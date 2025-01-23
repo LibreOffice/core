@@ -129,23 +129,23 @@ namespace svt::table
             TableControlAction  eAction;
         }
         static const aKnownActions[] = {
-            { KEY_DOWN,     0,          cursorDown },
-            { KEY_UP,       0,          cursorUp },
-            { KEY_LEFT,     0,          cursorLeft },
-            { KEY_RIGHT,    0,          cursorRight },
-            { KEY_HOME,     0,          cursorToLineStart },
-            { KEY_END,      0,          cursorToLineEnd },
-            { KEY_PAGEUP,   0,          cursorPageUp },
-            { KEY_PAGEDOWN, 0,          cursorPageDown },
-            { KEY_PAGEUP,   KEY_MOD1,   cursorToFirstLine },
-            { KEY_PAGEDOWN, KEY_MOD1,   cursorToLastLine },
-            { KEY_HOME,     KEY_MOD1,   cursorTopLeft },
-            { KEY_END,      KEY_MOD1,   cursorBottomRight },
-            { KEY_SPACE,    KEY_MOD1,   cursorSelectRow },
-            { KEY_UP,       KEY_SHIFT,  cursorSelectRowUp },
-            { KEY_DOWN,     KEY_SHIFT,  cursorSelectRowDown },
-            { KEY_END,      KEY_SHIFT,  cursorSelectRowAreaBottom },
-            { KEY_HOME,     KEY_SHIFT,  cursorSelectRowAreaTop }
+            { KEY_DOWN,     0,          TableControlAction::cursorDown },
+            { KEY_UP,       0,          TableControlAction::cursorUp },
+            { KEY_LEFT,     0,          TableControlAction::cursorLeft },
+            { KEY_RIGHT,    0,          TableControlAction::cursorRight },
+            { KEY_HOME,     0,          TableControlAction::cursorToLineStart },
+            { KEY_END,      0,          TableControlAction::cursorToLineEnd },
+            { KEY_PAGEUP,   0,          TableControlAction::cursorPageUp },
+            { KEY_PAGEDOWN, 0,          TableControlAction::cursorPageDown },
+            { KEY_PAGEUP,   KEY_MOD1,   TableControlAction::cursorToFirstLine },
+            { KEY_PAGEDOWN, KEY_MOD1,   TableControlAction::cursorToLastLine },
+            { KEY_HOME,     KEY_MOD1,   TableControlAction::cursorTopLeft },
+            { KEY_END,      KEY_MOD1,   TableControlAction::cursorBottomRight },
+            { KEY_SPACE,    KEY_MOD1,   TableControlAction::cursorSelectRow },
+            { KEY_UP,       KEY_SHIFT,  TableControlAction::cursorSelectRowUp },
+            { KEY_DOWN,     KEY_SHIFT,  TableControlAction::cursorSelectRowDown },
+            { KEY_END,      KEY_SHIFT,  TableControlAction::cursorSelectRowAreaBottom },
+            { KEY_HOME,     KEY_SHIFT,  TableControlAction::cursorSelectRowAreaTop }
         };
         for (const ActionMapEntry& rAction : aKnownActions)
         {

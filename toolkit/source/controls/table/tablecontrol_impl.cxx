@@ -1286,7 +1286,7 @@ namespace svt::table
 
         switch ( _eAction )
         {
-        case cursorDown:
+        case TableControlAction::cursorDown:
         if ( m_pSelEngine->GetSelectionMode() == SelectionMode::Single )
         {
             //if other rows already selected, deselect them
@@ -1314,7 +1314,7 @@ namespace svt::table
         }
             break;
 
-        case cursorUp:
+        case TableControlAction::cursorUp:
         if(m_pSelEngine->GetSelectionMode() == SelectionMode::Single)
         {
             if(!m_aSelectedRows.empty())
@@ -1343,7 +1343,7 @@ namespace svt::table
                 bSuccess = goTo( m_nCurColumn, m_nCurRow - 1 );
         }
         break;
-        case cursorLeft:
+        case TableControlAction::cursorLeft:
             if ( m_nCurColumn > 0 )
                 bSuccess = goTo( m_nCurColumn - 1, m_nCurRow );
             else
@@ -1351,7 +1351,7 @@ namespace svt::table
                     bSuccess = goTo( m_nColumnCount - 1, m_nCurRow - 1 );
             break;
 
-        case cursorRight:
+        case TableControlAction::cursorRight:
             if ( m_nCurColumn < m_nColumnCount - 1 )
                 bSuccess = goTo( m_nCurColumn + 1, m_nCurRow );
             else
@@ -1359,45 +1359,45 @@ namespace svt::table
                     bSuccess = goTo( 0, m_nCurRow + 1 );
             break;
 
-        case cursorToLineStart:
+        case TableControlAction::cursorToLineStart:
             bSuccess = goTo( 0, m_nCurRow );
             break;
 
-        case cursorToLineEnd:
+        case TableControlAction::cursorToLineEnd:
             bSuccess = goTo( m_nColumnCount - 1, m_nCurRow );
             break;
 
-        case cursorToFirstLine:
+        case TableControlAction::cursorToFirstLine:
             bSuccess = goTo( m_nCurColumn, 0 );
             break;
 
-        case cursorToLastLine:
+        case TableControlAction::cursorToLastLine:
             bSuccess = goTo( m_nCurColumn, m_nRowCount - 1 );
             break;
 
-        case cursorPageUp:
+        case TableControlAction::cursorPageUp:
         {
             RowPos nNewRow = ::std::max( RowPos(0), m_nCurRow - impl_getVisibleRows( false ) );
             bSuccess = goTo( m_nCurColumn, nNewRow );
         }
         break;
 
-        case cursorPageDown:
+        case TableControlAction::cursorPageDown:
         {
             RowPos nNewRow = ::std::min( m_nRowCount - 1, m_nCurRow + impl_getVisibleRows( false ) );
             bSuccess = goTo( m_nCurColumn, nNewRow );
         }
         break;
 
-        case cursorTopLeft:
+        case TableControlAction::cursorTopLeft:
             bSuccess = goTo( 0, 0 );
             break;
 
-        case cursorBottomRight:
+        case TableControlAction::cursorBottomRight:
             bSuccess = goTo( m_nColumnCount - 1, m_nRowCount - 1 );
             break;
 
-        case cursorSelectRow:
+        case TableControlAction::cursorSelectRow:
         {
             if(m_pSelEngine->GetSelectionMode() == SelectionMode::NONE)
                 return false;
@@ -1418,7 +1418,7 @@ namespace svt::table
             bSuccess = true;
         }
             break;
-        case cursorSelectRowUp:
+        case TableControlAction::cursorSelectRowUp:
         {
             if(m_pSelEngine->GetSelectionMode() == SelectionMode::NONE)
                 return false;
@@ -1503,7 +1503,7 @@ namespace svt::table
             }
         }
         break;
-        case cursorSelectRowDown:
+        case TableControlAction::cursorSelectRowDown:
         {
             if(m_pSelEngine->GetSelectionMode() == SelectionMode::NONE)
                 bSuccess = false;
@@ -1585,7 +1585,7 @@ namespace svt::table
         }
         break;
 
-        case cursorSelectRowAreaTop:
+        case TableControlAction::cursorSelectRowAreaTop:
         {
             if(m_pSelEngine->GetSelectionMode() == SelectionMode::NONE)
                 bSuccess = false;
@@ -1613,7 +1613,7 @@ namespace svt::table
         }
         break;
 
-        case cursorSelectRowAreaBottom:
+        case TableControlAction::cursorSelectRowAreaBottom:
         {
             if(m_pSelEngine->GetSelectionMode() == SelectionMode::NONE)
                 return false;

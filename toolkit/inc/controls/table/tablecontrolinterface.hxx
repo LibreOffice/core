@@ -29,7 +29,7 @@
 namespace svt::table
 {
     //= TableControlAction
-    enum TableControlAction
+    enum class TableControlAction
     {
         /// moves the cursor in the table control one row up, if possible, by keeping the current column
         cursorUp,
