@@ -90,7 +90,7 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
     bool mbCairoCoordinateLimitWorkaroundActive;
 
     // helpers for direct paints
-    void paintPolyPoylgonRGBA(const basegfx::B2DPolyPolygon& rPolyPolygon,
+    void paintPolyPolygonRGBA(const basegfx::B2DPolyPolygon& rPolyPolygon,
                               const basegfx::BColor& rColor, double fTransparency = 0.0);
     void processPolygonHairlinePrimitive2D(
         const primitive2d::PolygonHairlinePrimitive2D& rPolygonHairlinePrimitive2D);

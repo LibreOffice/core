@@ -1231,7 +1231,7 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const BitmapEx& rBitmapEx,
             const basegfx::B2DPolygon& aPolygon(basegfx::utils::createUnitPolygon());
 
             // draw directly, done
-            paintPolyPoylgonRGBA(basegfx::B2DPolyPolygon(aPolygon), aModifiedColor, fTransparency);
+            paintPolyPolygonRGBA(basegfx::B2DPolyPolygon(aPolygon), aModifiedColor, fTransparency);
 
             return;
         }
@@ -1447,11 +1447,11 @@ void CairoPixelProcessor2D::processPolygonHairlinePrimitive2D(
 void CairoPixelProcessor2D::processPolyPolygonColorPrimitive2D(
     const primitive2d::PolyPolygonColorPrimitive2D& rPolyPolygonColorPrimitive2D)
 {
-    paintPolyPoylgonRGBA(rPolyPolygonColorPrimitive2D.getB2DPolyPolygon(),
+    paintPolyPolygonRGBA(rPolyPolygonColorPrimitive2D.getB2DPolyPolygon(),
                          rPolyPolygonColorPrimitive2D.getBColor());
 }
 
-void CairoPixelProcessor2D::paintPolyPoylgonRGBA(const basegfx::B2DPolyPolygon& rPolyPolygon,
+void CairoPixelProcessor2D::paintPolyPolygonRGBA(const basegfx::B2DPolyPolygon& rPolyPolygon,
                                                  const basegfx::BColor& rColor,
                                                  double fTransparency)
 {
@@ -2348,7 +2348,7 @@ void CairoPixelProcessor2D::processFillGraphicPrimitive2D(
             aPolygon.transform(rFillGraphicPrimitive2D.getTransformation());
 
             // draw directly
-            paintPolyPoylgonRGBA(basegfx::B2DPolyPolygon(aPolygon), aModifiedColor,
+            paintPolyPolygonRGBA(basegfx::B2DPolyPolygon(aPolygon), aModifiedColor,
                                  rFillGraphicPrimitive2D.getTransparency());
 
             return;
@@ -3225,13 +3225,13 @@ void CairoPixelProcessor2D::processPolyPolygonRGBAPrimitive2D(
     if (!rPolyPolygonRGBAPrimitive2D.hasTransparency())
     {
         // do what CairoPixelProcessor2D::processPolyPolygonColorPrimitive2D does
-        paintPolyPoylgonRGBA(rPolyPolygonRGBAPrimitive2D.getB2DPolyPolygon(),
+        paintPolyPolygonRGBA(rPolyPolygonRGBAPrimitive2D.getB2DPolyPolygon(),
                              rPolyPolygonRGBAPrimitive2D.getBColor());
         return;
     }
 
     // draw with alpha directly
-    paintPolyPoylgonRGBA(rPolyPolygonRGBAPrimitive2D.getB2DPolyPolygon(),
+    paintPolyPolygonRGBA(rPolyPolygonRGBAPrimitive2D.getB2DPolyPolygon(),
                          rPolyPolygonRGBAPrimitive2D.getBColor(),
                          rPolyPolygonRGBAPrimitive2D.getTransparency());
 }
@@ -3254,7 +3254,7 @@ void CairoPixelProcessor2D::processPolyPolygonAlphaGradientPrimitive2D(
     {
         // default is a single ColorStop at 0.0 with black (0, 0, 0). The
         // luminance is then 0.0, too -> not transparent at all
-        paintPolyPoylgonRGBA(rPolyPolygon, rColor);
+        paintPolyPolygonRGBA(rPolyPolygon, rColor);
         return;
     }
 
@@ -3263,7 +3263,7 @@ void CairoPixelProcessor2D::processPolyPolygonAlphaGradientPrimitive2D(
     if (rAlphaStops.isSingleColor(aSingleColor))
     {
         // draw with alpha directly
-        paintPolyPoylgonRGBA(rPolyPolygon, rColor, aSingleColor.luminance());
+        paintPolyPolygonRGBA(rPolyPolygon, rColor, aSingleColor.luminance());
         return;
     }
 
@@ -3664,7 +3664,7 @@ bool CairoPixelProcessor2D::handleSvgGradientHelper(
         // only one color entry, fill with last existing color, done
         primitive2d::SvgGradientEntryVector::const_reference aEntry(
             rCandidate.getGradientEntries().back());
-        paintPolyPoylgonRGBA(rCandidate.getPolyPolygon(), aEntry.getColor(),
+        paintPolyPolygonRGBA(rCandidate.getPolyPolygon(), aEntry.getColor(),
                              1.0 - aEntry.getOpacity());
 
         return true;
