@@ -890,7 +890,7 @@ bool checkCoordinateLimitWorkaroundNeededForUsedCairo()
     const basegfx::B2DPoint aOffset(4, 4);
     const basegfx::B2DRange aObject(aCenter - aOffset, aCenter + aOffset);
 
-    // create transformation to render that to an aerea with
+    // create transformation to render that to an area with
     // range(0, 0, 8, 8) and set as transformation
     const basegfx::B2DHomMatrix aObjectToView(basegfx::utils::createSourceRangeTargetRangeTransform(
         aObject, basegfx::B2DRange(0, 0, 8, 8)));
