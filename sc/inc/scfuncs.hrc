@@ -4251,6 +4251,18 @@ const TranslateId SC_OPCODE_RANDARRAY_ARY[] =
     NC_("SC_OPCODE_RANDARRAY", "Return integer (TRUE) or decimal (FALSE) values.")
 };
 
+// -=*# Resource for function DROP #*=-
+const TranslateId SC_OPCODE_DROP_ARY[] =
+{
+    NC_("SC_OPCODE_DROP", "Excludes a specified number of contiguous rows or columns from the start or end of an array."),
+    NC_("SC_OPCODE_DROP", "Array"),
+    NC_("SC_OPCODE_DROP", "The array from which to drop rows or columns."),
+    NC_("SC_OPCODE_DROP", "Rows"),
+    NC_("SC_OPCODE_DROP", "The number of rows to drop. A negative value drops from the end of the array."),
+    NC_("SC_OPCODE_DROP", "Column"),
+    NC_("SC_OPCODE_DROP", "The number of columns to drop. A negative value drops from the end of the array.")
+};
+
 // -=*# Resource for function TAKE #*=-
 const TranslateId SC_OPCODE_TAKE_ARY[] =
 {

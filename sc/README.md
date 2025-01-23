@@ -55,6 +55,7 @@ properties, see ODF v1.3 part4 3.4 Host-Defined Behaviors
 https://docs.oasis-open.org/office/OpenDocument/v1.3/os/part4-formula/OpenDocument-v1.3-os-part4-formula.html#__RefHeading__1017868_715980110
 
 * Array Functions
+  * DROP
   * TAKE
   * TOCOL
   * TOROW
