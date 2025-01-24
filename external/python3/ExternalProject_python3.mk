@@ -142,7 +142,8 @@ endif
 
 ifeq ($(OS),MACOSX)
 
-python3_fw_prefix=$(gb_UnpackedTarball_workdir)/python3/python-inst/@__________________________________________________OOO/LibreOfficePython.framework
+python3_fw_prefix:=$(gb_UnpackedTarball_workdir)/python3/python-inst/@__________________________________________________OOO/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)
+python3_EXTENSION_MODULE_SUFFIX:=cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)$(if $(ENABLE_DBGUTIL),d)
 
 # rule to allow relocating the whole framework, removing reference to buildinstallation directory
 # also scripts are not allowed to be signed as executables (with extended attributes), but need to
@@ -150,7 +151,7 @@ python3_fw_prefix=$(gb_UnpackedTarball_workdir)/python3/python-inst/@___________
 # https://developer.apple.com/library/archive/technotes/tn2206/_index.html
 $(call gb_ExternalProject_get_state_target,python3,fixscripts) : $(call gb_ExternalProject_get_state_target,python3,build)
 	$(call gb_Output_announce,python3 - remove reference to installroot from scripts,build,CUS,5)
-	$(COMMAND_ECHO)cd $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/ && \
+	$(COMMAND_ECHO)cd $(python3_fw_prefix)/bin/ && \
 	for file in \
 		2to3-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
 		idle$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
@@ -173,19 +174,19 @@ cd \"$$origpath\"\n\
 $(call gb_ExternalProject_get_state_target,python3,fixinstallnames) : $(call gb_ExternalProject_get_state_target,python3,build) \
         | $(call gb_ExternalProject_get_state_target,python3,removeunnecessarystuff)
 	$(INSTALL_NAME_TOOL) -change \
-		$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/LibreOfficePython \
+		$(python3_fw_prefix)/LibreOfficePython \
 		@executable_path/../../../../LibreOfficePython \
-		$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/Resources/Python.app/Contents/MacOS/LibreOfficePython
-	for file in $(shell $(FIND) $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload -name "*.so") ; do \
+		$(python3_fw_prefix)/Resources/Python.app/Contents/MacOS/LibreOfficePython
+	for file in $(shell $(FIND) $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload -name "*.so") ; do \
 	$(INSTALL_NAME_TOOL) -change \
-		$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/LibreOfficePython \
+		$(python3_fw_prefix)/LibreOfficePython \
 		@loader_path/../../../LibreOfficePython $$file ; done
 	touch $@
 
 $(call gb_ExternalProject_get_state_target,python3,executables) : $(call gb_ExternalProject_get_state_target,python3,build)
-	cd $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin ; \
+	cd $(python3_fw_prefix)/bin ; \
 	$(INSTALL_NAME_TOOL) -change \
-		$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/LibreOfficePython \
+		$(python3_fw_prefix)/LibreOfficePython \
 		@executable_path/../LibreOfficePython python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)
 	touch $@
 
@@ -194,20 +195,20 @@ $(call gb_ExternalProject_get_state_target,python3,executables) : $(call gb_Exte
 
 $(call gb_ExternalProject_get_state_target,python3,removeunnecessarystuff) : $(call gb_ExternalProject_get_state_target,python3,build)
 	$(call gb_Output_announce,python3 - remove the stuff we don't need to ship,build,CUS,5)
-	rm -r $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/dbm
-	rm -r $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/sqlite3
-	rm -r $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/curses
-	rm -r $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/idlelib
-	rm -r $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/tkinter
-	rm -r $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/turtledemo
-	rm -r $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/test
-	rm -r $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/venv
+	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/dbm
+	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/sqlite3
+	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/curses
+	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/idlelib
+	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/tkinter
+	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/turtledemo
+	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/test
+	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/venv
 	# Then the binary libraries
-	rm $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_dbm.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)*.so
-	rm $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_sqlite3.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)*.so
-	rm $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_curses.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)*.so
-	rm $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_curses_panel.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)*.so
-	rm $(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_test*.cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)*.so
+	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_dbm.$(python3_EXTENSION_MODULE_SUFFIX).so
+	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_sqlite3.$(python3_EXTENSION_MODULE_SUFFIX).so
+	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_curses.$(python3_EXTENSION_MODULE_SUFFIX).so
+	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_curses_panel.$(python3_EXTENSION_MODULE_SUFFIX).so
+	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_test*.$(python3_EXTENSION_MODULE_SUFFIX).so
 	touch $@
 
 endif
