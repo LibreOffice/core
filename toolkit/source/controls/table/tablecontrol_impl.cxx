@@ -1657,8 +1657,7 @@ namespace svt::table
         PTableRenderer pRenderer = m_pModel ? m_pModel->getRenderer() : PTableRenderer();
         if ( pRenderer )
         {
-            tools::Rectangle aCellRect;
-            impl_getCellRect( m_nCurColumn, m_nCurRow, aCellRect );
+            tools::Rectangle aCellRect = calcCellRect(m_nCurRow, m_nCurColumn);
             if ( _bShow )
                 pRenderer->ShowCellCursor( *m_pDataWindow, aCellRect );
             else
@@ -1825,27 +1824,24 @@ namespace svt::table
         // if only one row is selected
         if ( _nPrevRow == _nCurRow )
         {
-            tools::Rectangle aCellRect;
-            impl_getCellRect( m_nCurColumn, _nCurRow, aCellRect );
+            tools::Rectangle aCellRect = calcCellRect(_nCurRow, m_nCurColumn);
             aInvalidateRect.SetTop( aCellRect.Top() );
             aInvalidateRect.SetBottom( aCellRect.Bottom() );
         }
         //if the region is above the current row
         else if(_nPrevRow < _nCurRow )
         {
-            tools::Rectangle aCellRect;
-            impl_getCellRect( m_nCurColumn, _nPrevRow, aCellRect );
+            tools::Rectangle aCellRect = calcCellRect(_nPrevRow, m_nCurColumn);
             aInvalidateRect.SetTop( aCellRect.Top() );
-            impl_getCellRect( m_nCurColumn, _nCurRow, aCellRect );
+            aCellRect = calcCellRect(_nCurRow, m_nCurColumn);
             aInvalidateRect.SetBottom( aCellRect.Bottom() );
         }
         //if the region is beneath the current row
         else
         {
-            tools::Rectangle aCellRect;
-            impl_getCellRect( m_nCurColumn, _nCurRow, aCellRect );
+            tools::Rectangle aCellRect = calcCellRect(_nCurRow, m_nCurColumn);
             aInvalidateRect.SetTop( aCellRect.Top() );
-            impl_getCellRect( m_nCurColumn, _nPrevRow, aCellRect );
+            aCellRect = calcCellRect(_nPrevRow, m_nCurColumn);
             aInvalidateRect.SetBottom( aCellRect.Bottom() );
         }
 
