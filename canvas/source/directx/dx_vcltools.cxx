@@ -173,7 +173,6 @@ namespace dxcanvas::tools
                 //    ScanlineFormat::N1BitMsbPal
                 //    ScanlineFormat::N8BitPal
                 //    ScanlineFormat::N24BitTcBgr
-                //    ScanlineFormat::N32BitTcMask
 
                 // and is always ScanlineFormat::BottomUp
 
@@ -234,7 +233,6 @@ namespace dxcanvas::tools
                             // to hand-formulate the following
                             // formats, too.
                         case ScanlineFormat::N1BitMsbPal:
-                        case ScanlineFormat::N32BitTcMask:
                             {
                                 Scanline pAScan = pAlphaReadAccess->GetScanline( y );
 

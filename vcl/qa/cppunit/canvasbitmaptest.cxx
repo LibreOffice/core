@@ -89,8 +89,6 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     {
         BitmapScopedReadAccess pAcc( aContainedBmp );
         nDepth = pAcc->GetBitCount();
-        if( pAcc->GetScanlineFormat() == ScanlineFormat::N32BitTcMask )
-            extraBpp = 8; // the format has 8 unused bits
     }
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Original bitmap size not (200,200)",

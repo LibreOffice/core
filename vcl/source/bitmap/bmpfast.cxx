@@ -337,10 +337,6 @@ static bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
         case ScanlineFormat::N8BitPal:
             break;
 
-        case ScanlineFormat::N32BitTcMask:
-//            return ImplConvertToBitmap<ScanlineFormat::N32BitTcMask>( aSrcType, rDst, rSrc );
-            break;
-
         case ScanlineFormat::N24BitTcBgr:
             return ImplConvertToBitmap<ScanlineFormat::N24BitTcBgr>( aSrcType, rDst, rSrc );
         case ScanlineFormat::N24BitTcRgb:
@@ -422,10 +418,6 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
     switch( nSrcFormat )
     {
         case ScanlineFormat::N1BitMsbPal:
-            break;
-
-        case ScanlineFormat::N32BitTcMask:
-//            return ImplConvertFromBitmap<ScanlineFormat::N32BitTcMask>( rDst, rSrc );
             break;
 
         case ScanlineFormat::N8BitPal:
@@ -653,10 +645,6 @@ static bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, c
         case ScanlineFormat::N8BitPal:
             break;
 
-        case ScanlineFormat::N32BitTcMask:
-//            return ImplBlendToBitmap<ScanlineFormat::N32BitTcMask>( aSrcType, rDst, rSrc, rMsk );
-            break;
-
         case ScanlineFormat::N24BitTcBgr:
             return ImplBlendToBitmap<ScanlineFormat::N24BitTcBgr>( aSrcType, rDst, rSrc, rMsk );
         case ScanlineFormat::N24BitTcRgb:
@@ -744,10 +732,6 @@ bool ImplFastBitmapBlending( BitmapWriteAccess const & rDstWA,
         case ScanlineFormat::N1BitMsbPal:
             break;
 
-        case ScanlineFormat::N32BitTcMask:
-//            return ImplBlendFromBitmap<ScanlineFormat::N32BitTcMask>( rDst, rSrc );
-            break;
-
         case ScanlineFormat::N8BitPal:
             if(rSrc.maPalette.IsGreyPalette8Bit())
                 return ImplBlendFromBitmap<ScanlineFormat::N8BitPal>( rDst, rSrc, rMsk );
@@ -821,8 +805,6 @@ bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
     // TODO: handle other bitmap formats
     switch (rDst.meFormat)
     {
-        case ScanlineFormat::N32BitTcMask:
-
         case ScanlineFormat::N24BitTcBgr:
         case ScanlineFormat::N24BitTcRgb:
 

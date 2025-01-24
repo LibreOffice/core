@@ -228,7 +228,7 @@ static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer const & rD
 
 std::optional<BitmapBuffer> StretchAndConvert(
     const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
-    ScanlineFormat nDstBitmapFormat, std::optional<BitmapPalette> pDstPal, const ColorMask* pDstMask )
+    ScanlineFormat nDstBitmapFormat, std::optional<BitmapPalette> pDstPal )
 {
     FncGetPixel     pFncGetPixel;
     FncSetPixel     pFncSetPixel;
@@ -262,7 +262,6 @@ std::optional<BitmapBuffer> StretchAndConvert(
         IMPL_CASE_SET_FORMAT( N32BitTcBgrx, 32 );
         IMPL_CASE_SET_FORMAT( N32BitTcRgba, 32 );
         IMPL_CASE_SET_FORMAT( N32BitTcRgbx, 32 );
-        IMPL_CASE_SET_FORMAT( N32BitTcMask, 32 );
 
         default:
             // should never come here
@@ -314,15 +313,6 @@ std::optional<BitmapBuffer> StretchAndConvert(
             return std::nullopt;
         }
         pDstBuffer->maPalette = *pDstPal;
-    }
-    else if (nDstBitmapFormat == ScanlineFormat::N32BitTcMask)
-    {
-        assert(pDstMask && "destination buffer requires color mask");
-        if (!pDstMask)
-        {
-            return std::nullopt;
-        }
-        pDstBuffer->maColorMask = *pDstMask;
     }
 
     // short circuit the most important conversions

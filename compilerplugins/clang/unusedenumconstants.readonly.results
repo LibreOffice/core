@@ -1020,8 +1020,6 @@ include/vcl/rendercontext/DrawImageFlags.hxx:29
     enum DrawImageFlags Highlight
 include/vcl/rendercontext/DrawImageFlags.hxx:30
     enum DrawImageFlags Deactive
-include/vcl/Scanline.hxx:43
-    enum ScanlineFormat N32BitTcMask
 include/vcl/skia/SkiaHelper.hxx:31
     enum SkiaHelper::RenderMethod RenderMetal
 include/vcl/vclenum.hxx:39

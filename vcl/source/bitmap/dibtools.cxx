@@ -137,11 +137,6 @@ vcl::PixelFormat convertToBPP(sal_uInt16 nCount)
                            vcl::PixelFormat::N24_BPP;
 }
 
-bool isBitfieldCompression( ScanlineFormat nScanlineFormat )
-{
-    return ScanlineFormat::N32BitTcMask == nScanlineFormat;
-}
-
 bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown, bool bMSOFormat)
 {
     if (rIStm.remainingSize() <= 4)
@@ -1375,32 +1370,23 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess c
     aHeader.nHeight = rAcc.Height();
     aHeader.nPlanes = 1;
 
-    if(isBitfieldCompression(rAcc.GetScanlineFormat()))
-    {
-        aHeader.nBitCount = 32;
-        aHeader.nSizeImage = rAcc.Height() * rAcc.GetScanlineSize();
-        nCompression = BITFIELDS;
-    }
-    else
-    {
-        // #i5xxx# Limit bitcount to 24bit, the 32 bit cases are
-        // not handled properly below (would have to set color
-        // masks, and nCompression=BITFIELDS - but color mask is
-        // not set for formats != *_TC_*). Note that this very
-        // problem might cause trouble at other places - the
-        // introduction of 32 bit RGBA bitmaps is relatively
-        // recent.
-        // #i59239# discretize bitcount to 1,8,24 (other cases
-        // are not written below)
-        const auto ePixelFormat(convertToBPP(rAcc.GetBitCount()));
-        aHeader.nBitCount = sal_uInt16(ePixelFormat);
-        aHeader.nSizeImage = rAcc.Height() * AlignedWidth4Bytes(rAcc.Width() * aHeader.nBitCount);
+    // #i5xxx# Limit bitcount to 24bit, the 32 bit cases are
+    // not handled properly below (would have to set color
+    // masks, and nCompression=BITFIELDS - but color mask is
+    // not set for formats != *_TC_*). Note that this very
+    // problem might cause trouble at other places - the
+    // introduction of 32 bit RGBA bitmaps is relatively
+    // recent.
+    // #i59239# discretize bitcount to 1,8,24 (other cases
+    // are not written below)
+    const auto ePixelFormat(convertToBPP(rAcc.GetBitCount()));
+    aHeader.nBitCount = sal_uInt16(ePixelFormat);
+    aHeader.nSizeImage = rAcc.Height() * AlignedWidth4Bytes(rAcc.Width() * aHeader.nBitCount);
 
-        if (bCompressed)
-        {
-            if (ePixelFormat == vcl::PixelFormat::N8_BPP)
-                nCompression = RLE_8;
-        }
+    if (bCompressed)
+    {
+        if (ePixelFormat == vcl::PixelFormat::N8_BPP)
+            nCompression = RLE_8;
     }
 
     if((rOStm.GetCompressMode() & SvStreamCompressFlags::ZBITMAP) && (rOStm.GetVersion() >= SOFFICE_FILEFORMAT_40))
@@ -1510,7 +1496,7 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess c
 
 bool ImplWriteDIBFileHeader(SvStream& rOStm, BitmapReadAccess const & rAcc)
 {
-    const sal_uInt32 nPalCount((rAcc.HasPalette() ? rAcc.GetPaletteEntryCount() : isBitfieldCompression(rAcc.GetScanlineFormat()) ? 3UL : 0UL));
+    const sal_uInt32 nPalCount((rAcc.HasPalette() ? rAcc.GetPaletteEntryCount() : 0UL));
     const sal_uInt32 nOffset(14 + DIBINFOHEADERSIZE + nPalCount * 4UL);
 
     rOStm.WriteUInt16( 0x4D42 ); // 'MB' from BITMAPFILEHEADER

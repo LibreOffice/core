@@ -93,8 +93,6 @@ FncGetPixel BitmapReadAccess::GetPixelFunction(ScanlineFormat nFormat)
         case ScanlineFormat::N32BitTcRgbx:
             assert(!Bitmap32IsPreMultipled());
             return GetPixelForN32BitTcRgbx;
-        case ScanlineFormat::N32BitTcMask:
-            return GetPixelForN32BitTcMask;
 
         default:
             return nullptr;
@@ -137,8 +135,6 @@ FncSetPixel BitmapReadAccess::SetPixelFunction(ScanlineFormat nFormat)
         case ScanlineFormat::N32BitTcRgbx:
             assert(!Bitmap32IsPreMultipled());
             return SetPixelForN32BitTcRgbx;
-        case ScanlineFormat::N32BitTcMask:
-            return SetPixelForN32BitTcMask;
 
         default:
             assert(false);
@@ -509,21 +505,6 @@ void BitmapReadAccess::SetPixelForN32BitTcRgbx(Scanline pScanline, tools::Long n
     *pScanline++ = rBitmapColor.GetGreen();
     *pScanline++ = rBitmapColor.GetBlue();
     *pScanline = 0xFF;
-}
-
-BitmapColor BitmapReadAccess::GetPixelForN32BitTcMask(ConstScanline pScanline, tools::Long nX,
-                                                      const ColorMask& rMask)
-{
-    BitmapColor aColor;
-    rMask.GetColorFor32Bit(aColor, pScanline + (nX << 2));
-    return aColor;
-}
-
-void BitmapReadAccess::SetPixelForN32BitTcMask(Scanline pScanline, tools::Long nX,
-                                               const BitmapColor& rBitmapColor,
-                                               const ColorMask& rMask)
-{
-    rMask.SetColorFor32Bit(rBitmapColor, pScanline + (nX << 2));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

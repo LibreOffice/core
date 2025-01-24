@@ -275,15 +275,6 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
         }
         break;
 
-        case ScanlineFormat::N32BitTcMask:
-            m_bPalette           = false;
-            m_nBitsPerInputPixel = 32;
-            m_aLayout.IsMsbFirst = false; // doesn't matter
-            setComponentInfo( m_pBmpAcc->GetColorMask().GetRedMask(),
-                              m_pBmpAcc->GetColorMask().GetGreenMask(),
-                              m_pBmpAcc->GetColorMask().GetBlueMask() );
-            break;
-
         default:
             OSL_FAIL( "unsupported bitmap format" );
             break;

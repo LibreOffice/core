@@ -85,8 +85,6 @@ void BitmapWriteAccess::CopyScanline(tools::Long nY, ConstScanline aSrcScanline,
                                  nSrcScanlineSize))
             return;
 
-        DBG_ASSERT(eFormat != ScanlineFormat::N32BitTcMask,
-                   "No support for pixel formats with color masks yet!");
         FncGetPixel pFncGetPixel;
         switch (eFormat)
         {
@@ -133,9 +131,6 @@ void BitmapWriteAccess::CopyScanline(tools::Long nY, ConstScanline aSrcScanline,
             case ScanlineFormat::N32BitTcRgbx:
                 assert(!Bitmap32IsPreMultipled());
                 pFncGetPixel = GetPixelForN32BitTcRgbx;
-                break;
-            case ScanlineFormat::N32BitTcMask:
-                pFncGetPixel = GetPixelForN32BitTcMask;
                 break;
 
             default:

@@ -47,7 +47,7 @@ struct VCL_DLLPUBLIC BitmapBuffer
 
 VCL_DLLPUBLIC std::optional<BitmapBuffer> StretchAndConvert(
     const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
-    ScanlineFormat nDstBitmapFormat, std::optional<BitmapPalette> pDstPal = std::nullopt, const ColorMask* pDstMask = nullptr );
+    ScanlineFormat nDstBitmapFormat, std::optional<BitmapPalette> pDstPal = std::nullopt );
 
 #endif // INCLUDED_VCL_BITMAPBUFFER_HXX
 

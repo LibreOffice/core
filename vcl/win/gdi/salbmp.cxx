@@ -337,13 +337,11 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const Win
     {
         // convert alpha bitmap to ScanlineFormat::N8BitPal format if not yet in that format
         SalTwoRect aSalTwoRect(0, 0, pA->mnWidth, pA->mnHeight, 0, 0, pA->mnWidth, pA->mnHeight);
-        const BitmapPalette& rTargetPalette = Bitmap::GetGreyPalette(256);
 
         pExtraA = StretchAndConvert(
             *pA,
             aSalTwoRect,
-            ScanlineFormat::N8BitPal,
-            rTargetPalette);
+            ScanlineFormat::N8BitPal);
 
         pSalA->ReleaseBuffer(pA, BitmapAccessMode::Read);
         pA = pExtraA ? &*pExtraA : nullptr;
@@ -765,7 +763,7 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
 
             pBuffer->meFormat = pBIH->biBitCount == 8 ? ScanlineFormat::N8BitPal :
                                 pBIH->biBitCount == 24 ? ScanlineFormat::N24BitTcBgr :
-                                pBIH->biBitCount == 32 ? ScanlineFormat::N32BitTcMask :
+                                pBIH->biBitCount == 32 ? ScanlineFormat::N32BitTcXrgb :
                                 ScanlineFormat::NONE;
             assert (pBuffer->meFormat != ScanlineFormat::NONE);
 
@@ -783,18 +781,6 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
                     pBuffer->maPalette.SetEntryCount( nPalCount );
                     memcpy( pBuffer->maPalette.ImplGetColorBuffer(), pBI->bmiColors, nPalCount * sizeof( RGBQUAD ) );
                     pBuffer->mpBits = reinterpret_cast<PBYTE>(pBI) + pBI->bmiHeader.biSize + nPalCount * sizeof( RGBQUAD );
-                }
-                else if( pBIH->biBitCount == 32 )
-                {
-                    ColorMaskElement aRedMask(0x00ff0000UL);
-                    aRedMask.CalcMaskShift();
-                    ColorMaskElement aGreenMask(0x0000ff00UL);
-                    aGreenMask.CalcMaskShift();
-                    ColorMaskElement aBlueMask(0x000000ffUL);
-                    aBlueMask.CalcMaskShift();
-                    pBuffer->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
-
-                    pBuffer->mpBits = reinterpret_cast<PBYTE>(pBI) + pBI->bmiHeader.biSize;
                 }
                 else
                     pBuffer->mpBits = reinterpret_cast<PBYTE>(pBI) + pBI->bmiHeader.biSize;
