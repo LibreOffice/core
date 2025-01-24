@@ -125,11 +125,6 @@ namespace svt::table
 
 
         // IAccessibleTable
-        virtual AbsoluteScreenPixelRectangle GetWindowExtentsAbsolute() const override;
-        virtual tools::Rectangle GetWindowExtentsRelative(const vcl::Window& rRelativeWindow) const override;
-        virtual void GrabFocus() override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible() override;
-        virtual vcl::Window* GetAccessibleParentWindow() const override;
         virtual vcl::Window* GetWindowInstance() override;
         virtual sal_Int32 GetAccessibleControlCount() const override;
         virtual bool ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint ) override;

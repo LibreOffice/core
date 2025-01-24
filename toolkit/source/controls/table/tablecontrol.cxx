@@ -516,31 +516,6 @@ namespace svt::table
             m_pImpl->commitTableEvent( i_eventID, i_newValue, i_oldValue );
     }
 
-    AbsoluteScreenPixelRectangle TableControl::GetWindowExtentsAbsolute() const
-    {
-        return Control::GetWindowExtentsAbsolute();
-    }
-
-    tools::Rectangle TableControl::GetWindowExtentsRelative(const vcl::Window& rRelativeWindow) const
-    {
-        return Control::GetWindowExtentsRelative( rRelativeWindow );
-    }
-
-    void TableControl::GrabFocus()
-    {
-        Control::GrabFocus();
-    }
-
-    Reference< XAccessible > TableControl::GetAccessible()
-    {
-        return Control::GetAccessible();
-    }
-
-    vcl::Window* TableControl::GetAccessibleParentWindow() const
-    {
-        return Control::GetAccessibleParentWindow();
-    }
-
     vcl::Window* TableControl::GetWindowInstance()
     {
         return this;
