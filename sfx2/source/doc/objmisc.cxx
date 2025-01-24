@@ -2038,7 +2038,15 @@ bool SfxObjectShell::isContentExtractionLocked() const
     Reference<XModel3> xModel = GetModel();
     if (!xModel.is())
         return false;
-    return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { "LockContentExtraction" } ), u"LockContentExtraction", false);
+    try
+    {
+        return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { "LockContentExtraction" } ), u"LockContentExtraction", false);
+    }
+    catch (const uno::RuntimeException&)
+    {
+        TOOLS_WARN_EXCEPTION("sfx.appl", "unexpected RuntimeException");
+    }
+    return false;
 }
 
 bool SfxObjectShell::isExportLocked() const
