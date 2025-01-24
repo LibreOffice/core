@@ -74,10 +74,10 @@ void SAL_CALL AccessibleGridControlBase::disposing()
 {
     SolarMutexGuard g;
 
-    if ( getClientId( ) )
+    if (m_aClientId)
     {
-        AccessibleEventNotifier::TClientId nId( getClientId( ) );
-        setClientId( 0 );
+        AccessibleEventNotifier::TClientId nId = m_aClientId;
+        m_aClientId = 0;
         AccessibleEventNotifier::revokeClientNotifyDisposing( nId, *this );
     }
 
@@ -217,30 +217,30 @@ void SAL_CALL AccessibleGridControlBase::addAccessibleEventListener(
     {
         SolarMutexGuard g;
 
-        if ( !getClientId( ) )
-            setClientId( AccessibleEventNotifier::registerClient( ) );
+        if (!m_aClientId)
+            m_aClientId = AccessibleEventNotifier::registerClient();
 
-        AccessibleEventNotifier::addEventListener( getClientId( ), _rxListener );
+        AccessibleEventNotifier::addEventListener(m_aClientId, _rxListener );
     }
 }
 
 void SAL_CALL AccessibleGridControlBase::removeAccessibleEventListener(
         const css::uno::Reference< css::accessibility::XAccessibleEventListener>& _rxListener )
 {
-    if( !(_rxListener.is() && getClientId( )) )
+    if (!(_rxListener.is() && m_aClientId))
         return;
 
     SolarMutexGuard g;
 
-    sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener( getClientId( ), _rxListener );
+    sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener(m_aClientId, _rxListener);
     if ( !nListenerCount )
     {
         // no listeners anymore
         // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
         // and at least to us not firing any events anymore, in case somebody calls
         // NotifyAccessibleEvent, again
-        AccessibleEventNotifier::TClientId nId( getClientId( ) );
-        setClientId( 0 );
+        AccessibleEventNotifier::TClientId nId = m_aClientId;
+        m_aClientId = 0;
         AccessibleEventNotifier::revokeClient( nId );
     }
 }
@@ -340,7 +340,7 @@ void AccessibleGridControlBase::commitEvent(
 {
     SolarMutexGuard g;
 
-    if ( !getClientId( ) )
+    if (!m_aClientId)
             // if we don't have a client id for the notifier, then we don't have listeners, then
             // we don't need to notify anything
             return;
@@ -350,7 +350,7 @@ void AccessibleGridControlBase::commitEvent(
 
     // let the notifier handle this event
 
-    AccessibleEventNotifier::addEvent( getClientId( ), aEvent );
+    AccessibleEventNotifier::addEvent(m_aClientId, aEvent);
 }
 
 sal_Int16 SAL_CALL AccessibleGridControlBase::getAccessibleRole()

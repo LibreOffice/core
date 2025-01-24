@@ -232,9 +232,6 @@ protected:
     /// @throws css::lang::DisposedException
     AbsoluteScreenPixelRectangle getBoundingBoxOnScreen();
 
-    ::comphelper::AccessibleEventNotifier::TClientId getClientId() const { return m_aClientId; }
-    void setClientId(::comphelper::AccessibleEventNotifier::TClientId _aNewClientId) { m_aClientId = _aNewClientId; }
-
 protected:
     // members
 
