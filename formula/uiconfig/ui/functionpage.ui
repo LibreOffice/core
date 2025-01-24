@@ -173,7 +173,7 @@
     </child>
     <child>
       <object class="GtkButton" id="help">
-        <property name="label">Help</property>
+        <property name="label" translatable="yes" context="functionpage|help">Help</property>
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="can-default">True</property>

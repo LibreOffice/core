@@ -136,10 +136,10 @@
                     <property name="can_focus">False</property>
                     <items>
                       <item id="0" translatable="yes" context="formulacalculationoptions|comboSyntaxRef">Use formula syntax</item>
-                      <item id="1">Calc A1</item>
-                      <item id="2">Excel A1</item>
-                      <item id="3">Excel R1C1</item>
-                      <item id="4">Calc A1 | Excel A1</item>
+                      <item id="1" translatable="yes" context="formulacalculationoptions|comboSyntaxRef">Calc A1</item>
+                      <item id="2" translatable="yes" context="formulacalculationoptions|comboSyntaxRef">Excel A1</item>
+                      <item id="3" translatable="yes" context="formulacalculationoptions|comboSyntaxRef">Excel R1C1</item>
+                      <item id="4" translatable="yes" context="formulacalculationoptions|comboSyntaxRef">Calc A1 | Excel A1</item>
                     </items>
                   </object>
                   <packing>

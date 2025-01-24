@@ -586,9 +586,9 @@
                             <items>
                               <item id="17" translatable="yes" context="pdfgeneralpage|pdf_version">PDF 1.7</item>
                               <item id="20" translatable="yes" context="pdfgeneralpage|pdf_version">PDF 2.0</item>
-                              <item id="1" context="pdfgeneralpage|pdf_version">PDF/A-1b (PDF 1.4 base)</item>
-                              <item id="2" context="pdfgeneralpage|pdf_version">PDF/A-2b (PDF 1.7 base)</item>
-                              <item id="3" context="pdfgeneralpage|pdf_version">PDF/A-3b (PDF 1.7 base)</item>
+                              <item id="1" translatable="yes" context="pdfgeneralpage|pdf_version">PDF/A-1b (PDF 1.4 base)</item>
+                              <item id="2" translatable="yes" context="pdfgeneralpage|pdf_version">PDF/A-2b (PDF 1.7 base)</item>
+                              <item id="3" translatable="yes" context="pdfgeneralpage|pdf_version">PDF/A-3b (PDF 1.7 base)</item>
                               <item id="4" translatable="yes" context="pdfgeneralpage|pdf_version">PDF/A-4 (PDF 2.0 base)</item>
                             </items>
                             <accessibility>

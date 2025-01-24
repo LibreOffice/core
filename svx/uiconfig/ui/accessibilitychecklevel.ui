@@ -177,7 +177,7 @@
                   <object class="GtkLabel" id="expand_direct_formatting_lb">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" context="accessibilitychecklevel|expand_direct_formatting_lb">Direct Formatting</property>
+                    <property name="label" translatable="yes" context="accessibilitychecklevel|expand_direct_formatting_lb">Direct Formatting</property>
                   </object>
                 </child>
               </object>
@@ -308,7 +308,7 @@
           <object class="GtkLabel" id="expand_other_lb">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" context="accessibilitychecklevel|expand_other_lb">Other</property>
+            <property name="label" translatable="yes" context="accessibilitychecklevel|expand_other_lb">Other</property>
           </object>
         </child>
       </object>
