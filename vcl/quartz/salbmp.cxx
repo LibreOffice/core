@@ -46,10 +46,6 @@
 #include <ios/iosinst.hxx>
 #endif
 
-const unsigned long k32BitRedColorMask   = 0x00ff0000;
-const unsigned long k32BitGreenColorMask = 0x0000ff00;
-const unsigned long k32BitBlueColorMask  = 0x000000ff;
-
 QuartzSalBitmap::QuartzSalBitmap()
   : mxCachedImage( nullptr )
   , mnBits(0)
@@ -446,13 +442,6 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
         case 32:
         {
             pBuffer->meFormat = ImplGetSVData()->mpDefInst->supportsBitmap32() ? ScanlineFormat::N32BitTcArgb : ScanlineFormat::N32BitTcXrgb;
-            ColorMaskElement aRedMask(k32BitRedColorMask);
-            aRedMask.CalcMaskShift();
-            ColorMaskElement aGreenMask(k32BitGreenColorMask);
-            aGreenMask.CalcMaskShift();
-            ColorMaskElement aBlueMask(k32BitBlueColorMask);
-            aBlueMask.CalcMaskShift();
-            pBuffer->maColorMask  = ColorMask(aRedMask, aGreenMask, aBlueMask);
             break;
         }
         default: assert(false);
