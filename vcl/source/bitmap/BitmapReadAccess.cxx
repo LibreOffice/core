@@ -41,8 +41,6 @@ BitmapReadAccess::BitmapReadAccess(const Bitmap& rBitmap, BitmapAccessMode nMode
     if (!xImpBmp)
         return;
 
-    maColorMask = mpBuffer->maColorMask;
-
     mFncGetPixel = GetPixelFunction(mpBuffer->meFormat);
     mFncSetPixel = SetPixelFunction(mpBuffer->meFormat);
 

@@ -60,7 +60,7 @@ public:
     {
         assert(pData && "Access is not valid!");
 
-        return mFncGetPixel(pData, nX, maColorMask);
+        return mFncGetPixel(pData, nX, mpBuffer->maColorMask);
     }
 
     sal_uInt8 GetIndexFromData(const sal_uInt8* pData, tools::Long nX) const
@@ -72,7 +72,7 @@ public:
     {
         assert(pData && "Access is not valid!");
 
-        mFncSetPixel(pData, nX, rBitmapColor, maColorMask);
+        mFncSetPixel(pData, nX, rBitmapColor, mpBuffer->maColorMask);
     }
 
     BitmapColor GetPixel(tools::Long nY, tools::Long nX) const
