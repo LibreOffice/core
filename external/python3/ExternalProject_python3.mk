@@ -208,6 +208,7 @@ $(call gb_ExternalProject_get_state_target,python3,removeunnecessarystuff) : $(c
 	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_sqlite3.$(python3_EXTENSION_MODULE_SUFFIX).so
 	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_curses.$(python3_EXTENSION_MODULE_SUFFIX).so
 	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_curses_panel.$(python3_EXTENSION_MODULE_SUFFIX).so
+	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_tkinter.$(python3_EXTENSION_MODULE_SUFFIX).so
 	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_test*.$(python3_EXTENSION_MODULE_SUFFIX).so
 	touch $@
 
