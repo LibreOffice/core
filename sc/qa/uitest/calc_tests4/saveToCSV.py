@@ -46,7 +46,7 @@ class saveToCSV(UITestCase):
 
                     with self.ui_test.execute_dialog_through_action(xOpen, "CLICK", close_button="") as xWarnDialog:
                         # CSV confirmation dialog is displayed
-                        xSave = xWarnDialog.getChild("save")
+                        xSave = xWarnDialog.getChild("btnYes")
 
                         with self.ui_test.execute_dialog_through_action(xSave, "CLICK") as xCsvDialog:
                             xFormulas = xCsvDialog.getChild("formulas")

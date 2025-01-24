@@ -393,7 +393,7 @@ class trackedchanges(UITestCase):
 
                         xOpen = xDialog.getChild("open")
                         # DOC confirmation dialog is displayed
-                        with self.ui_test.execute_dialog_through_action(xOpen, "CLICK", close_button="save"):
+                        with self.ui_test.execute_dialog_through_action(xOpen, "CLICK", close_button="btnYes"):
                             pass
 
                 with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:

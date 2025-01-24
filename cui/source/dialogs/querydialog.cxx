@@ -28,6 +28,8 @@ QueryDialog::QueryDialog(weld::Window* pParent, const OUString& sTitle, const OU
     , m_pQuestion(m_xBuilder->weld_label(u"lbQuestion"_ustr))
     , m_pImage(m_xBuilder->weld_image(u"imQuery"_ustr))
     , m_pCheckBox(m_xBuilder->weld_check_button(u"cbDontShowAgain"_ustr))
+    , m_pYes(m_xBuilder->weld_button(u"btnYes"_ustr))
+    , m_pNo(m_xBuilder->weld_button(u"btnNo"_ustr))
 {
     m_pTitle->set_label(sTitle);
     m_pText->set_label(sText);

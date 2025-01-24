@@ -10,7 +10,6 @@
 $(eval $(call gb_UIConfig_UIConfig,sfx))
 
 $(eval $(call gb_UIConfig_add_uifiles,sfx,\
-	sfx2/uiconfig/ui/alienwarndialog \
 	sfx2/uiconfig/ui/addtargetdialog \
 	sfx2/uiconfig/ui/autoredactdialog \
 	sfx2/uiconfig/ui/bookmarkdialog \

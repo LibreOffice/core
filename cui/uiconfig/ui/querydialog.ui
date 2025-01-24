@@ -65,6 +65,7 @@
               <object class="GtkLabel" id="lbTitle">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="xalign">0</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
@@ -85,10 +86,10 @@
               <object class="GtkLabel" id="lbText">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="hexpand">False</property>
+                <property name="hexpand">True</property>
                 <property name="wrap">True</property>
                 <property name="wrap-mode">word-char</property>
-                <property name="max-width-chars">40</property>
+                <property name="max-width-chars">50</property>
                 <property name="xalign">0</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="lbText-atkobject">
@@ -106,7 +107,9 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="valign">start</property>
+                <property name="hexpand">True</property>
                 <property name="wrap">True</property>
+                <property name="max-width-chars">50</property>
                 <property name="xalign">0</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="lbQuestion-atkobject">

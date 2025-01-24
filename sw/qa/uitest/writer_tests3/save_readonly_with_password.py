@@ -44,7 +44,7 @@ class save_readonly_with_password(UITestCase):
 
                         xOk = xPasswordDialog.getChild("ok")
                         # DOCX confirmation dialog is displayed
-                        with self.ui_test.execute_dialog_through_action(xOk, "CLICK", close_button="save"):
+                        with self.ui_test.execute_dialog_through_action(xOk, "CLICK", close_button="btnYes"):
                             pass
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:

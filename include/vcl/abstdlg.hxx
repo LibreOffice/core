@@ -163,6 +163,8 @@ protected:
     virtual ~AbstractQueryDialog() override = default;
 public:
     virtual bool ShowAgain() const = 0;
+    virtual void SetYesLabel(const OUString& sLabel) = 0;
+    virtual void SetNoLabel(const OUString& sLabel) = 0;
 };
 
 class VCL_DLLPUBLIC VclAbstractDialogFactory

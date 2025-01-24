@@ -30,7 +30,7 @@ class tdf144996(UITestCase):
 
             self.assertFalse(document.isReadonly())
 
-            with self.ui_test.execute_dialog_through_command(".uno:Save", close_button="save"):
+            with self.ui_test.execute_dialog_through_command(".uno:Save", close_button="btnYes"):
                 # Confirm file format popup
                 pass
 

@@ -47,6 +47,12 @@
 #define STR_HIDDENINFO_NOTES                    NC_("STR_HIDDENINFO_NOTES", "Notes")
 #define STR_HIDDENINFO_DOCVERSIONS              NC_("STR_HIDDENINFO_DOCVERSIONS", "Document versions")
 #define STR_NEW_FILENAME_SAVE                   NC_("STR_NEW_FILENAME_SAVE", "If you do not want to overwrite the original document, you should save your work under a new filename.")
+#define STR_QUERY_ALIENFORMAT_TTITLE            NC_("STR_QUERY_ALIENFORMAT_TITLE", "Non-standard file format")
+#define STR_QUERY_ALIENFORMAT_TEXT              NC_("STR_QUERY_ALIENFORMAT_TEXT", "This document may contain formatting or content that cannot be saved in the currently selected file format “%FORMATNAME (*.%EXTENSION)”.")
+#define STR_QUERY_ALIENFORMAT_QUESTION          NC_("STR_QUERY_ALIENFORMAT_QUESTION", "Use the default ODF file format (*.%EXTENSION) to be sure that the document is saved correctly.")
+#define STR_QUERY_ALIENFORMAT_YES               NC_("STR_QUERY_ALIENFORMAT_YES", "Use %FORMATNAME Format")
+#define STR_QUERY_ALIENFORMAT_NO                NC_("STR_QUERY_ALIENFORMAT_No", "Use %DEFAULTEXTENSION Format")
+
 // Used in the title of a shared document.
 #define STR_SHARED                              NC_("STR_SHARED", " (shared)")
 #define STR_XMLSEC_ODF12_EXPECTED               NC_("STR_XMLSEC_ODF12_EXPECTED", "The document format version is set to ODF 1.1 (OpenOffice.org 2.x) in Tools-Options-Load/Save-General. Signing documents requires ODF 1.2 (OpenOffice.org 3.x).")

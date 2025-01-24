@@ -28,11 +28,15 @@ private:
     std::unique_ptr<weld::Label> m_pQuestion;
     std::unique_ptr<weld::Image> m_pImage;
     std::unique_ptr<weld::CheckButton> m_pCheckBox;
+    std::unique_ptr<weld::Button> m_pYes;
+    std::unique_ptr<weld::Button> m_pNo;
 
 public:
     QueryDialog(weld::Window* pParent, const OUString& sTitle, const OUString& sText,
                 const OUString& sQuestion, bool bShowAgain = true);
     bool ShowAgain() const { return m_pCheckBox->get_active(); }
+    void SetYesLabel(const OUString& sLabel) { m_pYes->set_label(sLabel); }
+    void SetNoLabel(const OUString& sLabel) { m_pNo->set_label(sLabel); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

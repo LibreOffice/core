@@ -89,7 +89,6 @@
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/bindings.hxx>
-#include <alienwarn.hxx>
 
 #include <memory>
 #include <string_view>
@@ -102,6 +101,8 @@
 
 #include <osl/file.hxx>
 #include <svl/cryptosign.hxx>
+
+#include <vcl/abstdlg.hxx>
 
 #ifdef _WIN32
 #include <Shlobj.h>
@@ -2100,9 +2101,31 @@ bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XMod
         return true;
 
     weld::Window* pWin = SfxStoringHelper::GetModelWindow(xModel);
-    SfxAlienWarningDialog aDlg(pWin, aOldUIName,aExtension, aDefExtension, bDefIsAlien);
 
-    return aDlg.run() == RET_OK;
+    OUString sInfoText = SfxResId(STR_QUERY_ALIENFORMAT_TEXT);
+    sInfoText = sInfoText.replaceAll("%FORMATNAME", aOldUIName);
+    sInfoText = sInfoText.replaceAll("%EXTENSION", aExtension);
+
+    OUString sExtension = u"ODF"_ustr;
+    OUString sQuestion = "";
+    if (bDefIsAlien) {
+        sExtension = aDefExtension.toAsciiUpperCase();
+    }
+    else
+    {
+        sQuestion = SfxResId(STR_QUERY_ALIENFORMAT_QUESTION);
+        sQuestion = sQuestion.replaceAll("%EXTENSION", aDefExtension);
+    }
+
+    VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+    auto pDlg = pFact->CreateQueryDialog(pWin, SfxResId(STR_QUERY_ALIENFORMAT_TTITLE), sInfoText, sQuestion, false);
+    pDlg->SetYesLabel(SfxResId(STR_QUERY_ALIENFORMAT_YES).replaceAll("%FORMATNAME", aOldUIName)); // "Use %FORMATNAME Format"
+    pDlg->SetNoLabel(SfxResId(STR_QUERY_ALIENFORMAT_NO).replaceAll("%DEFAULTEXTENSION", sExtension)); // "Use %DEFAULTEXTENSION _Format"
+
+    sal_Int32 nResult = pDlg->Execute();
+    pDlg->disposeOnce();
+
+    return nResult == RET_YES;
 }
 
 uno::Reference<awt::XWindow> SfxStoringHelper::GetModelXWindow(const uno::Reference<frame::XModel>& xModel)

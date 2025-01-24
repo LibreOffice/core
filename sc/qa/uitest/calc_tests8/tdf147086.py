@@ -42,7 +42,7 @@ class tdf147086(UITestCase):
 
                         xOk = xPasswordDialog.getChild("ok")
                         # XLSX confirmation dialog is displayed
-                        with self.ui_test.execute_dialog_through_action(xOk, "CLICK", close_button="save"):
+                        with self.ui_test.execute_dialog_through_action(xOk, "CLICK", close_button="btnYes"):
                             pass
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath), [PropertyValue(Name="Silent", Value=True)]) as document:
