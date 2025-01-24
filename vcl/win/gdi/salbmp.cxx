@@ -794,28 +794,15 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
                     memcpy( pBuffer->maPalette.ImplGetColorBuffer(), pBI->bmiColors, nPalCount * sizeof( RGBQUAD ) );
                     pBuffer->mpBits = reinterpret_cast<PBYTE>(pBI) + pBI->bmiHeader.biSize + nPalCount * sizeof( RGBQUAD );
                 }
-                else if( ( pBIH->biBitCount == 16 ) || ( pBIH->biBitCount == 32 ) )
+                else if( pBIH->biBitCount == 32 )
                 {
-                    if( pBIH->biBitCount == 16 )
-                    {
-                        ColorMaskElement aRedMask(0x00007c00UL);
-                        aRedMask.CalcMaskShift();
-                        ColorMaskElement aGreenMask(0x000003e0UL);
-                        aGreenMask.CalcMaskShift();
-                        ColorMaskElement aBlueMask(0x0000001fUL);
-                        aBlueMask.CalcMaskShift();
-                        pBuffer->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
-                    }
-                    else
-                    {
-                        ColorMaskElement aRedMask(0x00ff0000UL);
-                        aRedMask.CalcMaskShift();
-                        ColorMaskElement aGreenMask(0x0000ff00UL);
-                        aGreenMask.CalcMaskShift();
-                        ColorMaskElement aBlueMask(0x000000ffUL);
-                        aBlueMask.CalcMaskShift();
-                        pBuffer->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
-                    }
+                    ColorMaskElement aRedMask(0x00ff0000UL);
+                    aRedMask.CalcMaskShift();
+                    ColorMaskElement aGreenMask(0x0000ff00UL);
+                    aGreenMask.CalcMaskShift();
+                    ColorMaskElement aBlueMask(0x000000ffUL);
+                    aBlueMask.CalcMaskShift();
+                    pBuffer->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
 
                     pBuffer->mpBits = reinterpret_cast<PBYTE>(pBI) + pBI->bmiHeader.biSize;
                 }
