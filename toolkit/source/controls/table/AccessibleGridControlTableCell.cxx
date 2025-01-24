@@ -323,8 +323,7 @@ namespace accessibility
         vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
         assert(pParent && "implGetBoundingBox - missing parent window");
         tools::Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( *pParent );
-        sal_Int64 nIndex = getAccessibleIndexInParent();
-        tools::Rectangle aCellRect = m_aTable.calcCellRect(nIndex%m_aTable.GetColumnCount(), nIndex/m_aTable.GetColumnCount());
+        tools::Rectangle aCellRect = m_aTable.calcCellRect(getRowPos(), getColumnPos());
         tools::Long nX = aGridRect.Left() + aCellRect.Left();
         tools::Long nY = aGridRect.Top() + aCellRect.Top();
         tools::Rectangle aCell( Point( nX, nY ), aCellRect.GetSize());
@@ -334,8 +333,7 @@ namespace accessibility
     AbsoluteScreenPixelRectangle AccessibleGridControlTableCell::implGetBoundingBoxOnScreen()
     {
         AbsoluteScreenPixelRectangle aGridRect = m_aTable.GetWindowExtentsAbsolute();
-        sal_Int64 nIndex = getAccessibleIndexInParent();
-        tools::Rectangle aCellRect = m_aTable.calcCellRect(nIndex%m_aTable.GetColumnCount(), nIndex/m_aTable.GetColumnCount());
+        tools::Rectangle aCellRect = m_aTable.calcCellRect(getRowPos(), getColumnPos());
         tools::Long nX = aGridRect.Left() + aCellRect.Left();
         tools::Long nY = aGridRect.Top() + aCellRect.Top();
         AbsoluteScreenPixelRectangle aCell( AbsoluteScreenPixelPoint( nX, nY ), aCellRect.GetSize());
