@@ -75,7 +75,6 @@ namespace accessibility
         virtual OUString                        implGetText() override;
         virtual css::lang::Locale               implGetLocale() override;
         virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override final;
-        virtual tools::Rectangle implGetBoundingBox() override;
         virtual AbsoluteScreenPixelRectangle implGetBoundingBoxOnScreen() override;
 
     public:

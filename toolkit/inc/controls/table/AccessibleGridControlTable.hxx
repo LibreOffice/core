@@ -149,9 +149,6 @@ public:
 private:
     // internal virtual methods
 
-    /** @attention  This method requires locked mutex's and a living object.
-        @return  The bounding box (VCL rect.) relative to the parent window. */
-    virtual tools::Rectangle implGetBoundingBox() override;
     ///** @attention  This method requires locked mutex's and a living object.
     //    @return  The bounding box (VCL rect.) in screen coordinates. */
     virtual AbsoluteScreenPixelRectangle implGetBoundingBoxOnScreen() override;

@@ -121,9 +121,6 @@ private:
         @return  The XAccessible interface of the specified column/row. */
     css::uno::Reference< css::accessibility::XAccessible >
     implGetChild( sal_Int32 nRow, sal_uInt32 nColumnPos );
-    /** @attention  This method requires locked mutex's and a living object.
-        @return  The bounding box (VCL rect.) relative to the parent window. */
-    virtual tools::Rectangle implGetBoundingBox() override;
    /** @attention  This method requires locked mutex's and a living object.
         @return  The bounding box (VCL rect.) in screen coordinates. */
     virtual AbsoluteScreenPixelRectangle implGetBoundingBoxOnScreen() override;

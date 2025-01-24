@@ -280,6 +280,22 @@ bool AccessibleGridControlBase::implIsShowing()
     return bShowing;
 }
 
+tools::Rectangle AccessibleGridControlBase::implGetBoundingBox()
+{
+    // calculate parent-relative position from own and parent's absolute position
+    tools::Rectangle aBound(implGetBoundingBoxOnScreen());
+    if (!m_xParent.is())
+        return aBound;
+
+    uno::Reference<css::accessibility::XAccessibleComponent> xParentComponent(m_xParent->getAccessibleContext(), uno::UNO_QUERY);
+    if (!xParentComponent.is())
+        return aBound;
+
+    awt::Point aParentPos = xParentComponent->getLocationOnScreen();
+    aBound.Move(-aParentPos.X, -aParentPos.Y);
+    return aBound;
+}
+
 sal_Int64 AccessibleGridControlBase::implCreateStateSet()
 {
     sal_Int64 nStateSet = 0;

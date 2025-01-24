@@ -318,18 +318,6 @@ namespace accessibility
         return false;
     }
 
-    tools::Rectangle AccessibleGridControlTableCell::implGetBoundingBox()
-    {
-        vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
-        assert(pParent && "implGetBoundingBox - missing parent window");
-        tools::Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( *pParent );
-        tools::Rectangle aCellRect = m_aTable.calcCellRect(getRowPos(), getColumnPos());
-        tools::Long nX = aGridRect.Left() + aCellRect.Left();
-        tools::Long nY = aGridRect.Top() + aCellRect.Top();
-        tools::Rectangle aCell( Point( nX, nY ), aCellRect.GetSize());
-        return aCell;
-    }
-
     AbsoluteScreenPixelRectangle AccessibleGridControlTableCell::implGetBoundingBoxOnScreen()
     {
         AbsoluteScreenPixelRectangle aGridRect = m_aTable.GetWindowExtentsAbsolute();

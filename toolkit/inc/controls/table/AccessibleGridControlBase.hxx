@@ -198,10 +198,12 @@ protected:
         @return  TRUE, if the object is really showing. */
     bool implIsShowing();
 
-    /** Derived classes return the bounding box relative to the parent window.
+    /** Return the bounding box relative to the parent.
         @attention  This method requires locked mutex's and a living object.
-        @return  The bounding box (VCL rect.) relative to the parent window. */
-    virtual tools::Rectangle implGetBoundingBox() = 0;
+        @return  The bounding box (VCL rect.) relative to the parent. */
+    tools::Rectangle implGetBoundingBox();
+
+
     ///** Derived classes return the bounding box in screen coordinates.
     //    @attention  This method requires locked mutex's and a living object.
     //    @return  The bounding box (VCL rect.) in screen coordinates. */

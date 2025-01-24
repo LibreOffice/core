@@ -70,8 +70,6 @@ namespace accessibility
         sal_Int64 implCreateStateSet() override;
 
     private:
-        virtual tools::Rectangle implGetBoundingBox() override;
-
         virtual AbsoluteScreenPixelRectangle implGetBoundingBoxOnScreen() override;
     };
 }

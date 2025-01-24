@@ -185,13 +185,6 @@ OUString SAL_CALL AccessibleGridControl::getImplementationName()
 
 // internal virtual methods ---------------------------------------------------
 
-tools::Rectangle AccessibleGridControl::implGetBoundingBox()
-{
-    vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
-    assert(pParent && "implGetBoundingBox - missing parent window");
-    return m_aTable.GetWindowExtentsRelative( *pParent );
-}
-
 AbsoluteScreenPixelRectangle AccessibleGridControl::implGetBoundingBoxOnScreen()
 {
     return m_aTable.GetWindowExtentsAbsolute();

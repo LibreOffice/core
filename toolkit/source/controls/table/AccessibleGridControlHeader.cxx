@@ -194,18 +194,6 @@ Sequence< sal_Int8 > SAL_CALL AccessibleGridControlHeader::getImplementationId()
 
 // internal virtual methods ---------------------------------------------------
 
-tools::Rectangle AccessibleGridControlHeader::implGetBoundingBox()
-{
-    vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
-    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( *pParent ) );
-    tools::Rectangle aHeaderRect (m_aTable.calcHeaderRect(isColumnBar()));
-    if(isColumnBar())
-        return tools::Rectangle(aGridRect.TopLeft(), Size(aGridRect.getOpenWidth(),aHeaderRect.getOpenHeight()));
-    else
-        return tools::Rectangle(aGridRect.TopLeft(), Size(aHeaderRect.getOpenWidth(),aGridRect.getOpenHeight()));
-
-}
-
 AbsoluteScreenPixelRectangle AccessibleGridControlHeader::implGetBoundingBoxOnScreen()
 {
     AbsoluteScreenPixelRectangle aGridRect( m_aTable.GetWindowExtentsAbsolute() );

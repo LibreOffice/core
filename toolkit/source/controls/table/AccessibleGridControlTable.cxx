@@ -342,20 +342,6 @@ void AccessibleGridControlTable::commitEvent(sal_Int16 nEventId, const css::uno:
 
 // internal virtual methods ---------------------------------------------------
 
-tools::Rectangle AccessibleGridControlTable::implGetBoundingBox()
-{
-    vcl::Window* pParent = m_aTable.GetAccessibleParentWindow();
-    assert(pParent && "implGetBoundingBox - missing parent window");
-    tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( *pParent ));
-    tools::Rectangle aTableRect( m_aTable.calcTableRect() );
-    tools::Long nX = aGridRect.Left() + aTableRect.Left();
-    tools::Long nY = aGridRect.Top() + aTableRect.Top();
-    tools::Long nWidth = aGridRect.GetSize().Width()-aTableRect.Left();
-    tools::Long nHeight = aGridRect.GetSize().Height()-aTableRect.Top();
-    tools::Rectangle aTable( Point( nX, nY ), Size( nWidth, nHeight ));
-    return aTable;
-}
-
 AbsoluteScreenPixelRectangle AccessibleGridControlTable::implGetBoundingBoxOnScreen()
 {
     tools::Rectangle aGridRect( m_aTable.GetWindowExtentsAbsolute());
