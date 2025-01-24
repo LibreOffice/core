@@ -125,7 +125,6 @@ namespace svt::table
 
 
         // IAccessibleTable
-        virtual vcl::Window* GetWindowInstance() override;
         virtual sal_Int32 GetAccessibleControlCount() const override;
         virtual bool ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint ) override;
         virtual sal_Int32 GetRowCount() const override;

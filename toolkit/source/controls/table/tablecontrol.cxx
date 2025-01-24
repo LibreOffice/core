@@ -516,12 +516,6 @@ namespace svt::table
             m_pImpl->commitTableEvent( i_eventID, i_newValue, i_oldValue );
     }
 
-    vcl::Window* TableControl::GetWindowInstance()
-    {
-        return this;
-    }
-
-
     bool TableControl::HasRowHeader()
     {
         return GetModel()->hasRowHeaders();

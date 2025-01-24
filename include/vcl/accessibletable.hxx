@@ -71,7 +71,6 @@ public:
             AccessibleTableControlObjType eObjType ) const= 0;
 
     // Window
-    virtual vcl::Window* GetWindowInstance()= 0;
     virtual sal_Int32 GetAccessibleControlCount() const = 0;
     virtual bool ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint )= 0;
     virtual sal_Int32 GetRowCount() const= 0;
