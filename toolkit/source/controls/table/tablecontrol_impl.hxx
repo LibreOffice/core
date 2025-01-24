@@ -342,10 +342,6 @@ namespace svt::table
         */
         TableSize   impl_getVisibleColumns( bool _bAcceptPartialCol ) const;
 
-        /** determines the rectangle occupied by the given cell
-        */
-        void        impl_getCellRect( ColPos _nColumn, RowPos _nRow, tools::Rectangle& _rCellRect ) const;
-
         /** updates all cached model values
 
             The method is not bound to the classes public invariants, as it's used in

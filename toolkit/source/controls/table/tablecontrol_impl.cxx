@@ -1665,23 +1665,6 @@ namespace svt::table
         }
     }
 
-
-    void TableControl_Impl::impl_getCellRect( ColPos _nColumn, RowPos _nRow, tools::Rectangle& _rCellRect ) const
-    {
-        if  (   !m_pModel
-            ||  ( COL_INVALID == _nColumn )
-            ||  ( ROW_INVALID == _nRow )
-            )
-        {
-            _rCellRect.SetEmpty();
-            return;
-        }
-
-        TableCellGeometry aCell( *this, impl_getAllVisibleCellsArea(), _nColumn, _nRow );
-        _rCellRect = aCell.getRect();
-    }
-
-
     RowPos TableControl_Impl::getRowAtPoint( const Point& rPoint ) const
     {
         return impl_getRowForAbscissa( rPoint.Y() );
@@ -2339,9 +2322,11 @@ namespace svt::table
 
     tools::Rectangle TableControl_Impl::calcCellRect( sal_Int32 nRow, sal_Int32 nCol ) const
     {
-        tools::Rectangle aCellRect;
-        impl_getCellRect(nCol, nRow, aCellRect);
-        return aCellRect;
+        if (!m_pModel || (nRow == ROW_INVALID) || (nCol == COL_INVALID))
+            return tools::Rectangle();
+
+        TableCellGeometry aCell(*this, impl_getAllVisibleCellsArea(), nCol, nRow);
+        return aCell.getRect();
     }
 
 
