@@ -4263,6 +4263,20 @@ const TranslateId SC_OPCODE_DROP_ARY[] =
     NC_("SC_OPCODE_DROP", "The number of columns to drop. A negative value drops from the end of the array.")
 };
 
+// -=*# Resource for function EXPAND #*=-
+const TranslateId SC_OPCODE_EXPAND_ARY[] =
+{
+    NC_("SC_OPCODE_EXPAND", "Expands or pads an array to specified row and column dimensions."),
+    NC_("SC_OPCODE_EXPAND", "Array"),
+    NC_("SC_OPCODE_EXPAND", "The array to expand."),
+    NC_("SC_OPCODE_EXPAND", "Rows"),
+    NC_("SC_OPCODE_EXPAND", "The number of rows in the expanded array. If missing, rows will not be expanded."),
+    NC_("SC_OPCODE_EXPAND", "Column"),
+    NC_("SC_OPCODE_EXPAND", "The number of columns in the expanded array. If missing, columns will not be expanded."),
+    NC_("SC_OPCODE_EXPAND", "Pad with"),
+    NC_("SC_OPCODE_EXPAND", "The value with which to pad. The default is #N/A.")
+};
+
 // -=*# Resource for function TAKE #*=-
 const TranslateId SC_OPCODE_TAKE_ARY[] =
 {

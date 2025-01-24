@@ -725,6 +725,7 @@ private:
     void ScSort();
     void ScSortBy();
     void ScDrop();
+    void ScExpand();
     void ScTake();
     void ScToCol();
     void ScToRow();

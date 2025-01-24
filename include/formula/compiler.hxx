@@ -518,13 +518,14 @@
 #define SC_OPCODE_MAT_SEQUENCE      503
 #define SC_OPCODE_RANDARRAY         504
 #define SC_OPCODE_DROP              505
-#define SC_OPCODE_TAKE              506
-#define SC_OPCODE_TOCOL             507
-#define SC_OPCODE_TOROW             508
-#define SC_OPCODE_UNIQUE            509
-#define SC_OPCODE_WRAPCOLS          510
-#define SC_OPCODE_WRAPROWS          511
-#define SC_OPCODE_STOP_2_PAR        512     /* last function with two or more parameters' OpCode + 1 */
+#define SC_OPCODE_EXPAND            506
+#define SC_OPCODE_TAKE              507
+#define SC_OPCODE_TOCOL             508
+#define SC_OPCODE_TOROW             509
+#define SC_OPCODE_UNIQUE            510
+#define SC_OPCODE_WRAPCOLS          511
+#define SC_OPCODE_WRAPROWS          512
+#define SC_OPCODE_STOP_2_PAR        513     /* last function with two or more parameters' OpCode + 1 */
 
 #define SC_OPCODE_STOP_FUNCTION     SC_OPCODE_STOP_2_PAR            /* last function's OpCode + 1 */
 #define SC_OPCODE_LAST_OPCODE_ID    (SC_OPCODE_STOP_FUNCTION - 1)   /* last OpCode */

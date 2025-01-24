@@ -3103,6 +3103,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "DROP",
         "ERROR.TYPE",
         "ERRORTYPE",
+        "EXPAND",
         "FILTER",
         "GETPIVOTDATA",
         "HLOOKUP",
