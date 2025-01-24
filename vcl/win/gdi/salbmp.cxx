@@ -514,20 +514,10 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
     WinSalGraphics* pGraphics = static_cast<WinSalGraphics*>(pSGraphics);
 
     HDC                 hDC  = pGraphics->getHDC();
-    HBITMAP             hNewDDB;
     BITMAP              aDDBInfo;
     PBYTE               pBits = reinterpret_cast<PBYTE>(pBI) + pBI->bmiHeader.biSize +
-                        ImplGetDIBColorCount( rSalBmp.mhDIB ) * sizeof( RGBQUAD );
-
-    if( pBI->bmiHeader.biBitCount == 1 )
-    {
-        hNewDDB = CreateBitmap( pBI->bmiHeader.biWidth, pBI->bmiHeader.biHeight, 1, 1, nullptr );
-
-        if( hNewDDB )
-            SetDIBits( hDC, hNewDDB, 0, pBI->bmiHeader.biHeight, pBits, pBI, DIB_RGB_COLORS );
-    }
-    else
-        hNewDDB = CreateDIBitmap( hDC, &pBI->bmiHeader, CBM_INIT, pBits, pBI, DIB_RGB_COLORS );
+                                ImplGetDIBColorCount( rSalBmp.mhDIB ) * sizeof( RGBQUAD );
+    HBITMAP hNewDDB = CreateDIBitmap( hDC, &pBI->bmiHeader, CBM_INIT, pBits, pBI, DIB_RGB_COLORS );
 
     GlobalUnlock( rSalBmp.mhDIB );
 
@@ -773,11 +763,11 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
         {
             pBuffer.reset(new BitmapBuffer);
 
-            pBuffer->meFormat = pBIH->biBitCount == 1 ? ScanlineFormat::N1BitMsbPal :
-                                pBIH->biBitCount == 8 ? ScanlineFormat::N8BitPal :
+            pBuffer->meFormat = pBIH->biBitCount == 8 ? ScanlineFormat::N8BitPal :
                                 pBIH->biBitCount == 24 ? ScanlineFormat::N24BitTcBgr :
                                 pBIH->biBitCount == 32 ? ScanlineFormat::N32BitTcMask :
                                 ScanlineFormat::NONE;
+            assert (pBuffer->meFormat != ScanlineFormat::NONE);
 
             if (pBuffer->meFormat != ScanlineFormat::NONE)
             {
