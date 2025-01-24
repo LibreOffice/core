@@ -30,8 +30,6 @@ namespace vcl { class Window; }
 namespace vcl::table
 {
 
-typedef sal_Int32   RowPos;
-
 enum class AccessibleTableControlObjType
 {
     GRIDCONTROL,         /// The GridControl itself.
