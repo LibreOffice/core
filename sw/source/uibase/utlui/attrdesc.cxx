@@ -645,13 +645,13 @@ bool SwTextGridItem::GetPresentation
 
     switch ( GetGridType() )
     {
-    case GRID_NONE :
+    case SwTextGrid::NONE :
         pId = STR_GRID_NONE;
         break;
-    case GRID_LINES_ONLY :
+    case SwTextGrid::LinesOnly :
         pId = STR_GRID_LINES_ONLY;
         break;
-    case GRID_LINES_CHARS :
+    case SwTextGrid::LinesAndChars :
         pId = STR_GRID_LINES_CHARS;
         break;
     }

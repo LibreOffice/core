@@ -5900,7 +5900,7 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
         return;
 
     bool bGrid = pGrid->GetRubyTextBelow();
-    bool bCell = GRID_LINES_CHARS == pGrid->GetGridType();
+    bool bCell = SwTextGrid::LinesAndChars == pGrid->GetGridType();
     tools::Long nGrid = pGrid->GetBaseHeight();
     const SwDoc* pDoc = GetFormat()->GetDoc();
     tools::Long nGridWidth = GetGridWidth(*pGrid, *pDoc);

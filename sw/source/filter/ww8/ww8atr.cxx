@@ -4301,13 +4301,13 @@ void WW8AttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
         default:
             OSL_FAIL("Unknown grid type");
             [[fallthrough]];
-        case GRID_NONE:
+        case SwTextGrid::NONE:
             nGridType = 0;
             break;
-        case GRID_LINES_ONLY:
+        case SwTextGrid::LinesOnly:
             nGridType = 2;
             break;
-        case GRID_LINES_CHARS:
+        case SwTextGrid::LinesAndChars:
             if ( rGrid.IsSnapToChars() )
                 nGridType = 3;
             else

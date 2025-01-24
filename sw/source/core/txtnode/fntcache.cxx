@@ -1021,7 +1021,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
 
         // ASIAN LINE AND CHARACTER GRID MODE
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
+        if ( pGrid && SwTextGrid::LinesAndChars == pGrid->GetGridType() )
         {
             //for textgrid refactor
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
@@ -1663,7 +1663,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
          SwFontScript::CJK == rInf.GetFont()->GetActual() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
+        if ( pGrid && SwTextGrid::LinesAndChars == pGrid->GetGridType() )
         {
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
@@ -1810,7 +1810,7 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
          rInf.GetFont() && SwFontScript::CJK == rInf.GetFont()->GetActual() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
+        if ( pGrid && SwTextGrid::LinesAndChars == pGrid->GetGridType() )
         {
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
@@ -2086,7 +2086,7 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, tools::Long nTe
          rInf.GetFont() && SwFontScript::CJK == rInf.GetFont()->GetActual() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
+        if ( pGrid && SwTextGrid::LinesAndChars == pGrid->GetGridType() )
         {
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);

@@ -236,26 +236,26 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrameFormat &rFormat, const wwSection &r
     SwTextGridItem aGrid;
     aGrid.SetDisplayGrid(false);
     aGrid.SetPrintGrid(false);
-    SwTextGrid eType=GRID_NONE;
+    SwTextGrid eType=SwTextGrid::NONE;
 
     switch (rSection.maSep.clm)
     {
         case 0:
-            eType = GRID_NONE;
+            eType = SwTextGrid::NONE;
             break;
         default:
             OSL_ENSURE(false, "Unknown grid type");
             [[fallthrough]];
         case 3:
-            eType = GRID_LINES_CHARS;
+            eType = SwTextGrid::LinesAndChars;
             aGrid.SetSnapToChars(true);
             break;
         case 1:
-            eType = GRID_LINES_CHARS;
+            eType = SwTextGrid::LinesAndChars;
             aGrid.SetSnapToChars(false);
             break;
         case 2:
-            eType = GRID_LINES_ONLY;
+            eType = SwTextGrid::LinesOnly;
             break;
     }
 

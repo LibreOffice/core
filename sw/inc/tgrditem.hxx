@@ -27,7 +27,7 @@
 
 class IntlWrapper;
 
-enum SwTextGrid { GRID_NONE, GRID_LINES_ONLY, GRID_LINES_CHARS };
+enum class SwTextGrid { NONE, LinesOnly, LinesAndChars };
 
 class SW_DLLPUBLIC SwTextGridItem final : public SfxPoolItem
 {

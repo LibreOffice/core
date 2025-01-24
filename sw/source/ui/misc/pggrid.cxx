@@ -169,9 +169,9 @@ void    SwTextGridPage::Reset(const SfxItemSet *rSet)
         weld::RadioButton* pButton = nullptr;
         switch(rGridItem.GetGridType())
         {
-            case GRID_NONE :        pButton = m_xNoGridRB.get();    break;
-            case GRID_LINES_ONLY  : pButton = m_xLinesGridRB.get(); break;
-            default:                pButton = m_xCharsGridRB.get();
+            case SwTextGrid::NONE :        pButton = m_xNoGridRB.get();    break;
+            case SwTextGrid::LinesOnly:    pButton = m_xLinesGridRB.get(); break;
+            default:                       pButton = m_xCharsGridRB.get();
         }
         pButton->set_active(true);
         m_xDisplayCB->set_active(rGridItem.IsDisplayGrid());
@@ -225,8 +225,8 @@ DeactivateRC SwTextGridPage::DeactivatePage( SfxItemSet* )
 void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
 {
     SwTextGridItem aGridItem;
-    aGridItem.SetGridType(m_xNoGridRB->get_active() ? GRID_NONE :
-        m_xLinesGridRB->get_active() ? GRID_LINES_ONLY : GRID_LINES_CHARS );
+    aGridItem.SetGridType(m_xNoGridRB->get_active() ? SwTextGrid::NONE :
+        m_xLinesGridRB->get_active() ? SwTextGrid::LinesOnly : SwTextGrid::LinesAndChars );
     aGridItem.SetSnapToChars(m_xSnapToCharsCB->get_active());
     aGridItem.SetLines( static_cast< sal_Int32 >(m_xLinesPerPageNF->get_value()) );
     aGridItem.SetBaseHeight( static_cast< sal_uInt16 >(
@@ -247,9 +247,9 @@ void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
     rSet.Put(aGridItem);
 
     SwView * pView = ::GetActiveView();
-    if (pView && aGridItem.GetGridType() != GRID_NONE)
+    if (pView && aGridItem.GetGridType() != SwTextGrid::NONE)
     {
-        if ( aGridItem.GetGridType() == GRID_LINES_CHARS )
+        if ( aGridItem.GetGridType() == SwTextGrid::LinesAndChars )
         {
             m_bHRulerChanged = true;
         }

@@ -495,7 +495,7 @@ void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point
 {
     SwPageExample::DrawPage(rRenderContext, rOrg, bSecond, bEnabled);
 
-    if (!m_pGridItem || !m_pGridItem->GetGridType())
+    if (!m_pGridItem || m_pGridItem->GetGridType() == SwTextGrid::NONE)
         return;
 
     //paint the grid now
@@ -563,7 +563,7 @@ void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point
         m_bVertical ? aCharRect.Move(nRubyHeight, 0) : aCharRect.Move(0, nRubyHeight);
 
     //vertical lines
-    bool bBothLines = m_pGridItem->GetGridType() == GRID_LINES_CHARS;
+    bool bBothLines = m_pGridItem->GetGridType() == SwTextGrid::LinesAndChars;
     rRenderContext.SetFillColor(COL_TRANSPARENT);
     sal_Int32 nXMove = m_bVertical ? nLineHeight : 0;
     sal_Int32 nYMove = m_bVertical ? 0 : nLineHeight;

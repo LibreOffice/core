@@ -128,7 +128,7 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             SwRectFnSet aRectFnSet(this);
             tools::Long nSize = aRectFnSet.GetWidth(getFrameArea());
             tools::Long nBorder = 0;
-            if( GRID_LINES_CHARS == pGrid->GetGridType() )
+            if( SwTextGrid::LinesAndChars == pGrid->GetGridType() )
             {
                 //for textgrid refactor
                 SwDoc *pDoc = GetFormat()->GetDoc();
@@ -2740,7 +2740,7 @@ SwTextGridItem const* GetGridItem(SwPageFrame const*const pPage)
     {
         SwTextGridItem const& rGridItem(
                 pPage->GetPageDesc()->GetMaster().GetTextGrid());
-        if (GRID_NONE != rGridItem.GetGridType())
+        if (SwTextGrid::NONE != rGridItem.GetGridType())
         {
             return &rGridItem;
         }

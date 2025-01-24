@@ -656,7 +656,7 @@ TextFrameIndex SwTextPortion::GetSpaceCnt(const SwTextSizeInfo &rInf,
     if ( rInf.SnapToGrid() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetTextFrame()->FindPageFrame()));
-        if (pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars())
+        if (pGrid && SwTextGrid::LinesAndChars == pGrid->GetGridType() && pGrid->IsSnapToChars())
             return TextFrameIndex(0);
     }
 
@@ -696,7 +696,7 @@ SwTwips SwTextPortion::CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo 
     if ( rInf.SnapToGrid() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetTextFrame()->FindPageFrame()));
-        if (pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars())
+        if (pGrid && SwTextGrid::LinesAndChars == pGrid->GetGridType() && pGrid->IsSnapToChars())
             return 0;
     }
 

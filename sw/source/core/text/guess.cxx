@@ -215,7 +215,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         {
             SwTextGridItem const*const pGrid(
                     GetGridItem(rInf.GetTextFrame()->FindPageFrame()));
-            bAddItalic = !pGrid || GRID_LINES_CHARS != pGrid->GetGridType();
+            bAddItalic = !pGrid || SwTextGrid::LinesAndChars != pGrid->GetGridType();
         }
 
         // do not add extra italic value for an isolated blank:

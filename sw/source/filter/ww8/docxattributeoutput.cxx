@@ -10087,13 +10087,13 @@ void DocxAttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
     switch ( rGrid.GetGridType( ) )
     {
         default:
-        case GRID_NONE:
+        case SwTextGrid::NONE:
             sGridType = "default";
             break;
-        case GRID_LINES_ONLY:
+        case SwTextGrid::LinesOnly:
             sGridType = "lines";
             break;
-        case GRID_LINES_CHARS:
+        case SwTextGrid::LinesAndChars:
             if ( rGrid.IsSnapToChars( ) )
                 sGridType = "snapToChars";
             else

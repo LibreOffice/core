@@ -328,7 +328,7 @@ void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextF
     bool bGridEnabled = false;
     if (SwTextGridItem const* pGrid = GetGridItem(m_pFrame->FindPageFrame()); pGrid)
     {
-        bGridEnabled = (pGrid->GetGridType() != GRID_NONE);
+        bGridEnabled = (pGrid->GetGridType() != SwTextGrid::NONE);
     }
 
     SetSnapToGrid(m_pFrame->GetTextNodeForParaProps()->GetSwAttrSet().GetParaGrid().GetValue()

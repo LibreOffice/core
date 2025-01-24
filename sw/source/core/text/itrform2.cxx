@@ -442,7 +442,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
     // Asian grid stuff
     SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
     const bool bHasGrid = pGrid && rInf.SnapToGrid() &&
-                              GRID_LINES_CHARS == pGrid->GetGridType();
+                              SwTextGrid::LinesAndChars == pGrid->GetGridType();
 
 
     const SwDoc & rDoc = rInf.GetTextFrame()->GetDoc();

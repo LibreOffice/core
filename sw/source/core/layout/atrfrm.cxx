@@ -2381,7 +2381,7 @@ bool SwFormatLineNumber::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 SwTextGridItem::SwTextGridItem()
     : SfxPoolItem( RES_TEXTGRID )
     , m_aColor( COL_LIGHTGRAY ), m_nLines( 20 )
-    , m_nBaseHeight( 400 ), m_nRubyHeight( 200 ), m_eGridType( GRID_NONE )
+    , m_nBaseHeight( 400 ), m_nRubyHeight( 200 ), m_eGridType( SwTextGrid::NONE )
     , m_bRubyTextBelow( false ), m_bPrintGrid( true ), m_bDisplayGrid( true )
     , m_nBaseWidth(400), m_bSnapToChars( true ), m_bSquaredMode(true)
 {
@@ -2452,13 +2452,13 @@ bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_GRID_TYPE:
             switch( GetGridType() )
             {
-                case GRID_NONE:
+                case SwTextGrid::NONE:
                     rVal <<= text::TextGridMode::NONE;
                     break;
-                case GRID_LINES_ONLY:
+                case SwTextGrid::LinesOnly:
                     rVal <<= text::TextGridMode::LINES;
                     break;
-                case GRID_LINES_CHARS:
+                case SwTextGrid::LinesAndChars:
                     rVal <<= text::TextGridMode::LINES_AND_CHARS;
                     break;
                 default:
@@ -2555,13 +2555,13 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 switch( nTmp )
                 {
                     case text::TextGridMode::NONE:
-                        SetGridType( GRID_NONE );
+                        SetGridType( SwTextGrid::NONE );
                         break;
                     case text::TextGridMode::LINES:
-                        SetGridType( GRID_LINES_ONLY );
+                        SetGridType( SwTextGrid::LinesOnly );
                         break;
                     case text::TextGridMode::LINES_AND_CHARS:
-                        SetGridType( GRID_LINES_CHARS );
+                        SetGridType( SwTextGrid::LinesAndChars );
                         break;
                     default:
                         bRet = false;
@@ -2596,7 +2596,7 @@ void SwTextGridItem::SwitchPaperMode(bool bNew)
     }
 
     // use default value when grid is disable
-    if (m_eGridType == GRID_NONE)
+    if (m_eGridType == SwTextGrid::NONE)
     {
         m_bSquaredMode = bNew;
         Init();
@@ -2627,7 +2627,7 @@ void SwTextGridItem::Init()
         m_nLines = 20;
         m_nBaseHeight = 400;
         m_nRubyHeight = 200;
-        m_eGridType = GRID_NONE;
+        m_eGridType = SwTextGrid::NONE;
         m_bRubyTextBelow = false;
         m_bPrintGrid = true;
         m_bDisplayGrid = true;
@@ -2639,7 +2639,7 @@ void SwTextGridItem::Init()
         m_nLines = 44;
         m_nBaseHeight = 312;
         m_nRubyHeight = 0;
-        m_eGridType = GRID_NONE;
+        m_eGridType = SwTextGrid::NONE;
         m_bRubyTextBelow = false;
         m_bPrintGrid = true;
         m_bDisplayGrid = true;

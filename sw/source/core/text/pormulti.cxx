@@ -2143,7 +2143,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
     bool bRet = false;
 
     SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
-    const bool bHasGrid = pGrid && GRID_LINES_CHARS == pGrid->GetGridType();
+    const bool bHasGrid = pGrid && SwTextGrid::LinesAndChars == pGrid->GetGridType();
 
     bool bRubyTop = false;
 
