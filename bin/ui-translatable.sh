@@ -10,13 +10,7 @@
 
 for i in `git ls-files *.ui`; do
     for j in "label" "title" "text" "format" "copyright" "comments" "preview_text" "tooltip" "message" ; do
-        grep -s "\<property name\=\"$j\"" $i | grep -v "translatable\=\"yes" | grep -v "translatable\=\"no" | grep -v gtk\- | grep ">.*[A-Za-z].*<";
-        if [ "$?" -eq 0 ] ;
-            then echo "Source: $i^";
-        fi
+        grep -Hns "\<property name\=\"$j\"" $i | grep -v "translatable\=\"yes" | grep -v "translatable\=\"no" | grep -v gtk\- | grep ">.*[A-Za-z].*<";
     done
-    grep -s "<item" $i | grep -v "translatable\=\"yes" | grep -v "translatable\=\"no" | grep ">.*[A-Za-z].*<";
-    if [ "$?" -eq 0 ] ;
-        then echo "Source: $i^";
-    fi
+    grep -Hns "<item" $i | grep -v "translatable\=\"yes" | grep -v "translatable\=\"no" | grep ">.*[A-Za-z].*<";
 done
