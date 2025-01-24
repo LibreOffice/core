@@ -514,6 +514,7 @@ enum OpCode : sal_uInt16
         ocMatSequence       = SC_OPCODE_MAT_SEQUENCE,
         ocRandArray         = SC_OPCODE_RANDARRAY,
         ocDrop              = SC_OPCODE_DROP,
+        ocExpand            = SC_OPCODE_EXPAND,
         ocTake              = SC_OPCODE_TAKE,
         ocToCol             = SC_OPCODE_TOCOL,
         ocToRow             = SC_OPCODE_TOROW,
@@ -1005,6 +1006,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocSort: return "Sort";
     case ocSortBy: return "SortBy";
     case ocDrop: return "Drop";
+    case ocExpand: return "Expand";
     case ocTake: return "Take";
     case ocToCol: return "ToCol";
     case ocToRow: return "ToRow";

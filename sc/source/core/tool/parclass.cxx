@@ -137,6 +137,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocDevSq,           {{ Reference                                            }, 1, Value }},
     { ocDiv,             {{ Array, Array                                         }, 0, Value }},
     { ocDrop,            {{ ReferenceOrRefArray, Value, Value,                   }, 0, ForceArrayReturn } },
+    { ocExpand,          {{ ReferenceOrRefArray, Value, Value,                   }, 0, ForceArrayReturn } },
     { ocEqual,           {{ Array, Array                                         }, 0, Value }},
     { ocFTest,           {{ ForceArray, ForceArray                               }, 0, Value }},
     { ocFalse,           {{ Bounds                                               }, 0, Value }},

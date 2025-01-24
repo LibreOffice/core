@@ -620,6 +620,7 @@ const XclFunctionInfo saFuncTable_2021[] =
 const XclFunctionInfo saFuncTable_2024[] =
 {
     EXC_FUNCENTRY_V_VR(  ocDrop,       1,  3,  0,  "DROP" ),
+    EXC_FUNCENTRY_V_VR(  ocExpand,     2,  4,  0,  "EXPAND" ),
     EXC_FUNCENTRY_V_VR(  ocTake,       1,  3,  0,  "TAKE" ),
     EXC_FUNCENTRY_V_VR(  ocToCol,      1,  3,  0,  "TOCOL" ),
     EXC_FUNCENTRY_V_VR(  ocToRow,      1,  3,  0,  "TOROW" ),

@@ -601,6 +601,7 @@ inline constexpr OUString HID_FUNC_FILTER_MS = u"SC_HID_FUNC_FILTER_MS"_ustr;
 inline constexpr OUString HID_FUNC_SORT_MS = u"SC_HID_FUNC_SORT_MS"_ustr;
 inline constexpr OUString HID_FUNC_SORTBY_MS = u"SC_HID_FUNC_SORTBY_MS"_ustr;
 inline constexpr OUString HID_FUNC_DROP_MS = u"SC_HID_FUNC_DROP_MS"_ustr;
+inline constexpr OUString HID_FUNC_EXPAND_MS = u"SC_HID_FUNC_EXPAND_MS"_ustr;
 inline constexpr OUString HID_FUNC_TAKE_MS = u"SC_HID_FUNC_TAKE_MS"_ustr;
 inline constexpr OUString HID_FUNC_TOCOL_MS = u"SC_HID_FUNC_TOCOL_MS"_ustr;
 inline constexpr OUString HID_FUNC_TOROW_MS = u"SC_HID_FUNC_TOROW_MS"_ustr;
