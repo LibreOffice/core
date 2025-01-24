@@ -8848,6 +8848,22 @@ void ScInterpreter::ScSortBy()
     }
 }
 
+static void lcl_FillCell(const ScMatrixRef& pMatSource, const ScMatrixRef& pMatDest, SCSIZE nsC, SCSIZE nsR, SCSIZE ndC, SCSIZE ndR)
+{
+    if (pMatSource->IsEmptyCell(nsC, nsR))
+    {
+        pMatDest->PutEmpty(ndC, ndR);
+    }
+    else if (!pMatSource->IsStringOrEmpty(nsC, nsR))
+    {
+        pMatDest->PutDouble(pMatSource->GetDouble(nsC, nsR), ndC, ndR);
+    }
+    else
+    {
+        pMatDest->PutString(pMatSource->GetString(nsC, nsR), ndC, ndR);
+    }
+}
+
 void ScInterpreter::ScDrop()
 {
     sal_uInt8 nParamCount = GetByte();
@@ -8964,19 +8980,7 @@ void ScInterpreter::ScDrop()
     {
         for (SCSIZE row = 0; row < nRows; ++row)
         {
-            if (pMatSource->IsEmptyCell(aResPos[iPos].first, aResPos[iPos].second))
-            {
-                pResMat->PutEmpty(col, row);
-            }
-            else if (!pMatSource->IsStringOrEmpty(aResPos[iPos].first, aResPos[iPos].second))
-            {
-                pResMat->PutDouble(pMatSource->GetDouble(aResPos[iPos].first, aResPos[iPos].second), col, row);
-            }
-            else
-            {
-                pResMat->PutString(pMatSource->GetString(aResPos[iPos].first, aResPos[iPos].second), col, row);
-            }
-
+            lcl_FillCell(pMatSource, pResMat, aResPos[iPos].first, aResPos[iPos].second, col, row);
             ++iPos;
         }
     }
@@ -9086,20 +9090,7 @@ void ScInterpreter::ScExpand()
         for (SCSIZE row = 0; row < nRows; ++row)
         {
             if (col < nsC && row < nsR)
-            {
-                if (pMatSource->IsEmptyCell(col, row))
-                {
-                    pResMat->PutEmpty(col, row);
-                }
-                else if (!pMatSource->IsStringOrEmpty(col, row))
-                {
-                    pResMat->PutDouble(pMatSource->GetDouble(col, row), col, row);
-                }
-                else
-                {
-                    pResMat->PutString(pMatSource->GetString(col, row), col, row);
-                }
-            }
+                lcl_FillCell(pMatSource, pResMat, col, row, col, row);
             else
             {
                 if (bDouble.has_value())
@@ -9234,19 +9225,7 @@ void ScInterpreter::ScTake()
     {
         for (SCSIZE row = 0; row < nRows; ++row)
         {
-            if (pMatSource->IsEmptyCell(aResPos[iPos].first, aResPos[iPos].second))
-            {
-                pResMat->PutEmpty(col, row);
-            }
-            else if (!pMatSource->IsStringOrEmpty(aResPos[iPos].first, aResPos[iPos].second))
-            {
-                pResMat->PutDouble(pMatSource->GetDouble(aResPos[iPos].first, aResPos[iPos].second), col, row);
-            }
-            else
-            {
-                pResMat->PutString(pMatSource->GetString(aResPos[iPos].first, aResPos[iPos].second), col, row);
-            }
-
+            lcl_FillCell(pMatSource, pResMat, aResPos[iPos].first, aResPos[iPos].second, col, row);
             ++iPos;
         }
     }
@@ -9348,18 +9327,7 @@ void ScInterpreter::ScToCol()
     // fill result matrix to the same column
     for (SCSIZE iPos = 0; iPos < aResPos.size(); ++iPos)
     {
-        if (pMatSource->IsEmptyCell(aResPos[iPos].first, aResPos[iPos].second))
-        {
-            pResMat->PutEmpty(0, iPos);
-        }
-        else if (!pMatSource->IsStringOrEmpty(aResPos[iPos].first, aResPos[iPos].second))
-        {
-            pResMat->PutDouble(pMatSource->GetDouble(aResPos[iPos].first, aResPos[iPos].second), 0, iPos);
-        }
-        else
-        {
-            pResMat->PutString(pMatSource->GetString(aResPos[iPos].first, aResPos[iPos].second), 0, iPos);
-        }
+        lcl_FillCell(pMatSource, pResMat, aResPos[iPos].first, aResPos[iPos].second, 0, iPos);
     }
 
     PushMatrix(pResMat);
@@ -9459,18 +9427,7 @@ void ScInterpreter::ScToRow()
     // fill result matrix to the same row
     for (SCSIZE iPos = 0; iPos < aResPos.size(); ++iPos)
     {
-        if (pMatSource->IsEmptyCell(aResPos[iPos].first, aResPos[iPos].second))
-        {
-            pResMat->PutEmpty(iPos, 0);
-        }
-        else if (!pMatSource->IsStringOrEmpty(aResPos[iPos].first, aResPos[iPos].second))
-        {
-            pResMat->PutDouble(pMatSource->GetDouble(aResPos[iPos].first, aResPos[iPos].second), iPos, 0);
-        }
-        else
-        {
-            pResMat->PutString(pMatSource->GetString(aResPos[iPos].first, aResPos[iPos].second), iPos, 0);
-        }
+        lcl_FillCell(pMatSource, pResMat, aResPos[iPos].first, aResPos[iPos].second, iPos, 0);
     }
 
     PushMatrix(pResMat);
@@ -9581,36 +9538,14 @@ void ScInterpreter::ScUnique()
         {
             for (SCSIZE col = 0; col < nsC; col++)
             {
-                if (pMatSource->IsEmptyCell(col, aResPos[iPos].first))
-                {
-                    pResMat->PutEmpty(col, iPos);
-                }
-                else if (!pMatSource->IsStringOrEmpty(col, aResPos[iPos].first))
-                {
-                    pResMat->PutDouble(pMatSource->GetDouble(col, aResPos[iPos].first), col, iPos);
-                }
-                else
-                {
-                    pResMat->PutString(pMatSource->GetString(col, aResPos[iPos].first), col, iPos);
-                }
+                lcl_FillCell(pMatSource, pResMat, col, aResPos[iPos].first, col, iPos);
             }
         }
         else
         {
             for (SCSIZE row = 0; row < nsR; row++)
             {
-                if (pMatSource->IsEmptyCell(aResPos[iPos].first, row))
-                {
-                    pResMat->PutEmpty(iPos, row);
-                }
-                else if (!pMatSource->IsStringOrEmpty(aResPos[iPos].first, row))
-                {
-                    pResMat->PutDouble(pMatSource->GetDouble(aResPos[iPos].first, row), iPos, row);
-                }
-                else
-                {
-                    pResMat->PutString(pMatSource->GetString(aResPos[iPos].first, row), iPos, row);
-                }
+                lcl_FillCell(pMatSource, pResMat, aResPos[iPos].first, row, iPos, row);
             }
         }
     }
@@ -9916,18 +9851,7 @@ void ScInterpreter::ScWrapCols()
         {
             if (iPos < aResPos.size())
             {
-                if (pMatSource->IsEmptyCell(aResPos[iPos].first, aResPos[iPos].second))
-                {
-                    pResMat->PutEmpty(col, row);
-                }
-                else if (!pMatSource->IsStringOrEmpty(aResPos[iPos].first, aResPos[iPos].second))
-                {
-                    pResMat->PutDouble(pMatSource->GetDouble(aResPos[iPos].first, aResPos[iPos].second), col, row);
-                }
-                else
-                {
-                    pResMat->PutString(pMatSource->GetString(aResPos[iPos].first, aResPos[iPos].second), col, row);
-                }
+                lcl_FillCell(pMatSource, pResMat, aResPos[iPos].first, aResPos[iPos].second, col, row);
                 ++iPos;
             }
             else if (bDouble.has_value())
@@ -10030,18 +9954,7 @@ void ScInterpreter::ScWrapRows()
         {
             if (iPos < aResPos.size())
             {
-                if (pMatSource->IsEmptyCell(aResPos[iPos].first, aResPos[iPos].second))
-                {
-                    pResMat->PutEmpty(col, row);
-                }
-                else if (!pMatSource->IsStringOrEmpty(aResPos[iPos].first, aResPos[iPos].second))
-                {
-                    pResMat->PutDouble(pMatSource->GetDouble(aResPos[iPos].first, aResPos[iPos].second), col, row);
-                }
-                else
-                {
-                    pResMat->PutString(pMatSource->GetString(aResPos[iPos].first, aResPos[iPos].second), col, row);
-                }
+                lcl_FillCell(pMatSource, pResMat, aResPos[iPos].first, aResPos[iPos].second, col, row);
                 ++iPos;
             }
             else if (bDouble.has_value())
