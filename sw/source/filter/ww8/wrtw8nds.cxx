@@ -3489,12 +3489,8 @@ void MSWordExportBase::UpdateTocSectionNodeProperties(const SwSectionNode& rSect
         SfxGrabBagItem aGrabBag(RES_PARATR_GRABBAG);
         aGrabBag.GetGrabBag()["SdtPr"] <<= aSdtPrPropertyValues;
 
-        // create temp attr set
-        SwAttrSet aSet(pNode->GetSwAttrSet());
-        aSet.Put(aGrabBag);
-
         // set new attr to node
-        const_cast<SwContentNode*>(pNode)->SetAttr(aSet);
+        const_cast<SwContentNode*>(pNode)->SetAttr(aGrabBag);
     }
 
     // set flag for the next node after TOC
@@ -3509,12 +3505,8 @@ void MSWordExportBase::UpdateTocSectionNodeProperties(const SwSectionNode& rSect
             SfxGrabBagItem aGrabBag(RES_PARATR_GRABBAG);
             aGrabBag.GetGrabBag()["ParaSdtEndBefore"] <<= true;
 
-            // create temp attr set
-            SwAttrSet aSet(pNodeAfterToc->GetSwAttrSet());
-            aSet.Put(aGrabBag);
-
             // set new attr to node
-            const_cast<SwContentNode*>(pNodeAfterToc)->SetAttr(aSet);
+            const_cast<SwContentNode*>(pNodeAfterToc)->SetAttr(aGrabBag);
         }
     }
 }
