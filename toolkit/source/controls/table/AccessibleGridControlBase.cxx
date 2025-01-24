@@ -47,39 +47,20 @@ namespace accessibility {
 
 using namespace com::sun::star::accessibility::AccessibleStateType;
 
-
 AccessibleGridControlBase::AccessibleGridControlBase(
-        css::uno::Reference< css::accessibility::XAccessible > xParent,
-        svt::table::TableControl& rTable,
-        ::vcl::table::AccessibleTableControlObjType      eObjType ) :
-    AccessibleGridControlImplHelper( m_aMutex ),
-    m_xParent(std::move( xParent )),
-    m_aTable( rTable),
-    m_eObjType( eObjType ),
-    m_aClientId(0)
+    css::uno::Reference<css::accessibility::XAccessible> xParent, svt::table::TableControl& rTable,
+    ::vcl::table::AccessibleTableControlObjType eObjType)
+    : m_xParent(std::move(xParent))
+    , m_aTable(rTable)
+    , m_eObjType(eObjType)
 {
-}
-
-AccessibleGridControlBase::~AccessibleGridControlBase()
-{
-    if( isAlive() )
-    {
-        // increment ref count to prevent double call of Dtor
-        osl_atomic_increment( &m_refCount );
-        dispose();
-    }
 }
 
 void SAL_CALL AccessibleGridControlBase::disposing()
 {
     SolarMutexGuard g;
 
-    if (m_aClientId)
-    {
-        AccessibleEventNotifier::TClientId nId = m_aClientId;
-        m_aClientId = 0;
-        AccessibleEventNotifier::revokeClientNotifyDisposing( nId, *this );
-    }
+    OAccessibleComponentHelper::disposing();
 
     m_xParent = nullptr;
     //m_aTable = NULL;
@@ -91,7 +72,7 @@ css::uno::Reference< css::accessibility::XAccessible > SAL_CALL AccessibleGridCo
 {
     SolarMutexGuard g;
 
-    ensureIsAlive();
+    ensureAlive();
     return m_xParent;
 }
 
@@ -99,7 +80,7 @@ sal_Int64 SAL_CALL AccessibleGridControlBase::getAccessibleIndexInParent()
 {
     SolarMutexGuard g;
 
-    ensureIsAlive();
+    ensureAlive();
 
     // -1 for child not found/no parent (according to specification)
     sal_Int64 nRet = -1;
@@ -134,7 +115,7 @@ OUString SAL_CALL AccessibleGridControlBase::getAccessibleDescription()
 {
     SolarMutexGuard g;
 
-    ensureIsAlive();
+    ensureAlive();
     return m_aTable.GetAccessibleObjectDescription(m_eObjType);
 }
 
@@ -142,7 +123,7 @@ OUString SAL_CALL AccessibleGridControlBase::getAccessibleName()
 {
     SolarMutexGuard g;
 
-    ensureIsAlive();
+    ensureAlive();
     return m_aTable.GetAccessibleObjectName(m_eObjType, 0, 0);
 }
 
@@ -151,7 +132,7 @@ AccessibleGridControlBase::getAccessibleRelationSet()
 {
    SolarMutexGuard g;
 
-   ensureIsAlive();
+   ensureAlive();
    // GridControl does not have relations.
    return new utl::AccessibleRelationSetHelper;
 }
@@ -169,7 +150,7 @@ lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
 {
     SolarMutexGuard g;
 
-    ensureIsAlive();
+    ensureAlive();
     if( m_xParent.is() )
     {
         css::uno::Reference< css::accessibility::XAccessibleContext >
@@ -178,71 +159,6 @@ lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
             return xParentContext->getLocale();
     }
     throw IllegalAccessibleComponentStateException();
-}
-
-// css::accessibility::XAccessibleComponent
-
-sal_Bool SAL_CALL AccessibleGridControlBase::containsPoint( const awt::Point& rPoint )
-{
-    return tools::Rectangle(Point(), getBoundingBox().GetSize())
-        .Contains(vcl::unohelper::ConvertToVCLPoint(rPoint));
-}
-
-awt::Rectangle SAL_CALL AccessibleGridControlBase::getBounds()
-{
-    return vcl::unohelper::ConvertToAWTRect(getBoundingBox());
-}
-
-awt::Point SAL_CALL AccessibleGridControlBase::getLocation()
-{
-    return vcl::unohelper::ConvertToAWTPoint(getBoundingBox().TopLeft());
-}
-
-awt::Point SAL_CALL AccessibleGridControlBase::getLocationOnScreen()
-{
-    return vcl::unohelper::ConvertToAWTPoint(getBoundingBoxOnScreen().TopLeft());
-}
-
-awt::Size SAL_CALL AccessibleGridControlBase::getSize()
-{
-    return vcl::unohelper::ConvertToAWTSize(getBoundingBox().GetSize());
-}
-
-// css::accessibility::XAccessibleEventBroadcaster
-
-void SAL_CALL AccessibleGridControlBase::addAccessibleEventListener(
-        const css::uno::Reference< css::accessibility::XAccessibleEventListener>& _rxListener )
-{
-    if ( _rxListener.is() )
-    {
-        SolarMutexGuard g;
-
-        if (!m_aClientId)
-            m_aClientId = AccessibleEventNotifier::registerClient();
-
-        AccessibleEventNotifier::addEventListener(m_aClientId, _rxListener );
-    }
-}
-
-void SAL_CALL AccessibleGridControlBase::removeAccessibleEventListener(
-        const css::uno::Reference< css::accessibility::XAccessibleEventListener>& _rxListener )
-{
-    if (!(_rxListener.is() && m_aClientId))
-        return;
-
-    SolarMutexGuard g;
-
-    sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener(m_aClientId, _rxListener);
-    if ( !nListenerCount )
-    {
-        // no listeners anymore
-        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-        // and at least to us not firing any events anymore, in case somebody calls
-        // NotifyAccessibleEvent, again
-        AccessibleEventNotifier::TClientId nId = m_aClientId;
-        m_aClientId = 0;
-        AccessibleEventNotifier::revokeClient( nId );
-    }
 }
 
 // XTypeProvider
@@ -313,65 +229,20 @@ sal_Int64 AccessibleGridControlBase::implCreateStateSet()
     return nStateSet;
 }
 
-// internal helper methods
-
-bool AccessibleGridControlBase::isAlive() const
+css::awt::Rectangle AccessibleGridControlBase::implGetBounds()
 {
-    ::osl::MutexGuard g(m_aMutex); // guards rBHelper members
-    return !rBHelper.bDisposed && !rBHelper.bInDispose;
-}
-
-void AccessibleGridControlBase::ensureIsAlive() const
-{
-    if( !isAlive() )
-        throw lang::DisposedException();
-}
-
-tools::Rectangle AccessibleGridControlBase::getBoundingBox()
-{
-    SolarMutexGuard aSolarGuard;
-    ensureIsAlive();
-    tools::Rectangle aRect = implGetBoundingBox();
-    if ( aRect.Left() == 0 && aRect.Top() == 0 && aRect.Right() == 0 && aRect.Bottom() == 0 )
-    {
-        SAL_WARN( "accessibility", "rectangle doesn't exist" );
-    }
-    return aRect;
-}
-
-AbsoluteScreenPixelRectangle AccessibleGridControlBase::getBoundingBoxOnScreen()
-{
-    SolarMutexGuard aSolarGuard;
-    ensureIsAlive();
-    AbsoluteScreenPixelRectangle aRect = implGetBoundingBoxOnScreen();
-    if ( aRect.Left() == 0 && aRect.Top() == 0 && aRect.Right() == 0 && aRect.Bottom() == 0 )
-    {
-        SAL_WARN( "accessibility", "rectangle doesn't exist" );
-    }
-    return aRect;
+    return vcl::unohelper::ConvertToAWTRect(implGetBoundingBox());
 }
 
 void AccessibleGridControlBase::commitEvent(
         sal_Int16 _nEventId, const Any& _rNewValue, const Any& _rOldValue )
 {
-    SolarMutexGuard g;
-
-    if (!m_aClientId)
-            // if we don't have a client id for the notifier, then we don't have listeners, then
-            // we don't need to notify anything
-            return;
-
-    // build an event object
-    AccessibleEventObject aEvent(*this, _nEventId, _rNewValue, _rOldValue, -1);
-
-    // let the notifier handle this event
-
-    AccessibleEventNotifier::addEvent(m_aClientId, aEvent);
+    NotifyAccessibleEvent(_nEventId, _rOldValue, _rNewValue);
 }
 
 sal_Int16 SAL_CALL AccessibleGridControlBase::getAccessibleRole()
 {
-    ensureIsAlive();
+    ensureAlive();
     sal_Int16 nRole = AccessibleRole::UNKNOWN;
     switch ( m_eObjType )
     {
@@ -405,7 +276,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  )
 {
     SolarMutexGuard aSolarGuard;
 
-    ensureIsAlive();
+    ensureAlive();
 
     Color nColor;
     if (m_aTable.IsControlForeground())
@@ -426,7 +297,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  )
 {
     SolarMutexGuard aSolarGuard;
 
-    ensureIsAlive();
+    ensureAlive();
     Color nColor;
     if (m_aTable.IsControlBackground())
         nColor = m_aTable.GetControlBackground();
@@ -449,7 +320,7 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL GridContr
 {
     SolarMutexGuard g;
 
-    ensureIsAlive();
+    ensureAlive();
     return this;
 }
 

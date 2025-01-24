@@ -83,7 +83,7 @@ sal_Int64 AccessibleGridControl::implGetAccessibleChildCount()
 sal_Int64 SAL_CALL AccessibleGridControl::getAccessibleChildCount()
 {
     SolarMutexGuard aSolarGuard;
-    ensureIsAlive();
+    ensureAlive();
     return implGetAccessibleChildCount();
 }
 
@@ -134,7 +134,7 @@ sal_Int16 SAL_CALL AccessibleGridControl::getAccessibleRole()
 {
     SolarMutexGuard g;
 
-    ensureIsAlive();
+    ensureAlive();
     return AccessibleRole::PANEL;
 }
 
@@ -145,7 +145,7 @@ css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
 AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
 {
     SolarMutexGuard aSolarGuard;
-    ensureIsAlive();
+    ensureAlive();
 
     sal_Int32 nIndex = 0;
     if (m_aTable.ConvertPointToControlIndex(nIndex, vcl::unohelper::ConvertToVCLPoint(rPoint)))
@@ -173,7 +173,7 @@ AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
 void SAL_CALL AccessibleGridControl::grabFocus()
 {
     SolarMutexGuard aSolarGuard;
-    ensureIsAlive();
+    ensureAlive();
     m_aTable.GrabFocus();
 }
 

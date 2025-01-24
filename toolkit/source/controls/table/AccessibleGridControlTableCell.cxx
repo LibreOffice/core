@@ -75,20 +75,20 @@ namespace accessibility
     {
         SolarMutexGuard g;
 
-        ensureIsAlive();
+        ensureAlive();
         return m_aTable.GetAccessibleObjectName(m_eObjType, m_nRowPos, m_nColPos);
     }
 
     // implementation of a table cell
     OUString AccessibleGridControlTableCell::implGetText()
     {
-        ensureIsAlive();
+        ensureAlive();
         return m_aTable.GetAccessibleCellText( getRowPos(),  getColumnPos() );
     }
 
     css::lang::Locale AccessibleGridControlTableCell::implGetLocale()
     {
-        ensureIsAlive();
+        ensureAlive();
         return m_aTable.GetAccessible()->getAccessibleContext()->getLocale();
     }
 
@@ -134,7 +134,7 @@ namespace accessibility
     {
         SolarMutexGuard aSolarGuard;
 
-        ensureIsAlive();
+        ensureAlive();
         if ( !implIsValidIndex( nIndex, implGetText().getLength() ) )
             throw IndexOutOfBoundsException();
 
@@ -146,7 +146,7 @@ namespace accessibility
     {
         SolarMutexGuard aSolarGuard;
 
-        ensureIsAlive();
+        ensureAlive();
 
         return m_aTable.GetIndexForPoint(vcl::unohelper::ConvertToVCLPoint(_aPoint));
     }
@@ -199,7 +199,7 @@ namespace accessibility
     {
         SolarMutexGuard g;
 
-        ensureIsAlive();
+        ensureAlive();
         return this;
     }
 
@@ -209,7 +209,7 @@ namespace accessibility
     {
         SolarMutexGuard aSolarGuard;
 
-        ensureIsAlive();
+        ensureAlive();
 
         return (static_cast<sal_Int64>(getRowPos()) * static_cast<sal_Int64>(m_aTable.GetColumnCount())) + getColumnPos();
     }

@@ -108,7 +108,7 @@ Reference<XAccessible > SAL_CALL AccessibleGridControlHeaderCell::getAccessibleC
         /** @return  The XAccessibleContext interface of this object. */
     Reference< css::accessibility::XAccessibleContext > SAL_CALL AccessibleGridControlHeaderCell::getAccessibleContext()
     {
-        ensureIsAlive();
+        ensureAlive();
         return this;
     }
 
@@ -142,7 +142,7 @@ sal_Int64 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleIndexInParent()
 {
     SolarMutexGuard g;
 
-    ensureIsAlive();
+    ensureAlive();
     return m_nColumnRowId;
 }
 

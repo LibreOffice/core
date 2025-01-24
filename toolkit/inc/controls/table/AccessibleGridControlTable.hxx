@@ -153,7 +153,6 @@ private:
     //    @return  The bounding box (VCL rect.) in screen coordinates. */
     virtual AbsoluteScreenPixelRectangle implGetBoundingBoxOnScreen() override;
 
-
     //// internal helper methods
     ///** @attention  This method requires a locked mutex.
     //    @return  The XAccessibleTable interface of the specified header bar. */

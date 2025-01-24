@@ -34,6 +34,7 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
+#include <comphelper/accessiblecomponenthelper.hxx>
 #include <comphelper/uno3.hxx>
 
 
@@ -42,19 +43,11 @@ namespace vcl { class Window; }
 
 namespace accessibility {
 
-typedef ::cppu::WeakComponentImplHelper<
-            css::accessibility::XAccessibleContext,
-            css::accessibility::XAccessibleComponent,
-            css::accessibility::XAccessibleEventBroadcaster,
-            css::lang::XServiceInfo >
-        AccessibleGridControlImplHelper;
-
 /** The GridControl accessible objects inherit from this base class. It
-    implements basic functionality for various Accessibility interfaces and
-    the event broadcaster and contains the osl::Mutex. */
-class AccessibleGridControlBase :
-    public ::cppu::BaseMutex,
-    public AccessibleGridControlImplHelper
+    implements basic functionality. */
+class AccessibleGridControlBase
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
+                                         css::lang::XServiceInfo>
 {
 public:
     /** Constructor.
@@ -67,9 +60,7 @@ public:
         ::vcl::table::AccessibleTableControlObjType  eObjType );
 
 protected:
-    virtual ~AccessibleGridControlBase() override;
-
-    /** Commits DeFunc event to listeners and cleans up members. */
+    virtual ~AccessibleGridControlBase() = default;
     virtual void SAL_CALL disposing() override;
 
 public:
@@ -117,25 +108,6 @@ public:
         performance. */
 
     // XAccessibleComponent
-
-    /** @return
-        TRUE, if the point lies within the bounding box of this object. */
-    virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& rPoint ) override;
-
-    /** @return  The bounding box of this object. */
-    virtual css::awt::Rectangle SAL_CALL getBounds() override;
-
-    /** @return
-        The upper left corner of the bounding box relative to the parent. */
-    virtual css::awt::Point SAL_CALL getLocation() override;
-
-    /** @return
-        The upper left corner of the bounding box in screen coordinates. */
-    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
-
-    /** @return  The size of the bounding box. */
-    virtual css::awt::Size SAL_CALL getSize() override;
-
     virtual sal_Int32 SAL_CALL getForeground(  ) override;
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
 
@@ -149,16 +121,6 @@ public:
     */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
     getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
-
-    // XAccessibleEventBroadcaster
-
-    /** Adds a new event listener */
-    virtual void SAL_CALL addAccessibleEventListener(
-            const css::uno::Reference< css::accessibility::XAccessibleEventListener>& rxListener ) override;
-
-    /** Removes an event listener. */
-    virtual void SAL_CALL removeAccessibleEventListener(
-            const css::uno::Reference< css::accessibility::XAccessibleEventListener>& rxListener ) override;
 
     // XTypeProvider
 
@@ -185,10 +147,10 @@ public:
     /** Commits an event to all listeners. */
     virtual void commitEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
                              const css::uno::Any& rOldValue);
-    /** @return  TRUE, if the object is not disposed or disposing. */
-    bool isAlive() const;
 
 protected:
+    virtual css::awt::Rectangle implGetBounds() override;
+
     // internal virtual methods
 
     /** Determines whether the Grid control is really showing inside of
@@ -203,7 +165,6 @@ protected:
         @return  The bounding box (VCL rect.) relative to the parent. */
     tools::Rectangle implGetBoundingBox();
 
-
     ///** Derived classes return the bounding box in screen coordinates.
     //    @attention  This method requires locked mutex's and a living object.
     //    @return  The bounding box (VCL rect.) in screen coordinates. */
@@ -217,23 +178,6 @@ protected:
     */
     virtual sal_Int64 implCreateStateSet();
 
-    // internal helper methods
-
-    /** @throws <type>DisposedException</type>  If the object is not alive. */
-    void ensureIsAlive() const;
-
-    /** Locks all mutex's and calculates the bounding box relative to the
-        parent window.
-        @return  The bounding box (VCL rect.) relative to the parent object.
-        @throws css::lang::DisposedException
-    */
-    tools::Rectangle getBoundingBox();
-    ///** Locks all mutex's and calculates the bounding box in screen
-    //    coordinates.
-    //    @return  The bounding box (VCL rect.) in screen coordinates. */
-    /// @throws css::lang::DisposedException
-    AbsoluteScreenPixelRectangle getBoundingBoxOnScreen();
-
 protected:
     // members
 
@@ -243,9 +187,6 @@ protected:
     svt::table::TableControl& m_aTable;
     /** The type of this object (for names, descriptions, state sets, ...). */
     ::vcl::table::AccessibleTableControlObjType m_eObjType;
-
-private:
-    ::comphelper::AccessibleEventNotifier::TClientId    m_aClientId;
 };
 
 

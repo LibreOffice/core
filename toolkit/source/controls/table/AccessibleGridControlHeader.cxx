@@ -58,7 +58,7 @@ AccessibleGridControlHeader::getAccessibleChild( sal_Int64 nChildIndex )
 
     if (nChildIndex<0 || nChildIndex>=getAccessibleChildCount())
         throw IndexOutOfBoundsException();
-    ensureIsAlive();
+    ensureAlive();
     Reference< XAccessible > xChild;
     if (m_eObjType == vcl::table::AccessibleTableControlObjType::COLUMNHEADERBAR)
     {
@@ -79,7 +79,7 @@ sal_Int64 SAL_CALL AccessibleGridControlHeader::getAccessibleIndexInParent()
 {
     SolarMutexGuard aSolarGuard;
 
-    ensureIsAlive();
+    ensureAlive();
     if (m_eObjType == vcl::table::AccessibleTableControlObjType::ROWHEADERBAR && m_aTable.HasColHeader())
         return 1;
     else
@@ -93,7 +93,7 @@ AccessibleGridControlHeader::getAccessibleAtPoint( const awt::Point& rPoint )
 {
     SolarMutexGuard aSolarGuard;
 
-    ensureIsAlive();
+    ensureAlive();
 
     sal_Int32 nRow = 0;
     sal_Int32 nColumnPos = 0;
@@ -104,7 +104,7 @@ AccessibleGridControlHeader::getAccessibleAtPoint( const awt::Point& rPoint )
 
 void SAL_CALL AccessibleGridControlHeader::grabFocus()
 {
-    ensureIsAlive();
+    ensureAlive();
     // focus on header not supported
 }
 
@@ -114,7 +114,7 @@ OUString SAL_CALL AccessibleGridControlHeader::getAccessibleRowDescription( sal_
 {
     SolarMutexGuard aSolarGuard;
 
-    ensureIsAlive();
+    ensureAlive();
     ensureIsValidRow( nRow );
     return OUString();  // no headers in headers
 }
@@ -123,7 +123,7 @@ OUString SAL_CALL AccessibleGridControlHeader::getAccessibleColumnDescription( s
 {
     SolarMutexGuard aSolarGuard;
 
-    ensureIsAlive();
+    ensureAlive();
     ensureIsValidColumn( nColumn );
     return OUString();  // no headers in headers
 }
@@ -132,7 +132,7 @@ Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibl
 {
     SolarMutexGuard g;
 
-    ensureIsAlive();
+    ensureAlive();
     return nullptr;        // no headers in headers
 }
 
@@ -140,7 +140,7 @@ Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibl
 {
     SolarMutexGuard g;
 
-    ensureIsAlive();
+    ensureAlive();
     return nullptr;        // no headers in headers
 }
 //not selectable
@@ -169,7 +169,7 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlHeader::getAccessibleCell
 {
     SolarMutexGuard g;
 
-    ensureIsAlive();
+    ensureAlive();
     ensureIsValidAddress(nRow, nColumn);
     return implGetChild(nRow, nColumn);
 }
