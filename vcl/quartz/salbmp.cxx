@@ -31,7 +31,6 @@
 #include <vcl/BitmapBuffer.hxx>
 #include <vcl/BitmapColor.hxx>
 #include <vcl/BitmapPalette.hxx>
-#include <vcl/ColorMask.hxx>
 #include <vcl/Scanline.hxx>
 
 #include <bitmap/bmpfast.hxx>

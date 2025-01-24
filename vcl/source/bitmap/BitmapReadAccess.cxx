@@ -19,7 +19,6 @@
 
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/BitmapTools.hxx>
-#include <vcl/ColorMask.hxx>
 
 #include <salbmp.hxx>
 #include <svdata.hxx>

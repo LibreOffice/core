@@ -50,7 +50,6 @@ typedef unsigned long Pixel;
 
 class   BitmapPalette;
 class   SalFrame;
-class   ColorMask;
 
 namespace vcl_sal { class WMAdaptor; }
 
