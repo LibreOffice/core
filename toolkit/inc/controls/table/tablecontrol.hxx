@@ -134,7 +134,6 @@ namespace svt::table
         virtual tools::Rectangle calcHeaderCellRect( bool _bIsColumnBar, sal_Int32 nPos) override;
         virtual tools::Rectangle calcTableRect() override;
         virtual tools::Rectangle calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos ) override;
-        virtual tools::Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
         virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
         virtual void FillAccessibleStateSetForCell( sal_Int64& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const override;
         virtual OUString GetRowName(sal_Int32 _nIndex) const override;

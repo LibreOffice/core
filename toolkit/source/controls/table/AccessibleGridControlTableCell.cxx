@@ -139,7 +139,7 @@ namespace accessibility
             throw IndexOutOfBoundsException();
 
         return vcl::unohelper::ConvertToAWTRect(
-            m_aTable.GetFieldCharacterBounds(getRowPos(), getColumnPos(), nIndex));
+            m_aTable.GetCharacterBounds(nIndex));
     }
 
     sal_Int32 SAL_CALL AccessibleGridControlTableCell::getIndexAtPoint( const css::awt::Point& _aPoint )

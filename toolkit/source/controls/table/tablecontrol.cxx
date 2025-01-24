@@ -585,13 +585,6 @@ namespace svt::table
         _rStateSet |= AccessibleStateType::ACTIVE;
     }
 
-
-    tools::Rectangle TableControl::GetFieldCharacterBounds(sal_Int32,sal_Int32,sal_Int32 nIndex)
-    {
-        return GetCharacterBounds(nIndex);
-    }
-
-
     sal_Int32 TableControl::GetFieldIndexAtPoint(sal_Int32,sal_Int32,const Point& _rPoint)
     {
         return GetIndexForPoint(_rPoint);

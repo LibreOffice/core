@@ -80,7 +80,6 @@ public:
     virtual tools::Rectangle calcHeaderCellRect( bool _bColHeader, sal_Int32 _nPos ) = 0;
     virtual tools::Rectangle calcTableRect() = 0;
     virtual tools::Rectangle calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos ) = 0;
-    virtual tools::Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)= 0;
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)= 0;
     virtual void FillAccessibleStateSetForCell( sal_Int64& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const= 0;
     virtual OUString GetRowName(sal_Int32 _nIndex) const = 0;
