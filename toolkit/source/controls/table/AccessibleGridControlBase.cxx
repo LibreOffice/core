@@ -76,41 +76,6 @@ css::uno::Reference< css::accessibility::XAccessible > SAL_CALL AccessibleGridCo
     return m_xParent;
 }
 
-sal_Int64 SAL_CALL AccessibleGridControlBase::getAccessibleIndexInParent()
-{
-    SolarMutexGuard g;
-
-    ensureAlive();
-
-    // -1 for child not found/no parent (according to specification)
-    sal_Int64 nRet = -1;
-
-    css::uno::Reference< uno::XInterface > xMeMyselfAndI( static_cast< css::accessibility::XAccessibleContext* >( this ), uno::UNO_QUERY );
-
-    //  iterate over parent's children and search for this object
-    if( m_xParent.is() )
-    {
-        css::uno::Reference< css::accessibility::XAccessibleContext >
-            xParentContext( m_xParent->getAccessibleContext() );
-        if( xParentContext.is() )
-        {
-            css::uno::Reference< uno::XInterface > xChild;
-
-            sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
-            for( sal_Int64 nChild = 0; nChild < nChildCount; ++nChild )
-            {
-                xChild.set(xParentContext->getAccessibleChild( nChild ), css::uno::UNO_QUERY);
-                if ( xMeMyselfAndI.get() == xChild.get() )
-                {
-                    nRet = nChild;
-                    break;
-                }
-            }
-        }
-    }
-    return nRet;
-}
-
 OUString SAL_CALL AccessibleGridControlBase::getAccessibleDescription()
 {
     SolarMutexGuard g;
