@@ -35,14 +35,15 @@ AccessibleGridControlHeaderCell::AccessibleGridControlHeaderCell(sal_Int32 _nCol
                                   const Reference< XAccessible >& rxParent,
                                   svt::table::TableControl& rTable,
                                   AccessibleTableControlObjType  eObjType)
-: AccessibleGridControlCell(rxParent, rTable,
+    : ImplInheritanceHelper(rxParent, rTable,
                             (eObjType == AccessibleTableControlObjType::ROWHEADERCELL) ? _nColumnRowId : 0,
                             (eObjType == AccessibleTableControlObjType::ROWHEADERCELL) ? 0 : _nColumnRowId,
                             eObjType)
-, m_nColumnRowId(_nColumnRowId)
+    , m_nColumnRowId(_nColumnRowId)
 {
     assert(eObjType == AccessibleTableControlObjType::ROWHEADERCELL || eObjType == AccessibleTableControlObjType::COLUMNHEADERCELL);
 }
+
 /** Return a bitset of states of the current object.
 */
 sal_Int64 AccessibleGridControlHeaderCell::implCreateStateSet()
@@ -85,26 +86,7 @@ Reference<XAccessible > SAL_CALL AccessibleGridControlHeaderCell::getAccessibleC
 {
     throw IndexOutOfBoundsException();
 }
-// XInterface -------------------------------------------------------------
 
-    /** Queries for a new interface. */
-    css::uno::Any SAL_CALL AccessibleGridControlHeaderCell::queryInterface( const css::uno::Type& rType )
-    {
-        Any aRet = AccessibleGridControlCell::queryInterface(rType);
-        return aRet;
-    }
-
-    /** Acquires the object (calls acquire() on base class). */
-    void SAL_CALL AccessibleGridControlHeaderCell::acquire() noexcept
-    {
-        AccessibleGridControlCell::acquire();
-    }
-
-    /** Releases the object (calls release() on base class). */
-    void SAL_CALL AccessibleGridControlHeaderCell::release() noexcept
-    {
-        AccessibleGridControlCell::release();
-    }
         /** @return  The XAccessibleContext interface of this object. */
     Reference< css::accessibility::XAccessibleContext > SAL_CALL AccessibleGridControlHeaderCell::getAccessibleContext()
     {

@@ -23,7 +23,8 @@
 
 namespace accessibility
 {
-    class AccessibleGridControlHeaderCell final : public AccessibleGridControlCell, public css::accessibility::XAccessible
+    class AccessibleGridControlHeaderCell final
+        : public cppu::ImplInheritanceHelper<AccessibleGridControlCell, css::accessibility::XAccessible>
     {
         sal_Int32   m_nColumnRowId;
     public:
@@ -44,16 +45,6 @@ namespace accessibility
         /** Grabs the focus to the GridControl. */
         virtual void SAL_CALL grabFocus() override;
 
-        // XInterface
-
-        /** Queries for a new interface. */
-        css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
-
-        /** Acquires the object (calls acquire() on base class). */
-        virtual void SAL_CALL acquire() noexcept override;
-
-        /** Releases the object (calls release() on base class). */
-        virtual void SAL_CALL release() noexcept override;
         // XAccessible
 
         /** @return  The XAccessibleContext interface of this object. */
