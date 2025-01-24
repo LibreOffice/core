@@ -585,11 +585,6 @@ namespace svt::table
         _rStateSet |= AccessibleStateType::ACTIVE;
     }
 
-    sal_Int32 TableControl::GetFieldIndexAtPoint(sal_Int32,sal_Int32,const Point& _rPoint)
-    {
-        return GetIndexForPoint(_rPoint);
-    }
-
 
     tools::Rectangle TableControl::calcHeaderRect(bool _bIsColumnBar )
     {

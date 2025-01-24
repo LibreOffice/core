@@ -148,8 +148,7 @@ namespace accessibility
 
         ensureIsAlive();
 
-        return m_aTable.GetFieldIndexAtPoint(getRowPos(), getColumnPos(),
-                                             vcl::unohelper::ConvertToVCLPoint(_aPoint));
+        return m_aTable.GetIndexForPoint(vcl::unohelper::ConvertToVCLPoint(_aPoint));
     }
 
     /** @return
