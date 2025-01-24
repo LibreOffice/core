@@ -796,20 +796,7 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
                 }
                 else if( ( pBIH->biBitCount == 16 ) || ( pBIH->biBitCount == 32 ) )
                 {
-                    sal_uLong nOffset = 0;
-
-                    if( pBIH->biCompression == BI_BITFIELDS )
-                    {
-                        nOffset = 3 * sizeof( RGBQUAD );
-                        ColorMaskElement aRedMask(*reinterpret_cast<UINT32*>(&pBI->bmiColors[ 0 ]));
-                        aRedMask.CalcMaskShift();
-                        ColorMaskElement aGreenMask(*reinterpret_cast<UINT32*>(&pBI->bmiColors[ 1 ]));
-                        aGreenMask.CalcMaskShift();
-                        ColorMaskElement aBlueMask(*reinterpret_cast<UINT32*>(&pBI->bmiColors[ 2 ]));
-                        aBlueMask.CalcMaskShift();
-                        pBuffer->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
-                    }
-                    else if( pBIH->biBitCount == 16 )
+                    if( pBIH->biBitCount == 16 )
                     {
                         ColorMaskElement aRedMask(0x00007c00UL);
                         aRedMask.CalcMaskShift();
@@ -830,7 +817,7 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
                         pBuffer->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
                     }
 
-                    pBuffer->mpBits = reinterpret_cast<PBYTE>(pBI) + pBI->bmiHeader.biSize + nOffset;
+                    pBuffer->mpBits = reinterpret_cast<PBYTE>(pBI) + pBI->bmiHeader.biSize;
                 }
                 else
                     pBuffer->mpBits = reinterpret_cast<PBYTE>(pBI) + pBI->bmiHeader.biSize;
