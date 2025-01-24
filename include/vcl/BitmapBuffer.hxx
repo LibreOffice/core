@@ -26,7 +26,6 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/BitmapPalette.hxx>
-#include <vcl/ColorMask.hxx>
 #include <vcl/Scanline.hxx>
 #include <tools/long.hxx>
 
@@ -41,7 +40,6 @@ struct VCL_DLLPUBLIC BitmapBuffer
     sal_uInt8*      mpBits;
     ScanlineFormat  meFormat = ScanlineFormat::NONE;
     ScanlineDirection meDirection = ScanlineDirection::BottomUp;
-    ColorMask       maColorMask;
     sal_uInt16      mnBitCount;
 };
 

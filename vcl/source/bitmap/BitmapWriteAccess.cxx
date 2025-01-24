@@ -141,10 +141,9 @@ void BitmapWriteAccess::CopyScanline(tools::Long nY, ConstScanline aSrcScanline,
 
         if (pFncGetPixel)
         {
-            const ColorMask aDummyMask;
             Scanline pScanline = GetScanline(nY);
             for (tools::Long nX = 0, nWidth = mpBuffer->mnWidth; nX < nWidth; ++nX)
-                SetPixelOnData(pScanline, nX, pFncGetPixel(aSrcScanline, nX, aDummyMask));
+                SetPixelOnData(pScanline, nX, pFncGetPixel(aSrcScanline, nX));
         }
     }
 }

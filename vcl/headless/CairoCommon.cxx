@@ -1983,7 +1983,6 @@ std::optional<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer* 
     pDst->mnWidth = nWidth;
     pDst->mnHeight = nHeight;
     pDst->mnBitCount = 32;
-    pDst->maColorMask = pSrc->maColorMask;
     pDst->maPalette = pSrc->maPalette;
 
     tools::Long nScanlineBase;

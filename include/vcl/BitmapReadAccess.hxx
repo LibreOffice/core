@@ -60,7 +60,7 @@ public:
     {
         assert(pData && "Access is not valid!");
 
-        return mFncGetPixel(pData, nX, mpBuffer->maColorMask);
+        return mFncGetPixel(pData, nX);
     }
 
     sal_uInt8 GetIndexFromData(const sal_uInt8* pData, tools::Long nX) const
@@ -72,7 +72,7 @@ public:
     {
         assert(pData && "Access is not valid!");
 
-        mFncSetPixel(pData, nX, rBitmapColor, mpBuffer->maColorMask);
+        mFncSetPixel(pData, nX, rBitmapColor);
     }
 
     BitmapColor GetPixel(tools::Long nY, tools::Long nX) const
@@ -131,55 +131,43 @@ protected:
 public:
     BitmapBuffer* ImplGetBitmapBuffer() const { return mpBuffer; }
 
-    static BitmapColor GetPixelForN1BitMsbPal(ConstScanline pScanline, tools::Long nX,
-                                              const ColorMask& rMask);
-    static BitmapColor GetPixelForN8BitPal(ConstScanline pScanline, tools::Long nX,
-                                           const ColorMask& rMask);
-    static BitmapColor GetPixelForN24BitTcBgr(ConstScanline pScanline, tools::Long nX,
-                                              const ColorMask& rMask);
-    static BitmapColor GetPixelForN24BitTcRgb(ConstScanline pScanline, tools::Long nX,
-                                              const ColorMask& rMask);
-    static BitmapColor GetPixelForN32BitTcAbgr(ConstScanline pScanline, tools::Long nX,
-                                               const ColorMask& rMask);
-    static BitmapColor GetPixelForN32BitTcXbgr(ConstScanline pScanline, tools::Long nX,
-                                               const ColorMask& rMask);
-    static BitmapColor GetPixelForN32BitTcArgb(ConstScanline pScanline, tools::Long nX,
-                                               const ColorMask& rMask);
-    static BitmapColor GetPixelForN32BitTcXrgb(ConstScanline pScanline, tools::Long nX,
-                                               const ColorMask& rMask);
-    static BitmapColor GetPixelForN32BitTcBgra(ConstScanline pScanline, tools::Long nX,
-                                               const ColorMask& rMask);
-    static BitmapColor GetPixelForN32BitTcBgrx(ConstScanline pScanline, tools::Long nX,
-                                               const ColorMask& rMask);
-    static BitmapColor GetPixelForN32BitTcRgba(ConstScanline pScanline, tools::Long nX,
-                                               const ColorMask& rMask);
-    static BitmapColor GetPixelForN32BitTcRgbx(ConstScanline pScanline, tools::Long nX,
-                                               const ColorMask& rMask);
+    static BitmapColor GetPixelForN1BitMsbPal(ConstScanline pScanline, tools::Long nX);
+    static BitmapColor GetPixelForN8BitPal(ConstScanline pScanline, tools::Long nX);
+    static BitmapColor GetPixelForN24BitTcBgr(ConstScanline pScanline, tools::Long nX);
+    static BitmapColor GetPixelForN24BitTcRgb(ConstScanline pScanline, tools::Long nX);
+    static BitmapColor GetPixelForN32BitTcAbgr(ConstScanline pScanline, tools::Long nX);
+    static BitmapColor GetPixelForN32BitTcXbgr(ConstScanline pScanline, tools::Long nX);
+    static BitmapColor GetPixelForN32BitTcArgb(ConstScanline pScanline, tools::Long nX);
+    static BitmapColor GetPixelForN32BitTcXrgb(ConstScanline pScanline, tools::Long nX);
+    static BitmapColor GetPixelForN32BitTcBgra(ConstScanline pScanline, tools::Long nX);
+    static BitmapColor GetPixelForN32BitTcBgrx(ConstScanline pScanline, tools::Long nX);
+    static BitmapColor GetPixelForN32BitTcRgba(ConstScanline pScanline, tools::Long nX);
+    static BitmapColor GetPixelForN32BitTcRgbx(ConstScanline pScanline, tools::Long nX);
 
     static void SetPixelForN1BitMsbPal(Scanline pScanline, tools::Long nX,
-                                       const BitmapColor& rBitmapColor, const ColorMask& rMask);
+                                       const BitmapColor& rBitmapColor);
     static void SetPixelForN8BitPal(Scanline pScanline, tools::Long nX,
-                                    const BitmapColor& rBitmapColor, const ColorMask& rMask);
+                                    const BitmapColor& rBitmapColor);
     static void SetPixelForN24BitTcBgr(Scanline pScanline, tools::Long nX,
-                                       const BitmapColor& rBitmapColor, const ColorMask& rMask);
+                                       const BitmapColor& rBitmapColor);
     static void SetPixelForN24BitTcRgb(Scanline pScanline, tools::Long nX,
-                                       const BitmapColor& rBitmapColor, const ColorMask& rMask);
+                                       const BitmapColor& rBitmapColor);
     static void SetPixelForN32BitTcAbgr(Scanline pScanline, tools::Long nX,
-                                        const BitmapColor& rBitmapColor, const ColorMask& rMask);
+                                        const BitmapColor& rBitmapColor);
     static void SetPixelForN32BitTcXbgr(Scanline pScanline, tools::Long nX,
-                                        const BitmapColor& rBitmapColor, const ColorMask& rMask);
+                                        const BitmapColor& rBitmapColor);
     static void SetPixelForN32BitTcArgb(Scanline pScanline, tools::Long nX,
-                                        const BitmapColor& rBitmapColor, const ColorMask& rMask);
+                                        const BitmapColor& rBitmapColor);
     static void SetPixelForN32BitTcXrgb(Scanline pScanline, tools::Long nX,
-                                        const BitmapColor& rBitmapColor, const ColorMask& rMask);
+                                        const BitmapColor& rBitmapColor);
     static void SetPixelForN32BitTcBgra(Scanline pScanline, tools::Long nX,
-                                        const BitmapColor& rBitmapColor, const ColorMask& rMask);
+                                        const BitmapColor& rBitmapColor);
     static void SetPixelForN32BitTcBgrx(Scanline pScanline, tools::Long nX,
-                                        const BitmapColor& rBitmapColor, const ColorMask& rMask);
+                                        const BitmapColor& rBitmapColor);
     static void SetPixelForN32BitTcRgba(Scanline pScanline, tools::Long nX,
-                                        const BitmapColor& rBitmapColor, const ColorMask& rMask);
+                                        const BitmapColor& rBitmapColor);
     static void SetPixelForN32BitTcRgbx(Scanline pScanline, tools::Long nX,
-                                        const BitmapColor& rBitmapColor, const ColorMask& rMask);
+                                        const BitmapColor& rBitmapColor);
 
     static FncGetPixel GetPixelFunction(ScanlineFormat nFormat);
     static FncSetPixel SetPixelFunction(ScanlineFormat nFormat);

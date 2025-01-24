@@ -1151,7 +1151,7 @@ void SkiaSalBitmap::PerformErase()
         // Set first scanline, copy to others.
         Scanline scanline = bitmapBuffer->mpBits;
         for (tools::Long x = 0; x < bitmapBuffer->mnWidth; ++x)
-            setPixel(scanline, x, mEraseColor, bitmapBuffer->maColorMask);
+            setPixel(scanline, x, mEraseColor);
         for (tools::Long y = 1; y < bitmapBuffer->mnHeight; ++y)
             memcpy(scanline + y * bitmapBuffer->mnScanlineSize, scanline,
                    bitmapBuffer->mnScanlineSize);

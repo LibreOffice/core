@@ -27,9 +27,8 @@
 
 bool Bitmap32IsPreMultipled();
 
-typedef BitmapColor (*FncGetPixel)(ConstScanline pScanline, tools::Long nX, const ColorMask& rMask);
-typedef void (*FncSetPixel)(Scanline pScanline, tools::Long nX, const BitmapColor& rBitmapColor,
-                            const ColorMask& rMask);
+typedef BitmapColor (*FncGetPixel)(ConstScanline pScanline, tools::Long nX);
+typedef void (*FncSetPixel)(Scanline pScanline, tools::Long nX, const BitmapColor& rBitmapColor);
 
 class VCL_DLLPUBLIC BitmapInfoAccess
 {
@@ -132,15 +131,6 @@ public:
     /// Returns the BitmapColor (i.e. palette index) that is an exact match
     /// of the required color. Returns SAL_MAX_UINT16 if nothing found.
     sal_uInt16 GetMatchingPaletteIndex(const BitmapColor& rBitmapColor) const;
-
-    const ColorMask& GetColorMask() const
-    {
-        const BitmapBuffer* pBuffer = mpBuffer;
-
-        assert(pBuffer && "Access is not valid!");
-
-        return pBuffer->maColorMask;
-    }
 
 private:
     BitmapInfoAccess(const BitmapInfoAccess&) = delete;

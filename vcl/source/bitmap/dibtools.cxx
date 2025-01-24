@@ -34,6 +34,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
+#include <vcl/ColorMask.hxx>
 #include <memory>
 
 #define DIBCOREHEADERSIZE       ( 12UL )
@@ -1227,7 +1228,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, sal_uLong 
 {
     if(BITFIELDS == nCompression)
     {
-        const ColorMask&    rMask = rAcc.GetColorMask();
+        ColorMask rMask;
         SVBT32              aVal32;
 
         UInt32ToSVBT32( rMask.GetRedMask(), aVal32 );

@@ -54,7 +54,7 @@ public:
         assert(nX < mpBuffer->mnWidth && "x-coordinate out of range!");
         assert(nY < mpBuffer->mnHeight && "y-coordinate out of range!");
 
-        mFncSetPixel(GetScanline(nY), nX, rBitmapColor, mpBuffer->maColorMask);
+        mFncSetPixel(GetScanline(nY), nX, rBitmapColor);
     }
 
     void SetPixelIndex(tools::Long nY, tools::Long nX, sal_uInt8 cIndex)
