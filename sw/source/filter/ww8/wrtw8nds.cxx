@@ -3524,12 +3524,8 @@ void MSWordExportBase::UpdateTocSectionNodeProperties(const SwSectionNode& rSect
         SfxGrabBagItem aGrabBag(RES_PARATR_GRABBAG,
             std::map<OUString, css::uno::Any>{{ u"SdtPr"_ustr, uno::Any(aSdtPrPropertyValues) }});
 
-        // create temp attr set
-        SwAttrSet aSet(pNode->GetSwAttrSet());
-        aSet.Put(aGrabBag);
-
         // set new attr to node
-        const_cast<SwContentNode*>(pNode)->SetAttr(aSet);
+        const_cast<SwContentNode*>(pNode)->SetAttr(aGrabBag);
     }
 
     // set flag for the next node after TOC
@@ -3544,12 +3540,8 @@ void MSWordExportBase::UpdateTocSectionNodeProperties(const SwSectionNode& rSect
             SfxGrabBagItem aGrabBag(RES_PARATR_GRABBAG,
                 std::map<OUString, css::uno::Any>{{u"ParaSdtEndBefore"_ustr, uno::Any(true)}});
 
-            // create temp attr set
-            SwAttrSet aSet(pNodeAfterToc->GetSwAttrSet());
-            aSet.Put(aGrabBag);
-
             // set new attr to node
-            const_cast<SwContentNode*>(pNodeAfterToc)->SetAttr(aSet);
+            const_cast<SwContentNode*>(pNodeAfterToc)->SetAttr(aGrabBag);
         }
     }
 }
