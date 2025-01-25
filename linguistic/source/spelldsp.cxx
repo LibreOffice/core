@@ -81,15 +81,10 @@ void ProposalList::Prepend( const OUString &rText )
 
 void ProposalList::Append( const OUString &rOrig, bool bPrepend )
 {
-    bool bFound = false;
     // convert ASCII apostrophe to the typographic one
     const OUString aText( rOrig.indexOf( '\'' ) > -1 ? rOrig.replace('\'', u'’') : rOrig );
-    size_t nCnt = aVec.size();
-    for (size_t i = 0;  !bFound && i < nCnt;  ++i)
-    {
-        if (aVec[i] == aText)
-            bFound = true;
-    }
+    const bool bFound = std::any_of(aVec.begin(), aVec.end(),
+        [&aText](const OUString& n){ return n == aText; });
     if (!bFound)
     {
         if ( bPrepend )
