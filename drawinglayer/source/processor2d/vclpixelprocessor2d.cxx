@@ -793,7 +793,7 @@ void VclPixelProcessor2D::processFillHatchPrimitive2D(
             maCurrentTransformation * basegfx::B2DVector(rFillHatchAttributes.getDistance(), 0.0));
         const sal_uInt32 nDistance(basegfx::fround(aDiscreteDistance.getLength()));
         const sal_uInt32 nAngle10(
-            basegfx::rad2deg<10>(basegfx::fround(rFillHatchAttributes.getAngle())));
+            basegfx::fround(basegfx::rad2deg<10>(rFillHatchAttributes.getAngle())));
         ::Hatch aVCLHatch(eHatchStyle, Color(rFillHatchAttributes.getColor()), nDistance,
                           Degree10(nAngle10));
 
