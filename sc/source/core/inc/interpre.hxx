@@ -735,6 +735,12 @@ private:
     void ScWrapCols();
     void ScWrapRows();
 
+private:
+    void ScToColOrRow(bool bCol);
+    void ScWrapColsOrRows(bool bCols);
+    void ScTakeOrDrop(bool bTake);
+
+public:
     // If upon call rMissingField==true then the database field parameter may be
     // missing (Xcl DCOUNT() syntax), or may be faked as missing by having the
     // value 0.0 or being exactly the entire database range reference (old SO
