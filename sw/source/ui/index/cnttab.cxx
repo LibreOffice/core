@@ -1418,6 +1418,8 @@ IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl, weld::Toggleable&, rButton, void)
         m_xUseFFCB->set_sensitive(m_xCollectSameCB->get_active() && !m_xUseDashCB->get_active());
         m_xUseDashCB->set_sensitive(m_xCollectSameCB->get_active() && !m_xUseFFCB->get_active());
         m_xCaseSensitiveCB->set_sensitive(m_xCollectSameCB->get_active());
+        // tdf#164847 - update menu items based on concordance file presence
+        MenuEnableHdl(*m_xAutoMarkPB);
     }
     else if (TOX_ILLUSTRATIONS == aCurType.eType
             || TOX_TABLES == aCurType.eType
@@ -1509,6 +1511,8 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, const OUString&, rIdent, void)
         if (RET_OK != aAutoMarkDlg.run() && bNew)
             m_sAutoMarkURL = sSaveAutoMarkURL;
     }
+    // tdf#164847 - update menu items based on concordance file presence
+    MenuEnableHdl(*m_xAutoMarkPB);
 }
 
 class SwTOXWidget
