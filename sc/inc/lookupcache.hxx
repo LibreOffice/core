@@ -189,7 +189,8 @@ private:
         }
     };
 
-    std::unordered_map< QueryKey, QueryCriteriaAndResult, QueryKey::Hash > maQueryMap;
+    typedef std::unordered_map<QueryKey, QueryCriteriaAndResult, QueryKey::Hash> QueryMap;
+    QueryMap maQueryMap;
     ScRange         maRange;
     ScDocument *    mpDoc;
     ScLookupCacheMap & mCacheMap;
