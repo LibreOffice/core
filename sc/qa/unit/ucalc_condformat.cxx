@@ -305,7 +305,7 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testDataBarCondCopyPaste)
     pDatabar->SetDataBarData(pFormatData);
     pFormat->AddEntry(pDatabar);
 
-    sal_uInt32 nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
+    sal_uInt32 nIndex0 = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, aCondFormatRange, &aClipDoc);
@@ -313,11 +313,11 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testDataBarCondCopyPaste)
     ScRange aTargetRange(0, 3, 0, 2, 3, 0);
     pasteFromClip(m_pDoc, aTargetRange, &aClipDoc);
 
-    // Pasting the same conditional format must modify existing format, making its range
-    // combined of previous range and newly pasted range having the conditional format.
-    // No new conditional formats must be created.
-    CPPUNIT_ASSERT_EQUAL(size_t(1), m_pDoc->GetCondFormList(0)->size());
-    aRangeList.Join(aTargetRange);
+    // Pasting the same conditional databar format into a non-adjacent range must create a new
+    // format.
+    sal_uInt32 nIndex1 = m_pDoc->GetCondFormat(0, 3, 0)->GetKey();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), m_pDoc->GetCondFormList(0)->size());
+    aRangeList = aTargetRange;
     for (SCCOL nCol = 0; nCol < 3; ++nCol)
     {
         ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(nCol, 3, 0);
@@ -325,13 +325,68 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testDataBarCondCopyPaste)
         CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
 
         sal_uInt32 nPastedKey = pPastedFormat->GetKey();
-        CPPUNIT_ASSERT_EQUAL(nIndex, nPastedKey);
+        CPPUNIT_ASSERT(nIndex0 != nPastedKey);
+        CPPUNIT_ASSERT_EQUAL(nIndex1, nPastedKey);
 
         const SfxPoolItem* pItem = m_pDoc->GetAttr(nCol, 3, 0, ATTR_CONDITIONAL);
         const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
         CPPUNIT_ASSERT(pCondFormatItem);
         CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-        CPPUNIT_ASSERT_EQUAL(nIndex, pCondFormatItem->GetCondFormatData().front());
+        CPPUNIT_ASSERT_EQUAL(nPastedKey, pCondFormatItem->GetCondFormatData().front());
+    }
+
+    // Now paste next to the previous range (immediately below)
+    aTargetRange = ScRange(0, 4, 0, 2, 4, 0);
+    pasteFromClip(m_pDoc, aTargetRange, &aClipDoc);
+
+    // Pasting the same conditional databar format into an adjacent range (not continuing the row)
+    // must create a new format.
+    sal_uInt32 nIndex2 = m_pDoc->GetCondFormat(0, 4, 0)->GetKey();
+    CPPUNIT_ASSERT_EQUAL(size_t(3), m_pDoc->GetCondFormList(0)->size());
+    aRangeList = aTargetRange;
+    for (SCCOL nCol = 0; nCol < 3; ++nCol)
+    {
+        ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(nCol, 4, 0);
+        CPPUNIT_ASSERT(pPastedFormat);
+        CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
+
+        sal_uInt32 nPastedKey = pPastedFormat->GetKey();
+        CPPUNIT_ASSERT(nIndex0 != nPastedKey);
+        CPPUNIT_ASSERT(nIndex1 != nPastedKey);
+        CPPUNIT_ASSERT_EQUAL(nIndex2, nPastedKey);
+
+        const SfxPoolItem* pItem = m_pDoc->GetAttr(nCol, 4, 0, ATTR_CONDITIONAL);
+        const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+        CPPUNIT_ASSERT(pCondFormatItem);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
+        CPPUNIT_ASSERT_EQUAL(nPastedKey, pCondFormatItem->GetCondFormatData().front());
+    }
+
+    // Now paste next to the previous range (immediately to the right)
+    aTargetRange = ScRange(3, 4, 0, 5, 4, 0);
+    pasteFromClip(m_pDoc, aTargetRange, &aClipDoc);
+
+    // Pasting the same conditional databar format into an adjacent range (continuing the row) must
+    // modify existing format, making its range combined of previous range and newly pasted range
+    // having the conditional format. No new conditional formats must be created.
+    CPPUNIT_ASSERT_EQUAL(size_t(3), m_pDoc->GetCondFormList(0)->size());
+    aRangeList.Join(aTargetRange);
+    for (SCCOL nCol = 3; nCol < 6; ++nCol)
+    {
+        ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(nCol, 4, 0);
+        CPPUNIT_ASSERT(pPastedFormat);
+        CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
+
+        sal_uInt32 nPastedKey = pPastedFormat->GetKey();
+        CPPUNIT_ASSERT(nIndex0 != nPastedKey);
+        CPPUNIT_ASSERT(nIndex1 != nPastedKey);
+        CPPUNIT_ASSERT_EQUAL(nIndex2, nPastedKey);
+
+        const SfxPoolItem* pItem = m_pDoc->GetAttr(nCol, 4, 0, ATTR_CONDITIONAL);
+        const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+        CPPUNIT_ASSERT(pCondFormatItem);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
+        CPPUNIT_ASSERT_EQUAL(nPastedKey, pCondFormatItem->GetCondFormatData().front());
     }
 
     m_pDoc->DeleteTab(0);
@@ -407,7 +462,7 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testColorScaleCondCopyPaste)
     pColorScaleFormat->AddEntry(pEntryRed);
 
     pFormat->AddEntry(pColorScaleFormat);
-    sal_uInt32 nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
+    sal_uInt32 nIndex0 = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, aCondFormatRange, &aClipDoc);
@@ -415,11 +470,11 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testColorScaleCondCopyPaste)
     ScRange aTargetRange(0, 3, 0, 2, 3, 0);
     pasteFromClip(m_pDoc, aTargetRange, &aClipDoc);
 
-    // Pasting the same conditional format must modify existing format, making its range
-    // combined of previous range and newly pasted range having the conditional format.
-    // No new conditional formats must be created.
-    CPPUNIT_ASSERT_EQUAL(size_t(1), m_pDoc->GetCondFormList(0)->size());
-    aRangeList.Join(aTargetRange);
+    // Pasting the same conditional databar format into a non-adjacent range must create a new
+    // format.
+    sal_uInt32 nIndex1 = m_pDoc->GetCondFormat(0, 3, 0)->GetKey();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), m_pDoc->GetCondFormList(0)->size());
+    aRangeList = aTargetRange;
     for (SCCOL nCol = 0; nCol < 3; ++nCol)
     {
         ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(nCol, 3, 0);
@@ -427,13 +482,68 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testColorScaleCondCopyPaste)
         CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
 
         sal_uInt32 nPastedKey = pPastedFormat->GetKey();
-        CPPUNIT_ASSERT_EQUAL(nIndex, nPastedKey);
+        CPPUNIT_ASSERT(nIndex0 != nPastedKey);
+        CPPUNIT_ASSERT_EQUAL(nIndex1, nPastedKey);
 
         const SfxPoolItem* pItem = m_pDoc->GetAttr(nCol, 3, 0, ATTR_CONDITIONAL);
         const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
         CPPUNIT_ASSERT(pCondFormatItem);
         CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-        CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pCondFormatItem->GetCondFormatData().front());
+        CPPUNIT_ASSERT_EQUAL(nPastedKey, pCondFormatItem->GetCondFormatData().front());
+    }
+
+    // Now paste next to the previous range (immediately below)
+    aTargetRange = ScRange(0, 4, 0, 2, 4, 0);
+    pasteFromClip(m_pDoc, aTargetRange, &aClipDoc);
+
+    // Pasting the same conditional databar format into an adjacent range (not continuing the row)
+    // must create a new format.
+    sal_uInt32 nIndex2 = m_pDoc->GetCondFormat(0, 4, 0)->GetKey();
+    CPPUNIT_ASSERT_EQUAL(size_t(3), m_pDoc->GetCondFormList(0)->size());
+    aRangeList = aTargetRange;
+    for (SCCOL nCol = 0; nCol < 3; ++nCol)
+    {
+        ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(nCol, 4, 0);
+        CPPUNIT_ASSERT(pPastedFormat);
+        CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
+
+        sal_uInt32 nPastedKey = pPastedFormat->GetKey();
+        CPPUNIT_ASSERT(nIndex0 != nPastedKey);
+        CPPUNIT_ASSERT(nIndex1 != nPastedKey);
+        CPPUNIT_ASSERT_EQUAL(nIndex2, nPastedKey);
+
+        const SfxPoolItem* pItem = m_pDoc->GetAttr(nCol, 4, 0, ATTR_CONDITIONAL);
+        const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+        CPPUNIT_ASSERT(pCondFormatItem);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
+        CPPUNIT_ASSERT_EQUAL(nPastedKey, pCondFormatItem->GetCondFormatData().front());
+    }
+
+    // Now paste next to the previous range (immediately to the right)
+    aTargetRange = ScRange(3, 4, 0, 5, 4, 0);
+    pasteFromClip(m_pDoc, aTargetRange, &aClipDoc);
+
+    // Pasting the same conditional databar format into an adjacent range (continuing the row) must
+    // modify existing format, making its range combined of previous range and newly pasted range
+    // having the conditional format. No new conditional formats must be created.
+    CPPUNIT_ASSERT_EQUAL(size_t(3), m_pDoc->GetCondFormList(0)->size());
+    aRangeList.Join(aTargetRange);
+    for (SCCOL nCol = 3; nCol < 6; ++nCol)
+    {
+        ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(nCol, 4, 0);
+        CPPUNIT_ASSERT(pPastedFormat);
+        CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
+
+        sal_uInt32 nPastedKey = pPastedFormat->GetKey();
+        CPPUNIT_ASSERT(nIndex0 != nPastedKey);
+        CPPUNIT_ASSERT(nIndex1 != nPastedKey);
+        CPPUNIT_ASSERT_EQUAL(nIndex2, nPastedKey);
+
+        const SfxPoolItem* pItem = m_pDoc->GetAttr(nCol, 4, 0, ATTR_CONDITIONAL);
+        const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+        CPPUNIT_ASSERT(pCondFormatItem);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
+        CPPUNIT_ASSERT_EQUAL(nPastedKey, pCondFormatItem->GetCondFormatData().front());
     }
 
     m_pDoc->DeleteTab(0);
