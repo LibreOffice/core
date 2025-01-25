@@ -430,6 +430,8 @@ void SAL_CALL IUnknownWrapper::setValue( const OUString& aPropertyName,
     }
 }
 
+static OUString BStrToOUString(BSTR s) { return OUString(o3tl::toU(s), SysStringLen(s)); }
+
 Any SAL_CALL IUnknownWrapper::getValue( const OUString& aPropertyName )
 {
     if ( ! m_spDispatch )
@@ -539,13 +541,13 @@ Any SAL_CALL IUnknownWrapper::getValue( const OUString& aPropertyName )
         case DISP_E_BADPARAMCOUNT:
         case DISP_E_BADVARTYPE:
         case DISP_E_EXCEPTION:
-            throw RuntimeException(OUString(o3tl::toU(excepinfo.bstrDescription)));
+            throw RuntimeException(BStrToOUString(excepinfo.bstrDescription));
             break;
         case DISP_E_MEMBERNOTFOUND:
-            throw UnknownPropertyException(OUString(o3tl::toU(excepinfo.bstrDescription)));
+            throw UnknownPropertyException(BStrToOUString(excepinfo.bstrDescription));
             break;
         default:
-            throw RuntimeException(OUString(o3tl::toU(excepinfo.bstrDescription)));
+            throw RuntimeException(BStrToOUString(excepinfo.bstrDescription));
             break;
         }
     }
