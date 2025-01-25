@@ -589,6 +589,52 @@ void ScTable::CopyCellToDocument(SCCOL nSrcCol, SCROW nSrcRow, SCCOL nDestCol, S
 
 namespace {
 
+bool isFormatDependentOnRange(const ScConditionalFormat& rFormat)
+{
+    for (size_t i = 0; i < rFormat.size(); ++i)
+        if (auto* entry = rFormat.GetEntry(i))
+            if (auto type = entry->GetType(); type == ScFormatEntry::Type::Colorscale
+                                              || type == ScFormatEntry::Type::Databar
+                                              || type == ScFormatEntry::Type::Iconset)
+                return true;
+    return false;
+}
+
+bool isRangeDependentFormatNeedDeduplication(const ScRangeList& rOld, const ScRangeList& rNew)
+{
+    // Are they two adjacent vectors?
+    if (rOld.size() == 1 && rNew.size() == 1)
+    {
+        // Test vertical vectors
+        if (rOld[0].aStart.Col() == rOld[0].aEnd.Col() && rNew[0].aStart.Col() == rNew[0].aEnd.Col()
+            && rNew[0].aStart.Col() == rOld[0].aStart.Col())
+        {
+            if (rOld[0].aEnd.Row() == rNew[0].aStart.Row() - 1
+                || rNew[0].aEnd.Row() == rOld[0].aStart.Row() - 1)
+            {
+                return true; // Two joining vertical vectors -> merge
+            }
+        }
+        // Test horizontal vectors
+        if (rOld[0].aStart.Row() == rOld[0].aEnd.Row() && rNew[0].aStart.Row() == rNew[0].aEnd.Row()
+            && rNew[0].aStart.Row() == rOld[0].aStart.Row())
+        {
+            if (rOld[0].aEnd.Col() == rNew[0].aStart.Col() - 1
+                || rNew[0].aEnd.Col() == rOld[0].aStart.Col() - 1)
+            {
+                return true; // Two joining horizontal vectors -> merge
+            }
+        }
+    }
+
+    // Is the new one fully included into the old one?
+    for (auto& range : rNew)
+        if (!rOld.Contains(range))
+            return false; // Different ranges, no deduplication
+
+    return true; // New is completely inside old -> merge (in fact, this means "nothing to do")
+}
+
 bool CheckAndDeduplicateCondFormat(ScDocument& rDocument, ScConditionalFormat* pOldFormat, const ScConditionalFormat* pNewFormat, SCTAB nTab)
 {
     if (!pOldFormat)
@@ -598,6 +644,11 @@ bool CheckAndDeduplicateCondFormat(ScDocument& rDocument, ScConditionalFormat* p
     {
         const ScRangeList& rNewRangeList = pNewFormat->GetRange();
         ScRangeList& rDstRangeList = pOldFormat->GetRangeList();
+
+        if (isFormatDependentOnRange(*pOldFormat)
+            && !isRangeDependentFormatNeedDeduplication(rDstRangeList, rNewRangeList))
+            return false; // No deduplication, create new format
+
         for (size_t i = 0; i < rNewRangeList.size(); ++i)
         {
             rDstRangeList.Join(rNewRangeList[i]);
