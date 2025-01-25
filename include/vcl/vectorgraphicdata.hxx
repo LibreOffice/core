@@ -81,7 +81,6 @@ private:
     VectorGraphicData& operator=(const VectorGraphicData&) = delete;
 
 public:
-    VectorGraphicData(const OUString& rPath, VectorGraphicDataType eVectorDataType);
     VectorGraphicData(
         BinaryDataContainer aDataContainer,
         VectorGraphicDataType eVectorDataType,

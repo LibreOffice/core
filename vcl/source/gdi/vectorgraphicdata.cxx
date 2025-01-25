@@ -319,39 +319,13 @@ std::pair<VectorGraphicData::State, size_t> VectorGraphicData::getSizeBytes() co
     }
 }
 
-VectorGraphicData::VectorGraphicData(
-    BinaryDataContainer aDataContainer,
-    VectorGraphicDataType eVectorDataType,
-    sal_Int32 nPageIndex)
+VectorGraphicData::VectorGraphicData(BinaryDataContainer aDataContainer, VectorGraphicDataType eVectorDataType, sal_Int32 nPageIndex)
 :   maDataContainer(std::move(aDataContainer)),
     mbSequenceCreated(false),
     mNestedBitmapSize(0),
     meType(eVectorDataType),
     mnPageIndex(nPageIndex)
 {
-}
-
-VectorGraphicData::VectorGraphicData(
-    const OUString& rPath,
-    VectorGraphicDataType eVectorDataType)
-:   mbSequenceCreated(false),
-    mNestedBitmapSize(0),
-    meType(eVectorDataType),
-    mnPageIndex(-1)
-{
-    SvFileStream rIStm(rPath, StreamMode::STD_READ);
-    if(rIStm.GetError())
-        return;
-    const sal_uInt32 nStmLen(rIStm.remainingSize());
-    if (nStmLen)
-    {
-        BinaryDataContainer aData(rIStm, nStmLen);
-
-        if (!rIStm.GetError())
-        {
-            maDataContainer = std::move(aData);
-        }
-    }
 }
 
 VectorGraphicData::~VectorGraphicData()

@@ -138,7 +138,16 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
     if ( !FileExists(aObj) )
         return false;
 
-    VectorGraphicData aVectorGraphicData(aObj.PathToFileName(), VectorGraphicDataType::Svg);
+    // Read the SVG file
+    SvFileStream aStream(aObj.PathToFileName(), StreamMode::STD_READ);
+    if (aStream.GetError())
+        return false;
+
+    BinaryDataContainer aDataContainer(aStream, aStream.remainingSize());
+    if (aStream.GetError())
+        return false;
+
+    VectorGraphicData aVectorGraphicData(aDataContainer, VectorGraphicDataType::Svg);
 
     // transform into [0,0,width,width*aspect] std dimensions
 
