@@ -89,7 +89,7 @@ SCROW ScLookupCache::lookup( const QueryCriteria & rCriteria ) const
 {
     // try to find the row index for which we have already performed lookup
     auto it = std::find_if(maQueryMap.begin(), maQueryMap.end(),
-        [&rCriteria](const std::pair<QueryKey, QueryCriteriaAndResult>& rEntry) {
+        [&rCriteria](const QueryMap::value_type& rEntry) {
             return rEntry.second.maCriteria == rCriteria;
         });
     if (it != maQueryMap.end())
