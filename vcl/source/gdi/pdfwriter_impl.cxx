@@ -9190,7 +9190,7 @@ void PDFWriterImpl::writeJPG( const JPGEmit& rObject )
         if( aAlpha.hasAlpha() )
             aAlpha.Invert();
         aEmit.m_aBitmap = BitmapEx( rObject.m_aAlphaMask.GetBitmap(), aAlpha );
-        writeBitmapObject( aEmit, true );
+        writeBitmapMaskObject( aEmit );
     }
 
     writeReferenceXObject(rObject.m_aReferenceXObject);
@@ -9611,7 +9611,7 @@ void PDFWriterImpl::mergeAnnotationsFromExternalPage(filter::PDFObjectElement* p
 
 }
 
-bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
+bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject )
 {
     if (rObject.m_aReferenceXObject.hasExternalPDFData() && !m_aContext.UseReferenceXObject)
     {
@@ -9622,35 +9622,13 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
     if (!updateObject(rObject.m_nObject))
         return false;
 
-    Bitmap  aBitmap;
     bool    bWriteMask = false;
-    if( ! bMask )
+    Bitmap  aBitmap = rObject.m_aBitmap.GetBitmap();
+    if( rObject.m_aBitmap.IsAlpha() )
     {
-        aBitmap = rObject.m_aBitmap.GetBitmap();
-        if( rObject.m_aBitmap.IsAlpha() )
-        {
-            if( m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4 )
-                bWriteMask = true;
-            // else draw without alpha channel
-        }
-    }
-    else
-    {
-        if( m_aContext.Version < PDFWriter::PDFVersion::PDF_1_4 || ! rObject.m_aBitmap.IsAlpha() )
-        {
-            if( rObject.m_aBitmap.IsAlpha() )
-            {
-                aBitmap = rObject.m_aBitmap.GetAlphaMask().GetBitmap();
-                aBitmap.Convert( BmpConversion::N1BitThreshold );
-                SAL_WARN_IF(aBitmap.getPixelFormat() != vcl::PixelFormat::N8_BPP, "vcl.pdfwriter", "mask conversion failed" );
-            }
-        }
-        else if (aBitmap.getPixelFormat() != vcl::PixelFormat::N8_BPP)
-        {
-            aBitmap = rObject.m_aBitmap.GetAlphaMask().GetBitmap();
-            aBitmap.Convert( BmpConversion::N8BitGreys );
-            SAL_WARN_IF(aBitmap.getPixelFormat() != vcl::PixelFormat::N8_BPP, "vcl.pdfwriter", "alpha mask conversion failed" );
-        }
+        if( m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4 )
+            bWriteMask = true;
+        // else draw without alpha channel
     }
 
     BitmapScopedReadAccess pAccess(aBitmap);
@@ -9705,64 +9683,53 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
             aLine.append( ">>\n" );
         }
     }
-    if( ! bMask )
-    {
-        aLine.append( "/ColorSpace" );
-        if( bTrueColor )
-            aLine.append( "/DeviceRGB\n" );
-        else
-        {
-            aLine.append( "[ /Indexed/DeviceRGB " );
-            aLine.append( static_cast<sal_Int32>(pAccess->GetPaletteEntryCount()-1) );
-            aLine.append( "\n<" );
-            if (m_aContext.Encryption.canEncrypt())
-            {
-                enableStringEncryption(rObject.m_nObject);
-                //check encryption buffer size
-                m_vEncryptionBuffer.resize(pAccess->GetPaletteEntryCount()*3);
-                int nChar = 0;
-                //fill the encryption buffer
-                for( sal_uInt16 i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
-                {
-                    const BitmapColor& rColor = pAccess->GetPaletteColor( i );
-                    m_vEncryptionBuffer[nChar++] = rColor.GetRed();
-                    m_vEncryptionBuffer[nChar++] = rColor.GetGreen();
-                    m_vEncryptionBuffer[nChar++] = rColor.GetBlue();
-                }
-                //encrypt the colorspace lookup table
-                std::vector<sal_uInt8> aOutputBuffer(nChar);
-                m_pPDFEncryptor->encrypt(m_vEncryptionBuffer.data(), nChar, aOutputBuffer, nChar);
-                //now queue the data for output
-                COSWriter::appendHexArray(aOutputBuffer.data(), aOutputBuffer.size(), aLine);
-            }
-            else //no encryption requested (PDF/A-1a program flow drops here)
-            {
-                for( sal_uInt16 i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
-                {
-                    const BitmapColor& rColor = pAccess->GetPaletteColor( i );
-                    COSWriter::appendHex( rColor.GetRed(), aLine );
-                    COSWriter::appendHex( rColor.GetGreen(), aLine );
-                    COSWriter::appendHex( rColor.GetBlue(), aLine );
-                }
-            }
-            aLine.append( ">\n]\n" );
-        }
-    }
+    aLine.append( "/ColorSpace" );
+    if( bTrueColor )
+        aLine.append( "/DeviceRGB\n" );
     else
     {
-        aLine.append( "/ColorSpace/DeviceGray\n"
-                      "/Decode [ 1 0 ]\n" );
+        aLine.append( "[ /Indexed/DeviceRGB " );
+        aLine.append( static_cast<sal_Int32>(pAccess->GetPaletteEntryCount()-1) );
+        aLine.append( "\n<" );
+        if (m_aContext.Encryption.canEncrypt())
+        {
+            enableStringEncryption(rObject.m_nObject);
+            //check encryption buffer size
+            m_vEncryptionBuffer.resize(pAccess->GetPaletteEntryCount()*3);
+            int nChar = 0;
+            //fill the encryption buffer
+            for( sal_uInt16 i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
+            {
+                const BitmapColor& rColor = pAccess->GetPaletteColor( i );
+                m_vEncryptionBuffer[nChar++] = rColor.GetRed();
+                m_vEncryptionBuffer[nChar++] = rColor.GetGreen();
+                m_vEncryptionBuffer[nChar++] = rColor.GetBlue();
+            }
+            //encrypt the colorspace lookup table
+            std::vector<sal_uInt8> aOutputBuffer(nChar);
+            m_pPDFEncryptor->encrypt(m_vEncryptionBuffer.data(), nChar, aOutputBuffer, nChar);
+            //now queue the data for output
+            COSWriter::appendHexArray(aOutputBuffer.data(), aOutputBuffer.size(), aLine);
+        }
+        else //no encryption requested (PDF/A-1a program flow drops here)
+        {
+            for( sal_uInt16 i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
+            {
+                const BitmapColor& rColor = pAccess->GetPaletteColor( i );
+                COSWriter::appendHex( rColor.GetRed(), aLine );
+                COSWriter::appendHex( rColor.GetGreen(), aLine );
+                COSWriter::appendHex( rColor.GetBlue(), aLine );
+            }
+        }
+        aLine.append( ">\n]\n" );
     }
 
-    if (!bMask && !m_bIsPDF_A1)
+    if (!m_bIsPDF_A1)
     {
         if( bWriteMask )
         {
             nMaskObject = createObject();
-            if (rObject.m_aBitmap.IsAlpha())
-                aLine.append( "/SMask " );
-            else
-                aLine.append( "/Mask " );
+            aLine.append( "/SMask " );
             aLine.append( nMaskObject );
             aLine.append( " 0 R\n" );
         }
@@ -9836,8 +9803,99 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
         BitmapEmit aEmit;
         aEmit.m_nObject             = nMaskObject;
         aEmit.m_aBitmap             = rObject.m_aBitmap;
-        return writeBitmapObject( aEmit, true );
+        return writeBitmapMaskObject( aEmit );
     }
+
+    writeReferenceXObject(rObject.m_aReferenceXObject);
+
+    return true;
+}
+
+bool PDFWriterImpl::writeBitmapMaskObject( const BitmapEmit& rObject )
+{
+    assert( rObject.m_aBitmap.IsAlpha() );
+    assert( rObject.m_aBitmap.GetAlphaMask().GetBitmap().getPixelFormat() == vcl::PixelFormat::N8_BPP );
+
+    if (rObject.m_aReferenceXObject.hasExternalPDFData() && !m_aContext.UseReferenceXObject)
+    {
+        writeReferenceXObject(rObject.m_aReferenceXObject);
+        return true;
+    }
+
+    if (!updateObject(rObject.m_nObject))
+        return false;
+
+    Bitmap  aBitmap;
+    if( m_aContext.Version < PDFWriter::PDFVersion::PDF_1_4 )
+    {
+        aBitmap = rObject.m_aBitmap.GetAlphaMask().GetBitmap();
+        aBitmap.Convert( BmpConversion::N1BitThreshold );
+    }
+    else
+    {
+        aBitmap = rObject.m_aBitmap.GetAlphaMask().GetBitmap();
+    }
+
+    const sal_Int32 nBitsPerComponent = 8;
+
+    sal_Int32 nStreamLengthObject   = createObject();
+
+    if (g_bDebugDisableCompression)
+    {
+        emitComment( "PDFWriterImpl::writeBitmapObject" );
+    }
+    OStringBuffer aLine(1024);
+    aLine.append( rObject.m_nObject );
+    aLine.append( " 0 obj\n"
+                  "<</Type/XObject/Subtype/Image/Width " );
+    aLine.append( static_cast<sal_Int32>(aBitmap.GetSizePixel().Width()) );
+    aLine.append( "/Height " );
+    aLine.append( static_cast<sal_Int32>(aBitmap.GetSizePixel().Height()) );
+    aLine.append( "/BitsPerComponent " );
+    aLine.append( nBitsPerComponent );
+    aLine.append( "/Length " );
+    aLine.append( nStreamLengthObject );
+    aLine.append( " 0 R\n" );
+    if (!g_bDebugDisableCompression)
+    {
+        aLine.append( "/Filter/FlateDecode" );
+    }
+    aLine.append( "/ColorSpace/DeviceGray\n"
+                  "/Decode [ 1 0 ]\n" );
+
+    aLine.append( ">>\n"
+                  "stream\n" );
+    if (!writeBuffer(aLine)) return false;
+    sal_uInt64 nStartPos = 0;
+    if (osl::File::E_None != m_aFile.getPos(nStartPos))
+        return false;
+
+    checkAndEnableStreamEncryption( rObject.m_nObject );
+    beginCompression();
+    BitmapScopedReadAccess pAccess(aBitmap);
+    //With PDF bitmaps, each row is padded to a BYTE boundary (multiple of 8 bits).
+    const int nScanLineBytes = ((pAccess->GetBitCount() * pAccess->Width()) + 7U) / 8U;
+    for( tools::Long i = 0; i < pAccess->Height(); i++ )
+    {
+        if (!writeBufferBytes(pAccess->GetScanline(i), nScanLineBytes))
+            return false;
+    }
+    endCompression();
+    disableStreamEncryption();
+
+    sal_uInt64 nEndPos = 0;
+    if (osl::File::E_None != m_aFile.getPos(nEndPos))
+        return false;
+    aLine.setLength( 0 );
+    aLine.append( "\nendstream\nendobj\n\n" );
+    if (!writeBuffer(aLine)) return false;
+    if (!updateObject(nStreamLengthObject)) return false;
+    aLine.setLength( 0 );
+    aLine.append( nStreamLengthObject );
+    aLine.append( " 0 obj\n" );
+    aLine.append( static_cast<sal_Int64>(nEndPos-nStartPos) );
+    aLine.append( "\nendobj\n\n" );
+    if (!writeBuffer(aLine)) return false;
 
     writeReferenceXObject(rObject.m_aReferenceXObject);
 
