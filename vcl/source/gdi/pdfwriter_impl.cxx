@@ -9185,7 +9185,11 @@ void PDFWriterImpl::writeJPG( const JPGEmit& rObject )
     {
         BitmapEmit aEmit;
         aEmit.m_nObject = nMaskObject;
-        aEmit.m_aBitmap = BitmapEx( rObject.m_aAlphaMask.GetBitmap(), rObject.m_aAlphaMask );
+        // tdf#164223 invert alpha mask for JPEG images
+        AlphaMask aAlpha = rObject.m_aAlphaMask;
+        if( aAlpha.hasAlpha() )
+            aAlpha.Invert();
+        aEmit.m_aBitmap = BitmapEx( rObject.m_aAlphaMask.GetBitmap(), aAlpha );
         writeBitmapObject( aEmit, true );
     }
 
