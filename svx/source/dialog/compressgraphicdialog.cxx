@@ -48,10 +48,6 @@ namespace
         bool ReduceResolutionCB = true;
         int  MFNewWidth = 1;
         int  MFNewHeight = 1;
-        bool LosslessRB = true;
-        bool JpegCompRB = false;
-        int  CompressionMF = 6;
-        int  QualityMF = 80;
         int  InterpolationCombo = 3;
     };
     memParam memp;
@@ -100,13 +96,6 @@ void CompressGraphicsDialog::recallParameter()
     if (memp.ReduceResolutionCB && (memp.MFNewHeight > 1))
         m_xMFNewHeight->set_value( memp.MFNewHeight );
 
-    m_xLosslessRB->set_active( memp.LosslessRB );
-    m_xJpegCompRB->set_active( memp.JpegCompRB );
-    m_xCompressionMF->set_value( memp.CompressionMF );
-    m_xCompressionSlider->set_value( memp.CompressionMF );
-    m_xQualityMF->set_value( memp.QualityMF );
-    m_xQualitySlider->set_value( memp.QualityMF );
-
     m_xInterpolationCombo->set_active( memp.InterpolationCombo );
 
     UpdateSensitivity(m_xReduceResolutionCB->get_active());
@@ -153,7 +142,14 @@ void CompressGraphicsDialog::Initialize()
     m_xQualityMF->connect_value_changed( LINK( this, CompressGraphicsDialog, NewQualityModifiedHdl ));
     m_xCompressionMF->connect_value_changed( LINK( this, CompressGraphicsDialog, NewCompressionModifiedHdl ));
 
-    m_xJpegCompRB->set_active(true);
+    const auto& pGfxLink = m_aGraphic.GetSharedGfxLink();
+    bool bDefaultChoice = (pGfxLink) ? (pGfxLink->GetType() == GfxLinkType::NativeJpg) : false;
+
+    m_xJpegCompRB->set_active(bDefaultChoice);
+    m_xQualitySlider->set_sensitive(bDefaultChoice);
+    m_xQualityMF->set_sensitive(bDefaultChoice);
+
+
     m_xReduceResolutionCB->set_active(true);
 
     m_xBtnOkay->connect_clicked( LINK( this, CompressGraphicsDialog, OkayClickHdl ) );
@@ -290,10 +286,6 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, OkayClickHdl, weld::Button&, void )
     memp.ReduceResolutionCB = m_xReduceResolutionCB->get_active();
     memp.MFNewWidth =         m_xMFNewWidth->get_value();
     memp.MFNewHeight =        m_xMFNewHeight->get_value();
-    memp.LosslessRB =         m_xLosslessRB->get_active();
-    memp.JpegCompRB =         m_xJpegCompRB->get_active();
-    memp.CompressionMF =      m_xCompressionMF->get_value();
-    memp.QualityMF =          m_xQualityMF->get_value();
     memp.InterpolationCombo = m_xInterpolationCombo->get_active();
     CompressGraphicsDialog::response(RET_OK);
 }
