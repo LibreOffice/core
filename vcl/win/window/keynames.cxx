@@ -204,12 +204,12 @@ namespace vcl_sal {
     // translate keycodes, used within the displayed menu shortcuts
     OUString getKeysReplacementName( std::u16string_view pLang, LONG nSymbol )
     {
-        for( unsigned int n = 0; n < SAL_N_ELEMENTS(aKeyboards); n++ )
+        for( const auto& rKeyboard : aKeyboards )
         {
-            if( o3tl::equalsAscii( pLang, aKeyboards[n].pLangName ) )
+            if( o3tl::equalsAscii( pLang, rKeyboard.pLangName ) )
             {
-                const struct KeysNameReplacement* pRepl = aKeyboards[n].pReplacements;
-                for( int m = aKeyboards[n].nReplacements ; m ; )
+                const struct KeysNameReplacement* pRepl = rKeyboard.pReplacements;
+                for( int m = rKeyboard.nReplacements ; m ; )
                 {
                     if( nSymbol == pRepl[--m].aSymbol )
                         return OUString( pRepl[m].pName, strlen(pRepl[m].pName), RTL_TEXTENCODING_UTF8 );
