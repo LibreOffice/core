@@ -983,12 +983,11 @@ sal_uInt16 SwSubFont::GetAscent( SwViewShell const *pSh, const OutputDevice& rOu
     return GetEscapement() ? CalcEscAscent( nAscent ) : nAscent;
 }
 
-sal_uInt16 SwSubFont::GetHeight(SwViewShell const* pSh, const OutputDevice& rOut,
-                                bool bIsCJKGridContext)
+sal_uInt16 SwSubFont::GetHeight( SwViewShell const *pSh, const OutputDevice& rOut )
 {
     SV_STAT( nGetTextSize );
     SwFntAccess aFntAccess( m_nFontCacheId, m_nFontIndex, this, pSh );
-    const sal_uInt16 nHeight = aFntAccess.Get()->GetFontHeight(pSh, rOut, bIsCJKGridContext);
+    const sal_uInt16 nHeight = aFntAccess.Get()->GetFontHeight( pSh, rOut );
     if ( GetEscapement() )
     {
         const sal_uInt16 nAscent = aFntAccess.Get()->GetFontAscent( pSh, rOut );

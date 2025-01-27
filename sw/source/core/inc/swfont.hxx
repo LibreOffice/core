@@ -74,8 +74,7 @@ class SwSubFont final : public SvxFont
     bool ChgFnt( SwViewShell const *pSh, OutputDevice& rOut );
     bool IsSymbol( SwViewShell const *pSh );
     sal_uInt16 GetAscent( SwViewShell const *pSh, const OutputDevice& rOut );
-    sal_uInt16 GetHeight(SwViewShell const* pSh, const OutputDevice& rOut,
-                         bool bIsCJKGridContext = false);
+    sal_uInt16 GetHeight( SwViewShell const *pSh, const OutputDevice& rOut );
     sal_uInt16 GetHangingBaseline( SwViewShell const *pSh, const OutputDevice& rOut );
     Size GetTextSize_( SwDrawTextInfo& rInf );
     Size GetCapitalSize( SwDrawTextInfo& rInf );
@@ -334,16 +333,10 @@ public:
     short CheckKerning()
         { return m_aSub[m_nActual].CheckKerning(); }
 
-    sal_uInt16 GetAscent(SwViewShell const* pSh, const OutputDevice& rOut)
-    {
-        return m_aSub[m_nActual].GetAscent(pSh, rOut);
-    }
-
-    sal_uInt16 GetHeight(SwViewShell const* pSh, const OutputDevice& rOut,
-                         bool bIsCJKGridContext = false)
-    {
-        return m_aSub[m_nActual].GetHeight(pSh, rOut, bIsCJKGridContext);
-    }
+    sal_uInt16 GetAscent( SwViewShell const *pSh, const OutputDevice& rOut )
+        { return m_aSub[m_nActual].GetAscent( pSh, rOut ); }
+    sal_uInt16 GetHeight( SwViewShell const *pSh, const OutputDevice& rOut )
+        { return m_aSub[m_nActual].GetHeight( pSh, rOut ); }
 
     sal_uInt16 GetHangingBaseline( SwViewShell const *pSh, const OutputDevice& rOut )
         { return m_nActual == SwFontScript::CTL ? m_aSub[m_nActual].GetHangingBaseline( pSh, rOut ) : 0; }

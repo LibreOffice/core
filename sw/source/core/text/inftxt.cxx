@@ -50,7 +50,6 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <paratr.hxx>
-#include <pagefrm.hxx>
 #include <sectfrm.hxx>
 #include <rootfrm.hxx>
 #include "inftxt.hxx"
@@ -67,7 +66,6 @@
 #include <EnhancedPDFExportHelper.hxx>
 #include <docsh.hxx>
 #include <strings.hrc>
-#include <tgrditem.hxx>
 #include <o3tl/deleter.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
@@ -323,15 +321,8 @@ void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextF
     // TODO: Unwind
     m_bURLNotify = pNoteURL && !m_bOnWin;
 
-    // tdf#164803 Snap-to-grid applies only if the grid is enabled
-    bool bGridEnabled = false;
-    if (SwTextGridItem const* pGrid = GetGridItem(m_pFrame->FindPageFrame()); pGrid)
-    {
-        bGridEnabled = (pGrid->GetGridType() != GRID_NONE);
-    }
-
     SetSnapToGrid(m_pFrame->GetTextNodeForParaProps()->GetSwAttrSet().GetParaGrid().GetValue()
-                  && m_pFrame->IsInDocBody() && bGridEnabled);
+                  && m_pFrame->IsInDocBody());
 
     m_pFnt = nullptr;
     m_pUnderFnt = nullptr;
