@@ -347,32 +347,27 @@ migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
 
         // read included files from current step description
         if (tmpAccess->getByName(u"IncludedFiles"_ustr) >>= tmpSeq) {
-            for (const OUString& rSeqEntry : tmpSeq)
-                tmpStep.includeFiles.push_back(rSeqEntry);
+            tmpStep.includeFiles.insert(tmpStep.includeFiles.end(), tmpSeq.begin(), tmpSeq.end());
         }
 
         // excluded files...
         if (tmpAccess->getByName(u"ExcludedFiles"_ustr) >>= tmpSeq) {
-            for (const OUString& rSeqEntry : tmpSeq)
-                tmpStep.excludeFiles.push_back(rSeqEntry);
+            tmpStep.excludeFiles.insert(tmpStep.excludeFiles.end(), tmpSeq.begin(), tmpSeq.end());
         }
 
         // included nodes...
         if (tmpAccess->getByName(u"IncludedNodes"_ustr) >>= tmpSeq) {
-            for (const OUString& rSeqEntry : tmpSeq)
-                tmpStep.includeConfig.push_back(rSeqEntry);
+            tmpStep.includeConfig.insert(tmpStep.includeConfig.end(), tmpSeq.begin(), tmpSeq.end());
         }
 
         // excluded nodes...
         if (tmpAccess->getByName(u"ExcludedNodes"_ustr) >>= tmpSeq) {
-            for (const OUString& rSeqEntry : tmpSeq)
-                tmpStep.excludeConfig.push_back(rSeqEntry);
+            tmpStep.excludeConfig.insert(tmpStep.excludeConfig.end(), tmpSeq.begin(), tmpSeq.end());
         }
 
         // excluded extensions...
         if (tmpAccess->getByName(u"ExcludedExtensions"_ustr) >>= tmpSeq) {
-            for (const OUString& rSeqEntry : tmpSeq)
-                tmpStep.excludeExtensions.push_back(rSeqEntry);
+            tmpStep.excludeExtensions.insert(tmpStep.excludeExtensions.end(), tmpSeq.begin(), tmpSeq.end());
         }
 
         // generic service
