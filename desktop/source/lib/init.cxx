@@ -5011,15 +5011,13 @@ static void lo_sendDialogEvent(LibreOfficeKit* /*pThis*/, unsigned long long int
 static void updateConfig(const OUString& rConfigPath)
 {
     osl::Directory aScanRootDir(rConfigPath);
-    osl::FileBase::RC nRetCode = aScanRootDir.open();
-    if (nRetCode != osl::Directory::E_None)
+    if (aScanRootDir.open() != osl::Directory::E_None)
     {
         SAL_WARN("lok", "Failed to open config URL: " << rConfigPath);
         return;
     }
     osl::DirectoryItem item;
-    osl::File::RC errorNext = osl::File::E_None;
-    while ((errorNext = aScanRootDir.getNextItem(item)) == ::osl::File::E_None)
+    while (aScanRootDir.getNextItem(item) == ::osl::File::E_None)
     {
         osl::FileStatus stat(osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_FileURL);
         if (item.getFileStatus(stat) != osl::FileBase::E_None)
@@ -5031,9 +5029,28 @@ static void updateConfig(const OUString& rConfigPath)
         OUString sFileName = stat.getFileName();
         if (sFileName == "xcu")
         {
-            OUString aXcuPath(stat.getFileURL() + "/config.xcu");
+            osl::Directory aXCURootDir(stat.getFileURL());
+            if (aXCURootDir.open() != osl::Directory::E_None)
+            {
+                SAL_WARN("lok", "Failed to open XCU URL: " << stat.getFileURL());
+                continue;
+            }
+
             auto xUpdate(css::configuration::Update::get(comphelper::getProcessComponentContext()));
-            xUpdate->insertModificationXcuFile(aXcuPath, { u"/"_ustr }, {});
+
+            osl::DirectoryItem xcu;
+            while (aXCURootDir.getNextItem(xcu) == ::osl::File::E_None)
+            {
+                osl::FileStatus xcustat(osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_FileURL);
+                if (xcu.getFileStatus(xcustat) != osl::FileBase::E_None)
+                {
+                    SAL_WARN("lok", "Failed to get xcu item info");
+                    continue;
+                }
+
+                SAL_INFO("lok", "Installing XCU Item: " << xcustat.getFileName());
+                xUpdate->insertModificationXcuFile(xcustat.getFileURL(), { u"/"_ustr }, {});
+            }
         }
     }
 }
