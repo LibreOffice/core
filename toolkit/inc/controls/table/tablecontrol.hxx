@@ -110,7 +110,6 @@ namespace svt::table
 
         /** Creates and returns the accessible object of the whole GridControl. */
         virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleControl( sal_Int32 _nIndex ) override;
         virtual OUString GetAccessibleObjectName(vcl::table::AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const override;
         virtual void GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow ) override;
         virtual OUString GetAccessibleObjectDescription(vcl::table::AccessibleTableControlObjType eObjType) const override;

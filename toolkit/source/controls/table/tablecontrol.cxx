@@ -322,14 +322,6 @@ namespace svt::table
         return m_pImpl->getAccessible( *pParent );
     }
 
-
-    Reference<XAccessible> TableControl::CreateAccessibleControl( sal_Int32 )
-    {
-        SAL_WARN( "svtools", "TableControl::CreateAccessibleControl: to be overwritten!" );
-        return nullptr;
-    }
-
-
     OUString TableControl::GetAccessibleObjectName( vcl::table::AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const
     {
         OUString aRetText;

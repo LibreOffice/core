@@ -147,24 +147,18 @@ AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
     SolarMutexGuard aSolarGuard;
     ensureAlive();
 
-    sal_Int32 nIndex = 0;
-    if (m_aTable.ConvertPointToControlIndex(nIndex, vcl::unohelper::ConvertToVCLPoint(rPoint)))
-        return m_aTable.CreateAccessibleControl(nIndex);
-    else
+    // try whether point is in one of the fixed children
+    // (table, header bars, corner control)
+    Point aPoint(vcl::unohelper::ConvertToVCLPoint(rPoint));
+    for (sal_Int32 nIndex = 0; nIndex < 3; ++nIndex)
     {
-        // try whether point is in one of the fixed children
-        // (table, header bars, corner control)
-        Point aPoint(vcl::unohelper::ConvertToVCLPoint(rPoint));
-        for (nIndex = 0; nIndex < 3; ++nIndex)
-        {
-            css::uno::Reference< css::accessibility::XAccessible > xCurrChild( implGetFixedChild( nIndex ) );
-            css::uno::Reference< css::accessibility::XAccessibleComponent >
-            xCurrChildComp( xCurrChild, uno::UNO_QUERY );
+        css::uno::Reference<css::accessibility::XAccessible> xCurrChild(implGetFixedChild(nIndex));
+        css::uno::Reference<css::accessibility::XAccessibleComponent> xCurrChildComp(
+            xCurrChild, uno::UNO_QUERY);
 
-            if (xCurrChildComp.is()
-                && vcl::unohelper::ConvertToVCLRect(xCurrChildComp->getBounds()).Contains(aPoint))
-                return xCurrChild;
-        }
+        if (xCurrChildComp.is()
+            && vcl::unohelper::ConvertToVCLRect(xCurrChildComp->getBounds()).Contains(aPoint))
+            return xCurrChild;
     }
     return nullptr;
 }
