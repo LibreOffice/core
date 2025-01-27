@@ -29,13 +29,11 @@
 
 namespace accessibility {
 
-
-typedef ::cppu::ImplHelper1 < css::accessibility::XAccessibleSelection >
-        AccessibleGridControlTableSelectionImplHelper;
 /** This class represents the accessible object of the data table of a
     Grid control. */
-class AccessibleGridControlTable final : public AccessibleGridControlTableBase,
-                                public AccessibleGridControlTableSelectionImplHelper
+class AccessibleGridControlTable final
+    : public cppu::ImplInheritanceHelper<AccessibleGridControlTableBase,
+                                         css::accessibility::XAccessibleSelection>
 {
 public:
     AccessibleGridControlTable(
@@ -125,16 +123,7 @@ public:
 
     /** Removes the specified row/column from the selection. */
     virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
-     // XInterface
 
-    /** Queries for a new interface. */
-    css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
-
-    /** Acquires the object (calls acquire() on base class). */
-    virtual void SAL_CALL acquire() noexcept override;
-
-    /** Releases the object (calls release() on base class). */
-    virtual void SAL_CALL release() noexcept override;
     // XServiceInfo
 
     /** @return  The name of this class. */

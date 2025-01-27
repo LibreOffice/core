@@ -38,11 +38,9 @@ using namespace ::vcl;
 
 namespace accessibility {
 
-
-AccessibleGridControlTable::AccessibleGridControlTable(
-        const Reference< XAccessible >& rxParent,
-        svt::table::TableControl& rTable) :
-    AccessibleGridControlTableBase(rxParent, rTable, AccessibleTableControlObjType::TABLE)
+AccessibleGridControlTable::AccessibleGridControlTable(const Reference<XAccessible>& rxParent,
+                                                       svt::table::TableControl& rTable)
+    : ImplInheritanceHelper(rxParent, rTable, AccessibleTableControlObjType::TABLE)
 {
 }
 
@@ -271,24 +269,7 @@ void SAL_CALL AccessibleGridControlTable::deselectAccessibleChild(
 
     ensureAlive();
 }
-// XInterface -----------------------------------------------------------------
 
-Any SAL_CALL AccessibleGridControlTable::queryInterface( const uno::Type& rType )
-{
-    Any aAny( AccessibleGridControlTableBase::queryInterface( rType ) );
-    return aAny.hasValue() ?
-        aAny : AccessibleGridControlTableSelectionImplHelper::queryInterface( rType );
-}
-
-void SAL_CALL AccessibleGridControlTable::acquire() noexcept
-{
-    AccessibleGridControlTableBase::acquire();
-}
-
-void SAL_CALL AccessibleGridControlTable::release() noexcept
-{
-    AccessibleGridControlTableBase::release();
-}
 // XServiceInfo ---------------------------------------------------------------
 
 OUString SAL_CALL AccessibleGridControlTable::getImplementationName()
