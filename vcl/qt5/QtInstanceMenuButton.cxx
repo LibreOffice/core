@@ -40,22 +40,29 @@ void QtInstanceMenuButton::insert_item(int nPos, const OUString& rId, const OUSt
     (void)eCheckRadioFalse;
 
     GetQtInstance().RunInMainThread([&] {
-        if (nPos == -1)
-            nPos = getMenu().actions().count();
-
-        QAction* pAction = getMenu().addAction(vclToQtStringWithAccelerator(rStr));
+        QAction* pAction = new QAction(vclToQtStringWithAccelerator(rStr), &getMenu());
         pAction->setObjectName(toQString(rId));
 
         if (pIconName)
             pAction->setIcon(loadQPixmapIcon(*pIconName));
         else if (pImageSurface)
             pAction->setIcon(toQPixmap(*pImageSurface));
+
+        insertAction(pAction, nPos);
     });
 }
 
-void QtInstanceMenuButton::insert_separator(int, const OUString&)
+void QtInstanceMenuButton::insert_separator(int nPos, const OUString& rId)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QAction* pAction = new QAction(&getMenu());
+        pAction->setSeparator(true);
+        pAction->setObjectName(toQString(rId));
+
+        insertAction(pAction, nPos);
+    });
 }
 
 void QtInstanceMenuButton::remove_item(const OUString& rId)
@@ -151,6 +158,19 @@ QAction* QtInstanceMenuButton::getAction(const OUString& rIdent) const
     }
 
     return nullptr;
+}
+
+void QtInstanceMenuButton::insertAction(QAction* pAction, int nPos)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QAction* pNextAction = nullptr;
+        QList<QAction*> pActions = getMenu().actions();
+        if (nPos >= 0 && nPos < pActions.count())
+            pNextAction = pActions.at(nPos);
+        getMenu().insertAction(pNextAction, pAction);
+    });
 }
 
 void QtInstanceMenuButton::handleButtonClicked()

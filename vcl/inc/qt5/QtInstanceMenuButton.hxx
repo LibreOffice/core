@@ -27,7 +27,7 @@ public:
                              const OUString* pIconName, VirtualDevice* pImageSurface,
                              TriState eCheckRadioFalse) override;
 
-    virtual void insert_separator(int pos, const OUString& rId) override;
+    virtual void insert_separator(int nPos, const OUString& rId) override;
     virtual void remove_item(const OUString& rId) override;
     virtual void clear() override;
     virtual void set_item_sensitive(const OUString& rIdent, bool bSensitive) override;
@@ -41,6 +41,7 @@ public:
 private:
     QMenu& getMenu() const;
     QAction* getAction(const OUString& rIdent) const;
+    void insertAction(QAction* pAction, int nPos);
 
 private Q_SLOTS:
     void handleButtonClicked();
