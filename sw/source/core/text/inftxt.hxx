@@ -765,7 +765,7 @@ inline sal_uInt16 SwTextSizeInfo::GetAscent() const
 inline sal_uInt16 SwTextSizeInfo::GetTextHeight() const
 {
     assert(GetOut());
-    return const_cast<SwFont*>(GetFont())->GetHeight(m_pVsh, *GetOut(), SnapToGrid());
+    return const_cast<SwFont*>(GetFont())->GetHeight( m_pVsh, *GetOut() );
 }
 
 inline sal_uInt16 SwTextSizeInfo::GetHangingBaseline() const

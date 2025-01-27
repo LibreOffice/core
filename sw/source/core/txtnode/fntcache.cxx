@@ -304,8 +304,7 @@ sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, const OutputDevice& 
 
 // Returns the height of the Font on the given output device;
 // it may be necessary to create the screen font first.
-sal_uInt16 SwFntObj::GetFontHeight(const SwViewShell* pSh, const OutputDevice& rOut,
-                                   bool bIsCJKGridContext)
+sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& rOut )
 {
     sal_uInt16 nRet = 0;
     const OutputDevice& rRefDev = pSh ? pSh->GetRefDev() : rOut;
@@ -314,7 +313,7 @@ sal_uInt16 SwFntObj::GetFontHeight(const SwViewShell* pSh, const OutputDevice& r
     {
         CreateScrFont( *pSh, rOut );
         OSL_ENSURE( USHRT_MAX != m_nScrHeight, "nScrHeight is going berzerk" );
-        nRet = m_nScrHeight + GetFontLeading(pSh, rRefDev, bIsCJKGridContext);
+        nRet = m_nScrHeight + GetFontLeading( pSh, rRefDev );
     }
     else
     {
@@ -337,15 +336,14 @@ sal_uInt16 SwFntObj::GetFontHeight(const SwViewShell* pSh, const OutputDevice& r
             const_cast<OutputDevice&>(rRefDev).SetFont( aOldFnt );
         }
 
-        nRet = m_nPrtHeight + GetFontLeading(pSh, rRefDev, bIsCJKGridContext);
+        nRet = m_nPrtHeight + GetFontLeading( pSh, rRefDev );
     }
 
     OSL_ENSURE( USHRT_MAX != nRet, "GetFontHeight returned USHRT_MAX" );
     return nRet;
 }
 
-sal_uInt16 SwFntObj::GetFontLeading(const SwViewShell* pSh, const OutputDevice& rOut,
-                                    bool bIsCJKGridContext)
+sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, const OutputDevice& rOut )
 {
     sal_uInt16 nRet = 0;
 
@@ -385,11 +383,8 @@ sal_uInt16 SwFntObj::GetFontLeading(const SwViewShell* pSh, const OutputDevice& 
         const bool bBrowse = ( pSh->GetWin() &&
                                pSh->GetViewOptions()->getBrowseMode() &&
                               !pSh->GetViewOptions()->IsPrtFormat() );
-        const bool bUseRealLeading
-            = rIDSA.get(DocumentSettingId::ADD_EXT_LEADING)
-              || (bIsCJKGridContext && rIDSA.get(DocumentSettingId::MS_WORD_COMP_GRID_METRICS));
 
-        if (!bBrowse && bUseRealLeading)
+        if ( !bBrowse && rIDSA.get(DocumentSettingId::ADD_EXT_LEADING) )
             nRet = m_nExtLeading;
         else
             nRet = m_nGuessedLeading;

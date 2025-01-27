@@ -97,10 +97,8 @@ public:
     sal_uInt16 GetExternalLeading() const  { return m_nExtLeading; }
 
     sal_uInt16 GetFontAscent( const SwViewShell *pSh, const OutputDevice& rOut );
-    sal_uInt16 GetFontHeight(const SwViewShell* pSh, const OutputDevice& rOut,
-                             bool bIsCJKGridContext = false);
-    sal_uInt16 GetFontLeading(const SwViewShell* pSh, const OutputDevice& rOut,
-                              bool bIsCJKGridContext = false);
+    sal_uInt16 GetFontHeight( const SwViewShell *pSh, const OutputDevice& rOut );
+    sal_uInt16 GetFontLeading( const SwViewShell *pSh, const OutputDevice& rOut );
     sal_uInt16 GetFontHangingBaseline( const SwViewShell *pSh, const OutputDevice& rOut );
 
     void GuessLeading( const SwViewShell& rSh, const FontMetric& rMet );

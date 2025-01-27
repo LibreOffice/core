@@ -277,7 +277,6 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::USE_VARIABLE_WIDTH_NBSP: return mbUseVariableWidthNBSP;
         case DocumentSettingId::PAINT_HELL_OVER_HEADER_FOOTER: return mbPaintHellOverHeaderFooter;
         case DocumentSettingId::MIN_ROW_HEIGHT_INCL_BORDER: return mbMinRowHeightInclBorder;
-        // tdf#129808
         case DocumentSettingId::MS_WORD_COMP_GRID_METRICS: return mbMsWordCompGridMetrics;
         case DocumentSettingId::NO_CLIPPING_WITH_WRAP_POLYGON: return mbNoClippingWithWrapPolygon;
         default:
@@ -605,7 +604,6 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::FOOTNOTE_IN_COLUMN_TO_PAGEEND:
             mbFootnoteInColumnToPageEnd = value;
             break;
-        // tdf#129808
         case DocumentSettingId::MS_WORD_COMP_GRID_METRICS:
             mbMsWordCompGridMetrics = value;
             break;

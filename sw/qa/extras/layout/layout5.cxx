@@ -1397,15 +1397,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testFoMargin)
     CPPUNIT_ASSERT_LESS(sal_Int32(13400), nPage2Height);
 }
 
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf164803)
-{
-    createSwDoc("tdf164803.fodt");
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-
-    // Without the fix, this will be 2
-    assertXPath(pXmlDoc, "//page", 2);
-}
-
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
