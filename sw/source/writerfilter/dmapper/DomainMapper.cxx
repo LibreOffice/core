@@ -2426,11 +2426,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 if (aAnyComplexColor.has_value())
                     return;
 
+                model::ComplexColor aComplexColor;
+
                 auto eType = TDefTableHandler::getThemeColorTypeIndex(pThemeColorHandler->mnIndex);
                 if (eType != model::ThemeColorType::Unknown)
                 {
-
-                    model::ComplexColor aComplexColor;
                     aComplexColor.setThemeColor(eType);
 
                     auto eUsage = TDefTableHandler::getThemeColorUsage(pThemeColorHandler->mnIndex);
@@ -2446,10 +2446,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                         sal_Int16 nShade = sal_Int16((255 - pThemeColorHandler->mnShade) * 10000 / 255);
                         aComplexColor.addTransformation({model::TransformationType::Shade, nShade});
                     }
-
-                    auto xComplexColor = model::color::createXComplexColor(aComplexColor);
-                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_COMPLEX_COLOR, uno::Any(xComplexColor));
                 }
+
+                auto xComplexColor = model::color::createXComplexColor(aComplexColor);
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_COMPLEX_COLOR, uno::Any(xComplexColor));
 
                 uno::Any aColorAny(msfilter::util::ConvertColorOU(Color(ColorTransparency, pThemeColorHandler->mnColor)));
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_ORIGINAL_COLOR, aColorAny, true, CHAR_GRAB_BAG);
