@@ -90,11 +90,13 @@ AccessibleGridControlTable::getAccessibleAtPoint( const awt::Point& rPoint )
 
     ensureAlive();
 
+    // convert position relative to this AccessibleGridControlTable to position relative to
+    // the parent TableControl by adding own relative position within the TableControl parent
+    Point aPosInTableControl = vcl::unohelper::ConvertToVCLPoint(rPoint) + implGetBoundingBox().TopLeft();
     Reference< XAccessible > xChild;
     sal_Int32 nRow = 0;
     sal_Int32 nColumnPos = 0;
-    if (m_aTable.ConvertPointToCellAddress(nRow, nColumnPos,
-                                           vcl::unohelper::ConvertToVCLPoint(rPoint)))
+    if (m_aTable.ConvertPointToCellAddress(nRow, nColumnPos, aPosInTableControl))
         xChild = new AccessibleGridControlTableCell(this, m_aTable, nRow, nColumnPos);
     return xChild;
 }
