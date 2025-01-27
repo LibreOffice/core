@@ -34,7 +34,7 @@ if __name__ == '__main__':
             continue
 
         for fileName in sorted(files):
-            if not fileName.endswith(".py"):
+            if not fileName.endswith(".py") and not fileName.endswith(".pem"):
                 continue
             filesList.append(path.join(relPythonDir, fileName))
         if filesList:

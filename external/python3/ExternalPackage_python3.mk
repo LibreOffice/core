@@ -1074,6 +1074,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pip/_vendor/certifi,\
 	Lib/pip/_vendor/certifi/__init__.py \
 	Lib/pip/_vendor/certifi/__main__.py \
+	Lib/pip/_vendor/certifi/cacert.pem \
 	Lib/pip/_vendor/certifi/core.py \
 ))
 
