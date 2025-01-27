@@ -56,8 +56,7 @@ AccessibleGridControlHeader::getAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
 
-    if (nChildIndex<0 || nChildIndex>=getAccessibleChildCount())
-        throw IndexOutOfBoundsException();
+    ensureIsValidIndex(nChildIndex);
     ensureAlive();
     Reference< XAccessible > xChild;
     if (m_eObjType == vcl::table::AccessibleTableControlObjType::COLUMNHEADERBAR)
