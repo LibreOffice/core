@@ -54,7 +54,7 @@ public:
     OUString const& GetClipbrdFormatName(sal_uInt16 nPos) const;
 
 private:
-    std::unique_ptr<SvxClipboardFormatItem_Impl> pImpl;
+    std::unique_ptr<SvxClipboardFormatItem_Impl> m_pImpl;
 };
 
 #endif

@@ -35,13 +35,13 @@ struct SvxClipboardFormatItem_Impl
 SfxPoolItem* SvxClipboardFormatItem::CreateDefault() { return new  SvxClipboardFormatItem(TypedWhichId<SvxClipboardFormatItem>(0)); };
 
 SvxClipboardFormatItem::SvxClipboardFormatItem( TypedWhichId<SvxClipboardFormatItem> nId )
-    : SfxPoolItem( nId ), pImpl( new SvxClipboardFormatItem_Impl )
+    : SfxPoolItem( nId ), m_pImpl( new SvxClipboardFormatItem_Impl )
 {
 }
 
 SvxClipboardFormatItem::SvxClipboardFormatItem( const SvxClipboardFormatItem& rCpy )
     : SfxPoolItem( rCpy ),
-    pImpl( new SvxClipboardFormatItem_Impl( *rCpy.pImpl ) )
+    m_pImpl( new SvxClipboardFormatItem_Impl( *rCpy.m_pImpl ) )
 {
 }
 
@@ -76,8 +76,8 @@ bool SvxClipboardFormatItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nM
     {
         sal_uInt16 nCount = sal_uInt16( aClipFormats.Identifiers.getLength() );
 
-        pImpl->aFmtIds.clear();
-        pImpl->aFmtNms.clear();
+        m_pImpl->aFmtIds.clear();
+        m_pImpl->aFmtNms.clear();
         for ( sal_uInt16 n=0; n < nCount; ++n )
             AddClipbrdFormat( static_cast<SotClipboardFormatId>(aClipFormats.Identifiers[n]), aClipFormats.Names[n], n );
 
@@ -92,14 +92,14 @@ bool SvxClipboardFormatItem::operator==( const SfxPoolItem& rComp ) const
     if (!SfxPoolItem::operator==(rComp))
         return false;
     const SvxClipboardFormatItem& rCmp = static_cast<const SvxClipboardFormatItem&>(rComp);
-    if(rCmp.pImpl->aFmtNms.size() != pImpl->aFmtNms.size())
+    if(rCmp.m_pImpl->aFmtNms.size() != m_pImpl->aFmtNms.size())
         return false;
 
     int nRet = 1;
-    for( sal_uInt16 n = 0, nEnd = rCmp.pImpl->aFmtNms.size(); n < nEnd; ++n )
+    for( sal_uInt16 n = 0, nEnd = rCmp.m_pImpl->aFmtNms.size(); n < nEnd; ++n )
     {
-        if( pImpl->aFmtIds[ n ] != rCmp.pImpl->aFmtIds[ n ] ||
-            pImpl->aFmtNms[n] != rCmp.pImpl->aFmtNms[n] )
+        if( m_pImpl->aFmtIds[ n ] != rCmp.m_pImpl->aFmtIds[ n ] ||
+            m_pImpl->aFmtNms[n] != rCmp.m_pImpl->aFmtNms[n] )
         {
             nRet = 0;
             break;
@@ -116,35 +116,35 @@ SvxClipboardFormatItem* SvxClipboardFormatItem::Clone( SfxItemPool * /*pPool*/ )
 
 void SvxClipboardFormatItem::AddClipbrdFormat( SotClipboardFormatId nId )
 {
-    sal_uInt16 nPos = pImpl->aFmtNms.size();
+    sal_uInt16 nPos = m_pImpl->aFmtNms.size();
 
-    pImpl->aFmtNms.insert( pImpl->aFmtNms.begin() + nPos, OUString());
-    pImpl->aFmtIds.insert( pImpl->aFmtIds.begin() + nPos, nId );
+    m_pImpl->aFmtNms.insert( m_pImpl->aFmtNms.begin() + nPos, OUString());
+    m_pImpl->aFmtIds.insert( m_pImpl->aFmtIds.begin() + nPos, nId );
 }
 
 void SvxClipboardFormatItem::AddClipbrdFormat( SotClipboardFormatId nId, const OUString& rName,
                             sal_uInt16 nPos )
 {
-    if( nPos > pImpl->aFmtNms.size() )
-        nPos = pImpl->aFmtNms.size();
+    if( nPos > m_pImpl->aFmtNms.size() )
+        nPos = m_pImpl->aFmtNms.size();
 
-    pImpl->aFmtNms.insert(pImpl->aFmtNms.begin() + nPos, rName);
-    pImpl->aFmtIds.insert( pImpl->aFmtIds.begin()+nPos, nId );
+    m_pImpl->aFmtNms.insert(m_pImpl->aFmtNms.begin() + nPos, rName);
+    m_pImpl->aFmtIds.insert( m_pImpl->aFmtIds.begin()+nPos, nId );
 }
 
 sal_uInt16 SvxClipboardFormatItem::Count() const
 {
-    return pImpl->aFmtIds.size();
+    return m_pImpl->aFmtIds.size();
 }
 
 SotClipboardFormatId SvxClipboardFormatItem::GetClipbrdFormatId( sal_uInt16 nPos ) const
 {
-    return pImpl->aFmtIds[ nPos ];
+    return m_pImpl->aFmtIds[ nPos ];
 }
 
 OUString const & SvxClipboardFormatItem::GetClipbrdFormatName( sal_uInt16 nPos ) const
 {
-    return pImpl->aFmtNms[nPos];
+    return m_pImpl->aFmtNms[nPos];
 }
 
 
