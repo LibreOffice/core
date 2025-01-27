@@ -269,12 +269,15 @@ QWindow* QtFrame::windowHandle() const
     assert(pChild->window() == pChild);
     switch (m_aSystemData.platform)
     {
+        case SystemEnvData::Platform::WASM:
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            // no idea, why Qt::WA_NativeWindow breaks the menubar for EMSCRIPTEN
+            pChild->setAttribute(Qt::WA_NativeWindow);
+            break;
+#endif
         case SystemEnvData::Platform::Wayland:
         case SystemEnvData::Platform::Xcb:
             pChild->setAttribute(Qt::WA_NativeWindow);
-            break;
-        case SystemEnvData::Platform::WASM:
-            // no idea, why Qt::WA_NativeWindow breaks the menubar for EMSCRIPTEN
             break;
         case SystemEnvData::Platform::Invalid:
             std::abort();
