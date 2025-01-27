@@ -19,7 +19,6 @@
 
 
 #include "chinese_dictionarydialog.hxx"
-#include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/linguistic2/ConversionPropertyType.hpp>
@@ -27,6 +26,7 @@
 #include <com/sun/star/linguistic2/XConversionPropertyType.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <comphelper/processfactory.hxx>
 #include <o3tl/safeint.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
@@ -326,11 +326,10 @@ ChineseDictionaryDialog::ChineseDictionaryDialog(weld::Window* pParent)
     Reference< linguistic2::XConversionDictionary > xDictionary_To_Traditional;
     //get dictionaries
     {
-        if(!m_xContext.is())
-            m_xContext.set( ::cppu::defaultBootstrap_InitialComponentContext() );
-        if(m_xContext.is())
+        css::uno::Reference<css::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+        if (xContext.is())
         {
-            Reference< linguistic2::XConversionDictionaryList > xDictionaryList = linguistic2::ConversionDictionaryList::create(m_xContext);
+            Reference< linguistic2::XConversionDictionaryList > xDictionaryList = linguistic2::ConversionDictionaryList::create(xContext);
             Reference< container::XNameContainer > xContainer( xDictionaryList->getDictionaryContainer() );
             if(xContainer.is())
             {

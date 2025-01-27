@@ -141,8 +141,6 @@ private:
 private:
     sal_Int32    m_nTextConversionOptions; //i18n::TextConversionOption
 
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
-
     std::unique_ptr<weld::RadioButton> m_xRB_To_Simplified;
     std::unique_ptr<weld::RadioButton> m_xRB_To_Traditional;
 

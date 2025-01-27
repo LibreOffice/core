@@ -36,7 +36,7 @@
 #include <cmdid.h>
 #include <anchoredobject.hxx>
 
-#include <cppuhelper/bootstrap.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -159,9 +159,7 @@ SwInsertChart::SwInsertChart( const Link<css::ui::dialogs::DialogClosedEvent*, v
     xChartModel.set( SwTableFUNC( &rWrtShell ).InsertChart( xDataProvider, xDataProvider.is(), aRangeString, &pFlyFrameFormat ));
 
     //open wizard
-    //@todo get context from writer if that has one
-    uno::Reference< uno::XComponentContext > xContext(
-        ::cppu::defaultBootstrap_InitialComponentContext() );
+    uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
     if( !(xContext.is() && xChartModel.is() && xDataProvider.is()))
         return;
 

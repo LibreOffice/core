@@ -27,6 +27,7 @@
 
 #include <basic/sberrors.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <svl/stritem.hxx>
 #include <svl/numformat.hxx>
@@ -95,7 +96,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/bootstrap.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <memory>
@@ -2004,8 +2004,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_CHINESE_CONVERSION:
             {
                 //open ChineseTranslationDialog
-                Reference< XComponentContext > xContext(
-                    ::cppu::defaultBootstrap_InitialComponentContext() ); //@todo get context from calc if that has one
+                uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
                 if(xContext.is())
                 {
                     Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );

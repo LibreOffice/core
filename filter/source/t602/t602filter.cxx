@@ -21,7 +21,6 @@
 #include <strings.hrc>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -30,6 +29,7 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <rtl/character.hxx>
@@ -883,7 +883,7 @@ bool T602ImportFilterDialog::OptionsDlg()
     any <<= _obj;\
     _cont->insertByName( _nam, any );
 
-    Reference < XComponentContext > rComponentContext = defaultBootstrap_InitialComponentContext();
+    Reference < XComponentContext > rComponentContext = ::comphelper::getProcessComponentContext();
     Reference < XMultiComponentFactory > rServiceManager = rComponentContext->getServiceManager();
     Reference < XInterface > rInstance = rServiceManager->createInstanceWithContext(u"com.sun.star.awt.UnoControlDialogModel"_ustr, rComponentContext );
 
