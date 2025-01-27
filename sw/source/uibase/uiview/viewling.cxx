@@ -76,7 +76,6 @@
 #include <vcl/unohelp.hxx>
 #include <rtl/ustring.hxx>
 
-#include <cppuhelper/bootstrap.hxx>
 #include <svtools/langtab.hxx>
 
 #include <editeng/editerr.hxx>
@@ -107,8 +106,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
         case SID_CHINESE_CONVERSION:
         {
             //open ChineseTranslationDialog
-            Reference< XComponentContext > xContext(
-                ::cppu::defaultBootstrap_InitialComponentContext() ); //@todo get context from calc if that has one
+            uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
             if(xContext.is())
             {
                 Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );

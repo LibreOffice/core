@@ -96,8 +96,8 @@
 #include <swabstdlg.hxx>
 
 #include <comphelper/string.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <cppuhelper/bootstrap.hxx>
 
 #include <langhelper.hxx>
 
@@ -1363,8 +1363,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
         case SID_CHINESE_CONVERSION:
         {
                 //open ChineseTranslationDialog
-                Reference< XComponentContext > xContext(
-                    ::cppu::defaultBootstrap_InitialComponentContext() ); //@todo get context from calc if that has one
+                uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
                 if(xContext.is())
                 {
                     Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );

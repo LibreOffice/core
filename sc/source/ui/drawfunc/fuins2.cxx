@@ -57,7 +57,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
-#include <cppuhelper/bootstrap.hxx>
 #include <svtools/dialogclosedlistener.hxx>
 #include <officecfg/Office/Common.hxx>
 
@@ -628,9 +627,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
             rViewShell.ActivateObject(pObj.get(), embed::EmbedVerbs::MS_OLEVERB_SHOW);
 
         //open wizard
-        //@todo get context from calc if that has one
-        uno::Reference< uno::XComponentContext > xContext(
-            ::cppu::defaultBootstrap_InitialComponentContext() );
+        uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
         if(xContext.is())
         {
             uno::Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
