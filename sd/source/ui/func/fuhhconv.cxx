@@ -24,8 +24,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <cppuhelper/bootstrap.hxx>
 #include <svl/style.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/langitem.hxx>
@@ -187,8 +187,7 @@ void FuHangulHanjaConversion::ConvertStyles( LanguageType nTargetLanguage, const
 void FuHangulHanjaConversion::StartChineseConversion()
 {
     //open ChineseTranslationDialog
-    Reference< XComponentContext > xContext(
-        ::cppu::defaultBootstrap_InitialComponentContext() ); //@todo get context from calc if that has one
+    uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
     if(!xContext.is())
         return;
 
