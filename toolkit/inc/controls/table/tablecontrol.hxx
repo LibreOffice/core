@@ -49,9 +49,8 @@ namespace svt::table
 
         The control supports the concept of a <em>current</em> (or <em>active</em>
         cell).
-        The control supports accessibility, this is encapsulated in IAccessibleTable
     */
-    class TableControl final : public Control, public vcl::table::IAccessibleTable
+    class TableControl final : public Control
     {
     private:
         std::shared_ptr<TableControl_Impl>            m_pImpl;
@@ -76,7 +75,7 @@ namespace svt::table
                 if there is no active cell, e.g. because the table does
                 not contain any rows or columns.
         */
-        sal_Int32 GetCurrentRow() const override;
+        sal_Int32 GetCurrentRow() const;
 
         /** retrieves the current column
 
@@ -87,7 +86,7 @@ namespace svt::table
                 if there is no active cell, e.g. because the table does
                 not contain any rows or columns.
         */
-        sal_Int32  GetCurrentColumn() const override;
+        sal_Int32 GetCurrentColumn() const;
 
         /** activates the cell at the given position
         */
@@ -110,10 +109,13 @@ namespace svt::table
 
         /** Creates and returns the accessible object of the whole GridControl. */
         virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
-        virtual OUString GetAccessibleObjectName(vcl::table::AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const override;
-        virtual void GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow ) override;
-        virtual OUString GetAccessibleObjectDescription(vcl::table::AccessibleTableControlObjType eObjType) const override;
-        virtual void FillAccessibleStateSet( sal_Int64& rStateSet, vcl::table::AccessibleTableControlObjType eObjType ) const override;
+        OUString GetAccessibleObjectName(vcl::table::AccessibleTableControlObjType eObjType,
+                                         sal_Int32 _nRow, sal_Int32 _nCol) const;
+        void GoToCell(sal_Int32 _nColumnPos, sal_Int32 _nRow);
+        OUString
+        GetAccessibleObjectDescription(vcl::table::AccessibleTableControlObjType eObjType) const;
+        void FillAccessibleStateSet(sal_Int64& rStateSet,
+                                    vcl::table::AccessibleTableControlObjType eObjType) const;
 
         // temporary methods
         // Those do not really belong into the public API - they're intended for firing A11Y-related events. However,
@@ -122,28 +124,28 @@ namespace svt::table
         void commitCellEventIfAccessibleAlive( sal_Int16 const i_eventID, const css::uno::Any& i_newValue, const css::uno::Any& i_oldValue );
         void commitTableEventIfAccessibleAlive( sal_Int16 const i_eventID, const css::uno::Any& i_newValue, const css::uno::Any& i_oldValue );
 
+        sal_Int32 GetAccessibleControlCount() const;
+        sal_Int32 GetRowCount() const;
+        sal_Int32 GetColumnCount() const;
+        bool ConvertPointToCellAddress(sal_Int32& _rnRow, sal_Int32& _rnColPos,
+                                       const Point& _rPoint);
+        tools::Rectangle calcHeaderRect(bool _bIsColumnBar);
+        tools::Rectangle calcHeaderCellRect(bool _bIsColumnBar, sal_Int32 nPos);
+        tools::Rectangle calcTableRect();
+        tools::Rectangle calcCellRect(sal_Int32 _nRowPos, sal_Int32 _nColPos);
+        void FillAccessibleStateSetForCell(sal_Int64& _rStateSet, sal_Int32 _nRow,
+                                           sal_uInt16 _nColumnPos) const;
+        OUString GetRowName(sal_Int32 _nIndex) const;
+        OUString GetColumnName(sal_Int32 _nIndex) const;
+        bool HasRowHeader();
+        bool HasColHeader();
+        OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
 
-        // IAccessibleTable
-        virtual sal_Int32 GetAccessibleControlCount() const override;
-        virtual sal_Int32 GetRowCount() const override;
-        virtual sal_Int32 GetColumnCount() const override;
-        virtual bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint ) override;
-        virtual tools::Rectangle calcHeaderRect( bool _bIsColumnBar ) override;
-        virtual tools::Rectangle calcHeaderCellRect( bool _bIsColumnBar, sal_Int32 nPos) override;
-        virtual tools::Rectangle calcTableRect() override;
-        virtual tools::Rectangle calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos ) override;
-        virtual void FillAccessibleStateSetForCell( sal_Int64& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const override;
-        virtual OUString GetRowName(sal_Int32 _nIndex) const override;
-        virtual OUString GetColumnName( sal_Int32 _nIndex ) const override;
-        virtual bool HasRowHeader() override;
-        virtual bool HasColHeader() override;
-        virtual OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const override;
-
-        virtual sal_Int32 GetSelectedRowCount() const override;
-        virtual sal_Int32 GetSelectedRowIndex( sal_Int32 const i_selectionIndex ) const override;
-        virtual bool IsRowSelected( sal_Int32 const i_rowIndex ) const override;
-        virtual void SelectRow( sal_Int32 const i_rowIndex, bool const i_select ) override;
-        virtual void SelectAllRows( bool const i_select ) override;
+        sal_Int32 GetSelectedRowCount() const;
+        sal_Int32 GetSelectedRowIndex(sal_Int32 const i_selectionIndex) const;
+        bool IsRowSelected(sal_Int32 const i_rowIndex) const;
+        void SelectRow(sal_Int32 const i_rowIndex, bool const i_select);
+        void SelectAllRows(bool const i_select);
 
         TableCell hitTest(const Point& rPoint) const;
         void invalidate(const TableArea aArea);
