@@ -237,7 +237,6 @@ private:
     bool m_bBasicHideCursor : 1;    // true -> HideCursor from Basic
     bool m_bSetCursorInReadOnly : 1;// true -> Cursor is allowed in ReadOnly-Areas
     bool m_bOverwriteCursor : 1;    // true -> show Overwrite Cursor
-    bool m_bIsCursorPosChanged : 1;    // true -> if the cursor position is changed last cursor update
 
     // true -> send accessible events when cursor changes
     // (set to false when using internal-only helper cursor)
