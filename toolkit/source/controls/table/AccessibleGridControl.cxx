@@ -148,9 +148,10 @@ AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
     // try whether point is in one of the fixed children
     // (table, header bars, corner control)
     Point aPoint(vcl::unohelper::ConvertToVCLPoint(rPoint));
-    for (sal_Int32 nIndex = 0; nIndex < 3; ++nIndex)
+    const sal_Int64 nChildCount = implGetAccessibleChildCount();
+    for (sal_Int64 nIndex = 0; nIndex < nChildCount; ++nIndex)
     {
-        css::uno::Reference<css::accessibility::XAccessible> xCurrChild(implGetFixedChild(nIndex));
+        css::uno::Reference<css::accessibility::XAccessible> xCurrChild = getAccessibleChild(nIndex);
         css::uno::Reference<css::accessibility::XAccessibleComponent> xCurrChildComp(
             xCurrChild, uno::UNO_QUERY);
 
@@ -183,67 +184,6 @@ AbsoluteScreenPixelRectangle AccessibleGridControl::implGetBoundingBoxOnScreen()
 }
 
 // internal helper methods ----------------------------------------------------
-
-css::uno::Reference< css::accessibility::XAccessible > AccessibleGridControl::implGetTable()
-{
-    if( !m_xTable.is() )
-    {
-        m_xTable = createAccessibleTable();
-    }
-    return m_xTable;
-}
-
-css::uno::Reference< css::accessibility::XAccessible >
-AccessibleGridControl::implGetHeaderBar( AccessibleTableControlObjType eObjType )
-{
-    css::uno::Reference< css::accessibility::XAccessible > xRet;
-    rtl::Reference< AccessibleGridControlHeader >* pxMember = nullptr;
-
-    if (eObjType == AccessibleTableControlObjType::ROWHEADERBAR)
-        pxMember = &m_xRowHeaderBar;
-    else if (eObjType ==  AccessibleTableControlObjType::COLUMNHEADERBAR)
-        pxMember = &m_xColumnHeaderBar;
-
-    if( pxMember )
-    {
-        if( !pxMember->is() )
-        {
-            *pxMember = new AccessibleGridControlHeader(
-                m_aCreator, m_aTable, eObjType );
-        }
-        xRet = pxMember->get();
-    }
-    return xRet;
-}
-
-css::uno::Reference< css::accessibility::XAccessible >
-AccessibleGridControl::implGetFixedChild( sal_Int64 nChildIndex )
-{
-    css::uno::Reference< css::accessibility::XAccessible > xRet;
-    switch( nChildIndex )
-    {
-        /** Child index of the column header bar (first row). */
-        case 0:
-            xRet = implGetHeaderBar(AccessibleTableControlObjType::COLUMNHEADERBAR);
-        break;
-        /** Child index of the row header bar ("handle column"). */
-        case 1:
-            xRet = implGetHeaderBar(AccessibleTableControlObjType::ROWHEADERBAR);
-        break;
-        /** Child index of the data table. */
-        case 2:
-            xRet = implGetTable();
-        break;
-    }
-    return xRet;
-}
-
-rtl::Reference<AccessibleGridControlTable> AccessibleGridControl::createAccessibleTable()
-{
-    css::uno::Reference< css::accessibility::XAccessible > xCreator(m_aCreator);
-    OSL_ENSURE(xCreator.is(), "AccessibleGridControl::createAccessibleTable: my creator died - how this?");
-    return new AccessibleGridControlTable( xCreator, m_aTable );
-}
 
 void AccessibleGridControl::commitCellEvent(sal_Int16 _nEventId,const Any& _rNewValue,const Any& _rOldValue)
 {

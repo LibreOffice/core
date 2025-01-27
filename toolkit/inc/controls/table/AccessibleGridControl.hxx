@@ -112,27 +112,12 @@ private:
 
     // internal helper methods ------------------------------------------------
 
-    /** This method creates (once) and returns the accessible data table child.
-        @attention  This method requires locked mutex's and a living object.
-        @return  The XAccessible interface of the data table. */
-    css::uno::Reference< css::accessibility::XAccessible > implGetTable();
-
-    /** This method creates (once) and returns the specified header bar.
-        @attention  This method requires locked mutex's and a living object.
-        @return  The XAccessible interface of the header bar. */
-    css::uno::Reference< css::accessibility::XAccessible >
-        implGetHeaderBar(AccessibleTableControlObjType eObjType);
-
     /** This method returns one of the children that are always present:
         Data table, row and column header bar or corner control.
         @attention  This method requires locked mutex's and a living object.
         @return  The XAccessible interface of the specified child. */
     css::uno::Reference< css::accessibility::XAccessible >
         implGetFixedChild( sal_Int64 nChildIndex );
-
-    /** This method creates and returns an accessible table.
-        @return  An AccessibleGridControlTable. */
-    rtl::Reference<AccessibleGridControlTable> createAccessibleTable();
 
     /// the css::accessibility::XAccessible which created the AccessibleGridControl
     css::uno::WeakReference< css::accessibility::XAccessible >                    m_aCreator;
