@@ -20,7 +20,6 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <controls/table/AccessibleGridControlTableBase.hxx>
-#include <vcl/accessibletable.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/sequence.hxx>
 
@@ -31,7 +30,6 @@ using css::uno::Any;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::vcl;
-using namespace ::vcl::table;
 
 
 namespace accessibility {

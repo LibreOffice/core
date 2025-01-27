@@ -23,7 +23,6 @@
 
 #include <comphelper/accessibletexthelper.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include <vcl/accessibletable.hxx>
 #include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 
 namespace accessibility
@@ -52,7 +51,7 @@ namespace accessibility
             svt::table::TableControl& _rTable,
             sal_Int32 _nRowPos,
             sal_uInt16 _nColPos,
-            ::vcl::table::AccessibleTableControlObjType _eType
+            AccessibleTableControlObjType _eType
         );
 
         virtual ~AccessibleGridControlCell() override = default;

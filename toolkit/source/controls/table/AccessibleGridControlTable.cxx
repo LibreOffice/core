@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <controls/table/AccessibleGridControlTable.hxx>
 #include <controls/table/AccessibleGridControlTableCell.hxx>
-#include <vcl/accessibletable.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
 #include <tools/debug.hxx>
@@ -35,7 +34,6 @@ using ::com::sun::star::uno::Any;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::vcl;
-using namespace ::vcl::table;
 
 
 namespace accessibility {

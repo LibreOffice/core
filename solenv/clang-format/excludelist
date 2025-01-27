@@ -6124,7 +6124,6 @@ include/vcl/Scanline.hxx
 include/vcl/abstdlg.hxx
 include/vcl/accessibility/vclxaccessiblecomponent.hxx
 include/vcl/accessiblefactory.hxx
-include/vcl/accessibletable.hxx
 include/vcl/accessibletableprovider.hxx
 include/vcl/alpha.hxx
 include/vcl/bitmap.hxx

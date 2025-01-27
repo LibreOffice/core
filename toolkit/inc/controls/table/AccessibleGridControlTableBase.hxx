@@ -47,7 +47,7 @@ public:
     AccessibleGridControlTableBase(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
         svt::table::TableControl& rTable,
-        ::vcl::table::AccessibleTableControlObjType  eObjType );
+        AccessibleTableControlObjType  eObjType);
 
 protected:
     virtual ~AccessibleGridControlTableBase() override = default;

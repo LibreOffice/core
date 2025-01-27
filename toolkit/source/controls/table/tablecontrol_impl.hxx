@@ -24,7 +24,6 @@
 #include <controls/table/tablecontrolinterface.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <vcl/accessibletable.hxx>
 #include <vcl/seleng.hxx>
 
 #include <vector>

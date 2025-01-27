@@ -25,7 +25,6 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <utility>
-#include <vcl/accessibletable.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
 
@@ -37,7 +36,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 using namespace ::vcl;
-using namespace ::vcl::table;
 
 AccessibleGridControl::AccessibleGridControl(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator,
@@ -104,7 +102,7 @@ AccessibleGridControl::getAccessibleChild( sal_Int64 nChildIndex )
             if(!m_xColumnHeaderBar.is())
             {
                 m_xColumnHeaderBar = new AccessibleGridControlHeader(m_aCreator, m_aTable,
-                                                                     vcl::table::AccessibleTableControlObjType::COLUMNHEADERBAR);
+                                                                     AccessibleTableControlObjType::COLUMNHEADERBAR);
             }
             xChild = m_xColumnHeaderBar.get();
         }
@@ -113,7 +111,7 @@ AccessibleGridControl::getAccessibleChild( sal_Int64 nChildIndex )
             if(!m_xRowHeaderBar.is())
             {
                 m_xRowHeaderBar = new AccessibleGridControlHeader(m_aCreator, m_aTable,
-                                                                  vcl::table::AccessibleTableControlObjType::ROWHEADERBAR);
+                                                                  AccessibleTableControlObjType::ROWHEADERBAR);
             }
             xChild = m_xRowHeaderBar.get();
         }

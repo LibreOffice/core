@@ -57,7 +57,7 @@ public:
     AccessibleGridControlBase(
         css::uno::Reference< css::accessibility::XAccessible > xParent,
         svt::table::TableControl& rTable,
-        ::vcl::table::AccessibleTableControlObjType  eObjType );
+        AccessibleTableControlObjType eObjType);
 
 protected:
     virtual ~AccessibleGridControlBase() = default;
@@ -139,7 +139,7 @@ public:
     // helper methods
 
     /** @return  The GridControl object type. */
-    inline ::vcl::table::AccessibleTableControlObjType getType() const;
+    inline AccessibleTableControlObjType getType() const;
 
     /** Commits an event to all listeners. */
     virtual void commitEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
@@ -183,7 +183,7 @@ protected:
     /** The SVT Table control. */
     svt::table::TableControl& m_aTable;
     /** The type of this object (for names, descriptions, state sets, ...). */
-    ::vcl::table::AccessibleTableControlObjType m_eObjType;
+    AccessibleTableControlObjType m_eObjType;
 };
 
 
@@ -205,7 +205,7 @@ protected:
     GridControlAccessibleElement(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
         svt::table::TableControl& rTable,
-        ::vcl::table::AccessibleTableControlObjType  eObjType );
+        AccessibleTableControlObjType  eObjType );
 
 protected:
     virtual ~GridControlAccessibleElement() override;
@@ -224,7 +224,7 @@ private:
 
 // inlines
 
-inline ::vcl::table::AccessibleTableControlObjType AccessibleGridControlBase::getType() const
+inline AccessibleTableControlObjType AccessibleGridControlBase::getType() const
 {
     return m_eObjType;
 }

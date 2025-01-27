@@ -56,14 +56,12 @@
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/accessibility/vclxaccessiblecomponent.hxx>
-#include <vcl/accessibletable.hxx>
 
 using namespace ::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::accessibility;
 using namespace ::vcl;
-using namespace ::vcl::table;
 
 namespace {
 

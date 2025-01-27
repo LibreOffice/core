@@ -121,7 +121,7 @@ private:
         @attention  This method requires locked mutex's and a living object.
         @return  The XAccessible interface of the header bar. */
     css::uno::Reference< css::accessibility::XAccessible >
-        implGetHeaderBar( ::vcl::table::AccessibleTableControlObjType eObjType );
+        implGetHeaderBar(AccessibleTableControlObjType eObjType);
 
     /** This method returns one of the children that are always present:
         Data table, row and column header bar or corner control.

@@ -21,17 +21,26 @@
 
 #include <controls/table/tablecontrolinterface.hxx>
 #include <controls/table/tablemodel.hxx>
-#include <vcl/accessibletable.hxx>
 
 #include <vcl/ctrl.hxx>
 #include <vcl/seleng.hxx>
 
 #include <memory>
 
+enum class AccessibleTableControlObjType
+{
+    GRIDCONTROL,         /// The GridControl itself.
+    TABLE,               /// The data table.
+    ROWHEADERBAR,        /// The row header bar.
+    COLUMNHEADERBAR,     /// The horizontal column header bar.
+    TABLECELL,           /// A cell of the data table.
+    ROWHEADERCELL,       /// A cell of the row header bar.
+    COLUMNHEADERCELL,    /// A cell of the column header bar.
+};
+
 namespace svt::table
 {
     class TableControl_Impl;
-
 
     //= TableControl
 
@@ -109,13 +118,13 @@ namespace svt::table
 
         /** Creates and returns the accessible object of the whole GridControl. */
         virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
-        OUString GetAccessibleObjectName(vcl::table::AccessibleTableControlObjType eObjType,
+        OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType,
                                          sal_Int32 _nRow, sal_Int32 _nCol) const;
         void GoToCell(sal_Int32 _nColumnPos, sal_Int32 _nRow);
         OUString
-        GetAccessibleObjectDescription(vcl::table::AccessibleTableControlObjType eObjType) const;
+        GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType) const;
         void FillAccessibleStateSet(sal_Int64& rStateSet,
-                                    vcl::table::AccessibleTableControlObjType eObjType) const;
+                                    AccessibleTableControlObjType eObjType) const;
 
         // temporary methods
         // Those do not really belong into the public API - they're intended for firing A11Y-related events. However,

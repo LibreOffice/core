@@ -20,7 +20,6 @@
 #include <controls/table/AccessibleGridControlBase.hxx>
 
 #include <utility>
-#include <vcl/accessibletable.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/window.hxx>
@@ -40,7 +39,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 using namespace ::vcl;
-using namespace ::vcl::table;
 
 
 namespace accessibility {
@@ -49,7 +47,7 @@ using namespace com::sun::star::accessibility::AccessibleStateType;
 
 AccessibleGridControlBase::AccessibleGridControlBase(
     css::uno::Reference<css::accessibility::XAccessible> xParent, svt::table::TableControl& rTable,
-    ::vcl::table::AccessibleTableControlObjType eObjType)
+    AccessibleTableControlObjType eObjType)
     : m_xParent(std::move(xParent))
     , m_aTable(rTable)
     , m_eObjType(eObjType)
@@ -274,7 +272,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  )
 
 GridControlAccessibleElement::GridControlAccessibleElement( const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
                         svt::table::TableControl& rTable,
-                        ::vcl::table::AccessibleTableControlObjType  eObjType )
+                        AccessibleTableControlObjType  eObjType )
     : GridControlAccessibleElement_Base(rxParent, rTable, eObjType)
 {
 }

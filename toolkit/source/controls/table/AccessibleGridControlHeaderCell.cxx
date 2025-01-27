@@ -20,7 +20,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <controls/table/AccessibleGridControlHeaderCell.hxx>
-#include <vcl/accessibletable.hxx>
 #include <vcl/svapp.hxx>
 
 namespace accessibility
@@ -29,7 +28,6 @@ namespace accessibility
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::uno;
     using namespace ::vcl;
-    using namespace ::vcl::table;
 
 AccessibleGridControlHeaderCell::AccessibleGridControlHeaderCell(sal_Int32 _nColumnRowId,
                                   const Reference< XAccessible >& rxParent,
