@@ -531,16 +531,6 @@ namespace svt::table
         return count;
     }
 
-
-    bool TableControl::ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint )
-    {
-        sal_Int32 nRow = m_pImpl->getRowAtPoint( _rPoint );
-        sal_Int32 nCol = m_pImpl->getColAtPoint( _rPoint );
-        _rnIndex = nRow * GetColumnCount() + nCol;
-        return nRow >= 0;
-    }
-
-
     sal_Int32 TableControl::GetRowCount() const
     {
         return GetModel()->getRowCount();

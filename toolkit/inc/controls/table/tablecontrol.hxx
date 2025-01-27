@@ -125,7 +125,6 @@ namespace svt::table
 
         // IAccessibleTable
         virtual sal_Int32 GetAccessibleControlCount() const override;
-        virtual bool ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint ) override;
         virtual sal_Int32 GetRowCount() const override;
         virtual sal_Int32 GetColumnCount() const override;
         virtual bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint ) override;
