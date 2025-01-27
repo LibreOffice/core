@@ -205,6 +205,8 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         m_pCursorShell->IsSelection() )
         aRect.Width( 0 );
 
+    bool bIsCursorPosChanged = m_aTextCursor.GetPos() != aRect.Pos();
+
     m_aTextCursor.SetSize( aRect.SSize() );
 
     m_aTextCursor.SetPos( aRect.Pos() );
@@ -247,7 +249,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
                     LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
             }
         }
-        else if (m_pCursorShell->m_bIsCursorPosChanged || m_pCursorShell->IsTableMode())
+        else if ( bIsCursorPosChanged || m_pCursorShell->IsTableMode())
         {
             SfxLokHelper::notifyUpdatePerViewId(m_pCursorShell->GetSfxViewShell(), SfxViewShell::Current(),
                 m_pCursorShell->GetSfxViewShell(), LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR);

@@ -1945,7 +1945,6 @@ class SwNotifyAccAboutInvalidTextSelections
 
 void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 {
-    Point nOldPos = m_pCurrentCursor->GetPtPos();
     CurrShell aCurr( this );
     ClearUpCursors();
 
@@ -2445,10 +2444,6 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
         GetOut()->SetSettings( aSettings );
     }
 
-    // Do not notify the cursor if the position didn't change
-    Point nNewPos = m_pCurrentCursor->GetPtPos();
-    m_bIsCursorPosChanged = nOldPos != nNewPos;
-
     if( m_bSVCursorVis )
         m_pVisibleCursor->Show(); // show again
 
@@ -2456,7 +2451,6 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
         sendLOKCursorUpdates();
 
     getIDocumentMarkAccess()->NotifyCursorUpdate(*this);
-    m_bIsCursorPosChanged = false; // reset to default
 }
 
 void SwCursorShell::sendLOKCursorUpdates()
@@ -3375,7 +3369,6 @@ SwCursorShell::SwCursorShell( SwCursorShell& rShell, vcl::Window *pInitWin )
     m_bAllProtect = m_bVisPortChgd = m_bChgCallFlag = m_bInCMvVisportChgd =
     m_bGCAttr = m_bIgnoreReadonly = m_bSelTableCells = m_bBasicHideCursor =
     m_bOverwriteCursor = false;
-    m_bIsCursorPosChanged = false;
     m_bSendAccessibleCursorEvents = true;
     m_bCallChgLnk = m_bHasFocus = m_bAutoUpdateCells = true;
     m_bSVCursorVis = true;
@@ -3425,7 +3418,6 @@ SwCursorShell::SwCursorShell( SwDoc& rDoc, vcl::Window *pInitWin,
     m_bAllProtect = m_bVisPortChgd = m_bChgCallFlag = m_bInCMvVisportChgd =
     m_bGCAttr = m_bIgnoreReadonly = m_bSelTableCells = m_bBasicHideCursor =
     m_bOverwriteCursor = false;
-    m_bIsCursorPosChanged = false;
     m_bSendAccessibleCursorEvents = true;
     m_bCallChgLnk = m_bHasFocus = m_bAutoUpdateCells = true;
     m_bSVCursorVis = true;
