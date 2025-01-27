@@ -570,7 +570,7 @@ namespace svt::table
 
     tools::Rectangle TableControl::calcHeaderRect(bool _bIsColumnBar )
     {
-        return m_pImpl->calcHeaderRect( !_bIsColumnBar );
+        return m_pImpl->calcHeaderRect(_bIsColumnBar);
     }
 
 
