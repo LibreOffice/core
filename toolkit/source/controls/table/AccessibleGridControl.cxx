@@ -188,24 +188,18 @@ AbsoluteScreenPixelRectangle AccessibleGridControl::implGetBoundingBoxOnScreen()
 void AccessibleGridControl::commitCellEvent(sal_Int16 _nEventId,const Any& _rNewValue,const Any& _rOldValue)
 {
     sal_Int64 nChildCount = implGetAccessibleChildCount();
-    if(nChildCount != 0)
+    assert(nChildCount != 0);
+    for (sal_Int64 i = 0; i < nChildCount; i++)
     {
-        for(sal_Int64 i=0;i<nChildCount;i++)
+        css::uno::Reference<css::accessibility::XAccessible> xAccessible = getAccessibleChild(i);
+        if (css::uno::Reference<css::accessibility::XAccessible>(m_xTable) == xAccessible)
         {
-            css::uno::Reference< css::accessibility::XAccessible > xAccessible = getAccessibleChild(i);
-            if(css::uno::Reference< css::accessibility::XAccessible >(m_xTable) == xAccessible)
-            {
-                Reference<XAccessible> xCell = m_xTable->getAccessibleCellAt(
-                    m_aTable.GetCurrentRow(), m_aTable.GetCurrentColumn());
-                AccessibleGridControlTableCell* pCell = static_cast<AccessibleGridControlTableCell*>(xCell.get());
-                pCell->commitEvent(_nEventId, _rNewValue, _rOldValue);
-            }
+            Reference<XAccessible> xCell = m_xTable->getAccessibleCellAt(
+                m_aTable.GetCurrentRow(), m_aTable.GetCurrentColumn());
+            AccessibleGridControlTableCell* pCell
+                = static_cast<AccessibleGridControlTableCell*>(xCell.get());
+            pCell->commitEvent(_nEventId, _rNewValue, _rOldValue);
         }
-    }
-    else
-    {
-        if ( m_xTable.is() )
-            m_xTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
     }
 }
 
