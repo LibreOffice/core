@@ -189,6 +189,7 @@ public:
     void testFuncSUM();
     void testFuncPRODUCT();
     void testFuncSUMPRODUCT();
+    void testFuncSUBTOTAL();
     void testFuncSUMXMY2();
     void testFuncMIN();
     void testFuncN();

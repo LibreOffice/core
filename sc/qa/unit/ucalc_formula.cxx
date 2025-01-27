@@ -4685,6 +4685,77 @@ void Test::testFuncSUMPRODUCT()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncSUBTOTAL()
+{
+    m_pDoc->InsertTab(0, "Formula");
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    // Fill C1:C1025 with values and insert formulas in D1:D1025 using the named expression.
+    for (size_t i = 0; i < 1025; i++)
+        m_pDoc->SetValue(ScAddress(2, i, 0), i + 1);
+
+    // Add a named expression for a function.
+    ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
+    CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
+    ScRangeData* pName = new ScRangeData(
+        m_pDoc, "MyRelative", "$C1:$C$1000", ScAddress(2, 999, 0),
+        ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
+    bool bInserted = pGlobalNames->insert(pName);
+    CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
+
+    for (size_t i = 0; i < 1025; i++)
+        m_pDoc->SetString(ScAddress(3, i, 0), "=IF(SUBTOTAL(3;MyRelative)=1;"";SUBTOTAL(3;MyRelative))");
+
+    // Make sure the results are correct.
+    for (size_t i = 0; i < 1025; i++)
+    {
+        if (i < 999.0)
+            CPPUNIT_ASSERT_EQUAL(26.0, m_pDoc->GetValue(3, i, 0));
+        else
+            CPPUNIT_ASSERT_EQUAL((1000.0 - (i - 999.0)), m_pDoc->GetValue(3, i, 0));
+    }
+
+    ScRange aTrimedRange(2, 999, 0, 2, 1024, 0);
+    ScRange aValidRange(2, 0, 0, 2, 999, 0);
+    for (size_t i = 0; i < 1025; i++)
+    {
+        ScFormulaCell* pCell = m_pDoc->GetFormulaCell(ScAddress(3, i, 0));
+        ScTokenArray* pCode = pCell->GetCode();
+        sal_uInt16 nLen = pCode->GetCodeLen();
+        FormulaToken** pRPNArray = pCode->GetCode();
+        OUString aCellName = pCell->aPos.GetColRowString();
+
+        for (sal_uInt16 nIdx = 0; nIdx < nLen; ++nIdx)
+        {
+            FormulaToken* pTok = pRPNArray[nIdx];
+            if (pTok && pTok->GetType() == svDoubleRef)
+            {
+                ScRange aRange = pTok->GetDoubleRef()->toAbs(ScAddress(3, i, 0));
+                if (i < 999)
+                {
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(OUString("Double ref is incorrectly trimmed in: " + aCellName).toUtf8().getStr(),
+                        aRange, aTrimedRange);
+                    // Without the trim it would failed with
+                    // assertion failed
+                    // - Expression: aRange == aTrimedRange
+                    // - Double ref is incorrectly trimmed in : D1
+                    // ScRange aTrimmableRange(2, 999, 0, 0, 1048575, 0);
+                }
+                else
+                {
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(OUString("Double ref is incorrectly trimmed in: " + aCellName).toUtf8().getStr(),
+                        aRange, aValidRange);
+                }
+            }
+        }
+        if (i >= 999)
+            aValidRange.aStart.IncRow();
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncSUMXMY2()
 {
     m_pDoc->InsertTab(0, "Test SumXMY2");
