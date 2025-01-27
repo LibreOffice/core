@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <accessibility/accessibletablistbox.hxx>
+
 #include <comphelper/types.hxx>
 #include <vcl/accessiblefactory.hxx>
 #include <vcl/toolkit/svtabbx.hxx>
@@ -1163,7 +1165,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessible()
         Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if ( xAccParent.is() )
         {
-            m_pAccessible = AccessibleFactory::createAccessibleTabListBox( xAccParent, *this );
+            m_pAccessible = new accessibility::AccessibleTabListBox(xAccParent, *this);
             if ( m_pAccessible )
                 xAccessible = m_pAccessible->getMyself();
         }

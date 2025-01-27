@@ -190,13 +190,6 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(Forma
     return new SVTXAccessibleNumericField(pFormattedField);
 }
 
-vcl::IAccessibleTabListBox*
-AccessibleFactory::createAccessibleTabListBox(const Reference<XAccessible>& rxParent,
-                                              SvHeaderTabListBox& rBox)
-{
-    return new AccessibleTabListBox( rxParent, rBox );
-}
-
 rtl::Reference<vcl::IAccessibleBrowseBox>
 AccessibleFactory::createAccessibleBrowseBox(const Reference<XAccessible>& _rxParent,
                                              vcl::IAccessibleTableProvider& _rBrowseBox)

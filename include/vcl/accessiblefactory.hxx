@@ -94,10 +94,6 @@ public:
     static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(vcl::Window* pWindow);
 
-    static vcl::IAccessibleTabListBox*
-    createAccessibleTabListBox(const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
-                               SvHeaderTabListBox& rBox);
-
     static rtl::Reference<vcl::IAccessibleBrowseBox>
     createAccessibleBrowseBox(const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
                               vcl::IAccessibleTableProvider& _rBrowseBox);
