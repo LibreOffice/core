@@ -58,20 +58,8 @@ AccessibleGridControlHeader::getAccessibleChild( sal_Int64 nChildIndex )
 
     ensureIsValidIndex(nChildIndex);
     ensureAlive();
-    Reference< XAccessible > xChild;
-    if (m_eObjType == vcl::table::AccessibleTableControlObjType::COLUMNHEADERBAR)
-    {
-        rtl::Reference<AccessibleGridControlHeaderCell> pColHeaderCell = new AccessibleGridControlHeaderCell(nChildIndex, this, m_aTable,
-                                                                                                             vcl::table::AccessibleTableControlObjType::COLUMNHEADERCELL);
-        xChild = pColHeaderCell;
-    }
-    else if (m_eObjType == vcl::table::AccessibleTableControlObjType::ROWHEADERBAR)
-    {
-        rtl::Reference<AccessibleGridControlHeaderCell> pRowHeaderCell = new AccessibleGridControlHeaderCell(nChildIndex, this, m_aTable,
-                                                                                                             vcl::table::AccessibleTableControlObjType::ROWHEADERCELL);
-        xChild = pRowHeaderCell;
-    }
-    return xChild;
+
+    return implGetChild(implGetRow(nChildIndex), implGetColumn(nChildIndex));
 }
 
 sal_Int64 SAL_CALL AccessibleGridControlHeader::getAccessibleIndexInParent()
