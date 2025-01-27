@@ -143,7 +143,7 @@ endif
 ifeq ($(OS),MACOSX)
 
 python3_fw_prefix:=$(gb_UnpackedTarball_workdir)/python3/python-inst/@__________________________________________________OOO/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)
-python3_EXTENSION_MODULE_SUFFIX:=cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)$(if $(ENABLE_DBGUTIL),d)
+python3_EXTENSION_MODULE_SUFFIX:=cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(ENABLE_DBGUTIL),d)-darwin
 
 # rule to allow relocating the whole framework, removing reference to buildinstallation directory
 # also scripts are not allowed to be signed as executables (with extended attributes), but need to
