@@ -6817,6 +6817,35 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
             --ppTok;
         }
     }
+    else if (eOpCode == ocSubTotal)
+    {
+        // tdf#164843: Double references from relative named ranges can point to large
+        // ranges (MAXCOL/MAXROW) and because of that some function evaluation
+        // like SubTotal can be extreamly slow when we call ScTable::CompileHybridFormula
+        // with these large ranges. Since all the SubTotal functions ignore empty cells
+        // its worth to optimize and trim the double references in SubTotal functions.
+        FormulaToken** ppTok = pCode - 2;
+        while (*ppTok)
+        {
+            FormulaToken* pTok = *ppTok;
+            if (pTok->GetType() == svDoubleRef)
+            {
+                ScComplexRefData* pRefData = pTok->GetDoubleRef();
+                // no need to set pRefData->SetTrimToData(true); because we already trim here
+                ScRange rRange = pRefData->toAbs(rDoc, aPos);
+                SCCOL nTempStartCol = rRange.aStart.Col();
+                SCROW nTempStartRow = rRange.aStart.Row();
+                SCCOL nTempEndCol = rRange.aEnd.Col();
+                SCROW nTempEndRow = rRange.aEnd.Row();
+                rDoc.ShrinkToDataArea(rRange.aStart.Tab(), nTempStartCol, nTempStartRow, nTempEndCol, nTempEndRow);
+                rRange.aStart.Set(nTempStartCol, nTempStartRow, rRange.aStart.Tab());
+                rRange.aEnd.Set(nTempEndCol, nTempEndRow, rRange.aEnd.Tab());
+                rRange.PutInOrder();
+                pRefData->SetRange(rDoc.GetSheetLimits(), rRange, aPos);
+            }
+            --ppTok;
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
