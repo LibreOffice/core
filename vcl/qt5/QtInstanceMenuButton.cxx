@@ -150,7 +150,7 @@ QMenu& QtInstanceMenuButton::getMenu() const
 
 QAction* QtInstanceMenuButton::getAction(const OUString& rIdent) const
 {
-    QList<QAction*> aActions = getMenu().actions();
+    const QList<QAction*> aActions = getMenu().actions();
     for (QAction* pAction : aActions)
     {
         if (pAction && pAction->objectName() == toQString(rIdent))
