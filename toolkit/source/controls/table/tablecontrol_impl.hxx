@@ -293,7 +293,7 @@ namespace svt::table
         getAccessible(vcl::Window& i_parentWindow);
         void            disposeAccessible();
 
-        bool     isAccessibleAlive() const { return impl_isAccessibleAlive(); }
+        bool     isAccessibleAlive() const;
 
         // ITableModelListener
         virtual void    rowsInserted( RowPos first, RowPos last ) override;
@@ -306,7 +306,6 @@ namespace svt::table
         virtual void    tableMetricsChanged() override;
 
     private:
-        bool            impl_isAccessibleAlive() const;
         void            impl_commitAccessibleEvent(
                             sal_Int16 const i_eventID,
                             css::uno::Any const & i_newValue

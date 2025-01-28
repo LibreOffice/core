@@ -2268,14 +2268,14 @@ namespace svt::table
 
     void TableControl_Impl::commitCellEvent( sal_Int16 const i_eventID, const Any& i_newValue, const Any& i_oldValue )
     {
-        if ( impl_isAccessibleAlive() )
+        if (isAccessibleAlive())
              m_pAccessibleTable->commitCellEvent( i_eventID, i_newValue, i_oldValue );
     }
 
 
     void TableControl_Impl::commitTableEvent( sal_Int16 const i_eventID, const Any& i_newValue, const Any& i_oldValue )
     {
-        if ( impl_isAccessibleAlive() )
+        if (isAccessibleAlive())
              m_pAccessibleTable->commitTableEvent( i_eventID, i_newValue, i_oldValue );
     }
 
@@ -2366,7 +2366,7 @@ namespace svt::table
     }
 
 
-    bool TableControl_Impl::impl_isAccessibleAlive() const
+    bool TableControl_Impl::isAccessibleAlive() const
     {
         return m_pAccessibleTable && m_pAccessibleTable->isAlive();
     }
@@ -2374,7 +2374,7 @@ namespace svt::table
 
     void TableControl_Impl::impl_commitAccessibleEvent( sal_Int16 const i_eventID, Any const & i_newValue )
     {
-        if ( impl_isAccessibleAlive() )
+        if (isAccessibleAlive())
              m_pAccessibleTable->commitEvent( i_eventID, i_newValue );
     }
 
