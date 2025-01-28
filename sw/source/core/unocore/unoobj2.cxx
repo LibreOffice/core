@@ -1378,7 +1378,7 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
             {
                 // then it is the body text
                 const rtl::Reference<SwXTextDocument> xModel = pDocSh->GetBaseModel();
-                xParentText = dynamic_cast<SwXText*>(xModel->getText().get());
+                xParentText = xModel->getBodyText();
             }
         }
     }
