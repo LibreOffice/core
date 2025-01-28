@@ -8,10 +8,14 @@
  */
 
 #include <swmodeltestbase.hxx>
+
+#include <osl/process.h>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <vcl/scheduler.hxx>
 #include <svx/svddef.hxx>
 
+#include <layouter.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtcntnt.hxx>
@@ -397,6 +401,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableSplitBug)
                     "height", u"1274"_ustr);
         discardDumpedLayout();
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableInSectionSplitLoop)
+{
+    createSwDoc("table-in-section-split-loop.fodt");
+
+    static OUString const var = u"TEST_NO_LOOP_CONTROLS"_ustr;
+    osl_setEnvironment(var.pData, u"1"_ustr.pData);
+    comphelper::ScopeGuard g([] { osl_clearEnvironment(var.pData); });
+
+    CPPUNIT_ASSERT_EQUAL(0, SwLayouter::GetLastLoopControlStage());
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    CPPUNIT_ASSERT_EQUAL(0, SwLayouter::GetLastLoopControlStage());
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
