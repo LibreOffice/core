@@ -456,12 +456,8 @@ namespace svt::table
                     rStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
                 break;
 
-            case AccessibleTableControlObjType::ROWHEADERBAR:
-                rStateSet |= AccessibleStateType::VISIBLE;
-                rStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
-                break;
-
             case AccessibleTableControlObjType::COLUMNHEADERBAR:
+            case AccessibleTableControlObjType::ROWHEADERBAR:
                 rStateSet |= AccessibleStateType::VISIBLE;
                 rStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
                 break;
