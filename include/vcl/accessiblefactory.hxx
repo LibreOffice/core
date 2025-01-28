@@ -40,7 +40,6 @@ namespace com::sun::star {
 }
 
 namespace vcl { class IAccessibleBrowseBox; }
-namespace vcl { class IAccessibleTabListBox; }
 namespace vcl { class IAccessibleTableProvider; }
 namespace vcl { class Window; }
 

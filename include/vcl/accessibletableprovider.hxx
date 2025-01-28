@@ -127,25 +127,6 @@ protected:
     ~IAccessibleTableProvider() {}
 };
 
-
-/** interface for an implementation of a table control's Accessible component
-*/
-class IAccessibleTabListBox
-{
-public:
-    /** returns the accessible object for the column header bar
-    */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-        getHeaderBar() = 0;
-
-    /** Returns the accessible object for the table.
-     */
-    virtual css::uno::Reference< css::accessibility::XAccessible> getTable() = 0;
-
-protected:
-    ~IAccessibleTabListBox() {}
-};
-
 /** interface for an implementation of a browse box's Accessible component
 */
 class IAccessibleBrowseBox : public cppu::WeakImplHelper<css::accessibility::XAccessible>

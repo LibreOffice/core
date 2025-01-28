@@ -33,7 +33,6 @@ typedef ::cppu::ImplHelper1  <   css::accessibility::XAccessible
 class AccessibleTabListBox final
                 :public AccessibleBrowseBox
                 ,public AccessibleTabListBox_Base
-                ,public ::vcl::IAccessibleTabListBox
 {
 private:
     VclPtr<SvHeaderTabListBox>        m_pTabListBox;
@@ -66,12 +65,12 @@ public:
     // IAccessibleTabListBox
 
     css::uno::Reference< css::accessibility::XAccessible >
-        getHeaderBar() override
+        getHeaderBar()
     {
         return AccessibleBrowseBox::getHeaderBar( AccessibleBrowseBoxObjType::ColumnHeaderBar );
     }
 
-    css::uno::Reference<css::accessibility::XAccessible> getTable() override
+    css::uno::Reference<css::accessibility::XAccessible> getTable()
     {
         return implGetTable();
     }
