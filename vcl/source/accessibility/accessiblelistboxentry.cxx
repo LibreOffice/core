@@ -146,15 +146,6 @@ namespace accessibility
         return bShowing;
     }
 
-    tools::Rectangle AccessibleListBoxEntry::GetBoundingBox()
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        EnsureIsAlive();
-        return GetBoundingBox_Impl();
-    }
-
     void AccessibleListBoxEntry::CheckActionIndex(sal_Int32 nIndex)
     {
         if (nIndex < 0 || nIndex >= getAccessibleActionCount())
@@ -550,7 +541,7 @@ namespace accessibility
         if ( pEntry )
         {
             vcl::ControlLayoutData aLayoutData;
-            tools::Rectangle aItemRect = GetBoundingBox();
+            tools::Rectangle aItemRect = GetBoundingBox_Impl();
             m_pTreeListBox->RecordLayoutData( &aLayoutData, aItemRect );
             tools::Rectangle aCharRect = aLayoutData.GetCharacterBounds( nIndex );
             aCharRect.Move( -aItemRect.Left(), -aItemRect.Top() );
@@ -572,7 +563,7 @@ namespace accessibility
         if ( pEntry )
         {
             vcl::ControlLayoutData aLayoutData;
-            tools::Rectangle aItemRect = GetBoundingBox();
+            tools::Rectangle aItemRect = GetBoundingBox_Impl();
             m_pTreeListBox->RecordLayoutData( &aLayoutData, aItemRect );
             Point aPnt(vcl::unohelper::ConvertToVCLPoint(aPoint));
             aPnt += aItemRect.TopLeft();

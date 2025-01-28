@@ -80,9 +80,6 @@ namespace accessibility
         bool                IsAlive_Impl() const;
         bool                IsShowing_Impl() const;
 
-        /// @throws css::lang::DisposedException
-        /// @throws css::uno::RuntimeException
-        tools::Rectangle               GetBoundingBox();
         /// @throws css::lang::IndexOutOfBoundsException
         void CheckActionIndex(sal_Int32 nIndex);
         /// @throws css::lang::DisposedException
