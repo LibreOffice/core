@@ -2356,15 +2356,13 @@ namespace svt::table
             return m_pAccessibleTable;
 
         DBG_TESTSOLARMUTEX();
-        if ( m_pAccessibleTable == nullptr )
+
+        Reference<XAccessible> const xAccParent = i_parentWindow.GetAccessible();
+        if (xAccParent.is())
         {
-            Reference< XAccessible > const xAccParent = i_parentWindow.GetAccessible();
-            if ( xAccParent.is() )
-            {
-                m_pAccessibleTable = new accessibility::AccessibleGridControlAccess(
-                    xAccParent, m_rAntiImpl
-                );
-            }
+            m_pAccessibleTable = new accessibility::AccessibleGridControlAccess(
+                xAccParent, m_rAntiImpl
+            );
         }
 
         return m_pAccessibleTable;
