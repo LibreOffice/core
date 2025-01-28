@@ -21,6 +21,10 @@ interface XGraphicStorageHandler : com::sun::star::uno::XInterface
     */
     com::sun::star::graphic::XGraphic loadGraphic([in] string aURL);
 
+    /** load a specific page from a graphic defined by the URL from the storage
+    */
+    com::sun::star::graphic::XGraphic loadGraphicAtPage([in] string aURL, [in] long nPage);
+
     /** load a graphic from the output stream
     */
     com::sun::star::graphic::XGraphic loadGraphicFromOutputStream([in] com::sun::star::io::XOutputStream xOutputStream);

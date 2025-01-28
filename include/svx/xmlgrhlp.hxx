@@ -56,7 +56,8 @@ private:
     std::vector< css::uno::Reference< css::io::XOutputStream > >
                                 maGrfStms;
 
-    std::unordered_map<OUString, css::uno::Reference<css::graphic::XGraphic>> maGraphicObjects;
+    std::unordered_map<OUString, std::vector<css::uno::Reference<css::graphic::XGraphic>>>
+        maGraphicObjects;
     std::unordered_map<Graphic, std::pair<OUString, OUString>> maExportGraphics;
 
     SvXMLGraphicHelperMode      meCreateMode;
@@ -71,8 +72,9 @@ private:
                                             ImplGetGraphicStream( const OUString& rPictureStorageName,
                                                       const OUString& rPictureStreamName );
     SVX_DLLPRIVATE static OUString      ImplGetGraphicMimeType( std::u16string_view rFileName );
-    SVX_DLLPRIVATE Graphic                  ImplReadGraphic( const OUString& rPictureStorageName,
-                                                 const OUString& rPictureStreamName );
+    SVX_DLLPRIVATE Graphic ImplReadGraphic(const OUString& rPictureStorageName,
+                                           const OUString& rPictureStreamName,
+                                           sal_Int32 nPage = -1);
 
                                 SvXMLGraphicHelper();
                                 virtual ~SvXMLGraphicHelper() override;
@@ -100,6 +102,10 @@ public:
     // XGraphicStorageHandler
     virtual css::uno::Reference<css::graphic::XGraphic> SAL_CALL
         loadGraphic(OUString const & aURL) override;
+
+    // XGraphicStorageHandler
+    virtual css::uno::Reference<css::graphic::XGraphic>
+        SAL_CALL loadGraphicAtPage(OUString const& aURL, sal_Int32 nPage) override;
 
     virtual css::uno::Reference<css::graphic::XGraphic> SAL_CALL
         loadGraphicFromOutputStream(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream) override;

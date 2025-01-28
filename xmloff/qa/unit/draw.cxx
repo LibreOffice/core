@@ -31,6 +31,7 @@
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/Theme.hxx>
+#include <comphelper/scopeguard.hxx>
 
 using namespace ::com::sun::star;
 
@@ -810,6 +811,50 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf157018_ThemeImportDraw)
     CPPUNIT_ASSERT_EQUAL(Color(0x0A0A0A), pColorSet->getColor(model::ThemeColorType::Hyperlink));
     CPPUNIT_ASSERT_EQUAL(Color(0x440000), pColorSet->getColor(model::ThemeColorType::Accent1));
 }
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testPdfExportAsOdg)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return;
+    }
+
+// setenv only works on unix based systems
+#ifndef _WIN32
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+    {
+        bResetEnvVar = true;
+        setenv("LO_IMPORT_USE_PDFIUM", "1", false);
+    }
+    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
+        if (bResetEnvVar)
+            unsetenv("LO_IMPORT_USE_PDFIUM");
+    });
+
+    loadFromFile(u"two-pages.pdf");
+    // save and reload as odg
+    saveAndReload("draw8");
+
+    // Check that the graphic in the second page of the document is the second page of the pdf
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDrawPagesSupplier.is());
+    uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xImage.is());
+    uno::Reference<beans::XPropertySet> xShapeProps(xImage, uno::UNO_QUERY);
+    uno::Reference<graphic::XGraphic> xGraphic;
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue("Graphic") >>= xGraphic);
+
+    Graphic aGraphic(xGraphic);
+    CPPUNIT_ASSERT_EQUAL(1, aGraphic.getPageNumber());
+#endif
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

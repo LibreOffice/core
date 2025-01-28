@@ -1302,7 +1302,8 @@ bool SvXMLImport::IsPackageURL( std::u16string_view rURL ) const
     return true;
 }
 
-uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicByURL(OUString const & rURL)
+uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicByURL(OUString const& rURL,
+                                                                sal_Int32 nPageNum)
 {
     uno::Reference<graphic::XGraphic> xGraphic;
 
@@ -1312,7 +1313,7 @@ uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicByURL(OUString const &
         {
             if (IsPackageURL(rURL))
             {
-                xGraphic = mxGraphicStorageHandler->loadGraphic(rURL);
+                xGraphic = mxGraphicStorageHandler->loadGraphicAtPage(rURL, nPageNum);
             }
             else
             {

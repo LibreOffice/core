@@ -102,7 +102,8 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
 }
 
 bool importPdfVectorGraphicData(SvStream& rStream,
-                                std::shared_ptr<VectorGraphicData>& rVectorGraphicData)
+                                std::shared_ptr<VectorGraphicData>& rVectorGraphicData,
+                                sal_Int32 nPageIndex)
 {
     BinaryDataContainer aDataContainer = vcl::pdf::createBinaryDataContainer(rStream);
     if (aDataContainer.isEmpty())
@@ -111,16 +112,16 @@ bool importPdfVectorGraphicData(SvStream& rStream,
         return false;
     }
 
-    rVectorGraphicData
-        = std::make_shared<VectorGraphicData>(aDataContainer, VectorGraphicDataType::Pdf);
+    rVectorGraphicData = std::make_shared<VectorGraphicData>(
+        aDataContainer, VectorGraphicDataType::Pdf, nPageIndex);
 
     return true;
 }
 
-bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
+bool ImportPDF(SvStream& rStream, Graphic& rGraphic, sal_Int32 nPageIndex)
 {
     std::shared_ptr<VectorGraphicData> pVectorGraphicData;
-    if (!importPdfVectorGraphicData(rStream, pVectorGraphicData))
+    if (!importPdfVectorGraphicData(rStream, pVectorGraphicData, nPageIndex))
         return false;
     rGraphic = Graphic(pVectorGraphicData);
     return true;

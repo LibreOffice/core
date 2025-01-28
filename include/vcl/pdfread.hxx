@@ -37,10 +37,11 @@ VCL_DLLPUBLIC size_t RenderPDFBitmaps(const void* pBuffer, int nSize,
 /// Imports a PDF stream as a VectorGraphicData.
 VCL_DLLPUBLIC bool
 importPdfVectorGraphicData(SvStream& rStream,
-                           std::shared_ptr<VectorGraphicData>& rVectorGraphicData);
+                           std::shared_ptr<VectorGraphicData>& rVectorGraphicData,
+                           sal_Int32 nPageIndex = -1);
 
 /// Imports a PDF stream into rGraphic.
-VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic);
+VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic, sal_Int32 nPageIndex = -1);
 
 // When inserting a PDF file as an image or pasting PDF data from the clipboard, at least on a
 // Retina iMac, the resulting rendered image does not look sharp without this surprisingly large
