@@ -285,11 +285,6 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL Accessibl
 {
     std::unique_lock aGuard( m_aMutex );
 
-    // if the context died meanwhile (there is no listener, so it won't tell us explicitly when this happens),
-    // then reset and re-create.
-    if ( m_xContext.is() && !m_xContext->isAlive() )
-        m_xContext = nullptr;
-
     if ( !m_xContext.is() )
         m_xContext = new AccessibleBrowseBox( m_xParent, this, m_rBrowseBox );
 
