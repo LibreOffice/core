@@ -115,9 +115,6 @@ namespace accessibility
         virtual css::awt::Rectangle implGetBounds() override;
 
     private:
-        // XTypeProvider
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;

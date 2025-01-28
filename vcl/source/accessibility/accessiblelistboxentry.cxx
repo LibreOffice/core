@@ -181,12 +181,6 @@ namespace accessibility
         return vcl::unohelper::ConvertToAWTRect(GetBoundingBox_Impl());
     }
 
-    // XTypeProvider
-    Sequence< sal_Int8 > AccessibleListBoxEntry::getImplementationId()
-    {
-        return css::uno::Sequence<sal_Int8>();
-    }
-
 
     // XComponent
 
