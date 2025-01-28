@@ -546,38 +546,6 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
     return xAcc;
 }
 
-sal_Int64 VCLXAccessibleComponent::getAccessibleIndexInParent(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    sal_Int64 nIndex = -1;
-    //  Iterate over all the parent's children and search for this object.
-    // this should be compatible with the code in SVX
-    uno::Reference< accessibility::XAccessible > xParentAcc = getAccessibleParent();
-    if ( xParentAcc.is() )
-    {
-        uno::Reference< accessibility::XAccessibleContext > xParentContext ( xParentAcc->getAccessibleContext() );
-        if ( xParentContext.is() )
-        {
-            sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
-            for ( sal_Int64 i = 0; i < nChildCount; i++ )
-            {
-                uno::Reference< accessibility::XAccessible > xChild( xParentContext->getAccessibleChild(i) );
-                if ( xChild.is() )
-                {
-                    uno::Reference< accessibility::XAccessibleContext > xChildContext = xChild->getAccessibleContext();
-                    if ( xChildContext == static_cast<accessibility::XAccessibleContext*>(this) )
-                    {
-                        nIndex = i;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    return nIndex;
-}
-
 sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  )
 {
     OExternalLockGuard aGuard( this );

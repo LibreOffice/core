@@ -79,7 +79,6 @@ public:
     sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
     css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
     css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
-    sal_Int64 SAL_CALL getAccessibleIndexInParent(  ) override;
     sal_Int16 SAL_CALL getAccessibleRole(  ) override;
     OUString SAL_CALL getAccessibleDescription(  ) override;
     OUString SAL_CALL getAccessibleName(  ) override;
