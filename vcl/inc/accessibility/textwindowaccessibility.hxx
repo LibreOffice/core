@@ -273,9 +273,6 @@ private:
     virtual void implGetSelection(::sal_Int32 & rStartIndex,
                                   ::sal_Int32 & rEndIndex) override;
 
-    // Throws css::lang::DisposedException:
-    void checkDisposed();
-
     ::rtl::Reference< Document > m_xDocument;
     Paragraphs::size_type m_nNumber;
 
