@@ -61,13 +61,12 @@ namespace accessibility
         AccessibleGridControlCell& operator=( const AccessibleGridControlCell& ) = delete;
     };
 
-    typedef ::cppu::ImplHelper2 <   css::accessibility::XAccessibleText
-                                ,   css::accessibility::XAccessible
-                                >   AccessibleTextHelper_BASE;
     // implementation of a table cell of GridControl
-    class AccessibleGridControlTableCell final   :public AccessibleGridControlCell
-                                        ,public AccessibleTextHelper_BASE
-                                        ,public ::comphelper::OCommonAccessibleText
+    class AccessibleGridControlTableCell final
+        : public cppu::ImplInheritanceHelper<AccessibleGridControlCell,
+                                             css::accessibility::XAccessibleText,
+                                             css::accessibility::XAccessible>,
+          public ::comphelper::OCommonAccessibleText
     {
     private:
         // OCommonAccessibleText
@@ -81,17 +80,6 @@ namespace accessibility
                                     svt::table::TableControl& _rTable,
                                     sal_Int32 _nRowId,
                                     sal_uInt16 _nColId);
-
-        // XInterface -------------------------------------------------------------
-
-        /** Queries for a new interface. */
-        css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
-
-        /** Acquires the object (calls acquire() on base class). */
-        virtual void SAL_CALL acquire() noexcept override;
-
-        /** Releases the object (calls release() on base class). */
-        virtual void SAL_CALL release() noexcept override;
 
         /** @return  The index of this object among the parent's children. */
         virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;

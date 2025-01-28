@@ -96,36 +96,12 @@ namespace accessibility
         nEndIndex = 0;
     }
 
-    AccessibleGridControlTableCell::AccessibleGridControlTableCell(const css::uno::Reference<XAccessible >& _rxParent,
-                                svt::table::TableControl& _rTable,
-                                sal_Int32 _nRowPos,
-                                sal_uInt16 _nColPos)
-        :AccessibleGridControlCell(_rxParent, _rTable, _nRowPos, _nColPos, AccessibleTableControlObjType::TABLECELL)
+    AccessibleGridControlTableCell::AccessibleGridControlTableCell(
+        const css::uno::Reference<XAccessible>& _rxParent, svt::table::TableControl& _rTable,
+        sal_Int32 _nRowPos, sal_uInt16 _nColPos)
+        : ImplInheritanceHelper(_rxParent, _rTable, _nRowPos, _nColPos,
+                                AccessibleTableControlObjType::TABLECELL)
     {
-    }
-
-    // XInterface
-
-    /** Queries for a new interface. */
-    css::uno::Any SAL_CALL AccessibleGridControlTableCell::queryInterface(
-            const css::uno::Type& rType )
-    {
-        Any aRet = AccessibleGridControlCell::queryInterface(rType);
-        if ( !aRet.hasValue() )
-            aRet = AccessibleTextHelper_BASE::queryInterface(rType);
-        return aRet;
-    }
-
-    /** Acquires the object (calls acquire() on base class). */
-    void SAL_CALL AccessibleGridControlTableCell::acquire() noexcept
-    {
-        AccessibleGridControlCell::acquire();
-    }
-
-    /** Releases the object (calls release() on base class). */
-    void SAL_CALL AccessibleGridControlTableCell::release() noexcept
-    {
-        AccessibleGridControlCell::release();
     }
 
     css::awt::Rectangle SAL_CALL AccessibleGridControlTableCell::getCharacterBounds( sal_Int32 nIndex )
