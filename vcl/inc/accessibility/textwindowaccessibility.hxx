@@ -111,21 +111,19 @@ private:
 
 typedef std::vector< ParagraphInfo > Paragraphs;
 
-typedef ::cppu::WeakComponentImplHelper<
+typedef cppu::ImplInheritanceHelper<
+    comphelper::OAccessibleComponentHelper,
     css::accessibility::XAccessible,
-    css::accessibility::XAccessibleContext,
-    css::accessibility::XAccessibleComponent,
     css::accessibility::XAccessibleEditableText,
     css::accessibility::XAccessibleMultiLineText,
-    css::accessibility::XAccessibleTextAttributes,
-    css::accessibility::XAccessibleEventBroadcaster > ParagraphBase;
+    css::accessibility::XAccessibleTextAttributes> ParagraphBase;
 
 // The Paragraph's number is the absolute position within the text engine (from
 // 0 to N - 1), whereas the Paragraph's index is the position within the text
 // view/accessible parent (from 0 to M - 1).  Paragraphs outside the currently
 // visible range have an index of -1.
-class Paragraph final:
-    private cppu::BaseMutex, public ParagraphBase, private ::comphelper::OCommonAccessibleText
+class Paragraph final
+    : public ParagraphBase, private ::comphelper::OCommonAccessibleText
 {
 public:
     Paragraph(::rtl::Reference< Document > xDocument,
@@ -145,6 +143,9 @@ public:
                      css::uno::Any const & rNewValue);
 
 private:
+    // OAccessibleComponentHelper
+    virtual css::awt::Rectangle implGetBounds() override;
+
     // OCommonAccessibleText
     virtual void implGetParagraphBoundary( const OUString& rText,
                                            css::i18n::Boundary& rBoundary,
@@ -180,18 +181,8 @@ private:
 
     virtual css::lang::Locale SAL_CALL getLocale() override;
 
-    virtual sal_Bool SAL_CALL containsPoint(css::awt::Point const & rPoint) override;
-
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
     getAccessibleAtPoint(css::awt::Point const & rPoint) override;
-
-    virtual css::awt::Rectangle SAL_CALL getBounds() override;
-
-    virtual css::awt::Point SAL_CALL getLocation() override;
-
-    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
-
-    virtual css::awt::Size SAL_CALL getSize() override;
 
     virtual void SAL_CALL grabFocus() override;
 
@@ -275,16 +266,6 @@ private:
 
     virtual ::sal_Int32 SAL_CALL getNumberOfLineWithCaret(  ) override;
 
-    virtual void SAL_CALL addAccessibleEventListener(
-        css::uno::Reference<
-        css::accessibility::XAccessibleEventListener > const & rListener) override;
-
-    virtual void SAL_CALL removeAccessibleEventListener(
-        css::uno::Reference<
-        css::accessibility::XAccessibleEventListener > const & rListener) override;
-
-    virtual void SAL_CALL disposing() override;
-
     virtual OUString implGetText() override;
 
     virtual css::lang::Locale implGetLocale() override;
@@ -297,9 +278,6 @@ private:
 
     ::rtl::Reference< Document > m_xDocument;
     Paragraphs::size_type m_nNumber;
-
-    /// client id in the AccessibleEventNotifier queue
-    sal_uInt32 m_nClientId;
 
     OUString m_aParagraphText;
 };

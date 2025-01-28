@@ -81,11 +81,10 @@ void WindowListenerGuard::endListening()
 }
 
 Paragraph::Paragraph(::rtl::Reference< Document > xDocument,
-                             Paragraphs::size_type nNumber):
-    ParagraphBase(m_aMutex),
+                             Paragraphs::size_type nNumber)
+    :ParagraphBase(),
     m_xDocument(std::move(xDocument)),
-    m_nNumber(nNumber),
-    m_nClientId(0)
+    m_nNumber(nNumber)
 {
     m_aParagraphText = m_xDocument->retrieveParagraphText(this);
 }
@@ -116,10 +115,7 @@ void Paragraph::notifyEvent(::sal_Int16 nEventId,
                                 css::uno::Any const & rOldValue,
                                 css::uno::Any const & rNewValue)
 {
-    if (m_nClientId)
-        comphelper::AccessibleEventNotifier::addEvent( m_nClientId, css::accessibility::AccessibleEventObject(
-                             getXWeak(),
-                             nEventId, rNewValue, rOldValue, -1) );
+    NotifyAccessibleEvent(nEventId, rOldValue, rNewValue);
 }
 
 // virtual
@@ -210,16 +206,6 @@ css::lang::Locale SAL_CALL Paragraph::getLocale()
 }
 
 // virtual
-sal_Bool SAL_CALL Paragraph::containsPoint(css::awt::Point const & rPoint)
-{
-    checkDisposed();
-    css::awt::Rectangle aRect(m_xDocument->retrieveParagraphBounds(this,
-                                                                     false));
-    return rPoint.X >= 0 && rPoint.X < aRect.Width
-        && rPoint.Y >= 0 && rPoint.Y < aRect.Height;
-}
-
-// virtual
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
 Paragraph::getAccessibleAtPoint(css::awt::Point const &)
 {
@@ -227,38 +213,9 @@ Paragraph::getAccessibleAtPoint(css::awt::Point const &)
     return nullptr;
 }
 
-// virtual
-css::awt::Rectangle SAL_CALL Paragraph::getBounds()
+css::awt::Rectangle Paragraph::implGetBounds()
 {
-    checkDisposed();
     return m_xDocument->retrieveParagraphBounds(this, false);
-}
-
-// virtual
-css::awt::Point SAL_CALL Paragraph::getLocation()
-{
-    checkDisposed();
-    css::awt::Rectangle aRect(m_xDocument->retrieveParagraphBounds(this,
-                                                                     false));
-    return css::awt::Point(aRect.X, aRect.Y);
-}
-
-// virtual
-css::awt::Point SAL_CALL Paragraph::getLocationOnScreen()
-{
-    checkDisposed();
-    css::awt::Rectangle aRect(m_xDocument->retrieveParagraphBounds(this,
-                                                                     true));
-    return css::awt::Point(aRect.X, aRect.Y);
-}
-
-// virtual
-css::awt::Size SAL_CALL Paragraph::getSize()
-{
-    checkDisposed();
-    css::awt::Rectangle aRect(m_xDocument->retrieveParagraphBounds(this,
-                                                                     false));
-    return css::awt::Size(aRect.Width, aRect.Height);
 }
 
 // virtual
@@ -567,68 +524,6 @@ css::accessibility::TextSegment SAL_CALL Paragraph::getTextAtLineWithCaret(  )
 {
     checkDisposed();
     return m_xDocument->retrieveParagraphLineWithCursor(this);
-}
-
-
-// virtual
-void SAL_CALL Paragraph::addAccessibleEventListener(
-    css::uno::Reference<
-    css::accessibility::XAccessibleEventListener > const & rListener)
-{
-    if (!rListener.is())
-        return;
-
-    ::osl::ClearableMutexGuard aGuard(rBHelper.rMutex);
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        aGuard.clear();
-        rListener->disposing(css::lang::EventObject(
-                                getXWeak()));
-    }
-    else
-    {
-        if (!m_nClientId)
-            m_nClientId = comphelper::AccessibleEventNotifier::registerClient( );
-        comphelper::AccessibleEventNotifier::addEventListener( m_nClientId, rListener );
-    }
-}
-
-// virtual
-void SAL_CALL Paragraph::removeAccessibleEventListener(
-    css::uno::Reference<
-    css::accessibility::XAccessibleEventListener > const & rListener)
-{
-    comphelper::AccessibleEventNotifier::TClientId nId = 0;
-    {
-        osl::MutexGuard aGuard(rBHelper.rMutex);
-        if (rListener.is() && m_nClientId != 0
-            && comphelper::AccessibleEventNotifier::removeEventListener( m_nClientId, rListener ) == 0)
-        {
-            nId = m_nClientId;
-            m_nClientId = 0;
-        }
-    }
-    if (nId != 0)
-    {
-        // no listeners anymore
-        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-        // and at least to us not firing any events anymore, in case somebody calls
-        // NotifyAccessibleEvent, again
-        comphelper::AccessibleEventNotifier::revokeClient(nId);
-    }
-}
-
-// virtual
-void SAL_CALL Paragraph::disposing()
-{
-    comphelper::AccessibleEventNotifier::TClientId nId = 0;
-    {
-        osl::MutexGuard aGuard(rBHelper.rMutex);
-        nId = m_nClientId;
-        m_nClientId = 0;
-    }
-    if (nId != 0)
-        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing(nId, *this);
 }
 
 // virtual
