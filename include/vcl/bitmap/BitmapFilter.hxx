@@ -42,6 +42,28 @@ void generateStripRanges(
 
 } // end vcl::bitmap
 
+/** BitmapFilter transforms (or "filters") a given bitmap based on a provided filter.
+    It is based on the command pattern, which allows for additional filters without
+    needing to modify existing client code.
+
+    The BitmapFilter class is the base class, to implement a new filter you derive
+    your new filter from this and implement the filtering functionality in the execute()
+    function.
+
+    The execute function takes the bitmapex that you want to apply the filter to, and
+    returns a brand new, filtered, BitmapEx instance.
+
+    The actual filters parameterisation is expected to be done in the constructor. So, to
+    take a simple example, if you want to make every fourth pixel a different color you
+    would accept a BitmapColor parameter that specifies the color, and stores this as a
+    member variable that the Bitmap4thColorReplaceFilter would then use in it's execute()
+    statement.
+
+    The BitmapFilter class has a static convenience Filter function that takes a BitmapEx
+    and the desired filter, which filters the BitmapEx parameter, then overwrite this BitmapEx
+    instance. If the filter fails (BitmapEx is empty) then it returns false.
+*/
+
 class VCL_DLLPUBLIC BitmapFilter
 {
 public:
