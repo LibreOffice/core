@@ -46,6 +46,7 @@
 #include <inspectorproperties.hrc>
 #include <strings.hrc>
 #include <rdfhelper.hxx>
+#include <unotxdoc.hxx>
 
 namespace sw::sidebar
 {
@@ -439,8 +440,8 @@ static void MetadataToTreeNode(const css::uno::Reference<css::uno::XInterface>& 
                                                                              uno::UNO_QUERY);
         const uno::Reference<rdf::XRepository>& xRepo = xDocumentMetadataAccess->getRDFRepository();
         const css::uno::Reference<css::rdf::XResource> xSubject(rSource, uno::UNO_QUERY);
-        std::map<OUString, OUString> xStatements
-            = SwRDFHelper::getStatements(pDocSh->GetBaseModel(), xRepo->getGraphNames(), xSubject);
+        std::map<OUString, OUString> xStatements = SwRDFHelper::getStatements(
+            pDocSh->GetXTextDocument(), xRepo->getGraphNames(), xSubject);
         for (const auto& pair : xStatements)
             aCurNode.children.push_back(SimplePropToTreeNode(pair.first, uno::Any(pair.second)));
     }

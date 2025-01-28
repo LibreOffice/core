@@ -53,6 +53,7 @@ class SwDocShell;
 class SwDrawModel;
 class SwViewShell;
 class SwDocStyleSheetPool;
+class SwXTextDocument;
 namespace svt
 {
 class EmbeddedObjectRef;
@@ -120,6 +121,11 @@ class SW_DLLPUBLIC SwDocShell
     /// Make DocInfo known to the Doc.
     SAL_DLLPRIVATE virtual std::shared_ptr<SfxDocumentInfoDialog> CreateDocumentInfoDialog(weld::Window* pParent,
                                                                                            const SfxItemSet &rSet) override;
+
+public:
+    rtl::Reference<SwXTextDocument> GetXTextDocument() const;
+private:
+
     /// OLE-stuff
     SAL_DLLPRIVATE virtual void Draw(OutputDevice*, const JobSetup&, sal_uInt16 nAspect, bool bOutputToWindow) override;
 

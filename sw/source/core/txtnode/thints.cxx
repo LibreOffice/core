@@ -82,6 +82,7 @@
 
 #include <rdfhelper.hxx>
 #include <hints.hxx>
+#include <unotxdoc.hxx>
 
 #ifdef DBG_UTIL
 #define CHECK           Check(true);
@@ -1287,7 +1288,7 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
             {
                 static constexpr OUStringLiteral metaNS(u"urn:bails");
                 const css::uno::Reference<css::rdf::XResource> xSubject = pMeta->MakeUnoObject();
-                uno::Reference<frame::XModel> xModel = pDocSh->GetBaseModel();
+                rtl::Reference<SwXTextDocument> xModel = pDocSh->GetXTextDocument();
                 SwRDFHelper::clearStatements(xModel, metaNS, xSubject);
             }
         }

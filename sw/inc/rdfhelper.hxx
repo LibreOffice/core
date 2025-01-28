@@ -12,6 +12,7 @@
 
 #include <map>
 
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
 #include "swdllapi.h"
@@ -20,7 +21,7 @@
 #include <com/sun/star/uno/Sequence.h>
 
 class SwTextNode;
-
+class SwXTextDocument;
 namespace com::sun::star {
     namespace frame {
         class XModel;
@@ -38,49 +39,42 @@ class SW_DLLPUBLIC SwRDFHelper
 public:
     /// Gets all graph-names in RDF of a given type.
     static css::uno::Sequence<css::uno::Reference<css::rdf::XURI>>
-    getGraphNames(const css::uno::Reference<css::rdf::XDocumentMetadataAccess>& xDocumentMetadataAccess,
+    getGraphNames(const rtl::Reference<SwXTextDocument>& xModel,
                   const css::uno::Reference<css::rdf::XURI>& xType);
 
     /// Gets all graph-names in RDF of a given type.
     static css::uno::Sequence<css::uno::Reference<css::rdf::XURI>>
-    getGraphNames(const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rType);
+    getGraphNames(const rtl::Reference<SwXTextDocument>& xModel, const OUString& rType);
 
     /// Gets all (XResource, key, value) statements in RDF graphs given the graph-names.
     static std::map<OUString, OUString>
-    getStatements(const css::uno::Reference<css::frame::XModel>& xModel,
+    getStatements(const rtl::Reference<SwXTextDocument>& xModel,
                   const css::uno::Sequence<css::uno::Reference<css::rdf::XURI>>& rGraphNames,
                   const css::uno::Reference<css::rdf::XResource>& xSubject);
 
     /// Gets all (XResource, key, value) statements in RDF graphs of type rType.
     static std::map<OUString, OUString>
-    getStatements(const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rType,
+    getStatements(const rtl::Reference<SwXTextDocument>& xModel, const OUString& rType,
                   const css::uno::Reference<css::rdf::XResource>& xSubject);
 
     /// Add an (XResource, key, value) statement in the graph of type rType -- or if it does not exist, create a graph at rPath first.
-    static void addStatement(const css::uno::Reference<css::frame::XModel>& xModel,
+    static void addStatement(const rtl::Reference<SwXTextDocument>& xModel,
                              const OUString& rType, const OUString& rPath,
                              const css::uno::Reference<css::rdf::XResource>& xSubject,
                              const OUString& rKey, const OUString& rValue);
 
     /// Check if a graph of type rType exists.
-    static bool hasMetadataGraph(const css::uno::Reference<css::frame::XModel>& xModel,
+    static bool hasMetadataGraph(const rtl::Reference<SwXTextDocument>& xModel,
                                  const OUString& rType);
 
     /// Remove an (XResource, key, value) statement in the graph of type rType, if it exists.
-    static void removeStatement(const css::uno::Reference<css::frame::XModel>& xModel,
+    static void removeStatement(const rtl::Reference<SwXTextDocument>& xModel,
                                 const OUString& rType,
                                 const css::uno::Reference<css::rdf::XResource>& xSubject,
                                 const OUString& rKey, const OUString& rValue);
 
-    /// Clone all statements in the graph of type rType, if any exists, from one subject to another.
-    static void cloneStatements(const css::uno::Reference<css::frame::XModel>& xSrcModel,
-                                const css::uno::Reference<css::frame::XModel>& xDstModel,
-                                const OUString& rType,
-                                const css::uno::Reference<css::rdf::XResource>& xSrcSubject,
-                                const css::uno::Reference<css::rdf::XResource>& xDstSubject);
-
     /// Remove all statements in the graph of type rType, if any exists.
-    static void clearStatements(const css::uno::Reference<css::frame::XModel>& xModel,
+    static void clearStatements(const rtl::Reference<SwXTextDocument>& xModel,
                                 const OUString& rType,
                                 const css::uno::Reference<css::rdf::XResource>& xSubject);
 
