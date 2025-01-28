@@ -551,33 +551,25 @@ sal_Int64 VCLXAccessibleComponent::getAccessibleIndexInParent(  )
     OExternalLockGuard aGuard( this );
 
     sal_Int64 nIndex = -1;
-
-    if ( GetWindow() )
+    //  Iterate over all the parent's children and search for this object.
+    // this should be compatible with the code in SVX
+    uno::Reference< accessibility::XAccessible > xParentAcc = getAccessibleParent();
+    if ( xParentAcc.is() )
     {
-        vcl::Window* pParent = GetWindow()->GetAccessibleParentWindow();
-        if ( pParent )
+        uno::Reference< accessibility::XAccessibleContext > xParentContext ( xParentAcc->getAccessibleContext() );
+        if ( xParentContext.is() )
         {
-            //  Iterate over all the parent's children and search for this object.
-            // this should be compatible with the code in SVX
-            uno::Reference< accessibility::XAccessible > xParentAcc( pParent->GetAccessible() );
-            if ( xParentAcc.is() )
+            sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
+            for ( sal_Int64 i = 0; i < nChildCount; i++ )
             {
-                uno::Reference< accessibility::XAccessibleContext > xParentContext ( xParentAcc->getAccessibleContext() );
-                if ( xParentContext.is() )
+                uno::Reference< accessibility::XAccessible > xChild( xParentContext->getAccessibleChild(i) );
+                if ( xChild.is() )
                 {
-                    sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
-                    for ( sal_Int64 i = 0; i < nChildCount; i++ )
+                    uno::Reference< accessibility::XAccessibleContext > xChildContext = xChild->getAccessibleContext();
+                    if ( xChildContext == static_cast<accessibility::XAccessibleContext*>(this) )
                     {
-                        uno::Reference< accessibility::XAccessible > xChild( xParentContext->getAccessibleChild(i) );
-                        if ( xChild.is() )
-                        {
-                            uno::Reference< accessibility::XAccessibleContext > xChildContext = xChild->getAccessibleContext();
-                            if ( xChildContext == static_cast<accessibility::XAccessibleContext*>(this) )
-                            {
-                                nIndex = i;
-                                break;
-                            }
-                        }
+                        nIndex = i;
+                        break;
                     }
                 }
             }
