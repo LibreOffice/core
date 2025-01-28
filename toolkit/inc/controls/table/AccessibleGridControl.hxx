@@ -32,19 +32,13 @@ namespace accessibility {
 
 
 /** This class represents the complete accessible Grid Control object. */
-    class AccessibleGridControl final
-        : public cppu::ImplInheritanceHelper<AccessibleGridControlBase,
-                                             css::accessibility::XAccessible>
+    class AccessibleGridControl final : public AccessibleGridControlBase
 {
     virtual ~AccessibleGridControl() override = default;
 
     /** Cleans up members. */
     using AccessibleGridControlBase::disposing;
     virtual void SAL_CALL disposing() override;
-
-    // XAccessible
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-        SAL_CALL getAccessibleContext() override;
 
     // XAccessibleContext -----------------------------------------------------
 

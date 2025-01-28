@@ -47,7 +47,7 @@ namespace accessibility {
     implements basic functionality. */
 class AccessibleGridControlBase
     : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::lang::XServiceInfo>
+                                         css::accessibility::XAccessible, css::lang::XServiceInfo>
 {
 public:
     /** Constructor.
@@ -64,6 +64,11 @@ protected:
     virtual void SAL_CALL disposing() override;
 
 public:
+    // XAccessible
+    /** @return  The XAccessibleContext interface of this object. */
+    virtual css::uno::Reference<css::accessibility::XAccessibleContext> SAL_CALL
+    getAccessibleContext() override;
+
     // XAccessibleContext
 
     /** @return  A reference to the parent accessible object. */
@@ -184,42 +189,6 @@ protected:
     svt::table::TableControl& m_aTable;
     /** The type of this object (for names, descriptions, state sets, ...). */
     AccessibleTableControlObjType m_eObjType;
-};
-
-
-// a version of AccessibleGridControlBase which implements not only the XAccessibleContext,
-// but also the XAccessible
-
-typedef cppu::ImplInheritanceHelper <AccessibleGridControlBase, css::accessibility::XAccessible>
-                                GridControlAccessibleElement_Base;
-
-class GridControlAccessibleElement : public GridControlAccessibleElement_Base
-{
-protected:
-    /** Constructor sets specified name and description.
-
-        @param rxParent    XAccessible interface of the parent object.
-        @param rTable      The Table control.
-        @param eObjType    Type of table control
-    */
-    GridControlAccessibleElement(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        svt::table::TableControl& rTable,
-        AccessibleTableControlObjType  eObjType );
-
-protected:
-    virtual ~GridControlAccessibleElement() override;
-
-protected:
-    // XAccessible
-
-    /** @return  The XAccessibleContext interface of this object. */
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL
-    getAccessibleContext() override;
-
-private:
-    GridControlAccessibleElement( const GridControlAccessibleElement& ) = delete;
-    GridControlAccessibleElement& operator=( const GridControlAccessibleElement& ) = delete;
 };
 
 // inlines

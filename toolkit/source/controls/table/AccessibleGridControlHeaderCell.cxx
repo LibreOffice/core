@@ -33,7 +33,7 @@ AccessibleGridControlHeaderCell::AccessibleGridControlHeaderCell(sal_Int32 _nCol
                                   const Reference< XAccessible >& rxParent,
                                   svt::table::TableControl& rTable,
                                   AccessibleTableControlObjType  eObjType)
-    : ImplInheritanceHelper(rxParent, rTable,
+    : AccessibleGridControlCell(rxParent, rTable,
                             (eObjType == AccessibleTableControlObjType::ROWHEADERCELL) ? _nColumnRowId : 0,
                             (eObjType == AccessibleTableControlObjType::ROWHEADERCELL) ? 0 : _nColumnRowId,
                             eObjType)
@@ -84,14 +84,6 @@ Reference<XAccessible > SAL_CALL AccessibleGridControlHeaderCell::getAccessibleC
 {
     throw IndexOutOfBoundsException();
 }
-
-        /** @return  The XAccessibleContext interface of this object. */
-    Reference< css::accessibility::XAccessibleContext > SAL_CALL AccessibleGridControlHeaderCell::getAccessibleContext()
-    {
-        ensureAlive();
-        return this;
-    }
-
 
 /** Grabs the focus to the column header. */
 void SAL_CALL AccessibleGridControlHeaderCell::grabFocus()

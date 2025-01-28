@@ -64,6 +64,16 @@ void SAL_CALL AccessibleGridControlBase::disposing()
     //m_aTable = NULL;
 }
 
+// css::accessibility::XAccessible
+
+css::uno::Reference<css::accessibility::XAccessibleContext> SAL_CALL AccessibleGridControlBase::getAccessibleContext()
+{
+    SolarMutexGuard g;
+
+    ensureAlive();
+    return this;
+}
+
 // css::accessibility::XAccessibleContext
 
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleParent()
@@ -268,29 +278,6 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  )
         nColor = m_aTable.GetBackground().GetColor();
     return sal_Int32(nColor);
 }
-
-
-GridControlAccessibleElement::GridControlAccessibleElement( const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-                        svt::table::TableControl& rTable,
-                        AccessibleTableControlObjType  eObjType )
-    : GridControlAccessibleElement_Base(rxParent, rTable, eObjType)
-{
-}
-
-// css::accessibility::XAccessible
-
-css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL GridControlAccessibleElement::getAccessibleContext()
-{
-    SolarMutexGuard g;
-
-    ensureAlive();
-    return this;
-}
-
-GridControlAccessibleElement::~GridControlAccessibleElement( )
-{
-}
-
 
 } // namespace accessibility
 

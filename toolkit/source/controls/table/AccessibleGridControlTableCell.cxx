@@ -165,18 +165,6 @@ namespace accessibility
         return nStateSet;
     }
 
-
-    // css::accessibility::XAccessible
-
-    /** @return  The css::accessibility::XAccessibleContext interface of this object. */
-    css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL AccessibleGridControlTableCell::getAccessibleContext()
-    {
-        SolarMutexGuard g;
-
-        ensureAlive();
-        return this;
-    }
-
     // css::accessibility::XAccessibleContext
 
     sal_Int64 SAL_CALL AccessibleGridControlTableCell::getAccessibleIndexInParent()

@@ -40,7 +40,7 @@ using namespace ::vcl;
 AccessibleGridControl::AccessibleGridControl(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
             svt::table::TableControl& _rTable)
-    : ImplInheritanceHelper(_rxParent, _rTable, AccessibleTableControlObjType::GRIDCONTROL)
+    : AccessibleGridControlBase(_rxParent, _rTable, AccessibleTableControlObjType::GRIDCONTROL)
 {
 }
 
@@ -70,14 +70,6 @@ void SAL_CALL AccessibleGridControl::disposing()
 sal_Int64 AccessibleGridControl::implGetAccessibleChildCount()
 {
     return m_aTable.GetAccessibleControlCount();
-}
-
-css::uno::Reference<css::accessibility::XAccessibleContext>
-    SAL_CALL AccessibleGridControl::getAccessibleContext()
-{
-    SolarMutexGuard aSolarGuard;
-    ensureAlive();
-    return this;
 }
 
 // css::accessibility::XAccessibleContext ---------------------------------------------------------

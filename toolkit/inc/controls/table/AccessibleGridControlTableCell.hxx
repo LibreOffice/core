@@ -63,9 +63,7 @@ namespace accessibility
 
     // implementation of a table cell of GridControl
     class AccessibleGridControlTableCell final
-        : public cppu::ImplInheritanceHelper<AccessibleGridControlCell,
-                                             css::accessibility::XAccessibleText,
-                                             css::accessibility::XAccessible>,
+        : public cppu::ImplInheritanceHelper<AccessibleGridControlCell, css::accessibility::XAccessibleText>,
           public ::comphelper::OCommonAccessibleText
     {
     private:
@@ -103,12 +101,6 @@ namespace accessibility
         /** Return a bitset of states of the current object.
         */
         sal_Int64 implCreateStateSet() override;
-
-        // XAccessible ------------------------------------------------------------
-
-        /** @return  The XAccessibleContext interface of this object. */
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL
-        getAccessibleContext() override;
 
         // XAccessibleText
         virtual sal_Int32 SAL_CALL getCaretPosition() override;
