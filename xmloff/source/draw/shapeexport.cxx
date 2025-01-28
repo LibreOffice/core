@@ -2498,12 +2498,12 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
         }
 
         {
+            if (sOutMimeType.isEmpty())
+            {
+                GetExport().GetGraphicMimeTypeFromStream(xGraphic, sOutMimeType);
+            }
             if (GetExport().getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
             {
-                if (sOutMimeType.isEmpty())
-                {
-                    GetExport().GetGraphicMimeTypeFromStream(xGraphic, sOutMimeType);
-                }
                 if (!sOutMimeType.isEmpty())
                 {   // ODF 1.3 OFFICE-3943
                     GetExport().AddAttribute(
@@ -2512,6 +2512,15 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                             : XML_NAMESPACE_LO_EXT,
                         u"mime-type"_ustr, sOutMimeType);
                 }
+            }
+
+            if (sOutMimeType == "application/pdf")
+            {
+                Graphic aGraphic(xGraphic);
+                sal_Int32 nPage = aGraphic.getPageNumber();
+                if (nPage >= 0)
+                    GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_PAGE_NUMBER,
+                                             OUString::number(nPage));
             }
 
             SvXMLElementExport aElement(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, true, true);

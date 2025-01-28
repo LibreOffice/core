@@ -2354,10 +2354,10 @@ bool SdXMLCaptionShapeContext::processAttribute( const sax_fastparser::FastAttri
 
 
 SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
-    SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXMLShapeContext( rImport, xAttrList, rShapes, false/*bTemporaryShape*/ )
+    SvXMLImport& rImport, const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+    uno::Reference<drawing::XShapes> const& rShapes)
+    : SdXMLShapeContext(rImport, xAttrList, rShapes, false /*bTemporaryShape*/)
+    , mnPage(-1)
 {
 }
 
@@ -2372,6 +2372,9 @@ bool SdXMLGraphicObjectShapeContext::processAttribute( const sax_fastparser::Fas
     case XML_ELEMENT(DRAW, XML_MIME_TYPE):
     case XML_ELEMENT(LO_EXT, XML_MIME_TYPE):
         msMimeType = aIter.toString();
+        break;
+    case XML_ELEMENT(LO_EXT, XML_PAGE_NUMBER):
+        mnPage = aIter.toInt32();
         break;
     default:
         return SdXMLShapeContext::processAttribute(aIter);
@@ -2425,7 +2428,8 @@ void SdXMLGraphicObjectShapeContext::startFastElement (sal_Int32 nElement,
         {
             if( !maURL.isEmpty() )
             {
-                uno::Reference<graphic::XGraphic> xGraphic = GetImport().loadGraphicByURL(maURL);
+                uno::Reference<graphic::XGraphic> xGraphic
+                    = GetImport().loadGraphicByURL(maURL, mnPage);
                 if (xGraphic.is())
                 {
                     xPropset->setPropertyValue(u"Graphic"_ustr, uno::Any(xGraphic));

@@ -23,8 +23,10 @@
 #include <com/sun/star/text/GraphicCrop.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <osl/process.h>
 #include <unotools/tempfile.hxx>
 #include <unotools/saveopt.hxx>
 #include <svx/unopage.hxx>
@@ -1082,6 +1084,49 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf161483_CircleStartEndAngle)
         xShapeProps->getPropertyValue(u"CircleEndAngle"_ustr) >>= nActualEndAngle;
         CPPUNIT_ASSERT_EQUAL(nExpectedEndAngle, nActualEndAngle);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testPdfExportAsOdg)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return;
+    }
+
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+    {
+        bResetEnvVar = true;
+        osl_setEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData, OUString("1").pData);
+    }
+    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
+        if (bResetEnvVar)
+            osl_clearEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData);
+    });
+
+    loadFromFile(u"two-pages.pdf");
+    // save and reload as odg
+    saveAndReload("draw8");
+
+    // Check that the graphic in the second page of the document is the second page of the pdf
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDrawPagesSupplier.is());
+    uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(1), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xImage.is());
+    uno::Reference<beans::XPropertySet> xShapeProps(xImage, uno::UNO_QUERY);
+    uno::Reference<graphic::XGraphic> xGraphic;
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue("Graphic") >>= xGraphic);
+
+    Graphic aGraphic(xGraphic);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : -1
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aGraphic.getPageNumber());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

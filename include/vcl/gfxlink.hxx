@@ -103,7 +103,7 @@ public:
 
     bool                IsNative() const;
 
-    bool                LoadNative( Graphic& rGraphic ) const;
+    bool LoadNative(Graphic& rGraphic, sal_Int32 nPageNum = -1) const;
 
     bool                ExportNative( SvStream& rOStream ) const;
 

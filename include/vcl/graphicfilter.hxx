@@ -272,10 +272,11 @@ public:
                                       sal_uInt16 nFormat,
                                       sal_uInt16 * pDeterminedFormat);
 
-    ErrCode             ImportGraphic( Graphic& rGraphic, std::u16string_view rPath,
-                                   SvStream& rStream,
-                                   sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
-                                   sal_uInt16 * pDeterminedFormat = nullptr, GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE );
+    ErrCode ImportGraphic(Graphic& rGraphic, std::u16string_view rPath, SvStream& rStream,
+                          sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
+                          sal_uInt16* pDeterminedFormat = nullptr,
+                          GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
+                          sal_Int32 nPageNum = -1);
 
     /// Imports multiple graphics.
     ///
@@ -289,7 +290,8 @@ public:
     void MakeGraphicsAvailableThreaded(std::vector< Graphic* >& rGraphics);
 
     // Setting sizeLimit limits how much will be read from the stream.
-    Graphic ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 sizeLimit = 0, const Size* pSizeHint = nullptr);
+    Graphic ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 sizeLimit = 0,
+                                  const Size* pSizeHint = nullptr, sal_Int32 nPage = -1);
 
     const ErrCode&          GetLastError() const { return *mxErrorEx;}
     SAL_DLLPRIVATE void     ResetLastError();
@@ -317,7 +319,8 @@ public:
     SAL_DLLPRIVATE static ErrCode readWMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
     SAL_DLLPRIVATE static ErrCode readEMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
 
-    SAL_DLLPRIVATE static ErrCode readPDF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
+    SAL_DLLPRIVATE static ErrCode readPDF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType,
+                           sal_Int32 nPageIndex = -1);
     SAL_DLLPRIVATE static ErrCode readTIFF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
     SAL_DLLPRIVATE static ErrCode readWithTypeSerializer(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, std::u16string_view aFilterName);
     SAL_DLLPRIVATE static ErrCode readBMP(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
