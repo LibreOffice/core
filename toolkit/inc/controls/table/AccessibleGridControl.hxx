@@ -162,8 +162,6 @@ public:
 
     void DisposeAccessImpl();
 
-    bool isAlive() const { return m_xContext.is() && m_xContext->isAlive(); }
-
     void commitCellEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
                          const css::uno::Any& rOldValue)
     {
