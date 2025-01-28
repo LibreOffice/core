@@ -665,6 +665,12 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
         case RTFKeyword::TRPADDR:
         case RTFKeyword::TRPADDT:
         {
+            // tdf#162198 prevent adding attributes to rows/cells from style without
+            // being repeated at the cell/row level
+            // this might be required for other attributes, too
+            if (m_aStates.top().getDestination() == Destination::STYLEENTRY)
+                return true;
+
             RTFSprms aAttributes;
             aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, new RTFValue(nParam));
             switch (nKeyword)
