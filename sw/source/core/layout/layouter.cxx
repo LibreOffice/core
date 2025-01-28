@@ -34,11 +34,11 @@
 
 class SwLooping
 {
+public:
     sal_uInt16 mnMinPage;
     sal_uInt16 mnMaxPage;
     sal_uInt16 mnCount;
     sal_uInt16 mnLoopControlStage;
-public:
     explicit SwLooping( SwPageFrame const * pPage );
     void Control( SwPageFrame* pPage );
     void Drastic( SwFrame* pFrame );
@@ -251,6 +251,14 @@ void SwLayouter::LoopingLouieLight( const SwDoc& rDoc, const SwTextFrame& rFrame
     }
 }
 
+// this is just for tests
+static int g_LastLoopControlStage;
+
+int SwLayouter::GetLastLoopControlStage()
+{
+    return g_LastLoopControlStage;
+}
+
 bool SwLayouter::StartLooping( SwPageFrame const * pPage )
 {
     if( mpLooping )
@@ -261,6 +269,10 @@ bool SwLayouter::StartLooping( SwPageFrame const * pPage )
 
 void SwLayouter::EndLoopControl()
 {
+    if (mpLooping)
+    {
+        g_LastLoopControlStage = mpLooping->mnLoopControlStage;
+    }
     mpLooping.reset();
 }
 

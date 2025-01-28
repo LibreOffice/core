@@ -3065,6 +3065,30 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
             }
         }
 
+        // A table frame may have grown beyond its parent frame after
+        // RemoveFollowFlowLine(), which is a problem in case the parent is a
+        // section: prevent shrinking the section smaller than the contained
+        // table.
+        if (IsTabFrame()
+            && static_cast<SwTabFrame*>(this)->IsRebuildLastLine()
+            && pToShrink == GetUpper()
+            && pToShrink->IsSctFrame()) // not required for page body, unsure about others
+        {
+            SwTwips nUpperMin{0};
+            for (SwFrame const* pFrame = pToShrink->GetLower();
+                 pFrame != GetNext(); pFrame = pFrame->GetNext())
+            {
+                nUpperMin += aRectFnSet.GetHeight(pFrame->getFrameArea());
+            }
+            if (aRectFnSet.GetHeight(pToShrink->getFramePrintArea()) - nShrink < nUpperMin)
+            {
+                nShrink = aRectFnSet.GetHeight(pToShrink->getFramePrintArea()) - nUpperMin;
+                if (nShrink <= 0)
+                {
+                    return 0; // nothing to do
+                }
+            }
+        }
         nReal = pToShrink ? pToShrink->Shrink( nShrink, bTst, bInfo ) : 0;
         if( ( SwNeighbourAdjust::GrowAdjust == nAdjust || SwNeighbourAdjust::AdjustGrow == nAdjust )
             && nReal < nShrink )
