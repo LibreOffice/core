@@ -39,7 +39,7 @@ class SW_DLLPUBLIC SwRDFHelper
 public:
     /// Gets all graph-names in RDF of a given type.
     static css::uno::Sequence<css::uno::Reference<css::rdf::XURI>>
-    getGraphNames(const css::uno::Reference<css::rdf::XDocumentMetadataAccess>& xDocumentMetadataAccess,
+    getGraphNames(const rtl::Reference<SwXTextDocument>& xModel,
                   const css::uno::Reference<css::rdf::XURI>& xType);
 
     /// Gets all graph-names in RDF of a given type.
