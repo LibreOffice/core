@@ -55,25 +55,14 @@ namespace accessibility
     AccessibleListBoxEntry::AccessibleListBoxEntry( SvTreeListBox& _rListBox,
                                                     SvTreeListEntry& rEntry,
                                                     AccessibleListBox & rListBox)
-        : AccessibleListBoxEntry_BASE( m_aMutex )
+        : AccessibleListBoxEntry_BASE()
 
         , m_pTreeListBox( &_rListBox )
         , m_pSvLBoxEntry(&rEntry)
-        , m_nClientId( 0 )
         , m_wListBox(&rListBox)
     {
         m_pTreeListBox->AddEventListener( LINK( this, AccessibleListBoxEntry, WindowEventListener ) );
         _rListBox.FillEntryPath( m_pSvLBoxEntry, m_aEntryPath );
-    }
-
-    AccessibleListBoxEntry::~AccessibleListBoxEntry()
-    {
-        if ( IsAlive_Impl() )
-        {
-            // increment ref count to prevent double call of Dtor
-            osl_atomic_increment( &m_refCount );
-            dispose();
-        }
     }
 
     IMPL_LINK( AccessibleListBoxEntry, WindowEventListener, VclWindowEvent&, rEvent, void )
@@ -114,18 +103,6 @@ namespace accessibility
         }
     }
 
-    void AccessibleListBoxEntry::NotifyAccessibleEvent( sal_Int16 _nEventId,
-                                                   const css::uno::Any& _aOldValue,
-                                                   const css::uno::Any& _aNewValue )
-    {
-        Reference< uno::XInterface > xSource( *this );
-        AccessibleEventObject aEventObj( xSource, _nEventId, _aNewValue, _aOldValue, -1 );
-
-        if (m_nClientId)
-            comphelper::AccessibleEventNotifier::addEvent( m_nClientId, aEventObj );
-    }
-
-
     tools::Rectangle AccessibleListBoxEntry::GetBoundingBox_Impl() const
     {
         tools::Rectangle aRect;
@@ -141,21 +118,6 @@ namespace accessibility
                 aTopLeft -= m_pTreeListBox->GetBoundingRect( pParent ).TopLeft();
                 aRect = tools::Rectangle( aTopLeft, aRect.GetSize() );
             }
-        }
-
-        return aRect;
-    }
-
-    tools::Rectangle AccessibleListBoxEntry::GetBoundingBoxOnScreen_Impl() const
-    {
-        tools::Rectangle aRect;
-        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
-        if ( pEntry )
-        {
-            aRect = m_pTreeListBox->GetBoundingRect( pEntry );
-            Point aTopLeft = aRect.TopLeft();
-            aTopLeft += Point(m_pTreeListBox->GetWindowExtentsAbsolute().TopLeft());
-            aRect = tools::Rectangle( aTopLeft, aRect.GetSize() );
         }
 
         return aRect;
@@ -193,15 +155,6 @@ namespace accessibility
         return GetBoundingBox_Impl();
     }
 
-    tools::Rectangle AccessibleListBoxEntry::GetBoundingBoxOnScreen()
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        EnsureIsAlive();
-        return GetBoundingBoxOnScreen_Impl();
-    }
-
     void AccessibleListBoxEntry::CheckActionIndex(sal_Int32 nIndex)
     {
         if (nIndex < 0 || nIndex >= getAccessibleActionCount())
@@ -232,6 +185,11 @@ namespace accessibility
         nEndIndex = 0;
     }
 
+    css::awt::Rectangle AccessibleListBoxEntry::implGetBounds()
+    {
+        return vcl::unohelper::ConvertToAWTRect(GetBoundingBox_Impl());
+    }
+
     // XTypeProvider
     Sequence< sal_Int8 > AccessibleListBoxEntry::getImplementationId()
     {
@@ -248,13 +206,7 @@ namespace accessibility
 
         Reference< XAccessible > xKeepAlive( this );
 
-        // Send a disposing to all listeners.
-        if ( m_nClientId )
-        {
-            ::comphelper::AccessibleEventNotifier::TClientId nId = m_nClientId;
-            m_nClientId =  0;
-            ::comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nId, *this );
-        }
+        OAccessibleComponentHelper::disposing();
 
         // clean up
         m_wListBox.clear();
@@ -520,12 +472,6 @@ namespace accessibility
 
     // XAccessibleComponent
 
-    sal_Bool SAL_CALL AccessibleListBoxEntry::containsPoint( const awt::Point& rPoint )
-    {
-        return tools::Rectangle(Point(), GetBoundingBox().GetSize())
-            .Contains(vcl::unohelper::ConvertToVCLPoint(rPoint));
-    }
-
     Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleAtPoint( const awt::Point& _aPoint )
     {
         SolarMutexGuard aSolarGuard;
@@ -545,26 +491,6 @@ namespace accessibility
         if (aRect.Contains(vcl::unohelper::ConvertToVCLPoint(_aPoint)))
             xAcc = pAccEntry.get();
         return xAcc;
-    }
-
-    awt::Rectangle SAL_CALL AccessibleListBoxEntry::getBounds(  )
-    {
-        return vcl::unohelper::ConvertToAWTRect(GetBoundingBox());
-    }
-
-    awt::Point SAL_CALL AccessibleListBoxEntry::getLocation(  )
-    {
-        return vcl::unohelper::ConvertToAWTPoint(GetBoundingBox().TopLeft());
-    }
-
-    awt::Point SAL_CALL AccessibleListBoxEntry::getLocationOnScreen(  )
-    {
-        return vcl::unohelper::ConvertToAWTPoint(GetBoundingBoxOnScreen().TopLeft());
-    }
-
-    awt::Size SAL_CALL AccessibleListBoxEntry::getSize(  )
-    {
-        return vcl::unohelper::ConvertToAWTSize(GetBoundingBox().GetSize());
     }
 
     void SAL_CALL AccessibleListBoxEntry::grabFocus(  )
@@ -680,40 +606,6 @@ namespace accessibility
     sal_Bool SAL_CALL AccessibleListBoxEntry::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
     {
         return false;
-    }
-
-    // XAccessibleEventBroadcaster
-
-    void SAL_CALL AccessibleListBoxEntry::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
-    {
-        if (xListener.is())
-        {
-            ::osl::MutexGuard aGuard( m_aMutex );
-            if (!m_nClientId)
-                m_nClientId = comphelper::AccessibleEventNotifier::registerClient( );
-            comphelper::AccessibleEventNotifier::addEventListener( m_nClientId, xListener );
-        }
-    }
-
-    void SAL_CALL AccessibleListBoxEntry::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
-    {
-        if (!xListener.is())
-            return;
-
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( m_nClientId, xListener );
-        if ( !nListenerCount )
-        {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
-            sal_Int32 nId = m_nClientId;
-            m_nClientId = 0;
-            comphelper::AccessibleEventNotifier::revokeClient( nId );
-
-        }
     }
 
     // XAccessibleAction

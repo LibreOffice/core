@@ -54,10 +54,8 @@ namespace accessibility
     class AccessibleListBox;
 
 // class AccessibleListBoxEntry ------------------------------------------
-    typedef ::cppu::WeakComponentImplHelper< css::accessibility::XAccessible
-                                                , css::accessibility::XAccessibleContext
-                                                , css::accessibility::XAccessibleComponent
-                                                , css::accessibility::XAccessibleEventBroadcaster
+    typedef cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper
+                                                , css::accessibility::XAccessible
                                                 , css::accessibility::XAccessibleAction
                                                 , css::accessibility::XAccessibleSelection
                                                 , css::accessibility::XAccessibleText
@@ -65,8 +63,7 @@ namespace accessibility
                                                 , css::lang::XServiceInfo > AccessibleListBoxEntry_BASE;
 
     /** the class AccessibleListBoxEntry represents the class for an accessible object of a listbox entry */
-    class AccessibleListBoxEntry final : public ::cppu::BaseMutex
-                                        ,public AccessibleListBoxEntry_BASE
+    class AccessibleListBoxEntry final : public AccessibleListBoxEntry_BASE
                                         ,public ::comphelper::OCommonAccessibleText
     {
     friend class AccessibleListBox;
@@ -77,31 +74,19 @@ namespace accessibility
         std::deque< sal_Int32 >           m_aEntryPath;
         SvTreeListEntry*                    m_pSvLBoxEntry; // Needed for a11y focused item...
 
-
-        /// client id in the AccessibleEventNotifier queue
-        sal_uInt32                          m_nClientId;
-
         unotools::WeakReference<AccessibleListBox> m_wListBox;
 
         tools::Rectangle               GetBoundingBox_Impl() const;
-        tools::Rectangle               GetBoundingBoxOnScreen_Impl() const;
         bool                IsAlive_Impl() const;
         bool                IsShowing_Impl() const;
 
         /// @throws css::lang::DisposedException
         /// @throws css::uno::RuntimeException
         tools::Rectangle               GetBoundingBox();
-        /// @throws css::lang::DisposedException
-        /// @throws css::uno::RuntimeException
-        tools::Rectangle               GetBoundingBoxOnScreen();
         /// @throws css::lang::IndexOutOfBoundsException
         void CheckActionIndex(sal_Int32 nIndex);
         /// @throws css::lang::DisposedException
         void                    EnsureIsAlive() const;
-
-        void                    NotifyAccessibleEvent( sal_Int16 _nEventId, const css::uno::Any& _aOldValue, const css::uno::Any& _aNewValue );
-
-        virtual ~AccessibleListBoxEntry() override;
 
         /** this function is called upon disposing the component
         */
@@ -129,6 +114,8 @@ namespace accessibility
 
         SvTreeListEntry* GetSvLBoxEntry() const { return m_pSvLBoxEntry; }
 
+    protected:
+        virtual css::awt::Rectangle implGetBounds() override;
 
     private:
         // XTypeProvider
@@ -155,12 +142,7 @@ namespace accessibility
         virtual css::lang::Locale SAL_CALL getLocale(  ) override;
 
         // XAccessibleComponent
-        virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-        virtual css::awt::Rectangle SAL_CALL getBounds(  ) override;
-        virtual css::awt::Point SAL_CALL getLocation(  ) override;
-        virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
-        virtual css::awt::Size SAL_CALL getSize(  ) override;
         virtual void SAL_CALL grabFocus(  ) override;
         virtual sal_Int32 SAL_CALL getForeground(  ) override;
         virtual sal_Int32 SAL_CALL getBackground(  ) override;
@@ -184,10 +166,6 @@ namespace accessibility
         virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
         virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
         virtual sal_Bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override;
-
-        // XAccessibleEventBroadcaster
-        virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-        virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
 
         // XAccessibleAction
         virtual sal_Int32 SAL_CALL getAccessibleActionCount(  ) override;
