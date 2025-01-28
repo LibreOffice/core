@@ -1582,8 +1582,7 @@ void DocxExport::WriteGlossary()
     uno::Reference< xml::sax::XSAXSerializable > serializer( glossaryDocDom, uno::UNO_QUERY );
     uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create( comphelper::getProcessComponentContext() );
     writer->setOutputStream( xOutputStream );
-    serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
-        uno::Sequence< beans::StringPair >() );
+    serializer->serialize(writer, uno::Sequence< beans::StringPair >());
 
     for (const uno::Sequence<beans::NamedValue>& glossaryElement : glossaryDomList)
     {
@@ -1624,8 +1623,7 @@ void DocxExport::WriteGlossary()
             continue; // External relation, no stream to write
         uno::Reference< xml::sax::XSAXSerializable > gserializer( xDom, uno::UNO_QUERY );
         writer->setOutputStream(GetFilter().openFragmentStream( "word/glossary/" + gTarget, contentType ) );
-        gserializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
-               uno::Sequence< beans::StringPair >() );
+        gserializer->serialize(writer, uno::Sequence< beans::StringPair >());
     }
 }
 
@@ -1747,8 +1745,7 @@ void DocxExport::WriteCustomXml()
 
                 writer->setOutputStream(xMemStream->getOutputStream());
 
-                serializer->serialize(uno::Reference< xml::sax::XDocumentHandler >(writer, uno::UNO_QUERY_THROW),
-                    uno::Sequence< beans::StringPair >());
+                serializer->serialize(writer, uno::Sequence< beans::StringPair >());
 
                 uno::Reference< io::XStream > xXSLTInStream = xMemStream;
                 uno::Reference< io::XStream > xXSLTOutStream;
@@ -1779,8 +1776,7 @@ void DocxExport::WriteCustomXml()
             {
                 writer->setOutputStream(xOutStream);
 
-                serializer->serialize(uno::Reference< xml::sax::XDocumentHandler >(writer, uno::UNO_QUERY_THROW),
-                    uno::Sequence< beans::StringPair >());
+                serializer->serialize(writer, uno::Sequence< beans::StringPair >());
             }
         }
 
@@ -1790,8 +1786,7 @@ void DocxExport::WriteCustomXml()
             uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create( comphelper::getProcessComponentContext() );
             writer->setOutputStream( GetFilter().openFragmentStream( "customXml/itemProps"+OUString::number(j+1)+".xml",
                 u"application/vnd.openxmlformats-officedocument.customXmlProperties+xml"_ustr ) );
-            serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
-                uno::Sequence< beans::StringPair >() );
+            serializer->serialize(writer, uno::Sequence< beans::StringPair >());
 
             // Adding itemprops's relationship entry to item.xml.rels file
             m_rFilter.addRelation( GetFilter().openFragmentStream( "customXml/item"+OUString::number(j+1)+".xml",
