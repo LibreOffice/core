@@ -553,7 +553,6 @@ SvHeaderTabListBox::SvHeaderTabListBox( vcl::Window* pParent, WinBits nWinStyle 
     : SvTabListBox(pParent, nWinStyle)
     , m_bFirstPaint(true)
     , m_pImpl(new ::vcl::SvHeaderTabListBoxImpl)
-    , m_pAccessible(nullptr)
 {
 }
 
@@ -567,6 +566,7 @@ void SvHeaderTabListBox::dispose()
     for (css::uno::Reference<css::accessibility::XAccessible>& rxChild : m_aAccessibleChildren)
         comphelper::disposeComponent(rxChild);
     m_aAccessibleChildren.clear();
+    m_xAccessible.clear();
 
     m_pImpl.reset();
     SvTabListBox::dispose();
@@ -883,7 +883,7 @@ tools::Rectangle SvHeaderTabListBox::GetFieldRectPixel( sal_Int32 _nRow, sal_uIn
 
 Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
 {
-    OSL_ENSURE( m_pAccessible, "Invalid call: Accessible is null" );
+    OSL_ENSURE(m_xAccessible.is(), "Invalid call: Accessible is null");
 
     Reference< XAccessible > xChild;
 
@@ -891,10 +891,10 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nR
     bool bIsCheckBox = IsCellCheckBox( _nRow, _nColumnPos, eState );
     if ( bIsCheckBox )
         xChild = AccessibleFactory::createAccessibleCheckBoxCell(
-                m_pAccessible->getTable(), *this, _nRow, _nColumnPos, eState, false);
+                m_xAccessible->getTable(), *this, _nRow, _nColumnPos, eState, false);
     else
         xChild = AccessibleFactory::createAccessibleBrowseBoxTableCell(
-                m_pAccessible->getTable(), *this, _nRow, _nColumnPos, OFFSET_NONE );
+                m_xAccessible->getTable(), *this, _nRow, _nColumnPos, OFFSET_NONE);
 
     return xChild;
 }
@@ -917,11 +917,11 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleColumnHeader( sal_u
     // get header
     Reference< XAccessible > xChild = m_aAccessibleChildren[ _nColumn ];
     // already exists?
-    if ( !xChild.is() && m_pAccessible )
+    if (!xChild.is() && m_xAccessible.is())
     {
         // no -> create new header cell
         xChild = AccessibleFactory::createAccessibleBrowseBoxHeaderCell(
-            _nColumn, m_pAccessible->getHeaderBar(),
+            _nColumn, m_xAccessible->getHeaderBar(),
             *this, AccessibleBrowseBoxObjType::ColumnHeaderCell);
 
         // insert into list
@@ -1158,15 +1158,16 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessible()
     DBG_ASSERT( pParent, "SvHeaderTabListBox::::CreateAccessible - accessible parent not found" );
 
     Reference< XAccessible > xAccessible;
-    if ( m_pAccessible ) xAccessible = m_pAccessible->getMyself();
+    if (m_xAccessible.is())
+        xAccessible = m_xAccessible->getMyself();
 
-    if( pParent && !m_pAccessible )
+    if (pParent && !m_xAccessible.is())
     {
         Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if ( xAccParent.is() )
         {
-            m_pAccessible = new AccessibleTabListBox(xAccParent, *this);
-            xAccessible = m_pAccessible->getMyself();
+            m_xAccessible = new AccessibleTabListBox(xAccParent, *this);
+            xAccessible = m_xAccessible->getMyself();
         }
     }
     return xAccessible;

@@ -24,6 +24,7 @@
 #endif
 
 #include <config_options.h>
+#include <accessibility/accessibletablistbox.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/accessibletableprovider.hxx>
@@ -96,7 +97,7 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvHeaderTabListBox : public SvTabList
 private:
     bool                            m_bFirstPaint;
     std::unique_ptr<::vcl::SvHeaderTabListBoxImpl>  m_pImpl;
-    ::vcl::IAccessibleTabListBox*   m_pAccessible;
+    rtl::Reference<AccessibleTabListBox>  m_xAccessible;
     std::vector<css::uno::Reference<css::accessibility::XAccessible>> m_aAccessibleChildren;
 
     DECL_DLLPRIVATE_LINK( ScrollHdl_Impl, SvTreeListBox*, void );
