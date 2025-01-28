@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 // Ctor() and Dtor()
 
 AccessibleTabListBox::AccessibleTabListBox( const Reference< XAccessible >& rxParent, SvHeaderTabListBox& rBox )
-    :AccessibleBrowseBox( rxParent, nullptr, rBox )
+    :ImplInheritanceHelper(rxParent, nullptr, rBox)
     ,m_pTabListBox( &rBox )
 {
     osl_atomic_increment( &m_refCount );
@@ -58,12 +58,6 @@ rtl::Reference<AccessibleBrowseBoxTable> AccessibleTabListBox::createAccessibleT
 {
     return new AccessibleTabListBoxTable( this, *m_pTabListBox );
 }
-
-// XInterface -----------------------------------------------------------------
-IMPLEMENT_FORWARD_XINTERFACE2( AccessibleTabListBox, AccessibleBrowseBox, AccessibleTabListBox_Base )
-
-// XTypeProvider --------------------------------------------------------------
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleTabListBox, AccessibleBrowseBox, AccessibleTabListBox_Base )
 
 // XAccessibleContext ---------------------------------------------------------
 

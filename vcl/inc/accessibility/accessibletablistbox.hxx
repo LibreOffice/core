@@ -26,13 +26,9 @@
 class AccessibleBrowseBoxTable;
 class SvHeaderTabListBox;
 
-typedef ::cppu::ImplHelper1  <   css::accessibility::XAccessible
-                            >   AccessibleTabListBox_Base;
-
 /** !!! */
 class AccessibleTabListBox final
-                :public AccessibleBrowseBox
-                ,public AccessibleTabListBox_Base
+    : public cppu::ImplInheritanceHelper<AccessibleBrowseBox, css::accessibility::XAccessible>
 {
 private:
     VclPtr<SvHeaderTabListBox>        m_pTabListBox;
@@ -44,11 +40,6 @@ public:
     AccessibleTabListBox(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
         SvHeaderTabListBox& rBox );
-
-    // XInterface
-    DECLARE_XINTERFACE( )
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER( )
 
     // XAccessibleContext -----------------------------------------------------
 
