@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
+#include <osl/process.h>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
@@ -24,6 +26,8 @@
 #include <editeng/postitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <svx/svdpage.hxx>
+
+#include <layouter.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtcntnt.hxx>
@@ -279,6 +283,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableSplitBug)
                     "height", u"1274");
         discardDumpedLayout();
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableInSectionSplitLoop)
+{
+    createDoc("table-in-section-split-loop.fodt");
+
+    static OUString const var{ "TEST_NO_LOOP_CONTROLS" };
+    osl_setEnvironment(var.pData, OUString("1").pData);
+    comphelper::ScopeGuard g([] { osl_clearEnvironment(var.pData); });
+
+    CPPUNIT_ASSERT_EQUAL(0, SwLayouter::GetLastLoopControlStage());
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    CPPUNIT_ASSERT_EQUAL(0, SwLayouter::GetLastLoopControlStage());
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)

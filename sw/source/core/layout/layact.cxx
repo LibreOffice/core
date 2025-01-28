@@ -594,7 +594,11 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
 
                         if ( ++nLoopControlRuns_1 > nLoopControlMax )
                         {
-                            OSL_FAIL( "LoopControl_1 in SwLayAction::InternalAction" );
+                            SAL_WARN("sw.layout", "LoopControl_1 in SwLayAction::InternalAction");
+                            if (::std::getenv("TEST_NO_LOOP_CONTROLS"))
+                            {
+                                throw std::exception{}; // => fail test
+                            }
                             break;
                         }
 
@@ -776,7 +780,11 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
 
                     if ( ++nLoopControlRuns_3 > nLoopControlMax )
                     {
-                        OSL_FAIL( "LoopControl_3 in Interrupt formatting in SwLayAction::InternalAction" );
+                        SAL_WARN("sw.layout", "LoopControl_3 in Interrupt formatting in SwLayAction::InternalAction");
+                        if (::std::getenv("TEST_NO_LOOP_CONTROLS"))
+                        {
+                            throw std::exception{}; // => fail test
+                        }
                         break;
                     }
 
@@ -795,7 +803,11 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
 
                     if ( ++nLoopControlRuns_2 > nLoopControlMax )
                     {
-                        OSL_FAIL( "LoopControl_2 in Interrupt formatting in SwLayAction::InternalAction" );
+                        SAL_WARN("sw.layout", "LoopControl_2 in Interrupt formatting in SwLayAction::InternalAction");
+                        if (::std::getenv("TEST_NO_LOOP_CONTROLS"))
+                        {
+                            throw std::exception{}; // => fail test
+                        }
                         break;
                     }
 

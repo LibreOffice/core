@@ -102,6 +102,7 @@ public:
 
     void LoopControl( SwPageFrame* pPage );
     void EndLoopControl();
+    SW_DLLPUBLIC static int GetLastLoopControlStage();
     void LoopingLouieLight( const SwDoc& rDoc, const SwTextFrame& rFrame );
 
     static void CollectEndnotes( SwDoc* pDoc, SwSectionFrame* pSect );
