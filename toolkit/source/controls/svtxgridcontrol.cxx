@@ -792,12 +792,12 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
             // works when the control is used outside the UNO context
             if (pTable->GetCurrentRow() !=  ROW_INVALID && pTable->GetCurrentColumn() != COL_INVALID)
             {
-                pTable->commitCellEventIfAccessibleAlive(
+                pTable->commitCellEvent(
                     AccessibleEventId::STATE_CHANGED,
                     Any( AccessibleStateType::FOCUSED ),
                     Any()
                 );
-                pTable->commitTableEventIfAccessibleAlive(
+                pTable->commitTableEvent(
                     AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
                     Any(),
                     Any()
@@ -805,7 +805,7 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
             }
             else
             {
-                pTable->commitTableEventIfAccessibleAlive(
+                pTable->commitTableEvent(
                     AccessibleEventId::STATE_CHANGED,
                     Any( AccessibleStateType::FOCUSED ),
                     Any()
@@ -820,7 +820,7 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
             // works when the control is used outside the UNO context
             if (pTable->GetCurrentRow() !=  ROW_INVALID && pTable->GetCurrentColumn() != COL_INVALID)
             {
-                pTable->commitCellEventIfAccessibleAlive(
+                pTable->commitCellEvent(
                     AccessibleEventId::STATE_CHANGED,
                     Any(),
                     Any( AccessibleStateType::FOCUSED )
@@ -828,7 +828,7 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
             }
             else
             {
-                pTable->commitTableEventIfAccessibleAlive(
+                pTable->commitTableEvent(
                     AccessibleEventId::STATE_CHANGED,
                     Any(),
                     Any( AccessibleStateType::FOCUSED )

@@ -130,8 +130,8 @@ namespace svt::table
         // Those do not really belong into the public API - they're intended for firing A11Y-related events. However,
         // firing those events should be an implementation internal to the TableControl resp. TableControl_Impl,
         // instead of something triggered externally.
-        void commitCellEventIfAccessibleAlive( sal_Int16 const i_eventID, const css::uno::Any& i_newValue, const css::uno::Any& i_oldValue );
-        void commitTableEventIfAccessibleAlive( sal_Int16 const i_eventID, const css::uno::Any& i_newValue, const css::uno::Any& i_oldValue );
+        void commitCellEvent(sal_Int16 const i_eventID, const css::uno::Any& i_newValue, const css::uno::Any& i_oldValue);
+        void commitTableEvent(sal_Int16 const i_eventID, const css::uno::Any& i_newValue, const css::uno::Any& i_oldValue);
 
         sal_Int32 GetAccessibleControlCount() const;
         sal_Int32 GetRowCount() const;

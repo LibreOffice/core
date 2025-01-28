@@ -141,24 +141,21 @@ namespace svt::table
             Control::KeyInput( rKEvt );
         else
         {
-            if ( m_pImpl->isAccessibleAlive() )
-            {
-                m_pImpl->commitCellEvent( AccessibleEventId::STATE_CHANGED,
-                                          Any( AccessibleStateType::FOCUSED ),
-                                          Any()
-                                        );
-                    // Huh? What the heck? Why do we unconditionally notify a STATE_CHANGE/FOCUSED after each and every
-                    // (handled) key stroke?
+            m_pImpl->commitCellEvent( AccessibleEventId::STATE_CHANGED,
+                                      Any( AccessibleStateType::FOCUSED ),
+                                      Any()
+                                    );
+                // Huh? What the heck? Why do we unconditionally notify a STATE_CHANGE/FOCUSED after each and every
+                // (handled) key stroke?
 
-                m_pImpl->commitTableEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
-                                           Any(),
-                                           Any()
-                                         );
-                    // ditto: Why do we notify this unconditionally? We should find the right place to notify the
-                    // ACTIVE_DESCENDANT_CHANGED event.
-                    // Also, we should check if STATE_CHANGED/FOCUSED is really necessary: finally, the children are
-                    // transient, aren't they?
-            }
+            m_pImpl->commitTableEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                                       Any(),
+                                       Any()
+                                     );
+                // ditto: Why do we notify this unconditionally? We should find the right place to notify the
+                // ACTIVE_DESCENDANT_CHANGED event.
+                // Also, we should check if STATE_CHANGED/FOCUSED is really necessary: finally, the children are
+                // transient, aren't they?
         }
     }
 
@@ -496,16 +493,14 @@ namespace svt::table
         }
     }
 
-    void TableControl::commitCellEventIfAccessibleAlive( sal_Int16 const i_eventID, const Any& i_newValue, const Any& i_oldValue )
+    void TableControl::commitCellEvent(sal_Int16 const i_eventID, const Any& i_newValue, const Any& i_oldValue)
     {
-        if ( m_pImpl->isAccessibleAlive() )
-            m_pImpl->commitCellEvent( i_eventID, i_newValue, i_oldValue );
+        m_pImpl->commitCellEvent( i_eventID, i_newValue, i_oldValue );
     }
 
-    void TableControl::commitTableEventIfAccessibleAlive( sal_Int16 const i_eventID, const Any& i_newValue, const Any& i_oldValue )
+    void TableControl::commitTableEvent(sal_Int16 const i_eventID, const Any& i_newValue, const Any& i_oldValue)
     {
-        if ( m_pImpl->isAccessibleAlive() )
-            m_pImpl->commitTableEvent( i_eventID, i_newValue, i_oldValue );
+        m_pImpl->commitTableEvent( i_eventID, i_newValue, i_oldValue );
     }
 
     bool TableControl::HasRowHeader()
@@ -601,15 +596,11 @@ namespace svt::table
     void TableControl::Select()
     {
         ImplCallEventListenersAndHandler( VclEventId::TableRowSelect, nullptr );
+        m_pImpl->commitAccessibleEvent( AccessibleEventId::SELECTION_CHANGED );
 
-        if ( m_pImpl->isAccessibleAlive() )
-        {
-            m_pImpl->commitAccessibleEvent( AccessibleEventId::SELECTION_CHANGED );
-
-            m_pImpl->commitTableEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, Any(), Any() );
-                // TODO: why do we notify this when the *selection* changed? Shouldn't we find a better place for this,
-                // actually, when the active descendant, i.e. the current cell, *really* changed?
-        }
+        m_pImpl->commitTableEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, Any(), Any() );
+            // TODO: why do we notify this when the *selection* changed? Shouldn't we find a better place for this,
+            // actually, when the active descendant, i.e. the current cell, *really* changed?
     }
 
     TableCell TableControl::hitTest(const Point& rPoint) const
