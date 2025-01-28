@@ -32,21 +32,19 @@ namespace accessibility {
 
 
 /** This class represents the complete accessible Grid Control object. */
-class AccessibleGridControl final : public AccessibleGridControlBase
+    class AccessibleGridControl final
+        : public cppu::ImplInheritanceHelper<AccessibleGridControlBase,
+                                             css::accessibility::XAccessible>
 {
-    friend class AccessibleGridControlAccess;
-
-    AccessibleGridControl(
-        const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-        const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator,
-        svt::table::TableControl& _rTable
-    );
-
     virtual ~AccessibleGridControl() override = default;
 
     /** Cleans up members. */
     using AccessibleGridControlBase::disposing;
     virtual void SAL_CALL disposing() override;
+
+    // XAccessible
+    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
+        SAL_CALL getAccessibleContext() override;
 
     // XAccessibleContext -----------------------------------------------------
 
@@ -79,6 +77,10 @@ class AccessibleGridControl final : public AccessibleGridControlBase
     virtual OUString SAL_CALL getImplementationName() override;
 
 public:
+    AccessibleGridControl(
+        const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
+        svt::table::TableControl& _rTable);
+
     // helper functions
 
      /** commitCellEvent commit the event at all listeners of the table
@@ -119,9 +121,6 @@ private:
     css::uno::Reference< css::accessibility::XAccessible >
         implGetFixedChild( sal_Int64 nChildIndex );
 
-    /// the css::accessibility::XAccessible which created the AccessibleGridControl
-    css::uno::WeakReference< css::accessibility::XAccessible >                    m_aCreator;
-
     /** The data table child. */
     rtl::Reference<AccessibleGridControlTable>                m_xTable;
 
@@ -134,60 +133,6 @@ private:
     /** @return  The count of visible children. */
     inline sal_Int64 implGetAccessibleChildCount();
 };
-
-
-/** the XAccessible which creates/returns an AccessibleGridControl
-
-    <p>The instance holds its XAccessibleContext with a hard reference, while
-    the context holds this instance weak.</p>
-*/
-
-class AccessibleGridControlAccess final
-    : public cppu::WeakImplHelper<css::accessibility::XAccessible>
-{
-private:
-    css::uno::Reference< css::accessibility::XAccessible > m_xParent;
-    VclPtr<svt::table::TableControl>                       m_xTable;
-    rtl::Reference<AccessibleGridControl>                  m_xContext;
-
-public:
-    AccessibleGridControlAccess(
-        css::uno::Reference< css::accessibility::XAccessible > _xParent,
-        svt::table::TableControl& _rTable
-    );
-
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        SAL_CALL getAccessibleContext() override;
-
-    void DisposeAccessImpl();
-
-    void commitCellEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
-                         const css::uno::Any& rOldValue)
-    {
-        if (m_xContext.is())
-            m_xContext->commitCellEvent( nEventId, rNewValue, rOldValue );
-    }
-
-    void commitTableEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
-                          const css::uno::Any& rOldValue)
-    {
-        if (m_xContext.is())
-            m_xContext->commitTableEvent( nEventId, rNewValue, rOldValue );
-    }
-
-    void commitEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue)
-    {
-        if (m_xContext.is())
-            m_xContext->commitEvent( nEventId, rNewValue, css::uno::Any() );
-    }
-
-private:
-    virtual ~AccessibleGridControlAccess() override;
-    AccessibleGridControlAccess( const AccessibleGridControlAccess& ) = delete;
-    AccessibleGridControlAccess& operator=( const AccessibleGridControlAccess& ) = delete;
-};
-
 
 } // namespace accessibility
 

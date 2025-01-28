@@ -129,7 +129,7 @@ namespace svt::table
         RowPos                  m_nAnchor;
         bool                    m_bUpdatingColWidths;
 
-        rtl::Reference<accessibility::AccessibleGridControlAccess> m_pAccessibleTable;
+        rtl::Reference<accessibility::AccessibleGridControl> m_xAccessibleTable;
 
     public:
         void        setModel( const PTableModel& _pModel );
@@ -289,7 +289,7 @@ namespace svt::table
         tools::Rectangle calcCellRect( sal_Int32 nRow, sal_Int32 nCol ) const;
 
         // A11Y
-        const rtl::Reference<accessibility::AccessibleGridControlAccess>&
+        const rtl::Reference<accessibility::AccessibleGridControl>&
         getAccessible(vcl::Window& i_parentWindow);
         void            disposeAccessible();
 

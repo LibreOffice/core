@@ -2268,15 +2268,15 @@ namespace svt::table
 
     void TableControl_Impl::commitCellEvent( sal_Int16 const i_eventID, const Any& i_newValue, const Any& i_oldValue )
     {
-        if (m_pAccessibleTable)
-             m_pAccessibleTable->commitCellEvent( i_eventID, i_newValue, i_oldValue );
+        if (m_xAccessibleTable.is())
+            m_xAccessibleTable->commitCellEvent(i_eventID, i_newValue, i_oldValue);
     }
 
 
     void TableControl_Impl::commitTableEvent( sal_Int16 const i_eventID, const Any& i_newValue, const Any& i_oldValue )
     {
-        if (m_pAccessibleTable)
-             m_pAccessibleTable->commitTableEvent( i_eventID, i_newValue, i_oldValue );
+        if (m_xAccessibleTable.is())
+            m_xAccessibleTable->commitTableEvent(i_eventID, i_newValue, i_oldValue);
     }
 
 
@@ -2338,37 +2338,35 @@ namespace svt::table
             impl_ni_ScrollColumns( _pScrollbar->GetDelta() );
     }
 
-    const rtl::Reference<accessibility::AccessibleGridControlAccess>&
+    const rtl::Reference<accessibility::AccessibleGridControl>&
     TableControl_Impl::getAccessible(vcl::Window& i_parentWindow)
     {
-        if (m_pAccessibleTable)
-            return m_pAccessibleTable;
+        if (m_xAccessibleTable.is())
+            return m_xAccessibleTable;
 
         DBG_TESTSOLARMUTEX();
 
         Reference<XAccessible> const xAccParent = i_parentWindow.GetAccessible();
         if (xAccParent.is())
         {
-            m_pAccessibleTable = new accessibility::AccessibleGridControlAccess(
-                xAccParent, m_rAntiImpl
-            );
+            m_xAccessibleTable = new accessibility::AccessibleGridControl(xAccParent, m_rAntiImpl);
         }
 
-        return m_pAccessibleTable;
+        return m_xAccessibleTable;
     }
 
 
     void TableControl_Impl::disposeAccessible()
     {
-        if ( m_pAccessibleTable )
-            m_pAccessibleTable->DisposeAccessImpl();
-        m_pAccessibleTable = nullptr;
+        if (m_xAccessibleTable.is())
+            m_xAccessibleTable->dispose();
+        m_xAccessibleTable.clear();
     }
 
     void TableControl_Impl::impl_commitAccessibleEvent( sal_Int16 const i_eventID, Any const & i_newValue )
     {
-        if (m_pAccessibleTable)
-             m_pAccessibleTable->commitEvent( i_eventID, i_newValue );
+        if (m_xAccessibleTable.is())
+            m_xAccessibleTable->commitEvent(i_eventID, i_newValue, css::uno::Any());
     }
 
 
