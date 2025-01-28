@@ -74,6 +74,7 @@
 #include <frameformats.hxx>
 #include <algorithm>
 #include <iterator>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1344,10 +1345,8 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
             if (SwDocShell *const pDocSh = rDoc.GetDocShell())
             {
                 // then it is the body text
-                const uno::Reference<frame::XModel> xModel = pDocSh->GetBaseModel();
-                const uno::Reference< text::XTextDocument > xDoc(
-                    xModel, uno::UNO_QUERY);
-                xParentText = dynamic_cast<SwXText*>(xDoc->getText().get());
+                const rtl::Reference<SwXTextDocument> xModel = pDocSh->GetXTextDocument();
+                xParentText = xModel->getBodyText();
             }
         }
     }
