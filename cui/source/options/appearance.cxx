@@ -449,7 +449,7 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, ResetAllBtnHdl, weld::Button&, void)
     pColorConfig->Commit();
 
     // RESET state for themes just prevents the theme colors from being used before
-    // they are realoaded from the StyleSettings, please read the comment above
+    // they are reloaded from the StyleSettings, please read the comment above
     // ColorConfig::SetupTheme()'s definition
     if (!ThemeColors::IsThemeDisabled())
     {
