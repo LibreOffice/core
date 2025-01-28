@@ -65,7 +65,8 @@ using namespace com::sun::star;
 namespace
 {
 void impl_cairo_set_hairline(cairo_t* pRT,
-                             const drawinglayer::geometry::ViewInformation2D& rViewInformation)
+                             const drawinglayer::geometry::ViewInformation2D& rViewInformation,
+                             bool bCairoCoordinateLimitWorkaroundActive)
 {
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 18, 0)
     void* addr(dlsym(nullptr, "cairo_set_hairline"));
@@ -75,11 +76,19 @@ void impl_cairo_set_hairline(cairo_t* pRT,
         return;
     }
 #endif
-    // avoid cairo_device_to_user_distance, see note on that below
-    const double fPx(
-        (rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0))
-            .getLength());
-    cairo_set_line_width(pRT, fPx);
+    if (bCairoCoordinateLimitWorkaroundActive)
+    {
+        // we have to render in view coordiantes, set line width to 1.0
+        cairo_set_line_width(pRT, 1.0);
+    }
+    else
+    {
+        // avoid cairo_device_to_user_distance, see note on that below
+        const double fPx(
+            (rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0))
+                .getLength());
+        cairo_set_line_width(pRT, fPx);
+    }
 }
 
 void addB2DPolygonToPathGeometry(cairo_t* pRT, const basegfx::B2DPolygon& rPolygon)
@@ -1269,7 +1278,8 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const BitmapEx& rBitmapEx,
     if (bRenderTransformationBounds)
     {
         cairo_set_source_rgba(mpRT, 1, 0, 0, 0.8);
-        impl_cairo_set_hairline(mpRT, getViewInformation2D());
+        impl_cairo_set_hairline(mpRT, getViewInformation2D(),
+                                isCairoCoordinateLimitWorkaroundActive());
         cairo_rectangle(mpRT, 0, 0, 1, 1);
         cairo_stroke(mpRT);
     }
@@ -1404,7 +1414,7 @@ void CairoPixelProcessor2D::processPolygonHairlinePrimitive2D(
                          aHairlineColor.getBlue());
 
     // set LineWidth, use Cairo's special cairo_set_hairline
-    impl_cairo_set_hairline(mpRT, getViewInformation2D());
+    impl_cairo_set_hairline(mpRT, getViewInformation2D(), isCairoCoordinateLimitWorkaroundActive());
 
     if (isCairoCoordinateLimitWorkaroundActive())
     {
@@ -2429,7 +2439,8 @@ void CairoPixelProcessor2D::processFillGraphicPrimitive2D(
     if (bRenderTransformationBounds)
     {
         cairo_set_source_rgba(mpRT, 0, 1, 0, 0.8);
-        impl_cairo_set_hairline(mpRT, getViewInformation2D());
+        impl_cairo_set_hairline(mpRT, getViewInformation2D(),
+                                isCairoCoordinateLimitWorkaroundActive());
         // full object
         cairo_rectangle(mpRT, 0, 0, 1, 1);
         // outline of pattern root image
