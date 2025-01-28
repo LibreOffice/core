@@ -616,14 +616,17 @@ SET_ADJUST:
                     {
                         aNewAttr.Put(SvxAdjustItem(eAdjst, EE_PARA_JUST));
                         // set anchor
-                        ESelection aSel = pOLV->GetSelection();
-                        aSel.Adjust();
-                        sal_Int32 nStartPara = aSel.start.nPara;
-                        if (!aSel.HasRange())
-                            nStartPara = 0;
+                        if (pOLV)
+                        {
+                            ESelection aSel = pOLV->GetSelection();
+                            aSel.Adjust();
+                            sal_Int32 nStartPara = aSel.start.nPara;
+                            if (!aSel.HasRange())
+                                nStartPara = 0;
 
-                        if (nStartPara == 0)
-                            aNewAttr.Put(SdrTextHorzAdjustItem(eAnchor));
+                            if (nStartPara == 0)
+                                aNewAttr.Put(SdrTextHorzAdjustItem(eAnchor));
+                        }
                     }
                     break;
 
