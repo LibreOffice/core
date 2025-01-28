@@ -321,12 +321,10 @@ namespace svt::table
         impl_ni_relayout();
 
         // notify A1YY events
-        if ( impl_isAccessibleAlive() )
-        {
-            impl_commitAccessibleEvent( AccessibleEventId::TABLE_MODEL_CHANGED,
-                Any( AccessibleTableModelChange( AccessibleTableModelChangeType::ROWS_INSERTED, i_first, i_last, -1, -1 ) )
-            );
-        }
+        impl_commitAccessibleEvent(
+            AccessibleEventId::TABLE_MODEL_CHANGED,
+            Any(AccessibleTableModelChange(AccessibleTableModelChangeType::ROWS_INSERTED, i_first,
+                                           i_last, -1, -1)));
 
         // schedule repaint
         invalidateRowRange( i_first, ROW_INVALID );
@@ -389,20 +387,11 @@ namespace svt::table
         impl_ni_relayout();
 
         // notify A11Y events
-        if ( impl_isAccessibleAlive() )
-        {
-            commitTableEvent(
-                AccessibleEventId::TABLE_MODEL_CHANGED,
-                Any( AccessibleTableModelChange(
-                    AccessibleTableModelChangeType::ROWS_REMOVED,
-                    firstRemovedRow,
-                    lastRemovedRow,
-                    -1,
-                    -1
-                ) ),
-                Any()
-            );
-        }
+        commitTableEvent(
+            AccessibleEventId::TABLE_MODEL_CHANGED,
+            Any(AccessibleTableModelChange(AccessibleTableModelChangeType::ROWS_REMOVED,
+                                           firstRemovedRow, lastRemovedRow, -1, -1)),
+            Any());
 
         // schedule a repaint
         invalidateRowRange( firstRemovedRow, ROW_INVALID );
