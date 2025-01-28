@@ -877,11 +877,6 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
             nTypePos = mnHalfCharWidth * 2; // start label after the opening bracket
         }
 
-        // vertical rdf:type label position for the opening and closing brackets
-        sal_Int32 fPos = std::get<0>(it) == SwScriptInfo::MarkKind::Start
-                ? -0.6 * nHeight
-                : 0.3 * nHeight;
-
         // MarkKind::Point: drawn I-beam (e.g. U+2336) as overlapping ][
         if ( std::get<0>(it) == SwScriptInfo::MarkKind::Point )
         {
@@ -908,34 +903,44 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
             auto origSize = aTmpSz;
 
             // calculate label size
-            aTmpSz.setHeight( ( 100 * aTmpSz.Height() ) / 250 );
-            aTmpSz.setWidth( ( 100 * aTmpSz.Width() ) / 250 );
+            aTmpSz.setHeight( std::min( tools::Long(60), 100 * aTmpSz.Height() / 250 ) );
+            aTmpSz.setWidth( std::min( tools::Long(60), 100 * aTmpSz.Width() / 250 ) );
+
+            // vertical rdf:type label position for the opening and closing brackets
+            sal_Int32 fPos = std::get<0>(it) == SwScriptInfo::MarkKind::Start
+                    ? -0.65 * nHeight
+                    : aTmpSz.Height();
 
             if ( aTmpSz.Width() || aTmpSz.Height() )
             {
                 aTmpFont.SetSize( aTmpSz, SwFontScript::Latin );
+                auto aTextSize =  rInf.GetTextSize(sType);
 
                 aNewPos.AdjustY(fPos);
                 if ( nDirection == -1 )
                 {
                     if (bStart)
                     {
-                        nTypePos += rInf.GetTextSize( sType ).Width();
+                        nTypePos += aTextSize.Width();
                         bStart = false;
                     }
                     else
-                        nTypePos += rInf.GetTextSize( sType + " " ).Width() + 2 * mnHalfCharWidth;
+                        nTypePos += aTextSize.Width() +
+                                        rInf.GetTextSize( " " ).Width() + 2 * mnHalfCharWidth;
                 }
                 aNewPos.AdjustX( nDirection * nTypePos );
 
                 const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
 
-                rInf.DrawText( sType, *this );
+                SwRect aRect( rInf.GetPos(), Size(aTextSize.Width(), -aTextSize.Height() * 0.8) );
+                rInf.DrawRect( aRect, true );  // white background
+                rInf.DrawText( sType, *this ); // label
 
                 // restore original position
                 aNewPos.AdjustX( -nDirection * nTypePos );
                 if ( nDirection == 1 )
-                    nTypePos += rInf.GetTextSize( sType + " " ).Width() - mnHalfCharWidth * 2;
+                    nTypePos += aTextSize.Width() +
+                                        rInf.GetTextSize( " " ).Width() - mnHalfCharWidth * 2;
 
                 aNewPos.AdjustY(-fPos);
             }
