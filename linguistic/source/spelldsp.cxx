@@ -83,9 +83,7 @@ void ProposalList::Append( const OUString &rOrig, bool bPrepend )
 {
     // convert ASCII apostrophe to the typographic one
     const OUString aText( rOrig.indexOf( '\'' ) > -1 ? rOrig.replace('\'', u'’') : rOrig );
-    const bool bFound = std::any_of(aVec.begin(), aVec.end(),
-        [&aText](const OUString& n){ return n == aText; });
-    if (!bFound)
+    if (std::find(aVec.begin(), aVec.end(), aText) == aVec.end())
     {
         if ( bPrepend )
             aVec.insert( aVec.begin(), aText );
