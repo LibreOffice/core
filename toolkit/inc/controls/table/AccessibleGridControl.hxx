@@ -114,13 +114,6 @@ private:
 
     // internal helper methods ------------------------------------------------
 
-    /** This method returns one of the children that are always present:
-        Data table, row and column header bar or corner control.
-        @attention  This method requires locked mutex's and a living object.
-        @return  The XAccessible interface of the specified child. */
-    css::uno::Reference< css::accessibility::XAccessible >
-        implGetFixedChild( sal_Int64 nChildIndex );
-
     /** The data table child. */
     rtl::Reference<AccessibleGridControlTable>                m_xTable;
 
