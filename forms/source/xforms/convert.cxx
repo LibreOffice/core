@@ -328,7 +328,7 @@ OUString Convert::collapseWhitespace( const OUString& _rString )
             aBuffer.append( c );
         }
     }
-    if( aBuffer[ aBuffer.getLength() - 1 ] == u' ' )
+    if( !aBuffer.isEmpty() && aBuffer[ aBuffer.getLength() - 1 ] == u' ' )
         aBuffer.setLength( aBuffer.getLength() - 1 );
     return aBuffer.makeStringAndClear();
 }
