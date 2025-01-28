@@ -101,7 +101,7 @@ void GfxLink::SetPrefMapMode( const MapMode& rPrefMapMode )
     mbPrefMapModeValid = true;
 }
 
-bool GfxLink::LoadNative( Graphic& rGraphic ) const
+bool GfxLink::LoadNative(Graphic& rGraphic, sal_Int32 nPageNum) const
 {
     bool bRet = false;
 
@@ -132,7 +132,9 @@ bool GfxLink::LoadNative( Graphic& rGraphic ) const
             {
                 GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
                 sal_uInt16 nFormat = rFilter.GetImportFormatNumberForShortName(aShortName);
-                ErrCode nResult = rFilter.ImportGraphic(rGraphic, u"", aMemoryStream, nFormat);
+                ErrCode nResult
+                    = rFilter.ImportGraphic(rGraphic, u"", aMemoryStream, nFormat, nullptr,
+                                            GraphicFilterImportFlags::NONE, nPageNum);
                 if (nResult == ERRCODE_NONE)
                     bRet = true;
             }

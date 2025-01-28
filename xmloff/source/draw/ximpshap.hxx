@@ -392,6 +392,7 @@ private:
     OUString maURL;
     OUString msMimeType;
     css::uno::Reference < css::io::XOutputStream > mxBase64Stream;
+    sal_Int32 mnPage;
 
 public:
     OUString const& getMimeType() const { return msMimeType; }

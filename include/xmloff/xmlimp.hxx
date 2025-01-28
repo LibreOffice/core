@@ -410,7 +410,8 @@ public:
         mxNumberFormatsSupplier = _xNumberFormatSupplier;
     }
 
-    css::uno::Reference<css::graphic::XGraphic> loadGraphicByURL(OUString const & rURL);
+    css::uno::Reference<css::graphic::XGraphic> loadGraphicByURL(OUString const& rURL,
+                                                                 sal_Int32 nPageNum = -1);
     css::uno::Reference<css::graphic::XGraphic> loadGraphicFromBase64(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream);
 
     css::uno::Reference< css::io::XOutputStream > GetStreamForGraphicObjectURLFromBase64() const;

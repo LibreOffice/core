@@ -1463,7 +1463,7 @@ bool ImpGraphic::swapIn()
     if (mbPrepared)
     {
         Graphic aGraphic;
-        if (!mpGfxLink->LoadNative(aGraphic))
+        if (!mpGfxLink->LoadNative(aGraphic, getPageNumber()))
             return false;
 
         updateFromLoadedGraphic(aGraphic.ImplGetImpGraphic());

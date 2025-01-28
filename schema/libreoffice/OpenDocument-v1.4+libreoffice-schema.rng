@@ -4025,4 +4025,13 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       </rng:attribute>
     </rng:optional>
   </rng:define>
+
+  <!-- TODO no proposal for page number on multipage formats -->
+  <rng:define name="draw-image-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:page-number">
+        <rng:ref name="integer"/>
+      </rng:attribute>
+      </rng:optional>
+  </rng:define>
 </rng:grammar>
