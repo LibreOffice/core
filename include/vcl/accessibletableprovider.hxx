@@ -133,16 +133,6 @@ protected:
 class IAccessibleTabListBox
 {
 public:
-    /** returns the XAccessible object itself
-
-        The reference returned here can be used to control the life time of the
-        IAccessibleTableImplementation object.
-
-        The returned reference is guaranteed to not be <NULL/>.
-    */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-        getMyself() = 0;
-
     /** returns the accessible object for the column header bar
     */
     virtual css::uno::Reference< css::accessibility::XAccessible >

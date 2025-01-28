@@ -1157,20 +1157,19 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessible()
     vcl::Window* pParent = GetAccessibleParentWindow();
     DBG_ASSERT( pParent, "SvHeaderTabListBox::::CreateAccessible - accessible parent not found" );
 
-    Reference< XAccessible > xAccessible;
     if (m_xAccessible.is())
-        xAccessible = m_xAccessible->getMyself();
+        return m_xAccessible;
 
-    if (pParent && !m_xAccessible.is())
+    if (pParent)
     {
         Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if ( xAccParent.is() )
         {
             m_xAccessible = new AccessibleTabListBox(xAccParent, *this);
-            xAccessible = m_xAccessible->getMyself();
+            return m_xAccessible;
         }
     }
-    return xAccessible;
+    return nullptr;
 }
 
 tools::Rectangle SvHeaderTabListBox::GetFieldCharacterBounds(sal_Int32,sal_Int32,sal_Int32)

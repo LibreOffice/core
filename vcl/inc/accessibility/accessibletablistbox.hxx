@@ -64,11 +64,6 @@ public:
     css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext() override;
 
     // IAccessibleTabListBox
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-        getMyself() override
-    {
-        return this;
-    }
 
     css::uno::Reference< css::accessibility::XAccessible >
         getHeaderBar() override
