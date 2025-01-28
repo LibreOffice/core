@@ -1958,6 +1958,13 @@ CPPUNIT_TEST_FIXTURE(Test, test162198Tdf)
     sal_Int32 nRightDistance = getProperty<sal_Int32>(xCellPropSet, u"LeftBorderDistance"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("left cell spacing to contents", sal_Int32(9), nLeftDistance);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("right cell spacing to contents", sal_Int32(9), nRightDistance);
+
+    xCell = xTable1->getCellByName(u"B1"_ustr);
+    xCellPropSet = uno::Reference<beans::XPropertySet>(xCell, uno::UNO_QUERY_THROW);
+    nLeftDistance = getProperty<sal_Int32>(xCellPropSet, u"LeftBorderDistance"_ustr);
+    nRightDistance = getProperty<sal_Int32>(xCellPropSet, u"LeftBorderDistance"_ustr);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("left cell spacing to contents", sal_Int32(9), nLeftDistance);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("right cell spacing to contents", sal_Int32(9), nRightDistance);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, test153192Tdf)
