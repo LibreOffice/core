@@ -866,9 +866,14 @@ void SfxObjectShell::InvalidateName()
 
 {
     pImpl->aTitle.clear();
-    SetName( GetTitle( SFX_TITLE_APINAME ) );
 
-    Broadcast( SfxHint(SfxHintId::TitleChanged) );
+    OUString sOldName = GetName();
+    OUString sNewName = GetTitle(SFX_TITLE_APINAME);
+    if (sOldName != sNewName)
+    {
+        SetName(sNewName);
+        Broadcast(SfxHint(SfxHintId::TitleChanged));
+    }
 }
 
 
