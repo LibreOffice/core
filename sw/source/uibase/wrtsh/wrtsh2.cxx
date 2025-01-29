@@ -597,15 +597,16 @@ static void LoadURL(SwView& rView, const OUString& rURL, LoadUrlFlags nFilter,
     if ((nFilter & LoadUrlFlags::NewView) && !comphelper::LibreOfficeKit::isActive())
         aTargetFrameName.SetValue( "_blank" );
 
-    rViewFrame.GetDispatcher()->ExecuteList(SID_OPENDOC,
-            SfxCallMode::ASYNCHRON|SfxCallMode::RECORD,
-            {
+    const SfxPoolItem* aArr[] = {
                 &aName,
                 &aNewView, /*&aSilent,*/
                 &aReferer,
                 &aView, &aTargetFrameName,
-                &aBrowse
-            });
+                &aBrowse,
+                nullptr
+            };
+    rViewFrame.GetDispatcher()->GetBindings()->Execute(
+        SID_OPENDOC, aArr, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
 }
 
 void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
