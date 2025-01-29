@@ -12,6 +12,9 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
 #include <com/sun/star/datatransfer/XTransferableTextSupplier.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
+#include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/AutoTextContainer.hpp>
@@ -43,6 +46,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/compbase.hxx>
 
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
@@ -1409,6 +1413,107 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf162480)
     auto xAnchorRange = xTextBox->getAnchor();
     auto xCellText = xTable->getCellByName("B1").queryThrow<css::text::XText>();
     CPPUNIT_ASSERT_EQUAL(xCellText, xAnchorRange->getText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf164885)
+{
+    class LocalDispatch : public comphelper::WeakImplHelper<css::frame::XDispatch>
+    {
+    public:
+        LocalDispatch() = default;
+
+        void SAL_CALL dispatch(const css::util::URL& URL,
+                               const css::uno::Sequence<css::beans::PropertyValue>&) override
+        {
+            sLastCommand = URL.Complete;
+        }
+        void SAL_CALL addStatusListener(const css::uno::Reference<css::frame::XStatusListener>&,
+                                        const css::util::URL&) override
+        {
+            // empty
+        }
+        void SAL_CALL removeStatusListener(const css::uno::Reference<css::frame::XStatusListener>&,
+                                           const css::util::URL&) override
+        {
+            // empty
+        }
+
+        OUString sLastCommand;
+    };
+
+    class LocalInterceptor
+        : public comphelper::WeakImplHelper<css::frame::XDispatchProviderInterceptor>
+    {
+    public:
+        LocalInterceptor() = default;
+
+        // XDispatchProvider
+        css::uno::Reference<css::frame::XDispatch>
+            SAL_CALL queryDispatch(const css::util::URL& URL, const OUString& TargetFrameName,
+                                   sal_Int32 SearchFlags) override
+        {
+            if (URL.Complete == ".uno:Open")
+                return pDispatch;
+            if (m_slave)
+                return m_slave->queryDispatch(URL, TargetFrameName, SearchFlags);
+            return {};
+        }
+        css::uno::Sequence<css::uno::Reference<css::frame::XDispatch>> SAL_CALL
+        queryDispatches(const css::uno::Sequence<css::frame::DispatchDescriptor>&) override
+        {
+            return {};
+        }
+
+        // XDispatchProviderInterceptor
+        css::uno::Reference<css::frame::XDispatchProvider>
+            SAL_CALL getSlaveDispatchProvider() override
+        {
+            return m_slave;
+        }
+        void SAL_CALL setSlaveDispatchProvider(
+            const css::uno::Reference<css::frame::XDispatchProvider>& val) override
+        {
+            m_slave = val;
+        }
+        css::uno::Reference<css::frame::XDispatchProvider>
+            SAL_CALL getMasterDispatchProvider() override
+        {
+            return m_master;
+        }
+        void SAL_CALL setMasterDispatchProvider(
+            const css::uno::Reference<css::frame::XDispatchProvider>& val) override
+        {
+            m_master = val;
+        }
+
+        rtl::Reference<LocalDispatch> pDispatch{ new LocalDispatch };
+
+    private:
+        css::uno::Reference<css::frame::XDispatchProvider> m_master;
+        css::uno::Reference<css::frame::XDispatchProvider> m_slave;
+    };
+
+    // Given a document with a hyperlink
+    createSwDoc("hyperlink.fodt");
+    auto controller(mxComponent.queryThrow<frame::XModel>()->getCurrentController());
+    auto xProvider(controller->getFrame().queryThrow<css::frame::XDispatchProviderInterception>());
+
+    rtl::Reference<LocalInterceptor> interceptor(new LocalInterceptor);
+    xProvider->registerDispatchProviderInterceptor(interceptor);
+
+    auto xCursor = controller.queryThrow<text::XTextViewCursorSupplier>()->getViewCursor();
+    xCursor->goRight(5, false); // put cursor inside the hyperlink
+
+    // Initiale "open hyperlink"
+    dispatchCommand(mxComponent, u".uno:OpenHyperlinkOnCursor"_ustr, {});
+
+    xProvider->releaseDispatchProviderInterceptor(interceptor);
+
+    // Without the fix, this failed with
+    // - Expected: .uno:Open
+    // - Actual  :
+    // because the interception didn't happen
+    CPPUNIT_ASSERT_EQUAL(u".uno:Open"_ustr, interceptor->pDispatch->sLastCommand);
 }
 
 } // end of anonymous namespace
