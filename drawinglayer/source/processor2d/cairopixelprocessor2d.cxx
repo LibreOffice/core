@@ -875,13 +875,19 @@ bool checkCoordinateLimitWorkaroundNeededForUsedCairo()
     // setup surface and render context
     cairo_surface_t* pSurface(cairo_image_surface_create(CAIRO_FORMAT_RGB24, 8, 8));
     if (!pSurface)
-        // got no surface -> be pessimistic
+    {
+        SAL_INFO(
+            "drawinglayer",
+            "checkCoordinateLimitWorkaroundNeededForUsedCairo: got no surface -> be pessimistic");
         return true;
+    }
 
     cairo_t* pRender(cairo_create(pSurface));
     if (!pRender)
     {
-        // got no render -> be pessimistic
+        SAL_INFO(
+            "drawinglayer",
+            "checkCoordinateLimitWorkaroundNeededForUsedCairo: got no render -> be pessimistic");
         cairo_surface_destroy(pSurface);
         return true;
     }
@@ -932,7 +938,9 @@ bool checkCoordinateLimitWorkaroundNeededForUsedCairo()
 
     // if cairo works or has no 24.8 internal format all pixels
     // have to be red (255), thus workaround is needed if !=
-    return aRedAt_1_1 != aRedAt_6_6;
+    auto const needed = aRedAt_1_1 != aRedAt_6_6;
+    SAL_INFO("drawinglayer", "checkCoordinateLimitWorkaroundNeededForUsedCairo: " << needed);
+    return needed;
 }
 }
 
