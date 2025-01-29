@@ -355,12 +355,9 @@ endif
 ifneq ($(ENABLE_WASM_STRIP_CANVAS),TRUE)
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	canvastools \
-	$(if $(ENABLE_CAIRO_CANVAS),cairocanvas) \
 	canvasfactory \
 	cppcanvas \
-	$(if $(filter WNT,$(OS)),directx9canvas) \
 	$(if $(ENABLE_OPENGL_CANVAS),oglcanvas) \
-	$(if $(filter WNT,$(OS)),gdipluscanvas) \
 	simplecanvas \
 	vclcanvas \
 ))

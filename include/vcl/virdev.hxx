@@ -54,7 +54,7 @@ private:
     RefDevMode          meRefDevMode;
     bool                mbForceZeroExtleadBug;
 
-    SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, tools::Long nDX, tools::Long nDY, const SystemGraphicsData *pData = nullptr );
+    SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, tools::Long nDX, tools::Long nDY );
     SAL_DLLPRIVATE bool InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
                                                      sal_uInt8* pBuffer );
 
@@ -107,13 +107,6 @@ public:
     explicit VirtualDevice(const OutputDevice& rCompDev,
                            DeviceFormat eFormat = DeviceFormat::WITHOUT_ALPHA)
         : VirtualDevice(&rCompDev, eFormat, OUTDEV_VIRDEV) {}
-
-    /** Create a virtual device using an existing system dependent device or graphics context
-        Any rendering will happen directly on the context and not on any intermediate bitmap.
-        Note: This might not be supported on all platforms !
-     */
-    explicit VirtualDevice(const SystemGraphicsData& rData, const Size &rSize,
-                           DeviceFormat eFormat);
 
     virtual             ~VirtualDevice() override;
     virtual void        dispose() override;

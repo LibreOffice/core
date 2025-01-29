@@ -25,9 +25,6 @@ class X11SkiaSalVirtualDevice final : public SalVirtualDevice
 public:
     X11SkiaSalVirtualDevice(const SalGraphics& rGraphics, tools::Long nDX, tools::Long nDY,
                             std::unique_ptr<X11SalGraphics> pNewGraphics);
-    X11SkiaSalVirtualDevice(const SalGraphics& rGraphics, tools::Long nDX, tools::Long nDY,
-                            const SystemGraphicsData& rData,
-                            std::unique_ptr<X11SalGraphics> pNewGraphics);
     virtual ~X11SkiaSalVirtualDevice() override;
 
     // SalGeometryProvider

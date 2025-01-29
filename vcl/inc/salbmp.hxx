@@ -39,7 +39,6 @@ struct BitmapBuffer;
 class Color;
 class SalGraphics;
 class BitmapPalette;
-struct BitmapSystemData;
 enum class BmpScaleFlag;
 
 extern const sal_uLong nVCLRLut[ 6 ];
@@ -77,7 +76,6 @@ public:
 
     virtual BitmapBuffer*   AcquireBuffer( BitmapAccessMode nMode ) = 0;
     virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) = 0;
-    virtual bool            GetSystemData( BitmapSystemData& rData ) = 0;
 
     virtual bool            ScalingSupported() const = 0;
     virtual bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) = 0;

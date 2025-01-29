@@ -97,37 +97,6 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
     return pVDev;
 }
 
-std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphics& rSGraphics,
-                                                       tools::Long &nDX, tools::Long &nDY,
-                                                       DeviceFormat /*eFormat*/,
-                                                       const SystemGraphicsData& rData )
-{
-    WinSalGraphics& rGraphics = static_cast<WinSalGraphics&>(rSGraphics);
-
-    HDC hDC = rData.hDC ? rData.hDC : GetDC(rData.hWnd);
-    if (hDC)
-    {
-        nDX = GetDeviceCaps( hDC, HORZRES );
-        nDY = GetDeviceCaps( hDC, VERTRES );
-    }
-    else
-    {
-        nDX = 0;
-        nDY = 0;
-    }
-
-    if (!hDC)
-        return nullptr;
-
-    const sal_uInt16 nBitCount = 0;
-    const bool bForeignDC = rData.hDC != nullptr;
-
-    auto pVDev = std::make_unique<WinSalVirtualDevice>(hDC, /*hBmp*/nullptr, nBitCount,
-                                                       bForeignDC, nDX, nDY,  rGraphics.isScreen());
-
-    return pVDev;
-}
-
 WinSalVirtualDevice::WinSalVirtualDevice(HDC hDC, HBITMAP hBMP, sal_uInt16 nBitCount, bool bForeignDC, tools::Long nWidth, tools::Long nHeight, bool bIsScreen)
     : mhLocalDC(hDC),          // HDC or 0 for Cache Device
       mhBmp(hBMP),             // Memory Bitmap

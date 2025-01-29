@@ -52,8 +52,6 @@ class X11SalVirtualDevice final : public SalVirtualDevice
 public:
     X11SalVirtualDevice(const SalGraphics& rGraphics, tools::Long nDX, tools::Long nDY,
             DeviceFormat eFormat, std::unique_ptr<X11SalGraphics> pNewGraphics);
-    X11SalVirtualDevice(const SalGraphics& rGraphics, tools::Long &nDX, tools::Long &nDY,
-            DeviceFormat eFormat, const SystemGraphicsData& rData, std::unique_ptr<X11SalGraphics> pNewGraphics);
 
     virtual ~X11SalVirtualDevice() override;
 

@@ -810,12 +810,6 @@ Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay ) const
     return aDispBmp;
 }
 
-bool Bitmap::GetSystemData( BitmapSystemData& rData ) const
-{
-    return mxSalBmp && mxSalBmp->GetSystemData(rData);
-}
-
-
 bool Bitmap::Convert( BmpConversion eConversion )
 {
     // try to convert in backend

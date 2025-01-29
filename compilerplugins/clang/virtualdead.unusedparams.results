@@ -220,9 +220,6 @@ vcl/inc/font/PhysicalFontFace.hxx:198
 vcl/inc/salbmp.hxx:71
     _Bool SalBitmap::Create(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmapCanvas> &,class Size &,_Bool,)
     000
-vcl/inc/salbmp.hxx:80
-    _Bool SalBitmap::GetSystemData(struct BitmapSystemData &,)
-    0
 vcl/inc/salbmp.hxx:86
     _Bool SalBitmap::Replace(const class Color &,const class Color &,unsigned char,)
     000

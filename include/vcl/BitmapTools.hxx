@@ -74,12 +74,6 @@ VCL_DLLPUBLIC void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const
 
 VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx);
 
-/**
- * @param data will be filled with alpha data, if xBitmap is alpha/transparent image
- * @param bHasAlpha will be set to true if resulting surface has alpha
- **/
-VCL_DLLPUBLIC void CanvasCairoExtractBitmapData( BitmapEx const & rBmpEx, Bitmap & rBitmap, unsigned char*& data, bool& bHasAlpha, tools::Long& rnWidth, tools::Long& rnHeight );
-
 VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > CanvasExtractBitmapData(BitmapEx const & rBitmapEx, const css::geometry::IntegerRectangle2D& rect);
 
 // helper to construct historical 8x8 bitmaps with two colors

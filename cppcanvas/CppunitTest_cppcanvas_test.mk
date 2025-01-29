@@ -39,7 +39,6 @@ $(eval $(call gb_CppunitTest_use_ure,cppcanvas_test))
 $(eval $(call gb_CppunitTest_use_vcl,cppcanvas_test))
 
 $(eval $(call gb_CppunitTest_use_components,cppcanvas_test,\
-	$(if $(ENABLE_CAIRO_CANVAS),canvas/source/cairo/cairocanvas) \
 	canvas/source/vcl/vclcanvas \
 	canvas/source/factory/canvasfactory \
     configmgr/source/configmgr \

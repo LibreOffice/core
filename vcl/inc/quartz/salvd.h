@@ -53,7 +53,6 @@ private:
 
 public:
     AquaSalVirtualDevice( AquaSalGraphics* pGraphic, tools::Long nDX, tools::Long nDY, DeviceFormat eFormat );
-    AquaSalVirtualDevice( tools::Long &nDX, tools::Long &nDY, DeviceFormat eFormat, const SystemGraphicsData& rData );
     virtual ~AquaSalVirtualDevice() override;
 
     virtual SalGraphics*            AcquireGraphics() override;

@@ -20,7 +20,6 @@
 #include <cairo-xlib.h>
 #include <unx/salgdi.h>
 #include <unx/x11/x11gdiimpl.h>
-#include "cairo_xlib_cairo.hxx"
 
 #include <headless/CairoCommon.hxx>
 

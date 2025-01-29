@@ -61,7 +61,6 @@ public:
 
     SAL_DLLPRIVATE virtual BitmapBuffer*   AcquireBuffer( BitmapAccessMode nMode ) override;
     SAL_DLLPRIVATE virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) override;
-    SAL_DLLPRIVATE virtual bool            GetSystemData( BitmapSystemData& rData ) override;
 
     SAL_DLLPRIVATE virtual bool            ScalingSupported() const override;
     SAL_DLLPRIVATE virtual bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) override;

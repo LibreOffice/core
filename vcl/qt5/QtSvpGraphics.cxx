@@ -18,7 +18,6 @@
 #include <QtFrame.hxx>
 #include <QtGraphics_Controls.hxx>
 #include <QtSvpGraphics.hxx>
-#include <QtSvpSurface.hxx>
 #include <QtTools.hxx>
 
 #include <QtWidgets/QWidget>
@@ -33,33 +32,6 @@ QtSvpGraphics::QtSvpGraphics(QtFrame* pFrame)
 }
 
 QtSvpGraphics::~QtSvpGraphics() {}
-
-void QtSvpGraphics::updateQWidget() const
-{
-    if (!m_pFrame)
-        return;
-    QWidget* pQWidget = m_pFrame->GetQWidget();
-    if (pQWidget)
-        pQWidget->update(pQWidget->rect());
-}
-
-#if ENABLE_CAIRO_CANVAS
-
-bool QtSvpGraphics::SupportsCairo() const { return true; }
-
-cairo::SurfaceSharedPtr
-QtSvpGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
-{
-    return std::make_shared<cairo::QtSvpSurface>(rSurface);
-}
-
-cairo::SurfaceSharedPtr QtSvpGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int x,
-                                                     int y, int width, int height) const
-{
-    return std::make_shared<cairo::QtSvpSurface>(this, x, y, width, height);
-}
-
-#endif
 
 static void QImage2BitmapBuffer(QImage& rImg, BitmapBuffer& rBuf)
 {

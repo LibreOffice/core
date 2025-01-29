@@ -414,14 +414,6 @@ bool SkiaSalBitmap::IsAllBlack() const
     return true;
 }
 
-bool SkiaSalBitmap::GetSystemData(BitmapSystemData&)
-{
-#ifdef DBG_UTIL
-    assert(mWriteAccessCount == 0);
-#endif
-    return false;
-}
-
 bool SkiaSalBitmap::ScalingSupported() const { return true; }
 
 bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag)

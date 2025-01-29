@@ -52,17 +52,11 @@ public:
     /// Gtk vclplug needs to pass GtkSalGraphics to X11SalVirtualDevice, so create it, and pass as pNewGraphics.
     static std::unique_ptr<SalVirtualDevice> CreateX11VirtualDevice(const SalGraphics& rGraphics, tools::Long nDX, tools::Long nDY,
             DeviceFormat eFormat, std::unique_ptr<X11SalGraphics> pNewGraphics);
-    static std::unique_ptr<SalVirtualDevice> CreateX11VirtualDevice(const SalGraphics& rGraphics, tools::Long &nDX, tools::Long &nDY,
-            DeviceFormat eFormat, const SystemGraphicsData& rData, std::unique_ptr<X11SalGraphics> pNewGraphics);
 
     virtual std::unique_ptr<SalVirtualDevice>
                                 CreateVirtualDevice( SalGraphics& rGraphics,
                                                      tools::Long nDX, tools::Long nDY,
                                                      DeviceFormat eFormat ) override;
-    virtual std::unique_ptr<SalVirtualDevice>
-                                CreateVirtualDevice( SalGraphics& rGraphics,
-                                                     tools::Long &nDX, tools::Long &nDY,
-                                                     DeviceFormat eFormat, const SystemGraphicsData& rData ) override;
     virtual void                PostPrintersChanged() override;
     virtual std::unique_ptr<GenPspGraphics> CreatePrintGraphics() override;
 

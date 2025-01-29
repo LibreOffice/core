@@ -402,10 +402,6 @@ include/unoidl/unoidl.hxx:455
     unoidl::ConstantValue::(anonymous union at /home/noel/libo-plugin/include/unoidl/unoidl.hxx:445:5) doubleValue double
 include/unotest/bootstrapfixturebase.hxx:52
     test::BootstrapFixtureBase m_directories Directories
-include/vcl/bitmap.hxx:102
-    BitmapSystemData mnWidth int
-include/vcl/bitmap.hxx:103
-    BitmapSystemData mnHeight int
 include/vcl/formatter.hxx:128
     Formatter m_aStaticFormatter StaticFormatter
 include/vcl/toolkit/field.hxx:399

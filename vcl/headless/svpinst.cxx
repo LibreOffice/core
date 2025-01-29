@@ -209,29 +209,6 @@ std::unique_ptr<SalVirtualDevice> SvpSalInstance::CreateVirtualDevice(SalGraphic
     return xNew;
 }
 
-std::unique_ptr<SalVirtualDevice> SvpSalInstance::CreateVirtualDevice(SalGraphics& rGraphics,
-                                                       tools::Long &nDX, tools::Long &nDY,
-                                                       DeviceFormat /*eFormat*/,
-                                                       const SystemGraphicsData& rGd)
-{
-    SvpSalGraphics *pSvpSalGraphics = dynamic_cast<SvpSalGraphics*>(&rGraphics);
-    assert(pSvpSalGraphics);
-#ifndef ANDROID
-    // tdf#127529 normally pPreExistingTarget is null and we are a true virtualdevice drawing to a backing buffer.
-    // Occasionally, for canvas/slideshow, pPreExistingTarget is pre-provided as a hack to use the vcl drawing
-    // apis to render onto a preexisting cairo surface. The necessity for that precedes the use of cairo in vcl proper
-    cairo_surface_t* pPreExistingTarget = static_cast<cairo_surface_t*>(rGd.pSurface);
-#else
-    //ANDROID case
-    (void)rGd;
-    cairo_surface_t* pPreExistingTarget = nullptr;
-#endif
-    std::unique_ptr<SalVirtualDevice> xNew(new SvpSalVirtualDevice(pSvpSalGraphics->getSurface(), pPreExistingTarget));
-    if (!xNew->SetSize(nDX, nDY))
-        xNew.reset();
-    return xNew;
-}
-
 cairo_surface_t* get_underlying_cairo_surface(const VirtualDevice& rDevice)
 {
     return static_cast<SvpSalVirtualDevice*>(rDevice.mpVirDev.get())->GetSurface();

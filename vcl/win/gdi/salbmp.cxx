@@ -804,20 +804,6 @@ void WinSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode 
         InvalidateChecksum();
 }
 
-bool WinSalBitmap::GetSystemData( BitmapSystemData& rData )
-{
-    bool bRet = false;
-    if( mhDIB || mhDDB )
-    {
-        bRet = true;
-        rData.pDIB = mhDIB;
-        const Size& rSize = GetSize ();
-        rData.mnWidth = rSize.Width();
-        rData.mnHeight = rSize.Height();
-    }
-    return bRet;
-}
-
 bool WinSalBitmap::ScalingSupported() const
 {
     return false;

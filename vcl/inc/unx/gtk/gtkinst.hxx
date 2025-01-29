@@ -267,11 +267,6 @@ public:
                                 CreateVirtualDevice( SalGraphics&,
                                                      tools::Long nDX, tools::Long nDY,
                                                      DeviceFormat eFormat ) override;
-    virtual std::unique_ptr<SalVirtualDevice>
-                                CreateVirtualDevice( SalGraphics&,
-                                                     tools::Long &nDX, tools::Long &nDY,
-                                                     DeviceFormat eFormat,
-                                                     const SystemGraphicsData& ) override;
     virtual std::shared_ptr<SalBitmap> CreateSalBitmap() override;
 
     virtual bool                DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
