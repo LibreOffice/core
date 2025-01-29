@@ -55,7 +55,6 @@ struct SvListView::Impl
     void ActionInserted(SvTreeListEntry* pEntry);
     void ActionInsertedTree(SvTreeListEntry* pEntry);
     void ActionRemoving(SvTreeListEntry* pEntry);
-    void ActionClear();
 };
 
 
@@ -1244,11 +1243,6 @@ void SvListView::Impl::ActionRemoving( SvTreeListEntry* pEntry )
     }
 }
 
-void SvListView::Impl::ActionClear()
-{
-    m_rThis.Clear();
-}
-
 void SvListView::ModelNotification( SvListAction nActionId, SvTreeListEntry* pEntry1,
                         SvTreeListEntry* /*pEntry2*/, sal_uInt32 /*nPos*/ )
 {
@@ -1279,7 +1273,7 @@ void SvListView::ModelNotification( SvListAction nActionId, SvTreeListEntry* pEn
             ModelHasMoved( pEntry1 );
             break;
         case SvListAction::CLEARING:
-            m_pImpl->ActionClear();
+            Clear();
             ModelHasCleared(); // sic! for compatibility reasons!
             break;
         case SvListAction::CLEARED:
