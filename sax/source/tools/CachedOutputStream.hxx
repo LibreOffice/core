@@ -11,6 +11,7 @@
 #define INCLUDED_SAX_SOURCE_TOOLS_CACHEDOUTPUTSTREAM_HXX
 
 #include <sal/types.h>
+#include <rtl/byteseq.hxx>
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -34,7 +35,7 @@ class CachedOutputStream
 
     /// ForMerge structure is used for sorting elements in Writer
     std::shared_ptr< ForMergeBase > mpForMerge;
-    const css::uno::Sequence<sal_Int8> mpCache;
+    const rtl::ByteSequence maCache;
     /// Output stream, usually writing data into files.
     css::uno::Reference< css::io::XOutputStream > mxOutputStream;
     uno_Sequence *pSeq;
@@ -42,8 +43,8 @@ class CachedOutputStream
     bool mbWriteToOutStream;
 
 public:
-    CachedOutputStream() : mpCache(mnMaximumSize)
-                         , pSeq(mpCache.get())
+    CachedOutputStream() : maCache(mnMaximumSize, rtl::BYTESEQ_NODEFAULT)
+                         , pSeq(maCache.get())
                          , mnCacheWrittenSize(0)
                          , mbWriteToOutStream(true)
     {}
@@ -103,9 +104,9 @@ public:
         // resize the Sequence to written size
         pSeq->nElements = mnCacheWrittenSize;
         if (mbWriteToOutStream)
-            mxOutputStream->writeBytes( mpCache );
+            mxOutputStream->writeBytes( css::uno::toUnoSequence(maCache) );
         else
-            mpForMerge->append( mpCache );
+            mpForMerge->append( css::uno::toUnoSequence(maCache) );
         // and next time write to the beginning
         mnCacheWrittenSize = 0;
     }
