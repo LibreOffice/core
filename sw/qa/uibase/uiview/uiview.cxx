@@ -17,6 +17,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -353,6 +354,54 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testEditInReadonly)
     eState = pView->GetViewFrame().GetBindings().QueryState(FN_INSERT_TABLE, pItem);
     //status default in editable section
     CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, eState);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testShowTextobjectbarInReadonly)
+{
+    createSwDoc("tdf146549.odt");
+
+    SwDocShell* pDocShell = getSwDocShell();
+    SwView* pView = pDocShell->GetView();
+
+    pView->GetViewFrame().GetDispatcher()->Execute(SID_EDITDOC, SfxCallMode::SYNCHRON);
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XParagraphCursor> xParaCursor(xTextDocument->getText()->createTextCursor(),
+                                                       uno::UNO_QUERY);
+
+    uno::Reference<view::XSelectionSupplier> xSelSupplier(xModel->getCurrentController(),
+                                                          uno::UNO_QUERY_THROW);
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    SfxViewFrame& rViewFrame = pWrtShell->GetView().GetViewFrame();
+    uno::Reference<com::sun::star::frame::XLayoutManager> xLayoutManager;
+    uno::Reference<beans::XPropertySet> xPropSet(rViewFrame.GetFrame().GetFrameInterface(),
+                                                 uno::UNO_QUERY);
+    xLayoutManager.set(xPropSet->getPropertyValue(u"LayoutManager"_ustr), uno::UNO_QUERY);
+
+    // move the cursor to the non-editable section
+    xSelSupplier->select(css::uno::Any(xParaCursor));
+
+    bool bShow;
+    bShow = xLayoutManager->isElementVisible(u"private:resource/toolbar/drawtextobjectbar"_ustr);
+    CPPUNIT_ASSERT_EQUAL(false, bShow); // the formatting toolbar should be hidden
+
+    // move the cursor to the editable section
+    xParaCursor->gotoNextParagraph(false);
+    xSelSupplier->select(css::uno::Any(xParaCursor));
+
+    bShow = xLayoutManager->isElementVisible(u"private:resource/toolbar/drawtextobjectbar"_ustr);
+    CPPUNIT_ASSERT_EQUAL(true, bShow); // the formatting toolbar should be shown
+
+    // move the cursor to the non-editable section
+    xParaCursor->gotoPreviousParagraph(false);
+    xSelSupplier->select(css::uno::Any(xParaCursor));
+
+    bShow = xLayoutManager->isElementVisible(u"private:resource/toolbar/drawtextobjectbar"_ustr);
+    CPPUNIT_ASSERT_EQUAL(false, bShow); // the formatting toolbar should be hidden
 }
 CPPUNIT_PLUGIN_IMPLEMENT();
 

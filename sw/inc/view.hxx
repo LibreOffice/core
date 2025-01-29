@@ -692,8 +692,10 @@ public:
     void NotifyCursor(SfxViewShell* pViewShell) const override;
     /// See SfxViewShell::GetColorConfigColor().
     ::Color GetColorConfigColor(svtools::ColorConfigEntry nColorType) const override;
-    void ShowUIElement(const OUString& sElementURL) const;
 
+    void SetUIElementVisibility(const OUString& sElementURL, bool bShow) const;
+    void ShowUIElement(const OUString& sElementURL) const;
+    void HideUIElement(const OUString& sElementURL) const;
 
     enum CachedStringID
     {
