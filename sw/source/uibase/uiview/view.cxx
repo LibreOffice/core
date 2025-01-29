@@ -245,16 +245,28 @@ uno::Reference<frame::XLayoutManager> getLayoutManager(const SfxViewFrame& rView
 }
 }
 
-void SwView::ShowUIElement(const OUString& sElementURL) const
+void SwView::SetUIElementVisibility(const OUString& sElementURL, bool bShow) const
 {
     if (auto xLayoutManager = getLayoutManager(*GetViewFrame()))
     {
         if (!xLayoutManager->getElement(sElementURL).is())
-        {
             xLayoutManager->createElement(sElementURL);
+
+        if (bShow)
             xLayoutManager->showElement(sElementURL);
-        }
+        else
+            xLayoutManager->hideElement(sElementURL);
     }
+}
+
+void SwView::ShowUIElement(const OUString& sElementURL) const
+{
+    SetUIElementVisibility(sElementURL, true);
+}
+
+void SwView::HideUIElement(const OUString& sElementURL) const
+{
+    SetUIElementVisibility(sElementURL, false);
 }
 
 void SwView::SelectShell()
@@ -634,6 +646,9 @@ void SwView::CheckReadonlyState()
         }
         if ( SfxItemState::DISABLED == eStateRO )
         {
+            if (m_pWrtShell->GetViewOptions()->IsReadonly())
+                ShowUIElement("private:resource/toolbar/drawtextobjectbar");
+
             rDis.SetSlotFilter( SfxSlotFilterState::ENABLED_READONLY, aROIds );
             bChgd = true;
         }
@@ -656,6 +671,9 @@ void SwView::CheckReadonlyState()
     else if ( SfxItemState::DISABLED != eStateRO ||
                 SfxItemState::DISABLED != eStateProtAll )
     {
+        if (m_pWrtShell->GetViewOptions()->IsReadonly())
+            HideUIElement("private:resource/toolbar/drawtextobjectbar");
+
         bChgd = true;
         rDis.SetSlotFilter();
     }

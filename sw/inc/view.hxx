@@ -642,8 +642,10 @@ public:
     const OUString& GetRedlineAuthor() const;
     /// See SfxViewShell::NotifyCursor().
     void NotifyCursor(SfxViewShell* pViewShell) const override;
-    void ShowUIElement(const OUString& sElementURL) const;
 
+    void SetUIElementVisibility(const OUString& sElementURL, bool bShow) const;
+    void ShowUIElement(const OUString& sElementURL) const;
+    void HideUIElement(const OUString& sElementURL) const;
 
     enum CachedStringID
     {
