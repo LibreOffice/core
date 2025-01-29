@@ -143,6 +143,7 @@ SAL_CALL XMLSignature_MSCryptImpl::generate(
     }
 
     //Sign the template
+    pDsigCtx->keyInfoReadCtx.flags |= XMLSEC_KEYINFO_FLAGS_X509DATA_DONT_VERIFY_CERTS;
     if( xmlSecDSigCtxSign( pDsigCtx , pNode ) == 0 )
     {
         if (pDsigCtx->status == xmlSecDSigStatusSucceeded)
