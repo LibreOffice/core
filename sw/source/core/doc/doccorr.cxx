@@ -121,6 +121,19 @@ void PaMCorrAbs( const SwPaM& rRange,
 
             if( pCursorShell->IsTableMode() )
                 lcl_PaMCorrAbs( const_cast<SwPaM &>(*pCursorShell->GetTableCrs()), aStart, aEnd, aNewPos );
+
+#if defined(YRS)
+            for (auto const& it : pCursorShell->m_PeerCursors)
+            {
+                if (it.second->m_pCurrentCursor)
+                {
+                    for (SwPaM & rPaM : it.second->m_pCurrentCursor->GetRingContainer())
+                    {
+                        lcl_PaMCorrAbs(rPaM, aStart, aEnd, aNewPos);
+                    }
+                }
+            }
+#endif
         }
     }
 
@@ -279,6 +292,16 @@ void PaMCorrRel( const SwNode &rOldNode,
 
             if( pCursorShell->IsTableMode() )
                 lcl_PaMCorrRel1( pCursorShell->GetTableCrs(), pOldNode, aNewPos, nCntIdx );
+
+#if defined(YRS)
+            for (auto const& it : pCursorShell->m_PeerCursors)
+            {
+                for (SwPaM & rPaM : it.second->m_pCurrentCursor->GetRingContainer())
+                {
+                    lcl_PaMCorrRel1(&rPaM, pOldNode, aNewPos, nCntIdx);
+                }
+            }
+#endif
         }
     }
 

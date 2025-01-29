@@ -87,6 +87,7 @@ public:
             SwPostItField const& rField, bool isInsert) override;
     void YrsRemoveCommentImpl(OString const& rCommentId) override;
     void YrsRemoveComment(SwPosition const& rPos, OString const& rCommentId) override;
+    void YrsNotifyCursorUpdate() override;
 #endif
 };
 

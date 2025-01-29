@@ -29,6 +29,7 @@
 #include <view.hxx>
 #include <docufld.hxx>
 #include <PostItMgr.hxx>
+#include <swmodule.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <txtannotationfld.hxx>
 #include <ndtxt.hxx>
@@ -120,7 +121,9 @@ YrsTransactionSupplier::YrsTransactionSupplier()
 
 YrsTransactionSupplier::~YrsTransactionSupplier()
 {
-    assert(m_pCurrentWriteTransaction == nullptr);
+    // with cursors there will always be a pending transaction, and there is no api to cancel it, so just ignore it...
+    //assert(m_pCurrentWriteTransaction == nullptr);
+    (void) m_pCurrentWriteTransaction;
 }
 
 YTransaction * YrsTransactionSupplier::GetReadTransaction()
@@ -623,13 +626,217 @@ extern "C" void observe_comments(void *const pState, uint32_t count, YEvent cons
     }
 }
 
+struct ObserveCursorState : public ObserveState
+{
+    struct Update {
+        OString const peerId;
+        ::std::optional<OUString> const oAuthor;
+        ::std::pair<int64_t, int64_t> const point;
+        ::std::optional<::std::pair<int64_t, int64_t>> const oMark;
+    };
+    ::std::vector<Update> CursorUpdates;
+};
+
+void YrsCursorUpdates(ObserveCursorState & rState)
+{
+    for (auto const& it : rState.CursorUpdates)
+    {
+#if defined(LOPLUGIN_BLOCK_BLOCK)
+#endif
+        {
+            ::std::optional<SwPosition> oMark;
+            if (it.oMark)
+            {
+                yvalidate(SwNodeOffset{it.oMark->first} < rState.rDoc.GetNodes().Count());
+                SwNode & rNode{*rState.rDoc.GetNodes()[SwNodeOffset{it.oMark->first}]};
+                yvalidate(rNode.IsTextNode());
+                yvalidate(it.oMark->second <= o3tl::make_unsigned(rNode.GetTextNode()->Len()));
+                oMark.emplace(*rNode.GetTextNode(), static_cast<sal_Int32>(it.oMark->second));
+            }
+
+            yvalidate(SwNodeOffset{it.point.first} < rState.rDoc.GetNodes().Count());
+            SwNode & rNode{*rState.rDoc.GetNodes()[SwNodeOffset{it.point.first}]};
+            yvalidate(rNode.IsTextNode());
+            yvalidate(it.point.second <= o3tl::make_unsigned(rNode.GetTextNode()->Len()));
+            SwPosition const point{*rNode.GetTextNode(), static_cast<sal_Int32>(it.point.second)};
+
+            for (SwViewShell & rShell : rState.rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()->GetRingContainer())
+            {
+                if (auto const pShell{dynamic_cast<SwCursorShell *>(&rShell)})
+                {
+                    if (it.oAuthor)
+                    {
+                        pShell->YrsAddCursor(it.peerId, {point}, oMark, *it.oAuthor);
+                    }
+                    else
+                    {
+                        pShell->YrsSetCursor(it.peerId, {point}, oMark);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void YrsReadCursor(ObserveCursorState & rState, OString const& rPeerId,
+    YOutput const& rCursor, ::std::optional<OUString> const oAuthor)
+{
+    switch (rCursor.tag)
+    {
+        case Y_ARRAY:
+        {
+            Branch const*const pArray{rCursor.value.y_type};
+            auto const len{yarray_len(pArray)};
+            if (len == 3 || len == 5)
+            {
+                // TODO cursor in EE
+            }
+            else if (len == 2 || len == 4)
+            {
+                // the only reason this stuff has a hope of working with
+                // integers is that the SwNodes is read-only
+                ::std::optional<::std::pair<int64_t, int64_t>> oMark;
+                if (len == 4)
+                {
+                    ::std::unique_ptr<YOutput, YOutputDeleter> const pNode{yarray_get(pArray, rState.pTxn, 2)};
+                    yvalidate(pNode->tag == Y_JSON_INT);
+                    ::std::unique_ptr<YOutput, YOutputDeleter> const pContent{yarray_get(pArray, rState.pTxn, 3)};
+                    yvalidate(pContent->tag == Y_JSON_INT);
+                    oMark.emplace(pNode->value.integer, pContent->value.integer);
+                }
+
+                ::std::unique_ptr<YOutput, YOutputDeleter> const pNode{yarray_get(pArray, rState.pTxn, 0)};
+                yvalidate(pNode->tag == Y_JSON_INT);
+                ::std::unique_ptr<YOutput, YOutputDeleter> const pContent{yarray_get(pArray, rState.pTxn, 1)};
+                yvalidate(pContent->tag == Y_JSON_INT);
+                ::std::pair<int64_t, int64_t> const pos{pNode->value.integer, pContent->value.integer};
+                rState.CursorUpdates.emplace_back(rPeerId, oAuthor, pos, oMark);
+            }
+            else
+                yvalidate(false);
+            break;
+        }
+        case Y_JSON_NULL:
+            for (SwViewShell & rShell : rState.rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()->GetRingContainer())
+            {
+                if (auto const pShell{dynamic_cast<SwCursorShell *>(&rShell)})
+                {
+                    if (oAuthor)
+                    {
+                        pShell->YrsAddCursor(rPeerId, {}, {}, *oAuthor);
+                    }
+                    else
+                    {
+                        pShell->YrsSetCursor(rPeerId, {}, {});
+                    }
+                }
+            }
+            break;
+        default:
+            yvalidate(false);
+    }
+}
+
 extern "C" void observe_cursors(void *const pState, uint32_t count, YEvent const*const events)
 {
-#if 1
-    (void) pState;
-    (void) count;
-    (void) events;
-#endif
+    SAL_DEBUG("YRS observe_cursors");
+    // note: it (very rarely) happens that observe_cursors will be called
+    // when a cursor is moved into a comment that is newly inserted, but
+    // observe_comments hasn't been called to actually insert the comment yet
+    // => need to buffer all the cursor updates and replay them at the end...
+    ObserveCursorState & rState{*static_cast<ObserveCursorState*>(pState)};
+
+    for (decltype(count) i = 0; i < count; ++i)
+    {
+        switch (events[i].tag)
+        {
+            case Y_MAP:
+            {
+                // new peer?
+                YMapEvent const*const pEvent{&events[i].content.map};
+                uint32_t lenP{0};
+                /*YPathSegment *const pPath{*/ymap_event_path(pEvent, &lenP);
+                yvalidate(lenP == 0);
+                uint32_t lenK{0};
+                YEventKeyChange *const pChange{ymap_event_keys(pEvent, &lenK)};
+                for (decltype(lenK) j = 0; j < lenK; ++j)
+                {
+                    OString const peerId{pChange[j].key};
+                    yvalidate(peerId != OString::number(ydoc_id(rState.rYrsSupplier.GetYDoc()))); // should never be updated by peers?
+                    switch (pChange[j].tag)
+                    {
+                        case Y_EVENT_KEY_CHANGE_UPDATE:
+                            yvalidate(false);
+                        case Y_EVENT_KEY_CHANGE_ADD:
+                        {
+                            switch (pChange[j].new_value->tag)
+                            {
+                                case Y_ARRAY:
+                                {
+                                    Branch const*const pArray{pChange[j].new_value->value.y_type};
+                                    auto const len{yarray_len(pArray)};
+                                    yvalidate(len == 2);
+                                    ::std::unique_ptr<YOutput, YOutputDeleter> const pAuthor{
+                                        yarray_get(pArray, rState.pTxn, 0)};
+                                    yvalidate(pAuthor->tag == Y_JSON_STR && pAuthor->len < SAL_MAX_INT32);
+                                    OUString const author{pAuthor->value.str,
+                                        static_cast<sal_Int32>(pAuthor->len), RTL_TEXTENCODING_UTF8};
+                                    ::std::unique_ptr<YOutput, YOutputDeleter> const pCursor{
+                                        yarray_get(pArray, rState.pTxn, 1)};
+                                    YrsReadCursor(rState, peerId, *pCursor, {author});
+                                    break;
+                                }
+                                default:
+                                    yvalidate(false);
+                            }
+                            break;
+                        }
+                        case Y_EVENT_KEY_CHANGE_DELETE:
+                        {
+                            for (SwViewShell & rShell : rState.rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()->GetRingContainer())
+                            {
+                                if (auto const pShell{dynamic_cast<SwCursorShell *>(&rShell)})
+                                {
+                                    pShell->YrsDelCursor(peerId);
+                                }
+                            }
+                            assert(false); // TODO cannot test this currently?
+                            break;
+                        }
+                        default:
+                            assert(false);
+                    }
+                }
+                break;
+            }
+            case Y_ARRAY:
+            {
+                YArrayEvent const*const pEvent{&events[i].content.array};
+                // position changed?
+                uint32_t lenP{0};
+                YPathSegment *const pPath{yarray_event_path(pEvent, &lenP)};
+                yvalidate(lenP == 1);
+                yvalidate(pPath[0].tag == Y_EVENT_PATH_KEY);
+                OString const peerId{pPath[0].value.key};
+                ypath_destroy(pPath, lenP);
+
+                uint32_t lenC{0};
+                YEventChange *const pChange{yarray_event_delta(pEvent, &lenC)};
+                // position update looks like this
+                yvalidate(lenC == 3);
+                yvalidate(pChange[0].tag == Y_EVENT_CHANGE_RETAIN);
+                yvalidate(pChange[0].len == 1);
+                yvalidate(pChange[1].tag == Y_EVENT_CHANGE_DELETE);
+                yvalidate(pChange[1].len == 1);
+                yvalidate(pChange[2].tag == Y_EVENT_CHANGE_ADD);
+                yvalidate(pChange[2].len == 1);
+                YrsReadCursor(rState, peerId, pChange[2].values[0], {});
+                break;
+            }
+            default:
+                assert(false);
+        }
+    }
 }
 
 void writeLength(sal_Int8 *& rpBuf, sal_Int32 const len)
@@ -726,9 +933,11 @@ IMPL_LINK(YrsThread, HandleMessage, void*, pVoid, void)
             // YText - need to be notified on new comments being created...
             ObserveState state{*m_pDSM->m_pYrsSupplier, m_pDSM->m_rDoc, pTxn};
             YSubscription *const pSubComments = yobserve_deep(m_pDSM->m_pYrsSupplier->GetCommentMap(), &state, observe_comments);
+            ObserveCursorState cursorState{*m_pDSM->m_pYrsSupplier, m_pDSM->m_rDoc, pTxn, {}};
             // not sure if yweak_observe would work for (weakref) cursors
-            YSubscription *const pSubCursors = yobserve_deep(m_pDSM->m_pYrsSupplier->GetCursorMap(), &state, observe_cursors);
+            YSubscription *const pSubCursors = yobserve_deep(m_pDSM->m_pYrsSupplier->GetCursorMap(), &cursorState, observe_cursors);
             m_pDSM->m_pYrsSupplier->CommitTransaction(true);
+            YrsCursorUpdates(cursorState);
             m_pDSM->m_pYrsSupplier->SetMode(IYrsTransactionSupplier::Mode::Edit);
             yunobserve(pSubComments);
             yunobserve(pSubCursors);
@@ -956,6 +1165,127 @@ void DocumentStateManager::YrsRemoveComment(SwPosition const& rPos, OString cons
     // either update the cursors here, or wait for round-trip?
 }
 
+void DocumentStateManager::YrsNotifyCursorUpdate()
+{
+    SwWrtShell *const pShell{dynamic_cast<SwWrtShell*>(m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell())};
+    if (!m_pYrsSupplier || !pShell->GetView().GetPostItMgr())
+    {
+        return;
+    }
+    SAL_DEBUG("YRS NotifyCursorUpdate");
+    YTransaction *const pTxn{m_pYrsSupplier->GetWriteTransaction()};
+    YDoc *const pYDoc{m_pYrsSupplier->GetYDoc()};
+    auto const id{ydoc_id(pYDoc)};
+    ::std::unique_ptr<YOutput, YOutputDeleter> pEntry{ymap_get(m_pYrsSupplier->m_pCursors, pTxn, OString::number(id).getStr())};
+    if (pEntry == nullptr)
+    {
+        OString const author{OUStringToOString(SwModule::get()->GetRedlineAuthor(SwModule::get()->GetRedlineAuthor()), RTL_TEXTENCODING_UTF8)};
+        ::std::vector<YInput> elements;
+        elements.push_back(yinput_string(author.getStr()));
+        elements.push_back(yinput_null());
+        YInput const input{yinput_yarray(elements.data(), 2)};
+        ymap_insert(m_pYrsSupplier->m_pCursors, pTxn, OString::number(id).getStr(), &input);
+        pEntry.reset(ymap_get(m_pYrsSupplier->m_pCursors, pTxn, OString::number(id).getStr()));
+    }
+    assert(pEntry);
+    yvalidate(pEntry->tag == Y_ARRAY);
+    yvalidate(yarray_len(pEntry->value.y_type) == 2);
+    ::std::unique_ptr<YOutput, YOutputDeleter> const pCurrent{yarray_get(pEntry->value.y_type, pTxn, 1)};
+    if (sw::annotation::SwAnnotationWin *const pWin{
+            pShell->GetView().GetPostItMgr()->GetActiveSidebarWin()})
+    {
+        // TODO StickyIndex cannot be inserted into YDoc ?
+        ESelection const sel{pWin->GetOutlinerView()->GetSelection()};
+        ::std::vector<YInput> positions;
+        // the ID of the comment
+        positions.push_back(yinput_string(pWin->GetOutlinerView()->GetEditView().GetYrsCommentId().getStr()));
+        positions.push_back(yinput_long(sel.start.nPara));
+        positions.push_back(yinput_long(sel.start.nIndex));
+        if (pWin->GetOutlinerView()->HasSelection())
+        {
+            positions.push_back(yinput_long(sel.end.nPara));
+            positions.push_back(yinput_long(sel.end.nIndex));
+            if (pCurrent == nullptr || pCurrent->tag != Y_ARRAY
+                || yarray_len(pCurrent->value.y_type) != 5
+                || strcmp(yarray_get(pCurrent->value.y_type, pTxn, 0)->value.str, positions[0].value.str) != 0
+                || yarray_get(pCurrent->value.y_type, pTxn, 1)->value.integer != positions[1].value.integer
+                || yarray_get(pCurrent->value.y_type, pTxn, 2)->value.integer != positions[2].value.integer
+                || yarray_get(pCurrent->value.y_type, pTxn, 3)->value.integer != positions[3].value.integer
+                || yarray_get(pCurrent->value.y_type, pTxn, 4)->value.integer != positions[4].value.integer)
+            {
+                YInput const input{yinput_yarray(positions.data(), 5)};
+                yarray_remove_range(pEntry->value.y_type, pTxn, 1, 1);
+                yarray_insert_range(pEntry->value.y_type, pTxn, 1, &input, 1);
+                YrsCommitModified();
+            }
+        }
+        else
+        {
+            if (pCurrent == nullptr || pCurrent->tag != Y_ARRAY
+                || yarray_len(pCurrent->value.y_type) != 3
+                || strcmp(yarray_get(pCurrent->value.y_type, pTxn, 0)->value.str, positions[0].value.str) != 0
+                || yarray_get(pCurrent->value.y_type, pTxn, 1)->value.integer != positions[1].value.integer
+                || yarray_get(pCurrent->value.y_type, pTxn, 2)->value.integer != positions[2].value.integer)
+            {
+                YInput const input{yinput_yarray(positions.data(), 3)};
+                yarray_remove_range(pEntry->value.y_type, pTxn, 1, 1);
+                yarray_insert_range(pEntry->value.y_type, pTxn, 1, &input, 1);
+                YrsCommitModified();
+            }
+        }
+    }
+    else if (!pShell->IsStdMode()
+           || pShell->GetSelectedObjCount() != 0
+           || pShell->IsTableMode()
+           || pShell->IsBlockMode())
+    {
+        if (pCurrent == nullptr || pCurrent->tag != Y_JSON_NULL)
+        {
+            YInput const input{yinput_null()};
+            yarray_remove_range(pEntry->value.y_type, pTxn, 1, 1);
+            yarray_insert_range(pEntry->value.y_type, pTxn, 1, &input, 1);
+            YrsCommitModified();
+        }
+    }
+    else
+    {
+        SwPaM const*const pCursor{pShell->GetCursor()};
+        ::std::vector<YInput> positions;
+        positions.push_back(yinput_long(pCursor->GetPoint()->GetNodeIndex().get()));
+        positions.push_back(yinput_long(pCursor->GetPoint()->GetContentIndex()));
+        if (pCursor->HasMark())
+        {
+            positions.push_back(yinput_long(pCursor->GetMark()->GetNodeIndex().get()));
+            positions.push_back(yinput_long(pCursor->GetMark()->GetContentIndex()));
+            if (pCurrent == nullptr || pCurrent->tag != Y_ARRAY
+                || yarray_len(pCurrent->value.y_type) != 4
+                || yarray_get(pCurrent->value.y_type, pTxn, 0)->value.integer != positions[0].value.integer
+                || yarray_get(pCurrent->value.y_type, pTxn, 1)->value.integer != positions[1].value.integer
+                || yarray_get(pCurrent->value.y_type, pTxn, 2)->value.integer != positions[2].value.integer
+                || yarray_get(pCurrent->value.y_type, pTxn, 3)->value.integer != positions[3].value.integer)
+            {
+                YInput const input{yinput_yarray(positions.data(), 4)};
+                yarray_remove_range(pEntry->value.y_type, pTxn, 1, 1);
+                yarray_insert_range(pEntry->value.y_type, pTxn, 1, &input, 1);
+                YrsCommitModified();
+            }
+        }
+        else
+        {
+            if (pCurrent == nullptr || pCurrent->tag != Y_ARRAY
+                || yarray_len(pCurrent->value.y_type) != 2
+                || yarray_get(pCurrent->value.y_type, pTxn, 0)->value.integer != positions[0].value.integer
+                || yarray_get(pCurrent->value.y_type, pTxn, 1)->value.integer != positions[1].value.integer)
+            {
+                YInput const input{yinput_yarray(positions.data(), 2)};
+                yarray_remove_range(pEntry->value.y_type, pTxn, 1, 1);
+                yarray_insert_range(pEntry->value.y_type, pTxn, 1, &input, 1);
+                YrsCommitModified();
+            }
+        }
+    }
+}
+
 void DocumentStateManager::YrsInitAcceptor()
 {
     if (!getenv("YRSACCEPT") || m_pYrsReader.is())
@@ -1049,7 +1379,7 @@ void DocumentStateManager::YrsInitAcceptor()
         }
         // initiate sync of comments to other side
     //AddComment would have done this    m_pYrsSupplier->GetWriteTransaction();
-        YrsCommitModified();
+        YrsNotifyCursorUpdate();
     }
     catch (uno::Exception const&) // exception here will cause UAF from SwView later
     {

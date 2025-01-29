@@ -143,12 +143,27 @@ std::optional<OUString> ReplaceBackReferences(const i18nutil::SearchOptions2& rS
 bool GetRanges(std::vector<std::shared_ptr<SwUnoCursor>> & rRanges,
         SwDoc & rDoc, SwPaM const& rDelPam);
 
+struct VisibleCursorState
+{
+    SwRect m_aCharRect;     ///< Char-SRectangle on which the cursor is located
+    Point m_aCursorHeight;  ///< height & offset from visible Cursor
+
+    SwShellCursor* m_pCurrentCursor;    ///< currently active cursor
+    SwVisibleCursor *m_pVisibleCursor;  ///< cursor displayed in view
+    bool m_bSVCursorVis : 1;        ///< SV-Cursor visible/invisible
+    bool m_bOverwriteCursor : 1;    ///< true -> show Overwrite Cursor
+
+    bool IsOverwriteCursor() const { return m_bOverwriteCursor; }
+    void SetOverwriteCursor( bool bFlag ) { m_bOverwriteCursor = bFlag; }
+};
+
 } // namespace sw
 
 class SAL_DLLPUBLIC_RTTI SwCursorShell
     : public SwViewShell
     , public sw::BroadcastingModify
     , public ::sw::IShellCursorSupplier
+    , protected ::sw::VisibleCursorState
 {
     friend class SwCallLink;
     friend class SwVisibleCursor;
@@ -173,8 +188,6 @@ public:
 
 private:
 
-    SwRect  m_aCharRect;          ///< Char-SRectangle on which the cursor is located
-    Point   m_aCursorHeight;        ///< height & offset from visible Cursor
     Point   m_aOldRBPos;          ///< Right/Bottom of last VisArea
                                 // (used in Invalidate by Cursor)
 
@@ -184,14 +197,22 @@ private:
                                    format changes at cursor position.*/
     Link<SwCursorShell&,void> m_aGrfArrivedLnk;      ///< Link calls to UI if a graphic is arrived
 
-    SwShellCursor* m_pCurrentCursor;      ///< current cursor
     SwShellCursor* m_pStackCursor;      ///< stack for the cursor
-    SwVisibleCursor *m_pVisibleCursor;        ///< the visible cursor
 
     SwBlockCursor *m_pBlockCursor;   ///< interface of cursor for block (=rectangular) selection
 
     SwShellTableCursor* m_pTableCursor; /**< table Cursor; only in tables when the
                                    selection lays over 2 columns */
+
+#if defined(YRS)
+public:
+    ::std::unordered_map<OString, ::std::unique_ptr<VisibleCursorState>> m_PeerCursors;
+    SwVisibleCursor * FindVisibleCursorForPeer(SwSelPaintRects const& rCursor) const;
+    void YrsAddCursor(OString const& rId, ::std::optional<SwPosition> const& roPoint, ::std::optional<SwPosition> const& roMark, OUString const& rAuthor);
+    void YrsSetCursor(OString const& rId, ::std::optional<SwPosition> const& roPoint, ::std::optional<SwPosition> const& roMark);
+    void YrsDelCursor(OString const& rId);
+private:
+#endif
 
     SwNodeIndex* m_pBoxIdx;       ///< for recognizing of the changed
     SwTableBox* m_pBoxPtr;        ///< table row
@@ -217,7 +238,6 @@ private:
     int m_nMarkedListLevel;
 
     bool m_bHasFocus : 1;         ///< Shell is "active" in a window
-    bool m_bSVCursorVis : 1;        ///< SV-Cursor visible/invisible
     bool m_bChgCallFlag : 1;      ///< attribute change inside Start- and EndAction
     bool m_bVisPortChgd : 1;      ///< in VisPortChg-Call
                                 // (used in Invalidate by the Cursor)
@@ -236,7 +256,6 @@ private:
     bool m_bAutoUpdateCells : 1;  // true -> autoformat cells
     bool m_bBasicHideCursor : 1;    // true -> HideCursor from Basic
     bool m_bSetCursorInReadOnly : 1;// true -> Cursor is allowed in ReadOnly-Areas
-    bool m_bOverwriteCursor : 1;    // true -> show Overwrite Cursor
 
     // true -> send accessible events when cursor changes
     // (set to false when using internal-only helper cursor)
@@ -492,9 +511,6 @@ public:
     // Methods for displaying or hiding the selected ranges with visible cursor.
     void ShowCursors( bool bCursorVis );
     void HideCursors();
-
-    bool IsOverwriteCursor() const { return m_bOverwriteCursor; }
-    void SetOverwriteCursor( bool bFlag ) { m_bOverwriteCursor = bFlag; }
 
     bool IsSendAccessibleCursorEvents() const { return m_bSendAccessibleCursorEvents; };
     void SetSendAccessibleCursorEvents(bool bEnable) { m_bSendAccessibleCursorEvents = bEnable; };

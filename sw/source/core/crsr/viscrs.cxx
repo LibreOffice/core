@@ -36,6 +36,7 @@
 #include <txtfld.hxx>
 #include <scriptinfo.hxx>
 #include <view.hxx>
+#include <swmodule.hxx>
 #include <IDocumentLayoutAccess.hxx>
 
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -75,11 +76,16 @@ tools::Long SwSelPaintRects::s_nPixPtY = 0;
 MapMode* SwSelPaintRects::s_pMapMode = nullptr;
 
 // Starting from here: classes / methods for the non-text-cursor
-SwVisibleCursor::SwVisibleCursor( const SwCursorShell * pCShell )
-    : m_pCursorShell( pCShell )
+SwVisibleCursor::SwVisibleCursor(::sw::VisibleCursorState const& rState,
+        const SwCursorShell *const pCShell)
+    : m_rState(rState)
+    , m_pCursorShell(pCShell)
     , m_nPageLastTime(0)
 {
-    pCShell->GetWin()->SetCursor( &m_aTextCursor );
+    if (&rState == pCShell)
+    {
+        pCShell->GetWin()->SetCursor( &m_aTextCursor );
+    }
     m_bIsVisible = m_aTextCursor.IsVisible();
     m_bIsDragCursor = false;
     m_aTextCursor.SetWidth( 0 );
@@ -90,7 +96,10 @@ SwVisibleCursor::~SwVisibleCursor()
     if( m_bIsVisible && m_aTextCursor.IsVisible() )
         m_aTextCursor.Hide();
 
-    m_pCursorShell->GetWin()->SetCursor( nullptr );
+    if (m_pCursorShell->GetWin()->GetCursor() == &m_aTextCursor)
+    {
+        m_pCursorShell->GetWin()->SetCursor( nullptr );
+    }
 }
 
 void SwVisibleCursor::Show()
@@ -100,7 +109,7 @@ void SwVisibleCursor::Show()
         m_bIsVisible = true;
 
         // display at all?
-        if( m_pCursorShell->VisArea().Overlaps( m_pCursorShell->m_aCharRect ) || comphelper::LibreOfficeKit::isActive() )
+        if (m_pCursorShell->VisArea().Overlaps(m_rState.m_aCharRect) || comphelper::LibreOfficeKit::isActive())
             SetPosAndShow(nullptr);
     }
 }
@@ -133,33 +142,33 @@ OString buildHyperlinkJSON(const OUString& sText, const OUString& sLink)
 
 }
 
-void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
+::std::pair<SwRect, bool> SwVisibleCursor::SetPos()
 {
     SwRect aRect;
-    tools::Long nTmpY = m_pCursorShell->m_aCursorHeight.getY();
+    tools::Long nTmpY = m_rState.m_aCursorHeight.getY();
     if( 0 > nTmpY )
     {
         nTmpY = -nTmpY;
         m_aTextCursor.SetOrientation( 900_deg10 );
-        aRect = SwRect( m_pCursorShell->m_aCharRect.Pos(),
-           Size( m_pCursorShell->m_aCharRect.Height(), nTmpY ) );
-        aRect.Pos().setX(aRect.Pos().getX() + m_pCursorShell->m_aCursorHeight.getX());
-        if( m_pCursorShell->IsOverwriteCursor() )
+        aRect = SwRect( m_rState.m_aCharRect.Pos(),
+           Size( m_rState.m_aCharRect.Height(), nTmpY ) );
+        aRect.Pos().setX(aRect.Pos().getX() + m_rState.m_aCursorHeight.getX());
+        if (m_rState.IsOverwriteCursor())
             aRect.Pos().setY(aRect.Pos().getY() + aRect.Width());
     }
     else
     {
         m_aTextCursor.SetOrientation();
-        aRect = SwRect( m_pCursorShell->m_aCharRect.Pos(),
-           Size( m_pCursorShell->m_aCharRect.Width(), nTmpY ) );
-        aRect.Pos().setY(aRect.Pos().getY() + m_pCursorShell->m_aCursorHeight.getX());
+        aRect = SwRect( m_rState.m_aCharRect.Pos(),
+           Size( m_rState.m_aCharRect.Width(), nTmpY ) );
+        aRect.Pos().setY(aRect.Pos().getY() + m_rState.m_aCursorHeight.getX());
     }
 
     // check if cursor should show the current cursor bidi level
     m_aTextCursor.SetDirection();
-    const SwCursor* pTmpCursor = m_pCursorShell->GetCursor_();
+    const SwCursor* pTmpCursor = m_rState.m_pCurrentCursor;
 
-    if ( pTmpCursor && !m_pCursorShell->IsOverwriteCursor() )
+    if ( pTmpCursor && !m_rState.IsOverwriteCursor() )
     {
         SwNode& rNode = pTmpCursor->GetPoint()->GetNode();
         if( rNode.IsTextNode() )
@@ -201,7 +210,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         if (!comphelper::LibreOfficeKit::isActive())
             ::SwAlignRect( aRect, static_cast<SwViewShell const *>(m_pCursorShell), m_pCursorShell->GetOut() );
     }
-    if( !m_pCursorShell->IsOverwriteCursor() || m_bIsDragCursor ||
+    if( !m_rState.IsOverwriteCursor() || m_bIsDragCursor ||
         m_pCursorShell->IsSelection() )
         aRect.Width( 0 );
 
@@ -209,6 +218,12 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
 
     m_aTextCursor.SetSize( aRect.SSize() );
     m_aTextCursor.SetPos( aRect.Pos() );
+    return { aRect, bIsCursorPosChanged };
+}
+
+void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
+{
+    auto const [aRect, bIsCursorPosChanged] {SetPos()};
 
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -346,7 +361,7 @@ const vcl::Cursor& SwVisibleCursor::GetTextCursor() const
     return m_aTextCursor;
 }
 
-SwSelPaintRects::SwSelPaintRects( const SwCursorShell& rCSh )
+SwSelPaintRects::SwSelPaintRects(const SwCursorShell& rCSh)
     : m_pCursorShell( &rCSh )
 #if HAVE_FEATURE_DESKTOP
     , m_bShowTextInputFieldOverlay(true)
@@ -456,8 +471,16 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
 
         if (xTargetOverlay.is())
         {
+            ::std::optional<Color> oColor;
+#if defined(YRS)
+            if (SwVisibleCursor *const pVisibleCursor{GetShell()->FindVisibleCursorForPeer(*this)})
+            {
+                ::std::size_t const authorId{SwModule::get()->InsertRedlineAuthor(*pVisibleCursor->m_Author)};
+                oColor.emplace(SwPostItMgr::GetColorAnchor(authorId));
+            }
+#endif
             // get the system's highlight color
-            const Color aHighlight(SvtOptionsDrawinglayer::getHilightColor());
+            const Color aHighlight(oColor ? *oColor : SvtOptionsDrawinglayer::getHilightColor());
 
             // create correct selection
             m_pCursorOverlay.reset( new sdr::overlay::OverlaySelection(
@@ -943,6 +966,25 @@ void SwShellCursor::FillRects()
     {
         GetShell()->GetLayout()->CalcFrameRects(*this, *this);
     }
+#if defined(YRS)
+    if (!HasMark())
+    {
+        if (SwVisibleCursor *const pVisibleCursor{GetShell()->FindVisibleCursorForPeer(*this)})
+        {
+            // use OutDev.GetSettings().GetStyleSettings().GetCursorSize() as width?
+            auto [cursorRect, _] {pVisibleCursor->SetPos()};
+            if (cursorRect.IsEmpty())
+            {
+                cursorRect.Width(20);
+            }
+            SAL_DEBUG("YRS FillRects extra rect " << cursorRect);
+            emplace_back(cursorRect);
+            SwRect const temp{Point{cursorRect.Left() - cursorRect.Height()/2,
+                cursorRect.Bottom()}, Size{cursorRect.Height() + 20, 20}};
+            emplace_back(temp);
+        }
+    }
+#endif
 }
 
 void SwShellCursor::Show(SfxViewShell const * pViewShell)

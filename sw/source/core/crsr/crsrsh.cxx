@@ -60,6 +60,9 @@
 #include <comphelper/flagguard.hxx>
 #include <strings.hrc>
 #include <IDocumentLayoutAccess.hxx>
+#if defined(YRS)
+#include <IDocumentState.hxx>
+#endif
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
@@ -1778,6 +1781,15 @@ void SwCursorShell::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
         bVis = true;
         m_pVisibleCursor->Hide();
     }
+#if defined(YRS)
+    for (auto const& it : m_PeerCursors)
+    {
+        if (it.second->m_pCurrentCursor)
+        {
+            it.second->m_pVisibleCursor->Hide();
+        }
+    }
+#endif
 
     // re-paint area
     SwViewShell::Paint(rRenderContext, rRect);
@@ -1807,6 +1819,15 @@ void SwCursorShell::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
     if( m_bSVCursorVis && bVis ) // also show SV cursor again
         m_pVisibleCursor->Show();
+#if defined(YRS)
+    for (auto const& it : m_PeerCursors)
+    {
+        if (it.second->m_pCurrentCursor && it.second->m_bSVCursorVis)
+        {
+            it.second->m_pVisibleCursor->Show();
+        }
+    }
+#endif
 }
 
 void SwCursorShell::VisPortChgd( const SwRect & rRect )
@@ -1987,6 +2008,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
     // If the current cursor is in a table and point/mark in different boxes,
     // then the table mode is active (also if it is already active: m_pTableCursor)
     SwPaM* pTstCursor = getShellCursor( true );
+    // TODO yrs: table selection is possible in RO mode
     if( pTstCursor->HasMark() && !m_pBlockCursor &&
         SwDoc::IsInTable( pTstCursor->GetPoint()->GetNode() ) &&
           ( m_pTableCursor ||
@@ -2164,7 +2186,17 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
     }
 
     m_pVisibleCursor->Hide(); // always hide visible Cursor
+#if defined(YRS)
+    for (auto const& it : m_PeerCursors)
+    {
+        if (it.second->m_pCurrentCursor)
+        {
+            it.second->m_pVisibleCursor->Hide();
+        }
+    }
+#endif
 
+    // for peers, leave it to the peer to move out of hidden/protected;
     // are we perhaps in a protected / hidden Section ?
     {
         SwShellCursor* pShellCursor = getShellCursor( true );
@@ -2216,7 +2248,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
     // loops _behind_ the last node in the selection, which always works if you
     // are in content.) To achieve this, we'll force cursor(s) to point into
     // content, if UpdateCursorPos() hasn't already done so.
-    for(SwPaM& rCmp : m_pCurrentCursor->GetRingContainer())
+    auto const MoveIntoContent = [](SwShellCursor *const pCursor) {
+    for (SwPaM& rCmp : pCursor->GetRingContainer())
     {
         // start will move forwards, end will move backwards
         bool bPointIsStart = ( rCmp.Start() == rCmp.GetPoint() );
@@ -2238,12 +2271,28 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
             }
         }
     }
+    };
+    MoveIntoContent(m_pCurrentCursor);
+#if defined(YRS)
+    for (auto const& it : m_PeerCursors)
+    {
+        if (it.second->m_pCurrentCursor)
+        {
+            MoveIntoContent(it.second->m_pCurrentCursor);
+        }
+    }
+#endif
+    SwContentFrame *pPointFrame;
 
-    SwRect aOld( m_aCharRect );
+    auto const Impl = [this, eFlags, eScrollSizeMode](::sw::VisibleCursorState & rState, SwContentFrame **const ppFrame, bool isThisShell)
+    {
+    SwRect aOld(rState.m_aCharRect);
     bool bFirst = true;
     SwContentFrame *pFrame;
     int nLoopCnt = 100;
-    SwShellCursor* pShellCursor = getShellCursor( true );
+    SwShellCursor* pShellCursor = isThisShell
+        ? static_cast<SwCursorShell&>(rState).getShellCursor(true)
+        : rState.m_pCurrentCursor;
 
     do {
         bool bAgainst;
@@ -2261,7 +2310,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
                 {
                     const SwStartNode* pNd = pShellCursor->GetPointNode().FindTableBoxStartNode();
                     if ( pNd && pNd->GetTableBox()->GetRedlineType() == RedlineType::Delete )
-                        return;
+                        return false;
                 }
 
                 do
@@ -2277,7 +2326,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
                 pFrame->PrepareCursor();
 
             // In protected Fly? but ignore in case of frame selection
-            if( !IsReadOnlyAvailable() && pFrame->IsProtected() &&
+            if (isThisShell && !IsReadOnlyAvailable() && pFrame->IsProtected() &&
                 ( !Imp()->GetDrawView() ||
                   !Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() ) &&
                 (!mxDoc->GetDocShell() ||
@@ -2300,7 +2349,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
                             GetDoc()->GetDocShell()->SetReadOnlyUI();
                             CallChgLnk();       // notify UI!
                         }
-                        return;
+                        return false;
                     }
                 }
 
@@ -2321,9 +2370,9 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
         } while( bAgainst );
 
         SwCursorMoveState aTmpState( m_eMvState );
-        aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
+        aTmpState.m_bSetInReadOnly = !isThisShell || IsReadOnlyAvailable();
         aTmpState.m_bRealHeight = true;
-        aTmpState.m_bRealWidth = IsOverwriteCursor();
+        aTmpState.m_bRealWidth = rState.m_bOverwriteCursor;
         aTmpState.m_nCursorBidiLevel = pShellCursor->GetCursorBidiLevel();
 
         // #i27615#,#i30453#
@@ -2336,25 +2385,26 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
 
         {
             DisableCallbackAction a(*GetLayout()); // tdf#91602 prevent recursive Action
-            if (!pFrame->GetCharRect(m_aCharRect, *pShellCursor->GetPoint(), &aTmpState))
+            if (!pFrame->GetCharRect(rState.m_aCharRect, *pShellCursor->GetPoint(), &aTmpState))
             {
                 Point& rPt = pShellCursor->GetPtPos();
-                rPt = m_aCharRect.Center();
+                rPt = rState.m_aCharRect.Center();
                 pFrame->GetModelPositionForViewPoint( pShellCursor->GetPoint(), rPt, &aTmpState );
             }
         }
-        UISizeNotify(); // tdf#96256 update view size
+        if (isThisShell)
+            UISizeNotify(); // tdf#96256 update view size
 
         if( !pShellCursor->HasMark() )
-            m_aCursorHeight = aTmpState.m_aRealHeight;
+            rState.m_aCursorHeight = aTmpState.m_aRealHeight;
         else
         {
-            m_aCursorHeight.setX(0);
-            m_aCursorHeight.setY(aTmpState.m_aRealHeight.getY() < 0 ?
-                              -m_aCharRect.Width() : m_aCharRect.Height());
+            rState.m_aCursorHeight.setX(0);
+            rState.m_aCursorHeight.setY(aTmpState.m_aRealHeight.getY() < 0 ?
+                -rState.m_aCharRect.Width() : rState.m_aCharRect.Height());
         }
 
-        if( !bFirst && aOld == m_aCharRect )
+        if (!bFirst && aOld == rState.m_aCharRect)
             break;
 
         // if the layout says that we are after the 100th iteration still in
@@ -2365,14 +2415,14 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
             OSL_ENSURE( false, "endless loop? CharRect != OldCharRect ");
             break;
         }
-        aOld = m_aCharRect;
+        aOld = rState.m_aCharRect;
         bFirst = false;
 
         // update cursor Points to the new Positions
-        pShellCursor->GetPtPos().setX(m_aCharRect.Left());
-        pShellCursor->GetPtPos().setY(m_aCharRect.Top());
+        pShellCursor->GetPtPos().setX(rState.m_aCharRect.Left());
+        pShellCursor->GetPtPos().setY(rState.m_aCharRect.Top());
 
-        if( !(eFlags & SwCursorShell::UPDOWN ))   // delete old Pos. of Up/Down
+        if (isThisShell && !(eFlags & SwCursorShell::UPDOWN))   // delete old Pos. of Up/Down
         {
             DisableCallbackAction a(*GetLayout());
             pFrame->Calc(GetOut());
@@ -2382,7 +2432,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
         }
 
         // scroll Cursor to visible area
-        if( m_bHasFocus && eFlags & SwCursorShell::SCROLLWIN &&
+        if (isThisShell && m_bHasFocus && eFlags & SwCursorShell::SCROLLWIN &&
             (HasSelection() || eFlags & SwCursorShell::READONLY ||
              !IsCursorReadonly() || GetViewOptions()->IsSelectionInReadonly()) )
         {
@@ -2395,8 +2445,25 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
         }
 
     } while( eFlags & SwCursorShell::SCROLLWIN );
+    *ppFrame = pFrame;
+    return true;
+    };
+#if defined(YRS)
+    for (auto const& it : m_PeerCursors)
+    {
+        if (it.second->m_pCurrentCursor)
+        {
+            SwContentFrame *pDummy;
+            Impl(*it.second, &pDummy, false);
+        }
+    }
+#endif
+    if (!Impl(*this, &pPointFrame, true))
+    {
+        return;
+    }
 
-    assert(pFrame);
+    assert(pPointFrame);
 
     if( m_pBlockCursor )
         RefreshBlockCursor();
@@ -2420,6 +2487,15 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
                     pNxt = pNxt->GetNext();
                 }
             }
+#if defined(YRS)
+            for (auto const& it : m_PeerCursors)
+            {
+                if (it.second->m_pCurrentCursor)
+                {
+                    it.second->m_pCurrentCursor->SwSelPaintRects::Show();
+                }
+            }
+#endif
         }
     }
 
@@ -2427,7 +2503,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
 
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     if (Imp()->IsAccessible() && m_bSendAccessibleCursorEvents)
-        Imp()->InvalidateAccessibleCursorPosition( pFrame );
+        Imp()->InvalidateAccessibleCursorPosition(pPointFrame);
 #endif
 
     // switch from blinking cursor to read-only-text-selection cursor
@@ -2450,6 +2526,16 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
 
     if( m_bSVCursorVis )
         m_pVisibleCursor->Show(); // show again
+#if defined(YRS)
+    for (auto const& it : m_PeerCursors)
+    {
+        if (it.second->m_pCurrentCursor && it.second->m_bSVCursorVis)
+        {
+            it.second->m_pVisibleCursor->Show();
+        }
+    }
+    GetDoc()->getIDocumentState().YrsNotifyCursorUpdate();
+#endif
 
     if (comphelper::LibreOfficeKit::isActive())
         sendLOKCursorUpdates();
@@ -3154,6 +3240,97 @@ SwVisibleCursor* SwCursorShell::GetVisibleCursor() const
     return m_pVisibleCursor;
 }
 
+#if defined(YRS)
+void SwCursorShell::YrsAddCursor(OString const& rId, ::std::optional<SwPosition> const& roPoint,
+        ::std::optional<SwPosition> const& roMark, OUString const& rAuthor)
+{
+    SwShellCursor * pCursor{nullptr};
+    if (roPoint)
+    {
+        pCursor = new SwShellCursor{*this, *roPoint};
+        if (roMark)
+        {
+            pCursor->SetMark();
+            *pCursor->GetMark() = *roMark;
+        }
+    }
+
+    auto const [it, inserted]{m_PeerCursors.emplace(rId, new VisibleCursorState{SwRect{}, Point{}, pCursor, nullptr, true, false})};
+    assert(inserted);
+    it->second->m_pVisibleCursor = new SwVisibleCursor{*it->second, this};
+    it->second->m_pVisibleCursor->m_Author = rAuthor;
+
+    // TODO check if pos is valid? just call UC? add cursor parameter so it doesnt check all of them?
+    UpdateCursor();
+}
+
+void SwCursorShell::YrsSetCursor(OString const& rId, ::std::optional<SwPosition> const& roPoint,
+        ::std::optional<SwPosition> const& roMark)
+{
+    auto const it{m_PeerCursors.find(rId)};
+    assert(it != m_PeerCursors.end());
+    if (!it->second->m_pCurrentCursor && !roPoint)
+    {
+        return; // cursor moved in EE
+    }
+    if (it->second->m_pCurrentCursor && !roPoint)
+    {
+        it->second->m_pVisibleCursor->Hide();
+        it->second->m_pCurrentCursor->Hide();
+        delete it->second->m_pCurrentCursor;
+        it->second->m_pCurrentCursor = nullptr;
+        return;
+    }
+    else if (!it->second->m_pCurrentCursor && roPoint)
+    {
+        it->second->m_pCurrentCursor = new SwShellCursor{*this, *roPoint};
+    }
+    else
+    {
+        *it->second->m_pCurrentCursor->GetPoint() = *roPoint;
+    }
+    if (it->second->m_pCurrentCursor->HasMark() && !roMark)
+    {
+        it->second->m_pCurrentCursor->DeleteMark();
+    }
+    else if (roMark)
+    {
+        if (!it->second->m_pCurrentCursor->HasMark())
+        {
+            it->second->m_pCurrentCursor->SetMark();
+        }
+        *it->second->m_pCurrentCursor->GetMark() = *roMark;
+    }
+
+    // TODO check if pos is valid? just call UC? add cursor parameter so it doesnt check all of them?
+    UpdateCursor();
+}
+
+void SwCursorShell::YrsDelCursor(OString const& rId)
+{
+    auto const it{m_PeerCursors.find(rId)};
+    assert(it != m_PeerCursors.end());
+    if (it->second->m_pCurrentCursor)
+    {
+        it->second->m_pCurrentCursor->Hide();
+    }
+    m_PeerCursors.erase(it);
+}
+
+SwVisibleCursor * SwCursorShell::FindVisibleCursorForPeer(SwSelPaintRects const& rCursor) const
+{
+    for (auto const& it : m_PeerCursors)
+    {
+        if (it.second->m_pCurrentCursor == &rCursor)
+        {
+            return it.second->m_pVisibleCursor;
+        }
+    }
+    return nullptr;
+}
+
+#endif
+
 bool SwCursorShell::IsOverReadOnlyPos( const Point& rPt ) const
 {
     Point aPt( rPt );
@@ -3389,7 +3566,7 @@ SwCursorShell::SwCursorShell( SwCursorShell& rShell, vcl::Window *pInitWin )
     m_bCallChgLnk = m_bHasFocus = m_bAutoUpdateCells = true;
     m_bSVCursorVis = true;
     m_bSetCursorInReadOnly = true;
-    m_pVisibleCursor = new SwVisibleCursor( this );
+    m_pVisibleCursor = new SwVisibleCursor(*this, this);
     m_bMacroExecAllowed = rShell.IsMacroExecAllowed();
 
     m_aLayoutIdle.SetPriority(TaskPriority::LOWEST);
@@ -3439,7 +3616,7 @@ SwCursorShell::SwCursorShell( SwDoc& rDoc, vcl::Window *pInitWin,
     m_bSVCursorVis = true;
     m_bSetCursorInReadOnly = true;
 
-    m_pVisibleCursor = new SwVisibleCursor( this );
+    m_pVisibleCursor = new SwVisibleCursor(*this, this);
     m_bMacroExecAllowed = true;
 
     m_aLayoutIdle.SetPriority(TaskPriority::LOWEST);
@@ -3455,6 +3632,14 @@ SwCursorShell::~SwCursorShell()
         CheckTableBoxContent( m_pCurrentCursor->GetPoint() );
     else
         ClearTableBoxContent();
+
+#if defined(YRS)
+    for (auto const& it : m_PeerCursors)
+    {
+        delete it.second->m_pVisibleCursor;
+        delete it.second->m_pCurrentCursor;
+    }
+#endif
 
     delete m_pVisibleCursor;
     delete m_pBlockCursor;
