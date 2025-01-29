@@ -23,6 +23,9 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <comphelper/propertysequence.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/eeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -817,6 +820,39 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf141703)
     uno::Reference<text::XText> xTextA2
         = uno::Reference<text::XTextRange>(xCellA2, uno::UNO_QUERY_THROW)->getText();
     CPPUNIT_ASSERT_EQUAL(u"B"_ustr, xTextA2->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf164855)
+{
+    createSdImpressDoc();
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
+
+    dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
+
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pActualPage->GetObj(2));
+    CPPUNIT_ASSERT(pTableObject);
+
+    const EditTextObject& rEdit
+        = pTableObject->getText(0)->GetOutlinerParaObject()->GetTextObject();
+    const SfxItemSet& rParaAttribs = rEdit.GetParaAttribs(0);
+    auto pAdjust = rParaAttribs.GetItem(EE_PARA_JUST);
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Left, pAdjust->GetAdjust());
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, u".uno:RightPara"_ustr, {});
+
+    const EditTextObject& rEdit2
+        = pTableObject->getText(0)->GetOutlinerParaObject()->GetTextObject();
+    const SfxItemSet& rParaAttribs2 = rEdit2.GetParaAttribs(0);
+    pAdjust = rParaAttribs2.GetItem(EE_PARA_JUST);
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Right, pAdjust->GetAdjust());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127481)
