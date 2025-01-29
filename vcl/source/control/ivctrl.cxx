@@ -158,9 +158,6 @@ void SvtIconChoiceCtrl::GetFocus()
 {
     _pImpl->GetFocus();
     Control::GetFocus();
-    SvxIconChoiceCtrlEntry* pSelectedEntry = GetSelectedEntry();
-    if ( pSelectedEntry )
-        _pImpl->CallEventListeners( VclEventId::ListboxSelect, pSelectedEntry );
 }
 
 void SvtIconChoiceCtrl::LoseFocus()
