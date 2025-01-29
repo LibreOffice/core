@@ -2831,9 +2831,8 @@ void SdMasterPage::setBackground( const Any& rValue )
             Reference< beans::XPropertySetInfo >  xSetInfo( xInputSet->getPropertySetInfo(), UNO_SET_THROW );
             Reference< beans::XPropertyState > xSetStates( xInputSet, UNO_QUERY );
 
-            for( const auto & rPair : ImplGetPageBackgroundPropertySet()->getPropertyMap().getPropertyEntries() )
+            for( const auto pProp : ImplGetPageBackgroundPropertySet()->getPropertyMap().getPropertyEntries() )
             {
-                const SfxItemPropertyMapEntry* pProp = rPair.second;
                 const OUString& rPropName = pProp->aName;
                 if( xSetInfo->hasPropertyByName( rPropName ) )
                 {

@@ -70,23 +70,29 @@ struct SfxItemPropertyMapEntry
         }
 };
 
+struct SfxItemPropertyMapCompare
+{
+    bool operator() ( const SfxItemPropertyMapEntry * lhs, const SfxItemPropertyMapEntry * rhs ) const
+    {
+        return lhs->aName < rhs->aName;
+    }
+};
 class SVL_DLLPUBLIC SfxItemPropertyMap
 {
+    o3tl::sorted_vector< const SfxItemPropertyMapEntry*, SfxItemPropertyMapCompare > m_aMap;
+    mutable css::uno::Sequence< css::beans::Property > m_aPropSeq;
 public:
     SfxItemPropertyMap( std::span<const SfxItemPropertyMapEntry> pEntries );
     SfxItemPropertyMap( const SfxItemPropertyMap& rSource );
     ~SfxItemPropertyMap();
 
-    const SfxItemPropertyMapEntry* getByName( const OUString & rName ) const;
+    const SfxItemPropertyMapEntry* getByName( std::u16string_view rName ) const;
     css::uno::Sequence< css::beans::Property > const & getProperties() const;
     /// @throws css::beans::UnknownPropertyException
     css::beans::Property getPropertyByName( const OUString & rName ) const;
-    bool hasPropertyByName( const OUString & rName ) const;
+    bool hasPropertyByName( std::u16string_view rName ) const;
 
-    const std::unordered_map< OUString, const SfxItemPropertyMapEntry* >& getPropertyEntries() const { return m_aMap; }
-private:
-    std::unordered_map< OUString, const SfxItemPropertyMapEntry* > m_aMap;
-    mutable css::uno::Sequence< css::beans::Property > m_aPropSeq;
+    const o3tl::sorted_vector< const SfxItemPropertyMapEntry*, SfxItemPropertyMapCompare >& getPropertyEntries() const { return m_aMap; }
 };
 
 class SfxItemPropertySetInfo;

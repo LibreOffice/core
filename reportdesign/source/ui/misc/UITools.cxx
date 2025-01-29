@@ -280,9 +280,8 @@ namespace
         uno::Reference< beans::XPropertySetInfo> xInfo = _xShape->getPropertySetInfo();
         SvxUnoPropertyMapProvider aMap;
         const SfxItemPropertyMap& rPropertyMap = aMap.GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool())->getPropertyMap();
-        for (const auto & rPair : rPropertyMap.getPropertyEntries())
+        for (const auto pProp : rPropertyMap.getPropertyEntries())
         {
-            const SfxItemPropertyMapEntry* pProp = rPair.second;
             if ( xInfo->hasPropertyByName(pProp->aName) )
             {
                 const SfxPoolItem* pItem = _rItemSet.GetItem(pProp->nWID);
@@ -301,9 +300,8 @@ namespace
         const uno::Reference< beans::XPropertySetInfo> xInfo = _xShape->getPropertySetInfo();
         SvxUnoPropertyMapProvider aMap;
         const SfxItemPropertyMap& rPropertyMap = aMap.GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool())->getPropertyMap();
-        for (const auto & rPair : rPropertyMap.getPropertyEntries())
+        for (const auto pProp : rPropertyMap.getPropertyEntries())
         {
-            const SfxItemPropertyMapEntry* pProp = rPair.second;
             const SfxPoolItem* pItem = nullptr;
             if ( SfxItemState::SET == _rItemSet.GetItemState(pProp->nWID, true, &pItem) && xInfo->hasPropertyByName(pProp->aName) )
             {

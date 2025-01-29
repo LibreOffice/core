@@ -183,7 +183,7 @@ namespace SwUnoCursorHelper
     css::uno::Any  GetPropertyValue(
             SwPaM& rPaM,
             const SfxItemPropertySet & rPropSet,
-            const OUString& rPropertyName);
+            std::u16string_view rPropertyName);
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::beans::PropertyState > GetPropertyStates(
@@ -204,14 +204,14 @@ namespace SwUnoCursorHelper
     void SetPropertyToDefault(
             SwPaM & rPaM,
             const SfxItemPropertySet & rPropSet,
-            const OUString& rPropertyName);
+            std::u16string_view rPropertyName);
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
     css::uno::Any  GetPropertyDefault(
             SwPaM const & rPaM,
             const SfxItemPropertySet & rPropSet,
-            const OUString& rPropertyName);
+            std::u16string_view rPropertyName);
 
     bool SetPageDesc(
             const css::uno::Any& rValue,
