@@ -115,7 +115,12 @@ static SwNode* GoPreviousWithFrame(SwNodeIndex *pIdx, SwFlowFrame const**const p
             // frame as the caller's one
             pFound = SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*static_cast<SwContentNode*>(pNd)).First();
         else if ( pNd->IsTableNode() )
-            pFound = SwIterator<SwFrame,SwFormat>(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrameFormat()).First();
+        {
+            if (SwFrameFormat *const pFormat{static_cast<SwTableNode*>(pNd)->GetTable().GetFrameFormat()})
+            {
+                pFound = SwIterator<SwFrame,SwFormat>(*pFormat).First();
+            }
+        }
         else if( pNd->IsStartNode() && !pNd->IsSectionNode() )
         {
             pNd = nullptr;
