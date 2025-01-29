@@ -792,11 +792,9 @@ void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSeriali
         }
 
         if (m_nSdtPrToken == FSNS(XML_w, XML_date) || m_nSdtPrToken == FSNS(XML_w, XML_docPartObj) || m_nSdtPrToken == FSNS(XML_w, XML_docPartList) || m_nSdtPrToken == FSNS(XML_w14, XML_checkbox)) {
-            const std::vector<sal_Int32>& rAttributeTokens = m_pTokenChildren->getFastAttributeTokens();
-            for (size_t i = 0, n = rAttributeTokens.size(); i < n; ++i)
+            for (auto& it : *m_pTokenChildren)
             {
-                pSerializer->singleElement(rAttributeTokens[i], FSNS(XML_w, XML_val),
-                                           m_pTokenChildren->getValueByIndex(i));
+                pSerializer->singleElement(it.getToken(), FSNS(XML_w, XML_val), it.toCString());
             }
         }
 
