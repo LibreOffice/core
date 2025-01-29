@@ -52,7 +52,7 @@ void AccessibleIconChoiceCtrl::ProcessWindowEvent( const VclWindowEvent& rVclWin
     {
         case VclEventId::ListboxSelect :
         {
-            if ( getCtrl() && getCtrl()->HasFocus() )
+            if (getCtrl())
             {
                 SvxIconChoiceCtrlEntry* pEntry = static_cast< SvxIconChoiceCtrlEntry* >( rVclWindowEvent.GetData() );
                 if ( pEntry )
@@ -61,10 +61,10 @@ void AccessibleIconChoiceCtrl::ProcessWindowEvent( const VclWindowEvent& rVclWin
                     Reference< XAccessible > xChild = new AccessibleIconChoiceCtrlEntry( *getCtrl(), nPos, this );
                     uno::Any aOldValue, aNewValue;
                     aNewValue <<= xChild;
-                    NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
+                    if (getCtrl()->HasFocus())
+                        NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
 
                     NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, aOldValue, aNewValue );
-
                 }
             }
             break;
