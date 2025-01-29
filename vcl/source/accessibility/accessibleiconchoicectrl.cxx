@@ -52,12 +52,6 @@ void AccessibleIconChoiceCtrl::ProcessWindowEvent( const VclWindowEvent& rVclWin
     {
         case VclEventId::ListboxSelect :
         {
-            // First send an event that tells the listeners of a
-            // modified selection.  The active descendant event is
-            // send after that so that the receiving AT has time to
-            // read the text or name of the active child.
-//                  NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
-
             if ( getCtrl() && getCtrl()->HasFocus() )
             {
                 SvxIconChoiceCtrlEntry* pEntry = static_cast< SvxIconChoiceCtrlEntry* >( rVclWindowEvent.GetData() );
