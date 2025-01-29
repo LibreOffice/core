@@ -73,6 +73,7 @@
 #include <anchoredobject.hxx>
 #include <wrtsh.hxx>
 #include <DocumentSettingManager.hxx>
+#include <DocumentLayoutManager.hxx>
 
 #include <unotxdoc.hxx>
 #include <view.hxx>
@@ -2192,6 +2193,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     // - fieldnames apply or not ...
     // ( - SwEndPortion must _no_ longer be generated. )
     // - Of course, the screen is something completely different than the printer ...
+    bool const isToggleFieldNames(mpOpt->IsFieldName() != rOpt.IsFieldName());
     bReformat = bReformat || mpOpt->IsFieldName() != rOpt.IsFieldName();
 
     // The map mode is changed, minima/maxima will be attended by UI
@@ -2278,6 +2280,12 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         StartAction();
         Reformat();
         EndAction();
+    }
+
+    if (isToggleFieldNames)
+    {
+        // the layout changes but SetModified() wasn't called so do it here:
+        mxDoc->GetDocumentLayoutManager().ClearSwLayouterEntries();
     }
 
     if( bOnlineSpellChgd )
