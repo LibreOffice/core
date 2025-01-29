@@ -274,6 +274,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf48459)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:rPr/w:specVanish", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf164901)
+{
+    loadAndSave("tdf164901.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+
+    // This was 0 (lost floating table because of containing a style separator)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFdo77129)
 {
     loadAndSave("fdo77129.docx");

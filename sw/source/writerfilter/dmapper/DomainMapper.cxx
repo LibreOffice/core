@@ -2139,7 +2139,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         }
         break;
     case NS_ooxml::LN_EG_RPrBase_specVanish:
-        if ( nIntValue && !IsStyleSheetImport() )
+        // tdf#131728 import inline heading
+        if ( nIntValue && !IsStyleSheetImport() &&
+                // tdf#164901 but not in a floating table
+                !(m_pImpl->hasTableManager() &&
+                        m_pImpl->getTableManager().getCurrentTablePosition().getLength() != 0) )
         {
             // put inline heading inside a text frame to get the same layout with ToC/PDF bookmark support
             m_pImpl->m_StreamStateStack.top().bIsInlineParagraph = true;
