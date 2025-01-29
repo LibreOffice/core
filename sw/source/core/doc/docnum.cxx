@@ -1232,12 +1232,27 @@ bool SwDoc::RenameNumRule(const OUString & rOldName, const OUString & rNewName,
         pNumRule->GetTextNodeList( aTextNodeList );
 
         pNumRule->SetName( rNewName, getIDocumentListsAccess() );
-
         SwNumRuleItem aItem(rNewName);
+
+        const size_t nArrLen = GetTextFormatColls()->size();
+        for( size_t i = 0; i < nArrLen; i++ )
+        {
+            SwTextFormatColl* pColl = (*GetTextFormatColls())[ i ];
+            const SwAttrSet& rAttrSet = pColl->GetAttrSet();
+
+            const SfxPoolItem* pTempItem = nullptr;
+            if (SfxItemState::SET == rAttrSet.GetItemState(RES_PARATR_NUMRULE, false, &pTempItem))
+            {
+                const SwNumRuleItem* pNumItem = static_cast<const SwNumRuleItem*>(pTempItem);
+                if (pNumItem->GetValue().equals(rOldName))
+                    pColl->SetFormatAttr( aItem );
+            }
+        }
 
         for ( SwTextNode* pTextNd : aTextNodeList )
         {
-            pTextNd->SetAttr(aItem);
+            if (SfxItemState::SET == pTextNd->GetSwAttrSet().GetItemState(RES_PARATR_NUMRULE, false))
+                pTextNd->SetAttr(aItem);
         }
 
         bResult = true;

@@ -47,6 +47,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/compbase.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
@@ -1514,6 +1515,49 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf164885)
     // - Actual  :
     // because the interception didn't happen
     CPPUNIT_ASSERT_EQUAL(u".uno:Open"_ustr, interceptor->pDispatch->sLastCommand);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf164921)
+{
+    // check renaming list style
+    OUString sChangedListStyle = u"ChangedListStyle"_ustr;
+
+    {
+        createSwDoc("tdf164921.odt");
+        //change list style name
+        //auto xModel = mxComponent.queryThrow<frame::XModel>();
+        uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XNameContainer> xListStyles(
+            xSFS->getStyleFamilies()->getByName(u"NumberingStyles"_ustr), uno::UNO_QUERY);
+        uno::Reference<container::XNamed> xListStyle(xListStyles->getByName(u"NewListStyle"_ustr),
+                                                     uno::UNO_QUERY);
+        xListStyle->setName(sChangedListStyle);
+
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor[u"FilterName"_ustr] <<= u"writer8"_ustr;
+        uno::Reference<frame::XStorable> const xStorable(mxComponent, uno::UNO_QUERY);
+        xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    }
+    {
+        saveAndReload(u"writer8"_ustr);
+
+        uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XNameContainer> xListStyles(
+            xSFS->getStyleFamilies()->getByName(u"NumberingStyles"_ustr), uno::UNO_QUERY);
+        uno::Reference<container::XNamed> xNewListStyle(
+            xListStyles->getByName(u"ChangedListStyle"_ustr), uno::UNO_QUERY);
+
+        CPPUNIT_ASSERT_EQUAL(xNewListStyle->getName(), sChangedListStyle);
+
+        uno::Reference<container::XNameContainer> xParaStyles(
+            xSFS->getStyleFamilies()->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xBodyTextStyle(xParaStyles->getByName("Text body"),
+                                                           uno::UNO_QUERY);
+
+        rtl::OUString sListStyleName;
+        xBodyTextStyle->getPropertyValue(u"NumberingStyleName"_ustr) >>= sListStyleName;
+        CPPUNIT_ASSERT_EQUAL(sListStyleName, sChangedListStyle);
+    }
 }
 
 } // end of anonymous namespace
