@@ -779,7 +779,7 @@ struct Convention_A1 : public ScCompiler::Convention
         static constexpr OUString aAddAllowed(u"?#"_ustr);
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed,
-                (bGroupSeparator ? nContFlags | KParseTokens::GROUP_SEPARATOR_IN_NUMBER : nContFlags),
+                (bGroupSeparator ? nContFlags | KParseTokens::GROUP_SEPARATOR_IN_NUMBER_3 : nContFlags),
                 aAddAllowed );
     }
 
@@ -1404,7 +1404,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         static constexpr OUString aAddAllowed(u"?!"_ustr);
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed,
-                (bGroupSeparator ? nContFlags | KParseTokens::GROUP_SEPARATOR_IN_NUMBER : nContFlags),
+                (bGroupSeparator ? nContFlags | KParseTokens::GROUP_SEPARATOR_IN_NUMBER_3 : nContFlags),
                 aAddAllowed );
     }
 
@@ -1749,7 +1749,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed,
-                (bGroupSeparator ? nContFlags | KParseTokens::GROUP_SEPARATOR_IN_NUMBER : nContFlags),
+                (bGroupSeparator ? nContFlags | KParseTokens::GROUP_SEPARATOR_IN_NUMBER_3 : nContFlags),
                 aAddAllowed );
     }
 
