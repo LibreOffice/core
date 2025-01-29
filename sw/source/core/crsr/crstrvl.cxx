@@ -1814,8 +1814,24 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             rContentAtPos.sStr =
                                 pTextNd->GetExpandText(GetLayout(), pTextAttr->GetStart(), *pEnd - pTextAttr->GetStart());
                         else if( RES_TXTATR_TOXMARK == pTextAttr->Which())
-                            rContentAtPos.sStr =
-                                pTextAttr->GetTOXMark().GetAlternativeText();
+                        {
+                            // tdf#143157 - include first and secondary keys in index fields
+                            const auto& aSwTOXMark = pTextAttr->GetTOXMark();
+                            const auto aSecondaryKey = aSwTOXMark.GetSecondaryKey();
+
+                            OUStringBuffer aStringBuffer(aSwTOXMark.GetPrimaryKey());
+                            if (!aSecondaryKey.isEmpty())
+                            {
+                                if (!aStringBuffer.isEmpty())
+                                    aStringBuffer.append(" > ");
+                                aStringBuffer.append(aSecondaryKey);
+                            }
+                            if (!aStringBuffer.isEmpty())
+                                aStringBuffer.append(" > ");
+                            aStringBuffer.append(aSwTOXMark.GetAlternativeText());
+
+                            rContentAtPos.sStr = aStringBuffer.makeStringAndClear();
+                        }
 
                         rContentAtPos.eContentAtPos =
                             RES_TXTATR_TOXMARK == pTextAttr->Which()
