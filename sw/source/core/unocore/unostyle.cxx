@@ -527,7 +527,7 @@ public:
         : mrMap(rMap)
     { }
 
-    bool AllowsKey(const OUString& rName)
+    bool AllowsKey(std::u16string_view rName)
     {
         return mrMap.hasPropertyByName(rName);
     }
@@ -4397,9 +4397,8 @@ uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties()
 
         // TODO: Optimize - and fix! the old iteration filled each WhichId
         // only once but there are more properties than WhichIds
-        for( const auto & rPair : rMap.getPropertyEntries() )
+        for( const auto pEntry : rMap.getPropertyEntries() )
         {
-            const SfxItemPropertyMapEntry* pEntry = rPair.second;
             if ( pEntry->nWID == nWID )
             {
                 beans::PropertyValue aPropertyValue;

@@ -41,7 +41,7 @@ SfxItemPropertyMap::SfxItemPropertyMap( std::span<const SfxItemPropertyMapEntry>
     for (const auto & pEntry : pEntries)
     {
         assert(!pEntry.aName.isEmpty() && "empty name? might be something left an empty entry at the end of this array");
-        m_aMap.insert( { pEntry.aName, &pEntry } );
+        m_aMap.insert( &pEntry );
     }
 }
 
@@ -51,12 +51,23 @@ SfxItemPropertyMap::~SfxItemPropertyMap()
 {
 }
 
-const SfxItemPropertyMapEntry* SfxItemPropertyMap::getByName( const OUString & rName ) const
+const SfxItemPropertyMapEntry* SfxItemPropertyMap::getByName( std::u16string_view rName ) const
 {
-    auto it = m_aMap.find(rName);
-    if (it == m_aMap.end())
+    struct Compare
+    {
+        bool operator() ( const SfxItemPropertyMapEntry* lhs, std::u16string_view rhs ) const
+        {
+            return lhs->aName < rhs;
+        }
+        bool operator() ( std::u16string_view lhs, const SfxItemPropertyMapEntry* rhs ) const
+        {
+            return lhs < rhs->aName;
+        }
+    };
+    auto it = std::lower_bound(m_aMap.begin(), m_aMap.end(), rName, Compare());
+    if (it == m_aMap.end() || Compare()(rName, *it))
         return nullptr;
-    return it->second;
+    return *it;
 }
 
 uno::Sequence<beans::Property> const & SfxItemPropertyMap::getProperties() const
@@ -66,9 +77,8 @@ uno::Sequence<beans::Property> const & SfxItemPropertyMap::getProperties() const
         m_aPropSeq.realloc( m_aMap.size() );
         beans::Property* pPropArray = m_aPropSeq.getArray();
         sal_uInt32 n = 0;
-        for( const auto & rPair : m_aMap )
+        for( const SfxItemPropertyMapEntry* pEntry : m_aMap )
         {
-            const SfxItemPropertyMapEntry* pEntry = rPair.second;
             pPropArray[n].Name = pEntry->aName;
             pPropArray[n].Handle = pEntry->nWID;
             pPropArray[n].Type = pEntry->aType;
@@ -94,7 +104,7 @@ beans::Property SfxItemPropertyMap::getPropertyByName( const OUString& rName ) c
     return aProp;
 }
 
-bool SfxItemPropertyMap::hasPropertyByName( const OUString & rName ) const
+bool SfxItemPropertyMap::hasPropertyByName( std::u16string_view rName ) const
 {
     return getByName(rName) != nullptr;
 }

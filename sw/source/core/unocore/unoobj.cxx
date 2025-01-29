@@ -1871,7 +1871,7 @@ SwXTextCursor::setString(const OUString& aString)
 
 uno::Any SwUnoCursorHelper::GetPropertyValue(
     SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
-    const OUString& rPropertyName)
+    std::u16string_view rPropertyName)
 {
     uno::Any aAny;
     SfxItemPropertyMapEntry const*const pEntry =
@@ -2163,7 +2163,7 @@ lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
 
 void SwUnoCursorHelper::SetPropertyToDefault(
     SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
-    const OUString& rPropertyName)
+    std::u16string_view rPropertyName)
 {
     SwDoc& rDoc = rPaM.GetDoc();
     SfxItemPropertyMapEntry const*const pEntry =
@@ -2201,7 +2201,7 @@ void SwUnoCursorHelper::SetPropertyToDefault(
 
 uno::Any SwUnoCursorHelper::GetPropertyDefault(
     SwPaM const & rPaM, const SfxItemPropertySet& rPropSet,
-    const OUString& rPropertyName)
+    std::u16string_view rPropertyName)
 {
     SfxItemPropertyMapEntry const*const pEntry =
         rPropSet.getPropertyMap().getByName(rPropertyName);

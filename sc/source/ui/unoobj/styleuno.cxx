@@ -1161,7 +1161,7 @@ uno::Reference<container::XIndexReplace> ScStyleObj::CreateEmptyNumberingRules()
 
 // beans::XPropertyState
 
-const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const OUString& rPropName,
+const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( std::u16string_view rPropName,
                                                     const SfxItemPropertyMapEntry*& rpResultEntry )
 {
     SfxStyleSheetBase* pStyle = GetStyle_Impl( true );
@@ -1195,7 +1195,7 @@ const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const OUString& rPropName,
     return nullptr;
 }
 
-beans::PropertyState ScStyleObj::getPropertyState_Impl( const OUString& aPropertyName )
+beans::PropertyState ScStyleObj::getPropertyState_Impl( std::u16string_view aPropertyName )
 {
     beans::PropertyState eRet = beans::PropertyState_DIRECT_VALUE;
 
@@ -1279,7 +1279,7 @@ void SAL_CALL ScStyleObj::setPropertyToDefault( const OUString& aPropertyName )
     setPropertyValue_Impl( aPropertyName, pEntry, nullptr );
 }
 
-uno::Any ScStyleObj::getPropertyDefault_Impl( const OUString& aPropertyName )
+uno::Any ScStyleObj::getPropertyDefault_Impl( std::u16string_view aPropertyName )
 {
     uno::Any aAny;
 
@@ -1531,7 +1531,7 @@ void SAL_CALL ScStyleObj::setPropertyValue( const OUString& aPropertyName, const
     setPropertyValue_Impl( aPropertyName, pEntry, &aValue );
 }
 
-void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const SfxItemPropertyMapEntry* pEntry, const uno::Any* pValue )
+void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const SfxItemPropertyMapEntry* pEntry, const uno::Any* pValue )
 {
     SfxStyleSheetBase* pStyle = GetStyle_Impl( true );
     if ( !(pStyle && pEntry) )
@@ -1872,7 +1872,7 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
         static_cast<SfxStyleSheet*>(GetStyle_Impl())->Broadcast(SfxHint(SfxHintId::DataChanged));
 }
 
-uno::Any ScStyleObj::getPropertyValue_Impl( const OUString& aPropertyName )
+uno::Any ScStyleObj::getPropertyValue_Impl( std::u16string_view aPropertyName )
 {
     uno::Any aAny;
     SfxStyleSheetBase* pStyle = GetStyle_Impl( true );

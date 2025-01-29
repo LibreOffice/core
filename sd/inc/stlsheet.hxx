@@ -138,7 +138,7 @@ public:
 
 private:
     /// @throws css::uno::RuntimeException
-    static const SfxItemPropertyMapEntry* getPropertyMapEntry( const OUString& rPropertyName );
+    static const SfxItemPropertyMapEntry* getPropertyMapEntry( std::u16string_view rPropertyName );
 
     void setPropertyValue_Impl(const OUString& aPropertyName, const css::uno::Any& aValue);
     css::uno::Any getPropertyValue_Impl(const OUString& PropertyName);

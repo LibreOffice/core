@@ -290,7 +290,7 @@ protected:
     SAL_DLLPRIVATE css::beans::PropertyState _getPropertyState( const SfxItemPropertyMapEntry* pMap, sal_Int32 nPara = -1 );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    SAL_DLLPRIVATE css::beans::PropertyState _getPropertyState( const OUString& PropertyName, sal_Int32 nPara = -1 );
+    SAL_DLLPRIVATE css::beans::PropertyState _getPropertyState( std::u16string_view PropertyName, sal_Int32 nPara = -1 );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
     SAL_DLLPRIVATE css::uno::Sequence< css::beans::PropertyState > _getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName, sal_Int32 nPara = -1  );

@@ -51,7 +51,7 @@ class SdUnoPageBackground final : public ::cppu::WeakImplHelper<
     std::unique_ptr<SfxItemSet> mpSet;
     SdrModel*           mpDoc;
 
-    const SfxItemPropertyMapEntry* getPropertyMapEntry( const OUString& rPropertyName ) const noexcept;
+    const SfxItemPropertyMapEntry* getPropertyMapEntry( std::u16string_view rPropertyName ) const noexcept;
 public:
     SdUnoPageBackground( SdDrawDocument* pDoc = nullptr, const SfxItemSet* pSet = nullptr);
     virtual ~SdUnoPageBackground() noexcept override;

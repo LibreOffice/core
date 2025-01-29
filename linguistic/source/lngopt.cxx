@@ -308,7 +308,7 @@ Sequence< PropertyValue > SAL_CALL
 
     std::vector<PropertyValue> aProps;
     aProps.reserve(aPropertyMap.getPropertyEntries().size());
-    for(auto const & [aName, pEntry] : aPropertyMap.getPropertyEntries())
+    for(auto pEntry : aPropertyMap.getPropertyEntries())
         aProps.push_back(PropertyValue(pEntry->aName, pEntry->nWID,
                                  aConfig.GetProperty(pEntry->nWID),
                                  css::beans::PropertyState_DIRECT_VALUE));
