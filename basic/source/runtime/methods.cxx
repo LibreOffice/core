@@ -1742,24 +1742,19 @@ void SbRtl_CDateFromUnoDateTime(StarBASIC *, SbxArray & rPar, bool)
 // Function to convert date to ISO 8601 date format YYYYMMDD
 void SbRtl_CDateToIso(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() == 2)
-    {
-        double aDate = rPar.Get(1)->GetDate();
+    if (rPar.Count() != 2)
+        return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
 
-        // Date may actually even be -YYYYYMMDD
-        char Buffer[11];
-        sal_Int16 nYear = implGetDateYear( aDate );
-        snprintf( Buffer, sizeof( Buffer ), (nYear < 0 ? "%05d%02d%02d" : "%04d%02d%02d"),
-                static_cast<int>(nYear),
-                static_cast<int>(implGetDateMonth( aDate )),
-                static_cast<int>(implGetDateDay( aDate )) );
-        OUString aRetStr = OUString::createFromAscii( Buffer );
-        rPar.Get(0)->PutString(aRetStr);
-    }
-    else
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
+    double aDate = rPar.Get(1)->GetDate();
+
+    // Date may actually even be -YYYYYMMDD
+    char Buffer[11];
+    sal_Int16 nYear = implGetDateYear(aDate);
+    snprintf(Buffer, sizeof(Buffer), (nYear < 0 ? "%05d%02d%02d" : "%04d%02d%02d"),
+             static_cast<int>(nYear), static_cast<int>(implGetDateMonth(aDate)),
+             static_cast<int>(implGetDateDay(aDate)));
+    OUString aRetStr = OUString::createFromAscii(Buffer);
+    rPar.Get(0)->PutString(aRetStr);
 }
 
 // Function to convert date from ISO 8601 date format YYYYMMDD or YYYY-MM-DD
