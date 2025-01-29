@@ -78,7 +78,7 @@ void impl_cairo_set_hairline(cairo_t* pRT,
 #endif
     if (bCairoCoordinateLimitWorkaroundActive)
     {
-        // we have to render in view coordiantes, set line width to 1.0
+        // we have to render in view coordinates, set line width to 1.0
         cairo_set_line_width(pRT, 1.0);
     }
     else
