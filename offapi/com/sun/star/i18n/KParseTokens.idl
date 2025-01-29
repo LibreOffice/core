@@ -95,6 +95,13 @@ published constants KParseTokens
     /// Unicode (above 127) other number
     const long UNI_OTHER_NUMBER     = 0x00080000;
 
+    /** The same as GROUP_SEPARATOR_IN_NUMBER, but require <em>3</em>
+        digits following the group separator.
+
+        @since LibreOffice 25.2
+     */
+    const long GROUP_SEPARATOR_IN_NUMBER_3 = 0x04000000;
+
     /** If this bit is set in <em>nContCharFlags</em> parameters, the
         locale's group separator characters in numbers are accepted and
         ignored/skipped. Else a group separator in a number ends the
