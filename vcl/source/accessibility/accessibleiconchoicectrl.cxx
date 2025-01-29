@@ -74,11 +74,7 @@ void AccessibleIconChoiceCtrl::ProcessWindowEvent( const VclWindowEvent& rVclWin
             VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
             if ( pCtrl && pCtrl->HasFocus() )
             {
-                SvxIconChoiceCtrlEntry* pEntry = static_cast< SvxIconChoiceCtrlEntry* >( rVclWindowEvent.GetData() );
-                if ( pEntry == nullptr )
-                {
-                    pEntry = getCtrl()->GetSelectedEntry();
-                }
+                SvxIconChoiceCtrlEntry* pEntry = getCtrl()->GetSelectedEntry();
                 if ( pEntry )
                 {
                     sal_Int32 nPos = pCtrl->GetEntryListPos( pEntry );
@@ -86,7 +82,6 @@ void AccessibleIconChoiceCtrl::ProcessWindowEvent( const VclWindowEvent& rVclWin
                     uno::Any aOldValue, aNewValue;
                     aNewValue <<= xChild;
                     NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
-                    NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, aOldValue, aNewValue );
                 }
             }
             break;
