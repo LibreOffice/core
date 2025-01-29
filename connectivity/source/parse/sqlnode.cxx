@@ -497,10 +497,31 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
         }
         bHandled = true;
         break;
+
+    case factor:
+        bSimple = false;
+        if (nCount == 2 && m_aChildren[0] && m_aChildren[1]
+            && (SQL_ISPUNCTUATION(m_aChildren[0], "-") || SQL_ISPUNCTUATION(m_aChildren[0], "+"))
+            && (m_aChildren[1]->getNodeType() == SQLNodeType::IntNum
+                || m_aChildren[1]->getNodeType() == SQLNodeType::ApproxNum))
+        {
+            // A signed number ("+" or "-" plus either IntNum or ApproxNum)
+            // The default processing would first add the sign, then process the number, which
+            // would see that rString is not empty already, and insert a space between the sign
+            // and the digits. Avoid that unneeded space.
+            OUStringBuffer aFactorPara;
+            m_aChildren[1]->impl_parseNodeToString_throw(aFactorPara, rParam, bSimple);
+            // Insert a space before the signed number, similar to parseLeaf for IntNum / ApproxNum
+            if (!rString.isEmpty())
+                rString.append(" ");
+            rString.append(m_aChildren[0]->getTokenValue() + aFactorPara);
+            bHandled = true;
+        }
+        break;
+
     case odbc_call_spec:
     case subquery:
     case term:
-    case factor:
     case window_function:
     case cast_spec:
     case num_value_exp:
