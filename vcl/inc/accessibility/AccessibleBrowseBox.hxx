@@ -25,10 +25,8 @@
 #include <vcl/accessibletableprovider.hxx>
 #include <mutex>
 
-namespace accessibility {
-
-    class AccessibleBrowseBoxHeaderBar;
-    class AccessibleBrowseBoxTable;
+class AccessibleBrowseBoxHeaderBar;
+class AccessibleBrowseBoxTable;
 
 
 /** This class represents the complete accessible BrowseBox object. */
@@ -259,10 +257,5 @@ private:
     AccessibleBrowseBoxAccess( const AccessibleBrowseBoxAccess& ) = delete;
     AccessibleBrowseBoxAccess& operator=( const AccessibleBrowseBoxAccess& ) = delete;
 };
-
-
-} // namespace accessibility
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

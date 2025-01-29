@@ -22,91 +22,83 @@
 #include <vcl/toolkit/svtabbx.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-namespace accessibility
+// class AccessibleTabListBox -----------------------------------------------------
+
+using namespace ::com::sun::star::accessibility;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star;
+
+
+// Ctor() and Dtor()
+
+AccessibleTabListBox::AccessibleTabListBox( const Reference< XAccessible >& rxParent, SvHeaderTabListBox& rBox )
+    :AccessibleBrowseBox( rxParent, nullptr, rBox )
+    ,m_pTabListBox( &rBox )
 {
-
-
-    // class AccessibleTabListBox -----------------------------------------------------
-
-    using namespace ::com::sun::star::accessibility;
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star;
-
-
-    // Ctor() and Dtor()
-
-    AccessibleTabListBox::AccessibleTabListBox( const Reference< XAccessible >& rxParent, SvHeaderTabListBox& rBox )
-        :AccessibleBrowseBox( rxParent, nullptr, rBox )
-        ,m_pTabListBox( &rBox )
+    osl_atomic_increment( &m_refCount );
     {
+        setCreator( this );
+    }
+    osl_atomic_decrement( &m_refCount );
+}
+
+
+AccessibleTabListBox::~AccessibleTabListBox()
+{
+    if ( isAlive() )
+    {
+        // increment ref count to prevent double call of Dtor
         osl_atomic_increment( &m_refCount );
-        {
-            setCreator( this );
-        }
-        osl_atomic_decrement( &m_refCount );
+        dispose();
     }
+}
 
+rtl::Reference<AccessibleBrowseBoxTable> AccessibleTabListBox::createAccessibleTable()
+{
+    return new AccessibleTabListBoxTable( this, *m_pTabListBox );
+}
 
-    AccessibleTabListBox::~AccessibleTabListBox()
+// XInterface -----------------------------------------------------------------
+IMPLEMENT_FORWARD_XINTERFACE2( AccessibleTabListBox, AccessibleBrowseBox, AccessibleTabListBox_Base )
+
+// XTypeProvider --------------------------------------------------------------
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleTabListBox, AccessibleBrowseBox, AccessibleTabListBox_Base )
+
+// XAccessibleContext ---------------------------------------------------------
+
+sal_Int64 SAL_CALL AccessibleTabListBox::getAccessibleChildCount()
+{
+    return 2; // header and table
+}
+
+Reference< XAccessibleContext > SAL_CALL AccessibleTabListBox::getAccessibleContext()
+{
+    return this;
+}
+
+Reference< XAccessible > SAL_CALL
+AccessibleTabListBox::getAccessibleChild( sal_Int64 nChildIndex )
+{
+    SolarMethodGuard aGuard(getMutex());
+    ensureIsAlive();
+
+    if ( nChildIndex < 0 || nChildIndex > 1 )
+        throw IndexOutOfBoundsException();
+
+    Reference< XAccessible > xRet;
+    if (nChildIndex == 0)
     {
-        if ( isAlive() )
-        {
-            // increment ref count to prevent double call of Dtor
-            osl_atomic_increment( &m_refCount );
-            dispose();
-        }
+        //! so far the actual implementation object only supports column headers
+        xRet = implGetHeaderBar( AccessibleBrowseBoxObjType::ColumnHeaderBar );
     }
+    else if (nChildIndex == 1)
+        xRet = implGetTable();
 
-    rtl::Reference<AccessibleBrowseBoxTable> AccessibleTabListBox::createAccessibleTable()
-    {
-        return new AccessibleTabListBoxTable( this, *m_pTabListBox );
-    }
+    if ( !xRet.is() )
+        throw RuntimeException(u"getAccessibleChild called with NULL xRet"_ustr,getXWeak());
 
-    // XInterface -----------------------------------------------------------------
-    IMPLEMENT_FORWARD_XINTERFACE2( AccessibleTabListBox, AccessibleBrowseBox, AccessibleTabListBox_Base )
-
-    // XTypeProvider --------------------------------------------------------------
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleTabListBox, AccessibleBrowseBox, AccessibleTabListBox_Base )
-
-    // XAccessibleContext ---------------------------------------------------------
-
-    sal_Int64 SAL_CALL AccessibleTabListBox::getAccessibleChildCount()
-    {
-        return 2; // header and table
-    }
-
-    Reference< XAccessibleContext > SAL_CALL AccessibleTabListBox::getAccessibleContext()
-    {
-        return this;
-    }
-
-    Reference< XAccessible > SAL_CALL
-    AccessibleTabListBox::getAccessibleChild( sal_Int64 nChildIndex )
-    {
-        SolarMethodGuard aGuard(getMutex());
-        ensureIsAlive();
-
-        if ( nChildIndex < 0 || nChildIndex > 1 )
-            throw IndexOutOfBoundsException();
-
-        Reference< XAccessible > xRet;
-        if (nChildIndex == 0)
-        {
-            //! so far the actual implementation object only supports column headers
-            xRet = implGetHeaderBar( AccessibleBrowseBoxObjType::ColumnHeaderBar );
-        }
-        else if (nChildIndex == 1)
-            xRet = implGetTable();
-
-        if ( !xRet.is() )
-            throw RuntimeException(u"getAccessibleChild called with NULL xRet"_ustr,getXWeak());
-
-        return xRet;
-    }
-
-
-}// namespace accessibility
-
+    return xRet;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

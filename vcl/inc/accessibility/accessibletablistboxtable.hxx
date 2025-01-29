@@ -26,9 +26,6 @@
 
 class SvHeaderTabListBox;
 
-
-namespace accessibility {
-
 typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleSelection >
             AccessibleTabListBoxTableImplHelper;
 
@@ -99,10 +96,5 @@ public:
     css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
     void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 };
-
-
-} // namespace accessibility
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

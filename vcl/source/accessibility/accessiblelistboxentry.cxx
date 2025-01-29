@@ -39,1047 +39,1042 @@
 #include <svdata.hxx>
 #include <strings.hrc>
 
-namespace accessibility
+// class AccessibleListBoxEntry -----------------------------------------------------
+
+using namespace ::com::sun::star::accessibility;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star;
+using namespace ::comphelper;
+
+
+// Ctor() and Dtor()
+
+AccessibleListBoxEntry::AccessibleListBoxEntry( SvTreeListBox& _rListBox,
+                                                SvTreeListEntry& rEntry,
+                                                AccessibleListBox & rListBox)
+    : AccessibleListBoxEntry_BASE()
+
+    , m_pTreeListBox( &_rListBox )
+    , m_pSvLBoxEntry(&rEntry)
+    , m_wListBox(&rListBox)
 {
-    // class AccessibleListBoxEntry -----------------------------------------------------
+    m_pTreeListBox->AddEventListener( LINK( this, AccessibleListBoxEntry, WindowEventListener ) );
+    _rListBox.FillEntryPath( m_pSvLBoxEntry, m_aEntryPath );
+}
 
-    using namespace ::com::sun::star::accessibility;
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star;
-    using namespace ::comphelper;
+IMPL_LINK( AccessibleListBoxEntry, WindowEventListener, VclWindowEvent&, rEvent, void )
+{
+    OSL_ENSURE( rEvent.GetWindow() , "AccessibleListBoxEntry::WindowEventListener: no event window!" );
+    OSL_ENSURE( rEvent.GetWindow() == m_pTreeListBox, "AccessibleListBoxEntry::WindowEventListener: where did this come from?" );
 
+    if ( m_pTreeListBox == nullptr )
+        return;
 
-    // Ctor() and Dtor()
-
-    AccessibleListBoxEntry::AccessibleListBoxEntry( SvTreeListBox& _rListBox,
-                                                    SvTreeListEntry& rEntry,
-                                                    AccessibleListBox & rListBox)
-        : AccessibleListBoxEntry_BASE()
-
-        , m_pTreeListBox( &_rListBox )
-        , m_pSvLBoxEntry(&rEntry)
-        , m_wListBox(&rListBox)
+    switch ( rEvent.GetId() )
     {
-        m_pTreeListBox->AddEventListener( LINK( this, AccessibleListBoxEntry, WindowEventListener ) );
-        _rListBox.FillEntryPath( m_pSvLBoxEntry, m_aEntryPath );
-    }
-
-    IMPL_LINK( AccessibleListBoxEntry, WindowEventListener, VclWindowEvent&, rEvent, void )
-    {
-        OSL_ENSURE( rEvent.GetWindow() , "AccessibleListBoxEntry::WindowEventListener: no event window!" );
-        OSL_ENSURE( rEvent.GetWindow() == m_pTreeListBox, "AccessibleListBoxEntry::WindowEventListener: where did this come from?" );
-
-        if ( m_pTreeListBox == nullptr )
-            return;
-
-        switch ( rEvent.GetId() )
+        case VclEventId::CheckboxToggle:
         {
-            case VclEventId::CheckboxToggle:
-            {
-                // assert this object is represented as a checkbox on a11y layer (LABEL role is used for
-                // SvButtonState::Tristate, s. AccessibleListBoxEntry::getAccessibleRole)
-                assert(getAccessibleRole() == AccessibleRole::CHECK_BOX
-                       || getAccessibleRole() == AccessibleRole::LABEL);
-                Any aOldValue;
-                Any aNewValue;
-                if (getAccessibleStateSet() & AccessibleStateType::CHECKED)
-                    aNewValue <<= AccessibleStateType::CHECKED;
-                else
-                    aOldValue <<= AccessibleStateType::CHECKED;
+            // assert this object is represented as a checkbox on a11y layer (LABEL role is used for
+            // SvButtonState::Tristate, s. AccessibleListBoxEntry::getAccessibleRole)
+            assert(getAccessibleRole() == AccessibleRole::CHECK_BOX
+                   || getAccessibleRole() == AccessibleRole::LABEL);
+            Any aOldValue;
+            Any aNewValue;
+            if (getAccessibleStateSet() & AccessibleStateType::CHECKED)
+                aNewValue <<= AccessibleStateType::CHECKED;
+            else
+                aOldValue <<= AccessibleStateType::CHECKED;
 
-                NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue);
-                break;
-            }
-            case  VclEventId::ObjectDying :
-            {
-                if ( m_pTreeListBox )
-                    m_pTreeListBox->RemoveEventListener( LINK( this, AccessibleListBoxEntry, WindowEventListener ) );
-                m_pTreeListBox = nullptr;
-                dispose();
-                break;
-            }
-            default: break;
+            NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue);
+            break;
         }
-    }
-
-    tools::Rectangle AccessibleListBoxEntry::GetBoundingBox_Impl() const
-    {
-        tools::Rectangle aRect;
-        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
-        if ( pEntry )
+        case  VclEventId::ObjectDying :
         {
-            aRect = m_pTreeListBox->GetBoundingRect( pEntry );
-            SvTreeListEntry* pParent = m_pTreeListBox->GetParent( pEntry );
-            if ( pParent )
-            {
-                // position relative to parent entry
-                Point aTopLeft = aRect.TopLeft();
-                aTopLeft -= m_pTreeListBox->GetBoundingRect( pParent ).TopLeft();
-                aRect = tools::Rectangle( aTopLeft, aRect.GetSize() );
-            }
-        }
-
-        return aRect;
-    }
-
-    bool AccessibleListBoxEntry::IsAlive_Impl() const
-    {
-        return !rBHelper.bDisposed && !rBHelper.bInDispose && (m_pTreeListBox != nullptr);
-    }
-
-    bool AccessibleListBoxEntry::IsShowing_Impl() const
-    {
-        Reference< XAccessible > xParent = implGetParentAccessible( );
-
-        bool bShowing = false;
-        Reference< XAccessibleContext > xParentContext =
-            xParent.is() ? xParent->getAccessibleContext() : Reference< XAccessibleContext >();
-        if( xParentContext.is() )
-        {
-            Reference< XAccessibleComponent > xParentComp( xParentContext, uno::UNO_QUERY );
-            if( xParentComp.is() )
-                bShowing = GetBoundingBox_Impl().Overlaps(
-                    vcl::unohelper::ConvertToVCLRect(xParentComp->getBounds()));
-        }
-
-        return bShowing;
-    }
-
-    void AccessibleListBoxEntry::CheckActionIndex(sal_Int32 nIndex)
-    {
-        if (nIndex < 0 || nIndex >= getAccessibleActionCount())
-            throw css::lang::IndexOutOfBoundsException();
-    }
-
-    void AccessibleListBoxEntry::EnsureIsAlive() const
-    {
-        if ( !IsAlive_Impl() )
-            throw lang::DisposedException();
-    }
-
-    OUString AccessibleListBoxEntry::implGetText()
-    {
-        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
-        if (pEntry)
-            return SvTreeListBox::SearchEntryTextWithHeadTitle(pEntry);
-        return OUString();
-    }
-
-    Locale AccessibleListBoxEntry::implGetLocale()
-    {
-        return Application::GetSettings().GetUILanguageTag().getLocale();
-    }
-    void AccessibleListBoxEntry::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex )
-    {
-        nStartIndex = 0;
-        nEndIndex = 0;
-    }
-
-    css::awt::Rectangle AccessibleListBoxEntry::implGetBounds()
-    {
-        return vcl::unohelper::ConvertToAWTRect(GetBoundingBox_Impl());
-    }
-
-
-    // XComponent
-
-    void SAL_CALL AccessibleListBoxEntry::disposing()
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        Reference< XAccessible > xKeepAlive( this );
-
-        OAccessibleComponentHelper::disposing();
-
-        // clean up
-        m_wListBox.clear();
-
-        if ( m_pTreeListBox )
-            m_pTreeListBox->RemoveEventListener( LINK( this, AccessibleListBoxEntry, WindowEventListener ) );
-        m_pTreeListBox = nullptr;
-    }
-
-    // XServiceInfo
-
-    OUString SAL_CALL AccessibleListBoxEntry::getImplementationName()
-    {
-        return u"com.sun.star.comp.svtools.AccessibleTreeListBoxEntry"_ustr;
-    }
-
-    Sequence< OUString > SAL_CALL AccessibleListBoxEntry::getSupportedServiceNames()
-    {
-        return {u"com.sun.star.accessibility.AccessibleContext"_ustr,
-                u"com.sun.star.accessibility.AccessibleComponent"_ustr,
-                u"com.sun.star.awt.AccessibleTreeListBoxEntry"_ustr};
-    }
-
-    sal_Bool SAL_CALL AccessibleListBoxEntry::supportsService( const OUString& _rServiceName )
-    {
-        return cppu::supportsService(this, _rServiceName);
-    }
-
-    // XAccessible
-
-    Reference< XAccessibleContext > SAL_CALL AccessibleListBoxEntry::getAccessibleContext(  )
-    {
-        EnsureIsAlive();
-        return this;
-    }
-
-    // XAccessibleContext
-
-    sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleChildCount(  )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        EnsureIsAlive();
-        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
-        sal_Int32 nCount = 0;
-        if ( pEntry )
-            nCount = m_pTreeListBox->GetLevelChildCount( pEntry );
-
-        return nCount;
-    }
-
-    Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleChild( sal_Int64 i )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-        EnsureIsAlive();
-
-        SvTreeListEntry* pEntry = GetRealChild(i);
-        if ( !pEntry )
-            throw IndexOutOfBoundsException();
-
-        rtl::Reference<AccessibleListBox> xListBox(m_wListBox);
-        assert(xListBox.is());
-
-        return xListBox->implGetAccessible(*pEntry);
-    }
-
-    Reference< XAccessible > AccessibleListBoxEntry::implGetParentAccessible( ) const
-    {
-        Reference< XAccessible > xParent;
-        assert( m_aEntryPath.size() ); // invalid path
-        if ( m_aEntryPath.size() == 1 )
-        {   // we're a top level entry
-            // -> our parent is the tree listbox itself
             if ( m_pTreeListBox )
-                xParent = m_pTreeListBox->GetAccessible( );
+                m_pTreeListBox->RemoveEventListener( LINK( this, AccessibleListBoxEntry, WindowEventListener ) );
+            m_pTreeListBox = nullptr;
+            dispose();
+            break;
         }
-        else
-        {   // we have an entry as parent -> get its accessible
-
-            // shorten our access path by one
-            std::deque< sal_Int32 > aParentPath( m_aEntryPath );
-            aParentPath.pop_back();
-
-            // get the entry for this shortened access path
-            SvTreeListEntry* pParentEntry = m_pTreeListBox->GetEntryFromPath( aParentPath );
-            assert(pParentEntry && "AccessibleListBoxEntry::implGetParentAccessible: could not obtain a parent entry!");
-            if ( pParentEntry )
-            {
-                rtl::Reference<AccessibleListBox> xListBox(m_wListBox);
-                assert(xListBox.is());
-                return xListBox->implGetAccessible(*pParentEntry);
-                // the AccessibleListBoxEntry class will create its parent
-                // when needed
-            }
-        }
-
-        return xParent;
+        default: break;
     }
+}
 
-
-    Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleParent(  )
+tools::Rectangle AccessibleListBoxEntry::GetBoundingBox_Impl() const
+{
+    tools::Rectangle aRect;
+    SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+    if ( pEntry )
     {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-        EnsureIsAlive();
-
-        return implGetParentAccessible( );
-    }
-
-    sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleIndexInParent(  )
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        OSL_ENSURE( !m_aEntryPath.empty(), "empty path" );
-        return m_aEntryPath.empty() ? -1 : m_aEntryPath.back();
-    }
-
-    sal_Int32 AccessibleListBoxEntry::GetRoleType() const
-    {
-        sal_Int32 nCase = 0;
-        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry(0);
-        if ( pEntry )
+        aRect = m_pTreeListBox->GetBoundingRect( pEntry );
+        SvTreeListEntry* pParent = m_pTreeListBox->GetParent( pEntry );
+        if ( pParent )
         {
-            if( pEntry->HasChildrenOnDemand() || m_pTreeListBox->GetChildCount(pEntry) > 0  )
-            {
-                nCase = 1;
-                return nCase;
-            }
+            // position relative to parent entry
+            Point aTopLeft = aRect.TopLeft();
+            aTopLeft -= m_pTreeListBox->GetBoundingRect( pParent ).TopLeft();
+            aRect = tools::Rectangle( aTopLeft, aRect.GetSize() );
         }
-
-        bool bHasButtons = (m_pTreeListBox->GetStyle() & WB_HASBUTTONS)!=0;
-        if( !(m_pTreeListBox->GetTreeFlags() & SvTreeFlags::CHKBTN) )
-        {
-            if( bHasButtons )
-                nCase = 1;
-        }
-        else
-        {
-            if( bHasButtons )
-                nCase = 2;
-            else
-                nCase = 3;
-        }
-        return nCase;
     }
 
-    sal_Int16 SAL_CALL AccessibleListBoxEntry::getAccessibleRole(  )
+    return aRect;
+}
+
+bool AccessibleListBoxEntry::IsAlive_Impl() const
+{
+    return !rBHelper.bDisposed && !rBHelper.bInDispose && (m_pTreeListBox != nullptr);
+}
+
+bool AccessibleListBoxEntry::IsShowing_Impl() const
+{
+    Reference< XAccessible > xParent = implGetParentAccessible( );
+
+    bool bShowing = false;
+    Reference< XAccessibleContext > xParentContext =
+        xParent.is() ? xParent->getAccessibleContext() : Reference< XAccessibleContext >();
+    if( xParentContext.is() )
     {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        SvTreeListBox* pBox = m_pTreeListBox;
-        if(!pBox)
-            return AccessibleRole::UNKNOWN;
-
-        SvTreeFlags treeFlag = pBox->GetTreeFlags();
-        if(treeFlag & SvTreeFlags::CHKBTN )
-        {
-            SvTreeListEntry* pEntry = pBox->GetEntryFromPath( m_aEntryPath );
-            SvButtonState eState = pBox->GetCheckButtonState( pEntry );
-            switch( eState )
-            {
-            case SvButtonState::Checked:
-            case SvButtonState::Unchecked:
-                return AccessibleRole::CHECK_BOX;
-            case SvButtonState::Tristate:
-            default:
-                return AccessibleRole::LABEL;
-            }
-        }
-        if (GetRoleType() == 0)
-            return AccessibleRole::LIST_ITEM;
-        else
-            //o is: return AccessibleRole::LABEL;
-            return AccessibleRole::TREE_ITEM;
+        Reference< XAccessibleComponent > xParentComp( xParentContext, uno::UNO_QUERY );
+        if( xParentComp.is() )
+            bShowing = GetBoundingBox_Impl().Overlaps(
+                vcl::unohelper::ConvertToVCLRect(xParentComp->getBounds()));
     }
 
-    OUString SAL_CALL AccessibleListBoxEntry::getAccessibleDescription(  )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+    return bShowing;
+}
 
-        if( getAccessibleRole() == AccessibleRole::TREE_ITEM )
-        {
-            return OUString();
-        }
-        return m_pTreeListBox->GetEntryAccessibleDescription(
-            m_pTreeListBox->GetEntryFromPath(m_aEntryPath));
-    }
+void AccessibleListBoxEntry::CheckActionIndex(sal_Int32 nIndex)
+{
+    if (nIndex < 0 || nIndex >= getAccessibleActionCount())
+        throw css::lang::IndexOutOfBoundsException();
+}
 
-    OUString SAL_CALL AccessibleListBoxEntry::getAccessibleName(  )
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
+void AccessibleListBoxEntry::EnsureIsAlive() const
+{
+    if ( !IsAlive_Impl() )
+        throw lang::DisposedException();
+}
 
-        EnsureIsAlive();
+OUString AccessibleListBoxEntry::implGetText()
+{
+    SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+    if (pEntry)
+        return SvTreeListBox::SearchEntryTextWithHeadTitle(pEntry);
+    return OUString();
+}
 
-        return implGetText();
-    }
+Locale AccessibleListBoxEntry::implGetLocale()
+{
+    return Application::GetSettings().GetUILanguageTag().getLocale();
+}
+void AccessibleListBoxEntry::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex )
+{
+    nStartIndex = 0;
+    nEndIndex = 0;
+}
 
-    Reference< XAccessibleRelationSet > SAL_CALL AccessibleListBoxEntry::getAccessibleRelationSet(  )
-    {
-        Reference< XAccessibleRelationSet > xRelSet;
-        Reference< XAccessible > xParent;
-        if ( m_aEntryPath.size() > 1 ) // not a root entry
-            xParent = implGetParentAccessible();
-        if ( xParent.is() )
-        {
-            rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-            Sequence<Reference<XAccessible>> aSequence { xParent };
-            pRelationSetHelper->AddRelation(
-                AccessibleRelation( AccessibleRelationType_NODE_CHILD_OF, aSequence ) );
-            xRelSet = pRelationSetHelper;
-        }
-        return xRelSet;
-    }
-
-    sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleStateSet(  )
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        sal_Int64 nStateSet = 0;
-
-        if ( IsAlive_Impl() )
-        {
-            switch(getAccessibleRole())
-            {
-                case AccessibleRole::LABEL:
-                    nStateSet |= AccessibleStateType::TRANSIENT;
-                    nStateSet |= AccessibleStateType::SELECTABLE;
-                    nStateSet |= AccessibleStateType::ENABLED;
-                    if (m_pTreeListBox->IsInplaceEditingEnabled())
-                        nStateSet |= AccessibleStateType::EDITABLE;
-                    if (IsShowing_Impl())
-                        nStateSet |= AccessibleStateType::SHOWING;
-                    break;
-                case AccessibleRole::CHECK_BOX:
-                    nStateSet |= AccessibleStateType::TRANSIENT;
-                    nStateSet |= AccessibleStateType::SELECTABLE;
-                    nStateSet |= AccessibleStateType::ENABLED;
-                    if (IsShowing_Impl())
-                        nStateSet |= AccessibleStateType::SHOWING;
-                    break;
-            }
-            SvTreeListEntry *pEntry = m_pTreeListBox->GetEntryFromPath(m_aEntryPath);
-            if (pEntry)
-                m_pTreeListBox->FillAccessibleEntryStateSet(pEntry, nStateSet);
-        }
-        else
-            nStateSet |= AccessibleStateType::DEFUNC;
-
-        return nStateSet;
-    }
-
-    Locale SAL_CALL AccessibleListBoxEntry::getLocale(  )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        return implGetLocale();
-    }
-
-    // XAccessibleComponent
-
-    Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleAtPoint( const awt::Point& _aPoint )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        EnsureIsAlive();
-        SvTreeListEntry* pEntry
-            = m_pTreeListBox->GetEntry(vcl::unohelper::ConvertToVCLPoint(_aPoint));
-        if ( !pEntry )
-            throw RuntimeException(u"AccessibleListBoxEntry::getAccessibleAtPoint - pEntry cannot be empty!"_ustr);
-
-        Reference< XAccessible > xAcc;
-        rtl::Reference<AccessibleListBox> xListBox(m_wListBox);
-        assert(xListBox.is());
-        auto pAccEntry = xListBox->implGetAccessible(*pEntry);
-        tools::Rectangle aRect = pAccEntry->GetBoundingBox_Impl();
-        if (aRect.Contains(vcl::unohelper::ConvertToVCLPoint(_aPoint)))
-            xAcc = pAccEntry.get();
-        return xAcc;
-    }
-
-    void SAL_CALL AccessibleListBoxEntry::grabFocus(  )
-    {
-        // do nothing, because no focus for each item
-    }
-
-    sal_Int32 AccessibleListBoxEntry::getForeground(    )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        sal_Int32 nColor = 0;
-        Reference< XAccessible > xParent = getAccessibleParent();
-        if ( xParent.is() )
-        {
-            Reference< XAccessibleComponent > xParentComp( xParent->getAccessibleContext(), UNO_QUERY );
-            if ( xParentComp.is() )
-                nColor = xParentComp->getForeground();
-        }
-
-        return nColor;
-    }
-
-    sal_Int32 AccessibleListBoxEntry::getBackground(  )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        sal_Int32 nColor = 0;
-        Reference< XAccessible > xParent = getAccessibleParent();
-        if ( xParent.is() )
-        {
-            Reference< XAccessibleComponent > xParentComp( xParent->getAccessibleContext(), UNO_QUERY );
-            if ( xParentComp.is() )
-                nColor = xParentComp->getBackground();
-        }
-
-        return nColor;
-    }
-
-    // XAccessibleText
+css::awt::Rectangle AccessibleListBoxEntry::implGetBounds()
+{
+    return vcl::unohelper::ConvertToAWTRect(GetBoundingBox_Impl());
+}
 
 
-    awt::Rectangle SAL_CALL AccessibleListBoxEntry::getCharacterBounds( sal_Int32 nIndex )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+// XComponent
 
-        EnsureIsAlive();
+void SAL_CALL AccessibleListBoxEntry::disposing()
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
 
-        if ( !implIsValidIndex( nIndex, implGetText().getLength() ) )
-            throw IndexOutOfBoundsException();
+    Reference< XAccessible > xKeepAlive( this );
 
-        awt::Rectangle aBounds( 0, 0, 0, 0 );
-        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
-        if ( pEntry )
-        {
-            vcl::ControlLayoutData aLayoutData;
-            tools::Rectangle aItemRect = GetBoundingBox_Impl();
-            m_pTreeListBox->RecordLayoutData( &aLayoutData, aItemRect );
-            tools::Rectangle aCharRect = aLayoutData.GetCharacterBounds( nIndex );
-            aCharRect.Move( -aItemRect.Left(), -aItemRect.Top() );
-            aBounds = vcl::unohelper::ConvertToAWTRect(aCharRect);
-        }
+    OAccessibleComponentHelper::disposing();
 
-        return aBounds;
-    }
+    // clean up
+    m_wListBox.clear();
 
-    sal_Int32 SAL_CALL AccessibleListBoxEntry::getIndexAtPoint( const awt::Point& aPoint )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-        EnsureIsAlive();
-        if(aPoint.X==0 && aPoint.Y==0) return 0;
+    if ( m_pTreeListBox )
+        m_pTreeListBox->RemoveEventListener( LINK( this, AccessibleListBoxEntry, WindowEventListener ) );
+    m_pTreeListBox = nullptr;
+}
 
-        sal_Int32 nIndex = -1;
-        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
-        if ( pEntry )
-        {
-            vcl::ControlLayoutData aLayoutData;
-            tools::Rectangle aItemRect = GetBoundingBox_Impl();
-            m_pTreeListBox->RecordLayoutData( &aLayoutData, aItemRect );
-            Point aPnt(vcl::unohelper::ConvertToVCLPoint(aPoint));
-            aPnt += aItemRect.TopLeft();
-            nIndex = aLayoutData.GetIndexForPoint( aPnt );
-        }
+// XServiceInfo
 
-        return nIndex;
-    }
+OUString SAL_CALL AccessibleListBoxEntry::getImplementationName()
+{
+    return u"com.sun.star.comp.svtools.AccessibleTreeListBoxEntry"_ustr;
+}
 
-    sal_Bool SAL_CALL AccessibleListBoxEntry::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-        EnsureIsAlive();
+Sequence< OUString > SAL_CALL AccessibleListBoxEntry::getSupportedServiceNames()
+{
+    return {u"com.sun.star.accessibility.AccessibleContext"_ustr,
+            u"com.sun.star.accessibility.AccessibleComponent"_ustr,
+            u"com.sun.star.awt.AccessibleTreeListBoxEntry"_ustr};
+}
 
-        OUString sText = implGetText();
-        if  ( ( 0 > nStartIndex ) || ( sText.getLength() <= nStartIndex )
-            || ( 0 > nEndIndex ) || ( sText.getLength() <= nEndIndex ) )
-            throw IndexOutOfBoundsException();
+sal_Bool SAL_CALL AccessibleListBoxEntry::supportsService( const OUString& _rServiceName )
+{
+    return cppu::supportsService(this, _rServiceName);
+}
 
-        if (!m_pTreeListBox)
-            return false;
+// XAccessible
 
-        sal_Int32 nLen = nEndIndex - nStartIndex + 1;
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipBoard = m_pTreeListBox->GetClipboard();
-        vcl::unohelper::TextDataObject::CopyStringTo(sText.copy(nStartIndex, nLen), xClipBoard);
+Reference< XAccessibleContext > SAL_CALL AccessibleListBoxEntry::getAccessibleContext(  )
+{
+    EnsureIsAlive();
+    return this;
+}
 
-        return true;
-    }
+// XAccessibleContext
 
-    sal_Bool SAL_CALL AccessibleListBoxEntry::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
-    {
-        return false;
-    }
+sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleChildCount(  )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
 
-    // XAccessibleAction
+    EnsureIsAlive();
+    SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+    sal_Int32 nCount = 0;
+    if ( pEntry )
+        nCount = m_pTreeListBox->GetLevelChildCount( pEntry );
 
-    sal_Int32 SAL_CALL AccessibleListBoxEntry::getAccessibleActionCount(  )
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
+    return nCount;
+}
 
-        // three actions supported
-        SvTreeFlags treeFlag = m_pTreeListBox->GetTreeFlags();
-        bool bHasButtons = (m_pTreeListBox->GetStyle() & WB_HASBUTTONS)!=0;
-        if( (treeFlag & SvTreeFlags::CHKBTN) && !bHasButtons)
-        {
-            sal_Int16 role = getAccessibleRole();
-            if ( role == AccessibleRole::CHECK_BOX )
-                return 2;
-            else if ( role == AccessibleRole::LABEL )
-                return 0;
-        }
-        else
-            return 1;
-        return 0;
-    }
+Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleChild( sal_Int64 i )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    EnsureIsAlive();
 
-    sal_Bool SAL_CALL AccessibleListBoxEntry::doAccessibleAction( sal_Int32 nIndex )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        bool bRet = false;
-        CheckActionIndex(nIndex);
-        EnsureIsAlive();
-
-        SvTreeFlags treeFlag = m_pTreeListBox->GetTreeFlags();
-        if( nIndex == 0 && (treeFlag & SvTreeFlags::CHKBTN) )
-        {
-            if(getAccessibleRole() == AccessibleRole::CHECK_BOX)
-            {
-                SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
-                SvButtonState state = m_pTreeListBox->GetCheckButtonState( pEntry );
-                if ( state == SvButtonState::Checked )
-                    m_pTreeListBox->SetCheckButtonState(pEntry, SvButtonState::Unchecked);
-                else if (state == SvButtonState::Unchecked)
-                    m_pTreeListBox->SetCheckButtonState(pEntry, SvButtonState::Checked);
-            }
-        }
-        else if( (nIndex == 1 && (treeFlag & SvTreeFlags::CHKBTN) ) || (nIndex == 0) )
-        {
-            SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
-            if ( pEntry )
-            {
-                if ( m_pTreeListBox->IsExpanded( pEntry ) )
-                    m_pTreeListBox->Collapse( pEntry );
-                else
-                    m_pTreeListBox->Expand( pEntry );
-                bRet = true;
-            }
-        }
-
-        return bRet;
-    }
-
-    OUString SAL_CALL AccessibleListBoxEntry::getAccessibleActionDescription( sal_Int32 nIndex )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        CheckActionIndex(nIndex);
-        EnsureIsAlive();
-
-        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
-        SvButtonState state = m_pTreeListBox->GetCheckButtonState( pEntry );
-        SvTreeFlags treeFlag = m_pTreeListBox->GetTreeFlags();
-        if(nIndex == 0 && (treeFlag & SvTreeFlags::CHKBTN))
-        {
-            if(getAccessibleRole() == AccessibleRole::CHECK_BOX)
-            {
-                if ( state == SvButtonState::Checked )
-                    return u"UnCheck"_ustr;
-                else if (state == SvButtonState::Unchecked)
-                    return u"Check"_ustr;
-            }
-            else
-            {
-                //Sometimes, a List or Tree may have both checkbox and label at the same time
-                return OUString();
-            }
-        }
-        else if( (nIndex == 1 && (treeFlag & SvTreeFlags::CHKBTN)) || nIndex == 0 )
-        {
-            if( pEntry && (pEntry->HasChildren() || pEntry->HasChildrenOnDemand()) )
-                return m_pTreeListBox->IsExpanded( pEntry ) ?
-                VclResId(STR_SVT_ACC_ACTION_COLLAPSE) :
-                VclResId(STR_SVT_ACC_ACTION_EXPAND);
-            return OUString();
-
-        }
+    SvTreeListEntry* pEntry = GetRealChild(i);
+    if ( !pEntry )
         throw IndexOutOfBoundsException();
+
+    rtl::Reference<AccessibleListBox> xListBox(m_wListBox);
+    assert(xListBox.is());
+
+    return xListBox->implGetAccessible(*pEntry);
+}
+
+Reference< XAccessible > AccessibleListBoxEntry::implGetParentAccessible( ) const
+{
+    Reference< XAccessible > xParent;
+    assert( m_aEntryPath.size() ); // invalid path
+    if ( m_aEntryPath.size() == 1 )
+    {   // we're a top level entry
+        // -> our parent is the tree listbox itself
+        if ( m_pTreeListBox )
+            xParent = m_pTreeListBox->GetAccessible( );
     }
+    else
+    {   // we have an entry as parent -> get its accessible
 
-    Reference< XAccessibleKeyBinding > AccessibleListBoxEntry::getAccessibleActionKeyBinding( sal_Int32 nIndex )
-    {
-        Reference< XAccessibleKeyBinding > xRet;
-        CheckActionIndex(nIndex);
-        // ... which key?
-        return xRet;
-    }
+        // shorten our access path by one
+        std::deque< sal_Int32 > aParentPath( m_aEntryPath );
+        aParentPath.pop_back();
 
-    // XAccessibleSelection
-
-    void SAL_CALL AccessibleListBoxEntry::selectAccessibleChild( sal_Int64 nChildIndex )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        EnsureIsAlive();
-
-        if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
-            throw IndexOutOfBoundsException();
-
-        SvTreeListEntry* pEntry = GetRealChild(nChildIndex);
-        if ( !pEntry )
-            throw IndexOutOfBoundsException();
-
-        m_pTreeListBox->Select( pEntry );
-    }
-
-    sal_Bool SAL_CALL AccessibleListBoxEntry::isAccessibleChildSelected( sal_Int64 nChildIndex )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        EnsureIsAlive();
-
-        if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
-            throw IndexOutOfBoundsException();
-
-        SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
-        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, nChildIndex );
-        if ( !pEntry )
-            throw IndexOutOfBoundsException();
-
-        return m_pTreeListBox->IsSelected( pEntry );
-    }
-
-    void SAL_CALL AccessibleListBoxEntry::clearAccessibleSelection(  )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        EnsureIsAlive();
-
-        SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
-        if ( !pParent )
-            throw RuntimeException(u"AccessibleListBoxEntry::clearAccessibleSelection - pParent cannot be empty!"_ustr);
-        sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
-        for ( sal_Int32 i = 0; i < nCount; ++i )
+        // get the entry for this shortened access path
+        SvTreeListEntry* pParentEntry = m_pTreeListBox->GetEntryFromPath( aParentPath );
+        assert(pParentEntry && "AccessibleListBoxEntry::implGetParentAccessible: could not obtain a parent entry!");
+        if ( pParentEntry )
         {
-            SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, i );
-            if ( m_pTreeListBox->IsSelected( pEntry ) )
-                m_pTreeListBox->Select( pEntry, false );
+            rtl::Reference<AccessibleListBox> xListBox(m_wListBox);
+            assert(xListBox.is());
+            return xListBox->implGetAccessible(*pParentEntry);
+            // the AccessibleListBoxEntry class will create its parent
+            // when needed
         }
     }
 
-    void SAL_CALL AccessibleListBoxEntry::selectAllAccessibleChildren(  )
+    return xParent;
+}
+
+
+Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleParent(  )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    EnsureIsAlive();
+
+    return implGetParentAccessible( );
+}
+
+sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleIndexInParent(  )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    OSL_ENSURE( !m_aEntryPath.empty(), "empty path" );
+    return m_aEntryPath.empty() ? -1 : m_aEntryPath.back();
+}
+
+sal_Int32 AccessibleListBoxEntry::GetRoleType() const
+{
+    sal_Int32 nCase = 0;
+    SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry(0);
+    if ( pEntry )
     {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        EnsureIsAlive();
-
-        SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
-        if ( !pParent )
-            throw RuntimeException(u"AccessibleListBoxEntry::selectAllAccessibleChildren - pParent cannot be empty!"_ustr);
-        sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
-        for ( sal_Int32 i = 0; i < nCount; ++i )
+        if( pEntry->HasChildrenOnDemand() || m_pTreeListBox->GetChildCount(pEntry) > 0  )
         {
-            SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, i );
-            if ( !m_pTreeListBox->IsSelected( pEntry ) )
-                m_pTreeListBox->Select( pEntry );
+            nCase = 1;
+            return nCase;
         }
     }
 
-    sal_Int64 SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleChildCount(  )
+    bool bHasButtons = (m_pTreeListBox->GetStyle() & WB_HASBUTTONS)!=0;
+    if( !(m_pTreeListBox->GetTreeFlags() & SvTreeFlags::CHKBTN) )
     {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
+        if( bHasButtons )
+            nCase = 1;
+    }
+    else
+    {
+        if( bHasButtons )
+            nCase = 2;
+        else
+            nCase = 3;
+    }
+    return nCase;
+}
 
-        EnsureIsAlive();
+sal_Int16 SAL_CALL AccessibleListBoxEntry::getAccessibleRole(  )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
 
-        sal_Int64 nSelCount = 0;
+    SvTreeListBox* pBox = m_pTreeListBox;
+    if(!pBox)
+        return AccessibleRole::UNKNOWN;
 
-        SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
-        if ( !pParent )
-            throw RuntimeException(u"AccessibleListBoxEntry::getSelectedAccessibleChildCount - pParent cannot be empty!"_ustr);
-        sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
-        for (sal_Int32 i = 0; i < nCount; ++i )
+    SvTreeFlags treeFlag = pBox->GetTreeFlags();
+    if(treeFlag & SvTreeFlags::CHKBTN )
+    {
+        SvTreeListEntry* pEntry = pBox->GetEntryFromPath( m_aEntryPath );
+        SvButtonState eState = pBox->GetCheckButtonState( pEntry );
+        switch( eState )
         {
-            SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, i );
-            if ( m_pTreeListBox->IsSelected( pEntry ) )
-                ++nSelCount;
+        case SvButtonState::Checked:
+        case SvButtonState::Unchecked:
+            return AccessibleRole::CHECK_BOX;
+        case SvButtonState::Tristate:
+        default:
+            return AccessibleRole::LABEL;
         }
-
-        return nSelCount;
     }
+    if (GetRoleType() == 0)
+        return AccessibleRole::LIST_ITEM;
+    else
+        //o is: return AccessibleRole::LABEL;
+        return AccessibleRole::TREE_ITEM;
+}
 
-    Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
+OUString SAL_CALL AccessibleListBoxEntry::getAccessibleDescription(  )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if( getAccessibleRole() == AccessibleRole::TREE_ITEM )
     {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        EnsureIsAlive();
-
-        if ( nSelectedChildIndex < 0 || nSelectedChildIndex >= getSelectedAccessibleChildCount() )
-            throw IndexOutOfBoundsException();
-
-        Reference< XAccessible > xChild;
-        sal_Int64 nSelCount = 0;
-
-        SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
-        if ( !pParent )
-            throw RuntimeException(u"AccessibleListBoxEntry::getSelectedAccessibleChild - pParent cannot be empty!"_ustr);
-        sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
-        for (sal_Int32 i = 0; i < nCount; ++i )
-        {
-            SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, i );
-            if ( m_pTreeListBox->IsSelected( pEntry ) )
-                ++nSelCount;
-
-            if ( nSelCount == ( nSelectedChildIndex + 1 ) )
-            {
-                rtl::Reference<AccessibleListBox> xListBox(m_wListBox);
-                assert(xListBox.is());
-                xChild = xListBox->implGetAccessible(*pEntry).get();
-                break;
-            }
-        }
-
-        return xChild;
-    }
-
-    void SAL_CALL AccessibleListBoxEntry::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        EnsureIsAlive();
-
-        if (nSelectedChildIndex < 0 || nSelectedChildIndex >= getAccessibleChildCount())
-            throw IndexOutOfBoundsException();
-
-        SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
-        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, nSelectedChildIndex );
-        if ( !pEntry )
-            throw IndexOutOfBoundsException();
-
-        m_pTreeListBox->Select( pEntry, false );
-    }
-    sal_Int32 SAL_CALL AccessibleListBoxEntry::getCaretPosition(  )
-    {
-        return -1;
-    }
-    sal_Bool SAL_CALL AccessibleListBoxEntry::setCaretPosition ( sal_Int32 nIndex )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-        EnsureIsAlive();
-
-        if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
-            throw IndexOutOfBoundsException();
-
-        return false;
-    }
-    sal_Unicode SAL_CALL AccessibleListBoxEntry::getCharacter( sal_Int32 nIndex )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-        EnsureIsAlive();
-        return OCommonAccessibleText::implGetCharacter( implGetText(), nIndex );
-    }
-    css::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleListBoxEntry::getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-        EnsureIsAlive();
-
-        OUString sText( implGetText() );
-
-        if ( !implIsValidIndex( nIndex, sText.getLength() ) )
-            throw IndexOutOfBoundsException();
-
-        return css::uno::Sequence< css::beans::PropertyValue >();
-    }
-    sal_Int32 SAL_CALL AccessibleListBoxEntry::getCharacterCount(  )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-        EnsureIsAlive();
-        return implGetText().getLength();
-    }
-
-    OUString SAL_CALL AccessibleListBoxEntry::getSelectedText(  )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-        EnsureIsAlive();
         return OUString();
     }
-    sal_Int32 SAL_CALL AccessibleListBoxEntry::getSelectionStart(  )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-        EnsureIsAlive();
-        return 0;
-    }
-    sal_Int32 SAL_CALL AccessibleListBoxEntry::getSelectionEnd(  )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-        EnsureIsAlive();
-        return 0;
-    }
-    sal_Bool SAL_CALL AccessibleListBoxEntry::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-        EnsureIsAlive();
+    return m_pTreeListBox->GetEntryAccessibleDescription(
+        m_pTreeListBox->GetEntryFromPath(m_aEntryPath));
+}
 
-        if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
-            throw IndexOutOfBoundsException();
+OUString SAL_CALL AccessibleListBoxEntry::getAccessibleName(  )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
 
+    EnsureIsAlive();
+
+    return implGetText();
+}
+
+Reference< XAccessibleRelationSet > SAL_CALL AccessibleListBoxEntry::getAccessibleRelationSet(  )
+{
+    Reference< XAccessibleRelationSet > xRelSet;
+    Reference< XAccessible > xParent;
+    if ( m_aEntryPath.size() > 1 ) // not a root entry
+        xParent = implGetParentAccessible();
+    if ( xParent.is() )
+    {
+        rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSetHelper = new utl::AccessibleRelationSetHelper;
+        Sequence<Reference<XAccessible>> aSequence { xParent };
+        pRelationSetHelper->AddRelation(
+            AccessibleRelation( AccessibleRelationType_NODE_CHILD_OF, aSequence ) );
+        xRelSet = pRelationSetHelper;
+    }
+    return xRelSet;
+}
+
+sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleStateSet(  )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    sal_Int64 nStateSet = 0;
+
+    if ( IsAlive_Impl() )
+    {
+        switch(getAccessibleRole())
+        {
+            case AccessibleRole::LABEL:
+                nStateSet |= AccessibleStateType::TRANSIENT;
+                nStateSet |= AccessibleStateType::SELECTABLE;
+                nStateSet |= AccessibleStateType::ENABLED;
+                if (m_pTreeListBox->IsInplaceEditingEnabled())
+                    nStateSet |= AccessibleStateType::EDITABLE;
+                if (IsShowing_Impl())
+                    nStateSet |= AccessibleStateType::SHOWING;
+                break;
+            case AccessibleRole::CHECK_BOX:
+                nStateSet |= AccessibleStateType::TRANSIENT;
+                nStateSet |= AccessibleStateType::SELECTABLE;
+                nStateSet |= AccessibleStateType::ENABLED;
+                if (IsShowing_Impl())
+                    nStateSet |= AccessibleStateType::SHOWING;
+                break;
+        }
+        SvTreeListEntry *pEntry = m_pTreeListBox->GetEntryFromPath(m_aEntryPath);
+        if (pEntry)
+            m_pTreeListBox->FillAccessibleEntryStateSet(pEntry, nStateSet);
+    }
+    else
+        nStateSet |= AccessibleStateType::DEFUNC;
+
+    return nStateSet;
+}
+
+Locale SAL_CALL AccessibleListBoxEntry::getLocale(  )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    return implGetLocale();
+}
+
+// XAccessibleComponent
+
+Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleAtPoint( const awt::Point& _aPoint )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    EnsureIsAlive();
+    SvTreeListEntry* pEntry
+        = m_pTreeListBox->GetEntry(vcl::unohelper::ConvertToVCLPoint(_aPoint));
+    if ( !pEntry )
+        throw RuntimeException(u"AccessibleListBoxEntry::getAccessibleAtPoint - pEntry cannot be empty!"_ustr);
+
+    Reference< XAccessible > xAcc;
+    rtl::Reference<AccessibleListBox> xListBox(m_wListBox);
+    assert(xListBox.is());
+    auto pAccEntry = xListBox->implGetAccessible(*pEntry);
+    tools::Rectangle aRect = pAccEntry->GetBoundingBox_Impl();
+    if (aRect.Contains(vcl::unohelper::ConvertToVCLPoint(_aPoint)))
+        xAcc = pAccEntry.get();
+    return xAcc;
+}
+
+void SAL_CALL AccessibleListBoxEntry::grabFocus(  )
+{
+    // do nothing, because no focus for each item
+}
+
+sal_Int32 AccessibleListBoxEntry::getForeground(    )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    sal_Int32 nColor = 0;
+    Reference< XAccessible > xParent = getAccessibleParent();
+    if ( xParent.is() )
+    {
+        Reference< XAccessibleComponent > xParentComp( xParent->getAccessibleContext(), UNO_QUERY );
+        if ( xParentComp.is() )
+            nColor = xParentComp->getForeground();
+    }
+
+    return nColor;
+}
+
+sal_Int32 AccessibleListBoxEntry::getBackground(  )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    sal_Int32 nColor = 0;
+    Reference< XAccessible > xParent = getAccessibleParent();
+    if ( xParent.is() )
+    {
+        Reference< XAccessibleComponent > xParentComp( xParent->getAccessibleContext(), UNO_QUERY );
+        if ( xParentComp.is() )
+            nColor = xParentComp->getBackground();
+    }
+
+    return nColor;
+}
+
+// XAccessibleText
+
+
+awt::Rectangle SAL_CALL AccessibleListBoxEntry::getCharacterBounds( sal_Int32 nIndex )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    EnsureIsAlive();
+
+    if ( !implIsValidIndex( nIndex, implGetText().getLength() ) )
+        throw IndexOutOfBoundsException();
+
+    awt::Rectangle aBounds( 0, 0, 0, 0 );
+    SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+    if ( pEntry )
+    {
+        vcl::ControlLayoutData aLayoutData;
+        tools::Rectangle aItemRect = GetBoundingBox_Impl();
+        m_pTreeListBox->RecordLayoutData( &aLayoutData, aItemRect );
+        tools::Rectangle aCharRect = aLayoutData.GetCharacterBounds( nIndex );
+        aCharRect.Move( -aItemRect.Left(), -aItemRect.Top() );
+        aBounds = vcl::unohelper::ConvertToAWTRect(aCharRect);
+    }
+
+    return aBounds;
+}
+
+sal_Int32 SAL_CALL AccessibleListBoxEntry::getIndexAtPoint( const awt::Point& aPoint )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    EnsureIsAlive();
+    if(aPoint.X==0 && aPoint.Y==0) return 0;
+
+    sal_Int32 nIndex = -1;
+    SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+    if ( pEntry )
+    {
+        vcl::ControlLayoutData aLayoutData;
+        tools::Rectangle aItemRect = GetBoundingBox_Impl();
+        m_pTreeListBox->RecordLayoutData( &aLayoutData, aItemRect );
+        Point aPnt(vcl::unohelper::ConvertToVCLPoint(aPoint));
+        aPnt += aItemRect.TopLeft();
+        nIndex = aLayoutData.GetIndexForPoint( aPnt );
+    }
+
+    return nIndex;
+}
+
+sal_Bool SAL_CALL AccessibleListBoxEntry::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    EnsureIsAlive();
+
+    OUString sText = implGetText();
+    if  ( ( 0 > nStartIndex ) || ( sText.getLength() <= nStartIndex )
+        || ( 0 > nEndIndex ) || ( sText.getLength() <= nEndIndex ) )
+        throw IndexOutOfBoundsException();
+
+    if (!m_pTreeListBox)
         return false;
-    }
-    OUString SAL_CALL AccessibleListBoxEntry::getText(  )
+
+    sal_Int32 nLen = nEndIndex - nStartIndex + 1;
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipBoard = m_pTreeListBox->GetClipboard();
+    vcl::unohelper::TextDataObject::CopyStringTo(sText.copy(nStartIndex, nLen), xClipBoard);
+
+    return true;
+}
+
+sal_Bool SAL_CALL AccessibleListBoxEntry::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
+{
+    return false;
+}
+
+// XAccessibleAction
+
+sal_Int32 SAL_CALL AccessibleListBoxEntry::getAccessibleActionCount(  )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    // three actions supported
+    SvTreeFlags treeFlag = m_pTreeListBox->GetTreeFlags();
+    bool bHasButtons = (m_pTreeListBox->GetStyle() & WB_HASBUTTONS)!=0;
+    if( (treeFlag & SvTreeFlags::CHKBTN) && !bHasButtons)
     {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-        EnsureIsAlive();
-        return implGetText(  );
+        sal_Int16 role = getAccessibleRole();
+        if ( role == AccessibleRole::CHECK_BOX )
+            return 2;
+        else if ( role == AccessibleRole::LABEL )
+            return 0;
     }
-    OUString SAL_CALL AccessibleListBoxEntry::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+    else
+        return 1;
+    return 0;
+}
+
+sal_Bool SAL_CALL AccessibleListBoxEntry::doAccessibleAction( sal_Int32 nIndex )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    bool bRet = false;
+    CheckActionIndex(nIndex);
+    EnsureIsAlive();
+
+    SvTreeFlags treeFlag = m_pTreeListBox->GetTreeFlags();
+    if( nIndex == 0 && (treeFlag & SvTreeFlags::CHKBTN) )
     {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-        EnsureIsAlive();
-        return OCommonAccessibleText::implGetTextRange( implGetText(), nStartIndex, nEndIndex );
-    }
-    css::accessibility::TextSegment SAL_CALL AccessibleListBoxEntry::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-        EnsureIsAlive();
-        return OCommonAccessibleText::getTextAtIndex( nIndex ,aTextType);
-    }
-    css::accessibility::TextSegment SAL_CALL AccessibleListBoxEntry::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-        EnsureIsAlive();
-        return OCommonAccessibleText::getTextBeforeIndex( nIndex ,aTextType);
-    }
-    css::accessibility::TextSegment SAL_CALL AccessibleListBoxEntry::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
-    {
-        SolarMutexGuard aSolarGuard;
-        ::osl::MutexGuard aGuard( m_aMutex );
-        EnsureIsAlive();
-
-        return OCommonAccessibleText::getTextBehindIndex( nIndex ,aTextType);
-    }
-
-    // XAccessibleValue
-
-
-    Any AccessibleListBoxEntry::getCurrentValue(  )
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        Any aValue;
-        sal_Int32 level = static_cast<sal_Int32>(m_aEntryPath.size()) - 1;
-        level = level < 0 ?  0: level;
-        aValue <<= level;
-        return aValue;
-    }
-
-
-    sal_Bool AccessibleListBoxEntry::setCurrentValue( const Any& aNumber )
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-
-        bool bReturn = false;
-        SvTreeListBox* pBox = m_pTreeListBox;
         if(getAccessibleRole() == AccessibleRole::CHECK_BOX)
         {
-            SvTreeListEntry* pEntry = pBox->GetEntryFromPath( m_aEntryPath );
-            if ( pEntry )
-            {
-                sal_Int32 nValue(0), nValueMin(0), nValueMax(0);
-                aNumber >>= nValue;
-                getMinimumValue() >>= nValueMin;
-                getMaximumValue() >>= nValueMax;
-
-                if ( nValue < nValueMin )
-                    nValue = nValueMin;
-                else if ( nValue > nValueMax )
-                    nValue = nValueMax;
-
-                pBox->SetCheckButtonState(pEntry,  static_cast<SvButtonState>(nValue) );
-                bReturn = true;
-            }
+            SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+            SvButtonState state = m_pTreeListBox->GetCheckButtonState( pEntry );
+            if ( state == SvButtonState::Checked )
+                m_pTreeListBox->SetCheckButtonState(pEntry, SvButtonState::Unchecked);
+            else if (state == SvButtonState::Unchecked)
+                m_pTreeListBox->SetCheckButtonState(pEntry, SvButtonState::Checked);
         }
-
-        return bReturn;
+    }
+    else if( (nIndex == 1 && (treeFlag & SvTreeFlags::CHKBTN) ) || (nIndex == 0) )
+    {
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+        if ( pEntry )
+        {
+            if ( m_pTreeListBox->IsExpanded( pEntry ) )
+                m_pTreeListBox->Collapse( pEntry );
+            else
+                m_pTreeListBox->Expand( pEntry );
+            bRet = true;
+        }
     }
 
+    return bRet;
+}
 
-    Any AccessibleListBoxEntry::getMaximumValue(  )
+OUString SAL_CALL AccessibleListBoxEntry::getAccessibleActionDescription( sal_Int32 nIndex )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    CheckActionIndex(nIndex);
+    EnsureIsAlive();
+
+    SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+    SvButtonState state = m_pTreeListBox->GetCheckButtonState( pEntry );
+    SvTreeFlags treeFlag = m_pTreeListBox->GetTreeFlags();
+    if(nIndex == 0 && (treeFlag & SvTreeFlags::CHKBTN))
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        Any aValue;
-        // SvTreeListBox* pBox = m_pTreeListBox;
-        switch(getAccessibleRole())
+        if(getAccessibleRole() == AccessibleRole::CHECK_BOX)
         {
-            case AccessibleRole::CHECK_BOX:
-                aValue <<= sal_Int32(1);
-                break;
-            case AccessibleRole::LABEL:
-            default:
-                break;
+            if ( state == SvButtonState::Checked )
+                return u"UnCheck"_ustr;
+            else if (state == SvButtonState::Unchecked)
+                return u"Check"_ustr;
         }
+        else
+        {
+            //Sometimes, a List or Tree may have both checkbox and label at the same time
+            return OUString();
+        }
+    }
+    else if( (nIndex == 1 && (treeFlag & SvTreeFlags::CHKBTN)) || nIndex == 0 )
+    {
+        if( pEntry && (pEntry->HasChildren() || pEntry->HasChildrenOnDemand()) )
+            return m_pTreeListBox->IsExpanded( pEntry ) ?
+            VclResId(STR_SVT_ACC_ACTION_COLLAPSE) :
+            VclResId(STR_SVT_ACC_ACTION_EXPAND);
+        return OUString();
 
-        return aValue;
+    }
+    throw IndexOutOfBoundsException();
+}
+
+Reference< XAccessibleKeyBinding > AccessibleListBoxEntry::getAccessibleActionKeyBinding( sal_Int32 nIndex )
+{
+    Reference< XAccessibleKeyBinding > xRet;
+    CheckActionIndex(nIndex);
+    // ... which key?
+    return xRet;
+}
+
+// XAccessibleSelection
+
+void SAL_CALL AccessibleListBoxEntry::selectAccessibleChild( sal_Int64 nChildIndex )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    EnsureIsAlive();
+
+    if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
+        throw IndexOutOfBoundsException();
+
+    SvTreeListEntry* pEntry = GetRealChild(nChildIndex);
+    if ( !pEntry )
+        throw IndexOutOfBoundsException();
+
+    m_pTreeListBox->Select( pEntry );
+}
+
+sal_Bool SAL_CALL AccessibleListBoxEntry::isAccessibleChildSelected( sal_Int64 nChildIndex )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    EnsureIsAlive();
+
+    if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
+        throw IndexOutOfBoundsException();
+
+    SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+    SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, nChildIndex );
+    if ( !pEntry )
+        throw IndexOutOfBoundsException();
+
+    return m_pTreeListBox->IsSelected( pEntry );
+}
+
+void SAL_CALL AccessibleListBoxEntry::clearAccessibleSelection(  )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    EnsureIsAlive();
+
+    SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+    if ( !pParent )
+        throw RuntimeException(u"AccessibleListBoxEntry::clearAccessibleSelection - pParent cannot be empty!"_ustr);
+    sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
+    for ( sal_Int32 i = 0; i < nCount; ++i )
+    {
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, i );
+        if ( m_pTreeListBox->IsSelected( pEntry ) )
+            m_pTreeListBox->Select( pEntry, false );
+    }
+}
+
+void SAL_CALL AccessibleListBoxEntry::selectAllAccessibleChildren(  )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    EnsureIsAlive();
+
+    SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+    if ( !pParent )
+        throw RuntimeException(u"AccessibleListBoxEntry::selectAllAccessibleChildren - pParent cannot be empty!"_ustr);
+    sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
+    for ( sal_Int32 i = 0; i < nCount; ++i )
+    {
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, i );
+        if ( !m_pTreeListBox->IsSelected( pEntry ) )
+            m_pTreeListBox->Select( pEntry );
+    }
+}
+
+sal_Int64 SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleChildCount(  )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    EnsureIsAlive();
+
+    sal_Int64 nSelCount = 0;
+
+    SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+    if ( !pParent )
+        throw RuntimeException(u"AccessibleListBoxEntry::getSelectedAccessibleChildCount - pParent cannot be empty!"_ustr);
+    sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
+    for (sal_Int32 i = 0; i < nCount; ++i )
+    {
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, i );
+        if ( m_pTreeListBox->IsSelected( pEntry ) )
+            ++nSelCount;
     }
 
+    return nSelCount;
+}
 
-    Any AccessibleListBoxEntry::getMinimumValue(  )
+Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    EnsureIsAlive();
+
+    if ( nSelectedChildIndex < 0 || nSelectedChildIndex >= getSelectedAccessibleChildCount() )
+        throw IndexOutOfBoundsException();
+
+    Reference< XAccessible > xChild;
+    sal_Int64 nSelCount = 0;
+
+    SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+    if ( !pParent )
+        throw RuntimeException(u"AccessibleListBoxEntry::getSelectedAccessibleChild - pParent cannot be empty!"_ustr);
+    sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
+    for (sal_Int32 i = 0; i < nCount; ++i )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, i );
+        if ( m_pTreeListBox->IsSelected( pEntry ) )
+            ++nSelCount;
 
-        Any aValue;
-        // SvTreeListBox* pBox = m_pTreeListBox;
-        switch(getAccessibleRole())
+        if ( nSelCount == ( nSelectedChildIndex + 1 ) )
         {
-            case AccessibleRole::CHECK_BOX:
-                aValue <<= sal_Int32(0);
-                break;
-            case AccessibleRole::LABEL:
-            default:
-                break;
+            rtl::Reference<AccessibleListBox> xListBox(m_wListBox);
+            assert(xListBox.is());
+            xChild = xListBox->implGetAccessible(*pEntry).get();
+            break;
         }
-
-        return aValue;
     }
 
-    Any AccessibleListBoxEntry::getMinimumIncrement(  )
+    return xChild;
+}
+
+void SAL_CALL AccessibleListBoxEntry::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    EnsureIsAlive();
+
+    if (nSelectedChildIndex < 0 || nSelectedChildIndex >= getAccessibleChildCount())
+        throw IndexOutOfBoundsException();
+
+    SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+    SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( pParent, nSelectedChildIndex );
+    if ( !pEntry )
+        throw IndexOutOfBoundsException();
+
+    m_pTreeListBox->Select( pEntry, false );
+}
+sal_Int32 SAL_CALL AccessibleListBoxEntry::getCaretPosition(  )
+{
+    return -1;
+}
+sal_Bool SAL_CALL AccessibleListBoxEntry::setCaretPosition ( sal_Int32 nIndex )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    EnsureIsAlive();
+
+    if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
+        throw IndexOutOfBoundsException();
+
+    return false;
+}
+sal_Unicode SAL_CALL AccessibleListBoxEntry::getCharacter( sal_Int32 nIndex )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    EnsureIsAlive();
+    return OCommonAccessibleText::implGetCharacter( implGetText(), nIndex );
+}
+css::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleListBoxEntry::getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    EnsureIsAlive();
+
+    OUString sText( implGetText() );
+
+    if ( !implIsValidIndex( nIndex, sText.getLength() ) )
+        throw IndexOutOfBoundsException();
+
+    return css::uno::Sequence< css::beans::PropertyValue >();
+}
+sal_Int32 SAL_CALL AccessibleListBoxEntry::getCharacterCount(  )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    EnsureIsAlive();
+    return implGetText().getLength();
+}
+
+OUString SAL_CALL AccessibleListBoxEntry::getSelectedText(  )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    EnsureIsAlive();
+    return OUString();
+}
+sal_Int32 SAL_CALL AccessibleListBoxEntry::getSelectionStart(  )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    EnsureIsAlive();
+    return 0;
+}
+sal_Int32 SAL_CALL AccessibleListBoxEntry::getSelectionEnd(  )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    EnsureIsAlive();
+    return 0;
+}
+sal_Bool SAL_CALL AccessibleListBoxEntry::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    EnsureIsAlive();
+
+    if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
+        throw IndexOutOfBoundsException();
+
+    return false;
+}
+OUString SAL_CALL AccessibleListBoxEntry::getText(  )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    EnsureIsAlive();
+    return implGetText(  );
+}
+OUString SAL_CALL AccessibleListBoxEntry::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    EnsureIsAlive();
+    return OCommonAccessibleText::implGetTextRange( implGetText(), nStartIndex, nEndIndex );
+}
+css::accessibility::TextSegment SAL_CALL AccessibleListBoxEntry::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    EnsureIsAlive();
+    return OCommonAccessibleText::getTextAtIndex( nIndex ,aTextType);
+}
+css::accessibility::TextSegment SAL_CALL AccessibleListBoxEntry::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    EnsureIsAlive();
+    return OCommonAccessibleText::getTextBeforeIndex( nIndex ,aTextType);
+}
+css::accessibility::TextSegment SAL_CALL AccessibleListBoxEntry::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    EnsureIsAlive();
+
+    return OCommonAccessibleText::getTextBehindIndex( nIndex ,aTextType);
+}
+
+// XAccessibleValue
+
+
+Any AccessibleListBoxEntry::getCurrentValue(  )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    Any aValue;
+    sal_Int32 level = static_cast<sal_Int32>(m_aEntryPath.size()) - 1;
+    level = level < 0 ?  0: level;
+    aValue <<= level;
+    return aValue;
+}
+
+
+sal_Bool AccessibleListBoxEntry::setCurrentValue( const Any& aNumber )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+
+    bool bReturn = false;
+    SvTreeListBox* pBox = m_pTreeListBox;
+    if(getAccessibleRole() == AccessibleRole::CHECK_BOX)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        Any aValue;
-        switch(getAccessibleRole())
+        SvTreeListEntry* pEntry = pBox->GetEntryFromPath( m_aEntryPath );
+        if ( pEntry )
         {
-            case AccessibleRole::CHECK_BOX:
-                aValue <<= sal_Int32(1);
-                break;
-            case AccessibleRole::LABEL:
-            default:
-                break;
-        }
+            sal_Int32 nValue(0), nValueMin(0), nValueMax(0);
+            aNumber >>= nValue;
+            getMinimumValue() >>= nValueMin;
+            getMaximumValue() >>= nValueMax;
 
-        return aValue;
+            if ( nValue < nValueMin )
+                nValue = nValueMin;
+            else if ( nValue > nValueMax )
+                nValue = nValueMax;
+
+            pBox->SetCheckButtonState(pEntry,  static_cast<SvButtonState>(nValue) );
+            bReturn = true;
+        }
     }
 
-    SvTreeListEntry* AccessibleListBoxEntry::GetRealChild(sal_Int32 nIndex)
+    return bReturn;
+}
+
+
+Any AccessibleListBoxEntry::getMaximumValue(  )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    Any aValue;
+    // SvTreeListBox* pBox = m_pTreeListBox;
+    switch(getAccessibleRole())
     {
-        SvTreeListEntry* pEntry = nullptr;
-        SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
-        if (pParent)
+        case AccessibleRole::CHECK_BOX:
+            aValue <<= sal_Int32(1);
+            break;
+        case AccessibleRole::LABEL:
+        default:
+            break;
+    }
+
+    return aValue;
+}
+
+
+Any AccessibleListBoxEntry::getMinimumValue(  )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    Any aValue;
+    // SvTreeListBox* pBox = m_pTreeListBox;
+    switch(getAccessibleRole())
+    {
+        case AccessibleRole::CHECK_BOX:
+            aValue <<= sal_Int32(0);
+            break;
+        case AccessibleRole::LABEL:
+        default:
+            break;
+    }
+
+    return aValue;
+}
+
+Any AccessibleListBoxEntry::getMinimumIncrement(  )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    Any aValue;
+    switch(getAccessibleRole())
+    {
+        case AccessibleRole::CHECK_BOX:
+            aValue <<= sal_Int32(1);
+            break;
+        case AccessibleRole::LABEL:
+        default:
+            break;
+    }
+
+    return aValue;
+}
+
+SvTreeListEntry* AccessibleListBoxEntry::GetRealChild(sal_Int32 nIndex)
+{
+    SvTreeListEntry* pEntry = nullptr;
+    SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
+    if (pParent)
+    {
+        pEntry = m_pTreeListBox->GetEntry( pParent, nIndex );
+        if ( !pEntry && getAccessibleChildCount() > 0 )
         {
+            m_pTreeListBox->RequestingChildren(pParent);
             pEntry = m_pTreeListBox->GetEntry( pParent, nIndex );
-            if ( !pEntry && getAccessibleChildCount() > 0 )
-            {
-                m_pTreeListBox->RequestingChildren(pParent);
-                pEntry = m_pTreeListBox->GetEntry( pParent, nIndex );
-            }
         }
-        return pEntry;
     }
-
-}// namespace accessibility
-
+    return pEntry;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

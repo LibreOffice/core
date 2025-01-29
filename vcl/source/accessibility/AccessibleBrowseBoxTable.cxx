@@ -30,9 +30,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
 
-namespace accessibility {
-
-
 // Ctor/Dtor/disposing --------------------------------------------------------
 
 AccessibleBrowseBoxTable::AccessibleBrowseBoxTable(
@@ -227,9 +224,5 @@ Reference< XAccessibleTable > AccessibleBrowseBoxTable::implGetHeaderBar(
     }
     return Reference< XAccessibleTable >( xRet, uno::UNO_QUERY );
 }
-
-
-} // namespace accessibility
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

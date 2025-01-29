@@ -16,8 +16,6 @@
 
 #include <accessibility/AccessibleIconView.hxx>
 
-namespace accessibility
-{
 AccessibleIconView::AccessibleIconView(
     SvTreeListBox& _rListBox, const css::uno::Reference<css::accessibility::XAccessible>& _xParent)
     : AccessibleListBox(_rListBox, _xParent)
@@ -48,6 +46,5 @@ void AccessibleIconView::ProcessWindowEvent(const VclWindowEvent& rVclWindowEven
             AccessibleListBox::ProcessWindowEvent(rVclWindowEvent);
     }
 }
-} // namespace accessibility
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

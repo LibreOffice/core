@@ -47,9 +47,6 @@
 class TextEngine;
 class TextView;
 
-namespace accessibility
-{
-
 class Document;
 
 class SfxListenerGuard
@@ -569,8 +566,5 @@ private:
     bool m_bSelectionChangedNotification;
     bool m_bInParagraphNotificationsHandler = false;
 };
-
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

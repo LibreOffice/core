@@ -23,11 +23,9 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-namespace accessibility
-{
-    using namespace ::com::sun::star::accessibility;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::accessibility;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
 
 AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnRowId,
                                   const Reference< XAccessible >& rxParent,
@@ -146,8 +144,5 @@ sal_Int64 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()
         --nIndex;
     return nIndex;
 }
-
-} // namespace accessibility
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

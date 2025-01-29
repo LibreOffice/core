@@ -28,9 +28,6 @@
 #include <sal/types.h>
 
 
-namespace accessibility
-{
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -298,9 +295,5 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL Accessibl
 
     return m_xContext;
 }
-
-
-
-} // namespace accessibility
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,8 +23,6 @@
 #include <accessibility/AccessibleBrowseBoxTableBase.hxx>
 
 
-namespace accessibility {
-
 /** This class represents the accessible object of the data table of a
     BrowseBox control. */
 class AccessibleBrowseBoxTable : public AccessibleBrowseBoxTableBase
@@ -120,10 +118,5 @@ protected:
     css::uno::Reference< css::accessibility::XAccessibleTable >
     implGetHeaderBar( sal_Int32 nChildIndex );
 };
-
-
-} // namespace accessibility
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

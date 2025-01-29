@@ -32,7 +32,7 @@ const sal_Int32 DEFAULT_INDEX_IN_PARENT = -1;
 
 
 
-template< class T > class VCLListBoxHelper final : public ::accessibility::IComboListBoxHelper
+template< class T > class VCLListBoxHelper final : public IComboListBoxHelper
 {
 private:
     T&  m_aComboListBox;

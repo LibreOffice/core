@@ -30,9 +30,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
 
-namespace accessibility {
-
-
 // Ctor/Dtor/disposing --------------------------------------------------------
 
 AccessibleBrowseBoxHeaderBar::AccessibleBrowseBoxHeaderBar(
@@ -357,9 +354,5 @@ void AccessibleBrowseBoxHeaderBar::ensureIsValidHeaderIndex( sal_Int32 nIndex )
     else
         ensureIsValidColumn( nIndex );
 }
-
-
-} // namespace accessibility
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

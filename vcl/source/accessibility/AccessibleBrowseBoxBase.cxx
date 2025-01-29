@@ -41,9 +41,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
-
-namespace accessibility {
-
 using namespace com::sun::star::accessibility::AccessibleStateType;
 
 
@@ -534,9 +531,5 @@ BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const css::uno::Referenc
 BrowseBoxAccessibleElement::~BrowseBoxAccessibleElement( )
 {
 }
-
-
-} // namespace accessibility
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

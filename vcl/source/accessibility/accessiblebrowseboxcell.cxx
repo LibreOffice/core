@@ -21,49 +21,46 @@
 #include <vcl/accessibletableprovider.hxx>
 #include <accessibility/accessiblebrowseboxcell.hxx>
 
-namespace accessibility
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::accessibility;
+
+// AccessibleBrowseBoxCell
+AccessibleBrowseBoxCell::AccessibleBrowseBoxCell(
+        const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, ::vcl::IAccessibleTableProvider& _rBrowseBox,
+        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
+        sal_Int32 _nRowPos, sal_uInt16 _nColPos, AccessibleBrowseBoxObjType _eType )
+    :AccessibleBrowseBoxBase( _rxParent, _rBrowseBox, _xFocusWindow, _eType )
+    ,m_nRowPos( _nRowPos )
+    ,m_nColPos( _nColPos )
 {
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::awt;
-    using namespace ::com::sun::star::accessibility;
+    // set accessible name here, because for that we need the position of the cell
+    // and so the base class isn't capable of doing this
+    sal_Int32 nPos = _nRowPos * _rBrowseBox.GetColumnCount() + _nColPos;
+    OUString aAccName = _rBrowseBox.GetAccessibleObjectName( AccessibleBrowseBoxObjType::TableCell, nPos );
+    implSetName( aAccName );
+}
 
-    // AccessibleBrowseBoxCell
-    AccessibleBrowseBoxCell::AccessibleBrowseBoxCell(
-            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, ::vcl::IAccessibleTableProvider& _rBrowseBox,
-            const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
-            sal_Int32 _nRowPos, sal_uInt16 _nColPos, AccessibleBrowseBoxObjType _eType )
-        :AccessibleBrowseBoxBase( _rxParent, _rBrowseBox, _xFocusWindow, _eType )
-        ,m_nRowPos( _nRowPos )
-        ,m_nColPos( _nColPos )
-    {
-        // set accessible name here, because for that we need the position of the cell
-        // and so the base class isn't capable of doing this
-        sal_Int32 nPos = _nRowPos * _rBrowseBox.GetColumnCount() + _nColPos;
-        OUString aAccName = _rBrowseBox.GetAccessibleObjectName( AccessibleBrowseBoxObjType::TableCell, nPos );
-        implSetName( aAccName );
-    }
+AccessibleBrowseBoxCell::~AccessibleBrowseBoxCell()
+{
+}
 
-    AccessibleBrowseBoxCell::~AccessibleBrowseBoxCell()
-    {
-    }
+void SAL_CALL AccessibleBrowseBoxCell::grabFocus()
+{
+    SolarMethodGuard aGuard(getMutex());
+    ensureIsAlive();
 
-    void SAL_CALL AccessibleBrowseBoxCell::grabFocus()
-    {
-        SolarMethodGuard aGuard(getMutex());
-        ensureIsAlive();
+    mpBrowseBox->GoToCell( m_nRowPos, m_nColPos );
+}
 
-        mpBrowseBox->GoToCell( m_nRowPos, m_nColPos );
-    }
+::tools::Rectangle AccessibleBrowseBoxCell::implGetBoundingBox()
+{
+    return mpBrowseBox->GetFieldRectPixel( m_nRowPos, m_nColPos, false, /*bOnScreen*/false );
+}
 
-    ::tools::Rectangle AccessibleBrowseBoxCell::implGetBoundingBox()
-    {
-        return mpBrowseBox->GetFieldRectPixel( m_nRowPos, m_nColPos, false, /*bOnScreen*/false );
-    }
-
-    AbsoluteScreenPixelRectangle AccessibleBrowseBoxCell::implGetBoundingBoxOnScreen()
-    {
-        return AbsoluteScreenPixelRectangle(mpBrowseBox->GetFieldRectPixel( m_nRowPos, m_nColPos, false, /*bOnScreen*/true ));
-    }
-}   // namespace accessibility
+AbsoluteScreenPixelRectangle AccessibleBrowseBoxCell::implGetBoundingBoxOnScreen()
+{
+    return AbsoluteScreenPixelRectangle(mpBrowseBox->GetFieldRectPixel( m_nRowPos, m_nColPos, false, /*bOnScreen*/true ));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

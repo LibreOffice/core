@@ -23,12 +23,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include <vcl/accessibletableprovider.hxx>
 
-class SvHeaderTabListBox;
-
-
-namespace accessibility {
-
 class AccessibleBrowseBoxTable;
+class SvHeaderTabListBox;
 
 typedef ::cppu::ImplHelper1  <   css::accessibility::XAccessible
                             >   AccessibleTabListBox_Base;
@@ -93,10 +89,5 @@ private:
         @return  An AccessibleBrowseBoxTable. */
     virtual rtl::Reference<AccessibleBrowseBoxTable> createAccessibleTable() override;
 };
-
-
-} // namespace accessibility
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,13 +25,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 
+class IComboListBoxHelper;
 class VCLXAccessibleListItem;
-
-namespace accessibility
-{
-    class IComboListBoxHelper;
-}
-
 
 /** Base class for the list contained in list- and combo boxes.  This class
     does not support selection because lists of combo boxes give no direct
@@ -111,10 +106,10 @@ public:
     void UpdateSelection_Impl_Acc (bool b_IsDropDownList);
 
     static void NotifyListItem(css::uno::Any const & val);
-    ::accessibility::IComboListBoxHelper* getListBoxHelper() { return m_pListBoxHelper.get(); }
+    IComboListBoxHelper* getListBoxHelper() { return m_pListBoxHelper.get(); }
 private:
     BoxType     m_aBoxType;
-    std::unique_ptr<::accessibility::IComboListBoxHelper> m_pListBoxHelper;
+    std::unique_ptr<IComboListBoxHelper> m_pListBoxHelper;
     std::vector<rtl::Reference<VCLXAccessibleListItem>> m_aAccessibleChildren;
     sal_Int32   m_nVisibleLineCount;
     /// Index in parent.  This is settable from the outside.

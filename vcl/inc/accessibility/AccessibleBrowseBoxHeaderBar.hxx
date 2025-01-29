@@ -25,9 +25,6 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
 
-namespace accessibility {
-
-
 typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleSelection >
         AccessibleBrowseBoxHeaderBarImplHelper;
 
@@ -209,10 +206,5 @@ inline bool AccessibleBrowseBoxHeaderBar::isColumnBar() const
 {
     return getType() == AccessibleBrowseBoxObjType::ColumnHeaderBar;
 }
-
-
-} // namespace accessibility
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

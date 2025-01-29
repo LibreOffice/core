@@ -22,53 +22,45 @@
 #include <accessibility/AccessibleBrowseBoxBase.hxx>
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 
-namespace accessibility
+
+// = AccessibleBrowseBoxCell
+
+/** common accessibility-functionality for browse box elements which occupy a cell
+*/
+class AccessibleBrowseBoxCell : public AccessibleBrowseBoxBase
 {
+private:
+    sal_Int32               m_nRowPos;      // the row number of the table cell
+    sal_uInt16              m_nColPos;      // the column id of the table cell
 
+protected:
+    // attribute access
+    sal_Int32    getRowPos( ) const { return m_nRowPos; }
+    sal_Int32    getColumnPos( ) const { return m_nColPos; }
 
-    // = AccessibleBrowseBoxCell
+protected:
+    // AccessibleBrowseBoxBase overridables
+    virtual tools::Rectangle implGetBoundingBox() override;
+    virtual AbsoluteScreenPixelRectangle implGetBoundingBoxOnScreen() override;
 
-    /** common accessibility-functionality for browse box elements which occupy a cell
-    */
-    class AccessibleBrowseBoxCell : public AccessibleBrowseBoxBase
-    {
-    private:
-        sal_Int32               m_nRowPos;      // the row number of the table cell
-        sal_uInt16              m_nColPos;      // the column id of the table cell
+    // XAccessibleComponent
+    virtual void SAL_CALL grabFocus() override;
 
-    protected:
-        // attribute access
-        sal_Int32    getRowPos( ) const { return m_nRowPos; }
-        sal_Int32    getColumnPos( ) const { return m_nColPos; }
+protected:
+    AccessibleBrowseBoxCell(
+        const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
+        ::vcl::IAccessibleTableProvider& _rBrowseBox,
+        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
+        sal_Int32 _nRowPos,
+        sal_uInt16 _nColPos,
+        AccessibleBrowseBoxObjType _eType = AccessibleBrowseBoxObjType::TableCell
+    );
 
-    protected:
-        // AccessibleBrowseBoxBase overridables
-        virtual tools::Rectangle implGetBoundingBox() override;
-        virtual AbsoluteScreenPixelRectangle implGetBoundingBoxOnScreen() override;
+    virtual ~AccessibleBrowseBoxCell() override;
 
-        // XAccessibleComponent
-        virtual void SAL_CALL grabFocus() override;
-
-    protected:
-        AccessibleBrowseBoxCell(
-            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-            ::vcl::IAccessibleTableProvider& _rBrowseBox,
-            const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
-            sal_Int32 _nRowPos,
-            sal_uInt16 _nColPos,
-            AccessibleBrowseBoxObjType _eType = AccessibleBrowseBoxObjType::TableCell
-        );
-
-        virtual ~AccessibleBrowseBoxCell() override;
-
-    private:
-        AccessibleBrowseBoxCell( const AccessibleBrowseBoxCell& ) = delete;
-        AccessibleBrowseBoxCell& operator=( const AccessibleBrowseBoxCell& ) = delete;
-    };
-
-
-}   // namespace accessibility
-
-
+private:
+    AccessibleBrowseBoxCell( const AccessibleBrowseBoxCell& ) = delete;
+    AccessibleBrowseBoxCell& operator=( const AccessibleBrowseBoxCell& ) = delete;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

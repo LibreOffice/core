@@ -9,9 +9,6 @@
 
 #include <accessibility/IComboListBoxHelper.hxx>
 
-namespace accessibility
-{
 IComboListBoxHelper::~IComboListBoxHelper() {}
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

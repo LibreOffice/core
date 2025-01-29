@@ -67,7 +67,7 @@ VCLXAccessibleListItem::VCLXAccessibleListItem(sal_Int32 _nIndexInParent, rtl::R
     , m_xParent(std::move(_xParent))
 {
     assert(m_xParent.is());
-    ::accessibility::IComboListBoxHelper* pListBoxHelper = m_xParent->getListBoxHelper();
+    IComboListBoxHelper* pListBoxHelper = m_xParent->getListBoxHelper();
     if (pListBoxHelper)
         m_sEntryText = pListBoxHelper->GetEntry(static_cast<sal_uInt16>(_nIndexInParent));
 }
@@ -246,7 +246,7 @@ sal_Int64 SAL_CALL VCLXAccessibleListItem::getAccessibleStateSet(  )
     {
         nStateSet |= AccessibleStateType::TRANSIENT;
 
-        ::accessibility::IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
+        IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
         if (pListBoxHelper && pListBoxHelper->IsEnabled())
         {
             nStateSet |= AccessibleStateType::SELECTABLE;
@@ -284,7 +284,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::containsPoint( const awt::Point& _aPoi
     std::unique_lock aGuard( m_aMutex );
 
     bool bInside = false;
-    ::accessibility::IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
+    IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
     if (pListBoxHelper)
     {
         tools::Rectangle aRect(pListBoxHelper->GetBoundingRectangle(static_cast<sal_uInt16>(m_nIndexInParent)));
@@ -305,7 +305,7 @@ awt::Rectangle SAL_CALL VCLXAccessibleListItem::getBounds(  )
     std::unique_lock aGuard( m_aMutex );
 
     awt::Rectangle aRect;
-    ::accessibility::IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
+    IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
     if (pListBoxHelper)
         aRect = vcl::unohelper::ConvertToAWTRect(
             pListBoxHelper->GetBoundingRectangle(static_cast<sal_uInt16>(m_nIndexInParent)));
@@ -319,7 +319,7 @@ awt::Point SAL_CALL VCLXAccessibleListItem::getLocation(  )
     std::unique_lock aGuard( m_aMutex );
 
     Point aPoint(0,0);
-    ::accessibility::IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
+    IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
     if (pListBoxHelper)
     {
         tools::Rectangle aRect = pListBoxHelper->GetBoundingRectangle( static_cast<sal_uInt16>(m_nIndexInParent) );
@@ -334,7 +334,7 @@ awt::Point SAL_CALL VCLXAccessibleListItem::getLocationOnScreen(  )
     std::unique_lock aGuard( m_aMutex );
 
     Point aPoint(0,0);
-    ::accessibility::IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
+    IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
     if (pListBoxHelper)
     {
         tools::Rectangle aRect = pListBoxHelper->GetBoundingRectangle(static_cast<sal_uInt16>(m_nIndexInParent));
@@ -350,7 +350,7 @@ awt::Size SAL_CALL VCLXAccessibleListItem::getSize(  )
     std::unique_lock aGuard( m_aMutex );
 
     Size aSize;
-    ::accessibility::IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
+    IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
     if (pListBoxHelper)
         aSize = pListBoxHelper->GetBoundingRectangle( static_cast<sal_uInt16>(m_nIndexInParent) ).GetSize();
 
@@ -408,7 +408,7 @@ awt::Rectangle SAL_CALL VCLXAccessibleListItem::getCharacterBounds( sal_Int32 nI
         throw IndexOutOfBoundsException();
 
     awt::Rectangle aBounds( 0, 0, 0, 0 );
-    ::accessibility::IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
+    IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
     if (pListBoxHelper)
     {
         tools::Rectangle aCharRect = pListBoxHelper->GetEntryCharacterBounds( m_nIndexInParent, nIndex );
@@ -433,7 +433,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getIndexAtPoint( const awt::Point& aP
     std::unique_lock aGuard( m_aMutex );
 
     sal_Int32 nIndex = -1;
-    ::accessibility::IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
+    IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
     if (pListBoxHelper)
     {
         sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
@@ -525,7 +525,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::copyText( sal_Int32 nStartIndex, sal_I
     checkIndex_Impl( nEndIndex, m_sEntryText );
 
     bool bRet = false;
-    ::accessibility::IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
+    IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
     if (pListBoxHelper)
     {
         Reference< datatransfer::clipboard::XClipboard > xClipboard = pListBoxHelper->GetClipboard();

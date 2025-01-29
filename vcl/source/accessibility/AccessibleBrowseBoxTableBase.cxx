@@ -32,9 +32,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
 
-namespace accessibility {
-
-
 // Ctor/Dtor/disposing --------------------------------------------------------
 
 AccessibleBrowseBoxTableBase::AccessibleBrowseBoxTableBase(
@@ -251,9 +248,5 @@ void AccessibleBrowseBoxTableBase::ensureIsValidIndex( sal_Int64 nChildIndex )
     if( nChildIndex >= implGetChildCount() )
         throw lang::IndexOutOfBoundsException( u"child index is invalid"_ustr, *this );
 }
-
-
-} // namespace accessibility
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

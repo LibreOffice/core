@@ -25,8 +25,6 @@
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 
 
-namespace accessibility {
-
 typedef cppu::ImplInheritanceHelper<BrowseBoxAccessibleElement, css::accessibility::XAccessibleTable>
         AccessibleBrowseBoxTableImplHelper;
 
@@ -209,10 +207,5 @@ protected:
         If the specified child index is invalid. */
     void ensureIsValidIndex( sal_Int64 nChildIndex );
 };
-
-
-} // namespace accessibility
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

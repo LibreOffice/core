@@ -20,49 +20,45 @@
 
 #include <accessibility/AccessibleBrowseBoxBase.hxx>
 
-namespace accessibility
+class AccessibleBrowseBoxHeaderCell final : public BrowseBoxAccessibleElement
 {
-    class AccessibleBrowseBoxHeaderCell final : public BrowseBoxAccessibleElement
+    sal_Int32   m_nColumnRowId;
+public:
+    AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnRowId,
+                                      const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
+                                      ::vcl::IAccessibleTableProvider&                  _rBrowseBox,
+                                      AccessibleBrowseBoxObjType  _eObjType);
+    /** @return  The count of visible children. */
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
+
+    /** @return  The XAccessible interface of the specified child. */
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+        getAccessibleChild( sal_Int64 nChildIndex ) override;
+
+    /** @return  The index of this object among the parent's children. */
+    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
+
+    /** Grabs the focus to the BrowseBox. */
+    virtual void SAL_CALL grabFocus() override;
+
+    bool isRowBarCell() const
     {
-        sal_Int32   m_nColumnRowId;
-    public:
-        AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnRowId,
-                                          const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-                                          ::vcl::IAccessibleTableProvider&                  _rBrowseBox,
-                                          AccessibleBrowseBoxObjType  _eObjType);
-        /** @return  The count of visible children. */
-        virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
+        return getType() == AccessibleBrowseBoxObjType::RowHeaderCell;
+    }
 
-        /** @return  The XAccessible interface of the specified child. */
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-            getAccessibleChild( sal_Int64 nChildIndex ) override;
+    /** @return
+            The name of this class.
+    */
+    virtual OUString SAL_CALL getImplementationName() override;
 
-        /** @return  The index of this object among the parent's children. */
-        virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
+    /** Return a bitset of states of the current object.
+    */
+    sal_Int64 implCreateStateSet() override;
 
-        /** Grabs the focus to the BrowseBox. */
-        virtual void SAL_CALL grabFocus() override;
+private:
+    virtual tools::Rectangle implGetBoundingBox() override;
 
-        bool isRowBarCell() const
-        {
-            return getType() == AccessibleBrowseBoxObjType::RowHeaderCell;
-        }
-
-        /** @return
-                The name of this class.
-        */
-        virtual OUString SAL_CALL getImplementationName() override;
-
-        /** Return a bitset of states of the current object.
-        */
-        sal_Int64 implCreateStateSet() override;
-
-    private:
-        virtual tools::Rectangle implGetBoundingBox() override;
-
-        virtual AbsoluteScreenPixelRectangle implGetBoundingBoxOnScreen() override;
-    };
-}
-
+    virtual AbsoluteScreenPixelRectangle implGetBoundingBoxOnScreen() override;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

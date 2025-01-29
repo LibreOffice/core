@@ -13,8 +13,6 @@
 
 #include "accessiblelistbox.hxx"
 
-namespace accessibility
-{
 class AccessibleIconView final : public AccessibleListBox
 {
 public:
@@ -25,6 +23,5 @@ protected:
     // VCLXAccessibleComponent
     virtual void ProcessWindowEvent(const VclWindowEvent& rVclWindowEvent) override;
 };
-} // namespace accessibility
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

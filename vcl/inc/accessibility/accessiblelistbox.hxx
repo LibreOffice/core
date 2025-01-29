@@ -28,91 +28,83 @@
 
 // class AccessibleListBox -----------------------------------------------
 
+class AccessibleListBoxEntry;
 class SvTreeListBox;
 class SvTreeListEntry;
 
-namespace accessibility
+/** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry
+*/
+class AccessibleListBox :
+    public cppu::ImplInheritanceHelper<
+        VCLXAccessibleComponent,
+        css::accessibility::XAccessible,
+        css::accessibility::XAccessibleSelection>
 {
-    class AccessibleListBoxEntry;
 
-    /** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry
+    css::uno::Reference< css::accessibility::XAccessible > m_xParent;
+    // OComponentHelper overridables
+    /** this function is called upon disposing the component */
+    virtual void SAL_CALL   disposing() override;
+
+protected:
+    // VCLXAccessibleComponent
+    virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
+    virtual void    FillAccessibleStateSet( sal_Int64& rStateSet ) override;
+
+private:
+    VclPtr< SvTreeListBox > getListBox() const;
+
+    void            RemoveChildEntries(SvTreeListEntry*);
+
+    sal_Int32 GetRoleType() const;
+
+public:
+    /** OAccessibleBase needs a valid view
+        @param  _rListBox
+            is the box for which we implement an accessible object
+        @param  _xParent
+            is our parent accessible object
     */
-    class AccessibleListBox :
-        public cppu::ImplInheritanceHelper<
-            VCLXAccessibleComponent,
-            css::accessibility::XAccessible,
-            css::accessibility::XAccessibleSelection>
-    {
+    AccessibleListBox(SvTreeListBox& _rListBox,
+                       const css::uno::Reference< css::accessibility::XAccessible >& _xParent );
 
-        css::uno::Reference< css::accessibility::XAccessible > m_xParent;
-        // OComponentHelper overridables
-        /** this function is called upon disposing the component */
-        virtual void SAL_CALL   disposing() override;
+    virtual ~AccessibleListBox() override;
 
-    protected:
-        // VCLXAccessibleComponent
-        virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
-        virtual void    FillAccessibleStateSet( sal_Int64& rStateSet ) override;
+    rtl::Reference<AccessibleListBoxEntry> implGetAccessible(SvTreeListEntry & rEntry);
 
-    private:
-        VclPtr< SvTreeListBox > getListBox() const;
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-        void            RemoveChildEntries(SvTreeListEntry*);
+    // XAccessible
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
-        sal_Int32 GetRoleType() const;
+    // XAccessibleContext
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
+    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
+    virtual OUString SAL_CALL getAccessibleDescription(  ) override;
+    virtual OUString SAL_CALL getAccessibleName(  ) override;
 
-    public:
-        /** OAccessibleBase needs a valid view
-            @param  _rListBox
-                is the box for which we implement an accessible object
-            @param  _xParent
-                is our parent accessible object
-        */
-        AccessibleListBox(SvTreeListBox& _rListBox,
-                           const css::uno::Reference< css::accessibility::XAccessible >& _xParent );
+    // XAccessibleSelection
+    void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
+    sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
+    void SAL_CALL clearAccessibleSelection(  ) override;
+    void SAL_CALL selectAllAccessibleChildren(  ) override;
+    sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;
+    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+    void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
-        virtual ~AccessibleListBox() override;
+private:
 
-        rtl::Reference<AccessibleListBoxEntry> implGetAccessible(SvTreeListEntry & rEntry);
+    typedef std::unordered_map<SvTreeListEntry*, rtl::Reference<AccessibleListBoxEntry>> MAP_ENTRY;
+    MAP_ENTRY m_mapEntry;
 
-        // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    rtl::Reference<AccessibleListBoxEntry> m_xFocusedEntry;
 
-        // XAccessible
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
+    AccessibleListBoxEntry* GetCurEventEntry( const VclWindowEvent& rVclWindowEvent );
 
-        // XAccessibleContext
-        virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
-        virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
-        virtual OUString SAL_CALL getAccessibleDescription(  ) override;
-        virtual OUString SAL_CALL getAccessibleName(  ) override;
-
-        // XAccessibleSelection
-        void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
-        sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
-        void SAL_CALL clearAccessibleSelection(  ) override;
-        void SAL_CALL selectAllAccessibleChildren(  ) override;
-        sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;
-        css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
-        void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
-
-    private:
-
-        typedef std::unordered_map<SvTreeListEntry*, rtl::Reference<AccessibleListBoxEntry>> MAP_ENTRY;
-        MAP_ENTRY m_mapEntry;
-
-        rtl::Reference<AccessibleListBoxEntry> m_xFocusedEntry;
-
-        accessibility::AccessibleListBoxEntry* GetCurEventEntry( const VclWindowEvent& rVclWindowEvent );
-
-    };
-
-
-}// namespace accessibility
-
-
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

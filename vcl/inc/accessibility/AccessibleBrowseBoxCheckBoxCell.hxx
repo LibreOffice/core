@@ -23,57 +23,54 @@
 #include <accessibility/accessiblebrowseboxcell.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-namespace accessibility
+
+typedef ::cppu::ImplHelper2 <   css::accessibility::XAccessible,
+                                css::accessibility::XAccessibleValue
+                            >   AccessibleCheckBoxCell_BASE;
+
+class AccessibleCheckBoxCell final : public AccessibleBrowseBoxCell
+                                ,public AccessibleCheckBoxCell_BASE
 {
+private:
+    TriState m_eState;
+    bool m_bIsTriState;
 
-    typedef ::cppu::ImplHelper2 <   css::accessibility::XAccessible,
-                                    css::accessibility::XAccessibleValue
-                                >   AccessibleCheckBoxCell_BASE;
+    virtual ~AccessibleCheckBoxCell() override {}
 
-    class AccessibleCheckBoxCell final : public AccessibleBrowseBoxCell
-                                    ,public AccessibleCheckBoxCell_BASE
-    {
-    private:
-        TriState m_eState;
-        bool m_bIsTriState;
+    virtual sal_Int64 implCreateStateSet() override;
 
-        virtual ~AccessibleCheckBoxCell() override {}
+public:
+    AccessibleCheckBoxCell(const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
+                            ::vcl::IAccessibleTableProvider& _rBrowseBox,
+                            sal_Int32 _nRowPos,
+                            sal_uInt16 _nColPos,
+                            const TriState& _eState,
+                            bool _bIsTriState);
 
-        virtual sal_Int64 implCreateStateSet() override;
+    // XInterface
+    DECLARE_XINTERFACE( )
+    // XTypeProvider
+    DECLARE_XTYPEPROVIDER( )
 
-    public:
-        AccessibleCheckBoxCell(const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-                                ::vcl::IAccessibleTableProvider& _rBrowseBox,
-                                sal_Int32 _nRowPos,
-                                sal_uInt16 _nColPos,
-                                const TriState& _eState,
-                                bool _bIsTriState);
+    // XAccessible
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
-        // XInterface
-        DECLARE_XINTERFACE( )
-        // XTypeProvider
-        DECLARE_XTYPEPROVIDER( )
-
-        // XAccessible
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
-
-        // XAccessibleContext
-        virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Int64 SAL_CALL getAccessibleIndexInParent(  ) override;
+    // XAccessibleContext
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent(  ) override;
 
 
-        // XAccessibleValue
-        virtual css::uno::Any SAL_CALL getCurrentValue(  ) override;
-        virtual sal_Bool SAL_CALL setCurrentValue( const css::uno::Any& aNumber ) override;
-        virtual css::uno::Any SAL_CALL getMaximumValue(  ) override;
-        virtual css::uno::Any SAL_CALL getMinimumValue(  ) override;
-        virtual css::uno::Any SAL_CALL getMinimumIncrement(  ) override;
+    // XAccessibleValue
+    virtual css::uno::Any SAL_CALL getCurrentValue(  ) override;
+    virtual sal_Bool SAL_CALL setCurrentValue( const css::uno::Any& aNumber ) override;
+    virtual css::uno::Any SAL_CALL getMaximumValue(  ) override;
+    virtual css::uno::Any SAL_CALL getMinimumValue(  ) override;
+    virtual css::uno::Any SAL_CALL getMinimumIncrement(  ) override;
 
-        // internal
-        void        SetChecked( bool _bChecked );
-    };
-}
+    // internal
+    void        SetChecked( bool _bChecked );
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

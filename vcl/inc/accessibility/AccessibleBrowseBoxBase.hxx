@@ -46,8 +46,6 @@ namespace vcl {
     class IAccessibleTableProvider;
 }
 
-namespace accessibility {
-
 typedef ::cppu::WeakComponentImplHelper<
             css::accessibility::XAccessibleContext,
             css::accessibility::XAccessibleComponent,
@@ -382,9 +380,5 @@ inline void AccessibleBrowseBoxBase::implSetName(
 {
     maName = rName;
 }
-
-} // namespace accessibility
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

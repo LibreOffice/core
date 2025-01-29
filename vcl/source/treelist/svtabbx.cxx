@@ -1165,7 +1165,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessible()
         Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if ( xAccParent.is() )
         {
-            m_pAccessible = new accessibility::AccessibleTabListBox(xAccParent, *this);
+            m_pAccessible = new AccessibleTabListBox(xAccParent, *this);
             xAccessible = m_pAccessible->getMyself();
         }
     }
