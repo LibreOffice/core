@@ -45,6 +45,7 @@
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
 #include <comphelper/DirectoryHelper.hxx>
+#include <comphelper/lok.hxx>
 
 #include <runtime.hxx>
 #include <sbunoobj.hxx>
@@ -3559,6 +3560,13 @@ void SbRtl_Shell(StarBASIC *, SbxArray & rPar, bool)
     }
     else
     {
+        // Just go straight to error in this case
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            StarBASIC::Error(ERRCODE_BASIC_FILE_NOT_FOUND);
+            return;
+        }
+
         oslProcessOption nOptions = osl_Process_SEARCHPATH | osl_Process_DETACHED;
 
         OUString aCmdLine = rPar.Get(1)->GetOUString();
