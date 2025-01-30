@@ -3381,4 +3381,43 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf129655)
     assertXPath(pXmlDoc, "//fly/txt[@WritingMode='Vertical']", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf159377)
+{
+    typedef sal_uLong SwNodeOffset;
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+
+    lcl_dispatchCommand(mxComponent, ".uno:SelectTable", {});
+    lcl_dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    pWrtShell->InsertFootnote("");
+    CPPUNIT_ASSERT(pWrtShell->IsCursorInFootnote());
+
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(28), pDoc->GetNodes().Count());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    // this pasted the 4 text nodes in the table, but no table nodes
+    // as currently tables aren't allowed in footnotes
+
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(32), pDoc->GetNodes().Count());
+
+    pWrtShell->Undo();
+
+    // problem was that this was 29 with an extra text node in the footnote
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(28), pDoc->GetNodes().Count());
+
+    pWrtShell->Redo();
+
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(32), pDoc->GetNodes().Count());
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(28), pDoc->GetNodes().Count());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

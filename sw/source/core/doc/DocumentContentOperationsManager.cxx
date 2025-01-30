@@ -5175,10 +5175,6 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
 
         // Reset the offset to 0 as it was before the insertion
         pCopyPam->GetPoint()->nContent.Assign(pCopyPam->GetPoint()->nNode.GetNode().GetContentNode(), 0);
-        // If the next node is a start node, then step back: SetInsertRange()
-        // will add 1 in this case, but that is too much...
-        if (pCopyPam->GetPoint()->nNode.GetNode().IsStartNode())
-            pCopyPam->GetPoint()->nNode--;
     }
     oInsContentIndex.reset();
     pCopyPam->Exchange();
