@@ -159,6 +159,39 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159377)
     CPPUNIT_ASSERT_EQUAL(SwNodeOffset(28), pDoc->GetNodes().Count());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testPasteTableInMiddleOfParagraph)
+{
+    createSwDoc();
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+
+    dispatchCommand(mxComponent, u".uno:SelectTable"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    pWrtShell->Undo();
+
+    pWrtShell->Insert(u"AB"_ustr);
+
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    pWrtShell->Undo();
+
+    // the problem was that the A was missing
+    CPPUNIT_ASSERT_EQUAL(OUString("AB"),
+                         pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
+
+    pWrtShell->Redo();
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(OUString("AB"),
+                         pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf111969)
 {
     // given a document with a field surrounded by N-dashes (–date–)
