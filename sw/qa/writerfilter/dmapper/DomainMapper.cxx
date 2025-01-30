@@ -17,6 +17,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/awt/FontFamily.hpp>
 
 #include <tools/UnitConversion.hxx>
 #include <unotools/streamwrap.hxx>
@@ -224,6 +225,30 @@ CPPUNIT_TEST_FIXTURE(Test, testRTFStylePaste)
     // Without the accompanying fix in place, this test would have failed, 'Default Drawing Style'
     // was imported, even if no pasted content referenced it.
     CPPUNIT_ASSERT(!xStyleFamily->hasByName(u"Default Drawing Style"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testRTFFontFamily)
+{
+    // Given an RTF file with a 'Times New (W1)' font:
+    loadFromFile(u"font-family.rtf");
+
+    // When checking the font family:
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortionEnum = xPara->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    sal_Int16 eFamily{};
+    xPortion->getPropertyValue(u"CharFontFamily"_ustr) >>= eFamily;
+
+    // Then make sure it's roman:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3 (ROMAN)
+    // - Actual  : 0 (DONTKNOW)
+    // i.e. the final result was a sans fallback instead of a serif fallback.
+    CPPUNIT_ASSERT_EQUAL(awt::FontFamily::ROMAN, eFamily);
 }
 }
 
