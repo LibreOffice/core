@@ -133,8 +133,7 @@ void ImageControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
     bool bFlat = (GetBorderStyle() == WindowBorderStyle::MONO);
     tools::Rectangle aRect(Point(0,0), pBorderWindow->GetOutputSizePixel());
-    Color oldLineCol = pBorderWindow->GetOutDev()->GetLineColor();
-    Color oldFillCol = pBorderWindow->GetOutDev()->GetFillColor();
+    pBorderWindow->GetOutDev()->Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
     pBorderWindow->GetOutDev()->SetFillColor();
     pBorderWindow->GetOutDev()->SetLineColor(bFlat ? COL_WHITE : COL_BLACK);
     pBorderWindow->GetOutDev()->DrawRect(aRect);
@@ -144,9 +143,7 @@ void ImageControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     aRect.AdjustBottom( -1 );
     pBorderWindow->GetOutDev()->SetLineColor(bFlat ? COL_BLACK : COL_WHITE);
     pBorderWindow->GetOutDev()->DrawRect(aRect);
-    pBorderWindow->GetOutDev()->SetLineColor(oldLineCol);
-    pBorderWindow->GetOutDev()->SetFillColor(oldFillCol);
-
+    pBorderWindow->GetOutDev()->Pop();
 }
 
 void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags )

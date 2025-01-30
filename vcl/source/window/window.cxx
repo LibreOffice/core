@@ -3511,8 +3511,7 @@ void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
     }
 
     tools::Rectangle aRect( rRect );
-    Color oldFillCol = GetOutDev()->GetFillColor();
-    Color oldLineCol = GetOutDev()->GetLineColor();
+    GetOutDev()->Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
 
     if( bDrawBorder )
         GetOutDev()->SetLineColor( bDark ? COL_WHITE : ( bBright ? COL_BLACK : aSelectionBorderCol ) );
@@ -3586,8 +3585,7 @@ void Window::DrawSelectionBackground( const tools::Rectangle& rRect,
         GetOutDev()->DrawTransparent( aPolyPoly, nPercent );
     }
 
-    GetOutDev()->SetFillColor( oldFillCol );
-    GetOutDev()->SetLineColor( oldLineCol );
+    GetOutDev()->Pop();
 }
 
 bool Window::IsScrollable() const

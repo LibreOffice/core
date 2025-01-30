@@ -895,9 +895,7 @@ void OutputDevice::ImplDrawEmphasisMark( tools::Long nBaseX, tools::Long nX, too
 
 void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
 {
-    Color               aOldLineColor   = GetLineColor();
-    Color               aOldFillColor   = GetFillColor();
-    bool                bOldMap         = mbMap;
+    Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR | vcl::PushFlags::MAPMODE);
     GDIMetaFile*        pOldMetaFile    = mpMetaFile;
     mpMetaFile = nullptr;
     EnableMapMode( false );
@@ -981,9 +979,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
         }
     }
 
-    SetLineColor( aOldLineColor );
-    SetFillColor( aOldFillColor );
-    EnableMapMode( bOldMap );
+    Pop();
     mpMetaFile = pOldMetaFile;
 }
 

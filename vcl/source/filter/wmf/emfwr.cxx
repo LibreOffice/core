@@ -954,8 +954,9 @@ void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const bas
     if(!aFillPolyPolygon.count())
         return;
 
+    maVDev->Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
+
     const Color aOldLineColor(maVDev->GetLineColor());
-    const Color aOldFillColor(maVDev->GetFillColor());
 
     maVDev->SetLineColor();
     maVDev->SetFillColor(aOldLineColor);
@@ -965,8 +966,7 @@ void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const bas
         ImplWritePolyPolygonRecord(tools::PolyPolygon( tools::Polygon(rB2DPolygon) ));
     }
 
-    maVDev->SetLineColor(aOldLineColor);
-    maVDev->SetFillColor(aOldFillColor);
+    maVDev->Pop();
 }
 
 void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )

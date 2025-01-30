@@ -107,8 +107,8 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
 
     Point aEntryPos(nX, nY);
 
-    const Color aBackupTextColor(rRenderContext.GetTextColor());
-    const vcl::Font aBackupFont(rRenderContext.GetFont());
+    rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR
+                        | vcl::PushFlags::FONT);
     const Color aBackupColor = rRenderContext.GetFillColor();
 
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
@@ -119,7 +119,6 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
 
     const SvViewDataEntry* pViewDataEntry = GetViewDataEntry(&rEntry);
 
-    bool bCurFontIsSel = false;
     if (pViewDataEntry->IsHighlighted())
     {
         vcl::Font aHighlightFont(rRenderContext.GetFont());
@@ -129,7 +128,6 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
         // set font color to highlight
         rRenderContext.SetTextColor(aHighlightTextColor);
         rRenderContext.SetFont(aHighlightFont);
-        bCurFontIsSel = true;
     }
 
     bool bFillColorSet = false;
@@ -223,11 +221,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
         rItem.Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
     }
 
-    if (bCurFontIsSel)
-    {
-        rRenderContext.SetTextColor(aBackupTextColor);
-        rRenderContext.SetFont(aBackupFont);
-    }
+    rRenderContext.Pop();
 }
 
 css::uno::Reference<css::accessibility::XAccessible> IconView::CreateAccessible()

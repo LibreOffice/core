@@ -770,9 +770,7 @@ void DecorationView::DrawSymbol( const tools::Rectangle& rRect, SymbolType eType
 {
     const StyleSettings&    rStyleSettings  = mpOutDev->GetSettings().GetStyleSettings();
     const tools::Rectangle         aRect           = mpOutDev->LogicToPixel( rRect );
-    const Color             aOldLineColor   = mpOutDev->GetLineColor();
-    const Color             aOldFillColor   = mpOutDev->GetFillColor();
-    const bool              bOldMapMode     = mpOutDev->IsMapModeEnabled();
+    mpOutDev->Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR | vcl::PushFlags::MAPMODE);
     Color                   nColor(rColor);
     mpOutDev->EnableMapMode( false );
 
@@ -803,9 +801,7 @@ void DecorationView::DrawSymbol( const tools::Rectangle& rRect, SymbolType eType
     ImplDrawSymbol( mpOutDev, aRect, eType );
 
     // Restore previous settings
-    mpOutDev->SetLineColor( aOldLineColor );
-    mpOutDev->SetFillColor( aOldFillColor );
-    mpOutDev->EnableMapMode( bOldMapMode );
+    mpOutDev->Pop();
 }
 
 void DecorationView::DrawFrame( const tools::Rectangle& rRect,
@@ -873,11 +869,9 @@ tools::Rectangle DecorationView::DrawFrame( const tools::Rectangle& rRect, DrawF
              ImplDrawFrame( mpOutDev, aRect, mpOutDev->GetSettings().GetStyleSettings(), nStyle, nFlags );
         else
         {
-             Color aOldLineColor  = mpOutDev->GetLineColor();
-             Color aOldFillColor  = mpOutDev->GetFillColor();
+             mpOutDev->Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
              ImplDrawFrame( mpOutDev, aRect, mpOutDev->GetSettings().GetStyleSettings(), nStyle, nFlags );
-             mpOutDev->SetLineColor( aOldLineColor );
-             mpOutDev->SetFillColor( aOldFillColor );
+             mpOutDev->Pop();
         }
     }
 
@@ -898,11 +892,9 @@ tools::Rectangle DecorationView::DrawButton( const tools::Rectangle& rRect, Draw
     const bool bOldMap = mpOutDev->IsMapModeEnabled();
     mpOutDev->EnableMapMode( false );
 
-    const Color aOldLineColor = mpOutDev->GetLineColor();
-    const Color aOldFillColor = mpOutDev->GetFillColor();
+    mpOutDev->Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
     ImplDrawButton( mpOutDev, aRect, nStyle );
-    mpOutDev->SetLineColor( aOldLineColor );
-    mpOutDev->SetFillColor( aOldFillColor );
+    mpOutDev->Pop();
 
     // keep border free, although it is used at default representation
     aRect.AdjustLeft( 1 );

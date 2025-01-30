@@ -2368,10 +2368,7 @@ static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tool
 
 static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rDropDownRect, bool bSetColor, bool bRotate )
 {
-    bool bLineColor = rRenderContext.IsLineColor();
-    bool bFillColor = rRenderContext.IsFillColor();
-    Color aOldFillColor = rRenderContext.GetFillColor();
-    Color aOldLineColor = rRenderContext.GetLineColor();
+    rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
     rRenderContext.SetLineColor();
 
     if ( bSetColor )
@@ -2409,14 +2406,7 @@ static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const tool
     rRenderContext.DrawPolygon( aPoly );
     rRenderContext.SetAntialiasing(aaflags);
 
-    if( bFillColor )
-        rRenderContext.SetFillColor(aOldFillColor);
-    else
-        rRenderContext.SetFillColor();
-    if( bLineColor )
-        rRenderContext.SetLineColor(aOldLineColor);
-    else
-        rRenderContext.SetLineColor();
+    rRenderContext.Pop();
 }
 
 void ToolBox::ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighlight)

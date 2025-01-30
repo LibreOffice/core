@@ -2007,11 +2007,11 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, tools:
                                         const TextPaM aTextEnd(nPara, nIndex + 1);
                                         if ((aTextStart < *pSelEnd) && (aTextEnd > *pSelStart))
                                         {
-                                            const Color aOldColor = pOutDev->GetFillColor();
+                                            pOutDev->Push(vcl::PushFlags::FILLCOLOR);
                                             pOutDev->SetFillColor(
                                                 rStyleSettings.GetHighlightColor());
                                             pOutDev->DrawRect(aTabArea);
-                                            pOutDev->SetFillColor(aOldColor);
+                                            pOutDev->Pop();
                                         }
                                         else
                                         {
