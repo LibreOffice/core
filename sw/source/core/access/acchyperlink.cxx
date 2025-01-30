@@ -82,13 +82,11 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex )
     if(nIndex != 0)
         throw lang::IndexOutOfBoundsException();
     SwFormatINetFormat const*const pINetFormat = GetTextAttr();
-    if (pINetFormat && !pINetFormat->GetValue().isEmpty())
+    if (pINetFormat)
     {
-        SwViewShell *pVSh = m_xParagraph->GetShell();
-        if (pVSh)
+        if (LoadURL(m_xParagraph->GetShell(), pINetFormat->GetValue(), LoadUrlFlags::NONE,
+                    pINetFormat->GetTargetFrame()))
         {
-            LoadURL(*pVSh, pINetFormat->GetValue(), LoadUrlFlags::NONE,
-                     pINetFormat->GetTargetFrame());
             const SwTextINetFormat *const pTextAttr = pINetFormat->GetTextINetFormat();
             if (pTextAttr)
             {

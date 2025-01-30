@@ -558,22 +558,22 @@ bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, LoadUrlFlags nFilter )
     return bRet;
 }
 
-static void LoadURL(SwView& rView, const OUString& rURL, LoadUrlFlags nFilter,
+static bool LoadURL(SfxViewShell& rView, const OUString& rURL, LoadUrlFlags nFilter,
                     const OUString& rTargetFrameName)
 {
-    SwDocShell* pDShell = rView.GetDocShell();
-    OSL_ENSURE( pDShell, "No DocShell?!");
     SfxViewFrame& rViewFrame = rView.GetViewFrame();
+    SfxObjectShell* pDShell = rViewFrame.GetObjectShell();
+    OSL_ENSURE( pDShell, "No DocShell?!");
 
     if (!SfxObjectShell::AllowedLinkProtocolFromDocument(rURL, pDShell, rViewFrame.GetFrameWeld()))
-        return;
+        return false;
 
     // We are doing tiledRendering, let the client handles the URL loading,
     // unless we are jumping to a TOC mark.
     if (comphelper::LibreOfficeKit::isActive() && !rURL.startsWith("#"))
     {
         rView.libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, rURL.toUtf8());
-        return;
+        return true;
     }
 
     OUString sTargetFrame(rTargetFrameName);
@@ -612,18 +612,26 @@ static void LoadURL(SwView& rView, const OUString& rURL, LoadUrlFlags nFilter,
             };
     rViewFrame.GetDispatcher()->GetBindings()->Execute(
         SID_OPENDOC, aArr, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+    return true;
 }
 
-void LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
+bool LoadURL( SwWrtShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
               const OUString& rTargetFrameName )
 {
     OSL_ENSURE( !rURL.isEmpty(), "what should be loaded here?" );
     if( rURL.isEmpty() )
-        return ;
+        return false;
 
+    return ::LoadURL(rVSh.GetView(), rURL, nFilter, rTargetFrameName);
+}
+
+bool LoadURL( SwViewShell* pVSh, const OUString& rURL, LoadUrlFlags nFilter,
+              const OUString& rTargetFrameName )
+{
     // The shell could be 0 also!!!!!
-    if (auto pSh = dynamic_cast<SwWrtShell*>(&rVSh))
-        ::LoadURL(pSh->GetView(), rURL, nFilter, rTargetFrameName);
+    if (auto pSh = dynamic_cast<SwWrtShell*>(pVSh))
+        return ::LoadURL(*pSh, rURL, nFilter, rTargetFrameName);
+    return false;
 }
 
 void SwWrtShell::NavigatorPaste(const NaviContentBookmark& rBkmk)

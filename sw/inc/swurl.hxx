@@ -23,6 +23,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 class SwViewShell;
+class SwWrtShell;
 
 enum class LoadUrlFlags {
     NONE    = 0x00,
@@ -32,7 +33,9 @@ namespace o3tl {
     template<> struct typed_flags<LoadUrlFlags> : is_typed_flags<LoadUrlFlags, 0x01> {};
 }
 
-void LoadURL( SwViewShell& rSh, const OUString& rName,
+bool LoadURL( SwWrtShell& rSh, const OUString& rName,
+              LoadUrlFlags nFilter, const OUString& rTargetFrameName );
+bool LoadURL( SwViewShell* rSh, const OUString& rName,
               LoadUrlFlags nFilter, const OUString& rTargetFrameName );
 
 #endif

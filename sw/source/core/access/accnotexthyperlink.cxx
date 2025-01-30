@@ -77,26 +77,13 @@ sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::doAccessibleAction( sal_Int32 nIn
     if( pMap != nullptr )
     {
         IMapObject* pMapObj = pMap->GetIMapObject(nIndex);
-        if (!pMapObj->GetURL().isEmpty())
-        {
-            SwViewShell *pVSh = mxFrame->GetShell();
-            if( pVSh )
-            {
-                LoadURL( *pVSh, pMapObj->GetURL(), LoadUrlFlags::NONE,
-                         pMapObj->GetTarget() );
-                bRet = true;
-            }
-        }
+        bRet = LoadURL(mxFrame->GetShell(), pMapObj->GetURL(), LoadUrlFlags::NONE,
+                       pMapObj->GetTarget());
     }
-    else if (!aURL.GetURL().isEmpty())
+    else
     {
-        SwViewShell *pVSh = mxFrame->GetShell();
-        if( pVSh )
-        {
-            LoadURL( *pVSh, aURL.GetURL(), LoadUrlFlags::NONE,
-                     aURL.GetTargetFrameName() );
-            bRet = true;
-        }
+        bRet = LoadURL(mxFrame->GetShell(), aURL.GetURL(), LoadUrlFlags::NONE,
+                       aURL.GetTargetFrameName());
     }
 
     return bRet;
