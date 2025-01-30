@@ -787,11 +787,14 @@ void QtFrame::ToTop(SalFrameToTop nFlags)
 
 void QtFrame::SetPointer(PointerStyle ePointerStyle)
 {
-    if (ePointerStyle == m_ePointerStyle)
-        return;
-    m_ePointerStyle = ePointerStyle;
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] {
+        if (ePointerStyle == m_ePointerStyle)
+            return;
+        m_ePointerStyle = ePointerStyle;
 
-    m_pQWidget->setCursor(GetQtData()->getCursor(ePointerStyle));
+        m_pQWidget->setCursor(GetQtData()->getCursor(ePointerStyle));
+    });
 }
 
 void QtFrame::CaptureMouse(bool bMouse)
@@ -1062,177 +1065,182 @@ static bool toVclFont(const QFont& rQFont, const css::lang::Locale& rLocale, vcl
 
 void QtFrame::UpdateSettings(AllSettings& rSettings)
 {
-    if (QtData::noNativeControls())
-        return;
-    QtCustomStyle::LoadCustomStyle(GetUseDarkMode());
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] {
+        if (QtData::noNativeControls())
+            return;
+        QtCustomStyle::LoadCustomStyle(GetUseDarkMode());
 
-    StyleSettings style(rSettings.GetStyleSettings());
-    const css::lang::Locale aLocale = rSettings.GetUILanguageTag().getLocale();
+        StyleSettings style(rSettings.GetStyleSettings());
+        const css::lang::Locale aLocale = rSettings.GetUILanguageTag().getLocale();
 
-    // General settings
-    QPalette pal = QApplication::palette();
+        // General settings
+        QPalette pal = QApplication::palette();
 
-    style.SetToolbarIconSize(ToolbarIconSize::Large);
+        style.SetToolbarIconSize(ToolbarIconSize::Large);
 
-    Color aFore = toColor(pal.color(QPalette::Active, QPalette::WindowText));
-    Color aBack = toColor(pal.color(QPalette::Active, QPalette::Window));
-    Color aText = toColor(pal.color(QPalette::Active, QPalette::Text));
-    Color aBase = toColor(pal.color(QPalette::Active, QPalette::Base));
-    Color aButn = toColor(pal.color(QPalette::Active, QPalette::ButtonText));
-    Color aMid = toColor(pal.color(QPalette::Active, QPalette::Mid));
-    Color aHigh = toColor(pal.color(QPalette::Active, QPalette::Highlight));
-    Color aHighText = toColor(pal.color(QPalette::Active, QPalette::HighlightedText));
-    Color aLink = toColor(pal.color(QPalette::Active, QPalette::Link));
-    Color aVisitedLink = toColor(pal.color(QPalette::Active, QPalette::LinkVisited));
+        Color aFore = toColor(pal.color(QPalette::Active, QPalette::WindowText));
+        Color aBack = toColor(pal.color(QPalette::Active, QPalette::Window));
+        Color aText = toColor(pal.color(QPalette::Active, QPalette::Text));
+        Color aBase = toColor(pal.color(QPalette::Active, QPalette::Base));
+        Color aButn = toColor(pal.color(QPalette::Active, QPalette::ButtonText));
+        Color aMid = toColor(pal.color(QPalette::Active, QPalette::Mid));
+        Color aHigh = toColor(pal.color(QPalette::Active, QPalette::Highlight));
+        Color aHighText = toColor(pal.color(QPalette::Active, QPalette::HighlightedText));
+        Color aLink = toColor(pal.color(QPalette::Active, QPalette::Link));
+        Color aVisitedLink = toColor(pal.color(QPalette::Active, QPalette::LinkVisited));
 
-    style.SetSkipDisabledInMenus(true);
+        style.SetSkipDisabledInMenus(true);
 
-    // Foreground
-    style.SetRadioCheckTextColor(aFore);
-    style.SetLabelTextColor(aFore);
-    style.SetDialogTextColor(aFore);
-    style.SetGroupTextColor(aFore);
+        // Foreground
+        style.SetRadioCheckTextColor(aFore);
+        style.SetLabelTextColor(aFore);
+        style.SetDialogTextColor(aFore);
+        style.SetGroupTextColor(aFore);
 
-    // Text
-    style.SetFieldTextColor(aText);
-    style.SetFieldRolloverTextColor(aText);
-    style.SetListBoxWindowTextColor(aText);
-    style.SetWindowTextColor(aText);
-    style.SetToolTextColor(aText);
+        // Text
+        style.SetFieldTextColor(aText);
+        style.SetFieldRolloverTextColor(aText);
+        style.SetListBoxWindowTextColor(aText);
+        style.SetWindowTextColor(aText);
+        style.SetToolTextColor(aText);
 
-    // Base
-    style.SetFieldColor(aBase);
-    style.SetActiveTabColor(aBase);
-    style.SetListBoxWindowBackgroundColor(aBase);
-    style.SetAlternatingRowColor(toColor(pal.color(QPalette::Active, QPalette::AlternateBase)));
+        // Base
+        style.SetFieldColor(aBase);
+        style.SetActiveTabColor(aBase);
+        style.SetListBoxWindowBackgroundColor(aBase);
+        style.SetAlternatingRowColor(toColor(pal.color(QPalette::Active, QPalette::AlternateBase)));
 
-    // Buttons
-    style.SetDefaultButtonTextColor(aButn);
-    style.SetButtonTextColor(aButn);
-    style.SetDefaultActionButtonTextColor(aButn);
-    style.SetActionButtonTextColor(aButn);
-    style.SetFlatButtonTextColor(aButn);
-    style.SetDefaultButtonRolloverTextColor(aButn);
-    style.SetButtonRolloverTextColor(aButn);
-    style.SetDefaultActionButtonRolloverTextColor(aButn);
-    style.SetActionButtonRolloverTextColor(aButn);
-    style.SetFlatButtonRolloverTextColor(aButn);
-    style.SetDefaultButtonPressedRolloverTextColor(aButn);
-    style.SetButtonPressedRolloverTextColor(aButn);
-    style.SetDefaultActionButtonPressedRolloverTextColor(aButn);
-    style.SetActionButtonPressedRolloverTextColor(aButn);
-    style.SetFlatButtonPressedRolloverTextColor(aButn);
+        // Buttons
+        style.SetDefaultButtonTextColor(aButn);
+        style.SetButtonTextColor(aButn);
+        style.SetDefaultActionButtonTextColor(aButn);
+        style.SetActionButtonTextColor(aButn);
+        style.SetFlatButtonTextColor(aButn);
+        style.SetDefaultButtonRolloverTextColor(aButn);
+        style.SetButtonRolloverTextColor(aButn);
+        style.SetDefaultActionButtonRolloverTextColor(aButn);
+        style.SetActionButtonRolloverTextColor(aButn);
+        style.SetFlatButtonRolloverTextColor(aButn);
+        style.SetDefaultButtonPressedRolloverTextColor(aButn);
+        style.SetButtonPressedRolloverTextColor(aButn);
+        style.SetDefaultActionButtonPressedRolloverTextColor(aButn);
+        style.SetActionButtonPressedRolloverTextColor(aButn);
+        style.SetFlatButtonPressedRolloverTextColor(aButn);
 
-    // Tabs
-    style.SetTabTextColor(aButn);
-    style.SetTabRolloverTextColor(aButn);
-    style.SetTabHighlightTextColor(aButn);
+        // Tabs
+        style.SetTabTextColor(aButn);
+        style.SetTabRolloverTextColor(aButn);
+        style.SetTabHighlightTextColor(aButn);
 
-    // Disable color
-    style.SetDisableColor(toColor(pal.color(QPalette::Disabled, QPalette::WindowText)));
+        // Disable color
+        style.SetDisableColor(toColor(pal.color(QPalette::Disabled, QPalette::WindowText)));
 
-    // Background
-    style.BatchSetBackgrounds(aBack);
-    style.SetInactiveTabColor(aBack);
-    style.SetWindowColor(aBack);
+        // Background
+        style.BatchSetBackgrounds(aBack);
+        style.SetInactiveTabColor(aBack);
+        style.SetWindowColor(aBack);
 
-    // Workspace
-    style.SetWorkspaceColor(aMid);
+        // Workspace
+        style.SetWorkspaceColor(aMid);
 
-    // Selection
-    // https://invent.kde.org/plasma/plasma-workspace/-/merge_requests/305
-    style.SetAccentColor(aHigh);
-    style.SetHighlightColor(aHigh);
-    style.SetHighlightTextColor(aHighText);
-    style.SetListBoxWindowHighlightColor(aHigh);
-    style.SetListBoxWindowHighlightTextColor(aHighText);
-    style.SetActiveColor(aHigh);
-    style.SetActiveTextColor(aHighText);
+        // Selection
+        // https://invent.kde.org/plasma/plasma-workspace/-/merge_requests/305
+        style.SetAccentColor(aHigh);
+        style.SetHighlightColor(aHigh);
+        style.SetHighlightTextColor(aHighText);
+        style.SetListBoxWindowHighlightColor(aHigh);
+        style.SetListBoxWindowHighlightTextColor(aHighText);
+        style.SetActiveColor(aHigh);
+        style.SetActiveTextColor(aHighText);
 
-    // Links
-    style.SetLinkColor(aLink);
-    style.SetVisitedLinkColor(aVisitedLink);
+        // Links
+        style.SetLinkColor(aLink);
+        style.SetVisitedLinkColor(aVisitedLink);
 
-    // Tooltip
-    style.SetHelpColor(toColor(QToolTip::palette().color(QPalette::Active, QPalette::ToolTipBase)));
-    style.SetHelpTextColor(
-        toColor(QToolTip::palette().color(QPalette::Active, QPalette::ToolTipText)));
+        // Tooltip
+        style.SetHelpColor(
+            toColor(QToolTip::palette().color(QPalette::Active, QPalette::ToolTipBase)));
+        style.SetHelpTextColor(
+            toColor(QToolTip::palette().color(QPalette::Active, QPalette::ToolTipText)));
 
-    // Menu
-    std::unique_ptr<QMenuBar> pMenuBar = std::make_unique<QMenuBar>();
-    QPalette qMenuCG = pMenuBar->palette();
+        // Menu
+        std::unique_ptr<QMenuBar> pMenuBar = std::make_unique<QMenuBar>();
+        QPalette qMenuCG = pMenuBar->palette();
 
-    // Menu text and background color, theme specific
-    Color aMenuFore = toColor(qMenuCG.color(QPalette::WindowText));
-    Color aMenuBack = toColor(qMenuCG.color(QPalette::Window));
+        // Menu text and background color, theme specific
+        Color aMenuFore = toColor(qMenuCG.color(QPalette::WindowText));
+        Color aMenuBack = toColor(qMenuCG.color(QPalette::Window));
 
-    style.SetMenuTextColor(aMenuFore);
-    style.SetMenuBarTextColor(aMenuFore);
-    style.SetMenuColor(aMenuBack);
-    style.SetMenuBarColor(aMenuBack);
-    style.SetMenuHighlightColor(toColor(qMenuCG.color(QPalette::Highlight)));
-    style.SetMenuHighlightTextColor(toColor(qMenuCG.color(QPalette::HighlightedText)));
+        style.SetMenuTextColor(aMenuFore);
+        style.SetMenuBarTextColor(aMenuFore);
+        style.SetMenuColor(aMenuBack);
+        style.SetMenuBarColor(aMenuBack);
+        style.SetMenuHighlightColor(toColor(qMenuCG.color(QPalette::Highlight)));
+        style.SetMenuHighlightTextColor(toColor(qMenuCG.color(QPalette::HighlightedText)));
 
-    // set special menubar highlight text color
-    if (QApplication::style()->inherits("HighContrastStyle"))
-        ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor
-            = toColor(qMenuCG.color(QPalette::HighlightedText));
-    else
-        ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = aMenuFore;
+        // set special menubar highlight text color
+        if (QApplication::style()->inherits("HighContrastStyle"))
+            ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor
+                = toColor(qMenuCG.color(QPalette::HighlightedText));
+        else
+            ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = aMenuFore;
 
-    // set menubar rollover color
-    if (pMenuBar->style()->styleHint(QStyle::SH_MenuBar_MouseTracking))
-    {
-        style.SetMenuBarRolloverColor(toColor(qMenuCG.color(QPalette::Highlight)));
-        style.SetMenuBarRolloverTextColor(ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor);
-    }
-    else
-    {
-        style.SetMenuBarRolloverColor(aMenuBack);
-        style.SetMenuBarRolloverTextColor(aMenuFore);
-    }
-    style.SetMenuBarHighlightTextColor(style.GetMenuHighlightTextColor());
+        // set menubar rollover color
+        if (pMenuBar->style()->styleHint(QStyle::SH_MenuBar_MouseTracking))
+        {
+            style.SetMenuBarRolloverColor(toColor(qMenuCG.color(QPalette::Highlight)));
+            style.SetMenuBarRolloverTextColor(
+                ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor);
+        }
+        else
+        {
+            style.SetMenuBarRolloverColor(aMenuBack);
+            style.SetMenuBarRolloverTextColor(aMenuFore);
+        }
+        style.SetMenuBarHighlightTextColor(style.GetMenuHighlightTextColor());
 
-    // Default fonts
-    vcl::Font aFont;
-    if (toVclFont(QApplication::font(), aLocale, aFont))
-    {
-        style.BatchSetFonts(aFont, aFont);
-        aFont.SetWeight(WEIGHT_BOLD);
-        style.SetTitleFont(aFont);
-        style.SetFloatTitleFont(aFont);
-    }
+        // Default fonts
+        vcl::Font aFont;
+        if (toVclFont(QApplication::font(), aLocale, aFont))
+        {
+            style.BatchSetFonts(aFont, aFont);
+            aFont.SetWeight(WEIGHT_BOLD);
+            style.SetTitleFont(aFont);
+            style.SetFloatTitleFont(aFont);
+        }
 
-    // Tooltip font
-    if (toVclFont(QToolTip::font(), aLocale, aFont))
-        style.SetHelpFont(aFont);
+        // Tooltip font
+        if (toVclFont(QToolTip::font(), aLocale, aFont))
+            style.SetHelpFont(aFont);
 
-    // Menu bar font
-    if (toVclFont(pMenuBar->font(), aLocale, aFont))
-        style.SetMenuFont(aFont);
+        // Menu bar font
+        if (toVclFont(pMenuBar->font(), aLocale, aFont))
+            style.SetMenuFont(aFont);
 
-    // Icon theme
-    const bool bPreferDarkTheme = GetUseDarkMode();
-    style.SetPreferredIconTheme(toOUString(QIcon::themeName()), bPreferDarkTheme);
+        // Icon theme
+        const bool bPreferDarkTheme = GetUseDarkMode();
+        style.SetPreferredIconTheme(toOUString(QIcon::themeName()), bPreferDarkTheme);
 
-    // Scroll bar size
-    style.SetScrollBarSize(QApplication::style()->pixelMetric(QStyle::PM_ScrollBarExtent));
-    style.SetMinThumbSize(QApplication::style()->pixelMetric(QStyle::PM_ScrollBarSliderMin));
+        // Scroll bar size
+        style.SetScrollBarSize(QApplication::style()->pixelMetric(QStyle::PM_ScrollBarExtent));
+        style.SetMinThumbSize(QApplication::style()->pixelMetric(QStyle::PM_ScrollBarSliderMin));
 
-    // These colors are used for the ruler text and marks
-    style.SetShadowColor(toColor(pal.color(QPalette::Disabled, QPalette::WindowText)));
-    style.SetDarkShadowColor(toColor(pal.color(QPalette::Inactive, QPalette::WindowText)));
+        // These colors are used for the ruler text and marks
+        style.SetShadowColor(toColor(pal.color(QPalette::Disabled, QPalette::WindowText)));
+        style.SetDarkShadowColor(toColor(pal.color(QPalette::Inactive, QPalette::WindowText)));
 
-    // match native QComboBox behavior of putting text cursor to end of text
-    // without text selection when combobox entry is selected
-    style.SetComboBoxTextSelectionMode(ComboBoxTextSelectionMode::CursorToEnd);
+        // match native QComboBox behavior of putting text cursor to end of text
+        // without text selection when combobox entry is selected
+        style.SetComboBoxTextSelectionMode(ComboBoxTextSelectionMode::CursorToEnd);
 
-    // Cursor blink interval
-    int nFlashTime = QApplication::cursorFlashTime();
-    style.SetCursorBlinkTime(nFlashTime != 0 ? nFlashTime / 2 : STYLE_CURSOR_NOBLINKTIME);
-    style.SetSystemColorsLoaded(true);
+        // Cursor blink interval
+        int nFlashTime = QApplication::cursorFlashTime();
+        style.SetCursorBlinkTime(nFlashTime != 0 ? nFlashTime / 2 : STYLE_CURSOR_NOBLINKTIME);
+        style.SetSystemColorsLoaded(true);
 
-    rSettings.SetStyleSettings(style);
+        rSettings.SetStyleSettings(style);
+    });
 }
 
 void QtFrame::Beep() { QApplication::beep(); }
