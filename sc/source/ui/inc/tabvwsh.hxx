@@ -99,6 +99,7 @@ private:
         OUString m_aText;
         OUString m_aSelection;
         sal_uInt64 m_nShellId;
+        OUString m_separator;
         std::chrono::steady_clock::time_point m_nTimeStamp;
 
         SendFormulabarUpdate()
