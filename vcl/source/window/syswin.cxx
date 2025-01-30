@@ -910,6 +910,8 @@ void SystemWindow::SetNotebookBar(const OUString& rUIXMLDescription,
                                   const NotebookBarAddonsItem& aNotebookBarAddonsItem,
                                   bool bReloadNotebookbar)
 {
+    mbInSetNoteBookBar = true;
+
     if (rUIXMLDescription != maNotebookBarUIFile || bReloadNotebookbar)
     {
         static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())
@@ -918,6 +920,8 @@ void SystemWindow::SetNotebookBar(const OUString& rUIXMLDescription,
         if(GetNotebookBar())
             GetNotebookBar()->SetSystemWindow(this);
     }
+
+    mbInSetNoteBookBar = false;
 }
 
 void SystemWindow::CloseNotebookBar()

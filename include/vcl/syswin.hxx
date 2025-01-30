@@ -107,6 +107,7 @@ private:
     bool            mbSysChild : 1 = false;
     bool            mbIsCalculatingInitialLayoutSize : 1 = false;
     bool            mbInitialLayoutSizeCalculated : 1 = false;
+    bool            mbInSetNoteBookBar : 1 = false;
     bool            mbPaintComplete : 1 = false;
     bool            mbIsDeferredInit : 1 = false;
     Idle            maLayoutIdle;
@@ -162,6 +163,7 @@ public:
     SAL_DLLPRIVATE bool            isLayoutEnabled() const;
     SAL_DLLPRIVATE void            setOptimalLayoutSize(bool bAllowWindowShrink);
     bool            isCalculatingInitialLayoutSize() const { return mbIsCalculatingInitialLayoutSize; }
+    bool            isSettingUpNoteBookBar() const { return mbInSetNoteBookBar; }
 
     void            SetIcon( sal_uInt16 nIcon );
     sal_uInt16          GetIcon() const { return mnIcon; }
