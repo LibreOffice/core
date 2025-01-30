@@ -939,7 +939,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         bool bCaseSensitive;
                     };
 
-                    std::shared_ptr<lcl_auxData> pAuxData = std::make_shared<lcl_auxData>(lcl_auxData{
+                    std::shared_ptr<lcl_auxData> xAuxData = std::make_shared<lcl_auxData>(lcl_auxData{
                         aCursorPos, eMode, eOper, aExpr1, aExpr2, bBlank, nListType, bShowHelp,
                         aHelpTitle, aHelpText, bShowError, eErrStyle, aErrTitle, aErrText, bCaseSensitive});
 
@@ -947,97 +947,98 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     rReq.Ignore(); // the 'old' request is not relevant any more
                     SfxTabDialogController::runAsync(
                         xDlg,
-                        [&rDoc, xRequest=std::move(xRequest), pAuxData, xDlg, pTabViewShell](sal_Int32 nResult)
+                        [&rDoc, xRequest=std::move(xRequest), xAuxData=std::move(xAuxData),
+                         xDlg, pTabViewShell](sal_Int32 nResult)
                         {
                         if ( nResult == RET_OK )
                         {
                             const SfxItemSet* pOutSet = xDlg->GetOutputItemSet();
 
                             if ( const SfxUInt16Item* pItem = pOutSet->GetItemIfSet( FID_VALID_MODE ) )
-                                pAuxData->eMode = static_cast<ScValidationMode>(pItem->GetValue());
+                                xAuxData->eMode = static_cast<ScValidationMode>(pItem->GetValue());
                             if ( const SfxUInt16Item* pItem = pOutSet->GetItemIfSet( FID_VALID_CONDMODE ) )
-                                pAuxData->eOper = static_cast<ScConditionMode>(pItem->GetValue());
+                                xAuxData->eOper = static_cast<ScConditionMode>(pItem->GetValue());
                             if ( const SfxStringItem* pItem = pOutSet->GetItemIfSet( FID_VALID_VALUE1 ) )
                             {
                                 OUString aTemp1 = pItem->GetValue();
-                                if (pAuxData->eMode == SC_VALID_DATE || pAuxData->eMode == SC_VALID_TIME)
+                                if (xAuxData->eMode == SC_VALID_DATE || xAuxData->eMode == SC_VALID_TIME)
                                 {
                                     sal_uInt32 nNumIndex = 0;
                                     double nVal;
                                     if (rDoc.GetFormatTable()->IsNumberFormat(aTemp1, nNumIndex, nVal))
-                                        pAuxData->aExpr1 = ::rtl::math::doubleToUString( nVal,
+                                        xAuxData->aExpr1 = ::rtl::math::doubleToUString( nVal,
                                                 rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
                                                 ScGlobal::getLocaleData().getNumDecimalSep()[0], true);
                                     else
-                                        pAuxData->aExpr1 = aTemp1;
+                                        xAuxData->aExpr1 = aTemp1;
                                 }
                                 else
-                                    pAuxData->aExpr1 = aTemp1;
+                                    xAuxData->aExpr1 = aTemp1;
                             }
                             if ( const SfxStringItem* pItem = pOutSet->GetItemIfSet( FID_VALID_VALUE2 ) )
                             {
                                 OUString aTemp2 = pItem->GetValue();
-                                if (pAuxData->eMode == SC_VALID_DATE || pAuxData->eMode == SC_VALID_TIME)
+                                if (xAuxData->eMode == SC_VALID_DATE || xAuxData->eMode == SC_VALID_TIME)
                                 {
                                     sal_uInt32 nNumIndex = 0;
                                     double nVal;
                                     if (rDoc.GetFormatTable()->IsNumberFormat(aTemp2, nNumIndex, nVal))
-                                        pAuxData->aExpr2 = ::rtl::math::doubleToUString( nVal,
+                                        xAuxData->aExpr2 = ::rtl::math::doubleToUString( nVal,
                                                 rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
                                                 ScGlobal::getLocaleData().getNumDecimalSep()[0], true);
                                     else
-                                        pAuxData->aExpr2 = aTemp2;
-                                    if ( pAuxData->eMode == SC_VALID_TIME ) {
-                                        sal_Int32 wraparound = pAuxData->aExpr1.compareTo(pAuxData->aExpr2);
+                                        xAuxData->aExpr2 = aTemp2;
+                                    if ( xAuxData->eMode == SC_VALID_TIME ) {
+                                        sal_Int32 wraparound = xAuxData->aExpr1.compareTo(xAuxData->aExpr2);
                                         if (wraparound > 0) {
-                                            if (pAuxData->eOper == ScConditionMode::Between) {
-                                                pAuxData->eOper = ScConditionMode::NotBetween;
-                                                std::swap( pAuxData->aExpr1, pAuxData->aExpr2 );
+                                            if (xAuxData->eOper == ScConditionMode::Between) {
+                                                xAuxData->eOper = ScConditionMode::NotBetween;
+                                                std::swap( xAuxData->aExpr1, xAuxData->aExpr2 );
                                             }
-                                            else if (pAuxData->eOper == ScConditionMode::NotBetween) {
-                                                pAuxData->eOper = ScConditionMode::Between;
-                                                std::swap( pAuxData->aExpr1, pAuxData->aExpr2 );
+                                            else if (xAuxData->eOper == ScConditionMode::NotBetween) {
+                                                xAuxData->eOper = ScConditionMode::Between;
+                                                std::swap( xAuxData->aExpr1, xAuxData->aExpr2 );
                                             }
                                         }
                                     }
                                 }
                                 else
-                                    pAuxData->aExpr2 = aTemp2;
+                                    xAuxData->aExpr2 = aTemp2;
                             }
                             if ( const SfxBoolItem* pItem = pOutSet->GetItemIfSet( FID_VALID_BLANK ) )
-                                pAuxData->bBlank = pItem->GetValue();
+                                xAuxData->bBlank = pItem->GetValue();
                             if ( const SfxBoolItem* pItem = pOutSet->GetItemIfSet( FID_VALID_CASESENS ) )
-                                pAuxData->bCaseSensitive = pItem->GetValue();
+                                xAuxData->bCaseSensitive = pItem->GetValue();
                             if ( const SfxInt16Item* pItem = pOutSet->GetItemIfSet( FID_VALID_LISTTYPE ) )
-                                pAuxData->nListType = pItem->GetValue();
+                                xAuxData->nListType = pItem->GetValue();
 
                             if ( const SfxBoolItem* pItem = pOutSet->GetItemIfSet( FID_VALID_SHOWHELP ) )
-                                pAuxData->bShowHelp = pItem->GetValue();
+                                xAuxData->bShowHelp = pItem->GetValue();
                             if ( const SfxStringItem* pItem = pOutSet->GetItemIfSet( FID_VALID_HELPTITLE ) )
-                                pAuxData->aHelpTitle = pItem->GetValue();
+                                xAuxData->aHelpTitle = pItem->GetValue();
                             if ( const SfxStringItem* pItem = pOutSet->GetItemIfSet( FID_VALID_HELPTEXT ) )
-                                pAuxData->aHelpText = pItem->GetValue();
+                                xAuxData->aHelpText = pItem->GetValue();
 
                             if ( const SfxBoolItem* pItem = pOutSet->GetItemIfSet( FID_VALID_SHOWERR ) )
-                                pAuxData->bShowError = pItem->GetValue();
+                                xAuxData->bShowError = pItem->GetValue();
                             if ( const SfxUInt16Item* pItem = pOutSet->GetItemIfSet( FID_VALID_ERRSTYLE ) )
-                                pAuxData->eErrStyle = static_cast<ScValidErrorStyle>(pItem->GetValue());
+                                xAuxData->eErrStyle = static_cast<ScValidErrorStyle>(pItem->GetValue());
                             if ( const SfxStringItem* pItem = pOutSet->GetItemIfSet( FID_VALID_ERRTITLE ) )
-                                pAuxData->aErrTitle = pItem->GetValue();
+                                xAuxData->aErrTitle = pItem->GetValue();
                             if ( const SfxStringItem* pItem = pOutSet->GetItemIfSet( FID_VALID_ERRTEXT ) )
-                                pAuxData->aErrText = pItem->GetValue();
+                                xAuxData->aErrText = pItem->GetValue();
 
-                            ScValidationData aData( pAuxData->eMode, pAuxData->eOper, pAuxData->aExpr1, pAuxData->aExpr2, rDoc, pAuxData->aCursorPos );
-                            aData.SetIgnoreBlank( pAuxData->bBlank );
-                            aData.SetCaseSensitive( pAuxData->bCaseSensitive );
-                            aData.SetListType( pAuxData->nListType );
+                            ScValidationData aData( xAuxData->eMode, xAuxData->eOper, xAuxData->aExpr1, xAuxData->aExpr2, rDoc, xAuxData->aCursorPos );
+                            aData.SetIgnoreBlank( xAuxData->bBlank );
+                            aData.SetCaseSensitive( xAuxData->bCaseSensitive );
+                            aData.SetListType( xAuxData->nListType );
 
-                            aData.SetInput(pAuxData->aHelpTitle, pAuxData->aHelpText);          // sets bShowInput to TRUE
-                            if (!pAuxData->bShowHelp)
+                            aData.SetInput(xAuxData->aHelpTitle, xAuxData->aHelpText);          // sets bShowInput to TRUE
+                            if (!xAuxData->bShowHelp)
                                 aData.ResetInput();                         // reset only bShowInput
 
-                            aData.SetError(pAuxData->aErrTitle, pAuxData->aErrText, pAuxData->eErrStyle); // sets bShowError to TRUE
-                            if (!pAuxData->bShowError)
+                            aData.SetError(xAuxData->aErrTitle, xAuxData->aErrText, xAuxData->eErrStyle); // sets bShowError to TRUE
+                            if (!xAuxData->bShowError)
                                 aData.ResetError();                         // reset only bShowError
 
                             pTabViewShell->SetValidation( aData );
