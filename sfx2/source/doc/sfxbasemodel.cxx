@@ -4067,27 +4067,30 @@ OUString SAL_CALL SfxBaseModel::getTitle()
         SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
         if ( pMedium )
         {
-            try {
-                ::ucbhelper::Content aContent( pMedium->GetName(),
-                    utl::UCBContentHelper::getDefaultCommandEnvironment(),
-                    comphelper::getProcessComponentContext() );
-                const Reference < beans::XPropertySetInfo > xProps
-                     = aContent.getProperties();
-                if ( xProps.is() )
-                {
-                    static constexpr OUString aServerTitle( u"TitleOnServer"_ustr );
-                    if ( xProps->hasPropertyByName( aServerTitle ) )
+            if (!pMedium->GetName().equalsIgnoreAsciiCase("private:stream"))
+            {
+                try {
+                    ::ucbhelper::Content aContent( pMedium->GetName(),
+                        utl::UCBContentHelper::getDefaultCommandEnvironment(),
+                        comphelper::getProcessComponentContext() );
+                    const Reference < beans::XPropertySetInfo > xProps
+                         = aContent.getProperties();
+                    if ( xProps.is() )
                     {
-                        Any aAny = aContent.getPropertyValue( aServerTitle );
-                        aAny >>= aResult;
+                        static constexpr OUString aServerTitle( u"TitleOnServer"_ustr );
+                        if ( xProps->hasPropertyByName( aServerTitle ) )
+                        {
+                            Any aAny = aContent.getPropertyValue( aServerTitle );
+                            aAny >>= aResult;
+                        }
                     }
                 }
-            }
-            catch (const ucb::ContentCreationException &)
-            {
-            }
-            catch (const ucb::CommandAbortedException &)
-            {
+                catch (const ucb::ContentCreationException &)
+                {
+                }
+                catch (const ucb::CommandAbortedException &)
+                {
+                }
             }
             if (pMedium->IsRepairPackage())
                 aResult += SfxResId(STR_REPAIREDDOCUMENT);
