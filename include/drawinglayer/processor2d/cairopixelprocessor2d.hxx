@@ -13,6 +13,7 @@
 #include <basegfx/color/bcolormodifier.hxx>
 #include <tools/long.hxx>
 #include <sal/config.h>
+#include <com/sun/star/awt/XGraphics.hpp>
 
 // cairo-specific
 #include <cairo.h>
@@ -88,6 +89,9 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
 
     // calculated result of if we are in outsideCairoCoordinateLimits mode
     bool mbCairoCoordinateLimitWorkaroundActive;
+
+    // the XGraphics which may be set using setXGraphics()
+    com::sun::star::uno::Reference<com::sun::star::awt::XGraphics> maXGraphics;
 
     // helpers for direct paints
     void paintPolyPolygonRGBA(const basegfx::B2DPolyPolygon& rPolyPolygon,
@@ -188,9 +192,20 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
 protected:
     bool hasError() const { return cairo_status(mpRT) != CAIRO_STATUS_SUCCESS; }
     bool hasRenderTarget() const { return nullptr != mpRT; }
+    const com::sun::star::uno::Reference<com::sun::star::awt::XGraphics>& getXGraphics() const
+    {
+        return maXGraphics;
+    }
 
 public:
     bool valid() const { return hasRenderTarget() && !hasError(); }
+
+    // set a XGraphics for this CairoPixelProcessor2D when it is available
+    void
+    setXGraphics(const com::sun::star::uno::Reference<com::sun::star::awt::XGraphics>& rXGraphics)
+    {
+        maXGraphics = rXGraphics;
+    }
 
     // read access to CairoCoordinateLimitWorkaround mechanism
     bool isCairoCoordinateLimitWorkaroundActive() const
