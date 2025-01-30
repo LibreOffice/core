@@ -971,11 +971,11 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testErase)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a rect action", MetaActionType::RECT, pAction->GetType());
 
     pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT + 3);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a line color action (end)", MetaActionType::LINECOLOR,
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action (end)", MetaActionType::FILLCOLOR,
                                  pAction->GetType());
 
     pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT + 4);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action (end)", MetaActionType::FILLCOLOR,
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a line color action (end)", MetaActionType::LINECOLOR,
                                  pAction->GetType());
 }
 

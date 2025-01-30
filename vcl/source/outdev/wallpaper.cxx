@@ -80,17 +80,27 @@ void OutputDevice::DrawColorWallpaper( tools::Long nX, tools::Long nY,
     assert(!is_double_buffered_window());
 
     // draw wallpaper without border
+    bool bOldIsLineColor = IsLineColor();
     Color aOldLineColor = GetLineColor();
+    bool bOldIsFillColor = IsFillColor();
     Color aOldFillColor = GetFillColor();
+    bool bMap = mbMap;
+
     SetLineColor();
     SetFillColor( rWallpaper.GetColor() );
-
-    bool bMap = mbMap;
     EnableMapMode( false );
+
     DrawRect( tools::Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
-    SetLineColor( aOldLineColor );
-    SetFillColor( aOldFillColor );
+
     EnableMapMode( bMap );
+    if (bOldIsFillColor)
+        SetFillColor(aOldFillColor);
+    else
+        SetFillColor();
+    if (bOldIsLineColor)
+        SetLineColor(aOldLineColor);
+    else
+        SetLineColor();
 }
 
 void OutputDevice::Erase()
