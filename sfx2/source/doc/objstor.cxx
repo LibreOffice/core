@@ -1839,7 +1839,8 @@ bool SfxObjectShell::SaveTo_Impl
     aLockUIGuard.Unlock();
     pImpl->bForbidReload = bOldStat;
 
-    if ( bOk )
+    // ucbhelper::Content is unable to do anything useful with a private:stream
+    if (bOk && !rMedium.GetName().equalsIgnoreAsciiCase("private:stream"))
     {
         try
         {
