@@ -193,7 +193,7 @@ Check:
 	If IsMissing(pvArgs) Or IsEmpty(pvArgs) Then pvArgs = Array()
 	If Not IsArray(pvArgs) Then pvArgs = Array(pvArgs)
 	If UBound(pvArgs) &gt;= 0 Then Event = pvArgs(0) Else Event = Nothing
-	If IsEmpty(Event) Then Event = Nothing
+	If IsEmpty(Event) Or IsNull(Event) Then Event = Nothing		&apos;	Event can be Null when popup built by Python code
 	If UBound(pvArgs) &gt;= 1 Then X = pvArgs(1) Else X = 0
 	If UBound(pvArgs) &gt;= 2 Then Y = pvArgs(2) Else Y = 0
 	If UBound(pvArgs) &gt;= 3 Then SubmenuChar = pvArgs(3) Else SubmenuChar = &quot;&quot;

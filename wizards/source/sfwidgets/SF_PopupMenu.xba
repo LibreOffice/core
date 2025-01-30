@@ -402,7 +402,10 @@ Check:
 
 Try:
 	vMenuItem = MenuRoot.Execute(PeerWindow, Rectangle, com.sun.star.awt.PopupMenuDirection.EXECUTE_DEFAULT)
-	If Not ReturnId Then vMenuItem = MenuIdentification.Item(CStr(vMenuItem))
+	&apos;	So far, vMenuItem is an Integer. Convert to the item name when relevant
+	If Not ReturnId Then
+		If vMenuItem &gt; 0 Then vMenuItem = MenuIdentification.Item(CStr(vMenuItem)) Else vMenuItem = &quot;&quot;
+	End If
 
 Finally:
 	Execute = vMenuItem
