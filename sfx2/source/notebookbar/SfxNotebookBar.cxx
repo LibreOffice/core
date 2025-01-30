@@ -517,6 +517,11 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                 return true;
             }
 
+            // tdf#164899 don't call SystemWindow::SetNotebookBar recursively
+            // if NoteBookBar is in process of getting set
+            if (pSysWindow->isSettingUpNoteBookBar())
+                return false;
+
             RemoveListeners(pSysWindow);
 
             pSysWindow->SetNotebookBar(aBuf, xFrame, aNotebookBarAddonsItem , bReloadNotebookbar);
