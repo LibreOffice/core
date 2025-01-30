@@ -653,21 +653,19 @@ void VclPixelProcessor2D::processControlPrimitive2D(
         return;
     }
 
-    // get awt::XControl from control primitive
-    const uno::Reference<awt::XControl>& rXControl(rControlPrimitive.getXControl());
     bool bDone(false);
 
     try
     {
-        // remember old graphics and create new
-        uno::Reference<awt::XView> xControlView(rXControl, uno::UNO_QUERY_THROW);
-        const uno::Reference<awt::XGraphics> xOriginalGraphics(xControlView->getGraphics());
-        const uno::Reference<awt::XGraphics> xNewGraphics(mpOutputDevice->CreateUnoGraphics());
+        const uno::Reference<awt::XGraphics> xTargetGraphics(mpOutputDevice->CreateUnoGraphics());
 
-        if (xNewGraphics.is())
+        if (xTargetGraphics.is())
         {
             // Needs to be drawn. Link new graphics and view
-            xControlView->setGraphics(xNewGraphics);
+            const uno::Reference<awt::XControl>& rXControl(rControlPrimitive.getXControl());
+            uno::Reference<awt::XView> xControlView(rXControl, uno::UNO_QUERY_THROW);
+            const uno::Reference<awt::XGraphics> xOriginalGraphics(xControlView->getGraphics());
+            xControlView->setGraphics(xTargetGraphics);
 
             // get position
             const basegfx::B2DHomMatrix aObjectToPixel(maCurrentTransformation

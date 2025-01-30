@@ -55,8 +55,10 @@
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/utils/bgradient.hxx>
 #include <vcl/BitmapReadAccess.hxx>
-#include <officecfg/Office/Common.hxx>
 #include <vcl/vcllayout.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <com/sun/star/awt/XView.hpp>
+#include <com/sun/star/awt/XControl.hpp>
 #include <unordered_map>
 #include <dlfcn.h>
 
@@ -951,6 +953,7 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
           officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get())
     , mnClipRecursionCount(0)
     , mbCairoCoordinateLimitWorkaroundActive(false)
+    , maXGraphics()
 {
     if (nWidthPixel <= 0 || nHeightPixel <= 0)
         // no size, invalid
@@ -994,6 +997,7 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
           officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get())
     , mnClipRecursionCount(0)
     , mbCairoCoordinateLimitWorkaroundActive(false)
+    , maXGraphics()
 {
     // no target, nothing to initialize
     if (nullptr == pTarget)
@@ -3873,12 +3877,44 @@ void CairoPixelProcessor2D::processControlPrimitive2D(
         return;
     }
 
-    // process recursively and use the decomposition as Bitmap
-    // NOTE: The VclPixelProcessor2D tries to paint it using
-    // UNO API and awt::XView/awt::XGraphics to directly paint the
-    // control. To do so would need the target OutDev which we
-    // want to avoid here
-    process(rControlPrimitive);
+    bool bDone(false);
+
+    try
+    {
+        if (getXGraphics().is())
+        {
+            // Needs to be drawn. Link new graphics and view
+            const uno::Reference<awt::XControl>& rXControl(rControlPrimitive.getXControl());
+            uno::Reference<awt::XView> xControlView(rXControl, uno::UNO_QUERY_THROW);
+            const uno::Reference<awt::XGraphics> xOriginalGraphics(xControlView->getGraphics());
+            xControlView->setGraphics(getXGraphics());
+
+            // get position
+            const basegfx::B2DHomMatrix aObjectToPixel(
+                getViewInformation2D().getObjectToViewTransformation()
+                * rControlPrimitive.getTransform());
+            const basegfx::B2DPoint aTopLeftPixel(aObjectToPixel * basegfx::B2DPoint(0.0, 0.0));
+
+            xControlView->draw(basegfx::fround(aTopLeftPixel.getX()),
+                               basegfx::fround(aTopLeftPixel.getY()));
+
+            // restore original graphics
+            xControlView->setGraphics(xOriginalGraphics);
+            bDone = true;
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        // #i116763# removing since there is a good alternative when the xControlView
+        // is not found and it is allowed to happen
+        // DBG_UNHANDLED_EXCEPTION();
+    }
+
+    if (!bDone)
+    {
+        // process recursively and use the decomposition as Bitmap
+        process(rControlPrimitive);
+    }
 }
 
 void CairoPixelProcessor2D::evaluateCairoCoordinateLimitWorkaround()
