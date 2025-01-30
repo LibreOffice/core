@@ -1462,7 +1462,7 @@ void PDFWriterImpl::endCompression()
         m_pCodec.reset();
         sal_uInt64 nLen = m_pMemStream->Tell();
         m_pMemStream->Seek( 0 );
-        writeBufferBytes( m_pMemStream->GetData(), nLen );
+        (void)writeBufferBytes( m_pMemStream->GetData(), nLen );
         m_pMemStream.reset();
     }
 }
@@ -5088,7 +5088,7 @@ class PDFStreamIf : public cppu::WeakImplHelper< css::io::XOutputStream >
         if( m_bWrite && aData.hasElements() )
         {
             sal_Int32 nBytes = aData.getLength();
-            m_pWriter->writeBufferBytes( aData.getConstArray(), nBytes );
+            (void)m_pWriter->writeBufferBytes( aData.getConstArray(), nBytes );
         }
     }
     virtual void SAL_CALL flush() override {}
