@@ -3097,6 +3097,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "ADDRESS",
         "AREAS",
         "CHOOSE",
+        "CHOOSEROWS",
         "COLUMN",
         "COLUMNS",
         "DDE",

@@ -57,6 +57,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocIfError,         {{ Array, Reference                                     }, 0, Value }},
     { ocIfNA,            {{ Array, Reference                                     }, 0, Value }},
     { ocChoose,          {{ Array, Reference                                     }, 1, Value }},
+    { ocChooseRows,      {{ ReferenceOrRefArray, ReferenceOrRefArray, ReferenceOrRefArray, }, 2, ForceArrayReturn }},
     { ocLet,             {{ Value, ReferenceOrRefArray, ReferenceOrRefArray, }, 2, ForceArrayReturn } },
     // Other specials.
     { ocArrayClose,      {{ Bounds                                               }, 0, Bounds }},

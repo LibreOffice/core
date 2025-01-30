@@ -4251,6 +4251,18 @@ const TranslateId SC_OPCODE_RANDARRAY_ARY[] =
     NC_("SC_OPCODE_RANDARRAY", "Return integer (TRUE) or decimal (FALSE) values.")
 };
 
+// -=*# Resource for function CHOOSEROWS #*=-
+const TranslateId SC_OPCODE_CHOOSEROWS_ARY[] =
+{
+    NC_("SC_OPCODE_CHOOSEROWS", "Returns the specified rows from an array."),
+    NC_("SC_OPCODE_CHOOSEROWS", "Array"),
+    NC_("SC_OPCODE_CHOOSEROWS", "The array containing the columns to be returned in the new array."),
+    NC_("SC_OPCODE_CHOOSEROWS", "Row 1"),
+    NC_("SC_OPCODE_CHOOSEROWS", "The first row number to be returned."),
+    NC_("SC_OPCODE_CHOOSEROWS", "Row 2"),
+    NC_("SC_OPCODE_CHOOSEROWS", "Row 2, Row 3,... The list of row numbers to be returned.")
+};
+
 // -=*# Resource for function DROP #*=-
 const TranslateId SC_OPCODE_DROP_ARY[] =
 {
