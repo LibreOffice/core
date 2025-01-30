@@ -430,7 +430,7 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
 
                 // Set the matching font family if we have one.
                 FontEntry::Pointer_t pFontEntry = m_pImpl->GetFontTable()->getFontEntryByName(sStringValue);
-                if (pFontEntry)
+                if (pFontEntry && pFontEntry->m_nFontFamily != awt::FontFamily::DONTKNOW)
                 {
                     m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_FAMILY,
                                                      uno::Any(pFontEntry->m_nFontFamily));
