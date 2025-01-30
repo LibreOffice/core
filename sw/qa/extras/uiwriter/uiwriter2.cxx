@@ -3420,4 +3420,38 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf159377)
     CPPUNIT_ASSERT_EQUAL(SwNodeOffset(28), pDoc->GetNodes().Count());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testPasteTableInMiddleOfParagraph)
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+
+    lcl_dispatchCommand(mxComponent, ".uno:SelectTable", {});
+    lcl_dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    pWrtShell->Undo();
+
+    pWrtShell->Insert("AB");
+
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+
+    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    pWrtShell->Undo();
+
+    // the problem was that the A was missing
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("AB"),
+        pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+
+    pWrtShell->Redo();
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("AB"),
+        pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
