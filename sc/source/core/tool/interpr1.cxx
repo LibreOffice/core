@@ -8960,6 +8960,112 @@ void ScInterpreter::ScTakeOrDrop(bool bTake)
     PushMatrix(pResMat);
 }
 
+void ScInterpreter::ScChooseRows()
+{
+    sal_uInt8 nParamCount = GetByte();
+
+    if (!MustHaveParamCountMin( nParamCount, 2))
+        return;
+
+    //reverse order of parameter stack to read them from first to last
+    ReverseStack(nParamCount);
+
+    // 1st argument: array
+    ScMatrixRef pMatSource = nullptr;
+    SCSIZE nsC = 0, nsR = 0;
+    switch (GetStackType())
+    {
+        case svSingleRef:
+        case svDoubleRef:
+        case svMatrix:
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+        {
+            pMatSource = GetMatrix();
+            if (!pMatSource)
+            {
+                PushIllegalParameter();
+                return;
+            }
+
+            pMatSource->GetDimensions(nsC, nsR);
+        }
+        break;
+
+        default:
+            PushIllegalParameter();
+            return;
+    }
+
+    std::vector<sal_Int32> aRowsVector;
+    while (nGlobalError == FormulaError::NONE && nParamCount-- > 1)
+    {
+        if (IsMissing())
+        {
+            PushIllegalParameter();
+            return;
+        }
+
+        ScMatrixRef pRefMatrix = GetMatrix();
+        if (!pRefMatrix)
+        {
+            PushIllegalParameter();
+            return;
+        }
+
+        SCSIZE nC = 0, nR = 0;
+        pRefMatrix->GetDimensions(nC, nR);
+        for (SCSIZE col = 0; col < nC; col++)
+        {
+            for (SCSIZE row = 0; row < nR; row++)
+            {
+                if (!pRefMatrix->IsStringOrEmpty(nC, nR))
+                {
+                    sal_Int32 nRow = double_to_int32(pRefMatrix->GetDouble(col, row));
+                    if (nRow < 0)
+                        nRow = nsR + nRow + 1;
+
+                    if (nRow <= 0 || o3tl::make_unsigned(nRow) > nsR)
+                    {
+                        PushIllegalParameter();
+                        return;
+                    }
+                    else
+                        aRowsVector.push_back(nRow);
+                }
+                else
+                {
+                    PushIllegalParameter();
+                    return;
+                }
+            }
+        }
+    }
+
+    if (nGlobalError != FormulaError::NONE || nsC < 1 || nsR < 1)
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    ScMatrixRef pResMat = GetNewMat(nsC, aRowsVector.size(), /*bEmpty*/true);
+    if (!pResMat)
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    for (SCSIZE col = 0; col < nsC; ++col)
+    {
+        for(SCSIZE row = 0; row < aRowsVector.size(); ++row)
+        {
+            lcl_FillCell(pMatSource, pResMat, col, aRowsVector[row] - 1, col, row);
+        }
+    }
+
+    PushMatrix(pResMat);
+}
+
 void ScInterpreter::ScDrop()
 {
     ScTakeOrDrop(/*bTake*/ false);

@@ -1279,6 +1279,7 @@ bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
         case ocSort :
         case ocSortBy :
         case ocRandArray :
+        case ocChooseRows :
         case ocDrop :
         case ocExpand :
         case ocTake :
