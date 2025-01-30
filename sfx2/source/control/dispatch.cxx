@@ -1543,6 +1543,7 @@ bool SfxDispatcher::IsCommandAllowedInLokReadOnlyViewMode (const OUString & comm
         u".uno:DeleteAnnotation"_ustr,
         u".uno:EditAnnotation"_ustr,
         u".uno:PromoteComment"_ustr,
+        u".uno:Save"_ustr,
     };
 
     if (std::find(std::begin(allowedList), std::end(allowedList), commandName) != std::end(allowedList))
