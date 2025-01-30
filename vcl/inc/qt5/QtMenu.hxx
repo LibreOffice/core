@@ -72,6 +72,7 @@ private:
 
 public:
     QtMenu(bool bMenuBar);
+    ~QtMenu();
 
     bool eventFilter(QObject* pObject, QEvent* pEvent) override;
 

@@ -984,6 +984,12 @@ int QtMenu::GetMenuBarHeight() const
     return mpQMenuBar->height();
 }
 
+QtMenu::~QtMenu()
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] { mpOwnedQMenu.reset(); });
+}
+
 QtMenuItem::QtMenuItem(const SalItemParams* pItemData)
     : mpParentMenu(nullptr)
     , mpSubMenu(nullptr)
