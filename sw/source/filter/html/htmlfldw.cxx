@@ -339,11 +339,10 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
     {
         //sequence of (start, end) property ranges we want to
         //query
-        SfxItemSetFixed<RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
-                       RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
-                       RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
-                       RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT>
-            aScriptItemSet( rWrt.m_pDoc->GetAttrPool() );
+        SfxItemSet aScriptItemSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
+                                                                  RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
+                                                                  RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
+                                                                  RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT>(rWrt.m_pDoc->GetAttrPool()));
         rTextNd.GetParaAttr(aScriptItemSet, nFieldPos, nFieldPos+1);
 
         sal_uInt16 aWesternWhichIds[4] =

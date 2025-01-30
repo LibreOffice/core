@@ -520,9 +520,9 @@ void SdrTextObj::AdaptTextMinSize()
         // No auto grow requested.  Bail out.
         return;
 
-    SfxItemSetFixed<SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
-        SDRATTR_TEXT_MINFRAMEWIDTH, SDRATTR_TEXT_AUTOGROWWIDTH> // contains SDRATTR_TEXT_MAXFRAMEWIDTH
-        aSet(*GetObjectItemSet().GetPool());
+    SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
+                                                    // contains SDRATTR_TEXT_MAXFRAMEWIDTH
+                                                    SDRATTR_TEXT_MINFRAMEWIDTH, SDRATTR_TEXT_AUTOGROWWIDTH>(*GetObjectItemSet().GetPool()));
 
     if(bW)
     {
@@ -1507,10 +1507,10 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
     tools::Rectangle aObjectRect = GetSnapRect();
 
     // prepare ItemSet to set exchanged width and height items
-    SfxItemSetFixed<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
-        // Expanded item ranges to also support hor and ver adjust.
-        SDRATTR_TEXT_VERTADJUST, SDRATTR_TEXT_VERTADJUST,
-        SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_HORZADJUST> aNewSet(*rSet.GetPool());
+    SfxItemSet aNewSet(SfxItemSet::makeFixedSfxItemSet<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
+                                                       // Expanded item ranges to also support hor and ver adjust.
+                                                       SDRATTR_TEXT_VERTADJUST, SDRATTR_TEXT_VERTADJUST,
+                                                       SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_HORZADJUST>(*rSet.GetPool()));
 
     aNewSet.Put(rSet);
     aNewSet.Put(makeSdrTextAutoGrowWidthItem(bAutoGrowHeight));

@@ -114,13 +114,11 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
 {
     if (!mpPrinter && bCreateIfNotExist && mxPoolHelper)
     {
-        auto pSet =
-            std::make_unique<SfxItemSetFixed
-                            <SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
-                            SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
-                            SID_PRINT_SELECTEDSHEET,    SID_PRINT_SELECTEDSHEET,
-                            SID_SCPRINTOPTIONS,         SID_SCPRINTOPTIONS>>(*mxPoolHelper->GetDocPool());
-
+        auto pSet = std::make_unique<SfxItemSet>(
+            SfxItemSet::makeFixedSfxItemSet<SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                                            SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
+                                            SID_PRINT_SELECTEDSHEET, SID_PRINT_SELECTEDSHEET,
+                                            SID_SCPRINTOPTIONS, SID_SCPRINTOPTIONS>(*mxPoolHelper->GetDocPool()));
         SfxPrinterChangeFlags nFlags = SfxPrinterChangeFlags::NONE;
         if (officecfg::Office::Common::Print::Warning::PaperOrientation::get())
             nFlags |= SfxPrinterChangeFlags::CHG_ORIENTATION;

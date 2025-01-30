@@ -1021,7 +1021,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
         bool bEdit = TAG_TEXTAREA == eTag || TYPE_FILE == eType ||
                      TYPE_TEXT == eType;
 
-        SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aItemSet( rWrt.m_pDoc->GetAttrPool() );
+        SfxItemSet aItemSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_BEGIN, RES_CHRATR_END>(rWrt.m_pDoc->GetAttrPool()));
         if( xPropSetInfo->hasPropertyByName( u"BackgroundColor"_ustr ) )
         {
             aTmp = xPropSet->getPropertyValue( u"BackgroundColor"_ustr );

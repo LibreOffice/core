@@ -1299,8 +1299,8 @@ namespace //local functions originally from docfmt.cxx
         if (!xExtra)
         {
             // Apply the first character's attributes to the ReplaceText
-            SfxItemSetFixed<RES_CHRATR_BEGIN,     RES_TXTATR_WITHEND_END - 1,
-                        RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>  aSet( rDoc.GetAttrPool() );
+            SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_BEGIN, RES_TXTATR_WITHEND_END - 1,
+                                                            RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>(rDoc.GetAttrPool()));
             SwTextNode * pNode = rRg.Start()->GetNode().GetTextNode();
             pNode->GetParaAttr( aSet, rRg.Start()->GetContentIndex() + 1, rRg.End()->GetContentIndex() );
 
@@ -1450,18 +1450,15 @@ namespace //local functions originally from docfmt.cxx
         // - The attribute in rChgSet does not belong to one of the above categories
         if ( !bCharAttr && !bOtherAttr )
         {
-            SfxItemSet* pTmpCharItemSet = new SfxItemSetFixed<
-                    RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
-                    RES_TXTATR_AUTOFMT, RES_TXTATR_CHARFMT,
-                    RES_TXTATR_UNKNOWN_CONTAINER,
-                        RES_TXTATR_UNKNOWN_CONTAINER>( rDoc.GetAttrPool() );
-
-            SfxItemSet* pTmpOtherItemSet = new SfxItemSetFixed<
-                    RES_PARATR_BEGIN, RES_GRFATR_END - 1,
-                    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1,
-                    // FillAttribute support:
-                    XATTR_FILL_FIRST, XATTR_FILL_LAST>( rDoc.GetAttrPool() );
-
+            SfxItemSet* pTmpCharItemSet = new SfxItemSet(
+                rDoc.GetAttrPool(), WhichRangesContainer(svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
+                                                                    RES_TXTATR_AUTOFMT, RES_TXTATR_CHARFMT,
+                                                                    RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER>));
+            SfxItemSet* pTmpOtherItemSet = new SfxItemSet(
+                rDoc.GetAttrPool(), WhichRangesContainer(svl::Items<RES_PARATR_BEGIN, RES_GRFATR_END - 1,
+                                                                    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1,
+                                                                    // FillAttribute support:
+                                                                    XATTR_FILL_FIRST, XATTR_FILL_LAST>));
             pTmpCharItemSet->Put( rChgSet );
             pTmpOtherItemSet->Put( rChgSet );
 
@@ -1546,8 +1543,7 @@ namespace //local functions originally from docfmt.cxx
             // Attributes without an end do not have a range
             if ( !bCharAttr && !bOtherAttr )
             {
-                SfxItemSetFixed<RES_TXTATR_NOEND_BEGIN, RES_TXTATR_NOEND_END-1>
-                    aTextSet( rDoc.GetAttrPool() );
+                SfxItemSet aTextSet(SfxItemSet::makeFixedSfxItemSet<RES_TXTATR_NOEND_BEGIN, RES_TXTATR_NOEND_END-1>(rDoc.GetAttrPool()));
                 aTextSet.Put( rChgSet );
                 if( aTextSet.Count() )
                 {
@@ -1577,11 +1573,9 @@ namespace //local functions originally from docfmt.cxx
             {
                 // CharFormat and URL attributes are treated separately!
                 // TEST_TEMP ToDo: AutoFormat!
-                SfxItemSetFixed<
-                        RES_TXTATR_REFMARK, RES_TXTATR_METAFIELD,
-                        RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
-                        RES_TXTATR_INPUTFIELD, RES_TXTATR_CONTENTCONTROL>
-                     aTextSet(rDoc.GetAttrPool());
+                SfxItemSet aTextSet(SfxItemSet::makeFixedSfxItemSet<RES_TXTATR_REFMARK, RES_TXTATR_METAFIELD,
+                                                                    RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
+                                                                    RES_TXTATR_INPUTFIELD, RES_TXTATR_CONTENTCONTROL>(rDoc.GetAttrPool()));
 
                 aTextSet.Put( rChgSet );
                 if( aTextSet.Count() )
@@ -1711,15 +1705,14 @@ namespace //local functions originally from docfmt.cxx
             }
         }
 
-        SfxItemSetFixed<RES_PAGEDESC, RES_BREAK> firstSet(rDoc.GetAttrPool());
+        SfxItemSet firstSet(SfxItemSet::makeFixedSfxItemSet<RES_PAGEDESC, RES_BREAK>(rDoc.GetAttrPool()));
         if (pOtherSet && pOtherSet->Count())
         {   // actually only RES_BREAK is possible here...
             firstSet.Put(*pOtherSet);
         }
-        SfxItemSetFixed
-            <RES_PARATR_BEGIN, RES_PAGEDESC,
-                       RES_BREAK+1, RES_FRMATR_END,
-                       XATTR_FILL_FIRST, XATTR_FILL_LAST+1> propsSet(rDoc.GetAttrPool());
+        SfxItemSet propsSet(SfxItemSet::makeFixedSfxItemSet<RES_PARATR_BEGIN, RES_PAGEDESC,
+                                                            RES_BREAK+1, RES_FRMATR_END,
+                                                            XATTR_FILL_FIRST, XATTR_FILL_LAST+1> (rDoc.GetAttrPool()));
         if (pOtherSet && pOtherSet->Count())
         {
             propsSet.Put(*pOtherSet);
@@ -4239,10 +4232,11 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
 */
 std::shared_ptr<SfxItemSet> DocumentContentOperationsManager::lcl_createDelSet(SwDoc& rDoc)
 {
-    std::shared_ptr<SfxItemSet> pDelSet(new SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
-                        RES_TXTATR_INETFMT, RES_TXTATR_UNKNOWN_CONTAINER,
-                        RES_PARATR_BEGIN, RES_FRMATR_END - 1,
-                        RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>(rDoc.GetAttrPool()));
+    std::shared_ptr<SfxItemSet> pDelSet(new SfxItemSet(
+        rDoc.GetAttrPool(), WhichRangesContainer(svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
+                                                            RES_TXTATR_INETFMT, RES_TXTATR_UNKNOWN_CONTAINER,
+                                                            RES_PARATR_BEGIN, RES_FRMATR_END - 1,
+                                                            RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>)));
     o3tl::sorted_vector<sal_uInt16> aAttribs;
 
     static constexpr std::pair<sal_uInt16, sal_uInt16> aResetableSetRange[] = {
@@ -4766,9 +4760,8 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
             if( !sRepl.isEmpty() )
             {
                 // Apply the first character's attributes to the ReplaceText
-                SfxItemSetFixed
-                            <RES_CHRATR_BEGIN,     RES_TXTATR_WITHEND_END - 1,
-                            RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>  aSet( m_rDoc.GetAttrPool() );
+                SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_BEGIN, RES_TXTATR_WITHEND_END - 1,
+                                                                RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>(m_rDoc.GetAttrPool()));
                 pTextNd->GetParaAttr( aSet, nStt+1, nStt+1 );
 
                 aSet.ClearItem( RES_TXTATR_REFMARK );

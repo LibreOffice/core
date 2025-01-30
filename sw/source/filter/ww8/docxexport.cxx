@@ -1932,7 +1932,7 @@ void DocxExport::WriteDocumentBackgroundFill()
     }
     else if (eFillType == drawing::FillStyle_GRADIENT)
     {
-        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aSet(m_rDoc.GetAttrPool());
+        SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILL_FIRST, XATTR_FILL_LAST>(m_rDoc.GetAttrPool()));
         aSet.Set(rPageStyleAttrSet);
 
         // Collect all of the gradient attributes into SdrExporter() AttrLists

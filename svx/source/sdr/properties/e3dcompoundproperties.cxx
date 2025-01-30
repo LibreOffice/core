@@ -56,7 +56,7 @@ namespace sdr::properties
                 GetObjectItemSet();
 
                 // add filtered scene properties (SDRATTR_3DSCENE_) to local itemset
-                SfxItemSetFixed<SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST> aSet(*moItemSet->GetPool() );
+                SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST>(*moItemSet->GetPool()));
                 aSet.Put(pScene->GetProperties().GetObjectItemSet());
                 moItemSet->Put(aSet);
             }
@@ -77,7 +77,7 @@ namespace sdr::properties
                 GetObjectItemSet();
 
                 // Generate filtered scene properties (SDRATTR_3DSCENE_) itemset
-                SfxItemSetFixed<SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST> aSet(*moItemSet->GetPool());
+                SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST>(*moItemSet->GetPool()));
                 aSet.Put(rSet);
 
                 if(bClearAllItems)

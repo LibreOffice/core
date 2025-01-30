@@ -2017,8 +2017,8 @@ bool SwFEShell::ImpEndCreate()
         }
     }
 
-    SfxItemSetFixed<RES_FRM_SIZE, RES_FRM_SIZE,
-                    RES_SURROUND, RES_ANCHOR>  aSet( GetDoc()->GetAttrPool() );
+    SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_FRM_SIZE, RES_FRM_SIZE,
+                    RES_SURROUND, RES_ANCHOR>(GetDoc()->GetAttrPool()));
     aSet.Put( aAnch );
 
     // OD 2004-03-30 #i26791# - determine relative object position
@@ -2091,7 +2091,7 @@ bool SwFEShell::ImpEndCreate()
             ::GetHtmlMode( GetDoc()->GetDocShell() ) &&
             nullptr != ( pFlyFrame = GetSelectedFlyFrame() ))
         {
-            SfxItemSetFixed<RES_VERT_ORIENT, RES_HORI_ORIENT> aHtmlSet( GetDoc()->GetAttrPool() );
+            SfxItemSet aHtmlSet(SfxItemSet::makeFixedSfxItemSet<RES_VERT_ORIENT, RES_HORI_ORIENT>(GetDoc()->GetAttrPool()));
             // horizontal orientation:
             const bool bLeftFrame = aFlyRect.Left() <
                                       pAnch->getFrameArea().Left() + pAnch->getFramePrintArea().Left(),
@@ -2841,8 +2841,8 @@ void SwFEShell::CheckUnboundObjects()
             // First the action here, to assure GetCharRect delivers current values.
             StartAllAction();
 
-            SfxItemSetFixed<RES_FRM_SIZE, RES_FRM_SIZE,
-                            RES_SURROUND, RES_ANCHOR>  aSet( GetAttrPool() );
+            SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_FRM_SIZE, RES_FRM_SIZE,
+                            RES_SURROUND, RES_ANCHOR>(GetAttrPool()));
             aSet.Put( aAnch );
             aSet.Put( SwFormatSurround( css::text::WrapTextMode_THROUGH ) );
             SwFrameFormat* pFormat = getIDocumentLayoutAccess().MakeLayoutFormat( RndStdIds::DRAW_OBJECT, &aSet );
@@ -3203,7 +3203,7 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
 
             if(bMarquee)
             {
-                SfxItemSetFixed<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST> aSet(rDrawModel.GetItemPool());
+                SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST>(rDrawModel.GetItemPool()));
                 aSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
                 aSet.Put( makeSdrTextAutoGrowHeightItem( false ) );
                 aSet.Put( SdrTextAniKindItem( SdrTextAniKind::Slide ) );

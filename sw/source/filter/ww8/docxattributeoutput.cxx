@@ -9319,7 +9319,7 @@ void DocxAttributeOutput::FormatTextLeftMargin(SvxTextLeftMarginItem const& rTex
         // so try to add them as paragraph properties here.
         if (!pTextNd->IsCountedInList())
         {
-            SfxItemSetFixed<RES_MARGIN_TEXTLEFT, RES_MARGIN_TEXTLEFT> temp(m_rExport.m_rDoc.GetAttrPool());
+            SfxItemSet temp(SfxItemSet::makeFixedSfxItemSet<RES_MARGIN_TEXTLEFT, RES_MARGIN_TEXTLEFT>(m_rExport.m_rDoc.GetAttrPool()));
             pTextNd->GetParaAttr(temp, 0, 0, false, true, true, nullptr);
             if (auto *const pItem = temp.GetItem(RES_MARGIN_TEXTLEFT))
             {

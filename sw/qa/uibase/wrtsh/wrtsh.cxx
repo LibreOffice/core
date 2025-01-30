@@ -108,7 +108,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTickCheckboxContentControl)
 
     // The default Liberation Serif doesn't have a checkmark glyph, avoid font fallback.
     SwView& rView = pWrtShell->GetView();
-    SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aSet(rView.GetPool());
+    SfxItemSet aSet(
+        SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_BEGIN, RES_CHRATR_END>(rView.GetPool()));
     SvxFontItem aFont(FAMILY_DONTKNOW, u"DejaVu Sans"_ustr, OUString(), PITCH_DONTKNOW,
                       RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);
     aSet.Put(aFont);
@@ -172,7 +173,8 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControl)
 
     // The default Liberation Serif doesn't have a checkmark glyph, avoid font fallback.
     SwView& rView = pWrtShell->GetView();
-    SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aSet(rView.GetPool());
+    SfxItemSet aSet(
+        SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_BEGIN, RES_CHRATR_END>(rView.GetPool()));
     SvxFontItem aFont(FAMILY_DONTKNOW, u"DejaVu Sans"_ustr, OUString(), PITCH_DONTKNOW,
                       RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);
     aSet.Put(aFont);

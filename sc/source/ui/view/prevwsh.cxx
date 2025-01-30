@@ -625,7 +625,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    SfxItemSetFixed<SID_ATTR_ZOOM, SID_ATTR_ZOOM>  aSet( GetPool() );
+                    SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<SID_ATTR_ZOOM, SID_ATTR_ZOOM>(GetPool()));
                     SvxZoomItem     aZoomItem( SvxZoomType::PERCENT, pPreview->GetZoom(), SID_ATTR_ZOOM );
 
                     aSet.Put( aZoomItem );

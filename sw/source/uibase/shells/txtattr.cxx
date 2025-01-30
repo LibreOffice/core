@@ -74,7 +74,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                                 Get( nWhich )).GetValue() ? STATE_ON : STATE_OFF;
     }
 
-    SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END-1> aSet( GetPool() );
+    SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_BEGIN, RES_CHRATR_END-1>(GetPool()));
     if (STATE_TOGGLE == eState)
         rSh.GetCurAttr( aSet );
 
@@ -324,11 +324,9 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
     const SfxItemSet* pArgs = rReq.GetArgs();
 
     // Get both attributes immediately isn't more expensive!!
-    SfxItemSetFixed
-        <RES_PARATR_LINESPACING, RES_PARATR_ADJUST,
-        RES_PARATR_HYPHENZONE, RES_PARATR_HYPHENZONE,
-        RES_FRAMEDIR, RES_FRAMEDIR>  aSet( GetPool() );
-
+    SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_PARATR_LINESPACING, RES_PARATR_ADJUST,
+                                                    RES_PARATR_HYPHENZONE, RES_PARATR_HYPHENZONE,
+                                                    RES_FRAMEDIR, RES_FRAMEDIR>(GetPool()));
     sal_uInt16 nSlot = rReq.GetSlot();
     switch (nSlot)
     {
@@ -388,7 +386,7 @@ SET_LINESPACE:
         case SID_ATTR_PARA_LEFT_TO_RIGHT :
         case SID_ATTR_PARA_RIGHT_TO_LEFT :
         {
-            SfxItemSetFixed<RES_PARATR_ADJUST, RES_PARATR_ADJUST>  aAdjustSet( GetPool() );
+            SfxItemSet aAdjustSet(SfxItemSet::makeFixedSfxItemSet<RES_PARATR_ADJUST, RES_PARATR_ADJUST>(GetPool()));
             GetShell().GetCurAttr(aAdjustSet);
             bool bChgAdjust = false;
             SfxItemState eAdjustState = aAdjustSet.GetItemState(RES_PARATR_ADJUST, false);
@@ -444,7 +442,7 @@ SET_LINESPACE:
         break;
         case SID_ATTR_PARA_HYPHENZONE:
         {
-            SfxItemSetFixed<RES_PARATR_HYPHENZONE, RES_PARATR_HYPHENZONE> aHyphSet( GetPool() );
+            SfxItemSet aHyphSet(SfxItemSet::makeFixedSfxItemSet<RES_PARATR_HYPHENZONE, RES_PARATR_HYPHENZONE>(GetPool()));
             GetShell().GetCurAttr(aHyphSet);
             SfxItemState eState = aHyphSet.GetItemState(RES_PARATR_HYPHENZONE, false);
             if ( eState >= SfxItemState::DEFAULT )
@@ -485,7 +483,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
             if( pItem )
             {
                 OUString sCharStyleName = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                SfxItemSetFixed<RES_PARATR_DROP, RES_PARATR_DROP> aSet(GetPool());
+                SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_PARATR_DROP, RES_PARATR_DROP>(GetPool()));
                 rSh.GetCurAttr(aSet);
                 SwFormatDrop aDropItem(aSet.Get(RES_PARATR_DROP));
                 SwCharFormat* pFormat = nullptr;
@@ -505,8 +503,8 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
             }
             else
             {
-                SfxItemSetFixed<RES_PARATR_DROP, RES_PARATR_DROP,
-                               HINT_END, HINT_END>  aSet(GetPool());
+                SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_PARATR_DROP, RES_PARATR_DROP,
+                                                                HINT_END, HINT_END>(GetPool()));
                 rSh.GetCurAttr(aSet);
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSwDropCapsDialog(GetView().GetFrameWeld(), aSet));
@@ -538,8 +536,8 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
         {
             if(pItem)
             {
-                SfxItemSetFixed<RES_PAGEDESC,   RES_PAGEDESC,
-                    SID_ATTR_PARA_MODEL, SID_ATTR_PARA_MODEL>  aCoreSet( GetPool() );
+                SfxItemSet aCoreSet(SfxItemSet::makeFixedSfxItemSet<RES_PAGEDESC, RES_PAGEDESC,
+                                                                    SID_ATTR_PARA_MODEL, SID_ATTR_PARA_MODEL>(GetPool()));
                 aCoreSet.Put(*pItem);
                 SfxToSwPageDescAttr( rSh, aCoreSet);
                 rSh.SetAttrSet(aCoreSet);
@@ -832,9 +830,8 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             break;
             case SID_ATTR_PARA_MODEL:
             {
-                SfxItemSetFixed
-                        <RES_PAGEDESC,RES_PAGEDESC,
-                        SID_ATTR_PARA_MODEL,SID_ATTR_PARA_MODEL>  aTemp(GetPool());
+                SfxItemSet aTemp(SfxItemSet::makeFixedSfxItemSet<RES_PAGEDESC, RES_PAGEDESC,
+                                                                 SID_ATTR_PARA_MODEL, SID_ATTR_PARA_MODEL>(GetPool()));
                 aTemp.Put(aCoreSet);
                 ::SwToSfxPageDescAttr(aTemp);
                 rSet.Put(aTemp.Get(SID_ATTR_PARA_MODEL));
@@ -843,7 +840,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             break;
             case RES_TXTATR_INETFMT:
             {
-                SfxItemSetFixed<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT> aSet(GetPool());
+                SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>(GetPool()));
                 rSh.GetCurAttr(aSet);
                 const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT);
                 rSet.Put(rItem);
@@ -852,7 +849,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             break;
             case FN_NO_BREAK:
             {
-                SfxItemSetFixed<RES_CHRATR_NOHYPHEN, RES_CHRATR_NOHYPHEN> aSet(GetPool());
+                SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_NOHYPHEN, RES_CHRATR_NOHYPHEN>(GetPool()));
                 rSh.GetCurAttr(aSet);
                 const SfxPoolItem& rItem = aSet.Get(RES_CHRATR_NOHYPHEN);
 

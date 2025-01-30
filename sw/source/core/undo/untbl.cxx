@@ -2243,7 +2243,7 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     SwFrameFormat* pBoxFormat = pBox->ClaimFrameFormat();
     if( m_bNewFormat || m_bNewFormula || m_bNewValue )
     {
-        SfxItemSetFixed<RES_BOXATR_FORMAT, RES_BOXATR_VALUE> aBoxSet( rDoc.GetAttrPool() );
+        SfxItemSet aBoxSet(SfxItemSet::makeFixedSfxItemSet<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>(rDoc.GetAttrPool()));
 
         // Resetting attributes is not enough. In addition, take care that the
         // text will be also formatted correctly.
@@ -2271,7 +2271,7 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     else if( getSwDefaultTextFormat() != m_nFormatIdx )
     {
-        SfxItemSetFixed<RES_BOXATR_FORMAT, RES_BOXATR_VALUE> aBoxSet( rDoc.GetAttrPool() );
+        SfxItemSet aBoxSet(SfxItemSet::makeFixedSfxItemSet<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>(rDoc.GetAttrPool()));
 
         aBoxSet.Put( SwTableBoxNumFormat( m_nFormatIdx ));
         aBoxSet.Put( SwTableBoxValue( m_fNum ));
@@ -2468,10 +2468,8 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
         aInsIdx = rBox.GetSttIdx() + 1;
         rDoc.GetNodes().Delete( aInsIdx );
 
-        SfxItemSetFixed<
-                RES_VERT_ORIENT, RES_VERT_ORIENT,
-                RES_BOXATR_FORMAT, RES_BOXATR_VALUE>
-             aTmpSet(rDoc.GetAttrPool());
+        SfxItemSet aTmpSet(SfxItemSet::makeFixedSfxItemSet<RES_VERT_ORIENT, RES_VERT_ORIENT,
+                           RES_BOXATR_FORMAT, RES_BOXATR_VALUE>(rDoc.GetAttrPool()));
         aTmpSet.Put( rBox.GetFrameFormat()->GetAttrSet() );
         if( aTmpSet.Count() )
         {
@@ -2488,9 +2486,9 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if( aTmpSet.Count() )
         {
-            pEntry->pBoxNumAttr = std::make_unique<SfxItemSetFixed<
-                    RES_VERT_ORIENT, RES_VERT_ORIENT,
-                    RES_BOXATR_FORMAT, RES_BOXATR_VALUE>>(rDoc.GetAttrPool());
+            pEntry->pBoxNumAttr = std::make_unique<SfxItemSet>(
+                SfxItemSet::makeFixedSfxItemSet<RES_VERT_ORIENT, RES_VERT_ORIENT,
+                                                RES_BOXATR_FORMAT, RES_BOXATR_VALUE>(rDoc.GetAttrPool()));
             pEntry->pBoxNumAttr->Put( aTmpSet );
         }
 
@@ -2563,9 +2561,8 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
         aInsIdx = rBox.GetSttIdx() + 1;
         rDoc.GetNodes().Delete( aInsIdx );
 
-        SfxItemSetFixed<
-                RES_VERT_ORIENT, RES_VERT_ORIENT,
-                RES_BOXATR_FORMAT, RES_BOXATR_VALUE> aTmpSet(rDoc.GetAttrPool());
+        SfxItemSet aTmpSet(SfxItemSet::makeFixedSfxItemSet<RES_VERT_ORIENT, RES_VERT_ORIENT,
+                           RES_BOXATR_FORMAT, RES_BOXATR_VALUE>(rDoc.GetAttrPool()));
         aTmpSet.Put( rBox.GetFrameFormat()->GetAttrSet() );
         if( aTmpSet.Count() )
         {
@@ -2581,9 +2578,9 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
 
         if( aTmpSet.Count() )
         {
-            pEntry->pBoxNumAttr = std::make_unique<SfxItemSetFixed<
-                    RES_VERT_ORIENT, RES_VERT_ORIENT,
-                    RES_BOXATR_FORMAT, RES_BOXATR_VALUE>>(rDoc.GetAttrPool());
+            pEntry->pBoxNumAttr = std::make_unique<SfxItemSet>(
+                SfxItemSet::makeFixedSfxItemSet<RES_VERT_ORIENT, RES_VERT_ORIENT,
+                                                RES_BOXATR_FORMAT, RES_BOXATR_VALUE>(rDoc.GetAttrPool()));
             pEntry->pBoxNumAttr->Put( aTmpSet );
         }
 
@@ -2618,9 +2615,9 @@ void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent
         }
     }
 
-    pEntry->pBoxNumAttr = std::make_unique<SfxItemSetFixed<
-            RES_VERT_ORIENT, RES_VERT_ORIENT,
-            RES_BOXATR_FORMAT, RES_BOXATR_VALUE>>(pDoc->GetAttrPool());
+    pEntry->pBoxNumAttr = std::make_unique<SfxItemSet>(
+        SfxItemSet::makeFixedSfxItemSet<RES_VERT_ORIENT, RES_VERT_ORIENT,
+                                        RES_BOXATR_FORMAT, RES_BOXATR_VALUE>(pDoc->GetAttrPool()));
     pEntry->pBoxNumAttr->Put( rBox.GetFrameFormat()->GetAttrSet() );
     if( !pEntry->pBoxNumAttr->Count() )
     {

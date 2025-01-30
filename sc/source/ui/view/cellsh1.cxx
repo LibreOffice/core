@@ -3644,7 +3644,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
 
     ScopedVclPtr<SfxAbstractTabDialog> pDlg;
     ScSubTotalParam aSubTotalParam;
-    SfxItemSetFixed<SCITEM_SUBTDATA, SCITEM_SUBTDATA> aArgSet( GetPool() );
+    SfxItemSet aArgSet(SfxItemSet::makeFixedSfxItemSet<SCITEM_SUBTDATA, SCITEM_SUBTDATA>(GetPool()));
 
     bool bAnonymous;
 
