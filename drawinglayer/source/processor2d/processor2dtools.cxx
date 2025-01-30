@@ -30,6 +30,8 @@
 #include <officecfg/Office/Common.hxx>
 #endif
 
+using namespace com::sun::star;
+
 namespace drawinglayer::processor2d
 {
 std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromScratch(
@@ -128,7 +130,14 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
                 rTargetOutDev.GetOutputWidthPixel(), rTargetOutDev.GetOutputHeightPixel()));
 
         if (aRetval->valid())
+        {
+            // if we construct a CairoPixelProcessor2D from OutputDevice,
+            // additionally set the XGraphics that can be obtained from
+            // there. It may be used e.g. to render FormControls directly
+            aRetval->setXGraphics(rTargetOutDev.CreateUnoGraphics());
+
             return aRetval;
+        }
     }
 #endif
 
