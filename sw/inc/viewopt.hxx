@@ -111,7 +111,7 @@ struct ViewOptFlags1
         , bTextBoundariesFull(false)
         , bSectionBoundaries(true)
         , bTableBoundaries(true)
-        , bShowBoundaries(false)
+        , bShowBoundaries(true)
     {}
 
     bool operator==(const ViewOptFlags1& rOther) const
