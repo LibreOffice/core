@@ -171,7 +171,7 @@ CommandLineEvent CheckOfficeURI(/* in,out */ OUString& arg, CommandLineEvent cur
     if (nURIlen < 0)
         nURIlen = rest2.getLength();
     auto const uri = rest2.copy(0, nURIlen);
-    if (INetURLObject(uri).GetProtocol() == INetProtocol::Macro) {
+    if (INetURLObject(uri).IsExoticProtocol()) {
         // Let the "Open" machinery process the full command URI (leading to failure, by intention,
         // as the "Open" machinery does not know about those command URI schemes):
         curEvt = CommandLineEvent::Open;
