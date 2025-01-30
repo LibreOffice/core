@@ -47,6 +47,7 @@
 #include <sfx2/printer.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
+#include <svtools/langtab.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <utility>
@@ -1858,6 +1859,18 @@ void ScTabViewShell::LOKSendFormulabarUpdate(EditView* pActiveView,
     maSendFormulabarUpdate.m_aText = rText;
     maSendFormulabarUpdate.m_aSelection = aSelection;
     maSendFormulabarUpdate.m_nTimeStamp = now;
+
+    ScViewData& rViewData = this->GetViewData();
+    const ScDocument& rDoc = rViewData.GetDocShell()->GetDocument();
+    const ScPatternAttr* pPattern = rDoc.GetPattern(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetRefTabNo());
+
+    if (pPattern)
+    {
+        SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+        sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
+        maSendFormulabarUpdate.m_separator = pFormatter->GetFormatDecimalSep(nFormat);
+    }
+
     maSendFormulabarUpdate.Send();
 }
 
@@ -1867,6 +1880,7 @@ void ScTabViewShell::SendFormulabarUpdate::Send()
     (*pData)["action_type"_ostr] = "setText";
     (*pData)["text"_ostr] = m_aText;
     (*pData)["selection"_ostr] = m_aSelection;
+    (*pData)["separator"_ostr] = m_separator;
     OUString sWindowId = OUString::number(m_nShellId) + "formulabar";
     jsdialog::SendAction(sWindowId, u"sc_input_window"_ustr, std::move(pData));
 }
