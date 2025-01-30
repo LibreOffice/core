@@ -1504,7 +1504,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf164885)
     auto xCursor = controller.queryThrow<text::XTextViewCursorSupplier>()->getViewCursor();
     xCursor->goRight(5, false); // put cursor inside the hyperlink
 
-    // Initiale "open hyperlink"
+    // Initiate "open hyperlink"
     dispatchCommand(mxComponent, u".uno:OpenHyperlinkOnCursor"_ustr, {});
 
     xProvider->releaseDispatchProviderInterceptor(interceptor);
