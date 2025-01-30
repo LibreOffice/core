@@ -60,9 +60,8 @@ class B2DPolygonPrinter(object):
     def _count(self):
         # It's a call into the inferior (being debugged) process.
         # Will not work with core dumps and can cause a deadlock.
-        if self.exists():
-            return int(gdb.parse_and_eval(
-                    "(('basegfx::B2DPolygon' *) {})->count()".format(self.value.address)))
+        return int(gdb.parse_and_eval(
+                "(('basegfx::B2DPolygon' *) {})->count()".format(self.value.address)))
 
     def _isEmpty(self):
         return self._count() == 0
@@ -70,9 +69,8 @@ class B2DPolygonPrinter(object):
     def _hasCurves(self):
         # It's a call into the inferior (being debugged) process.
         # Will not work with core dumps and can cause a deadlock.
-        if self.exists():
-            return int(gdb.parse_and_eval(
-                    "(('basegfx::B2DPolygon' *) {})->areControlPointsUsed()".format(self.value.address))) != 0
+        return int(gdb.parse_and_eval(
+                "(('basegfx::B2DPolygon' *) {})->areControlPointsUsed()".format(self.value.address))) != 0
 
     def _children(self):
         if self._hasCurves():
@@ -153,16 +151,14 @@ class B2DPolyPolygonPrinter(object):
     def _count(self):
         # It's a call into the inferior (being debugged) process.
         # Will not work with core dumps and can cause a deadlock.
-        if self.exists():
-            return int(gdb.parse_and_eval(
-                    "(('basegfx::B2DPolyPolygon' *) {})->count()".format(self.value.address)))
+        return int(gdb.parse_and_eval(
+                "(('basegfx::B2DPolyPolygon' *) {})->count()".format(self.value.address)))
 
     def _isClosed(self):
         # It's a call into the inferior (being debugged) process.
         # Will not work with core dumps and can cause a deadlock.
-        if self.exists():
-            return int(gdb.parse_and_eval(
-                    "(('basegfx::B2DPolyPolygon' *) {})->isClosed()".format(self.value.address))) != 0
+        return int(gdb.parse_and_eval(
+                "(('basegfx::B2DPolyPolygon' *) {})->isClosed()".format(self.value.address))) != 0
 
     def _isEmpty(self):
         return self._count() == 0
