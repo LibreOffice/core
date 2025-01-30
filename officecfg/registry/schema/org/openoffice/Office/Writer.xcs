@@ -937,7 +937,7 @@
             <desc>Toggle all boundaries on/off.</desc>
             <label>Show boundaries</label>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
       </group>
       <group oor:name="Zoom">
