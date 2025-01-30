@@ -507,6 +507,7 @@ void QtFrame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, too
     if (!rQtInstance.IsMainThread())
     {
         rQtInstance.RunInMainThread([&] { SetPosSize(nX, nY, nWidth, nHeight, nFlags); });
+        return;
     }
 
     if (!isWindow() || isChild(true, false))
