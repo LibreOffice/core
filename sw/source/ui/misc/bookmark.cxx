@@ -346,6 +346,7 @@ void SwInsertBookmarkDlg::PopulateTable()
     aTableBookmarks.clear();
     m_xBookmarksBox->clear();
 
+    rSh.StartAllAction();
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
     for (IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
          ppBookmark != pMarkAccess->getBookmarksEnd(); ++ppBookmark)
@@ -356,6 +357,7 @@ void SwInsertBookmarkDlg::PopulateTable()
             aTableBookmarks.emplace_back(*ppBookmark, (*ppBookmark)->GetName());
         }
     }
+    rSh.EndAllAction();
     m_nLastBookmarksCount = pMarkAccess->getBookmarksCount();
 }
 
