@@ -32,6 +32,7 @@
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <osl/process.h>
 
 using namespace ::com::sun::star;
 
@@ -820,18 +821,16 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testPdfExportAsOdg)
         return;
     }
 
-// setenv only works on unix based systems
-#ifndef _WIN32
     // We need to enable PDFium import (and make sure to disable after the test)
     bool bResetEnvVar = false;
     if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
     {
         bResetEnvVar = true;
-        setenv("LO_IMPORT_USE_PDFIUM", "1", false);
+        osl_setEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData, OUString("1").pData);
     }
     comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
         if (bResetEnvVar)
-            unsetenv("LO_IMPORT_USE_PDFIUM");
+            osl_clearEnvironment(OUString("LO_IMPORT_USE_PDFIUM").pData);
     });
 
     loadFromFile(u"two-pages.pdf");
@@ -851,8 +850,10 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testPdfExportAsOdg)
     CPPUNIT_ASSERT(xShapeProps->getPropertyValue("Graphic") >>= xGraphic);
 
     Graphic aGraphic(xGraphic);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : -1
     CPPUNIT_ASSERT_EQUAL(1, aGraphic.getPageNumber());
-#endif
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
