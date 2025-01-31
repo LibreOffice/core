@@ -724,6 +724,7 @@ private:
     void ScFilter();
     void ScSort();
     void ScSortBy();
+    void ScChooseCols();
     void ScChooseRows();
     void ScDrop();
     void ScExpand();
@@ -737,6 +738,7 @@ private:
     void ScWrapRows();
 
 private:
+    void ScChooseColsOrRows(bool bCols);
     void ScToColOrRow(bool bCol);
     void ScWrapColsOrRows(bool bCols);
     void ScTakeOrDrop(bool bTake);

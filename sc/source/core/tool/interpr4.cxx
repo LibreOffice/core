@@ -4129,6 +4129,7 @@ StackVar ScInterpreter::Interpret()
                     case ocIfError          : ScIfError( false );           break;
                     case ocIfNA             : ScIfError( true );            break;
                     case ocChoose           : ScChooseJump();               break;
+                    case ocChooseCols       : ScChooseCols();               break;
                     case ocChooseRows       : ScChooseRows();               break;
                     case ocAdd              : ScAdd();                      break;
                     case ocSub              : ScSub();                      break;

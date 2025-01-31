@@ -8960,7 +8960,17 @@ void ScInterpreter::ScTakeOrDrop(bool bTake)
     PushMatrix(pResMat);
 }
 
+void ScInterpreter::ScChooseCols()
+{
+    ScChooseColsOrRows(/*bCols*/ true);
+}
+
 void ScInterpreter::ScChooseRows()
+{
+    ScChooseColsOrRows(/*bCols*/ false);
+}
+
+void ScInterpreter::ScChooseColsOrRows(bool bCols)
 {
     sal_uInt8 nParamCount = GetByte();
 
@@ -8997,7 +9007,7 @@ void ScInterpreter::ScChooseRows()
             return;
     }
 
-    std::vector<sal_Int32> aRowsVector;
+    std::vector<sal_Int32> aParamsVector;
     while (nGlobalError == FormulaError::NONE && nParamCount-- > 1)
     {
         if (IsMissing())
@@ -9021,17 +9031,18 @@ void ScInterpreter::ScChooseRows()
             {
                 if (!pRefMatrix->IsStringOrEmpty(nC, nR))
                 {
-                    sal_Int32 nRow = double_to_int32(pRefMatrix->GetDouble(col, row));
-                    if (nRow < 0)
-                        nRow = nsR + nRow + 1;
+                    sal_Int32 nParam = double_to_int32(pRefMatrix->GetDouble(col, row));
+                    sal_Int32 nMax = bCols ? nsC : nsR;
+                    if (nParam < 0)
+                        nParam = nMax + nParam + 1;
 
-                    if (nRow <= 0 || o3tl::make_unsigned(nRow) > nsR)
+                    if (nParam <= 0 || nParam > nMax)
                     {
                         PushIllegalParameter();
                         return;
                     }
                     else
-                        aRowsVector.push_back(nRow);
+                        aParamsVector.push_back(nParam);
                 }
                 else
                 {
@@ -9048,18 +9059,23 @@ void ScInterpreter::ScChooseRows()
         return;
     }
 
-    ScMatrixRef pResMat = GetNewMat(nsC, aRowsVector.size(), /*bEmpty*/true);
+    SCSIZE nColumns = bCols ? aParamsVector.size() : nsC;
+    SCSIZE nRows = bCols ? nsR : aParamsVector.size();
+    ScMatrixRef pResMat = GetNewMat(nColumns, nRows, /*bEmpty*/true);
     if (!pResMat)
     {
         PushIllegalArgument();
         return;
     }
 
-    for (SCSIZE col = 0; col < nsC; ++col)
+    for (SCSIZE col = 0; col < nColumns; ++col)
     {
-        for(SCSIZE row = 0; row < aRowsVector.size(); ++row)
+        for(SCSIZE row = 0; row < nRows; ++row)
         {
-            lcl_FillCell(pMatSource, pResMat, col, aRowsVector[row] - 1, col, row);
+            if (bCols)
+                lcl_FillCell(pMatSource, pResMat, aParamsVector[col] - 1, row, col, row);
+            else
+                lcl_FillCell(pMatSource, pResMat, col, aParamsVector[row] - 1, col, row);
         }
     }
 
