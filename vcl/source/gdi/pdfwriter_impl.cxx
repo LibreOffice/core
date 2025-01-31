@@ -5510,8 +5510,9 @@ bool PDFWriterImpl::emitCatalog()
             bSigned = true;
         }
 #endif
-        aLine.append("/DR ");
-        appendObjectReference(getResourceDictObj(), aLine);
+        aLine.append("/DR<</Font ");
+        appendObjectReference(getFontDictObject(), aLine);
+        aLine.append(">>");
 
         // NeedAppearances must not be used if PDF is signed, PDF/A is used or
         // we have copied widgets (can't guarantee we have appearance streams in this case)
