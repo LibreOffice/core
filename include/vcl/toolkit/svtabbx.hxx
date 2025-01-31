@@ -106,13 +106,12 @@ private:
     void            RecalculateAccessibleChildren();
 
 public:
-    SvHeaderTabListBox( vcl::Window* pParent, WinBits nBits );
+    SvHeaderTabListBox(vcl::Window* pParent, WinBits nBits, HeaderBar* pHeaderBar);
     virtual ~SvHeaderTabListBox() override;
     virtual void dispose() override;
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
 
-    void            InitHeaderBar(HeaderBar* pHeaderBar);
     HeaderBar*      GetHeaderBar();
     static bool     IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol );
 

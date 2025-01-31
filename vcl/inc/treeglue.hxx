@@ -22,8 +22,8 @@ private:
     Link<const IterString&, bool> m_aEditedEntryHdl;
 
 public:
-    LclHeaderTabListBox(vcl::Window* pParent, WinBits nWinStyle)
-        : SvHeaderTabListBox(pParent, nWinStyle)
+    LclHeaderTabListBox(vcl::Window* pParent, WinBits nWinStyle, HeaderBar* pHeaderBar)
+        : SvHeaderTabListBox(pParent, nWinStyle, pHeaderBar)
     {
     }
 

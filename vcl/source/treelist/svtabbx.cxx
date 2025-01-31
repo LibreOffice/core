@@ -549,11 +549,16 @@ namespace vcl
     };
 }
 
-SvHeaderTabListBox::SvHeaderTabListBox( vcl::Window* pParent, WinBits nWinStyle )
+SvHeaderTabListBox::SvHeaderTabListBox(vcl::Window* pParent, WinBits nWinStyle, HeaderBar* pHeaderBar)
     : SvTabListBox(pParent, nWinStyle)
     , m_bFirstPaint(true)
     , m_pImpl(new ::vcl::SvHeaderTabListBoxImpl)
 {
+
+    assert(pHeaderBar);
+    m_pImpl->m_pHeaderBar = pHeaderBar;
+    SetScrolledHdl(LINK(this, SvHeaderTabListBox, ScrollHdl_Impl));
+    m_pImpl->m_pHeaderBar->SetCreateAccessibleHdl(LINK(this, SvHeaderTabListBox, CreateAccessibleHdl_Impl));
 }
 
 SvHeaderTabListBox::~SvHeaderTabListBox()
@@ -579,15 +584,6 @@ void SvHeaderTabListBox::Paint( vcl::RenderContext& rRenderContext, const tools:
         m_bFirstPaint = false;
     }
     SvTabListBox::Paint(rRenderContext, rRect);
-}
-
-void SvHeaderTabListBox::InitHeaderBar( HeaderBar* pHeaderBar )
-{
-    DBG_ASSERT( !m_pImpl->m_pHeaderBar, "header bar already initialized" );
-    DBG_ASSERT( pHeaderBar, "invalid header bar initialization" );
-    m_pImpl->m_pHeaderBar = pHeaderBar;
-    SetScrolledHdl( LINK( this, SvHeaderTabListBox, ScrollHdl_Impl ) );
-    m_pImpl->m_pHeaderBar->SetCreateAccessibleHdl( LINK( this, SvHeaderTabListBox, CreateAccessibleHdl_Impl ) );
 }
 
 HeaderBar* SvHeaderTabListBox::GetHeaderBar()
