@@ -320,7 +320,7 @@ SwSpellPopup::SwSpellPopup(
         // words could be added.
         uno::Reference< linguistic2::XDictionary >  xDic( LinguMgr::GetStandardDic() );
         if (xDic.is())
-            xDic->setActive( true );
+            xDic->setActive(!comphelper::LibreOfficeKit::isActive());
 
         m_aDics = xDicList->getDictionaries();
 
@@ -362,8 +362,9 @@ SwSpellPopup::SwSpellPopup(
         }
     }
 
-    m_xPopupMenu->EnableItem(m_nAddMenuId, (nItemId - MN_DICTIONARIES_START) > 1);
-    m_xPopupMenu->EnableItem(m_nAddId, (nItemId - MN_DICTIONARIES_START) == 1);
+    sal_uInt16 nDiff = nItemId - MN_DICTIONARIES_START;
+    m_xPopupMenu->EnableItem(m_nAddMenuId, nDiff > 2);
+    m_xPopupMenu->EnableItem(m_nAddId, nDiff == 2);
 
     //ADD NEW LANGUAGE MENU ITEM
 
