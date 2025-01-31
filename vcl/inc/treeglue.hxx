@@ -15,41 +15,6 @@
 //the configured drag drop mode would make more sense to me, but I'm not
 //going to change the baseclass
 
-class LclHeaderTabListBox final : public SvHeaderTabListBox
-{
-private:
-    Link<SvTreeListEntry*, bool> m_aEditingEntryHdl;
-    Link<const IterString&, bool> m_aEditedEntryHdl;
-
-public:
-    LclHeaderTabListBox(vcl::Window* pParent, WinBits nWinStyle, HeaderBar* pHeaderBar)
-        : SvHeaderTabListBox(pParent, nWinStyle, pHeaderBar)
-    {
-    }
-
-    void SetEditingEntryHdl(const Link<SvTreeListEntry*, bool>& rLink)
-    {
-        m_aEditingEntryHdl = rLink;
-    }
-
-    void SetEditedEntryHdl(const Link<const IterString&, bool>& rLink)
-    {
-        m_aEditedEntryHdl = rLink;
-    }
-
-    virtual DragDropMode NotifyStartDrag() override { return GetDragDropMode(); }
-
-    virtual bool EditingEntry(SvTreeListEntry* pEntry) override
-    {
-        return m_aEditingEntryHdl.Call(pEntry);
-    }
-
-    virtual bool EditedEntry(SvTreeListEntry* pEntry, const OUString& rNewText) override
-    {
-        return m_aEditedEntryHdl.Call(IterString(pEntry, rNewText));
-    }
-};
-
 class LclTabListBox final : public SvTabListBox
 {
     Link<SvTreeListBox*, void> m_aModelChangedHdl;

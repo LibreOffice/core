@@ -3849,7 +3849,7 @@ bool SalInstanceTreeView::get_text_emphasis(SvTreeListEntry* pEntry, int col) co
 
 void SalInstanceTreeView::set_header_item_width(const std::vector<int>& rWidths)
 {
-    LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
+    SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
     if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
     {
         for (size_t i = 0; i < rWidths.size(); ++i)
@@ -3877,7 +3877,7 @@ SalInstanceTreeView::SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBui
     m_xTreeView->SetCustomMeasureHdl(LINK(this, SalInstanceTreeView, CustomMeasureHdl));
     const std::vector<tools::Long> aTabPositions{ 0 };
     m_xTreeView->SetTabs(aTabPositions);
-    LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
+    SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
 
     if (pHeaderBox)
     {
@@ -3976,7 +3976,7 @@ void SalInstanceTreeView::set_centered_column(int nCol)
 
 int SalInstanceTreeView::get_column_width(int nColumn) const
 {
-    LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
+    SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
     if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
         return pHeaderBar->GetItemSize(pHeaderBar->GetItemId(nColumn));
     // GetTab(0) gives the position of the bitmap which is automatically inserted by the TabListBox.
@@ -3989,7 +3989,7 @@ int SalInstanceTreeView::get_column_width(int nColumn) const
 
 OUString SalInstanceTreeView::get_column_title(int nColumn) const
 {
-    LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
+    SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
     if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
     {
         return pHeaderBar->GetItemText(pHeaderBar->GetItemId(nColumn));
@@ -3999,7 +3999,7 @@ OUString SalInstanceTreeView::get_column_title(int nColumn) const
 
 void SalInstanceTreeView::set_column_title(int nColumn, const OUString& rTitle)
 {
-    LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
+    SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
     if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
     {
         return pHeaderBar->SetItemText(pHeaderBar->GetItemId(nColumn), rTitle);
@@ -4025,14 +4025,14 @@ void SalInstanceTreeView::queue_draw()
 
 void SalInstanceTreeView::show()
 {
-    if (LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get()))
+    if (SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get()))
         pHeaderBox->GetParent()->Show();
     SalInstanceWidget::show();
 }
 
 void SalInstanceTreeView::hide()
 {
-    if (LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get()))
+    if (SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get()))
         pHeaderBox->GetParent()->Hide();
     SalInstanceWidget::hide();
 }
@@ -5040,7 +5040,7 @@ void SalInstanceTreeView::set_sort_indicator(TriState eState, int col)
 {
     assert(col >= 0 && "cannot sort on expander column");
 
-    LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
+    SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
     HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr;
     if (!pHeaderBar)
         return;
@@ -5063,7 +5063,7 @@ TriState SalInstanceTreeView::get_sort_indicator(int col) const
 {
     assert(col >= 0 && "cannot sort on expander column");
 
-    LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
+    SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
     if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
     {
         sal_uInt16 nTextId = pHeaderBar->GetItemId(col);
@@ -5153,7 +5153,7 @@ bool SalInstanceTreeView::changed_by_hover() const { return m_xTreeView->IsSelec
 
 SalInstanceTreeView::~SalInstanceTreeView()
 {
-    LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
+    SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
     if (pHeaderBox)
     {
         if (HeaderBar* pHeaderBar = pHeaderBox->GetHeaderBar())

@@ -1743,7 +1743,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
                 xHeader->SetHelpId(getHelpRoot() + headerid);
                 m_aChildren.emplace_back(headerid, xHeader, true);
 
-                VclPtr<LclHeaderTabListBox> xHeaderBox = VclPtr<LclHeaderTabListBox>::Create(xContainer, nWinStyle, xHeader);
+                VclPtr<SvHeaderTabListBox> xHeaderBox = VclPtr<SvHeaderTabListBox>::Create(xContainer, nWinStyle, xHeader);
                 xContainer->set_expand(true);
                 xHeader->Show();
                 xContainer->Show();

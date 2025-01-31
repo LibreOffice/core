@@ -100,6 +100,9 @@ private:
     rtl::Reference<AccessibleTabListBox>  m_xAccessible;
     std::vector<css::uno::Reference<css::accessibility::XAccessible>> m_aAccessibleChildren;
 
+    Link<SvTreeListEntry*, bool> m_aEditingEntryHdl;
+    Link<const IterString&, bool> m_aEditedEntryHdl;
+
     DECL_DLLPRIVATE_LINK( ScrollHdl_Impl, SvTreeListBox*, void );
     DECL_DLLPRIVATE_LINK( CreateAccessibleHdl_Impl, HeaderBar*, void );
 
@@ -203,6 +206,32 @@ public:
     virtual sal_Int32               GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
 
     virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
+
+    void SetEditingEntryHdl(const Link<SvTreeListEntry*, bool>& rLink)
+    {
+        m_aEditingEntryHdl = rLink;
+    }
+
+    void SetEditedEntryHdl(const Link<const IterString&, bool>& rLink)
+    {
+        m_aEditedEntryHdl = rLink;
+    }
+
+    //the default NotifyStartDrag is weird to me, and defaults to enabling all
+    //possibilities when drag starts, while restricting it to some subset of
+    //the configured drag drop mode would make more sense to me, but I'm not
+    //going to change the baseclass
+    virtual DragDropMode NotifyStartDrag() override { return GetDragDropMode(); }
+
+    virtual bool EditingEntry(SvTreeListEntry* pEntry) override
+    {
+        return m_aEditingEntryHdl.Call(pEntry);
+    }
+
+    virtual bool EditedEntry(SvTreeListEntry* pEntry, const OUString& rNewText) override
+    {
+        return m_aEditedEntryHdl.Call(IterString(pEntry, rNewText));
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

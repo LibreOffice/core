@@ -221,7 +221,6 @@ merge StgAvlIterator with StgIterator
 merge StgAvlNode with StgDirEntry
 merge StgCache with StgIo
 merge StylesPreviewWindow_Base with StylesPreviewWindow_Impl
-merge SvHeaderTabListBox with LclHeaderTabListBox
 merge SvIdlDataBase with SvIdlWorkingBase
 merge SvListView with SvTreeListBox
 maybe merge SvLockBytes with utl::UcbLockBytes, in modules tools and unotools
