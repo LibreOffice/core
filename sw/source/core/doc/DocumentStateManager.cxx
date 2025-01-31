@@ -900,7 +900,7 @@ namespace {
         }
         else
         if (!pShell->IsStdMode()
-            || pShell->IsObjSelected()
+//            || pShell->IsObjSelected()
             || pShell->IsTableMode()
             || pShell->IsBlockMode())
         {
