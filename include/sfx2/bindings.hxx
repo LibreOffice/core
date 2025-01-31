@@ -100,8 +100,8 @@ friend class SfxBindings_Impl;
     sal_uInt16       nRegLevel;      // Lock-Level while Reconfig
 
 private:
-    SAL_DLLPRIVATE SfxPoolItemHolder Execute_Impl( sal_uInt16 nSlot, const SfxPoolItem **pArgs, sal_uInt16 nModi,
-                                    SfxCallMode nCall, const SfxPoolItem **pInternalArgs);
+    SAL_DLLPRIVATE SfxPoolItemHolder Execute_Impl(sal_uInt16 nSlot, const SfxPoolItem** pArgs,
+                                                  SfxCallMode nCall);
     SAL_DLLPRIVATE void SetSubBindings_Impl( SfxBindings* );
     SAL_DLLPRIVATE void UpdateSlotServer_Impl(); // Update SlotServer
     SAL_DLLPRIVATE std::optional<SfxItemSet> CreateSet_Impl(SfxStateCache& rCache, const SfxSlot* &pRealSlot,

@@ -867,7 +867,7 @@ SfxPoolItemHolder SfxBindings::ExecuteSynchron( sal_uInt16 nId, const SfxPoolIte
     if( !nId || !pDispatcher )
         return SfxPoolItemHolder();
 
-    return Execute_Impl( nId, ppItems, 0, SfxCallMode::SYNCHRON, nullptr );
+    return Execute_Impl(nId, ppItems, SfxCallMode::SYNCHRON);
 }
 
 bool SfxBindings::Execute( sal_uInt16 nId, const SfxPoolItem** ppItems, SfxCallMode nCallMode )
@@ -875,12 +875,11 @@ bool SfxBindings::Execute( sal_uInt16 nId, const SfxPoolItem** ppItems, SfxCallM
     if( !nId || !pDispatcher )
         return false;
 
-    const SfxPoolItemHolder aRet(Execute_Impl(nId, ppItems, 0, nCallMode, nullptr));
+    const SfxPoolItemHolder aRet(Execute_Impl(nId, ppItems, nCallMode));
     return aRet.is();
 }
 
-SfxPoolItemHolder SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem** ppItems, sal_uInt16 nModi, SfxCallMode nCallMode,
-                        const SfxPoolItem **ppInternalArgs )
+SfxPoolItemHolder SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem** ppItems, SfxCallMode nCallMode )
 {
     SfxStateCache *pCache = GetStateCache( nId );
     if ( !pCache )
@@ -889,7 +888,7 @@ SfxPoolItemHolder SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem**
         while ( pBind )
         {
             if ( pBind->GetStateCache( nId ) )
-                return pBind->Execute_Impl( nId, ppItems, nModi, nCallMode, ppInternalArgs );
+                return pBind->Execute_Impl(nId, ppItems, nCallMode);
             pBind = pBind->pImpl->pSubBindings;
         }
     }
@@ -910,11 +909,8 @@ SfxPoolItemHolder SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem**
     pCache->GetSlotServer( rDispatcher, pImpl->xProv ); // make pCache->GetDispatch() up to date
     if ( pCache->GetDispatch().is() )
     {
-        DBG_ASSERT( !ppInternalArgs, "Internal args get lost when dispatched!" );
-
         SfxItemPool &rPool = GetDispatcher()->GetFrame()->GetObjectShell()->GetPool();
         SfxRequest aReq( nId, nCallMode, rPool );
-        aReq.SetModifier( nModi );
         if( ppItems )
             while( *ppItems )
                 aReq.AppendItem( **ppItems++ );
@@ -953,17 +949,9 @@ SfxPoolItemHolder SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem**
 
     SfxItemPool &rPool = pShell->GetPool();
     SfxRequest aReq( nId, nCallMode, rPool );
-    aReq.SetModifier( nModi );
     if( ppItems )
         while( *ppItems )
             aReq.AppendItem( **ppItems++ );
-    if ( ppInternalArgs )
-    {
-        SfxAllItemSet aSet( rPool );
-        for ( const SfxPoolItem **pArg = ppInternalArgs; *pArg; ++pArg )
-            aSet.Put( **pArg );
-        aReq.SetInternalArgs_Impl( aSet );
-    }
 
     Execute_Impl( aReq, pSlot, pShell );
 
