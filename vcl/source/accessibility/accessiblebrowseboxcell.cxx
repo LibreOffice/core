@@ -61,9 +61,4 @@ void SAL_CALL AccessibleBrowseBoxCell::grabFocus()
     return aCellRect;
 }
 
-AbsoluteScreenPixelRectangle AccessibleBrowseBoxCell::implGetBoundingBoxOnScreen()
-{
-    return AbsoluteScreenPixelRectangle(mpBrowseBox->GetFieldRectPixel( m_nRowPos, m_nColPos, false, /*bOnScreen*/true ));
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -193,11 +193,6 @@ tools::Rectangle AccessibleBrowseBoxTable::implGetBoundingBox()
     return mpBrowseBox->calcTableRect(false);
 }
 
-AbsoluteScreenPixelRectangle AccessibleBrowseBoxTable::implGetBoundingBoxOnScreen()
-{
-    return AbsoluteScreenPixelRectangle(mpBrowseBox->calcTableRect());
-}
-
 // internal helper methods ----------------------------------------------------
 
 Reference< XAccessibleTable > AccessibleBrowseBoxTable::implGetHeaderBar(

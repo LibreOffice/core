@@ -41,7 +41,6 @@ protected:
 protected:
     // AccessibleBrowseBoxBase overridables
     virtual tools::Rectangle implGetBoundingBox() override;
-    virtual AbsoluteScreenPixelRectangle implGetBoundingBoxOnScreen() override;
 
     // XAccessibleComponent
     virtual void SAL_CALL grabFocus() override;

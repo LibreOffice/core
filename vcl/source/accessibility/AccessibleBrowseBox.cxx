@@ -175,11 +175,6 @@ tools::Rectangle AccessibleBrowseBox::implGetBoundingBox()
     return mpBrowseBox->GetWindowExtentsRelative( *pParent );
 }
 
-AbsoluteScreenPixelRectangle AccessibleBrowseBox::implGetBoundingBoxOnScreen()
-{
-    return mpBrowseBox->GetWindowExtentsAbsolute();
-}
-
 // internal helper methods
 css::uno::Reference< css::accessibility::XAccessible > AccessibleBrowseBox::implGetTable()
 {

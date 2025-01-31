@@ -57,8 +57,6 @@ public:
 
 private:
     virtual tools::Rectangle implGetBoundingBox() override;
-
-    virtual AbsoluteScreenPixelRectangle implGetBoundingBoxOnScreen() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -36,6 +36,7 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
+#include <comphelper/accessiblecomponenthelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/uno3.hxx>
 
@@ -46,20 +47,11 @@ namespace vcl {
     class IAccessibleTableProvider;
 }
 
-typedef ::cppu::WeakComponentImplHelper<
-            css::accessibility::XAccessibleContext,
-            css::accessibility::XAccessibleComponent,
-            css::accessibility::XAccessibleEventBroadcaster,
-            css::awt::XFocusListener,
-            css::lang::XServiceInfo >
-        AccessibleBrowseBoxImplHelper;
-
 /** The BrowseBox accessible objects inherit from this base class. It
-    implements basic functionality for various Accessibility interfaces and
-    the event broadcaster and contains the osl::Mutex. */
-class AccessibleBrowseBoxBase :
-    public ::cppu::BaseMutex,
-    public AccessibleBrowseBoxImplHelper
+    implements basic functionality for various Accessibility interfaces. */
+class AccessibleBrowseBoxBase
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
+                                         css::awt::XFocusListener, css::lang::XServiceInfo>
 {
 public:
     /** Constructor sets specified name and description. If the constant of a
@@ -94,10 +86,10 @@ public:
         OUString  rDescription );
 
 protected:
-    virtual ~AccessibleBrowseBoxBase() override;
-
     /** Commits DeFunc event to listeners and cleans up members. */
     virtual void SAL_CALL disposing() override;
+
+    virtual css::awt::Rectangle implGetBounds() override;
 
 public:
     // XAccessibleContext
@@ -143,24 +135,6 @@ public:
 
     // XAccessibleComponent
 
-    /** @return
-        TRUE, if the point lies within the bounding box of this object. */
-    virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& rPoint ) override;
-
-    /** @return  The bounding box of this object. */
-    virtual css::awt::Rectangle SAL_CALL getBounds() override;
-
-    /** @return
-        The upper left corner of the bounding box relative to the parent. */
-    virtual css::awt::Point SAL_CALL getLocation() override;
-
-    /** @return
-        The upper left corner of the bounding box in screen coordinates. */
-    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
-
-    /** @return  The size of the bounding box. */
-    virtual css::awt::Size SAL_CALL getSize() override;
-
     virtual sal_Int32 SAL_CALL getForeground(  ) override;
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
 
@@ -177,16 +151,6 @@ public:
             The accessible child rendered under the given point.
     */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
-
-    // XAccessibleEventBroadcaster
-
-    /** Adds a new event listener */
-    virtual void SAL_CALL addAccessibleEventListener(
-            const css::uno::Reference< css::accessibility::XAccessibleEventListener>& rxListener ) override;
-
-    /** Removes an event listener. */
-    virtual void SAL_CALL removeAccessibleEventListener(
-            const css::uno::Reference< css::accessibility::XAccessibleEventListener>& rxListener ) override;
 
     // XTypeProvider
 
@@ -236,10 +200,6 @@ protected:
         @attention  This method requires locked mutex's and a living object.
         @return  The bounding box (VCL rect.) relative to the parent window. */
     virtual tools::Rectangle implGetBoundingBox() = 0;
-    /** Derived classes return the bounding box in screen coordinates.
-        @attention  This method requires locked mutex's and a living object.
-        @return  The bounding box (VCL rect.) in screen coordinates. */
-    virtual AbsoluteScreenPixelRectangle implGetBoundingBoxOnScreen() = 0;
 
     /** Creates a bitset of states of the
         current object. This method calls FillStateSet at the BrowseBox which
@@ -254,19 +214,6 @@ protected:
     /** Changes the name of the object (flat assignment, no notify).
         @attention  This method requires a locked mutex. */
     inline void implSetName( const OUString& rName );
-
-    /** Locks all mutex's and calculates the bounding box relative to the
-        parent window.
-        @return  The bounding box (VCL rect.) relative to the parent object.
-        @throws css::lang::DisposedException
-    */
-    tools::Rectangle getBoundingBox();
-    /** Locks all mutex's and calculates the bounding box in screen
-        coordinates.
-        @return  The bounding box (VCL rect.) in screen coordinates.
-        @throws css::lang::DisposedException
-    */
-    AbsoluteScreenPixelRectangle getBoundingBoxOnScreen();
 
 public:
     /** @return  The osl::Mutex member provided by the class BaseMutex. */
@@ -296,8 +243,6 @@ private:
 
     /** The type of this object (for names, descriptions, state sets, ...). */
     AccessibleBrowseBoxObjType meObjType;
-
-    ::comphelper::AccessibleEventNotifier::TClientId    m_aClientId;
 };
 
 

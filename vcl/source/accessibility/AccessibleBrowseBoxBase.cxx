@@ -63,27 +63,16 @@ AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
         AccessibleBrowseBoxObjType      eObjType,
         OUString           rName,
         OUString           rDescription ) :
-    AccessibleBrowseBoxImplHelper( m_aMutex ),
+    ImplInheritanceHelper(),
     mxParent(std::move( rxParent )),
     mpBrowseBox( &rBrowseBox ),
     m_xFocusWindow(std::move(_xFocusWindow)),
     maName(std::move( rName )),
     maDescription(std::move( rDescription )),
-    meObjType( eObjType ),
-    m_aClientId(0)
+    meObjType( eObjType )
 {
     if ( m_xFocusWindow.is() )
         m_xFocusWindow->addFocusListener( this );
-}
-
-AccessibleBrowseBoxBase::~AccessibleBrowseBoxBase()
-{
-    if( isAlive() )
-    {
-        // increment ref count to prevent double call of Dtor
-        osl_atomic_increment( &m_refCount );
-        dispose();
-    }
 }
 
 void SAL_CALL AccessibleBrowseBoxBase::disposing()
@@ -95,15 +84,15 @@ void SAL_CALL AccessibleBrowseBoxBase::disposing()
         m_xFocusWindow->removeFocusListener( this );
     }
 
-    if (m_aClientId)
-    {
-        AccessibleEventNotifier::TClientId nId(m_aClientId);
-        m_aClientId = 0;
-        AccessibleEventNotifier::revokeClientNotifyDisposing( nId, *this );
-    }
+    OAccessibleComponentHelper::disposing();
 
     mxParent = nullptr;
     mpBrowseBox = nullptr;
+}
+
+css::awt::Rectangle AccessibleBrowseBoxBase::implGetBounds()
+{
+    return vcl::unohelper::ConvertToAWTRect(implGetBoundingBox());
 }
 
 // css::accessibility::XAccessibleContext
@@ -197,32 +186,6 @@ lang::Locale SAL_CALL AccessibleBrowseBoxBase::getLocale()
 
 // css::accessibility::XAccessibleComponent
 
-sal_Bool SAL_CALL AccessibleBrowseBoxBase::containsPoint( const css::awt::Point& rPoint )
-{
-    return tools::Rectangle(Point(), getBoundingBox().GetSize())
-        .Contains(vcl::unohelper::ConvertToVCLPoint(rPoint));
-}
-
-awt::Rectangle SAL_CALL AccessibleBrowseBoxBase::getBounds()
-{
-    return vcl::unohelper::ConvertToAWTRect(getBoundingBox());
-}
-
-awt::Point SAL_CALL AccessibleBrowseBoxBase::getLocation()
-{
-    return vcl::unohelper::ConvertToAWTPoint(getBoundingBox().TopLeft());
-}
-
-awt::Point SAL_CALL AccessibleBrowseBoxBase::getLocationOnScreen()
-{
-    return vcl::unohelper::ConvertToAWTPoint(getBoundingBoxOnScreen().TopLeft());
-}
-
-awt::Size SAL_CALL AccessibleBrowseBoxBase::getSize()
-{
-    return vcl::unohelper::ConvertToAWTSize(getBoundingBox().GetSize());
-}
-
 void SAL_CALL AccessibleBrowseBoxBase::focusGained( const css::awt::FocusEvent& )
 {
     css::uno::Any aFocused;
@@ -240,41 +203,6 @@ void SAL_CALL AccessibleBrowseBoxBase::focusLost( const css::awt::FocusEvent& )
     aFocused <<= FOCUSED;
 
     commitEvent(AccessibleEventId::STATE_CHANGED,aEmpty,aFocused);
-}
-// css::accessibility::XAccessibleEventBroadcaster
-
-void SAL_CALL AccessibleBrowseBoxBase::addAccessibleEventListener(
-        const css::uno::Reference< css::accessibility::XAccessibleEventListener>& _rxListener )
-{
-    if ( _rxListener.is() )
-    {
-        ::osl::MutexGuard aGuard( getMutex() );
-        if (!m_aClientId)
-            m_aClientId = AccessibleEventNotifier::registerClient();
-
-        AccessibleEventNotifier::addEventListener(m_aClientId, _rxListener);
-    }
-}
-
-void SAL_CALL AccessibleBrowseBoxBase::removeAccessibleEventListener(
-        const css::uno::Reference< css::accessibility::XAccessibleEventListener>& _rxListener )
-{
-    if (!(_rxListener.is() && m_aClientId))
-        return;
-
-    ::osl::MutexGuard aGuard( getMutex() );
-    sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener(m_aClientId, _rxListener );
-    if ( !nListenerCount )
-    {
-        // no listeners anymore
-        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-        // and at least to us not firing any events anymore, in case somebody calls
-        // NotifyAccessibleEvent, again
-
-        AccessibleEventNotifier::TClientId nId(m_aClientId);
-        m_aClientId = 0;
-        AccessibleEventNotifier::revokeClient( nId );
-    }
 }
 
 // XTypeProvider
@@ -376,47 +304,10 @@ void AccessibleBrowseBoxBase::ensureIsAlive() const
         throw lang::DisposedException();
 }
 
-tools::Rectangle AccessibleBrowseBoxBase::getBoundingBox()
-{
-    SolarMethodGuard aGuard(getMutex());
-    ensureIsAlive();
-
-    tools::Rectangle aRect = implGetBoundingBox();
-    if ( aRect.Left() == 0 && aRect.Top() == 0 && aRect.Right() == 0 && aRect.Bottom() == 0 )
-    {
-        SAL_WARN( "accessibility", "rectangle doesn't exist" );
-    }
-    return aRect;
-}
-
-AbsoluteScreenPixelRectangle AccessibleBrowseBoxBase::getBoundingBoxOnScreen()
-{
-    SolarMethodGuard aGuard(getMutex());
-    ensureIsAlive();
-
-    AbsoluteScreenPixelRectangle aRect = implGetBoundingBoxOnScreen();
-    if ( aRect.Left() == 0 && aRect.Top() == 0 && aRect.Right() == 0 && aRect.Bottom() == 0 )
-    {
-        SAL_WARN( "accessibility", "rectangle doesn't exist" );
-    }
-    return aRect;
-}
-
 void AccessibleBrowseBoxBase::commitEvent(
         sal_Int16 _nEventId, const Any& _rNewValue, const Any& _rOldValue )
 {
-    osl::MutexGuard aGuard( getMutex() );
-    if (!m_aClientId)
-            // if we don't have a client id for the notifier, then we don't have listeners, then
-            // we don't need to notify anything
-            return;
-
-    // build an event object
-    AccessibleEventObject aEvent(*this, _nEventId, _rNewValue, _rOldValue,  -1);
-
-    // let the notifier handle this event
-
-    AccessibleEventNotifier::addEvent(m_aClientId, aEvent );
+    NotifyAccessibleEvent(_nEventId, _rOldValue, _rNewValue);
 }
 
 sal_Int16 SAL_CALL AccessibleBrowseBoxBase::getAccessibleRole()

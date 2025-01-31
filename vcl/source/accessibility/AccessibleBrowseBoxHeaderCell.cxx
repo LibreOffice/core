@@ -129,12 +129,6 @@ tools::Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBox()
     return getRectangle(mpBrowseBox,m_nColumnRowId,false,isRowBarCell());
 }
 
-
-AbsoluteScreenPixelRectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBoxOnScreen()
-{
-    return AbsoluteScreenPixelRectangle(getRectangle(mpBrowseBox,m_nColumnRowId,true,isRowBarCell()));
-}
-
 sal_Int64 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()
 {
     ::osl::MutexGuard aGuard( getMutex() );
