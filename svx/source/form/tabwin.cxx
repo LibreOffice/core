@@ -21,6 +21,7 @@
 #include <tabwin.hxx>
 #include <fmservs.hxx>
 
+#include <svl/itemset.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <com/sun/star/sdb/CommandType.hpp>

@@ -26,6 +26,7 @@
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <sal/log.hxx>
+#include <svl/itemset.hxx>
 #include <tools/debug.hxx>
 
 #include <vcl/svapp.hxx>

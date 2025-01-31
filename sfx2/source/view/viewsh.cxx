@@ -3942,7 +3942,7 @@ bool SfxViewShell::HasMouseClickListeners_Impl() const
 
 bool SfxViewShell::Escape()
 {
-    return GetViewFrame().GetBindings().Execute(SID_TERMINATE_INPLACEACTIVATION);
+    return GetViewFrame().GetBindings().Execute(SID_TERMINATE_INPLACEACTIVATION).is();
 }
 
 Reference< view::XRenderable > SfxViewShell::GetRenderable()

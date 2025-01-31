@@ -158,7 +158,7 @@ public:
 
     SfxPoolItemHolder ExecuteSynchron( sal_uInt16 nSlot,
                                  const SfxPoolItem **pArgs = nullptr);
-    bool             Execute( sal_uInt16 nSlot,
+    SfxPoolItemHolder Execute( sal_uInt16 nSlot,
                                  const SfxPoolItem **pArgs = nullptr,
                                  SfxCallMode nCall = SfxCallMode::SLOT);
 

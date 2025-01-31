@@ -864,19 +864,15 @@ void SfxBindings::Release( SfxControllerItem& rItem )
 
 SfxPoolItemHolder SfxBindings::ExecuteSynchron( sal_uInt16 nId, const SfxPoolItem** ppItems )
 {
+    return Execute(nId, ppItems, SfxCallMode::SYNCHRON);
+}
+
+SfxPoolItemHolder SfxBindings::Execute( sal_uInt16 nId, const SfxPoolItem** ppItems, SfxCallMode nCallMode )
+{
     if( !nId || !pDispatcher )
         return SfxPoolItemHolder();
 
-    return Execute_Impl(nId, ppItems, SfxCallMode::SYNCHRON);
-}
-
-bool SfxBindings::Execute( sal_uInt16 nId, const SfxPoolItem** ppItems, SfxCallMode nCallMode )
-{
-    if( !nId || !pDispatcher )
-        return false;
-
-    const SfxPoolItemHolder aRet(Execute_Impl(nId, ppItems, nCallMode));
-    return aRet.is();
+    return Execute_Impl(nId, ppItems, nCallMode);
 }
 
 SfxPoolItemHolder SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem** ppItems, SfxCallMode nCallMode )
