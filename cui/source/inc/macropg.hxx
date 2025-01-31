@@ -33,8 +33,6 @@
 typedef std::pair<OUString, OUString> EventPair;
 typedef std::unordered_map<OUString, EventPair> EventsHash;
 
-class SvxMacroTabPage_;
-class SvTabListBox;
 class SvxMacroTabPage_Impl;
 
 
