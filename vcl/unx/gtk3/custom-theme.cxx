@@ -109,10 +109,11 @@ void ApplyCustomTheme(GdkScreen* pScreen, GtkCssProvider** pCustomThemeProvider)
 #if GTK_CHECK_VERSION(4, 0, 0)
         gtk_style_context_add_provider_for_display(pGdkDisplay,
                                                    GTK_STYLE_PROVIDER(*pCustomThemeProvider),
-                                                   GTK_STYLE_PROVIDER_PRIORITY_USER);
+                                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 #else
-        gtk_style_context_add_provider_for_screen(
-            pScreen, GTK_STYLE_PROVIDER(*pCustomThemeProvider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+        gtk_style_context_add_provider_for_screen(pScreen,
+                                                  GTK_STYLE_PROVIDER(*pCustomThemeProvider),
+                                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 #endif
     }
 }
