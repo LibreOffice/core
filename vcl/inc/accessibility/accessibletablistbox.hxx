@@ -53,8 +53,6 @@ public:
     // XAccessibleContext
     css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext() override;
 
-    // IAccessibleTabListBox
-
     css::uno::Reference< css::accessibility::XAccessible >
         getHeaderBar()
     {
