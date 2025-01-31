@@ -114,14 +114,15 @@ public:
     enum RangePosition
     {
         RANGE_IN_TEXT,  // "ordinary" css::text::TextRange
-        RANGE_IN_CELL,  // position created with a cell that has no uno object
         RANGE_IS_TABLE, // anchor of a table
         RANGE_IS_SECTION, // anchor of a section
+        RANGE_IS_BOOKMARK, ///< anchor of a bookmark
     };
 
     SwXTextRange(SwPaM const & rPam,
             const css::uno::Reference< css::text::XText > & xParent,
-            const enum RangePosition eRange = RANGE_IN_TEXT);
+            const enum RangePosition eRange = RANGE_IN_TEXT,
+            bool isInCell = false);
     // only for RANGE_IS_TABLE
     SwXTextRange(SwTableFormat& rTableFormat);
     // only for RANGE_IS_SECTION
@@ -136,7 +137,8 @@ public:
 
     static rtl::Reference< SwXTextRange > CreateXTextRange(
             SwDoc & rDoc,
-            const SwPosition& rPos, const SwPosition *const pMark);
+            const SwPosition& rPos, const SwPosition *const pMark,
+            RangePosition eRange = RANGE_IN_TEXT);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -209,6 +211,7 @@ public:
 private:
     const SfxItemPropertySet& m_rPropSet;
     const enum RangePosition m_eRangePosition;
+    bool const m_isRangeInCell; //< position created with a cell that has no uno object
     SwDoc& m_rDoc;
     css::uno::Reference<css::text::XText> m_xParentText;
     const SwFrameFormat* m_pTableOrSectionFormat;

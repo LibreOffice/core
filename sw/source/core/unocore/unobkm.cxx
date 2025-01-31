@@ -266,7 +266,8 @@ uno::Reference< text::XTextRange > SAL_CALL SwXBookmark::getAnchor()
             *m_pImpl->m_pDoc,
             m_pImpl->m_pRegisteredBookmark->GetMarkPos(),
             (m_pImpl->m_pRegisteredBookmark->IsExpanded())
-                ? &m_pImpl->m_pRegisteredBookmark->GetOtherMarkPos() : nullptr);
+                ? &m_pImpl->m_pRegisteredBookmark->GetOtherMarkPos() : nullptr,
+            SwXTextRange::RANGE_IS_BOOKMARK);
 }
 
 void SAL_CALL SwXBookmark::dispose()
