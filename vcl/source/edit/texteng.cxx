@@ -2357,7 +2357,7 @@ OUString TextEngine::GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord, 
         TextNode* pNode = mpDoc->GetNodes()[ rCursorPos.GetPara() ].get();
         uno::Reference < i18n::XBreakIterator > xBI = GetBreakIterator();
         i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), rCursorPos.GetIndex(), GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
-        // tdf#57879 - expand selection to the left to include connector punctuations and search for additional word boundaries
+        // tdf#57879 - expand selection to the left to include connector punctuation and search for additional word boundaries
         if (aBoundary.startPos > 0 && aBoundary.startPos < pNode->GetText().getLength() && u_charType(pNode->GetText()[aBoundary.startPos]) == U_CONNECTOR_PUNCTUATION)
         {
             aBoundary.startPos = xBI->getWordBoundary(pNode->GetText(), aBoundary.startPos - 1,
@@ -2369,7 +2369,7 @@ OUString TextEngine::GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord, 
                 xBI->getWordBoundary( pNode->GetText(), aBoundary.startPos - 2,
                     GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true).startPos);
         }
-        // tdf#57879 - expand selection to the right to include connector punctuations and search for additional word boundaries
+        // tdf#57879 - expand selection to the right to include connector punctuation and search for additional word boundaries
         if (aBoundary.endPos > 0 && aBoundary.endPos < pNode->GetText().getLength() && u_charType(pNode->GetText()[aBoundary.endPos - 1]) == U_CONNECTOR_PUNCTUATION)
         {
             aBoundary.endPos = xBI->getWordBoundary(pNode->GetText(), aBoundary.endPos,
