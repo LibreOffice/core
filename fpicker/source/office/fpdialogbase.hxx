@@ -24,7 +24,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include "pickercallbacks.hxx"
 
-class SvTabListBox;
 class SvtFileView;
 class SvtFileDialogFilter_Impl;
 
