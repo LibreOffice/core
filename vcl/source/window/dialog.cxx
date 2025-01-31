@@ -374,6 +374,11 @@ struct DialogImpl
 
     ~DialogImpl()
     {
+        disposeAndClear();
+    }
+
+    void disposeAndClear()
+    {
         for (VclPtr<PushButton> & pOwnedButton : maOwnedButtons)
             pOwnedButton.disposeAndClear();
     }
@@ -619,7 +624,7 @@ void Dialog::dispose()
 {
     bool bTunnelingEnabled = mpDialogImpl->m_bLOKTunneling;
 
-    mpDialogImpl.reset();
+    mpDialogImpl->disposeAndClear();
     RemoveFromDlgList();
     mpActionArea.clear();
     mpContentArea.clear();
@@ -1095,20 +1100,11 @@ short Dialog::Execute()
         OSL_FAIL( "Dialog::Execute() - Dialog destroyed in Execute()" );
     }
 
-    assert(mpDialogImpl);
 
-    if (mpDialogImpl)
-    {
-        tools::Long nRet = mpDialogImpl->mnResult;
-        mpDialogImpl->mnResult = -1;
+    tools::Long nRet = mpDialogImpl->mnResult;
+    mpDialogImpl->mnResult = -1;
 
-        return static_cast<short>(nRet);
-    }
-    else
-    {
-        SAL_WARN( "vcl", "Dialog::Execute() : missing mpDialogImpl " );
-        return 0;
-    }
+    return static_cast<short>(nRet);
 }
 
 // virtual
@@ -1142,6 +1138,9 @@ void Dialog::EndDialog( tools::Long nResult )
 {
     if (!mbInExecute || isDisposed())
         return;
+
+    // do not let this object be destroyed from underneath us
+    VclPtr<vcl::Window> xWindow = this;
 
     const bool bModal = GetType() != WindowType::MODELESSDIALOG;
 
@@ -1186,8 +1185,7 @@ void Dialog::EndDialog( tools::Long nResult )
     if ( mpDialogImpl->mbStartedModal )
         ImplEndExecuteModal();
 
-    // coverity[check_after_deref] - ImplEndExecuteModal might trigger destruction of mpDialogImpl
-    if ( mpDialogImpl && mpDialogImpl->maEndCtx.isSet() )
+    if ( mpDialogImpl->maEndCtx.isSet() )
     {
         // We have a special case with async-dialogs that re-execute themselves.
         // In order to prevent overwriting state we need here, we need to extract
@@ -1214,26 +1212,23 @@ void Dialog::EndDialog( tools::Long nResult )
 
         // Destroy ourselves, if we have a context with VclPtr owner, and
         // we have not been re-executed.
-        if (!mpDialogImpl || !mpDialogImpl->maEndCtx.isSet())
+        if (!mpDialogImpl->maEndCtx.isSet())
             xOwner.disposeAndClear();
         xOwnerDialogController.reset();
         xOwnerSelf.reset();
     }
     else
     {
-        if ( mpDialogImpl && mpDialogImpl->mbStartedModal )
+        if ( mpDialogImpl->mbStartedModal )
         {
             mpDialogImpl->mbStartedModal = false;
             mpDialogImpl->mnResult = -1;
         }
         mbInExecute = false;
-        if ( mpDialogImpl)
-        {
-            // Destroy ourselves (if we have a context with VclPtr owner)
-            std::shared_ptr<weld::DialogController> xOwnerDialogController = std::move(mpDialogImpl->maEndCtx.mxOwnerDialogController);
-            std::shared_ptr<weld::Dialog> xOwnerSelf = std::move(mpDialogImpl->maEndCtx.mxOwnerSelf);
-            mpDialogImpl->maEndCtx.mxOwner.disposeAndClear();
-        }
+        // Destroy ourselves (if we have a context with VclPtr owner)
+        std::shared_ptr<weld::DialogController> xOwnerDialogController = std::move(mpDialogImpl->maEndCtx.mxOwnerDialogController);
+        std::shared_ptr<weld::Dialog> xOwnerSelf = std::move(mpDialogImpl->maEndCtx.mxOwnerSelf);
+        mpDialogImpl->maEndCtx.mxOwner.disposeAndClear();
     }
 }
 
@@ -1666,7 +1661,7 @@ void Dialog::Activate()
 
 void Dialog::Command(const CommandEvent& rCEvt)
 {
-    if (mpDialogImpl && mpDialogImpl->m_aPopupMenuHdl.Call(rCEvt))
+    if (mpDialogImpl->m_aPopupMenuHdl.Call(rCEvt))
         return;
     SystemWindow::Command(rCEvt);
 }
