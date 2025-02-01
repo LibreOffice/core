@@ -468,7 +468,7 @@ public:
         const sal_Int32 nIndex,
         ::sw::GetTextAttrMode const eMode = ::sw::GetTextAttrMode::Expand) const;
 
-    bool Spell(SwSpellArgs*);
+    bool Spell(SwSpellArgs* , bool bIsReadOnly);
     bool Convert( SwConversionArgs & );
 
     inline SwTextFormatColl *GetTextColl() const;

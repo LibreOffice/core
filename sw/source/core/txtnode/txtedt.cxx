@@ -993,7 +993,7 @@ bool SwScanner::NextWord()
 }
 
 // Note: this is a clone of SwTextFrame::AutoSpell_, so keep them in sync when fixing things!
-bool SwTextNode::Spell(SwSpellArgs* pArgs)
+bool SwTextNode::Spell(SwSpellArgs* pArgs, bool bIsReadOnly)
 {
     // modify string according to redline information and hidden text
     const OUString aOldText( m_Text );
@@ -1016,6 +1016,16 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
 
     pArgs->xSpellAlt = nullptr;
 
+    bool bIsEditableSect = false;
+    if (bIsReadOnly)
+    {
+        // Enable spell checking in editable sections in read-only mode.
+        if (SwSectionNode* pSectNode = GetTextNode()->FindSectionNode())
+        {
+            bIsEditableSect = pSectNode->GetSection().IsEditInReadonly();
+        }
+    }
+
     // 4 cases:
 
     // 1. IsWrongDirty = 0 and GetWrong = 0
@@ -1028,7 +1038,7 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
     //      Text has been checked but there is an invalid range in the wrong list
 
     // Nothing has to be done for case 1.
-    if ( ( IsWrongDirty() || GetWrong() ) && m_Text.getLength() )
+    if ((IsWrongDirty() || GetWrong()) && (!bIsReadOnly || bIsEditableSect) && m_Text.getLength())
     {
         if (nBegin > m_Text.getLength())
         {

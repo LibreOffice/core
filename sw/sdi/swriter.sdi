@@ -7939,7 +7939,7 @@ SfxBoolItem SpellingAndGrammarDialog FN_SPELL_GRAMMAR_DIALOG
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
+    ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
