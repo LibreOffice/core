@@ -343,8 +343,19 @@ SwGlossaryDlg::SwGlossaryDlg(const SfxViewFrame& rViewFrame,
 
     ShowPreview();
 
-    m_bIsDocReadOnly = m_pShell->GetView().GetDocShell()->IsReadOnly() ||
-                      m_pShell->HasReadonlySel();
+    bool bIsInEditableSect = false;
+    bool bIsReadOnly = m_pShell->GetView().GetDocShell()->IsReadOnly();
+    if (bIsReadOnly)
+    {
+        // If there is editable section in read-only mode,
+        // enable the use of the AutoText dialog's insert button
+        // within these sections.
+        const SwSection* pSection = m_pShell->GetCurrSection();
+        if (pSection && pSection->IsEditInReadonly())
+            bIsInEditableSect = true;
+    }
+
+    m_bIsDocReadOnly = (bIsReadOnly || m_pShell->HasReadonlySel()) && !bIsInEditableSect;
     if( m_bIsDocReadOnly )
         m_xInsertBtn->set_sensitive(false);
     m_xNameED->grab_focus();
