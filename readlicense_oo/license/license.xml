@@ -2281,21 +2281,6 @@
     <hr />
     <h1><a id="a__Extensions" name="a__Extensions">Extensions</a></h1>
     <p>Only third party extensions are listed here whose source code is not in the LibreOffice tree.</p>
-    <div class="NUMBERTEXT"><!-- FIXME: license_*.xsl written in XSLT 1.0 matches this when LIBNUMBERTEXT is defined -->
-        <h2>Numbertext</h2>
-        <p>The following software may be included in this product: Numbertext. Use of any of this software is governed
-        by the terms of the license below:</p>
-        <p>License: LGPL/BSD dual-license, 2009-2010 (C) László Németh (nemeth at openoffice dot org)</p>
-        <p>Numbertext language data (Soros programs):</p>
-        <p>LGPL/BSD dual-license, 2009-2010 (C) László Németh et al. (see AUTHORS)</p>
-        <p>Serbian modules:</p>
-        <p>CC/LGPL/BSD tri-license, 2009 (C) Goran Rakić (grakic at devbase dot net)</p>
-        <p>Note: for full distribution with specifications, IDE and JavaScript implementation, see <a href=
-        "http://NUMBERTEXT.org/">http://NUMBERTEXT.org</a></p>
-        <p>Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND,
-        either express or implied.</p>
-        <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
-    </div>
     <div class="NLPSOLVER">
         <h2>Solver for Nonlinear Programming</h2>
         <p>The following software may be included in this product: Solver for Nonlinear Programming. Use of any of this

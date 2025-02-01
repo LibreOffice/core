@@ -695,9 +695,5 @@ ZXING_TARBALL := zxing-cpp-2.3.0.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-NUMBERTEXT_EXTENSION_SHA256SUM := 1568ed1d2feb8210bb5de61d69574a165cded536cfa17c6953c9064076469de2
-# three static lines
-# so that git cherry-pick
-# will not run into conflicts
 OPENSYMBOL_SHA256SUM := f543e6e2d7275557a839a164941c0a86e5f2c3f2a0042bfc434c88c6dde9e140
 OPENSYMBOL_TTF := f543e6e2d7275557a839a164941c0a86e5f2c3f2a0042bfc434c88c6dde9e140-opens___.ttf
