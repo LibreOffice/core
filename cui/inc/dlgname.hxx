@@ -29,6 +29,7 @@ private:
     std::unique_ptr<weld::Entry> m_xEdtName;
     std::unique_ptr<weld::Label> m_xFtDescription;
     std::unique_ptr<weld::Button> m_xBtnOK;
+    std::function<bool(OUString)> m_aCheckName;
 
     Link<SvxNameDialog&, bool> m_aCheckNameHdl;
     Link<SvxNameDialog&, OUString> m_aCheckNameTooltipHdl;
@@ -40,6 +41,8 @@ public:
                   const OUString& rTitle = u""_ustr);
 
     OUString GetName() const { return m_xEdtName->get_text(); }
+
+    void SetCheckName(const std::function<bool(OUString)>& rFunc) { m_aCheckName = rFunc; }
 
     /** add a callback Link that is called whenever the content of the edit
         field is changed.  The Link result determines whether the OK
@@ -58,6 +61,12 @@ public:
     {
         m_aCheckNameTooltipHdl = rLink;
         m_xBtnOK->set_tooltip_text(rLink.Call(*this));
+    }
+
+    void SetNameText(const OUString& aName)
+    {
+        m_xEdtName->set_text(aName);
+        m_xEdtName->set_position(-1);
     }
 
     void SetEditHelpId(const OUString& aHelpId) { m_xEdtName->set_help_id(aHelpId); }

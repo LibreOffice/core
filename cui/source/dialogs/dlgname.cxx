@@ -33,6 +33,7 @@ SvxNameDialog::SvxNameDialog(weld::Window* pParent, const OUString& rName, const
     , m_xEdtName(m_xBuilder->weld_entry(u"name_entry"_ustr))
     , m_xFtDescription(m_xBuilder->weld_label(u"description_label"_ustr))
     , m_xBtnOK(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_aCheckName(nullptr)
 {
     m_xFtDescription->set_label(rDesc);
     m_xEdtName->set_text(rName);
@@ -49,6 +50,8 @@ IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl, weld::Entry&, void)
     bool bEnable;
     if (m_aCheckNameHdl.IsSet())
         bEnable = m_aCheckNameHdl.Call(*this);
+    else if (m_aCheckName)
+        bEnable = m_aCheckName(m_xEdtName->get_text());
     else
         bEnable = !m_xEdtName->get_text().isEmpty();
     m_xBtnOK->set_sensitive(bEnable);

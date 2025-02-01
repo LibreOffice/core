@@ -28,7 +28,6 @@
 #include <osl/file.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/inputdlg.hxx>
 #include <sfx2/minfitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -41,6 +40,7 @@
 #include <unotools/viewoptions.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/weldutils.hxx>
+#include <dlgname.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -1228,11 +1228,12 @@ void MacroManagerDialog::BasicScriptsCreateLibrary(const basctl::ScriptDocument&
          aLibName = CuiResId(STR_LIBRARY) + OUString::number(++i))
         ;
 
-    InputDialog aInputDlg(m_xDialog.get(), CuiResId(STR_INPUTDIALOG_NEWLIBRARYLABEL));
-    aInputDlg.set_title(CuiResId(STR_INPUTDIALOG_NEWLIBRARYTITLE));
-    aInputDlg.SetEntryText(aLibName);
-    aInputDlg.HideHelpBtn();
-    aInputDlg.setCheckEntry([&](OUString sNewName) {
+    OUString aDesc = CuiResId(STR_INPUTDIALOG_NEWLIBRARYLABEL);
+
+    SvxNameDialog aNameDialog(m_xDialog.get(), aLibName, aDesc,
+                              CuiResId(STR_INPUTDIALOG_NEWLIBRARYTITLE));
+
+    aNameDialog.SetCheckName([&](OUString sNewName) -> bool {
         if (sNewName.isEmpty() || rDocument.hasLibrary(basctl::E_SCRIPTS, sNewName)
             || rDocument.hasLibrary(basctl::E_DIALOGS, sNewName) || sNewName.getLength() > 30
             || !basctl::IsValidSbxName(sNewName))
@@ -1240,10 +1241,10 @@ void MacroManagerDialog::BasicScriptsCreateLibrary(const basctl::ScriptDocument&
         return true;
     });
 
-    if (!aInputDlg.run())
+    if (aNameDialog.run() != RET_OK)
         return;
 
-    aLibName = aInputDlg.GetEntryText();
+    aLibName = aNameDialog.GetName();
 
     try
     {
@@ -1295,21 +1296,22 @@ void MacroManagerDialog::BasicScriptsCreateModule(const basctl::ScriptDocument& 
          aModName = CuiResId(STR_MODULE) + OUString::number(++i))
         ;
 
-    InputDialog aInputDlg(m_xDialog.get(), CuiResId(STR_INPUTDIALOG_NEWMODULELABEL));
-    aInputDlg.set_title(CuiResId(STR_INPUTDIALOG_NEWMODULETITLE));
-    aInputDlg.SetEntryText(aModName);
-    aInputDlg.HideHelpBtn();
-    aInputDlg.setCheckEntry([&](OUString sNewName) {
+    OUString aDesc = CuiResId(STR_INPUTDIALOG_NEWMODULELABEL);
+
+    SvxNameDialog aNameDialog(m_xDialog.get(), aModName, aDesc,
+                              CuiResId(STR_INPUTDIALOG_NEWMODULETITLE));
+
+    aNameDialog.SetCheckName([&](OUString sNewName) -> bool {
         if (sNewName.isEmpty() || rDocument.hasModule(aLibName, sNewName)
             || sNewName.getLength() > 30 || !basctl::IsValidSbxName(sNewName))
             return false;
         return true;
     });
 
-    if (!aInputDlg.run())
+    if (!aNameDialog.run())
         return;
 
-    aModName = aInputDlg.GetEntryText();
+    aModName = aNameDialog.GetName();
 
     OUString sModuleCode;
     if (!rDocument.createModule(aLibName, aModName, true /*create main sub*/, sModuleCode))
@@ -1339,21 +1341,22 @@ void MacroManagerDialog::BasicScriptsCreateDialog(const basctl::ScriptDocument& 
          sDialogName = CuiResId(STR_DIALOG) + OUString::number(++i))
         ;
 
-    InputDialog aInputDlg(m_xDialog.get(), CuiResId(STR_INPUTDIALOG_NEWDIALOGLABEL));
-    aInputDlg.set_title(CuiResId(STR_INPUTDIALOG_NEWDIALOGTITLE));
-    aInputDlg.SetEntryText(sDialogName);
-    aInputDlg.HideHelpBtn();
-    aInputDlg.setCheckEntry([&](OUString sNewName) {
+    OUString aDesc = CuiResId(STR_INPUTDIALOG_NEWDIALOGLABEL);
+
+    SvxNameDialog aNameDialog(m_xDialog.get(), sDialogName, aDesc,
+                              CuiResId(STR_INPUTDIALOG_NEWDIALOGTITLE));
+
+    aNameDialog.SetCheckName([&](OUString sNewName) -> bool {
         if (sNewName.isEmpty() || rDocument.hasDialog(aLibName, sNewName)
             || sNewName.getLength() > 30 || !basctl::IsValidSbxName(sNewName))
             return false;
         return true;
     });
 
-    if (!aInputDlg.run())
+    if (!aNameDialog.run())
         return;
 
-    sDialogName = aInputDlg.GetEntryText();
+    sDialogName = aNameDialog.GetName();
 
     try
     {
@@ -1744,11 +1747,12 @@ void MacroManagerDialog::BasicScriptsLibraryModuleDialogRename(
 
     if (rTreeView.get_iter_depth(*xSelectedIter) == 2) // library
     {
-        InputDialog aInputDlg(m_xDialog.get(), CuiResId(STR_INPUTDIALOG_RENAMELIBRARYLABEL));
-        aInputDlg.HideHelpBtn();
-        aInputDlg.set_title(CuiResId(STR_INPUTDIALOG_RENAMELIBRARYTITLE));
-        aInputDlg.SetEntryText(sOldName);
-        aInputDlg.setCheckEntry([&](OUString sNewName) {
+        OUString aDesc = CuiResId(STR_INPUTDIALOG_RENAMELIBRARYLABEL);
+
+        SvxNameDialog aNameDialog(m_xDialog.get(), sOldName, aDesc,
+                                  CuiResId(STR_INPUTDIALOG_RENAMELIBRARYTITLE));
+
+        aNameDialog.SetCheckName([&](OUString sNewName) -> bool {
             if (sNewName != sOldName
                 && (sNewName.isEmpty() || rDocument.hasLibrary(basctl::E_SCRIPTS, sNewName)
                     || rDocument.hasLibrary(basctl::E_DIALOGS, sNewName)
@@ -1757,10 +1761,10 @@ void MacroManagerDialog::BasicScriptsLibraryModuleDialogRename(
             return true;
         });
 
-        if (!aInputDlg.run())
+        if (!aNameDialog.run())
             return;
 
-        OUString sNewName = aInputDlg.GetEntryText();
+        OUString sNewName = aNameDialog.GetName();
         if (sNewName == sOldName)
             return;
 
@@ -1799,15 +1803,16 @@ void MacroManagerDialog::BasicScriptsLibraryModuleDialogRename(
         OUString aLibName = m_xScriptContainersListBox->GetSelectedEntryContainerName(
             ScriptContainerType::LIBRARY);
 
-        InputDialog aInputDlg(m_xDialog.get(), CuiResId(pScriptContainerInfo->pBrowseNode
-                                                            ? STR_INPUTDIALOG_RENAMEMODULELABEL
-                                                            : STR_INPUTDIALOG_RENAMEDIALOGLABEL));
-        aInputDlg.HideHelpBtn();
-        aInputDlg.set_title(CuiResId(pScriptContainerInfo->pBrowseNode
-                                         ? STR_INPUTDIALOG_RENAMEMODULETITLE
-                                         : STR_INPUTDIALOG_RENAMEMODULETITLE));
-        aInputDlg.SetEntryText(sOldName);
-        aInputDlg.setCheckEntry([&](OUString sNewName) {
+        OUString aDesc
+            = CuiResId(pScriptContainerInfo->pBrowseNode ? STR_INPUTDIALOG_RENAMEMODULELABEL
+                                                         : STR_INPUTDIALOG_RENAMEDIALOGLABEL);
+
+        SvxNameDialog aNameDialog(m_xDialog.get(), sOldName, aDesc,
+                                  CuiResId(pScriptContainerInfo->pBrowseNode
+                                               ? STR_INPUTDIALOG_RENAMEMODULETITLE
+                                               : STR_INPUTDIALOG_RENAMEMODULETITLE));
+
+        aNameDialog.SetCheckName([&](OUString sNewName) -> bool {
             if (sNewName != sOldName
                 && (sNewName.isEmpty() || sNewName.getLength() > 30
                             || !basctl::IsValidSbxName(sNewName)
@@ -1818,10 +1823,10 @@ void MacroManagerDialog::BasicScriptsLibraryModuleDialogRename(
             return true;
         });
 
-        if (!aInputDlg.run())
+        if (!aNameDialog.run())
             return;
 
-        OUString sNewName = aInputDlg.GetEntryText();
+        OUString sNewName = aNameDialog.GetName();
         if (sNewName == sOldName)
             return;
 
@@ -2051,29 +2056,27 @@ void MacroManagerDialog::ScriptingFrameworkScriptsRenameEntry(weld::TreeView& rT
             aNewName = aNewName.copy(0, extnPos);
         }
 
-        InputDialog aInputDlg(m_xDialog.get(),
-                              xBrowseNode->getType()
-                                      == css::script::browse::BrowseNodeTypes::CONTAINER
-                                  ? CuiResId(STR_INPUTDIALOG_RENAMELIBRARYLABEL)
-                                  : CuiResId(STR_INPUTDIALOG_RENAMEMACROLABEL));
-        aInputDlg.set_title(xBrowseNode->getType()
-                                    == css::script::browse::BrowseNodeTypes::CONTAINER
-                                ? CuiResId(STR_INPUTDIALOG_RENAMELIBRARYTITLE)
-                                : CuiResId(STR_INPUTDIALOG_RENAMEMACROTITLE));
-        aInputDlg.SetEntryText(aNewName);
-        aInputDlg.HideHelpBtn();
-        // doesn't check if the name already exists, that will be caught below by invoke
-        aInputDlg.setCheckEntry([](OUString sNewName) {
+        OUString aDesc = xBrowseNode->getType() == css::script::browse::BrowseNodeTypes::CONTAINER
+                             ? CuiResId(STR_INPUTDIALOG_RENAMELIBRARYLABEL)
+                             : CuiResId(STR_INPUTDIALOG_RENAMEMACROLABEL);
+
+        SvxNameDialog aNameDialog(m_xDialog.get(), aNewName, aDesc,
+                                  xBrowseNode->getType()
+                                          == css::script::browse::BrowseNodeTypes::CONTAINER
+                                      ? CuiResId(STR_INPUTDIALOG_RENAMELIBRARYTITLE)
+                                      : CuiResId(STR_INPUTDIALOG_RENAMEMACROTITLE));
+
+        aNameDialog.SetCheckName([](OUString sNewName) -> bool {
             if (sNewName.isEmpty() || sNewName.getLength() > 30
                 || !basctl::IsValidSbxName(sNewName))
                 return false;
             return true;
         });
 
-        if (!aInputDlg.run())
+        if (!aNameDialog.run())
             return;
 
-        aNewName = aInputDlg.GetEntryText();
+        aNewName = aNameDialog.GetName();
 
         css::uno::Sequence<css::uno::Any> args{ css::uno::Any(aNewName) };
         css::uno::Sequence<css::uno::Any> outArgs;
@@ -2301,19 +2304,19 @@ void MacroManagerDialog::ScriptingFrameworkScriptsCreateEntry(InputDialogMode eI
             }
         }
 
-        InputDialog aInputDlg(m_xDialog.get(), eInputDialogMode == InputDialogMode::NEWLIB
-                                                   ? CuiResId(STR_INPUTDIALOG_NEWLIBRARYLABEL)
-                                                   : CuiResId(STR_INPUTDIALOG_NEWMACROLABEL));
-        aInputDlg.set_title(eInputDialogMode == InputDialogMode::NEWLIB
-                                ? CuiResId(STR_INPUTDIALOG_NEWLIBRARYTITLE)
-                                : CuiResId(STR_INPUTDIALOG_NEWMACROTITLE));
-        aInputDlg.SetEntryText(aNewName);
-        aInputDlg.HideHelpBtn();
+        OUString aDesc = eInputDialogMode == InputDialogMode::NEWLIB
+                             ? CuiResId(STR_INPUTDIALOG_NEWLIBRARYLABEL)
+                             : CuiResId(STR_INPUTDIALOG_NEWMACROLABEL);
 
-        // setCheckEntry doesn't check if the name already exists. It is checked after the dialog
+        SvxNameDialog aNameDialog(m_xDialog.get(), aNewName, aDesc,
+                                  eInputDialogMode == InputDialogMode::NEWLIB
+                                      ? CuiResId(STR_INPUTDIALOG_NEWLIBRARYTITLE)
+                                      : CuiResId(STR_INPUTDIALOG_NEWMACROTITLE));
+
+        // SetCheckName doesn't check if the name already exists. It is checked after the dialog
         // in the Creatable invocation call - this could be improved by including a check for
         // existing name
-        aInputDlg.setCheckEntry([](OUString sNewName) {
+        aNameDialog.SetCheckName([](OUString sNewName) -> bool {
             if (sNewName.isEmpty() || sNewName.getLength() > 30
                 || !basctl::IsValidSbxName(sNewName))
                 return false;
@@ -2322,9 +2325,9 @@ void MacroManagerDialog::ScriptingFrameworkScriptsCreateEntry(InputDialogMode eI
 
         do
         {
-            if (aInputDlg.run())
+            if (aNameDialog.run())
             {
-                OUString aUserSuppliedName = aInputDlg.GetEntryText();
+                OUString aUserSuppliedName = aNameDialog.GetName();
                 bValid = true;
                 for (const css::uno::Reference<css::script::browse::XBrowseNode>& n : childNodes)
                 {
@@ -2340,7 +2343,7 @@ void MacroManagerDialog::ScriptingFrameworkScriptsCreateEntry(InputDialogMode eI
                                                              VclButtonsType::Ok, aError));
                         xErrorBox->set_title(CuiResId(RID_CUISTR_CREATEFAILED_TITLE));
                         xErrorBox->run();
-                        aInputDlg.SetEntryText(aNewName);
+                        aNameDialog.SetNameText(aNewName);
                         break;
                     }
                 }
