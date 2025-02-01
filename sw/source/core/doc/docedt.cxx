@@ -544,6 +544,11 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
     sal_uLong nCurrNd = pSttPos->nNode.GetIndex();
     sal_uLong nEndNd = pEndPos->nNode.GetIndex();
 
+    bool bIsReadOnly = false;
+    const SfxObjectShell* pObjShell = GetDocShell();
+    if (pObjShell && pObjShell->IsReadOnly())
+        bIsReadOnly = true;
+
     uno::Any aRet;
     if( nCurrNd <= nEndNd )
     {
@@ -606,8 +611,8 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                         }
 
                         sal_Int32 nSpellErrorPosition = pNd->GetTextNode()->GetText().getLength();
-                        if( (!pConvArgs && pNd->GetTextNode()->Spell( pSpellArgs.get() )) ||
-                            ( pConvArgs && pNd->GetTextNode()->Convert( *pConvArgs )))
+                        if ((!pConvArgs && pNd->GetTextNode()->Spell(pSpellArgs.get(), bIsReadOnly))
+                            || (pConvArgs && pNd->GetTextNode()->Convert(*pConvArgs)))
                         {
                             // Cancel and remember position
                             pSttPos->nNode = nCurrNd;

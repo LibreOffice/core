@@ -636,7 +636,8 @@ void SwView::CheckReadonlyState()
             SID_ATTR_PARA_ORPHANS,
             SID_ATTR_PARA_MODEL,        SID_PARA_DLG,
             FN_SELECT_PARA,             SID_DEC_INDENT,
-            SID_INC_INDENT
+            SID_INC_INDENT,
+            FN_SPELL_GRAMMAR_DIALOG
         };
         static bool bFirst = true;
         if ( bFirst )
