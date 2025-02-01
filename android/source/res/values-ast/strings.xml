@@ -96,7 +96,7 @@
     <string name="UNO_commands_string_parent_value_hint">Valor cimeru</string>
     <string name="action_exportToPDF">Esportar a PDF</string>
     <string name="action_print">Imprentar</string>
-    <string name="tabhost_character">Carácter</string>
+    <string name="tabhost_character">Caráuter</string>
     <string name="tabhost_paragraph">Párrafu</string>
     <string name="tabhost_insert">Inxertar</string>
     <string name="tabhost_style">Estilu</string>
