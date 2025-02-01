@@ -28,12 +28,6 @@ en-US = "MediaWiki Publisher"
 [STR_DESC_MODULE_OPTIONAL_EXTENSIONS_MEDIAWIKI]
 en-US = "MediaWiki Publisher"
 
-[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_NUMBERTEXT]
-en-US = "Numbertext"
-
-[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_NUMBERTEXT]
-en-US = "Provides the NUMBERTEXT/MONEYTEXT spreadsheet functions which convert numbers to localized text, e.g. '100' to 'hundred'."
-
 [STR_NAME_MODULE_OPTIONAL_EXTENSIONS_NLPSOLVER]
 en-US = "Solver for Nonlinear Programming"
 

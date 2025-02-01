@@ -45,22 +45,6 @@ Module gid_Module_Optional_Extensions_MEDIAWIKI
 End
 #endif
 
-/* ** Numbertext ** */
-
-#ifdef WITH_EXTENSION_NUMBERTEXT
-
-#include "AutoInstall/extensions_numbertext"
-
-Module gid_Module_Optional_Extensions_NumberText
-    PackageInfo = "packinfo_extensions.txt";
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_NUMBERTEXT);
-    ParentID = gid_Module_Optional_Extensions;
-    Files = (auto_extensions_numbertext_ALL);
-    Default = YES;
-    Styles = ( );
-End
-#endif
-
 /* ** NLPSolver ** */
 
 #ifdef WITH_EXTENSION_NLPSOLVER
