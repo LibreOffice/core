@@ -9,8 +9,4 @@
 
 $(eval $(call gb_ExtensionPackageSet_ExtensionPackageSet,misc_extensions))
 
-ifneq ($(NUMBERTEXT_EXTENSION_PACK),)
-$(eval $(call gb_ExtensionPackageSet_add_extension,misc_extensions,numbertext,$(NUMBERTEXT_EXTENSION_PACK)))
-endif
-
 # vim: set noet sw=4 ts=4:

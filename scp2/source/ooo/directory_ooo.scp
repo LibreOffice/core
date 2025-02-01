@@ -420,11 +420,6 @@ Directory gid_Dir_Share_Fingerprint
     DosName = "fingerprint";
 End
 
-Directory gid_Dir_Share_Numbertext
-    ParentID = gid_Brand_Dir_Share;
-    DosName = "numbertext";
-End
-
 Directory gid_Dir_Help
 #if defined MACOSX
     ParentID = gid_Dir_Bundle_Contents_Resources;
