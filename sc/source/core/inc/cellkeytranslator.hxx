@@ -72,7 +72,6 @@ private:
 
     void addToMap(const OUString& rKey, const char* pName, const css::lang::Locale& rLocale,
                   OpCode eOpCode);
-    void addToMap(const TransItem* pItems, const css::lang::Locale& rLocale);
 
     static ::std::unique_ptr<ScCellKeywordTranslator> spInstance;
     ScCellKeywordHashMap maStringNameMap;
