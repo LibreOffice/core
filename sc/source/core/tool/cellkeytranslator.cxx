@@ -98,7 +98,7 @@ static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
     }
 
     LanguageTag aLanguageTag( pLocale ? *pLocale : lang::Locale(u""_ustr,u""_ustr,u""_ustr));
-    const char* aBestMatchName = itr->second.front().mpName;
+    const char* aBestMatchName = nullptr;
     LocaleMatch eLocaleMatchLevel = LOCALE_MATCH_NONE;
     bool bOpCodeMatched = false;
 
@@ -156,7 +156,8 @@ static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
     }
 
     // No preferred strings found.  Return the best matching name.
-    rName = OUString::createFromAscii(aBestMatchName);
+    if (aBestMatchName)
+        rName = OUString::createFromAscii(aBestMatchName);
 }
 
 void ScCellKeywordTranslator::transKeyword(OUString& rName, const lang::Locale* pLocale, OpCode eOpCode)
