@@ -1065,7 +1065,7 @@ bool ToggleUnicodeCodepoint::AllowMoreInput(sal_uInt32 uChar)
     switch ( unicode::getUnicodeType(uChar) )
     {
         case css::i18n::UnicodeType::SURROGATE:
-            if( bPreventNonHex )
+            if (bPreventNonHex || mbIsHexString)
             {
                 mbAllowMoreChars = false;
                 return false;
@@ -1096,7 +1096,7 @@ bool ToggleUnicodeCodepoint::AllowMoreInput(sal_uInt32 uChar)
 
         case css::i18n::UnicodeType::NON_SPACING_MARK:
         case css::i18n::UnicodeType::COMBINING_SPACING_MARK:
-            if( bPreventNonHex )
+            if (bPreventNonHex || mbIsHexString)
             {
                 mbAllowMoreChars = false;
                 return false;
