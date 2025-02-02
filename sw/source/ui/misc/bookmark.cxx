@@ -548,6 +548,8 @@ void BookmarkTable::InsertBookmark(SwWrtShell& rSh, sw::mark::MarkBase* const pM
     m_xControl->set_text(nRow, sBookmarkNodeText, 2);
     m_xControl->set_text(nRow, sHidden, 3);
     m_xControl->set_text(nRow, sHideCondition, 4);
+
+    m_xControl->columns_autosize();
 }
 
 std::unique_ptr<weld::TreeIter> BookmarkTable::GetRowByBookmarkName(const OUString& sName)
