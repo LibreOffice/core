@@ -2411,6 +2411,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testUnicodeNotationToggle)
     // - Actual  : xyz侮U+e0101
     // i.e., one codepoint to the left of the combining codepoint was not converted
     CPPUNIT_ASSERT_EQUAL(sWithCombiningSMPName, sDocString);
+
+    pWrtShell->SplitNode();
+    // Given a combined character "è", consisting of U+0065 and U+0300, followed by a HEX
+    // without a U+ for the conversion into the next character "n"
+    pWrtShell->Insert2(u"è006E"_ustr);
+    dispatchCommand(mxComponent, u".uno:UnicodeNotationToggle"_ustr, aPropertyValues);
+    sDocString = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText();
+    // Before tdf#164989 fix, this failed with
+    // - Expected: èn
+    // - Actual  : è006U+0300
+    // i.e., it converted the last combined character *before* the HEX code *to HEX*, replacing
+    // the last character of the HEX; not the expected conversion of the code itself *from HEX*.
+    CPPUNIT_ASSERT_EQUAL(u"\u0065\u0300n"_ustr, sDocString);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf34957)
