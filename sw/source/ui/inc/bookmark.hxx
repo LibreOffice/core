@@ -78,6 +78,7 @@ public:
     }
     void start_editing(weld::TreeIter const& rIter) { m_xControl->start_editing(rIter); }
     void make_sorted() { m_xControl->make_sorted(); }
+    void make_unsorted() { m_xControl->make_unsorted(); }
     bool get_sort_order() const { return m_xControl->get_sort_order(); }
     void set_sort_order(bool bAscending) { m_xControl->set_sort_order(bAscending); }
     int get_sort_column() const { return m_xControl->get_sort_column(); }
