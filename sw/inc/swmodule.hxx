@@ -232,7 +232,7 @@ public:
     virtual std::optional<SfxItemSet> CreateItemSet( sal_uInt16 nId ) override;
     virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet ) override;
     virtual std::unique_ptr<SfxTabPage> CreateTabPage( sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet ) override;
-    SW_DLLPUBLIC virtual std::optional<SfxStyleFamilies> CreateStyleFamilies() override;
+    SW_DLLPUBLIC virtual SfxStyleFamilies CreateStyleFamilies() override;
 
     // Pool is created here and set at SfxShell.
     void    InitAttrPool();

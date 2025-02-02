@@ -22,7 +22,6 @@
 #include <sfx2/styfitem.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <memory>
-#include <optional>
 
 namespace weld { class Button; }
 namespace weld { class CheckButton; }
@@ -39,7 +38,7 @@ namespace weld { class Widget; }
 class SfxManageStyleSheetPage final : public SfxTabPage
 {
     SfxStyleSheetBase *pStyle;
-    std::optional<SfxStyleFamilies> mxFamilies;
+    SfxStyleFamilies maFamilies;
     const SfxStyleFamilyItem *pItem;
     OUString aBuf;
     bool bModified;

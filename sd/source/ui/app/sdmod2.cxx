@@ -862,7 +862,7 @@ std::unique_ptr<SfxTabPage> SdModule::CreateTabPage( sal_uInt16 nId, weld::Conta
     return xRet;
 }
 
-std::optional<SfxStyleFamilies> SdModule::CreateStyleFamilies()
+SfxStyleFamilies SdModule::CreateStyleFamilies()
 {
     SfxStyleFamilies aStyleFamilies;
     std::locale resLocale = SdModule::get()->GetResLocale();

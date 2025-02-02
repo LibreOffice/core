@@ -71,11 +71,11 @@ SwCondCollPage::SwCondCollPage(weld::Container* pPage, weld::DialogController* p
     m_xStyleLB->connect_selection_changed(LINK(this, SwCondCollPage, SelectTreeListBoxHdl));
     m_xFilterLB->connect_changed(LINK(this, SwCondCollPage, SelectListBoxHdl));
 
-    std::optional<SfxStyleFamilies> xFamilies(SwModule::get()->CreateStyleFamilies());
-    size_t nCount = xFamilies->size();
+    SfxStyleFamilies aFamilies(SwModule::get()->CreateStyleFamilies());
+    size_t nCount = aFamilies.size();
     for (size_t j = 0; j < nCount; ++j)
     {
-        const SfxStyleFamilyItem &rFamilyItem = xFamilies->at(j);
+        const SfxStyleFamilyItem &rFamilyItem = aFamilies.at(j);
         if (SfxStyleFamily::Para == rFamilyItem.GetFamily())
         {
             const SfxStyleFilter& rFilterList = rFamilyItem.GetFilterList();

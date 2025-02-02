@@ -350,7 +350,7 @@ void    SwModule::RemoveAttrPool()
     m_pAttrPool.clear();
 }
 
-std::optional<SfxStyleFamilies> SwModule::CreateStyleFamilies()
+SfxStyleFamilies SwModule::CreateStyleFamilies()
 {
     SfxStyleFamilies aStyleFamilies;
 

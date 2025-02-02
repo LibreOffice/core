@@ -235,9 +235,7 @@ IMPL_LINK_NOARG(StyleList, ReadResource, void*, size_t)
     m_pCurObjShell = pViewFrame->GetObjectShell();
     m_Module = m_pCurObjShell ? m_pCurObjShell->GetModule() : nullptr;
     if (m_Module)
-        m_xStyleFamilies = m_Module->CreateStyleFamilies();
-    if (!m_xStyleFamilies)
-        m_xStyleFamilies.emplace();
+        m_aStyleFamilies = m_Module->CreateStyleFamilies();
 
     m_nActFilter = 0xffff;
 
@@ -251,14 +249,14 @@ IMPL_LINK_NOARG(StyleList, ReadResource, void*, size_t)
         if (m_bModuleHasStylesHighlighterFeature)
             sDefaultCharStyleUIName = getDefaultStyleName(SfxStyleFamily::Char);
     }
-    size_t nCount = m_xStyleFamilies->size();
+    size_t nCount = m_aStyleFamilies.size();
     m_pBindings->ENTERREGISTRATIONS();
 
     size_t i;
     for (i = 0; i < nCount; ++i)
     {
         sal_uInt16 nSlot = 0;
-        switch (m_xStyleFamilies->at(i).GetFamily())
+        switch (m_aStyleFamilies.at(i).GetFamily())
         {
             case SfxStyleFamily::Char:
                 nSlot = SID_STYLE_FAMILY1;
@@ -860,17 +858,17 @@ static SfxStyleFamily NIdToSfxFamilyId(sal_uInt16 nId)
 
 sal_uInt16 StyleList::StyleNrToInfoOffset(sal_uInt16 nId)
 {
-    const SfxStyleFamilyItem& rItem = m_xStyleFamilies->at(nId);
+    const SfxStyleFamilyItem& rItem = m_aStyleFamilies.at(nId);
     return SfxTemplate::SfxFamilyIdToNId(rItem.GetFamily()) - 1;
 }
 
 // Helper function: Access to the current family item
 const SfxStyleFamilyItem* StyleList::GetFamilyItem() const
 {
-    const size_t nCount = m_xStyleFamilies->size();
+    const size_t nCount = m_aStyleFamilies.size();
     for (size_t i = 0; i < nCount; ++i)
     {
-        const SfxStyleFamilyItem& rItem = m_xStyleFamilies->at(i);
+        const SfxStyleFamilyItem& rItem = m_aStyleFamilies.at(i);
         sal_uInt16 nId = SfxTemplate::SfxFamilyIdToNId(rItem.GetFamily());
         if (nId == m_nActFamily)
             return &rItem;
@@ -912,7 +910,7 @@ IMPL_LINK_NOARG(StyleList, IsSafeForWaterCan, void*, bool)
 
 IMPL_LINK(StyleList, SetWaterCanState, const SfxBoolItem*, pItem, void)
 {
-    size_t nCount = m_xStyleFamilies->size();
+    size_t nCount = m_aStyleFamilies.size();
     m_pBindings->EnterRegistrations();
     for (size_t n = 0; n < nCount; n++)
     {
@@ -1239,7 +1237,7 @@ void StyleList::UpdateStyles(StyleFlags nFlags)
     if (!pItem)
     {
         // Is the case for the template catalog
-        const size_t nFamilyCount = m_xStyleFamilies->size();
+        const size_t nFamilyCount = m_aStyleFamilies.size();
         size_t n;
         for (n = 0; n < nFamilyCount; n++)
             if (m_pFamilyState[StyleNrToInfoOffset(n)])
@@ -1568,7 +1566,7 @@ IMPL_LINK_NOARG(StyleList, Clear, void*, void)
             pViewShell->GetStylesHighlighterCharColorMap().clear();
         }
     }
-    m_xStyleFamilies.reset();
+    m_aStyleFamilies.clear();
     for (auto& i : m_pFamilyState)
         i.reset();
     m_pCurObjShell = nullptr;
@@ -1916,7 +1914,7 @@ void StyleList::Update()
     if (m_nActFamily == 0xffff || nullptr == (pItem = m_pFamilyState[m_nActFamily - 1].get()))
     {
         m_pParentDialog->CheckItem(OUString::number(m_nActFamily), false);
-        const size_t nFamilyCount = m_xStyleFamilies->size();
+        const size_t nFamilyCount = m_aStyleFamilies.size();
         size_t n;
         for (n = 0; n < nFamilyCount; n++)
             if (m_pFamilyState[StyleNrToInfoOffset(n)])
@@ -1974,7 +1972,7 @@ void StyleList::Update()
 
 const SfxStyleFamilyItem& StyleList::GetFamilyItemByIndex(size_t i) const
 {
-    return m_xStyleFamilies->at(i);
+    return m_aStyleFamilies.at(i);
 }
 
 IMPL_STATIC_LINK(StyleList, CustomGetSizeHdl, weld::TreeView::get_size_args, aPayload, Size)

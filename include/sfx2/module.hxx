@@ -78,7 +78,7 @@ public:
                                                const SfxItemSet& rSet );
     virtual void                Invalidate(sal_uInt16 nId = 0) override;
 
-    virtual std::optional<SfxStyleFamilies> CreateStyleFamilies() { return {}; }
+    virtual SfxStyleFamilies CreateStyleFamilies() { return {}; }
 
     static SfxModule*           GetActiveModule( SfxViewFrame* pFrame=nullptr );
     static FieldUnit            GetCurrentFieldUnit();

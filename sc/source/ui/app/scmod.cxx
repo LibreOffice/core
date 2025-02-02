@@ -2344,7 +2344,7 @@ bool ScModule::HasThesaurusLanguage( LanguageType nLang )
     return bHasLang;
 }
 
-std::optional<SfxStyleFamilies> ScModule::CreateStyleFamilies()
+SfxStyleFamilies ScModule::CreateStyleFamilies()
 {
     SfxStyleFamilies aStyleFamilies;
     std::locale resLocale = ScModule::get()->GetResLocale();

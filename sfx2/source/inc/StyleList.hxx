@@ -223,7 +223,7 @@ private:
     std::unique_ptr<weld::Builder> mxMenuBuilder;
     std::unique_ptr<weld::Menu> mxMenu;
 
-    std::optional<SfxStyleFamilies> m_xStyleFamilies;
+    SfxStyleFamilies m_aStyleFamilies;
     std::array<std::unique_ptr<SfxTemplateItem>, MAX_FAMILIES> m_pFamilyState;
     SfxObjectShell* m_pCurObjShell;
     sal_uInt16 m_nActFamily;

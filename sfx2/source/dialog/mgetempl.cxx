@@ -91,7 +91,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(weld::Container* pPage, weld::D
     else
         m_xEditLinkStyleBtn->set_sensitive(true);
 
-    mxFamilies = SfxApplication::GetModule_Impl()->CreateStyleFamilies();
+    maFamilies = SfxApplication::GetModule_Impl()->CreateStyleFamilies();
 
     SfxStyleSheetBasePool* pPool = nullptr;
     SfxObjectShell* pDocShell = SfxObjectShell::Current();
@@ -184,11 +184,11 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(weld::Container* pPage, weld::D
         m_xBaseLb->set_sensitive(false);
     }
 
-    size_t nCount = mxFamilies->size();
+    size_t nCount = maFamilies.size();
     size_t i;
     for ( i = 0; i < nCount; ++i )
     {
-        pItem = &(mxFamilies->at(i));
+        pItem = &(maFamilies.at(i));
 
         if ( pItem->GetFamily() == pStyle->GetFamily() )
             break;
@@ -255,7 +255,6 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(weld::Container* pPage, weld::D
 
 SfxManageStyleSheetPage::~SfxManageStyleSheetPage()
 {
-    mxFamilies.reset();
     pItem = nullptr;
     pStyle = nullptr;
 }
