@@ -1094,7 +1094,7 @@ SwTextAttr* MakeTextAttr(
                 // when the annotation mark is created and inserted into the document.
                 auto& pField = const_cast<SwPostItField&>(dynamic_cast<const SwPostItField&>(*(pNew->GetFormatField().GetField())));
 
-                // We set the name here to make the object referencable.
+                // We set the name here to make the object referenceable.
                 pField.SetName(sw::mark::MarkBase::GenerateNewName(u"__Annotation__"));
                 pField.SetPostItId();
             }
