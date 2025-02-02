@@ -34,11 +34,11 @@ struct TransItem;
 
 struct ScCellKeyword
 {
-    const char* mpName;
+    OUString msName;
     OpCode meOpCode;
     const css::lang::Locale& mrLocale;
 
-    ScCellKeyword(const char* pName, OpCode eOpCode, const css::lang::Locale& rLocale);
+    ScCellKeyword(const OUString& sName, OpCode eOpCode, const css::lang::Locale& rLocale);
 };
 
 typedef std::unordered_map<OUString, ::std::vector<ScCellKeyword>> ScCellKeywordHashMap;
@@ -70,7 +70,7 @@ public:
 private:
     ScCellKeywordTranslator();
 
-    void addToMap(const OUString& rKey, const char* pName, const css::lang::Locale& rLocale,
+    void addToMap(const OUString& rKey, const OUString& pName, const css::lang::Locale& rLocale,
                   OpCode eOpCode);
 
     static ::std::unique_ptr<ScCellKeywordTranslator> spInstance;

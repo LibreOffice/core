@@ -70,8 +70,8 @@ static LocaleMatch lclLocaleCompare(const lang::Locale& rLocale1, const Language
     return eMatchLevel;
 }
 
-ScCellKeyword::ScCellKeyword(const char* pName, OpCode eOpCode, const lang::Locale& rLocale) :
-    mpName(pName),
+ScCellKeyword::ScCellKeyword(const OUString& sName, OpCode eOpCode, const lang::Locale& rLocale) :
+    msName(sName),
     meOpCode(eOpCode),
     mrLocale(rLocale)
 {
@@ -93,12 +93,12 @@ static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
     {
         // Since no locale nor opcode matching is needed, simply return
         // the first item on the list.
-        rName = OUString::createFromAscii( itr->second.front().mpName );
+        rName = itr->second.front().msName;
         return;
     }
 
     LanguageTag aLanguageTag( pLocale ? *pLocale : lang::Locale(u""_ustr,u""_ustr,u""_ustr));
-    const char* aBestMatchName = nullptr;
+    const OUString* aBestMatchName = nullptr;
     LocaleMatch eLocaleMatchLevel = LOCALE_MATCH_NONE;
     bool bOpCodeMatched = false;
 
@@ -112,18 +112,18 @@ static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
                 if ( eLevel == LOCALE_MATCH_ALL )
                 {
                     // Name with matching opcode and locale found.
-                    rName = OUString::createFromAscii( elem.mpName );
+                    rName = elem.msName;
                     return;
                 }
                 else if ( eLevel > eLocaleMatchLevel )
                 {
                     // Name with a better matching locale.
                     eLocaleMatchLevel = eLevel;
-                    aBestMatchName = elem.mpName;
+                    aBestMatchName = &elem.msName;
                 }
                 else if ( !bOpCodeMatched )
                     // At least the opcode matches.
-                    aBestMatchName = elem.mpName;
+                    aBestMatchName = &elem.msName;
 
                 bOpCodeMatched = true;
             }
@@ -133,7 +133,7 @@ static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
             if ( elem.meOpCode == eOpCode )
             {
                 // Name with a matching opcode preferred.
-                rName = OUString::createFromAscii( elem.mpName );
+                rName = elem.msName;
                 return;
             }
         }
@@ -143,21 +143,21 @@ static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
             if ( eLevel == LOCALE_MATCH_ALL )
             {
                 // Name with matching locale preferred.
-                rName = OUString::createFromAscii( elem.mpName );
+                rName = elem.msName;
                 return;
             }
             else if ( eLevel > eLocaleMatchLevel )
             {
                 // Name with a better matching locale.
                 eLocaleMatchLevel = eLevel;
-                aBestMatchName = elem.mpName;
+                aBestMatchName = &elem.msName;
             }
         }
     }
 
     // No preferred strings found.  Return the best matching name.
     if (aBestMatchName)
-        rName = OUString::createFromAscii(aBestMatchName);
+        rName = *aBestMatchName;
 }
 
 void ScCellKeywordTranslator::transKeyword(OUString& rName, const lang::Locale* pLocale, OpCode eOpCode)
@@ -174,8 +174,8 @@ void ScCellKeywordTranslator::transKeyword(OUString& rName, const lang::Locale* 
 
 struct TransItem
 {
-    const sal_Unicode*  from;
-    const char*         to;
+    OUString            from;
+    OUString            to;
     OpCode              func;
 };
 
@@ -190,85 +190,85 @@ ScCellKeywordTranslator::ScCellKeywordTranslator() :
 
     static const lang::Locale aFr(u"fr"_ustr, u""_ustr, u""_ustr);
 
-    static const TransItem pFr[] = {
-        { u"ADRESSE", "ADDRESS", ocCell },
-        { u"COLONNE", "COL", ocCell },
-        { u"CONTENU", "CONTENTS", ocCell },
-        { u"COULEUR", "COLOR", ocCell },
-        { u"LARGEUR", "WIDTH", ocCell },
-        { u"LIGNE", "ROW", ocCell },
-        { u"NOMFICHIER", "FILENAME", ocCell },
-        { u"PREFIXE", "PREFIX", ocCell },
-        { u"PROTEGE", "PROTECT", ocCell },
-        { u"NBFICH", "NUMFILE", ocInfo },
-        { u"RECALCUL", "RECALC", ocInfo },
-        { u"SYSTEXPL", "SYSTEM", ocInfo },
-        { u"VERSION", "RELEASE", ocInfo },
-        { u"VERSIONSE", "OSVERSION", ocInfo },
+    static constexpr TransItem pFr[] = {
+        { u"ADRESSE"_ustr, u"ADDRESS"_ustr, ocCell },
+        { u"COLONNE"_ustr, u"COL"_ustr, ocCell },
+        { u"CONTENU"_ustr, u"CONTENTS"_ustr, ocCell },
+        { u"COULEUR"_ustr, u"COLOR"_ustr, ocCell },
+        { u"LARGEUR"_ustr, u"WIDTH"_ustr, ocCell },
+        { u"LIGNE"_ustr, u"ROW"_ustr, ocCell },
+        { u"NOMFICHIER"_ustr, u"FILENAME"_ustr, ocCell },
+        { u"PREFIXE"_ustr, u"PREFIX"_ustr, ocCell },
+        { u"PROTEGE"_ustr, u"PROTECT"_ustr, ocCell },
+        { u"NBFICH"_ustr, u"NUMFILE"_ustr, ocInfo },
+        { u"RECALCUL"_ustr, u"RECALC"_ustr, ocInfo },
+        { u"SYSTEXPL"_ustr, u"SYSTEM"_ustr, ocInfo },
+        { u"VERSION"_ustr, u"RELEASE"_ustr, ocInfo },
+        { u"VERSIONSE"_ustr, u"OSVERSION"_ustr, ocInfo },
     };
 
     for (const auto& element : pFr)
-        addToMap(OUString(element.from), element.to, aFr, element.func);
+        addToMap(element.from, element.to, aFr, element.func);
 
     // Hungarian language locale
 
     static const lang::Locale aHu(u"hu"_ustr, u""_ustr, u""_ustr);
 
-    static const TransItem pHu[] = {
-        { u"CÍM", "ADDRESS", ocCell },
-        { u"OSZLOP", "COL", ocCell },
-        { u"SZÍN", "COLOR", ocCell },
-        { u"TARTALOM", "CONTENTS", ocCell },
-        { u"SZÉLES", "WIDTH", ocCell },
-        { u"SOR", "ROW", ocCell },
-        { u"FILENÉV", "FILENAME", ocCell },
-        { u"PREFIX", "PREFIX", ocCell },
-        { u"VÉDETT", "PROTECT", ocCell },
-        { u"KOORD", "COORD", ocCell },
-        { u"FORMA", "FORMAT", ocCell },
-        { u"ZÁRÓJELEK", "PARENTHESES", ocCell },
-        { u"LAP", "SHEET", ocCell },
-        { u"TÍPUS", "TYPE", ocCell },
-        { u"FILESZÁM", "NUMFILE", ocInfo },
-        { u"SZÁMOLÁS", "RECALC", ocInfo },
-        { u"RENDSZER", "SYSTEM", ocInfo },
-        { u"VERZIÓ", "RELEASE", ocInfo },
-        { u"OPRENDSZER", "OSVERSION", ocInfo },
+    static constexpr TransItem pHu[] = {
+        { u"CÍM"_ustr, u"ADDRESS"_ustr, ocCell },
+        { u"OSZLOP"_ustr, u"COL"_ustr, ocCell },
+        { u"SZÍN"_ustr, u"COLOR"_ustr, ocCell },
+        { u"TARTALOM"_ustr, u"CONTENTS"_ustr, ocCell },
+        { u"SZÉLES"_ustr, u"WIDTH"_ustr, ocCell },
+        { u"SOR"_ustr, u"ROW"_ustr, ocCell },
+        { u"FILENÉV"_ustr, u"FILENAME"_ustr, ocCell },
+        { u"PREFIX"_ustr, u"PREFIX"_ustr, ocCell },
+        { u"VÉDETT"_ustr, u"PROTECT"_ustr, ocCell },
+        { u"KOORD"_ustr, u"COORD"_ustr, ocCell },
+        { u"FORMA"_ustr, u"FORMAT"_ustr, ocCell },
+        { u"ZÁRÓJELEK"_ustr, u"PARENTHESES"_ustr, ocCell },
+        { u"LAP"_ustr, u"SHEET"_ustr, ocCell },
+        { u"TÍPUS"_ustr, u"TYPE"_ustr, ocCell },
+        { u"FILESZÁM"_ustr, u"NUMFILE"_ustr, ocInfo },
+        { u"SZÁMOLÁS"_ustr, u"RECALC"_ustr, ocInfo },
+        { u"RENDSZER"_ustr, u"SYSTEM"_ustr, ocInfo },
+        { u"VERZIÓ"_ustr, u"RELEASE"_ustr, ocInfo },
+        { u"OPRENDSZER"_ustr, u"OSVERSION"_ustr, ocInfo },
     };
 
     for (const auto& element : pHu)
-        addToMap(OUString(element.from), element.to, aHu, element.func);
+        addToMap(element.from, element.to, aHu, element.func);
 
     // German language locale
 
     static const lang::Locale aDe(u"de"_ustr, u""_ustr, u""_ustr);
 
-    static const TransItem pDe[] = {
-        { u"ZEILE", "ROW", ocCell },
-        { u"SPALTE", "COL", ocCell },
-        { u"BREITE", "WIDTH", ocCell },
-        { u"ADRESSE", "ADDRESS", ocCell },
-        { u"DATEINAME", "FILENAME", ocCell },
-        { u"FARBE", "COLOR", ocCell },
-        { u"FORMAT", "FORMAT", ocCell },
-        { u"INHALT", "CONTENTS", ocCell },
-        { u"KLAMMERN", "PARENTHESES", ocCell },
-        { u"SCHUTZ", "PROTECT", ocCell },
-        { u"TYP", "TYPE", ocCell },
-        { u"PRÄFIX", "PREFIX", ocCell },
-        { u"BLATT", "SHEET", ocCell },
-        { u"KOORD", "COORD", ocCell },
+    static constexpr TransItem pDe[] = {
+        { u"ZEILE"_ustr, u"ROW"_ustr, ocCell },
+        { u"SPALTE"_ustr, u"COL"_ustr, ocCell },
+        { u"BREITE"_ustr, u"WIDTH"_ustr, ocCell },
+        { u"ADRESSE"_ustr, u"ADDRESS"_ustr, ocCell },
+        { u"DATEINAME"_ustr, u"FILENAME"_ustr, ocCell },
+        { u"FARBE"_ustr, u"COLOR"_ustr, ocCell },
+        { u"FORMAT"_ustr, u"FORMAT"_ustr, ocCell },
+        { u"INHALT"_ustr, u"CONTENTS"_ustr, ocCell },
+        { u"KLAMMERN"_ustr, u"PARENTHESES"_ustr, ocCell },
+        { u"SCHUTZ"_ustr, u"PROTECT"_ustr, ocCell },
+        { u"TYP"_ustr, u"TYPE"_ustr, ocCell },
+        { u"PRÄFIX"_ustr, u"PREFIX"_ustr, ocCell },
+        { u"BLATT"_ustr, u"SHEET"_ustr, ocCell },
+        { u"KOORD"_ustr, u"COORD"_ustr, ocCell },
     };
 
     for (const auto& element : pDe)
-        addToMap(OUString(element.from), element.to, aDe, element.func);
+        addToMap(element.from, element.to, aDe, element.func);
 }
 
 ScCellKeywordTranslator::~ScCellKeywordTranslator()
 {
 }
 
-void ScCellKeywordTranslator::addToMap(const OUString& rKey, const char* pName, const lang::Locale& rLocale, OpCode eOpCode)
+void ScCellKeywordTranslator::addToMap(const OUString& rKey, const OUString& pName, const lang::Locale& rLocale, OpCode eOpCode)
 {
     ScCellKeyword aKeyItem( pName, eOpCode, rLocale );
 
