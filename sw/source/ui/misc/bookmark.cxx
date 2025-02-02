@@ -348,6 +348,10 @@ void SwInsertBookmarkDlg::PopulateTable()
     m_aTableBookmarks.clear();
     m_xBookmarksBox->clear();
 
+    int nSortColumn = m_xBookmarksBox->get_sort_column();
+    if (nSortColumn != -1)
+        m_xBookmarksBox->make_unsorted();
+
     m_rSh.StartAllAction();
     IDocumentMarkAccess* const pMarkAccess = m_rSh.getIDocumentMarkAccess();
     for (auto ppBookmark = pMarkAccess->getBookmarksBegin();
@@ -360,6 +364,10 @@ void SwInsertBookmarkDlg::PopulateTable()
         }
     }
     m_rSh.EndAllAction();
+
+    if (nSortColumn != -1)
+        m_xBookmarksBox->make_sorted();
+
     m_nLastBookmarksCount = pMarkAccess->getBookmarksCount();
 }
 
