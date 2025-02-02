@@ -27,6 +27,7 @@
 #include <com/sun/star/ucb/Lock.hpp>
 #include <utility>
 #include <comphelper/lok.hxx>
+#include <condition_variable>
 
 #include "CurlSession.hxx"
 
@@ -60,7 +61,10 @@ typedef std::map< OUString, LockInfo > LockInfoMap;
 
 class SerfLockStore : public comphelper::LibreOfficeKit::ThreadJoinable
 {
+public:
     std::mutex         m_aMutex;
+    std::condition_variable m_aCondition;
+    std::chrono::milliseconds refreshLocks(std::unique_lock<std::mutex>& rGuard);
     rtl::Reference< TickerThread > m_pTickerThread;
     LockInfoMap        m_aLockInfoMap;
 
