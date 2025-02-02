@@ -3692,7 +3692,34 @@ SwTwips SwTextFrame::CalcFitToContent()
 
     SetPara( pOldPara );
 
-    return nMax;
+    // tdf#164932 handle numbering list offset
+    const SwTextNode* pTextNode( GetTextNodeForParaProps() );
+    SwTwips nNumOffset = 0;
+    if ( pTextNode->IsNumbered(getRootFrame()) &&
+        pTextNode->IsCountedInList() && pTextNode->GetNumRule() )
+    {
+        int nListLevel = pTextNode->GetActualListLevel();
+
+        if (nListLevel < 0)
+            nListLevel = 0;
+
+        if (nListLevel >= MAXLEVEL)
+            nListLevel = MAXLEVEL - 1;
+
+        const SwNumFormat& rNumFormat =
+                pTextNode->GetNumRule()->Get( o3tl::narrowing<sal_uInt16>(nListLevel) );
+        if ( rNumFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+        {
+            const SwAttrSet& rSet = pTextNode->GetSwAttrSet();
+            ::sw::ListLevelIndents const indents(pTextNode->AreListLevelIndentsApplicable());
+            SvxTextLeftMarginItem leftMargin(rSet.GetTextLeftMargin());
+            if (indents & ::sw::ListLevelIndents::LeftMargin)
+                leftMargin.SetTextLeft(SvxIndentValue::twips(rNumFormat.GetAbsLSpace()));
+            nNumOffset = leftMargin.ResolveTextLeft(/*metrics*/ {});
+        }
+    }
+
+    return nMax + nNumOffset;
 }
 
 /**
