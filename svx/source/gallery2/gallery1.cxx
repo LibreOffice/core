@@ -230,7 +230,7 @@ public:
 
 
 Gallery::Gallery( std::u16string_view rMultiPath )
-:       bMultiPath          ( false )
+:       m_bMultiPath          ( false )
 {
     ImplLoad( rMultiPath );
 }
@@ -253,15 +253,15 @@ void Gallery::ImplLoad( std::u16string_view rMultiPath )
 {
     bool bIsReadOnlyDir {false};
 
-    bMultiPath = !rMultiPath.empty();
+    m_bMultiPath = !rMultiPath.empty();
 
     INetURLObject aCurURL(SvtPathOptions().GetConfigPath());
     ImplLoadSubDirs( aCurURL, bIsReadOnlyDir );
 
     if( !bIsReadOnlyDir )
-        aUserURL = aCurURL;
+        m_aUserURL = aCurURL;
 
-    if( bMultiPath )
+    if( m_bMultiPath )
     {
         bool bIsRelURL {true};
         sal_Int32 nIdx {0};
@@ -270,22 +270,22 @@ void Gallery::ImplLoad( std::u16string_view rMultiPath )
             aCurURL = INetURLObject(o3tl::getToken(rMultiPath, 0, ';', nIdx));
             if (bIsRelURL)
             {
-                aRelURL = aCurURL;
+                m_aRelURL = aCurURL;
                 bIsRelURL = false;
             }
 
             ImplLoadSubDirs( aCurURL, bIsReadOnlyDir );
 
             if( !bIsReadOnlyDir )
-                aUserURL = aCurURL;
+                m_aUserURL = aCurURL;
         }
         while (nIdx>0);
     }
     else
-        aRelURL = INetURLObject( rMultiPath );
+        m_aRelURL = INetURLObject( rMultiPath );
 
-    DBG_ASSERT( aUserURL.GetProtocol() != INetProtocol::NotValid, "no writable Gallery user directory available" );
-    DBG_ASSERT( aRelURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
+    DBG_ASSERT( m_aUserURL.GetProtocol() != INetProtocol::NotValid, "no writable Gallery user directory available" );
+    DBG_ASSERT( m_aRelURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 }
 
 void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadOnly )
@@ -451,7 +451,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                                 GalleryThemeEntry* pEntry = GalleryFileStorageEntry::CreateThemeEntry( aThmURL, rbDirIsReadOnly || bReadOnly );
 
                                 if( pEntry )
-                                    aThemeList.emplace_back( pEntry );
+                                    m_aThemeList.emplace_back( pEntry );
                             }
                         }
                         catch( const ucb::ContentCreationException& )
@@ -483,9 +483,9 @@ GalleryThemeEntry* Gallery::ImplGetThemeEntry( std::u16string_view rThemeName )
 {
     if( !rThemeName.empty() )
     {
-        for ( size_t i = 0, n = aThemeList.size(); i < n; ++i )
-            if( rThemeName == aThemeList[ i ]->GetThemeName() )
-                return aThemeList[ i ].get();
+        for ( size_t i = 0, n = m_aThemeList.size(); i < n; ++i )
+            if( rThemeName == m_aThemeList[ i ]->GetThemeName() )
+                return m_aThemeList[ i ].get();
     }
 
     return nullptr;
@@ -495,9 +495,9 @@ OUString Gallery::GetThemeName( sal_uInt32 nThemeId ) const
 {
     GalleryThemeEntry* pFound = nullptr;
 
-    for ( size_t i = 0, n = aThemeList.size(); i < n && !pFound; ++i )
+    for ( size_t i = 0, n = m_aThemeList.size(); i < n && !pFound; ++i )
     {
-        GalleryThemeEntry* pEntry = aThemeList[ i ].get();
+        GalleryThemeEntry* pEntry = m_aThemeList[ i ].get();
         if( nThemeId == pEntry->GetId() )
             pFound = pEntry;
     }
@@ -587,7 +587,7 @@ bool Gallery::CreateTheme( const OUString& rThemeName )
                 true, aURL, rThemeName,
                 false, true, 0, false );
 
-        aThemeList.emplace_back( pNewEntry );
+        m_aThemeList.emplace_back( pNewEntry );
         delete pNewEntry->createGalleryTheme( this );
         Broadcast( GalleryHint( GalleryHintType::THEME_CREATED, rThemeName ) );
         bRet = true;
@@ -637,10 +637,10 @@ bool Gallery::RemoveTheme( const OUString& rThemeName )
             pThemeEntry->removeTheme();
         }
 
-        auto it = std::find_if(aThemeList.begin(), aThemeList.end(),
+        auto it = std::find_if(m_aThemeList.begin(), m_aThemeList.end(),
             [&pThemeEntry](const std::unique_ptr<GalleryThemeEntry>& rpEntry) { return pThemeEntry == rpEntry.get(); });
-        if (it != aThemeList.end())
-            aThemeList.erase( it );
+        if (it != m_aThemeList.end())
+            m_aThemeList.erase( it );
 
         Broadcast( GalleryHint( GalleryHintType::THEME_REMOVED, rThemeName ) );
 
@@ -664,9 +664,9 @@ GalleryTheme* Gallery::ImplGetCachedTheme(GalleryThemeEntry* pThemeEntry)
 
     if( pThemeEntry )
     {
-        auto it = std::find_if(aThemeCache.begin(), aThemeCache.end(),
+        auto it = std::find_if(m_aThemeCache.begin(), m_aThemeCache.end(),
             [&pThemeEntry](const GalleryThemeCacheEntry* pEntry) { return pThemeEntry == pEntry->GetThemeEntry(); });
-        if (it != aThemeCache.end())
+        if (it != m_aThemeCache.end())
             pTheme = (*it)->GetTheme();
 
         if( !pTheme )
@@ -674,8 +674,8 @@ GalleryTheme* Gallery::ImplGetCachedTheme(GalleryThemeEntry* pThemeEntry)
             std::unique_ptr<GalleryTheme> pNewTheme = pThemeEntry->getCachedTheme(this);
             if (pNewTheme)
             {
-                aThemeCache.push_back( new GalleryThemeCacheEntry( pThemeEntry, std::move(pNewTheme) ));
-                pTheme = aThemeCache.back()->GetTheme();
+                m_aThemeCache.push_back( new GalleryThemeCacheEntry( pThemeEntry, std::move(pNewTheme) ));
+                pTheme = m_aThemeCache.back()->GetTheme();
             }
         }
     }
@@ -685,12 +685,12 @@ GalleryTheme* Gallery::ImplGetCachedTheme(GalleryThemeEntry* pThemeEntry)
 
 void Gallery::ImplDeleteCachedTheme( GalleryTheme const * pTheme )
 {
-    auto it = std::find_if(aThemeCache.begin(), aThemeCache.end(),
+    auto it = std::find_if(m_aThemeCache.begin(), m_aThemeCache.end(),
         [&pTheme](const GalleryThemeCacheEntry* pEntry) { return pTheme == pEntry->GetTheme(); });
-    if (it != aThemeCache.end())
+    if (it != m_aThemeCache.end())
     {
         delete *it;
-        aThemeCache.erase(it);
+        m_aThemeCache.erase(it);
     }
 }
 

@@ -95,11 +95,11 @@ class SVXCORE_DLLPUBLIC Gallery final : public SfxBroadcaster
 
 private:
 
-    std::vector< std::unique_ptr<GalleryThemeEntry> > aThemeList;
-    GalleryCacheThemeList       aThemeCache;
-    INetURLObject               aRelURL;
-    INetURLObject               aUserURL;
-    bool                        bMultiPath;
+    std::vector< std::unique_ptr<GalleryThemeEntry> > m_aThemeList;
+    GalleryCacheThemeList       m_aThemeCache;
+    INetURLObject               m_aRelURL;
+    INetURLObject               m_aUserURL;
+    bool                        m_bMultiPath;
 
     SAL_DLLPRIVATE void         ImplLoad( std::u16string_view rMultiPath );
     SAL_DLLPRIVATE void         ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbIsReadOnly );
@@ -119,9 +119,9 @@ public:
 
     static Gallery*             GetGalleryInstance();
 
-    size_t                      GetThemeCount() const { return aThemeList.size(); }
+    size_t                      GetThemeCount() const { return m_aThemeList.size(); }
     SAL_DLLPRIVATE const GalleryThemeEntry* GetThemeInfo( size_t nPos )
-                                { return nPos < aThemeList.size() ? aThemeList[ nPos ].get() : nullptr; }
+                                { return nPos < m_aThemeList.size() ? m_aThemeList[ nPos ].get() : nullptr; }
     const GalleryThemeEntry* GetThemeInfo( std::u16string_view rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
 
     bool                        HasTheme( std::u16string_view rThemeName );
@@ -136,8 +136,8 @@ public:
 
 public:
 
-    SAL_DLLPRIVATE const INetURLObject& GetUserURL() const { return aUserURL; }
-    SAL_DLLPRIVATE const INetURLObject& GetRelativeURL() const { return aRelURL; }
+    SAL_DLLPRIVATE const INetURLObject& GetUserURL() const { return m_aUserURL; }
+    SAL_DLLPRIVATE const INetURLObject& GetRelativeURL() const { return m_aRelURL; }
 };
 
 #endif // INCLUDED_SVX_GALLERY1_HXX
