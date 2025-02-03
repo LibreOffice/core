@@ -1051,9 +1051,10 @@ void ScDocument::UpdateAreaLinks()
         return;
 
     const ::sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
-    for (const auto & rLink : rLinks)
+    // Note: SvBaseLink::Update can remove entries after the current one
+    for (size_t i = 0; i < rLinks.size(); ++i)
     {
-        ::sfx2::SvBaseLink* pBase = rLink.get();
+        ::sfx2::SvBaseLink* pBase = rLinks[i].get();
         if (dynamic_cast<const ScAreaLink*>( pBase) !=  nullptr)
             pBase->Update();
     }
