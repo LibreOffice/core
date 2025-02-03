@@ -6821,7 +6821,7 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
     {
         // tdf#164843: Double references from relative named ranges can point to large
         // ranges (MAXCOL/MAXROW) and because of that some function evaluation
-        // like SubTotal can be extreamly slow when we call ScTable::CompileHybridFormula
+        // like SubTotal can be extremely slow when we call ScTable::CompileHybridFormula
         // with these large ranges. Since all the SubTotal functions ignore empty cells
         // its worth to optimize and trim the double references in SubTotal functions.
         FormulaToken** ppTok = pCode - 2;
