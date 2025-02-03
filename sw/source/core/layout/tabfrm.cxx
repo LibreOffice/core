@@ -6130,7 +6130,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
          !IsCoveredCell() &&
          (pPg = FindPageFrame())!=nullptr )
     {
-        if ( !pLower->IsContentFrame() && pLower->IsSctFrame() && !pLower->IsTabFrame() )
+        if ( !pLower->IsContentFrame() && !pLower->IsSctFrame() && !pLower->IsTabFrame() )
         {
             // OSL_ENSURE(for HTML-import!
             OSL_ENSURE( false, "VAlign to cell without content" );
