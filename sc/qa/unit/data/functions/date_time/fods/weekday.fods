@@ -782,7 +782,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Err</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce14" table:formula="of:=ISERROR(a13ú)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce14" table:formula="of:=ISERROR(A13)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="=WEEKDAY(K10;K1:K2)" calcext:value-type="string">
