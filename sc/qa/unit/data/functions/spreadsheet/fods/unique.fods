@@ -5104,6 +5104,57 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="25"/>
     </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="2" table:formula="of:=COM.MICROSOFT.UNIQUE({&quot;Á&quot;|&quot;á&quot;|&quot;é&quot;|&quot;É&quot;})" office:value-type="string" office:string-value="Á" calcext:value-type="string">
+      <text:p>Á</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Á</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce38" table:formula="of:=([.A74]=[.E74])AND([.B74]=[.F74])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A74])" office:value-type="string" office:string-value="{=UNIQUE({&quot;Á&quot;;&quot;á&quot;;&quot;é&quot;;&quot;É&quot;})}" calcext:value-type="string">
+      <text:p>{=UNIQUE({&quot;Á&quot;;&quot;á&quot;;&quot;é&quot;;&quot;É&quot;})}</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="25"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell office:value-type="string" office:string-value="é" calcext:value-type="string">
+      <text:p>é</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>é</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce38" table:formula="of:=([.A75]=[.E75])AND([.B75]=[.F75])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A75])" office:value-type="string" office:string-value="{=UNIQUE({&quot;Á&quot;;&quot;á&quot;;&quot;é&quot;;&quot;É&quot;})}" calcext:value-type="string">
+      <text:p>{=UNIQUE({&quot;Á&quot;;&quot;á&quot;;&quot;é&quot;;&quot;É&quot;})}</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="25"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="1" table:formula="of:=COM.MICROSOFT.UNIQUE({&quot;Á&quot;|&quot;á&quot;|&quot;é&quot;|&quot;É&quot;|&quot;c&quot;}; ; 1)" office:value-type="string" office:string-value="c" calcext:value-type="string">
+      <text:p>c</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>c</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce38" table:formula="of:=([.A76]=[.E76])AND([.B76]=[.F76])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A76])" office:value-type="string" office:string-value="{=UNIQUE({&quot;Á&quot;;&quot;á&quot;;&quot;é&quot;;&quot;É&quot;;&quot;c&quot;}; ; 1)}" calcext:value-type="string">
+      <text:p>{=UNIQUE({&quot;Á&quot;;&quot;á&quot;;&quot;é&quot;;&quot;É&quot;;&quot;c&quot;}; ; 1)}</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="25"/>
+    </table:table-row>
     <table:table-row table:style-name="ro2" table:number-rows-repeated="140">
      <table:table-cell table:number-columns-repeated="8"/>
      <table:table-cell table:style-name="ce37"/>
