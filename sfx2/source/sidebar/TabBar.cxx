@@ -230,7 +230,6 @@ bool TabBar::EventNotify(NotifyEvent& rEvent)
 void TabBar::CreateTabItem(weld::Toolbar& rItem, const DeckDescriptor& rDeckDescriptor)
 {
     rItem.set_accessible_description(rDeckDescriptor.msHelpText);
-    rItem.set_tooltip_text(rDeckDescriptor.msHelpText);
     const OUString sCommand = ".uno:SidebarDeck." + rDeckDescriptor.msId;
     OUString sShortcut = vcl::CommandInfoProvider::GetCommandShortcut(sCommand, mxFrame);
     if (!sShortcut.isEmpty())
