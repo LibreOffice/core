@@ -365,6 +365,12 @@ Finally:
 End Property	&apos;	SFDocuments.SF_Document.Keywords
 
 REM -----------------------------------------------------------------------------
+Property Get MenuHeaders() As Variant
+&apos;&apos;&apos;	Returns the list, as an array of strings, of the menu headers present in the menubar
+	MenuHeaders = _PropertyGet(&quot;MenuHeaders&quot;)
+End Property	&apos;	SFDocuments.SF_Document.MenuHeaders
+
+REM -----------------------------------------------------------------------------
 Property Get Readonly() As Boolean
 &apos;&apos;&apos;	Returns True if the document must not be modified
 	Readonly = _PropertyGet(&quot;Readonly&quot;)
@@ -1011,6 +1017,7 @@ Public Function Properties() As Variant
 					, &quot;IsMath&quot; _
 					, &quot;IsWriter&quot; _
 					, &quot;Keywords&quot; _
+					, &quot;MenuHeaders&quot; _
 					, &quot;Readonly&quot; _
 					, &quot;StyleFamilies&quot; _
 					, &quot;Subject&quot; _
@@ -2152,6 +2159,9 @@ Private Function _PropertyGet(Optional ByVal psProperty As String) As Variant
 Dim oProperties As Object			&apos;	Document or Custom properties
 Dim oTransient As Object			&apos;	com.sun.star.frame.TransientDocumentsDocumentContentFactory
 Dim oContent As Object				&apos;	com.sun.star.comp.ucb.TransientDocumentsContent
+Dim oMenuBar As Object				&apos;	com.sun.star.awt.XMenuBar
+Dim sMenus As String				&apos;	List of menus in the menubar
+Dim i As Long, j As Long
 Dim cstThisSub As String
 Const cstSubArgs = &quot;&quot;
 
@@ -2167,48 +2177,60 @@ Const cstSubArgs = &quot;&quot;
 		If Not _IsStillAlive() Then GoTo Finally
 	End If
 
-	Select Case psProperty
-		Case &quot;CustomProperties&quot;
+	Select Case UCase(psProperty)
+		Case UCase(&quot;CustomProperties&quot;)
 			_CustomProperties = CreateScriptService(&quot;Dictionary&quot;, True)	&apos;	Always reload as updates could have been done manually by user
 																		&apos;	(with case-sensitive comparison of keys)
 			_CustomProperties.ImportFromPropertyValues(_Component.getDocumentProperties().UserDefinedProperties.getPropertyValues)
 			_PropertyGet = _CustomProperties
-		Case &quot;Description&quot;
+		Case UCase(&quot;Description&quot;)
 			_PropertyGet = _Component.DocumentProperties.Description
-		Case &quot;DocumentProperties&quot;
+		Case UCase(&quot;DocumentProperties&quot;)
 			_LoadDocumentProperties()	&apos;	Always reload as updates could have been done manually by user
 			Set _PropertyGet = _DocumentProperties
-		Case &quot;DocumentType&quot;
+		Case UCase(&quot;DocumentType&quot;)
 			_PropertyGet = _DocumentType
-		Case &quot;ExportFilters&quot;
+		Case UCase(&quot;ExportFilters&quot;)
 			_PropertyGet = _GetFilterNames(True)
-		Case &quot;FileSystem&quot;
+		Case UCase(&quot;FileSystem&quot;)
 			&apos;	Natural choice would have been to use the component.RunTimeUID property
 			&apos;	However it is optional in the OfficeDocument service and not available for Base documents
 			&apos;	Below a more generic alternative derived from the get_document_uri() method found in apso.py
 			Set oTransient = ScriptForge.SF_Utils._GetUnoService(&quot;TransientDocumentFactory&quot;)
 			Set oContent = oTransient.createDocumentContent(_Component)
 			_PropertyGet = oContent.getIdentifier().ContentIdentifier &amp; &quot;/&quot;
-		Case &quot;ImportFilters&quot;
+		Case UCase(&quot;ImportFilters&quot;)
 			_PropertyGet = _GetFilterNames(False)
-		Case &quot;IsAlive&quot;
+		Case UCase(&quot;IsAlive&quot;)
 			_PropertyGet = _IsStillAlive(False, False)
-		Case &quot;IsBase&quot;, &quot;IsCalc&quot;, &quot;IsDraw&quot;, &quot;IsFormDocument&quot;, &quot;IsImpress&quot;, &quot;IsMath&quot;, &quot;IsWriter&quot;
+		Case UCase(&quot;IsBase&quot;), UCase(&quot;IsCalc&quot;), UCase(&quot;IsDraw&quot;), UCase(&quot;IsFormDocument&quot;), UCase(&quot;IsImpress&quot;), UCase(&quot;IsMath&quot;), UCase(&quot;IsWriter&quot;)
 			_PropertyGet = ( Mid(psProperty, 3) = _DocumentType )
-		Case &quot;Keywords&quot;
+		Case UCase(&quot;Keywords&quot;)
 			_PropertyGet = Join(_Component.DocumentProperties.Keywords, &quot;, &quot;)
-		Case &quot;Readonly&quot;
+		Case UCase(&quot;MenuHeaders&quot;)
+			Set oMenuBar = _Component.CurrentController.Frame.LayoutManager.getElement(&quot;private:resource/menubar/menubar&quot;).XMenuBar
+			&apos;	Join all menu headers, then split the whole string
+			sMenus = &quot;&quot;
+			With oMenuBar
+				For i = 0 To .ItemCount - 1
+					j = .getItemId(i)
+					sMenus = sMenus &amp; .getItemText(j) &amp; &quot;,&quot;
+				Next i
+			End With
+			If Len(sMenus) &gt; 0 Then sMenus = Left(sMenus, Len(sMenus) - 1)		&apos;	Suppress final comma
+			_PropertyGet = Split(Replace(sMenus, &quot;~&quot;, &quot;&quot;), &quot;,&quot;)
+		Case UCase(&quot;Readonly&quot;)
 			_PropertyGet = _Component.isReadonly()
-		Case &quot;StyleFamilies&quot;
+		Case UCase(&quot;StyleFamilies&quot;)
 			If UBound(_StyleFamilies) &lt; 0 Then _StyleFamilies = _Component.getStyleFamilies().getElementNames()
 			_PropertyGet = _StyleFamilies
-		Case &quot;Subject&quot;
+		Case UCase(&quot;Subject&quot;)
 			_PropertyGet = _Component.DocumentProperties.Subject
-		Case &quot;Title&quot;
+		Case UCase(&quot;Title&quot;)
 			_PropertyGet = _Component.DocumentProperties.Title
-		Case &quot;XComponent&quot;
+		Case UCase(&quot;XComponent&quot;)
 			Set _PropertyGet = _Component
-		Case &quot;XDocumentSettings&quot;
+		Case UCase(&quot;XDocumentSettings&quot;)
 			With _Component
 				If IsNull(_DocumentSettings) Then
 					Select Case _DocumentType

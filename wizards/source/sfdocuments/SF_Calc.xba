@@ -2648,6 +2648,7 @@ Public Function Properties() As Variant
 					, &quot;LastCell&quot; _
 					, &quot;LastColumn&quot; _
 					, &quot;LastRow&quot; _
+					, &quot;MenuHeaders&quot; _
 					, &quot;Range&quot; _
 					, &quot;Readonly&quot; _
 					, &quot;Region&quot; _
@@ -3761,6 +3762,11 @@ REM ----------------------------------------------------------------------------
 Property Let Keywords(Optional ByVal pvKeywords As Variant)
 	[_Super].Keywords = pvKeywords
 End Property	&apos;	SFDocuments.SF_Calc.Keywords
+
+REM -----------------------------------------------------------------------------
+Property Get MenuHeaders() As Variant
+	MenuHeaders = [_Super].GetProperty(&quot;MenuHeaders&quot;)
+End Property	&apos;	SFDocuments.SF_Calc.MenuHeaders
 
 REM -----------------------------------------------------------------------------
 Property Get Readonly() As Variant

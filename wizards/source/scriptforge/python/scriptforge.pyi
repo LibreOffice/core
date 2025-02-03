@@ -3129,6 +3129,8 @@ class SFDatabases:
         """ Returns True when the datasheet component has not been closed by the user.  """
         LastRow: int
         """ Returns the number of rows in the datasheet.    """
+        MenuHeaders: Tuple[str, ...]
+        """ Returns the list, as a tuple of strings, of the menus present in the menubar.   """
         OrderBy: str
         """ Specifies the order in which records are shown expressed as the ``ORDER BY`` clause of a ``SQL`` query
         without the ``ORDER BY`` keyword. If an empty string is specified then the active ``OrderBy`` is removed.   """
@@ -4466,6 +4468,8 @@ class SFDocuments:
         Keywords: str
         """ Get/set the ``Keywords`` property of the document as a comma-separated list of keywords.
         This property is not applicable to ``Base`` documents. """
+        MenuHeaders: Tuple[str, ...]
+        """ Returns the list, as a tuple of strings, of the menus present in the menubar.   """
         Readonly: bool
         """ ``True`` if the document is actually in read-only mode.
         This property is not applicable to ``Base`` documents. """
@@ -4933,7 +4937,6 @@ class SFDocuments:
                 """
             ...
 
-        # pylint: disable=arguments-renamed
         def PrintOut(self, formdocument: str, pages: str = ..., copies: int = ...) -> bool:
             """
                 Send the content of the form document to the printer.

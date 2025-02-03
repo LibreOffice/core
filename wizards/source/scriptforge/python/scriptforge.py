@@ -1969,8 +1969,8 @@ class SFDatabases:
         servicename = 'SFDatabases.Datasheet'
         servicesynonyms = ('datasheet', 'sfdatabases.datasheet')
         serviceproperties = dict(ColumnHeaders = 0, CurrentColumn = 1, CurrentRow = 1,
-                                 DatabaseFileName = 0, Filter = 2, IsAlive = 1, LastRow = 0, OrderBy = 2,
-                                 ParentDatabase = 0, Source = 0, SourceType = 0, XComponent = 0,
+                                 DatabaseFileName = 0, Filter = 2, IsAlive = 1, LastRow = 0, MenuHeaders = 1,
+                                 OrderBy = 2, ParentDatabase = 0, Source = 0, SourceType = 0, XComponent = 0,
                                  XControlModel = 0, XTabControllerModel = 0)
 
         def Activate(self):
@@ -2296,8 +2296,8 @@ class SFDocuments:
         serviceproperties = dict(CustomProperties = 3, Description = 3, DocumentProperties = 1,
                                  DocumentType = 0, ExportFilters = 0, FileSystem = 0, ImportFilters = 0,
                                  IsAlive = 1, IsBase = 0, IsCalc = 0, IsDraw = 0, IsFormDocument = 0,
-                                 IsImpress = 0, IsMath = 0, IsWriter = 0, Keywords = 3, Readonly = 1,
-                                 StyleFamilies = 1, Subject = 3, Title = 3, XComponent = 0,
+                                 IsImpress = 0, IsMath = 0, IsWriter = 0, Keywords = 3, MenuHeaders = 1,
+                                 Readonly = 1, StyleFamilies = 1, Subject = 3, Title = 3, XComponent = 0,
                                  XDocumentSettings = 0)
 
         @classmethod
@@ -2392,7 +2392,7 @@ class SFDocuments:
         servicesynonyms = ('base', 'scriptforge.base')
         serviceproperties = dict(DocumentType = 0, FileSystem = 0, IsAlive = 1, IsBase = 0, IsCalc = 0,
                                  IsDraw = 0, IsFormDocument = 0, IsImpress = 0, IsMath = 0,
-                                 IsWriter = 0, XComponent = 0)
+                                 IsWriter = 0, MenuHeaders = 1, XComponent = 0)
 
         @classmethod
         def ReviewServiceArgs(cls, windowname = ''):
@@ -2451,7 +2451,7 @@ class SFDocuments:
                                  DocumentProperties = 1, DocumentType = 0, ExportFilters = 0,
                                  FileSystem = 0, ImportFilters = 0, IsAlive = 1, IsBase = 0, IsCalc = 0,
                                  IsDraw = 0, IsFormDocument = 0, IsImpress = 0, IsMath = 0,
-                                 IsWriter = 0, Keywords = 3, Readonly = 1, Sheets = 1,
+                                 IsWriter = 0, Keywords = 3, MenuHeaders = 1, Readonly = 1, Sheets = 1,
                                  StyleFamilies = 0, Subject = 3, Title = 3, XComponent = 0,
                                  XDocumentSettings = 0)
 
@@ -2815,7 +2815,7 @@ class SFDocuments:
         servicesynonyms = ('formdocument', 'sfdocuments.formdocument')
         serviceproperties = dict(DocumentType = 0, FileSystem = 0, IsAlive = 1, IsBase = 0, IsCalc = 0,
                                  IsDraw = 0, IsFormDocument = 0, IsImpress = 0, IsMath = 0,
-                                 IsWriter = 0, Readonly = 0, StyleFamilies = 0, XComponent = 0,
+                                 IsWriter = 0, MenuHeaders = 1, Readonly = 0, StyleFamilies = 0, XComponent = 0,
                                  XDocumentSettings = 0)
 
         @classmethod
@@ -2854,8 +2854,8 @@ class SFDocuments:
         serviceproperties = dict(CustomProperties = 3, Description = 3, DocumentProperties = 1,
                                  DocumentType = 0, ExportFilters = 0, FileSystem = 0, ImportFilters = 0,
                                  IsAlive = 1, IsBase = 0, IsCalc = 0, IsDraw = 0, IsFormDocument = 0,
-                                 IsImpress = 0, IsMath = 0, IsWriter = 0, Keywords = 3, Readonly = 1,
-                                 StyleFamilies = 1, Subject = 3, Title = 3, XComponent = 0,
+                                 IsImpress = 0, IsMath = 0, IsWriter = 0, Keywords = 3, MenuHeaders = 1,
+                                 Readonly = 1, StyleFamilies = 1, Subject = 3, Title = 3, XComponent = 0,
                                  XDocumentSettings = 0)
 
         @classmethod

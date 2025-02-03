@@ -430,6 +430,7 @@ Public Function Properties() As Variant
 					, &quot;IsFormDocument&quot; _
 					, &quot;IsImpress&quot; _
 					, &quot;IsMath&quot; _
+					, &quot;MenuHeaders&quot; _
 					, &quot;Readonly&quot; _
 					, &quot;StyleFamilies&quot; _
 					, &quot;XComponent&quot; _
@@ -479,6 +480,11 @@ REM ----------------------------------------------------------------------------
 Property Get IsMath() As Boolean
 	IsMath = [_Super].GetProperty(&quot;IsMath&quot;)
 End Property	&apos;	SFDocuments.SF_FormDocument.IsMath
+
+REM -----------------------------------------------------------------------------
+Property Get MenuHeaders() As Variant
+	MenuHeaders = [_Super].GetProperty(&quot;MenuHeaders&quot;)
+End Property	&apos;	SFDocuments.SF_FormDocument.MenuHeaders
 
 REM -----------------------------------------------------------------------------
 Property Get Readonly() As Variant

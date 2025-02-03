@@ -160,6 +160,12 @@ Property Get LastRow() As Long
 End Property	&apos;	SFDatabases.SF_Datasheet.LastRow
 
 REM -----------------------------------------------------------------------------
+Property Get MenuHeaders() As Variant
+&apos;&apos;&apos;	Returns the list, as an array of strings, of the menu headers present in the menubar
+	MenuHeaders = _PropertyGet(&quot;MenuHeaders&quot;)
+End Property	&apos;	SFDocuments.SF_Datasheet.MenuHeaders
+
+REM -----------------------------------------------------------------------------
 Property Get OrderBy() As Variant
 &apos;&apos;&apos;	The Order is a SQL ORDER BY clause without the ORDER BY keywords
 	OrderBy = _PropertyGet(&quot;OrderBy&quot;)
@@ -586,6 +592,7 @@ Public Function Properties() As Variant
 					, &quot;Filter&quot; _
 					, &quot;IsAlive&quot; _
 					, &quot;LastRow&quot; _
+					, &quot;MenuHeaders&quot; _
 					, &quot;OrderBy&quot; _
 					, &quot;ParentDatabase&quot; _
 					, &quot;Source&quot; _
@@ -834,6 +841,9 @@ Private Function _PropertyGet(Optional ByVal psProperty As String) As Variant
 &apos;&apos;&apos;		psProperty: the name of the property
 
 Dim lRow As Long				&apos;	Actual row number
+Dim oMenuBar As Object				&apos;	com.sun.star.awt.XMenuBar
+Dim sMenus As String				&apos;	List of menus in the menubar
+Dim i As Long, j As Long
 Dim cstThisSub As String
 Const cstSubArgs = &quot;&quot;
 
@@ -845,20 +855,20 @@ Const cstSubArgs = &quot;&quot;
 		If Not _IsStillAlive() Then GoTo Finally
 	End If
 
-	Select Case psProperty
-		Case &quot;ColumnHeaders&quot;
+	Select Case UCase(psProperty)
+		Case UCase(&quot;ColumnHeaders&quot;)
 			_PropertyGet = _ColumnHeaders
-		Case &quot;CurrentColumn&quot;
+		Case UCase(&quot;CurrentColumn&quot;)
 			_PropertyGet = _ColumnHeaders(_ControlView.getCurrentColumnPosition())
-		Case &quot;CurrentRow&quot;
+		Case UCase(&quot;CurrentRow&quot;)
 			_PropertyGet = _TabControllerModel.Row
-		Case &quot;DatabaseFileName&quot;
+		Case UCase(&quot;DatabaseFileName&quot;)
 			_PropertyGet = ScriptForge.SF_FileSystem._ConvertFromUrl(_BaseFileName)
-		Case &quot;Filter&quot;
+		Case UCase(&quot;Filter&quot;)
 			_PropertyGet = _TabControllerModel.Filter
-		Case &quot;IsAlive&quot;
+		Case UCase(&quot;IsAlive&quot;)
 			_PropertyGet = _IsStillAlive(False)
-		Case &quot;LastRow&quot;
+		Case UCase(&quot;LastRow&quot;)
 			With _TabControllerModel
 				If .IsRowCountFinal Then
 					_PropertyGet = .RowCount
@@ -873,19 +883,31 @@ Const cstSubArgs = &quot;&quot;
 					End If
 				End If
 			End With
-		Case &quot;OrderBy&quot;
+		Case UCase(&quot;MenuHeaders&quot;)
+			Set oMenuBar = _Component.Frame.LayoutManager.getElement(&quot;private:resource/menubar/menubar&quot;).XMenuBar
+			&apos;	Join all menu headers, then split the whole string
+			sMenus = &quot;&quot;
+			With oMenuBar
+				For i = 0 To .ItemCount - 1
+					j = .getItemId(i)
+					sMenus = sMenus &amp; .getItemText(j) &amp; &quot;,&quot;
+				Next i
+			End With
+			If Len(sMenus) &gt; 0 Then sMenus = Left(sMenus, Len(sMenus) - 1)		&apos;	Suppress final comma
+			_PropertyGet = Split(Replace(sMenus, &quot;~&quot;, &quot;&quot;), &quot;,&quot;)
+		Case UCase(&quot;OrderBy&quot;)
 			_PropertyGet = _TabControllerModel.Order
-		Case &quot;ParentDatabase&quot;
+		Case UCase(&quot;ParentDatabase&quot;)
 			Set _PropertyGet = _ParentDatabase
-		Case &quot;Source&quot;
+		Case UCase(&quot;Source&quot;)
 			_PropertyGet = _Command
-		Case &quot;SourceType&quot;
+		Case UCase(&quot;SourceType&quot;)
 			_PropertyGet = _SheetType
-		Case &quot;XComponent&quot;
+		Case UCase(&quot;XComponent&quot;)
 			Set _PropertyGet = _Component
-		Case &quot;XControlModel&quot;
+		Case UCase(&quot;XControlModel&quot;)
 			Set _PropertyGet = _ControlModel
-		Case &quot;XTabControllerModel&quot;
+		Case UCase(&quot;XTabControllerModel&quot;)
 			Set _PropertyGet = _TabControllerModel
 		Case Else
 			_PropertyGet = Null

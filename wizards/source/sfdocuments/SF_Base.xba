@@ -695,6 +695,7 @@ Public Function Properties() As Variant
 					, &quot;IsImpress&quot; _
 					, &quot;IsMath&quot; _
 					, &quot;IsWriter&quot; _
+					, &quot;MenuHeaders&quot; _
 					, &quot;XComponent&quot; _
 					)
 
@@ -880,6 +881,11 @@ REM ----------------------------------------------------------------------------
 &apos;Property Let Keywords(Optional ByVal pvKeywords As Variant)
 &apos;	[_Super].Keywords = pvKeywords
 &apos;End Property	&apos;	SFDocuments.SF_Base.Keywords
+
+REM -----------------------------------------------------------------------------
+Property Get MenuHeaders() As Variant
+	MenuHeaders = [_Super].GetProperty(&quot;MenuHeaders&quot;)
+End Property	&apos;	SFDocuments.SF_Base.MenuHeaders
 
 REM -----------------------------------------------------------------------------
 &apos;Property Get Readonly() As Variant
