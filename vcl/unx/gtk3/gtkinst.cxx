@@ -12536,7 +12536,7 @@ public:
         atk_object_set_name(pAccessible, OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr());
 #else
         gtk_accessible_update_property(GTK_ACCESSIBLE(pItem), GTK_ACCESSIBLE_PROPERTY_LABEL,
-                                       OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr());
+                                       OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr(), -1);
 #endif
     }
 
@@ -12549,7 +12549,7 @@ public:
         atk_object_set_name(pAccessible, OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr());
 #else
         gtk_accessible_update_property(GTK_ACCESSIBLE(pItem), GTK_ACCESSIBLE_PROPERTY_LABEL,
-                                       OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr());
+                                       OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr(), -1);
 #endif
     }
 
