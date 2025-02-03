@@ -9393,7 +9393,7 @@ void ScInterpreter::ScUnique()
             aStr += aCellStr + u"\x0001";
         }
 
-        if (aStrSet.insert(aStr).second) // unique if inserted
+        if (aStrSet.insert(aStr.toAsciiLowerCase()).second) // unique if inserted
         {
             aResPos.emplace_back(std::make_pair(i, aStr));
         }
@@ -9404,7 +9404,7 @@ void ScInterpreter::ScUnique()
                 auto it = std::find_if(aResPos.begin(), aResPos.end(),
                     [&aStr](const std::pair<SCSIZE, OUString>& aRes)
                     {
-                        return aRes.second.equals(aStr);
+                        return aRes.second.toAsciiLowerCase().equals(aStr.toAsciiLowerCase());
                     }
                 );
                 if (it != aResPos.end())
