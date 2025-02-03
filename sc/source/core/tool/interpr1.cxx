@@ -8854,7 +8854,7 @@ void ScInterpreter::ScUnique()
             aStr += aCellStr + u"\x0001";
         }
 
-        if (aStrSet.insert(aStr).second) // unique if inserted
+        if (aStrSet.insert(ScGlobal::getCharClass().lowercase(aStr)).second) // unique if inserted
         {
             aResPos.emplace_back(std::make_pair(i, aStr));
         }
@@ -8863,9 +8863,9 @@ void ScInterpreter::ScUnique()
             if (bExactly_once)
             {
                 auto it = std::find_if(aResPos.begin(), aResPos.end(),
-                    [&aStr](const std::pair<SCSIZE, OUString>& aRes)
+                    [str = ScGlobal::getCharClass().lowercase(aStr)](const std::pair<SCSIZE, OUString>& aRes)
                     {
-                        return aRes.second.equals(aStr);
+                        return ScGlobal::getCharClass().lowercase(aRes.second).equals(str);
                     }
                 );
                 if (it != aResPos.end())
