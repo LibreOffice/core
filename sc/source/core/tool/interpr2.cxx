@@ -253,7 +253,20 @@ void ScInterpreter::ScGetWeekOfYear()
     if ( !MustHaveParamCount( nParamCount, 1, 2 ) )
         return;
 
-    sal_Int16 nFlag = ( nParamCount == 1 ) ? 1 : GetInt16();
+    sal_Int16 nFlag;
+    if (nParamCount == 1)
+    {
+        nFlag = 1;
+    }
+    else if (GetRawStackType() == svMissing)
+    {
+        nFlag = 1;
+        Pop();
+    }
+    else
+    {
+        nFlag = GetInt16();
+    }
 
     Date aDate = mrContext.NFGetNullDate();
     aDate.AddDays( GetFloor32());

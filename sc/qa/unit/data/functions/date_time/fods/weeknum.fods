@@ -769,13 +769,13 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce20" table:formula="of:=WEEKNUM([.K9];)" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>Err:502</text:p>
+     <table:table-cell table:style-name="ce20" table:formula="of:=WEEKNUM([.K9];)" office:value-type="float" office:value="31" calcext:value-type="float">
+      <text:p>31</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>ERR</text:p>
+     <table:table-cell office:value-type="float" office:value="31" calcext:value-type="float">
+      <text:p>31</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A9])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce23" table:formula="of:=[.A9]=[.B9]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="=WEEKNUM(K9;)" calcext:value-type="string">
