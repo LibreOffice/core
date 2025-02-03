@@ -106,14 +106,22 @@ public:
 
     // VirtualDevice
     // nDX and nDY in pixels
-    // nBitCount: 0 == default(=as window) / 1 == mono
     // pData allows for using a system dependent graphics or device context,
     // if a system context is passed in nDX and nDY are updated to reflect
     // its size; otherwise these remain unchanged.
     virtual std::unique_ptr<SalVirtualDevice>
                             CreateVirtualDevice( SalGraphics& rGraphics,
+                                                 tools::Long nDX, tools::Long nDY,
+                                                 DeviceFormat eFormat ) = 0;
+
+    // VirtualDevice
+    // nDX and nDY in pixels
+    // pData allows for using a system dependent graphics or device context,
+    // nDX and nDY are updated to reflect its size; otherwise these remain unchanged.
+    virtual std::unique_ptr<SalVirtualDevice>
+                            CreateVirtualDevice( SalGraphics& rGraphics,
                                                  tools::Long &rDX, tools::Long &rDY,
-                                                 DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr ) = 0;
+                                                 DeviceFormat eFormat, const SystemGraphicsData& rData ) = 0;
 
     // Printer
     // pSetupData->mpDriverData can be 0

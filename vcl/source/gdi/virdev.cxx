@@ -154,7 +154,12 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
         (void)pOutDev->AcquireGraphics();
     pGraphics = pOutDev->mpGraphics;
     if ( pGraphics )
-        mpVirDev = pSVData->mpDefInst->CreateVirtualDevice(*pGraphics, nDX, nDY, meFormatAndAlpha, pData);
+    {
+        if (pData)
+            mpVirDev = pSVData->mpDefInst->CreateVirtualDevice(*pGraphics, nDX, nDY, meFormatAndAlpha, *pData);
+        else
+            mpVirDev = pSVData->mpDefInst->CreateVirtualDevice(*pGraphics, nDX, nDY, meFormatAndAlpha);
+    }
     else
         mpVirDev = nullptr;
     if ( !mpVirDev )

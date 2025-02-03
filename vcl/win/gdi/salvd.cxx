@@ -72,52 +72,75 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, tools::Long nDX, to
 }
 
 std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphics& rSGraphics,
-                                                       tools::Long &nDX, tools::Long &nDY,
-                                                       DeviceFormat /*eFormat*/,
-                                                       const SystemGraphicsData* pData )
+                                                       tools::Long nDX, tools::Long nDY,
+                                                       DeviceFormat /*eFormat*/ )
 {
     WinSalGraphics& rGraphics = static_cast<WinSalGraphics&>(rSGraphics);
-    HDC hDC = nullptr;
 
-    if( pData )
+    HDC hDC = CreateCompatibleDC( rGraphics.getHDC() );
+    SAL_WARN_IF( !hDC, "vcl", "CreateCompatibleDC failed: " << WindowsErrorString( GetLastError() ) );
+
+    if (!hDC)
+        return nullptr;
+
+    const sal_uInt16 nBitCount = 0;
+    // #124826# continue even if hBmp could not be created
+    // if we would return a failure in this case, the process
+    // would terminate which is not required
+    HBITMAP hBmp = WinSalVirtualDevice::ImplCreateVirDevBitmap(rGraphics.getHDC(),
+                                                           nDX, nDY, nBitCount,
+                                                           &o3tl::temporary<void*>(nullptr));
+
+    const SalData* pSalData = GetSalData();
+
+    WinSalVirtualDevice* pVDev = new WinSalVirtualDevice(hDC, hBmp, nBitCount,
+                                                         /*bForeignDC*/false, nDX, nDY);
+
+    WinSalGraphics* pVirGraphics = new WinSalGraphics(WinSalGraphics::VIRTUAL_DEVICE,
+                                                      rGraphics.isScreen(), nullptr, pVDev);
+
+    // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
+    pVirGraphics->SetLayout( SalLayoutFlags::NONE );
+    pVirGraphics->setHDC(hDC);
+
+    if ( pSalData->mhDitherPal && pVirGraphics->isScreen() )
     {
-        hDC = (pData->hDC) ? pData->hDC : GetDC(pData->hWnd);
-        if (hDC)
-        {
-            nDX = GetDeviceCaps( hDC, HORZRES );
-            nDY = GetDeviceCaps( hDC, VERTRES );
-        }
-        else
-        {
-            nDX = 0;
-            nDY = 0;
-        }
+        pVirGraphics->setPalette(pSalData->mhDitherPal);
+        RealizePalette( hDC );
+    }
+
+    pVDev->setGraphics(pVirGraphics);
+
+    return std::unique_ptr<SalVirtualDevice>(pVDev);
+}
+
+std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphics& rSGraphics,
+                                                       tools::Long &nDX, tools::Long &nDY,
+                                                       DeviceFormat /*eFormat*/,
+                                                       const SystemGraphicsData& rData )
+{
+    WinSalGraphics& rGraphics = static_cast<WinSalGraphics&>(rSGraphics);
+
+    HDC hDC = rData.hDC ? rData.hDC : GetDC(rData.hWnd);
+    if (hDC)
+    {
+        nDX = GetDeviceCaps( hDC, HORZRES );
+        nDY = GetDeviceCaps( hDC, VERTRES );
     }
     else
     {
-        hDC = CreateCompatibleDC( rGraphics.getHDC() );
-        SAL_WARN_IF( !hDC, "vcl", "CreateCompatibleDC failed: " << WindowsErrorString( GetLastError() ) );
+        nDX = 0;
+        nDY = 0;
     }
 
     if (!hDC)
         return nullptr;
 
-    sal_uInt16 nBitCount = 0;
-    HBITMAP hBmp = nullptr;
-    if (!pData)
-    {
-        // #124826# continue even if hBmp could not be created
-        // if we would return a failure in this case, the process
-        // would terminate which is not required
-        hBmp = WinSalVirtualDevice::ImplCreateVirDevBitmap(rGraphics.getHDC(),
-                                                           nDX, nDY, nBitCount,
-                                                           &o3tl::temporary<void*>(nullptr));
-    }
-
-    const bool bForeignDC = pData != nullptr && pData->hDC != nullptr;
+    const sal_uInt16 nBitCount = 0;
+    const bool bForeignDC = rData.hDC != nullptr;
     const SalData* pSalData = GetSalData();
 
-    WinSalVirtualDevice* pVDev = new WinSalVirtualDevice(hDC, hBmp, nBitCount,
+    WinSalVirtualDevice* pVDev = new WinSalVirtualDevice(hDC, /*hBmp*/nullptr, nBitCount,
                                                          bForeignDC, nDX, nDY);
 
     WinSalGraphics* pVirGraphics = new WinSalGraphics(WinSalGraphics::VIRTUAL_DEVICE,

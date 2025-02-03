@@ -198,9 +198,21 @@ void SvpSalInstance::DestroyObject( SalObject* pObject )
 #ifndef IOS
 
 std::unique_ptr<SalVirtualDevice> SvpSalInstance::CreateVirtualDevice(SalGraphics& rGraphics,
+                                                       tools::Long nDX, tools::Long nDY,
+                                                       DeviceFormat /*eFormat*/)
+{
+    SvpSalGraphics *pSvpSalGraphics = dynamic_cast<SvpSalGraphics*>(&rGraphics);
+    assert(pSvpSalGraphics);
+    std::unique_ptr<SalVirtualDevice> xNew(new SvpSalVirtualDevice(pSvpSalGraphics->getSurface(), /*pPreExistingTarget*/nullptr));
+    if (!xNew->SetSize(nDX, nDY))
+        xNew.reset();
+    return xNew;
+}
+
+std::unique_ptr<SalVirtualDevice> SvpSalInstance::CreateVirtualDevice(SalGraphics& rGraphics,
                                                        tools::Long &nDX, tools::Long &nDY,
                                                        DeviceFormat /*eFormat*/,
-                                                       const SystemGraphicsData* pGd)
+                                                       const SystemGraphicsData& rGd)
 {
     SvpSalGraphics *pSvpSalGraphics = dynamic_cast<SvpSalGraphics*>(&rGraphics);
     assert(pSvpSalGraphics);
@@ -208,10 +220,10 @@ std::unique_ptr<SalVirtualDevice> SvpSalInstance::CreateVirtualDevice(SalGraphic
     // tdf#127529 normally pPreExistingTarget is null and we are a true virtualdevice drawing to a backing buffer.
     // Occasionally, for canvas/slideshow, pPreExistingTarget is pre-provided as a hack to use the vcl drawing
     // apis to render onto a preexisting cairo surface. The necessity for that precedes the use of cairo in vcl proper
-    cairo_surface_t* pPreExistingTarget = pGd ? static_cast<cairo_surface_t*>(pGd->pSurface) : nullptr;
+    cairo_surface_t* pPreExistingTarget = static_cast<cairo_surface_t*>(rGd.pSurface);
 #else
     //ANDROID case
-    (void)pGd;
+    (void)rGd;
     cairo_surface_t* pPreExistingTarget = nullptr;
 #endif
     std::unique_ptr<SalVirtualDevice> xNew(new SvpSalVirtualDevice(pSvpSalGraphics->getSurface(), pPreExistingTarget));

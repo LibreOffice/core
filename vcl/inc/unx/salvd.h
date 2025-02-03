@@ -50,8 +50,10 @@ class X11SalVirtualDevice final : public SalVirtualDevice
     bool m_bOwnsSurface; // nearly always true, except for edge case of tdf#127529
 
 public:
+    X11SalVirtualDevice(const SalGraphics& rGraphics, tools::Long nDX, tools::Long nDY,
+            DeviceFormat eFormat, std::unique_ptr<X11SalGraphics> pNewGraphics);
     X11SalVirtualDevice(const SalGraphics& rGraphics, tools::Long &nDX, tools::Long &nDY,
-            DeviceFormat eFormat, const SystemGraphicsData *pData, std::unique_ptr<X11SalGraphics> pNewGraphics);
+            DeviceFormat eFormat, const SystemGraphicsData& rData, std::unique_ptr<X11SalGraphics> pNewGraphics);
 
     virtual ~X11SalVirtualDevice() override;
 

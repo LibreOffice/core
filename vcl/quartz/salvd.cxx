@@ -38,34 +38,87 @@
 #include <quartz/utils.h>
 
 std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraphics& rGraphics,
-                                                        tools::Long &nDX, tools::Long &nDY,
-                                                        DeviceFormat eFormat,
-                                                        const SystemGraphicsData *pData )
+                                                        tools::Long nDX, tools::Long nDY,
+                                                        DeviceFormat eFormat )
 {
     // #i92075# can be called first in a thread
     SalData::ensureThreadAutoreleasePool();
 
 #ifdef IOS
-    if( pData )
-    {
-        return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >(&rGraphics),
-                                         nDX, nDY, eFormat, pData ));
-    }
-    else
-    {
-        std::unique_ptr<SalVirtualDevice> pNew(new AquaSalVirtualDevice( NULL, nDX, nDY, eFormat, NULL ));
-        pNew->SetSize( nDX, nDY );
-        return pNew;
-    }
+    std::unique_ptr<SalVirtualDevice> pNew(new AquaSalVirtualDevice( NULL, nDX, nDY, eFormat, NULL ));
+    pNew->SetSize( nDX, nDY );
+    return pNew;
 #else
     return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >(&rGraphics),
-                                     nDX, nDY, eFormat, pData ));
+                                     nDX, nDY, eFormat ));
+#endif
+}
+
+std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraphics& rGraphics,
+                                                        tools::Long &nDX, tools::Long &nDY,
+                                                        DeviceFormat eFormat,
+                                                        const SystemGraphicsData& rData )
+{
+    // #i92075# can be called first in a thread
+    SalData::ensureThreadAutoreleasePool();
+
+#ifdef IOS
+    return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >(&rGraphics),
+                                     nDX, nDY, eFormat, rData ));
+#else
+    return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >(&rGraphics),
+                                     nDX, nDY, eFormat, rData ));
 #endif
 }
 
 AquaSalVirtualDevice::AquaSalVirtualDevice(
+    AquaSalGraphics* pGraphic, tools::Long nDX, tools::Long nDY,
+    DeviceFormat eFormat )
+  : mbGraphicsUsed( false )
+  , mnBitmapDepth( 0 )
+  , mnWidth(0)
+  , mnHeight(0)
+{
+    SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::AquaSalVirtualDevice() this=" << this
+              << " size=(" << nDX << "x" << nDY << ") bitcount=" << static_cast<int>(eFormat) );
+
+    // create empty new virtual device
+
+    mbForeignContext = false;           // the mxContext is created within VCL
+    mpGraphics = new AquaSalGraphics(); // never fails
+    switch (eFormat)
+    {
+#ifdef IOS
+        case DeviceFormat::GRAYSCALE:
+            mnBitmapDepth = 8;
+            break;
+#endif
+        default:
+            mnBitmapDepth = 0;
+            break;
+    }
+#ifdef MACOSX
+    // inherit resolution from reference device
+    if( pGraphic )
+    {
+        AquaSalFrame* pFrame = pGraphic->getGraphicsFrame();
+        if( pFrame && AquaSalFrame::isAlive( pFrame ) )
+        {
+            mpGraphics->setGraphicsFrame( pFrame );
+            mpGraphics->copyResolution( *pGraphic );
+        }
+    }
+#endif
+    if( nDX && nDY )
+    {
+        SetSize( nDX, nDY );
+    }
+    // NOTE: if SetSize does not succeed, we just ignore the nDX and nDY
+}
+
+AquaSalVirtualDevice::AquaSalVirtualDevice(
     AquaSalGraphics* pGraphic, tools::Long &nDX, tools::Long &nDY,
-    DeviceFormat eFormat, const SystemGraphicsData *pData )
+    DeviceFormat eFormat, const SystemGraphicsData& rData )
   : mbGraphicsUsed( false )
   , mnBitmapDepth( 0 )
   , mnWidth(0)
@@ -73,77 +126,42 @@ AquaSalVirtualDevice::AquaSalVirtualDevice(
 {
     SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::AquaSalVirtualDevice() this=" << this
               << " size=(" << nDX << "x" << nDY << ") bitcount=" << static_cast<int>(eFormat) <<
-              " pData=" << pData << " context=" << (pData ? pData->rCGContext : nullptr) );
+              " rData=" << &rData << " context=" << rData.rCGContext );
 
-    if( pGraphic && pData && pData->rCGContext )
+    assert(pGraphic);
+    assert(rData.rCGContext);
+
+    // Create virtual device based on existing SystemGraphicsData
+    // We ignore nDx and nDY, as the desired size comes from the SystemGraphicsData.
+    // the mxContext is from pData (what "mxContext"? there is no such field anywhere in vcl;)
+    mbForeignContext = true;
+    mpGraphics = new AquaSalGraphics( /*pGraphic*/ );
+    if (nDX == 0)
     {
-        // Create virtual device based on existing SystemGraphicsData
-        // We ignore nDx and nDY, as the desired size comes from the SystemGraphicsData.
-        // the mxContext is from pData (what "mxContext"? there is no such field anywhere in vcl;)
-        mbForeignContext = true;
-        mpGraphics = new AquaSalGraphics( /*pGraphic*/ );
-        if (nDX == 0)
-        {
-            nDX = 1;
-        }
-        if (nDY == 0)
-        {
-            nDY = 1;
-        }
-        maLayer.set(CGLayerCreateWithContext(pData->rCGContext, CGSizeMake(nDX, nDY), nullptr));
-        // Interrogate the context as to its real size
-        if (maLayer.isSet())
-        {
-            const CGSize aSize = CGLayerGetSize(maLayer.get());
-            nDX = static_cast<tools::Long>(aSize.width);
-            nDY = static_cast<tools::Long>(aSize.height);
-        }
-        else
-        {
-            nDX = 0;
-            nDY = 0;
-        }
-
-        mpGraphics->SetVirDevGraphics(this, maLayer, pData->rCGContext);
-
-        SAL_INFO("vcl.virdev", "AquaSalVirtualDevice::AquaSalVirtualDevice() this=" << this <<
-                 " (" << nDX << "x" << nDY << ") mbForeignContext=" << (mbForeignContext ? "YES" : "NO"));
-
+        nDX = 1;
+    }
+    if (nDY == 0)
+    {
+        nDY = 1;
+    }
+    maLayer.set(CGLayerCreateWithContext(rData.rCGContext, CGSizeMake(nDX, nDY), nullptr));
+    // Interrogate the context as to its real size
+    if (maLayer.isSet())
+    {
+        const CGSize aSize = CGLayerGetSize(maLayer.get());
+        nDX = static_cast<tools::Long>(aSize.width);
+        nDY = static_cast<tools::Long>(aSize.height);
     }
     else
     {
-        // create empty new virtual device
-        mbForeignContext = false;           // the mxContext is created within VCL
-        mpGraphics = new AquaSalGraphics(); // never fails
-        switch (eFormat)
-        {
-#ifdef IOS
-            case DeviceFormat::GRAYSCALE:
-                mnBitmapDepth = 8;
-                break;
-#endif
-            default:
-                mnBitmapDepth = 0;
-                break;
-        }
-#ifdef MACOSX
-        // inherit resolution from reference device
-        if( pGraphic )
-        {
-            AquaSalFrame* pFrame = pGraphic->getGraphicsFrame();
-            if( pFrame && AquaSalFrame::isAlive( pFrame ) )
-            {
-                mpGraphics->setGraphicsFrame( pFrame );
-                mpGraphics->copyResolution( *pGraphic );
-            }
-        }
-#endif
-        if( nDX && nDY )
-        {
-            SetSize( nDX, nDY );
-        }
-        // NOTE: if SetSize does not succeed, we just ignore the nDX and nDY
+        nDX = 0;
+        nDY = 0;
     }
+
+    mpGraphics->SetVirDevGraphics(this, maLayer, rData.rCGContext);
+
+    SAL_INFO("vcl.virdev", "AquaSalVirtualDevice::AquaSalVirtualDevice() this=" << this <<
+             " (" << nDX << "x" << nDY << ") mbForeignContext=" << (mbForeignContext ? "YES" : "NO"));
 }
 
 AquaSalVirtualDevice::~AquaSalVirtualDevice()

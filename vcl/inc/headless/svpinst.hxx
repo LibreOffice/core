@@ -136,12 +136,19 @@ public:
 
     // VirtualDevice
     // nDX and nDY in Pixel
-    // nBitCount: 0 == Default(=as window) / 1 == Mono
+    SAL_DLLPRIVATE virtual std::unique_ptr<SalVirtualDevice>
+                            CreateVirtualDevice( SalGraphics& rGraphics,
+                                                     tools::Long nDX, tools::Long nDY,
+                                                     DeviceFormat eFormat ) override;
+
+    // VirtualDevice
+    // nDX and nDY in Pixel
     // pData allows for using a system dependent graphics or device context
     SAL_DLLPRIVATE virtual std::unique_ptr<SalVirtualDevice>
                             CreateVirtualDevice( SalGraphics& rGraphics,
                                                      tools::Long &nDX, tools::Long &nDY,
-                                                     DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr ) override;
+                                                     DeviceFormat eFormat,
+                                                     const SystemGraphicsData& rData ) override;
 
     // Printer
     // pSetupData->mpDriverData can be 0
