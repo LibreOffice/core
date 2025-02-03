@@ -850,6 +850,7 @@ void SfxTemplateDialog_Impl::InsertFamilyItem(sal_uInt16 nId, const SfxStyleFami
     m_xActionTbL->set_item_visible(sId, true);
     m_xActionTbL->set_item_icon_name(sId, rItem.GetImage());
     m_xActionTbL->set_item_tooltip_text(sId, rItem.GetText());
+    m_xActionTbL->set_item_accessible_name(sId, rItem.GetText());
     m_xActionTbL->set_item_help_id(sId, sHelpId);
     ++m_nActionTbLVisible;
 }
