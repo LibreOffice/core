@@ -825,7 +825,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Err</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR(a13ú)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR([.A12])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=WEEKNUM(K10;K1:K2)" calcext:value-type="string">
@@ -840,7 +840,7 @@
      <table:table-cell office:value-type="float" office:value="30" calcext:value-type="float">
       <text:p>30</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR(a13ú)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce23" table:formula="of:=[.A13]=[.B13]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="=WEEKNUM($K$9;11)" calcext:value-type="string">
@@ -855,7 +855,7 @@
      <table:table-cell office:value-type="float" office:value="30" calcext:value-type="float">
       <text:p>30</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR(a13ú)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce23" table:formula="of:=[.A14]=[.B14]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="=WEEKNUM($K$9;12)" calcext:value-type="string">
@@ -871,7 +871,7 @@
      <table:table-cell office:value-type="float" office:value="30" calcext:value-type="float">
       <text:p>30</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR(a13ú)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce23" table:formula="of:=[.A15]=[.B15]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A15])" office:value-type="string" office:string-value="=WEEKNUM($K$9;13)" calcext:value-type="string">
@@ -886,7 +886,7 @@
      <table:table-cell office:value-type="float" office:value="30" calcext:value-type="float">
       <text:p>30</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR(a13ú)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce23" table:formula="of:=[.A16]=[.B16]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A16])" office:value-type="string" office:string-value="=WEEKNUM($K$9;14)" calcext:value-type="string">
@@ -901,7 +901,7 @@
      <table:table-cell office:value-type="float" office:value="30" calcext:value-type="float">
       <text:p>30</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR(a13ú)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce23" table:formula="of:=[.A17]=[.B17]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A17])" office:value-type="string" office:string-value="=WEEKNUM($K$9;15)" calcext:value-type="string">
@@ -919,7 +919,7 @@
      <table:table-cell office:value-type="float" office:value="31" calcext:value-type="float">
       <text:p>31</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR(a13ú)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce23" table:formula="of:=[.A18]=[.B18]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="=WEEKNUM($K$9;16)" calcext:value-type="string">
@@ -934,7 +934,7 @@
      <table:table-cell office:value-type="float" office:value="31" calcext:value-type="float">
       <text:p>31</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR(a13ú)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce23" table:formula="of:=[.A19]=[.B19]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A19])" office:value-type="string" office:string-value="=WEEKNUM($K$9;17)" calcext:value-type="string">
@@ -949,7 +949,7 @@
      <table:table-cell office:value-type="float" office:value="29" calcext:value-type="float">
       <text:p>29</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR(a13ú)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce23" table:formula="of:=[.A20]=[.B20]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A20])" office:value-type="string" office:string-value="=WEEKNUM($K$9;21)" calcext:value-type="string">
@@ -964,7 +964,7 @@
      <table:table-cell office:value-type="float" office:value="29" calcext:value-type="float">
       <text:p>29</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce23" table:formula="of:=ISERROR(a13ú)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce23" table:formula="of:=[.A21]=[.B21]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce24" table:formula="of:=FORMULA([.A21])" office:value-type="string" office:string-value="=WEEKNUM($K$9;150)" calcext:value-type="string">
