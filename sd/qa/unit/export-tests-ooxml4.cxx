@@ -1198,6 +1198,41 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testDeduplicateMasters)
     CPPUNIT_ASSERT_EQUAL(Color(0x000000), nColor);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testConvertWithMasterDeduplication)
+{
+    createSdImpressDoc("odp/dupmastermultlayouts.odp");
+    save("Impress Office Open XML");
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+
+    // For each slide check that it's layout exists
+    for (int i = 1; i <= 4; ++i)
+    {
+        xmlDocUniquePtr pXmlDocRels
+            = parseExport("ppt/slides/_rels/slide" + OUString::number(i) + ".xml.rels");
+
+        assertXPath(
+            pXmlDocRels,
+            "(/rels:Relationships/rels:Relationship[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout'])"_ostr);
+        // the relative target e.g. "../slideLayouts/slideLayout2.xml"
+        OUString sRelativeLayoutPath = getXPathContent(
+            pXmlDocRels,
+            "(/rels:Relationships/rels:Relationship[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout'])/@Target"_ostr);
+
+        // Check that the referenced slideLayout files exist
+        // Without the accompanying fix in place, this test would have failed with:
+        // equality assertion failed
+        // - Expected: 1
+        // - Actual  : 0
+        // i.e. the referenced slideLayout file was missing on export.
+        OUString sSlideLayoutName = sRelativeLayoutPath.getToken(2, '/');
+        CPPUNIT_ASSERT_EQUAL(true,
+                             bool(xNameAccess->hasByName("ppt/slideLayouts/" + sSlideLayoutName)));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
