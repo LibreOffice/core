@@ -1148,6 +1148,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf124261)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf164932)
+{
+    // text frame with AutoText setting must use the left offset
+    // of the list style of its text content
+    createSwDoc("tdf164932.fodt");
+    auto pDump = parseLayoutDump();
+    // This was 4 (three lines in the text frame anchored as character in the first line
+    assertXPath(pDump, "//SwLineLayout", 2);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf135991)
 {
     createSwDoc("tdf135991.odt");
