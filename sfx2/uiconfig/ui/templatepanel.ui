@@ -133,6 +133,7 @@
                     <property name="icon-name">res/sc05554.png</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="watercan-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="templatepanel|accessible_name|watercan">Fill Format Mode</property>
                         <property name="AtkObject::accessible-description" translatable="yes" context="templatepanel|extended_tip|watercan">Applies the selected style to the object or text that you select in the document. </property>
                       </object>
                     </child>
@@ -148,6 +149,11 @@
                     <property name="tooltip-text" translatable="yes" context="templatepanel|STR_STYLE_NEW_STYLE_FROM_SELECTION">New Style from Selection</property>
                     <property name="use-underline">True</property>
                     <property name="icon-name">res/sc05555.png</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="new-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="templatepanel|accessible_name|new">New Style from Selection</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -160,6 +166,11 @@
                     <property name="tooltip-text" translatable="yes" context="templatepanel|STR_STYLE_NEW_STYLE_ACTION">Styles actions</property>
                     <property name="use-underline">True</property>
                     <property name="icon-name">res/sc05555.png</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="newmenu-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="templatepanel|accessible_name|newmenu">Styles actions</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -172,6 +183,11 @@
                     <property name="tooltip-text" translatable="yes" context="templatepanel|STR_STYLE_UPDATE_STYLE">Update Style</property>
                     <property name="use-underline">True</property>
                     <property name="icon-name">res/sc05556.png</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="update-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="templatepanel|accessible_name|update">Update Style</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
