@@ -1569,15 +1569,18 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     if (nPageNum != GetEquivalentMasterPage(nPageNum)
         && GetEquivalentMasterPage(nPageNum) != SAL_MAX_UINT32)
     {
-        // It's equivalent to an already written master, write only the layout file
-        if (maMastersLayouts[nPageNum].second != -1)
+        // It's equivalent to an already written master, write only the layouts files
+        OUString aSlideName;
+        Reference<XNamed> xNamed(mXDrawPage, UNO_QUERY);
+        if (xNamed.is())
+            aSlideName = xNamed->getName();
+        for (int i = 0; i < OOXML_LAYOUT_SIZE; ++i)
         {
-            OUString aSlideName;
-            Reference<XNamed> xNamed(mXDrawPage, UNO_QUERY);
-            if (xNamed.is())
-                aSlideName = xNamed->getName();
-            ImplWritePPTXLayoutWithContent(maMastersLayouts[nPageNum].second, nPageNum, aSlideName,
-                                           aXBackgroundPropSet);
+            if (mLayoutInfo[i].mnFileIdArray.size() > nPageNum
+                && mLayoutInfo[i].mnFileIdArray[nPageNum] > 0)
+            {
+                ImplWritePPTXLayoutWithContent(i, nPageNum, aSlideName, aXBackgroundPropSet);
+            }
         }
 
         // Close the list tag if it was the last one
@@ -1764,15 +1767,22 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     // Add layouts of other Impress masters that came from a sinlge pptx master with multiple layouts
     for (sal_uInt32 i = 0; i < mnMasterPages; i++)
     {
-        if (i != nPageNum && maEquivalentMasters[i] == nPageNum && maMastersLayouts[i].second != -1)
+        if (i != nPageNum && maEquivalentMasters[i] == nPageNum)
         {
-            // Reserve layout file Id to be writen later
-            if (mLayoutInfo[maMastersLayouts[i].second].mnFileIdArray.size() < mnMasterPages)
-                mLayoutInfo[maMastersLayouts[i].second].mnFileIdArray.resize(mnMasterPages);
-            mLayoutInfo[maMastersLayouts[i].second].mnFileIdArray[i] = mnLayoutFileIdMax;
-            mnLayoutFileIdMax++;
+            aLayouts = getLayoutsUsedForMaster(maMastersLayouts[i].first);
+            if (maMastersLayouts[i].second != -1)
+                aLayouts.insert(maMastersLayouts[i].second);
 
-            AddLayoutIdAndRelation(pFS, GetLayoutFileId(maMastersLayouts[i].second, i));
+            for (auto nLayout : aLayouts)
+            {
+                // Reserve layout file Id to be writen later
+                if (mLayoutInfo[nLayout].mnFileIdArray.size() < mnMasterPages)
+                    mLayoutInfo[nLayout].mnFileIdArray.resize(mnMasterPages);
+                mLayoutInfo[nLayout].mnFileIdArray[i] = mnLayoutFileIdMax;
+                mnLayoutFileIdMax++;
+
+                AddLayoutIdAndRelation(pFS, GetLayoutFileId(nLayout, i));
+            }
         }
     }
 
