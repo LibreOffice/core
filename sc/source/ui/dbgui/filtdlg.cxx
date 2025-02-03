@@ -1160,8 +1160,7 @@ IMPL_LINK(ScFilterDlg, LbSelectHdl, weld::ComboBox&, rLb, void)
             UpdateColorList(4);
         }
 
-        auto aEntry = theQueryData.GetEntry(nQ);
-        aEntry.eOp = op;
+        theQueryData.GetEntry(nQ).eOp = op;
     }
     else if (&rLb == m_xLbColor1.get() || &rLb == m_xLbColor2.get() || &rLb == m_xLbColor3.get()
              || &rLb == m_xLbColor4.get())
