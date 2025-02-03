@@ -310,6 +310,7 @@ void ScDBFunc::ToggleAutoFilter()
         {
             nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG )->GetValue();
             rDoc.ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag & ~ScMF::Auto ) );
+            aParam.RemoveAllEntriesByField(nCol);
         }
 
         // use a list action for the AutoFilter buttons (ScUndoAutoFilter) and the filter operation
@@ -324,11 +325,6 @@ void ScDBFunc::ToggleAutoFilter()
 
         pDBData->SetAutoFilter(false);
 
-        //  remove filter (incl. Paint / Undo)
-
-        SCSIZE nEC = aParam.GetEntryCount();
-        for (SCSIZE i=0; i<nEC; i++)
-            aParam.GetEntry(i).bDoQuery = false;
         aParam.bDuplicate = true;
         Query( aParam, nullptr, true );
 
