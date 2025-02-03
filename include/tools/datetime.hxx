@@ -71,9 +71,8 @@ public:
 
     auto            operator <=>( const DateTime& rDateTime ) const
                     {
-                        if (auto cmp = Date::operator<=>(rDateTime); cmp != 0)
-                            return cmp;
-                        return tools::Time::operator<=>(rDateTime);
+                        return std::make_pair(GetDate(), GetTime()) <=>
+                            std::make_pair(rDateTime.GetDate(), rDateTime.GetTime());
                     }
     bool            operator==(const DateTime& rDateTime) const
                     {

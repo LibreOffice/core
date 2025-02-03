@@ -133,8 +133,6 @@ public:
 
     bool            IsEqualIgnoreNanoSec( const tools::Time& rTime ) const;
 
-    bool            operator==(const Time& rTime) const = default;
-
     auto            operator <=> ( const Time& rTime ) const = default;
 
     static Time     GetUTCOffset();
