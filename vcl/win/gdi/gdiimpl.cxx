@@ -908,17 +908,10 @@ void WinSalGraphicsImpl::invert( sal_uInt32 nPoints, const Point* pPtAry, SalInv
     for (sal_uInt32 i=0; i<nPoints; ++i)
         pWinPtAry[i] = POINT { static_cast<LONG>(pPtAry[i].getX()), static_cast<LONG>(pPtAry[i].getY()) };
 
-    // for Windows 95 and its maximum number of points
     if ( nSalFlags & SalInvert::TrackFrame )
-    {
-        if ( !Polyline( mrParent.getHDC(), pWinPtAry.get(), static_cast<int>(nPoints) ) && (nPoints > MAX_64KSALPOINTS) )
-            Polyline( mrParent.getHDC(), pWinPtAry.get(), MAX_64KSALPOINTS );
-    }
+        Polyline( mrParent.getHDC(), pWinPtAry.get(), static_cast<int>(nPoints) );
     else
-    {
-        if ( !Polygon( mrParent.getHDC(), pWinPtAry.get(), static_cast<int>(nPoints) ) && (nPoints > MAX_64KSALPOINTS) )
-            Polygon( mrParent.getHDC(), pWinPtAry.get(), MAX_64KSALPOINTS );
-    }
+        Polygon( mrParent.getHDC(), pWinPtAry.get(), static_cast<int>(nPoints) );
 
     SetROP2( mrParent.getHDC(), nOldROP );
     SelectPen( mrParent.getHDC(), hOldPen );
@@ -1612,9 +1605,7 @@ void WinSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry )
     for (sal_uInt32 i=0; i<nPoints; ++i)
         pWinPtAry[i] = POINT { static_cast<LONG>(pPtAry[i].getX()), static_cast<LONG>(pPtAry[i].getY()) };
 
-    // for Windows 95 and its maximum number of points
-    if ( !Polyline( mrParent.getHDC(), pWinPtAry.get(), static_cast<int>(nPoints) ) && (nPoints > MAX_64KSALPOINTS) )
-        Polyline( mrParent.getHDC(), pWinPtAry.get(), MAX_64KSALPOINTS );
+    Polyline( mrParent.getHDC(), pWinPtAry.get(), static_cast<int>(nPoints) );
 
     // Polyline seems to uses LineTo, which doesn't paint the last pixel (see 87eb8f8ee)
     if ( !mrParent.isPrinter() )
@@ -1627,9 +1618,7 @@ void WinSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const Point* pPtAry )
     for (sal_uInt32 i=0; i<nPoints; ++i)
         pWinPtAry[i] = POINT { static_cast<LONG>(pPtAry[i].getX()), static_cast<LONG>(pPtAry[i].getY()) };
 
-    // for Windows 95 and its maximum number of points
-    if ( !Polygon( mrParent.getHDC(), pWinPtAry.get(), static_cast<int>(nPoints) ) && (nPoints > MAX_64KSALPOINTS) )
-        Polygon( mrParent.getHDC(), pWinPtAry.get(), MAX_64KSALPOINTS );
+    Polygon( mrParent.getHDC(), pWinPtAry.get(), static_cast<int>(nPoints) );
 }
 
 void WinSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints,
@@ -1670,25 +1659,7 @@ void WinSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pP
         n += nPoints;
     }
 
-    if ( !PolyPolygon( mrParent.getHDC(), pWinPointAryAry, reinterpret_cast<int*>(pWinPointAry), static_cast<UINT>(nPoly) ) &&
-         (nPolyPolyPoints > MAX_64KSALPOINTS) )
-    {
-        nPolyPolyPoints  = 0;
-        nPoly = 0;
-        do
-        {
-            nPolyPolyPoints += pWinPointAry[static_cast<UINT>(nPoly)];
-            nPoly++;
-        }
-        while ( nPolyPolyPoints < MAX_64KSALPOINTS );
-        nPoly--;
-        if ( pWinPointAry[static_cast<UINT>(nPoly)] > MAX_64KSALPOINTS )
-            pWinPointAry[static_cast<UINT>(nPoly)] = MAX_64KSALPOINTS;
-        if ( nPoly == 1 )
-            Polygon( mrParent.getHDC(), pWinPointAryAry, *pWinPointAry );
-        else
-            PolyPolygon( mrParent.getHDC(), pWinPointAryAry, reinterpret_cast<int*>(pWinPointAry), nPoly );
-    }
+    PolyPolygon( mrParent.getHDC(), pWinPointAryAry, reinterpret_cast<int*>(pWinPointAry), static_cast<UINT>(nPoly) );
 
     if ( pWinPointAry != aWinPointAry )
         delete [] pWinPointAry;

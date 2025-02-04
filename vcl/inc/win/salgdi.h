@@ -376,6 +376,4 @@ int     ImplIsSysColorEntry( Color nColor );
 void    ImplGetLogFontFromFontSelect( const vcl::font::FontSelectPattern&,
             const vcl::font::PhysicalFontFace*, LOGFONTW&, bool bAntiAliased);
 
-#define MAX_64KSALPOINTS    ((((sal_uInt16)0xFFFF)-8)/sizeof(POINTS))
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
