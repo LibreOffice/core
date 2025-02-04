@@ -835,10 +835,11 @@ tools::Rectangle SvHeaderTabListBox::calcHeaderRect( bool _bIsColumnBar, bool _b
 
 tools::Rectangle SvHeaderTabListBox::calcTableRect( bool _bOnScreen )
 {
+    tools::Rectangle aScreenRect(GetWindowExtentsAbsolute());
     if ( _bOnScreen )
-        return tools::Rectangle(GetWindowExtentsAbsolute());
-    else
-        return GetWindowExtentsRelative( *GetAccessibleParentWindow() );
+        return aScreenRect;
+
+    return tools::Rectangle(Point(0, 0), aScreenRect.GetSize());
 }
 
 tools::Rectangle SvHeaderTabListBox::GetFieldRectPixel( sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader, bool _bOnScreen )
@@ -858,8 +859,6 @@ tools::Rectangle SvHeaderTabListBox::GetFieldRectPixel( sal_Int32 _nRow, sal_uIn
         aTopLeft = aRect.TopLeft();
         if (_bOnScreen)
             aTopLeft += Point(GetWindowExtentsAbsolute().TopLeft());
-        else
-            aTopLeft += GetWindowExtentsRelative( *GetAccessibleParentWindow() ).TopLeft();
         aRect = tools::Rectangle( aTopLeft, aRect.GetSize() );
     }
 
