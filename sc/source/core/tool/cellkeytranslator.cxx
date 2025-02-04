@@ -276,11 +276,11 @@ void ScCellKeywordTranslator::addToMap(const OUString& rKey, const OUString& pNa
     if ( itr == itrEnd )
     {
         // New keyword.
-        std::vector<ScCellKeyword> aVector { aKeyItem };
+        std::vector<ScCellKeyword> aVector { std::move(aKeyItem) };
         maStringNameMap.emplace(rKey, aVector);
     }
     else
-        itr->second.push_back(aKeyItem);
+        itr->second.emplace_back(std::move(aKeyItem));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
