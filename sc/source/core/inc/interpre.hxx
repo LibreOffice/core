@@ -729,6 +729,7 @@ private:
     void ScDrop();
     void ScExpand();
     void ScHStack();
+    void ScVStack();
     void ScTake();
     void ScToCol();
     void ScToRow();
@@ -743,6 +744,7 @@ private:
     void ScToColOrRow(bool bCol);
     void ScWrapColsOrRows(bool bCols);
     void ScTakeOrDrop(bool bTake);
+    void ScHorizontalOrVerticalStack(bool bHorizontal);
 
 public:
     // If upon call rMissingField==true then the database field parameter may be

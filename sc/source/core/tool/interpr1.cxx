@@ -9210,6 +9210,16 @@ void ScInterpreter::ScExpand()
 
 void ScInterpreter::ScHStack()
 {
+    ScHorizontalOrVerticalStack(/*bHorizontal*/ true);
+}
+
+void ScInterpreter::ScVStack()
+{
+    ScHorizontalOrVerticalStack(/*bHorizontal*/ false);
+}
+
+void ScInterpreter::ScHorizontalOrVerticalStack(bool bHorizontal)
+{
     sal_uInt8 nParamCount = GetByte();
 
     if (!MustHaveParamCountMin( nParamCount, 1))
@@ -9238,8 +9248,8 @@ void ScInterpreter::ScHStack()
 
         SCSIZE nC = 0, nR = 0;
         pRefMatrix->GetDimensions(nC, nR);
-        nColumns = nColumns + nC;
-        nRows = std::max(nRows , nR);
+        nColumns = bHorizontal ? nColumns + nC : std::max(nColumns, nC);
+        nRows = bHorizontal ? std::max(nRows , nR) : nRows + nR;
         aResMatrix.emplace_back(pRefMatrix);
     }
 
@@ -9262,16 +9272,33 @@ void ScInterpreter::ScHStack()
     {
         SCSIZE nC = 0, nR = 0;
         rMatrix->GetDimensions(nC, nR);
-        for (SCSIZE col = 0; col < nC; ++col)
+        if (bHorizontal)
         {
-            for (SCSIZE row = 0; row < nRows; ++row)
+            for (SCSIZE col = 0; col < nC; ++col)
             {
-                if (row < nR)
-                    lcl_FillCell(rMatrix, pResMat, col, row, nCount, row);
-                else
-                    pResMat->PutError(FormulaError::NotAvailable, nCount, row);
+                for (SCSIZE row = 0; row < nRows; ++row)
+                {
+                    if (row < nR)
+                        lcl_FillCell(rMatrix, pResMat, col, row, nCount, row);
+                    else
+                        pResMat->PutError(FormulaError::NotAvailable, nCount, row);
+                }
+                ++nCount;
             }
-            ++nCount;
+        }
+        else
+        {
+            for (SCSIZE row = 0; row < nR; ++row)
+            {
+                for (SCSIZE col = 0; col < nColumns; ++col)
+                {
+                    if (col < nC)
+                        lcl_FillCell(rMatrix, pResMat, col, row, col, nCount);
+                    else
+                        pResMat->PutError(FormulaError::NotAvailable, col, nCount);
+                }
+                ++nCount;
+            }
         }
     }
 
