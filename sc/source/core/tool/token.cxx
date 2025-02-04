@@ -1596,6 +1596,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocDrop:
             case ocExpand:
             case ocHStack:
+            case ocVStack:
             case ocTake:
             case ocToCol:
             case ocToRow:
