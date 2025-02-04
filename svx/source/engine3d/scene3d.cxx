@@ -208,11 +208,6 @@ E3dScene::E3dScene(SdrModel& rSdrModel, E3dScene const & rSource)
 
 void E3dScene::SetDefaultAttributes()
 {
-    // For WIN95/NT turn off the FP-Exceptions
-#if defined(_WIN32)
-    _control87( _MCW_EM, _MCW_EM );
-#endif
-
     // Set defaults
     m_aCamera.SetViewWindow(-2, -2, 4, 4);
     m_aCameraSet.SetDeviceRectangle(-2, 2, -2, 2);
