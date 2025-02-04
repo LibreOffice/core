@@ -693,7 +693,6 @@ static const sal_Unicode* lcl_r1c1_get_col( const ScSheetLimits& rSheetLimits,
                                             ScAddress* pAddr, ScRefFlags* nFlags )
 {
     const sal_Unicode *pEnd;
-    sal_Int64 n;
     bool isRelative;
 
     if( p[0] == '\0' )
@@ -703,7 +702,7 @@ static const sal_Unicode* lcl_r1c1_get_col( const ScSheetLimits& rSheetLimits,
     isRelative = *p == '[';
     if( isRelative )
         p++;
-    n = sal_Unicode_strtol( p, &pEnd );
+    sal_Int64 n = sal_Unicode_strtol( p, &pEnd );
     if( nullptr == pEnd )
         return nullptr;
 
@@ -712,22 +711,31 @@ static const sal_Unicode* lcl_r1c1_get_col( const ScSheetLimits& rSheetLimits,
         if( isRelative )
             return nullptr;
         n = rDetails.nCol;
+
+        if (n < 0 || n >= rSheetLimits.GetMaxColCount())
+            return nullptr;
     }
     else if( isRelative )
     {
         if( *pEnd != ']' )
             return nullptr;
         n += rDetails.nCol;
+
+        if (n < 0 || n >= rSheetLimits.GetMaxColCount())
+            return nullptr;
+
         pEnd++;
     }
     else
     {
         *nFlags |= ScRefFlags::COL_ABS;
+
+        if (n <= 0 || n > rSheetLimits.GetMaxColCount())
+            return nullptr;
+
         n--;
     }
 
-    if( n < 0 || n >= rSheetLimits.GetMaxColCount())
-        return nullptr;
     pAddr->SetCol( static_cast<SCCOL>( n ) );
     *nFlags |= ScRefFlags::COL_VALID;
 
