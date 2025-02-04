@@ -26,10 +26,9 @@
 
 class SvHeaderTabListBox;
 
-typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleSelection >
-            AccessibleTabListBoxTableImplHelper;
-
-class AccessibleTabListBoxTable final : public AccessibleBrowseBoxTable, public AccessibleTabListBoxTableImplHelper
+class AccessibleTabListBoxTable final
+    : public cppu::ImplInheritanceHelper<AccessibleBrowseBoxTable,
+                                         css::accessibility::XAccessibleSelection>
 {
 private:
     VclPtr<SvHeaderTabListBox>     m_pTabListBox;
@@ -78,12 +77,6 @@ private:
     virtual ~AccessibleTabListBoxTable() override;
 
 public:
-    // XInterface
-    DECLARE_XINTERFACE( )
-
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER( )
-
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
 

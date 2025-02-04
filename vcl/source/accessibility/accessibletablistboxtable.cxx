@@ -35,11 +35,10 @@ using namespace ::com::sun::star;
 
 // Ctor() and Dtor()
 
-AccessibleTabListBoxTable::AccessibleTabListBoxTable( const Reference< XAccessible >& rxParent, SvHeaderTabListBox& rBox ) :
-
-    AccessibleBrowseBoxTable( rxParent, rBox ),
-
-    m_pTabListBox   ( &rBox )
+AccessibleTabListBoxTable::AccessibleTabListBoxTable(const Reference<XAccessible>& rxParent,
+                                                     SvHeaderTabListBox& rBox)
+    : ImplInheritanceHelper(rxParent, rBox)
+    , m_pTabListBox(&rBox)
 
 {
     m_pTabListBox->AddEventListener( LINK( this, AccessibleTabListBoxTable, WindowEventListener ) );
@@ -242,11 +241,6 @@ sal_Int32 AccessibleTabListBoxTable::implGetSelRow( sal_Int32 nSelRow ) const
 
     return 0;
 }
-
-// XInterface & XTypeProvider
-
-IMPLEMENT_FORWARD_XINTERFACE2(AccessibleTabListBoxTable, AccessibleBrowseBoxTable, AccessibleTabListBoxTableImplHelper)
-IMPLEMENT_FORWARD_XTYPEPROVIDER2(AccessibleTabListBoxTable, AccessibleBrowseBoxTable, AccessibleTabListBoxTableImplHelper)
 
 // XServiceInfo
 
