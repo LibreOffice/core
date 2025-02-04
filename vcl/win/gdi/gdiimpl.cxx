@@ -67,8 +67,7 @@ namespace {
 // #100127# Fill point and flag memory from array of points which
 // might also contain bezier control points for the PolyDraw() GDI method
 // Make sure pWinPointAry and pWinFlagAry are big enough
-void ImplPreparePolyDraw( bool                      bCloseFigures,
-                          sal_uLong                 nPoly,
+void ImplPreparePolyDraw( sal_uLong                 nPoly,
                           const sal_uInt32*         pPoints,
                           const Point* const*    pPtAry,
                           const PolyFlags* const*   pFlgAry,
@@ -133,9 +132,8 @@ void ImplPreparePolyDraw( bool                      bCloseFigures,
                 ++nCurrPoint;
             }
 
-            // end figure?
-            if( bCloseFigures )
-                pWinFlagAry[-1] |= PT_CLOSEFIGURE;
+            // end figure
+            pWinFlagAry[-1] |= PT_CLOSEFIGURE;
         }
     }
 }
@@ -1716,7 +1714,7 @@ bool WinSalGraphicsImpl::drawPolygonBezier( sal_uInt32 nPoints, const Point* pPt
     }
 
     sal_uInt32 nPoints_i32(nPoints);
-    ImplPreparePolyDraw(true, 1, &nPoints_i32, &pPtAry, &pFlgAry, pWinPointAry, pWinFlagAry);
+    ImplPreparePolyDraw(1, &nPoints_i32, &pPtAry, &pFlgAry, pWinPointAry, pWinFlagAry);
 
     bool bRet( false );
 
@@ -1763,7 +1761,7 @@ bool WinSalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
         pWinFlagAry = aStackAry2;
     }
 
-    ImplPreparePolyDraw(true, nPoly, pPoints, pPtAry, pFlgAry, pWinPointAry, pWinFlagAry);
+    ImplPreparePolyDraw(nPoly, pPoints, pPtAry, pFlgAry, pWinPointAry, pWinFlagAry);
 
     bool bRet( false );
 
