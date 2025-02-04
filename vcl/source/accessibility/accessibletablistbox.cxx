@@ -63,7 +63,8 @@ rtl::Reference<AccessibleBrowseBoxTable> AccessibleTabListBox::createAccessibleT
 
 sal_Int64 SAL_CALL AccessibleTabListBox::getAccessibleChildCount()
 {
-    return 2; // header and table
+    // only the table; header is handled by HeaderBar (which is a sibling of the SvHeaderTabListBox)
+    return 1;
 }
 
 Reference< XAccessibleContext > SAL_CALL AccessibleTabListBox::getAccessibleContext()
@@ -77,22 +78,10 @@ AccessibleTabListBox::getAccessibleChild( sal_Int64 nChildIndex )
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
-    if ( nChildIndex < 0 || nChildIndex > 1 )
+    if (nChildIndex != 0)
         throw IndexOutOfBoundsException();
 
-    Reference< XAccessible > xRet;
-    if (nChildIndex == 0)
-    {
-        //! so far the actual implementation object only supports column headers
-        xRet = implGetHeaderBar( AccessibleBrowseBoxObjType::ColumnHeaderBar );
-    }
-    else if (nChildIndex == 1)
-        xRet = implGetTable();
-
-    if ( !xRet.is() )
-        throw RuntimeException(u"getAccessibleChild called with NULL xRet"_ustr,getXWeak());
-
-    return xRet;
+    return implGetTable();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
