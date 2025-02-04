@@ -1958,10 +1958,7 @@ tools::Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
     {
         aTopLeft.setY( GetDataRowHeight() );
         nWidth = GetColumnWidth(0);
-        if (pParent)
-            nHeight = GetWindowExtentsRelative( *pParent ).GetHeight() - aTopLeft.Y() - GetControlArea().GetSize().Height();
-        else
-            nHeight = GetWindowExtentsAbsolute().GetHeight() - aTopLeft.Y() - GetControlArea().GetSize().Height();
+        nHeight = GetWindowExtentsAbsolute().GetHeight() - aTopLeft.Y() - GetControlArea().GetSize().Height();
     }
     if (pParent)
         aTopLeft += GetWindowExtentsRelative( *pParent ).TopLeft();
