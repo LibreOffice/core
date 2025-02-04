@@ -742,6 +742,67 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf117245)
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf159029)
+{
+    createSwDoc("2024-01-19_merged-cells-on-separate-pages-vertical-alignement.odt");
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/infos/bounds", "top",
+                    u"1970");
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/txt[1]/infos/bounds", "top",
+                    u"1970");
+    }
+
+    // set vert orient
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GotoTable("Table1");
+    pWrtShell->Right(SwCursorSkipMode::Cells, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->SetBoxAlign(css::text::VertOrientation::BOTTOM);
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/infos/bounds", "top",
+                    u"1970");
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/txt[1]/infos/bounds", "top",
+                    u"15494");
+    }
+
+    // delete
+    pWrtShell->SttEndDoc(true);
+    pWrtShell->DelRight();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/infos/bounds", "top",
+                    u"1694");
+        // the problem was that this moved to the top of the cell
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/txt[1]/infos/bounds", "top",
+                    u"15494");
+    }
+
+    pWrtShell->Undo();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/infos/bounds", "top",
+                    u"1970");
+        // the problem was that this moved to the top of the cell
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/txt[1]/infos/bounds", "top",
+                    u"15494");
+    }
+
+    pWrtShell->Redo();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/infos/bounds", "top",
+                    u"1694");
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/txt[1]/infos/bounds", "top",
+                    u"15494");
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf118672)
 {
     createSwDoc("tdf118672.odt");
