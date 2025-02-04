@@ -2318,11 +2318,25 @@ public:
         return *this;
     }
 
+    wrapped_iterator operator++(int)
+    {
+        auto const old = *this;
+        ++it;
+        return old;
+    }
+
     wrapped_iterator& operator--()
     {
         --it;
 
         return *this;
+    }
+
+    wrapped_iterator operator--(int)
+    {
+        auto const old = *this;
+        --it;
+        return old;
     }
 
     value_type& operator*() const
