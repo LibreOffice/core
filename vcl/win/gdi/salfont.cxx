@@ -648,16 +648,9 @@ hb_blob_t* WinFontFace::GetHbTable(hb_tag_t nTag) const
 
 void WinSalGraphics::SetTextColor( Color nColor )
 {
-    COLORREF aCol = PALETTERGB( nColor.GetRed(),
-                                nColor.GetGreen(),
-                                nColor.GetBlue() );
-
-    if( !mbPrinter &&
-        GetSalData()->mhDitherPal &&
-        ImplIsSysColorEntry( nColor ) )
-    {
-        aCol = PALRGB_TO_RGB( aCol );
-    }
+    COLORREF aCol = RGB( nColor.GetRed(),
+                         nColor.GetGreen(),
+                         nColor.GetBlue() );
 
     ::SetTextColor( getHDC(), aCol );
 }

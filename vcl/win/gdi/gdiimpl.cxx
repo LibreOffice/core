@@ -148,62 +148,6 @@ Color ImplGetROPColor( SalROPColor nROPColor )
     return nColor;
 }
 
-bool IsDitherColor(BYTE nRed, BYTE nGreen, BYTE nBlue)
-{
-    constexpr sal_uInt8 DITHER_PAL_DELTA = 51;
-
-    return !(nRed % DITHER_PAL_DELTA) &&
-           !(nGreen % DITHER_PAL_DELTA) &&
-           !(nBlue % DITHER_PAL_DELTA);
-}
-
-bool IsPaletteColor(BYTE nRed, BYTE nGreen, BYTE nBlue)
-{
-    static const PALETTEENTRY aImplSalSysPalEntryAry[] =
-    {
-    {    0,    0,    0, 0 },
-    {    0,    0, 0x80, 0 },
-    {    0, 0x80,    0, 0 },
-    {    0, 0x80, 0x80, 0 },
-    { 0x80,    0,    0, 0 },
-    { 0x80,    0, 0x80, 0 },
-    { 0x80, 0x80,    0, 0 },
-    { 0x80, 0x80, 0x80, 0 },
-    { 0xC0, 0xC0, 0xC0, 0 },
-    {    0,    0, 0xFF, 0 },
-    {    0, 0xFF,    0, 0 },
-    {    0, 0xFF, 0xFF, 0 },
-    { 0xFF,    0,    0, 0 },
-    { 0xFF,    0, 0xFF, 0 },
-    { 0xFF, 0xFF,    0, 0 },
-    { 0xFF, 0xFF, 0xFF, 0 }
-    };
-
-    for (const auto& rPalEntry : aImplSalSysPalEntryAry)
-    {
-        if(rPalEntry.peRed == nRed &&
-           rPalEntry.peGreen == nGreen &&
-           rPalEntry.peBlue == nBlue)
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool IsExtraColor(BYTE nRed, BYTE nGreen, BYTE nBlue)
-{
-    return (nRed == 0) && (nGreen == 184) && (nBlue == 255);
-}
-
-bool ImplIsPaletteEntry(BYTE nRed, BYTE nGreen, BYTE nBlue)
-{
-    return IsDitherColor(nRed, nGreen, nBlue) ||
-           IsPaletteColor(nRed, nGreen, nBlue) ||
-           IsExtraColor(nRed, nGreen, nBlue);
-}
-
 } // namespace
 
 WinSalGraphicsImpl::WinSalGraphicsImpl(WinSalGraphics& rParent):
@@ -1295,17 +1239,9 @@ HPEN WinSalGraphicsImpl::SearchStockPen(COLORREF nPenColor)
 
 HPEN WinSalGraphicsImpl::MakePen(Color nColor)
 {
-    COLORREF nPenColor = PALETTERGB(nColor.GetRed(),
-                                    nColor.GetGreen(),
-                                    nColor.GetBlue());
-
-    if (!mrParent.isPrinter())
-    {
-        if (GetSalData()->mhDitherPal && ImplIsSysColorEntry(nColor))
-        {
-            nPenColor = PALRGB_TO_RGB(nPenColor);
-        }
-    }
+    COLORREF nPenColor = RGB(nColor.GetRed(),
+                            nColor.GetGreen(),
+                            nColor.GetBlue());
 
     return CreatePen(PS_SOLID, mrParent.mnPenWidth, nPenColor);
 }
@@ -1377,112 +1313,14 @@ HBRUSH WinSalGraphicsImpl::SearchStockBrush(COLORREF nBrushColor)
     return nullptr;
 }
 
-namespace
-{
-
-BYTE GetDitherMappingValue(BYTE nVal, BYTE nThres, const SalData* pSalData)
-{
-    return (pSalData->mpDitherDiff[nVal] > nThres) ?
-        pSalData->mpDitherHigh[nVal] : pSalData->mpDitherLow[nVal];
-}
-
-HBRUSH Make16BitDIBPatternBrush(Color nColor)
-{
-    const SalData* pSalData = GetSalData();
-
-    const BYTE nRed   = nColor.GetRed();
-    const BYTE nGreen = nColor.GetGreen();
-    const BYTE nBlue  = nColor.GetBlue();
-
-    static const BYTE aOrdDither16Bit[8][8] =
-    {
-       { 0, 6, 1, 7, 0, 6, 1, 7 },
-       { 4, 2, 5, 3, 4, 2, 5, 3 },
-       { 1, 7, 0, 6, 1, 7, 0, 6 },
-       { 5, 3, 4, 2, 5, 3, 4, 2 },
-       { 0, 6, 1, 7, 0, 6, 1, 7 },
-       { 4, 2, 5, 3, 4, 2, 5, 3 },
-       { 1, 7, 0, 6, 1, 7, 0, 6 },
-       { 5, 3, 4, 2, 5, 3, 4, 2 }
-    };
-
-    BYTE* pTmp = pSalData->mpDitherDIBData;
-
-    for(int nY = 0; nY < 8; ++nY)
-    {
-        for(int nX = 0; nX < 8; ++nX)
-        {
-            const BYTE nThres = aOrdDither16Bit[nY][nX];
-            *pTmp++ = GetDitherMappingValue(nBlue, nThres, pSalData);
-            *pTmp++ = GetDitherMappingValue(nGreen, nThres, pSalData);
-            *pTmp++ = GetDitherMappingValue(nRed, nThres, pSalData);
-        }
-    }
-
-    return CreateDIBPatternBrush(pSalData->mhDitherDIB, DIB_RGB_COLORS);
-}
-
-HBRUSH Make8BitDIBPatternBrush(Color nColor)
-{
-    const SalData* pSalData = GetSalData();
-
-    const BYTE nRed   = nColor.GetRed();
-    const BYTE nGreen = nColor.GetGreen();
-    const BYTE nBlue  = nColor.GetBlue();
-
-    static const BYTE aOrdDither8Bit[8][8] =
-    {
-       {  0, 38,  9, 48,  2, 40, 12, 50 },
-       { 25, 12, 35, 22, 28, 15, 37, 24 },
-       {  6, 44,  3, 41,  8, 47,  5, 44 },
-       { 32, 19, 28, 16, 34, 21, 31, 18 },
-       {  1, 40, 11, 49,  0, 39, 10, 48 },
-       { 27, 14, 36, 24, 26, 13, 36, 23 },
-       {  8, 46,  4, 43,  7, 45,  4, 42 },
-       { 33, 20, 30, 17, 32, 20, 29, 16 }
-    };
-
-    BYTE* pTmp = pSalData->mpDitherDIBData;
-
-    for (int nY = 0; nY < 8; ++nY)
-    {
-        for (int nX = 0; nX < 8; ++nX)
-        {
-            const BYTE nThres = aOrdDither8Bit[nY][nX];
-            *pTmp = GetDitherMappingValue(nRed, nThres, pSalData) +
-                    GetDitherMappingValue(nGreen, nThres, pSalData) * 6 +
-                    GetDitherMappingValue(nBlue, nThres, pSalData) * 36;
-            pTmp++;
-        }
-    }
-
-    return CreateDIBPatternBrush(pSalData->mhDitherDIB, DIB_PAL_COLORS);
-}
-
-} // namespace
-
 HBRUSH WinSalGraphicsImpl::MakeBrush(Color nColor)
 {
-    const SalData* pSalData = GetSalData();
-
     const BYTE        nRed        = nColor.GetRed();
     const BYTE        nGreen      = nColor.GetGreen();
     const BYTE        nBlue       = nColor.GetBlue();
-    const COLORREF    nBrushColor = PALETTERGB(nRed, nGreen, nBlue);
+    const COLORREF    nBrushColor = RGB(nRed, nGreen, nBlue);
 
-    if (mrParent.isPrinter() || !pSalData->mhDitherDIB)
-        return CreateSolidBrush(nBrushColor);
-
-    if (24 == reinterpret_cast<BITMAPINFOHEADER*>(pSalData->mpDitherDIB)->biBitCount)
-        return Make16BitDIBPatternBrush(nColor);
-
-    if (ImplIsSysColorEntry(nColor))
-        return CreateSolidBrush(PALRGB_TO_RGB(nBrushColor));
-
-    if (ImplIsPaletteEntry(nRed, nGreen, nBlue))
-        return CreateSolidBrush(nBrushColor);
-
-    return Make8BitDIBPatternBrush(nColor);
+    return CreateSolidBrush(nBrushColor);
 }
 
 void WinSalGraphicsImpl::ResetBrush(HBRUSH hNewBrush)
@@ -1541,14 +1379,9 @@ void WinSalGraphicsImpl::drawPixel( tools::Long nX, tools::Long nY )
 
 void WinSalGraphicsImpl::drawPixel( tools::Long nX, tools::Long nY, Color nColor )
 {
-    COLORREF nCol = PALETTERGB( nColor.GetRed(),
-                                nColor.GetGreen(),
-                                nColor.GetBlue() );
-
-    if ( !mrParent.isPrinter() &&
-         GetSalData()->mhDitherPal &&
-         ImplIsSysColorEntry( nColor ) )
-        nCol = PALRGB_TO_RGB( nCol );
+    COLORREF nCol = RGB( nColor.GetRed(),
+                        nColor.GetGreen(),
+                        nColor.GetBlue() );
 
     DrawPixelImpl( nX, nY, nCol );
 }

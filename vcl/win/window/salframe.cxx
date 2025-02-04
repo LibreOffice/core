@@ -1023,9 +1023,6 @@ bool WinSalFrame::InitFrameGraphicsDC( WinSalGraphics *pGraphics, HDC hDC, HWND 
     if ( !hDC )
         return false;
 
-    if ( pSalData->mhDitherPal )
-        pGraphics->setPalette(pSalData->mhDitherPal);
-
     if ( pGraphics == mpThreadGraphics )
         pSalData->mnCacheDCInUse++;
     return true;
@@ -4521,9 +4518,6 @@ static void ImplHandleSettingsChangeMsg(HWND hWnd, UINT nMsg, WPARAM /*wParam*/,
         GetSalData()->mbThemeChanged = true;
     }
 
-    if ( WM_SYSCOLORCHANGE == nMsg && GetSalData()->mhDitherPal )
-        ImplUpdateSysColorEntries();
-
     WinSalFrame* pFrame = ProcessOrDeferMessage( hWnd, 0, 0, DeferPolicy::Blocked );
     if (!pFrame)
         return;
@@ -4544,174 +4538,6 @@ static void ImplHandleUserEvent( HWND hWnd, LPARAM lParam )
         pFrame->CallCallback( SalEvent::UserEvent, reinterpret_cast<void*>(lParam) );
         ImplSalYieldMutexRelease();
     }
-}
-
-static void ImplHandleForcePalette( HWND hWnd )
-{
-    SalData*    pSalData = GetSalData();
-    HPALETTE    hPal = pSalData->mhDitherPal;
-    if (!hPal)
-        return;
-
-    WinSalFrame* pFrame = ProcessOrDeferMessage(hWnd, SAL_MSG_FORCEPALETTE);
-    if (!pFrame)
-        return;
-    const ::comphelper::ScopeGuard aScopeGuard([](){ ImplSalYieldMutexRelease(); });
-
-    WinSalGraphics* pGraphics = pFrame->mpLocalGraphics;
-    if (!pGraphics || !pGraphics->getHDC() || !pGraphics->getDefPal()
-            || (pGraphics->setPalette(hPal, FALSE) == GDI_ERROR))
-        return;
-
-    InvalidateRect(hWnd, nullptr, FALSE);
-    UpdateWindow(hWnd);
-    pFrame->CallCallback(SalEvent::DisplayChanged, nullptr);
-}
-
-static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
-                                  WPARAM wParam, LPARAM lParam, bool& rDef )
-{
-    SalData*    pSalData = GetSalData();
-    HPALETTE    hPal = pSalData->mhDitherPal;
-    if ( !hPal )
-        return 0;
-
-    rDef = false;
-    if ( pSalData->mbInPalChange )
-        return 0;
-
-    if ( (nMsg == WM_PALETTECHANGED) || (nMsg == SAL_MSG_POSTPALCHANGED) )
-    {
-        if ( reinterpret_cast<HWND>(wParam) == hWnd )
-            return 0;
-    }
-
-    bool bReleaseMutex = false;
-    if ( (nMsg == WM_QUERYNEWPALETTE) || (nMsg == WM_PALETTECHANGED) )
-    {
-        // as Windows can send these messages also, we have to use
-        // the Solar semaphore
-        if ( ImplSalYieldMutexTryToAcquire() )
-            bReleaseMutex = true;
-        else if ( nMsg == WM_QUERYNEWPALETTE )
-        {
-            bool const ret = PostMessageW(hWnd, SAL_MSG_POSTQUERYNEWPAL, wParam, lParam);
-            SAL_WARN_IF(!ret, "vcl", "ERROR: PostMessage() failed!");
-        }
-        else /* ( nMsg == WM_PALETTECHANGED ) */
-        {
-            bool const ret = PostMessageW(hWnd, SAL_MSG_POSTPALCHANGED, wParam, lParam);
-            SAL_WARN_IF(!ret, "vcl", "ERROR: PostMessage() failed!");
-        }
-    }
-
-    WinSalVirtualDevice*pTempVD;
-    WinSalFrame*        pTempFrame;
-    WinSalGraphics*     pGraphics;
-    HDC                 hDC;
-    HPALETTE hOldPal = nullptr;
-    UINT nCols = GDI_ERROR;
-    bool                bUpdate;
-
-    pSalData->mbInPalChange = true;
-
-    // reset all palettes in VirDevs and Frames
-    pTempVD = pSalData->mpFirstVD;
-    while ( pTempVD )
-    {
-        pGraphics = pTempVD->getGraphics();
-        pGraphics->setPalette(nullptr);
-        pTempVD = pTempVD->getNext();
-    }
-    pTempFrame = pSalData->mpFirstFrame;
-    while ( pTempFrame )
-    {
-        pGraphics = pTempFrame->mpLocalGraphics;
-        pGraphics->setPalette(nullptr);
-        pTempFrame = pTempFrame->mpNextFrame;
-    }
-
-    // re-initialize palette
-    WinSalFrame* pFrame = nullptr;
-    if ( bFrame )
-        pFrame = GetWindowPtr( hWnd );
-
-    UnrealizeObject(hPal);
-    const bool bStdDC = pFrame && pFrame->mpLocalGraphics && pFrame->mpLocalGraphics->getHDC();
-    if (!bStdDC)
-    {
-        hDC = GetDC(hWnd);
-        hOldPal = SelectPalette(hDC, hPal, TRUE);
-        if (hOldPal)
-            nCols = RealizePalette(hDC);
-    }
-    else
-    {
-        hDC = pFrame->mpLocalGraphics->getHDC();
-        nCols = pFrame->mpLocalGraphics->setPalette(hPal);
-    }
-
-    bUpdate = nCols != 0 && nCols != GDI_ERROR;
-
-    if ( !bStdDC )
-    {
-        if (hOldPal)
-            SelectPalette(hDC, hOldPal, TRUE);
-        ReleaseDC( hWnd, hDC );
-    }
-
-    // reset all palettes in VirDevs and Frames
-    pTempVD = pSalData->mpFirstVD;
-    while ( pTempVD )
-    {
-        pGraphics = pTempVD->getGraphics();
-        if ( pGraphics->getDefPal() )
-            pGraphics->setPalette(hPal);
-        pTempVD = pTempVD->getNext();
-    }
-
-    pTempFrame = pSalData->mpFirstFrame;
-    while ( pTempFrame )
-    {
-        if ( pTempFrame != pFrame )
-        {
-            pGraphics = pTempFrame->mpLocalGraphics;
-            if (pGraphics && pGraphics->getDefPal())
-            {
-                UINT nRes = pGraphics->setPalette(hPal);
-                if (nRes != 0 && nRes != GDI_ERROR)
-                    bUpdate = true;
-            }
-        }
-        pTempFrame = pTempFrame->mpNextFrame;
-    }
-
-    // if colors changed, update the window
-    if ( bUpdate )
-    {
-        pTempFrame = pSalData->mpFirstFrame;
-        while ( pTempFrame )
-        {
-            pGraphics = pTempFrame->mpLocalGraphics;
-            if (pGraphics && pGraphics->getDefPal())
-            {
-                InvalidateRect( pTempFrame->mhWnd, nullptr, FALSE );
-                UpdateWindow( pTempFrame->mhWnd );
-                pTempFrame->CallCallback( SalEvent::DisplayChanged, nullptr );
-            }
-            pTempFrame = pTempFrame->mpNextFrame;
-        }
-    }
-
-    pSalData->mbInPalChange = false;
-
-    if ( bReleaseMutex )
-        ImplSalYieldMutexRelease();
-
-    if ( nMsg == WM_PALETTECHANGED )
-        return 0;
-    else
-        return nCols;
 }
 
 static bool ImplHandleMinMax( HWND hWnd, LPARAM lParam )
@@ -6199,26 +6025,6 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
             rDef = false;
             break;
 
-        case SAL_MSG_FORCEPALETTE:
-            ImplHandleForcePalette( hWnd );
-            rDef = false;
-            break;
-
-        case WM_QUERYNEWPALETTE:
-        case SAL_MSG_POSTQUERYNEWPAL:
-            nRet = ImplHandlePalette( true, hWnd, nMsg, wParam, lParam, rDef );
-            break;
-
-        case WM_ACTIVATE:
-            // Getting activated, we also want to set our palette.
-            // We do this in Activate, so that other external child windows
-            // can overwrite our palette. Thus our palette is set only once
-            // and not recursively, as at all other places it is set only as
-            // the background palette.
-            if ( LOWORD( wParam ) != WA_INACTIVE )
-                SendMessageW( hWnd, SAL_MSG_FORCEPALETTE, 0, 0 );
-            break;
-
         case WM_ENABLE:
             // #95133# a system dialog is opened/closed, using our app window as parent
             {
@@ -6431,17 +6237,12 @@ LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
     return nRet;
 }
 
-bool ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT& rlResult )
+bool ImplHandleGlobalMsg( HWND /*hWnd*/, UINT nMsg, WPARAM /*wParam*/, LPARAM /*lParam*/, LRESULT& /*rlResult*/ )
 {
     // handle all messages concerning all frames so they get processed only once
     // Must work for Unicode and none Unicode
     bool bResult = false;
-    if ( (nMsg == WM_PALETTECHANGED) || (nMsg == SAL_MSG_POSTPALCHANGED) )
-    {
-        bResult = true;
-        rlResult = ImplHandlePalette( false, hWnd, nMsg, wParam, lParam, bResult );
-    }
-    else if( nMsg == WM_DISPLAYCHANGE )
+    if( nMsg == WM_DISPLAYCHANGE )
     {
         WinSalSystem* pSys = static_cast<WinSalSystem*>(ImplGetSalSystem());
         if( pSys )

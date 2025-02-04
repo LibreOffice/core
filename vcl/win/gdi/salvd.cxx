@@ -91,8 +91,6 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
                                                            nDX, nDY, nBitCount,
                                                            &o3tl::temporary<void*>(nullptr));
 
-    const SalData* pSalData = GetSalData();
-
     WinSalVirtualDevice* pVDev = new WinSalVirtualDevice(hDC, hBmp, nBitCount,
                                                          /*bForeignDC*/false, nDX, nDY);
 
@@ -102,12 +100,6 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
     // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
     pVirGraphics->SetLayout( SalLayoutFlags::NONE );
     pVirGraphics->setHDC(hDC);
-
-    if ( pSalData->mhDitherPal && pVirGraphics->isScreen() )
-    {
-        pVirGraphics->setPalette(pSalData->mhDitherPal);
-        RealizePalette( hDC );
-    }
 
     pVDev->setGraphics(pVirGraphics);
 
@@ -138,7 +130,6 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
 
     const sal_uInt16 nBitCount = 0;
     const bool bForeignDC = rData.hDC != nullptr;
-    const SalData* pSalData = GetSalData();
 
     WinSalVirtualDevice* pVDev = new WinSalVirtualDevice(hDC, /*hBmp*/nullptr, nBitCount,
                                                          bForeignDC, nDX, nDY);
@@ -149,12 +140,6 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
     // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
     pVirGraphics->SetLayout( SalLayoutFlags::NONE );
     pVirGraphics->setHDC(hDC);
-
-    if ( pSalData->mhDitherPal && pVirGraphics->isScreen() )
-    {
-        pVirGraphics->setPalette(pSalData->mhDitherPal);
-        RealizePalette( hDC );
-    }
 
     pVDev->setGraphics(pVirGraphics);
 

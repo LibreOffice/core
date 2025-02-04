@@ -98,13 +98,6 @@ public:
 public:
     HINSTANCE               mhInst;                 // default instance handle
     int                     mnCmdShow;              // default frame show style
-    HPALETTE                mhDitherPal;            // dither palette
-    HGLOBAL                 mhDitherDIB;            // dither memory handle
-    BYTE*                   mpDitherDIB;            // dither memory
-    BYTE*                   mpDitherDIBData;        // beginning of DIB data
-    std::unique_ptr<tools::Long[]> mpDitherDiff;    // Dither mapping table
-    std::unique_ptr<BYTE[]> mpDitherLow;            // Dither mapping table
-    std::unique_ptr<BYTE[]> mpDitherHigh;           // Dither mapping table
     HHOOK                   mhSalObjMsgHook;        // hook to get interesting msg for SalObject
     HWND                    mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
     WinSalInstance*         mpInstance;
@@ -124,7 +117,6 @@ public:
     WPARAM                  mnSalObjWantKeyEvt;     // KeyEvent that should be processed by SalObj-Hook
     BYTE                    mnCacheDCInUse;         // count of CacheDC in use
     bool                    mbObjClassInit;         // is SALOBJECTCLASS initialised
-    bool                    mbInPalChange;          // is in WM_QUERYNEWPALETTE
     DWORD                   mnAppThreadId;          // Id from Application-Thread
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
     TempFontItem*           mpSharedTempFontItem;   // LibreOffice shared fonts
@@ -233,17 +225,11 @@ OUString ImplSalGetUniString(const char* pStr, sal_Int32 nLen = -1);
 // wParam == 0; lParam == 0
 #define SAL_MSG_POSTFOCUS           (WM_USER+133)
 // wParam == wParam; lParam == lParam
-#define SAL_MSG_POSTQUERYNEWPAL     (WM_USER+134)
-// wParam == wParam; lParam == lParam
-#define SAL_MSG_POSTPALCHANGED      (WM_USER+135)
-// wParam == wParam; lParam == lParam
 #define SAL_MSG_POSTMOVE            (WM_USER+136)
 // wParam == wParam; lParam == lParam
 #define SAL_MSG_POSTCALLSIZE        (WM_USER+137)
 // wParam == pRECT; lParam == 0
 #define SAL_MSG_POSTPAINT           (WM_USER+138)
-// wParam == 0; lParam == pFrame; lResult 0
-#define SAL_MSG_FORCEPALETTE        (WM_USER+139)
 // wParam == 0; lParam == 0
 #define SAL_MSG_CAPTUREMOUSE        (WM_USER+140)
 // wParam == 0; lParam == 0

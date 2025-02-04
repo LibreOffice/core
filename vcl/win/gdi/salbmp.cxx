@@ -553,14 +553,6 @@ bool WinSalBitmap::Create(const SalBitmap& rSSalBmp, vcl::PixelFormat eNewPixelF
     HDC         hDC = GetDC( nullptr );
     PBYTE       pBits = reinterpret_cast<PBYTE>(pBI) + pBI->bmiHeader.biSize +
                         ImplGetDIBColorCount( mhDIB ) * sizeof( RGBQUAD );
-    SalData*    pSalData = GetSalData();
-    HPALETTE    hOldPal = nullptr;
-
-    if ( pSalData->mhDitherPal )
-    {
-        hOldPal = SelectPalette( hDC, pSalData->mhDitherPal, TRUE );
-        RealizePalette( hDC );
-    }
 
     if( GetDIBits( hDC, rSalBmp.mhDDB, 0, nLines, pBits, pBI, DIB_RGB_COLORS ) == nLines )
     {
@@ -575,9 +567,6 @@ bool WinSalBitmap::Create(const SalBitmap& rSSalBmp, vcl::PixelFormat eNewPixelF
         GlobalFree( mhDIB );
         mhDIB = nullptr;
     }
-
-    if( hOldPal )
-        SelectPalette( hDC, hOldPal, TRUE );
 
     ReleaseDC( nullptr, hDC );
 

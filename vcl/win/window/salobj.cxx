@@ -534,19 +534,10 @@ WinSalObject::~WinSalObject()
     // destroy cache data
     delete [] reinterpret_cast<BYTE*>(mpStdClipRgnData);
 
-    HWND hWndParent = ::GetParent( mhWnd );
-
     if ( mhWndChild )
         DestroyWindow( mhWndChild );
     if ( mhWnd )
         DestroyWindow( mhWnd );
-
-    // reset palette, if no external child window is left,
-    // as they might have overwritten our palette
-    if ( hWndParent &&
-         ::GetActiveWindow() == hWndParent &&
-         !GetWindow( hWndParent, GW_CHILD ) )
-        SendMessageW( hWndParent, SAL_MSG_FORCEPALETTE, 0, 0 );
 }
 
 void WinSalObject::ResetClipRegion()

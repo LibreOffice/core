@@ -248,13 +248,6 @@ SalData::SalData()
 {
     mhInst = nullptr;           // default instance handle
     mnCmdShow = 0;              // default frame show style
-    mhDitherPal = nullptr;      // dither palette
-    mhDitherDIB = nullptr;      // dither memory handle
-    mpDitherDIB = nullptr;      // dither memory
-    mpDitherDIBData = nullptr;  // beginning of DIB data
-    mpDitherDiff = nullptr;     // Dither mapping table
-    mpDitherLow = nullptr;      // Dither mapping table
-    mpDitherHigh = nullptr;     // Dither mapping table
     mhSalObjMsgHook = nullptr;  // hook to get interesting msg for SalObject
     mhWantLeaveMsg = nullptr;   // window handle, that want a MOUSELEAVE message
     mpInstance = nullptr;  // pointer of first instance
@@ -280,7 +273,6 @@ SalData::SalData()
     mnSalObjWantKeyEvt = 0;     // KeyEvent for the SalObj hook
     mnCacheDCInUse = 0;         // count of CacheDC in use
     mbObjClassInit = false;     // is SALOBJECTCLASS initialised
-    mbInPalChange = false;      // is in WM_QUERYNEWPALETTE
     mnAppThreadId = 0;          // Id from Application-Thread
     mpFirstIcon = nullptr;      // icon cache, points to first icon, NULL if none
     mpSharedTempFontItem = nullptr;
