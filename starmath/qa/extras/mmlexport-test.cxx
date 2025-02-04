@@ -33,6 +33,7 @@ public:
     void testTdf101022();
     void testMaj();
     void testHadd();
+    void testTdf158867();
 
     CPPUNIT_TEST_SUITE(MathMLExportTest);
     CPPUNIT_TEST(testBlank);
@@ -40,6 +41,7 @@ public:
     CPPUNIT_TEST(testTdf101022);
     CPPUNIT_TEST(testMaj);
     CPPUNIT_TEST(testHadd);
+    CPPUNIT_TEST(testTdf158867);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -144,6 +146,21 @@ void MathMLExportTest::testHadd()
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
     assertXPathContent(pDoc, "/m:math/m:semantics/m:mrow/m:munderover/m:mi", u"\U0001EEF1");
+}
+
+void MathMLExportTest::testTdf158867()
+{
+    loadFromURL(u"private:factory/smath"_ustr);
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+    pDocShell->SetText(u"1,2 over 2 = 0,65"_ustr);
+    save(u"MathML XML (Math)"_ustr);
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPathContent(pDoc, "/m:math/m:semantics/m:mrow/m:mfrac/m:mn[1]", u"1,2");
+    assertXPathContent(pDoc, "/m:math/m:semantics/m:mrow/m:mfrac/m:mn[2]", u"2");
+    assertXPathContent(pDoc, "/m:math/m:semantics/m:mrow/m:mo", u"=");
+    assertXPathContent(pDoc, "/m:math/m:semantics/m:mrow/m:mn", u"0,65");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MathMLExportTest);
