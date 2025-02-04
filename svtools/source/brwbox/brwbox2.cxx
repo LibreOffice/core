@@ -1993,7 +1993,7 @@ tools::Rectangle BrowseBox::GetFieldRectPixel( sal_Int32 _nRowId, sal_uInt16 _nC
     if ( !_bOnScreen )
         pParent = GetAccessibleParentWindow();
 
-    tools::Rectangle aRect = GetFieldRectPixel(_nRowId,_nColId,_bOnScreen);
+    tools::Rectangle aRect = GetFieldRectPixel(_nRowId, _nColId, true);
 
     Point aTopLeft = aRect.TopLeft();
     if (pParent)
