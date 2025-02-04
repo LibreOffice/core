@@ -514,101 +514,101 @@ namespace {
 void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSalBitmap,
                      bool bPrinter, int nDrawMode )
 {
-    if( hDC )
-    {
-        HGLOBAL     hDrawDIB;
-        HBITMAP     hDrawDDB = rSalBitmap.ImplGethDDB();
-        std::optional<WinSalBitmap> xTmpSalBmp;
-        bool        bPrintDDB = ( bPrinter && hDrawDDB );
+    if( !hDC )
+        return;
 
-        if( bPrintDDB )
+    HGLOBAL     hDrawDIB;
+    HBITMAP     hDrawDDB = rSalBitmap.ImplGethDDB();
+    std::optional<WinSalBitmap> xTmpSalBmp;
+    bool        bPrintDDB = ( bPrinter && hDrawDDB );
+
+    if( bPrintDDB )
+    {
+        xTmpSalBmp.emplace();
+        xTmpSalBmp->Create(rSalBitmap, vcl::bitDepthToPixelFormat(rSalBitmap.GetBitCount()));
+        hDrawDIB = xTmpSalBmp->ImplGethDIB();
+    }
+    else
+        hDrawDIB = rSalBitmap.ImplGethDIB();
+
+    if( hDrawDIB )
+    {
+        if (PBITMAPINFO pBI = static_cast<PBITMAPINFO>(GlobalLock( hDrawDIB )))
         {
-            xTmpSalBmp.emplace();
-            xTmpSalBmp->Create(rSalBitmap, vcl::bitDepthToPixelFormat(rSalBitmap.GetBitCount()));
-            hDrawDIB = xTmpSalBmp->ImplGethDIB();
+            PBYTE               pBits = reinterpret_cast<PBYTE>(pBI) + pBI->bmiHeader.biSize +
+                                        WinSalBitmap::ImplGetDIBColorCount( hDrawDIB ) * sizeof( RGBQUAD );
+            const int           nOldStretchMode = SetStretchBltMode( hDC, STRETCH_DELETESCANS );
+
+            StretchDIBits( hDC,
+                           static_cast<int>(rPosAry.mnDestX), static_cast<int>(rPosAry.mnDestY),
+                           static_cast<int>(rPosAry.mnDestWidth), static_cast<int>(rPosAry.mnDestHeight),
+                           static_cast<int>(rPosAry.mnSrcX), static_cast<int>(pBI->bmiHeader.biHeight - rPosAry.mnSrcHeight - rPosAry.mnSrcY),
+                           static_cast<int>(rPosAry.mnSrcWidth), static_cast<int>(rPosAry.mnSrcHeight),
+                           pBits, pBI, DIB_RGB_COLORS, nDrawMode );
+
+            GlobalUnlock( hDrawDIB );
+            SetStretchBltMode( hDC, nOldStretchMode );
+        }
+    }
+    else if( hDrawDDB && !bPrintDDB )
+    {
+        ScopedCachedHDC<CACHED_HDC_DRAW> hBmpDC(hDrawDDB);
+
+        COLORREF    nOldBkColor = RGB(0xFF,0xFF,0xFF);
+        COLORREF    nOldTextColor = RGB(0,0,0);
+        bool        bMono = ( rSalBitmap.GetBitCount() == 1 );
+
+        if( bMono )
+        {
+            COLORREF nBkColor = RGB( 0xFF, 0xFF, 0xFF );
+            COLORREF nTextColor = RGB( 0x00, 0x00, 0x00 );
+            //fdo#33455 handle 1 bit depth pngs with palette entries
+            //to set fore/back colors
+            if (BitmapBuffer* pBitmapBuffer = const_cast<WinSalBitmap&>(rSalBitmap).AcquireBuffer(BitmapAccessMode::Info))
+            {
+                const BitmapPalette& rPalette = pBitmapBuffer->maPalette;
+                if (rPalette.GetEntryCount() == 2)
+                {
+                    Color nCol = rPalette[0];
+                    nTextColor = RGB( nCol.GetRed(), nCol.GetGreen(), nCol.GetBlue() );
+                    nCol = rPalette[1];
+                    nBkColor = RGB( nCol.GetRed(), nCol.GetGreen(), nCol.GetBlue() );
+                }
+                const_cast<WinSalBitmap&>(rSalBitmap).ReleaseBuffer(pBitmapBuffer, BitmapAccessMode::Info);
+            }
+            nOldBkColor = SetBkColor( hDC, nBkColor );
+            nOldTextColor = ::SetTextColor( hDC, nTextColor );
+        }
+
+        if ( (rPosAry.mnSrcWidth  == rPosAry.mnDestWidth) &&
+             (rPosAry.mnSrcHeight == rPosAry.mnDestHeight) )
+        {
+            BitBlt( hDC,
+                    static_cast<int>(rPosAry.mnDestX), static_cast<int>(rPosAry.mnDestY),
+                    static_cast<int>(rPosAry.mnDestWidth), static_cast<int>(rPosAry.mnDestHeight),
+                    hBmpDC.get(),
+                    static_cast<int>(rPosAry.mnSrcX), static_cast<int>(rPosAry.mnSrcY),
+                    nDrawMode );
         }
         else
-            hDrawDIB = rSalBitmap.ImplGethDIB();
-
-        if( hDrawDIB )
         {
-            if (PBITMAPINFO pBI = static_cast<PBITMAPINFO>(GlobalLock( hDrawDIB )))
-            {
-                PBYTE               pBits = reinterpret_cast<PBYTE>(pBI) + pBI->bmiHeader.biSize +
-                                            WinSalBitmap::ImplGetDIBColorCount( hDrawDIB ) * sizeof( RGBQUAD );
-                const int           nOldStretchMode = SetStretchBltMode( hDC, STRETCH_DELETESCANS );
+            const int nOldStretchMode = SetStretchBltMode( hDC, STRETCH_DELETESCANS );
 
-                StretchDIBits( hDC,
-                               static_cast<int>(rPosAry.mnDestX), static_cast<int>(rPosAry.mnDestY),
-                               static_cast<int>(rPosAry.mnDestWidth), static_cast<int>(rPosAry.mnDestHeight),
-                               static_cast<int>(rPosAry.mnSrcX), static_cast<int>(pBI->bmiHeader.biHeight - rPosAry.mnSrcHeight - rPosAry.mnSrcY),
-                               static_cast<int>(rPosAry.mnSrcWidth), static_cast<int>(rPosAry.mnSrcHeight),
-                               pBits, pBI, DIB_RGB_COLORS, nDrawMode );
-
-                GlobalUnlock( hDrawDIB );
-                SetStretchBltMode( hDC, nOldStretchMode );
-            }
-        }
-        else if( hDrawDDB && !bPrintDDB )
-        {
-            ScopedCachedHDC<CACHED_HDC_DRAW> hBmpDC(hDrawDDB);
-
-            COLORREF    nOldBkColor = RGB(0xFF,0xFF,0xFF);
-            COLORREF    nOldTextColor = RGB(0,0,0);
-            bool        bMono = ( rSalBitmap.GetBitCount() == 1 );
-
-            if( bMono )
-            {
-                COLORREF nBkColor = RGB( 0xFF, 0xFF, 0xFF );
-                COLORREF nTextColor = RGB( 0x00, 0x00, 0x00 );
-                //fdo#33455 handle 1 bit depth pngs with palette entries
-                //to set fore/back colors
-                if (BitmapBuffer* pBitmapBuffer = const_cast<WinSalBitmap&>(rSalBitmap).AcquireBuffer(BitmapAccessMode::Info))
-                {
-                    const BitmapPalette& rPalette = pBitmapBuffer->maPalette;
-                    if (rPalette.GetEntryCount() == 2)
-                    {
-                        Color nCol = rPalette[0];
-                        nTextColor = RGB( nCol.GetRed(), nCol.GetGreen(), nCol.GetBlue() );
-                        nCol = rPalette[1];
-                        nBkColor = RGB( nCol.GetRed(), nCol.GetGreen(), nCol.GetBlue() );
-                    }
-                    const_cast<WinSalBitmap&>(rSalBitmap).ReleaseBuffer(pBitmapBuffer, BitmapAccessMode::Info);
-                }
-                nOldBkColor = SetBkColor( hDC, nBkColor );
-                nOldTextColor = ::SetTextColor( hDC, nTextColor );
-            }
-
-            if ( (rPosAry.mnSrcWidth  == rPosAry.mnDestWidth) &&
-                 (rPosAry.mnSrcHeight == rPosAry.mnDestHeight) )
-            {
-                BitBlt( hDC,
+            StretchBlt( hDC,
                         static_cast<int>(rPosAry.mnDestX), static_cast<int>(rPosAry.mnDestY),
                         static_cast<int>(rPosAry.mnDestWidth), static_cast<int>(rPosAry.mnDestHeight),
                         hBmpDC.get(),
                         static_cast<int>(rPosAry.mnSrcX), static_cast<int>(rPosAry.mnSrcY),
+                        static_cast<int>(rPosAry.mnSrcWidth), static_cast<int>(rPosAry.mnSrcHeight),
                         nDrawMode );
-            }
-            else
-            {
-                const int nOldStretchMode = SetStretchBltMode( hDC, STRETCH_DELETESCANS );
 
-                StretchBlt( hDC,
-                            static_cast<int>(rPosAry.mnDestX), static_cast<int>(rPosAry.mnDestY),
-                            static_cast<int>(rPosAry.mnDestWidth), static_cast<int>(rPosAry.mnDestHeight),
-                            hBmpDC.get(),
-                            static_cast<int>(rPosAry.mnSrcX), static_cast<int>(rPosAry.mnSrcY),
-                            static_cast<int>(rPosAry.mnSrcWidth), static_cast<int>(rPosAry.mnSrcHeight),
-                            nDrawMode );
+            SetStretchBltMode( hDC, nOldStretchMode );
+        }
 
-                SetStretchBltMode( hDC, nOldStretchMode );
-            }
-
-            if( bMono )
-            {
-                SetBkColor( hDC, nOldBkColor );
-                ::SetTextColor( hDC, nOldTextColor );
-            }
+        if( bMono )
+        {
+            SetBkColor( hDC, nOldBkColor );
+            ::SetTextColor( hDC, nOldTextColor );
         }
     }
 }
@@ -932,24 +932,20 @@ sal_uInt16 WinSalGraphicsImpl::GetBitCount() const
 
 tools::Long WinSalGraphicsImpl::GetGraphicsWidth() const
 {
-    if( mrParent.gethWnd() && IsWindow( mrParent.gethWnd() ) )
-    {
-        WinSalFrame* pFrame = GetWindowPtr( mrParent.gethWnd() );
-        if( pFrame )
-        {
-            if (pFrame->GetWidth())
-                return pFrame->GetWidth();
-            else
-            {
-                // TODO: perhaps not needed, width should always be up-to-date
-                RECT aRect;
-                GetClientRect( mrParent.gethWnd(), &aRect );
-                return aRect.right;
-            }
-        }
-    }
+    if( !mrParent.gethWnd() || !IsWindow( mrParent.gethWnd() ) )
+        return 0;
 
-    return 0;
+    WinSalFrame* pFrame = GetWindowPtr( mrParent.gethWnd() );
+    if( !pFrame )
+        return 0;
+
+    if (pFrame->GetWidth())
+        return pFrame->GetWidth();
+
+    // TODO: perhaps not needed, width should always be up-to-date
+    RECT aRect;
+    GetClientRect( mrParent.gethWnd(), &aRect );
+    return aRect.right;
 }
 
 void WinSalGraphicsImpl::ResetClipRegion()
@@ -966,16 +962,12 @@ void WinSalGraphicsImpl::ResetClipRegion()
 static bool containsOnlyHorizontalAndVerticalEdges(const basegfx::B2DPolygon& rCandidate)
 {
     if(rCandidate.areControlPointsUsed())
-    {
         return false;
-    }
 
     const sal_uInt32 nPointCount(rCandidate.count());
 
     if(nPointCount < 2)
-    {
         return true;
-    }
 
     const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount + 1 : nPointCount);
     basegfx::B2DPoint aLast(rCandidate.getB2DPoint(0));
@@ -999,9 +991,7 @@ static bool containsOnlyHorizontalAndVerticalEdges(const basegfx::B2DPolygon& rC
 static bool containsOnlyHorizontalAndVerticalEdges(const basegfx::B2DPolyPolygon& rCandidate)
 {
     if(rCandidate.areControlPointsUsed())
-    {
         return false;
-    }
 
     for(auto const& rPolygon : rCandidate)
     {
@@ -1291,15 +1281,15 @@ void WinSalGraphicsImpl::SetLineColor(Color nColor)
 HPEN WinSalGraphicsImpl::SearchStockPen(COLORREF nPenColor)
 {
     // Only screen, because printer has problems, when we use stock objects.
-    if (!mrParent.isPrinter())
-    {
-        const SalData* pSalData = GetSalData();
+    if (mrParent.isPrinter())
+        return nullptr;
 
-        for (sal_uInt16 i = 0; i < pSalData->mnStockPenCount; i++)
-        {
-            if (nPenColor == pSalData->maStockPenColorAry[i])
-                return pSalData->mhStockPenAry[i];
-        }
+    const SalData* pSalData = GetSalData();
+
+    for (sal_uInt16 i = 0; i < pSalData->mnStockPenCount; i++)
+    {
+        if (nPenColor == pSalData->maStockPenColorAry[i])
+            return pSalData->mhStockPenAry[i];
     }
 
     return nullptr;
@@ -1847,78 +1837,76 @@ static void impAddB2DPolygonToGDIPlusGraphicsPathReal(
     bool bPixelSnapHairline)
 {
     sal_uInt32 nCount(rPolygon.count());
+    if(nCount == 0)
+        return;
 
-    if(nCount)
+    const sal_uInt32 nEdgeCount(rPolygon.isClosed() ? nCount : nCount - 1);
+    if(nEdgeCount == 0)
+        return;
+
+    const bool bControls(rPolygon.areControlPointsUsed());
+    basegfx::B2DPoint aCurr(rPolygon.getB2DPoint(0));
+    basegfx::B2DHomMatrix aObjectToDeviceInv;
+
+    if(bPixelSnapHairline)
     {
-        const sal_uInt32 nEdgeCount(rPolygon.isClosed() ? nCount : nCount - 1);
+        aCurr = impPixelSnap(rPolygon, rObjectToDevice, aObjectToDeviceInv, 0);
+    }
 
-        if(nEdgeCount)
+    for(sal_uInt32 a(0); a < nEdgeCount; a++)
+    {
+        const sal_uInt32 nNextIndex((a + 1) % nCount);
+        basegfx::B2DPoint aNext(rPolygon.getB2DPoint(nNextIndex));
+        const bool b1stControlPointUsed(bControls && rPolygon.isNextControlPointUsed(a));
+        const bool b2ndControlPointUsed(bControls && rPolygon.isPrevControlPointUsed(nNextIndex));
+
+        if(bPixelSnapHairline)
         {
-            const bool bControls(rPolygon.areControlPointsUsed());
-            basegfx::B2DPoint aCurr(rPolygon.getB2DPoint(0));
-            basegfx::B2DHomMatrix aObjectToDeviceInv;
+            aNext = impPixelSnap(rPolygon, rObjectToDevice, aObjectToDeviceInv, nNextIndex);
+        }
 
-            if(bPixelSnapHairline)
+        if(b1stControlPointUsed || b2ndControlPointUsed)
+        {
+            basegfx::B2DPoint aCa(rPolygon.getNextControlPoint(a));
+            basegfx::B2DPoint aCb(rPolygon.getPrevControlPoint(nNextIndex));
+
+            // tdf#99165 MS Gdiplus cannot handle creating correct extra geometry for fat lines
+            // with LineCap or LineJoin when a bezier segment starts or ends trivial, e.g. has
+            // no 1st or 2nd control point, despite that these are mathematically correct definitions
+            // (basegfx can handle that).
+            // Caution: This error (and it's correction) might be necessary for other graphical
+            // sub-systems in a similar way.
+            // tdf#101026 The 1st attempt to create a mathematically correct replacement control
+            // vector was wrong. Best alternative is one as close as possible which means short.
+            if(!b1stControlPointUsed)
             {
-                aCurr = impPixelSnap(rPolygon, rObjectToDevice, aObjectToDeviceInv, 0);
+                aCa = aCurr + ((aCb - aCurr) * 0.0005);
+            }
+            else if(!b2ndControlPointUsed)
+            {
+                aCb = aNext + ((aCa - aNext) * 0.0005);
             }
 
-            for(sal_uInt32 a(0); a < nEdgeCount; a++)
+            rGraphicsPath.AddBezier(
+                static_cast< Gdiplus::REAL >(aCurr.getX()), static_cast< Gdiplus::REAL >(aCurr.getY()),
+                static_cast< Gdiplus::REAL >(aCa.getX()), static_cast< Gdiplus::REAL >(aCa.getY()),
+                static_cast< Gdiplus::REAL >(aCb.getX()), static_cast< Gdiplus::REAL >(aCb.getY()),
+                static_cast< Gdiplus::REAL >(aNext.getX()), static_cast< Gdiplus::REAL >(aNext.getY()));
+        }
+        else
+        {
+            rGraphicsPath.AddLine(
+                static_cast< Gdiplus::REAL >(aCurr.getX()), static_cast< Gdiplus::REAL >(aCurr.getY()),
+                static_cast< Gdiplus::REAL >(aNext.getX()), static_cast< Gdiplus::REAL >(aNext.getY()));
+        }
+
+        if(a + 1 < nEdgeCount)
+        {
+            aCurr = aNext;
+
+            if(bNoLineJoin)
             {
-                const sal_uInt32 nNextIndex((a + 1) % nCount);
-                basegfx::B2DPoint aNext(rPolygon.getB2DPoint(nNextIndex));
-                const bool b1stControlPointUsed(bControls && rPolygon.isNextControlPointUsed(a));
-                const bool b2ndControlPointUsed(bControls && rPolygon.isPrevControlPointUsed(nNextIndex));
-
-                if(bPixelSnapHairline)
-                {
-                    aNext = impPixelSnap(rPolygon, rObjectToDevice, aObjectToDeviceInv, nNextIndex);
-                }
-
-                if(b1stControlPointUsed || b2ndControlPointUsed)
-                {
-                    basegfx::B2DPoint aCa(rPolygon.getNextControlPoint(a));
-                    basegfx::B2DPoint aCb(rPolygon.getPrevControlPoint(nNextIndex));
-
-                    // tdf#99165 MS Gdiplus cannot handle creating correct extra geometry for fat lines
-                    // with LineCap or LineJoin when a bezier segment starts or ends trivial, e.g. has
-                    // no 1st or 2nd control point, despite that these are mathematically correct definitions
-                    // (basegfx can handle that).
-                    // Caution: This error (and it's correction) might be necessary for other graphical
-                    // sub-systems in a similar way.
-                    // tdf#101026 The 1st attempt to create a mathematically correct replacement control
-                    // vector was wrong. Best alternative is one as close as possible which means short.
-                    if(!b1stControlPointUsed)
-                    {
-                        aCa = aCurr + ((aCb - aCurr) * 0.0005);
-                    }
-                    else if(!b2ndControlPointUsed)
-                    {
-                        aCb = aNext + ((aCa - aNext) * 0.0005);
-                    }
-
-                    rGraphicsPath.AddBezier(
-                        static_cast< Gdiplus::REAL >(aCurr.getX()), static_cast< Gdiplus::REAL >(aCurr.getY()),
-                        static_cast< Gdiplus::REAL >(aCa.getX()), static_cast< Gdiplus::REAL >(aCa.getY()),
-                        static_cast< Gdiplus::REAL >(aCb.getX()), static_cast< Gdiplus::REAL >(aCb.getY()),
-                        static_cast< Gdiplus::REAL >(aNext.getX()), static_cast< Gdiplus::REAL >(aNext.getY()));
-                }
-                else
-                {
-                    rGraphicsPath.AddLine(
-                        static_cast< Gdiplus::REAL >(aCurr.getX()), static_cast< Gdiplus::REAL >(aCurr.getY()),
-                        static_cast< Gdiplus::REAL >(aNext.getX()), static_cast< Gdiplus::REAL >(aNext.getY()));
-                }
-
-                if(a + 1 < nEdgeCount)
-                {
-                    aCurr = aNext;
-
-                    if(bNoLineJoin)
-                    {
-                        rGraphicsPath.StartFigure();
-                    }
-                }
+                rGraphicsPath.StartFigure();
             }
         }
     }
@@ -1974,17 +1962,17 @@ sal_Int64 SystemDependentData_GraphicsPath::estimateUsageInBytes() const
 {
     sal_Int64 nRetval(0);
 
-    if(mpGraphicsPath)
-    {
-        const INT nPointCount(mpGraphicsPath->GetPointCount());
+    if(!mpGraphicsPath)
+        return 0;
 
-        if(0 != nPointCount)
-        {
-            // Each point has
-            // - 2 x sizeof(Gdiplus::REAL)
-            // - 1 byte (see GetPathTypes in docu)
-            nRetval = nPointCount * ((2 * sizeof(Gdiplus::REAL)) + 1);
-        }
+    const INT nPointCount(mpGraphicsPath->GetPointCount());
+
+    if(0 != nPointCount)
+    {
+        // Each point has
+        // - 2 x sizeof(Gdiplus::REAL)
+        // - 1 byte (see GetPathTypes in docu)
+        nRetval = nPointCount * ((2 * sizeof(Gdiplus::REAL)) + 1);
     }
 
     return nRetval;
@@ -2503,34 +2491,32 @@ static void setInterpolationMode(
 
 bool WinSalGraphicsImpl::TryDrawBitmapGDIPlus(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap)
 {
-    if(rTR.mnSrcWidth && rTR.mnSrcHeight && rTR.mnDestWidth && rTR.mnDestHeight)
-    {
-        assert(dynamic_cast<const WinSalBitmap*>(&rSrcBitmap));
+    if(!rTR.mnSrcWidth || !rTR.mnSrcHeight || !rTR.mnDestWidth || !rTR.mnDestHeight)
+        return false;
 
-        const WinSalBitmap& rSalBitmap = static_cast< const WinSalBitmap& >(rSrcBitmap);
-        std::shared_ptr< Gdiplus::Bitmap > aARGB(rSalBitmap.ImplGetGdiPlusBitmap());
+    assert(dynamic_cast<const WinSalBitmap*>(&rSrcBitmap));
 
-        if(aARGB)
-        {
-            Gdiplus::Graphics aGraphics(mrParent.getHDC());
+    const WinSalBitmap& rSalBitmap = static_cast< const WinSalBitmap& >(rSrcBitmap);
+    std::shared_ptr< Gdiplus::Bitmap > aARGB(rSalBitmap.ImplGetGdiPlusBitmap());
 
-            setInterpolationMode(
-                aGraphics,
-                rTR.mnSrcWidth,
-                rTR.mnDestWidth,
-                rTR.mnSrcHeight,
-                rTR.mnDestHeight);
+    if(!aARGB)
+        return false;
 
-            paintToGdiPlus(
-                aGraphics,
-                rTR,
-                *aARGB);
+    Gdiplus::Graphics aGraphics(mrParent.getHDC());
 
-            return true;
-        }
-    }
+    setInterpolationMode(
+        aGraphics,
+        rTR.mnSrcWidth,
+        rTR.mnDestWidth,
+        rTR.mnSrcHeight,
+        rTR.mnDestHeight);
 
-    return false;
+    paintToGdiPlus(
+        aGraphics,
+        rTR,
+        *aARGB);
+
+    return true;
 }
 
 bool WinSalGraphicsImpl::blendBitmap(
@@ -2554,36 +2540,34 @@ bool WinSalGraphicsImpl::drawAlphaBitmap(
     const SalBitmap& rSrcBitmap,
     const SalBitmap& rAlphaBmp)
 {
-    if(rTR.mnSrcWidth && rTR.mnSrcHeight && rTR.mnDestWidth && rTR.mnDestHeight)
-    {
-        assert(dynamic_cast<const WinSalBitmap*>(&rSrcBitmap));
-        assert(dynamic_cast<const WinSalBitmap*>(&rAlphaBmp));
+    if(!rTR.mnSrcWidth || !rTR.mnSrcHeight || !rTR.mnDestWidth || !rTR.mnDestHeight)
+        return false;
 
-        const WinSalBitmap& rSalBitmap = static_cast< const WinSalBitmap& >(rSrcBitmap);
-        const WinSalBitmap& rSalAlpha = static_cast< const WinSalBitmap& >(rAlphaBmp);
-        std::shared_ptr< Gdiplus::Bitmap > aARGB(rSalBitmap.ImplGetGdiPlusBitmap(&rSalAlpha));
+    assert(dynamic_cast<const WinSalBitmap*>(&rSrcBitmap));
+    assert(dynamic_cast<const WinSalBitmap*>(&rAlphaBmp));
 
-        if(aARGB)
-        {
-            Gdiplus::Graphics aGraphics(mrParent.getHDC());
+    const WinSalBitmap& rSalBitmap = static_cast< const WinSalBitmap& >(rSrcBitmap);
+    const WinSalBitmap& rSalAlpha = static_cast< const WinSalBitmap& >(rAlphaBmp);
+    std::shared_ptr< Gdiplus::Bitmap > aARGB(rSalBitmap.ImplGetGdiPlusBitmap(&rSalAlpha));
 
-            setInterpolationMode(
-                aGraphics,
-                rTR.mnSrcWidth,
-                rTR.mnDestWidth,
-                rTR.mnSrcHeight,
-                rTR.mnDestHeight);
+    if(!aARGB)
+        return false;
 
-            paintToGdiPlus(
-                aGraphics,
-                rTR,
-                *aARGB);
+    Gdiplus::Graphics aGraphics(mrParent.getHDC());
 
-            return true;
-        }
-    }
+    setInterpolationMode(
+        aGraphics,
+        rTR.mnSrcWidth,
+        rTR.mnDestWidth,
+        rTR.mnSrcHeight,
+        rTR.mnDestHeight);
 
-    return false;
+    paintToGdiPlus(
+        aGraphics,
+        rTR,
+        *aARGB);
+
+    return true;
 }
 
 bool WinSalGraphicsImpl::drawTransformedBitmap(
@@ -2604,56 +2588,54 @@ bool WinSalGraphicsImpl::drawTransformedBitmap(
     const WinSalBitmap* pSalAlpha = static_cast< const WinSalBitmap* >(pAlphaBitmap);
     std::shared_ptr< Gdiplus::Bitmap > aARGB(rSalBitmap.ImplGetGdiPlusBitmap(pSalAlpha));
 
-    if(aARGB)
-    {
-        const tools::Long nSrcWidth(aARGB->GetWidth());
-        const tools::Long nSrcHeight(aARGB->GetHeight());
+    if(!aARGB)
+        return false;
 
-        if(nSrcWidth && nSrcHeight)
-        {
-            const tools::Long nDestWidth(basegfx::fround<tools::Long>(basegfx::B2DVector(rX - rNull).getLength()));
-            const tools::Long nDestHeight(basegfx::fround<tools::Long>(basegfx::B2DVector(rY - rNull).getLength()));
+    const tools::Long nSrcWidth(aARGB->GetWidth());
+    const tools::Long nSrcHeight(aARGB->GetHeight());
 
-            if(nDestWidth && nDestHeight)
-            {
-                Gdiplus::Graphics aGraphics(mrParent.getHDC());
-                Gdiplus::PointF aDestPoints[3];
-                Gdiplus::ImageAttributes aAttributes;
-
-                setInterpolationMode(
-                    aGraphics,
-                    nSrcWidth,
-                    nDestWidth,
-                    nSrcHeight,
-                    nDestHeight);
-
-                // this mode is only capable of drawing the whole bitmap to a parallelogram
-                aDestPoints[0].X = Gdiplus::REAL(rNull.getX());
-                aDestPoints[0].Y = Gdiplus::REAL(rNull.getY());
-                aDestPoints[1].X = Gdiplus::REAL(rX.getX());
-                aDestPoints[1].Y = Gdiplus::REAL(rX.getY());
-                aDestPoints[2].X = Gdiplus::REAL(rY.getX());
-                aDestPoints[2].Y = Gdiplus::REAL(rY.getY());
-
-                aAttributes.SetWrapMode(Gdiplus::WrapModeTileFlipXY);
-
-                aGraphics.DrawImage(
-                    aARGB.get(),
-                    aDestPoints,
-                    3,
-                    Gdiplus::REAL(0.0),
-                    Gdiplus::REAL(0.0),
-                    Gdiplus::REAL(nSrcWidth),
-                    Gdiplus::REAL(nSrcHeight),
-                    Gdiplus::UnitPixel,
-                    &aAttributes);
-            }
-        }
-
+    if(!nSrcWidth || !nSrcHeight)
         return true;
-    }
 
-    return false;
+    const tools::Long nDestWidth(basegfx::fround<tools::Long>(basegfx::B2DVector(rX - rNull).getLength()));
+    const tools::Long nDestHeight(basegfx::fround<tools::Long>(basegfx::B2DVector(rY - rNull).getLength()));
+
+    if(!nDestWidth || !nDestHeight)
+        return true;
+
+    Gdiplus::Graphics aGraphics(mrParent.getHDC());
+    Gdiplus::PointF aDestPoints[3];
+    Gdiplus::ImageAttributes aAttributes;
+
+    setInterpolationMode(
+        aGraphics,
+        nSrcWidth,
+        nDestWidth,
+        nSrcHeight,
+        nDestHeight);
+
+    // this mode is only capable of drawing the whole bitmap to a parallelogram
+    aDestPoints[0].X = Gdiplus::REAL(rNull.getX());
+    aDestPoints[0].Y = Gdiplus::REAL(rNull.getY());
+    aDestPoints[1].X = Gdiplus::REAL(rX.getX());
+    aDestPoints[1].Y = Gdiplus::REAL(rX.getY());
+    aDestPoints[2].X = Gdiplus::REAL(rY.getX());
+    aDestPoints[2].Y = Gdiplus::REAL(rY.getY());
+
+    aAttributes.SetWrapMode(Gdiplus::WrapModeTileFlipXY);
+
+    aGraphics.DrawImage(
+        aARGB.get(),
+        aDestPoints,
+        3,
+        Gdiplus::REAL(0.0),
+        Gdiplus::REAL(0.0),
+        Gdiplus::REAL(nSrcWidth),
+        Gdiplus::REAL(nSrcHeight),
+        Gdiplus::UnitPixel,
+        &aAttributes);
+
+    return true;
 }
 
 bool WinSalGraphicsImpl::hasFastDrawTransformedBitmap() const

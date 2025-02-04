@@ -400,20 +400,20 @@ static void ImplInsertSysColorEntry( int nSysIndex )
 {
     const DWORD nRGB = GetSysColor( nSysIndex );
 
-    if ( !ImplIsPaletteEntry( GetRValue( nRGB ), GetGValue( nRGB ), GetBValue( nRGB ) ) )
+    if ( ImplIsPaletteEntry( GetRValue( nRGB ), GetGValue( nRGB ), GetBValue( nRGB ) ) )
+        return;
+
+    if ( !pFirstSysColor )
     {
-        if ( !pFirstSysColor )
-        {
-            pActSysColor = pFirstSysColor = new SysColorEntry;
-            pFirstSysColor->nRGB = nRGB;
-            pFirstSysColor->pNext = nullptr;
-        }
-        else
-        {
-            pActSysColor = pActSysColor->pNext = new SysColorEntry;
-            pActSysColor->nRGB = nRGB;
-            pActSysColor->pNext = nullptr;
-        }
+        pActSysColor = pFirstSysColor = new SysColorEntry;
+        pFirstSysColor->nRGB = nRGB;
+        pFirstSysColor->pNext = nullptr;
+    }
+    else
+    {
+        pActSysColor = pActSysColor->pNext = new SysColorEntry;
+        pActSysColor->nRGB = nRGB;
+        pActSysColor->pNext = nullptr;
     }
 }
 
@@ -936,63 +936,64 @@ static BYTE* ImplSearchEntry( BYTE* pSource, BYTE const * pDest, sal_uLong nComp
 
 static bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSize )
 {
-    bool    bRetValue = false;
     BYTE* pDest = ImplSearchEntry( pSource, reinterpret_cast<BYTE const *>("%%BoundingBox:"), nSize, 14 );
-    if ( pDest )
+    if ( !pDest )
+        return false;
+
+    bool    bRetValue = false;
+
+    nNumb[0] = nNumb[1] = nNumb[2] = nNumb[3] = 0;
+    pDest += 14;
+
+    int nSizeLeft = nSize - ( pDest - pSource );
+    if ( nSizeLeft > 100 )
+        nSizeLeft = 100;    // only 100 bytes following the bounding box will be checked
+
+    int i;
+    for ( i = 0; ( i < 4 ) && nSizeLeft; i++ )
     {
-        nNumb[0] = nNumb[1] = nNumb[2] = nNumb[3] = 0;
-        pDest += 14;
+        int     nDivision = 1;
+        bool    bDivision = false;
+        bool    bNegative = false;
+        bool    bValid = true;
 
-        int nSizeLeft = nSize - ( pDest - pSource );
-        if ( nSizeLeft > 100 )
-            nSizeLeft = 100;    // only 100 bytes following the bounding box will be checked
-
-        int i;
-        for ( i = 0; ( i < 4 ) && nSizeLeft; i++ )
+        while ( ( --nSizeLeft ) && ( ( *pDest == ' ' ) || ( *pDest == 0x9 ) ) ) pDest++;
+        BYTE nByte = *pDest;
+        while ( nSizeLeft && ( nByte != ' ' ) && ( nByte != 0x9 ) && ( nByte != 0xd ) && ( nByte != 0xa ) )
         {
-            int     nDivision = 1;
-            bool    bDivision = false;
-            bool    bNegative = false;
-            bool    bValid = true;
-
-            while ( ( --nSizeLeft ) && ( ( *pDest == ' ' ) || ( *pDest == 0x9 ) ) ) pDest++;
-            BYTE nByte = *pDest;
-            while ( nSizeLeft && ( nByte != ' ' ) && ( nByte != 0x9 ) && ( nByte != 0xd ) && ( nByte != 0xa ) )
+            switch ( nByte )
             {
-                switch ( nByte )
-                {
-                    case '.' :
+                case '.' :
+                    if ( bDivision )
+                        bValid = false;
+                    else
+                        bDivision = true;
+                    break;
+                case '-' :
+                    bNegative = true;
+                    break;
+                default :
+                    if ( ( nByte < '0' ) || ( nByte > '9' ) )
+                        nSizeLeft = 1;  // error parsing the bounding box values
+                    else if ( bValid )
+                    {
                         if ( bDivision )
-                            bValid = false;
-                        else
-                            bDivision = true;
-                        break;
-                    case '-' :
-                        bNegative = true;
-                        break;
-                    default :
-                        if ( ( nByte < '0' ) || ( nByte > '9' ) )
-                            nSizeLeft = 1;  // error parsing the bounding box values
-                        else if ( bValid )
-                        {
-                            if ( bDivision )
-                                nDivision*=10;
-                            nNumb[i] *= 10;
-                            nNumb[i] += nByte - '0';
-                        }
-                        break;
-                }
-                nSizeLeft--;
-                nByte = *(++pDest);
+                            nDivision*=10;
+                        nNumb[i] *= 10;
+                        nNumb[i] += nByte - '0';
+                    }
+                    break;
             }
-            if ( bNegative )
-                nNumb[i] = -nNumb[i];
-            if ( bDivision && ( nDivision != 1 ) )
-                nNumb[i] /= nDivision;
+            nSizeLeft--;
+            nByte = *(++pDest);
         }
-        if ( i == 4 )
-            bRetValue = true;
+        if ( bNegative )
+            nNumb[i] = -nNumb[i];
+        if ( bDivision && ( nDivision != 1 ) )
+            nNumb[i] /= nDivision;
     }
+    if ( i == 4 )
+        bRetValue = true;
     return bRetValue;
 }
 
@@ -1000,138 +1001,134 @@ static bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSize )
 
 bool WinSalGraphics::drawEPS( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, void* pPtr, sal_uInt32 nSize )
 {
-    bool bRetValue = false;
 
-    if ( mbPrinter )
+    if ( !mbPrinter )
+        return false;
+
+    int nEscape = POSTSCRIPT_PASSTHROUGH;
+    if ( !Escape( getHDC(), QUERYESCSUPPORT, sizeof( int ), reinterpret_cast<LPSTR>(&nEscape), nullptr ) )
+        return false;
+
+    double  nBoundingBox[4];
+    if ( !ImplGetBoundingBox( nBoundingBox, static_cast<BYTE*>(pPtr), nSize ) )
+        return false;
+
+    OStringBuffer aBuf( POSTSCRIPT_BUFSIZE );
+
+    // reserve place for a sal_uInt16
+    aBuf.append( "aa" );
+
+    // #107797# Write out EPS encapsulation header
+
+    // directly taken from the PLRM 3.0, p. 726. Note:
+    // this will definitely cause problems when
+    // recursively creating and embedding PostScript files
+    // in OOo, since we use statically-named variables
+    // here (namely, b4_Inc_state_salWin, dict_count_salWin and
+    // op_count_salWin). Currently, I have no idea on how to
+    // work around that, except from scanning and
+    // interpreting the EPS for unused identifiers.
+
+    // append the real text
+    aBuf.append( "\n\n/b4_Inc_state_salWin save def\n"
+                 "/dict_count_salWin countdictstack def\n"
+                 "/op_count_salWin count 1 sub def\n"
+                 "userdict begin\n"
+                 "/showpage {} def\n"
+                 "0 setgray 0 setlinecap\n"
+                 "1 setlinewidth 0 setlinejoin\n"
+                 "10 setmiterlimit [] 0 setdash newpath\n"
+                 "/languagelevel where\n"
+                 "{\n"
+                 "  pop languagelevel\n"
+                 "  1 ne\n"
+                 "  {\n"
+                 "    false setstrokeadjust false setoverprint\n"
+                 "  } if\n"
+                 "} if\n\n" );
+
+    // #i10737# Apply clipping manually
+
+    // Windows seems to ignore any clipping at the HDC,
+    // when followed by a POSTSCRIPT_PASSTHROUGH
+
+    // Check whether we've got a clipping, consisting of
+    // exactly one rect (other cases should be, but aren't
+    // handled currently)
+
+    // TODO: Handle more than one rectangle here (take
+    // care, the buffer can handle only POSTSCRIPT_BUFSIZE
+    // characters!)
+    if ( mhRegion != nullptr &&
+         mpStdClipRgnData != nullptr &&
+         mpClipRgnData == mpStdClipRgnData &&
+         mpClipRgnData->rdh.nCount == 1 )
     {
-        int nEscape = POSTSCRIPT_PASSTHROUGH;
+        RECT* pRect = &(mpClipRgnData->rdh.rcBound);
 
-        if ( Escape( getHDC(), QUERYESCSUPPORT, sizeof( int ), reinterpret_cast<LPSTR>(&nEscape), nullptr ) )
-        {
-            double  nBoundingBox[4];
-
-            if ( ImplGetBoundingBox( nBoundingBox, static_cast<BYTE*>(pPtr), nSize ) )
-            {
-                OStringBuffer aBuf( POSTSCRIPT_BUFSIZE );
-
-                // reserve place for a sal_uInt16
-                aBuf.append( "aa" );
-
-                // #107797# Write out EPS encapsulation header
-
-                // directly taken from the PLRM 3.0, p. 726. Note:
-                // this will definitely cause problems when
-                // recursively creating and embedding PostScript files
-                // in OOo, since we use statically-named variables
-                // here (namely, b4_Inc_state_salWin, dict_count_salWin and
-                // op_count_salWin). Currently, I have no idea on how to
-                // work around that, except from scanning and
-                // interpreting the EPS for unused identifiers.
-
-                // append the real text
-                aBuf.append( "\n\n/b4_Inc_state_salWin save def\n"
-                             "/dict_count_salWin countdictstack def\n"
-                             "/op_count_salWin count 1 sub def\n"
-                             "userdict begin\n"
-                             "/showpage {} def\n"
-                             "0 setgray 0 setlinecap\n"
-                             "1 setlinewidth 0 setlinejoin\n"
-                             "10 setmiterlimit [] 0 setdash newpath\n"
-                             "/languagelevel where\n"
-                             "{\n"
-                             "  pop languagelevel\n"
-                             "  1 ne\n"
-                             "  {\n"
-                             "    false setstrokeadjust false setoverprint\n"
-                             "  } if\n"
-                             "} if\n\n" );
-
-                // #i10737# Apply clipping manually
-
-                // Windows seems to ignore any clipping at the HDC,
-                // when followed by a POSTSCRIPT_PASSTHROUGH
-
-                // Check whether we've got a clipping, consisting of
-                // exactly one rect (other cases should be, but aren't
-                // handled currently)
-
-                // TODO: Handle more than one rectangle here (take
-                // care, the buffer can handle only POSTSCRIPT_BUFSIZE
-                // characters!)
-                if ( mhRegion != nullptr &&
-                     mpStdClipRgnData != nullptr &&
-                     mpClipRgnData == mpStdClipRgnData &&
-                     mpClipRgnData->rdh.nCount == 1 )
-                {
-                    RECT* pRect = &(mpClipRgnData->rdh.rcBound);
-
-                    aBuf.append( "\nnewpath\n"
-                                 + OString::number(pRect->left) + " " + OString::number(pRect->top)
-                                 + " moveto\n"
-                                 + OString::number(pRect->right) + " " + OString::number(pRect->top)
-                                 + " lineto\n"
-                                 + OString::number(pRect->right) + " "
-                                 + OString::number(pRect->bottom) + " lineto\n"
-                                 + OString::number(pRect->left) + " "
-                                 + OString::number(pRect->bottom) + " lineto\n"
-                                 "closepath\n"
-                                 "clip\n"
-                                 "newpath\n" );
-                }
-
-                // #107797# Write out buffer
-
-                *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = static_cast<sal_uInt16>( aBuf.getLength() - 2 );
-                Escape ( getHDC(), nEscape, aBuf.getLength(), aBuf.getStr(), nullptr );
-
-                // #107797# Write out EPS transformation code
-
-                double  dM11 = nWidth / ( nBoundingBox[2] - nBoundingBox[0] );
-                double  dM22 = nHeight / (nBoundingBox[1] - nBoundingBox[3] );
-                // reserve a sal_uInt16 again
-                aBuf.setLength( 2 );
-                aBuf.append( "\n\n[" + OString::number(dM11) + " 0 0 " + OString::number(dM22) + " "
-                             + OString::number(nX - ( dM11 * nBoundingBox[0] )) + " "
-                             + OString::number(nY - ( dM22 * nBoundingBox[3] )) + "] concat\n"
-                             "%%BeginDocument:\n" );
-                *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = static_cast<sal_uInt16>( aBuf.getLength() - 2 );
-                Escape ( getHDC(), nEscape, aBuf.getLength(), aBuf.getStr(), nullptr );
-
-                // #107797# Write out actual EPS content
-
-                sal_uLong   nToDo = nSize;
-                sal_uLong   nDoNow;
-                while ( nToDo )
-                {
-                    nDoNow = nToDo;
-                    if ( nToDo > POSTSCRIPT_BUFSIZE - 2 )
-                        nDoNow = POSTSCRIPT_BUFSIZE - 2;
-                    // the following is based on the string buffer allocation
-                    // of size POSTSCRIPT_BUFSIZE at construction time of aBuf
-                    *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = static_cast<sal_uInt16>(nDoNow);
-                    memcpy( const_cast<char *>(aBuf.getStr() + 2), static_cast<BYTE*>(pPtr) + nSize - nToDo, nDoNow );
-                    sal_uLong nResult = Escape ( getHDC(), nEscape, nDoNow + 2, aBuf.getStr(), nullptr );
-                    if (!nResult )
-                        break;
-                    nToDo -= nResult;
-                }
-
-                // #107797# Write out EPS encapsulation footer
-
-                // reserve a sal_uInt16 again
-                aBuf.setLength( 2 );
-                aBuf.append( "%%EndDocument\n"
-                             "count op_count_salWin sub {pop} repeat\n"
-                             "countdictstack dict_count_salWin sub {end} repeat\n"
-                             "b4_Inc_state_salWin restore\n\n" );
-                *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = static_cast<sal_uInt16>( aBuf.getLength() - 2 );
-                Escape ( getHDC(), nEscape, aBuf.getLength(), aBuf.getStr(), nullptr );
-                bRetValue = true;
-            }
-        }
+        aBuf.append( "\nnewpath\n"
+                     + OString::number(pRect->left) + " " + OString::number(pRect->top)
+                     + " moveto\n"
+                     + OString::number(pRect->right) + " " + OString::number(pRect->top)
+                     + " lineto\n"
+                     + OString::number(pRect->right) + " "
+                     + OString::number(pRect->bottom) + " lineto\n"
+                     + OString::number(pRect->left) + " "
+                     + OString::number(pRect->bottom) + " lineto\n"
+                     "closepath\n"
+                     "clip\n"
+                     "newpath\n" );
     }
 
-    return bRetValue;
+    // #107797# Write out buffer
+
+    *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = static_cast<sal_uInt16>( aBuf.getLength() - 2 );
+    Escape ( getHDC(), nEscape, aBuf.getLength(), aBuf.getStr(), nullptr );
+
+    // #107797# Write out EPS transformation code
+
+    double  dM11 = nWidth / ( nBoundingBox[2] - nBoundingBox[0] );
+    double  dM22 = nHeight / (nBoundingBox[1] - nBoundingBox[3] );
+    // reserve a sal_uInt16 again
+    aBuf.setLength( 2 );
+    aBuf.append( "\n\n[" + OString::number(dM11) + " 0 0 " + OString::number(dM22) + " "
+                 + OString::number(nX - ( dM11 * nBoundingBox[0] )) + " "
+                 + OString::number(nY - ( dM22 * nBoundingBox[3] )) + "] concat\n"
+                 "%%BeginDocument:\n" );
+    *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = static_cast<sal_uInt16>( aBuf.getLength() - 2 );
+    Escape ( getHDC(), nEscape, aBuf.getLength(), aBuf.getStr(), nullptr );
+
+    // #107797# Write out actual EPS content
+
+    sal_uLong   nToDo = nSize;
+    sal_uLong   nDoNow;
+    while ( nToDo )
+    {
+        nDoNow = nToDo;
+        if ( nToDo > POSTSCRIPT_BUFSIZE - 2 )
+            nDoNow = POSTSCRIPT_BUFSIZE - 2;
+        // the following is based on the string buffer allocation
+        // of size POSTSCRIPT_BUFSIZE at construction time of aBuf
+        *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = static_cast<sal_uInt16>(nDoNow);
+        memcpy( const_cast<char *>(aBuf.getStr() + 2), static_cast<BYTE*>(pPtr) + nSize - nToDo, nDoNow );
+        sal_uLong nResult = Escape ( getHDC(), nEscape, nDoNow + 2, aBuf.getStr(), nullptr );
+        if (!nResult )
+            break;
+        nToDo -= nResult;
+    }
+
+    // #107797# Write out EPS encapsulation footer
+
+    // reserve a sal_uInt16 again
+    aBuf.setLength( 2 );
+    aBuf.append( "%%EndDocument\n"
+                 "count op_count_salWin sub {pop} repeat\n"
+                 "countdictstack dict_count_salWin sub {end} repeat\n"
+                 "b4_Inc_state_salWin restore\n\n" );
+    *reinterpret_cast<sal_uInt16*>(const_cast<char *>(aBuf.getStr())) = static_cast<sal_uInt16>( aBuf.getLength() - 2 );
+    Escape ( getHDC(), nEscape, aBuf.getLength(), aBuf.getStr(), nullptr );
+
+    return true;
 }
 
 SystemGraphicsData WinSalGraphics::GetGraphicsData() const

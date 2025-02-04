@@ -269,19 +269,19 @@ IDWriteFontFace* D2DWriteTextOutRenderer::GetDWriteFace(const WinFontInstance& r
                                                         float* lfSize) const
 {
     auto pFontFace = rWinFont.GetDWFontFace();
-    if (pFontFace)
-    {
-        LOGFONTW aLogFont;
-        HFONT hFont = rWinFont.GetHFONT();
+    if (!pFontFace)
+        return nullptr;
 
-        GetObjectW(hFont, sizeof(LOGFONTW), &aLogFont);
-        float dpix, dpiy;
-        mpRT->GetDpi(&dpix, &dpiy);
-        *lfSize = aLogFont.lfHeight * 96.0f / dpiy;
+    LOGFONTW aLogFont;
+    HFONT hFont = rWinFont.GetHFONT();
 
-        assert(*lfSize < 0);
-        *lfSize *= -1;
-    }
+    GetObjectW(hFont, sizeof(LOGFONTW), &aLogFont);
+    float dpix, dpiy;
+    mpRT->GetDpi(&dpix, &dpiy);
+    *lfSize = aLogFont.lfHeight * 96.0f / dpiy;
+
+    assert(*lfSize < 0);
+    *lfSize *= -1;
 
     return pFontFace;
 }

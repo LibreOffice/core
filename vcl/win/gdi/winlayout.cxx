@@ -139,9 +139,7 @@ WinFontInstance::~WinFontInstance()
         ::DeleteFont(m_hFont);
 
     if (m_hVerticalFont)
-    {
         ::DeleteFont(m_hVerticalFont);
-    }
 }
 
 float WinFontInstance::getHScale() const
@@ -156,28 +154,28 @@ void WinFontInstance::ImplInitHbFont(hb_font_t* /*pHbFont*/)
 {
     assert(m_pGraphics);
     // Calculate the AverageWidthFactor, see LogicalFontInstance::GetScale().
-    if (GetFontSelectPattern().mnWidth)
+    if (!GetFontSelectPattern().mnWidth)
+        return;
+
+    double nUPEM = GetFontFace()->UnitsPerEm();
+
+    LOGFONTW aLogFont;
+    GetObjectW(m_hFont, sizeof(LOGFONTW), &aLogFont);
+
+    // Set the height (font size) to EM to minimize rounding errors.
+    aLogFont.lfHeight = -nUPEM;
+    // Set width to the default to get the original value in the metrics.
+    aLogFont.lfWidth = 0;
+
+    TEXTMETRICW aFontMetric;
     {
-        double nUPEM = GetFontFace()->UnitsPerEm();
-
-        LOGFONTW aLogFont;
-        GetObjectW(m_hFont, sizeof(LOGFONTW), &aLogFont);
-
-        // Set the height (font size) to EM to minimize rounding errors.
-        aLogFont.lfHeight = -nUPEM;
-        // Set width to the default to get the original value in the metrics.
-        aLogFont.lfWidth = 0;
-
-        TEXTMETRICW aFontMetric;
-        {
-            // Get the font metrics.
-            HDC hDC = m_pGraphics->getHDC();
-            ScopedSelectedHFONT hFont(hDC, CreateFontIndirectW(&aLogFont));
-            GetTextMetricsW(hDC, &aFontMetric);
-        }
-
-        SetAverageWidthFactor(nUPEM / aFontMetric.tmAveCharWidth);
+        // Get the font metrics.
+        HDC hDC = m_pGraphics->getHDC();
+        ScopedSelectedHFONT hFont(hDC, CreateFontIndirectW(&aLogFont));
+        GetTextMetricsW(hDC, &aFontMetric);
     }
+
+    SetAverageWidthFactor(nUPEM / aFontMetric.tmAveCharWidth);
 }
 
 void WinFontInstance::SetGraphics(WinSalGraphics* pGraphics)

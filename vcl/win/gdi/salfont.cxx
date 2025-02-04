@@ -473,38 +473,38 @@ static FontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rEnumFont
 void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 {
     OUString aFontName( o3tl::toU(rLogFont.lfFaceName) );
-    if (!aFontName.isEmpty())
-    {
-        rFont.SetFamilyName( aFontName );
-        rFont.SetCharSet( ImplCharSetToSal( rLogFont.lfCharSet ) );
-        rFont.SetFamily( ImplFamilyToSal( rLogFont.lfPitchAndFamily ) );
-        rFont.SetPitch( ImplLogPitchToSal( rLogFont.lfPitchAndFamily ) );
-        rFont.SetWeight( ImplWeightToSal( rLogFont.lfWeight ) );
+    if (aFontName.isEmpty())
+        return;
 
-        tools::Long nFontHeight = rLogFont.lfHeight;
-        if ( nFontHeight < 0 )
-            nFontHeight = -nFontHeight;
-        tools::Long nDPIY = GetDeviceCaps( hDC, LOGPIXELSY );
-        if( !nDPIY )
-            nDPIY = 600;
-        nFontHeight *= 72;
-        nFontHeight += nDPIY/2;
-        nFontHeight /= nDPIY;
-        rFont.SetFontSize( Size( 0, nFontHeight ) );
-        rFont.SetOrientation( Degree10(static_cast<sal_Int16>(rLogFont.lfEscapement)) );
-        if ( rLogFont.lfItalic )
-            rFont.SetItalic( ITALIC_NORMAL );
-        else
-            rFont.SetItalic( ITALIC_NONE );
-        if ( rLogFont.lfUnderline )
-            rFont.SetUnderline( LINESTYLE_SINGLE );
-        else
-            rFont.SetUnderline( LINESTYLE_NONE );
-        if ( rLogFont.lfStrikeOut )
-            rFont.SetStrikeout( STRIKEOUT_SINGLE );
-        else
-            rFont.SetStrikeout( STRIKEOUT_NONE );
-    }
+    rFont.SetFamilyName( aFontName );
+    rFont.SetCharSet( ImplCharSetToSal( rLogFont.lfCharSet ) );
+    rFont.SetFamily( ImplFamilyToSal( rLogFont.lfPitchAndFamily ) );
+    rFont.SetPitch( ImplLogPitchToSal( rLogFont.lfPitchAndFamily ) );
+    rFont.SetWeight( ImplWeightToSal( rLogFont.lfWeight ) );
+
+    tools::Long nFontHeight = rLogFont.lfHeight;
+    if ( nFontHeight < 0 )
+        nFontHeight = -nFontHeight;
+    tools::Long nDPIY = GetDeviceCaps( hDC, LOGPIXELSY );
+    if( !nDPIY )
+        nDPIY = 600;
+    nFontHeight *= 72;
+    nFontHeight += nDPIY/2;
+    nFontHeight /= nDPIY;
+    rFont.SetFontSize( Size( 0, nFontHeight ) );
+    rFont.SetOrientation( Degree10(static_cast<sal_Int16>(rLogFont.lfEscapement)) );
+    if ( rLogFont.lfItalic )
+        rFont.SetItalic( ITALIC_NORMAL );
+    else
+        rFont.SetItalic( ITALIC_NONE );
+    if ( rLogFont.lfUnderline )
+        rFont.SetUnderline( LINESTYLE_SINGLE );
+    else
+        rFont.SetUnderline( LINESTYLE_NONE );
+    if ( rLogFont.lfStrikeOut )
+        rFont.SetStrikeout( STRIKEOUT_SINGLE );
+    else
+        rFont.SetStrikeout( STRIKEOUT_NONE );
 }
 
 WinFontFace::WinFontFace(const ENUMLOGFONTEXW& rEnumFont, const NEWTEXTMETRICW& rMetric)
@@ -923,20 +923,20 @@ static int lcl_AddFontResource(SalData& rSalData, const OUString& rFontFileURL, 
 
     int nRet = AddFontResourceExW(o3tl::toW(aFontSystemPath.getStr()), FR_PRIVATE, nullptr);
     SAL_WARN_IF(nRet <= 0, "vcl.fonts", "AddFontResourceExW failed for " << rFontFileURL);
-    if (nRet > 0)
+    if (nRet <= 0)
+        return nRet;
+
+    TempFontItem* pNewItem = new TempFontItem;
+    pNewItem->maFontResourcePath = aFontSystemPath;
+    if (bShared)
     {
-        TempFontItem* pNewItem = new TempFontItem;
-        pNewItem->maFontResourcePath = aFontSystemPath;
-        if (bShared)
-        {
-            pNewItem->mpNextItem = rSalData.mpSharedTempFontItem;
-            rSalData.mpSharedTempFontItem = pNewItem;
-        }
-        else
-        {
-            pNewItem->mpNextItem = rSalData.mpOtherTempFontItem;
-            rSalData.mpOtherTempFontItem = pNewItem;
-        }
+        pNewItem->mpNextItem = rSalData.mpSharedTempFontItem;
+        rSalData.mpSharedTempFontItem = pNewItem;
+    }
+    else
+    {
+        pNewItem->mpNextItem = rSalData.mpOtherTempFontItem;
+        rSalData.mpOtherTempFontItem = pNewItem;
     }
     return nRet;
 }
