@@ -284,8 +284,6 @@ ScViewCfg::ScViewCfg() :
     aDisplayItem( CFGPATH_DISPLAY ),
     aGridItem( CFGPATH_GRID )
 {
-    sal_Int32 nIntVal = 0;
-
     Sequence<OUString> aNames = GetLayoutPropertyNames();
     Sequence<Any> aValues = aLayoutItem.GetProperties(aNames);
     aLayoutItem.EnableNotification(aNames);
@@ -346,73 +344,10 @@ ScViewCfg::ScViewCfg() :
     }
     aLayoutItem.SetCommitLink( LINK( this, ScViewCfg, LayoutCommitHdl ) );
 
-    aNames = GetDisplayPropertyNames();
-    aValues = aDisplayItem.GetProperties(aNames);
-    aDisplayItem.EnableNotification(aNames);
-    pValues = aValues.getConstArray();
-    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
-    {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
-        {
-            OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
-            if(pValues[nProp].hasValue())
-            {
-                switch(nProp)
-                {
-                    case SCDISPLAYOPT_FORMULA:
-                        SetOption( VOPT_FORMULAS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                        break;
-                    case SCDISPLAYOPT_ZEROVALUE:
-                        SetOption( VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                        break;
-                    case SCDISPLAYOPT_NOTETAG:
-                        SetOption( VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                        break;
-                    case SCDISPLAYOPT_NOTEAUTHOR:
-                        SetOption( VOPT_NOTEAUTHOR, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                        break;
-                    case SCDISPLAYOPT_FORMULAMARK:
-                        SetOption( VOPT_FORMULAS_MARKS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                        break;
-                    case SCDISPLAYOPT_VALUEHI:
-                        SetOption( VOPT_SYNTAX, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                        break;
-                    case SCDISPLAYOPT_ANCHOR:
-                        SetOption( VOPT_ANCHOR, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
-                        break;
-                    case SCDISPLAYOPT_OBJECTGRA:
-                        if ( pValues[nProp] >>= nIntVal )
-                        {
-                            //#i80528# adapt to new range eventually
-                            if(sal_Int32(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int32(VOBJ_MODE_SHOW);
-
-                            SetObjMode( VOBJ_TYPE_OLE, static_cast<ScVObjMode>(nIntVal));
-                        }
-                        break;
-                    case SCDISPLAYOPT_CHART:
-                        if ( pValues[nProp] >>= nIntVal )
-                        {
-                            //#i80528# adapt to new range eventually
-                            if(sal_Int32(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int32(VOBJ_MODE_SHOW);
-
-                            SetObjMode( VOBJ_TYPE_CHART, static_cast<ScVObjMode>(nIntVal));
-                        }
-                        break;
-                    case SCDISPLAYOPT_DRAWING:
-                        if ( pValues[nProp] >>= nIntVal )
-                        {
-                            //#i80528# adapt to new range eventually
-                            if(sal_Int32(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int32(VOBJ_MODE_SHOW);
-
-                            SetObjMode( VOBJ_TYPE_DRAW, static_cast<ScVObjMode>(nIntVal));
-                        }
-                        break;
-                }
-            }
-        }
-    }
+    aDisplayItem.EnableNotification(GetDisplayPropertyNames());
+    ReadDisplayCfg();
     aDisplayItem.SetCommitLink( LINK( this, ScViewCfg, DisplayCommitHdl ) );
+    aDisplayItem.SetNotifyLink( LINK( this, ScViewCfg, DisplayNotifyHdl ) );
 
     aGridItem.EnableNotification(GetGridPropertyNames());
     ReadGridCfg();
@@ -469,6 +404,82 @@ IMPL_LINK_NOARG(ScViewCfg, LayoutCommitHdl, ScLinkConfigItem&, void)
         }
     }
     aLayoutItem.PutProperties(aNames, aValues);
+}
+
+void ScViewCfg::ReadDisplayCfg()
+{
+    const Sequence<OUString> aNames = GetDisplayPropertyNames();
+    const Sequence<Any> aValues = aDisplayItem.GetProperties(aNames);
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    if (aValues.getLength() != aNames.getLength())
+        return;
+
+    sal_Int32 nIntVal = 0;
+
+    const Any* pValues = aValues.getConstArray();
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        OSL_ENSURE(pValues[nProp].hasValue(), "property value missing");
+        if(pValues[nProp].hasValue())
+        {
+            switch(nProp)
+            {
+                case SCDISPLAYOPT_FORMULA:
+                    SetOption( VOPT_FORMULAS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                    break;
+                case SCDISPLAYOPT_ZEROVALUE:
+                    SetOption( VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                    break;
+                case SCDISPLAYOPT_NOTETAG:
+                    SetOption( VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                    break;
+                case SCDISPLAYOPT_NOTEAUTHOR:
+                    SetOption( VOPT_NOTEAUTHOR, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                    break;
+                case SCDISPLAYOPT_FORMULAMARK:
+                    SetOption( VOPT_FORMULAS_MARKS, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                    break;
+                case SCDISPLAYOPT_VALUEHI:
+                    SetOption( VOPT_SYNTAX, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                    break;
+                case SCDISPLAYOPT_ANCHOR:
+                    SetOption( VOPT_ANCHOR, ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                    break;
+                case SCDISPLAYOPT_OBJECTGRA:
+                    if ( pValues[nProp] >>= nIntVal )
+                    {
+                        //#i80528# adapt to new range eventually
+                        if(sal_Int32(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int32(VOBJ_MODE_SHOW);
+
+                        SetObjMode( VOBJ_TYPE_OLE, static_cast<ScVObjMode>(nIntVal));
+                    }
+                    break;
+                case SCDISPLAYOPT_CHART:
+                    if ( pValues[nProp] >>= nIntVal )
+                    {
+                        //#i80528# adapt to new range eventually
+                        if(sal_Int32(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int32(VOBJ_MODE_SHOW);
+
+                        SetObjMode( VOBJ_TYPE_CHART, static_cast<ScVObjMode>(nIntVal));
+                    }
+                    break;
+                case SCDISPLAYOPT_DRAWING:
+                    if ( pValues[nProp] >>= nIntVal )
+                    {
+                        //#i80528# adapt to new range eventually
+                        if(sal_Int32(VOBJ_MODE_HIDE) < nIntVal) nIntVal = sal_Int32(VOBJ_MODE_SHOW);
+
+                        SetObjMode( VOBJ_TYPE_DRAW, static_cast<ScVObjMode>(nIntVal));
+                    }
+                    break;
+            }
+        }
+    }
+}
+
+IMPL_LINK_NOARG(ScViewCfg, DisplayNotifyHdl, ScLinkConfigItem&, void)
+{
+    ReadDisplayCfg();
 }
 
 IMPL_LINK_NOARG(ScViewCfg, DisplayCommitHdl, ScLinkConfigItem&, void)
@@ -567,7 +578,10 @@ void ScViewCfg::ReadGridCfg()
     SetGridOptions( aGrid );
 }
 
-IMPL_LINK_NOARG(ScViewCfg, GridNotifyHdl, ScLinkConfigItem&, void) { ReadGridCfg(); }
+IMPL_LINK_NOARG(ScViewCfg, GridNotifyHdl, ScLinkConfigItem&, void)
+{
+    ReadGridCfg();
+}
 
 IMPL_LINK_NOARG(ScViewCfg, GridCommitHdl, ScLinkConfigItem&, void)
 {
