@@ -142,35 +142,106 @@ class WinSalGraphics : public SalGraphics
     friend class WinSalGraphicsImpl;
     friend class ScopedFont;
 
-protected:
-    std::unique_ptr<SalGraphicsImpl> mpImpl;
-    WinSalGraphicsImplBase * mWinSalGraphicsImplBase;
-
-private:
-    HDC                     mhLocalDC;              // HDC
-    bool                    mbPrinter : 1;          // is Printer
-    bool                    mbVirDev : 1;           // is VirDev
-    bool                    mbWindow : 1;           // is Window
-    bool                    mbScreen : 1;           // is Screen compatible
-    HWND                    mhWnd;              // Window-Handle, when Window-Graphics
-
-    rtl::Reference<WinFontInstance>
-                            mpWinFontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
-    HRGN                    mhRegion;           // vcl::Region Handle
-    HPEN                    mhDefPen;           // DefaultPen
-    HBRUSH                  mhDefBrush;         // DefaultBrush
-    HFONT                   mhDefFont;          // DefaultFont
-    HPALETTE                mhDefPal;           // DefaultPalette
-    COLORREF                mnTextColor;        // TextColor
-    RGNDATA*                mpClipRgnData;      // ClipRegion-Data
-    RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
-    int                     mnPenWidth;         // line width
-
-    // just call both from setHDC!
-    void InitGraphics();
-    void DeInitGraphics();
-
 public:
+    enum Type
+    {
+        PRINTER,
+        VIRTUAL_DEVICE,
+        WINDOW,
+        SCREEN
+    };
+
+    explicit WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd,
+                            SalGeometryProvider *pProvider);
+    virtual ~WinSalGraphics() override;
+
+    SalGraphicsImpl* GetImpl() const override;
+    WinSalGraphicsImplBase * getWinSalGraphicsImplBase() const { return mWinSalGraphicsImplBase; }
+    bool isPrinter() const;
+    bool isVirtualDevice() const;
+    bool isWindow() const;
+    bool isScreen() const;
+
+    void setHWND(HWND hWnd);
+    void Flush();
+
+    virtual bool        blendBitmap( const SalTwoRect&,
+                                     const SalBitmap& rBitmap ) override;
+
+    virtual bool        blendAlphaBitmap( const SalTwoRect&,
+                                          const SalBitmap& rSrcBitmap,
+                                          const SalBitmap& rMaskBitmap,
+                                          const SalBitmap& rAlphaBitmap ) override;
+
+    virtual bool        drawAlphaBitmap( const SalTwoRect&,
+                                         const SalBitmap& rSourceBitmap,
+                                         const SalBitmap& rAlphaBitmap ) override;
+    virtual bool       drawTransformedBitmap(
+                           const basegfx::B2DPoint& rNull,
+                           const basegfx::B2DPoint& rX,
+                           const basegfx::B2DPoint& rY,
+                           const SalBitmap& rSourceBitmap,
+                           const SalBitmap* pAlphaBitmap,
+                           double fAlpha) override;
+
+    virtual bool       hasFastDrawTransformedBitmap() const override;
+
+    virtual bool       drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt8 nTransparency ) override;
+
+    // public SalGraphics methods, the interface to the independent vcl part
+
+    // get device resolution
+    virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
+    // get the depth of the device
+    virtual sal_uInt16          GetBitCount() const override;
+    // get the width of the device
+    virtual tools::Long            GetGraphicsWidth() const override;
+
+    // set the clip region to empty
+    virtual void            ResetClipRegion() override;
+
+    // set the line color to transparent (= don't draw lines)
+    virtual void            SetLineColor() override;
+    // set the line color to a specific color
+    virtual void            SetLineColor( Color nColor ) override;
+    // set the fill color to transparent (= don't fill)
+    virtual void            SetFillColor() override;
+    // set the fill color to a specific color, shapes will be
+    // filled accordingly
+    virtual void            SetFillColor( Color nColor ) override;
+    // enable/disable XOR drawing
+    virtual void            SetXORMode( bool bSet, bool ) override;
+    // set line color for raster operations
+    virtual void            SetROPLineColor( SalROPColor nROPColor ) override;
+    // set fill color for raster operations
+    virtual void            SetROPFillColor( SalROPColor nROPColor ) override;
+    // set the text color to a specific color
+    virtual void            SetTextColor( Color nColor ) override;
+    // set the font
+    virtual void            SetFont( LogicalFontInstance*, int nFallbackLevel ) override;
+    // get the current font's metrics
+    virtual void            GetFontMetric( FontMetricDataRef&, int nFallbackLevel ) override;
+    // get the repertoire of the current font
+    virtual FontCharMapRef  GetFontCharMap() const override;
+    // get the layout capabilities of the current font
+    virtual bool GetFontCapabilities(vcl::FontCapabilities &rGetFontCapabilities) const override;
+    // graphics must fill supplied font list
+    virtual void            GetDevFontList( vcl::font::PhysicalFontCollection* ) override;
+    // graphics must drop any cached font info
+    virtual void            ClearDevFontCache() override;
+    virtual bool            AddTempDevFont( vcl::font::PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) override;
+
+    virtual std::unique_ptr<GenericSalLayout>
+                            GetTextLayout(int nFallbackLevel) override;
+    virtual void            DrawTextLayout( const GenericSalLayout& ) override;
+
+    virtual bool            supportsOperation( OutDevSupportType ) const override;
+
+    virtual SystemGraphicsData GetGraphicsData() const override;
+
+    /// Update settings based on the platform values
+    static void updateSettingsNative( AllSettings& rSettings );
+
     // Returns base HFONT, an optional HFONT for non-rotated CJK glyphs,
     // and tmDescent value for adjusting offset in vertical writing mode.
     std::tuple<HFONT, HFONT, sal_Int32>
@@ -187,39 +258,13 @@ public:
 
     HRGN getRegion() const;
 
-
-    enum Type
-    {
-        PRINTER,
-        VIRTUAL_DEVICE,
-        WINDOW,
-        SCREEN
-    };
-
     static IDWriteFactory* getDWriteFactory();
     static IDWriteGdiInterop* getDWriteGdiInterop();
 
-public:
-
     HWND gethWnd();
 
-
-public:
-    explicit WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd,
-                            SalGeometryProvider *pProvider);
-    virtual ~WinSalGraphics() override;
-
-    SalGraphicsImpl* GetImpl() const override;
-    WinSalGraphicsImplBase * getWinSalGraphicsImplBase() const { return mWinSalGraphicsImplBase; }
-    bool isPrinter() const;
-    bool isVirtualDevice() const;
-    bool isWindow() const;
-    bool isScreen() const;
-
-    void setHWND(HWND hWnd);
-    void Flush();
-
 protected:
+
     virtual void        setClipRegion( const vcl::Region& ) override;
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void        drawPixel( tools::Long nX, tools::Long nY ) override;
@@ -274,7 +319,6 @@ protected:
     virtual bool        drawEPS( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, void* pPtr, sal_uInt32 nSize ) override;
 
     // native widget rendering methods that require mirroring
-protected:
     virtual bool        isNativeControlSupported( ControlType nType, ControlPart nPart ) override;
     virtual bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
                                               const Point& aPos, bool& rIsInside ) override;
@@ -285,89 +329,37 @@ protected:
                                                 const ImplControlValue& aValue, const OUString& aCaption,
                                                 tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion ) override;
 
-public:
-    virtual bool        blendBitmap( const SalTwoRect&,
-                                     const SalBitmap& rBitmap ) override;
-
-    virtual bool        blendAlphaBitmap( const SalTwoRect&,
-                                          const SalBitmap& rSrcBitmap,
-                                          const SalBitmap& rMaskBitmap,
-                                          const SalBitmap& rAlphaBitmap ) override;
-
-    virtual bool        drawAlphaBitmap( const SalTwoRect&,
-                                         const SalBitmap& rSourceBitmap,
-                                         const SalBitmap& rAlphaBitmap ) override;
-    virtual bool       drawTransformedBitmap(
-                           const basegfx::B2DPoint& rNull,
-                           const basegfx::B2DPoint& rX,
-                           const basegfx::B2DPoint& rY,
-                           const SalBitmap& rSourceBitmap,
-                           const SalBitmap* pAlphaBitmap,
-                           double fAlpha) override;
-
-    virtual bool       hasFastDrawTransformedBitmap() const override;
-
-    virtual bool       drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt8 nTransparency ) override;
-
 private:
-    // local helpers
+    // just call both from setHDC!
+    void InitGraphics();
+    void DeInitGraphics();
 
+    // local helpers
     void DrawTextLayout(const GenericSalLayout&, HDC, bool bUseDWrite, bool bRenderingModeNatural);
 
-public:
-    // public SalGraphics methods, the interface to the independent vcl part
+protected:
+    std::unique_ptr<SalGraphicsImpl> mpImpl;
+    WinSalGraphicsImplBase * mWinSalGraphicsImplBase;
 
-    // get device resolution
-    virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
-    // get the depth of the device
-    virtual sal_uInt16          GetBitCount() const override;
-    // get the width of the device
-    virtual tools::Long            GetGraphicsWidth() const override;
+private:
+    HDC                     mhLocalDC;              // HDC
+    bool                    mbPrinter : 1;          // is Printer
+    bool                    mbVirDev : 1;           // is VirDev
+    bool                    mbWindow : 1;           // is Window
+    bool                    mbScreen : 1;           // is Screen compatible
+    HWND                    mhWnd;              // Window-Handle, when Window-Graphics
 
-    // set the clip region to empty
-    virtual void            ResetClipRegion() override;
-
-    // set the line color to transparent (= don't draw lines)
-    virtual void            SetLineColor() override;
-    // set the line color to a specific color
-    virtual void            SetLineColor( Color nColor ) override;
-    // set the fill color to transparent (= don't fill)
-    virtual void            SetFillColor() override;
-    // set the fill color to a specific color, shapes will be
-    // filled accordingly
-    virtual void            SetFillColor( Color nColor ) override;
-    // enable/disable XOR drawing
-    virtual void            SetXORMode( bool bSet, bool ) override;
-    // set line color for raster operations
-    virtual void            SetROPLineColor( SalROPColor nROPColor ) override;
-    // set fill color for raster operations
-    virtual void            SetROPFillColor( SalROPColor nROPColor ) override;
-    // set the text color to a specific color
-    virtual void            SetTextColor( Color nColor ) override;
-    // set the font
-    virtual void            SetFont( LogicalFontInstance*, int nFallbackLevel ) override;
-    // get the current font's metrics
-    virtual void            GetFontMetric( FontMetricDataRef&, int nFallbackLevel ) override;
-    // get the repertoire of the current font
-    virtual FontCharMapRef  GetFontCharMap() const override;
-    // get the layout capabilities of the current font
-    virtual bool GetFontCapabilities(vcl::FontCapabilities &rGetFontCapabilities) const override;
-    // graphics must fill supplied font list
-    virtual void            GetDevFontList( vcl::font::PhysicalFontCollection* ) override;
-    // graphics must drop any cached font info
-    virtual void            ClearDevFontCache() override;
-    virtual bool            AddTempDevFont( vcl::font::PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) override;
-
-    virtual std::unique_ptr<GenericSalLayout>
-                            GetTextLayout(int nFallbackLevel) override;
-    virtual void            DrawTextLayout( const GenericSalLayout& ) override;
-
-    virtual bool            supportsOperation( OutDevSupportType ) const override;
-
-    virtual SystemGraphicsData GetGraphicsData() const override;
-
-    /// Update settings based on the platform values
-    static void updateSettingsNative( AllSettings& rSettings );
+    rtl::Reference<WinFontInstance>
+                            mpWinFontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
+    HRGN                    mhRegion;           // vcl::Region Handle
+    HPEN                    mhDefPen;           // DefaultPen
+    HBRUSH                  mhDefBrush;         // DefaultBrush
+    HFONT                   mhDefFont;          // DefaultFont
+    HPALETTE                mhDefPal;           // DefaultPalette
+    COLORREF                mnTextColor;        // TextColor
+    RGNDATA*                mpClipRgnData;      // ClipRegion-Data
+    RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
+    int                     mnPenWidth;         // line width
 };
 
 // Init/Deinit Graphics
