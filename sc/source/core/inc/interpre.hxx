@@ -728,6 +728,7 @@ private:
     void ScChooseRows();
     void ScDrop();
     void ScExpand();
+    void ScHStack();
     void ScTake();
     void ScToCol();
     void ScToRow();

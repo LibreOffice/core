@@ -3109,6 +3109,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "FILTER",
         "GETPIVOTDATA",
         "HLOOKUP",
+        "HSTACK",
         "HYPERLINK",
         "INDEX",
         "INDIRECT",

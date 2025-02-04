@@ -9007,6 +9007,12 @@ void ScInterpreter::ScChooseColsOrRows(bool bCols)
             return;
     }
 
+    if (nGlobalError != FormulaError::NONE || nsC < 1 || nsR < 1)
+    {
+        PushIllegalArgument();
+        return;
+    }
+
     std::vector<sal_Int32> aParamsVector;
     while (nGlobalError == FormulaError::NONE && nParamCount-- > 1)
     {
@@ -9051,12 +9057,6 @@ void ScInterpreter::ScChooseColsOrRows(bool bCols)
                 }
             }
         }
-    }
-
-    if (nGlobalError != FormulaError::NONE || nsC < 1 || nsR < 1)
-    {
-        PushIllegalArgument();
-        return;
     }
 
     SCSIZE nColumns = bCols ? aParamsVector.size() : nsC;
@@ -9202,6 +9202,76 @@ void ScInterpreter::ScExpand()
                 else
                     pResMat->PutError(FormulaError::NotAvailable, col, row);
             }
+        }
+    }
+
+    PushMatrix(pResMat);
+}
+
+void ScInterpreter::ScHStack()
+{
+    sal_uInt8 nParamCount = GetByte();
+
+    if (!MustHaveParamCountMin( nParamCount, 1))
+        return;
+
+    //reverse order of parameter stack to read them from first to last
+    ReverseStack(nParamCount);
+
+    SCSIZE nColumns = 0;
+    SCSIZE nRows = 0;
+    std::vector<ScMatrixRef> aResMatrix;
+    while (nGlobalError == FormulaError::NONE && nParamCount-- > 0)
+    {
+        if (IsMissing())
+        {
+            PushIllegalParameter();
+            return;
+        }
+
+        ScMatrixRef pRefMatrix = GetMatrix();
+        if (!pRefMatrix)
+        {
+            PushIllegalParameter();
+            return;
+        }
+
+        SCSIZE nC = 0, nR = 0;
+        pRefMatrix->GetDimensions(nC, nR);
+        nColumns = nColumns + nC;
+        nRows = std::max(nRows , nR);
+        aResMatrix.emplace_back(pRefMatrix);
+    }
+
+    // No result
+    if (aResMatrix.size() == 0)
+    {
+        PushNA();
+        return;
+    }
+
+    ScMatrixRef pResMat = GetNewMat(nColumns, nRows, /*bEmpty*/true);
+    if (!pResMat)
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    SCSIZE nCount = 0;
+    for (const ScMatrixRef& rMatrix : aResMatrix)
+    {
+        SCSIZE nC = 0, nR = 0;
+        rMatrix->GetDimensions(nC, nR);
+        for (SCSIZE col = 0; col < nC; ++col)
+        {
+            for (SCSIZE row = 0; row < nRows; ++row)
+            {
+                if (row < nR)
+                    lcl_FillCell(rMatrix, pResMat, col, row, nCount, row);
+                else
+                    pResMat->PutError(FormulaError::NotAvailable, nCount, row);
+            }
+            ++nCount;
         }
     }
 

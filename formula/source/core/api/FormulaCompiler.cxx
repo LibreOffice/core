@@ -1283,6 +1283,7 @@ bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
         case ocChooseRows :
         case ocDrop :
         case ocExpand :
+        case ocHStack :
         case ocTake :
         case ocToCol :
         case ocToRow :

@@ -517,6 +517,7 @@ enum OpCode : sal_uInt16
         ocChooseRows        = SC_OPCODE_CHOOSEROWS,
         ocDrop              = SC_OPCODE_DROP,
         ocExpand            = SC_OPCODE_EXPAND,
+        ocHStack            = SC_OPCODE_HSTACK,
         ocTake              = SC_OPCODE_TAKE,
         ocToCol             = SC_OPCODE_TOCOL,
         ocToRow             = SC_OPCODE_TOROW,
@@ -1011,6 +1012,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocChooseRows: return "ChooseRows";
     case ocDrop: return "Drop";
     case ocExpand: return "Expand";
+    case ocHStack: return "HStack";
     case ocTake: return "Take";
     case ocToCol: return "ToCol";
     case ocToRow: return "ToRow";

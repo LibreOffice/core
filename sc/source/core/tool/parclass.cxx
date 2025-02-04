@@ -163,6 +163,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocGreaterEqual,    {{ Array, Array                                         }, 0, Value }},
     { ocGrowth,          {{ Reference, Reference, Reference, Value               }, 0, Value }},
     { ocHLookup,         {{ Value, ReferenceOrForceArray, Value, Value           }, 0, Value }},
+    { ocHStack,          {{ ReferenceOrRefArray, ReferenceOrRefArray,            }, 1, ForceArrayReturn }},
     { ocHarMean,         {{ Reference                                            }, 1, Value }},
     { ocIRR,             {{ Reference, Value                                     }, 0, Value }},
     { ocIndex,           {{ Reference, Value, Value, Value                       }, 0, Value }},
