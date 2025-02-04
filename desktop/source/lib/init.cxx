@@ -5087,7 +5087,24 @@ static void updateConfig(const OUString& rConfigPath)
                 }
 
                 SAL_INFO("lok", "Installing XCU Item: " << xcustat.getFileName());
-                xUpdate->insertModificationXcuFile(xcustat.getFileURL(), { u"/"_ustr }, {});
+                // Filter xcu to a subset of options to allow
+                const uno::Sequence<OUString> aAllowedSubset{
+                    u"/org.openoffice.Office.Calc/Grid"_ustr,
+                    u"/org.openoffice.Office.Calc/Print"_ustr,
+                    u"/org.openoffice.Office.Calc/Content/Display/ObjectGraphic"_ustr,
+                    u"/org.openoffice.Office.Calc/Content/Display/FormulaMark"_ustr,
+
+                    u"/org.openoffice.Office.Draw/Grid"_ustr,
+                    u"/org.openoffice.Office.Draw/Print"_ustr,
+
+                    u"/org.openoffice.Office.Impress/Grid"_ustr,
+                    u"/org.openoffice.Office.Impress/Print"_ustr,
+
+                    u"/org.openoffice.Office.Writer/Grid"_ustr,
+                    u"/org.openoffice.Office.Writer/Print"_ustr,
+                    u"/org.openoffice.Office.Writer/Content/Display/GraphicObject"_ustr
+                };
+                xUpdate->insertModificationXcuFile(xcustat.getFileURL(), aAllowedSubset, {});
             }
         }
         else if (sFileName == "wordbook")
