@@ -13,11 +13,14 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -33,11 +36,13 @@ public:
     void testRegistrationName();
     uno::Reference<XConnection> setUpDBConnection();
     void testQueryColumns();
+    void testODBCEscapeQuery();
 
     CPPUNIT_TEST_SUITE(CRMDBTest);
     CPPUNIT_TEST(testCRMDatabase);
     CPPUNIT_TEST(testRegistrationName);
     CPPUNIT_TEST(testQueryColumns);
+    CPPUNIT_TEST(testODBCEscapeQuery);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -180,6 +185,47 @@ void CRMDBTest::testQueryColumns()
     }
 }
 
+void CRMDBTest::testODBCEscapeQuery()
+{
+    uno::Reference<XConnection> xConnection = setUpDBConnection();
+    createTables(xConnection);
+
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xConnection, UNO_QUERY);
+    CPPUNIT_ASSERT(xFactory.is());
+
+    Reference<XSingleSelectQueryComposer> xComposer(
+        xFactory->createInstance(u"com.sun.star.sdb.SingleSelectQueryComposer"_ustr),
+        UNO_QUERY_THROW);
+
+    uno::Reference<XQueriesSupplier> xQuerySupplier(xConnection, UNO_QUERY_THROW);
+    uno::Reference<container::XNameAccess> xQueryAccess = xQuerySupplier->getQueries();
+    CPPUNIT_ASSERT(xQueryAccess->hasElements());
+
+    Reference<XPropertySet> xQuery(xQueryAccess->getByName(u"parse odbc escape"_ustr), UNO_QUERY);
+    OUString sQuery;
+    xQuery->getPropertyValue(u"Command"_ustr) >>= sQuery;
+
+    // Test to make sure the query is parseable
+    // If it is unparseable, catch the SQLException and fail with the SQL error mesage
+    try
+    {
+        xComposer->setQuery(sQuery);
+    }
+    catch (const SQLException& e)
+    {
+        OString oMessage = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
+        CPPUNIT_ASSERT_MESSAGE(oMessage.getStr(), false);
+    }
+
+    Reference<XStatement> xStatement = xConnection->createStatement();
+    Reference<XResultSet> xResults = xStatement->executeQuery(xComposer->getQuery());
+    CPPUNIT_ASSERT(xResults.is());
+
+    // Check to make sure the query returns the correct result
+    Reference<XRow> xRow(xResults, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xResults->next());
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xRow->getString(1));
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(CRMDBTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();

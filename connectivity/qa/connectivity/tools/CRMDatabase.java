@@ -203,43 +203,6 @@ public class CRMDatabase
         m_connection.refreshTables();
     }
 
-
-    private void validateUnparseable()
-    {
-    /*
-        // The "unparseable" query should be indeed be unparseable by OOo (though a valid HSQL query)
-        XSingleSelectQueryComposer composer;
-        QueryDefinition unparseableQuery;
-        try
-        {
-            final XMultiServiceFactory factory = UnoRuntime.queryInterface(
-                    XMultiServiceFactory.class, m_database.defaultConnection().getXConnection() );
-            composer = UnoRuntime.queryInterface(
-                    XSingleSelectQueryComposer.class, factory.createInstance( "com.sun.star.sdb.SingleSelectQueryComposer" ) );
-            unparseableQuery = m_dataSource.getQueryDefinition( "unparseable" );
-        }
-        catch( Exception e )
-        {
-            throw new RuntimeException( "caught an unexpected exception: " + e.getMessage() );
-        }
-
-        boolean caughtExpected = false;
-        try
-        {
-            composer.setQuery( unparseableQuery.getCommand() );
-        }
-        catch (WrappedTargetException e) { }
-        catch( SQLException e )
-        {
-            caughtExpected = true;
-        }
-
-        if ( !caughtExpected )
-            throw new RuntimeException( "Somebody improved the parser! This is bad :), since we need an unparsable query here!" );
-            */
-    }
-
-
     private void createQueries() throws ElementExistException, WrappedTargetException, com.sun.star.lang.IllegalArgumentException
     {
         m_database.getDataSource().createQuery(
@@ -268,10 +231,5 @@ public class CRMDatabase
 
         m_database.getDataSource().createQuery( "parseable", "SELECT * FROM \"customers\"" );
         m_database.getDataSource().createQuery( "parseable native", "SELECT * FROM INFORMATION_SCHEMA.SYSTEM_VIEWS", false );
-/*
-        m_database.getDataSource().createQuery( "unparseable",
-            "SELECT {fn DAYOFMONTH ('2001-01-01')} AS \"ID_VARCHAR\" FROM \"products\"", false );
-*/
-        validateUnparseable();
     }
 }

@@ -162,6 +162,8 @@ void DBTestBase::createQueries(const Reference<XDataSource>& xDataSource)
 
     createQuery(u"SELECT * FROM \"CUSTOMERS\""_ustr, true, u"parseable"_ustr, xDataSource);
     createQuery(u"SELECT * FROM INFORMATION_SCHEMA.SYSTEM_VIEWS"_ustr, false, u"parseable native"_ustr, xDataSource);
+    createQuery(u"SELECT {fn DAYOFMONTH ('2001-01-01')} AS \"ID_VARCHAR\" FROM \"PRODUCTS\""_ustr,
+                false, u"parse odbc escape"_ustr, xDataSource);
 }
 
 void DBTestBase::createQuery(const OUString& sQuery, bool bEscapeProcessing, const OUString& sQueryName, const Reference<XDataSource> & xDataSource)
