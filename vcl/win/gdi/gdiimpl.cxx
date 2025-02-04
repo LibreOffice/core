@@ -769,10 +769,10 @@ void WinSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry,
         WinSalBitmap aTmp;
 
         if( aTmp.Create( rSalBitmap, &mrParent ) )
-            ImplDrawBitmap( hDC, aPosAry, aTmp, false, 0x00B8074AUL );
+            ImplDrawBitmap( hDC, aPosAry, aTmp, false, 0x00B8074AUL ); // raster operation PSDPxax
     }
     else
-        ImplDrawBitmap( hDC, aPosAry, rSalBitmap, false, 0x00B8074AUL );
+        ImplDrawBitmap( hDC, aPosAry, rSalBitmap, false, 0x00B8074AUL );// raster operation PSDPxax
 }
 
 std::shared_ptr<SalBitmap> WinSalGraphicsImpl::getBitmap( tools::Long nX, tools::Long nY, tools::Long nDX, tools::Long nDY )
