@@ -22431,7 +22431,7 @@ public:
             g_signal_connect(getContainer(), "query-tooltip", G_CALLBACK(signalComboTooltipQuery), this);
         }
 
-        // take over a11y characteristics from the stock GtkComboBox to the toggle button
+        // take over a11y characteristics from the stock GtkComboBox
         if (AtkObject* pComboBoxAccessible = gtk_widget_get_accessible(GTK_WIDGET(m_pComboBox)))
         {
             if (AtkObject* pToggleButtonAccessible = gtk_widget_get_accessible(GTK_WIDGET(m_pToggleButton)))
@@ -22442,6 +22442,21 @@ public:
                 if (const char* pDesc = atk_object_get_description(pComboBoxAccessible))
                     atk_object_set_description(pToggleButtonAccessible, pDesc);
 
+                // for editable combobox, also set a11y combobox role and relations
+                // for the box containing the GtkEntry
+                AtkRelationSet* pBoxRelationSet = nullptr;
+                if (gtk_combo_box_get_has_entry(m_pComboBox))
+                {
+                    GtkWidget* pBox = GTK_WIDGET(gtk_builder_get_object(pComboBuilder, "box"));
+                    assert(pBox);
+                    if (AtkObject* pBoxAccessible = gtk_widget_get_accessible(pBox))
+                    {
+                        atk_object_set_role(pBoxAccessible, ATK_ROLE_COMBO_BOX);
+                        pBoxRelationSet = atk_object_ref_relation_set(pBoxAccessible);
+                        assert(pBoxRelationSet);
+                    }
+                }
+
                 if (AtkRelationSet* pComboBoxRelationSet = atk_object_ref_relation_set(pComboBoxAccessible))
                 {
                     AtkRelationSet* pToggleButtonRelationSet = atk_object_ref_relation_set(pToggleButtonAccessible);
@@ -22451,6 +22466,9 @@ public:
                         AtkRelation* pRelation = atk_relation_set_get_relation(pComboBoxRelationSet, i);
                         assert(pRelation);
                         atk_relation_set_add(pToggleButtonRelationSet, pRelation);
+
+                        if (pBoxRelationSet)
+                            atk_relation_set_add(pBoxRelationSet, pRelation);
                     }
                     g_object_unref(pComboBoxRelationSet);
                     g_object_unref(pToggleButtonRelationSet);
@@ -22504,14 +22522,6 @@ public:
             m_nEntryKeyPressEventSignalId = g_signal_connect(m_pEntry, "key-press-event", G_CALLBACK(signalEntryKeyPress), this);
             m_nEntryPopulatePopupMenuSignalId = g_signal_connect(m_pEntry, "populate-popup", G_CALLBACK(signalEntryPopulatePopup), nullptr);
             m_nKeyPressEventSignalId = 0;
-
-            // for editable combobox, set a11y combobox role for the box containing the entry
-            // (in addition to the button for which this is already set in the .ui file that
-            // gets focus in case of the non-editable combobox)
-            GtkWidget* pBox = GTK_WIDGET(gtk_builder_get_object(pComboBuilder, "box"));
-            assert(pBox);
-            if (AtkObject* pBoxAccessible = gtk_widget_get_accessible(pBox))
-                atk_object_set_role(pBoxAccessible, ATK_ROLE_COMBO_BOX);
         }
         else
         {
