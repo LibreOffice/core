@@ -440,7 +440,13 @@ bool SidebarTextControl::Command( const CommandEvent& rCEvt )
                 const Size aSize = GetOutputSizePixel();
                 aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
             }
-            SfxDispatcher::ExecutePopup(&mrSidebarWin, &aPos);
+
+            // tdf#164072: don't use SwAnnotationWin itself as popup parent because it
+            // may get disposed while the popup menu is still executed
+            vcl::Window* pParentWin = mrSidebarWin.GetParent();
+            assert(pParentWin);
+            aPos += mrSidebarWin.GetWindowExtentsRelative(*pParentWin).TopLeft();
+            SfxDispatcher::ExecutePopup(pParentWin, &aPos);
         }
         return true;
     }
