@@ -2032,8 +2032,8 @@ void WinSalGraphicsImpl::drawPolyPolygon(
     }
 
     Gdiplus::Graphics aGraphics(mrParent.getHDC());
-    const sal_uInt8 aTrans(sal_uInt8(255) - static_cast<sal_uInt8>(basegfx::fround(fTransparency * 255.0)));
-    const Gdiplus::Color aTestColor(aTrans, maFillColor.GetRed(), maFillColor.GetGreen(), maFillColor.GetBlue());
+    const sal_uInt8 nAlpha(sal_uInt8(255) - static_cast<sal_uInt8>(basegfx::fround(fTransparency * 255.0)));
+    const Gdiplus::Color aTestColor(nAlpha, maFillColor.GetRed(), maFillColor.GetGreen(), maFillColor.GetBlue());
     const Gdiplus::SolidBrush aSolidBrush(aTestColor.GetValue());
 
     // Set full (Object-to-Device) transformation - if used
@@ -2210,8 +2210,8 @@ bool WinSalGraphicsImpl::drawPolyLine(
     }
 
     Gdiplus::Graphics aGraphics(mrParent.getHDC());
-    const sal_uInt8 aTrans = static_cast<sal_uInt8>(basegfx::fround( 255 * (1.0 - fTransparency) ));
-    const Gdiplus::Color aTestColor(aTrans, maLineColor.GetRed(), maLineColor.GetGreen(), maLineColor.GetBlue());
+    const sal_uInt8 nAlpha = static_cast<sal_uInt8>(basegfx::fround( 255 * (1.0 - fTransparency) ));
+    const Gdiplus::Color aTestColor(nAlpha, maLineColor.GetRed(), maLineColor.GetGreen(), maLineColor.GetBlue());
     Gdiplus::Pen aPen(aTestColor.GetValue(), Gdiplus::REAL(fLineWidth));
     bool bNoLineJoin(false);
 
