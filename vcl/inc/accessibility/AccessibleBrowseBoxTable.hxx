@@ -27,8 +27,6 @@
     BrowseBox control. */
 class AccessibleBrowseBoxTable : public AccessibleBrowseBoxTableBase
 {
-    friend class AccessibleBrowseBox;   // to create header bars
-
 public:
     AccessibleBrowseBoxTable(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
