@@ -54,7 +54,7 @@ std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraph
 #endif
 }
 
-std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraphics& rGraphics,
+std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraphics&,
                                                         tools::Long &nDX, tools::Long &nDY,
                                                         DeviceFormat eFormat,
                                                         const SystemGraphicsData& rData )
@@ -63,10 +63,10 @@ std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraph
     SalData::ensureThreadAutoreleasePool();
 
 #ifdef IOS
-    return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >(&rGraphics),
+    return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice(
                                      nDX, nDY, eFormat, rData ));
 #else
-    return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >(&rGraphics),
+    return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice(
                                      nDX, nDY, eFormat, rData ));
 #endif
 }
@@ -117,7 +117,7 @@ AquaSalVirtualDevice::AquaSalVirtualDevice(
 }
 
 AquaSalVirtualDevice::AquaSalVirtualDevice(
-    AquaSalGraphics* pGraphic, tools::Long &nDX, tools::Long &nDY,
+    tools::Long &nDX, tools::Long &nDY,
     DeviceFormat eFormat, const SystemGraphicsData& rData )
   : mbGraphicsUsed( false )
   , mnBitmapDepth( 0 )
@@ -128,14 +128,13 @@ AquaSalVirtualDevice::AquaSalVirtualDevice(
               << " size=(" << nDX << "x" << nDY << ") bitcount=" << static_cast<int>(eFormat) <<
               " rData=" << &rData << " context=" << rData.rCGContext );
 
-    assert(pGraphic);
     assert(rData.rCGContext);
 
     // Create virtual device based on existing SystemGraphicsData
     // We ignore nDx and nDY, as the desired size comes from the SystemGraphicsData.
     // the mxContext is from pData (what "mxContext"? there is no such field anywhere in vcl;)
     mbForeignContext = true;
-    mpGraphics = new AquaSalGraphics( /*pGraphic*/ );
+    mpGraphics = new AquaSalGraphics();
     if (nDX == 0)
     {
         nDX = 1;
