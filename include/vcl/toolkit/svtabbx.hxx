@@ -96,7 +96,7 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvHeaderTabListBox : public SvTabList
 {
 private:
     bool                            m_bFirstPaint;
-    std::unique_ptr<::vcl::SvHeaderTabListBoxImpl>  m_pImpl;
+    VclPtr<HeaderBar> m_xHeaderBar;
     rtl::Reference<AccessibleTabListBox>  m_xAccessible;
     std::vector<css::uno::Reference<css::accessibility::XAccessible>> m_aAccessibleChildren;
 

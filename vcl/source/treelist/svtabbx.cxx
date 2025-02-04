@@ -539,26 +539,15 @@ tools::Long SvTabListBox::GetLogicTab( sal_uInt16 nTab )
     return aTabs[ nTab ]->GetPos();
 }
 
-namespace vcl
-{
-    struct SvHeaderTabListBoxImpl
-    {
-        VclPtr<HeaderBar>       m_pHeaderBar;
-
-        SvHeaderTabListBoxImpl() : m_pHeaderBar( nullptr ) { }
-    };
-}
-
 SvHeaderTabListBox::SvHeaderTabListBox(vcl::Window* pParent, WinBits nWinStyle, HeaderBar* pHeaderBar)
     : SvTabListBox(pParent, nWinStyle)
     , m_bFirstPaint(true)
-    , m_pImpl(new ::vcl::SvHeaderTabListBoxImpl)
 {
 
     assert(pHeaderBar);
-    m_pImpl->m_pHeaderBar = pHeaderBar;
+    m_xHeaderBar = pHeaderBar;
     SetScrolledHdl(LINK(this, SvHeaderTabListBox, ScrollHdl_Impl));
-    m_pImpl->m_pHeaderBar->SetCreateAccessibleHdl(LINK(this, SvHeaderTabListBox, CreateAccessibleHdl_Impl));
+    m_xHeaderBar->SetCreateAccessibleHdl(LINK(this, SvHeaderTabListBox, CreateAccessibleHdl_Impl));
 }
 
 SvHeaderTabListBox::~SvHeaderTabListBox()
@@ -573,7 +562,7 @@ void SvHeaderTabListBox::dispose()
     m_aAccessibleChildren.clear();
     m_xAccessible.clear();
 
-    m_pImpl.reset();
+    m_xHeaderBar.clear();
     SvTabListBox::dispose();
 }
 
@@ -588,7 +577,7 @@ void SvHeaderTabListBox::Paint( vcl::RenderContext& rRenderContext, const tools:
 
 HeaderBar* SvHeaderTabListBox::GetHeaderBar()
 {
-    return m_pImpl ? m_pImpl->m_pHeaderBar : nullptr;
+    return m_xHeaderBar;
 }
 
 bool SvHeaderTabListBox::IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol )
@@ -644,12 +633,12 @@ void SvHeaderTabListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
 IMPL_LINK_NOARG(SvHeaderTabListBox, ScrollHdl_Impl, SvTreeListBox*, void)
 {
-    m_pImpl->m_pHeaderBar->SetOffset( -GetXOffset() );
+    m_xHeaderBar->SetOffset(-GetXOffset());
 }
 
 IMPL_LINK_NOARG(SvHeaderTabListBox, CreateAccessibleHdl_Impl, HeaderBar*, void)
 {
-    vcl::Window* pParent = m_pImpl->m_pHeaderBar->GetAccessibleParentWindow();
+    vcl::Window* pParent = m_xHeaderBar->GetAccessibleParentWindow();
     DBG_ASSERT( pParent, "SvHeaderTabListBox..CreateAccessibleHdl_Impl - accessible parent not found" );
     if ( pParent )
     {
@@ -658,7 +647,7 @@ IMPL_LINK_NOARG(SvHeaderTabListBox, CreateAccessibleHdl_Impl, HeaderBar*, void)
         {
             Reference<XAccessible> xAccessible = AccessibleFactory::createAccessibleBrowseBoxHeaderBar(
                 xAccParent, *this, AccessibleBrowseBoxObjType::ColumnHeaderBar );
-            m_pImpl->m_pHeaderBar->SetAccessible( xAccessible );
+            m_xHeaderBar->SetAccessible(xAccessible);
         }
     }
 }
@@ -708,7 +697,7 @@ sal_Int32 SvHeaderTabListBox::GetRowCount() const
 
 sal_uInt16 SvHeaderTabListBox::GetColumnCount() const
 {
-    return m_pImpl->m_pHeaderBar->GetItemCount();
+    return m_xHeaderBar->GetItemCount();
 }
 
 sal_Int32 SvHeaderTabListBox::GetCurrRow() const
@@ -743,7 +732,7 @@ OUString SvHeaderTabListBox::GetRowDescription( sal_Int32 _nRow ) const
 
 OUString SvHeaderTabListBox::GetColumnDescription( sal_uInt16 _nColumn ) const
 {
-    return m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( _nColumn ) );
+    return m_xHeaderBar->GetItemText(m_xHeaderBar->GetItemId(_nColumn ));
 }
 
 bool SvHeaderTabListBox::HasRowHeader() const
@@ -833,12 +822,12 @@ tools::Rectangle SvHeaderTabListBox::calcHeaderRect( bool _bIsColumnBar, bool _b
     {
         vcl::Window* pParent = nullptr;
         if (_bOnScreen)
-            aRect = tools::Rectangle(m_pImpl->m_pHeaderBar->GetWindowExtentsAbsolute());
+            aRect = tools::Rectangle(m_xHeaderBar->GetWindowExtentsAbsolute());
         else
         {
-            pParent = m_pImpl->m_pHeaderBar->GetAccessibleParentWindow();
+            pParent = m_xHeaderBar->GetAccessibleParentWindow();
             assert(pParent);
-            aRect = m_pImpl->m_pHeaderBar->GetWindowExtentsRelative(*pParent );
+            aRect = m_xHeaderBar->GetWindowExtentsRelative(*pParent);
         }
     }
     return aRect;
@@ -861,8 +850,8 @@ tools::Rectangle SvHeaderTabListBox::GetFieldRectPixel( sal_Int32 _nRow, sal_uIn
     {
         aRect = _bIsHeader ? calcHeaderRect( true, false ) : GetBoundingRect( pEntry );
         Point aTopLeft = aRect.TopLeft();
-        DBG_ASSERT( m_pImpl->m_pHeaderBar->GetItemCount() > _nColumn, "invalid column" );
-        tools::Rectangle aItemRect = m_pImpl->m_pHeaderBar->GetItemRect( m_pImpl->m_pHeaderBar->GetItemId( _nColumn ) );
+        DBG_ASSERT(m_xHeaderBar->GetItemCount() > _nColumn, "invalid column");
+        tools::Rectangle aItemRect = m_xHeaderBar->GetItemRect(m_xHeaderBar->GetItemId(_nColumn));
         aTopLeft.setX( aItemRect.Left() );
         Size aSize = aItemRect.GetSize();
         aRect = tools::Rectangle( aTopLeft, aSize );
@@ -990,7 +979,7 @@ OUString SvHeaderTabListBox::GetAccessibleObjectName( AccessibleBrowseBoxObjType
         }
         case AccessibleBrowseBoxObjType::ColumnHeaderCell:
         {
-            aRetText = m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( static_cast<sal_uInt16>(_nPos) ) );
+            aRetText = m_xHeaderBar->GetItemText(m_xHeaderBar->GetItemId(static_cast<sal_uInt16>(_nPos)));
             break;
         }
 
@@ -1019,7 +1008,7 @@ OUString SvHeaderTabListBox::GetAccessibleObjectDescription( AccessibleBrowseBox
 
             OUString aText( VclResId(STR_SVT_ACC_DESC_TABLISTBOX) );
             aText = aText.replaceFirst( "%1", OUString::number( nRow ) );
-            OUString sColHeader = m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( nColumn ) );
+            OUString sColHeader = m_xHeaderBar->GetItemText(m_xHeaderBar->GetItemId(nColumn));
             if ( sColHeader.isEmpty() )
                 sColHeader = OUString::number( nColumn );
             aText = aText.replaceFirst( "%2", sColHeader );
