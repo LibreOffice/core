@@ -185,6 +185,22 @@ void SwTabFrame::RegistFlys()
     }
 }
 
+static void InvalidateVertOrientCells(SwRowFrame & rRow)
+{
+    for (SwFrame * pLower{rRow.Lower()}; pLower != nullptr; pLower = pLower->GetNext())
+    {
+        SwCellFrame * pCell{static_cast<SwCellFrame *>(pLower)};
+        if (pCell->GetLayoutRowSpan() != 1)
+        {
+            pCell = const_cast<SwCellFrame *>(&pCell->FindStartEndOfRowSpanCell(true));
+        }
+        if (pCell->GetFormat()->GetVertOrient().GetVertOrient() != text::VertOrientation::NONE)
+        {   // tdf#159029 force repositioning of content in cell because it
+            pCell->InvalidatePrt(); // was disabled by SetRebuildLastLine()
+        }
+    }
+}
+
 static void SwInvalidateAll( SwFrame *pFrame, tools::Long nBottom );
 static void lcl_RecalcRow( SwRowFrame& rRow, tools::Long nBottom );
 static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, tools::Long lYStart, bool bInva );
@@ -865,6 +881,7 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
         // Everything looks fine. Splitting seems to be successful. We invalidate
         // rFollowLine to force a new formatting.
         ::SwInvalidateAll( &rFollowLine, LONG_MAX );
+        InvalidateVertOrientCells(rLastLine);
     }
     else
     {
@@ -2680,6 +2697,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                                 ::SwInvalidateAll( pLastLine, LONG_MAX );
                                 SetRebuildLastLine( true );
                                 lcl_RecalcRow(*static_cast<SwRowFrame*>(pLastLine), LONG_MAX);
+                                InvalidateVertOrientCells(*static_cast<SwRowFrame *>(pLastLine));
                                 SetRebuildLastLine( false );
                             }
 
