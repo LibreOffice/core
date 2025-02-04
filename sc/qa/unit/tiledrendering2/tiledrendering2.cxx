@@ -14,9 +14,11 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <test/lokcallback.hxx>
 #include <vcl/scheduler.hxx>
+#include <tabvwsh.hxx>
 
 #include <docuno.hxx>
 
@@ -79,6 +81,7 @@ class ViewCallback final
 
 public:
     std::map<std::string, boost::property_tree::ptree> m_aStateChanges;
+    std::string decimalSeparator;
     TestLokCallbackWrapper m_callbackWrapper;
 
     ViewCallback()
@@ -128,6 +131,26 @@ public:
                 m_aStateChanges[aCommandName] = aTree;
             }
             break;
+            case LOK_CALLBACK_JSDIALOG:
+            {
+                std::stringstream aStream(pPayload);
+                boost::property_tree::ptree aTree;
+                boost::property_tree::read_json(aStream, aTree);
+                if (aTree.get_child("jsontype").get_value<std::string>() == "formulabar")
+                {
+                    if (aTree.find("data") != aTree.not_found())
+                    {
+                        if (aTree.get_child("data").find("separator")
+                            != aTree.get_child("data").not_found())
+                        {
+                            decimalSeparator = aTree.get_child("data")
+                                                   .get_child("separator")
+                                                   .get_value<std::string>();
+                        }
+                    }
+                }
+            }
+            break;
         }
     }
 };
@@ -158,6 +181,28 @@ CPPUNIT_TEST_FIXTURE(Test, testSidebarLocale)
     CPPUNIT_ASSERT(it != aView2.m_aStateChanges.end());
     std::string aLocale = it->second.get<std::string>("locale");
     CPPUNIT_ASSERT_EQUAL(std::string("de-DE"), aLocale);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDecimalSeparatorInfo)
+{
+    createDoc("decimal-separator.ods");
+
+    ViewCallback aView1;
+
+    // Go to cell A1.
+    uno::Sequence<beans::PropertyValue> aPropertyValues
+        = { comphelper::makePropertyValue("ToPoint", OUString("$A$1")) };
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+
+    // Cell A1 has language set to English. Decimal separator should be ".".
+    CPPUNIT_ASSERT_EQUAL(std::string("."), aView1.decimalSeparator);
+
+    // Go to cell B1.
+    aPropertyValues = { comphelper::makePropertyValue("ToPoint", OUString("B$1")) };
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+
+    // Cell B1 has language set to Turkish. Decimal separator should be ",".
+    CPPUNIT_ASSERT_EQUAL(std::string(","), aView1.decimalSeparator);
 }
 }
 
