@@ -272,6 +272,4 @@ Svx3DShadeModeItem* Svx3DShadeModeItem::Clone(SfxItemPool* /*pPool*/) const
     return new Svx3DShadeModeItem(*this);
 }
 
-// EOF
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

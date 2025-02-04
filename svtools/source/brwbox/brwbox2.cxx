@@ -2004,6 +2004,4 @@ tools::Rectangle BrowseBox::GetFieldRectPixel( sal_Int32 _nRowId, sal_uInt16 _nC
     return tools::Rectangle(aTopLeft,aRect.GetSize());
 }
 
-// ------------------------------------------------------------------------- EOF
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
