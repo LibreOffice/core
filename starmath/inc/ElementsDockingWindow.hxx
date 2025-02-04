@@ -31,7 +31,6 @@
 #include <vector>
 
 class SmDocShell;
-class SvTreeListBox;
 struct ElementData;
 
 class SmElementsControl
