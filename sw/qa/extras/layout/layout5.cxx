@@ -744,7 +744,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf117245)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf159029)
 {
-    createSwDoc("2024-01-19_merged-cells-on-separate-pages-vertical-alignement.odt");
+    createSwDoc("2024-01-19_merged-cells-on-separate-pages-vertical-alignment.odt");
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
