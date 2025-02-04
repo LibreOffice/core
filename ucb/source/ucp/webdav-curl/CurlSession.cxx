@@ -49,6 +49,11 @@
 #include <tuple>
 #include <utility>
 
+#ifndef _WIN32
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#endif
+
 using namespace ::com::sun::star;
 
 namespace
@@ -646,6 +651,67 @@ static auto ExtractRealm(ResponseHeaders const& rHeaders, char const* const pAut
     return buf.makeStringAndClear();
 }
 
+#ifndef _WIN32
+
+static std::string makeIPAddress(const sockaddr& ai_addr)
+{
+    char addrstr[INET6_ADDRSTRLEN];
+
+    static_assert(INET6_ADDRSTRLEN >= INET_ADDRSTRLEN, "ipv6 addresses are longer than ipv4");
+    const void* inAddr = nullptr;
+    switch (ai_addr.sa_family)
+    {
+        case AF_INET:
+        {
+            auto ipv4 = reinterpret_cast<const sockaddr_in*>(&ai_addr);
+            inAddr = &(ipv4->sin_addr);
+            break;
+        }
+        case AF_INET6:
+        {
+            auto ipv6 = reinterpret_cast<const sockaddr_in6*>(&ai_addr);
+            inAddr = &(ipv6->sin6_addr);
+            break;
+        }
+    }
+
+    if (!inAddr)
+    {
+        SAL_WARN("ucb.ucp.webdav.curl", "Unknown sa_family: " << ai_addr.sa_family);
+        return std::string();
+    }
+
+    const char* result = inet_ntop(ai_addr.sa_family, inAddr, addrstr, sizeof(addrstr));
+    if (!result)
+    {
+        SAL_WARN("ucb.ucp.webdav.curl", "inet_ntop failure");
+        return std::string();
+    }
+    return std::string(result);
+}
+
+// filter out connections to instance metadata
+static curl_socket_t opensocket_callback(void* /*clientp*/, curlsocktype purpose,
+                                         struct curl_sockaddr* address)
+{
+    if (purpose == CURLSOCKTYPE_IPCXN)
+    {
+        if (address->family == AF_INET && makeIPAddress(address->addr) == "169.254.169.254")
+        {
+            SAL_WARN("ucb.ucp.webdav.curl", "ignoring instance metadata ip");
+            return CURL_SOCKET_BAD;
+        }
+        else if (address->family == AF_INET6 && makeIPAddress(address->addr) == "fd00:ec2::254")
+        {
+            SAL_WARN("ucb.ucp.webdav.curl", "ignoring instance metadata ip");
+            return CURL_SOCKET_BAD;
+        }
+    }
+    return socket(address->family, address->socktype, address->protocol);
+}
+
+#endif
+
 CurlSession::CurlSession(uno::Reference<uno::XComponentContext> xContext,
                          ::rtl::Reference<DAVSessionFactory> const& rpFactory, OUString const& rURI,
                          uno::Sequence<beans::NamedValue> const& rFlags,
@@ -763,6 +829,14 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> xContext,
         rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_SSL_VERIFYHOST, 0L);
         assert(rc == CURLE_OK);
     }
+
+#ifndef _WIN32
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_OPENSOCKETFUNCTION, opensocket_callback);
+        assert(rc == CURLE_OK);
+    }
+#endif
 }
 
 CurlSession::~CurlSession() {}
