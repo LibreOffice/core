@@ -75,6 +75,8 @@ std::shared_ptr<rtl::Bootstrap> & UnoRc()
     return theRc;
 };
 
+#if !defined EMSCRIPTEN
+
 OUString generateOfficePipeId()
 {
     OUString userPath;
@@ -122,6 +124,8 @@ bool existsOfficePipe()
     ::osl::Pipe pipe( pipeId, osl_Pipe_OPEN, sec );
     return pipe.is();
 }
+
+#endif
 
 //get modification time
 bool getModifyTimeTargetFile(const OUString &rFileURL, TimeValue &rTime)
@@ -330,6 +334,9 @@ OUString expandUnoRcUrl( OUString const & url )
 
 bool office_is_running()
 {
+#if defined EMSCRIPTEN
+    return true;
+#else
     //We need to check if we run within the office process. Then we must not use the pipe, because
     //this could cause a deadlock. This is actually a workaround for i82778
     OUString sFile;
@@ -368,6 +375,7 @@ bool office_is_running()
         ret =  existsOfficePipe();
     }
     return ret;
+#endif
 }
 
 
