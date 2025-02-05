@@ -49,13 +49,11 @@ struct RenderContext
     SdrModel& mrModel;
 
     EEControlBits mnSavedControlBits;
-    Fraction maScale;
     ScopedVclPtrInstance<VirtualDevice> maVirtualDevice;
 
     RenderContext(unsigned char* pBuffer, SdrModel& rModel, SdrPage& rPage, Size const& rSlideSize,
                   const Fraction& rScale)
         : mrModel(rModel)
-        , maScale(rScale)
         , maVirtualDevice(DeviceFormat::WITHOUT_ALPHA)
     {
         // Turn off spelling
@@ -65,7 +63,7 @@ struct RenderContext
 
         maVirtualDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
-        maVirtualDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(rSlideSize, maScale, Point(),
+        maVirtualDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(rSlideSize, rScale, Point(),
                                                                    pBuffer);
         Size aPageSize(rPage.GetSize());
 

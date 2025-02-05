@@ -668,7 +668,6 @@ WindowImpl::WindowImpl( vcl::Window& rWindow, WindowType nType )
     mbPushButton                        = false;                     // true: PushButton is the base class
     mbToolBox                           = false;                     // true: ToolBox is the base class
     mbMenuFloatingWindow                = false;                     // true: MenuFloatingWindow is the base class
-    mbToolbarFloatingWindow             = false;                     // true: ImplPopupFloatWin is the base class, used for subtoolbars
     mbSplitter                          = false;                     // true: Splitter is the base class
     mbVisible                           = false;                     // true: Show( true ) called
     mbOverlapVisible                    = false;                     // true: Hide called for visible window from ImplHideAllOverlapWindow()

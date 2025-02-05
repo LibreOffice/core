@@ -383,7 +383,6 @@ public:
                         mbMenuFloatingWindow:1,
                         mbDrawSelectionBackground:1,
                         mbIsInTaskPaneList:1,
-                        mbToolbarFloatingWindow:1,
                         mbHelpTextDynamic:1,
                         mbFakeFocusSet:1,
                         mbHexpand:1,

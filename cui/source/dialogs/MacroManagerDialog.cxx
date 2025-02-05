@@ -642,7 +642,6 @@ MacroManagerDialog::MacroManagerDialog(weld::Window* pParent,
     , m_xScriptContainersListBox(
           new ScriptContainersListBox(m_xBuilder->weld_tree_view(u"scriptcontainers"_ustr), this))
     , m_xScriptsListBox(new ScriptsListBox(m_xBuilder->weld_tree_view(u"scripts"_ustr)))
-    , m_xScriptContainersListBoxLabel(m_xBuilder->weld_label(u"scriptcontainerlistboxlabel"_ustr))
     , m_xScriptsListBoxLabel(m_xBuilder->weld_label(u"scriptslistboxlabel"_ustr))
     , m_xRunButton(m_xBuilder->weld_button(u"run"_ustr))
     , m_xCloseButton(m_xBuilder->weld_button(u"close"_ustr))

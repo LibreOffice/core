@@ -74,7 +74,6 @@ namespace formula
         virtual sal_Unicode getSingleToken(const EToken _eToken) const = 0;
 
     protected:
-        bool changeFavouriteList;
         ~IFunctionManager() {}
     };
 

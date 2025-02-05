@@ -442,12 +442,6 @@ ImplPopupFloatWin::ImplPopupFloatWin( vcl::Window* pParent, bool bToolBox ) :
     FloatingWindow( pParent, bToolBox ? WB_BORDER | WB_POPUP | WB_SYSTEMWINDOW | WB_NOSHADOW : WB_STDPOPUP ),
     mbToolBox( bToolBox )
 {
-    if ( bToolBox )
-    {
-        // indicate window type, required for accessibility
-        // which should not see this window as a toplevel window
-        mpWindowImpl->mbToolbarFloatingWindow = true;
-    }
 }
 
 ImplPopupFloatWin::~ImplPopupFloatWin()

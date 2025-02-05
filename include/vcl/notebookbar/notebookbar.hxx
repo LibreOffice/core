@@ -60,7 +60,6 @@ private:
     Link<const SfxViewShell*, void> m_rDisposeLink;
 
     AllSettings DefaultSettings;
-    AllSettings PersonaSettings;
 
     void UpdateBackground();
 

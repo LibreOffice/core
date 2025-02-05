@@ -63,7 +63,6 @@ class AccessibilityCheckLevel
 {
 private:
     std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Box> m_xContainer;
     std::array<std::vector<std::unique_ptr<AccessibilityCheckEntry>>, 11> m_aEntries;
     std::array<std::unique_ptr<weld::Expander>, 11> m_xExpanders;
     std::array<std::unique_ptr<weld::Box>, 11> m_xBoxes;

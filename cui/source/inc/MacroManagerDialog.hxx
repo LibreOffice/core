@@ -178,10 +178,8 @@ class MacroManagerDialog : public weld::GenericDialogController, public SfxListe
     // For forwarding to Assign dialog
     css::uno::Reference<css::frame::XFrame> m_xDocumentFrame;
 
-    std::unique_ptr<weld::Label> m_xDialogDescription;
     std::unique_ptr<ScriptContainersListBox> m_xScriptContainersListBox;
     std::unique_ptr<ScriptsListBox> m_xScriptsListBox;
-    std::unique_ptr<weld::Label> m_xScriptContainersListBoxLabel;
     std::unique_ptr<weld::Label> m_xScriptsListBoxLabel;
     std::unique_ptr<weld::Button> m_xRunButton;
     std::unique_ptr<weld::Button> m_xCloseButton;
