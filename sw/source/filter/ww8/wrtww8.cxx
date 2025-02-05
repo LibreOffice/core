@@ -3443,21 +3443,6 @@ ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
     m_pRedlAuthors = nullptr;
     m_aTOXArr.clear();
 
-    if ( !m_oOLEExp )
-    {
-        sal_uInt32 nSvxMSDffOLEConvFlags = 0;
-        if (officecfg::Office::Common::Filter::Microsoft::Export::MathToMathType::get())
-            nSvxMSDffOLEConvFlags |= OLE_STARMATH_2_MATHTYPE;
-        if (officecfg::Office::Common::Filter::Microsoft::Export::WriterToWinWord::get())
-            nSvxMSDffOLEConvFlags |= OLE_STARWRITER_2_WINWORD;
-        if (officecfg::Office::Common::Filter::Microsoft::Export::CalcToExcel::get())
-            nSvxMSDffOLEConvFlags |= OLE_STARCALC_2_EXCEL;
-        if (officecfg::Office::Common::Filter::Microsoft::Export::ImpressToPowerPoint::get())
-            nSvxMSDffOLEConvFlags |= OLE_STARIMPRESS_2_POWERPOINT;
-
-        m_oOLEExp.emplace( nSvxMSDffOLEConvFlags );
-    }
-
     if ( !m_pOCXExp && m_rDoc.GetDocShell() )
         m_pOCXExp.reset(new SwMSConvertControls(m_rDoc.GetDocShell(), m_pCurPam.get()));
 
