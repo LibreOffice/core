@@ -238,7 +238,6 @@ public:
     /// Semantically identical to Normalize() member method.
     static bool Normalize( sal_uInt16 & rDay, sal_uInt16 & rMonth, sal_Int16 & rYear );
 
- private:
     /// An accelerated form of DateToDays on this date
     sal_Int32 GetAsNormalizedDays() const;
 };

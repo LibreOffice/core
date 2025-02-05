@@ -1047,7 +1047,7 @@ template<class D>
 static double lcl_DateToDouble( const D& rDate, const Date& rNullDate )
 {
     tools::Long nDate = Date::DateToDays( rDate.Day, rDate.Month, rDate.Year );
-    tools::Long nNullDate = Date::DateToDays( rNullDate.GetDay(), rNullDate.GetMonth(), rNullDate.GetYear() );
+    tools::Long nNullDate = rNullDate.GetAsNormalizedDays();
     return double( nDate - nNullDate );
 }
 
