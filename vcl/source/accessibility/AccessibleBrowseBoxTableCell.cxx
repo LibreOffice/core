@@ -63,12 +63,10 @@ void AccessibleBrowseBoxTableCell::implGetSelection( sal_Int32& nStartIndex, sal
     nEndIndex = 0;
 }
 
-AccessibleBrowseBoxTableCell::AccessibleBrowseBoxTableCell(const Reference<XAccessible >& _rxParent,
-                            vcl::IAccessibleTableProvider& _rBrowseBox,
-                            sal_Int32 _nRowPos,
-                            sal_uInt16 _nColPos,
-                            sal_Int32 _nOffset )
-    :AccessibleBrowseBoxCell(_rxParent, _rBrowseBox, nullptr, _nRowPos, _nColPos)
+AccessibleBrowseBoxTableCell::AccessibleBrowseBoxTableCell(
+    const Reference<XAccessible>& _rxParent, vcl::IAccessibleTableProvider& _rBrowseBox,
+    sal_Int32 _nRowPos, sal_uInt16 _nColPos, sal_Int32 _nOffset)
+    : ImplInheritanceHelper(_rxParent, _rBrowseBox, nullptr, _nRowPos, _nColPos)
 {
     m_nOffset = ( _nOffset == OFFSET_DEFAULT ) ? sal_Int32(vcl::BBINDEX_FIRSTCONTROL) : _nOffset;
     sal_Int32 nIndex = getIndex_Impl( _nRowPos, _nColPos, _rBrowseBox.GetColumnCount() );
@@ -78,29 +76,6 @@ AccessibleBrowseBoxTableCell::AccessibleBrowseBoxTableCell(const Reference<XAcce
     Reference< XComponent > xComponent(_rxParent, UNO_QUERY);
     if( xComponent.is() )
         xComponent->addEventListener(static_cast< XEventListener *> (this));
-}
-
-// XInterface -------------------------------------------------------------
-
-/** Queries for a new interface. */
-css::uno::Any SAL_CALL AccessibleBrowseBoxTableCell::queryInterface( const css::uno::Type& rType )
-{
-    Any aRet = AccessibleBrowseBoxCell::queryInterface(rType);
-    if ( !aRet.hasValue() )
-        aRet = AccessibleTextHelper_BASE::queryInterface(rType);
-    return aRet;
-}
-
-/** Acquires the object (calls acquire() on base class). */
-void SAL_CALL AccessibleBrowseBoxTableCell::acquire() noexcept
-{
-    AccessibleBrowseBoxCell::acquire();
-}
-
-/** Releases the object (calls release() on base class). */
-void SAL_CALL AccessibleBrowseBoxTableCell::release() noexcept
-{
-    AccessibleBrowseBoxCell::release();
 }
 
 css::awt::Rectangle SAL_CALL AccessibleBrowseBoxTableCell::getCharacterBounds( sal_Int32 nIndex )

@@ -23,14 +23,12 @@
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 
-typedef ::cppu::ImplHelper2 <   css::accessibility::XAccessibleText
-                            ,   css::accessibility::XAccessible
-                            >   AccessibleTextHelper_BASE;
-
 // implementation of a table cell of BrowseBox
-class AccessibleBrowseBoxTableCell final : public AccessibleBrowseBoxCell
-                                    ,public AccessibleTextHelper_BASE
-                                    ,public ::comphelper::OCommonAccessibleText
+class AccessibleBrowseBoxTableCell final
+    : public cppu::ImplInheritanceHelper<AccessibleBrowseBoxCell,
+                                         css::accessibility::XAccessibleText,
+                                         css::accessibility::XAccessible>,
+      public ::comphelper::OCommonAccessibleText
 {
 private:
     sal_Int32   m_nOffset;
@@ -46,17 +44,6 @@ public:
                                 sal_Int32 _nRowId,
                                 sal_uInt16 _nColId,
                                 sal_Int32 _nOffset );
-
-    // XInterface -------------------------------------------------------------
-
-    /** Queries for a new interface. */
-    css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
-
-    /** Acquires the object (calls acquire() on base class). */
-    virtual void SAL_CALL acquire() noexcept override;
-
-    /** Releases the object (calls release() on base class). */
-    virtual void SAL_CALL release() noexcept override;
 
     // XEventListener
     using AccessibleBrowseBoxBase::disposing;
