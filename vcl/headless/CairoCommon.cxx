@@ -1155,10 +1155,17 @@ bool CairoCommon::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
 
     if (pSystemDependentData_CairoPath)
     {
+        auto strokeEquals
+            = [](const std::vector<double>& rStroke1, const std::vector<double>* pStroke2) -> bool {
+            if (!pStroke2)
+                return rStroke1.empty();
+            return rStroke1 == *pStroke2;
+        };
         // check data validity
         if (nullptr == pSystemDependentData_CairoPath->getCairoPath()
             || pSystemDependentData_CairoPath->getNoJoin() != bNoJoin
             || pSystemDependentData_CairoPath->getAntiAlias() != bAntiAlias
+            || !strokeEquals(pSystemDependentData_CairoPath->getStroke(), pStroke)
             || bPixelSnapHairline /*tdf#124700*/)
         {
             // data invalid, forget
