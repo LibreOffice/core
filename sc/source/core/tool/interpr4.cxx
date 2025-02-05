@@ -2180,20 +2180,15 @@ double ScInterpreter::GetDouble()
 
 double ScInterpreter::GetDoubleWithDefault(double nDefault)
 {
-    bool bMissing = IsMissing();
-    double nResultVal = GetDouble();
-    if ( bMissing )
-        nResultVal = nDefault;
-    return nResultVal;
+    if (!IsMissing())
+        return GetDouble();
+    Pop();
+    return nDefault;
 }
 
 bool ScInterpreter::GetBoolWithDefault(bool bDefault)
 {
-    bool bMissing = IsMissing();
-    bool bResultVal = (GetDouble() != 0.0);
-    if (bMissing)
-        bResultVal = bDefault;
-    return bResultVal;
+    return GetDoubleWithDefault(bDefault ? 1.0 : 0.0) != 0.0;
 }
 
 sal_Int32 ScInterpreter::double_to_int32(double fVal)
@@ -2231,11 +2226,7 @@ sal_Int32 ScInterpreter::GetInt32()
 
 sal_Int32 ScInterpreter::GetInt32WithDefault( sal_Int32 nDefault )
 {
-    bool bMissing = IsMissing();
-    double fVal = GetDouble();
-    if ( bMissing )
-        return nDefault;
-    return double_to_int32(fVal);
+    return double_to_int32(GetDoubleWithDefault(nDefault));
 }
 
 sal_Int32 ScInterpreter::GetFloor32()
