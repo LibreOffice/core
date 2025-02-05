@@ -93,6 +93,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			ENABLE_IPV6=yes \
 			ENABLE_SSPI=yes \
 			ENABLE_WINSSL=yes \
+			WINBUILD_ACKNOWLEDGE_DEPRECATED=yes \
 			WITH_ZLIB=static \
 	,winbuild)
 	$(call gb_Trace_EndRange,curl,EXTERNAL)
