@@ -194,7 +194,7 @@ private:
 class AccessibleBrowseBoxAccess final : public ::vcl::IAccessibleBrowseBox
 {
 private:
-    mutable std::mutex                  m_aMutex;
+    mutable std::recursive_mutex m_aMutex;
     css::uno::Reference< css::accessibility::XAccessible >
                                         m_xParent;
     ::vcl::IAccessibleTableProvider&    m_rBrowseBox;
