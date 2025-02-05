@@ -79,6 +79,7 @@
 #include <svx/hlnkitem.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/sdtagitm.hxx>
+#include <svx/svdetc.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpagv.hxx>
@@ -207,6 +208,7 @@
 #include <iostream>
 #include <boost/property_tree/json_parser.hpp>
 #include <rtl/uri.hxx>
+#include <editeng/editeng.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -258,6 +260,55 @@ OUString getWeightString(SfxItemSet const & rItemSet)
 void lcl_LogWarning(const std::string& rWarning)
 {
     LOK_WARN("sd.transform", rWarning);
+}
+
+void lcl_UnoCommand(const std::string& rText)
+{
+    if (rText.size() > 0)
+    {
+        OUString aCmd;
+        std::vector<beans::PropertyValue> aArg;
+        std::size_t nSpace = rText.find(' ');
+        if (nSpace != std::string::npos)
+        {
+            aCmd = OStringToOUString(rText.substr(0, nSpace), RTL_TEXTENCODING_UTF8);
+            std::string aArgText = rText.substr(nSpace + 1);
+
+            aArg = comphelper::JsonToPropertyValues(aArgText);
+        }
+        else
+        {
+            aCmd = OStringToOUString(rText, RTL_TEXTENCODING_UTF8);
+        }
+
+        OUString aCmdSub;
+        if (aCmd.startsWith(".uno:"))
+        {
+            aCmdSub = aCmd.subView(5);
+        }
+        else
+        {
+            lcl_LogWarning("FillApi SlideCmd: uno command not recognized'" + rText + "'");
+            return;
+        }
+
+        // Check if the uno command is allowed
+        const std::map<std::u16string_view, KitUnoCommand>& rUnoCommandList
+            = GetKitUnoCommandList();
+        auto aCmdData = rUnoCommandList.find(aCmdSub);
+        if (aCmdData != rUnoCommandList.end())
+        {
+            // Make the uno command synchron
+            aArg.push_back(comphelper::makePropertyValue("SynchronMode", true));
+
+            // Todo: check why it does not work on my windows system
+            comphelper::dispatchCommand(aCmd, comphelper::containerToSequence(aArg));
+        }
+        else
+        {
+            lcl_LogWarning("FillApi SlideCmd: uno command not recognized'" + rText + "'");
+        }
+    }
 }
 
 class ClassificationCommon
@@ -787,8 +838,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 if (aItem.first == "Transforms")
                 {
                     // Handle all transformations
-                    for (const auto& aItem2 : aItem.second)
+                    for (const auto& aItem2Obj : aItem.second)
                     {
+                        // handle `"Transforms": { `  and `"Transforms": [` cases as well
+                        // if an element is an object `{...}`, then get the first element of the object
+                        const auto& aItem2
+                            = aItem2Obj.first == "" ? *aItem2Obj.second.ordered_begin() : aItem2Obj;
+
                         //jump to slide
                         if (aItem2.first == "SlideCommands")
                         {
@@ -796,7 +852,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                             int nNextPageId = 0;
                             for (const auto& aItem3Obj : aItem2.second)
                             {
-                                const auto& aItem3 = *aItem3Obj.second.ordered_begin();
+                                // It accept direct property, or object as well
+                                const auto& aItem3 = aItem3Obj.first == ""
+                                                         ? *aItem3Obj.second.ordered_begin()
+                                                         : aItem3Obj;
 
                                 sal_uInt16 nPageCount
                                     = GetDoc()->GetSdPageCount(PageKind::Standard);
@@ -1151,8 +1210,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                          || aItem3.first == "UnMarkObject")
                                 {
                                     bool bUnMark = aItem3.first == "UnMarkObject";
-                                    int nObjId
-                                        = static_cast<AutoLayout>(aItem3.second.get_value<int>());
+                                    int nObjId = aItem3.second.get_value<int>();
 
                                     SdPage* pPageStandard
                                         = GetDoc()->GetSdPage(nActPageId, PageKind::Standard);
@@ -1179,47 +1237,121 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                             + "' (Object Count = " + std::to_string(nObjId));
                                     }
                                 }
+
+                                else if (aItem3.first.starts_with("EditTextObject."))
+                                {
+                                    int nObjId = stoi(aItem3.first.substr(15));
+                                    SdPage* pPageStandard
+                                        = GetDoc()->GetSdPage(nActPageId, PageKind::Standard);
+                                    int nObjCount = pPageStandard->GetObjCount();
+                                    if (nObjId < 0)
+                                    {
+                                        lcl_LogWarning(
+                                            "FillApi SlideCmd EditTextObject: Object idx < 0. '"
+                                            + aItem3.first + "'");
+                                    }
+                                    else if (nObjId >= nObjCount)
+                                    {
+                                        lcl_LogWarning(
+                                            "FillApi SlideCmd EditTextObject: Object idx >= "
+                                            "Object Count. '"
+                                            + aItem3.first
+                                            + "' (Object Count = " + std::to_string(nPageCount));
+                                    }
+                                    else
+                                    {
+                                        SdrObject* pSdrObj = pPageStandard->GetObj(nObjId);
+                                        if (!pSdrObj->IsSdrTextObj())
+                                        {
+                                            lcl_LogWarning(
+                                                "FillApi SlideCmd EditTextObject: Object is "
+                                                "not a TextObject. '"
+                                                + aItem3.first + "'");
+                                        }
+                                        else
+                                        {
+                                            SdrTextObj* pSdrTxt = static_cast<SdrTextObj*>(pSdrObj);
+                                            SdrView* pView1 = GetView();
+                                            pView1->MarkObj(pSdrTxt, pView1->GetSdrPageView());
+                                            pView1->SdrBeginTextEdit(pSdrTxt);
+                                            EditView& rEditView
+                                                = pView1->GetTextEditOutlinerView()->GetEditView();
+                                            for (const auto& aItem4Obj : aItem3.second)
+                                            {
+                                                const auto& aItem4
+                                                    = aItem4Obj.first == ""
+                                                          ? *aItem4Obj.second.ordered_begin()
+                                                          : aItem4Obj;
+
+                                                if (aItem4.first == "SelectText")
+                                                {
+                                                    std::vector<int> aValues;
+                                                    for (const auto& aItem5 : aItem4.second)
+                                                    {
+                                                        //if == last?
+                                                        aValues.push_back(aItem5.second.get_value<int>());
+                                                    }
+                                                    if (aValues.size() == 0)
+                                                    {
+                                                        //select the whole text
+                                                        aValues.push_back(0);
+                                                        aValues.push_back(0);
+                                                        aValues.push_back(EE_PARA_MAX);
+                                                        aValues.push_back(EE_TEXTPOS_MAX);
+                                                    }
+                                                    else if (aValues.size() == 1)
+                                                    {
+                                                        //select the paragraph
+                                                        aValues.push_back(0);
+                                                        aValues.push_back(aValues[0]);
+                                                        aValues.push_back(EE_TEXTPOS_MAX);
+                                                    }
+                                                    else if (aValues.size() == 2)
+                                                    {
+                                                        // set the cursor without selecting anything
+                                                        aValues.push_back(aValues[0]);
+                                                        aValues.push_back(aValues[1]);
+                                                    }
+                                                    else if (aValues.size() == 3)
+                                                    {
+                                                        aValues.push_back(EE_TEXTPOS_MAX);
+                                                    }
+
+                                                    const ESelection rNewSel(aValues[0], aValues[1],
+                                                                             aValues[2], aValues[3]);
+                                                    rEditView.SetSelection(rNewSel);
+                                                }
+                                                else if (aItem4.first == "SelectParagraph")
+                                                {
+                                                    int nParaId = aItem4.second.get_value<int>();
+
+                                                    const ESelection rNewSel(nParaId, 0, nParaId,
+                                                                             EE_TEXTPOS_MAX);
+                                                    rEditView.SetSelection(rNewSel);
+                                                }
+                                                else if (aItem4.first == "InsertText")
+                                                {
+                                                    OUString aText = OStringToOUString(
+                                                        aItem4.second.get_value<std::string>(),
+                                                        RTL_TEXTENCODING_UTF8);
+                                                    // It select the inserted text also
+                                                    rEditView.InsertText(aText, true);
+                                                }
+                                                else if (aItem4.first == "UnoCommand")
+                                                {
+                                                    std::string aText
+                                                        = aItem4.second.get_value<std::string>();
+                                                    lcl_UnoCommand(aText);
+                                                }
+                                            }
+                                            pView1->SdrEndTextEdit();
+                                        }
+                                    }
+                                }
                                 else if (aItem3.first == "UnoCommand")
                                 {
                                     std::string aText = aItem3.second.get_value<std::string>();
-                                    if (aText.size() > 0)
-                                    {
-                                        OUString aCmd;
-                                        std::vector<beans::PropertyValue> aArg;
-                                        std::size_t nSpace = aText.find(' ');
-                                        if (nSpace != std::string::npos)
-                                        {
-                                            aCmd = OStringToOUString(aText.substr(0, nSpace),
-                                                                     RTL_TEXTENCODING_UTF8);
-                                            std::string aArgText = aText.substr(nSpace + 1);
-
-                                            aArg = comphelper::JsonToPropertyValues(aArgText);
-                                        }
-                                        else
-                                        {
-                                            aCmd = OStringToOUString(aText, RTL_TEXTENCODING_UTF8);
-                                        }
-
-                                        // Check if the uno command is allowed
-                                        const std::map<std::u16string_view, KitUnoCommand>& rUnoCommandList = GetKitUnoCommandList();
-                                        const bool bSupportedCmd = rUnoCommandList.find(aCmd) != rUnoCommandList.end();
-                                        if (bSupportedCmd)
-                                        {
-                                            // Make the uno command synchron
-                                            aArg.push_back(comphelper::makePropertyValue(
-                                                "SynchronMode", true));
-
-                                            // Todo: check why it does not work on my windows system
-                                            comphelper::dispatchCommand(
-                                                aCmd, comphelper::containerToSequence(aArg));
-                                        }
-                                        else
-                                        {
-                                            lcl_LogWarning(
-                                                "FillApi SlideCmd: uno command not recognized'"
-                                                + aText + "'");
-                                        }
-                                    }
+                                    lcl_UnoCommand(aText);
                                 }
                             }
                         }
