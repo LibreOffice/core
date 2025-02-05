@@ -136,11 +136,9 @@ struct AutoMarkEntry
 
 }
 
-typedef ::svt::EditBrowseBox SwEntryBrowseBox_Base;
-
 namespace {
 
-class SwEntryBrowseBox : public SwEntryBrowseBox_Base
+class SwEntryBrowseBox : public svt::EditBrowseBox
 {
     VclPtr<svt::EditControl> m_aCellEdit;
     VclPtr<svt::CheckBoxControl> m_aCellCheckBox;
@@ -3769,15 +3767,15 @@ void SwTOXStylesTabPage::Modify()
 #define ITEM_WORDONLY       7
 
 SwEntryBrowseBox::SwEntryBrowseBox(const css::uno::Reference<css::awt::XWindow> &rParent)
-    : SwEntryBrowseBox_Base(VCLUnoHelper::GetWindow(rParent), EditBrowseBoxFlags::NONE, WB_TABSTOP | WB_BORDER,
-                           BrowserMode::KEEPHIGHLIGHT |
-                           BrowserMode::COLUMNSELECTION |
-                           BrowserMode::MULTISELECTION |
-                           BrowserMode::TRACKING_TIPS |
-                           BrowserMode::HLINES |
-                           BrowserMode::VLINES |
-                           BrowserMode::AUTO_VSCROLL|
-                           BrowserMode::HIDECURSOR   )
+    : svt::EditBrowseBox(VCLUnoHelper::GetWindow(rParent), EditBrowseBoxFlags::NONE, WB_TABSTOP | WB_BORDER,
+                         BrowserMode::KEEPHIGHLIGHT |
+                         BrowserMode::COLUMNSELECTION |
+                         BrowserMode::MULTISELECTION |
+                         BrowserMode::TRACKING_TIPS |
+                         BrowserMode::HLINES |
+                         BrowserMode::VLINES |
+                         BrowserMode::AUTO_VSCROLL|
+                         BrowserMode::HIDECURSOR)
     , m_aCellEdit(VclPtr<svt::EditControl>::Create(&GetDataWindow()))
     , m_aCellCheckBox(VclPtr<svt::CheckBoxControl>::Create(&GetDataWindow()))
     , m_nCurrentRow(0)
@@ -3834,12 +3832,12 @@ void SwEntryBrowseBox::dispose()
 {
     m_aCellEdit.disposeAndClear();
     m_aCellCheckBox.disposeAndClear();
-    SwEntryBrowseBox_Base::dispose();
+    svt::EditBrowseBox::dispose();
 }
 
 void SwEntryBrowseBox::Resize()
 {
-    SwEntryBrowseBox_Base::Resize();
+    svt::EditBrowseBox::Resize();
 
     tools::Long nWidth = GetSizePixel().Width();
     std::vector<tools::Long> aWidths = GetOptimalColWidths();
