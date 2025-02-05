@@ -2181,6 +2181,38 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testHtmlCopyImages)
     CPPUNIT_ASSERT(aImage.startsWith("file:///"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf158198)
+{
+    createSwDoc("tdf158198.odt");
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(),
+                                                            uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xBookmarksByIdx->getCount());
+    uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"WORD"_ustr));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"PARAGRAPH"_ustr));
+
+    uno::Reference<text::XTextContent> xBookmark1(xBookmarksByName->getByName(u"WORD"_ustr),
+                                                  uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xAnchor1 = xBookmark1->getAnchor();
+
+    uno::Reference<text::XTextContent> xBookmark2(xBookmarksByName->getByName(u"PARAGRAPH"_ustr),
+                                                  uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xAnchor2 = xBookmark2->getAnchor();
+    CPPUNIT_ASSERT_EQUAL(u"{WORD}"_ustr, xAnchor1->getString());
+    CPPUNIT_ASSERT_EQUAL(u"{PARAGRAPH}"_ustr, xAnchor2->getString());
+
+    xAnchor1->setString("");
+    xAnchor2->setString("");
+
+    // Without the fix in place, this test would have failed here
+    // - Expected: 2
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xBookmarksByIdx->getCount());
+    CPPUNIT_ASSERT(xAnchor1->getString().isEmpty());
+    CPPUNIT_ASSERT(xAnchor2->getString().isEmpty());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf116789)
 {
     createSwDoc("tdf116789.fodt");
