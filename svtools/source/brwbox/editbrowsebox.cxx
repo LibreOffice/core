@@ -376,7 +376,7 @@ namespace svt
             case KEY_RETURN:
                 if (!bCtrl && !bShift && IsTabAllowed(true))
                 {
-                    Dispatch(BROWSER_CURSORRIGHT);
+                    Dispatch(BrowserDispatchId::CURSORRIGHT);
                 }
                 else
                     BrowseBox::KeyInput(rEvt);
@@ -385,7 +385,7 @@ namespace svt
                 if (!bCtrl && !bShift)
                 {
                     if (IsTabAllowed(true))
-                        Dispatch(BROWSER_CURSORRIGHT);
+                        Dispatch(BrowserDispatchId::CURSORRIGHT);
                     else
                         // do NOT call BrowseBox::KeyInput : this would handle the tab, but we already now
                         // that tab isn't allowed here. So give the Control class a chance
@@ -395,7 +395,7 @@ namespace svt
                 else if (!bCtrl && bShift)
                 {
                     if (IsTabAllowed(false))
-                        Dispatch(BROWSER_CURSORLEFT);
+                        Dispatch(BrowserDispatchId::CURSORLEFT);
                     else
                         // do NOT call BrowseBox::KeyInput : this would handle the tab, but we already now
                         // that tab isn't allowed here. So give the Control class a chance
@@ -492,13 +492,13 @@ namespace svt
         aController->ActivatingMouseEvent(_rEvt, _bUp);
     }
 
-    void EditBrowseBox::Dispatch( sal_uInt16 _nId )
+    void EditBrowseBox::Dispatch(BrowserDispatchId eId)
     {
-        if ( _nId == BROWSER_ENHANCESELECTION )
+        if (eId == BrowserDispatchId::ENHANCESELECTION)
         {   // this is a workaround for the bug in the base class:
-            // if the row selection is to be extended (which is what BROWSER_ENHANCESELECTION tells us)
+            // if the row selection is to be extended (which is what BrowserDispatchId::ENHANCESELECTION tells us)
             // then the base class does not revert any column selections, while, for doing a "simple"
-            // selection (BROWSER_SELECT), it does. In fact, it does not only revert the col selection then,
+            // selection (BrowserDispatchId::SELECT), it does. In fact, it does not only revert the col selection then,
             // but also any current row selections.
             // This clearly tells me that the both ids are for row selection only - there this behaviour does
             // make sense.
@@ -512,7 +512,7 @@ namespace svt
                 Select();
             }
         }
-        BrowseBox::Dispatch( _nId );
+        BrowseBox::Dispatch(eId);
     }
 
     bool EditBrowseBox::ProcessKey(const KeyEvent& rKeyEvent)
@@ -523,22 +523,34 @@ namespace svt
         bool       bAlt =   rKeyEvent.GetKeyCode().IsMod2();
         bool       bLocalSelect = false;
         bool       bNonEditOnly = false;
-        sal_uInt16 nId = BROWSER_NONE;
+        BrowserDispatchId eId = BrowserDispatchId::NONE;
 
         if (!bAlt && !bCtrl && !bShift )
             switch ( nCode )
             {
-                case KEY_DOWN:          nId = BROWSER_CURSORDOWN; break;
-                case KEY_UP:            nId = BROWSER_CURSORUP; break;
-                case KEY_PAGEDOWN:      nId = BROWSER_CURSORPAGEDOWN; break;
-                case KEY_PAGEUP:        nId = BROWSER_CURSORPAGEUP; break;
-                case KEY_HOME:          nId = BROWSER_CURSORHOME; break;
-                case KEY_END:           nId = BROWSER_CURSOREND; break;
+                case KEY_DOWN:
+                    eId = BrowserDispatchId::CURSORDOWN;
+                    break;
+                case KEY_UP:
+                    eId = BrowserDispatchId::CURSORUP;
+                    break;
+                case KEY_PAGEDOWN:
+                    eId = BrowserDispatchId::CURSORPAGEDOWN;
+                    break;
+                case KEY_PAGEUP:
+                    eId = BrowserDispatchId::CURSORPAGEUP;
+                    break;
+                case KEY_HOME:
+                    eId = BrowserDispatchId::CURSORHOME;
+                    break;
+                case KEY_END:
+                    eId = BrowserDispatchId::CURSOREND;
+                    break;
 
                 case KEY_TAB:
                     // ask if traveling to the next cell is allowed
                     if (IsTabAllowed(true))
-                        nId = BROWSER_CURSORRIGHT;
+                        eId = BrowserDispatchId::CURSORRIGHT;
                     break;
 
                 case KEY_RETURN:
@@ -552,56 +564,87 @@ namespace svt
                     }
                     // ask if traveling to the next cell is allowed
                     if (IsTabAllowed(true))
-                        nId = BROWSER_CURSORRIGHT;
+                        eId = BrowserDispatchId::CURSORRIGHT;
 
                     break;
-                case KEY_RIGHT:         nId = BROWSER_CURSORRIGHT; break;
-                case KEY_LEFT:          nId = BROWSER_CURSORLEFT; break;
-                case KEY_SPACE:         nId = BROWSER_SELECT; bNonEditOnly = bLocalSelect = true; break;
+                case KEY_RIGHT:
+                    eId = BrowserDispatchId::CURSORRIGHT;
+                    break;
+                case KEY_LEFT:
+                    eId = BrowserDispatchId::CURSORLEFT;
+                    break;
+                case KEY_SPACE:
+                    eId = BrowserDispatchId::SELECT;
+                    bNonEditOnly = bLocalSelect = true;
+                    break;
             }
 
         if ( !bAlt && !bCtrl && bShift )
             switch ( nCode )
             {
-                case KEY_DOWN:          nId = BROWSER_SELECTDOWN; bLocalSelect = true; break;
-                case KEY_UP:            nId = BROWSER_SELECTUP; bLocalSelect = true; break;
-                case KEY_HOME:          nId = BROWSER_SELECTHOME; bLocalSelect = true; break;
-                case KEY_END:           nId = BROWSER_SELECTEND; bLocalSelect = true; break;
+                case KEY_DOWN:
+                    eId = BrowserDispatchId::SELECTDOWN;
+                    bLocalSelect = true;
+                    break;
+                case KEY_UP:
+                    eId = BrowserDispatchId::SELECTUP;
+                    bLocalSelect = true;
+                    break;
+                case KEY_HOME:
+                    eId = BrowserDispatchId::SELECTHOME;
+                    bLocalSelect = true;
+                    break;
+                case KEY_END:
+                    eId = BrowserDispatchId::SELECTEND;
+                    bLocalSelect = true;
+                    break;
                 case KEY_TAB:
                     if (IsTabAllowed(false))
-                        nId = BROWSER_CURSORLEFT;
+                        eId = BrowserDispatchId::CURSORLEFT;
                     break;
             }
 
         if ( !bAlt && bCtrl && bShift )
             switch ( nCode )
             {
-                case KEY_SPACE:         nId = BROWSER_SELECTCOLUMN; bLocalSelect = true; break;
+                case KEY_SPACE:
+                    eId = BrowserDispatchId::SELECTCOLUMN;
+                    bLocalSelect = true;
+                    break;
             }
 
 
         if ( !bAlt && bCtrl && !bShift )
             switch ( nCode )
             {
-                case KEY_DOWN:          nId = BROWSER_SCROLLUP; break;
-                case KEY_UP:            nId = BROWSER_SCROLLDOWN; break;
-                case KEY_PAGEDOWN:      nId = BROWSER_CURSORENDOFFILE; break;
-                case KEY_PAGEUP:        nId = BROWSER_CURSORTOPOFFILE; break;
-                case KEY_HOME:          nId = BROWSER_CURSORTOPOFSCREEN; break;
-                case KEY_END:           nId = BROWSER_CURSORENDOFSCREEN; break;
-                case KEY_SPACE:         nId = BROWSER_ENHANCESELECTION; bLocalSelect = true; break;
+                case KEY_DOWN:
+                    eId = BrowserDispatchId::SCROLLUP;
+                    break;
+                case KEY_UP:
+                    eId = BrowserDispatchId::SCROLLDOWN;
+                    break;
+                case KEY_PAGEDOWN:
+                    eId = BrowserDispatchId::CURSORENDOFFILE;
+                    break;
+                case KEY_PAGEUP:
+                    eId = BrowserDispatchId::CURSORTOPOFFILE;
+                    break;
+                case KEY_HOME:
+                    eId = BrowserDispatchId::CURSORTOPOFSCREEN;
+                    break;
+                case KEY_END:
+                    eId = BrowserDispatchId::CURSORENDOFSCREEN;
+                    break;
+                case KEY_SPACE:
+                    eId = BrowserDispatchId::ENHANCESELECTION;
+                    bLocalSelect = true;
+                    break;
             }
 
-
-        if  (   ( nId != BROWSER_NONE )
-            &&  (   !IsEditing()
-                ||  (   !bNonEditOnly
-                    &&  aController->MoveAllowed(rKeyEvent)
-                    )
-                )
-            )
+        if ((eId != BrowserDispatchId::NONE)
+            && (!IsEditing() || (!bNonEditOnly && aController->MoveAllowed(rKeyEvent))))
         {
-            if (nId == BROWSER_SELECT || BROWSER_SELECTCOLUMN == nId )
+            if (eId == BrowserDispatchId::SELECT || BrowserDispatchId::SELECTCOLUMN == eId)
             {
                 // save the cell content (if necessary)
                 if (IsEditing() && aController->IsValueChangedFromSaved() && !SaveModified())
@@ -613,7 +656,7 @@ namespace svt
                 }
             }
 
-            Dispatch(nId);
+            Dispatch(eId);
 
             if (bLocalSelect && (GetSelectRowCount() || GetSelection() != nullptr))
                 DeactivateCell();

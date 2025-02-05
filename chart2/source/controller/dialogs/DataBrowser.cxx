@@ -940,7 +940,7 @@ void DataBrowser::MoveLeftColumn()
     // keep cursor in swapped column
     if(( 0 < GetCurColumnId() ) && ( GetCurColumnId() <= ColCount() - 1 ))
     {
-        Dispatch( BROWSER_CURSORLEFT );
+        Dispatch(BrowserDispatchId::CURSORLEFT);
     }
     RenewTable();
 }
@@ -961,7 +961,7 @@ void DataBrowser::MoveRightColumn()
     // keep cursor in swapped column
     if( GetCurColumnId() < ColCount() - 1 )
     {
-        Dispatch( BROWSER_CURSORRIGHT );
+        Dispatch(BrowserDispatchId::CURSORRIGHT);
     }
     RenewTable();
 }
@@ -982,7 +982,7 @@ void DataBrowser::MoveUpRow()
     // keep cursor in swapped row
     if(( 0 < GetCurRow() ) && ( GetCurRow() <= GetRowCount() - 1 ))
     {
-        Dispatch( BROWSER_CURSORUP );
+        Dispatch(BrowserDispatchId::CURSORUP);
     }
     RenewTable();
 }
@@ -1003,7 +1003,7 @@ void DataBrowser::MoveDownRow()
     // keep cursor in swapped row
     if( GetCurRow() < GetRowCount() - 1 )
     {
-        Dispatch( BROWSER_CURSORDOWN );
+        Dispatch(BrowserDispatchId::CURSORDOWN);
     }
     RenewTable();
 }

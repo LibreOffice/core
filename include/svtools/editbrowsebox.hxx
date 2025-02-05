@@ -1059,7 +1059,7 @@ namespace svt
         // late construction
         virtual void Init();
         virtual void RemoveRows();
-        virtual void Dispatch(sal_uInt16 nId);
+        virtual void Dispatch(BrowserDispatchId eId);
 
         const CellControllerRef& Controller() const { return aController; }
         EditBrowseBoxFlags  GetBrowserFlags() const { return m_nBrowserFlags; }

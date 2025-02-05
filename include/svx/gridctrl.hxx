@@ -407,7 +407,7 @@ public:
     // the options can restrict but not extend the update abilities
     void setDataSource(const css::uno::Reference< css::sdbc::XRowSet >& rCursor,
         DbGridControlOptions nOpts = DbGridControlOptions::Insert | DbGridControlOptions::Update | DbGridControlOptions::Delete);
-    virtual void Dispatch(sal_uInt16 nId) override;
+    virtual void Dispatch(BrowserDispatchId eId) override;
 
     CursorWrapper* getDataSource() const {return m_pDataCursor.get();}
     const std::vector< std::unique_ptr<DbGridColumn> >& GetColumns() const {return m_aColumns;}

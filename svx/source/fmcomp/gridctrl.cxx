@@ -2749,9 +2749,9 @@ void DbGridControl::CellModified()
     }
 }
 
-void DbGridControl::Dispatch(sal_uInt16 nId)
+void DbGridControl::Dispatch(BrowserDispatchId eId)
 {
-    if (nId == BROWSER_CURSORENDOFFILE)
+    if (eId == BrowserDispatchId::CURSORENDOFFILE)
     {
         if (m_nOptions & DbGridControlOptions::Insert)
             AppendNew();
@@ -2759,7 +2759,7 @@ void DbGridControl::Dispatch(sal_uInt16 nId)
             MoveToLast();
     }
     else
-        EditBrowseBox::Dispatch(nId);
+        EditBrowseBox::Dispatch(eId);
 }
 
 void DbGridControl::Undo()

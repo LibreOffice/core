@@ -82,31 +82,33 @@ namespace o3tl
     template<> struct typed_flags<BrowserMode> : is_typed_flags<BrowserMode, 0x2cf73b> {};
 }
 
-#define BROWSER_NONE                      0
-#define BROWSER_SELECT                  720
-#define BROWSER_ENHANCESELECTION        722
-#define BROWSER_SELECTDOWN              724
-#define BROWSER_SELECTUP                725
-#define BROWSER_CURSORDOWN              731
-#define BROWSER_CURSORUP                732
-#define BROWSER_CURSORLEFT              733
-#define BROWSER_CURSORRIGHT             734
-#define BROWSER_CURSORPAGEDOWN          735
-#define BROWSER_CURSORPAGEUP            736
-#define BROWSER_CURSORENDOFFILE         741
-#define BROWSER_CURSORTOPOFFILE         742
-#define BROWSER_CURSORENDOFSCREEN       743
-#define BROWSER_CURSORTOPOFSCREEN       744
-#define BROWSER_CURSORHOME              745
-#define BROWSER_CURSOREND               746
-#define BROWSER_SCROLLDOWN              751
-#define BROWSER_SCROLLUP                752
-#define BROWSER_SELECTHOME              753
-#define BROWSER_SELECTEND               754
-#define BROWSER_SELECTCOLUMN            755
-#define BROWSER_MOVECOLUMNLEFT          756
-#define BROWSER_MOVECOLUMNRIGHT         757
-
+enum class BrowserDispatchId
+{
+    NONE,
+    SELECT,
+    ENHANCESELECTION,
+    SELECTDOWN,
+    SELECTUP,
+    CURSORDOWN,
+    CURSORUP,
+    CURSORLEFT,
+    CURSORRIGHT,
+    CURSORPAGEDOWN,
+    CURSORPAGEUP,
+    CURSORENDOFFILE,
+    CURSORTOPOFFILE,
+    CURSORENDOFSCREEN,
+    CURSORTOPOFSCREEN,
+    CURSORHOME,
+    CURSOREND,
+    SCROLLDOWN,
+    SCROLLUP,
+    SELECTHOME,
+    SELECTEND,
+    SELECTCOLUMN,
+    MOVECOLUMNLEFT,
+    MOVECOLUMNRIGHT,
+};
 
 class BrowseEvent
 {
@@ -593,7 +595,7 @@ public:
     virtual bool    ProcessKey(const KeyEvent& rEvt);
     virtual void    ChildFocusIn();
     virtual void    ChildFocusOut();
-    SAL_DLLPRIVATE void Dispatch( sal_uInt16 nId );
+    SAL_DLLPRIVATE void Dispatch(BrowserDispatchId eId);
     void            SetMode( BrowserMode nMode );
     BrowserMode     GetMode( ) const { return m_nCurrentMode; }
 
