@@ -17,17 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
+#include <sal/config.h>
+
+#include <vector>
+#include <unordered_map>
+
 #include <global.hxx>
 #include <cellkeytranslator.hxx>
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nutil/transliteration.hxx>
-#include <rtl/ustring.hxx>
 #include <unotools/syslocale.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
-
-using ::com::sun::star::uno::Sequence;
+#include <unotools/transliterationwrapper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -42,44 +43,42 @@ enum LocaleMatch
     LOCALE_MATCH_ALL
 };
 
-}
-
-static LocaleMatch lclLocaleCompare(const lang::Locale& rLocale1, const LanguageTag& rLanguageTag2)
+LocaleMatch lclLocaleCompare(const lang::Locale& rLocale1, const LanguageTag& rLanguageTag2)
 {
-    LocaleMatch eMatchLevel = LOCALE_MATCH_NONE;
     LanguageTag aLanguageTag1( rLocale1);
 
-    if ( aLanguageTag1.getLanguage() == rLanguageTag2.getLanguage() )
-        eMatchLevel = LOCALE_MATCH_LANG;
-    else
-        return eMatchLevel;
+    if (aLanguageTag1.getLanguage() != rLanguageTag2.getLanguage())
+        return LOCALE_MATCH_NONE;
 
-    if ( aLanguageTag1.getScript() == rLanguageTag2.getScript() )
-        eMatchLevel = LOCALE_MATCH_LANG_SCRIPT;
-    else
-        return eMatchLevel;
+    if (aLanguageTag1.getScript() != rLanguageTag2.getScript())
+        return LOCALE_MATCH_LANG;
 
-    if ( aLanguageTag1.getCountry() == rLanguageTag2.getCountry() )
-        eMatchLevel = LOCALE_MATCH_LANG_SCRIPT_COUNTRY;
-    else
-        return eMatchLevel;
+    if (aLanguageTag1.getCountry() != rLanguageTag2.getCountry())
+        return LOCALE_MATCH_LANG_SCRIPT;
 
-    if (aLanguageTag1 == rLanguageTag2)
-        return LOCALE_MATCH_ALL;
+    if (aLanguageTag1 != rLanguageTag2)
+        return LOCALE_MATCH_LANG_SCRIPT_COUNTRY;
 
-    return eMatchLevel;
+    return LOCALE_MATCH_ALL;
 }
 
-ScCellKeyword::ScCellKeyword(const OUString& sName, OpCode eOpCode, const lang::Locale& rLocale) :
-    msName(sName),
-    meOpCode(eOpCode),
-    mrLocale(rLocale)
+struct ScCellKeyword
 {
-}
+    OUString msName;
+    OpCode meOpCode;
+    const css::lang::Locale& mrLocale;
 
-::std::unique_ptr<ScCellKeywordTranslator> ScCellKeywordTranslator::spInstance;
+    ScCellKeyword(const OUString& sName, OpCode eOpCode, const css::lang::Locale& rLocale)
+        : msName(sName)
+        , meOpCode(eOpCode)
+        , mrLocale(rLocale)
+    {
+    }
+};
 
-static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
+typedef std::unordered_map<OUString, std::vector<ScCellKeyword>> ScCellKeywordHashMap;
+
+void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
                             OpCode eOpCode, const lang::Locale* pLocale)
 {
     ScCellKeywordHashMap::const_iterator itrEnd = aMap.end();
@@ -160,35 +159,22 @@ static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
         rName = *aBestMatchName;
 }
 
-void ScCellKeywordTranslator::transKeyword(OUString& rName, const lang::Locale* pLocale, OpCode eOpCode)
+ScCellKeywordHashMap MakeMap()
 {
-    if (!spInstance)
-        spInstance.reset( new ScCellKeywordTranslator );
+    ScCellKeywordHashMap map;
 
-    LanguageType nLang = pLocale ?
-        LanguageTag(*pLocale).makeFallback().getLanguageType() : ScGlobal::oSysLocale->GetLanguageTag().getLanguageType();
-    Sequence<sal_Int32> aOffsets;
-    rName = spInstance->maTransWrapper.transliterate(rName, nLang, 0, rName.getLength(), &aOffsets);
-    lclMatchKeyword(rName, spInstance->maStringNameMap, eOpCode, pLocale);
-}
-
-struct TransItem
-{
-    OUString            from;
-    OUString            to;
-    OpCode              func;
-};
-
-ScCellKeywordTranslator::ScCellKeywordTranslator() :
-    maTransWrapper( ::comphelper::getProcessComponentContext(),
-                    TransliterationFlags::LOWERCASE_UPPERCASE )
-{
     // All keywords must be uppercase, and the mapping must be from the
     // localized keyword to the English keyword.
+    struct TransItem
+    {
+        OUString from;
+        OUString to;
+        OpCode func;
+    };
 
     // French language locale
 
-    static const lang::Locale aFr(u"fr"_ustr, u""_ustr, u""_ustr);
+    static const lang::Locale aFr(u"fr"_ustr, {}, {});
 
     static constexpr TransItem pFr[] = {
         { u"ADRESSE"_ustr, u"ADDRESS"_ustr, ocCell },
@@ -208,11 +194,11 @@ ScCellKeywordTranslator::ScCellKeywordTranslator() :
     };
 
     for (const auto& element : pFr)
-        addToMap(element.from, element.to, aFr, element.func);
+        map[element.from].emplace_back(element.to, element.func, aFr);
 
     // Hungarian language locale
 
-    static const lang::Locale aHu(u"hu"_ustr, u""_ustr, u""_ustr);
+    static const lang::Locale aHu(u"hu"_ustr, {}, {});
 
     static constexpr TransItem pHu[] = {
         { u"CÍM"_ustr, u"ADDRESS"_ustr, ocCell },
@@ -236,11 +222,11 @@ ScCellKeywordTranslator::ScCellKeywordTranslator() :
     };
 
     for (const auto& element : pHu)
-        addToMap(element.from, element.to, aHu, element.func);
+        map[element.from].emplace_back(element.to, element.func, aHu);
 
     // German language locale
 
-    static const lang::Locale aDe(u"de"_ustr, u""_ustr, u""_ustr);
+    static const lang::Locale aDe(u"de"_ustr, {}, {});
 
     static constexpr TransItem pDe[] = {
         { u"ZEILE"_ustr, u"ROW"_ustr, ocCell },
@@ -259,28 +245,24 @@ ScCellKeywordTranslator::ScCellKeywordTranslator() :
     };
 
     for (const auto& element : pDe)
-        addToMap(element.from, element.to, aDe, element.func);
+        map[element.from].emplace_back(element.to, element.func, aDe);
+
+    return map;
 }
 
-ScCellKeywordTranslator::~ScCellKeywordTranslator()
+} // namespace
+
+void ScCellKeywordTranslator::transKeyword(OUString& rName, const css::lang::Locale* pLocale,
+                                           OpCode eOpCode)
 {
-}
+    static const ScCellKeywordHashMap saStringNameMap(MakeMap());
+    static utl::TransliterationWrapper saTransWrapper(comphelper::getProcessComponentContext(),
+                                                      TransliterationFlags::LOWERCASE_UPPERCASE);
 
-void ScCellKeywordTranslator::addToMap(const OUString& rKey, const OUString& pName, const lang::Locale& rLocale, OpCode eOpCode)
-{
-    ScCellKeyword aKeyItem( pName, eOpCode, rLocale );
-
-    ScCellKeywordHashMap::iterator itrEnd = maStringNameMap.end();
-    ScCellKeywordHashMap::iterator itr = maStringNameMap.find(rKey);
-
-    if ( itr == itrEnd )
-    {
-        // New keyword.
-        std::vector<ScCellKeyword> aVector { std::move(aKeyItem) };
-        maStringNameMap.emplace(rKey, aVector);
-    }
-    else
-        itr->second.emplace_back(std::move(aKeyItem));
+    const LanguageType nLang = pLocale ? LanguageTag(*pLocale).makeFallback().getLanguageType()
+                                       : ScGlobal::oSysLocale->GetLanguageTag().getLanguageType();
+    rName = saTransWrapper.transliterate(rName, nLang, 0, rName.getLength(), nullptr);
+    lclMatchKeyword(rName, saStringNameMap, eOpCode, pLocale);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

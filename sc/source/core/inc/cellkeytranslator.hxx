@@ -20,34 +20,18 @@
 #pragma once
 
 #include <formula/opcode.hxx>
-#include <unotools/transliterationwrapper.hxx>
-#include <vector>
-#include <memory>
-#include <unordered_map>
+#include <rtl/ustring.hxx>
 
 namespace com::sun::star::lang
 {
 struct Locale;
 }
 
-struct TransItem;
-
-struct ScCellKeyword
-{
-    OUString msName;
-    OpCode meOpCode;
-    const css::lang::Locale& mrLocale;
-
-    ScCellKeyword(const OUString& sName, OpCode eOpCode, const css::lang::Locale& rLocale);
-};
-
-typedef std::unordered_map<OUString, ::std::vector<ScCellKeyword>> ScCellKeywordHashMap;
-
 /** Translate cell function keywords.
 
-    This class provides a convenient way to translate a string keyword used as
+    Provides a convenient way to translate a string keyword used as
     a cell function argument.  Since Calc's built-in cell functions don't
-    localize string keywords, this class is used mainly to deal with an Excel
+    localize string keywords, this is used mainly to deal with an Excel
     document where string names may be localized.
 
     To use, simply call the
@@ -61,21 +45,9 @@ typedef std::unordered_map<OUString, ::std::vector<ScCellKeyword>> ScCellKeyword
     fails to find one that satisfies the specified locale and/or opcode, it
     returns a translated string with non-matching locale and/or opcode if
     available. */
-class ScCellKeywordTranslator
+namespace ScCellKeywordTranslator
 {
-public:
-    static void transKeyword(OUString& rName, const css::lang::Locale* pLocale, OpCode eOpCode);
-    ~ScCellKeywordTranslator();
-
-private:
-    ScCellKeywordTranslator();
-
-    void addToMap(const OUString& rKey, const OUString& pName, const css::lang::Locale& rLocale,
-                  OpCode eOpCode);
-
-    static ::std::unique_ptr<ScCellKeywordTranslator> spInstance;
-    ScCellKeywordHashMap maStringNameMap;
-    ::utl::TransliterationWrapper maTransWrapper;
+void transKeyword(OUString& rName, const css::lang::Locale* pLocale, OpCode eOpCode);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
