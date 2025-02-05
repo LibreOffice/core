@@ -644,6 +644,7 @@ public:
     JSToolbar(JSDialogSender* pSender, ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder,
               bool bTakeOwnership);
 
+    virtual void set_item_active(const OUString& rIdent, bool bActive) override;
     virtual void set_menu_item_active(const OUString& rIdent, bool bActive) override;
     virtual void set_item_sensitive(const OUString& rIdent, bool bSensitive) override;
     virtual void set_item_icon_name(const OUString& rIdent, const OUString& rIconName) override;
