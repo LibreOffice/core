@@ -601,7 +601,7 @@ namespace sax_fastparser {
                 maMarkStack.top()->m_DebugStartedElements.pop_front();
             }
 #endif
-            Sequence<sal_Int8> aSeq( maMarkStack.top()->getData() );
+            Int8Sequence aSeq( maMarkStack.top()->getData() );
             maMarkStack.pop();
             mbMarkStackEmpty = true;
             maCachedOutputStream.resetOutputToStream();
@@ -698,7 +698,7 @@ namespace sax_fastparser {
         maCachedOutputStream.writeBytes( reinterpret_cast<const sal_Int8*>(pStr), nLen );
     }
 
-    FastSaxSerializer::Int8Sequence& FastSaxSerializer::ForMerge::getData()
+    Int8Sequence& FastSaxSerializer::ForMerge::getData()
     {
         merge( maData, maPostponed, true );
         maPostponed.realloc( 0 );
@@ -730,7 +730,7 @@ namespace sax_fastparser {
         merge( maData, rWhat, false );
     }
 
-    void FastSaxSerializer::ForMerge::append( const css::uno::Sequence<sal_Int8> &rWhat )
+    void FastSaxSerializer::ForMerge::append( const Int8Sequence &rWhat )
     {
         merge( maData, rWhat, true );
     }
@@ -783,7 +783,7 @@ namespace sax_fastparser {
         append( rWhat );
     }
 
-    void FastSaxSerializer::ForSort::append( const css::uno::Sequence<sal_Int8> &rWhat )
+    void FastSaxSerializer::ForSort::append( const Int8Sequence &rWhat )
     {
         merge( maData[mnCurrentElement], rWhat, true );
     }
@@ -803,7 +803,7 @@ namespace sax_fastparser {
         }
     }
 
-    FastSaxSerializer::Int8Sequence& FastSaxSerializer::ForSort::getData()
+    Int8Sequence& FastSaxSerializer::ForSort::getData()
     {
         sort( );
         return ForMerge::getData();

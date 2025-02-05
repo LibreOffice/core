@@ -45,7 +45,6 @@ typedef std::vector<TokenValue> TokenValueList;
 /// Receives notification of sax document events to write into an XOutputStream.
 class FastSaxSerializer
 {
-    typedef css::uno::Sequence< ::sal_Int8 > Int8Sequence;
     typedef css::uno::Sequence< ::sal_Int32 > Int32Sequence;
 
 public:
@@ -189,7 +188,7 @@ private:
 #endif
 
         virtual void prepend( const Int8Sequence &rWhat );
-        virtual void append( const css::uno::Sequence<sal_Int8> &rWhat ) override;
+        virtual void append( const Int8Sequence &rWhat ) override;
         void postpone( const Int8Sequence &rWhat );
 
     protected:
@@ -220,7 +219,7 @@ private:
 #endif
 
         virtual void prepend( const Int8Sequence &rWhat ) override;
-        virtual void append( const css::uno::Sequence<sal_Int8> &rWhat ) override;
+        virtual void append( const Int8Sequence &rWhat ) override;
     private:
         void sort();
     };
