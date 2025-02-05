@@ -293,7 +293,9 @@ bool SfxPoolItem::areSame(const SfxPoolItem& rItem1, const SfxPoolItem& rItem2)
 
 namespace
 {
-class InvalidOrDisabledItem final : public SfxPoolItem
+// tdf#164745 make InvalidItem and DisabledItem two classes to
+// avoi d that op== sees them as equal
+class InvalidItem final : public SfxPoolItem
 {
     virtual bool operator==(const SfxPoolItem&) const override { return true; }
     virtual SfxPoolItem* Clone(SfxItemPool*) const override { return nullptr; }
@@ -301,15 +303,30 @@ class InvalidOrDisabledItem final : public SfxPoolItem
 public:
     // make it StaticDefaultItem to process similar to these
     // which is plausible (never change and are not allowed to)
-    DECLARE_ITEM_TYPE_FUNCTION(InvalidOrDisabledItem)
-    InvalidOrDisabledItem()
+    DECLARE_ITEM_TYPE_FUNCTION(InvalidItem)
+    InvalidItem()
         : SfxPoolItem(0)
     {
         setStaticDefault();
     }
 };
-InvalidOrDisabledItem aInvalidItem;
-InvalidOrDisabledItem aDisabledItem;
+class DisabledItem final : public SfxPoolItem
+{
+    virtual bool operator==(const SfxPoolItem&) const override { return true; }
+    virtual SfxPoolItem* Clone(SfxItemPool*) const override { return nullptr; }
+
+public:
+    // make it StaticDefaultItem to process similar to these
+    // which is plausible (never change and are not allowed to)
+    DECLARE_ITEM_TYPE_FUNCTION(DisabledItem)
+    DisabledItem()
+        : SfxPoolItem(0)
+    {
+        setStaticDefault();
+    }
+};
+InvalidItem aInvalidItem;
+DisabledItem aDisabledItem;
 }
 
 SfxPoolItem const* const INVALID_POOL_ITEM = &aInvalidItem;
