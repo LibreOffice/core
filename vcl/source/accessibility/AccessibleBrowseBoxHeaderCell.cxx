@@ -107,26 +107,18 @@ OUString SAL_CALL AccessibleBrowseBoxHeaderCell::getImplementationName()
     return u"com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderCell"_ustr;
 }
 
-namespace
-{
-    tools::Rectangle getRectangle(vcl::IAccessibleTableProvider* _pBrowseBox,sal_Int32 _nRowColIndex, bool _bOnScreen,bool _bRowBar)
-    {
-        sal_Int32 nRow  = 0;
-        sal_uInt16 nCol =  static_cast<sal_uInt16>(_nRowColIndex);
-        if ( _bRowBar )
-        {
-            nRow = _nRowColIndex + 1;
-            nCol = 0;
-        }
-
-        tools::Rectangle aRet(_pBrowseBox->GetFieldRectPixel( nRow , nCol, true, _bOnScreen));
-        return tools::Rectangle(aRet.TopLeft() - Point(0,aRet.GetHeight()),aRet.GetSize());
-    }
-}
-
 tools::Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBox()
 {
-    return getRectangle(mpBrowseBox,m_nColumnRowId,false,isRowBarCell());
+    sal_Int32 nRow  = 0;
+    sal_uInt16 nCol =  static_cast<sal_uInt16>(m_nColumnRowId);
+    if (isRowBarCell())
+    {
+        nRow = m_nColumnRowId + 1;
+        nCol = 0;
+    }
+
+    tools::Rectangle aRet(mpBrowseBox->GetFieldRectPixel(nRow , nCol, true, false));
+    return tools::Rectangle(aRet.TopLeft() - Point(0, aRet.GetHeight()), aRet.GetSize());
 }
 
 sal_Int64 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()
