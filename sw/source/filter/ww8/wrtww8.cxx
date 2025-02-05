@@ -3443,9 +3443,6 @@ ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
     m_pRedlAuthors = nullptr;
     m_aTOXArr.clear();
 
-    if ( !m_pOCXExp && m_rDoc.GetDocShell() )
-        m_pOCXExp.reset(new SwMSConvertControls(m_rDoc.GetDocShell(), m_pCurPam.get()));
-
     // #i81405# - Collect anchored objects before changing the redline mode.
     m_aFrames = GetFrames( m_rDoc, bWriteAll? nullptr : m_pOrigPam );
 
@@ -4031,6 +4028,13 @@ AttributeOutputBase& WW8Export::AttrOutput() const
 MSWordSections& WW8Export::Sections() const
 {
     return *m_pSepx;
+}
+
+SwMSConvertControls& WW8Export::GetOCXExp()
+{
+    if (!m_pOCXExp)
+        m_pOCXExp.reset(new SwMSConvertControls(m_rDoc.GetDocShell(), m_pCurPam.get()));
+    return *m_pOCXExp;
 }
 
 SwWW8Writer::SwWW8Writer(std::u16string_view rFltName, const OUString& rBaseURL)
