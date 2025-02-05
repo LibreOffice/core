@@ -55,9 +55,9 @@ void SAL_CALL AccessibleBrowseBoxCell::grabFocus()
 
 ::tools::Rectangle AccessibleBrowseBoxCell::implGetBoundingBox()
 {
-    tools::Rectangle aCellRect = mpBrowseBox->calcFieldRectPixel(m_nRowPos, m_nColPos, false, /*bOnScreen*/false);
+    tools::Rectangle aCellRect = mpBrowseBox->calcFieldRectPixel(m_nRowPos, m_nColPos, false);
     // above rect is relative to the browse box, convert it to be relative to the table (which is the cell's parent)
-    aCellRect.SetPos(aCellRect.TopLeft() - mpBrowseBox->calcTableRect(false).TopLeft());
+    aCellRect.SetPos(aCellRect.TopLeft() - mpBrowseBox->calcTableRect().TopLeft());
     return aCellRect;
 }
 

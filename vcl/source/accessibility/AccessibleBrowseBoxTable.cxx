@@ -190,7 +190,7 @@ OUString SAL_CALL AccessibleBrowseBoxTable::getImplementationName()
 
 tools::Rectangle AccessibleBrowseBoxTable::implGetBoundingBox()
 {
-    return mpBrowseBox->calcTableRect(false);
+    return mpBrowseBox->calcTableRect();
 }
 
 // internal helper methods ----------------------------------------------------

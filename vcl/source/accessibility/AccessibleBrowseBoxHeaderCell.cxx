@@ -117,7 +117,7 @@ tools::Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBox()
         nCol = 0;
     }
 
-    tools::Rectangle aRet(mpBrowseBox->calcFieldRectPixel(nRow , nCol, true, false));
+    tools::Rectangle aRet(mpBrowseBox->calcFieldRectPixel(nRow , nCol, true));
     return tools::Rectangle(aRet.TopLeft() - Point(0, aRet.GetHeight()), aRet.GetSize());
 }
 

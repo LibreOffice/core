@@ -302,7 +302,7 @@ Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxHeaderBar::getImplementationId(
 
 tools::Rectangle AccessibleBrowseBoxHeaderBar::implGetBoundingBox()
 {
-    return mpBrowseBox->calcHeaderRect(isColumnBar(), false);
+    return mpBrowseBox->calcHeaderRect(isColumnBar());
 }
 
 sal_Int32 AccessibleBrowseBoxHeaderBar::implGetRowCount() const

@@ -166,9 +166,9 @@ public:
     virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const override;
     virtual OUString                GetAccessibleCellText( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const override;
 
-    virtual tools::Rectangle               calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true ) override;
-    virtual tools::Rectangle               calcTableRect( bool _bOnScreen = true ) override;
-    virtual tools::Rectangle               calcFieldRectPixel( sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader, bool _bOnScreen ) override;
+    virtual tools::Rectangle calcHeaderRect(bool _bIsColumnBar) override;
+    virtual tools::Rectangle calcTableRect() override;
+    virtual tools::Rectangle calcFieldRectPixel(sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader) override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumn ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleRowHeader( sal_Int32 _nRow ) override;

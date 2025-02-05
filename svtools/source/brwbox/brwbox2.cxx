@@ -1940,7 +1940,7 @@ void BrowseBox::SetCursorColor(const Color& _rCol)
     DoShowCursor();
 }
 
-tools::Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
+tools::Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar)
 {
     Point aTopLeft;
     tools::Long nWidth;
@@ -1956,17 +1956,14 @@ tools::Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
         nWidth = GetColumnWidth(0);
         nHeight = GetWindowExtentsAbsolute().GetHeight() - aTopLeft.Y() - GetControlArea().GetSize().Height();
     }
-    if (_bOnScreen)
-        aTopLeft += Point(GetWindowExtentsAbsolute().TopLeft());
     return tools::Rectangle(aTopLeft,Size(nWidth,nHeight));
 }
 
-tools::Rectangle BrowseBox::calcTableRect(bool _bOnScreen)
+tools::Rectangle BrowseBox::calcTableRect()
 {
     tools::Rectangle aRect(GetWindowExtentsAbsolute());
-    if (!_bOnScreen)
-        aRect.SetPos(Point(0, 0));
-    tools::Rectangle aRowBar = calcHeaderRect(false, _bOnScreen);
+    aRect.SetPos(Point(0, 0));
+    tools::Rectangle aRowBar = calcHeaderRect(false);
 
     tools::Long nX = aRowBar.Right() - aRect.Left();
     tools::Long nY = aRowBar.Top() - aRect.Top();
@@ -1975,15 +1972,9 @@ tools::Rectangle BrowseBox::calcTableRect(bool _bOnScreen)
     return tools::Rectangle(aRowBar.TopRight(), Size(aSize.Width() - nX, aSize.Height() - nY - GetBarHeight()) );
 }
 
-tools::Rectangle BrowseBox::calcFieldRectPixel( sal_Int32 _nRowId, sal_uInt16 _nColId, bool /*_bIsHeader*/, bool _bOnScreen )
+tools::Rectangle BrowseBox::calcFieldRectPixel(sal_Int32 _nRowId, sal_uInt16 _nColId, bool /*_bIsHeader*/)
 {
-    tools::Rectangle aRect = GetFieldRectPixel(_nRowId, _nColId, true);
-
-    Point aTopLeft = aRect.TopLeft();
-    if (_bOnScreen)
-        aTopLeft += Point(GetWindowExtentsAbsolute().TopLeft());
-
-    return tools::Rectangle(aTopLeft,aRect.GetSize());
+    return GetFieldRectPixel(_nRowId, _nColId, true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

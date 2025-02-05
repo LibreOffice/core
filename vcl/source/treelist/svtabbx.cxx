@@ -817,51 +817,38 @@ OUString SvHeaderTabListBox::GetAccessibleCellText( sal_Int32 _nRow, sal_uInt16 
     return GetTabEntryText(_nRow, _nColumnPos);
 }
 
-tools::Rectangle SvHeaderTabListBox::calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen )
+tools::Rectangle SvHeaderTabListBox::calcHeaderRect(bool _bIsColumnBar)
 {
     tools::Rectangle aRect;
     if ( _bIsColumnBar )
     {
-        vcl::Window* pParent = nullptr;
-        if (_bOnScreen)
-            aRect = tools::Rectangle(m_xHeaderBar->GetWindowExtentsAbsolute());
-        else
-        {
-            pParent = m_xHeaderBar->GetAccessibleParentWindow();
-            assert(pParent);
-            aRect = m_xHeaderBar->GetWindowExtentsRelative(*pParent);
-        }
+        vcl::Window* pParent = m_xHeaderBar->GetAccessibleParentWindow();
+        assert(pParent);
+        aRect = m_xHeaderBar->GetWindowExtentsRelative(*pParent);
     }
     return aRect;
 }
 
-tools::Rectangle SvHeaderTabListBox::calcTableRect( bool _bOnScreen )
+tools::Rectangle SvHeaderTabListBox::calcTableRect()
 {
     tools::Rectangle aScreenRect(GetWindowExtentsAbsolute());
-    if ( _bOnScreen )
-        return aScreenRect;
-
     return tools::Rectangle(Point(0, 0), aScreenRect.GetSize());
 }
 
-tools::Rectangle SvHeaderTabListBox::calcFieldRectPixel( sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader, bool _bOnScreen )
+tools::Rectangle SvHeaderTabListBox::calcFieldRectPixel(sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader)
 {
     DBG_ASSERT( !_bIsHeader || 0 == _nRow, "invalid parameters" );
     tools::Rectangle aRect;
     SvTreeListEntry* pEntry = GetEntryOnPos(_nRow );
     if ( pEntry )
     {
-        aRect = _bIsHeader ? calcHeaderRect( true, false ) : GetBoundingRect( pEntry );
+        aRect = _bIsHeader ? calcHeaderRect(true) : GetBoundingRect(pEntry);
         Point aTopLeft = aRect.TopLeft();
         DBG_ASSERT(m_xHeaderBar->GetItemCount() > _nColumn, "invalid column");
         tools::Rectangle aItemRect = m_xHeaderBar->GetItemRect(m_xHeaderBar->GetItemId(_nColumn));
         aTopLeft.setX( aItemRect.Left() );
         Size aSize = aItemRect.GetSize();
         aRect = tools::Rectangle( aTopLeft, aSize );
-        aTopLeft = aRect.TopLeft();
-        if (_bOnScreen)
-            aTopLeft += Point(GetWindowExtentsAbsolute().TopLeft());
-        aRect = tools::Rectangle( aTopLeft, aRect.GetSize() );
     }
 
     return aRect;

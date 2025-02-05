@@ -678,32 +678,18 @@ public:
     /** returns the Rectangle for either the column header bar or the row header bar
         @param  _bIsColumnBar
             <TRUE/> when column header bar is used
-        @param  _bOnScreen
-            <TRUE/> when the rectangle should be calculated OnScreen
         @return
             the Rectangle
     */
-    virtual tools::Rectangle calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen = true) override;
+    virtual tools::Rectangle calcHeaderRect(bool _bIsColumnBar) override;
 
-    /** calculates the Rectangle of the table
-        @param  _bOnScreen
-            <TRUE/> when the rectangle should be calculated OnScreen
+    /** calculates the Rectangle of the table relative to the BrowseBox.
         @return
             the Rectangle
     */
-    virtual tools::Rectangle calcTableRect(bool _bOnScreen = true) override;
+    virtual tools::Rectangle calcTableRect() override;
 
-    /**
-        @param  _nRowId
-            the current row
-        @param  _nColId
-            the column id
-        @param  _bOnScreen
-            <TRUE/> when the rectangle should be calculated OnScreen
-        @return
-            the Rectangle
-    */
-    virtual tools::Rectangle calcFieldRectPixel(sal_Int32 _nRowId, sal_uInt16 _nColId, bool _bIsHeader, bool _bOnScreen) override;
+    virtual tools::Rectangle calcFieldRectPixel(sal_Int32 _nRowId, sal_uInt16 _nColId, bool _bIsHeader) override;
 
     /// return <TRUE/> if and only if the accessible object for this instance has been created and is alive
     SAL_DLLPRIVATE bool isAccessibleAlive( ) const;

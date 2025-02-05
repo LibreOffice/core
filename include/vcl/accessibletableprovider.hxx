@@ -86,9 +86,9 @@ public:
     virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;
     virtual OUString                GetAccessibleCellText( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;
 
-    virtual tools::Rectangle               calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true ) = 0;
-    virtual tools::Rectangle               calcTableRect( bool _bOnScreen = true ) = 0;
-    virtual tools::Rectangle               calcFieldRectPixel( sal_Int32 _nRow, sal_uInt16 _nColumnPos, bool _bIsHeader, bool _bOnScreen ) = 0;
+    virtual tools::Rectangle calcHeaderRect(bool _bIsColumnBar) = 0;
+    virtual tools::Rectangle calcTableRect() = 0;
+    virtual tools::Rectangle calcFieldRectPixel(sal_Int32 _nRow, sal_uInt16 _nColumnPos, bool _bIsHeader) = 0;
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) = 0;
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleRowHeader( sal_Int32 _nRow ) = 0;
