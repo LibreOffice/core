@@ -985,6 +985,9 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                     + OString::number(p.getY()));
             }
 
+            if (meDragMode == SdrDragMode::Crop)
+                aExtraInfo.append(", \"isCropMode\": true");
+
             if (bWriterGraphic)
             {
                 aExtraInfo.append(", \"isWriterGraphic\": true");
