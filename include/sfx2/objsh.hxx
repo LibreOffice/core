@@ -104,7 +104,7 @@ namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::io { class XStream; }
-namespace com::sun::star::script { class XLibraryContainer; }
+namespace com::sun::star::script { class XStorageBasedLibraryContainer ; }
 namespace com::sun::star::security { class XCertificate; }
 namespace com::sun::star::security { class XDocumentDigitalSignatures; }
 namespace com::sun::star::security { struct DocumentSignatureInformation; }
@@ -577,9 +577,9 @@ public:
     sal_uInt16                  GetAutoStyleFilterIndex() const;
     bool                        HasBasic() const;
     BasicManager*               GetBasicManager() const;
-    css::uno::Reference< css::script::XLibraryContainer >
+    css::uno::Reference< css::script::XStorageBasedLibraryContainer >
                                 GetBasicContainer();
-    css::uno::Reference< css::script::XLibraryContainer >
+    css::uno::Reference< css::script::XStorageBasedLibraryContainer >
                                 GetDialogContainer();
     StarBASIC*                  GetBasic() const;
 

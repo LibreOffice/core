@@ -1124,7 +1124,7 @@ void EditorWindow::CreateEditEngine()
     // set readonly mode for readonly libraries
     ScriptDocument aDocument(rModulWindow.GetDocument());
     OUString aOULibName(rModulWindow.GetLibName());
-    Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
+    Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
     if (xModLibContainer.is()
      && xModLibContainer->hasByName(aOULibName)
      && xModLibContainer->isLibraryReadOnly(aOULibName))

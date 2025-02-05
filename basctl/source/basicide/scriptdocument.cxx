@@ -75,6 +75,7 @@ namespace basctl
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::script::XLibraryContainer;
+    using ::com::sun::star::script::XStorageBasedLibraryContainer;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
@@ -206,7 +207,7 @@ namespace basctl
                         getDocumentRef() const { return m_xDocument; }
 
         /// returns a library container belonging to the document
-        Reference< XLibraryContainer >
+        Reference< XStorageBasedLibraryContainer >
                     getLibraryContainer( LibraryContainerType _eType ) const;
 
         /// determines whether a given library is part of the shared installation
@@ -332,23 +333,22 @@ namespace basctl
         return m_bValid;
     }
 
-    Reference< XLibraryContainer > ScriptDocument::Impl::getLibraryContainer( LibraryContainerType _eType ) const
+    Reference<XStorageBasedLibraryContainer> ScriptDocument::Impl::getLibraryContainer( LibraryContainerType _eType ) const
     {
         OSL_ENSURE( isValid(), "ScriptDocument::Impl::getLibraryContainer: invalid!" );
 
-        Reference< XLibraryContainer > xContainer;
+        Reference<XStorageBasedLibraryContainer> xContainer;
         if ( !isValid() )
             return xContainer;
 
         try
         {
             if ( isApplication() )
-                xContainer.set( _eType == E_SCRIPTS ? SfxGetpApp()->GetBasicContainer() : SfxGetpApp()->GetDialogContainer(), UNO_QUERY_THROW );
+                xContainer.set(_eType == E_SCRIPTS ? SfxGetpApp()->GetBasicContainer() : SfxGetpApp()->GetDialogContainer());
             else
             {
                 xContainer.set(
-                    _eType == E_SCRIPTS ? m_xScriptAccess->getBasicLibraries() : m_xScriptAccess->getDialogLibraries(),
-                    UNO_QUERY_THROW );
+                    _eType == E_SCRIPTS ? m_xScriptAccess->getBasicLibraries() : m_xScriptAccess->getDialogLibraries());
             }
         }
         catch( const Exception& )
@@ -1160,7 +1160,7 @@ namespace basctl
     }
 
 
-    Reference< XLibraryContainer > ScriptDocument::getLibraryContainer( LibraryContainerType _eType ) const
+    Reference< XStorageBasedLibraryContainer > ScriptDocument::getLibraryContainer( LibraryContainerType _eType ) const
     {
         return m_pImpl->getLibraryContainer( _eType );
     }

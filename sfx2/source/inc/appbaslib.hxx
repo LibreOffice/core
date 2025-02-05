@@ -62,7 +62,7 @@ public:
     */
     void    reset( BasicManager* _pBasicManager );
 
-    css::script::XLibraryContainer *
+    css::script::XStorageBasedLibraryContainer*
             getLibraryContainer( ContainerType _eType );
 
     /** calls the storeLibraries at both our script and basic library container

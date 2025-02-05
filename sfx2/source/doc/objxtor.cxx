@@ -717,8 +717,8 @@ bool SfxObjectShell::HasBasic() const
 #if HAVE_FEATURE_SCRIPTING
 namespace
 {
-    const Reference< XLibraryContainer >&
-    lcl_getOrCreateLibraryContainer( bool _bScript, Reference< XLibraryContainer >& _rxContainer,
+    const Reference< XStorageBasedLibraryContainer >&
+    lcl_getOrCreateLibraryContainer( bool _bScript, Reference< XStorageBasedLibraryContainer >& _rxContainer,
         const Reference< XModel >& _rxDocument )
     {
         if ( !_rxContainer.is() )
@@ -732,8 +732,7 @@ namespace
                                 ?   DocumentScriptLibraryContainer::create(
                                         xContext, xStorageDoc )
                                 :   DocumentDialogLibraryContainer::create(
-                                        xContext, xStorageDoc )
-                                ,   UNO_QUERY_THROW );
+                                        xContext, xStorageDoc ));
             }
             catch (const Exception&)
             {
@@ -745,7 +744,7 @@ namespace
 }
 #endif
 
-Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
+Reference< XStorageBasedLibraryContainer > SfxObjectShell::GetDialogContainer()
 {
 #if HAVE_FEATURE_SCRIPTING
     try
@@ -767,7 +766,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
     return SfxGetpApp()->GetDialogContainer();
 }
 
-Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
+Reference< XStorageBasedLibraryContainer > SfxObjectShell::GetBasicContainer()
 {
 #if HAVE_FEATURE_SCRIPTING
     if (!comphelper::IsFuzzing())

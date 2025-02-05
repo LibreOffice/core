@@ -2280,23 +2280,10 @@ bool SfxObjectShell::ConnectTmpStorage_Impl(
             {
                 pImpl->aBasicManager.setStorage( xTmpStorage );
 
-                // Get rid of this workaround after issue i113914 is fixed
-                try
-                {
-                    uno::Reference< script::XStorageBasedLibraryContainer > xBasicLibraries( pImpl->xBasicLibraries, uno::UNO_QUERY );
-                    if (xBasicLibraries)
-                        xBasicLibraries->setRootStorage( xTmpStorage );
-                }
-                catch( uno::Exception& )
-                {}
-                try
-                {
-                    uno::Reference< script::XStorageBasedLibraryContainer > xDialogLibraries( pImpl->xDialogLibraries, uno::UNO_QUERY );
-                    if (xDialogLibraries)
-                        xDialogLibraries->setRootStorage( xTmpStorage );
-                }
-                catch( uno::Exception& )
-                {}
+                if (pImpl->xBasicLibraries)
+                    pImpl->xBasicLibraries->setRootStorage( xTmpStorage );
+                if (pImpl->xDialogLibraries)
+                    pImpl->xDialogLibraries->setRootStorage( xTmpStorage );
             }
         }
         catch( uno::Exception& )
@@ -2446,23 +2433,10 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed, bool bRegisterRecent )
         // Set storage in document library containers
         pImpl->aBasicManager.setStorage( xStorage );
 
-        // Get rid of this workaround after issue i113914 is fixed
-        try
-        {
-            uno::Reference< script::XStorageBasedLibraryContainer > xBasicLibraries( pImpl->xBasicLibraries, uno::UNO_QUERY );
-            if (xBasicLibraries)
-                xBasicLibraries->setRootStorage( xStorage );
-        }
-        catch( uno::Exception& )
-        {}
-        try
-        {
-            uno::Reference< script::XStorageBasedLibraryContainer > xDialogLibraries( pImpl->xDialogLibraries, uno::UNO_QUERY );
-            if (xDialogLibraries)
-                xDialogLibraries->setRootStorage( xStorage );
-        }
-        catch( uno::Exception& )
-        {}
+        if (pImpl->xBasicLibraries)
+            pImpl->xBasicLibraries->setRootStorage( xStorage );
+        if (pImpl->xDialogLibraries)
+            pImpl->xDialogLibraries->setRootStorage( xStorage );
     }
     else
     {

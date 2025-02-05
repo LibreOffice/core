@@ -33,7 +33,7 @@
 #include <sfx2/shell.hxx>
 
 namespace com::sun::star::frame { class XFrame; }
-namespace com::sun::star::script { class XLibraryContainer; }
+namespace com::sun::star::script { class XStorageBasedLibraryContainer; }
 
 namespace weld { class Window; }
 
@@ -155,8 +155,8 @@ public:
     static ErrCode              CallAppBasic( const OUString& i_macroName )
                                 { return CallBasic( i_macroName, SfxApplication::GetBasicManager(), nullptr, nullptr ); }
     static BasicManager*        GetBasicManager();
-    css::script::XLibraryContainer * GetDialogContainer();
-    css::script::XLibraryContainer * GetBasicContainer();
+    css::script::XStorageBasedLibraryContainer* GetDialogContainer();
+    css::script::XStorageBasedLibraryContainer* GetBasicContainer();
     static StarBASIC*           GetBasic();
     void                        SaveBasicAndDialogContainer() const;
 
