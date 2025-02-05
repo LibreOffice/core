@@ -26,9 +26,7 @@
 class AccessibleBrowseBoxTable;
 class SvHeaderTabListBox;
 
-/** !!! */
-class AccessibleTabListBox final
-    : public cppu::ImplInheritanceHelper<AccessibleBrowseBox, css::accessibility::XAccessible>
+class AccessibleTabListBox final : public AccessibleBrowseBox
 {
 private:
     VclPtr<SvHeaderTabListBox>        m_pTabListBox;
@@ -49,9 +47,6 @@ public:
     /** @return  The XAccessible interface of the specified child. */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
     getAccessibleChild( sal_Int64 nChildIndex ) override;
-
-    // XAccessibleContext
-    css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext() override;
 
     css::uno::Reference< css::accessibility::XAccessible >
         getHeaderBar()

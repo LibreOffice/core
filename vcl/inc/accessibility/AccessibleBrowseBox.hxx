@@ -30,7 +30,8 @@ class AccessibleBrowseBoxTable;
 
 
 /** This class represents the complete accessible BrowseBox object. */
-class AccessibleBrowseBox : public AccessibleBrowseBoxBase
+class AccessibleBrowseBox
+    : public cppu::ImplInheritanceHelper<AccessibleBrowseBoxBase, css::accessibility::XAccessible>
 {
     friend class AccessibleBrowseBoxAccess;
 
@@ -56,6 +57,10 @@ protected:
     virtual void SAL_CALL disposing() override;
 
 protected:
+    // XAccessible
+    css::uno::Reference<css::accessibility::XAccessibleContext>
+        SAL_CALL getAccessibleContext() override;
+
     // XAccessibleContext
 
     /** @return  The count of visible children. */

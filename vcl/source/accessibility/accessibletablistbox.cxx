@@ -32,9 +32,10 @@ using namespace ::com::sun::star;
 
 // Ctor() and Dtor()
 
-AccessibleTabListBox::AccessibleTabListBox( const Reference< XAccessible >& rxParent, SvHeaderTabListBox& rBox )
-    :ImplInheritanceHelper(rxParent, nullptr, rBox)
-    ,m_pTabListBox( &rBox )
+AccessibleTabListBox::AccessibleTabListBox(const Reference<XAccessible>& rxParent,
+                                           SvHeaderTabListBox& rBox)
+    : AccessibleBrowseBox(rxParent, nullptr, rBox)
+    , m_pTabListBox(&rBox)
 {
     osl_atomic_increment( &m_refCount );
     {
@@ -65,11 +66,6 @@ sal_Int64 SAL_CALL AccessibleTabListBox::getAccessibleChildCount()
 {
     // only the table; header is handled by HeaderBar (which is a sibling of the SvHeaderTabListBox)
     return 1;
-}
-
-Reference< XAccessibleContext > SAL_CALL AccessibleTabListBox::getAccessibleContext()
-{
-    return this;
 }
 
 Reference< XAccessible > SAL_CALL
