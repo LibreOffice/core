@@ -1095,11 +1095,6 @@ bool SvHeaderTabListBox::GetGlyphBoundRects( const Point& rOrigin, const OUStrin
     return GetOutDev()->GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, rVector );
 }
 
-AbsoluteScreenPixelRectangle SvHeaderTabListBox::GetWindowExtentsAbsolute() const
-{
-    return Control::GetWindowExtentsAbsolute();
-}
-
 tools::Rectangle SvHeaderTabListBox::GetWindowExtentsRelative(const vcl::Window& rRelativeWindow) const
 {
     return Control::GetWindowExtentsRelative( rRelativeWindow );

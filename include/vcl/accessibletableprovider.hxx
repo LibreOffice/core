@@ -113,7 +113,6 @@ public:
     virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, std::vector< tools::Rectangle >& rVector ) = 0;
 
     // Window
-    virtual AbsoluteScreenPixelRectangle GetWindowExtentsAbsolute() const = 0;
     virtual tools::Rectangle        GetWindowExtentsRelative(const vcl::Window& rRelativeWindow) const = 0;
     virtual void                    GrabFocus() = 0;
     virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible() = 0;

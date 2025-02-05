@@ -512,11 +512,6 @@ bool BrowseBox::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, 
     return GetOutDev()->GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, rVector );
 }
 
-AbsoluteScreenPixelRectangle BrowseBox::GetWindowExtentsAbsolute() const
-{
-    return Control::GetWindowExtentsAbsolute();
-}
-
 tools::Rectangle BrowseBox::GetWindowExtentsRelative(const vcl::Window& rRelativeWindow) const
 {
     return Control::GetWindowExtentsRelative( rRelativeWindow );

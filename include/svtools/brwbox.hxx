@@ -819,7 +819,6 @@ public:
     virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const override;
     virtual OUString                GetAccessibleCellText(sal_Int32 _nRow, sal_uInt16 _nColPos) const override;
     virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, std::vector< tools::Rectangle >& rVector ) override;
-    virtual AbsoluteScreenPixelRectangle GetWindowExtentsAbsolute() const override;
     virtual tools::Rectangle        GetWindowExtentsRelative(const vcl::Window& rRelativeWindow) const override;
     virtual void                    GrabFocus() override;
     virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible() override;
