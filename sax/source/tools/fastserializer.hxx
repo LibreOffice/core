@@ -166,7 +166,7 @@ private:
     class ForMerge : public ForMergeBase
     {
         Int8Sequence maData;
-        Int8Sequence maPostponed;
+        std::vector<sal_Int8> maPostponed;
 
     public:
         sal_Int32 const m_Tag;
@@ -194,6 +194,8 @@ private:
     protected:
         void resetData( );
         static void merge( Int8Sequence &rTop, const Int8Sequence &rMerge, bool bAppend );
+    private:
+        static void merge( Int8Sequence &rTop, const sal_Int8* pMerge, sal_Int32 nMergeLen, bool bAppend );
     };
 
     class ForSort : public ForMerge

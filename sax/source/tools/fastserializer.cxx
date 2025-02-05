@@ -700,8 +700,8 @@ namespace sax_fastparser {
 
     Int8Sequence& FastSaxSerializer::ForMerge::getData()
     {
-        merge( maData, maPostponed, true );
-        maPostponed.realloc( 0 );
+        merge( maData, maPostponed.data(), maPostponed.size(), true );
+        maPostponed.resize(0);
 
         return maData;
     }
@@ -716,7 +716,7 @@ namespace sax_fastparser {
         }
 
         std::cerr << "\nPostponed: ";
-        for ( sal_Int32 i=0, len=maPostponed.getLength(); i < len; i++ )
+        for ( sal_Int32 i=0, len=maPostponed.size(); i < len; i++ )
         {
             std::cerr << maPostponed[i];
         }
@@ -737,12 +737,12 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::ForMerge::postpone( const Int8Sequence &rWhat )
     {
-        merge( maPostponed, rWhat, true );
+        const sal_Int8* pData = rWhat.getConstArray();
+        maPostponed.insert(maPostponed.end(), pData, pData + rWhat.getLength());
     }
 
-    void FastSaxSerializer::ForMerge::merge( Int8Sequence &rTop, const Int8Sequence &rMerge, bool bAppend )
+    void FastSaxSerializer::ForMerge::merge(Int8Sequence &rTop, const sal_Int8* pMerge, sal_Int32 nMergeLen, bool bAppend)
     {
-        sal_Int32 nMergeLen = rMerge.getLength();
         if ( nMergeLen <= 0 )
             return;
 
@@ -752,14 +752,19 @@ namespace sax_fastparser {
         if ( bAppend )
         {
             // append the rMerge to the rTop
-            memcpy( rTop.getArray() + nTopLen, rMerge.getConstArray(), nMergeLen );
+            memcpy( rTop.getArray() + nTopLen, pMerge, nMergeLen );
         }
         else
         {
             // prepend the rMerge to the rTop
             memmove( rTop.getArray() + nMergeLen, rTop.getConstArray(), nTopLen );
-            memcpy( rTop.getArray(), rMerge.getConstArray(), nMergeLen );
+            memcpy( rTop.getArray(), pMerge, nMergeLen );
         }
+    }
+
+    void FastSaxSerializer::ForMerge::merge( Int8Sequence &rTop, const Int8Sequence &rMerge, bool bAppend )
+    {
+        merge(rTop, rMerge.getConstArray(), rMerge.getLength(), bAppend);
     }
 
     void FastSaxSerializer::ForMerge::resetData( )
