@@ -2468,6 +2468,38 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testMouseMergeRef)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testFillHandleDnD)
+{
+    // Test the fill handle drag and drop
+    createScDoc();
+
+    ScTabViewShell* pViewShell = getViewShell();
+
+    insertStringToCell(u"A1"_ustr, u"1");
+
+    // Select cell A1 to show the handle
+    goToCell(u"A1"_ustr);
+
+    // B2 left top corner = A1 right bottom corner
+    Point aB2 = pViewShell->GetViewData().GetPrintTwipsPos(1, 1);
+    Point aA7 = pViewShell->GetViewData().GetPrintTwipsPos(0, 6);
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aB2.X() - 1, aB2.Y() - 1, 1,
+                              MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEMOVE, aA7.X(), aA7.Y(), 1, MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aA7.X(), aA7.Y(), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pDoc->GetString(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pDoc->GetString(ScAddress(0, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"6"_ustr, pDoc->GetString(ScAddress(0, 5, 0)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
