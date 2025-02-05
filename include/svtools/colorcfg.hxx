@@ -258,14 +258,6 @@ struct ColorConfigValue
     {
     }
 
-    ColorConfigValue(const Color& rColor, bool bVisible)
-        : bIsVisible(bVisible)
-        , nColor(rColor)
-        , nLightColor(rColor)
-        , nDarkColor(rColor)
-    {
-    }
-
     bool operator!=(const ColorConfigValue& rCmp) const
     {
         return

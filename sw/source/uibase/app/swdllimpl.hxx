@@ -32,8 +32,6 @@ public:
     SwDLL();
     ~SwDLL() COVERITY_NOEXCEPT_FALSE;
 
-    sw::Filters& getFilters();
-
 private:
     SwDLL(SwDLL const&) = delete;
     SwDLL& operator=(SwDLL const&) = delete;

@@ -87,23 +87,6 @@ void DrawViewShell::destroyXSlideShowInstance()
     mxSlideShow.clear();
 }
 
-const uno::Reference<presentation::XSlideShow> & DrawViewShell::getXSlideShowInstance()
-{
-    if (!mxSlideShow.is())
-    {
-        try
-        {
-            const auto& xContext = ::comphelper::getProcessComponentContext();
-            mxSlideShow.set(presentation::SlideShow::create(xContext), uno::UNO_SET_THROW);
-        }
-        catch (uno::Exception&)
-        {
-            TOOLS_WARN_EXCEPTION("sd", "DrawViewShell::createXSlideShowInstance()");
-        }
-    }
-    return mxSlideShow;
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

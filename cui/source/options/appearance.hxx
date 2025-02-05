@@ -80,7 +80,6 @@ private:
     void InitThemes();
     void InitAppearance();
     void InitCustomization();
-    void UpdateControlsState();
     void LoadSchemeList();
 
     void UpdateRemoveBtnState();

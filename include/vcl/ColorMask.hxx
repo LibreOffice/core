@@ -107,14 +107,10 @@ public:
     inline sal_uInt32   GetGreenMask() const;
     inline sal_uInt32   GetBlueMask() const;
 
-    inline void         GetColorFor16BitMSB( BitmapColor& rColor, const sal_uInt8* pPixel ) const;
-    inline void         SetColorFor16BitMSB( const BitmapColor& rColor, sal_uInt8* pPixel ) const;
     inline void         GetColorFor16BitLSB( BitmapColor& rColor, const sal_uInt8* pPixel ) const;
-    inline void         SetColorFor16BitLSB( const BitmapColor& rColor, sal_uInt8* pPixel ) const;
 
     inline void         GetColorFor32Bit( BitmapColor& rColor, const sal_uInt8* pPixel ) const;
     inline void         GetColorAndAlphaFor32Bit( BitmapColor& rColor, sal_uInt8& rAlpha, const sal_uInt8* pPixel ) const;
-    inline void         SetColorFor32Bit( const BitmapColor& rColor, sal_uInt8* pPixel ) const;
 };
 
 inline sal_uInt32 ColorMask::GetRedMask() const
@@ -132,34 +128,11 @@ inline sal_uInt32 ColorMask::GetBlueMask() const
     return maB.mnMask;
 }
 
-inline void ColorMask::GetColorFor16BitMSB( BitmapColor& rColor, const sal_uInt8* pPixel ) const
-{
-    const sal_uInt32 nVal = pPixel[ 1 ] | ( static_cast<sal_uInt32>(pPixel[ 0 ]) << 8 );
-
-    MASK_TO_COLOR( nVal, maR.mnMask, maG.mnMask, maB.mnMask, maR.mnShift, maG.mnShift, maB.mnShift, rColor );
-}
-
-inline void ColorMask::SetColorFor16BitMSB( const BitmapColor& rColor, sal_uInt8* pPixel ) const
-{
-    const sal_uInt16 nVal = static_cast<sal_uInt16>(COLOR_TO_MASK( rColor, maR.mnMask, maG.mnMask, maB.mnMask, maR.mnShift, maG.mnShift, maB.mnShift, 0/*nAlphaChannel*/ ));
-
-    pPixel[ 0 ] = static_cast<sal_uInt8>(nVal >> 8);
-    pPixel[ 1 ] = static_cast<sal_uInt8>(nVal);
-}
-
 inline void ColorMask::GetColorFor16BitLSB( BitmapColor& rColor, const sal_uInt8* pPixel ) const
 {
     const sal_uInt32 nVal = pPixel[ 0 ] | ( static_cast<sal_uInt32>(pPixel[ 1 ]) << 8 );
 
     MASK_TO_COLOR( nVal, maR.mnMask, maG.mnMask, maB.mnMask, maR.mnShift, maG.mnShift, maB.mnShift, rColor );
-}
-
-inline void ColorMask::SetColorFor16BitLSB( const BitmapColor& rColor, sal_uInt8* pPixel ) const
-{
-    const sal_uInt16 nVal = static_cast<sal_uInt16>(COLOR_TO_MASK( rColor, maR.mnMask, maG.mnMask, maB.mnMask, maR.mnShift, maG.mnShift, maB.mnShift, 0/*nAlphaChannel*/ ));
-
-    pPixel[ 0 ] = static_cast<sal_uInt8>(nVal);
-    pPixel[ 1 ] = static_cast<sal_uInt8>(nVal >> 8);
 }
 
 inline void ColorMask::GetColorFor32Bit( BitmapColor& rColor, const sal_uInt8* pPixel ) const
@@ -177,15 +150,6 @@ inline void ColorMask::GetColorAndAlphaFor32Bit( BitmapColor& rColor, sal_uInt8&
     rAlpha = static_cast<sal_uInt8>(nVal >> 24);
 
     MASK_TO_COLOR( nVal, maR.mnMask, maG.mnMask, maB.mnMask, maR.mnShift, maG.mnShift, maB.mnShift, rColor );
-}
-
-inline void ColorMask::SetColorFor32Bit( const BitmapColor& rColor, sal_uInt8* pPixel ) const
-{
-    const sal_uInt32 nVal = COLOR_TO_MASK( rColor, maR.mnMask, maG.mnMask, maB.mnMask, maR.mnShift, maG.mnShift, maB.mnShift, 0/*nAlphaChannel*/ );
-    pPixel[ 0 ] = static_cast<sal_uInt8>(nVal);
-    pPixel[ 1 ] = static_cast<sal_uInt8>( nVal >> 8 );
-    pPixel[ 2 ] = static_cast<sal_uInt8>( nVal >> 16 );
-    pPixel[ 3 ] = static_cast<sal_uInt8>( nVal >> 24 );
 }
 
 #endif // INCLUDED_VCL_COLORMASK_HXX

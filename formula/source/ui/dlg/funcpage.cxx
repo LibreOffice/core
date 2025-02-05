@@ -389,8 +389,6 @@ sal_Int32 FuncPage::GetCategoryEntryCount() const { return m_xLbCategory->get_co
 
 sal_Int32 FuncPage::GetFunction() const { return m_xLbFunction->get_selected_index(); }
 
-sal_Int32 FuncPage::GetFunctionEntryCount() const { return m_xLbFunction->n_children(); }
-
 OUString FuncPage::GetSelFunctionName() const { return m_xLbFunction->get_selected_text(); }
 
 sal_uInt16 FuncPage::GetFuncIndex() const

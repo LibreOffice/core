@@ -670,34 +670,16 @@ StyleSettings::GetWarningColor() const
     return mxData->maColors.maWarningColor;
 }
 
-void
-StyleSettings::SetWarningTextColor( const Color& rColor )
-{
-    mxData->maColors.maWarningTextColor = rColor;
-}
-
 const Color&
 StyleSettings::GetWarningTextColor() const
 {
     return mxData->maColors.maWarningTextColor;
 }
 
-void
-StyleSettings::SetErrorColor( const Color& rColor )
-{
-    mxData->maColors.maErrorColor = rColor;
-}
-
 const Color&
 StyleSettings::GetErrorColor() const
 {
     return mxData->maColors.maErrorColor;
-}
-
-void
-StyleSettings::SetErrorTextColor( const Color& rColor )
-{
-    mxData->maColors.maErrorTextColor = rColor;
 }
 
 const Color&

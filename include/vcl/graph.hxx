@@ -148,7 +148,6 @@ public:
 
     sal_uLong       GetSizeBytes() const;
 
-    void            Draw(OutputDevice& rOutDev, const Point& rDestPt) const;
     void            Draw(OutputDevice& rOutDev, const Point& rDestPt,
                          const Size& rDestSize) const;
     static void     DrawEx(OutputDevice& rOutDev, const OUString& rText,

@@ -73,11 +73,6 @@ namespace SwGlobals
         // coverity[side_effect_free : FALSE] - not actually side-effect-free
         theSwDLLInstance();
     }
-
-    sw::Filters & getFilters()
-    {
-        return theSwDLLInstance()->getFilters();
-    }
 }
 
 SwDLL::SwDLL()
@@ -163,12 +158,6 @@ SwDLL::~SwDLL() COVERITY_NOEXCEPT_FALSE
     ::FinitCore();
     // sign out object-Factory
     SdrObjFactory::RemoveMakeObjectHdl(LINK(&aSwObjectFactory, SwObjectFactory, MakeObject ));
-}
-
-sw::Filters & SwDLL::getFilters()
-{
-    assert(m_pFilters);
-    return *m_pFilters;
 }
 
 #ifndef DISABLE_DYNLOADING

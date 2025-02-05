@@ -797,12 +797,6 @@ public:
      */
     VCL_DLLPUBLIC std::set< ErrorCode > const & GetErrors() const;
 
-    // uses 128bit encryption
-    VCL_DLLPUBLIC static css::uno::Reference< css::beans::XMaterialHolder >
-           InitEncryption( const OUString& i_rOwnerPassword,
-                           const OUString& i_rUserPassword
-                         );
-
     /* functions for graphics state */
     /* flag values: see vcl/outdev.hxx */
     VCL_DLLPUBLIC void Push( PushFlags nFlags = PushFlags::ALL );

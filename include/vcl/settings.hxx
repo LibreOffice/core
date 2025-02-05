@@ -365,13 +365,10 @@ public:
     void                            SetWarningColor( const Color& rColor );
     const Color&                    GetWarningColor() const;
 
-    void                            SetWarningTextColor( const Color& rColor );
     const Color&                    GetWarningTextColor() const;
 
-    void                            SetErrorColor( const Color& rColor );
     const Color&                    GetErrorColor() const;
 
-    void                            SetErrorTextColor( const Color& rColor );
     const Color&                    GetErrorTextColor() const;
 
     void                            SetHelpColor( const Color& rColor );

@@ -34,8 +34,6 @@ class Filters;
 namespace SwGlobals
 {
 void SW_DLLPUBLIC ensure();
-
-sw::Filters& getFilters();
 }
 
 #endif

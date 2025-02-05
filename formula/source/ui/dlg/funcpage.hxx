@@ -83,7 +83,6 @@ public:
     sal_Int32       GetCategory() const;
     sal_Int32       GetCategoryEntryCount() const;
     sal_Int32       GetFunction() const;
-    sal_Int32       GetFunctionEntryCount() const;
 
     // tdf#104487 - remember last used function category
     static sal_Int32 GetRememeberdFunctionCategory() { return m_nRememberedFunctionCategory; };

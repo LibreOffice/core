@@ -421,11 +421,6 @@ sal_uLong Graphic::GetSizeBytes() const
     return mxImpGraphic->getSizeBytes();
 }
 
-void Graphic::Draw(OutputDevice& rOutDev, const Point& rDestPt) const
-{
-    mxImpGraphic->draw(rOutDev, rDestPt);
-}
-
 void Graphic::Draw(OutputDevice& rOutDev, const Point& rDestPt,
                    const Size& rDestSz) const
 {
