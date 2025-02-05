@@ -122,8 +122,9 @@ enum class SfxItemType : sal_uInt16
     CntUInt32ItemType,
     DatabaseMapItemType,
     DbuTypeCollectionItemType,
+    DisabledItemType,
     DriverPoolingSettingsItemType,
-    InvalidOrDisabledItemType,
+    InvalidItemType,
     MediaItemType,
     NameOrIndexType,
     OfaPtrItemType,
@@ -566,6 +567,7 @@ class SfxItemSet;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
 class ItemInstanceManager;
 
+// macro to define overloaded ItemType function, see explanations below
 #define DECLARE_ITEM_TYPE_FUNCTION(T) \
     virtual SfxItemType ItemType() const override { return SfxItemType::T##Type; }
 

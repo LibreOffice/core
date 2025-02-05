@@ -361,7 +361,8 @@ void SfxStateCache::SetVisibleState( bool bShow )
     bItemVisible = bShow;
     if ( bShow )
     {
-        if ( IsInvalidItem(pLastItem) || ( pLastItem == nullptr ))
+        // tdf#164745 also need to do this when disabled item
+        if ( nullptr == pLastItem || IsInvalidItem(pLastItem) || IsDisabledItem(pLastItem) )
         {
             pState = new SfxVoidItem( nId );
             bDeleteItem = true;
@@ -431,39 +432,17 @@ void SfxStateCache::SetState_Impl
             static_cast<SfxDispatchController_Impl *>(pInternalController)->StateChanged( nId, eState, pState, &aSlotServ );
 
         // Remember new value
-        if (!IsInvalidItem(pLastItem) && !IsDisabledItem(pLastItem))
+        if ( !IsInvalidItem(pLastItem) && !IsDisabledItem(pLastItem) )
         {
-            // tdf#162666 only delete if it *was* cloned
             delete pLastItem;
+            pLastItem = nullptr;
         }
 
-        // always reset to nullptr
-        pLastItem = nullptr;
-
-        if ( nullptr != pState)
-        {
-            if (IsInvalidItem(pState))
-            {
-                // tdf#162666 if invalid, use INVALID_POOL_ITEM
-                pLastItem = INVALID_POOL_ITEM;
-            }
-            else if (IsDisabledItem(pState))
-            {
-                // tdf#162666 if disabled, use DISABLED_POOL_ITEM
-                pLastItem = DISABLED_POOL_ITEM;
-            }
-            else
-            {
-                // tdf#162666 in all other cases, clone the Item. Note that
-                // due to not using a Pool here it is not possible to use a
-                // ItemSet or a ItemHolder, those would automatically handle
-                // these cases correctly. In this cache, this currently needs
-                // to be done handish. Also note that this may break again
-                // when changes in the Item/ItemSet/ItemHolder mechanism may
-                // be done
-                pLastItem = pState->Clone();
-            }
-        }
+        // tdf#164745 clone when it exists and it's really an item
+        if ( pState && !IsInvalidItem(pState) && !IsDisabledItem(pState) )
+            pLastItem = pState->Clone();
+        else
+            pLastItem = nullptr;
 
         eLastState = eState;
         bItemDirty = false;
