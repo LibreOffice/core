@@ -12,19 +12,25 @@ sc/source/core/opencl/opbase.hxx:447
     void sc::opencl::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class sc::opencl::outputstream &,)
 slideshow/source/engine/animationfactory.cxx:617
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
-ux-gnu/../../../include/c++/13/bits/locale_facets_nonio.h:2002
+ux-gnu/../../../include/c++/14/bits/locale_facets_nonio.h:2002
     void std::messages::do_close(int,)const
-ux-gnu/../../../include/c++/13/streambuf:583
+ux-gnu/../../../include/c++/14/streambuf:583
     void std::basic_streambuf::imbue(const class std::locale &,)
 vcl/inc/font/LogicalFontInstance.hxx:127
     void LogicalFontInstance::ImplInitHbFont(struct hb_font_t *,)
-vcl/inc/salframe.hxx:145
+vcl/inc/salframe.hxx:147
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
-vcl/inc/salframe.hxx:214
+vcl/inc/salframe.hxx:219
     void SalFrame::FlashWindow()const
-vcl/inc/salinst.hxx:203
+vcl/inc/salframe.hxx:319
+    void SalFrame::SetTaskBarProgress(int,)
+vcl/inc/salframe.hxx:320
+    void SalFrame::SetTaskBarState(enum VclTaskBarStates,)
+vcl/inc/salinst.hxx:210
     void SalInstance::releaseMainThread()
-vcl/inc/salinst.hxx:212
+vcl/inc/salinst.hxx:219
     void SalInstance::BeforeAbort(const class rtl::OUString &,_Bool,)
+vcl/inc/salmenu.hxx:77
+    void SalMenu::GetSystemMenuData(struct SystemMenuData &,)
 vcl/inc/salobj.hxx:49
     void SalObject::Enable(_Bool,)

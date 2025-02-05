@@ -44,7 +44,7 @@ public:
 
 private:
     void positionExtraControlsContainer();
-    virtual QPushButton* buttonForResponseCode(int nResponse);
+    QPushButton* buttonForResponseCode(int nResponse);
 
 protected slots:
     virtual void dialogFinished(int nResult) override;

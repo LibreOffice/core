@@ -254,7 +254,7 @@ namespace svt::table
 
             @see TableControlAction
         */
-        virtual bool                dispatchAction(TableControlAction _eAction);
+        bool                        dispatchAction(TableControlAction _eAction);
 
         virtual SelectionEngine*    getSelEngine() override;
         virtual PTableModel         getModel() const override;
