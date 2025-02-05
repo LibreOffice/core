@@ -30,7 +30,7 @@
 
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 
 #include <fmtfld.hxx>
@@ -114,7 +114,7 @@ void SwHTMLParser::EndScript()
             aLibName = "Standard";
 
         // get module library container
-        Reference< script::XLibraryContainer > xModLibContainer = pDocSh->GetBasicContainer();
+        Reference< script::XStorageBasedLibraryContainer > xModLibContainer = pDocSh->GetBasicContainer();
 
         if ( xModLibContainer.is() )
         {
@@ -156,7 +156,7 @@ void SwHTMLParser::EndScript()
         }
 
         // get dialog library container
-        Reference< script::XLibraryContainer > xDlgLibContainer = pDocSh->GetDialogContainer();
+        Reference< script::XStorageBasedLibraryContainer > xDlgLibContainer = pDocSh->GetDialogContainer();
 
         if ( xDlgLibContainer.is() )
         {

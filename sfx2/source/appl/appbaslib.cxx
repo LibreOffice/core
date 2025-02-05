@@ -67,15 +67,8 @@ void SfxBasicManagerHolder::reset( BasicManager* _pBasicManager )
         return;
 
     StartListening(*mpBasicManager);
-    try
-    {
-        mxBasicContainer.set( mpBasicManager->GetScriptLibraryContainer(), UNO_QUERY_THROW );
-        mxDialogContainer.set( mpBasicManager->GetDialogLibraryContainer(), UNO_QUERY_THROW  );
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION("sfx.appl");
-    }
+    mxBasicContainer.set( mpBasicManager->GetScriptLibraryContainer() );
+    mxDialogContainer.set( mpBasicManager->GetDialogLibraryContainer()  );
 #endif
 }
 
@@ -130,7 +123,7 @@ void SfxBasicManagerHolder::storeLibrariesToStorage( const Reference< XStorage >
 #endif
 }
 
-XLibraryContainer * SfxBasicManagerHolder::getLibraryContainer( ContainerType _eType )
+XStorageBasedLibraryContainer* SfxBasicManagerHolder::getLibraryContainer( ContainerType _eType )
 {
     OSL_PRECOND( isValid(), "SfxBasicManagerHolder::getLibraryContainer: not initialized!" );
 
@@ -167,7 +160,7 @@ com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
     css::uno::Sequence<css::uno::Any> const &)
 {
     SfxApplication::GetBasicManager();
-    css::uno::XInterface* pRet = SfxGetpApp()->GetDialogContainer();
+    css::uno::XInterface* pRet = static_cast<css::script::XLibraryContainer*>(SfxGetpApp()->GetDialogContainer());
     pRet->acquire();
     return pRet;
 }
@@ -179,7 +172,7 @@ com_sun_star_comp_sfx2_ApplicationScriptLibraryContainer_get_implementation(
     css::uno::Sequence<css::uno::Any> const &)
 {
     SfxApplication::GetBasicManager();
-    css::uno::XInterface* pRet = SfxGetpApp()->GetBasicContainer();
+    css::uno::XInterface* pRet = static_cast<css::script::XLibraryContainer*>(SfxGetpApp()->GetBasicContainer());
     pRet->acquire();
     return pRet;
 }

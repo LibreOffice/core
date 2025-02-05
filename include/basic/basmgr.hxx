@@ -29,7 +29,7 @@
 
 namespace basic { class SfxScriptLibraryContainer; }
 namespace com::sun::star::script { class XLibraryContainer; }
-namespace com::sun::star::script { class XPersistentLibraryContainer; }
+namespace com::sun::star::script { class XStorageBasedLibraryContainer; }
 namespace com::sun::star::script { class XStarBasicAccess; }
 
 class BasicManager;
@@ -58,8 +58,8 @@ namespace basic { class ImplRepository; }
 
 struct LibraryContainerInfo
 {
-    css::uno::Reference< css::script::XPersistentLibraryContainer > mxScriptCont;
-    css::uno::Reference< css::script::XPersistentLibraryContainer > mxDialogCont;
+    css::uno::Reference< css::script::XStorageBasedLibraryContainer > mxScriptCont;
+    css::uno::Reference< css::script::XStorageBasedLibraryContainer > mxDialogCont;
     basic::SfxScriptLibraryContainer* mpOldBasicPassword;
 
     LibraryContainerInfo()
@@ -69,8 +69,8 @@ struct LibraryContainerInfo
 
     LibraryContainerInfo
     (
-        css::uno::Reference< css::script::XPersistentLibraryContainer > xScriptCont,
-        css::uno::Reference< css::script::XPersistentLibraryContainer > xDialogCont,
+        css::uno::Reference< css::script::XStorageBasedLibraryContainer > xScriptCont,
+        css::uno::Reference< css::script::XStorageBasedLibraryContainer > xDialogCont,
         basic::SfxScriptLibraryContainer* pOldBasicPassword
     )
         : mxScriptCont(std::move( xScriptCont ))
@@ -136,9 +136,9 @@ public:
     */
     void            SetLibraryContainerInfo( const LibraryContainerInfo& rInfo );
 
-    const css::uno::Reference< css::script::XPersistentLibraryContainer >&
+    const css::uno::Reference< css::script::XStorageBasedLibraryContainer >&
                     GetDialogLibraryContainer()  const;
-    const css::uno::Reference< css::script::XPersistentLibraryContainer >&
+    const css::uno::Reference< css::script::XStorageBasedLibraryContainer >&
                     GetScriptLibraryContainer()  const;
 
     bool            LoadLib( sal_uInt16 nLib );

@@ -55,9 +55,9 @@ struct SfxObjectShell_Impl final : public ::sfx2::IMacroDocumentAccess
     std::unique_ptr<::comphelper::EmbeddedObjectContainer> mxObjectContainer;
     SfxBasicManagerHolder aBasicManager;
     SfxObjectShell&     rDocShell;
-    css::uno::Reference< css::script::XLibraryContainer >
+    css::uno::Reference< css::script::XStorageBasedLibraryContainer >
                         xBasicLibraries;
-    css::uno::Reference< css::script::XLibraryContainer >
+    css::uno::Reference< css::script::XStorageBasedLibraryContainer >
                         xDialogLibraries;
     ::sfx2::DocumentMacroMode
                         aMacroMode;

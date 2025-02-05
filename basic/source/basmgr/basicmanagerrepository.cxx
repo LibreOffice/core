@@ -55,7 +55,7 @@ namespace basic
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::embed::XStorage;
-    using ::com::sun::star::script::XPersistentLibraryContainer;
+    using ::com::sun::star::script::XStorageBasedLibraryContainer;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::document::XStorageBasedDocument;
@@ -168,15 +168,15 @@ namespace basic
         */
         static bool impl_getDocumentLibraryContainers_nothrow(
                     const Reference< XModel >& _rxDocument,
-                    Reference< XPersistentLibraryContainer >& _out_rxBasicLibraries,
-                    Reference< XPersistentLibraryContainer >& _out_rxDialogLibraries
+                    Reference<XStorageBasedLibraryContainer>& _out_rxBasicLibraries,
+                    Reference<XStorageBasedLibraryContainer>& _out_rxDialogLibraries
                 );
 
         /** initializes the given library containers, which belong to a document
         */
         static void impl_initDocLibraryContainers_nothrow(
-                    const Reference< XPersistentLibraryContainer >& _rxBasicLibraries,
-                    const Reference< XPersistentLibraryContainer >& _rxDialogLibraries
+                    const Reference<XStorageBasedLibraryContainer>& _rxBasicLibraries,
+                    const Reference<XStorageBasedLibraryContainer>& _rxDialogLibraries
                 );
 
         // OEventListenerAdapter overridables
@@ -374,7 +374,7 @@ namespace basic
         return m_aStore.find(xNormalized) != m_aStore.end();
     }
 
-    void ImplRepository::impl_initDocLibraryContainers_nothrow( const Reference< XPersistentLibraryContainer >& _rxBasicLibraries, const Reference< XPersistentLibraryContainer >& _rxDialogLibraries )
+    void ImplRepository::impl_initDocLibraryContainers_nothrow( const Reference<XStorageBasedLibraryContainer>& _rxBasicLibraries, const Reference<XStorageBasedLibraryContainer>& _rxDialogLibraries )
     {
         OSL_PRECOND( _rxBasicLibraries.is() && _rxDialogLibraries.is(),
             "ImplRepository::impl_initDocLibraryContainers_nothrow: illegal library containers, this will crash!" );
@@ -413,8 +413,8 @@ namespace basic
             // the document is not able to provide the storage it is based on.
             return false;
         }
-        Reference< XPersistentLibraryContainer > xBasicLibs;
-        Reference< XPersistentLibraryContainer > xDialogLibs;
+        Reference<XStorageBasedLibraryContainer> xBasicLibs;
+        Reference<XStorageBasedLibraryContainer> xDialogLibs;
         if ( !impl_getDocumentLibraryContainers_nothrow( _rxDocumentModel, xBasicLibs, xDialogLibs ) )
         {
             m_aStore.erase(location);
@@ -519,15 +519,15 @@ namespace basic
 
 
     bool ImplRepository::impl_getDocumentLibraryContainers_nothrow( const Reference< XModel >& _rxDocument,
-        Reference< XPersistentLibraryContainer >& _out_rxBasicLibraries, Reference< XPersistentLibraryContainer >& _out_rxDialogLibraries )
+        Reference<XStorageBasedLibraryContainer>& _out_rxBasicLibraries, Reference<XStorageBasedLibraryContainer>& _out_rxDialogLibraries )
     {
         _out_rxBasicLibraries.clear();
         _out_rxDialogLibraries.clear();
         try
         {
             Reference< XEmbeddedScripts > xScripts( _rxDocument, UNO_QUERY_THROW );
-            _out_rxBasicLibraries.set( xScripts->getBasicLibraries(), UNO_QUERY_THROW );
-            _out_rxDialogLibraries.set( xScripts->getDialogLibraries(), UNO_QUERY_THROW );
+            _out_rxBasicLibraries.set( xScripts->getBasicLibraries() );
+            _out_rxDialogLibraries.set( xScripts->getDialogLibraries() );
         }
         catch( const Exception& )
         {

@@ -510,12 +510,12 @@ static void copyToLibraryContainer( StarBASIC* pBasic, const LibraryContainerInf
     }
 }
 
-const uno::Reference< script::XPersistentLibraryContainer >& BasicManager::GetDialogLibraryContainer()  const
+const uno::Reference< script::XStorageBasedLibraryContainer >& BasicManager::GetDialogLibraryContainer()  const
 {
     return maContainerInfo.mxDialogCont;
 }
 
-const uno::Reference< script::XPersistentLibraryContainer >& BasicManager::GetScriptLibraryContainer()  const
+const uno::Reference< script::XStorageBasedLibraryContainer >& BasicManager::GetScriptLibraryContainer()  const
 {
     return maContainerInfo.mxScriptCont;
 }

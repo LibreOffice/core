@@ -21,7 +21,7 @@
 
 #include "basctldllapi.h"
 
-#include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/io/XInputStreamProvider.hpp>
@@ -208,7 +208,7 @@ namespace basctl
 
             If the document is not valid, <NULL/> is returned.
         */
-        css::uno::Reference< css::script::XLibraryContainer >
+        css::uno::Reference< css::script::XStorageBasedLibraryContainer >
                     getLibraryContainer( LibraryContainerType _eType ) const;
 
         /** determines whether there exists a library of the given type, with the given name

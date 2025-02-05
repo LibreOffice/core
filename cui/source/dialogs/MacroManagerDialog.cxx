@@ -413,7 +413,7 @@ void ScriptContainersListBox::Insert(
             OUString aLibName = m_xTreeView->get_text(*xNewEntryIter);
 
             css::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
-                aDocument.getLibraryContainer(basctl::E_SCRIPTS), css::uno::UNO_QUERY);
+                aDocument.getLibraryContainer(basctl::E_SCRIPTS));
             if (xModLibContainer.is() && xModLibContainer->hasByName(aLibName))
             {
                 css::uno::Reference<css::script::XLibraryContainerPassword> xPasswd(
@@ -572,7 +572,7 @@ IMPL_LINK(ScriptContainersListBox, QueryTooltip, const weld::TreeIter&, rEntryIt
                 return OUString();
 
             css::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
-                aDocument.getLibraryContainer(basctl::E_SCRIPTS), css::uno::UNO_QUERY);
+                aDocument.getLibraryContainer(basctl::E_SCRIPTS));
             // check for linked library
             OUString aLibName = m_xTreeView->get_text(rEntryIter);
             if (xModLibContainer.is() && xModLibContainer->hasByName(aLibName)
@@ -605,7 +605,7 @@ IMPL_LINK(ScriptContainersListBox, ExpandingHdl, const weld::TreeIter&, rEntryIt
 
             // check if the library is password protected
             css::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
-                aDocument.getLibraryContainer(basctl::E_SCRIPTS), css::uno::UNO_QUERY);
+                aDocument.getLibraryContainer(basctl::E_SCRIPTS));
             if (xModLibContainer.is() && xModLibContainer->hasByName(aLibName))
             {
                 css::uno::Reference<css::script::XLibraryContainerPassword> xPasswd(
@@ -963,7 +963,7 @@ void MacroManagerDialog::UpdateUI()
             {
                 // if this is a Basic linked library use the link url name for the description string
                 css::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
-                    aDocument.getLibraryContainer(basctl::E_SCRIPTS), css::uno::UNO_QUERY);
+                    aDocument.getLibraryContainer(basctl::E_SCRIPTS));
                 OUString aLibName = rTreeView.get_text(*xSelectedIter);
                 if (xModLibContainer.is() && xModLibContainer->hasByName(aLibName)
                     && xModLibContainer->isLibraryLink(aLibName))
@@ -1077,7 +1077,7 @@ void MacroManagerDialog::CheckButtons()
                 {
                     // check, if library is readonly
                     css::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
-                        aDocument.getLibraryContainer(basctl::E_SCRIPTS), css::uno::UNO_QUERY);
+                        aDocument.getLibraryContainer(basctl::E_SCRIPTS));
 
                     bool bReadOnly = xModLibContainer.is() && xModLibContainer->hasByName(aLibName)
                                      && xModLibContainer->isLibraryReadOnly(aLibName);
@@ -1111,9 +1111,9 @@ void MacroManagerDialog::CheckButtons()
                         ScriptContainerType::LIBRARY);
 
                     css::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
-                        aDocument.getLibraryContainer(basctl::E_SCRIPTS), css::uno::UNO_QUERY);
+                        aDocument.getLibraryContainer(basctl::E_SCRIPTS));
                     css::uno::Reference<css::script::XLibraryContainer2> xDlgLibContainer(
-                        aDocument.getLibraryContainer(basctl::E_DIALOGS), css::uno::UNO_QUERY);
+                        aDocument.getLibraryContainer(basctl::E_DIALOGS));
 
                     bool bReadOnly
                         = (xModLibContainer.is() && xModLibContainer->hasByName(aLibName)
@@ -1261,7 +1261,7 @@ void MacroManagerDialog::BasicScriptsCreateLibrary(const basctl::ScriptDocument&
         // cannot be renamed/moved since the SfxLibraryContainer::renameLibrary
         // moves the folders/files on the file system
         css::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
-            rDocument.getLibraryContainer(basctl::E_SCRIPTS), css::uno::UNO_QUERY);
+            rDocument.getLibraryContainer(basctl::E_SCRIPTS));
         css::uno::Reference<css::script::XPersistentLibraryContainer> xModPersLibContainer(
             xModLibContainer, css::uno::UNO_QUERY);
         if (xModPersLibContainer.is())
@@ -1684,9 +1684,9 @@ bool MacroManagerDialog::IsLibraryReadOnlyOrFailedPasswordQuery(
     const basctl::ScriptDocument& rDocument, weld::TreeIter* pIter)
 {
     css::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
-        rDocument.getLibraryContainer(basctl::E_SCRIPTS), css::uno::UNO_QUERY);
+        rDocument.getLibraryContainer(basctl::E_SCRIPTS));
     css::uno::Reference<css::script::XLibraryContainer2> xDlgLibContainer(
-        rDocument.getLibraryContainer(basctl::E_DIALOGS), css::uno::UNO_QUERY);
+        rDocument.getLibraryContainer(basctl::E_DIALOGS));
 
     OUString aLibName
         = m_xScriptContainersListBox->GetContainerName(*pIter, ScriptContainerType::LIBRARY);
@@ -1772,11 +1772,11 @@ void MacroManagerDialog::BasicScriptsLibraryModuleDialogRename(
         try
         {
             css::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
-                rDocument.getLibraryContainer(basctl::E_SCRIPTS), css::uno::UNO_QUERY);
+                rDocument.getLibraryContainer(basctl::E_SCRIPTS));
             if (xModLibContainer.is() && xModLibContainer->hasByName(sOldName))
                 xModLibContainer->renameLibrary(sOldName, sNewName);
             css::uno::Reference<css::script::XLibraryContainer2> xDlgLibContainer(
-                rDocument.getLibraryContainer(basctl::E_DIALOGS), css::uno::UNO_QUERY);
+                rDocument.getLibraryContainer(basctl::E_DIALOGS));
             if (xDlgLibContainer.is() && xDlgLibContainer->hasByName(sOldName))
                 xDlgLibContainer->renameLibrary(sOldName, sNewName);
         }
@@ -1860,9 +1860,9 @@ void MacroManagerDialog::BasicScriptsLibraryModuleDialogDelete(
         // check, if library is link
         bool bIsLibraryLink = false;
         css::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
-            rDocument.getLibraryContainer(basctl::E_SCRIPTS), css::uno::UNO_QUERY);
+            rDocument.getLibraryContainer(basctl::E_SCRIPTS));
         css::uno::Reference<css::script::XLibraryContainer2> xDlgLibContainer(
-            rDocument.getLibraryContainer(basctl::E_DIALOGS), css::uno::UNO_QUERY);
+            rDocument.getLibraryContainer(basctl::E_DIALOGS));
         if ((xModLibContainer.is() && xModLibContainer->hasByName(aLibName)
              && xModLibContainer->isLibraryLink(aLibName))
             || (xDlgLibContainer.is() && xDlgLibContainer->hasByName(aLibName)
