@@ -384,6 +384,11 @@ private:
     css::uno::Reference<css::accessibility::XAccessible>
     getAccessibleHeaderBar(AccessibleBrowseBoxObjType _eObjType);
 
+    css::uno::Reference<css::accessibility::XAccessible>
+    getAccessibleHeaderCell(BrowseBox::THeaderCellMap& _raHeaderCells, sal_Int32 _nPos,
+                            AccessibleBrowseBoxObjType _eType,
+                            const css::uno::Reference<css::accessibility::XAccessible>& _rParent);
+
     /// @see AccessibleBrowseBox::getTable
     css::uno::Reference<css::accessibility::XAccessible>
     getAccessibleTable();
