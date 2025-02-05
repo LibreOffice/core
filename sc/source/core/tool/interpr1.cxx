@@ -10877,12 +10877,12 @@ void ScInterpreter::ScIndex()
     if ( !MustHaveParamCount( nParamCount, 1, 4 ) )
         return;
 
-    sal_uInt32 nArea;
+    sal_Int32 nArea;
     size_t nAreaCount;
     SCCOL nCol;
     SCROW nRow;
     if (nParamCount == 4)
-        nArea = GetUInt32();
+        nArea = GetInt32();
     else
         nArea = 1;
     bool bColMissing;
@@ -10900,18 +10900,18 @@ void ScInterpreter::ScIndex()
         nRow = static_cast<SCROW>(GetInt32());
     else
         nRow = 0;
+    if (nArea < 1 || nCol < 0 || nRow < 0)
+    {
+        PushIllegalArgument();
+        return;
+    }
     if (GetStackType() == svRefList)
         nAreaCount = (sp ? pStack[sp-1]->GetRefList()->size() : 0);
     else
         nAreaCount = 1;     // one reference or array or whatever
-    if (nGlobalError != FormulaError::NONE || nAreaCount == 0 || static_cast<size_t>(nArea) > nAreaCount)
+    if (nGlobalError != FormulaError::NONE || nAreaCount == 0 || o3tl::make_unsigned(nArea) > nAreaCount)
     {
         PushError( FormulaError::NoRef);
-        return;
-    }
-    else if (nArea < 1 || nCol < 0 || nRow < 0)
-    {
-        PushIllegalArgument();
         return;
     }
     switch (GetStackType())
@@ -10920,8 +10920,7 @@ void ScInterpreter::ScIndex()
         case svExternalSingleRef:
         case svExternalDoubleRef:
             {
-                if (nArea != 1)
-                    SetError(FormulaError::IllegalArgument);
+                assert(nArea == 1);
                 sal_uInt16 nOldSp = sp;
                 ScMatrixRef pMat = GetMatrix();
                 if (!pMat)
