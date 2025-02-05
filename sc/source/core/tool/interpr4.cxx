@@ -1966,34 +1966,27 @@ bool ScInterpreter::IsMissing() const
 
 StackVar ScInterpreter::GetRawStackType()
 {
-    StackVar eRes;
     if( sp )
     {
-        eRes = pStack[sp - 1]->GetType();
+        return pStack[sp - 1]->GetType();
     }
     else
     {
         SetError(FormulaError::UnknownStackVariable);
-        eRes = svUnknown;
+        return svUnknown;
     }
-    return eRes;
 }
 
 StackVar ScInterpreter::GetStackType()
 {
-    StackVar eRes;
-    if( sp )
+    switch (StackVar eRes = GetRawStackType())
     {
-        eRes = pStack[sp - 1]->GetType();
-        if( eRes == svMissing || eRes == svEmptyCell )
-            eRes = svDouble;    // default!
+        case svMissing:
+        case svEmptyCell:
+            return svDouble; // default!
+        default:
+            return eRes;
     }
-    else
-    {
-        SetError(FormulaError::UnknownStackVariable);
-        eRes = svUnknown;
-    }
-    return eRes;
 }
 
 StackVar ScInterpreter::GetStackType( sal_uInt8 nParam )
