@@ -1341,6 +1341,30 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139737)
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf156348)
+{
+    createSwDoc("tdf156348.odt");
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "Delimiter", uno::Any(u"\t"_ustr) },
+                                           { "WithHeader", uno::Any(false) },
+                                           { "RepeatHeaderLines", uno::Any(sal_uInt16(0)) },
+                                           { "WithBorder", uno::Any(false) },
+                                           { "DontSplitTable", uno::Any(false) } }));
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, u".uno:ConvertTextToTable"_ustr, aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf150845)
 {
     createSwDoc();
