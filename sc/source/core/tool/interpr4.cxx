@@ -2260,18 +2260,7 @@ sal_Int16 ScInterpreter::GetInt16()
 
 sal_uInt32 ScInterpreter::GetUInt32()
 {
-    double fVal = rtl::math::approxFloor( GetDouble());
-    if (!std::isfinite(fVal))
-    {
-        SetError( GetDoubleErrorValue( fVal));
-        return SAL_MAX_UINT32;
-    }
-    if (fVal < 0.0 || fVal > SAL_MAX_UINT32)
-    {
-        SetError( FormulaError::IllegalArgument);
-        return SAL_MAX_UINT32;
-    }
-    return static_cast<sal_uInt32>(fVal);
+    return double_to<sal_uInt32>(GetDouble());
 }
 
 bool ScInterpreter::GetDoubleOrString( double& rDouble, svl::SharedString& rString )
