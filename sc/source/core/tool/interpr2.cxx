@@ -357,7 +357,7 @@ void ScInterpreter::ScEasterSunday()
 }
 
 FormulaError ScInterpreter::GetWeekendAndHolidayMasks(
-    const sal_uInt8 nParamCount, const sal_uInt32 nNullDate, vector< double >& rSortArray,
+    const sal_uInt8 nParamCount, const sal_Int32 nNullDate, vector< double >& rSortArray,
     bool bWeekendMask[ 7 ] )
 {
     if ( nParamCount == 4 )
@@ -397,7 +397,7 @@ FormulaError ScInterpreter::GetWeekendAndHolidayMasks(
 }
 
 FormulaError ScInterpreter::GetWeekendAndHolidayMasks_MS(
-    const sal_uInt8 nParamCount, const sal_uInt32 nNullDate, vector< double >& rSortArray,
+    const sal_uInt8 nParamCount, const sal_Int32 nNullDate, vector< double >& rSortArray,
     bool bWeekendMask[ 7 ], bool bWorkdayFunction )
 {
     FormulaError nErr = FormulaError::NONE;
@@ -522,7 +522,7 @@ void ScInterpreter::ScNetWorkdays( bool bOOXML_Version )
     vector<double> nSortArray;
     bool bWeekendMask[ 7 ];
     const Date& rNullDate = mrContext.NFGetNullDate();
-    sal_uInt32 nNullDate = Date::DateToDays( rNullDate.GetDay(), rNullDate.GetMonth(), rNullDate.GetYear() );
+    sal_Int32 nNullDate = Date::DateToDays( rNullDate.GetDay(), rNullDate.GetMonth(), rNullDate.GetYear() );
     FormulaError nErr;
     if ( bOOXML_Version )
     {
@@ -538,9 +538,9 @@ void ScInterpreter::ScNetWorkdays( bool bOOXML_Version )
         PushError( nErr );
     else
     {
-        sal_uInt32 nDate2 = GetUInt32();
-        sal_uInt32 nDate1 = GetUInt32();
-        if (nGlobalError != FormulaError::NONE || (nDate1 > SAL_MAX_UINT32 - nNullDate) || nDate2 > (SAL_MAX_UINT32 - nNullDate))
+        sal_Int32 nDate2 = GetFloor32();
+        sal_Int32 nDate1 = GetFloor32();
+        if (nGlobalError != FormulaError::NONE || (nDate1 > SAL_MAX_INT32 - nNullDate) || nDate2 > (SAL_MAX_INT32 - nNullDate))
         {
             PushIllegalArgument();
             return;
@@ -579,7 +579,7 @@ void ScInterpreter::ScWorkday_MS()
     vector<double> nSortArray;
     bool bWeekendMask[ 7 ];
     const Date& rNullDate = mrContext.NFGetNullDate();
-    sal_uInt32 nNullDate = Date::DateToDays( rNullDate.GetDay(), rNullDate.GetMonth(), rNullDate.GetYear() );
+    sal_Int32 nNullDate = Date::DateToDays( rNullDate.GetDay(), rNullDate.GetMonth(), rNullDate.GetYear() );
     FormulaError nErr = GetWeekendAndHolidayMasks_MS( nParamCount, nNullDate,
                         nSortArray, bWeekendMask, true );
     if ( nErr != FormulaError::NONE )
@@ -587,8 +587,8 @@ void ScInterpreter::ScWorkday_MS()
     else
     {
         sal_Int32 nDays = GetFloor32();
-        sal_uInt32 nDate = GetUInt32();
-        if (nGlobalError != FormulaError::NONE || (nDate > SAL_MAX_UINT32 - nNullDate))
+        sal_Int32 nDate = GetFloor32();
+        if (nGlobalError != FormulaError::NONE || (nDate > SAL_MAX_INT32 - nNullDate))
         {
             PushIllegalArgument();
             return;

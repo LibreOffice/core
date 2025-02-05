@@ -838,9 +838,9 @@ public:
     void ScGetIsoWeekOfYear();
     void ScWeeknumOOo();
     void ScEasterSunday();
-    FormulaError GetWeekendAndHolidayMasks( const sal_uInt8 nParamCount, const sal_uInt32 nNullDate,
+    FormulaError GetWeekendAndHolidayMasks( const sal_uInt8 nParamCount, const sal_Int32 nNullDate,
             ::std::vector<double>& rSortArray, bool bWeekendMask[ 7 ] );
-    FormulaError GetWeekendAndHolidayMasks_MS( const sal_uInt8 nParamCount, const sal_uInt32 nNullDate,
+    FormulaError GetWeekendAndHolidayMasks_MS( const sal_uInt8 nParamCount, const sal_Int32 nNullDate,
             ::std::vector<double>& rSortArray, bool bWeekendMask[ 7 ], bool bWorkdayFunction );
     static inline sal_Int16 GetDayOfWeek( sal_Int32 n );
     void ScNetWorkdays( bool bOOXML_Version );
