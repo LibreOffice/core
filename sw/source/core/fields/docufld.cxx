@@ -915,8 +915,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
         }
         else
         {
-            sal_Int32 dur = xDocProps->getEditingDuration();
-            double fVal = tools::Time(dur/3600, (dur%3600)/60, dur%60).GetTimeInDays();
+            double fVal = xDocProps->getEditingDuration() / double(tools::Time::secondPerDay);
             aStr = ExpandValue(fVal, nFormat, nLang);
         }
         break;
@@ -1032,75 +1031,65 @@ SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const 
     m_aContent = rValue;
 }
 
-template<class T>
-static double lcl_TimeToDouble( const T& rTime )
+template <class T> static double lcl_TimeToDays(const T& rTime)
 {
-    const double fNanoSecondsPerDay = 86400000000000.0;
-    return (  (rTime.Hours   * SAL_CONST_INT64(3600000000000))
-            + (rTime.Minutes * SAL_CONST_INT64(  60000000000))
-            + (rTime.Seconds * SAL_CONST_INT64(   1000000000))
+    constexpr double fNanoSecondsPerDay = tools::Time::nanoSecPerDay;
+    return (  (rTime.Hours   * tools::Time::nanoSecPerHour)
+            + (rTime.Minutes * tools::Time::nanoSecPerMinute)
+            + (rTime.Seconds * tools::Time::nanoSecPerSec)
             + (rTime.NanoSeconds))
         / fNanoSecondsPerDay;
 }
 
-template<class D>
-static double lcl_DateToDouble( const D& rDate, const Date& rNullDate )
+template<class D> static double lcl_DateToDays(const D& rDate, const SwDocShell* pDocShell)
 {
-    tools::Long nDate = Date::DateToDays( rDate.Day, rDate.Month, rDate.Year );
-    tools::Long nNullDate = rNullDate.GetAsNormalizedDays();
+    const SvNumberFormatter* pFormatter = pDocShell->GetDoc()->GetNumberFormatter();
+    sal_Int64 nDate = Date::DateToDays(rDate.Day, rDate.Month, rDate.Year);
+    sal_Int64 nNullDate = pFormatter->GetNullDate().GetAsNormalizedDays();
     return double( nDate - nNullDate );
 }
 
 OUString SwDocInfoField::ExpandImpl(SwRootFrame const*const) const
 {
-    if ( ( m_nSubType & 0xFF ) == DI_CUSTOM )
+    // if the field is "fixed" we don't update it from the property
+    if (!IsFixed())
     {
-        // custom properties currently need special treatment
-        // We don't have a secure way to detect "real" custom properties in Word import of text
-        // fields, so we treat *every* unknown property as a custom property, even the "built-in"
-        // section in Word's document summary information stream as these properties have not been
-        // inserted when the document summary information was imported, we do it here.
-        // This approach is still a lot better than the old one to import such fields as
-        // "user fields" and simple text
-        SwDocShell* pDocShell = GetDoc()->GetDocShell();
-        if( !pDocShell )
-            return m_aContent;
-        try
+        if ( ( m_nSubType & 0xFF ) == DI_CUSTOM )
         {
-            uno::Reference<document::XDocumentPropertiesSupplier> xDPS( pDocShell->GetModel(), uno::UNO_QUERY_THROW);
-            uno::Reference<document::XDocumentProperties> xDocProps( xDPS->getDocumentProperties());
-            uno::Reference < beans::XPropertySet > xSet( xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
-            uno::Reference < beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
-
-            uno::Any aAny;
-            if( xSetInfo->hasPropertyByName( m_aName ) )
-                aAny = xSet->getPropertyValue( m_aName );
-            if ( aAny.getValueType() != cppu::UnoType<void>::get() )
+            // custom properties currently need special treatment
+            // We don't have a secure way to detect "real" custom properties in Word import of text
+            // fields, so we treat *every* unknown property as a custom property, even the "built-in"
+            // section in Word's document summary information stream as these properties have not been
+            // inserted when the document summary information was imported, we do it here.
+            // This approach is still a lot better than the old one to import such fields as
+            // "user fields" and simple text
+            SwDocShell* pDocShell = GetDoc()->GetDocShell();
+            if( !pDocShell )
+                return m_aContent;
+            try
             {
-                // "void" type means that the property has not been inserted until now
-                if ( !IsFixed() )
+                uno::Reference<document::XDocumentPropertiesSupplier> xDPS( pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+                uno::Reference<document::XDocumentProperties> xDocProps( xDPS->getDocumentProperties());
+                uno::Reference < beans::XPropertySet > xSet( xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
+                uno::Reference < beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
+
+                uno::Any aAny;
+                if( xSetInfo->hasPropertyByName( m_aName ) )
+                    aAny = xSet->getPropertyValue( m_aName );
+                if (aAny.hasValue())
                 {
-                    // if the field is "fixed" we don't update it from the property
+                    // "void" type means that the property has not been inserted until now
                     OUString sVal;
-                    uno::Reference < script::XTypeConverter > xConverter( script::Converter::create(comphelper::getProcessComponentContext()) );
-                    util::Date aDate;
-                    util::DateTime aDateTime;
-                    util::Duration aDuration;
-                    if( aAny >>= aDate)
+                    if (util::Date aDate; aAny >>= aDate)
                     {
-                        SvNumberFormatter* pFormatter = pDocShell->GetDoc()->GetNumberFormatter();
-                        const Date& rNullDate = pFormatter->GetNullDate();
-                        sVal = ExpandValue( lcl_DateToDouble<util::Date>( aDate, rNullDate ), GetFormat(), GetLanguage());
+                        sVal = ExpandValue(lcl_DateToDays(aDate, pDocShell), GetFormat(), GetLanguage());
                     }
-                    else if( aAny >>= aDateTime )
+                    else if (util::DateTime aDateTime; aAny >>= aDateTime)
                     {
-                        double fDateTime = lcl_TimeToDouble<util::DateTime>( aDateTime );
-                        SvNumberFormatter* pFormatter = pDocShell->GetDoc()->GetNumberFormatter();
-                        const Date& rNullDate = pFormatter->GetNullDate();
-                        fDateTime += lcl_DateToDouble<util::DateTime>( aDateTime, rNullDate );
+                        double fDateTime = lcl_TimeToDays(aDateTime) + lcl_DateToDays(aDateTime, pDocShell);
                         sVal = ExpandValue( fDateTime, GetFormat(), GetLanguage());
                     }
-                    else if( aAny >>= aDuration )
+                    else if (util::Duration aDuration; aAny >>= aDuration)
                     {
                         sVal = OUStringChar(aDuration.Negative ? '-' : '+')
                              + SwViewShell::GetShellRes()->sDurationFormat;
@@ -1113,17 +1102,18 @@ OUString SwDocInfoField::ExpandImpl(SwRootFrame const*const) const
                     }
                     else
                     {
+                        uno::Reference < script::XTypeConverter > xConverter( script::Converter::create(comphelper::getProcessComponentContext()) );
                         uno::Any aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
                         aNew >>= sVal;
                     }
                     const_cast<SwDocInfoField*>(this)->m_aContent = sVal;
                 }
             }
+            catch (uno::Exception&) {}
         }
-        catch (uno::Exception&) {}
+        else
+            const_cast<SwDocInfoField*>(this)->m_aContent = static_cast<SwDocInfoFieldType*>(GetTyp())->Expand(m_nSubType, GetFormat(), GetLanguage(), m_aName);
     }
-    else if ( !IsFixed() )
-        const_cast<SwDocInfoField*>(this)->m_aContent = static_cast<SwDocInfoFieldType*>(GetTyp())->Expand(m_nSubType, GetFormat(), GetLanguage(), m_aName);
 
     return m_aContent;
 }
@@ -2475,11 +2465,10 @@ void SwRefPageGetField::ChangeExpansion(const SwFrame& rFrame,
 
     //  create index for determination of the TextNode
     SwPosition aPos( rDoc.GetNodes() );
-    SwTextNode* pTextNode = const_cast<SwTextNode*>(GetBodyTextNode(rDoc, aPos, rFrame));
 
     // If no layout exists, ChangeExpansion is called for header and
     // footer lines via layout formatting without existing TextNode.
-    if(!pTextNode)
+    if(!GetBodyTextNode(rDoc, aPos, rFrame))
         return;
 
     SetGetExpField aEndField( aPos.GetNode(), pField, aPos.GetContentIndex() );
