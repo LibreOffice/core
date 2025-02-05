@@ -64,8 +64,8 @@ IMPL_LINK(ObjectPage, EditingEntryHdl, const weld::TreeIter&, rEntry, bool)
         EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(&rEntry);
         const ScriptDocument& aDocument( aDesc.GetDocument() );
         const OUString& aLibName( aDesc.GetLibName() );
-        Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
-        Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+        Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
+        Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ) );
         if ( !( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) ) ||
                 ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) ) ) )
         {
@@ -284,8 +284,8 @@ private:
                     const ScriptDocument& aDocument( aDesc.GetDocument() );
                     const OUString& aLibName( aDesc.GetLibName() );
                     // allow MOVE mode only for libraries, which are not readonly
-                    Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
-                    Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+                    Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
+                    Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ) );
                     if ( !( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) ) ||
                             ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) ) ) )
                     {
@@ -356,7 +356,7 @@ private:
             const OUString& aDestLibName = aDestDesc.GetLibName();
 
             // check if module library is not loaded, readonly or password protected
-            Reference< script::XLibraryContainer2 > xModLibContainer( rDestDoc.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
+            Reference< script::XLibraryContainer2 > xModLibContainer( rDestDoc.getLibraryContainer( E_SCRIPTS ) );
             if ( xModLibContainer.is() && xModLibContainer->hasByName( aDestLibName ) )
             {
                 if ( !xModLibContainer->isLibraryLoaded( aDestLibName ) )
@@ -371,7 +371,7 @@ private:
             }
 
             // check if dialog library is not loaded or readonly
-            Reference< script::XLibraryContainer2 > xDlgLibContainer( rDestDoc.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+            Reference< script::XLibraryContainer2 > xDlgLibContainer( rDestDoc.getLibraryContainer( E_DIALOGS ) );
             if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aDestLibName ) )
             {
                 if ( !xDlgLibContainer->isLibraryLoaded( aDestLibName ) )
@@ -648,8 +648,8 @@ void ObjectPage::CheckButtons()
     bool bReadOnly = false;
     if ( nDepth > 0 )
     {
-        Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
-        Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+        Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
+        Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ) );
         if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) ) ||
              ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) ) )
         {

@@ -23,7 +23,7 @@
 
 #include <cassert>
 
-#include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
@@ -71,7 +71,7 @@ BasicManager* SfxApplication::GetBasicManager()
 #endif
 }
 
-XLibraryContainer * SfxApplication::GetDialogContainer()
+XStorageBasedLibraryContainer* SfxApplication::GetDialogContainer()
 {
 #if !HAVE_FEATURE_SCRIPTING
     return nullptr;
@@ -85,7 +85,7 @@ XLibraryContainer * SfxApplication::GetDialogContainer()
 }
 
 
-XLibraryContainer * SfxApplication::GetBasicContainer()
+XStorageBasedLibraryContainer* SfxApplication::GetBasicContainer()
 {
 #if !HAVE_FEATURE_SCRIPTING
     return nullptr;

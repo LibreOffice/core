@@ -255,8 +255,8 @@ IMPL_LINK(LibPage, EditingEntryHdl, const weld::TreeIter&, rIter, bool)
     }
 
     // check, if library is readonly
-    Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
-    Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+    Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ) );
+    Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ) );
     if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) && !xModLibContainer->isLibraryLink( aLibName ) ) ||
          ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
     {
@@ -298,11 +298,11 @@ IMPL_LINK(LibPage, EditedEntryHdl, const IterString&, rIterString, bool)
     {
         try
         {
-            Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
+            Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ) );
             if ( xModLibContainer.is() )
                 xModLibContainer->renameLibrary( aOldName, sNewName );
 
-            Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+            Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ) );
             if ( xDlgLibContainer.is() )
                 xDlgLibContainer->renameLibrary( aOldName, sNewName );
 
@@ -359,8 +359,8 @@ void LibPage::CheckButtons()
         return;
 
     OUString aLibName = m_xLibBox->get_text(*xCur, 0);
-    Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
-    Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+    Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ) );
+    Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ) );
 
     if ( m_eCurLocation == LIBRARY_LOCATION_SHARE )
     {
@@ -684,8 +684,8 @@ void LibPage::InsertLib()
                 if (rView.get_toggle(nLib) == TRISTATE_TRUE)
                 {
                     OUString aLibName(rView.get_text(nLib));
-                    Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
-                    Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+                    Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ) );
+                    Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ) );
 
                     // check, if the library is already existing
                     if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) ) ||
@@ -911,7 +911,7 @@ void LibPage::Export()
     OUString aLibName(m_xLibBox->get_text(*xCurEntry, 0));
 
     // Password verification
-    Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
+    Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ) );
 
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && !xModLibContainer->isLibraryLoaded( aLibName ) )
     {
@@ -1137,8 +1137,8 @@ void LibPage::DeleteCurrent()
 
     // check, if library is link
     bool bIsLibraryLink = false;
-    Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
-    Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+    Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ) );
+    Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ) );
     if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryLink( aLibName ) ) ||
          ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryLink( aLibName ) ) )
     {
@@ -1230,7 +1230,7 @@ void LibPage::ImpInsertLibEntry( const OUString& rLibName, int nPos )
 {
     // check, if library is password protected
     bool bProtected = false;
-    Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
+    Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ) );
     if ( xModLibContainer.is() && xModLibContainer->hasByName( rLibName ) )
     {
         Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
@@ -1324,9 +1324,9 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
             // cannot be renamed/moved since the SfxLibraryContainer::renameLibrary
             // moves the folders/files on the file system
             Reference<script::XLibraryContainer2> xModLibContainer(
-                rDocument.getLibraryContainer(E_SCRIPTS), UNO_QUERY);
+                rDocument.getLibraryContainer(E_SCRIPTS));
             Reference<script::XLibraryContainer2> xDlgLibContainer(
-                rDocument.getLibraryContainer(E_DIALOGS), UNO_QUERY);
+                rDocument.getLibraryContainer(E_DIALOGS));
             Reference<script::XPersistentLibraryContainer> xModPersLibContainer(xModLibContainer,
                                                                                 UNO_QUERY);
             if (xModPersLibContainer.is())
