@@ -844,7 +844,7 @@ tools::Rectangle SvHeaderTabListBox::calcTableRect( bool _bOnScreen )
     return tools::Rectangle(Point(0, 0), aScreenRect.GetSize());
 }
 
-tools::Rectangle SvHeaderTabListBox::GetFieldRectPixel( sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader, bool _bOnScreen )
+tools::Rectangle SvHeaderTabListBox::calcFieldRectPixel( sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader, bool _bOnScreen )
 {
     DBG_ASSERT( !_bIsHeader || 0 == _nRow, "invalid parameters" );
     tools::Rectangle aRect;
