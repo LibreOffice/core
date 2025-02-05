@@ -2258,6 +2258,11 @@ sal_Int16 ScInterpreter::GetInt16()
     return double_to<sal_Int16>(GetDouble());
 }
 
+sal_Int16 ScInterpreter::GetInt16WithDefault(sal_Int16 nDefault)
+{
+    return double_to<sal_Int16>(GetDoubleWithDefault(nDefault));
+}
+
 sal_uInt32 ScInterpreter::GetUInt32()
 {
     return double_to<sal_uInt32>(GetDouble());

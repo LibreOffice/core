@@ -498,6 +498,7 @@ private:
     sal_Int32 GetFloor32();
     /** if GetDouble() not within int16 limits sets nGlobalError and returns SAL_MAX_INT16 */
     sal_Int16 GetInt16();
+    sal_Int16 GetInt16WithDefault(sal_Int16 nDefault);
     /** if GetDouble() not within uint32 limits sets nGlobalError and returns SAL_MAX_UINT32 */
     sal_uInt32 GetUInt32();
     bool GetBool() { return GetDouble() != 0.0; }
