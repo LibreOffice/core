@@ -1942,10 +1942,6 @@ void BrowseBox::SetCursorColor(const Color& _rCol)
 
 tools::Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
 {
-    vcl::Window* pParent = nullptr;
-    if ( !_bOnScreen )
-        pParent = GetAccessibleParentWindow();
-
     Point aTopLeft;
     tools::Long nWidth;
     tools::Long nHeight;
@@ -1960,25 +1956,17 @@ tools::Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
         nWidth = GetColumnWidth(0);
         nHeight = GetWindowExtentsAbsolute().GetHeight() - aTopLeft.Y() - GetControlArea().GetSize().Height();
     }
-    if (pParent)
-        aTopLeft += GetWindowExtentsRelative( *pParent ).TopLeft();
-    else
+    if (_bOnScreen)
         aTopLeft += Point(GetWindowExtentsAbsolute().TopLeft());
     return tools::Rectangle(aTopLeft,Size(nWidth,nHeight));
 }
 
 tools::Rectangle BrowseBox::calcTableRect(bool _bOnScreen)
 {
-    vcl::Window* pParent = nullptr;
-    if ( !_bOnScreen )
-        pParent = GetAccessibleParentWindow();
-
-    tools::Rectangle aRect;
-    if (pParent)
-        aRect = GetWindowExtentsRelative( *pParent );
-    else
-        aRect = tools::Rectangle(GetWindowExtentsAbsolute());
-    tools::Rectangle aRowBar = calcHeaderRect(false, pParent == nullptr);
+    tools::Rectangle aRect(GetWindowExtentsAbsolute());
+    if (!_bOnScreen)
+        aRect.SetPos(Point(0, 0));
+    tools::Rectangle aRowBar = calcHeaderRect(false, _bOnScreen);
 
     tools::Long nX = aRowBar.Right() - aRect.Left();
     tools::Long nY = aRowBar.Top() - aRect.Top();
@@ -1989,16 +1977,10 @@ tools::Rectangle BrowseBox::calcTableRect(bool _bOnScreen)
 
 tools::Rectangle BrowseBox::GetFieldRectPixel( sal_Int32 _nRowId, sal_uInt16 _nColId, bool /*_bIsHeader*/, bool _bOnScreen )
 {
-    vcl::Window* pParent = nullptr;
-    if ( !_bOnScreen )
-        pParent = GetAccessibleParentWindow();
-
     tools::Rectangle aRect = GetFieldRectPixel(_nRowId, _nColId, true);
 
     Point aTopLeft = aRect.TopLeft();
-    if (pParent)
-        aTopLeft += GetWindowExtentsRelative( *pParent ).TopLeft();
-    else
+    if (_bOnScreen)
         aTopLeft += Point(GetWindowExtentsAbsolute().TopLeft());
 
     return tools::Rectangle(aTopLeft,aRect.GetSize());
