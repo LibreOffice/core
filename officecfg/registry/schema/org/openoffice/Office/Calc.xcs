@@ -1816,6 +1816,16 @@
           <value>true</value>
         </prop>
       </group>
+      <group oor:name="Draw">
+        <prop oor:name="ClickChangeRotation" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Configured into draw toolbar -->
+          <info>
+            <desc>Enables to toggle rotate mode in shapes.</desc>
+            <label>ClickChangeRotation</label>
+          </info>
+          <value>true</value>
+        </prop>
+      </group>
     </group>
     <group oor:name="Compatibility">
       <info>

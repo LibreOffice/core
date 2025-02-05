@@ -1016,6 +1016,12 @@ interface BaseTextEditView
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
 
+    SID_CLICK_CHANGE_ROTATION
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+    ]
+
     SID_MOVE_SHAPE_HANDLE
     [
         ExecMethod = Execute ;

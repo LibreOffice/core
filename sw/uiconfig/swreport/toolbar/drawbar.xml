@@ -48,4 +48,5 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle"/>
+ <toolbar:toolbaritem xlink:href=".uno:ClickChangeRotation"/>
 </toolbar:toolbar>

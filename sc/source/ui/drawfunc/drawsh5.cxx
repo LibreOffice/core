@@ -417,21 +417,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             break;
 
         case SID_OBJECT_ROTATE:
-            {
-                SdrDragMode eMode;
-                if (pView->GetDragMode() == SdrDragMode::Rotate)
-                    eMode = SdrDragMode::Move;
-                else
-                    eMode = SdrDragMode::Rotate;
-                pView->SetDragMode( eMode );
-                rBindings.Invalidate( SID_OBJECT_ROTATE );
-                rBindings.Invalidate( SID_OBJECT_MIRROR );
-                if (eMode == SdrDragMode::Rotate && !pView->IsFrameDragSingles())
-                {
-                    pView->SetFrameDragSingles();
-                    rBindings.Invalidate( SID_BEZIER_EDIT );
-                }
-            }
+            rViewData.GetViewShell()->SwitchRotateMode();
             break;
         case SID_OBJECT_MIRROR:
             {

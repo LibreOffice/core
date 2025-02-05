@@ -31,15 +31,32 @@
 #include <output.hxx>
 #include <drawview.hxx>
 #include <fupoor.hxx>
+#include <scmod.hxx>
+#include <appoptio.hxx>
 
 #include <drawutil.hxx>
 #include <document.hxx>
 #include <comphelper/lok.hxx>
 
+static bool lcl_HasSelectionChanged(const SdrMarkList & rBeforeList, const SdrMarkList & rAfterList)
+{
+    if (rBeforeList.GetMarkCount() != rAfterList.GetMarkCount())
+        return true;
+    for (size_t nObject = 0; nObject < rBeforeList.GetMarkCount(); ++nObject)
+    {
+        if (rBeforeList.GetMark(nObject)->GetMarkedSdrObj() !=
+            rAfterList.GetMark(nObject)->GetMarkedSdrObj())
+            return true;
+    }
+    return false;
+}
+
 bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
 {
     bool bRet = false;
     FuPoor* pDraw = mrViewData.GetView()->GetDrawFuncPtr();
+    pDraw->ResetSelectionHasChanged();
+    ScDrawView* pDrView = mrViewData.GetScDrawView();
     if (pDraw && !mrViewData.IsRefMode())
     {
         MapMode aDrawMode = GetDrawMapMode();
@@ -56,9 +73,14 @@ bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
         }
         else
         {
+            SdrMarkList aPreMarkList = pDrView->GetMarkedObjectList();
             bRet = pDraw->MouseButtonDown( rMEvt );
-            if ( bRet )
+            if (bRet)
+            {
+                if (lcl_HasSelectionChanged(aPreMarkList, pDrView->GetMarkedObjectList()))
+                    pDraw->SetSelectionHasChanged();
                 UpdateStatusPosSize();
+            }
         }
 
         if ( comphelper::LibreOfficeKit::isActive() && aOldMode != aDrawMode )
@@ -66,7 +88,6 @@ bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
     }
 
     // cancel draw with right key
-    ScDrawView* pDrView = mrViewData.GetScDrawView();
     if ( pDrView && !rMEvt.IsLeft() && !bRet )
     {
         pDrView->BrkAction();
@@ -79,12 +100,13 @@ bool ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
 {
     ScViewFunc* pView = mrViewData.GetView();
     bool bRet = false;
+    bool bLOKitActive = comphelper::LibreOfficeKit::isActive();
     FuPoor* pDraw = pView->GetDrawFuncPtr();
     if (pDraw && !mrViewData.IsRefMode())
     {
         MapMode aDrawMode = GetDrawMapMode();
         MapMode aOldMode = GetMapMode();
-        if ( comphelper::LibreOfficeKit::isActive() && aOldMode != aDrawMode )
+        if ( bLOKitActive && aOldMode != aDrawMode )
             SetMapMode( aDrawMode );
 
         pDraw->SetWindow( this );
@@ -92,9 +114,9 @@ bool ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
 
         // execute "format paint brush" for drawing objects
         SfxItemSet* pDrawBrush = pView->GetDrawBrushSet();
+        ScDrawView* pDrView = mrViewData.GetScDrawView();
         if ( pDrawBrush )
         {
-            ScDrawView* pDrView = mrViewData.GetScDrawView();
             if ( pDrView )
             {
                 pDrView->SetAttrToMarked(*pDrawBrush, true/*bReplaceAll*/);
@@ -103,8 +125,16 @@ bool ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
             if ( !pView->IsPaintBrushLocked() )
                 pView->ResetBrushDocument(); // end paint brush mode if not locked
         }
+        else if (!bLOKitActive && pDrView->GetMarkedObjectList().GetMarkCount() > 0
+                 && rMEvt.IsLeft()
+                 && rMEvt.GetClicks() == 1
+            && SC_MOD()->GetAppOptions().IsClickChangeRotation()
+            && !pDraw->HasSelectionChanged())
+        {
+            mrViewData.GetView()->SwitchRotateMode();
+        }
 
-        if ( comphelper::LibreOfficeKit::isActive() && aOldMode != aDrawMode )
+        if ( bLOKitActive && aOldMode != aDrawMode )
             SetMapMode( aOldMode );
     }
 

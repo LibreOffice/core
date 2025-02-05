@@ -217,7 +217,7 @@
 #define SID_PICK_THROUGH                    (SID_SD_START+159)
     // FREE 160 - 168
 #define SID_DOUBLECLICK_TEXTEDIT            (SID_SD_START+169)
-#define SID_CLICK_CHANGE_ROTATION           (SID_SD_START+170)
+// In svxids.hrc: #define SID_CLICK_CHANGE_ROTATION           (SID_SD_START+170)
 #define SID_HELPLINES_VISIBLE               (SID_SD_START+179)
 #define SID_HELPLINES_FRONT                 (SID_SD_START+180)
 #define SID_BEFORE_OBJ                      (SID_SD_START+181)

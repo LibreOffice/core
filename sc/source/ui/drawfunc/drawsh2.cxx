@@ -45,6 +45,8 @@
 #include <drwlayer.hxx>
 #include <drtxtob.hxx>
 #include <gridwin.hxx>
+#include <scmod.hxx>
+#include <appoptio.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/xflgrit.hxx>
 #include <comphelper/lok.hxx>
@@ -92,6 +94,8 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Conditions / Toggles
     rSet.Put( SfxBoolItem( SID_OBJECT_ROTATE, eMode == SdrDragMode::Rotate ) );
     rSet.Put( SfxBoolItem( SID_OBJECT_MIRROR, eMode == SdrDragMode::Mirror ) );
     rSet.Put( SfxBoolItem( SID_BEZIER_EDIT, !pView->IsFrameDragSingles() ) );
+    rSet.Put(SfxBoolItem(SID_CLICK_CHANGE_ROTATION,
+                         SC_MOD()->GetAppOptions().IsClickChangeRotation()));
 
     sal_uInt16 nFWId = ScGetFontWorkId();
     SfxViewFrame& rViewFrm = rViewData.GetViewShell()->GetViewFrame();

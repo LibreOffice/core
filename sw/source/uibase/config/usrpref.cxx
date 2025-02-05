@@ -125,7 +125,8 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
         "Display/DefaultAnchor",                // 25
         "Zoom/DefaultZoom",                     // 26
         "Zoom/ZoomType",                        // 27
-        "Zoom/ZoomValue"                        //28
+        "Zoom/ZoomValue",                       // 28
+        "Draw/ClickChangeRotation"              // 34
     };
 #if defined(__GNUC__) && !defined(__clang__)
     // clang 8.0.0 says strcmp isn't constexpr
@@ -204,6 +205,7 @@ void SwContentViewConfig::ImplCommit()
             case 26: bVal = m_rParent.IsDefaultZoom(); break;// "Zoom/DefaultZoom"
             case 27:pValues[nProp] <<= static_cast<sal_Int32>(m_rParent.GetDefaultZoomType()); break; // "Zoom/ZoomType"
             case 28: pValues[nProp] <<= static_cast<sal_Int32>(m_rParent.GetDefaultZoomValue()); break; // "Zoom/ZoomValue"
+            case 29: bVal = m_rParent.IsClickChangeRotation(); break; // "Draw/ClickChangeRotation"
         }
         if ((nProp != g_UpdateLinkIndex) && (nProp != g_DefaultAnchor) &&
             (nProp != g_ZoomType) && (nProp != g_ZoomValue))
@@ -280,7 +282,8 @@ void SwContentViewConfig::Load()
                     pValues[nProp] >>= nSet;
                     m_rParent.SetDefaultZoomValue(static_cast<sal_uInt16>(nSet), true);
                 }
-                break; //"Zoom/ZoomValue"
+                break; //"Zoom/ZoomValue" // 28
+                case 29: m_rParent.SetClickChangeRotation(bSet); break; // "Draw/ClickChangeRotation"
             }
         }
     }

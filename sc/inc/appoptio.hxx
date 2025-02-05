@@ -74,6 +74,10 @@ public:
 
     void        SetShowSharedDocumentWarning( bool bNew )   { mbShowSharedDocumentWarning = bNew; }
     bool        GetShowSharedDocumentWarning() const        { return mbShowSharedDocumentWarning; }
+
+    void        SetClickChangeRotation( bool bNew ) { bClickChangeRotation = bNew; }
+    bool        IsClickChangeRotation() const { return bClickChangeRotation; }
+
     ScOptionsUtil::KeyBindingType GetKeyBindingType() const { return meKeyBindingType; }
     void        SetKeyBindingType( ScOptionsUtil::KeyBindingType e ) { meKeyBindingType = e; }
 
@@ -101,6 +105,7 @@ private:
     sal_Int32       nDefaultObjectSizeWidth;
     sal_Int32       nDefaultObjectSizeHeight;
     bool            mbShowSharedDocumentWarning;
+    bool            bClickChangeRotation;
     ScOptionsUtil::KeyBindingType meKeyBindingType;
     bool            mbLinksInsertedLikeMSExcel;
 };

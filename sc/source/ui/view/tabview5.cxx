@@ -463,6 +463,27 @@ void ScTabView::ResetDrawDragMode()
         pDrawView->SetDragMode( SdrDragMode::Move );
 }
 
+void ScTabView::SwitchRotateMode()
+{
+    if (pDrawView)
+    {
+        SfxBindings& rBindings = aViewData.GetBindings();
+        SdrDragMode eMode;
+        if (pDrawView->GetDragMode() == SdrDragMode::Rotate)
+            eMode = SdrDragMode::Move;
+        else
+            eMode = SdrDragMode::Rotate;
+        pDrawView->SetDragMode( eMode );
+        rBindings.Invalidate( SID_OBJECT_ROTATE );
+        rBindings.Invalidate( SID_OBJECT_MIRROR );
+        if (eMode == SdrDragMode::Rotate && !pDrawView->IsFrameDragSingles())
+        {
+            pDrawView->SetFrameDragSingles();
+            rBindings.Invalidate( SID_BEZIER_EDIT );
+        }
+    }
+}
+
 void ScTabView::ViewOptionsHasChanged( bool bHScrollChanged, bool bGraphicsChanged )
 {
     //  create DrawView when grid should be displayed

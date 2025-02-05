@@ -188,15 +188,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
     switch (nSlotId)
     {
         case SID_OBJECT_ROTATE:
-            if (rSh.IsObjSelected() && pSdrView->IsRotateAllowed())
-            {
-                if (GetView().IsDrawRotate())
-                    rSh.SetDragMode(SdrDragMode::Move);
-                else
-                    rSh.SetDragMode(SdrDragMode::Rotate);
-
-                GetView().FlipDrawRotate();
-            }
+            GetView().ToggleRotate();
             break;
         case SID_MOVE_SHAPE_HANDLE:
         {

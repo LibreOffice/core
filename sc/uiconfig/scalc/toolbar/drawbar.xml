@@ -59,4 +59,5 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle"/>
+ <toolbar:toolbaritem xlink:href=".uno:ClickChangeRotation"/>
 </toolbar:toolbar>

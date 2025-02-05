@@ -147,6 +147,7 @@ class XFillGradientItem;
 #define SID_ATTR_SYMBOLSIZE                 TypedWhichId<SvxSizeItem>(SID_SD_START+116)
 #define SID_HELPLINES_MOVE                  (SID_SD_START+153)
 #define SID_GRID_USE                        (SID_SD_START+154)
+#define SID_CLICK_CHANGE_ROTATION           (SID_SD_START+170)
 #define ID_VAL_MOUSESTART_X                 (SID_SD_START+200)
 #define ID_VAL_MOUSESTART_Y                 (SID_SD_START+201)
   // free

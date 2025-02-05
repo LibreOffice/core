@@ -12764,3 +12764,19 @@ SdrMetricItem TextColumnsSpacing SID_ATTR_TEXTCOLUMNS_SPACING
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Format;
 ]
+
+SfxBoolItem ClickChangeRotation SID_CLICK_CHANGE_ROTATION
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Options;
+]

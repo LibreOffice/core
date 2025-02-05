@@ -47,6 +47,8 @@
 #include <scslots.hxx>
 
 #include <userdat.hxx>
+#include <scmod.hxx>
+#include <appoptio.hxx>
 #include <svl/macitem.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/viewsh.hxx>
@@ -407,7 +409,14 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                 pView->SetAttrToMarked(*pNewArgs, false);
             rReq.Done();
             break;
-
+        case SID_CLICK_CHANGE_ROTATION:
+            {
+                ScAppOptions aNewOpts( SC_MOD()->GetAppOptions() );
+                aNewOpts.SetClickChangeRotation(!aNewOpts.IsClickChangeRotation());
+                SC_MOD()->SetAppOptions(aNewOpts);
+                rReq.Done();
+            }
+            break;
         default:
             break;
     }

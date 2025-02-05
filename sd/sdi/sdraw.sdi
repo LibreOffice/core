@@ -294,24 +294,6 @@ SfxVoidItem ChangePolygon SID_CHANGEPOLYGON
     GroupId = SfxGroupId::Drawing;
 ]
 
-SfxBoolItem ClickChangeRotation SID_CLICK_CHANGE_ROTATION
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Options;
-]
-
 SfxVoidItem CloseObject SID_OBJECT_CLOSE
 ()
 [

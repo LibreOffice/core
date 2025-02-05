@@ -352,6 +352,9 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             case SID_SPOTLIGHT_CHARSTYLES:
                 aBool.SetValue(m_bIsSpotlightCharStyles);
             break;
+            case SID_CLICK_CHANGE_ROTATION:
+                aBool.SetValue( pOpt->IsClickChangeRotation());
+            break;
         }
 
         if( nWhich )
@@ -689,6 +692,12 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
         pOpt->SetShowChangesInMargin( bFlag );
         break;
+
+    case SID_CLICK_CHANGE_ROTATION:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsClickChangeRotation();
+        pOpt->SetClickChangeRotation(bFlag);
+    break;
 
     default:
         OSL_FAIL("wrong request method");

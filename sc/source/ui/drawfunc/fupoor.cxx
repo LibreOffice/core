@@ -43,7 +43,8 @@ FuPoor::FuPoor(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
     aDragTimer("sc FuPoor aDragTimer"),
     bIsInDragMode(false),
     // remember MouseButton state
-    mnCode(0)
+    mnCode(0),
+    mbSelectionHasChanged(false)
 {
     aScrollTimer.SetInvokeHandler( LINK(this, FuPoor, ScrollHdl) );
     aScrollTimer.SetTimeout(SELENG_AUTOREPEAT_INTERVAL);
