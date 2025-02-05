@@ -2748,8 +2748,8 @@ void ScInterpreter::ScDde()
     sal_uInt8 nMode = SC_DDE_DEFAULT;
     if (nParamCount == 4)
     {
-        sal_uInt32 nTmp = GetUInt32();
-        if (nGlobalError != FormulaError::NONE || nTmp > SAL_MAX_UINT8)
+        sal_Int32 nTmp = GetInt32();
+        if (nGlobalError != FormulaError::NONE || nTmp < 0 || nTmp > SAL_MAX_UINT8)
         {
             PushIllegalArgument();
             return;
