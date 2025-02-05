@@ -78,70 +78,28 @@ struct ScCellKeyword
 
 typedef std::unordered_map<OUString, std::vector<ScCellKeyword>> ScCellKeywordHashMap;
 
-void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
-                            OpCode eOpCode, const lang::Locale* pLocale)
+void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap, OpCode eOpCode,
+                     const lang::Locale& rLocale)
 {
-    ScCellKeywordHashMap::const_iterator itrEnd = aMap.end();
+    assert(eOpCode != ocNone);
     ScCellKeywordHashMap::const_iterator itr = aMap.find(rName);
 
-    if ( itr == itrEnd || itr->second.empty() )
+    if (itr == aMap.end() || itr->second.empty())
         // No candidate strings exist.  Bail out.
         return;
 
-    if ( eOpCode == ocNone && !pLocale )
-    {
-        // Since no locale nor opcode matching is needed, simply return
-        // the first item on the list.
-        rName = itr->second.front().msName;
-        return;
-    }
-
-    LanguageTag aLanguageTag( pLocale ? *pLocale : lang::Locale(u""_ustr,u""_ustr,u""_ustr));
+    LanguageTag aLanguageTag(rLocale);
     const OUString* aBestMatchName = nullptr;
     LocaleMatch eLocaleMatchLevel = LOCALE_MATCH_NONE;
-    bool bOpCodeMatched = false;
 
     for (auto const& elem : itr->second)
     {
-        if ( eOpCode != ocNone && pLocale )
-        {
-            if (elem.meOpCode == eOpCode)
-            {
-                LocaleMatch eLevel = lclLocaleCompare(elem.mrLocale, aLanguageTag);
-                if ( eLevel == LOCALE_MATCH_ALL )
-                {
-                    // Name with matching opcode and locale found.
-                    rName = elem.msName;
-                    return;
-                }
-                else if ( eLevel > eLocaleMatchLevel )
-                {
-                    // Name with a better matching locale.
-                    eLocaleMatchLevel = eLevel;
-                    aBestMatchName = &elem.msName;
-                }
-                else if ( !bOpCodeMatched )
-                    // At least the opcode matches.
-                    aBestMatchName = &elem.msName;
-
-                bOpCodeMatched = true;
-            }
-        }
-        else if ( eOpCode != ocNone && !pLocale )
-        {
-            if ( elem.meOpCode == eOpCode )
-            {
-                // Name with a matching opcode preferred.
-                rName = elem.msName;
-                return;
-            }
-        }
-        else if ( pLocale )
+        if (elem.meOpCode == eOpCode)
         {
             LocaleMatch eLevel = lclLocaleCompare(elem.mrLocale, aLanguageTag);
             if ( eLevel == LOCALE_MATCH_ALL )
             {
-                // Name with matching locale preferred.
+                // Name with matching opcode and locale found.
                 rName = elem.msName;
                 return;
             }
@@ -252,17 +210,16 @@ ScCellKeywordHashMap MakeMap()
 
 } // namespace
 
-void ScCellKeywordTranslator::transKeyword(OUString& rName, const css::lang::Locale* pLocale,
+void ScCellKeywordTranslator::transKeyword(OUString& rName, const css::lang::Locale& rLocale,
                                            OpCode eOpCode)
 {
     static const ScCellKeywordHashMap saStringNameMap(MakeMap());
     static utl::TransliterationWrapper saTransWrapper(comphelper::getProcessComponentContext(),
                                                       TransliterationFlags::LOWERCASE_UPPERCASE);
 
-    const LanguageType nLang = pLocale ? LanguageTag(*pLocale).makeFallback().getLanguageType()
-                                       : ScGlobal::oSysLocale->GetLanguageTag().getLanguageType();
+    const LanguageType nLang = LanguageTag(rLocale).makeFallback().getLanguageType();
     rName = saTransWrapper.transliterate(rName, nLang, 0, rName.getLength(), nullptr);
-    lclMatchKeyword(rName, saStringNameMap, eOpCode, pLocale);
+    lclMatchKeyword(rName, saStringNameMap, eOpCode, rLocale);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

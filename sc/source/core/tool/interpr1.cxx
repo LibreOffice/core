@@ -2373,7 +2373,7 @@ void ScInterpreter::ScCell()
     {
         ScRefCellValue aCell(mrDoc, aCellPos);
 
-        ScCellKeywordTranslator::transKeyword(aInfoType, &ScGlobal::GetLocale(), ocCell);
+        ScCellKeywordTranslator::transKeyword(aInfoType, ScGlobal::GetLocale(), ocCell);
 
 // *** ADDRESS INFO ***
         if( aInfoType == "COL" )
@@ -2590,7 +2590,7 @@ void ScInterpreter::ScCellExternal()
     }
     aRef.SetAbsTab(-1); // revert the value.
 
-    ScCellKeywordTranslator::transKeyword(aInfoType, &ScGlobal::GetLocale(), ocCell);
+    ScCellKeywordTranslator::transKeyword(aInfoType, ScGlobal::GetLocale(), ocCell);
     ScExternalRefManager* pRefMgr = mrDoc.GetExternalRefManager();
 
     if ( aInfoType == "COL" )

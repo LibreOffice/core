@@ -40,14 +40,11 @@ struct Locale;
 
     function.
 
-    Note that when the locale and/or the opcode is specified, the function
-    tries to find a string with matching locale and/or opcode. But when it
-    fails to find one that satisfies the specified locale and/or opcode, it
-    returns a translated string with non-matching locale and/or opcode if
-    available. */
+    Note that the function only finds a string with matching locale and opcode.
+    Locale is matched as close as possible */
 namespace ScCellKeywordTranslator
 {
-void transKeyword(OUString& rName, const css::lang::Locale* pLocale, OpCode eOpCode);
+void transKeyword(OUString& rName, const css::lang::Locale& rLocale, OpCode eOpCode);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
