@@ -488,6 +488,7 @@ private:
     double GetDouble();
     double GetDoubleWithDefault(double nDefault);
     bool IsMissing() const;
+    template <typename Int> requires std::is_integral_v<Int> Int double_to(double fVal);
     sal_Int32 double_to_int32(double fVal);
     /** if GetDouble() not within int32 limits sets nGlobalError and returns SAL_MAX_INT32 */
     sal_Int32 GetInt32();

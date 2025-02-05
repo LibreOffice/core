@@ -2191,32 +2191,39 @@ bool ScInterpreter::GetBoolWithDefault(bool bDefault)
     return GetDoubleWithDefault(bDefault ? 1.0 : 0.0) != 0.0;
 }
 
-sal_Int32 ScInterpreter::double_to_int32(double fVal)
+template <typename Int>
+    requires std::is_integral_v<Int>
+Int ScInterpreter::double_to(double fVal)
 {
     if (!std::isfinite(fVal))
     {
         SetError( GetDoubleErrorValue( fVal));
-        return SAL_MAX_INT32;
+        return std::numeric_limits<Int>::max();
     }
     if (fVal > 0.0)
     {
         fVal = rtl::math::approxFloor( fVal);
-        if (fVal > SAL_MAX_INT32)
+        if (fVal > std::numeric_limits<Int>::max())
         {
             SetError( FormulaError::IllegalArgument);
-            return SAL_MAX_INT32;
+            return std::numeric_limits<Int>::max();
         }
     }
     else if (fVal < 0.0)
     {
         fVal = rtl::math::approxCeil( fVal);
-        if (fVal < SAL_MIN_INT32)
+        if (fVal < std::numeric_limits<Int>::min())
         {
             SetError( FormulaError::IllegalArgument);
-            return SAL_MAX_INT32;
+            return std::numeric_limits<Int>::max();
         }
     }
-    return static_cast<sal_Int32>(fVal);
+    return static_cast<Int>(fVal);
+}
+
+sal_Int32 ScInterpreter::double_to_int32(double fVal)
+{
+    return double_to<sal_Int32>(fVal);
 }
 
 sal_Int32 ScInterpreter::GetInt32()
@@ -2248,31 +2255,7 @@ sal_Int32 ScInterpreter::GetFloor32()
 
 sal_Int16 ScInterpreter::GetInt16()
 {
-    double fVal = GetDouble();
-    if (!std::isfinite(fVal))
-    {
-        SetError( GetDoubleErrorValue( fVal));
-        return SAL_MAX_INT16;
-    }
-    if (fVal > 0.0)
-    {
-        fVal = rtl::math::approxFloor( fVal);
-        if (fVal > SAL_MAX_INT16)
-        {
-            SetError( FormulaError::IllegalArgument);
-            return SAL_MAX_INT16;
-        }
-    }
-    else if (fVal < 0.0)
-    {
-        fVal = rtl::math::approxCeil( fVal);
-        if (fVal < SAL_MIN_INT16)
-        {
-            SetError( FormulaError::IllegalArgument);
-            return SAL_MAX_INT16;
-        }
-    }
-    return static_cast<sal_Int16>(fVal);
+    return double_to<sal_Int16>(GetDouble());
 }
 
 sal_uInt32 ScInterpreter::GetUInt32()
