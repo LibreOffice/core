@@ -3431,22 +3431,6 @@ ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
     m_pRedlAuthors = nullptr;
     m_aTOXArr.clear();
 
-    if ( !m_oOLEExp )
-    {
-        sal_uInt32 nSvxMSDffOLEConvFlags = 0;
-        const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-        if ( rOpt.IsMath2MathType() )
-            nSvxMSDffOLEConvFlags |= OLE_STARMATH_2_MATHTYPE;
-        if ( rOpt.IsWriter2WinWord() )
-            nSvxMSDffOLEConvFlags |= OLE_STARWRITER_2_WINWORD;
-        if ( rOpt.IsCalc2Excel() )
-            nSvxMSDffOLEConvFlags |= OLE_STARCALC_2_EXCEL;
-        if ( rOpt.IsImpress2PowerPoint() )
-            nSvxMSDffOLEConvFlags |= OLE_STARIMPRESS_2_POWERPOINT;
-
-        m_oOLEExp.emplace( nSvxMSDffOLEConvFlags );
-    }
-
     if ( !m_pOCXExp && m_rDoc.GetDocShell() )
         m_pOCXExp.reset(new SwMSConvertControls(m_rDoc.GetDocShell(), m_pCurPam.get()));
 

@@ -36,6 +36,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <svx/svdoole2.hxx>
 
+#include <unotools/fltrcfg.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <fmtanchr.hxx>
 #include <ndgrf.hxx>
@@ -239,6 +240,23 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
     {
         sal_Int64 nAspect = rOLENode.GetAspect();
         svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
+
+        if ( !m_oOLEExp )
+        {
+            sal_uInt32 nSvxMSDffOLEConvFlags = 0;
+            const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
+            if ( rOpt.IsMath2MathType() )
+                nSvxMSDffOLEConvFlags |= OLE_STARMATH_2_MATHTYPE;
+            if ( rOpt.IsWriter2WinWord() )
+                nSvxMSDffOLEConvFlags |= OLE_STARWRITER_2_WINWORD;
+            if ( rOpt.IsCalc2Excel() )
+                nSvxMSDffOLEConvFlags |= OLE_STARCALC_2_EXCEL;
+            if ( rOpt.IsImpress2PowerPoint() )
+                nSvxMSDffOLEConvFlags |= OLE_STARIMPRESS_2_POWERPOINT;
+
+            m_oOLEExp.emplace( nSvxMSDffOLEConvFlags );
+        }
+
         m_oOLEExp->ExportOLEObject( aObjRef, *xOleStg );
         if ( nAspect == embed::Aspects::MSOLE_ICON )
         {
