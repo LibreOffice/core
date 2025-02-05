@@ -1063,7 +1063,7 @@ public:
 
     bool MiserableFormFieldExportHack(const SwFrameFormat& rFrameFormat);
 
-    SwMSConvertControls& GetOCXExp()        { return *m_pOCXExp; }
+    SwMSConvertControls& GetOCXExp();
     void ExportDopTypography(WW8DopTypography &rTypo);
 
     sal_uInt16 AddRedlineAuthor( std::size_t nId );
