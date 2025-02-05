@@ -272,6 +272,7 @@ gb_emscripten_fs_image_files := \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/fps/ui/explorerfiledialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/fps/ui/foldernamedialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/fps/ui/remotefilesdialog.ui \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/StartModule/menubar/menubar.xml \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/filter/oox-drawingml-adj-names \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/filter/oox-drawingml-cs-presets \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/filter/vml-shape-types \
@@ -333,7 +334,6 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/sglobal/toolbar/textstylebar.xml \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/sglobal/toolbar/toolbar.xml \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/sglobal/toolbar/viewerbar.xml \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/StartModule/menubar/menubar.xml \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/sweb/menubar/menubar.xml \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/sweb/popupmenu/anchor.xml \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/sweb/popupmenu/annotation.xml \
