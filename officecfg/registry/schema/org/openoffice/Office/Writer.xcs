@@ -940,7 +940,17 @@
           <value>true</value>
         </prop>
       </group>
-      <group oor:name="Zoom">
+      <group oor:name="Draw">
+          <prop oor:name="ClickChangeRotation" oor:type="xs:boolean" oor:nillable="false">
+              <!-- UIHints: Configured into draw toolbar -->
+              <info>
+                  <desc>Enables to toggle rotate mode in shapes.</desc>
+                  <label>ClickChangeRotation</label>
+              </info>
+              <value>true</value>
+          </prop>
+      </group>
+        <group oor:name="Zoom">
           <info>
               <desc>Contains zoom settings of the document view.</desc>
           </info>

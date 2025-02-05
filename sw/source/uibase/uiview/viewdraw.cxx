@@ -448,6 +448,20 @@ void SwView::NoRotate()
     }
 }
 
+void SwView::ToggleRotate()
+{
+    if (m_pWrtShell->GetSelectedObjCount() &&
+        m_pWrtShell->GetDrawView()->IsRotateAllowed())
+    {
+        if (IsDrawRotate())
+            m_pWrtShell->SetDragMode(SdrDragMode::Move);
+        else
+            m_pWrtShell->SetDragMode(SdrDragMode::Rotate);
+
+        FlipDrawRotate();
+    }
+}
+
 // Enable DrawTextEditMode
 
 static bool lcl_isTextBox(SdrObject const * pObject)

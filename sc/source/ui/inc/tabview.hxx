@@ -638,6 +638,8 @@ public:
     SCCOL GetLOKEndHeaderCol() const { return mnLOKEndHeaderCol; }
 
     void SyncGridWindowMapModeFromDrawMapMode();
+
+    void SwitchRotateMode();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

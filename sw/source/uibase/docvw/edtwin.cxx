@@ -112,6 +112,7 @@
 #include <breakit.hxx>
 #include <checkit.hxx>
 #include <pagefrm.hxx>
+#include <usrpref.hxx>
 
 #include <helpids.h>
 #include <cmdid.h>
@@ -4791,6 +4792,11 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     {
                         pSdrView->UnmarkAllObj();
                         pSdrView->MarkObj(pObj, pPV);
+                        if (rMEvt.IsLeft() && rMEvt.GetClicks() == 1 &&
+                            SwModule::get()->GetUsrPref(
+                                dynamic_cast<const SwWebView*>(&m_rView) != nullptr)->
+                            IsClickChangeRotation())
+                            m_rView.ToggleRotate();
                     }
                     else
                     {

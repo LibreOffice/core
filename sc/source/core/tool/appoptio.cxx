@@ -79,6 +79,7 @@ void ScAppOptions::SetDefaults()
     nDefaultObjectSizeHeight = 5000;
 
     mbShowSharedDocumentWarning = true;
+    bClickChangeRotation = false;
 
     meKeyBindingType     = ScOptionsUtil::KEY_DEFAULT;
     mbLinksInsertedLikeMSExcel = false;
@@ -103,6 +104,7 @@ ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
     nDefaultObjectSizeWidth = rCpy.nDefaultObjectSizeWidth;
     nDefaultObjectSizeHeight = rCpy.nDefaultObjectSizeHeight;
     mbShowSharedDocumentWarning = rCpy.mbShowSharedDocumentWarning;
+    bClickChangeRotation = rCpy.bClickChangeRotation;
     meKeyBindingType  = rCpy.meKeyBindingType;
     mbLinksInsertedLikeMSExcel = rCpy.mbLinksInsertedLikeMSExcel;
     return *this;
@@ -193,6 +195,7 @@ constexpr OUStringLiteral CFGPATH_MISC = u"Office.Calc/Misc";
 #define SCMISCOPT_DEFOBJWIDTH       0
 #define SCMISCOPT_DEFOBJHEIGHT      1
 #define SCMISCOPT_SHOWSHAREDDOCWARN 2
+#define SCMISCOPT_CLICKCHANGEROTATION 3
 
 constexpr OUStringLiteral CFGPATH_COMPAT = u"Office.Calc/Compatibility";
 
@@ -260,7 +263,8 @@ Sequence<OUString> ScAppCfg::GetMiscPropertyNames()
 {
     return {u"DefaultObjectSize/Width"_ustr,      // SCMISCOPT_DEFOBJWIDTH
             u"DefaultObjectSize/Height"_ustr,     // SCMISCOPT_DEFOBJHEIGHT
-            u"SharedDocument/ShowWarning"_ustr};  // SCMISCOPT_SHOWSHAREDDOCWARN
+            u"SharedDocument/ShowWarning"_ustr,   // SCMISCOPT_SHOWSHAREDDOCWARN
+            u"Draw/ClickChangeRotation"_ustr};    // SCMISCOPT_CLICKCHANGEROTATION
 }
 
 Sequence<OUString> ScAppCfg::GetCompatPropertyNames()
@@ -465,6 +469,8 @@ void ScAppCfg::ReadMiscCfg()
         SetDefaultObjectSizeHeight(nIntVal);
     SetShowSharedDocumentWarning(
         ScUnoHelpFunctions::GetBoolFromAny(aValues[SCMISCOPT_SHOWSHAREDDOCWARN]));
+    SetClickChangeRotation(
+        ScUnoHelpFunctions::GetBoolFromAny(aValues[SCMISCOPT_CLICKCHANGEROTATION]));
 }
 
 void ScAppCfg::ReadCompatCfg()
@@ -634,6 +640,9 @@ IMPL_LINK_NOARG(ScAppCfg, MiscCommitHdl, ScLinkConfigItem&, void)
                 break;
             case SCMISCOPT_SHOWSHAREDDOCWARN:
                 pValues[nProp] <<= GetShowSharedDocumentWarning();
+                break;
+            case SCMISCOPT_CLICKCHANGEROTATION:
+                pValues[nProp] <<= IsClickChangeRotation();
                 break;
         }
     }

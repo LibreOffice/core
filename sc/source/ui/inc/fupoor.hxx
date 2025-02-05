@@ -60,7 +60,7 @@ protected:
     // of own MouseEvents (like in ScrollHdl)
 private:
     sal_uInt16      mnCode;
-
+    bool            mbSelectionHasChanged;
 public:
     FuPoor(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, const SfxRequest& rReq);
@@ -95,6 +95,10 @@ public:
 
     // Create default drawing objects via keyboard
     virtual rtl::Reference<SdrObject> CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle);
+
+    void ResetSelectionHasChanged() {mbSelectionHasChanged = false;}
+    void SetSelectionHasChanged() {mbSelectionHasChanged = true;}
+    bool HasSelectionChanged() {return mbSelectionHasChanged;}
 
 protected:
     static void ImpForceQuadratic(tools::Rectangle& rRect);

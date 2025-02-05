@@ -78,6 +78,7 @@ struct ViewOptFlags1
     bool bSectionBoundaries : 1;   // section boundaries
     bool bTableBoundaries : 1;   // table boundaries
     bool bShowBoundaries : 1;   // show all boundaries
+    bool bClickChangeRotation : 1; // change with single click into rotate mode
 
     ViewOptFlags1()
         : bUseHeaderFooterMenu(false)
@@ -117,6 +118,7 @@ struct ViewOptFlags1
         , bSectionBoundaries(true)
         , bTableBoundaries(true)
         , bShowBoundaries(true)
+        , bClickChangeRotation(false)
     {}
 
     bool operator==(const ViewOptFlags1& rOther) const
@@ -157,7 +159,8 @@ struct ViewOptFlags1
             && bTextBoundariesFull == rOther.bTextBoundariesFull
             && bSectionBoundaries == rOther.bSectionBoundaries
             && bTableBoundaries == rOther.bTableBoundaries
-            && bShowBoundaries == rOther.bShowBoundaries;
+            && bShowBoundaries == rOther.bShowBoundaries
+            && bClickChangeRotation == rOther.bClickChangeRotation;
     }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
@@ -691,6 +694,9 @@ public:
 
     bool IsShowBoundaries() const { return m_nCoreOptions.bShowBoundaries; }
     void SetShowBoundaries( bool b ) { m_nCoreOptions.bShowBoundaries = b; }
+
+    bool IsClickChangeRotation() const { return m_nCoreOptions.bClickChangeRotation; }
+    void SetClickChangeRotation( bool b ) { m_nCoreOptions.bClickChangeRotation = b; }
 
 #ifdef DBG_UTIL
     // Correspond to statements in ui/config/cfgvw.src.

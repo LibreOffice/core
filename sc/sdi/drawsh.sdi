@@ -229,6 +229,7 @@ interface TableDraw
     SID_MOVE_SHAPE_HANDLE           [ ExecMethod = ExecDrawAttr; ]
     SID_ATTR_TEXTCOLUMNS_NUMBER     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
     SID_ATTR_TEXTCOLUMNS_SPACING    [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
+    SID_CLICK_CHANGE_ROTATION       [ ExecMethod = ExecDrawAttr; StateMethod = GetState; ]
 }
 
 

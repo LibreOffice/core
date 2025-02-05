@@ -371,6 +371,9 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             case FN_BOOKVIEW:
                 aBool.SetValue( pOpt->IsViewLayoutBookMode());
             break;
+            case SID_CLICK_CHANGE_ROTATION:
+                aBool.SetValue( pOpt->IsClickChangeRotation());
+            break;
         }
 
         if( nWhich )
@@ -734,6 +737,11 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         pOpt->SetViewLayoutColumns( 2 );
         pOpt->SetViewLayoutBookMode( true );
         break;
+    case SID_CLICK_CHANGE_ROTATION:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsClickChangeRotation();
+        pOpt->SetClickChangeRotation(bFlag);
+    break;
 
     default:
         OSL_FAIL("wrong request method");

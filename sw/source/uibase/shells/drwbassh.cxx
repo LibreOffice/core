@@ -1010,8 +1010,6 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                 }
             }
             break;
-
-
         }
         nWhich = aIter.NextWhich();
     }

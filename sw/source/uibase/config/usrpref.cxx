@@ -129,7 +129,8 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
         "Display/TextBoundariesFull",           // 30
         "Display/SectionBoundaries",            // 31
         "Display/TableBoundaries",              // 32
-        "Display/ShowBoundaries"                // 33
+        "Display/ShowBoundaries",               // 33
+        "Draw/ClickChangeRotation"              // 34
     };
 #if defined(__GNUC__) && !defined(__clang__)
     // clang 8.0.0 says strcmp isn't constexpr
@@ -213,6 +214,7 @@ void SwContentViewConfig::ImplCommit()
             case 31: bVal = m_rParent.IsSectionBoundaries(); break; // "Display/SectionBoundaries"
             case 32: bVal = m_rParent.IsTableBoundaries(); break; // "Display/TableBoundaries"
             case 33: bVal = m_rParent.IsShowBoundaries(); break; // "Display/ShowBoundaries"
+            case 34: bVal = m_rParent.IsClickChangeRotation(); break; // "Draw/ClickChangeRotation"
         }
         if ((nProp != g_UpdateLinkIndex) && (nProp != g_DefaultAnchor) &&
             (nProp != g_ZoomType) && (nProp != g_ZoomValue))
@@ -295,6 +297,7 @@ void SwContentViewConfig::Load()
                 case 31: m_rParent.SetSectionBoundaries(bSet); break; //"Display/SectionBoundaries"
                 case 32: m_rParent.SetTableBoundaries(bSet); break; //"Display/TableBoundaries"
                 case 33: m_rParent.SetShowBoundaries(bSet); break; //"Display/ShowBoundaries"
+                case 34: m_rParent.SetClickChangeRotation(bSet); break; // "Draw/ClickChangeRotation"
             }
         }
     }
