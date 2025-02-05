@@ -1575,6 +1575,15 @@ JSToolbar::JSToolbar(JSDialogSender* pSender, ::ToolBox* pToolbox, SalInstanceBu
 {
 }
 
+void JSToolbar::set_item_active(const OUString& rIdent, bool bActive)
+{
+    bool bWasActive = get_item_active(rIdent);
+    SalInstanceToolbar::set_item_active(rIdent, bActive);
+
+    if (bWasActive != bActive)
+        sendUpdate();
+}
+
 void JSToolbar::set_menu_item_active(const OUString& rIdent, bool bActive)
 {
     bool bWasActive = get_menu_item_active(rIdent);
