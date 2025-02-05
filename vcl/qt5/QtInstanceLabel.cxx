@@ -22,7 +22,8 @@ QtInstanceLabel::QtInstanceLabel(QLabel* pLabel)
 void QtInstanceLabel::set_label(const OUString& rText)
 {
     SolarMutexGuard g;
-    GetQtInstance().RunInMainThread([&] { m_pLabel->setText(toQString(rText)); });
+    GetQtInstance().RunInMainThread(
+        [&] { m_pLabel->setText(vclToQtStringWithAccelerator(rText)); });
 }
 
 OUString QtInstanceLabel::get_label() const
