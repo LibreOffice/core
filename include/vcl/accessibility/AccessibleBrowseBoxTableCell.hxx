@@ -18,10 +18,10 @@
  */
 #pragma once
 
-#include <accessibility/accessiblebrowseboxcell.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/accessibility/AccessibleScrollType.hpp>
+#include <vcl/accessibility/AccessibleBrowseBoxCell.hxx>
 
 // implementation of a table cell of BrowseBox
 class AccessibleBrowseBoxTableCell final

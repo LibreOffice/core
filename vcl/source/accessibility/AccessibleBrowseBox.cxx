@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/AccessibleBrowseBox.hxx>
-#include <accessibility/AccessibleBrowseBoxTable.hxx>
-#include <accessibility/AccessibleBrowseBoxHeaderBar.hxx>
 #include <com/sun/star/awt/XVclWindowPeer.hdl>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <utility>
+#include <vcl/accessibility/AccessibleBrowseBox.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxHeaderBar.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxTable.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <vcl/unohelp.hxx>
 #include <sal/types.h>
@@ -49,7 +49,7 @@ void AccessibleBrowseBox::setCreator( const css::uno::Reference< css::accessibil
 {
 #if OSL_DEBUG_LEVEL > 0
     css::uno::Reference< css::accessibility::XAccessible > xCreator(m_aCreator);
-    OSL_ENSURE( !xCreator.is(), "accessibility/AccessibleBrowseBox::setCreator: creator already set!" );
+    OSL_ENSURE( !xCreator.is(), "AccessibleBrowseBox::setCreator: creator already set!" );
 #endif
     m_aCreator = _rxCreator;
 }
@@ -237,7 +237,7 @@ AccessibleBrowseBox::implGetFixedChild( sal_Int64 nChildIndex )
 rtl::Reference<AccessibleBrowseBoxTable> AccessibleBrowseBox::createAccessibleTable()
 {
     css::uno::Reference< css::accessibility::XAccessible > xCreator(m_aCreator);
-    OSL_ENSURE( xCreator.is(), "accessibility/AccessibleBrowseBox::createAccessibleTable: my creator died - how this?" );
+    OSL_ENSURE( xCreator.is(), "AccessibleBrowseBox::createAccessibleTable: my creator died - how this?" );
     return new AccessibleBrowseBoxTable( xCreator, *mpBrowseBox );
 }
 

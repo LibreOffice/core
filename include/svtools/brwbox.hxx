@@ -26,7 +26,7 @@
 #include <vcl/headbar.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/AccessibleBrowseBoxObjType.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <vector>
 #include <stack>

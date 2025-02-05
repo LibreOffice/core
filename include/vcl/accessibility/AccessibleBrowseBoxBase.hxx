@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <vcl/svapp.hxx>
@@ -39,6 +38,7 @@
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/uno3.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 
 
 namespace vcl { class Window; }

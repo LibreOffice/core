@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/AccessibleBrowseBoxTable.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxTable.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <vcl/unohelp.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>

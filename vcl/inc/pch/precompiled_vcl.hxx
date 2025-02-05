@@ -305,7 +305,7 @@
 #include <salvtables.hxx>
 #include <sft.hxx>
 #include <svdata.hxx>
-#include <vcl/AccessibleBrowseBoxObjType.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/BinaryDataContainer.hxx>
 #include <vcl/BitmapColor.hxx>
 #include <vcl/BitmapReadAccess.hxx>

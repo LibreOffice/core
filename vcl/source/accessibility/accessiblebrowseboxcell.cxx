@@ -18,8 +18,8 @@
  */
 
 #include <sal/types.h>
+#include <vcl/accessibility/AccessibleBrowseBoxCell.hxx>
 #include <vcl/accessibletableprovider.hxx>
-#include <accessibility/accessiblebrowseboxcell.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;

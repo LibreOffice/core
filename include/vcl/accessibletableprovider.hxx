@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_ACCESSIBLETABLEPROVIDER_HXX
 #define INCLUDED_VCL_ACCESSIBLETABLEPROVIDER_HXX
 
-#include <vcl/AccessibleBrowseBoxObjType.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/window.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>

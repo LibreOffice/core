@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <accessibility/AccessibleBrowseBox.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <vcl/accessibility/AccessibleBrowseBox.hxx>
 #include <vcl/accessibletableprovider.hxx>
 
 class AccessibleBrowseBoxTable;

@@ -20,8 +20,8 @@
 
 #pragma once
 
-#include <accessibility/AccessibleBrowseBoxBase.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxBase.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <mutex>
 

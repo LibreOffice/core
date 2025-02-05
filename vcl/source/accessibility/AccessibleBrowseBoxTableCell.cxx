@@ -18,7 +18,7 @@
  */
 
 
-#include <accessibility/AccessibleBrowseBoxTableCell.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxTableCell.hxx>
 
 #include <vcl/accessibletableprovider.hxx>
 #include <vcl/unohelp.hxx>

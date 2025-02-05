@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <accessibility/AccessibleBrowseBoxBase.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxBase.hxx>
 
 class AccessibleBrowseBoxHeaderCell final : public BrowseBoxAccessibleElement
 {

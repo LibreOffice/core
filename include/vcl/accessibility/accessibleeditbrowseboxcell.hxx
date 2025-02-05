@@ -18,10 +18,10 @@
  */
 #pragma once
 
-#include <accessibility/accessiblebrowseboxcell.hxx>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <comphelper/compbase.hxx>
 #include <comphelper/accessiblewrapper.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxCell.hxx>
 
 
 // = EditBrowseBoxTableCell

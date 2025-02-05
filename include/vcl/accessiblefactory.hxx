@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/dllapi.h>
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -28,6 +27,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <tools/gen.hxx>
 #include <rtl/ref.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 
 namespace com::sun::star {
     namespace accessibility {

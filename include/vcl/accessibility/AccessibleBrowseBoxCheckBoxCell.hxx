@@ -20,8 +20,8 @@
 
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <accessibility/accessiblebrowseboxcell.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxCell.hxx>
 
 
 typedef ::cppu::ImplHelper2 <   css::accessibility::XAccessible,

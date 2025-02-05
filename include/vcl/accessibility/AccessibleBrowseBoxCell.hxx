@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <accessibility/AccessibleBrowseBoxBase.hxx>
-#include <vcl/AccessibleBrowseBoxObjType.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxBase.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 
 
 // = AccessibleBrowseBoxCell

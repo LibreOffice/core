@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include <accessibility/AccessibleBrowseBoxTableBase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
+#include <vcl/accessibility/AccessibleBrowseBoxTableBase.hxx>
 
 
 typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleSelection >

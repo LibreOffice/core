@@ -19,10 +19,10 @@
 
 #pragma once
 
-#include <accessibility/AccessibleBrowseBoxTable.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
+#include <vcl/accessibility/AccessibleBrowseBoxTable.hxx>
 
 class SvHeaderTabListBox;
 

@@ -20,10 +20,10 @@
 #include <svdata.hxx>
 #include <strings.hrc>
 
-#include <accessibility/accessibleeditbrowseboxcell.hxx>
 #include <comphelper/processfactory.hxx>
 #include <utility>
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/accessibility/accessibleeditbrowseboxcell.hxx>
 
 using namespace com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;

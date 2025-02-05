@@ -18,11 +18,11 @@
  */
 
 #include <accessibility/accessibletablistboxtable.hxx>
-#include <accessibility/AccessibleBrowseBoxTableCell.hxx>
-#include <accessibility/AccessibleBrowseBoxCheckBoxCell.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <vcl/accessibility/AccessibleBrowseBoxCheckBoxCell.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxTableCell.hxx>
 #include <vcl/toolkit/svtabbx.hxx>
 
 // class AccessibleTabListBoxTable ---------------------------------------------
