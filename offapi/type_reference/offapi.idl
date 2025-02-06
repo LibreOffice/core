@@ -7834,6 +7834,7 @@ module com {
      [property, optional] ::com::sun::star::io::XStream OutputStream;
      [property, optional] string MimeType;
      [property, optional] ::com::sun::star::beans::PropertyValues FilterData;
+     [property, optional] boolean LoadAsLink;
     };
    };
    module i18n {
@@ -16930,6 +16931,7 @@ module com {
       const short CHECKBOX_AUTOEXTENSION = 100;
       const short CHECKBOX_FILTEROPTIONS = 102;
       const short CHECKBOX_GPGENCRYPTION = 211;
+      const short CHECKBOX_GPGSIGN = 214;
       const short CHECKBOX_LINK = 104;
       const short CHECKBOX_PASSWORD = 101;
       const short CHECKBOX_PREVIEW = 105;
@@ -17120,6 +17122,8 @@ module com {
     published constants MeasureUnit {
      const short APPFONT = 17;
      const short CM = 3;
+     const short FONT_CJK_ADVANCE = 20;
+     const short FONT_EM = 19;
      const short FOOT = 13;
      const short INCH = 7;
      const short INCH_1000TH = 4;
