@@ -105,8 +105,6 @@ enum ScanState
 
 }
 
-static const char* pInternal[2] = { "TTT", "__DEBUG_VAR" };
-
 using namespace ::com::sun::star::i18n;
 
 void ScCompiler::fillFromAddInMap( const NonConstOpCodeMapPtr& xMap,FormulaGrammar::Grammar _eGrammar  ) const
@@ -3128,13 +3126,15 @@ bool ScCompiler::ParseOpCode( const OUString& rName, bool bInArray )
 
 bool ScCompiler::ParseOpCode2( std::u16string_view rName )
 {
-    for (sal_uInt16 i = ocInternalBegin; i <= ocInternalEnd; i++)
+    if (rName == u"TTT")
     {
-        if (o3tl::equalsAscii(rName, pInternal[i - ocInternalBegin]))
-        {
-            maRawToken.SetOpCode(static_cast<OpCode>(i));
-            return true;
-        }
+        maRawToken.SetOpCode(ocTTT);
+        return true;
+    }
+    if (rName == u"__DEBUG_VAR")
+    {
+        maRawToken.SetOpCode(ocDebugVar);
+        return true;
     }
 
     return false;

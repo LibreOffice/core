@@ -43,8 +43,6 @@ namespace formula
 {
     using namespace ::com::sun::star;
 
-    static const char* pInternal[2] = { "TTT", "__DEBUG_VAR" };
-
 namespace {
 
 class FormulaCompilerRecursionGuard
@@ -2610,8 +2608,10 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
             }
         }
     }
-    else if( eOp >= ocInternalBegin && eOp <= ocInternalEnd )
-        rBuffer.appendAscii( pInternal[ eOp - ocInternalBegin ] );
+    else if (eOp == ocTTT)
+        rBuffer.append("TTT");
+    else if (eOp == ocDebugVar)
+        rBuffer.append("__DEBUG_VAR");
     else if (eOp == ocIntersect)
     {
         // Nasty, ugly, horrific, terrifying...
