@@ -80,7 +80,7 @@ namespace svt
         CellController(ControlBase* pW);
         virtual ~CellController() override;
 
-        ControlBase& GetWindow() const { return *const_cast<CellController*>(this)->pWindow; }
+        ControlBase& GetWindow() const { return *pWindow; }
 
         virtual void SaveValue() = 0;
         virtual bool IsValueChangedFromSaved() const = 0;
