@@ -1207,6 +1207,17 @@
           <value/>
         </prop>
       </group>
+      <group oor:name="ClipboardHTMLImport">
+        <prop oor:name="Language" oor:type="xs:int" oor:nillable="false">
+          <value>0</value> <!-- LANGUAGE_SYSTEM -->
+        </prop>
+        <prop oor:name="DetectSpecialNumbers" oor:type="xs:boolean" oor:nillable="false">
+          <value>false</value>
+        </prop>
+        <prop oor:name="DetectScientificNumbers" oor:type="xs:boolean" oor:nillable="false">
+          <value>false</value>
+        </prop>
+      </group>
       <group oor:name="TextToColumnsImport">
         <info>
           <desc>Contains setting for Text to Columns Import</desc>

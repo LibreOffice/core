@@ -82,7 +82,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTab
         weld::WaitObject aWait( rViewData.GetDialogParent() );
         if (!pOwnClip)
         {
-            pTabViewShell->PasteFromSystem();
+            pTabViewShell->PasteFromSystem(true);
             // Anchor To Cell rather than To Page
             ScDrawView* pDrawView = pTabViewShell->GetScDrawView();
             if(pDrawView)

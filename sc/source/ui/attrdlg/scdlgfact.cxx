@@ -131,7 +131,6 @@ public:
     LanguageType GetLanguageType() const override { return m_pDlg->getLanguageType(); }
     bool IsDateConversionSet() const override { return m_pDlg->isDateConversionSet(); }
     bool IsScientificConversionSet() const override { return m_pDlg->isScientificConversionSet(); }
-    bool IsKeepAskingSet() const override { return m_pDlg->isKeepAskingSet(); }
 };
 }
 

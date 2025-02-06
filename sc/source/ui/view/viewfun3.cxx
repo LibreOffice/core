@@ -489,7 +489,7 @@ void ScViewFunc::PasteDraw()
     }
 }
 
-void ScViewFunc::PasteFromSystem()
+void ScViewFunc::PasteFromSystem(bool useSavedPrefs)
 {
     UpdateInputLine();
 
@@ -605,7 +605,7 @@ void ScViewFunc::PasteFromSystem()
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::RICHTEXT))
                     PasteFromSystem(SotClipboardFormatId::RICHTEXT);
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::HTML))
-                    PasteFromSystem(SotClipboardFormatId::HTML);
+                    PasteFromSystem(SotClipboardFormatId::HTML, false, useSavedPrefs);
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::BITMAP))
                     PasteFromSystem(SotClipboardFormatId::BITMAP);
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::HTML_SIMPLE))
@@ -717,7 +717,7 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
     }
 }
 
-bool ScViewFunc::PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi )
+bool ScViewFunc::PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi, bool useSavedPrefs )
 {
     UpdateInputLine();
 
@@ -755,7 +755,7 @@ bool ScViewFunc::PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi )
 
         bRet = PasteDataFormat( nFormatId, aDataHelper.GetTransferable(),
                                 nPosX, nPosY,
-                                nullptr, false, !bApi );       // allow warning dialog
+                                nullptr, false, !bApi, useSavedPrefs );       // allow warning dialog
 
         if ( !bRet && !bApi )
         {

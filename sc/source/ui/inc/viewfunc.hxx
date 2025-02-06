@@ -127,8 +127,8 @@ public:
 
     void                        FillTab( InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool bSkipEmpty, bool bAsLink );
 
-    SC_DLLPUBLIC void           PasteFromSystem();
-    SC_DLLPUBLIC bool           PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi = false );
+    SC_DLLPUBLIC void           PasteFromSystem(bool useSavedPrefs = false);
+    SC_DLLPUBLIC bool           PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi = false, bool useSavedPrefs = false );
     void                        PasteFromTransferable( const css::uno::Reference<
                                                        css::datatransfer::XTransferable >& rxTransferable );
 
@@ -143,7 +143,7 @@ public:
     bool            PasteDataFormat( SotClipboardFormatId nFormatId,
                                         const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
                                         SCCOL nPosX, SCROW nPosY, const Point* pLogicPos,
-                                        bool bLink = false, bool bAllowDialogs = false );
+                                        bool bLink = false, bool bAllowDialogs = false, bool useSavedPrefs = false );
 
     bool            PasteFile( const Point&, const OUString&, bool bLink );
     bool            PasteObject( const Point&, const css::uno::Reference < css::embed::XEmbeddedObject >&, const Size*, const Graphic* = nullptr, const OUString& = OUString(), sal_Int64 nAspect = css::embed::Aspects::MSOLE_CONTENT );
@@ -381,7 +381,7 @@ private:
     bool            PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
                                         const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
                                         SCCOL nPosX, SCROW nPosY,
-                                        bool bAllowDialogs, const TransferableDataHelper& rDataHelper );
+                                        bool bAllowDialogs, const TransferableDataHelper& rDataHelper, bool useSavedPrefs = false );
 
     sal_uInt16      GetOptimalColWidth( SCCOL nCol, SCTAB nTab, bool bFormula );
 

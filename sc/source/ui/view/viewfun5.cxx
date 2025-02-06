@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <i18nlangtag/lang.h>
+#include <officecfg/Office/Calc.hxx>
 #include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/MSOLEObjectSystemCreator.hpp>
@@ -76,7 +78,7 @@ using namespace com::sun::star;
 
 bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     const uno::Reference<datatransfer::XTransferable>& rxTransferable,
-                    SCCOL nPosX, SCROW nPosY, const Point* pLogicPos, bool bLink, bool bAllowDialogs )
+                    SCCOL nPosX, SCROW nPosY, const Point* pLogicPos, bool bLink, bool bAllowDialogs, bool useSavedPrefs )
 {
     ScDocument& rDoc = GetViewData().GetDocument();
     rDoc.SetPastingDrawFromOtherDoc( true );
@@ -126,7 +128,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                 nFormatId == SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT )
     {
         bRet = PasteDataFormatFormattedText(nFormatId, rxTransferable, nPosX, nPosY,
-                                        bAllowDialogs, aDataHelper);
+                                        bAllowDialogs, aDataHelper, useSavedPrefs);
     }
     else if (nFormatId == SotClipboardFormatId::SBA_DATAEXCHANGE)
     {
@@ -658,7 +660,7 @@ bool ScViewFunc::PasteDataFormatSource( SotClipboardFormatId nFormatId,
 bool ScViewFunc::PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
                     const uno::Reference<datatransfer::XTransferable>& rxTransferable,
                     SCCOL nPosX, SCROW nPosY, bool bAllowDialogs,
-                    const TransferableDataHelper& rDataHelper )
+                    const TransferableDataHelper& rDataHelper, bool useSavedPrefs )
 {
     if ( nFormatId == SotClipboardFormatId::RTF && rDataHelper.HasFormat( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT ) )
     {
@@ -676,22 +678,15 @@ bool ScViewFunc::PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
     auto pStrBuffer = std::make_shared<OUString>();
     if (std::unique_ptr<SvStream> xStream = rDataHelper.GetSotStorageStream( nFormatId ) )
     {
-        // Static variables for per-session storage. This could be
-        // changed to longer-term storage in future.
-        static bool bHaveSavedPreferences = false;
-        static LanguageType eSavedLanguage;
-        static bool bSavedDateConversion;
-        static bool bSavedScientificConversion;
-
         if (nFormatId == SotClipboardFormatId::HTML &&
             !comphelper::LibreOfficeKit::isActive())
         {
-            if (bHaveSavedPreferences)
+            if (useSavedPrefs)
             {
                 ScAsciiOptions aOptions;
-                aOptions.SetLanguage(eSavedLanguage);
-                aOptions.SetDetectSpecialNumber(bSavedDateConversion);
-                aOptions.SetDetectScientificNumber(bSavedScientificConversion);
+                aOptions.SetLanguage(LanguageType(officecfg::Office::Calc::Dialogs::ClipboardHTMLImport::Language::get()));
+                aOptions.SetDetectSpecialNumber(officecfg::Office::Calc::Dialogs::ClipboardHTMLImport::DetectSpecialNumbers::get());
+                aOptions.SetDetectScientificNumber(officecfg::Office::Calc::Dialogs::ClipboardHTMLImport::DetectScientificNumbers::get());
                 pObj->SetExtOptions(aOptions);
             }
             else
@@ -710,13 +705,11 @@ bool ScViewFunc::PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
                     aOptions.SetLanguage(pDlg->GetLanguageType());
                     aOptions.SetDetectSpecialNumber(pDlg->IsDateConversionSet());
                     aOptions.SetDetectScientificNumber(pDlg->IsScientificConversionSet());
-                    if (!pDlg->IsKeepAskingSet())
-                    {
-                        bHaveSavedPreferences = true;
-                        eSavedLanguage = pDlg->GetLanguageType();
-                        bSavedDateConversion = pDlg->IsDateConversionSet();
-                        bSavedScientificConversion = pDlg->IsScientificConversionSet();
-                    }
+                    auto pChange(comphelper::ConfigurationChanges::create());
+                    officecfg::Office::Calc::Dialogs::ClipboardHTMLImport::Language::set(pDlg->GetLanguageType().get(), pChange);
+                    officecfg::Office::Calc::Dialogs::ClipboardHTMLImport::DetectSpecialNumbers::set(pDlg->IsDateConversionSet(), pChange);
+                    officecfg::Office::Calc::Dialogs::ClipboardHTMLImport::DetectScientificNumbers::set(pDlg->IsScientificConversionSet(), pChange);
+                    pChange->commit();
                     pObj->SetExtOptions(aOptions);
                 }
                 else
