@@ -27,7 +27,6 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <tools/gen.hxx>
 #include <rtl/ref.hxx>
-#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 
 namespace com::sun::star {
     namespace accessibility {
@@ -39,8 +38,6 @@ namespace com::sun::star {
     }
 }
 
-namespace vcl { class IAccessibleBrowseBox; }
-namespace vcl { class IAccessibleTableProvider; }
 namespace vcl { class Window; }
 
 class CheckBox;
@@ -93,10 +90,6 @@ public:
     static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(vcl::Window* pWindow);
 
-    static rtl::Reference<vcl::IAccessibleBrowseBox>
-    createAccessibleBrowseBox(const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
-                              vcl::IAccessibleTableProvider& _rBrowseBox);
-
     static css::uno::Reference<css::accessibility::XAccessible> createAccessibleIconChoiceCtrl(
         SvtIconChoiceCtrl& _rIconCtrl,
         const css::uno::Reference<css::accessibility::XAccessible>& _xParent);
@@ -111,31 +104,6 @@ public:
     static css::uno::Reference<css::accessibility::XAccessible>
     createAccessibleIconView(SvTreeListBox& _rListBox,
                              const css::uno::Reference<css::accessibility::XAccessible>& _xParent);
-
-    static css::uno::Reference<css::accessibility::XAccessible> createAccessibleBrowseBoxHeaderBar(
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
-        vcl::IAccessibleTableProvider& _rOwningTable, AccessibleBrowseBoxObjType _eObjType);
-
-    static css::uno::Reference<css::accessibility::XAccessible> createAccessibleBrowseBoxTableCell(
-        const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
-        vcl::IAccessibleTableProvider& _rBrowseBox, sal_Int32 _nRowId, sal_uInt16 _nColId,
-        sal_Int32 _nOffset);
-
-    static css::uno::Reference<css::accessibility::XAccessible> createAccessibleBrowseBoxHeaderCell(
-        sal_Int32 _nColumnRowId,
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
-        vcl::IAccessibleTableProvider& _rBrowseBox, AccessibleBrowseBoxObjType _eObjType);
-
-    static css::uno::Reference<css::accessibility::XAccessible> createAccessibleCheckBoxCell(
-        const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
-        vcl::IAccessibleTableProvider& _rBrowseBox, sal_Int32 _nRowPos, sal_uInt16 _nColPos,
-        const TriState& _eState, bool _bIsTriState);
-
-    static css::uno::Reference<css::accessibility::XAccessible> createEditBrowseBoxTableCellAccess(
-        const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
-        const css::uno::Reference<css::accessibility::XAccessible>& _rxControlAccessible,
-        const css::uno::Reference<css::awt::XWindow>& _rxFocusWindow,
-        vcl::IAccessibleTableProvider& _rBrowseBox, sal_Int32 _nRowPos, sal_uInt16 _nColPos);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

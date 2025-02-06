@@ -27,7 +27,7 @@
 
 /** common accessibility-functionality for browse box elements which occupy a cell
 */
-class AccessibleBrowseBoxCell : public AccessibleBrowseBoxBase
+class VCL_DLLPUBLIC AccessibleBrowseBoxCell : public AccessibleBrowseBoxBase
 {
 private:
     sal_Int32               m_nRowPos;      // the row number of the table cell

@@ -49,7 +49,7 @@ namespace vcl {
 
 /** The BrowseBox accessible objects inherit from this base class. It
     implements basic functionality for various Accessibility interfaces. */
-class AccessibleBrowseBoxBase
+class VCL_DLLPUBLIC AccessibleBrowseBoxBase
     : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
                                          css::awt::XFocusListener, css::lang::XServiceInfo>
 {
@@ -86,6 +86,9 @@ public:
         OUString  rDescription );
 
 protected:
+    AccessibleBrowseBoxBase(const AccessibleBrowseBoxBase&) = delete;
+    AccessibleBrowseBoxBase& operator=(const AccessibleBrowseBoxBase&) = delete;
+
     /** Commits DeFunc event to listeners and cleans up members. */
     virtual void SAL_CALL disposing() override;
 

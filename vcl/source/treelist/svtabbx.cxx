@@ -37,6 +37,10 @@
 #include <memory>
 #include <tools/json_writer.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxCheckBoxCell.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxHeaderBar.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxHeaderCell.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxTableCell.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <comphelper/base64.hxx>
 
@@ -647,8 +651,8 @@ IMPL_LINK_NOARG(SvHeaderTabListBox, CreateAccessibleHdl_Impl, HeaderBar*, void)
         css::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if ( xAccParent.is() )
         {
-            Reference<XAccessible> xAccessible = AccessibleFactory::createAccessibleBrowseBoxHeaderBar(
-                xAccParent, *this, AccessibleBrowseBoxObjType::ColumnHeaderBar );
+            Reference<XAccessible> xAccessible = new AccessibleBrowseBoxHeaderBar(
+                xAccParent, *this, AccessibleBrowseBoxObjType::ColumnHeaderBar);
             m_xHeaderBar->SetAccessible(xAccessible);
         }
     }
@@ -863,11 +867,11 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nR
     TriState eState = TRISTATE_INDET;
     bool bIsCheckBox = IsCellCheckBox( _nRow, _nColumnPos, eState );
     if ( bIsCheckBox )
-        xChild = AccessibleFactory::createAccessibleCheckBoxCell(
-                m_xAccessible->getTable(), *this, _nRow, _nColumnPos, eState, false);
+        xChild = new AccessibleCheckBoxCell(m_xAccessible->getTable(), *this, _nRow, _nColumnPos,
+                                            eState, false);
     else
-        xChild = AccessibleFactory::createAccessibleBrowseBoxTableCell(
-                m_xAccessible->getTable(), *this, _nRow, _nColumnPos, OFFSET_NONE);
+        xChild = new AccessibleBrowseBoxTableCell(m_xAccessible->getTable(), *this, _nRow,
+                                                  _nColumnPos, OFFSET_NONE);
 
     return xChild;
 }
@@ -893,9 +897,8 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleColumnHeader( sal_u
     if (!xChild.is() && m_xAccessible.is())
     {
         // no -> create new header cell
-        xChild = AccessibleFactory::createAccessibleBrowseBoxHeaderCell(
-            _nColumn, m_xAccessible->getHeaderBar(),
-            *this, AccessibleBrowseBoxObjType::ColumnHeaderCell);
+        xChild = new AccessibleBrowseBoxHeaderCell(_nColumn, m_xAccessible->getHeaderBar(), *this,
+                                                   AccessibleBrowseBoxObjType::ColumnHeaderCell);
 
         // insert into list
         m_aAccessibleChildren[ _nColumn ] = xChild;

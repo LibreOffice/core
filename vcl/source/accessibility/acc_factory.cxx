@@ -40,16 +40,10 @@
 #include <accessibility/vclxaccessibletabcontrol.hxx>
 #include <accessibility/vclxaccessibletabpagewindow.hxx>
 #include <accessibility/accessibletablistbox.hxx>
-#include <vcl/accessibility/AccessibleBrowseBox.hxx>
 #include <accessibility/accessibleiconchoicectrl.hxx>
 #include <accessibility/AccessibleIconView.hxx>
 #include <accessibility/accessiblelistbox.hxx>
-#include <vcl/accessibility/AccessibleBrowseBoxHeaderBar.hxx>
 #include <accessibility/textwindowaccessibility.hxx>
-#include <vcl/accessibility/AccessibleBrowseBoxTableCell.hxx>
-#include <vcl/accessibility/AccessibleBrowseBoxHeaderCell.hxx>
-#include <vcl/accessibility/AccessibleBrowseBoxCheckBoxCell.hxx>
-#include <vcl/accessibility/accessibleeditbrowseboxcell.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/combobox.hxx>
@@ -187,13 +181,6 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(Forma
     return new SVTXAccessibleNumericField(pFormattedField);
 }
 
-rtl::Reference<vcl::IAccessibleBrowseBox>
-AccessibleFactory::createAccessibleBrowseBox(const Reference<XAccessible>& _rxParent,
-                                             vcl::IAccessibleTableProvider& _rBrowseBox)
-{
-    return new AccessibleBrowseBoxAccess( _rxParent, _rBrowseBox );
-}
-
 Reference<XAccessible>
 AccessibleFactory::createAccessibleIconChoiceCtrl(SvtIconChoiceCtrl& _rIconCtrl,
                                                   const Reference<XAccessible>& _xParent)
@@ -220,47 +207,6 @@ AccessibleFactory::createAccessibleIconView(SvTreeListBox& _rListBox,
                                             const Reference<XAccessible>& _xParent)
 {
     return new AccessibleIconView( _rListBox, _xParent );
-}
-
-Reference<XAccessible>
-AccessibleFactory::createAccessibleBrowseBoxHeaderBar(const Reference<XAccessible>& rxParent,
-                                                      vcl::IAccessibleTableProvider& _rOwningTable,
-                                                      AccessibleBrowseBoxObjType _eObjType)
-{
-    return new AccessibleBrowseBoxHeaderBar( rxParent, _rOwningTable, _eObjType );
-}
-
-Reference<XAccessible> AccessibleFactory::createAccessibleBrowseBoxTableCell(
-    const Reference<XAccessible>& _rxParent, vcl::IAccessibleTableProvider& _rBrowseBox,
-    sal_Int32 _nRowId, sal_uInt16 _nColId, sal_Int32 _nOffset)
-{
-    return new AccessibleBrowseBoxTableCell( _rxParent, _rBrowseBox,
-        _nRowId, _nColId, _nOffset );
-}
-
-Reference<XAccessible> AccessibleFactory::createAccessibleBrowseBoxHeaderCell(
-    sal_Int32 _nColumnRowId, const Reference<XAccessible>& rxParent,
-    vcl::IAccessibleTableProvider& _rBrowseBox, AccessibleBrowseBoxObjType _eObjType)
-{
-    return new AccessibleBrowseBoxHeaderCell( _nColumnRowId, rxParent, _rBrowseBox,
-        _eObjType);
-}
-
-Reference<XAccessible> AccessibleFactory::createAccessibleCheckBoxCell(
-    const Reference<XAccessible>& _rxParent, vcl::IAccessibleTableProvider& _rBrowseBox,
-    sal_Int32 _nRowPos, sal_uInt16 _nColPos, const TriState& _eState, bool _bIsTriState)
-{
-    return new AccessibleCheckBoxCell( _rxParent, _rBrowseBox,
-        _nRowPos, _nColPos, _eState, _bIsTriState );
-}
-
-Reference<XAccessible> AccessibleFactory::createEditBrowseBoxTableCellAccess(
-    const Reference<XAccessible>& _rxParent, const Reference<XAccessible>& _rxControlAccessible,
-    const Reference<XWindow>& _rxFocusWindow, vcl::IAccessibleTableProvider& _rBrowseBox,
-    sal_Int32 _nRowPos, sal_uInt16 _nColPos)
-{
-    return new EditBrowseBoxTableCellAccess( _rxParent, _rxControlAccessible,
-        _rxFocusWindow, _rBrowseBox, _nRowPos, _nColPos );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

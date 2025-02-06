@@ -24,7 +24,7 @@
 #include <vcl/accessibility/AccessibleBrowseBoxCell.hxx>
 
 // implementation of a table cell of BrowseBox
-class AccessibleBrowseBoxTableCell final
+class VCL_DLLPUBLIC AccessibleBrowseBoxTableCell final
     : public cppu::ImplInheritanceHelper<AccessibleBrowseBoxCell,
                                          css::accessibility::XAccessibleText,
                                          css::accessibility::XAccessible>,
@@ -97,6 +97,10 @@ public:
     virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
     virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
     virtual sal_Bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override;
+
+private:
+    AccessibleBrowseBoxTableCell(const AccessibleBrowseBoxTableCell&) = delete;
+    AccessibleBrowseBoxTableCell& operator=(const AccessibleBrowseBoxTableCell&) = delete;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,6 +23,8 @@
 #include "editbrowseboximpl.hxx"
 #include <comphelper/types.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxCheckBoxCell.hxx>
+#include <vcl/accessibility/accessibleeditbrowseboxcell.hxx>
 #include <vcl/accessiblefactory.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
@@ -45,14 +47,8 @@ Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(sal_Int32 _
     Reference< XAccessible > xReturn;
     if ( xAccContext.is() )
     {
-        xReturn = AccessibleFactory::createAccessibleCheckBoxCell(
-            xAccContext->getAccessibleChild( ::vcl::BBINDEX_TABLE ),
-            *this,
-            _nRow,
-            _nColumnPos,
-            eState,
-            true
-        );
+        xReturn = new AccessibleCheckBoxCell(xAccContext->getAccessibleChild(::vcl::BBINDEX_TABLE),
+                                             *this, _nRow, _nColumnPos, eState, true);
     }
     return xReturn;
 }
@@ -75,14 +71,12 @@ void EditBrowseBox::implCreateActiveAccessible( )
     if ( !(xMy.is() && xCont.is()) )
          return;
 
-    m_aImpl->m_xActiveCell = AccessibleFactory::createEditBrowseBoxTableCellAccess(
-         xMy,                                                       // parent accessible
-         xCont,                                                     // control accessible
-         VCLUnoHelper::GetInterface( &aController->GetWindow() ),   // focus window (for notifications)
-         *this,                                                     // the browse box
-         GetCurRow(),
-         GetColumnPos( GetCurColumnId() )
-     );
+    m_aImpl->m_xActiveCell = new EditBrowseBoxTableCellAccess(
+        xMy, // parent accessible
+        xCont, // control accessible
+        VCLUnoHelper::GetInterface(&aController->GetWindow()), // focus window (for notifications)
+        *this, // the browse box
+        GetCurRow(), GetColumnPos(GetCurColumnId()));
 
     commitBrowseBoxEvent( CHILD, Any( m_aImpl->m_xActiveCell ), Any() );
 }

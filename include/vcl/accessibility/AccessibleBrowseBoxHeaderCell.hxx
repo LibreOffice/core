@@ -20,7 +20,7 @@
 
 #include <vcl/accessibility/AccessibleBrowseBoxBase.hxx>
 
-class AccessibleBrowseBoxHeaderCell final : public BrowseBoxAccessibleElement
+class VCL_DLLPUBLIC AccessibleBrowseBoxHeaderCell final : public BrowseBoxAccessibleElement
 {
     sal_Int32   m_nColumnRowId;
 public:

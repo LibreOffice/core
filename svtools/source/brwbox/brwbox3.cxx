@@ -19,7 +19,10 @@
 
 #include <osl/diagnose.h>
 #include <svtools/brwbox.hxx>
+#include <vcl/accessibility/AccessibleBrowseBox.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxHeaderCell.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxTableCell.hxx>
 #include <vcl/accessiblefactory.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
@@ -41,8 +44,8 @@ Reference<XAccessible> BrowseBox::getAccessibleHeaderCell(BrowseBox::THeaderCell
     BrowseBox::THeaderCellMap::iterator aFind = _raHeaderCells.find(_nPos);
     if (aFind == _raHeaderCells.end())
     {
-        Reference<XAccessible> xAccessible = AccessibleFactory::createAccessibleBrowseBoxHeaderCell(
-            _nPos, _rParent, *this, _eType);
+        Reference<XAccessible> xAccessible
+            = new AccessibleBrowseBoxHeaderCell(_nPos, _rParent, *this, _eType);
         aFind = _raHeaderCells.emplace(_nPos, xAccessible).first;
     }
     if (aFind != _raHeaderCells.end())
@@ -74,9 +77,7 @@ Reference< XAccessible > BrowseBox::CreateAccessible()
         Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if( xAccParent.is() )
         {
-            m_pAccessible = AccessibleFactory::createAccessibleBrowseBox(
-                xAccParent, *this
-            );
+            m_pAccessible = new AccessibleBrowseBoxAccess(xAccParent, *this);
         }
     }
 
@@ -91,13 +92,8 @@ Reference< XAccessible > BrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_u
     // BBINDEX_TABLE must be the table
     OSL_ENSURE(m_pAccessible,"Invalid call: Accessible is null");
 
-    return AccessibleFactory::createAccessibleBrowseBoxTableCell(
-        getAccessibleTable(),
-        *this,
-        _nRow,
-        _nColumnPos,
-        OFFSET_DEFAULT
-    );
+    return new AccessibleBrowseBoxTableCell(getAccessibleTable(), *this, _nRow, _nColumnPos,
+                                            OFFSET_DEFAULT);
 }
 
 

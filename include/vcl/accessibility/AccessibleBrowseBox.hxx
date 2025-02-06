@@ -44,6 +44,9 @@ protected:
 
     virtual ~AccessibleBrowseBox() override;
 
+    AccessibleBrowseBox(const AccessibleBrowseBox&) = delete;
+    AccessibleBrowseBox& operator=(const AccessibleBrowseBox&) = delete;
+
     /** sets the XAccessible which created the context
 
         To be called only once, and only if in the ctor NULL was passed.
@@ -191,7 +194,7 @@ private:
     The instance holds its XAccessibleContext with a hard reference, while
     the context holds this instance weak.
 */
-class AccessibleBrowseBoxAccess final : public ::vcl::IAccessibleBrowseBox
+class VCL_DLLPUBLIC AccessibleBrowseBoxAccess final : public ::vcl::IAccessibleBrowseBox
 {
 private:
     mutable std::recursive_mutex m_aMutex;

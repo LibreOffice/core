@@ -86,8 +86,8 @@ private:
 // = EditBrowseBoxTableCell
 
 // XAccessible providing an EditBrowseBoxTableCell
-class EditBrowseBoxTableCellAccess final :
-    public comphelper::WeakComponentImplHelper<css::accessibility::XAccessible>
+class VCL_DLLPUBLIC EditBrowseBoxTableCellAccess final
+    : public comphelper::WeakComponentImplHelper<css::accessibility::XAccessible>
 {
     css::uno::WeakReference< css::accessibility::XAccessibleContext >
                                         m_aContext;

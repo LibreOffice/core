@@ -28,8 +28,8 @@ typedef ::cppu::ImplHelper2 <   css::accessibility::XAccessible,
                                 css::accessibility::XAccessibleValue
                             >   AccessibleCheckBoxCell_BASE;
 
-class AccessibleCheckBoxCell final : public AccessibleBrowseBoxCell
-                                ,public AccessibleCheckBoxCell_BASE
+class VCL_DLLPUBLIC AccessibleCheckBoxCell final : public AccessibleBrowseBoxCell,
+                                                   public AccessibleCheckBoxCell_BASE
 {
 private:
     TriState m_eState;
