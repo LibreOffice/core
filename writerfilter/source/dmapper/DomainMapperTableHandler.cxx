@@ -1660,7 +1660,11 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             sal_Int32 nTableWidthType = text::SizeType::FIX;
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH_TYPE, nTableWidthType);
             // m_xText points to the body text, get the current xText from m_rDMapper_Impl, in case e.g. we would be in a header.
-            uno::Reference<text::XTextAppendAndConvert> xTextAppendAndConvert(m_rDMapper_Impl.GetTopTextAppend(), uno::UNO_QUERY);
+            uno::Reference<text::XTextAppendAndConvert> xTextAppendAndConvert;
+            if (m_rDMapper_Impl.GetCurrentXText())
+            {
+                xTextAppendAndConvert.set(m_rDMapper_Impl.GetTopTextAppend(), uno::UNO_QUERY);
+            }
             uno::Reference<beans::XPropertySet> xFrameAnchor;
 
             // Writer layout has problems with redlines on floating table rows in footnotes, avoid
