@@ -1013,7 +1013,8 @@ namespace svt
 
         if ( isAccessibleAlive() && m_aImpl->m_xActiveCell)
         {
-            commitBrowseBoxEvent(AccessibleEventId::CHILD, Any(), Any(m_aImpl->m_xActiveCell));
+            css::uno::Reference<css::accessibility::XAccessible> xCell = m_aImpl->m_xActiveCell;
+            commitBrowseBoxEvent(AccessibleEventId::CHILD, Any(), Any(xCell));
             m_aImpl->clearActiveCell();
         }
 

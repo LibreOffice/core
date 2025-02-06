@@ -78,7 +78,8 @@ void EditBrowseBox::implCreateActiveAccessible( )
         *this, // the browse box
         GetCurRow(), GetColumnPos(GetCurColumnId()));
 
-    commitBrowseBoxEvent( CHILD, Any( m_aImpl->m_xActiveCell ), Any() );
+    css::uno::Reference<css::accessibility::XAccessible> xCell = m_aImpl->m_xActiveCell;
+    commitBrowseBoxEvent(CHILD, Any(xCell), Any());
 }
 
 
@@ -97,16 +98,10 @@ Reference< XAccessible > EditBrowseBox::CreateAccessibleControl( sal_Int32 _nInd
 
 void EditBrowseBoxImpl::clearActiveCell()
 {
-    try
-    {
-        ::comphelper::disposeComponent(m_xActiveCell);
-    }
-    catch(const Exception&)
-    {
-        TOOLS_WARN_EXCEPTION( "svtools", "EditBrowseBoxImpl::clearActiveCell: caught an exception while disposing the AccessibleCell!" );
-    }
+    if (m_xActiveCell)
+        m_xActiveCell->dispose();
 
-    m_xActiveCell = nullptr;
+    m_xActiveCell.clear();
 }
 
 void EditBrowseBox::GrabTableFocus()
