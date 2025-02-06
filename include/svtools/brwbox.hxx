@@ -26,6 +26,7 @@
 #include <vcl/headbar.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/accessibility/AccessibleBrowseBox.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <vector>
@@ -342,7 +343,7 @@ private:
     Color           m_aCursorColor;     // special color for cursor, COL_TRANSPARENT for usual (VCL-painted) "inverted" cursor
     BrowserMode     m_nCurrentMode;     // last argument of SetMode (redundant, as our other members represent the current settings, too)
 
-    rtl::Reference<vcl::IAccessibleBrowseBox> m_pAccessible;
+    rtl::Reference<AccessibleBrowseBoxAccess> m_pAccessible;
 
     THeaderCellMap m_aColHeaderCellMap;
     THeaderCellMap m_aRowHeaderCellMap;

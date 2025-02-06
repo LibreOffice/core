@@ -711,7 +711,6 @@ maybe merge utl::OConfigurationValueContainer with svxform::FmSearchConfigItem, 
 merge utl::OInputStreamWrapper_Base with utl::OInputStreamWrapper
 merge vcl::DeletionNotifier with SalFrame
 merge vcl::ExtOutDevData with vcl::PDFExtOutDevData
-merge vcl::IAccessibleBrowseBox with AccessibleBrowseBoxAccess
 maybe merge vcl::PDFOutputStream with (anonymous namespace)::PDFExportStreamDoc, in modules vcl and filter
 merge vcl::SolarThreadExecutor with vcl::solarthread::detail::GenericSolarThreadExecutor
 merge vcl::font::GlyphFallbackFontSubstitution with (anonymous namespace)::FcGlyphFallbackSubstitution

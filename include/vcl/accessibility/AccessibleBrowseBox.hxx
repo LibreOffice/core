@@ -30,7 +30,7 @@ class AccessibleBrowseBoxTable;
 
 
 /** This class represents the complete accessible BrowseBox object. */
-class AccessibleBrowseBox
+class VCL_DLLPUBLIC AccessibleBrowseBox
     : public cppu::ImplInheritanceHelper<AccessibleBrowseBoxBase, css::accessibility::XAccessible>
 {
     friend class AccessibleBrowseBoxAccess;
@@ -194,7 +194,7 @@ private:
     The instance holds its XAccessibleContext with a hard reference, while
     the context holds this instance weak.
 */
-class VCL_DLLPUBLIC AccessibleBrowseBoxAccess final : public ::vcl::IAccessibleBrowseBox
+class VCL_DLLPUBLIC AccessibleBrowseBoxAccess final : public cppu::WeakImplHelper<css::accessibility::XAccessible>
 {
 private:
     mutable std::recursive_mutex m_aMutex;
@@ -210,48 +210,64 @@ public:
         ::vcl::IAccessibleTableProvider& _rBrowseBox
     );
 
-private:
     virtual ~AccessibleBrowseBoxAccess() override;
 
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         SAL_CALL getAccessibleContext() override;
 
-    // IAccessibleBrowseBox
-    void dispose() override;
-    virtual bool isAlive() const override
+    void dispose();
+    virtual bool isAlive() const
     {
         std::unique_lock aGuard(m_aMutex);
         return m_xContext.is() && m_xContext->isAlive();
     }
     virtual css::uno::Reference< css::accessibility::XAccessible >
-        getHeaderBar( AccessibleBrowseBoxObjType _eObjType ) override
+        getHeaderBar( AccessibleBrowseBoxObjType _eObjType )
     {
         std::unique_lock aGuard(m_aMutex);
         return m_xContext ? m_xContext->getHeaderBar(_eObjType) : nullptr;
     }
     virtual css::uno::Reference< css::accessibility::XAccessible >
-        getTable() override
+        getTable()
     {
         std::unique_lock aGuard(m_aMutex);
         return m_xContext ? m_xContext->getTable() : nullptr;
     }
+
+    /** commits the event at all listeners of the column/row header bar
+        @param nEventId
+            the event id
+        @param rNewValue
+            the new value
+        @param rOldValue
+            the old value
+    */
     virtual void commitHeaderBarEvent( sal_Int16 nEventId, const css::uno::Any& rNewValue,
-        const css::uno::Any& rOldValue, bool _bColumnHeaderBar ) override
+        const css::uno::Any& rOldValue, bool _bColumnHeaderBar )
     {
         std::unique_lock aGuard(m_aMutex);
         if (m_xContext)
             m_xContext->commitHeaderBarEvent( nEventId, rNewValue, rOldValue, _bColumnHeaderBar );
     }
+
+    /** commits the event at all listeners of the table
+        @param nEventId
+            the event id
+        @param rNewValue
+            the new value
+        @param rOldValue
+            the old value
+    */
     virtual void commitTableEvent( sal_Int16 nEventId,
-        const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) override
+        const css::uno::Any& rNewValue, const css::uno::Any& rOldValue )
     {
         std::unique_lock aGuard(m_aMutex);
         if (m_xContext)
             m_xContext->commitTableEvent( nEventId, rNewValue, rOldValue );
     }
     virtual void commitEvent( sal_Int16 nEventId,
-        const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) override
+        const css::uno::Any& rNewValue, const css::uno::Any& rOldValue )
     {
         std::unique_lock aGuard(m_aMutex);
         if (m_xContext)
