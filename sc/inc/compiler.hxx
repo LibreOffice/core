@@ -253,7 +253,7 @@ public:
         virtual ScCharFlags getCharTableFlags( sal_Unicode c, sal_Unicode cLast ) const = 0;
 
     protected:
-        std::unique_ptr<ScCharFlags[]> mpCharTable;
+        const std::array<ScCharFlags, 128>& mrCharTable;
     };
     friend struct Convention;
 

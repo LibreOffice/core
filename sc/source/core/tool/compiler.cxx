@@ -103,6 +103,185 @@ enum ScanState
     ssStop
 };
 
+constexpr std::array<ScCharFlags, 128> makeCommonCharTable()
+{
+    std::array<ScCharFlags, 128> a;
+    a.fill(ScCharFlags::Illegal);
+
+    // Allow tabs/newlines.
+    // Allow saving whitespace as is (as per OpenFormula specification v.1.2, clause 5.14 "Whitespace").
+    a['\t'] = ScCharFlags::CharDontCare | ScCharFlags::WordSep | ScCharFlags::ValueSep;
+    a['\n'] = ScCharFlags::CharDontCare | ScCharFlags::WordSep | ScCharFlags::ValueSep;
+    a['\r'] = ScCharFlags::CharDontCare | ScCharFlags::WordSep | ScCharFlags::ValueSep;
+
+    a[' '] = ScCharFlags::CharDontCare | ScCharFlags::WordSep | ScCharFlags::ValueSep;
+    a['!'] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
+    a['"'] = ScCharFlags::CharString | ScCharFlags::StringSep;
+    a['#'] = ScCharFlags::WordSep | ScCharFlags::CharErrConst;
+    a['$'] = ScCharFlags::CharWord | ScCharFlags::Word | ScCharFlags::CharIdent | ScCharFlags::Ident;
+    a['%'] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
+    a['&'] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
+    a['\''] = ScCharFlags::NameSep;
+    a['('] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
+    a[')'] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
+    a['*'] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
+    a['+'] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueExp | ScCharFlags::ValueSign;
+    a[','] = ScCharFlags::CharValue | ScCharFlags::Value;
+    a['-'] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueExp | ScCharFlags::ValueSign;
+    a['.'] = ScCharFlags::Word | ScCharFlags::CharValue | ScCharFlags::Value | ScCharFlags::Ident | ScCharFlags::Name;
+    a['/'] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
+
+    for (int i = '0'; i <= '9'; i++)
+        a[i] = ScCharFlags::CharValue | ScCharFlags::Word | ScCharFlags::Value | ScCharFlags::ValueExp | ScCharFlags::ValueValue | ScCharFlags::Ident | ScCharFlags::Name;
+
+    a[':'] = ScCharFlags::Char | ScCharFlags::Word;
+    a[';'] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
+    a['<'] = ScCharFlags::CharBool | ScCharFlags::WordSep | ScCharFlags::ValueSep;
+    a['='] = ScCharFlags::Char | ScCharFlags::Bool | ScCharFlags::WordSep | ScCharFlags::ValueSep;
+    a['>'] = ScCharFlags::CharBool | ScCharFlags::Bool | ScCharFlags::WordSep | ScCharFlags::ValueSep;
+    a['?'] = ScCharFlags::CharWord | ScCharFlags::Word | ScCharFlags::Name;
+    /* @ */ // FREE
+
+    for (int i = 'A'; i <= 'Z'; i++)
+        a[i] = ScCharFlags::CharWord | ScCharFlags::Word | ScCharFlags::CharIdent | ScCharFlags::Ident | ScCharFlags::CharName | ScCharFlags::Name;
+
+    /* [ */ // FREE
+    /* \ */ // FREE
+    /* ] */ // FREE
+
+    a['^'] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
+    a['_'] = ScCharFlags::CharWord | ScCharFlags::Word | ScCharFlags::CharIdent | ScCharFlags::Ident | ScCharFlags::CharName | ScCharFlags::Name;
+    /* ` */ // FREE
+
+    for (int i = 'a'; i <= 'z'; i++)
+        a[i] = ScCharFlags::CharWord | ScCharFlags::Word | ScCharFlags::CharIdent | ScCharFlags::Ident | ScCharFlags::CharName | ScCharFlags::Name;
+
+    a['{'] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep; // array open
+    a['|'] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep; // array row sep (Should be OOo specific)
+    a['}'] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep; // array close
+    a['~'] = ScCharFlags::Char;        // OOo specific
+    /* 127 */ // FREE
+
+    return a;
+}
+
+constexpr std::array<ScCharFlags, 128> makeCharTable_OOO_A1()
+{
+    auto a = makeCommonCharTable();
+    a['['] = ScCharFlags::Char;
+    a[']'] = ScCharFlags::Char;
+    return a;
+}
+
+constexpr std::array<ScCharFlags, 128> makeCharTable_OOO_A1_ODF()
+{
+    auto a = makeCommonCharTable();
+    a['!'] |= ScCharFlags::OdfLabelOp;
+    a['$'] |= ScCharFlags::OdfNameMarker;
+    a['['] = ScCharFlags::OdfLBracket;
+    a[']'] = ScCharFlags::OdfRBracket;
+    return a;
+}
+
+constexpr std::array<ScCharFlags, 128> makeCharTable_XL()
+{
+    auto a = makeCommonCharTable();
+    a[' '] |= ScCharFlags::Word;
+    a['!'] |= ScCharFlags::Ident | ScCharFlags::Word;
+    a['"'] |= ScCharFlags::Word;
+    a['#'] &= ~ScCharFlags::WordSep;
+    a['#'] |= ScCharFlags::Word;
+    a['%'] |= ScCharFlags::Word;
+    a['&'] |= ScCharFlags::Word;
+    a['\''] |= ScCharFlags::Word;
+    a['('] |= ScCharFlags::Word;
+    a[')'] |= ScCharFlags::Word;
+    a['*'] |= ScCharFlags::Word;
+    a['+'] |= ScCharFlags::Word;
+#if 0 /* this really needs to be locale specific. */
+    a[','] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
+#else
+    a[','] |= ScCharFlags::Word;
+#endif
+    a['-'] |= ScCharFlags::Word;
+
+    a[';'] |= ScCharFlags::Word;
+    a['<'] |= ScCharFlags::Word;
+    a['='] |= ScCharFlags::Word;
+    a['>'] |= ScCharFlags::Word;
+    /* ? */ // question really is not permitted in sheet name
+    a['@'] |= ScCharFlags::Word;
+    a['['] = ScCharFlags::Word;
+    a[']'] = ScCharFlags::Word;
+    a['{'] |= ScCharFlags::Word;
+    a['|'] |= ScCharFlags::Word;
+    a['}'] |= ScCharFlags::Word;
+    a['~'] |= ScCharFlags::Word;
+    return a;
+}
+
+constexpr std::array<ScCharFlags, 128> makeCharTable_XL_A1()
+{
+    auto a = makeCharTable_XL();
+    a['['] |= ScCharFlags::Char;
+    a[']'] |= ScCharFlags::Char;
+    return a;
+}
+
+constexpr std::array<ScCharFlags, 128> makeCharTable_XL_OOX()
+{
+    auto a = makeCharTable_XL_A1();
+    a['['] |= ScCharFlags::CharIdent;
+    a[']'] |= ScCharFlags::Ident;
+    return a;
+}
+
+constexpr std::array<ScCharFlags, 128> makeCharTable_XL_R1C1()
+{
+    auto a = makeCharTable_XL();
+    a['['] |= ScCharFlags::Ident;
+    a[']'] |= ScCharFlags::Ident;
+    return a;
+}
+
+const std::array<ScCharFlags, 128>& getCharTable(FormulaGrammar::AddressConvention eConv)
+{
+    switch (eConv)
+    {
+        case FormulaGrammar::CONV_OOO:
+        {
+            static constexpr auto table_OOO_A1(makeCharTable_OOO_A1());
+            return table_OOO_A1;
+        }
+        case FormulaGrammar::CONV_ODF:
+        {
+            static constexpr auto table_OOO_A1_ODF(makeCharTable_OOO_A1_ODF());
+            return table_OOO_A1_ODF;
+        }
+        case FormulaGrammar::CONV_XL_A1:
+        {
+            static constexpr auto table_XL_A1(makeCharTable_XL_A1());
+            return table_XL_A1;
+        }
+        case FormulaGrammar::CONV_XL_R1C1:
+        {
+            static constexpr auto table_XL_R1C1(makeCharTable_XL_R1C1());
+            return table_XL_R1C1;
+        }
+        case FormulaGrammar::CONV_XL_OOX:
+        {
+            static constexpr auto table_XL_OOX(makeCharTable_XL_OOX());
+            return table_XL_OOX;
+        }
+        case FormulaGrammar::CONV_UNSPECIFIED:
+        default:
+        {
+            assert(!"Unimplemented convention");
+            std::abort();
+        }
+    }
+}
+
 }
 
 using namespace ::com::sun::star::i18n;
@@ -363,143 +542,10 @@ ScCompiler::Convention::~Convention()
 }
 
 ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
-        :
-    meConv( eConv )
+    : meConv(eConv)
+    , mrCharTable(getCharTable(eConv))
 {
-    int i;
-    ScCharFlags *t= new ScCharFlags [128];
-
     ScCompiler::pConventions[ meConv ] = this;
-    mpCharTable.reset( t );
-
-    for (i = 0; i < 128; i++)
-        t[i] = ScCharFlags::Illegal;
-
-// Allow tabs/newlines.
-// Allow saving whitespace as is (as per OpenFormula specification v.1.2, clause 5.14 "Whitespace").
-/* tab */   t[ 9] = ScCharFlags::CharDontCare | ScCharFlags::WordSep | ScCharFlags::ValueSep;
-/* lf  */   t[10] = ScCharFlags::CharDontCare | ScCharFlags::WordSep | ScCharFlags::ValueSep;
-/* cr  */   t[13] = ScCharFlags::CharDontCare | ScCharFlags::WordSep | ScCharFlags::ValueSep;
-
-/*   */     t[32] = ScCharFlags::CharDontCare | ScCharFlags::WordSep | ScCharFlags::ValueSep;
-/* ! */     t[33] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
-            if (FormulaGrammar::CONV_ODF == meConv)
-/* ! */         t[33] |= ScCharFlags::OdfLabelOp;
-/* " */     t[34] = ScCharFlags::CharString | ScCharFlags::StringSep;
-/* # */     t[35] = ScCharFlags::WordSep | ScCharFlags::CharErrConst;
-/* $ */     t[36] = ScCharFlags::CharWord | ScCharFlags::Word | ScCharFlags::CharIdent | ScCharFlags::Ident;
-            if (FormulaGrammar::CONV_ODF == meConv)
-/* $ */         t[36] |= ScCharFlags::OdfNameMarker;
-/* % */     t[37] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
-/* & */     t[38] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
-/* ' */     t[39] = ScCharFlags::NameSep;
-/* ( */     t[40] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
-/* ) */     t[41] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
-/* * */     t[42] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
-/* + */     t[43] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueExp | ScCharFlags::ValueSign;
-/* , */     t[44] = ScCharFlags::CharValue | ScCharFlags::Value;
-/* - */     t[45] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueExp | ScCharFlags::ValueSign;
-/* . */     t[46] = ScCharFlags::Word | ScCharFlags::CharValue | ScCharFlags::Value | ScCharFlags::Ident | ScCharFlags::Name;
-/* / */     t[47] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
-
-            for (i = 48; i < 58; i++)
-/* 0-9 */       t[i] = ScCharFlags::CharValue | ScCharFlags::Word | ScCharFlags::Value | ScCharFlags::ValueExp | ScCharFlags::ValueValue | ScCharFlags::Ident | ScCharFlags::Name;
-
-/* : */     t[58] = ScCharFlags::Char | ScCharFlags::Word;
-/* ; */     t[59] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
-/* < */     t[60] = ScCharFlags::CharBool | ScCharFlags::WordSep | ScCharFlags::ValueSep;
-/* = */     t[61] = ScCharFlags::Char | ScCharFlags::Bool | ScCharFlags::WordSep | ScCharFlags::ValueSep;
-/* > */     t[62] = ScCharFlags::CharBool | ScCharFlags::Bool | ScCharFlags::WordSep | ScCharFlags::ValueSep;
-/* ? */     t[63] = ScCharFlags::CharWord | ScCharFlags::Word | ScCharFlags::Name;
-/* @ */     // FREE
-
-    for (i = 65; i < 91; i++)
-/* A-Z */   t[i] = ScCharFlags::CharWord | ScCharFlags::Word | ScCharFlags::CharIdent | ScCharFlags::Ident | ScCharFlags::CharName | ScCharFlags::Name;
-
-    if (FormulaGrammar::CONV_ODF == meConv)
-    {
-/* [ */     t[91] = ScCharFlags::OdfLBracket;
-/* \ */     // FREE
-/* ] */     t[93] = ScCharFlags::OdfRBracket;
-    }
-    else if (FormulaGrammar::CONV_OOO == meConv)
-    {
-/* [ */     t[91] = ScCharFlags::Char;
-/* \ */     // FREE
-/* ] */     t[93] = ScCharFlags::Char;
-    }
-    else if (FormulaGrammar::CONV_XL_OOX == meConv)
-    {
-/* [ */     t[91] = ScCharFlags::Char | ScCharFlags::CharIdent;
-/* \ */     // FREE
-/* ] */     t[93] = ScCharFlags::Char | ScCharFlags::Ident;
-    }
-    else if (FormulaGrammar::CONV_XL_A1 == meConv)
-    {
-/* [ */     t[91] = ScCharFlags::Char;
-/* \ */     // FREE
-/* ] */     t[93] = ScCharFlags::Char;
-    }
-    else if( FormulaGrammar::CONV_XL_R1C1 == meConv )
-    {
-/* [ */     t[91] = ScCharFlags::Ident;
-/* \ */     // FREE
-/* ] */     t[93] = ScCharFlags::Ident;
-    }
-    else
-    {
-/* [ */     // FREE
-/* \ */     // FREE
-/* ] */     // FREE
-    }
-
-/* ^ */     t[94] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
-/* _ */     t[95] = ScCharFlags::CharWord | ScCharFlags::Word | ScCharFlags::CharIdent | ScCharFlags::Ident | ScCharFlags::CharName | ScCharFlags::Name;
-/* ` */     // FREE
-
-            for (i = 97; i < 123; i++)
-/* a-z */       t[i] = ScCharFlags::CharWord | ScCharFlags::Word | ScCharFlags::CharIdent | ScCharFlags::Ident | ScCharFlags::CharName | ScCharFlags::Name;
-
-/* { */     t[123] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep; // array open
-/* | */     t[124] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep; // array row sep (Should be OOo specific)
-/* } */     t[125] = ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep; // array close
-/* ~ */     t[126] = ScCharFlags::Char;        // OOo specific
-/* 127 */   // FREE
-
-    if( !(FormulaGrammar::CONV_XL_A1 == meConv || FormulaGrammar::CONV_XL_R1C1 == meConv || FormulaGrammar::CONV_XL_OOX == meConv) )
-return;
-
-/*   */     t[32] |=   ScCharFlags::Word;
-/* ! */     t[33] |=   ScCharFlags::Ident | ScCharFlags::Word;
-/* " */     t[34] |=   ScCharFlags::Word;
-/* # */     t[35] &=  ~ScCharFlags::WordSep;
-/* # */     t[35] |=   ScCharFlags::Word;
-/* % */     t[37] |=   ScCharFlags::Word;
-/* & */     t[38] |=   ScCharFlags::Word;
-/* ' */     t[39] |=   ScCharFlags::Word;
-/* ( */     t[40] |=   ScCharFlags::Word;
-/* ) */     t[41] |=   ScCharFlags::Word;
-/* * */     t[42] |=   ScCharFlags::Word;
-/* + */     t[43] |=   ScCharFlags::Word;
-#if 0 /* this really needs to be locale specific. */
-/* , */     t[44]  =   ScCharFlags::Char | ScCharFlags::WordSep | ScCharFlags::ValueSep;
-#else
-/* , */     t[44] |=   ScCharFlags::Word;
-#endif
-/* - */     t[45] |=   ScCharFlags::Word;
-
-/* ; */     t[59] |=   ScCharFlags::Word;
-/* < */     t[60] |=   ScCharFlags::Word;
-/* = */     t[61] |=   ScCharFlags::Word;
-/* > */     t[62] |=   ScCharFlags::Word;
-/* ? */     // question really is not permitted in sheet name
-/* @ */     t[64] |=   ScCharFlags::Word;
-/* [ */     t[91] |=   ScCharFlags::Word;
-/* ] */     t[93] |=   ScCharFlags::Word;
-/* { */     t[123]|=   ScCharFlags::Word;
-/* | */     t[124]|=   ScCharFlags::Word;
-/* } */     t[125]|=   ScCharFlags::Word;
-/* ~ */     t[126]|=   ScCharFlags::Word;
 }
 
 static bool lcl_isValidQuotedText( std::u16string_view rFormula, size_t nSrcPos, ParseResult& rRes )
@@ -790,7 +836,7 @@ struct Convention_A1 : public ScCompiler::Convention
 
     virtual ScCharFlags getCharTableFlags( sal_Unicode c, sal_Unicode /*cLast*/ ) const override
     {
-        return mpCharTable[static_cast<sal_uInt8>(c)];
+        return mrCharTable[static_cast<sal_uInt8>(c)];
     }
 };
 
@@ -1851,7 +1897,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 
     virtual ScCharFlags getCharTableFlags( sal_Unicode c, sal_Unicode cLast ) const override
     {
-        ScCharFlags nFlags = mpCharTable[static_cast<sal_uInt8>(c)];
+        ScCharFlags nFlags = mrCharTable[static_cast<sal_uInt8>(c)];
         if (c == '-' && cLast == '[')
             // '-' can occur within a reference string only after '[' e.g. R[-1]C.
             nFlags |= ScCharFlags::Ident;
