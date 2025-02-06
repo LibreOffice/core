@@ -568,7 +568,7 @@
                                 <property name="use-underline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="insert-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|insert">Adds the reference code for the selected bibliography entry to the Structure line. Select an entry in the list, click in an empty box, and then click this button.</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|insert">Adds the reference code for the selected citation to the Structure line. Select an entry in the list, click in an empty box, and then click this button.</property>
                                   </object>
                                 </child>
                               </object>
@@ -898,7 +898,7 @@
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="sortpos-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|sortpos">Sorts the bibliography entries according to the position of their references in the document.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|sortpos">Sorts the citations according to the position of their references in the document.</property>
                           </object>
                         </child>
                       </object>
@@ -918,7 +918,7 @@
                         <property name="group">sortpos</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="sortcontents-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|sortcontents">Sorts the bibliography entries by the Sort keys that you specify, for example, by author or by year of publication.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|sortcontents">Sorts the citations by the Sort keys that you specify, for example, by author or by year of publication.</property>
                           </object>
                         </child>
                       </object>
@@ -983,7 +983,7 @@
                         <property name="hexpand">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="key1lb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|key1lb">Select the entry by which to sort the bibliography entries. This option is only available if you select the Content radio button in the Sort by area.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|key1lb">Select the entry by which to sort the citations. This option is only available if you select the Content radio button in the Sort by area.</property>
                           </object>
                         </child>
                       </object>
@@ -1024,7 +1024,7 @@
                         <property name="hexpand">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="key2lb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|key2lb">Select the entry by which to sort the bibliography entries. This option is only available if you select the Content radio button in the Sort by area.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|key2lb">Select the entry by which to sort the citations. This option is only available if you select the Content radio button in the Sort by area.</property>
                           </object>
                         </child>
                       </object>
@@ -1041,7 +1041,7 @@
                         <property name="hexpand">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="key3lb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|key3lb">Select the entry by which to sort the bibliography entries. This option is only available if you select the Content radio button in the Sort by area.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|key3lb">Select the entry by which to sort the citations. This option is only available if you select the Content radio button in the Sort by area.</property>
                           </object>
                         </child>
                       </object>
@@ -1062,7 +1062,7 @@
                         <property name="active">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="up1cb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|up1cb">Sorts the bibliography entries in ascending alphanumerical order.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|up1cb">Sorts the citations in ascending alphanumerical order.</property>
                           </object>
                         </child>
                       </object>
@@ -1082,7 +1082,7 @@
                         <property name="always-show-image">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="down1cb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|down1cb">Sorts the bibliography entries in a descending alphanumerical order.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|down1cb">Sorts the citations in a descending alphanumerical order.</property>
                           </object>
                         </child>
                       </object>
@@ -1103,7 +1103,7 @@
                         <property name="active">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="up2cb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|up2cb">Sorts the bibliography entries in ascending alphanumerical order.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|up2cb">Sorts the citations in ascending alphanumerical order.</property>
                           </object>
                         </child>
                       </object>
@@ -1124,7 +1124,7 @@
                         <property name="active">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="up3cb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|up3cb">Sorts the bibliography entries in ascending alphanumerical order.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|up3cb">Sorts the citations in ascending alphanumerical order.</property>
                           </object>
                         </child>
                       </object>
@@ -1144,7 +1144,7 @@
                         <property name="always-show-image">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="down2cb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|down2cb">Sorts the bibliography entries in a descending alphanumerical order.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|down2cb">Sorts the citations in a descending alphanumerical order.</property>
                           </object>
                         </child>
                       </object>
@@ -1164,7 +1164,7 @@
                         <property name="always-show-image">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="down3cb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|down3cb">Sorts the bibliography entries in a descending alphanumerical order.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|down3cb">Sorts the citations in a descending alphanumerical order.</property>
                           </object>
                         </child>
                       </object>

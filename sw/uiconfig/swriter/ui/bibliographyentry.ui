@@ -5,7 +5,7 @@
   <object class="GtkDialog" id="BibliographyEntryDialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
-    <property name="title" translatable="yes" context="bibliographyentry|BibliographyEntryDialog">Insert Bibliography Entry</property>
+    <property name="title" translatable="yes" context="bibliographyentry|BibliographyEntryDialog">Insert Citation</property>
     <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -321,7 +321,7 @@
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="bibliographyentry|label4">Entry</property>
+                <property name="label" translatable="yes" context="bibliographyentry|label4">Citation</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

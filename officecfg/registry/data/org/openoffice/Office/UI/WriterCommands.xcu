@@ -149,10 +149,10 @@
           <value xml:lang="en-US">Table of Contents</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Table of Contents, Index or Bibliography</value>
+          <value xml:lang="en-US">Insert Table of Contents, Index or Citation</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Table of Contents, Index or Bibliography...</value>
+          <value xml:lang="en-US">Table of Contents, Index or Citation...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -160,7 +160,7 @@
       </node>
       <node oor:name=".uno:InsertAuthoritiesEntry" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Bibliography Entry...</value>
+          <value xml:lang="en-US">~Citation...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
@@ -525,7 +525,7 @@
       </node>
       <node oor:name=".uno:AuthoritiesEntryDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Bibliography Entry...</value>
+          <value xml:lang="en-US">~Citation...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

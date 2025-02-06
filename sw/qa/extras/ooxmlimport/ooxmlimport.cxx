@@ -1015,7 +1015,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107784)
     }
 
     uno::Reference<text::XTextField> xEnumerationAccess(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"Bibliography entry"_ustr, xEnumerationAccess->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(u"Citation"_ustr, xEnumerationAccess->getPresentation(true).trim());
     CPPUNIT_ASSERT_EQUAL(u"(Smith, 1950)"_ustr, xEnumerationAccess->getPresentation(false).trim());
 }
 
