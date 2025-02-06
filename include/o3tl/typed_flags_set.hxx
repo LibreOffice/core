@@ -252,7 +252,7 @@ typename o3tl::typed_flags<typename W::Unwrapped::Self>::Wrap operator |(
 }
 
 template<typename E>
-inline typename o3tl::typed_flags<E>::Self operator &=(E & lhs, E rhs) {
+inline constexpr typename o3tl::typed_flags<E>::Self operator &=(E & lhs, E rhs) {
     assert(
         o3tl::detail::isNonNegative(
             o3tl::to_underlying(lhs)));
@@ -264,7 +264,7 @@ inline typename o3tl::typed_flags<E>::Self operator &=(E & lhs, E rhs) {
 }
 
 template<typename E>
-inline typename o3tl::typed_flags<E>::Self operator &=(
+inline constexpr typename o3tl::typed_flags<E>::Self operator &=(
     E & lhs, typename o3tl::typed_flags<E>::Wrap rhs)
 {
     assert(
@@ -275,7 +275,7 @@ inline typename o3tl::typed_flags<E>::Self operator &=(
 }
 
 template<typename E>
-inline typename o3tl::typed_flags<E>::Self operator |=(E & lhs, E rhs) {
+inline constexpr typename o3tl::typed_flags<E>::Self operator |=(E & lhs, E rhs) {
     assert(
         o3tl::detail::isNonNegative(
             o3tl::to_underlying(lhs)));
@@ -287,7 +287,7 @@ inline typename o3tl::typed_flags<E>::Self operator |=(E & lhs, E rhs) {
 }
 
 template<typename E>
-inline typename o3tl::typed_flags<E>::Self operator |=(
+inline constexpr typename o3tl::typed_flags<E>::Self operator |=(
     E & lhs, typename o3tl::typed_flags<E>::Wrap rhs)
 {
     assert(
@@ -298,7 +298,7 @@ inline typename o3tl::typed_flags<E>::Self operator |=(
 }
 
 template<typename E>
-inline typename o3tl::typed_flags<E>::Self operator ^=(E & lhs, E rhs) {
+inline constexpr typename o3tl::typed_flags<E>::Self operator ^=(E & lhs, E rhs) {
     assert(
         o3tl::detail::isNonNegative(
             o3tl::to_underlying(lhs)));
@@ -310,7 +310,7 @@ inline typename o3tl::typed_flags<E>::Self operator ^=(E & lhs, E rhs) {
 }
 
 template<typename E>
-inline typename o3tl::typed_flags<E>::Self operator ^=(
+inline constexpr typename o3tl::typed_flags<E>::Self operator ^=(
     E & lhs, typename o3tl::typed_flags<E>::Wrap rhs)
 {
     assert(
