@@ -37,6 +37,8 @@ protected:
 
     SfxEnumItem(const SfxEnumItem &) = default;
 
+    virtual SfxItemType ItemType() const override = 0;
+
 public:
 
     EnumT GetValue() const { return m_nValue; }

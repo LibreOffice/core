@@ -51,6 +51,8 @@ protected:
         : SfxEnumItem( nWhichL, ePos ), m_nOffset( 0 )
     {}
 
+    virtual SfxItemType ItemType() const override = 0;
+
 public:
     virtual sal_uInt16       GetValueCount() const override;
 

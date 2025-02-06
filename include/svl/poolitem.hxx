@@ -208,6 +208,7 @@ enum class SfxItemType : sal_uInt16
     SdrMeasureBelowRefEdgeItemType,
     SdrMeasureDecimalPlacesItemType,
     SdrMeasureKindItemType,
+    SdrMeasureFormatStringItemType,
     SdrMeasureOverhangItemType,
     SdrMeasureScaleItemType,
     SdrMeasureTextAutoAngleItemType,
@@ -685,7 +686,7 @@ public:
                                  m_nWhich = nId;
                              }
     sal_uInt16 Which() const { return m_nWhich; }
-    virtual SfxItemType ItemType() const = 0;
+    SAL_LOPLUGIN_ANNOTATE("mustoverride") virtual SfxItemType ItemType() const = 0;
 
     // StaticWhichCast asserts if the TypedWhichId is not matching its type, otherwise it returns a reference.
     // You can use StaticWhichCast when you are sure about the type at compile time -- like a static_cast.
