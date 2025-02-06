@@ -38,6 +38,7 @@
 #include <swacorr.hxx>
 #include <sfx2/linkmgr.hxx>
 
+#include <edtwin.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <unotxdoc.hxx>
@@ -748,6 +749,63 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf160898)
     pWrtShell->Down(false, 2);
     // Without the fix, this would crash:
     pWrtShell->SelAll();
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testParagraphStyleCloneFormatting)
+{
+    createSwDoc();
+    emulateTyping(u"First Line");
+
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    emulateTyping(u"Second Line");
+
+    CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr,
+                         getProperty<OUString>(getParagraph(1), u"ParaStyleName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr,
+                         getProperty<OUString>(getParagraph(2), u"ParaStyleName"_ustr));
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+        { "Style", uno::Any(u"Heading 1"_ustr) },
+        { "FamilyName", uno::Any(u"ParagraphStyles"_ustr) },
+    });
+    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
+
+    CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr,
+                         getProperty<OUString>(getParagraph(1), u"ParaStyleName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Heading 1"_ustr,
+                         getProperty<OUString>(getParagraph(2), u"ParaStyleName"_ustr));
+
+    uno::Sequence aArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr, uno::Any(false)) };
+    dispatchCommand(mxComponent, u".uno:FormatPaintbrush"_ustr, aArgs);
+
+    // Disable map mode, so that it's possible to send mouse event coordinates
+    // directly in twips.
+    SwEditWin& rEditWin = getSwDocShell()->GetView()->GetEditWin();
+    rEditWin.EnableMapMode(false);
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+
+    // move to first line
+    pWrtShell->Up(/*bSelect=*/false, 1);
+    Point aPoint = pShellCursor->GetSttPos();
+
+    // click on first line
+    pTextDoc->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,
+                             MOUSE_LEFT, 0);
+    pTextDoc->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aPoint.getX(), aPoint.getY(), 1,
+                             MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(u"Heading 1"_ustr,
+                         getProperty<OUString>(getParagraph(1), u"ParaStyleName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Heading 1"_ustr,
+                         getProperty<OUString>(getParagraph(2), u"ParaStyleName"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf161172)
