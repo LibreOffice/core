@@ -195,12 +195,12 @@ BrowseBox::~BrowseBox()
 
 void BrowseBox::DisposeAccessible()
 {
-    if (m_pAccessible )
+    if (m_xAccessible)
     {
         disposeAndClearHeaderCell(m_aColHeaderCellMap);
         disposeAndClearHeaderCell(m_aRowHeaderCellMap);
-        m_pAccessible->dispose();
-        m_pAccessible = nullptr;
+        m_xAccessible->dispose();
+        m_xAccessible = nullptr;
     }
 }
 

@@ -54,15 +54,15 @@ Reference<XAccessible> BrowseBox::getAccessibleHeaderCell(BrowseBox::THeaderCell
 
 Reference<XAccessible> BrowseBox::getAccessibleHeaderBar(AccessibleBrowseBoxObjType _eObjType)
 {
-    if (m_pAccessible && m_pAccessible->isAlive())
-        return m_pAccessible->getHeaderBar(_eObjType);
+    if (m_xAccessible && m_xAccessible->isAlive())
+        return m_xAccessible->getHeaderBar(_eObjType);
     return nullptr;
 }
 
 Reference<XAccessible> BrowseBox::getAccessibleTable()
 {
-    if (m_pAccessible && m_pAccessible->isAlive())
-        return m_pAccessible->getTable();
+    if (m_xAccessible && m_xAccessible->isAlive())
+        return m_xAccessible->getTable();
     return nullptr;
 }
 
@@ -71,16 +71,16 @@ Reference< XAccessible > BrowseBox::CreateAccessible()
     vcl::Window* pParent = GetAccessibleParentWindow();
     DBG_ASSERT( pParent, "BrowseBox::CreateAccessible - parent not found" );
 
-    if (pParent && !m_pAccessible)
+    if (pParent && !m_xAccessible)
     {
         Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if( xAccParent.is() )
         {
-            m_pAccessible = new AccessibleBrowseBoxAccess(xAccParent, *this);
+            m_xAccessible = new AccessibleBrowseBoxAccess(xAccParent, *this);
         }
     }
 
-    return m_pAccessible;
+    return m_xAccessible;
 }
 
 
@@ -89,7 +89,7 @@ Reference< XAccessible > BrowseBox::CreateAccessible()
 Reference< XAccessible > BrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
 {
     // BBINDEX_TABLE must be the table
-    OSL_ENSURE(m_pAccessible,"Invalid call: Accessible is null");
+    OSL_ENSURE(m_xAccessible, "Invalid call: Accessible is null");
 
     return new AccessibleBrowseBoxTableCell(getAccessibleTable(), *this, _nRow, _nColumnPos,
                                             OFFSET_DEFAULT);
@@ -367,26 +367,22 @@ void BrowseBox::commitHeaderBarEvent(sal_Int16 nEventId,
         const Any& rNewValue, const Any& rOldValue, bool _bColumnHeaderBar )
 {
     if ( isAccessibleAlive() )
-        m_pAccessible->commitHeaderBarEvent( nEventId,
-            rNewValue, rOldValue, _bColumnHeaderBar );
+        m_xAccessible->commitHeaderBarEvent(nEventId, rNewValue, rOldValue, _bColumnHeaderBar);
 }
 
 void BrowseBox::commitTableEvent( sal_Int16 _nEventId, const Any& _rNewValue, const Any& _rOldValue )
 {
     if ( isAccessibleAlive() )
-        m_pAccessible->commitTableEvent(_nEventId, _rNewValue, _rOldValue);
+        m_xAccessible->commitTableEvent(_nEventId, _rNewValue, _rOldValue);
 }
 
 void BrowseBox::commitBrowseBoxEvent( sal_Int16 _nEventId, const Any& _rNewValue, const Any& _rOldValue )
 {
     if ( isAccessibleAlive() )
-        m_pAccessible->commitEvent( _nEventId, _rNewValue, _rOldValue);
+        m_xAccessible->commitEvent(_nEventId, _rNewValue, _rOldValue);
 }
 
-bool BrowseBox::isAccessibleAlive( ) const
-{
-    return m_pAccessible && m_pAccessible->isAlive();
-}
+bool BrowseBox::isAccessibleAlive() const { return m_xAccessible && m_xAccessible->isAlive(); }
 
 // IAccessibleTableProvider
 

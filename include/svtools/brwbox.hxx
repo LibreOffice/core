@@ -343,7 +343,7 @@ private:
     Color           m_aCursorColor;     // special color for cursor, COL_TRANSPARENT for usual (VCL-painted) "inverted" cursor
     BrowserMode     m_nCurrentMode;     // last argument of SetMode (redundant, as our other members represent the current settings, too)
 
-    rtl::Reference<AccessibleBrowseBoxAccess> m_pAccessible;
+    rtl::Reference<AccessibleBrowseBoxAccess> m_xAccessible;
 
     THeaderCellMap m_aColHeaderCellMap;
     THeaderCellMap m_aRowHeaderCellMap;
