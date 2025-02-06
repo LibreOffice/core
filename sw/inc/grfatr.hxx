@@ -154,6 +154,8 @@ protected:
         : SfxInt16Item( nWhichL, nVal )
     {}
 
+    virtual SfxItemType ItemType() const override = 0;
+
 public:
     // pure virtual methods from SfxInt16Item
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -265,6 +267,8 @@ class SwDrawModeGrf_Base: public SfxEnumItem<GraphicDrawMode> {
 protected:
     SwDrawModeGrf_Base(GraphicDrawMode nMode):
         SfxEnumItem(RES_GRFATR_DRAWMODE, nMode) {}
+
+    virtual SfxItemType ItemType() const override = 0;
 };
 
 class SW_DLLPUBLIC SwDrawModeGrf final : public SwDrawModeGrf_Base
