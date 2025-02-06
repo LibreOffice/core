@@ -37,23 +37,11 @@ using namespace ::com::sun::star::accessibility;
 
 AccessibleBrowseBox::AccessibleBrowseBox(
     const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
-    const css::uno::Reference<css::accessibility::XAccessible>& _rxCreator,
     ::vcl::IAccessibleTableProvider& _rBrowseBox)
     : ImplInheritanceHelper(_rxParent, _rBrowseBox, nullptr, AccessibleBrowseBoxObjType::BrowseBox)
-    , m_aCreator(_rxCreator)
 {
     m_xFocusWindow.set(mpBrowseBox->GetWindowInstance()->GetComponentInterface(), css::uno::UNO_QUERY);
 }
-
-void AccessibleBrowseBox::setCreator( const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator )
-{
-#if OSL_DEBUG_LEVEL > 0
-    css::uno::Reference< css::accessibility::XAccessible > xCreator(m_aCreator);
-    OSL_ENSURE( !xCreator.is(), "AccessibleBrowseBox::setCreator: creator already set!" );
-#endif
-    m_aCreator = _rxCreator;
-}
-
 
 AccessibleBrowseBox::~AccessibleBrowseBox()
 {
@@ -63,8 +51,6 @@ AccessibleBrowseBox::~AccessibleBrowseBox()
 void SAL_CALL AccessibleBrowseBox::disposing()
 {
     ::osl::MutexGuard aGuard( getMutex() );
-
-    m_aCreator.clear();
 
     if ( mxTable.is() )
     {
@@ -202,13 +188,13 @@ AccessibleBrowseBox::implGetHeaderBar(AccessibleBrowseBoxObjType eObjType)
     if( eObjType == AccessibleBrowseBoxObjType::RowHeaderBar )
     {
         if (!mxRowHeaderBar.is())
-            mxRowHeaderBar = new AccessibleBrowseBoxHeaderBar(m_aCreator, *mpBrowseBox, eObjType);
+            mxRowHeaderBar = new AccessibleBrowseBoxHeaderBar(this, *mpBrowseBox, eObjType);
         return mxRowHeaderBar;
     }
     else if( eObjType == AccessibleBrowseBoxObjType::ColumnHeaderBar )
     {
         if (!mxColumnHeaderBar.is())
-            mxColumnHeaderBar = new AccessibleBrowseBoxHeaderBar(m_aCreator, *mpBrowseBox, eObjType);
+            mxColumnHeaderBar = new AccessibleBrowseBoxHeaderBar(this, *mpBrowseBox, eObjType);
         return mxColumnHeaderBar;
     }
 
@@ -236,9 +222,7 @@ AccessibleBrowseBox::implGetFixedChild( sal_Int64 nChildIndex )
 
 rtl::Reference<AccessibleBrowseBoxTable> AccessibleBrowseBox::createAccessibleTable()
 {
-    css::uno::Reference< css::accessibility::XAccessible > xCreator(m_aCreator);
-    OSL_ENSURE( xCreator.is(), "AccessibleBrowseBox::createAccessibleTable: my creator died - how this?" );
-    return new AccessibleBrowseBoxTable( xCreator, *mpBrowseBox );
+    return new AccessibleBrowseBoxTable(this, *mpBrowseBox);
 }
 
 void AccessibleBrowseBox::commitTableEvent(sal_Int16 _nEventId,const Any& _rNewValue,const Any& _rOldValue)
@@ -256,44 +240,6 @@ void AccessibleBrowseBox::commitHeaderBarEvent( sal_Int16 _nEventId,
     rtl::Reference< AccessibleBrowseBoxHeaderBar >& xHeaderBar = _bColumnHeaderBar ? mxColumnHeaderBar : mxRowHeaderBar;
     if ( xHeaderBar.is() )
         xHeaderBar->commitEvent(_nEventId,_rNewValue,_rOldValue);
-}
-
-
-// = AccessibleBrowseBoxAccess
-
-AccessibleBrowseBoxAccess::AccessibleBrowseBoxAccess( css::uno::Reference< css::accessibility::XAccessible > _xParent, ::vcl::IAccessibleTableProvider& _rBrowseBox )
-        :m_xParent(std::move( _xParent ))
-        ,m_rBrowseBox( _rBrowseBox )
-{
-}
-
-
-AccessibleBrowseBoxAccess::~AccessibleBrowseBoxAccess()
-{
-}
-
-
-void AccessibleBrowseBoxAccess::dispose()
-{
-    std::unique_lock aGuard( m_aMutex );
-
-    if (m_xContext.is())
-    {
-        m_xContext->dispose();
-        m_xContext.clear();
-    }
-    m_xParent.clear();
-}
-
-
-css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL AccessibleBrowseBoxAccess::getAccessibleContext()
-{
-    std::unique_lock aGuard( m_aMutex );
-
-    if ( !m_xContext.is() )
-        m_xContext = new AccessibleBrowseBox( m_xParent, this, m_rBrowseBox );
-
-    return m_xContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

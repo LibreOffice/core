@@ -76,7 +76,7 @@ Reference< XAccessible > BrowseBox::CreateAccessible()
         Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if( xAccParent.is() )
         {
-            m_xAccessible = new AccessibleBrowseBoxAccess(xAccParent, *this);
+            m_xAccessible = new AccessibleBrowseBox(xAccParent, *this);
         }
     }
 

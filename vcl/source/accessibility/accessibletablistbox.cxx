@@ -34,14 +34,9 @@ using namespace ::com::sun::star;
 
 AccessibleTabListBox::AccessibleTabListBox(const Reference<XAccessible>& rxParent,
                                            SvHeaderTabListBox& rBox)
-    : AccessibleBrowseBox(rxParent, nullptr, rBox)
+    : AccessibleBrowseBox(rxParent, rBox)
     , m_pTabListBox(&rBox)
 {
-    osl_atomic_increment( &m_refCount );
-    {
-        setCreator( this );
-    }
-    osl_atomic_decrement( &m_refCount );
 }
 
 

@@ -23,7 +23,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxBase.hxx>
 #include <vcl/accessibletableprovider.hxx>
-#include <mutex>
 
 class AccessibleBrowseBoxHeaderBar;
 class AccessibleBrowseBoxTable;
@@ -33,33 +32,23 @@ class AccessibleBrowseBoxTable;
 class VCL_DLLPUBLIC AccessibleBrowseBox
     : public cppu::ImplInheritanceHelper<AccessibleBrowseBoxBase, css::accessibility::XAccessible>
 {
-    friend class AccessibleBrowseBoxAccess;
 
-protected:
+public:
     AccessibleBrowseBox(
         const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-        const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator,
         ::vcl::IAccessibleTableProvider& _rBrowseBox
     );
 
+protected:
     virtual ~AccessibleBrowseBox() override;
 
     AccessibleBrowseBox(const AccessibleBrowseBox&) = delete;
     AccessibleBrowseBox& operator=(const AccessibleBrowseBox&) = delete;
 
-    /** sets the XAccessible which created the context
-
-        To be called only once, and only if in the ctor NULL was passed.
-    */
-    void    setCreator(
-        const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator
-    );
-
     /** Cleans up members. */
     using AccessibleBrowseBoxBase::disposing;
     virtual void SAL_CALL disposing() override;
 
-protected:
     // XAccessible
     css::uno::Reference<css::accessibility::XAccessibleContext>
         SAL_CALL getAccessibleContext() override;
@@ -175,9 +164,6 @@ protected:
     virtual rtl::Reference<AccessibleBrowseBoxTable> createAccessibleTable();
 
 private:
-    /// the css::accessibility::XAccessible which created the AccessibleBrowseBox
-    css::uno::WeakReference< css::accessibility::XAccessible >  m_aCreator;
-
     /** The data table child. */
     rtl::Reference<AccessibleBrowseBoxTable>                    mxTable;
 
@@ -186,97 +172,6 @@ private:
 
     /** The header bar for columns (first row of the table). */
     rtl::Reference<AccessibleBrowseBoxHeaderBar>                mxColumnHeaderBar;
-};
-
-
-/** the XAccessible which creates/returns an AccessibleBrowseBox
-
-    The instance holds its XAccessibleContext with a hard reference, while
-    the context holds this instance weak.
-*/
-class VCL_DLLPUBLIC AccessibleBrowseBoxAccess final : public cppu::WeakImplHelper<css::accessibility::XAccessible>
-{
-private:
-    mutable std::recursive_mutex m_aMutex;
-    css::uno::Reference< css::accessibility::XAccessible >
-                                        m_xParent;
-    ::vcl::IAccessibleTableProvider&    m_rBrowseBox;
-
-    rtl::Reference<AccessibleBrowseBox> m_xContext;
-
-public:
-    AccessibleBrowseBoxAccess(
-        css::uno::Reference< css::accessibility::XAccessible > _xParent,
-        ::vcl::IAccessibleTableProvider& _rBrowseBox
-    );
-
-    virtual ~AccessibleBrowseBoxAccess() override;
-
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        SAL_CALL getAccessibleContext() override;
-
-    void dispose();
-    virtual bool isAlive() const
-    {
-        std::unique_lock aGuard(m_aMutex);
-        return m_xContext.is() && m_xContext->isAlive();
-    }
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-        getHeaderBar( AccessibleBrowseBoxObjType _eObjType )
-    {
-        std::unique_lock aGuard(m_aMutex);
-        return m_xContext ? m_xContext->getHeaderBar(_eObjType) : nullptr;
-    }
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-        getTable()
-    {
-        std::unique_lock aGuard(m_aMutex);
-        return m_xContext ? m_xContext->getTable() : nullptr;
-    }
-
-    /** commits the event at all listeners of the column/row header bar
-        @param nEventId
-            the event id
-        @param rNewValue
-            the new value
-        @param rOldValue
-            the old value
-    */
-    virtual void commitHeaderBarEvent( sal_Int16 nEventId, const css::uno::Any& rNewValue,
-        const css::uno::Any& rOldValue, bool _bColumnHeaderBar )
-    {
-        std::unique_lock aGuard(m_aMutex);
-        if (m_xContext)
-            m_xContext->commitHeaderBarEvent( nEventId, rNewValue, rOldValue, _bColumnHeaderBar );
-    }
-
-    /** commits the event at all listeners of the table
-        @param nEventId
-            the event id
-        @param rNewValue
-            the new value
-        @param rOldValue
-            the old value
-    */
-    virtual void commitTableEvent( sal_Int16 nEventId,
-        const css::uno::Any& rNewValue, const css::uno::Any& rOldValue )
-    {
-        std::unique_lock aGuard(m_aMutex);
-        if (m_xContext)
-            m_xContext->commitTableEvent( nEventId, rNewValue, rOldValue );
-    }
-    virtual void commitEvent( sal_Int16 nEventId,
-        const css::uno::Any& rNewValue, const css::uno::Any& rOldValue )
-    {
-        std::unique_lock aGuard(m_aMutex);
-        if (m_xContext)
-            m_xContext->commitEvent( nEventId, rNewValue, rOldValue );
-    }
-
-private:
-    AccessibleBrowseBoxAccess( const AccessibleBrowseBoxAccess& ) = delete;
-    AccessibleBrowseBoxAccess& operator=( const AccessibleBrowseBoxAccess& ) = delete;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
