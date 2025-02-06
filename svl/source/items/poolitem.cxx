@@ -294,7 +294,7 @@ bool SfxPoolItem::areSame(const SfxPoolItem& rItem1, const SfxPoolItem& rItem2)
 namespace
 {
 // tdf#164745 make InvalidItem and DisabledItem two classes to
-// avoi d that op== sees them as equal
+// avoid that op== sees them as equal
 class InvalidItem final : public SfxPoolItem
 {
     virtual bool operator==(const SfxPoolItem&) const override { return true; }
