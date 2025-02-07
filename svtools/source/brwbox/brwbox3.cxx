@@ -111,20 +111,6 @@ Reference< XAccessible > BrowseBox::CreateAccessibleColumnHeader( sal_uInt16 _nC
         getAccessibleHeaderBar(AccessibleBrowseBoxObjType::ColumnHeaderBar));
 }
 
-
-sal_Int32 BrowseBox::GetAccessibleControlCount() const
-{
-    return 0;
-}
-
-
-Reference< XAccessible > BrowseBox::CreateAccessibleControl( sal_Int32 )
-{
-    SAL_WARN( "svtools", "BrowseBox::CreateAccessibleControl: to be overwritten!" );
-    return nullptr;
-}
-
-
 // Conversions ----------------------------------------------------------------
 
 bool BrowseBox::ConvertPointToCellAddress(

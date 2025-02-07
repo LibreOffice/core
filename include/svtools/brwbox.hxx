@@ -731,16 +731,6 @@ public:
         css::accessibility::XAccessible >
     CreateAccessibleColumnHeader( sal_uInt16 nColumnPos ) override;
 
-    /** @return  The count of additional controls of the control area. */
-    virtual sal_Int32 GetAccessibleControlCount() const override;
-
-    /** Creates the accessible object of an additional control.
-        @param nIndex  The 0-based index of the control.
-        @return  The XAccessible interface of the specified control. */
-    virtual css::uno::Reference<
-        css::accessibility::XAccessible >
-    CreateAccessibleControl( sal_Int32 nIndex ) override;
-
     /** Converts a point relative to the data window origin to a cell address.
         @param rnRow  Out-parameter that takes the row index.
         @param rnColumnId  Out-parameter that takes the column ID.
