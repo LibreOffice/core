@@ -2144,7 +2144,7 @@ AC_ARG_WITH(main-module,
     AS_HELP_STRING([--with-main-module=<writer/calc>],
         [Specify which main module to build for wasm.
         Default value is 'writer'.]),
-,)
+, [with_main_module=calc,writer])
 
 if test "$_os" = Emscripten; then
     AC_ARG_ENABLE(emscripten-proxy-to-pthread,
