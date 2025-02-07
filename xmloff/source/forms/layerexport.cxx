@@ -523,6 +523,20 @@ namespace xmloff
             Reference< XText > xControlText( _rxObject, UNO_QUERY );
             if ( xControlText.is() )
             {
+                try
+                {
+                    // tdf#120397: similar to the fix of tdf#153161 where
+                    // XTextRange::getText() --> ::GetSelection() flushes the changes
+                    // for some Shape objects we also need to set the end cursor pos
+                    // to the end of the form text objects, otherwise fail to get
+                    // exported correctly. Maybe at some point it would make sense
+                    // to find a better place for more targeted flush.
+                    xControlText = xControlText->getText();
+                }
+                catch (css::uno::RuntimeException const&)
+                {
+                    // just in case if we would hit something here
+                }
                 m_rContext.GetTextParagraphExport()->collectTextAutoStyles( xControlText );
             }
 
