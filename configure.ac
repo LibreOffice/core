@@ -5704,6 +5704,22 @@ emscripten*)
 esac
 
 dnl ===================================================================
+dnl Target-specific options
+dnl ===================================================================
+
+ENABLE_LASX="TRUE"
+if test "$CPUNAME" == LOONGARCH64; then
+    AC_ARG_ENABLE(lasx,
+        AS_HELP_STRING([--enable-lasx],
+            [build with LASX vectorization])
+    )
+    if test "$enable_lasx" != yes; then
+        ENABLE_LASX=""
+    fi
+fi
+AC_SUBST(ENABLE_LASX)
+
+dnl ===================================================================
 dnl .NET support
 dnl ===================================================================
 
