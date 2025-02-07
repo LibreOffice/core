@@ -311,10 +311,10 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         {
             try
             {
-                // tdf#153161: it seems that the call to XTextRange::getString flushes the changes
+                // tdf#153161: it seems that the call to xText->getText flushes the changes
                 // for some objects, that otherwise fail to get exported correctly. Maybe at some
                 // point it would make sense to find a better place for more targeted flush.
-                xText->getString();
+                xText = xText->getText();
             }
             catch (uno::RuntimeException const&)
             {
