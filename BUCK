@@ -40,6 +40,12 @@ prebuilt_jar(
   visibility = ['PUBLIC'],
 )
 
+prebuilt_jar(
+  name = 'java-websocket',
+  binary_jar = 'instdir/program/classes/java_websocket.jar',
+  visibility = ['PUBLIC'],
+)
+
 zip_file(
   name = 'api',
   srcs = [
