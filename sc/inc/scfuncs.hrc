@@ -4256,9 +4256,9 @@ const TranslateId SC_OPCODE_CHOOSECOLS_ARY[] =
 {
     NC_("SC_OPCODE_CHOOSECOLS", "Returns the specified columns from an array."),
     NC_("SC_OPCODE_CHOOSECOLS", "Array"),
-    NC_("SC_OPCODE_CHOOSECOLS", "The array containing the rows to be returned in the new array."),
+    NC_("SC_OPCODE_CHOOSECOLS", "The array containing the columns to be returned in the new array."),
     NC_("SC_OPCODE_CHOOSECOLS", "Column 1"),
-    NC_("SC_OPCODE_CHOOSECOLS", "The first column number to be returned."),
+    NC_("SC_OPCODE_CHOOSECOLS", "The number of the first column to be returned."),
     NC_("SC_OPCODE_CHOOSECOLS", "Column 2"),
     NC_("SC_OPCODE_CHOOSECOLS", "Column 2, Column 3,... The list of column numbers to be returned.")
 };
@@ -4268,9 +4268,9 @@ const TranslateId SC_OPCODE_CHOOSEROWS_ARY[] =
 {
     NC_("SC_OPCODE_CHOOSEROWS", "Returns the specified rows from an array."),
     NC_("SC_OPCODE_CHOOSEROWS", "Array"),
-    NC_("SC_OPCODE_CHOOSEROWS", "The array containing the columns to be returned in the new array."),
+    NC_("SC_OPCODE_CHOOSEROWS", "The array containing the rows to be returned in the new array."),
     NC_("SC_OPCODE_CHOOSEROWS", "Row 1"),
-    NC_("SC_OPCODE_CHOOSEROWS", "The first row number to be returned."),
+    NC_("SC_OPCODE_CHOOSEROWS", "The number of the first row to be returned."),
     NC_("SC_OPCODE_CHOOSEROWS", "Row 2"),
     NC_("SC_OPCODE_CHOOSEROWS", "Row 2, Row 3,... The list of row numbers to be returned.")
 };
@@ -4338,9 +4338,9 @@ const TranslateId SC_OPCODE_TOCOL_ARY[] =
 {
     NC_("SC_OPCODE_TOCOL", "transforms an array into a single column."),
     NC_("SC_OPCODE_TOCOL", "Array"),
-    NC_("SC_OPCODE_TOCOL", "The range or array to return as a column."),
+    NC_("SC_OPCODE_TOCOL", "The range or array to return as a single column."),
     NC_("SC_OPCODE_TOCOL", "Ignore"),
-    NC_("SC_OPCODE_TOCOL", "Whether to ignore certain types of values. 0 or omitted - keep all values (default). 1 - ignore blanks. 2 - ignore errors. 3 - ignore blanks and errors."),
+    NC_("SC_OPCODE_TOCOL", "Whether to ignore certain types of values. 0 or omitted - keep all values (default). 1 - ignore blank cells. 2 - ignore cells with error. 3 - ignore blanks cells and cells with error."),
     NC_("SC_OPCODE_TOCOL", "Scan by column"),
     NC_("SC_OPCODE_TOCOL", "Scan the array by column. FALSE or omitted (default) - the array is scanned by row. TRUE - the array is scanned by column.")
 };
@@ -4350,9 +4350,9 @@ const TranslateId SC_OPCODE_TOROW_ARY[] =
 {
     NC_("SC_OPCODE_TOROW", "transforms an array into a single row."),
     NC_("SC_OPCODE_TOROW", "Array"),
-    NC_("SC_OPCODE_TOROW", "The range or array to return as a row."),
+    NC_("SC_OPCODE_TOROW", "The range or array to return as a single row."),
     NC_("SC_OPCODE_TOROW", "Ignore"),
-    NC_("SC_OPCODE_TOROW", "Whether to ignore certain types of values. 0 or omitted - keep all values (default). 1 - ignore blanks. 2 - ignore errors. 3 - ignore blanks and errors."),
+    NC_("SC_OPCODE_TOROW", "Whether to ignore certain types of values. 0 or omitted - keep all values (default). 1 - ignore blank cells. 2 - ignore cells with error. 3 - ignore blanks cells and cells with error."),
     NC_("SC_OPCODE_TOROW", "Scan by column"),
     NC_("SC_OPCODE_TOROW", "Scan the array by column. FALSE or omitted (default) - the array is scanned by row. TRUE - the array is scanned by column.")
 };
