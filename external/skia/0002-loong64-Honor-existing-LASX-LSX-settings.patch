@@ -1,0 +1,48 @@
+From d1168502a9872eb1a8de76a0414292e95c54eed9 Mon Sep 17 00:00:00 2001
+From: Bingwu Zhang <xtex@aosc.io>
+Date: Sat, 8 Feb 2025 12:05:04 +0800
+Subject: [PATCH 2/4] [loong64] Honor existing LASX/LSX settings
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1333; i=xtex@aosc.io;
+ h=from:subject; bh=XsKjt2E4mmiE+K/HXjlVXAX8KruaZxFK1HhexJExG7M=;
+ b=owGbwMvMwCW2U4Ij7wZL9ETG02pJDOmr/iY0Tfy5rfxqeegfo8PK9U0bPFs45jMd/f4u99juw
+ keHY3786ihlYRDjYpAVU2QpMmzwZtVJ5xddVi4LM4eVCWQIAxenAEzk5A2Gf7rTeX/clQ99KPDu
+ xPsYVtY+icRvz2/9/Jr9ZaXaLrPl6nEMf/gFmgxyEkodXlYIBzTEzpvpu23Zj6zpG8xW2X0NO6L
+ WwAAA
+X-Developer-Key: i=xtex@aosc.io; a=openpgp;
+ fpr=7231804B052C670F15A6771DB918086ED8045B91
+
+Change-Id: I1e6183b987002ed09621b111a6012a0f186233f1
+Signed-off-by: Bingwu Zhang <xtex@aosc.io>
+---
+ AUTHORS                          | 1 +
+ src/opts/SkRasterPipeline_opts.h | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/AUTHORS b/AUTHORS
+index f533d9a8e5bf..03d0ac82a412 100755
+--- a/AUTHORS
++++ b/AUTHORS
+@@ -24,6 +24,7 @@ Amazon, Inc <*@amazon.com>
+ Anthony Catel <paraboul@gmail.com>
+ Andrew Kurushin <ajax16384@gmail.com>
+ Bharat Ahuja <ahujabharat93@gmail.com>
++Bingwu Zhang <xtex@aosc.io>
+ Biswapriyo Nath <nathbappai@gmail.com>
+ Brian Salomon <briansalomon@gmail.com>
+ Callum Moffat <smartercallum@gmail.com>
+diff --git a/src/opts/SkRasterPipeline_opts.h b/src/opts/SkRasterPipeline_opts.h
+index d12968d876b5..27a00474e07b 100644
+--- a/src/opts/SkRasterPipeline_opts.h
++++ b/src/opts/SkRasterPipeline_opts.h
+@@ -69,7 +69,7 @@ using NoCtx = const void*;
+ 
+ #if defined(SKRP_CPU_SCALAR) || defined(SKRP_CPU_NEON) || defined(SKRP_CPU_HSW) || \
+         defined(SKRP_CPU_SKX) || defined(SKRP_CPU_AVX) || defined(SKRP_CPU_SSE41) || \
+-        defined(SKRP_CPU_SSE2)
++        defined(SKRP_CPU_SSE2) || defined(SKRP_CPU_LASX) || defined(SKRP_CPU_LSX)
+     // Honor the existing setting
+ #elif !defined(__clang__) && !defined(__GNUC__)
+     #define SKRP_CPU_SCALAR
+-- 
+2.48.1
+
