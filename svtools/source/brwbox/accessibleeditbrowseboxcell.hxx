@@ -18,110 +18,29 @@
  */
 #pragma once
 
-#include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
-#include <comphelper/compbase.hxx>
-#include <comphelper/accessiblewrapper.hxx>
-#include <vcl/accessibility/AccessibleBrowseBoxCell.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <svtools/editbrowsebox.hxx>
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 
-
-// = EditBrowseBoxTableCell
-
-class EditBrowseBoxTableCell final : public AccessibleBrowseBoxCell
-                                ,public ::comphelper::OAccessibleContextWrapperHelper
+class EditBrowseBoxTableCell final
+    : public cppu::ImplInheritanceHelper<VCLXAccessibleComponent, css::accessibility::XAccessible>
 {
 public:
-    EditBrowseBoxTableCell(
-        const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-        const css::uno::Reference< css::accessibility::XAccessible >& _rxOwningAccessible,
-        const css::uno::Reference< css::accessibility::XAccessibleContext >& _xControlChild,
-        ::vcl::IAccessibleTableProvider& _rBrowseBox,
-        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
-        sal_Int32 _nRowPos,
-        sal_uInt16 _nColPos
-    );
+    EditBrowseBoxTableCell(svt::ControlBase* pControl);
 
-private:
-    virtual ~EditBrowseBoxTableCell() override;
-
-    // XAccessibleComponent
-    virtual sal_Int32 SAL_CALL getForeground(  ) override ;
-    virtual sal_Int32 SAL_CALL getBackground(  ) override ;
+    // XAccessible
+    css::uno::Reference<css::accessibility::XAccessibleContext>
+        SAL_CALL getAccessibleContext() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
 
-    // XInterface
-    DECLARE_XINTERFACE( )
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER( )
-
     // XAccessibleContext
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
-    virtual OUString SAL_CALL getAccessibleDescription(  ) override;
-    virtual OUString SAL_CALL getAccessibleName(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override;
-
-    sal_Int16 SAL_CALL getAccessibleRole() override;
-
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
-
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-
-    // OComponentHelper
-    virtual void SAL_CALL disposing() override;
-
-    // XComponent/OComponentProxyAggregationHelper (needs to be disambiguated)
-    virtual void SAL_CALL dispose() final override;
-
-    // OAccessibleContextWrapperHelper();
-    void notifyTranslatedEvent( const css::accessibility::AccessibleEventObject& _rEvent ) override;
+    virtual css::uno::Reference<css::accessibility::XAccessible>
+        SAL_CALL getAccessibleParent() override;
 
     EditBrowseBoxTableCell( const EditBrowseBoxTableCell& ) = delete;
     EditBrowseBoxTableCell& operator=( const EditBrowseBoxTableCell& ) = delete;
-};
-
-
-// = EditBrowseBoxTableCell
-
-// XAccessible providing an EditBrowseBoxTableCell
-class EditBrowseBoxTableCellAccess final
-    : public comphelper::WeakComponentImplHelper<css::accessibility::XAccessible>
-{
-    css::uno::WeakReference< css::accessibility::XAccessibleContext >
-                                        m_aContext;
-    css::uno::Reference< css::accessibility::XAccessible >
-                                        m_xParent;
-    css::uno::Reference< css::accessibility::XAccessible >
-                                        m_xControlAccessible;
-    css::uno::Reference< css::awt::XWindow >
-                                        m_xFocusWindow;
-    ::vcl::IAccessibleTableProvider*    m_pBrowseBox;
-    sal_Int32                           m_nRowPos;
-    sal_uInt16                          m_nColPos;
-
-public:
-    EditBrowseBoxTableCellAccess(
-        css::uno::Reference< css::accessibility::XAccessible > _xParent,
-        css::uno::Reference< css::accessibility::XAccessible > _xControlAccessible,
-        css::uno::Reference< css::awt::XWindow > _xFocusWindow,
-        ::vcl::IAccessibleTableProvider& _rBrowseBox,
-        sal_Int32 _nRowPos,
-        sal_uInt16 _nColPos
-    );
-
-private:
-    virtual ~EditBrowseBoxTableCellAccess() override;
-
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
-
-    // XComponent/WeakComponentImplHelper
-    virtual void disposing(std::unique_lock<std::mutex>&) override;
-
-    EditBrowseBoxTableCellAccess( const EditBrowseBoxTableCellAccess& ) = delete;
-    EditBrowseBoxTableCellAccess& operator=( const EditBrowseBoxTableCellAccess& ) = delete;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

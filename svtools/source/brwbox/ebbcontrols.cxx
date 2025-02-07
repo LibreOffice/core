@@ -16,6 +16,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "accessibleeditbrowseboxcell.hxx"
+
 #include <svtools/editbrowsebox.hxx>
 #include <vcl/svapp.hxx>
 
@@ -377,6 +379,11 @@ namespace svt
     bool ControlBase::ProcessKey(const KeyEvent& rKEvt)
     {
         return static_cast<BrowserDataWin*>(GetParent())->GetParent()->ProcessKey(rKEvt);
+    }
+
+    css::uno::Reference<css::accessibility::XAccessible> ControlBase::CreateAccessible()
+    {
+        return new EditBrowseBoxTableCell(this);
     }
 
     IMPL_LINK(ControlBase, KeyInputHdl, const KeyEvent&, rKEvt, bool)

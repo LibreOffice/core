@@ -22,6 +22,8 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include "editbrowseboximpl.hxx"
 #include <comphelper/types.hxx>
+#include <svtools/strings.hrc>
+#include <svtools/svtresid.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxCheckBoxCell.hxx>
 #include <vcl/accessiblefactory.hxx>
@@ -65,20 +67,19 @@ void EditBrowseBox::implCreateActiveAccessible( )
     if ( m_aImpl->m_xActiveCell.is() || !IsEditing() )
          return;
 
-    Reference< XAccessible > xCont = aController->GetWindow().GetAccessible();
-    Reference< XAccessible > xMy = GetAccessible();
-    if ( !(xMy.is() && xCont.is()) )
-         return;
+    ControlBase& rControl = aController->GetWindow();
 
-    m_aImpl->m_xActiveCell = new EditBrowseBoxTableCellAccess(
-        xMy, // parent accessible
-        xCont, // control accessible
-        VCLUnoHelper::GetInterface(&aController->GetWindow()), // focus window (for notifications)
-        *this, // the browse box
-        GetCurRow(), GetColumnPos(GetCurColumnId()));
+    // set accessible name based on current cell (which is the one that is being edited)
+    const sal_uInt16 nCol = GetColumnPos(GetCurColumnId());
+    const sal_Int32 nRow = GetCurRow();
+    OUString sAccName
+        = SvtResId(STR_ACC_COLUMN_NUM).replaceAll("%COLUMNNUMBER", OUString::number(nCol - 1))
+          + ", " + SvtResId(STR_ACC_ROW_NUM).replaceAll("%ROWNUMBER", OUString::number(nRow));
+    rControl.SetAccessibleName(sAccName);
 
-    css::uno::Reference<css::accessibility::XAccessible> xCell = m_aImpl->m_xActiveCell;
-    commitBrowseBoxEvent(CHILD, Any(xCell), Any());
+    m_aImpl->m_xActiveCell = rControl.GetAccessible();
+
+    commitBrowseBoxEvent(CHILD, Any(m_aImpl->m_xActiveCell), Any());
 }
 
 
@@ -95,13 +96,7 @@ Reference< XAccessible > EditBrowseBox::CreateAccessibleControl( sal_Int32 _nInd
     return m_aImpl->m_xActiveCell;
 }
 
-void EditBrowseBoxImpl::clearActiveCell()
-{
-    if (m_xActiveCell)
-        m_xActiveCell->dispose();
-
-    m_xActiveCell.clear();
-}
+void EditBrowseBoxImpl::clearActiveCell() { m_xActiveCell.clear(); }
 
 void EditBrowseBox::GrabTableFocus()
 {

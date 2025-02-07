@@ -18,7 +18,8 @@
  */
 #pragma once
 
-#include "accessibleeditbrowseboxcell.hxx"
+#include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 namespace svt
 {
@@ -26,7 +27,7 @@ namespace svt
     class EditBrowseBoxImpl
     {
     public:
-        rtl::Reference<EditBrowseBoxTableCellAccess> m_xActiveCell;
+        css::uno::Reference<css::accessibility::XAccessible> m_xActiveCell;
 
         void clearActiveCell();
     };

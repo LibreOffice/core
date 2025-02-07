@@ -210,6 +210,8 @@ namespace svt
             m_aKeyReleaseHdl = rHdl;
         }
 
+        css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+
     protected:
         DECL_DLLPRIVATE_LINK(KeyInputHdl, const KeyEvent&, bool);
         DECL_DLLPRIVATE_LINK(KeyReleaseHdl, const KeyEvent&, bool);
