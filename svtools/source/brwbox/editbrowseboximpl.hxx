@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <vcl/accessibility/accessibleeditbrowseboxcell.hxx>
+#include "accessibleeditbrowseboxcell.hxx"
 
 namespace svt
 {

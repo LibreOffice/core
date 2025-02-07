@@ -108,7 +108,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/accessibility/AccessibleTextAttributeHelper \
     vcl/source/accessibility/acc_factory \
     vcl/source/accessibility/accessiblebrowseboxcell \
-    vcl/source/accessibility/accessibleeditbrowseboxcell \
     vcl/source/accessibility/accessibleiconchoicectrl \
     vcl/source/accessibility/accessibleiconchoicectrlentry \
     vcl/source/accessibility/AccessibleIconView \

@@ -68,6 +68,7 @@ $(eval $(call gb_Library_use_externals,svt,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,svt,\
+    svtools/source/brwbox/accessibleeditbrowseboxcell \
     svtools/source/brwbox/brwbox1 \
     svtools/source/brwbox/brwbox2 \
     svtools/source/brwbox/brwbox3 \

@@ -17,13 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svdata.hxx>
-#include <strings.hrc>
+#include "accessibleeditbrowseboxcell.hxx"
 
 #include <comphelper/processfactory.hxx>
-#include <utility>
 #include <comphelper/diagnose_ex.hxx>
-#include <vcl/accessibility/accessibleeditbrowseboxcell.hxx>
+#include <svtools/strings.hrc>
+#include <svtools/svtresid.hxx>
 
 using namespace com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
@@ -109,8 +108,8 @@ OUString SAL_CALL EditBrowseBoxTableCell::getAccessibleName()
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
-    return VclResId(RID_STR_ACC_COLUMN_NUM).replaceAll("%COLUMNNUMBER", OUString::number(getColumnPos()-1)) + ", "
-           + VclResId(RID_STR_ACC_ROW_NUM).replaceAll("%ROWNUMBER", OUString::number(getRowPos()));
+    return SvtResId(STR_ACC_COLUMN_NUM).replaceAll("%COLUMNNUMBER", OUString::number(getColumnPos()-1)) + ", "
+           + SvtResId(STR_ACC_ROW_NUM).replaceAll("%ROWNUMBER", OUString::number(getRowPos()));
 }
 
 css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleRelationSet()

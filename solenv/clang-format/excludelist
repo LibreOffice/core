@@ -6118,7 +6118,6 @@ include/vcl/accessibility/AccessibleBrowseBoxObjType.hxx
 include/vcl/accessibility/AccessibleBrowseBoxTable.hxx
 include/vcl/accessibility/AccessibleBrowseBoxTableBase.hxx
 include/vcl/accessibility/AccessibleBrowseBoxTableCell.hxx
-include/vcl/accessibility/accessibleeditbrowseboxcell.hxx
 include/vcl/BitmapBuffer.hxx
 include/vcl/BitmapColor.hxx
 include/vcl/BitmapPalette.hxx
@@ -10932,6 +10931,8 @@ svl/unx/source/svdde/ddedummy.cxx
 svtools/inc/strings.hxx
 svtools/inc/framestatuslistener.hxx
 svtools/langsupport/langsupport.cxx
+svtools/source/brwbox/accessibleeditbrowseboxcell.cxx
+svtools/source/brwbox/accessibleeditbrowseboxcell.hxx
 svtools/source/brwbox/brwbox1.cxx
 svtools/source/brwbox/brwbox2.cxx
 svtools/source/brwbox/brwbox3.cxx
@@ -14125,7 +14126,6 @@ vcl/source/accessibility/AccessibleBrowseBoxTableBase.cxx
 vcl/source/accessibility/AccessibleBrowseBoxTableCell.cxx
 vcl/source/accessibility/acc_factory.cxx
 vcl/source/accessibility/accessiblebrowseboxcell.cxx
-vcl/source/accessibility/accessibleeditbrowseboxcell.cxx
 vcl/source/accessibility/accessibleiconchoicectrl.cxx
 vcl/source/accessibility/accessibleiconchoicectrlentry.cxx
 vcl/source/accessibility/accessiblelistbox.cxx
