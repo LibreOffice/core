@@ -871,7 +871,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nR
                                             eState, false);
     else
         xChild = new AccessibleBrowseBoxTableCell(m_xAccessible->getTable(), *this, _nRow,
-                                                  _nColumnPos, OFFSET_NONE);
+                                                  _nColumnPos);
 
     return xChild;
 }

@@ -28,9 +28,6 @@
 namespace vcl
 {
 
-#define OFFSET_DEFAULT  (sal_Int32(-1))
-#define OFFSET_NONE     (sal_Int32(0))
-
 enum AccessibleTableChildIndex
 {
     /** Child index of the column header bar (first row). Exists always. */

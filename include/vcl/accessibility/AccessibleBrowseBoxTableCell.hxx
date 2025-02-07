@@ -31,8 +31,6 @@ class VCL_DLLPUBLIC AccessibleBrowseBoxTableCell final
       public ::comphelper::OCommonAccessibleText
 {
 private:
-    sal_Int32   m_nOffset;
-
     // OCommonAccessibleText
     virtual OUString                        implGetText() final override;
     virtual css::lang::Locale               implGetLocale() override;
@@ -42,8 +40,7 @@ public:
     AccessibleBrowseBoxTableCell( const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
                                 ::vcl::IAccessibleTableProvider& _rBrowseBox,
                                 sal_Int32 _nRowId,
-                                sal_uInt16 _nColId,
-                                sal_Int32 _nOffset );
+                                sal_uInt16 _nColId);
 
     // XEventListener
     using AccessibleBrowseBoxBase::disposing;

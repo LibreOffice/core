@@ -65,10 +65,9 @@ void AccessibleBrowseBoxTableCell::implGetSelection( sal_Int32& nStartIndex, sal
 
 AccessibleBrowseBoxTableCell::AccessibleBrowseBoxTableCell(
     const Reference<XAccessible>& _rxParent, vcl::IAccessibleTableProvider& _rBrowseBox,
-    sal_Int32 _nRowPos, sal_uInt16 _nColPos, sal_Int32 _nOffset)
+    sal_Int32 _nRowPos, sal_uInt16 _nColPos)
     : ImplInheritanceHelper(_rxParent, _rBrowseBox, nullptr, _nRowPos, _nColPos)
 {
-    m_nOffset = ( _nOffset == OFFSET_DEFAULT ) ? sal_Int32(vcl::BBINDEX_FIRSTCONTROL) : _nOffset;
     sal_Int32 nIndex = getIndex_Impl( _nRowPos, _nColPos, _rBrowseBox.GetColumnCount() );
     setAccessibleName( _rBrowseBox.GetAccessibleObjectName( AccessibleBrowseBoxObjType::TableCell, nIndex ) );
     setAccessibleDescription( _rBrowseBox.GetAccessibleObjectDescription( AccessibleBrowseBoxObjType::TableCell, nIndex ) );
@@ -169,7 +168,7 @@ sal_Int64 SAL_CALL AccessibleBrowseBoxTableCell::getAccessibleIndexInParent()
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
-    return /*vcl::BBINDEX_FIRSTCONTROL*/ m_nOffset + (static_cast<sal_Int64>(getRowPos()) * static_cast<sal_Int64>(mpBrowseBox->GetColumnCount())) + getColumnPos();
+    return (static_cast<sal_Int64>(getRowPos()) * static_cast<sal_Int64>(mpBrowseBox->GetColumnCount())) + getColumnPos();
 }
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getCaretPosition(  )

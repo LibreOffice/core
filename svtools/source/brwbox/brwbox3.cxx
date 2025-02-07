@@ -91,8 +91,7 @@ Reference< XAccessible > BrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_u
     // BBINDEX_TABLE must be the table
     OSL_ENSURE(m_xAccessible, "Invalid call: Accessible is null");
 
-    return new AccessibleBrowseBoxTableCell(getAccessibleTable(), *this, _nRow, _nColumnPos,
-                                            OFFSET_DEFAULT);
+    return new AccessibleBrowseBoxTableCell(getAccessibleTable(), *this, _nRow, _nColumnPos);
 }
 
 
