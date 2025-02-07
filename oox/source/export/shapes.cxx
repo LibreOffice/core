@@ -1808,16 +1808,6 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
     if (GetProperty(rXPropSet, "EdgeEndConnection"))
         mAny >>= rXShapeB;
 
-    if (GetProperty(rXPropSet, "StartGluePointIndex"))
-        mAny >>= nStartGlueId;
-    if (nStartGlueId != -1)
-        nStartGlueId = lcl_GetGluePointId(rXShapeA, nStartGlueId);
-
-    if (GetProperty(rXPropSet, "EndGluePointIndex"))
-        mAny >>= nEndGlueId;
-    if (nEndGlueId != -1)
-        nEndGlueId = lcl_GetGluePointId(rXShapeB, nEndGlueId);
-
     // Position is relative to group in Word, but relative to anchor of group in API.
     if (GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes && m_xParent.is())
     {
@@ -1828,6 +1818,24 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
         aEndPoint.Y -= aParentPos.Y;
     }
     EscherConnectorListEntry aConnectorEntry( xShape, aStartPoint, rXShapeA, aEndPoint, rXShapeB );
+
+    if (GetProperty(rXPropSet, "StartGluePointIndex"))
+    {
+        mAny >>= nStartGlueId;
+        nStartGlueId = (nStartGlueId != -1) ? lcl_GetGluePointId(rXShapeA, nStartGlueId)
+                                            : (aConnectorEntry.mXConnectToA.is()
+                                                   ? aConnectorEntry.GetConnectorRule(true)
+                                                   : -1);
+    }
+
+    if (GetProperty(rXPropSet, "EndGluePointIndex"))
+    {
+        mAny >>= nEndGlueId;
+        nEndGlueId = (nEndGlueId != -1) ? lcl_GetGluePointId(rXShapeB, nEndGlueId)
+                                        : (aConnectorEntry.mXConnectToB.is()
+                                               ? aConnectorEntry.GetConnectorRule(false)
+                                               : -1);
+    }
 
     if (eConnectorType != ConnectorType_LINE)
     {
