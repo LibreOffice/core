@@ -498,10 +498,17 @@ static bool drawThemedControl(HDC hDC, ControlType nType, int iPart, int iState,
             Color aScrollBarThumbColor = ThemeColors::GetThemeColors().GetBaseColor();
             const Color& rBackgroundColor = ThemeColors::GetThemeColors().GetWindowColor();
 
+            bool bUseDarkMode = UseDarkMode();
             if (iState == SCRBS_PRESSED)
-                aScrollBarThumbColor.IncreaseLuminance(60);
+                if (bUseDarkMode)
+                    aScrollBarThumbColor.IncreaseLuminance(60);
+                else
+                    aScrollBarThumbColor.DecreaseLuminance(60);
             else if (iState = SCRBS_HOT)
-                aScrollBarThumbColor.IncreaseLuminance(30);
+                if (bUseDarkMode)
+                    aScrollBarThumbColor.IncreaseLuminance(30);
+                else
+                    aScrollBarThumbColor.DecreaseLuminance(30);
 
             ScopedHBRUSH hbrush(CreateSolidBrush(RGB(rBackgroundColor.GetRed(),
                                                      rBackgroundColor.GetGreen(),
