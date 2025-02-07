@@ -360,6 +360,7 @@ ICU_DATA_TARBALL := icu4c-77_1-data.zip
 # so that git cherry-pick
 # will not run into conflicts
 JAVA_WEBSOCKET_SHA256SUM := f3ce29efde338707241d47ab4784b19a1e3658bfa0564b5bc5f80c27e5118728
+# please also adjust the version in ridljar/pom.libreoffice.xml
 JAVA_WEBSOCKET_TARBALL := Java-WebSocket-1.6.0.tar.gz
 # three static lines
 # so that git cherry-pick
