@@ -446,8 +446,8 @@ LXML_TARBALL := lxml-5.2.2.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-MARIADB_CONNECTOR_C_SHA256SUM := 1c03c30b394871ab354dbdb47574beae19e2657da21a911ecc9e33e9388a3bef
-MARIADB_CONNECTOR_C_TARBALL := mariadb-connector-c-3.3.13-src.tar.gz
+MARIADB_CONNECTOR_C_SHA256SUM := 497c324ed9ebce1dd8a940c1d308574f0d4db41c8209f19bfb3ded25e733ed49
+MARIADB_CONNECTOR_C_TARBALL := mariadb-connector-c-3.3.14-src.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
