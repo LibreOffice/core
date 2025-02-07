@@ -39,8 +39,8 @@ public:
     virtual css::uno::Reference<css::accessibility::XAccessible>
         SAL_CALL getAccessibleParent() override;
 
-    EditBrowseBoxTableCell( const EditBrowseBoxTableCell& ) = delete;
-    EditBrowseBoxTableCell& operator=( const EditBrowseBoxTableCell& ) = delete;
+    EditBrowseBoxTableCell(const EditBrowseBoxTableCell&) = delete;
+    EditBrowseBoxTableCell& operator=(const EditBrowseBoxTableCell&) = delete;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

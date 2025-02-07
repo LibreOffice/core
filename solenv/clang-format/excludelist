@@ -10931,8 +10931,6 @@ svl/unx/source/svdde/ddedummy.cxx
 svtools/inc/strings.hxx
 svtools/inc/framestatuslistener.hxx
 svtools/langsupport/langsupport.cxx
-svtools/source/brwbox/accessibleeditbrowseboxcell.cxx
-svtools/source/brwbox/accessibleeditbrowseboxcell.hxx
 svtools/source/brwbox/brwbox1.cxx
 svtools/source/brwbox/brwbox2.cxx
 svtools/source/brwbox/brwbox3.cxx
