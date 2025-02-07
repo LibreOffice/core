@@ -110,7 +110,7 @@ void Outliner::SetModifyHdl( const Link<LinkParamNone*,void>& rLink )
 
 void Outliner::SetNotifyHdl( const Link<EENotify&,void>& rLink )
 {
-    pEditEngine->aOutlinerNotifyHdl = rLink;
+    aOutlinerNotifyHdl = rLink;
 
     if ( rLink.IsSet() )
         pEditEngine->SetNotifyHdl( LINK( this, Outliner, EditEngineNotifyHdl ) );

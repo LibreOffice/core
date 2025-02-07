@@ -565,6 +565,10 @@ enum class OutlinerMode {
     OutlineView    = 0x0004
 };
 
+enum class SdrCompatibilityFlag;
+
+typedef std::vector<EENotify> NotifyList;
+
 class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
 {
 public:
@@ -611,6 +615,9 @@ private:
     sal_uInt8           nBlockInsCallback;
     bool                bStrippingPortions;
     bool                bPasting;
+
+    Link<EENotify&,void> aOutlinerNotifyHdl;
+    NotifyList          aNotifyCache;
 
     DECL_DLLPRIVATE_LINK(    ParaVisibleStateChangedHdl, Paragraph&, void );
     DECL_DLLPRIVATE_LINK(    BeginMovingParagraphsHdl, MoveParagraphsInfo&, void );

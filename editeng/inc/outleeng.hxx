@@ -21,10 +21,6 @@
 #include <editeng/outliner.hxx>
 #include <editeng/editeng.hxx>
 
-enum class SdrCompatibilityFlag;
-
-typedef std::vector<EENotify> NotifyList;
-
 class OutlinerEditEng : public EditEngine
 {
     Outliner*           pOwner;
@@ -75,10 +71,6 @@ public:
     std::optional<bool> GetCompatFlag(SdrCompatibilityFlag eFlag) const;
 
        virtual void        SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet ) override;
-
-    // belongs into class Outliner, move there before incompatible update!
-    Link<EENotify&,void> aOutlinerNotifyHdl;
-    NotifyList          aNotifyCache;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

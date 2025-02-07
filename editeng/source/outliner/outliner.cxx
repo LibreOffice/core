@@ -1903,12 +1903,12 @@ void Outliner::ImplBlockInsertionCallbacks( bool b )
         if ( !nBlockInsCallback )
         {
             // Call blocked notify events...
-            while(!pEditEngine->aNotifyCache.empty())
+            while(!aNotifyCache.empty())
             {
-                EENotify aNotify(pEditEngine->aNotifyCache.front());
+                EENotify aNotify(aNotifyCache.front());
                 // Remove from list before calling, maybe we enter LeaveBlockNotifications while calling the handler...
-                pEditEngine->aNotifyCache.erase(pEditEngine->aNotifyCache.begin());
-                pEditEngine->aOutlinerNotifyHdl.Call( aNotify );
+                aNotifyCache.erase(aNotifyCache.begin());
+                aOutlinerNotifyHdl.Call( aNotify );
             }
         }
     }
@@ -1917,9 +1917,9 @@ void Outliner::ImplBlockInsertionCallbacks( bool b )
 IMPL_LINK( Outliner, EditEngineNotifyHdl, EENotify&, rNotify, void )
 {
     if ( !nBlockInsCallback )
-        pEditEngine->aOutlinerNotifyHdl.Call( rNotify );
+        aOutlinerNotifyHdl.Call( rNotify );
     else
-        pEditEngine->aNotifyCache.push_back(rNotify);
+        aNotifyCache.push_back(rNotify);
 }
 
 /** sets a link that is called at the beginning of a drag operation at an edit view */
