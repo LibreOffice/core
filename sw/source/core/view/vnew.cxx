@@ -20,6 +20,7 @@
 #include <sfx2/printer.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <comphelper/lok.hxx>
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -137,6 +138,14 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
         if( ! HasDrawView() )
             MakeDrawView();
         mpOpt->SetFormView( ! GetDrawView()->IsDesignMode() );
+    }
+
+    awt::Rectangle aClientVisibleArea = comphelper::LibreOfficeKit::getInitialClientVisibleArea();
+    if (aClientVisibleArea.Width && aClientVisibleArea.Height)
+    {
+        maLOKVisibleArea
+            = tools::Rectangle(Point(aClientVisibleArea.X, aClientVisibleArea.Y),
+                               Size(aClientVisibleArea.Width, aClientVisibleArea.Height));
     }
 }
 

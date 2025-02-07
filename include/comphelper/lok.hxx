@@ -16,6 +16,10 @@
 #include <rtl/ustring.hxx>
 
 class LanguageTag;
+namespace com::sun::star::awt
+{
+struct Rectangle;
+}
 
 // Interface between the LibreOfficeKit implementation called by LibreOfficeKit clients and other
 // LibreOffice code.
@@ -144,6 +148,10 @@ COMPHELPER_DLLPUBLIC void setViewSetter(std::function<void(int)> pViewSetter);
 COMPHELPER_DLLPUBLIC void setView(int nView);
 COMPHELPER_DLLPUBLIC void setViewGetter(std::function<int()> pViewGetter);
 COMPHELPER_DLLPUBLIC int getView();
+
+COMPHELPER_DLLPUBLIC void
+setInitialClientVisibleArea(const css::awt::Rectangle& rClientVisibleArea);
+COMPHELPER_DLLPUBLIC css::awt::Rectangle getInitialClientVisibleArea();
 }
 
 #endif // INCLUDED_COMPHELPER_LOK_HXX

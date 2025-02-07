@@ -2888,6 +2888,21 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         }
         SvtSecurityOptions::SetMacroSecurityLevel(nMacroSecurityLevel);
 
+        OUString aClientVisibleArea = extractParameter(aOptions, u"ClientVisibleArea");
+        if (!aClientVisibleArea.isEmpty())
+        {
+            std::vector<OUString> aTokens = comphelper::string::split(aClientVisibleArea, ';');
+            if (aTokens.size() >= 4)
+            {
+                awt::Rectangle aRectangle;
+                aRectangle.X = aTokens[0].toInt32();
+                aRectangle.Y = aTokens[1].toInt32();
+                aRectangle.Width = aTokens[2].toInt32();
+                aRectangle.Height = aTokens[3].toInt32();
+                comphelper::LibreOfficeKit::setInitialClientVisibleArea(aRectangle);
+            }
+        }
+
 #if defined(ANDROID) && HAVE_FEATURE_ANDROID_LOK
         sal_Int16 nMacroExecMode = document::MacroExecMode::USE_CONFIG;
 #else
