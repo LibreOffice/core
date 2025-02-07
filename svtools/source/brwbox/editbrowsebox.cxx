@@ -28,7 +28,6 @@
 #include <bitmaps.hlst>
 
 #include <algorithm>
-#include "editbrowseboximpl.hxx"
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
 
@@ -117,8 +116,6 @@ EditBrowseBox::EditBrowseBox( vcl::Window* pParent, EditBrowseBoxFlags nBrowserF
               ,m_nBrowserFlags(nBrowserFlags)
               ,pHeader(nullptr)
 {
-    m_aImpl.reset(new EditBrowseBoxImpl);
-
     SetCompoundControl(true);
 
     ImplInitSettings(true, true, true);
@@ -1011,11 +1008,10 @@ void EditBrowseBox::DeactivateCell(bool bUpdate)
     if (!IsEditing())
         return;
 
-    if ( isAccessibleAlive() && m_aImpl->m_xActiveCell)
+    if (isAccessibleAlive() && m_xActiveCell.is())
     {
-        css::uno::Reference<css::accessibility::XAccessible> xCell = m_aImpl->m_xActiveCell;
-        commitBrowseBoxEvent(AccessibleEventId::CHILD, Any(), Any(xCell));
-        m_aImpl->clearActiveCell();
+        commitBrowseBoxEvent(AccessibleEventId::CHILD, Any(), Any(m_xActiveCell));
+        clearActiveCell();
     }
 
     aOldController = aController;

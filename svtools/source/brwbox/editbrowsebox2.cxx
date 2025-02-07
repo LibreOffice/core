@@ -20,7 +20,6 @@
 #include <svtools/editbrowsebox.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include "editbrowseboximpl.hxx"
 #include <comphelper/types.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
@@ -62,9 +61,9 @@ sal_Int32 EditBrowseBox::GetAccessibleControlCount() const
 void EditBrowseBox::implCreateActiveAccessible( )
 {
     DBG_ASSERT( IsEditing(), "EditBrowseBox::implCreateActiveAccessible: not to be called if we're not editing currently!" );
-    DBG_ASSERT( !m_aImpl->m_xActiveCell.is(), "EditBrowseBox::implCreateActiveAccessible: not to be called if the old one is still alive!" );
+    DBG_ASSERT( !m_xActiveCell.is(), "EditBrowseBox::implCreateActiveAccessible: not to be called if the old one is still alive!" );
 
-    if ( m_aImpl->m_xActiveCell.is() || !IsEditing() )
+    if (m_xActiveCell.is() || !IsEditing())
          return;
 
     ControlBase& rControl = aController->GetWindow();
@@ -77,9 +76,9 @@ void EditBrowseBox::implCreateActiveAccessible( )
           + ", " + SvtResId(STR_ACC_ROW_NUM).replaceAll("%ROWNUMBER", OUString::number(nRow));
     rControl.SetAccessibleName(sAccName);
 
-    m_aImpl->m_xActiveCell = rControl.GetAccessible();
+    m_xActiveCell = rControl.GetAccessible();
 
-    commitBrowseBoxEvent(CHILD, Any(m_aImpl->m_xActiveCell), Any());
+    commitBrowseBoxEvent(CHILD, Any(m_xActiveCell), Any());
 }
 
 
@@ -89,14 +88,14 @@ Reference< XAccessible > EditBrowseBox::CreateAccessibleControl( sal_Int32 _nInd
 
     if ( isAccessibleAlive() )
     {
-        if ( !m_aImpl->m_xActiveCell.is() )
+        if (!m_xActiveCell.is())
             implCreateActiveAccessible();
     }
 
-    return m_aImpl->m_xActiveCell;
+    return m_xActiveCell;
 }
 
-void EditBrowseBoxImpl::clearActiveCell() { m_xActiveCell.clear(); }
+void EditBrowseBox::clearActiveCell() { m_xActiveCell.clear(); }
 
 void EditBrowseBox::GrabTableFocus()
 {

@@ -886,7 +886,6 @@ namespace svt
 
 
     //= EditBrowseBox
-    class EditBrowseBoxImpl;
     class SVT_DLLPUBLIC EditBrowseBox: public BrowseBox
     {
         friend class EditBrowserHeader;
@@ -956,7 +955,9 @@ namespace svt
         VclPtr<CheckBoxControl> pCheckBoxPaint;
 
         EditBrowseBoxFlags  m_nBrowserFlags;
-        std::unique_ptr< EditBrowseBoxImpl> m_aImpl;
+
+        css::uno::Reference<css::accessibility::XAccessible> m_xActiveCell;
+        void clearActiveCell();
 
     protected:
         VclPtr<BrowserHeader>  pHeader;
