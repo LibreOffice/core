@@ -949,13 +949,9 @@ void SfxItemSet::Changed(const SfxPoolItem*, const SfxPoolItem*) const
 {
 }
 
-/**
- * Only retain the Items that are also present in rSet
- * (nevermind their value).
- */
 void SfxItemSet::Intersect( const SfxItemSet& rSet )
 {
-    // Delete all Items not contained in rSet
+    // Delete all Items *not* contained in rSet
     assert(m_pPool && "Not implemented without Pool");
 
     if (!Count() || this == &rSet)
@@ -970,21 +966,19 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
         return;
     }
 
-    // CAUTION: In the former impl, the
-    // - version for different ranges checked for SfxItemState::UNKNOWN
-    //   in rSet -> this means that the WhichID is *not* defined in
-    //   the ranges of rSet *at all* > definitely an *error*
-    // - version for same ranges checked for
-    //   nullptr != local && nullptr == rSet.
-    // All together I think also using the text
-    // "Delete all Items not contained in rSet" leads to
-    // locally delete all Items that are *not* set in rSet
-    // -> != SfxItemState::SET
-
+    // locally delete all items *not* contained in rSet, independent of their
+    // values, just dependent of existence. Iterate over all existing local items
     for (PoolItemMap::iterator aCandidate(m_aPoolItemMap.begin()); aCandidate != m_aPoolItemMap.end();)
     {
-        if (SfxItemState::SET != rSet.GetItemState_ForWhichID(SfxItemState::UNKNOWN, aCandidate->first, false, nullptr))
+        // check if an item with that WhichID exists in rSet
+        const PoolItemMap::const_iterator aHit(rSet.m_aPoolItemMap.find(aCandidate->first));
+
+        if (aHit == rSet.m_aPoolItemMap.end())
         {
+            // no item with that WhichID exists in rset, so we have to delete
+            // aCandidate.
+            // tdf#164712: NOTE: This includes all set items (SfxItemState::SET)
+            // but *also* SfxItemState::DISABLED and SfxItemState::INVALID.
 #ifdef DBG_UTIL
             assert(0 == m_nRegisteredSfxItemIter && "ITEM: SfxItemSet Intersect with active SfxItemIters (!)");
 #endif
@@ -1012,28 +1006,16 @@ void SfxItemSet::Differentiate(const SfxItemSet& rSet)
         return;
     }
 
-    // CAUTION: In the former impl, the
-    // - version for different ranges checked for SfxItemState::SET
-    //   in rSet
-    // - version for same ranges checked for
-    //   nullptr != local && nullptr != rSet.
-    // All together I think also using the text
-    // "Delete all Items contained in rSet" leads to
-    // locally delete all Items that *are *not* set in rSet
-    // -> ==SfxItemState::SET
-
-    for (PoolItemMap::iterator aCandidate(m_aPoolItemMap.begin()); aCandidate != m_aPoolItemMap.end();)
+    // locally delete all items contained in rSet, independent of their
+    // values, just dependent of their existence in rSet.
+    // tdf#164712: NOTE: This includes all set items (SfxItemState::SET)
+    // but also SfxItemState::DISABLED and SfxItemState::INVALID.
+    // These are all items that exist in the std::unordered_map (PoolItemMap)
+    // of rSet, so we can just iterate over those and use the WhichID to
+    // delete the eventually Items in the local set
+    for (PoolItemMap::const_iterator aCandidate(rSet.m_aPoolItemMap.begin()); aCandidate != rSet.m_aPoolItemMap.end(); aCandidate++)
     {
-        if (SfxItemState::SET == rSet.GetItemState_ForWhichID(SfxItemState::UNKNOWN, aCandidate->first, false, nullptr))
-        {
-#ifdef DBG_UTIL
-            assert(0 == m_nRegisteredSfxItemIter && "ITEM: SfxItemSet Differentiate with active SfxItemIters (!)");
-#endif
-            ClearSingleItem_PrepareRemove(aCandidate->second);
-            aCandidate = m_aPoolItemMap.erase(aCandidate);
-        }
-        else
-            aCandidate++;
+        ClearSingleItem_ForWhichID(aCandidate->first);
     }
 }
 
