@@ -846,7 +846,7 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
     if (!aParam.bUserDef)
         return;
 
-    SCCOLROW nStartPos = aParam.bByRow ? maRange.aStart.Col() : maRange.aStart.Row();
+    SCCOLROW nStartPos = aParam.bByRow ? maRange.aStart.Row() : maRange.aStart.Col();
     // descending sort - need to enable 1st SortParam slot
     if (rSorConditionLoaded.mbDescending)
         assert(aParam.GetSortKeyCount() == DEFSORT);
