@@ -348,6 +348,13 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
                 maData.mnActivePane = EXC_PANE_TOPRIGHT;
             else if( maData.HasPane( EXC_PANE_BOTTOMLEFT ) )
                 maData.mnActivePane = EXC_PANE_BOTTOMLEFT;
+
+            // Starting cell for active, frozen pane must not be less than the split position
+            // i.e. it must not be in the frozen section (or Excel 2019 considers the file corrupt).
+            if (maData.maSecondXclPos.mnCol < maData.mnSplitX)
+                maData.maSecondXclPos.mnCol = maData.mnSplitX;
+            if (maData.maSecondXclPos.mnRow < maData.mnSplitY)
+                maData.maSecondXclPos.mnRow = maData.mnSplitY;
         }
         else
         {
