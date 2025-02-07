@@ -1315,8 +1315,21 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkSwizzler_opts_lasx \
     UnpackedTarball/skia/src/core/SkBlitRow_opts_lasx \
     UnpackedTarball/skia/src/core/SkBitmapProcState_opts_lasx, \
-        $(LO_SKIA_AVOID_INLINE_COPIES) \
+        $(LO_SKIA_AVOID_INLINE_COPIES) -mlasx \
 ))
+# Always allow LASX builtin functions duraing linking
+# because the above SkOpts_lasx, etc, LASX binary compatibility
+# object requires LASX intrinsics to be available
+$(eval $(call gb_Library_add_ldflags,skia,\
+	-mlasx \
+))
+
+# Apply --enable-lasx to compiling
+ifeq ($(ENABLE_LASX),TRUE)
+$(eval $(call gb_Library_add_cxxflags,skia, \
+    -mlasx \
+))
+endif
 endif
 
 # Skcms code is used by png writer, which is used by SkiaHelper::dump(). Building
