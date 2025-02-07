@@ -32,6 +32,11 @@
 #include <Window.hxx>
 #include <optsitem.hxx>
 #include <sdabstdlg.hxx>
+#include <slideshow.hxx>
+#include <ViewShell.hxx>
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::presentation;
 
 namespace sd {
 
@@ -166,13 +171,6 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
         rPresentationSettings.mbMouseVisible = bValue;
     }
 
-    bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_PEN, SfxBoolItem );
-    if ( bValue != rPresentationSettings.mbMouseAsPen )
-    {
-        bValuesChanged = true;
-        rPresentationSettings.mbMouseAsPen = bValue;
-    }
-
     bValue = !ITEMVALUE( aDlgSet, ATTR_PRESENT_CHANGE_PAGE, SfxBoolItem );
     if ( bValue != rPresentationSettings.mbLockedPages )
     {
@@ -220,6 +218,20 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     {
         bValuesChanged = true;
         rPresentationSettings.mbInteractive = bValue;
+    }
+
+    bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_PEN, SfxBoolItem );
+    if ( bValue != rPresentationSettings.mbMouseAsPen )
+    {
+        bValuesChanged = true;
+        rPresentationSettings.mbMouseAsPen = bValue;
+
+        // live slideshow? pass pen state on immediately
+        Reference< XSlideShowController > xSlideShowController(
+            SlideShow::GetSlideShowController(mpViewShell->GetViewShellBase() ) );
+        if( xSlideShowController.is() )
+            if(rPresentationSettings.mbInteractive)
+                xSlideShowController->setUsePen( bValue );
     }
 
     pOptions->SetDisplay( aDlgSet.Get(ATTR_PRESENT_DISPLAY).GetValue() );
