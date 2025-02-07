@@ -22,6 +22,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <unotxdoc.hxx>
 
 #include <view.hxx>
@@ -323,6 +324,31 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPDFExportViewSwitch)
     // first view.
     CPPUNIT_ASSERT(aView1.m_aExportFile.isEmpty());
     CPPUNIT_ASSERT(!aView2.m_aExportFile.isEmpty());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testLoadVisibleArea)
+{
+    // Given a document with 3 pages, the LOK visible area at load time is set to the first page:
+    awt::Rectangle aVisibleArea{ 0, 0, 12240, 15840 };
+    comphelper::LibreOfficeKit::setInitialClientVisibleArea(aVisibleArea);
+    comphelper::ScopeGuard g([] { comphelper::LibreOfficeKit::setInitialClientVisibleArea({}); });
+
+    // When loading that document:
+    OUString aURL = createFileURL(u"3pages.odt");
+    UnoApiXmlTest::loadFromURL(aURL);
+
+    // Then make sure only the first page is laid out:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwRootFrame* pLayout = pWrtShell->GetLayout();
+    SwPageFrame* pPage1 = pLayout->GetLower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(!pPage1->IsInvalidContent());
+    SwPageFrame* pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    // Without the accompanying fix in place, this test failed, as the entire document was laid out
+    // before the loading finished.
+    CPPUNIT_ASSERT(pPage2->IsInvalidContent());
+    SwPageFrame* pPage3 = pPage2->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage3->IsInvalidContent());
 }
 }
 

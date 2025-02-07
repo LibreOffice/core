@@ -8,11 +8,16 @@
  */
 
 #include <comphelper/lok.hxx>
+
+#include <com/sun/star/awt/Rectangle.hpp>
+
 #include <osl/process.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <sal/log.hxx>
 
 #include <iostream>
+
+using namespace com::sun::star;
 
 namespace comphelper::LibreOfficeKit
 {
@@ -42,6 +47,9 @@ static void* g_pAnyInputCallbackData;
 
 static std::function<void(int)> g_pViewSetter;
 static std::function<int()> g_pViewGetter;
+
+/// Visible area of the first view during document load.
+static awt::Rectangle g_aInitialClientVisibleArea;
 
 namespace
 {
@@ -369,6 +377,13 @@ int getView()
 
     return g_pViewGetter();
 }
+
+void setInitialClientVisibleArea(const awt::Rectangle& rClientVisibleArea)
+{
+    g_aInitialClientVisibleArea = rClientVisibleArea;
+}
+
+awt::Rectangle getInitialClientVisibleArea() { return g_aInitialClientVisibleArea; }
 
 } // namespace
 
