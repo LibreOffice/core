@@ -432,6 +432,19 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testSortConditionRef)
     assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "ref", u"B3:B2");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testSortConditionRef2)
+{
+    // Ascending sortCondition reference detected wrong without fix.
+    //- Expected: A11:A300
+    //- Actual  : J11:J300
+    //- In <>, attribute 'ref' of '//x:worksheet/x:autoFilter/x:sortState/x:sortCondition' incorrect value.
+    createScDoc("xlsx/sortconditionref2.xlsx");
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "ref", u"A11:A300");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testDateAutofilterXLSX)
 {
     // XLSX Roundtripping autofilter with date list
