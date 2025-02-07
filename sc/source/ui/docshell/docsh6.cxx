@@ -491,6 +491,7 @@ void ScDocShell::CheckConfigOptions()
         // One of arg separators conflicts with the current decimal
         // separator.  Reset them to default.
         ScFormulaOptions aNew = rOpt;
+        aNew.GetCalcConfig().MergeDocumentSpecific(m_pDocument->GetCalcConfig());
         aNew.ResetFormulaSeparators();
         SetFormulaOptions(aNew);
         pScMod->SetFormulaOptions(aNew);
