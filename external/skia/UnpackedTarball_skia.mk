@@ -41,6 +41,10 @@ skia_patches := \
     help-msvc-analyzer.patch \
     always_inline_and_multiversioning_conflict.patch.1 \
     windows-define-conflict.patch.1 \
+    0001-loong64-fix-some-bugs-in-type-conversion-on-Loongarc.patch \
+	0002-loong64-Honor-existing-LASX-LSX-settings.patch \
+	0003-loong64-Fix-missing-rounding-in-loong64-scaled_mult-.patch \
+	0004-loong64-Fix-the-remaining-implicit-vector-casts.patch \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
