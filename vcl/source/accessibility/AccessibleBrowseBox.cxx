@@ -102,17 +102,14 @@ AccessibleBrowseBox::getAccessibleChild( sal_Int64 nChildIndex )
         throw lang::IndexOutOfBoundsException();
 
     css::uno::Reference< css::accessibility::XAccessible > xRet;
-    if( nChildIndex >= 0 )
+    if (nChildIndex < vcl::BBINDEX_FIRSTCONTROL)
+        xRet = implGetFixedChild(nChildIndex);
+    else
     {
-        if( nChildIndex < vcl::BBINDEX_FIRSTCONTROL )
-            xRet = implGetFixedChild( nChildIndex );
-        else
-        {
-            // additional controls
-            nChildIndex -= vcl::BBINDEX_FIRSTCONTROL;
-            if( nChildIndex < mpBrowseBox->GetAccessibleControlCount() )
-                xRet = mpBrowseBox->CreateAccessibleControl( nChildIndex );
-        }
+        // additional controls
+        nChildIndex -= vcl::BBINDEX_FIRSTCONTROL;
+        if (nChildIndex < mpBrowseBox->GetAccessibleControlCount())
+            xRet = mpBrowseBox->CreateAccessibleControl(nChildIndex);
     }
 
     if( !xRet.is() )
