@@ -50,6 +50,22 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testGroupShape)
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:grpSp/xdr:grpSpPr");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testFreezePaneStartCellXLSX)
+{
+    // given a hand-mangled document with a newly-invalid topLeftCell for the active pane
+    // where pane xSplit="5" ySplit="10" topLeftCell="A1" state="frozen"
+
+    createScDoc("xlsx/freezePaneStartCell.xlsx");
+
+    save(u"Calc Office Open XML"_ustr);
+
+    xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    OUString sFirstNonFrozenCell = getXPath(pDoc, "//x:sheetViews//x:pane", "topLeftCell");
+
+    // new versions of Excel complain if the start of the non-frozen section is inside the freeze
+    CPPUNIT_ASSERT_EQUAL(u"F11"_ustr, sFirstNonFrozenCell);
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testMatrixMultiplicationXLSX)
 {
     createScDoc("xlsx/matrix-multiplication.xlsx");
