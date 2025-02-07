@@ -5098,7 +5098,8 @@ static void updateConfig(const OUString& rConfigPath)
 
                     u"/org.openoffice.Office.Writer/Grid"_ustr,
                     u"/org.openoffice.Office.Writer/Print"_ustr,
-                    u"/org.openoffice.Office.Writer/Content/Display/GraphicObject"_ustr
+                    u"/org.openoffice.Office.Writer/Content/Display/GraphicObject"_ustr,
+                    u"/org.openoffice.Office.Writer/Content/NonprintingCharacter"_ustr
                 };
                 xUpdate->insertModificationXcuFile(xcustat.getFileURL(), aAllowedSubset, {});
             }
