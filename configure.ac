@@ -4704,6 +4704,7 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
 AC_SUBST(COM_IS_CLANG)
 
 CLANGVER=
+CLANG_16=
 if test "$COM_IS_CLANG" = TRUE; then
     AC_MSG_CHECKING([whether Clang is new enough])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
@@ -4732,10 +4733,14 @@ if test "$COM_IS_CLANG" = TRUE; then
         else
             AC_MSG_ERROR(["$CLANG_FULL_VERSION" is too old or unrecognized, must be at least Clang 12])
         fi
+        if test "$CLANGVER" -ge 160000; then
+            CLANG_16=TRUE
+        fi
         AC_DEFINE_UNQUOTED(CLANG_VERSION,$CLANGVER)
         AC_DEFINE_UNQUOTED(CLANG_FULL_VERSION,$CLANG_FULL_VERSION)
     fi
 fi
+AC_SUBST(CLANG_16)
 
 SHOWINCLUDES_PREFIX=
 if test "$_os" = WINNT; then

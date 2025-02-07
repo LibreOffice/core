@@ -79,6 +79,7 @@ endif
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,firebird, \
     external/firebird/sanitizer.patch \
+    $(if $(CLANG_16),external/firebird/sanitizer-rtti.patch) \
 ))
 endif
 
