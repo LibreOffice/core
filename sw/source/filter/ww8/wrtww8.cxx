@@ -4033,7 +4033,7 @@ MSWordSections& WW8Export::Sections() const
 SwMSConvertControls& WW8Export::GetOCXExp()
 {
     if (!m_pOCXExp)
-        m_pOCXExp.reset(new SwMSConvertControls(m_rDoc.GetDocShell(), m_pCurPam.get()));
+        m_pOCXExp.reset(new SwMSConvertControls(m_rDoc.GetDocShell(), GetWriter().m_pCurrentPam.get()));
     return *m_pOCXExp;
 }
 
