@@ -65,7 +65,6 @@ private:
     void UpdateActionGroupItem(const QtMenuItem* pSalMenuItem);
     bool validateQMenuBar() const;
     QPushButton* ImplAddMenuBarButton(const QIcon& rIcon, const QString& rToolTip, int nId);
-    void ImplRemoveMenuBarButton(int nId);
     void connectHelpShortcut(QMenu* pMenu);
     // set slots that handle signals relevant for help menu
     void connectHelpSignalSlots(QMenu* pMenu, QtMenuItem* pSalMenuItem);

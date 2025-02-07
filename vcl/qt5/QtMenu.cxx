@@ -790,7 +790,7 @@ QPushButton* QtMenu::ImplAddMenuBarButton(const QIcon& rIcon, const QString& rTo
 
     QPushButton* pButton = static_cast<QPushButton*>(m_pButtonGroup->button(nId));
     if (pButton)
-        ImplRemoveMenuBarButton(nId);
+        RemoveMenuBarButton(nId);
 
     pButton = new QPushButton();
     // we don't want the button to increase the QMenuBar height, so a fixed size square it is
@@ -824,24 +824,6 @@ bool QtMenu::AddMenuBarButton(const SalMenuButtonItem& rItem)
                                   toQString(rItem.maToolTipText), rItem.mnId);
 }
 
-void QtMenu::ImplRemoveMenuBarButton(int nId)
-{
-    if (!validateQMenuBar())
-        return;
-
-    assert(m_pButtonGroup);
-    auto* pButton = m_pButtonGroup->button(nId);
-    assert(pButton);
-    QWidget* pWidget = mpQMenuBar->cornerWidget(Qt::TopRightCorner);
-    assert(pWidget);
-    QLayout* pLayout = pWidget->layout();
-    m_pButtonGroup->removeButton(pButton);
-    pLayout->removeWidget(pButton);
-    delete pButton;
-
-    lcl_force_menubar_layout_update(*mpQMenuBar);
-}
-
 void QtMenu::connectHelpShortcut(QMenu* pMenu)
 {
     assert(pMenu);
@@ -865,7 +847,26 @@ void QtMenu::connectHelpSignalSlots(QMenu* pMenu, QtMenuItem* pSalMenuItem)
     pMenu->setToolTipsVisible(true);
 }
 
-void QtMenu::RemoveMenuBarButton(sal_uInt16 nId) { ImplRemoveMenuBarButton(nId); }
+void QtMenu::RemoveMenuBarButton(sal_uInt16 nId)
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] {
+        if (!validateQMenuBar())
+            return;
+
+        assert(m_pButtonGroup);
+        auto* pButton = m_pButtonGroup->button(nId);
+        assert(pButton);
+        QWidget* pWidget = mpQMenuBar->cornerWidget(Qt::TopRightCorner);
+        assert(pWidget);
+        QLayout* pLayout = pWidget->layout();
+        m_pButtonGroup->removeButton(pButton);
+        pLayout->removeWidget(pButton);
+        delete pButton;
+
+        lcl_force_menubar_layout_update(*mpQMenuBar);
+    });
+}
 
 tools::Rectangle QtMenu::GetMenuBarButtonRectPixel(sal_uInt16 nId, SalFrame* pFrame)
 {
