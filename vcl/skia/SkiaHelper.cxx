@@ -42,6 +42,9 @@ bool isAlphaMaskBlendingEnabled() { return false; }
 #include <list>
 #include <o3tl/lru_map.hxx>
 
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/util/XFlushable.hpp>
+
 #include <SkBitmap.h>
 #include <SkCanvas.h>
 #include <include/codec/SkEncodedImageFormat.h>
@@ -158,6 +161,25 @@ static std::string_view vendorAsString(uint32_t vendor)
     return DriverBlocklist::GetVendorNameFromId(vendor);
 }
 
+// returns old value
+static bool setForceSkiaRaster(bool val)
+{
+    const bool oldValue = officecfg::Office::Common::VCL::ForceSkiaRaster::get();
+    if (oldValue != val && !officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly())
+    {
+        auto batch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::VCL::ForceSkiaRaster::set(val, batch);
+        batch->commit();
+
+        // make sure the change is written to the configuration
+        if (auto xFlushable{ css::configuration::theDefaultProvider::get(
+                                 comphelper::getProcessComponentContext())
+                                 .query<css::util::XFlushable>() })
+            xFlushable->flush();
+    }
+    return oldValue;
+}
+
 // Note that this function also logs system information about Vulkan.
 static bool isVulkanDenylisted(const VkPhysicalDeviceProperties& props)
 {
@@ -236,6 +258,11 @@ static void checkDeviceDenylisted(bool blockDisable = false)
         case RenderVulkan:
         {
 #ifdef SK_VULKAN
+            // Temporarily change config to force software rendering. If the following HW check
+            // crashes, this config change will stay active, and will make sure to avoid use of
+            // faulty HW/driver on the nest start
+            const bool oldForceSkiaRasterValue = setForceSkiaRaster(true);
+
             // First try if a GrDirectContext already exists.
             std::unique_ptr<skwindow::WindowContext> temporaryWindowContext;
             GrDirectContext* grDirectContext
@@ -268,6 +295,9 @@ static void checkDeviceDenylisted(bool blockDisable = false)
                 disableRenderMethod(RenderVulkan);
                 useRaster = true;
             }
+
+            // The check succeeded; restore the original value
+            setForceSkiaRaster(oldForceSkiaRasterValue);
 #else
             SAL_WARN("vcl.skia", "Vulkan support not built in");
             (void)blockDisable;
