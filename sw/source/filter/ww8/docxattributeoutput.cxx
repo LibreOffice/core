@@ -1709,23 +1709,26 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
 
     m_pSerializer->endElementNS( XML_w, XML_pPr );
 
-    // RDF metadata for this text node.
-    SwTextNode* pTextNode = m_rExport.m_pCurPam->GetPointNode().GetTextNode();
-    std::map<OUString, OUString> aStatements;
-    if (pTextNode)
-        aStatements = SwRDFHelper::getTextNodeStatements(u"urn:bails"_ustr, *pTextNode);
-    if (!aStatements.empty())
+    if (m_rExport.m_bHasBailsMetaData)
     {
-        m_pSerializer->startElementNS(XML_w, XML_smartTag,
-                                      FSNS(XML_w, XML_uri), "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-                                      FSNS(XML_w, XML_element), "RDF");
-        m_pSerializer->startElementNS(XML_w, XML_smartTagPr);
-        for (const auto& rStatement : aStatements)
-            m_pSerializer->singleElementNS(XML_w, XML_attr,
-                                           FSNS(XML_w, XML_name), rStatement.first,
-                                           FSNS(XML_w, XML_val), rStatement.second);
-        m_pSerializer->endElementNS(XML_w, XML_smartTagPr);
-        m_pSerializer->endElementNS(XML_w, XML_smartTag);
+        // RDF metadata for this text node.
+        SwTextNode* pTextNode = m_rExport.m_pCurPam->GetPointNode().GetTextNode();
+        std::map<OUString, OUString> aStatements;
+        if (pTextNode)
+            aStatements = SwRDFHelper::getTextNodeStatements(u"urn:bails"_ustr, *pTextNode);
+        if (!aStatements.empty())
+        {
+            m_pSerializer->startElementNS(XML_w, XML_smartTag,
+                                          FSNS(XML_w, XML_uri), "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                                          FSNS(XML_w, XML_element), "RDF");
+            m_pSerializer->startElementNS(XML_w, XML_smartTagPr);
+            for (const auto& rStatement : aStatements)
+                m_pSerializer->singleElementNS(XML_w, XML_attr,
+                                               FSNS(XML_w, XML_name), rStatement.first,
+                                               FSNS(XML_w, XML_val), rStatement.second);
+            m_pSerializer->endElementNS(XML_w, XML_smartTagPr);
+            m_pSerializer->endElementNS(XML_w, XML_smartTag);
+        }
     }
 
     if ((m_nColBreakStatus == COLBRK_WRITE || m_nColBreakStatus == COLBRK_WRITEANDPOSTPONE)

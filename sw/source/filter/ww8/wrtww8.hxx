@@ -575,6 +575,7 @@ public:
     /// Is font size written already as part of the current character properties?
     bool m_bFontSizeWritten;
     bool m_bAddFootnoteTab;     // only one aesthetic spacing tab per footnote
+    bool m_bHasBailsMetaData;   // false if there is no urn:bails metadata in the document
 
     SwDoc& m_rDoc;
     SwNodeOffset m_nCurStart, m_nCurEnd;

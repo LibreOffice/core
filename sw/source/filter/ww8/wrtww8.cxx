@@ -121,6 +121,7 @@
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <fmtanchr.hxx>
+#include <unotxdoc.hxx>
 
 using namespace css;
 using namespace sw::util;
@@ -3981,12 +3982,15 @@ MSWordExportBase::MSWordExportBase( SwDoc& rDocument, std::shared_ptr<SwUnoCurso
     , m_bExportModeRTF(false)
     , m_bFontSizeWritten(false)
     , m_bAddFootnoteTab(false)
+    , m_bHasBailsMetaData(false)
     , m_rDoc(rDocument)
     , m_nCurStart(pCurrentPam->GetPoint()->GetNodeIndex())
     , m_nCurEnd(pCurrentPam->GetMark()->GetNodeIndex())
     , m_pCurPam(pCurrentPam)
     , m_pOrigPam(pOriginalPam)
 {
+    if (SwDocShell* pShell = rDocument.GetDocShell())
+        m_bHasBailsMetaData = SwRDFHelper::hasMetadataGraph(pShell->GetBaseModel(), u"urn:bails"_ustr);
 }
 
 MSWordExportBase::~MSWordExportBase()
