@@ -641,9 +641,12 @@ public:
      @param     rSettings       const reference to settings object used to
                                 change the application's settings.
 
+     @param     bTemporary      this is a temporary change (used in GraphicExporter::filter),
+                                do not notify change listeners
+
      @see OverrideSystemSettings, MergeSystemSettings, GetSettings
     */
-    static void                 SetSettings( const AllSettings& rSettings );
+    static void                 SetSettings( const AllSettings& rSettings, bool bTemporary = false );
 
     /** Gets the application's settings. If the application hasn't initialized
      it's settings, then it does so (lazy initialization).
