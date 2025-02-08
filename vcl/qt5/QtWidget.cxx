@@ -716,9 +716,15 @@ QtWidget::QtWidget(QtFrame& rFrame, Qt::WindowFlags f)
     , m_nDeltaX(0)
     , m_nDeltaY(0)
 {
-    setAttribute(Qt::WA_TranslucentBackground);
-    setAttribute(Qt::WA_OpaquePaintEvent);
-    setAttribute(Qt::WA_NoSystemBackground);
+    // make floating windows translucent, needed at least by BubbleWindow
+    // (used for update notifications) on X11
+    if (f & Qt::FramelessWindowHint)
+    {
+        setAttribute(Qt::WA_TranslucentBackground);
+        setAttribute(Qt::WA_OpaquePaintEvent);
+        setAttribute(Qt::WA_NoSystemBackground);
+    }
+
     setMouseTracking(true);
     if (!rFrame.isPopup())
         setFocusPolicy(Qt::StrongFocus);
