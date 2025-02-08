@@ -2540,7 +2540,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
             // At the moment smarttags are only written for paragraphs, at the
             // beginning of the paragraph.
-            if (nCurrentPos == 0)
+            if (nCurrentPos == 0 && m_bHasBailsMetaData)
                 AppendSmartTags(rNode);
 
             bool bTextAtr = aAttrIter.IsTextAttr( nCurrentPos );
