@@ -593,7 +593,7 @@ void Application::MergeSystemSettings( AllSettings& rSettings )
     }
 }
 
-void Application::SetSettings( const AllSettings& rSettings )
+void Application::SetSettings(const AllSettings& rSettings, bool bTemporary)
 {
     const SolarMutexGuard aGuard;
 
@@ -612,8 +612,10 @@ void Application::SetSettings( const AllSettings& rSettings )
             pSVData->mbResLocaleSet = false;
         }
         *pSVData->maAppData.mxSettings = rSettings;
-        AllSettingsFlags nChangeFlags = aOldSettings.GetChangeFlags( *pSVData->maAppData.mxSettings );
-        if ( bool(nChangeFlags) )
+        // Don't broadcast temporary changes
+        AllSettingsFlags nChangeFlags = bTemporary ? AllSettingsFlags::NONE
+                                                   : aOldSettings.GetChangeFlags(*pSVData->maAppData.mxSettings);
+        if (nChangeFlags != AllSettingsFlags::NONE)
         {
             DataChangedEvent aDCEvt( DataChangedEventType::SETTINGS, &aOldSettings, nChangeFlags );
 

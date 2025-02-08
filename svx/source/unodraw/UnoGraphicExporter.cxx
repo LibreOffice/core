@@ -1014,7 +1014,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             aStyleSettings.SetUseFontAAFromSystem(false);
         }
         aAllSettings.SetStyleSettings(aStyleSettings);
-        Application::SetSettings(aAllSettings);
+        Application::SetSettings(aAllSettings, /*bTemporary*/true);
         nStatus = GetGraphic( aSettings, aGraphic, bVectorType ) ? ERRCODE_NONE : ERRCODE_GRFILTER_FILTERERROR;
         if (aSettings.meAntiAliasing != TRISTATE_INDET)
         {
@@ -1023,7 +1023,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         }
         aStyleSettings.SetUseSubpixelAA(bUseSubpixelAA);
         aAllSettings.SetStyleSettings(aStyleSettings);
-        Application::SetSettings(aAllSettings);
+        Application::SetSettings(aAllSettings, /*bTemporary*/true);
     }
 
     if( nStatus == ERRCODE_NONE )
