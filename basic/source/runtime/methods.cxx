@@ -2074,7 +2074,13 @@ double Now_Impl()
 
 // Date Now()
 
-void SbRtl_Now(StarBASIC*, SbxArray& rPar, bool) { rPar.Get(0)->PutDate(Now_Impl()); }
+void SbRtl_Now(StarBASIC*, SbxArray& rPar, bool)
+{
+    if (rPar.Count() != 1)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    rPar.Get(0)->PutDate(Now_Impl());
+}
 
 // Date Time()
 
