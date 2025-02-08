@@ -50,7 +50,9 @@ embed::VisualRepresentation OleEmbeddedObject::GetVisualRepresentationInNativeFo
     // TODO: detect the format in the future for now use workaround
     uno::Reference< io::XInputStream > xInStream = xCachedVisRepr->getInputStream();
     if ( !xInStream.is() )
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(
+            u"Failed to retrieve input stream from cached visual representation. "_ustr
+        );
     uno::Reference< io::XSeekable > xSeekable( xCachedVisRepr, uno::UNO_QUERY_THROW );
 
     uno::Sequence< sal_Int8 > aSeq( 2 );
