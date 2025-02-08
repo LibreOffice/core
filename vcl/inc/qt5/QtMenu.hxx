@@ -74,8 +74,6 @@ public:
     QtMenu(bool bMenuBar);
     ~QtMenu();
 
-    bool eventFilter(QObject* pObject, QEvent* pEvent) override;
-
     virtual bool VisibleMenuBar() override; // must return TRUE to actually DISPLAY native menu bars
 
     virtual void InsertItem(SalMenuItem* pSalMenuItem, unsigned nPos) override;
