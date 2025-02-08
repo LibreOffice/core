@@ -27,6 +27,8 @@
 
 #include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/spreadsheet/import_interface_styles.hpp>
+#include <orcus/spreadsheet/import_interface_underline.hpp>
+#include <orcus/spreadsheet/import_interface_strikethrough.hpp>
 
 #include <memory>
 #include <map>
@@ -37,6 +39,8 @@
 class ScOrcusSheet;
 class ScOrcusStyles;
 class ScOrcusFactory;
+class ScOrcusImportFontStyle;
+class ScOrcusSharedStrings;
 class SfxItemSet;
 namespace com::sun::star::task { class XStatusIndicator; }
 
@@ -103,6 +107,69 @@ public:
     virtual void commit() override;
 };
 
+struct ScOrcusStrikethrough
+{
+    std::optional<orcus::spreadsheet::strikethrough_style_t> meStyle;
+    std::optional<orcus::spreadsheet::strikethrough_type_t> meType;
+    std::optional<orcus::spreadsheet::strikethrough_width_t> meWidth;
+    std::optional<orcus::spreadsheet::strikethrough_text_t> meText;
+
+    void reset();
+    std::optional<FontStrikeout> toFontStrikeout() const;
+};
+
+struct ScOrcusUnderline
+{
+    std::optional<orcus::spreadsheet::underline_style_t> meStyle;
+    std::optional<orcus::spreadsheet::underline_thickness_t> meThickness;
+    std::optional<orcus::spreadsheet::underline_spacing_t> meSpacing;
+    std::optional<orcus::spreadsheet::underline_count_t> meCount;
+
+    void reset();
+    std::optional<FontLineStyle> toFontLineStyle() const;
+};
+
+class ScOrcusSegmentStrikethrough : public orcus::spreadsheet::iface::import_strikethrough
+{
+    friend class ScOrcusSharedStrings;
+
+    SfxItemSet* mpDestFormat = nullptr;
+    ScOrcusStrikethrough maAttrs;
+
+    void reset(SfxItemSet* pDestFormat);
+
+public:
+    void set_style(orcus::spreadsheet::strikethrough_style_t s) override;
+    void set_type(orcus::spreadsheet::strikethrough_type_t s) override;
+    void set_width(orcus::spreadsheet::strikethrough_width_t s) override;
+    void set_text(orcus::spreadsheet::strikethrough_text_t s) override;
+    void commit() override;
+};
+
+class ScOrcusSegmentUnderline : public orcus::spreadsheet::iface::import_underline
+{
+    friend class ScOrcusSharedStrings;
+
+    SfxItemSet* mpDestFormat = nullptr;
+
+    ScOrcusUnderline maAttrs;
+    std::optional<Color> maColor;
+
+    void reset(SfxItemSet* pDestFormat);
+
+public:
+    void set_style(orcus::spreadsheet::underline_style_t e) override;
+    void set_thickness(orcus::spreadsheet::underline_thickness_t e) override;
+    void set_spacing(orcus::spreadsheet::underline_spacing_t e) override;
+    void set_count(orcus::spreadsheet::underline_count_t e) override;
+    void set_color(
+        orcus::spreadsheet::color_elem_t alpha,
+        orcus::spreadsheet::color_elem_t red,
+        orcus::spreadsheet::color_elem_t green,
+        orcus::spreadsheet::color_elem_t blue) override;
+    void commit() override;
+};
+
 class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_strings
 {
     ScOrcusFactory& mrFactory;
@@ -110,6 +177,9 @@ class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_str
 
     SfxItemSet maCurFormat;
     std::vector<std::pair<ESelection, SfxItemSet>> maFormatSegments;
+
+    ScOrcusSegmentUnderline maImportUnderline;
+    ScOrcusSegmentStrikethrough maImportStrikethrough;
 
     OUString toOUString(std::string_view s);
 
@@ -121,6 +191,8 @@ public:
 
     virtual void set_segment_bold(bool b) override;
     virtual void set_segment_italic(bool b) override;
+    virtual void set_segment_superscript(bool b) override;
+    virtual void set_segment_subscript(bool b) override;
     virtual void set_segment_font(size_t font_index) override;
     virtual void set_segment_font_name(std::string_view s) override;
     virtual void set_segment_font_size(double point) override;
@@ -128,6 +200,10 @@ public:
             orcus::spreadsheet::color_elem_t red,
             orcus::spreadsheet::color_elem_t green,
             orcus::spreadsheet::color_elem_t blue) override;
+
+    virtual orcus::spreadsheet::iface::import_underline* start_underline() override;
+    virtual orcus::spreadsheet::iface::import_strikethrough* start_strikethrough() override;
+
     virtual void append_segment(std::string_view s) override;
 
     virtual size_t commit_segments() override;
@@ -195,28 +271,6 @@ private:
     ScFormatEntry::Type meEntryType;
 };
 
-class ScOrcusAutoFilter : public orcus::spreadsheet::iface::import_auto_filter
-{
-public:
-    ScOrcusAutoFilter( const ScOrcusGlobalSettings& rGS );
-
-    virtual ~ScOrcusAutoFilter() override;
-
-    virtual void set_range(const orcus::spreadsheet::range_t& range) override;
-
-    virtual void set_column(orcus::spreadsheet::col_t col) override;
-
-    virtual void append_column_match_value(std::string_view value) override;
-
-    virtual void commit_column() override;
-
-    virtual void commit() override;
-
-private:
-    const ScOrcusGlobalSettings& mrGlobalSettings;
-    ScRange maRange;
-};
-
 class ScOrcusSheetProperties : public orcus::spreadsheet::iface::import_sheet_properties
 {
     ScDocumentImport& mrDoc;
@@ -233,9 +287,12 @@ public:
         orcus::spreadsheet::col_t col, orcus::spreadsheet::col_t col_span,
         bool hidden) override;
 
-    virtual void set_row_height(orcus::spreadsheet::row_t row, double height, orcus::length_unit_t unit) override;
+    virtual void set_row_height(
+        orcus::spreadsheet::row_t row, orcus::spreadsheet::row_t row_span,
+        double height, orcus::length_unit_t unit) override;
 
-    virtual void set_row_hidden(orcus::spreadsheet::row_t row, bool hidden) override;
+    virtual void set_row_hidden(
+        orcus::spreadsheet::row_t row, orcus::spreadsheet::row_t row_span, bool hidden) override;
 
     virtual void set_merge_cell_range(const orcus::spreadsheet::range_t& range) override;
 };
@@ -314,7 +371,6 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
     ScOrcusStyles& mrStyles;
     sc::SharedFormulaGroups maFormulaGroups;
 
-    ScOrcusAutoFilter maAutoFilter;
     ScOrcusSheetProperties maProperties;
     ScOrcusConditionalFormat maConditionalFormat;
     ScOrcusNamedExpression maNamedExpressions;
@@ -330,8 +386,6 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
 public:
     ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& rFactory);
 
-    virtual orcus::spreadsheet::iface::import_auto_filter* get_auto_filter() override;
-    virtual orcus::spreadsheet::iface::import_table* get_table() override;
     virtual orcus::spreadsheet::iface::import_sheet_properties* get_sheet_properties() override;
     virtual orcus::spreadsheet::iface::import_conditional_format* get_conditional_format() override;
     virtual orcus::spreadsheet::iface::import_named_expression* get_named_expression() override;
@@ -458,11 +512,54 @@ struct ScOrcusCellStyle
     ScOrcusCellStyle();
 };
 
+class ScOrcusImportFontUnderlineStyle : public orcus::spreadsheet::iface::import_underline
+{
+    friend class ScOrcusImportFontStyle;
+
+    ScOrcusFont* mpDestFont = nullptr;
+    ScOrcusUnderline maAttrs;
+    std::optional<Color> maColor;
+
+    void reset(ScOrcusFont* pDest);
+
+public:
+    void set_style(orcus::spreadsheet::underline_style_t e) override;
+    void set_thickness(orcus::spreadsheet::underline_thickness_t e) override;
+    void set_spacing(orcus::spreadsheet::underline_spacing_t e) override;
+    void set_count(orcus::spreadsheet::underline_count_t e) override;
+    void set_color(
+        orcus::spreadsheet::color_elem_t alpha,
+        orcus::spreadsheet::color_elem_t red,
+        orcus::spreadsheet::color_elem_t green,
+        orcus::spreadsheet::color_elem_t blue) override;
+    void commit() override;
+};
+
+class ScOrcusImportFontStrikethroughStyle : public orcus::spreadsheet::iface::import_strikethrough
+{
+    friend class ScOrcusImportFontStyle;
+
+    ScOrcusFont* mpDestFont = nullptr;
+    ScOrcusStrikethrough maAttrs;
+
+    void reset(ScOrcusFont* pDest);
+
+public:
+    void set_style(orcus::spreadsheet::strikethrough_style_t s) override;
+    void set_type(orcus::spreadsheet::strikethrough_type_t s) override;
+    void set_width(orcus::spreadsheet::strikethrough_width_t s) override;
+    void set_text(orcus::spreadsheet::strikethrough_text_t s) override;
+    void commit() override;
+};
+
 class ScOrcusImportFontStyle : public orcus::spreadsheet::iface::import_font_style
 {
     ScOrcusFont maCurrentFont;
     ScOrcusFactory& mrFactory;
     std::vector<ScOrcusFont>& mrFonts;
+
+    ScOrcusImportFontUnderlineStyle maUnderlineImport;
+    ScOrcusImportFontStrikethroughStyle maStrikeoutImport;
 
 public:
     ScOrcusImportFontStyle( ScOrcusFactory& rFactory, std::vector<ScOrcusFont>& rFonts );
@@ -481,24 +578,16 @@ public:
     void set_size(double point) override;
     void set_size_asian(double point) override;
     void set_size_complex(double point) override;
-    void set_underline(orcus::spreadsheet::underline_t e) override;
-    void set_underline_width(orcus::spreadsheet::underline_width_t e) override;
-    void set_underline_mode(orcus::spreadsheet::underline_mode_t e) override;
-    void set_underline_type(orcus::spreadsheet::underline_type_t e) override;
-    void set_underline_color(
-        orcus::spreadsheet::color_elem_t alpha,
-        orcus::spreadsheet::color_elem_t red,
-        orcus::spreadsheet::color_elem_t green,
-        orcus::spreadsheet::color_elem_t blue) override;
+
     void set_color(
         orcus::spreadsheet::color_elem_t alpha,
         orcus::spreadsheet::color_elem_t red,
         orcus::spreadsheet::color_elem_t green,
         orcus::spreadsheet::color_elem_t blue) override;
-    void set_strikethrough_style(orcus::spreadsheet::strikethrough_style_t s) override;
-    void set_strikethrough_type(orcus::spreadsheet::strikethrough_type_t s) override;
-    void set_strikethrough_width(orcus::spreadsheet::strikethrough_width_t s) override;
-    void set_strikethrough_text(orcus::spreadsheet::strikethrough_text_t s) override;
+
+    orcus::spreadsheet::iface::import_underline* start_underline() override;
+    orcus::spreadsheet::iface::import_strikethrough* start_strikethrough() override;
+
     std::size_t commit() override;
 };
 

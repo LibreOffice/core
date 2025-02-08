@@ -38,6 +38,7 @@
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/escapementitem.hxx>
 
 #include <svl/sharedstringpool.hxx>
 #include <svl/numformat.hxx>
@@ -420,6 +421,7 @@ os::iface::import_reference_resolver* ScOrcusFactory::get_reference_resolver(os:
             return &maRefResolver;
         case os::formula_ref_context_t::named_expression_base:
         case os::formula_ref_context_t::named_range:
+        case os::formula_ref_context_t::table_range:
             return nullptr;
     }
 
@@ -787,16 +789,20 @@ void ScOrcusSheetProperties::set_column_hidden(os::col_t col, os::col_t col_span
         mrDoc.getDoc().SetColHidden(col, col + col_span - 1, mnTab, hidden);
 }
 
-void ScOrcusSheetProperties::set_row_height(os::row_t row, double height, orcus::length_unit_t unit)
+void ScOrcusSheetProperties::set_row_height(
+    os::row_t row, os::row_t row_span, double height, orcus::length_unit_t unit)
 {
     double nNewHeight = translateToInternal(height, unit);
-    mrDoc.getDoc().SetRowHeightOnly(row, row,mnTab, nNewHeight);
+    SCROW nStartRow = row;
+    SCROW nEndRow = row + row_span - 1;
+    mrDoc.getDoc().SetRowHeightOnly(nStartRow, nEndRow, mnTab, nNewHeight);
 }
 
-void ScOrcusSheetProperties::set_row_hidden(os::row_t row, bool hidden)
+void ScOrcusSheetProperties::set_row_hidden(os::row_t row, os::row_t row_span, bool hidden)
 {
-    if (hidden)
-        mrDoc.getDoc().SetRowHidden(row, row, mnTab, hidden);
+    SCROW nStartRow = row;
+    SCROW nEndRow = row + row_span - 1;
+    mrDoc.getDoc().SetRowHidden(nStartRow, nEndRow, mnTab, hidden);
 }
 
 void ScOrcusSheetProperties::set_merge_cell_range(const orcus::spreadsheet::range_t& range)
@@ -962,7 +968,6 @@ ScOrcusSheet::ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& r
     mnTab(nTab),
     mrFactory(rFactory),
     mrStyles(static_cast<ScOrcusStyles&>(*mrFactory.get_styles())),
-    maAutoFilter(rFactory.getGlobalSettings()),
     maProperties(mnTab, mrDoc),
     maConditionalFormat(mnTab, rDoc.getDoc()),
     maNamedExpressions(rDoc, rFactory.getGlobalSettings(), nTab),
@@ -1169,16 +1174,6 @@ ScDocumentImport& ScOrcusSheet::getDoc()
     return mrDoc;
 }
 
-os::iface::import_auto_filter* ScOrcusSheet::get_auto_filter()
-{
-    return &maAutoFilter;
-}
-
-os::iface::import_table* ScOrcusSheet::get_table()
-{
-    return nullptr;
-}
-
 os::iface::import_sheet_properties* ScOrcusSheet::get_sheet_properties()
 {
     return &maProperties;
@@ -1321,6 +1316,277 @@ ScOrcusFactory& ScOrcusSheet::getFactory()
     return mrFactory;
 }
 
+void ScOrcusStrikethrough::reset()
+{
+    meStyle.reset();
+    meType.reset();
+    meWidth.reset();
+    meText.reset();
+}
+
+std::optional<FontStrikeout> ScOrcusStrikethrough::toFontStrikeout() const
+{
+    std::optional<FontStrikeout> eStrikeout;
+
+    if (meType)
+    {
+        switch (*meType)
+        {
+            case os::strikethrough_type_t::unknown:
+                eStrikeout = STRIKEOUT_DONTKNOW;
+                break;
+            case os::strikethrough_type_t::none:
+                eStrikeout = STRIKEOUT_NONE;
+                break;
+            case os::strikethrough_type_t::single_type:
+                eStrikeout = STRIKEOUT_SINGLE;
+                break;
+            case os::strikethrough_type_t::double_type:
+                eStrikeout = STRIKEOUT_DOUBLE;
+                break;
+        }
+    }
+
+    if (meWidth)
+    {
+        switch (*meWidth)
+        {
+            case os::strikethrough_width_t::bold:
+                eStrikeout = STRIKEOUT_BOLD;
+                break;
+            default:;
+        }
+    }
+
+    if (meText)
+    {
+        switch (*meText)
+        {
+            case os::strikethrough_text_t::slash:
+                eStrikeout = STRIKEOUT_SLASH;
+                break;
+            case os::strikethrough_text_t::cross:
+                eStrikeout = STRIKEOUT_X;
+                break;
+            case os::strikethrough_text_t::unknown:
+                break;
+        }
+    }
+
+    return eStrikeout;
+}
+
+
+void ScOrcusUnderline::reset()
+{
+    meStyle.reset();
+    meThickness.reset();
+    meSpacing.reset();
+    meCount.reset();
+}
+
+std::optional<FontLineStyle> ScOrcusUnderline::toFontLineStyle() const
+{
+    std::optional<FontLineStyle> eUnderline;
+
+    if (meStyle)
+    {
+        switch (*meStyle)
+        {
+            case os::underline_style_t::none:
+                eUnderline = LINESTYLE_NONE;
+                break;
+            case os::underline_style_t::solid:
+            {
+                if (meCount)
+                {
+                    switch (*meCount)
+                    {
+                        case os::underline_count_t::single_count:
+                            eUnderline = LINESTYLE_SINGLE;
+                            break;
+                        case os::underline_count_t::double_count:
+                            eUnderline = LINESTYLE_DOUBLE;
+                            break;
+                        case os::underline_count_t::none:
+                            break;
+                    }
+                }
+                else
+                    eUnderline = LINESTYLE_SINGLE;
+                break;
+            }
+            case os::underline_style_t::dotted:
+                eUnderline = LINESTYLE_DOTTED;
+                break;
+            case os::underline_style_t::dash:
+                eUnderline = LINESTYLE_DASH;
+                break;
+            case os::underline_style_t::long_dash:
+                eUnderline = LINESTYLE_LONGDASH;
+                break;
+            case os::underline_style_t::dot_dash:
+                eUnderline = LINESTYLE_DASHDOT;
+                break;
+            case os::underline_style_t::dot_dot_dash:
+                eUnderline = LINESTYLE_DASHDOTDOT;
+                break;
+            case os::underline_style_t::wave:
+            {
+                if (meCount)
+                {
+                    switch (*meCount)
+                    {
+                        case os::underline_count_t::single_count:
+                            eUnderline = LINESTYLE_WAVE;
+                            break;
+                        case os::underline_count_t::double_count:
+                            eUnderline = LINESTYLE_DOUBLEWAVE;
+                            break;
+                        case os::underline_count_t::none:
+                            break;
+                    }
+                }
+                else
+                    eUnderline = LINESTYLE_WAVE;
+                break;
+            }
+        }
+    }
+
+    bool bApplyBold = false;
+
+    if (meThickness)
+    {
+        switch (*meThickness)
+        {
+            case os::underline_thickness_t::bold:
+            case os::underline_thickness_t::thick:
+                bApplyBold = true;
+                break;
+            default:;
+        }
+    }
+
+    if (bApplyBold)
+    {
+        if (eUnderline)
+        {
+            switch (*eUnderline)
+            {
+                case LINESTYLE_NONE:
+                case LINESTYLE_SINGLE:
+                    eUnderline = LINESTYLE_BOLD;
+                    break;
+                case LINESTYLE_DOTTED:
+                    eUnderline = LINESTYLE_BOLDDOTTED;
+                    break;
+                case LINESTYLE_DASH:
+                    eUnderline = LINESTYLE_BOLDDASH;
+                    break;
+                case LINESTYLE_LONGDASH:
+                    eUnderline = LINESTYLE_BOLDLONGDASH;
+                    break;
+                case LINESTYLE_DASHDOT:
+                    eUnderline = LINESTYLE_BOLDDASHDOT;
+                    break;
+                case LINESTYLE_DASHDOTDOT:
+                    eUnderline = LINESTYLE_BOLDDASHDOTDOT;
+                    break;
+                case LINESTYLE_WAVE:
+                    eUnderline = LINESTYLE_BOLDWAVE;
+                    break;
+                default:
+                    ;
+            }
+        }
+    }
+
+    return eUnderline;
+}
+
+void ScOrcusSegmentStrikethrough::reset(SfxItemSet* pDestFormat)
+{
+    mpDestFormat = pDestFormat;
+    maAttrs.reset();
+}
+
+void ScOrcusSegmentStrikethrough::set_style(os::strikethrough_style_t s)
+{
+    maAttrs.meStyle = s;
+}
+
+void ScOrcusSegmentStrikethrough::set_type(os::strikethrough_type_t s)
+{
+    maAttrs.meType = s;
+}
+
+void ScOrcusSegmentStrikethrough::set_width(os::strikethrough_width_t s)
+{
+    maAttrs.meWidth = s;
+}
+
+void ScOrcusSegmentStrikethrough::set_text(os::strikethrough_text_t s)
+{
+    maAttrs.meText = s;
+}
+
+void ScOrcusSegmentStrikethrough::commit()
+{
+    auto eStrikeout = maAttrs.toFontStrikeout();
+    if (!eStrikeout)
+        return;
+
+    mpDestFormat->Put(SvxCrossedOutItem(*eStrikeout, EE_CHAR_STRIKEOUT));
+}
+
+void ScOrcusSegmentUnderline::reset(SfxItemSet* pDestFormat)
+{
+    mpDestFormat = pDestFormat;
+    maAttrs.reset();
+    maColor.reset();
+}
+
+void ScOrcusSegmentUnderline::set_style(os::underline_style_t e)
+{
+    maAttrs.meStyle = e;
+}
+
+void ScOrcusSegmentUnderline::set_thickness(os::underline_thickness_t e)
+{
+    maAttrs.meThickness = e;
+}
+
+void ScOrcusSegmentUnderline::set_spacing(os::underline_spacing_t e)
+{
+    maAttrs.meSpacing = e;
+}
+
+void ScOrcusSegmentUnderline::set_count(os::underline_count_t e)
+{
+    maAttrs.meCount = e;
+}
+
+void ScOrcusSegmentUnderline::set_color(
+    os::color_elem_t alpha, os::color_elem_t red, os::color_elem_t green, os::color_elem_t blue)
+{
+    maColor = Color(ColorAlpha, alpha, red, green, blue);
+}
+
+void ScOrcusSegmentUnderline::commit()
+{
+    auto eUnderline = maAttrs.toFontLineStyle();
+    if (!eUnderline)
+        return;
+
+    SvxUnderlineItem aItem(*eUnderline, EE_CHAR_UNDERLINE);
+
+    if (maColor)
+        aItem.SetColor(*maColor);
+
+    mpDestFormat->Put(aItem);
+}
+
 OUString ScOrcusSharedStrings::toOUString(std::string_view s)
 {
     return {s.data(), sal_Int32(s.size()), mrFactory.getGlobalSettings().getTextEncoding()};
@@ -1360,6 +1626,18 @@ void ScOrcusSharedStrings::set_segment_italic(bool b)
     maCurFormat.Put(SvxPostureItem(eItalic, EE_CHAR_ITALIC));
 }
 
+void ScOrcusSharedStrings::set_segment_superscript(bool b)
+{
+    if (b)
+        maCurFormat.Put(SvxEscapementItem(SvxEscapement::Superscript, EE_CHAR_ESCAPEMENT));
+}
+
+void ScOrcusSharedStrings::set_segment_subscript(bool b)
+{
+    if (b)
+        maCurFormat.Put(SvxEscapementItem(SvxEscapement::Subscript, EE_CHAR_ESCAPEMENT));
+}
+
 void ScOrcusSharedStrings::set_segment_font_name(std::string_view s)
 {
     OUString aName = toOUString(s);
@@ -1384,6 +1662,18 @@ void ScOrcusSharedStrings::set_segment_font_color(
 {
     Color aColor(ColorAlpha, alpha, red, green, blue);
     maCurFormat.Put(SvxColorItem(aColor, EE_CHAR_COLOR));
+}
+
+os::iface::import_underline* ScOrcusSharedStrings::start_underline()
+{
+    maImportUnderline.reset(&maCurFormat);
+    return &maImportUnderline;
+}
+
+os::iface::import_strikethrough* ScOrcusSharedStrings::start_strikethrough()
+{
+    maImportStrikethrough.reset(&maCurFormat);
+    return &maImportStrikethrough;
 }
 
 void ScOrcusSharedStrings::append_segment(std::string_view s)
@@ -1616,6 +1906,77 @@ ScOrcusCellStyle::ScOrcusCellStyle() :
 {
 }
 
+void ScOrcusImportFontUnderlineStyle::reset(ScOrcusFont* pDest)
+{
+    mpDestFont = pDest;
+
+    maAttrs.reset();
+    maColor.reset();
+}
+
+void ScOrcusImportFontUnderlineStyle::set_style(os::underline_style_t e)
+{
+    maAttrs.meStyle = e;
+}
+
+void ScOrcusImportFontUnderlineStyle::set_thickness(os::underline_thickness_t e)
+{
+    maAttrs.meThickness = e;
+}
+
+void ScOrcusImportFontUnderlineStyle::set_spacing(os::underline_spacing_t e)
+{
+    maAttrs.meSpacing = e;
+}
+
+void ScOrcusImportFontUnderlineStyle::set_count(os::underline_count_t e)
+{
+    maAttrs.meCount = e;
+}
+
+void ScOrcusImportFontUnderlineStyle::set_color(
+    os::color_elem_t alpha, os::color_elem_t red, os::color_elem_t green, os::color_elem_t blue)
+{
+    maColor = Color(ColorAlpha, alpha, red, green, blue);
+}
+
+void ScOrcusImportFontUnderlineStyle::commit()
+{
+    mpDestFont->meUnderline = maAttrs.toFontLineStyle();
+    mpDestFont->maUnderlineColor = maColor;
+}
+
+void ScOrcusImportFontStrikethroughStyle::reset(ScOrcusFont* pDest)
+{
+    mpDestFont = pDest;
+    maAttrs.reset();
+}
+
+void ScOrcusImportFontStrikethroughStyle::set_style(orcus::spreadsheet::strikethrough_style_t s)
+{
+    maAttrs.meStyle = s;
+}
+
+void ScOrcusImportFontStrikethroughStyle::set_type(orcus::spreadsheet::strikethrough_type_t s)
+{
+    maAttrs.meType = s;
+}
+
+void ScOrcusImportFontStrikethroughStyle::set_width(orcus::spreadsheet::strikethrough_width_t s)
+{
+    maAttrs.meWidth = s;
+}
+
+void ScOrcusImportFontStrikethroughStyle::set_text(orcus::spreadsheet::strikethrough_text_t s)
+{
+    maAttrs.meText = s;
+}
+
+void ScOrcusImportFontStrikethroughStyle::commit()
+{
+    mpDestFont->meStrikeout = maAttrs.toFontStrikeout();
+}
+
 ScOrcusImportFontStyle::ScOrcusImportFontStyle( ScOrcusFactory& rFactory, std::vector<ScOrcusFont>& rFonts ) :
     mrFactory(rFactory),
     mrFonts(rFonts)
@@ -1690,181 +2051,22 @@ void ScOrcusImportFontStyle::set_size_complex(double point)
     maCurrentFont.mnSizeComplex = point;
 }
 
-void ScOrcusImportFontStyle::set_underline(os::underline_t e)
-{
-    switch(e)
-    {
-        case os::underline_t::single_line:
-        case os::underline_t::single_accounting:
-            maCurrentFont.meUnderline = LINESTYLE_SINGLE;
-            break;
-        case os::underline_t::double_line:
-        case os::underline_t::double_accounting:
-            maCurrentFont.meUnderline = LINESTYLE_DOUBLE;
-            break;
-        case os::underline_t::none:
-            maCurrentFont.meUnderline = LINESTYLE_NONE;
-            break;
-        case os::underline_t::dotted:
-            maCurrentFont.meUnderline = LINESTYLE_DOTTED;
-            break;
-        case os::underline_t::dash:
-            maCurrentFont.meUnderline = LINESTYLE_DASH;
-            break;
-        case os::underline_t::long_dash:
-            maCurrentFont.meUnderline = LINESTYLE_LONGDASH;
-            break;
-        case os::underline_t::dot_dash:
-            maCurrentFont.meUnderline = LINESTYLE_DASHDOT;
-            break;
-        case os::underline_t::dot_dot_dash:
-            maCurrentFont.meUnderline = LINESTYLE_DASHDOTDOT;
-            break;
-        case os::underline_t::wave:
-            maCurrentFont.meUnderline = LINESTYLE_WAVE;
-            break;
-        default:
-            ;
-    }
-}
-
-void ScOrcusImportFontStyle::set_underline_width(os::underline_width_t e)
-{
-    if (e == os::underline_width_t::bold || e == os::underline_width_t::thick)
-    {
-        if (maCurrentFont.meUnderline)
-        {
-            switch (*maCurrentFont.meUnderline)
-            {
-                case LINESTYLE_NONE:
-                case LINESTYLE_SINGLE:
-                    maCurrentFont.meUnderline = LINESTYLE_BOLD;
-                    break;
-                case LINESTYLE_DOTTED:
-                    maCurrentFont.meUnderline = LINESTYLE_BOLDDOTTED;
-                    break;
-                case LINESTYLE_DASH:
-                    maCurrentFont.meUnderline = LINESTYLE_BOLDDASH;
-                    break;
-                case LINESTYLE_LONGDASH:
-                    maCurrentFont.meUnderline = LINESTYLE_BOLDLONGDASH;
-                    break;
-                case LINESTYLE_DASHDOT:
-                    maCurrentFont.meUnderline = LINESTYLE_BOLDDASHDOT;
-                    break;
-                case LINESTYLE_DASHDOTDOT:
-                    maCurrentFont.meUnderline = LINESTYLE_BOLDDASHDOTDOT;
-                    break;
-                case LINESTYLE_WAVE:
-                    maCurrentFont.meUnderline = LINESTYLE_BOLDWAVE;
-                    break;
-                default:
-                    ;
-            }
-        }
-        else
-            maCurrentFont.meUnderline = LINESTYLE_BOLD;
-    }
-}
-
-void ScOrcusImportFontStyle::set_underline_mode(os::underline_mode_t /*e*/)
-{
-}
-
-void ScOrcusImportFontStyle::set_underline_type(os::underline_type_t  e )
-{
-    if (e == os::underline_type_t::double_type)
-    {
-        if (maCurrentFont.meUnderline)
-        {
-            switch (*maCurrentFont.meUnderline)
-            {
-                case LINESTYLE_NONE:
-                case LINESTYLE_SINGLE:
-                    maCurrentFont.meUnderline = LINESTYLE_DOUBLE;
-                    break;
-                case LINESTYLE_WAVE:
-                    maCurrentFont.meUnderline = LINESTYLE_DOUBLEWAVE;
-                    break;
-                default:
-                    ;
-            }
-        }
-        else
-            maCurrentFont.meUnderline = LINESTYLE_DOUBLE;
-    }
-}
-
-void ScOrcusImportFontStyle::set_underline_color(
-    os::color_elem_t alpha, os::color_elem_t red, os::color_elem_t green, os::color_elem_t blue)
-{
-    maCurrentFont.maUnderlineColor = Color(ColorAlpha, alpha, red, green, blue);
-}
-
 void ScOrcusImportFontStyle::set_color(
     os::color_elem_t alpha, os::color_elem_t red, os::color_elem_t green, os::color_elem_t blue)
 {
     maCurrentFont.maColor = Color(ColorAlpha, alpha, red, green, blue);
 }
 
-void ScOrcusImportFontStyle::set_strikethrough_style(os::strikethrough_style_t /*s*/)
+orcus::spreadsheet::iface::import_underline* ScOrcusImportFontStyle::start_underline()
 {
+    maUnderlineImport.reset(&maCurrentFont);
+    return &maUnderlineImport;
 }
 
-void ScOrcusImportFontStyle::set_strikethrough_type(os::strikethrough_type_t s)
+orcus::spreadsheet::iface::import_strikethrough* ScOrcusImportFontStyle::start_strikethrough()
 {
-    if (maCurrentFont.meStrikeout)
-    {
-        if (*maCurrentFont.meStrikeout == STRIKEOUT_BOLD ||
-            *maCurrentFont.meStrikeout == STRIKEOUT_SLASH ||
-            *maCurrentFont.meStrikeout == STRIKEOUT_X)
-            return;
-    }
-
-    switch (s)
-    {
-        case os::strikethrough_type_t::unknown:
-            maCurrentFont.meStrikeout = STRIKEOUT_DONTKNOW;
-            break;
-        case os::strikethrough_type_t::none:
-            maCurrentFont.meStrikeout = STRIKEOUT_NONE;
-            break;
-        case os::strikethrough_type_t::single_type:
-            maCurrentFont.meStrikeout = STRIKEOUT_SINGLE;
-            break;
-        case os::strikethrough_type_t::double_type:
-            maCurrentFont.meStrikeout = STRIKEOUT_DOUBLE;
-            break;
-        default:
-            ;
-    }
-}
-
-void ScOrcusImportFontStyle::set_strikethrough_width(os::strikethrough_width_t s)
-{
-    switch (s)
-    {
-        case os::strikethrough_width_t::bold:
-            maCurrentFont.meStrikeout = STRIKEOUT_BOLD;
-            break;
-        default:
-            ;
-    }
-}
-
-void ScOrcusImportFontStyle::set_strikethrough_text(os::strikethrough_text_t s)
-{
-    switch (s)
-    {
-        case os::strikethrough_text_t::slash:
-            maCurrentFont.meStrikeout = STRIKEOUT_SLASH;
-            break;
-        case os::strikethrough_text_t::cross:
-            maCurrentFont.meStrikeout = STRIKEOUT_X;
-            break;
-        default:
-            ;
-    }
+    maStrikeoutImport.reset(&maCurrentFont);
+    return &maStrikeoutImport;
 }
 
 std::size_t ScOrcusImportFontStyle::commit()
@@ -2435,46 +2637,6 @@ void ScOrcusStyles::set_xf_count(os::xf_category_t /*cat*/, size_t /*n*/)
 
 void ScOrcusStyles::set_cell_style_count(size_t /*n*/)
 {
-}
-
-// auto filter import
-
-ScOrcusAutoFilter::ScOrcusAutoFilter( const ScOrcusGlobalSettings& rGS ) :
-    mrGlobalSettings(rGS)
-{
-}
-
-ScOrcusAutoFilter::~ScOrcusAutoFilter()
-{
-}
-
-void ScOrcusAutoFilter::set_range(const os::range_t& range)
-{
-    maRange.aStart.SetRow(range.first.row);
-    maRange.aStart.SetCol(range.first.column);
-    maRange.aEnd.SetRow(range.last.row);
-    maRange.aEnd.SetCol(range.last.column);
-}
-
-void ScOrcusAutoFilter::set_column(os::col_t col)
-{
-    SAL_INFO("sc.orcus.autofilter", "set_column: " << col);
-}
-
-void ScOrcusAutoFilter::append_column_match_value(std::string_view value)
-{
-    OUString aString(value.data(), value.size(), mrGlobalSettings.getTextEncoding());
-    SAL_INFO("sc.orcus.autofilter", "append_column_match_value: " << aString);
-}
-
-void ScOrcusAutoFilter::commit_column()
-{
-    SAL_INFO("sc.orcus.autofilter", "commit column");
-}
-
-void ScOrcusAutoFilter::commit()
-{
-    SAL_INFO("sc.orcus.autofilter", "commit");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

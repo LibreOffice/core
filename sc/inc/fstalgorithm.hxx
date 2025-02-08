@@ -103,7 +103,7 @@ std::vector<Span> toSpanArray( const mdds::flat_segment_tree<Key,bool>& rTree, K
     typedef mdds::flat_segment_tree<Key,bool> FstType;
 
     std::vector<Span> aSpans;
-    if (!rTree.is_tree_valid())
+    if (!rTree.valid_tree())
         return aSpans;
 
     bool bThisVal = false;

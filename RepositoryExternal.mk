@@ -3395,7 +3395,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 
 $(call gb_LinkTarget_add_libs,$(1),\
-       -L$(gb_UnpackedTarball_workdir)/liborcus/src/liborcus/.libs -lorcus-0.18 \
+       -L$(gb_UnpackedTarball_workdir)/liborcus/src/liborcus/.libs -lorcus-0.20 \
 )
 
 $(if $(SYSTEM_BOOST), \
@@ -3414,7 +3414,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(gb_UnpackedTarball_workdir)/liborcus/src/parser/.libs -lorcus-parser-0.18 \
+	-L$(gb_UnpackedTarball_workdir)/liborcus/src/parser/.libs -lorcus-parser-0.20 \
 )
 
 endef

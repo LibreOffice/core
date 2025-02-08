@@ -1,0 +1,47 @@
+From 3b590cabb6f8296dcddb6588e3346a7604f97d51 Mon Sep 17 00:00:00 2001
+From: Kohei Yoshida <kohei.yoshida@gmail.com>
+Date: Fri, 7 Feb 2025 23:03:34 -0500
+Subject: [PATCH 2/2] Properly map enum types to their labels
+
+---
+ src/liborcus/spreadsheet_types.cpp | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/src/liborcus/spreadsheet_types.cpp b/src/liborcus/spreadsheet_types.cpp
+index f3f51050..161e53ca 100644
+--- a/src/liborcus/spreadsheet_types.cpp
++++ b/src/liborcus/spreadsheet_types.cpp
+@@ -595,10 +595,7 @@ std::ostream& operator<< (std::ostream& os, underline_style_t uline)
+ {
+     static constexpr std::string_view names[] = {
+         "none",
+-        "single-line",
+-        "single-accounting",
+-        "double-line",
+-        "double-accounting",
++        "solid",
+         "dotted",
+         "dash",
+         "long-dash",
+@@ -633,6 +630,7 @@ std::ostream& operator<< (std::ostream& os, underline_spacing_t ulmode)
+     static constexpr std::string_view names[] = {
+         "continuous",
+         "skip-white-space",
++        "continuous-over-field",
+     };
+ 
+     return write_name_for_pos(os, names, std::size(names), ulmode);
+@@ -642,8 +640,8 @@ std::ostream& operator<< (std::ostream& os, underline_count_t ultype)
+ {
+     static constexpr std::string_view names[] = {
+         "none",
+-        "single-type",
+-        "double-type",
++        "single-count",
++        "double-count",
+     };
+ 
+     return write_name_for_pos(os, names, std::size(names), ultype);
+-- 
+2.34.1
+

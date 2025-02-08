@@ -215,7 +215,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
         rDoc.SetRowFlags( 0, rDoc.MaxRow(), nScTab, CRFlags::ManualSize );
 
     maRowHeights.build_tree();
-    if (!maRowHeights.is_tree_valid())
+    if (!maRowHeights.valid_tree())
         return;
 
     SCROW nPrevRow = -1;

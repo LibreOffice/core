@@ -1,0 +1,42 @@
+From cfa3ec177d4dd44327cd42d018a0fb88888e19c9 Mon Sep 17 00:00:00 2001
+From: Kohei Yoshida <kohei.yoshida@gmail.com>
+Date: Fri, 7 Feb 2025 22:51:29 -0500
+Subject: [PATCH 1/2] Define missing element rules for immediate child elements
+ of root
+
+---
+ src/liborcus/odf_styles_context.cpp | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/src/liborcus/odf_styles_context.cpp b/src/liborcus/odf_styles_context.cpp
+index a60e47da..0e45783e 100644
+--- a/src/liborcus/odf_styles_context.cpp
++++ b/src/liborcus/odf_styles_context.cpp
+@@ -67,6 +67,24 @@ styles_context::styles_context(
+         // parent element -> child element
+         { XMLNS_UNKNOWN_ID, XML_UNKNOWN_TOKEN, NS_odf_office, XML_automatic_styles }, // root element
+         { XMLNS_UNKNOWN_ID, XML_UNKNOWN_TOKEN, NS_odf_office, XML_styles }, // root element
++        { NS_odf_office, XML_automatic_styles, NS_odf_number, XML_boolean_style },
++        { NS_odf_office, XML_automatic_styles, NS_odf_number, XML_currency_style },
++        { NS_odf_office, XML_automatic_styles, NS_odf_number, XML_date_style },
++        { NS_odf_office, XML_automatic_styles, NS_odf_number, XML_number_style },
++        { NS_odf_office, XML_automatic_styles, NS_odf_number, XML_percentage_style },
++        { NS_odf_office, XML_automatic_styles, NS_odf_number, XML_text_style },
++        { NS_odf_office, XML_automatic_styles, NS_odf_number, XML_time_style },
++        { NS_odf_office, XML_automatic_styles, NS_odf_style, XML_default_style },
++        { NS_odf_office, XML_automatic_styles, NS_odf_style, XML_style },
++        { NS_odf_office, XML_styles, NS_odf_number, XML_boolean_style },
++        { NS_odf_office, XML_styles, NS_odf_number, XML_currency_style },
++        { NS_odf_office, XML_styles, NS_odf_number, XML_date_style },
++        { NS_odf_office, XML_styles, NS_odf_number, XML_number_style },
++        { NS_odf_office, XML_styles, NS_odf_number, XML_percentage_style },
++        { NS_odf_office, XML_styles, NS_odf_number, XML_text_style },
++        { NS_odf_office, XML_styles, NS_odf_number, XML_time_style },
++        { NS_odf_office, XML_styles, NS_odf_style, XML_default_style },
++        { NS_odf_office, XML_styles, NS_odf_style, XML_style },
+     };
+ 
+     init_element_validator(rules, std::size(rules));
+-- 
+2.34.1
+

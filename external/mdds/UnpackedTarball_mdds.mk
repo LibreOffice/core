@@ -14,9 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,mdds,$(MDDS_TARBALL)))
 $(eval $(call gb_UnpackedTarball_set_patchlevel,mdds,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,mdds,\
-    external/mdds/use-after-free.patch \
     external/mdds/gcc-12-silence-use-after-free.patch.1 \
-    external/mdds/0001-cid-1546160-COPY_INSTEAD_OF_MOVE.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:

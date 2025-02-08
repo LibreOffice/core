@@ -486,8 +486,8 @@ MARIADB_CONNECTOR_C_TARBALL := mariadb-connector-c-3.3.14-src.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-MDDS_SHA256SUM := 1483d90cefb8aa4563c4d0a85cb7b243aa95217d235d422e9ca6722fd5b97e56
-MDDS_TARBALL := mdds-2.1.1.tar.xz
+MDDS_SHA256SUM := 9b077e8d929050e9a432cc131beed2380ac85cfe98b17fc26d01d0ed532129c8
+MDDS_TARBALL := mdds-3.0.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -548,8 +548,8 @@ OPENSSL_TARBALL := openssl-3.0.15.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-ORCUS_SHA256SUM := 69ed26a00d4aaa7688e62a6e003cbc81928521a45e96605e53365aa499719e39
-ORCUS_TARBALL := liborcus-0.19.2.tar.xz
+ORCUS_SHA256SUM := fb6438977a75e7f455b772acf80d861fbc787ab18d52f7997af44a212311a507
+ORCUS_TARBALL := liborcus-0.20.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

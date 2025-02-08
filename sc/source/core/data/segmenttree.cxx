@@ -134,7 +134,7 @@ typename ScFlatSegmentsImpl<ValueType_, ExtValueType_>::ValueType ScFlatSegments
         return nValue;
     }
 
-    if (!maSegments.is_tree_valid())
+    if (!maSegments.valid_tree())
     {
         assert(!ScGlobal::bThreadedGroupCalcInProgress);
         maSegments.build_tree();
@@ -150,7 +150,7 @@ sal_uInt64 ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getSumValue(SCCOLROW n
     if (mbTreeSearchEnabled)
     {
 
-        if (!maSegments.is_tree_valid())
+        if (!maSegments.valid_tree())
         {
             assert(!ScGlobal::bThreadedGroupCalcInProgress);
             maSegments.build_tree();
@@ -242,7 +242,7 @@ bool ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getRangeData(SCCOLROW nPos, 
     if (!mbTreeSearchEnabled)
         return getRangeDataLeaf(nPos, rData);
 
-    if (!maSegments.is_tree_valid())
+    if (!maSegments.valid_tree())
     {
         assert(!ScGlobal::bThreadedGroupCalcInProgress);
         maSegments.build_tree();
@@ -333,7 +333,7 @@ template<typename ValueType_, typename ExtValueType_>
 void ScFlatSegmentsImpl<ValueType_, ExtValueType_>::makeReady()
 {
     assert(!ScGlobal::bThreadedGroupCalcInProgress);
-    if (!maSegments.is_tree_valid())
+    if (!maSegments.valid_tree())
         maSegments.build_tree();
 }
 

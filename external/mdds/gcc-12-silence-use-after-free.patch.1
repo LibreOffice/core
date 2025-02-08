@@ -22,9 +22,9 @@ cc1plus: all warnings being treated as errors
 diff -ur mdds.org/include/mdds/node.hpp mdds/include/mdds/node.hpp
 --- mdds.org/include/mdds/node.hpp	2023-07-24 18:27:14.427139325 +0000
 +++ mdds/include/mdds/node.hpp	2023-07-24 18:26:54.554461294 +0000
-@@ -244,9 +244,15 @@
- template<typename T>
- inline void intrusive_ptr_release(node<T>* p)
+@@ -210,9 +210,15 @@
+ template<typename KeyT, typename ValueT>
+ inline void intrusive_ptr_release(node<KeyT, ValueT>* p)
  {
 -    --p->refcount;
 -    if (!p->refcount)
@@ -39,4 +39,4 @@ diff -ur mdds.org/include/mdds/node.hpp mdds/include/mdds/node.hpp
 +#endif
  }
  
- template<typename T>
+ template<typename NodePtrT>

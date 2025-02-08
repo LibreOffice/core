@@ -1,0 +1,13 @@
+diff --git a/src/lib/IWORKTable.cpp b/src/lib/IWORKTable.cpp
+index bde1011..a68f549 100644
+--- a/src/lib/IWORKTable.cpp
++++ b/src/lib/IWORKTable.cpp
+@@ -168,7 +168,7 @@ void parseDateTimeFormat(std::string const &format, librevenge::RVNGPropertyList
+ 
+ void writeBorder(librevenge::RVNGPropertyList &props, const char *name, IWORKGridLine_t &line, unsigned index)
+ {
+-  if (!line.is_tree_valid())
++  if (!line.valid_tree())
+     line.build_tree();
+ 
+   IWORKStylePtr_t style;

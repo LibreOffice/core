@@ -1021,7 +1021,7 @@ sal_Int32 ScRowStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32
         return maCache.mnStyle;
 
     StylesType& r = *aTables[nTable];
-    if (!r.is_tree_valid())
+    if (!r.valid_tree())
         r.build_tree();
     sal_Int32 nStyle(0);
     sal_Int32 nStart(0), nEnd(0);

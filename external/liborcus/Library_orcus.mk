@@ -55,6 +55,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/config \
 	UnpackedTarball/liborcus/src/liborcus/css_document_tree \
 	UnpackedTarball/liborcus/src/liborcus/css_selector \
+	UnpackedTarball/liborcus/src/liborcus/debug_utils \
 	UnpackedTarball/liborcus/src/liborcus/detection_result \
 	UnpackedTarball/liborcus/src/liborcus/dom_tree \
 	UnpackedTarball/liborcus/src/liborcus/format_detection \
@@ -75,6 +76,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/interface \
 	UnpackedTarball/liborcus/src/liborcus/json_document_tree \
 	UnpackedTarball/liborcus/src/liborcus/json_map_tree \
+	UnpackedTarball/liborcus/src/liborcus/json_path \
 	UnpackedTarball/liborcus/src/liborcus/json_structure_mapper \
 	UnpackedTarball/liborcus/src/liborcus/json_structure_tree \
 	UnpackedTarball/liborcus/src/liborcus/json_util \
@@ -86,10 +88,11 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/odf_number_format_context \
 	UnpackedTarball/liborcus/src/liborcus/odf_para_context \
 	UnpackedTarball/liborcus/src/liborcus/odf_style_context \
-	UnpackedTarball/liborcus/src/liborcus/odf_styles_context \
 	UnpackedTarball/liborcus/src/liborcus/odf_styles \
+	UnpackedTarball/liborcus/src/liborcus/odf_styles_context \
 	UnpackedTarball/liborcus/src/liborcus/odf_tokens \
 	UnpackedTarball/liborcus/src/liborcus/ods_content_xml_context \
+	UnpackedTarball/liborcus/src/liborcus/ods_database_ranges_context \
 	UnpackedTarball/liborcus/src/liborcus/ods_dde_links_context \
 	UnpackedTarball/liborcus/src/liborcus/ods_session_data \
 	UnpackedTarball/liborcus/src/liborcus/ooxml_content_types \
@@ -106,8 +109,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/orcus_import_xlsx \
 	UnpackedTarball/liborcus/src/liborcus/orcus_json \
 	UnpackedTarball/liborcus/src/liborcus/orcus_ods \
-	UnpackedTarball/liborcus/src/liborcus/orcus_xlsx \
 	UnpackedTarball/liborcus/src/liborcus/orcus_xls_xml \
+	UnpackedTarball/liborcus/src/liborcus/orcus_xlsx \
 	UnpackedTarball/liborcus/src/liborcus/orcus_xml \
 	UnpackedTarball/liborcus/src/liborcus/orcus_xml_impl \
 	UnpackedTarball/liborcus/src/liborcus/orcus_xml_map_def \
@@ -117,16 +120,19 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/spreadsheet_interface \
 	UnpackedTarball/liborcus/src/liborcus/spreadsheet_types \
 	UnpackedTarball/liborcus/src/liborcus/string_helper \
-	UnpackedTarball/liborcus/src/liborcus/xlsx_autofilter_context \
-	UnpackedTarball/liborcus/src/liborcus/xlsx_conditional_format_context \
-	UnpackedTarball/liborcus/src/liborcus/xlsx_drawing_context \
-	UnpackedTarball/liborcus/src/liborcus/xlsx_handler \
-	UnpackedTarball/liborcus/src/liborcus/xlsx_helper \
+	UnpackedTarball/liborcus/src/liborcus/xls_filter_utils \
+	UnpackedTarball/liborcus/src/liborcus/xls_types \
+	UnpackedTarball/liborcus/src/liborcus/xls_xml_auto_filter_context \
 	UnpackedTarball/liborcus/src/liborcus/xls_xml_context \
 	UnpackedTarball/liborcus/src/liborcus/xls_xml_detection_handler \
 	UnpackedTarball/liborcus/src/liborcus/xls_xml_handler \
 	UnpackedTarball/liborcus/src/liborcus/xls_xml_namespace_types \
 	UnpackedTarball/liborcus/src/liborcus/xls_xml_tokens \
+	UnpackedTarball/liborcus/src/liborcus/xlsx_autofilter_context \
+	UnpackedTarball/liborcus/src/liborcus/xlsx_conditional_format_context \
+	UnpackedTarball/liborcus/src/liborcus/xlsx_drawing_context \
+	UnpackedTarball/liborcus/src/liborcus/xlsx_handler \
+	UnpackedTarball/liborcus/src/liborcus/xlsx_helper \
 	UnpackedTarball/liborcus/src/liborcus/xlsx_pivot_context \
 	UnpackedTarball/liborcus/src/liborcus/xlsx_revision_context \
 	UnpackedTarball/liborcus/src/liborcus/xlsx_session_data \
