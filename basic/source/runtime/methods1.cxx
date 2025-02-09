@@ -583,13 +583,10 @@ void SbRtl_Trim(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    else
-    {
-        OUString aStr(comphelper::string::strip(rPar.Get(1)->GetOUString(), ' '));
-        rPar.Get(0)->PutString(aStr);
-    }
+    OUString aStr(comphelper::string::strip(rPar.Get(1)->GetOUString(), ' '));
+    rPar.Get(0)->PutString(aStr);
 }
 
 void SbRtl_GetSolarVersion(StarBASIC *, SbxArray & rPar, bool)
