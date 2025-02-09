@@ -3418,7 +3418,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         if (m_pImpl->m_StreamStateStack.top().nTableDepth == 0
             && m_pImpl->GetIsFirstParagraphInSection()
                 && !m_pImpl->GetIsDummyParaAddedForTableInSection() && !m_pImpl->GetIsTextFrameInserted()
-                && !m_pImpl->GetIsPreviousParagraphFramed() && !IsInHeaderFooter())
+                && !m_pImpl->GetIsPreviousParagraphFramed())
         {
             m_pImpl->AddDummyParaForTableInSection();
         }

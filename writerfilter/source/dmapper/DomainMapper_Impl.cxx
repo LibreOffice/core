@@ -691,8 +691,8 @@ void DomainMapper_Impl::RemoveDummyParaForTableInSection()
 }
 void DomainMapper_Impl::AddDummyParaForTableInSection()
 {
-    // Shapes and textboxes can't have sections.
-    if (IsInShape() || m_bIsInTextBox)
+    // Shapes, headers, and textboxes can't have sections.
+    if (IsInShape() || IsInHeaderFooter() || m_bIsInTextBox)
         return;
 
     if (!m_aTextAppendStack.empty())
