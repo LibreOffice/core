@@ -3974,7 +3974,10 @@ MSWordExportBase::MSWordExportBase( SwDoc& rDocument, std::shared_ptr<SwUnoCurso
     , m_pOrigPam(pOriginalPam)
 {
     if (SwDocShell* pShell = rDocument.GetDocShell())
-        m_bHasBailsMetaData = SwRDFHelper::hasMetadataGraph(pShell->GetXTextDocument(), u"urn:bails"_ustr);
+    {
+        m_xTextDoc = pShell->GetXTextDocument();
+        m_bHasBailsMetaData = SwRDFHelper::hasMetadataGraph(m_xTextDoc, u"urn:bails"_ustr);
+    }
 }
 
 MSWordExportBase::~MSWordExportBase()

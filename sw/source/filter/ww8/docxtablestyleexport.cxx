@@ -11,6 +11,7 @@
 #include "docxhelper.hxx"
 #include <doc.hxx>
 #include <docsh.hxx>
+#include <unotxdoc.hxx>
 #include <oox/token/tokens.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <sax/fastattribs.hxx>
@@ -125,7 +126,7 @@ void DocxTableStyleExport::TableStyles(sal_Int32 nCountStylesToWrite)
 {
     // Do we have table styles from InteropGrabBag available?
     uno::Reference<beans::XPropertySet> xPropertySet(
-        m_pImpl->getDoc().GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+        m_pImpl->getDoc().GetDocShell()->GetXTextDocument());
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
     xPropertySet->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
     uno::Sequence<beans::PropertyValue> aTableStyles;
