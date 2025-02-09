@@ -38,15 +38,29 @@ public:
     }
 };
 
-DECLARE_OOXMLEXPORT_TEST(testTdf161631, "tdf161631.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf161631)
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
-    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+    auto verify = [this](bool bIsExport = false) {
+        CPPUNIT_ASSERT_EQUAL(1, getPages());
+        CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
 
-    // Without the fix in place, this test would have failed with
-    // - Expected: Some text
-    // - Actual  :
-    CPPUNIT_ASSERT_EQUAL(u"Some text"_ustr, getParagraph(1)->getString());
+        // Without the fix in place, this test would have failed with
+        // - Expected : Some text
+        // - Actual:
+        CPPUNIT_ASSERT_EQUAL(u"Some text"_ustr, getParagraph(1)->getString());
+
+        if (bIsExport)
+        {
+            // tdf#164876 tdf#165117: don't add an empty paragraph every round-trip
+            xmlDocUniquePtr pXmlDoc1 = parseExport(u"word/footer2.xml"_ustr);
+            assertXPath(pXmlDoc1, "/w:ftr/w:p", 1);
+        }
+    };
+
+    createSwDoc("tdf161631.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf158597, "tdf158597.docx")
