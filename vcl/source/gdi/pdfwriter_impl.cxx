@@ -9183,10 +9183,7 @@ void PDFWriterImpl::writeJPG( const JPGEmit& rObject )
 
     if( nMaskObject )
     {
-        BitmapEmit aEmit;
-        aEmit.m_nObject = nMaskObject;
-        aEmit.m_aBitmap = BitmapEx( rObject.m_aAlphaMask.GetBitmap(), rObject.m_aAlphaMask );
-        writeBitmapMaskObject( aEmit );
+        writeBitmapMaskObject( nMaskObject, rObject.m_aAlphaMask );
     }
 
     writeReferenceXObject(rObject.m_aReferenceXObject);
@@ -9796,10 +9793,7 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject )
 
     if( nMaskObject )
     {
-        BitmapEmit aEmit;
-        aEmit.m_nObject             = nMaskObject;
-        aEmit.m_aBitmap             = rObject.m_aBitmap;
-        return writeBitmapMaskObject( aEmit );
+        return writeBitmapMaskObject( nMaskObject, rObject.m_aBitmap.GetAlphaMask() );
     }
 
     writeReferenceXObject(rObject.m_aReferenceXObject);
@@ -9807,29 +9801,22 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject )
     return true;
 }
 
-bool PDFWriterImpl::writeBitmapMaskObject( const BitmapEmit& rObject )
+bool PDFWriterImpl::writeBitmapMaskObject( sal_Int32 nMaskObject, const AlphaMask& rAlphaMask )
 {
-    assert( rObject.m_aBitmap.IsAlpha() );
-    assert( rObject.m_aBitmap.GetAlphaMask().GetBitmap().getPixelFormat() == vcl::PixelFormat::N8_BPP );
+    assert( rAlphaMask.GetBitmap().getPixelFormat() == vcl::PixelFormat::N8_BPP );
 
-    if (rObject.m_aReferenceXObject.hasExternalPDFData() && !m_aContext.UseReferenceXObject)
-    {
-        writeReferenceXObject(rObject.m_aReferenceXObject);
-        return true;
-    }
-
-    if (!updateObject(rObject.m_nObject))
+    if (!updateObject(nMaskObject))
         return false;
 
     Bitmap  aBitmap;
     if( m_aContext.Version < PDFWriter::PDFVersion::PDF_1_4 )
     {
-        aBitmap = rObject.m_aBitmap.GetAlphaMask().GetBitmap();
+        aBitmap = rAlphaMask.GetBitmap();
         aBitmap.Convert( BmpConversion::N1BitThreshold );
     }
     else
     {
-        aBitmap = rObject.m_aBitmap.GetAlphaMask().GetBitmap();
+        aBitmap = rAlphaMask.GetBitmap();
     }
 
     const sal_Int32 nBitsPerComponent = 8;
@@ -9841,7 +9828,7 @@ bool PDFWriterImpl::writeBitmapMaskObject( const BitmapEmit& rObject )
         emitComment( "PDFWriterImpl::writeBitmapObject" );
     }
     OStringBuffer aLine(1024);
-    aLine.append( rObject.m_nObject );
+    aLine.append( nMaskObject );
     aLine.append( " 0 obj\n"
                   "<</Type/XObject/Subtype/Image/Width " );
     aLine.append( static_cast<sal_Int32>(aBitmap.GetSizePixel().Width()) );
@@ -9866,7 +9853,7 @@ bool PDFWriterImpl::writeBitmapMaskObject( const BitmapEmit& rObject )
     if (osl::File::E_None != m_aFile.getPos(nStartPos))
         return false;
 
-    checkAndEnableStreamEncryption( rObject.m_nObject );
+    checkAndEnableStreamEncryption( nMaskObject );
     beginCompression();
     BitmapScopedReadAccess pAccess(aBitmap);
     //With PDF bitmaps, each row is padded to a BYTE boundary (multiple of 8 bits).
@@ -9892,8 +9879,6 @@ bool PDFWriterImpl::writeBitmapMaskObject( const BitmapEmit& rObject )
     aLine.append( static_cast<sal_Int64>(nEndPos-nStartPos) );
     aLine.append( "\nendobj\n\n" );
     if (!writeBuffer(aLine)) return false;
-
-    writeReferenceXObject(rObject.m_aReferenceXObject);
 
     return true;
 }

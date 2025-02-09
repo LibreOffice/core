@@ -895,7 +895,7 @@ private:
     bool writeBitmapObject( const BitmapEmit& rObject );
     /* writes an XObject of type mask image
      */
-    bool writeBitmapMaskObject( const BitmapEmit& rObject );
+    bool writeBitmapMaskObject( sal_Int32 nMaskObject, const AlphaMask& rAlphaMask );
 
     void writeJPG( const JPGEmit& rEmit );
     /// Writes the form XObject proxy for the image.
