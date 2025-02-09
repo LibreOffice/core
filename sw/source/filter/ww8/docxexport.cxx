@@ -1242,15 +1242,13 @@ void DocxExport::WriteSettings()
         m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_endnotePr, m_rDoc.GetEndNoteInfo(), XML_endnote );
 
     // Has themeFontLang information
-    rtl::Reference< SwXTextDocument > xPropSet( pDocShell->GetBaseModel() );
-
     bool bUseGrabBagProtection = false;
     bool bWriterWantsToProtect = false;
     bool bWriterWantsToProtectForm = false;
     bool bWriterWantsToProtectRedline = false;
     bool bHasDummyRedlineProtectionKey = false;
     bool bReadOnlyStatusUnchanged = true;
-    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = m_xTextDoc->getPropertySetInfo();
     if ( m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FORM) ||
          m_pSections->DocumentIsProtected() )
     {
@@ -1259,7 +1257,7 @@ void DocxExport::WriteSettings()
     if ( xPropSetInfo->hasPropertyByName( u"RedlineProtectionKey"_ustr ) )
     {
         uno::Sequence<sal_Int8> aKey;
-        xPropSet->getPropertyValue( u"RedlineProtectionKey"_ustr ) >>= aKey;
+        m_xTextDoc->getPropertyValue( u"RedlineProtectionKey"_ustr ) >>= aKey;
         bool bHasRedlineProtectionKey = aKey.hasElements();
         bHasDummyRedlineProtectionKey = aKey.getLength() == 1 && aKey[0] == 1;
         if ( bHasRedlineProtectionKey && !bHasDummyRedlineProtectionKey )
@@ -1271,7 +1269,7 @@ void DocxExport::WriteSettings()
     if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
     {
         uno::Sequence< beans::PropertyValue > propList;
-        xPropSet->getPropertyValue( aGrabBagName ) >>= propList;
+        m_xTextDoc->getPropertyValue( aGrabBagName ) >>= propList;
 
         for (const auto& rProp : propList)
         {
@@ -1511,9 +1509,7 @@ void DocxExport::WriteTheme()
 // See OOXMLDocumentImpl::resolveGlossaryStream
 void DocxExport::WriteGlossary()
 {
-    rtl::Reference< SwXTextDocument > xPropSet( m_rDoc.GetDocShell()->GetBaseModel() );
-
-    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = m_xTextDoc->getPropertySetInfo();
     OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if ( !xPropSetInfo->hasPropertyByName( aName ) )
         return;
@@ -1521,7 +1517,7 @@ void DocxExport::WriteGlossary()
     uno::Reference<xml::dom::XDocument> glossaryDocDom;
     uno::Sequence< uno::Sequence<beans::NamedValue> > glossaryDomList;
     uno::Sequence< beans::PropertyValue > propList;
-    xPropSet->getPropertyValue( aName ) >>= propList;
+    m_xTextDoc->getPropertyValue( aName ) >>= propList;
     sal_Int32 collectedProperties = 0;
     for (const auto& rProp : propList)
     {
@@ -1672,16 +1668,14 @@ static void lcl_UpdateXmlValues(const SdtData& sdtData, const uno::Reference<css
 
 void DocxExport::WriteCustomXml()
 {
-    rtl::Reference< SwXTextDocument > xPropSet( m_rDoc.GetDocShell()->GetBaseModel() );
-
-    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = m_xTextDoc->getPropertySetInfo();
     if ( !xPropSetInfo->hasPropertyByName( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) )
         return;
 
     uno::Sequence<uno::Reference<xml::dom::XDocument> > customXmlDomlist;
     uno::Sequence<uno::Reference<xml::dom::XDocument> > customXmlDomPropslist;
     uno::Sequence< beans::PropertyValue > propList;
-    xPropSet->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= propList;
+    m_xTextDoc->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= propList;
     auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "OOXCustomXml"; });
     if (pProp != std::cend(propList))
@@ -1771,15 +1765,10 @@ void DocxExport::WriteCustomXml()
 
 void DocxExport::WriteVBA()
 {
-    SwDocShell* pShell = m_rDoc.GetDocShell();
-    if (!pShell)
+    if (!m_xTextDoc)
         return;
 
-    rtl::Reference<SwXTextDocument> xStorageBasedDocument(pShell->GetBaseModel());
-    if (!xStorageBasedDocument.is())
-        return;
-
-    uno::Reference<embed::XStorage> xDocumentStorage = xStorageBasedDocument->getDocumentStorage();
+    uno::Reference<embed::XStorage> xDocumentStorage = m_xTextDoc->getDocumentStorage();
     OUString aMacrosName(u"_MS_VBA_Macros"_ustr);
     if (!xDocumentStorage.is() || !xDocumentStorage->hasByName(aMacrosName))
         return;
@@ -1838,16 +1827,14 @@ void DocxExport::WriteEmbeddings()
     if (!pShell)
         return;
 
-    rtl::Reference< SwXTextDocument > xPropSet( pShell->GetBaseModel() );
-
-    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = m_xTextDoc->getPropertySetInfo();
     OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if ( !xPropSetInfo->hasPropertyByName( aName ) )
         return;
 
     uno::Sequence< beans::PropertyValue > embeddingsList;
     uno::Sequence< beans::PropertyValue > propList;
-    xPropSet->getPropertyValue( aName ) >>= propList;
+    m_xTextDoc->getPropertyValue( aName ) >>= propList;
     auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "OOXEmbeddings"; });
     if (pProp != std::cend(propList))
@@ -2111,13 +2098,12 @@ sal_Int32 DocxExport::getWordCompatibilityMode()
      *     when we no longer care about working with perfect compatibility with older versions of MS Word.
      */
     m_nWordCompatibilityMode = 15; //older versions might not open our files well
-    rtl::Reference< SwXTextDocument > xPropSet(m_rDoc.GetDocShell()->GetBaseModel());
-    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = m_xTextDoc->getPropertySetInfo();
     // Round-trip the existing compatibilityMode
     if (xPropSetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
     {
         uno::Sequence< beans::PropertyValue > propList;
-        xPropSet->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= propList;
+        m_xTextDoc->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= propList;
 
         sal_Int32 nImportedWordCompatbilityMode = -1;
         for (const auto& rProp : propList)

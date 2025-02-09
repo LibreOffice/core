@@ -40,6 +40,7 @@
 #include "WW8TableInfo.hxx"
 #include <calbck.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <unotxdoc.hxx>
 
 #include <vcl/graph.hxx>
 
@@ -578,6 +579,7 @@ public:
     bool m_bHasBailsMetaData;   // false if there is no urn:bails metadata in the document
 
     SwDoc& m_rDoc;
+    rtl::Reference<SwXTextDocument> m_xTextDoc;
     SwNodeOffset m_nCurStart, m_nCurEnd;
     std::shared_ptr<SwUnoCursor> & m_pCurPam;
     SwPaM *m_pOrigPam;

@@ -4935,9 +4935,8 @@ DocxStringTokenMap const aExceptionTokens[] = {
 void DocxAttributeOutput::LatentStyles()
 {
     // Do we have latent styles available?
-    rtl::Reference<SwXTextDocument> xPropertySet(m_rExport.m_rDoc.GetDocShell()->GetBaseModel());
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
-    xPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
+    m_rExport.m_xTextDoc->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
     uno::Sequence<beans::PropertyValue> aLatentStyles;
     auto pProp = std::find_if(std::cbegin(aInteropGrabBag), std::cend(aInteropGrabBag),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "latentStyles"; });
@@ -5924,9 +5923,8 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     OSL_ASSERT(pFlyFrameFormat);
 
     // get interoperability information about embedded objects
-    rtl::Reference< SwXTextDocument > xPropSet( m_rExport.m_rDoc.GetDocShell()->GetBaseModel() );
     uno::Sequence< beans::PropertyValue > aGrabBag, aObjectsInteropList,aObjectInteropAttributes;
-    xPropSet->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= aGrabBag;
+    m_rExport.m_xTextDoc->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= aGrabBag;
     auto pProp = std::find_if(std::cbegin(aGrabBag), std::cend(aGrabBag),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "EmbeddedObjects"; });
     if (pProp != std::cend(aGrabBag))

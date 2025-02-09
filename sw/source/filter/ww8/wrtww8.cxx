@@ -121,7 +121,6 @@
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <fmtanchr.hxx>
-#include <unotxdoc.hxx>
 
 using namespace css;
 using namespace sw::util;
@@ -3990,7 +3989,10 @@ MSWordExportBase::MSWordExportBase( SwDoc& rDocument, std::shared_ptr<SwUnoCurso
     , m_pOrigPam(pOriginalPam)
 {
     if (SwDocShell* pShell = rDocument.GetDocShell())
-        m_bHasBailsMetaData = SwRDFHelper::hasMetadataGraph(pShell->GetBaseModel(), u"urn:bails"_ustr);
+    {
+        m_xTextDoc = pShell->GetBaseModel();
+        m_bHasBailsMetaData = SwRDFHelper::hasMetadataGraph(m_xTextDoc, u"urn:bails"_ustr);
+    }
 }
 
 MSWordExportBase::~MSWordExportBase()

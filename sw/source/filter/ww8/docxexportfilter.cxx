@@ -73,26 +73,18 @@ bool DocxExportFilter::exportDocument()
         // Check whether application is in headless mode
         if (!Application::IsHeadlessModeEnabled())
         {
-            if (SwDocShell* pShell = pDoc->GetDocShell())
+            uno::Reference<embed::XStorage> xDocumentStorage =
+                pTextDoc->getDocumentStorage();
+            if (xDocumentStorage.is() && xDocumentStorage->hasByName(u"_MS_VBA_Macros"_ustr))
             {
-                rtl::Reference<SwXTextDocument> xStorageBasedDocument(
-                    pShell->GetBaseModel());
-                if (xStorageBasedDocument.is())
-                {
-                    uno::Reference<embed::XStorage> xDocumentStorage =
-                        xStorageBasedDocument->getDocumentStorage();
-                    if (xDocumentStorage.is() && xDocumentStorage->hasByName(u"_MS_VBA_Macros"_ustr))
-                    {
-                        // Let user know that macros won't be saved in this format
-                        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
-                                nullptr,
-                                VclMessageType::Warning, VclButtonsType::OkCancel,
-                                SwResId(STR_CANT_SAVE_MACROS))
-                        );
-                        if (xBox->run() == RET_CANCEL)
-                            return false;
-                    }
-                }
+                // Let user know that macros won't be saved in this format
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                        nullptr,
+                        VclMessageType::Warning, VclButtonsType::OkCancel,
+                        SwResId(STR_CANT_SAVE_MACROS))
+                );
+                if (xBox->run() == RET_CANCEL)
+                    return false;
             }
         }
     }
