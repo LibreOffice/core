@@ -498,16 +498,6 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 xVDev->EnableMapMode( false );
 
                                 AlphaMask aAlpha(xVDev->GetBitmap(Point(), xVDev->GetOutputSizePixel()));
-                                const AlphaMask& aPaintAlpha(aPaint.GetAlphaMask());
-                                // The alpha mask is inverted from what is
-                                // expected so invert it again. To test this
-                                // code, export to PDF the transparent shapes,
-                                // gradients, and images in the documents
-                                // attached to the following bug reports:
-                                //   https://bugs.documentfoundation.org/show_bug.cgi?id=155912
-                                //   https://bugs.documentfoundation.org/show_bug.cgi?id=156630
-                                aAlpha.Invert(); // convert to alpha
-                                aAlpha.BlendWith(aPaintAlpha);
 #if HAVE_FEATURE_SKIA
 #if OSL_DEBUG_LEVEL > 0
                                 // In release builds, we always invert
@@ -525,6 +515,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                     //   https://bugs.documentfoundation.org/attachment.cgi?id=188084
                                     aAlpha.Invert(); // convert to alpha
                                 }
+                                aAlpha.BlendWith(aPaint.GetAlphaMask());
 
                                 xVDev.disposeAndClear();
 
@@ -773,22 +764,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case MetaActionType::BMPEX:
                 {
                     const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction*>(pAction);
-
-                    // The alpha mask is inverted from what is
-                    // expected so invert it again. To test this
-                    // code, export to PDF the transparent shapes,
-                    // gradients, and images in the documents
-                    // attached to the following bug reports:
-                    //   https://bugs.documentfoundation.org/show_bug.cgi?id=155912
-                    //   https://bugs.documentfoundation.org/show_bug.cgi?id=156630
                     BitmapEx aBitmapEx( pA->GetBitmapEx() );
-                    if ( aBitmapEx.IsAlpha())
-                    {
-                        AlphaMask aAlpha = aBitmapEx.GetAlphaMask();
-                        aAlpha.Invert();
-                        aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aAlpha);
-                    }
-
                     Size aSize( OutputDevice::LogicToLogic( aBitmapEx.GetPrefSize(),
                             aBitmapEx.GetPrefMapMode(), pDummyVDev->GetMapMode() ) );
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
@@ -799,22 +775,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case MetaActionType::BMPEXSCALE:
                 {
                     const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
-
-                    // The alpha mask is inverted from what is
-                    // expected so invert it again. To test this
-                    // code, export to PDF the transparent shapes,
-                    // gradients, and images in the documents
-                    // attached to the following bug reports:
-                    //   https://bugs.documentfoundation.org/show_bug.cgi?id=155912
-                    //   https://bugs.documentfoundation.org/show_bug.cgi?id=156630
                     BitmapEx aBitmapEx( pA->GetBitmapEx() );
-                    if ( aBitmapEx.IsAlpha())
-                    {
-                        AlphaMask aAlpha = aBitmapEx.GetAlphaMask();
-                        aAlpha.Invert();
-                        aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aAlpha);
-                    }
-
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
                     implWriteBitmapEx( pA->GetPoint(), pA->GetSize(), aBitmapEx, aGraphic, pDummyVDev, i_rContext );
                 }
@@ -824,21 +785,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 {
                     const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
 
-                    // The alpha mask is inverted from what is
-                    // expected so invert it again. To test this
-                    // code, export to PDF the transparent shapes,
-                    // gradients, and images in the documents
-                    // attached to the following bug reports:
-                    //   https://bugs.documentfoundation.org/show_bug.cgi?id=155912
-                    //   https://bugs.documentfoundation.org/show_bug.cgi?id=156630
                     BitmapEx aBitmapEx( pA->GetBitmapEx() );
-                    if ( aBitmapEx.IsAlpha())
-                    {
-                        AlphaMask aAlpha = aBitmapEx.GetAlphaMask();
-                        aAlpha.Invert();
-                        aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aAlpha);
-                    }
-
                     aBitmapEx.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
                     implWriteBitmapEx( pA->GetDestPoint(), pA->GetDestSize(), aBitmapEx, aGraphic, pDummyVDev, i_rContext );

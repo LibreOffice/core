@@ -2627,16 +2627,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
                                        StreamMode::READ);
                 vcl::PngImageReader aReader(aStream);
 
-                // When rendering an image with an alpha mask during PDF
-                // export, the alpha mask needs to be inverted
                 BitmapEx aBitmapEx = aReader.read();
-                if ( aBitmapEx.IsAlpha())
-                {
-                    AlphaMask aAlpha = aBitmapEx.GetAlphaMask();
-                    aAlpha.Invert();
-                    aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aAlpha);
-                }
-
                 const BitmapEmit& rBitmapEmit = createBitmapEmit(aBitmapEx, Graphic(),
                                                                  aUsedBitmaps, aResourceDict,
                                                                  aOutputStreams);
@@ -9182,9 +9173,7 @@ void PDFWriterImpl::writeJPG( const JPGEmit& rObject )
         return;
 
     if( nMaskObject )
-    {
         writeBitmapMaskObject( nMaskObject, rObject.m_aAlphaMask );
-    }
 
     writeReferenceXObject(rObject.m_aReferenceXObject);
 }
@@ -9792,9 +9781,7 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject )
     if (!writeBuffer(aLine)) return false;
 
     if( nMaskObject )
-    {
         return writeBitmapMaskObject( nMaskObject, rObject.m_aBitmap.GetAlphaMask() );
-    }
 
     writeReferenceXObject(rObject.m_aReferenceXObject);
 
@@ -9858,9 +9845,15 @@ bool PDFWriterImpl::writeBitmapMaskObject( sal_Int32 nMaskObject, const AlphaMas
     BitmapScopedReadAccess pAccess(aBitmap);
     //With PDF bitmaps, each row is padded to a BYTE boundary (multiple of 8 bits).
     const int nScanLineBytes = ((pAccess->GetBitCount() * pAccess->Width()) + 7U) / 8U;
+    // we have alpha, but we want to output transparency, so we need to invert the data
+    std::unique_ptr<sal_uInt8[]> pInvertedBytes = std::make_unique<sal_uInt8[]>(nScanLineBytes);
     for( tools::Long i = 0; i < pAccess->Height(); i++ )
     {
-        if (!writeBufferBytes(pAccess->GetScanline(i), nScanLineBytes))
+        const Scanline pScanline = pAccess->GetScanline(i);
+        std::copy(pScanline, pScanline + nScanLineBytes, pInvertedBytes.get());
+        for (auto p = pInvertedBytes.get(); p < pInvertedBytes.get() + nScanLineBytes; ++p)
+            *p = ~(*p);
+        if (!writeBufferBytes(pInvertedBytes.get(), nScanLineBytes))
             return false;
     }
     endCompression();
