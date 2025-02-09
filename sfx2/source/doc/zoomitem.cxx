@@ -32,7 +32,7 @@ SfxPoolItem* SvxZoomItem::CreateDefault() { return new SvxZoomItem; }
 constexpr OUString ZOOM_PARAM_VALUE = u"Value"_ustr;
 constexpr OUString ZOOM_PARAM_VALUESET = u"ValueSet"_ustr;
 constexpr OUString ZOOM_PARAM_TYPE = u"Type"_ustr;
-#define ZOOM_PARAMS         3
+constexpr auto ZOOM_PARAMS = 3;
 
 
 SvxZoomItem::SvxZoomItem
