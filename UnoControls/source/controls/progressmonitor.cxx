@@ -604,12 +604,12 @@ void ProgressMonitor::impl_recalcLayout ()
     css::uno::Reference< XWindow >  xRef_Text_Bottom      ( m_xText_Bottom    , UNO_QUERY );
     css::uno::Reference< XWindow >  xRef_Button           ( m_xButton         , UNO_QUERY );
 
-    xRef_Topic_Top->setPosSize    ( nDx+nX_Topic_Top    , nDy+nY_Topic_Top    , nWidth_Topic_Top    , nHeight_Topic_Top    , 15 );
-    xRef_Text_Top->setPosSize     ( nDx+nX_Text_Top     , nDy+nY_Text_Top     , nWidth_Text_Top     , nHeight_Text_Top     , 15 );
-    xRef_Topic_Bottom->setPosSize ( nDx+nX_Topic_Bottom , nDy+nY_Topic_Bottom , nWidth_Topic_Bottom , nHeight_Topic_Bottom , 15 );
-    xRef_Text_Bottom->setPosSize  ( nDx+nX_Text_Bottom  , nDy+nY_Text_Bottom  , nWidth_Text_Bottom  , nHeight_Text_Bottom  , 15 );
-    xRef_Button->setPosSize       ( nDx+nX_Button       , nDy+nY_Button       , nWidth_Button       , nHeight_Button       , 15 );
-    m_xProgressBar->setPosSize( nDx+nX_ProgressBar, nDy+nY_ProgressBar, nWidth_ProgressBar, nHeight_ProgressBar, 15 );
+    xRef_Topic_Top->setPosSize    ( nDx+nX_Topic_Top    , nDy+nY_Topic_Top    , nWidth_Topic_Top    , nHeight_Topic_Top    , PosSize::POSSIZE );
+    xRef_Text_Top->setPosSize     ( nDx+nX_Text_Top     , nDy+nY_Text_Top     , nWidth_Text_Top     , nHeight_Text_Top     , PosSize::POSSIZE );
+    xRef_Topic_Bottom->setPosSize ( nDx+nX_Topic_Bottom , nDy+nY_Topic_Bottom , nWidth_Topic_Bottom , nHeight_Topic_Bottom , PosSize::POSSIZE );
+    xRef_Text_Bottom->setPosSize  ( nDx+nX_Text_Bottom  , nDy+nY_Text_Bottom  , nWidth_Text_Bottom  , nHeight_Text_Bottom  , PosSize::POSSIZE );
+    xRef_Button->setPosSize       ( nDx+nX_Button       , nDy+nY_Button       , nWidth_Button       , nHeight_Button       , PosSize::POSSIZE );
+    m_xProgressBar->setPosSize    ( nDx+nX_ProgressBar  , nDy+nY_ProgressBar  , nWidth_ProgressBar  , nHeight_ProgressBar  , PosSize::POSSIZE );
 
     m_a3DLine.X      = nDx+nX_Topic_Top;
     m_a3DLine.Y      = nDy+nY_Topic_Bottom+nHeight_Topic_Bottom+(PROGRESSMONITOR_FREEBORDER/2);
