@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_SKIA_OSX_GDIIMPL_HXX
-#define INCLUDED_VCL_INC_SKIA_OSX_GDIIMPL_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -51,7 +50,5 @@ private:
     virtual void flushSurfaceToWindowContext() override;
     static inline sk_sp<SkFontMgr> fontManager;
 };
-
-#endif // INCLUDED_VCL_INC_SKIA_OSX_GDIIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
