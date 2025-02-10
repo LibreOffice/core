@@ -4461,7 +4461,7 @@ SfxVoidItem ResetAttributes SID_CELL_FORMAT_RESET
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
