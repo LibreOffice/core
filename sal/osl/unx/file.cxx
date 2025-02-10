@@ -62,8 +62,9 @@
 #include <android/log.h>
 #include <android/asset_manager.h>
 #include <o3tl/string_view.hxx>
-#include <vector>
 #endif
+
+#include <vector>
 
 #ifdef LINUX
 #include <sys/vfs.h>
