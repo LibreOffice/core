@@ -805,7 +805,7 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
             aSysTextColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
         }
 
-        if (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current())
+        if (SfxViewShell::Current())
         {
             if (aBackColor.IsDark())
                 aColor = COL_WHITE;
