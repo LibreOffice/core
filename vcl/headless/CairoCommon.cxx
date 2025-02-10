@@ -1814,26 +1814,15 @@ void CairoCommon::drawMask(const SalTwoRect& rTR, const SalBitmap& rSalBitmap, C
     }
     sal_Int32 nStride;
     unsigned char* mask_data = aSurface.getBits(nStride);
-#if !ENABLE_WASM_STRIP_PREMULTIPLY
-    vcl::bitmap::lookup_table const& unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
-#endif
     for (tools::Long y = rTR.mnSrcY; y < rTR.mnSrcY + rTR.mnSrcHeight; ++y)
     {
         unsigned char* row = mask_data + (nStride * y);
         unsigned char* data = row + (rTR.mnSrcX * 4);
         for (tools::Long x = rTR.mnSrcX; x < rTR.mnSrcX + rTR.mnSrcWidth; ++x)
         {
-            sal_uInt8 a = data[SVP_CAIRO_ALPHA];
-#if ENABLE_WASM_STRIP_PREMULTIPLY
-            sal_uInt8 b = vcl::bitmap::unpremultiply(data[SVP_CAIRO_BLUE], a);
-            sal_uInt8 g = vcl::bitmap::unpremultiply(data[SVP_CAIRO_GREEN], a);
-            sal_uInt8 r = vcl::bitmap::unpremultiply(data[SVP_CAIRO_RED], a);
-#else
-            sal_uInt8 b = unpremultiply_table[a][data[SVP_CAIRO_BLUE]];
-            sal_uInt8 g = unpremultiply_table[a][data[SVP_CAIRO_GREEN]];
-            sal_uInt8 r = unpremultiply_table[a][data[SVP_CAIRO_RED]];
-#endif
-            if (r == 0 && g == 0 && b == 0)
+            // Don't need to unpremultiply the data here, because we are checking for zero,
+            // and that is the same multiplied or un-multiplied.
+            if (data[SVP_CAIRO_RED] == 0 && data[SVP_CAIRO_GREEN] == 0 && data[SVP_CAIRO_BLUE] == 0)
             {
                 data[0] = nMaskColor.GetBlue();
                 data[1] = nMaskColor.GetGreen();
