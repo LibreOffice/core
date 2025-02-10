@@ -47,8 +47,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
-constexpr SvLBoxTabFlags MYTABMASK =
-    SvLBoxTabFlags::ADJUST_RIGHT | SvLBoxTabFlags::ADJUST_LEFT | SvLBoxTabFlags::ADJUST_CENTER | SvLBoxTabFlags::FORCE;
+constexpr SvLBoxTabFlags MYTABMASK = SvLBoxTabFlags::ADJUST_FLAGS | SvLBoxTabFlags::FORCE;
 
 namespace {
     OString lcl_extractPngString(const BitmapEx& rImage)
@@ -497,7 +496,7 @@ void SvTabListBox::SetTabAlignCenter(sal_uInt16 nTab)
         return;
     SvLBoxTab& rTab = mvTabList[ nTab ];
     SvLBoxTabFlags nFlags = rTab.nFlags;
-    nFlags &= ~MYTABMASK;
+    nFlags &= ~SvLBoxTabFlags::ADJUST_FLAGS;
     // see SvLBoxTab::CalcOffset for force, which only matters for centering
     nFlags |= SvLBoxTabFlags::ADJUST_CENTER | SvLBoxTabFlags::FORCE;
     rTab.nFlags = nFlags;
