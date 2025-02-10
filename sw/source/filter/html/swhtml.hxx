@@ -1031,17 +1031,24 @@ inline bool SwHTMLParser::HasStyleOptions( std::u16string_view rStyle,
 
 class SwTextFootnote;
 
+
+namespace {
+    SwFormatFootnote* GetFormatFootnote(SwTextFootnote* pTextFootnote)
+    {
+        return pTextFootnote ? &static_cast<SwFormatFootnote&>(pTextFootnote->GetAttr()) : nullptr;
+    }
+}
 class SwHTMLTextFootnote
 {
 private:
     OUString m_sName;
     SwTextFootnote* m_pTextFootnote;
-    std::unique_ptr<SvtDeleteListener> m_xDeleteListener;
+    sw::WeakBroadcastingPtr<SwFormatFootnote> m_pFormatFootnote;
 public:
     SwHTMLTextFootnote(OUString rName, SwTextFootnote* pInTextFootnote)
         : m_sName(std::move(rName))
         , m_pTextFootnote(pInTextFootnote)
-        , m_xDeleteListener(new SvtDeleteListener(static_cast<SwFormatFootnote&>(pInTextFootnote->GetAttr())))
+        , m_pFormatFootnote(sw::WeakBroadcastingPtr<SwFormatFootnote>(GetFormatFootnote(pInTextFootnote)))
     {
     }
     const OUString& GetName() const
@@ -1050,7 +1057,7 @@ public:
     }
     const SwNodeIndex* GetStartNode() const
     {
-        if (m_xDeleteListener->WasDeleted())
+        if(!m_pFormatFootnote)
             return nullptr;
         return m_pTextFootnote->GetStartNode();
     }

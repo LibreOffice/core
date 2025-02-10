@@ -81,7 +81,7 @@ public:
         , m_pFormatFootnote(pFootnote)
     {
         if (m_pFormatFootnote)
-            StartListening(*m_pFormatFootnote);
+            StartListening(m_pFormatFootnote->GetNotifier());
     }
 
     const SwFormatFootnote* GetFootnoteFormat() const {
@@ -324,7 +324,7 @@ SwXFootnote::attach(const uno::Reference< text::XTextRange > & xTextRange)
         m_pImpl->EndListeningAll();
         SwFormatFootnote* pFootnote = const_cast<SwFormatFootnote*>(&pTextAttr->GetFootnote());
         m_pImpl->m_pFormatFootnote = pFootnote;
-        m_pImpl->StartListening(*pFootnote);
+        m_pImpl->StartListening(pFootnote->GetNotifier());
         // force creation of sequence id - is used for references
         if (pNewDoc->IsInReading())
         {

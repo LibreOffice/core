@@ -251,15 +251,15 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
 
         SwFormatFootnote& rFormatFootnote = static_cast<SwFormatFootnote&>(pFN->GetAttr());
 
-        SvtDeleteListener aDeleteListener(rFormatFootnote);
+        sw::WeakBroadcastingPtr<SwFormatFootnote> pWeakFormatFootnote(&rFormatFootnote);
 
         // read content of Ft-/End-Note
         Read_HdFtFootnoteText( pSttIdx, rDesc.mnStartCp, rDesc.mnLen, rDesc.meType);
 
         m_bFootnoteEdn = bOld;
 
-        SAL_WARN_IF(aDeleteListener.WasDeleted(), "sw.ww8", "Footnode deleted during its import");
-        if (!aDeleteListener.WasDeleted())
+        SAL_WARN_IF(!pWeakFormatFootnote, "sw.ww8", "Footnode deleted during its import");
+        if (pWeakFormatFootnote)
         {
             bFtEdOk = true;
 
@@ -2753,7 +2753,7 @@ void WW8TabDesc::FinishSwTable()
     m_pIo->m_oLastAnchorPos.reset();
 
     SwTableNode* pTableNode = m_pTable->GetTableNode();
-    SwDeleteListener aListener(*pTableNode);
+    sw::WeakBroadcastingPtr pWeakTableNode(pTableNode);
     m_pIo->m_xRedlineStack = std::move(mxOldRedlineStack);
 
     if (xLastAnchorCursor)
@@ -2772,7 +2772,7 @@ void WW8TabDesc::FinishSwTable()
 
     m_pIo->m_aInsertedTables.InsertTable(*m_pTableNd, *m_pIo->m_pPaM);
 
-    if (aListener.WasDeleted())
+    if (pTableNode && !pWeakTableNode)
         throw std::runtime_error("table unexpectedly destroyed by applying redlines");
 
     MergeCells();

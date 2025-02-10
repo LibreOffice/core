@@ -61,35 +61,32 @@ std::unique_ptr<PanelLayout> WriterInspectorTextPanel::Create(weld::Widget* pPar
     return std::make_unique<WriterInspectorTextPanel>(pParent);
 }
 
-WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent)
-    : InspectorTextPanel(pParent)
-    , m_nParIdx(0)
+namespace
+{
+SwWrtShell* GetWrtShell()
 {
     SwDocShell* pDocSh = dynamic_cast<SwDocShell*>(SfxObjectShell::Current());
-    m_pShell = pDocSh ? pDocSh->GetWrtShell() : nullptr;
+    return pDocSh ? pDocSh->GetWrtShell() : nullptr;
+}
+}
+WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent)
+    : InspectorTextPanel(pParent)
+    , m_pShell(GetWrtShell())
+    , m_nParIdx(0)
+{
     if (m_pShell)
     {
         m_oldLink = m_pShell->GetChgLnk();
         m_pShell->SetChgLnk(LINK(this, WriterInspectorTextPanel, AttrChangedNotify));
-
-        // tdf#154629 listen to know if the shell destructs before this panel does,
-        // which can happen on entering print preview
-        m_pShell->Add(*this);
     }
 
     // Update panel on start
     std::vector<svx::sidebar::TreeNode> aStore;
+    SwDocShell* pDocSh = dynamic_cast<SwDocShell*>(SfxObjectShell::Current());
     SwEditShell* pEditSh = pDocSh ? pDocSh->GetDoc()->GetEditShell() : nullptr;
     if (pEditSh && pEditSh->GetCursor()->GetPointNode().GetTextNode())
         UpdateTree(*pDocSh, *pEditSh, aStore, m_nParIdx);
     updateEntries(aStore, m_nParIdx);
-}
-
-void WriterInspectorTextPanel::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
-{
-    if (rHint.GetId() == SfxHintId::SwObjectDying)
-        m_pShell = nullptr;
-    SwClient::SwClientNotify(rModify, rHint);
 }
 
 WriterInspectorTextPanel::~WriterInspectorTextPanel()
@@ -97,7 +94,6 @@ WriterInspectorTextPanel::~WriterInspectorTextPanel()
     if (m_pShell)
     {
         m_pShell->SetChgLnk(m_oldLink);
-        m_pShell->Remove(*this);
     }
 }
 

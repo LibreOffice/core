@@ -44,7 +44,7 @@ class SwXTextRange;
 /// for the footnote content is defined by m_pTextAttr.
 class SW_DLLPUBLIC SwFormatFootnote final
     : public SfxPoolItem
-    , public SvtBroadcaster
+    , public sw::BroadcasterMixin
 {
     friend class SwTextFootnote;
     SwTextFootnote* m_pTextAttr;   ///< My TextAttribute.

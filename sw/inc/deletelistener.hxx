@@ -13,57 +13,49 @@
 #include <svl/lstner.hxx>
 #include "calbck.hxx"
 
-class SwDeleteListener final : public SwClient
+namespace sw
+{
+template <typename T> class WeakBroadcastingPtr final : public SvtListener
 {
 private:
-    SwModify* m_pModify;
-
-    virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override
+    T* m_pBroadcasting;
+    void StartListeningIfNonnull()
     {
-        if (rHint.GetId() == SfxHintId::SwObjectDying)
-        {
-            m_pModify->Remove(*this);
-            m_pModify = nullptr;
-        }
+        if (m_pBroadcasting)
+            StartListening(m_pBroadcasting->GetNotifier());
     }
 
 public:
-    SwDeleteListener(SwModify& rModify)
-        : m_pModify(&rModify)
+    WeakBroadcastingPtr(T* pBroadcasting)
+        : m_pBroadcasting(pBroadcasting)
     {
-        m_pModify->Add(*this);
+        StartListeningIfNonnull();
     }
-
-    bool WasDeleted() const { return !m_pModify; }
-
-    virtual ~SwDeleteListener() override
+    WeakBroadcastingPtr(const WeakBroadcastingPtr& rOther)
+        : m_pBroadcasting(rOther.m_pBroadcasting)
     {
-        if (!m_pModify)
-            return;
-        m_pModify->Remove(*this);
+        StartListeningIfNonnull();
     }
-};
-
-class SvtDeleteListener final : public SvtListener
-{
-private:
-    bool m_bObjectDeleted;
-
-public:
-    explicit SvtDeleteListener(SvtBroadcaster& rNotifier)
-        : m_bObjectDeleted(false)
+    WeakBroadcastingPtr& operator=(const WeakBroadcastingPtr& rOther)
     {
-        StartListening(rNotifier);
+        if (m_pBroadcasting)
+            EndListening(m_pBroadcasting->GetNotifier());
+        m_pBroadcasting = rOther.m_pBroadcasting;
+        StartListeningIfNonnull();
+        return *this;
     }
 
     virtual void Notify(const SfxHint& rHint) override
     {
         if (rHint.GetId() == SfxHintId::Dying)
-            m_bObjectDeleted = true;
+            m_pBroadcasting = nullptr;
     }
 
-    bool WasDeleted() const { return m_bObjectDeleted; }
+    T* operator->() { return m_pBroadcasting; }
+    T& operator*() { return *m_pBroadcasting; }
+    explicit operator bool() const { return m_pBroadcasting; }
 };
+}
 
 class SfxDeleteListener final : public SfxListener
 {

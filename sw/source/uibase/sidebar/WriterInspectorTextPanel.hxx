@@ -20,12 +20,13 @@
 
 #include <svx/sidebar/InspectorTextPanel.hxx>
 #include <calbck.hxx>
+#include <deletelistener.hxx>
 
 class SwWrtShell;
 
 namespace sw::sidebar
 {
-class WriterInspectorTextPanel final : public svx::sidebar::InspectorTextPanel, public SwClient
+class WriterInspectorTextPanel final : public svx::sidebar::InspectorTextPanel
 {
 public:
     static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent);
@@ -35,14 +36,12 @@ public:
     virtual ~WriterInspectorTextPanel() override;
 
 private:
-    SwWrtShell* m_pShell;
+    sw::WeakBroadcastingPtr<SwWrtShell> m_pShell;
     Link<LinkParamNone*, void> m_oldLink;
     sal_Int32 m_nParIdx; // count optional metadata tree items to collapse default paragraph styles
 
     // attributes have changed
     DECL_LINK(AttrChangedNotify, LinkParamNone*, void);
-
-    virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 };
 
 } // end of namespace svx::sidebar
