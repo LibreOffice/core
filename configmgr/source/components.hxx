@@ -98,6 +98,8 @@ public:
     css::beans::Optional< css::uno::Any >
     getExternalValue(std::u16string_view descriptor);
 
+    osl::Mutex & getLock() const { return *lock_; }
+
 private:
     Components(const Components&) = delete;
     Components& operator=(const Components&) = delete;

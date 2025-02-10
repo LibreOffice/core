@@ -204,7 +204,6 @@ void Components::WriteThread::execute() {
         }
         delayOrTerminate_.wait(std::chrono::seconds(1));
             // must not throw; result_error is harmless and ignored
-        osl::MutexGuard g(*lock_); // must not throw
         try {
             try {
                 writeModFile(components_, url_, data_);
