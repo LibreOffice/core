@@ -1364,6 +1364,9 @@ void SvTreeListBox::Resize()
     pImpl->ShowCursor( true );
 }
 
+
+namespace {
+
 /* Cases:
 
    A) entries have bitmaps
@@ -1377,11 +1380,15 @@ void SvTreeListBox::Resize()
        2. node buttons (can optionally also be on root items) + CheckButton
        3. CheckButton
 */
+enum class TreeListButtonType
+{
+    NO_BUTTONS,
+    NODE_BUTTONS,
+    NODE_AND_CHECK_BUTTONS,
+    CHECK_BUTTONS,
+};
 
-#define NO_BUTTONS              0
-#define NODE_BUTTONS            1
-#define NODE_AND_CHECK_BUTTONS  2
-#define CHECK_BUTTONS           3
+}
 
 #define TABFLAGS_TEXT (SvLBoxTabFlags::DYNAMIC |        \
                        SvLBoxTabFlags::ADJUST_LEFT |    \
@@ -1421,23 +1428,23 @@ void SvTreeListBox::SetTabs()
 
     ClearTabList();
 
-    int nCase = NO_BUTTONS;
+    TreeListButtonType eButtonType = TreeListButtonType::NO_BUTTONS;
     if( !(nTreeFlags & SvTreeFlags::CHKBTN) )
     {
         if( bHasButtons )
-            nCase = NODE_BUTTONS;
+            eButtonType = TreeListButtonType::NODE_BUTTONS;
     }
     else
     {
         if( bHasButtons )
-            nCase = NODE_AND_CHECK_BUTTONS;
+            eButtonType = TreeListButtonType::NODE_AND_CHECK_BUTTONS;
         else
-            nCase = CHECK_BUTTONS;
+            eButtonType = TreeListButtonType::CHECK_BUTTONS;
     }
 
-    switch( nCase )
+    switch(eButtonType)
     {
-        case NO_BUTTONS :
+        case TreeListButtonType::NO_BUTTONS:
             nStartPos += nContextWidthDIV2;  // because of centering
             AddTab( nStartPos, TABFLAGS_CONTEXTBMP );
             nStartPos += nContextWidthDIV2;  // right edge of context bitmap
@@ -1447,7 +1454,7 @@ void SvTreeListBox::SetTabs()
             AddTab( nStartPos, TABFLAGS_TEXT );
             break;
 
-        case NODE_BUTTONS :
+        case TreeListButtonType::NODE_BUTTONS:
             if( bHasButtonsAtRoot )
                 nStartPos += ( nIndent + (nNodeWidthPixel/2) );
             else
@@ -1463,7 +1470,7 @@ void SvTreeListBox::SetTabs()
             AddTab( nStartPos, TABFLAGS_TEXT );
             break;
 
-        case NODE_AND_CHECK_BUTTONS :
+        case TreeListButtonType::NODE_AND_CHECK_BUTTONS:
             if( bHasButtonsAtRoot )
                 nStartPos += ( nIndent + nNodeWidthPixel );
             else
@@ -1480,7 +1487,7 @@ void SvTreeListBox::SetTabs()
             AddTab( nStartPos, TABFLAGS_TEXT );
             break;
 
-        case CHECK_BUTTONS :
+        case TreeListButtonType::CHECK_BUTTONS:
             nStartPos += nCheckWidthDIV2;
             AddTab( nStartPos, TABFLAGS_CHECKBTN );
             nStartPos += nCheckWidthDIV2;  // right edge of CheckButton
