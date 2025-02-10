@@ -1993,17 +1993,6 @@ void XclImpXFRangeBuffer::Finalize()
     ScDocument& rDoc = rDocImport.getDoc();
     SCTAB nScTab = GetCurrScTab();
 
-    // apply row styles
-    for( SCROW nScRow = 0; nScRow < static_cast<SCROW>(maRows.size()); ++nScRow )
-    {
-        if (!maRows[nScRow])
-            continue;
-        sal_uInt16 nXFIndex = *maRows[nScRow];
-        for( SCCOL nScCol = 0; nScCol < static_cast<SCCOL>(maColumns.size()); ++nScCol )
-            if (maColumns[nScCol])
-                SetXF( ScAddress( nScCol, nScRow, 0 ), nXFIndex, xlXFModeRow );
-    }
-
     // apply patterns
     XclImpXFBuffer& rXFBuffer = GetXFBuffer();
     ScDocumentImport::Attrs aPendingAttrParam;
@@ -2061,6 +2050,16 @@ void XclImpXFRangeBuffer::Finalize()
     }
     if( pendingColStart != -1 )
         rDocImport.setAttrEntries(nScTab, pendingColStart, pendingColEnd, std::move(aPendingAttrParam));
+
+    // apply row styles
+    for( SCROW nScRow = 0; nScRow < static_cast<SCROW>(maRows.size()); ++nScRow )
+    {
+        if (!maRows[nScRow])
+            continue;
+        sal_uInt16 nXFIndex = *maRows[nScRow];
+        for( nScCol = 0; nScCol < static_cast<SCCOL>(maColumns.size()); ++nScCol )
+            SetXF( ScAddress( nScCol, nScRow, 0 ), nXFIndex, xlXFModeRow );
+    }
 
     // insert hyperlink cells
     for( const auto& [rXclRange, rUrl] : maHyperlinks )
