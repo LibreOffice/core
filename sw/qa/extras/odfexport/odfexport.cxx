@@ -2725,6 +2725,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129568ui)
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getProperty<Color>(xStyle, u"BackColor"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf164712)
+{
+    loadAndReload("tdf164712.odt");
+    auto xText = getParagraph(1)->getText();
+    CPPUNIT_ASSERT(xText.is());
+    auto xCursor(xText->createTextCursorByRange(getParagraph(1)));
+    CPPUNIT_ASSERT(xCursor.is());
+    uno::Reference<beans::XPropertySet> xPropertySet(xCursor, uno::UNO_QUERY);
+    Color nColor;
+    // without the fix in place, this test would have failed here
+    CPPUNIT_ASSERT(!css::uno::fromAny(xPropertySet->getPropertyValue(u"CharBackColor"_ustr), &nColor));
+}
+
 DECLARE_ODFEXPORT_TEST(testTdf132642_keepWithNextTable, "tdf132642_keepWithNextTable.odt")
 {
     // Since the row is very big, it should split over two pages.
