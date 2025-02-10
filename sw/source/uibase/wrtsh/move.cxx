@@ -85,7 +85,7 @@ void SwWrtShell::MoveCursor( bool bWithSelect )
     else
     {
         EndSelect();
-        (this->*m_fnKillSel)( nullptr, false, ScrollSizeMode::ScrollSizeDefault );
+        (this->*m_fnKillSel)( nullptr, false );
     }
 }
 
@@ -505,7 +505,7 @@ bool SwWrtShell::PushCursor(SwTwips lOffset, bool bSelect)
             CallChgLnk();
         }
 
-        (this->*m_fnSetCursor)( &m_aDest, true, ScrollSizeMode::ScrollSizeDefault );
+        (this->*m_fnSetCursor)( &m_aDest, true );
 
         bDiff = aOldRect != GetCharRect();
 
@@ -546,7 +546,7 @@ bool SwWrtShell::PopCursor(bool bUpdate, bool bSelect)
             else
                 EndSelect();
 
-            (this->*m_fnSetCursor)(&m_pCursorStack->aDocPos, !m_pCursorStack->bIsFrameSel, ScrollSizeMode::ScrollSizeDefault);
+            (this->*m_fnSetCursor)(&m_pCursorStack->aDocPos, !m_pCursorStack->bIsFrameSel);
             if( m_pCursorStack->bIsFrameSel && IsObjSelectable(m_pCursorStack->aDocPos))
             {
                 HideCursor();

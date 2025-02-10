@@ -28,7 +28,6 @@
 #include <vcl/transfer.hxx>
 #include <swevent.hxx>
 #include <swtypes.hxx>
-#include <viewsh.hxx>
 
 class   SwWrtShell;
 class   SwView;
@@ -82,7 +81,6 @@ class SAL_DLLPUBLIC_RTTI SwEditWin final : public vcl::DocWindow,
     LanguageType    m_eBufferLanguage;
     Point           m_aStartPos;
     Point           m_aMovePos;
-    ScrollSizeMode  m_eScrollSizeMode;
     Point           m_aRszMvHdlPt;
     Timer           m_aTemplateTimer;
 
@@ -173,7 +171,7 @@ class SAL_DLLPUBLIC_RTTI SwEditWin final : public vcl::DocWindow,
     DECL_LINK( TemplateTimerHdl, Timer *, void );
 
     void            MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
-                                const bool bOnlyText, bool bLockView);
+                                const bool bOnlyText, bool bLockView );
 
     virtual void    DataChanged( const DataChangedEvent& ) override;
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;

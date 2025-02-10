@@ -339,29 +339,14 @@ void SwView::CheckVisArea()
 //                              within the new visible area.
 //  sal_uInt16 nRange           optional accurate indication of the
 //                              range by which to scroll if necessary.
-//  eScrollSizeMode             mouse selection should only bring the selected part
-//                              into the visible area, timer call needs increased size
 
-void SwView::CalcPt( Point *pPt, const tools::Rectangle &rRect, sal_uInt16 nRangeX,
-                    sal_uInt16 nRangeY, ScrollSizeMode eScrollSizeMode)
+void SwView::CalcPt( Point *pPt, const tools::Rectangle &rRect,
+                     sal_uInt16 nRangeX, sal_uInt16 nRangeY)
 {
 
     const SwTwips lMin = IsDocumentBorder() ? DOCUMENTBORDER : 0;
 
-    const tools::Long nDefaultYScroll = GetYScroll();
-    tools::Long nYScroll;
-    if (eScrollSizeMode != ScrollSizeMode::ScrollSizeDefault)
-    {
-        nYScroll = m_aVisArea.Top() > rRect.Top() ?
-            m_aVisArea.Top() - rRect.Top() :
-            rRect.Bottom() - m_aVisArea.Bottom();
-        if (eScrollSizeMode == ScrollSizeMode::ScrollSizeTimer)
-             nYScroll = std::min(nDefaultYScroll, nYScroll * 5);
-        else if (eScrollSizeMode == ScrollSizeMode::ScrollSizeTimer2)
-             nYScroll = 2 * nDefaultYScroll;
-    }
-    else
-        nYScroll = nDefaultYScroll;
+    tools::Long nYScroll = GetYScroll();
     tools::Long nDesHeight = rRect.GetHeight();
     tools::Long nCurHeight = m_aVisArea.GetHeight();
     nYScroll = std::min(nYScroll, nCurHeight - nDesHeight); // If it is scarce, then scroll not too much.
@@ -406,8 +391,7 @@ bool SwView::IsScroll( const tools::Rectangle &rRect ) const
     return m_bCenterCursor || m_bTopCursor || !m_aVisArea.Contains(rRect);
 }
 
-void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt16 nRangeY
-    , ScrollSizeMode eScrollSizeMode )
+void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt16 nRangeY )
 {
     if ( m_aVisArea.IsEmpty() )
         return;
@@ -479,8 +463,7 @@ void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt
 
         CalcPt( &aPt, tools::Rectangle( rRect.TopLeft(), aSize ),
                 static_cast< sal_uInt16 >((aVisSize.Width() - aSize.Width()) / 2),
-                static_cast< sal_uInt16 >((aVisSize.Height()- aSize.Height())/ 2),
-                eScrollSizeMode );
+                static_cast< sal_uInt16 >((aVisSize.Height()- aSize.Height())/ 2) );
 
         if( m_bTopCursor )
         {
@@ -497,7 +480,7 @@ void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt
     if( !m_bCenterCursor )
     {
         Point aPt( m_aVisArea.TopLeft() );
-        CalcPt( &aPt, rRect, nRangeX, nRangeY, eScrollSizeMode );
+        CalcPt( &aPt, rRect, nRangeX, nRangeY );
 
         if( m_bTopCursor )
         {

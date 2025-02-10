@@ -58,7 +58,7 @@ void SwInsFootNoteDlg::Apply()
                                m_eCharSet, RES_CHRATR_FONT );
             aSet.Put( aFont );
             m_rSh.SetAttrSet( aSet, SetAttrMode::DONTEXPAND );
-            m_rSh.ResetSelect(nullptr, false, ScrollSizeMode::ScrollSizeDefault);
+            m_rSh.ResetSelect(nullptr, false);
             m_rSh.Left(SwCursorSkipMode::Chars, false, 1, false );
         }
         m_rSh.EndUndo( SwUndoId::END );
@@ -138,7 +138,7 @@ IMPL_LINK( SwInsFootNoteDlg, NextPrevHdl, weld::Button&, rBtn, void )
     Apply();
 
     // go to the next foot/endnote here
-    m_rSh.ResetSelect(nullptr, false, ScrollSizeMode::ScrollSizeDefault);
+    m_rSh.ResetSelect(nullptr, false);
     if (&rBtn == m_xNextBT.get())
         m_rSh.GotoNextFootnoteAnchor();
     else
@@ -188,7 +188,7 @@ SwInsFootNoteDlg::~SwInsFootNoteDlg() COVERITY_NOEXCEPT_FALSE
     SwViewShell::SetCareDialog(nullptr);
 
     if (m_bEdit)
-        m_rSh.ResetSelect(nullptr, false, ScrollSizeMode::ScrollSizeDefault);
+        m_rSh.ResetSelect(nullptr, false);
 }
 
 void SwInsFootNoteDlg::Init()

@@ -646,7 +646,7 @@ const SwRect& SwViewShell::VisArea() const
     return comphelper::LibreOfficeKit::isActive()? GetLayout()->getFrameArea(): maVisArea;
 }
 
-void SwViewShell::MakeVisible( const SwRect &rRect, ScrollSizeMode eScrollSizeMode )
+void SwViewShell::MakeVisible( const SwRect &rRect )
 {
     if ( !(!VisArea().Contains( rRect ) || IsScrollMDI( this, rRect ) || GetCareDialog(*this)) )
         return;
@@ -662,7 +662,7 @@ void SwViewShell::MakeVisible( const SwRect &rRect, ScrollSizeMode eScrollSizeMo
         do{
             nOldH = pRoot->getFrameArea().Height();
             StartAction();
-            ScrollMDI( this, rRect, USHRT_MAX, USHRT_MAX, eScrollSizeMode );
+            ScrollMDI( this, rRect, USHRT_MAX, USHRT_MAX );
             EndAction();
         } while( nOldH != pRoot->getFrameArea().Height() && nLoopCnt-- );
     }

@@ -679,7 +679,7 @@ IMPL_LINK_NOARG(SwEditWin, TimerHandler, Timer *, void)
             rSh.SelectTableRowCol( *m_xRowColumnSelectionStart, &aPos, m_bIsRowDrag );
         }
         else
-            rSh.CallSetCursor( &aModPt, false, m_eScrollSizeMode );
+            rSh.CallSetCursor( &aModPt, false );
 
         // It can be that a "jump" over a table cannot be accomplished like
         // that. So we jump over the table by Up/Down here.
@@ -703,20 +703,15 @@ void SwEditWin::JustifyAreaTimer()
 {
     const tools::Rectangle &rVisArea = GetView().GetVisArea();
 #ifdef UNX
-    const tools::Long coMinLen = 40;
+    const tools::Long coMinLen = 100;
 #else
-    const tools::Long coMinLen = 20;
+    const tools::Long coMinLen = 50;
 #endif
     tools::Long const nTimeout = 800,
          nDiff = std::max(
          std::max( m_aMovePos.Y() - rVisArea.Bottom(), rVisArea.Top() - m_aMovePos.Y() ),
          std::max( m_aMovePos.X() - rVisArea.Right(),  rVisArea.Left() - m_aMovePos.X()));
-    m_aTimer.SetTimeout( std::max( coMinLen, nTimeout - nDiff) );
-    m_eScrollSizeMode = m_aTimer.GetTimeout() < 100 ?
-        ScrollSizeMode::ScrollSizeTimer2 :
-        m_aTimer.GetTimeout() < 400 ?
-            ScrollSizeMode::ScrollSizeTimer :
-            ScrollSizeMode::ScrollSizeMouseSelection;
+    m_aTimer.SetTimeout( std::max( coMinLen, nTimeout - nDiff*2L) );
 }
 
 void SwEditWin::LeaveArea(const Point &rPos)
@@ -3958,7 +3953,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                 if ( !bOverSelect || rSh.IsInSelect() )
                 {
-                    MoveCursor( rSh, aDocPos, bOnlyText, bLockView);
+                    MoveCursor( rSh, aDocPos, bOnlyText, bLockView );
                     bCallBase = false;
                 }
                 if (!bOverURLGrf && !bExecDrawTextLink && !bOnlyText)
@@ -4542,8 +4537,8 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                           rSh.IsAddMode() ) )
                     {
                         rSh.Drag( &aDocPt, false );
-                        g_bValidCursorPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPt, false,
-                            ScrollSizeMode::ScrollSizeMouseSelection));
+
+                        g_bValidCursorPos = !(CRSR_POSCHG & rSh.CallSetCursor(&aDocPt, false));
                         EnterArea();
                     }
                 }
@@ -5460,7 +5455,6 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     m_aTimer("SwEditWin"),
     m_aKeyInputFlushTimer("SwEditWin m_aKeyInputFlushTimer"),
     m_eBufferLanguage(LANGUAGE_DONTKNOW),
-    m_eScrollSizeMode(ScrollSizeMode::ScrollSizeMouseSelection),
     m_aTemplateTimer("SwEditWin m_aTemplateTimer"),
     m_pUserMarkerObj( nullptr ),
 
@@ -6263,7 +6257,7 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         // the query against the content form doesn't work!!!
         SwMvContext aMvContext( &rSh );
         if (rSh.HasSelection())
-            rSh.ResetSelect(&aDocPos, false, ScrollSizeMode::ScrollSizeDefault);
+            rSh.ResetSelect(&aDocPos, false);
         rSh.SwCursorShell::SetCursor(aDocPos, false, /*Block=*/false, /*FieldInfo=*/true);
     }
     if( !bOverURLGrf )

@@ -31,7 +31,6 @@
 #include "swdllapi.h"
 #include "swtypes.hxx"
 #include "shellid.hxx"
-#include "viewsh.hxx"
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 
@@ -300,8 +299,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SAL_DLLPRIVATE Point         AlignToPixel(const Point& rPt) const;
     SAL_DLLPRIVATE void          CalcPt( Point* pPt,const tools::Rectangle& rRect,
                                     sal_uInt16 nRangeX,
-                                    sal_uInt16 nRangeY,
-                                    ScrollSizeMode eScrollSizeMode);
+                                    sal_uInt16 nRangeY);
 
     SAL_DLLPRIVATE bool          GetPageScrollUpOffset(SwTwips& rOff) const;
     SAL_DLLPRIVATE bool          GetPageScrollDownOffset(SwTwips& rOff) const;
@@ -446,8 +444,7 @@ public:
     bool            IsScroll(const tools::Rectangle& rRect) const;
     void            Scroll( const tools::Rectangle& rRect,
                             sal_uInt16 nRangeX = USHRT_MAX,
-                            sal_uInt16 nRangeY = USHRT_MAX,
-                            ScrollSizeMode eScrollSizeMode = ScrollSizeMode::ScrollSizeDefault);
+                            sal_uInt16 nRangeY = USHRT_MAX);
 
     tools::Long            SetVScrollMax(tools::Long lMax);
     tools::Long            SetHScrollMax(tools::Long lMax);

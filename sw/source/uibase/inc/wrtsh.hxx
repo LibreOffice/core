@@ -108,7 +108,7 @@ private:
     using SwEditShell::AutoCorrect;
     using SwCursorShell::GotoMark;
 
-    typedef tools::Long (SwWrtShell::*SELECTFUNC)(const Point *, bool bProp, ScrollSizeMode eScrollSizeMode );
+    typedef tools::Long (SwWrtShell::*SELECTFUNC)(const Point *, bool bProp );
     typedef void (SwWrtShell::*SELECTFUNC2)(const Point *, bool bProp );
 
     SELECTFUNC2 m_fnDrag      = &SwWrtShell::BeginDrag;
@@ -120,20 +120,16 @@ public:
     using SwCursorShell::GotoFootnoteAnchor;
     using SwEditShell::Insert;
 
-    tools::Long CallSetCursor(const Point* pPt, bool bProp,
-        ScrollSizeMode eScrollSizeMode = ScrollSizeMode::ScrollSizeDefault)
-        { return (this->*m_fnSetCursor)(pPt, bProp, eScrollSizeMode); }
+    tools::Long CallSetCursor(const Point* pPt, bool bProp) { return (this->*m_fnSetCursor)(pPt, bProp); }
     void Drag         (const Point* pPt, bool bProp) { (this->*m_fnDrag)(pPt, bProp); }
     void EndDrag      (const Point* pPt, bool bProp) { (this->*m_fnEndDrag)(pPt, bProp); }
-    tools::Long KillSelection(const Point* pPt, bool bProp,
-        ScrollSizeMode eScrollSizeMode = ScrollSizeMode::ScrollSizeDefault)
-        { return (this->*m_fnKillSel)(pPt, bProp, eScrollSizeMode ); }
+    tools::Long KillSelection(const Point* pPt, bool bProp) { return (this->*m_fnKillSel)(pPt, bProp); }
 
     bool IsSplitVerticalByDefault() const;
     void SetSplitVerticalByDefault(bool value);
 
     // reset all selections
-    SW_DLLPUBLIC tools::Long ResetSelect( const Point *, bool, ScrollSizeMode );
+    SW_DLLPUBLIC tools::Long ResetSelect( const Point *, bool );
 
     // resets the cursorstack after movement with PageUp/-Down if a stack is built up
     inline void ResetCursorStack();
@@ -619,11 +615,9 @@ private:
     void  ResetCursorStack_();
 
     using SwCursorShell::SetCursor;
-    tools::Long  SetCursor(const Point *, bool bProp=false,
-        ScrollSizeMode eScrollSizeMode = ScrollSizeMode::ScrollSizeDefault );
+    tools::Long  SetCursor(const Point *, bool bProp=false );
 
-    tools::Long  SetCursorKillSel(const Point *, bool bProp,
-        ScrollSizeMode eScrollSizeMode = ScrollSizeMode::ScrollSizeDefault );
+    tools::Long  SetCursorKillSel(const Point *, bool bProp );
 
     void  BeginDrag(const Point *, bool bProp );
     void  DefaultDrag(const Point *, bool bProp );
@@ -639,7 +633,7 @@ private:
 
     void  SttLeaveSelect();
     void  AddLeaveSelect();
-    tools::Long  Ignore(const Point *, bool bProp, ScrollSizeMode eScrollSizeMode = ScrollSizeMode::ScrollSizeDefault );
+    tools::Long  Ignore(const Point *, bool bProp );
 
     void  LeaveExtSel() { m_bSelWrd = m_bSelLn = false;}
 

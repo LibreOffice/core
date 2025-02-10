@@ -169,7 +169,7 @@ public:
 
     SW_DLLPUBLIC void UpdateCursor(
         sal_uInt16 eFlags = SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE,
-        bool bIdleEnd = false, ScrollSizeMode eScrollSizeMode = ScrollSizeMode::ScrollSizeDefault );
+        bool bIdleEnd = false );
 
 private:
 
@@ -421,7 +421,7 @@ public:
      *        the cursor is done in order to get at the properties under the mouse pointer.
      */
     SW_DLLPUBLIC int SetCursor(const Point& rPt, bool bOnlyText = false, bool bBlock = true,
-                  bool bFieldInfo = false, ScrollSizeMode eScrollSizeMode = ScrollSizeMode::ScrollSizeDefault);
+                  bool bFieldInfo = false);
 
     /*
      * Notification that the visible area was changed. m_aVisArea is reset, then
@@ -731,8 +731,7 @@ public:
     // Place only the visible cursor at the given position in the document.
     // Return false if SPoint was corrected by layout.
     // (This is needed for displaying the Drag&Drop/Copy-Cursor.)
-    bool SetVisibleCursor( const Point &rPt,
-        ScrollSizeMode eScrollSizeMode = ScrollSizeMode::ScrollSizeDefault );
+    bool SetVisibleCursor( const Point &rPt );
     inline void UnSetVisibleCursor();
     SW_DLLPUBLIC SwVisibleCursor* GetVisibleCursor() const;
 
@@ -814,7 +813,7 @@ public:
     bool GotoRegion( std::u16string_view rName );
 
     // show the current selection
-    virtual void MakeSelVisible(ScrollSizeMode eScrollSizeMode = ScrollSizeMode::ScrollSizeDefault);
+    virtual void MakeSelVisible();
 
     // set the cursor to a NOT protected/hidden node
     bool FindValidContentNode( bool bOnlyText );

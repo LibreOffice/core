@@ -979,7 +979,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SfxItemSetFixed<RES_CHRATR_FONT, RES_CHRATR_FONT> aSet( rWrtSh.GetAttrPool() );
                 rWrtSh.GetCurAttr( aSet );
                 rWrtSh.SetAttrSet( aSet, SetAttrMode::DONTEXPAND );
-                rWrtSh.ResetSelect(nullptr, false, ScrollSizeMode::ScrollSizeDefault);
+                rWrtSh.ResetSelect(nullptr, false);
                 rWrtSh.EndSelect();
                 rWrtSh.GotoFootnoteText();
             }

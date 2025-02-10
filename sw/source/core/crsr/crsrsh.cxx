@@ -1058,8 +1058,7 @@ bool SwCursorShell::IsInHeaderFooter( bool* pbInHeader ) const
     return nullptr != pFrame;
 }
 
-int SwCursorShell::SetCursor(const Point& rLPt, bool bOnlyText, bool bBlock,
-    bool bFieldInfo, ScrollSizeMode eScrollSizeMode)
+int SwCursorShell::SetCursor(const Point& rLPt, bool bOnlyText, bool bBlock, bool bFieldInfo)
 {
     CurrShell aCurr( this );
 
@@ -1164,7 +1163,7 @@ int SwCursorShell::SetCursor(const Point& rLPt, bool bOnlyText, bool bBlock,
 
     if( !pCursor->IsSelOvr( SwCursorSelOverFlags::ChangePos ) )
     {
-        UpdateCursor( SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE, false, eScrollSizeMode );
+        UpdateCursor( SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE );
         bRet &= ~CRSR_POSOLD;
     }
     else if( bOnlyText && !m_pCurrentCursor->HasMark() )
@@ -1922,7 +1921,7 @@ class SwNotifyAccAboutInvalidTextSelections
 }
 #endif
 
-void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMode eScrollSizeMode )
+void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 {
     CurrShell aCurr( this );
     ClearUpCursors();
@@ -2365,7 +2364,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
             // again, thus save and reset the flag here
             bool bSav = m_bSVCursorVis;
             m_bSVCursorVis = false;
-            MakeSelVisible(eScrollSizeMode);
+            MakeSelVisible();
             m_bSVCursorVis = bSav;
         }
 
@@ -3054,7 +3053,7 @@ bool SwCursorShell::ExtendSelection( bool bEnd, sal_Int32 nCount )
     @param rPt The position to move the visible cursor to.
     @return <false> if SPoint was corrected by the layout.
 */
-bool SwCursorShell::SetVisibleCursor( const Point &rPt, ScrollSizeMode eScrollSizeMode )
+bool SwCursorShell::SetVisibleCursor( const Point &rPt )
 {
     CurrShell aCurr( this );
     Point aPt( rPt );
@@ -3093,7 +3092,7 @@ bool SwCursorShell::SetVisibleCursor( const Point &rPt, ScrollSizeMode eScrollSi
     m_pVisibleCursor->Hide(); // always hide visible cursor
     if( IsScrollMDI( this, m_aCharRect ))
     {
-        MakeVisible( m_aCharRect, eScrollSizeMode );
+        MakeVisible( m_aCharRect );
         m_pCurrentCursor->Show(nullptr);
     }
 
@@ -3479,7 +3478,7 @@ size_t SwCursorShell::UpdateTableSelBoxes()
 }
 
 /// show the current selected "object"
-void SwCursorShell::MakeSelVisible(ScrollSizeMode eScrollSizeMode)
+void SwCursorShell::MakeSelVisible()
 {
     OSL_ENSURE( m_bHasFocus, "no focus but cursor should be made visible?" );
     if( m_aCursorHeight.Y() < m_aCharRect.Height() && m_aCharRect.Height() > VisArea().Height() )
@@ -3503,13 +3502,13 @@ void SwCursorShell::MakeSelVisible(ScrollSizeMode eScrollSizeMode)
     else
     {
         if( m_aCharRect.HasArea() )
-            MakeVisible( m_aCharRect, eScrollSizeMode );
+            MakeVisible( m_aCharRect );
         else
         {
             SwRect aTmp( m_aCharRect );
             aTmp.AddHeight(1 );
             aTmp.AddWidth(1 );
-            MakeVisible( aTmp, eScrollSizeMode );
+            MakeVisible( aTmp );
         }
     }
 }

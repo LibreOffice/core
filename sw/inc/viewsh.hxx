@@ -84,13 +84,6 @@ enum class LockPaintReason
     ExampleFrame
 };
 
-enum class ScrollSizeMode
-{
-    ScrollSizeDefault, //usually 30% of the visible area
-    ScrollSizeMouseSelection, //make target rectangle visible
-    ScrollSizeTimer, // increase of timer based scrolling
-    ScrollSizeTimer2 // more increase of timer based scrolling
-};
 namespace vcl
 {
     typedef OutputDevice RenderContext;
@@ -288,7 +281,7 @@ public:
     void setLOKVisibleArea(const tools::Rectangle& rArea) { maLOKVisibleArea = rArea; }
 
     // If necessary scroll until passed Rect is situated in visible sector.
-    void MakeVisible( const SwRect &, ScrollSizeMode eScrollSizeMode = ScrollSizeMode::ScrollSizeDefault );
+    void MakeVisible( const SwRect & );
 
     // At nearest occasion pass new document size to UI.
     void SizeChgNotify();

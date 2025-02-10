@@ -360,7 +360,7 @@ public:
     void SetPageObjsNewPage( std::vector<SwFrameFormat*>& rFillArr );
 
     /// Show current selection (frame / draw object as required).
-    virtual void MakeSelVisible(ScrollSizeMode eScrollSizeMode = ScrollSizeMode::ScrollSizeDefault) override;
+    virtual void MakeSelVisible() override;
 
     /** @return FrameFormat of object that may be under Point.
      Object does not become selected! */
