@@ -385,8 +385,8 @@ GLM_TARBALL := glm-1.0.1.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-GPGME_SHA256SUM := ea05d0258e71061d61716584ec34cef59330a91340571edc46b78374973ba85f
-GPGME_TARBALL := gpgme-1.24.1.tar.bz2
+GPGME_SHA256SUM := e11b1a0e361777e9e55f48a03d89096e2abf08c63d84b7017cfe1dce06639581
+GPGME_TARBALL := gpgme-1.24.2.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
