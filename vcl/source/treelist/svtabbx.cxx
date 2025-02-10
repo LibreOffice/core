@@ -226,22 +226,6 @@ void SvTabListBox::SetTabs()
     // fluff up the list with additional tabs and adjust the rightmost tab
     // of the tree listbox.
 
-    // Picking the rightmost tab.
-    // HACK for the explorer! If ViewParent != 0, the first tab of the tree
-    // listbox is calculated by the tree listbox itself! This behavior is
-    // necessary for ButtonsOnRoot, as the explorer does not know in this
-    // case, which additional offset it needs to add to the tabs in this mode
-    // -- the tree listbox knows that, though!
-    /*
-    if( !pViewParent )
-    {
-    SvLBoxTab* pFirstTab = (SvLBoxTab*)aTabs.GetObject( aTabs.Count()-1 );
-    pFirstTab->SetPos( pTabList[0].GetPos() );
-    pFirstTab->nFlags &= ~MYTABMASK;
-    pFirstTab->nFlags |= pTabList[0].nFlags;
-    }
-    */
-
     // the 1st column (index 1 or 2 depending on button flags) is always set
     // editable by SvTreeListBox::SetTabs(),
     // which prevents setting a different column to editable as the first
