@@ -34,13 +34,6 @@
 #include <memory>
 #include <vector>
 
-enum class SvTabJustify
-{
-    AdjustRight = static_cast<int>(SvLBoxTabFlags::ADJUST_RIGHT),
-    AdjustLeft = static_cast<int>(SvLBoxTabFlags::ADJUST_LEFT),
-    AdjustCenter = static_cast<int>(SvLBoxTabFlags::ADJUST_CENTER)
-};
-
 class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTabListBox : public SvTreeListBox
 {
 private:
@@ -79,7 +72,7 @@ public:
     OUString         GetCellText( sal_uInt32 nPos, sal_uInt16 nCol ) const;
     sal_uInt32       GetEntryPos( const SvTreeListEntry* pEntry ) const;
 
-    void             SetTabJustify( sal_uInt16 nTab, SvTabJustify );
+    void             SetTabAlignCenter(sal_uInt16 nTab);
     void             SetTabEditable( sal_uInt16 nTab, bool bEditable );
 
     virtual void     DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;

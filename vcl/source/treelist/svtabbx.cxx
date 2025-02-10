@@ -506,7 +506,7 @@ SvTreeListEntry* SvTabListBox::GetChildOnPos( SvTreeListEntry* _pParent, sal_uIn
     return nullptr;
 }
 
-void SvTabListBox::SetTabJustify( sal_uInt16 nTab, SvTabJustify eJustify)
+void SvTabListBox::SetTabAlignCenter(sal_uInt16 nTab)
 {
     DBG_ASSERT(nTab<mvTabList.size(),"GetTabPos:Invalid Tab");
     if( nTab >= mvTabList.size() )
@@ -515,7 +515,7 @@ void SvTabListBox::SetTabJustify( sal_uInt16 nTab, SvTabJustify eJustify)
     SvLBoxTabFlags nFlags = rTab.nFlags;
     nFlags &= ~MYTABMASK;
     // see SvLBoxTab::CalcOffset for force, which only matters for centering
-    nFlags |= static_cast<SvLBoxTabFlags>(eJustify) | SvLBoxTabFlags::FORCE;
+    nFlags |= SvLBoxTabFlags::ADJUST_CENTER | SvLBoxTabFlags::FORCE;
     rTab.nFlags = nFlags;
     SvTreeListBox::nTreeFlags |= SvTreeFlags::RECALCTABS;
     if( IsUpdateMode() )

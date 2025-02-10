@@ -3969,10 +3969,7 @@ void SalInstanceTreeView::set_column_editables(const std::vector<bool>& rEditabl
         m_xTreeView->SetTabEditable(i, rEditables[i]);
 }
 
-void SalInstanceTreeView::set_centered_column(int nCol)
-{
-    m_xTreeView->SetTabJustify(nCol, SvTabJustify::AdjustCenter);
-}
+void SalInstanceTreeView::set_centered_column(int nCol) { m_xTreeView->SetTabAlignCenter(nCol); }
 
 int SalInstanceTreeView::get_column_width(int nColumn) const
 {
