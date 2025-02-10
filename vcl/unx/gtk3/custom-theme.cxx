@@ -125,11 +125,18 @@ OString CreateStyleString()
     Color aSpinBack = aThemeColors.GetBaseColor();
     aSpinBack.SetAlpha(20);
 
-    Color aPressedColor = ThemeColors::GetThemeColors().GetWindowColor();
+    Color aPressedColor = ThemeColors::GetThemeColors().GetBaseColor();
+    Color aNotebookBorderColor = aPressedColor;
     if (aPressedColor.IsDark())
-        aPressedColor.IncreaseLuminance(30);
+    {
+        aPressedColor.DecreaseLuminance(5);
+        aNotebookBorderColor.DecreaseLuminance(20);
+    }
     else
-        aPressedColor.DecreaseLuminance(30);
+    {
+        aPressedColor.IncreaseLuminance(5);
+        aNotebookBorderColor.IncreaseLuminance(20);
+    }
 
     // clang-format off
     OUString aStr =
@@ -295,25 +302,30 @@ OString CreateStyleString()
            *************/
 
         "tabbox > tab:hover,"
+        "notebook > header tab:checked:hover,"
         "notebook > header tab:hover {"
-        "  background-color: #" + aPressedColor.AsRGBHexString() + ";"
-        "  border: 1px solid #" + aThemeColors.GetSeparatorColor().AsRGBHexString() + ";"
+        "  background-color: #" + ThemeColors::GetThemeColors().GetBaseColor().AsRGBHexString() + ";"
         "  color: #" + aThemeColors.GetWindowTextColor().AsRGBHexString() + ";"
         "}"
 
         "tabbox > tab:checked, notebook > header tab:checked {"
         "  background-color: #" + aPressedColor.AsRGBHexString() + ";"
-        "  border: 1px solid #" + aThemeColors.GetSeparatorColor().AsRGBHexString() + ";"
+        "  color: #" + aThemeColors.GetWindowTextColor().AsRGBHexString() + ";"
+        "}"
+
+        "tabbox > tab, notebook > header tab {"
         "  color: #" + aThemeColors.GetWindowTextColor().AsRGBHexString() + ";"
         "}"
 
         "notebook {"
         "  background-color: #" + aThemeColors.GetWindowColor().AsRGBHexString() + ";"
+        "  color: #" + aThemeColors.GetWindowTextColor().AsRGBHexString() + ";"
         "}"
 
         "notebook > header {"
-        "  background-color: #" + aThemeColors.GetBaseColor().AsRGBHexString() + ";"
-        "  border-color: #" + aThemeColors.GetBaseColor().AsRGBHexString() + ";"
+        "  background-color: #" + aPressedColor.AsRGBHexString() + ";"
+        "  border-color: #" + aNotebookBorderColor.AsRGBHexString() + ";"
+        "  color: #" + aThemeColors.GetWindowTextColor().AsRGBHexString() + ";"
         "}"
 
         "notebook > stack:not(:only-child) {"
@@ -522,7 +534,6 @@ OString CreateStyleString()
         "}"
 
         "button.combo:only-child:disabled {"
-        "  box-shadow: 0 0 0 2px transparent;"
         "  background-color: #" + aThemeColors.GetDisabledColor().AsRGBHexString() + ";"
         "  color: #" + aThemeColors.GetInactiveTextColor().AsRGBHexString() + ";"
         "}"
@@ -595,9 +606,11 @@ OString CreateStyleString()
         "  text-shadow: none;"
         "}"
 
+        // use default destructive color value as per libadwaita named-colors.html
+        // https://gnome.pages.gitlab.gnome.org/libadwaita/doc/1.5/named-colors.html
         "button.destructive-action:not(:disabled) {"
-        "  background-color: #f38ba8;"
-        "  color: #" + aThemeColors.GetButtonTextColor().AsRGBHexString() + ";"
+        "  background-color: #c01c28;"
+        "  color: #ffffff;"
         "}"
 
         ".view:selected {"
