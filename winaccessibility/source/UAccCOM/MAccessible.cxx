@@ -299,9 +299,13 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accChildCount(long *pcountCh
             sal_Int64 nChildCount = pRContext->getAccessibleChildCount();
             if (nChildCount > std::numeric_limits<long>::max())
             {
-                SAL_WARN("iacc2", "CMAccessible::get_accChildCount: Child count exceeds maximum long value, "
-                                  "returning max long.");
-                nChildCount = std::numeric_limits<long>::max();
+                // return error code if child count exceeds max long value
+                // (for Calc sheets which report all cells as children);
+                // tdf#153131: Windows Speech Recognition and apparently some other
+                // tools quering information via the a11y API seem to query all children unconditionally,
+                // so returning a large number (like std::numeric_limits<long>::max) would cause a freeze
+                SAL_WARN("iacc2", "CMAccessible::get_accChildCount: Child count exceeds maximum long value");
+                return S_FALSE;
             }
 
             *pcountChildren = nChildCount;
