@@ -495,7 +495,7 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
                 const SwBodyFrame* pBodyFrame = mpAnchorFrame->FindBodyFrame();
                 while (pBodyFrame && !pBodyFrame->IsPageBodyFrame())
                     pBodyFrame = pBodyFrame->GetUpper()->FindBodyFrame();
-                if (pBodyFrame)
+                if (pBodyFrame && pBodyFrame->GetUpper() == &rPageFrame) // same physical page...
                     aPgAlignArea = pBodyFrame->getFrameArea();
             }
         }
