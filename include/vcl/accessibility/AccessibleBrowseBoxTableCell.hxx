@@ -26,8 +26,7 @@
 // implementation of a table cell of BrowseBox
 class VCL_DLLPUBLIC AccessibleBrowseBoxTableCell final
     : public cppu::ImplInheritanceHelper<AccessibleBrowseBoxCell,
-                                         css::accessibility::XAccessibleText,
-                                         css::accessibility::XAccessible>,
+                                         css::accessibility::XAccessibleText>,
       public ::comphelper::OCommonAccessibleText
 {
 private:
@@ -68,12 +67,6 @@ public:
     /** Return a bitset of states of the current object.
     */
     sal_Int64 implCreateStateSet() override;
-
-    // XAccessible ------------------------------------------------------------
-
-    /** @return  The XAccessibleContext interface of this object. */
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL
-    getAccessibleContext() override;
 
     // XAccessibleText
     virtual sal_Int32 SAL_CALL getCaretPosition() override;

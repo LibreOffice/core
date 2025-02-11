@@ -38,7 +38,8 @@ using namespace ::com::sun::star::accessibility;
 AccessibleBrowseBox::AccessibleBrowseBox(
     const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
     ::vcl::IAccessibleTableProvider& _rBrowseBox)
-    : ImplInheritanceHelper(_rxParent, _rBrowseBox, nullptr, AccessibleBrowseBoxObjType::BrowseBox)
+    : AccessibleBrowseBoxBase(_rxParent, _rBrowseBox, nullptr,
+                              AccessibleBrowseBoxObjType::BrowseBox)
 {
     m_xFocusWindow.set(mpBrowseBox->GetWindowInstance()->GetComponentInterface(), css::uno::UNO_QUERY);
 }
@@ -69,16 +70,6 @@ void SAL_CALL AccessibleBrowseBox::disposing()
     }
 
     AccessibleBrowseBoxBase::disposing();
-}
-
-// css::accessibility::XAccessible
-
-Reference<css::accessibility::XAccessibleContext>
-    SAL_CALL AccessibleBrowseBox::getAccessibleContext()
-{
-    osl::MutexGuard aGuard(getMutex());
-    ensureIsAlive();
-    return this;
 }
 
 // css::accessibility::XAccessibleContext

@@ -29,8 +29,7 @@ class AccessibleBrowseBoxTable;
 
 
 /** This class represents the complete accessible BrowseBox object. */
-class VCL_DLLPUBLIC AccessibleBrowseBox
-    : public cppu::ImplInheritanceHelper<AccessibleBrowseBoxBase, css::accessibility::XAccessible>
+class VCL_DLLPUBLIC AccessibleBrowseBox : public AccessibleBrowseBoxBase
 {
 
 public:
@@ -48,10 +47,6 @@ protected:
     /** Cleans up members. */
     using AccessibleBrowseBoxBase::disposing;
     virtual void SAL_CALL disposing() override;
-
-    // XAccessible
-    css::uno::Reference<css::accessibility::XAccessibleContext>
-        SAL_CALL getAccessibleContext() override;
 
     // XAccessibleContext
 

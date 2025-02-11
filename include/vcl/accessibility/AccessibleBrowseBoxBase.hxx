@@ -51,7 +51,8 @@ namespace vcl {
     implements basic functionality for various Accessibility interfaces. */
 class VCL_DLLPUBLIC AccessibleBrowseBoxBase
     : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
-                                         css::awt::XFocusListener, css::lang::XServiceInfo>
+                                         css::accessibility::XAccessible, css::awt::XFocusListener,
+                                         css::lang::XServiceInfo>
 {
 public:
     /** Constructor sets specified name and description. If the constant of a
@@ -95,8 +96,11 @@ protected:
     virtual css::awt::Rectangle implGetBounds() override;
 
 public:
-    // XAccessibleContext
+    // XAccessible
+    css::uno::Reference<css::accessibility::XAccessibleContext>
+        SAL_CALL getAccessibleContext() override;
 
+    // XAccessibleContext
     /** @return  A reference to the parent accessible object. */
     virtual css::uno::Reference<css::accessibility::XAccessible > SAL_CALL getAccessibleParent() override;
 
@@ -247,62 +251,6 @@ private:
     /** The type of this object (for names, descriptions, state sets, ...). */
     AccessibleBrowseBoxObjType meObjType;
 };
-
-
-// a version of AccessibleBrowseBoxBase which implements not only the XAccessibleContext,
-// but also the XAccessible
-
-typedef cppu::ImplInheritanceHelper<AccessibleBrowseBoxBase, css::accessibility::XAccessible>
-                                BrowseBoxAccessibleElement_Base;
-
-class BrowseBoxAccessibleElement : public BrowseBoxAccessibleElement_Base
-{
-protected:
-    /** Constructor sets specified name and description. If the constant of a
-        text is BBTEXT_NONE, the derived class has to set the text via
-        implSetName() (in Ctor) or later via
-        setAccessibleName() and setAccessibleDescription() (these methods
-        notify the listeners about the change).
-
-        @param rxParent         XAccessible interface of the parent object.
-        @param rBrowseBox       The BrowseBox control.
-        @param eObjType         Object type
-    */
-    BrowseBoxAccessibleElement(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        ::vcl::IAccessibleTableProvider& rBrowseBox,
-        AccessibleBrowseBoxObjType eObjType );
-
-    /** Constructor sets specified name and description.
-
-        @param rxParent         XAccessible interface of the parent object.
-        @param rBrowseBox       The BrowseBox control.
-        @param eObjType         Object type
-        @param rName            The name of this object.
-        @param rDescription     The description text of this object.
-    */
-    BrowseBoxAccessibleElement(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        ::vcl::IAccessibleTableProvider& rBrowseBox,
-        AccessibleBrowseBoxObjType eObjType,
-        const OUString& rName,
-        const OUString& rDescription );
-
-public:
-    // noncopyable
-    BrowseBoxAccessibleElement(const BrowseBoxAccessibleElement&) = delete;
-    const BrowseBoxAccessibleElement& operator=(const BrowseBoxAccessibleElement&) = delete;
-
-protected:
-    virtual ~BrowseBoxAccessibleElement() override;
-
-protected:
-    // XAccessible
-
-    /** @return  The XAccessibleContext interface of this object. */
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext() override;
-};
-
 
 // a helper class for protecting methods which need to lock the solar mutex in addition to the own mutex
 

@@ -24,15 +24,13 @@
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <vcl/accessibility/AccessibleBrowseBoxBase.hxx>
 
-
-typedef cppu::ImplInheritanceHelper<BrowseBoxAccessibleElement, css::accessibility::XAccessibleTable>
-        AccessibleBrowseBoxTableImplHelper;
-
 /** The BrowseBox accessible table objects inherit from this base class. It
     implements basic functionality for the XAccessibleTable interface.
     BrowseBox table objects are: the data table, the column header bar and the
     row header bar. */
-class AccessibleBrowseBoxTableBase : public AccessibleBrowseBoxTableImplHelper
+class AccessibleBrowseBoxTableBase
+    : public cppu::ImplInheritanceHelper<AccessibleBrowseBoxBase,
+                                         css::accessibility::XAccessibleTable>
 {
 public:
     /** Constructor sets specified name and description. If the constant of a

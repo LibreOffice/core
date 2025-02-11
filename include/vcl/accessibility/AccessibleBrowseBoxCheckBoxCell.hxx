@@ -24,7 +24,7 @@
 #include <vcl/accessibility/AccessibleBrowseBoxCell.hxx>
 
 class VCL_DLLPUBLIC AccessibleCheckBoxCell final
-    : public cppu::ImplInheritanceHelper<AccessibleBrowseBoxCell, css::accessibility::XAccessible,
+    : public cppu::ImplInheritanceHelper<AccessibleBrowseBoxCell,
                                          css::accessibility::XAccessibleValue>
 {
 private:
@@ -42,9 +42,6 @@ public:
                             sal_uInt16 _nColPos,
                             const TriState& _eState,
                             bool _bIsTriState);
-
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;

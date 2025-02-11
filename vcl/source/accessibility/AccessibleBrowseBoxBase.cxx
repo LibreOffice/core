@@ -95,6 +95,16 @@ css::awt::Rectangle AccessibleBrowseBoxBase::implGetBounds()
     return vcl::unohelper::ConvertToAWTRect(implGetBoundingBox());
 }
 
+// css::accessibility::XAccessible
+
+Reference<css::accessibility::XAccessibleContext>
+    SAL_CALL AccessibleBrowseBoxBase::getAccessibleContext()
+{
+    osl::MutexGuard aGuard(getMutex());
+    ensureIsAlive();
+    return this;
+}
+
 // css::accessibility::XAccessibleContext
 
 Reference< css::accessibility::XAccessible > SAL_CALL AccessibleBrowseBoxBase::getAccessibleParent()
@@ -392,35 +402,6 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  )
     }
 
     return sal_Int32(nColor);
-}
-
-
-// css::accessibility::XAccessible
-
-Reference< css::accessibility::XAccessibleContext > SAL_CALL BrowseBoxAccessibleElement::getAccessibleContext()
-{
-    osl::MutexGuard aGuard( getMutex() );
-    ensureIsAlive();
-    return this;
-}
-
-
-BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const css::uno::Reference< css::accessibility::XAccessible >& rxParent, ::vcl::IAccessibleTableProvider& rBrowseBox,
-        AccessibleBrowseBoxObjType eObjType )
-    : BrowseBoxAccessibleElement_Base(rxParent, rBrowseBox, nullptr, eObjType)
-{
-}
-
-
-BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const css::uno::Reference< css::accessibility::XAccessible >& rxParent, ::vcl::IAccessibleTableProvider& rBrowseBox,
-        AccessibleBrowseBoxObjType  eObjType, const OUString& rName, const OUString& rDescription )
-    : BrowseBoxAccessibleElement_Base(rxParent, rBrowseBox, nullptr, eObjType, rName, rDescription)
-{
-}
-
-
-BrowseBoxAccessibleElement::~BrowseBoxAccessibleElement( )
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

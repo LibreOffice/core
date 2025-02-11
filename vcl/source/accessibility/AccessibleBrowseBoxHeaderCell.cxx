@@ -27,16 +27,13 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnRowId,
-                                  const Reference< XAccessible >& rxParent,
-                                  vcl::IAccessibleTableProvider& rBrowseBox,
-                                  AccessibleBrowseBoxObjType eObjType)
-: BrowseBoxAccessibleElement(rxParent,
-                          rBrowseBox,
-                          eObjType,
-                          rBrowseBox.GetAccessibleObjectName( eObjType ,_nColumnRowId),
-                          rBrowseBox.GetAccessibleObjectDescription( eObjType ,_nColumnRowId))
-, m_nColumnRowId(_nColumnRowId)
+AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(
+    sal_Int32 _nColumnRowId, const Reference<XAccessible>& rxParent,
+    vcl::IAccessibleTableProvider& rBrowseBox, AccessibleBrowseBoxObjType eObjType)
+    : AccessibleBrowseBoxBase(rxParent, rBrowseBox, nullptr, eObjType,
+                              rBrowseBox.GetAccessibleObjectName(eObjType, _nColumnRowId),
+                              rBrowseBox.GetAccessibleObjectDescription(eObjType, _nColumnRowId))
+    , m_nColumnRowId(_nColumnRowId)
 {
 }
 /** Return a bitset of states of the current object.

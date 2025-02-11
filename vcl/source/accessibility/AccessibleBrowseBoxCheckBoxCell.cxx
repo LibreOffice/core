@@ -37,13 +37,6 @@ AccessibleCheckBoxCell::AccessibleCheckBoxCell(const Reference<XAccessible>& _rx
 {
 }
 
-Reference< XAccessibleContext > SAL_CALL AccessibleCheckBoxCell::getAccessibleContext(  )
-{
-    osl::MutexGuard aGuard( getMutex() );
-    ensureIsAlive();
-    return this;
-}
-
 sal_Int64 AccessibleCheckBoxCell::implCreateStateSet()
 {
     sal_Int64 nStateSet = AccessibleBrowseBoxCell::implCreateStateSet();

@@ -150,17 +150,6 @@ sal_Int64 AccessibleBrowseBoxTableCell::implCreateStateSet()
     return nStateSet;
 }
 
-
-// XAccessible ------------------------------------------------------------
-
-/** @return  The XAccessibleContext interface of this object. */
-Reference< XAccessibleContext > SAL_CALL AccessibleBrowseBoxTableCell::getAccessibleContext()
-{
-    osl::MutexGuard aGuard( getMutex() );
-    ensureIsAlive();
-    return this;
-}
-
 // XAccessibleContext -----------------------------------------------------
 
 sal_Int64 SAL_CALL AccessibleBrowseBoxTableCell::getAccessibleIndexInParent()
