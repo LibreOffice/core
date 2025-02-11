@@ -436,6 +436,7 @@ void PDFSigningTest::testBadCertP1()
         = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "bad-cert-p1.pdf", 1,
                  /*rExpectedSubFilter=*/OString());
     CPPUNIT_ASSERT(!aInfos.empty());
+#if HAVE_FEATURE_PDFIUM
     SignatureInformation& rInformation = aInfos[0];
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 0 (SecurityOperationStatus_UNKNOWN)
@@ -443,6 +444,7 @@ void PDFSigningTest::testBadCertP1()
     // i.e. annotation after a P1 signature was not considered as a bad modification.
     CPPUNIT_ASSERT_EQUAL(xml::crypto::SecurityOperationStatus::SecurityOperationStatus_UNKNOWN,
                          rInformation.nStatus);
+#endif
 }
 
 void PDFSigningTest::testBadCertP3Stamp()
@@ -451,6 +453,7 @@ void PDFSigningTest::testBadCertP3Stamp()
         = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "bad-cert-p3-stamp.pdf", 1,
                  /*rExpectedSubFilter=*/OString());
     CPPUNIT_ASSERT(!aInfos.empty());
+#if HAVE_FEATURE_PDFIUM
     SignatureInformation& rInformation = aInfos[0];
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -459,6 +462,7 @@ void PDFSigningTest::testBadCertP3Stamp()
     // i.e. adding a stamp annotation was not considered as a bad modification.
     CPPUNIT_ASSERT_EQUAL(xml::crypto::SecurityOperationStatus::SecurityOperationStatus_UNKNOWN,
                          rInformation.nStatus);
+#endif
 }
 
 /// Test writing a PAdES signature.
@@ -473,12 +477,14 @@ void PDFSigningTest::testSigningCertificateAttribute()
     if (!bHadCertificates)
         return;
 
+#if HAVE_FEATURE_PDFIUM
     // Verify it.
     std::vector<SignatureInformation> aInfos = verify(aOutURL, 1, "ETSI.CAdES.detached");
     CPPUNIT_ASSERT(!aInfos.empty());
     SignatureInformation& rInformation = aInfos[0];
     // Assert that it has a signed signingCertificateV2 attribute.
     CPPUNIT_ASSERT(rInformation.bHasSigningCertificate);
+#endif
 }
 
 void PDFSigningTest::testGood()
@@ -491,6 +497,7 @@ void PDFSigningTest::testGood()
         "dict-bool.pdf",
     };
 
+#if HAVE_FEATURE_PDFIUM
     for (const auto& rName : aNames)
     {
         std::vector<SignatureInformation> aInfos = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + rName, 1, /*rExpectedSubFilter=*/OString());
@@ -498,6 +505,7 @@ void PDFSigningTest::testGood()
         SignatureInformation& rInformation = aInfos[0];
         CPPUNIT_ASSERT_EQUAL((int)xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED, (int)rInformation.nStatus);
     }
+#endif
 }
 
 void PDFSigningTest::testTokenize()
