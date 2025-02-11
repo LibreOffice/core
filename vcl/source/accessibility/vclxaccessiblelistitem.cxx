@@ -137,7 +137,12 @@ tools::Rectangle VCLXAccessibleListItem::implGetBounds()
     tools::Rectangle aRect;
     IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
     if (pListBoxHelper)
+    {
         aRect = pListBoxHelper->GetBoundingRectangle(static_cast<sal_uInt16>(m_nIndexInParent));
+        // convert position relative to the combobox/listbox (parent's parent) to position relative
+        // to direct parent by subtracting parent's relative position in the combobox/listbox
+        aRect -= vcl::unohelper::ConvertToVCLPoint(m_xParent->getLocation());
+    }
 
     return aRect;
 }
@@ -322,9 +327,8 @@ awt::Point SAL_CALL VCLXAccessibleListItem::getLocationOnScreen(  )
     SolarMutexGuard aSolarGuard;
 
     Point aPoint = implGetBounds().TopLeft();
-    IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
-    if (pListBoxHelper)
-        aPoint += Point(pListBoxHelper->GetWindowExtentsAbsolute().TopLeft());
+    if (m_xParent.is())
+        aPoint += vcl::unohelper::ConvertToVCLPoint(m_xParent->getLocationOnScreen());
 
     return vcl::unohelper::ConvertToAWTPoint(aPoint);
 }
