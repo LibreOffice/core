@@ -25,6 +25,8 @@
 #include <typeinfo>
 
 #include <com/sun/star/uno/Exception.hpp>
+#include <config_emscripten.h>
+#include <config_vclplug.h>
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <svdata.hxx>
@@ -37,6 +39,7 @@
 #include <vcl/idle.hxx>
 #include <saltimer.hxx>
 #include <salinst.hxx>
+#include <comphelper/emscriptenthreading.hxx>
 #include <comphelper/profilezone.hxx>
 #include <schedulerimpl.hxx>
 
@@ -358,7 +361,12 @@ void Scheduler::CallbackTaskScheduling()
     ImplSVData *pSVData = ImplGetSVData();
     ImplSchedulerContext &rSchedCtx = pSVData->maSchedCtx;
 
+#if !(defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD)
+    //TODO: While the special Emscripten Qt6 JSPI/non-PROXY_TO_PTHREAD mode doesn't lock the
+    // SolarMutex in QtTimer::timeoutActivated, but only down below when calling pTask->Invoke(),
+    // that looks too brittle in general, so treat that special mode specially here.
     DBG_TESTSOLARMUTEX();
+#endif
 
     SchedulerGuard aSchedulerGuard;
     if ( !rSchedCtx.mbActive || InfiniteTimeoutMs == rSchedCtx.mnTimerPeriod )
@@ -506,7 +514,23 @@ void Scheduler::CallbackTaskScheduling()
         {
             // prepare Scheduler object for deletion after handling
             pTask->SetDeletionFlags();
+#if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
+            if (pTask->DecideTransferredExecution())
+            {
+                auto & data = comphelper::emscriptenthreading::getData();
+                data.proxyingQueue.proxyAsync(data.eventHandlerThread.native_handle(), [pTask] {
+                    SolarMutexGuard g;
+                    pTask->Invoke();
+                });
+            }
+            else
+            {
+                SolarMutexGuard g;
+                pTask->Invoke();
+            }
+#else
             pTask->Invoke();
+#endif
         }
     }
     catch (css::uno::Exception&)
@@ -691,6 +715,11 @@ Task::~Task() COVERITY_NOEXCEPT_FALSE
     }
     else
         assert(nullptr == mpSchedulerData || comphelper::IsFuzzing());
+}
+
+bool Task::DecideTransferredExecution()
+{
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

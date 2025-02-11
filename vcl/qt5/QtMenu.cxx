@@ -769,19 +769,24 @@ QPushButton* QtMenu::ImplAddMenuBarButton(const QIcon& rIcon, const QString& rTo
     if (!pWidget)
     {
         assert(!m_pButtonGroup);
-        pWidget = new QWidget(mpQMenuBar);
+        GetQtInstance().EmscriptenLightweightRunInMainThread(
+            [this, &pWidget] { pWidget = new QWidget(mpQMenuBar); });
         assert(!pWidget->layout());
-        pLayout = new QHBoxLayout();
+        GetQtInstance().EmscriptenLightweightRunInMainThread(
+            [&pLayout] { pLayout = new QHBoxLayout(); });
         pLayout->setContentsMargins(QMargins());
         pLayout->setSpacing(0);
         pWidget->setLayout(pLayout);
-        m_pButtonGroup = new QButtonGroup(pLayout);
+        GetQtInstance().EmscriptenLightweightRunInMainThread(
+            [this, pLayout] { m_pButtonGroup = new QButtonGroup(pLayout); });
         m_pButtonGroup->setObjectName(gButtonGroupKey);
         m_pButtonGroup->setExclusive(false);
         connect(m_pButtonGroup, QOverload<QAbstractButton*>::of(&QButtonGroup::buttonClicked), this,
                 &QtMenu::slotMenuBarButtonClicked);
-        pWidget->show();
-        mpQMenuBar->setCornerWidget(pWidget, Qt::TopRightCorner);
+        GetQtInstance().EmscriptenLightweightRunInMainThread([this, pWidget] {
+            pWidget->show();
+            mpQMenuBar->setCornerWidget(pWidget, Qt::TopRightCorner);
+        });
     }
     else
         pLayout = static_cast<QHBoxLayout*>(pWidget->layout());
@@ -792,7 +797,8 @@ QPushButton* QtMenu::ImplAddMenuBarButton(const QIcon& rIcon, const QString& rTo
     if (pButton)
         RemoveMenuBarButton(nId);
 
-    pButton = new QPushButton();
+    GetQtInstance().EmscriptenLightweightRunInMainThread(
+        [&pButton] { pButton = new QPushButton(); });
     // we don't want the button to increase the QMenuBar height, so a fixed size square it is
     const int nFixedLength
         = mpQMenuBar->height() - 2 * mpQMenuBar->style()->pixelMetric(QStyle::PM_MenuBarVMargin);
@@ -828,7 +834,9 @@ void QtMenu::connectHelpShortcut(QMenu* pMenu)
 {
     assert(pMenu);
     QKeySequence sequence(QKeySequence::HelpContents);
-    QShortcut* pQShortcut = new QShortcut(sequence, pMenu);
+    QShortcut* pQShortcut;
+    GetQtInstance().EmscriptenLightweightRunInMainThread(
+        [&sequence, pMenu, &pQShortcut] { pQShortcut = new QShortcut(sequence, pMenu); });
     connect(pQShortcut, &QShortcut::activated, this, QtMenu::slotShowHelp);
     connect(pQShortcut, &QShortcut::activatedAmbiguously, this, QtMenu::slotShowHelp);
 }

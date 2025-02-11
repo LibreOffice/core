@@ -195,8 +195,10 @@ QtFrame::~QtFrame()
 void QtFrame::Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
                      sal_Int32 nExtentsHeight) const
 {
-    m_pQWidget->update(scaledQRect(QRect(nExtentsX, nExtentsY, nExtentsWidth, nExtentsHeight),
-                                   1 / devicePixelRatioF()));
+    GetQtInstance().EmscriptenLightweightRunInMainThread([
+        this, r = scaledQRect(QRect(nExtentsX, nExtentsY, nExtentsWidth, nExtentsHeight),
+                              1 / devicePixelRatioF())
+    ] { m_pQWidget->update(r); });
 }
 
 SalGraphics* QtFrame::AcquireGraphics()
@@ -258,7 +260,13 @@ QWidget* QtFrame::asChild() const
     return m_pQWidget;
 }
 
-qreal QtFrame::devicePixelRatioF() const { return asChild()->devicePixelRatioF(); }
+qreal QtFrame::devicePixelRatioF() const
+{
+    qreal ret;
+    GetQtInstance().EmscriptenLightweightRunInMainThread(
+        [ child = asChild(), &ret ] { ret = child->devicePixelRatioF(); });
+    return ret;
+}
 
 bool QtFrame::isWindow() const { return asChild()->isWindow(); }
 
@@ -430,7 +438,10 @@ void QtFrame::SetMinClientSize(tools::Long nWidth, tools::Long nHeight)
     if (!isChild())
     {
         const qreal fRatio = devicePixelRatioF();
-        asChild()->setMinimumSize(round(nWidth / fRatio), round(nHeight / fRatio));
+        GetQtInstance().EmscriptenLightweightRunInMainThread(
+            [ child = asChild(), w = round(nWidth / fRatio), h = round(nHeight / fRatio) ] {
+                child->setMinimumSize(w, h);
+            });
     }
 }
 

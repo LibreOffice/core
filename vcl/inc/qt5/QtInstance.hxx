@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <config_emscripten.h>
+#include <config_vclplug.h>
 #include <vclpluginapi.h>
 #include <unx/geninst.h>
 #include <salusereventlist.hxx>
@@ -42,6 +44,13 @@ class QtTimer;
 class QApplication;
 class SalYieldMutex;
 class SalFrame;
+
+#if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
+namespace comphelper::emscriptenthreading
+{
+struct Data;
+}
+#endif
 
 struct StdFreeCStr
 {
@@ -70,6 +79,10 @@ class VCLPLUG_QT_PUBLIC QtInstance : public QObject,
     bool m_bUpdateFonts;
 
     QtFrame* m_pActivePopup;
+
+#if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
+    comphelper::emscriptenthreading::Data* m_emscriptenThreadingData;
+#endif
 
     DECL_DLLPRIVATE_LINK(updateStyleHdl, Timer*, void);
     void AfterAppInit() override;
@@ -114,6 +127,7 @@ public:
     static std::unique_ptr<QApplication> CreateQApplication(int& nArgc, char** pArgv);
 
     void RunInMainThread(std::function<void()> func);
+    void EmscriptenLightweightRunInMainThread(std::function<void()> func);
 
     virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
     virtual SalFrame* CreateChildFrame(SystemParentData* pParent,

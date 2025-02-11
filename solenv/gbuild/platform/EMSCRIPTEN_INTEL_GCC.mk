@@ -18,7 +18,7 @@ gb_EMSCRIPTEN_LDFLAGS := $(gb_EMSCRIPTEN_CPPFLAGS)
 gb_EMSCRIPTEN_LDFLAGS += -s TOTAL_MEMORY=1GB
 
 ifeq ($(ENABLE_EMSCRIPTEN_PROXY_TO_PTHREAD),)
-gb_EMSCRIPTEN_LDFLAGS += -sPTHREAD_POOL_SIZE=6
+gb_EMSCRIPTEN_LDFLAGS += -sPTHREAD_POOL_SIZE=7
 endif
 
 # Double the main thread stack size, but keep the default value for other threads:
@@ -31,7 +31,9 @@ gb_EMSCRIPTEN_LDFLAGS += --bind -s FORCE_FILESYSTEM=1 -s WASM_BIGINT=1 -s ERROR_
 gb_EMSCRIPTEN_QTDEFS := -DQT_NO_LINKED_LIST -DQT_NO_JAVA_STYLE_ITERATORS -DQT_NO_EXCEPTIONS -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 
 ifeq ($(ENABLE_EMSCRIPTEN_JSPI),TRUE)
-gb_EMSCRIPTEN_LDFLAGS += -sJSPI
+gb_EMSCRIPTEN_LDFLAGS += \
+    -sJSPI \
+    -sJSPI_EXPORTS=_emscripten_check_mailbox,_ZN10emscripten8internal13MethodInvokerINS0_3rvp11default_tagEMN7qstdweb13EventListenerEFvNS_3valEEvPS5_JS6_EE6invokeERKS8_S9_PNS_7_EM_VALE
 endif
 
 ifeq ($(ENABLE_EMSCRIPTEN_PROXY_POSIX_SOCKETS),TRUE)
@@ -55,6 +57,10 @@ gb_LinkTarget_CXXFLAGS += $(gb_EMSCRIPTEN_QTDEFS)
 endif
 gb_LinkTarget_LDFLAGS += $(gb_EMSCRIPTEN_LDFLAGS) $(gb_EMSCRIPTEN_CPPFLAGS) \
     $(gb_EMSCRIPTEN_EXCEPT) -sEXPORT_EXCEPTION_HANDLING_HELPERS
+
+# Depending on emsdk version being used, enable e.g. std::jthread and std::stop_token used by some
+# build configurations:
+gb_LinkTarget_CXXFLAGS += -fexperimental-library
 
 ifeq ($(ENABLE_OPTIMIZED),TRUE)
 ifneq ($(ENABLE_SYMBOLS_FOR),)

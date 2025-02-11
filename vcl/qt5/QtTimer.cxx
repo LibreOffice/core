@@ -25,6 +25,8 @@
 #include <QtWidgets/QApplication>
 #include <QtCore/QThread>
 
+#include <config_emscripten.h>
+#include <config_vclplug.h>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
@@ -41,7 +43,12 @@ QtTimer::QtTimer()
 
 void QtTimer::timeoutActivated()
 {
+#if !(defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD)
+    //TODO: While the special Emscripten Qt6 JSPI/non-PROXY_TO_PTHREAD mode doesn't lock the
+    // SolarMutex here, but only when calling pTask->Invoke() in Scheduler::CallbackTaskScheduling,
+    // that looks too brittle in general, so treat that special mode specially here.
     SolarMutexGuard aGuard;
+#endif
     if (Application::IsUseSystemEventLoop())
     {
         const ImplSVData* pSVData = ImplGetSVData();

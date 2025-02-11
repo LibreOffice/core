@@ -17,10 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cassert>
 #include <memory>
 
 #include "menubarwindow.hxx"
 
+#include <comphelper/scopeguard.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
@@ -66,10 +68,20 @@ SystemWindow::ImplData::ImplData()
     maMaxOutSize = Size( SHRT_MAX, SHRT_MAX );
 }
 
-SystemWindow::SystemWindow(WindowType nType, const char* pIdleDebugName)
+bool SystemWindow::LayoutIdle::DecideTransferredExecution()
+{
+    if (transferState_ == TransferState::NotTransferable) {
+        return false;
+    }
+    parent_.acquire(); // paired with release in ImplHandleLayoutTimerHdl
+    transferState_ = TransferState::Transferred;
+    return true;
+}
+
+SystemWindow::SystemWindow(WindowType nType, const char* pIdleDebugName, bool transferableIdle)
     : Window(nType)
     , mpImplData(new ImplData)
-    , maLayoutIdle( pIdleDebugName )
+    , maLayoutIdle( pIdleDebugName, *this, transferableIdle )
 {
     mpWindowImpl->mbSysWin            = true;
     mpWindowImpl->mnActivateMode      = ActivateModeFlags::GrabFocus;
@@ -1036,6 +1048,11 @@ void SystemWindow::setPosSizeOnContainee(Size aSize, Window &rBox)
 
 IMPL_LINK_NOARG( SystemWindow, ImplHandleLayoutTimerHdl, Timer*, void )
 {
+    comphelper::ScopeGuard g([this] {
+        if (maLayoutIdle.wasTransferred()) {
+            release(); // paired with acquire in LayoutIdle::DecideTransferredExecution
+        }
+    });
     Window *pBox = GetWindow(GetWindowType::FirstChild);
     if (!isLayoutEnabled())
     {

@@ -52,6 +52,7 @@
 
 #include <vclpluginapi.h>
 #include <tools/debug.hxx>
+#include <comphelper/emscriptenthreading.hxx>
 #include <comphelper/flagguard.hxx>
 #include <config_emscripten.h>
 #include <config_vclplug.h>
@@ -61,6 +62,7 @@
 #include <vcl/sysdata.hxx>
 #include <sal/log.hxx>
 #include <o3tl/unreachable.hxx>
+#include <o3tl/temporary.hxx>
 #include <osl/process.h>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && ENABLE_GSTREAMER_1_0 && QT5_HAVE_GOBJECT
 #include <unx/gstsink.hxx>
@@ -76,6 +78,13 @@ Q_IMPORT_PLUGIN(QWasmIntegrationPlugin)
 #if defined DISABLE_DYNLOADING && ENABLE_QT6
 #include <QtCore/QtResource>
 #endif
+#endif
+
+#if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
+#include <emscripten/promise.h>
+#include <emscripten/proxying.h>
+#include <emscripten/threading.h>
+#include <pthread.h>
 #endif
 
 namespace
@@ -226,6 +235,13 @@ void QtInstance::RunInMainThread(std::function<void()> func)
         func();
         return;
     }
+#if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
+    if (pthread_self() == m_emscriptenThreadingData->eventHandlerThread.native_handle())
+    {
+        EmscriptenLightweightRunInMainThread(func);
+        return;
+    }
+#endif
 
     QtYieldMutex* const pMutex(static_cast<QtYieldMutex*>(GetYieldMutex()));
     {
@@ -243,6 +259,26 @@ void QtInstance::RunInMainThread(std::function<void()> func)
         pMutex->m_ResultCondition.wait(g, [pMutex]() { return pMutex->m_isResultReady; });
         pMutex->m_isResultReady = false;
     }
+}
+
+void QtInstance::EmscriptenLightweightRunInMainThread(std::function<void()> func)
+{
+#if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
+    if (pthread_self() != emscripten_main_runtime_thread_id())
+    {
+        SolarMutexReleaser release;
+        emscripten_sync_run_in_main_runtime_thread(
+            EM_FUNC_SIG_RETURN_VALUE_V | EM_FUNC_SIG_WITH_N_PARAMETERS(1)
+                | EM_FUNC_SIG_SET_PARAM(0, EM_FUNC_SIG_PARAM_P),
+            +[](void* pf) {
+                SolarMutexGuard g;
+                (*static_cast<std::function<void()>*>(pf))();
+            },
+            &func);
+        return;
+    }
+#endif
+    func();
 }
 
 OUString QtInstance::constructToolkitID(std::u16string_view sTKname)
@@ -266,6 +302,11 @@ QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp)
     , m_bUpdateFonts(false)
     , m_pActivePopup(nullptr)
 {
+#if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
+    comphelper::emscriptenthreading::setUp();
+    m_emscriptenThreadingData = &comphelper::emscriptenthreading::getData();
+#endif
+
     ImplSVData* pSVData = ImplGetSVData();
     const OUString sToolkit = "qt" + OUString::number(QT_VERSION_MAJOR);
     pSVData->maAppData.mxToolkitName = constructToolkitID(sToolkit);
@@ -309,6 +350,10 @@ QtInstance::~QtInstance()
     // force freeing the QApplication before freeing the arguments,
     // as it uses references to the provided arguments!
     m_pQApplication.reset();
+
+#if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
+    comphelper::emscriptenthreading::tearDown();
+#endif
 }
 
 void QtInstance::AfterAppInit()
@@ -497,6 +542,26 @@ bool QtInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
         if (bWasEvent)
             m_aWaitingYieldCond.set();
     }
+#if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
+    else if (pthread_self() == m_emscriptenThreadingData->eventHandlerThread.native_handle())
+    {
+        SolarMutexReleaser release;
+        struct Args
+        {
+            QtInstance* This;
+            bool bWait;
+            bool bHandleAllCurrentEvents;
+            bool& bWasEvent;
+        };
+        (void)emscripten_promise_await(emscripten_proxy_promise(
+            m_emscriptenThreadingData->proxyingQueue.queue, emscripten_main_runtime_thread_id(),
+            [](void* p) {
+                Args const& args = *static_cast<Args*>(p);
+                args.bWasEvent = args.This->DoYield(args.bWait, args.bHandleAllCurrentEvents);
+            },
+            &o3tl::temporary<Args>({ this, bWait, bHandleAllCurrentEvents, bWasEvent })));
+    }
+#endif
     else
     {
         {
@@ -545,7 +610,20 @@ void QtInstance::TriggerUserEventProcessing()
 
 void QtInstance::ProcessEvent(SalUserEvent aEvent)
 {
+#if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
+    SolarMutexReleaser release;
+    (void)emscripten_promise_await(
+        emscripten_proxy_promise(m_emscriptenThreadingData->proxyingQueue.queue,
+                                 m_emscriptenThreadingData->eventHandlerThread.native_handle(),
+                                 [](void* p) {
+                                     auto& aEvent = *static_cast<SalUserEvent*>(p);
+                                     SolarMutexGuard g;
+                                     aEvent.m_pFrame->CallCallback(aEvent.m_nEvent, aEvent.m_pData);
+                                 },
+                                 &aEvent));
+#else
     aEvent.m_pFrame->CallCallback(aEvent.m_nEvent, aEvent.m_pData);
+#endif
 }
 
 rtl::Reference<QtFilePicker>
@@ -601,7 +679,9 @@ QtInstance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
     if (it != m_aClipboards.end())
         return it->second;
 
-    css::uno::Reference<css::uno::XInterface> xClipboard = QtClipboard::create(sel);
+    css::uno::Reference<css::uno::XInterface> xClipboard;
+    EmscriptenLightweightRunInMainThread(
+        [&sel, &xClipboard] { xClipboard = QtClipboard::create(sel); });
     if (xClipboard.is())
         m_aClipboards[sel] = xClipboard;
 

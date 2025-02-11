@@ -82,6 +82,8 @@ public:
 
     const char     *GetDebugName() const { return mpDebugName; }
 
+    virtual bool DecideTransferredExecution();
+
     // Call handler
     virtual void    Invoke() = 0;
 

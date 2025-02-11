@@ -96,6 +96,25 @@ class VCL_DLLPUBLIC SystemWindow
     class ImplData;
 
 private:
+    class LayoutIdle: public Idle {
+    public:
+        LayoutIdle(char const * pDebugName, SystemWindow & parent, bool transferable):
+            Idle(pDebugName), parent_(parent),
+            transferState_(
+                transferable ? TransferState::Transferable : TransferState::NotTransferable)
+        {}
+
+        bool DecideTransferredExecution() override;
+
+        bool wasTransferred() const { return transferState_ == TransferState::Transferred; }
+
+    private:
+        enum class TransferState { NotTransferable, Transferable, Transferred };
+
+        SystemWindow & parent_;
+        TransferState transferState_;
+    };
+
     std::unique_ptr<ImplData> mpImplData;
     VclPtr<MenuBar> mpMenuBar;
     OUString        maNotebookBarUIFile;
@@ -110,7 +129,7 @@ private:
     bool            mbInSetNoteBookBar : 1 = false;
     bool            mbPaintComplete : 1 = false;
     bool            mbIsDeferredInit : 1 = false;
-    Idle            maLayoutIdle;
+    LayoutIdle      maLayoutIdle;
 protected:
     VclPtr<vcl::Window> mpDialogParent;
 public:
@@ -136,7 +155,8 @@ private:
 
 protected:
     // Single argument ctors shall be explicit.
-    SAL_DLLPRIVATE explicit SystemWindow(WindowType nType, const char* pIdleDebugName);
+    SAL_DLLPRIVATE explicit SystemWindow(
+        WindowType nType, const char* pIdleDebugName, bool transferableIdle = false);
     SAL_DLLPRIVATE void loadUI(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
 
     SAL_DLLPRIVATE void SetWindowState(const vcl::WindowData& rData);
