@@ -59,11 +59,11 @@ using namespace ::com::sun::star;
 
 // Ctor() and Dtor()
 
-VCLXAccessibleListItem::VCLXAccessibleListItem(sal_Int32 _nIndexInParent, rtl::Reference< VCLXAccessibleList > _xParent)
+VCLXAccessibleListItem::VCLXAccessibleListItem(sal_Int32 _nIndexInParent,
+                                               rtl::Reference<VCLXAccessibleList> _xParent)
     : m_nIndexInParent(_nIndexInParent)
     , m_bSelected(false)
     , m_bVisible(false)
-    , m_nClientId(0)
     , m_xParent(std::move(_xParent))
 {
     assert(m_xParent.is());
@@ -104,14 +104,8 @@ void VCLXAccessibleListItem::NotifyAccessibleEvent( sal_Int16 _nEventId,
                                                     const css::uno::Any& _aOldValue,
                                                     const css::uno::Any& _aNewValue )
 {
-    AccessibleEventObject aEvt;
-    aEvt.Source = *this;
-    aEvt.EventId = _nEventId;
-    aEvt.OldValue = _aOldValue;
-    aEvt.NewValue = _aNewValue;
-
-    if (m_nClientId)
-        comphelper::AccessibleEventNotifier::addEvent( m_nClientId, aEvt );
+    comphelper::OAccessibleComponentHelper::NotifyAccessibleEvent(_nEventId, _aOldValue,
+                                                                  _aNewValue);
 }
 
 // OCommonAccessibleText
@@ -132,7 +126,7 @@ void VCLXAccessibleListItem::implGetSelection( sal_Int32& nStartIndex, sal_Int32
     nEndIndex = 0;
 }
 
-tools::Rectangle VCLXAccessibleListItem::implGetBounds()
+awt::Rectangle VCLXAccessibleListItem::implGetBounds()
 {
     tools::Rectangle aRect;
     IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
@@ -144,7 +138,7 @@ tools::Rectangle VCLXAccessibleListItem::implGetBounds()
         aRect -= vcl::unohelper::ConvertToVCLPoint(m_xParent->getLocation());
     }
 
-    return aRect;
+    return vcl::unohelper::ConvertToAWTRect(aRect);
 }
 
 // XTypeProvider
@@ -156,24 +150,12 @@ Sequence< sal_Int8 > VCLXAccessibleListItem::getImplementationId()
 
 // XComponent
 
-void VCLXAccessibleListItem::disposing(std::unique_lock<std::mutex>& rGuard)
+void SAL_CALL VCLXAccessibleListItem::disposing()
 {
-    VCLXAccessibleListItem_BASE::disposing(rGuard);
-
     m_sEntryText.clear();
-    m_xParent           = nullptr;
-    comphelper::AccessibleEventNotifier::TClientId nId = m_nClientId;
-    m_nClientId =  0;
-    Reference< XInterface > xEventSource;
-    if ( nId )
-    {
-        xEventSource = *this;
+    m_xParent = nullptr;
 
-        // Send a disposing to all listeners.
-        rGuard.unlock();
-        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nId, *this );
-        rGuard.lock();
-    }
+    OAccessibleComponentHelper::disposing();
 }
 
 // XServiceInfo
@@ -257,7 +239,7 @@ sal_Int64 SAL_CALL VCLXAccessibleListItem::getAccessibleStateSet(  )
 
     sal_Int64 nStateSet = 0;
 
-    if ( !m_bDisposed )
+    if (isAlive())
     {
         nStateSet |= AccessibleStateType::TRANSIENT;
 
@@ -292,53 +274,9 @@ Locale SAL_CALL VCLXAccessibleListItem::getLocale(  )
 
 // XAccessibleComponent
 
-sal_Bool SAL_CALL VCLXAccessibleListItem::containsPoint( const awt::Point& _aPoint )
-{
-    SolarMutexGuard aSolarGuard;
-
-    tools::Rectangle aRect = implGetBounds();
-    aRect.SetPos(Point(0, 0));
-    const bool bInside = aRect.Contains(vcl::unohelper::ConvertToVCLPoint(_aPoint));
-    return bInside;
-}
-
 Reference< XAccessible > SAL_CALL VCLXAccessibleListItem::getAccessibleAtPoint( const awt::Point& )
 {
     return Reference< XAccessible >();
-}
-
-awt::Rectangle SAL_CALL VCLXAccessibleListItem::getBounds(  )
-{
-    SolarMutexGuard aSolarGuard;
-
-    return vcl::unohelper::ConvertToAWTRect(implGetBounds());
-}
-
-awt::Point SAL_CALL VCLXAccessibleListItem::getLocation(  )
-{
-    SolarMutexGuard aSolarGuard;
-
-    const Point aPoint = implGetBounds().TopLeft();
-    return vcl::unohelper::ConvertToAWTPoint(aPoint);
-}
-
-awt::Point SAL_CALL VCLXAccessibleListItem::getLocationOnScreen(  )
-{
-    SolarMutexGuard aSolarGuard;
-
-    Point aPoint = implGetBounds().TopLeft();
-    if (m_xParent.is())
-        aPoint += vcl::unohelper::ConvertToVCLPoint(m_xParent->getLocationOnScreen());
-
-    return vcl::unohelper::ConvertToAWTPoint(aPoint);
-}
-
-awt::Size SAL_CALL VCLXAccessibleListItem::getSize(  )
-{
-    SolarMutexGuard aSolarGuard;
-
-    Size aSize = implGetBounds().GetSize();
-    return vcl::unohelper::ConvertToAWTSize(aSize);
 }
 
 void SAL_CALL VCLXAccessibleListItem::grabFocus(  )
@@ -525,40 +463,6 @@ sal_Bool VCLXAccessibleListItem::scrollSubstringTo( sal_Int32, sal_Int32, Access
 {
     return false;
 }
-
-// XAccessibleEventBroadcaster
-
-void SAL_CALL VCLXAccessibleListItem::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
-{
-    if (xListener.is())
-    {
-        if (!m_nClientId)
-            m_nClientId = comphelper::AccessibleEventNotifier::registerClient( );
-        comphelper::AccessibleEventNotifier::addEventListener( m_nClientId, xListener );
-    }
-}
-
-void SAL_CALL VCLXAccessibleListItem::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
-{
-    if ( !(xListener.is() && m_nClientId) )
-        return;
-
-    sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( m_nClientId, xListener );
-    if ( nListenerCount )
-        return;
-
-    // no listeners anymore
-    // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-    // and at least to us not firing any events anymore, in case somebody calls
-    // NotifyAccessibleEvent, again
-    if ( m_nClientId )
-    {
-        comphelper::AccessibleEventNotifier::TClientId nId( m_nClientId );
-        m_nClientId = 0;
-        comphelper::AccessibleEventNotifier::revokeClient( nId );
-    }
-}
-
 
 // AF (Oct. 29 2002): Return black as constant foreground color.  This is an
 // initial implementation and has to be substituted by code that determines

@@ -21,10 +21,7 @@
 
 #include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/compbase.hxx>
 #include <comphelper/accessibletexthelper.hxx>
@@ -42,18 +39,13 @@ namespace com::sun::star::awt {
 
 // class VCLXAccessibleListItem ------------------------------------------
 
-typedef ::comphelper::WeakComponentImplHelper< css::accessibility::XAccessible
-                                            , css::accessibility::XAccessibleContext
-                                            , css::accessibility::XAccessibleComponent
-                                            , css::accessibility::XAccessibleEventBroadcaster
-                                            , css::accessibility::XAccessibleText
-                                            , css::lang::XServiceInfo > VCLXAccessibleListItem_BASE;
-
 /** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry
 */
-class VCLXAccessibleListItem final :
-                                     public ::comphelper::OCommonAccessibleText,
-                                     public VCLXAccessibleListItem_BASE
+class VCLXAccessibleListItem final
+    : public cppu::ImplInheritanceHelper<
+          comphelper::OAccessibleComponentHelper, css::accessibility::XAccessible,
+          css::accessibility::XAccessibleText, css::lang::XServiceInfo>,
+      public comphelper::OCommonAccessibleText
 {
 private:
     OUString                            m_sEntryText;
@@ -61,22 +53,19 @@ private:
     bool                            m_bSelected;
     bool                            m_bVisible;
 
-    /// client id in the AccessibleEventNotifier queue
-    sal_uInt32                          m_nClientId;
-
     rtl::Reference< VCLXAccessibleList >                     m_xParent;
 
     virtual ~VCLXAccessibleListItem() override = default;
-    /** this function is called upon disposing the component
-    */
-    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
+
+    virtual void SAL_CALL disposing() override;
 
     // OCommonAccessibleText
     virtual OUString                        implGetText() override;
     virtual css::lang::Locale               implGetLocale() override;
     virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override;
 
-    tools::Rectangle implGetBounds();
+    // OCommonAccessibleComponent
+    virtual css::awt::Rectangle implGetBounds() override;
 
     OUString getTextRangeImpl(sal_Int32 nStartIndex, sal_Int32 nEndIndex);
 
@@ -120,12 +109,7 @@ public:
     virtual css::lang::Locale SAL_CALL getLocale(  ) override;
 
     // XAccessibleComponent
-    virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-    virtual css::awt::Rectangle SAL_CALL getBounds(  ) override;
-    virtual css::awt::Point SAL_CALL getLocation(  ) override;
-    virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
-    virtual css::awt::Size SAL_CALL getSize(  ) override;
     virtual void SAL_CALL grabFocus(  ) override;
     virtual sal_Int32 SAL_CALL getForeground() override;
     virtual sal_Int32 SAL_CALL getBackground() override;
@@ -149,10 +133,6 @@ public:
     virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
     virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
     virtual sal_Bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override;
-
-    // XAccessibleEventBroadcaster
-    virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-    virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
 };
 
 
