@@ -333,6 +333,8 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
          pGuess->BreakPos() != TextFrameIndex(COMPLETE_STRING) &&
          rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
                     DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING) &&
+         // tdf#164499 no shrinking in tabulated line
+         ( !rInf.GetLast() || !rInf.GetLast()->InTabGrp() ) &&
          // tdf#158436 avoid shrinking at underflow, e.g. no-break space after a
          // very short word resulted endless loop
          !rInf.IsUnderflow() )
