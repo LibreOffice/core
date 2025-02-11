@@ -228,7 +228,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="spotlightstyles">
-            <property name="label" translatable="yes" context="commontemplate|STR_SPOTLIGHT_CHECKBOX">Spotlight</property>
+            <property name="label" translatable="yes" context="commontemplate|STR_SPOTLIGHT_CHECKBOX">Highlight styles</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
             <property name="use-underline">True</property>
