@@ -482,37 +482,16 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
 {
     if( !pOpts )
         return;
-
+    //this needs to reflect all settings from SdTpOptionsMisc::FillItemSet()
     pOpts->SetStartWithTemplate( maOptionsMisc.IsStartWithTemplate() );
     pOpts->SetMarkedHitMovesAlways( maOptionsMisc.IsMarkedHitMovesAlways() );
-    pOpts->SetMoveOnlyDragging( maOptionsMisc.IsMoveOnlyDragging() );
-    pOpts->SetCrookNoContortion( maOptionsMisc.IsCrookNoContortion() );
-    pOpts->SetQuickEdit( maOptionsMisc.IsQuickEdit() );
+    pOpts->SetQuickEdit(maOptionsMisc.IsQuickEdit());
+    pOpts->SetPickThrough( maOptionsMisc.IsPickThrough() );
     pOpts->SetMasterPagePaintCaching( maOptionsMisc.IsMasterPagePaintCaching() );
     pOpts->SetDragWithCopy( maOptionsMisc.IsDragWithCopy() );
-    pOpts->SetPickThrough( maOptionsMisc.IsPickThrough() );
-    pOpts->SetDoubleClickTextEdit( maOptionsMisc.IsDoubleClickTextEdit() );
-    pOpts->SetClickChangeRotation( maOptionsMisc.IsClickChangeRotation() );
     pOpts->SetSummationOfParagraphs( maOptionsMisc.IsSummationOfParagraphs() );
-    pOpts->SetTabBarVisible( maOptionsMisc.IsTabBarVisible() );
+    pOpts->SetCrookNoContortion( maOptionsMisc.IsCrookNoContortion() );
 
-    pOpts->SetSolidDragging( maOptionsMisc.IsSolidDragging() );
-    pOpts->SetShowUndoDeleteWarning( maOptionsMisc.IsShowUndoDeleteWarning() );
-    pOpts->SetPrinterIndependentLayout( maOptionsMisc.GetPrinterIndependentLayout() );
-    pOpts->SetShowComments( maOptionsMisc.IsShowComments() );
-    pOpts->SetDefaultObjectSizeWidth( maOptionsMisc.GetDefaultObjectSizeWidth() );
-    pOpts->SetDefaultObjectSizeHeight( maOptionsMisc.GetDefaultObjectSizeHeight() );
-
-    pOpts->SetPreviewNewEffects( maOptionsMisc.IsPreviewNewEffects() );
-    pOpts->SetPreviewChangedEffects( maOptionsMisc.IsPreviewChangedEffects() );
-    pOpts->SetPreviewTransitions( maOptionsMisc.IsPreviewTransitions() );
-
-    pOpts->SetDisplay( maOptionsMisc.GetDisplay() );
-
-    pOpts->SetPresentationPenColor( maOptionsMisc.GetPresentationPenColor() );
-    pOpts->SetPresentationPenWidth( maOptionsMisc.GetPresentationPenWidth() );
-
-    pOpts->SetDragThreshold( maOptionsMisc.GetDragThresholdPixels() );
 }
 
 /*************************************************************************
