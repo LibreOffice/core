@@ -54,7 +54,7 @@ namespace
 }
 
 VCLXAccessibleList::VCLXAccessibleList(vcl::Window* pWindow, BoxType aBoxType,
-                                       const Reference< XAccessible >& _xParent)
+                                       const rtl::Reference<VCLXAccessibleBox>& _xParent)
     : ImplInheritanceHelper     (pWindow),
       m_aBoxType                (aBoxType),
       m_nVisibleLineCount       (0),

@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <accessibility/vclxaccessiblebox.hxx>
+
 #include <memory>
 #include <vector>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
@@ -43,7 +45,7 @@ public:
     enum BoxType {COMBOBOX, LISTBOX};
 
     VCLXAccessibleList(vcl::Window* pWindow, BoxType aBoxType,
-                       const css::uno::Reference<css::accessibility::XAccessible>& _xParent);
+                       const rtl::Reference<VCLXAccessibleBox>& _xParent);
 
     /** The index that is passed to this method is returned on following
         calls to getAccessibleIndexInParent.
@@ -155,7 +157,7 @@ private:
     /** We need to save the accessible parent to return it in getAccessibleParent(),
         because this method of the base class returns the wrong parent.
     */
-    css::uno::Reference< css::accessibility::XAccessible >  m_xParent;
+    rtl::Reference<VCLXAccessibleBox> m_xParent;
 
     void UpdateEntryRange_Impl();
     void UpdateSelection_Impl(sal_Int32 nPos = 0);
