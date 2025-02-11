@@ -3097,8 +3097,20 @@ void SdXMLPluginShapeContext::endFastElement(sal_Int32 nElement)
         {
             // in case we have a media object
             xProps->setPropertyValue( u"MediaURL"_ustr, uno::Any(maHref));
-
-            xProps->setPropertyValue(u"MediaMimeType"_ustr, uno::Any(maMimeType) );
+            // could be from old times when a format was unsupported
+            // likely already guessed a possibly more accurate MIME type from MediaURL, don't override
+            bool bUpdateMimeType = false;
+            if (maMimeType != AVMEDIA_MIMETYPE_COMMON)
+                bUpdateMimeType = true;
+            else
+            {
+                OUString aExistingMimeType;
+                xProps->getPropertyValue(u"MediaMimeType"_ustr) >>= aExistingMimeType;
+                if (aExistingMimeType.isEmpty())
+                    bUpdateMimeType = true;
+            }
+            if (bUpdateMimeType)
+                xProps->setPropertyValue(u"MediaMimeType"_ustr, uno::Any(maMimeType) );
 
             for (const auto& rParam : maParams)
             {

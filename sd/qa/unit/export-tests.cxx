@@ -354,8 +354,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testMediaEmbedding)
     CPPUNIT_ASSERT_MESSAGE("missing media object", pMediaObj != nullptr);
     CPPUNIT_ASSERT_EQUAL(u"vnd.sun.star.Package:Media/button-1.wav"_ustr,
                          pMediaObj->getMediaProperties().getURL());
-    CPPUNIT_ASSERT_EQUAL(u"application/vnd.sun.star.media"_ustr,
-                         pMediaObj->getMediaProperties().getMimeType());
+    CPPUNIT_ASSERT_EQUAL(u"audio/x-wav"_ustr, pMediaObj->getMediaProperties().getMimeType());
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testFillBitmapUnused)
