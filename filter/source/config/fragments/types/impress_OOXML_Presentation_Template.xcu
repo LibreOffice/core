@@ -20,7 +20,7 @@
     <prop oor:name="URLPattern"/>
     <prop oor:name="Extensions"><value>potx potm</value></prop>
     <prop oor:name="MediaType"><value>application/vnd.openxmlformats-officedocument.presentationml.template</value></prop>
-    <prop oor:name="Preferred"><value>true</value></prop>
+    <prop oor:name="Preferred"><value>false</value></prop>
     <prop oor:name="PreferredFilter"><value>Impress Office Open XML Template</value></prop>
     <prop oor:name="UIName"><value>Office Open XML Presentation Template</value></prop>
     <prop oor:name="ClipboardFormat"/>
