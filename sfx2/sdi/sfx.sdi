@@ -4002,7 +4002,7 @@ SfxBoolItem SearchDialog SID_SEARCH_DLG
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
+    ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,

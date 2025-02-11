@@ -254,7 +254,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     SearchOptionFlags nOptions = SearchOptionFlags::ALL;
 
                     // No replacement if ReadOnly
-                    if (GetViewData().GetDocShell()->IsReadOnly())
+                    if (GetViewData().GetDocShell()->IsReadOnly() || IsCurrentLokViewReadOnly())
                         nOptions &= ~SearchOptionFlags( SearchOptionFlags::REPLACE | SearchOptionFlags::REPLACE_ALL );
                     rSet.Put( SfxUInt16Item( nWhich, static_cast<sal_uInt16>(nOptions) ) );
                 }
