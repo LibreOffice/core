@@ -440,6 +440,29 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRowHeightODS)
     CPPUNIT_ASSERT_MESSAGE("Row should have an automatic height.", !bManual);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRowHeightTdf165003)
+{
+    createScDoc("ods/RowHeightTdf165003.ods");
+
+    SCTAB nTab = 0;
+    SCROW nRow = 0;
+    ScDocument* pDoc = getScDoc();
+
+    int nHeight = pDoc->GetRowHeight(nRow, nTab, false);
+    CPPUNIT_ASSERT_EQUAL(256, nHeight);
+    nHeight = pDoc->GetRowHeight(++nRow, nTab, false);
+    CPPUNIT_ASSERT_EQUAL(256, nHeight);
+    nHeight = pDoc->GetRowHeight(++nRow, nTab, false);
+    CPPUNIT_ASSERT_EQUAL(256, nHeight);
+    nHeight = pDoc->GetRowHeight(++nRow, nTab, false);
+    CPPUNIT_ASSERT_EQUAL(256, nHeight);
+    // this row has 90-degree rotated text, and without the fix, would have had zero height.
+    nHeight = pDoc->GetRowHeight(++nRow, nTab, false);
+    CPPUNIT_ASSERT_EQUAL(582, nHeight);
+    nHeight = pDoc->GetRowHeight(++nRow, nTab, false);
+    CPPUNIT_ASSERT_EQUAL(256, nHeight);
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRichTextContentODS)
 {
     createScDoc("ods/rich-text-cells.ods");
