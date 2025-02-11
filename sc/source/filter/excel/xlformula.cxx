@@ -619,8 +619,8 @@ const XclFunctionInfo saFuncTable_2021[] =
  */
 const XclFunctionInfo saFuncTable_2024[] =
 {
-    EXC_FUNCENTRY_V_VR(  ocChooseCols, 2,  MX, 0,  "CHOOSECOLS" ),
-    EXC_FUNCENTRY_V_VR(  ocChooseRows, 2,  MX, 0,  "CHOOSEROWS" ),
+    EXC_FUNCENTRY_V_VR(  ocChooseCols, 1,  MX, 0,  "CHOOSECOLS" ),
+    EXC_FUNCENTRY_V_VR(  ocChooseRows, 1,  MX, 0,  "CHOOSEROWS" ),
     EXC_FUNCENTRY_V_VR(  ocDrop,       1,  3,  0,  "DROP" ),
     EXC_FUNCENTRY_V_VR(  ocExpand,     2,  4,  0,  "EXPAND" ),
     EXC_FUNCENTRY_V_VR(  ocHStack,     1,  MX, 0,  "HSTACK" ),

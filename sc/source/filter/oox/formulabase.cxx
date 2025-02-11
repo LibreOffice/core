@@ -894,8 +894,8 @@ const FunctionData saFuncTable2021[] =
 /* FIXME: BIFF?? function identifiers available? Where to obtain? */
 const FunctionData saFuncTable2024[] =
 {
-    { "COM.MICROSOFT.CHOOSECOLS",          "CHOOSECOLS",          NOID,   NOID,   2,  MX, A, { VO }, FuncFlags::MACROCALL_NEW },
-    { "COM.MICROSOFT.CHOOSEROWS",          "CHOOSEROWS",          NOID,   NOID,   2,  MX, A, { VO }, FuncFlags::MACROCALL_NEW },
+    { "COM.MICROSOFT.CHOOSECOLS",          "CHOOSECOLS",          NOID,   NOID,   1,  MX, A, { VO }, FuncFlags::MACROCALL_NEW },
+    { "COM.MICROSOFT.CHOOSEROWS",          "CHOOSEROWS",          NOID,   NOID,   1,  MX, A, { VO }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.DROP",                "DROP",                NOID,   NOID,   1,  3,  A, { VO }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.EXPAND",              "EXPAND",              NOID,   NOID,   2,  4,  A, { VO }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.HSTACK",              "HSTACK",              NOID,   NOID,   1,  MX, A, { VO }, FuncFlags::MACROCALL_NEW },

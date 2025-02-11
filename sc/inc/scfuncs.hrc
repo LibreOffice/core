@@ -4257,10 +4257,8 @@ const TranslateId SC_OPCODE_CHOOSECOLS_ARY[] =
     NC_("SC_OPCODE_CHOOSECOLS", "Returns the specified columns from an array."),
     NC_("SC_OPCODE_CHOOSECOLS", "Array"),
     NC_("SC_OPCODE_CHOOSECOLS", "The array containing the columns to be returned in the new array."),
-    NC_("SC_OPCODE_CHOOSECOLS", "Column 1"),
-    NC_("SC_OPCODE_CHOOSECOLS", "The number of the first column to be returned."),
-    NC_("SC_OPCODE_CHOOSECOLS", "Column 2"),
-    NC_("SC_OPCODE_CHOOSECOLS", "Column 2, Column 3,... The list of column numbers to be returned.")
+    NC_("SC_OPCODE_CHOOSECOLS", "Column "),
+    NC_("SC_OPCODE_CHOOSECOLS", "Column 1, Column 2,... The list of column numbers to be returned.")
 };
 
 // -=*# Resource for function CHOOSEROWS #*=-
@@ -4269,10 +4267,8 @@ const TranslateId SC_OPCODE_CHOOSEROWS_ARY[] =
     NC_("SC_OPCODE_CHOOSEROWS", "Returns the specified rows from an array."),
     NC_("SC_OPCODE_CHOOSEROWS", "Array"),
     NC_("SC_OPCODE_CHOOSEROWS", "The array containing the rows to be returned in the new array."),
-    NC_("SC_OPCODE_CHOOSEROWS", "Row 1"),
-    NC_("SC_OPCODE_CHOOSEROWS", "The number of the first row to be returned."),
-    NC_("SC_OPCODE_CHOOSEROWS", "Row 2"),
-    NC_("SC_OPCODE_CHOOSEROWS", "Row 2, Row 3,... The list of row numbers to be returned.")
+    NC_("SC_OPCODE_CHOOSEROWS", "Row "),
+    NC_("SC_OPCODE_CHOOSEROWS", "Row 1, Row 2,... The list of row numbers to be returned.")
 };
 
 // -=*# Resource for function DROP #*=-
