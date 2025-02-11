@@ -536,7 +536,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
         m_xCbxDistort->get_state_changed_from_saved())
     {
         SdOptionsMiscItem aOptsItem;
-
+        //all settings here need to be reflected in SdOptionsMiscItem::SetOptions()
         aOptsItem.GetOptionsMisc().SetStartWithTemplate( m_xCbxStartWithTemplate->get_active() );
         aOptsItem.GetOptionsMisc().SetMarkedHitMovesAlways( m_xCbxMarkedHitMovesAlways->get_active() );
         aOptsItem.GetOptionsMisc().SetQuickEdit( m_xCbxQuickEdit->get_active() );
