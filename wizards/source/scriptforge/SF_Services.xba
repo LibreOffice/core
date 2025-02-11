@@ -357,69 +357,54 @@ Private Function _FindModuleFromMethod(ByVal psLibrary As String _
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The name of the module or a zero-length string if not found
 
+Dim oBasic As Object					&apos;	com.sun.star.comp.scripting.ScriptProviderForBasic
 Dim vCategories As Variant				&apos;	&quot;user&quot; or &quot;share&quot; library categories
 Dim sCategory As String
-Dim vLanguages As Variant				&apos;	&quot;Basic&quot;, &quot;Python&quot;, ... programming languages
-Dim sLanguage As String
 Dim vLibraries As Variant				&apos;	Library names
 Dim sLibrary As String
 Dim vModules As Variant					&apos;	Module names
 Dim sModule As String					&apos;	Return value
-Dim vMethods As Variant					&apos;	Method/properties/subs/functions
+Dim vMethods As Variant					&apos;	Methods/properties/subs/functions
 Dim sMethod As String
-Dim oRoot As Object						&apos;	com.sun.star.script.browse.BrowseNodeFactory
-Dim i As Integer, j As Integer, k As Integer, l As Integer, m As Integer
+Dim i As Integer, k As Integer, l As Integer, m As Integer
 
 	_FindModuleFromMethod = &quot;&quot;
-	Set oRoot = SF_Utils._GetUNOService(&quot;BrowseNodeFactory&quot;).createView(com.sun.star.script.browse.BrowseNodeFactoryViewTypes.MACROORGANIZER)
 
-	&apos;	Exploration is done via tree nodes
-	If Not IsNull(oRoot) Then
-		If oRoot.hasChildNodes() Then
-			vCategories = oRoot.getChildNodes()
-			For i = 0 To UBound(vCategories)
-				sCategory = vCategories(i).getName()
-				&apos;	Consider &quot;My macros &amp; Dialogs&quot; and &quot;LibreOffice Macros &amp; Dialogs&quot; only
-				If sCategory = &quot;user&quot; Or sCategory = &quot;share&quot; Then
-					If vCategories(i).hasChildNodes() Then
-						vLanguages = vCategories(i).getChildNodes()
-						For j = 0 To UBound(vLanguages)
-							sLanguage = vLanguages(j).getName()
-							&apos;	Consider Basic libraries only
-							If sLanguage = &quot;Basic&quot; Then
-								If vLanguages(j).hasChildNodes() Then
-									vLibraries = vLanguages(j).getChildNodes()
-									For k = 0 To UBound(vLibraries)
-										sLibrary = vLibraries(k).getName()
-										&apos;	Consider the given library only
-										If sLibrary = psLibrary Then
-											If vLibraries(k).hasChildNodes() Then
-												vModules = vLibraries(k).getChildNodes()
-												For l = 0 To UBound(vModules)
-													sModule = vModules(l).getName()
-													&apos;	Check if the module contains the targeted method
-													If vModules(l).hasChildNodes() Then
-														vMethods = vModules(l).getChildNodes()
-														For m = 0 To UBound(vMethods)
-															sMethod = vMethods(m).getName()
-															If sMethod = psMethod Then
-																_FindModuleFromMethod = sModule
-																Exit Function
-															End If
-														Next m
-													End If
-												Next l
-											End If
-										End If
-									Next k
-								End If
+	&apos;	Exploration is done via tree nodes, starting
+	&apos;	from a com.sun.star.comp.scripting.ScriptProviderForBasic
+	&apos;	See also bug report https://bugs.documentfoundation.org/show_bug.cgi?id=165147
+	vCategories = Array(&quot;user&quot;, &quot;share&quot;)
+	For i = 0 To UBound(vCategories)
+		Set oBasic = CreateUnoService(&quot;com.sun.star.comp.scripting.ScriptProviderForBasic&quot;)
+		sCategory = vCategories(i)
+		oBasic.initialize(Array(sCategory))
+		If oBasic.hasChildNodes() Then
+			vLibraries = oBasic.getChildNodes()
+			For k = 0 To UBound(vLibraries)
+				sLibrary = vLibraries(k).getName()
+				&apos;	Consider the given library only
+				If sLibrary = psLibrary Then
+					If vLibraries(k).hasChildNodes() Then
+						vModules = vLibraries(k).getChildNodes()
+						For l = 0 To UBound(vModules)
+							sModule = vModules(l).getName()
+							&apos;	Check if the module contains the targeted method
+							If vModules(l).hasChildNodes() Then
+								vMethods = vModules(l).getChildNodes()
+								For m = 0 To UBound(vMethods)
+									sMethod = vMethods(m).getName()
+									If sMethod = psMethod Then
+										_FindModuleFromMethod = sModule
+										Exit Function
+									End If
+								Next m
 							End If
-						Next j
+						Next l
 					End If
 				End If
-			Next i
+			Next k
 		End If
-	End If
+	Next i
 
 End Function	&apos;	ScriptForge.SF_Services._FindModuleFromMethod
 
