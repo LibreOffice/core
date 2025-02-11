@@ -539,8 +539,10 @@ IMPL_LINK_NOARG(SvxGrfCropPage, UncropHdl, weld::Button&, void)
 
     m_xLeftMF->set_value(0, FieldUnit::NONE);
     m_xRightMF->set_value(0, FieldUnit::NONE);
+    ZoomHdl(*m_xWidthZoomMF);
     m_xTopMF->set_value(0, FieldUnit::NONE);
     m_xBottomMF->set_value(0, FieldUnit::NONE);
+    ZoomHdl(*m_xHeightZoomMF);
 
     m_aExampleWN.SetLeft(0);
     m_aExampleWN.SetRight(0);
