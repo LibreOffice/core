@@ -855,7 +855,7 @@ void SwView::StateSearch(SfxItemSet &rSet)
             case SID_SEARCH_OPTIONS:
             {
                 SearchOptionFlags nOpt = SearchOptionFlags::ALL;
-                if( GetDocShell()->IsReadOnly() )
+                if (GetDocShell()->IsReadOnly() || IsCurrentLokViewReadOnly())
                     nOpt &= ~SearchOptionFlags( SearchOptionFlags::REPLACE |
                                SearchOptionFlags::REPLACE_ALL );
                 rSet.Put( SfxUInt16Item( SID_SEARCH_OPTIONS, static_cast<sal_uInt16>(nOpt) ));
