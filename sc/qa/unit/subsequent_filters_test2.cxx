@@ -862,6 +862,24 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf130132)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf165080)
+{
+    createScDoc("xls/tdf165080.xls");
+
+    ScDocument* pDoc = getScDoc();
+
+    const ScPatternAttr* pAttr = pDoc->GetPattern(0, 0, 0);
+
+    const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
+    const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+    const Color& rColor = rBackground.GetColor();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: rgba[c0c0c0ff]
+    // - Actual  : rgba[ffffff00]
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTGRAY, rColor);
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf133327)
 {
     createScDoc("ods/tdf133327.ods");
