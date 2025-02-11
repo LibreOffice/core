@@ -302,7 +302,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accChildCount(long *pcountCh
                 // return error code if child count exceeds max long value
                 // (for Calc sheets which report all cells as children);
                 // tdf#153131: Windows Speech Recognition and apparently some other
-                // tools quering information via the a11y API seem to query all children unconditionally,
+                // tools querying information via the a11y API seem to query all children unconditionally,
                 // so returning a large number (like std::numeric_limits<long>::max) would cause a freeze
                 SAL_WARN("iacc2", "CMAccessible::get_accChildCount: Child count exceeds maximum long value");
                 return S_FALSE;
