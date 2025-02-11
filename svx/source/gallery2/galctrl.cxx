@@ -258,15 +258,15 @@ void DialogGalleryPreview::Paint(vcl::RenderContext& rRenderContext, const tools
 {
     rRenderContext.SetBackground(Wallpaper(GALLERY_BG_COLOR));
 
-    if (ImplGetGraphicCenterRect(aGraphicObj.GetGraphic(), aPreviewRect))
+    if (ImplGetGraphicCenterRect(maGraphicObj.GetGraphic(), maPreviewRect))
     {
-        const Point aPos( aPreviewRect.TopLeft() );
-        const Size  aSize( aPreviewRect.GetSize() );
+        const Point aPos( maPreviewRect.TopLeft() );
+        const Size  aSize( maPreviewRect.GetSize() );
 
-        if( aGraphicObj.IsAnimated() )
-            aGraphicObj.StartAnimation(rRenderContext, aPos, aSize);
+        if( maGraphicObj.IsAnimated() )
+            maGraphicObj.StartAnimation(rRenderContext, aPos, aSize);
         else
-            aGraphicObj.Draw(rRenderContext, aPos, aSize);
+            maGraphicObj.Draw(rRenderContext, aPos, aSize);
     }
 }
 

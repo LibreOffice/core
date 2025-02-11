@@ -69,8 +69,8 @@ public:
 class SVXCORE_DLLPUBLIC DialogGalleryPreview final : public weld::CustomWidgetController
 {
 private:
-    GraphicObject aGraphicObj;
-    tools::Rectangle aPreviewRect;
+    GraphicObject maGraphicObj;
+    tools::Rectangle maPreviewRect;
 
     SVX_DLLPRIVATE bool             ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::Rectangle& rResultRect ) const;
 
@@ -81,7 +81,7 @@ public:
     DialogGalleryPreview();
 
     virtual void        SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
-    void                SetGraphic( const Graphic& rGraphic ) { aGraphicObj.SetGraphic( rGraphic ); }
+    void                SetGraphic( const Graphic& rGraphic ) { maGraphicObj.SetGraphic( rGraphic ); }
     bool                SetGraphic( const INetURLObject& );
 };
 
