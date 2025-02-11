@@ -882,7 +882,8 @@ awt::Rectangle VCLXAccessibleList::implGetBounds()
     else
     {
         // a list has the same bounds as his parent but starts at (0,0)
-        aBounds = VCLXAccessibleComponent::implGetBounds();
+        if (m_xParent)
+            aBounds = m_xParent->getBounds();
         aBounds.X = 0;
         aBounds.Y = 0;
         if ( m_aBoxType == COMBOBOX )
@@ -905,26 +906,15 @@ awt::Point VCLXAccessibleList::getLocationOnScreen(  )
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    awt::Point aPos;
-    if ( m_pListBoxHelper
-        && (m_pListBoxHelper->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN )
+    awt::Rectangle aBounds = implGetBounds();
+    awt::Point aPos(aBounds.X, aBounds.Y);
+    if (m_xParent.is())
     {
-        if ( m_pListBoxHelper->IsInDropDown() )
-            aPos = vcl::unohelper::ConvertToAWTPoint(
-                m_pListBoxHelper->GetDropDownPosSizePixel().TopLeft());
+        awt::Point aParentLocation = m_xParent->getLocationOnScreen();
+        aPos.X += aParentLocation.X;
+        aPos.Y += aParentLocation.Y;
     }
-    else
-    {
-        aPos = VCLXAccessibleComponent::getLocationOnScreen();
-        if ( m_aBoxType == COMBOBOX )
-        {
-            VclPtr< ComboBox > pBox = GetAs< ComboBox >();
-            if ( pBox )
-            {
-                aPos.Y += pBox->GetSubEdit()->GetSizePixel().Height();
-            }
-        }
-    }
+
     return aPos;
 }
 
