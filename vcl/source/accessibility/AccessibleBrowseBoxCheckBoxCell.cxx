@@ -26,20 +26,16 @@
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
 
-AccessibleCheckBoxCell::AccessibleCheckBoxCell(const Reference<XAccessible >& _rxParent,
-                            vcl::IAccessibleTableProvider& _rBrowseBox,
-                            sal_Int32 _nRowPos,
-                            sal_uInt16 _nColPos
-                            ,const TriState& _eState,
-                            bool _bIsTriState)
-    :AccessibleBrowseBoxCell(_rxParent, _rBrowseBox, nullptr, _nRowPos, _nColPos, AccessibleBrowseBoxObjType::CheckBoxCell)
-    ,m_eState(_eState)
-    ,m_bIsTriState(_bIsTriState)
+AccessibleCheckBoxCell::AccessibleCheckBoxCell(const Reference<XAccessible>& _rxParent,
+                                               vcl::IAccessibleTableProvider& _rBrowseBox,
+                                               sal_Int32 _nRowPos, sal_uInt16 _nColPos,
+                                               const TriState& _eState, bool _bIsTriState)
+    : ImplInheritanceHelper(_rxParent, _rBrowseBox, nullptr, _nRowPos, _nColPos,
+                            AccessibleBrowseBoxObjType::CheckBoxCell)
+    , m_eState(_eState)
+    , m_bIsTriState(_bIsTriState)
 {
 }
-IMPLEMENT_FORWARD_XINTERFACE2( AccessibleCheckBoxCell, AccessibleBrowseBoxCell, AccessibleCheckBoxCell_BASE )
-
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleCheckBoxCell, AccessibleBrowseBoxCell, AccessibleCheckBoxCell_BASE )
 
 Reference< XAccessibleContext > SAL_CALL AccessibleCheckBoxCell::getAccessibleContext(  )
 {

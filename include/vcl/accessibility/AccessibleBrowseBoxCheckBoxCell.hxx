@@ -23,13 +23,9 @@
 #include <cppuhelper/implbase2.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxCell.hxx>
 
-
-typedef ::cppu::ImplHelper2 <   css::accessibility::XAccessible,
-                                css::accessibility::XAccessibleValue
-                            >   AccessibleCheckBoxCell_BASE;
-
-class VCL_DLLPUBLIC AccessibleCheckBoxCell final : public AccessibleBrowseBoxCell,
-                                                   public AccessibleCheckBoxCell_BASE
+class VCL_DLLPUBLIC AccessibleCheckBoxCell final
+    : public cppu::ImplInheritanceHelper<AccessibleBrowseBoxCell, css::accessibility::XAccessible,
+                                         css::accessibility::XAccessibleValue>
 {
 private:
     TriState m_eState;
@@ -46,11 +42,6 @@ public:
                             sal_uInt16 _nColPos,
                             const TriState& _eState,
                             bool _bIsTriState);
-
-    // XInterface
-    DECLARE_XINTERFACE( )
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER( )
 
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
