@@ -29,6 +29,7 @@
 #include <comphelper/compbase.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <accessibility/vclxaccessiblelist.hxx>
+#include <tools/gen.hxx>
 
 // forward ---------------------------------------------------------------
 
@@ -74,6 +75,8 @@ private:
     virtual OUString                        implGetText() override;
     virtual css::lang::Locale               implGetLocale() override;
     virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override;
+
+    tools::Rectangle implGetBounds();
 
     OUString getTextRangeImpl(sal_Int32 nStartIndex, sal_Int32 nEndIndex);
 

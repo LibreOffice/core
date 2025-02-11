@@ -132,6 +132,16 @@ void VCLXAccessibleListItem::implGetSelection( sal_Int32& nStartIndex, sal_Int32
     nEndIndex = 0;
 }
 
+tools::Rectangle VCLXAccessibleListItem::implGetBounds()
+{
+    tools::Rectangle aRect;
+    IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
+    if (pListBoxHelper)
+        aRect = pListBoxHelper->GetBoundingRectangle(static_cast<sal_uInt16>(m_nIndexInParent));
+
+    return aRect;
+}
+
 // XTypeProvider
 
 Sequence< sal_Int8 > VCLXAccessibleListItem::getImplementationId()
@@ -281,14 +291,9 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::containsPoint( const awt::Point& _aPoi
 {
     SolarMutexGuard aSolarGuard;
 
-    bool bInside = false;
-    IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
-    if (pListBoxHelper)
-    {
-        tools::Rectangle aRect(pListBoxHelper->GetBoundingRectangle(static_cast<sal_uInt16>(m_nIndexInParent)));
-        aRect.Move(-aRect.Left(), -aRect.Top());
-        bInside = aRect.Contains(vcl::unohelper::ConvertToVCLPoint(_aPoint));
-    }
+    tools::Rectangle aRect = implGetBounds();
+    aRect.SetPos(Point(0, 0));
+    const bool bInside = aRect.Contains(vcl::unohelper::ConvertToVCLPoint(_aPoint));
     return bInside;
 }
 
@@ -301,26 +306,14 @@ awt::Rectangle SAL_CALL VCLXAccessibleListItem::getBounds(  )
 {
     SolarMutexGuard aSolarGuard;
 
-    awt::Rectangle aRect;
-    IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
-    if (pListBoxHelper)
-        aRect = vcl::unohelper::ConvertToAWTRect(
-            pListBoxHelper->GetBoundingRectangle(static_cast<sal_uInt16>(m_nIndexInParent)));
-
-    return aRect;
+    return vcl::unohelper::ConvertToAWTRect(implGetBounds());
 }
 
 awt::Point SAL_CALL VCLXAccessibleListItem::getLocation(  )
 {
     SolarMutexGuard aSolarGuard;
 
-    Point aPoint(0,0);
-    IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
-    if (pListBoxHelper)
-    {
-        tools::Rectangle aRect = pListBoxHelper->GetBoundingRectangle( static_cast<sal_uInt16>(m_nIndexInParent) );
-        aPoint = aRect.TopLeft();
-    }
+    const Point aPoint = implGetBounds().TopLeft();
     return vcl::unohelper::ConvertToAWTPoint(aPoint);
 }
 
@@ -328,14 +321,11 @@ awt::Point SAL_CALL VCLXAccessibleListItem::getLocationOnScreen(  )
 {
     SolarMutexGuard aSolarGuard;
 
-    Point aPoint(0,0);
+    Point aPoint = implGetBounds().TopLeft();
     IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
     if (pListBoxHelper)
-    {
-        tools::Rectangle aRect = pListBoxHelper->GetBoundingRectangle(static_cast<sal_uInt16>(m_nIndexInParent));
-        aPoint = aRect.TopLeft();
         aPoint += Point(pListBoxHelper->GetWindowExtentsAbsolute().TopLeft());
-    }
+
     return vcl::unohelper::ConvertToAWTPoint(aPoint);
 }
 
@@ -343,11 +333,7 @@ awt::Size SAL_CALL VCLXAccessibleListItem::getSize(  )
 {
     SolarMutexGuard aSolarGuard;
 
-    Size aSize;
-    IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
-    if (pListBoxHelper)
-        aSize = pListBoxHelper->GetBoundingRectangle( static_cast<sal_uInt16>(m_nIndexInParent) ).GetSize();
-
+    Size aSize = implGetBounds().GetSize();
     return vcl::unohelper::ConvertToAWTSize(aSize);
 }
 
