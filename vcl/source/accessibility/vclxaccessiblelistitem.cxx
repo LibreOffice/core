@@ -201,7 +201,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleListItem::getAccessibleChild( sa
 
 Reference< XAccessible > SAL_CALL VCLXAccessibleListItem::getAccessibleParent(  )
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aSolarGuard;
 
     return m_xParent;
 }
@@ -225,7 +225,7 @@ OUString SAL_CALL VCLXAccessibleListItem::getAccessibleDescription(  )
 
 OUString SAL_CALL VCLXAccessibleListItem::getAccessibleName(  )
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aSolarGuard;
 
     // entry text == accessible name
     return m_sEntryText;
@@ -238,7 +238,7 @@ Reference< XAccessibleRelationSet > SAL_CALL VCLXAccessibleListItem::getAccessib
 
 sal_Int64 SAL_CALL VCLXAccessibleListItem::getAccessibleStateSet(  )
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aSolarGuard;
 
     sal_Int64 nStateSet = 0;
 
@@ -271,7 +271,6 @@ sal_Int64 SAL_CALL VCLXAccessibleListItem::getAccessibleStateSet(  )
 Locale SAL_CALL VCLXAccessibleListItem::getLocale(  )
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( m_aMutex );
 
     return implGetLocale();
 }
@@ -281,7 +280,6 @@ Locale SAL_CALL VCLXAccessibleListItem::getLocale(  )
 sal_Bool SAL_CALL VCLXAccessibleListItem::containsPoint( const awt::Point& _aPoint )
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( m_aMutex );
 
     bool bInside = false;
     IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
@@ -302,7 +300,6 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleListItem::getAccessibleAtPoint( 
 awt::Rectangle SAL_CALL VCLXAccessibleListItem::getBounds(  )
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( m_aMutex );
 
     awt::Rectangle aRect;
     IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
@@ -316,7 +313,6 @@ awt::Rectangle SAL_CALL VCLXAccessibleListItem::getBounds(  )
 awt::Point SAL_CALL VCLXAccessibleListItem::getLocation(  )
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( m_aMutex );
 
     Point aPoint(0,0);
     IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
@@ -331,7 +327,6 @@ awt::Point SAL_CALL VCLXAccessibleListItem::getLocation(  )
 awt::Point SAL_CALL VCLXAccessibleListItem::getLocationOnScreen(  )
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( m_aMutex );
 
     Point aPoint(0,0);
     IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
@@ -347,7 +342,6 @@ awt::Point SAL_CALL VCLXAccessibleListItem::getLocationOnScreen(  )
 awt::Size SAL_CALL VCLXAccessibleListItem::getSize(  )
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( m_aMutex );
 
     Size aSize;
     IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
@@ -372,7 +366,6 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getCaretPosition()
 sal_Bool SAL_CALL VCLXAccessibleListItem::setCaretPosition( sal_Int32 nIndex )
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( m_aMutex );
 
     if ( !implIsValidRange( nIndex, nIndex, m_sEntryText.getLength() ) )
         throw IndexOutOfBoundsException();
@@ -383,7 +376,6 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::setCaretPosition( sal_Int32 nIndex )
 sal_Unicode SAL_CALL VCLXAccessibleListItem::getCharacter( sal_Int32 nIndex )
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( m_aMutex );
 
     return OCommonAccessibleText::implGetCharacter( m_sEntryText, nIndex );
 }
@@ -391,7 +383,6 @@ sal_Unicode SAL_CALL VCLXAccessibleListItem::getCharacter( sal_Int32 nIndex )
 Sequence< PropertyValue > SAL_CALL VCLXAccessibleListItem::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& )
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( m_aMutex );
 
     if ( !implIsValidIndex( nIndex, m_sEntryText.getLength() ) )
         throw IndexOutOfBoundsException();
@@ -402,7 +393,6 @@ Sequence< PropertyValue > SAL_CALL VCLXAccessibleListItem::getCharacterAttribute
 awt::Rectangle SAL_CALL VCLXAccessibleListItem::getCharacterBounds( sal_Int32 nIndex )
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( m_aMutex );
 
     if ( !implIsValidIndex( nIndex, m_sEntryText.getLength() ) )
         throw IndexOutOfBoundsException();
@@ -422,7 +412,7 @@ awt::Rectangle SAL_CALL VCLXAccessibleListItem::getCharacterBounds( sal_Int32 nI
 
 sal_Int32 SAL_CALL VCLXAccessibleListItem::getCharacterCount()
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aSolarGuard;
 
     return m_sEntryText.getLength();
 }
@@ -430,7 +420,6 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getCharacterCount()
 sal_Int32 SAL_CALL VCLXAccessibleListItem::getIndexAtPoint( const awt::Point& aPoint )
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( m_aMutex );
 
     sal_Int32 nIndex = -1;
     IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
@@ -464,7 +453,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getSelectionEnd()
 
 sal_Bool SAL_CALL VCLXAccessibleListItem::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aSolarGuard;
 
     if ( !implIsValidRange( nStartIndex, nEndIndex, m_sEntryText.getLength() ) )
         throw IndexOutOfBoundsException();
@@ -474,12 +463,12 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::setSelection( sal_Int32 nStartIndex, s
 
 OUString SAL_CALL VCLXAccessibleListItem::getText()
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aSolarGuard;
 
     return m_sEntryText;
 }
 
-OUString VCLXAccessibleListItem::getTextRangeImpl(std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 nStartIndex, sal_Int32 nEndIndex)
+OUString VCLXAccessibleListItem::getTextRangeImpl(sal_Int32 nStartIndex, sal_Int32 nEndIndex)
 {
     return OCommonAccessibleText::implGetTextRange(m_sEntryText, nStartIndex, nEndIndex);
 }
@@ -487,15 +476,13 @@ OUString VCLXAccessibleListItem::getTextRangeImpl(std::unique_lock<std::mutex>& 
 OUString SAL_CALL VCLXAccessibleListItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( m_aMutex );
 
-    return getTextRangeImpl(aGuard, nStartIndex, nEndIndex);
+    return getTextRangeImpl(nStartIndex, nEndIndex);
 }
 
 css::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( m_aMutex );
 
     return OCommonAccessibleText::getTextAtIndex( nIndex, aTextType );
 }
@@ -503,7 +490,6 @@ css::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextAtIndex(
 css::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( m_aMutex );
 
     return OCommonAccessibleText::getTextBeforeIndex( nIndex, aTextType );
 }
@@ -511,7 +497,6 @@ css::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextBeforeIn
 css::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( m_aMutex );
 
     return OCommonAccessibleText::getTextBehindIndex( nIndex, aTextType );
 }
@@ -519,7 +504,6 @@ css::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextBehindIn
 sal_Bool SAL_CALL VCLXAccessibleListItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( m_aMutex );
 
     checkIndex_Impl( nStartIndex, m_sEntryText );
     checkIndex_Impl( nEndIndex, m_sEntryText );
@@ -531,7 +515,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::copyText( sal_Int32 nStartIndex, sal_I
         Reference< datatransfer::clipboard::XClipboard > xClipboard = pListBoxHelper->GetClipboard();
         if ( xClipboard.is() )
         {
-            OUString sText(getTextRangeImpl(aGuard, nStartIndex, nEndIndex));
+            OUString sText(getTextRangeImpl(nStartIndex, nEndIndex));
             rtl::Reference<vcl::unohelper::TextDataObject> pDataObj = new vcl::unohelper::TextDataObject( sText );
 
             SolarMutexReleaser aReleaser;

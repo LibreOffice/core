@@ -75,7 +75,7 @@ private:
     virtual css::lang::Locale               implGetLocale() override;
     virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override;
 
-    OUString getTextRangeImpl(std::unique_lock<std::mutex>& rGuard, sal_Int32 nStartIndex, sal_Int32 nEndIndex);
+    OUString getTextRangeImpl(sal_Int32 nStartIndex, sal_Int32 nEndIndex);
 
 public:
     /** OAccessibleBase needs a valid view
