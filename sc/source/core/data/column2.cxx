@@ -310,7 +310,10 @@ tools::Long ScColumn::GetNeededSize(
             tools::Long nWidth = 0;
             if ( eOrient != SvxCellOrientation::Standard )
             {
-                nWidth = pDev->GetTextHeight();
+                tools::Long nHeight = pDev->GetTextHeight();
+                // swap width and height
+                nValue = bWidth ? nHeight : pDev->GetTextWidth( aValStr );
+                nWidth = nHeight;
             }
             else if ( nRotate )
             {
@@ -363,7 +366,10 @@ tools::Long ScColumn::GetNeededSize(
                 }
             }
             else if (bBreak && !bWidth)
+            {
                 nWidth = pDev->GetTextWidth(aValStr);
+                nValue = pDev->GetTextHeight();
+            }
             else
                 // in the common case (height), avoid calling the expensive GetTextWidth
                 nValue = bWidth ? pDev->GetTextWidth( aValStr ) : pDev->GetTextHeight();
