@@ -479,12 +479,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf161810)
             auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
             auto pDXArray = pTextArrayAction->GetDXArray();
 
-            // There should be 73 chars on the first line
-            CPPUNIT_ASSERT_EQUAL(size_t(73), pDXArray.size());
+            // There should be 70 chars on the first line
+            // (tdf#164499 no space shrinking in lines with tabulation)
+            CPPUNIT_ASSERT_EQUAL(size_t(70), pDXArray.size());
 
-            // Assert we are using the expected position for the last char
-            // This was 9369, now 9165, according to the fixed space shrinking
-            CPPUNIT_ASSERT_LESS(sal_Int32(9300), sal_Int32(pDXArray[72]));
             break;
         }
     }
@@ -533,6 +531,26 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf163149)
             break;
         }
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf164499)
+{
+    createSwDoc("tdf164499.docx");
+
+    // Ensure that all text portions are calculated before testing.
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // no shrinking in tabulated text lines
+
+    // This was 1 (no line break in heading 2.5.5)
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/txt[18]/SwParaPortion/SwLineLayout", 2);
+    // line break in heading 2.5.5: the second line contains only the page number
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/txt[18]/SwParaPortion/SwLineLayout[2]",
+                "portion", u"*1");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf132599_always)
