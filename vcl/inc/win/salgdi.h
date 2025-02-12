@@ -253,8 +253,6 @@ public:
     void setHDC(HDC aNew);
 
     HPALETTE getDefPal() const;
-    // returns the result from RealizePalette, otherwise 0 on success or GDI_ERROR
-    UINT setPalette(HPALETTE, BOOL bForceBkgd = TRUE);
 
     HRGN getRegion() const;
 
