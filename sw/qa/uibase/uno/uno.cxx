@@ -375,6 +375,33 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetFields)
                          aRef.get<std::string>("name"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetLayout)
+{
+    // Given a document with 2 pages:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertPageBreak();
+
+    // When getting info about the layout:
+    tools::JsonWriter aJsonWriter;
+    std::string_view aCommand(".uno:Layout");
+    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pXTextDocument->getCommandValues(aJsonWriter, aCommand);
+
+    // Then make sure we get the 2 pages:
+    OString pJSON(aJsonWriter.finishAndGetAsOString());
+    std::stringstream aStream((std::string(pJSON)));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    auto aPages = aTree.get_child("commandValues").get_child("pages");
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPages.count(""));
+    for (const auto& rPage : aPages)
+    {
+        CPPUNIT_ASSERT(!rPage.second.get<bool>("isInvalidContent"));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormField)
 {
     // Given a document with a fieldmark:
