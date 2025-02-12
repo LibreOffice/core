@@ -4303,8 +4303,8 @@ const TranslateId SC_OPCODE_HSTACK_ARY[] =
     NC_("SC_OPCODE_HSTACK", "Appends arrays horizontally to create a larger array"),
     NC_("SC_OPCODE_HSTACK", "Array"),
     NC_("SC_OPCODE_HSTACK", "The first array to append."),
-    NC_("SC_OPCODE_HSTACK", "Array 2"),
-    NC_("SC_OPCODE_HSTACK", "Array 2, Array 3,... The following arrays to append. if an array has fewer rows, #N/A error will be returned in the additional rows."),
+    NC_("SC_OPCODE_HSTACK", "Array "),
+    NC_("SC_OPCODE_HSTACK", "Array 1, Array 2,... The following arrays to append. If an array has fewer rows, #N/A error will be returned in the additional rows."),
 };
 
 // -=*# Resource for function VSTACK #*=-
@@ -4313,8 +4313,8 @@ const TranslateId SC_OPCODE_VSTACK_ARY[] =
     NC_("SC_OPCODE_VSTACK", "Appends arrays vertically to create a larger array"),
     NC_("SC_OPCODE_VSTACK", "Array"),
     NC_("SC_OPCODE_VSTACK", "The first array to append."),
-    NC_("SC_OPCODE_VSTACK", "Array 2"),
-    NC_("SC_OPCODE_VSTACK", "Array 2, Array 3,... The following arrays to append. if an array has fewer columns, #N/A error will be returned in the additional columns."),
+    NC_("SC_OPCODE_VSTACK", "Array "),
+    NC_("SC_OPCODE_VSTACK", "Array 1, Array 2,... The following arrays to append. If an array has fewer columns, #N/A error will be returned in the additional columns."),
 };
 
 // -=*# Resource for function TAKE #*=-
