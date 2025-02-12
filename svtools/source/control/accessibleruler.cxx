@@ -40,23 +40,12 @@ using namespace ::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
-SvtRulerAccessible::SvtRulerAccessible(
-    uno::Reference< XAccessible > xParent, Ruler& rRepr, OUString aName ) :
-
-    msName(std::move( aName )),
-    mxParent(std::move( xParent )),
-    mpRepr( &rRepr ),
-    mnClientId( 0 )
+SvtRulerAccessible::SvtRulerAccessible(uno::Reference<XAccessible> xParent, Ruler& rRepr,
+                                       OUString aName)
+    : msName(std::move(aName))
+    , mxParent(std::move(xParent))
+    , mpRepr(&rRepr)
 {
-}
-
-SvtRulerAccessible::~SvtRulerAccessible()
-{
-    if( !m_bDisposed )
-    {
-        osl_atomic_increment( &m_refCount );
-        dispose();      // set mpRepr = NULL & release all children
-    }
 }
 
 //=====  XAccessible  =========================================================
@@ -68,54 +57,19 @@ uno::Reference< XAccessibleContext > SAL_CALL SvtRulerAccessible::getAccessibleC
 
 //=====  XAccessibleComponent  ================================================
 
-sal_Bool SAL_CALL SvtRulerAccessible::containsPoint( const awt::Point& rPoint )
-{
-    SolarMutexGuard aSolarGuard;
-
-//  return GetBoundingBox().IsInside( vcl::unohelper::ConvertToVCLPoint( rPoint ) );
-    return tools::Rectangle(Point(0, 0), GetBoundingBox().GetSize())
-        .Contains(vcl::unohelper::ConvertToVCLPoint(rPoint));
-}
-
 uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleAtPoint( const awt::Point& )
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( m_aMutex );
-    throwIfDisposed(aGuard);
+    ensureAlive();
 
     return uno::Reference< XAccessible >();
-}
-
-awt::Rectangle SAL_CALL SvtRulerAccessible::getBounds()
-{
-    SolarMutexGuard aSolarGuard;
-    return vcl::unohelper::ConvertToAWTRect(GetBoundingBox());
-}
-
-awt::Point SAL_CALL SvtRulerAccessible::getLocation()
-{
-    SolarMutexGuard aSolarGuard;
-    return vcl::unohelper::ConvertToAWTPoint(GetBoundingBox().TopLeft());
-}
-
-awt::Point SAL_CALL SvtRulerAccessible::getLocationOnScreen()
-{
-    SolarMutexGuard aSolarGuard;
-    return vcl::unohelper::ConvertToAWTPoint(GetBoundingBoxOnScreen().TopLeft());
-}
-
-awt::Size SAL_CALL SvtRulerAccessible::getSize()
-{
-    SolarMutexGuard aSolarGuard;
-    return vcl::unohelper::ConvertToAWTSize(GetBoundingBox().GetSize());
 }
 
 //=====  XAccessibleContext  ==================================================
 sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleChildCount()
 {
     SolarMutexGuard aSolarGuard;
-    std::unique_lock aGuard( m_aMutex );
-    throwIfDisposed(aGuard);
+    ensureAlive();
 
     return 0;
 }
@@ -195,7 +149,7 @@ sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleStateSet()
 
     sal_Int64 nStateSet = 0;
 
-    if( !m_bDisposed )
+    if (isAlive())
     {
         nStateSet |= AccessibleStateType::ENABLED;
 
@@ -226,39 +180,6 @@ lang::Locale SAL_CALL SvtRulerAccessible::getLocale()
 
     //  No parent.  Therefore throw exception to indicate this cluelessness.
     throw IllegalAccessibleComponentStateException();
-}
-
-void SAL_CALL SvtRulerAccessible::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
-{
-    if (xListener.is())
-    {
-        std::unique_lock aGuard( m_aMutex );
-        if (!mnClientId)
-            mnClientId = comphelper::AccessibleEventNotifier::registerClient( );
-        comphelper::AccessibleEventNotifier::addEventListener( mnClientId, xListener );
-    }
-}
-
-void SAL_CALL SvtRulerAccessible::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
-{
-    if (!xListener.is())
-        return;
-
-    std::unique_lock aGuard( m_aMutex );
-
-    if (!mnClientId)
-        return;
-
-    sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
-    if ( !nListenerCount )
-    {
-        // no listeners anymore
-        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-        // and at least to us not firing any events anymore, in case somebody calls
-        // NotifyAccessibleEvent, again
-        comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
-        mnClientId = 0;
-    }
 }
 
 void SAL_CALL SvtRulerAccessible::grabFocus()
@@ -312,33 +233,22 @@ Sequence< sal_Int8 > SAL_CALL SvtRulerAccessible::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-void SvtRulerAccessible::disposing(std::unique_lock<std::mutex>&)
+void SAL_CALL SvtRulerAccessible::disposing()
 {
     mpRepr = nullptr;      // object dies with representation
 
-    // Send a disposing to all listeners.
-    if ( mnClientId )
-    {
-        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
-        mnClientId =  0;
-    }
+    comphelper::OAccessibleComponentHelper::disposing();
+
     mxParent.clear();
 }
 
-tools::Rectangle SvtRulerAccessible::GetBoundingBoxOnScreen()
+awt::Rectangle SvtRulerAccessible::implGetBounds()
 {
     if (!mpRepr)
         throw css::lang::DisposedException(OUString(), static_cast<cppu::OWeakObject*>(this));
 
-    return tools::Rectangle(mpRepr->GetParent()->OutputToAbsoluteScreenPixel(mpRepr->GetPosPixel()), mpRepr->GetSizePixel());
-}
-
-tools::Rectangle SvtRulerAccessible::GetBoundingBox()
-{
-    if (!mpRepr)
-        throw css::lang::DisposedException(OUString(), static_cast<cppu::OWeakObject*>(this));
-
-    return tools::Rectangle(mpRepr->GetPosPixel(), mpRepr->GetSizePixel());
+    return vcl::unohelper::ConvertToAWTRect(
+        tools::Rectangle(mpRepr->GetPosPixel(), mpRepr->GetSizePixel()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

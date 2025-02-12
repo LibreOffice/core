@@ -27,22 +27,16 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/interfacecontainer.h>
+#include <comphelper/accessiblecomponenthelper.hxx>
 #include <comphelper/compbase.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace tools { class Rectangle; }
 class Ruler;
 
-
-typedef ::comphelper::WeakComponentImplHelper<
-            css::accessibility::XAccessible,
-            css::accessibility::XAccessibleComponent,
-            css::accessibility::XAccessibleContext,
-            css::accessibility::XAccessibleEventBroadcaster,
-            css::lang::XServiceInfo >
-            SvtRulerAccessible_Base;
-
-class SvtRulerAccessible final : public SvtRulerAccessible_Base
+class SvtRulerAccessible final
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
+                                         css::accessibility::XAccessible, css::lang::XServiceInfo>
 {
 public:
     //=====  internal  ========================================================
@@ -56,23 +50,8 @@ public:
 
     //=====  XAccessibleComponent  ============================================
 
-    virtual sal_Bool SAL_CALL
-        containsPoint( const css::awt::Point& rPoint ) override;
-
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
         getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
-
-    virtual css::awt::Rectangle SAL_CALL
-        getBounds() override;
-
-    virtual css::awt::Point SAL_CALL
-        getLocation() override;
-
-    virtual css::awt::Point SAL_CALL
-        getLocationOnScreen() override;
-
-    virtual css::awt::Size SAL_CALL
-        getSize() override;
 
     virtual void SAL_CALL
         grabFocus() override;
@@ -113,13 +92,6 @@ public:
 
     virtual css::lang::Locale SAL_CALL
         getLocale() override;
-    //=====  XAccessibleEventBroadcaster  =====================================
-
-    virtual void SAL_CALL
-        addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-
-    virtual void SAL_CALL
-        removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
 
     //=====  XServiceInfo  ====================================================
 
@@ -137,21 +109,11 @@ public:
     virtual css::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId() override;
 
+protected:
+    virtual css::awt::Rectangle implGetBounds() override;
+
 private:
-
-    virtual ~SvtRulerAccessible() override;
-
-    virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
-
-    /// @Return the object's current bounding box relative to the desktop.
-    ///
-    /// @throws css::uno::RuntimeException
-    tools::Rectangle GetBoundingBoxOnScreen();
-
-    /// @Return the object's current bounding box relative to the parent object.
-    ///
-    /// @throws css::uno::RuntimeException
-    tools::Rectangle GetBoundingBox();
+    virtual void SAL_CALL disposing() override;
 
     /// Name of this object.
     OUString                            msName;
@@ -162,9 +124,6 @@ private:
 
     /// pointer to internal representation
     VclPtr<Ruler>                       mpRepr;
-
-    /// client id in the AccessibleEventNotifier queue
-    sal_uInt32 mnClientId;
 };
 
 #endif
