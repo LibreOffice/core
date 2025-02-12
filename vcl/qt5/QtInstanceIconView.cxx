@@ -64,7 +64,13 @@ void QtInstanceIconView::insert(int nPos, const OUString* pStr, const OUString* 
         if (pId)
             pItem->setData(toQString(*pId), ROLE_ID);
         if (pIcon)
+        {
             pItem->setIcon(QIcon(toQPixmap(*pIcon)));
+            // set list view icon size to avoid downscaling
+            const QSize aIconSize
+                = m_pListView->iconSize().expandedTo(toQSize(pIcon->GetOutputSizePixel()));
+            m_pListView->setIconSize(aIconSize);
+        }
 
         m_pModel->insertRow(nPos, pItem);
     });
