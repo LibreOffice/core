@@ -71,11 +71,6 @@ public:
         return aRect;
     }
 
-    virtual AbsoluteScreenPixelRectangle GetWindowExtentsAbsolute() override
-    {
-        return m_aComboListBox.GetWindowExtentsAbsolute();
-    }
-
     virtual bool            IsEnabled() const override
     {
         return m_aComboListBox.IsEnabled();

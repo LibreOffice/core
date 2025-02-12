@@ -982,42 +982,6 @@ sal_uLong ImpGraphic::getSizeBytes() const
     return mnSizeBytes;
 }
 
-void ImpGraphic::draw(OutputDevice& rOutDev, const Point& rDestPt) const
-{
-    ensureAvailable();
-
-    if (isSwappedOut())
-        return;
-
-    switch (meType)
-    {
-        case GraphicType::Bitmap:
-        {
-            if (mpAnimation)
-            {
-                mpAnimation->Draw(rOutDev, rDestPt);
-            }
-            else
-            {
-                if (maVectorGraphicData)
-                    updateBitmapFromVectorGraphic();
-                maBitmapEx.Draw(&rOutDev, rDestPt);
-            }
-        }
-        break;
-
-        case GraphicType::GdiMetafile:
-        {
-            draw(rOutDev, rDestPt, maMetaFile.GetPrefSize());
-        }
-        break;
-
-        case GraphicType::Default:
-        case GraphicType::NONE:
-            break;
-    }
-}
-
 void ImpGraphic::draw(OutputDevice& rOutDev,
                       const Point& rDestPt, const Size& rDestSize) const
 {

@@ -84,8 +84,6 @@ public:
 
     void removeLock(const OUString& rURI);
 
-    void refreshLocks();
-
     // comphelper::LibreOfficeKit::ThreadJoinable
     virtual bool joinThreads() override;
     virtual void startThreads() override;

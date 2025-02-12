@@ -161,7 +161,6 @@ private:
 
     void ensureCurrentSizeInBytes();
 
-    void                draw(OutputDevice& rOutDev, const Point& rDestPt) const;
     void                draw(OutputDevice& rOutDev, const Point& rDestPt,
                              const Size& rDestSize) const;
 

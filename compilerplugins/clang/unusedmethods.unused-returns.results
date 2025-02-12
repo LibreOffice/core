@@ -44,7 +44,7 @@ extensions/source/scanner/sanedlg.hxx:87
     _Bool SaneDlg::LoadState()
 extensions/source/scanner/sanedlg.hxx:101
     _Bool SaneDlg::SetAdjustedNumericalValue(const char *,double,int)
-formula/source/ui/dlg/funcpage.hxx:104
+formula/source/ui/dlg/funcpage.hxx:103
     _Bool formula::FuncPage::UpdateFavouritesList()
 framework/source/fwe/classes/addonsoptions.cxx:281
     _Bool framework::AddonsOptions_Impl::ReadToolBarItemSet(const rtl::OUString &,com::sun::star::uno::Sequence<com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> > &)

@@ -138,8 +138,6 @@ cui/source/inc/GraphicsTestsDialog.hxx:48
     void GraphicsTestsDialog::LinkStubHandleResultViewRequest(void *,weld::Button &)
 cui/source/inc/SvxNotebookbarConfigPage.hxx:40
     void SvxNotebookbarConfigPage::SetElement()
-cui/source/options/appearance.hxx:83
-    void SvxAppearanceTabPage::UpdateControlsState()
 dbaccess/source/filter/hsqldb/fbalterparser.hxx:19
     void dbahsql::FbAlterStmtParser::ensureProperTableLengths() const
 dbaccess/source/filter/hsqldb/parseschema.hxx:80
@@ -282,8 +280,6 @@ extensions/source/scanner/scanner.hxx:83
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> ScannerManager_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 filter/source/svg/svgwriter.hxx:346
     Color SVGActionWriter::ImplGetColorWithIntensity(const Color &,unsigned short)
-formula/source/ui/dlg/funcpage.hxx:86
-    int formula::FuncPage::GetFunctionEntryCount() const
 hwpfilter/source/hiodev.h:62
     unsigned long HIODev::read4b(void *,unsigned long)
 idl/source/prj/svidl.cxx:103
@@ -888,9 +884,9 @@ include/comphelper/logging.hxx:415
     void comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
 include/comphelper/logging.hxx:428
     void comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/lok.hxx:67
+include/comphelper/lok.hxx:71
     _Bool comphelper::LibreOfficeKit::isLocalRendering()
-include/comphelper/lok.hxx:135
+include/comphelper/lok.hxx:139
     void comphelper::LibreOfficeKit::setBlockedCommandList(const char *)
 include/comphelper/multicontainer2.hxx:112
     void comphelper::OMultiTypeInterfaceContainerHelper2::clear()
@@ -1894,11 +1890,11 @@ include/svl/lockfilecommon.hxx:60
     void svt::LockFileCommon::SetURL(const rtl::OUString &)
 include/svl/ondemand.hxx:339
     const CharClass & OnDemandCharClass::operator*() const
-include/svl/poolitem.hxx:652
+include/svl/poolitem.hxx:655
     _Bool SfxPoolItem::isPooled() const
-include/svl/poolitem.hxx:707
+include/svl/poolitem.hxx:710
     type-parameter-?-? * SfxPoolItem::DynamicWhichCast(TypedWhichId<type-parameter-?-?>)
-include/svl/poolitem.hxx:863
+include/svl/poolitem.hxx:866
     _Bool IsDynamicDefaultItem(const SfxPoolItem *)
 include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<CntUInt16Item, derived_type>, int>::type)
@@ -2728,13 +2724,11 @@ include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<const SfxStringItem, derived_type>, int>::type)
 include/svl/whichranges.hxx:52
     void svl::Items_t::fill(struct std::pair<unsigned short, unsigned short> *)
-include/svtools/colorcfg.hxx:261
-     svtools::ColorConfigValue::ColorConfigValue(const Color &,_Bool)
-include/svtools/colorcfg.hxx:318
+include/svtools/colorcfg.hxx:310
     void svtools::EditableColorConfig::SetCurrentSchemeName(const rtl::OUString &)
-include/svtools/colorcfg.hxx:322
+include/svtools/colorcfg.hxx:314
     void svtools::EditableColorConfig::SetModified()
-include/svtools/colorcfg.hxx:328
+include/svtools/colorcfg.hxx:320
     void svtools::EditableColorConfig::EnableBroadcast()
 include/svtools/ctrlbox.hxx:412
     void FontStyleBox::set_size_request(int,int)
@@ -3098,14 +3092,6 @@ include/vcl/builder.hxx:241
     void VclBuilder::connectNumericFormatterAdjustment(const rtl::OUString &,const rtl::OUString &)
 include/vcl/builderpage.hxx:36
     void BuilderPage::SetHelpId(const rtl::OUString &)
-include/vcl/ColorMask.hxx:110
-    void ColorMask::GetColorFor16BitMSB(BitmapColor &,const unsigned char *) const
-include/vcl/ColorMask.hxx:111
-    void ColorMask::SetColorFor16BitMSB(const BitmapColor &,unsigned char *) const
-include/vcl/ColorMask.hxx:113
-    void ColorMask::SetColorFor16BitLSB(const BitmapColor &,unsigned char *) const
-include/vcl/ColorMask.hxx:117
-    void ColorMask::SetColorFor32Bit(const BitmapColor &,unsigned char *) const
 include/vcl/commandevent.hxx:99
     const CommandGestureRotateData * CommandEvent::GetGestureRotateData() const
 include/vcl/commandevent.hxx:256
@@ -3152,8 +3138,6 @@ include/vcl/GestureEventZoom.hxx:36
      GestureEventZoom::GestureEventZoom(int,int,enum GestureEventZoomType,double)
 include/vcl/gradient.hxx:86
     _Bool Gradient::operator!=(const Gradient &) const
-include/vcl/graph.hxx:151
-    void Graphic::Draw(OutputDevice &,const Point &) const
 include/vcl/hatch.hxx:57
     _Bool Hatch::operator!=(const Hatch &) const
 include/vcl/inputctx.hxx:62
@@ -3180,41 +3164,33 @@ include/vcl/outdev.hxx:1638
     basegfx::B2DPolyPolygon OutputDevice::LogicToPixel(const basegfx::B2DPolyPolygon &,const MapMode &) const
 include/vcl/outdev.hxx:1657
     basegfx::B2DPolyPolygon OutputDevice::PixelToLogic(const basegfx::B2DPolyPolygon &,const MapMode &) const
-include/vcl/pdfwriter.hxx:802
-    com::sun::star::uno::Reference<com::sun::star::beans::XMaterialHolder> vcl::PDFWriter::InitEncryption(const rtl::OUString &,const rtl::OUString &)
 include/vcl/salnativewidgets.hxx:420
     _Bool TabitemValue::isBothAligned() const
 include/vcl/salnativewidgets.hxx:421
     _Bool TabitemValue::isNotAligned() const
 include/vcl/settings.hxx:365
     void StyleSettings::SetWarningColor(const Color &)
-include/vcl/settings.hxx:368
-    void StyleSettings::SetWarningTextColor(const Color &)
-include/vcl/settings.hxx:371
-    void StyleSettings::SetErrorColor(const Color &)
-include/vcl/settings.hxx:374
-    void StyleSettings::SetErrorTextColor(const Color &)
-include/vcl/settings.hxx:453
+include/vcl/settings.hxx:450
     const Color & StyleSettings::GetAlternatingRowColor() const
-include/vcl/settings.hxx:469
+include/vcl/settings.hxx:466
     void StyleSettings::SetUseFlatBorders(_Bool)
-include/vcl/settings.hxx:472
+include/vcl/settings.hxx:469
     void StyleSettings::SetUseFlatMenus(_Bool)
-include/vcl/settings.hxx:484
+include/vcl/settings.hxx:481
     void StyleSettings::SetHideDisabledMenuItems(_Bool)
-include/vcl/settings.hxx:549
+include/vcl/settings.hxx:546
     void StyleSettings::SetSpinSize(int)
-include/vcl/settings.hxx:582
+include/vcl/settings.hxx:579
     Size StyleSettings::GetToolbarIconSizePixel() const
-include/vcl/settings.hxx:703
+include/vcl/settings.hxx:700
     _Bool HelpSettings::operator!=(const HelpSettings &) const
-include/vcl/settings.hxx:764
+include/vcl/settings.hxx:761
     _Bool AllSettings::operator==(const AllSettings &) const
 include/vcl/split.hxx:92
     void Splitter::SetHorizontal(_Bool)
 include/vcl/svapp.hxx:166
      ApplicationEvent::ApplicationEvent(enum ApplicationEvent::Type,std::vector<rtl::OUString> &&)
-include/vcl/svapp.hxx:808
+include/vcl/svapp.hxx:811
     void Application::AppEvent(const ApplicationEvent &)
 include/vcl/TaskStopwatch.hxx:91
     void TaskStopwatch::reset()
@@ -3242,7 +3218,7 @@ include/vcl/toolkit/longcurr.hxx:47
     BigInt LongCurrencyFormatter::GetValue() const
 include/vcl/toolkit/treelist.hxx:171
     const SvTreeListEntry * SvTreeList::GetParent(const SvTreeListEntry *) const
-include/vcl/toolkit/treelistbox.hxx:369
+include/vcl/toolkit/treelistbox.hxx:371
     void SvTreeListBox::RemoveSelection()
 include/vcl/txtattr.hxx:57
     _Bool TextAttrib::operator!=(const TextAttrib &) const
@@ -3538,6 +3514,8 @@ sc/qa/unit/helper/qahelper.hxx:77
     std::basic_ostream<char> & operator<<(std::basic_ostream<char> &,const enum OpCode &)
 sc/qa/unit/helper/qahelper.hxx:83
     std::basic_string<char> print(const ScAddress &)
+sc/qa/unit/screenshots/screenshots.cxx:325
+    int main()
 sc/source/core/inc/interpre.hxx:125
     basic_ostream<type-parameter-?-?, type-parameter-?-?> & sc::operator<<(basic_ostream<type-parameter-?-?, type-parameter-?-?> &,const struct sc::ParamIfsResult &)
 sc/source/core/inc/interpre.hxx:190
@@ -3572,7 +3550,7 @@ sc/source/core/tool/scmatrix.cxx:2335
     wrapped_iterator<T, U, return_type> (anonymous namespace)::wrapped_iterator::operator--(int)
 sc/source/core/tool/scmatrix.cxx:2348
     type-parameter-?-? * (anonymous namespace)::wrapped_iterator::operator->() const
-sc/source/filter/inc/orcusinterface.hxx:749
+sc/source/filter/inc/orcusinterface.hxx:838
     const rtl::OUString * ScOrcusFactory::getString(unsigned long) const
 sc/source/filter/inc/richstring.hxx:244
     _Bool oox::xls::RichString::isPreserveSpace() const
@@ -3712,8 +3690,6 @@ sd/source/ui/dlg/sddlgfact.cxx:56
      (anonymous namespace)::ScreenshottedDialog_Impl_BASE::AbstractDialogImpl_BASE(weld::Window *&,const SfxObjectShell *&,SfxStyleSheetBase &,SdrModel *&,SdrView *&)
 sd/source/ui/dlg/sddlgfact.cxx:56
      (anonymous namespace)::ScreenshottedDialog_Impl_BASE::AbstractDialogImpl_BASE(weld::Window *&,const SvxFieldData *&,const SfxItemSet &)
-sd/source/ui/inc/DrawViewShell.hxx:391
-    const com::sun::star::uno::Reference<com::sun::star::presentation::XSlideShow> & sd::DrawViewShell::getXSlideShowInstance()
 sd/source/ui/inc/filedlg.hxx:54
     _Bool SdOpenSoundFileDialog::IsInsertAsLinkSelected() const
 sd/source/ui/inc/GraphicViewShell.hxx:43
@@ -4124,8 +4100,6 @@ sw/inc/swcrsr.hxx:316
     SwTableCursor * SwTableCursor::GetPrev()
 sw/inc/swcrsr.hxx:317
     const SwTableCursor * SwTableCursor::GetPrev() const
-sw/inc/swdll.hxx:38
-    sw::Filters & SwGlobals::getFilters()
 sw/inc/swrect.hxx:108
     SvStream & WriteSwRect(SvStream &,const SwRect &)
 sw/inc/swrect.hxx:152
@@ -4144,8 +4118,6 @@ sw/inc/viscrs.hxx:229
     SwShellTableCursor * SwShellTableCursor::GetPrev()
 sw/inc/viscrs.hxx:230
     const SwShellTableCursor * SwShellTableCursor::GetPrev() const
-sw/qa/extras/layout/layout4.cxx:1903
-    int main()
 sw/qa/inc/swmodeltestbase.hxx:172
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> SwModelTestBase::getParagraphAnchoredObject(const int,const com::sun::star::uno::Reference<com::sun::star::text::XTextRange> &) const
 sw/source/core/access/accportions.cxx:55
@@ -4222,8 +4194,12 @@ ucb/source/inc/regexpmap.hxx:289
     RegexpMapConstIter<type-parameter-?-?> ucb_impl::RegexpMap::end() const
 ucb/source/ucp/gio/gio_mount.cxx:37
     void * ooo_mount_operation_get_instance_private(struct OOoMountOperation *)
+ucb/source/ucp/webdav-curl/SerfLockStore.hxx:87
+    void http_dav_ucp::SerfLockStore::refreshLocks()
 unoxml/inc/node.hxx:116
     void DOM::CNode::checkNoParent(const com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode> &)
+vcl/inc/accessibility/IComboListBoxHelper.hxx:44
+    AbsoluteScreenPixelRectangle IComboListBoxHelper::GetWindowExtentsAbsolute()
 vcl/inc/bitmap/ScanlineTools.hxx:23
     void vcl::bitmap::ScanlineTransformer::skipPixel(unsigned int)
 vcl/inc/ControlCacheKey.hxx:34
@@ -4244,12 +4220,12 @@ vcl/inc/font/LogicalFontInstance.hxx:99
     void LogicalFontInstance::SetAverageWidthFactor(double)
 vcl/inc/graphic/GraphicID.hxx:38
     _Bool GraphicID::operator==(const GraphicID &) const
-vcl/inc/headless/CairoCommon.hxx:83
-    const std::vector<double> & SystemDependentData_CairoPath::getStroke() const
 vcl/inc/headless/svpgdi.hxx:59
     struct _cairo * SvpSalGraphics::createTmpCompatibleCairoContext() const
 vcl/inc/impfont.hxx:94
     unsigned long ImplFont::GetHashValue() const
+vcl/inc/impgraph.hxx:164
+    void ImpGraphic::draw(OutputDevice &,const Point &) const
 vcl/inc/ImplLayoutArgs.hxx:78
     std::basic_ostream<char> & operator<<(std::basic_ostream<char> &,const vcl::text::ImplLayoutArgs &)
 vcl/inc/jsdialog/jsdialogbuilder.hxx:71
