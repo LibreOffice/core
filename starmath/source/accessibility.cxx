@@ -139,16 +139,9 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getBounds()
     if (!pWin)
         throw RuntimeException();
 
-    const Point aOutPos;
     const Size aOutSize(pWin->GetOutputSizePixel());
-    css::awt::Rectangle aRet;
 
-    aRet.X = aOutPos.X();
-    aRet.Y = aOutPos.Y();
-    aRet.Width = aOutSize.Width();
-    aRet.Height = aOutSize.Height();
-
-    return aRet;
+    return css::awt::Rectangle(0, 0, aOutSize.Width(), aOutSize.Height());
 }
 
 awt::Point SAL_CALL SmGraphicAccessible::getLocation()
