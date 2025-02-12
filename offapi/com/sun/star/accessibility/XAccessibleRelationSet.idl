@@ -72,7 +72,7 @@ interface XAccessibleRelationSet : ::com::sun::star::uno::XInterface
 
     /** Retrieve and return the relation with the given relation type.
 
-        @param aRelationType
+        @param eRelationType
             The type of the relation to return.
 
         @return
