@@ -166,7 +166,7 @@ OUString filterOut(const OUString& s, std::u16string_view excludedSubstr)
     return result;
 }
 
-OUString filterValidationResults(const OUString& s)
+OUString filterValidationResults(const OUString& s, std::u16string_view rFilter)
 {
     OUString result = s;
     // In ECMA-376-1 Second Edition, 2008, there is the following restriction for oleObj:
@@ -189,13 +189,55 @@ OUString filterValidationResults(const OUString& s)
     //
     // But officeotron only knows the old version...
     result = filterOut(result, u"Invalid content was found starting with element 'p:pic'. No child element is expected at this point.");
+
+    if (rFilter == u"Office Open XML Text")
+    {
+        /* While the spec says the core-properties relationship must be
+         *     officedocument/2006/relationships/metadata/core-properties
+         * MS Word actually just writes the ECMA-376-1ST EDITION version
+         * for both ECMA_Transitional and ISO_Transitional formats.
+         *
+         * officeotron doesn't care that clause 15.2.12.1 fails on all MSWord-produced output.
+         */
+        result = filterOut(result, u"Entry with MIME type \"application/vnd.openxmlformats-package.core-properties+xml\" has unrecognized relationship type \"http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties\" (see ISO/IEC 29500-1:2008, Clause 15.2.12.1)");
+    }
+
     return result;
 }
 }
 #endif
 
-void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFormat eFormat) const
+void test::BootstrapFixture::validate(const OUString& rPath, std::u16string_view rFilter) const
 {
+    test::ValidationFormat eFormat = test::ODF;
+    if (rFilter == u"Calc Office Open XML")
+        eFormat = test::OOXML;
+    else if (rFilter == u"Office Open XML Text")
+        eFormat = test::OOXML;
+    else if (rFilter == u"Impress Office Open XML")
+        eFormat = test::OOXML;
+    else if (rFilter == u"writer8")
+        eFormat = test::ODF;
+    else if (rFilter == u"calc8")
+        eFormat = test::ODF;
+    else if (rFilter == u"impress8")
+        eFormat = test::ODF;
+    else if (rFilter == u"draw8")
+        eFormat = test::ODF;
+    else if (rFilter == u"OpenDocument Text Flat XML")
+        eFormat = test::ODF;
+    else if (rFilter == u"MS Word 97")
+        eFormat = test::MSBINARY;
+    else if (rFilter == u"MS Excel 97")
+        eFormat = test::MSBINARY;
+    else if (rFilter == u"MS PowerPoint 97")
+        eFormat = test::MSBINARY;
+    else
+    {
+        SAL_INFO("test", "BootstrapFixture::validate: unknown filter");
+        return;
+    }
+
 #if HAVE_EXPORT_VALIDATION
     OUString var;
     if( eFormat == test::OOXML )
@@ -266,7 +308,7 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
 
     if( eFormat == test::OOXML && !aContentOUString.isEmpty() )
     {
-        aContentOUString = filterValidationResults(aContentOUString);
+        aContentOUString = filterValidationResults(aContentOUString, rFilter);
         // check for validation errors here
         sal_Int32 nIndex = aContentOUString.lastIndexOf(grand_total);
         if(nIndex == -1)

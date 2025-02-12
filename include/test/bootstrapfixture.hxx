@@ -61,7 +61,7 @@ public:
 
     virtual void setUp() override;
 
-    void validate(const OUString& rURL, ValidationFormat) const;
+    void validate(const OUString& rURL, std::u16string_view rFilter) const;
 
     // Allows to exclude tests dependent on color depth of the default virtual device
     static sal_uInt16 getDefaultDeviceBitCount();

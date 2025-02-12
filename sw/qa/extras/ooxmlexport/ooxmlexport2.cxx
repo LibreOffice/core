@@ -44,7 +44,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testPageGraphicBackground)
 {
     loadAndReload("page-graphic-background.odt");
-    validate(maTempFile.GetFileName(), test::OOXML);
+    validate(maTempFile.GetFileName(), mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // No idea how the graphic background should be exported (seems there is no
     // way to do a non-tiling export to OOXML), but at least the background
@@ -165,7 +165,7 @@ CPPUNIT_TEST_FIXTURE(Test, testZoom)
     verify();
 
     // Validation test: order of elements were wrong.
-    validate(maTempFile.GetFileName(), test::OOXML);
+    validate(maTempFile.GetFileName(), mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
     // Order was: rsid, next.
     int nNext = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "next");
@@ -181,7 +181,7 @@ CPPUNIT_TEST_FIXTURE(Test, testZoom)
 CPPUNIT_TEST_FIXTURE(Test, defaultTabStopNotInStyles)
 {
     loadAndReload("empty.odt");
-    validate(maTempFile.GetFileName(), test::OOXML);
+    validate(maTempFile.GetFileName(), mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 // The default tab stop was mistakenly exported to a style.
 // xray ThisComponent.StyleFamilies(1)(0).ParaTabStop
@@ -253,13 +253,13 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo38244)
     verify();
     saveAndReload(mpFilter);
     verify();
-    validate(maTempFile.GetFileName(), test::OOXML);
+    validate(maTempFile.GetFileName(), mpFilter);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentsNested)
 {
     loadAndReload("comments-nested.odt");
-    validate(maTempFile.GetFileName(), test::OOXML);
+    validate(maTempFile.GetFileName(), mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xOuter = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), u"TextField"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"Outer"_ustr, getProperty<OUString>(xOuter, u"Content"_ustr));
