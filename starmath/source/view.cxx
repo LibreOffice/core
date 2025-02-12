@@ -349,7 +349,7 @@ void SmGraphicWidget::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 SmGraphicWidget::~SmGraphicWidget()
 {
     if (mxAccessible.is())
-        mxAccessible->ClearWin();    // make Accessible nonfunctional
+        mxAccessible->dispose();
     mxAccessible.clear();
     CaretBlinkStop();
 }
