@@ -962,10 +962,9 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     // add one to range sizes to get back to the old Rectangle and outliner measurements
     const sal_uInt32 nAnchorTextWidth(basegfx::fround<sal_uInt32>(aAnchorTextRange.getWidth() + 1));
     const sal_uInt32 nAnchorTextHeight(basegfx::fround<sal_uInt32>(aAnchorTextRange.getHeight() + 1));
-    const OutlinerParaObject* pOutlinerParaObject = rSdrAutofitTextPrimitive.getSdrText()->GetOutlinerParaObject();
-    OSL_ENSURE(pOutlinerParaObject, "impDecomposeBlockTextPrimitive used with no OutlinerParaObject (!)");
-    const bool bVerticalWriting(pOutlinerParaObject->IsEffectivelyVertical());
-    const bool bTopToBottom(pOutlinerParaObject->IsTopToBottom());
+    const OutlinerParaObject& rOutlinerParaObject(rSdrAutofitTextPrimitive.getOutlinerParaObject());
+    const bool bVerticalWriting(rOutlinerParaObject.IsEffectivelyVertical());
+    const bool bTopToBottom(rOutlinerParaObject.IsTopToBottom());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
     if(rSdrAutofitTextPrimitive.getWordWrap() || IsTextFrame())
@@ -987,7 +986,7 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
 
     rOutliner.SetPaperSize(aAnchorTextSize);
     rOutliner.SetUpdateLayout(true);
-    rOutliner.SetText(*pOutlinerParaObject);
+    rOutliner.SetText(rOutlinerParaObject);
 
     setupAutoFitText(rOutliner, aAnchorTextSize);
     // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
@@ -1788,11 +1787,9 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     const sal_uInt32 nAnchorTextHeight(basegfx::fround<sal_uInt32>(aAnchorTextRange.getHeight() + 1));
 
     // Text
-    const OutlinerParaObject* pOutlinerParaObject = rSdrChainedTextPrimitive.getSdrText()->GetOutlinerParaObject();
-    OSL_ENSURE(pOutlinerParaObject, "impDecomposeBlockTextPrimitive used with no OutlinerParaObject (!)");
-
-    const bool bVerticalWriting(pOutlinerParaObject->IsEffectivelyVertical());
-    const bool bTopToBottom(pOutlinerParaObject->IsTopToBottom());
+    const OutlinerParaObject& rOutlinerParaObject(rSdrChainedTextPrimitive.getOutlinerParaObject());
+    const bool bVerticalWriting(rOutlinerParaObject.IsEffectivelyVertical());
+    const bool bTopToBottom(rOutlinerParaObject.IsTopToBottom());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
     if(IsTextFrame())
@@ -1813,7 +1810,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     rOutliner.SetPaperSize(aNullSize);
     rOutliner.SetUpdateLayout(true);
     // Sets original text
-    rOutliner.SetText(*pOutlinerParaObject);
+    rOutliner.SetText(rOutlinerParaObject);
 
     /* Begin overflow/underflow handling */
 
