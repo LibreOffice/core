@@ -51,9 +51,9 @@ public:
     virtual void set_toggle(int row, TriState eState, int col = -1) override;
     virtual TriState get_toggle(int row, int col = -1) const override;
     virtual void set_image(int nRow, const OUString& rImage, int nCol = -1) override;
-    virtual void set_image(int row, VirtualDevice& rImage, int col = -1) override;
-    virtual void set_image(int row, const css::uno::Reference<css::graphic::XGraphic>& rImage,
-                           int col = -1) override;
+    virtual void set_image(int nRow, VirtualDevice& rImage, int nCol = -1) override;
+    virtual void set_image(int nRow, const css::uno::Reference<css::graphic::XGraphic>& rImage,
+                           int nCol = -1) override;
     virtual void set_text_emphasis(int row, bool bOn, int col) override;
     virtual bool get_text_emphasis(int row, int col) const override;
     virtual void set_text_align(int row, double fAlign, int col) override;
@@ -107,10 +107,10 @@ public:
     virtual void set_image(const weld::TreeIter& rIter, const OUString& rImage,
                            int nCol = -1) override;
     virtual void set_image(const weld::TreeIter& rIter, VirtualDevice& rImage,
-                           int col = -1) override;
+                           int nCol = -1) override;
     virtual void set_image(const weld::TreeIter& rIter,
                            const css::uno::Reference<css::graphic::XGraphic>& rImage,
-                           int col = -1) override;
+                           int nCol = -1) override;
     virtual void set_font_color(const weld::TreeIter& rIter, const Color& rColor) override;
     virtual void scroll_to_row(const weld::TreeIter& rIter) override;
     virtual bool is_selected(const weld::TreeIter& rIter) const override;

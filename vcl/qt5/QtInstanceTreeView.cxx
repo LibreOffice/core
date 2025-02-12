@@ -232,14 +232,32 @@ void QtInstanceTreeView::set_image(int nRow, const OUString& rImage, int nCol)
     });
 }
 
-void QtInstanceTreeView::set_image(int, VirtualDevice&, int)
+void QtInstanceTreeView::set_image(int nRow, VirtualDevice& rImage, int nCol)
 {
-    assert(false && "Not implemented yet");
+    assert(nCol != -1 && "Special column -1 not handled yet");
+
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QModelIndex aIndex = modelIndex(nRow, nCol);
+        QIcon aIcon = toQPixmap(rImage);
+        m_pModel->setData(aIndex, aIcon, Qt::DecorationRole);
+    });
 }
 
-void QtInstanceTreeView::set_image(int, const css::uno::Reference<css::graphic::XGraphic>&, int)
+void QtInstanceTreeView::set_image(int nRow,
+                                   const css::uno::Reference<css::graphic::XGraphic>& rImage,
+                                   int nCol)
 {
-    assert(false && "Not implemented yet");
+    assert(nCol != -1 && "Special column -1 not handled yet");
+
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QModelIndex aIndex = modelIndex(nRow, nCol);
+        QIcon aIcon = toQPixmap(rImage);
+        m_pModel->setData(aIndex, aIcon, Qt::DecorationRole);
+    });
 }
 
 void QtInstanceTreeView::set_text_emphasis(int, bool, int)
@@ -550,15 +568,16 @@ void QtInstanceTreeView::set_image(const weld::TreeIter& rIter, const OUString& 
     set_image(rowIndex(rIter), rImage, nCol);
 }
 
-void QtInstanceTreeView::set_image(const weld::TreeIter&, VirtualDevice&, int)
+void QtInstanceTreeView::set_image(const weld::TreeIter& rIter, VirtualDevice& rImage, int nCol)
 {
-    assert(false && "Not implemented yet");
+    set_image(rowIndex(rIter), rImage, nCol);
 }
 
-void QtInstanceTreeView::set_image(const weld::TreeIter&,
-                                   const css::uno::Reference<css::graphic::XGraphic>&, int)
+void QtInstanceTreeView::set_image(const weld::TreeIter& rIter,
+                                   const css::uno::Reference<css::graphic::XGraphic>& rImage,
+                                   int nCol)
 {
-    assert(false && "Not implemented yet");
+    set_image(rowIndex(rIter), rImage, nCol);
 }
 
 void QtInstanceTreeView::set_font_color(const weld::TreeIter&, const Color&)
