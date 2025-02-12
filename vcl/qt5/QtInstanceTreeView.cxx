@@ -298,7 +298,11 @@ void QtInstanceTreeView::set_font_color(int, const Color&)
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceTreeView::scroll_to_row(int) { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::scroll_to_row(int nRow)
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] { m_pTreeView->scrollTo(modelIndex(nRow)); });
+}
 
 bool QtInstanceTreeView::is_selected(int) const
 {
@@ -585,9 +589,9 @@ void QtInstanceTreeView::set_font_color(const weld::TreeIter&, const Color&)
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceTreeView::scroll_to_row(const weld::TreeIter&)
+void QtInstanceTreeView::scroll_to_row(const weld::TreeIter& rIter)
 {
-    assert(false && "Not implemented yet");
+    scroll_to_row(rowIndex(rIter));
 }
 
 bool QtInstanceTreeView::is_selected(const weld::TreeIter&) const

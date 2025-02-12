@@ -60,7 +60,7 @@ public:
     virtual void swap(int pos1, int pos2) override;
     virtual std::vector<int> get_selected_rows() const override;
     virtual void set_font_color(int pos, const Color& rColor) override;
-    virtual void scroll_to_row(int row) override;
+    virtual void scroll_to_row(int nRow) override;
     virtual bool is_selected(int pos) const override;
     virtual int get_cursor_index() const override;
     virtual void set_cursor(int pos) override;
