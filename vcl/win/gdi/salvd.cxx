@@ -91,19 +91,10 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
                                                            nDX, nDY, nBitCount,
                                                            &o3tl::temporary<void*>(nullptr));
 
-    WinSalVirtualDevice* pVDev = new WinSalVirtualDevice(hDC, hBmp, nBitCount,
-                                                         /*bForeignDC*/false, nDX, nDY);
+    auto pVDev = std::make_unique<WinSalVirtualDevice>(hDC, hBmp, nBitCount,
+                                                       /*bForeignDC*/false, nDX, nDY, rGraphics.isScreen());
 
-    WinSalGraphics* pVirGraphics = new WinSalGraphics(WinSalGraphics::VIRTUAL_DEVICE,
-                                                      rGraphics.isScreen(), nullptr, pVDev);
-
-    // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
-    pVirGraphics->SetLayout( SalLayoutFlags::NONE );
-    pVirGraphics->setHDC(hDC);
-
-    pVDev->setGraphics(pVirGraphics);
-
-    return std::unique_ptr<SalVirtualDevice>(pVDev);
+    return pVDev;
 }
 
 std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphics& rSGraphics,
@@ -131,22 +122,13 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
     const sal_uInt16 nBitCount = 0;
     const bool bForeignDC = rData.hDC != nullptr;
 
-    WinSalVirtualDevice* pVDev = new WinSalVirtualDevice(hDC, /*hBmp*/nullptr, nBitCount,
-                                                         bForeignDC, nDX, nDY);
+    auto pVDev = std::make_unique<WinSalVirtualDevice>(hDC, /*hBmp*/nullptr, nBitCount,
+                                                       bForeignDC, nDX, nDY,  rGraphics.isScreen());
 
-    WinSalGraphics* pVirGraphics = new WinSalGraphics(WinSalGraphics::VIRTUAL_DEVICE,
-                                                      rGraphics.isScreen(), nullptr, pVDev);
-
-    // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
-    pVirGraphics->SetLayout( SalLayoutFlags::NONE );
-    pVirGraphics->setHDC(hDC);
-
-    pVDev->setGraphics(pVirGraphics);
-
-    return std::unique_ptr<SalVirtualDevice>(pVDev);
+    return pVDev;
 }
 
-WinSalVirtualDevice::WinSalVirtualDevice(HDC hDC, HBITMAP hBMP, sal_uInt16 nBitCount, bool bForeignDC, tools::Long nWidth, tools::Long nHeight)
+WinSalVirtualDevice::WinSalVirtualDevice(HDC hDC, HBITMAP hBMP, sal_uInt16 nBitCount, bool bForeignDC, tools::Long nWidth, tools::Long nHeight, bool bIsScreen)
     : mhLocalDC(hDC),          // HDC or 0 for Cache Device
       mhBmp(hBMP),             // Memory Bitmap
       mnBitCount(nBitCount),   // BitCount (0 or 1)
@@ -165,7 +147,18 @@ WinSalVirtualDevice::WinSalVirtualDevice(HDC hDC, HBITMAP hBMP, sal_uInt16 nBitC
     SalData* pSalData = GetSalData();
     mpNext = pSalData->mpFirstVD;
     pSalData->mpFirstVD = this;
+
+    WinSalGraphics* pVirGraphics = new WinSalGraphics(WinSalGraphics::VIRTUAL_DEVICE,
+                                                      bIsScreen, nullptr, this);
+
+    // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
+    pVirGraphics->SetLayout( SalLayoutFlags::NONE );
+    pVirGraphics->setHDC(hDC);
+
+    setGraphics(pVirGraphics);
 }
+
+
 
 WinSalVirtualDevice::~WinSalVirtualDevice()
 {

@@ -49,7 +49,7 @@ public:
     void setGraphics(WinSalGraphics* pVirGraphics) { mpGraphics.reset(pVirGraphics); }
     WinSalVirtualDevice* getNext() const { return mpNext; }
 
-    WinSalVirtualDevice(HDC hDC = nullptr, HBITMAP hBMP = nullptr, sal_uInt16 nBitCount = 0, bool bForeignDC = false, tools::Long nWidth = 0, tools::Long nHeight = 0);
+    WinSalVirtualDevice(HDC hDC, HBITMAP hBMP, sal_uInt16 nBitCount, bool bForeignDC, tools::Long nWidth, tools::Long nHeight, bool bIsScreen);
     virtual ~WinSalVirtualDevice() override;
 
     virtual SalGraphics*    AcquireGraphics() override;
