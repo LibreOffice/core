@@ -251,6 +251,9 @@ public:
     std::vector<std::string> m_aStateChanged;
     std::map<std::string, boost::property_tree::ptree> m_aStateChanges;
     TestLokCallbackWrapper m_callbackWrapper;
+    bool invalidatedAll;
+    int editModeOfInvalidation;
+    int partOfInvalidation;
 
     ViewCallback()
         : m_bGraphicSelectionInvalidated(false)
@@ -290,8 +293,7 @@ public:
                 OString text(pPayload);
                 if (!text.startsWith("EMPTY"))
                 {
-                    uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(
-                        OUString::createFromAscii(pPayload));
+                    uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
                     CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
                     tools::Rectangle aInvalidationRect;
                     aInvalidationRect.SetLeft(aSeq[0].toInt32());
@@ -299,6 +301,12 @@ public:
                     aInvalidationRect.setWidth(aSeq[2].toInt32());
                     aInvalidationRect.setHeight(aSeq[3].toInt32());
                     m_aInvalidations.push_back(aInvalidationRect);
+                }
+                else
+                {
+                    editModeOfInvalidation = mpViewShell->getEditMode();
+                    partOfInvalidation = mpViewShell->getPart();
+                    invalidatedAll = true;
                 }
             }
             break;

@@ -3421,6 +3421,28 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     pXImpressDocument->postSlideshowCleanup();
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesViewInvalidations)
+{
+    // Given a document with 2 slides.
+    SdXImpressDocument* pXImpressDocument = createDoc("NotesView.odp");
+    ViewCallback aView;
+    CPPUNIT_ASSERT_EQUAL(2, pXImpressDocument->getParts());
+
+    // Switching to the second slide.
+    pXImpressDocument->setPart(1);
+
+    Scheduler::ProcessEventsToIdle();
+
+    aView.invalidatedAll = false;
+
+    // Switching to notes view.
+    dispatchCommand(mxComponent, ".uno:NotesMode", uno::Sequence<beans::PropertyValue>());
+
+    CPPUNIT_ASSERT_EQUAL(true, aView.invalidatedAll);
+    CPPUNIT_ASSERT_EQUAL(1, aView.partOfInvalidation);
+    CPPUNIT_ASSERT_EQUAL(2, aView.editModeOfInvalidation);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
