@@ -80,7 +80,10 @@ Node::Node(int layer): layer_(layer), finalized_(Data::NO_LAYER)
 
 Node::Node(const Node & other):
     SimpleReferenceObject(), layer_(other.layer_), finalized_(other.finalized_)
-{}
+{
+    if (CreateStaticizedNodes)
+        staticize();
+}
 
 Node::~Node() {}
 
