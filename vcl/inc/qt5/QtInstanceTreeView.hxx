@@ -92,7 +92,8 @@ public:
     virtual void select(const weld::TreeIter& rIter) override;
     virtual void unselect(const weld::TreeIter& rIter) override;
     virtual void set_extra_row_indent(const weld::TreeIter& rIter, int nIndentLevel) override;
-    virtual void set_text(const weld::TreeIter& rIter, const OUString& rStr, int col = -1) override;
+    virtual void set_text(const weld::TreeIter& rIter, const OUString& rStr,
+                          int nCol = -1) override;
     virtual void set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col = -1) override;
     virtual bool get_sensitive(const weld::TreeIter& rIter, int col) const override;
     virtual void set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int col) override;
@@ -104,7 +105,7 @@ public:
     virtual void set_id(const weld::TreeIter& rIter, const OUString& rId) override;
     virtual OUString get_id(const weld::TreeIter& rIter) const override;
     virtual void set_image(const weld::TreeIter& rIter, const OUString& rImage,
-                           int col = -1) override;
+                           int nCol = -1) override;
     virtual void set_image(const weld::TreeIter& rIter, VirtualDevice& rImage,
                            int col = -1) override;
     virtual void set_image(const weld::TreeIter& rIter,
@@ -185,8 +186,8 @@ public:
     using QtInstanceWidget::get_sensitive;
 
 private:
-    QModelIndex modelIndex(int nPos) const;
-    static QModelIndex modelIndex(const weld::TreeIter& rIter);
+    QModelIndex modelIndex(int nRow, int nCol = 0) const;
+    QModelIndex modelIndex(const weld::TreeIter& rIter, int nCol = 0) const;
     OUString get_id(const QModelIndex& rModelIndex) const;
     static QAbstractItemView::SelectionMode mapSelectionMode(SelectionMode eMode);
 

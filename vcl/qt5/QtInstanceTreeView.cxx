@@ -463,9 +463,16 @@ void QtInstanceTreeView::set_extra_row_indent(const weld::TreeIter&, int)
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceTreeView::set_text(const weld::TreeIter&, const OUString&, int)
+void QtInstanceTreeView::set_text(const weld::TreeIter& rIter, const OUString& rStr, int nCol)
 {
-    assert(false && "Not implemented yet");
+    assert(nCol != -1 && "Special column -1 not handled yet");
+
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QModelIndex aIndex = modelIndex(rIter, nCol);
+        m_pModel->setData(aIndex, toQString(rStr));
+    });
 }
 
 void QtInstanceTreeView::set_sensitive(const weld::TreeIter&, bool, int)
@@ -512,9 +519,14 @@ OUString QtInstanceTreeView::get_text(const weld::TreeIter&, int) const
     return OUString();
 }
 
-void QtInstanceTreeView::set_id(const weld::TreeIter&, const OUString&)
+void QtInstanceTreeView::set_id(const weld::TreeIter& rIter, const OUString& rId)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QModelIndex aIndex = modelIndex(rIter);
+        m_pModel->setData(aIndex, toQString(rId), ROLE_ID);
+    });
 }
 
 OUString QtInstanceTreeView::get_id(const weld::TreeIter& rIter) const
@@ -522,9 +534,19 @@ OUString QtInstanceTreeView::get_id(const weld::TreeIter& rIter) const
     return get_id(modelIndex(rIter));
 }
 
-void QtInstanceTreeView::set_image(const weld::TreeIter&, const OUString&, int)
+void QtInstanceTreeView::set_image(const weld::TreeIter& rIter, const OUString& rImage, int nCol)
 {
-    assert(false && "Not implemented yet");
+    assert(nCol != -1 && "Special column -1 not handled yet");
+
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (rImage.isEmpty())
+            return;
+        QModelIndex aIndex = modelIndex(rIter, nCol);
+        QIcon aIcon = loadQPixmapIcon(rImage);
+        m_pModel->setData(aIndex, aIcon, Qt::DecorationRole);
+    });
 }
 
 void QtInstanceTreeView::set_image(const weld::TreeIter&, VirtualDevice&, int)
@@ -818,11 +840,15 @@ QAbstractItemView::SelectionMode QtInstanceTreeView::mapSelectionMode(SelectionM
     }
 }
 
-QModelIndex QtInstanceTreeView::modelIndex(int nPos) const { return m_pModel->index(nPos, 0); }
-
-QModelIndex QtInstanceTreeView::modelIndex(const weld::TreeIter& rIter)
+QModelIndex QtInstanceTreeView::modelIndex(int nRow, int nCol) const
 {
-    return static_cast<const QtInstanceTreeIter&>(rIter).m_aModelIndex;
+    return m_pModel->index(nRow, nCol);
+}
+
+QModelIndex QtInstanceTreeView::modelIndex(const weld::TreeIter& rIter, int nCol) const
+{
+    QModelIndex aModelIndex = static_cast<const QtInstanceTreeIter&>(rIter).m_aModelIndex;
+    return modelIndex(aModelIndex.row(), nCol);
 }
 
 OUString QtInstanceTreeView::get_id(const QModelIndex& rModelIndex) const
