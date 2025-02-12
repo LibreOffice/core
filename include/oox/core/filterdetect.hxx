@@ -82,6 +82,7 @@ public:
     virtual void SAL_CALL characters( const OUString& aChars ) override;
 
 private:
+    void parseSettings(const AttributeList& rAttribs);
     void                parseRelationship( const AttributeList& rAttribs );
 
     OUString            getFilterNameFromContentType( std::u16string_view rContentType, std::u16string_view rFileName );

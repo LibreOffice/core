@@ -15,6 +15,9 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
+
 #include <pam.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -1059,15 +1062,28 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158855)
     // Check that the import doesn't produce an extra empty paragraph before a page break
     CPPUNIT_ASSERT_EQUAL(2, getPages()); // was 3
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs()); // was 3
-    uno::Reference<text::XTextTable>(getParagraphOrTable(1), uno::UNO_QUERY_THROW);
+
+    uno::Reference<text::XTextTable> xTableImport(getParagraphOrTable(1), uno::UNO_QUERY_THROW);
     getParagraph(2, u"Next page"_ustr); // was empty, with the 3rd being "Next page"
 
-    saveAndReload(mpFilter);
+    // tdf#164201 the table was shifting to left of the page margin because it became compat12
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), getProperty<sal_Int32>(xTableImport, u"LeftMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(OUString("Office Open XML Text"),
+                         getSwDocShell()->GetMedium()->GetFilter()->GetFilterName());
+
+    saveAndReload(getSwDocShell()->GetMedium()->GetFilter()->GetFilterName());
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
-    uno::Reference<text::XTextTable>(getParagraphOrTable(1), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextTable> xTableExport(getParagraphOrTable(1), uno::UNO_QUERY_THROW);
     getParagraph(2, u"Next page"_ustr);
+
+    // tdf#164201 instead of "From left: 0" (aka 9), it was "From Left: -0.19cm" (aka -191)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), getProperty<sal_Int32>(xTableExport, u"LeftMargin"_ustr));
+
+    xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
+    assertXPath(pXmlSettings, "//w:compat/w:compatSetting[1]", "name", u"compatibilityMode");
+    assertXPath(pXmlSettings, "//w:compat/w:compatSetting[1]", "val", u"15");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf158971)

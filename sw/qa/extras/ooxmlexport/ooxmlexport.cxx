@@ -568,7 +568,7 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphMark2, "paragraph-mark2.docx")
 CPPUNIT_TEST_FIXTURE(Test, testParagraphMarkNonempty)
 {
     loadAndSave("paragraph-mark-nonempty.odt");
-    validate(maTempFile.GetFileName(), test::OOXML);
+    validate(maTempFile.GetFileName(), mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // There were two <w:sz> elements, make sure the 40 one is dropped and the 20 one is kept.

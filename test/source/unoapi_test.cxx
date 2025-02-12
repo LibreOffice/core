@@ -180,31 +180,12 @@ void UnoApiTest::save(const OUString& rFilter, const char* pPassword)
 
     if (!mbSkipValidation)
     {
-        if (rFilter == "Calc Office Open XML")
-            validate(maTempFile.GetFileName(), test::OOXML);
-        /*
-        // too many validation errors right now
-        else if (rFilter == "Office Open XML Text")
-            validate(maTempFile.GetFileName(), test::OOXML);
-        */
-        else if (rFilter == "Impress Office Open XML")
-            validate(maTempFile.GetFileName(), test::OOXML);
-        else if (rFilter == "writer8")
-            validate(maTempFile.GetFileName(), test::ODF);
-        else if (rFilter == "calc8")
-            validate(maTempFile.GetFileName(), test::ODF);
-        else if (rFilter == "impress8")
-            validate(maTempFile.GetFileName(), test::ODF);
-        else if (rFilter == "draw8")
-            validate(maTempFile.GetFileName(), test::ODF);
-        else if (rFilter == "OpenDocument Text Flat XML")
-            validate(maTempFile.GetFileName(), test::ODF);
-        else if (rFilter == "MS Word 97")
-            validate(maTempFile.GetFileName(), test::MSBINARY);
-        else if (rFilter == "MS Excel 97")
-            validate(maTempFile.GetFileName(), test::MSBINARY);
-        else if (rFilter == "MS PowerPoint 97")
-            validate(maTempFile.GetFileName(), test::MSBINARY);
+        if (rFilter == "Office Open XML Text")
+        {
+            // do nothing: too many validation errors right now
+        }
+        else
+            validate(maTempFile.GetFileName(), rFilter);
     }
 }
 

@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/Pair.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
@@ -632,8 +633,12 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
         = bRemovePersonalInfo
           && !SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnKeepDocUserInfo);
 
+    // Although the spec says that ISOIEC_29500_2008 must use the "officedocument" URI,
+    // in MS errata they admit that DOCX just uses the old "package" URI from ECMA_376_1ST_EDITION.
+
     OUString sValue;
-    if( rSelf.getVersion() == oox::core::ISOIEC_29500_2008  )
+    const bool bDocx = dynamic_cast<text::XTextDocument*>(rSelf.getModel().get());
+    if (!bDocx && rSelf.getVersion() == oox::core::ISOIEC_29500_2008)
     {
         // The lowercase "officedocument" is intentional and according to the spec
         // (although most other places are written "officeDocument")

@@ -88,6 +88,15 @@ void SAL_CALL FilterDetectDocHandler::startFastElement(
     AttributeList aAttribs( rAttribs );
     switch ( nElement )
     {
+        // cases for word/settings.xml
+        case W_TOKEN(settings):
+        case W_TOKEN(compat):
+            break;
+        case W_TOKEN(compatSetting):
+            if (!maContextStack.empty() && (maContextStack.back() == W_TOKEN(compat)))
+                parseSettings(aAttribs);
+            break;
+
         // cases for _rels/.rels
         case PR_TOKEN( Relationships ):
         break;
@@ -140,6 +149,18 @@ Reference<XFastContextHandler> SAL_CALL FilterDetectDocHandler::createUnknownChi
 
 void SAL_CALL FilterDetectDocHandler::characters( const OUString& /*aChars*/ )
 {
+}
+
+void FilterDetectDocHandler::parseSettings(const AttributeList& rAttribs)
+{
+    // tdf#131936 Remember filter when opening file as 'Office Open XML Text'
+    if (rAttribs.getStringDefaulted(W_TOKEN(name)).equalsIgnoreAsciiCase("compatibilityMode"))
+    {
+        const sal_Int32 nVal = rAttribs.getInteger(W_TOKEN(val), 12); // default to Word 2007
+        // if specified multiple times, highest value wins
+        if (nVal > 12 && maOOXMLVariant == OOXMLVariant::ECMA_Transitional)
+            maOOXMLVariant = OOXMLVariant::ISO_Transitional; // Word 2010+
+    }
 }
 
 void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
@@ -438,6 +459,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
             aParser.registerNamespace( NMSP_packageRel );
             aParser.registerNamespace( NMSP_officeRel );
             aParser.registerNamespace( NMSP_packageContentTypes );
+            aParser.registerNamespace(NMSP_doc); // for W_TOKEN
 
             OUString aFileName;
             aMediaDescriptor[utl::MediaDescriptor::PROP_URL] >>= aFileName;
@@ -447,6 +469,16 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
             /*  Parse '_rels/.rels' to get the target path and '[Content_Types].xml'
                 to determine the content type of the part at the target path. */
             aParser.parseStream( aZipStorage, u"_rels/.rels"_ustr );
+            try
+            {
+                // Text documents can't use .rels to determine maOOXMLVariant. Use compatibilityMode
+                 aParser.parseStream(aZipStorage, u"word/settings.xml"_ustr);
+            }
+            catch(const Exception&)
+            {
+                // not a MS Word text document, or file might not exist
+            }
+            // Order is critical: .rels and then settings.xml must be parsed before [Content_Types]
             aParser.parseStream( aZipStorage, u"[Content_Types].xml"_ustr );
         }
     }
