@@ -163,17 +163,14 @@ void SwAccessibleFrameBase::InvalidateCursorPos_()
     if(!bNewSelected)
         return;
 
-    uno::Reference< XAccessible > xParent( GetWeakParent() );
+    rtl::Reference<SwAccessibleContext> xParent(GetWeakParent());
     if( xParent.is() )
     {
-        SwAccessibleContext *pAcc =
-            static_cast <SwAccessibleContext *>( xParent.get() );
-
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
         uno::Reference< XAccessible > xChild(this);
         aEvent.NewValue <<= xChild;
-        pAcc->FireAccessibleEvent( aEvent );
+        xParent->FireAccessibleEvent( aEvent );
     }
 }
 

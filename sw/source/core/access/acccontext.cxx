@@ -1077,19 +1077,17 @@ void SwAccessibleContext::Dispose(bool bRecursive, bool bCanSkipInvisible)
         DisposeChildren(GetFrame(), bRecursive, bCanSkipInvisible);
 
     // get parent
-    uno::Reference< XAccessible > xParent( GetWeakParent() );
+    rtl::Reference<SwAccessibleContext> xParent(GetWeakParent());
     uno::Reference < XAccessibleContext > xThis( this );
 
     // send child event at parent
     if( xParent.is() )
     {
-        SwAccessibleContext *pAcc = static_cast<SwAccessibleContext *>(xParent.get());
-
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::CHILD;
         aEvent.OldValue <<= xThis;
         aEvent.IndexHint = -1;
-        pAcc->FireAccessibleEvent( aEvent );
+        xParent->FireAccessibleEvent(aEvent);
     }
 
     // set defunc state (it's not required to broadcast a state changed
