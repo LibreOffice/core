@@ -179,7 +179,6 @@ private:
     std::mutex triggerMutex_;
     std::condition_variable triggerCondition_;
     bool triggered_;
-    std::shared_ptr<osl::Mutex> lock_;
 };
 
 Components::WriteThread::WriteThread(
@@ -187,8 +186,7 @@ Components::WriteThread::WriteThread(
     OUString url, Data const & data):
     Thread("configmgrWriter"), reference_(reference), components_(components),
     url_(std::move(url)), data_(data),
-    triggered_(false),
-    lock_( lock() )
+    triggered_(false)
 {
     assert(reference != nullptr);
 }
