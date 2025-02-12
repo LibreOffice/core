@@ -795,6 +795,9 @@ public:
     OString m_ShapeSelection;
     std::map<std::string, boost::property_tree::ptree> m_aStateChanges;
     TestLokCallbackWrapper m_callbackWrapper;
+    bool invalidatedAll;
+    int editModeOfInvalidation;
+    int partOfInvalidation;
 
     ViewCallback()
         : m_bGraphicSelectionInvalidated(false),
@@ -805,7 +808,10 @@ public:
           m_bViewLock(false),
           m_bTilesInvalidated(false),
           m_bViewSelectionSet(false),
-          m_callbackWrapper(&callback, this)
+          m_callbackWrapper(&callback, this),
+          invalidatedAll(false),
+          editModeOfInvalidation(0),
+          partOfInvalidation(0)
     {
         mpViewShell = SfxViewShell::Current();
         mpViewShell->setLibreOfficeKitViewCallback(&m_callbackWrapper);
@@ -842,6 +848,12 @@ public:
                 aInvalidationRect.setWidth(aSeq[2].toInt32());
                 aInvalidationRect.setHeight(aSeq[3].toInt32());
                 m_aInvalidations.push_back(aInvalidationRect);
+            }
+            else
+            {
+                editModeOfInvalidation = mpViewShell->getEditMode();
+                partOfInvalidation = mpViewShell->getPart();
+                invalidatedAll = true;
             }
         }
         break;
@@ -4826,6 +4838,28 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertSignatureLineExternal)
     dispatchCommand(mxComponent, u".uno:Signature"_ustr, aArgs);
     // Signature line is not selected after finishing signing:
     CPPUNIT_ASSERT(!pViewShell->GetViewShell()->GetSignPDFCertificate().Is());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesViewInvalidations)
+{
+    // Given a document with 2 slides.
+    SdXImpressDocument* pXImpressDocument = createDoc("NotesView.odp");
+    ViewCallback aView;
+    CPPUNIT_ASSERT_EQUAL(2, pXImpressDocument->getParts());
+
+    // Switching to the second slide.
+    pXImpressDocument->setPart(1);
+
+    Scheduler::ProcessEventsToIdle();
+
+    aView.invalidatedAll = false;
+
+    // Switching to notes view.
+    dispatchCommand(mxComponent, ".uno:NotesMode", uno::Sequence<beans::PropertyValue>());
+
+    CPPUNIT_ASSERT_EQUAL(true, aView.invalidatedAll);
+    CPPUNIT_ASSERT_EQUAL(1, aView.partOfInvalidation);
+    CPPUNIT_ASSERT_EQUAL(2, aView.editModeOfInvalidation);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
