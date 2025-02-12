@@ -158,8 +158,6 @@ private:
 
     css::uno::Reference< css::accessibility::XAccessible > getAccessible( const SdrObject* pObj );
 
-    ::accessibility::AccessibleShapeTreeInfo maTreeInfo;
-
     /** Description of this object.  This is not a constant because it can
         be set from the outside.
     */

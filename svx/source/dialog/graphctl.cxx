@@ -840,9 +840,7 @@ css::uno::Reference< css::accessibility::XAccessible > GraphCtrl::CreateAccessib
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     if(mpAccContext == nullptr )
     {
-        // Disable accessibility if no model/view data available
-        if (pView && pModel)
-            mpAccContext = new SvxGraphCtrlAccessibleContext(*this);
+        mpAccContext = new SvxGraphCtrlAccessibleContext(*this);
     }
 #endif
     return mpAccContext;

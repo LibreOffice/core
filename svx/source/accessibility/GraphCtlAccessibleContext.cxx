@@ -86,10 +86,6 @@ SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
         msName = SvxResId( RID_SVXSTR_GRAPHCTRL_ACC_NAME );
         msDescription = SvxResId( RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION );
     }
-
-    maTreeInfo.SetSdrView( mpView );
-    maTreeInfo.SetWindow(mpControl->GetDrawingArea()->get_ref_device().GetOwnerWindow());
-    maTreeInfo.SetViewForwarder( this );
 }
 
 
@@ -125,9 +121,13 @@ Reference< XAccessible > SvxGraphCtrlAccessibleContext::getAccessible( const Sdr
 
             css::uno::Reference<css::accessibility::XAccessible> xParent(getAccessibleParent());
             AccessibleShapeInfo aShapeInfo (xShape,xParent);
+            ::accessibility::AccessibleShapeTreeInfo aTreeInfo;
+            aTreeInfo.SetSdrView(mpView);
+            aTreeInfo.SetWindow(mpControl->GetDrawingArea()->get_ref_device().GetOwnerWindow());
+            aTreeInfo.SetViewForwarder(this);
             // Create accessible object that corresponds to the descriptor's shape.
             rtl::Reference<AccessibleShape> pAcc(ShapeTypeHandler::Instance().CreateAccessibleObject(
-                aShapeInfo, maTreeInfo));
+                aShapeInfo, aTreeInfo));
             xAccessibleShape = pAcc.get();
             if (pAcc.is())
             {
@@ -652,8 +652,6 @@ void SvxGraphCtrlAccessibleContext::setModelAndView (
         mpPage = nullptr;
         mpView = nullptr;
     }
-
-    maTreeInfo.SetSdrView (mpView);
 }
 
 
