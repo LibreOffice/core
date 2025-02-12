@@ -535,23 +535,26 @@ sub merge_mergemodules_into_msi_database
 
             installer::logger::include_timestamp_into_logfile("\nPerformance Info: Before including tables");
 
-            $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -i " . $workingtables. " " . $executetables;
-            # msidb.exe really wants backslashes
-            $systemcall =~ s/\//\\\\/g;
+            # trying to import all tables at once seems to work fine, but creates a broken installer tdf#165149
+            foreach my $table (split / /, $workingtables . ' ' . $executetables) {
+                $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -i " . $table;
+                # msidb.exe really wants backslashes
+                $systemcall =~ s/\//\\\\/g;
 
-            $systemcall_output = `$systemcall`;
-            $returnvalue = $? >> 8;
+                $systemcall_output = `$systemcall`;
+                $returnvalue = $? >> 8;
 
-            if ($returnvalue)
-            {
-                $infoline = "ERROR: Could not execute $systemcall - returncode: $returnvalue - output: $systemcall_output\n";
-                push( @installer::globals::logfileinfo, $infoline);
-                installer::exiter::exit_program("ERROR: Could not include tables into msi database: $msifilename !", "merge_mergemodules_into_msi_database");
-            }
-            else
-            {
-                $infoline = "Success: Executed $systemcall successfully!\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                if ($returnvalue)
+                {
+                    $infoline = "ERROR: Could not execute $systemcall - returncode: $returnvalue - output: $systemcall_output\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    installer::exiter::exit_program("ERROR: Could not include tables into msi database: $msifilename !", "merge_mergemodules_into_msi_database");
+                }
+                else
+                {
+                    $infoline = "Success: Executed $systemcall successfully!\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                }
             }
 
             installer::logger::include_timestamp_into_logfile("\nPerformance Info: After including tables");
