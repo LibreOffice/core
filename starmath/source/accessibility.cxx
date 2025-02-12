@@ -123,14 +123,10 @@ sal_Bool SAL_CALL SmGraphicAccessible::containsPoint( const awt::Point& aPoint )
             aPoint.X < aSz.Width()  &&  aPoint.Y < aSz.Height();
 }
 
-uno::Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleAtPoint(
-        const awt::Point& aPoint )
+uno::Reference<XAccessible> SAL_CALL SmGraphicAccessible::getAccessibleAtPoint(const awt::Point&)
 {
     SolarMutexGuard aGuard;
-    XAccessible *pRes = nullptr;
-    if (containsPoint( aPoint ))
-        pRes = this;
-    return pRes;
+    return nullptr;
 }
 
 awt::Rectangle SAL_CALL SmGraphicAccessible::getBounds()
