@@ -316,7 +316,19 @@ int QtInstanceTreeView::find_text(const OUString& rText) const
     return nIndex;
 }
 
-OUString QtInstanceTreeView::get_id(int nPos) const { return get_id(modelIndex(nPos)); }
+OUString QtInstanceTreeView::get_id(int nPos) const
+{
+    SolarMutexGuard g;
+
+    OUString sId;
+    GetQtInstance().RunInMainThread([&] {
+        QVariant aRoleData = m_pModel->data(modelIndex(nPos), ROLE_ID);
+        if (aRoleData.canConvert<QString>())
+            sId = toOUString(aRoleData.toString());
+    });
+
+    return sId;
+}
 
 int QtInstanceTreeView::find_id(const OUString& rId) const
 {
@@ -520,7 +532,7 @@ void QtInstanceTreeView::set_id(const weld::TreeIter& rIter, const OUString& rId
 
 OUString QtInstanceTreeView::get_id(const weld::TreeIter& rIter) const
 {
-    return get_id(modelIndex(rIter));
+    return get_id(rowIndex(rIter));
 }
 
 void QtInstanceTreeView::set_image(const weld::TreeIter& rIter, const OUString& rImage, int nCol)
@@ -843,20 +855,6 @@ int QtInstanceTreeView::rowIndex(const weld::TreeIter& rIter)
 {
     QModelIndex aModelIndex = static_cast<const QtInstanceTreeIter&>(rIter).m_aModelIndex;
     return aModelIndex.row();
-}
-
-OUString QtInstanceTreeView::get_id(const QModelIndex& rModelIndex) const
-{
-    SolarMutexGuard g;
-
-    OUString sId;
-    GetQtInstance().RunInMainThread([&] {
-        QVariant aRoleData = m_pModel->data(rModelIndex, ROLE_ID);
-        if (aRoleData.canConvert<QString>())
-            sId = toOUString(aRoleData.toString());
-    });
-
-    return sId;
 }
 
 void QtInstanceTreeView::handleActivated()
