@@ -50,7 +50,7 @@ public:
     virtual void set_id(int row, const OUString& rId) override;
     virtual void set_toggle(int row, TriState eState, int col = -1) override;
     virtual TriState get_toggle(int row, int col = -1) const override;
-    virtual void set_image(int row, const OUString& rImage, int col = -1) override;
+    virtual void set_image(int nRow, const OUString& rImage, int nCol = -1) override;
     virtual void set_image(int row, VirtualDevice& rImage, int col = -1) override;
     virtual void set_image(int row, const css::uno::Reference<css::graphic::XGraphic>& rImage,
                            int col = -1) override;

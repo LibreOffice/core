@@ -217,9 +217,19 @@ TriState QtInstanceTreeView::get_toggle(int, int) const
     return TRISTATE_INDET;
 }
 
-void QtInstanceTreeView::set_image(int, const OUString&, int)
+void QtInstanceTreeView::set_image(int nRow, const OUString& rImage, int nCol)
 {
-    assert(false && "Not implemented yet");
+    assert(nCol != -1 && "Special column -1 not handled yet");
+
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (rImage.isEmpty())
+            return;
+        QModelIndex aIndex = modelIndex(nRow, nCol);
+        QIcon aIcon = loadQPixmapIcon(rImage);
+        m_pModel->setData(aIndex, aIcon, Qt::DecorationRole);
+    });
 }
 
 void QtInstanceTreeView::set_image(int, VirtualDevice&, int)
@@ -537,17 +547,7 @@ OUString QtInstanceTreeView::get_id(const weld::TreeIter& rIter) const
 
 void QtInstanceTreeView::set_image(const weld::TreeIter& rIter, const OUString& rImage, int nCol)
 {
-    assert(nCol != -1 && "Special column -1 not handled yet");
-
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread([&] {
-        if (rImage.isEmpty())
-            return;
-        QModelIndex aIndex = modelIndex(rIter, nCol);
-        QIcon aIcon = loadQPixmapIcon(rImage);
-        m_pModel->setData(aIndex, aIcon, Qt::DecorationRole);
-    });
+    set_image(rowIndex(rIter), rImage, nCol);
 }
 
 void QtInstanceTreeView::set_image(const weld::TreeIter&, VirtualDevice&, int)
