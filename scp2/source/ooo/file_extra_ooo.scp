@@ -39,6 +39,7 @@ End
 #if defined (WITH_GALLERY_BUILD)
 
 GALLERY_FILELIST(sounds)
+GALLERY_FILELIST(backgrounds)
 
 #endif
 
