@@ -21,5 +21,8 @@ $(gb_CustomTarget_workdir)/desktop/soffice_bin-emscripten-exports/exports: \
 	# emsdk 3.1.54, comment lines were not supported, so filter them out here for now:
 	grep -v '^#' $(SRCDIR)/desktop/util/Executable_soffice_bin-emscripten-exports >$@
 	cat $(gb_CustomTarget_workdir)/bridges/gcc3_wasm/exports >>$@
+ifeq ($(ENABLE_QT6)-$(ENABLE_EMSCRIPTEN_JSPI)-$(ENABLE_EMSCRIPTEN_PROXY_TO_PTHREAD),TRUE-TRUE-)
+	printf '__ZN10emscripten8internal13MethodInvokerINS0_3rvp11default_tagEMN7qstdweb13EventListenerEFvNS_3valEEvPS5_JS6_EE6invokeERKS8_S9_PNS_7_EM_VALE\n' >>$@
+endif
 
 # vim: set noet sw=4 ts=4:

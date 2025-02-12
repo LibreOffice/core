@@ -12,4 +12,3 @@ _lok_preinit
 _lok_preinit_2
 _malloc
 _free
-__ZN10emscripten8internal13MethodInvokerINS0_3rvp11default_tagEMN7qstdweb13EventListenerEFvNS_3valEEvPS5_JS6_EE6invokeERKS8_S9_PNS_7_EM_VALE
