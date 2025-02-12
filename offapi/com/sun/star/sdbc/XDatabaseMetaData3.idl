@@ -204,7 +204,6 @@ interface XDatabaseMetaData3 : XDatabaseMetaData2
     XResultSet getFunctions([in]string catalog, [in]string schemaPattern, [in]string functionNamePattern) raises (SQLException);
 
     /**
-    /**
      * Retrieves a description of the given catalog's system or user
      * function parameters and return type.
      *
@@ -337,8 +336,8 @@ interface XDatabaseMetaData3 : XDatabaseMetaData2
      *  <LI><B>DECIMAL_DIGITS</B> int {@code =>} the number of fractional digits. Null is returned for data types where
      * DECIMAL_DIGITS is not applicable.
      *  <LI><B>NUM_PREC_RADIX</B> int {@code =>} Radix (typically either 10 or 2)
-     *  <LI><B>COLUMN_USAGE</B> String {@code =>} The allowed usage for the column.  The
-     *  value returned will correspond to the enum name returned by {@link PseudoColumnUsage#name PseudoColumnUsage.name()}
+     *  <LI><B>COLUMN_USAGE</B> String {@code =>} The allowed usage for the column. The
+     *  value returned will correspond to the name of a value defined in PseudoColumnUsage @see PseudoColumnUsage.idl
      *  <LI><B>REMARKS</B> String {@code =>} comment describing column (may be {@code null})
      *  <LI><B>CHAR_OCTET_LENGTH</B> int {@code =>} for char types the
      *       maximum number of bytes in the column
@@ -387,11 +386,10 @@ interface XDatabaseMetaData3 : XDatabaseMetaData2
 
     /**
      * Indicates whether this data source supports the SQL {@code  ROWID} type,
-     * and the lifetime for which a {@link  RowId} object remains valid.
+     * and the lifetime for which a RowId (see RowId.idl) object remains valid.
      *
-     * @return the status indicating the lifetime of a {@code  RowId}
+     * @return one of the constants from RowIdLifetime (see RowIdLifetime.idl)
      * @throws SQLException if a database access error occurs
-     * @see RowIdLifetime.idl
      */
     long getRowIdLifetime() raises (SQLException);
 
@@ -581,7 +579,6 @@ interface XDatabaseMetaData3 : XDatabaseMetaData2
 
     /**
      * Retrieves whether this database supports sharding.
-     * @implSpec
      * The default implementation will return {@code false}
      *
      * @return {@code true} if this database supports sharding;
