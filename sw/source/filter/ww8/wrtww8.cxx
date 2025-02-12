@@ -1210,7 +1210,7 @@ bool WW8_WrFkp::Append( WW8_FC nEndFc, sal_uInt16 nVarLen, const sal_uInt8* pSpr
         if( nPos < 0 )
             return false;           // doesn't fit at all
         nOffset = nPos;             // save offset (can also be uneven!)
-        nPos &= 0xFFFE;             // Pos for Sprms ( gerade Pos )
+        nPos &= 0xFFFE;             // Pos for Sprms ( even Pos )
     }
 
     if( o3tl::make_unsigned(nPos) <= ( m_nIMax + 2U ) * 4U + ( m_nIMax + 1U ) * m_nItemSize )
