@@ -79,8 +79,6 @@ namespace accessibility
     class AccessibleTextHelper_Impl : public SfxListener
     {
     public:
-        typedef ::std::vector< sal_Int16 > VectorOfStates;
-
         // receive pointer to our frontend class and view window
         AccessibleTextHelper_Impl();
         virtual ~AccessibleTextHelper_Impl() override;

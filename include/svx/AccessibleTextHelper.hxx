@@ -119,8 +119,6 @@ class AccessibleTextHelper_Impl;
 class SVX_DLLPUBLIC AccessibleTextHelper final
 {
 public:
-    typedef ::std::vector<sal_Int16> VectorOfStates;
-
     /** Create accessible text object for given edit source
 
         @param pEditSource
