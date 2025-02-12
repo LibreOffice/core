@@ -188,6 +188,7 @@ public:
 private:
     QModelIndex modelIndex(int nRow, int nCol = 0) const;
     QModelIndex modelIndex(const weld::TreeIter& rIter, int nCol = 0) const;
+    static int rowIndex(const weld::TreeIter& rIter);
     OUString get_id(const QModelIndex& rModelIndex) const;
     static QAbstractItemView::SelectionMode mapSelectionMode(SelectionMode eMode);
 

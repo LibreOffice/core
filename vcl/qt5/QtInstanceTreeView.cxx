@@ -192,14 +192,10 @@ void QtInstanceTreeView::set_text(int nRow, const OUString& rText, int nCol)
     assert(nCol != -1 && "Support for special index -1 (first text column) not implemented yet");
 
     SolarMutexGuard g;
+
     GetQtInstance().RunInMainThread([&] {
-        QStandardItem* pItem = m_pModel->item(nRow, nCol);
-        if (!pItem)
-        {
-            pItem = new QStandardItem;
-            m_pModel->setItem(nRow, nCol, pItem);
-        }
-        pItem->setText(toQString(rText));
+        QModelIndex aIndex = modelIndex(nRow, nCol);
+        m_pModel->setData(aIndex, toQString(rText));
     });
 }
 
@@ -465,14 +461,7 @@ void QtInstanceTreeView::set_extra_row_indent(const weld::TreeIter&, int)
 
 void QtInstanceTreeView::set_text(const weld::TreeIter& rIter, const OUString& rStr, int nCol)
 {
-    assert(nCol != -1 && "Special column -1 not handled yet");
-
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread([&] {
-        QModelIndex aIndex = modelIndex(rIter, nCol);
-        m_pModel->setData(aIndex, toQString(rStr));
-    });
+    set_text(rowIndex(rIter), rStr, nCol);
 }
 
 void QtInstanceTreeView::set_sensitive(const weld::TreeIter&, bool, int)
@@ -847,8 +836,13 @@ QModelIndex QtInstanceTreeView::modelIndex(int nRow, int nCol) const
 
 QModelIndex QtInstanceTreeView::modelIndex(const weld::TreeIter& rIter, int nCol) const
 {
+    return modelIndex(rowIndex(rIter), nCol);
+}
+
+int QtInstanceTreeView::rowIndex(const weld::TreeIter& rIter)
+{
     QModelIndex aModelIndex = static_cast<const QtInstanceTreeIter&>(rIter).m_aModelIndex;
-    return modelIndex(aModelIndex.row(), nCol);
+    return aModelIndex.row();
 }
 
 OUString QtInstanceTreeView::get_id(const QModelIndex& rModelIndex) const
