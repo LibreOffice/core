@@ -175,7 +175,6 @@ private:
 
     GraphCtrl*  mpControl;
 
-    SdrModel* mpModel;
     SdrPage* mpPage;
     SdrView* mpView;
 

@@ -59,7 +59,6 @@ SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
 
     SvxGraphCtrlAccessibleContext_Base( m_aMutex ),
     mpControl( &rRepr ),
-    mpModel (nullptr),
     mpPage (nullptr),
     mpView (nullptr),
     mnClientId( 0 ),
@@ -67,17 +66,16 @@ SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
 {
     if (mpControl != nullptr)
     {
-        mpModel = mpControl->GetSdrModel();
-        if (mpModel != nullptr)
-            mpPage = mpModel->GetPage( 0 );
+        SdrModel* pModel = mpControl->GetSdrModel();
+        if (pModel)
+            mpPage = pModel->GetPage(0);
         mpView = mpControl->GetSdrView();
 
-        if( mpModel == nullptr || mpPage == nullptr || mpView == nullptr )
+        if (pModel == nullptr || mpPage == nullptr || mpView == nullptr)
         {
             mbDisposed = true;
             // Set all the pointers to NULL just in case they are used as
             // a disposed flag.
-            mpModel = nullptr;
             mpPage = nullptr;
             mpView = nullptr;
         }
@@ -642,18 +640,15 @@ void SvxGraphCtrlAccessibleContext::setModelAndView (
 {
     ::SolarMutexGuard aGuard;
 
-    mpModel = pModel;
-    if (mpModel != nullptr)
-        mpPage = mpModel->GetPage( 0 );
+    mpPage = pModel ? pModel->GetPage(0) : nullptr;
     mpView = pView;
 
-    if (mpModel == nullptr || mpPage == nullptr || mpView == nullptr)
+    if (mpPage == nullptr || mpView == nullptr)
     {
         mbDisposed = true;
 
         // Set all the pointers to NULL just in case they are used as
         // a disposed flag.
-        mpModel = nullptr;
         mpPage = nullptr;
         mpView = nullptr;
     }
