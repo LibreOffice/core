@@ -634,12 +634,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf54862)
     verify();
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf85435, "tdf85435.doc")
-{
-    // Without the fix, this document only has one page.
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
-}
-
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

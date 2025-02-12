@@ -2243,6 +2243,39 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
         const auto nAmpRatio = (m_pCurr->Height() + nLineHeight - 1) / nLineHeight;
         nLineHeight *= nAmpRatio;
 
+        // tdf#164871: Handle all types of line spacing in grid layout.
+        // The prop/auto rule was originally implemented with #99106#, but other spacing
+        // types were not implemented (perhaps unintentionally). These implementations
+        // differ from the below non-grid implementations, so cannot be reused.
+        const SvxLineSpacingItem* pSpace = m_aLineInf.GetLineSpacing();
+        if (pSpace)
+        {
+            switch (pSpace->GetLineSpaceRule())
+            {
+                case SvxLineSpaceRule::Min:
+                    // tdf#164871: MSO idiosyncratically disables the grid extra space
+                    // when the minimum height is 0. While strange, certain documents
+                    // require this and it seems harmless to emulate.
+                    if (pSpace->GetLineHeight() == 0)
+                    {
+                        nLineHeight = m_pCurr->Height() + nRubyHeight;
+                    }
+
+                    if (nLineHeight < pSpace->GetLineHeight())
+                    {
+                        nLineHeight = pSpace->GetLineHeight();
+                    }
+                    break;
+
+                case SvxLineSpaceRule::Fix:
+                    nLineHeight = pSpace->GetLineHeight();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
         const SwTwips nAsc = m_pCurr->GetAscent() +
                       ( bRubyTop ?
                        ( nLineHeight - m_pCurr->Height() + nRubyHeight ) / 2 :
@@ -2253,7 +2286,6 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
         m_pInf->GetParaPortion()->SetFixLineHeight();
 
         // we ignore any line spacing options except from ...
-        const SvxLineSpacingItem* pSpace = m_aLineInf.GetLineSpacing();
         if ( ! IsParaLine() && pSpace &&
              SvxInterLineSpaceRule::Prop == pSpace->GetInterLineSpaceRule() )
         {
