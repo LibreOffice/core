@@ -56,7 +56,7 @@ SmGraphicAccessible::SmGraphicAccessible(SmGraphicWidget *pGraphicWin) :
     nClientId           (0),
     pWin                (pGraphicWin)
 {
-    OSL_ENSURE( pWin, "SmGraphicAccessible: window missing" );
+    assert(pWin && "SmGraphicAccessible: window missing");
 }
 
 SmGraphicAccessible::~SmGraphicAccessible()
