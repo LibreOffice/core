@@ -171,43 +171,6 @@ Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleParent()
     return pWin->GetDrawingArea()->get_accessible_parent();
 }
 
-sal_Int64 SAL_CALL SmGraphicAccessible::getAccessibleIndexInParent()
-{
-    SolarMutexGuard aGuard;
-
-    // -1 for child not found/no parent (according to specification)
-    sal_Int64 nRet = -1;
-
-    css::uno::Reference<css::accessibility::XAccessible> xParent(getAccessibleParent());
-    if (!xParent)
-        return nRet;
-
-    try
-    {
-        css::uno::Reference<css::accessibility::XAccessibleContext> xParentContext(
-            xParent->getAccessibleContext());
-
-        //  iterate over parent's children and search for this object
-        if (xParentContext.is())
-        {
-            sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
-            for (sal_Int64 nChild = 0; (nChild < nChildCount) && (-1 == nRet); ++nChild)
-            {
-                css::uno::Reference<css::accessibility::XAccessible> xChild(
-                    xParentContext->getAccessibleChild(nChild));
-                if (xChild.get() == this)
-                    nRet = nChild;
-            }
-        }
-    }
-    catch (const css::uno::Exception&)
-    {
-        TOOLS_WARN_EXCEPTION("svx", "WeldEditAccessible::getAccessibleIndexInParent");
-    }
-
-    return nRet;
-}
-
 sal_Int16 SAL_CALL SmGraphicAccessible::getAccessibleRole()
 {
     return AccessibleRole::DOCUMENT;
