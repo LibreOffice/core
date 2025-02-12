@@ -1468,6 +1468,67 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testFoMargin)
     CPPUNIT_ASSERT_LESS(sal_Int32(13400), nPage2Height);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf144450)
+{
+    createSwDoc("tdf144450.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    // Basic case: default, single-line spacing
+    auto nCase1 = getXPath(pXmlDoc, "/root/page[1]/body/txt[1]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(3995), nCase1);
+    CPPUNIT_ASSERT_LESS(sal_Int32(4005), nCase1);
+
+    // Default spacing with snap-to-grid disabled
+    auto nCase2 = getXPath(pXmlDoc, "/root/page[2]/body/txt[1]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(2175), nCase2);
+    CPPUNIT_ASSERT_LESS(sal_Int32(2185), nCase2);
+
+    // 1.15-line spacing
+    auto nCase3 = getXPath(pXmlDoc, "/root/page[3]/body/txt[1]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(4295), nCase3);
+    CPPUNIT_ASSERT_LESS(sal_Int32(4305), nCase3);
+
+    // 1.5-line spacing
+    auto nCase4 = getXPath(pXmlDoc, "/root/page[4]/body/txt[1]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(4995), nCase4);
+    CPPUNIT_ASSERT_LESS(sal_Int32(5005), nCase4);
+
+    // 2.0-line spacing
+    auto nCase5 = getXPath(pXmlDoc, "/root/page[5]/body/txt[1]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(5995), nCase5);
+    CPPUNIT_ASSERT_LESS(sal_Int32(6005), nCase5);
+
+    // Prop spacing, 2.5x
+    auto nCase6 = getXPath(pXmlDoc, "/root/page[6]/body/txt[1]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(6995), nCase6);
+    CPPUNIT_ASSERT_LESS(sal_Int32(7005), nCase6);
+
+    // At-least 0 spacing: this is a special case that disables extra grid spacing
+    auto nCase7 = getXPath(pXmlDoc, "/root/page[7]/body/txt[1]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(2575), nCase7);
+    CPPUNIT_ASSERT_LESS(sal_Int32(2585), nCase7);
+
+    // At-least 0.01": should match the basic case
+    auto nCase8 = getXPath(pXmlDoc, "/root/page[8]/body/txt[1]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(3995), nCase8);
+    CPPUNIT_ASSERT_LESS(sal_Int32(4005), nCase8);
+
+    // At-least 4"
+    auto nCase9 = getXPath(pXmlDoc, "/root/page[9]/body/txt[1]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(11515), nCase9);
+    CPPUNIT_ASSERT_LESS(sal_Int32(11525), nCase9);
+
+    // Fixed 1"
+    auto nCase10 = getXPath(pXmlDoc, "/root/page[10]/body/txt[1]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(2875), nCase10);
+    CPPUNIT_ASSERT_LESS(sal_Int32(2885), nCase10);
+
+    // Fixed 2"
+    auto nCase11 = getXPath(pXmlDoc, "/root/page[11]/body/txt[1]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(5755), nCase11);
+    CPPUNIT_ASSERT_LESS(sal_Int32(5765), nCase11);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
