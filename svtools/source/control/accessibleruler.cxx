@@ -70,7 +70,8 @@ uno::Reference< XAccessibleContext > SAL_CALL SvtRulerAccessible::getAccessibleC
 
 sal_Bool SAL_CALL SvtRulerAccessible::containsPoint( const awt::Point& rPoint )
 {
-    // no guard -> done in getBounds()
+    SolarMutexGuard aSolarGuard;
+
 //  return GetBoundingBox().IsInside( vcl::unohelper::ConvertToVCLPoint( rPoint ) );
     return tools::Rectangle(Point(0, 0), GetBoundingBox().GetSize())
         .Contains(vcl::unohelper::ConvertToVCLPoint(rPoint));
@@ -78,6 +79,7 @@ sal_Bool SAL_CALL SvtRulerAccessible::containsPoint( const awt::Point& rPoint )
 
 uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleAtPoint( const awt::Point& )
 {
+    SolarMutexGuard aSolarGuard;
     std::unique_lock aGuard( m_aMutex );
     throwIfDisposed(aGuard);
 
@@ -86,31 +88,32 @@ uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleAtPoint(
 
 awt::Rectangle SAL_CALL SvtRulerAccessible::getBounds()
 {
-    // no guard -> done in GetBoundingBox()
+    SolarMutexGuard aSolarGuard;
     return vcl::unohelper::ConvertToAWTRect(GetBoundingBox());
 }
 
 awt::Point SAL_CALL SvtRulerAccessible::getLocation()
 {
-    // no guard -> done in GetBoundingBox()
+    SolarMutexGuard aSolarGuard;
     return vcl::unohelper::ConvertToAWTPoint(GetBoundingBox().TopLeft());
 }
 
 awt::Point SAL_CALL SvtRulerAccessible::getLocationOnScreen()
 {
-    // no guard -> done in GetBoundingBoxOnScreen()
+    SolarMutexGuard aSolarGuard;
     return vcl::unohelper::ConvertToAWTPoint(GetBoundingBoxOnScreen().TopLeft());
 }
 
 awt::Size SAL_CALL SvtRulerAccessible::getSize()
 {
-    // no guard -> done in GetBoundingBox()
+    SolarMutexGuard aSolarGuard;
     return vcl::unohelper::ConvertToAWTSize(GetBoundingBox().GetSize());
 }
 
 //=====  XAccessibleContext  ==================================================
 sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleChildCount()
 {
+    SolarMutexGuard aSolarGuard;
     std::unique_lock aGuard( m_aMutex );
     throwIfDisposed(aGuard);
 
@@ -119,6 +122,7 @@ sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleChildCount()
 
 uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleChild( sal_Int64 )
 {
+    SolarMutexGuard aSolarGuard;
     uno::Reference< XAccessible >   xChild ;
 
     return xChild;
@@ -126,12 +130,13 @@ uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleChild( s
 
 uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleParent()
 {
+    SolarMutexGuard aSolarGuard;
     return mxParent;
 }
 
 sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleIndexInParent()
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aSolarGuard;
 
     //  Use a simple but slow solution for now.  Optimize later.
 
@@ -158,16 +163,19 @@ sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleIndexInParent()
 
 sal_Int16 SAL_CALL SvtRulerAccessible::getAccessibleRole()
 {
+    SolarMutexGuard aSolarGuard;
     return AccessibleRole::RULER;
 }
 
 OUString SAL_CALL SvtRulerAccessible::getAccessibleDescription()
 {
+    SolarMutexGuard aSolarGuard;
     return OUString();
 }
 
 OUString SAL_CALL SvtRulerAccessible::getAccessibleName()
 {
+    SolarMutexGuard aSolarGuard;
     return msName;
 }
 
@@ -176,13 +184,14 @@ OUString SAL_CALL SvtRulerAccessible::getAccessibleName()
 */
 uno::Reference< XAccessibleRelationSet > SAL_CALL SvtRulerAccessible::getAccessibleRelationSet()
 {
+    SolarMutexGuard aSolarGuard;
     return uno::Reference< XAccessibleRelationSet >();
 }
 
 
 sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleStateSet()
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aSolarGuard;
 
     sal_Int64 nStateSet = 0;
 
@@ -206,7 +215,7 @@ sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleStateSet()
 
 lang::Locale SAL_CALL SvtRulerAccessible::getLocale()
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aSolarGuard;
 
     if( mxParent.is() )
     {
@@ -254,43 +263,31 @@ void SAL_CALL SvtRulerAccessible::removeAccessibleEventListener( const uno::Refe
 
 void SAL_CALL SvtRulerAccessible::grabFocus()
 {
-    VclPtr<Ruler> xRepr;
-    {
-        std::unique_lock aGuard( m_aMutex );
-        xRepr = mpRepr;
-    }
-    if (!xRepr)
+    SolarMutexGuard aSolarGuard;
+
+    if (!mpRepr)
         throw css::lang::DisposedException(OUString(), static_cast<cppu::OWeakObject*>(this));
 
-    SolarMutexGuard     aSolarGuard;
-    xRepr->GrabFocus();
+    mpRepr->GrabFocus();
 }
 
 sal_Int32 SvtRulerAccessible::getForeground(  )
 {
-    VclPtr<Ruler> xRepr;
-    {
-        std::unique_lock aGuard( m_aMutex );
-        xRepr = mpRepr;
-    }
-    if (!xRepr)
+    SolarMutexGuard aSolarGuard;
+
+    if (!mpRepr)
         throw css::lang::DisposedException(OUString(), static_cast<cppu::OWeakObject*>(this));
 
-    SolarMutexGuard     aSolarGuard;
-    return sal_Int32(xRepr->GetControlForeground());
+    return sal_Int32(mpRepr->GetControlForeground());
 }
 sal_Int32 SvtRulerAccessible::getBackground(  )
 {
-    VclPtr<Ruler> xRepr;
-    {
-        std::unique_lock aGuard( m_aMutex );
-        xRepr = mpRepr;
-    }
-    if (!xRepr)
+    SolarMutexGuard aSolarGuard;
+
+    if (!mpRepr)
         throw css::lang::DisposedException(OUString(), static_cast<cppu::OWeakObject*>(this));
 
-    SolarMutexGuard     aSolarGuard;
-    return sal_Int32(xRepr->GetControlBackground());
+    return sal_Int32(mpRepr->GetControlBackground());
 }
 
 // XServiceInfo
@@ -330,30 +327,18 @@ void SvtRulerAccessible::disposing(std::unique_lock<std::mutex>&)
 
 tools::Rectangle SvtRulerAccessible::GetBoundingBoxOnScreen()
 {
-    VclPtr<Ruler> xRepr;
-    {
-        std::unique_lock aGuard( m_aMutex );
-        xRepr = mpRepr;
-    }
-    if (!xRepr)
+    if (!mpRepr)
         throw css::lang::DisposedException(OUString(), static_cast<cppu::OWeakObject*>(this));
 
-    SolarMutexGuard     aSolarGuard;
-    return tools::Rectangle( xRepr->GetParent()->OutputToAbsoluteScreenPixel( xRepr->GetPosPixel() ), xRepr->GetSizePixel() );
+    return tools::Rectangle(mpRepr->GetParent()->OutputToAbsoluteScreenPixel(mpRepr->GetPosPixel()), mpRepr->GetSizePixel());
 }
 
 tools::Rectangle SvtRulerAccessible::GetBoundingBox()
 {
-    VclPtr<Ruler> xRepr;
-    {
-        std::unique_lock aGuard( m_aMutex );
-        xRepr = mpRepr;
-    }
-    if (!xRepr)
+    if (!mpRepr)
         throw css::lang::DisposedException(OUString(), static_cast<cppu::OWeakObject*>(this));
 
-    SolarMutexGuard     aSolarGuard;
-    return tools::Rectangle( xRepr->GetPosPixel(), xRepr->GetSizePixel() );
+    return tools::Rectangle(mpRepr->GetPosPixel(), mpRepr->GetSizePixel());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
