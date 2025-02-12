@@ -33,6 +33,7 @@ merge (anonymous namespace)::empty with (anonymous namespace)::second
 maybe merge AbstractMailMergeWizard with vcl::AbstractDialogImpl_BASE, in modules sw and vcl
 merge AbstractSmParser with SmParser5
 maybe merge AbstractSwInsertDBColAutoPilot with vcl::AbstractDialogImpl_BASE, in modules sw and vcl
+maybe merge AccessibleBrowseBoxCell with cppu::ImplInheritanceHelper, in modules vcl and cppuhelper
 merge AddressWalker with AddressWalkerWriter
 merge AutoIdle with (anonymous namespace)::TestAutoIdleRR
 merge B3dTransformationSet with B3dViewport
@@ -452,6 +453,7 @@ merge comphelper::ICryptoImplementation with comphelper::(anonymous namespace)::
 maybe merge comphelper::IPropertyInfoService with frm::ConcreteInfoService, in modules comphelper and forms
 maybe merge comphelper::MasterPropertySet with SwXDocumentSettings, in modules comphelper and sw
 merge comphelper::MasterPropertySetInfo_Base with comphelper::MasterPropertySetInfo
+merge comphelper::OAccessibleContextWrapperHelper with comphelper::OAccessibleContextWrapper
 maybe merge comphelper::OAccessibleSelectionHelper with cppu::ImplInheritanceHelper, in modules comphelper and cppuhelper
 maybe merge comphelper::OAccessibleTextHelper with cppu::ImplInheritanceHelper, in modules comphelper and cppuhelper
 merge comphelper::OAccessibleWrapper_Base with comphelper::OAccessibleWrapper
