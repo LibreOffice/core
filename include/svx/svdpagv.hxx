@@ -253,6 +253,8 @@ public:
     // #103911# Set/Get document color for svx at SdrPageViews
     void SetApplicationDocumentColor(Color aDocumentColor);
     const Color& GetApplicationDocumentColor() const { return maDocumentColor;}
+
+    void resetGridOffsetsOfAllPageWindows() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

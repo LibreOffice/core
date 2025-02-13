@@ -25,6 +25,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdtypes.hxx>
 
+#include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 
 #include <algorithm>
@@ -898,5 +899,22 @@ void SdrPageView::SetApplicationDocumentColor(Color aDocumentColor)
     maDocumentColor = aDocumentColor;
 }
 
+void SdrPageView::resetGridOffsetsOfAllPageWindows() const
+{
+    for (auto& pPageWindow : maPageWindows)
+    {
+        assert(pPageWindow && "SdrView::SetMasterPagePaintCaching: Corrupt SdrPageWindow list (!)");
+
+        if (pPageWindow)
+        {
+            sdr::contact::ObjectContact& rObjectContact(pPageWindow->GetObjectContact());
+
+            if (rObjectContact.supportsGridOffsets())
+            {
+                rObjectContact.resetAllGridOffsets();
+            }
+        }
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -509,6 +509,7 @@ public:
     /// notify this view with new positions for other view's cursors (after zoom)
     void updateKitOtherCursors() const;
     void updateOtherKitSelections() const;
+    void resetCachedViewGridOffsets() const;
 
     void notifyKitCellFollowJump() const;
 
