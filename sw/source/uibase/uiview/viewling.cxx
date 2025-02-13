@@ -620,7 +620,7 @@ IMPL_STATIC_LINK( AsyncExecute, ExecuteHdl_Impl, void*, p, void )
 }
 //!! End of extra code for context menu modifying extensions
 
-bool SwView::ExecSpellPopup(const Point& rPt)
+bool SwView::ExecSpellPopup(const Point& rPt, bool bIsMouseEvent)
 {
     bool bRet = false;
     const SwViewOption* pVOpt = m_pWrtShell->GetViewOptions();
@@ -666,7 +666,8 @@ bool SwView::ExecSpellPopup(const Point& rPt)
             // if neither spell checking nor grammar checking provides suggestions use the
             // default context menu.
             bool bUseGrammarContext = false;
-            Reference< XSpellAlternatives >  xAlt( m_pWrtShell->GetCorrection(&rPt, aToFill) );
+            Reference<XSpellAlternatives> xAlt(
+                m_pWrtShell->GetCorrection(bIsMouseEvent ? &rPt : nullptr, aToFill));
             ProofreadingResult aGrammarCheckRes;
             sal_Int32 nErrorInResult = -1;
             uno::Sequence< OUString > aSuggestions;
@@ -674,7 +675,9 @@ bool SwView::ExecSpellPopup(const Point& rPt)
             if (!xAlt.is() || !xAlt->getAlternatives().hasElements())
             {
                 sal_Int32 nErrorPosInText = -1;
-                bCorrectionRes = m_pWrtShell->GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, &rPt, aToFill );
+                bCorrectionRes = m_pWrtShell->GetGrammarCorrection(
+                    aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions,
+                    bIsMouseEvent ? &rPt : nullptr, aToFill);
                 OUString aMessageText;
                 if (nErrorInResult >= 0)
                     aMessageText = aGrammarCheckRes.aErrors[ nErrorInResult ].aShortComment;
