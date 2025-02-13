@@ -5196,17 +5196,17 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf71956)
     CPPUNIT_ASSERT_EQUAL(12, nTextObjectCount);
 
     CPPUNIT_ASSERT_EQUAL(u"ه"_ustr, aText[0].trim());
-    CPPUNIT_ASSERT_EQUAL(u"\u0670\u0020\u0644\u0644"_ustr, aText[1].trim());
+    CPPUNIT_ASSERT_EQUAL(u"\u064e\u0651\u0670ل"_ustr, aText[1].trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[2].trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[3].trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[4].trim());
     CPPUNIT_ASSERT_EQUAL(u"ل"_ustr, aText[5].trim());
-    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[6].trim());
-    CPPUNIT_ASSERT_EQUAL(u"\u0647"_ustr, aText[7].trim());
+    CPPUNIT_ASSERT_EQUAL(u"ل"_ustr, aText[6].trim());
+    CPPUNIT_ASSERT_EQUAL(u"\u064e\u0651\u0670ل"_ustr, aText[7].trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[8].trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[9].trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[10].trim());
-    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText[11].trim());
+    CPPUNIT_ASSERT_EQUAL(u"ه"_ustr, aText[11].trim());
 
     // Verify that the corresponding text segments are positioned roughly equally
     auto fnEqualPos
