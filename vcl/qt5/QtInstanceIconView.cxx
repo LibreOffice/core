@@ -14,6 +14,9 @@
 
 #include <vcl/qt/QtUtils.hxx>
 
+#include <QtGui/QHelpEvent>
+#include <QtWidgets/QToolTip>
+
 // role used for the ID in the QStandardItem
 constexpr int ROLE_ID = Qt::UserRole + 1000;
 
@@ -28,6 +31,9 @@ QtInstanceIconView::QtInstanceIconView(QListView* pListView)
 
     m_pSelectionModel = m_pListView->selectionModel();
     assert(m_pSelectionModel);
+
+    // install event filter to handle tooltip events
+    m_pListView->installEventFilter(this);
 
     connect(m_pListView, &QListView::activated, this, &QtInstanceIconView::handleActivated);
     connect(m_pSelectionModel, &QItemSelectionModel::selectionChanged, this,
@@ -272,6 +278,16 @@ int QtInstanceIconView::n_children() const
     return nChildren;
 }
 
+bool QtInstanceIconView::eventFilter(QObject* pObject, QEvent* pEvent)
+{
+    assert(pObject == m_pListView);
+
+    if (pEvent->type() == QEvent::ToolTip)
+        return handleToolTipEvent(static_cast<QHelpEvent*>(pEvent));
+
+    return QtInstanceWidget::eventFilter(pObject, pEvent);
+}
+
 QModelIndex QtInstanceIconView::modelIndex(int nPos) const { return m_pModel->index(nPos, 0); }
 
 QModelIndex QtInstanceIconView::modelIndex(const weld::TreeIter& rIter) const
@@ -283,6 +299,23 @@ int QtInstanceIconView::position(const weld::TreeIter& rIter)
 {
     QModelIndex aModelIndex = static_cast<const QtInstanceTreeIter&>(rIter).modelIndex();
     return aModelIndex.row();
+}
+
+bool QtInstanceIconView::handleToolTipEvent(QHelpEvent* pHelpEvent)
+{
+    QModelIndex aIndex = m_pListView->indexAt(pHelpEvent->pos());
+    if (!aIndex.isValid())
+        return false;
+
+    SolarMutexGuard g;
+    const QtInstanceTreeIter aIter(aIndex);
+    const QString sToolTip = toQString(signal_query_tooltip(aIter));
+    if (sToolTip.isEmpty())
+        return false;
+
+    QToolTip::showText(pHelpEvent->globalPos(), sToolTip, m_pListView,
+                       m_pListView->visualRect(aIndex));
+    return true;
 }
 
 void QtInstanceIconView::handleActivated()
