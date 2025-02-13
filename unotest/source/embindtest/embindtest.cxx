@@ -35,6 +35,7 @@
 #include <org/libreoffice/embindtest/Template.hpp>
 #include <org/libreoffice/embindtest/Test.hpp>
 #include <org/libreoffice/embindtest/XTest.hpp>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <salhelper/thread.hxx>
@@ -930,11 +931,11 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
 
     sal_Bool SAL_CALL testSolarMutex() override
     {
-        TestThread t;
-        t.launch();
-        t.join();
+        rtl::Reference t(new TestThread);
+        t->launch();
+        t->join();
         SolarMutexGuard g;
-        return t.value;
+        return t->value;
     }
 
     OUString stringAttribute_ = u"hä"_ustr;
