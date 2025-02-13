@@ -13,7 +13,17 @@ $(eval $(call gb_Library_use_unpacked,pdfium,pdfium))
 
 $(eval $(call gb_Library_set_warnings_disabled,pdfium))
 
-$(eval $(call gb_Library_set_precompiled_header,pdfium,external/pdfium/inc/pch/precompiled_pdfium))
+$(eval $(call gb_Library_use_clang,pdfium))
+#This currently results in all sorts of compile complaints
+#$(eval $(call gb_Library_set_precompiled_header,pdfium,external/pdfium/inc/pch/precompiled_pdfium))
+# The clang-cl provided with at least VS 2019 16.11.28 is known-broken with -std:c++20:
+ifneq ($(filter -std:c++20,$(CXXFLAGS_CXX11)),)
+ifeq ($(LO_CLANG_VERSION),120000)
+$(eval $(call gb_Library_add_cxxflags,pdfium, \
+    -std:c++17 \
+))
+endif
+endif
 
 $(eval $(call gb_Library_set_include,pdfium,\
     -I$(gb_UnpackedTarball_workdir)/pdfium \
