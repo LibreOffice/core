@@ -402,6 +402,8 @@ void MasterPagesSelector::SetItem (
             {
                 OUString sId = OUString::number(aToken);
                 mxPreviewIconView->insert(nIndex, nullptr, &sId, pVDev, nullptr);
+                mxPreviewIconView->set_item_accessible_name(
+                    nIndex, mpContainer->GetPageNameForToken(aToken));
             }
 
             AddTokenToIndexEntry(nIndex, aToken);
