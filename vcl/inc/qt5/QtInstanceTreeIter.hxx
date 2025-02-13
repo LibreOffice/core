@@ -12,12 +12,15 @@
 #include <QtGui/QStandardItemModel>
 #include <vcl/weld.hxx>
 
-struct QtInstanceTreeIter final : public weld::TreeIter
+class QtInstanceTreeIter final : public weld::TreeIter
 {
     QModelIndex m_aModelIndex;
 
+public:
     explicit QtInstanceTreeIter(QModelIndex aModelIndex);
     virtual bool equal(const TreeIter& rOther) const override;
+
+    QModelIndex modelIndex() const { return m_aModelIndex; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
