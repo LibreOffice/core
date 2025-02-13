@@ -1649,7 +1649,7 @@ void GetDocStructureSlides(::tools::JsonWriter& rJsonWriter, SdXImpressDocument*
     // write data of every master slide
     if (nMasterPageCount > 0)
     {
-        auto aMasterPagesNode = rJsonWriter.startArray("MasterSlides");
+        auto aMasterPagesNode = rJsonWriter.startNode("MasterSlides");
         for (int nMPId = 0; nMPId < nMasterPageCount; nMPId++)
         {
             auto aMasterPageNode = rJsonWriter.startNode("MasterSlide " + std::to_string(nMPId));
@@ -1662,7 +1662,7 @@ void GetDocStructureSlides(::tools::JsonWriter& rJsonWriter, SdXImpressDocument*
     // write data of every slide
     if (nPageCount > 0)
     {
-        auto aPagesNode = rJsonWriter.startArray("Slides");
+        auto aPagesNode = rJsonWriter.startNode("Slides");
         for (int nPId = 0; nPId < nPageCount; nPId++)
         {
             auto aPageNode = rJsonWriter.startNode("Slide " + std::to_string(nPId));
@@ -1691,7 +1691,7 @@ void GetDocStructureSlides(::tools::JsonWriter& rJsonWriter, SdXImpressDocument*
 
             if (nObjCount > 0)
             {
-                auto aObjectsNode = rJsonWriter.startArray("Objects");
+                auto aObjectsNode = rJsonWriter.startNode("Objects");
                 for (int nOId = 0; nOId < nObjCount; nOId++)
                 {
                     auto aObjectNode = rJsonWriter.startNode("Objects " + std::to_string(nOId));
@@ -1703,7 +1703,7 @@ void GetDocStructureSlides(::tools::JsonWriter& rJsonWriter, SdXImpressDocument*
                         rJsonWriter.put("TextCount", nTextCount);
                         if (nTextCount > 0)
                         {
-                            auto aTextsNode = rJsonWriter.startArray("Texts");
+                            auto aTextsNode = rJsonWriter.startNode("Texts");
                             for (int nTId = 0; nTId < nTextCount; nTId++)
                             {
                                 auto aTextNode

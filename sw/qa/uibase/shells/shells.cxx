@@ -597,34 +597,33 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureTransformChart)
     createSwDoc("docStructureChartExampleOriginal.odt");
     OString aJson = R"json(
 {
-    "Transforms": {
-        "Charts.ByEmbedIndex.0": {
-            "modifyrow.1": [ 19, 15 ],
-            "datayx.3.1": 37,
-            "deleterow.0": "",
-            "deleterow.1": "",
-            "insertrow.0": [ 15, 17 ],
-            "setrowdesc.0": "Paul",
-            "insertrow.2": [ 19, 22 ],
-            "setrowdesc.2": "Barbara",
-            "insertrow.4": [ 29, 27 ],
-            "setrowdesc.4": "Elizabeth",
-            "insertrow.5": [ 14, 26 ],
-            "setrowdesc.5": "William",
-            "insertcolumn.1": [ 1,2,3,4,5,6 ],
-            "insertcolumn.0": [ 2,1,2,1,2,1 ],
-            "insertcolumn.4": [ 7,7,7,7,7,7 ],
-            "setcolumndesc.4": "c4",
-            "setcolumndesc.0": "c0",
-            "setcolumndesc.2": "c2"
-        },
-        "Charts.BySubTitle.Subtitle2": {
+    "Transforms": [
+        {"Charts.ByEmbedIndex.0": [
+            {"modifyrow.1": [ 19, 15 ]},
+            {"datayx.3.1": 37},
+            {"deleterow.0": ""},
+            {"deleterow.1": ""},
+            {"insertrow.0": [ 15, 17 ]},
+            {"setrowdesc.0": "Paul"},
+            {"insertrow.2": [ 19, 22 ]},
+            {"setrowdesc.2": "Barbara"},
+            {"insertrow.4": [ 29, 27 ]},
+            {"setrowdesc.4": "Elizabeth"},
+            {"insertrow.5": [ 14, 26 ]},
+            {"setrowdesc.5": "William"},
+            {"insertcolumn.1": [ 1,2,3,4,5,6 ]},
+            {"insertcolumn.0": [ 2,1,2,1,2,1 ]},
+            {"insertcolumn.4": [ 7,7,7,7,7,7 ]},
+            {"setcolumndesc.4": "c4"},
+            {"setcolumndesc.0": "c0"},
+            {"setcolumndesc.2": "c2"}
+        ]},
+        {"Charts.BySubTitle.Subtitle2": {
             "deletecolumn.3": ""
-        },
-        "Charts.ByEmbedName.Object3": {
-            "resize": [ 12, 3 ],
-            "setrowdesc":
-            [
+        }},
+        {"Charts.ByEmbedName.Object3": [
+            {"resize": [ 12, 3 ]},
+            {"setrowdesc": [
                 "United Kingdom",
                 "United States of America",
                 "Canada",
@@ -637,11 +636,11 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureTransformChart)
                 "Italy",
                 "France",
                 "Egypt"
-            ],
-            "modifycolumn.0": [ 12, 9, 8, 5, 5, 4, 3, 3, 2, 2, 1, 1],
-            "resize": [ 12, 2 ]
-        },
-        "Charts.ByTitle.Fixed issues": {
+            ]},
+            {"modifycolumn.0": [ 12, 9, 8, 5, 5, 4, 3, 3, 2, 2, 1, 1]},
+            {"resize": [ 12, 2 ]}
+        ]},
+        {"Charts.ByTitle.Fixed issues": {
             "data": [ [ 3,1,2 ],
                       [ 2,0,1 ],
                       [ 3,2,0 ],
@@ -662,8 +661,8 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureTransformChart)
                       [ 2,2,2,1,2,3 ] ],
             "setrowdesc": ["2023.01",".02",".03",".04",".05",".06",".07",".08",".09",".10",".11",".12","2023.01",".02",".03",".04",".05",".06"],
             "setcolumndesc": ["Jennifer", "Charles", "Thomas", "Maria", "Lisa", "Daniel"]
-        }
-    }
+        }}
+    ]
 }
 )json"_ostr;
 
@@ -771,14 +770,14 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractChart)
         = "{ \"DocStructure\": { \"Charts.ByEmbedIndex.0\": { \"name\": \"Object1\", \"title\": "
           "\"Paid leave days\", \"subtitle\": \"Subtitle2\", \"RowDescriptions\": [ \"James\", "
           "\"Mary\", \"Patricia\", \"David\"], \"ColumnDescriptions\": [ \"2022\", \"2023\"], "
-          "\"DataValues\": [ \"Row.0\": [ \"22\", \"24\"], \"Row.1\": [ \"18\", \"16\"], "
-          "\"Row.2\": [ \"32\", \"32\"], \"Row.3\": [ \"25\", \"23\"]]}, "
+          "\"DataValues\": [ [ \"22\", \"24\"], [ \"18\", \"16\"], [ \"32\", \"32\"], "
+          "[ \"25\", \"23\"]]}, "
           "\"Charts.ByEmbedIndex.1\": { \"name\": \"Object2\", \"title\": \"Fixed issues\", "
           "\"subtitle\": \"Subtitle1\", \"RowDescriptions\": [ \"\"], \"ColumnDescriptions\": [ \" "
-          "\"], \"DataValues\": [ \"Row.0\": [ \"NaN\"]]}, \"Charts.ByEmbedIndex.2\": { \"name\": "
+          "\"], \"DataValues\": [ [ \"NaN\"]]}, \"Charts.ByEmbedIndex.2\": { \"name\": "
           "\"Object3\", \"title\": \"Employees from countries\", \"subtitle\": \"Subtitle3\", "
           "\"RowDescriptions\": [ \"\"], \"ColumnDescriptions\": [ \"Column 1\"], \"DataValues\": "
-          "[ \"Row.0\": [ \"NaN\"]]}}}"_ostr;
+          "[ [ \"NaN\"]]}}}"_ostr;
 
     CPPUNIT_ASSERT_EQUAL(aExpectedStr, aJsonWriter.finishAndGetAsOString());
 }
@@ -788,8 +787,8 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureDocProperties)
     createSwDoc("docStructureChartExampleOriginal.odt");
     OString aJson = R"json(
 {
-    "Transforms": {
-        "DocumentProperties": {
+    "Transforms": [
+        { "DocumentProperties": {
             "Author":"Author TxT",
             "Generator":"Generator TxT",
             "CreationDate":"2024-01-21T14:45:00",
@@ -828,35 +827,35 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureDocProperties)
             "Rights":"Rights TxT",
             "Source":"Source TxT",
             "Type":"Type TxT",
-            "UserDefinedProperties":{
-                "Add.NewPropName Str": {
+            "UserDefinedProperties": [
+                {"Add.NewPropName Str": {
                     "type": "string",
                     "value": "this is a string"
-                },
-                "Add.NewPropName Str": {
+                }},
+                {"Add.NewPropName Str": {
                     "type": "boolean",
                     "value": false
-                },
-                "Add.NewPropName Bool": {
+                }},
+                {"Add.NewPropName Bool": {
                     "type": "boolean",
                     "value": true
-                },
-                "Add.NewPropName Numb": {
+                }},
+                {"Add.NewPropName Numb": {
                     "type": "long",
                     "value": 1245
-                },
-                "Add.NewPropName float": {
+                }},
+                {"Add.NewPropName float": {
                     "type": "float",
                     "value": 12.45
-                },
-                "Add.NewPropName Double": {
+                }},
+                {"Add.NewPropName Double": {
                     "type": "double",
                     "value": 124.578
-                },
-                "Delete": "NewPropName Double"
-            }
-        }
-    }
+                }},
+                {"Delete": "NewPropName Double"}
+            ]
+        } }
+    ]
 }
 )json"_ostr;
 
