@@ -33,7 +33,7 @@ class SmDocShell;
 
 namespace accessibility { class AccessibleTextHelper; }
 
-// classe used for accessibility in the graphic-window
+// class used for accessibility in the graphic-window
 
 class SmGraphicAccessible final
     : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
