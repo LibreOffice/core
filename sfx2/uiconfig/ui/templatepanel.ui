@@ -23,184 +23,307 @@
     </columns>
   </object>
   <!-- n-columns=1 n-rows=1 -->
-  <object class="GtkGrid" id="TemplatePanel">
+  <object class="GtkBox" id="TemplatePanel">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
+    <property name="orientation">vertical</property>
     <child>
-      <object class="GtkBox" id="box1">
+      <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
-        <property name="border-width">6</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">3</property>
         <child>
-          <object class="GtkBox">
+          <object class="GtkToolbar" id="left">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
+            <property name="toolbar-style">text</property>
+            <property name="show-arrow">False</property>
+            <property name="icon_size">2</property>
             <child>
-              <object class="GtkToolbar" id="left">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="toolbar-style">text</property>
-                <property name="show-arrow">False</property>
-                <property name="icon_size">2</property>
-                <child>
-                  <object class="GtkToggleToolButton" id="2">
-                    <property name="use-underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToggleToolButton" id="1">
-                    <property name="use-underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToggleToolButton" id="3">
-                    <property name="use-underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToggleToolButton" id="4">
-                    <property name="use-underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToggleToolButton" id="5">
-                    <property name="use-underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToggleToolButton" id="6">
-                    <property name="use-underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToggleToolButton" id="65535">
-                    <property name="use-underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
+              <object class="GtkToggleToolButton" id="2">
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
+                <property name="homogeneous">False</property>
               </packing>
             </child>
             <child>
-              <object class="GtkToolbar" id="right">
+              <object class="GtkToggleToolButton" id="1">
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="3">
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="4">
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="5">
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="6">
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="65535">
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToolbar" id="right">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="toolbar-style">icons</property>
+            <property name="show-arrow">False</property>
+            <property name="icon_size">2</property>
+            <child>
+              <object class="GtkToggleToolButton" id="watercan">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="toolbar-style">icons</property>
-                <property name="show-arrow">False</property>
-                <property name="icon_size">2</property>
-                <child>
-                  <object class="GtkToggleToolButton" id="watercan">
-                    <property name="visible">True</property>
-                    <property name="tooltip-text" translatable="yes" context="templatepanel|STR_STYLE_FILL_FORMAT_MODE">Fill Format Mode</property>
-                    <property name="use-underline">True</property>
-                    <property name="icon-name">res/sc05554.png</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="watercan-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="templatepanel|accessible_name|watercan">Fill Format Mode</property>
-                        <property name="AtkObject::accessible-description" translatable="yes" context="templatepanel|extended_tip|watercan">Applies the selected style to the object or text that you select in the document. </property>
-                      </object>
-                    </child>
+                <property name="tooltip-text" translatable="yes" context="templatepanel|STR_STYLE_FILL_FORMAT_MODE">Fill Format Mode</property>
+                <property name="use-underline">True</property>
+                <property name="icon-name">res/sc05554.png</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="watercan-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="templatepanel|accessible_name|watercan">Fill Format Mode</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="templatepanel|extended_tip|watercan">Applies the selected style to the object or text that you select in the document. </property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolButton" id="new">
-                    <property name="visible">True</property>
-                    <property name="tooltip-text" translatable="yes" context="templatepanel|STR_STYLE_NEW_STYLE_FROM_SELECTION">New Style from Selection</property>
-                    <property name="use-underline">True</property>
-                    <property name="icon-name">res/sc05555.png</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="new-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="templatepanel|accessible_name|new">New Style from Selection</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkMenuToolButton" id="newmenu">
-                    <property name="no-show-all">True</property>
-                    <property name="tooltip-text" translatable="yes" context="templatepanel|STR_STYLE_NEW_STYLE_ACTION">Styles actions</property>
-                    <property name="use-underline">True</property>
-                    <property name="icon-name">res/sc05555.png</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="newmenu-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="templatepanel|accessible_name|newmenu">Styles actions</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolButton" id="update">
-                    <property name="visible">True</property>
-                    <property name="tooltip-text" translatable="yes" context="templatepanel|STR_STYLE_UPDATE_STYLE">Update Style</property>
-                    <property name="use-underline">True</property>
-                    <property name="icon-name">res/sc05556.png</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="update-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="templatepanel|accessible_name|update">Update Style</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="pack-type">end</property>
-                <property name="position">2</property>
+                <property name="homogeneous">False</property>
               </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="new">
+                <property name="visible">True</property>
+                <property name="tooltip-text" translatable="yes" context="templatepanel|STR_STYLE_NEW_STYLE_FROM_SELECTION">New Style from Selection</property>
+                <property name="use-underline">True</property>
+                <property name="icon-name">res/sc05555.png</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="new-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="templatepanel|accessible_name|new">New Style from Selection</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuToolButton" id="newmenu">
+                <property name="no-show-all">True</property>
+                <property name="tooltip-text" translatable="yes" context="templatepanel|STR_STYLE_NEW_STYLE_ACTION">Styles actions</property>
+                <property name="use-underline">True</property>
+                <property name="icon-name">res/sc05555.png</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="newmenu-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="templatepanel|accessible_name|newmenu">Styles actions</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="update">
+                <property name="visible">True</property>
+                <property name="tooltip-text" translatable="yes" context="templatepanel|STR_STYLE_UPDATE_STYLE">Update Style</property>
+                <property name="use-underline">True</property>
+                <property name="icon-name">res/sc05556.png</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="update-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="templatepanel|accessible_name|update">Update Style</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack-type">end</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="can-focus">True</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <property name="shadow-type">in</property>
+        <child>
+          <object class="GtkTreeView" id="flatview">
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="no-show-all">True</property>
+            <property name="has-tooltip">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="model">liststore1</property>
+            <property name="headers-visible">False</property>
+            <property name="search-column">0</property>
+            <property name="show-expanders">False</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn0">
+                <child>
+                  <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf1"/>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                <property name="resizable">True</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                  <attributes>
+                    <attribute name="text">1</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="flatview-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="templatepanel|STR_STYLE_ELEMTLIST">Style List</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="can-focus">True</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <property name="shadow-type">in</property>
+        <child>
+          <object class="GtkTreeView" id="treeview">
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="no-show-all">True</property>
+            <property name="has-tooltip">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="model">liststore2</property>
+            <property name="headers-visible">False</property>
+            <property name="reorderable">True</property>
+            <property name="search-column">1</property>
+            <property name="enable-tree-lines">True</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                <child>
+                  <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf2"/>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                <property name="resizable">True</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                  <attributes>
+                    <attribute name="text">1</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="treeview-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="templatepanel|STR_STYLE_ELEMTLIST">Style List</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="settings">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <child>
+          <object class="GtkCheckButton" id="showpreview">
+            <property name="label" translatable="yes" context="commontemplate|STR_PREVIEW_CHECKBOX">Show previews</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="showpreview-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="templatepanel|extended_tip|showpreview">Display the style names as examples of their formatting. </property>
+              </object>
             </child>
           </object>
           <packing>
@@ -210,49 +333,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow">
+          <object class="GtkCheckButton" id="highlightstyles">
+            <property name="label" translatable="yes" context="commontemplate|STR_HIGHLIGHT_CHECKBOX">Spotlight</property>
             <property name="can-focus">True</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="shadow-type">in</property>
-            <child>
-              <object class="GtkTreeView" id="flatview">
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="no-show-all">True</property>
-                <property name="has-tooltip">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="model">liststore1</property>
-                <property name="headers-visible">False</property>
-                <property name="search-column">0</property>
-                <property name="show-expanders">False</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn" id="treeviewcolumn0">
-                    <child>
-                      <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf1"/>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                    <property name="resizable">True</property>
-                    <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                      <attributes>
-                        <attribute name="text">1</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                </child>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="flatview-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="templatepanel|STR_STYLE_ELEMTLIST">Style List</property>
-                  </object>
-                </child>
+            <property name="receives-default">False</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="highlightstyles-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="templatepanel|extended_tip|highlightstyles">Displays a color and a unique number code for each applied paragraph or character style in the document. </property>
               </object>
             </child>
           </object>
@@ -262,130 +351,27 @@
             <property name="position">1</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkScrolledWindow">
-            <property name="can-focus">True</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="shadow-type">in</property>
-            <child>
-              <object class="GtkTreeView" id="treeview">
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="no-show-all">True</property>
-                <property name="has-tooltip">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="model">liststore2</property>
-                <property name="headers-visible">False</property>
-                <property name="reorderable">True</property>
-                <property name="search-column">1</property>
-                <property name="enable-tree-lines">True</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn" id="treeviewcolumn3">
-                    <child>
-                      <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf2"/>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                    <property name="resizable">True</property>
-                    <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext2"/>
-                      <attributes>
-                        <attribute name="text">1</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                </child>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="treeview-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="templatepanel|STR_STYLE_ELEMTLIST">Style List</property>
-                  </object>
-                </child>
-              </object>
-            </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">5</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkComboBoxText" id="filter">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="filter-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="templatepanel|extended_tip|filter">Select a filter for the list of styles.</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="settings">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <child>
-              <object class="GtkCheckButton" id="showpreview">
-                <property name="label" translatable="yes" context="commontemplate|STR_PREVIEW_CHECKBOX">Show previews</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="showpreview-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="templatepanel|extended_tip|showpreview">Display the style names as examples of their formatting. </property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="highlightstyles">
-                <property name="label" translatable="yes" context="commontemplate|STR_HIGHLIGHT_CHECKBOX">Spotlight</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="highlightstyles-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="templatepanel|extended_tip|highlightstyles">Displays a color and a unique number code for each applied paragraph or character style in the document. </property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">5</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkComboBoxText" id="filter">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="filter-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="templatepanel|extended_tip|filter">Select a filter for the list of styles.</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">4</property>
-          </packing>
         </child>
       </object>
       <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">0</property>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">4</property>
       </packing>
     </child>
   </object>
