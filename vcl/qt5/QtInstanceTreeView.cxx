@@ -207,7 +207,15 @@ bool QtInstanceTreeView::get_sensitive(int, int) const
     return false;
 }
 
-void QtInstanceTreeView::set_id(int, const OUString&) { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::set_id(int nRow, const OUString& rId)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QModelIndex aIndex = modelIndex(nRow);
+        m_pModel->setData(aIndex, toQString(rId), ROLE_ID);
+    });
+}
 
 void QtInstanceTreeView::set_toggle(int, TriState, int) { assert(false && "Not implemented yet"); }
 
@@ -554,12 +562,7 @@ OUString QtInstanceTreeView::get_text(const weld::TreeIter&, int) const
 
 void QtInstanceTreeView::set_id(const weld::TreeIter& rIter, const OUString& rId)
 {
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread([&] {
-        QModelIndex aIndex = modelIndex(rIter);
-        m_pModel->setData(aIndex, toQString(rId), ROLE_ID);
-    });
+    set_id(rowIndex(rIter), rId);
 }
 
 OUString QtInstanceTreeView::get_id(const weld::TreeIter& rIter) const
