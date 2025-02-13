@@ -10,28 +10,12 @@
 #include <QtInstanceTreeView.hxx>
 #include <QtInstanceTreeView.moc>
 
+#include <QtInstanceTreeIter.hxx>
+
 #include <vcl/qt/QtUtils.hxx>
 
 // role used for the ID in the QStandardItem
 constexpr int ROLE_ID = Qt::UserRole + 1000;
-
-namespace
-{
-struct QtInstanceTreeIter final : public weld::TreeIter
-{
-    QModelIndex m_aModelIndex;
-
-    explicit QtInstanceTreeIter(QModelIndex aModelIndex)
-        : m_aModelIndex(aModelIndex)
-    {
-    }
-
-    virtual bool equal(const TreeIter& rOther) const override
-    {
-        return m_aModelIndex == static_cast<const QtInstanceTreeIter&>(rOther).m_aModelIndex;
-    }
-};
-};
 
 QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
     : QtInstanceWidget(pTreeView)

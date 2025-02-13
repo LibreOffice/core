@@ -128,6 +128,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt6,\
     vcl/qt6/QtInstanceTextView \
     vcl/qt6/QtInstanceToggleButton \
     vcl/qt6/QtInstanceToolbar \
+    vcl/qt6/QtInstanceTreeIter \
     vcl/qt6/QtInstanceTreeView \
     vcl/qt6/QtInstanceWidget \
     vcl/qt6/QtInstanceWindow \
