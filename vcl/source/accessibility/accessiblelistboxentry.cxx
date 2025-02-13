@@ -374,31 +374,7 @@ OUString SAL_CALL AccessibleListBoxEntry::getAccessibleDescription(  )
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if( getAccessibleRole() == AccessibleRole::TREE_ITEM )
-    {
-        return OUString();
-    }
-
-    SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath(m_aEntryPath);
-    assert(pEntry);
-
-    //want to count the real column number in the list box.
-    sal_uInt16 iRealItemCount = 0;
-    for (size_t i = 0; i < pEntry->ItemCount(); ++i)
-    {
-        const SvLBoxItem& rItem = pEntry->GetItem(i);
-        if (rItem.GetType() == SvLBoxItemType::String &&
-            !static_cast<const SvLBoxString&>(rItem).GetText().isEmpty())
-        {
-            iRealItemCount++;
-        }
-    }
-    // No idea why <= 1; that was in AccessibleListBoxEntry::getAccessibleDescription
-    // since the "Integrate branch of IAccessible2" commit
-    if (iRealItemCount <= 1)
-        return {};
-    else
-        return SvTreeListBox::SearchEntryTextWithHeadTitle(pEntry);
+    return OUString();
 }
 
 OUString SAL_CALL AccessibleListBoxEntry::getAccessibleName(  )
