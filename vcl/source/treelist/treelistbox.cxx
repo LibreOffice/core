@@ -3504,7 +3504,7 @@ void SvTreeListBox::FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, sal_In
     }
 }
 
-OUString SvTreeListBox::GetEntryAccessibleDescription(SvTreeListEntry* pEntry) const
+OUString SvTreeListBox::GetEntryAccessibleDescription(SvTreeListEntry* pEntry)
 {
     assert(pEntry);
 

@@ -378,7 +378,7 @@ OUString SAL_CALL AccessibleListBoxEntry::getAccessibleDescription(  )
     {
         return OUString();
     }
-    return m_pTreeListBox->GetEntryAccessibleDescription(
+    return SvTreeListBox::GetEntryAccessibleDescription(
         m_pTreeListBox->GetEntryFromPath(m_aEntryPath));
 }
 

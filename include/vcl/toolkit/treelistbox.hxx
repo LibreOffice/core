@@ -459,7 +459,7 @@ public:
     /** Fills the StateSet of one entry. */
     void FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, sal_Int64& rStateSet ) const;
 
-    virtual OUString GetEntryAccessibleDescription(SvTreeListEntry* pEntry) const;
+    static OUString GetEntryAccessibleDescription(SvTreeListEntry* pEntry);
 
     /** Calculate and return the bounding rectangle of an entry.
         @param pEntry

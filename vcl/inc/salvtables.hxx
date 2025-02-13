@@ -1926,7 +1926,6 @@ private:
     DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
     DECL_LINK(CommandHdl, const CommandEvent&, bool);
     DECL_LINK(TooltipHdl, SvTreeListEntry*, OUString);
-    DECL_LINK(EntryAccessibleDescriptionHdl, SvTreeListEntry*, OUString);
     DECL_LINK(DumpImageHdl, const ::IconView::encoded_image_query&, bool);
 
 public:

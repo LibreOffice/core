@@ -39,12 +39,6 @@ public:
 
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
-    virtual OUString GetEntryAccessibleDescription(SvTreeListEntry* pEntry) const override;
-    void SetEntryAccessibleDescriptionHdl(const Link<SvTreeListEntry*, OUString>& rLink)
-    {
-        maEntryAccessibleDescriptionHdl = rLink;
-    }
-
     virtual FactoryFunction GetUITestFactory() const override;
     virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
     typedef std::tuple<OUString&, SvTreeListEntry*> encoded_image_query;
@@ -61,7 +55,6 @@ protected:
     virtual void CalcEntryHeight(SvTreeListEntry const* pEntry) override;
 
 private:
-    Link<SvTreeListEntry*, OUString> maEntryAccessibleDescriptionHdl;
     Link<const encoded_image_query&, bool> maDumpImageHdl;
     void DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEntry* pEntry);
 };

@@ -238,16 +238,6 @@ css::uno::Reference<css::accessibility::XAccessible> IconView::CreateAccessible(
     return {};
 }
 
-OUString IconView::GetEntryAccessibleDescription(SvTreeListEntry* pEntry) const
-{
-    assert(pEntry);
-
-    if (maEntryAccessibleDescriptionHdl.IsSet())
-        return maEntryAccessibleDescriptionHdl.Call(pEntry);
-
-    return SvTreeListBox::GetEntryAccessibleDescription(pEntry);
-}
-
 FactoryFunction IconView::GetUITestFactory() const { return IconViewUIObject::create; }
 
 static OString extractPngString(const SvLBoxContextBmp* pBmpItem)
