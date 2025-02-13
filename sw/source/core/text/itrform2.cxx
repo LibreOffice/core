@@ -441,9 +441,14 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
 
     // Asian grid stuff
     SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
-    const bool bHasGrid = pGrid && rInf.SnapToGrid() &&
-                              SwTextGrid::LinesAndChars == pGrid->GetGridType();
 
+    // tdf#149089: For compatibility with MSO grid layout, do not insert kern portions to
+    // align successive portions to the char grid when MS_WORD_COMP_GRID_METRICS is set.
+    // See also tdf#161145.
+    const bool bHasGrid = pGrid && rInf.SnapToGrid()
+                          && SwTextGrid::LinesAndChars == pGrid->GetGridType()
+                          && !GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                              DocumentSettingId::MS_WORD_COMP_GRID_METRICS);
 
     const SwDoc & rDoc = rInf.GetTextFrame()->GetDoc();
     const sal_uInt16 nGridWidth = bHasGrid ? GetGridWidth(*pGrid, rDoc) : 0;
