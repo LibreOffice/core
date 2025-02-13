@@ -40,6 +40,7 @@ protected:
     tools::Rectangle m_aInvalidation;
     /// Union of all invalidations.
     tools::Rectangle m_aInvalidations;
+    tools::Rectangle m_aCursorRectangle;
     Size m_aDocumentSize;
     OString m_aTextSelection;
     bool m_bFound;
@@ -231,6 +232,12 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
                 boost::property_tree::ptree& aChild = aTree.get_child("hyperlink");
                 m_sHyperlinkText = OString(aChild.get("text", ""));
                 m_sHyperlinkLink = OString(aChild.get("link", ""));
+
+                OString aRectangle(aTree.get_child("rectangle").get_value<std::string>());
+                uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aRectangle));
+                CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
+                m_aCursorRectangle = tools::Rectangle(Point(aSeq[0].toInt32(), aSeq[1].toInt32()), Size(aSeq[2].toInt32(), aSeq[3].toInt32()));
+
             }
         }
         break;
