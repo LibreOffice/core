@@ -17,7 +17,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,postgresql, \
 	external/postgresql/windows.patch.0 \
 	external/postgresql/postgresql.exit.patch.0 \
 	external/postgresql/postgres-msvc-build.patch.1 \
-	external/postgresql/0001-Assume-that-stdbool.h-conforms-to-the-C-standard.patch.1 \
 	$(if $(filter WNT_AARCH64,$(OS)_$(CPUNAME)), external/postgresql/arm64.patch.1) \
 ))
 
