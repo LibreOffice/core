@@ -1885,6 +1885,8 @@ void SwWW8ImplReader::ImportDop()
     // tdf#155229 calculate minimum row height including horizontal border width
     m_rDoc.getIDocumentSettingAccess().set(
         DocumentSettingId::MIN_ROW_HEIGHT_INCL_BORDER, true);
+    // use Word-compatible CJK text grid metrics
+    m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::MS_WORD_COMP_GRID_METRICS, true);
 
     // Import Default Tabs
     tools::Long nDefTabSiz = m_xWDop->dxaTab;
