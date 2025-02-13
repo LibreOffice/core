@@ -5796,6 +5796,13 @@ void SalInstanceIconView::set_id(int pos, const OUString& rId)
     pEntry->SetUserData(m_aUserData.back().get());
 }
 
+void SalInstanceIconView::set_item_accessible_name(int pos, const OUString& rName)
+{
+    SvTreeListEntry* pEntry = m_xIconView->GetEntry(pos);
+    assert(pEntry);
+    pEntry->SetAccessibleName(rName);
+}
+
 tools::Rectangle SalInstanceIconView::get_rect(int pos) const
 {
     SvTreeListEntry* aEntry = m_xIconView->GetEntry(nullptr, pos);

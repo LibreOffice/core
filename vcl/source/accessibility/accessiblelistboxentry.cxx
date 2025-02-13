@@ -388,6 +388,13 @@ OUString SAL_CALL AccessibleListBoxEntry::getAccessibleName(  )
 
     EnsureIsAlive();
 
+    if (SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath(m_aEntryPath))
+    {
+        OUString sName = pEntry->GetAccessibleName();
+        if (!sName.isEmpty())
+            return sName;
+    }
+
     return implGetText();
 }
 

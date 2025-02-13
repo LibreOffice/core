@@ -1995,6 +1995,8 @@ public:
 
     virtual void set_id(int pos, const OUString& rId) override;
 
+    virtual void set_item_accessible_name(int pos, const OUString& rName) override;
+
     virtual OUString get_text(const weld::TreeIter& rIter) const override;
 
     virtual tools::Rectangle get_rect(int pos) const override;

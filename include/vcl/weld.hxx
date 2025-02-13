@@ -1518,6 +1518,7 @@ public:
     virtual void set_image(int pos, VirtualDevice& rDevice) = 0;
     virtual void set_text(int pos, const OUString& rText) = 0;
     virtual void set_id(int pos, const OUString& rId) = 0;
+    virtual void set_item_accessible_name(int pos, const OUString& rName) = 0;
     virtual void remove(int pos) = 0;
     virtual tools::Rectangle get_rect(int pos) const = 0;
 

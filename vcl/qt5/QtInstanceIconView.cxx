@@ -174,6 +174,16 @@ void QtInstanceIconView::set_id(int nPos, const OUString& rId)
     });
 }
 
+void QtInstanceIconView::set_item_accessible_name(int nPos, const OUString& rName)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QModelIndex aIndex = modelIndex(nPos);
+        m_pModel->setData(aIndex, toQString(rName), Qt::AccessibleTextRole);
+    });
+}
+
 void QtInstanceIconView::remove(int) { assert(false && "Not implemented yet"); }
 
 tools::Rectangle QtInstanceIconView::get_rect(int) const
