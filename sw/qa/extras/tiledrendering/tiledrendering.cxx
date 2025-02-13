@@ -58,6 +58,7 @@
 #include <test/lokcallback.hxx>
 #include <sfx2/msgpool.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <unotools/searchopt.hxx>
 
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
@@ -116,6 +117,7 @@ protected:
     int m_nRedlineTableEntryModified;
     int m_nTrackedChangeIndex;
     bool m_bFullInvalidateSeen;
+    tools::Rectangle m_aCursorRectangle;
     OString m_sHyperlinkText;
     OString m_sHyperlinkLink;
     OString m_aFormFieldButton;
@@ -295,6 +297,11 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
                     boost::property_tree::ptree &aChild = aTree.get_child("hyperlink");
                     m_sHyperlinkText = OString(aChild.get("text", ""));
                     m_sHyperlinkLink = OString(aChild.get("link", ""));
+
+                    OString aRectangle(aTree.get_child("rectangle").get_value<std::string>());
+                    uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aRectangle));
+                    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
+                    m_aCursorRectangle = tools::Rectangle(Point(aSeq[0].toInt32(), aSeq[1].toInt32()), Size(aSeq[2].toInt32(), aSeq[3].toInt32()));
                 }
             }
             break;
@@ -4778,6 +4785,38 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testLoadVisibleArea)
     CPPUNIT_ASSERT(pPage2->IsInvalidContent());
     SwPageFrame* pPage3 = pPage2->GetNext()->DynCastPageFrame();
     CPPUNIT_ASSERT(pPage3->IsInvalidContent());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFindAndReplaceInComments)
+{
+    comphelper::LibreOfficeKit::setViewIdForVisCursorInvalidation(true);
+    SvtSearchOptions aSearchOpt;
+    aSearchOpt.SetNotes(true);
+    aSearchOpt.Commit();
+    comphelper::ScopeGuard g([] {
+            comphelper::LibreOfficeKit::setViewIdForVisCursorInvalidation(false);
+            SvtSearchOptions aOpt;
+            aOpt.SetNotes(false);
+            aOpt.Commit();
+            });
+
+    SwXTextDocument* pXTextDocument = createDoc("findandreplaceincomments.odt");
+    CPPUNIT_ASSERT(pXTextDocument);
+
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    Scheduler::ProcessEventsToIdle();
+    setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
+        { "SearchItem.SearchString", uno::Any(OUString("test")) },
+    }));
+    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 2000 (2108)
+    // - Actual  : 1418
+    CPPUNIT_ASSERT_GREATER(static_cast<tools::Long>(2000), m_aCursorRectangle.getY());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

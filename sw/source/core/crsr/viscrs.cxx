@@ -208,18 +208,9 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
     bool bIsCursorPosChanged = m_aTextCursor.GetPos() != aRect.Pos();
 
     m_aTextCursor.SetSize( aRect.SSize() );
-
     m_aTextCursor.SetPos( aRect.Pos() );
 
-    bool bPostItActive = false;
-    SwView* pView = dynamic_cast<SwView*>(m_pCursorShell->GetSfxViewShell());
-    if (pView)
-    {
-        if (SwPostItMgr* pPostItMgr = pView->GetPostItMgr())
-            bPostItActive = pPostItMgr->GetActiveSidebarWin() != nullptr;
-    }
-
-    if (comphelper::LibreOfficeKit::isActive() && !bPostItActive)
+    if (comphelper::LibreOfficeKit::isActive())
     {
         // notify about page number change (if that happened)
         sal_uInt16 nPage, nVirtPage;
