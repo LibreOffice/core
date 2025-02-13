@@ -206,7 +206,7 @@ void CRMDBTest::testODBCEscapeQuery()
     xQuery->getPropertyValue(u"Command"_ustr) >>= sQuery;
 
     // Test to make sure the query is parseable
-    // If it is unparseable, catch the SQLException and fail with the SQL error mesage
+    // If it is unparseable, catch the SQLException and fail with the SQL error message
     try
     {
         xComposer->setQuery(sQuery);
