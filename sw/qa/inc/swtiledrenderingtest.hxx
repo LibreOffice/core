@@ -45,6 +45,7 @@ protected:
     int m_nRedlineTableEntryModified;
     int m_nTrackedChangeIndex;
     bool m_bFullInvalidateSeen;
+    tools::Rectangle m_aCursorRectangle;
     OString m_sHyperlinkText;
     OString m_sHyperlinkLink;
     OString m_aFormFieldButton;

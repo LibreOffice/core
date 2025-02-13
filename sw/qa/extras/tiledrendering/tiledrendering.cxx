@@ -26,6 +26,7 @@
 #include <test/helper/transferable.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/virdev.hxx>
@@ -53,6 +54,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
+#include <unotools/searchopt.hxx>
 
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
@@ -3954,6 +3956,38 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf159626_blackPatternFill)
     // The document should be entirely black (except for text margin markings).
     CPPUNIT_ASSERT(nEdgePlusWhitePlusAntialiasPixels > 0);
     CPPUNIT_ASSERT(nPureBlackPixels / 10 > nEdgePlusWhitePlusAntialiasPixels);
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFindAndReplaceInComments)
+{
+    comphelper::LibreOfficeKit::setViewIdForVisCursorInvalidation(true);
+    SvtSearchOptions aSearchOpt;
+    aSearchOpt.SetNotes(true);
+    aSearchOpt.Commit();
+    comphelper::ScopeGuard g([] {
+            comphelper::LibreOfficeKit::setViewIdForVisCursorInvalidation(false);
+            SvtSearchOptions aOpt;
+            aOpt.SetNotes(false);
+            aOpt.Commit();
+            });
+
+    SwXTextDocument* pXTextDocument = createDoc("findandreplaceincomments.odt");
+    CPPUNIT_ASSERT(pXTextDocument);
+
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    Scheduler::ProcessEventsToIdle();
+    setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
+        { "SearchItem.SearchString", uno::Any(OUString("test")) },
+    }));
+    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 2000 (2108)
+    // - Actual  : 1418
+    CPPUNIT_ASSERT_GREATER(static_cast<tools::Long>(2000), m_aCursorRectangle.getY());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
