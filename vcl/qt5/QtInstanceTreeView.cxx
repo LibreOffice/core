@@ -65,7 +65,7 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const O
         m_pModel->insertRow(nPos, pItem);
 
         if (pRet)
-            static_cast<QtInstanceTreeIter*>(pRet)->modelIndex() = modelIndex(nPos);
+            static_cast<QtInstanceTreeIter*>(pRet)->setModelIndex(modelIndex(nPos));
     });
 }
 
@@ -381,7 +381,7 @@ std::unique_ptr<weld::TreeIter> QtInstanceTreeView::make_iterator(const weld::Tr
 
 void QtInstanceTreeView::copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const
 {
-    static_cast<QtInstanceTreeIter&>(rDest).modelIndex() = modelIndex(rSource);
+    static_cast<QtInstanceTreeIter&>(rDest).setModelIndex(modelIndex(rSource));
 }
 
 bool QtInstanceTreeView::get_selected(weld::TreeIter* pIter) const
@@ -396,7 +396,7 @@ bool QtInstanceTreeView::get_selected(weld::TreeIter* pIter) const
 
         bHasSelection = true;
         if (pIter)
-            static_cast<QtInstanceTreeIter*>(pIter)->modelIndex() = aSelectedIndexes.first();
+            static_cast<QtInstanceTreeIter*>(pIter)->setModelIndex(aSelectedIndexes.first());
     });
     return bHasSelection;
 }

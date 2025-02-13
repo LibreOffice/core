@@ -21,6 +21,7 @@ public:
     virtual bool equal(const TreeIter& rOther) const override;
 
     QModelIndex modelIndex() const { return m_aModelIndex; }
+    void setModelIndex(const QModelIndex& aIndex) { m_aModelIndex = aIndex; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
