@@ -2267,6 +2267,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf112025)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf72942)
 {
     mergeDocs("fdo72942.docx", "fdo72942-insert.docx");
+    CPPUNIT_ASSERT_EQUAL(7, getParagraphs());
 
     // check styles of paragraphs added from [fdo72942.docx]
     const uno::Reference<text::XTextRange> xRun1 = getRun(getParagraph(1), 1);
