@@ -10,6 +10,8 @@
 #include <QtInstanceIconView.hxx>
 #include <QtInstanceIconView.moc>
 
+#include <QtInstanceTreeIter.hxx>
+
 #include <vcl/qt/QtUtils.hxx>
 
 // role used for the ID in the QStandardItem
@@ -118,10 +120,18 @@ OUString QtInstanceIconView::get_selected_text() const
     return OUString();
 }
 
-OUString QtInstanceIconView::get_id(int) const
+OUString QtInstanceIconView::get_id(int nPos) const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    SolarMutexGuard g;
+
+    OUString sId;
+    GetQtInstance().RunInMainThread([&] {
+        QVariant aRoleData = m_pModel->data(modelIndex(nPos), ROLE_ID);
+        if (aRoleData.canConvert<QString>())
+            sId = toOUString(aRoleData.toString());
+    });
+
+    return sId;
 }
 
 void QtInstanceIconView::select(int nPos)
@@ -133,11 +143,36 @@ void QtInstanceIconView::select(int nPos)
 
 void QtInstanceIconView::unselect(int) { assert(false && "Not implemented yet"); }
 
-void QtInstanceIconView::set_image(int, VirtualDevice&) { assert(false && "Not implemented yet"); }
+void QtInstanceIconView::set_image(int nPos, VirtualDevice& rDevice)
+{
+    SolarMutexGuard g;
 
-void QtInstanceIconView::set_text(int, const OUString&) { assert(false && "Not implemented yet"); }
+    GetQtInstance().RunInMainThread([&] {
+        QModelIndex aIndex = modelIndex(nPos);
+        QIcon aIcon = toQPixmap(rDevice);
+        m_pModel->setData(aIndex, aIcon, Qt::DecorationRole);
+    });
+}
 
-void QtInstanceIconView::set_id(int, const OUString&) { assert(false && "Not implemented yet"); }
+void QtInstanceIconView::set_text(int nPos, const OUString& rText)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QModelIndex aIndex = modelIndex(nPos);
+        m_pModel->setData(aIndex, toQString(rText));
+    });
+}
+
+void QtInstanceIconView::set_id(int nPos, const OUString& rId)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QModelIndex aIndex = modelIndex(nPos);
+        m_pModel->setData(aIndex, toQString(rId), ROLE_ID);
+    });
+}
 
 void QtInstanceIconView::remove(int) { assert(false && "Not implemented yet"); }
 
@@ -165,9 +200,13 @@ bool QtInstanceIconView::get_cursor(weld::TreeIter*) const
     return false;
 }
 
-void QtInstanceIconView::set_cursor(const weld::TreeIter&)
+void QtInstanceIconView::set_cursor(const weld::TreeIter& rIter)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        m_pSelectionModel->setCurrentIndex(modelIndex(rIter), QItemSelectionModel::NoUpdate);
+    });
 }
 
 bool QtInstanceIconView::get_iter_first(weld::TreeIter&) const
@@ -176,16 +215,24 @@ bool QtInstanceIconView::get_iter_first(weld::TreeIter&) const
     return false;
 }
 
-OUString QtInstanceIconView::get_id(const weld::TreeIter&) const
+OUString QtInstanceIconView::get_id(const weld::TreeIter& rIter) const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    return get_id(position(rIter));
 }
 
-OUString QtInstanceIconView::get_text(const weld::TreeIter&) const
+OUString QtInstanceIconView::get_text(const weld::TreeIter& rIter) const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    SolarMutexGuard g;
+
+    OUString sText;
+    GetQtInstance().RunInMainThread([&] {
+        const QModelIndex aIndex = modelIndex(rIter);
+        const QVariant aData = m_pModel->data(aIndex);
+        assert(aData.canConvert<QString>() && "model data not a string");
+        sText = toOUString(aData.toString());
+    });
+
+    return sText;
 }
 
 bool QtInstanceIconView::iter_next_sibling(weld::TreeIter&) const
@@ -194,9 +241,10 @@ bool QtInstanceIconView::iter_next_sibling(weld::TreeIter&) const
     return false;
 }
 
-void QtInstanceIconView::scroll_to_item(const weld::TreeIter&)
+void QtInstanceIconView::scroll_to_item(const weld::TreeIter& rIter)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] { m_pListView->scrollTo(modelIndex(rIter)); });
 }
 
 void QtInstanceIconView::selected_foreach(const std::function<bool(weld::TreeIter&)>&)
@@ -212,6 +260,19 @@ int QtInstanceIconView::n_children() const
     GetQtInstance().RunInMainThread([&] { nChildren = m_pModel->rowCount(); });
 
     return nChildren;
+}
+
+QModelIndex QtInstanceIconView::modelIndex(int nPos) const { return m_pModel->index(nPos, 0); }
+
+QModelIndex QtInstanceIconView::modelIndex(const weld::TreeIter& rIter) const
+{
+    return modelIndex(position(rIter));
+}
+
+int QtInstanceIconView::position(const weld::TreeIter& rIter)
+{
+    QModelIndex aModelIndex = static_cast<const QtInstanceTreeIter&>(rIter).modelIndex();
+    return aModelIndex.row();
 }
 
 void QtInstanceIconView::handleActivated()

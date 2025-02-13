@@ -44,12 +44,12 @@ public:
 
     virtual OUString get_selected_text() const override;
 
-    virtual OUString get_id(int pos) const override;
+    virtual OUString get_id(int nPos) const override;
     virtual void select(int nPos) override;
     virtual void unselect(int pos) override;
-    virtual void set_image(int pos, VirtualDevice& rDevice) override;
-    virtual void set_text(int pos, const OUString& rText) override;
-    virtual void set_id(int pos, const OUString& rId) override;
+    virtual void set_image(int nPos, VirtualDevice& rDevice) override;
+    virtual void set_text(int nPos, const OUString& rText) override;
+    virtual void set_id(int nPos, const OUString& rId) override;
     virtual void remove(int pos) override;
     virtual tools::Rectangle get_rect(int pos) const override;
 
@@ -67,6 +67,11 @@ public:
     virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override;
 
     virtual int n_children() const override;
+
+private:
+    QModelIndex modelIndex(int nPos) const;
+    QModelIndex modelIndex(const weld::TreeIter& rIter) const;
+    static int position(const weld::TreeIter& rIter);
 
 private Q_SLOTS:
     void handleActivated();
