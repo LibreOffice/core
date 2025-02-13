@@ -1146,6 +1146,8 @@ bool xpdf_ImportFromFile(const OUString& rURL,
     bool bRet=true;
     try
     {
+        std::unique_ptr<Buffering> pBuffering;
+
         if( eErr!=osl_Process_E_None )
         {
             SAL_WARN(
@@ -1166,17 +1168,38 @@ bool xpdf_ImportFromFile(const OUString& rURL,
             osl_writeFile( pIn, aBuf.getStr(), sal_uInt64(aBuf.getLength()), &nWritten );
         }
 
-        if( pOut && pErr )
+        if (pOut)
+        {
+            // Check for a header saying if the child managed to open the document
+            OStringBuffer aHeaderLine;
+            pBuffering = std::unique_ptr<Buffering>(new Buffering(pOut));
+            oslFileError eFileErr = pBuffering->readLine(aHeaderLine);
+            if (osl_File_E_None == eFileErr)
+            {
+                SAL_INFO("sdext.pdfimport", "Header line:" << aHeaderLine.toString());
+            }
+            else
+            {
+                SAL_WARN("sdext.pdfimport", "Unable to read header line; " << eFileErr);
+                bRet = false;
+            }
+        }
+        else
+        {
+            SAL_WARN("sdext.pdfimport", "No output file");
+            bRet = false;
+        }
+
+        if (bRet && pOut && pErr)
         {
             // read results of PDF parser. One line - one call to
             // OutputDev. stderr is used for alternate streams, like
             // embedded fonts and bitmaps
             Parser aParser(rSink,pErr,xContext);
-            Buffering aBuffering(pOut);
             OStringBuffer line;
             for( ;; )
             {
-                oslFileError nRes = aBuffering.readLine(line);
+                oslFileError nRes = pBuffering->readLine(line);
 
                 if ( osl_File_E_None != nRes )
                     break;

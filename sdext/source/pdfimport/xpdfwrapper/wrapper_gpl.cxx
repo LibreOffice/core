@@ -191,8 +191,20 @@ int main(int argc, char **argv)
                  pUserPasswordStr );
 #endif
 
-    if (!aDoc.isOk())
-        return aDoc.getErrorCode();
+    if (aDoc.isOk())
+    {
+        printf("#OPEN\n");
+        fflush(stdout);
+    }
+    else
+    {
+        int err = aDoc.getErrorCode();
+        // e.g. #ERROR:1:   (code for OpenFile)
+        //      #ERROR:2:ENCRYPTED   For ones we need to detect, use text
+        printf( "#ERROR:%d:%s\n", err, err==errEncrypted ? "ENCRYPTED" : "");
+        fflush(stdout);
+        return err;
+    }
 
     pdfi::PDFOutDev aOutDev(&aDoc);
     if (options == TO_STRING_VIEW("SkipImages")) {
