@@ -964,26 +964,8 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
 
 void ScDrawView::resetGridOffsetsForAllSdrPageViews()
 {
-    SdrPageView* pPageView(GetSdrPageView());
-
-    if(nullptr == pPageView)
-        return;
-
-    for(sal_uInt32 a(0); a < pPageView->PageWindowCount(); a++)
-    {
-        SdrPageWindow* pPageWindow(pPageView->GetPageWindow(a));
-        assert(pPageWindow && "SdrView::SetMasterPagePaintCaching: Corrupt SdrPageWindow list (!)");
-
-        if(nullptr != pPageWindow)
-        {
-            sdr::contact::ObjectContact& rObjectContact(pPageWindow->GetObjectContact());
-
-            if(rObjectContact.supportsGridOffsets())
-            {
-                rObjectContact.resetAllGridOffsets();
-            }
-        }
-    }
+    if (SdrPageView* pPageView = GetSdrPageView())
+        pPageView->resetGridOffsetsOfAllPageWindows();
 }
 
 bool ScDrawView::calculateGridOffsetForSdrObject(

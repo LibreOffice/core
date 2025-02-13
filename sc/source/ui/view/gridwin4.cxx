@@ -1500,6 +1500,13 @@ namespace
     };
 } // anonymous namespace
 
+void ScGridWindow::resetCachedViewGridOffsets() const
+{
+    if (mpLOKDrawView)
+        if (SdrPageView* pPageView = mpLOKDrawView->GetSdrPageView())
+            pPageView->resetGridOffsetsOfAllPageWindows();
+}
+
 void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                               int nOutputWidth, int nOutputHeight,
                               int nTilePosX, int nTilePosY,
