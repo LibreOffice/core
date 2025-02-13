@@ -1529,6 +1529,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf144450)
     CPPUNIT_ASSERT_LESS(sal_Int32(5765), nCase11);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf149089)
+{
+    createSwDoc("tdf149089.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    // Tests that kern portions aren't inserted for lines-and-chars grids when the
+    // MS_WORD_COMP_GRID_METRICS compatibility flag is set.
+    //
+    // Without the fix, this would be 4
+    sal_Int32 nKernPors
+        = getXPathContent(pXmlDoc, "count(//SwLinePortion[@type='PortionType::Kern'])").toInt32();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nKernPors);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
