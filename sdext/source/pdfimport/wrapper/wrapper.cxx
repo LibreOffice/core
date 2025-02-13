@@ -1045,6 +1045,41 @@ public:
         *pBytesRead = nBytesRead;
         return osl_File_E_None;
     }
+
+    // Read a line and return any error
+    // Note: It skips leading \n and \r
+    //       It clears the line buffer at the start
+    oslFileError readLine(OStringBuffer& line)
+    {
+        char aChar('\n');
+        sal_uInt64 nBytesRead;
+        oslFileError nRes;
+
+        line.setLength(0);
+
+        // skip garbage \r \n at start of line
+        for (;;)
+        {
+            nRes = read(&aChar, 1, &nBytesRead);
+            if (osl_File_E_None != nRes || nBytesRead != 1 || (aChar != '\n' && aChar != '\r'))
+                break;
+        }
+        if (osl_File_E_None != nRes)
+            return nRes;
+
+        if (aChar != '\n' && aChar != '\r')
+            line.append(aChar);
+
+        for (;;)
+        {
+            nRes = read(&aChar, 1, &nBytesRead);
+            if (osl_File_E_None != nRes || nBytesRead != 1 || aChar == '\n' || aChar == '\r')
+                break;
+            line.append(aChar);
+        }
+
+        return nRes;
+    }
 };
 
 }
@@ -1141,37 +1176,14 @@ bool xpdf_ImportFromFile(const OUString& rURL,
             OStringBuffer line;
             for( ;; )
             {
-                char aChar('\n');
-                sal_uInt64 nBytesRead;
-                oslFileError nRes;
+                oslFileError nRes = aBuffering.readLine(line);
 
-                // skip garbage \r \n at start of line
-                for (;;)
-                {
-                    nRes = aBuffering.read(&aChar, 1, &nBytesRead);
-                    if (osl_File_E_None != nRes || nBytesRead != 1 || (aChar != '\n' && aChar != '\r') )
-                        break;
-                }
-                if ( osl_File_E_None != nRes )
-                    break;
-
-                if( aChar != '\n' && aChar != '\r' )
-                    line.append( aChar );
-
-                for (;;)
-                {
-                    nRes = aBuffering.read(&aChar, 1, &nBytesRead);
-                    if ( osl_File_E_None != nRes || nBytesRead != 1 || aChar == '\n' || aChar == '\r' )
-                        break;
-                    line.append( aChar );
-                }
                 if ( osl_File_E_None != nRes )
                     break;
                 if ( line.isEmpty() )
                     break;
 
                 aParser.parseLine(line);
-                line.setLength(0);
             }
         }
     }
