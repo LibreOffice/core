@@ -17106,31 +17106,6 @@ private:
         return !aTooltip.isEmpty();
     }
 
-    /* Set the item's tooltip text as its accessible description as well. */
-    void set_item_accessible_description_from_tooltip(GtkTreeIter& iter)
-    {
-#if GTK_CHECK_VERSION(4, 0, 0)
-        (void)iter;
-#else
-        AtkObject* pAtkObject = gtk_widget_get_accessible(GTK_WIDGET(m_pIconView));
-        assert(pAtkObject);
-        GtkTreePath* pPath = gtk_tree_model_get_path(GTK_TREE_MODEL(m_pTreeStore), &iter);
-        assert(gtk_tree_path_get_depth(pPath) == 1);
-        int* indices = gtk_tree_path_get_indices(pPath);
-        const int nIndex = indices[0];
-        assert(nIndex < atk_object_get_n_accessible_children(pAtkObject)
-               && "item index too high for ItemView's accessible child count");
-
-        const OUString sTooltipText = signal_query_tooltip(GtkInstanceTreeIter(iter));
-        AtkObject* pChild = atk_object_ref_accessible_child(pAtkObject, nIndex);
-        atk_object_set_description(pChild,
-                                   OUStringToOString(sTooltipText, RTL_TEXTENCODING_UTF8).getStr());
-        g_object_unref(pChild);
-        gtk_tree_path_free(pPath);
-
-#endif
-    }
-
     void insert_item(GtkTreeIter& iter, int pos, const OUString* pId, const OUString* pText, const OUString* pIconName)
     {
         // m_nTextCol may be -1, so pass it last, to not terminate the sequence before the Id value
@@ -17145,8 +17120,6 @@ private:
             if (pixbuf)
                 g_object_unref(pixbuf);
         }
-
-        set_item_accessible_description_from_tooltip(iter);
     }
 
     void insert_item(GtkTreeIter& iter, int pos, const OUString* pId, const OUString* pText, const VirtualDevice* pIcon)
@@ -17163,8 +17136,6 @@ private:
             if (pixbuf)
                 g_object_unref(pixbuf);
         }
-
-        set_item_accessible_description_from_tooltip(iter);
     }
 
     OUString get(const GtkTreeIter& iter, int col) const
