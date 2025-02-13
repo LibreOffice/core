@@ -108,7 +108,10 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
     // possibility to deactivate for easy test/request testing
     static bool bUsePrimitiveRenderer(nullptr == std::getenv("DISABLE_SYSTEM_DEPENDENT_PRIMITIVE_RENDERER"));
 
-    if (bUsePrimitiveRenderer)
+    if (bUsePrimitiveRenderer
+        // tdf#165061 do not use SDPR when RTL is enabled, SDPR is designed
+        // for rendering EditViews and does not support RTL (yet?)
+        && !rTargetOutDev.IsRTLEnabled())
     {
         SystemGraphicsData aData(rTargetOutDev.GetSystemGfxData());
 
