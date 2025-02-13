@@ -77,3 +77,15 @@ index 8026a75d5..34c20d62f 100644
    static_assert(kModeKeyForMode.size() == FPDF_ANNOT_APPEARANCEMODE_COUNT,
                  "length of kModeKeyForMode should be equal to "
                  "FPDF_ANNOT_APPEARANCEMODE_COUNT");
+--- a/core/fxcrt/fx_memory_wrappers.h	2025-02-13 13:38:35.761778900 +0100
++++ b/core/fxcrt/fx_memory_wrappers.h	2025-02-13 13:38:48.136654800 +0100
+@@ -33,9 +33,6 @@
+ template <class T, void* Alloc(size_t, size_t), void Free(void*)>
+ struct FxPartitionAllocAllocator {
+  public:
+-  static_assert(std::is_arithmetic<T>::value || std::is_enum<T>::value ||
+-                    IsFXDataPartitionException<T>::value,
+-                "Only numeric types allowed in this partition");
+ 
+   using value_type = T;
+   using pointer = T*;
