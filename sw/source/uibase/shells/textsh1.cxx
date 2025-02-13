@@ -2502,8 +2502,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 if (aItem.first == "Transforms")
                 {
                     // Handle all transformations
-                    for (const auto& aItem2 : aItem.second)
+                    for (const auto& aItem2Obj : aItem.second)
                     {
+                        // handle `"Transforms": { `  and `"Transforms": [` cases as well
+                        // if an element is an object `{...}`, then get the first element of the object
+                        const auto& aItem2
+                            = aItem2Obj.first == "" ? *aItem2Obj.second.ordered_begin() : aItem2Obj;
+
                         if (aItem2.first == "DocumentProperties")
                         {
                             uno::Reference<document::XDocumentPropertiesSupplier>
@@ -2754,8 +2759,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                     if (!xUserPropsAccess.is())
                                         continue;
 
-                                    for (const auto& aItem4 : aItem3.second)
+                                    for (const auto& aItem4Obj : aItem3.second)
                                     {
+                                        // handle [{},{}...] case as well as {}...}
+                                        const auto& aItem4 = aItem4Obj.first == ""
+                                                                 ? *aItem4Obj.second.ordered_begin()
+                                                                 : aItem4Obj;
+
                                         if (aItem4.first == "Delete")
                                         {
                                             std::string aPropName
@@ -2971,8 +2981,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                         }
                                     }
 
-                                    for (const auto& aItem3 : aItem2.second)
+                                    for (const auto& aItem3Obj : aItem2.second)
                                     {
+                                        //handle [] and {} cases
+                                        const auto& aItem3 = aItem3Obj.first == ""
+                                                                 ? *aItem3Obj.second.ordered_begin()
+                                                                 : aItem3Obj;
+
                                         if (aItem3.first.starts_with("deletecolumn.")
                                             || aItem3.first.starts_with("deleterow.")
                                             || aItem3.first.starts_with("insertcolumn.")

@@ -638,8 +638,7 @@ void GetDocStructureCharts(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShe
             auto aDataValuesNode = rJsonWriter.startArray("DataValues");
             for (int j = 0; j < aData.getLength(); j++)
             {
-                OString aRowNodeName("Row."_ostr + OString::number(j));
-                auto aRowNode = rJsonWriter.startArray(aRowNodeName);
+                auto aRowNode = rJsonWriter.startAnonArray();
                 for (int k = 0; k < aData[j].getLength(); k++)
                 {
                     rJsonWriter.putSimpleValue(OUString::number(aData[j][k]));
