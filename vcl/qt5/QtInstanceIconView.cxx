@@ -133,7 +133,7 @@ void QtInstanceIconView::select(int nPos)
 
 void QtInstanceIconView::unselect(int) { assert(false && "Not implemented yet"); }
 
-void QtInstanceIconView::set_image(int, VirtualDevice*) { assert(false && "Not implemented yet"); }
+void QtInstanceIconView::set_image(int, VirtualDevice&) { assert(false && "Not implemented yet"); }
 
 void QtInstanceIconView::set_text(int, const OUString&) { assert(false && "Not implemented yet"); }
 

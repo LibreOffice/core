@@ -335,8 +335,8 @@ void MasterPagesSelector::NotifyContainerChangeEvent (const MasterPageContainerC
                 Image aPreview(mpContainer->GetPreviewForToken(rEvent.maChildToken));
                 if (aPreview.GetSizePixel().Width() > 0)
                 {
-                    VclPtr<VirtualDevice> aDev = GetVirtualDevice(aPreview);
-                    mxPreviewIconView->set_image(nIndex, aDev);
+                    VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aPreview);
+                    mxPreviewIconView->set_image(nIndex, *pVDev);
                 }
             }
         }
@@ -392,16 +392,16 @@ void MasterPagesSelector::SetItem (
 
         if (aPreview.GetSizePixel().Width() > 0)
         {
-            VclPtr<VirtualDevice> aVDev = GetVirtualDevice(aPreview);
+            VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aPreview);
             if (!mxPreviewIconView->get_id(nIndex).isEmpty())
             {
-                mxPreviewIconView->set_image(nIndex, aVDev);
+                mxPreviewIconView->set_image(nIndex, *pVDev);
                 mxPreviewIconView->set_id(nIndex, OUString::number(aToken));
             }
             else
             {
                 OUString sId = OUString::number(aToken);
-                mxPreviewIconView->insert(nIndex, nullptr, &sId, aVDev, nullptr);
+                mxPreviewIconView->insert(nIndex, nullptr, &sId, pVDev, nullptr);
             }
 
             AddTokenToIndexEntry(nIndex, aToken);
@@ -494,7 +494,7 @@ void MasterPagesSelector::UpdateAllPreviews()
         if (aPreview.GetSizePixel().Width() > 0)
         {
             VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aPreview);
-            mxPreviewIconView->set_image(aIndex, pVDev);
+            mxPreviewIconView->set_image(aIndex, *pVDev);
         }
         else if (mpContainer->GetPreviewState(aToken) == MasterPageContainer::PS_CREATABLE)
         {

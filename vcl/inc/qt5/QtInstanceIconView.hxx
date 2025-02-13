@@ -47,7 +47,7 @@ public:
     virtual OUString get_id(int pos) const override;
     virtual void select(int nPos) override;
     virtual void unselect(int pos) override;
-    virtual void set_image(int pos, VirtualDevice* pDevice) override;
+    virtual void set_image(int pos, VirtualDevice& rDevice) override;
     virtual void set_text(int pos, const OUString& rText) override;
     virtual void set_id(int pos, const OUString& rId) override;
     virtual void remove(int pos) override;

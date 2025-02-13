@@ -1989,7 +1989,7 @@ public:
 
     const OUString* getEntryData(int index) const;
 
-    virtual void set_image(int pos, VirtualDevice* rImage) override;
+    virtual void set_image(int pos, VirtualDevice& rImage) override;
 
     virtual void set_text(int pos, const OUString& rText) override;
 

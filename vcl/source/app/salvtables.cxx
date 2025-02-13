@@ -5723,7 +5723,7 @@ OUString SalInstanceIconView::get_id(int pos) const
     return *pRet;
 }
 
-void SalInstanceIconView::set_image(int pos, VirtualDevice* pIcon)
+void SalInstanceIconView::set_image(int pos, VirtualDevice& rIcon)
 {
     SvTreeListEntry* aEntry = m_xIconView->GetEntry(nullptr, pos);
     if (aEntry == nullptr)
@@ -5731,13 +5731,10 @@ void SalInstanceIconView::set_image(int pos, VirtualDevice* pIcon)
     SvLBoxContextBmp* aItem
         = static_cast<SvLBoxContextBmp*>(aEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
 
-    Image aImage;
-    if (pIcon)
-    {
-        const Point aNull(0, 0);
-        const Size aSize = pIcon->GetOutputSize();
-        aImage = Image(pIcon->GetBitmapEx(aNull, aSize));
-    }
+    const Point aNull(0, 0);
+    const Size aSize = rIcon.GetOutputSize();
+    Image aImage(rIcon.GetBitmapEx(aNull, aSize));
+
     if (aItem == nullptr)
     {
         aEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));

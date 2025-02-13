@@ -17216,19 +17216,16 @@ private:
         return tools::Rectangle(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height);
     }
 
-    void set_image(int pos, VirtualDevice* pIcon) override
+    void set_image(int pos, VirtualDevice& rIcon) override
     {
         GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
         if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
         {
-            if (pIcon)
-            {
-                GdkPixbuf* pixbuf = getPixbuf(*pIcon);
-                gtk_tree_store_set(m_pTreeStore, &iter, m_nImageCol, pixbuf, -1);
-                if (pixbuf)
-                    g_object_unref(pixbuf);
-            }
+            GdkPixbuf* pixbuf = getPixbuf(rIcon);
+            gtk_tree_store_set(m_pTreeStore, &iter, m_nImageCol, pixbuf, -1);
+            if (pixbuf)
+                g_object_unref(pixbuf);
         }
     }
 
