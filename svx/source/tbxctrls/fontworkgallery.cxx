@@ -143,6 +143,7 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
         OUString sId = OUString::number(static_cast<sal_uInt16>(nFavorite));
         maIdToTitleMap.emplace(sId, aTitles.at(nFavorite - 1));
         maCtlFavorites->insert(-1, nullptr, &sId, maFavoritesHorizontal[nFavorite - 1], nullptr);
+        maCtlFavorites->set_item_accessible_name(maCtlFavorites->n_children() - 1, aTitles.at(nFavorite -1));
     }
 
     if (maCtlFavorites->n_children())
