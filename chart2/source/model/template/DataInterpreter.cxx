@@ -406,7 +406,7 @@ void lcl_ShowDataSource( const Reference< data::XDataSource > & xSource )
     {
         if( aSequences[k].is())
         {
-            OUString aSourceRepr("<none>");
+            OUString aSourceRepr(u"<none>"_ustr);
             if( aSequences[k]->getValues().is())
                 aSourceRepr = aSequences[k]->getValues()->getSourceRangeRepresentation();
             xProp.set( aSequences[k]->getValues(), uno::UNO_QUERY );
@@ -420,7 +420,7 @@ void lcl_ShowDataSource( const Reference< data::XDataSource > & xSource )
                 SAL_INFO("chart2", "  <data sequence " << k << "> unknown Role, Source: " << aSourceRepr );
             }
 
-            aSourceRepr = "<none>";
+            aSourceRepr = u"<none>"_ustr;
             if( aSequences[k]->getLabel().is())
                 aSourceRepr = aSequences[k]->getLabel()->getSourceRangeRepresentation();
             xProp.set( aSequences[k]->getLabel(), uno::UNO_QUERY );
