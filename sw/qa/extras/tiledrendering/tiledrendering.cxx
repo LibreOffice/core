@@ -1288,11 +1288,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
     {
         SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
-            {
-                { "NewTheme", uno::Any(u"Dark"_ustr) },
-            }
-        );
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({});
         comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
     }
     CPPUNIT_ASSERT_EQUAL("S;Dark"_ostr, pXTextDocument->getViewRenderState());

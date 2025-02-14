@@ -383,6 +383,17 @@ weld::Window* SfxRequest::GetFrameWeld() const
 
 void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 {
+    const bool bIsLOK = comphelper::LibreOfficeKit::isActive();
+    static svtools::EditableColorConfig aEditableConfig;
+    static bool aColorConfigInitialized = false;
+    if (!aColorConfigInitialized && bIsLOK)
+    {
+        // preload color schemes
+        aEditableConfig.LoadScheme("Light");
+        aEditableConfig.LoadScheme("Dark");
+        aColorConfigInitialized = true;
+    }
+
     bool bDone = false;
     switch ( rReq.GetSlot() )
     {
@@ -738,16 +749,18 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 }
                 MiscSettings::SetAppColorMode(nUseMode);
             }
-            svtools::EditableColorConfig aEditableConfig;
+
             // kit explicitly ignores changes to the global color scheme, except for the current ViewShell,
             // so an attempted change to the same global color scheme when the now current ViewShell ignored
             // the last change requires re-sending the change. In which case individual shells will have to
             // decide if this color-scheme change is a change from their perspective to avoid unnecessary
             // invalidations.
-            if (!pNewThemeArg || comphelper::LibreOfficeKit::isActive()
-                || aEditableConfig.GetCurrentSchemeName() != sSchemeName)
+            if (!pNewThemeArg || bIsLOK || aEditableConfig.GetCurrentSchemeName() != sSchemeName)
             {
-                aEditableConfig.LoadScheme(sSchemeName);
+                if (bIsLOK)
+                    aEditableConfig.SetCurrentSchemeName(sSchemeName);
+                else
+                    aEditableConfig.LoadScheme(sSchemeName);
             }
 
             Invalidate(FN_CHANGE_THEME);
