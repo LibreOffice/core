@@ -3240,11 +3240,15 @@ short ImpEditEngine::ReplaceTextOnly(
 
             DBG_ASSERT( (nCurrentPos+1) < pNode->Len(), "TransliterateText - String smaller than expected!" );
             GetEditDoc().RemoveChars( EditPaM( pNode, nCurrentPos+1 ), -nDiff);
+            ESelection const deleted{maEditDoc.GetPos(pNode), nCurrentPos+1, maEditDoc.GetPos(pNode), nCurrentPos-nDiff};
+            UpdateSelectionsDelete(deleted);
         }
         else
         {
             DBG_ASSERT( nDiff == 1, "TransliterateText - Diff other than expected! But should work..." );
             GetEditDoc().InsertText( EditPaM( pNode, nCurrentPos ), OUStringChar(rNewText[n]) );
+            ESelection const inserted{maEditDoc.GetPos(pNode), nCurrentPos, maEditDoc.GetPos(pNode), nCurrentPos+nDiff};
+            UpdateSelectionsInsert(inserted);
 
         }
         nDiffs = sal::static_int_cast< short >(nDiffs + nDiff);

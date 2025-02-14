@@ -206,7 +206,6 @@ void WeldEditView::PaintSelection(vcl::RenderContext& rRenderContext, tools::Rec
         aLogicRanges.emplace_back(nLeft, nTop, nRight, nBottom);
     }
 
-    // get the system's highlight color
     sdr::overlay::OverlaySelection aCursorOverlay(sdr::overlay::OverlayType::Transparent, color,
                                                   std::move(aLogicRanges), true);
 
@@ -248,6 +247,7 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
     std::vector<tools::Rectangle> aLogicRects;
     pEditView->GetSelectionRectangles(aLogicRects);
 
+    // get the system's highlight color
     const Color aHighlight(SvtOptionsDrawinglayer::getHilightColor());
     PaintSelection(rRenderContext, rRect, aLogicRects, aHighlight);
 

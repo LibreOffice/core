@@ -287,6 +287,13 @@ private:
     EESelectionMode meSelectionMode;
     EditSelection maEditSelection;
     EEAnchorMode meAnchorMode;
+#if defined(YRS)
+public:
+    /// when SwAnnotationWin::UpdateData() is called, the EE is cleared
+    /// and recreated, so use ESelection not EditSelection to survive this!
+    ::std::unordered_map<OString, ::std::pair<OUString, ESelection>> m_PeerCursors;
+private:
+#endif
 
     /// mechanism to change from the classic refresh mode that simply
     // invalidates the area where text was changed. When set, the invalidate
@@ -702,7 +709,7 @@ private:
 
     void                ImpBreakLine(ParaPortion& rParaPortion, EditLine& rLine, TextPortion const * pPortion, sal_Int32 nPortionStart, tools::Long nRemainingWidth, bool bCanHyphenate);
     void                ImpAdjustBlocks(ParaPortion& rParaPortion, EditLine& rLine, tools::Long nRemainingSpace );
-    EditPaM             ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pRight, bool bBackward = false );
+    EditPaM             ImpConnectParagraphs(ContentNode* pLeft, ContentNode* pRight, bool bBackward = false, bool isUpdateCursors = true);
     EditPaM             ImpDeleteSelection(const EditSelection& rCurSel);
     EditPaM             ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttribs = true );
     EditPaM             ImpInsertParaBreak( const EditSelection& rEditSelection );
@@ -1013,6 +1020,8 @@ public:
 
     bool                    UpdateSelection(EditSelection &);
     void                    UpdateSelections();
+    void UpdateSelectionsDelete(ESelection const& rDeleted);
+    void UpdateSelectionsInsert(ESelection const& rInserted);
 
     void                EnableUndo( bool bEnable );
     bool IsUndoEnabled() const { return mbUndoEnabled; }

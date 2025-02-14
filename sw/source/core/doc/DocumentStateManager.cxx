@@ -630,6 +630,7 @@ struct ObserveCursorState : public ObserveState
 {
     struct Update {
         OString const peerId;
+        ::std::optional<OString> const oCommentId;
         ::std::optional<OUString> const oAuthor;
         ::std::pair<int64_t, int64_t> const point;
         ::std::optional<::std::pair<int64_t, int64_t>> const oMark;
@@ -641,8 +642,25 @@ void YrsCursorUpdates(ObserveCursorState & rState)
 {
     for (auto const& it : rState.CursorUpdates)
     {
-#if defined(LOPLUGIN_BLOCK_BLOCK)
-#endif
+        if (it.oCommentId)
+        {
+            auto const it2{rState.rYrsSupplier.GetComments().find(*it.oCommentId)};
+            yvalidate(it2 != rState.rYrsSupplier.GetComments().end());
+            SwAnnotationWin & rWin{*it2->second.front()->mpPostIt};
+            // note: rState.pTxn is invalid at this point!
+            rWin.GetOutlinerView()->GetEditView().YrsApplyEECursor(it.peerId, *it.oAuthor, it.point, it.oMark);
+            if ((rWin.GetStyle() & WB_DIALOGCONTROL) == 0)
+            {
+                // note: Invalidate does work with gen but does not with gtk3
+                //rWin.Invalidate(); // not active window, force paint
+                rWin.queue_draw();
+            }
+            else
+            {   // apparently this repaints active window
+                rWin.GetOutlinerView()->GetEditView().Invalidate();
+            }
+        }
+        else
         {
             ::std::optional<SwPosition> oMark;
             if (it.oMark)
@@ -678,8 +696,43 @@ void YrsCursorUpdates(ObserveCursorState & rState)
     }
 }
 
+void YrsInvalidateEECursors(ObserveState const& rState,
+    OString const& rPeerId, OString const*const pCommentId)
+{
+    for (auto const& it : rState.rYrsSupplier.GetComments())
+    {
+        if (pCommentId == nullptr || *pCommentId != it.first)
+        {
+            SwAnnotationWin & rWin{*it.second.front()->mpPostIt};
+            if (rWin.GetOutlinerView()->GetEditView().YrsDelEECursor(rPeerId))
+            {
+                rWin.queue_draw(); // repaint
+            }
+        }
+    }
+}
+
+void YrsInvalidateSwCursors(ObserveState const& rState,
+    OString const& rPeerId, OUString const& rAuthor, bool const isAdd)
+{
+    for (SwViewShell & rShell : rState.rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()->GetRingContainer())
+    {
+        if (auto const pShell{dynamic_cast<SwCursorShell *>(&rShell)})
+        {
+            if (isAdd)
+            {
+                pShell->YrsAddCursor(rPeerId, {}, {}, rAuthor);
+            }
+            else
+            {
+                pShell->YrsSetCursor(rPeerId, {}, {});
+            }
+        }
+    }
+}
+
 void YrsReadCursor(ObserveCursorState & rState, OString const& rPeerId,
-    YOutput const& rCursor, ::std::optional<OUString> const oAuthor)
+    YOutput const& rCursor, OUString const& rAuthor, bool const isAdd)
 {
     switch (rCursor.tag)
     {
@@ -689,10 +742,32 @@ void YrsReadCursor(ObserveCursorState & rState, OString const& rPeerId,
             auto const len{yarray_len(pArray)};
             if (len == 3 || len == 5)
             {
-                // TODO cursor in EE
+                ::std::unique_ptr<YOutput, YOutputDeleter> const pComment{yarray_get(pArray, rState.pTxn, 0)};
+                yvalidate(pComment->tag == Y_JSON_STR && pComment->len < SAL_MAX_INT32);
+                OString const commentId{pComment->value.str, static_cast<sal_Int32>(pComment->len)};
+                YrsInvalidateEECursors(rState, rPeerId, &commentId);
+                YrsInvalidateSwCursors(rState, rPeerId, rAuthor, false);
+                ::std::optional<::std::pair<int64_t, int64_t>> oMark;
+                if (len == 5)
+                {
+                    ::std::unique_ptr<YOutput, YOutputDeleter> const pNode{
+                        yarray_get(pArray, rState.pTxn, 3)};
+                    yvalidate(pNode->tag == Y_JSON_INT);
+                    ::std::unique_ptr<YOutput, YOutputDeleter> const pContent{
+                        yarray_get(pArray, rState.pTxn, 4)};
+                    yvalidate(pContent->tag == Y_JSON_INT);
+                    oMark.emplace(pNode->value.integer, pContent->value.integer);
+                }
+                ::std::unique_ptr<YOutput, YOutputDeleter> const pNode{yarray_get(pArray, rState.pTxn, 1)};
+                yvalidate(pNode->tag == Y_JSON_INT);
+                ::std::unique_ptr<YOutput, YOutputDeleter> const pContent{yarray_get(pArray, rState.pTxn, 2)};
+                yvalidate(pContent->tag == Y_JSON_INT);
+                ::std::pair<int64_t, int64_t> const pos{pNode->value.integer, pContent->value.integer};
+                rState.CursorUpdates.emplace_back(rPeerId, ::std::optional<OString>{commentId}, ::std::optional<OUString>{rAuthor}, pos, oMark);
             }
             else if (len == 2 || len == 4)
             {
+                YrsInvalidateEECursors(rState, rPeerId, nullptr);
                 // the only reason this stuff has a hope of working with
                 // integers is that the SwNodes is read-only
                 ::std::optional<::std::pair<int64_t, int64_t>> oMark;
@@ -710,27 +785,17 @@ void YrsReadCursor(ObserveCursorState & rState, OString const& rPeerId,
                 ::std::unique_ptr<YOutput, YOutputDeleter> const pContent{yarray_get(pArray, rState.pTxn, 1)};
                 yvalidate(pContent->tag == Y_JSON_INT);
                 ::std::pair<int64_t, int64_t> const pos{pNode->value.integer, pContent->value.integer};
-                rState.CursorUpdates.emplace_back(rPeerId, oAuthor, pos, oMark);
+                rState.CursorUpdates.emplace_back(rPeerId, ::std::optional<OString>{},
+                    isAdd ? ::std::optional<OUString>{rAuthor} : ::std::optional<OUString>{},
+                    pos, oMark);
             }
             else
                 yvalidate(false);
             break;
         }
         case Y_JSON_NULL:
-            for (SwViewShell & rShell : rState.rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()->GetRingContainer())
-            {
-                if (auto const pShell{dynamic_cast<SwCursorShell *>(&rShell)})
-                {
-                    if (oAuthor)
-                    {
-                        pShell->YrsAddCursor(rPeerId, {}, {}, *oAuthor);
-                    }
-                    else
-                    {
-                        pShell->YrsSetCursor(rPeerId, {}, {});
-                    }
-                }
-            }
+            YrsInvalidateEECursors(rState, rPeerId, nullptr);
+            YrsInvalidateSwCursors(rState, rPeerId, rAuthor, isAdd);
             break;
         default:
             yvalidate(false);
@@ -783,7 +848,7 @@ extern "C" void observe_cursors(void *const pState, uint32_t count, YEvent const
                                         static_cast<sal_Int32>(pAuthor->len), RTL_TEXTENCODING_UTF8};
                                     ::std::unique_ptr<YOutput, YOutputDeleter> const pCursor{
                                         yarray_get(pArray, rState.pTxn, 1)};
-                                    YrsReadCursor(rState, peerId, *pCursor, {author});
+                                    YrsReadCursor(rState, peerId, *pCursor, author, true);
                                     break;
                                 }
                                 default:
@@ -830,7 +895,10 @@ extern "C" void observe_cursors(void *const pState, uint32_t count, YEvent const
                 yvalidate(pChange[1].len == 1);
                 yvalidate(pChange[2].tag == Y_EVENT_CHANGE_ADD);
                 yvalidate(pChange[2].len == 1);
-                YrsReadCursor(rState, peerId, pChange[2].values[0], {});
+                Branch const*const pArray{yarray_event_target(pEvent)};
+                ::std::unique_ptr<YOutput, YOutputDeleter> const pAuthor{yarray_get(pArray, rState.pTxn, 0)};
+                OUString const author{pAuthor->value.str, static_cast<sal_Int32>(pAuthor->len), RTL_TEXTENCODING_UTF8};
+                YrsReadCursor(rState, peerId, pChange[2].values[0], author, false);
                 break;
             }
             default:
@@ -1168,12 +1236,12 @@ void DocumentStateManager::YrsRemoveComment(SwPosition const& rPos, OString cons
 void DocumentStateManager::YrsNotifyCursorUpdate()
 {
     SwWrtShell *const pShell{dynamic_cast<SwWrtShell*>(m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell())};
-    if (!m_pYrsSupplier || !pShell->GetView().GetPostItMgr())
+    YTransaction *const pTxn{m_pYrsSupplier ? m_pYrsSupplier->GetWriteTransaction() : nullptr};
+    if (!pTxn || !pShell->GetView().GetPostItMgr())
     {
         return;
     }
     SAL_DEBUG("YRS NotifyCursorUpdate");
-    YTransaction *const pTxn{m_pYrsSupplier->GetWriteTransaction()};
     YDoc *const pYDoc{m_pYrsSupplier->GetYDoc()};
     auto const id{ydoc_id(pYDoc)};
     ::std::unique_ptr<YOutput, YOutputDeleter> pEntry{ymap_get(m_pYrsSupplier->m_pCursors, pTxn, OString::number(id).getStr())};
@@ -1464,7 +1532,6 @@ void DocumentStateManager::SetModified()
 
 #if defined(YRS)
     SAL_DEBUG("YRS SetModified");
-    // FIXME: this is called only on LoseFocus! not while editing comment
     YrsCommitModified();
 #endif
 }

@@ -347,6 +347,51 @@ void EditView::GetSelectionRectangles(std::vector<tools::Rectangle>& rLogicRects
     return getImpl().GetSelectionRectangles(getImpl().GetEditSelection(), rLogicRects);
 }
 
+#if defined(YRS)
+void EditView::YrsGetSelectionRectangles(
+    ::std::vector<::std::pair<OUString, ::std::vector<tools::Rectangle>>>& rLogicRects) const
+{
+    for (auto const& it : getImpl().m_PeerCursors)
+    {
+        rLogicRects.push_back({it.second.first, {}});
+        EditSelection const sel{getEditEngine().getImpl().CreateSel(it.second.second)};
+        if (sel.HasRange())
+        {
+            getImpl().GetSelectionRectangles(sel, rLogicRects.back().second);
+        }
+        else
+        {
+            ParaPortion const& rParaPortion{getEditEngine().GetParaPortions().getRef(it.second.second.start.nPara)};
+            auto const oCursor{getImpl().ImplGetCursorRectAndMaybeScroll(sel.Min(), rParaPortion, false)};
+            if (oCursor)
+            {
+                auto const rect{std::get<0>(*oCursor)};
+                rLogicRects.back().second.push_back(rect);
+            }
+        }
+    }
+}
+
+void EditView::YrsApplyEECursor(OString const& rPeerId, OUString const& rAuthor,
+    ::std::pair<int64_t, int64_t> const point,
+    ::std::optional<::std::pair<int64_t, int64_t>> const oMark)
+{
+    ::std::optional<EditSelection> const oSel{getEditEngine().GetEditDoc().YrsReadEECursor(point, oMark)};
+    if (!oSel)
+    {
+        SAL_DEBUG("YRS ignoring invalid cursor position");
+        return;
+    }
+    ESelection const esel{getEditEngine().getImpl().CreateESel(*oSel)};
+    getImpl().m_PeerCursors[rPeerId] = {rAuthor, esel};
+}
+
+bool EditView::YrsDelEECursor(OString const& rId)
+{
+    return getImpl().m_PeerCursors.erase(rId) != 0;
+}
+#endif
+
 Point EditView::CalculateTextPaintStartPosition() const
 {
     return getImpEditEngine().CalculateTextPaintStartPosition(getImpl());

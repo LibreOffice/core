@@ -937,6 +937,22 @@ void SwAnnotationWin::LoseFocus()
 {
 }
 
+void SwAnnotationWin::queue_draw()
+{
+    if (mxSidebarTextControlWin)
+    {
+        mxSidebarTextControlWin->queue_draw();
+    }
+}
+
+void SwAnnotationWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+{
+    if (mxSidebarTextControl)
+    {
+        mxSidebarTextControl->Paint(rRenderContext, rRect);
+    }
+}
+
 void SwAnnotationWin::ShowNote()
 {
     SetPosAndSize();

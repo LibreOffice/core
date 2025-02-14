@@ -474,6 +474,7 @@ bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 FormatAndLayout( pView );
             }
 
+            UpdateSelections(); // other views
             EditSelection aNewSel( EditPaM( mpIMEInfos->aPos.GetNode(), mpIMEInfos->aPos.GetIndex()+pData->GetCursorPos() ) );
             pView->SetSelection( CreateESel( aNewSel ) );
             pView->SetInsertMode( !pData->IsCursorOverwrite() );
@@ -2212,7 +2213,8 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
 }
 
 
-EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pRight, bool bBackward )
+EditPaM ImpEditEngine::ImpConnectParagraphs(ContentNode* pLeft, ContentNode* pRight,
+        bool bBackward, bool const isUpdateCursors)
 {
     OSL_ENSURE( pLeft != pRight, "Join together the same paragraph ?" );
     OSL_ENSURE(maEditDoc.GetPos(pLeft) != EE_PARA_MAX, "Inserted node not found (1)");
@@ -2230,6 +2232,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
 
     sal_Int32 nParagraphTobeDeleted = maEditDoc.GetPos( pRight );
     maDeletedNodes.push_back(std::make_unique<DeletedNodeInfo>( pRight, nParagraphTobeDeleted ));
+    ESelection const deleted{nParagraphTobeDeleted - 1, pLeft->Len(), nParagraphTobeDeleted, 0};
 
     GetEditEnginePtr()->ParagraphConnected( maEditDoc.GetPos( pLeft ), maEditDoc.GetPos( pRight ) );
 
@@ -2295,6 +2298,11 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
             rParaPortion.MarkSelectionInvalid(0);
             rParaPortion.GetLines().Reset();
         }
+    }
+
+    if (isUpdateCursors)
+    {
+        UpdateSelectionsDelete(deleted);
     }
 
     TextModified();
@@ -2398,6 +2406,7 @@ EditPaM ImpEditEngine::ImpDeleteSelection(const EditSelection& rCurSel)
     if ( !rCurSel.HasRange() )
         return rCurSel.Min();
 
+    ESelection const deleted{CreateESel(rCurSel)};
     EditSelection aCurSel(rCurSel);
     aCurSel.Adjust( maEditDoc );
     EditPaM aStartPaM(aCurSel.Min());
@@ -2440,7 +2449,7 @@ EditPaM ImpEditEngine::ImpDeleteSelection(const EditSelection& rCurSel)
         assert(pPortion);
         pPortion->MarkSelectionInvalid( 0 );
         // Join together...
-        aStartPaM = ImpConnectParagraphs( aStartPaM.GetNode(), aEndPaM.GetNode() );
+        aStartPaM = ImpConnectParagraphs(aStartPaM.GetNode(), aEndPaM.GetNode(), false, false);
     }
     else
     {
@@ -2450,6 +2459,7 @@ EditPaM ImpEditEngine::ImpDeleteSelection(const EditSelection& rCurSel)
         pPortion->MarkInvalid( aEndPaM.GetIndex(), aStartPaM.GetIndex() - aEndPaM.GetIndex() );
     }
 
+    UpdateSelectionsDelete(deleted);
     UpdateSelections();
     TextModified();
     return aStartPaM;
@@ -2467,8 +2477,13 @@ void ImpEditEngine::RemoveParagraph( sal_Int32 nPara )
     if ( pNode && pPortion )
     {
         // No Undo encapsulation needed.
+        auto const len{pNode->Len()};
         ImpRemoveParagraph(nPara);
         InvalidateFromParagraph(nPara);
+        ESelection const deleted{nPara == 0 ? nPara : nPara - 1,
+            nPara == 0 ? 0 : maEditDoc.GetObject(nPara-1)->Len(),
+            nPara, len};
+        UpdateSelectionsDelete(deleted);
         UpdateSelections();
         if (IsUpdateLayout())
             FormatAndLayout();
@@ -2830,6 +2845,10 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
 
     UndoActionEnd();
 
+    ESelection inserted{CreateEPaM(aCurPaM)};
+    inserted.end = CreateEPaM(aPaM);
+    UpdateSelectionsInsert(inserted);
+
     TextModified();
     return aPaM;
 }
@@ -2875,6 +2894,10 @@ EditPaM ImpEditEngine::ImpInsertFeature(const EditSelection& rCurSel, const SfxP
     ParaPortion* pPortion = FindParaPortion( aPaM.GetNode() );
     assert(pPortion);
     pPortion->MarkInvalid( aPaM.GetIndex()-1, 1 );
+
+    ESelection inserted{CreateEPaM(rCurSel.Min())};
+    inserted.end = CreateEPaM(aPaM);
+    UpdateSelectionsInsert(inserted);
 
     TextModified();
 
@@ -2954,6 +2977,10 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttrib
 
     if( nullptr != rPaM.GetNode() )
         rPaM.GetNode()->checkAndDeleteEmptyAttribs(); // if empty Attributes have emerged.
+
+    ESelection inserted{CreateEPaM(rPaM)};
+    inserted.end = CreateEPaM(aPaM);
+    UpdateSelectionsInsert(inserted);
 
     TextModified();
     return aPaM;
@@ -3805,8 +3832,148 @@ void ImpEditEngine::UpdateSelections()
         {
             pView->getImpl().SetEditSelection(aCurSel);
         }
+#if defined(YRS)
+        for (auto & it : pView->getImpl().m_PeerCursors)
+        {
+            EditSelection sel(CreateSel(it.second.second));
+            if (UpdateSelection(sel))
+            {
+                assert(false); // should have called Insert/Delete?
+                it.second.second = CreateESel(sel);
+            }
+        }
+#endif
     }
     maDeletedNodes.clear();
+}
+
+#if defined(YRS)
+static bool UpdatePosDelete(EPaM & rPos, ESelection const& rDeleted)
+{
+    // correct towards start: RemoveParagraph(Count()) can't work otherwise
+    assert(rDeleted.IsAdjusted());
+    if (rDeleted.start.nPara == rPos.nPara)
+    {
+        if (rDeleted.start.nIndex < rPos.nIndex)
+        {
+            if (rDeleted.start.nPara == rDeleted.end.nPara && rDeleted.end.nIndex < rPos.nIndex)
+            {
+                rPos.nIndex -= (rDeleted.end.nIndex - rDeleted.start.nIndex);
+            }
+            else
+            {
+                rPos.nIndex = rDeleted.start.nIndex;
+            }
+            return true;
+        }
+    }
+    else if (rDeleted.start.nPara < rPos.nPara && rPos.nPara <= rDeleted.end.nPara)
+    {
+        if (rPos.nPara == rDeleted.end.nPara && rDeleted.end.nIndex < rPos.nIndex)
+        {
+            rPos.nIndex -= rDeleted.end.nIndex - rDeleted.start.nIndex;
+        }
+        else
+        {
+            rPos.nIndex = rDeleted.start.nIndex;
+        }
+        rPos.nPara = rDeleted.start.nPara;
+        return true;
+    }
+    else if (rDeleted.end.nPara < rPos.nPara)
+    {
+        rPos.nPara -= rDeleted.end.nPara - rDeleted.start.nPara;
+        return true;
+    }
+    return false;
+}
+#endif
+
+static bool UpdatePosInsert(EPaM & rPos, ESelection const& rInserted)
+{
+    assert(rInserted.IsAdjusted());
+    if (rInserted.start.nPara == rPos.nPara)
+    {
+        if (rInserted.start.nIndex <= rPos.nIndex)
+        {
+            rPos.nPara = rInserted.end.nPara;
+            rPos.nIndex = rInserted.end.nIndex + (rPos.nIndex - rInserted.start.nIndex);
+            return true;
+        }
+    }
+    else if (rInserted.start.nPara < rPos.nPara && rInserted.start.nPara != rInserted.end.nPara)
+    {
+        rPos.nPara += rInserted.end.nPara - rInserted.start.nPara;
+        return true;
+    }
+    return false;
+}
+
+void ImpEditEngine::UpdateSelectionsDelete(ESelection const& rDeleted)
+{
+    ESelection deleted(rDeleted);
+    deleted.Adjust();
+    for (EditView *const pView : maEditViews)
+    {
+        // FIXME fails because CreateESel needs the deleted nodes! but if it's
+        // called before deleting the nodes, it will assign wrong nodes...
+        // perhaps the cursors could be stored as ESelection in the first
+        // place, but that would require reviewing all code that inserts or
+        // deletes nodes if it does the update in the correct place...
+#if 0
+        EditSelection const sel{pView->getImpl().GetEditSelection()};
+        ESelection esel{CreateESel(sel)};
+        bool isChanged{false};
+        isChanged |= UpdatePosDelete(esel.start, deleted);
+        isChanged |= UpdatePosDelete(esel.end, deleted);
+        if (isChanged)
+        {
+            pView->getImpl().SetEditSelection(CreateSel(esel));
+        }
+#else
+        (void)pView;
+        (void)deleted;
+#endif
+#if defined(YRS)
+        for (auto & it : pView->getImpl().m_PeerCursors)
+        {
+            UpdatePosDelete(it.second.second.start, deleted);
+            UpdatePosDelete(it.second.second.end, deleted);
+        }
+#endif
+    }
+}
+
+void ImpEditEngine::UpdateSelectionsInsert(ESelection const& rInserted)
+{
+    for (EditView *const pView : maEditViews)
+    {
+        EditSelection const sel{pView->getImpl().GetEditSelection()};
+        ESelection esel{CreateESel(sel)};
+        // nodes have been inserted, but CreateESel counts them: adjust for this!
+        if (rInserted.start.nPara < esel.start.nPara)
+        {
+            esel.start.nPara -= rInserted.end.nPara - rInserted.start.nPara;
+        }
+        if (rInserted.start.nPara < esel.end.nPara)
+        {
+            esel.end.nPara -= rInserted.end.nPara - rInserted.start.nPara;
+        }
+        bool isChanged{false};
+        isChanged |= UpdatePosInsert(esel.start, rInserted);
+        isChanged |= UpdatePosInsert(esel.end, rInserted);
+        if (isChanged)
+        {
+            pView->getImpl().SetEditSelection(CreateSel(esel));
+        }
+#if defined(YRS)
+        for (auto & it : pView->getImpl().m_PeerCursors)
+        {
+            UpdatePosInsert(it.second.second.start, rInserted);
+            UpdatePosInsert(it.second.second.end, rInserted);
+        }
+#endif
+    }
 }
 
 EditSelection ImpEditEngine::ConvertSelection(

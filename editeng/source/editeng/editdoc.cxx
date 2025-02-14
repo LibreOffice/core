@@ -2712,75 +2712,105 @@ void EditDoc::YrsReadEEState(YTransaction *const pTxn, ImpEditEngine & rIEE)
     rIEE.RemoveParagraph(nodes); // remove pre-existing one from InitDoc()
 }
 
-static void YrsAdjustCursors(ImpEditEngine & rIEE, EditDoc & rDoc,
-    sal_Int32 const node, sal_Int32 const pos, ContentNode *const pNewNode, sal_Int32 const delta)
+::std::optional<EditSelection> EditDoc::YrsReadEECursor(
+    ::std::pair<int64_t, int64_t> const i_point,
+    ::std::optional<::std::pair<int64_t, int64_t>> const i_oMark)
 {
-    for (EditView *const pView : rIEE.GetEditViews())
+    // TODO should not use ints here?
+    ::std::optional<EditPaM> oMark;
+    if (i_oMark)
     {
-        bool bSet{false};
-        EditSelection sel{pView->getImpl().GetEditSelection()};
-        ContentNode const*const pNode{rDoc.GetObject(node)};
-        if (sel.Min().GetNode() == pNode
-            && pos <= sel.Min().GetIndex())
+//        yvalidate(i_oMark->first < Count());
+        if (Count() <= i_oMark->first)
         {
-            sel.Min().SetNode(pNewNode);
-            sel.Min().SetIndex(sel.Min().GetIndex() + delta);
-            bSet = true;
+            return {};
         }
-        if (sel.Max().GetNode() == pNode
-            && pos <= sel.Max().GetIndex())
+        ContentNode & rNode{*GetObject(i_oMark->first)};
+//        yvalidate(i_oMark->second <= o3tl::make_unsigned(rNode.Len()));
+        if (o3tl::make_unsigned(rNode.Len()) < i_oMark->second)
         {
-            sel.Max().SetNode(pNewNode);
-            sel.Max().SetIndex(sel.Max().GetIndex() + delta);
-            bSet = true;
+            return {};
         }
-        if (bSet)
-        {
-            pView->getImpl().SetEditSelection(sel);
-        }
+        oMark.emplace(&rNode, static_cast<sal_Int32>(i_oMark->second));
     }
+
+    // the problem with using ints here is that multiple local edits may
+    // occur before the peer sends the updated cursor for the first edit,
+    // and then its position may be invalid; work around this here by
+    // ignoring obviously invalid cursors.
+//    yvalidate(i_point.first < Count());
+    if (Count() <= i_point.first)
+    {
+        return {};
+    }
+    ContentNode & rNode{*GetObject(i_point.first)};
+//    yvalidate(i_point.second <= o3tl::make_unsigned(rNode.Len()));
+    if (o3tl::make_unsigned(rNode.Len()) < i_point.second)
+    {
+        return {};
+    }
+    EditPaM point{&rNode, static_cast<sal_Int32>(i_point.second)};
+
+    return EditSelection{point, oMark ? *oMark : point};
 }
 
-// TODO test this
+static bool UpdatePosDelete(EditDoc & rDoc, EditPaM & rPos, ESelection const& rDeleted)
+{
+    auto const nPosNode{rDoc.GetPos(rPos.GetNode())};
+    if (rDeleted.start.nPara == nPosNode)
+    {
+        if (rDeleted.start.nIndex < rPos.GetIndex())
+        {
+            if (rDeleted.start.nPara == rDeleted.end.nPara && rDeleted.end.nIndex < rPos.GetIndex())
+            {
+                rPos.SetIndex(rPos.GetIndex() - (rDeleted.end.nIndex - rDeleted.start.nIndex));
+            }
+            else
+            {
+                rPos.SetIndex(rDeleted.start.nIndex);
+            }
+            return true;
+        }
+    }
+    else if (rDeleted.start.nPara < nPosNode && nPosNode <= rDeleted.end.nPara)
+    {
+        if (nPosNode == rDeleted.end.nPara && rDeleted.end.nIndex < rPos.GetIndex())
+        {
+            rPos.SetIndex(rPos.GetIndex() - (rDeleted.end.nIndex - rDeleted.start.nIndex));
+        }
+        else
+        {
+            rPos.SetIndex(rDeleted.start.nIndex);
+        }
+        rPos.SetNode(rDoc.GetObject(rDeleted.start.nPara));
+        return true;
+    }
+#if 0
+    else if (rDeleted.end.nPara < nPosNode)
+    {
+        rPos.SetNode(rDoc.GetObject(nPosNode - (rDeleted.end.nPara - rDeleted.start.nPara)));
+        return true;
+    }
+#endif
+    return false;
+
+}
+
+// TODO this is now sort of duplicated as UpdateSelectionsDelete, but
+// consolidating that would probably require replacing EditSelection with
+// ESelection in EditView
 static void YrsAdjustCursorsDel(ImpEditEngine & rIEE, EditDoc & rDoc,
     sal_Int32 const startNode, sal_Int32 const startPos,
     sal_Int32 const endNode, sal_Int32 const endPos)
 {
+    ESelection const deleted{startNode, startPos, endNode, endPos};
     for (EditView *const pView : rIEE.GetEditViews())
     {
-        bool bSet{false};
         EditSelection sel{pView->getImpl().GetEditSelection()};
-        ContentNode *const pStartNode{rDoc.GetObject(startNode)};
-        ContentNode const*const pEndNode{rDoc.GetObject(endNode)};
-        if ((sel.Min().GetNode() == pStartNode && startPos < sel.Min().GetIndex())
-            || (startNode < rDoc.GetPos(sel.Min().GetNode()) && rDoc.GetPos(sel.Min().GetNode()) < endNode)
-            || (sel.Min().GetNode() == pEndNode && sel.Min().GetIndex() < endPos))
-        {
-            sel.Min().SetNode(pStartNode);
-            sel.Min().SetIndex(startPos);
-            bSet = true;
-        }
-        else if (sel.Min().GetNode() == pEndNode)
-        {
-            sel.Min().SetNode(pStartNode);
-            sel.Min().SetIndex(startPos + sel.Min().GetIndex() - endPos);
-            bSet = true;
-        }
-        if ((sel.Max().GetNode() == pStartNode && startPos < sel.Max().GetIndex())
-            || (startNode < rDoc.GetPos(sel.Max().GetNode()) && rDoc.GetPos(sel.Max().GetNode()) < endNode)
-            || (sel.Max().GetNode() == pEndNode && sel.Max().GetIndex() < endPos))
-        {
-            sel.Max().SetNode(pStartNode);
-            sel.Max().SetIndex(startPos);
-            bSet = true;
-        }
-        else if (sel.Max().GetNode() == pEndNode)
-        {
-            sel.Max().SetNode(pStartNode);
-            sel.Max().SetIndex(startPos + sel.Max().GetIndex() - endPos);
-            bSet = true;
-        }
-        if (bSet)
+        bool isChanged{false};
+        isChanged |= UpdatePosDelete(rDoc, sel.Min(), deleted);
+        isChanged |= UpdatePosDelete(rDoc, sel.Max(), deleted);
+        if (isChanged)
         {
             pView->getImpl().SetEditSelection(sel);
         }
@@ -2832,7 +2862,6 @@ void EditDoc::YrsApplyEEDelta(YTransaction *const /*pTxn*/, YTextEvent const*con
                                     { return {rEntry.key, rEntry.value}; };
                                 EditPaM const pam{maContents[node].get(), pos};
                                 YrsImplInsertFeature<YDeltaAttr>(rIEE, pam, pChange[i].attributes, pChange[i].attributes_len, GetAttr);
-                                YrsAdjustCursors(rIEE, *this, node, pos, maContents[node].get(), 1);
                                 ++pos;
                                 break;
                             }
@@ -2845,9 +2874,8 @@ void EditDoc::YrsApplyEEDelta(YTransaction *const /*pTxn*/, YTextEvent const*con
                                     EditSelection const sel{EditPaM{maContents[node].get(), pos}};
                                     rIEE.InsertText(sel, str.copy(index, iPara));
                                 }
-                                EditPaM const newPos{rIEE.SplitContent(node, pos + iPara)};
+                                rIEE.SplitContent(node, pos + iPara);
                                 rIEE.SetStyleSheet(node, pStyle);
-                                YrsAdjustCursors(rIEE, *this, node, pos, const_cast<ContentNode*>(newPos.GetNode()), -pos);
                                 index = iPara + 1;
                                 pos = 0;
                                 ++node;
@@ -2868,7 +2896,6 @@ void EditDoc::YrsApplyEEDelta(YTransaction *const /*pTxn*/, YTextEvent const*con
                             {
                                 EditSelection const sel{EditPaM{maContents[node].get(), pos}};
                                 rIEE.InsertText(sel, str.copy(index, str.getLength() - index));
-                                YrsAdjustCursors(rIEE, *this, node, pos, maContents[node].get(), str.getLength() - index);
                                 pos += str.getLength() - index;
                             }
                             break;
@@ -2936,6 +2963,8 @@ void EditDoc::YrsApplyEEDelta(YTransaction *const /*pTxn*/, YTextEvent const*con
                 if (pChange[i].tag == Y_EVENT_CHANGE_DELETE)
                 {
                     YrsAdjustCursorsDel(rIEE, *this, nodeStart, posStart, node, pos);
+                    ESelection const deleted{rIEE.CreateESel(*oSel)};
+                    rIEE.UpdateSelectionsDelete(deleted);
                     rIEE.DeleteSelected(*oSel);
                     node = nodeStart;
                     pos = posStart;

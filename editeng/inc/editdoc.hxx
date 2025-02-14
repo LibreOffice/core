@@ -134,6 +134,8 @@ public:
     void YrsWriteEEState();
     void YrsReadEEState(YTransaction *, ImpEditEngine & rIEE);
     void YrsApplyEEDelta(YTransaction *, YTextEvent const* pEvent, ImpEditEngine & rIEE);
+    ::std::optional<EditSelection> YrsReadEECursor(::std::pair<int64_t, int64_t> point,
+            ::std::optional<::std::pair<int64_t, int64_t>> oMark);
     void YrsSetStyle(sal_Int32 nPara, ::std::u16string_view rStyle);
     void YrsSetParaAttr(sal_Int32 nPara, SfxPoolItem const& rItem);
     OString GetYrsCommentId() const;

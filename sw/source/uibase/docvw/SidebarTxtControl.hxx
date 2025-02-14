@@ -40,8 +40,6 @@ class SidebarTextControl : public WeldEditView
         void MakeVisible();
 
     protected:
-        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-
         virtual bool Command(const CommandEvent& rCEvt) override;
         virtual void GetFocus() override;
         virtual void LoseFocus() override;
@@ -53,12 +51,15 @@ class SidebarTextControl : public WeldEditView
                            SwView& rDocView,
                            SwPostItMgr& rPostItMgr);
 
+        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+
         virtual EditView* GetEditView() const override;
 
         virtual EditEngine* GetEditEngine() const override;
 
 #if defined(YRS)
         virtual void EditViewInvalidate(const tools::Rectangle& rRect) override;
+        virtual void EditViewSelectionChange() override;
 #endif
         virtual void EditViewScrollStateChange() override;
 

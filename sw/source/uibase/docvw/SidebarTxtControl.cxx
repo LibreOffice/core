@@ -57,6 +57,7 @@
 #include <IDocumentDeviceAccess.hxx>
 #if defined(YRS)
 #include <IDocumentState.hxx>
+#include <swmodule.hxx>
 #endif
 #include <redline.hxx>
 #include <memory>
@@ -205,8 +206,17 @@ OUString SidebarTextControl::RequestHelp(tools::Rectangle& rHelpRect)
 #if defined(YRS)
 void SidebarTextControl::EditViewInvalidate(const tools::Rectangle& rRect)
 {
+    SAL_DEBUG("YRS EditViewInvalidate");
+    mrDocView.GetDocShell()->GetDoc()->getIDocumentState().YrsNotifyCursorUpdate();
     mrDocView.GetDocShell()->GetDoc()->getIDocumentState().YrsCommitModified();
     return WeldEditView::EditViewInvalidate(rRect);
+}
+
+void SidebarTextControl::EditViewSelectionChange()
+{
+    SAL_DEBUG("YRS EditViewSelectionChange");
+    mrDocView.GetDocShell()->GetDoc()->getIDocumentState().YrsNotifyCursorUpdate();
+    return WeldEditView::EditViewSelectionChange();
 }
 #endif
 
@@ -267,6 +277,25 @@ void SidebarTextControl::Paint(vcl::RenderContext& rRenderContext, const tools::
     }
 
     DoPaint(rRenderContext, rRect);
+
+#if defined(YRS)
+    if (EditView *const pEditView{GetEditView()})
+    {
+        rRenderContext.Push(vcl::PushFlags::ALL);
+        rRenderContext.SetClipRegion();
+
+        ::std::vector<::std::pair<OUString, ::std::vector<tools::Rectangle>>> rects;
+        pEditView->YrsGetSelectionRectangles(rects);
+        for (auto const& it : rects)
+        {
+            ::std::size_t const authorId{SwModule::get()->InsertRedlineAuthor(it.first)};
+            Color const color{SwPostItMgr::GetColorAnchor(authorId)};
+            PaintSelection(rRenderContext, rRect, it.second, color);
+        }
+
+        rRenderContext.Pop();
+    }
+#endif
 
     if (mrSidebarWin.GetLayoutStatus() != SwPostItHelper::DELETED)
         return;
