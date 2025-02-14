@@ -3740,6 +3740,60 @@ sal_uInt32 ImpEditEngine::GetParaHeight(sal_Int32 nParagraph) const
     return nHeight;
 }
 
+bool ImpEditEngine::UpdateSelection(EditSelection & rCurSel)
+{
+    bool bChanged = false;
+    for (const std::unique_ptr<DeletedNodeInfo> & aDeletedNode : maDeletedNodes)
+    {
+        const DeletedNodeInfo& rInf = *aDeletedNode;
+        if ((rCurSel.Min().GetNode() == rInf.GetNode()) ||
+            (rCurSel.Max().GetNode() == rInf.GetNode()))
+        {
+            // Use ParaPortions, as now also hidden paragraphs have to be
+            // taken into account!
+            sal_Int32 nPara = rInf.GetPosition();
+            if (!GetParaPortions().exists(nPara)) // Last paragraph
+            {
+                nPara = GetParaPortions().lastIndex();
+            }
+            assert(GetParaPortions().exists(nPara) && "Empty Document in UpdateSelections ?");
+            // Do not end up from a hidden paragraph:
+            sal_Int32 nCurrentPara = nPara;
+            sal_Int32 nLastParaIndex = GetParaPortions().lastIndex();
+            while (nPara <= nLastParaIndex && !GetParaPortions().getRef(nPara).IsVisible())
+                nPara++;
+            if (nPara > nLastParaIndex) // then also backwards ...
+            {
+                nPara = nCurrentPara;
+                while ( nPara && !GetParaPortions().getRef(nPara).IsVisible() )
+                    nPara--;
+            }
+            OSL_ENSURE(GetParaPortions().getRef(nPara).IsVisible(), "No visible paragraph found: UpdateSelections" );
+
+            ParaPortion& rParaPortion = GetParaPortions().getRef(nPara);
+            EditSelection aTmpSelection(EditPaM(rParaPortion.GetNode(), 0));
+            rCurSel = aTmpSelection;
+            bChanged=true;
+            break;  // for loop
+        }
+    }
+    if ( !bChanged )
+    {
+        // Check Index if node shrunk.
+        if (rCurSel.Min().GetIndex() > rCurSel.Min().GetNode()->Len())
+        {
+            rCurSel.Min().SetIndex(rCurSel.Min().GetNode()->Len());
+            bChanged = true;
+        }
+        if (rCurSel.Max().GetIndex() > rCurSel.Max().GetNode()->Len())
+        {
+            rCurSel.Max().SetIndex(rCurSel.Max().GetNode()->Len());
+            bChanged = true;
+        }
+    }
+    return bChanged;
+}
+
 void ImpEditEngine::UpdateSelections()
 {
     // Check whether one of the selections is at a deleted node...
@@ -3747,54 +3801,9 @@ void ImpEditEngine::UpdateSelections()
     for (EditView* pView : maEditViews)
     {
         EditSelection aCurSel( pView->getImpl().GetEditSelection() );
-        bool bChanged = false;
-        for (const std::unique_ptr<DeletedNodeInfo> & aDeletedNode : maDeletedNodes)
+        if (UpdateSelection(aCurSel))
         {
-            const DeletedNodeInfo& rInf = *aDeletedNode;
-            if ( ( aCurSel.Min().GetNode() == rInf.GetNode() ) ||
-                 ( aCurSel.Max().GetNode() == rInf.GetNode() ) )
-            {
-                // Use ParaPortions, as now also hidden paragraphs have to be
-                // taken into account!
-                sal_Int32 nPara = rInf.GetPosition();
-                if (!GetParaPortions().exists(nPara)) // Last paragraph
-                {
-                    nPara = GetParaPortions().lastIndex();
-                }
-                assert(GetParaPortions().exists(nPara) && "Empty Document in UpdateSelections ?");
-                // Do not end up from a hidden paragraph:
-                sal_Int32 nCurrentPara = nPara;
-                sal_Int32 nLastParaIndex = GetParaPortions().lastIndex();
-                while (nPara <= nLastParaIndex && !GetParaPortions().getRef(nPara).IsVisible())
-                    nPara++;
-                if (nPara > nLastParaIndex) // then also backwards ...
-                {
-                    nPara = nCurrentPara;
-                    while ( nPara && !GetParaPortions().getRef(nPara).IsVisible() )
-                        nPara--;
-                }
-                OSL_ENSURE(GetParaPortions().getRef(nPara).IsVisible(), "No visible paragraph found: UpdateSelections" );
-
-                ParaPortion& rParaPortion = GetParaPortions().getRef(nPara);
-                EditSelection aTmpSelection(EditPaM(rParaPortion.GetNode(), 0));
-                pView->getImpl().SetEditSelection( aTmpSelection );
-                bChanged=true;
-                break;  // for loop
-            }
-        }
-        if ( !bChanged )
-        {
-            // Check Index if node shrunk.
-            if ( aCurSel.Min().GetIndex() > aCurSel.Min().GetNode()->Len() )
-            {
-                aCurSel.Min().SetIndex( aCurSel.Min().GetNode()->Len() );
-                pView->getImpl().SetEditSelection( aCurSel );
-            }
-            if ( aCurSel.Max().GetIndex() > aCurSel.Max().GetNode()->Len() )
-            {
-                aCurSel.Max().SetIndex( aCurSel.Max().GetNode()->Len() );
-                pView->getImpl().SetEditSelection( aCurSel );
-            }
+            pView->getImpl().SetEditSelection(aCurSel);
         }
     }
     maDeletedNodes.clear();

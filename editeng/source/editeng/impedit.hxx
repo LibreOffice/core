@@ -1007,6 +1007,7 @@ public:
 
     const SfxItemSet& GetEmptyItemSet() const;
 
+    bool                    UpdateSelection(EditSelection &);
     void                    UpdateSelections();
 
     void                EnableUndo( bool bEnable );
