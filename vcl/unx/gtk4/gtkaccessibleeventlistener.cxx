@@ -67,6 +67,13 @@ void GtkAccessibleEventListener::notifyEvent(
                 gtk_accessible_update_state(GTK_ACCESSIBLE(m_pLoAccessible),
                                             GTK_ACCESSIBLE_STATE_CHECKED, eState, -1);
             }
+#if GTK_CHECK_VERSION(4, 17, 5)
+            else if (nState == css::accessibility::AccessibleStateType::FOCUSED)
+            {
+                gtk_accessible_update_platform_state(GTK_ACCESSIBLE(m_pLoAccessible),
+                                                     GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED);
+            }
+#endif
             break;
         }
 #if GTK_CHECK_VERSION(4, 13, 8)
