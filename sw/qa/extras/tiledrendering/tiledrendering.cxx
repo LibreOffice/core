@@ -1774,14 +1774,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
         SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
         SwView* pView = pDoc->GetDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
-            {
-                { "NewTheme", uno::Any(OUString("Dark")) },
-            }
-        );
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({});
         comphelper::dispatchCommand(".uno:ChangeTheme", xFrame, aPropertyValues);
     }
-    CPPUNIT_ASSERT_EQUAL("S;Dark"_ostr, pXTextDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("SD;Dark"_ostr, pXTextDocument->getViewRenderState());
     // Switch back to the first view, and check that the options string is the same
     SfxLokHelper::setView(nFirstViewId);
     CPPUNIT_ASSERT_EQUAL("PS;Default"_ostr, pXTextDocument->getViewRenderState());
