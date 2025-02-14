@@ -131,7 +131,7 @@ private:
     DECL_LINK(ToolBoxSelectHdl, const OUString&, void);
     DECL_LINK(ToolBoxDropdownClickHdl, const OUString&, void);
     DECL_LINK(MenuSelectHdl, const OUString&, void);
-    DECL_LINK(FormatRowOutputHdl, weld::SpinButton&, void);
+    DECL_STATIC_LINK(ScNavigatorDlg, FormatRowOutputHdl, sal_Int64, OUString);
     DECL_LINK(ParseRowInputHdl, int*, bool);
 
     void    UpdateButtons();

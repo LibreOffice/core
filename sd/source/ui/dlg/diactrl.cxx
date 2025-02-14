@@ -109,9 +109,9 @@ void SdPagesField::UpdatePagesField( const SfxUInt16Item* pItem )
         m_xWidget->set_text(OUString());
 }
 
-IMPL_STATIC_LINK(SdPagesField, OutputHdl, weld::SpinButton&, rSpinButton, void)
+IMPL_STATIC_LINK(SdPagesField, OutputHdl, sal_Int64, nValue, OUString)
 {
-    rSpinButton.set_text(format_number(rSpinButton.get_value()));
+    return format_number(nValue);
 }
 
 IMPL_LINK(SdPagesField, spin_button_input, int*, result, bool)

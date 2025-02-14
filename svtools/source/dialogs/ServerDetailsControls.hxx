@@ -60,7 +60,7 @@ class DetailsContainer
     protected:
         void notifyChange( );
         DECL_LINK(ValueChangeHdl, weld::Entry&, void);
-        DECL_STATIC_LINK(DetailsContainer, FormatPortHdl, weld::SpinButton&, void);
+        DECL_STATIC_LINK(DetailsContainer, FormatPortHdl, sal_Int64, OUString);
 };
 
 class HostDetailsContainer : public DetailsContainer

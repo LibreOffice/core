@@ -37,7 +37,7 @@ private:
     css::uno::Reference<css::frame::XFrame> m_xFrame;
 
     DECL_LINK(ModifyHdl, weld::SpinButton&, void);
-    DECL_STATIC_LINK(SdPagesField, OutputHdl, weld::SpinButton&, void);
+    DECL_STATIC_LINK(SdPagesField, OutputHdl, sal_Int64, OUString);
     DECL_LINK(spin_button_input, int* result, bool);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 

@@ -1856,7 +1856,7 @@ class VCL_DLLPUBLIC SpinButton : virtual public Entry
     friend class ::LOKTrigger;
 
     Link<SpinButton&, void> m_aValueChangedHdl;
-    Link<SpinButton&, void> m_aOutputHdl;
+    Link<sal_Int64, OUString> m_aOutputHdl;
     Link<int*, bool> m_aInputHdl;
 
 protected:
@@ -1866,7 +1866,8 @@ protected:
     {
         if (!m_aOutputHdl.IsSet())
             return false;
-        m_aOutputHdl.Call(*this);
+        const OUString sText = m_aOutputHdl.Call(get_value());
+        set_text(sText);
         return true;
     }
 
@@ -1913,7 +1914,7 @@ public:
 
     void connect_value_changed(const Link<SpinButton&, void>& rLink) { m_aValueChangedHdl = rLink; }
 
-    void connect_output(const Link<SpinButton&, void>& rLink) { m_aOutputHdl = rLink; }
+    void connect_output(const Link<sal_Int64, OUString>& rLink) { m_aOutputHdl = rLink; }
     void connect_input(const Link<int*, bool>& rLink) { m_aInputHdl = rLink; }
 
     sal_Int64 normalize(sal_Int64 nValue) const { return (nValue * Power10(get_digits())); }
@@ -2083,7 +2084,7 @@ class VCL_DLLPUBLIC MetricSpinButton final
     Link<MetricSpinButton&, void> m_aValueChangedHdl;
 
     DECL_LINK(spin_button_value_changed, weld::SpinButton&, void);
-    DECL_LINK(spin_button_output, weld::SpinButton&, void);
+    DECL_LINK(spin_button_output, sal_Int64, OUString);
     DECL_LINK(spin_button_input, int* result, bool);
 
     void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
@@ -2102,7 +2103,7 @@ public:
         m_xSpinButton->connect_input(LINK(this, MetricSpinButton, spin_button_input));
         m_xSpinButton->connect_value_changed(
             LINK(this, MetricSpinButton, spin_button_value_changed));
-        spin_button_output(*m_xSpinButton);
+        m_xSpinButton->set_text(spin_button_output(m_xSpinButton->get_value()));
     }
 
     static OUString MetricToString(FieldUnit rUnit);
@@ -2134,7 +2135,11 @@ public:
     // typically you only need to call this if set_text (e.g. with "") was
     // previously called to display some arbitrary text instead of the
     // formatted value and now you want to show it as formatted again
-    void reformat() { spin_button_output(*m_xSpinButton); }
+    void reformat()
+    {
+        const OUString sText = spin_button_output(m_xSpinButton->get_value());
+        m_xSpinButton->set_text(sText);
+    }
 
     void set_range(sal_Int64 min, sal_Int64 max, FieldUnit eValueUnit)
     {

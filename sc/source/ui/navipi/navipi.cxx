@@ -160,10 +160,9 @@ IMPL_LINK_NOARG(ScNavigatorDlg, ExecuteColHdl, weld::Entry&, bool)
     return true;
 }
 
-IMPL_LINK_NOARG(ScNavigatorDlg, FormatRowOutputHdl, weld::SpinButton&, void)
+IMPL_STATIC_LINK(ScNavigatorDlg, FormatRowOutputHdl, sal_Int64, nValue, OUString)
 {
-    OUString aStr = ::ScColToAlpha(m_xEdCol->get_value() - 1);
-    m_xEdCol->set_text(aStr);
+    return ::ScColToAlpha(nValue - 1);
 }
 
 IMPL_LINK_NOARG(ScNavigatorDlg, ExecuteRowHdl, weld::Entry&, bool)

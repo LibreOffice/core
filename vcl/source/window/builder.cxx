@@ -255,11 +255,9 @@ namespace weld
         signal_value_changed();
     }
 
-    IMPL_LINK(MetricSpinButton, spin_button_output, SpinButton&, rSpinButton, void)
+    IMPL_LINK(MetricSpinButton, spin_button_output, sal_Int64, nValue, OUString)
     {
-        OUString sNewText(format_number(rSpinButton.get_value()));
-        if (sNewText != rSpinButton.get_text())
-            rSpinButton.set_text(sNewText);
+        return format_number(nValue);
     }
 
     void MetricSpinButton::update_width_chars()
@@ -362,7 +360,8 @@ namespace weld
             m_eSrcUnit = eUnit;
             set_increments(step, page, m_eSrcUnit);
             set_value(value, m_eSrcUnit);
-            spin_button_output(*m_xSpinButton);
+            const OUString sText = spin_button_output(m_xSpinButton->get_value());
+            m_xSpinButton->set_text(sText);
             update_width_chars();
         }
     }
