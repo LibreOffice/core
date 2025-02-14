@@ -671,7 +671,7 @@ public:
     void SetRowSplit( const SwFormatRowSplit &rSz );
     std::unique_ptr<SwFormatRowSplit> GetRowSplit() const;
 
-    SW_DLLPUBLIC void SetBoxAlign(sal_uInt16 nOrient);
+    void SetBoxAlign(sal_uInt16 nOrient);
     sal_uInt16 GetBoxAlign() const;         ///< USHRT_MAX if ambiguous.
 
     bool BalanceRowHeight( bool bTstOnly, const bool bOptimize = false );
