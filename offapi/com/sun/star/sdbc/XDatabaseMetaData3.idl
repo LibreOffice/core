@@ -386,7 +386,7 @@ interface XDatabaseMetaData3 : XDatabaseMetaData2
 
     /**
      * Indicates whether this data source supports the SQL {@code  ROWID} type,
-     * and the lifetime for which a RowId (see RowId.idl) object remains valid.
+     * and the lifetime for which a XRowId (see XRowId.idl) object remains valid.
      *
      * @return one of the constants from RowIdLifetime (see RowIdLifetime.idl)
      * @throws SQLException if a database access error occurs

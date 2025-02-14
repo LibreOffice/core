@@ -3289,6 +3289,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sdbc,\
 	KeyRule \
 	ProcedureColumn \
 	ProcedureResult \
+	PseudoColumnUsage \
 	ResultSetConcurrency \
 	ResultSetType \
 	RowIdLifetime \
@@ -3326,6 +3327,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sdbc,\
 	XResultSetMetaDataSupplier \
 	XResultSetUpdate \
 	XRow \
+	XRowId \
 	XRowSet \
 	XRowSetListener \
 	XRowUpdate \
