@@ -5679,7 +5679,7 @@ public:
             // clone the original item to query its label
             GMenuItem* pMenuItem = g_menu_item_new_from_model(aRes.first, aRes.second);
             char *pLabel = nullptr;
-            g_menu_item_get_attribute(pMenuItem, G_MENU_ATTRIBUTE_LABEL, "&s", &pLabel);
+            g_menu_item_get_attribute(pMenuItem, G_MENU_ATTRIBUTE_LABEL, "s", &pLabel);
             OUString aRet(pLabel, pLabel ? strlen(pLabel) : 0, RTL_TEXTENCODING_UTF8);
             g_free(pLabel);
             g_object_unref(pMenuItem);
