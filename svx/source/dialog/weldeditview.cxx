@@ -225,27 +225,30 @@ void WeldEditView::PaintSelection(vcl::RenderContext& rRenderContext, tools::Rec
 
 void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
+    EditView* const pEditView{ GetEditView() };
+
+    if (pEditView == nullptr)
+    {
+        return;
+    }
+
     rRenderContext.Push(vcl::PushFlags::ALL);
     rRenderContext.SetClipRegion();
 
-    std::vector<tools::Rectangle> aLogicRects;
+    pEditView->Paint(comphelper::LibreOfficeKit::isActive() ? rRenderContext.PixelToLogic(rRect)
+                                                            : rRect,
+                     &rRenderContext);
 
-    if (EditView* pEditView = GetEditView())
+    if (HasFocus())
     {
-        pEditView->Paint(comphelper::LibreOfficeKit::isActive() ? rRenderContext.PixelToLogic(rRect)
-                                                                : rRect,
-                         &rRenderContext);
-
-        if (HasFocus())
-        {
-            pEditView->ShowCursor(false);
-            vcl::Cursor* pCursor = pEditView->GetCursor();
-            pCursor->DrawToDevice(rRenderContext);
-        }
-
-        // get logic selection
-        pEditView->GetSelectionRectangles(aLogicRects);
+        pEditView->ShowCursor(false);
+        vcl::Cursor* pCursor = pEditView->GetCursor();
+        pCursor->DrawToDevice(rRenderContext);
     }
+
+    // get logic selection
+    std::vector<tools::Rectangle> aLogicRects;
+    pEditView->GetSelectionRectangles(aLogicRects);
 
     const Color aHighlight(SvtOptionsDrawinglayer::getHilightColor());
     PaintSelection(rRenderContext, rRect, aLogicRects, aHighlight);
