@@ -131,23 +131,16 @@ css::uno::Any SAL_CALL QtTransferable::getTransferData(const css::datatransfer::
     if (rFlavor.MimeType == "text/plain;charset=utf-16")
     {
         OUString aString;
-        // use existing UTF-16 encoded text/plain or convert to UTF-16 as needed
+        // use existing UTF-16 encoded MIME data if present
         if (m_pMimeData->hasFormat("text/plain;charset=utf-16"))
         {
             QByteArray aByteData(m_pMimeData->data(toQString(rFlavor.MimeType)));
             aString = OUString(reinterpret_cast<const sal_Unicode*>(aByteData.data()),
                                aByteData.size() / 2);
         }
-        else if (m_pMimeData->hasFormat("text/plain;charset=utf-8"))
-        {
-            QByteArray aByteData(m_pMimeData->data(QStringLiteral("text/plain;charset=utf-8")));
-            aString = OUString::fromUtf8(reinterpret_cast<const char*>(aByteData.data()));
-        }
         else
         {
-            QByteArray aByteData(m_pMimeData->data(QStringLiteral("text/plain")));
-            aString = OUString(reinterpret_cast<const char*>(aByteData.data()), aByteData.size(),
-                               osl_getThreadTextEncoding());
+            aString = toOUString(m_pMimeData->text());
         }
         aAny <<= aString;
     }
