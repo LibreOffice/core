@@ -77,9 +77,21 @@ extern "C" void getUnoScriptUrls(std::vector<OUString> * urls) {
     }
 }
 
+#if HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
 EM_JS(void, runUnoScriptUrl, (char16_t const * url), {
     importScripts(UTF16ToString(url));
 });
+#else
+EM_JS(void, runUnoScriptUrl, (char16_t const * url), {
+    fetch(UTF16ToString(url)).then(res => {
+        if (!res.ok) {
+            throw Error(
+                "Loading <" + res.url + "> failed with " + res.status + " " + res.statusText);
+        }
+        return res.blob();
+    }).then(blob => blob.text()).then(text => eval(text));
+});
+#endif
 
 EM_JS(void, setupMainChannel, (), {
     const orig = self.onmessage;
