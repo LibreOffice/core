@@ -41,6 +41,7 @@
 #include <salinst.hxx>
 #include <comphelper/emscriptenthreading.hxx>
 #include <comphelper/profilezone.hxx>
+#include <tools/json_writer.hxx>
 #include <schedulerimpl.hxx>
 
 namespace {
@@ -299,6 +300,49 @@ Scheduler::IdlesLockGuard::~IdlesLockGuard()
 {
     ImplSchedulerContext& rSchedCtx = ImplGetSVData()->maSchedCtx;
     osl_atomic_decrement(&rSchedCtx.mnIdlesLockCount);
+}
+
+void Scheduler::dumpAsJSON(tools::JsonWriter& rJsonWriter)
+{
+    // Similar to Scheduler::CallbackTaskScheduling(), figure out the most urgent priority, but
+    // don't actually invoke any task.
+    int nMostUrgentPriority = -1;
+    ImplSVData* pSVData = ImplGetSVData();
+    ImplSchedulerContext& rSchedCtx = pSVData->maSchedCtx;
+    if (!rSchedCtx.mbActive || rSchedCtx.mnTimerPeriod == InfiniteTimeoutMs)
+    {
+        rJsonWriter.put("mostUrgentPriority", nMostUrgentPriority);
+        return;
+    }
+
+    sal_uInt64 nTime = tools::Time::GetSystemTicks();
+    if (nTime < rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod - 1)
+    {
+        rJsonWriter.put("mostUrgentPriority", nMostUrgentPriority);
+        return;
+    }
+
+    for (int nTaskPriority = 0; nTaskPriority < PRIO_COUNT; ++nTaskPriority)
+    {
+        ImplSchedulerData* pSchedulerData = rSchedCtx.mpFirstSchedulerData[nTaskPriority];
+        while (pSchedulerData)
+        {
+            Task* pTask = pSchedulerData->mpTask;
+            if (pTask && pTask->IsActive())
+            {
+                // Const, doesn't modify the task.
+                sal_uInt64 nReadyPeriod = pTask->UpdateMinPeriod(nTime);
+                if (nReadyPeriod == ImmediateTimeoutMs)
+                {
+                    nMostUrgentPriority = nTaskPriority;
+                    rJsonWriter.put("mostUrgentPriority", nMostUrgentPriority);
+                    return;
+                }
+            }
+            pSchedulerData = pSchedulerData->mpNext;
+        }
+    }
+    rJsonWriter.put("mostUrgentPriority", nMostUrgentPriority);
 }
 
 inline void Scheduler::UpdateSystemTimer( ImplSchedulerContext &rSchedCtx,

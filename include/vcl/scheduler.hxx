@@ -23,6 +23,10 @@
 #include <vcl/dllapi.h>
 
 struct ImplSchedulerContext;
+namespace tools
+{
+class JsonWriter;
+}
 
 class VCL_DLLPUBLIC Scheduler final
 {
@@ -81,6 +85,8 @@ public:
     static void       SetDeterministicMode(bool bDeterministic);
     /// Return the current state of deterministic mode.
     static bool       GetDeterministicMode();
+
+    static void dumpAsJSON(tools::JsonWriter& rJsonWriter);
 
     // Makes sure that idles are not processed, until the guard is destroyed
     struct VCL_DLLPUBLIC IdlesLockGuard final
