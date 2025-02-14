@@ -10,6 +10,7 @@
 #pragma once
 
 #include "QtFrame.hxx"
+#include "QtInstance.hxx"
 
 #include <QtWidgets/QApplication>
 
@@ -21,7 +22,9 @@ class QtGraphicsBase
 
 public:
     QtGraphicsBase()
-        : m_fDPR(qApp ? qApp->devicePixelRatio() : 1.0)
+        : m_fDPR(qApp ? GetQtInstance().EmscriptenLightweightRunInMainThread(
+                            [] { return qApp->devicePixelRatio(); })
+                      : 1.0)
     {
     }
 
