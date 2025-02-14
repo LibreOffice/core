@@ -59,6 +59,8 @@ protected:
 
     void InitAccessible();
 
+    static void PaintSelection(vcl::RenderContext& rRenderContext, tools::Rectangle const& rRect,
+                               std::vector<tools::Rectangle> const& rLogicRects, Color const color);
     void DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
 
 public:

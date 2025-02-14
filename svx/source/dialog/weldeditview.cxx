@@ -164,6 +164,65 @@ void WeldEditView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     DoPaint(rRenderContext, rRect);
 }
 
+void WeldEditView::PaintSelection(vcl::RenderContext& rRenderContext, tools::Rectangle const& rRect,
+                                  std::vector<tools::Rectangle> const& rLogicRects,
+                                  Color const color)
+{
+    if (rLogicRects.empty())
+    {
+        return;
+    }
+
+    std::vector<basegfx::B2DRange> aLogicRanges;
+    aLogicRanges.reserve(rLogicRects.size());
+
+    tools::Long nMinX(LONG_MAX), nMaxX(0), nMinY(LONG_MAX), nMaxY(0);
+    for (const auto& aRect : rLogicRects)
+    {
+        nMinX = std::min(nMinX, aRect.Left());
+        nMinY = std::min(nMinY, aRect.Top());
+        nMaxX = std::max(nMaxX, aRect.Right());
+        nMaxY = std::max(nMaxY, aRect.Bottom());
+    }
+
+    const Size aLogicPixel(rRenderContext.PixelToLogic(Size(1, 1)));
+    for (const auto& aRect : rLogicRects)
+    {
+        // Extend each range by one pixel so multiple lines touch each
+        // other if adjacent, so the whole set is drawn with a single
+        // border around the lot. But keep the selection within the
+        // original max extents.
+        auto nTop = aRect.Top();
+        if (nTop > nMinY)
+            nTop -= aLogicPixel.Height();
+        auto nBottom = aRect.Bottom();
+        if (nBottom < nMaxY)
+            nBottom += aLogicPixel.Height();
+        auto nLeft = aRect.Left();
+        if (nLeft > nMinX)
+            nLeft -= aLogicPixel.Width();
+        auto nRight = aRect.Right();
+        if (nRight < nMaxX)
+            nRight += aLogicPixel.Width();
+
+        aLogicRanges.emplace_back(nLeft, nTop, nRight, nBottom);
+    }
+
+    // get the system's highlight color
+    sdr::overlay::OverlaySelection aCursorOverlay(sdr::overlay::OverlayType::Transparent, color,
+                                                  std::move(aLogicRanges), true);
+
+    drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+    aViewInformation2D.setViewTransformation(rRenderContext.GetViewTransformation());
+    aViewInformation2D.setViewport(vcl::unotools::b2DRectangleFromRectangle(rRect));
+
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
+        drawinglayer::processor2d::createProcessor2DFromOutputDevice(rRenderContext,
+                                                                     aViewInformation2D));
+
+    xProcessor->process(aCursorOverlay.getOverlayObjectPrimitive2DSequence());
+}
+
 void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     rRenderContext.Push(vcl::PushFlags::ALL);
@@ -188,59 +247,8 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
         pEditView->GetSelectionRectangles(aLogicRects);
     }
 
-    if (!aLogicRects.empty())
-    {
-        std::vector<basegfx::B2DRange> aLogicRanges;
-        aLogicRanges.reserve(aLogicRects.size());
-
-        tools::Long nMinX(LONG_MAX), nMaxX(0), nMinY(LONG_MAX), nMaxY(0);
-        for (const auto& aRect : aLogicRects)
-        {
-            nMinX = std::min(nMinX, aRect.Left());
-            nMinY = std::min(nMinY, aRect.Top());
-            nMaxX = std::max(nMaxX, aRect.Right());
-            nMaxY = std::max(nMaxY, aRect.Bottom());
-        }
-
-        const Size aLogicPixel(rRenderContext.PixelToLogic(Size(1, 1)));
-        for (const auto& aRect : aLogicRects)
-        {
-            // Extend each range by one pixel so multiple lines touch each
-            // other if adjacent, so the whole set is drawn with a single
-            // border around the lot. But keep the selection within the
-            // original max extents.
-            auto nTop = aRect.Top();
-            if (nTop > nMinY)
-                nTop -= aLogicPixel.Height();
-            auto nBottom = aRect.Bottom();
-            if (nBottom < nMaxY)
-                nBottom += aLogicPixel.Height();
-            auto nLeft = aRect.Left();
-            if (nLeft > nMinX)
-                nLeft -= aLogicPixel.Width();
-            auto nRight = aRect.Right();
-            if (nRight < nMaxX)
-                nRight += aLogicPixel.Width();
-
-            aLogicRanges.emplace_back(nLeft, nTop, nRight, nBottom);
-        }
-
-        // get the system's highlight color
-        const Color aHighlight(SvtOptionsDrawinglayer::getHilightColor());
-
-        sdr::overlay::OverlaySelection aCursorOverlay(sdr::overlay::OverlayType::Transparent,
-                                                      aHighlight, std::move(aLogicRanges), true);
-
-        drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-        aViewInformation2D.setViewTransformation(rRenderContext.GetViewTransformation());
-        aViewInformation2D.setViewport(vcl::unotools::b2DRectangleFromRectangle(rRect));
-
-        std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
-            drawinglayer::processor2d::createProcessor2DFromOutputDevice(rRenderContext,
-                                                                         aViewInformation2D));
-
-        xProcessor->process(aCursorOverlay.getOverlayObjectPrimitive2DSequence());
-    }
+    const Color aHighlight(SvtOptionsDrawinglayer::getHilightColor());
+    PaintSelection(rRenderContext, rRect, aLogicRects, aHighlight);
 
     rRenderContext.Pop();
 }
