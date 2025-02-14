@@ -827,6 +827,7 @@ const svl::SharedString & ScInterpreter::PopString()
                 nGlobalError = p->GetError();
                 break;
             case svString:
+            case svStringName:
                 return p->GetString();
             case svEmptyCell:
             case svMissing:
@@ -2344,6 +2345,7 @@ svl::SharedString ScInterpreter::GetString()
             return GetStringFromDouble( PopDouble() );
         }
         case svString:
+        case svStringName:
             return PopString();
         case svSingleRef:
         {

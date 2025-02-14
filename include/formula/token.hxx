@@ -50,6 +50,7 @@ enum StackVar : sal_uInt8
     svByte,
     svDouble,
     svString,
+    svStringName,
     svSingleRef,
     svDoubleRef,
     svMatrix,
@@ -93,6 +94,7 @@ inline std::string StackVarEnumToString(StackVar const e)
         case svByte:              return "Byte";
         case svDouble:            return "Double";
         case svString:            return "String";
+        case svStringName:        return "StringName";
         case svSingleRef:         return "SingleRef";
         case svDoubleRef:         return "DoubleRef";
         case svMatrix:            return "Matrix";
@@ -395,6 +397,21 @@ public:
     virtual void SetString( const svl::SharedString& rStr ) override;
     virtual bool operator==( const FormulaToken& rToken ) const override;
 };
+
+// FormulaStringNameToken
+class FORMULA_DLLPUBLIC FormulaStringNameToken final : public FormulaToken
+{
+    svl::SharedString maString;
+public:
+    FormulaStringNameToken(svl::SharedString r);
+    FormulaStringNameToken(const FormulaStringNameToken& r);
+
+    virtual FormulaToken* Clone() const override;
+    virtual const svl::SharedString& GetString() const override;
+    virtual void SetString(const svl::SharedString& rStr) override;
+    virtual bool operator==(const FormulaToken& rToken) const override;
+};
+
 
 class FORMULA_DLLPUBLIC FormulaIndexToken final : public FormulaToken
 {
