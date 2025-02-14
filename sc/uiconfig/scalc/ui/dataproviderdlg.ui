@@ -273,6 +273,20 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="hexpand">True</property>
+                            <items>
+                              <item id="0" translatable="yes" context="dataproviderdlg|transformation_list">Delete Column</item>
+                              <item id="1" translatable="yes" context="dataproviderdlg|transformation_list">Delete Row</item>
+                              <item id="2" translatable="yes" context="dataproviderdlg|transformation_list">Swap Rows</item>
+                              <item id="3" translatable="yes" context="dataproviderdlg|transformation_list">Split Column</item>
+                              <item id="4" translatable="yes" context="dataproviderdlg|transformation_list">Merge Columns</item>
+                              <item id="5" translatable="yes" context="dataproviderdlg|transformation_list">Text Transformation</item>
+                              <item id="6" translatable="yes" context="dataproviderdlg|transformation_list">Sort Columns</item>
+                              <item id="7" translatable="yes" context="dataproviderdlg|transformation_list">Aggregate Functions</item>
+                              <item id="8" translatable="yes" context="dataproviderdlg|transformation_list">Number Transformations</item>
+                              <item id="9" translatable="yes" context="dataproviderdlg|transformation_list">Replace Null Transformations</item>
+                              <item id="10" translatable="yes" context="dataproviderdlg|transformation_list">Date &amp; Time Transformations</item>
+                              <item id="11" translatable="yes" context="dataproviderdlg|transformation_list">Find Replace Transformation</item>
+                            </items>
                           </object>
                           <packing>
                             <property name="left-attach">0</property>

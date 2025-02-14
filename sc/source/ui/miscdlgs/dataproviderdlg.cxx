@@ -76,27 +76,6 @@ ScDataTransformationBaseControl::~ScDataTransformationBaseControl()
 
 namespace {
 
-struct MenuData
-{
-    const char* aTransformationName;
-    std::function<void(ScDataProviderDlg*)> maCallback;
-};
-
-MenuData aTransformationData[] = {
-    { "Delete Column", &ScDataProviderDlg::deleteColumn },
-    { "Delete Row", &ScDataProviderDlg::deleteRowTransformation},
-    { "Swap Rows", &ScDataProviderDlg::swapRowsTransformation},
-    { "Split Column", &ScDataProviderDlg::splitColumn },
-    { "Merge Columns", &ScDataProviderDlg::mergeColumns },
-    { "Text Transformation", &ScDataProviderDlg::textTransformation },
-    { "Sort Columns", &ScDataProviderDlg::sortTransformation },
-    { "Aggregate Functions", &ScDataProviderDlg::aggregateFunction},
-    { "Number Transformations", &ScDataProviderDlg::numberTransformation },
-    { "Replace Null Transformations", &ScDataProviderDlg::replaceNullTransformation },
-    { "Date & Time Transformations", &ScDataProviderDlg::dateTimeTransformation },
-    { "Find Replace Transformation", &ScDataProviderDlg::findReplaceTransformation}
-};
-
 class ScDeleteColumnTransformationControl : public ScDataTransformationBaseControl
 {
 private:
@@ -802,11 +781,6 @@ ScDataProviderDlg::ScDataProviderDlg(weld::Window* pParent, std::shared_ptr<ScDo
         mxDBRanges->append_text(rNamedDB->GetName());
     }
 
-    for (const auto& i : aTransformationData)
-    {
-         mxTransformationBox->append_text(OUString::createFromAscii(i.aTransformationName));
-    }
-
     pDBData = new ScDBData(u"data"_ustr, 0, 0, 0, mxDoc->MaxCol(), mxDoc->MaxRow());
     bool bSuccess = mxDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     SAL_WARN_IF(!bSuccess, "sc", "temporary warning");
@@ -861,16 +835,26 @@ IMPL_LINK_NOARG(ScDataProviderDlg, CancelQuitHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(ScDataProviderDlg, TransformationListHdl, weld::Button&, void)
 {
-    OUString transformation_string = mxTransformationBox->get_active_text();
-    for (auto& i: aTransformationData)
-    {
-        if (transformation_string == OUString::createFromAscii(i.aTransformationName))
-        {
-            i.maCallback(this);
-            maIdle.Start();
-            return;
-        }
-    }
+    static std::function<void(ScDataProviderDlg*)> aTransformationOp[12]{
+        &ScDataProviderDlg::deleteColumn,
+        &ScDataProviderDlg::deleteRowTransformation,
+        &ScDataProviderDlg::swapRowsTransformation,
+        &ScDataProviderDlg::splitColumn,
+        &ScDataProviderDlg::mergeColumns,
+        &ScDataProviderDlg::textTransformation,
+        &ScDataProviderDlg::sortTransformation,
+        &ScDataProviderDlg::aggregateFunction,
+        &ScDataProviderDlg::numberTransformation,
+        &ScDataProviderDlg::replaceNullTransformation,
+        &ScDataProviderDlg::dateTimeTransformation,
+        &ScDataProviderDlg::findReplaceTransformation
+    };
+    OUString rId = mxTransformationBox->get_active_id();
+    int nPos = mxTransformationBox->find_id(rId);
+
+    aTransformationOp[nPos](this);
+    maIdle.Start();
+    return;
 }
 
 IMPL_LINK_NOARG(ScDataProviderDlg, ProviderSelectHdl, weld::ComboBox&, void)
