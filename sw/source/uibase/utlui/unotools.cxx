@@ -59,6 +59,7 @@
 #include <swmodule.hxx>
 #include <TextCursorHelper.hxx>
 #include <doc.hxx>
+#include <unotextbodyhf.hxx>
 
 using namespace ::com::sun::star;
 
@@ -284,10 +285,8 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
             m_bIsInitialized = true;
         }
 
-        uno::Reference< text::XText >  xText = m_xModel->getText();
-        uno::Reference< text::XTextCursor > xTextCursor = xText->createTextCursor();
-        m_xCursor = dynamic_cast<SwXTextCursor*>(xTextCursor.get());
-        assert(bool(xTextCursor) == bool(m_xCursor) && "expect to get SwXTextCursor type here");
+        rtl::Reference< SwXBodyText > xText = m_xModel->getBodyText();
+        m_xCursor = xText->createXTextCursor();
 
         //From here, a cursor is defined, which goes through the template,
         //and overwrites the template words where it is necessary.

@@ -47,6 +47,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <frmatr.hxx>
+#include <unotextbodyhf.hxx>
 
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -109,7 +110,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
         if (SwDocShell* pShell = pShape->GetDoc()->GetDocShell())
         {
             rtl::Reference<SwXTextDocument> xTextDocument(pShell->GetBaseModel());
-            xTextContentAppend.set(xTextDocument->getText(), uno::UNO_QUERY_THROW);
+            xTextContentAppend = xTextDocument->getBodyText();
         }
     }
 

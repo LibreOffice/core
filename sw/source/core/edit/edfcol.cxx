@@ -1890,11 +1890,10 @@ void SwEditShell::ValidateAllParagraphSignatures(bool updateDontRemove)
         });
 
     rtl::Reference<SwXTextDocument> xModel = pDocShell->GetBaseModel();
-    uno::Reference<text::XText> xParent = xModel->getText();
-    uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(xParent, uno::UNO_QUERY);
-    if (!xParagraphEnumerationAccess.is())
+    rtl::Reference<SwXBodyText> xParent = xModel->getBodyText();
+    if (!xParent.is())
         return;
-    uno::Reference<container::XEnumeration> xParagraphs = xParagraphEnumerationAccess->createEnumeration();
+    rtl::Reference<SwXParagraphEnumeration> xParagraphs = xParent->createParagraphEnumeration();
     if (!xParagraphs.is())
         return;
     uno::Sequence<uno::Reference<css::rdf::XURI>> aGraphNames = SwRDFHelper::getGraphNames(pDocShell->GetBaseModel(), MetaNS);
