@@ -162,8 +162,7 @@ IMPL_LINK_NOARG(ScNavigatorDlg, ExecuteColHdl, weld::Entry&, bool)
 
 IMPL_LINK_NOARG(ScNavigatorDlg, FormatRowOutputHdl, weld::SpinButton&, void)
 {
-    OUString aStr;
-    ::ScColToAlpha(aStr, m_xEdCol->get_value() - 1);
+    OUString aStr = ::ScColToAlpha(m_xEdCol->get_value() - 1);
     m_xEdCol->set_text(aStr);
 }
 
