@@ -271,6 +271,7 @@ public:
                 token as well.
      */
     FormulaToken*           ReplaceToken( sal_uInt16 nOffset, FormulaToken*, ReplaceMode eMode );
+    FormulaToken*           ReplaceRPNToken( sal_uInt16 nOffset, FormulaToken* );
 
     /** Remove a sequence of tokens from pCode array, and pRPN array if the
         tokens are referenced there.
@@ -480,6 +481,7 @@ public:
     FormulaToken* AddToken( const FormulaToken& );
 
     FormulaToken* AddString( const svl::SharedString& rStr );
+    FormulaToken* AddStringName( const svl::SharedString& rStr );
     FormulaToken* AddDouble( double fVal );
     void          AddExternal( const sal_Unicode* pStr );
     /** Xcl import may play dirty tricks with OpCode!=ocExternal.
@@ -540,8 +542,9 @@ class FORMULA_DLLPUBLIC FormulaTokenIterator
         const FormulaTokenArray* pArr;
         short nPC;
         short nStop;
+        bool bLambda;
 
-        Item(const FormulaTokenArray* arr, short pc, short stop);
+        Item(const FormulaTokenArray* arr, short pc, short stop, bool lambda);
     };
 
     std::vector<Item> maStack;
@@ -572,6 +575,8 @@ public:
     void Jump( short nStart, short nNext, short nStop = SHRT_MAX );
     void Push( const FormulaTokenArray* );
     void Pop();
+    void FrontPop();
+    void Lambda( bool bOpt );
 
     /** Reconstruct the iterator afresh from a token array
     */
