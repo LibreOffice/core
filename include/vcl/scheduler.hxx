@@ -23,6 +23,10 @@
 #include <vcl/dllapi.h>
 
 struct ImplSchedulerContext;
+namespace tools
+{
+class JsonWriter;
+}
 
 class VCL_DLLPUBLIC Scheduler final
 {
@@ -88,6 +92,8 @@ public:
         IdlesLockGuard();
         ~IdlesLockGuard();
     };
+
+    static void dumpAsJSON(tools::JsonWriter& rJsonWriter);
 };
 
 #endif // INCLUDED_VCL_SCHEDULER_HXX
