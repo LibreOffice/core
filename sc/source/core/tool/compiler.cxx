@@ -5158,7 +5158,7 @@ ScRangeData* ScCompiler::GetRangeData( const FormulaToken& rToken ) const
 bool ScCompiler::HandleStringName()
 {
     ScTokenArray* pNew = new ScTokenArray(rDoc);
-    pNew->AddString(mpToken->GetString());
+    pNew->AddStringName(mpToken->GetString());
     PushTokenArray(pNew, true);
     return GetToken();
 }

@@ -516,9 +516,10 @@ private:
     sc::RangeMatrix GetRangeMatrix();
 
     // Get tokens at specific parameters for LET (lambda) function
-    void getTokensAtParameter( std::unique_ptr<ScTokenArray>& pTokens, short nPos );
     static void replaceNamesToResult( const std::unordered_map<OUString, formula::FormulaToken*>& rResultIndexes,
-        std::unique_ptr<ScTokenArray>& pTokens );
+        std::unique_ptr<ScTokenArray>& pTokens, short nStartPos, short nEndPos );
+    std::unique_ptr<ScTokenArray> checkPushTokens( const std::unique_ptr<ScTokenArray>& pTokens,
+        short nStartPos, short nEndPos );
 
     void ScTableOp();                                       // repeated operations
 

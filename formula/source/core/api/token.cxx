@@ -789,6 +789,24 @@ FormulaToken* FormulaTokenArray::ReplaceToken( sal_uInt16 nOffset, FormulaToken*
     }
 }
 
+FormulaToken* FormulaTokenArray::ReplaceRPNToken( sal_uInt16 nOffset, FormulaToken* t )
+{
+    if (nOffset < nRPN)
+    {
+        CheckToken(*t);
+        t->IncRef();
+        FormulaToken* p = pRPN[nOffset];
+        pRPN[nOffset] = t;
+        p->DecRef();    // may be dead now
+        return t;
+    }
+    else
+    {
+        t->DeleteIfZeroRef();
+        return nullptr;
+    }
+}
+
 sal_uInt16 FormulaTokenArray::RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount )
 {
     if (nOffset < nLen)
@@ -886,6 +904,11 @@ FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
 FormulaToken* FormulaTokenArray::AddString( const svl::SharedString& rStr )
 {
     return Add( new FormulaStringToken( rStr ) );
+}
+
+FormulaToken* FormulaTokenArray::AddStringName( const svl::SharedString& rStr )
+{
+    return Add( new FormulaStringNameToken( rStr ) );
 }
 
 FormulaToken* FormulaTokenArray::AddDouble( double fVal )
@@ -1619,13 +1642,13 @@ void FormulaTokenArray::ReinternStrings( svl::SharedStringPool& rPool )
 
 /*----------------------------------------------------------------------*/
 
-FormulaTokenIterator::Item::Item(const FormulaTokenArray* pArray, short pc, short stop) :
-    pArr(pArray), nPC(pc), nStop(stop)
+FormulaTokenIterator::Item::Item(const FormulaTokenArray* pArray, short pc, short stop, bool lambda) :
+    pArr(pArray), nPC(pc), nStop(stop), bLambda(lambda)
 {
 }
 
 FormulaTokenIterator::FormulaTokenIterator( const FormulaTokenArray& rArr )
-    : maStack{ FormulaTokenIterator::Item(&rArr, -1, SHRT_MAX) }
+    : maStack{ FormulaTokenIterator::Item(&rArr, -1, SHRT_MAX, false) }
 {
 }
 
@@ -1635,7 +1658,7 @@ FormulaTokenIterator::~FormulaTokenIterator()
 
 void FormulaTokenIterator::Push( const FormulaTokenArray* pArr )
 {
-    FormulaTokenIterator::Item item(pArr, -1, SHRT_MAX);
+    FormulaTokenIterator::Item item(pArr, -1, SHRT_MAX, false);
 
     maStack.push_back(item);
 }
@@ -1645,12 +1668,23 @@ void FormulaTokenIterator::Pop()
     maStack.pop_back();
 }
 
+void FormulaTokenIterator::FrontPop()
+{
+    maStack.erase(maStack.begin());
+}
+
+void FormulaTokenIterator::Lambda(bool bOpt)
+{
+    maStack.back().bLambda = bOpt;
+}
+
 void FormulaTokenIterator::Reset()
 {
     while( maStack.size() > 1 )
         maStack.pop_back();
 
-    maStack.back().nPC = -1;
+    if (!maStack.back().bLambda)
+        maStack.back().nPC = -1;
 }
 
 FormulaToken* FormulaTokenArrayPlainIterator::GetNextName()
@@ -1669,12 +1703,12 @@ FormulaToken* FormulaTokenArrayPlainIterator::GetNextName()
 
 FormulaToken* FormulaTokenArrayPlainIterator::GetNextStringName()
 {
-    if (mpFTA->GetArray())
+    if (mpFTA->GetCode())
     {
-        while (mnIndex < mpFTA->GetLen())
+        while (mnIndex < mpFTA->GetCodeLen())
         {
-            FormulaToken* t = mpFTA->GetArray()[mnIndex++];
-            if (t->GetType() == svString && t->GetOpCode() == ocStringName)
+            FormulaToken* t = mpFTA->GetCode()[ mnIndex++ ];
+            if (t->GetType() == svStringName)
                 return t;
         }
     }
@@ -1998,6 +2032,35 @@ void FormulaStringOpToken::SetString( const svl::SharedString& rStr )
 bool FormulaStringOpToken::operator==( const FormulaToken& r ) const
 {
     return FormulaByteToken::operator==( r ) && maString == r.GetString();
+}
+
+FormulaStringNameToken::FormulaStringNameToken( svl::SharedString r ) :
+    FormulaToken( svStringName ), maString(std::move( r ))
+{
+}
+
+FormulaStringNameToken::FormulaStringNameToken( const FormulaStringNameToken& r ) :
+    FormulaToken( r ), maString( r.maString ) {
+}
+
+FormulaToken* FormulaStringNameToken::Clone() const
+{
+    return new FormulaStringNameToken(*this);
+}
+
+const svl::SharedString& FormulaStringNameToken::GetString() const
+{
+    return maString;
+}
+
+void FormulaStringNameToken::SetString( const svl::SharedString& rStr )
+{
+    maString = rStr;
+}
+
+bool FormulaStringNameToken::operator==( const FormulaToken& r ) const
+{
+    return FormulaToken::operator==( r ) && maString == r.GetString();
 }
 
 sal_uInt16  FormulaIndexToken::GetIndex() const             { return nIndex; }
