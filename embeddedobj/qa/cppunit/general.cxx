@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_features.h>
 #include <test/unoapi_test.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>
@@ -110,6 +111,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfigPdf)
     });
     mxComponent.set(loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"));
 
+#if HAVE_FEATURE_POPPLER
     // Insert a PDF file as an embedded object.
     uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     comphelper::EmbeddedObjectContainer aContainer(xStorage);
@@ -124,6 +126,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfigPdf)
     // 2) this is non-Windows, so OLE embedding is not an option
     // so silently still loading the data into Writer would be bad.
     CPPUNIT_ASSERT(!xObject.is());
+#endif
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

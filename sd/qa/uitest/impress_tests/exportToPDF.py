@@ -72,11 +72,13 @@ class exportToPDF(UITestCase):
                         xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'BACKSPACE'}))
                         xFileName.executeAction('TYPE', mkPropertyValues({'TEXT': xFilePath}))
 
-            with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
+            # only run this if optional pdfimport service is available
+            if self.xContext.ServiceManager.createInstance("org.libreoffice.comp.documents.DrawPDFImport"):
+                with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
 
-                self.assertEqual("", document.DrawPages[0].getByIndex(0).String)
-                self.assertEqual(" ", document.DrawPages[0].getByIndex(1).String)
-                self.assertEqual(" ", document.DrawPages[0].getByIndex(2).String)
-                self.assertEqual("Hello World", document.DrawPages[0].getByIndex(3).String)
+                    self.assertEqual("", document.DrawPages[0].getByIndex(0).String)
+                    self.assertEqual(" ", document.DrawPages[0].getByIndex(1).String)
+                    self.assertEqual(" ", document.DrawPages[0].getByIndex(2).String)
+                    self.assertEqual("Hello World", document.DrawPages[0].getByIndex(3).String)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

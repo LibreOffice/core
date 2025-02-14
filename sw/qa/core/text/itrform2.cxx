@@ -128,6 +128,10 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlHeaderPDFExport)
 
     // Then make sure all the expected text is there on page 2:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
+    if (!pPdfDocument)
+        return; // no pdfium in this build
+
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage2 = pPdfDocument->openPage(1);
     int nTextCount = 0;
     for (int i = 0; i < pPage2->getObjectCount(); ++i)
