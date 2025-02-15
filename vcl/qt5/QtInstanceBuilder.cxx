@@ -74,6 +74,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"cui/ui/splitcellsdialog.ui"_ustr,
         u"cui/ui/tipofthedaydialog.ui"_ustr,
         u"cui/ui/toolbarmodedialog.ui"_ustr,
+        u"cui/ui/zoomdialog.ui"_ustr,
         u"dbaccess/ui/savedialog.ui"_ustr,
         u"dbaccess/ui/tabledesignsavemodifieddialog.ui"_ustr,
         u"modules/scalc/ui/inputstringdialog.ui"_ustr,
