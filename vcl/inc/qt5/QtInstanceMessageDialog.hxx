@@ -41,6 +41,8 @@ public:
     std::unique_ptr<weld::Button> weld_button_for_response(int nResponse) override;
     virtual int run() override;
 
+    void addStandardButtons(VclButtonsType eButtonType);
+
 private:
     void positionExtraControlsContainer();
     QPushButton* buttonForResponseCode(int nResponse);

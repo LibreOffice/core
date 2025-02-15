@@ -12,6 +12,7 @@
 
 #include <QtInstanceButton.hxx>
 
+#include <vcl/stdtext.hxx>
 #include <vcl/qt/QtUtils.hxx>
 
 #include <QtWidgets/QLabel>
@@ -182,6 +183,35 @@ void QtInstanceMessageDialog::dialogFinished(int nResult)
 
     QtInstanceDialog::dialogFinished(nResponseCode);
 }
+
+void QtInstanceMessageDialog::addStandardButtons(VclButtonsType eButtonType)
+{
+    switch (eButtonType)
+    {
+        case VclButtonsType::NONE:
+            break;
+        case VclButtonsType::Ok:
+            add_button(GetStandardText(StandardButtonType::OK), RET_OK);
+            break;
+        case VclButtonsType::Close:
+            add_button(GetStandardText(StandardButtonType::Close), RET_CLOSE);
+            break;
+        case VclButtonsType::Cancel:
+            add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+            break;
+        case VclButtonsType::YesNo:
+            add_button(GetStandardText(StandardButtonType::Yes), RET_YES);
+            add_button(GetStandardText(StandardButtonType::No), RET_NO);
+            break;
+        case VclButtonsType::OkCancel:
+            add_button(GetStandardText(StandardButtonType::OK), RET_OK);
+            add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+            break;
+        default:
+            assert(false && "Unhandled VCLButtonsType");
+    }
+}
+
 void QtInstanceMessageDialog::positionExtraControlsContainer()
 {
     assert(m_pExtraControlsContainer);

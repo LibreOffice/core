@@ -58,7 +58,6 @@
 #include <config_vclplug.h>
 #include <dndhelper.hxx>
 #include <vcl/qt/QtUtils.hxx>
-#include <vcl/stdtext.hxx>
 #include <vcl/sysdata.hxx>
 #include <sal/log.hxx>
 #include <o3tl/unreachable.hxx>
@@ -118,34 +117,6 @@ public:
     virtual void doAcquire(sal_uInt32 nLockCount) override;
     virtual sal_uInt32 doRelease(bool const bUnlockAll) override;
 };
-
-void lcl_setStandardButtons(QtInstanceMessageDialog& rMessageDialog, VclButtonsType eButtonType)
-{
-    switch (eButtonType)
-    {
-        case VclButtonsType::NONE:
-            break;
-        case VclButtonsType::Ok:
-            rMessageDialog.add_button(GetStandardText(StandardButtonType::OK), RET_OK);
-            break;
-        case VclButtonsType::Close:
-            rMessageDialog.add_button(GetStandardText(StandardButtonType::Close), RET_CLOSE);
-            break;
-        case VclButtonsType::Cancel:
-            rMessageDialog.add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
-            break;
-        case VclButtonsType::YesNo:
-            rMessageDialog.add_button(GetStandardText(StandardButtonType::Yes), RET_YES);
-            rMessageDialog.add_button(GetStandardText(StandardButtonType::No), RET_NO);
-            break;
-        case VclButtonsType::OkCancel:
-            rMessageDialog.add_button(GetStandardText(StandardButtonType::OK), RET_OK);
-            rMessageDialog.add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
-            break;
-        default:
-            assert(false && "Unhandled VCLButtonsType");
-    }
-}
 }
 
 bool QtYieldMutex::IsCurrentThread() const
@@ -973,7 +944,7 @@ weld::MessageDialog* QtInstance::CreateMessageDialog(weld::Widget* pParent,
         pMessageBox->setIcon(vclMessageTypeToQtIcon(eMessageType));
         pMessageBox->setWindowTitle(vclMessageTypeToQtTitle(eMessageType));
         QtInstanceMessageDialog* pDialog = new QtInstanceMessageDialog(pMessageBox);
-        lcl_setStandardButtons(*pDialog, eButtonsType);
+        pDialog->addStandardButtons(eButtonsType);
         return pDialog;
     }
 }
