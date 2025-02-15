@@ -17657,9 +17657,11 @@ private:
         if (m_bBlockOutput)
             return true;
         m_bFormatting = true;
-        bool bRet = signal_output();
+        std::optional<OUString> aText = signal_output();
+        if (aText.has_value())
+            set_text(aText.value());
         m_bFormatting = false;
-        return bRet;
+        return aText.has_value();
     }
 
     static gboolean signalOutput(GtkSpinButton*, gpointer widget)

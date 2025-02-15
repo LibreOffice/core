@@ -1862,13 +1862,16 @@ class VCL_DLLPUBLIC SpinButton : virtual public Entry
 protected:
     void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
 
-    bool signal_output()
+    /** If a custom output handler (which provides a formatted string for a value)
+     *  is set, the formatted string is set in the returned std::optional.
+     *  Otherwise, an empty std::optional is returned.
+     */
+    std::optional<OUString> signal_output()
     {
         if (!m_aOutputHdl.IsSet())
-            return false;
+            return {};
         const OUString sText = m_aOutputHdl.Call(get_value());
-        set_text(sText);
-        return true;
+        return sText;
     }
 
     TriState signal_input(int* result)
