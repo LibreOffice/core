@@ -56,7 +56,7 @@ void generateStripRanges(
     The actual filters parameterisation is expected to be done in the constructor. So, to
     take a simple example, if you want to make every fourth pixel a different color you
     would accept a BitmapColor parameter that specifies the color, and stores this as a
-    member variable that the Bitmap4thColorReplaceFilter would then use in it's execute()
+    member variable that the Bitmap4thColorReplaceFilter would then use in its execute()
     statement.
 
     The BitmapFilter class has a static convenience Filter function that takes a BitmapEx
