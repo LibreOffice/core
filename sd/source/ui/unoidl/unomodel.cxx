@@ -1461,7 +1461,7 @@ void GetDocStructureSlides(::tools::JsonWriter& rJsonWriter, SdXImpressDocument*
     auto it = rArguments.find(u"filter"_ustr);
     if (it != rArguments.end())
     {
-        // If filter is present but we are filtering not to slide informations
+        // If filter is present but we are filtering not to slide information
         if (!it->second.equals(u"slides"_ustr))
             return;
     }
