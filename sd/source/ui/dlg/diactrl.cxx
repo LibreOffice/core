@@ -65,8 +65,8 @@ SdPagesField::SdPagesField( vcl::Window* pParent,
     m_xWidget->set_range(1, MAX_PAGES_PER_ROW);
     m_xWidget->set_increments(1, 5);
     m_xWidget->connect_value_changed(LINK(this, SdPagesField, ModifyHdl));
-    m_xWidget->connect_output(LINK(this, SdPagesField, OutputHdl));
-    m_xWidget->connect_input(LINK(this, SdPagesField, spin_button_input));
+    m_xWidget->set_value_formatter(LINK(this, SdPagesField, OutputHdl));
+    m_xWidget->set_text_parser(LINK(this, SdPagesField, spin_button_input));
     m_xWidget->connect_key_press(LINK(this, SdPagesField, KeyInputHdl));
 
     auto width = std::max(m_xWidget->get_pixel_size(format_number(1)).Width(),

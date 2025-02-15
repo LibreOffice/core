@@ -1856,36 +1856,37 @@ class VCL_DLLPUBLIC SpinButton : virtual public Entry
     friend class ::LOKTrigger;
 
     Link<SpinButton&, void> m_aValueChangedHdl;
-    Link<sal_Int64, OUString> m_aOutputHdl;
-    Link<const OUString&, std::optional<int>> m_aInputHdl;
+    Link<sal_Int64, OUString> m_aFormatValueHdl;
+    Link<const OUString&, std::optional<int>> m_aParseTextHdl;
 
 protected:
     void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
 
-    /** If a custom output handler (which provides a formatted string for a value)
-     *  is set, the formatted string is set in the returned std::optional.
+    /** If a custom value formatter was set via <a>set_value_formatter</a>,
+     *  that one gets called to create a text representation of the value
+     *  and that one gets returned.
      *  Otherwise, an empty std::optional is returned.
      */
-    std::optional<OUString> signal_output()
+    std::optional<OUString> format_value(sal_Int64 nValue)
     {
-        if (!m_aOutputHdl.IsSet())
+        if (!m_aFormatValueHdl.IsSet())
             return {};
-        const OUString sText = m_aOutputHdl.Call(get_value());
+        const OUString sText = m_aFormatValueHdl.Call(nValue);
         return sText;
     }
 
-    /** If a custom input handler (which parses a value from the current text)
-     *  is set and the current text can be parsed, this method sets that value
+    /** If a custom text parser (which parses a value from the given text)
+     *  is set and the text can be parsed, this method sets that value
      *  in <a>result</a> and returns <a>TRISTATE_TRUE</a>.
      *  Returns <a>TRISTATE_FALSE</a> if a custom handler is set, but the text
      *  cannot be parsed.
      *  Returns <a>TRISTATE_INDET</a> if no custom input handler is set.
      */
-    TriState signal_input(int* result)
+    TriState parse_text(const OUString& rText, int* result)
     {
-        if (!m_aInputHdl.IsSet())
+        if (!m_aParseTextHdl.IsSet())
             return TRISTATE_INDET;
-        std::optional<int> aValue = m_aInputHdl.Call(get_text());
+        std::optional<int> aValue = m_aParseTextHdl.Call(rText);
         if (!aValue.has_value())
             return TRISTATE_FALSE;
 
@@ -1929,10 +1930,18 @@ public:
 
     void connect_value_changed(const Link<SpinButton&, void>& rLink) { m_aValueChangedHdl = rLink; }
 
-    void connect_output(const Link<sal_Int64, OUString>& rLink) { m_aOutputHdl = rLink; }
-    void connect_input(const Link<const OUString&, std::optional<int>>& rLink)
+    /** Set a value formatter that receives the value as a parameter and returns the
+     *  text representation to display in the SpinButton.
+     */
+    void set_value_formatter(const Link<sal_Int64, OUString>& rLink) { m_aFormatValueHdl = rLink; }
+
+    /** Set a parser that receives the text as a parameter and returns the value
+     *  parsed from the text, or an empty std::optional if a value cannot be
+     *  parsed from the text.
+     */
+    void set_text_parser(const Link<const OUString&, std::optional<int>>& rLink)
     {
-        m_aInputHdl = rLink;
+        m_aParseTextHdl = rLink;
     }
 
     sal_Int64 normalize(sal_Int64 nValue) const { return (nValue * Power10(get_digits())); }
@@ -2117,8 +2126,8 @@ public:
         , m_xSpinButton(std::move(pSpinButton))
     {
         update_width_chars();
-        m_xSpinButton->connect_output(LINK(this, MetricSpinButton, spin_button_output));
-        m_xSpinButton->connect_input(LINK(this, MetricSpinButton, spin_button_input));
+        m_xSpinButton->set_value_formatter(LINK(this, MetricSpinButton, spin_button_output));
+        m_xSpinButton->set_text_parser(LINK(this, MetricSpinButton, spin_button_input));
         m_xSpinButton->connect_value_changed(
             LINK(this, MetricSpinButton, spin_button_value_changed));
         m_xSpinButton->set_text(spin_button_output(m_xSpinButton->get_value()));

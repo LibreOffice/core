@@ -35,7 +35,7 @@ using namespace com::sun::star::uno;
 DetailsContainer::DetailsContainer(PlaceEditDialog* pDialog)
     : m_pDialog(pDialog)
 {
-    m_pDialog->m_xEDPort->connect_output(LINK(this, DetailsContainer, FormatPortHdl));
+    m_pDialog->m_xEDPort->set_value_formatter(LINK(this, DetailsContainer, FormatPortHdl));
 }
 
 //format without thousand separator

@@ -17657,7 +17657,7 @@ private:
         if (m_bBlockOutput)
             return true;
         m_bFormatting = true;
-        std::optional<OUString> aText = signal_output();
+        std::optional<OUString> aText = format_value(get_value());
         if (aText.has_value())
             set_text(aText.value());
         m_bFormatting = false;
@@ -17676,7 +17676,7 @@ private:
         GtkInstanceSpinButton* pThis = static_cast<GtkInstanceSpinButton*>(widget);
         SolarMutexGuard aGuard;
         int result;
-        TriState eHandled = pThis->signal_input(&result);
+        TriState eHandled = pThis->parse_text(pThis->get_text(), &result);
         if (eHandled == TRISTATE_INDET)
             return 0;
         if (eHandled == TRISTATE_TRUE)

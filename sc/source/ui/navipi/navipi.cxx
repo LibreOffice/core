@@ -344,8 +344,8 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, weld::Widget* pParent, SfxNaviga
     m_xEdRow->connect_activate(LINK(this, ScNavigatorDlg, ExecuteRowHdl));
 
     m_xEdCol->connect_activate(LINK(this, ScNavigatorDlg, ExecuteColHdl));
-    m_xEdCol->connect_output(LINK(this, ScNavigatorDlg, FormatRowOutputHdl));
-    m_xEdCol->connect_input(LINK(this, ScNavigatorDlg, ParseRowInputHdl));
+    m_xEdCol->set_value_formatter(LINK(this, ScNavigatorDlg, FormatRowOutputHdl));
+    m_xEdCol->set_text_parser(LINK(this, ScNavigatorDlg, ParseRowInputHdl));
 
     m_xTbxCmd1->connect_clicked(LINK(this, ScNavigatorDlg, ToolBoxSelectHdl));
     m_xTbxCmd2->connect_clicked(LINK(this, ScNavigatorDlg, ToolBoxSelectHdl));
