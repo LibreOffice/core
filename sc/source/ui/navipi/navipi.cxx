@@ -108,27 +108,24 @@ namespace
     }
 }
 
-IMPL_LINK(ScNavigatorDlg, ParseRowInputHdl, int*, result, bool)
+IMPL_LINK(ScNavigatorDlg, ParseRowInputHdl, const OUString&, rStrCol, std::optional<int>)
 {
     SCCOL nCol(0);
 
-    OUString aStrCol = m_xEdCol->get_text();
-
-    if (!aStrCol.isEmpty())
+    if (!rStrCol.isEmpty())
     {
         if (ScViewData* pData = GetViewData())
         {
             ScDocument& rDoc = pData->GetDocument();
 
-            if ( CharClass::isAsciiNumeric(aStrCol) )
-                nCol = NumToAlpha(rDoc.GetSheetLimits(), static_cast<SCCOL>(aStrCol.toInt32()));
+            if ( CharClass::isAsciiNumeric(rStrCol) )
+                nCol = NumToAlpha(rDoc.GetSheetLimits(), static_cast<SCCOL>(rStrCol.toInt32()));
             else
-                nCol = AlphaToNum( rDoc, aStrCol );
+                nCol = AlphaToNum( rDoc, rStrCol );
         }
     }
 
-    *result = nCol;
-    return true;
+    return std::optional<int>(nCol);
 }
 
 IMPL_LINK_NOARG(ScNavigatorDlg, ExecuteColHdl, weld::Entry&, bool)

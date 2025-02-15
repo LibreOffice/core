@@ -114,20 +114,20 @@ IMPL_STATIC_LINK(SdPagesField, OutputHdl, sal_Int64, nValue, OUString)
     return format_number(nValue);
 }
 
-IMPL_LINK(SdPagesField, spin_button_input, int*, result, bool)
+IMPL_LINK(SdPagesField, spin_button_input, const OUString&, rText, std::optional<int>)
 {
     const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
     double fResult(0.0);
-    bool bRet = vcl::TextToValue(m_xWidget->get_text(), fResult, 0, m_xWidget->get_digits(), rLocaleData, FieldUnit::NONE);
-    if (bRet)
-    {
-        if (fResult > SAL_MAX_INT32)
-            fResult = SAL_MAX_INT32;
-        else if (fResult < SAL_MIN_INT32)
-            fResult = SAL_MIN_INT32;
-        *result = fResult;
-    }
-    return bRet;
+    bool bRet = vcl::TextToValue(rText, fResult, 0, m_xWidget->get_digits(), rLocaleData, FieldUnit::NONE);
+    if (!bRet)
+        return {};
+
+    if (fResult > SAL_MAX_INT32)
+        fResult = SAL_MAX_INT32;
+    else if (fResult < SAL_MIN_INT32)
+        fResult = SAL_MIN_INT32;
+
+    return std::optional<int>(fResult);
 }
 
 IMPL_LINK_NOARG(SdPagesField, ModifyHdl, weld::SpinButton&, void)

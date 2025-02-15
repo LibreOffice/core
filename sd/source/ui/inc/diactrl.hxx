@@ -38,7 +38,7 @@ private:
 
     DECL_LINK(ModifyHdl, weld::SpinButton&, void);
     DECL_STATIC_LINK(SdPagesField, OutputHdl, sal_Int64, OUString);
-    DECL_LINK(spin_button_input, int* result, bool);
+    DECL_LINK(spin_button_input, const OUString&, std::optional<int>);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
 public:

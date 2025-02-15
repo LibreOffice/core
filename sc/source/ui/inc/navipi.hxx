@@ -132,7 +132,7 @@ private:
     DECL_LINK(ToolBoxDropdownClickHdl, const OUString&, void);
     DECL_LINK(MenuSelectHdl, const OUString&, void);
     DECL_STATIC_LINK(ScNavigatorDlg, FormatRowOutputHdl, sal_Int64, OUString);
-    DECL_LINK(ParseRowInputHdl, int*, bool);
+    DECL_LINK(ParseRowInputHdl, const OUString&, std::optional<int>);
 
     void    UpdateButtons();
     void    SetCurrentCell( SCCOL nCol, SCROW Row );

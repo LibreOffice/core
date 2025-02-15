@@ -1857,7 +1857,7 @@ class VCL_DLLPUBLIC SpinButton : virtual public Entry
 
     Link<SpinButton&, void> m_aValueChangedHdl;
     Link<sal_Int64, OUString> m_aOutputHdl;
-    Link<int*, bool> m_aInputHdl;
+    Link<const OUString&, std::optional<int>> m_aInputHdl;
 
 protected:
     void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
@@ -1874,11 +1874,23 @@ protected:
         return sText;
     }
 
+    /** If a custom input handler (which parses a value from the current text)
+     *  is set and the current text can be parsed, this method sets that value
+     *  in <a>result</a> and returns <a>TRISTATE_TRUE</a>.
+     *  Returns <a>TRISTATE_FALSE</a> if a custom handler is set, but the text
+     *  cannot be parsed.
+     *  Returns <a>TRISTATE_INDET</a> if no custom input handler is set.
+     */
     TriState signal_input(int* result)
     {
         if (!m_aInputHdl.IsSet())
             return TRISTATE_INDET;
-        return m_aInputHdl.Call(result) ? TRISTATE_TRUE : TRISTATE_FALSE;
+        std::optional<int> aValue = m_aInputHdl.Call(get_text());
+        if (!aValue.has_value())
+            return TRISTATE_FALSE;
+
+        *result = aValue.value();
+        return TRISTATE_TRUE;
     }
 
 public:
@@ -1918,7 +1930,10 @@ public:
     void connect_value_changed(const Link<SpinButton&, void>& rLink) { m_aValueChangedHdl = rLink; }
 
     void connect_output(const Link<sal_Int64, OUString>& rLink) { m_aOutputHdl = rLink; }
-    void connect_input(const Link<int*, bool>& rLink) { m_aInputHdl = rLink; }
+    void connect_input(const Link<const OUString&, std::optional<int>>& rLink)
+    {
+        m_aInputHdl = rLink;
+    }
 
     sal_Int64 normalize(sal_Int64 nValue) const { return (nValue * Power10(get_digits())); }
 
@@ -2088,7 +2103,7 @@ class VCL_DLLPUBLIC MetricSpinButton final
 
     DECL_LINK(spin_button_value_changed, weld::SpinButton&, void);
     DECL_LINK(spin_button_output, sal_Int64, OUString);
-    DECL_LINK(spin_button_input, int* result, bool);
+    DECL_LINK(spin_button_input, const OUString&, std::optional<int>);
 
     void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
 

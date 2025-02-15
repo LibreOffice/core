@@ -371,20 +371,20 @@ namespace weld
         return vcl::ConvertValue(nValue, 0, m_xSpinButton->get_digits(), eInUnit, eOutUnit);
     }
 
-    IMPL_LINK(MetricSpinButton, spin_button_input, int*, result, bool)
+    IMPL_LINK(MetricSpinButton, spin_button_input, const OUString&, rText, std::optional<int>)
     {
         const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
         double fResult(0.0);
-        bool bRet = vcl::TextToValue(get_text(), fResult, 0, m_xSpinButton->get_digits(), rLocaleData, m_eSrcUnit);
-        if (bRet)
-        {
-            if (fResult > SAL_MAX_INT32)
-                fResult = SAL_MAX_INT32;
-            else if (fResult < SAL_MIN_INT32)
-                fResult = SAL_MIN_INT32;
-            *result = fResult;
-        }
-        return bRet;
+        bool bRet = vcl::TextToValue(rText, fResult, 0, m_xSpinButton->get_digits(), rLocaleData, m_eSrcUnit);
+        if (!bRet)
+            return {};
+
+        if (fResult > SAL_MAX_INT32)
+            fResult = SAL_MAX_INT32;
+        else if (fResult < SAL_MIN_INT32)
+            fResult = SAL_MIN_INT32;
+
+        return std::optional<int>(fResult);
     }
 
     EntryTreeView::EntryTreeView(std::unique_ptr<Entry> xEntry, std::unique_ptr<TreeView> xTreeView)
