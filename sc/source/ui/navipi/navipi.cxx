@@ -75,38 +75,34 @@ void ScNavigatorDlg::ReleaseFocus()
 
 namespace
 {
-    SCCOL NumToAlpha(const ScSheetLimits& rSheetLimits, SCCOL nColNo, OUString& rStr)
+    SCCOL NumToAlpha(const ScSheetLimits& rSheetLimits, SCCOL nColNo)
     {
         if ( nColNo > SCNAV_MAXCOL(rSheetLimits) )
             nColNo = SCNAV_MAXCOL(rSheetLimits);
         else if ( nColNo < 1 )
             nColNo = 1;
 
-        ::ScColToAlpha( rStr, nColNo - 1);
-
         return nColNo;
     }
 
-    SCCOL AlphaToNum(const ScDocument& rDoc, OUString& rStr)
+    SCCOL AlphaToNum(const ScDocument& rDoc, const OUString& rStr)
     {
         SCCOL  nColumn = 0;
 
         if ( CharClass::isAsciiAlpha( rStr) )
         {
-            rStr = rStr.toAsciiUpperCase();
+            const OUString aUpperCaseStr = rStr.toAsciiUpperCase();
 
-            if (::AlphaToCol( rDoc, nColumn, rStr))
+            if (::AlphaToCol( rDoc, nColumn, aUpperCaseStr))
                 ++nColumn;
 
-            if ( (rStr.getLength() > SCNAV_COLLETTERS(rDoc.GetSheetLimits())) ||
+            if ( (aUpperCaseStr.getLength() > SCNAV_COLLETTERS(rDoc.GetSheetLimits())) ||
                  (nColumn > SCNAV_MAXCOL(rDoc.GetSheetLimits())) )
             {
                 nColumn = SCNAV_MAXCOL(rDoc.GetSheetLimits());
-                NumToAlpha( rDoc.GetSheetLimits(), nColumn, rStr );
+                NumToAlpha( rDoc.GetSheetLimits(), nColumn);
             }
         }
-        else
-            rStr.clear();
 
         return nColumn;
     }
@@ -125,7 +121,7 @@ IMPL_LINK(ScNavigatorDlg, ParseRowInputHdl, int*, result, bool)
             ScDocument& rDoc = pData->GetDocument();
 
             if ( CharClass::isAsciiNumeric(aStrCol) )
-                nCol = NumToAlpha(rDoc.GetSheetLimits(), static_cast<SCCOL>(aStrCol.toInt32()), aStrCol);
+                nCol = NumToAlpha(rDoc.GetSheetLimits(), static_cast<SCCOL>(aStrCol.toInt32()));
             else
                 nCol = AlphaToNum( rDoc, aStrCol );
         }
