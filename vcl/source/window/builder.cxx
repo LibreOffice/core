@@ -3581,7 +3581,7 @@ VclButtonsType BuilderBase::mapGtkToVclButtonsType(std::u16string_view sGtkButto
     else if (sGtkButtons == u"ok-cancel")
         return VclButtonsType::OkCancel;
 
-    SAL_WARN("vcl.layout", "unknown buttons type mode" << OUString(sGtkButtons));
+    assert(false && "unknown buttons type mode");
     return VclButtonsType::NONE;
 }
 
