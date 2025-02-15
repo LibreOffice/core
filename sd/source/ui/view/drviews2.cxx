@@ -975,7 +975,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                     else
                                     {
                                         lcl_LogWarning(
-                                            "FillApi SlideCmd: Not enought Slide to delete 1. '"
+                                            "FillApi SlideCmd: Not enough Slide to delete 1. '"
                                             + aItem3.first + ": " + std::to_string(nPageIdToDel));
                                     }
                                 }
