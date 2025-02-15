@@ -10,6 +10,8 @@
 #include <QtInstanceMessageDialog.hxx>
 #include <QtInstanceMessageDialog.moc>
 
+#include <QtInstanceButton.hxx>
+
 #include <vcl/qt/QtUtils.hxx>
 
 #include <QtWidgets/QLabel>

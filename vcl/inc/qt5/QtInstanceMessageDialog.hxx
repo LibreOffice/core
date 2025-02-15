@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "QtInstanceButton.hxx"
 #include "QtInstanceDialog.hxx"
 #include <QtWidgets/QMessageBox>
 
