@@ -110,18 +110,6 @@ namespace
 
         return nColumn;
     }
-
-    SCCOL NumStrToAlpha(const ScSheetLimits& rSheetLimits, OUString& rStr)
-    {
-        SCCOL  nColumn = 0;
-
-        if ( CharClass::isAsciiNumeric(rStr) )
-            nColumn = NumToAlpha( rSheetLimits, static_cast<SCCOL>(rStr.toInt32()), rStr );
-        else
-            rStr.clear();
-
-        return nColumn;
-    }
 }
 
 IMPL_LINK(ScNavigatorDlg, ParseRowInputHdl, int*, result, bool)
@@ -137,7 +125,7 @@ IMPL_LINK(ScNavigatorDlg, ParseRowInputHdl, int*, result, bool)
             ScDocument& rDoc = pData->GetDocument();
 
             if ( CharClass::isAsciiNumeric(aStrCol) )
-                nCol = NumStrToAlpha( rDoc.GetSheetLimits(), aStrCol );
+                nCol = NumToAlpha(rDoc.GetSheetLimits(), static_cast<SCCOL>(aStrCol.toInt32()), aStrCol);
             else
                 nCol = AlphaToNum( rDoc, aStrCol );
         }
