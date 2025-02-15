@@ -826,7 +826,12 @@ void QtBuilder::setMessageDialogProperties(QMessageBox& rMessageBox, stringmap& 
 {
     for (auto const & [ rKey, rValue ] : rProps)
     {
-        if (rKey == u"text")
+        if (rKey == u"buttons")
+        {
+            const VclButtonsType eButtons = BuilderBase::mapGtkToVclButtonsType(rValue);
+            QtInstanceMessageDialog::addStandardButtons(rMessageBox, eButtons);
+        }
+        else if (rKey == u"text")
         {
             rMessageBox.setText(toQString(rValue));
         }
