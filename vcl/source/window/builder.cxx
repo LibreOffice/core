@@ -3565,6 +3565,26 @@ void BuilderBase::collectAccelerator(xmlreader::XmlReader& reader, accelmap& rMa
     }
 }
 
+
+VclButtonsType BuilderBase::mapGtkToVclButtonsType(std::u16string_view sGtkButtons)
+{
+    if (sGtkButtons == u"none")
+        return VclButtonsType::NONE;
+    if (sGtkButtons == u"ok")
+        return VclButtonsType::Ok;
+    if (sGtkButtons == u"cancel")
+        return VclButtonsType::Cancel;
+    if (sGtkButtons == u"close")
+        return VclButtonsType::Close;
+    else if (sGtkButtons == u"yes-no")
+        return VclButtonsType::YesNo;
+    else if (sGtkButtons == u"ok-cancel")
+        return VclButtonsType::OkCancel;
+
+    SAL_WARN("vcl.layout", "unknown buttons type mode" << OUString(sGtkButtons));
+    return VclButtonsType::NONE;
+}
+
 bool BuilderBase::isToolbarItemClass(std::u16string_view sClass)
 {
     return sClass == u"GtkToolButton" || sClass == u"GtkMenuToolButton"

@@ -48,6 +48,7 @@ public:
     static OUString extractActionName(stringmap& rMap);
     static sal_Int32 extractActive(stringmap& rMap);
     static bool extractResizable(stringmap& rMap);
+    static VclButtonsType mapGtkToVclButtonsType(std::u16string_view sGtkButtons);
 
 protected:
     BuilderBase(std::u16string_view sUIDir, const OUString& rUIFile, bool bLegacy);

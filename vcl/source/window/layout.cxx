@@ -2649,24 +2649,7 @@ bool MessageDialog::set_property(const OUString &rKey, const OUString &rValue)
     }
     else if (rKey == "buttons")
     {
-        VclButtonsType eMode = VclButtonsType::NONE;
-        if (rValue == "none")
-            eMode = VclButtonsType::NONE;
-        else if (rValue == "ok")
-            eMode = VclButtonsType::Ok;
-        else if (rValue == "cancel")
-            eMode = VclButtonsType::Cancel;
-        else if (rValue == "close")
-            eMode = VclButtonsType::Close;
-        else if (rValue == "yes-no")
-            eMode = VclButtonsType::YesNo;
-        else if (rValue == "ok-cancel")
-            eMode = VclButtonsType::OkCancel;
-        else
-        {
-            SAL_WARN("vcl.layout", "unknown buttons type mode" << rValue);
-        }
-        m_eButtonsType = eMode;
+        m_eButtonsType = BuilderBase::mapGtkToVclButtonsType(rValue);
     }
     else
         return Dialog::set_property(rKey, rValue);
