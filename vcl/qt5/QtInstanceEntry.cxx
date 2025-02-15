@@ -40,7 +40,10 @@ OUString QtInstanceEntry::get_text() const
     return sText;
 }
 
-void QtInstanceEntry::set_width_chars(int) { assert(false && "Not implemented yet"); }
+void QtInstanceEntry::set_width_chars(int)
+{
+    SAL_WARN("vcl.qt", "QtInstanceEntry::set_width_chars not implemented yet");
+}
 
 int QtInstanceEntry::get_width_chars() const
 {
