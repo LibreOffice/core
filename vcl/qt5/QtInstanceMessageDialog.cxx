@@ -99,18 +99,7 @@ OUString QtInstanceMessageDialog::get_secondary_text() const
 
 void QtInstanceMessageDialog::add_button(const OUString& rText, int nResponse, const OUString&)
 {
-    SolarMutexGuard g;
-    QtInstance& rQtInstance = GetQtInstance();
-    if (!rQtInstance.IsMainThread())
-    {
-        rQtInstance.RunInMainThread([&] { add_button(rText, nResponse); });
-        return;
-    }
-
-    assert(m_pMessageDialog);
-    QPushButton* pButton = m_pMessageDialog->addButton(vclToQtStringWithAccelerator(rText),
-                                                       QMessageBox::ButtonRole::ActionRole);
-    pButton->setProperty(PROPERTY_VCL_RESPONSE_CODE, QVariant::fromValue(nResponse));
+    addButton(*m_pMessageDialog, rText, nResponse);
 }
 
 void QtInstanceMessageDialog::set_default_response(int nResponse)
@@ -186,30 +175,50 @@ void QtInstanceMessageDialog::dialogFinished(int nResult)
 
 void QtInstanceMessageDialog::addStandardButtons(VclButtonsType eButtonType)
 {
-    switch (eButtonType)
-    {
-        case VclButtonsType::NONE:
-            break;
-        case VclButtonsType::Ok:
-            add_button(GetStandardText(StandardButtonType::OK), RET_OK);
-            break;
-        case VclButtonsType::Close:
-            add_button(GetStandardText(StandardButtonType::Close), RET_CLOSE);
-            break;
-        case VclButtonsType::Cancel:
-            add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
-            break;
-        case VclButtonsType::YesNo:
-            add_button(GetStandardText(StandardButtonType::Yes), RET_YES);
-            add_button(GetStandardText(StandardButtonType::No), RET_NO);
-            break;
-        case VclButtonsType::OkCancel:
-            add_button(GetStandardText(StandardButtonType::OK), RET_OK);
-            add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
-            break;
-        default:
-            assert(false && "Unhandled VCLButtonsType");
-    }
+    addStandardButtons(*m_pMessageDialog, eButtonType);
+}
+
+void QtInstanceMessageDialog::addStandardButtons(QMessageBox& rMessageDialog,
+                                                 VclButtonsType eButtonType)
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] {
+        switch (eButtonType)
+        {
+            case VclButtonsType::NONE:
+                break;
+            case VclButtonsType::Ok:
+                addButton(rMessageDialog, GetStandardText(StandardButtonType::OK), RET_OK);
+                break;
+            case VclButtonsType::Close:
+                addButton(rMessageDialog, GetStandardText(StandardButtonType::Close), RET_CLOSE);
+                break;
+            case VclButtonsType::Cancel:
+                addButton(rMessageDialog, GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+                break;
+            case VclButtonsType::YesNo:
+                addButton(rMessageDialog, GetStandardText(StandardButtonType::Yes), RET_YES);
+                addButton(rMessageDialog, GetStandardText(StandardButtonType::No), RET_NO);
+                break;
+            case VclButtonsType::OkCancel:
+                addButton(rMessageDialog, GetStandardText(StandardButtonType::OK), RET_OK);
+                addButton(rMessageDialog, GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+                break;
+            default:
+                assert(false && "Unhandled VCLButtonsType");
+        }
+    });
+}
+
+void QtInstanceMessageDialog::addButton(QMessageBox& rMessageDialog, const OUString& rText,
+                                        int nResponse)
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] {
+        QPushButton* pButton = rMessageDialog.addButton(vclToQtStringWithAccelerator(rText),
+                                                        QMessageBox::ButtonRole::ActionRole);
+        pButton->setProperty(PROPERTY_VCL_RESPONSE_CODE, QVariant::fromValue(nResponse));
+    });
 }
 
 void QtInstanceMessageDialog::positionExtraControlsContainer()

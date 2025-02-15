@@ -42,8 +42,10 @@ public:
     virtual int run() override;
 
     void addStandardButtons(VclButtonsType eButtonType);
+    static void addStandardButtons(QMessageBox& rMessageDialog, VclButtonsType eButtonType);
 
 private:
+    static void addButton(QMessageBox& rMessageDialog, const OUString& rText, int nResponse);
     void positionExtraControlsContainer();
     QPushButton* buttonForResponseCode(int nResponse);
 
