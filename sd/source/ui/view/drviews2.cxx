@@ -894,7 +894,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                         else
                                         {
                                             lcl_LogWarning(
-                                                "FillApi SlideCmd: MatserSlide name not found at: '"
+                                                "FillApi SlideCmd: MasterSlide name not found at: '"
                                                 + aItem3.first + ": " + aMPageName + "'");
                                         }
                                     }

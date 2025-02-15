@@ -1497,7 +1497,7 @@ void GetDocStructureSlides(::tools::JsonWriter& rJsonWriter, SdXImpressDocument*
             // Slide Name
             rJsonWriter.put("SlideName", pPageStandard->GetName());
 
-            // MatserSlide Name
+            // MasterSlide Name
             const FmFormPage* pMasterPage
                 = dynamic_cast<const FmFormPage*>(&pPageStandard->TRG_GetMasterPage());
 
