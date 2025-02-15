@@ -1147,6 +1147,7 @@ bool xpdf_ImportFromFile(const OUString& rURL,
     try
     {
         std::unique_ptr<Buffering> pBuffering;
+        sal_uInt64 nWritten = 0;
 
         if( eErr!=osl_Process_E_None )
         {
@@ -1157,41 +1158,43 @@ bool xpdf_ImportFromFile(const OUString& rURL,
             return false;
         }
 
-        if( pIn )
+        if (!pIn || !pOut || !pErr)
         {
-            OStringBuffer aBuf(256);
-            if( bIsEncrypted )
-                aBuf.append( OUStringToOString( aPwd, RTL_TEXTENCODING_ISO_8859_1 ) );
-            aBuf.append( '\n' );
-
-            sal_uInt64 nWritten = 0;
-            osl_writeFile( pIn, aBuf.getStr(), sal_uInt64(aBuf.getLength()), &nWritten );
+            SAL_WARN("sdext.pdfimport", "Failure opening pipes");
+            bRet = false;
         }
+        OStringBuffer aBuf(256);
+        // Password lines are Pmypassword\n followed by "O\n" to try to open
+        aBuf = "P" + OUStringToOString(aPwd, RTL_TEXTENCODING_ISO_8859_1) + "\nO\n";
 
-        if (pOut)
+        osl_writeFile(pIn, aBuf.getStr(), sal_uInt64(aBuf.getLength()), &nWritten);
+
+        // Check for a header saying if the child managed to open the document
+        OStringBuffer aHeaderLine;
+        pBuffering = std::unique_ptr<Buffering>(new Buffering(pOut));
+        oslFileError eFileErr = pBuffering->readLine(aHeaderLine);
+        if (osl_File_E_None == eFileErr)
         {
-            // Check for a header saying if the child managed to open the document
-            OStringBuffer aHeaderLine;
-            pBuffering = std::unique_ptr<Buffering>(new Buffering(pOut));
-            oslFileError eFileErr = pBuffering->readLine(aHeaderLine);
-            if (osl_File_E_None == eFileErr)
+            auto aHeaderString = aHeaderLine.toString();
+            SAL_INFO("sdext.pdfimport", "Header line:" << aHeaderString);
+            if (!aHeaderString.startsWith("#OPEN"))
             {
-                SAL_INFO("sdext.pdfimport", "Header line:" << aHeaderLine.toString());
-            }
-            else
-            {
-                SAL_WARN("sdext.pdfimport", "Unable to read header line; " << eFileErr);
+                SAL_WARN("sdext.pdfimport", "Error from parser: " << aHeaderString);
                 bRet = false;
             }
         }
         else
         {
-            SAL_WARN("sdext.pdfimport", "No output file");
+            SAL_WARN("sdext.pdfimport", "Unable to read header line; " << eFileErr);
             bRet = false;
         }
 
         if (bRet && pOut && pErr)
         {
+            // Start the rendering by sending G command
+            osl_writeFile(pIn, "G\n", 2, &nWritten);
+            SAL_INFO("sdext.pdfimport", "Sent Go command: " << nWritten);
+
             // read results of PDF parser. One line - one call to
             // OutputDev. stderr is used for alternate streams, like
             // embedded fonts and bitmaps

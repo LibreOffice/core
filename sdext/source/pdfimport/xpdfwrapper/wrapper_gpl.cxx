@@ -137,37 +137,6 @@ int main(int argc, char **argv)
     globalParams->setupBaseFonts(nullptr);
 #endif
 
-    // try to read a possible open password from stdin
-    char aPwBuf[129];
-    aPwBuf[128] = 0;
-    if( ! fgets( aPwBuf, sizeof(aPwBuf)-1, stdin ) )
-        aPwBuf[0] = 0; // mark as empty
-    else
-    {
-        for( size_t i = 0; i < sizeof(aPwBuf); i++ )
-        {
-            if( aPwBuf[i] == '\n' )
-            {
-                aPwBuf[i] = 0;
-                break;
-            }
-        }
-    }
-
-    // PDFDoc takes over ownership for all strings below
-    GooString* pFileName = new GooString(myStringToStdString(argv[1]));
-
-    // check for password string(s)
-    GooString* pOwnerPasswordStr( aPwBuf[0] != 0
-                                 ? new GooString( aPwBuf )
-                                 : (ownerPassword
-                                    ? new GooString(myStringToStdString(ownerPassword))
-                                    : nullptr ) );
-    GooString* pUserPasswordStr( aPwBuf[0] != 0
-                                ? new GooString( aPwBuf )
-                                : (userPassword
-                                  ? new GooString(myStringToStdString(userPassword))
-                                  : nullptr ) );
     if (outputFile)
 #if defined _WIN32
         g_binary_out = _wfopen(outputFile, L"wb");
@@ -181,38 +150,115 @@ int main(int argc, char **argv)
     _setmode( _fileno( g_binary_out ), _O_BINARY );
 #endif
 
+    // We receive commands from stdin, these can include a password.
+    bool bFinishedInput = false;
+    char *aPwBuf = strdup("");
+    std::unique_ptr<PDFDoc> pDocUnique;
+
+    do
+    {
+        // try to read an input line
+        char aInputBuf[129];
+        aInputBuf[128] = 0;
+        if (!fgets(aInputBuf, sizeof(aInputBuf)-1, stdin))
+        {
+            printf("#ERROR:-1:Empty Input\n");
+            fflush(stdout);
+            return EXIT_FAILURE;
+        }
+        else
+        {
+            for (size_t i = 0; i < sizeof(aInputBuf); i++)
+            {
+                if (aInputBuf[i] == '\n')
+                {
+                    aInputBuf[i] = 0;
+                    break;
+                }
+            }
+        }
+
+        switch (aInputBuf[0])
+        {
+            case 'E': // Exit
+                // We treat this as an error, we normally
+                // expect password input and then processing
+                printf("#ERROR:-1:Exit on request\n");
+                fflush(stdout);
+                return EXIT_FAILURE;
+
+            case 'G': // Go! - actually render
+                if (pDocUnique == nullptr || !pDocUnique->isOk())
+                {
+                    printf("#ERROR:-1:PDF is not open\n");
+                    fflush(stdout);
+                    return EXIT_FAILURE;
+                }
+                bFinishedInput = true;
+                break;
+
+            case 'O': // Open
+                // Try opening the document with any password we have
+                {
+                    // PDFDoc takes over ownership for all strings below
+                    GooString* pFileName = new GooString(myStringToStdString(argv[1]));
+
+                    // check for password string(s)
+                    GooString* pOwnerPasswordStr(aPwBuf[0] != 0
+                                                 ? new GooString(aPwBuf)
+                                                 : (ownerPassword
+                                                    ? new GooString(myStringToStdString(ownerPassword))
+                                                    : nullptr));
+                    GooString* pUserPasswordStr(aPwBuf[0] != 0
+                                                ? new GooString(aPwBuf)
+                                                : (userPassword
+                                                  ? new GooString(myStringToStdString(userPassword))
+                                                  : nullptr));
 #if POPPLER_CHECK_VERSION(22, 6, 0)
-    PDFDoc aDoc( std::make_unique<GooString>(pFileName),
-                 std::optional<GooString>(pOwnerPasswordStr),
-                 std::optional<GooString>(pUserPasswordStr) );
+                    pDocUnique = std::unique_ptr<PDFDoc>(
+                        new PDFDoc(std::make_unique<GooString>(pFileName),
+                                   std::optional<GooString>(pOwnerPasswordStr),
+                                   std::optional<GooString>(pUserPasswordStr)));
 #else
-    PDFDoc aDoc( pFileName,
-                 pOwnerPasswordStr,
-                 pUserPasswordStr );
+                    pDocUnique = std::unique_ptr<PDFDoc>(
+                        new PDFDoc(pFileName, pOwnerPasswordStr, pUserPasswordStr));
 #endif
 
-    if (aDoc.isOk())
-    {
-        printf("#OPEN\n");
-        fflush(stdout);
-    }
-    else
-    {
-        int err = aDoc.getErrorCode();
-        // e.g. #ERROR:1:   (code for OpenFile)
-        //      #ERROR:2:ENCRYPTED   For ones we need to detect, use text
-        printf( "#ERROR:%d:%s\n", err, err==errEncrypted ? "ENCRYPTED" : "");
-        fflush(stdout);
-        return err;
-    }
+                    if (pDocUnique->isOk())
+                    {
+                        printf("#OPEN\n");
+                    }
+                    else
+                    {
+                        int err = pDocUnique->getErrorCode();
+                        // e.g. #ERROR:1:   (code for OpenFile)
+                        //      #ERROR:2:ENCRYPTED   For ones we need to detect, use text
+                        printf("#ERROR:%d:%s\n", err, err==errEncrypted ? "ENCRYPTED" : "");
+                    }
+                    fflush(stdout);
+                }
+                break;
 
-    pdfi::PDFOutDev aOutDev(&aDoc);
+            case 'P': // Password
+                free(aPwBuf);
+                aPwBuf = strdup(aInputBuf + 1);
+                break;
+
+            default:
+                printf("#ERROR:-1:Unknown command %d\n", aInputBuf[0]);
+                fflush(stdout);
+                return EXIT_FAILURE;
+        }
+    } while (!bFinishedInput);
+
+    PDFDoc* pDoc = pDocUnique.release();
+    pdfi::PDFOutDev aOutDev(pDoc);
     if (options == TO_STRING_VIEW("SkipImages")) {
             aOutDev.setSkipImages(true);
     }
 
     // tell the receiver early - needed for proper progress calculation
-    const int nPages = aDoc.getNumPages();
+    const int nPages = pDoc->getNumPages();
     pdfi::PDFOutDev::setPageNum(nPages);
 
     // virtual resolution of the PDF OutputDev in dpi
@@ -221,12 +267,12 @@ int main(int argc, char **argv)
     // do the conversion
     for (int i = 1; i <= nPages; ++i)
     {
-        aDoc.displayPage(&aOutDev,
+        pDoc->displayPage(&aOutDev,
                 i,
                 PDFI_OUTDEV_RESOLUTION,
                 PDFI_OUTDEV_RESOLUTION,
                 0, true, true, true);
-        aDoc.processLinks(&aOutDev, i);
+        pDoc->processLinks(&aOutDev, i);
     }
 
     return 0;
