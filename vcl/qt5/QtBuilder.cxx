@@ -31,7 +31,6 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QListView>
 #include <QtWidgets/QLayout>
-#include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QProgressBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
@@ -102,8 +101,6 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
 {
     QObject* pCurrentChild = makeObject(pParent, rClass, sType, rID, rProps);
 
-    setProperties(pCurrentChild, rProps);
-
     rProps.clear();
 
     return pCurrentChild;
@@ -131,7 +128,9 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
 
     if (sName == u"GtkMessageDialog")
     {
-        pObject = new QMessageBox(pParentWidget);
+        QMessageBox* pMessageBox = new QMessageBox(pParentWidget);
+        setMessageDialogProperties(*pMessageBox, rMap);
+        pObject = pMessageBox;
     }
     else if (sName == u"GtkBox")
     {
@@ -201,7 +200,9 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     }
     else if (sName == u"GtkCheckButton")
     {
-        pObject = new QCheckBox(pParentWidget);
+        QCheckBox* pCheckBox = new QCheckBox(pParentWidget);
+        setCheckButtonProperties(*pCheckBox, rMap);
+        pObject = pCheckBox;
     }
     else if (sName == u"GtkComboBox" || sName == u"GtkComboBoxText")
     {
@@ -211,7 +212,9 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     }
     else if (sName == u"GtkDialog")
     {
-        pObject = new QDialog(pParentWidget);
+        QDialog* pDialog = new QDialog(pParentWidget);
+        setDialogProperties(*pDialog, rMap);
+        pObject = pDialog;
     }
     else if (sName == u"GtkDrawingArea")
     {
@@ -300,8 +303,11 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     }
     else if (sName == u"GtkRadioButton")
     {
-        pObject = new QRadioButton(pParentWidget);
+        QRadioButton* pRadioButton = new QRadioButton(pParentWidget);
+        // apply GtkCheckButton properties because GtkRadioButton subclasses GtkCheckButton in GTK 3
+        setCheckButtonProperties(*pRadioButton, rMap);
         extractRadioButtonGroup(sID, rMap);
+        pObject = pRadioButton;
     }
     else if (sName == u"GtkScrolledWindow")
     {
@@ -328,7 +334,9 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     }
     else if (sName == u"GtkTextView")
     {
-        pObject = new QPlainTextEdit(pParentWidget);
+        QPlainTextEdit* pTextEdit = new QPlainTextEdit(pParentWidget);
+        setTextViewProperties(*pTextEdit, rMap);
+        pObject = pTextEdit;
     }
     else if (sName == u"GtkToggleButton")
     {
@@ -734,70 +742,6 @@ void QtBuilder::replaceWidget(QWidget* pOldWidget, QWidget* pNewWidget)
     deleteObject(pOldWidget);
 }
 
-void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
-{
-    if (QMessageBox* pMessageBox = qobject_cast<QMessageBox*>(pObject))
-    {
-        for (auto const & [ rKey, rValue ] : rProps)
-        {
-            if (rKey == u"text")
-            {
-                pMessageBox->setText(toQString(rValue));
-            }
-            else if (rKey == u"title")
-            {
-                pMessageBox->setWindowTitle(toQString(rValue));
-            }
-            else if (rKey == u"secondary-text")
-            {
-                pMessageBox->setInformativeText(toQString(rValue));
-            }
-            else if (rKey == u"message-type")
-            {
-                if (rValue == u"error")
-                    pMessageBox->setIcon(QMessageBox::Critical);
-                else if (rValue == u"info")
-                    pMessageBox->setIcon(QMessageBox::Information);
-                else if (rValue == u"question")
-                    pMessageBox->setIcon(QMessageBox::Question);
-                else if (rValue == u"warning")
-                    pMessageBox->setIcon(QMessageBox::Warning);
-                else
-                    assert(false && "Unhandled message-type");
-            }
-        }
-    }
-    else if (qobject_cast<QCheckBox*>(pObject) || qobject_cast<QRadioButton*>(pObject))
-    {
-        QAbstractButton* pButton = static_cast<QAbstractButton*>(pObject);
-        for (auto const & [ rKey, rValue ] : rProps)
-        {
-            if (rKey == u"active")
-                pButton->setChecked(toBool(rValue));
-            else if (rKey == u"label")
-                pButton->setText(convertAccelerator(rValue));
-        }
-    }
-    else if (QDialog* pDialog = qobject_cast<QDialog*>(pObject))
-    {
-        for (auto const & [ rKey, rValue ] : rProps)
-        {
-            if (rKey == u"modal")
-                pDialog->setModal(toBool(rValue));
-            else if (rKey == u"title")
-                pDialog->setWindowTitle(toQString(rValue));
-        }
-    }
-    else if (QPlainTextEdit* pTextEdit = qobject_cast<QPlainTextEdit*>(pObject))
-    {
-        for (auto const & [ rKey, rValue ] : rProps)
-        {
-            if (rKey == u"accepts-tab")
-                pTextEdit->setTabChangesFocus(!toBool(rValue));
-        }
-    }
-}
-
 void QtBuilder::setButtonProperties(QAbstractButton& rButton, stringmap& rProps)
 {
     for (auto const & [ rKey, rValue ] : rProps)
@@ -818,6 +762,28 @@ void QtBuilder::setButtonProperties(QAbstractButton& rButton, stringmap& rProps)
         {
             rButton.setText(convertAccelerator(rValue));
         }
+    }
+}
+
+void QtBuilder::setCheckButtonProperties(QAbstractButton& rButton, stringmap& rProps)
+{
+    for (auto const & [ rKey, rValue ] : rProps)
+    {
+        if (rKey == u"active")
+            rButton.setChecked(toBool(rValue));
+        else if (rKey == u"label")
+            rButton.setText(convertAccelerator(rValue));
+    }
+}
+
+void QtBuilder::setDialogProperties(QDialog& rDialog, stringmap& rProps)
+{
+    for (auto const & [ rKey, rValue ] : rProps)
+    {
+        if (rKey == u"modal")
+            rDialog.setModal(toBool(rValue));
+        else if (rKey == u"title")
+            rDialog.setWindowTitle(toQString(rValue));
     }
 }
 
@@ -854,6 +820,38 @@ void QtBuilder::setMenuButtonProperties(QToolButton& rButton, stringmap& rProps)
     }
 
     setButtonProperties(rButton, rProps);
+}
+
+void QtBuilder::setMessageDialogProperties(QMessageBox& rMessageBox, stringmap& rProps)
+{
+    for (auto const & [ rKey, rValue ] : rProps)
+    {
+        if (rKey == u"text")
+        {
+            rMessageBox.setText(toQString(rValue));
+        }
+        else if (rKey == u"title")
+        {
+            rMessageBox.setWindowTitle(toQString(rValue));
+        }
+        else if (rKey == u"secondary-text")
+        {
+            rMessageBox.setInformativeText(toQString(rValue));
+        }
+        else if (rKey == u"message-type")
+        {
+            if (rValue == u"error")
+                rMessageBox.setIcon(QMessageBox::Critical);
+            else if (rValue == u"info")
+                rMessageBox.setIcon(QMessageBox::Information);
+            else if (rValue == u"question")
+                rMessageBox.setIcon(QMessageBox::Question);
+            else if (rValue == u"warning")
+                rMessageBox.setIcon(QMessageBox::Warning);
+            else
+                assert(false && "Unhandled message-type");
+        }
+    }
 }
 
 void QtBuilder::setScaleProperties(QSlider& rSlider, stringmap& rProps)
@@ -904,6 +902,15 @@ void QtBuilder::setSpinButtonProperties(QDoubleSpinBox& rSpinBox, stringmap& rPr
             else if (rKey == "step-increment")
                 rSpinBox.setSingleStep(rValue.toDouble());
         }
+    }
+}
+
+void QtBuilder::setTextViewProperties(QPlainTextEdit& rTextEdit, stringmap& rProps)
+{
+    for (auto const & [ rKey, rValue ] : rProps)
+    {
+        if (rKey == u"accepts-tab")
+            rTextEdit.setTabChangesFocus(!toBool(rValue));
     }
 }
 
