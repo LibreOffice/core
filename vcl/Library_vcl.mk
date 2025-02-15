@@ -245,7 +245,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/imp_listbox \
     vcl/source/control/listbox \
     vcl/source/control/managedmenubutton \
-    vcl/source/control/menubtn \
+    vcl/source/control/MenuButton \
     vcl/source/control/NotebookbarPopup \
     vcl/source/control/PriorityHBox \
     vcl/source/control/PriorityMergedHBox \

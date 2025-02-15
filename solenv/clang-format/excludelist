@@ -6246,7 +6246,7 @@ include/vcl/toolkit/imgctrl.hxx
 include/vcl/toolkit/ivctrl.hxx
 include/vcl/toolkit/longcurr.hxx
 include/vcl/toolkit/lstbox.hxx
-include/vcl/toolkit/menubtn.hxx
+include/vcl/toolkit/MenuButton.hxx
 include/vcl/toolkit/morebtn.hxx
 include/vcl/toolkit/prgsbar.hxx
 include/vcl/toolkit/roadmap.hxx
@@ -14559,6 +14559,7 @@ vcl/source/control/calendar.cxx
 vcl/source/control/combobox.cxx
 vcl/source/control/ctrl.cxx
 vcl/source/control/ContextVBox.cxx
+vcl/source/control/MenuButton.cxx
 vcl/source/control/edit.cxx
 vcl/source/control/field.cxx
 vcl/source/control/field2.cxx
@@ -14575,7 +14576,6 @@ vcl/source/control/ivctrl.cxx
 vcl/source/control/listbox.cxx
 vcl/source/control/longcurr.cxx
 vcl/source/control/managedmenubutton.cxx
-vcl/source/control/menubtn.cxx
 vcl/source/control/notebookbar.cxx
 vcl/source/control/prgsbar.cxx
 vcl/source/control/quickselectionengine.cxx

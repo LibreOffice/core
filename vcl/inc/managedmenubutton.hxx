@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include <vcl/toolkit/menubtn.hxx>
+#include <vcl/toolkit/MenuButton.hxx>
+
 #include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 

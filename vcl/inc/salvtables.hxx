@@ -21,7 +21,7 @@
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/toolkit/lstbox.hxx>
-#include <vcl/toolkit/menubtn.hxx>
+#include <vcl/toolkit/MenuButton.hxx>
 #include <vcl/toolkit/prgsbar.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/tabctrl.hxx>

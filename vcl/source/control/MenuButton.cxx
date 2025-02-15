@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -22,7 +22,7 @@
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/toolkit/menubtn.hxx>
+#include <vcl/toolkit/MenuButton.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/logger.hxx>
@@ -312,4 +312,4 @@ bool MenuToggleButton::GetActive() const
     return mbIsActive;
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

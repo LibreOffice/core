@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/toolkit/menubtn.hxx>
+#include <vcl/toolkit/MenuButton.hxx>
 
 class MenuToggleButton final : public MenuButton
 {
