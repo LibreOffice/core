@@ -33,6 +33,11 @@ QtInstanceSpinButton::QtInstanceSpinButton(QtDoubleSpinBox* pSpinBox)
     disconnect(pSpinBox->lineEdit(), &QLineEdit::textChanged, this, nullptr);
     connect(m_pSpinBox, &QDoubleSpinBox::textChanged, this,
             &QtInstanceSpinButton::handleTextChanged);
+
+    // set functions to convert between value and formatted text
+    m_pSpinBox->setFormatValueFunction([this](int nValue) { return format_value(nValue); });
+    m_pSpinBox->setParseTextFunction(
+        [this](const OUString& rText, int* pResult) { return parse_text(rText, pResult); });
 }
 
 QWidget* QtInstanceSpinButton::getQWidget() const { return m_pSpinBox; }

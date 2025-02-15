@@ -9,6 +9,11 @@
 
 #include <QtDoubleSpinBox.hxx>
 #include <QtDoubleSpinBox.moc>
+#include <QtInstanceSpinButton.hxx>
+
+#include <QtTools.hxx>
+
+#include <vcl/qt/QtUtils.hxx>
 
 QtDoubleSpinBox::QtDoubleSpinBox(QWidget* pParent)
     : QDoubleSpinBox(pParent)
@@ -16,5 +21,30 @@ QtDoubleSpinBox::QtDoubleSpinBox(QWidget* pParent)
 }
 
 QLineEdit* QtDoubleSpinBox::lineEdit() const { return QDoubleSpinBox::lineEdit(); }
+
+QString QtDoubleSpinBox::textFromValue(double fValue) const
+{
+    if (m_aFormatValueFunction)
+    {
+        std::optional<OUString> aText = m_aFormatValueFunction(std::round(fValue));
+        if (aText.has_value())
+            return toQString(aText.value());
+    }
+
+    return QDoubleSpinBox::textFromValue(fValue);
+}
+
+double QtDoubleSpinBox::valueFromText(const QString& rText) const
+{
+    if (m_aParseTextFunction)
+    {
+        int nValue = 0;
+        TriState eState = m_aParseTextFunction(toOUString(rText), &nValue);
+        if (eState == TRISTATE_TRUE)
+            return nValue;
+    }
+
+    return QDoubleSpinBox::valueFromText(rText);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
