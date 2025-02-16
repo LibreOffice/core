@@ -696,8 +696,8 @@ static void lpgetSysQueueTokenHandler(
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     std::unordered_set< OUString > aUniqueSet;
     std::unordered_set< OUString > aOnlySet;
-    aUniqueSet.insert( OUString( "_all" ) );
-    aUniqueSet.insert( OUString( "_default" ) );
+    aUniqueSet.insert( u"_all"_ustr );
+    aUniqueSet.insert( u"_default"_ustr );
 
     // the eventual "all" attribute of the "_all" queue tells us, which
     // printers are to be used for this user at all
