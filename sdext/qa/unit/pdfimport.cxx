@@ -483,6 +483,22 @@ namespace
 #endif
         }
 
+        void testTdf55425_decrypt()
+        {
+#if HAVE_FEATURE_POPPLER
+            // This tries to load an encrypted file
+            // It was created with LO set to PDF2.0 and with a password set
+            auto pSink = std::make_shared<TestSink>();
+            CPPUNIT_ASSERT(
+                pdfi::xpdf_ImportFromFile(
+                    m_directories.getURLFromSrc(u"/sdext/qa/unit/data/tdf55425_crypt-pdf20-passa.pdf"),
+                    pSink,
+                    uno::Reference< task::XInteractionHandler >(),
+                    u"a"_ustr, // Critically secure test password
+                    getComponentContext(), u""_ustr));
+#endif
+        }
+
         void testOdfDrawExport()
         {
 #if HAVE_FEATURE_POPPLER
@@ -901,6 +917,7 @@ namespace
         CPPUNIT_TEST(testTdf78427_FontWeight_MyraidProSemibold);
         CPPUNIT_TEST(testTdf143959_nameFromFontFile);
         CPPUNIT_TEST(testTdf104597_textrun);
+        CPPUNIT_TEST(testTdf55425_decrypt);
         CPPUNIT_TEST(testSpaces);
         CPPUNIT_TEST_SUITE_END();
     };
