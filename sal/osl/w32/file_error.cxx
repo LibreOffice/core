@@ -26,10 +26,8 @@ namespace {
 struct osl_file_error_entry
 {
     unsigned long oscode; /* OS return value */
-    int errnocode;        /* oslFileError code */
+    oslFileError errnocode; /* oslFileError code */
 };
-
-}
 
 const struct osl_file_error_entry errtable[] = {
   {  ERROR_SUCCESS,                osl_File_E_None     },  /* 0 */
@@ -54,6 +52,7 @@ const struct osl_file_error_entry errtable[] = {
   {  ERROR_SHARING_VIOLATION,      osl_File_E_ACCES    },  /* 32 */
   {  ERROR_LOCK_VIOLATION,         osl_File_E_ACCES    },  /* 33 */
   {  ERROR_BAD_NETPATH,            osl_File_E_NOENT    },  /* 53 */
+  {  ERROR_UNEXP_NET_ERR,          osl_File_E_NETWORK  },  /* 59 */
   {  ERROR_NETWORK_ACCESS_DENIED,  osl_File_E_ACCES    },  /* 65 */
   {  ERROR_BAD_NET_NAME,           osl_File_E_NOENT    },  /* 67 */
   {  ERROR_FILE_EXISTS,            osl_File_E_EXIST    },  /* 80 */
@@ -66,7 +65,6 @@ const struct osl_file_error_entry errtable[] = {
   {  ERROR_DISK_FULL,              osl_File_E_NOSPC    },  /* 112 */
   {  ERROR_INVALID_TARGET_HANDLE,  osl_File_E_BADF     },  /* 114 */
   {  ERROR_INVALID_NAME,           osl_File_E_NOENT    },  /* 123 */
-  {  ERROR_INVALID_HANDLE,         osl_File_E_INVAL    },  /* 124 */
   {  ERROR_WAIT_NO_CHILDREN,       osl_File_E_CHILD    },  /* 128 */
   {  ERROR_CHILD_NOT_COMPLETE,     osl_File_E_CHILD    },  /* 129 */
   {  ERROR_DIRECT_ACCESS_HANDLE,   osl_File_E_BADF     },  /* 130 */
@@ -84,8 +82,9 @@ const struct osl_file_error_entry errtable[] = {
   {  ERROR_DIRECTORY,              osl_File_E_NOTDIR   },  /* 267 */
   {  ERROR_NOT_ENOUGH_QUOTA,       osl_File_E_NOMEM    },  /* 1816 */
   {  ERROR_CANT_ACCESS_FILE,       osl_File_E_ACCES    },  /* 1920 */
-  {  ERROR_UNEXP_NET_ERR,          osl_File_E_NETWORK  }   /* 59 */
 };
+
+}
 
 /* The following two constants must be the minimum and maximum
    values in the (contiguous) range of osl_File_E_xec Failure errors.
@@ -101,13 +100,10 @@ const struct osl_file_error_entry errtable[] = {
 
 oslFileError oslTranslateFileError (/*DWORD*/ unsigned long dwError)
 {
-    static const int n = SAL_N_ELEMENTS(errtable);
-
-    int i;
-    for (i = 0; i < n; ++i )
+    for (auto& mapping : errtable)
     {
-        if (dwError == errtable[i].oscode)
-            return static_cast<oslFileError>(errtable[i].errnocode);
+        if (dwError == mapping.oscode)
+            return mapping.errnocode;
     }
 
     /* The error code wasn't in the table.  We check for a range of
