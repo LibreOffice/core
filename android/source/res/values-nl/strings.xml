@@ -91,7 +91,7 @@
     <string name="unable_to_save">Kan bestand niet opslaan</string>
     <string name="error">Fout</string>
     <string name="enter_part_name">Voer de sectienaam in</string>
-    <string name="bmp_null">Bmp is null!</string>
+    <string name="bmp_null">Bmp is ongeldig</string>
     <string name="sheet">Blad</string>
     <string name="slide">Dia</string>
     <string name="part">Sectie</string>
