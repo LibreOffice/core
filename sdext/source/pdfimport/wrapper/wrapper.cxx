@@ -20,7 +20,6 @@
 #include <config_folders.h>
 
 #include <contentsink.hxx>
-#include <pdfparse.hxx>
 #include <pdfihelper.hxx>
 #include <wrapper.hxx>
 
@@ -943,69 +942,6 @@ void Parser::parseLine( std::string_view aLine )
 
 } // namespace
 
-static bool checkEncryption( std::u16string_view                           i_rPath,
-                             const uno::Reference< task::XInteractionHandler >& i_xIHdl,
-                             OUString&                                     io_rPwd,
-                             bool&                                              o_rIsEncrypted,
-                             const OUString&                               i_rDocName
-                             )
-{
-    bool bSuccess = false;
-
-    std::unique_ptr<pdfparse::PDFEntry> pEntry(pdfparse::PDFReader::read(i_rPath));
-    if( pEntry )
-    {
-        pdfparse::PDFFile* pPDFFile = dynamic_cast<pdfparse::PDFFile*>(pEntry.get());
-        if( pPDFFile )
-        {
-            o_rIsEncrypted = pPDFFile->isEncrypted();
-            if( o_rIsEncrypted )
-            {
-                if( pPDFFile->usesSupportedEncryptionFormat() )
-                {
-                    bool bAuthenticated = false;
-                    if( !io_rPwd.isEmpty() )
-                    {
-                        OString aIsoPwd = OUStringToOString( io_rPwd,
-                                                                       RTL_TEXTENCODING_ISO_8859_1 );
-                        bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd );
-                    }
-                    if( bAuthenticated )
-                        bSuccess = true;
-                    else
-                    {
-                        if( i_xIHdl.is() )
-                        {
-                            bool bEntered = false;
-                            do
-                            {
-                                bEntered = getPassword( i_xIHdl, io_rPwd, ! bEntered, i_rDocName );
-                                OString aIsoPwd = OUStringToOString( io_rPwd,
-                                                                               RTL_TEXTENCODING_ISO_8859_1 );
-                                bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd );
-                            } while( bEntered && ! bAuthenticated );
-                        }
-
-                        bSuccess = bAuthenticated;
-                    }
-                }
-                else if( i_xIHdl.is() )
-                {
-                    reportUnsupportedEncryptionFormat( i_xIHdl );
-                        //TODO: this should either be handled further down the
-                        // call stack, or else information that this has already
-                        // been handled should be passed down the call stack, so
-                        // that SfxBaseModel::load does not show an additional
-                        // "General Error" message box
-                }
-            }
-            else
-                bSuccess = true;
-        }
-    }
-    return bSuccess;
-}
-
 namespace {
 
 class Buffering
@@ -1105,14 +1041,6 @@ bool xpdf_ImportFromFile(const OUString& rURL,
 
     // check for encryption, if necessary get password
     OUString aPwd( rPwd );
-    bool bIsEncrypted = false;
-    if( !checkEncryption( aSysUPath, xIHdl, aPwd, bIsEncrypted, aDocName ) )
-    {
-        SAL_INFO(
-            "sdext.pdfimport",
-            "checkEncryption(" << aSysUPath << ") failed");
-        return false;
-    }
 
     // Determine xpdfimport executable URL:
     OUString converterURL(u"$BRAND_BASE_DIR/" LIBO_BIN_FOLDER "/xpdfimport"_ustr);
@@ -1163,31 +1091,66 @@ bool xpdf_ImportFromFile(const OUString& rURL,
             SAL_WARN("sdext.pdfimport", "Failure opening pipes");
             bRet = false;
         }
-        OStringBuffer aBuf(256);
-        // Password lines are Pmypassword\n followed by "O\n" to try to open
-        aBuf = "P" + OUStringToOString(aPwd, RTL_TEXTENCODING_ISO_8859_1) + "\nO\n";
 
-        osl_writeFile(pIn, aBuf.getStr(), sal_uInt64(aBuf.getLength()), &nWritten);
-
-        // Check for a header saying if the child managed to open the document
-        OStringBuffer aHeaderLine;
-        pBuffering = std::unique_ptr<Buffering>(new Buffering(pOut));
-        oslFileError eFileErr = pBuffering->readLine(aHeaderLine);
-        if (osl_File_E_None == eFileErr)
+        // Loop possibly asking for a password if needed
+        bool bEntered = false;
+        do
         {
-            auto aHeaderString = aHeaderLine.toString();
-            SAL_INFO("sdext.pdfimport", "Header line:" << aHeaderString);
-            if (!aHeaderString.startsWith("#OPEN"))
+            OStringBuffer aBuf(256);
+            // Password lines are Pmypassword\n followed by "O\n" to try to open
+            aBuf = "P" + OUStringToOString(aPwd, RTL_TEXTENCODING_UTF8) + "\nO\n";
+
+            osl_writeFile(pIn, aBuf.getStr(), sal_uInt64(aBuf.getLength()), &nWritten);
+
+            // Check for a header saying if the child managed to open the document
+            OStringBuffer aHeaderLine;
+            pBuffering = std::unique_ptr<Buffering>(new Buffering(pOut));
+            oslFileError eFileErr = pBuffering->readLine(aHeaderLine);
+            if (osl_File_E_None == eFileErr)
             {
-                SAL_WARN("sdext.pdfimport", "Error from parser: " << aHeaderString);
+                auto aHeaderString = aHeaderLine.toString();
+                SAL_INFO("sdext.pdfimport", "Header line:" << aHeaderString);
+                if (aHeaderString.startsWith("#OPEN"))
+                {
+                    // Great - it opened!
+                    break;
+                }
+
+                // The only other thing we expect here is a line starting with
+                // #ERROR:
+                if (!aHeaderString.startsWith("#ERROR:"))
+                {
+                    SAL_WARN("sdext.pdfimport", "Bad parser answer:: " << aHeaderString);
+                    bRet = false;
+                    break;
+                }
+
+                if (!aHeaderString.endsWith(":ENCRYPTED"))
+                {
+                    // Some other type of parser error
+                    SAL_WARN("sdext.pdfimport", "Error from parser: " << aHeaderString);
+                    bRet = false;
+                    break;
+                }
+
+                // Must be a failure to decrypt, prompt for a password
+                bEntered = getPassword(xIHdl, aPwd, !bEntered, aDocName);
+                if (!bEntered)
+                {
+                    // User cancelled password input
+                    SAL_INFO("sdext.pdfimport", "User cancelled password input");
+                    bRet = false;
+                    break;
+                }
+
+                // user entered a password, just loop around again
+            }
+            else
+            {
+                SAL_WARN("sdext.pdfimport", "Unable to read header line; " << eFileErr);
                 bRet = false;
             }
-        }
-        else
-        {
-            SAL_WARN("sdext.pdfimport", "Unable to read header line; " << eFileErr);
-            bRet = false;
-        }
+        } while (bRet);
 
         if (bRet && pOut && pErr)
         {
