@@ -229,7 +229,8 @@ void SwTextRuby::InitRuby(SwTextNode & rNode)
     ChgTextNode(&rNode);
     SwCharFormat * const pFormat(
         rNode.GetDoc().getIDocumentStylePoolAccess().GetCharFormatFromPool(RES_POOLCHR_RUBYTEXT) );
-    pFormat->Add(*this);
+    EndListeningAll();
+    StartListening(pFormat->GetNotifier());
 }
 
 /**

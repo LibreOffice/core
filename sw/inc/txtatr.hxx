@@ -80,10 +80,10 @@ public:
 };
 
 
-class SW_DLLPUBLIC SwTextRuby final: public SwTextAttrNesting, public SwClient
+class SW_DLLPUBLIC SwTextRuby final: public SwTextAttrNesting, public SvtListener
 {
     SwTextNode* m_pTextNode;
-    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
+    virtual void Notify(const SfxHint&) override;
 public:
     SwTextRuby(
         const SfxPoolItemHolder& rAttr,

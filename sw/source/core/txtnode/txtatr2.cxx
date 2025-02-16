@@ -257,7 +257,6 @@ SwTextRuby::SwTextRuby(
     sal_Int32 nEnd )
     : SwTextAttr( rAttr, nStart )
     , SwTextAttrNesting( rAttr, nStart, nEnd )
-    , SwClient( nullptr )
     , m_pTextNode( nullptr )
 {
     SwFormatRuby& rSwFormatRuby(static_cast<SwFormatRuby&>(GetAttr()));
@@ -268,41 +267,29 @@ SwTextRuby::~SwTextRuby()
 {
 }
 
-void SwTextRuby::SwClientNotify(const SwModify&, const SfxHint& rHint)
+void SwTextRuby::Notify(const SfxHint& rHint)
 {
     if(lcl_CheckAutoFormatHint(rHint, m_pTextNode))
         return;
-    if (rHint.GetId() == SfxHintId::SwFormatChange)
+    sal_uInt16 nWhich = 0;
+    switch(rHint.GetId())
     {
-        if(!m_pTextNode)
-            return;
-        SwUpdateAttr aUpdateAttr(GetStart(), *GetEnd(), RES_UPDATEATTR_FMT_CHG);
-        m_pTextNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aUpdateAttr, &aUpdateAttr));
+        case SfxHintId::SwAttrSetChange: nWhich = RES_UPDATEATTR_ATTRSET_CHG; break;
+        case SfxHintId::SwFormatChange: nWhich = RES_UPDATEATTR_FMT_CHG; break;
+        case SfxHintId::SwObjectDying: nWhich = RES_UPDATEATTR_OBJECTDYING; break;
+        case SfxHintId::SwLegacyModify:
+        {
+            auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+            nWhich = pLegacy->GetWhich();
+            assert( isCHRATR(nWhich) && "SwTextRuby::SwClientNotify(): unknown legacy hint");
+            break;
+        }
+        default: break;
     }
-    else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
-    {
-        if(!m_pTextNode)
-            return;
-        SwUpdateAttr aUpdateAttr(GetStart(), *GetEnd(), RES_UPDATEATTR_ATTRSET_CHG);
-        m_pTextNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aUpdateAttr, &aUpdateAttr));
-    }
-    else if (rHint.GetId() == SfxHintId::SwObjectDying)
-    {
-        if(!m_pTextNode)
-            return;
-        SwUpdateAttr aUpdateAttr(GetStart(), *GetEnd(), RES_UPDATEATTR_OBJECTDYING);
-        m_pTextNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aUpdateAttr, &aUpdateAttr));
-    }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
-    {
-        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        const auto nWhich = pLegacy->GetWhich();
-        assert( isCHRATR(nWhich) && "SwTextRuby::SwClientNotify(): unknown legacy hint");
-        if(!m_pTextNode)
-            return;
-        SwUpdateAttr aUpdateAttr(GetStart(), *GetEnd(), nWhich);
-        m_pTextNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aUpdateAttr, &aUpdateAttr));
-    }
+    if(!m_pTextNode || !nWhich)
+        return;
+    SwUpdateAttr aUpdateAttr(GetStart(), *GetEnd(), nWhich);
+    m_pTextNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aUpdateAttr, &aUpdateAttr));
 }
 
 SwCharFormat* SwTextRuby::GetCharFormat()
@@ -339,10 +326,9 @@ SwCharFormat* SwTextRuby::GetCharFormat()
         }
     }
 
-    if( pRet )
-        pRet->Add(*this);
-    else
-        EndListeningAll();
+    EndListeningAll();
+    if(pRet)
+        StartListening(pRet->GetNotifier());
 
     return pRet;
 }
