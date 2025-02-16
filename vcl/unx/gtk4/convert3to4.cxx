@@ -119,11 +119,11 @@ void AddBorderAsMargins(const css::uno::Reference<css::xml::dom::XNode>& xNode,
 {
     auto xDoc = xNode->getOwnerDocument();
 
-    auto xMarginEnd = CreateProperty(xDoc, "margin-end", rBorderWidth);
+    auto xMarginEnd = CreateProperty(xDoc, u"margin-end"_ustr, rBorderWidth);
     insertAsFirstChild(xNode, xMarginEnd);
-    xNode->insertBefore(CreateProperty(xDoc, "margin-top", rBorderWidth), xMarginEnd);
-    xNode->insertBefore(CreateProperty(xDoc, "margin-bottom", rBorderWidth), xMarginEnd);
-    xNode->insertBefore(CreateProperty(xDoc, "margin-start", rBorderWidth), xMarginEnd);
+    xNode->insertBefore(CreateProperty(xDoc, u"margin-top"_ustr, rBorderWidth), xMarginEnd);
+    xNode->insertBefore(CreateProperty(xDoc, u"margin-bottom"_ustr, rBorderWidth), xMarginEnd);
+    xNode->insertBefore(CreateProperty(xDoc, u"margin-start"_ustr, rBorderWidth), xMarginEnd);
 }
 
 struct MenuEntry
@@ -399,7 +399,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     = xChild->getParentNode()->getAttributes();
                 css::uno::Reference<css::xml::dom::XNode> xId = xParentMap->getNamedItem("id");
                 auto xDoc = xChild->getOwnerDocument();
-                auto xDefaultWidget = CreateProperty(xDoc, "default-widget", xId->getNodeValue());
+                auto xDefaultWidget
+                    = CreateProperty(xDoc, u"default-widget"_ustr, xId->getNodeValue());
                 SetPropertyOnTopLevel(xChild, xDefaultWidget);
                 xRemoveList.push_back(xChild);
             }
@@ -410,7 +411,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     = xChild->getParentNode()->getAttributes();
                 css::uno::Reference<css::xml::dom::XNode> xId = xParentMap->getNamedItem("id");
                 auto xDoc = xChild->getOwnerDocument();
-                auto xDefaultWidget = CreateProperty(xDoc, "focus-widget", xId->getNodeValue());
+                auto xDefaultWidget
+                    = CreateProperty(xDoc, u"focus-widget"_ustr, xId->getNodeValue());
                 SetPropertyOnTopLevel(xChild, xDefaultWidget);
                 xRemoveList.push_back(xChild);
             }
@@ -489,7 +491,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     // but glade doesn't write max-width-chars and in gtk4 where we have width-chars, e.g
                     // print dialog, then max-width-chars gives the effect we wanted with width-chars
                     auto xDoc = xChild->getOwnerDocument();
-                    auto mMaxWidthChars = CreateProperty(xDoc, "max-width-chars",
+                    auto mMaxWidthChars = CreateProperty(xDoc, u"max-width-chars"_ustr,
                                                          xChild->getFirstChild()->getNodeValue());
                     xChild->getParentNode()->insertBefore(mMaxWidthChars, xChild);
                 }
@@ -505,7 +507,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 if (xId && xId->getNodeValue() == "help")
                 {
                     auto xDoc = xChild->getOwnerDocument();
-                    auto xIconName = CreateProperty(xDoc, "icon-name", "help-browser-symbolic");
+                    auto xIconName
+                        = CreateProperty(xDoc, u"icon-name"_ustr, u"help-browser-symbolic"_ustr);
                     xChild->getParentNode()->insertBefore(xIconName, xChild);
                     xRemoveList.push_back(xChild);
                 }
@@ -530,7 +533,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     if (sSize == "3" || sSize == "5" || sSize == "6")
                     {
                         auto xDoc = xChild->getOwnerDocument();
-                        auto xIconSize = CreateProperty(xDoc, "icon-size", "2");
+                        auto xIconSize = CreateProperty(xDoc, u"icon-size"_ustr, u"2"_ustr);
                         xChild->getParentNode()->insertBefore(xIconSize, xChild);
                     }
 
@@ -574,8 +577,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 {
                     bool bHasFrame = xChild->getFirstChild()->getNodeValue() != "none";
                     auto xDoc = xChild->getOwnerDocument();
-                    auto xHasFrame = CreateProperty(
-                        xDoc, "has-frame", bHasFrame ? OUString("True") : OUString("False"));
+                    auto xHasFrame = CreateProperty(xDoc, u"has-frame"_ustr,
+                                                    bHasFrame ? u"True"_ustr : u"False"_ustr);
                     xChild->getParentNode()->insertBefore(xHasFrame, xChild);
                     xRemoveList.push_back(xChild);
                 }
@@ -630,7 +633,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 {
                     assert(xChild->getFirstChild()->getNodeValue() == "none");
                     auto xDoc = xChild->getOwnerDocument();
-                    auto xHasFrame = CreateProperty(xDoc, "has-frame", "False");
+                    auto xHasFrame = CreateProperty(xDoc, u"has-frame"_ustr, u"False"_ustr);
                     xChild->getParentNode()->insertBefore(xHasFrame, xChild);
                     xRemoveList.push_back(xChild);
                 }
@@ -663,7 +666,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     if (xChild->getFirstChild()->getNodeValue() == "never")
                     {
                         auto xDoc = xChild->getOwnerDocument();
-                        auto xHasFrame = CreateProperty(xDoc, "propagate-natural-width", "True");
+                        auto xHasFrame
+                            = CreateProperty(xDoc, u"propagate-natural-width"_ustr, u"True"_ustr);
                         xChild->getParentNode()->insertBefore(xHasFrame, xChild);
                     }
                 }
@@ -676,7 +680,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     if (xChild->getFirstChild()->getNodeValue() == "never")
                     {
                         auto xDoc = xChild->getOwnerDocument();
-                        auto xHasFrame = CreateProperty(xDoc, "propagate-natural-height", "True");
+                        auto xHasFrame
+                            = CreateProperty(xDoc, u"propagate-natural-height"_ustr, u"True"_ustr);
                         xChild->getParentNode()->insertBefore(xHasFrame, xChild);
                     }
                 }
@@ -688,7 +693,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 {
                     OUString sMenuName = xChild->getFirstChild()->getNodeValue();
                     auto xDoc = xChild->getOwnerDocument();
-                    auto xPopover = CreateProperty(xDoc, "popover", sMenuName);
+                    auto xPopover = CreateProperty(xDoc, u"popover"_ustr, sMenuName);
                     xChild->getParentNode()->insertBefore(xPopover, xChild);
                     xRemoveList.push_back(xChild);
                 }
@@ -753,7 +758,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 if (GetParentObjectType(xChild) == "GtkMenuButton" && gtk_get_minor_version() >= 4)
                 {
                     auto xDoc = xChild->getOwnerDocument();
-                    auto xAlwaysShowArrow = CreateProperty(xDoc, "always-show-arrow", "True");
+                    auto xAlwaysShowArrow
+                        = CreateProperty(xDoc, u"always-show-arrow"_ustr, u"True"_ustr);
                     xChild->getParentNode()->insertBefore(xAlwaysShowArrow, xChild);
                 }
                 xRemoveList.push_back(xChild);
@@ -802,7 +808,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 {
                     auto xDoc = xChild->getOwnerDocument();
 
-                    auto xVExpand = CreateProperty(xDoc, "vexpand", "True");
+                    auto xVExpand = CreateProperty(xDoc, u"vexpand"_ustr, u"True"_ustr);
                     insertAsFirstChild(xObject, xVExpand);
 
                     if (!sBorderWidth.isEmpty())
@@ -984,9 +990,9 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 xClass->setNodeValue("GtkPopoverMenu");
 
                 // <property name="menu-model">
-                xChild->appendChild(CreateProperty(xDoc, "menu-model", sId));
-                xChild->appendChild(CreateProperty(xDoc, "has-arrow", "False"));
-                xChild->appendChild(CreateProperty(xDoc, "visible", "False"));
+                xChild->appendChild(CreateProperty(xDoc, u"menu-model"_ustr, sId));
+                xChild->appendChild(CreateProperty(xDoc, u"has-arrow"_ustr, u"False"_ustr));
+                xChild->appendChild(CreateProperty(xDoc, u"visible"_ustr, u"False"_ustr));
             }
         }
 
@@ -1053,7 +1059,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     || sClass == "GtkToggleButton" || sClass == "GtkButtonBox")
 
                 {
-                    auto xVisible = CreateProperty(xDoc, "visible", "False");
+                    auto xVisible = CreateProperty(xDoc, u"visible"_ustr, u"False"_ustr);
                     insertAsFirstChild(xChild, xVisible);
                 }
             }
@@ -1064,7 +1070,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     && !ToplevelIsMessageDialog(xChild))
                 {
                     xClass->setNodeValue("GtkHeaderBar");
-                    auto xSpacingNode = CreateProperty(xDoc, "show-title-buttons", "False");
+                    auto xSpacingNode
+                        = CreateProperty(xDoc, u"show-title-buttons"_ustr, u"False"_ustr);
                     insertAsFirstChild(xChild, xSpacingNode);
 
                     // move the replacement GtkHeaderBar up to before the content_area
@@ -1167,7 +1174,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                                 }
                             }
 
-                            auto xUseHeaderBar = CreateProperty(xDoc, "use-header-bar", "1");
+                            auto xUseHeaderBar
+                                = CreateProperty(xDoc, u"use-header-bar"_ustr, u"1"_ustr);
                             SetPropertyOnTopLevel(xContentAreaCandidate, xUseHeaderBar);
 
                             break;
@@ -1203,7 +1211,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 xClass->setNodeValue("GtkMenuButton");
                 if (gtk_get_minor_version() >= 4)
                 {
-                    auto xAlwaysShowArrow = CreateProperty(xDoc, "always-show-arrow", "True");
+                    auto xAlwaysShowArrow
+                        = CreateProperty(xDoc, u"always-show-arrow"_ustr, u"True"_ustr);
                     insertAsFirstChild(xChild, xAlwaysShowArrow);
                 }
             }
@@ -1289,9 +1298,9 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 
                         if (bHasStartObject && !bLastStartExpands)
                         {
-                            auto xAlign = CreateProperty(xDoc, "halign", "end");
+                            auto xAlign = CreateProperty(xDoc, u"halign"_ustr, u"end"_ustr);
                             insertAsFirstChild(GetChildObject(aPackEnds[0]), xAlign);
-                            auto xExpand = CreateProperty(xDoc, "hexpand", "True");
+                            auto xExpand = CreateProperty(xDoc, u"hexpand"_ustr, u"True"_ustr);
                             insertAsFirstChild(GetChildObject(aPackEnds[0]), xExpand);
                         }
                     }
@@ -1344,11 +1353,11 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                         // so use private:///graphicrepository/ here. At the moment we just want this to be transported
                         // as-is to postprocess_widget. Though it might be nice to register a protocol handler with gio
                         // to avoid us doing the load in that second pass.
-                        auto xUri = CreateProperty(xDoc, "file",
+                        auto xUri = CreateProperty(xDoc, u"file"_ustr,
                                                    "private:///graphicrepository/" + sIconName);
                         xChild->insertBefore(xUri, xChildPropertyIconName);
                         // calc, insert, header and footer, custom header menubutton icon
-                        auto xCanShrink = CreateProperty(xDoc, "can-shrink", "False");
+                        auto xCanShrink = CreateProperty(xDoc, u"can-shrink"_ustr, u"False"_ustr);
                         xChild->insertBefore(xCanShrink, xChildPropertyIconName);
                         xChild->removeChild(xChildPropertyIconName);
                     }
@@ -1358,7 +1367,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             }
             else if (sClass == "GtkPopover" && !bHasVisible)
             {
-                auto xVisible = CreateProperty(xDoc, "visible", "False");
+                auto xVisible = CreateProperty(xDoc, u"visible"_ustr, u"False"_ustr);
                 insertAsFirstChild(xChild, xVisible);
             }
             else if (sClass == "AtkObject")
@@ -1440,7 +1449,8 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                                 if (sPropName == "icon-name")
                                 {
                                     OUString sIconName(xProp->getFirstChild()->getNodeValue());
-                                    auto xIconName = CreateProperty(xDoc, "icon-name", sIconName);
+                                    auto xIconName
+                                        = CreateProperty(xDoc, u"icon-name"_ustr, sIconName);
                                     insertAsFirstChild(xChild, xIconName);
                                     bChildAlwaysShowImage = false;
                                     break;
@@ -1465,13 +1475,15 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 
                     if (eChildImagePos == GTK_POS_TOP || eChildImagePos == GTK_POS_BOTTOM)
                     {
-                        auto xOrientation = CreateProperty(xDoc, "orientation", "vertical");
+                        auto xOrientation
+                            = CreateProperty(xDoc, u"orientation"_ustr, u"vertical"_ustr);
                         xNewObjectNode->appendChild(xOrientation);
                     }
 
-                    xNewObjectNode->appendChild(CreateProperty(xDoc, "spacing", "6"));
+                    xNewObjectNode->appendChild(CreateProperty(xDoc, u"spacing"_ustr, u"6"_ustr));
                     if (!bChildXAlign)
-                        xNewObjectNode->appendChild(CreateProperty(xDoc, "halign", "center"));
+                        xNewObjectNode->appendChild(
+                            CreateProperty(xDoc, u"halign"_ustr, u"center"_ustr));
 
                     xNewChildNode->appendChild(xNewObjectNode);
 
@@ -1492,12 +1504,13 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     }
                     else
                     {
-                        auto xNotVisible = CreateProperty(xDoc, "visible", "False");
+                        auto xNotVisible = CreateProperty(xDoc, u"visible"_ustr, u"False"_ustr);
                         xNewChildObjectNode->appendChild(xNotVisible);
                     }
                     if (bChildUseUnderline)
                     {
-                        auto xUseUnderline = CreateProperty(xDoc, "use-underline", "True");
+                        auto xUseUnderline
+                            = CreateProperty(xDoc, u"use-underline"_ustr, u"True"_ustr);
                         xNewChildObjectNode->appendChild(xUseUnderline);
                     }
                     xNewLabelChildNode->appendChild(xNewChildObjectNode);
