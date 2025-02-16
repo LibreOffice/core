@@ -95,6 +95,7 @@
 #include <shellres.hxx>
 #include <txtfrm.hxx>
 #include <attrhint.hxx>
+#include <deletelistener.hxx>
 
 #include <vector>
 #include <map>
@@ -1788,33 +1789,21 @@ bool SwDoc::RemoveInvisibleContent()
     GetIDocumentUndoRedo().StartUndo( SwUndoId::UI_DELETE_INVISIBLECNTNT, nullptr );
 
     {
-        class FieldTypeGuard : public SwClient
-        {
-        public:
-            explicit FieldTypeGuard(SwFieldType* pType)
-                : SwClient(pType)
-            {
-            }
-            const SwFieldType* get() const
-            {
-                return static_cast<const SwFieldType*>(GetRegisteredIn());
-            }
-        };
         // Removing some nodes for one SwFieldIds::Database type might remove the type from
         // document's field types, invalidating iterators. So, we need to create own list of
         // matching types prior to processing them.
-        std::vector<std::unique_ptr<FieldTypeGuard>> aHidingFieldTypes;
+        std::vector<sw::WeakBroadcastingPtr<SwFieldType>> aHidingFieldTypes;
         for (std::unique_ptr<SwFieldType> const & pType : *getIDocumentFieldsAccess().GetFieldTypes())
         {
             if (FieldCanHideParaWeight(pType->Which()))
-                aHidingFieldTypes.push_back(std::make_unique<FieldTypeGuard>(pType.get()));
+                aHidingFieldTypes.push_back(pType.get());
         }
-        for (const auto& pTypeGuard : aHidingFieldTypes)
+        for (const auto& pWeakType : aHidingFieldTypes)
         {
-            if (const SwFieldType* pType = pTypeGuard->get())
+            if (pWeakType)
             {
                 std::vector<SwFormatField*> vFields;
-                pType->GatherFields(vFields);
+                pWeakType->GatherFields(vFields);
                 for(auto pFormatField: vFields)
                     bRet |= HandleHidingField(*pFormatField, GetNodes(), getIDocumentContentOperations());
             }

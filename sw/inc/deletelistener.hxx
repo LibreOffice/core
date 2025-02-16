@@ -52,6 +52,7 @@ public:
     }
 
     T* operator->() { return m_pBroadcasting; }
+    const T* operator->() const { return m_pBroadcasting; }
     T& operator*() { return *m_pBroadcasting; }
     explicit operator bool() const { return m_pBroadcasting; }
 };
