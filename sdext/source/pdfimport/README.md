@@ -87,6 +87,77 @@ wrapper layer.  The tree is then 'visited' by optimisation layers
 and then by backend specific XML generators (e.g. for Draw and Writer)
 that then generate an XML stream to be parsed by the core of LibreOffice.
 
+## The wrapper protocol
+
+The LibreOffice wrapper talks to the GPL wrapper code over a pipe
+using a simple line based protocol before the main decoding is done.
+
+The commands are:
+
+- *Pmypassword* - set the password to be used for future opening of the PDF,
+it can be empty.
+
+- *O* - Open the PDF document using the password.  This returns a response
+line which is either **#OPEN** when it worked or **#ERROR**.  The **#ERROR**
+includes information on the failure shown below.
+
+- *G* - Go - ie render the document using the previously provided document.
+No more commands are accepted after this point, the structure is dumped
+to stdout, and the binary data blobs go to stderr.
+
+- *E* - Exit without doing anything more with the file.  Used when you give
+up on password attempts.
+
+Some example runs might be:
+
+- A normal unencrypted document:
+
+```
+    P
+    O
+    #OPEN
+    G
+```
+
+- An encrypted document:
+
+```
+    P
+    O
+    #ERROR:2:ENCRYPTED
+    Psecret
+    O
+    #OPEN
+    G
+```
+
+- An encrypted document that we give up on:
+
+```
+    P
+    O
+    #ERROR:2:ENCRYPTED
+    E
+```
+
+- A document with some other error:
+
+```
+    P
+    O
+    #ERROR:1:
+    E
+```
+
+Note we don't rely on the error number in the code.
+
+## Hybrid documents
+
+PDF can contain other files, one use of which is to store the original document
+file that was used to generate the PDF.
+
+TBD: Once I figure out how it works.
+
 ## Bug handling
 
 - Please tag bugs with *filter:pdf* in component *filters and storage*.
