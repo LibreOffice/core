@@ -94,6 +94,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"modules/swriter/ui/footnotepage.ui"_ustr,
         u"modules/swriter/ui/inforeadonlydialog.ui"_ustr,
         u"modules/swriter/ui/insertbreak.ui"_ustr,
+        u"modules/swriter/ui/inserttable.ui"_ustr,
         u"modules/swriter/ui/printoptionspage.ui"_ustr,
         u"modules/swriter/ui/renameobjectdialog.ui"_ustr,
         u"modules/swriter/ui/rowheight.ui"_ustr,
