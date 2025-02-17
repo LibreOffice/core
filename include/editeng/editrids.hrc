@@ -201,6 +201,8 @@
 #define RID_SVXITEMS_HYPHEN_FALSE               NC_("RID_SVXITEMS_HYPHEN_FALSE", "No hyphenation")
 #define RID_SVXITEMS_HYPHEN_KEEP_TRUE           NC_("RID_SVXITEMS_HYPHEN_KEEP_TRUE", "No hyphenation across")
 #define RID_SVXITEMS_HYPHEN_KEEP_FALSE          NC_("RID_SVXITEMS_HYPHEN_KEEP_FALSE", "Hyphenation across page")
+#define RID_SVXITEMS_HYPHEN_KEEP_LINE_TRUE      NC_("RID_SVXITEMS_HYPHEN_KEEP_LINE_TRUE", "by shifting the last hyphenated word")
+#define RID_SVXITEMS_HYPHEN_KEEP_LINE_FALSE     NC_("RID_SVXITEMS_HYPHEN_KEEP_LINE_FALSE", "by shifting the last hyphenated line")
 #define RID_SVXITEMS_SIZE_WIDTH                 NC_("RID_SVXITEMS_SIZE_WIDTH", "Width: ")
 #define RID_SVXITEMS_SIZE_HEIGHT                NC_("RID_SVXITEMS_SIZE_HEIGHT", "Height: ")
 #define RID_SVXITEMS_LRSPACE_LEFT               NC_("RID_SVXITEMS_LRSPACE_LEFT", "Indent left ")

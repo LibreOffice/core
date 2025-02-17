@@ -208,6 +208,7 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
     std::unique_ptr<sw::MergedPara> m_pMergedPara;
 
     TextFrameIndex mnOffset; // Is the offset in the Content (character count)
+    TextFrameIndex mnNoHyphOffset; // Is the offset of the last line to disable its hyphenation
 
     sal_uInt16 mnCacheIndex; // Index into the cache, USHRT_MAX if there's definitely no fitting object in the cache
 
@@ -454,6 +455,8 @@ public:
     TextFrameIndex GetOffset() const { return mnOffset; }
            void        SetOffset_(TextFrameIndex nNewOfst);
     inline void        SetOffset (TextFrameIndex nNewOfst);
+    TextFrameIndex GetNoHyphOffset() const { return mnNoHyphOffset; }
+    void SetNoHyphOffset(TextFrameIndex const nNewOfst) { mnNoHyphOffset = nNewOfst; }
     void ManipOfst(TextFrameIndex const nNewOfst) { mnOffset = nNewOfst; }
            SwTextFrame   *GetFrameAtPos ( const SwPosition &rPos);
     inline const SwTextFrame *GetFrameAtPos ( const SwPosition &rPos) const;

@@ -573,10 +573,19 @@ sal_Int16 SettingsTable::GetConsecutiveHyphenLimit() const
 
 bool SettingsTable::GetHyphenationKeep() const
 {
+    // if allowHyphenationAtTrackBottom is false, also if it is not defined
+    // (which means the same) hyphenation is not allowed in the last line, so
+    // set ParaHyphenationKeep to TRUE, and set ParaHyphenationKeepType to COLUMN
+    return m_pImpl->m_nAllowHyphenationAtTrackBottom != 1;
+}
+
+bool SettingsTable::GetHyphenationKeepLine() const
+{
     // if allowHyphenationAtTrackBottom is not true and useWord2013TrackBottomHyphenation is
-    // not present or it is true, set ParaHyphenationKeep to COLUMN
-    return m_pImpl->m_nAllowHyphenationAtTrackBottom != 1 &&
-                m_pImpl->m_nUseWord2013TrackBottomHyphenation != 0;
+    // not present or it is false, shift only the hyphenated word to the next column or page,
+    // not the full line, so set ParaHyphenationKeepLine to TRUE
+    return GetHyphenationKeep() &&
+                m_pImpl->m_nUseWord2013TrackBottomHyphenation != 1;
 }
 
 const OUString & SettingsTable::GetDecimalSymbol() const
@@ -746,6 +755,7 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
     {
         xDefault->setPropertyValue(u"ParaHyphenationKeep"_ustr, uno::Any(true));
         xDefault->setPropertyValue(u"ParaHyphenationKeepType"_ustr, uno::Any(text::ParagraphHyphenationKeepType::COLUMN));
+        xDefault->setPropertyValue(u"ParaHyphenationKeepLine"_ustr, uno::Any(GetHyphenationKeepLine()));
     }
 }
 

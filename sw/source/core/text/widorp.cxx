@@ -469,6 +469,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
 
     // hyphenation-keep: truncate a hyphenated line at the end of
     // the column, page or spread (but not more)
+    // hyphenation-keep-line: disable hyphenation in the last line instead of truncating it
     int nExtraWidLines = 0;
     if( rLine.GetLineNr() >= m_nWidLines && pMaster->HasPara() &&
         ( rLine.GetLineNr() == m_nWidLines || !rLine.GetCurr()->IsEndHyph() ) )
@@ -478,6 +479,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
         const SvxHyphenZoneItem &rAttr = rSet.GetHyphenZone();
 
         bool bKeep = rAttr.IsHyphen() && rAttr.IsKeep() && rAttr.GetKeepType();
+        bool bKeepLine = bKeep && rAttr.IsKeepLine();
 
         // if PAGE or SPREAD, allow hyphenation in the not last column or in the
         // not last linked frame on the same page
@@ -499,7 +501,10 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
 
         if ( bKeep && pMasterPara && pMasterPara->GetNext() )
         {
+            // calculate the beginning of last hyphenated line
+            TextFrameIndex nIdx(pMasterPara->GetLen());
             SwLineLayout * pNext = pMasterPara->GetNext();
+            nIdx += pNext->GetLen();
             SwLineLayout * pCurr = pNext;
             SwLineLayout * pPrev = pNext;
             while ( pNext->GetNext() )
@@ -507,20 +512,36 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
                 pPrev = pCurr;
                 pCurr = pNext;
                 pNext = pNext->GetNext();
+                nIdx += pNext->GetLen();
             }
+            nIdx -= pNext->GetLen();
             // hyphenated line, but not the last remaining one
-            if ( pNext->IsEndHyph() && !pNext->IsLastHyph() )
+            // in the case of shifting full line (bKeepLine = false)
+            if ( pNext->IsEndHyph() && ( bKeepLine || !pNext->IsLastHyph() ) )
             {
                 nExtraWidLines = rLine.GetLineNr() - m_nWidLines + 1;
+                // shift only a word: disable hyphenation in the line, if needed
+                if ( bKeepLine && nExtraWidLines )
+                {
+                    pMaster->SetNoHyphOffset(nIdx);
+                    nExtraWidLines = 0; // no need to shift the full line
+                }
+                // shift full line:
                 // set remaining line to "last remaining hyphenated line"
                 // to avoid truncating multiple hyphenated lines instead
                 // of a single one
-                if ( pCurr->IsEndHyph() )
+                else if ( !bKeepLine && pCurr->IsEndHyph() )
                     pCurr->SetLastHyph( true );
                 // also unset the line before the remaining one
                 // TODO: check also the line after the truncated line?
                 if ( pPrev->IsLastHyph() )
                     pPrev->SetLastHyph( false );
+            }
+            else if ( !pNext->IsEndHyph() && pMaster->GetNoHyphOffset() != nIdx )
+            {
+                // not hyphenated and not a last line with forbidden hyphenation:
+                // enable hyphenation for all the lines in the TextFrame again
+                pMaster->SetNoHyphOffset(TextFrameIndex(COMPLETE_STRING));
             }
         }
     }

@@ -1496,13 +1496,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160518_page_in_text_body_style)
     assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='allowHyphenationAtTrackBottom']", 0);
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf160518_auto_in_text_body_style)
+CPPUNIT_TEST_FIXTURE(Test, testTdf165354)
 {
-    // text body  style contains hyphenation settings
-    loadAndReload("tdf160518_auto_in_text_body_style.fodt");
-    xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='useWord2013TrackBottomHyphenation']", "val", u"1");
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='allowHyphenationAtTrackBottom']", "val", u"1");
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
+        return;
+
+    loadAndReload("tdf165354.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // This was "except that it has an at" (hyphenation at the end of the page)
+    assertXPath(pXmlDoc, "//page[1]/body/txt[2]/SwParaPortion/SwLineLayout[9]", "portion", u"except that it has an ");
+    // This started with "mosphere" (hyphenation at the end of the previous page)
+    assertXPath(pXmlDoc, "//page[2]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion", u"atmosphere. The Earth ");
+    // The same word is still hyphenated in the same paragraph, but not at the bottom of the page
+    assertXPath(pXmlDoc, "//page[2]/body/txt[1]/SwParaPortion/SwLineLayout[9]", "portion", u"except that it has an at");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testHyphenationAuto)

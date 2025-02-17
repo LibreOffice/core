@@ -42,6 +42,7 @@ class EDITENG_DLLPUBLIC SvxHyphenZoneItem final : public SfxPoolItem
     sal_uInt8 nMinWordLength;   // hyphenate only words with at least nMinWordLength characters
     sal_uInt16 nTextHyphenZone; // don't force hyphenation at line end, allow this extra white space
     sal_uInt8 nKeepType;        // avoid hyphenation across page etc., see ParagraphHyphenationKeep
+    bool      bKeepLine : 1;    // if bKeep, shift the hyphenated word (true), or the full line
     sal_uInt8 nCompoundMinLead; // min. characters between compound word boundary and hyphenation
 
 public:
@@ -94,6 +95,9 @@ public:
 
     sal_uInt8 &GetKeepType() { return nKeepType; }
     sal_uInt8 GetKeepType() const { return nKeepType; }
+
+    void SetKeepLine( const bool bNew ) { bKeepLine = bNew; }
+    bool IsKeepLine() const { return bKeepLine; }
 };
 
 #endif

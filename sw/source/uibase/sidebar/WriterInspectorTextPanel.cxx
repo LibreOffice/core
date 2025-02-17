@@ -275,6 +275,7 @@ static OUString PropertyNametoRID(const OUString& rName)
         { "ParaHyphenationZone", RID_PARA_HYPHENATION_ZONE },
         { "ParaHyphenationKeep", RID_PARA_HYPHENATION_KEEP },
         { "ParaHyphenationKeepType", RID_PARA_HYPHENATION_KEEP_TYPE },
+        { "ParaHyphenationKeepLine", RID_PARA_HYPHENATION_KEEP_LINE },
         { "ParaInteropGrabBag", RID_PARA_INTEROP_GRAB_BAG },
         { "ParaIsAutoFirstLineIndent", RID_PARA_IS_AUTO_FIRST_LINE_INDENT },
         { "ParaIsCharacterDistance", RID_PARA_IS_CHARACTER_DISTANCE },

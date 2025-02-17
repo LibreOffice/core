@@ -277,6 +277,7 @@ struct SvxHyphenZone
     INT16       HyphenZone    MID_HYPHEN_ZONE;
     BOOL        HyphenKeep    MID_HYPHEN_KEEP;
     INT16       HyphenKeepType MID_HYPHEN_KEEP_TYPE;
+    BOOL        HyphenKeepLine MID_HYPHEN_KEEP_LINE;
     INT16       MinLead       MID_HYPHEN_COMPOUND_MIN_LEAD;
 };
 item SvxHyphenZone SvxHyphenZoneItem;

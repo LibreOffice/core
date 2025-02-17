@@ -454,6 +454,18 @@ published service ParagraphProperties
             @since LibreOffice 24.8
          */
         [optional, property] short ParaHyphenationCompoundMinLeadingChars;
+
+        /** This value is `TRUE` if ParaHyphenationKeep = TRUE solved by
+            shifting the hyphenated word, and FALSE, if it is solved by shifting
+            (only a single) full hyphenated line.
+
+            @see ParaHyphenationKeep
+
+            @see ParaHyphenationKeepType
+
+            @since LibreOffice 25.8
+         */
+        [optional, property] boolean ParaHyphenationKeepLine;
 };
 
 

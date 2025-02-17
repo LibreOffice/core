@@ -286,7 +286,11 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         }
     }
 
-    bool bHyph = rInf.IsHyphenate() && !rInf.IsHyphForbud();
+    bool bHyph = rInf.IsHyphenate() && !rInf.IsHyphForbud() &&
+        // disable hyphenation in the last line, when hyphenation-keep-line is enabled
+        ( rInf.GetTextFrame()->GetNoHyphOffset() == TextFrameIndex(COMPLETE_STRING) ||
+          // when there is a portion in the last line, rInf.GetIdx() > GetNoHyphOffset()
+          rInf.GetTextFrame()->GetNoHyphOffset() > rInf.GetIdx() );
     TextFrameIndex nHyphPos(0);
 
     // nCutPos is the first character not fitting to the current line

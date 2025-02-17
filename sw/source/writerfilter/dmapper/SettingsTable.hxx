@@ -81,6 +81,7 @@ public:
     sal_Int16 GetHyphenationZone() const;
     sal_Int16 GetConsecutiveHyphenLimit() const;
     bool GetHyphenationKeep() const;
+    bool GetHyphenationKeepLine() const;
 
     const OUString& GetDecimalSymbol() const;
     const OUString& GetListSeparator() const;
