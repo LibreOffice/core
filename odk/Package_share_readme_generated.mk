@@ -13,7 +13,6 @@ $(eval $(call gb_Package_set_outdir,odk_share_readme_generated,$(INSTDIR)))
 
 $(eval $(call gb_Package_add_files,odk_share_readme_generated,$(SDKDIRNAME)/share/readme,\
 	$(if $(filter WNT,$(OS)),license/license.txt) \
-	readme/$(call gb_README,en-US) \
 ))
 
 # vim: set noet sw=4 ts=4:
