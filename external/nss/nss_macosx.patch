@@ -1,8 +1,8 @@
 diff -ru a/nspr/configure b/nspr/configure
 --- a/a/nspr/configure	2014-09-29 16:50:33.907375937 +0100
 +++ b/b/nspr/configure	2014-09-29 16:51:59.213931947 +0100
-@@ -6483,7 +6486,7 @@
- 
+@@ -7221,7 +7221,7 @@
+ fi
  
      DSO_CFLAGS=-fPIC
 -    DSO_LDOPTS='-dynamiclib -compatibility_version 1 -current_version 1 -all_load -install_name @executable_path/$@ -headerpad_max_install_names'
