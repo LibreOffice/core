@@ -659,7 +659,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="check-total-rows">
-                        <property name="label" translatable="yes" context="pivottablelayoutdialog|check-total-rows">Total rows</property>
+                        <property name="label" translatable="yes" context="pivottablelayoutdialog|check-total-rows">Show totals row</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -678,7 +678,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="check-total-columns">
-                        <property name="label" translatable="yes" context="pivottablelayoutdialog|check-total-columns">Total columns</property>
+                        <property name="label" translatable="yes" context="pivottablelayoutdialog|check-total-columns">Show totals column</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
