@@ -80,7 +80,7 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
     , mpView(nullptr)
-    , m_xBitmapLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window(u"imagewin"_ustr, true)))
+    , m_xBitmapLB(new SvxPresetListBoxValueSet(m_xBuilder->weld_scrolled_window(u"imagewin"_ustr, true)))
     , m_xBitmapStyleLB(m_xBuilder->weld_combo_box(u"imagestyle"_ustr))
     , m_xSizeBox(m_xBuilder->weld_container(u"sizebox"_ustr))
     , m_xTsbScale(m_xBuilder->weld_check_button(u"scaletsb"_ustr))
@@ -106,6 +106,7 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
     m_xBitmapLB->SetSelectHdl( LINK(this, SvxBitmapTabPage, ModifyBitmapHdl) );
     m_xBitmapLB->SetRenameHdl( LINK(this, SvxBitmapTabPage, ClickRenameHdl) );
     m_xBitmapLB->SetDeleteHdl( LINK(this, SvxBitmapTabPage, ClickDeleteHdl) );
+    m_xBitmapLB->SetDialog(this);
     m_xBitmapStyleLB->connect_changed( LINK(this, SvxBitmapTabPage, ModifyBitmapStyleHdl) );
     Link<weld::MetricSpinButton&, void> aLink1( LINK(this, SvxBitmapTabPage, ModifyBitmapSizeHdl) );
     m_xBitmapWidth->connect_value_changed( aLink1 );
@@ -444,6 +445,39 @@ void SvxBitmapTabPage::ClickBitmapHdl_Impl()
     ModifyBitmapHdl(m_xBitmapLB.get());
 }
 
+void SvxBitmapTabPage::DeleteBitmapHdl_Impl(const sal_uInt16 nId)
+{
+    const size_t nPos = m_xBitmapLB->GetItemPos(nId);
+    if( nPos == VALUESET_ITEM_NOTFOUND )
+        return;
+
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/querydeletebitmapdialog.ui"_ustr));
+    std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog(u"AskDelBitmapDialog"_ustr));
+
+    if (xQueryBox->run() != RET_YES)
+        return;
+
+    sal_uInt16 nNextId = m_xBitmapLB->GetSelectedItemId();
+    const bool bDeletingSelectedItem(nId == nNextId);
+    if (bDeletingSelectedItem)
+    {
+        nNextId = m_xBitmapLB->GetItemId(nPos + 1);
+        if (!nNextId)
+            nNextId = m_xBitmapLB->GetItemId(nPos - 1);
+    }
+
+    m_pBitmapList->Remove( static_cast<sal_uInt16>(nPos) );
+    m_xBitmapLB->RemoveItem( nId );
+
+    if (bDeletingSelectedItem)
+    {
+        m_xBitmapLB->SelectItem(nNextId);
+        m_aCtlBitmapPreview.Invalidate();
+    }
+    ModifyBitmapHdl(m_xBitmapLB.get());
+    m_nBitmapListState |= ChangeType::MODIFIED;
+}
+
 void SvxBitmapTabPage::CalculateBitmapPresetSize()
 {
     if(rBitmapSize.IsEmpty())
@@ -570,37 +604,28 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
 {
-    const sal_uInt16 nId = m_xBitmapLB->GetContextMenuItemId();
-    const size_t nPos = m_xBitmapLB->GetItemPos(nId);
+    DeleteBitmapHdl_Impl(m_xBitmapLB->GetContextMenuItemId());
+}
 
-    if( nPos == VALUESET_ITEM_NOTFOUND )
-        return;
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/querydeletebitmapdialog.ui"_ustr));
-    std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog(u"AskDelBitmapDialog"_ustr));
+SvxBitmapTabPage::SvxPresetListBoxValueSet::SvxPresetListBoxValueSet(std::unique_ptr<weld::ScrolledWindow> pWindow)
+    : SvxPresetListBox(std::move(pWindow))
+{
+}
 
-    if (xQueryBox->run() != RET_YES)
-        return;
-
-    sal_uInt16 nNextId = m_xBitmapLB->GetSelectedItemId();
-    const bool bDeletingSelectedItem(nId == nNextId);
-    if (bDeletingSelectedItem)
+bool SvxBitmapTabPage::SvxPresetListBoxValueSet::KeyInput(const KeyEvent& rKEvt)
+{
+    switch (rKEvt.GetKeyCode().GetCode())
     {
-        nNextId = m_xBitmapLB->GetItemId(nPos + 1);
-        if (!nNextId)
-            nNextId = m_xBitmapLB->GetItemId(nPos - 1);
+        case KEY_DELETE:
+        {
+            m_pSvxBitmapTabPage->DeleteBitmapHdl_Impl(GetSelectedItemId());
+            return true;
+        }
+        break;
+        default:
+            return SvxPresetListBox::KeyInput(rKEvt);
     }
-
-    m_pBitmapList->Remove( static_cast<sal_uInt16>(nPos) );
-    m_xBitmapLB->RemoveItem( nId );
-
-    if (bDeletingSelectedItem)
-    {
-        m_xBitmapLB->SelectItem(nNextId);
-        m_aCtlBitmapPreview.Invalidate();
-    }
-    ModifyBitmapHdl(m_xBitmapLB.get());
-    m_nBitmapListState |= ChangeType::MODIFIED;
 }
 
 IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapSizeHdl, weld::MetricSpinButton&, void )

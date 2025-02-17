@@ -498,6 +498,24 @@ public:
 
 class SvxBitmapTabPage : public SfxTabPage
 {
+
+public:
+
+    class SvxPresetListBoxValueSet : public SvxPresetListBox
+    {
+    public:
+        SvxPresetListBoxValueSet(std::unique_ptr<weld::ScrolledWindow> pWindow);
+        virtual bool KeyInput(const KeyEvent& rKEvt) override;
+
+        void SetDialog(SvxBitmapTabPage* pSvxBitmapTabPage)
+        {
+            m_pSvxBitmapTabPage = pSvxBitmapTabPage;
+        }
+
+    private:
+        SvxBitmapTabPage* m_pSvxBitmapTabPage;
+    };
+
 private:
 
     const SfxItemSet&          m_rOutAttrs;
@@ -519,7 +537,7 @@ private:
     Size                       rZoomedSize;
 
     SvxXRectPreview m_aCtlBitmapPreview;
-    std::unique_ptr<SvxPresetListBox>   m_xBitmapLB;
+    std::unique_ptr<SvxPresetListBoxValueSet>   m_xBitmapLB;
     std::unique_ptr<weld::ComboBox> m_xBitmapStyleLB;
     std::unique_ptr<weld::Container> m_xSizeBox;
     std::unique_ptr<weld::CheckButton> m_xTsbScale;
@@ -549,6 +567,7 @@ private:
     DECL_LINK( ClickImportHdl, weld::Button&, void );
     void ClickBitmapHdl_Impl();
     void CalculateBitmapPresetSize();
+    void DeleteBitmapHdl_Impl(const sal_uInt16 nId);
     sal_Int32 SearchBitmapList(std::u16string_view rBitmapName);
     sal_Int32 SearchBitmapList(const GraphicObject& rGraphicObject);
     tools::Long AddBitmap(const GraphicObject& rGraphicObject, const OUString& rName,
