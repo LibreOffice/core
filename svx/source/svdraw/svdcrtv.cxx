@@ -39,6 +39,7 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace com::sun::star;
 
@@ -184,7 +185,7 @@ SdrCreateView::SdrCreateView(SdrModel& rSdrModel, OutputDevice* pOut)
     , mpCreateViewExtraData(new ImpSdrCreateViewExtraData())
     , maCurrentCreatePointer(PointerStyle::Cross)
     , mnAutoCloseDistPix(5)
-    , mnFreeHandMinDistPix(10)
+    , mnFreeHandMinDistPix(officecfg::Office::Common::Misc::FreehandThresholdPixels::get())
     , mnCurrentInvent(SdrInventor::Default)
     , mnCurrentIdent(SdrObjKind::NONE)
     , mb1stPointAsCenter(false)

@@ -5629,6 +5629,13 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="FreehandThresholdPixels" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Defines number of pixels the cursor can move before a new bezier point will be added when using Freehand tool.</desc>
+          <label>Freehand Tool Pixel Threshold</label>
+        </info>
+        <value>10</value>
+      </prop>
     </group>
     <group oor:name="Forms">
       <info>

@@ -135,7 +135,7 @@ public:
 
     // Setting for the minimum distance in pixels between 2 bezier points when
     // creating a freehand line.
-    // Default = 10 Pixel
+    // The value is defined by config item /org.openoffice.Office.Common/Misc/FreehandThresholdPixels
     sal_uInt16 GetFreeHandMinDistPix() const { return sal_uInt16(mnFreeHandMinDistPix); }
 
     // FIXME: Whoever wants to keep the Create Interface for the PathObj which is
