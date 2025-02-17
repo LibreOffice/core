@@ -879,22 +879,25 @@ void SwTransferable::DeleteSelection()
     m_pWrtShell->EndUndo( SwUndoId::END );
 }
 
-static void DeleteDDEMarks(SwDoc & rDest)
+static void DeleteDDEAndReminderMarks(SwDoc & rDest)
 {
     IDocumentMarkAccess *const pMarkAccess = rDest.getIDocumentMarkAccess();
-    std::vector< ::sw::mark::MarkBase* > vDdeMarks;
-    // find all DDE-Bookmarks
+    std::vector< ::sw::mark::MarkBase* > vMarks;
+    // find all DDE-Bookmarks and Navigator-Reminders
     for (auto ppMark = pMarkAccess->getAllMarksBegin();
         ppMark != pMarkAccess->getAllMarksEnd();
         ++ppMark)
     {
-        if (IDocumentMarkAccess::MarkType::DDE_BOOKMARK == IDocumentMarkAccess::GetType(**ppMark))
+        IDocumentMarkAccess::MarkType eMarkType = IDocumentMarkAccess::GetType(**ppMark);
+        if (eMarkType == IDocumentMarkAccess::MarkType::DDE_BOOKMARK
+            || eMarkType == IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER)
         {
-            vDdeMarks.push_back(*ppMark);
+            vMarks.push_back(*ppMark);
         }
     }
     // remove all DDE-Bookmarks, they are invalid inside the clipdoc!
-    for (const auto& rpMark : vDdeMarks)
+    // and remove all Navigator-Reminders (tdf#165223)
+    for (const auto& rpMark : vMarks)
     {
         pMarkAccess->deleteMark(rpMark);
     }
@@ -938,7 +941,7 @@ void SwTransferable::PrepareForCopyTextRange(SwPaM & rPaM)
         rDest.GetMetaFieldManager().copyDocumentProperties(rSrc);
     }
 
-    DeleteDDEMarks(rDest);
+    DeleteDDEAndReminderMarks(rDest);
 
     // a new one was created in core (OLE objects copied!)
     m_aDocShellRef = rDest.GetTmpDocShell();
@@ -1064,7 +1067,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         rTmpDoc.getIDocumentFieldsAccess().LockExpFields();     // Never update fields - leave text as is
         lclOverWriteDoc(*m_pWrtShell, rTmpDoc);
 
-        DeleteDDEMarks(rTmpDoc);
+        DeleteDDEAndReminderMarks(rTmpDoc);
 
         // a new one was created in CORE (OLE objects copied!)
         m_aDocShellRef = rTmpDoc.GetTmpDocShell();
