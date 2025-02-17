@@ -17657,7 +17657,7 @@ private:
         if (m_bBlockOutput)
             return true;
         m_bFormatting = true;
-        std::optional<OUString> aText = format_value(get_value());
+        std::optional<OUString> aText = format_floating_point_value(get_floating_point_value());
         if (aText.has_value())
             set_text(aText.value());
         m_bFormatting = false;
@@ -17675,13 +17675,13 @@ private:
     {
         GtkInstanceSpinButton* pThis = static_cast<GtkInstanceSpinButton*>(widget);
         SolarMutexGuard aGuard;
-        int result;
-        TriState eHandled = pThis->parse_text(pThis->get_text(), &result);
+        double fResult;
+        TriState eHandled = pThis->parse_text(pThis->get_text(), &fResult);
         if (eHandled == TRISTATE_INDET)
             return 0;
         if (eHandled == TRISTATE_TRUE)
         {
-            *new_value = pThis->convert_value_to_double(result);
+            *new_value = fResult;
             return 1;
         }
         return GTK_INPUT_ERROR;

@@ -5933,7 +5933,7 @@ IMPL_LINK_NOARG(SalInstanceSpinButton, LoseFocusHdl, Control&, void) { signal_va
 
 IMPL_LINK_NOARG(SalInstanceSpinButton, OutputHdl, LinkParamNone*, bool)
 {
-    std::optional<OUString> aText = format_value(get_value());
+    std::optional<OUString> aText = format_floating_point_value(get_floating_point_value());
     if (!aText.has_value())
         return false;
 
@@ -5943,10 +5943,10 @@ IMPL_LINK_NOARG(SalInstanceSpinButton, OutputHdl, LinkParamNone*, bool)
 
 IMPL_LINK(SalInstanceSpinButton, InputHdl, double*, pResult, TriState)
 {
-    int nResult;
-    TriState eRet = parse_text(get_text(), &nResult);
+    double fResult;
+    TriState eRet = parse_text(get_text(), &fResult);
     if (eRet == TRISTATE_TRUE)
-        *pResult = convert_value_to_double(nResult);
+        *pResult = fResult;
     return eRet;
 }
 

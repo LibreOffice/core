@@ -1859,6 +1859,17 @@ class VCL_DLLPUBLIC SpinButton : virtual public Entry
     Link<sal_Int64, OUString> m_aFormatValueHdl;
     Link<const OUString&, std::optional<int>> m_aParseTextHdl;
 
+    // helper methods to convert between sal_Int64 value and
+    // floating point number it represents (depending on get_digits())
+    double convert_value_to_double(sal_Int64 nValue) const
+    {
+        return static_cast<double>(nValue) / Power10(get_digits());
+    }
+    sal_Int64 convert_double_to_value(double fDouble) const
+    {
+        return basegfx::fround64(fDouble * Power10(get_digits()));
+    }
+
 protected:
     void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
 
@@ -1867,11 +1878,11 @@ protected:
      *  and that one gets returned.
      *  Otherwise, an empty std::optional is returned.
      */
-    std::optional<OUString> format_value(sal_Int64 nValue)
+    std::optional<OUString> format_floating_point_value(double fValue)
     {
         if (!m_aFormatValueHdl.IsSet())
             return {};
-        const OUString sText = m_aFormatValueHdl.Call(nValue);
+        const OUString sText = m_aFormatValueHdl.Call(convert_double_to_value(fValue));
         return sText;
     }
 
@@ -1882,7 +1893,7 @@ protected:
      *  cannot be parsed.
      *  Returns <a>TRISTATE_INDET</a> if no custom input handler is set.
      */
-    TriState parse_text(const OUString& rText, int* result)
+    TriState parse_text(const OUString& rText, double* pResult)
     {
         if (!m_aParseTextHdl.IsSet())
             return TRISTATE_INDET;
@@ -1890,19 +1901,8 @@ protected:
         if (!aValue.has_value())
             return TRISTATE_FALSE;
 
-        *result = aValue.value();
+        *pResult = convert_value_to_double(aValue.value());
         return TRISTATE_TRUE;
-    }
-
-    // helper methods to convert between sal_Int64 value and
-    // floating point number it represents (depending on get_digits())
-    double convert_value_to_double(sal_Int64 nValue) const
-    {
-        return static_cast<double>(nValue) / Power10(get_digits());
-    }
-    sal_Int64 convert_double_to_value(double fDouble) const
-    {
-        return basegfx::fround64(fDouble * Power10(get_digits()));
     }
 
     // methods to implement in subclasses which use floating point values directly;
