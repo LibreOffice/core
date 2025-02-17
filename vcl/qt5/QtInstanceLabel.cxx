@@ -48,7 +48,36 @@ void QtInstanceLabel::set_mnemonic_widget(Widget* pTarget)
 
 void QtInstanceLabel::set_font(const vcl::Font&) { assert(false && "Not implemented yet"); }
 
-void QtInstanceLabel::set_label_type(weld::LabelType) { assert(false && "Not implemented yet"); }
+void QtInstanceLabel::set_label_type(weld::LabelType eType)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        switch (eType)
+        {
+            case weld::LabelType::Normal:
+            {
+                // reset to default QLabel colors
+                QLabel aLabel;
+                QPalette aPalette = aLabel.palette();
+                set_background(toColor(aPalette.color(getQWidget()->backgroundRole())));
+                setFontColor(toColor(aPalette.color(aLabel.backgroundRole())));
+                break;
+            }
+            case weld::LabelType::Warning:
+                set_background(Application::GetSettings().GetStyleSettings().GetWarningColor());
+                setFontColor(Application::GetSettings().GetStyleSettings().GetWarningTextColor());
+                break;
+            case weld::LabelType::Error:
+                set_background(Application::GetSettings().GetStyleSettings().GetErrorColor());
+                setFontColor(Application::GetSettings().GetStyleSettings().GetErrorTextColor());
+                break;
+            case weld::LabelType::Title:
+                setFontColor(Application::GetSettings().GetStyleSettings().GetLightColor());
+                break;
+        }
+    });
+}
 
 void QtInstanceLabel::set_font_color(const Color& rColor) { setFontColor(rColor); }
 
