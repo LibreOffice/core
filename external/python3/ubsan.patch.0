@@ -1,23 +1,3 @@
---- Modules/_ctypes/libffi_osx/x86/x86-ffi64.c
-+++ Modules/_ctypes/libffi_osx/x86/x86-ffi64.c
-@@ -599,9 +599,15 @@
- 	tramp = (volatile unsigned short*)&closure->tramp[0];
- 
- 	tramp[0] = 0xbb49;		/* mov <code>, %r11	*/
--	*(void* volatile*)&tramp[1] = ffi_closure_unix64;
-+	tramp[1] = (unsigned short) ffi_closure_unix64;
-+	tramp[2] = (unsigned short) (((unsigned long)ffi_closure_unix64) >> 16);
-+	tramp[3] = (unsigned short) (((unsigned long)ffi_closure_unix64) >> 32);
-+	tramp[4] = (unsigned short) (((unsigned long)ffi_closure_unix64) >> 48);
- 	tramp[5] = 0xba49;		/* mov <data>, %r10	*/
--	*(void* volatile*)&tramp[6] = closure;
-+	tramp[6] = (unsigned short) closure;
-+	tramp[7] = (unsigned short) (((unsigned long)closure) >> 16);
-+	tramp[8] = (unsigned short) (((unsigned long)closure) >> 32);
-+	tramp[9] = (unsigned short) (((unsigned long)closure) >> 48);
- 
- 	/*	Set the carry bit if the function uses any sse registers.
- 		This is clc or stc, together with the first byte of the jmp.  */
 --- Modules/posixmodule.c
 +++ Modules/posixmodule.c
 @@ -13998,6 +13998,9 @@
@@ -43,12 +23,12 @@
                      PyDictUnicodeEntry *ep = oldentries;
 --- Objects/listobject.c
 +++ Objects/listobject.c
-@@ -554,7 +554,7 @@
-         dest[i] = v;
+@@ -539,7 +539,7 @@
+         dest[i] = Py_NewRef(v);
      }
      src = b->ob_item;
 -    dest = np->ob_item + Py_SIZE(a);
 +    dest = Py_SIZE(a) == 0 ? np->ob_item : np->ob_item + Py_SIZE(a);
      for (i = 0; i < Py_SIZE(b); i++) {
          PyObject *v = src[i];
-         Py_INCREF(v);
+         dest[i] = Py_NewRef(v);

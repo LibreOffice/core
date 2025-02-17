@@ -1,16 +1,17 @@
 --- configure
 +++ configure
-@@ -16356,13 +16356,13 @@
+@@ -19904,14 +19904,14 @@
        ZLIB_CFLAGS=${ZLIB_CFLAGS-""}
        ZLIB_LIBS=${ZLIB_LIBS-"-lz"}
        py_check_lib_save_LIBS=$LIBS
--{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for inflateCopy in -lz" >&5
--$as_echo_n "checking for inflateCopy in -lz... " >&6; }
-+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for inflateCopy in -lzlib" >&5
-+$as_echo_n "checking for inflateCopy in -lzlib... " >&6; }
- if ${ac_cv_lib_z_inflateCopy+:} false; then :
-   $as_echo_n "(cached) " >&6
- else
+-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for inflateCopy in -lz" >&5
+-printf %s "checking for inflateCopy in -lz... " >&6; }
++{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for inflateCopy in -lzlib" >&5
++printf %s "checking for inflateCopy in -lzlib... " >&6; }
+ if test ${ac_cv_lib_z_inflateCopy+y}
+ then :
+   printf %s "(cached) " >&6
+ else $as_nop
    ac_check_lib_save_LIBS=$LIBS
 -LIBS="-lz  $LIBS"
 +LIBS="-lzlib  $LIBS"

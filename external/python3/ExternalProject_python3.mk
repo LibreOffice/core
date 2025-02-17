@@ -20,6 +20,7 @@ $(eval $(call gb_ExternalProject_use_externals,python3,\
 $(eval $(call gb_ExternalProject_register_targets,python3,\
 	build \
 	$(if $(filter MACOSX,$(OS)),\
+		packages \
 		fixscripts \
 		fixinstallnames \
 		executables \
@@ -144,6 +145,12 @@ ifeq ($(OS),MACOSX)
 
 python3_fw_prefix:=$(gb_UnpackedTarball_workdir)/python3/python-inst/@__________________________________________________OOO/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)
 python3_EXTENSION_MODULE_SUFFIX:=cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(ENABLE_DBGUTIL),d)-darwin
+
+# Since python 3.12 setuptools and pip are not available by default
+$(call gb_ExternalProject_get_state_target,python3,packages) : $(call gb_ExternalProject_get_state_target,python3,build)
+	cp -r $(gb_UnpackedTarball_workdir)/python3/Lib/setuptools $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/site-packages/
+	cp -r $(gb_UnpackedTarball_workdir)/python3/Lib/_distutils_hack $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/site-packages/
+	cp -r $(gb_UnpackedTarball_workdir)/python3/Lib/pip $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/site-packages/
 
 # rule to allow relocating the whole framework, removing reference to buildinstallation directory
 # also scripts are not allowed to be signed as executables (with extended attributes), but need to
