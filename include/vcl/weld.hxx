@@ -2130,7 +2130,7 @@ public:
         m_xSpinButton->set_text_parser(LINK(this, MetricSpinButton, spin_button_input));
         m_xSpinButton->connect_value_changed(
             LINK(this, MetricSpinButton, spin_button_value_changed));
-        m_xSpinButton->set_text(spin_button_output(m_xSpinButton->get_value()));
+        m_xSpinButton->set_text(format_number(m_xSpinButton->get_value()));
     }
 
     static OUString MetricToString(FieldUnit rUnit);
@@ -2164,7 +2164,7 @@ public:
     // formatted value and now you want to show it as formatted again
     void reformat()
     {
-        const OUString sText = spin_button_output(m_xSpinButton->get_value());
+        const OUString sText = format_number(m_xSpinButton->get_value());
         m_xSpinButton->set_text(sText);
     }
 

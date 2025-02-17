@@ -360,7 +360,7 @@ namespace weld
             m_eSrcUnit = eUnit;
             set_increments(step, page, m_eSrcUnit);
             set_value(value, m_eSrcUnit);
-            const OUString sText = spin_button_output(m_xSpinButton->get_value());
+            const OUString sText = format_number(m_xSpinButton->get_value());
             m_xSpinButton->set_text(sText);
             update_width_chars();
         }
