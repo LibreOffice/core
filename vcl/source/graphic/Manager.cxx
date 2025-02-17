@@ -58,6 +58,7 @@ MemoryManager::MemoryManager()
 
     if (mbSwapEnabled)
     {
+        maSwapOutTimer.SetPriority(TaskPriority::DEFAULT_IDLE);
         maSwapOutTimer.SetInvokeHandler(LINK(this, MemoryManager, ReduceMemoryTimerHandler));
         maSwapOutTimer.SetTimeout(mnTimeout);
         maSwapOutTimer.Start();

@@ -49,6 +49,7 @@ DocumentTimerManager::DocumentTimerManager(SwDoc& i_rSwdoc)
     m_aDocIdle.SetPriority(TaskPriority::LOWEST);
     m_aDocIdle.SetInvokeHandler(LINK(this, DocumentTimerManager, DoIdleJobs));
 
+    m_aFireIdleJobsTimer.SetPriority(TaskPriority::DEFAULT_IDLE);
     m_aFireIdleJobsTimer.SetInvokeHandler(LINK(this, DocumentTimerManager, FireIdleJobsTimeout));
     m_aFireIdleJobsTimer.SetTimeout(1000); // Enough time for LOK to render the first tiles.
 }

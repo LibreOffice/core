@@ -143,6 +143,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
                                        ErrCodeArea::Sc,
                                        GetResLocale()) );
 
+    m_aIdleTimer.SetPriority(TaskPriority::DEFAULT_IDLE);
     m_aIdleTimer.SetTimeout(SC_IDLE_MIN);
     m_aIdleTimer.SetInvokeHandler( LINK( this, ScModule, IdleHandler ) );
     m_aIdleTimer.Start();
