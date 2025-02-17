@@ -37,8 +37,8 @@ private:
 
     std::unique_ptr<GalleryDragDrop> mxDragDropTargetHelper;
     std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
-    GraphicObject aGraphicObj;
-    tools::Rectangle aPreviewRect;
+    GraphicObject m_aGraphicObj;
+    tools::Rectangle m_aPreviewRect;
     GalleryBrowser1* mpParent;
     GalleryTheme* mpTheme;
 
@@ -62,7 +62,7 @@ public:
     virtual void Show() override;
     virtual void Hide() override;
 
-    void                SetGraphic( const Graphic& rGraphic ) { aGraphicObj.SetGraphic( rGraphic ); }
+    void                SetGraphic( const Graphic& rGraphic ) { m_aGraphicObj.SetGraphic( rGraphic ); }
     static void         PreviewMedia( const INetURLObject& rURL );
 };
 

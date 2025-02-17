@@ -114,15 +114,15 @@ void GalleryPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     rRenderContext.SetBackground(Wallpaper(GALLERY_BG_COLOR));
     rRenderContext.Erase();
 
-    if (ImplGetGraphicCenterRect(aGraphicObj.GetGraphic(), aPreviewRect))
+    if (ImplGetGraphicCenterRect(m_aGraphicObj.GetGraphic(), m_aPreviewRect))
     {
-        const Point aPos( aPreviewRect.TopLeft() );
-        const Size  aSize( aPreviewRect.GetSize() );
+        const Point aPos( m_aPreviewRect.TopLeft() );
+        const Size  aSize( m_aPreviewRect.GetSize() );
 
-        if( aGraphicObj.IsAnimated() )
-            aGraphicObj.StartAnimation(rRenderContext, aPos, aSize);
+        if( m_aGraphicObj.IsAnimated() )
+            m_aGraphicObj.StartAnimation(rRenderContext, aPos, aSize);
         else
-            aGraphicObj.Draw(rRenderContext, aPos, aSize);
+            m_aGraphicObj.Draw(rRenderContext, aPos, aSize);
     }
 }
 
