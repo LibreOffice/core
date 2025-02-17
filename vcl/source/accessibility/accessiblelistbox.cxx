@@ -167,13 +167,13 @@ void AccessibleListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEven
             SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
             if ( pEntry )
             {
-                Reference<XAccessible> const xChild(implGetAccessible(*pEntry));
+                rtl::Reference<AccessibleListBoxEntry> const xChild(implGetAccessible(*pEntry));
                 const short nAccEvent =
                         ( rVclWindowEvent.GetId() == VclEventId::ItemExpanded )
                         ? AccessibleEventId::LISTBOX_ENTRY_EXPANDED
                         : AccessibleEventId::LISTBOX_ENTRY_COLLAPSED;
                 uno::Any aListBoxEntry;
-                aListBoxEntry <<= xChild;
+                aListBoxEntry <<= Reference<XAccessible>(xChild);
                 NotifyAccessibleEvent( nAccEvent, Any(), aListBoxEntry );
                 if ( getListBox() && getListBox()->HasFocus() )
                 {

@@ -172,8 +172,7 @@ Reference< XAccessible > AccessibleTableShapeImpl::getAccessibleChild(sal_Int64 
 
     if( iter != maChildMap.end() )
     {
-        Reference< XAccessible > xChild( (*iter).second );
-        return xChild;
+        return (*iter).second;
     }
     else
     {

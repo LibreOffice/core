@@ -111,7 +111,7 @@ void VCLXAccessibleStatusBar::RemoveChild( sal_Int32 i )
         return;
 
     // get the accessible of the removed page
-    Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
+    rtl::Reference< VCLXAccessibleStatusBarItem > xChild( m_aAccessibleChildren[i] );
 
     // remove entry in child list
     m_aAccessibleChildren.erase( m_aAccessibleChildren.begin() + i );
@@ -120,12 +120,10 @@ void VCLXAccessibleStatusBar::RemoveChild( sal_Int32 i )
     if ( xChild.is() )
     {
         Any aOldValue, aNewValue;
-        aOldValue <<= xChild;
+        aOldValue <<= Reference< XAccessible >(xChild);
         NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
 
-        Reference< XComponent > xComponent( xChild, UNO_QUERY );
-        if ( xComponent.is() )
-            xComponent->dispose();
+        xChild->dispose();
     }
 }
 

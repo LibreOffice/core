@@ -333,8 +333,7 @@ Reference< css::awt::XBitmap > ScannerManager::getBitmap( const ScannerContext& 
 
     osl::MutexGuard aProtGuard( pHolder->m_aProtector );
 
-    Reference< css::awt::XBitmap > xRet( pHolder->m_xBitmap );
-    pHolder->m_xBitmap.clear();
+    rtl::Reference< BitmapTransporter > xRet = std::move( pHolder->m_xBitmap );
 
     return xRet;
 }

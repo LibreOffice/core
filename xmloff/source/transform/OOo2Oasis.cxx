@@ -1046,7 +1046,6 @@ void XMLBodyTransformerContext_Impl::StartElement(
 
     rtl::Reference<XMLMutableAttributeList> pMutableAttrList =
         new XMLMutableAttributeList( rAttrList );
-    Reference< XAttributeList > xAttrList = pMutableAttrList;
     OUString aClass( GetTransformer().GetClass() );
     if( aClass.isEmpty() )
     {
@@ -1065,7 +1064,7 @@ void XMLBodyTransformerContext_Impl::StartElement(
     m_aClassQName = GetTransformer().GetNamespaceMap().GetQNameByKey(
                         XML_NAMESPACE_OFFICE, aClass );
     GetTransformer().GetDocHandler()->startElement( m_aClassQName,
-                                                    xAttrList );
+                                                    pMutableAttrList );
 }
 
 void XMLBodyTransformerContext_Impl::EndElement()

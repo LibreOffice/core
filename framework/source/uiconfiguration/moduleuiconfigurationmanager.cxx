@@ -912,8 +912,7 @@ void SAL_CALL ModuleUIConfigurationManager::dispose()
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aGuard;
-    Reference< XComponent > xModuleImageManager( m_xModuleImageManager );
-    m_xModuleImageManager.clear();
+    rtl::Reference< ImageManager > xModuleImageManager = std::move( m_xModuleImageManager );
     m_xModuleAcceleratorManager.clear();
     m_aUIElements[LAYER_USERDEFINED].clear();
     m_aUIElements[LAYER_DEFAULT].clear();

@@ -59,7 +59,6 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const css::uno::Reference< 
     pHelper->m_aProgressHandler.set(pProgressHelper);
 
     // UCB has ownership of environment...
-    css::uno::Reference< XCommandEnvironment > aEnvironment(pHelper);
 
     // append query string to the URL
     try {
@@ -77,7 +76,7 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const css::uno::Reference< 
             aUTF8QueryURL.append("?" + aQueryString);
         }
         OUString aQueryURL = OStringToOUString(aUTF8QueryURL, RTL_TEXTENCODING_UTF8);
-        ucbhelper::Content aContent(aQueryURL, aEnvironment, m_xContext);
+        ucbhelper::Content aContent(aQueryURL, pHelper, m_xContext);
         // get reply
         try {
             m_aResultStream = aContent.openStream();

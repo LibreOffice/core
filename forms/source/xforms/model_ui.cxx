@@ -372,9 +372,8 @@ css::uno::Reference< ::css::beans::XPropertySet > Model::cloneBindingAsGhost( co
     pBinding->deferNotifications(true);
 
     // Copy the propertyset and return result...
-    XPropertySet_t xNewBinding(pBinding);
-    copy( xBinding, xNewBinding );
-    return xNewBinding;
+    copy( xBinding, XPropertySet_t(pBinding) );
+    return pBinding;
 }
 
 void Model::removeBindingIfUseless( const css::uno::Reference< ::css::beans::XPropertySet >& xBinding )

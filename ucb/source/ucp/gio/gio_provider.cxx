@@ -37,7 +37,7 @@ ContentProvider::queryContent(
     osl::MutexGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
-    css::uno::Reference< css::ucb::XContent > xContent = queryExistingContent( Identifier );
+    rtl::Reference< ucbhelper::ContentImplHelper > xContent = queryExistingContent( Identifier );
     if ( xContent.is() )
         return xContent;
 

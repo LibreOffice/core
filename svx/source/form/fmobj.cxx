@@ -164,8 +164,7 @@ void FmFormObj::impl_checkRefDevice_nothrow( bool _force )
         {
             rtl::Reference<VCLXDevice> pUnoRefDevice = new VCLXDevice;
             pUnoRefDevice->SetOutputDevice( m_pLastKnownRefDevice );
-            Reference< XDevice > xRefDevice( pUnoRefDevice );
-            xModelProps->setPropertyValue( sRefDevicePropName, Any( xRefDevice ) );
+            xModelProps->setPropertyValue( sRefDevicePropName, Any( Reference< XDevice >( pUnoRefDevice ) ) );
         }
     }
     catch( const Exception& )

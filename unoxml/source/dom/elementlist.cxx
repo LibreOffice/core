@@ -94,13 +94,7 @@ namespace DOM
     CElementListImpl::~CElementListImpl()
     {
         if (m_xEventListener.is() && m_pElement.is())
-        {
-            Reference< XEventTarget > xTarget = m_pElement;
-            assert(xTarget.is());
-            if (!xTarget.is())
-                return;
-            xTarget->removeEventListener(u"DOMSubtreeModified"_ustr, m_xEventListener, false/*capture*/);
-        }
+            m_pElement->removeEventListener(u"DOMSubtreeModified"_ustr, m_xEventListener, false/*capture*/);
     }
 
     void CElementListImpl::registerListener(CElement & rElement)

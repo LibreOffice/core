@@ -1330,8 +1330,7 @@ namespace svxform
         m_xFrame = pBindings->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface();
         DBG_ASSERT( m_xFrame.is(), "DataNavigatorWindow::LoadModels(): no frame" );
         // add frameaction listener
-        Reference< XFrameActionListener > xListener = m_xDataListener;
-        m_xFrame->addFrameActionListener( xListener );
+        m_xFrame->addFrameActionListener( Reference< XFrameActionListener >(m_xDataListener) );
 
         // load xforms models of the current document
         LoadModels();
@@ -1349,8 +1348,7 @@ namespace svxform
 
     DataNavigatorWindow::~DataNavigatorWindow()
     {
-        Reference< XFrameActionListener > xListener = m_xDataListener;
-        m_xFrame->removeFrameActionListener( xListener );
+        m_xFrame->removeFrameActionListener( Reference< XFrameActionListener >(m_xDataListener) );
 
         SvtViewOptions aViewOpt( EViewType::TabDialog, CFGNAME_DATANAVIGATOR );
         aViewOpt.SetPageID(m_xTabCtrl->get_current_page_ident());
@@ -1992,8 +1990,7 @@ namespace svxform
 
     void DataNavigatorWindow::AddContainerBroadcaster( const css::uno::Reference< css::container::XContainer >& xContainer )
     {
-        Reference< XContainerListener > xListener = m_xDataListener;
-        xContainer->addContainerListener( xListener );
+        xContainer->addContainerListener( Reference< XContainerListener >(m_xDataListener) );
         m_aContainerList.push_back( xContainer );
     }
 
@@ -2010,10 +2007,9 @@ namespace svxform
 
     void DataNavigatorWindow::RemoveBroadcaster()
     {
-        Reference< XContainerListener > xContainerListener = m_xDataListener;
         sal_Int32 i, nCount = m_aContainerList.size();
         for ( i = 0; i < nCount; ++i )
-            m_aContainerList[i]->removeContainerListener( xContainerListener );
+            m_aContainerList[i]->removeContainerListener( Reference< XContainerListener >(m_xDataListener) );
         Reference< XEventListener > xEventListener = m_xDataListener;
         nCount = m_aEventTargetList.size();
         for ( i = 0; i < nCount; ++i )

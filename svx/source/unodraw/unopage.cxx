@@ -808,7 +808,7 @@ rtl::Reference<SvxShape> SvxDrawPage::CreateShapeByTypeAndInventor( SdrObjKind n
 
 Reference< drawing::XShape >  SvxDrawPage::CreateShape( SdrObject *pObj ) const
 {
-    Reference< drawing::XShape > xShape( CreateShapeByTypeAndInventor(pObj->GetObjIdentifier(),
+    rtl::Reference< SvxShape > xShape( CreateShapeByTypeAndInventor(pObj->GetObjIdentifier(),
                                               pObj->GetObjInventor(),
                                               pObj,
                                               const_cast<SvxDrawPage*>(this)));

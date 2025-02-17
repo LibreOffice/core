@@ -1346,8 +1346,7 @@ void ControlContainerBase::dispose()
     // --- SAFE ---
 
     SolarMutexClearableGuard aGuard;
-    Reference< XEventListener > xListener = mxListener;
-    mxListener.clear();
+    rtl::Reference< ResourceListener > xListener = std::move(mxListener);
     aGuard.clear();
     // --- SAFE ---
 
@@ -1669,13 +1668,10 @@ void ControlContainerBase::ImplStartListingForResourceEvents()
 
     ImplGetPropertyValue( PROPERTY_RESOURCERESOLVER ) >>= xStringResourceResolver;
 
-    // Add our helper as listener to retrieve notifications about changes
-    Reference< util::XModifyListener > rListener( mxListener );
-    ResourceListener* pResourceListener = static_cast< ResourceListener* >( rListener.get() );
-
-    // resource listener will stop listening if resolver reference is empty
-    if ( pResourceListener )
-        pResourceListener->startListening( xStringResourceResolver );
+    // Add our helper as listener to retrieve notifications about changes.
+    // Resource listener will stop listening if resolver reference is empty.
+    if ( mxListener )
+        mxListener->startListening( xStringResourceResolver );
     ImplUpdateResourceResolver();
 }
 

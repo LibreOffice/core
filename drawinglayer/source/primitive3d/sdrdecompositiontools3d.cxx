@@ -233,8 +233,7 @@ namespace drawinglayer::primitive3d
                     }
 
                     // exchange aRetval content with texture group
-                    const Primitive3DReference xRef(pNewTexturePrimitive3D);
-                    aRetval = { xRef };
+                    aRetval = { Primitive3DReference(pNewTexturePrimitive3D) };
 
                     if(css::drawing::TextureKind2_LUMINANCE == aSdr3DObjectAttribute.getTextureKind())
                     {

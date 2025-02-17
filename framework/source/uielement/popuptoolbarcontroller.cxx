@@ -206,8 +206,8 @@ PopupMenuToolbarController::createPopupWindow()
     // its ToolBarManager can be disposed along with our controller, destroying
     // m_xPopupMenu, while the latter still in execute. This should be fixed at a
     // different level, for now just hold it here so it won't crash.
-    css::uno::Reference< css::awt::XPopupMenu > xPopupMenu ( m_xPopupMenu );
-    sal_uInt16 nId = xPopupMenu->execute(
+    rtl::Reference< VCLXPopupMenu > xKeepAlivePopupMenu ( m_xPopupMenu );
+    sal_uInt16 nId = xKeepAlivePopupMenu->execute(
         css::uno::Reference< css::awt::XWindowPeer >( getParent(), css::uno::UNO_QUERY ),
         vcl::unohelper::ConvertToAWTRect( pToolBox->GetItemRect( m_nToolBoxId ) ),
         ( eAlign == WindowAlign::Top || eAlign == WindowAlign::Bottom ) ?
@@ -216,7 +216,7 @@ PopupMenuToolbarController::createPopupWindow()
     pToolBox->SetItemDown( m_nToolBoxId, false );
 
     if ( nId )
-        functionExecuted( xPopupMenu->getCommand( nId ) );
+        functionExecuted( xKeepAlivePopupMenu->getCommand( nId ) );
 
     return xRet;
 }

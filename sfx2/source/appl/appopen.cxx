@@ -684,7 +684,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             // later if the following transaction was finished.
 
             rtl::Reference<sfx2::PreventDuplicateInteraction> pHandler = new sfx2::PreventDuplicateInteraction(comphelper::getProcessComponentContext());
-            uno::Reference<task::XInteractionHandler> xHandler(pHandler);
             uno::Reference<task::XInteractionHandler> xWrappedHandler;
 
             // wrap existing handler or create new UUI handler
@@ -698,7 +697,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 pHandler->setHandler(xWrappedHandler);
             else
                 pHandler->useDefaultUUIHandler();
-            rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,css::uno::Any(xHandler)) );
+            rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,css::uno::Any(uno::Reference<task::XInteractionHandler>(pHandler))) );
 
             // define rules for this handler
             css::uno::Type aInteraction = ::cppu::UnoType<css::task::ErrorCodeRequest>::get();

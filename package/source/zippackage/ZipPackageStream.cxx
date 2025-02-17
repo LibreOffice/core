@@ -326,7 +326,6 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
 
         // create another temporary file
         rtl::Reference < utl::TempFileFastService > xTempOut = new utl::TempFileFastService;
-        uno::Reference < io::XInputStream > xTempIn( xTempOut );
 
         // copy the raw stream to the temporary file
         ::comphelper::OStorageHelper::CopyInputToOutput( xInRaw, xTempOut );
@@ -340,7 +339,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
         xRootNameContainer.clear();
 
         // return the stream representing the first temporary file
-        return xTempIn;
+        return xTempOut;
     }
     catch ( RuntimeException& )
     {

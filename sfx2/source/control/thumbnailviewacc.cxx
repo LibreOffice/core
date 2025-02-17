@@ -71,7 +71,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAcces
     if( !pItem )
         throw lang::IndexOutOfBoundsException();
 
-    uno::Reference< accessibility::XAccessible >  xRet = pItem->GetAccessible();
+    rtl::Reference< ThumbnailViewItemAcc >  xRet = pItem->GetAccessible();
     return xRet;
 }
 

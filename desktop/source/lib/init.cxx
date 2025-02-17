@@ -2333,8 +2333,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
 
         auto xClip = forceSetClipboardForCurrentView(m_pDocument);
 
-        uno::Reference<datatransfer::clipboard::XClipboard> xClipboard(xClip);
-        pWindow->SetClipboard(xClipboard);
+        pWindow->SetClipboard(uno::Reference<datatransfer::clipboard::XClipboard>(xClip));
     }
     else if (aAction == "size_changed")
     {
@@ -2869,7 +2868,6 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
                     pLib->mInteractionMap.erase(aURL.toUtf8());
                 }
             });
-        uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction);
 
         int nMacroSecurityLevel = 1;
         const OUString aMacroSecurityLevel = extractParameter(aOptions, u"MacroSecurityLevel");
@@ -2911,7 +2909,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         // to bring saveas dialog which cannot work with LOK case
         uno::Sequence<css::beans::PropertyValue> aFilterOptions{
             comphelper::makePropertyValue(u"FilterOptions"_ustr, aOptions),
-            comphelper::makePropertyValue(u"InteractionHandler"_ustr, xInteraction),
+            comphelper::makePropertyValue(u"InteractionHandler"_ustr, uno::Reference<task::XInteractionHandler2>(pInteraction)),
             comphelper::makePropertyValue(u"MacroExecutionMode"_ustr, nMacroExecMode),
             comphelper::makePropertyValue(u"AsTemplate"_ustr, false),
             comphelper::makePropertyValue(u"Silent"_ustr, !aBatch.isEmpty())
@@ -3800,9 +3798,8 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
             // gImpl does not have to exist when running from a unit test
             rtl::Reference<LOKInteractionHandler> const pInteraction(
                     new LOKInteractionHandler("saveas"_ostr, gImpl, pDocument));
-            uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction);
 
-            aSaveMediaDescriptor[MediaDescriptor::PROP_INTERACTIONHANDLER] <<= xInteraction;
+            aSaveMediaDescriptor[MediaDescriptor::PROP_INTERACTIONHANDLER] <<= uno::Reference<task::XInteractionHandler2>(pInteraction);
         }
 
 
@@ -5301,11 +5298,10 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
 
         rtl::Reference<LOKInteractionHandler> const pInteraction(
             new LOKInteractionHandler("save"_ostr, gImpl, pDocument));
-        uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction);
 
         beans::PropertyValue aValue;
         aValue.Name = u"InteractionHandler"_ustr;
-        aValue.Value <<= xInteraction;
+        aValue.Value <<= uno::Reference<task::XInteractionHandler2>(pInteraction);
         aPropertyValuesVector.push_back(aValue);
 
         bool bDontSaveIfUnmodified = false;

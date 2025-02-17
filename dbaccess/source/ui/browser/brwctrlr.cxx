@@ -436,8 +436,8 @@ Sequence< Reference< css::awt::XControl > > SAL_CALL SbaXDataBrowserController::
 {
     if (m_pOwner->getBrowserView())
     {
-        Reference< css::awt::XControl >  xGrid = m_pOwner->getBrowserView()->getGridControl();
-        return Sequence< Reference< css::awt::XControl > >(&xGrid, 1);
+        rtl::Reference< SbaXGridControl > xGrid = m_pOwner->getBrowserView()->getGridControl();
+        return { Reference< css::awt::XControl >(xGrid) };
     }
     return Sequence< Reference< css::awt::XControl > >();
 }
@@ -2195,16 +2195,12 @@ bool SbaXDataBrowserController::CommitCurrent()
     if (!getBrowserView())
         return true;
 
-    Reference< css::awt::XControl >  xActiveControl(getBrowserView()->getGridControl());
-    Reference< css::form::XBoundControl >  xLockingTest(xActiveControl, UNO_QUERY);
-    bool bControlIsLocked = xLockingTest.is() && xLockingTest->getLock();
+    rtl::Reference< SbaXGridControl >  xActiveControl(getBrowserView()->getGridControl());
+    Reference< css::form::XBoundControl >  xLockingTest(static_cast<cppu::OWeakObject*>(xActiveControl.get()), UNO_QUERY);
+    bool bControlIsLocked = xActiveControl.is() && xLockingTest->getLock();
     if (xActiveControl.is() && !bControlIsLocked)
     {
-        // At first check Control if it supports the IFace
-        Reference< css::form::XBoundComponent >  xBoundControl(xActiveControl, UNO_QUERY);
-        if (!xBoundControl.is())
-            xBoundControl.set(xActiveControl->getModel(), UNO_QUERY);
-        if (xBoundControl.is() && !xBoundControl->commit())
+        if (!xActiveControl->commit())
             return false;
     }
     return true;

@@ -145,11 +145,11 @@ void SmartTagMenuController::FillMenu()
         const OUString aSmartTagCaption = xFirstAction->getSmartTagCaption( nSmartTagIndex, rLocale );
 
         // No sub-menus if there's only one smart tag type listed
-        css::uno::Reference<css::awt::XPopupMenu> xSubMenu = m_xPopupMenu;
+        rtl::Reference<VCLXPopupMenu> xSubMenu = m_xPopupMenu;
         if ( 1 < rActionComponentsSequence.getLength() )
         {
             m_xPopupMenu->insertItem(nMenuId, aSmartTagCaption, 0, -1);
-            xSubMenu.set(new VCLXPopupMenu);
+            xSubMenu = new VCLXPopupMenu;
             m_xPopupMenu->setPopupMenu(nMenuId++, xSubMenu);
         }
 

@@ -95,7 +95,7 @@ ContentProvider::queryContent(
         throw uno::RuntimeException();
 
     // Check, if a content with given id already exists...
-    uno::Reference< ucb::XContent > xContent
+    rtl::Reference< ucbhelper::ContentImplHelper > xContent
         = queryExistingContent( xCanonicId );
     if ( xContent.is() )
         return xContent;

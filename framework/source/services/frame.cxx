@@ -1794,7 +1794,7 @@ void SAL_CALL XFrameImpl::addTitleChangeListener( const css::uno::Reference< css
 
     // SAFE ->
     SolarMutexClearableGuard aReadLock;
-    css::uno::Reference< css::frame::XTitleChangeBroadcaster > xTitle(m_xTitleHelper);
+    rtl::Reference< TitleHelper > xTitle(m_xTitleHelper);
     aReadLock.clear();
     // <- SAFE
 
@@ -1807,7 +1807,7 @@ void SAL_CALL XFrameImpl::removeTitleChangeListener( const css::uno::Reference< 
 
     // SAFE ->
     SolarMutexClearableGuard aReadLock;
-    css::uno::Reference< css::frame::XTitleChangeBroadcaster > xTitle(m_xTitleHelper);
+    rtl::Reference< TitleHelper > xTitle(m_xTitleHelper);
     aReadLock.clear();
     // <- SAFE
 
@@ -3102,7 +3102,7 @@ void XFrameImpl::implts_startWindowListening()
     // Make snapshot of necessary member!
     SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::awt::XWindow > xContainerWindow = m_xContainerWindow;
-    css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > xDragDropListener = m_xDropTargetListener;
+    rtl::Reference< OpenFileDropTargetListener > xDragDropListener = m_xDropTargetListener;
     css::uno::Reference< css::awt::XWindowListener > xWindowListener(this);
     css::uno::Reference< css::awt::XFocusListener > xFocusListener(this);
     css::uno::Reference< css::awt::XTopWindowListener > xTopWindowListener(this);
@@ -3138,7 +3138,7 @@ void XFrameImpl::implts_stopWindowListening()
     // Make snapshot of necessary member!
     SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::awt::XWindow > xContainerWindow = m_xContainerWindow;
-    css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > xDragDropListener = m_xDropTargetListener;
+    rtl::Reference< OpenFileDropTargetListener > xDragDropListener = m_xDropTargetListener;
     css::uno::Reference< css::awt::XWindowListener > xWindowListener(this);
     css::uno::Reference< css::awt::XFocusListener > xFocusListener(this);
     css::uno::Reference< css::awt::XTopWindowListener > xTopWindowListener(this);

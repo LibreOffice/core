@@ -1408,7 +1408,7 @@ namespace
 {
     Reference< XFrame > lcl_getDatabaseDocumentFrame( ODatabaseModelImpl const & _rImpl )
     {
-        Reference< XModel > xDatabaseDocumentModel( _rImpl.getModel_noCreate() );
+        rtl::Reference< ODatabaseDocument > xDatabaseDocumentModel( _rImpl.getModel_noCreate() );
 
         Reference< XController > xDatabaseDocumentController;
         if ( xDatabaseDocumentModel.is() )
@@ -1469,10 +1469,9 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
     }
 
     m_pInterceptor = new OInterceptor( this );
-    Reference<XDispatchProviderInterceptor> xInterceptor = m_pInterceptor;
 
     ::comphelper::NamedValueCollection aEmbeddedDescriptor;
-    aEmbeddedDescriptor.put( u"OutplaceDispatchInterceptor"_ustr, xInterceptor );
+    aEmbeddedDescriptor.put( u"OutplaceDispatchInterceptor"_ustr, Reference<XDispatchProviderInterceptor>(m_pInterceptor) );
 
     ::comphelper::NamedValueCollection aMediaDesc;
     separateOpenCommandArguments( i_rOpenCommandArguments, aMediaDesc, aEmbeddedDescriptor );
@@ -1771,7 +1770,7 @@ namespace
     {
         Reference< XDatabaseDocumentUI > xUI;
 
-        Reference< XModel > xModel( _rModelImpl.getModel_noCreate() );
+        rtl::Reference< ODatabaseDocument > xModel( _rModelImpl.getModel_noCreate() );
         if ( xModel.is() )
             xUI.set( xModel->getCurrentController(), UNO_QUERY );
         return xUI;

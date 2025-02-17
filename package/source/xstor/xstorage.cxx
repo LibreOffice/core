@@ -3386,14 +3386,13 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
             throw io::IOException( THROW_WHERE );
 
         rtl::Reference < utl::TempFileFastService > xTempFile = new utl::TempFileFastService;
-        uno::Reference < io::XOutputStream > xTempOut = xTempFile;
         xTempIn = xTempFile;
 
         if ( !xTempFile )
             throw io::IOException( THROW_WHERE );
 
         // Copy temporary file to a new one
-        ::comphelper::OStorageHelper::CopyInputToOutput( xRawInStream, xTempOut );
+        ::comphelper::OStorageHelper::CopyInputToOutput( xRawInStream, xTempFile );
         xTempFile->closeOutput();
         xTempFile->seek( 0 );
 

@@ -504,7 +504,7 @@ weld::Window* ODatabaseModelImpl::GetFrameWeld()
     if (m_xDialogParent.is())
         return Application::GetFrameWeld(m_xDialogParent);
 
-    Reference<XModel> xModel = getModel_noCreate();
+    rtl::Reference<ODatabaseDocument> xModel = getModel_noCreate();
     if (!xModel.is())
         return nullptr;
     Reference<XController> xController(xModel->getCurrentController());
@@ -526,7 +526,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 #if ENABLE_FIREBIRD_SDBC
     bool bIgnoreMigration = false;
     bool bNeedMigration = false;
-    Reference< XModel > xModel = m_pImpl->getModel_noCreate();
+    rtl::Reference< ODatabaseDocument > xModel = m_pImpl->getModel_noCreate();
     if ( xModel)
     {
         //See ODbTypeWizDialogSetup::SaveDatabaseDocument
@@ -1306,11 +1306,11 @@ Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocume
 {
     ModelMethodGuard aGuard( *this );
 
-    Reference< XModel > xModel( m_pImpl->getModel_noCreate() );
+    rtl::Reference< ODatabaseDocument > xModel( m_pImpl->getModel_noCreate() );
     if ( !xModel.is() )
         xModel = m_pImpl->createNewModel_deliverOwnership();
 
-    return Reference< XOfficeDatabaseDocument >( xModel, UNO_QUERY_THROW );
+    return Reference< XOfficeDatabaseDocument >( static_cast<cppu::OWeakObject*>(xModel.get()), UNO_QUERY_THROW );
 }
 
 void SAL_CALL ODatabaseSource::initialize( css::uno::Sequence< css::uno::Any > const & rArguments)

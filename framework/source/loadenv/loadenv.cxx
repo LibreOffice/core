@@ -302,8 +302,8 @@ void LoadEnv::startLoading(const OUString& sURL, const uno::Sequence<beans::Prop
         m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_SILENT, false))
     {
         rtl::Reference<QuietInteraction> pQuietInteraction = new QuietInteraction();
-        uno::Reference<task::XInteractionHandler> xInteractionHandler(pQuietInteraction);
-        m_lMediaDescriptor[utl::MediaDescriptor::PROP_INTERACTIONHANDLER] <<= xInteractionHandler;
+        m_lMediaDescriptor[utl::MediaDescriptor::PROP_INTERACTIONHANDLER] <<=
+                uno::Reference<task::XInteractionHandler>(pQuietInteraction);
     }
 
     initializeUIDefaults(m_xContext, m_lMediaDescriptor, bUIMode, &m_pQuietInteraction);

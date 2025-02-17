@@ -1065,7 +1065,7 @@ namespace accessibility
 
                 // #i61812# remember para to be removed for later notification
                 // AFTER the new state is applied (that after the para got removed)
-                ::uno::Reference< XAccessible > xPara(begin->first.get());
+                rtl::Reference<AccessibleEditableTextPara> xPara(begin->first.get());
 
                 // release everything from the remove position until the end
                 maParaManager.Release(aFunctor.GetParaIndex(), nCurrParas);
@@ -1081,7 +1081,7 @@ namespace accessibility
 
                 // #i61812# notification for removed para
                 if (xPara.is())
-                    FireEvent(AccessibleEventId::CHILD, uno::Any(), uno::Any( xPara) );
+                    FireEvent(AccessibleEventId::CHILD, uno::Any(), uno::Any( ::uno::Reference< XAccessible >(xPara) ) );
             }
 #ifdef DBG_UTIL
             else

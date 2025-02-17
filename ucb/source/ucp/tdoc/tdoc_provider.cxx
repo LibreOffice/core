@@ -112,7 +112,7 @@ ContentProvider::queryContent(
     osl::MutexGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
-    uno::Reference< ucb::XContent > xContent
+    rtl::Reference< ucbhelper::ContentImplHelper > xContent
         = queryExistingContent( xCanonicId );
 
     if ( !xContent.is() )
@@ -169,7 +169,7 @@ ContentProvider::createDocumentContent(
     osl::MutexGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
-    uno::Reference< ucb::XContent > xContent
+    rtl::Reference< ucbhelper::ContentImplHelper > xContent
         = queryExistingContent( xId );
 
     if ( !xContent.is() )

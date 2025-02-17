@@ -212,10 +212,9 @@ void SAL_CALL OFormattedFieldWrapper::write(const Reference<XObjectOutputStream>
 
     // for this we transfer the current props of the formatted part to the edit part
     Reference<XPropertySet>  xFormatProps(m_xFormattedPart, UNO_QUERY);
-    Reference<XPropertySet> xEditProps = m_pEditPart;
 
     Locale aAppLanguage = Application::GetSettings().GetUILanguageTag().getLocale();
-    dbtools::TransferFormComponentProperties(xFormatProps, xEditProps, aAppLanguage);
+    dbtools::TransferFormComponentProperties(xFormatProps, m_pEditPart, aAppLanguage);
 
     // then write the edit part, after switching to "fake mode"
     m_pEditPart->enableFormattedWriteFake();

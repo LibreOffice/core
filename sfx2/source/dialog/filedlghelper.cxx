@@ -3031,10 +3031,9 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
 
     const bool bMSType = IsMSType(pCurrentFilter);
 
-    uno::Reference< css::task::XInteractionRequest > rRequest( pPasswordRequest );
     do
     {
-        xInteractionHandler->handle( rRequest );
+        xInteractionHandler->handle( uno::Reference< css::task::XInteractionRequest >( pPasswordRequest ) );
         if (!pPasswordRequest->isPassword() || bMSType)
         {
             break;

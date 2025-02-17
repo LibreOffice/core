@@ -521,7 +521,7 @@ void ChildrenManagerImpl::RemoveShape (const Reference<drawing::XShape>& rxShape
         return;
 
     // Remove descriptor from that list.
-    Reference<XAccessible> xHoldAlive(I->mxAccessibleShape);
+    rtl::Reference<AccessibleShape> xHoldAlive(I->mxAccessibleShape);
 
     UnregisterAsDisposeListener (I->mxShape);
     // Dispose the accessible object.

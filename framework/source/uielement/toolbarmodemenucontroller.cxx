@@ -170,7 +170,7 @@ void SAL_CALL ToolbarModeMenuController::statusChanged( const FeatureStateEvent&
 
     // All other status events will be processed here
     std::unique_lock aLock( m_aMutex );
-    Reference< css::awt::XPopupMenu > xPopupMenu( m_xPopupMenu );
+    rtl::Reference< VCLXPopupMenu > xPopupMenu( m_xPopupMenu );
     aLock.unlock();
 
     if ( !xPopupMenu.is() )

@@ -166,7 +166,7 @@ private:
             throw css::lang::IndexOutOfBoundsException( OUString(), *this );
 
         Columns::iterator const pos = m_aColumns.begin() + i_columnIndex;
-        Reference< XGridColumn > const xColumn( *pos );
+        rtl::Reference< GridColumn > const xColumn( *pos );
         m_aColumns.erase( pos );
 
         // update indexes of all subsequent columns
@@ -184,7 +184,7 @@ private:
         ContainerEvent aEvent;
         aEvent.Source = *this;
         aEvent.Accessor <<= i_columnIndex;
-        aEvent.Element <<= xColumn;
+        aEvent.Element <<= Reference< XGridColumn >(xColumn);
 
         m_aContainerListeners.notifyEach( aGuard, &XContainerListener::elementRemoved, aEvent );
 

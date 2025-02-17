@@ -75,9 +75,8 @@ void UnoApiTest::setTestInteractionHandler(const char* pPassword,
     auto& rPropertyValue = rFilterOptions.emplace_back();
     xInteractionHandler
         = rtl::Reference<TestInteractionHandler>(new TestInteractionHandler(sPassword));
-    css::uno::Reference<task::XInteractionHandler2> const xInteraction(xInteractionHandler);
     rPropertyValue.Name = "InteractionHandler";
-    rPropertyValue.Value <<= xInteraction;
+    rPropertyValue.Value <<= css::uno::Reference<task::XInteractionHandler2>(xInteractionHandler);
 }
 
 void UnoApiTest::loadFromURL(OUString const& rURL, const char* pPassword)

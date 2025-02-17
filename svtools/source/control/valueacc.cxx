@@ -366,7 +366,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
     if( !pItem )
         throw lang::IndexOutOfBoundsException();
 
-    uno::Reference< accessibility::XAccessible >  xRet = pItem->GetAccessible();
+    rtl::Reference< ValueItemAcc > xRet = pItem->GetAccessible();
     return xRet;
 }
 

@@ -59,7 +59,6 @@ void XMLFrameOOoTransformerContext::StartElement(
 
     rtl::Reference<XMLMutableAttributeList> pFrameMutableAttrList =
         new XMLMutableAttributeList;
-    Reference< XAttributeList > xFrameAttrList( pFrameMutableAttrList );
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -91,7 +90,7 @@ void XMLFrameOOoTransformerContext::StartElement(
     }
 
     GetTransformer().GetDocHandler()->startElement( m_aElemQName,
-                                                    xFrameAttrList );
+                                                    Reference< XAttributeList >( pFrameMutableAttrList ) );
     XMLTransformerContext::StartElement( xAttrList );
 }
 

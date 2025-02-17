@@ -109,9 +109,9 @@ uno::Any SvxUnoTextContentEnumeration::nextElement()
     if(!hasMoreElements())
         throw container::NoSuchElementException();
 
-    uno::Reference< text::XTextContent > xRef( maContents.at(mnNextParagraph) );
+    rtl::Reference< SvxUnoTextContent > xRef( maContents.at(mnNextParagraph) );
     mnNextParagraph++;
-    return uno::Any( xRef );
+    return uno::Any( uno::Reference< text::XTextContent >(xRef) );
 }
 
 
@@ -433,9 +433,9 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
     if( maPortions.empty() || mnNextPortion >= maPortions.size() )
         throw container::NoSuchElementException();
 
-    uno::Reference< text::XTextRange > xRange = maPortions.at(mnNextPortion);
+    rtl::Reference< SvxUnoTextRange > xRange = maPortions.at(mnNextPortion);
     mnNextPortion++;
-    return uno::Any( xRange );
+    return uno::Any( uno::Reference< text::XTextRange >(xRange) );
 }
 
 SvxUnoTextCursor::SvxUnoTextCursor( const SvxUnoTextBase& rText ) noexcept

@@ -236,11 +236,9 @@ OUString SmMLExportWrapper::Export(SmMlElement* pElementTree)
         return u""_ustr;
 
     //Get model
-    uno::Reference<lang::XComponent> xModelComp = m_xModel;
-    SAL_WARN_IF(xModelComp == nullptr, "starmath", "Missing model component");
     SmModel* pModel = m_xModel.get();
     SAL_WARN_IF(pModel == nullptr, "starmath", "Failed to get threw uno tunnel");
-    if (xModelComp == nullptr || pModel == nullptr)
+    if (pModel == nullptr)
         return u""_ustr;
 
     // Get doc shell
@@ -273,7 +271,7 @@ OUString SmMLExportWrapper::Export(SmMlElement* pElementTree)
 
     // Write stuff
     // Note: export through an XML exporter component (memory stream version)
-    return WriteThroughComponentMS(xModelComp, xContext, xInfoSet);
+    return WriteThroughComponentMS(uno::Reference<lang::XComponent>(m_xModel), xContext, xInfoSet);
 }
 
 // export through an XML exporter component (output stream version)

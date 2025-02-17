@@ -103,7 +103,7 @@ DataSupplier::queryContent( std::unique_lock<std::mutex>& rResultSetGuard, sal_u
 
     if ( static_cast<size_t>(_nIndex) < m_aResults.size() )
     {
-        Reference< XContent > xContent = m_aResults[ _nIndex ]->xContent;
+        rtl::Reference< OContentHelper > xContent = m_aResults[ _nIndex ]->xContent;
         if ( xContent.is() )
         {
             // Already cached.

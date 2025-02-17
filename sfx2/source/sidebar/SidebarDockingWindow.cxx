@@ -74,8 +74,7 @@ SidebarDockingWindow::~SidebarDockingWindow()
 
 void SidebarDockingWindow::dispose()
 {
-    Reference<lang::XComponent> xComponent(mpSidebarController);
-    mpSidebarController.clear();
+    rtl::Reference<SidebarController> xComponent = std::move(mpSidebarController);
     if (xComponent.is())
         xComponent->dispose();
 

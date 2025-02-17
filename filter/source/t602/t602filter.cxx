@@ -190,7 +190,7 @@ void SAL_CALL T602ImportFilter::initialize( const Sequence< Any >& /*aArguments*
 
 void T602ImportFilter::inschr(unsigned char ch)
 {
-    Reference < XAttributeList > xAttrList ( mpAttrList );
+    rtl::Reference < comphelper::AttributeList > xAttrList ( mpAttrList );
 
     if(!ini.showcomm&&pst.comment) return;
 
@@ -248,7 +248,7 @@ bool T602ImportFilter::importImpl( const Sequence< css::beans::PropertyValue >& 
 
     mpAttrList = new comphelper::AttributeList;
 
-    Reference < XAttributeList > xAttrList ( mpAttrList );
+    rtl::Reference < comphelper::AttributeList > xAttrList ( mpAttrList );
 
     mxHandler->startDocument();
 
@@ -489,7 +489,7 @@ void T602ImportFilter::inschrdef(unsigned char ch)
 
 void T602ImportFilter::wrtfnt()
 {
-    Reference < XAttributeList > xAttrList ( mpAttrList );
+    rtl::Reference < comphelper::AttributeList > xAttrList ( mpAttrList );
     const char *style;
 
     switch(fst.nowfnt) {
@@ -537,7 +537,7 @@ unsigned char T602ImportFilter::Readchar602()
 void T602ImportFilter::par602(bool endofpage)
 {
     sal_Int16 endp;
-    Reference < XAttributeList > xAttrList ( mpAttrList );
+    rtl::Reference < comphelper::AttributeList > xAttrList ( mpAttrList );
 
     if(!endofpage || !pst.waspar) {
         if(ini.showcomm||!pst.comment) {
@@ -675,7 +675,7 @@ void T602ImportFilter::Read602()
     unsigned char ch=0;
     char cmd602[3] = {0};
 
-    Reference < XAttributeList > xAttrList ( mpAttrList );
+    rtl::Reference < comphelper::AttributeList > xAttrList ( mpAttrList );
 
     if (node==tnode::QUIT) return;
 

@@ -201,9 +201,8 @@ namespace DOM::events {
             xmlNodePtr cur = pNode;
             while (cur != nullptr)
             {
-                Reference< XEventTarget > const xRef(
-                        rDocument.GetCNode(cur));
-                captureVector.emplace_back(xRef, cur);
+                rtl::Reference< CNode > const xRef(rDocument.GetCNode(cur));
+                captureVector.emplace_back(Reference< XEventTarget >(xRef), cur);
                 cur = cur->parent;
             }
         }

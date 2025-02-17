@@ -818,11 +818,10 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
     }
     else
     {
-        Reference<css::form::XLoadable> xLoadable(m_xDatMan);
-        xLoadable->unload();
+        m_xDatMan->unload();
         m_xDatMan->setActiveDataTable(aDBTableName);
         m_xDatMan->updateGridModel();
-        xLoadable->load();
+        m_xDatMan->load();
     }
 
 

@@ -106,15 +106,14 @@ void XMLFormPropOASISTransformerContext::StartElement(
 
     rtl::Reference<XMLMutableAttributeList> pMutableAttrList =
         new XMLMutableAttributeList( rAttrList );
-    Reference< XAttributeList > xAttrList( pMutableAttrList );
 
     sal_Int16 nValueTypeAttr = -1;
     OUString aValue;
     bool bIsVoid = false;
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    sal_Int16 nAttrCount = pMutableAttrList.is() ? pMutableAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString aAttrName = xAttrList->getNameByIndex( i );
+        const OUString aAttrName = pMutableAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
             GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
@@ -124,7 +123,7 @@ void XMLFormPropOASISTransformerContext::StartElement(
             pActions->find( aKey );
         if( aIter != pActions->end() )
         {
-            const OUString aAttrValue = xAttrList->getValueByIndex( i );
+            const OUString aAttrValue = pMutableAttrList->getValueByIndex( i );
             switch( (*aIter).second.m_nActionType )
             {
             case XML_ATACTION_RENAME:
@@ -178,12 +177,11 @@ void XMLFormPropOASISTransformerContext::StartElement(
                                 GetXMLToken( GetValueType( aValue ) ) );
 
     if( !m_bIsListValue )
-        XMLRenameElemTransformerContext::StartElement( xAttrList );
+        XMLRenameElemTransformerContext::StartElement( pMutableAttrList );
     if( m_bIsList )
         return;
 
     pMutableAttrList = new XMLMutableAttributeList;
-    xAttrList = pMutableAttrList;
     if( bIsVoid )
     {
         OUString aNewAttrQName(
@@ -197,7 +195,7 @@ void XMLFormPropOASISTransformerContext::StartElement(
         GetTransformer().GetNamespaceMap().GetQNameByKey(
                 XML_NAMESPACE_FORM, GetXMLToken( XML_PROPERTY_VALUE ) ) );
     GetTransformer().GetDocHandler()->startElement( aValueElemQName,
-                                                    xAttrList );
+                                                    pMutableAttrList );
     GetTransformer().GetDocHandler()->characters( aValue );
     GetTransformer().GetDocHandler()->endElement( aValueElemQName );
 }

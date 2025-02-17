@@ -627,7 +627,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
         xChild = new VCLXAccessibleToolBoxItem( pToolBox, i );
         if ( pItemWindow )
         {
-            Reference< XAccessible> xParent = xChild;
+            rtl::Reference<VCLXAccessibleToolBoxItem> xParent = xChild;
             auto const xInnerAcc(pItemWindow->GetAccessible());
             if (xInnerAcc) // else child is being disposed - avoid crashing
             {

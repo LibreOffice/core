@@ -2110,9 +2110,8 @@ SfxLibraryContainer::createLibrary_Impl(const OUString& Name, std::unique_lock<s
     checkStorageURL(pNewLib->maUnexpandedStorageURL, pNewLib->maLibInfoFileURL,
                     pNewLib->maStorageURL, pNewLib->maUnexpandedStorageURL);
 
-    Reference< XNameAccess > xNameAccess( pNewLib );
     Any aElement;
-    aElement <<= xNameAccess;
+    aElement <<= Reference< XNameAccess >( pNewLib );
     maNameContainer.insertByName(Name, aElement, guard);
     maModifiable.setModified(true, guard);
     return pNewLib;
@@ -2150,9 +2149,8 @@ SfxLibraryContainer::createLibraryLink_Impl(const OUString& Name, const OUString
     implLoadLibraryIndexFile(pNewLib.get(), aLibDesc, xDummyStor, OUString(), guard);
     implImportLibDescriptor(pNewLib.get(), aLibDesc, guard);
 
-    Reference< XNameAccess > xRet( pNewLib );
     Any aElement;
-    aElement <<= xRet;
+    aElement <<= Reference< XNameAccess >( pNewLib );
     maNameContainer.insertByName(Name, aElement, guard);
     maModifiable.setModified(true, guard);
 
@@ -2167,7 +2165,7 @@ SfxLibraryContainer::createLibraryLink_Impl(const OUString& Name, const OUString
         pNewLib->mbReadOnly = true;
     }
 
-    return xRet;
+    return pNewLib;
 }
 
 void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )

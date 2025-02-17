@@ -300,14 +300,6 @@ ErrCode SmMLImportWrapper::Import(std::u16string_view aSource)
         return ERRCODE_SFX_DOLOADFAILED;
     }
 
-    // Make a model component from our SmModel
-    uno::Reference<lang::XComponent> xModelComp = m_xModel;
-    if (!xModelComp.is())
-    {
-        SAL_WARN("starmath", "Failed to make model while file input");
-        return ERRCODE_SFX_DOLOADFAILED;
-    }
-
     // Get model via uno
     SmModel* pModel = m_xModel.get();
     if (pModel == nullptr)
@@ -339,7 +331,8 @@ ErrCode SmMLImportWrapper::Import(std::u16string_view aSource)
 
     // Read data
     // read a component from text
-    ErrCode nError = ReadThroughComponentMS(aSource, xModelComp, xContext, xInfoSet);
+    ErrCode nError = ReadThroughComponentMS(aSource, uno::Reference<lang::XComponent>(m_xModel),
+                                            xContext, xInfoSet);
 
     // Declare any error
     if (nError != ERRCODE_NONE)
