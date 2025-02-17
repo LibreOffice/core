@@ -24,8 +24,8 @@ class QtDoubleSpinBox : public QDoubleSpinBox
 {
     Q_OBJECT
 
-    std::function<std::optional<OUString>(int)> m_aFormatValueFunction;
-    std::function<TriState(const OUString&, int*)> m_aParseTextFunction;
+    std::function<std::optional<OUString>(double)> m_aFormatValueFunction;
+    std::function<std::optional<double>(const QString&)> m_aParseTextFunction;
 
 public:
     QtDoubleSpinBox(QWidget* pParent);
@@ -36,12 +36,12 @@ public:
     virtual QString textFromValue(double fValue) const override;
     virtual double valueFromText(const QString& rText) const override;
 
-    void setFormatValueFunction(std::function<std::optional<OUString>(int)> aFunction)
+    void setFormatValueFunction(std::function<std::optional<OUString>(double)> aFunction)
     {
         m_aFormatValueFunction = aFunction;
     }
 
-    void setParseTextFunction(std::function<TriState(const OUString&, int*)> aFunction)
+    void setParseTextFunction(std::function<std::optional<double>(const QString&)> aFunction)
     {
         m_aParseTextFunction = aFunction;
     }

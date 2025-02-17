@@ -26,7 +26,7 @@ QString QtDoubleSpinBox::textFromValue(double fValue) const
 {
     if (m_aFormatValueFunction)
     {
-        std::optional<OUString> aText = m_aFormatValueFunction(std::round(fValue));
+        std::optional<OUString> aText = m_aFormatValueFunction(fValue);
         if (aText.has_value())
             return toQString(aText.value());
     }
@@ -38,10 +38,9 @@ double QtDoubleSpinBox::valueFromText(const QString& rText) const
 {
     if (m_aParseTextFunction)
     {
-        int nValue = 0;
-        TriState eState = m_aParseTextFunction(toOUString(rText), &nValue);
-        if (eState == TRISTATE_TRUE)
-            return nValue;
+        std::optional<double> aValue = m_aParseTextFunction(rText);
+        if (aValue.has_value())
+            return aValue.value();
     }
 
     return QDoubleSpinBox::valueFromText(rText);

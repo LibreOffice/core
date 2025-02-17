@@ -14,6 +14,8 @@
 
 #include <QtWidgets/QSpinBox>
 
+#include <optional>
+
 class QtInstanceSpinButton : public QtInstanceEntry, public virtual weld::SpinButton
 {
     Q_OBJECT
@@ -34,6 +36,9 @@ public:
     virtual void get_floating_point_increments(double& rStep, double& rPage) const override;
     virtual void set_digits(unsigned int nDigits) override;
     virtual unsigned int get_digits() const override;
+
+private:
+    std::optional<double> convertTextToDouble(const QString& rText);
 
 private Q_SLOTS:
     void handleValueChanged();

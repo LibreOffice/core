@@ -35,9 +35,10 @@ QtInstanceSpinButton::QtInstanceSpinButton(QtDoubleSpinBox* pSpinBox)
             &QtInstanceSpinButton::handleTextChanged);
 
     // set functions to convert between value and formatted text
-    m_pSpinBox->setFormatValueFunction([this](int nValue) { return format_value(nValue); });
+    m_pSpinBox->setFormatValueFunction(
+        [this](double fValue) { return format_value(convert_double_to_value(fValue)); });
     m_pSpinBox->setParseTextFunction(
-        [this](const OUString& rText, int* pResult) { return parse_text(rText, pResult); });
+        [this](const QString& rText) { return convertTextToDouble(rText); });
 }
 
 QWidget* QtInstanceSpinButton::getQWidget() const { return m_pSpinBox; }
@@ -104,6 +105,16 @@ unsigned int QtInstanceSpinButton::get_digits() const
     unsigned int nDigits = 0;
     GetQtInstance().RunInMainThread([&] { nDigits = o3tl::make_unsigned(m_pSpinBox->decimals()); });
     return nDigits;
+}
+
+std::optional<double> QtInstanceSpinButton::convertTextToDouble(const QString& rText)
+{
+    int nValue = 0;
+    TriState eState = parse_text(toOUString(rText), &nValue);
+    if (eState == TRISTATE_TRUE)
+        return std::optional<double>(convert_value_to_double(nValue));
+
+    return {};
 }
 
 void QtInstanceSpinButton::handleValueChanged()
