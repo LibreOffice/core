@@ -446,6 +446,7 @@ Desktop::Desktop()
     , m_aBootstrapStatus(BS_OK)
     , m_firstRunTimer( "desktop::Desktop m_firstRunTimer" )
 {
+    m_firstRunTimer.SetPriority(TaskPriority::DEFAULT_IDLE);
     m_firstRunTimer.SetTimeout(3000); // 3 sec.
     m_firstRunTimer.SetInvokeHandler(LINK(this, Desktop, AsyncInitFirstRun));
 }
