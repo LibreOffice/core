@@ -751,7 +751,8 @@ void E3dScene::NbcInsertObject(SdrObject* pObj, size_t nPos)
     else
     {
         // No 3D object, inserted a page in place in a scene ...
-        getSdrObjectFromSdrObjList()->getSdrPageFromSdrObject()->InsertObject(pObj, nPos);
+        if (SdrPage* pPage = getSdrObjectFromSdrObjList()->getSdrPageFromSdrObject())
+            pPage->InsertObject(pObj, nPos);
     }
 }
 
@@ -770,7 +771,8 @@ void E3dScene::InsertObject(SdrObject* pObj, size_t nPos)
     else
     {
         // No 3D object, inserted a page in place in a scene ...
-        getSdrObjectFromSdrObjList()->getSdrPageFromSdrObject()->InsertObject(pObj, nPos);
+        if (SdrPage* pPage = getSdrObjectFromSdrObjList()->getSdrPageFromSdrObject())
+            pPage->InsertObject(pObj, nPos);
     }
 }
 
