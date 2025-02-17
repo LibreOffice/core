@@ -1139,11 +1139,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             xMailDispatcher->addListener( xMailListener );
             if(!rMergeDescriptor.bSendAsAttachment && rMergeDescriptor.bSendAsHTML)
             {
-                sMailBodyMimeType = "text/html; charset=utf-8";
+                sMailBodyMimeType = u"text/html; charset=utf-8"_ustr;
                 sMailEncoding = RTL_TEXTENCODING_UTF8;
             }
             else
-                sMailBodyMimeType = "text/plain; charset=UTF-8; format=flowed";
+                sMailBodyMimeType = u"text/plain; charset=UTF-8; format=flowed"_ustr;
         }
     }
 
@@ -1319,7 +1319,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     if (!sColumnData.isEmpty())
                         sLeading = sColumnData;
                     else
-                        sLeading = "_";
+                        sLeading = u"_"_ustr;
                 }
                 else
                 {
@@ -2789,16 +2789,16 @@ OUString SwDBManager::LoadAndRegisterDataSource(weld::Window* pParent, SwDocShel
     OUString sFilterAllData(SwResId(STR_FILTER_ALL_DATA));
 
     const std::vector<std::pair<OUString, OUString>> filters{
-        { SwResId(STR_FILTER_SXB), "*.odb" },
-        { SwResId(STR_FILTER_SXC), "*.ods;*.sxc" },
-        { SwResId(STR_FILTER_SXW), "*.odt;*.sxw" },
-        { SwResId(STR_FILTER_DBF), "*.dbf" },
-        { SwResId(STR_FILTER_XLS), "*.xls;*.xlsx" },
-        { SwResId(STR_FILTER_DOC), "*.doc;*.docx" },
-        { SwResId(STR_FILTER_TXT), "*.txt" },
-        { SwResId(STR_FILTER_CSV), "*.csv" },
+        { SwResId(STR_FILTER_SXB), u"*.odb"_ustr },
+        { SwResId(STR_FILTER_SXC), u"*.ods;*.sxc"_ustr },
+        { SwResId(STR_FILTER_SXW), u"*.odt;*.sxw"_ustr },
+        { SwResId(STR_FILTER_DBF), u"*.dbf"_ustr },
+        { SwResId(STR_FILTER_XLS), u"*.xls;*.xlsx"_ustr },
+        { SwResId(STR_FILTER_DOC), u"*.doc;*.docx"_ustr },
+        { SwResId(STR_FILTER_TXT), u"*.txt"_ustr },
+        { SwResId(STR_FILTER_CSV), u"*.csv"_ustr },
 #ifdef _WIN32
-        { SwResId(STR_FILTER_ACCDB), "*.accdb;*.accde;*.mdb;*.mde" },
+        { SwResId(STR_FILTER_ACCDB), u"*.accdb;*.accde;*.mdb;*.mde"_ustr },
 #endif
     };
 
@@ -2899,7 +2899,7 @@ void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const
 
     // Fallback, just in case the document would contain an embedded data source, but no DB fields.
     if (sDataSource.isEmpty())
-        sDataSource = "EmbeddedDatabase";
+        sDataSource = u"EmbeddedDatabase"_ustr;
 
     SwDBManager::RevokeDataSource( sDataSource );
 
