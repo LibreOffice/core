@@ -1974,6 +1974,16 @@ CPPUNIT_TEST_FIXTURE(Test, test153192Tdf)
     CPPUNIT_ASSERT(xStorable->isReadonly());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, test118465Tdf)
+{
+    createSwDoc("tblrepeat.rtf");
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<sal_Int32>(xTable, u"HeaderRowCount"_ustr));
+}
+
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
