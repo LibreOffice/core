@@ -16,7 +16,7 @@ diff -ur nss.org/nspr/build/autoconf/config.sub nss/nspr/build/autoconf/config.s
 diff -ur nss.org/nspr/configure nss/nspr/configure
 --- nss.org/nspr/configure	2017-09-07 15:29:45.018246359 +0200
 +++ nss/nspr/configure	2017-09-07 15:31:47.604075663 +0200
-@@ -2728,18 +2728,15 @@
+@@ -3253,18 +3253,15 @@
      esac
  
          AS="$android_toolchain"/bin/"$android_tool_prefix"-as
@@ -36,7 +36,7 @@ diff -ur nss.org/nspr/configure nss/nspr/configure
 -    CXXFLAGS="-mandroid -I$android_platform/usr/include -fpic -fno-short-enums -fno-exceptions $CXXFLAGS"
 -    LDFLAGS="-mandroid -L$android_platform/usr/lib -Wl,-rpath-link=$android_platform/usr/lib --sysroot=$android_platform $LDFLAGS"
  
-     $as_echo "#define ANDROID 1" >>confdefs.h
+     printf "%s\n" "#define ANDROID 1" >>confdefs.h
  
 diff -ur nss.org/nss/Makefile nss/nss/Makefile
 --- nss.org/nss/Makefile	2017-09-07 15:29:44.933245745 +0200

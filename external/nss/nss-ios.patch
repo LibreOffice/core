@@ -58,24 +58,15 @@
  
 --- a/a/nss/lib/pk11wrap/pk11load.c
 +++ a/a/nss/lib/pk11wrap/pk11load.c
-@@ -390,6 +390,8 @@
- /*
-  * load a new module into our address space and initialize it.
-  */
-+extern CK_RV NSSCKBI_C_GetFunctionList();
-+
- SECStatus
- secmod_LoadPKCS11Module(SECMODModule *mod, SECMODModule **oldModule)
- {
-@@ -468,6 +470,7 @@
+@@ -456,6 +456,7 @@
  /* load the library. If this succeeds, then we have to remember to
-          * unload the library if anything goes wrong from here on out...
-          */
+  * unload the library if anything goes wrong from here on out...
+  */
 +#ifndef NSS_STATIC_PKCS11 // With NSS_STATIC_PKCS11, the only module wodule we load here is nssckbi
  #if defined(_WIN32)
          if (nssUTF8_Length(mod->dllName, NULL)) {
              wchar_t *dllNameWide = _NSSUTIL_UTF8ToWide(mod->dllName);
-@@ -507,6 +510,10 @@
+@@ -495,6 +496,11 @@
              mod->moduleDBFunc = (void *)
                  PR_FindSymbol(library, "NSS_ReturnModuleSpecData");
          }
@@ -83,11 +74,12 @@
 +        if (strcmp(mod->dllName, "NSSCKBI") == 0)
 +            fentry = NSSCKBI_C_GetFunctionList;
 +#endif
++
          if (mod->moduleDBFunc == NULL)
              mod->isModuleDB = PR_FALSE;
          if ((ientry == NULL) && (fentry == NULL)) {
-@@ -643,10 +650,12 @@
-     }
+@@ -545,10 +551,12 @@
+ 
  fail:
      mod->functionList = NULL;
 +#ifndef NSS_STATIC_PKCS11
@@ -99,6 +91,16 @@
      return SECFailure;
  }
  
+@@ -656,6 +664,8 @@
+ /*
+  * load a new module into our address space and initialize it.
+  */
++extern CK_RV NSSCKBI_C_GetFunctionList();
++
+ SECStatus
+ secmod_LoadPKCS11Module(SECMODModule *mod, SECMODModule **oldModule)
+ {
+
 --- a/a/nss/lib/ckfw/nssck.api
 +++ a/a/nss/lib/ckfw/nssck.api
 @@ -1842,7 +1842,11 @@
