@@ -774,6 +774,8 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     std::vector<tools::Long> aPageFields;
     std::vector<DataField> aDataFields;
 
+    tools::Long nRowItemsCount = 0; // for <rowItems count="..."> of pivotTable*.xml
+    tools::Long nColItemsCount = 0; // for <colItems count="..."> of pivotTable*.xml
     tools::Long nDataDimCount = rSaveData.GetDataDimensionCount();
     // Use dimensions in the save data to get their correct ordering.
     // Dimension order here is significant as they specify the order of
@@ -1053,8 +1055,15 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             pAttList->add( XML_outline, ToPsz10(false));
         pPivotStrm->startElement(XML_pivotField, pAttList);
 
+        tools::Long nItemsCount
+            = static_cast<tools::Long>(aMemberSequence.size() + aSubtotalSequence.size());
         pPivotStrm->startElement(XML_items,
-            XML_count, OString::number(static_cast<tools::Long>(aMemberSequence.size() + aSubtotalSequence.size())));
+            XML_count, OString::number(nItemsCount));
+
+        if (strcmp(toOOXMLAxisType(eOrient), "axisCol") == 0)
+            nColItemsCount = nItemsCount;
+        else
+            nRowItemsCount = nItemsCount;
 
         for (const auto & nMember : aMemberSequence)
         {
@@ -1092,6 +1101,20 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     }
 
     // <rowItems>
+    if (nRowItemsCount > 0)
+    {
+        pPivotStrm->startElement(XML_rowItems, XML_count, OString::number(nRowItemsCount));
+
+        // export nRowItemsCount times <i> and <x> elements
+        for (tools::Long nCount = 0; nCount < nRowItemsCount; ++nCount)
+        {
+            pPivotStrm->startElement(XML_i);
+            pPivotStrm->singleElement(XML_x, XML_v, OString::number(nCount));
+            pPivotStrm->endElement(XML_i);
+        }
+
+        pPivotStrm->endElement(XML_rowItems);
+    }
 
     // <colFields>
 
@@ -1109,6 +1132,20 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     }
 
     // <colItems>
+    if (nColItemsCount > 0)
+    {
+        pPivotStrm->startElement(XML_colItems, XML_count, OString::number(nColItemsCount));
+
+        // export nColItemsCount times <i> and <x> elements
+        for (tools::Long nCount = 0; nCount < nColItemsCount; ++nCount)
+        {
+            pPivotStrm->startElement(XML_i);
+            pPivotStrm->singleElement(XML_x, XML_v, OString::number(nCount));
+            pPivotStrm->endElement(XML_i);
+        }
+
+        pPivotStrm->endElement(XML_colItems);
+    }
 
     // <pageFields>
 

@@ -126,6 +126,42 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableBasicODS)
                                  sal_uInt16(pDim->GetFunction()));
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf123225PivotTableRowColItems)
+{
+    createScDoc("ods/tdf123225_pivotTable_row_col_items.ods");
+    save(u"Calc Office Open XML"_ustr);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    // be sure that we have <rowItems> and <colItems> element
+    // under <pivotTableDefinition> after export of the .ods to .xlsx
+
+    // Row items <rowItems>
+
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:rowItems"_ostr, 1);
+    // check if <rowItems count="8">
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:rowItems"_ostr, "count"_ostr, "8");
+    // check if <rowItems> has enough <i> depending on count attribute value
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:rowItems/x:i"_ostr, 8);
+    // check if first <i> has single <x/> element
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:rowItems/x:i[1]/x:x"_ostr, 1);
+    // check if <x/> of the first <i> element, has v="0" attribute value
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:rowItems/x:i[1]/x:x"_ostr, "v"_ostr, "0");
+
+    // Column items <colItems>
+
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:colItems"_ostr, 1);
+    // check if <colItems count="5">
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:colItems"_ostr, "count"_ostr, "5");
+    // check if <colItems> has enough <i> depending on count attribute value
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:colItems/x:i"_ostr, 5);
+    // check if first <i> has single <x/> element
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:colItems/x:i[1]/x:x"_ostr, 1);
+    // check if <x/> of the first <i> element, has v="0" attribute value
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:colItems/x:i[1]/x:x"_ostr, "v"_ostr, "0");
+}
+
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableNamedRangeSourceODS)
 {
     createScDoc("ods/pivot-table-named-range-source.ods");
