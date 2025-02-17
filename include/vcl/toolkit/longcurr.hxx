@@ -40,8 +40,7 @@ public:
 
     OUString const &        GetCurrencySymbol() const;
 
-    void                    SetDecimalDigits( sal_uInt16 nDigits );
-    sal_uInt16              GetDecimalDigits() const { return mnDecimalDigits;}
+    static sal_uInt16       GetDecimalDigits() { return 0;}
     void                    SetValue(const BigInt& rNewValue);
     void                    SetUserValue( BigInt nNewValue );
     BigInt                  GetValue() const;
@@ -55,9 +54,6 @@ protected:
 private:
     friend bool ImplLongCurrencyReformat( const OUString&, BigInt const &, BigInt const &, sal_uInt16, const LocaleDataWrapper&, OUString&, LongCurrencyFormatter const & );
     SAL_DLLPRIVATE void        ImpInit();
-
-    sal_uInt16              mnDecimalDigits;
-
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) LongCurrencyBox final : public ComboBox, public LongCurrencyFormatter

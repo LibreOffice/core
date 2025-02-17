@@ -274,8 +274,8 @@ void LongCurrencyFormatter::ImpInit()
     mnMin               = 0;
     mnMax               = 0x7FFFFFFF;
     mnMax              *= 0x7FFFFFFF;
-    mnDecimalDigits     = 0;
-    SetDecimalDigits( 0 );
+
+    ReformatAll();
 }
 
 LongCurrencyFormatter::LongCurrencyFormatter(Edit* pEdit)
@@ -368,17 +368,6 @@ void LongCurrencyFormatter::ReformatAll()
 {
     Reformat();
 }
-
-void LongCurrencyFormatter::SetDecimalDigits( sal_uInt16 nDigits )
-{
-    if ( nDigits > 9 )
-        nDigits = 9;
-
-    mnDecimalDigits = nDigits;
-    ReformatAll();
-}
-
-
 
 LongCurrencyBox::LongCurrencyBox(vcl::Window* pParent, WinBits nWinStyle)
     : ComboBox(pParent, nWinStyle)
