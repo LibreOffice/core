@@ -41,13 +41,14 @@ from email.utils import formatdate
 from email.utils import parseaddr
 from socket import _GLOBAL_DEFAULT_TIMEOUT
 
+import os
 import sys
 import ssl
 import smtplib
 import imaplib
 import poplib
 
-dbg = False
+dbg = os.environ.get('LO_DEBUG_MAILMERGE', '').lower() not in ['', '0', 'false']
 
 # pythonloader looks for a static g_ImplementationHelper variable
 g_ImplementationHelper = unohelper.ImplementationHelper()
