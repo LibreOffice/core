@@ -262,10 +262,8 @@ QWidget* QtFrame::asChild() const
 
 qreal QtFrame::devicePixelRatioF() const
 {
-    qreal ret;
-    GetQtInstance().EmscriptenLightweightRunInMainThread(
-        [ child = asChild(), &ret ] { ret = child->devicePixelRatioF(); });
-    return ret;
+    return GetQtInstance().EmscriptenLightweightRunInMainThread(
+        [child = asChild()] { return child->devicePixelRatioF(); });
 }
 
 bool QtFrame::isWindow() const { return asChild()->isWindow(); }

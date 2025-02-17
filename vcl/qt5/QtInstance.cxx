@@ -232,7 +232,7 @@ void QtInstance::RunInMainThread(std::function<void()> func)
     }
 }
 
-void QtInstance::EmscriptenLightweightRunInMainThread(std::function<void()> func)
+void QtInstance::EmscriptenLightweightRunInMainThread_(std::function<void()> func)
 {
 #if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
     if (pthread_self() != emscripten_main_runtime_thread_id())
@@ -650,9 +650,8 @@ QtInstance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
     if (it != m_aClipboards.end())
         return it->second;
 
-    css::uno::Reference<css::uno::XInterface> xClipboard;
-    EmscriptenLightweightRunInMainThread(
-        [&sel, &xClipboard] { xClipboard = QtClipboard::create(sel); });
+    css::uno::Reference<css::uno::XInterface> xClipboard
+        = EmscriptenLightweightRunInMainThread([&sel] { return QtClipboard::create(sel); });
     if (xClipboard.is())
         m_aClipboards[sel] = xClipboard;
 

@@ -30,9 +30,12 @@
 
 #include <QtCore/QObject>
 
+#include <concepts>
 #include <cstdlib>
 #include <functional>
 #include <memory>
+#include <type_traits>
+#include <utility>
 #include <vector>
 
 #include "QtFilePicker.hxx"
@@ -89,6 +92,8 @@ class VCLPLUG_QT_PUBLIC QtInstance : public QObject,
 
     static QWidget* GetNativeParentFromWeldParent(weld::Widget* pParent);
 
+    void EmscriptenLightweightRunInMainThread_(std::function<void()> func);
+
 private Q_SLOTS:
     bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
     static void deleteObjectLater(QObject* pObject);
@@ -127,7 +132,22 @@ public:
     static std::unique_ptr<QApplication> CreateQApplication(int& nArgc, char** pArgv);
 
     void RunInMainThread(std::function<void()> func);
-    void EmscriptenLightweightRunInMainThread(std::function<void()> func);
+    template <typename F>
+    requires std::invocable<F> std::invoke_result_t<F>
+    EmscriptenLightweightRunInMainThread(F&& func)
+    {
+        if constexpr (std::is_same_v<std::invoke_result_t<F>, void>)
+        {
+            EmscriptenLightweightRunInMainThread_(std::move(func));
+        }
+        else
+        {
+            std::invoke_result_t<F> ret;
+            EmscriptenLightweightRunInMainThread_(
+                [&func, &ret] { ret = std::forward<std::invoke_result_t<F>>(func()); });
+            return ret;
+        }
+    }
 
     virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
     virtual SalFrame* CreateChildFrame(SystemParentData* pParent,
