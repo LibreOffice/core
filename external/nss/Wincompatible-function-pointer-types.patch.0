@@ -1,234 +1,215 @@
 --- nspr/pr/tests/testfile.c
 +++ nspr/pr/tests/testfile.c
-@@ -86,7 +86,7 @@
+@@ -72,7 +72,7 @@
  #endif
- #define TMPDIR_LEN  64
+ #define TMPDIR_LEN 64
  char testdir[TMPDIR_LEN];
--static PRInt32 PR_CALLBACK DirTest(void *argunused);
-+static void PR_CALLBACK DirTest(void *argunused);
+-static PRInt32 PR_CALLBACK DirTest(void* argunused);
++static void PR_CALLBACK DirTest(void* argunused);
  PRInt32 dirtest_failed = 0;
  
- PRThread* create_new_thread(PRThreadType type,
-@@ -123,7 +123,7 @@
-     if (native_thread) {
  #if defined(_PR_PTHREADS)
-         pthread_t tid;
--        if (!pthread_create(&tid, NULL, start, arg)) {
-+        if (!pthread_create(&tid, NULL, (void *(*)(void *))start, arg)) {
-             return((PRThread *) tid);
-         }
-         else {
-@@ -594,7 +594,7 @@
-     return 0;
+@@ -134,7 +134,7 @@
+   if (native_thread) {
+ #  if defined(_PR_PTHREADS)
+     pthread_t tid;
+-    if (!pthread_create(&tid, NULL, nativeStart, arg)) {
++    if (!pthread_create(&tid, NULL, (void *(*)(void *))nativeStart, arg)) {
+       return ((PRThread*)tid);
+     } else {
+       return (NULL);
+@@ -595,7 +595,7 @@
+   return 0;
  }
  
--static PRInt32 PR_CALLBACK DirTest(void *arg)
-+static void PR_CALLBACK DirTest(void *arg)
- {
-     struct dirtest_arg *tinfo = (struct dirtest_arg *) arg;
-     PRFileDesc *fd_file;
-@@ -618,14 +618,14 @@
-         printf(
-             "testfile failed to create dir %s [%d, %d]\n",
-             TEST_DIR, PR_GetError(), PR_GetOSError());
--        return -1;
-+        return;
-     }
-     fd_dir = PR_OpenDir(TEST_DIR);
-     if (fd_dir == NULL) {
-         printf(
-             "testfile failed to open dirctory %s [%d, %d]\n",
-             TEST_DIR, PR_GetError(), PR_GetOSError());
--        return -1;
-+        return;
-     }
+-static PRInt32 PR_CALLBACK DirTest(void* arg) {
++static void PR_CALLBACK DirTest(void* arg) {
+   struct dirtest_arg* tinfo = (struct dirtest_arg*)arg;
+   PRFileDesc* fd_file;
+   PRDir* fd_dir;
+@@ -617,13 +617,13 @@
+   if ((PR_MkDir(TEST_DIR, 0777)) < 0) {
+     printf("testfile failed to create dir %s [%d, %d]\n", TEST_DIR,
+            PR_GetError(), PR_GetOSError());
+-    return -1;
++    return;
+   }
+   fd_dir = PR_OpenDir(TEST_DIR);
+   if (fd_dir == NULL) {
+     printf("testfile failed to open dirctory %s [%d, %d]\n", TEST_DIR,
+            PR_GetError(), PR_GetOSError());
+-    return -1;
++    return;
+   }
  
-     strcpy(pathname, TEST_DIR);
-@@ -645,7 +645,7 @@
-             printf(
-                 "testfile failed to create/open file %s [%d, %d]\n",
-                 pathname, PR_GetError(), PR_GetOSError());
--            return -1;
-+            return;
-         }
-         PR_Close(fd_file);
-     }
-@@ -664,7 +664,7 @@
-         printf(
-             "testfile failed to create/open hidden file %s [%d, %d]\n",
-             pathname, PR_GetError(), PR_GetOSError());
--        return -1;
-+        return;
-     }
- 
-     PR_Close(fd_file);
-@@ -681,7 +681,7 @@
-     if (hfile == INVALID_HANDLE_VALUE) {
-         printf("testfile failed to create/open hidden file %s [0, %d]\n",
-                pathname, GetLastError());
--        return -1;
-+        return;
-     }
-     CloseHandle(hfile);
- 
-@@ -696,7 +696,7 @@
-     if (hfile == INVALID_HANDLE_VALUE) {
-         printf("testfile failed to create/open hidden file %s [0, %d]\n",
-                pathname, GetLastError());
--        return -1;
-+        return;
-     }
-     CloseHandle(hfile);
- 
-@@ -707,7 +707,7 @@
+   strcpy(pathname, TEST_DIR);
+@@ -641,7 +641,7 @@
      if (fd_file == NULL) {
-         printf("testfile failed to create/open hidden file %s [%d, %d]\n",
-                pathname, PR_GetError(), PR_GetOSError());
--        return -1;
-+        return;
+       printf("testfile failed to create/open file %s [%d, %d]\n", pathname,
+              PR_GetError(), PR_GetOSError());
+-      return -1;
++      return;
      }
      PR_Close(fd_file);
- #endif  /* XP_UNIX */
-@@ -720,14 +720,14 @@
-         printf(
-             "testfile failed to close dirctory %s [%d, %d]\n",
-             TEST_DIR, PR_GetError(), PR_GetOSError());
--        return -1;
-+        return;
-     }
-     fd_dir = PR_OpenDir(TEST_DIR);
-     if (fd_dir == NULL) {
-         printf(
-             "testfile failed to reopen dirctory %s [%d, %d]\n",
-             TEST_DIR, PR_GetError(), PR_GetOSError());
--        return -1;
-+        return;
+   }
+@@ -659,7 +659,7 @@
+   if (fd_file == NULL) {
+     printf("testfile failed to create/open hidden file %s [%d, %d]\n", pathname,
+            PR_GetError(), PR_GetOSError());
+-    return -1;
++    return;
+   }
+ 
+   PR_Close(fd_file);
+@@ -673,7 +673,7 @@
+   if (hfile == INVALID_HANDLE_VALUE) {
+     printf("testfile failed to create/open hidden file %s [0, %d]\n", pathname,
+            GetLastError());
+-    return -1;
++    return;
+   }
+   CloseHandle(hfile);
+ 
+@@ -684,7 +684,7 @@
+   if (hfile == INVALID_HANDLE_VALUE) {
+     printf("testfile failed to create/open hidden file %s [0, %d]\n", pathname,
+            GetLastError());
+-    return -1;
++    return;
+   }
+   CloseHandle(hfile);
+ 
+@@ -695,13 +695,13 @@
+   if (PR_FAILURE == PR_CloseDir(fd_dir)) {
+     printf("testfile failed to close dirctory %s [%d, %d]\n", TEST_DIR,
+            PR_GetError(), PR_GetOSError());
+-    return -1;
++    return;
+   }
+   fd_dir = PR_OpenDir(TEST_DIR);
+   if (fd_dir == NULL) {
+     printf("testfile failed to reopen dirctory %s [%d, %d]\n", TEST_DIR,
+            PR_GetError(), PR_GetOSError());
+-    return -1;
++    return;
+   }
+ 
+   /*
+@@ -723,19 +723,19 @@
+     if ((PR_GetFileInfo(pathname, &info)) < 0) {
+       printf("testfile failed to GetFileInfo file %s [%d, %d]\n", pathname,
+              PR_GetError(), PR_GetOSError());
+-      return -1;
++      return;
      }
  
-     /*
-@@ -750,14 +750,14 @@
-             printf(
-                 "testfile failed to GetFileInfo file %s [%d, %d]\n",
-                 pathname, PR_GetError(), PR_GetOSError());
--            return -1;
-+            return;
-         }
+     if (info.type != PR_FILE_FILE) {
+       printf("testfile incorrect fileinfo for file %s [%d, %d]\n", pathname,
+              PR_GetError(), PR_GetOSError());
+-      return -1;
++      return;
+     }
+   }
+   if (num_files != 0) {
+     printf("testfile failed to find all files in directory %s [%d, %d]\n",
+            TEST_DIR, PR_GetError(), PR_GetOSError());
+-    return -1;
++    return;
+   }
  
-         if (info.type != PR_FILE_FILE) {
-             printf(
-                 "testfile incorrect fileinfo for file %s [%d, %d]\n",
-                 pathname, PR_GetError(), PR_GetOSError());
--            return -1;
-+            return;
-         }
-     }
-     if (num_files != 0)
-@@ -765,7 +765,7 @@
-         printf(
-             "testfile failed to find all files in directory %s [%d, %d]\n",
-             TEST_DIR, PR_GetError(), PR_GetOSError());
--        return -1;
-+        return;
-     }
+   PR_CloseDir(fd_dir);
+@@ -750,7 +750,7 @@
+   if (fd_dir == NULL) {
+     printf("testfile failed to reopen dirctory %s [%d, %d]\n", TEST_DIR,
+            PR_GetError(), PR_GetOSError());
+-    return -1;
++    return;
+   }
  
-     PR_CloseDir(fd_dir);
-@@ -781,7 +781,7 @@
-         printf(
-             "testfile failed to reopen dirctory %s [%d, %d]\n",
-             TEST_DIR, PR_GetError(), PR_GetOSError());
--        return -1;
-+        return;
+   DPRINTF(("Listing non-hidden files in directory %s\n", TEST_DIR));
+@@ -758,7 +758,7 @@
+     DPRINTF(("\t%s\n", dirEntry->name));
+     if (!strcmp(HIDDEN_FILE_NAME, dirEntry->name)) {
+       printf("testfile found hidden file %s\n", pathname);
+-      return -1;
++      return;
      }
+   }
+   /*
+@@ -770,7 +770,7 @@
+   if (PR_FAILURE == PR_Delete(pathname)) {
+     printf("testfile failed to delete hidden file %s [%d, %d]\n", pathname,
+            PR_GetError(), PR_GetOSError());
+-    return -1;
++    return;
+   }
  
-     DPRINTF(("Listing non-hidden files in directory %s\n",TEST_DIR));
-@@ -789,7 +789,7 @@
-         DPRINTF(("\t%s\n",dirEntry->name));
-         if (!strcmp(HIDDEN_FILE_NAME, dirEntry->name)) {
-             printf("testfile found hidden file %s\n", pathname);
--            return -1;
-+            return;
-         }
+   PR_CloseDir(fd_dir);
+@@ -781,35 +781,35 @@
+   if (PR_FAILURE == PR_Rename(TEST_DIR, renamename)) {
+     printf("testfile failed to rename directory %s [%d, %d]\n", TEST_DIR,
+            PR_GetError(), PR_GetOSError());
+-    return -1;
++    return;
+   }
  
-     }
-@@ -803,7 +803,7 @@
-         printf(
-             "testfile failed to delete hidden file %s [%d, %d]\n",
-             pathname, PR_GetError(), PR_GetOSError());
--        return -1;
-+        return;
-     }
+   if (PR_FAILURE == PR_MkDir(TEST_DIR, 0777)) {
+     printf("testfile failed to recreate dir %s [%d, %d]\n", TEST_DIR,
+            PR_GetError(), PR_GetOSError());
+-    return -1;
++    return;
+   }
+   if (PR_SUCCESS == PR_Rename(renamename, TEST_DIR)) {
+     printf("testfile renamed directory to existing name %s\n", renamename);
+-    return -1;
++    return;
+   }
  
-     PR_CloseDir(fd_dir);
-@@ -815,41 +815,41 @@
-         printf(
-             "testfile failed to rename directory %s [%d, %d]\n",
-             TEST_DIR, PR_GetError(), PR_GetOSError());
--        return -1;
-+        return;
-     }
+   if (PR_FAILURE == PR_RmDir(TEST_DIR)) {
+     printf("testfile failed to rmdir %s [%d, %d]\n", TEST_DIR, PR_GetError(),
+            PR_GetOSError());
+-    return -1;
++    return;
+   }
  
-     if (PR_FAILURE == PR_MkDir(TEST_DIR, 0777)) {
-         printf(
-             "testfile failed to recreate dir %s [%d, %d]\n",
-             TEST_DIR, PR_GetError(), PR_GetOSError());
--        return -1;
-+        return;
-     }
-     if (PR_SUCCESS == PR_Rename(renamename, TEST_DIR)) {
-         printf(
-             "testfile renamed directory to existing name %s\n",
-             renamename);
--        return -1;
-+        return;
-     }
+   if (PR_FAILURE == PR_Rename(renamename, TEST_DIR)) {
+     printf("testfile failed to rename directory %s [%d, %d]\n", renamename,
+            PR_GetError(), PR_GetOSError());
+-    return -1;
++    return;
+   }
+   fd_dir = PR_OpenDir(TEST_DIR);
+   if (fd_dir == NULL) {
+     printf("testfile failed to reopen directory %s [%d, %d]\n", TEST_DIR,
+            PR_GetError(), PR_GetOSError());
+-    return -1;
++    return;
+   }
  
-     if (PR_FAILURE == PR_RmDir(TEST_DIR)) {
-         printf(
-             "testfile failed to rmdir %s [%d, %d]\n",
-             TEST_DIR, PR_GetError(), PR_GetOSError());
--        return -1;
-+        return;
+   strcpy(pathname, TEST_DIR);
+@@ -823,7 +823,7 @@
+     if (PR_FAILURE == PR_Delete(pathname)) {
+       printf("testfile failed to delete file %s [%d, %d]\n", pathname,
+              PR_GetError(), PR_GetOSError());
+-      return -1;
++      return;
      }
+   }
  
-     if (PR_FAILURE == PR_Rename(renamename, TEST_DIR)) {
-         printf(
-             "testfile failed to rename directory %s [%d, %d]\n",
-             renamename, PR_GetError(), PR_GetOSError());
--        return -1;
-+        return;
-     }
-     fd_dir = PR_OpenDir(TEST_DIR);
-     if (fd_dir == NULL) {
-         printf(
-             "testfile failed to reopen directory %s [%d, %d]\n",
-             TEST_DIR, PR_GetError(), PR_GetOSError());
--        return -1;
-+        return;
-     }
+@@ -832,14 +832,13 @@
+   if (PR_FAILURE == PR_RmDir(TEST_DIR)) {
+     printf("testfile failed to rmdir %s [%d, %d]\n", TEST_DIR, PR_GetError(),
+            PR_GetOSError());
+-    return -1;
++    return;
+   }
+   PR_EnterMonitor(tinfo->mon);
+   tinfo->done = 1;
+   PR_Notify(tinfo->mon);
+   PR_ExitMonitor(tinfo->mon);
  
-     strcpy(pathname, TEST_DIR);
-@@ -865,7 +865,7 @@
-             printf(
-                 "testfile failed to delete file %s [%d, %d]\n",
-                 pathname, PR_GetError(), PR_GetOSError());
--            return -1;
-+            return;
-         }
-     }
- 
-@@ -875,14 +875,13 @@
-         printf(
-             "testfile failed to rmdir %s [%d, %d]\n",
-             TEST_DIR, PR_GetError(), PR_GetOSError());
--        return -1;
-+        return;
-     }
-     PR_EnterMonitor(tinfo->mon);
-     tinfo->done = 1;
-     PR_Notify(tinfo->mon);
-     PR_ExitMonitor(tinfo->mon);
- 
--    return 0;
+-  return 0;
  }
  /************************************************************************/
+
  
