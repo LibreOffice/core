@@ -97,6 +97,7 @@ static bool td_equals(typelib_TypeDescriptionReference const* pTDR1,
 static cppu::type_entry* getTypeEntries(cppu::class_data* cd)
 {
     cppu::type_entry* pEntries = cd->m_typeEntries;
+    if (!cd->m_storedTypeRefs) // not inited?
     {
         static std::mutex aMutex;
         std::scoped_lock guard(aMutex);
@@ -121,8 +122,13 @@ static cppu::type_entry* getTypeEntries(cppu::class_data* cd)
                 // ref is statically held by getCppuType()
                 pEntry->m_type.typeRef = rType.getTypeLibType();
             }
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             cd->m_storedTypeRefs = true;
         }
+    }
+    else
+    {
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
     return pEntries;
 }
