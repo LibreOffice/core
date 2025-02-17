@@ -1373,9 +1373,9 @@ JSSpinButton::JSSpinButton(JSDialogSender* pSender, ::FormattedField* pSpin,
 {
 }
 
-void JSSpinButton::set_value(sal_Int64 value)
+void JSSpinButton::set_floating_point_value(double fValue)
 {
-    SalInstanceSpinButton::set_value(value);
+    SalInstanceSpinButton::set_floating_point_value(fValue);
 
     std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
     (*pMap)[ACTION_TYPE ""_ostr] = "setText";
@@ -1383,9 +1383,9 @@ void JSSpinButton::set_value(sal_Int64 value)
     sendAction(std::move(pMap));
 }
 
-void JSSpinButton::set_range(sal_Int64 min, sal_Int64 max)
+void JSSpinButton::set_floating_point_range(double fMin, double fMax)
 {
-    SalInstanceSpinButton::set_range(min, max);
+    SalInstanceSpinButton::set_floating_point_range(fMin, fMax);
     sendUpdate();
 }
 

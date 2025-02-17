@@ -42,50 +42,50 @@ QtInstanceSpinButton::QtInstanceSpinButton(QtDoubleSpinBox* pSpinBox)
 
 QWidget* QtInstanceSpinButton::getQWidget() const { return m_pSpinBox; }
 
-void QtInstanceSpinButton::set_value(sal_Int64 nValue)
+void QtInstanceSpinButton::set_floating_point_value(double fValue)
 {
     SolarMutexGuard g;
-    GetQtInstance().RunInMainThread([&] { (m_pSpinBox->setValue(nValue)); });
+    GetQtInstance().RunInMainThread([&] { (m_pSpinBox->setValue(fValue)); });
 }
 
-sal_Int64 QtInstanceSpinButton::get_value() const
+double QtInstanceSpinButton::get_floating_point_value() const
 {
     SolarMutexGuard g;
 
-    sal_Int64 nValue;
-    GetQtInstance().RunInMainThread([&] { nValue = std::round(m_pSpinBox->value()); });
-    return nValue;
+    double fValue;
+    GetQtInstance().RunInMainThread([&] { fValue = m_pSpinBox->value(); });
+    return fValue;
 }
 
-void QtInstanceSpinButton::set_range(sal_Int64 nMin, sal_Int64 nMax)
+void QtInstanceSpinButton::set_floating_point_range(double fMin, double fMax)
 {
     SolarMutexGuard g;
-    GetQtInstance().RunInMainThread([&] { (m_pSpinBox->setRange(nMin, nMax)); });
+    GetQtInstance().RunInMainThread([&] { (m_pSpinBox->setRange(fMin, fMax)); });
 }
 
-void QtInstanceSpinButton::get_range(sal_Int64& rMin, sal_Int64& rMax) const
+void QtInstanceSpinButton::get_floating_point_range(double& rMin, double& rMax) const
 {
     SolarMutexGuard g;
 
     GetQtInstance().RunInMainThread([&] {
-        rMin = std::round(m_pSpinBox->minimum());
-        rMax = std::round(m_pSpinBox->maximum());
+        rMin = m_pSpinBox->minimum();
+        rMax = m_pSpinBox->maximum();
     });
 }
 
-void QtInstanceSpinButton::set_increments(sal_Int64 nStep, sal_Int64)
+void QtInstanceSpinButton::set_floating_point_increments(double fStep, double)
 {
     SolarMutexGuard g;
 
-    GetQtInstance().RunInMainThread([&] { m_pSpinBox->setSingleStep(nStep); });
+    GetQtInstance().RunInMainThread([&] { m_pSpinBox->setSingleStep(fStep); });
 }
 
-void QtInstanceSpinButton::get_increments(sal_Int64& rStep, sal_Int64& rPage) const
+void QtInstanceSpinButton::get_floating_point_increments(double& rStep, double& rPage) const
 {
     SolarMutexGuard g;
 
     GetQtInstance().RunInMainThread([&] {
-        rStep = std::round(m_pSpinBox->singleStep());
+        rStep = m_pSpinBox->singleStep();
         rPage = rStep;
     });
 }

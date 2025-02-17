@@ -1905,11 +1905,35 @@ protected:
         return basegfx::fround64(fDouble * Power10(get_digits()));
     }
 
+    // methods to implement in subclasses which use floating point values directly;
+    // public methods using sal_Int64 values whose floating point value depends on get_digits()
+    // take care of conversion
+    virtual void set_floating_point_value(double fValue) = 0;
+    virtual double get_floating_point_value() const = 0;
+    virtual void set_floating_point_range(double fMin, double fMax) = 0;
+    virtual void get_floating_point_range(double& rMin, double& rMax) const = 0;
+    virtual void set_floating_point_increments(double fStep, double fPage) = 0;
+    virtual void get_floating_point_increments(double& rStep, double& rPage) const = 0;
+
 public:
-    virtual void set_value(sal_Int64 value) = 0;
-    virtual sal_Int64 get_value() const = 0;
-    virtual void set_range(sal_Int64 min, sal_Int64 max) = 0;
-    virtual void get_range(sal_Int64& min, sal_Int64& max) const = 0;
+    void set_value(sal_Int64 value) { set_floating_point_value(convert_value_to_double(value)); }
+
+    sal_Int64 get_value() const { return convert_double_to_value(get_floating_point_value()); }
+
+    void set_range(sal_Int64 min, sal_Int64 max)
+    {
+        set_floating_point_range(convert_value_to_double(min), convert_value_to_double(max));
+    }
+
+    void get_range(sal_Int64& min, sal_Int64& max) const
+    {
+        double fMin = 0;
+        double fMax = 0;
+        get_floating_point_range(fMin, fMax);
+        min = convert_double_to_value(fMin);
+        max = convert_double_to_value(fMax);
+    }
+
     void set_min(sal_Int64 min)
     {
         sal_Int64 dummy, max;
@@ -1934,8 +1958,21 @@ public:
         get_range(dummy, max);
         return max;
     }
-    virtual void set_increments(sal_Int64 step, sal_Int64 page) = 0;
-    virtual void get_increments(sal_Int64& step, sal_Int64& page) const = 0;
+
+    void set_increments(sal_Int64 step, sal_Int64 page)
+    {
+        set_floating_point_increments(convert_value_to_double(step), convert_value_to_double(page));
+    }
+
+    void get_increments(sal_Int64& step, sal_Int64& page) const
+    {
+        double fStep = 0;
+        double fPage = 0;
+        get_floating_point_increments(fStep, fPage);
+        step = convert_double_to_value(fStep);
+        page = convert_double_to_value(fPage);
+    }
+
     virtual void set_digits(unsigned int digits) = 0;
     virtual unsigned int get_digits() const = 0;
 

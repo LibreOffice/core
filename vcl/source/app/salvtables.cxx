@@ -5863,37 +5863,34 @@ SalInstanceSpinButton::SalInstanceSpinButton(FormattedField* pButton, SalInstanc
         m_xButton->SetActivateHdl(LINK(this, SalInstanceSpinButton, ActivateHdl));
 }
 
-sal_Int64 SalInstanceSpinButton::get_value() const
+double SalInstanceSpinButton::get_floating_point_value() const { return m_rFormatter.GetValue(); }
+
+void SalInstanceSpinButton::set_floating_point_value(double fValue)
 {
-    return convert_double_to_value(m_rFormatter.GetValue());
+    m_rFormatter.SetValue(fValue);
 }
 
-void SalInstanceSpinButton::set_value(sal_Int64 value)
+void SalInstanceSpinButton::set_floating_point_range(double fMin, double fMax)
 {
-    m_rFormatter.SetValue(convert_value_to_double(value));
+    m_rFormatter.SetMinValue(fMin);
+    m_rFormatter.SetMaxValue(fMax);
 }
 
-void SalInstanceSpinButton::set_range(sal_Int64 min, sal_Int64 max)
+void SalInstanceSpinButton::get_floating_point_range(double& rMin, double& rMax) const
 {
-    m_rFormatter.SetMinValue(convert_value_to_double(min));
-    m_rFormatter.SetMaxValue(convert_value_to_double(max));
+    rMin = m_rFormatter.GetMinValue();
+    rMax = m_rFormatter.GetMaxValue();
 }
 
-void SalInstanceSpinButton::get_range(sal_Int64& min, sal_Int64& max) const
+void SalInstanceSpinButton::set_floating_point_increments(double fStep, double /*fPage*/)
 {
-    min = convert_double_to_value(m_rFormatter.GetMinValue());
-    max = convert_double_to_value(m_rFormatter.GetMaxValue());
+    m_rFormatter.SetSpinSize(fStep);
 }
 
-void SalInstanceSpinButton::set_increments(sal_Int64 step, sal_Int64 /*page*/)
+void SalInstanceSpinButton::get_floating_point_increments(double& rStep, double& rPage) const
 {
-    m_rFormatter.SetSpinSize(convert_value_to_double(step));
-}
-
-void SalInstanceSpinButton::get_increments(sal_Int64& step, sal_Int64& page) const
-{
-    step = convert_double_to_value(m_rFormatter.GetSpinSize());
-    page = convert_double_to_value(m_rFormatter.GetSpinSize());
+    rStep = m_rFormatter.GetSpinSize();
+    rPage = m_rFormatter.GetSpinSize();
 }
 
 void SalInstanceSpinButton::set_digits(unsigned int digits)

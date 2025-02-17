@@ -25,13 +25,13 @@ public:
 
     virtual QWidget* getQWidget() const override;
 
-    virtual void set_value(sal_Int64 nValue) override;
-    virtual sal_Int64 get_value() const override;
-    virtual void set_range(sal_Int64 nMin, sal_Int64 nMax) override;
-    virtual void get_range(sal_Int64& rMin, sal_Int64& rMax) const override;
+    virtual void set_floating_point_value(double fValue) override;
+    virtual double get_floating_point_value() const override;
+    virtual void set_floating_point_range(double fMin, double fMax) override;
+    virtual void get_floating_point_range(double& rMin, double& rMax) const override;
 
-    virtual void set_increments(sal_Int64 nStep, sal_Int64 nPage) override;
-    virtual void get_increments(sal_Int64& rStep, sal_Int64& rPage) const override;
+    virtual void set_floating_point_increments(double fStep, double fPage) override;
+    virtual void get_floating_point_increments(double& rStep, double& rPage) const override;
     virtual void set_digits(unsigned int nDigits) override;
     virtual unsigned int get_digits() const override;
 

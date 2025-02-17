@@ -566,8 +566,8 @@ public:
     JSSpinButton(JSDialogSender* pSender, ::FormattedField* pSpin, SalInstanceBuilder* pBuilder,
                  bool bTakeOwnership);
 
-    virtual void set_value(sal_Int64 value) override;
-    virtual void set_range(sal_Int64 min, sal_Int64 max) override;
+    virtual void set_floating_point_value(double fValue) override;
+    virtual void set_floating_point_range(double fMin, double fMax) override;
 };
 
 class JSFormattedSpinButton final

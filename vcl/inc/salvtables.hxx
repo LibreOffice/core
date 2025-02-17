@@ -688,17 +688,17 @@ public:
     SalInstanceSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder,
                           bool bTakeOwnership);
 
-    virtual sal_Int64 get_value() const override;
+    virtual double get_floating_point_value() const override;
 
-    virtual void set_value(sal_Int64 value) override;
+    virtual void set_floating_point_value(double fValue) override;
 
-    virtual void set_range(sal_Int64 min, sal_Int64 max) override;
+    virtual void set_floating_point_range(double fMin, double fMax) override;
 
-    virtual void get_range(sal_Int64& min, sal_Int64& max) const override;
+    virtual void get_floating_point_range(double& rMin, double& rMax) const override;
 
-    virtual void set_increments(sal_Int64 step, sal_Int64 /*page*/) override;
+    virtual void set_floating_point_increments(double fStep, double /*fPage*/) override;
 
-    virtual void get_increments(sal_Int64& step, sal_Int64& page) const override;
+    virtual void get_floating_point_increments(double& rStep, double& rPage) const override;
 
     virtual void set_digits(unsigned int digits) override;
 

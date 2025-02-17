@@ -17739,16 +17739,16 @@ public:
 #endif
     }
 
-    virtual sal_Int64 get_value() const override
+    virtual double get_floating_point_value() const override
     {
-        return convert_double_to_value(gtk_spin_button_get_value(m_pButton));
+        return gtk_spin_button_get_value(m_pButton);
     }
 
-    virtual void set_value(sal_Int64 value) override
+    virtual void set_floating_point_value(double fValue) override
     {
         disable_notify_events();
         m_bBlank = false;
-        gtk_spin_button_set_value(m_pButton, convert_value_to_double(value));
+        gtk_spin_button_set_value(m_pButton, fValue);
         enable_notify_events();
     }
 
@@ -17787,36 +17787,28 @@ public:
         enable_notify_events();
     }
 
-    virtual void set_range(sal_Int64 min, sal_Int64 max) override
+    virtual void set_floating_point_range(double fMin, double fMax) override
     {
         disable_notify_events();
-        gtk_spin_button_set_range(m_pButton, convert_value_to_double(min),
-                                  convert_value_to_double(max));
+        gtk_spin_button_set_range(m_pButton, fMin, fMax);
         enable_notify_events();
     }
 
-    virtual void get_range(sal_Int64& min, sal_Int64& max) const override
+    virtual void get_floating_point_range(double& rMin, double& rMax) const override
     {
-        double gtkmin, gtkmax;
-        gtk_spin_button_get_range(m_pButton, &gtkmin, &gtkmax);
-        min = convert_double_to_value(gtkmin);
-        max = convert_double_to_value(gtkmax);
+        gtk_spin_button_get_range(m_pButton, &rMin, &rMax);
     }
 
-    virtual void set_increments(sal_Int64 step, sal_Int64 page) override
+    virtual void set_floating_point_increments(double fStep, double fPage) override
     {
         disable_notify_events();
-        gtk_spin_button_set_increments(m_pButton, convert_value_to_double(step),
-                                       convert_value_to_double(page));
+        gtk_spin_button_set_increments(m_pButton, fStep, fPage);
         enable_notify_events();
     }
 
-    virtual void get_increments(sal_Int64& step, sal_Int64& page) const override
+    virtual void get_floating_point_increments(double& rStep, double& rPage) const override
     {
-        double gtkstep, gtkpage;
-        gtk_spin_button_get_increments(m_pButton, &gtkstep, &gtkpage);
-        step = convert_double_to_value(gtkstep);
-        page = convert_double_to_value(gtkpage);
+        gtk_spin_button_get_increments(m_pButton, &rStep, &rPage);
     }
 
     virtual void set_digits(unsigned int digits) override
