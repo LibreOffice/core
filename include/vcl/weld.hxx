@@ -1894,6 +1894,17 @@ protected:
         return TRISTATE_TRUE;
     }
 
+    // helper methods to convert between sal_Int64 value and
+    // floating point number it represents (depending on get_digits())
+    double convert_value_to_double(sal_Int64 nValue) const
+    {
+        return static_cast<double>(nValue) / Power10(get_digits());
+    }
+    sal_Int64 convert_double_to_value(double fDouble) const
+    {
+        return basegfx::fround64(fDouble * Power10(get_digits()));
+    }
+
 public:
     virtual void set_value(sal_Int64 value) = 0;
     virtual sal_Int64 get_value() const = 0;

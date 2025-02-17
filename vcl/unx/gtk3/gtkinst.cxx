@@ -17681,7 +17681,7 @@ private:
             return 0;
         if (eHandled == TRISTATE_TRUE)
         {
-            *new_value = pThis->toGtk(result);
+            *new_value = pThis->convert_value_to_double(result);
             return 1;
         }
         return GTK_INPUT_ERROR;
@@ -17696,16 +17696,6 @@ private:
             return;
         g_signal_handler_disconnect(m_pButton, nDestroySignalId);
         GtkInstanceEditable::signal_activate();
-    }
-
-    double toGtk(sal_Int64 nValue) const
-    {
-        return static_cast<double>(nValue) / Power10(get_digits());
-    }
-
-    sal_Int64 fromGtk(double fValue) const
-    {
-        return basegfx::fround64(fValue * Power10(get_digits()));
     }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -17751,14 +17741,14 @@ public:
 
     virtual sal_Int64 get_value() const override
     {
-        return fromGtk(gtk_spin_button_get_value(m_pButton));
+        return convert_double_to_value(gtk_spin_button_get_value(m_pButton));
     }
 
     virtual void set_value(sal_Int64 value) override
     {
         disable_notify_events();
         m_bBlank = false;
-        gtk_spin_button_set_value(m_pButton, toGtk(value));
+        gtk_spin_button_set_value(m_pButton, convert_value_to_double(value));
         enable_notify_events();
     }
 
@@ -17800,7 +17790,8 @@ public:
     virtual void set_range(sal_Int64 min, sal_Int64 max) override
     {
         disable_notify_events();
-        gtk_spin_button_set_range(m_pButton, toGtk(min), toGtk(max));
+        gtk_spin_button_set_range(m_pButton, convert_value_to_double(min),
+                                  convert_value_to_double(max));
         enable_notify_events();
     }
 
@@ -17808,14 +17799,15 @@ public:
     {
         double gtkmin, gtkmax;
         gtk_spin_button_get_range(m_pButton, &gtkmin, &gtkmax);
-        min = fromGtk(gtkmin);
-        max = fromGtk(gtkmax);
+        min = convert_double_to_value(gtkmin);
+        max = convert_double_to_value(gtkmax);
     }
 
     virtual void set_increments(sal_Int64 step, sal_Int64 page) override
     {
         disable_notify_events();
-        gtk_spin_button_set_increments(m_pButton, toGtk(step), toGtk(page));
+        gtk_spin_button_set_increments(m_pButton, convert_value_to_double(step),
+                                       convert_value_to_double(page));
         enable_notify_events();
     }
 
@@ -17823,8 +17815,8 @@ public:
     {
         double gtkstep, gtkpage;
         gtk_spin_button_get_increments(m_pButton, &gtkstep, &gtkpage);
-        step = fromGtk(gtkstep);
-        page = fromGtk(gtkpage);
+        step = convert_double_to_value(gtkstep);
+        page = convert_double_to_value(gtkpage);
     }
 
     virtual void set_digits(unsigned int digits) override

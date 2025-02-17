@@ -5845,19 +5845,6 @@ IMPL_LINK(SalInstanceIconView, CommandHdl, const CommandEvent&, rEvent, bool)
     return m_aCommandHdl.Call(rEvent);
 }
 
-double SalInstanceSpinButton::toField(sal_Int64 nValue) const
-{
-    return static_cast<double>(nValue) / Power10(get_digits());
-}
-
-sal_Int64 SalInstanceSpinButton::fromField(double fValue) const
-{
-    auto const x = fValue * Power10(get_digits());
-    return x == double(std::numeric_limits<sal_Int64>::max())
-               ? std::numeric_limits<sal_Int64>::max()
-               : sal_Int64(std::round(x));
-}
-
 SalInstanceSpinButton::SalInstanceSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder,
                                              bool bTakeOwnership)
     : SalInstanceEntry(pButton, pBuilder, bTakeOwnership)
@@ -5876,31 +5863,37 @@ SalInstanceSpinButton::SalInstanceSpinButton(FormattedField* pButton, SalInstanc
         m_xButton->SetActivateHdl(LINK(this, SalInstanceSpinButton, ActivateHdl));
 }
 
-sal_Int64 SalInstanceSpinButton::get_value() const { return fromField(m_rFormatter.GetValue()); }
+sal_Int64 SalInstanceSpinButton::get_value() const
+{
+    return convert_double_to_value(m_rFormatter.GetValue());
+}
 
-void SalInstanceSpinButton::set_value(sal_Int64 value) { m_rFormatter.SetValue(toField(value)); }
+void SalInstanceSpinButton::set_value(sal_Int64 value)
+{
+    m_rFormatter.SetValue(convert_value_to_double(value));
+}
 
 void SalInstanceSpinButton::set_range(sal_Int64 min, sal_Int64 max)
 {
-    m_rFormatter.SetMinValue(toField(min));
-    m_rFormatter.SetMaxValue(toField(max));
+    m_rFormatter.SetMinValue(convert_value_to_double(min));
+    m_rFormatter.SetMaxValue(convert_value_to_double(max));
 }
 
 void SalInstanceSpinButton::get_range(sal_Int64& min, sal_Int64& max) const
 {
-    min = fromField(m_rFormatter.GetMinValue());
-    max = fromField(m_rFormatter.GetMaxValue());
+    min = convert_double_to_value(m_rFormatter.GetMinValue());
+    max = convert_double_to_value(m_rFormatter.GetMaxValue());
 }
 
 void SalInstanceSpinButton::set_increments(sal_Int64 step, sal_Int64 /*page*/)
 {
-    m_rFormatter.SetSpinSize(toField(step));
+    m_rFormatter.SetSpinSize(convert_value_to_double(step));
 }
 
 void SalInstanceSpinButton::get_increments(sal_Int64& step, sal_Int64& page) const
 {
-    step = fromField(m_rFormatter.GetSpinSize());
-    page = fromField(m_rFormatter.GetSpinSize());
+    step = convert_double_to_value(m_rFormatter.GetSpinSize());
+    page = convert_double_to_value(m_rFormatter.GetSpinSize());
 }
 
 void SalInstanceSpinButton::set_digits(unsigned int digits)

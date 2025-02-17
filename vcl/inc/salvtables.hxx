@@ -684,10 +684,6 @@ private:
     DECL_LINK(InputHdl, sal_Int64*, TriState);
     DECL_LINK(ActivateHdl, Edit&, bool);
 
-    double toField(sal_Int64 nValue) const;
-
-    sal_Int64 fromField(double fValue) const;
-
 public:
     SalInstanceSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder,
                           bool bTakeOwnership);
