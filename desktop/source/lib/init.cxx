@@ -5031,6 +5031,17 @@ static void lo_sendDialogEvent(LibreOfficeKit* /*pThis*/, unsigned long long int
     lcl_sendDialogEvent(nWindowId, pArguments);
 }
 
+static void reInitDictionaryList()
+{
+    uno::Reference<css::linguistic2::XSearchableDictionaryList> xDicList
+        = LinguMgr::GetDictionaryList();
+    if (xDicList.is())
+    {
+        uno::Reference<lang::XInitialization> xReInitDictionaryList(xDicList, uno::UNO_QUERY_THROW);
+        xReInitDictionaryList->initialize({});
+    }
+};
+
 static void updateConfig(const OUString& rConfigPath)
 {
     osl::Directory aScanRootDir(rConfigPath);
@@ -5095,14 +5106,7 @@ static void updateConfig(const OUString& rConfigPath)
         }
         else if (sFileName == "wordbook")
         {
-            uno::Reference<css::linguistic2::XSearchableDictionaryList> xDicList
-                = LinguMgr::GetDictionaryList();
-            if (xDicList.is())
-            {
-                uno::Reference<lang::XInitialization> xReInitDictionaryList(xDicList,
-                                                                            uno::UNO_QUERY_THROW);
-                xReInitDictionaryList->initialize({});
-            }
+            reInitDictionaryList();
         }
     }
 }
@@ -8177,7 +8181,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             uno::Reference<css::util::XPathSettings> xPathSettings = util::thePathSettings::get(xContext);
             uno::Reference<lang::XInitialization> xReInitSettings(xPathSettings, uno::UNO_QUERY_THROW);
             xReInitSettings->initialize({});
-
+            reInitDictionaryList();
         }
     }
 
