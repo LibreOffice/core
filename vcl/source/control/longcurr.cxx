@@ -209,12 +209,6 @@ bool ImplCurrencyGetValue( const OUString& rStr, BigInt& rValue,
 
 } // namespace
 
-static bool ImplLongCurrencyGetValue( const OUString& rStr, BigInt& rValue,
-                                      sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper )
-{
-    return ImplCurrencyGetValue( rStr, rValue, nDecDigits, rLocaleDataWrapper );
-}
-
 namespace weld
 {
     IMPL_LINK_NOARG(LongCurrencyFormatter, FormatOutputHdl, LinkParamNone*, bool)
@@ -238,7 +232,7 @@ namespace weld
         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
 
         BigInt value;
-        bool bRet = ImplLongCurrencyGetValue(GetEntryText(), value, GetDecimalDigits(), rLocaleDataWrapper);
+        bool bRet = ImplCurrencyGetValue(GetEntryText(), value, GetDecimalDigits(), rLocaleDataWrapper);
 
         if (bRet)
             *result = double(value);
@@ -328,7 +322,7 @@ BigInt LongCurrencyFormatter::GetValue() const
         return 0;
 
     BigInt nTempValue;
-    if ( ImplLongCurrencyGetValue( GetField()->GetText(), nTempValue, GetDecimalDigits(), GetLocaleDataWrapper() ) )
+    if (ImplCurrencyGetValue(GetField()->GetText(), nTempValue, GetDecimalDigits(), GetLocaleDataWrapper()))
     {
         if ( nTempValue > mnMax )
             nTempValue = mnMax;
@@ -358,7 +352,7 @@ void LongCurrencyFormatter::Reformat()
     {
         GetField()->SetText( aStr );
         MarkToBeReformatted( false );
-        ImplLongCurrencyGetValue( aStr, mnLastValue, GetDecimalDigits(), GetLocaleDataWrapper() );
+        ImplCurrencyGetValue(aStr, mnLastValue, GetDecimalDigits(), GetLocaleDataWrapper());
     }
     else
         SetValue( mnLastValue );
