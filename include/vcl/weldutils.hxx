@@ -285,7 +285,7 @@ public:
 
 private:
     DECL_DLLPRIVATE_LINK(FormatOutputHdl, LinkParamNone*, bool);
-    DECL_DLLPRIVATE_LINK(ParseInputHdl, sal_Int64*, TriState);
+    DECL_DLLPRIVATE_LINK(ParseInputHdl, double*, TriState);
 
     SAL_DLLPRIVATE void Init();
 
@@ -313,7 +313,7 @@ public:
 
 private:
     DECL_DLLPRIVATE_LINK(FormatOutputHdl, LinkParamNone*, bool);
-    DECL_DLLPRIVATE_LINK(ParseInputHdl, sal_Int64*, TriState);
+    DECL_DLLPRIVATE_LINK(ParseInputHdl, double*, TriState);
     DECL_DLLPRIVATE_LINK(CursorChangedHdl, weld::Entry&, void);
 
     SAL_DLLPRIVATE void Init();
@@ -346,7 +346,7 @@ public:
 
 private:
     DECL_DLLPRIVATE_LINK(FormatOutputHdl, LinkParamNone*, bool);
-    DECL_DLLPRIVATE_LINK(ParseInputHdl, sal_Int64*, TriState);
+    DECL_DLLPRIVATE_LINK(ParseInputHdl, double*, TriState);
     DECL_DLLPRIVATE_LINK(CursorChangedHdl, weld::Entry&, void);
 
     SAL_DLLPRIVATE void Init();

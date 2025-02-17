@@ -681,7 +681,7 @@ private:
     DECL_LINK(UpDownHdl, SpinField&, void);
     DECL_LINK(LoseFocusHdl, Control&, void);
     DECL_LINK(OutputHdl, LinkParamNone*, bool);
-    DECL_LINK(InputHdl, sal_Int64*, TriState);
+    DECL_LINK(InputHdl, double*, TriState);
     DECL_LINK(ActivateHdl, Edit&, bool);
 
 public:

@@ -62,7 +62,7 @@ public:
 
     DECL_LINK(ValueChangedHdl, weld::FormattedSpinButton&, void);
     DECL_LINK(FormatOutputHdl, LinkParamNone*, bool);
-    DECL_LINK(ParseInputHdl, sal_Int64*, TriState);
+    DECL_LINK(ParseInputHdl, double*, TriState);
     DECL_LINK(ModifyHdl, weld::Entry&, void);
     DECL_LINK(ActivateHdl, weld::Entry&, bool);
     DECL_LINK(FocusInHdl, weld::Widget&, void);
@@ -103,9 +103,9 @@ IMPL_LINK(SpinfieldControl, KeyInputHdl, const ::KeyEvent&, rKEvt, bool)
     return ChildKeyInput(rKEvt);
 }
 
-IMPL_LINK(SpinfieldControl, ParseInputHdl, sal_Int64*, result, TriState)
+IMPL_LINK(SpinfieldControl, ParseInputHdl, double*, result, TriState)
 {
-    *result = m_xWidget->get_text().toDouble() * weld::SpinButton::Power10(m_xWidget->GetFormatter().GetDecimalDigits());
+    *result = m_xWidget->get_text().toDouble();
     return TRISTATE_TRUE;
 }
 

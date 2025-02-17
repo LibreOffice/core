@@ -5913,7 +5913,7 @@ SalInstanceSpinButton::~SalInstanceSpinButton()
         pEdit->SetActivateHdl(Link<Edit&, bool>());
     else
         m_xButton->SetActivateHdl(Link<Edit&, bool>());
-    m_rFormatter.SetInputHdl(Link<sal_Int64*, TriState>());
+    m_rFormatter.SetInputHdl(Link<double*, TriState>());
     m_rFormatter.SetOutputHdl(Link<LinkParamNone*, bool>());
     m_xButton->SetLoseFocusHdl(Link<Control&, void>());
     m_xButton->SetDownHdl(Link<SpinField&, void>());
@@ -5941,12 +5941,12 @@ IMPL_LINK_NOARG(SalInstanceSpinButton, OutputHdl, LinkParamNone*, bool)
     return true;
 }
 
-IMPL_LINK(SalInstanceSpinButton, InputHdl, sal_Int64*, pResult, TriState)
+IMPL_LINK(SalInstanceSpinButton, InputHdl, double*, pResult, TriState)
 {
     int nResult;
     TriState eRet = parse_text(get_text(), &nResult);
     if (eRet == TRISTATE_TRUE)
-        *pResult = nResult;
+        *pResult = convert_value_to_double(nResult);
     return eRet;
 }
 

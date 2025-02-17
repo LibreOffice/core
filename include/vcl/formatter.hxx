@@ -143,7 +143,7 @@ protected:
 
     bool                m_bUseInputStringForFormatting;
 
-    Link<sal_Int64*, TriState> m_aInputHdl;
+    Link<double*, TriState> m_aInputHdl;
     Link<LinkParamNone*, bool> m_aOutputHdl;
 
 public:
@@ -242,7 +242,7 @@ public:
     bool    TreatingAsNumber() const    { return m_bTreatAsNumber; }
     void    TreatAsNumber(bool bDoSo) { m_bTreatAsNumber = bDoSo; }
 
-    void    SetInputHdl(const Link<sal_Int64*,TriState>& rLink) { m_aInputHdl = rLink; }
+    void    SetInputHdl(const Link<double*,TriState>& rLink) { m_aInputHdl = rLink; }
     void    SetOutputHdl(const Link<LinkParamNone*, bool>& rLink) { m_aOutputHdl = rLink; }
 public:
 

@@ -2254,7 +2254,7 @@ namespace weld
         return true;
     }
 
-    IMPL_LINK(DateFormatter, ParseInputHdl, sal_Int64*, result, TriState)
+    IMPL_LINK(DateFormatter, ParseInputHdl, double*, result, TriState)
     {
         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
 
@@ -3152,7 +3152,7 @@ namespace weld
         return true;
     }
 
-    IMPL_LINK(TimeFormatter, ParseInputHdl, sal_Int64*, result, TriState)
+    IMPL_LINK(TimeFormatter, ParseInputHdl, double*, result, TriState)
     {
         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
 

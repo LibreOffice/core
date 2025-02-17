@@ -227,7 +227,7 @@ namespace weld
         return true;
     }
 
-    IMPL_LINK(LongCurrencyFormatter, ParseInputHdl, sal_Int64*, result, TriState)
+    IMPL_LINK(LongCurrencyFormatter, ParseInputHdl, double*, result, TriState)
     {
         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
 
@@ -235,7 +235,7 @@ namespace weld
         bool bRet = ImplCurrencyGetValue(GetEntryText(), value, GetDecimalDigits(), rLocaleDataWrapper);
 
         if (bRet)
-            *result = double(value);
+            *result = double(value) / weld::SpinButton::Power10(GetDecimalDigits());
 
         return bRet ? TRISTATE_TRUE : TRISTATE_FALSE;
     }

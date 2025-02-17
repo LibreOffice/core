@@ -793,16 +793,13 @@ bool Formatter::ImplGetValue(double& dNewVal)
     bool bUseExternalFormatterValue = false;
     if (m_aInputHdl.IsSet())
     {
-        sal_Int64 nResult;
-        auto eState = m_aInputHdl.Call(&nResult);
+        double fResult;
+        auto eState = m_aInputHdl.Call(&fResult);
         bUseExternalFormatterValue = eState != TRISTATE_INDET;
         if (bUseExternalFormatterValue)
         {
             if (eState == TRISTATE_TRUE)
-            {
-                dNewVal = nResult;
-                dNewVal /= weld::SpinButton::Power10(GetDecimalDigits());
-            }
+                dNewVal = fResult;
             else
                 dNewVal = m_dCurrentValue;
         }
