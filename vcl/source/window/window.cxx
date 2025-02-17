@@ -621,10 +621,10 @@ WindowImpl::WindowImpl( vcl::Window& rWindow, WindowType nType )
     mpAccessibleInfos                   = nullptr;
     maControlForeground                 = COL_TRANSPARENT;  // no foreground set
     maControlBackground                 = COL_TRANSPARENT;  // no background set
-    mnLeftBorder                        = 0;                         // left border
-    mnTopBorder                         = 0;                         // top border
-    mnRightBorder                       = 0;                         // right border
-    mnBottomBorder                      = 0;                         // bottom border
+    mnLeftBorder                        = 0;                         // width of left border
+    mnTopBorder                         = 0;                         // width of top border
+    mnRightBorder                       = 0;                         // width of right border
+    mnBottomBorder                      = 0;                         // width of bottom border
     mnWidthRequest                      = -1;                        // width request
     mnHeightRequest                     = -1;                        // height request
     mnOptimalWidthCache                 = -1;                        // optimal width cache
