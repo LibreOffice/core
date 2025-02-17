@@ -214,9 +214,8 @@ namespace sdr::contact
                 }
 
                 // fill object matrix
-                const basegfx::B2DHomMatrix aObjectMatrix(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+                const basegfx::B2DHomMatrix aObjectMatrix(basegfx::utils::createScaleTranslateB2DHomMatrix(
                     aObjectRange.getWidth(), aObjectRange.getHeight(),
-                    /*fShearX=*/0, /*fRotate=*/0,
                     aObjectRange.getMinX(), aObjectRange.getMinY()));
 
                 // create primitive

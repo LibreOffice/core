@@ -1143,15 +1143,9 @@ void SdrGrafObj::addCropHandles(SdrHdlList& rTarget) const
 
         aMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
-        if(!basegfx::fTools::equalZero(fShearX))
-        {
-            // shearX is used, correct it
-            fShearX = -fShearX;
-        }
-
         aMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
             aScale,
-            fShearX,
+            -fShearX,
             fRotate,
             aTranslate);
     }

@@ -583,8 +583,8 @@ void SdXMLShapeContext::SetTransformation()
     basegfx::B2DHomMatrix aB2DHomMatrix;
     aB2DHomMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                                 aScale,
-                                basegfx::fTools::equalZero(fShearX) ? 0.0 : -fShearX,
-                                basegfx::fTools::equalZero(fRotate) ? 0.0 : fRotate,
+                                -fShearX,
+                                fRotate,
                             aTranslate);
     drawing::HomogenMatrix3 aUnoMatrix;
 

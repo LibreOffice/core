@@ -2964,8 +2964,8 @@ void SdrObjCustomShape::AdjustToMaxRect(const tools::Rectangle& rMaxRect, bool b
     basegfx::B2DHomMatrix aMathMatrix;
     aMathMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
             aScale,
-            basegfx::fTools::equalZero(fShearX) ? 0.0 : -fShearX,
-            basegfx::fTools::equalZero(fRotate) ? 0.0 : fRotate,
+            -fShearX,
+            fRotate,
             aTranslate);
 
     // Calculate scaling factors from size of the transformed unit polygon as ersatz for the not
@@ -2995,8 +2995,8 @@ void SdrObjCustomShape::AdjustToMaxRect(const tools::Rectangle& rMaxRect, bool b
     aMathMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
     aMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
             aScale,
-            basegfx::fTools::equalZero(fShearX) ? 0.0 : -fShearX,
-            basegfx::fTools::equalZero(fRotate) ? 0.0 : fRotate,
+            -fShearX,
+            fRotate,
             aTranslate);
 
     // Now use TRSetBaseGeometry to actually perform scale, shear, rotate and translate
@@ -3103,7 +3103,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     if (aScale.getX() > 2.0 && aScale.getY() > 2.0)
         aScale -= basegfx::B2DTuple(1.0, 1.0);
     basegfx::B2DHomMatrix aMathMat = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
-                    aScale, -fShearX, basegfx::fTools::equalZero(fRotate) ? 0.0 : fRotate,
+                    aScale, -fShearX, fRotate,
                     aTranslate);
     // Use matrix to get current center
     basegfx::B2DPoint aCenter(0.5,0.5);
@@ -3200,7 +3200,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
     rMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
         aScale,
         basegfx::fTools::equalZero(fShearX) ? 0.0 : tan(fShearX),
-        basegfx::fTools::equalZero(fRotate) ? 0.0 : -fRotate,
+        -fRotate,
         aTranslate);
 
     return false;

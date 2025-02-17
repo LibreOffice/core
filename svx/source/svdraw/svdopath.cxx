@@ -2876,7 +2876,7 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
     rMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
         aScale,
         basegfx::fTools::equalZero(fShearX) ? 0.0 : tan(fShearX),
-        basegfx::fTools::equalZero(fRotate) ? 0.0 : -fRotate,
+        -fRotate,
         aTranslate);
 
     return true;
