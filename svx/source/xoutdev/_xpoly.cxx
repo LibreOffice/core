@@ -729,8 +729,21 @@ void XPolygon::PointsToBezier(sal_uInt16 nFirst)
     fY2 -= fY1 * fU2 / fT2;
     fY2 -= fY3 * fT2 / (fU2 * 3);
 
-    pPoints[nFirst+1] = Point(static_cast<tools::Long>(fX1), static_cast<tools::Long>(fY1));
-    pPoints[nFirst+2] = Point(static_cast<tools::Long>(fX2), static_cast<tools::Long>(fY2));
+    Point aControlPoint1(static_cast<tools::Long>(fX1), static_cast<tools::Long>(fY1));
+    Point aControlPoint2(static_cast<tools::Long>(fX2), static_cast<tools::Long>(fY2));
+
+    auto fPointOffset1 = std::hypot(aControlPoint1.X() - pPoints[nFirst + 1].X(), aControlPoint1.Y() - pPoints[nFirst + 1].Y());
+    auto fPointOffset2 = std::hypot(aControlPoint2.X() - pPoints[nFirst + 2].X(), aControlPoint2.Y() - pPoints[nFirst + 2].Y());
+
+    // To prevent the curve from overshooting due to sharp direction changes in the given sequence of points,
+    // compare the control point offsets against the full segment length.
+    // Apply the calculated ControlPoints only if their offsets are within a reasonable range.
+    if( fPointOffset1 < nFullLength && fPointOffset2 < nFullLength )
+    {
+        pPoints[nFirst + 1] = aControlPoint1;
+        pPoints[nFirst + 2] = aControlPoint2;
+    }
+
     SetFlags(nFirst+1, PolyFlags::Control);
     SetFlags(nFirst+2, PolyFlags::Control);
 }
