@@ -854,6 +854,12 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TrPrBase_cantSplit, pValue);
         }
         break;
+        case RTFKeyword::TRHDR:
+        {
+            auto pValue = new RTFValue(1);
+            m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TrPrBase_tblHeader, pValue);
+        }
+        break;
         case RTFKeyword::SECTUNLOCKED:
         {
             auto pValue = new RTFValue(0);

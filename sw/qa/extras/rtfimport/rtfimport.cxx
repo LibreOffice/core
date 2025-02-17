@@ -1980,6 +1980,16 @@ CPPUNIT_TEST_FIXTURE(Test, test162198Tdf)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("right cell spacing to contents", sal_Int32(9), nRightDistance);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, test118465Tdf)
+{
+    createSwDoc("tblrepeat.rtf");
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<sal_Int32>(xTable, u"HeaderRowCount"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, test165333Tdf)
 {
     createSwDoc("165333.rtf");
