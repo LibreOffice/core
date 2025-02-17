@@ -60,70 +60,69 @@ $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/libpython$(
 
 python3_EXTENSION_MODULE_SUFFIX=cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)$(if $(ENABLE_DBGUTIL),d)
 python3_EXTENSION_MODULES= \
-	LO_lib/array.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_asyncio.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/audioop.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/binascii.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_bisect.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_blake2.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_bz2.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/cmath.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_codecs_cn.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_codecs_hk.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_codecs_iso2022.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_codecs_jp.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_codecs_kr.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_codecs_tw.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_contextvars.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_crypt.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_csv.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_ctypes.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_datetime.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_decimal.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_elementtree.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/fcntl.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/grp.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/array.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_asyncio.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/audioop.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/binascii.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_bisect.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_blake2.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_bz2.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/cmath.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_codecs_cn.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_codecs_hk.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_codecs_iso2022.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_codecs_jp.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_codecs_kr.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_codecs_tw.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_contextvars.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_crypt.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_csv.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_ctypes.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_datetime.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_decimal.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_elementtree.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/fcntl.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/grp.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	$(if $(ENABLE_OPENSSL), \
-		LO_lib/_hashlib.$(python3_EXTENSION_MODULE_SUFFIX).so \
+		Modules/_hashlib.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	) \
-	LO_lib/_heapq.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_json.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_lsprof.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/math.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_md5.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/mmap.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_multibytecodec.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_multiprocessing.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_opcode.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/ossaudiodev.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_pickle.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_posixshmem.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_posixsubprocess.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/pyexpat.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_queue.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_random.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/resource.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/select.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_sha1.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_sha256.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_sha3.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_sha512.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_socket.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/spwd.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_heapq.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_json.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_lsprof.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/math.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_md5.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/mmap.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_multibytecodec.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_multiprocessing.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_opcode.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/ossaudiodev.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_pickle.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_posixshmem.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_posixsubprocess.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/pyexpat.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_queue.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_random.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/resource.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/select.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_sha1.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_sha2.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_sha3.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_socket.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/spwd.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	$(if $(ENABLE_OPENSSL), \
-		LO_lib/_ssl.$(python3_EXTENSION_MODULE_SUFFIX).so \
+		Modules/_ssl.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	) \
-	LO_lib/_statistics.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_struct.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/syslog.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/termios.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/unicodedata.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_statistics.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_struct.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/syslog.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/termios.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/unicodedata.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	$(if $(ENABLE_DBGUTIL),, \
-		LO_lib/xxlimited.$(python3_EXTENSION_MODULE_SUFFIX).so \
+		Modules/xxlimited.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	)\
-	LO_lib/_xxsubinterpreters.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_xxtestfuzz.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/zlib.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_xxsubinterpreters.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_xxtestfuzz.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/zlib.$(python3_EXTENSION_MODULE_SUFFIX).so \
 
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/lib-dynload,\
 	$(python3_EXTENSION_MODULES) \
@@ -185,15 +184,16 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/__future__.py \
 	Lib/__hello__.py \
 	Lib/_aix_support.py \
-	Lib/_bootsubprocess.py \
 	Lib/_collections_abc.py \
 	Lib/_compat_pickle.py \
 	Lib/_compression.py \
 	Lib/_markupbase.py \
 	Lib/_osx_support.py \
 	Lib/_py_abc.py \
+	Lib/_pydatetime.py \
 	Lib/_pydecimal.py \
 	Lib/_pyio.py \
+	Lib/_pylong.py \
 	Lib/_sitebuiltins.py \
 	Lib/_strptime.py \
 	Lib/_threading_local.py \
@@ -203,8 +203,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/antigravity.py \
 	Lib/argparse.py \
 	Lib/ast.py \
-	Lib/asynchat.py \
-	Lib/asyncore.py \
 	Lib/base64.py \
 	Lib/bdb.py \
 	Lib/bisect.py \
@@ -252,7 +250,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/hmac.py \
 	Lib/imaplib.py \
 	Lib/imghdr.py \
-	Lib/imp.py \
 	Lib/inspect.py \
 	Lib/io.py \
 	Lib/ipaddress.py \
@@ -304,7 +301,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/shutil.py \
 	Lib/signal.py \
 	Lib/site.py \
-	Lib/smtpd.py \
 	Lib/smtplib.py \
 	Lib/sndhdr.py \
 	Lib/socket.py \
@@ -347,7 +343,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/webbrowser.py \
 	Lib/xdrlib.py \
 	Lib/zipapp.py \
-	Lib/zipfile.py \
 	Lib/zipimport.py \
 ))
 
@@ -429,63 +424,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/ctypes/macholib/dyld.py \
 	Lib/ctypes/macholib/dylib.py \
 	Lib/ctypes/macholib/framework.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/distutils,\
-	Lib/distutils/README \
-	Lib/distutils/__init__.py \
-	Lib/distutils/_msvccompiler.py \
-	Lib/distutils/archive_util.py \
-	Lib/distutils/bcppcompiler.py \
-	Lib/distutils/ccompiler.py \
-	Lib/distutils/cmd.py \
-	Lib/distutils/config.py \
-	Lib/distutils/core.py \
-	Lib/distutils/cygwinccompiler.py \
-	Lib/distutils/debug.py \
-	Lib/distutils/dep_util.py \
-	Lib/distutils/dir_util.py \
-	Lib/distutils/dist.py \
-	Lib/distutils/errors.py \
-	Lib/distutils/extension.py \
-	Lib/distutils/fancy_getopt.py \
-	Lib/distutils/file_util.py \
-	Lib/distutils/filelist.py \
-	Lib/distutils/log.py \
-	Lib/distutils/msvc9compiler.py \
-	Lib/distutils/msvccompiler.py \
-	Lib/distutils/spawn.py \
-	Lib/distutils/sysconfig.py \
-	Lib/distutils/text_file.py \
-	Lib/distutils/unixccompiler.py \
-	Lib/distutils/util.py \
-	Lib/distutils/version.py \
-	Lib/distutils/versionpredicate.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/distutils/command,\
-	Lib/distutils/command/__init__.py \
-	Lib/distutils/command/bdist.py \
-	Lib/distutils/command/bdist_dumb.py \
-	Lib/distutils/command/bdist_rpm.py \
-	Lib/distutils/command/build.py \
-	Lib/distutils/command/build_clib.py \
-	Lib/distutils/command/build_ext.py \
-	Lib/distutils/command/build_py.py \
-	Lib/distutils/command/build_scripts.py \
-	Lib/distutils/command/check.py \
-	Lib/distutils/command/clean.py \
-	Lib/distutils/command/command_template \
-	Lib/distutils/command/config.py \
-	Lib/distutils/command/install.py \
-	Lib/distutils/command/install_data.py \
-	Lib/distutils/command/install_egg_info.py \
-	Lib/distutils/command/install_headers.py \
-	Lib/distutils/command/install_lib.py \
-	Lib/distutils/command/install_scripts.py \
-	Lib/distutils/command/register.py \
-	Lib/distutils/command/sdist.py \
-	Lib/distutils/command/upload.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/email,\
@@ -931,6 +869,16 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/xmlrpc/__init__.py \
 	Lib/xmlrpc/client.py \
 	Lib/xmlrpc/server.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/zipfile,\
+	Lib/zipfile/__init__.py \
+	Lib/zipfile/__main__.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/zipfile/_path,\
+	Lib/zipfile/_path/__init__.py \
+	Lib/zipfile/_path/glob.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/zoneinfo,\

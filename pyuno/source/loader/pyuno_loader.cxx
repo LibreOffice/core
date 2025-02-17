@@ -242,7 +242,7 @@ void pythonInit() {
     PyImport_AppendInittab( "pyuno", PyInit_pyuno );
 
 #if HAVE_FEATURE_READONLY_INSTALLSET
-    Py_DontWriteBytecodeFlag = 1;
+    config.write_bytecode = 0;
 #endif
 
     // initialize python
