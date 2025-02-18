@@ -704,21 +704,14 @@ AC_ARG_ENABLE(fuzz-options,
 )
 
 dnl ===================================================================
-dnl When building for Android, --with-android-ndk,
-dnl --with-android-ndk-toolchain-version and --with-android-sdk are
-dnl mandatory
+dnl When building for Android, --with-android-ndk and
+dnl --with-android-sdk are mandatory
 dnl ===================================================================
 
 AC_ARG_WITH(android-ndk,
     AS_HELP_STRING([--with-android-ndk],
         [Specify location of the Android Native Development Kit. Mandatory when building for Android.]),
 ,)
-
-AC_ARG_WITH(android-ndk-toolchain-version,
-    AS_HELP_STRING([--with-android-ndk-toolchain-version],
-        [Specify which toolchain version to use, of those present in the
-        Android NDK you are using. The default (and only supported version currently) is "clang5.0"]),,
-        with_android_ndk_toolchain_version=clang5.0)
 
 AC_ARG_WITH(android-sdk,
     AS_HELP_STRING([--with-android-sdk],
@@ -791,14 +784,6 @@ if test -n "$with_android_ndk"; then
         ;;
     esac
 
-    case "$with_android_ndk_toolchain_version" in
-    clang5.0)
-        ANDROID_GCC_TOOLCHAIN_VERSION=4.9
-        ;;
-    *)
-        AC_MSG_ERROR([Unrecognized value for the --with-android-ndk-toolchain-version option. Building for Android is only supported with Clang 5.*])
-    esac
-
     AC_MSG_NOTICE([using the Android API level... $ANDROID_API_LEVEL])
 
     # NDK 15 or later toolchain is 64bit-only, except for Windows that we don't support. Using a 64-bit
@@ -851,7 +836,6 @@ AC_SUBST(ANDROID_NDK_DIR)
 AC_SUBST(ANDROID_NDK_VERSION)
 AC_SUBST(ANDROID_API_LEVEL)
 AC_SUBST(ANDROID_APP_ABI)
-AC_SUBST(ANDROID_GCC_TOOLCHAIN_VERSION)
 AC_SUBST(ANDROID_SYSROOT_PLATFORM)
 AC_SUBST(ANDROID_TOOLCHAIN)
 
