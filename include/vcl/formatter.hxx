@@ -198,7 +198,7 @@ public:
     sal_uLong   GetFormatKey() const                { return m_nFormatKey; }
     void    SetFormatKey(sal_uLong nFormatKey);
 
-    SvNumberFormatter*  GetOrCreateFormatter() const { return m_pFormatter ? m_pFormatter : const_cast<Formatter*>(this)->CreateFormatter(); }
+    SvNumberFormatter& GetOrCreateFormatter() const { return m_pFormatter ? *m_pFormatter : *const_cast<Formatter*>(this)->CreateFormatter(); }
 
     SvNumberFormatter*  GetFormatter() const    { return m_pFormatter; }
     void    SetFormatter(SvNumberFormatter* pFormatter, bool bResetFormat = true);

@@ -280,7 +280,7 @@ bool DoubleNumericFormatter::CheckText(const OUString& sText) const
 void DoubleNumericFormatter::ResetConformanceTester()
 {
     // the thousands and the decimal separator are language dependent
-    const SvNumberformat* pFormatEntry = GetOrCreateFormatter()->GetEntry(m_nFormatKey);
+    const SvNumberformat* pFormatEntry = GetOrCreateFormatter().GetEntry(m_nFormatKey);
 
     sal_Unicode cSeparatorThousand = ',';
     sal_Unicode cSeparatorDecimal = '.';
