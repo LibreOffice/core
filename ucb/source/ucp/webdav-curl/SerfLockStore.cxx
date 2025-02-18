@@ -222,7 +222,7 @@ void SerfLockStore::removeLockImpl(std::unique_lock<std::mutex> & rGuard, const 
     }
 }
 
-std::chrono::milliseconds SerfLockStore::refreshLocks(std::unique_lock<std::mutex>&rGuard)
+std::chrono::milliseconds SerfLockStore::refreshLocks(std::unique_lock<std::mutex>& rGuard)
 {
     assert(rGuard.owns_lock());
     (void)rGuard;
@@ -230,8 +230,6 @@ std::chrono::milliseconds SerfLockStore::refreshLocks(std::unique_lock<std::mute
     TimeValue currentTimeVal;
     osl_getSystemTime(&currentTimeVal);
     sal_Int32 currentTime = currentTimeVal.Seconds;
-
-    std::unique_lock aGuard( m_aMutex );
 
     ::std::vector<OUString> authFailedLocks;
     std::chrono::milliseconds min_remaining = std::chrono::milliseconds::max();
@@ -282,7 +280,7 @@ std::chrono::milliseconds SerfLockStore::refreshLocks(std::unique_lock<std::mute
 
     for (auto const& rLock : authFailedLocks)
     {
-        removeLockImpl(aGuard, rLock);
+        removeLockImpl(rGuard, rLock);
     }
 
     return min_remaining;
