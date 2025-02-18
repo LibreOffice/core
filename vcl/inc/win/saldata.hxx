@@ -115,7 +115,6 @@ public:
     sal_uInt16              mnStockPenCount;        // count of static pens
     sal_uInt16              mnStockBrushCount;      // count of static brushes
     WPARAM                  mnSalObjWantKeyEvt;     // KeyEvent that should be processed by SalObj-Hook
-    BYTE                    mnCacheDCInUse;         // count of CacheDC in use
     bool                    mbObjClassInit;         // is SALOBJECTCLASS initialised
     DWORD                   mnAppThreadId;          // Id from Application-Thread
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
@@ -204,8 +203,6 @@ OUString ImplSalGetUniString(const char* pStr, sal_Int32 nLen = -1);
 #define SAL_MSG_CREATEOBJECT        (WM_USER+116)
 // wParam == 0; lParam == pObject;
 #define SAL_MSG_DESTROYOBJECT       (WM_USER+117)
-// wParam == hWnd; lParam == 0; lResult == hDC
-#define SAL_MSG_GETCACHEDDC         (WM_USER+120)
 // wParam == hWnd; lParam == 0
 #define SAL_MSG_RELEASEDC           (WM_USER+121)
 // wParam == newParentHwnd; lParam == oldHwnd; lResult == newhWnd

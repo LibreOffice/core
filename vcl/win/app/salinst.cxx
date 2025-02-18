@@ -271,7 +271,6 @@ SalData::SalData()
     mnStockPenCount = 0;        // count of static pens
     mnStockBrushCount = 0;      // count of static brushes
     mnSalObjWantKeyEvt = 0;     // KeyEvent for the SalObj hook
-    mnCacheDCInUse = 0;         // count of CacheDC in use
     mbObjClassInit = false;     // is SALOBJECTCLASS initialised
     mnAppThreadId = 0;          // Id from Application-Thread
     mpFirstIcon = nullptr;      // icon cache, points to first icon, NULL if none
@@ -666,13 +665,6 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
             {
                 NoYieldLockGuard g;
                 delete reinterpret_cast<SalObject*>(lParam);
-            }
-            break;
-        case (SAL_MSG_GETCACHEDDC):
-            {
-                NoYieldLockGuard g;
-                nRet = reinterpret_cast<LRESULT>(
-                    GetDCEx(reinterpret_cast<HWND>(wParam), nullptr, 0x00000002L));
             }
             break;
         case (SAL_MSG_RELEASEDC):
