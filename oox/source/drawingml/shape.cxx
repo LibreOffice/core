@@ -1531,16 +1531,12 @@ Reference< XShape > const & Shape::createAndInsert(
                 std::optional<css::style::ParagraphAdjust>& oParaAdjust
                     = mpTextBody->getParagraphs()[0]->getProperties().getParaAdjust();
 
-                bool bAutoHeight = false;
-                Reference< XPropertySetInfo > xSetInfo(xSet->getPropertySetInfo());
-                const OUString& rPropName = PropertyMap::getPropertyName(PROP_TextAutoGrowHeight);
-                if (xSetInfo.is() && xSetInfo->hasPropertyByName(rPropName))
-                {
-                    uno::Any aTextAutoGrowHeight = xSet->getPropertyValue(u"TextAutoGrowHeight"_ustr);
-                    aTextAutoGrowHeight >>= bAutoHeight;
-                }
+                bool bAutoGrowHeight = getTextBody()
+                    ->getTextProperties()
+                    .maPropertyMap.getProperty(PROP_TextAutoGrowHeight)
+                    .get<bool>();
 
-                if (bAutoHeight && nShapeRotateInclCamera == 0)
+                if (bAutoGrowHeight && nShapeRotateInclCamera == 0)
                 {
                     mpTextBody->getTextProperties().maPropertyMap.setProperty(
                         PROP_TextHorizontalAdjust, lcl_convertTextAdjust(
