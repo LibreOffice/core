@@ -345,7 +345,7 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
     {
         // Insert attributes of referenced char format into current set
         const SwFormatCharFormat& rCharFormat = pCleanedSet->Get(RES_TXTATR_CHARFMT);
-        const SwAttrSet& rStyleAttrs = static_cast<const SwCharFormat *>(rCharFormat.GetRegisteredIn())->GetAttrSet();
+        const SwAttrSet& rStyleAttrs = rCharFormat.GetCharFormat()->GetAttrSet();
         SfxWhichIter aIter(rStyleAttrs);
         sal_uInt16 nWhich = aIter.FirstWhich();
         while (nWhich)

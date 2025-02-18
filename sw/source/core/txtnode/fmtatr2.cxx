@@ -60,20 +60,24 @@ using namespace ::com::sun::star;
 
 SfxPoolItem* SwFormatINetFormat::CreateDefault() { return new SwFormatINetFormat; }
 
-SwFormatCharFormat::SwFormatCharFormat( SwCharFormat *pFormat )
-    : SfxPoolItem( RES_TXTATR_CHARFMT ),
-    SwClient(pFormat),
-    m_pTextAttribute( nullptr )
+SwFormatCharFormat::SwFormatCharFormat(SwCharFormat* pFormat)
+    : SfxPoolItem(RES_TXTATR_CHARFMT)
+    , m_pTextAttribute(nullptr)
+    , m_pCharFormat(pFormat)
 {
+    if(m_pCharFormat)
+        StartListening(m_pCharFormat->GetNotifier());
     setNonShareable();
 }
 
 SwFormatCharFormat::SwFormatCharFormat( const SwFormatCharFormat& rAttr )
-    : SfxPoolItem( RES_TXTATR_CHARFMT ),
-    SwClient( rAttr.GetCharFormat() ),
-    m_pTextAttribute( nullptr )
+    : SfxPoolItem(RES_TXTATR_CHARFMT)
+    , m_pTextAttribute(nullptr)
+    , m_pCharFormat(rAttr.m_pCharFormat)
 {
     setNonShareable();
+    if(m_pCharFormat)
+        StartListening(m_pCharFormat->GetNotifier());
 }
 
 SwFormatCharFormat::~SwFormatCharFormat() {}
@@ -81,7 +85,7 @@ SwFormatCharFormat::~SwFormatCharFormat() {}
 bool SwFormatCharFormat::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return GetCharFormat() == static_cast<const SwFormatCharFormat&>(rAttr).GetCharFormat();
+    return m_pCharFormat == static_cast<const SwFormatCharFormat&>(rAttr).m_pCharFormat;
 }
 
 SwFormatCharFormat* SwFormatCharFormat::Clone( SfxItemPool* ) const
@@ -90,44 +94,38 @@ SwFormatCharFormat* SwFormatCharFormat::Clone( SfxItemPool* ) const
 }
 
 // forward to the TextAttribute
-void SwFormatCharFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
+void SwFormatCharFormat::Notify(const SfxHint& rHint)
 {
-    if(rHint.GetId() == SfxHintId::SwAutoFormatUsedHint)
+    if(!m_pTextAttribute)
+        return;
+    switch(rHint.GetId())
     {
-        if(m_pTextAttribute)
+        case SfxHintId::SwAutoFormatUsedHint:
             m_pTextAttribute->HandleAutoFormatUsedHint(static_cast<const sw::AutoFormatUsedHint&>(rHint));
-    }
-    else if (rHint.GetId() == SfxHintId::SwFormatChange)
-    {
-        auto pChangeHint = static_cast<const SwFormatChangeHint*>(&rHint);
-        if(m_pTextAttribute)
-            m_pTextAttribute->TriggerNodeUpdate(*pChangeHint);
-    }
-    else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
-    {
-        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-        if(m_pTextAttribute)
-            m_pTextAttribute->TriggerNodeUpdate(*pChangeHint);
-    }
-    else if (rHint.GetId() == SfxHintId::SwObjectDying)
-    {
-        auto pDyingHint = static_cast<const sw::ObjectDyingHint*>(&rHint);
-        if(m_pTextAttribute)
-            m_pTextAttribute->TriggerNodeUpdate(*pDyingHint);
-    }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
-    {
-        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        if(m_pTextAttribute)
-            m_pTextAttribute->TriggerNodeUpdate(*pLegacy);
+            break;
+        case SfxHintId::SwFormatChange:
+            m_pTextAttribute->TriggerNodeUpdate(*static_cast<const SwFormatChangeHint*>(&rHint));
+            break;
+        case SfxHintId::SwAttrSetChange:
+            m_pTextAttribute->TriggerNodeUpdate(*static_cast<const sw::AttrSetChangeHint*>(&rHint));
+            break;
+        case SfxHintId::SwObjectDying:
+            m_pTextAttribute->TriggerNodeUpdate(*static_cast<const sw::ObjectDyingHint*>(&rHint));
+            m_pCharFormat = nullptr;
+            break;
+        case SfxHintId::SwLegacyModify:
+            m_pTextAttribute->TriggerNodeUpdate(*static_cast<const sw::LegacyModifyHint*>(&rHint));
+            break;
+        default:
+            break;
     }
 }
 
 bool SwFormatCharFormat::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     ProgName sCharFormatName;
-    if(GetCharFormat())
-        SwStyleNameMapper::FillProgName(GetCharFormat()->GetName(), sCharFormatName,  SwGetPoolIdFromName::ChrFmt );
+    if(m_pCharFormat)
+        SwStyleNameMapper::FillProgName(m_pCharFormat->GetName(), sCharFormatName,  SwGetPoolIdFromName::ChrFmt );
     rVal <<= sCharFormatName.toString();
     return true;
 }
