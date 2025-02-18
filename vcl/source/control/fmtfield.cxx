@@ -533,6 +533,39 @@ bool Formatter::SetFormat(const OUString& rFormatString, LanguageType eLang)
     return true;
 }
 
+OUString Formatter::FormatValue(double fValue)
+{
+    if (m_aFormatValueHdl.IsSet())
+    {
+        std::optional<OUString> aText = m_aFormatValueHdl.Call(fValue);
+        if (aText.has_value())
+            return aText.value();
+    }
+
+    OUString sNewText;
+    if (GetOrCreateFormatter().IsTextFormat(m_nFormatKey))
+    {
+        // first convert the number as string in standard format
+        OUString sTemp;
+        GetOrCreateFormatter().GetOutputString(fValue, 0, sTemp, &m_pLastOutputColor);
+        // then encode the string in the corresponding text format
+        GetOrCreateFormatter().GetOutputString(sTemp, m_nFormatKey, sNewText, &m_pLastOutputColor);
+    }
+    else
+    {
+        if( IsUsingInputStringForFormatting())
+        {
+            sNewText = GetOrCreateFormatter().GetInputLineString(fValue, m_nFormatKey);
+        }
+        else
+        {
+            GetOrCreateFormatter().GetOutputString(fValue, m_nFormatKey, sNewText, &m_pLastOutputColor);
+        }
+    }
+
+    return sNewText;
+}
+
 bool Formatter::GetThousandsSep() const
 {
     DBG_ASSERT(!GetOrCreateFormatter().IsTextFormat(m_nFormatKey),
@@ -744,38 +777,9 @@ void Formatter::ImplSetValue(double dVal, bool bForce)
     m_ValueState = valueDouble;
     UpdateCurrentValue(dVal);
 
-    std::optional<OUString> aText;
-    if (m_aFormatValueHdl.IsSet())
-        aText = m_aFormatValueHdl.Call(dVal);
-
-    if (!aText.has_value())
-    {
-        OUString sNewText;
-        if (GetOrCreateFormatter().IsTextFormat(m_nFormatKey))
-        {
-            // first convert the number as string in standard format
-            OUString sTemp;
-            GetOrCreateFormatter().GetOutputString(dVal, 0, sTemp, &m_pLastOutputColor);
-            // then encode the string in the corresponding text format
-            GetOrCreateFormatter().GetOutputString(sTemp, m_nFormatKey, sNewText, &m_pLastOutputColor);
-        }
-        else
-        {
-            if( IsUsingInputStringForFormatting())
-            {
-                sNewText = GetOrCreateFormatter().GetInputLineString(dVal, m_nFormatKey);
-            }
-            else
-            {
-                GetOrCreateFormatter().GetOutputString(dVal, m_nFormatKey, sNewText, &m_pLastOutputColor);
-            }
-        }
-        aText = sNewText;
-    }
-
-    assert(aText.has_value());
-    ImplSetTextImpl(*aText, nullptr);
-    DBG_ASSERT(CheckText(*aText), "FormattedField::ImplSetValue : formatted string doesn't match the criteria !");
+    const OUString sNewText = FormatValue(dVal);
+    ImplSetTextImpl(sNewText, nullptr);
+    DBG_ASSERT(CheckText(sNewText), "FormattedField::ImplSetValue : formatted string doesn't match the criteria !");
 
     m_ValueState = valueDouble;
 }
