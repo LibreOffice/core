@@ -2966,19 +2966,19 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 
     gHScrollbar = gtk_scrollbar_new(GTK_ORIENTATION_HORIZONTAL, nullptr);
     gtk_fixed_put(GTK_FIXED(gDumbContainer), gHScrollbar, 0, 0);
-    gtk_widget_show(gHScrollbar);
+    gtk_widget_set_visible(gHScrollbar, true);
 
 #if GTK_CHECK_VERSION(4, 0, 0)
     gVScrollbar = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, nullptr);
     gtk_fixed_put(GTK_FIXED(gDumbContainer), gVScrollbar, 0, 0);
-    gtk_widget_show(gVScrollbar);
+    gtk_widget_set_visible(gVScrollbar, true);
     mpVScrollbarStyle = gtk_widget_get_style_context(gVScrollbar);
 
     mpHScrollbarStyle = gtk_widget_get_style_context(gHScrollbar);
 
     gTextView = gtk_text_view_new();
     gtk_fixed_put(GTK_FIXED(gDumbContainer), gTextView, 0, 0);
-    gtk_widget_show(gTextView);
+    gtk_widget_set_visible(gTextView, true);
 #else
     mpVScrollbarStyle = createStyleContext(GtkControlPart::ScrollbarVertical);
     mpVScrollbarContentsStyle = createStyleContext(GtkControlPart::ScrollbarVerticalContents);

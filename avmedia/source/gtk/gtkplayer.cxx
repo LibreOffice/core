@@ -351,12 +351,8 @@ uno::Reference<::media::XPlayerWindow>
     GtkWidget* pParent = static_cast<GtkWidget*>(pEnvData->pWidget);
     gtk_widget_set_can_target(pParent, false);
     gtk_grid_attach(GTK_GRID(pParent), m_pVideo, 0, 0, 1, 1);
-    // "‘void gtk_widget_show(GtkWidget*)’ is deprecated: Use 'gtk_widget_set_visible or
-    // gtk_window_present' instead":
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    gtk_widget_show(m_pVideo);
-    gtk_widget_show(pParent);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    gtk_widget_set_visible(m_pVideo, true);
+    gtk_widget_set_visible(pParent, true);
 
     xRet = new ::avmedia::gstreamer::Window;
 

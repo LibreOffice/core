@@ -207,7 +207,7 @@ void GtkSalObject::Show( bool bVisible )
     if( m_pSocket )
     {
         if( bVisible )
-            gtk_widget_show(m_pSocket);
+            gtk_widget_set_visible(m_pSocket, true);
         else
             gtk_widget_hide(m_pSocket);
     }
@@ -327,7 +327,7 @@ GtkSalObjectWidgetClip::GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow)
 #else
     gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(m_pScrolledWindow), m_pViewPort);
 #endif
-    gtk_widget_show(m_pViewPort);
+    gtk_widget_set_visible(m_pViewPort, true);
 
     // our plug window
     m_pSocket = gtk_grid_new();
@@ -336,7 +336,7 @@ GtkSalObjectWidgetClip::GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow)
 #else
     gtk_viewport_set_child(GTK_VIEWPORT(m_pViewPort), m_pSocket);
 #endif
-    gtk_widget_show(m_pSocket);
+    gtk_widget_set_visible(m_pSocket, true);
 
     Show(bShow);
 
@@ -514,7 +514,7 @@ void GtkSalObjectWidgetClip::Show( bool bVisible )
         return;
     if( bVisible )
     {
-        gtk_widget_show(m_pScrolledWindow);
+        gtk_widget_set_visible(m_pScrolledWindow, true);
         // tdf#146641 allocations attempted while hidden are discarded by gtk,
         // so on transition to visible ApplyClipRegion needs to be called
         ApplyClipRegion();

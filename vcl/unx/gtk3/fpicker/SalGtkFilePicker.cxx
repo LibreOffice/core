@@ -183,8 +183,8 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     gtk_box_append(GTK_BOX(m_pVBox), pHBox);
     gtk_box_prepend(GTK_BOX(m_pVBox), pThinVBox);
 #endif
-    gtk_widget_show( pHBox );
-    gtk_widget_show( pThinVBox );
+    gtk_widget_set_visible(pHBox, true);
+    gtk_widget_set_visible(pThinVBox, true);
 
     OUString aLabel;
 
@@ -295,7 +295,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
 #else
     gtk_expander_set_child(GTK_EXPANDER(m_pFilterExpander), scrolled_window);
 #endif
-    gtk_widget_show (scrolled_window);
+    gtk_widget_set_visible(scrolled_window, true);
 
     m_pFilterStore = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING,
         G_TYPE_STRING, G_TYPE_STRING);
@@ -319,7 +319,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
 #else
     gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scrolled_window), m_pFilterView);
 #endif
-    gtk_widget_show (m_pFilterView);
+    gtk_widget_set_visible(m_pFilterView, true);
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_file_chooser_set_extra_widget( GTK_FILE_CHOOSER( m_pDialog ), m_pVBox );
@@ -341,7 +341,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     g_signal_connect (G_OBJECT( m_pDialog ), "map",
                       G_CALLBACK (dialog_mapped_cb), this);
 
-    gtk_widget_show( m_pVBox );
+    gtk_widget_set_visible(m_pVBox, true);
 
     PangoLayout  *layout = gtk_widget_create_pango_layout (m_pFilterView, nullptr);
     guint ypad;
@@ -1591,7 +1591,7 @@ sal_Bool SAL_CALL SalGtkFilePicker::setShowState( sal_Bool bShowState )
                     GTK_FILE_CHOOSER( m_pDialog ), "update-preview",
                     G_CALLBACK( update_preview_cb ), static_cast<gpointer>(this) );
             }
-            gtk_widget_show( m_pPreview );
+            gtk_widget_set_visible(m_pPreview, true);
         }
         else
         {
@@ -1815,7 +1815,7 @@ void SalGtkFilePicker::impl_initialize(GtkWidget* pParentWidget, sal_Int16 templ
     for( int nTVIndex = 0; nTVIndex < TOGGLE_LAST; nTVIndex++ )
     {
         if( mbToggleVisibility[nTVIndex] )
-            gtk_widget_show( m_pToggles[ nTVIndex ] );
+            gtk_widget_set_visible(m_pToggles[nTVIndex], true);
     }
 
     for( int nTVIndex = 0; nTVIndex < LIST_LAST; nTVIndex++ )
@@ -1823,9 +1823,9 @@ void SalGtkFilePicker::impl_initialize(GtkWidget* pParentWidget, sal_Int16 templ
         if( mbListVisibility[nTVIndex] )
         {
             gtk_widget_set_sensitive( m_pLists[ nTVIndex ], false );
-            gtk_widget_show( m_pLists[ nTVIndex ] );
-            gtk_widget_show( m_pListLabels[ nTVIndex ] );
-            gtk_widget_show( m_pHBoxs[ nTVIndex ] );
+            gtk_widget_set_visible(m_pLists[nTVIndex], true);
+            gtk_widget_set_visible(m_pListLabels[nTVIndex], true);
+            gtk_widget_set_visible(m_pHBoxs[nTVIndex], true);
         }
     }
 

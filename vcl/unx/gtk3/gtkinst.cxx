@@ -2025,8 +2025,8 @@ private:
         gtk_widget_show_all(pParent);
 #else
         gtk_grid_attach(GTK_GRID(pParent), m_pGLArea, 0, 0, 1, 1);
-        gtk_widget_show(pParent);
-        gtk_widget_show(m_pGLArea);
+        gtk_widget_set_visible(pParent, true);
+        gtk_widget_set_visible(m_pGLArea, true);
 #endif
 
         gtk_gl_area_make_current(GTK_GL_AREA(m_pGLArea));
@@ -3623,7 +3623,7 @@ public:
 
     virtual void show() override
     {
-        gtk_widget_show(m_pWidget);
+        gtk_widget_set_visible(m_pWidget, true);
     }
 
     virtual void hide() override
@@ -4451,7 +4451,7 @@ public:
             gtk_widget_realize(m_pWidget);
         }
         if (!bAlreadyVisible)
-            gtk_widget_show(m_pWidget);
+            gtk_widget_set_visible(m_pWidget, true);
         if (!bAlreadyMapped)
             gtk_widget_map(m_pWidget);
 
@@ -5504,7 +5504,7 @@ public:
 
         ::set_buildable_id(GTK_BUILDABLE(pItem), rId);
         gtk_menu_shell_append(GTK_MENU_SHELL(m_pMenu), pItem);
-        gtk_widget_show(pItem);
+        gtk_widget_set_visible(pItem, true);
         add_to_map(GTK_MENU_ITEM(pItem));
         if (pos != -1)
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
@@ -5538,7 +5538,7 @@ public:
         GtkWidget* pItem = gtk_separator_menu_item_new();
         ::set_buildable_id(GTK_BUILDABLE(pItem), rId);
         gtk_menu_shell_append(GTK_MENU_SHELL(m_pMenu), pItem);
-        gtk_widget_show(pItem);
+        gtk_widget_set_visible(pItem, true);
         add_to_map(GTK_MENU_ITEM(pItem));
         if (pos != -1)
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
@@ -5694,7 +5694,7 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         GtkWidget* pWidget = GTK_WIDGET(m_aMap[rIdent]);
         if (bShow)
-            gtk_widget_show(pWidget);
+            gtk_widget_set_visible(pWidget, true);
         else
             gtk_widget_hide(pWidget);
 #else
@@ -6607,7 +6607,7 @@ public:
         {
             if (GTK_IS_DIALOG(m_pWindow))
                 sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(GTK_DIALOG(m_pWindow))));
-            gtk_widget_show(GTK_WIDGET(m_pWindow));
+            gtk_widget_set_visible(GTK_WIDGET(m_pWindow), true);
         }
 #endif
 
@@ -6779,7 +6779,7 @@ struct DialogRunner
             gtk_window_set_modal(m_pDialog, true);
 
         if (!gtk_widget_get_visible(GTK_WIDGET(m_pDialog)))
-            gtk_widget_show(GTK_WIDGET(m_pDialog));
+            gtk_widget_set_visible(GTK_WIDGET(m_pDialog), true);
 
         gulong nSignalResponseId = GTK_IS_DIALOG(m_pDialog) ? g_signal_connect(m_pDialog, "response", G_CALLBACK(signal_response), this) : 0;
         gulong nSignalCancelId = GTK_IS_ASSISTANT(m_pDialog) ? g_signal_connect(m_pDialog, "cancel", G_CALLBACK(signal_cancel), this) : 0;
@@ -7008,7 +7008,7 @@ private:
         gtk_menu_shell_append(GTK_MENU_SHELL(pMenu), pMenuItem);
         bool bActivate(false);
         g_signal_connect(pMenuItem, "activate", G_CALLBACK(signalActivate), &bActivate);
-        gtk_widget_show(pMenuItem);
+        gtk_widget_set_visible(pMenuItem, true);
 
         int button, event_time;
         if (pEvent)
@@ -7321,7 +7321,7 @@ public:
         // All others: Show();
         for (GtkWidget* pWindow : m_aHiddenWidgets)
         {
-            gtk_widget_show(pWindow);
+            gtk_widget_set_visible(pWindow, true);
             g_object_unref(pWindow);
         }
         m_aHiddenWidgets.clear();
@@ -7331,10 +7331,10 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_container_set_border_width(GTK_CONTAINER(m_pDialog), m_nOldBorderWidth);
         if (GtkWidget* pActionArea = gtk_dialog_get_action_area(GTK_DIALOG(m_pDialog)))
-            gtk_widget_show(pActionArea);
+            gtk_widget_set_visible(pActionArea, true);
 #else
         if (GtkWidget* pActionArea = gtk_dialog_get_header_bar(GTK_DIALOG(m_pDialog)))
-            gtk_widget_show(pActionArea);
+            gtk_widget_set_visible(pActionArea, true);
 #endif
         resize_to_request();
         present();
@@ -7697,7 +7697,7 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_show_all(GTK_WIDGET(m_pButtonBox));
 #else
-        gtk_widget_show(GTK_WIDGET(m_pButtonBox));
+        gtk_widget_set_visible(GTK_WIDGET(m_pButtonBox), true);
 #endif
 
         find_sidebar(GTK_WIDGET(m_pAssistant), &m_pSidebar);
@@ -7821,7 +7821,7 @@ public:
         ::set_buildable_id(GTK_BUILDABLE(pChild), rIdent);
         gtk_assistant_append_page(m_pAssistant, pChild);
         gtk_assistant_set_page_type(m_pAssistant, pChild, GTK_ASSISTANT_PAGE_CUSTOM);
-        gtk_widget_show(pChild);
+        gtk_widget_set_visible(pChild, true);
 
         enable_notify_events();
 
@@ -8305,7 +8305,7 @@ public:
         gtk_container_remove(GTK_CONTAINER(m_pScrolledWindow), pViewport);
 #endif
         GtkWidget* pNewViewport = GTK_WIDGET(g_object_new(immobilized_viewport_get_type(), nullptr));
-        gtk_widget_show(pNewViewport);
+        gtk_widget_set_visible(pNewViewport, true);
 #if GTK_CHECK_VERSION(4, 0, 0)
         gtk_scrolled_window_set_child(m_pScrolledWindow, pNewViewport);
         gtk_viewport_set_child(GTK_VIEWPORT(pNewViewport), pChild);
@@ -9026,8 +9026,8 @@ private:
 
         GtkWidget *pChild = gtk_grid_new();
         gtk_notebook_append_page(pNotebook, pChild, pTabWidget);
-        gtk_widget_show(pChild);
-        gtk_widget_show(pTabWidget);
+        gtk_widget_set_visible(pChild, true);
+        gtk_widget_set_visible(pTabWidget, true);
 
         enable_notify_events();
     }
@@ -9039,8 +9039,8 @@ private:
         GtkWidget *pTabWidget = gtk_label_new_with_mnemonic(MapToGtkAccelerator(rLabel).getStr());
         ::set_buildable_id(GTK_BUILDABLE(pTabWidget), rIdent);
         gtk_notebook_insert_page(pNotebook, pChild, pTabWidget, nPos);
-        gtk_widget_show(pChild);
-        gtk_widget_show(pTabWidget);
+        gtk_widget_set_visible(pChild, true);
+        gtk_widget_set_visible(pTabWidget, true);
 
         if (nPos != -1)
         {
@@ -9071,7 +9071,7 @@ private:
 #endif
         // coverity[freed_arg : FALSE] - this does not free m_pNotebook , it is reffed by pParent
         g_object_unref(m_pNotebook);
-        gtk_widget_show(GTK_WIDGET(m_pOverFlowBox));
+        gtk_widget_set_visible(GTK_WIDGET(m_pOverFlowBox), true);
     }
 
     void split_notebooks()
@@ -9099,7 +9099,7 @@ private:
         g_object_freeze_notify(G_OBJECT(m_pOverFlowNotebook));
 #endif
 
-        gtk_widget_show(GTK_WIDGET(m_pOverFlowNotebook));
+        gtk_widget_set_visible(GTK_WIDGET(m_pOverFlowNotebook), true);
 
         gint nPages;
 
@@ -10782,7 +10782,7 @@ private:
         gtk_box_prepend(m_pBox, GTK_WIDGET(m_pImage));
         gtk_widget_set_halign(m_pLabel, GTK_ALIGN_START);
 #endif
-        gtk_widget_show(GTK_WIDGET(m_pImage));
+        gtk_widget_set_visible(GTK_WIDGET(m_pImage), true);
     }
 
     static void signalFlagsChanged(GtkToggleButton* pToggleButton, GtkStateFlags flags, gpointer widget)
@@ -11112,7 +11112,7 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_show_all(GTK_WIDGET(pBox));
 #else
-        gtk_widget_show(GTK_WIDGET(pBox));
+        gtk_widget_set_visible(GTK_WIDGET(pBox), true);
 #endif
 
         return pBox;
@@ -11748,7 +11748,7 @@ public:
 
         ::set_buildable_id(GTK_BUILDABLE(pItem), rId);
         gtk_menu_shell_append(GTK_MENU_SHELL(m_pMenu), pItem);
-        gtk_widget_show(pItem);
+        gtk_widget_set_visible(pItem, true);
         GtkMenuItem* pMenuItem = GTK_MENU_ITEM(pItem);
         m_aExtraItems.push_back(pMenuItem);
         add_to_map(pMenuItem);
@@ -12107,7 +12107,7 @@ private:
     {
         GtkWidget* pImage = image_new_from_xgraphic(rIcon, bMirror);
         if (pImage)
-            gtk_widget_show(pImage);
+            gtk_widget_set_visible(pImage, true);
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_tool_button_set_icon_widget(pItem, pImage);
 #else
@@ -12130,7 +12130,7 @@ private:
 #else
             pImage = image_new_from_virtual_device(*pDevice);
 #endif
-            gtk_widget_show(pImage);
+            gtk_widget_set_visible(pImage, true);
         }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -12334,7 +12334,7 @@ public:
 #else
         gtk_box_insert_child_after(m_pToolbar, pItem, toolbar_get_nth_item(pos - 1));
 #endif
-        gtk_widget_show(GTK_WIDGET(pItem));
+        gtk_widget_set_visible(GTK_WIDGET(pItem), true);
         add_to_map(GTK_WIDGET(pItem), nullptr);
     }
 
@@ -12351,7 +12351,7 @@ public:
 #else
         gtk_box_insert_child_after(m_pToolbar, pItem, toolbar_get_nth_item(pos - 1));
 #endif
-        gtk_widget_show(GTK_WIDGET(pItem));
+        gtk_widget_set_visible(GTK_WIDGET(pItem), true);
     }
 
     virtual void set_item_popover(const OUString& rIdent, weld::Widget* pPopover) override
@@ -12457,7 +12457,7 @@ public:
 
         GtkWidget* pImage = image_new_from_icon_name(rIconName);
         if (pImage)
-            gtk_widget_show(pImage);
+            gtk_widget_set_visible(pImage, true);
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pItem), pImage);
@@ -13682,7 +13682,7 @@ private:
             gtk_widget_set_margin_start(GTK_WIDGET(m_pPlaceHolderLabel), x);
             gtk_widget_set_margin_end(GTK_WIDGET(m_pPlaceHolderLabel), x);
             gtk_label_set_text(m_pPlaceHolderLabel, placeholder_text);
-            gtk_widget_show(GTK_WIDGET(m_pPlaceHolderLabel));
+            gtk_widget_set_visible(GTK_WIDGET(m_pPlaceHolderLabel), true);
         }
         else
             gtk_widget_hide(GTK_WIDGET(m_pPlaceHolderLabel));
@@ -13794,7 +13794,7 @@ public:
     {
         GtkInstanceEditable::show();
         if (m_pPlaceHolderReplacement)
-            gtk_widget_show(GTK_WIDGET(m_pPlaceHolderReplacement));
+            gtk_widget_set_visible(GTK_WIDGET(m_pPlaceHolderReplacement), true);
     }
 
     virtual void hide() override
@@ -16506,8 +16506,8 @@ public:
     {
         GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
         if (GTK_IS_SCROLLED_WINDOW(pParent))
-            gtk_widget_show(pParent);
-        gtk_widget_show(m_pWidget);
+            gtk_widget_set_visible(pParent, true);
+        gtk_widget_set_visible(m_pWidget, true);
     }
 
     virtual void hide() override
@@ -17425,8 +17425,8 @@ public:
     {
         GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
         if (GTK_IS_SCROLLED_WINDOW(pParent))
-            gtk_widget_show(pParent);
-        gtk_widget_show(m_pWidget);
+            gtk_widget_set_visible(pParent, true);
+        gtk_widget_set_visible(m_pWidget, true);
     }
 
     virtual void hide() override
@@ -18513,8 +18513,8 @@ public:
     {
         GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
         if (GTK_IS_SCROLLED_WINDOW(pParent))
-            gtk_widget_show(pParent);
-        gtk_widget_show(m_pWidget);
+            gtk_widget_set_visible(pParent, true);
+        gtk_widget_set_visible(m_pWidget, true);
     }
 
     virtual void hide() override
@@ -19411,7 +19411,7 @@ static void signalEntryPopulatePopup(GtkEntry* pEntry, GtkWidget* pMenu, gpointe
         return;
 
     GtkWidget *item = gtk_menu_item_new_with_mnemonic(MapToGtkAccelerator(VclResId(STR_SPECIAL_CHARACTER_MENU_ENTRY)).getStr());
-    gtk_widget_show(item);
+    gtk_widget_set_visible(item, true);
     g_signal_connect_swapped(item, "activate", G_CALLBACK(signalActivateEntryInsertSpecialChar), pEntry);
     gtk_menu_shell_append(GTK_MENU_SHELL(pMenu), item);
 }
@@ -24127,7 +24127,7 @@ private:
                     if (GtkWidget* pImage = image_new_from_icon_name_theme_lang(aIconName, m_aIconTheme, m_aUILang))
                     {
                         gtk_tool_button_set_icon_widget(pToolButton, pImage);
-                        gtk_widget_show(pImage);
+                        gtk_widget_set_visible(pImage, true);
                     }
                 }
             }
@@ -24157,7 +24157,7 @@ private:
                         gtk_widget_set_halign(pImage, GTK_ALIGN_CENTER);
                         gtk_widget_set_valign(pImage, GTK_ALIGN_CENTER);
                         gtk_button_set_child(pButton, pImage);
-                        gtk_widget_show(pImage);
+                        gtk_widget_set_visible(pImage, true);
                     }
                 }
             }
@@ -24178,7 +24178,7 @@ private:
                         static auto menu_button_set_child = reinterpret_cast<void (*) (GtkMenuButton*, GtkWidget*)>(dlsym(nullptr, "gtk_menu_button_set_child"));
                         if (menu_button_set_child)
                             menu_button_set_child(pButton, pImage);
-                        gtk_widget_show(pImage);
+                        gtk_widget_set_visible(pImage, true);
                     }
                 }
             }
@@ -24581,7 +24581,7 @@ public:
             gtk_widget_show_all(pTopLevel);
 #else
             gtk_box_append(GTK_BOX(pContentArea), pTopLevel);
-            gtk_widget_show(pTopLevel);
+            gtk_widget_set_visible(pTopLevel, true);
 #endif
         }
 
@@ -25150,7 +25150,7 @@ std::unique_ptr<weld::Builder> GtkInstance::CreateInterimBuilder(vcl::Window* pP
 #if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_widget_show_all(pWindow);
 #else
-    gtk_widget_show(pWindow);
+    gtk_widget_set_visible(pWindow, true);
 #endif
 
     // build the widget tree as a child of the GtkEventBox GtkGrid parent
@@ -25209,7 +25209,7 @@ void* GtkInstance::CreateGStreamerSink(const SystemChildWindow *pWindow)
 #if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_widget_show_all(pParent);
 #else
-    gtk_widget_show(pParent);
+    gtk_widget_set_visible(pParent, true);
 #endif
 
     return pVideosink;

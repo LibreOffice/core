@@ -165,7 +165,7 @@ sal_Int16 Gtk3KDE5FilePickerIpc::execute()
     gtk_window_set_default_size(GTK_WINDOW(pDummyDialog), 0, 0);
     gtk_window_set_accept_focus(GTK_WINDOW(pDummyDialog), false);
     // gtk_widget_set_opacity() only has the desired effect when widget is already shown
-    gtk_widget_show(pDummyDialog);
+    gtk_widget_set_visible(pDummyDialog, true);
     gtk_widget_set_opacity(pDummyDialog, 0);
     // run dialog, leaving event processing to GTK
     // dialog will be closed by the separate 'aIpcHandler' thread once the IPC response is there

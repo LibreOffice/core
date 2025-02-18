@@ -1215,7 +1215,7 @@ void GtkSalFrame::InitCommon()
 #if !GTK_CHECK_VERSION(4,0,0)
     gtk_widget_show_all(GTK_WIDGET(m_pTopLevelGrid));
 #else
-    gtk_widget_show(GTK_WIDGET(m_pTopLevelGrid));
+    gtk_widget_set_visible(GTK_WIDGET(m_pTopLevelGrid), true);
 #endif
 
     // realize the window, we need an XWindow id
@@ -1767,7 +1767,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
                 gtk_widget_set_direction(GTK_WIDGET(m_pHeaderBar), bDesktopIsRTL ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR);
                 gtk_header_bar_set_show_close_button(m_pHeaderBar, true);
                 gtk_window_set_titlebar(GTK_WINDOW(m_pWindow), GTK_WIDGET(m_pHeaderBar));
-                gtk_widget_show(GTK_WIDGET(m_pHeaderBar));
+                gtk_widget_set_visible(GTK_WIDGET(m_pHeaderBar), true);
             }
         }
 #endif
@@ -2018,15 +2018,15 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
         {
             OString sOrigName(g_get_prgname());
             g_set_prgname("libreoffice-startcenter");
-            gtk_widget_show(m_pWindow);
+            gtk_widget_set_visible(m_pWindow, true);
             g_set_prgname(sOrigName.getStr());
         }
         else
         {
-            gtk_widget_show(m_pWindow);
+            gtk_widget_set_visible(m_pWindow, true);
         }
 #else
-        gtk_widget_show(m_pWindow);
+        gtk_widget_set_visible(m_pWindow, true);
 #endif
 
         if( isFloatGrabWindow() )
@@ -2532,7 +2532,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
     else if( eType == SetType::UnFullscreen )
     {
         if (pMenuBarContainerWidget)
-            gtk_widget_show(pMenuBarContainerWidget);
+            gtk_widget_set_visible(pMenuBarContainerWidget, true);
         gtk_window_unfullscreen( GTK_WINDOW( m_pWindow ) );
     }
 
@@ -2590,7 +2590,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
     else if (eType == SetType::UnFullscreen)
     {
         if (pMenuBarContainerWidget)
-            gtk_widget_show(pMenuBarContainerWidget);
+            gtk_widget_set_visible(pMenuBarContainerWidget, true);
         gtk_window_unfullscreen(GTK_WINDOW(m_pWindow));
 
         if (!(m_nStyle & SalFrameStyleFlags::SIZEABLE))
@@ -3237,8 +3237,8 @@ void* GtkSalFrame::ShowPopover(const OUString& rHelpText, vcl::Window* pParent, 
     gtk_popover_set_autohide(GTK_POPOVER(pWidget), false);
 #endif
 
-    gtk_widget_show(pLabel);
-    gtk_widget_show(pWidget);
+    gtk_widget_set_visible(pLabel, true);
+    gtk_widget_set_visible(pWidget, true);
 
     return pWidget;
 }

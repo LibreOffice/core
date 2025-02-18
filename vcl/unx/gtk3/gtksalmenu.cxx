@@ -731,7 +731,7 @@ GtkWidget* GtkSalMenu::AddButton(GtkWidget *pImage)
     gtk_style_context_add_class(pButtonContext, "flat");
     gtk_style_context_add_class(pButtonContext, "small-button");
 
-    gtk_widget_show(pImage);
+    gtk_widget_set_visible(pImage, true);
 
     gtk_widget_set_valign(pButton, GTK_ALIGN_CENTER);
 
@@ -1040,9 +1040,9 @@ void GtkSalMenu::CreateMenuBarWidget()
     g_signal_connect(G_OBJECT(mpMenuBarWidget), "key-press-event", G_CALLBACK(MenuBarSignalKey), this);
 #endif
 
-    gtk_widget_show(mpMenuBarWidget);
-    gtk_widget_show(mpMenuAllowShrinkWidget);
-    gtk_widget_show(mpMenuBarContainerWidget);
+    gtk_widget_set_visible(mpMenuBarWidget, true);
+    gtk_widget_set_visible(mpMenuAllowShrinkWidget, true);
+    gtk_widget_set_visible(mpMenuBarContainerWidget, true);
 
     ShowCloseButton( static_cast<MenuBar*>(mpVCLMenu.get())->HasCloseButton() );
 }
