@@ -1152,7 +1152,7 @@ void ScInterpreter::ScMatSequence()
         return;
     }
 
-    size_t nMatrixSize = nColumns * nRows;
+    size_t nMatrixSize = static_cast<size_t>(nColumns) * nRows;
     ScMatrixRef pResMat = GetNewMat(nColumns, nRows, /*bEmpty*/true);
     for (size_t iPos = 0; iPos < nMatrixSize; iPos++)
     {
