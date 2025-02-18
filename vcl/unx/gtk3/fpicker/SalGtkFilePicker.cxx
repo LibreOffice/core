@@ -110,7 +110,7 @@ void SalGtkFilePicker::InitialMapping()
 {
     if (!mbPreviewState )
     {
-        gtk_widget_hide( m_pPreview );
+        gtk_widget_set_visible(m_pPreview, false);
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_file_chooser_set_preview_widget_active( GTK_FILE_CHOOSER( m_pDialog ), false);
 #endif
@@ -1078,7 +1078,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute()
                 break;
         }
     }
-    gtk_widget_hide(m_pDialog);
+    gtk_widget_set_visible(m_pDialog, false);
 
     if (mnHID_FolderChange)
         g_signal_handler_disconnect(GTK_FILE_CHOOSER( m_pDialog ), mnHID_FolderChange);
@@ -1596,7 +1596,7 @@ sal_Bool SAL_CALL SalGtkFilePicker::setShowState( sal_Bool bShowState )
         else
         {
             // Hide
-            gtk_widget_hide( m_pPreview );
+            gtk_widget_set_visible(m_pPreview, false);
         }
 
         // also emit the signal
@@ -2056,7 +2056,7 @@ void SalGtkFilePicker::SetFilters()
 
     // We always hide the expander now and depend on the user using the glob
     // list, or type a filename suffix, to select a filter by inference.
-    gtk_widget_hide(m_pFilterExpander);
+    gtk_widget_set_visible(m_pFilterExpander, false);
 
     // set the default filter
     if (!sPseudoFilter.isEmpty())

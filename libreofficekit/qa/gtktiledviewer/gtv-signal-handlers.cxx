@@ -705,7 +705,7 @@ gboolean signalFindbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer /*pData
         case GDK_KEY_Escape:
         {
             // Hide the findbar.
-            gtk_widget_hide(GTK_WIDGET(window->findtoolbar));
+            gtk_widget_set_visible(GTK_WIDGET(window->findtoolbar), false);
             return true;
         }
     }

@@ -2056,7 +2056,7 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
                 m_pParent->grabPointer(bParentIsFloatGrabWindow, true, bParentIsFloatGrabWindow);
             }
         }
-        gtk_widget_hide( m_pWindow );
+        gtk_widget_set_visible(m_pWindow, false);
         if( m_pIMHandler )
             m_pIMHandler->focusChanged( false );
     }
@@ -2522,7 +2522,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
     if( eType == SetType::Fullscreen )
     {
         if (pMenuBarContainerWidget)
-            gtk_widget_hide(pMenuBarContainerWidget);
+            gtk_widget_set_visible(pMenuBarContainerWidget, false);
         if (bSpanMonitorsWhenFullscreen)
             gtk_window_fullscreen(GTK_WINDOW(m_pWindow));
         else
@@ -2574,7 +2574,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
         }
 
         if (pMenuBarContainerWidget)
-            gtk_widget_hide(pMenuBarContainerWidget);
+            gtk_widget_set_visible(pMenuBarContainerWidget, false);
         if (bSpanMonitorsWhenFullscreen)
             gtk_window_fullscreen(GTK_WINDOW(m_pWindow));
         else

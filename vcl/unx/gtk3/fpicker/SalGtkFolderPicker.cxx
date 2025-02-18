@@ -170,7 +170,7 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute()
             retVal = 0;
             break;
     }
-    gtk_widget_hide(m_pDialog);
+    gtk_widget_set_visible(m_pDialog, false);
 
     return retVal;
 }

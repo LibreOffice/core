@@ -243,7 +243,7 @@ void gtv_application_window_toggle_findbar(GtvApplicationWindow* window)
 {
     if (gtk_widget_get_visible(window->findtoolbar))
     {
-        gtk_widget_hide(window->findtoolbar);
+        gtk_widget_set_visible(window->findtoolbar, false);
     }
     else
     {

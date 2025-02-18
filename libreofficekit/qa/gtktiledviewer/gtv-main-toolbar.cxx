@@ -240,7 +240,7 @@ gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, LibreOfficeKitDocumentType 
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(priv->m_pLeftpara), ".uno:AlignLeft");
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(priv->m_pCenterpara), ".uno:AlignHorizontalCenter");
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(priv->m_pRightpara), ".uno:AlignRight");
-        gtk_widget_hide(priv->m_pJustifypara);
+        gtk_widget_set_visible(priv->m_pJustifypara, false);
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(priv->m_pDeleteComment), ".uno:DeleteNote");
 
         gtk_widget_set_visible(toolbar->m_pAddressbar, true);

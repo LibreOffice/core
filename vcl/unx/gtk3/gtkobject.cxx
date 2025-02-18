@@ -205,12 +205,7 @@ void GtkSalObject::Reparent(SalFrame* pFrame)
 void GtkSalObject::Show( bool bVisible )
 {
     if( m_pSocket )
-    {
-        if( bVisible )
-            gtk_widget_set_visible(m_pSocket, true);
-        else
-            gtk_widget_hide(m_pSocket);
-    }
+        gtk_widget_set_visible(m_pSocket, bVisible);
 }
 
 Size GtkSalObjectBase::GetOptimalSize() const
@@ -531,7 +526,7 @@ void GtkSalObjectWidgetClip::Show( bool bVisible )
 
         g_object_set_data(G_OBJECT(pTopLevel), "g-lo-BlockFocusChange", GINT_TO_POINTER(true) );
 
-        gtk_widget_hide(m_pScrolledWindow);
+        gtk_widget_set_visible(m_pScrolledWindow, false);
 
         GtkWidget* pNewFocus = GTK_IS_WINDOW(pTopLevel) ? gtk_window_get_focus(GTK_WINDOW(pTopLevel)) : nullptr;
         if (pOldFocus && pOldFocus != pNewFocus)

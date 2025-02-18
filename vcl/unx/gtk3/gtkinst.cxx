@@ -3628,7 +3628,7 @@ public:
 
     virtual void hide() override
     {
-        gtk_widget_hide(m_pWidget);
+        gtk_widget_set_visible(m_pWidget, false);
     }
 
     virtual void set_size_request(int nWidth, int nHeight) override
@@ -4541,7 +4541,7 @@ public:
         if (!bAlreadyMapped)
             gtk_widget_unmap(m_pWidget);
         if (!bAlreadyVisible)
-            gtk_widget_hide(m_pWidget);
+            gtk_widget_set_visible(m_pWidget, false);
         if (!bAlreadyRealized)
             gtk_widget_unrealize(m_pWidget);
     }
@@ -5693,10 +5693,7 @@ public:
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
         GtkWidget* pWidget = GTK_WIDGET(m_aMap[rIdent]);
-        if (bShow)
-            gtk_widget_set_visible(pWidget, true);
-        else
-            gtk_widget_hide(pWidget);
+        gtk_widget_set_visible(pWidget, bShow);
 #else
         bool bOldVisible = m_aHiddenIds.find(rIdent) == m_aHiddenIds.end();
         if (bShow == bOldVisible)
@@ -6646,7 +6643,7 @@ public:
         cairo_destroy(cr);
 
         if (!bAlreadyVisible)
-            gtk_widget_hide(GTK_WIDGET(m_pWindow));
+            gtk_widget_set_visible(GTK_WIDGET(m_pWindow), false);
         if (!bAlreadyRealized)
             gtk_widget_unrealize(GTK_WIDGET(m_pWindow));
 
@@ -6862,7 +6859,7 @@ namespace
             {
                 g_object_ref(pChild);
                 rWasVisibleWidgets.emplace_back(pChild);
-                gtk_widget_hide(pChild);
+                gtk_widget_set_visible(pChild, false);
             }
             else
             {
@@ -6880,7 +6877,7 @@ namespace
             {
                 g_object_ref(pChild);
                 rWasVisibleWidgets.emplace_back(pChild);
-                gtk_widget_hide(pChild);
+                gtk_widget_set_visible(pChild, false);
             }
             else if (GTK_IS_CONTAINER(pChild))
             {
@@ -7292,13 +7289,13 @@ public:
         m_nOldBorderWidth = gtk_container_get_border_width(GTK_CONTAINER(m_pDialog));
         gtk_container_set_border_width(GTK_CONTAINER(m_pDialog), 0);
         if (GtkWidget* pActionArea = gtk_dialog_get_action_area(GTK_DIALOG(m_pDialog)))
-            gtk_widget_hide(pActionArea);
+            gtk_widget_set_visible(pActionArea, false);
         gtk_widget_show_all(pRefEdit);
         if (pRefBtn)
             gtk_widget_show_all(pRefBtn);
 #else
         if (GtkWidget* pActionArea = gtk_dialog_get_header_bar(GTK_DIALOG(m_pDialog)))
-            gtk_widget_hide(pActionArea);
+            gtk_widget_set_visible(pActionArea, false);
 #endif
 
         // calc's insert->function is springing back to its original size if the ref-button
@@ -7682,14 +7679,14 @@ public:
         for (GtkWidget* pChild = gtk_widget_get_first_child(pParent);
              pChild; pChild = gtk_widget_get_next_sibling(pChild))
         {
-            gtk_widget_hide(pChild);
+            gtk_widget_set_visible(pChild, false);
         }
 #else
         GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pParent));
         for (GList* pChild = g_list_first(pChildren); pChild; pChild = g_list_next(pChild))
         {
             GtkWidget* pWidget = static_cast<GtkWidget*>(pChild->data);
-            gtk_widget_hide(pWidget);
+            gtk_widget_set_visible(pWidget, false);
         }
         g_list_free(pChildren);
 #endif
@@ -9563,7 +9560,7 @@ public:
     void reset_split_data()
     {
         // reset overflow and allow it to be recalculated if necessary
-        gtk_widget_hide(GTK_WIDGET(m_pOverFlowNotebook));
+        gtk_widget_set_visible(GTK_WIDGET(m_pOverFlowNotebook), false);
         m_bOverFlowBoxActive = false;
         m_nStartTabCount = 0;
         m_nEndTabCount = 0;
@@ -9591,7 +9588,7 @@ public:
         }
 
         // reset overflow and allow it to be recalculated if necessary
-        gtk_widget_hide(GTK_WIDGET(m_pOverFlowNotebook));
+        gtk_widget_set_visible(GTK_WIDGET(m_pOverFlowNotebook), false);
         m_bOverFlowBoxActive = false;
 
         insert_page(m_pNotebook, rIdent, rLabel, gtk_grid_new(), nPos);
@@ -10576,7 +10573,7 @@ void MoveWindowContentsToPopover(GtkWindow* pMenuHack, GtkWidget* pPopover, GtkW
 
     gtk_grab_remove(GTK_WIDGET(pMenuHack));
 
-    gtk_widget_hide(GTK_WIDGET(pMenuHack));
+    gtk_widget_set_visible(GTK_WIDGET(pMenuHack), false);
     //put contents back from where the came from
     GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(pMenuHack));
     g_object_ref(pChild);
@@ -11297,7 +11294,7 @@ public:
 #endif
 
         insertAsParent(GTK_WIDGET(m_pMenuButton), GTK_WIDGET(m_pContainer));
-        gtk_widget_hide(GTK_WIDGET(m_pMenuButton));
+        gtk_widget_set_visible(GTK_WIDGET(m_pMenuButton), false);
 
         // move the first GtkMenuButton child, as created by GtkInstanceMenuButton ctor, into the GtkToggleButton
         // instead, leaving just the indicator behind in the GtkMenuButton
@@ -13685,7 +13682,7 @@ private:
             gtk_widget_set_visible(GTK_WIDGET(m_pPlaceHolderLabel), true);
         }
         else
-            gtk_widget_hide(GTK_WIDGET(m_pPlaceHolderLabel));
+            gtk_widget_set_visible(GTK_WIDGET(m_pPlaceHolderLabel), false);
     }
 
     void launch_update_placeholder_replacement()
@@ -13800,7 +13797,7 @@ public:
     virtual void hide() override
     {
         if (m_pPlaceHolderReplacement)
-            gtk_widget_hide(GTK_WIDGET(m_pPlaceHolderReplacement));
+            gtk_widget_set_visible(GTK_WIDGET(m_pPlaceHolderReplacement), false);
         GtkInstanceEditable::hide();
     }
 
@@ -16514,8 +16511,8 @@ public:
     {
         GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
         if (GTK_IS_SCROLLED_WINDOW(pParent))
-            gtk_widget_hide(pParent);
-        gtk_widget_hide(m_pWidget);
+            gtk_widget_set_visible(pParent, false);
+        gtk_widget_set_visible(m_pWidget, false);
     }
 
     virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants) override
@@ -17433,8 +17430,8 @@ public:
     {
         GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
         if (GTK_IS_SCROLLED_WINDOW(pParent))
-            gtk_widget_hide(pParent);
-        gtk_widget_hide(m_pWidget);
+            gtk_widget_set_visible(pParent, false);
+        gtk_widget_set_visible(m_pWidget, false);
     }
 
     virtual OUString get_selected_text() const override
@@ -18521,8 +18518,8 @@ public:
     {
         GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
         if (GTK_IS_SCROLLED_WINDOW(pParent))
-            gtk_widget_hide(pParent);
-        gtk_widget_hide(m_pWidget);
+            gtk_widget_set_visible(pParent, false);
+        gtk_widget_set_visible(m_pWidget, false);
     }
 
     virtual ~GtkInstanceTextView() override
@@ -21501,7 +21498,7 @@ private:
 
             do_ungrab(GTK_WIDGET(m_pMenuWindow));
 
-            gtk_widget_hide(GTK_WIDGET(m_pMenuWindow));
+            gtk_widget_set_visible(GTK_WIDGET(m_pMenuWindow), false);
 
             GdkSurface* pSurface = widget_get_surface(GTK_WIDGET(m_pMenuWindow));
             g_object_set_data(G_OBJECT(pSurface), "g-lo-InstancePopup", GINT_TO_POINTER(false));
@@ -24200,7 +24197,7 @@ private:
             }
 
             if (bHideHelp && sBuildableName == "help")
-                gtk_widget_hide(pWidget);
+                gtk_widget_set_visible(pWidget, false);
         }
 
         if (m_pStringReplace)

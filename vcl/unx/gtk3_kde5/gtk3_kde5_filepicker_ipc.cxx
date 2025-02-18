@@ -113,7 +113,7 @@ static void handleIpcForExecute(Gtk3KDE5FilePickerIpc* pFilePickerIpc, GtkWidget
     pFilePickerIpc->readResponse(id, *bResult);
 
     // end the dummy dialog
-    gtk_widget_hide(pDummyDialog);
+    gtk_widget_set_visible(pDummyDialog, false);
 }
 
 // Gtk3KDE5FilePicker

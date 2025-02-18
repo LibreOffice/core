@@ -153,7 +153,7 @@ void SAL_CALL RunDialog::notifyTermination( const css::lang::EventObject& )
 void RunDialog::cancel()
 {
     gtk_dialog_response( GTK_DIALOG( mpDialog ), GTK_RESPONSE_CANCEL );
-    gtk_widget_hide( mpDialog );
+    gtk_widget_set_visible(mpDialog, false);
 }
 
 namespace
