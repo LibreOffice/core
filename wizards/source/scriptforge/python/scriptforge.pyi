@@ -5098,6 +5098,87 @@ class SFDocuments:
                 """
             ...
 
+        def AlignRange(self,
+                         targetrange: RANGE,
+                         alignment: str,
+                         filterformula: str = ...,
+                         filterscope: Literal['CELL', 'ROW', 'COLUMN'] = ...,
+                         ) -> RANGE:
+            """
+                Align horizontally or vertically a range of cells.
+                The range is updated and the remainder of the sheet is left untouched.
+                Either the full range is updated or a selection based on a ``filterformula``.
+                    Args
+                        ``targetrange``: the cell or the range as a string in which cells should be re-aligned.
+
+                        ``alignment``: a string combining 1 or 2 of next characters.
+                            - L align Left
+                            - C align Center
+                            - R align Right
+                            - B align Bottom
+                            - M center vertically (Middle)
+                            - T align Top
+
+                        ``filterformula``: a ``Calc`` formula that shall be applied to the given range
+                        to determine which cells will be affected. The specified formula must return ``True``
+                        or ``False``. If this argument is not specified, then all cells in the range are affected.
+
+                        Express the formula in terms of (examples assume a range = ``"A1:J10"``):
+                            - the top-left cell of the range when ``filterscope`` = "CELL" e.g. ``"=(A1>100)"``
+                            - the topmost row of the range when ``filterscope`` = "ROW" e.g. ``"=(SUM($A1:$J1)<1000)"``
+                            - the leftmost column of the range when ``filterscope`` = "COLUMN" e.g. ``"=(A$10=SUM(A$1:A$9))"``
+
+                        ``filterscope``: determines how ``filterformula`` is expanded to the given range.
+                        The argument is mandatory if a ``filterformula`` is specified.
+                    Returns
+                        A string representing the modified area as a range of cells.
+                """
+            ...
+
+        def BorderRange(self,
+                         targetrange: RANGE,
+                         borders: str,
+                         filterformula: str = ...,
+                         filterscope: Literal['CELL', 'ROW', 'COLUMN'] = ...,
+                         ) -> RANGE:
+            """
+                Apply within and around a range of cells a set of line borders.
+                All the borders have the same standard width, style and color.
+
+                Pre-existing border lines in the impacted cells, rows or columns are first cleared.
+                Other cells in the range are left untouched.
+                To clear the full range use Border = "" without the ``filterformula`` argument.
+
+                Either the full range is updated or a selection based on a ``filterformula``.
+                    Args
+                        ``targetrange``: the cell or the range as a string on which borders should be applied.
+
+                        ``borders``: a string combining next characters.
+                            - B Bottom outer line
+                            - L Left outer line
+                            - T Top outer line
+                            - R Right outer line
+                            - H Horizontal inner line
+                            - V Verical inner line
+                            - U diagonal bottom-Up line
+                            - D diagonal top-Down line
+
+                        ``filterformula``: a ``Calc`` formula that shall be applied to the given range
+                        to determine which cells will be affected. The specified formula must return ``True``
+                        or ``False``. If this argument is not specified, then all cells in the range are affected.
+
+                        Express the formula in terms of (examples assume a range = ``"A1:J10"``):
+                            - the top-left cell of the range when ``filterscope`` = "CELL" e.g. ``"=(A1>100)"``
+                            - the topmost row of the range when ``filterscope`` = "ROW" e.g. ``"=(SUM($A1:$J1)<1000)"``
+                            - the leftmost column of the range when ``filterscope`` = "COLUMN" e.g. ``"=(A$10=SUM(A$1:A$9))"``
+
+                        ``filterscope``: determines how ``filterformula`` is expanded to the given range.
+                        The argument is mandatory if a ``filterformula`` is specified.
+                    Returns
+                        A string representing the modified area as a range of cells.
+                """
+            ...
+
         def Charts(self, sheetname: SHEETNAME, chartname: str = ...) -> Union[Tuple[str, ...], CHART]:
             """
                 Returns either the list with the names of all chart objects in a given sheet
@@ -5189,6 +5270,41 @@ class SFDocuments:
                         The argument is mandatory if a ``filterformula`` is specified.
                 """
             ...
+
+        def ColorizeRange(self,
+                         targetrange: RANGE,
+                         foreground: int = ...,
+                         background: int = ...,
+                         filterformula: str = ...,
+                         filterscope: Literal['CELL', 'ROW', 'COLUMN'] = ...,
+                         ) -> RANGE:
+            """
+                Define fore- and background colors of a range of cells.
+                The range is updated and the remainder of the sheet is left untouched.
+                Either the full range is updated or a selection based on a ``filterformula``.
+                    Args
+                        ``targetrange``: the cell or the range as a string in which cells should be re-colorizeed.
+
+                        ``foreground``: the foreground color as the output of the basic.RGB() function.
+
+                        ``background``: the background color as the output of the basic.RGB() function.
+
+                        ``filterformula``: a ``Calc`` formula that shall be applied to the given range
+                        to determine which cells will be affected. The specified formula must return ``True``
+                        or ``False``. If this argument is not specified, then all cells in the range are affected.
+
+                        Express the formula in terms of (examples assume a range = ``"A1:J10"``):
+                            - the top-left cell of the range when ``filterscope`` = "CELL" e.g. ``"=(A1>100)"``
+                            - the topmost row of the range when ``filterscope`` = "ROW" e.g. ``"=(SUM($A1:$J1)<1000)"``
+                            - the leftmost column of the range when ``filterscope`` = "COLUMN" e.g. ``"=(A$10=SUM(A$1:A$9))"``
+
+                        ``filterscope``: determines how ``filterformula`` is expanded to the given range.
+                        The argument is mandatory if a ``filterformula`` is specified.
+                    Returns
+                        A string representing the modified area as a range of cells.
+                """
+            ...
+
         def CompactLeft(self, range: RANGE, wholecolumn: bool = ..., filterformula: str = ...) -> RANGE:
             """
                 Deletes the columns of a specified range that match a filter expressed as a ``Calc`` formula.
@@ -5473,6 +5589,47 @@ class SFDocuments:
                 """
             ...
 
+        def DecorateFont(self,
+                         targetrange: RANGE,
+                         fontname: str = ...,
+                         fontsize: int = ...,
+                         decoration: str = ...,
+                         filterformula: str = ...,
+                         filterscope: Literal['CELL', 'ROW', 'COLUMN'] = ...,
+                         ) -> RANGE:
+            """
+                Specify simple and easy properties of the font to be used in a range of cells.
+                The range is updated and the remainder of the sheet is left untouched.
+                Either the full range is updated or a selection based on a ``filterformula``.
+                    Args
+                        ``targetrange``: the cell or the range as a string in which cell fonts should be re-decorated.
+
+                        ``fontname``: the name of the font to be used. The name is not checked. Default = no change.
+
+                        ``fontsize``: the size of the font in pixels. Default = no change.
+
+                        ``decoration``: a string combining 1 or more of next characters (default = no change).
+                            - B Bold
+                            - I Italic
+                            - U Underline
+                            - S Strikethrough
+
+                        ``filterformula``: a ``Calc`` formula that shall be applied to the given range
+                        to determine which cells will be affected. The specified formula must return ``True``
+                        or ``False``. If this argument is not specified, then all cells in the range are affected.
+
+                        Express the formula in terms of (examples assume a range = ``"A1:J10"``):
+                            - the top-left cell of the range when ``filterscope`` = "CELL" e.g. ``"=(A1>100)"``
+                            - the topmost row of the range when ``filterscope`` = "ROW" e.g. ``"=(SUM($A1:$J1)<1000)"``
+                            - the leftmost column of the range when ``filterscope`` = "COLUMN" e.g. ``"=(A$10=SUM(A$1:A$9))"``
+
+                        ``filterscope``: determines how ``filterformula`` is expanded to the given range.
+                        The argument is mandatory if a ``filterformula`` is specified.
+                    Returns
+                        A string representing the modified area as a range of cells.
+                """
+            ...
+
         def ExportRangeToFile(self,
                               range: RANGE,
                               filename: FILE,
@@ -5494,6 +5651,41 @@ class SFDocuments:
                         Defaults to ``False``.
                     Returns
                         ``True`` if the destination file was successfully saved.
+                """
+            ...
+
+        def FormatRange(self,
+                         targetrange: RANGE,
+                         numberformat: str,
+                         locale: str = ...,
+                         filterformula: str = ...,
+                         filterscope: Literal['CELL', 'ROW', 'COLUMN'] = ...,
+                         ) -> RANGE:
+            """
+                Apply a given number format to a cell or a range of cells.
+                The range is updated and the remainder of the sheet is left untouched.
+                Either the full range is updated or a selection based on a ``filterformula``.
+                    Args
+                        ``targetrange``: the cell or the range as a string that should receive the format
+
+                        ``numberformat``: the format to apply, as a string.
+
+                        ``locale``: a la-CO combination to indicate the used locale.
+                        The default locale is the output of the platform.FormatLocale property.
+
+                        ``filterformula``: a ``Calc`` formula that shall be applied to the given range
+                        to determine which cells will be affected. The specified formula must return ``True``
+                        or ``False``. If this argument is not specified, then all cells in the range are affected.
+
+                        Express the formula in terms of (examples assume a range = ``"A1:J10"``):
+                            - the top-left cell of the range when ``filterscope`` = "CELL" e.g. ``"=(A1>100)"``
+                            - the topmost row of the range when ``filterscope`` = "ROW" e.g. ``"=(SUM($A1:$J1)<1000)"``
+                            - the leftmost column of the range when ``filterscope`` = "COLUMN" e.g. ``"=(A$10=SUM(A$1:A$9))"``
+
+                        ``filterscope``: determines how ``filterformula`` is expanded to the given range.
+                        The argument is mandatory if a ``filterformula`` is specified.
+                    Returns
+                        A string representing the modified area as a range of cells.
                 """
             ...
 
@@ -5927,7 +6119,7 @@ class SFDocuments:
                             - the leftmost column of the range when ``filterscope`` = "COLUMN" e.g. ``"=(A$10=SUM(A$1:A$9))"``
 
                         ``filterscope``: determines how ``filterformula`` is expanded to the given range.
-                       Tuple The argument is mandatory if a ``filterformula`` is specified.
+                        The argument is mandatory if a ``filterformula`` is specified.
                     Returns
                         A string representing the modified area as a range of cells.
                 """

@@ -2518,6 +2518,12 @@ class SFDocuments:
         def Activate(self, sheetname = ''):
             return self.ExecMethod(self.vbMethod, 'Activate', sheetname)
 
+        def AlignRange(self, targetrange, alignment, filterformula = '', filterscope = ''):
+            return self.ExecMethod(self.vbMethod, 'AlignRange', targetrange, alignment, filterformula, filterscope)
+
+        def BorderRange(self, targetrange, borders, filterformula = '', filterscope = ''):
+            return self.ExecMethod(self.vbMethod, 'BorderRange', targetrange, borders, filterformula, filterscope)
+
         def Charts(self, sheetname, chartname = ''):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Charts', sheetname, chartname)
 
@@ -2529,6 +2535,10 @@ class SFDocuments:
 
         def ClearValues(self, range, filterformula = '', filterscope = ''):
             return self.ExecMethod(self.vbMethod, 'ClearValues', range, filterformula, filterscope)
+
+        def ColorizeRange(self, targetrange, foreground = -1, background = -1, filterformula = '', filterscope = ''):
+            return self.ExecMethod(self.vbMethod, 'ColorizeRange', targetrange, foreground, background,
+                                   filterformula, filterscope)
 
         def CompactLeft(self, range, wholecolumn = False, filterformula = ''):
             return self.ExecMethod(self.vbMethod, 'CompactLeft', range, wholecolumn, filterformula)
@@ -2579,8 +2589,17 @@ class SFDocuments:
         def DSum(self, range):
             return self.ExecMethod(self.vbMethod, 'DSum', range)
 
+        def DecorateFont(self, targetrange, fontname = '', fontsize = 0, decoration = '',
+                         filterformula = '', filterscope = ''):
+            return self.ExecMethod(self.vbMethod, 'DecorateFont', targetrange, fontname, fontsize, decoration,
+                                   filterformula, filterscope)
+
         def ExportRangeToFile(self, range, filename, imagetype = 'pdf', overwrite = False):
             return self.ExecMethod(self.vbMethod, 'ExportRangeToFile', range, filename, imagetype, overwrite)
+
+        def FormatRange(self, targetrange, numberformat, locale = '', filterformula = '', filterscope = ''):
+            return self.ExecMethod(self.vbMethod, 'FormatRange', targetrange, numberformat, locale,
+                                   filterformula, filterscope)
 
         def Forms(self, sheetname, form = ''):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Forms', sheetname, form)
