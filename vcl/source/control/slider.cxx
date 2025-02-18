@@ -39,6 +39,8 @@
 Slider::Slider(vcl::Window* pParent, WinBits nStyle)
     : Control(WindowType::SLIDER)
 {
+    mnStartPos          = 0;
+    mnMouseOff          = 0;
     mnThumbPixOffset    = 0;
     mnThumbPixRange     = 0;
     mnThumbPixPos       = 0;    // between mnThumbPixOffset and mnThumbPixOffset+mnThumbPixRange
