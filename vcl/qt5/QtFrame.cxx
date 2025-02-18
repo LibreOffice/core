@@ -1333,7 +1333,8 @@ void QtFrame::SetScreenNumber(unsigned int nScreen)
 
     // setScreen by itself has no effect, explicitly move the widget to
     // the new screen
-    asChild()->move(screenGeo.topLeft());
+    GetQtInstance().EmscriptenLightweightRunInMainThread(
+        [ child = asChild(), topLeft = screenGeo.topLeft() ] { child->move(topLeft); });
 }
 
 void QtFrame::SetApplicationID(const OUString& rWMClass)
