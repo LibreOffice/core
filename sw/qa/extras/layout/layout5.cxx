@@ -1543,6 +1543,19 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf149089)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nKernPors);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf165089)
+{
+    createSwDoc("tdf165089.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    // Tests that the grid is not centered when the MS_WORD_COMP_GRID_METRICS flag is set.
+    //
+    // Without the fix, this would be 6703
+    auto nTop = getXPath(pXmlDoc, "/root/page/body/txt/infos/bounds", "top").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(1400), nTop);
+    CPPUNIT_ASSERT_LESS(sal_Int32(1450), nTop);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
