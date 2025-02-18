@@ -45,6 +45,7 @@ void comphelper::emscriptenthreading::tearDown()
     assert(data != nullptr);
     data->eventHandlerThread.request_stop();
     data->eventHandlerThread.join();
+    delete data;
     data = nullptr;
 }
 
