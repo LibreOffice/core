@@ -147,7 +147,7 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
     if (aStream.GetError())
         return false;
 
-    VectorGraphicData aVectorGraphicData(aDataContainer, VectorGraphicDataType::Svg);
+    VectorGraphicData aVectorGraphicData(std::move(aDataContainer), VectorGraphicDataType::Svg);
 
     // transform into [0,0,width,width*aspect] std dimensions
 
