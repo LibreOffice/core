@@ -25,7 +25,7 @@ namespace comphelper::emscriptenthreading
 struct Data
 {
     emscripten::ProxyingQueue proxyingQueue;
-    std::jthread eventHandlerThread;
+    std::thread::native_handle_type eventHandlerThread;
 };
 
 void setUp();

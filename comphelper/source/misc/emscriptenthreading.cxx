@@ -17,7 +17,6 @@
 
 #include <cassert>
 #include <mutex>
-#include <stop_token>
 #include <thread>
 
 namespace
@@ -31,20 +30,15 @@ void comphelper::emscriptenthreading::setUp()
     std::scoped_lock g(mutex);
     assert(data == nullptr);
     data = new Data;
-    data->eventHandlerThread = std::jthread([](std::stop_token token) {
-        while (!token.stop_requested())
-        {
-            data->proxyingQueue.execute();
-        }
-    });
+    std::thread t([] { emscripten_exit_with_live_runtime(); });
+    data->eventHandlerThread = t.native_handle();
+    t.detach();
 }
 
 void comphelper::emscriptenthreading::tearDown()
 {
     std::scoped_lock g(mutex);
     assert(data != nullptr);
-    data->eventHandlerThread.request_stop();
-    data->eventHandlerThread.join();
     delete data;
     data = nullptr;
 }

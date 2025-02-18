@@ -207,7 +207,7 @@ void QtInstance::RunInMainThread(std::function<void()> func)
         return;
     }
 #if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
-    if (pthread_self() == m_emscriptenThreadingData->eventHandlerThread.native_handle())
+    if (pthread_self() == m_emscriptenThreadingData->eventHandlerThread)
     {
         EmscriptenLightweightRunInMainThread(func);
         return;
@@ -492,7 +492,7 @@ bool QtInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
             m_aWaitingYieldCond.set();
     }
 #if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
-    else if (pthread_self() == m_emscriptenThreadingData->eventHandlerThread.native_handle())
+    else if (pthread_self() == m_emscriptenThreadingData->eventHandlerThread)
     {
         SolarMutexReleaser release;
         struct Args
@@ -563,7 +563,7 @@ void QtInstance::ProcessEvent(SalUserEvent aEvent)
     SolarMutexReleaser release;
     (void)emscripten_promise_await(
         emscripten_proxy_promise(m_emscriptenThreadingData->proxyingQueue.queue,
-                                 m_emscriptenThreadingData->eventHandlerThread.native_handle(),
+                                 m_emscriptenThreadingData->eventHandlerThread,
                                  [](void* p) {
                                      auto& aEvent = *static_cast<SalUserEvent*>(p);
                                      SolarMutexGuard g;

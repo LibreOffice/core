@@ -559,10 +559,14 @@ void Scheduler::CallbackTaskScheduling()
             if (pTask->DecideTransferredExecution())
             {
                 auto & data = comphelper::emscriptenthreading::getData();
-                data.proxyingQueue.proxyAsync(data.eventHandlerThread.native_handle(), [pTask] {
-                    SolarMutexGuard g;
-                    pTask->Invoke();
-                });
+                (void) emscripten_proxy_promise(
+                    data.proxyingQueue.queue, data.eventHandlerThread,
+                    [](void * p) {
+                        auto const pTask = static_cast<Task *>(p);
+                        SolarMutexGuard g;
+                        pTask->Invoke();
+                    },
+                    pTask);
             }
             else
             {

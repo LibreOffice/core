@@ -58,8 +58,8 @@ endif
 gb_LinkTarget_LDFLAGS += $(gb_EMSCRIPTEN_LDFLAGS) $(gb_EMSCRIPTEN_CPPFLAGS) \
     $(gb_EMSCRIPTEN_EXCEPT) -sEXPORT_EXCEPTION_HANDLING_HELPERS
 
-# Depending on emsdk version being used, enable e.g. std::jthread and std::stop_token used by some
-# build configurations:
+# Depending on emsdk version being used, might enable standard library features that would otherwise
+# be hidden:
 gb_LinkTarget_CXXFLAGS += -fexperimental-library
 
 ifeq ($(ENABLE_OPTIMIZED),TRUE)
