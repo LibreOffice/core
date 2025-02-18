@@ -27,6 +27,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <vcl/scheduler.hxx>
 
 using namespace com::sun::star;
 
@@ -225,21 +226,11 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testScheduler)
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
 
     // When asking for the state of the scheduler:
-    tools::JsonWriter aWriter;
-    SfxLokHelper::getCommandValues(aWriter, ".uno:Scheduler");
-    OString aJson = aWriter.finishAndGetAsOString();
+    int nRet = Scheduler::GetMostUrgentTaskPriority();
 
-    // Then make sure we get an int priority:
-    CPPUNIT_ASSERT(SfxLokHelper::supportsCommand(u"Scheduler"));
-    std::stringstream aStream{ std::string(aJson) };
-    boost::property_tree::ptree aTree;
-    boost::property_tree::read_json(aStream, aTree);
-    auto it = aTree.find("mostUrgentPriority");
-    // Without the accompanying fix in place, this test would have failed, this JSON key was
-    // missing.
-    CPPUNIT_ASSERT(it != aTree.not_found());
-    // This returns TaskPriority::HIGH_IDLE, but just make sure we get an int.
-    it->second.get_value<int>();
+    // Then make sure we get a priority:
+    // This returns TaskPriority::HIGH_IDLE, but just make sure we get a positive priority.
+    CPPUNIT_ASSERT(nRet != -1);
 }
 #endif
 

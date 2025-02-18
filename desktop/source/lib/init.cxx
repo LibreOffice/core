@@ -208,6 +208,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/jsdialog/executor.hxx>
+#include <vcl/scheduler.hxx>
 
 // Needed for getUndoManager()
 #include <com/sun/star/document/XUndoManager.hpp>
@@ -7692,7 +7693,9 @@ static void lo_registerAnyInputCallback(LibreOfficeKit* /*pThis*/,
                        void* pData)
 {
     SolarMutexGuard aGuard;
-    comphelper::LibreOfficeKit::setAnyInputCallback(pAnyInputCallback, pData);
+    comphelper::LibreOfficeKit::setAnyInputCallback(pAnyInputCallback, pData, []() -> int {
+        return Scheduler::GetMostUrgentTaskPriority();
+    });
 }
 
 static bool bInitialized = false;

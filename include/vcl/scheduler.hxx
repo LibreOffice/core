@@ -23,10 +23,6 @@
 #include <vcl/dllapi.h>
 
 struct ImplSchedulerContext;
-namespace tools
-{
-class JsonWriter;
-}
 
 class VCL_DLLPUBLIC Scheduler final
 {
@@ -86,7 +82,7 @@ public:
     /// Return the current state of deterministic mode.
     static bool       GetDeterministicMode();
 
-    static void dumpAsJSON(tools::JsonWriter& rJsonWriter);
+    static int GetMostUrgentTaskPriority();
 };
 
 #endif // INCLUDED_VCL_SCHEDULER_HXX
