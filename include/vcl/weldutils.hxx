@@ -284,7 +284,7 @@ public:
     SAL_DLLPRIVATE virtual ~LongCurrencyFormatter() override;
 
 private:
-    DECL_DLLPRIVATE_LINK(FormatOutputHdl, LinkParamNone*, bool);
+    DECL_DLLPRIVATE_LINK(FormatOutputHdl, double, std::optional<OUString>);
     DECL_DLLPRIVATE_LINK(ParseInputHdl, double*, TriState);
 
     SAL_DLLPRIVATE void Init();
@@ -312,7 +312,7 @@ public:
     virtual ~TimeFormatter() override;
 
 private:
-    DECL_DLLPRIVATE_LINK(FormatOutputHdl, LinkParamNone*, bool);
+    DECL_DLLPRIVATE_LINK(FormatOutputHdl, double, std::optional<OUString>);
     DECL_DLLPRIVATE_LINK(ParseInputHdl, double*, TriState);
     DECL_DLLPRIVATE_LINK(CursorChangedHdl, weld::Entry&, void);
 
@@ -345,7 +345,7 @@ public:
     virtual ~DateFormatter() override;
 
 private:
-    DECL_DLLPRIVATE_LINK(FormatOutputHdl, LinkParamNone*, bool);
+    DECL_DLLPRIVATE_LINK(FormatOutputHdl, double, std::optional<OUString>);
     DECL_DLLPRIVATE_LINK(ParseInputHdl, double*, TriState);
     DECL_DLLPRIVATE_LINK(CursorChangedHdl, weld::Entry&, void);
 

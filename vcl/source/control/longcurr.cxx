@@ -211,11 +211,10 @@ bool ImplCurrencyGetValue( const OUString& rStr, BigInt& rValue,
 
 namespace weld
 {
-    IMPL_LINK_NOARG(LongCurrencyFormatter, FormatOutputHdl, LinkParamNone*, bool)
+    IMPL_LINK(LongCurrencyFormatter, FormatOutputHdl, double, fValue, std::optional<OUString>)
     {
         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
         const OUString& rCurrencySymbol = !m_aCurrencySymbol.isEmpty() ? m_aCurrencySymbol : rLocaleDataWrapper.getCurrSymbol();
-        double fValue = GetValue();
         sal_uInt16 nDecimalDigits = GetDecimalDigits();
         if (nDecimalDigits)
         {
@@ -223,8 +222,7 @@ namespace weld
             fValue = std::round(fValue * weld::SpinButton::Power10(nDecimalDigits));
         }
         OUString aText = ImplGetCurr(rLocaleDataWrapper, fValue, GetDecimalDigits(), rCurrencySymbol, m_bThousandSep);
-        ImplSetTextImpl(aText, nullptr);
-        return true;
+        return std::optional<OUString>(aText);
     }
 
     IMPL_LINK(LongCurrencyFormatter, ParseInputHdl, double*, result, TriState)

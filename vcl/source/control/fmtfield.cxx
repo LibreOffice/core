@@ -746,7 +746,11 @@ void Formatter::ImplSetValue(double dVal, bool bForce)
     m_ValueState = valueDouble;
     UpdateCurrentValue(dVal);
 
-    if (!m_aOutputHdl.IsSet() || !m_aOutputHdl.Call(nullptr))
+    std::optional<OUString> aText;
+    if (m_aFormatValueHdl.IsSet())
+        aText = m_aFormatValueHdl.Call(dVal);
+
+    if (!aText.has_value())
     {
         OUString sNewText;
         if (GetOrCreateFormatter()->IsTextFormat(m_nFormatKey))
@@ -768,9 +772,12 @@ void Formatter::ImplSetValue(double dVal, bool bForce)
                 GetOrCreateFormatter()->GetOutputString(dVal, m_nFormatKey, sNewText, &m_pLastOutputColor);
             }
         }
-        ImplSetTextImpl(sNewText, nullptr);
-        DBG_ASSERT(CheckText(sNewText), "FormattedField::ImplSetValue : formatted string doesn't match the criteria !");
+        aText = sNewText;
     }
+
+    assert(aText.has_value());
+    ImplSetTextImpl(*aText, nullptr);
+    DBG_ASSERT(CheckText(*aText), "FormattedField::ImplSetValue : formatted string doesn't match the criteria !");
 
     m_ValueState = valueDouble;
 }

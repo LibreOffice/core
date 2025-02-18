@@ -680,7 +680,7 @@ protected:
 private:
     DECL_LINK(UpDownHdl, SpinField&, void);
     DECL_LINK(LoseFocusHdl, Control&, void);
-    DECL_LINK(OutputHdl, LinkParamNone*, bool);
+    DECL_LINK(OutputHdl, double, std::optional<OUString>);
     DECL_LINK(InputHdl, double*, TriState);
     DECL_LINK(ActivateHdl, Edit&, bool);
 

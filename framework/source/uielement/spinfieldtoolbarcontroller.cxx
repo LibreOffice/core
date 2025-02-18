@@ -61,7 +61,7 @@ public:
     OUString get_entry_text() const { return m_xWidget->get_text(); }
 
     DECL_LINK(ValueChangedHdl, weld::FormattedSpinButton&, void);
-    DECL_LINK(FormatOutputHdl, LinkParamNone*, bool);
+    DECL_LINK(FormatOutputHdl, double, std::optional<OUString>);
     DECL_LINK(ParseInputHdl, double*, TriState);
     DECL_LINK(ModifyHdl, weld::Entry&, void);
     DECL_LINK(ActivateHdl, weld::Entry&, bool);
@@ -84,7 +84,7 @@ SpinfieldControl::SpinfieldControl(vcl::Window* pParent, SpinfieldToolbarControl
     m_xWidget->connect_focus_in(LINK(this, SpinfieldControl, FocusInHdl));
     m_xWidget->connect_focus_out(LINK(this, SpinfieldControl, FocusOutHdl));
     Formatter& rFormatter = m_xWidget->GetFormatter();
-    rFormatter.SetOutputHdl(LINK(this, SpinfieldControl, FormatOutputHdl));
+    rFormatter.SetFormatValueHdl(LINK(this, SpinfieldControl, FormatOutputHdl));
     rFormatter.SetInputHdl(LINK(this, SpinfieldControl, ParseInputHdl));
     m_xWidget->connect_value_changed(LINK(this, SpinfieldControl, ValueChangedHdl));
     m_xWidget->connect_changed(LINK(this, SpinfieldControl, ModifyHdl));
@@ -156,11 +156,9 @@ IMPL_LINK_NOARG(SpinfieldControl, ActivateHdl, weld::Entry&, bool)
     return bConsumed;
 }
 
-IMPL_LINK_NOARG(SpinfieldControl, FormatOutputHdl, LinkParamNone*, bool)
+IMPL_LINK(SpinfieldControl, FormatOutputHdl, double, fValue, std::optional<OUString>)
 {
-    OUString aText = m_pSpinfieldToolbarController->FormatOutputString(m_xWidget->GetFormatter().GetValue());
-    m_xWidget->set_text(aText);
-    return true;
+    return std::optional<OUString>(m_pSpinfieldToolbarController->FormatOutputString(fValue));
 }
 
 SpinfieldToolbarController::SpinfieldToolbarController(

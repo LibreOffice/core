@@ -2247,11 +2247,9 @@ namespace weld
         return ::DateFormatter::FormatDate(Date(nValue), m_eFormat, rLocaleData, m_aStaticFormatter);
     }
 
-    IMPL_LINK_NOARG(DateFormatter, FormatOutputHdl, LinkParamNone*, bool)
+    IMPL_LINK(DateFormatter, FormatOutputHdl, double, fValue, std::optional<OUString>)
     {
-        OUString sText = FormatNumber(GetValue());
-        ImplSetTextImpl(sText, nullptr);
-        return true;
+        return std::optional<OUString>(FormatNumber(fValue));
     }
 
     IMPL_LINK(DateFormatter, ParseInputHdl, double*, result, TriState)
@@ -3145,11 +3143,9 @@ namespace weld
         return ::TimeFormatter::FormatTime(ConvertValue(nValue), m_eFormat, m_eTimeFormat, m_bDuration, rLocaleData);
     }
 
-    IMPL_LINK_NOARG(TimeFormatter, FormatOutputHdl, LinkParamNone*, bool)
+    IMPL_LINK(TimeFormatter, FormatOutputHdl, double, fValue, std::optional<OUString>)
     {
-        OUString sText = FormatNumber(GetValue());
-        ImplSetTextImpl(sText, nullptr);
-        return true;
+        return std::optional<OUString>(FormatNumber(fValue));
     }
 
     IMPL_LINK(TimeFormatter, ParseInputHdl, double*, result, TriState)

@@ -144,7 +144,7 @@ protected:
     bool                m_bUseInputStringForFormatting;
 
     Link<double*, TriState> m_aInputHdl;
-    Link<LinkParamNone*, bool> m_aOutputHdl;
+    Link<double, std::optional<OUString>> m_aFormatValueHdl;
 
 public:
     Formatter();
@@ -243,7 +243,7 @@ public:
     void    TreatAsNumber(bool bDoSo) { m_bTreatAsNumber = bDoSo; }
 
     void    SetInputHdl(const Link<double*,TriState>& rLink) { m_aInputHdl = rLink; }
-    void    SetOutputHdl(const Link<LinkParamNone*, bool>& rLink) { m_aOutputHdl = rLink; }
+    void    SetFormatValueHdl(const Link<double, std::optional<OUString>>& rLink) { m_aFormatValueHdl = rLink; }
 public:
 
     //The following methods are interesting, if m_bTreatAsNumber is set to sal_False
