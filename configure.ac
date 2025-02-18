@@ -6108,11 +6108,6 @@ if test "$cross_compiling" = "yes"; then
     test "${enable_fuzzers}" = yes && sub_conf_opts="$sub_conf_opts --without-system-libxml"
     if test "$_os" = "Emscripten"; then
         sub_conf_opts="$sub_conf_opts --without-system-libxml --without-system-fontconfig --without-system-freetype --without-system-zlib"
-        if test "${with_main_module+set}" = set; then
-            sub_conf_opts="$sub_conf_opts --with-main-module=${with_main_module}"
-        else
-            sub_conf_opts="$sub_conf_opts --with-main-module=writer"
-        fi
     fi
     # windows uses full-internal python and that in turn relies on openssl, so also enable openssl
     # when cross-compiling for aarch64, overriding the defaults below
