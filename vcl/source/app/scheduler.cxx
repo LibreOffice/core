@@ -299,7 +299,7 @@ Scheduler::IdlesLockGuard::~IdlesLockGuard()
     osl_atomic_decrement(&rSchedCtx.mnIdlesLockCount);
 }
 
-void Scheduler::dumpAsJSON(tools::JsonWriter& rJsonWriter)
+int Scheduler::GetMostUrgentTaskPriority()
 {
     // Similar to Scheduler::CallbackTaskScheduling(), figure out the most urgent priority, but
     // don't actually invoke any task.
@@ -308,15 +308,13 @@ void Scheduler::dumpAsJSON(tools::JsonWriter& rJsonWriter)
     ImplSchedulerContext& rSchedCtx = pSVData->maSchedCtx;
     if (!rSchedCtx.mbActive || rSchedCtx.mnTimerPeriod == InfiniteTimeoutMs)
     {
-        rJsonWriter.put("mostUrgentPriority", nMostUrgentPriority);
-        return;
+        return nMostUrgentPriority;
     }
 
     sal_uInt64 nTime = tools::Time::GetSystemTicks();
     if (nTime < rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod - 1)
     {
-        rJsonWriter.put("mostUrgentPriority", nMostUrgentPriority);
-        return;
+        return nMostUrgentPriority;
     }
 
     for (int nTaskPriority = 0; nTaskPriority < PRIO_COUNT; ++nTaskPriority)
@@ -332,14 +330,13 @@ void Scheduler::dumpAsJSON(tools::JsonWriter& rJsonWriter)
                 if (nReadyPeriod == ImmediateTimeoutMs)
                 {
                     nMostUrgentPriority = nTaskPriority;
-                    rJsonWriter.put("mostUrgentPriority", nMostUrgentPriority);
-                    return;
+                    return nMostUrgentPriority;
                 }
             }
             pSchedulerData = pSchedulerData->mpNext;
         }
     }
-    rJsonWriter.put("mostUrgentPriority", nMostUrgentPriority);
+    return nMostUrgentPriority;
 }
 
 inline void Scheduler::UpdateSystemTimer( ImplSchedulerContext &rSchedCtx,

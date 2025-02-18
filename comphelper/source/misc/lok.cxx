@@ -42,8 +42,9 @@ static bool g_bLocalRendering(false);
 
 static Compat g_eCompatFlags(Compat::none);
 
-static std::function<bool(void*)> g_pAnyInputCallback;
+static std::function<bool(void*, int)> g_pAnyInputCallback;
 static void* g_pAnyInputCallbackData;
+static std::function<int()> g_pMostUrgentPriorityGetter;
 
 static std::function<void(int)> g_pViewSetter;
 static std::function<int()> g_pViewGetter;
@@ -329,10 +330,11 @@ void statusIndicatorFinish()
         pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::Finish, 0, nullptr);
 }
 
-void setAnyInputCallback(const std::function<bool(void*)>& pAnyInputCallback, void* pData)
+void setAnyInputCallback(const std::function<bool(void*, int)>& pAnyInputCallback, void* pData, std::function<int()> pMostUrgentPriorityGetter)
 {
     g_pAnyInputCallback = pAnyInputCallback;
     g_pAnyInputCallbackData = pData;
+    g_pMostUrgentPriorityGetter = pMostUrgentPriorityGetter;
 }
 
 bool anyInput()
@@ -342,7 +344,8 @@ bool anyInput()
     // Ignore input events during background save.
     if (!g_bForkedChild && g_pAnyInputCallback && g_pAnyInputCallbackData)
     {
-        bRet = g_pAnyInputCallback(g_pAnyInputCallbackData);
+        int nMostUrgentPriority = g_pMostUrgentPriorityGetter();
+        bRet = g_pAnyInputCallback(g_pAnyInputCallbackData, nMostUrgentPriority);
     }
 
     return bRet;
