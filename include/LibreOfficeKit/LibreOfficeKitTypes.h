@@ -26,7 +26,7 @@ typedef int (*LibreOfficeKitPollCallback)(void* pData, int timeoutUs);
 typedef void (*LibreOfficeKitWakeCallback)(void* pData);
 
 /// @see lok::Office::registerAnyInputCallback()
-typedef bool (*LibreOfficeKitAnyInputCallback)(void* pData);
+typedef bool (*LibreOfficeKitAnyInputCallback)(void* pData, int nMostUrgentPriority);
 
 #ifdef __cplusplus
 }

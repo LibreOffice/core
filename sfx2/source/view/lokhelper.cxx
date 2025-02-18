@@ -44,7 +44,6 @@
 #include <tools/json_writer.hxx>
 #include <svl/cryptosign.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/scheduler.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
 
@@ -997,8 +996,7 @@ void SfxLokHelper::addCertificates(const std::vector<std::string>& rCerts)
 
 bool SfxLokHelper::supportsCommand(std::u16string_view rCommand)
 {
-    static const std::initializer_list<std::u16string_view> vSupport
-        = { u"Signature", u"Scheduler" };
+    static const std::initializer_list<std::u16string_view> vSupport = { u"Signature" };
 
     return std::find(vSupport.begin(), vSupport.end(), rCommand) != vSupport.end();
 }
@@ -1030,11 +1028,14 @@ std::map<OUString, OUString> SfxLokHelper::parseCommandParameters(std::u16string
     return aMap;
 }
 
-namespace
+void SfxLokHelper::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
 {
-/// Implements getCommandValues(".uno:Signature").
-void GetSignature(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
-{
+    static constexpr OString aSignature(".uno:Signature"_ostr);
+    if (!o3tl::starts_with(rCommand, aSignature))
+    {
+        return;
+    }
+
     SfxObjectShell* pObjectShell = SfxObjectShell::Current();
     if (!pObjectShell)
     {
@@ -1052,7 +1053,7 @@ void GetSignature(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
     }
     pObjectShell->SignDocumentContentUsingCertificate(aSigningContext);
     // Set commandName, this is a reply to a request.
-    rJsonWriter.put("commandName", ".uno:Signature");
+    rJsonWriter.put("commandName", aSignature);
     auto aCommandValues = rJsonWriter.startNode("commandValues");
     rJsonWriter.put("signatureTime", aSigningContext.m_nSignatureTime);
 
@@ -1061,30 +1062,6 @@ void GetSignature(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
     OUStringBuffer aBuffer;
     comphelper::Base64::encode(aBuffer, aDigest);
     rJsonWriter.put("digest", aBuffer.makeStringAndClear());
-}
-
-/// Implements getCommandValues(".uno:Scheduler").
-void GetScheduler(tools::JsonWriter& rJsonWriter)
-{
-    Scheduler::dumpAsJSON(rJsonWriter);
-}
-}
-
-void SfxLokHelper::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
-{
-    static constexpr OString aSignature(".uno:Signature"_ostr);
-    static constexpr OString aScheduler(".uno:Scheduler"_ostr);
-    if (o3tl::starts_with(rCommand, aSignature))
-    {
-        GetSignature(rJsonWriter, rCommand);
-        return;
-    }
-
-    if (o3tl::starts_with(rCommand, aScheduler))
-    {
-        GetScheduler(rJsonWriter);
-        return;
-    }
 }
 
 void SfxLokHelper::notifyUpdate(SfxViewShell const* pThisView, int nType)

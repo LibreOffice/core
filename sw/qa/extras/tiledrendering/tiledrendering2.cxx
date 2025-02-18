@@ -199,11 +199,19 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAsyncLayout)
 class AnyInputCallback final
 {
 public:
-    static bool callback(void* /*pData*/) { return true; }
+    static bool callback(void* /*pData*/, int /*nPriority*/) { return true; }
 
-    AnyInputCallback() { comphelper::LibreOfficeKit::setAnyInputCallback(&callback, this); }
+    AnyInputCallback()
+    {
+        comphelper::LibreOfficeKit::setAnyInputCallback(&callback, this,
+                                                        []() -> int { return -1; });
+    }
 
-    ~AnyInputCallback() { comphelper::LibreOfficeKit::setAnyInputCallback(nullptr, nullptr); }
+    ~AnyInputCallback()
+    {
+        comphelper::LibreOfficeKit::setAnyInputCallback(nullptr, nullptr,
+                                                        []() -> int { return -1; });
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAnyInput)
