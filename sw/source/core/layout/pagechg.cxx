@@ -121,7 +121,10 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
     {
         SwTextGridItem const*const pGrid(
                 GetGridItem(static_cast<SwPageFrame*>(GetUpper())));
-        if( pGrid )
+
+        bool bCenterGrid = !GetFormat()->getIDocumentSettingAccess().get(
+            DocumentSettingId::MS_WORD_COMP_GRID_METRICS);
+        if (pGrid && bCenterGrid)
         {
             bNoGrid = false;
             tools::Long nSum = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
