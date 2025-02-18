@@ -29,7 +29,7 @@ void HelpSearch::query(OUString const &queryStr, bool captionOnly,
 
     const TCHAR* field = captionOnly ? L"caption" : L"content";
 
-    bool isWildcard = queryStr[queryStr.getLength() - 1] == L'*';
+    const bool isWildcard = (!queryStr.isEmpty() && queryStr[queryStr.getLength() - 1] == L'*');
     std::vector<TCHAR> aQueryStr(OUStringToTCHARVec(queryStr));
     lucene::search::Query *pQuery;
     if (isWildcard)
