@@ -177,6 +177,7 @@ task copyAssets(type: Copy) {
                         '**/pbmenubutton.ui',
                         '**/scrollbars.ui',
                         '**/tabbuttons.ui',
+                        '**/tabbuttonsmirrored.ui',
                         '**/tabviewbar.ui'
                         ]
         }
