@@ -18,6 +18,7 @@
 #include <QtInstanceDrawingArea.hxx>
 #include <QtInstanceEntry.hxx>
 #include <QtInstanceExpander.hxx>
+#include <QtInstanceFormattedSpinButton.hxx>
 #include <QtInstanceFrame.hxx>
 #include <QtInstanceGrid.hxx>
 #include <QtInstanceImage.hxx>
@@ -344,10 +345,12 @@ QtInstanceBuilder::weld_metric_spin_button(const OUString& rId, FieldUnit eUnit)
 }
 
 std::unique_ptr<weld::FormattedSpinButton>
-QtInstanceBuilder::weld_formatted_spin_button(const OUString&)
+QtInstanceBuilder::weld_formatted_spin_button(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QtDoubleSpinBox* pSpinBox = m_xBuilder->get<QtDoubleSpinBox>(rId);
+    std::unique_ptr<weld::FormattedSpinButton> xRet(
+        pSpinBox ? std::make_unique<QtInstanceFormattedSpinButton>(pSpinBox) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::ComboBox> QtInstanceBuilder::weld_combo_box(const OUString& rId)
