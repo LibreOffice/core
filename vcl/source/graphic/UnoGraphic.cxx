@@ -26,7 +26,7 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapColor.hxx>
-#include <vcl/bitmap/BitmapDuoToneFilter.hxx>
+#include <BitmapDuoToneFilter.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
