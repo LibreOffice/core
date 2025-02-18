@@ -229,14 +229,10 @@ void LicenseDialog::setTitle( OUString const & )
 
 sal_Int16 LicenseDialog::execute()
 {
-    return vcl::solarthread::syncExecute(
-        std::bind(&LicenseDialog::solar_execute, this));
-}
-
-sal_Int16 LicenseDialog::solar_execute()
-{
-    LicenseDialogImpl dlg(Application::GetFrameWeld(m_parent), m_sExtensionName, m_sLicenseText);
-    return dlg.run();
+    return vcl::solarthread::syncExecute([this]() {
+        LicenseDialogImpl dlg(Application::GetFrameWeld(this->m_parent), this->m_sExtensionName, this->m_sLicenseText);
+        return dlg.run();
+    });
 }
 
 } // namespace dp_gui

@@ -33,8 +33,6 @@ class LicenseDialog
     OUString m_sExtensionName;
     OUString /* const */ m_sLicenseText;
 
-    sal_Int16 solar_execute();
-
 public:
     LicenseDialog(css::uno::Sequence<css::uno::Any> const& args,
                   css::uno::Reference<css::uno::XComponentContext> const& xComponentContext);
