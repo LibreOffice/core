@@ -2190,7 +2190,7 @@ AC_ARG_WITH(main-module,
     AS_HELP_STRING([--with-main-module=<writer/calc>],
         [Specify which main module to build for wasm.
         Default value is 'writer'.]),
-, [with_main_module=calc,writer])
+, [with_main_module='calc writer'])
 
 if test "$_os" = Emscripten; then
     AC_ARG_ENABLE(emscripten-jspi,
@@ -4203,14 +4203,20 @@ if test "$cross_compiling" = "yes"; then
         ENABLE_WASM_STRIP=TRUE
     fi
     if test "$_os" = "Emscripten"; then
-        if test "$with_main_module" = ''; then
-            ENABLE_WASM_STRIP_CALC=TRUE
-            ENABLE_WASM_STRIP_WRITER=TRUE
-        elif test "$with_main_module" = "calc"; then
-            ENABLE_WASM_STRIP_WRITER=TRUE
-        elif test "$with_main_module" = "writer"; then
-            ENABLE_WASM_STRIP_CALC=TRUE
-        fi
+        ENABLE_WASM_STRIP_CALC=TRUE
+        ENABLE_WASM_STRIP_WRITER=TRUE
+        for i in $with_main_module; do
+            case "$i" in
+            calc)
+                ENABLE_WASM_STRIP_CALC=
+                ;;
+            writer)
+                ENABLE_WASM_STRIP_WRITER=
+                ;;
+            *)
+                AC_MSG_ERROR([Unknown --with-main-module "$i"])
+            esac
+        done
     fi
 else
     CROSS_COMPILING=
