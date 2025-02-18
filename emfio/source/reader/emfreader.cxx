@@ -2136,6 +2136,33 @@ namespace emfio
                     }
                     break;
 
+                    case EMR_CREATECOLORSPACE :
+                    {
+                        sal_uInt32 nRemainingRecSize = nRecSize - 8;
+                        if (nRemainingRecSize < 5)
+                            bStatus = false;
+                        else
+                        {
+                            // index of the logical color space object in the EMF object table
+                            sal_Int32 ihCS(0);
+                            mpInputStream->ReadInt32(ihCS);
+                            sal_Int32 nDescChars = nRemainingRecSize - 4;
+                            OUString aDesc;
+                            for (sal_Int32 i=0; i < nDescChars; i++)
+                            {
+                                unsigned char cChar(0);
+                                mpInputStream->ReadUChar(cChar);
+                                if (cChar == 0)
+                                    break;
+                                aDesc = aDesc + OUStringChar(static_cast<sal_Unicode>(cChar));
+                            }
+                            // if it's the standard color space name, no need to do anything
+                            if (aDesc != "COSP")
+                                SAL_WARN("emfio", "TODO: color space change for EMR_CREATECOLORSPACE not implemented: '" << aDesc << "' " << nDescChars);
+                        }
+                    }
+                    break;
+
                     case EMR_MASKBLT :
                     case EMR_PLGBLT :
                     case EMR_SETDIBITSTODEVICE :
@@ -2149,7 +2176,6 @@ namespace emfio
                     case EMR_ANGLEARC :
                     case EMR_SETCOLORADJUSTMENT :
                     case EMR_POLYDRAW16 :
-                    case EMR_CREATECOLORSPACE :
                     case EMR_SETCOLORSPACE :
                     case EMR_DELETECOLORSPACE :
                     case EMR_GLSRECORD :
