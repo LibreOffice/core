@@ -24,6 +24,7 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
@@ -1344,6 +1345,33 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testConvertWithMasterDeduplication)
         CPPUNIT_ASSERT_EQUAL(true,
                              bool(xNameAccess->hasByName("ppt/slideLayouts/" + sSlideLayoutName)));
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf162571HorzAnchor)
+{
+    createSdImpressDoc("pptx/tdf165261.pptx");
+    saveAndReload(u"Impress Office Open XML"_ustr);
+
+    uno::Reference<drawing::XShape> xShape(getShapeFromPage(1, 0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xProp(xShape, uno::UNO_QUERY);
+
+    drawing::TextHorizontalAdjust eHori;
+    CPPUNIT_ASSERT(xProp->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eHori);
+    CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust::TextHorizontalAdjust_LEFT, eHori);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf165261HorzAnchor)
+{
+    createSdImpressDoc("pptx/tdf165261.pptx");
+    saveAndReload(u"Impress Office Open XML"_ustr);
+
+    uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+
+    uno::Reference<beans::XPropertySet> xProp(xShape, uno::UNO_QUERY);
+    drawing::TextHorizontalAdjust eHori;
+    CPPUNIT_ASSERT(xProp->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eHori);
+    CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust::TextHorizontalAdjust_CENTER, eHori);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
