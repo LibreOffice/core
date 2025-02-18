@@ -100,7 +100,6 @@ namespace
                  (nColumn > SCNAV_MAXCOL(rDoc.GetSheetLimits())) )
             {
                 nColumn = SCNAV_MAXCOL(rDoc.GetSheetLimits());
-                NumToAlpha( rDoc.GetSheetLimits(), nColumn);
             }
         }
 
