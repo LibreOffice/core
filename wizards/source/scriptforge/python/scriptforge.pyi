@@ -5159,7 +5159,7 @@ class SFDocuments:
                             - T Top outer line
                             - R Right outer line
                             - H Horizontal inner line
-                            - V Verical inner line
+                            - V Vertical inner line
                             - U diagonal bottom-Up line
                             - D diagonal top-Down line
 
