@@ -1984,6 +1984,17 @@ CPPUNIT_TEST_FIXTURE(Test, test118465Tdf)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<sal_Int32>(xTable, u"HeaderRowCount"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, test165333Tdf)
+{
+    createSwDoc("165333.rtf");
+    uno::Reference<text::XTextRange> const xRun1(
+        getRun(uno::Reference<text::XTextRange>(getParagraphOrTable(1), uno::UNO_QUERY), 1));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xRun1, u"CharHidden"_ustr));
+    uno::Reference<text::XTextRange> const xRun2(
+        getRun(uno::Reference<text::XTextRange>(getParagraphOrTable(1), uno::UNO_QUERY), 2));
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xRun2, u"CharHidden"_ustr));
+}
+
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
