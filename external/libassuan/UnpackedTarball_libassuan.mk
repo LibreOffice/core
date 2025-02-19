@@ -15,7 +15,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libassuan,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libassuan, \
     external/libassuan/find-libgpg-error.patch \
-    external/libassuan/drop_putc_unlocked.patch.1 \
     external/libassuan/fix-autoconf-macros.patch \
     $(if $(filter MSC,$(COM)),external/libassuan/w32-build-fixes.patch.1) \
     external/libassuan/w32-build-fixes-2.patch \
