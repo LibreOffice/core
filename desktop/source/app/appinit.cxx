@@ -65,31 +65,41 @@ using namespace ::com::sun::star::ucb;
 
 namespace {
 
-extern "C" void getUnoScriptUrls(std::vector<OUString> * urls) {
+extern "C" void getUnoScriptUrls(std::vector<std::u16string> * urls) {
     assert(urls != nullptr);
     OUString const base(emscripten::val::global("document")["baseURI"].as<std::u16string>());
     auto const val = emscripten::val::module_property("uno_scripts");
     if (!val.isUndefined()) {
         auto const len = val["length"].as<std::uint32_t>();
         for (std::uint32_t i = 0; i != len; ++i) {
-            urls->push_back(rtl::Uri::convertRelToAbs(base, OUString(val[i].as<std::u16string>())));
+            urls->push_back(
+                std::u16string(
+                    rtl::Uri::convertRelToAbs(base, OUString(val[i].as<std::u16string>()))));
         }
     }
 }
 
 #if HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
-EM_JS(void, runUnoScriptUrl, (char16_t const * url), {
-    importScripts(UTF16ToString(url));
+EM_JS(void, runUnoScriptUrls, (emscripten::EM_VAL handle), {
+    importScripts.apply(self, Emval.toValue(handle));
 });
 #else
-EM_JS(void, runUnoScriptUrl, (char16_t const * url), {
-    fetch(UTF16ToString(url)).then(res => {
-        if (!res.ok) {
-            throw Error(
-                "Loading <" + res.url + "> failed with " + res.status + " " + res.statusText);
+EM_JS(void, runUnoScriptUrls, (emscripten::EM_VAL handle), {
+    const urls = Emval.toValue(handle);
+    function step() {
+        if (urls.length !== 0) {
+            const url = urls.shift();
+            fetch(url).then(res => {
+                if (!res.ok) {
+                    throw Error(
+                        "Loading <" + res.url + "> failed with " + res.status + " "
+                        + res.statusText);
+                }
+                return res.blob();
+            }).then(blob => blob.text()).then(text => { eval(text); step(); });
         }
-        return res.blob();
-    }).then(blob => blob.text()).then(text => eval(text));
+    };
+    step();
 });
 #endif
 
@@ -125,14 +135,9 @@ extern "C" void resolveUnoMain(pthread_t id) {
 
 void initUno() {
     init_unoembind_uno();
-    std::vector<OUString> urls;
+    std::vector<std::u16string> urls;
     emscripten_sync_run_in_main_runtime_thread(EM_FUNC_SIG_VI, getUnoScriptUrls, &urls);
-    for (auto const & url: urls) {
-        if (url.indexOf('\0') != -1) {
-            throw std::invalid_argument("Module.uno_scripts element contains embedded NUL");
-        }
-        runUnoScriptUrl(url.getStr());
-    }
+    runUnoScriptUrls(emscripten::val::array(urls).as_handle());
     setupMainChannel();
     emscripten_async_run_in_main_runtime_thread(EM_FUNC_SIG_VI, resolveUnoMain, pthread_self());
 }
