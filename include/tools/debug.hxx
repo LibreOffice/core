@@ -34,10 +34,10 @@
     standard assert.
 */
 
-typedef void (*DbgTestSolarMutexProc)();
+typedef void (*DbgTestSolarMutexProc)(bool);
 
 TOOLS_DLLPUBLIC void DbgSetTestSolarMutex( DbgTestSolarMutexProc pParam );
-TOOLS_DLLPUBLIC void DbgTestSolarMutex();
+TOOLS_DLLPUBLIC void DbgTestSolarMutex(bool owned);
 
 #ifndef NDEBUG
 // we want the solar mutex checking to be enabled in the assert-enabled builds that the QA people use
@@ -45,12 +45,19 @@ TOOLS_DLLPUBLIC void DbgTestSolarMutex();
 #define DBG_TESTSOLARMUTEX()   \
 do                             \
 {                              \
-    DbgTestSolarMutex();       \
+    DbgTestSolarMutex(true);   \
+} while(false)
+
+#define DBG_TESTNOTSOLARMUTEX() \
+do                             \
+{                              \
+    DbgTestSolarMutex(false);  \
 } while(false)
 
 #else
 
 #define DBG_TESTSOLARMUTEX() ((void)0)
+#define DBG_TESTNOTSOLARMUTEX() ((void)0)
 
 #endif
 

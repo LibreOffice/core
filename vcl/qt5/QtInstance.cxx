@@ -242,6 +242,7 @@ void QtInstance::EmscriptenLightweightRunInMainThread_(std::function<void()> fun
             EM_FUNC_SIG_RETURN_VALUE_V | EM_FUNC_SIG_WITH_N_PARAMETERS(1)
                 | EM_FUNC_SIG_SET_PARAM(0, EM_FUNC_SIG_PARAM_P),
             +[](void* pf) {
+                DBG_TESTNOTSOLARMUTEX();
                 SolarMutexGuard g;
                 (*static_cast<std::function<void()>*>(pf))();
             },

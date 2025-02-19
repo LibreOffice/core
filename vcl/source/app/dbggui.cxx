@@ -30,9 +30,13 @@
 
 using namespace ::com::sun::star;
 
-static void ImplDbgTestSolarMutex()
+static void ImplDbgTestSolarMutex(bool owned)
 {
-    assert(ImplGetSVData()->mpDefInst->GetYieldMutex()->IsCurrentThread() && "SolarMutex not owned!");
+    if (owned) {
+        assert(ImplGetSVData()->mpDefInst->GetYieldMutex()->IsCurrentThread() && "SolarMutex not owned!");
+    } else {
+        assert(!ImplGetSVData()->mpDefInst->GetYieldMutex()->IsCurrentThread() && "SolarMutex owned!");
+    }
 }
 
 void DbgGUIInitSolarMutexCheck()
