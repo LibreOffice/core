@@ -1674,7 +1674,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet, const bool bBroadcast,
                     const OUString sStyle = pCondItem->GetStyle( i );
                     if (sStyle.isEmpty())
                         continue;
-                    SwFormat *const pFindFormat = lcl_FindParaFormat( m_rDoc, sStyle );
+                    SwTextFormatColl* const pFindFormat = lcl_FindParaFormat( m_rDoc, sStyle );
                     if (pFindFormat)
                     {
                         aCond.RegisterToFormat( *pFindFormat );

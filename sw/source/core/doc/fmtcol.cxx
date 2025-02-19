@@ -577,17 +577,17 @@ void SwTextFormatColls::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 //FEATURE::CONDCOLL
 
-SwCollCondition::SwCollCondition( SwTextFormatColl* pColl, Master_CollCondition nMasterCond,
-                                sal_uInt32 nSubCond )
-    : SwClient( pColl ), m_nCondition( nMasterCond ),
-      m_nSubCondition( nSubCond )
+SwCollCondition::SwCollCondition( SwTextFormatColl* pColl, Master_CollCondition nMasterCond, sal_uInt32 nSubCond )
+    : m_nCondition(nMasterCond)
+    , m_nSubCondition(nSubCond)
+    , m_pCollection(pColl)
 {
 }
 
 SwCollCondition::SwCollCondition( const SwCollCondition& rCopy )
-    : SwClient( const_cast<sw::BroadcastingModify*>(static_cast<const sw::BroadcastingModify*>(rCopy.GetRegisteredIn())) ),
-      m_nCondition( rCopy.m_nCondition ),
-      m_nSubCondition( rCopy.m_nSubCondition )
+    : m_nCondition(rCopy.m_nCondition)
+    , m_nSubCondition(rCopy.m_nSubCondition)
+    , m_pCollection(rCopy.m_pCollection)
 {
 }
 
@@ -595,9 +595,9 @@ SwCollCondition::~SwCollCondition()
 {
 }
 
-void SwCollCondition::RegisterToFormat( SwFormat& rFormat )
+void SwCollCondition::RegisterToFormat(SwTextFormatColl& rColl)
 {
-    rFormat.Add(*this);
+    m_pCollection = &rColl;
 }
 
 bool SwCollCondition::operator==( const SwCollCondition& rCmp ) const

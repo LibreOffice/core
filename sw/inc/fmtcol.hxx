@@ -23,6 +23,7 @@
 #include "format.hxx"
 #include "hintids.hxx"
 #include "paratr.hxx"
+#include "deletelistener.hxx"
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
 
@@ -178,16 +179,17 @@ enum class Master_CollCondition
     PARA_IN_ENDNOTE
 };
 
-class SW_DLLPUBLIC SwCollCondition final : public SwClient
+class SW_DLLPUBLIC SwCollCondition final
 {
     Master_CollCondition m_nCondition;
     sal_uInt32 m_nSubCondition;
+    sw::WeakBroadcastingPtr<SwTextFormatColl> m_pCollection;
 
 public:
 
     SwCollCondition( SwTextFormatColl* pColl, Master_CollCondition nMasterCond,
                     sal_uInt32 nSubCond );
-    virtual ~SwCollCondition() override;
+    ~SwCollCondition();
 
     /// @@@ public copy ctor, but no copy assignment?
     SwCollCondition( const SwCollCondition& rCpy );
@@ -202,8 +204,8 @@ public:
     sal_uInt32 GetSubCondition() const   { return m_nSubCondition; }
 
     void SetCondition( Master_CollCondition nCond, sal_uInt32 nSubCond );
-    SwTextFormatColl* GetTextFormatColl() const     { return const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(GetRegisteredIn())); }
-    void RegisterToFormat( SwFormat& );
+    SwTextFormatColl* GetTextFormatColl() const { return const_cast<SwTextFormatColl*>(m_pCollection.operator->()); }
+    void RegisterToFormat( SwTextFormatColl& );
 };
 
 using SwFormatCollConditions = std::vector<std::unique_ptr<SwCollCondition>>;
