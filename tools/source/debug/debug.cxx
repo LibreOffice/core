@@ -44,14 +44,14 @@ void DbgSetTestSolarMutex( DbgTestSolarMutexProc pParam )
         aDebugData.bTestSolarMutexWasSet = true;
 }
 
-void DbgTestSolarMutex()
+void DbgTestSolarMutex(bool owned)
 {
     // don't warn if it was set at least once, because then we're probably just post-DeInitVCL()
     SAL_WARN_IF(
         !aDebugData.bTestSolarMutexWasSet && aDebugData.pDbgTestSolarMutex == nullptr, "tools.debug",
         "no DbgTestSolarMutex function set");
     if ( aDebugData.pDbgTestSolarMutex )
-        aDebugData.pDbgTestSolarMutex();
+        aDebugData.pDbgTestSolarMutex(owned);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
