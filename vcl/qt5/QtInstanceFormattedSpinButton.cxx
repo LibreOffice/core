@@ -33,9 +33,11 @@ QtInstanceFormattedSpinButton::QtInstanceFormattedSpinButton(QtDoubleSpinBox* pS
     connect(m_pSpinBox, &QDoubleSpinBox::textChanged, this,
             &QtInstanceFormattedSpinButton::handleTextChanged);
 
-    // set function to convert value to text
+    // set functions to convert between value and formatted text
     m_pSpinBox->setFormatValueFunction(
         [this](double fValue) { return GetFormatter().FormatValue(fValue); });
+    m_pSpinBox->setParseTextFunction(
+        [this](const QString& rText) { return GetFormatter().ParseText(toOUString(rText)); });
 }
 
 QWidget* QtInstanceFormattedSpinButton::getQWidget() const { return m_pSpinBox; }
