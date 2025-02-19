@@ -1368,6 +1368,9 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(weld::Grid* pParent, ScIconSetTyp
     , mxLbEntryType(mxBuilder->weld_combo_box(u"listbox"_ustr))
     , mpParentGrid(pParent)
 {
+    mxEdEntry->set_buildable_name(mxEdEntry->get_buildable_name() + OUString::number(i));
+    mxLbEntryType->set_buildable_name(mxLbEntryType->get_buildable_name() + OUString::number(i));
+
     mxImgIcon->set_from_icon_name(ScIconSetFormat::getIconName(eType, i));
     if(pEntry)
     {
