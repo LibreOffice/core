@@ -268,6 +268,7 @@ public:
     void    SetFormatValueHdl(const Link<double, std::optional<OUString>>& rLink) { m_aFormatValueHdl = rLink; }
 
     OUString FormatValue(double fValue);
+    std::optional<double> ParseText(const OUString& rText);
 public:
 
     //The following methods are interesting, if m_bTreatAsNumber is set to sal_False

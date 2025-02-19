@@ -784,32 +784,20 @@ void Formatter::ImplSetValue(double dVal, bool bForce)
     m_ValueState = valueDouble;
 }
 
-bool Formatter::ImplGetValue(double& dNewVal)
+std::optional<double> Formatter::ParseText(const OUString& rText)
 {
-    dNewVal = m_dCurrentValue;
-    if (m_ValueState == valueDouble)
-        return true;
-
-    // tdf#155241 default to m_dDefaultValue only if explicitly set
-    // otherwise default to m_dCurrentValue
-    if (m_bDefaultValueSet)
-        dNewVal = m_dDefaultValue;
-
-    OUString sText(GetEntryText());
-    if (sText.isEmpty())
-        return true;
-
+    double fValue = 0.0;
     bool bUseExternalFormatterValue = false;
     if (m_aParseTextHdl.IsSet())
     {
-        ParseResult aResult = m_aParseTextHdl.Call(sText);
+        ParseResult aResult = m_aParseTextHdl.Call(rText);
         bUseExternalFormatterValue = aResult.m_eState != TRISTATE_INDET;
         if (bUseExternalFormatterValue)
         {
             if (aResult.m_eState == TRISTATE_TRUE)
-                dNewVal = aResult.m_fValue;
+                fValue = aResult.m_fValue;
             else
-                dNewVal = m_dCurrentValue;
+                fValue = m_dCurrentValue;
         }
     }
 
@@ -822,6 +810,7 @@ bool Formatter::ImplGetValue(double& dNewVal)
             nFormatKey = 0;
 
         // special treatment for percentage formatting
+        OUString sText = rText;
         if (GetOrCreateFormatter().GetType(m_nFormatKey) == SvNumFormatType::PERCENT)
         {
             // the language of our format
@@ -839,14 +828,37 @@ bool Formatter::ImplGetValue(double& dNewVal)
             // into 0.03. Without this, the formatter would give us the double 3 for an input '3',
             // which equals 300 percent.
         }
-        if (!GetOrCreateFormatter().IsNumberFormat(sText, nFormatKey, dNewVal))
-            return false;
+        if (!GetOrCreateFormatter().IsNumberFormat(sText, nFormatKey, fValue))
+            return std::optional<double>();
     }
 
-    if (m_bHasMin && (dNewVal<m_dMinValue))
-        dNewVal = m_dMinValue;
-    if (m_bHasMax && (dNewVal>m_dMaxValue))
-        dNewVal = m_dMaxValue;
+    if (m_bHasMin && (fValue < m_dMinValue))
+        fValue = m_dMinValue;
+    if (m_bHasMax && (fValue > m_dMaxValue))
+        fValue = m_dMaxValue;
+    return std::optional<double>(fValue);
+}
+
+bool Formatter::ImplGetValue(double& dNewVal)
+{
+    dNewVal = m_dCurrentValue;
+    if (m_ValueState == valueDouble)
+        return true;
+
+    // tdf#155241 default to m_dDefaultValue only if explicitly set
+    // otherwise default to m_dCurrentValue
+    if (m_bDefaultValueSet)
+        dNewVal = m_dDefaultValue;
+
+    OUString sText(GetEntryText());
+    if (sText.isEmpty())
+        return true;
+
+    std::optional<double> aValue = ParseText(sText);
+    if (!aValue.has_value())
+        return false;
+
+    dNewVal = aValue.value();
     return true;
 }
 
