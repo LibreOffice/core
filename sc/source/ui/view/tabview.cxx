@@ -2359,7 +2359,6 @@ void ScTabView::SetNewVisArea()
     for (i=0; i<4; i++)
         if (pGridWin[i] && aDrawMode[i] != aOldMode[i])
         {
-            pGridWin[i]->flushOverlayManager();     // #i79909# flush overlays before switching to edit MapMode
             pGridWin[i]->SetMapMode(aOldMode[i]);
         }
 
@@ -2384,8 +2383,6 @@ void ScTabView::SetNewVisArea()
 
         ScGridWindow *pGridWindow = GetViewData().GetActiveWin();
         pGridWindow->DrawEditView(*pGridWindow->GetOutDev(), pEditView);
-
-        pGridWindow->flushOverlayManager();
         pGridWindow->GetOutDev()->SetMapMode(GetViewData().GetLogicMode());
 
         if (bInPlaceVisCursor)

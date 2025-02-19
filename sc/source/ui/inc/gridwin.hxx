@@ -361,9 +361,7 @@ public:
     virtual void dispose() override;
 
     virtual void    KeyInput(const KeyEvent& rKEvt) override;
-    // #i70788# flush and get overlay
     rtl::Reference<sdr::overlay::OverlayManager> getOverlayManager() const;
-    void flushOverlayManager();
 
     virtual OUString GetSurroundingText() const override;
     virtual Selection GetSurroundingTextSelection() const override;

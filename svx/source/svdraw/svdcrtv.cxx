@@ -820,18 +820,6 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
 
             mpCreateViewExtraData->CreateAndShowOverlay(*this, nullptr, aPoly);
         }
-
-        // #i101679# Force changed overlay to be shown
-        for(sal_uInt32 a(0); a < PaintWindowCount(); a++)
-        {
-            SdrPaintWindow* pCandidate = GetPaintWindow(a);
-            const rtl::Reference<sdr::overlay::OverlayManager>& xOverlayManager = pCandidate->GetOverlayManager();
-
-            if (xOverlayManager.is())
-            {
-                xOverlayManager->flush();
-            }
-        }
     }
 
     maDragStat.SetShown(true);
