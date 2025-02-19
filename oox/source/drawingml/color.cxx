@@ -785,6 +785,10 @@ model::ComplexColor Color::getComplexColor() const
         // store resulting RGB value in mnC1
         toRgb();
         mnC1 = lclRgbComponentsToRgb( mnC1, mnC2, mnC3 );
+        if (hasTransparency())
+        {
+            mnC1 |= static_cast<sal_Int32>(255.0 * (MAX_PERCENT - mnAlpha) / MAX_PERCENT) << 24;
+        }
     }
     else // if( meMode != COLOR_UNUSED )
     {
