@@ -8271,38 +8271,46 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                         if (xTextAppend.is())
                         {
-                            uno::Reference< text::XText > xText = xTextAppend->getText();
-                            uno::Reference< text::XTextCursor > xCrsr = xText->createTextCursor();
-                            if (xCrsr.is())
+                            uno::Sequence<beans::PropertyValue> aValues(bHasFont ? 4 : 3);
+                            beans::PropertyValue aCharSetVal;
+                            aCharSetVal.Name = getPropertyName(PROP_CHAR_FONT_CHAR_SET);
+                            aCharSetVal.Value <<= awt::CharSet::SYMBOL;
+                            aValues.getArray()[0] = std::move(aCharSetVal);
+                            if(bHasFont)
                             {
-                                xCrsr->gotoEnd(false);
-                                xText->insertString(xCrsr, sSymbol, true);
-                                uno::Reference< beans::XPropertySet > xProp( xCrsr, uno::UNO_QUERY );
-                                xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_CHAR_SET), uno::Any(awt::CharSet::SYMBOL));
-                                if(bHasFont)
-                                {
-                                    uno::Any    aVal( sFont );
-                                    xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME), aVal);
-                                    xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME_ASIAN), aVal);
-                                    xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME_COMPLEX), aVal);
+                                beans::PropertyValue aFontVal1;
+                                beans::PropertyValue aFontVal2;
+                                beans::PropertyValue aFontVal3;
 
-                                }
-                                PropertyMapPtr pCharTopContext = GetTopContextOfType(CONTEXT_CHARACTER);
-                                if (pCharTopContext.is())
-                                {
-                                    uno::Sequence<beans::PropertyValue> aValues
-                                        = pCharTopContext->GetPropertyValues(
-                                            /*bCharGrabBag=*/!IsInComments());
-                                    OUString sFontName = getPropertyName(PROP_CHAR_FONT_NAME);
-                                    for (const beans::PropertyValue& rProperty : aValues)
-                                    {
-                                        if (!bHasFont || !rProperty.Name.startsWith(sFontName))
-                                            xProp->setPropertyValue(rProperty.Name, rProperty.Value);
-                                    }
+                                aFontVal1.Name = getPropertyName(PROP_CHAR_FONT_NAME);
+                                aFontVal1.Value <<= sFont;
+                                aFontVal2.Name = getPropertyName(PROP_CHAR_FONT_NAME_ASIAN);
+                                aFontVal2.Value <<= sFont;
+                                aFontVal3.Name = getPropertyName(PROP_CHAR_FONT_NAME_COMPLEX);
+                                aFontVal3.Value <<= sFont;
 
-                                }
-
+                                aValues.getArray()[1] = std::move(aFontVal1);
+                                aValues.getArray()[2] = std::move(aFontVal2);
+                                aValues.getArray()[3] = std::move(aFontVal3);
                             }
+
+                            PropertyMapPtr pCharTopContext = GetTopContextOfType(CONTEXT_CHARACTER);
+                            if (pCharTopContext.is())
+                            {
+                                uno::Sequence<beans::PropertyValue> aContextValues
+                                    = pCharTopContext->GetPropertyValues(
+                                        /*bCharGrabBag=*/!IsInComments());
+                                OUString sFontName = getPropertyName(PROP_CHAR_FONT_NAME);
+                                for (const beans::PropertyValue& rProperty : aContextValues)
+                                {
+                                    if (!bHasFont || !rProperty.Name.startsWith(sFontName))
+                                    {
+                                        aValues.realloc(aValues.getLength() + 1);
+                                        aValues.getArray()[aValues.getLength() - 1] = rProperty;
+                                    }
+                                }
+                            }
+                            xTextAppend->appendTextPortion(sSymbol, aValues);
                         }
                     }
                 }
