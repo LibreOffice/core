@@ -162,7 +162,6 @@ public class SQLQueryComposer
     {
         String sSortValue = CurDBMetaData.getSortFieldNames()[_SortIndex][0];
         String currentOrder = m_queryComposer.getOrder();
-        XPropertySet xColumn = CurDBMetaData.getColumnObjectByFieldName(sSortValue, _baddAliasFieldNames);
 
         String sSort = "ASC";
         if(CurDBMetaData.getSortFieldNames()[_SortIndex].length > 1)
