@@ -45,7 +45,8 @@ std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraph
     SalData::ensureThreadAutoreleasePool();
 
 #ifdef IOS
-    std::unique_ptr<SalVirtualDevice> pNew(new AquaSalVirtualDevice( NULL, nDX, nDY, eFormat, NULL ));
+    (void)rGraphics;
+    std::unique_ptr<SalVirtualDevice> pNew(new AquaSalVirtualDevice( nullptr, nDX, nDY, eFormat ));
     pNew->SetSize( nDX, nDY );
     return pNew;
 #else
@@ -62,13 +63,8 @@ std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraph
     // #i92075# can be called first in a thread
     SalData::ensureThreadAutoreleasePool();
 
-#ifdef IOS
     return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice(
                                      nDX, nDY, eFormat, rData ));
-#else
-    return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice(
-                                     nDX, nDY, eFormat, rData ));
-#endif
 }
 
 AquaSalVirtualDevice::AquaSalVirtualDevice(
@@ -97,7 +93,9 @@ AquaSalVirtualDevice::AquaSalVirtualDevice(
             mnBitmapDepth = 0;
             break;
     }
-#ifdef MACOSX
+#ifdef IOS
+    (void)pGraphic;
+#else
     // inherit resolution from reference device
     if( pGraphic )
     {
