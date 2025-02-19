@@ -1974,7 +1974,7 @@ Dim vRanges() As Variant		&apos;	Array of subranges resulting from the applicati
 Dim oFRange As Object			&apos;	A single element of vRanges
 Dim oNumberFormats As Object	&apos;	com.sun.star.util.XNumberFormats
 Dim oLocale As Object			&apos;	com.sun.star.lang.Locale
-Dim bNew As Boolean				&apos;	When True, the requested format doen&apos;t exist yet
+Dim bNew As Boolean				&apos;	When True, the requested format doesn&apos;t exist yet
 Dim lFormatID As Long			&apos;	The format key in the list of number formats
 
 Const cstThisSub = &quot;SFDocuments.Calc.FormatRange&quot;
