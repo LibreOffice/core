@@ -77,6 +77,7 @@ private:
     /// current start/end pair
     SwPosition const* m_pStartPos;
     SwPosition const* m_pEndPos;
+    SwNode const* m_pCurrentRedlineNode;
 
 public:
     SwPosition const* GetStartPos() const { return m_pStartPos; }
@@ -94,6 +95,7 @@ public:
         , m_RedlineIndex(isHideRedlines ? m_rIDRA.GetRedlinePos(rTextNode, RedlineType::Any) : SwRedlineTable::npos)
         , m_pStartPos(nullptr)
         , m_pEndPos(&m_Start)
+        , m_pCurrentRedlineNode(&rTextNode)
     {
     }
 
@@ -107,6 +109,14 @@ public:
         assert(m_pEndPos);
         if (m_isHideRedlines)
         {
+            // GetRedlinePos() returns npos if there is no redline on the
+            // node but something else could have merged nodes so search again!
+            if (m_RedlineIndex == SwRedlineTable::npos
+                && &m_pEndPos->GetNode() != m_pCurrentRedlineNode)
+            {
+                m_RedlineIndex = m_rIDRA.GetRedlinePos(m_pEndPos->GetNode(), RedlineType::Any);
+                m_pCurrentRedlineNode = &m_pEndPos->GetNode();
+            }
             // position on current or next redline
             for (; m_RedlineIndex < m_rIDRA.GetRedlineTable().size(); ++m_RedlineIndex)
             {
