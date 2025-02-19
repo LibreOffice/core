@@ -28,11 +28,9 @@ struct Data
     std::thread::native_handle_type eventHandlerThread;
 };
 
-void setUp();
+Data& getData();
 
 void tearDown();
-
-Data& getData();
 }
 
 #endif

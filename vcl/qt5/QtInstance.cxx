@@ -275,7 +275,6 @@ QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp)
     , m_pActivePopup(nullptr)
 {
 #if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
-    comphelper::emscriptenthreading::setUp();
     m_emscriptenThreadingData = &comphelper::emscriptenthreading::getData();
 #endif
 

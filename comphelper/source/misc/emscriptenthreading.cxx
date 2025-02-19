@@ -15,7 +15,6 @@
 
 #if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
 
-#include <cassert>
 #include <mutex>
 #include <thread>
 
@@ -25,29 +24,27 @@ std::mutex mutex;
 comphelper::emscriptenthreading::Data* data = nullptr;
 }
 
-void comphelper::emscriptenthreading::setUp()
+comphelper::emscriptenthreading::Data& comphelper::emscriptenthreading::getData()
 {
     std::scoped_lock g(mutex);
-    assert(data == nullptr);
-    data = new Data;
-    std::thread t([] { emscripten_exit_with_live_runtime(); });
-    data->eventHandlerThread = t.native_handle();
-    t.detach();
+    if (data == nullptr)
+    {
+        data = new Data;
+        std::thread t([] { emscripten_exit_with_live_runtime(); });
+        data->eventHandlerThread = t.native_handle();
+        t.detach();
+    }
+    return *data;
 }
 
 void comphelper::emscriptenthreading::tearDown()
 {
     std::scoped_lock g(mutex);
-    assert(data != nullptr);
-    delete data;
-    data = nullptr;
-}
-
-comphelper::emscriptenthreading::Data& comphelper::emscriptenthreading::getData()
-{
-    std::scoped_lock g(mutex);
-    assert(data != nullptr);
-    return *data;
+    if (data != nullptr)
+    {
+        delete data;
+        data = nullptr;
+    }
 }
 
 #endif
