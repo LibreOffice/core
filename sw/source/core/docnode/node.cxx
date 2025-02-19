@@ -1449,8 +1449,10 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
                     // node as SwFrame::InvalidatePage() will access them.
                     // Note: cannot send via SwClientNotify from dtor
                     // because that would access deleted wrong-lists
-                    sw::UpdateMergedParaForDelete(*pMerged, true,
-                            *static_cast<SwTextNode*>(this), 0, Len());
+                    sw::UpdateMergedParaForDelete(*pMerged,
+                        pFrame->getRootFrame()->GetParagraphBreakMode(),
+                        static_cast<SwTextFrame *>(pFrame)->GetScriptInfo(),
+                        true, *static_cast<SwTextNode*>(this), 0, Len());
                     if (this == pMerged->pParaPropsNode)
                     {
                         // otherwise pointer should have been updated to a different node

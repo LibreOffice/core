@@ -2378,18 +2378,9 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     // ( - SwEndPortion must _no_ longer be generated. )
     // - Of course, the screen is something completely different than the printer ...
     bool const isToggleFieldNames(mpOpt->IsFieldName() != rOpt.IsFieldName());
-
-    if (mpOpt->IsFieldName() != rOpt.IsFieldName()
-        || mpOpt->IsParagraph() != rOpt.IsParagraph())
-    {
-        GetLayout()->SetFieldmarkMode( rOpt.IsFieldName()
-                    ? sw::FieldmarkMode::ShowCommand
-                    : sw::FieldmarkMode::ShowResult,
-                rOpt.IsParagraph()
-                    ? sw::ParagraphBreakMode::Shown
-                    : sw::ParagraphBreakMode::Hidden);
-        bReformat = true;
-    }
+    bool const isToggleLayoutHide{isToggleFieldNames
+                || mpOpt->IsParagraph() != rOpt.IsParagraph()
+                || mpOpt->IsShowHiddenChar() != rOpt.IsShowHiddenChar()};
 
     // The map mode is changed, minima/maxima will be attended by UI
     if( mpOpt->GetZoom() != rOpt.GetZoom() && !IsPreview() )
@@ -2458,6 +2449,17 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     mpOpt->SetUIOptions(rOpt);
 
     mxDoc->GetDocumentSettingManager().set(DocumentSettingId::HTML_MODE, 0 != ::GetHtmlMode(mxDoc->GetDocShell()));
+
+    if (isToggleLayoutHide)
+    {
+        GetLayout()->SetFieldmarkMode( rOpt.IsFieldName()
+                    ? sw::FieldmarkMode::ShowCommand
+                    : sw::FieldmarkMode::ShowResult,
+                sw::IsShowHiddenChars(this)
+                    ? sw::ParagraphBreakMode::Shown
+                    : sw::ParagraphBreakMode::Hidden);
+        bReformat = true;
+    }
 
     if( bBrowseModeChanged || bHideWhitespaceModeChanged )
     {
