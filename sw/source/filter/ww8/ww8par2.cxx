@@ -763,7 +763,7 @@ void SwWW8ImplReader::Read_ANLevelNo( sal_uInt16, const sal_uInt8* pData, short 
                 if (!m_bNoAttrImport)
                     static_cast<SwTextFormatColl*>(m_pCurrentColl)->AssignToListLevelOfOutlineStyle( m_nSwNumLevel );
                     // For WW-NoNumbering also NO_NUMBERING could be used.
-                    // ( For normal numberierung NO_NUM has to be used:
+                    // ( For normal numbering NO_NUM has to be used:
                     //   NO_NUM : pauses numbering,
                     //   NO_NUMBERING : no numbering at all )
 

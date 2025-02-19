@@ -160,11 +160,11 @@ class SW_DLLPUBLIC SwPageDesc final
     mutable StashedPageDesc m_aStashedHeader;
     mutable StashedPageDesc m_aStashedFooter;
 
-    sw::WriterMultiListener m_aDepends; ///< Because of grid alignment (Registerhaltigkeit).
+    sw::WriterMultiListener m_aDepends; ///< Because of grid alignment (register accuracy / register-true).
     mutable const SwTextFormatColl* m_pTextFormatColl;
     SwPageDesc *m_pFollow;
     sal_uInt16  m_nRegHeight; ///< Sentence spacing and fontascent of style.
-    sal_uInt16  m_nRegAscent; ///< For grid alignment (Registerhaltigkeit).
+    sal_uInt16  m_nRegAscent; ///< For grid alignment (register accuracy / register-true).
     drawing::TextVerticalAdjust   m_nVerticalAdjustment; // doc/docx: vertically center / justify / bottom
     UseOnPage   m_eUse;
     bool        m_IsLandscape;
