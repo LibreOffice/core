@@ -53,6 +53,7 @@ $(BUILDDIR)/config_host.mk : $(wildcard \
 		$(SRCDIR)/instsetoo_native/util/openoffice.lst.in \
 		$(SRCDIR)/configure.ac \
 		$(SRCDIR)/config_host/*.h.in \
+		$(SRCDIR)/distro-configs/*.conf $(SRCDIR)/distro-configs/Jenkins/* \
 		$(SRCDIR)/download.lst \
 		$(SRCDIR)/m4/*.m4 \
 		$(BUILDDIR)/autogen.input \
