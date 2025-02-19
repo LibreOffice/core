@@ -38,7 +38,6 @@
 #include <saltimer.hxx>
 #include <salinst.hxx>
 #include <comphelper/profilezone.hxx>
-#include <tools/json_writer.hxx>
 #include <schedulerimpl.hxx>
 
 namespace {
