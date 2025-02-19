@@ -827,9 +827,6 @@ void SdrDragView::ShowDragObj(bool IsSizeValid)
                     mpCurrentSdrDragMethod->CreateOverlayGeometry(
                         *xOverlayManager,
                         rPageWindow.GetObjectContact(), IsSizeValid);
-
-                    // #i101679# Force changed overlay to be shown
-                    xOverlayManager->flush();
                 }
             }
         }

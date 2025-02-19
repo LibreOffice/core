@@ -1351,9 +1351,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     if (mrViewData.HasEditView(eWhich))
     {
-        // flush OverlayManager before changing the MapMode
-        flushOverlayManager();
-
         // set MapMode for text edit
         rDevice.SetMapMode(mrViewData.GetLogicMode());
     }

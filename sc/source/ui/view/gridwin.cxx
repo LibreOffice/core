@@ -7424,15 +7424,6 @@ rtl::Reference<sdr::overlay::OverlayManager> ScGridWindow::getOverlayManager() c
     return rtl::Reference<sdr::overlay::OverlayManager>();
 }
 
-void ScGridWindow::flushOverlayManager()
-{
-    // #i70788# get the OverlayManager safely
-    rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
-
-    if (xOverlayManager.is())
-        xOverlayManager->flush();
-}
-
 ScViewData& ScGridWindow::getViewData()
 {
     return mrViewData;

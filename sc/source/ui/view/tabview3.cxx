@@ -2225,9 +2225,6 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
                 pGridWin[i]->DeleteAutoFillOverlay();
                 pGridWin[i]->DeleteCopySourceOverlay();
 
-                // flush OverlayManager before changing MapMode to text edit
-                pGridWin[i]->flushOverlayManager();
-
                 // MapMode must be set after HideCursor
                 pGridWin[i]->SetMapMode(aViewData.GetLogicMode());
 
@@ -3223,9 +3220,6 @@ void ScTabView::ZoomChanged()
 
     if ( pWin && aViewData.HasEditView( aViewData.GetActivePart() ) )
     {
-        // flush OverlayManager before changing the MapMode
-        pWin->flushOverlayManager();
-
         // make sure the EditView's position and size are updated
         // with the right (logic, not drawing) MapMode
         pWin->SetMapMode( aViewData.GetLogicMode() );
