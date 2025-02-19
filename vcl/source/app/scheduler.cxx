@@ -41,7 +41,6 @@
 #include <salinst.hxx>
 #include <comphelper/emscriptenthreading.hxx>
 #include <comphelper/profilezone.hxx>
-#include <tools/json_writer.hxx>
 #include <schedulerimpl.hxx>
 
 namespace {
