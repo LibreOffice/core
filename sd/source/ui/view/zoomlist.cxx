@@ -27,8 +27,6 @@
 
 namespace sd
 {
-#define MAX_ENTRIES 10
-
 ZoomList::ZoomList(ViewShell* pViewShell)
     : mpViewShell(pViewShell)
     , mnCurPos(0)
@@ -38,6 +36,7 @@ ZoomList::ZoomList(ViewShell* pViewShell)
 void ZoomList::InsertZoomRect(const ::tools::Rectangle& rRect)
 {
     size_t nRectCount = maRectangles.size();
+    constexpr size_t MAX_ENTRIES = 10;
 
     if (nRectCount >= MAX_ENTRIES)
         maRectangles.erase(maRectangles.begin());
