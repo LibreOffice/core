@@ -959,6 +959,19 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaProps)
     CPPUNIT_ASSERT_EQUAL(
         SvxAdjust::Left,
         pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+
+    dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
+
+    pTextFrame = dynamic_cast<SwTextFrame*>(pBody->GetLower());
+    for (int i = 0; i < 18; ++i)
+    {
+        pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    }
+    // the problem was that this redline (following hidden) wasn't merged
+    CPPUNIT_ASSERT_EQUAL(u"10 visible, hidden-merge, visible, delete-merge, visible"_ustr,
+                         pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"abcdefghi"_ustr, pTextFrame->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf151954)
