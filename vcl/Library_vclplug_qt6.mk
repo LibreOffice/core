@@ -140,7 +140,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt6,\
     vcl/qt6/QtPainter \
     vcl/qt6/QtPrinter \
     vcl/qt6/QtSvpGraphics \
-    vcl/qt6/QtSvpSurface \
     vcl/qt6/QtSystem \
     vcl/qt6/QtTimer \
     vcl/qt6/QtTools \

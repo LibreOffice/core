@@ -94,7 +94,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk4,\
     vcl/unx/gtk4/gtkdata \
     vcl/unx/gtk4/gtkinst \
     vcl/unx/gtk4/gtksys \
-    vcl/unx/gtk4/gtkcairo \
     vcl/unx/gtk4/custom-theme \
     vcl/unx/gtk4/salnativewidgets-gtk \
     vcl/unx/gtk4/gtkframe \
