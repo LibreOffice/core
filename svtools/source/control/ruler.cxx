@@ -20,6 +20,7 @@
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
 #include <vcl/event.hxx>
+#include <vcl/themecolors.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/vcllayout.hxx>
 #include <vcl/virdev.hxx>
@@ -1188,16 +1189,29 @@ void Ruler::ImplFormat(vcl::RenderContext const & rRenderContext)
     nVirTop++;
     nVirBottom--;
 
+    Color aRulerColor;
+    Color aMarginRulerColor;
+    if (ThemeColors::IsThemeEnabled())
+    {
+        aRulerColor = ThemeColors::GetThemeColors().GetBaseColor();
+        aMarginRulerColor = ThemeColors::GetThemeColors().GetWindowColor();
+    }
+    else
+    {
+        aRulerColor = rStyleSettings.GetWindowColor();
+        aMarginRulerColor = rStyleSettings.GetDialogColor();
+    }
+
     // draw margin1, margin2 and in-between
     maVirDev->SetLineColor();
-    maVirDev->SetFillColor(rStyleSettings.GetDialogColor());
+    maVirDev->SetFillColor(aMarginRulerColor);
     if (nM1 > nVirLeft)
         ImplVDrawRect(*maVirDev, nP1, nVirTop + 1, nM1, nVirBottom); //left gray rectangle
     if (nM2 < nP2)
         ImplVDrawRect(*maVirDev, nM2, nVirTop + 1, nP2, nVirBottom); //right gray rectangle
     if (nM2 - nM1 > 0)
     {
-        maVirDev->SetFillColor(rStyleSettings.GetWindowColor());
+        maVirDev->SetFillColor(aRulerColor);
         ImplVDrawRect(*maVirDev, nM1 + 1, nVirTop, nM2 - 1, nVirBottom); //center rectangle
     }
     maVirDev->SetLineColor(rStyleSettings.GetShadowColor());
