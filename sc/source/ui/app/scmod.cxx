@@ -238,7 +238,7 @@ void ScModule::ConfigurationChanged(utl::ConfigurationBroadcaster* p, Configurat
                 }
 
                 // if nothing changed, and the hint was OnlyCurrentDocumentColorScheme we can skip invalidate
-                const bool bSkipInvalidate = bUnchanged && eHints == ConfigurationHints::OnlyCurrentDocumentColorScheme;
+                const bool bSkipInvalidate = bKit ||(bUnchanged && eHints == ConfigurationHints::OnlyCurrentDocumentColorScheme);
                 if (!bSkipInvalidate)
                 {
                     pViewSh->PaintGrid();
