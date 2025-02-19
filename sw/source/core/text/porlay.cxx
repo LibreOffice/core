@@ -1132,8 +1132,9 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
     InitScriptInfo( rNode, pMerged, m_nDefaultDir == UBIDI_RTL );
 }
 
-void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
-        sw::MergedPara const*const pMerged, bool bRTL)
+// note: must not use pMerged->pParaPropsNode to avoid circular dependency
+void SwScriptInfo::InitScriptInfoHidden(const SwTextNode& rNode,
+        sw::MergedPara const*const pMerged)
 {
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
@@ -1279,6 +1280,14 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
             m_HiddenChg.push_back( TextFrameIndex(nEnd) );
         }
     }
+}
+
+void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
+        sw::MergedPara const*const pMerged, bool bRTL)
+{
+    InitScriptInfoHidden(rNode, pMerged);
+
+    const OUString& rText(pMerged ? pMerged->mergedText : rNode.GetText());
 
     // SCRIPT AND SCRIPT RELATED INFORMATION
 
@@ -2370,7 +2379,7 @@ SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTextNode& rTNd,
 
     for( SwTextFrame* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
-        pScriptInfo = const_cast<SwScriptInfo*>(pLast->GetScriptInfo());
+        pScriptInfo = pLast->GetScriptInfo();
         if ( pScriptInfo )
         {
             if (bAllowInvalid ||

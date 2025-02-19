@@ -104,6 +104,8 @@ public:
     SwScriptInfo();
     ~SwScriptInfo();
 
+    // partial init: only m_HiddenChg/m_Bookmarks
+    void InitScriptInfoHidden(const SwTextNode& rNode, sw::MergedPara const* pMerged);
     // determines script changes
     void InitScriptInfo(const SwTextNode& rNode, sw::MergedPara const* pMerged, bool bRTL);
     void InitScriptInfo(const SwTextNode& rNode, sw::MergedPara const* pMerged);
