@@ -89,9 +89,9 @@ namespace migration
         }
     }
 
-#define MAX_HEADER_LENGTH 16
 static bool IsUserWordbook( const OUString& rFile )
 {
+    constexpr sal_uInt16 MAX_HEADER_LENGTH = 16;
     bool bRet = false;
     std::unique_ptr<SvStream> pStream = ::utl::UcbStreamHelper::CreateStream( rFile, StreamMode::STD_READ );
     if ( pStream && !pStream->GetError() )
