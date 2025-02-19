@@ -319,12 +319,6 @@ Any SAL_CALL SwXTextDocument::queryInterface( const uno::Type& rType )
         Reference<lang::XMultiServiceFactory> xTmp = this;
         aRet <<= xTmp;
     }
-    if ( !aRet.hasValue() &&
-        rType == cppu::UnoType<tiledrendering::XTiledRenderable>::get())
-    {
-        Reference<tiledrendering::XTiledRenderable> xTmp = this;
-        aRet <<= xTmp;
-    }
 
     if ( !aRet.hasValue()
         && rType != cppu::UnoType<css::document::XDocumentEventBroadcaster>::get()
@@ -362,8 +356,7 @@ Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes()
             SwXTextDocumentBaseClass::getTypes(),
             aNumTypes,
             Sequence {
-                cppu::UnoType<lang::XMultiServiceFactory>::get(),
-                cppu::UnoType<tiledrendering::XTiledRenderable>::get()});
+                cppu::UnoType<lang::XMultiServiceFactory>::get()});
 }
 
 SwXTextDocument::SwXTextDocument(SwDocShell* pShell)
@@ -4082,28 +4075,6 @@ void SwXTextDocument::resetSelection()
 
     SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
     pWrtShell->ResetSelect(nullptr, false, ScrollSizeMode::ScrollSizeDefault);
-}
-
-void SAL_CALL SwXTextDocument::paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight )
-{
-    SystemGraphicsData aData;
-    aData.nSize = sizeof(SystemGraphicsData);
-    #if defined(_WIN32)
-    sal_Int64 nWindowHandle;
-    Parent >>= nWindowHandle;
-    aData.hWnd = reinterpret_cast<HWND>(nWindowHandle);
-    ScopedVclPtrInstance<VirtualDevice> xDevice(aData, Size(1, 1), DeviceFormat::WITHOUT_ALPHA);
-    paintTile(*xDevice, nOutputWidth, nOutputHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-    #else
-    // TODO: support other platforms
-    (void)Parent;
-    (void)nOutputWidth;
-    (void)nOutputHeight;
-    (void)nTilePosX;
-    (void)nTilePosY;
-    (void)nTileWidth;
-    (void)nTileHeight;
-    #endif
 }
 
 /**

@@ -62,7 +62,6 @@
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/ITiledRenderable.hxx>
-#include <com/sun/star/tiledrendering/XTiledRenderable.hpp>
 #include <com/sun/star/text/XPasteBroadcaster.hpp>
 
 #include "unobaseclass.hxx"
@@ -173,8 +172,7 @@ SwXTextDocumentBaseClass;
 
 class SW_DLLPUBLIC SwXTextDocument final : public SwXTextDocumentBaseClass,
     public SvxFmMSFactory,
-    public vcl::ITiledRenderable,
-    public css::tiledrendering::XTiledRenderable
+    public vcl::ITiledRenderable
 {
 private:
     class Impl;
@@ -494,9 +492,6 @@ public:
 
     /// @see vcl::ITiledRenderable::getSearchResultRectangles().
     std::vector<basegfx::B2DRange> getSearchResultRectangles(const char* pPayload) override;
-
-    // css::tiledrendering::XTiledRenderable
-    virtual void SAL_CALL paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight ) override;
 
     /// @see vcl::ITiledRenderable::executeContentControlEvent().
     void executeContentControlEvent(const StringMap& aArguments) override;

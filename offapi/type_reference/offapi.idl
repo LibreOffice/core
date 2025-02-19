@@ -14374,12 +14374,6 @@ module com {
      ::com::sun::star::container::XNameAccess getTextTables();
     };
    };
-   module tiledrendering {
-    interface XTiledRenderable {
-     interface ::com::sun::star::uno::XInterface;
-     void paintTile([in] any Parent, [in] long nOutputWidth, [in] long nOutputHeight, [in] long nTilePosX, [in] long nTilePosY, [in] long nTileWidth, [in] long nTileHeight);
-    };
-   };
    module text {
     published service GenericTextDocument {
      service ::com::sun::star::document::OfficeDocument;
@@ -14387,7 +14381,6 @@ module com {
      interface ::com::sun::star::text::XTextDocument;
      interface ::com::sun::star::util::XSearchable;
      interface ::com::sun::star::util::XRefreshable;
-     [optional] interface ::com::sun::star::tiledrendering::XTiledRenderable;
      [optional] interface ::com::sun::star::text::XFootnotesSupplier;
      [optional] interface ::com::sun::star::text::XEndnotesSupplier;
      [optional] interface ::com::sun::star::text::XContentControlsSupplier;

@@ -1494,9 +1494,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/text/textfield
 	Subject \
 	Title \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/tiledrendering,\
-	XTiledRenderable \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/ucb,\
 	CachedContentResultSet \
 	CachedContentResultSetStub \

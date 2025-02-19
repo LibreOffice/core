@@ -117,7 +117,6 @@ module org.libreoffice.uno
     exports com.sun.star.task;
     exports com.sun.star.text;
     exports com.sun.star.text.textfield;
-    exports com.sun.star.tiledrendering;
     exports com.sun.star.ucb;
     exports com.sun.star.ui;
     exports com.sun.star.ui.dialogs;
