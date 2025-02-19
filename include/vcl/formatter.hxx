@@ -99,6 +99,28 @@ public:
         UNLESS_MERGELIBS(VCL_DLLPUBLIC) static SvNumberFormatter* GetFormatter();
     };
 
+    /**
+     * This struct gets returned by the handlers that can be set via Formatter::SetParseTextHdl
+     * and describes the result of trying to convert text to a double value.
+     */
+    struct ParseResult
+    {
+        ParseResult()
+            : ParseResult(TRISTATE_INDET, 0.0)
+        {
+        }
+
+        ParseResult(TriState eState, double fValue)
+            : m_eState(eState)
+            , m_fValue(fValue)
+        {
+        }
+
+        TriState m_eState;
+        // if m_eState is TRISTATE_TRUE, this contains the value
+        double m_fValue;
+    };
+
 protected:
     OUString      m_sLastValidText;
     // Has nothing to do with the current value. It is the last text, which was valid at input (checked by CheckText,
@@ -143,7 +165,7 @@ protected:
 
     bool                m_bUseInputStringForFormatting;
 
-    Link<double*, TriState> m_aInputHdl;
+    Link<const OUString&, ParseResult> m_aParseTextHdl;
     Link<double, std::optional<OUString>> m_aFormatValueHdl;
 
 public:
@@ -242,7 +264,7 @@ public:
     bool    TreatingAsNumber() const    { return m_bTreatAsNumber; }
     void    TreatAsNumber(bool bDoSo) { m_bTreatAsNumber = bDoSo; }
 
-    void    SetInputHdl(const Link<double*,TriState>& rLink) { m_aInputHdl = rLink; }
+    void    SetParseTextHdl(const Link<const OUString&, ParseResult>& rLink) { m_aParseTextHdl = rLink; }
     void    SetFormatValueHdl(const Link<double, std::optional<OUString>>& rLink) { m_aFormatValueHdl = rLink; }
 
     OUString FormatValue(double fValue);

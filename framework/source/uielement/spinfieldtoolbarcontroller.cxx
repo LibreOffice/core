@@ -62,7 +62,7 @@ public:
 
     DECL_LINK(ValueChangedHdl, weld::FormattedSpinButton&, void);
     DECL_LINK(FormatOutputHdl, double, std::optional<OUString>);
-    DECL_LINK(ParseInputHdl, double*, TriState);
+    DECL_STATIC_LINK(SpinfieldControl, ParseInputHdl, const OUString&, Formatter::ParseResult);
     DECL_LINK(ModifyHdl, weld::Entry&, void);
     DECL_LINK(ActivateHdl, weld::Entry&, bool);
     DECL_LINK(FocusInHdl, weld::Widget&, void);
@@ -85,7 +85,7 @@ SpinfieldControl::SpinfieldControl(vcl::Window* pParent, SpinfieldToolbarControl
     m_xWidget->connect_focus_out(LINK(this, SpinfieldControl, FocusOutHdl));
     Formatter& rFormatter = m_xWidget->GetFormatter();
     rFormatter.SetFormatValueHdl(LINK(this, SpinfieldControl, FormatOutputHdl));
-    rFormatter.SetInputHdl(LINK(this, SpinfieldControl, ParseInputHdl));
+    rFormatter.SetParseTextHdl(LINK(this, SpinfieldControl, ParseInputHdl));
     m_xWidget->connect_value_changed(LINK(this, SpinfieldControl, ValueChangedHdl));
     m_xWidget->connect_changed(LINK(this, SpinfieldControl, ModifyHdl));
     m_xWidget->connect_activate(LINK(this, SpinfieldControl, ActivateHdl));
@@ -103,10 +103,10 @@ IMPL_LINK(SpinfieldControl, KeyInputHdl, const ::KeyEvent&, rKEvt, bool)
     return ChildKeyInput(rKEvt);
 }
 
-IMPL_LINK(SpinfieldControl, ParseInputHdl, double*, result, TriState)
+IMPL_STATIC_LINK(SpinfieldControl, ParseInputHdl, const OUString&, rText, Formatter::ParseResult)
 {
-    *result = m_xWidget->get_text().toDouble();
-    return TRISTATE_TRUE;
+    const double fValue = rText.toDouble();
+    return Formatter::ParseResult(TRISTATE_TRUE, fValue);
 }
 
 SpinfieldControl::~SpinfieldControl()

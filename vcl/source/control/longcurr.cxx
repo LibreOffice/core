@@ -225,17 +225,18 @@ namespace weld
         return std::optional<OUString>(aText);
     }
 
-    IMPL_LINK(LongCurrencyFormatter, ParseInputHdl, double*, result, TriState)
+    IMPL_LINK(LongCurrencyFormatter, ParseInputHdl, const OUString&, rText, Formatter::ParseResult)
     {
         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
 
         BigInt value;
-        bool bRet = ImplCurrencyGetValue(GetEntryText(), value, GetDecimalDigits(), rLocaleDataWrapper);
+        bool bRet = ImplCurrencyGetValue(rText, value, GetDecimalDigits(), rLocaleDataWrapper);
 
+        double fValue = 0;
         if (bRet)
-            *result = double(value) / weld::SpinButton::Power10(GetDecimalDigits());
+            fValue = double(value) / weld::SpinButton::Power10(GetDecimalDigits());
 
-        return bRet ? TRISTATE_TRUE : TRISTATE_FALSE;
+        return Formatter::ParseResult(bRet ? TRISTATE_TRUE : TRISTATE_FALSE, fValue);
     }
 }
 

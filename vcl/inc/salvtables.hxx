@@ -681,7 +681,7 @@ private:
     DECL_LINK(UpDownHdl, SpinField&, void);
     DECL_LINK(LoseFocusHdl, Control&, void);
     DECL_LINK(OutputHdl, double, std::optional<OUString>);
-    DECL_LINK(InputHdl, double*, TriState);
+    DECL_LINK(InputHdl, const OUString&, Formatter::ParseResult);
     DECL_LINK(ActivateHdl, Edit&, bool);
 
 public:

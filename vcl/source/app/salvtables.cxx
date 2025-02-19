@@ -5856,7 +5856,7 @@ SalInstanceSpinButton::SalInstanceSpinButton(FormattedField* pButton, SalInstanc
     m_xButton->SetDownHdl(LINK(this, SalInstanceSpinButton, UpDownHdl));
     m_xButton->SetLoseFocusHdl(LINK(this, SalInstanceSpinButton, LoseFocusHdl));
     m_rFormatter.SetFormatValueHdl(LINK(this, SalInstanceSpinButton, OutputHdl));
-    m_rFormatter.SetInputHdl(LINK(this, SalInstanceSpinButton, InputHdl));
+    m_rFormatter.SetParseTextHdl(LINK(this, SalInstanceSpinButton, InputHdl));
     if (Edit* pEdit = m_xButton->GetSubEdit())
         pEdit->SetActivateHdl(LINK(this, SalInstanceSpinButton, ActivateHdl));
     else
@@ -5913,7 +5913,7 @@ SalInstanceSpinButton::~SalInstanceSpinButton()
         pEdit->SetActivateHdl(Link<Edit&, bool>());
     else
         m_xButton->SetActivateHdl(Link<Edit&, bool>());
-    m_rFormatter.SetInputHdl(Link<double*, TriState>());
+    m_rFormatter.SetParseTextHdl(Link<const OUString&, Formatter::ParseResult>());
     m_rFormatter.SetFormatValueHdl(Link<double, std::optional<OUString>>());
     m_xButton->SetLoseFocusHdl(Link<Control&, void>());
     m_xButton->SetDownHdl(Link<SpinField&, void>());
@@ -5936,13 +5936,12 @@ IMPL_LINK(SalInstanceSpinButton, OutputHdl, double, fValue, std::optional<OUStri
     return format_floating_point_value(fValue);
 }
 
-IMPL_LINK(SalInstanceSpinButton, InputHdl, double*, pResult, TriState)
+IMPL_LINK(SalInstanceSpinButton, InputHdl, const OUString&, rText, Formatter::ParseResult)
 {
-    double fResult;
-    TriState eRet = parse_text(get_text(), &fResult);
-    if (eRet == TRISTATE_TRUE)
-        *pResult = fResult;
-    return eRet;
+    double fResult = 0;
+    TriState eRet = parse_text(rText, &fResult);
+
+    return Formatter::ParseResult(eRet, fResult);
 }
 
 SalInstanceFormattedSpinButton::SalInstanceFormattedSpinButton(FormattedField* pButton,

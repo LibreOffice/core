@@ -318,7 +318,7 @@ LongCurrencyFormatter::LongCurrencyFormatter(weld::FormattedSpinButton& rSpinBut
 void LongCurrencyFormatter::Init()
 {
     SetFormatValueHdl(LINK(this, LongCurrencyFormatter, FormatOutputHdl));
-    SetInputHdl(LINK(this, LongCurrencyFormatter, ParseInputHdl));
+    SetParseTextHdl(LINK(this, LongCurrencyFormatter, ParseInputHdl));
 }
 
 void LongCurrencyFormatter::SetUseThousandSep(bool b)
@@ -358,7 +358,7 @@ void TimeFormatter::Init()
     DisableRemainderFactor(); //so with hh::mm::ss, incrementing mm will not reset ss
 
     SetFormatValueHdl(LINK(this, TimeFormatter, FormatOutputHdl));
-    SetInputHdl(LINK(this, TimeFormatter, ParseInputHdl));
+    SetParseTextHdl(LINK(this, TimeFormatter, ParseInputHdl));
 
     SetMin(tools::Time(0, 0));
     SetMax(tools::Time(23, 59, 59, 999999999));
@@ -442,7 +442,7 @@ DateFormatter::DateFormatter(weld::Entry& rEntry)
 void DateFormatter::Init()
 {
     SetFormatValueHdl(LINK(this, DateFormatter, FormatOutputHdl));
-    SetInputHdl(LINK(this, DateFormatter, ParseInputHdl));
+    SetParseTextHdl(LINK(this, DateFormatter, ParseInputHdl));
 
     SetMin(Date(1, 1, 1900));
     SetMax(Date(31, 12, 2200));

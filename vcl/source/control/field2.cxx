@@ -2252,17 +2252,19 @@ namespace weld
         return std::optional<OUString>(FormatNumber(fValue));
     }
 
-    IMPL_LINK(DateFormatter, ParseInputHdl, double*, result, TriState)
+    IMPL_LINK(DateFormatter, ParseInputHdl, const OUString&, rText, Formatter::ParseResult)
     {
         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
 
         Date aResult(Date::EMPTY);
-        bool bRet = ::DateFormatter::TextToDate(GetEntryText(), aResult, ResolveSystemFormat(m_eFormat, rLocaleDataWrapper),
+        bool bRet = ::DateFormatter::TextToDate(rText, aResult, ResolveSystemFormat(m_eFormat, rLocaleDataWrapper),
                                                 rLocaleDataWrapper, GetCalendarWrapper());
-        if (bRet)
-            *result = aResult.GetDate();
 
-        return bRet ? TRISTATE_TRUE : TRISTATE_FALSE;
+        double fValue = 0;
+        if (bRet)
+            fValue = aResult.GetDate();
+
+        return Formatter::ParseResult(bRet ? TRISTATE_TRUE : TRISTATE_FALSE, fValue);
     }
 }
 
@@ -3148,16 +3150,17 @@ namespace weld
         return std::optional<OUString>(FormatNumber(fValue));
     }
 
-    IMPL_LINK(TimeFormatter, ParseInputHdl, double*, result, TriState)
+    IMPL_LINK(TimeFormatter, ParseInputHdl, const OUString&, rText, Formatter::ParseResult)
     {
         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
 
+        double fValue = 0.0;
         tools::Time aResult(tools::Time::EMPTY);
-        bool bRet = ::TimeFormatter::TextToTime(GetEntryText(), aResult, m_eFormat, m_bDuration, rLocaleDataWrapper);
+        bool bRet = ::TimeFormatter::TextToTime(rText, aResult, m_eFormat, m_bDuration, rLocaleDataWrapper);
         if (bRet)
-            *result = ConvertValue(aResult);
+            fValue = ConvertValue(aResult);
 
-        return bRet ? TRISTATE_TRUE : TRISTATE_FALSE;
+        return Formatter::ParseResult(bRet ? TRISTATE_TRUE : TRISTATE_FALSE, fValue);
     }
 
     IMPL_LINK(TimeFormatter, CursorChangedHdl, weld::Entry&, rEntry, void)

@@ -800,15 +800,14 @@ bool Formatter::ImplGetValue(double& dNewVal)
         return true;
 
     bool bUseExternalFormatterValue = false;
-    if (m_aInputHdl.IsSet())
+    if (m_aParseTextHdl.IsSet())
     {
-        double fResult;
-        auto eState = m_aInputHdl.Call(&fResult);
-        bUseExternalFormatterValue = eState != TRISTATE_INDET;
+        ParseResult aResult = m_aParseTextHdl.Call(sText);
+        bUseExternalFormatterValue = aResult.m_eState != TRISTATE_INDET;
         if (bUseExternalFormatterValue)
         {
-            if (eState == TRISTATE_TRUE)
-                dNewVal = fResult;
+            if (aResult.m_eState == TRISTATE_TRUE)
+                dNewVal = aResult.m_fValue;
             else
                 dNewVal = m_dCurrentValue;
         }
