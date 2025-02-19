@@ -265,6 +265,47 @@ public:
 
 namespace sw {
 
+void FindParaPropsNodeIgnoreHidden(sw::MergedPara & rMerged,
+        sw::ParagraphBreakMode const eMode, SwScriptInfo * pScriptInfo)
+{
+    if (eMode == sw::ParagraphBreakMode::Hidden)
+    {
+        ::std::optional<SwScriptInfo> oScriptInfo;
+        if (pScriptInfo == nullptr)
+        {
+            oScriptInfo.emplace();
+            pScriptInfo = &*oScriptInfo;
+        }
+        // always init: when called from SwTextFrame::SwClientNotify() it is stale!
+        pScriptInfo->InitScriptInfoHidden(*rMerged.pFirstNode, &rMerged);
+        TextFrameIndex nHiddenStart{COMPLETE_STRING};
+        TextFrameIndex nHiddenEnd{0};
+        pScriptInfo->GetBoundsOfHiddenRange(TextFrameIndex{0}, nHiddenStart, nHiddenEnd);
+        if (TextFrameIndex{0} == nHiddenStart)
+        {
+            if (nHiddenEnd == TextFrameIndex{rMerged.mergedText.getLength()})
+            {
+                rMerged.pParaPropsNode = const_cast<SwTextNode*>(rMerged.pLastNode);
+            }
+            else
+            {   // this requires MapViewToModel to never return a position at
+                // the end of a node (when all its text is hidden)
+                rMerged.pParaPropsNode = sw::MapViewToModel(rMerged, nHiddenEnd).first;
+            }
+            return;
+        }
+    }
+    if (!rMerged.extents.empty())
+    {   // para props from first node that isn't empty (OOo/LO compat)
+        rMerged.pParaPropsNode = rMerged.extents.begin()->pNode;
+    }
+    else
+    {   // if every node is empty, the last one wins (Word compat)
+        // (OOo/LO historically used first one)
+        rMerged.pParaPropsNode = const_cast<SwTextNode*>(rMerged.pLastNode);
+    }
+}
+
 std::unique_ptr<sw::MergedPara>
 CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
        FrameMode const eMode)
@@ -279,7 +320,6 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     std::vector<SwSectionNode *> sections;
     std::vector<sw::Extent> extents;
     OUStringBuffer mergedText;
-    SwTextNode * pParaPropsNode(nullptr);
     SwTextNode * pNode(&rTextNode);
     sal_Int32 nLastEnd(0);
     for (auto iter = HideIterator(rTextNode,
@@ -421,22 +461,23 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     if (extents.empty()) // there was no text anywhere
     {
         assert(mergedText.isEmpty());
-        pParaPropsNode = pNode; // if every node is empty, the last one wins
     }
     else
     {
         assert(!mergedText.isEmpty());
-        pParaPropsNode = extents.begin()->pNode; // para props from first node that isn't empty
     }
-//    pParaPropsNode = &rTextNode; // well, actually...
+    auto pRet{std::make_unique<sw::MergedPara>(rFrame, std::move(extents),
+                mergedText.makeStringAndClear(), &rTextNode, nodes.back())};
+    FindParaPropsNodeIgnoreHidden(*pRet, rFrame.getRootFrame()->GetParagraphBreakMode(), nullptr);
+    assert(pRet->pParaPropsNode);
     // keep lists up to date with visible nodes
-    if (pParaPropsNode->IsInList() && !pParaPropsNode->GetNum(rFrame.getRootFrame()))
+    if (pRet->pParaPropsNode->IsInList() && !pRet->pParaPropsNode->GetNum(rFrame.getRootFrame()))
     {
-        pParaPropsNode->AddToListRLHidden(); // try to add it...
+        pRet->pParaPropsNode->AddToListRLHidden(); // try to add it...
     }
     for (auto const pTextNode : nodes)
     {
-        if (pTextNode != pParaPropsNode)
+        if (pTextNode != pRet->pParaPropsNode)
         {
             pTextNode->RemoveFromListRLHidden();
         }
@@ -450,12 +491,12 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
         // for non-first nodes that are already merged with this frame,
         // need to remove here too, otherwise footnotes can be removed only
         // by lucky accident, e.g. TruncLines().
-        auto itExtent(extents.begin());
+        auto itExtent(pRet->extents.begin());
         for (auto const pTextNode : nodes)
         {
             sal_Int32 nLast(0);
             std::vector<std::pair<sal_Int32, sal_Int32>> hidden;
-            for ( ; itExtent != extents.end(); ++itExtent)
+            for ( ; itExtent != pRet->extents.end(); ++itExtent)
             {
                 if (itExtent->pNode != pTextNode)
                 {
@@ -491,9 +532,6 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
             pSectionNode->GetSection().GetFormat()->DelFrames(/*rFrame.getRootFrame()*/);
         }
     }
-    auto pRet(std::make_unique<sw::MergedPara>(rFrame, std::move(extents),
-                mergedText.makeStringAndClear(), pParaPropsNode, &rTextNode,
-                nodes.back()));
     for (SwTextNode * pTmp : nodes)
     {
         pRet->listener.StartListening(pTmp);
