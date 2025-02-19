@@ -48,6 +48,7 @@ namespace sw {
     };
 
     enum class FieldmarkMode { ShowCommand = 1, ShowResult = 2, ShowBoth = 3 };
+    // this has evolved into something that could be called HiddenTextMode?
     enum class ParagraphBreakMode { Shown, Hidden };
 };
 
