@@ -22,6 +22,8 @@
 #include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 
+#include "type_entries.hxx"
+
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <mutex>
@@ -61,7 +63,7 @@ static bool td_equals(
             OUString::unacquired(&pTDR1->pTypeName) == OUString::unacquired(&pTDR2->pTypeName));
 }
 
-static type_entry * getTypeEntries( class_data * cd )
+type_entry * getTypeEntries( class_data * cd )
 {
     type_entry * pEntries = cd->m_typeEntries;
     if (! cd->m_storedTypeRefs) // not inited?

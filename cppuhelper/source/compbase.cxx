@@ -11,6 +11,8 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
+#include "type_entries.hxx"
+
 namespace cppuhelper
 {
 WeakComponentImplHelperBase2::~WeakComponentImplHelperBase2() {}
@@ -76,45 +78,6 @@ static bool td_equals(typelib_TypeDescriptionReference const* pTDR1,
 {
     return ((pTDR1 == pTDR2)
             || OUString::unacquired(&pTDR1->pTypeName) == OUString::unacquired(&pTDR2->pTypeName));
-}
-
-static cppu::type_entry* getTypeEntries(cppu::class_data* cd)
-{
-    cppu::type_entry* pEntries = cd->m_typeEntries;
-    if (!cd->m_storedTypeRefs) // not inited?
-    {
-        static std::mutex aMutex;
-        std::scoped_lock guard(aMutex);
-        if (!cd->m_storedTypeRefs) // not inited?
-        {
-            // get all types
-            for (sal_Int32 n = cd->m_nTypes; n--;)
-            {
-                cppu::type_entry* pEntry = &pEntries[n];
-                css::uno::Type const& rType = (*pEntry->m_type.getCppuType)(nullptr);
-                OSL_ENSURE(rType.getTypeClass() == css::uno::TypeClass_INTERFACE,
-                           "### wrong helper init: expected interface!");
-                OSL_ENSURE(
-                    !isXInterface(rType.getTypeLibType()->pTypeName),
-                    "### want to implement XInterface: template argument is XInterface?!?!?!");
-                if (rType.getTypeClass() != css::uno::TypeClass_INTERFACE)
-                {
-                    OUString msg("type \"" + rType.getTypeName() + "\" is no interface type!");
-                    SAL_WARN("cppuhelper", msg);
-                    throw css::uno::RuntimeException(msg);
-                }
-                // ref is statically held by getCppuType()
-                pEntry->m_type.typeRef = rType.getTypeLibType();
-            }
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            cd->m_storedTypeRefs = true;
-        }
-    }
-    else
-    {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-    }
-    return pEntries;
 }
 
 static void* makeInterface(sal_IntPtr nOffset, void* that)
