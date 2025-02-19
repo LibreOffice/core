@@ -32,6 +32,7 @@
 namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
 
 namespace sw::mark { class IMark; }
+namespace sw { enum class ParagraphBreakMode; }
 class SwCharRange;
 class SwTextNode;
 class SwTextAttrEnd;
@@ -50,6 +51,7 @@ class SwPortionHandler;
 class SwScriptInfo;
 enum class ExpandMode;
 class SwTextAttr;
+class SwViewShell;
 class SwWrtShell;
 class SwNode;
 class SwFlyAtContentFrame;
@@ -106,6 +108,10 @@ class InsertText;
 std::pair<SwTextNode*, sal_Int32> MapViewToModel(MergedPara const&, TextFrameIndex nIndex);
 TextFrameIndex MapModelToView(MergedPara const&, SwTextNode const* pNode, sal_Int32 nIndex);
 
+bool IsShowHiddenChars(SwViewShell const*const pViewShell);
+void FindParaPropsNodeIgnoreHidden(MergedPara & rMerged,
+        sw::ParagraphBreakMode const eMode, SwScriptInfo * pScriptInfo);
+
 // warning: Existing must be used only once; a second use would delete the frame created by the first one...
 enum class FrameMode { New, Existing };
 std::unique_ptr<sw::MergedPara> CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode, FrameMode eMode);
@@ -125,6 +131,7 @@ void GotoPrevLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const* pLayout);
 void GotoNextLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const* pLayout);
 
 TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
+        sw::ParagraphBreakMode eMode, SwScriptInfo * pScriptInfo,
         bool isRealDelete,
         SwTextNode const& rNode, sal_Int32 nIndex, sal_Int32 nLen);
 
@@ -696,6 +703,7 @@ public:
 
     /// Returns the script info stored at the paraportion
     const SwScriptInfo* GetScriptInfo() const;
+    SwScriptInfo* GetScriptInfo();
 
     /// Swaps width and height of the text frame
     void SwapWidthAndHeight();
@@ -1005,12 +1013,11 @@ struct MergedPara
     SwTextNode const* pLastNode;
     MergedPara(SwTextFrame & rFrame, std::vector<Extent>&& rExtents,
             OUString aText,
-            SwTextNode *const pProps, SwTextNode *const pFirst,
+            SwTextNode *const pFirst,
             SwTextNode const*const pLast)
         : listener(rFrame), extents(std::move(rExtents)), mergedText(std::move(aText))
-        , pParaPropsNode(pProps), pFirstNode(pFirst), pLastNode(pLast)
+        , pParaPropsNode(nullptr), pFirstNode(pFirst), pLastNode(pLast)
     {
-        assert(pParaPropsNode);
         assert(pFirstNode);
         assert(pLastNode);
     }

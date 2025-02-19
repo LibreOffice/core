@@ -25,7 +25,10 @@
 
 #include <unotxdoc.hxx>
 #include <rootfrm.hxx>
+#include <pagefrm.hxx>
+#include <bodyfrm.hxx>
 #include <txtfrm.hxx>
+#include <ndtxt.hxx>
 #include <wrtsh.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -875,7 +878,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152872)
     // 5 is empty and hidden
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds"_ostr, "height"_ostr, "0");
 
-    dispatchCommand(mxComponent, u".uno:ControlCodes"_ustr, {});
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetShowHiddenChar(true);
+    aViewOptions.SetViewMetaChars(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
 
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
@@ -885,18 +892,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152872)
                 u"C "_ustr);
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr,
                 u"D"_ustr);
-    // 3 is an empty paragraph with RES_CHRATR_HIDDEN which results in 0-height
-    // frame; ideally it should only be hidden when control codes are hidden
-    // and be a full-height frame now, but that needs more work...
-    assertXPath(pXmlDoc, "/root/page/body/txt[3]/infos/bounds"_ostr, "height"_ostr, u"0"_ustr);
+    // 3 is an empty paragraph with RES_CHRATR_HIDDEN
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/infos/bounds"_ostr, "height"_ostr, u"398"_ustr);
     assertXPath(pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr,
                 u"E"_ustr);
-    // 5 is an empty paragraph with RES_CHRATR_HIDDEN which results in 0-height
-    // frame; ideally it should only be hidden when control codes are hidden
-    // and be a full-height frame now, but that needs more work...
-    assertXPath(pXmlDoc, "/root/page/body/txt[5]/infos/bounds"_ostr, "height"_ostr, "0");
+    // 5 is an empty paragraph with RES_CHRATR_HIDDEN
+    assertXPath(pXmlDoc, "/root/page/body/txt[5]/infos/bounds"_ostr, "height"_ostr, "398");
 
-    dispatchCommand(mxComponent, u".uno:ControlCodes"_ustr, {});
+    aViewOptions.SetViewMetaChars(false);
+    pWrtShell->ApplyViewOptions(aViewOptions);
 
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
@@ -906,6 +910,228 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152872)
                 "C DE");
     // 5 is empty and hidden
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds"_ostr, "height"_ostr, "0");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaProps)
+{
+    createSwDoc("merge_hidden_redline.docx");
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetShowHiddenChar(true);
+    aViewOptions.SetViewMetaChars(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+
+    // note: do not use layout dump here, because it doesn't work:
+    // SwTextFrame::Format doesn't actually create the SwMarginPortion for
+    // non-left-aligned frames; instead, it sets SetFormatAdj() flag and later
+    // *SwTextPainter* checks via GetAdjusted() if the flag is set and calls
+    // CalcAdjLine() which inserts the SwMarginPortion.
+
+    SwRootFrame* pRoot = pWrtShell->GetLayout();
+    CPPUNIT_ASSERT(pRoot->GetLower()->IsPageFrame());
+    SwPageFrame* pPage = static_cast<SwPageFrame*>(pRoot->GetLower());
+    CPPUNIT_ASSERT(pPage->GetLower()->IsBodyFrame());
+    SwBodyFrame* pBody = static_cast<SwBodyFrame*>(pPage->GetLower());
+    CPPUNIT_ASSERT(pBody->GetLower()->IsTextFrame());
+    SwTextFrame* pTextFrame = dynamic_cast<SwTextFrame*>(pBody->GetLower());
+
+    CPPUNIT_ASSERT_EQUAL(u"1 hidden, delete-merge"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    // TODO: redlines don't merge like in Word yet
+    CPPUNIT_ASSERT_EQUAL(u"Abcdef"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"ghi"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"2 visible, delete-merge"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"abcghi"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"def"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"3 delete-merge"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"def"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"ghi"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"4 delete-merge, delete-merge"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"def"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"5 visible, hidden-merge, visible"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Center,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"def"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Left,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"6 hidden-merge, visible"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Center,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"def"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Left,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"7 visible, hidden-merge"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"abcdef"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Center,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"ghi"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Left,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"8 visible, delete-merge, visible, hidden-merge, visible"_ustr,
+                         pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Right,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"def"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Center,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"ghi"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Left,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"9 hidden-merge"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Center,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"def"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Left,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"10 visible, hidden-merge, visible, delete-merge, visible"_ustr,
+                         pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Right,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"def"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Center,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"ghi"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Left,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+
+    aViewOptions.SetShowHiddenChar(false);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+
+    // the problem was that the wrong SwTextNode was used for properties
+    pTextFrame = dynamic_cast<SwTextFrame*>(pBody->GetLower());
+    CPPUNIT_ASSERT_EQUAL(u"1 hidden, delete-merge"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    // TODO: redlines don't merge like in Word yet
+    CPPUNIT_ASSERT_EQUAL(u"Abcdef"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"ghi"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"2 visible, delete-merge"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"abcghi"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"def"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"3 delete-merge"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"def"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"ghi"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"4 delete-merge, delete-merge"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"def"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"5 visible, hidden-merge, visible"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"abcdef"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Center,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"6 hidden-merge, visible"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"abcdef"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Left,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"7 visible, hidden-merge"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"abcdefghi"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Center,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"8 visible, delete-merge, visible, hidden-merge, visible"_ustr,
+                         pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Right,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"defghi"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Center,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"9 hidden-merge"_ustr, pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"abcdef"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Left,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"10 visible, hidden-merge, visible, delete-merge, visible"_ustr,
+                         pTextFrame->GetText());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"abcdef"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Right,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(u"ghi"_ustr, pTextFrame->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::Left,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf151954)

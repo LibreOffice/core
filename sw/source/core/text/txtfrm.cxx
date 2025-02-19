@@ -1018,6 +1018,7 @@ namespace sw {
 // 1. if real insert => correct nStart/nEnd for full nLen
 // 2. if rl un-delete => do not correct nStart/nEnd but just include un-deleted
 static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
+        sw::ParagraphBreakMode const eMode, SwScriptInfo *const pScriptInfo,
         bool const isRealInsert,
         SwTextNode const& rNode, sal_Int32 const nIndex, sal_Int32 const nLen)
 {
@@ -1129,13 +1130,6 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
         rMerged.extents.emplace(itInsert, const_cast<SwTextNode*>(&rNode), nIndex, nIndex + nLen);
         text.insert(nTFIndex, rNode.GetText().subView(nIndex, nLen));
         nInserted = nLen;
-        if (rMerged.extents.size() == 1 // also if it was empty!
-            || rMerged.pParaPropsNode->GetIndex() < rNode.GetIndex())
-        {   // text inserted after current para-props node
-            rMerged.pParaPropsNode->RemoveFromListRLHidden();
-            rMerged.pParaPropsNode = &const_cast<SwTextNode&>(rNode);
-            rMerged.pParaPropsNode->AddToListRLHidden();
-        }
         // called from SwRangeRedline::InvalidateRange()
         if (rNode.GetRedlineMergeFlag() == SwNode::Merge::Hidden)
         {
@@ -1143,12 +1137,24 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
         }
     }
     rMerged.mergedText = text.makeStringAndClear();
+    if ((!bInserted && rMerged.extents.size() == 1) // also if it was empty!
+        || rNode.GetIndex() <= rMerged.pParaPropsNode->GetIndex())
+    {   // text inserted before current para-props node
+        SwTextNode *const pOldParaPropsNode{rMerged.pParaPropsNode};
+        FindParaPropsNodeIgnoreHidden(rMerged, eMode, pScriptInfo);
+        if (rMerged.pParaPropsNode != pOldParaPropsNode)
+        {
+            pOldParaPropsNode->RemoveFromListRLHidden();
+            rMerged.pParaPropsNode->AddToListRLHidden();
+        }
+    }
     return TextFrameIndex(nInserted);
 }
 
 // 1. if real delete => correct nStart/nEnd for full nLen
 // 2. if rl delete => do not correct nStart/nEnd but just exclude deleted
 TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
+        sw::ParagraphBreakMode const eMode, SwScriptInfo *const pScriptInfo,
         bool const isRealDelete,
         SwTextNode const& rNode, sal_Int32 nIndex, sal_Int32 const nLen)
 {
@@ -1159,7 +1165,7 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
     sal_Int32 nToDelete(nLen);
     sal_Int32 nDeleted(0);
     size_t nFoundNode(0);
-    size_t nErased(0);
+//    size_t nErased(0);
     auto it = rMerged.extents.begin();
     for (; it != rMerged.extents.end(); )
     {
@@ -1195,7 +1201,7 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
                     bErase = nDeleteHere == it->nEnd - it->nStart;
                     if (bErase)
                     {
-                        ++nErased;
+//                        ++nErased;
                         assert(it->nStart == nIndex);
                         it = rMerged.extents.erase(it);
                     }
@@ -1261,21 +1267,23 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
 // can't do: might be last one in node was erased   assert(nLen == 0 || rMerged.empty() || (it-1)->nEnd <= nIndex);
     // note: if first node gets deleted then that must call DelFrames as
     // pFirstNode is never updated
-    if (nErased && nErased == nFoundNode)
+    rMerged.mergedText = text.makeStringAndClear();
+// could be all-hidden now so always check!    if (nErased && nErased == nFoundNode)
     {   // all visible text from node was erased
 #if 1
         if (rMerged.pParaPropsNode == &rNode)
         {
-            rMerged.pParaPropsNode->RemoveFromListRLHidden();
-            rMerged.pParaPropsNode = rMerged.extents.empty()
-                ? const_cast<SwTextNode*>(rMerged.pLastNode)
-                : rMerged.extents.front().pNode;
-            rMerged.pParaPropsNode->AddToListRLHidden();
+            SwTextNode *const pOldParaPropsNode{rMerged.pParaPropsNode};
+            FindParaPropsNodeIgnoreHidden(rMerged, eMode, pScriptInfo);
+            if (rMerged.pParaPropsNode != pOldParaPropsNode)
+            {
+                pOldParaPropsNode->RemoveFromListRLHidden();
+                rMerged.pParaPropsNode->AddToListRLHidden();
+            }
         }
 #endif
 // NOPE must listen on all non-hidden nodes; particularly on pLastNode        rMerged.listener.EndListening(&const_cast<SwTextNode&>(rNode));
     }
-    rMerged.mergedText = text.makeStringAndClear();
     return TextFrameIndex(nDeleted);
 }
 
@@ -1521,7 +1529,7 @@ bool SwTextFrame::IsHiddenNowImpl() const
         else // ParaPortion is created in Format, but this is called earlier
         {
             SwScriptInfo aInfo;
-            aInfo.InitScriptInfo(*m_pMergedPara->pFirstNode, m_pMergedPara.get(), IsRightToLeft());
+            aInfo.InitScriptInfoHidden(*m_pMergedPara->pFirstNode, m_pMergedPara.get());
             aInfo.GetBoundsOfHiddenRange(TextFrameIndex(0),
                         nHiddenStart, nHiddenEnd);
         }
@@ -2135,8 +2143,9 @@ void UpdateMergedParaForMove(sw::MergedPara & rMerged,
     for (auto const& it : deleted)
     {
         sal_Int32 const nStart(it.first - nSourceStart + nDestStart);
-        TextFrameIndex const nDeleted = UpdateMergedParaForDelete(rMerged, false,
-            rDestNode, nStart, it.second - it.first);
+        TextFrameIndex const nDeleted = UpdateMergedParaForDelete(rMerged,
+            rTextFrame.getRootFrame()->GetParagraphBreakMode(), rTextFrame.GetScriptInfo(),
+            false, rDestNode, nStart, it.second - it.first);
 //FIXME asserts valid for join - but if called from split, the new node isn't there yet and it will be added later...       assert(nDeleted);
 //            assert(nDeleted == it.second - it.first);
         if(nDeleted)
@@ -2314,7 +2323,9 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             sal_Int32 const nNLen = pRedlineDelText->nLen;
             nPos = MapModelToView(&rNode, nNPos);
             // update merged before doing anything else
-            nLen = UpdateMergedParaForDelete(*m_pMergedPara, false, rNode, nNPos, nNLen);
+            nLen = UpdateMergedParaForDelete(*m_pMergedPara,
+                    getRootFrame()->GetParagraphBreakMode(), GetScriptInfo(),
+                    false, rNode, nNPos, nNLen);
             const sal_Int32 m = -nNLen;
             if (nLen && IsIdxInside(nPos, nLen))
             {
@@ -2336,7 +2347,9 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             sal_Int32 const nNPos = pRedlineUnDelText->nStart;
             sal_Int32 const nNLen = pRedlineUnDelText->nLen;
             nPos = MapModelToView(&rNode, nNPos);
-            nLen = UpdateMergedParaForInsert(*m_pMergedPara, false, rNode, nNPos, nNLen);
+            nLen = UpdateMergedParaForInsert(*m_pMergedPara,
+                    getRootFrame()->GetParagraphBreakMode(), GetScriptInfo(),
+                    false, rNode, nNPos, nNLen);
             if (IsIdxInside(nPos, nLen))
             {
                 if (!nLen)
@@ -2398,7 +2411,9 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             nLen = TextFrameIndex(pInsertText->nLen);
             if (m_pMergedPara)
             {
-                UpdateMergedParaForInsert(*m_pMergedPara, true, rNode, pInsertText->nPos, pInsertText->nLen);
+                UpdateMergedParaForInsert(*m_pMergedPara,
+                    getRootFrame()->GetParagraphBreakMode(), GetScriptInfo(),
+                    true, rNode, pInsertText->nPos, pInsertText->nLen);
             }
             if( IsIdxInside( nPos, nLen ) )
             {
@@ -2424,7 +2439,9 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
         nPos = MapModelToView(&rNode, pDeleteText->nStart);
         if (m_pMergedPara)
         {   // update merged before doing anything else
-            nLen = UpdateMergedParaForDelete(*m_pMergedPara, true, rNode, pDeleteText->nStart, pDeleteText->nLen);
+            nLen = UpdateMergedParaForDelete(*m_pMergedPara,
+                getRootFrame()->GetParagraphBreakMode(), GetScriptInfo(),
+                true, rNode, pDeleteText->nStart, pDeleteText->nLen);
         }
         else
         {
@@ -2451,7 +2468,9 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
         nPos = MapModelToView(&rNode, pDeleteChar->m_nPos);
         if (m_pMergedPara)
         {
-            nLen = UpdateMergedParaForDelete(*m_pMergedPara, true, rNode, pDeleteChar->m_nPos, 1);
+            nLen = UpdateMergedParaForDelete(*m_pMergedPara,
+                getRootFrame()->GetParagraphBreakMode(), GetScriptInfo(),
+                true, rNode, pDeleteChar->m_nPos, 1);
         }
         else
         {
@@ -4145,6 +4164,12 @@ void SwTextFrame::VisitPortions( SwPortionHandler& rPH ) const
 const SwScriptInfo* SwTextFrame::GetScriptInfo() const
 {
     const SwParaPortion* pPara = GetPara();
+    return pPara ? &pPara->GetScriptInfo() : nullptr;
+}
+
+SwScriptInfo* SwTextFrame::GetScriptInfo()
+{
+    SwParaPortion* pPara = GetPara();
     return pPara ? &pPara->GetScriptInfo() : nullptr;
 }
 

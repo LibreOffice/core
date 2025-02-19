@@ -3296,6 +3296,16 @@ void SwTextFormatter::MergeCharacterBorder( SwLinePortion& rPortion, SwLinePorti
     Seek(rInf.GetIdx());
 }
 
+namespace sw {
+    bool IsShowHiddenChars(SwViewShell const*const pViewShell)
+    {
+        SwViewOption const*const pOpt{pViewShell ? pViewShell->GetViewOptions() : nullptr};
+        const bool bShowInDocView{pViewShell && pViewShell->GetWin() && pOpt->IsShowHiddenChar()};
+        const bool bShowForPrinting{pViewShell && pOpt->IsShowHiddenChar(true) && pOpt->IsPrinting()};
+        return (bShowInDocView || bShowForPrinting);
+    }
+}
+
 namespace {
     // calculates and sets optimal repaint offset for the current line
     tools::Long lcl_CalcOptRepaint( SwTextFormatter &rThis,
