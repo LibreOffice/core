@@ -404,8 +404,8 @@ LCMS2_TARBALL := lcms2-2.17.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBASSUAN_SHA256SUM := c8f0f42e6103dea4b1a6a483cb556654e97302c7465308f58363778f95f194b1
-LIBASSUAN_TARBALL := libassuan-3.0.1.tar.bz2
+LIBASSUAN_SHA256SUM := d2931cdad266e633510f9970e1a2f346055e351bb19f9b78912475b8074c36f6
+LIBASSUAN_TARBALL := libassuan-3.0.2.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
