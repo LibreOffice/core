@@ -112,12 +112,9 @@ void MergeNotebookBarAddons(vcl::Window* pParent, const VclBuilder::customMakeWi
     std::vector<Image> aImageVec = aNotebookBarAddonsItem.aImageValues;
     tools::ULong nIter = 0;
     sal_uInt16 nPriorityIdx = aImageVec.size();
-    css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> aExtension;
-    for (std::size_t nIdx = 0; nIdx < aNotebookBarAddonsItem.aAddonValues.size(); nIdx++)
+    for (const auto& aExtension : aNotebookBarAddonsItem.aAddonValues)
     {
-        aExtension = aNotebookBarAddonsItem.aAddonValues[nIdx];
-
-        for (const css::uno::Sequence<css::beans::PropertyValue>& pExtension : aExtension)
+        for (const auto& pExtension : aExtension)
         {
             VclPtr<vcl::Window> pOptionalParent;
             pOptionalParent = VclPtr<OptionalBox>::Create(pParent);
@@ -146,11 +143,8 @@ void MergeNotebookBarMenuAddons(Menu* pPopupMenu, sal_Int16 nItemId, const OUStr
 {
     std::vector<Image> aImageVec = aNotebookBarAddonsItem.aImageValues;
     tools::ULong nIter = 0;
-    css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> aExtension;
-    for (std::size_t nIdx = 0; nIdx < aNotebookBarAddonsItem.aAddonValues.size(); nIdx++)
+    for (const auto& aExtension : aNotebookBarAddonsItem.aAddonValues)
     {
-        aExtension = aNotebookBarAddonsItem.aAddonValues[nIdx];
-
         for (int nSecIdx = 0; nSecIdx < aExtension.getLength(); nSecIdx++)
         {
             AddonNotebookBarItem aAddonNotebookBarItem;
