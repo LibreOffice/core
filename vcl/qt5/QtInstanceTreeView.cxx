@@ -622,20 +622,29 @@ void QtInstanceTreeView::bulk_insert_for_each(
     assert(false && "Not implemented yet");
 }
 
-bool QtInstanceTreeView::get_row_expanded(const weld::TreeIter&) const
+bool QtInstanceTreeView::get_row_expanded(const weld::TreeIter& rIter) const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    SolarMutexGuard g;
+
+    bool bExpanded = false;
+    GetQtInstance().RunInMainThread(
+        [&] { bExpanded = m_pTreeView->isExpanded(modelIndex(rIter)); });
+
+    return bExpanded;
 }
 
-void QtInstanceTreeView::expand_row(const weld::TreeIter&)
+void QtInstanceTreeView::expand_row(const weld::TreeIter& rIter)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { m_pTreeView->expand(modelIndex(rIter)); });
 }
 
-void QtInstanceTreeView::collapse_row(const weld::TreeIter&)
+void QtInstanceTreeView::collapse_row(const weld::TreeIter& rIter)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { m_pTreeView->collapse(modelIndex(rIter)); });
 }
 
 void QtInstanceTreeView::set_children_on_demand(const weld::TreeIter&, bool)
