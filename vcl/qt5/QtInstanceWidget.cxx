@@ -36,8 +36,7 @@ void QtInstanceWidget::set_sensitive(bool bSensitive)
         return;
     }
 
-    assert(m_pWidget);
-    m_pWidget->setEnabled(bSensitive);
+    getQWidget()->setEnabled(bSensitive);
 }
 
 bool QtInstanceWidget::get_sensitive() const
@@ -51,8 +50,7 @@ bool QtInstanceWidget::get_sensitive() const
         return bSensitive;
     }
 
-    assert(m_pWidget);
-    return m_pWidget->isEnabled();
+    return getQWidget()->isEnabled();
 }
 
 bool QtInstanceWidget::get_visible() const
@@ -66,8 +64,7 @@ bool QtInstanceWidget::get_visible() const
         return bVisible;
     }
 
-    assert(m_pWidget);
-    return m_pWidget->isVisible();
+    return getQWidget()->isVisible();
 }
 
 bool QtInstanceWidget::is_visible() const
@@ -81,11 +78,9 @@ bool QtInstanceWidget::is_visible() const
         return bVisible;
     }
 
-    assert(m_pWidget);
-
-    QWidget* pTopLevel = m_pWidget->topLevelWidget();
+    QWidget* pTopLevel = getQWidget()->topLevelWidget();
     assert(pTopLevel);
-    return m_pWidget->isVisibleTo(pTopLevel) && pTopLevel->isVisible();
+    return getQWidget()->isVisibleTo(pTopLevel) && pTopLevel->isVisible();
 }
 
 void QtInstanceWidget::set_can_focus(bool bCanFocus)
@@ -98,11 +93,10 @@ void QtInstanceWidget::set_can_focus(bool bCanFocus)
         return;
     }
 
-    assert(m_pWidget);
     if (bCanFocus)
-        m_pWidget->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+        getQWidget()->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     else
-        m_pWidget->setFocusPolicy(Qt::FocusPolicy::NoFocus);
+        getQWidget()->setFocusPolicy(Qt::FocusPolicy::NoFocus);
 }
 
 void QtInstanceWidget::grab_focus()
@@ -115,8 +109,7 @@ void QtInstanceWidget::grab_focus()
         return;
     }
 
-    assert(m_pWidget);
-    m_pWidget->setFocus();
+    getQWidget()->setFocus();
 }
 
 bool QtInstanceWidget::has_focus() const
@@ -130,8 +123,7 @@ bool QtInstanceWidget::has_focus() const
         return bFocus;
     }
 
-    assert(m_pWidget);
-    return m_pWidget->hasFocus();
+    return getQWidget()->hasFocus();
 }
 
 bool QtInstanceWidget::is_active() const { return has_focus(); }
@@ -154,7 +146,7 @@ bool QtInstanceWidget::has_child_focus() const
     QWidget* pParent = pFocusWidget->parentWidget();
     while (pParent)
     {
-        if (pParent == m_pWidget)
+        if (pParent == getQWidget())
             return true;
         pParent = pParent->parentWidget();
     }
@@ -171,8 +163,7 @@ void QtInstanceWidget::show()
         return;
     }
 
-    assert(m_pWidget);
-    m_pWidget->show();
+    getQWidget()->show();
 }
 
 void QtInstanceWidget::hide()
@@ -185,15 +176,14 @@ void QtInstanceWidget::hide()
         return;
     }
 
-    assert(m_pWidget);
-    m_pWidget->hide();
+    getQWidget()->hide();
 }
 
 void QtInstanceWidget::set_size_request(int nWidth, int nHeight)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread(
-        [&] { m_pWidget->setMinimumSize(std::max(0, nWidth), std::max(0, nHeight)); });
+        [&] { getQWidget()->setMinimumSize(std::max(0, nWidth), std::max(0, nHeight)); });
 }
 
 Size QtInstanceWidget::get_size_request() const
@@ -201,7 +191,7 @@ Size QtInstanceWidget::get_size_request() const
     SolarMutexGuard g;
 
     Size aSize;
-    GetQtInstance().RunInMainThread([&] { aSize = toSize(m_pWidget->minimumSize()); });
+    GetQtInstance().RunInMainThread([&] { aSize = toSize(getQWidget()->minimumSize()); });
     return aSize;
 }
 
@@ -210,7 +200,7 @@ Size QtInstanceWidget::get_preferred_size() const
     SolarMutexGuard g;
 
     Size aPreferredSize;
-    GetQtInstance().RunInMainThread([&] { aPreferredSize = toSize(m_pWidget->sizeHint()); });
+    GetQtInstance().RunInMainThread([&] { aPreferredSize = toSize(getQWidget()->sizeHint()); });
 
     return aPreferredSize;
 }
@@ -221,7 +211,7 @@ float QtInstanceWidget::get_approximate_digit_width() const
 
     float fWidth = 0;
     GetQtInstance().RunInMainThread(
-        [&] { fWidth = m_pWidget->fontMetrics().horizontalAdvance("0123456789") / 10.0; });
+        [&] { fWidth = getQWidget()->fontMetrics().horizontalAdvance("0123456789") / 10.0; });
     return fWidth;
 }
 
@@ -230,7 +220,7 @@ int QtInstanceWidget::get_text_height() const
     SolarMutexGuard g;
 
     int nHeight = 0;
-    GetQtInstance().RunInMainThread([&] { nHeight = m_pWidget->fontMetrics().height(); });
+    GetQtInstance().RunInMainThread([&] { nHeight = getQWidget()->fontMetrics().height(); });
     return nHeight;
 }
 
@@ -240,7 +230,7 @@ Size QtInstanceWidget::get_pixel_size(const OUString& rText) const
 
     Size aSize;
     GetQtInstance().RunInMainThread(
-        [&] { aSize = toSize(m_pWidget->fontMetrics().boundingRect(toQString(rText)).size()); });
+        [&] { aSize = toSize(getQWidget()->fontMetrics().boundingRect(toQString(rText)).size()); });
 
     return aSize;
 }
@@ -262,7 +252,7 @@ void QtInstanceWidget::setHelpId(QWidget& rWidget, const OUString& rHelpId)
         [&] { rWidget.setProperty(PROPERTY_HELP_ID, toQString(rHelpId)); });
 }
 
-void QtInstanceWidget::set_help_id(const OUString& rHelpId) { setHelpId(*m_pWidget, rHelpId); }
+void QtInstanceWidget::set_help_id(const OUString& rHelpId) { setHelpId(*getQWidget(), rHelpId); }
 
 OUString QtInstanceWidget::get_help_id() const
 {
@@ -275,7 +265,7 @@ OUString QtInstanceWidget::get_help_id() const
         return sHelpId;
     }
 
-    const QVariant aHelpIdVariant = m_pWidget->property(PROPERTY_HELP_ID);
+    const QVariant aHelpIdVariant = getQWidget()->property(PROPERTY_HELP_ID);
     if (!aHelpIdVariant.isValid())
         return OUString();
 
@@ -341,8 +331,7 @@ void QtInstanceWidget::set_accessible_name(const OUString& rName)
         return;
     }
 
-    assert(m_pWidget);
-    m_pWidget->setAccessibleName(toQString(rName));
+    getQWidget()->setAccessibleName(toQString(rName));
 }
 
 void QtInstanceWidget::set_accessible_description(const OUString& rDescription)
@@ -355,8 +344,7 @@ void QtInstanceWidget::set_accessible_description(const OUString& rDescription)
         return;
     }
 
-    assert(m_pWidget);
-    m_pWidget->setAccessibleDescription(toQString(rDescription));
+    getQWidget()->setAccessibleDescription(toQString(rDescription));
 }
 
 OUString QtInstanceWidget::get_accessible_name() const
@@ -370,8 +358,7 @@ OUString QtInstanceWidget::get_accessible_name() const
         return sName;
     }
 
-    assert(m_pWidget);
-    return toOUString(m_pWidget->accessibleName());
+    return toOUString(getQWidget()->accessibleName());
 }
 
 OUString QtInstanceWidget::get_accessible_description() const
@@ -385,8 +372,7 @@ OUString QtInstanceWidget::get_accessible_description() const
         return sDescription;
     }
 
-    assert(m_pWidget);
-    return toOUString(m_pWidget->accessibleDescription());
+    return toOUString(getQWidget()->accessibleDescription());
 }
 
 OUString QtInstanceWidget::get_accessible_id() const
@@ -400,9 +386,8 @@ OUString QtInstanceWidget::get_accessible_id() const
         return sId;
     }
 
-    assert(m_pWidget);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
-    return toOUString(m_pWidget->accessibleIdentifier());
+    return toOUString(getQWidget()->accessibleIdentifier());
 #else
     return OUString();
 #endif
@@ -423,8 +408,7 @@ void QtInstanceWidget::set_tooltip_text(const OUString& rTip)
         return;
     }
 
-    assert(m_pWidget);
-    m_pWidget->setToolTip(toQString(rTip));
+    getQWidget()->setToolTip(toQString(rTip));
 }
 
 OUString QtInstanceWidget::get_tooltip_text() const
@@ -438,8 +422,7 @@ OUString QtInstanceWidget::get_tooltip_text() const
         return sToolTipText;
     }
 
-    assert(m_pWidget);
-    return toOUString(m_pWidget->toolTip());
+    return toOUString(getQWidget()->toolTip());
 }
 
 void QtInstanceWidget::set_cursor_data(void*) { assert(false && "Not implemented yet"); }
@@ -461,14 +444,14 @@ bool QtInstanceWidget::get_extents_relative_to(const Widget& rRelative, int& rX,
 
     bool bRet = false;
     GetQtInstance().RunInMainThread([&] {
-        QRect aGeometry = m_pWidget->geometry();
+        QRect aGeometry = getQWidget()->geometry();
         rWidth = aGeometry.width();
         rHeight = aGeometry.height();
         const QtInstanceWidget* pRelativeWidget = dynamic_cast<const QtInstanceWidget*>(&rRelative);
         if (!pRelativeWidget)
             return;
 
-        QPoint aRelativePos = m_pWidget->mapTo(pRelativeWidget->getQWidget(), QPoint(0, 0));
+        QPoint aRelativePos = getQWidget()->mapTo(pRelativeWidget->getQWidget(), QPoint(0, 0));
         rX = aRelativePos.x();
         rY = aRelativePos.y();
         bRet = true;
@@ -483,7 +466,7 @@ bool QtInstanceWidget::get_direction() const
 
     bool bRTL = false;
     GetQtInstance().RunInMainThread(
-        [&] { bRTL = m_pWidget->layoutDirection() == Qt::LayoutDirection::RightToLeft; });
+        [&] { bRTL = getQWidget()->layoutDirection() == Qt::LayoutDirection::RightToLeft; });
     return bRTL;
 }
 
@@ -492,8 +475,8 @@ void QtInstanceWidget::set_direction(bool bRTL)
     SolarMutexGuard g;
 
     GetQtInstance().RunInMainThread([&] {
-        m_pWidget->setLayoutDirection(bRTL ? Qt::LayoutDirection::RightToLeft
-                                           : Qt::LayoutDirection::LeftToRight);
+        getQWidget()->setLayoutDirection(bRTL ? Qt::LayoutDirection::RightToLeft
+                                              : Qt::LayoutDirection::LeftToRight);
     });
 }
 
@@ -513,15 +496,15 @@ void QtInstanceWidget::set_busy_cursor(bool bBusy)
         assert(m_nBusyCount >= 0);
 
         if (m_nBusyCount == 1)
-            m_pWidget->setCursor(Qt::BusyCursor);
+            getQWidget()->setCursor(Qt::BusyCursor);
         else if (m_nBusyCount == 0)
-            m_pWidget->unsetCursor();
+            getQWidget()->unsetCursor();
     });
 }
 
 std::unique_ptr<weld::Container> QtInstanceWidget::weld_parent() const
 {
-    QWidget* pParentWidget = m_pWidget->parentWidget();
+    QWidget* pParentWidget = getQWidget()->parentWidget();
     if (!pParentWidget)
         return nullptr;
 
@@ -532,7 +515,7 @@ void QtInstanceWidget::queue_resize()
 {
     SolarMutexGuard g;
 
-    GetQtInstance().RunInMainThread([&] { m_pWidget->adjustSize(); });
+    GetQtInstance().RunInMainThread([&] { getQWidget()->adjustSize(); });
 }
 
 void QtInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OUString&)>&)
@@ -622,9 +605,9 @@ void QtInstanceWidget::applicationFocusChanged(QWidget* pOldFocus, QWidget* pNew
 {
     SolarMutexGuard g;
 
-    if (pOldFocus == m_pWidget)
+    if (pOldFocus == getQWidget())
         signal_focus_out();
-    else if (pNewFocus == m_pWidget)
+    else if (pNewFocus == getQWidget())
         signal_focus_in();
 }
 
