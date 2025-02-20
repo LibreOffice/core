@@ -179,12 +179,42 @@ void QtInstanceTreeView::set_text(int nRow, const OUString& rText, int nCol)
     });
 }
 
-void QtInstanceTreeView::set_sensitive(int, bool, int) { assert(false && "Not implemented yet"); }
-
-bool QtInstanceTreeView::get_sensitive(int, int) const
+void QtInstanceTreeView::set_sensitive(int nRow, bool bSensitive, int nCol)
 {
-    assert(false && "Not implemented yet");
-    return false;
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        // column index -1 means "all columns"
+        if (nCol == -1)
+        {
+            for (int i = 0; i < m_pModel->columnCount(); ++i)
+                set_sensitive(nRow, bSensitive, i);
+            return;
+        }
+
+        QStandardItem* pItem = m_pModel->item(nRow, nCol);
+        if (pItem)
+        {
+            if (bSensitive)
+                pItem->setFlags(pItem->flags() | Qt::ItemIsEnabled);
+            else
+                pItem->setFlags(pItem->flags() & ~Qt::ItemIsEnabled);
+        }
+    });
+}
+
+bool QtInstanceTreeView::get_sensitive(int nRow, int nCol) const
+{
+    SolarMutexGuard g;
+
+    bool bSensitive = false;
+    GetQtInstance().RunInMainThread([&] {
+        QStandardItem* pItem = m_pModel->item(nRow, nCol);
+        if (pItem)
+            bSensitive = pItem->flags() & Qt::ItemIsEnabled;
+    });
+
+    return bSensitive;
 }
 
 void QtInstanceTreeView::set_id(int nRow, const OUString& rId)
@@ -500,15 +530,14 @@ void QtInstanceTreeView::set_text(const weld::TreeIter& rIter, const OUString& r
     set_text(rowIndex(rIter), rStr, nCol);
 }
 
-void QtInstanceTreeView::set_sensitive(const weld::TreeIter&, bool, int)
+void QtInstanceTreeView::set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int nCol)
 {
-    assert(false && "Not implemented yet");
+    set_sensitive(rowIndex(rIter), bSensitive, nCol);
 }
 
-bool QtInstanceTreeView::get_sensitive(const weld::TreeIter&, int) const
+bool QtInstanceTreeView::get_sensitive(const weld::TreeIter& rIter, int nCol) const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    return get_sensitive(rowIndex(rIter), nCol);
 }
 
 void QtInstanceTreeView::set_text_emphasis(const weld::TreeIter&, bool, int)

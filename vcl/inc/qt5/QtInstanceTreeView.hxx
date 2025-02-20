@@ -45,8 +45,8 @@ public:
     virtual void remove(int nPos) override;
     virtual OUString get_text(int nRow, int nCol = -1) const override;
     virtual void set_text(int nRow, const OUString& rText, int nCol = -1) override;
-    virtual void set_sensitive(int row, bool bSensitive, int col = -1) override;
-    virtual bool get_sensitive(int row, int col) const override;
+    virtual void set_sensitive(int nRow, bool bSensitive, int nCol = -1) override;
+    virtual bool get_sensitive(int nRow, int nCol) const override;
     virtual void set_id(int row, const OUString& rId) override;
     virtual void set_toggle(int row, TriState eState, int col = -1) override;
     virtual TriState get_toggle(int row, int col = -1) const override;
@@ -94,8 +94,9 @@ public:
     virtual void set_extra_row_indent(const weld::TreeIter& rIter, int nIndentLevel) override;
     virtual void set_text(const weld::TreeIter& rIter, const OUString& rStr,
                           int nCol = -1) override;
-    virtual void set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col = -1) override;
-    virtual bool get_sensitive(const weld::TreeIter& rIter, int col) const override;
+    virtual void set_sensitive(const weld::TreeIter& rIter, bool bSensitive,
+                               int nCol = -1) override;
+    virtual bool get_sensitive(const weld::TreeIter& rIter, int nCol) const override;
     virtual void set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int col) override;
     virtual bool get_text_emphasis(const weld::TreeIter& rIter, int col) const override;
     virtual void set_text_align(const weld::TreeIter& rIter, double fAlign, int col) override;
