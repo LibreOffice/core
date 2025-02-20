@@ -43,13 +43,9 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const O
     // assert only these are used at the moment and implement remaining cases
     // when needed to support more dialogs, then adjust/remove asserts below
     assert(!pParent && "Not implemented yet");
-    assert(!pIconName && "Not implemented yet");
-    assert(!pImageSurface && "Not implemented yet");
     assert(!bChildrenOnDemand && "Not implemented yet");
     // avoid -Werror=unused-parameter for release build
     (void)pParent;
-    (void)pIconName;
-    (void)pImageSurface;
     (void)bChildrenOnDemand;
 
     SolarMutexGuard g;
@@ -59,6 +55,11 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const O
             pItem->setText(toQString(*pStr));
         if (pId)
             pItem->setData(toQString(*pId), ROLE_ID);
+
+        if (pIconName && !pIconName->isEmpty())
+            pItem->setIcon(loadQPixmapIcon(*pIconName));
+        else if (pImageSurface)
+            pItem->setIcon(toQPixmap(*pImageSurface));
 
         if (nPos == -1)
             nPos = m_pModel->rowCount();
