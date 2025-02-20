@@ -13,6 +13,7 @@
 QtInstanceFormattedSpinButton::QtInstanceFormattedSpinButton(QtDoubleSpinBox* pSpinBox)
     : QtInstanceEntry(pSpinBox->lineEdit())
     , m_pSpinBox(pSpinBox)
+    , m_pFormatter(nullptr)
 {
     assert(pSpinBox);
 
