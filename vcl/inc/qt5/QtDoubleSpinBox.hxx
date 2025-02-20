@@ -35,6 +35,7 @@ public:
 
     virtual QString textFromValue(double fValue) const override;
     virtual double valueFromText(const QString& rText) const override;
+    virtual QValidator::State validate(QString& rInput, int& rPos) const override;
 
     void setFormatValueFunction(std::function<std::optional<OUString>(double)> aFunction)
     {
