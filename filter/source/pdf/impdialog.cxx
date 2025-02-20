@@ -939,6 +939,24 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAddStreamHdl, weld::Toggleable&, voi
 void ImpPDFTabGeneralPage::thePDFVersionChanged()
 {
     const bool bIsPDFA = IsPdfaSelected();
+
+    if (IsPDFAVersionSelected(1))
+    {
+        if (mxCbPDFUA->get_sensitive())
+        {
+            if (mpParent)
+                mpParent->mbPDFUACompliance = mxCbPDFUA->get_active();
+
+            mxCbPDFUA->set_active(false);
+            mxCbPDFUA->set_sensitive(false);
+        }
+    }
+    else if (mpParent && !mxCbPDFUA->get_sensitive())
+    {
+        mxCbPDFUA->set_active(mpParent->mbPDFUACompliance);
+        mxCbPDFUA->set_sensitive(!mpParent->maConfigItem.IsReadOnly(u"PDFUACompliance"_ustr));
+    }
+
     const bool bIsPDFUA = mxCbPDFUA->get_active();
 
     // set the security page status (and its controls as well)

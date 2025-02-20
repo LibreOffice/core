@@ -1330,7 +1330,8 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
             break;
     }
 
-    if (m_aContext.UniversalAccessibilityCompliance)
+    // PDF/UA can only be enabled if PDF version is 1.7 (PDF/UA-1) and 2.0 (PDF/UA-2)
+    if (m_aContext.UniversalAccessibilityCompliance && m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_7)
     {
         m_bIsPDF_UA = true;
         m_aContext.Tagged = true;
