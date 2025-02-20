@@ -1337,6 +1337,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.attribute("shadow", aFont.IsShadow() ? "true" : "false");
                 rWriter.attribute("wordunderline", aFont.IsWordLineMode() ? "true" : "false");
                 rWriter.attribute("outline", aFont.IsOutline() ? "true" : "false");
+                rWriter.attribute("strikeout", aFont.GetStrikeout());
 
                 rWriter.endElement();
             }

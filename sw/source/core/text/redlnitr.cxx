@@ -800,7 +800,7 @@ short SwRedlineItr::Seek(SwFont& rFnt,
             {
                 --nRet;
                 Clear_( &rFnt );    // We go behind the current range
-                ++m_nAct;             // and check the next one
+//                ++m_nAct; // don't increment, could be in next range too if overlap
             }
             else if (nNew < m_nStart)
             {
@@ -820,16 +820,35 @@ short SwRedlineItr::Seek(SwFont& rFnt,
         m_nStart = COMPLETE_STRING;
         m_nEnd = COMPLETE_STRING;
         const SwRedlineTable& rTable = m_rDoc.getIDocumentRedlineAccess().GetRedlineTable();
+        ::std::optional<decltype(m_nAct)> oFirstMatch;
 
         for ( ; m_nAct < rTable.size() ; ++m_nAct)
         {
-            rTable[ m_nAct ]->CalcStartEnd(nNode, m_nStart, m_nEnd);
+            decltype(m_nStart) nStart;
+            decltype(m_nEnd) nEnd;
+            if (rTable[m_nAct]->CalcStartEnd(nNode, nStart, nEnd))
+            { // previous redline intersected nNode but this one precedes it
+                continue;
+            }
 
-            if (nNew < m_nEnd)
+            // redline table is sorted, but here it's not the complete redlines
+            assert(m_nStart == COMPLETE_STRING || m_nStart <= nStart);
+            assert(m_nStart == COMPLETE_STRING || m_nStart <= nEnd);
+            if (oFirstMatch && nNew < nStart)
             {
-                if (nNew >= m_nStart) // only possible candidate
+                m_nEnd = std::min(m_nEnd, nStart);
+                break;
+            }
+            if (nNew < nEnd)
+            {
+                m_nStart = nStart;
+                m_nEnd = std::min(m_nEnd, nEnd);
+                if (nStart <= nNew) // there can be a format and another redline...
                 {
-                    m_bOn = true;
+                    if (!oFirstMatch)
+                    {
+                        oFirstMatch.emplace(m_nAct);
+                    }
                     const SwRangeRedline *pRed = rTable[ m_nAct ];
 
                     if (m_pSet)
@@ -874,13 +893,19 @@ short SwRedlineItr::Seek(SwFont& rFnt,
                         }
                         nWhich = aIter.NextWhich();
                     }
-
-                    ++nRet;
                 }
-                break;
+                else
+                {
+                    break;
+                }
             }
-            m_nStart = COMPLETE_STRING;
-            m_nEnd = COMPLETE_STRING;
+        }
+
+        if (oFirstMatch)
+        {
+            m_bOn = true;
+            m_nAct = *oFirstMatch; // rewind
+            ++nRet; // increment only once per m_nStart/m_nEnd range
         }
     }
     else if (m_eMode == Mode::Hide)
@@ -928,6 +953,7 @@ void SwRedlineItr::FillHints( std::size_t nAuthor, RedlineType eType )
             break;
         case RedlineType::Format:
         case RedlineType::FmtColl:
+        case RedlineType::ParagraphFormat:
             SwModule::get()->GetFormatAuthorAttr(nAuthor, *m_pSet);
             break;
         default:
