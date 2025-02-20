@@ -189,6 +189,7 @@ private:
     QModelIndex modelIndex(int nRow, int nCol = 0) const;
     QModelIndex modelIndex(const weld::TreeIter& rIter, int nCol = 0) const;
     static int rowIndex(const weld::TreeIter& rIter);
+    QModelIndex firstTextColumnModelIndex(int nRow) const;
     static QAbstractItemView::SelectionMode mapSelectionMode(SelectionMode eMode);
 
 private Q_SLOTS:

@@ -162,7 +162,7 @@ OUString QtInstanceTreeView::get_text(int nRow, int nCol) const
 
     OUString sText;
     GetQtInstance().RunInMainThread([&] {
-        const QModelIndex aIndex = m_pModel->index(nRow, 0);
+        const QModelIndex aIndex = firstTextColumnModelIndex(nRow);
         const QVariant aData = m_pModel->data(aIndex);
         assert(aData.canConvert<QString>() && "model data not a string");
         sText = toOUString(aData.toString());
@@ -865,6 +865,20 @@ int QtInstanceTreeView::rowIndex(const weld::TreeIter& rIter)
 {
     QModelIndex aModelIndex = static_cast<const QtInstanceTreeIter&>(rIter).modelIndex();
     return aModelIndex.row();
+}
+
+QModelIndex QtInstanceTreeView::firstTextColumnModelIndex(int nRow) const
+{
+    for (int i = 0; i < m_pModel->columnCount(); i++)
+    {
+        const QModelIndex aIndex = modelIndex(nRow, i);
+        QVariant data = m_pModel->data(aIndex, Qt::DisplayRole);
+        if (data.canConvert<QString>())
+            return aIndex;
+    }
+
+    assert(false && "No text column found");
+    return QModelIndex();
 }
 
 void QtInstanceTreeView::handleActivated()
