@@ -460,6 +460,8 @@ public:
 
     SW_DLLPUBLIC void SetIgnoreTabsAndBlanksForLineCalculation(bool bIgnoreTabsAndBlanksForLineCalculation);
 
+    SW_DLLPUBLIC void SetMsWordUlTrailSpace(bool val);
+
     // DOCUMENT COMPATIBILITY FLAGS END
 
     // Calls Idle-formatter of Layout.

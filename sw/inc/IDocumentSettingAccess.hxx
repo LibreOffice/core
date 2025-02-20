@@ -142,6 +142,7 @@ enum class DocumentSettingId
     MS_WORD_COMP_GRID_METRICS,
     // tdf#161233 pictures with wrap polygon should not be clipped
     NO_CLIPPING_WITH_WRAP_POLYGON,
+    MS_WORD_UL_TRAIL_SPACE,
 };
 
 /** Provides access to settings of a document
