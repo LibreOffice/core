@@ -522,6 +522,25 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129357)
     assertXPathContent(pXmlDoc, "/metafile/push/push/push/push/push/textarray[2]/text", u"-");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf165322)
+{
+    createSwDoc("CT-formatted-deletion.docx");
+    SwDocShell* pShell = getSwDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // paragraph with 2 redlines was not marked as deleted
+    assertXPath(pXmlDoc,
+                "//text[text() = 'Nunc viverra imperdiet enim. Fusce est. Vivamus a "
+                "tellus.']/parent::textarray/preceding-sibling::font[1]",
+                "strikeout", u"1");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInNumbering)
 {
     createSwDoc("tdf42748.fodt");
