@@ -140,7 +140,7 @@ COMPHELPER_DLLPUBLIC void setBlockedCommandList(const char* blockedCommandList);
 
 COMPHELPER_DLLPUBLIC void
 setAnyInputCallback(const std::function<bool(void*, int)>& pAnyInputCallback, void* pData,
-                    std::function<int()> pMostUrgentPriorityGetter);
+                    const std::function<int()>& pMostUrgentPriorityGetter);
 COMPHELPER_DLLPUBLIC bool anyInput();
 
 // These allow setting callbacks, so that set/get of a LOK view is possible even in code that is
