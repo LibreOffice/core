@@ -36,6 +36,7 @@
 #include <IMark.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
+#include <o3tl/temporary.hxx>
 #include <xmloff/odffields.hxx>
 #include <viewopt.hxx>
 
@@ -227,6 +228,35 @@ static TextFrameIndex lcl_AddSpace_Latin(const SwTextSizeInfo& rInf, const OUStr
     return nCnt;
 }
 
+static void GetLimitedStringPart(const SwTextFormatInfo& rInf, TextFrameIndex nIndex,
+                                 TextFrameIndex nLength, sal_uInt16 nComp, SwTwips nOriginalWidth,
+                                 SwTwips nMaxWidth, TextFrameIndex& rOutLength, SwTwips& rOutWidth)
+{
+    assert(nMaxWidth >= 0);
+    assert(nLength >= TextFrameIndex(0));
+    const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
+    rOutLength = nLength;
+    rOutWidth = nOriginalWidth;
+    while (rOutWidth > nMaxWidth)
+    {
+        TextFrameIndex nNewOnLineLengthGuess(rOutLength.get() * nMaxWidth / rOutWidth);
+        assert(nNewOnLineLengthGuess < rOutLength);
+        if (nNewOnLineLengthGuess < (rOutLength - TextFrameIndex(1)))
+            ++nNewOnLineLengthGuess; // to avoid too aggressive decrease
+        rOutLength = nNewOnLineLengthGuess;
+        rInf.GetTextSize(&rSI, nIndex, rOutLength, std::nullopt, nComp, rOutWidth,
+                         o3tl::temporary(tools::Long()), o3tl::temporary(SwTwips()),
+                         o3tl::temporary(SwTwips()), rInf.GetCachedVclData().get());
+    }
+}
+
+static bool IsMsWordUlTrailSpace(const SwTextFormatInfo& rInf)
+{
+    const auto& settings = rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess();
+    return settings.get(DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS)
+           && settings.get(DocumentSettingId::MS_WORD_UL_TRAIL_SPACE);
+}
+
 SwTextPortion * SwTextPortion::CopyLinePortion(const SwLinePortion &rPortion)
 {
     SwTextPortion *const pNew(new SwTextPortion);
@@ -296,6 +326,15 @@ static bool lcl_HasContent( const SwFieldPortion& rField, SwTextFormatInfo const
 {
     OUString aText;
     return rField.GetExpText( rInf, aText ) && !aText.isEmpty();
+}
+
+sal_uInt16 SwTextPortion::GetMaxComp(const SwTextFormatInfo& rInf) const
+{
+    const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
+    return (SwFontScript::CJK == rInf.GetFont()->GetActual()) && rSI.CountCompChg()
+                   && !rInf.IsMulti() && !InFieldGrp() && !IsDropPortion()
+               ? 10000
+               : 0;
 }
 
 bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
@@ -477,11 +516,36 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
             TextFrameIndex const nRealStart = pGuess->BreakStart() - pGuess->FieldDiff();
             if( pGuess->BreakPos() < nRealStart && !InExpGrp() )
             {
-                SwHolePortion *pNew = new SwHolePortion( *this );
-                pNew->SetLen( nRealStart - pGuess->BreakPos() );
-                pNew->Width(0);
-                pNew->ExtraBlankWidth( pGuess->ExtraBlankWidth() );
+                TextFrameIndex nTotalExtraLen(nRealStart - pGuess->BreakPos());
+                TextFrameIndex nExtraLen(nTotalExtraLen);
+                TextFrameIndex nExtraLenOutOfLine(0);
+                SwTwips nTotalExtraWidth(pGuess->ExtraBlankWidth());
+                SwTwips nExtraWidth(nTotalExtraWidth);
+                SwTwips nExtraWidthOutOfLine(0);
+                SwTwips nAvailableLineWidth(rInf.GetLineWidth() - Width());
+                const bool bMsWordUlTrailSpace(IsMsWordUlTrailSpace(rInf));
+                if (nExtraWidth > nAvailableLineWidth && bMsWordUlTrailSpace)
+                {
+                    GetLimitedStringPart(rInf, pGuess->BreakPos(), nTotalExtraLen, GetMaxComp(rInf),
+                                         nTotalExtraWidth, nAvailableLineWidth, nExtraLen,
+                                         nExtraWidth);
+                    nExtraLenOutOfLine = nTotalExtraLen - nExtraLen;
+                    nExtraWidthOutOfLine = nTotalExtraWidth - nExtraWidth;
+                }
+
+                SwHolePortion* pNew = new SwHolePortion(*this, bMsWordUlTrailSpace);
+                pNew->SetLen(nExtraLen);
+                pNew->ExtraBlankWidth(nExtraWidth);
                 Insert( pNew );
+
+                if (nExtraWidthOutOfLine)
+                {
+                    // Out-of-line hole portion - will not show underline
+                    SwHolePortion* pNewOutOfLine = new SwHolePortion(*this, false);
+                    pNewOutOfLine->SetLen(nExtraLenOutOfLine);
+                    pNewOutOfLine->ExtraBlankWidth(nExtraWidthOutOfLine);
+                    pNew->Insert(pNewOutOfLine);
+                }
 
                 // UAX #14 Unicode Line Breaking Algorithm Non-tailorable Line breaking rule LB6:
                 // https://www.unicode.org/reports/tr14/#LB6 Do not break before hard line breaks
@@ -828,8 +892,9 @@ SwPositiveSize SwTextInputFieldPortion::GetTextSize( const SwTextSizeInfo &rInf 
     return rInf.GetTextSize();
 }
 
-SwHolePortion::SwHolePortion( const SwTextPortion &rPor )
+SwHolePortion::SwHolePortion(const SwTextPortion& rPor, bool bShowUnderline)
     : m_nBlankWidth( 0 )
+    , m_bShowUnderline(bShowUnderline)
 {
     SetLen( TextFrameIndex(1) );
     Height( rPor.Height() );
@@ -871,12 +936,13 @@ void SwHolePortion::Paint( const SwTextPaintInfo &rInf ) const
     const SwFont* pOrigFont = rInf.GetFont();
     std::unique_ptr<SwFont> pHoleFont;
     std::optional<SwFontSave> oFontSave;
-    if( pOrigFont->GetUnderline() != LINESTYLE_NONE
+    if( (!m_bShowUnderline && pOrigFont->GetUnderline() != LINESTYLE_NONE)
     ||  pOrigFont->GetOverline() != LINESTYLE_NONE
     ||  pOrigFont->GetStrikeout() != STRIKEOUT_NONE )
     {
         pHoleFont.reset(new SwFont( *pOrigFont ));
-        pHoleFont->SetUnderline( LINESTYLE_NONE );
+        if (!m_bShowUnderline)
+            pHoleFont->SetUnderline(LINESTYLE_NONE);
         pHoleFont->SetOverline( LINESTYLE_NONE );
         pHoleFont->SetStrikeout( STRIKEOUT_NONE );
         oFontSave.emplace( rInf, pHoleFont.get() );
@@ -915,6 +981,9 @@ void SwHolePortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText, T
 
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("blank-width"),
                                       BAD_CAST(OString::number(m_nBlankWidth).getStr()));
+
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("show-underline"),
+                                      BAD_CAST(OString::boolean(m_bShowUnderline).getStr()));
 
     (void)xmlTextWriterEndElement(pWriter);
 }

@@ -66,6 +66,7 @@ constexpr std::pair<OUString, TranslateId> options_list[]{
     { u"ContinuousEndnotes"_ustr, STR_COMPAT_OPT_CONTINUOUS_ENDNOTES },
     { u"MsWordCompGridMetrics"_ustr, STR_COMPAT_OPT_MSWORDCOMPGRIDMETRICS },
     { u"IgnoreTabsAndBlanksForLineCalculation"_ustr, STR_COMPAT_OPT_IGNORETABSANDBLANKSFORLINECALCULATION },
+    { u"MsWordUlTrailSpace"_ustr, STR_COMPAT_OPT_UNDERLINETRAILINGSPACE },
 };
 
 // DocumentSettingId, negate?
@@ -95,6 +96,7 @@ std::pair<DocumentSettingId, bool> DocumentSettingForOption(const OUString& opti
 //        { u"AddTableLineSpacing"_ustr, { DocumentSettingId::ADD_PARA_LINE_SPACING_TO_TABLE_CELLS, false } },
         { u"MsWordCompGridMetrics"_ustr, { DocumentSettingId::MS_WORD_COMP_GRID_METRICS, false } },
         { u"IgnoreTabsAndBlanksForLineCalculation"_ustr, { DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION, false } },
+        { u"MsWordUlTrailSpace"_ustr, { DocumentSettingId::MS_WORD_UL_TRAIL_SPACE, false } },
     };
     return map.at(option);
 }
@@ -340,6 +342,10 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
 
                     case DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION:
                         m_pWrtShell->SetIgnoreTabsAndBlanksForLineCalculation(bChecked);
+                        break;
+
+                    case DocumentSettingId::MS_WORD_UL_TRAIL_SPACE:
+                        m_pWrtShell->SetMsWordUlTrailSpace(bChecked);
                         break;
 
                     default:

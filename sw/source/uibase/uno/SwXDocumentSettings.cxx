@@ -167,6 +167,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_MIN_ROW_HEIGHT_INCL_BORDER,
     HANDLE_MS_WORD_COMP_GRID_METRICS,
     HANDLE_NO_CLIPPING_WITH_WRAP_POLYGON,
+    HANDLE_MS_WORD_UL_TRAIL_SPACE,
 };
 
 }
@@ -280,6 +281,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { u"MinRowHeightInclBorder"_ustr, HANDLE_MIN_ROW_HEIGHT_INCL_BORDER, cppu::UnoType<bool>::get(), 0 },
         { u"MsWordCompGridMetrics"_ustr, HANDLE_MS_WORD_COMP_GRID_METRICS, cppu::UnoType<bool>::get(), 0 },
         { u"NoClippingWithWrapPolygon"_ustr, HANDLE_NO_CLIPPING_WITH_WRAP_POLYGON, cppu::UnoType<bool>::get(), 0 },
+        { u"MsWordUlTrailSpace"_ustr, HANDLE_MS_WORD_UL_TRAIL_SPACE, cppu::UnoType<bool>::get(), 0 },
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -1207,10 +1209,16 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         }
         break;
         case HANDLE_NO_CLIPPING_WITH_WRAP_POLYGON:
-            bool bTmp;
-            if (rValue >>= bTmp)
+            if (bool bTmp; rValue >>= bTmp)
             {
                 mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::NO_CLIPPING_WITH_WRAP_POLYGON,
+                                                       bTmp);
+            }
+            break;
+        case HANDLE_MS_WORD_UL_TRAIL_SPACE:
+            if (bool bTmp; rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::MS_WORD_UL_TRAIL_SPACE,
                                                        bTmp);
             }
             break;
@@ -1823,6 +1831,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::NO_CLIPPING_WITH_WRAP_POLYGON);
+        }
+        break;
+        case HANDLE_MS_WORD_UL_TRAIL_SPACE:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::MS_WORD_UL_TRAIL_SPACE);
         }
         break;
         default:

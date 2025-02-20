@@ -1532,6 +1532,7 @@
 #define STR_COMPAT_OPT_CONTINUOUS_ENDNOTES NC_("STR_COMPAT_OPT_CONTINUOUS_ENDNOTES", "Render endnotes at the end of document inline, rather than on a separate page")
 #define STR_COMPAT_OPT_MSWORDCOMPGRIDMETRICS NC_("STR_COMPAT_OPT_MSWORDCOMPGRIDMETRICS", "Use Word-compatible font metrics for text grid")
 #define STR_COMPAT_OPT_IGNORETABSANDBLANKSFORLINECALCULATION NC_("STR_COMPAT_OPT_IGNORETABSANDBLANKSFORLINECALCULATION", "Make whitespace character height not affect line height")
+#define STR_COMPAT_OPT_UNDERLINETRAILINGSPACE NC_("STR_COMPAT_OPT_UNDERLINETRAILINGSPACE", "Underline Word-compatible trailing blanks")
 
 #define STR_TABLE_PANEL_ALIGN_AUTO              NC_("sidebartableedit|alignautolabel", "Automatic")
 #define STR_TABLE_PANEL_ALIGN_LEFT              NC_("sidebartableedit|alignleftlabel", "Left")

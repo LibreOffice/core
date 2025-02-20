@@ -176,13 +176,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
     const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
 
-    sal_uInt16 nMaxComp = ( SwFontScript::CJK == rInf.GetFont()->GetActual() ) &&
-                        rSI.CountCompChg() &&
-                        ! rInf.IsMulti() &&
-                        ! rPor.InFieldGrp() &&
-                        ! rPor.IsDropPortion() ?
-                        10000 :
-                            0 ;
+    const sal_uInt16 nMaxComp = rPor.GetMaxComp(rInf);
 
     SwTwips nLineWidth = rInf.GetLineWidth();
     TextFrameIndex nMaxLen = TextFrameIndex(rInf.GetText().getLength()) - rInf.GetIdx();

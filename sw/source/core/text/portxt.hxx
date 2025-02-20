@@ -47,6 +47,8 @@ public:
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
+
+    sal_uInt16 GetMaxComp(const SwTextFormatInfo &rInf) const;
 };
 
 class SwTextInputFieldPortion : public SwTextPortion
@@ -63,8 +65,10 @@ public:
 class SwHolePortion : public SwLinePortion
 {
     SwTwips m_nBlankWidth;
+    bool m_bShowUnderline;
+
 public:
-    explicit SwHolePortion( const SwTextPortion &rPor );
+    explicit SwHolePortion(const SwTextPortion& rPor, bool bShowUnderline = false);
     SwTwips GetBlankWidth() const { return m_nBlankWidth; }
     void SetBlankWidth(const SwTwips nNew) { m_nBlankWidth = nNew; }
     virtual SwLinePortion *Compress() override;

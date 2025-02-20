@@ -42,6 +42,7 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <sfx2/linkmgr.hxx>
 
@@ -1917,6 +1918,110 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf163913)
                 1);
     assertXPath(pXmlDoc, "//style:style[@style:name='P4']/style:paragraph-properties",
                 "margin-right", u"6em");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace)
+{
+    // Testing MsWordUlTrailSpace compat option
+
+    // Given a document with both MsWordCompTrailingBlanks and MsWordUlTrailSpace set
+    createSwDoc("UnderlineTrailingSpace.fodt");
+    // 1. Make sure that the import sets MsWordUlTrailSpace option, and creates correct layout
+    {
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xSettings(
+            xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(true),
+                             xSettings->getPropertyValue(u"MsWordUlTrailSpace"_ustr));
+
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        OUString val;
+        // Line 1: one SwHolePortion, showing underline
+        val = getXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout/SwHolePortion", "length");
+        CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(69), val.toInt32()); // In truth, it should be 70
+        val = getXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout/SwHolePortion",
+                       "show-underline");
+        CPPUNIT_ASSERT_EQUAL(u"true"_ustr, val);
+        // TODO: Line 2
+        // Line 3: two SwHolePortion, one for shown underline, one for the rest
+        val = getXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/SwHolePortion[1]",
+                       "length");
+        CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(140), val.toInt32());
+        val = getXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/SwHolePortion[1]",
+                       "show-underline");
+        CPPUNIT_ASSERT_EQUAL(u"true"_ustr, val);
+        val = getXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/SwHolePortion[2]",
+                       "length");
+        CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(850), val.toInt32());
+        val = getXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/SwHolePortion[2]",
+                       "show-underline");
+        CPPUNIT_ASSERT_EQUAL(u"false"_ustr, val);
+    }
+
+    saveAndReload(mpFilter);
+    // 2. Make sure that exported document has MsWordUlTrailSpace option set
+    {
+        xmlDocUniquePtr pXmlDoc = parseExport(u"settings.xml"_ustr);
+        assertXPathContent(pXmlDoc, "//config:config-item[@config:name='MsWordUlTrailSpace']",
+                           u"true");
+
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xSettings(
+            xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(true),
+                             xSettings->getPropertyValue(u"MsWordUlTrailSpace"_ustr));
+    }
+
+    // 3. Disable the option, and check the layout
+    {
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xSettings(
+            xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+        xSettings->setPropertyValue(u"MsWordUlTrailSpace"_ustr, uno::Any(false));
+        CPPUNIT_ASSERT_EQUAL(uno::Any(false),
+                             xSettings->getPropertyValue(u"MsWordUlTrailSpace"_ustr));
+
+        getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->Reformat();
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        OUString val;
+        // Line 1: one SwHolePortion, not showing underline
+        val = getXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout/SwHolePortion", "length");
+        CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(69), val.toInt32()); // In truth, it should be 70
+        val = getXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout/SwHolePortion",
+                       "show-underline");
+        CPPUNIT_ASSERT_EQUAL(u"false"_ustr, val);
+        // TODO: Line 2
+        // Line 3: one SwHolePortion, not showing underline
+        val = getXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/SwHolePortion", "length");
+        CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(999), val.toInt32());
+        val = getXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/SwHolePortion",
+                       "show-underline");
+        CPPUNIT_ASSERT_EQUAL(u"false"_ustr, val);
+    }
+
+    saveAndReload(mpFilter);
+    // 4. Make sure that exported document has MsWordUlTrailSpace option not set
+    {
+        xmlDocUniquePtr pXmlDoc = parseExport(u"settings.xml"_ustr);
+        assertXPathContent(pXmlDoc, "//config:config-item[@config:name='MsWordUlTrailSpace']",
+                           u"false");
+
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xSettings(
+            xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(false),
+                             xSettings->getPropertyValue(u"MsWordUlTrailSpace"_ustr));
+    }
+
+    createSwDoc();
+    // 5. Make sure that a new Writer document has this setting set to false
+    {
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xSettings(
+            xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(false),
+                             xSettings->getPropertyValue(u"MsWordUlTrailSpace"_ustr));
+    }
 }
 
 } // end of anonymous namespace
