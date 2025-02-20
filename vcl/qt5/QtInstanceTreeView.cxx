@@ -155,14 +155,12 @@ void QtInstanceTreeView::remove(int nPos)
 
 OUString QtInstanceTreeView::get_text(int nRow, int nCol) const
 {
-    assert(nCol == -1 && "Column support not implemented yet");
-    (void)nCol; // for release build
-
     SolarMutexGuard g;
 
     OUString sText;
     GetQtInstance().RunInMainThread([&] {
-        const QModelIndex aIndex = firstTextColumnModelIndex(nRow);
+        const QModelIndex aIndex
+            = nCol == -1 ? firstTextColumnModelIndex(nRow) : modelIndex(nRow, nCol);
         const QVariant aData = m_pModel->data(aIndex);
         assert(aData.canConvert<QString>() && "model data not a string");
         sText = toOUString(aData.toString());
@@ -173,12 +171,11 @@ OUString QtInstanceTreeView::get_text(int nRow, int nCol) const
 
 void QtInstanceTreeView::set_text(int nRow, const OUString& rText, int nCol)
 {
-    assert(nCol != -1 && "Support for special index -1 (first text column) not implemented yet");
-
     SolarMutexGuard g;
 
     GetQtInstance().RunInMainThread([&] {
-        QModelIndex aIndex = modelIndex(nRow, nCol);
+        const QModelIndex aIndex
+            = nCol == -1 ? firstTextColumnModelIndex(nRow) : modelIndex(nRow, nCol);
         m_pModel->setData(aIndex, toQString(rText));
     });
 }
@@ -538,10 +535,9 @@ TriState QtInstanceTreeView::get_toggle(const weld::TreeIter&, int) const
     return TRISTATE_INDET;
 }
 
-OUString QtInstanceTreeView::get_text(const weld::TreeIter&, int) const
+OUString QtInstanceTreeView::get_text(const weld::TreeIter& rIter, int nCol) const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    return get_text(rowIndex(rIter), nCol);
 }
 
 void QtInstanceTreeView::set_id(const weld::TreeIter& rIter, const OUString& rId)

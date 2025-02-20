@@ -101,7 +101,7 @@ public:
     virtual void set_text_align(const weld::TreeIter& rIter, double fAlign, int col) override;
     virtual void set_toggle(const weld::TreeIter& rIter, TriState bOn, int col = -1) override;
     virtual TriState get_toggle(const weld::TreeIter& rIter, int col = -1) const override;
-    virtual OUString get_text(const weld::TreeIter& rIter, int col = -1) const override;
+    virtual OUString get_text(const weld::TreeIter& rIter, int nCol = -1) const override;
     virtual void set_id(const weld::TreeIter& rIter, const OUString& rId) override;
     virtual OUString get_id(const weld::TreeIter& rIter) const override;
     virtual void set_image(const weld::TreeIter& rIter, const OUString& rImage,
