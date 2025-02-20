@@ -783,14 +783,14 @@ SwRedlineItr::~SwRedlineItr() COVERITY_NOEXCEPT_FALSE
     m_pExt.reset();
 }
 
-// The return value of SwRedlineItr::Seek tells you if the current font
-// has been manipulated by leaving (-1) or accessing (+1) of a section
+/// The return value of SwRedlineItr::Seek tells if the current font
+/// has been manipulated by leaving (-1) or entering (+1) a range redline
 short SwRedlineItr::Seek(SwFont& rFnt,
         SwNodeOffset const nNode, sal_Int32 const nNew, sal_Int32 const nOld)
 {
     short nRet = 0;
     if( ExtOn() )
-        return 0; // Abbreviation: if we're within an ExtendTextInputs
+        return 0; // shortcut: if we're within an ExtendTextInputs
                   // there can't be other changes of attributes (not even by redlining)
     if (m_eMode == Mode::Show)
     {
@@ -799,20 +799,20 @@ short SwRedlineItr::Seek(SwFont& rFnt,
             if (nNew >= m_nEnd)
             {
                 --nRet;
-                Clear_( &rFnt );    // We go behind the current section
+                Clear_( &rFnt );    // We go behind the current range
                 ++m_nAct;             // and check the next one
             }
             else if (nNew < m_nStart)
             {
                 --nRet;
-                Clear_( &rFnt );    // We go in front of the current section
+                Clear_( &rFnt );    // We go before the current range
                 if (m_nAct > m_nFirst)
-                    m_nAct = m_nFirst;  // the test has to run from the beginning
+                    m_nAct = m_nFirst;  // need to start over
                 else
                     return nRet + EnterExtend(rFnt, nNode, nNew); // There's none prior to us
             }
             else
-                return nRet + EnterExtend(rFnt, nNode, nNew); // We stayed in the same section
+                return nRet + EnterExtend(rFnt, nNode, nNew); // We stayed in the same range
         }
         if (SwRedlineTable::npos == m_nAct || nOld > nNew)
             m_nAct = m_nFirst;
