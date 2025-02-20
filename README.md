@@ -47,7 +47,7 @@ run and compile LibreOffice, also used by the TDF builds:
     * Runtime: 11.4 (only support for newer i devices == 64 bit)
     * Build: Xcode 9.3 and iPhone SDK 11.4
 * Android:
-    * Build: NDK r23 and SDK 30.0.3
+    * Build: NDK 27 and SDK 30.0.3
 * Emscripten / WASM:
     * Runtime: a browser with SharedMemory support (threads + atomics)
     * Build: Qt 5.15 with Qt supported Emscripten 1.39.8
