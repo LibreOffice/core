@@ -18,6 +18,8 @@
 QtDoubleSpinBox::QtDoubleSpinBox(QWidget* pParent)
     : QDoubleSpinBox(pParent)
 {
+    // don't notify about value/text changes while typing
+    setKeyboardTracking(false);
 }
 
 QLineEdit* QtDoubleSpinBox::lineEdit() const { return QDoubleSpinBox::lineEdit(); }
