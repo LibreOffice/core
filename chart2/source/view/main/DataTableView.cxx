@@ -95,8 +95,7 @@ DataTableView::DataTableView(
     , m_xComponentContext(rComponentContext)
     , m_bAlignAxisValuesWithColumns(bAlignAxisValuesWithColumns)
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(m_xDataTableModel);
-    m_aLineProperties.initFromPropertySet(xPropertySet);
+    m_aLineProperties.initFromPropertySet(uno::Reference<beans::XPropertySet>(m_xDataTableModel));
 }
 
 void DataTableView::setCellCharAndParagraphProperties(
@@ -162,9 +161,8 @@ void DataTableView::setCellProperties(css::uno::Reference<beans::XPropertySet>& 
 {
     xPropertySet->setPropertyValue(u"FillColor"_ustr, uno::Any(Color(0xFFFFFF)));
 
-    uno::Reference<beans::XPropertySet> xDataTableProperties(m_xDataTableModel);
     float fFontHeight = 0.0;
-    xDataTableProperties->getPropertyValue(u"CharHeight"_ustr) >>= fFontHeight;
+    m_xDataTableModel->getPropertyValue(u"CharHeight"_ustr) >>= fFontHeight;
     fFontHeight = o3tl::convert(fFontHeight, o3tl::Length::pt, o3tl::Length::mm100);
     sal_Int32 nXDistance = std::round(fFontHeight * 0.18f);
     sal_Int32 nYDistance = std::round(fFontHeight * 0.30f);
@@ -349,9 +347,8 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     constexpr const sal_Int32 constSymbolMargin = 100; // 1mm
     if (bKeys)
     {
-        uno::Reference<beans::XPropertySet> xDataTableProperties(m_xDataTableModel);
         float fFontHeight = 0.0;
-        xDataTableProperties->getPropertyValue(u"CharHeight"_ustr) >>= fFontHeight;
+        m_xDataTableModel->getPropertyValue(u"CharHeight"_ustr) >>= fFontHeight;
         fFontHeight = o3tl::convert(fFontHeight, o3tl::Length::pt, o3tl::Length::mm100);
 
         sal_Int32 nSymbolHeight = sal_Int32(fFontHeight * 0.6);

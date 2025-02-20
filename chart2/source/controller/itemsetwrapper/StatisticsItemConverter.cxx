@@ -147,13 +147,10 @@ uno::Reference< beans::XPropertySet > lcl_getCurveProperties(
     if( bExists )
     {
         uno::Reference< chart2::XRegressionCurveContainer > xRegCnt( xSeriesPropSet, uno::UNO_QUERY );
-        uno::Reference< chart2::XRegressionCurve > xCurve(
+        rtl::Reference< ::chart::RegressionCurveModel > xCurve(
             ::chart::RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt ));
         if( xCurve.is())
-        {
-            uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-            return xProperties;
-        }
+            return xCurve;
     }
 
     return uno::Reference< beans::XPropertySet >();

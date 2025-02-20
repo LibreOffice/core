@@ -2337,14 +2337,13 @@ rtl::Reference<SvxShapeGroupAnyD> ShapeFactory::getChartRootShape(
     const rtl::Reference<SvxDrawPage>& xDrawPage )
 {
     rtl::Reference<SvxShapeGroupAnyD> xRet;
-    const uno::Reference< drawing::XShapes > xShapes = xDrawPage;
-    if( xShapes.is() )
+    if( xDrawPage.is() )
     {
-        sal_Int32 nCount = xShapes->getCount();
+        sal_Int32 nCount = xDrawPage->getCount();
         uno::Reference< drawing::XShape > xShape;
         for( sal_Int32 nN = nCount; nN--; )
         {
-            if( xShapes->getByIndex( nN ) >>= xShape )
+            if( xDrawPage->getByIndex( nN ) >>= xShape )
             {
                 if( ShapeFactory::getShapeName( xShape ) == "com.sun.star.chart2.shapes" )
                 {

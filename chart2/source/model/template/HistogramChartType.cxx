@@ -278,10 +278,9 @@ void HistogramChartType::createCalculatedDataSeries()
     aValuesDataSequence->setValues(comphelper::containerToSequence(aValues));
     aValuesDataSequence->setLabels(comphelper::containerToSequence(aLabels));
 
-    uno::Reference<chart2::data::XDataSequence> aDataSequence = aValuesDataSequence;
-    setRoleToTheSequence(aDataSequence, u"values-y"_ustr);
+    setRoleToTheSequence(aValuesDataSequence, u"values-y"_ustr);
 
-    m_aDataSeries[0]->addDataSequence(new LabeledDataSequence(aDataSequence));
+    m_aDataSeries[0]->addDataSequence(new LabeledDataSequence(aValuesDataSequence));
 }
 
 } //  namespace chart

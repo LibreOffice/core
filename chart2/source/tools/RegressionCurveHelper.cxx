@@ -364,15 +364,14 @@ void RegressionCurveHelper::addMeanValueLine(
         return;
 
     // todo: use a valid context
-    uno::Reference< XRegressionCurve > xCurve( createMeanValueLine() );
+    rtl::Reference< RegressionCurveModel > xCurve( createMeanValueLine() );
     xRegCnt->addRegressionCurve( xCurve );
 
     if( xSeriesProp.is())
     {
-        uno::Reference< XPropertySet > xProp( xCurve, uno::UNO_QUERY );
-        if( xProp.is())
+        if( xCurve.is())
         {
-            xProp->setPropertyValue( u"LineColor"_ustr,
+            xCurve->setPropertyValue( u"LineColor"_ustr,
                                      xSeriesProp->getPropertyValue( u"Color"_ustr));
         }
     }

@@ -227,7 +227,7 @@ rtl::Reference< DataSource > DataSourceHelper::pressUsedDataIntoRectangularForma
     std::vector< rtl::Reference< DataSeries > > aSeriesVector;
     if (xDiagram)
         aSeriesVector = xDiagram->getDataSeries();
-    uno::Reference< chart2::data::XDataSource > xSeriesSource =
+    rtl::Reference< ::chart::DataSource > xSeriesSource =
         DataSeriesHelper::getDataSource( aSeriesVector );
     const Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSequences( xSeriesSource->getDataSequences() );
 

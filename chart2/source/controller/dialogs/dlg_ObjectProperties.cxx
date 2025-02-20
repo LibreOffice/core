@@ -173,7 +173,7 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
 
                 //is the crossing main axis a category axes?:
                 rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, xDiagram ) );
-                uno::Reference< XAxis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( xAxis, xCooSys ) );
+                rtl::Reference< Axis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( xAxis, xCooSys ) );
                 if( xCrossingMainAxis.is() )
                 {
                     ScaleData aScale( xCrossingMainAxis->getScaleData() );

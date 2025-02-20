@@ -404,7 +404,7 @@ rtl::Reference<SdrObject> DrawCommandDispatch::createDefaultObject( const ChartC
 
     if ( pDrawViewWrapper && pDrawModelWrapper )
     {
-        Reference< drawing::XDrawPage > xDrawPage( pDrawModelWrapper->getMainDrawPage() );
+        rtl::Reference< SvxDrawPage > xDrawPage( pDrawModelWrapper->getMainDrawPage() );
         SdrPage* pPage = GetSdrPageFromXDrawPage( xDrawPage );
         if ( pPage )
         {

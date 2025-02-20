@@ -446,12 +446,9 @@ bool TitleHelper::getTitleType( eTitleType& rType
 void TitleHelper::hideTitle( TitleHelper::eTitleType nTitleIndex
         , const rtl::Reference<ChartModel>& xModel)
 {
-    uno::Reference< chart2::XTitle > xTitled( TitleHelper::getTitle( nTitleIndex, xModel ) );
+    rtl::Reference< Title > xTitled( TitleHelper::getTitle( nTitleIndex, xModel ) );
     if( xTitled.is())
-    {
-        css::uno::Reference<css::beans::XPropertySet> xProps(xTitled, css::uno::UNO_QUERY_THROW);
-        xProps->setPropertyValue(u"Visible"_ustr,css::uno::Any(false));
-    }
+        xTitled->setPropertyValue(u"Visible"_ustr,css::uno::Any(false));
 }
 
 } //namespace chart

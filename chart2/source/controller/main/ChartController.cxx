@@ -799,7 +799,7 @@ void SAL_CALL ChartController::dispose()
 
         if( aModelRef.is())
         {
-            uno::Reference< frame::XModel > xModel( aModelRef->getModel() );
+            rtl::Reference< ChartModel > xModel( aModelRef->getModel() );
             if(xModel.is())
                 xModel->disconnectController( uno::Reference< frame::XController >( this ));
 

@@ -59,7 +59,7 @@ void VPolarAngleAxis::createTextShapes_ForAngleAxis(
     tNameSequence aPropNames;
     tAnySequence aPropValues;
 
-    uno::Reference< beans::XPropertySet > xProps( m_aAxisProperties.m_xAxisModel );
+    rtl::Reference< ::chart::Axis > xProps( m_aAxisProperties.m_xAxisModel );
     PropertyMapper::getTextLabelMultiPropertyLists( xProps, aPropNames, aPropValues, false, -1, false, false );
     LabelPositionHelper::doDynamicFontResize( aPropValues, aPropNames, xProps
         , rAxisLabelProperties.m_aFontReferenceSize );

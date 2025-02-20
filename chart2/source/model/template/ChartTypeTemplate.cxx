@@ -648,12 +648,12 @@ void ChartTypeTemplate::createAxes(
             nAxisCount = 2;
         for( sal_Int32 nAxisIndex = 0; nAxisIndex < nAxisCount; ++nAxisIndex )
         {
-            Reference< XAxis > xAxis = AxisHelper::getAxis( nDim, nAxisIndex, xCooSys );
+            rtl::Reference< Axis > xAxis = AxisHelper::getAxis( nDim, nAxisIndex, xCooSys );
             if( !xAxis.is())
             {
                 // create and add axis
-                xAxis.set( AxisHelper::createAxis(
-                               nDim, nAxisIndex, xCooSys, GetComponentContext() ));
+                xAxis = AxisHelper::createAxis(
+                               nDim, nAxisIndex, xCooSys, GetComponentContext() );
             }
         }
     }

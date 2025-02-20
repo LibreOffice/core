@@ -921,7 +921,6 @@ constexpr sal_Int32 constPageLayoutFixedDistance = 350;
 bool getAvailablePosAndSizeForDiagram(
     CreateShapeParam2D& rParam, const awt::Size & rPageSize, rtl::Reference<Diagram> const& xDiagram)
 {
-    uno::Reference<beans::XPropertySet> const xProp(xDiagram);
     rParam.mbUseFixedInnerSize = false;
 
     //@todo: we need a size dependent on the axis labels
@@ -945,12 +944,12 @@ bool getAvailablePosAndSizeForDiagram(
     rParam.maRemainingSpace.Height -= 2*nYDistance;
 
     bool bPosSizeExcludeAxes = false;
-    if( xProp.is() )
-        xProp->getPropertyValue( u"PosSizeExcludeAxes"_ustr ) >>= bPosSizeExcludeAxes;
+    if( xDiagram.is() )
+        xDiagram->getPropertyValue( u"PosSizeExcludeAxes"_ustr ) >>= bPosSizeExcludeAxes;
 
     //size:
     css::chart2::RelativeSize aRelativeSize;
-    if( xProp.is() && (xProp->getPropertyValue( u"RelativeSize"_ustr )>>=aRelativeSize) )
+    if( xDiagram.is() && (xDiagram->getPropertyValue( u"RelativeSize"_ustr )>>=aRelativeSize) )
     {
         rParam.maRemainingSpace.Height = static_cast<sal_Int32>(aRelativeSize.Secondary*rPageSize.Height);
         rParam.maRemainingSpace.Width = static_cast<sal_Int32>(aRelativeSize.Primary*rPageSize.Width);
@@ -962,7 +961,7 @@ bool getAvailablePosAndSizeForDiagram(
 
     //position:
     chart2::RelativePosition aRelativePosition;
-    if( xProp.is() && (xProp->getPropertyValue( u"RelativePosition"_ustr )>>=aRelativePosition) )
+    if( xDiagram.is() && (xDiagram->getPropertyValue( u"RelativePosition"_ustr )>>=aRelativePosition) )
     {
         //@todo decide whether x is primary or secondary
 

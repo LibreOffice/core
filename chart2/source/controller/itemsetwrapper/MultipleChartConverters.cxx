@@ -52,9 +52,9 @@ AllAxisItemConverter::AllAxisItemConverter(
     const std::vector< rtl::Reference< Axis > > aElementList = AxisHelper::getAllAxesOfDiagram( xDiagram );
     for( rtl::Reference< Axis > const & axis : aElementList )
     {
-        uno::Reference< beans::XPropertySet > xObjectProperties(axis);
         m_aConverters.emplace_back( new ::chart::wrapper::AxisItemConverter(
-            xObjectProperties, rItemPool, rDrawModel,
+            uno::Reference< beans::XPropertySet >(axis),
+            rItemPool, rDrawModel,
             xChartModel, nullptr, nullptr,
             pRefSize));
     }
@@ -145,10 +145,10 @@ AllTitleItemConverter::AllTitleItemConverter(
         rtl::Reference< Title > xTitle( TitleHelper::getTitle( TitleHelper::eTitleType(nTitle), xChartModel ) );
         if(!xTitle.is())
             continue;
-        uno::Reference< beans::XPropertySet > xObjectProperties( xTitle );
         m_aConverters.emplace_back(
             new ::chart::wrapper::TitleItemConverter(
-                xObjectProperties, rItemPool, rDrawModel, xNamedPropertyContainerFactory, std::nullopt));
+                uno::Reference< beans::XPropertySet >( xTitle ),
+                rItemPool, rDrawModel, xNamedPropertyContainerFactory, std::nullopt));
     }
 }
 

@@ -429,7 +429,7 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
     m_nMaxAxisIndex = 0;
     for (const auto& pVCooSys : m_rVCooSysList)
     {
-        uno::Reference<XCoordinateSystem> xCooSys = pVCooSys->getModel();
+        rtl::Reference<BaseCoordinateSystem> xCooSys = pVCooSys->getModel();
         sal_Int32 nDimCount = xCooSys->getDimension();
 
         for (sal_Int32 nDimIndex = 0; nDimIndex < nDimCount; ++nDimIndex)

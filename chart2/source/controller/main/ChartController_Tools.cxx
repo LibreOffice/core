@@ -346,7 +346,7 @@ void ChartController::impl_PasteGraphic(
     rtl::Reference<SvxGraphicObject> xGraphicShape = new SvxGraphicObject(nullptr);
     xGraphicShape->setShapeKind(SdrObjKind::Graphic);
 
-    uno::Reference< drawing::XShapes > xPage = pDrawModelWrapper->getMainDrawPage();
+    rtl::Reference< SvxDrawPage > xPage = pDrawModelWrapper->getMainDrawPage();
     if( xPage.is())
     {
         xPage->add( xGraphicShape );
@@ -394,7 +394,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
     if ( !(pDrawModelWrapper && m_pDrawViewWrapper) )
         return;
 
-    Reference< drawing::XDrawPage > xDestPage( pDrawModelWrapper->getMainDrawPage() );
+    rtl::Reference< SvxDrawPage > xDestPage( pDrawModelWrapper->getMainDrawPage() );
     SdrPage* pDestPage = GetSdrPageFromXDrawPage( xDestPage );
     if ( !pDestPage )
         return;
@@ -451,7 +451,7 @@ void ChartController::impl_PasteStringAsTextShape( const OUString& rString, cons
     if ( !(pDrawModelWrapper && m_pDrawViewWrapper) )
         return;
 
-    const Reference< drawing::XDrawPage > xDrawPage( pDrawModelWrapper->getMainDrawPage() );
+    const rtl::Reference< SvxDrawPage > xDrawPage( pDrawModelWrapper->getMainDrawPage() );
     OSL_ASSERT( xDrawPage.is() );
 
     if ( !xDrawPage )
