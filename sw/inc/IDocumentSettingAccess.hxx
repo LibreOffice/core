@@ -133,6 +133,7 @@ enum class DocumentSettingId
     DROP_CAP_PUNCTUATION,
     // render NBSP as standard-space-width (prettier when justified)
     USE_VARIABLE_WIDTH_NBSP,
+    MS_WORD_UL_TRAIL_SPACE,
 };
 
 /** Provides access to settings of a document

@@ -116,6 +116,12 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="MsWordUlTrailSpace" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Show underline of Word-compatible trailing blanks</desc>
+        </info>
+        <value>false</value>
+      </prop>
       <prop oor:name="SubtractFlysAnchoredAtFlys" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Tolerate white lines of PDF page backgrounds for compatibility with old documents (Use LibreOffice 4.3 anchoring paint order)</desc>

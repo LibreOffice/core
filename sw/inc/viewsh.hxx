@@ -446,6 +446,8 @@ public:
 
     void SetEmptyDbFieldHidesPara(bool bEmptyDbFieldHidesPara);
 
+    void SetMsWordUlTrailSpace(bool val);
+
     // DOCUMENT COMPATIBILITY FLAGS END
 
     // Calls Idle-formatter of Layout.

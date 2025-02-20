@@ -1470,6 +1470,8 @@
 #define STR_CHARACTER_DIRECT_FORMATTING         NC_("STR_CHARACTER_DIRECT_FORMATTING", "Character Direct Formatting")
 #define STR_CHARACTER_DIRECT_FORMATTING_TAG     NC_("STR_CHARACTER_DIRECT_FORMATTING_TAG", "df")
 
+#define STR_COMPAT_OPT_UNDERLINETRAILINGSPACE NC_("STR_COMPAT_OPT_UNDERLINETRAILINGSPACE", "Underline Word-compatible trailing blanks")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

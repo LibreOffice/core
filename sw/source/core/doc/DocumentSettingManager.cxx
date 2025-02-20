@@ -263,6 +263,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY: return mbNoNumberingShowFollowBy;
         case DocumentSettingId::DROP_CAP_PUNCTUATION: return mbDropCapPunctuation;
         case DocumentSettingId::USE_VARIABLE_WIDTH_NBSP: return mbUseVariableWidthNBSP;
+        case DocumentSettingId::MS_WORD_UL_TRAIL_SPACE: return mbMsWordUlTrailSpace;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -571,6 +572,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::FOOTNOTE_IN_COLUMN_TO_PAGEEND:
             mbFootnoteInColumnToPageEnd = value;
             break;
+        case DocumentSettingId::MS_WORD_UL_TRAIL_SPACE:
+            mbMsWordUlTrailSpace = value;
+            break;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -750,6 +754,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbFootnoteInColumnToPageEnd = rSource.mbFootnoteInColumnToPageEnd;
     mbDropCapPunctuation = rSource.mbDropCapPunctuation;
     mbUseVariableWidthNBSP = rSource.mbUseVariableWidthNBSP;
+    mbMsWordUlTrailSpace = rSource.mbMsWordUlTrailSpace;
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const
@@ -1113,6 +1118,11 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbDoNotMirrorRtlDrawObjs"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbDoNotMirrorRtlDrawObjs).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbMsWordUlTrailSpace"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(mbMsWordUlTrailSpace).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);

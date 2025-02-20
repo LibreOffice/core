@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:settings>
+  <config:config-item-set config:name="ooo:configuration-settings">
+   <config:config-item config:name="MsWordCompTrailingBlanks" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="MsWordUlTrailSpace" config:type="boolean">true</config:config-item>
+  </config:config-item-set>
+ </office:settings>
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="swiss" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="paragraph">
+   <style:paragraph-properties fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:writing-mode="page"/>
+   <style:text-properties style:use-window-font-color="true" style:font-name="Liberation Sans" fo:font-size="10.5pt" fo:language="zxx" fo:country="none" style:letter-kerning="true" style:font-name-asian="Liberation Sans" style:font-size-asian="10.5pt" style:language-asian="zxx" style:country-asian="none" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text">
+   <style:paragraph-properties fo:margin-top="0" fo:margin-bottom="0" style:contextual-spacing="false" fo:text-align="justify" style:justify-single-word="false" style:writing-mode="lr-tb"/>
+  </style:style>
+  <style:style style:name="MyListLabel" style:family="text">
+   <style:text-properties style:font-name="Liberation Sans"/>
+  </style:style>
+  <text:list-style style:name="MyListStyle">
+   <text:list-level-style-bullet text:level="1" text:style-name="MyListLabel" style:num-suffix="•" text:bullet-char="•">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab" fo:text-indent="-7mm" fo:margin-left="7mm"/>
+    </style:list-level-properties>
+    <style:text-properties fo:font-name="Liberation Sans"/>
+   </text:list-level-style-bullet>
+  </text:list-style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="210mm" fo:page-height="297mm" fo:margin-top="1in" fo:margin-bottom="1in" fo:margin-left="1.25in" fo:margin-right="1.25in" style:writing-mode="lr-tb"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:list text:style-name="MyListStyle">
+    <text:list-item>
+     <text:p>下划线 <text:span text:style-name="T1"><text:s text:c="70"/></text:span></text:p>
+    </text:list-item>
+   </text:list>
+   <text:p><text:span text:style-name="T1"><text:s text:c="10"/></text:span></text:p>
+   <text:p><text:span text:style-name="T1"><text:s text:c="1000"/></text:span></text:p>
+  </office:text>
+ </office:body>
+</office:document>

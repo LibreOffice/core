@@ -1051,6 +1051,18 @@ void SwViewShell::SetEmptyDbFieldHidesPara(bool bEmptyDbFieldHidesPara)
     EndAction();
 }
 
+void SwViewShell::SetMsWordUlTrailSpace(bool val)
+{
+    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
+    if (rIDSA.get(DocumentSettingId::MS_WORD_UL_TRAIL_SPACE) != val)
+    {
+        SwWait aWait(*GetDoc()->GetDocShell(), true);
+        rIDSA.set(DocumentSettingId::MS_WORD_UL_TRAIL_SPACE, val);
+        const SwInvalidateFlags nInv = SwInvalidateFlags::Size;
+        lcl_InvalidateAllContent(*this, nInv);
+    }
+}
+
 void SwViewShell::Reformat()
 {
     SwWait aWait( *GetDoc()->GetDocShell(), true );
