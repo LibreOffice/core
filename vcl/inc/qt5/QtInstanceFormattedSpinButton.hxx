@@ -25,6 +25,7 @@ class QtInstanceFormattedSpinButton : public QtInstanceEntry,
 
 public:
     QtInstanceFormattedSpinButton(QtDoubleSpinBox* pSpinBox);
+    virtual ~QtInstanceFormattedSpinButton();
 
     virtual QWidget* getQWidget() const override;
 

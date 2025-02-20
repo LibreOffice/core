@@ -77,6 +77,12 @@ void QtInstanceFormattedSpinButton::SetFormatter(weld::EntryFormatter* pFormatte
     sync_increments_from_formatter();
 }
 
+QtInstanceFormattedSpinButton::~QtInstanceFormattedSpinButton()
+{
+    m_pFormatter = nullptr;
+    m_xOwnFormatter.reset();
+}
+
 void QtInstanceFormattedSpinButton::sync_range_from_formatter()
 {
     SolarMutexGuard g;
