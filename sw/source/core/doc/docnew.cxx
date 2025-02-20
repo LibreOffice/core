@@ -167,10 +167,9 @@ bool SwDoc::StartGrammarChecking( bool bSkipStart )
         if ( xGCIterator.is() )
         {
             rtl::Reference< SwXTextDocument >  xDoc = pDocShell->GetBaseModel();
-            uno::Reference< text::XFlatParagraphIteratorProvider >  xFPIP( xDoc );
 
             // start automatic background checking if not active already
-            if ( xFPIP.is() && !xGCIterator->isProofreading( cppu::getXWeak(xDoc.get()) ) )
+            if ( xDoc.is() && !xGCIterator->isProofreading( cppu::getXWeak(xDoc.get()) ) )
             {
                 bStarted = true;
                 if ( !bSkipStart )
@@ -180,7 +179,7 @@ bool SwDoc::StartGrammarChecking( bool bSkipStart )
                         // again until the user modifies the document
                         pLayout->SetNeedGrammarCheck(false);
                     }
-                    xGCIterator->startProofreading( cppu::getXWeak(xDoc.get()), xFPIP );
+                    xGCIterator->startProofreading( cppu::getXWeak(xDoc.get()), uno::Reference< text::XFlatParagraphIteratorProvider >(xDoc) );
                 }
             }
         }

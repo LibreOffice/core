@@ -1500,7 +1500,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         }
                         else
                         {
-                            uno::Reference< mail::XMailMessage > xMessage = lcl_CreateMailFromDoc(
+                            rtl::Reference< SwMailMessage > xMessage = lcl_CreateMailFromDoc(
                                 rMergeDescriptor, sFileURL, sColumnData, sMailBodyMimeType,
                                 sMailEncoding, pStoreToFilter->GetMimeType() );
                             if( xMessage.is() )

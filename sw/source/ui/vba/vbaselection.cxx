@@ -815,7 +815,7 @@ SwVbaSelection::Tables( const uno::Any& aIndex )
         SwFrameFormat* pFormat = pTTCursor->GetFrameFormat();
         if ( pFormat )
         {
-            uno::Reference< text::XTextTable > xTable = SwXTextTables::GetObject(*pFormat);
+            rtl::Reference< SwXTextTable > xTable = SwXTextTables::GetObject(*pFormat);
             uno::Reference< word::XTable > xVBATable = new SwVbaTable( mxParent, mxContext, mxModel, xTable );
             aRet <<= xVBATable;
         }

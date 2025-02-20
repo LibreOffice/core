@@ -1025,8 +1025,7 @@ void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
 
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::CHILD;
-    uno::Reference< XAccessible > xAcc( xAccImpl );
-    aEvent.OldValue <<= xAcc;
+    aEvent.OldValue <<= uno::Reference< XAccessible >( xAccImpl );
     aEvent.IndexHint = -1;
     FireAccessibleEvent( aEvent );
 

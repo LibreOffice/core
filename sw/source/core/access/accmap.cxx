@@ -1761,7 +1761,7 @@ uno::Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
         mpPreview.reset( new SwAccPreviewData() );
     mpPreview->Update( *this, _rPreviewPages, _rScale, _pSelectedPageFrame, _rPreviewWinSize );
 
-    uno::Reference<XAccessible> xAcc = GetDocumentView_( true );
+    rtl::Reference<SwAccessibleContext> xAcc = GetDocumentView_( true );
     return xAcc;
 }
 

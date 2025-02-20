@@ -89,8 +89,7 @@ public:
     {
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
-        uno::Reference< text::XTextTable > xTable( mxTables[ Index ] );
-        return uno::Any( xTable );
+        return uno::Any( uno::Reference< text::XTextTable >( mxTables[ Index ] ) );
     }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<text::XTextTable>::get(); }

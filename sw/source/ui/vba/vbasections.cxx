@@ -99,9 +99,8 @@ public:
     {
         // Hacky implementation of Range.Sections, only support 1 section
         uno::Reference< beans::XPropertySet > xRangeProps( xTextRange, uno::UNO_QUERY_THROW );
-        uno::Reference< style::XStyle > xStyle = word::getCurrentPageStyle( mxModel, xRangeProps );
-        uno::Reference< beans::XPropertySet > xPageProps( xStyle, uno::UNO_QUERY_THROW );
-        mxSections.push_back( xPageProps );
+        rtl::Reference< SwXBaseStyle > xStyle = word::getCurrentPageStyle( mxModel, xRangeProps );
+        mxSections.push_back( uno::Reference< beans::XPropertySet >(xStyle) );
     }
 
     // XIndexAccess

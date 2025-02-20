@@ -847,7 +847,7 @@ SwXFieldmark::getPresentation(sal_Bool const bShowCommand)
         }
         else
         {   // also for ODF_FORMDATE, which shouldn't be a fieldmark...
-            uno::Reference<text::XTextRange> const xCommand(GetCommand(*pMark));
+            rtl::Reference<SwXTextRange> const xCommand(GetCommand(*pMark));
             return xCommand->getString();
         }
     }
@@ -861,7 +861,7 @@ SwXFieldmark::getPresentation(sal_Bool const bShowCommand)
         else
         {
             assert(!m_bReplacementObject);
-            uno::Reference<text::XTextRange> const xResult(GetResult(*pMark));
+            rtl::Reference<SwXTextRange> const xResult(GetResult(*pMark));
             return xResult->getString();
         }
     }

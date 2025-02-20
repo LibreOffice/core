@@ -877,7 +877,6 @@ static Color getBookmarkColor(const SwTextNode& rNode, const sw::mark::Bookmark*
         SwDoc& rDoc = const_cast<SwDoc&>(rNode.GetDoc());
         const rtl::Reference< SwXBookmark > xRef = SwXBookmark::CreateXBookmark(rDoc,
                 const_cast<sw::mark::MarkBase*>(static_cast<const sw::mark::MarkBase*>(pBookmark)));
-        const css::uno::Reference<css::rdf::XResource> xSubject(xRef);
         if (const SwDocShell* pShell = rDoc.GetDocShell())
         {
             rtl::Reference<SwXTextDocument> xModel = pShell->GetBaseModel();
@@ -891,7 +890,7 @@ static Color getBookmarkColor(const SwTextNode& rNode, const sw::mark::Bookmark*
             const uno::Reference<rdf::XRepository> xRepository =
                 xModel->getRDFRepository();
             const uno::Reference<container::XEnumeration> xEnum(
-                xRepository->getStatements(xSubject, xODF_SHADING, nullptr), uno::UNO_SET_THROW);
+                xRepository->getStatements(css::uno::Reference<css::rdf::XResource>(xRef), xODF_SHADING, nullptr), uno::UNO_SET_THROW);
 
             rdf::Statement stmt;
             if ( xEnum->hasMoreElements() && (xEnum->nextElement() >>= stmt) )
@@ -919,7 +918,6 @@ static OUString getBookmarkType(const SwTextNode& rNode, const sw::mark::Bookmar
         SwDoc& rDoc = const_cast<SwDoc&>(rNode.GetDoc());
         const rtl::Reference< SwXBookmark > xRef = SwXBookmark::CreateXBookmark(rDoc,
                 const_cast<sw::mark::MarkBase*>(static_cast<const sw::mark::MarkBase*>(pBookmark)));
-        const css::uno::Reference<css::rdf::XResource> xSubject(xRef);
         if (const SwDocShell* pShell = rDoc.GetDocShell())
         {
             rtl::Reference<SwXTextDocument> xModel = pShell->GetBaseModel();
@@ -930,12 +928,12 @@ static OUString getBookmarkType(const SwTextNode& rNode, const sw::mark::Bookmar
             static uno::Reference< rdf::XURI > xODF_PREFIX(
                 rdf::URI::createKnown(xContext, rdf::URIs::RDF_TYPE), uno::UNO_SET_THROW);
 
-            uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(
+            rtl::Reference<SwXTextDocument> xDocumentMetadataAccess(
                 pShell->GetBaseModel());
             const uno::Reference<rdf::XRepository> xRepository =
                 xDocumentMetadataAccess->getRDFRepository();
             const uno::Reference<container::XEnumeration> xEnum(
-                xRepository->getStatements(xSubject, xODF_PREFIX, nullptr), uno::UNO_SET_THROW);
+                xRepository->getStatements(css::uno::Reference<css::rdf::XResource>(xRef), xODF_PREFIX, nullptr), uno::UNO_SET_THROW);
 
             rdf::Statement stmt;
             if ( xEnum->hasMoreElements() && (xEnum->nextElement() >>= stmt) )

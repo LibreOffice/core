@@ -3369,9 +3369,9 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
                 }
                 else
                     pFrameFormat = &pDesc->GetMaster();
-                const uno::Reference<text::XText> xRet = lcl_makeHeaderFooter(nRes, nRes == RES_HEADER, pFrameFormat);
+                const rtl::Reference<SwXHeadFootText> xRet = lcl_makeHeaderFooter(nRes, nRes == RES_HEADER, pFrameFormat);
                 if (xRet.is())
-                    aRetRange[nProp] <<= xRet;
+                    aRetRange[nProp] <<= uno::Reference<text::XText>(xRet);
             }
             break;
             case FN_PARAM_FTN_INFO:

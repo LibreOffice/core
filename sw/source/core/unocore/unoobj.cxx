@@ -2235,7 +2235,7 @@ SwXTextCursor::getPropertySetInfo()
             { UNO_NAME_IS_SKIP_PROTECTED_TEXT, FN_SKIP_PROTECTED_TEXT, cppu::UnoType<bool>::get(), PROPERTY_NONE,     0},
             { UNO_NAME_NO_FORMAT_ATTR, 0, cppu::UnoType<bool>::get(), PROPERTY_NONE,     0},
         };
-        const uno::Reference< beans::XPropertySetInfo >  xInfo =
+        const rtl::Reference< SfxItemPropertySetInfo >  xInfo =
             m_rPropSet.getPropertySetInfo();
         // extend PropertySetInfo!
         const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();

@@ -2705,7 +2705,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             else if ( pSectionContext )
             {
                 FieldContextPtr pContext = m_pImpl->GetTopFieldContext();
-                uno::Reference< beans::XPropertySet > xTOC = pContext->GetTOC();
+                rtl::Reference< SwXSection > xTOC = pContext->GetTOC();
                 if( xTOC.is() )
                 {
                     uno::Reference<text::XTextColumns> xTextColumns;

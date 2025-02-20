@@ -570,7 +570,7 @@ rtl::Reference<SwXDocumentSettings> const & DomainMapper_Impl::GetDocumentSettin
 
 void DomainMapper_Impl::SetDocumentSettingsProperty( const OUString& rPropName, const uno::Any& rValue )
 {
-    uno::Reference< beans::XPropertySet > xSettings = GetDocumentSettings();
+    rtl::Reference< SwXDocumentSettings > xSettings = GetDocumentSettings();
     if( xSettings.is() )
     {
         try

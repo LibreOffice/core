@@ -552,7 +552,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL
 SwXFieldMaster::getPropertySetInfo()
 {
     SolarMutexGuard aGuard;
-    uno::Reference< beans::XPropertySetInfo >  aRef =
+    rtl::Reference< SfxItemPropertySetInfo >  aRef =
                         aSwMapProvider.GetPropertySet(
             lcl_GetPropMapIdForFieldType(m_pImpl->m_nResTypeId))->getPropertySetInfo();
     return aRef;
@@ -1317,7 +1317,7 @@ SwXTextField::getTextFieldMaster()
     SwFieldType* pType = m_pImpl->GetFieldType();
     if (!pType && !m_pImpl->m_pDoc) // tdf#152619
         return nullptr;
-    uno::Reference<beans::XPropertySet> const xRet(
+    rtl::Reference<SwXFieldMaster> const xRet(
             SwXFieldMaster::CreateXFieldMaster(m_pImpl->m_pDoc, pType));
     return xRet;
 }
@@ -2141,7 +2141,7 @@ SwXTextField::getPropertySetInfo()
     }
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(
                     lcl_GetPropertyMapOfService(m_pImpl->m_nServiceId));
-    const uno::Reference<beans::XPropertySetInfo> xInfo = pPropSet->getPropertySetInfo();
+    const rtl::Reference<SfxItemPropertySetInfo> xInfo = pPropSet->getPropertySetInfo();
     // extend PropertySetInfo!
     const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
     aRef = new SfxExtItemPropertySetInfo(
@@ -2423,8 +2423,8 @@ uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyName)
                             = new SwTextAPIObject( std::make_unique<SwTextAPIEditSource>(m_pImpl->m_pDoc) );
                     }
 
-                    uno::Reference<text::XText> xText(m_pImpl->m_xTextObject);
-                    aRet <<= xText;
+                    rtl::Reference<SwTextAPIObject> xText(m_pImpl->m_xTextObject);
+                    aRet <<= uno::Reference<text::XText>(xText);
                     break;
                 }
             case FIELD_PROP_PAR1:

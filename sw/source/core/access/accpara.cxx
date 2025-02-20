@@ -3396,7 +3396,7 @@ sal_Int16 SAL_CALL SwAccessibleParagraph::getAccessibleRole()
 //Get the real heading level, Heading1 ~ Heading10
 sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()
 {
-    uno::Reference< css::beans::XPropertySet > xPortion = CreateUnoPortion( 0, 0 );
+    rtl::Reference< SwXTextPortion > xPortion = CreateUnoPortion( 0, 0 );
     uno::Any styleAny = xPortion->getPropertyValue( u"ParaStyleName"_ustr );
     OUString sValue;
     if (styleAny >>= sValue)
@@ -3417,7 +3417,7 @@ sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()
 
 bool SwAccessibleParagraph::IsBlockQuote()
 {
-    uno::Reference<css::beans::XPropertySet> xPortion = CreateUnoPortion(0, 0);
+    rtl::Reference<SwXTextPortion> xPortion = CreateUnoPortion(0, 0);
     uno::Any aStyleAny = xPortion->getPropertyValue(u"ParaStyleName"_ustr);
     OUString sValue;
     if (aStyleAny >>= sValue)

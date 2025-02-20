@@ -869,10 +869,8 @@ sal_Int32 SwXTextTables::getCount()
 
 uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nInputIndex)
 {
-    uno::Reference<XTextTable> xTable = getTextTableByIndex(nInputIndex);
-    uno::Any aRet;
-    aRet <<= xTable;
-    return aRet;
+    rtl::Reference<SwXTextTable> xTable = getTextTableByIndex(nInputIndex);
+    return uno::Any(uno::Reference<XTextTable>(xTable));
 }
 
 rtl::Reference<SwXTextTable> SwXTextTables::getTextTableByIndex(sal_Int32 nInputIndex)
@@ -1000,9 +998,9 @@ namespace
     {
         static uno::Any wrapFrame(SwFrameFormat & rFrameFormat)
         {
-            uno::Reference<text::XTextFrame> const xRet(
+            rtl::Reference<SwXTextFrame> const xRet(
                 SwXTextFrame::CreateXTextFrame(*rFrameFormat.GetDoc(), &rFrameFormat));
-            return uno::Any(xRet);
+            return uno::Any(uno::Reference<text::XTextFrame>(xRet));
         }
         static bool filter(const SwNode* const pNode) { return !pNode->IsNoTextNode(); };
     };
@@ -1012,9 +1010,9 @@ namespace
     {
         static uno::Any wrapFrame(SwFrameFormat & rFrameFormat)
         {
-            uno::Reference<text::XTextContent> const xRet(
+            rtl::Reference<SwXTextGraphicObject> const xRet(
                 SwXTextGraphicObject::CreateXTextGraphicObject(*rFrameFormat.GetDoc(), &rFrameFormat));
-            return uno::Any(xRet);
+            return uno::Any(uno::Reference<text::XTextContent>(xRet));
         }
         static bool filter(const SwNode* const pNode) { return pNode->IsGrfNode(); };
     };
@@ -1024,9 +1022,9 @@ namespace
     {
         static uno::Any wrapFrame(SwFrameFormat & rFrameFormat)
         {
-            uno::Reference<text::XTextContent> const xRet(
+            rtl::Reference<SwXTextEmbeddedObject> const xRet(
                 SwXTextEmbeddedObject::CreateXTextEmbeddedObject(*rFrameFormat.GetDoc(), &rFrameFormat));
-            return uno::Any(xRet);
+            return uno::Any(uno::Reference<text::XTextContent>(xRet));
         }
         static bool filter(const SwNode* const pNode) { return pNode->IsOLENode(); };
     };
@@ -1550,11 +1548,9 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
         {
             if (count == nIndex)
             {
-                uno::Any aRet;
-                const uno::Reference< text::XTextContent > xRef =
+                const rtl::Reference< SwXBookmark > xRef =
                     SwXBookmark::CreateXBookmark(rDoc, *ppMark);
-                aRet <<= xRef;
-                return aRet;
+                return uno::Any(uno::Reference< text::XTextContent >(xRef));
             }
             ++count; // only count real bookmarks
         }
@@ -1573,9 +1569,9 @@ uno::Any SwXBookmarks::getByName(const OUString& rName)
         throw NoSuchElementException();
 
     uno::Any aRet;
-    const uno::Reference< text::XTextContent > xRef =
+    const rtl::Reference< SwXBookmark > xRef =
         SwXBookmark::CreateXBookmark(rDoc, *ppBkmk);
-    aRet <<= xRef;
+    aRet <<= uno::Reference< text::XTextContent >(xRef);
     return aRet;
 }
 

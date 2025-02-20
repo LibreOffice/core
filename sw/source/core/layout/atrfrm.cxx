@@ -1803,9 +1803,9 @@ bool SwFormatAnchor::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 SwFrameFormat* pFormat = m_oContentAnchor->GetNode().GetFlyFormat();
                 if(pFormat)
                 {
-                    uno::Reference<text::XTextFrame> const xRet(
+                    rtl::Reference<SwXTextFrame> const xRet(
                         SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat));
-                    rVal <<= xRet;
+                    rVal <<= uno::Reference<text::XTextFrame>(xRet);
                 }
             }
         }

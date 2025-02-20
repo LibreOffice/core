@@ -453,8 +453,7 @@ uno::Reference<text::XTextField> lcl_InsertParagraphSignature(const rtl::Referen
                                                               const OUString& signature,
                                                               const OUString& usage)
 {
-    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel);
-    auto xField = uno::Reference<text::XTextField>(xMultiServiceFactory->createInstance(MetadataFieldServiceName), uno::UNO_QUERY);
+    auto xField = uno::Reference<text::XTextField>(xModel->createInstance(MetadataFieldServiceName), uno::UNO_QUERY);
 
     // Add the signature at the end.
     xField->attach(xParagraph->getAnchor()->getEnd());
@@ -708,7 +707,7 @@ SwTextFormatColl& SwEditShell::GetTextFormatColl(sal_uInt16 nFormatColl) const
     return *((*(GetDoc()->GetTextFormatColls()))[nFormatColl]);
 }
 
-static void insertFieldToDocument(uno::Reference<lang::XMultiServiceFactory> const & rxMultiServiceFactory,
+static void insertFieldToDocument(rtl::Reference<SwXTextDocument> const & rxMultiServiceFactory,
                            uno::Reference<text::XText> const & rxText, uno::Reference<text::XParagraphCursor> const & rxParagraphCursor,
                            OUString const & rsKey)
 {
@@ -794,8 +793,6 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
     rtl::Reference<SwXTextDocument> xModel = pDocShell->GetBaseModel();
     uno::Reference<container::XNameAccess> xStyleFamilies = xModel->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
-
-    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel);
 
     uno::Reference<document::XDocumentProperties> xDocumentProperties = pObjSh->getDocProperties();
 
@@ -888,16 +885,16 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
                     OUString sKey = aCreator.makeNumberedTextKey();
 
                     svx::classification::addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
-                    insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
-                    insertFieldToDocument(xMultiServiceFactory, xFooterText, xFooterParagraphCursor, sKey);
+                    insertFieldToDocument(xModel, xHeaderText, xHeaderParagraphCursor, sKey);
+                    insertFieldToDocument(xModel, xFooterText, xFooterParagraphCursor, sKey);
                 }
                 break;
 
                 case svx::ClassificationType::CATEGORY:
                 {
                     OUString sKey = aCreator.makeCategoryNameKey();
-                    insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
-                    insertFieldToDocument(xMultiServiceFactory, xFooterText, xFooterParagraphCursor, sKey);
+                    insertFieldToDocument(xModel, xHeaderText, xHeaderParagraphCursor, sKey);
+                    insertFieldToDocument(xModel, xFooterText, xFooterParagraphCursor, sKey);
                 }
                 break;
 
@@ -905,8 +902,8 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
                 {
                     OUString sKey = aCreator.makeNumberedMarkingKey();
                     svx::classification::addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
-                    insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
-                    insertFieldToDocument(xMultiServiceFactory, xFooterText, xFooterParagraphCursor, sKey);
+                    insertFieldToDocument(xModel, xHeaderText, xHeaderParagraphCursor, sKey);
+                    insertFieldToDocument(xModel, xFooterText, xFooterParagraphCursor, sKey);
                 }
                 break;
 
@@ -914,8 +911,8 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
                 {
                     OUString sKey = aCreator.makeNumberedIntellectualPropertyPartKey();
                     svx::classification::addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msName);
-                    insertFieldToDocument(xMultiServiceFactory, xHeaderText, xHeaderParagraphCursor, sKey);
-                    insertFieldToDocument(xMultiServiceFactory, xFooterText, xFooterParagraphCursor, sKey);
+                    insertFieldToDocument(xModel, xHeaderText, xHeaderParagraphCursor, sKey);
+                    insertFieldToDocument(xModel, xFooterText, xFooterParagraphCursor, sKey);
                 }
                 break;
 
@@ -1112,7 +1109,6 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
     for (const OUString& rPageStyleName : aStyles)
     {
         uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
-        uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel);
 
         if (bHeaderIsNeeded || bWatermarkIsNeeded || bHadWatermark)
         {
@@ -1131,7 +1127,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
                 if (!lcl_hasField(xHeaderText, DocInfoServiceName, Concat2View(SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCHEADER())))
                 {
                     // Append a field to the end of the header text.
-                    uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance(DocInfoServiceName), uno::UNO_QUERY);
+                    uno::Reference<beans::XPropertySet> xField(xModel->createInstance(DocInfoServiceName), uno::UNO_QUERY);
                     xField->setPropertyValue(UNO_NAME_NAME, uno::Any(SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCHEADER()));
                     uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
                     xHeaderText->insertTextContent(xHeaderText->getEnd(), xTextContent, /*bAbsorb=*/false);
@@ -1158,7 +1154,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
             if (!lcl_hasField(xFooterText, DocInfoServiceName, sFooter))
             {
                 // Append a field to the end of the footer text.
-                uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance(DocInfoServiceName), uno::UNO_QUERY);
+                uno::Reference<beans::XPropertySet> xField(xModel->createInstance(DocInfoServiceName), uno::UNO_QUERY);
                 xField->setPropertyValue(UNO_NAME_NAME, uno::Any(sFooter));
                 uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
                 xFooterText->insertTextContent(xFooterText->getEnd(), xTextContent, /*bAbsorb=*/false);
@@ -1959,8 +1955,7 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
 
         try
         {
-            const css::uno::Reference<css::rdf::XResource> xSubject(xParagraph);
-            std::map<OUString, OUString> aParagraphStatements = SwRDFHelper::getStatements(xModel, aGraphNames, xSubject);
+            std::map<OUString, OUString> aParagraphStatements = SwRDFHelper::getStatements(xModel, aGraphNames, xParagraph);
             auto it = aParagraphStatements.find(ParagraphClassificationFieldNamesRDFName);
             const OUString sFieldNames = (it != aParagraphStatements.end()) ? it->second : OUString();
 
@@ -1990,13 +1985,13 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
                     }
                     else if (aKeyCreator.isCategoryNameKey(sName))
                     {
-                        const std::pair<OUString, OUString> pairAbbr = lcl_getRDF(xModel, xSubject, ParagraphClassificationAbbrRDFName);
+                        const std::pair<OUString, OUString> pairAbbr = lcl_getRDF(xModel, uno::Reference<rdf::XResource>(xParagraph), ParagraphClassificationAbbrRDFName);
                         const OUString sAbbreviatedName = (!pairAbbr.second.isEmpty() ? pairAbbr.second : sValue);
                         aResults.emplace_back(svx::ClassificationType::CATEGORY, sValue, sAbbreviatedName, sBlank);
                     }
                     else if (aKeyCreator.isCategoryIdentifierKey(sName))
                     {
-                        const std::pair<OUString, OUString> pairAbbr = lcl_getRDF(xModel, xSubject, ParagraphClassificationAbbrRDFName);
+                        const std::pair<OUString, OUString> pairAbbr = lcl_getRDF(xModel, uno::Reference<rdf::XResource>(xParagraph), ParagraphClassificationAbbrRDFName);
                         const OUString sAbbreviatedName = (!pairAbbr.second.isEmpty() ? pairAbbr.second : sValue);
                         aResults.emplace_back(svx::ClassificationType::CATEGORY, sBlank, sAbbreviatedName, sValue);
                     }
@@ -2013,7 +2008,7 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
             }
 
             // Update classification based on results.
-            lcl_ApplyParagraphClassification(GetDoc(), xModel, xParagraph, xSubject, std::move(aResults));
+            lcl_ApplyParagraphClassification(GetDoc(), xModel, xParagraph, xParagraph, std::move(aResults));
 
             // Get Signatures
             std::map<OUString, SignatureDescr> aSignatures;

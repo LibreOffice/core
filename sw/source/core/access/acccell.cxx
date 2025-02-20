@@ -107,13 +107,11 @@ SwAccessibleCell::SwAccessibleCell(std::shared_ptr<SwAccessibleMap> const& pInit
 
     m_bIsSelected = IsSelected();
 
-    css::uno::Reference<css::accessibility::XAccessible> xTableReference(
+    rtl::Reference<SwAccessibleContext> xTableReference(
         getAccessibleParentImpl());
-    css::uno::Reference<css::accessibility::XAccessibleContext> xContextTable(
-        xTableReference, css::uno::UNO_QUERY);
     SAL_WARN_IF(
-        (!xContextTable.is()
-         || xContextTable->getAccessibleRole() != AccessibleRole::TABLE),
+        (!xTableReference.is()
+         || xTableReference->getAccessibleRole() != AccessibleRole::TABLE),
         "sw.a11y", "bad accessible context");
     m_pAccTable = static_cast<SwAccessibleTable *>(xTableReference.get());
 }

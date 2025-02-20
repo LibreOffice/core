@@ -1352,7 +1352,7 @@ SwXParagraph::createContentEnumeration(const OUString& rServiceName)
     SwTextNode & rTextNode(GetTextNodeOrThrow());
 
     SwPaM aPam( rTextNode );
-    uno::Reference< container::XEnumeration > xRet =
+    rtl::Reference< SwXParaFrameEnumeration > xRet =
         SwXParaFrameEnumeration::Create(aPam, PARAFRAME_PORTION_PARAGRAPH);
     return xRet;
 }

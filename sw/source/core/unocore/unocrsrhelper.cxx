@@ -530,10 +530,10 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
                 {   // hmm... can only return 1 here
                     SwTOXMark & rMark =
                         static_cast<SwTOXMark &>((*marks.begin())->GetAttr());
-                    const uno::Reference< text::XDocumentIndexMark > xRef =
+                    const rtl::Reference< SwXDocumentIndexMark > xRef =
                         SwXDocumentIndexMark::CreateXDocumentIndexMark(
                             rPam.GetDoc(), &rMark);
-                    (*pAny) <<= xRef;
+                    (*pAny) <<= uno::Reference< text::XDocumentIndexMark >(xRef);
                 }
             }
             else
@@ -549,10 +549,10 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
             {
                 if( pAny )
                 {
-                    const uno::Reference< text::XDocumentIndex > xRef =
+                    const rtl::Reference< SwXDocumentIndex > xRef =
                         SwXDocumentIndex::CreateXDocumentIndex(rPam.GetDoc(),
                             static_cast<SwTOXBaseSection *>(pBase));
-                    (*pAny) <<= xRef;
+                    (*pAny) <<= uno::Reference< text::XDocumentIndex >(xRef);
                 }
             }
             else
@@ -571,10 +571,10 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
             {
                 if( pAny )
                 {
-                    uno::Reference<text::XTextField> const xField(
+                    rtl::Reference<SwXTextField> const xField(
                         SwXTextField::CreateXTextField(&rPam.GetDoc(),
                            &pTextAttr->GetFormatField()));
-                    *pAny <<= xField;
+                    *pAny <<= uno::Reference<text::XTextField>(xField);
                 }
             }
             else
@@ -595,14 +595,14 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
                     //SwTable& rTable = static_cast<SwTableNode*>(pSttNode)->GetTable();
                     if(FN_UNO_TEXT_TABLE == rEntry.nWID)
                     {
-                        uno::Reference< XTextTable >  xTable = SwXTextTables::GetObject(*pTableFormat);
-                        *pAny <<= xTable;
+                        rtl::Reference< SwXTextTable >  xTable = SwXTextTables::GetObject(*pTableFormat);
+                        *pAny <<= uno::Reference< XTextTable >(xTable);
                     }
                     else
                     {
                         SwTableBox* pBox = pSttNode->GetTableBox();
-                        uno::Reference< XCell >  xCell = SwXCell::CreateXCell(pTableFormat, pBox);
-                        *pAny <<= xCell;
+                        rtl::Reference< SwXCell >  xCell = SwXCell::CreateXCell(pTableFormat, pBox);
+                        *pAny <<= uno::Reference< XCell >(xCell);
                     }
                 }
             }
@@ -621,9 +621,9 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
                 // Create a wrapper only for text frames, not for graphic or OLE nodes.
                 if (pAny && !rPam.GetPointNode().IsNoTextNode())
                 {
-                    uno::Reference<XTextFrame> const xFrame(
+                    rtl::Reference<SwXTextFrame> const xFrame(
                         SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat));
-                    (*pAny) <<= xFrame;
+                    (*pAny) <<= uno::Reference<XTextFrame>(xFrame);
                 }
             }
             else
@@ -652,8 +652,8 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
             {
                 if (pAny)
                 {
-                    uno::Reference<text::XTextContent> xParagraph = SwXParagraph::CreateXParagraph(pTextNode->GetDoc(), pTextNode, nullptr);
-                    *pAny <<= xParagraph;
+                    rtl::Reference<SwXParagraph> xParagraph = SwXParagraph::CreateXParagraph(pTextNode->GetDoc(), pTextNode, nullptr);
+                    *pAny <<= uno::Reference<text::XTextContent>(xParagraph);
                 }
             }
             else
@@ -685,10 +685,10 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
                 {
                     if( pAny )
                     {
-                        const uno::Reference< text::XFootnote > xFootnote =
+                        const rtl::Reference< SwXFootnote > xFootnote =
                             SwXFootnote::CreateXFootnote(rPam.GetDoc(),
                                     &const_cast<SwFormatFootnote&>(rFootnote));
-                        *pAny <<= xFootnote;
+                        *pAny <<= uno::Reference< text::XFootnote >(xFootnote);
                     }
                 }
                 else
@@ -711,10 +711,10 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
                 if( pAny )
                 {   // hmm... can only return 1 here
                     const SwFormatRefMark& rRef = (*marks.begin())->GetRefMark();
-                    uno::Reference<XTextContent> const xRef =
+                    rtl::Reference<SwXReferenceMark> const xRef =
                         SwXReferenceMark::CreateXReferenceMark(rPam.GetDoc(),
                                 const_cast<SwFormatRefMark*>(&rRef));
-                    *pAny <<= xRef;
+                    *pAny <<= uno::Reference<XTextContent>(xRef);
                 }
             }
             else

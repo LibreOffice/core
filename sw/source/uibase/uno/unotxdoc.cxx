@@ -882,8 +882,8 @@ Reference< XIndexAccess >
     auto pResultCursor(FindAny(xDesc, xCursor, true, nResult, xTmp));
     if(!pResultCursor)
         throw RuntimeException(u"No result cursor"_ustr);
-    Reference< XIndexAccess >  xRet = SwXTextRanges::Create( nResult ? &(*pResultCursor) : nullptr );
-    return xRet;
+    rtl::Reference< SwXTextRanges > xRet = SwXTextRanges::Create( nResult ? &(*pResultCursor) : nullptr );
+    return Reference< XIndexAccess >(xRet);
 }
 
 Reference< XInterface >  SwXTextDocument::findFirst(const Reference< util::XSearchDescriptor > & xDesc)
@@ -2220,8 +2220,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case WID_DOC_FORBIDDEN_CHARS:
         {
             GetPropertyHelper();
-            Reference<XForbiddenCharacters> xRet = mxPropertyHelper;
-            aAny <<= xRet;
+            aAny <<= Reference<XForbiddenCharacters>(mxPropertyHelper);
         }
         break;
         case WID_DOC_TWO_DIGIT_YEAR:

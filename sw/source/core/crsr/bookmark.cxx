@@ -517,7 +517,7 @@ namespace sw::mark
     uno::Reference< rdf::XMetadatable > Bookmark::MakeUnoObject()
     {
         SwDoc& rDoc( GetMarkPos().GetDoc() );
-        const uno::Reference< rdf::XMetadatable> xMeta(
+        const rtl::Reference< SwXBookmark> xMeta(
                 SwXBookmark::CreateXBookmark(rDoc, this) );
         return xMeta;
     }

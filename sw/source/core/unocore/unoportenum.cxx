@@ -873,10 +873,10 @@ lcl_ExportHints(
                             break;
                         pPortion = new SwXTextPortion(
                                 pUnoCursor, xParent, PORTION_FIELD);
-                        Reference<XTextField> const xField =
+                        rtl::Reference<SwXTextField> const xField =
                             SwXTextField::CreateXTextField(&rDoc,
                                     &pAttr->GetFormatField());
-                        pPortion->SetTextField(xField);
+                        pPortion->SetTextField(Reference<XTextField>(xField));
                     }
                     break;
 
@@ -898,10 +898,10 @@ lcl_ExportHints(
                         else
                         {
                             pPortion = new SwXTextPortion( pUnoCursor, xParent, PORTION_ANNOTATION );
-                            Reference<XTextField> xField =
+                            rtl::Reference<SwXTextField> xField =
                                 SwXTextField::CreateXTextField(&rDoc,
                                         &pAttr->GetFormatField());
-                            pPortion->SetTextField(xField);
+                            pPortion->SetTextField(Reference<XTextField>(xField));
                         }
                     }
                     break;
@@ -915,10 +915,10 @@ lcl_ExportHints(
                         if( *pUnoCursor->GetMark() == *pUnoCursor->GetPoint() )
                             break;
                         pPortion = new SwXTextPortion( pUnoCursor, xParent, PORTION_FIELD);
-                        Reference<XTextField> xField =
+                        rtl::Reference<SwXTextField> xField =
                             SwXTextField::CreateXTextField(&rDoc,
                                     &pAttr->GetFormatField());
-                        pPortion->SetTextField(xField);
+                        pPortion->SetTextField(Reference<XTextField>(xField));
                     }
                     break;
 

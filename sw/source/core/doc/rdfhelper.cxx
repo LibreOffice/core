@@ -168,20 +168,20 @@ void SwRDFHelper::clearStatements(const rtl::Reference<SwXTextDocument>& xModel,
 
 std::map<OUString, OUString> SwRDFHelper::getTextNodeStatements(const OUString& rType, SwTextNode& rTextNode)
 {
-    uno::Reference<rdf::XResource> xTextNode(SwXParagraph::CreateXParagraph(rTextNode.GetDoc(), &rTextNode, nullptr));
+    rtl::Reference<SwXParagraph> xTextNode(SwXParagraph::CreateXParagraph(rTextNode.GetDoc(), &rTextNode, nullptr));
     SwDocShell* pShell = rTextNode.GetDoc().GetDocShell();
     if (!pShell)
         return std::map<OUString, OUString>();
-    return getStatements(pShell->GetBaseModel(), rType, xTextNode);
+    return getStatements(pShell->GetBaseModel(), rType, uno::Reference<rdf::XResource>(xTextNode));
 }
 
 void SwRDFHelper::addTextNodeStatement(const OUString& rType, const OUString& rPath, SwTextNode& rTextNode, const OUString& rKey, const OUString& rValue)
 {
-    uno::Reference<rdf::XResource> xSubject(SwXParagraph::CreateXParagraph(rTextNode.GetDoc(), &rTextNode, nullptr));
+    rtl::Reference<SwXParagraph> xSubject(SwXParagraph::CreateXParagraph(rTextNode.GetDoc(), &rTextNode, nullptr));
     SwDocShell* pShell = rTextNode.GetDoc().GetDocShell();
     if (!pShell)
         return;
-    addStatement(pShell->GetBaseModel(), rType, rPath, xSubject, rKey, rValue);
+    addStatement(pShell->GetBaseModel(), rType, rPath, uno::Reference<rdf::XResource>(xSubject), rKey, rValue);
 }
 
 void SwRDFHelper::removeTextNodeStatement(const OUString& rType, SwTextNode& rTextNode, const OUString& rKey, const OUString& rValue)
@@ -198,10 +198,10 @@ void SwRDFHelper::removeTextNodeStatement(const OUString& rType, SwTextNode& rTe
 
     const uno::Reference<rdf::XURI>& xGraphName = aGraphNames[0];
     uno::Reference<rdf::XNamedGraph> xGraph = xModel->getRDFRepository()->getGraph(xGraphName);
-    uno::Reference<rdf::XResource> xSubject(SwXParagraph::CreateXParagraph(rTextNode.GetDoc(), &rTextNode, nullptr));
+    rtl::Reference<SwXParagraph> xSubject(SwXParagraph::CreateXParagraph(rTextNode.GetDoc(), &rTextNode, nullptr));
     uno::Reference<rdf::XURI> xKey = rdf::URI::create(xComponentContext, rKey);
     uno::Reference<rdf::XLiteral> xValue = rdf::Literal::create(xComponentContext, rValue);
-    xGraph->removeStatements(xSubject, xKey, xValue);
+    xGraph->removeStatements(uno::Reference<rdf::XResource>(xSubject), xKey, xValue);
 }
 
 void SwRDFHelper::updateTextNodeStatement(const OUString& rType, const OUString& rPath, SwTextNode& rTextNode, const OUString& rKey, const OUString& rOldValue, const OUString& rNewValue)
@@ -225,19 +225,19 @@ void SwRDFHelper::updateTextNodeStatement(const OUString& rType, const OUString&
     }
 
     uno::Reference<rdf::XNamedGraph> xGraph = xModel->getRDFRepository()->getGraph(xGraphName);
-    uno::Reference<rdf::XResource> xSubject(SwXParagraph::CreateXParagraph(rTextNode.GetDoc(), &rTextNode, nullptr));
+    rtl::Reference<SwXParagraph> xSubject(SwXParagraph::CreateXParagraph(rTextNode.GetDoc(), &rTextNode, nullptr));
     uno::Reference<rdf::XURI> xKey = rdf::URI::create(xComponentContext, rKey);
 
     if (aGraphNames.hasElements())
     {
         // Remove the old value.
         uno::Reference<rdf::XLiteral> xOldValue = rdf::Literal::create(xComponentContext, rOldValue);
-        xGraph->removeStatements(xSubject, xKey, xOldValue);
+        xGraph->removeStatements(uno::Reference<rdf::XResource>(xSubject), xKey, xOldValue);
     }
 
     // Now add it with new value.
     uno::Reference<rdf::XLiteral> xNewValue = rdf::Literal::create(xComponentContext, rNewValue);
-    xGraph->addStatement(xSubject, xKey, xNewValue);
+    xGraph->addStatement(uno::Reference<rdf::XResource>(xSubject), xKey, xNewValue);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

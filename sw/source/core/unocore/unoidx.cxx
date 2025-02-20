@@ -505,7 +505,7 @@ SwXDocumentIndex::getPropertySetInfo()
 {
     SolarMutexGuard g;
 
-    const uno::Reference< beans::XPropertySetInfo > xRef =
+    const rtl::Reference< SfxItemPropertySetInfo > xRef =
         m_pImpl->m_rPropSet.getPropertySetInfo();
     return xRef;
 }
@@ -905,9 +905,9 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             case WID_IDX_HEADER_SECTION :
                 if(WID_IDX_CONTENT_SECTION == pEntry->nWID)
                 {
-                    const uno::Reference <text::XTextSection> xContentSect =
+                    const rtl::Reference<SwXTextSection> xContentSect =
                         SwXTextSection::CreateXTextSection( pSectionFormat );
-                    aRet <<= xContentSect;
+                    aRet <<= uno::Reference <text::XTextSection>(xContentSect);
                 }
                 else if (pSectionFormat)
                 {
@@ -918,10 +918,10 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                     {
                         if(pSect->GetType() == SectionType::ToxHeader)
                         {
-                            const uno::Reference <text::XTextSection> xHeader =
+                            const rtl::Reference<SwXTextSection> xHeader =
                                 SwXTextSection::CreateXTextSection(
                                     pSect->GetFormat() );
-                            aRet <<= xHeader;
+                            aRet <<= uno::Reference <text::XTextSection>(xHeader);
                             break;
                         }
                     }
@@ -2028,7 +2028,7 @@ SwXDocumentIndexMark::getPropertySetInfo()
     }
     if(!xInfos[nPos].is())
     {
-        const uno::Reference< beans::XPropertySetInfo > xInfo =
+        const rtl::Reference< SfxItemPropertySetInfo > xInfo =
             m_pImpl->m_rPropSet.getPropertySetInfo();
         // extend PropertySetInfo!
         const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
@@ -2369,11 +2369,11 @@ SwXDocumentIndexes::getByIndex(sal_Int32 nIndex)
             pSect->GetFormat()->GetSectionNode() &&
             nIdx++ == nIndex )
         {
-           const uno::Reference< text::XDocumentIndex > xTmp =
+           const rtl::Reference< SwXDocumentIndex > xTmp =
                SwXDocumentIndex::CreateXDocumentIndex(
                    rDoc, static_cast<SwTOXBaseSection *>(pSect));
            uno::Any aRet;
-           aRet <<= xTmp;
+           aRet <<= uno::Reference< text::XDocumentIndex >(xTmp);
            return aRet;
         }
     }
@@ -2396,12 +2396,10 @@ SwXDocumentIndexes::getByName(const OUString& rName)
             (static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName()
                 == rName))
         {
-           const uno::Reference< text::XDocumentIndex > xTmp =
+           const rtl::Reference< SwXDocumentIndex > xTmp =
                SwXDocumentIndex::CreateXDocumentIndex(
                    rDoc, static_cast<SwTOXBaseSection *>(pSect));
-           uno::Any aRet;
-           aRet <<= xTmp;
-           return aRet;
+           return uno::Any(uno::Reference< text::XDocumentIndex >(xTmp));
         }
     }
     throw container::NoSuchElementException();

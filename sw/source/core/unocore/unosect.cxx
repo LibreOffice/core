@@ -236,9 +236,9 @@ SwXTextSection::getParentSection()
     SwSectionFormat & rSectionFormat( m_pImpl->GetSectionFormatOrThrow() );
 
     SwSectionFormat *const pParentFormat = rSectionFormat.GetParent();
-    const uno::Reference< text::XTextSection > xRet =
-        pParentFormat ? CreateXTextSection(pParentFormat) : nullptr;
-    return xRet;
+    if (!pParentFormat)
+        return nullptr;
+    return CreateXTextSection(pParentFormat);
 }
 
 uno::Sequence< uno::Reference< text::XTextSection > > SAL_CALL
@@ -1099,10 +1099,10 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
                 if (pTOXBaseSect)
                 {
                     // convert section to TOXBase and get SwXDocumentIndex
-                    const uno::Reference<text::XDocumentIndex> xIndex =
+                    const rtl::Reference<SwXDocumentIndex> xIndex =
                         SwXDocumentIndex::CreateXDocumentIndex(
                             *pTOXBaseSect->GetFormat()->GetDoc(), pTOXBaseSect);
-                    pRet[nProperty] <<= xIndex;
+                    pRet[nProperty] <<= uno::Reference<text::XDocumentIndex>(xIndex);
                 }
                 // else: no enclosing index found -> empty return value
             }

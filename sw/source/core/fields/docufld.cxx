@@ -1919,8 +1919,7 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             else
                 m_xTextObject->SetString( m_sText );
 
-            uno::Reference < text::XText > xText( m_xTextObject );
-            rAny <<= xText;
+            rAny <<= uno::Reference < text::XText >( m_xTextObject );
             break;
         }
     case FIELD_PROP_DATE:

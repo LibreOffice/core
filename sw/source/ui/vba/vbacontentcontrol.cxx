@@ -556,7 +556,7 @@ uno::Reference<word::XRange> SwVbaContentControl::getRange()
         SwPosition aStart(*pTextNode, m_pCC->GetTextAttr()->GetStart() + 1);
         // Don't select the CH_TXTATR_BREAKWORD itself at the end.
         SwPosition aEnd(*pTextNode, *m_pCC->GetTextAttr()->End() - 1);
-        uno::Reference<text::XTextRange> xText(
+        rtl::Reference<SwXTextRange> xText(
             SwXTextRange::CreateXTextRange(pTextNode->GetDoc(), aStart, &aEnd));
         if (xText.is())
             xRet = new SwVbaRange(mxParent, mxContext, mxTextDocument, xText->getStart(),

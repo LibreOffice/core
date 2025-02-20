@@ -343,16 +343,12 @@ void AccessibilityIssue::quickFixIssue() const
                 SwContentNode* pContentNode = m_pNode->GetContentNode();
                 SwPosition aStart(*pContentNode, m_nStart);
                 SwPosition aEnd(*pContentNode, m_nEnd);
-                uno::Reference<text::XTextRange> xRun
+                rtl::Reference<SwXTextRange> xRun
                     = SwXTextRange::CreateXTextRange(*m_pDoc, aStart, &aEnd);
-                if (xRun.is())
+                if (xRun.is()
+                    && xRun->getPropertySetInfo()->hasPropertyByName(u"HyperLinkName"_ustr))
                 {
-                    uno::Reference<beans::XPropertySet> xProperties(xRun, uno::UNO_QUERY);
-                    if (xProperties->getPropertySetInfo()->hasPropertyByName(u"HyperLinkName"_ustr))
-                    {
-                        xProperties->setPropertyValue(u"HyperLinkName"_ustr,
-                                                      uno::Any(aNameDialog->GetName()));
-                    }
+                    xRun->setPropertyValue(u"HyperLinkName"_ustr, uno::Any(aNameDialog->GetName()));
                 }
                 pWrtShell->SetModified();
             }

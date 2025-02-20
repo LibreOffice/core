@@ -283,8 +283,8 @@ uno::Any SwXTextView::getSelection()
             case ShellMode::TableListText:
             case ShellMode::Text            :
             {
-                uno::Reference< container::XIndexAccess > xPos = SwXTextRanges::Create(rSh.GetCursor());
-                aRef.set(xPos, uno::UNO_QUERY);
+                rtl::Reference< SwXTextRanges > xPos = SwXTextRanges::Create(rSh.GetCursor());
+                aRef.set(uno::Reference< container::XIndexAccess >(xPos), uno::UNO_QUERY);
             }
             break;
             case ShellMode::Frame           :

@@ -5758,7 +5758,7 @@ void SwTextNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
 uno::Reference< rdf::XMetadatable >
 SwTextNode::MakeUnoObject()
 {
-    const uno::Reference<rdf::XMetadatable> xMeta(
+    const rtl::Reference<SwXParagraph> xMeta(
             SwXParagraph::CreateXParagraph(GetDoc(), this, nullptr));
     return xMeta;
 }
