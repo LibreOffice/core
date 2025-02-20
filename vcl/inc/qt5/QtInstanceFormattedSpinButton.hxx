@@ -23,6 +23,8 @@ class QtInstanceFormattedSpinButton : public QtInstanceEntry,
     std::unique_ptr<weld::EntryFormatter> m_xOwnFormatter;
     weld::EntryFormatter* m_pFormatter;
 
+    bool m_bInSetSingleStep = false;
+
 public:
     QtInstanceFormattedSpinButton(QtDoubleSpinBox* pSpinBox);
     virtual ~QtInstanceFormattedSpinButton();
@@ -35,6 +37,9 @@ public:
     virtual void sync_range_from_formatter() override;
     virtual void sync_value_from_formatter() override;
     virtual void sync_increments_from_formatter() override;
+
+private:
+    OUString formatValue(double fValue);
 
 private Q_SLOTS:
     void handleValueChanged();

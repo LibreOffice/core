@@ -34,8 +34,7 @@ QtInstanceFormattedSpinButton::QtInstanceFormattedSpinButton(QtDoubleSpinBox* pS
             &QtInstanceFormattedSpinButton::handleTextChanged);
 
     // set functions to convert between value and formatted text
-    m_pSpinBox->setFormatValueFunction(
-        [this](double fValue) { return GetFormatter().FormatValue(fValue); });
+    m_pSpinBox->setFormatValueFunction([this](double fValue) { return formatValue(fValue); });
     m_pSpinBox->setParseTextFunction(
         [this](const QString& rText) { return GetFormatter().ParseText(toOUString(rText)); });
 }
@@ -116,9 +115,33 @@ void QtInstanceFormattedSpinButton::sync_increments_from_formatter()
     SolarMutexGuard g;
 
     GetQtInstance().RunInMainThread([&] {
-        if (m_pFormatter)
-            m_pSpinBox->setSingleStep(m_pFormatter->GetSpinSize());
+        if (!m_pFormatter)
+            return;
+
+        m_bInSetSingleStep = true;
+        m_pSpinBox->setSingleStep(m_pFormatter->GetSpinSize());
+        m_bInSetSingleStep = false;
     });
+}
+
+OUString QtInstanceFormattedSpinButton::formatValue(double fValue)
+{
+    SolarMutexGuard g;
+
+    OUString sText;
+    GetQtInstance().RunInMainThread([&] {
+        // If the formatter is a TimeFormatter, its CursorChangedHdl would trigger
+        // an update of the text via QDoubleSpinBox::setSingleStep that calls
+        // QAbstractSpinBoxPrivate::updateEdit, which would replace text that is currently
+        // being typed.
+        // Detect that case and simply return the current text.
+        if (m_bInSetSingleStep)
+            sText = toOUString(m_pSpinBox->text());
+        else
+            sText = GetFormatter().FormatValue(fValue);
+    });
+
+    return sText;
 }
 
 void QtInstanceFormattedSpinButton::handleValueChanged()
