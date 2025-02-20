@@ -484,11 +484,11 @@ int QtInstanceTreeView::iter_n_children(const weld::TreeIter&) const
     return -1;
 }
 
-void QtInstanceTreeView::remove(const weld::TreeIter&) { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::remove(const weld::TreeIter& rIter) { remove(rowIndex(rIter)); }
 
-void QtInstanceTreeView::select(const weld::TreeIter&) { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::select(const weld::TreeIter& rIter) { select(rowIndex(rIter)); }
 
-void QtInstanceTreeView::unselect(const weld::TreeIter&) { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::unselect(const weld::TreeIter& rIter) { unselect(rowIndex(rIter)); }
 
 void QtInstanceTreeView::set_extra_row_indent(const weld::TreeIter&, int)
 {
@@ -580,10 +580,9 @@ void QtInstanceTreeView::scroll_to_row(const weld::TreeIter& rIter)
     scroll_to_row(rowIndex(rIter));
 }
 
-bool QtInstanceTreeView::is_selected(const weld::TreeIter&) const
+bool QtInstanceTreeView::is_selected(const weld::TreeIter& rIter) const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    return is_selected(rowIndex(rIter));
 }
 
 void QtInstanceTreeView::move_subtree(weld::TreeIter&, const weld::TreeIter*, int)
