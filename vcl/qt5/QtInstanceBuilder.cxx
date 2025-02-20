@@ -86,6 +86,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"modules/scalc/ui/selectsource.ui"_ustr,
         u"modules/scalc/ui/showsheetdialog.ui"_ustr,
         u"modules/schart/ui/insertaxisdlg.ui"_ustr,
+        u"modules/simpress/ui/presentationdialog.ui"_ustr,
         u"modules/smath/ui/alignmentdialog.ui"_ustr,
         u"modules/smath/ui/fontsizedialog.ui"_ustr,
         u"modules/smath/ui/savedefaultsdialog.ui"_ustr,
