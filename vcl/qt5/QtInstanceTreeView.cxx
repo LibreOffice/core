@@ -135,15 +135,14 @@ void QtInstanceTreeView::select(int nPos)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread(
-        [&] { m_pSelectionModel->select(m_pModel->index(nPos, 0), QItemSelectionModel::Select); });
+        [&] { m_pSelectionModel->select(modelIndex(nPos), QItemSelectionModel::Select); });
 }
 
 void QtInstanceTreeView::unselect(int nPos)
 {
     SolarMutexGuard g;
-    GetQtInstance().RunInMainThread([&] {
-        m_pSelectionModel->select(m_pModel->index(nPos, 0), QItemSelectionModel::Deselect);
-    });
+    GetQtInstance().RunInMainThread(
+        [&] { m_pSelectionModel->select(modelIndex(nPos), QItemSelectionModel::Deselect); });
 }
 
 void QtInstanceTreeView::remove(int nPos)
@@ -319,7 +318,7 @@ void QtInstanceTreeView::set_cursor(int nPos)
     SolarMutexGuard g;
 
     GetQtInstance().RunInMainThread([&] {
-        m_pSelectionModel->setCurrentIndex(m_pModel->index(nPos, 0), QItemSelectionModel::NoUpdate);
+        m_pSelectionModel->setCurrentIndex(modelIndex(nPos), QItemSelectionModel::NoUpdate);
     });
 }
 
