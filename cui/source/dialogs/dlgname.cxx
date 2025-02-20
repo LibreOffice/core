@@ -72,6 +72,7 @@ SvxNumberDialog::SvxNumberDialog(weld::Window* pParent, const OUString& rDesc, s
     , m_xFtDescription(m_xBuilder->weld_label(u"description_label"_ustr))
 {
     m_xFtDescription->set_label(rDesc);
+    m_xEdtNumber->set_digits(0);
     m_xEdtNumber->set_min(nMin);
     m_xEdtNumber->set_max(nMax);
     m_xEdtNumber->set_value(nValue);
