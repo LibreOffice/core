@@ -292,10 +292,14 @@ void QtInstanceTreeView::scroll_to_row(int nRow)
     GetQtInstance().RunInMainThread([&] { m_pTreeView->scrollTo(modelIndex(nRow)); });
 }
 
-bool QtInstanceTreeView::is_selected(int) const
+bool QtInstanceTreeView::is_selected(int nPos) const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    SolarMutexGuard g;
+
+    bool bSelected = false;
+    GetQtInstance().RunInMainThread([&] { bSelected = m_pSelectionModel->isRowSelected(nPos); });
+
+    return bSelected;
 }
 
 int QtInstanceTreeView::get_cursor_index() const

@@ -61,7 +61,7 @@ public:
     virtual std::vector<int> get_selected_rows() const override;
     virtual void set_font_color(int pos, const Color& rColor) override;
     virtual void scroll_to_row(int nRow) override;
-    virtual bool is_selected(int pos) const override;
+    virtual bool is_selected(int nPos) const override;
     virtual int get_cursor_index() const override;
     virtual void set_cursor(int pos) override;
 
