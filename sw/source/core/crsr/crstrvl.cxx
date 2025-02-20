@@ -1859,10 +1859,40 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
             if( !bRet && IsAttrAtPos::Redline & rContentAtPos.eContentAtPos )
             {
-                const SwRangeRedline* pRedl = GetDoc()->getIDocumentRedlineAccess().GetRedline(aPos, nullptr);
+                SwRedlineTable::size_type index;
+                IDocumentRedlineAccess const& rIDRA{GetDoc()->getIDocumentRedlineAccess()};
+                const SwRangeRedline* pRedl{rIDRA.GetRedline(aPos, &index)};
 
                 if( pRedl )
                 {
+                    // treat insert/delete as more important than formatting
+                    for (; index < rIDRA.GetRedlineTable().size(); ++index)
+                    {
+                        SwRangeRedline const*const pTmp{rIDRA.GetRedlineTable()[index]};
+                        if (aPos < *pTmp->Start())
+                        {
+                            break;
+                        }
+                        switch (pRedl->GetType())
+                        {
+                            case RedlineType::Format:
+                            case RedlineType::FmtColl:
+                            case RedlineType::ParagraphFormat:
+                                switch (pTmp->GetType())
+                                {
+                                    case RedlineType::Insert:
+                                    case RedlineType::Delete:
+                                        pRedl = pTmp;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            break;
+                            default:
+                                break;
+                        }
+                    };
+
                     rContentAtPos.aFnd.pRedl = pRedl;
                     rContentAtPos.eContentAtPos = IsAttrAtPos::Redline;
                     rContentAtPos.pFndTextAttr = nullptr;
