@@ -9,11 +9,6 @@
 
 #include <QtDoubleSpinBox.hxx>
 #include <QtDoubleSpinBox.moc>
-#include <QtInstanceSpinButton.hxx>
-
-#include <QtTools.hxx>
-
-#include <vcl/qt/QtUtils.hxx>
 
 QtDoubleSpinBox::QtDoubleSpinBox(QWidget* pParent)
     : QDoubleSpinBox(pParent)
@@ -28,9 +23,9 @@ QString QtDoubleSpinBox::textFromValue(double fValue) const
 {
     if (m_aFormatValueFunction)
     {
-        std::optional<OUString> aText = m_aFormatValueFunction(fValue);
+        std::optional<QString> aText = m_aFormatValueFunction(fValue);
         if (aText.has_value())
-            return toQString(aText.value());
+            return aText.value();
     }
 
     return QDoubleSpinBox::textFromValue(fValue);

@@ -39,6 +39,7 @@ public:
 
 private:
     std::optional<double> convertTextToDouble(const QString& rText);
+    std::optional<QString> formatValue(double fValue);
 
 private Q_SLOTS:
     void handleValueChanged();

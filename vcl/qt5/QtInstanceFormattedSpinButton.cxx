@@ -10,6 +10,8 @@
 #include <QtInstanceFormattedSpinButton.hxx>
 #include <QtInstanceFormattedSpinButton.moc>
 
+#include <vcl/qt/QtUtils.hxx>
+
 QtInstanceFormattedSpinButton::QtInstanceFormattedSpinButton(QtDoubleSpinBox* pSpinBox)
     : QtInstanceEntry(pSpinBox->lineEdit())
     , m_pSpinBox(pSpinBox)
@@ -124,7 +126,7 @@ void QtInstanceFormattedSpinButton::sync_increments_from_formatter()
     });
 }
 
-OUString QtInstanceFormattedSpinButton::formatValue(double fValue)
+QString QtInstanceFormattedSpinButton::formatValue(double fValue)
 {
     SolarMutexGuard g;
 
@@ -141,7 +143,7 @@ OUString QtInstanceFormattedSpinButton::formatValue(double fValue)
             sText = GetFormatter().FormatValue(fValue);
     });
 
-    return sText;
+    return toQString(sText);
 }
 
 void QtInstanceFormattedSpinButton::handleValueChanged()

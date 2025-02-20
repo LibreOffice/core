@@ -39,7 +39,7 @@ public:
     virtual void sync_increments_from_formatter() override;
 
 private:
-    OUString formatValue(double fValue);
+    QString formatValue(double fValue);
 
 private Q_SLOTS:
     void handleValueChanged();

@@ -35,8 +35,7 @@ QtInstanceSpinButton::QtInstanceSpinButton(QtDoubleSpinBox* pSpinBox)
             &QtInstanceSpinButton::handleTextChanged);
 
     // set functions to convert between value and formatted text
-    m_pSpinBox->setFormatValueFunction(
-        [this](double fValue) { return format_floating_point_value(fValue); });
+    m_pSpinBox->setFormatValueFunction([this](double fValue) { return formatValue(fValue); });
     m_pSpinBox->setParseTextFunction(
         [this](const QString& rText) { return convertTextToDouble(rText); });
 }
@@ -115,6 +114,15 @@ std::optional<double> QtInstanceSpinButton::convertTextToDouble(const QString& r
         return std::optional<double>(fValue);
 
     return {};
+}
+
+std::optional<QString> QtInstanceSpinButton::formatValue(double fValue)
+{
+    std::optional<OUString> aText = format_floating_point_value(fValue);
+    if (!aText.has_value())
+        return {};
+
+    return std::optional<QString>(toQString(aText.value()));
 }
 
 void QtInstanceSpinButton::handleValueChanged()

@@ -9,11 +9,6 @@
 
 #pragma once
 
-class QtInstanceSpinButton;
-
-#include <rtl/ustring.hxx>
-#include <tools/gen.hxx>
-
 #include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QWidget>
@@ -24,7 +19,7 @@ class QtDoubleSpinBox : public QDoubleSpinBox
 {
     Q_OBJECT
 
-    std::function<std::optional<OUString>(double)> m_aFormatValueFunction;
+    std::function<std::optional<QString>(double)> m_aFormatValueFunction;
     std::function<std::optional<double>(const QString&)> m_aParseTextFunction;
 
 public:
@@ -37,7 +32,7 @@ public:
     virtual double valueFromText(const QString& rText) const override;
     virtual QValidator::State validate(QString& rInput, int& rPos) const override;
 
-    void setFormatValueFunction(std::function<std::optional<OUString>(double)> aFunction)
+    void setFormatValueFunction(std::function<std::optional<QString>(double)> aFunction)
     {
         m_aFormatValueFunction = aFunction;
     }
