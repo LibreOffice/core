@@ -782,11 +782,7 @@ void QtInstanceTreeView::set_selection_mode(SelectionMode eMode)
         [&] { m_pTreeView->setSelectionMode(mapSelectionMode(eMode)); });
 }
 
-int QtInstanceTreeView::count_selected_rows() const
-{
-    assert(false && "Not implemented yet");
-    return 0;
-}
+int QtInstanceTreeView::count_selected_rows() const { return get_selected_rows().size(); }
 
 void QtInstanceTreeView::remove_selection() { assert(false && "Not implemented yet"); }
 
