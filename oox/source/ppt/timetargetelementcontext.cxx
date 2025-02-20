@@ -31,6 +31,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <avmedia/mediaitem.hxx>
+#include <sax/fastattribs.hxx>
 #include <utility>
 
 using namespace ::com::sun::star::uno;

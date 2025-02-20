@@ -86,8 +86,7 @@ public:
                             const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs );
     ~AttributeList();
 
-    /** Returns the wrapped com.sun.star.xml.sax.XFastAttributeList object. */
-    css::uno::Reference<css::xml::sax::XFastAttributeList> getFastAttributeList() const;
+    const rtl::Reference<sax_fastparser::FastAttributeList> &  getFastAttributeList() const { return mxAttribs; }
 
     /** Returns true, if the specified attribute is present. */
     bool                hasAttribute( sal_Int32 nAttrToken ) const;

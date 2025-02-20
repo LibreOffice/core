@@ -39,6 +39,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <o3tl/string_view.hxx>
+#include <sax/fastattribs.hxx>
 #include <utility>
 
 #include "animvariantcontext.hxx"

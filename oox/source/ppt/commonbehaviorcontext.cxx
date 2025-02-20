@@ -23,6 +23,7 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
+#include <sax/fastattribs.hxx>
 
 #include "commonbehaviorcontext.hxx"
 #include "commontimenodecontext.hxx"

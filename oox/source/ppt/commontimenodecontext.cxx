@@ -31,6 +31,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <sax/fastattribs.hxx>
 
 #include "animationtypes.hxx"
 

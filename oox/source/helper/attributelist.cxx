@@ -150,11 +150,6 @@ AttributeList::AttributeList( const Reference< XFastAttributeList >& rxAttribs )
 
 AttributeList::~AttributeList() = default;
 
-css::uno::Reference<css::xml::sax::XFastAttributeList> AttributeList::getFastAttributeList() const
-{
-    return mxAttribs;
-}
-
 bool AttributeList::hasAttribute( sal_Int32 nAttrToken ) const
 {
     return mxAttribs->hasAttribute( nAttrToken );

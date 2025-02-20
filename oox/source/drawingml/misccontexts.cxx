@@ -27,6 +27,7 @@
 #include <oox/token/tokens.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/graph.hxx>
+#include <sax/fastattribs.hxx>
 #include <unordered_map>
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>

@@ -62,6 +62,7 @@
 #include <oox/ppt/pptimport.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <sax/fastattribs.hxx>
 
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>

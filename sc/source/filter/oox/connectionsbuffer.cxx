@@ -322,7 +322,7 @@ void Connection::importExtension(const AttributeList& rAttribs)
 }
 
 css::uno::Sequence<css::uno::Any> Connection::getSequenceOfAny(
-    css::uno::Reference<css::xml::sax::XFastAttributeList>& xFastAttributeList)
+    const css::uno::Reference<css::xml::sax::XFastAttributeList>& xFastAttributeList)
 {
     css::uno::Sequence<css::xml::FastAttribute> aFast = xFastAttributeList->getFastAttributes();
     css::uno::Sequence<css::xml::Attribute> aUnk = xFastAttributeList->getUnknownAttributes();

@@ -27,6 +27,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <sal/log.hxx>
+#include <sax/fastattribs.hxx>
 #include <utility>
 
 using namespace ::oox::core;
