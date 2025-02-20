@@ -95,6 +95,7 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
@@ -7732,6 +7733,31 @@ static void preLoadShortCutAccelerators()
     batch->commit();
 }
 
+static void preLoadTypeDetection()
+{
+    uno::Reference<document::XTypeDetection> xTypeDetection(
+        xFactory->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, xContext),
+        uno::UNO_QUERY);
+    if (xTypeDetection)
+    {
+        SvMemoryStream aMemory;
+        // just enough to check zip based type detection
+        const sal_uInt8 aMinimalZip[30] = { 0x50, 0x4b, 0x03, 0x04,
+                                            0x14, 0x00, 0x00, 0x08 };
+        aMemory.WriteBytes(aMinimalZip, std::size(aMinimalZip));
+        uno::Reference<io::XStream> xInputStream = new utl::OStreamWrapper(aMemory);
+
+        uno::Sequence<beans::PropertyValue> aMediaDesc(2);
+        auto pArgs = aMediaDesc.getArray();
+        pArgs[0].Name = "URL";
+        pArgs[0].Value <<= OUString("private:stream");
+        pArgs[1].Name = "InputStream";
+        pArgs[1].Value <<= xInputStream;
+
+        xTypeDetection->queryTypeByDescriptor(aMediaDesc, true);
+    }
+}
+
 /// Used only by LibreOfficeKit when used by Online to pre-initialize
 static void preloadData()
 {
@@ -7908,6 +7934,9 @@ static void preloadData()
         auto xComp = xCompLoader->loadComponentFromURL(component, u"_blank"_ustr, 0, szEmptyArgs);
         xComp->dispose();
     }
+
+    // Preload typedetection
+    preLoadTypeDetection();
 
     // Set user profile's path back to the original one
     rtl::Bootstrap::set(u"UserInstallation"_ustr, sUserPath);
