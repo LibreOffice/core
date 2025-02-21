@@ -139,6 +139,9 @@ public:
     inline void ResetCursorStack();
     SW_DLLPUBLIC SelectionType GetSelectionType() const;
 
+    // checks if the section is editable in read-only mode
+    bool    IsSectionEditableInReadonly() const;
+
     bool    IsModePushed() const { return nullptr != m_pModeStack; }
     void    PushMode();
     void    PopMode();

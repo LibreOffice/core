@@ -79,8 +79,9 @@ SwTbxAutoTextCtrl::~SwTbxAutoTextCtrl()
 void SwTbxAutoTextCtrl::CreatePopupWindow()
 {
     SwView* pView = ::GetActiveView();
-    if(pView && !pView->GetDocShell()->IsReadOnly() &&
-       !pView->GetWrtShell().HasReadonlySel() )
+    if (pView
+        && ((!pView->GetDocShell()->IsReadOnly() && !pView->GetWrtShell().HasReadonlySel())
+            || pView->GetWrtShell().IsSectionEditableInReadonly()))
     {
         Link<Menu*,bool> aLnk = LINK(this, SwTbxAutoTextCtrl, PopupHdl);
 

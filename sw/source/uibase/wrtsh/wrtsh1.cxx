@@ -1834,6 +1834,21 @@ SelectionType SwWrtShell::GetSelectionType() const
     return nCnt;
 }
 
+bool SwWrtShell::IsSectionEditableInReadonly() const
+{
+    bool bIsEditableSect = false;
+    SwTextNode* pTextNode = GetCursor()->GetPointNode().GetTextNode();
+    if (pTextNode)
+    {
+        if (SwSectionNode* pSectNode = pTextNode->FindSectionNode())
+        {
+            bIsEditableSect = pSectNode->GetSection().IsEditInReadonly();
+        }
+    }
+
+    return bIsEditableSect;
+}
+
 // Find the text collection with the name rCollname
 // Returns:   Pointer at the collection or 0, if no
 //            text collection with this name exists, or
