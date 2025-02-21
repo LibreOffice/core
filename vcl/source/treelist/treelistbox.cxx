@@ -1794,26 +1794,20 @@ void SvTreeListBox::SetDefaultCollapsedEntryBmp( const Image& aBmp )
     pImpl->SetDefaultEntryColBmp( aBmp );
 }
 
-void SvTreeListBox::EnableCheckButton( SvLBoxButtonData* pData )
+void SvTreeListBox::EnableCheckButton(SvLBoxButtonData& rData)
 {
-    if( !pData )
-        nTreeFlags &= ~SvTreeFlags::CHKBTN;
-    else
-    {
-        SetCheckButtonData( pData );
-        nTreeFlags |= SvTreeFlags::CHKBTN;
-        pData->SetLink( LINK(this, SvTreeListBox, CheckButtonClick));
-    }
+    SetCheckButtonData(rData);
+    nTreeFlags |= SvTreeFlags::CHKBTN;
+    rData.SetLink( LINK(this, SvTreeListBox, CheckButtonClick));
 
     SetTabs();
     if( IsUpdateMode() )
         Invalidate();
 }
 
-void SvTreeListBox::SetCheckButtonData( SvLBoxButtonData* pData )
+void SvTreeListBox::SetCheckButtonData(SvLBoxButtonData& rData)
 {
-    if ( pData )
-        pCheckButtonData = pData;
+    pCheckButtonData = &rData;
 }
 
 const Image& SvTreeListBox::GetDefaultExpandedNodeImage( )

@@ -4407,10 +4407,10 @@ void SalInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType eType)
     assert(n_children() == 0 && "tree must be empty");
     m_bTogglesAsRadio = eType == weld::ColumnToggleType::Radio;
 
-    SvLBoxButtonData* pData = m_bTogglesAsRadio ? &m_aRadioButtonData : &m_aCheckButtonData;
-    m_xTreeView->EnableCheckButton(pData);
+    SvLBoxButtonData& rData = m_bTogglesAsRadio ? m_aRadioButtonData : m_aCheckButtonData;
+    m_xTreeView->EnableCheckButton(rData);
     // EnableCheckButton clobbered this, restore it
-    pData->SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
+    rData.SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
 }
 
 void SalInstanceTreeView::set_toggle(int pos, TriState eState, int col)

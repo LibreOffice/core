@@ -535,8 +535,8 @@ public:
 
     void            SetNoAutoCurEntry( bool b );
 
-    void            EnableCheckButton( SvLBoxButtonData* );
-    void            SetCheckButtonData( SvLBoxButtonData* );
+    void            EnableCheckButton(SvLBoxButtonData&);
+    void            SetCheckButtonData(SvLBoxButtonData&);
 
     /** Returns the default image which clients should use for expanded nodes, to have a consistent user
         interface experience in the whole product.
