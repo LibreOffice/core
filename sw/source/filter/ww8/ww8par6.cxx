@@ -5888,7 +5888,7 @@ static const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                                                          // of fMultLinespace;long;
         {NS_sprm::PDyaBefore::val,        &SwWW8ImplReader::Read_UL},                     // pap.dyaBefore;dya;word;
         {NS_sprm::PDyaAfter::val,         &SwWW8ImplReader::Read_UL},                     // pap.dyaAfter;dya;word;
-        {NS_sprm::PChgTabs::val,          nullptr},                                       // pap.itbdMac, pap.rgdxaTab, pap.rgtbd;
+        {NS_sprm::PChgTabs::val,          &SwWW8ImplReader::Read_Tab},                    // pap.itbdMac, pap.rgdxaTab, pap.rgtbd;
                                                                                          // complex;variable length;
         {NS_sprm::PFInTable::val,         nullptr},                                       // pap.fInTable;0 or 1;byte;
         {NS_sprm::PFTtp::val,             &SwWW8ImplReader::Read_TabRowEnd},              // pap.fTtp;0 or 1;byte;
