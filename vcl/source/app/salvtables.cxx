@@ -4164,6 +4164,10 @@ void SalInstanceTreeView::clear()
     enable_notify_events();
 }
 
+void SalInstanceTreeView::select_all() { unselect(-1); }
+
+void SalInstanceTreeView::unselect_all() { select(-1); }
+
 int SalInstanceTreeView::n_children() const
 {
     return m_xTreeView->GetModel()->GetChildList(nullptr).size();
@@ -5621,6 +5625,10 @@ void SalInstanceIconView::unselect(int pos)
     }
     enable_notify_events();
 }
+
+void SalInstanceIconView::select_all() { unselect(-1); }
+
+void SalInstanceIconView::unselect_all() { select(-1); }
 
 int SalInstanceIconView::n_children() const
 {

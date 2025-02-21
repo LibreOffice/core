@@ -1344,8 +1344,8 @@ public:
     void connect_drag_begin(const Link<bool&, bool>& rLink) { m_aDragBeginHdl = rLink; }
 
     //all of them. Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
-    void select_all() { unselect(-1); }
-    void unselect_all() { select(-1); }
+    virtual void select_all() = 0;
+    virtual void unselect_all() = 0;
 
     // return the number of toplevel nodes
     virtual int n_children() const = 0;
@@ -1537,8 +1537,8 @@ public:
     virtual void selected_foreach(const std::function<bool(TreeIter&)>& func) = 0;
 
     //all of them. Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
-    void select_all() { unselect(-1); }
-    void unselect_all() { select(-1); }
+    virtual void select_all() = 0;
+    virtual void unselect_all() = 0;
 
     // return the number of toplevel nodes
     virtual int n_children() const = 0;

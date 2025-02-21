@@ -1645,6 +1645,9 @@ public:
 
     virtual void clear() override;
 
+    virtual void select_all() override;
+    virtual void unselect_all() override;
+
     virtual int n_children() const override;
 
     virtual int iter_n_children(const weld::TreeIter& rIter) const override;
@@ -1956,6 +1959,9 @@ public:
     virtual void select(int pos) override;
 
     virtual void unselect(int pos) override;
+
+    virtual void select_all() override;
+    virtual void unselect_all() override;
 
     virtual int n_children() const override;
 

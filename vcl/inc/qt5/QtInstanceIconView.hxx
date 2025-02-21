@@ -67,6 +67,9 @@ public:
 
     virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override;
 
+    virtual void select_all() override;
+    virtual void unselect_all() override;
+
     virtual int n_children() const override;
 
     virtual bool eventFilter(QObject* pObject, QEvent* pEvent) override;

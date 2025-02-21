@@ -143,6 +143,9 @@ public:
     virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rTransferable,
                                     sal_uInt8 eDNDConstants) override;
 
+    virtual void select_all() override;
+    virtual void unselect_all() override;
+
     virtual int n_children() const override;
 
     virtual void make_sorted() override;

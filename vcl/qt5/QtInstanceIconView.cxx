@@ -268,6 +268,18 @@ void QtInstanceIconView::selected_foreach(const std::function<bool(weld::TreeIte
     assert(false && "Not implemented yet");
 }
 
+void QtInstanceIconView::select_all()
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] { m_pListView->selectAll(); });
+}
+
+void QtInstanceIconView::unselect_all()
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] { m_pListView->clearSelection(); });
+}
+
 int QtInstanceIconView::n_children() const
 {
     SolarMutexGuard g;
