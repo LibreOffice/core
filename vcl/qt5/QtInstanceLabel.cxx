@@ -30,7 +30,8 @@ OUString QtInstanceLabel::get_label() const
 {
     SolarMutexGuard g;
     OUString sLabel;
-    GetQtInstance().RunInMainThread([&] { sLabel = toOUString(m_pLabel->text()); });
+    GetQtInstance().RunInMainThread(
+        [&] { sLabel = qtToVclStringWithAccelerator(m_pLabel->text()); });
 
     return sLabel;
 }

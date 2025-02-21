@@ -177,4 +177,26 @@ QString vclToQtStringWithAccelerator(const OUString& rText)
     return toQString(rText.replaceAll("&", "&&").replace('~', '&'));
 }
 
+OUString qtToVclStringWithAccelerator(const QString& rText)
+{
+    // find and replace single "&" used for accelerator
+    qsizetype nIndex = 0;
+    while (nIndex < rText.size())
+    {
+        nIndex = rText.indexOf('&', nIndex);
+        // skip "&&", i.e. escaped '&'
+        if (nIndex < rText.length() - 1 && rText.at(nIndex + 1) == '&')
+            nIndex += 2;
+        else
+            break;
+    }
+
+    QString sModified = rText;
+    if (nIndex >= 0)
+        sModified.replace(nIndex, 1, '~');
+
+    // replace escaped "&&" with plain "&"
+    return toOUString(sModified.replace("&&", "&"));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

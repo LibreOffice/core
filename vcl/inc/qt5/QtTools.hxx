@@ -161,6 +161,11 @@ QString vclMessageTypeToQtTitle(VclMessageType eType);
  */
 QString vclToQtStringWithAccelerator(const OUString& rText);
 
+/** Converts a string potentially containing a '&' character to indicate an accelerator
+ *  to the VCL variant using '~' for the accelerator.
+ */
+OUString qtToVclStringWithAccelerator(const QString& rText);
+
 template <typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
                                                      const QString& rString)

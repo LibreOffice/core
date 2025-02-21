@@ -68,7 +68,7 @@ OUString QtInstanceButton::get_label() const
     }
 
     assert(m_pButton);
-    return toOUString(m_pButton->text());
+    return qtToVclStringWithAccelerator(m_pButton->text());
 }
 
 void QtInstanceButton::set_font(const vcl::Font& /*rFont*/)
