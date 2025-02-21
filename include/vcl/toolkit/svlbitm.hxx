@@ -72,7 +72,7 @@ private:
     void                    SetWidthAndHeight();
 public:
                             // include creating default images (CheckBox or RadioButton)
-                            SvLBoxButtonData( const Control* pControlForSettings, bool _bRadioBtn );
+                            SvLBoxButtonData(const Control& rControlForSettings, bool _bRadioBtn);
 
                             ~SvLBoxButtonData();
 
@@ -93,9 +93,8 @@ public:
     void                    SetImage(SvBmp nIndex, const Image& aImage) { aBmps[static_cast<int>(nIndex)] = aImage; }
     Image&                  GetImage(SvBmp nIndex) { return aBmps[static_cast<int>(nIndex)]; }
 
-    void                    SetDefaultImages( const Control* pControlForSettings );
+    void                    SetDefaultImages(const Control& rControlForSettings);
                                 // set images according to the color scheme of the Control
-                                // pControlForSettings == NULL: settings are taken from Application
     bool                    HasDefaultImages() const;
 };
 

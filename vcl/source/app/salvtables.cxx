@@ -3861,8 +3861,8 @@ SalInstanceTreeView::SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBui
                                          bool bTakeOwnership)
     : SalInstanceWidget(pTreeView, pBuilder, bTakeOwnership)
     , m_xTreeView(pTreeView)
-    , m_aCheckButtonData(pTreeView, false)
-    , m_aRadioButtonData(pTreeView, true)
+    , m_aCheckButtonData(*pTreeView, false)
+    , m_aRadioButtonData(*pTreeView, true)
     , m_bTogglesAsRadio(false)
     , m_nSortColumn(-1)
 {

@@ -3435,7 +3435,7 @@ void SvTreeListBox::ApplySettings(vcl::RenderContext& rRenderContext)
 
     // always try to re-create default-SvLBoxButtonData
     if (pCheckButtonData && pCheckButtonData->HasDefaultImages())
-        pCheckButtonData->SetDefaultImages(this);
+        pCheckButtonData->SetDefaultImages(*this);
 }
 
 void SvTreeListBox::InitSettings()
@@ -3452,7 +3452,7 @@ void SvTreeListBox::InitSettings()
 
     // always try to re-create default-SvLBoxButtonData
     if( pCheckButtonData && pCheckButtonData->HasDefaultImages() )
-        pCheckButtonData->SetDefaultImages(this);
+        pCheckButtonData->SetDefaultImages(*this);
 }
 
 css::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()
