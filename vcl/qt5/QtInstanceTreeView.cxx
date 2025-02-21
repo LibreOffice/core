@@ -175,8 +175,8 @@ OUString QtInstanceTreeView::get_text(int nRow, int nCol) const
         const QModelIndex aIndex
             = nCol == -1 ? firstTextColumnModelIndex(nRow) : modelIndex(nRow, nCol);
         const QVariant aData = m_pModel->data(aIndex);
-        assert(aData.canConvert<QString>() && "model data not a string");
-        sText = toOUString(aData.toString());
+        if (aData.canConvert<QString>())
+            sText = toOUString(aData.toString());
     });
 
     return sText;
