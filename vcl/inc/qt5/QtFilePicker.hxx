@@ -167,6 +167,7 @@ private:
     QtFilePicker& operator=(const QtFilePicker&) = delete;
 
     static QString getResString(TranslateId pRedId);
+    void applyTemplate(sal_Int16 nTemplateId);
     static css::uno::Any handleGetListValue(const QComboBox* pWidget, sal_Int16 nControlAction);
     static void handleSetListValue(QComboBox* pQComboBox, sal_Int16 nAction,
                                    const css::uno::Any& rValue);

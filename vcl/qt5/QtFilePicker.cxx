@@ -603,6 +603,112 @@ QString QtFilePicker::getResString(TranslateId pResId)
     return aResString.replace('~', '&');
 }
 
+void QtFilePicker::applyTemplate(sal_Int16 nTemplateId)
+{
+    QFileDialog::AcceptMode acceptMode = QFileDialog::AcceptOpen;
+    switch (nTemplateId)
+    {
+        case FILEOPEN_SIMPLE:
+            break;
+
+        case FILESAVE_SIMPLE:
+            acceptMode = QFileDialog::AcceptSave;
+            break;
+
+        case FILESAVE_AUTOEXTENSION:
+            acceptMode = QFileDialog::AcceptSave;
+            addCustomControl(CHECKBOX_AUTOEXTENSION);
+            break;
+
+        case FILESAVE_AUTOEXTENSION_PASSWORD:
+            acceptMode = QFileDialog::AcceptSave;
+            addCustomControl(CHECKBOX_AUTOEXTENSION);
+            addCustomControl(CHECKBOX_PASSWORD);
+            addCustomControl(CHECKBOX_GPGENCRYPTION);
+#if HAVE_FEATURE_GPGME
+            addCustomControl(CHECKBOX_GPGSIGN);
+#endif
+            break;
+
+        case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
+            acceptMode = QFileDialog::AcceptSave;
+            addCustomControl(CHECKBOX_AUTOEXTENSION);
+            addCustomControl(CHECKBOX_PASSWORD);
+            addCustomControl(CHECKBOX_GPGENCRYPTION);
+#if HAVE_FEATURE_GPGME
+            addCustomControl(CHECKBOX_GPGSIGN);
+#endif
+            addCustomControl(CHECKBOX_FILTEROPTIONS);
+            break;
+
+        case FILESAVE_AUTOEXTENSION_SELECTION:
+            acceptMode = QFileDialog::AcceptSave;
+            addCustomControl(CHECKBOX_AUTOEXTENSION);
+            addCustomControl(CHECKBOX_SELECTION);
+            break;
+
+        case FILESAVE_AUTOEXTENSION_TEMPLATE:
+            acceptMode = QFileDialog::AcceptSave;
+            addCustomControl(CHECKBOX_AUTOEXTENSION);
+            addCustomControl(LISTBOX_TEMPLATE);
+            break;
+
+        case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
+            addCustomControl(CHECKBOX_LINK);
+            addCustomControl(CHECKBOX_PREVIEW);
+            addCustomControl(LISTBOX_IMAGE_TEMPLATE);
+            break;
+
+        case FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR:
+            addCustomControl(CHECKBOX_LINK);
+            addCustomControl(CHECKBOX_PREVIEW);
+            addCustomControl(LISTBOX_IMAGE_ANCHOR);
+            break;
+
+        case FILEOPEN_PLAY:
+            addCustomControl(PUSHBUTTON_PLAY);
+            break;
+
+        case FILEOPEN_LINK_PLAY:
+            addCustomControl(CHECKBOX_LINK);
+            addCustomControl(PUSHBUTTON_PLAY);
+            break;
+
+        case FILEOPEN_READONLY_VERSION:
+            addCustomControl(CHECKBOX_READONLY);
+            addCustomControl(LISTBOX_VERSION);
+            break;
+
+        case FILEOPEN_LINK_PREVIEW:
+            addCustomControl(CHECKBOX_LINK);
+            addCustomControl(CHECKBOX_PREVIEW);
+            break;
+
+        case FILEOPEN_PREVIEW:
+            addCustomControl(CHECKBOX_PREVIEW);
+            break;
+
+        default:
+            throw lang::IllegalArgumentException(u"Unknown template"_ustr,
+                                                 static_cast<XFilePicker2*>(this), 1);
+    }
+
+    TranslateId resId;
+    switch (acceptMode)
+    {
+        case QFileDialog::AcceptOpen:
+            resId = STR_FILEDLG_OPEN;
+            break;
+        case QFileDialog::AcceptSave:
+            resId = STR_FILEDLG_SAVE;
+            m_pFileDialog->setFileMode(QFileDialog::AnyFile);
+            break;
+    }
+
+    m_pFileDialog->setAcceptMode(acceptMode);
+    m_pFileDialog->setWindowTitle(getResString(resId));
+}
+
 void QtFilePicker::addCustomControl(sal_Int16 controlId)
 {
     QWidget* widget = nullptr;
@@ -717,19 +823,9 @@ void QtFilePicker::addCustomControl(sal_Int16 controlId)
 void SAL_CALL QtFilePicker::initialize(const uno::Sequence<uno::Any>& args)
 {
     // parameter checking
-    uno::Any arg;
     if (args.getLength() == 0)
         throw lang::IllegalArgumentException(u"no arguments"_ustr, static_cast<XFilePicker2*>(this),
                                              1);
-
-    arg = args[0];
-
-    if ((arg.getValueType() != cppu::UnoType<sal_Int16>::get())
-        && (arg.getValueType() != cppu::UnoType<sal_Int8>::get()))
-    {
-        throw lang::IllegalArgumentException(u"invalid argument type"_ustr,
-                                             static_cast<XFilePicker2*>(this), 1);
-    }
 
     SolarMutexGuard g;
     QtInstance& rQtInstance = GetQtInstance();
@@ -744,111 +840,17 @@ void SAL_CALL QtFilePicker::initialize(const uno::Sequence<uno::Any>& args)
     m_aTitleToFilterMap.clear();
     m_aCurrentFilter.clear();
 
-    sal_Int16 templateId = -1;
-    arg >>= templateId;
+    // handle template which is set in XFilePicker3, but not XFolderPicker2 initialization
+    uno::Any arg;
+    arg = args[0];
 
-    QFileDialog::AcceptMode acceptMode = QFileDialog::AcceptOpen;
-    switch (templateId)
+    if ((arg.getValueType() == cppu::UnoType<sal_Int16>::get())
+        || (arg.getValueType() == cppu::UnoType<sal_Int8>::get()))
     {
-        case FILEOPEN_SIMPLE:
-            break;
-
-        case FILESAVE_SIMPLE:
-            acceptMode = QFileDialog::AcceptSave;
-            break;
-
-        case FILESAVE_AUTOEXTENSION:
-            acceptMode = QFileDialog::AcceptSave;
-            addCustomControl(CHECKBOX_AUTOEXTENSION);
-            break;
-
-        case FILESAVE_AUTOEXTENSION_PASSWORD:
-            acceptMode = QFileDialog::AcceptSave;
-            addCustomControl(CHECKBOX_AUTOEXTENSION);
-            addCustomControl(CHECKBOX_PASSWORD);
-            addCustomControl(CHECKBOX_GPGENCRYPTION);
-#if HAVE_FEATURE_GPGME
-            addCustomControl(CHECKBOX_GPGSIGN);
-#endif
-            break;
-
-        case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
-            acceptMode = QFileDialog::AcceptSave;
-            addCustomControl(CHECKBOX_AUTOEXTENSION);
-            addCustomControl(CHECKBOX_PASSWORD);
-            addCustomControl(CHECKBOX_GPGENCRYPTION);
-#if HAVE_FEATURE_GPGME
-            addCustomControl(CHECKBOX_GPGSIGN);
-#endif
-            addCustomControl(CHECKBOX_FILTEROPTIONS);
-            break;
-
-        case FILESAVE_AUTOEXTENSION_SELECTION:
-            acceptMode = QFileDialog::AcceptSave;
-            addCustomControl(CHECKBOX_AUTOEXTENSION);
-            addCustomControl(CHECKBOX_SELECTION);
-            break;
-
-        case FILESAVE_AUTOEXTENSION_TEMPLATE:
-            acceptMode = QFileDialog::AcceptSave;
-            addCustomControl(CHECKBOX_AUTOEXTENSION);
-            addCustomControl(LISTBOX_TEMPLATE);
-            break;
-
-        case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
-            addCustomControl(CHECKBOX_LINK);
-            addCustomControl(CHECKBOX_PREVIEW);
-            addCustomControl(LISTBOX_IMAGE_TEMPLATE);
-            break;
-
-        case FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR:
-            addCustomControl(CHECKBOX_LINK);
-            addCustomControl(CHECKBOX_PREVIEW);
-            addCustomControl(LISTBOX_IMAGE_ANCHOR);
-            break;
-
-        case FILEOPEN_PLAY:
-            addCustomControl(PUSHBUTTON_PLAY);
-            break;
-
-        case FILEOPEN_LINK_PLAY:
-            addCustomControl(CHECKBOX_LINK);
-            addCustomControl(PUSHBUTTON_PLAY);
-            break;
-
-        case FILEOPEN_READONLY_VERSION:
-            addCustomControl(CHECKBOX_READONLY);
-            addCustomControl(LISTBOX_VERSION);
-            break;
-
-        case FILEOPEN_LINK_PREVIEW:
-            addCustomControl(CHECKBOX_LINK);
-            addCustomControl(CHECKBOX_PREVIEW);
-            break;
-
-        case FILEOPEN_PREVIEW:
-            addCustomControl(CHECKBOX_PREVIEW);
-            break;
-
-        default:
-            throw lang::IllegalArgumentException(u"Unknown template"_ustr,
-                                                 static_cast<XFilePicker2*>(this), 1);
+        sal_Int16 templateId = -1;
+        arg >>= templateId;
+        applyTemplate(templateId);
     }
-
-    TranslateId resId;
-    switch (acceptMode)
-    {
-        case QFileDialog::AcceptOpen:
-            resId = STR_FILEDLG_OPEN;
-            break;
-        case QFileDialog::AcceptSave:
-            resId = STR_FILEDLG_SAVE;
-            m_pFileDialog->setFileMode(QFileDialog::AnyFile);
-            break;
-    }
-
-    m_pFileDialog->setAcceptMode(acceptMode);
-    m_pFileDialog->setWindowTitle(getResString(resId));
 
     css::uno::Reference<css::awt::XWindow> xParentWindow;
     if (args.getLength() > 1)
