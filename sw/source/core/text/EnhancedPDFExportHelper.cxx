@@ -135,6 +135,7 @@ typedef std::pair< SwRect, sal_Int32 > IdMapEntry;
 typedef std::vector< IdMapEntry > LinkIdMap;
 typedef std::vector< IdMapEntry > NoteIdMap;
 typedef std::map< const SwTable*, TableColumnsMapEntry > TableColumnsMap;
+typedef std::map< const SwTable*, sal_Int32 > TableCaptionsMap;
 typedef std::map< const SwNumberTreeNode*, sal_Int32 > NumListIdMap;
 typedef std::map< const SwNumberTreeNode*, sal_Int32 > NumListBodyIdMap;
 typedef std::set<const void*> FrameTagSet;
@@ -142,6 +143,7 @@ typedef std::set<const void*> FrameTagSet;
 struct SwEnhancedPDFState
 {
     TableColumnsMap m_TableColumnsMap;
+    TableCaptionsMap m_TableCaptionsMap;
     LinkIdMap m_LinkIdMap;
     NoteIdMap m_NoteIdMap;
     NumListIdMap m_NumListIdMap;
@@ -255,6 +257,77 @@ bool lcl_IsHeadlineCell( const SwCellFrame& rCellFrame )
     }
 
     return bRet;
+}
+
+// returns true if the frame is a caption
+bool lcl_IsCaptionFrame(const SwFrame& rFrame)
+{
+    if (!rFrame.IsTextFrame())
+        return false;
+
+    SwTextFrame const& rTextFrame(*static_cast<const SwTextFrame*>(&rFrame));
+    const SwTextNode* const pTextNd(rTextFrame.GetTextNodeForParaProps());
+    if (!pTextNd)
+        return false;
+
+    const SwFormat* pTextFormat = pTextNd->GetFormatColl();
+    const SwFormat* pParentTextFormat = pTextFormat ? pTextFormat->DerivedFrom() : nullptr;
+
+    ProgName sParentStyleName;
+    if (pParentTextFormat)
+        SwStyleNameMapper::FillProgName(pParentTextFormat->GetName(), sParentStyleName,
+                                        SwGetPoolIdFromName::TxtColl);
+
+    return sParentStyleName == aCaption;
+}
+
+const SwTabFrame* lcl_FindTableForCaption(const SwFrame& rFrame)
+{
+    const SwTabFrame* pTabFrame = nullptr;
+    bool bPrevFrame = false;
+
+    // It is possible to add multiple captions to a table,
+    // both above and below, either simultaneously or separately.
+    // Start by checking the next frame, and if we don't find a table frame
+    // or if the next frame is not a caption, we return to the current caption
+    // and perform the same operation backwards using the previous frames.
+    const SwFrame* pRetFrame = rFrame.GetNext();
+    if (!pRetFrame)
+    {
+        bPrevFrame = true;
+        pRetFrame = rFrame.GetPrev();
+    }
+
+    while (pRetFrame)
+    {
+        if (pRetFrame->IsTabFrame())
+        {
+            pTabFrame = static_cast<const SwTabFrame*>(pRetFrame);
+            break;
+        }
+
+        // Check if the next or the previous frame is a caption frame
+        bool bIsCaption = lcl_IsCaptionFrame(*pRetFrame);
+        if (bIsCaption && pRetFrame->GetNext())
+        {
+            pRetFrame = !bPrevFrame ? pRetFrame->GetNext() : pRetFrame->GetPrev();
+        }
+        else if (!bPrevFrame && rFrame.GetPrev())
+        {
+            // If no table was found while checking the GetNext() frames,
+            // jump back to the current caption and
+            // start checking the GetPrev() frames.
+            bPrevFrame = true;
+            pRetFrame = rFrame.GetPrev();
+        }
+        else
+            // This part handles the case
+            // when the table has been deleted,
+            // but the caption has not.
+            break;
+    }
+
+    return pTabFrame;
 }
 
 // List all frames for which the NonStructElement tag is set:
@@ -573,7 +646,8 @@ void SwTaggedPDFHelper::BeginTag(vcl::pdf::StructElement eType, const OUString& 
              ( rFrame.IsTextFrame() && rFrame.GetDrawObjs() ) ||
              (rFrame.IsFootnoteFrame() && static_cast<SwFootnoteFrame const&>(rFrame).GetFollow()) ||
              ( rFrame.IsRowFrame() && rFrame.IsInSplitTableRow() ) ||
-             ( rFrame.IsCellFrame() && const_cast<SwFrame&>(rFrame).GetNextCellLeaf() ) )
+             ( rFrame.IsCellFrame() && const_cast<SwFrame&>(rFrame).GetNextCellLeaf() ) ||
+               rFrame.IsTabFrame() )
         {
             pKey = lcl_GetKeyFromFrame(rFrame);
 
@@ -1488,8 +1562,46 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
                 else if (sParentStyleName == aCaption)
                 {
-                    nPDFType = sal_uInt16(vcl::pdf::StructElement::Caption);
-                    aPDFType = sStyleName.toString() + aCaptionString;
+                    OUString sTableCaption = sStyleName.toString() + aCaptionString;
+
+                    if (!pFrame->IsInFly()) // Table caption
+                    {
+                        TableCaptionsMap& rTableCaptionsMap(
+                            mpPDFExtOutDevData->GetSwPDFState()->m_TableCaptionsMap);
+
+                        const SwTabFrame* pTabFrame = lcl_FindTableForCaption(*pFrame);
+                        if (pTabFrame)
+                        {
+                            const SwTable* pTable = pTabFrame->GetTable();
+                            if (rTableCaptionsMap.find(pTable) != rTableCaptionsMap.end())
+                            {
+                                // Reopen Caption tag:
+                                // - if the table has an above and below caption
+                                // - if the table has multiple above or below captions
+                                m_nRestoreCurrentTag
+                                    = mpPDFExtOutDevData->GetCurrentStructureElement();
+
+                                sal_Int32 const nCaptionId = rTableCaptionsMap[pTable];
+                                mpPDFExtOutDevData->SetCurrentStructureElement(nCaptionId);
+                            }
+                            else
+                            {
+                                OpenTagImpl(pTable);
+
+                                // Open Caption tag
+                                sal_Int32 const nId = BeginTagImpl(
+                                    nullptr, vcl::pdf::StructElement::Caption, sTableCaption);
+
+                                rTableCaptionsMap[pTable] = nId;
+                            }
+                        }
+                        aPDFType = "Standard";
+                    }
+                    else // Figure caption
+                    {
+                        nPDFType = sal_uInt16(vcl::pdf::StructElement::Caption);
+                        aPDFType = sTableCaption;
+                    }
                 }
 
                 // Heading: H

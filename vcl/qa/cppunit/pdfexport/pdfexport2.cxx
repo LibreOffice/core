@@ -85,6 +85,67 @@ void PdfExportTest2::load(std::u16string_view rFile, vcl::filter::PDFDocument& r
     CPPUNIT_ASSERT(rDocument.Read(aStream));
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160705)
+{
+    // Enable PDF/UA
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+
+    vcl::filter::PDFDocument aDocument;
+    load(u"tdf160705.odt", aDocument);
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
+
+    int nTable(0);
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (pType && pType->GetValue() == "StructElem")
+        {
+            auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+            if (pS && pS->GetValue() == "Table")
+            {
+                auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject->Lookup("K"_ostr));
+                CPPUNIT_ASSERT(pKids);
+
+                // In the first table, the caption element is the first child element
+                // In the second table, the caption element is the last child element
+                // In the third table, the caption element is the first child element
+                int nId = 0;
+                if (nTable == 1) // second table
+                    nId = pKids->GetElements().size() - 1;
+                else if (nTable == 2) // third table
+                    nId = 0;
+
+                auto pTableKids = pKids->GetElements();
+                auto pRefKid = dynamic_cast<vcl::filter::PDFReferenceElement*>(pTableKids[nId]);
+                CPPUNIT_ASSERT(pRefKid);
+                auto pObj = pRefKid->LookupObject();
+                CPPUNIT_ASSERT(pObj);
+                auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObj->Lookup("Type"_ostr));
+                CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType1->GetValue());
+                auto pS1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObj->Lookup("S"_ostr));
+                CPPUNIT_ASSERT_EQUAL("TableCaption"_ostr, pS1->GetValue());
+
+                auto pKids2 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObj->Lookup("K"_ostr));
+                CPPUNIT_ASSERT(pKids2);
+
+                // The captions of Table1, Table2 and Table3 also have two standard elements
+                CPPUNIT_ASSERT_EQUAL(size_t(2), pKids2->GetElements().size());
+
+                ++nTable;
+            }
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf159895)
 {
     // Enable PDF/UA
