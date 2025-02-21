@@ -1535,19 +1535,16 @@ IMPL_LINK(SvxLinguTabPage, SelectHdl_Impl, weld::TreeView&, rBox, void)
     }
 }
 
-void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
+void SvxLinguTabPage::HideModulesGroup()
 {
-    if ( 0 != ( GROUP_MODULES & nGrp ) )
-    {
-        m_xLinguModulesFT->hide();
-        m_xLinguModulesCLB->hide();
-        m_xLinguModulesEditPB->hide();
+    m_xLinguModulesFT->hide();
+    m_xLinguModulesCLB->hide();
+    m_xLinguModulesEditPB->hide();
 
-        if (officecfg::Office::Security::Hyperlinks::Open::get() != SvtExtendedSecurityOptions::OPEN_NEVER &&
-            !comphelper::LibreOfficeKit::isActive())
-        {
-            m_xMoreDictsBox->show();
-        }
+    if (officecfg::Office::Security::Hyperlinks::Open::get() != SvtExtendedSecurityOptions::OPEN_NEVER &&
+        !comphelper::LibreOfficeKit::isActive())
+    {
+        m_xMoreDictsBox->show();
     }
 }
 

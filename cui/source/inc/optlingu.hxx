@@ -37,12 +37,6 @@ namespace com::sun::star{
 
 class SvxLinguData_Impl;
 
-// define ----------------------------------------------------------------
-
-#define GROUP_MODULES   (sal_uInt16(0x0008))
-
-// forward ---------------------------------------------------------------
-
 class SvxEditModulesDlg : public weld::GenericDialogController
 {
     OUString            sSpell;
@@ -150,7 +144,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 
-    void                HideGroups( sal_uInt16 nGrp );
+    void                HideModulesGroup();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
