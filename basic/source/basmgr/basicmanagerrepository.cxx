@@ -371,7 +371,7 @@ namespace basic
         Reference< XInterface > xNormalized( _rxDocumentModel, UNO_QUERY );
         DBG_ASSERT( _rxDocumentModel.is(), "ImplRepository::impl_getLocationForModel: invalid model!" );
 
-        return m_aStore.find(xNormalized) != m_aStore.end();
+        return m_aStore.contains(xNormalized);
     }
 
     void ImplRepository::impl_initDocLibraryContainers_nothrow( const Reference<XStorageBasedLibraryContainer>& _rxBasicLibraries, const Reference<XStorageBasedLibraryContainer>& _rxDialogLibraries )
