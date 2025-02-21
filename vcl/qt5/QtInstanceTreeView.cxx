@@ -228,12 +228,31 @@ void QtInstanceTreeView::set_id(int nRow, const OUString& rId)
     });
 }
 
-void QtInstanceTreeView::set_toggle(int, TriState, int) { assert(false && "Not implemented yet"); }
-
-TriState QtInstanceTreeView::get_toggle(int, int) const
+void QtInstanceTreeView::set_toggle(int nRow, TriState eState, int nCol)
 {
-    assert(false && "Not implemented yet");
-    return TRISTATE_INDET;
+    assert(nCol != -1 && "Special column index -1 not handled yet");
+
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        const QModelIndex aIndex = modelIndex(nRow, nCol);
+        m_pModel->itemFromIndex(aIndex)->setCheckState(toQtCheckState(eState));
+    });
+}
+
+TriState QtInstanceTreeView::get_toggle(int nRow, int nCol) const
+{
+    assert(nCol != -1 && "Special column index -1 not handled yet");
+
+    SolarMutexGuard g;
+
+    TriState eState = TRISTATE_INDET;
+    GetQtInstance().RunInMainThread([&] {
+        const QModelIndex aIndex = modelIndex(nRow, nCol);
+        eState = toVclTriState(m_pModel->itemFromIndex(aIndex)->checkState());
+    });
+
+    return eState;
 }
 
 void QtInstanceTreeView::set_image(int nRow, const OUString& rImage, int nCol)
@@ -557,15 +576,14 @@ void QtInstanceTreeView::set_text_align(const weld::TreeIter&, double, int)
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceTreeView::set_toggle(const weld::TreeIter&, TriState, int)
+void QtInstanceTreeView::set_toggle(const weld::TreeIter& rIter, TriState bOn, int nCol)
 {
-    assert(false && "Not implemented yet");
+    set_toggle(rowIndex(rIter), bOn, nCol);
 }
 
-TriState QtInstanceTreeView::get_toggle(const weld::TreeIter&, int) const
+TriState QtInstanceTreeView::get_toggle(const weld::TreeIter& rIter, int nCol) const
 {
-    assert(false && "Not implemented yet");
-    return TRISTATE_INDET;
+    return get_toggle(rowIndex(rIter), nCol);
 }
 
 OUString QtInstanceTreeView::get_text(const weld::TreeIter& rIter, int nCol) const
@@ -912,6 +930,38 @@ QModelIndex QtInstanceTreeView::firstTextColumnModelIndex(int nRow) const
 
     assert(false && "No text column found");
     return QModelIndex();
+}
+
+Qt::CheckState QtInstanceTreeView::toQtCheckState(TriState eTristate)
+{
+    switch (eTristate)
+    {
+        case TRISTATE_FALSE:
+            return Qt::CheckState::Unchecked;
+        case TRISTATE_TRUE:
+            return Qt::CheckState::Checked;
+        case TRISTATE_INDET:
+            return Qt::CheckState::PartiallyChecked;
+        default:
+            assert(false && "unhandled Tristate value");
+            return Qt::CheckState::PartiallyChecked;
+    }
+}
+
+TriState QtInstanceTreeView::toVclTriState(Qt::CheckState eTristate)
+{
+    switch (eTristate)
+    {
+        case Qt::CheckState::Unchecked:
+            return TRISTATE_FALSE;
+        case Qt::CheckState::Checked:
+            return TRISTATE_TRUE;
+        case Qt::CheckState::PartiallyChecked:
+            return TRISTATE_INDET;
+        default:
+            assert(false && "unhandled Qt::CheckState value");
+            return TRISTATE_INDET;
+    }
 }
 
 void QtInstanceTreeView::handleActivated()
