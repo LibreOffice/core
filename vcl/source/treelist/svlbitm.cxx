@@ -38,7 +38,8 @@ struct SvLBoxButtonData_Impl
     SvLBoxButtonData_Impl() : pEntry(nullptr), pBox(nullptr), bDefaultImages(false), bShowRadioButton(false) {}
 };
 
-void SvLBoxButtonData::InitData( bool _bRadioBtn, const Control* pCtrl )
+SvLBoxButtonData::SvLBoxButtonData( const Control* pControlForSettings, bool _bRadioBtn )
+    : pImpl( new SvLBoxButtonData_Impl )
 {
     nWidth = nHeight = 0;
 
@@ -48,13 +49,7 @@ void SvLBoxButtonData::InitData( bool _bRadioBtn, const Control* pCtrl )
     pImpl->bDefaultImages = true;
     pImpl->bShowRadioButton = _bRadioBtn;
 
-    SetDefaultImages( pCtrl );
-}
-
-SvLBoxButtonData::SvLBoxButtonData( const Control* pControlForSettings, bool _bRadioBtn )
-    : pImpl( new SvLBoxButtonData_Impl )
-{
-    InitData( _bRadioBtn, pControlForSettings );
+    SetDefaultImages(pControlForSettings);
 }
 
 SvLBoxButtonData::~SvLBoxButtonData()

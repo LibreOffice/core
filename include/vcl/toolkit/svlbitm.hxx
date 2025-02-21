@@ -70,7 +70,6 @@ private:
     std::vector<Image>      aBmps;  // indices s. constants BMP_...
 
     void                    SetWidthAndHeight();
-    void                    InitData( bool _bRadioBtn, const Control* pControlForSettings );
 public:
                             // include creating default images (CheckBox or RadioButton)
                             SvLBoxButtonData( const Control* pControlForSettings, bool _bRadioBtn );
