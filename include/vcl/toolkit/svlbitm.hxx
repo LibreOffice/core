@@ -69,7 +69,6 @@ private:
 
     SvTreeListEntry* m_pEntry;
     SvLBoxButton* m_pBox;
-    bool m_bDefaultImages;
     bool m_bShowRadioButton;
 
     void                    SetWidthAndHeight();
@@ -98,7 +97,6 @@ public:
 
     void                    SetDefaultImages(const Control& rControlForSettings);
                                 // set images according to the color scheme of the Control
-    bool                    HasDefaultImages() const;
 };
 
 // **********************************************************************

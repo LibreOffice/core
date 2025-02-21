@@ -3434,7 +3434,7 @@ void SvTreeListBox::ApplySettings(vcl::RenderContext& rRenderContext)
     rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
 
     // always try to re-create default-SvLBoxButtonData
-    if (pCheckButtonData && pCheckButtonData->HasDefaultImages())
+    if (pCheckButtonData)
         pCheckButtonData->SetDefaultImages(*this);
 }
 
@@ -3451,7 +3451,7 @@ void SvTreeListBox::InitSettings()
     SetBackground(rStyleSettings.GetFieldColor());
 
     // always try to re-create default-SvLBoxButtonData
-    if( pCheckButtonData && pCheckButtonData->HasDefaultImages() )
+    if( pCheckButtonData)
         pCheckButtonData->SetDefaultImages(*this);
 }
 

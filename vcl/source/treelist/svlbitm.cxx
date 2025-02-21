@@ -31,13 +31,11 @@
 SvLBoxButtonData::SvLBoxButtonData(const Control& rControlForSettings, bool _bRadioBtn)
     : m_pEntry(nullptr)
     , m_pBox(nullptr)
-    , m_bDefaultImages(false)
     , m_bShowRadioButton(false)
 {
     nWidth = nHeight = 0;
 
     bDataOk = false;
-    m_bDefaultImages = true;
     m_bShowRadioButton = _bRadioBtn;
 
     SetDefaultImages(rControlForSettings);
@@ -136,11 +134,6 @@ void SvLBoxButtonData::SetDefaultImages(const Control& rCtrl)
         SetImage(SvBmp::TRISTATE,    CheckBox::GetCheckImage( rSettings, DrawButtonFlags::DontKnow ) );
         SetImage(SvBmp::HITRISTATE,  CheckBox::GetCheckImage( rSettings, DrawButtonFlags::DontKnow | DrawButtonFlags::Pressed ) );
     }
-}
-
-bool SvLBoxButtonData::HasDefaultImages() const
-{
-    return m_bDefaultImages;
 }
 
 bool SvLBoxButtonData::IsRadio() const {
