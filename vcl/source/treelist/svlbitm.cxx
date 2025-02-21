@@ -33,8 +33,6 @@ SvLBoxButtonData::SvLBoxButtonData(const Control& rControlForSettings, bool _bRa
     , m_pBox(nullptr)
     , m_bShowRadioButton(false)
 {
-    nWidth = nHeight = 0;
-
     bDataOk = false;
     m_bShowRadioButton = _bRadioBtn;
 
@@ -70,11 +68,17 @@ SvBmp SvLBoxButtonData::GetIndex( SvItemStateFlags nItemState )
     return nIdx;
 }
 
+Size SvLBoxButtonData::GetSize()
+{
+    if (!bDataOk)
+        SetWidthAndHeight();
+
+    return m_aSize;
+}
+
 void SvLBoxButtonData::SetWidthAndHeight()
 {
-    Size aSize = aBmps.at(SvBmp::UNCHECKED).GetSizePixel();
-    nWidth = aSize.Width();
-    nHeight = aSize.Height();
+    m_aSize = aBmps.at(SvBmp::UNCHECKED).GetSizePixel();
     bDataOk = true;
 }
 
@@ -349,7 +353,7 @@ void SvLBoxButton::Paint(
     ControlType eCtrlType = (pData->IsRadio())? ControlType::Radiobutton : ControlType::Checkbox;
     if ( rRenderContext.IsNativeControlSupported( eCtrlType, ControlPart::Entire) )
     {
-        Size aSize(pData->Width(), pData->Height());
+        Size aSize = pData->GetSize();
         ImplAdjustBoxSize(aSize, eCtrlType, rRenderContext);
         ImplControlValue aControlValue;
         tools::Rectangle aCtrlRegion( rPos, aSize );
@@ -416,7 +420,7 @@ void SvLBoxButton::InitViewData(SvTreeListBox* pView,SvTreeListEntry* pEntry, Sv
 {
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
-    Size aSize( pData->Width(), pData->Height() );
+    Size aSize = pData->GetSize();
 
     ControlType eCtrlType = (pData->IsRadio())? ControlType::Radiobutton : ControlType::Checkbox;
     if ( pView )
@@ -509,20 +513,6 @@ std::unique_ptr<SvLBoxItem> SvLBoxContextBmp::Clone(SvLBoxItem const * pSource) 
     pNew->m_pImpl->m_aImage2 = static_cast< SvLBoxContextBmp const * >( pSource )->m_pImpl->m_aImage2;
     pNew->m_pImpl->m_bExpanded = static_cast<SvLBoxContextBmp const *>(pSource)->m_pImpl->m_bExpanded;
     return std::unique_ptr<SvLBoxItem>(pNew.release());
-}
-
-tools::Long SvLBoxButtonData::Width()
-{
-    if ( !bDataOk )
-        SetWidthAndHeight();
-    return nWidth;
-}
-
-tools::Long SvLBoxButtonData::Height()
-{
-    if ( !bDataOk )
-        SetWidthAndHeight();
-    return nHeight;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

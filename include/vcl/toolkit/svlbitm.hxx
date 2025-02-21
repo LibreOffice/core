@@ -62,8 +62,7 @@ class SvLBoxButtonData
 {
 private:
     Link<SvLBoxButtonData*,void> aLink;
-    tools::Long                    nWidth;
-    tools::Long                    nHeight;
+    Size                    m_aSize;
     bool                    bDataOk;
     std::map<SvBmp, Image> aBmps;
 
@@ -79,8 +78,7 @@ public:
                             ~SvLBoxButtonData();
 
     static SvBmp            GetIndex( SvItemStateFlags nItemState );
-    tools::Long                    Width();
-    tools::Long                    Height();
+    Size                    GetSize();
     void                    SetLink( const Link<SvLBoxButtonData*,void>& rLink) { aLink=rLink; }
     bool                    IsRadio() const;
     // as buttons are not derived from LinkHdl
