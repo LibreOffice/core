@@ -163,4 +163,33 @@ SystemGraphicsData GenPspGraphics::GetGraphicsData() const
     return SystemGraphicsData();
 }
 
+#if ENABLE_CAIRO_CANVAS
+
+bool GenPspGraphics::SupportsCairo() const
+{
+    return false;
+}
+
+cairo::SurfaceSharedPtr GenPspGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& /*rSurface*/) const
+{
+    return cairo::SurfaceSharedPtr();
+}
+
+cairo::SurfaceSharedPtr GenPspGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int /*x*/, int /*y*/, int /*width*/, int /*height*/) const
+{
+    return cairo::SurfaceSharedPtr();
+}
+
+cairo::SurfaceSharedPtr GenPspGraphics::CreateBitmapSurface(const OutputDevice& /*rRefDevice*/, const BitmapSystemData& /*rData*/, const Size& /*rSize*/) const
+{
+    return cairo::SurfaceSharedPtr();
+}
+
+css::uno::Any GenPspGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*rSurface*/, const basegfx::B2ISize& /*rSize*/) const
+{
+    return css::uno::Any();
+}
+
+#endif // ENABLE_CAIRO_CANVAS
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

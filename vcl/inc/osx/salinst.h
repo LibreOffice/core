@@ -110,6 +110,11 @@ public:
                             CreateVirtualDevice( SalGraphics& rGraphics,
                                                    tools::Long nDX, tools::Long nDY,
                                                    DeviceFormat eFormat ) override;
+    virtual std::unique_ptr<SalVirtualDevice>
+                            CreateVirtualDevice( SalGraphics& rGraphics,
+                                                   tools::Long &nDX, tools::Long &nDY,
+                                                   DeviceFormat eFormat,
+                                                   const SystemGraphicsData& rData ) override;
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                ImplJobSetup* pSetupData ) override;
     virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter ) override;

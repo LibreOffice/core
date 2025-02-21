@@ -1019,10 +1019,11 @@ SalGraphics* WinSalFrame::AcquireGraphics()
     if ( mbGraphics || !mhWnd )
         return nullptr;
 
+    SalData* pSalData = GetSalData();
     WinSalGraphics *pGraphics = nullptr;
     HDC hDC = nullptr;
 
-    assert(GetSalData()->mpInstance->IsMainThread());
+    assert(pSalData->mpInstance->IsMainThread());
     if ( !mpLocalGraphics )
         mpLocalGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd, this);
     pGraphics = mpLocalGraphics;

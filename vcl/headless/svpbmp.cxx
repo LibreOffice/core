@@ -239,6 +239,11 @@ void SvpSalBitmap::ReleaseBuffer(BitmapBuffer*, BitmapAccessMode nMode)
         InvalidateChecksum();
 }
 
+bool SvpSalBitmap::GetSystemData( BitmapSystemData& )
+{
+    return false;
+}
+
 bool SvpSalBitmap::ScalingSupported() const
 {
     return false;

@@ -245,6 +245,51 @@ OUString OutputDevice::GetRenderBackendName() const
     return mpGraphics->getRenderBackendName();
 }
 
+#if ENABLE_CAIRO_CANVAS
+
+bool OutputDevice::SupportsCairo() const
+{
+    if (!mpGraphics && !AcquireGraphics())
+        return false;
+    assert(mpGraphics);
+
+    return mpGraphics->SupportsCairo();
+}
+
+cairo::SurfaceSharedPtr OutputDevice::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
+{
+    if (!mpGraphics && !AcquireGraphics())
+        return cairo::SurfaceSharedPtr();
+    assert(mpGraphics);
+    return mpGraphics->CreateSurface(rSurface);
+}
+
+cairo::SurfaceSharedPtr OutputDevice::CreateSurface(int x, int y, int width, int height) const
+{
+    if (!mpGraphics && !AcquireGraphics())
+        return cairo::SurfaceSharedPtr();
+    assert(mpGraphics);
+    return mpGraphics->CreateSurface(*this, x, y, width, height);
+}
+
+cairo::SurfaceSharedPtr OutputDevice::CreateBitmapSurface(const BitmapSystemData& rData, const Size& rSize) const
+{
+    if (!mpGraphics && !AcquireGraphics())
+        return cairo::SurfaceSharedPtr();
+    assert(mpGraphics);
+    return mpGraphics->CreateBitmapSurface(*this, rData, rSize);
+}
+
+css::uno::Any OutputDevice::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const
+{
+    if (!mpGraphics && !AcquireGraphics())
+        return css::uno::Any();
+    assert(mpGraphics);
+    return mpGraphics->GetNativeSurfaceHandle(rSurface, rSize);
+}
+
+#endif // ENABLE_CAIRO_CANVAS
+
 css::uno::Any OutputDevice::GetSystemGfxDataAny() const
 {
     const SystemGraphicsData aSysData = GetSystemGfxData();

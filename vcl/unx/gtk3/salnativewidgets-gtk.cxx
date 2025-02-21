@@ -27,6 +27,7 @@
 #include <IconThemeSelector.hxx>
 #include "custom-theme.hxx"
 #include <vcl/themecolors.hxx>
+#include "gtkcairo.hxx"
 #include <optional>
 
 GtkCssProvider*  GtkSalGraphics::mpCustomThemeProvider = nullptr;
@@ -2821,6 +2822,31 @@ bool GtkSalGraphics::isNativeControlSupported( ControlType nType, ControlPart nP
     return false;
 }
 #endif
+
+#if ENABLE_CAIRO_CANVAS
+
+bool GtkSalGraphics::SupportsCairo() const
+{
+    return true;
+}
+
+cairo::SurfaceSharedPtr GtkSalGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
+{
+    return std::make_shared<cairo::Gtk3Surface>(rSurface);
+}
+
+cairo::SurfaceSharedPtr GtkSalGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int x, int y, int width, int height) const
+{
+    return std::make_shared<cairo::Gtk3Surface>(this, x, y, width, height);
+}
+
+#endif
+
+void GtkSalGraphics::WidgetQueueDraw() const
+{
+    //request gtk to sync the entire contents
+    mpFrame->queue_draw();
+}
 
 namespace {
 

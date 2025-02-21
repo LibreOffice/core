@@ -1670,6 +1670,7 @@ QtSvpGraphics::CreateSurface(OutputDevice const&, int, int, int, int) const
 QtSvpGraphics::CreateSurface(std::shared_ptr<_cairo_surface> const&) const
 QtSvpGraphics::GetResolution(int&, int&)
 QtSvpGraphics::QtSvpGraphics(QtFrame*)
+QtSvpGraphics::SupportsCairo() const
 QtSvpGraphics::handleDamage(tools::Rectangle const&)
 QtSvpGraphics::updateQWidget() const
 QtSvpGraphics::~QtSvpGraphics()
@@ -5770,6 +5771,7 @@ SkiaSalBitmap::GetAsSkBitmap() const
 SkiaSalBitmap::GetBitCount() const
 SkiaSalBitmap::GetImageKey(SkiaHelper::DirectImage) const
 SkiaSalBitmap::GetSkShader(SkSamplingOptions const&, SkiaHelper::DirectImage) const
+SkiaSalBitmap::GetSystemData(BitmapSystemData&)
 SkiaSalBitmap::Invert()
 SkiaSalBitmap::IsAllBlack() const
 SkiaSalBitmap::IsFullyOpaqueAsAlpha() const

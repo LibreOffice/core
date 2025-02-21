@@ -124,7 +124,7 @@ void VirtualDevice::ReleaseGraphics( bool bRelease )
 }
 
 void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
-                                    tools::Long nDX, tools::Long nDY )
+                                    tools::Long nDX, tools::Long nDY, const SystemGraphicsData *pData )
 {
     SAL_INFO( "vcl.virdev", "ImplInitVirDev(" << nDX << "," << nDY << ")" );
 
@@ -154,7 +154,12 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
         (void)pOutDev->AcquireGraphics();
     pGraphics = pOutDev->mpGraphics;
     if ( pGraphics )
-        mpVirDev = pSVData->mpDefInst->CreateVirtualDevice(*pGraphics, nDX, nDY, meFormatAndAlpha);
+    {
+        if (pData)
+            mpVirDev = pSVData->mpDefInst->CreateVirtualDevice(*pGraphics, nDX, nDY, meFormatAndAlpha, *pData);
+        else
+            mpVirDev = pSVData->mpDefInst->CreateVirtualDevice(*pGraphics, nDX, nDY, meFormatAndAlpha);
+    }
     else
         mpVirDev = nullptr;
     if ( !mpVirDev )
@@ -188,7 +193,8 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     // virtual devices have white background by default
     SetBackground( Wallpaper( COL_WHITE ) );
 
-    if( bErase )
+    // #i59283# don't erase user-provided surface
+    if( !pData && bErase)
         Erase();
 
     // register VirDev in the list
@@ -208,6 +214,16 @@ VirtualDevice::VirtualDevice(const OutputDevice* pCompDev, DeviceFormat eFormatA
                             << ", " << static_cast<int>(eOutDevType) << " )" );
 
     ImplInitVirDev(pCompDev ? pCompDev : Application::GetDefaultDevice(), 0, 0);
+}
+
+VirtualDevice::VirtualDevice(const SystemGraphicsData& rData, const Size &rSize,
+                             DeviceFormat eFormat)
+    : OutputDevice(OUTDEV_VIRDEV)
+    , meFormatAndAlpha(eFormat)
+{
+    SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
+
+    ImplInitVirDev(Application::GetDefaultDevice(), rSize.Width(), rSize.Height(), &rData);
 }
 
 VirtualDevice::~VirtualDevice()

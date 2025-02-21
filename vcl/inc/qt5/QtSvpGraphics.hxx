@@ -36,6 +36,16 @@ public:
     QtSvpGraphics(QtFrame* pFrame);
     ~QtSvpGraphics() override;
 
+    void updateQWidget() const;
+
+#if ENABLE_CAIRO_CANVAS
+    bool SupportsCairo() const override;
+    cairo::SurfaceSharedPtr
+    CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
+    cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width,
+                                          int height) const override;
+#endif // ENABLE_CAIRO_CANVAS
+
     virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
 
     virtual OUString getRenderBackendName() const override { return u"qtsvp"_ustr; }

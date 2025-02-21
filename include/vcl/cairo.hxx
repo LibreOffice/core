@@ -61,6 +61,41 @@
 typedef struct _cairo_surface cairo_surface_t;
 typedef struct _cairo cairo_t;
 
+class VirtualDevice;
 
+namespace cairo {
+
+    typedef std::shared_ptr<cairo_surface_t> CairoSurfaceSharedPtr;
+    typedef std::shared_ptr<cairo_t>         CairoSharedPtr;
+    struct Surface;
+    typedef std::shared_ptr<Surface>         SurfaceSharedPtr;
+
+    /** Cairo surface interface
+
+        For each cairo-supported platform, there's an implementation of
+        this interface
+     */
+    struct Surface
+    {
+    public:
+        virtual ~Surface() {}
+
+        // Query methods
+        virtual CairoSharedPtr getCairo() const = 0;
+        virtual CairoSurfaceSharedPtr getCairoSurface() const = 0;
+        virtual SurfaceSharedPtr getSimilar(int cairo_content_type, int width, int height) const = 0;
+
+        /// factory for VirDev on this surface
+        virtual VclPtr<VirtualDevice> createVirtualDevice() const = 0;
+
+        /// Resize the surface (possibly destroying content), only possible for X11 typically
+        /// so on failure caller must create a new surface instead
+        virtual bool Resize( int /*width*/, int /*height*/ ) { return false; }
+
+        /// Flush all pending output to surface
+        virtual void flush() const = 0;
+    };
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

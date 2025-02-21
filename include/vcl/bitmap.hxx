@@ -90,6 +90,19 @@ class   SalBitmap;
 
 namespace basegfx { class SystemDependentDataHolder; }
 
+struct BitmapSystemData
+{
+    #if defined(_WIN32)
+    void* pDIB; // device independent byte buffer
+    #elif defined( MACOSX ) || defined( IOS )
+    // Nothing needed, apparently
+    #else
+    void* aPixmap;
+    #endif
+    int mnWidth;
+    int mnHeight;
+};
+
 class SAL_WARN_UNUSED VCL_DLLPUBLIC Bitmap final
 {
 public:
@@ -120,6 +133,14 @@ public:
     inline sal_Int64        GetSizeBytes() const;
     bool                    HasGreyPalette8Bit() const;
     bool                    HasGreyPaletteAny() const;
+    /** get system dependent bitmap data
+
+        @param rData
+        The system dependent BitmapSystemData structure to be filled
+
+        @return true if the bitmap has a valid system object (e.g. not empty)
+    */
+    bool                    GetSystemData( BitmapSystemData& rData ) const;
 
     BitmapChecksum          GetChecksum() const;
 

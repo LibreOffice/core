@@ -28,10 +28,24 @@ $(eval $(call gb_Module_add_targets,canvas,\
         $(if $(or $(DISABLE_GUI),$(DISABLE_DYNLOADING)),,Executable_canvasdemo)) \
 ))
 
+ifeq ($(ENABLE_CAIRO_CANVAS),TRUE)
+$(eval $(call gb_Module_add_targets,canvas,\
+	Library_cairocanvas \
+))
+endif
+
 ifeq ($(ENABLE_OPENGL_CANVAS),TRUE)
 $(eval $(call gb_Module_add_targets,canvas,\
 	Library_oglcanvas \
 	Package_opengl \
+))
+endif
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Module_add_targets,canvas,\
+	Library_directx9canvas \
+	Library_gdipluscanvas \
+	StaticLibrary_directxcanvas \
 ))
 endif
 

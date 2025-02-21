@@ -426,6 +426,29 @@ std::unique_ptr<SalVirtualDevice> QtInstance::CreateVirtualDevice(SalGraphics& r
     }
 }
 
+std::unique_ptr<SalVirtualDevice>
+QtInstance::CreateVirtualDevice(SalGraphics& rGraphics, tools::Long& nDX, tools::Long& nDY,
+                                DeviceFormat /*eFormat*/, const SystemGraphicsData& rGd)
+{
+    if (m_bUseCairo)
+    {
+        SvpSalGraphics* pSvpSalGraphics = dynamic_cast<QtSvpGraphics*>(&rGraphics);
+        assert(pSvpSalGraphics);
+        // tdf#127529 see SvpSalInstance::CreateVirtualDevice for the rare case of a non-null pPreExistingTarget
+        cairo_surface_t* pPreExistingTarget = static_cast<cairo_surface_t*>(rGd.pSurface);
+        std::unique_ptr<SalVirtualDevice> pVD(
+            new QtSvpVirtualDevice(pSvpSalGraphics->getSurface(), pPreExistingTarget));
+        pVD->SetSize(nDX, nDY);
+        return pVD;
+    }
+    else
+    {
+        std::unique_ptr<SalVirtualDevice> pVD(new QtVirtualDevice(/*scale*/ 1));
+        pVD->SetSize(nDX, nDY);
+        return pVD;
+    }
+}
+
 std::unique_ptr<SalMenu> QtInstance::CreateMenu(bool bMenuBar, Menu* pVCLMenu)
 {
     SolarMutexGuard aGuard;

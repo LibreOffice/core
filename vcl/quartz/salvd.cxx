@@ -55,6 +55,18 @@ std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraph
 #endif
 }
 
+std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraphics&,
+                                                        tools::Long &nDX, tools::Long &nDY,
+                                                        DeviceFormat eFormat,
+                                                        const SystemGraphicsData& rData )
+{
+    // #i92075# can be called first in a thread
+    SalData::ensureThreadAutoreleasePool();
+
+    return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice(
+                                     nDX, nDY, eFormat, rData ));
+}
+
 AquaSalVirtualDevice::AquaSalVirtualDevice(
     AquaSalGraphics* pGraphic, tools::Long nDX, tools::Long nDY,
     DeviceFormat eFormat )
@@ -100,6 +112,53 @@ AquaSalVirtualDevice::AquaSalVirtualDevice(
         SetSize( nDX, nDY );
     }
     // NOTE: if SetSize does not succeed, we just ignore the nDX and nDY
+}
+
+AquaSalVirtualDevice::AquaSalVirtualDevice(
+    tools::Long &nDX, tools::Long &nDY,
+    DeviceFormat eFormat, const SystemGraphicsData& rData )
+  : mbGraphicsUsed( false )
+  , mnBitmapDepth( 0 )
+  , mnWidth(0)
+  , mnHeight(0)
+{
+    SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::AquaSalVirtualDevice() this=" << this
+              << " size=(" << nDX << "x" << nDY << ") bitcount=" << static_cast<int>(eFormat) <<
+              " rData=" << &rData << " context=" << rData.rCGContext );
+
+    assert(rData.rCGContext);
+
+    // Create virtual device based on existing SystemGraphicsData
+    // We ignore nDx and nDY, as the desired size comes from the SystemGraphicsData.
+    // the mxContext is from pData (what "mxContext"? there is no such field anywhere in vcl;)
+    mbForeignContext = true;
+    mpGraphics = new AquaSalGraphics();
+    if (nDX == 0)
+    {
+        nDX = 1;
+    }
+    if (nDY == 0)
+    {
+        nDY = 1;
+    }
+    maLayer.set(CGLayerCreateWithContext(rData.rCGContext, CGSizeMake(nDX, nDY), nullptr));
+    // Interrogate the context as to its real size
+    if (maLayer.isSet())
+    {
+        const CGSize aSize = CGLayerGetSize(maLayer.get());
+        nDX = static_cast<tools::Long>(aSize.width);
+        nDY = static_cast<tools::Long>(aSize.height);
+    }
+    else
+    {
+        nDX = 0;
+        nDY = 0;
+    }
+
+    mpGraphics->SetVirDevGraphics(this, maLayer, rData.rCGContext);
+
+    SAL_INFO("vcl.virdev", "AquaSalVirtualDevice::AquaSalVirtualDevice() this=" << this <<
+             " (" << nDX << "x" << nDY << ") mbForeignContext=" << (mbForeignContext ? "YES" : "NO"));
 }
 
 AquaSalVirtualDevice::~AquaSalVirtualDevice()

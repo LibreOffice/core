@@ -174,6 +174,8 @@ void QtBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
         InvalidateChecksum();
 }
 
+bool QtBitmap::GetSystemData(BitmapSystemData& /*rData*/) { return false; }
+
 bool QtBitmap::ScalingSupported() const { return false; }
 
 bool QtBitmap::Scale(const double& /*rScaleX*/, const double& /*rScaleY*/,

@@ -82,6 +82,7 @@ BigInt::operator%=(BigInt const&)
 BigInt::operator=(BigInt const&)
 Bitmap::CreateAlphaMask(Color const&) const
 Bitmap::CreateMask(Color const&) const
+Bitmap::GetSystemData(BitmapSystemData&) const
 Bitmap::RemoveBlendedStartColor(Color const&, AlphaMask const&)
 BitmapBasicMorphologyFilter::BitmapBasicMorphologyFilter(BasicMorphologyOp, int, unsigned char)
 BitmapBasicMorphologyFilter::filter(Bitmap const&) const
@@ -1786,6 +1787,7 @@ OutlinerView::Indent(short)
 OutputDevice::AddFontSubstitute(rtl::OUString const&, rtl::OUString const&, AddFontSubstituteFlags)
 OutputDevice::AddHatchActions(tools::PolyPolygon const&, Hatch const&, GDIMetaFile&)
 OutputDevice::BeginFontSubstitution()
+OutputDevice::CreateBitmapSurface(BitmapSystemData const&, Size const&) const
 OutputDevice::CreateSurface(int, int, int, int) const
 OutputDevice::CreateSurface(std::shared_ptr<_cairo_surface> const&) const
 OutputDevice::CreateUnoGraphicsList()
@@ -1799,6 +1801,7 @@ OutputDevice::GetGlyphBoundRects(Point const&, rtl::OUString const&, int, int, s
 OutputDevice::GetGraphics() const
 OutputDevice::GetInverseViewTransformation(MapMode const&) const
 OutputDevice::GetNativeControlRegion(ControlType, ControlPart, tools::Rectangle const&, ControlState, ImplControlValue const&, tools::Rectangle&, tools::Rectangle&) const
+OutputDevice::GetNativeSurfaceHandle(std::shared_ptr<cairo::Surface>&, basegfx::B2ISize const&) const
 OutputDevice::GetRenderBackendName() const
 OutputDevice::GetSpriteCanvas() const
 OutputDevice::GetTextBoundRect(basegfx::B2DRange&, rtl::OUString const&, int, int, int, unsigned long, KernArraySpan, std::span<unsigned char const, 18446744073709551615ul>, SalLayoutGlyphs const*) const
@@ -1817,6 +1820,7 @@ OutputDevice::PixelToLogic(vcl::Region const&) const
 OutputDevice::RefreshFontData(bool)
 OutputDevice::RemoveFontsSubstitute()
 OutputDevice::RemoveTransparenciesFromMetaFile(GDIMetaFile const&, GDIMetaFile&, long, long, bool, bool, bool, Color const&)
+OutputDevice::SupportsCairo() const
 PDFSignatureHelper::GetNewSecurityId() const
 PDFSignatureHelper::ReadAndVerifySignature(com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const&)
 PDFSignatureHelper::SetDescription(rtl::OUString const&)
@@ -2008,6 +2012,7 @@ QtSvpGraphics::CreateSurface(OutputDevice const&, int, int, int, int) const
 QtSvpGraphics::CreateSurface(std::shared_ptr<_cairo_surface> const&) const
 QtSvpGraphics::GetResolution(int&, int&)
 QtSvpGraphics::QtSvpGraphics(QtFrame*)
+QtSvpGraphics::SupportsCairo() const
 QtSvpGraphics::handleDamage(tools::Rectangle const&)
 QtSvpGraphics::updateQWidget() const
 QtSvpGraphics::~QtSvpGraphics()
@@ -6022,6 +6027,7 @@ SkiaSalBitmap::GetAsSkBitmap() const
 SkiaSalBitmap::GetBitCount() const
 SkiaSalBitmap::GetImageKey(SkiaHelper::DirectImage) const
 SkiaSalBitmap::GetSkShader(SkSamplingOptions const&, SkiaHelper::DirectImage) const
+SkiaSalBitmap::GetSystemData(BitmapSystemData&)
 SkiaSalBitmap::Invert()
 SkiaSalBitmap::IsAllBlack() const
 SkiaSalBitmap::IsFullyOpaqueAsAlpha() const

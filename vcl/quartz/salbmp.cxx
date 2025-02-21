@@ -587,6 +587,66 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
     return xMask;
 }
 
+/** QuartzSalBitmap::GetSystemData Get platform native image data from existing image
+ *
+ *  @param rData struct BitmapSystemData, defined in vcl/inc/bitmap.hxx
+ *  @return true if successful
+**/
+bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
+{
+    bool bRet = false;
+
+    if (!maGraphicContext.isSet())
+        CreateContext();
+
+    if (maGraphicContext.isSet())
+    {
+        bRet = true;
+
+        if ((CGBitmapContextGetBitsPerPixel(maGraphicContext.get()) == 32) &&
+            (CGBitmapContextGetBitmapInfo(maGraphicContext.get()) & kCGBitmapByteOrderMask) != kCGBitmapByteOrder32Host)
+        {
+            /**
+             * We need to hack things because VCL does not use kCGBitmapByteOrder32Host, while Cairo requires it.
+             *
+             * Not sure what the above comment means. We don't use Cairo on macOS or iOS.
+             *
+             * This whole if statement was originally (before 2011) inside #ifdef CAIRO. Did we use Cairo on Mac back then?
+             * Anyway, nowadays (since many years, I think) we don't, so should this if statement be dropped? Fun.
+             */
+
+            CGImageRef xImage = CGBitmapContextCreateImage(maGraphicContext.get());
+
+            // re-create the context with single change: include kCGBitmapByteOrder32Host flag.
+            CGContextHolder aGraphicContextNew(CGBitmapContextCreate(CGBitmapContextGetData(maGraphicContext.get()),
+                                                                     CGBitmapContextGetWidth(maGraphicContext.get()),
+                                                                     CGBitmapContextGetHeight(maGraphicContext.get()),
+                                                                     CGBitmapContextGetBitsPerComponent(maGraphicContext.get()),
+                                                                     CGBitmapContextGetBytesPerRow(maGraphicContext.get()),
+                                                                     CGBitmapContextGetColorSpace(maGraphicContext.get()),
+                                                                     CGBitmapContextGetBitmapInfo(maGraphicContext.get()) | kCGBitmapByteOrder32Host));
+            CFRelease(maGraphicContext.get());
+
+            // Needs to be flipped
+            aGraphicContextNew.saveState();
+            CGContextTranslateCTM (aGraphicContextNew.get(), 0, CGBitmapContextGetHeight(aGraphicContextNew.get()));
+            CGContextScaleCTM (aGraphicContextNew.get(), 1.0, -1.0);
+
+            CGContextDrawImage(aGraphicContextNew.get(), CGRectMake( 0, 0, CGImageGetWidth(xImage), CGImageGetHeight(xImage)), xImage);
+
+            // Flip back
+            CGContextRestoreGState( aGraphicContextNew.get() );
+            CGImageRelease( xImage );
+            maGraphicContext = aGraphicContextNew;
+        }
+
+        rData.mnWidth = mnWidth;
+        rData.mnHeight = mnHeight;
+    }
+
+    return bRet;
+}
+
 bool QuartzSalBitmap::ScalingSupported() const
 {
     return false;

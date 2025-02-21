@@ -37,6 +37,7 @@ $(eval $(call gb_CppunitTest_use_ure,cppcanvas_emfplus))
 $(eval $(call gb_CppunitTest_use_vcl_non_headless,cppcanvas_emfplus))
 
 $(eval $(call gb_CppunitTest_use_components,cppcanvas_emfplus,\
+	canvas/source/cairo/cairocanvas \
 	canvas/source/factory/canvasfactory \
 	cppcanvas/source/uno/mtfrenderer \
 	configmgr/source/configmgr \

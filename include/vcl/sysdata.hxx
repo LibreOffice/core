@@ -152,7 +152,10 @@ struct SystemGraphicsData
 #elif defined( IOS )
     CGContextRef    rCGContext;     // CoreGraphics graphic context
 #elif defined( UNX )
-    // Nothing
+    void*           pDisplay;       // the relevant display connection
+    sal_uIntPtr     hDrawable;      // a drawable
+    void*           pVisual;        // the visual in use
+    int             nScreen;        // the current screen of the drawable
 #endif
 #if USE_HEADLESS_CODE
     void*           pSurface;       // the cairo surface when using svp-based backends, which includes gtk[3|4]
@@ -169,7 +172,10 @@ struct SystemGraphicsData
 #elif defined( IOS )
         , rCGContext( NULL )
 #elif defined( UNX )
-    // Nothing
+        , pDisplay( nullptr )
+        , hDrawable( 0 )
+        , pVisual( nullptr )
+        , nScreen( 0 )
 #endif
 #if USE_HEADLESS_CODE
         , pSurface( nullptr )

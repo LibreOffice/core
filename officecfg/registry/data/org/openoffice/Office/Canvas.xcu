@@ -28,28 +28,39 @@
   <node oor:name="CanvasServiceList">
     <node oor:name="com.sun.star.rendering.Canvas" oor:op="replace">
       <prop oor:name="PreferredImplementations" oor:type="oor:string-list">
-        <value oor:separator=",">com.sun.star.comp.rendering.Canvas.VCL
+        <value oor:separator=",">com.sun.star.comp.rendering.BitmapCanvas.GDI+,
+                                 com.sun.star.comp.rendering.Canvas.GDI+,
+                                 com.sun.star.comp.rendering.Canvas.Cairo,
+                                 com.sun.star.comp.rendering.Canvas.VCL
         </value>
       </prop>
       <prop oor:name="AcceleratedImplementations" oor:type="oor:string-list">
         <value oor:separator=","/>
       </prop>
       <prop oor:name="AntialiasingImplementations" oor:type="oor:string-list">
-        <value oor:separator=",">
+        <value oor:separator=",">com.sun.star.comp.rendering.BitmapCanvas.GDI+,
+                                 com.sun.star.comp.rendering.Canvas.GDI+,
+                                 com.sun.star.comp.rendering.Canvas.Cairo
         </value>
       </prop>
     </node>
     <node oor:name="com.sun.star.rendering.SpriteCanvas" oor:op="replace">
       <prop oor:name="PreferredImplementations" oor:type="oor:string-list">
-        <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.VCL
+        <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.DX9,
+                                 com.sun.star.comp.rendering.SpriteCanvas.Cairo,
+                                 com.sun.star.comp.rendering.SpriteCanvas.VCL
         </value>
       </prop>
       <prop oor:name="AcceleratedImplementations" oor:type="oor:string-list">
-        <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.OGL
+        <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.DX9,
+                                 com.sun.star.comp.rendering.SpriteCanvas.Cairo,
+                                 com.sun.star.comp.rendering.SpriteCanvas.OGL
         </value>
       </prop>
       <prop oor:name="AntialiasingImplementations" oor:type="oor:string-list">
-        <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.OGL
+        <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.DX9,
+                                 com.sun.star.comp.rendering.SpriteCanvas.Cairo,
+                                 com.sun.star.comp.rendering.SpriteCanvas.OGL
         </value>
       </prop>
     </node>
