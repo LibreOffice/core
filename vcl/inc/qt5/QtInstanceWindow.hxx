@@ -10,13 +10,17 @@
 #pragma once
 
 #include "QtInstanceContainer.hxx"
+#include "QtXWindow.hxx"
 
 class QtInstanceWindow : public QtInstanceContainer, public virtual weld::Window
 {
     Q_OBJECT
 
+    rtl::Reference<QtXWindow> m_xWindow;
+
 public:
     QtInstanceWindow(QWidget* pWidget);
+    virtual ~QtInstanceWindow();
 
     virtual void set_title(const OUString& rTitle) override;
     virtual OUString get_title() const override;

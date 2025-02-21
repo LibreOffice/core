@@ -27,6 +27,7 @@
 #include <QtTools.hxx>
 #include <QtWidget.hxx>
 #include <QtInstance.hxx>
+#include <QtXWindow.hxx>
 
 #include <com/sun/star/awt/SystemDependentXWindow.hpp>
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
@@ -857,6 +858,12 @@ void SAL_CALL QtFilePicker::initialize(const uno::Sequence<uno::Any>& args)
         args[1] >>= xParentWindow;
     if (!xParentWindow.is())
         return;
+
+    if (QtXWindow* pQtXWindow = dynamic_cast<QtXWindow*>(xParentWindow.get()))
+    {
+        m_pParentWidget = pQtXWindow->getQWidget();
+        return;
+    }
 
     css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysWinPeer(xParentWindow,
                                                                           css::uno::UNO_QUERY);

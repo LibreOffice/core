@@ -148,6 +148,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt6,\
     vcl/qt6/QtVirtualDevice \
     vcl/qt6/QtWidget \
     vcl/qt6/QtXAccessible \
+    vcl/qt6/QtXWindow \
     $(if $(USING_X11), \
         vcl/qt6/QtX11Support \
     ) \

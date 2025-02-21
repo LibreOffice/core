@@ -21,6 +21,12 @@ QtInstanceWindow::QtInstanceWindow(QWidget* pWidget)
     pWidget->installEventFilter(this);
 }
 
+QtInstanceWindow::~QtInstanceWindow()
+{
+    if (m_xWindow.is())
+        m_xWindow->clear();
+}
+
 void QtInstanceWindow::set_title(const OUString& rTitle)
 {
     SolarMutexGuard g;
@@ -181,8 +187,9 @@ OUString QtInstanceWindow::get_window_state(vcl::WindowDataMask eMask) const
 
 css::uno::Reference<css::awt::XWindow> QtInstanceWindow::GetXWindow()
 {
-    assert(false && "Not implemented yet");
-    return css::uno::Reference<css::awt::XWindow>();
+    if (!m_xWindow.is())
+        m_xWindow.set(new QtXWindow(this));
+    return m_xWindow;
 }
 
 SystemEnvData QtInstanceWindow::get_system_data() const
