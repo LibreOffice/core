@@ -1796,18 +1796,13 @@ void SvTreeListBox::SetDefaultCollapsedEntryBmp( const Image& aBmp )
 
 void SvTreeListBox::EnableCheckButton(SvLBoxButtonData& rData)
 {
-    SetCheckButtonData(rData);
+    pCheckButtonData = &rData;
     nTreeFlags |= SvTreeFlags::CHKBTN;
     rData.SetLink( LINK(this, SvTreeListBox, CheckButtonClick));
 
     SetTabs();
     if( IsUpdateMode() )
         Invalidate();
-}
-
-void SvTreeListBox::SetCheckButtonData(SvLBoxButtonData& rData)
-{
-    pCheckButtonData = &rData;
 }
 
 const Image& SvTreeListBox::GetDefaultExpandedNodeImage( )
