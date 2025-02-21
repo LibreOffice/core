@@ -50,7 +50,12 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const O
 
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] {
-        QStandardItem* pItem = new QStandardItem;
+        if (nPos == -1)
+            nPos = m_pModel->rowCount();
+        m_pModel->insertRow(nPos);
+
+        const QModelIndex aIndex = modelIndex(nPos);
+        QStandardItem* pItem = m_pModel->itemFromIndex(aIndex);
         if (pStr)
             pItem->setText(toQString(*pStr));
         if (pId)
@@ -61,12 +66,8 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const O
         else if (pImageSurface)
             pItem->setIcon(toQPixmap(*pImageSurface));
 
-        if (nPos == -1)
-            nPos = m_pModel->rowCount();
-        m_pModel->insertRow(nPos, pItem);
-
         if (pRet)
-            static_cast<QtInstanceTreeIter*>(pRet)->setModelIndex(modelIndex(nPos));
+            static_cast<QtInstanceTreeIter*>(pRet)->setModelIndex(aIndex);
     });
 }
 
