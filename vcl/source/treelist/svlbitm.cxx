@@ -28,26 +28,19 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 
-struct SvLBoxButtonData_Impl
-{
-    SvTreeListEntry*    pEntry;
-    SvLBoxButton*       pBox;
-    bool                bDefaultImages;
-    bool                bShowRadioButton;
-
-    SvLBoxButtonData_Impl() : pEntry(nullptr), pBox(nullptr), bDefaultImages(false), bShowRadioButton(false) {}
-};
-
 SvLBoxButtonData::SvLBoxButtonData(const Control& rControlForSettings, bool _bRadioBtn)
-    : pImpl( new SvLBoxButtonData_Impl )
+    : m_pEntry(nullptr)
+    , m_pBox(nullptr)
+    , m_bDefaultImages(false)
+    , m_bShowRadioButton(false)
 {
     nWidth = nHeight = 0;
 
     aBmps.resize(int(SvBmp::HITRISTATE)+1);
 
     bDataOk = false;
-    pImpl->bDefaultImages = true;
-    pImpl->bShowRadioButton = _bRadioBtn;
+    m_bDefaultImages = true;
+    m_bShowRadioButton = _bRadioBtn;
 
     SetDefaultImages(rControlForSettings);
 }
@@ -91,8 +84,8 @@ void SvLBoxButtonData::SetWidthAndHeight()
 
 void SvLBoxButtonData::StoreButtonState(SvTreeListEntry* pActEntry, SvLBoxButton* pActBox)
 {
-    pImpl->pEntry = pActEntry;
-    pImpl->pBox = pActBox;
+    m_pEntry = pActEntry;
+    m_pBox = pActBox;
 }
 
 SvButtonState SvLBoxButtonData::ConvertToButtonState( SvItemStateFlags nItemFlags )
@@ -115,21 +108,19 @@ SvButtonState SvLBoxButtonData::ConvertToButtonState( SvItemStateFlags nItemFlag
 
 SvTreeListEntry* SvLBoxButtonData::GetActEntry() const
 {
-    assert(pImpl && "-SvLBoxButtonData::GetActEntry(): don't use me that way!");
-    return pImpl->pEntry;
+    return m_pEntry;
 }
 
 SvLBoxButton* SvLBoxButtonData::GetActBox() const
 {
-    assert(pImpl && "-SvLBoxButtonData::GetActBox(): don't use me that way!");
-    return pImpl->pBox;
+    return m_pBox;
 }
 
 void SvLBoxButtonData::SetDefaultImages(const Control& rCtrl)
 {
     const AllSettings& rSettings = rCtrl.GetSettings();
 
-    if ( pImpl->bShowRadioButton )
+    if (m_bShowRadioButton)
     {
         SetImage(SvBmp::UNCHECKED,   RadioButton::GetRadioImage( rSettings, DrawButtonFlags::Default ) );
         SetImage(SvBmp::CHECKED,     RadioButton::GetRadioImage( rSettings, DrawButtonFlags::Checked ) );
@@ -151,11 +142,11 @@ void SvLBoxButtonData::SetDefaultImages(const Control& rCtrl)
 
 bool SvLBoxButtonData::HasDefaultImages() const
 {
-    return pImpl->bDefaultImages;
+    return m_bDefaultImages;
 }
 
 bool SvLBoxButtonData::IsRadio() const {
-    return pImpl->bShowRadioButton;
+    return m_bShowRadioButton;
 }
 
 // ***************************************************************

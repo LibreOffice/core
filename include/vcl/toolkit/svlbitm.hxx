@@ -57,17 +57,19 @@ namespace o3tl
     template<> struct typed_flags<SvItemStateFlags> : is_typed_flags<SvItemStateFlags, 0x0f> {};
 }
 
-struct SvLBoxButtonData_Impl;
-
 class SvLBoxButtonData
 {
 private:
     Link<SvLBoxButtonData*,void> aLink;
     tools::Long                    nWidth;
     tools::Long                    nHeight;
-    std::unique_ptr<SvLBoxButtonData_Impl> pImpl;
     bool                    bDataOk;
     std::vector<Image>      aBmps;  // indices s. constants BMP_...
+
+    SvTreeListEntry* m_pEntry;
+    SvLBoxButton* m_pBox;
+    bool m_bDefaultImages;
+    bool m_bShowRadioButton;
 
     void                    SetWidthAndHeight();
 public:
