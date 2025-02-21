@@ -122,21 +122,21 @@ void SvLBoxButtonData::SetDefaultImages(const Control& rCtrl)
 
     if (m_bShowRadioButton)
     {
-        SetImage(SvBmp::UNCHECKED,   RadioButton::GetRadioImage( rSettings, DrawButtonFlags::Default ) );
-        SetImage(SvBmp::CHECKED,     RadioButton::GetRadioImage( rSettings, DrawButtonFlags::Checked ) );
-        SetImage(SvBmp::HICHECKED,   RadioButton::GetRadioImage( rSettings, DrawButtonFlags::Checked | DrawButtonFlags::Pressed ) );
-        SetImage(SvBmp::HIUNCHECKED, RadioButton::GetRadioImage( rSettings, DrawButtonFlags::Default | DrawButtonFlags::Pressed ) );
-        SetImage(SvBmp::TRISTATE,    RadioButton::GetRadioImage( rSettings, DrawButtonFlags::DontKnow ) );
-        SetImage(SvBmp::HITRISTATE,  RadioButton::GetRadioImage( rSettings, DrawButtonFlags::DontKnow | DrawButtonFlags::Pressed ) );
+        aBmps[SvBmp::UNCHECKED] = RadioButton::GetRadioImage(rSettings, DrawButtonFlags::Default);
+        aBmps[SvBmp::CHECKED] = RadioButton::GetRadioImage(rSettings, DrawButtonFlags::Checked);
+        aBmps[SvBmp::HICHECKED] = RadioButton::GetRadioImage(rSettings, DrawButtonFlags::Checked | DrawButtonFlags::Pressed);
+        aBmps[SvBmp::HIUNCHECKED] = RadioButton::GetRadioImage(rSettings, DrawButtonFlags::Default | DrawButtonFlags::Pressed);
+        aBmps[SvBmp::TRISTATE] = RadioButton::GetRadioImage(rSettings, DrawButtonFlags::DontKnow);
+        aBmps[SvBmp::HITRISTATE] = RadioButton::GetRadioImage(rSettings, DrawButtonFlags::DontKnow | DrawButtonFlags::Pressed);
     }
     else
     {
-        SetImage(SvBmp::UNCHECKED,   CheckBox::GetCheckImage( rSettings, DrawButtonFlags::Default ) );
-        SetImage(SvBmp::CHECKED,     CheckBox::GetCheckImage( rSettings, DrawButtonFlags::Checked ) );
-        SetImage(SvBmp::HICHECKED,   CheckBox::GetCheckImage( rSettings, DrawButtonFlags::Checked | DrawButtonFlags::Pressed ) );
-        SetImage(SvBmp::HIUNCHECKED, CheckBox::GetCheckImage( rSettings, DrawButtonFlags::Default | DrawButtonFlags::Pressed ) );
-        SetImage(SvBmp::TRISTATE,    CheckBox::GetCheckImage( rSettings, DrawButtonFlags::DontKnow ) );
-        SetImage(SvBmp::HITRISTATE,  CheckBox::GetCheckImage( rSettings, DrawButtonFlags::DontKnow | DrawButtonFlags::Pressed ) );
+        aBmps[SvBmp::UNCHECKED] = CheckBox::GetCheckImage( rSettings, DrawButtonFlags::Default);
+        aBmps[SvBmp::CHECKED] = CheckBox::GetCheckImage( rSettings, DrawButtonFlags::Checked);
+        aBmps[SvBmp::HICHECKED] = CheckBox::GetCheckImage( rSettings, DrawButtonFlags::Checked | DrawButtonFlags::Pressed);
+        aBmps[SvBmp::HIUNCHECKED] = CheckBox::GetCheckImage( rSettings, DrawButtonFlags::Default | DrawButtonFlags::Pressed);
+        aBmps[SvBmp::TRISTATE] = CheckBox::GetCheckImage( rSettings, DrawButtonFlags::DontKnow);
+        aBmps[SvBmp::HITRISTATE] = CheckBox::GetCheckImage( rSettings, DrawButtonFlags::DontKnow | DrawButtonFlags::Pressed);
     }
 }
 

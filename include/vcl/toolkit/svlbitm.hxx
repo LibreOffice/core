@@ -90,7 +90,6 @@ public:
     SvTreeListEntry*        GetActEntry() const;
     SvLBoxButton*           GetActBox() const;
 
-    void                    SetImage(SvBmp eIndex, const Image& aImage) { aBmps[eIndex] = aImage; }
     Image&                  GetImage(SvBmp eIndex) { return aBmps.at(eIndex); }
 
     void                    SetDefaultImages(const Control& rControlForSettings);
