@@ -14,6 +14,8 @@
 
 #include <vcl/qt/QtUtils.hxx>
 
+#include <QtWidgets/QHeaderView>
+
 // role used for the ID in the QStandardItem
 constexpr int ROLE_ID = Qt::UserRole + 1000;
 
@@ -66,6 +68,9 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const O
         else if (pImageSurface)
             pItem->setIcon(toQPixmap(*pImageSurface));
 
+        if (m_bExtraToggleButtonColumnEnabled)
+            m_pModel->itemFromIndex(toggleButtonModelIndex(nPos))->setCheckable(true);
+
         if (pRet)
             static_cast<QtInstanceTreeIter*>(pRet)->setModelIndex(aIndex);
     });
@@ -110,9 +115,16 @@ OUString QtInstanceTreeView::get_selected_id() const
     return sId;
 }
 
-void QtInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType)
+void QtInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType eType)
 {
-    assert(false && "Not implemented yet");
+    (void)eType;
+    assert(eType == weld::ColumnToggleType::Check && "Only checkboxes supported so far");
+
+    assert(m_pModel->rowCount() == 0 && "Must be called before inserting any data");
+
+    m_bExtraToggleButtonColumnEnabled = true;
+
+    m_pTreeView->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
 }
 
 void QtInstanceTreeView::set_clicks_to_toggle(int) { assert(false && "Not implemented yet"); }
@@ -231,25 +243,21 @@ void QtInstanceTreeView::set_id(int nRow, const OUString& rId)
 
 void QtInstanceTreeView::set_toggle(int nRow, TriState eState, int nCol)
 {
-    assert(nCol != -1 && "Special column index -1 not handled yet");
-
     SolarMutexGuard g;
 
     GetQtInstance().RunInMainThread([&] {
-        const QModelIndex aIndex = modelIndex(nRow, nCol);
+        QModelIndex aIndex = nCol == -1 ? toggleButtonModelIndex(nRow) : modelIndex(nRow, nCol);
         m_pModel->itemFromIndex(aIndex)->setCheckState(toQtCheckState(eState));
     });
 }
 
 TriState QtInstanceTreeView::get_toggle(int nRow, int nCol) const
 {
-    assert(nCol != -1 && "Special column index -1 not handled yet");
-
     SolarMutexGuard g;
 
     TriState eState = TRISTATE_INDET;
     GetQtInstance().RunInMainThread([&] {
-        const QModelIndex aIndex = modelIndex(nRow, nCol);
+        QModelIndex aIndex = nCol == -1 ? toggleButtonModelIndex(nRow) : modelIndex(nRow, nCol);
         eState = toVclTriState(m_pModel->itemFromIndex(aIndex)->checkState());
     });
 
@@ -905,6 +913,8 @@ QAbstractItemView::SelectionMode QtInstanceTreeView::mapSelectionMode(SelectionM
 
 QModelIndex QtInstanceTreeView::modelIndex(int nRow, int nCol) const
 {
+    if (m_bExtraToggleButtonColumnEnabled)
+        nCol += 1;
     return m_pModel->index(nRow, nCol);
 }
 
@@ -917,6 +927,14 @@ int QtInstanceTreeView::rowIndex(const weld::TreeIter& rIter)
 {
     QModelIndex aModelIndex = static_cast<const QtInstanceTreeIter&>(rIter).modelIndex();
     return aModelIndex.row();
+}
+
+QModelIndex QtInstanceTreeView::toggleButtonModelIndex(int nRow) const
+{
+    assert(m_bExtraToggleButtonColumnEnabled && "Special toggle button column is not enabled");
+
+    // Special toggle button column is always the first one
+    return m_pModel->index(nRow, 0);
 }
 
 QModelIndex QtInstanceTreeView::firstTextColumnModelIndex(int nRow) const
