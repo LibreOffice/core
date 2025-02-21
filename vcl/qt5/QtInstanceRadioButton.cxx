@@ -57,7 +57,8 @@ OUString QtInstanceRadioButton::get_label() const
 
 void QtInstanceRadioButton::QtInstanceRadioButton::set_label_wrap(bool /*bWrap*/)
 {
-    assert(false && "Not implemented yet");
+    // https://bugreports.qt.io/browse/QTBUG-5370
+    SAL_WARN("vcl.qt", "Qt doesn't support word wrap in radio buttons (see QTBUG-5370)");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
