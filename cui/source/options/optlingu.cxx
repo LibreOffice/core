@@ -798,7 +798,7 @@ SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController*
     , nUPN_HYPH_MIN_LEADING(-1)
     , nUPN_HYPH_MIN_TRAILING(-1)
     , m_nDlbClickEventId(nullptr)
-    , m_xLinguModulesFT(m_xBuilder->weld_label(u"lingumodulesft"_ustr))
+    , m_xLinguModulesFrame(m_xBuilder->weld_container(u"lingumodulesframe"_ustr))
     , m_xLinguModulesCLB(m_xBuilder->weld_tree_view(u"lingumodules"_ustr))
     , m_xLinguModulesEditPB(m_xBuilder->weld_button(u"lingumodulesedit"_ustr))
     , m_xLinguDicsFT(m_xBuilder->weld_label(u"lingudictsft"_ustr))
@@ -1537,9 +1537,7 @@ IMPL_LINK(SvxLinguTabPage, SelectHdl_Impl, weld::TreeView&, rBox, void)
 
 void SvxLinguTabPage::HideModulesGroup()
 {
-    m_xLinguModulesFT->hide();
-    m_xLinguModulesCLB->hide();
-    m_xLinguModulesEditPB->hide();
+    m_xLinguModulesFrame->hide();
 
     if (officecfg::Office::Security::Hyperlinks::Open::get() != SvtExtendedSecurityOptions::OPEN_NEVER &&
         !comphelper::LibreOfficeKit::isActive())

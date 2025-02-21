@@ -59,7 +59,7 @@
     <property name="border-width">6</property>
     <property name="row-spacing">12</property>
     <child>
-      <object class="GtkFrame" id="frame1">
+      <object class="GtkFrame" id="lingumodulesframe">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="hexpand">True</property>

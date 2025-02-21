@@ -107,7 +107,7 @@ private:
 
     std::unique_ptr<SvxLinguData_Impl>  pLinguData;
 
-    std::unique_ptr<weld::Label> m_xLinguModulesFT;
+    std::unique_ptr<weld::Container> m_xLinguModulesFrame;
     std::unique_ptr<weld::TreeView> m_xLinguModulesCLB;
     std::unique_ptr<weld::Button> m_xLinguModulesEditPB;
     std::unique_ptr<weld::Label> m_xLinguDicsFT;
