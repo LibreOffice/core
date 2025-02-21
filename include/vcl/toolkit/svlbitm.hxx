@@ -23,6 +23,7 @@
 #error "don't use this in new code"
 #endif
 
+#include <map>
 #include <memory>
 #include <vcl/dllapi.h>
 #include <tools/link.hxx>
@@ -36,12 +37,12 @@ class SvLBoxButton;
 
 enum class SvBmp
 {
-    UNCHECKED        = 0,
-    CHECKED          = 1,
-    TRISTATE         = 2,
-    HIUNCHECKED      = 3,
-    HICHECKED        = 4,
-    HITRISTATE       = 5
+    UNCHECKED,
+    CHECKED,
+    TRISTATE,
+    HIUNCHECKED,
+    HICHECKED,
+    HITRISTATE,
 };
 
 enum class SvItemStateFlags
@@ -64,7 +65,7 @@ private:
     tools::Long                    nWidth;
     tools::Long                    nHeight;
     bool                    bDataOk;
-    std::vector<Image>      aBmps;  // indices s. constants BMP_...
+    std::map<SvBmp, Image> aBmps;
 
     SvTreeListEntry* m_pEntry;
     SvLBoxButton* m_pBox;
@@ -92,8 +93,8 @@ public:
     SvTreeListEntry*        GetActEntry() const;
     SvLBoxButton*           GetActBox() const;
 
-    void                    SetImage(SvBmp nIndex, const Image& aImage) { aBmps[static_cast<int>(nIndex)] = aImage; }
-    Image&                  GetImage(SvBmp nIndex) { return aBmps[static_cast<int>(nIndex)]; }
+    void                    SetImage(SvBmp eIndex, const Image& aImage) { aBmps[eIndex] = aImage; }
+    Image&                  GetImage(SvBmp eIndex) { return aBmps.at(eIndex); }
 
     void                    SetDefaultImages(const Control& rControlForSettings);
                                 // set images according to the color scheme of the Control

@@ -36,8 +36,6 @@ SvLBoxButtonData::SvLBoxButtonData(const Control& rControlForSettings, bool _bRa
 {
     nWidth = nHeight = 0;
 
-    aBmps.resize(int(SvBmp::HITRISTATE)+1);
-
     bDataOk = false;
     m_bDefaultImages = true;
     m_bShowRadioButton = _bRadioBtn;
@@ -76,7 +74,7 @@ SvBmp SvLBoxButtonData::GetIndex( SvItemStateFlags nItemState )
 
 void SvLBoxButtonData::SetWidthAndHeight()
 {
-    Size aSize = aBmps[int(SvBmp::UNCHECKED)].GetSizePixel();
+    Size aSize = aBmps.at(SvBmp::UNCHECKED).GetSizePixel();
     nWidth = aSize.Width();
     nHeight = aSize.Height();
     bDataOk = true;
