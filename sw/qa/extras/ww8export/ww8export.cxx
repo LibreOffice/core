@@ -22,6 +22,7 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
@@ -257,7 +258,15 @@ DECLARE_WW8EXPORT_TEST(testN823651, "n823651.doc")
     // Character height was 10pt instead of 7.5pt in the header.
     uno::Reference<beans::XPropertySet> xStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     uno::Reference<text::XText> xText = getProperty< uno::Reference<text::XTextRange> >(xStyle, u"HeaderTextFirst"_ustr)->getText();
-    CPPUNIT_ASSERT_EQUAL(7.5f, getProperty<float>(getParagraphOfText(1, xText), u"CharHeight"_ustr));
+    uno::Reference<text::XTextRange> xHeaderParagraph = getParagraphOfText(1, xText, "");
+    CPPUNIT_ASSERT_EQUAL(7.5f, getProperty<float>(xHeaderParagraph, u"CharHeight"_ustr));
+
+    // tdf#164845 - inherit the two tab stops from the "Header" paragraph style
+    auto aTabStops
+        = getProperty<uno::Sequence<style::TabStop>>(xHeaderParagraph, u"ParaTabStops"_ustr);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(2), aTabStops.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7620), aTabStops[0].Position); // 7.62cm
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(15240), aTabStops[1].Position); // 15.24 cm
 }
 
 DECLARE_WW8EXPORT_TEST(testFdo36868, "fdo36868.doc")
