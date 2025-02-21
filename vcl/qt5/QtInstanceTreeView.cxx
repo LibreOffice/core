@@ -466,10 +466,7 @@ bool QtInstanceTreeView::get_cursor(weld::TreeIter*) const
     return false;
 }
 
-void QtInstanceTreeView::set_cursor(const weld::TreeIter&)
-{
-    assert(false && "Not implemented yet");
-}
+void QtInstanceTreeView::set_cursor(const weld::TreeIter& rIter) { set_cursor(rowIndex(rIter)); }
 
 bool QtInstanceTreeView::get_iter_first(weld::TreeIter&) const
 {
@@ -569,20 +566,19 @@ bool QtInstanceTreeView::get_sensitive(const weld::TreeIter& rIter, int nCol) co
     return get_sensitive(rowIndex(rIter), nCol);
 }
 
-void QtInstanceTreeView::set_text_emphasis(const weld::TreeIter&, bool, int)
+void QtInstanceTreeView::set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int nCol)
 {
-    assert(false && "Not implemented yet");
+    set_text_emphasis(rowIndex(rIter), bOn, nCol);
 }
 
-bool QtInstanceTreeView::get_text_emphasis(const weld::TreeIter&, int) const
+bool QtInstanceTreeView::get_text_emphasis(const weld::TreeIter& rIter, int nCol) const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    return get_text_emphasis(rowIndex(rIter), nCol);
 }
 
-void QtInstanceTreeView::set_text_align(const weld::TreeIter&, double, int)
+void QtInstanceTreeView::set_text_align(const weld::TreeIter& rIter, double fAlign, int nCol)
 {
-    assert(false && "Not implemented yet");
+    return set_text_align(rowIndex(rIter), fAlign, nCol);
 }
 
 void QtInstanceTreeView::set_toggle(const weld::TreeIter& rIter, TriState bOn, int nCol)
@@ -627,9 +623,9 @@ void QtInstanceTreeView::set_image(const weld::TreeIter& rIter,
     set_image(rowIndex(rIter), rImage, nCol);
 }
 
-void QtInstanceTreeView::set_font_color(const weld::TreeIter&, const Color&)
+void QtInstanceTreeView::set_font_color(const weld::TreeIter& rIter, const Color& rColor)
 {
-    assert(false && "Not implemented yet");
+    set_font_color(rowIndex(rIter), rColor);
 }
 
 void QtInstanceTreeView::scroll_to_row(const weld::TreeIter& rIter)
