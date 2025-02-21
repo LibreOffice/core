@@ -380,9 +380,8 @@ void QtInstanceTreeView::set_cursor(int nPos)
 {
     SolarMutexGuard g;
 
-    GetQtInstance().RunInMainThread([&] {
-        m_pSelectionModel->setCurrentIndex(modelIndex(nPos), QItemSelectionModel::NoUpdate);
-    });
+    GetQtInstance().RunInMainThread(
+        [&] { m_pSelectionModel->setCurrentIndex(modelIndex(nPos), QItemSelectionModel::Select); });
 }
 
 int QtInstanceTreeView::find_text(const OUString& rText) const
