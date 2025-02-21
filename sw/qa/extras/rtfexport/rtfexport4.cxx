@@ -685,8 +685,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136587_noStyleName)
                              getProperty<sal_Int16>(xStyleProps, u"ParaAdjust"_ustr));
 
         // The problem was that the default style wasn't imported at all, so the fontsize was only 12.
-        xStyleProps.set(paragraphStyles->getByName(u"Default Paragraph Style"_ustr),
-                        uno::UNO_QUERY_THROW);
+        xStyleProps.set(paragraphStyles->getByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(32.0f, getProperty<float>(xStyleProps, u"CharHeight"_ustr));
     };
     createSwDoc("tdf136587_noStyleName.rtf");

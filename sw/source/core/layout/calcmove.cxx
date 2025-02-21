@@ -304,9 +304,17 @@ void SwFrame::PrepareMake(vcl::RenderContext* pRenderContext)
 
         // There is no format of previous frame, if current frame is a table
         // frame and its previous frame wants to keep with it.
-        const bool bFormatPrev = !bTab ||
-                                 !GetPrev() ||
-                                 !GetPrev()->GetAttrSet()->GetKeep().GetValue();
+        bool bFormatPrev{!bTab};
+        if (!bFormatPrev)
+        {
+            SwFrame const* pPrev{this};
+            do
+            {
+                pPrev = pPrev->GetPrev();
+            }
+            while (pPrev && pPrev->IsHiddenNow());
+            bFormatPrev = pPrev && !pPrev->GetAttrSet()->GetKeep().GetValue();
+        }
         if ( bFormatPrev )
         {
             SwFrame *pFrame = GetUpper()->Lower();
@@ -965,9 +973,6 @@ void SwLayoutFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     const SwLayNotify aNotify( this );
     bool bVert = IsVertical();
 
-    if (IsHiddenNow())
-        MakeValidZeroHeight();
-
     SwRectFnSet fnRect(IsNeighbourFrame() != bVert, IsVertLR(), IsVertLRBT());
 
     std::optional<SwBorderAttrAccess> oAccess;
@@ -976,7 +981,14 @@ void SwLayoutFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     while ( !isFrameAreaPositionValid() || !isFrameAreaSizeValid() || !isFramePrintAreaValid() )
     {
         if ( !isFrameAreaPositionValid() )
+        {
             MakePos();
+        }
+
+        if (IsHiddenNow())
+        {
+            MakeValidZeroHeight();
+        }
 
         if ( GetUpper() )
         {
@@ -1112,6 +1124,16 @@ bool SwFrame::IsCollapseUpper() const
     if (!pPageFrame || !pPageFrame->GetPrev())
     {
         return false;
+    }
+
+    // Avoid the ignore after applying a new page style (but do it after page breaks).
+    const SwTextNode* pTextNode = pTextFrame->GetTextNodeForParaProps();
+    if (pTextNode)
+    {
+        if (pTextNode->HasSwAttrSet() && pTextNode->GetSwAttrSet().HasItem(RES_PAGEDESC))
+        {
+            return false;
+        }
     }
 
     return true;
@@ -1284,8 +1306,15 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         return;
     }
 
-    if (IsHiddenNow())
-        MakeValidZeroHeight();
+    bool const isHiddenNow(static_cast<SwTextFrame*>(this)->IsHiddenNowImpl());
+    if (isHiddenNow)
+    {
+        while (HasFollow())
+        {
+            static_cast<SwTextFrame&>(*this).JoinFrame();
+        }
+        HideAndShowObjects();
+    }
 
     std::optional<SwFrameDeleteGuard> oDeleteGuard(std::in_place, this);
     LockJoin();
@@ -1330,7 +1359,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         oNotify->SetBordersJoinedWithPrev();
     }
 
-    const bool bKeep = IsKeep(rAttrs.GetAttrSet().GetKeep(), GetBreakItem());
+    const bool bKeep{!isHiddenNow && IsKeep(rAttrs.GetAttrSet().GetKeep(), GetBreakItem())};
 
     std::unique_ptr<SwSaveFootnoteHeight> pSaveFootnote;
     if ( bFootnote )
@@ -1456,11 +1485,19 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         aOldPrtPos = aRectFnSet.GetPos(getFramePrintArea());
 
         if ( !isFrameAreaPositionValid() )
+        {
             MakePos();
+        }
+
+        if (isHiddenNow)
+        {   // call this after MakePos() otherwise Shrink may not work
+            MakeValidZeroHeight();
+        }
 
         //Set FixSize. VarSize is being adjusted by Format().
         if ( !isFrameAreaSizeValid() )
         {
+            assert(!isHiddenNow); // hidden frame must not be formatted
             // invalidate printing area flag, if the following conditions are hold:
             // - current frame width is 0.
             // - current printing area width is 0.
@@ -1497,6 +1534,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         }
         if ( !isFramePrintAreaValid() )
         {
+            assert(!isHiddenNow); // hidden frame must not be formatted
             const tools::Long nOldW = aRectFnSet.GetWidth(getFramePrintArea());
             // #i34730# - keep current frame height
             const SwTwips nOldH = aRectFnSet.GetHeight(getFrameArea());
@@ -1533,7 +1571,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         // Criteria:
         // - It needs to be movable (otherwise, splitting doesn't make sense)
         // - It needs to overlap with the lower edge of the PrtArea of the Upper
-        if ( !bMustFit )
+        if (!bMustFit && !isHiddenNow)
         {
             bool bWidow = true;
             const SwTwips nDeadLine = aRectFnSet.GetPrtBottom(*GetUpper());
@@ -1559,6 +1597,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         }
         if ( !isFrameAreaSizeValid() )
         {
+            assert(!isHiddenNow); // hidden frame must not be formatted
             setFrameAreaSizeValid(true);
             bFormatted = true;
             ++nFormatCount;
@@ -1597,8 +1636,15 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             pMoveBwdPre = pTemp;
             isMoveBwdPreValid = bTemp;
             bMovedBwd = true;
-            bFormatted = false;
-            if ( bKeep && bMoveable )
+            if (isHiddenNow)
+            {   // MoveBwd invalidated the size! Validate to prevent Format!
+                MakeValidZeroHeight();
+            }
+            else
+            {
+                bFormatted = false;
+            }
+            if (bKeep && bMoveable && !isHiddenNow)
             {
                 if( CheckMoveFwd( bMakePage, false, bMovedBwd ) )
                 {
@@ -1729,7 +1775,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
         if( nBottomDist >= 0 )
         {
-            if ( bKeep && bMoveable )
+            if (bKeep && bMoveable && !isHiddenNow)
             {
                 // We make sure the successor will be formatted the same.
                 // This way, we keep control until (almost) everything is stable,
@@ -2056,8 +2102,18 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
     const SwFrame *pTmpPrev = pNewUpper->Lower();
     if( pTmpPrev && pTmpPrev->IsFootnoteFrame() )
         pTmpPrev = static_cast<const SwFootnoteFrame*>(pTmpPrev)->Lower();
-    while ( pTmpPrev && pTmpPrev->GetNext() )
-        pTmpPrev = pTmpPrev->GetNext();
+    {
+        SwFrame const* pTmpNonHidden{pTmpPrev && pTmpPrev->IsHiddenNow() ? nullptr : pTmpPrev};
+        while (pTmpPrev && pTmpPrev->GetNext())
+        {
+            pTmpPrev = pTmpPrev->GetNext();
+            if (!pTmpPrev->IsHiddenNow())
+            {
+                pTmpNonHidden = pTmpPrev;
+            }
+        }
+        pTmpPrev = pTmpNonHidden;
+    }
 
     // tdf#156727 if the previous one has keep-with-next, ignore it on this one!
     bool const isIgnoreKeep(pTmpPrev && pTmpPrev->IsFlowFrame()
@@ -2066,6 +2122,14 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
 
     do
     {
+        if (pFrame->IsHiddenNow())
+        {   // shortcut
+            assert(pFrame == this);
+            bRet = true;
+            pFrame = nullptr;
+            break;
+        }
+
         // #i46181#
         SwTwips nSecondCheck = 0;
         SwTwips nOldSpace = nSpace;
@@ -2231,8 +2295,8 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
                     return true;
                 }
             }
-            SwFrame *pNxt;
-            if( nullptr != (pNxt = pFrame->FindNext()) && pNxt->IsContentFrame() &&
+            SwFrame *const pNxt{pFrame->FindNextIgnoreHidden()};
+            if (nullptr != pNxt && pNxt->IsContentFrame() &&
                 ( !pFootnoteFrame || ( pNxt->IsInFootnote() &&
                   pNxt->FindFootnoteFrame()->GetAttr() == pFootnoteFrame->GetAttr() ) ) )
             {
@@ -2258,10 +2322,7 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
                     pTmpPrev = nullptr;
                 else
                 {
-                    if (pFrame->IsHiddenNow())
-                        pTmpPrev = lcl_NotHiddenPrev( pFrame );
-                    else
-                        pTmpPrev = pFrame;
+                    pTmpPrev = pFrame;
                 }
                 pFrame = static_cast<SwContentFrame*>(pNxt);
             }

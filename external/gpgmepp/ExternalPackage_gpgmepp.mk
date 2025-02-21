@@ -15,8 +15,8 @@ ifneq ($(DISABLE_DYNLOADING),TRUE)
 
 ifeq ($(OS),LINUX)
 
-$(eval $(call gb_ExternalPackage_add_file,gpgmepp,$(LIBO_LIB_FOLDER)/libgpgmepp.so.6,lang/cpp/src/.libs/libgpgmepp.so.6.21.0))
-$(eval $(call gb_ExternalPackage_add_file,gpgmepp,$(LIBO_LIB_FOLDER)/libgpgme.so.11,src/.libs/libgpgme.so.11.33.0))
+$(eval $(call gb_ExternalPackage_add_file,gpgmepp,$(LIBO_LIB_FOLDER)/libgpgmepp.so.6,lang/cpp/src/.libs/libgpgmepp.so.6.21.2))
+$(eval $(call gb_ExternalPackage_add_file,gpgmepp,$(LIBO_LIB_FOLDER)/libgpgme.so.11,src/.libs/libgpgme.so.11.33.2))
 
 else ifeq ($(OS),MACOSX)
 

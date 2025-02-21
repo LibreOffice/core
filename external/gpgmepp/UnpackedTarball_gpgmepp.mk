@@ -28,7 +28,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,gpgmepp, \
     external/gpgmepp/w32-build-fixes-2.patch \
     $(if $(filter LINUX,$(OS)),external/gpgmepp/asan.patch) \
     $(if $(filter LINUX,$(OS)),external/gpgmepp/rpath.patch) \
-    $(if $(filter LINUX,$(OS)),external/gpgmepp/gettid.patch) \
     external/gpgmepp/ubsan.patch \
     external/gpgmepp/c++20.patch \
     external/gpgmepp/clang-cl.patch \

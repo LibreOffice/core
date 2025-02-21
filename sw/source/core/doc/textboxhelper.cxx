@@ -1583,9 +1583,11 @@ bool SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat* pShape, const Sdr
         SdrObject* pFrmObj = pTextBox->FindRealSdrObject();
         if (!pFrmObj)
         {
-            // During loading there is no ready SdrObj for z-ordering, so create and cache it here
-            pFrmObj
-                = SwXTextFrame::GetOrCreateSdrObject(*dynamic_cast<SwFlyFrameFormat*>(pTextBox));
+            if (SwFlyFrameFormat* pFlyFrameFormat = dynamic_cast<SwFlyFrameFormat*>(pTextBox))
+            {
+                // During loading there is no ready SdrObj for z-ordering, so create and cache it here
+                pFrmObj = SwXTextFrame::GetOrCreateSdrObject(*pFlyFrameFormat);
+            }
         }
         if (pFrmObj)
         {

@@ -35,6 +35,10 @@
 #include <Carbon/Carbon.h>
 #include <postmac.h>
 
+#if HAVE_FEATURE_SKIA
+#include <vcl/skia/SkiaHelper.hxx>
+#endif
+
 #include "cuidraw.hxx"
 
 // presentation of native widgets consists of two important methods:
@@ -671,6 +675,12 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                 CGContextRestoreGState(context);
 
                 [pBox release];
+
+#if HAVE_FEATURE_SKIA
+                // tdf#164428 Skia/Metal needs flush after drawing progress bar
+                if (SkiaHelper::isVCLSkiaEnabled() && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster)
+                    mpFrame->mbForceFlushProgressBar = true;
+#endif
 
                 bOK = true;
             }

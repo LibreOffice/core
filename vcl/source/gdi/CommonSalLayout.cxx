@@ -150,6 +150,14 @@ public:
         return nClusterId;
     }
 
+    void Reset()
+    {
+        for (auto& rElement : m_aGlyphs)
+        {
+            rElement.second.m_bUsed = false;
+        }
+    }
+
     void ShapeSubRun(const sal_Unicode* pStr, const int nLength, const SubRun& aSubRun,
                      hb_font_t* pHbFont, const std::vector<hb_feature_t>& maFeatures,
                      hb_language_t oHbLanguage)
@@ -591,6 +599,73 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
             hb_glyph_info_t *pHbGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, nullptr);
             hb_glyph_position_t *pHbPositions = hb_buffer_get_glyph_positions(pHbBuffer, nullptr);
 
+            // tdf#164106: Grapheme clusters can be split across multiple layouts. To do this,
+            // the complete string is laid out, and only the necessary glyphs are extracted.
+            // These sub-layouts are positioned side-by-side to form the complete text.
+            // This approach is good enough for most diacritic cases, but it cannot handle cases
+            // where a glyph with an advance is reordered into a different sub-layout.
+            bool bStartClusterOutOfOrder = false;
+            bool bEndClusterOutOfOrder = false;
+            {
+                double nNormalAdvance = 0.0;
+                double nStartAdvance = 0.0;
+                double nEndAdvance = 0.0;
+
+                auto fnHandleGlyph = [&](int i)
+                {
+                    int32_t nGlyphIndex = pHbGlyphInfos[i].codepoint;
+                    int32_t nCluster = pHbGlyphInfos[i].cluster;
+                    auto nOrigCharPos = stClusterMapper.RemapGlyph(nCluster, nGlyphIndex);
+
+                    double nAdvance = 0.0;
+                    if (aSubRun.maDirection == HB_DIRECTION_TTB)
+                    {
+                        nAdvance = -pHbPositions[i].y_advance;
+                    }
+                    else
+                    {
+                        nAdvance = pHbPositions[i].x_advance;
+                    }
+
+                    nNormalAdvance += nAdvance;
+
+                    if (nOrigCharPos < rArgs.mnDrawMinCharPos)
+                    {
+                        nStartAdvance += nAdvance;
+                        if (nStartAdvance != nNormalAdvance)
+                        {
+                            bStartClusterOutOfOrder = true;
+                        }
+                    }
+
+                    if (nOrigCharPos < rArgs.mnDrawEndCharPos)
+                    {
+                        nEndAdvance += nAdvance;
+                        if (nEndAdvance != nNormalAdvance)
+                        {
+                            bEndClusterOutOfOrder = true;
+                        }
+                    }
+                };
+
+                if (bRightToLeft)
+                {
+                    for (int i = nRunGlyphCount - 1; i >= 0; --i)
+                    {
+                        fnHandleGlyph(i);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < nRunGlyphCount; ++i)
+                    {
+                        fnHandleGlyph(i);
+                    }
+                }
+
+                stClusterMapper.Reset();
+            }
+
             for (int i = 0; i < nRunGlyphCount; ++i) {
                 int32_t nGlyphIndex = pHbGlyphInfos[i].codepoint;
                 int32_t nCharPos = pHbGlyphInfos[i].cluster;
@@ -731,14 +806,15 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                 const GlyphItem aGI(nCharPos, nCharCount, nGlyphIndex, aNewPos, nGlyphFlags,
                                     nAdvance, nXOffset, nYOffset, nOrigCharPos);
 
-                if (aGI.origCharPos() >= rArgs.mnDrawMinCharPos
-                    && aGI.origCharPos() < rArgs.mnDrawEndCharPos)
+                auto nLowerBound = (bStartClusterOutOfOrder ? aGI.charPos() : aGI.origCharPos());
+                auto nUpperBound = (bEndClusterOutOfOrder ? aGI.charPos() : aGI.origCharPos());
+                if (nLowerBound >= rArgs.mnDrawMinCharPos && nUpperBound < rArgs.mnDrawEndCharPos)
                 {
                     m_GlyphItems.push_back(aGI);
                 }
 
-                if (aGI.origCharPos() >= rArgs.mnDrawOriginCluster
-                    && aGI.origCharPos() < rArgs.mnDrawEndCharPos)
+                if (nLowerBound >= rArgs.mnDrawOriginCluster
+                    && nUpperBound < rArgs.mnDrawEndCharPos)
                 {
                     aCurrPos.adjustX(nAdvance);
                 }

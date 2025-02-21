@@ -1389,6 +1389,8 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
 
     // until next attribute change:
     const TextFrameIndex nNextAttr = GetNextAttr();
+    // until next layout-breaking attribute change:
+    const TextFrameIndex nNextLayoutBreakAttr = GetNextLayoutBreakAttr();
     // end of script type:
     const TextFrameIndex nNextScript = m_pScriptInfo->NextScriptChg(rInf.GetIdx());
     // end of direction:
@@ -1398,7 +1400,7 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
     // bookmarks
     const TextFrameIndex nNextBookmark = m_pScriptInfo->NextBookmark(rInf.GetIdx());
 
-    auto nNextContext = std::min({ nNextChg, nNextScript, nNextDir });
+    auto nNextContext = std::min({ nNextChg, nNextLayoutBreakAttr, nNextScript, nNextDir });
     nNextChg = std::min({ nNextChg, nNextAttr, nNextScript, nNextDir, nNextHidden, nNextBookmark });
 
     // Turbo boost:

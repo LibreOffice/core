@@ -37,7 +37,11 @@ void LabelItemWindow::SetOptimalSize()
 
 void LabelItemWindow::set_label(const OUString& rLabel, const LabelItemWindowType eType)
 {
-    m_xLabel->set_visible(false); // a11y announcement
+    // hide temporarily, to trigger a11y announcement for SHOWING event for
+    // the label with NOTIFICATION a11y role when label gets shown again below
+    if (!rLabel.isEmpty())
+        m_xLabel->set_visible(false);
+
     m_xLabel->set_label(rLabel);
     if ((eType == LabelItemWindowType::Text) || rLabel.isEmpty())
     {

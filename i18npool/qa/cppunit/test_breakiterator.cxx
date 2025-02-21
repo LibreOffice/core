@@ -44,11 +44,8 @@ public:
     void testJapanese();
     void testChinese();
 
-    void testLegacyDictWordPrepostDash_de_DE();
-    void testLegacyDictWordPrepostDash_nds_DE();
-    void testLegacyDictWordPrepostDash_nl_NL();
-    void testLegacyDictWordPrepostDash_sv_SE();
     void testDictWordAbbreviation();
+    void testDictWordPrepostDash();
     void testHebrewGereshGershaim();
     void testLegacySurrogatePairs();
     void testWordCount();
@@ -69,11 +66,8 @@ public:
 #endif
     CPPUNIT_TEST(testJapanese);
     CPPUNIT_TEST(testChinese);
-    CPPUNIT_TEST(testLegacyDictWordPrepostDash_de_DE);
-    CPPUNIT_TEST(testLegacyDictWordPrepostDash_nds_DE);
-    CPPUNIT_TEST(testLegacyDictWordPrepostDash_nl_NL);
-    CPPUNIT_TEST(testLegacyDictWordPrepostDash_sv_SE);
     CPPUNIT_TEST(testDictWordAbbreviation);
+    CPPUNIT_TEST(testDictWordPrepostDash);
     CPPUNIT_TEST(testHebrewGereshGershaim);
     CPPUNIT_TEST(testLegacySurrogatePairs);
     CPPUNIT_TEST(testWordCount);
@@ -1647,22 +1641,25 @@ void TestBreakIterator::testChinese()
     }
 }
 
-void TestBreakIterator::testLegacyDictWordPrepostDash_de_DE()
+void TestBreakIterator::testDictWordPrepostDash()
 {
-    lang::Locale aLocale;
-    aLocale.Language = "de";
-    aLocale.Country = "DE";
+    std::vector<lang::Locale> aLocale{ { "de", "DE", "" },
+                                       { "nds", "DE", "" },
+                                       { "nl", "NL", "" },
+                                       { "sv", "SE", "" },
+                                       { "da", "DK", "" } };
 
+    for (const auto& rLocale : aLocale)
     {
         auto aTest = u"Arbeits- -nehmer"_ustr;
 
         i18n::Boundary aBounds
-            = m_xBreak->getWordBoundary(aTest, 3, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+            = m_xBreak->getWordBoundary(aTest, 3, rLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aBounds.endPos);
 
         aBounds
-            = m_xBreak->getWordBoundary(aTest, 13, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+            = m_xBreak->getWordBoundary(aTest, 13, rLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.startPos);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(16), aBounds.endPos);
     }
@@ -1708,69 +1705,6 @@ void TestBreakIterator::testDictWordAbbreviation()
             = m_xBreak->getWordBoundary(aTest, 30, rLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(29), aBounds.startPos);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(33), aBounds.endPos);
-    }
-}
-
-void TestBreakIterator::testLegacyDictWordPrepostDash_nds_DE()
-{
-    lang::Locale aLocale;
-    aLocale.Language = "nds";
-    aLocale.Country = "DE";
-
-    {
-        auto aTest = u"Arbeits- -nehmer"_ustr;
-
-        i18n::Boundary aBounds
-            = m_xBreak->getWordBoundary(aTest, 3, aLocale, i18n::WordType::DICTIONARY_WORD, false);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aBounds.endPos);
-
-        aBounds
-            = m_xBreak->getWordBoundary(aTest, 13, aLocale, i18n::WordType::DICTIONARY_WORD, false);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(16), aBounds.endPos);
-    }
-}
-
-void TestBreakIterator::testLegacyDictWordPrepostDash_nl_NL()
-{
-    lang::Locale aLocale;
-    aLocale.Language = "nl";
-    aLocale.Country = "NL";
-
-    {
-        auto aTest = u"Arbeits- -nehmer"_ustr;
-
-        i18n::Boundary aBounds
-            = m_xBreak->getWordBoundary(aTest, 3, aLocale, i18n::WordType::DICTIONARY_WORD, false);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aBounds.endPos);
-
-        aBounds
-            = m_xBreak->getWordBoundary(aTest, 13, aLocale, i18n::WordType::DICTIONARY_WORD, false);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(16), aBounds.endPos);
-    }
-}
-
-void TestBreakIterator::testLegacyDictWordPrepostDash_sv_SE()
-{
-    lang::Locale aLocale;
-    aLocale.Language = "sv";
-    aLocale.Country = "SE";
-
-    {
-        auto aTest = u"Arbeits- -nehmer"_ustr;
-
-        i18n::Boundary aBounds
-            = m_xBreak->getWordBoundary(aTest, 3, aLocale, i18n::WordType::DICTIONARY_WORD, false);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aBounds.endPos);
-
-        aBounds
-            = m_xBreak->getWordBoundary(aTest, 13, aLocale, i18n::WordType::DICTIONARY_WORD, false);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.startPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(16), aBounds.endPos);
     }
 }
 

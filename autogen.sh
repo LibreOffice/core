@@ -45,7 +45,10 @@ sub sanity_checks($)
        $autoconf    => "autoconf is required",
        $aclocal     => "$aclocal is required",
       );
-
+    if ($ENV{WSL_DISTRO_NAME} && $ENV{PATH} =~ /mingw64/) {
+        # for wsl-as-helper build we only need the m4 macros like for macOS
+        delete $required{'pkg-config'};
+    }
     for my $elem (@path) {
         for my $app (keys %required) {
             if (-f "$elem/$app") {
@@ -160,7 +163,8 @@ if (defined $ENV{LODE_HOME})
 my $aclocal_flags = $ENV{ACLOCAL_FLAGS};
 
 $aclocal_flags .= " -I $src_path/m4";
-$aclocal_flags .= " -I $src_path/m4/mac" if ($system eq 'Darwin');
+# the m4/mac directory provides the pkg-config macros used in configure
+$aclocal_flags .= " -I $src_path/m4/mac" if ($system eq 'Darwin' || ($ENV{WSL_DISTRO_NAME} && $ENV{PATH} =~ /mingw64/));
 
 $ENV{AUTOMAKE_EXTRA_FLAGS} = '--warnings=no-portability' if (!($system eq 'Darwin'));
 

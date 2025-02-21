@@ -1498,6 +1498,12 @@ bool SwTextFrame::IsHiddenNow() const
         return true;
     }
 
+    // TODO: what is the above check good for and can it be removed?
+    return IsHiddenNowImpl();
+}
+
+bool SwTextFrame::IsHiddenNowImpl() const
+{
     if (SwContentFrame::IsHiddenNow())
         return true;
 
@@ -2988,12 +2994,17 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
 
     if( !HasPara() && !bSplitFlyAnchor && PrepareHint::MustFit != ePrep )
     {
-        SetInvalidVert( true ); // Test
         OSL_ENSURE( !IsLocked(), "SwTextFrame::Prepare: three of a perfect pair" );
-        if ( bNotify )
-            InvalidateSize();
-        else
-            InvalidateSize_();
+        // check while ignoring frame width (testParagraphMarkInCell)
+        // because it's called from InvalidateAllContent()
+        if (!IsHiddenNowImpl())
+        {
+            SetInvalidVert( true ); // Test
+            if ( bNotify )
+                InvalidateSize();
+            else
+                InvalidateSize_();
+        }
         return bParaPossiblyInvalid;
     }
 

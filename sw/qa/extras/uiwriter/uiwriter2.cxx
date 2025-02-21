@@ -2620,8 +2620,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRTLparaStyle_LocaleArabic)
     saveAndReload(u"Office Open XML Text"_ustr);
 
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Default Paragraph Style"_ustr),
-        uno::UNO_QUERY_THROW);
+        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
     // Test the text Direction value for the -none- based paragraph styles
     CPPUNIT_ASSERT_EQUAL_MESSAGE("RTL Writing Mode", sal_Int32(1),
                                  getProperty<sal_Int32>(xPageStyle, u"WritingMode"_ustr));

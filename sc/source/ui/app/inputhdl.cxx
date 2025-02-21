@@ -2852,6 +2852,9 @@ void ScInputHandler::UpdateFormulaMode()
 {
     SfxApplication* pSfxApp = SfxGetpApp();
 
+    if (!pActiveViewSh)
+        return;
+
     bool bIsFormula = !bProtected;
     if (bIsFormula)
     {
@@ -2985,18 +2988,20 @@ void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText, S
     if ( eMode == eNewMode )
         return;
 
+    if (!pActiveViewSh)
+        return;
+
     ImplCreateEditEngine();
 
     if (bProtected)
     {
         eMode = SC_INPUT_NONE;
         StopInputWinEngine( true );
-        if (pActiveViewSh)
-            pActiveViewSh->GetActiveWin()->GrabFocus();
+        pActiveViewSh->GetActiveWin()->GrabFocus();
         return;
     }
 
-    if (eNewMode != SC_INPUT_NONE && pActiveViewSh)
+    if (eNewMode != SC_INPUT_NONE)
         // Disable paste mode when edit mode starts.
         pActiveViewSh->GetViewData().SetPasteMode( ScPasteFlags::NONE );
 
@@ -3013,8 +3018,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText, S
         {
             if (StartTable(0, false, eMode == SC_INPUT_TABLE, pTopEngine))
             {
-                if (pActiveViewSh)
-                    pActiveViewSh->GetViewData().GetDocShell()->PostEditView( mpEditEngine.get(), aCursorPos );
+                pActiveViewSh->GetViewData().GetDocShell()->PostEditView( mpEditEngine.get(), aCursorPos );
             }
         }
 

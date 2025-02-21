@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/drawing/BarCode.hpp>
 #include <com/sun/star/drawing/BarCodeErrorCorrection.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
@@ -1719,6 +1720,40 @@ CPPUNIT_TEST_FIXTURE(Test, testMidnightRedlineDatetime)
                        u"2001-01-01T00:00:00"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf163703)
+{
+    // Given a document with italics autostyle in a comment
+    loadAndReload("italics-in-comment.fodt");
+
+    auto xFields(
+        mxComponent.queryThrow<text::XTextFieldsSupplier>()->getTextFields()->createEnumeration());
+    auto xComment(xFields->nextElement().queryThrow<text::XTextContent>());
+    CPPUNIT_ASSERT(xComment.queryThrow<lang::XServiceInfo>()->supportsService(
+        u"com.sun.star.text.textfield.Annotation"_ustr));
+
+    auto xCommentText(getProperty<uno::Reference<css::text::XText>>(xComment, u"TextRange"_ustr));
+    CPPUNIT_ASSERT(xCommentText);
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs(xCommentText));
+    auto xCommentPara(getParagraphOrTable(1, xCommentText).queryThrow<css::text::XTextRange>());
+    CPPUNIT_ASSERT_EQUAL(u"lorem"_ustr, xCommentPara->getString());
+
+    // Without the fix, this would fail with
+    // - Expected: lo
+    // - Actual  : lorem
+    // - run does not contain expected content
+    // because direct formatting was dropped on export, and the comment was exported in one chunk
+    auto x1stRun = getRun(xCommentPara, 1, "lo");
+    CPPUNIT_ASSERT_EQUAL(css::awt::FontSlant_NONE,
+                         getProperty<css::awt::FontSlant>(x1stRun, u"CharPosture"_ustr));
+
+    auto x2ndRun = getRun(xCommentPara, 2, "r");
+    CPPUNIT_ASSERT_EQUAL(css::awt::FontSlant_ITALIC,
+                         getProperty<css::awt::FontSlant>(x2ndRun, u"CharPosture"_ustr));
+
+    auto x3rdRun = getRun(xCommentPara, 3, "em");
+    CPPUNIT_ASSERT_EQUAL(css::awt::FontSlant_NONE,
+                         getProperty<css::awt::FontSlant>(x3rdRun, u"CharPosture"_ustr));
+}
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

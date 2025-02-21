@@ -2285,7 +2285,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         && !pAttrs->GetAttrSet().GetKeep().GetValue()
         && AreAllRowsKeepWithNext(GetFirstNonHeadlineRow(), /*bCheckParents=*/false);
     // The beloved keep attribute
-    const bool bKeep = IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), bEmulateTableKeep);
+    const bool bKeep{!isHiddenNow && IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), bEmulateTableKeep)};
 
     // Join follow table, if this table is not allowed to split:
     if ( bDontSplit )
@@ -2360,9 +2360,6 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         }
     }
 
-    if (isHiddenNow)
-        MakeValidZeroHeight();
-
     int nUnSplitted = 5; // Just another loop control :-(
     int nThrowAwayValidLayoutLimit = 5; // And another one :-(
     PosSizeOscillationControl posSizeOscillationControl; // And yet another one.
@@ -2385,6 +2382,11 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         Point aOldPos( aRectFnSet.GetPos(getFrameArea()) );
         MakePos();
 
+        if (isHiddenNow)
+        {   // after MakePos()
+            MakeValidZeroHeight();
+        }
+
         if ( aOldPos != aRectFnSet.GetPos(getFrameArea()) )
         {
             if ( aOldPos.Y() != aRectFnSet.GetTop(getFrameArea()) )
@@ -2403,9 +2405,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 }
                 aNotify.SetLowersComplete( false );
             }
-            SwFrame *pPre;
-            if ( bKeep || (nullptr != (pPre = FindPrev()) &&
-                pPre->GetAttrSet()->GetKeep().GetValue()) )
+            SwFrame const*const pPre{bKeep ? nullptr : FindPrevIgnoreHidden()};
+            if (bKeep || (nullptr != pPre && pPre->GetAttrSet()->GetKeep().GetValue()))
             {
                 m_bCalcLowers = true;
             }
@@ -2760,7 +2761,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                             oAccess.emplace(SwFrame::GetCache(), this);
                             pAttrs = oAccess->Get();
                         }
-                        if (IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), true)
+                        if (!isHiddenNow
+                            && IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), true)
                             && pLastRow->ShouldRowKeepWithNext())
                         {
                             bFormat = true;
@@ -3153,6 +3155,10 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                                         {
                                             bCalcNxt = false;
                                         }
+                                    }
+                                    if (pNxt->IsHiddenNow())
+                                    {   // e.g. "testThemeCrash"
+                                        bCalcNxt = false;
                                     }
                                     if ( bCalcNxt )
                                     {
@@ -5627,9 +5633,9 @@ bool SwRowFrame::ShouldRowKeepWithNext( const bool bCheckParents ) const
         return false;
 
     const SwCellFrame* pCell = static_cast<const SwCellFrame*>(Lower());
-    const SwFrame* pText = pCell->Lower();
+    const SwFrame* pText = pCell ? pCell->Lower() : nullptr;
 
-    return pText && pText->IsTextFrame() &&
+    return pText && pText->IsTextFrame() && !pText->IsHiddenNow() &&
            static_cast<const SwTextFrame*>(pText)->GetTextNodeForParaProps()->GetSwAttrSet().GetKeep(bCheckParents).GetValue();
 }
 

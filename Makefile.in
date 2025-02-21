@@ -436,8 +436,8 @@ $(BUILDDIR)/$(PLATFORMID)/done: test-install
 	mkdir -p $(PLATFORMID)/Symbols
 	mv $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app $(PLATFORMID)/"$(PRODUCTNAME)".app
 ifneq ($(ENABLE_SYMBOLS_FOR),)
-	symbols -arch all -symbolsPackageDir $(PLATFORMID)/Symbols $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/Frameworks/[^L]* $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/MacOS/*
-	strip -S                                                   $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/Frameworks/[^L]* $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/MacOS/*
+	symbols -arch all -symbolsPackageDir $(PLATFORMID)/Symbols $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/Frameworks/[^Li]* $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/Frameworks/intl/l* $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/MacOS/*
+	strip -S                                                   $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/Frameworks/[^Li]* $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/Frameworks/intl/l* $(PLATFORMID)/"$(PRODUCTNAME)".app/Contents/MacOS/*
 endif
 	touch $@
 

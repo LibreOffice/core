@@ -9,7 +9,7 @@ dnl in order to create a configure script.
 # several non-alphanumeric characters, those are split off and used only for the
 # ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
 
-AC_INIT([LibreOffice],[24.8.4.2],[],[],[http://documentfoundation.org/])
+AC_INIT([LibreOffice],[24.8.5.2],[],[],[http://documentfoundation.org/])
 
 dnl libnumbertext needs autoconf 2.68, but that can pick up autoconf268 just fine if it is installed
 dnl whereas aclocal (as run by autogen.sh) insists on using autoconf and fails hard
@@ -335,6 +335,7 @@ if test -n "$WSL_DISTRO_NAME" && $(echo $PATH |grep -q mingw64); then
     fi
     STRAWBERRY_TOOLS="$formatted_path/c/bin"
     STRAWBERRY_PERL="$formatted_path/perl/bin/perl.exe"
+    STRAWBERRY_PERL_UNIX="$formatted_path_unix/perl/bin/perl.exe"
     AC_ARG_WITH([wsl-command],
         [AS_HELP_STRING([--with-wsl-command],
             [Specify your wsl distro command if it isn't the default/the one used with just wsl.exe –
@@ -6604,14 +6605,22 @@ dnl Testing for required Perl modules
 dnl ===================================================================
 
 AC_MSG_CHECKING([for required Perl modules])
+dnl Digest::MD5 seems only be used for packaging, but is basically a given
 perl_use_string="use Cwd ; use Digest::MD5"
+perl_use_string_spp="use Cwd ; use Digest::MD5"
 if test "$_os" = "WINNT"; then
     if test -n "$PKGFORMAT"; then
         for i in $PKGFORMAT; do
             case "$i" in
             msi)
                 # for getting fonts versions to use in MSI
-                perl_use_string="$perl_use_string ; use Font::TTF::Font"
+                if test -n "$WSL_ONLY_AS_HELPER"; then
+                    # in case of a wsl-as-helper build, the packaging is done using strawberry-perl
+                    # and not the perl provided by git-bash
+                    perl_use_string_spp="$perl_use_string_spp ; use Font::TTF::Font"
+                else
+                    perl_use_string="$perl_use_string ; use Font::TTF::Font"
+                fi
                 ;;
             esac
         done
@@ -6622,10 +6631,38 @@ if test "$with_system_hsqldb" = "yes"; then
 fi
 if test "$enable_openssl" = "yes" -a "$with_system_openssl" != "yes"; then
     # OpenSSL needs that to build
-    perl_use_string="$perl_use_string ; use FindBin"
+    if test -n "$WSL_ONLY_AS_HELPER"; then
+        # OpenSSL is built via spp, FindBin is provided by default, but deps might change in future
+        perl_use_string_spp="$perl_use_string_spp ; use FindBin"
+    else
+        perl_use_string="$perl_use_string ; use FindBin"
+    fi
 fi
+dnl in WSL_ONLY_AS_HELPER case the test should be done with git-bash-provided-perl and not perl from
+dnl the wsl container, but that can wait until we require a module that's not provided by default
 if $PERL -e "$perl_use_string">/dev/null 2>&1; then
     AC_MSG_RESULT([all modules found])
+    if test -n "$WSL_ONLY_AS_HELPER"; then
+        AC_MSG_CHECKING([for required Perl modules in Strawberry Perl])
+        if $STRAWBERRY_PERL_UNIX -e "$perl_use_string_spp">/dev/null 2>&1; then
+            AC_MSG_RESULT([all modules found])
+        else
+            AC_MSG_RESULT([failed to find some modules])
+            # Find out which modules are missing.
+            for i in $perl_use_string_spp; do
+                if test "$i" != "use" -a "$i" != ";"; then
+                    if ! $STRAWBERRY_PERL_UNIX -e "use $i;">/dev/null 2>&1; then
+                        missing_perl_modules="$missing_perl_modules $i"
+                    fi
+                fi
+            done
+            PathFormat "$(dirname $STRAWBERRY_PERL_UNIX)"
+            spp_cpan_command='PATH="$(cygpath.exe -up "'$STRAWBERRY_TOOLS';'$formatted_path'"):$PATH" cpanm'
+            AC_MSG_ERROR([
+            The missing Perl modules are: $missing_perl_modules
+            Install them with »$spp_cpan_command $missing_perl_modules«])
+        fi
+    fi
 else
     AC_MSG_RESULT([failed to find some modules])
     # Find out which modules are missing.
@@ -15481,6 +15518,7 @@ if test -n "$WSL_ONLY_AS_HELPER"; then
     WGET=
     GNUTAR="tar.exe"
     SHA256SUM="sha256sum.exe"
+    COMPRESSIONTOOL="/usr/bin/gzip"
     # TODO: maybe switch to strawberry-perl right away?
     # only openssl seems to actually require it (for Pod/Usage.pm and maybe more)
     PERL="perl.exe"

@@ -88,11 +88,13 @@ class SwStyleNameMapper final
 
 public:
     // This gets the UI Name from the programmatic name
+    SAL_WARN_UNUSED_RESULT
     static const OUString& GetUIName(const OUString& rName, SwGetPoolIdFromName);
     static         void FillUIName(const OUString& rName, OUString& rFillName,
                             SwGetPoolIdFromName);
 
     // Get the programmatic Name from the UI name
+    SAL_WARN_UNUSED_RESULT
     static const OUString& GetProgName(const OUString& rName,
                                        SwGetPoolIdFromName);
     static         void FillProgName(const OUString& rName, OUString& rFillName,
@@ -100,19 +102,23 @@ public:
 
     // This gets the UI Name from the Pool ID
     SW_DLLPUBLIC static void FillUIName(sal_uInt16 nId, OUString& rFillName);
+    SAL_WARN_UNUSED_RESULT
     SW_DLLPUBLIC static const OUString& GetUIName(sal_uInt16 nId,
                                                   const OUString& rName);
 
     // This gets the programmatic Name from the Pool ID
     static         void FillProgName(sal_uInt16 nId, OUString& rFillName);
+    SAL_WARN_UNUSED_RESULT
     SW_DLLPUBLIC static const OUString& GetProgName(sal_uInt16 nId,
                                                     const OUString& rName);
 
     // This gets the PoolId from the UI Name
+    SAL_WARN_UNUSED_RESULT
     SW_DLLPUBLIC static sal_uInt16 GetPoolIdFromUIName(const OUString& rName,
                                                        SwGetPoolIdFromName);
 
     // Get the Pool ID from the programmatic name
+    SAL_WARN_UNUSED_RESULT
     static sal_uInt16 GetPoolIdFromProgName(const OUString& rName,
                                             SwGetPoolIdFromName);
 
@@ -121,8 +127,10 @@ public:
     // RES_POOLCOLL_LABEL_TABLE, RES_POOLCOLL_LABEL_FRAME
     // forth and back.
     // Non-matching names remain unchanged.
+    SAL_WARN_UNUSED_RESULT
     SW_DLLPUBLIC static const OUString & GetSpecialExtraProgName(
                     const OUString& rExtraUIName);
+    SAL_WARN_UNUSED_RESULT
     static const OUString & GetSpecialExtraUIName(const OUString& rExtraProgName);
 
     static const std::vector<OUString>& GetTextUINameArray();

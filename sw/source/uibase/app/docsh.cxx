@@ -1124,6 +1124,12 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 rSet.DisableItem(nWhich);
         }
         break;
+        case SID_TEMPLATE_LOAD:
+            // In the launched template dialog the subsequent "Load" button depends
+            // on m_pWrtShell existing
+            if (!m_pWrtShell)
+                rSet.DisableItem(nWhich);
+        break;
 
         default: OSL_ENSURE(false,"You cannot get here!");
 

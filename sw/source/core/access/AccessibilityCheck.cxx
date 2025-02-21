@@ -21,6 +21,7 @@
 #include <svx/svdpage.hxx>
 #include <sortedobjs.hxx>
 #include <swtable.hxx>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -490,6 +491,32 @@ double calculateContrastRatio(Color const& rColor1, Color const& rColor2)
     return (aMinMax.second + 0.05) / (aMinMax.first + 0.05);
 }
 
+// Determine required minimum contrast ratio for text with the given properties
+// according to https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html
+// * 3.0 for large text (font size >= 18 or bold and font size >= 14)
+// * 4.5 otherwise
+double minimumContrastRatio(const uno::Reference<beans::XPropertySet>& xProperties)
+{
+    double fMinimumContrastRatio = 4.5;
+    double fFontSize = 0;
+    if (xProperties->getPropertyValue(u"CharHeight"_ustr) >>= fFontSize)
+    {
+        if (fFontSize >= 18)
+            fMinimumContrastRatio = 3.0;
+        else if (fFontSize >= 14)
+        {
+            double fCharWeight = 0;
+            if (xProperties->getPropertyValue(u"CharWeight"_ustr) >>= fCharWeight)
+            {
+                if (fCharWeight == css::awt::FontWeight::BOLD
+                    || fCharWeight == css::awt::FontWeight::ULTRABOLD)
+                    fMinimumContrastRatio = 3.0;
+            }
+        }
+    }
+    return fMinimumContrastRatio;
+}
+
 class TextContrastCheck : public NodeCheck
 {
 private:
@@ -609,7 +636,7 @@ private:
             aBackgroundColor = COL_WHITE;
 
         double fContrastRatio = calculateContrastRatio(aForegroundColor, aBackgroundColor);
-        if (fContrastRatio < 4.5)
+        if (fContrastRatio < minimumContrastRatio(xProperties))
         {
             auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_CONTRAST));
             pIssue->setIssueObject(IssueObject::TEXT);
@@ -1712,7 +1739,7 @@ public:
         if (const SwNode* pStartFly = pCurrent->FindFlyStartNode())
         {
             const SwFrameFormat* pFormat = pStartFly->GetFlyFormat();
-            if (!pFormat || pFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+            if (pFormat)
                 return;
         }
 

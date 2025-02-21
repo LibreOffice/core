@@ -58,11 +58,22 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
     mnCurPageRangeStart( 0 ),
     mnCurPageRangeCount( 0 )
 {
+    NSPrintInfo* pShared = [NSPrintInfo sharedPrintInfo];
+
     NSString* pStr = CreateNSString( i_rQueue.maPrinterName );
     mpPrinter = [NSPrinter printerWithName: pStr];
     [pStr release];
 
-    NSPrintInfo* pShared = [NSPrintInfo sharedPrintInfo];
+    // Related: tdf#163126 a printer is not needed to use the native
+    // macOS print dialog so if the printer is nil, use the native
+    // default printer instead.
+    if( !mpPrinter )
+        mpPrinter = [NSPrintInfo defaultPrinter];
+    if( !mpPrinter && pShared )
+        mpPrinter = [pShared printer];
+    if( mpPrinter )
+        [mpPrinter retain];
+
     if( pShared )
     {
         mpPrintInfo = [pShared copy];
@@ -89,6 +100,8 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
 AquaSalInfoPrinter::~AquaSalInfoPrinter()
 {
     delete mpGraphics;
+    if( mpPrinter )
+        [mpPrinter release];
     if( mpPrintInfo )
         [mpPrintInfo release];
     if( mrContext )
@@ -101,8 +114,8 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
     {
         if( mpPrintInfo )
         {
-            // FIXME: get printer resolution
-            sal_Int32 nDPIX = 720, nDPIY = 720;
+            sal_Int32 nDPIX = 72, nDPIY = 72;
+            mpGraphics->GetResolution( nDPIX, nDPIY );
             NSSize aPaperSize = [mpPrintInfo paperSize];
 
             NSRect aImageRect = [mpPrintInfo imageablePageBounds];
@@ -203,13 +216,17 @@ void AquaSalInfoPrinter::setPaperSize( tools::Long i_nWidth, tools::Long i_nHeig
 
     Orientation ePaperOrientation = Orientation::Portrait;
     const PaperInfo* pPaper = matchPaper( i_nWidth, i_nHeight, ePaperOrientation );
-
     if( pPaper )
     {
-        NSString* pPaperName = [CreateNSString( OStringToOUString(PaperInfo::toPSName(pPaper->getPaper()), RTL_TEXTENCODING_ASCII_US) ) autorelease];
-        [mpPrintInfo setPaperName: pPaperName];
+        // Don't set the print info's paper name if it is empty
+        const rtl::OString rPaperName( PaperInfo::toPSName( pPaper->getPaper() ) );
+        if( !rPaperName.isEmpty() )
+        {
+            NSString* pPaperName = [CreateNSString( OStringToOUString( rPaperName, RTL_TEXTENCODING_ASCII_US ) ) autorelease];
+            [mpPrintInfo setPaperName: pPaperName];
+        }
     }
-    else if( i_nWidth > 0 && i_nHeight > 0 )
+    if( i_nWidth > 0 && i_nHeight > 0 )
     {
         NSSize aPaperSize = { static_cast<CGFloat>(TenMuToPt(i_nWidth)), static_cast<CGFloat>(TenMuToPt(i_nHeight)) };
         [mpPrintInfo setPaperSize: aPaperSize];
@@ -340,24 +357,6 @@ void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
     }
 }
 
-static Size getPageSize( vcl::PrinterController const & i_rController, sal_Int32 i_nPage )
-{
-    Size aPageSize;
-    uno::Sequence< PropertyValue > const aPageParms( i_rController.getPageParameters( i_nPage ) );
-    for( const PropertyValue & pv : aPageParms )
-    {
-        if ( pv.Name == "PageSize" )
-        {
-            awt::Size aSize;
-            pv.Value >>= aSize;
-            aPageSize.setWidth( aSize.Width );
-            aPageSize.setHeight( aSize.Height );
-            break;
-        }
-    }
-    return aPageSize;
-}
-
 bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
                                    const OUString& i_rJobName,
                                    ImplJobSetup* i_pSetupData,
@@ -420,14 +419,21 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
             Size aCurSize( 21000, 29700 );
             if( nAllPages > 0 )
             {
+                // Related: tdf#159995 use filtered page sizes so that
+                // printing multiple pages per sheet in LibreOffice's
+                // non-native print dialog uses the correct paper size.
+                // Note: to use LibreOffice's non-native print dialog,
+                // set "UseSystemPrintDialog" to "false" in LibreOffice's
+                // Expert Conguration dialog and restart.
+                GDIMetaFile aPageFile;
                 mnCurPageRangeCount = 1;
-                aCurSize = getPageSize( i_rController, mnCurPageRangeStart );
+                aCurSize = i_rController.getFilteredPageFile( mnCurPageRangeStart, aPageFile ).aSize;
                 Size aNextSize( aCurSize );
 
                 // print pages up to a different size
-                while( mnCurPageRangeCount + mnCurPageRangeStart < nAllPages )
+                while( mnCurPageRangeStart + mnCurPageRangeCount < nAllPages )
                 {
-                    aNextSize = getPageSize( i_rController, mnCurPageRangeStart + mnCurPageRangeCount );
+                    aNextSize = i_rController.getFilteredPageFile( mnCurPageRangeStart + mnCurPageRangeCount, aPageFile ).aSize;
                     if( aCurSize == aNextSize // same page size
                         ||
                         (aCurSize.Width() == aNextSize.Height() && aCurSize.Height() == aNextSize.Width()) // same size, but different orientation
@@ -504,15 +510,18 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
                 bool wasSuccessful = [pPrintOperation runOperation];
                 pInst->endedPrintJob();
                 bSuccess = wasSuccessful;
-                bWasAborted = [[[pPrintOperation printInfo] jobDisposition] compare: NSPrintCancelJob] == NSOrderedSame;
+                bWasAborted = [[[pPrintOperation printInfo] jobDisposition] isEqualToString: NSPrintCancelJob];
                 mbJob = false;
                 if( pReleaseAfterUse )
                     [pReleaseAfterUse release];
             }
 
-            mnCurPageRangeStart += mnCurPageRangeCount;
-            mnCurPageRangeCount = 1;
-        } while( aAccViewState.bNeedRestart || mnCurPageRangeStart + mnCurPageRangeCount < nAllPages );
+            // When the last page has a page size change, one more loop
+            // still needs to run so set mnCurPageRangeCount to zero.
+            if( !aAccViewState.bNeedRestart )
+                mnCurPageRangeStart += mnCurPageRangeCount;
+            mnCurPageRangeCount = 0;
+        } while( ( !bWasAborted || aAccViewState.bNeedRestart ) && mnCurPageRangeStart + mnCurPageRangeCount < nAllPages );
     }
 
     // inform application that it can release its data
@@ -666,8 +675,14 @@ const PaperInfo* AquaSalInfoPrinter::matchPaper( tools::Long i_nWidth, tools::Lo
     {
         for( size_t i = 0; i < m_aPaperFormats.size(); i++ )
         {
-            if( std::abs( m_aPaperFormats[i].getWidth() - i_nWidth ) < 50 &&
-                std::abs( m_aPaperFormats[i].getHeight() - i_nHeight ) < 50 )
+            // Related: tdf#163126 expand match range to 1/10th of an inch
+            // The A4 page size in Apple's "no printer installed" printer
+            // can differ from LibreOffice's A4 page size by more than a
+            // millimeter so increase the match range to 1/10th of an inch
+            // since an A4 match would fail when using the previous 0.5
+            // millimeter match range.
+            if( std::abs( m_aPaperFormats[i].getWidth() - i_nWidth ) < 254 &&
+                std::abs( m_aPaperFormats[i].getHeight() - i_nHeight ) < 254 )
             {
                 pMatch = &m_aPaperFormats[i];
                 return pMatch;

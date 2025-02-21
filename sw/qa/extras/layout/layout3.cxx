@@ -1041,7 +1041,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf155177)
     createSwDoc("tdf155177-1-min.odt");
 
     uno::Reference<beans::XPropertySet> xStyle(
-        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Body Text"_ustr), uno::UNO_QUERY_THROW);
+        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Text body"_ustr), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(210), getProperty<sal_Int32>(xStyle, u"ParaTopMargin"_ustr));
 
     {
@@ -2163,6 +2163,102 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf156724)
     assertXPath(pXmlDoc, "/root/page[2]/ftncont"_ostr, 1);
     assertXPath(pXmlDoc, "/root/page[2]/ftncont/ftn"_ostr, 1);
     assertXPath(pXmlDoc, "/root/page"_ostr, 2);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenParagraphFollowFrame)
+{
+    createSwDoc("hidden-para-follow-frame.fodt");
+
+    uno::Any aOldValue{ queryDispatchStatus(mxComponent, m_xContext, ".uno:ShowHiddenParagraphs") };
+
+    Resetter g([this, aOldValue] {
+        uno::Sequence<beans::PropertyValue> argsSH(
+            comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", aOldValue } }));
+        dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+    });
+
+    uno::Sequence<beans::PropertyValue> argsSH(
+        comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(true) } }));
+    dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+    uno::Sequence<beans::PropertyValue> args(
+        comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
+    dispatchCommand(mxComponent, ".uno:Fieldnames", args);
+    Scheduler::ProcessEventsToIdle();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page", 2);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt", 2);
+        discardDumpedLayout();
+    }
+
+    dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", {});
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        // the problem was that the 3rd paragraph didn't move to page 1
+        assertXPath(pXmlDoc, "/root/page", 1);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt", 3);
+        discardDumpedLayout();
+    }
+
+    dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", {});
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page", 2);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt", 2);
+        discardDumpedLayout();
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenParagraphFlys)
+{
+    createSwDoc("hidden-para-as-char-fly.fodt");
+
+    uno::Any aOldValue{ queryDispatchStatus(mxComponent, m_xContext, ".uno:ShowHiddenParagraphs") };
+
+    Resetter g([this, aOldValue] {
+        uno::Sequence<beans::PropertyValue> argsSH(
+            comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", aOldValue } }));
+        dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+    });
+
+    uno::Sequence<beans::PropertyValue> argsSH(
+        comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(true) } }));
+    dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+    uno::Sequence<beans::PropertyValue> args(
+        comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
+    dispatchCommand(mxComponent, ".uno:Fieldnames", args);
+    Scheduler::ProcessEventsToIdle();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page/body/txt[3]/anchored/fly/infos/bounds", "height",
+                    u"724"_ustr);
+        discardDumpedLayout();
+    }
+
+    dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", {});
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        // the problem was that this did not shrink
+        assertXPath(pXmlDoc, "/root/page/body/txt[3]/anchored/fly/infos/bounds", "height",
+                    u"448"_ustr);
+        discardDumpedLayout();
+    }
+
+    dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", {});
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page/body/txt[3]/anchored/fly/infos/bounds", "height",
+                    u"724"_ustr);
+        discardDumpedLayout();
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testSectionUnhide)

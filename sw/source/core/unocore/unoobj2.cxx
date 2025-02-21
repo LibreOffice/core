@@ -676,16 +676,18 @@ class SwXTextRange::Impl
 public:
     const SfxItemPropertySet& m_rPropSet;
     const enum RangePosition m_eRangePosition;
+    bool const m_isRangeInCell; //< position created with a cell that has no uno object
     SwDoc& m_rDoc;
     uno::Reference<text::XText> m_xParentText;
     const SwFrameFormat* m_pTableOrSectionFormat;
     const ::sw::mark::IMark* m_pMark;
 
-    Impl(SwDoc& rDoc, const enum RangePosition eRange,
+    Impl(SwDoc& rDoc, const enum RangePosition eRange, bool const isInCell,
             SwFrameFormat* const pTableOrSectionFormat,
             uno::Reference<text::XText> xParent = nullptr)
         : m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
         , m_eRangePosition(eRange)
+        , m_isRangeInCell(isInCell)
         , m_rDoc(rDoc)
         , m_xParentText(std::move(xParent))
         , m_pTableOrSectionFormat(pTableOrSectionFormat)
@@ -744,15 +746,16 @@ void SwXTextRange::Impl::Notify(const SfxHint& rHint)
 
 SwXTextRange::SwXTextRange(SwPaM const & rPam,
         const uno::Reference< text::XText > & xParent,
-        const enum RangePosition eRange)
-    : m_pImpl( new SwXTextRange::Impl(rPam.GetDoc(), eRange, nullptr, xParent) )
+        const enum RangePosition eRange,
+        bool const isInCell)
+    : m_pImpl( new SwXTextRange::Impl(rPam.GetDoc(), eRange, isInCell, nullptr, xParent) )
 {
     SetPositions(rPam);
 }
 
 SwXTextRange::SwXTextRange(SwTableFormat& rTableFormat)
     : m_pImpl(
-        new SwXTextRange::Impl(*rTableFormat.GetDoc(), RANGE_IS_TABLE, &rTableFormat) )
+        new SwXTextRange::Impl(*rTableFormat.GetDoc(), RANGE_IS_TABLE, false, &rTableFormat) )
 {
     SwTable *const pTable = SwTable::FindTable( &rTableFormat );
     SwTableNode *const pTableNode = pTable->GetTableNode();
@@ -763,7 +766,7 @@ SwXTextRange::SwXTextRange(SwTableFormat& rTableFormat)
 
 SwXTextRange::SwXTextRange(SwSectionFormat& rSectionFormat)
     : m_pImpl(
-        new SwXTextRange::Impl(*rSectionFormat.GetDoc(), RANGE_IS_SECTION, &rSectionFormat) )
+        new SwXTextRange::Impl(*rSectionFormat.GetDoc(), RANGE_IS_SECTION, false, &rSectionFormat) )
 {
     // no SetPositions here for now
 }
@@ -1057,7 +1060,10 @@ void SAL_CALL SwXTextRange::setString(const OUString& rString)
 {
     SolarMutexGuard aGuard;
 
-    DeleteAndInsert(rString, ::sw::DeleteAndInsertMode::Default);
+    // tdf#158198 avoid deleting bookmark via setString on its anchor
+    DeleteAndInsert(rString, RANGE_IS_BOOKMARK == m_pImpl->m_eRangePosition
+                                ? ::sw::DeleteAndInsertMode::ForceReplace
+                                : ::sw::DeleteAndInsertMode::Default);
 }
 
 bool SwXTextRange::GetPositions(SwPaM& rToFill, ::sw::TextRangeMode const eMode) const
@@ -1232,7 +1238,8 @@ lcl_IsStartNodeInFormat(const bool bHeader, SwStartNode const *const pSttNode,
 
 rtl::Reference< SwXTextRange >
 SwXTextRange::CreateXTextRange(
-    SwDoc & rDoc, const SwPosition& rPos, const SwPosition *const pMark)
+    SwDoc & rDoc, const SwPosition& rPos, const SwPosition *const pMark,
+    RangePosition const eRange)
 {
     const uno::Reference<text::XText> xParentText(
             ::sw::CreateParentXText(rDoc, rPos));
@@ -1244,7 +1251,7 @@ SwXTextRange::CreateXTextRange(
     }
     const bool isCell( dynamic_cast<SwXCell*>(xParentText.get()) );
     return new SwXTextRange(*pNewCursor, xParentText,
-            isCell ? RANGE_IN_CELL : RANGE_IN_TEXT);
+            eRange, isCell);
 }
 
 namespace sw {
@@ -1401,7 +1408,7 @@ SwXTextRange::createEnumeration()
         getText();
     }
 
-    const CursorType eSetType = (RANGE_IN_CELL == m_pImpl->m_eRangePosition)
+    const CursorType eSetType = m_pImpl->m_isRangeInCell
             ? CursorType::SelectionInTable : CursorType::Selection;
     return SwXParagraphEnumeration::Create(m_pImpl->m_xParentText, pNewCursor, eSetType);
 }

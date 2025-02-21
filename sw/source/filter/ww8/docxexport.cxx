@@ -2032,6 +2032,7 @@ rtl::Reference<FastAttributeList> DocxExport::MainXmlNamespaces()
     pAttr->add( FSNS( XML_xmlns, XML_w ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(doc)), RTL_TEXTENCODING_UTF8) );
     pAttr->add( FSNS( XML_xmlns, XML_w10 ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(vmlWord)), RTL_TEXTENCODING_UTF8) );
     pAttr->add( FSNS( XML_xmlns, XML_wp ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(dmlWordDr)), RTL_TEXTENCODING_UTF8) );
+    pAttr->add( FSNS( XML_xmlns, XML_pic ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(dmlPicture)), RTL_TEXTENCODING_UTF8) );
     pAttr->add( FSNS( XML_xmlns, XML_wps ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(wps)), RTL_TEXTENCODING_UTF8) );
     pAttr->add( FSNS( XML_xmlns, XML_wpg ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(wpg)), RTL_TEXTENCODING_UTF8) );
     pAttr->add( FSNS( XML_xmlns, XML_mc ), OUStringToOString(m_rFilter.getNamespaceURL(OOX_NS(mce)), RTL_TEXTENCODING_UTF8) );

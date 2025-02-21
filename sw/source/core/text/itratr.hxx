@@ -87,6 +87,7 @@ public:
     // The parameter returns the position of the next change before or at the
     // char position.
     TextFrameIndex GetNextAttr() const;
+    TextFrameIndex GetNextLayoutBreakAttr() const;
     /// Enables the attributes used at char pos nPos in the logical font
     bool Seek(TextFrameIndex nPos);
     // Creates the font at the specified position via Seek() and checks

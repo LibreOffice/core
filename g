@@ -29,9 +29,23 @@ usage()
     echo " -z restore the git hooks and do other sanity checks"
 }
 
+refresh_create_link()
+{
+    local hook_name=$1
+    local hook=$2
+    local lnarg=$3
+
+    # if it doesn't exist or is neither a symlink nor sharing the same inode (hardlink)
+    if [ ! -e "${hook?}" ] || [ ! \( -L "${hook?}" -o "${hook_name}" -ef "${hook?}" \) ] ; then
+        rm -f "${hook?}"
+        ln -f $lnarg "${hook_name}" "${hook?}"
+    fi
+}
+
 refresh_submodule_hooks()
 {
     local repo=$1
+    local lnarg=$2
     local hook
     local hook_name
 
@@ -42,10 +56,7 @@ refresh_submodule_hooks()
                 continue
             fi
             hook="${repo?}/.git/hooks/${hook_name##*/}"
-            if [ ! -e "${hook?}" ] || [ ! -L "${hook?}" ] ; then
-                rm -f "${hook?}"
-                ln -sf "${hook_name}" "${hook?}"
-            fi
+            refresh_create_link "${hook_name}" "${hook?}" "$lnarg"
         done
         # override if need be by the submodules' own hooks
         for hook_name in "${COREDIR?}/${repo?}/.git-hooks"/* ; do
@@ -53,10 +64,7 @@ refresh_submodule_hooks()
                 continue
             fi
             hook="${repo?}/.git/hooks/${hook_name##*/}"
-            if [ ! -e "${hook?}" ] || [ ! -L "${hook?}" ] ; then
-                rm -f "${hook?}"
-                ln -sf "${hook_name}" "${hook?}"
-            fi
+            refresh_create_link "${hook_name}" "${hook?}" "$lnarg"
         done
     elif [ -d .git/modules/"${repo}"/hooks ] ; then
         for hook_name in "${COREDIR?}/.git-hooks"/* ; do
@@ -64,10 +72,7 @@ refresh_submodule_hooks()
                 continue
             fi
             hook=".git/modules/${repo?}/hooks/${hook_name##*/}"
-            if [ ! -e "${hook?}" ] || [ ! -L "${hook?}" ] ; then
-                rm -f "${hook?}"
-                ln -sf "${hook_name}" "${hook?}"
-            fi
+            refresh_create_link "${hook_name}" "${hook?}" "$lnarg"
         done
         # override if need be by the submodules' own hooks
         for hook_name in "${COREDIR?}/${repo?}/.git-hooks"/* ; do
@@ -75,10 +80,7 @@ refresh_submodule_hooks()
                 continue
             fi
             hook=".git/modules/${repo?}/hooks/${hook_name##*/}"
-            if [ ! -e "${hook?}" ] || [ ! -L "${hook?}" ] ; then
-                rm -f "${hook?}"
-                ln -sf "${hook_name}" "${hook?}"
-            fi
+            refresh_create_link "${hook_name}" "${hook?}" "$lnarg"
         done
     fi
 
@@ -89,63 +91,35 @@ refresh_all_hooks()
     local repo
     local hook_name
     local hook
-    local winlnk
-    local wingit
     local gitbash
-    local lnkfile=".git/hooks/pre-commit"
+    local lnarg
 
     pushd "${COREDIR?}" > /dev/null
 
     # it is 'GIT for Windows'
-    wingit=$(git --version | grep -ic windows)
     gitbash=$(echo $OSTYPE | grep -ic msys)
 
-    # In the win-git-bash, do not make links, it makes only copies
-    if [ $gitbash -eq 1 ]; then
-        if [ -d ".git" ]; then
-            if [ ! -e "${lnkfile}" ] || [ ! -L "${lnkfile}" ] ; then
-                # here when wrong link then the file not exist
-                echo "Your hooks not right, solve this in cygwin with"
-                echo "   ./g -z"
-            fi
-        fi
-    else
-        if [ $wingit -eq 1 ]; then
-            # There's no ".git" e.g. in a secondary worktree
-            if [ -d ".git" ]; then
-                winlnk=0
-                if [ -e "${lnkfile}" ] && [ -L "${lnkfile}" ] ; then
-                    # if linux-links or windows-links?
-                    # dos dir output windows link:
-                    #   04.09.2020  10:54    <SYMLINK>      pre-commit [..\..\.git-hooks\pre-commit]
-                    # dos dir output linux link:
-                    #   file not found
-                    winlnk=$(cmd /C "DIR ${lnkfile//'/'/'\'}" 2>&1)
-                    winlnk=$(echo "$winlnk" | grep -icE "<SYMLINK>.*${lnkfile##*/} \[")
-                fi
-
-                if [ $winlnk -eq 0 ]; then
-                    echo "You using GIT for Windows, but the hook-links not right, change with mklink"
-                    cat .git-hooks/README
-                fi
-            fi
-        else
-            # There's no ".git" e.g. in a secondary worktree
-            if [ -d ".git" ]; then
-                for hook_name in "${COREDIR?}/.git-hooks"/* ; do
-                    hook=".git/hooks/${hook_name##*/}"
-                    if [ ! -e "${hook?}" ] || [ ! -L "${hook?}" ] ; then
-                        rm -f "${hook?}"
-                        ln -sf "${hook_name}" "${hook?}"
-                    fi
-                done
-            fi
-
-            for repo in ${SUBMODULES_ALL?} ; do
-                refresh_submodule_hooks "$repo"
-            done
-        fi
+    # git-bash/MSYS doesn't create symlinks by default, and "real" symlinks are restricted to
+    # Admin-mode or when devmode is activated, junction points as fallback would work for bash/
+    # regular use but not when git tries to spawn them, similar for plain windows shortcuts (worse
+    # because running the hooks will fail silently/they'd be inactive)
+    # ln -s without setting MSYS to contain winsymlinks:{lnk,native,nativestrict,sys} to force one
+    # of the other modes described above will do plain copies.
+    # So in case of git-bash use hardlinks since those work just fine, everywhere else use symlinks
+    if [ $gitbash -ne 1 ]; then
+        lnarg="-s"
     fi
+    # There's no ".git" e.g. in a secondary worktree
+    if [ -d ".git" ]; then
+        for hook_name in "${COREDIR?}/.git-hooks"/* ; do
+            hook=".git/hooks/${hook_name##*/}"
+            refresh_create_link "${hook_name}" "${hook?}" "$lnarg"
+        done
+    fi
+
+    for repo in ${SUBMODULES_ALL?} ; do
+        refresh_submodule_hooks "$repo" "$lnarg"
+    done
 
     popd > /dev/null
 

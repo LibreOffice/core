@@ -85,6 +85,7 @@ class ControllerProperties;
 -(NSArray*)localizedSummaryItems;
 
 -(sal_Int32)updatePrintOperation:(sal_Int32)pLastPageCount;
+-(sal_Int32)updatePrintOperation:(sal_Int32)pLastPageCount forceRestart:(BOOL)bForceRestart;
 
 @end
 
@@ -121,15 +122,23 @@ class ControllerProperties;
 
 -(sal_Int32)updatePrintOperation:(sal_Int32)pLastPageCount
 {
+    return [self updatePrintOperation: pLastPageCount forceRestart: NO];
+}
+
+-(sal_Int32)updatePrintOperation:(sal_Int32)pLastPageCount forceRestart:(BOOL)bForceRestart
+{
     // page range may be changed by option choice
     sal_Int32 nPages = mpPrinterController->getFilteredPageCount();
 
     mpViewState->bNeedRestart = false;
-    if( nPages != pLastPageCount )
+    if( bForceRestart || nPages != pLastPageCount )
     {
         #if OSL_DEBUG_LEVEL > 1
-        SAL_INFO( "vcl.osx.print", "number of pages changed" <<
-                  " from " << pLastPageCount << " to " << nPages );
+        if( nPages != pLastPageCount )
+        {
+            SAL_INFO( "vcl.osx.print", "number of pages changed" <<
+                      " from " << pLastPageCount << " to " << nPages );
+        }
         #endif
         mpViewState->bNeedRestart = true;
     }
@@ -148,7 +157,12 @@ class ControllerProperties;
         // hack: send a cancel message to the modal window displaying views
         NSWindow* pNSWindow = [NSApp modalWindow];
         if( pNSWindow )
+        {
             [pNSWindow cancelOperation: nil];
+            [pNSWindow close];
+            [NSApp abortModal];
+        }
+        [mpPrintOperation setShowsProgressPanel: NO];
         [[mpPrintOperation printInfo] setJobDisposition: NSPrintCancelJob];
     }
 
@@ -264,12 +278,18 @@ public:
             if( pVal )
             {
                 // ugly
-                if( name_it->second == "PrintContent" )
+                bool bPrintContent = name_it->second == "PrintContent";
+                if( bPrintContent )
                    pVal->Value <<= i_bValue ? sal_Int32(2) : sal_Int32(0);
                 else
                    pVal->Value <<= i_bValue;
 
-                mnLastPageCount = [mpAccessoryController updatePrintOperation: mnLastPageCount];
+                // Related: tdf#163126 if the "print selection only" checkbox
+                // is changed when the content is only a single page, calling
+                // -[AquaPrintPanelAccessoryController updatePrintOperation:]
+                // won't restart the print job so force the print job to
+                // restart.
+                mnLastPageCount = [mpAccessoryController updatePrintOperation: mnLastPageCount forceRestart: bPrintContent];
             }
         }
     }
@@ -926,12 +946,12 @@ static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat 
         [pFormatter setMaximumFractionDigits: 0];
         if( nMinValue != nMaxValue )
         {
-            [pFormatter setMinimum: [[NSNumber numberWithInt: nMinValue] autorelease]];
+            [pFormatter setMinimum: [NSNumber numberWithInt: nMinValue]];
             [pStep setMinValue: nMinValue];
-            [pFormatter setMaximum: [[NSNumber numberWithInt: nMaxValue] autorelease]];
+            [pFormatter setMaximum: [NSNumber numberWithInt: nMaxValue]];
             [pStep setMaxValue: nMaxValue];
         }
-        [pFieldView setFormatter: pFormatter];
+        [pFieldView setFormatter: [pFormatter autorelease]];
 
         sal_Int64 nSelectVal = 0;
         if( pValue && pValue->Value.hasValue() )
@@ -1046,6 +1066,24 @@ static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat 
             aPropertyName == "PrintContent" &&
             aChoices.getLength() > 2 )
         {
+            // Related: tdf#163126 the "print selection only" checkbox would
+            // remain unchecked after checking it had restarted the print
+            // job so load the checkbox state from where it was updated in
+            // ControllerProperties::changePropertyWithBoolValue().
+            const PropertyValue* pVal = pController->getValue( "PrintSelectionOnly" );
+            if( pVal )
+            {
+                bool bPrintSelectionOnly;
+                pVal->Value >>= bPrintSelectionOnly;
+                aSelectionChecked = bPrintSelectionOnly ? 2 : 0;
+            }
+            else
+            {
+                pVal = pController->getValue( "PrintContent" );
+                if( pVal )
+                    pVal->Value >>= aSelectionChecked;
+            }
+
             bAddSelectionCheckBox = true;
             bSelectionBoxEnabled = aChoicesDisabled.getLength() < 2 || ! aChoicesDisabled[2];
             bSelectionBoxChecked = (aSelectionChecked==2);
@@ -1144,9 +1182,9 @@ static void addEdit( NSView* pCurParent, CGFloat rCurX, CGFloat& rCurY, CGFloat 
                 NSString* pLabel = CreateNSString( aGroupTitle );
                 NSTabViewItem* pItem = [[NSTabViewItem alloc] initWithIdentifier: pLabel ];
                 [pItem setLabel: pLabel];
-                [pTabView addTabViewItem: pItem];
+                [pTabView addTabViewItem: [pItem autorelease]];
                 pCurParent = [[NSView alloc] initWithFrame: aTabViewFrame];
-                [pItem setView: pCurParent];
+                [pItem setView: [pCurParent autorelease]];
                 [pLabel release];
 
                 nCurX = 20; // reset indent

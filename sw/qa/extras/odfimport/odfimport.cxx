@@ -1215,6 +1215,28 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133459)
     CPPUNIT_ASSERT_EQUAL(u"QQ YYYY"_ustr, getProperty<OUString>(xFormat, u"FormatString"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf159549)
+{
+    createSwDoc("tdf159549.fodt");
+
+    uno::Reference<container::XNameAccess> xParaStyles(getStyles(u"ParagraphStyles"_ustr));
+
+    uno::Reference<beans::XPropertySet> xStyleBuiltin(xParaStyles->getByName(
+            u"Text body"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(float(32), getProperty<float>(xStyleBuiltin, "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), xStyleBuiltin.queryThrow<style::XStyle>()->getParentStyle());
+
+    uno::Reference<beans::XPropertySet> xStyleDerived(xParaStyles->getByName(
+            u"DerivedFromTextBody"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(float(32), getProperty<float>(xStyleDerived, "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Text body"), xStyleDerived.queryThrow<style::XStyle>()->getParentStyle());
+
+    uno::Reference<beans::XPropertySet> xStyleCustom(xParaStyles->getByName(
+            u"Body Text"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(float(16), getProperty<float>(xStyleCustom, "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), xStyleCustom.queryThrow<style::XStyle>()->getParentStyle());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf134971)
 {
     createSwDoc("tdf134971a.odt");

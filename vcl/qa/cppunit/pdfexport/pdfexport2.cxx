@@ -5682,6 +5682,93 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf151748KashidaSpace)
     CPPUNIT_ASSERT_EQUAL(u"توسط"_ustr, aText.at(16).trim());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf162750SmallCapsLigature)
+{
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
+    saveAsPDF(u"tdf162750.fodt");
+
+    auto pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    auto pPdfPage = pPdfDocument->openPage(/*nIndex*/ 0);
+    CPPUNIT_ASSERT(pPdfPage);
+    auto pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+
+    CPPUNIT_ASSERT_EQUAL(3, nPageObjectCount);
+
+    std::vector<OUString> aText;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        auto pPageObject = pPdfPage->getObject(i);
+        CPPUNIT_ASSERT_MESSAGE("no object", pPageObject != nullptr);
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+        {
+            aText.push_back(pPageObject->getText(pTextPage));
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aText.size());
+    CPPUNIT_ASSERT_EQUAL(u"ffi"_ustr, aText.at(0).trim());
+
+    // Without the fix, this will be "ffi"
+    CPPUNIT_ASSERT_EQUAL(u"f"_ustr, aText.at(1).trim());
+
+    CPPUNIT_ASSERT_EQUAL(u"FI"_ustr, aText.at(2).trim());
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf164106SplitReorderedClusters)
+{
+    aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
+    saveAsPDF(u"tdf164106.fodt");
+
+    auto pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    auto pPdfPage = pPdfDocument->openPage(/*nIndex*/ 0);
+    CPPUNIT_ASSERT(pPdfPage);
+    auto pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+
+    CPPUNIT_ASSERT_EQUAL(14, nPageObjectCount);
+
+    std::vector<OUString> aText;
+    std::vector<basegfx::B2DRectangle> aRect;
+
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        auto pPageObject = pPdfPage->getObject(i);
+        CPPUNIT_ASSERT_MESSAGE("no object", pPageObject != nullptr);
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+        {
+            aText.push_back(pPageObject->getText(pTextPage));
+            aRect.push_back(pPageObject->getBounds());
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(size_t(14), aText.size());
+
+    auto fnCompareIndices = [&](size_t nSplit, size_t nCombined) {
+        CPPUNIT_ASSERT_EQUAL(aText.at(nSplit).trim(), aText.at(nCombined).trim());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aRect.at(nSplit).getMinX(), aRect.at(nCombined).getMinX(),
+                                     /*delta*/ 0.2);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aRect.at(nSplit).getMaxX(), aRect.at(nCombined).getMaxX(),
+                                     /*delta*/ 0.2);
+    };
+
+    fnCompareIndices(0, 7);
+    fnCompareIndices(1, 8);
+    fnCompareIndices(2, 9);
+    fnCompareIndices(3, 10);
+    fnCompareIndices(4, 11);
+    fnCompareIndices(5, 12);
+    fnCompareIndices(6, 13);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

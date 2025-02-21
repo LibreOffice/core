@@ -898,7 +898,7 @@ uno::Any XStyleFamily::getByIndex(sal_Int32 nIndex)
     OUString sStyleName;
     try
     {
-        SwStyleNameMapper::FillUIName(m_rEntry.translateIndex(nIndex), sStyleName);
+        SwStyleNameMapper::FillProgName(m_rEntry.translateIndex(nIndex), sStyleName);
     } catch(...) {}
     if (sStyleName.isEmpty())
         GetCountOrName(&sStyleName, nIndex);
@@ -910,10 +910,10 @@ uno::Any XStyleFamily::getByIndex(sal_Int32 nIndex)
 uno::Any XStyleFamily::getByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
-    OUString sStyleName;
-    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId());
     if(!m_pBasePool)
         throw uno::RuntimeException();
+    OUString sStyleName;
+    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
     if(!pBase)
         throw container::NoSuchElementException(rName);
@@ -1355,7 +1355,9 @@ OUString SwXStyle::getParentStyle()
     {
         if(!m_bIsDescriptor)
             throw uno::RuntimeException();
-        return m_sParentStyleName;
+        OUString ret;
+        SwStyleNameMapper::FillProgName(m_sParentStyleName, ret, lcl_GetSwEnumFromSfxEnum(m_rEntry.family()));
+        return ret;
     }
     SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName, m_rEntry.family());
     OUString aString;
@@ -1369,7 +1371,7 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
 {
     SolarMutexGuard aGuard;
     OUString sParentStyle;
-    SwStyleNameMapper::FillUIName(rParentStyle, sParentStyle, lcl_GetSwEnumFromSfxEnum ( m_rEntry.family()) );
+    SwStyleNameMapper::FillUIName(rParentStyle, sParentStyle, lcl_GetSwEnumFromSfxEnum(m_rEntry.family()));
     if(!m_pBasePool)
     {
         if(!m_bIsDescriptor)
@@ -1377,7 +1379,7 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
         m_sParentStyleName = sParentStyle;
         try
         {
-            const auto aAny = m_xStyleFamily->getByName(sParentStyle);
+            const auto aAny = m_xStyleFamily->getByName(rParentStyle);
             m_xStyleData = aAny.get<decltype(m_xStyleData)>();
         }
         catch(...)
@@ -1572,6 +1574,11 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAPER_BIN)>(const SfxItemProperty
     if (!rValue.has<OUString>() && !rValue.has<sal_Int32>())
         throw lang::IllegalArgumentException();
     SfxPrinter* pPrinter = m_pDoc->getIDocumentDeviceAccess().getPrinter(true);
+
+    // PAPER_BINs have no meaning when there is no actual printer
+    if (pPrinter->IsDisplayPrinter())
+        return;
+
     using printeridx_t = decltype(pPrinter->GetPaperBinCount());
     printeridx_t nBin = std::numeric_limits<printeridx_t>::max();
     if(rValue.has<OUString>())
@@ -1831,11 +1838,11 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_TXTATR_CJK_RUBY)>(const SfxItemPr
         pRuby.reset(new SwFormatRuby(OUString()));
     OUString sStyle;
     SwStyleNameMapper::FillUIName(sValue, sStyle, SwGetPoolIdFromName::ChrFmt);
-    pRuby->SetCharFormatName(sValue);
+    pRuby->SetCharFormatName(sStyle);
     pRuby->SetCharFormatId(0);
     if(!sValue.isEmpty())
     {
-        const sal_uInt16 nId(SwStyleNameMapper::GetPoolIdFromUIName(sValue, SwGetPoolIdFromName::ChrFmt));
+        const sal_uInt16 nId(SwStyleNameMapper::GetPoolIdFromUIName(sStyle, SwGetPoolIdFromName::ChrFmt));
         pRuby->SetCharFormatId(nId);
     }
     rStyleSet.Put(std::move(pRuby));

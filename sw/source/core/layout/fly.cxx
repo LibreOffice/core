@@ -1708,9 +1708,10 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
             // frame due to its keep-attribute, if it can't move forward.
             // #i57765# - do not consider invalid previous
             // frame, if current frame has a column/page break before attribute.
-            SwFrame* pTmpPrev = pFrame->FindPrev();
+            assert(pFrame->IsFlowFrame());
+            SwFlowFrame* pTmpFlowFrame = SwFlowFrame::CastFlowFrame(pFrame);
+            SwFrame* pTmpPrev = pTmpFlowFrame->FindPrevIgnoreHidden();
             SwFlowFrame* pTmpPrevFlowFrame = pTmpPrev && pTmpPrev->IsFlowFrame() ? SwFlowFrame::CastFlowFrame(pTmpPrev) : nullptr;
-            SwFlowFrame* pTmpFlowFrame     = pFrame->IsFlowFrame() ? SwFlowFrame::CastFlowFrame(pFrame) : nullptr;
 
             bool bPrevInvalid = pTmpPrevFlowFrame && pTmpFlowFrame &&
                                !pTmpFlowFrame->IsFollow() &&

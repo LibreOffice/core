@@ -55,6 +55,8 @@ public:
 
     bool IsDocIdle() const override;
 
+    bool IsIdlingBlocked() const override;
+
 private:
     DocumentTimerManager(DocumentTimerManager const&) = delete;
     DocumentTimerManager& operator=(DocumentTimerManager const&) = delete;
@@ -80,6 +82,8 @@ inline bool DocumentTimerManager::IsDocIdle() const
 {
     return ((0 == m_nIdleBlockCount) && (GetNextIdleJob() != IdleJob::Busy));
 }
+
+inline bool DocumentTimerManager::IsIdlingBlocked() const { return (0 != m_nIdleBlockCount); }
 }
 
 #endif

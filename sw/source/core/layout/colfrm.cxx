@@ -312,9 +312,13 @@ void SwLayoutFrame::ChgColumns( const SwFormatCol &rOld, const SwFormatCol &rNew
 
 void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttributes )
 {
-    if( !Lower()->GetNext() )
+    SwFrame* pLower = Lower();
+    if (!pLower)
+        return;
+
+    if( !pLower->GetNext() )
     {
-        Lower()->ChgSize( getFramePrintArea().SSize() );
+        pLower->ChgSize( getFramePrintArea().SSize() );
         return;
     }
 
@@ -328,7 +332,7 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
         if ( !bAdjustAttributes )
         {
             tools::Long nAvail = fnRect.GetWidth(getFramePrintArea());
-            for ( SwLayoutFrame *pCol = static_cast<SwLayoutFrame*>(Lower());
+            for ( SwLayoutFrame *pCol = static_cast<SwLayoutFrame*>(pLower);
                   pCol;
                   pCol = static_cast<SwLayoutFrame*>(pCol->GetNext()) )
                 nAvail -= fnRect.GetWidth(pCol->getFrameArea());
@@ -344,7 +348,7 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
     const sal_uInt16 nMin = bLine ? sal_uInt16( 20 + ( pAttr->GetLineWidth() / 2) ) : 0;
 
     const bool bR2L = IsRightToLeft();
-    SwFrame *pCol = bR2L ? GetLastLower() : Lower();
+    SwFrame *pCol = bR2L ? GetLastLower() : pLower;
 
     // #i27399#
     // bOrtho means we have to adjust the column frames manually. Otherwise
@@ -429,7 +433,7 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
         return;
 
     tools::Long nInnerWidth = ( nAvail - nGutter ) / pAttr->GetNumCols();
-    pCol = Lower();
+    pCol = pLower;
     for( sal_uInt16 i = 0; i < pAttr->GetNumCols() && pCol; pCol = pCol->GetNext(), ++i ) //i118878, value returned by GetNumCols() can't be trusted
     {
         SwTwips nWidth;

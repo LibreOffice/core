@@ -1004,23 +1004,26 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         AllSettings aAllSettings = Application::GetSettings();
         StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
         bool bUseFontAAFromSystem = aStyleSettings.GetUseFontAAFromSystem();
+        bool bUseSubpixelAA = aStyleSettings.GetUseSubpixelAA();
+        aStyleSettings.SetUseSubpixelAA(false);
         if (aSettings.meAntiAliasing != TRISTATE_INDET)
         {
             // This is safe to do globally as we own the solar mutex.
             SvtOptionsDrawinglayer::SetAntiAliasing(aSettings.meAntiAliasing == TRISTATE_TRUE, /*bTemporary*/true);
             // Opt in to have AA affect font rendering as well.
             aStyleSettings.SetUseFontAAFromSystem(false);
-            aAllSettings.SetStyleSettings(aStyleSettings);
-            Application::SetSettings(aAllSettings);
         }
+        aAllSettings.SetStyleSettings(aStyleSettings);
+        Application::SetSettings(aAllSettings, /*bTemporary*/true);
         nStatus = GetGraphic( aSettings, aGraphic, bVectorType ) ? ERRCODE_NONE : ERRCODE_GRFILTER_FILTERERROR;
         if (aSettings.meAntiAliasing != TRISTATE_INDET)
         {
             SvtOptionsDrawinglayer::SetAntiAliasing(bAntiAliasing, /*bTemporary*/true);
             aStyleSettings.SetUseFontAAFromSystem(bUseFontAAFromSystem);
-            aAllSettings.SetStyleSettings(aStyleSettings);
-            Application::SetSettings(aAllSettings);
         }
+        aStyleSettings.SetUseSubpixelAA(bUseSubpixelAA);
+        aAllSettings.SetStyleSettings(aStyleSettings);
+        Application::SetSettings(aAllSettings, /*bTemporary*/true);
     }
 
     if( nStatus == ERRCODE_NONE )

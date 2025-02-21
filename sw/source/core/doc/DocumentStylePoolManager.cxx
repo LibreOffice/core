@@ -601,8 +601,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             // in online we can have multiple languages, use translated name
             if (comphelper::LibreOfficeKit::isActive())
             {
-                OUString aName;
-                SwStyleNameMapper::GetUIName(nId, aName);
+                OUString aName = SwStyleNameMapper::GetUIName(nId, OUString());
                 if (!aName.isEmpty())
                     pNewColl->SetFormatName(aName);
             }

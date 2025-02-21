@@ -41,7 +41,9 @@ namespace
 D2D1_TEXT_ANTIALIAS_MODE lclGetSystemTextAntiAliasType()
 {
     UINT t;
-    if (SystemParametersInfoW(SPI_GETFONTSMOOTHINGTYPE, 0, &t, 0) && t == FE_FONTSMOOTHINGCLEARTYPE)
+    if (Application::GetSettings().GetStyleSettings().GetUseSubpixelAA()
+        && SystemParametersInfoW(SPI_GETFONTSMOOTHINGTYPE, 0, &t, 0)
+        && t == FE_FONTSMOOTHINGCLEARTYPE)
         return D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE;
     return D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE;
 }

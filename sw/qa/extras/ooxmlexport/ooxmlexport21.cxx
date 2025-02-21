@@ -582,6 +582,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126533_pageGradient, "fill.docx")
 
     awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xPageStyle, u"FillGradient"_ustr);
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RECT, aGradient.Style);
+
+    // LO and MS handle radials very differently, so it is hard to say what
+    // color1 (fill) and color2 should be. This test is only interested in making sure
+    // that the colors are not alternating back and forth on each round-trip.
+    CPPUNIT_ASSERT_EQUAL(Color(0xff8200), Color(ColorTransparency, aGradient.StartColor));
+    CPPUNIT_ASSERT_EQUAL(Color(0x000082), Color(ColorTransparency, aGradient.EndColor));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_pageBitmap, "tdf126533_pageBitmap.docx")

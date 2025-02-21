@@ -549,14 +549,16 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 if ( aFileName.isEmpty() )
                 {
-                    SfxNewFileDialog aNewFileDlg(GetView()->GetFrameWeld(), SfxNewFileDialogMode::LoadTemplate);
+                    weld::Window* pDialogParent = rReq.GetFrameWeld();
+                    SAL_WARN_IF(!pDialogParent, "sw.ui", "missing parameter for DialogParent");
+                    SfxNewFileDialog aNewFileDlg(pDialogParent, SfxNewFileDialogMode::LoadTemplate);
                     aNewFileDlg.SetTemplateFlags(nFlags);
 
                     sal_uInt16 nRet = aNewFileDlg.run();
                     if(RET_TEMPLATE_LOAD == nRet)
                     {
                         FileDialogHelper aDlgHelper(TemplateDescription::FILEOPEN_SIMPLE,
-                                                    FileDialogFlags::NONE, GetView()->GetFrameWeld());
+                                                    FileDialogFlags::NONE, pDialogParent);
                         aDlgHelper.SetContext(FileDialogHelper::WriterLoadTemplate);
                         uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
