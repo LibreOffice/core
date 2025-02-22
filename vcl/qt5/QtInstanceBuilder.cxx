@@ -83,6 +83,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"cui/ui/zoomdialog.ui"_ustr,
         u"dbaccess/ui/savedialog.ui"_ustr,
         u"dbaccess/ui/tabledesignsavemodifieddialog.ui"_ustr,
+        u"filter/ui/testxmlfilter.ui"_ustr,
         u"filter/ui/xmlfiltertabpagegeneral.ui"_ustr,
         u"filter/ui/xmlfiltertabpagetransformation.ui"_ustr,
         u"filter/ui/xsltfilterdialog.ui"_ustr,
