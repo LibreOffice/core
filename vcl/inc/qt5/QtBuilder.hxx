@@ -108,7 +108,6 @@ private:
     void setSpinButtonProperties(QDoubleSpinBox& rSpinBox, stringmap& rProps);
     static void setTextViewProperties(QPlainTextEdit& rTextEdit, stringmap& rProps);
     static QWidget* windowForObject(QObject* pObject);
-    static QDialogButtonBox* findButtonBox(QDialog* pDialog);
 
     static void applyGridPackingProperties(QWidget* pCurrentChild, QGridLayout& rGrid,
                                            const stringmap& rPackingProperties);

@@ -169,7 +169,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         if (QMessageBox* pMessageBox = qobject_cast<QMessageBox*>(pTopLevel))
         {
             // for a QMessageBox, return the existing button box instead of creating a new one
-            QDialogButtonBox* pButtonBox = findButtonBox(pMessageBox);
+            QDialogButtonBox* pButtonBox = QtInstanceDialog::findButtonBox(pMessageBox);
             assert(pButtonBox && "Could not find QMessageBox's button box");
             pObject = pButtonBox;
 
@@ -522,7 +522,7 @@ void QtBuilder::tweakInsertedChild(QObject* pParent, QObject* pCurrentChild, std
         // and button click is handled in QtInstanceMessageDialog
         if (!qobject_cast<QMessageBox*>(pDialog))
         {
-            if (QDialogButtonBox* pButtonBox = findButtonBox(pDialog))
+            if (QDialogButtonBox* pButtonBox = QtInstanceDialog::findButtonBox(pDialog))
             {
                 // ensure that button box is the last item in QDialog's layout
                 // (that seems to be implicitly the case for GtkDialog in GTK)
@@ -935,25 +935,6 @@ QWidget* QtBuilder::windowForObject(QObject* pObject)
             return pParentWidget->window();
     }
 
-    return nullptr;
-}
-
-QDialogButtonBox* QtBuilder::findButtonBox(QDialog* pDialog)
-{
-    assert(pDialog);
-    QLayout* pLayout = pDialog->layout();
-    if (!pLayout)
-        return nullptr;
-
-    for (int i = 0; i < pLayout->count(); i++)
-    {
-        QLayoutItem* pItem = pLayout->itemAt(i);
-        if (QWidget* pItemWidget = pItem->widget())
-        {
-            if (QDialogButtonBox* pButtonBox = qobject_cast<QDialogButtonBox*>(pItemWidget))
-                return pButtonBox;
-        }
-    }
     return nullptr;
 }
 

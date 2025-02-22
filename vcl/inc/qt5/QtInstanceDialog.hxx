@@ -12,6 +12,7 @@
 #include "QtInstanceWindow.hxx"
 
 #include <QtWidgets/QAbstractButton>
+#include <QtWidgets/QDialogButtonBox>
 
 class QtInstanceDialog : public QtInstanceWindow, public virtual weld::Dialog
 {
@@ -60,6 +61,7 @@ public:
 
     virtual std::unique_ptr<weld::Container> weld_content_area() override;
 
+    static QDialogButtonBox* findButtonBox(QDialog* pDialog);
     static void handleButtonClick(QDialog& rDialog, QAbstractButton& rButton);
 
     /**

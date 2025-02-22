@@ -204,6 +204,25 @@ void QtInstanceDialog::dialogFinished(int nResult)
     xRunAsyncDialog.reset();
 }
 
+QDialogButtonBox* QtInstanceDialog::findButtonBox(QDialog* pDialog)
+{
+    assert(pDialog);
+    QLayout* pLayout = pDialog->layout();
+    if (!pLayout)
+        return nullptr;
+
+    for (int i = 0; i < pLayout->count(); i++)
+    {
+        QLayoutItem* pItem = pLayout->itemAt(i);
+        if (QWidget* pItemWidget = pItem->widget())
+        {
+            if (QDialogButtonBox* pButtonBox = qobject_cast<QDialogButtonBox*>(pItemWidget))
+                return pButtonBox;
+        }
+    }
+    return nullptr;
+}
+
 void QtInstanceDialog::handleButtonClick(QDialog& rDialog, QAbstractButton& rButton)
 {
     SolarMutexGuard g;
