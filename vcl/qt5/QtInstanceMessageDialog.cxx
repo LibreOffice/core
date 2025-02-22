@@ -277,28 +277,8 @@ void QtInstanceMessageDialog::positionExtraControlsContainer()
 
 QPushButton* QtInstanceMessageDialog::buttonForResponseCode(int nResponse)
 {
-    SolarMutexGuard g;
-    QtInstance& rQtInstance = GetQtInstance();
-    if (!rQtInstance.IsMainThread())
-    {
-        QPushButton* pButton;
-        rQtInstance.RunInMainThread([&] { pButton = buttonForResponseCode(nResponse); });
-        return pButton;
-    }
-
-    assert(m_pMessageDialog);
-
     const QList<QAbstractButton*> aButtons = m_pMessageDialog->buttons();
-    for (QAbstractButton* pAbstractButton : aButtons)
-    {
-        if (pAbstractButton->property(PROPERTY_VCL_RESPONSE_CODE).toInt() == nResponse)
-        {
-            QPushButton* pButton = qobject_cast<QPushButton*>(pAbstractButton);
-            assert(pButton);
-            return pButton;
-        }
-    }
-    return nullptr;
+    return QtInstanceDialog::buttonForResponseCode(aButtons, nResponse);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

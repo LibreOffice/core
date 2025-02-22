@@ -13,6 +13,7 @@
 
 #include <QtWidgets/QAbstractButton>
 #include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QPushButton>
 
 class QtInstanceDialog : public QtInstanceWindow, public virtual weld::Dialog
 {
@@ -69,6 +70,10 @@ public:
     * int VCL response code of that button.
     */
     static const char* const PROPERTY_VCL_RESPONSE_CODE;
+
+protected:
+    static QPushButton* buttonForResponseCode(const QList<QAbstractButton*>& rButtons,
+                                              int nResponse);
 
 protected slots:
     virtual void dialogFinished(int nResult);

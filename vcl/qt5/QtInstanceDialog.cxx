@@ -223,6 +223,21 @@ QDialogButtonBox* QtInstanceDialog::findButtonBox(QDialog* pDialog)
     return nullptr;
 }
 
+QPushButton* QtInstanceDialog::buttonForResponseCode(const QList<QAbstractButton*>& rButtons,
+                                                     int nResponse)
+{
+    for (QAbstractButton* pAbstractButton : rButtons)
+    {
+        if (pAbstractButton->property(PROPERTY_VCL_RESPONSE_CODE).toInt() == nResponse)
+        {
+            QPushButton* pButton = qobject_cast<QPushButton*>(pAbstractButton);
+            assert(pButton);
+            return pButton;
+        }
+    }
+    return nullptr;
+}
+
 void QtInstanceDialog::handleButtonClick(QDialog& rDialog, QAbstractButton& rButton)
 {
     SolarMutexGuard g;
