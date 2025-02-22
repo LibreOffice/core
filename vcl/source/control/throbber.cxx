@@ -34,8 +34,8 @@ using ::com::sun::star::graphic::XGraphicProvider;
 using ::com::sun::star::uno::Exception;
 namespace ImageScaleMode = css::awt::ImageScaleMode;
 
-Throbber::Throbber( vcl::Window* i_parentWindow, WinBits i_style )
-    :ImageControl( i_parentWindow, i_style )
+Throbber::Throbber(vcl::Window* pParentWindow, WinBits eStyle )
+    :ImageControl(pParentWindow, eStyle )
     ,mbRepeat( true )
     ,mnStepTime( 100 )
     ,mnCurStep( 0 )
