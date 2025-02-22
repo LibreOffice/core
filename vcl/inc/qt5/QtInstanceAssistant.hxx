@@ -21,6 +21,8 @@ class QtInstanceAssistant : public QtInstanceDialog, public virtual weld::Assist
 
     QWizard* m_pWizard;
 
+    std::vector<std::unique_ptr<QtInstanceContainer>> m_aPages;
+
 public:
     QtInstanceAssistant(QWizard* pWizard);
 

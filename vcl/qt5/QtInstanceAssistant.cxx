@@ -144,10 +144,24 @@ void QtInstanceAssistant::set_page_sensitive(const OUString& rIdent, bool bSensi
     });
 }
 
-weld::Container* QtInstanceAssistant::append_page(const OUString&)
+weld::Container* QtInstanceAssistant::append_page(const OUString& rIdent)
 {
-    assert(false && "not implemented yet");
-    return nullptr;
+    SolarMutexGuard g;
+
+    weld::Container* pContainer = nullptr;
+
+    GetQtInstance().RunInMainThread([&] {
+        QWizardPage* pNewPage = new QWizardPage;
+        pNewPage->setObjectName(toQString(rIdent));
+        // ensure that QWizard page ID matches page index
+        const int nPageId = m_pWizard->pageIds().size();
+        m_pWizard->setPage(nPageId, pNewPage);
+
+        m_aPages.emplace_back(new QtInstanceContainer(pNewPage));
+        pContainer = m_aPages.back().get();
+    });
+
+    return pContainer;
 }
 
 void QtInstanceAssistant::set_page_side_help_id(const OUString&)
