@@ -597,7 +597,7 @@ SwCollCondition::~SwCollCondition()
 
 void SwCollCondition::RegisterToFormat(SwTextFormatColl& rColl)
 {
-    m_pCollection = &rColl;
+    m_pCollection.Assign(&rColl);
 }
 
 bool SwCollCondition::operator==( const SwCollCondition& rCmp ) const

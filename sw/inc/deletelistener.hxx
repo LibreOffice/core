@@ -36,12 +36,16 @@ public:
     {
         StartListeningIfNonnull();
     }
-    WeakBroadcastingPtr& operator=(const WeakBroadcastingPtr& rOther)
+    void Assign(T* pBroadcasting)
     {
         if (m_pBroadcasting)
             EndListening(m_pBroadcasting->GetNotifier());
-        m_pBroadcasting = rOther.m_pBroadcasting;
+        m_pBroadcasting = pBroadcasting;
         StartListeningIfNonnull();
+    }
+    WeakBroadcastingPtr& operator=(const WeakBroadcastingPtr& rOther)
+    {
+        Assign(rOther.m_pBroadcasting);
         return *this;
     }
 
