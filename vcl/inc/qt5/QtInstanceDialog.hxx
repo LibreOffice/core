@@ -56,7 +56,7 @@ public:
 
     virtual void set_centered_on_parent(bool bTrackGeometryRequests) override;
 
-    virtual std::unique_ptr<weld::Button> weld_button_for_response(int) override;
+    virtual std::unique_ptr<weld::Button> weld_button_for_response(int nResponse) override;
 
     virtual void set_default_response(int) override;
 

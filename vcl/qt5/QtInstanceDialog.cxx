@@ -149,9 +149,22 @@ void QtInstanceDialog::set_centered_on_parent(bool)
     // QDialog is centered on parent toplevel by default
 }
 
-std::unique_ptr<weld::Button> QtInstanceDialog::weld_button_for_response(int)
+std::unique_ptr<weld::Button> QtInstanceDialog::weld_button_for_response(int nResponse)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    QPushButton* pButton = nullptr;
+    GetQtInstance().RunInMainThread([&] {
+        if (QDialogButtonBox* pButtonBox = findButtonBox(m_pDialog))
+        {
+            const QList<QAbstractButton*> aButtons = pButtonBox->buttons();
+            pButton = buttonForResponseCode(aButtons, nResponse);
+        }
+    });
+
+    if (pButton)
+        return std::make_unique<QtInstanceButton>(pButton);
+
     return nullptr;
 }
 
