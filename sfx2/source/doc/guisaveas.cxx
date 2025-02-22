@@ -1770,8 +1770,12 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
     aArgsSequence = aModelData.GetMediaDescr().getAsConstPropertyValueList();
 
     // store the document and handle it's docinfo
-
-    DocumentSettingsGuard aSettingsGuard( aModelData.GetModel(), aModelData.IsRecommendReadOnly(), nStoreMode & EXPORT_REQUESTED );
+    // Restore when exporting (which is also done when LoKit is enable, see below).
+    const bool bRestore
+        = (nStoreMode & EXPORT_REQUESTED)
+          || ((nStoreMode & SAVEAS_REQUESTED) && comphelper::LibreOfficeKit::isActive());
+    DocumentSettingsGuard aSettingsGuard(aModelData.GetModel(), aModelData.IsRecommendReadOnly(),
+                                         bRestore);
 
     // Treat attempted PDF export like a print: update document print statistics
     if ((nStoreMode & PDFEXPORT_REQUESTED) && SfxViewShell::Current())
@@ -1867,7 +1871,10 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
         try
         {
 #endif
-            if ( nStoreMode & EXPORT_REQUESTED )
+            // SaveAs in LoKit is unhelpful. It saves the document to a new path, which
+            // breaks the link with the storage, so new modifications can't be uploaded.
+            if ((nStoreMode & EXPORT_REQUESTED)
+                || ((nStoreMode & SAVEAS_REQUESTED) && comphelper::LibreOfficeKit::isActive()))
                 aModelData.GetStorable()->storeToURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
             else
                 aModelData.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
