@@ -16,6 +16,7 @@ $(call gb_CustomTarget_get_target,vcl/qt5) : \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtFilePicker.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtFrame.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstance.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceAssistant.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceBox.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceCheckButton.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceComboBox.moc \

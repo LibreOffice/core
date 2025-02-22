@@ -98,6 +98,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt6,\
     vcl/qt6/QtHyperlinkLabel \
     vcl/qt6/QtInstance \
     vcl/qt6/QtInstance_Print \
+    vcl/qt6/QtInstanceAssistant \
     vcl/qt6/QtInstanceBox \
     vcl/qt6/QtInstanceBuilder \
     vcl/qt6/QtInstanceButton \

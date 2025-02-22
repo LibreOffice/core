@@ -31,7 +31,7 @@ public:
 
     virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OUString& id) override;
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OUString& rId) override;
-    virtual std::unique_ptr<weld::Assistant> weld_assistant(const OUString&) override;
+    virtual std::unique_ptr<weld::Assistant> weld_assistant(const OUString& rId) override;
     virtual std::unique_ptr<weld::Window> create_screenshot_window() override;
     virtual std::unique_ptr<weld::Widget> weld_widget(const OUString& rId) override;
     virtual std::unique_ptr<weld::Container> weld_container(const OUString& rId) override;

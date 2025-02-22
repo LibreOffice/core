@@ -41,6 +41,7 @@
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QTreeView>
+#include <QtWidgets/QWizard>
 
 namespace
 {
@@ -131,6 +132,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         QMessageBox* pMessageBox = new QMessageBox(pParentWidget);
         setMessageDialogProperties(*pMessageBox, rMap);
         pObject = pMessageBox;
+    }
+    else if (sName == u"GtkAssistant")
+    {
+        pObject = new QWizard(pParentWidget);
     }
     else if (sName == u"GtkBox")
     {

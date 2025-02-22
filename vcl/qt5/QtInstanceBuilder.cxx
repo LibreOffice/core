@@ -12,6 +12,7 @@
 #include <unordered_set>
 
 #include <QtBuilder.hxx>
+#include <QtInstanceAssistant.hxx>
 #include <QtInstanceBox.hxx>
 #include <QtInstanceCheckButton.hxx>
 #include <QtInstanceComboBox.hxx>
@@ -158,10 +159,12 @@ std::unique_ptr<weld::Dialog> QtInstanceBuilder::weld_dialog(const OUString& rId
     return xRet;
 }
 
-std::unique_ptr<weld::Assistant> QtInstanceBuilder::weld_assistant(const OUString&)
+std::unique_ptr<weld::Assistant> QtInstanceBuilder::weld_assistant(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QWizard* pWizard = m_xBuilder->get<QWizard>(rId);
+    std::unique_ptr<weld::Assistant> xRet(pWizard ? std::make_unique<QtInstanceAssistant>(pWizard)
+                                                  : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Window> QtInstanceBuilder::create_screenshot_window()
