@@ -833,9 +833,9 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> xContext,
 #ifndef _WIN32
     if (comphelper::LibreOfficeKit::isActive())
     {
-        //rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_OPENSOCKETFUNCTION, opensocket_callback);
-        //assert(rc == CURLE_OK);
-        (void)opensocket_callback;
+        //See https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html
+        rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_OPENSOCKETFUNCTION, opensocket_callback);
+        assert(rc == CURLE_OK);
     }
 #endif
 }
