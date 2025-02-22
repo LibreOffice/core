@@ -31,63 +31,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="label3">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="xmlfiltertabpagegeneral|label3">_Application:</property>
-            <property name="use-underline">True</property>
-            <property name="mnemonic-widget">application</property>
-            <property name="xalign">1</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label4">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="xmlfiltertabpagegeneral|label4">_Name of file type:</property>
-            <property name="use-underline">True</property>
-            <property name="mnemonic-widget">interfacename</property>
-            <property name="xalign">1</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label5">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="xmlfiltertabpagegeneral|label5">File _extension:</property>
-            <property name="use-underline">True</property>
-            <property name="mnemonic-widget">extension</property>
-            <property name="xalign">1</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label6">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="xmlfiltertabpagegeneral|label6">Comment_s:</property>
-            <property name="use-underline">True</property>
-            <property name="mnemonic-widget">description</property>
-            <property name="xalign">1</property>
-            <property name="yalign">0</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">4</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkEntry" id="filtername">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
@@ -107,41 +50,17 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="extension">
+          <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="halign">start</property>
-            <property name="activates-default">True</property>
-            <property name="width-chars">6</property>
-            <property name="truncate-multiline">True</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="extension-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="xmlfiltertabpagegeneral|extended_tip|extension">Enter the file extension to use when you open a file without specifying a filter. The file extension is used to determine which filter to use.</property>
-              </object>
-            </child>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="xmlfiltertabpagegeneral|label3">_Application:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">application</property>
+            <property name="xalign">1</property>
           </object>
           <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkEntry" id="interfacename">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="halign">start</property>
-            <property name="activates-default">True</property>
-            <property name="width-chars">38</property>
-            <property name="truncate-multiline">True</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="interfacename-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="xmlfiltertabpagegeneral|extended_tip|interfacename">Enter the name that you want to display in the File type box in file dialogs.</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">2</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
@@ -166,6 +85,87 @@
           <packing>
             <property name="left-attach">1</property>
             <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label4">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="xmlfiltertabpagegeneral|label4">_Name of file type:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">interfacename</property>
+            <property name="xalign">1</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="interfacename">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="halign">start</property>
+            <property name="activates-default">True</property>
+            <property name="width-chars">38</property>
+            <property name="truncate-multiline">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="interfacename-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="xmlfiltertabpagegeneral|extended_tip|interfacename">Enter the name that you want to display in the File type box in file dialogs.</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label5">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="xmlfiltertabpagegeneral|label5">File _extension:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">extension</property>
+            <property name="xalign">1</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="extension">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="halign">start</property>
+            <property name="activates-default">True</property>
+            <property name="width-chars">6</property>
+            <property name="truncate-multiline">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="extension-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="xmlfiltertabpagegeneral|extended_tip|extension">Enter the file extension to use when you open a file without specifying a filter. The file extension is used to determine which filter to use.</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label6">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="xmlfiltertabpagegeneral|label6">Comment_s:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">description</property>
+            <property name="xalign">1</property>
+            <property name="yalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">4</property>
           </packing>
         </child>
         <child>
