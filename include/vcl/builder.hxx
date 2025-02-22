@@ -278,7 +278,7 @@ private:
     static vcl::Window* prepareWidgetOwnScrolling(vcl::Window *pParent, WinBits &rWinStyle);
     void        cleanupWidgetOwnScrolling(vcl::Window *pScrollParent, vcl::Window *pWindow, stringmap &rMap);
 
-    void set_response(std::u16string_view sID, short nResponse) override;
+    void set_response(std::u16string_view sID, int nResponse) override;
 
     OUString        get_by_window(const vcl::Window *pWindow) const;
     void            delete_by_window(vcl::Window *pWindow);

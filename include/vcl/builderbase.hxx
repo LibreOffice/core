@@ -137,7 +137,7 @@ protected:
 
     const ListStore* get_model_by_name(const OUString& sID) const;
 
-    virtual void set_response(std::u16string_view sID, short nResponse) = 0;
+    virtual void set_response(std::u16string_view sID, int nResponse) = 0;
 
     void handleSizeGroup(xmlreader::XmlReader& reader);
 

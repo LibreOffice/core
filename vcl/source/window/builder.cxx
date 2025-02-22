@@ -3502,7 +3502,7 @@ void BuilderBase::handleActionWidget(xmlreader::XmlReader &reader)
     if (nDelim != -1)
         sID = sID.copy(0, nDelim);
 
-    short nResponse = sResponse.toInt32();
+    int nResponse = sResponse.toInt32();
     switch (nResponse)
     {
         case -5:
@@ -3614,7 +3614,7 @@ vcl::Window *VclBuilder::get_by_name(std::u16string_view sID)
     return nullptr;
 }
 
-void VclBuilder::set_response(std::u16string_view sID, short nResponse)
+void VclBuilder::set_response(std::u16string_view sID, int nResponse)
 {
     PushButton* pPushButton = get<PushButton>(sID);
     assert(pPushButton);

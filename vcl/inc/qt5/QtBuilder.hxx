@@ -91,7 +91,7 @@ public:
                                   const OUString& rID, stringmap& rProps, stringmap& rAtkProps,
                                   accelmap& rAccels) override;
 
-    virtual void set_response(std::u16string_view sID, short nResponse) override;
+    virtual void set_response(std::u16string_view sID, int nResponse) override;
 
 private:
     static void deleteObject(QObject* pObject);

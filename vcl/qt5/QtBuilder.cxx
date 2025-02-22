@@ -709,11 +709,11 @@ void QtBuilder::applyTabChildProperties(QObject* pParent, const std::vector<OUSt
                                          rProperties.at(u"label"_ustr));
 }
 
-void QtBuilder::set_response(std::u16string_view sID, short nResponse)
+void QtBuilder::set_response(std::u16string_view sID, int nResponse)
 {
     QPushButton* pPushButton = get<QPushButton>(sID);
     assert(pPushButton);
-    pPushButton->setProperty(QtInstanceMessageDialog::PROPERTY_VCL_RESPONSE_CODE, int(nResponse));
+    pPushButton->setProperty(QtInstanceMessageDialog::PROPERTY_VCL_RESPONSE_CODE, nResponse);
 }
 
 void QtBuilder::deleteObject(QObject* pObject)
