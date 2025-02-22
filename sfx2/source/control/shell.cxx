@@ -19,6 +19,7 @@
 
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/VerbAttributes.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -30,6 +31,7 @@
 #include <svtools/asynclink.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -42,6 +44,7 @@
 #include <statcach.hxx>
 #include <sidebar/ContextChangeBroadcaster.hxx>
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 
 #include <memory>
@@ -281,6 +284,22 @@ void SfxShell::HandleOpenXmlFilterSettings(SfxRequest & rReq)
     try
     {
         uno::Reference < ui::dialogs::XExecutableDialog > xDialog = ui::dialogs::XSLTFilterDialog::create( ::comphelper::getProcessComponentContext() );
+
+        // set dialog parent
+        css::uno::Reference<com::sun::star::lang::XInitialization> xInit(xDialog,
+                                                                         css::uno::UNO_QUERY);
+        if (xInit.is())
+        {
+            if (SfxViewShell* pViewShell = GetViewShell())
+            {
+                css::uno::Reference<css::awt::XWindow> xDialogParent
+                    = VCLUnoHelper::GetInterface(pViewShell->GetWindow());
+                css::uno::Sequence<css::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+                    { { "ParentWindow", uno::Any(xDialogParent) } }));
+                xInit->initialize(aSeq);
+            }
+        }
+
         (void)xDialog->execute();
     }
     catch (const uno::Exception&)
