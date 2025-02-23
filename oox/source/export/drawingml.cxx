@@ -4690,6 +4690,57 @@ void prepareTextArea(const EnhancedCustomShape2d& rEnhancedCustomShape2d,
 
     return;
 }
+
+void prepareGluePoints(const EnhancedCustomShape2d& rEnhancedCustomShape2d,
+                       std::vector<Guide>& rGuideList,
+                       const uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rGluePoints,
+                       const uno::Sequence<drawing::EnhancedCustomShapeTextFrame>& aTextFrames)
+{
+    if (rGluePoints.hasElements())
+    {
+        OString sWidth, sHeight;
+        if (aTextFrames.hasElements())
+        {
+            double fTop = 0.0, fLeft = 0.0, fBottom = 0.0, fRight = 0.0;
+
+            rEnhancedCustomShape2d.GetParameter(fTop, aTextFrames[0].TopLeft.First, true, false);
+            rEnhancedCustomShape2d.GetParameter(fLeft, aTextFrames[0].TopLeft.Second, true, false);
+            rEnhancedCustomShape2d.GetParameter(fBottom, aTextFrames[0].BottomRight.First, false,
+                                                true);
+            rEnhancedCustomShape2d.GetParameter(fRight, aTextFrames[0].BottomRight.Second, false,
+                                                true);
+
+            sWidth = OString::number(fLeft + fRight);
+            sHeight = OString::number(fTop + fBottom);
+        }
+        else
+        {
+            tools::Rectangle aLogicRectLO(rEnhancedCustomShape2d.GetLogicRect());
+            sal_Int32 nWidth = aLogicRectLO.Right() - aLogicRectLO.Left();
+            sal_Int32 nHeight = aLogicRectLO.Bottom() - aLogicRectLO.Top();
+            sWidth = OString::number(oox::drawingml::convertHmmToEmu(nWidth));
+            sHeight = OString::number(oox::drawingml::convertHmmToEmu(nHeight));
+        }
+
+        sal_Int32 nIndex = 1;
+        for (auto const& rGluePoint : rGluePoints)
+        {
+            Guide aGuide;
+            double fRetValueX;
+            rEnhancedCustomShape2d.GetParameter(fRetValueX, rGluePoint.First, false, false);
+            aGuide.sName = "GluePoint"_ostr + OString::number(nIndex) + "X";
+            aGuide.sFormula = "*/ " + OString::number(fRetValueX) + " w " + sWidth;
+            rGuideList.push_back(aGuide);
+
+            double fRetValueY;
+            rEnhancedCustomShape2d.GetParameter(fRetValueY, rGluePoint.Second, false, false);
+            aGuide.sName = "GluePoint"_ostr + OString::number(nIndex) + "Y";
+            aGuide.sFormula = "*/ " + OString::number(fRetValueY) + " h " + sHeight;
+            rGuideList.push_back(aGuide);
+            nIndex++;
+        }
+    }
+}
 }
 
 bool DrawingML::WriteCustomGeometry(
@@ -4725,6 +4776,8 @@ bool DrawingML::WriteCustomGeometry(
     uno::Sequence<beans::PropertyValue> aPathProp;
     pPathProp->Value >>= aPathProp;
 
+    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aGluePoints;
+    uno::Sequence<drawing::EnhancedCustomShapeTextFrame> aTextFrames;
     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
     uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
     uno::Sequence<awt::Size> aPathSize;
@@ -4736,6 +4789,10 @@ bool DrawingML::WriteCustomGeometry(
             rPathProp.Value >>= aPairs;
         else if (rPathProp.Name == "Segments")
             rPathProp.Value >>= aSegments;
+        else if (rPathProp.Name == "GluePoints")
+            rPathProp.Value >>= aGluePoints;
+        else if (rPathProp.Name == "TextFrames")
+            rPathProp.Value >>= aTextFrames;
         else if (rPathProp.Name == "SubViewSize")
             rPathProp.Value >>= aPathSize;
         else if (rPathProp.Name == "StretchX")
@@ -4775,6 +4832,7 @@ bool DrawingML::WriteCustomGeometry(
     TextAreaRect aTextAreaRect;
     std::vector<Guide> aGuideList; // for now only for <a:rect>
     prepareTextArea(aCustomShape2d, aGuideList, aTextAreaRect);
+    prepareGluePoints(aCustomShape2d, aGuideList, aGluePoints, aTextFrames);
     mpFS->startElementNS(XML_a, XML_custGeom);
     mpFS->singleElementNS(XML_a, XML_avLst);
     if (aGuideList.empty())
@@ -4791,6 +4849,26 @@ bool DrawingML::WriteCustomGeometry(
         mpFS->endElementNS(XML_a, XML_gdLst);
     }
     mpFS->singleElementNS(XML_a, XML_ahLst);
+
+    if (!aGuideList.empty())
+    {
+        mpFS->startElementNS(XML_a, XML_cxnLst);
+        for (auto it = aGuideList.begin(); it != aGuideList.end(); ++it)
+        {
+            auto aNextIt = std::next(it);
+            if (aNextIt != aGuideList.end() && it->sName.startsWith("GluePoint")
+                && aNextIt->sName.startsWith("GluePoint"))
+            {
+                mpFS->startElementNS(XML_a, XML_cxn, XML_ang, "0");
+                mpFS->singleElementNS(XML_a, XML_pos, XML_x, it->sName, XML_y, aNextIt->sName);
+                mpFS->endElementNS(XML_a, XML_cxn);
+
+                ++it;
+            }
+        }
+        mpFS->endElementNS(XML_a, XML_cxnLst);
+    }
+
     mpFS->singleElementNS(XML_a, XML_rect, XML_l, aTextAreaRect.left, XML_t, aTextAreaRect.top,
                           XML_r, aTextAreaRect.right, XML_b, aTextAreaRect.bottom);
     mpFS->startElementNS(XML_a, XML_pathLst);
