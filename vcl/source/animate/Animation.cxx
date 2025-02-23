@@ -495,16 +495,15 @@ bool Animation::Invert()
     if (IsInAnimation() || maFrames.empty())
         return false;
 
-    bool bRet = true;
-
-    for (size_t i = 0, n = maFrames.size(); (i < n) && bRet; ++i)
-    {
-        bRet = maFrames[i]->maBitmapEx.Invert();
-    }
-
     maBitmapEx.Invert();
 
-    return bRet;
+    for (auto& pFrame : maFrames)
+    {
+        if (!pFrame->maBitmapEx.Invert())
+            return false;
+    }
+
+    return true;
 }
 
 void Animation::Mirror(BmpMirrorFlags nMirrorFlags)
