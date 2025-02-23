@@ -24,113 +24,112 @@
 #include <unordered_map>
 #include <memory>
 
-typedef std::unordered_map< const char*, PPPOptimizerTokenEnum, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
+typedef std::unordered_map< OUString, PPPOptimizerTokenEnum> TypeNameHashMap;
 
 namespace {
 
 struct TokenTable
 {
-    const char*                         pS;
+    OUString                            pS;
     PPPOptimizerTokenEnum               pE;
 };
 
 }
 
-const TokenTable pTokenTableArray[] =
+constexpr TokenTable pTokenTableArray[] =
 {
-    { "btnNavFinish",       TK_btnNavFinish },
+    { u"btnNavFinish"_ustr,       TK_btnNavFinish },
 
-    { "DocumentService",    TK_DocumentService },
-    { "FileSizeDestination",TK_FileSizeDestination },
-    { "FileSizeSource",     TK_FileSizeSource },
-    { "FilterName",         TK_FilterName },
-    { "Flags",              TK_Flags },
-    { "DocumentFrame",      TK_DocumentFrame },
-    { "DialogParentWindow", TK_DialogParentWindow },
-    { "Name",               TK_Name },
-    { "Progress",           TK_Progress },
-    { "Settings",           TK_Settings },
-    { "StatusDispatcher",   TK_StatusDispatcher },
-    { "Type",               TK_Type },
-    { "UIName",             TK_UIName },
+    { u"DocumentService"_ustr,    TK_DocumentService },
+    { u"FileSizeDestination"_ustr,TK_FileSizeDestination },
+    { u"FileSizeSource"_ustr,     TK_FileSizeSource },
+    { u"FilterName"_ustr,         TK_FilterName },
+    { u"Flags"_ustr,              TK_Flags },
+    { u"DocumentFrame"_ustr,      TK_DocumentFrame },
+    { u"DialogParentWindow"_ustr, TK_DialogParentWindow },
+    { u"Name"_ustr,               TK_Name },
+    { u"Progress"_ustr,           TK_Progress },
+    { u"Settings"_ustr,           TK_Settings },
+    { u"StatusDispatcher"_ustr,   TK_StatusDispatcher },
+    { u"Type"_ustr,               TK_Type },
+    { u"UIName"_ustr,             TK_UIName },
 
-    { "JPEGCompression",    TK_JPEGCompression },
-    { "JPEGQuality",        TK_JPEGQuality },
-    { "RemoveCropArea",     TK_RemoveCropArea },
-    { "ImageResolution",    TK_ImageResolution },
-    { "EmbedLinkedGraphics",TK_EmbedLinkedGraphics },
-    { "OLEOptimization",    TK_OLEOptimization },
-    { "OLEOptimizationType",TK_OLEOptimizationType },
-    { "DeleteUnusedMasterPages", TK_DeleteUnusedMasterPages },
-    { "DeleteHiddenSlides", TK_DeleteHiddenSlides },
-    { "DeleteNotesPages",   TK_DeleteNotesPages },
-    { "CustomShowName",     TK_CustomShowName },
-    { "SaveAs",             TK_SaveAs },
-    { "SaveAsURL",          TK_SaveAsURL },
-    { "OpenNewDocument",    TK_OpenNewDocument },
-    { "EstimatedFileSize",  TK_EstimatedFileSize },
+    { u"JPEGCompression"_ustr,    TK_JPEGCompression },
+    { u"JPEGQuality"_ustr,        TK_JPEGQuality },
+    { u"RemoveCropArea"_ustr,     TK_RemoveCropArea },
+    { u"ImageResolution"_ustr,    TK_ImageResolution },
+    { u"EmbedLinkedGraphics"_ustr,TK_EmbedLinkedGraphics },
+    { u"OLEOptimization"_ustr,    TK_OLEOptimization },
+    { u"OLEOptimizationType"_ustr,TK_OLEOptimizationType },
+    { u"DeleteUnusedMasterPages"_ustr, TK_DeleteUnusedMasterPages },
+    { u"DeleteHiddenSlides"_ustr, TK_DeleteHiddenSlides },
+    { u"DeleteNotesPages"_ustr,   TK_DeleteNotesPages },
+    { u"CustomShowName"_ustr,     TK_CustomShowName },
+    { u"SaveAs"_ustr,             TK_SaveAs },
+    { u"SaveAsURL"_ustr,          TK_SaveAsURL },
+    { u"OpenNewDocument"_ustr,    TK_OpenNewDocument },
+    { u"EstimatedFileSize"_ustr,  TK_EstimatedFileSize },
 
-    { "Status",             TK_Status },
-    { "Pages",              TK_Pages },
+    { u"Status"_ustr,             TK_Status },
+    { u"Pages"_ustr,              TK_Pages },
 
-    { "STR_SUN_OPTIMIZATION_WIZARD2",STR_SUN_OPTIMIZATION_WIZARD2 },
-    { "STR_INTRODUCTION",           STR_INTRODUCTION },
-    { "STR_IMAGE_OPTIMIZATION",     STR_IMAGE_OPTIMIZATION },
-    { "STR_OLE_OBJECTS",            STR_OLE_OBJECTS },
-    { "STR_OLE_OBJECTS_DESC",       STR_OLE_OBJECTS_DESC },
-    { "STR_NO_OLE_OBJECTS_DESC",    STR_NO_OLE_OBJECTS_DESC },
-    { "STR_SLIDES",                 STR_SLIDES },
-    { "STR_SUMMARY",                STR_SUMMARY },
-    { "STR_DELETE_SLIDES",          STR_DELETE_SLIDES },
-    { "STR_OPTIMIZE_IMAGES",        STR_OPTIMIZE_IMAGES },
-    { "STR_CREATE_REPLACEMENT",     STR_CREATE_REPLACEMENT },
-    { "MY_SETTINGS",                STR_MY_SETTINGS },
-    { "STR_OK",                     STR_OK },
-    { "STR_INFO_PRIMARY",           STR_INFO_PRIMARY },
-    { "STR_INFO_SECONDARY_1",       STR_INFO_SECONDARY_1 },
-    { "STR_INFO_SECONDARY_2",       STR_INFO_SECONDARY_2 },
-    { "STR_INFO_SECONDARY_3",       STR_INFO_SECONDARY_3 },
-    { "STR_INFO_SECONDARY_4",       STR_INFO_SECONDARY_4 },
-    { "STR_DUPLICATING_PRESENTATION",STR_DUPLICATING_PRESENTATION },
-    { "STR_DELETING_SLIDES",        STR_DELETING_SLIDES },
-    { "STR_OPTIMIZING_GRAPHICS",    STR_OPTIMIZING_GRAPHICS },
-    { "STR_CREATING_OLE_REPLACEMENTS",STR_CREATING_OLE_REPLACEMENTS },
-    { "STR_FileSizeSeparator",      STR_FILESIZESEPARATOR },
-    { "STR_FILENAME_SUFFIX",        STR_FILENAME_SUFFIX },
-    { "STR_WARN_UNSAVED_PRESENTATION", STR_WARN_UNSAVED_PRESENTATION },
+    { u"STR_SUN_OPTIMIZATION_WIZARD2"_ustr,STR_SUN_OPTIMIZATION_WIZARD2 },
+    { u"STR_INTRODUCTION"_ustr,           STR_INTRODUCTION },
+    { u"STR_IMAGE_OPTIMIZATION"_ustr,     STR_IMAGE_OPTIMIZATION },
+    { u"STR_OLE_OBJECTS"_ustr,            STR_OLE_OBJECTS },
+    { u"STR_OLE_OBJECTS_DESC"_ustr,       STR_OLE_OBJECTS_DESC },
+    { u"STR_NO_OLE_OBJECTS_DESC"_ustr,    STR_NO_OLE_OBJECTS_DESC },
+    { u"STR_SLIDES"_ustr,                 STR_SLIDES },
+    { u"STR_SUMMARY"_ustr,                STR_SUMMARY },
+    { u"STR_DELETE_SLIDES"_ustr,          STR_DELETE_SLIDES },
+    { u"STR_OPTIMIZE_IMAGES"_ustr,        STR_OPTIMIZE_IMAGES },
+    { u"STR_CREATE_REPLACEMENT"_ustr,     STR_CREATE_REPLACEMENT },
+    { u"MY_SETTINGS"_ustr,                STR_MY_SETTINGS },
+    { u"STR_OK"_ustr,                     STR_OK },
+    { u"STR_INFO_PRIMARY"_ustr,           STR_INFO_PRIMARY },
+    { u"STR_INFO_SECONDARY_1"_ustr,       STR_INFO_SECONDARY_1 },
+    { u"STR_INFO_SECONDARY_2"_ustr,       STR_INFO_SECONDARY_2 },
+    { u"STR_INFO_SECONDARY_3"_ustr,       STR_INFO_SECONDARY_3 },
+    { u"STR_INFO_SECONDARY_4"_ustr,       STR_INFO_SECONDARY_4 },
+    { u"STR_DUPLICATING_PRESENTATION"_ustr,STR_DUPLICATING_PRESENTATION },
+    { u"STR_DELETING_SLIDES"_ustr,        STR_DELETING_SLIDES },
+    { u"STR_OPTIMIZING_GRAPHICS"_ustr,    STR_OPTIMIZING_GRAPHICS },
+    { u"STR_CREATING_OLE_REPLACEMENTS"_ustr,STR_CREATING_OLE_REPLACEMENTS },
+    { u"STR_FileSizeSeparator"_ustr,      STR_FILESIZESEPARATOR },
+    { u"STR_FILENAME_SUFFIX"_ustr,        STR_FILENAME_SUFFIX },
+    { u"STR_WARN_UNSAVED_PRESENTATION"_ustr, STR_WARN_UNSAVED_PRESENTATION },
 
 
-    { "NotFound",           TK_NotFound }
+    { u"NotFound"_ustr,           TK_NotFound }
 };
 
-static TypeNameHashMap* createHashMap()
+static const TypeNameHashMap& createHashMap()
 {
-    TypeNameHashMap* pH = new TypeNameHashMap;
-    const TokenTable* pPtr = pTokenTableArray;
-    const TokenTable* pEnd = pPtr + SAL_N_ELEMENTS( pTokenTableArray );
-    for ( ; pPtr < pEnd; pPtr++ )
-        (*pH)[ pPtr->pS ] = pPtr->pE;
-    return pH;
+    static TypeNameHashMap aMap = []()
+    {
+        TypeNameHashMap map;
+        for ( const auto& rToken : pTokenTableArray )
+        {
+            map[ rToken.pS ] = rToken.pE;
+        }
+        return map;
+    }();
+    return aMap;
 }
 
-PPPOptimizerTokenEnum TKGet( std::u16string_view rToken )
+PPPOptimizerTokenEnum TKGet( const OUString& rToken )
 {
-    static TypeNameHashMap* pHashMap = createHashMap();
+    const TypeNameHashMap& rHashMap = createHashMap();
     PPPOptimizerTokenEnum eRetValue = TK_NotFound;
-    size_t i, nLen = rToken.size();
-    std::unique_ptr<char[]> pBuf(new char[ nLen + 1 ]);
-    for ( i = 0; i < nLen; i++ )
-        pBuf[ i ] = static_cast<char>(rToken[ i ]);
-    pBuf[ i ] = 0;
-    TypeNameHashMap::iterator aHashIter( pHashMap->find( pBuf.get() ) );
-    if ( aHashIter != pHashMap->end() )
+    auto aHashIter = rHashMap.find( rToken );
+    if ( aHashIter != rHashMap.end() )
         eRetValue = (*aHashIter).second;
     return eRetValue;
 }
 
 OUString TKGet( const PPPOptimizerTokenEnum eToken )
 {
-    return OUString::createFromAscii( pTokenTableArray[ eToken ].pS );
+    return pTokenTableArray[ eToken ].pS;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
