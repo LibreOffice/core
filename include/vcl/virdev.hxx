@@ -119,6 +119,8 @@ public:
 
     bool                CanEnableNativeWidget() const override;
 
+    bool                CanAnimate() const override { return false; }
+
     virtual void        EnableRTL( bool bEnable = true ) override;
 
     bool                SetOutputSizePixel( const Size& rNewSize, bool bErase = true, bool bAlphaMaskTransparent = false );

@@ -48,6 +48,8 @@ public:
 
     Color GetBackgroundColor() const override;
 
+    bool CanAnimate() const override { return true; }
+
     using ::OutputDevice::SetSettings;
     virtual void SetSettings(const AllSettings& rSettings) override;
     void SetSettings(const AllSettings& rSettings, bool bChild);

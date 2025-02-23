@@ -337,6 +337,8 @@ public:
     /// request XSpriteCanvas render interface
     css::uno::Reference< css::rendering::XSpriteCanvas > GetSpriteCanvas() const;
 
+    virtual bool CanAnimate() const = 0;
+
 protected:
 
     /** Acquire a graphics device that the output device uses to draw on.

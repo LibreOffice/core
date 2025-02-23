@@ -168,7 +168,7 @@ bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDes
     if (maFrames.empty())
         return false;
 
-    if ((rOut.GetOutDevType() == OUTDEV_WINDOW) && !mbLoopTerminated
+    if (rOut.CanAnimate() && !mbLoopTerminated
         && (ANIMATION_TIMEOUT_ON_CLICK != maFrames[mnFrameIndex]->mnWait))
     {
         bool differs = true;

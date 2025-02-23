@@ -887,9 +887,10 @@ public:
     {
     }
 
-    bool AcquireGraphics() const { return true; }
-    void ReleaseGraphics(bool) {}
-    bool UsePolyPolygonForComplexGradient() { return false; }
+    bool AcquireGraphics() const override { return true; }
+    void ReleaseGraphics(bool) override {}
+    bool UsePolyPolygonForComplexGradient() override { return false; }
+    bool CanAnimate() const override { return false; }
 
     bool testShouldDrawWavePixelAsRect(tools::Long nLineWidth)
     {

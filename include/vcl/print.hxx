@@ -147,6 +147,8 @@ public:
 
     bool                        IsScreenComp() const override { return false; }
 
+    bool                        CanAnimate() const override { return false; }
+
     void DrawBorder(tools::Rectangle aBorderRect) override
     {
         SetLineColor(COL_BLACK);
