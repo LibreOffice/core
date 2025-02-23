@@ -756,7 +756,7 @@ void update_checker()
                 for (auto& lang_update : aUpdateInfo.aLanguageFiles)
                 {
                     // only download the language packs for installed languages
-                    if (aInstalledLanguageSet.find(lang_update.aLangCode) != aInstalledLanguageSet.end())
+                    if (aInstalledLanguageSet.contains(lang_update.aLangCode))
                     {
                         OUString aFileName = "update_" + lang_update.aLangCode + ".mar";
                         download_file(lang_update.aUpdateFile.aURL, lang_update.aUpdateFile.nSize, lang_update.aUpdateFile.aHash, aFileName);
