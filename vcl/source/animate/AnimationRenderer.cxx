@@ -276,28 +276,28 @@ void AnimationRenderer::draw( sal_uLong nIndex, VirtualDevice* pVDev )
 
     pDev->DrawBitmapEx( aBmpPosPix, aBmpSizePix, rAnimationFrame.maBitmap );
 
-    if( !pVDev )
+    if (pVDev)
+        return;
+
+    std::optional<vcl::Region> xOldClip;
+    if (!maClip.IsNull())
+        xOldClip = pRenderContext->GetClipRegion();
+
+    if (xOldClip)
+        pRenderContext->SetClipRegion( maClip );
+
+    pRenderContext->DrawOutDev( maDispPt, maDispSz, Point(), maSizePx, *pDev );
+    if (pGuard)
+        pGuard->SetPaintRect(tools::Rectangle(maDispPt, maDispSz));
+
+    if( xOldClip)
     {
-        std::optional<vcl::Region> xOldClip;
-        if (!maClip.IsNull())
-            xOldClip = pRenderContext->GetClipRegion();
-
-        if (xOldClip)
-            pRenderContext->SetClipRegion( maClip );
-
-        pRenderContext->DrawOutDev( maDispPt, maDispSz, Point(), maSizePx, *pDev );
-        if (pGuard)
-            pGuard->SetPaintRect(tools::Rectangle(maDispPt, maDispSz));
-
-        if( xOldClip)
-        {
-            pRenderContext->SetClipRegion(*xOldClip);
-            xOldClip.reset();
-        }
-
-        pDev.disposeAndClear();
-        pRenderContext->Flush();
+        pRenderContext->SetClipRegion(*xOldClip);
+        xOldClip.reset();
     }
+
+    pDev.disposeAndClear();
+    pRenderContext->Flush();
 }
 
 void AnimationRenderer::repaint()
