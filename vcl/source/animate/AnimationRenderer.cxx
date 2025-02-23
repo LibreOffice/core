@@ -197,16 +197,17 @@ void AnimationRenderer::draw( sal_uLong nIndex, VirtualDevice* pVDev )
     if(mbIsPaused)
         return;
 
-    VclPtr<VirtualDevice>   pDev;
-    Point                   aPosPix;
-    Point                   aBmpPosPix;
-    Size                    aSizePix;
-    Size                    aBmpSizePix;
-    const sal_uLong             nLastPos = mpParent->Count() - 1;
-    mnActIndex = std::min( nIndex, nLastPos );
+    mnActIndex = std::min(nIndex, static_cast<sal_uLong>(mpParent->Count() - 1));
+
     const AnimationFrame&  rAnimationFrame = mpParent->Get( static_cast<sal_uInt16>( mnActIndex ) );
 
+    Point aPosPix;
+    Size aSizePix;
+
     getPosSize( rAnimationFrame, aPosPix, aSizePix );
+
+    Point aBmpPosPix;
+    Size aBmpSizePix;
 
     // Mirrored horizontally?
     if( mbIsMirroredHorizontally )
@@ -231,6 +232,8 @@ void AnimationRenderer::draw( sal_uLong nIndex, VirtualDevice* pVDev )
         aBmpPosPix.setY( aPosPix.Y() );
         aBmpSizePix.setHeight( aSizePix.Height() );
     }
+
+    VclPtr<VirtualDevice> pDev;
 
     // get output device
     if( !pVDev )
