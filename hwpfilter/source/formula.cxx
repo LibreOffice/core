@@ -216,7 +216,7 @@ void Formula::makeIdentifier(Node *res)
           indo;
 #else
           rstartEl(u"math:mi"_ustr, mxList);
-          runistr(fromHcharStringToOUString(getMathMLEntity(tmp->value.get())));
+          runistr(getMathMLEntity(tmp->value.get()));
           rendEl(u"math:mi"_ustr);
 #endif
           break;
@@ -238,7 +238,7 @@ void Formula::makeIdentifier(Node *res)
           inds; fprintf(stderr,"<math:mo>%s</math:mo>\n",tmp->value.get()); indo;
 #else
           rstartEl(u"math:mo"_ustr, mxList);
-          runistr(fromHcharStringToOUString(getMathMLEntity(tmp->value.get())));
+          runistr(getMathMLEntity(tmp->value.get()));
           rendEl(u"math:mo"_ustr);
 #endif
           break;
@@ -399,7 +399,7 @@ void Formula::makeDecoration(Node *res)
      indo;
 #else
      rstartEl(u"math:mo"_ustr, mxList);
-     runistr(fromHcharStringToOUString(getMathMLEntity(tmp->value.get())));
+     runistr(getMathMLEntity(tmp->value.get()));
      rendEl(u"math:mo"_ustr);
 #endif
 
@@ -521,9 +521,9 @@ void Formula::makeFence(Node *res)
                 getMathMLEntity(tmp->next->next->value.get()).c_str());
 #else
      padd(u"open"_ustr, u"CDATA"_ustr,
-             OUString(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value.get()).c_str())));
+             getMathMLEntity(tmp->value.get()));
      padd(u"close"_ustr, u"CDATA"_ustr,
-             OUString(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->next->next->value.get()).c_str())));
+             getMathMLEntity(tmp->next->next->value.get()));
      rstartEl(u"math:mfenced"_ustr, mxList);
      mxList->clear();
 #endif
