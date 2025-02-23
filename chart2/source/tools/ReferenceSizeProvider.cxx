@@ -226,7 +226,8 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
     // Main Title
     if( xChartDoc.is())
         impl_getAutoResizeFromTitled( xChartDoc, eResult );
-    if( eResult == AUTO_RESIZE_AMBIGUOUS )
+    if (eResult == AUTO_RESIZE_AMBIGUOUS
+        || eResult == AUTO_RESIZE_UNKNOWN) // Unknown when xChartDoc is null.
         return eResult;
 
     // diagram is needed by the rest of the objects
