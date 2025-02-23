@@ -27,6 +27,29 @@ public:
     int testTdf115005_FallBack_Images(bool bAddReplacementImages);
 };
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf165262)
+{
+    createSdImpressDoc("ppt/tdf165262.ppt");
+    save(u"Impress Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc1, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[1]/p:spPr/a:custGeom");
+
+    // glue points export
+    assertXPath(pXmlDoc1,
+                "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[1]/p:spPr/a:custGeom/a:gdLst/a:gd[5]", "name",
+                u"GluePoint1X");
+    assertXPath(pXmlDoc1,
+                "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[1]/p:spPr/a:custGeom/a:gdLst/a:gd[5]", "fmla",
+                u"*/ 15 w 21600");
+    assertXPath(pXmlDoc1,
+                "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[1]/p:spPr/a:custGeom/a:gdLst/a:gd[6]", "name",
+                u"GluePoint1Y");
+    assertXPath(pXmlDoc1,
+                "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[1]/p:spPr/a:custGeom/a:gdLst/a:gd[6]", "fmla",
+                u"*/ 0 h 21600");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf164775_ConnectorShape)
 {
     createSdImpressDoc("odp/tdf164775.odp");
