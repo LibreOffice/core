@@ -489,8 +489,9 @@ void XclExpPageSettings::SaveXml( XclExpXmlStream& rStrm )
 
 XclExpImgData* XclExpPageSettings::getGraphicExport()
 {
-    if( const Graphic* pGraphic = maData.mxBrushItem->GetGraphic() )
-        return new XclExpImgData( *pGraphic, EXC_ID8_IMGDATA );
+    if( maData.mxBrushItem )
+        if( const Graphic* pGraphic = maData.mxBrushItem->GetGraphic() )
+            return new XclExpImgData( *pGraphic, EXC_ID8_IMGDATA );
 
     return nullptr;
 }
