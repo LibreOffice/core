@@ -93,7 +93,7 @@ SfxFormalArgument const aFormalArgs[] = {
     { static_cast<const SfxType*>(&aSfxStringItem_Impl), u"AdditionsTag"_ustr, FN_PARAM_ADDITIONS_TAG },
 };
 
-sal_uInt16 const nMediaArgsCount = SAL_N_ELEMENTS(aFormalArgs);
+constexpr sal_uInt16 nMediaArgsCount = std::size(aFormalArgs);
 
 constexpr OUString sTemplateRegionName = u"TemplateRegionName"_ustr;
 constexpr OUString sTemplateName = u"TemplateName"_ustr;
