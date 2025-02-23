@@ -99,17 +99,17 @@ bool Help::StartExtHelp()
     ImplSVData* pSVData = ImplGetSVData();
     ImplSVHelpData& aHelpData = ImplGetSVHelpData();
 
-    if ( aHelpData.mbExtHelp && !aHelpData.mbExtHelpMode )
-    {
-        aHelpData.mbExtHelpMode = true;
-        aHelpData.mbOldBalloonMode = aHelpData.mbBalloonHelp;
-        aHelpData.mbBalloonHelp = true;
-        if (pSVData->maFrameData.mpAppWin)
-            pSVData->maFrameData.mpAppWin->ImplGenerateMouseMove();
-        return true;
-    }
+    if (!aHelpData.mbExtHelp || aHelpData.mbExtHelpMode )
+        return false;
 
-    return false;
+    aHelpData.mbExtHelpMode = true;
+    aHelpData.mbOldBalloonMode = aHelpData.mbBalloonHelp;
+    aHelpData.mbBalloonHelp = true;
+
+    if (pSVData->maFrameData.mpAppWin)
+        pSVData->maFrameData.mpAppWin->ImplGenerateMouseMove();
+
+    return true;
 }
 
 bool Help::EndExtHelp()
@@ -117,16 +117,16 @@ bool Help::EndExtHelp()
     ImplSVData* pSVData = ImplGetSVData();
     ImplSVHelpData& aHelpData = ImplGetSVHelpData();
 
-    if ( aHelpData.mbExtHelp && aHelpData.mbExtHelpMode )
-    {
-        aHelpData.mbExtHelpMode = false;
-        aHelpData.mbBalloonHelp = aHelpData.mbOldBalloonMode;
-        if (pSVData->maFrameData.mpAppWin)
-            pSVData->maFrameData.mpAppWin->ImplGenerateMouseMove();
-        return true;
-    }
+    if (!aHelpData.mbExtHelp || !aHelpData.mbExtHelpMode)
+        return false;
 
-    return false;
+    aHelpData.mbExtHelpMode = false;
+    aHelpData.mbBalloonHelp = aHelpData.mbOldBalloonMode;
+
+    if (pSVData->maFrameData.mpAppWin)
+        pSVData->maFrameData.mpAppWin->ImplGenerateMouseMove();
+
+    return true;
 }
 
 void Help::EnableBalloonHelp()
