@@ -12,6 +12,11 @@
 
 #include <vcl/qt/QtUtils.hxx>
 
+// Name of QObject property set on QWizardPage objects for the page
+// index as used in the weld::Assistant API.
+// This is different from the page id as used in the QWizard API
+const char* const PROPERTY_PAGE_INDEX = "page-index";
+
 QtInstanceAssistant::QtInstanceAssistant(QWizard* pWizard)
     : QtInstanceDialog(pWizard)
     , m_pWizard(pWizard)
@@ -23,10 +28,13 @@ int QtInstanceAssistant::get_current_page() const
 {
     SolarMutexGuard g;
 
-    int nPage = 0;
-    GetQtInstance().RunInMainThread([&] { nPage = m_pWizard->currentId(); });
+    int nPageIndex = -1;
+    GetQtInstance().RunInMainThread([&] {
+        if (QWizardPage* pPage = m_pWizard->page(m_pWizard->currentId()))
+            nPageIndex = pageIndex(*pPage);
+    });
 
-    return nPage;
+    return nPageIndex;
 }
 
 int QtInstanceAssistant::get_n_pages() const
@@ -45,7 +53,7 @@ OUString QtInstanceAssistant::get_page_ident(int nPage) const
 
     OUString sId;
     GetQtInstance().RunInMainThread([&] {
-        if (QWizardPage* pPage = m_pWizard->page(nPage))
+        if (QWizardPage* pPage = page(nPage))
             sId = toOUString(pPage->objectName());
     });
 
@@ -71,19 +79,24 @@ void QtInstanceAssistant::set_current_page(int nPage)
 
     GetQtInstance().RunInMainThread([&] {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
-        m_pWizard->setCurrentId(nPage);
+        const QList<int> aPageIds = m_pWizard->pageIds();
+        for (int nId : aPageIds)
+        {
+            QWizardPage* pPage = m_pWizard->page(nId);
+            assert(pPage);
+            if (pageIndex(*pPage) == nPage)
+            {
+                m_pWizard->setCurrentId(nId);
+                return;
+            }
+        }
 #else
-        int nCurrentPage = m_pWizard->currentId();
-        if (nPage > nCurrentPage)
-        {
-            for (int i = 0; i < nPage - nCurrentPage; ++i)
-                m_pWizard->next();
-        }
-        else if (nPage < nCurrentPage)
-        {
-            for (int i = 0; i < nPage - nCurrentPage; ++i)
-                m_pWizard->back();
-        }
+        // QWizard::setCurrentId only available from 6.4 on
+        // start with first page and advance until the expected one is the current one
+        m_pWizard->restart();
+        int nCurrentId = m_pWizard->currentId();
+        while (nCurrentId != -1 && pageIndex(*m_pWizard->page(nCurrentId)) != nPage)
+            m_pWizard->next();
 #endif
     });
 }
@@ -94,21 +107,53 @@ void QtInstanceAssistant::set_current_page(const OUString& rIdent)
 
     GetQtInstance().RunInMainThread([&] {
         const QList<int> aPageIds = m_pWizard->pageIds();
-        for (int nPage : aPageIds)
+        for (int nPageId : aPageIds)
         {
-            QWizardPage* pPage = m_pWizard->page(nPage);
+            QWizardPage* pPage = m_pWizard->page(nPageId);
             if (pPage && pPage->objectName() == toQString(rIdent))
             {
-                set_current_page(nPage);
+                set_current_page(nPageId);
                 break;
             }
         }
     });
 }
 
-void QtInstanceAssistant::set_page_index(const OUString&, int)
+void QtInstanceAssistant::set_page_index(const OUString& rIdent, int nIndex)
 {
-    assert(false && "not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        const QString sIdent = toQString(rIdent);
+
+        // QWizard page IDs are different from weld::Assistant page indices
+        // use a vector where items will be sorted by page index for help
+        QList<QWizardPage*> aPages;
+        int nOldIndex = -1;
+        const QList<int> aPageIds = m_pWizard->pageIds();
+        for (int nPageId : aPageIds)
+        {
+            QWizardPage* pPage = m_pWizard->page(nPageId);
+            assert(pPage);
+            aPages.push_back(pPage);
+            if (pPage->objectName() == sIdent)
+                nOldIndex = pageIndex(*pPage);
+        }
+
+        assert(nOldIndex >= 0 && "no page with the given identifier");
+
+        // sort vector by page index
+        std::sort(aPages.begin(), aPages.end(), [](QWizardPage* pFirst, QWizardPage* pSecond) {
+            return pageIndex(*pFirst) < pageIndex(*pSecond);
+        });
+        // remove and reinsert the page at new position
+        QWizardPage* pPage = aPages.takeAt(nOldIndex);
+        aPages.insert(nIndex, pPage);
+
+        // update index property for all pages
+        for (qsizetype i = 0; i < aPages.size(); ++i)
+            setPageIndex(*aPages.at(i), i);
+    });
 }
 
 void QtInstanceAssistant::set_page_title(const OUString& rIdent, const OUString& rTitle)
@@ -153,9 +198,11 @@ weld::Container* QtInstanceAssistant::append_page(const OUString& rIdent)
     GetQtInstance().RunInMainThread([&] {
         QWizardPage* pNewPage = new QWizardPage;
         pNewPage->setObjectName(toQString(rIdent));
-        // ensure that QWizard page ID matches page index
-        const int nPageId = m_pWizard->pageIds().size();
-        m_pWizard->setPage(nPageId, pNewPage);
+
+        const int nPageIndex = m_pWizard->pageIds().size();
+        setPageIndex(*pNewPage, nPageIndex);
+
+        m_pWizard->addPage(pNewPage);
 
         m_aPages.emplace_back(new QtInstanceContainer(pNewPage));
         pContainer = m_aPages.back().get();
@@ -185,6 +232,31 @@ QWizardPage* QtInstanceAssistant::page(const OUString& rIdent) const
     }
 
     return nullptr;
+}
+
+QWizardPage* QtInstanceAssistant::page(int nPageIndex) const
+{
+    const QList<int> aPageIds = m_pWizard->pageIds();
+    for (int nId : aPageIds)
+    {
+        QWizardPage* pPage = m_pWizard->page(nId);
+        if (pPage && pageIndex(*pPage) == nPageIndex)
+            return pPage;
+    }
+
+    return nullptr;
+}
+
+int QtInstanceAssistant::pageIndex(QWizardPage& rPage)
+{
+    const QVariant aPageProperty = rPage.property(PROPERTY_PAGE_INDEX);
+    assert(aPageProperty.isValid() && aPageProperty.canConvert<int>());
+    return aPageProperty.toInt();
+}
+
+void QtInstanceAssistant::setPageIndex(QWizardPage& rPage, int nIndex)
+{
+    rPage.setProperty(PROPERTY_PAGE_INDEX, nIndex);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

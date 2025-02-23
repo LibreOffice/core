@@ -15,6 +15,20 @@
 
 #include <QtWidgets/QWizard>
 
+/*
+ * weld::Assistant implementation using a QWizard widget.
+ *
+ * The weld::Assistant API uses two ways to refer to specific pages:
+ * 1) an int page index
+ * 2) an OUString identifier
+ *
+ * Qt's QWizard widget used by this class uses an int id to refer to pages.
+ * This concept of an id does not match the index concept that weld::Assistang uses.
+ * (The id generally does not match an index in the range between 0 and the number of pages - 1.)
+ *
+ * Instead, 1) is mapped to a custom QObject property and for 2), the QObject::objectName
+ * of the QWizardPage objects is used.
+ */
 class QtInstanceAssistant : public QtInstanceDialog, public virtual weld::Assistant
 {
     Q_OBJECT
@@ -44,6 +58,11 @@ public:
 
 private:
     QWizardPage* page(const OUString& rIdent) const;
+    QWizardPage* page(int nPageIndex) const;
+
+    // get/set the page index as used in the weld::Assistant API
+    static int pageIndex(QWizardPage& rPage);
+    static void setPageIndex(QWizardPage& rPage, int nIndex);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
