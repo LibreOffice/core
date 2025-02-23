@@ -23,7 +23,7 @@
  * 2) an OUString identifier
  *
  * Qt's QWizard widget used by this class uses an int id to refer to pages.
- * This concept of an id does not match the index concept that weld::Assistang uses.
+ * This concept of an id does not match the index concept that weld::Assistant uses.
  * (The id generally does not match an index in the range between 0 and the number of pages - 1.)
  *
  * Instead, 1) is mapped to a custom QObject property and for 2), the QObject::objectName
