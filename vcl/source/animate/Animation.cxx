@@ -128,14 +128,10 @@ bool Animation::IsTransparent() const
 
 sal_uLong Animation::GetSizeBytes() const
 {
-    sal_uLong nSizeBytes = GetBitmapEx().GetSizeBytes();
-
-    for (auto const& pAnimationFrame : maFrames)
-    {
-        nSizeBytes += pAnimationFrame->maBitmapEx.GetSizeBytes();
-    }
-
-    return nSizeBytes;
+    return std::accumulate(maFrames.begin(), maFrames.end(), GetBitmapEx().GetSizeBytes(),
+                           [](sal_Int64 nSize, const std::unique_ptr<AnimationFrame>& pFrame) {
+                               return nSize + pFrame->maBitmapEx.GetSizeBytes();
+                           });
 }
 
 BitmapChecksum Animation::GetChecksum() const
