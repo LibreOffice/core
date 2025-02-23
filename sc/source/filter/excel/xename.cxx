@@ -328,6 +328,9 @@ OUString XclExpName::GetWithDefaultRangeSeparator( const OUString& rSymbol ) con
 void XclExpName::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
+    // Sheets where IsExportTab is not true are not exported, so use mnXclTab
+    // (1 based) to get the sheetid as of the exported document's perspective.
+    SCTAB nXlsxTab = mnXclTab - 1;
     rWorkbook->startElement( XML_definedName,
             // OOXTODO: XML_comment, "",
             // OOXTODO: XML_customMenu, "",
@@ -336,7 +339,7 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_functionGroupId, "",
             // OOXTODO: XML_help, "",
             XML_hidden, ToPsz( ::get_flag( mnFlags, EXC_NAME_HIDDEN ) ),
-            XML_localSheetId, sax_fastparser::UseIf(OString::number( mnScTab ), mnScTab != SCTAB_GLOBAL),
+            XML_localSheetId, sax_fastparser::UseIf(OString::number(nXlsxTab), mnScTab != SCTAB_GLOBAL),
             XML_name, maOrigName.toUtf8(),
             // OOXTODO: XML_publishToServer, "",
             // OOXTODO: XML_shortcutKey, "",
