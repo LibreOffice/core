@@ -68,6 +68,8 @@
 #include <ooxresid.hxx>
 #include <strings.hrc>
 
+#include "EmbeddedFontListContext.hxx"
+
 using namespace ::com::sun::star;
 using namespace ::oox::core;
 using namespace ::oox::drawingml;
@@ -703,6 +705,8 @@ void PresentationFragmentHandler::finalizeImport()
         return new CustomShowListContext( *this, maCustomShowList );
     case PPT_TOKEN( defaultTextStyle ):
         return new TextListStyleContext( *this, *mpTextListStyle );
+    case PPT_TOKEN(embeddedFontLst):
+        return new EmbeddedFontListContext(*this);
     case PPT_TOKEN( modifyVerifier ):
         OUString sAlgorithmClass = rAttribs.getStringDefaulted(XML_cryptAlgorithmClass);
         OUString sAlgorithmType = rAttribs.getStringDefaulted(XML_cryptAlgorithmType);
