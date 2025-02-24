@@ -3416,30 +3416,21 @@ void SbRtl_Shell(StarBASIC *, SbxArray & rPar, bool)
                 aCmdLine += " " + tmp;
             }
         }
-        else if( aCmdLine.isEmpty() )
-        {
-            // avoid special treatment (empty list)
-            aCmdLine += " ";
-        }
         sal_Int32 nLen = aCmdLine.getLength();
 
         // #55735 if there are parameters, they have to be separated
         // #72471 also separate the single parameters
         std::vector<OUString> aTokenVector;
-        OUString aToken;
-        sal_Int32 i = 0;
-        sal_Unicode c;
-        while( i < nLen )
+        for (sal_Int32 i = 0; i < nLen;)
         {
-            for ( ;; ++i )
+            sal_Unicode c = aCmdLine[i];
+            if (c == ' ' || c == '\t')
             {
-                c = aCmdLine[ i ];
-                if ( c != ' ' && c != '\t' )
-                {
-                    break;
-                }
+                ++i;
+                continue;
             }
 
+            OUString aToken;
             if( c == '\"' || c == '\'' )
             {
                 sal_Int32 iFoundPos = aCmdLine.indexOf( c, i + 1 );
@@ -3477,6 +3468,9 @@ void SbRtl_Shell(StarBASIC *, SbxArray & rPar, bool)
             aTokenVector.push_back( aToken );
         }
         // #55735 / #72471 end
+
+        if (aTokenVector.empty())
+            return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
 
         sal_Int16 nWinStyle = 0;
         if( nArgCount >= 3 )
