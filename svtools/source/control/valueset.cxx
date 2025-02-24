@@ -143,7 +143,7 @@ void ValueSet::ImplDeleteItems()
             Any aOldAny;
             Any aNewAny;
 
-            aOldAny <<= Reference< XAccessible >(pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ ));
+            aOldAny <<= Reference< XAccessible >(pItem->GetAccessible());
             ImplFireAccessibleEvent(AccessibleEventId::CHILD, aOldAny, aNewAny);
         }
 
@@ -774,7 +774,7 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
         if( nPos != VALUESET_ITEM_NOTFOUND )
         {
             rtl::Reference<ValueItemAcc> pItemAcc =
-                mItemList[nPos]->GetAccessible( false/*bIsTransientChildrenDisabled*/ );
+                mItemList[nPos]->GetAccessible();
 
             if( pItemAcc )
             {
@@ -800,7 +800,7 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
         ValueItemAcc* pItemAcc = nullptr;
         if (pItem != nullptr)
             pItemAcc =
-                pItem->GetAccessible(false /*bIsTransientChildrenDisabled*/).get();
+                pItem->GetAccessible().get();
 
         if (pItemAcc)
         {
@@ -1101,7 +1101,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
                     Any aOldAny;
                     Any aNewAny;
 
-                    aNewAny <<= Reference<XAccessible>(pItem->GetAccessible(false/*bIsTransientChildrenDisabled*/));
+                    aNewAny <<= Reference<XAccessible>(pItem->GetAccessible());
                     ImplFireAccessibleEvent(AccessibleEventId::CHILD, aOldAny, aNewAny);
                 }
 
@@ -1123,7 +1123,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
                     Any aOldAny;
                     Any aNewAny;
 
-                    aOldAny <<= Reference<XAccessible>(pItem->GetAccessible(false/*bIsTransientChildrenDisabled*/));
+                    aOldAny <<= Reference<XAccessible>(pItem->GetAccessible());
                     ImplFireAccessibleEvent(AccessibleEventId::CHILD, aOldAny, aNewAny);
                 }
 
@@ -1911,7 +1911,7 @@ void ValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
 
     if (ImplHasAccessibleListeners())
     {
-        rtl::Reference<ValueItemAcc> xAccessible(pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/));
+        rtl::Reference<ValueItemAcc> xAccessible(pItem->GetAccessible());
         xAccessible->FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, aOldName, aNewName);
     }
 }

@@ -54,10 +54,10 @@ ValueSetItem::~ValueSetItem()
     }
 }
 
-const rtl::Reference< ValueItemAcc > & ValueSetItem::GetAccessible( bool bIsTransientChildrenDisabled )
+const rtl::Reference< ValueItemAcc > & ValueSetItem::GetAccessible()
 {
     if( !mxAcc.is() )
-        mxAcc = new ValueItemAcc( this, bIsTransientChildrenDisabled );
+        mxAcc = new ValueItemAcc(this, false);
 
     return mxAcc;
 }
@@ -494,7 +494,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
     if( !pItem )
         throw lang::IndexOutOfBoundsException();
 
-    uno::Reference< accessibility::XAccessible >  xRet = pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ );
+    uno::Reference< accessibility::XAccessible >  xRet = pItem->GetAccessible();
     return xRet;
 }
 
@@ -687,7 +687,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
         if( VALUESET_ITEM_NONEITEM != nItemPos )
         {
             ValueSetItem* const pItem = mpValueSet->mItemList[nItemPos].get();
-            xRet = pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ );
+            xRet = pItem->GetAccessible();
         }
     }
 
@@ -860,7 +860,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getSelectedAc
         ValueSetItem* pItem = getItem(i);
 
         if (pItem && mpValueSet->IsItemSelected(pItem->mnId) && (nSelectedChildIndex == static_cast< sal_Int64 >(nSel++)))
-            xRet = pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ );
+            xRet = pItem->GetAccessible();
     }
 
     return xRet;
