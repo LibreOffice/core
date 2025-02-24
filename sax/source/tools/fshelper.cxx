@@ -57,13 +57,9 @@ void FastSerializerHelper::startElement(sal_Int32 elementTokenId)
 {
     mpSerializer->startFastElement(elementTokenId);
 }
-void FastSerializerHelper::pushAttributeValue(sal_Int32 attribute, const char* value)
+void FastSerializerHelper::pushAttributeValue(sal_Int32 attribute, std::string_view value)
 {
     mpSerializer->getTokenValueList().emplace_back(attribute, value);
-}
-void FastSerializerHelper::pushAttributeValue(sal_Int32 attribute, const OString& value)
-{
-    mpSerializer->getTokenValueList().emplace_back(attribute, value.getStr());
 }
 void FastSerializerHelper::singleElement(sal_Int32 elementTokenId)
 {
@@ -87,13 +83,7 @@ void FastSerializerHelper::singleElement(sal_Int32 elementTokenId, const rtl::Re
     mpSerializer->singleFastElement(elementTokenId, xAttrList.get());
 }
 
-FastSerializerHelper* FastSerializerHelper::write(const char* value)
-{
-    mpSerializer->write(value, -1);
-    return this;
-}
-
-FastSerializerHelper* FastSerializerHelper::write(const OString& value)
+FastSerializerHelper* FastSerializerHelper::write(std::string_view value)
 {
     mpSerializer->write(value);
     return this;
@@ -123,9 +113,9 @@ FastSerializerHelper* FastSerializerHelper::write(double value)
     return this;
 }
 
-FastSerializerHelper* FastSerializerHelper::writeEscaped(const char* value)
+FastSerializerHelper* FastSerializerHelper::writeEscaped(std::string_view value)
 {
-    mpSerializer->write(value, -1, true);
+    mpSerializer->write(value, true);
     return this;
 }
 
