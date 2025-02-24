@@ -44,7 +44,7 @@ namespace DOM
         CCharacterData(CDocument const& rDocument, ::osl::Mutex const& rMutex,
                 css::xml::dom::NodeType const& reNodeType, xmlNodePtr const& rpNode);
 
-        void dispatchEvent_Impl(
+        void dispatchEvent_Impl(::osl::ClearableMutexGuard& guard,
                 OUString const& prevValue, OUString const& newValue);
 
     public:

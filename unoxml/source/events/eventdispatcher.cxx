@@ -78,6 +78,11 @@ namespace DOM::events {
         }
     }
 
+    bool CEventDispatcher::hasListeners() const
+    {
+        return !m_CaptureListeners.empty() || !m_TargetListeners.empty();
+    }
+
     CEventDispatcher::~CEventDispatcher()
     {
     }

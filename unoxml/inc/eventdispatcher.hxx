@@ -59,6 +59,8 @@ public:
         const css::uno::Reference<css::xml::dom::events::XEventListener>& aListener,
         bool bCapture);
 
+    bool hasListeners() const;
+
     static void callListeners(
         TypeListenerMap const& rTMap,
         xmlNodePtr const pNode,
