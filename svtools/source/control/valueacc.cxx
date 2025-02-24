@@ -134,13 +134,11 @@ sal_Int64 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
                 pItem = nullptr;
             }
 
-            // Do not create an accessible object for the test.
-            if (pItem != nullptr && pItem->mxAcc.is())
-                if (pItem->GetAccessible( mbIsTransientChildrenDisabled ).get() == this )
-                {
-                    nIndexInParent = i;
-                    bDone = true;
-                }
+            if (pItem && pItem == mpValueSetItem)
+            {
+                nIndexInParent = i;
+                bDone = true;
+            }
         }
     }
 
@@ -148,7 +146,7 @@ sal_Int64 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
     if (mpValueSetItem && ((mpValueSetItem->mrParent.GetStyle() & WB_NONEFIELD) != 0))
     {
         ValueSetItem* pFirstItem = mpValueSetItem->mrParent.ImplGetItem(VALUESET_ITEM_NONEITEM);
-        if( pFirstItem && pFirstItem ->GetAccessible(mbIsTransientChildrenDisabled).get() == this )
+        if( pFirstItem && pFirstItem == mpValueSetItem)
             nIndexInParent = 0;
         else
             nIndexInParent++;
