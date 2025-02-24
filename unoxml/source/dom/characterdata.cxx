@@ -18,6 +18,8 @@
  */
 
 #include "characterdata.hxx"
+#include "document.hxx"
+#include <eventdispatcher.hxx>
 
 #include <string.h>
 
@@ -43,9 +45,15 @@ namespace DOM
     {
     }
 
-    void CCharacterData::dispatchEvent_Impl(
+    void CCharacterData::dispatchEvent_Impl(::osl::ClearableMutexGuard& guard,
             OUString const& prevValue, OUString const& newValue)
     {
+        CDocument& rDocument(GetOwnerDocument());
+        if (!rDocument.GetEventDispatcher().hasListeners())
+            return;
+
+        guard.clear(); // release mutex before calling event handlers
+
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
             "DOMCharacterDataModified"), UNO_QUERY);
@@ -69,9 +77,7 @@ namespace DOM
             OUString oldValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
             xmlNodeAddContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(arg, RTL_TEXTENCODING_UTF8).getStr()));
             OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
-
-            guard.clear(); // release mutex before calling event handlers
-            dispatchEvent_Impl(oldValue, newValue);
+            dispatchEvent_Impl(guard, oldValue, newValue);
         }
     }
 
@@ -103,8 +109,7 @@ namespace DOM
         xmlNodeSetContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
         OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
 
-        guard.clear(); // release mutex before calling event handlers
-        dispatchEvent_Impl(oldValue, newValue);
+        dispatchEvent_Impl(guard, oldValue, newValue);
 
     }
 
@@ -173,8 +178,7 @@ namespace DOM
         xmlNodeSetContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
         OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
 
-        guard.clear(); // release mutex before calling event handlers
-        dispatchEvent_Impl(oldValue, newValue);
+        dispatchEvent_Impl(guard, oldValue, newValue);
 
     }
 
@@ -210,8 +214,7 @@ namespace DOM
         xmlNodeSetContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
         OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
 
-        guard.clear(); // release mutex before calling event handlers
-        dispatchEvent_Impl(oldValue, newValue);
+        dispatchEvent_Impl(guard, oldValue, newValue);
 
     }
 
@@ -228,8 +231,7 @@ namespace DOM
             xmlNodeSetContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(data, RTL_TEXTENCODING_UTF8).getStr()));
             OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
 
-            guard.clear(); // release mutex before calling event handlers
-            dispatchEvent_Impl(oldValue, newValue);
+            dispatchEvent_Impl(guard, oldValue, newValue);
         }
     }
 
