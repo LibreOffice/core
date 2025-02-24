@@ -23,6 +23,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <unotools/useroptions.hxx>
+#include <unotools/datetime.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpage.hxx>
 #include <editeng/outlobj.hxx>
@@ -494,8 +495,7 @@ void ScPostIt::AutoStamp(bool bCreate)
     if (bCreate)
     {
         DateTime aNow(DateTime::SYSTEM);
-        auto const & rLocaleData = ScGlobal::getLocaleData();
-        maNoteData.maDate = rLocaleData.getDate(aNow) + " " + rLocaleData.getTime(aNow, false);
+        maNoteData.maDate =  utl::toISO8601(aNow.GetUNODateTime());
     }
     if (!maNoteData.maAuthor.isEmpty())
         return;
