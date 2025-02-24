@@ -120,10 +120,7 @@ void SvxAppearanceTabPage::UpdateControlsState()
 {
     // in case of AUTOMATIC_COLOR_SCHEME, disable all the controls
     bool bEnableControls = m_xSchemeList->get_active_id() != AUTOMATIC_COLOR_SCHEME;
-    m_xColorEntryBtn->set_sensitive(bEnableControls);
-    m_xColorChangeBtn->set_sensitive(bEnableControls);
     m_xShowInDocumentChkBtn->set_sensitive(bEnableControls);
-    m_xColorRadioBtn->set_sensitive(bEnableControls);
     EnableImageControls(bEnableControls && GetActiveEntry() == static_cast<int>(APPBACKGROUND));
 }
 
@@ -183,10 +180,7 @@ bool SvxAppearanceTabPage::FillItemSet(SfxItemSet* /* rSet */)
         m_bRestartRequired = true;
         // for automatic scheme, restart is not required as customizations section is disabled
         if (pColorConfig->GetCurrentSchemeName() == AUTOMATIC_COLOR_SCHEME)
-        {
             UpdateOldAppearance();
-            m_bRestartRequired = false;
-        }
     }
 
     // commit ColorConfig
