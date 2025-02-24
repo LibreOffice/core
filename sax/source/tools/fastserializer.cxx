@@ -457,7 +457,7 @@ namespace sax_fastparser {
 
             writeBytes(sEqualSignAndQuote, N_CHARS(sEqualSignAndQuote));
 
-            write(rTokenValue.pValue, -1, true);
+            write(rTokenValue.pValue, true);
 
             writeBytes(sQuote, N_CHARS(sQuote));
         }

@@ -37,8 +37,8 @@ namespace sax_fastparser {
 struct TokenValue
 {
     sal_Int32   nToken;
-    const char *pValue;
-    TokenValue(sal_Int32 _nToken, const char *_pValue) : nToken(_nToken), pValue(_pValue) {}
+    std::string_view pValue;
+    TokenValue(sal_Int32 _nToken, std::string_view _pValue) : nToken(_nToken), pValue(_pValue) {}
 };
 typedef std::vector<TokenValue> TokenValueList;
 

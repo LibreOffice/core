@@ -129,14 +129,13 @@ public:
 
     void startElement(sal_Int32 elementTokenId, const rtl::Reference<FastAttributeList>& xAttrList);
 
-    FastSerializerHelper* write(const char* value);
-    FastSerializerHelper* write(const OString& value);
+    FastSerializerHelper* write(std::string_view value);
     FastSerializerHelper* write(std::u16string_view value);
     FastSerializerHelper* write(sal_Int32 value);
     FastSerializerHelper* write(sal_Int64 value);
     FastSerializerHelper* write(double value);
 
-    FastSerializerHelper* writeEscaped(const char* value);
+    FastSerializerHelper* writeEscaped(std::string_view value);
     FastSerializerHelper* writeEscaped(std::u16string_view value);
 
     FastSerializerHelper* writeId(sal_Int32 tokenId);
@@ -154,8 +153,7 @@ public:
     void setAllowXEscape(bool bSet);
 
 private:
-    void pushAttributeValue( sal_Int32 attribute, const char* value );
-    void pushAttributeValue( sal_Int32 attribute, const OString& value );
+    void pushAttributeValue(sal_Int32 attribute, std::string_view value);
 
     std::unique_ptr<FastSaxSerializer> mpSerializer;
 };
