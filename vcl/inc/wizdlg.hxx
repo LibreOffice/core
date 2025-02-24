@@ -257,7 +257,7 @@ namespace vcl
         DECL_LINK(OnPrevPage, Button*, void);
         DECL_LINK(OnFinish, Button*, void);
 
-        void     implConstruct( const WizardButtonFlags _nButtonFlags );
+        void implConstruct();
 
         virtual void     DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
     };

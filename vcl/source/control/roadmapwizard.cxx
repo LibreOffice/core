@@ -91,7 +91,7 @@ namespace vcl
         maWizardLayoutIdle.SetPriority(TaskPriority::RESIZE);
         maWizardLayoutIdle.SetInvokeHandler( LINK( this, RoadmapWizard, ImplHandleWizardLayoutTimerHdl ) );
 
-        implConstruct(WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP);
+        implConstruct();
 
         SetLeftAlignedButtonCount( 1 );
         mbEmptyViewMargin = true;
