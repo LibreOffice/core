@@ -224,6 +224,16 @@
         the terms of the license below:</p>
         <p><a href="#a__CPL_version_1_0">Jump to Common Public License Version 1.0 (CPL)</a></p>
     </div>
+    <h2>dtoa.c</h2>
+    <p>The following software may be included in this product: dtoa.c, which provides a function to convert a decimal
+    string to double. Use of any of this software is governed by the terms of the license below:</p>
+    <p>Copyright (c) 1991, 2000, 2001 by Lucent Technologies.</p>
+    <p>Permission to use, copy, modify, and distribute this software for any purpose without fee is hereby granted,
+    provided that this entire notice is included in all copies of any software which is or includes a copy or
+    modification of this software and in all copies of the supporting documentation for such software.</p>
+    <p>THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED WARRANTY. IN PARTICULAR, NEITHER THE
+    AUTHOR NOR LUCENT MAKES ANY REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY OF THIS SOFTWARE
+    OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.</p>
     <div class="EPOXY">
         <h2>Epoxy</h2>
         <p>The following software may be included in this product: epoxy.</p>
