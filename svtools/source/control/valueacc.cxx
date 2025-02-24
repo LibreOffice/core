@@ -57,14 +57,13 @@ ValueSetItem::~ValueSetItem()
 const rtl::Reference< ValueItemAcc > & ValueSetItem::GetAccessible()
 {
     if( !mxAcc.is() )
-        mxAcc = new ValueItemAcc(this, false);
+        mxAcc = new ValueItemAcc(this);
 
     return mxAcc;
 }
 
-ValueItemAcc::ValueItemAcc(ValueSetItem* pValueSetItem, bool bIsTransientChildrenDisabled) :
-    mpValueSetItem(pValueSetItem),
-    mbIsTransientChildrenDisabled( bIsTransientChildrenDisabled )
+ValueItemAcc::ValueItemAcc(ValueSetItem* pValueSetItem)
+    : mpValueSetItem(pValueSetItem)
 {
 }
 
@@ -200,9 +199,7 @@ sal_Int64 SAL_CALL ValueItemAcc::getAccessibleStateSet()
         nStateSet |= accessibility::AccessibleStateType::SENSITIVE;
         nStateSet |= accessibility::AccessibleStateType::SHOWING;
         nStateSet |= accessibility::AccessibleStateType::VISIBLE;
-        if ( !mbIsTransientChildrenDisabled )
-            nStateSet |= accessibility::AccessibleStateType::TRANSIENT;
-
+        nStateSet |= accessibility::AccessibleStateType::TRANSIENT;
         nStateSet |= accessibility::AccessibleStateType::SELECTABLE;
         nStateSet |= accessibility::AccessibleStateType::FOCUSABLE;
 

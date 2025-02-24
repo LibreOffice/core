@@ -193,11 +193,10 @@ private:
         css::accessibility::XAccessibleEventListener > >                mxEventListeners;
     std::mutex                                                          maMutex;
     ValueSetItem*                                                       mpValueSetItem;
-    bool                                                                mbIsTransientChildrenDisabled;
 
 public:
 
-    ValueItemAcc(ValueSetItem* pValueSetItem, bool bIsTransientChildrenDisabled);
+    ValueItemAcc(ValueSetItem* pValueSetItem);
     virtual ~ValueItemAcc() override;
 
     void    ValueSetItemDestroyed();
