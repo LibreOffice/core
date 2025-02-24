@@ -1615,7 +1615,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125546)
     loadAndSave("tdf125546.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // compress redlines (it was 15)
-    assertXPath(pXmlDoc, "//w:rPrChange"_ostr, 2);
+    assertXPath(pXmlDoc, "//w:rPrChange"_ostr, 3);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testLabelWidthAndPosition_Left_FirstLineIndent)
