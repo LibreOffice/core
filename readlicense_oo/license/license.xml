@@ -2277,6 +2277,25 @@
         original software.</p>
         <p>3. This notice may not be removed or altered from any source distribution.</p>
     </div>
+    <div class="ZXCVBN">
+        <h2>zxcvbn-c</h2>
+        <p>The following software may be included in this product: zxcvbn-c. Use of any of this software is governed
+        by the terms of the license below:</p>
+        <p>MIT License</p>
+        <p>Copyright (c) 2015-2017 Tony Evans</p>
+        <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+        associated documentation files (the "Software"), to deal in the Software without restriction, including
+        without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
+        following conditions:</p>
+        <p>The above copyright notice and this permission notice shall be included in all copies or substantial
+        portions of the Software.</p>
+        <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+        LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
+        EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+        IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+        THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+    </div>
     <div class="ZXING">
         <h2>ZXing-C++</h2>
         <p>The following software may be included in this product: ZXing-C++. Use of any of this software is governed
