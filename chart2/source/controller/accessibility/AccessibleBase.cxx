@@ -144,15 +144,12 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
 
         ClearableMutexGuard aGuard( m_aMutex );
         // make local copy for notification
-        std::vector<Reference<XAccessible>> aLocalChildList(m_aChildList);
+        std::vector<rtl::Reference<AccessibleBase>> aLocalChildList(m_aChildList);
         aGuard.clear();
 
         for (auto const& localChild : aLocalChildList)
         {
-            // Note: at this place we must be sure to have an AccessibleBase
-            // object in the UNO reference to XAccessible !
-            bStop = (*static_cast< AccessibleBase * >
-                     ( localChild.get() )).NotifyEvent( eEventType, rId );
+            bStop = localChild->NotifyEvent(eEventType, rId);
             if (bStop)
                 break;
         }
@@ -252,7 +249,7 @@ void AccessibleBase::AddChild( AccessibleBase * pChild  )
 
     ClearableMutexGuard aGuard( m_aMutex );
 
-    Reference< XAccessible > xChild( pChild );
+    rtl::Reference<AccessibleBase> xChild(pChild);
     m_aChildList.push_back( xChild );
 
     m_aChildOIDMap[ pChild->GetId() ] = xChild;
@@ -261,16 +258,13 @@ void AccessibleBase::AddChild( AccessibleBase * pChild  )
     if( m_bChildrenInitialized )
     {
         Any aEmpty, aNew;
-        aNew <<= xChild;
+        aNew <<= uno::Reference<XAccessible>(xChild);
 
         aGuard.clear();
         BroadcastAccEvent( AccessibleEventId::CHILD, aNew, aEmpty );
     }
 }
 
-/** in this method we imply that the Reference< XAccessible > elements in the
-    vector are AccessibleBase objects !
- */
 void AccessibleBase::RemoveChildByOId( const ObjectIdentifier& rOId )
 {
     ClearableMutexGuard aGuard( m_aMutex );
@@ -279,7 +273,7 @@ void AccessibleBase::RemoveChildByOId( const ObjectIdentifier& rOId )
     if( aIt == m_aChildOIDMap.end())
         return;
 
-    Reference< XAccessible > xChild( aIt->second );
+    rtl::Reference<AccessibleBase> xChild(aIt->second);
 
     // remove from map
     m_aChildOIDMap.erase( aIt );
@@ -301,15 +295,14 @@ void AccessibleBase::RemoveChildByOId( const ObjectIdentifier& rOId )
     if( bInitialized )
     {
         Any aEmpty, aOld;
-        aOld <<= xChild;
+        aOld <<= uno::Reference<XAccessible>(xChild);
 
         BroadcastAccEvent( AccessibleEventId::CHILD, aEmpty, aOld );
     }
 
     // dispose the child
-    Reference< lang::XComponent > xComp( xChild, UNO_QUERY );
-    if( xComp.is())
-        xComp->dispose();
+    if (xChild.is())
+        xChild->dispose();
 }
 
 awt::Point AccessibleBase::GetUpperLeftOnScreen() const
@@ -360,7 +353,7 @@ void AccessibleBase::KillAllChildren()
     ClearableMutexGuard aGuard( m_aMutex );
 
     // make local copy for notification, and remove all children
-    std::vector<Reference<XAccessible>> aLocalChildList;
+    std::vector<rtl::Reference<AccessibleBase>> aLocalChildList;
     aLocalChildList.swap( m_aChildList );
     m_aChildOIDMap.clear();
 
@@ -368,16 +361,14 @@ void AccessibleBase::KillAllChildren()
 
     // call dispose for all children
     // and notify listeners
-    Reference< lang::XComponent > xComp;
     Any aEmpty, aOld;
     for (auto const& localChild : aLocalChildList)
     {
-        aOld <<= localChild;
+        aOld <<= uno::Reference<XAccessible>(localChild);
         BroadcastAccEvent( AccessibleEventId::CHILD, aEmpty, aOld );
 
-        xComp.set(localChild, UNO_QUERY);
-        if( xComp.is())
-            xComp->dispose();
+        if (localChild.is())
+            localChild->dispose();
     }
     m_bChildrenInitialized = false;
 }
@@ -477,7 +468,7 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleChild( sal_Int64 
 
 Reference< XAccessible > AccessibleBase::ImplGetAccessibleChildById( sal_Int64 i ) const
 {
-    Reference< XAccessible > xResult;
+    rtl::Reference<AccessibleBase> xResult;
 
     MutexGuard aGuard( m_aMutex);
     if( ! m_bMayHaveChildren ||
@@ -493,7 +484,7 @@ Reference< XAccessible > AccessibleBase::ImplGetAccessibleChildById( sal_Int64 i
         throw aEx;
     }
     else
-        xResult.set( m_aChildList[ i ] );
+        xResult = m_aChildList[i];
 
     return xResult;
 }
@@ -585,20 +576,18 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleAtPoint( const aw
         ( aRect.Y <= aPoint.Y && aPoint.Y <= (aRect.Y + aRect.Height)))
     {
         ClearableMutexGuard aGuard( m_aMutex );
-        std::vector<Reference<XAccessible>> aLocalChildList( m_aChildList );
+        std::vector<rtl::Reference<AccessibleBase>> aLocalChildList(m_aChildList);
         aGuard.clear();
 
-        Reference< XAccessibleComponent > aComp;
-        for (auto const& localChild : aLocalChildList)
+        for (const rtl::Reference<AccessibleBase>& xLocalChild : aLocalChildList)
         {
-            aComp.set(localChild, UNO_QUERY);
-            if( aComp.is())
+            if (xLocalChild.is())
             {
-                aRect = aComp->getBounds();
+                aRect = xLocalChild->getBounds();
                 if( ( aRect.X <= aPoint.X && aPoint.X <= (aRect.X + aRect.Width) ) &&
                     ( aRect.Y <= aPoint.Y && aPoint.Y <= (aRect.Y + aRect.Height)))
                 {
-                    aResult = localChild;
+                    aResult = xLocalChild;
                     break;
                 }
             }

@@ -284,12 +284,12 @@ private:
     /** type of the hash containing a vector index for every AccessibleUniqueId
         of the object in the child list
      */
-    typedef std::map< ObjectIdentifier, css::uno::Reference< css::accessibility::XAccessible > > ChildOIDMap;
+    typedef std::map<ObjectIdentifier, rtl::Reference<AccessibleBase>> ChildOIDMap;
 
     bool                                  m_bIsDisposed;
     const bool                            m_bMayHaveChildren;
     bool                                  m_bChildrenInitialized;
-    std::vector<css::uno::Reference<css::accessibility::XAccessible>> m_aChildList;
+    std::vector<rtl::Reference<AccessibleBase>> m_aChildList;
 
     ChildOIDMap                           m_aChildOIDMap;
 
