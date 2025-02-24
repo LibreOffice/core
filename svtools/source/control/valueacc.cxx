@@ -19,6 +19,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/unohelp.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -700,17 +701,29 @@ awt::Rectangle SAL_CALL ValueSetAcc::getBounds()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    const Point         aOutPos;
 
+    weld::DrawingArea* pDrawingArea = mpValueSet->GetDrawingArea();
+    if (!pDrawingArea)
+        return css::awt::Rectangle();
+
+    const AbsoluteScreenPixelPoint aOutPos = pDrawingArea->get_accessible_location_on_screen();
     const Size aOutSize(mpValueSet->GetOutputSizePixel());
-    awt::Rectangle      aRet;
+    tools::Rectangle aBounds(aOutPos, aOutSize);
 
-    aRet.X = aOutPos.X();
-    aRet.Y = aOutPos.Y();
-    aRet.Width = aOutSize.Width();
-    aRet.Height = aOutSize.Height();
+    // subtract absolute parent pos to get relative pos in parent
+    uno::Reference<accessibility::XAccessible> xParent(getAccessibleParent());
+    if (xParent)
+    {
+        uno::Reference<accessibility::XAccessibleContext> xParentContext(xParent->getAccessibleContext());
+        uno::Reference<accessibility::XAccessibleComponent> xParentComponent(xParent->getAccessibleContext(), css::uno::UNO_QUERY);
+        if (xParentComponent.is())
+        {
+            awt::Point aParentPos = xParentComponent->getLocationOnScreen();
+            aBounds.Move(-aParentPos.X, - aParentPos.Y);
+        }
+    }
 
-    return aRet;
+    return vcl::unohelper::ConvertToAWTRect(aBounds);
 }
 
 awt::Point SAL_CALL ValueSetAcc::getLocation()
@@ -729,24 +742,12 @@ awt::Point SAL_CALL ValueSetAcc::getLocationOnScreen()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    awt::Point aScreenLoc(0, 0);
 
-    uno::Reference<accessibility::XAccessible> xParent(getAccessibleParent());
-    if (xParent)
-    {
-        uno::Reference<accessibility::XAccessibleContext> xParentContext(xParent->getAccessibleContext());
-        uno::Reference<accessibility::XAccessibleComponent> xParentComponent(xParentContext, css::uno::UNO_QUERY);
-        OSL_ENSURE( xParentComponent.is(), "ValueSetAcc::getLocationOnScreen: no parent component!" );
-        if ( xParentComponent.is() )
-        {
-            awt::Point aParentScreenLoc( xParentComponent->getLocationOnScreen() );
-            awt::Point aOwnRelativeLoc( getLocation() );
-            aScreenLoc.X = aParentScreenLoc.X + aOwnRelativeLoc.X;
-            aScreenLoc.Y = aParentScreenLoc.Y + aOwnRelativeLoc.Y;
-        }
-    }
+    weld::DrawingArea* pDrawingArea = mpValueSet->GetDrawingArea();
+    if (!pDrawingArea)
+        return css::awt::Point();
 
-    return aScreenLoc;
+    return vcl::unohelper::ConvertToAWTPoint(pDrawingArea->get_accessible_location_on_screen());
 }
 
 awt::Size SAL_CALL ValueSetAcc::getSize()
