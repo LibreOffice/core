@@ -858,11 +858,19 @@ weld::Widget* ImpEditView::GetPopupParent(tools::Rectangle& rRect) const
 
 void ImpEditView::SetOutputArea( const tools::Rectangle& rRect )
 {
-    const OutputDevice& rOutDev = GetOutputDevice();
-    // should be better be aligned on pixels!
-    tools::Rectangle aNewRect(rOutDev.LogicToPixel(rRect));
-    aNewRect = rOutDev.PixelToLogic(aNewRect);
-    maOutputArea = aNewRect;
+    // Here a PixelSnap was used before using GetOutputDevice() and
+    // LogicToPixel/PixelToLogic (what was incorrect, would need
+    // to take care of 1/2 pixel in logic for rounding). We do not
+    // need that anymore, in fact it leads to text slightly
+    // 'jumping' around by up to 1 pixel (of course).
+    // We paint text nowadays using decomposed TextPrimitives
+    // with sub-pixel precision and similar (using a shortcut)
+    // for text in TextEdit on the Overlay, also using sub-pixel
+    // precision. Just remove this to avoid Text being displayed
+    // different in TextEdit and EditView paint visualizations
+    // and assign given value to OutputArea unchanged.
+    maOutputArea = rRect;
+
     if (!maOutputArea.IsWidthEmpty() && maOutputArea.Right() < maOutputArea.Left())
         maOutputArea.SetRight(maOutputArea.Left());
     if (!maOutputArea.IsHeightEmpty() && maOutputArea.Bottom() < maOutputArea.Top())
