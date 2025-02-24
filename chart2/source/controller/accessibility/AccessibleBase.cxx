@@ -325,10 +325,7 @@ awt::Point AccessibleBase::GetUpperLeftOnScreen() const
     return aResult;
 }
 
-void AccessibleBase::BroadcastAccEvent(
-    sal_Int16 nId,
-    const Any & rNew,
-    const Any & rOld ) const
+void AccessibleBase::BroadcastAccEvent(sal_Int16 nId, const Any& rNew, const Any& rOld)
 {
     ClearableMutexGuard aGuard( m_aMutex );
 
@@ -337,10 +334,7 @@ void AccessibleBase::BroadcastAccEvent(
         // if we don't have a client id for the notifier, then we don't have listeners, then
         // we don't need to notify anything
 
-    // the const cast is needed, because UNO parameters are never const
-    const AccessibleEventObject aEvent(
-        const_cast< uno::XWeak * >( static_cast< const uno::XWeak * >( this )),
-        nId, rNew, rOld, -1 );
+    const AccessibleEventObject aEvent(static_cast<uno::XWeak*>(this), nId, rNew, rOld, -1);
 
     // let the notifier handle this event
     ::comphelper::AccessibleEventNotifier::addEvent( m_nEventNotifierId, aEvent );

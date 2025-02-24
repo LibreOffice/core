@@ -186,7 +186,7 @@ protected:
      */
     void         BroadcastAccEvent( sal_Int16 nId,
                                     const css::uno::Any & rNew,
-                                    const css::uno::Any & rOld ) const;
+                                    const css::uno::Any & rOld );
 
     /** Removes all children from the internal lists and broadcasts child remove
         events.
