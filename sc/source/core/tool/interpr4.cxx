@@ -1478,6 +1478,7 @@ bool ScInterpreter::ConvertMatrixParameters()
             {
                 case svDouble:
                 case svString:
+                case svStringName:
                 case svSingleRef:
                 case svExternalSingleRef:
                 case svMissing:
