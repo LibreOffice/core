@@ -2768,7 +2768,7 @@ AC_ARG_WITH(system-hunspell,
 
 libo_FUZZ_ARG_ENABLE(cairo-rgba,
     AS_HELP_STRING([--enable-cairo-rgba],
-        [Use RGBA order, instead of default BRGA. Not possible with --with-system-cairo]))
+        [Use RGBA order, instead of default BGRA. Not possible with --with-system-cairo]))
 
 libo_FUZZ_ARG_ENABLE(zxing,
     AS_HELP_STRING([--disable-zxing],
