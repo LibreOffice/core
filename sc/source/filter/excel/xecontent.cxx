@@ -1091,7 +1091,7 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
     {
         rWorksheet->startElement(XML_formula);
         OString aFormula = GetFixedFormula(eOperation, maOrigin, aText);
-        rWorksheet->writeEscaped(aFormula.getStr());
+        rWorksheet->writeEscaped(aFormula);
         rWorksheet->endElement( XML_formula );
     }
     else if(RequiresFormula(eOperation))

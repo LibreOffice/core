@@ -138,7 +138,7 @@ void XclExpExtCfvo::SaveXml( XclExpXmlStream& rStrm )
             meType == COLORSCALE_VALUE)
     {
         rWorksheet->startElementNS(XML_xm, XML_f);
-        rWorksheet->writeEscaped(maValue.getStr());
+        rWorksheet->writeEscaped(maValue);
         rWorksheet->endElementNS(XML_xm, XML_f);
     }
 
@@ -247,7 +247,7 @@ void XclExpExtCF::SaveXml( XclExpXmlStream& rStrm )
         OString aFixedFormulaText = aFormula.toUtf8();
         OString aFixedFormula = GetFixedFormula(eOperation, aFixedFormulaPos, aFixedFormulaText);
         rWorksheet->startElementNS( XML_xm, XML_f );
-        rWorksheet->writeEscaped(aFixedFormula.getStr());
+        rWorksheet->writeEscaped(aFixedFormula);
         rWorksheet->endElementNS( XML_xm, XML_f );
 
         rWorksheet->startElementNS( XML_xm, XML_f );

@@ -443,7 +443,7 @@ namespace sax_fastparser {
 
             write("=\"");
 
-            write(rTokenValue.pValue, -1, true);
+            write(rTokenValue.pValue, true);
 
             write("\"");
         }
