@@ -2760,7 +2760,9 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     // a frame to get inline paragraphs, keeping also the table of content support
                     // FIXME: overwrite the non-character styles of the paragraph style
                     // with the settings of the next paragraph style, like MSO does
-                    if ( m_StreamStateStack.top().bIsInlineParagraph && !m_StreamStateStack.top().bIsPreviousInlineParagraph )
+                    if ( m_StreamStateStack.top().bIsInlineParagraph && !m_StreamStateStack.top().bIsPreviousInlineParagraph &&
+                            // tdf#164878 skip empty paragraphs, i.e. math formula and other objects
+                            m_StreamStateStack.top().bParaChanged )
                     {
                         uno::Reference<text::XParagraphCursor> xParaCursor(
                             xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
