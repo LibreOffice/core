@@ -215,6 +215,7 @@ static bool lcl_InnerCalcLayout( SwFrame *pFrame,
 // cell height.
 static SwTwips lcl_CalcMinRowHeight( const SwRowFrame *pRow,
                                      const bool _bConsiderObjs );
+static sal_uInt16 lcl_GetLineWidth(const SwRowFrame& rRow, const SvxBoxItemLine& rLine);
 static sal_uInt16 lcl_GetTopSpace( const SwRowFrame& rRow );
 
 static SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrame&, const SwBorderAttrs& );
@@ -5008,7 +5009,7 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
             if (bMinRowHeightInclBorder)
             {
                 //get horizontal border(s)
-                nHeight += lcl_GetTopSpace(*_pRow);
+                nHeight += lcl_GetLineWidth(*_pRow, SvxBoxItemLine::TOP);
             }
         }
     }
@@ -5052,6 +5053,24 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
     }
 
     return nHeight;
+}
+
+// Calculate the maximum border-line thickness (CalcLineWidth) off all the cells in the row
+static sal_uInt16 lcl_GetLineWidth(const SwRowFrame& rRow, const SvxBoxItemLine& rLine)
+{
+    sal_uInt16 nBorderThickness = 0;
+    for (const SwCellFrame* pCell = static_cast<const SwCellFrame*>(rRow.Lower()); pCell;
+          pCell = static_cast<const SwCellFrame*>(pCell->GetNext()))
+    {
+        sal_uInt16 nTmpWidth = 0;
+        const SwFrame* pLower = pCell->Lower();
+        if (pLower && pLower->IsRowFrame())
+            nTmpWidth = lcl_GetLineWidth(*static_cast<const SwRowFrame*>(pLower), rLine);
+        else
+            nTmpWidth = pCell->GetFormat()->GetAttrSet().GetBox().CalcLineWidth(rLine);
+        nBorderThickness = std::max(nBorderThickness, nTmpWidth);
+    }
+    return nBorderThickness;
 }
 
 // #i29550#
