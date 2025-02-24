@@ -229,6 +229,8 @@ private: // methods
 
     bool doFlush();
 
+    void doUpdateSettings( AllSettings& rSettings );
+
 private: // data
     static AquaSalFrame*       s_pCaptureFrame;
 

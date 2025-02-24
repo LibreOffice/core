@@ -256,7 +256,24 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                                         const OUString &,
                                         const Color&)
 {
-    return mpBackend->drawNativeControl(nType, nPart, rControlRegion, nState, aValue);
+    // tdf#165266 Force native controls to use current effective appearance
+    // +[NSAppearance setCurrentAppearance:] is deprecated and calling
+    // that appears to do less and less with each new version of macos
+    // and/or Xcode so run all drawing of native controls in a block passed
+    // to -[NSAppearance performAsCurrentDrawingAppearance:].
+    __block bool bRet = false;
+    if (@available(macOS 11, *))
+    {
+        [[NSApp effectiveAppearance] performAsCurrentDrawingAppearance:^() {
+            bRet = mpBackend->drawNativeControl(nType, nPart, rControlRegion, nState, aValue);
+        }];
+    }
+    else
+    {
+        bRet = mpBackend->drawNativeControl(nType, nPart, rControlRegion, nState, aValue);
+    }
+
+    return bRet;
 }
 
 static NSColor* colorFromRGB(const Color& rColor)
