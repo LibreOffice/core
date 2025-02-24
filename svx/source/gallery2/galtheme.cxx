@@ -50,21 +50,21 @@
 using namespace ::com::sun::star;
 
 GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry )
-    : pParent(pGallery)
-    , pThm(pThemeEntry)
+    : mpParent(pGallery)
+    , mpThm(pThemeEntry)
     , mnThemeLockCount(0)
     , mnBroadcasterLockCount(0)
-    , nDragPos(0)
-    , bDragging(false)
-    , bAbortActualize(false)
+    , mnDragPos(0)
+    , mbDragging(false)
+    , mbAbortActualize(false)
 {
-    mpGalleryStorageEngine = pThm->createGalleryStorageEngine(maGalleryObjectCollection);
+    mpGalleryStorageEngine = mpThm->createGalleryStorageEngine(maGalleryObjectCollection);
 }
 
 GalleryTheme::~GalleryTheme()
 {
-    if(pThm->IsModified())
-        if(!mpGalleryStorageEngine->implWrite(*this, pThm))
+    if(mpThm->IsModified())
+        if(!mpGalleryStorageEngine->implWrite(*this, mpThm))
             ImplSetModified(false);
 
     for (auto & pEntry : maGalleryObjectCollection.getObjectList())
@@ -210,13 +210,13 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
     const sal_uInt32 nCount = maGalleryObjectCollection.size();
 
     LockBroadcaster();
-    bAbortActualize = false;
+    mbAbortActualize = false;
 
     // reset delete flag
     for (sal_uInt32 i = 0; i < nCount; i++)
         maGalleryObjectCollection.get(i)->mbDelete = false;
 
-    for (sal_uInt32 i = 0; ( i < nCount ) && !bAbortActualize; i++)
+    for (sal_uInt32 i = 0; ( i < nCount ) && !mbAbortActualize; i++)
     {
         if( pProgress )
             pProgress->Update( i, nCount - 1 );
@@ -288,8 +288,8 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
     // update theme
     mpGalleryStorageEngine->updateTheme();
     ImplSetModified( true );
-    if (pThm->IsModified())
-        if (!mpGalleryStorageEngine->implWrite(*this, pThm))
+    if (mpThm->IsModified())
+        if (!mpGalleryStorageEngine->implWrite(*this, mpThm))
             ImplSetModified(false);
     UnlockBroadcaster();
 }
@@ -764,15 +764,15 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
 
 void GalleryTheme::ImplSetModified( bool bModified )
 {
-    pThm->SetModified(bModified);
+    mpThm->SetModified(bModified);
 }
 
-sal_uInt32 GalleryTheme::GetId() const { return pThm->GetId(); }
-void GalleryTheme::SetId( sal_uInt32 nNewId, bool bResetThemeName ) { pThm->SetId( nNewId, bResetThemeName ); }
-bool GalleryTheme::IsReadOnly() const { return pThm->IsReadOnly(); }
-bool GalleryTheme::IsDefault() const { return pThm->IsDefault(); }
+sal_uInt32 GalleryTheme::GetId() const { return mpThm->GetId(); }
+void GalleryTheme::SetId( sal_uInt32 nNewId, bool bResetThemeName ) { mpThm->SetId( nNewId, bResetThemeName ); }
+bool GalleryTheme::IsReadOnly() const { return mpThm->IsReadOnly(); }
+bool GalleryTheme::IsDefault() const { return mpThm->IsDefault(); }
 
-const OUString& GalleryTheme::GetName() const { return pThm->GetThemeName(); }
+const OUString& GalleryTheme::GetName() const { return mpThm->GetThemeName(); }
 const INetURLObject& GalleryTheme::getThemeURL() const { return mpGalleryStorageEngine->getThemeURL(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

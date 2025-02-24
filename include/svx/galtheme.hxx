@@ -58,13 +58,13 @@ private:
 
     std::unique_ptr<GalleryFileStorage>     mpGalleryStorageEngine;
     GalleryObjectCollection     maGalleryObjectCollection;
-    Gallery*                    pParent;
-    GalleryThemeEntry*          pThm;
+    Gallery*                    mpParent;
+    GalleryThemeEntry*          mpThm;
     sal_uInt32                  mnThemeLockCount;
     sal_uInt32                  mnBroadcasterLockCount;
-    sal_uInt32                  nDragPos;
-    bool                        bDragging;
-    bool                        bAbortActualize;
+    sal_uInt32                  mnDragPos;
+    bool                        mbDragging;
+    bool                        mbAbortActualize;
 
     const std::unique_ptr<GalleryFileStorage>& getGalleryStorageEngine() const { return mpGalleryStorageEngine; }
 
@@ -95,8 +95,8 @@ public:
     sal_uInt32                  GetId() const;
     SAL_DLLPRIVATE void         SetId( sal_uInt32 nNewId, bool bResetThemeName );
 
-    SAL_DLLPRIVATE void         SetDragging( bool bSet ) { bDragging = bSet; }
-    SAL_DLLPRIVATE bool         IsDragging() const { return bDragging; }
+    SAL_DLLPRIVATE void         SetDragging( bool bSet ) { mbDragging = bSet; }
+    SAL_DLLPRIVATE bool         IsDragging() const { return mbDragging; }
 
     SAL_DLLPRIVATE void         LockTheme() { ++mnThemeLockCount; }
     SAL_DLLPRIVATE bool         UnlockTheme();
@@ -105,16 +105,16 @@ public:
     void                        UnlockBroadcaster();
     SAL_DLLPRIVATE bool         IsBroadcasterLocked() const { return mnBroadcasterLockCount > 0; }
 
-    SAL_DLLPRIVATE void         SetDragPos(sal_uInt32 nPos) { nDragPos = nPos; }
-    SAL_DLLPRIVATE sal_uInt32   GetDragPos() const { return nDragPos; }
+    SAL_DLLPRIVATE void         SetDragPos(sal_uInt32 nPos) { mnDragPos = nPos; }
+    SAL_DLLPRIVATE sal_uInt32   GetDragPos() const { return mnDragPos; }
 
     bool                        IsReadOnly() const;
     bool                        IsDefault() const;
 
     void                        Actualize( const Link<const INetURLObject&, void>& rActualizeLink, GalleryProgress* pProgress = nullptr );
-    SAL_DLLPRIVATE void         AbortActualize() { bAbortActualize = true; }
+    SAL_DLLPRIVATE void         AbortActualize() { mbAbortActualize = true; }
 
-    SAL_DLLPRIVATE Gallery*     GetParent() const { return pParent; }
+    SAL_DLLPRIVATE Gallery*     GetParent() const { return mpParent; }
 
 public:
 
