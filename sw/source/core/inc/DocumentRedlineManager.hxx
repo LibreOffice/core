@@ -137,6 +137,8 @@ public:
         /*[in]*/ SwRedlineTable::size_type nStartPos,
         /*[in]*/ SwRedlineTable::size_type nEndPos) const override;
 
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+
     //Non Interface methods;
 
     /** Set comment-text for Redline. It then comes in via AppendRedLine.

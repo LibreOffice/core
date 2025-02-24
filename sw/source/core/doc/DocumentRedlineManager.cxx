@@ -2897,6 +2897,46 @@ void DocumentRedlineManager::UpdateRedlineContentNode(SwRedlineTable::size_type 
     }
 }
 
+void DocumentRedlineManager::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("DocumentRedlineManager"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    if (meRedlineFlags != RedlineFlags::NONE)
+    {
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("meRedlineFlags"));
+        if (meRedlineFlags & RedlineFlags::On)
+        {
+            (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("On"), BAD_CAST("true"));
+        }
+        if (meRedlineFlags & RedlineFlags::Ignore)
+        {
+            (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("Ignore"), BAD_CAST("true"));
+        }
+        if (meRedlineFlags & RedlineFlags::ShowInsert)
+        {
+            (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("ShowInsert"), BAD_CAST("true"));
+        }
+        if (meRedlineFlags & RedlineFlags::ShowDelete)
+        {
+            (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("ShowDelete"), BAD_CAST("true"));
+        }
+        if (meRedlineFlags & RedlineFlags::DeleteRedlines)
+        {
+            (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("DeleteRedlines"), BAD_CAST("true"));
+        }
+        if (meRedlineFlags & RedlineFlags::DontCombineRedlines)
+        {
+            (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("DontCombineRedlines"), BAD_CAST("true"));
+        }
+        (void)xmlTextWriterEndElement(pWriter);
+    }
+    maRedlineTable.dumpAsXml(pWriter);
+    maExtraRedlineTable.dumpAsXml(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 bool DocumentRedlineManager::HasRedline( const SwPaM& rPam, RedlineType nType, bool bStartOrEndInRange ) const
 {
     SwPosition currentStart(*rPam.Start());

@@ -235,6 +235,8 @@ public:
     virtual void UpdateRedlineContentNode(/*[in]*/ SwRedlineTable::size_type nStartPos,
                                           /*[in]*/ SwRedlineTable::size_type nEndPos) const = 0;
 
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const = 0;
+
 
 protected:
      virtual ~IDocumentRedlineAccess() {};
