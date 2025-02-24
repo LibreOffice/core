@@ -192,15 +192,15 @@ private:
     ::std::vector< css::uno::Reference<
         css::accessibility::XAccessibleEventListener > >                mxEventListeners;
     std::mutex                                                          maMutex;
-    ValueSetItem*                                                    mpParent;
+    ValueSetItem*                                                       mpValueSetItem;
     bool                                                                mbIsTransientChildrenDisabled;
 
 public:
 
-    ValueItemAcc(ValueSetItem* pParent, bool bIsTransientChildrenDisabled);
+    ValueItemAcc(ValueSetItem* pValueSetItem, bool bIsTransientChildrenDisabled);
     virtual ~ValueItemAcc() override;
 
-    void    ParentDestroyed();
+    void    ValueSetItemDestroyed();
 
     void    FireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
 

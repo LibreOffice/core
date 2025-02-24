@@ -49,7 +49,7 @@ ValueSetItem::~ValueSetItem()
 {
     if( mxAcc.is() )
     {
-        mxAcc->ParentDestroyed();
+        mxAcc->ValueSetItemDestroyed();
     }
 }
 
@@ -61,8 +61,8 @@ const rtl::Reference< ValueItemAcc > & ValueSetItem::GetAccessible( bool bIsTran
     return mxAcc;
 }
 
-ValueItemAcc::ValueItemAcc( ValueSetItem* pParent, bool bIsTransientChildrenDisabled ) :
-    mpParent( pParent ),
+ValueItemAcc::ValueItemAcc(ValueSetItem* pValueSetItem, bool bIsTransientChildrenDisabled) :
+    mpValueSetItem(pValueSetItem),
     mbIsTransientChildrenDisabled( bIsTransientChildrenDisabled )
 {
 }
@@ -71,10 +71,10 @@ ValueItemAcc::~ValueItemAcc()
 {
 }
 
-void ValueItemAcc::ParentDestroyed()
+void ValueItemAcc::ValueSetItemDestroyed()
 {
     std::scoped_lock aGuard( maMutex );
-    mpParent = nullptr;
+    mpValueSetItem = nullptr;
 }
 
 uno::Reference< accessibility::XAccessibleContext > SAL_CALL ValueItemAcc::getAccessibleContext()
@@ -100,8 +100,8 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibl
     const SolarMutexGuard aSolarGuard;
     uno::Reference< accessibility::XAccessible >    xRet;
 
-    if( mpParent )
-        xRet = mpParent->mrParent.mxAccessible;
+    if (mpValueSetItem)
+        xRet = mpValueSetItem->mrParent.mxAccessible;
 
     return xRet;
 }
@@ -114,11 +114,11 @@ sal_Int64 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
     // parent.
     sal_Int64 nIndexInParent = -1;
 
-    if( mpParent )
+    if (mpValueSetItem)
     {
         bool bDone = false;
 
-        sal_uInt16 nCount = mpParent->mrParent.ImplGetVisibleItemCount();
+        sal_uInt16 nCount = mpValueSetItem->mrParent.ImplGetVisibleItemCount();
         ValueSetItem* pItem;
         for (sal_uInt16 i=0; i<nCount && !bDone; i++)
         {
@@ -126,7 +126,7 @@ sal_Int64 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
             // just in case the number of children changes in the meantime.
             try
             {
-                pItem = mpParent->mrParent.ImplGetItem(i);
+                pItem = mpValueSetItem->mrParent.ImplGetItem(i);
             }
             catch (const lang::IndexOutOfBoundsException&)
             {
@@ -144,9 +144,9 @@ sal_Int64 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
     }
 
     //if this valueset contain a none field(common value is default), then we should increase the real index and set the noitem index value equal 0.
-    if ( mpParent && ( (mpParent->mrParent.GetStyle() & WB_NONEFIELD) != 0 ) )
+    if (mpValueSetItem && ((mpValueSetItem->mrParent.GetStyle() & WB_NONEFIELD) != 0))
     {
-        ValueSetItem* pFirstItem = mpParent->mrParent.ImplGetItem (VALUESET_ITEM_NONEITEM);
+        ValueSetItem* pFirstItem = mpValueSetItem->mrParent.ImplGetItem(VALUESET_ITEM_NONEITEM);
         if( pFirstItem && pFirstItem ->GetAccessible(mbIsTransientChildrenDisabled).get() == this )
             nIndexInParent = 0;
         else
@@ -172,12 +172,12 @@ OUString SAL_CALL ValueItemAcc::getAccessibleName()
 {
     const SolarMutexGuard aSolarGuard;
 
-    if( mpParent )
+    if (mpValueSetItem)
     {
-        if (mpParent->maText.isEmpty())
-            return "Item " +  OUString::number(static_cast<sal_Int32>(mpParent->mnId));
+        if (mpValueSetItem->maText.isEmpty())
+            return "Item " + OUString::number(static_cast<sal_Int32>(mpValueSetItem->mnId));
         else
-            return mpParent->maText;
+            return mpValueSetItem->maText;
     }
 
     return OUString();
@@ -195,7 +195,7 @@ sal_Int64 SAL_CALL ValueItemAcc::getAccessibleStateSet()
     const SolarMutexGuard aSolarGuard;
     sal_Int64 nStateSet = 0;
 
-    if( mpParent )
+    if (mpValueSetItem)
     {
         nStateSet |= accessibility::AccessibleStateType::ENABLED;
         nStateSet |= accessibility::AccessibleStateType::SENSITIVE;
@@ -207,11 +207,11 @@ sal_Int64 SAL_CALL ValueItemAcc::getAccessibleStateSet()
         nStateSet |= accessibility::AccessibleStateType::SELECTABLE;
         nStateSet |= accessibility::AccessibleStateType::FOCUSABLE;
 
-        if( mpParent->mrParent.GetSelectedItemId() == mpParent->mnId )
+        if (mpValueSetItem->mrParent.GetSelectedItemId() == mpValueSetItem->mnId)
         {
 
             nStateSet |= accessibility::AccessibleStateType::SELECTED;
-            if (mpParent->mrParent.HasChildFocus())
+            if (mpValueSetItem->mrParent.HasChildFocus())
                 nStateSet |= accessibility::AccessibleStateType::FOCUSED;
         }
     }
@@ -296,10 +296,10 @@ awt::Rectangle SAL_CALL ValueItemAcc::getBounds()
     const SolarMutexGuard aSolarGuard;
     awt::Rectangle      aRet;
 
-    if( mpParent )
+    if (mpValueSetItem)
     {
-        tools::Rectangle   aRect( mpParent->mrParent.GetItemRect(mpParent->mnId) );
-        tools::Rectangle   aParentRect( Point(), mpParent->mrParent.GetOutputSizePixel() );
+        tools::Rectangle aRect(mpValueSetItem->mrParent.GetItemRect(mpValueSetItem->mnId));
+        tools::Rectangle aParentRect(Point(), mpValueSetItem->mrParent.GetOutputSizePixel());
 
         aRect.Intersection( aParentRect );
 
@@ -328,10 +328,11 @@ awt::Point SAL_CALL ValueItemAcc::getLocationOnScreen()
     const SolarMutexGuard aSolarGuard;
     awt::Point          aRet;
 
-    if( mpParent )
+    if (mpValueSetItem)
     {
-        const Point aPos = mpParent->mrParent.GetItemRect(mpParent->mnId).TopLeft();
-        const Point aScreenPos(mpParent->mrParent.GetDrawingArea()->get_accessible_location_on_screen());
+        const Point aPos = mpValueSetItem->mrParent.GetItemRect(mpValueSetItem->mnId).TopLeft();
+        const Point aScreenPos(
+            mpValueSetItem->mrParent.GetDrawingArea()->get_accessible_location_on_screen());
 
         aRet.X = aPos.X() + aScreenPos.X();
         aRet.Y = aPos.Y() + aScreenPos.Y();
@@ -365,8 +366,8 @@ sal_Int32 SAL_CALL ValueItemAcc::getForeground(  )
 sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
 {
     Color nColor;
-    if (mpParent && mpParent->meType == VALUESETITEM_COLOR)
-        nColor = mpParent->maColor;
+    if (mpValueSetItem && mpValueSetItem->meType == VALUESETITEM_COLOR)
+        nColor = mpValueSetItem->maColor;
     else
         nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
     return static_cast<sal_Int32>(nColor);
@@ -700,6 +701,7 @@ awt::Rectangle SAL_CALL ValueSetAcc::getBounds()
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
     const Point         aOutPos;
+
     const Size aOutSize(mpValueSet->GetOutputSizePixel());
     awt::Rectangle      aRet;
 
