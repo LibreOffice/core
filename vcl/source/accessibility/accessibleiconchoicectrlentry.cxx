@@ -440,8 +440,6 @@ sal_Bool SAL_CALL AccessibleIconChoiceCtrlEntry::scrollSubstringTo( sal_Int32, s
     return false;
 }
 
-// XAccessibleEventBroadcaster
-
 sal_Int32 SAL_CALL AccessibleIconChoiceCtrlEntry::getCaretPosition(  )
 {
     return -1;
