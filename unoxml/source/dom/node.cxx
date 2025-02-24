@@ -357,27 +357,32 @@ namespace DOM
         // because that will not remove unneeded ns decls
         nscleanup(res, m_aNodePtr);
 
-        ::rtl::Reference<CNode> const pNode = GetOwnerDocument().GetCNode(res);
+        CDocument& rDocument(GetOwnerDocument());
+        ::rtl::Reference<CNode> const pNode = rDocument.GetCNode(res);
 
         if (!pNode.is()) { return nullptr; }
 
-        // dispatch DOMNodeInserted event, target is the new node
-        // this node is the related node
-        // does bubble
         pNode->m_bUnlinked = false; // will be deleted by xmlFreeDoc
-        Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
-        Reference< XMutationEvent > event(docevent->createEvent(
-            u"DOMNodeInserted"_ustr), UNO_QUERY);
-        event->initMutationEvent(u"DOMNodeInserted"_ustr, true, false, this,
-            OUString(), OUString(), OUString(), AttrChangeType(0) );
 
-        // the following dispatch functions use only UNO interfaces
-        // and call event listeners, so release mutex to prevent deadlocks.
-        guard.clear();
+        if (rDocument.GetEventDispatcher().hasListeners())
+        {
+            // dispatch DOMNodeInserted event, target is the new node
+            // this node is the related node
+            // does bubble
+            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
+            Reference< XMutationEvent > event(docevent->createEvent(
+                u"DOMNodeInserted"_ustr), UNO_QUERY);
+            event->initMutationEvent(u"DOMNodeInserted"_ustr, true, false, this,
+                OUString(), OUString(), OUString(), AttrChangeType(0) );
 
-        dispatchEvent(event);
-        // dispatch subtree modified for this node
-        dispatchSubtreeModified();
+            // the following dispatch functions use only UNO interfaces
+            // and call event listeners, so release mutex to prevent deadlocks.
+            guard.clear();
+
+            dispatchEvent(event);
+            // dispatch subtree modified for this node
+            dispatchSubtreeModified();
+        }
 
         return pNode;
     }
@@ -752,30 +757,34 @@ namespace DOM
             pOld->m_bUnlinked = true;
         }
 
-        /*DOMNodeRemoved
-         * Fired when a node is being removed from its parent node.
-         * This event is dispatched before the node is removed from the tree.
-         * The target of this event is the node being removed.
-         *   Bubbles: Yes
-         *   Cancelable: No
-         *   Context Info: relatedNode holds the parent node
-         */
-        Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
-        Reference< XMutationEvent > event(docevent->createEvent(
-            u"DOMNodeRemoved"_ustr), UNO_QUERY);
-        event->initMutationEvent(u"DOMNodeRemoved"_ustr,
-            true,
-            false,
-            this,
-            OUString(), OUString(), OUString(), AttrChangeType(0) );
+        CDocument& rDocument(GetOwnerDocument());
+        if (rDocument.GetEventDispatcher().hasListeners())
+        {
+            /*DOMNodeRemoved
+             * Fired when a node is being removed from its parent node.
+             * This event is dispatched before the node is removed from the tree.
+             * The target of this event is the node being removed.
+             *   Bubbles: Yes
+             *   Cancelable: No
+             *   Context Info: relatedNode holds the parent node
+             */
+            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
+            Reference< XMutationEvent > event(docevent->createEvent(
+                u"DOMNodeRemoved"_ustr), UNO_QUERY);
+            event->initMutationEvent(u"DOMNodeRemoved"_ustr,
+                true,
+                false,
+                this,
+                OUString(), OUString(), OUString(), AttrChangeType(0) );
 
-        // the following dispatch functions use only UNO interfaces
-        // and call event listeners, so release mutex to prevent deadlocks.
-        guard.clear();
+            // the following dispatch functions use only UNO interfaces
+            // and call event listeners, so release mutex to prevent deadlocks.
+            guard.clear();
 
-        dispatchEvent(event);
-        // subtree modified for this node
-        dispatchSubtreeModified();
+            dispatchEvent(event);
+            // subtree modified for this node
+            dispatchSubtreeModified();
+        }
 
         return xReturn;
     }
