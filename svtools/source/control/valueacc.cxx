@@ -397,8 +397,8 @@ void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValu
     }
 }
 
-ValueSetAcc::ValueSetAcc( ValueSet* pParent ) :
-    mpParent( pParent ),
+ValueSetAcc::ValueSetAcc(ValueSet* pValueSet) :
+    mpValueSet(pValueSet),
     mbIsFocused(false)
 {
 }
@@ -474,7 +474,7 @@ sal_Int64 SAL_CALL ValueSetAcc::getAccessibleChildCount()
     const SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
 
-    sal_Int64 nCount = mpParent->ImplGetVisibleItemCount();
+    sal_Int64 nCount = mpValueSet->ImplGetVisibleItemCount();
     if (HasNoneField())
         nCount += 1;
     return nCount;
@@ -502,7 +502,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    return mpParent->GetDrawingArea()->get_accessible_parent();
+    return mpValueSet->GetDrawingArea()->get_accessible_parent();
 }
 
 sal_Int64 SAL_CALL ValueSetAcc::getAccessibleIndexInParent()
@@ -554,9 +554,9 @@ OUString SAL_CALL ValueSetAcc::getAccessibleDescription()
     const SolarMutexGuard aSolarGuard;
     OUString              aRet;
 
-    if (mpParent)
+    if (mpValueSet)
     {
-        aRet = mpParent->GetAccessibleDescription();
+        aRet = mpValueSet->GetAccessibleDescription();
     }
 
     return aRet;
@@ -569,9 +569,9 @@ OUString SAL_CALL ValueSetAcc::getAccessibleName()
     const SolarMutexGuard aSolarGuard;
     OUString              aRet;
 
-    if (mpParent)
+    if (mpValueSet)
     {
-        aRet = mpParent->GetAccessibleName();
+        aRet = mpValueSet->GetAccessibleName();
     }
 
     return aRet;
@@ -581,7 +581,7 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueSetAcc::ge
 {
     ThrowIfDisposed();
     SolarMutexGuard g;
-    return mpParent->GetDrawingArea()->get_accessible_relation_set();
+    return mpValueSet->GetDrawingArea()->get_accessible_relation_set();
 }
 
 sal_Int64 SAL_CALL ValueSetAcc::getAccessibleStateSet()
@@ -677,16 +677,16 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    const sal_uInt16                                    nItemId = mpParent->GetItemId( Point( aPoint.X, aPoint.Y ) );
+    const sal_uInt16 nItemId = mpValueSet->GetItemId(Point(aPoint.X, aPoint.Y));
     uno::Reference< accessibility::XAccessible >    xRet;
 
     if ( nItemId )
     {
-        const size_t nItemPos = mpParent->GetItemPos( nItemId );
+        const size_t nItemPos = mpValueSet->GetItemPos(nItemId);
 
         if( VALUESET_ITEM_NONEITEM != nItemPos )
         {
-            ValueSetItem *const pItem = mpParent->mItemList[nItemPos].get();
+            ValueSetItem* const pItem = mpValueSet->mItemList[nItemPos].get();
             xRet = pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ );
         }
     }
@@ -700,7 +700,7 @@ awt::Rectangle SAL_CALL ValueSetAcc::getBounds()
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
     const Point         aOutPos;
-    const Size          aOutSize( mpParent->GetOutputSizePixel() );
+    const Size aOutSize(mpValueSet->GetOutputSizePixel());
     awt::Rectangle      aRet;
 
     aRet.X = aOutPos.X();
@@ -763,7 +763,7 @@ void SAL_CALL ValueSetAcc::grabFocus()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    mpParent->GrabFocus();
+    mpValueSet->GrabFocus();
 }
 
 sal_Int32 SAL_CALL ValueSetAcc::getForeground(  )
@@ -793,7 +793,7 @@ void SAL_CALL ValueSetAcc::selectAccessibleChild( sal_Int64 nChildIndex )
     if(pItem == nullptr)
         throw lang::IndexOutOfBoundsException();
 
-    mpParent->SelectItem( pItem->mnId );
+    mpValueSet->SelectItem(pItem->mnId);
 }
 
 
@@ -810,7 +810,7 @@ sal_Bool SAL_CALL ValueSetAcc::isAccessibleChildSelected( sal_Int64 nChildIndex 
     if (pItem == nullptr)
         throw lang::IndexOutOfBoundsException();
 
-    bool  bRet = mpParent->IsItemSelected( pItem->mnId );
+    bool bRet = mpValueSet->IsItemSelected(pItem->mnId);
     return bRet;
 }
 
@@ -819,7 +819,7 @@ void SAL_CALL ValueSetAcc::clearAccessibleSelection()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    mpParent->SetNoSelection();
+    mpValueSet->SetNoSelection();
 }
 
 
@@ -840,7 +840,7 @@ sal_Int64 SAL_CALL ValueSetAcc::getSelectedAccessibleChildCount()
     {
         ValueSetItem* pItem = getItem (i);
 
-        if( pItem && mpParent->IsItemSelected( pItem->mnId ) )
+        if (pItem && mpValueSet->IsItemSelected(pItem->mnId))
             ++nRet;
     }
 
@@ -858,7 +858,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getSelectedAc
     {
         ValueSetItem* pItem = getItem(i);
 
-        if( pItem && mpParent->IsItemSelected( pItem->mnId ) && ( nSelectedChildIndex == static_cast< sal_Int64 >( nSel++ ) ) )
+        if (pItem && mpValueSet->IsItemSelected(pItem->mnId) && (nSelectedChildIndex == static_cast< sal_Int64 >(nSel++)))
             xRet = pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ );
     }
 
@@ -877,12 +877,12 @@ void SAL_CALL ValueSetAcc::deselectAccessibleChild( sal_Int64 nChildIndex )
     // Because of the single selection we can reset the whole selection when
     // the specified child is currently selected.
     if (isAccessibleChildSelected(nChildIndex))
-        mpParent->SetNoSelection();
+        mpValueSet->SetNoSelection();
 }
 
 void ValueSetAcc::Invalidate()
 {
-    mpParent = nullptr;
+    mpValueSet = nullptr;
 }
 
 void ValueSetAcc::disposing(std::unique_lock<std::mutex>& rGuard)
@@ -912,7 +912,7 @@ void ValueSetAcc::disposing(std::unique_lock<std::mutex>& rGuard)
 
 sal_uInt16 ValueSetAcc::getItemCount() const
 {
-    sal_uInt16 nCount = mpParent->ImplGetVisibleItemCount();
+    sal_uInt16 nCount = mpValueSet->ImplGetVisibleItemCount();
     // When the None-Item is visible then increase the number of items by
     // one.
     if (HasNoneField())
@@ -928,19 +928,19 @@ ValueSetItem* ValueSetAcc::getItem (sal_uInt16 nIndex) const
     {
         if (nIndex == 0)
             // When present the first item is the then always visible none field.
-            pItem = mpParent->ImplGetItem (VALUESET_ITEM_NONEITEM);
+            pItem = mpValueSet->ImplGetItem(VALUESET_ITEM_NONEITEM);
         else
             // Shift down the index to compensate for the none field.
             nIndex -= 1;
     }
     if (pItem == nullptr)
-        pItem = mpParent->ImplGetItem (nIndex);
+        pItem = mpValueSet->ImplGetItem(nIndex);
 
     return pItem;
 }
 
 
-void ValueSetAcc::ThrowIfDisposed(bool bCheckParent)
+void ValueSetAcc::ThrowIfDisposed(bool bCheckValueSet)
 {
     if (m_bDisposed)
     {
@@ -950,17 +950,17 @@ void ValueSetAcc::ThrowIfDisposed(bool bCheckParent)
             getXWeak());
     }
 
-    if (bCheckParent && !mpParent)
+    if (bCheckValueSet && !mpValueSet)
     {
-        assert(false && "ValueSetAcc not disposed but mpParent == NULL");
-        throw css::uno::RuntimeException(u"ValueSetAcc not disposed but mpParent == NULL"_ustr);
+        assert(false && "ValueSetAcc not disposed but mpValueSet  == NULL");
+        throw css::uno::RuntimeException(u"ValueSetAcc not disposed but mpValueSet == NULL"_ustr);
     }
 }
 
 bool ValueSetAcc::HasNoneField() const
 {
-    assert(mpParent && "ValueSetAcc::HasNoneField called with mpParent==NULL");
-    return ((mpParent->GetStyle() & WB_NONEFIELD) != 0);
+    assert(mpValueSet && "ValueSetAcc::HasNoneField called with mpValueSet==NULL");
+    return ((mpValueSet->GetStyle() & WB_NONEFIELD) != 0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

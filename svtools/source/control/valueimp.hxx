@@ -76,7 +76,7 @@ class ValueSetAcc final : public ValueSetAccComponentBase
 {
 public:
 
-    explicit ValueSetAcc(ValueSet* pParent);
+    explicit ValueSetAcc(ValueSet* pValueSet);
     virtual ~ValueSetAcc() override;
 
     void                FireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
@@ -139,7 +139,7 @@ public:
 private:
     ::std::vector< css::uno::Reference<
         css::accessibility::XAccessibleEventListener > >                mxEventListeners;
-    ValueSet*                                                    mpParent;
+    ValueSet* mpValueSet;
     /// The current FOCUSED state.
     bool mbIsFocused;
 
@@ -168,11 +168,10 @@ private:
         DisposedException is thrown to inform the (indirect) caller of the
         foul deed.
         @param bCheckValueSet
-            Whether to also check that the ValueSet (parent)
-            is non-null.
+            Whether to also check that the ValueSet is non-null.
         @throws css::lang::DisposedException
     */
-    void ThrowIfDisposed(bool bCheckParent = true);
+    void ThrowIfDisposed(bool bCheckValueSet = true);
 
     /** Check whether the value set has a 'none' field, i.e. a field (button)
         that deselects any items (selects none of them).
