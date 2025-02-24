@@ -2929,6 +2929,36 @@ bool DocumentRedlineManager::HasRedline( const SwPaM& rPam, RedlineType nType, b
 const SwRangeRedline* DocumentRedlineManager::GetRedline( const SwPosition& rPos,
                                     SwRedlineTable::size_type* pFndPos ) const
 {
+    if (maRedlineTable.HasOverlappingElements())
+    {
+        for (auto it = maRedlineTable.begin(), itEnd = maRedlineTable.end(); it != itEnd; ++it)
+        {
+            auto [pStart, pEnd] = (**it).StartEnd();
+            if (rPos < *pStart)
+            {
+                if (pFndPos)
+                {
+                    *pFndPos = std::distance(maRedlineTable.begin(), it);
+                }
+                return nullptr;
+            }
+            if (pEnd == pStart
+                    ? *pStart == rPos
+                    : (*pStart <= rPos && rPos < *pEnd))
+            {
+                if (pFndPos)
+                {
+                    *pFndPos = std::distance(maRedlineTable.begin(), it);
+                }
+                return *it;
+            }
+        }
+        if (pFndPos)
+        {
+            *pFndPos = maRedlineTable.size();
+        }
+        return nullptr;
+    }
     SwRedlineTable::size_type nO = maRedlineTable.size(), nM, nU = 0;
     if( nO > 0 )
     {
