@@ -2003,8 +2003,7 @@ void SwDoc::dumpAsXml(xmlTextWriterPtr pWriter) const
     mpSectionFormatTable->dumpAsXml(pWriter);
     mpTableFrameFormatTable->dumpAsXml(pWriter, "tableFrameFormatTable");
     mpNumRuleTable->dumpAsXml(pWriter);
-    getIDocumentRedlineAccess().GetRedlineTable().dumpAsXml(pWriter);
-    getIDocumentRedlineAccess().GetExtraRedlineTable().dumpAsXml(pWriter);
+    getIDocumentRedlineAccess().dumpAsXml(pWriter);
     if (const SdrModel* pModel = getIDocumentDrawModelAccess().GetDrawModel())
         pModel->dumpAsXml(pWriter);
 
