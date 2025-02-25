@@ -73,7 +73,7 @@ ValueItemAcc::~ValueItemAcc()
 
 void ValueItemAcc::ValueSetItemDestroyed()
 {
-    std::scoped_lock aGuard( maMutex );
+    const SolarMutexGuard aSolarGuard;
     mpValueSetItem = nullptr;
 }
 
@@ -233,63 +233,14 @@ lang::Locale SAL_CALL ValueItemAcc::getLocale()
     return aRet;
 }
 
-
-void SAL_CALL ValueItemAcc::addAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
-{
-    std::scoped_lock aGuard( maMutex );
-
-    if( !rxListener.is() )
-           return;
-
-    bool bFound = false;
-
-    for (auto const& eventListener : mxEventListeners)
-    {
-        if(eventListener == rxListener)
-        {
-            bFound = true;
-            break;
-        }
-    }
-
-    if (!bFound)
-        mxEventListeners.push_back( rxListener );
-}
-
-
-void SAL_CALL ValueItemAcc::removeAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
-{
-    std::scoped_lock aGuard( maMutex );
-
-    if( rxListener.is() )
-    {
-        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::iterator aIter =
-            std::find(mxEventListeners.begin(), mxEventListeners.end(), rxListener);
-
-        if (aIter != mxEventListeners.end())
-            mxEventListeners.erase(aIter);
-    }
-}
-
-
-sal_Bool SAL_CALL ValueItemAcc::containsPoint( const awt::Point& aPoint )
-{
-    const awt::Rectangle    aRect( getBounds() );
-    const Point             aSize( aRect.Width, aRect.Height );
-    const Point             aNullPoint, aTestPoint( aPoint.X, aPoint.Y );
-
-    return tools::Rectangle( aNullPoint, aSize ).Contains( aTestPoint );
-}
-
 uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibleAtPoint( const awt::Point& )
 {
     uno::Reference< accessibility::XAccessible > xRet;
     return xRet;
 }
 
-awt::Rectangle SAL_CALL ValueItemAcc::getBounds()
+awt::Rectangle ValueItemAcc::implGetBounds()
 {
-    const SolarMutexGuard aSolarGuard;
     awt::Rectangle      aRet;
 
     if (mpValueSetItem)
@@ -304,46 +255,6 @@ awt::Rectangle SAL_CALL ValueItemAcc::getBounds()
         aRet.Width = aRect.GetWidth();
         aRet.Height = aRect.GetHeight();
     }
-
-    return aRet;
-}
-
-awt::Point SAL_CALL ValueItemAcc::getLocation()
-{
-    const awt::Rectangle    aRect( getBounds() );
-    awt::Point              aRet;
-
-    aRet.X = aRect.X;
-    aRet.Y = aRect.Y;
-
-    return aRet;
-}
-
-awt::Point SAL_CALL ValueItemAcc::getLocationOnScreen()
-{
-    const SolarMutexGuard aSolarGuard;
-    awt::Point          aRet;
-
-    if (mpValueSetItem)
-    {
-        const Point aPos = mpValueSetItem->mrParent.GetItemRect(mpValueSetItem->mnId).TopLeft();
-        const Point aScreenPos(
-            mpValueSetItem->mrParent.GetDrawingArea()->get_accessible_location_on_screen());
-
-        aRet.X = aPos.X() + aScreenPos.X();
-        aRet.Y = aPos.Y() + aScreenPos.Y();
-    }
-
-    return aRet;
-}
-
-awt::Size SAL_CALL ValueItemAcc::getSize()
-{
-    const awt::Rectangle    aRect( getBounds() );
-    awt::Size               aRet;
-
-    aRet.Width = aRect.Width;
-    aRet.Height = aRect.Height;
 
     return aRet;
 }
@@ -371,27 +282,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
 
 void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
 {
-    if( !nEventId )
-        return;
-
-    std::vector<uno::Reference<accessibility::XAccessibleEventListener>> aTmpListeners;
-
-    {
-        std::scoped_lock aGuard(maMutex);
-        aTmpListeners = mxEventListeners;
-    }
-
-    accessibility::AccessibleEventObject aEvtObject;
-
-    aEvtObject.EventId = nEventId;
-    aEvtObject.Source = getXWeak();
-    aEvtObject.NewValue = rNewValue;
-    aEvtObject.OldValue = rOldValue;
-
-    for (auto const& tmpListener : aTmpListeners)
-    {
-        tmpListener->notifyEvent( aEvtObject );
-    }
+    NotifyAccessibleEvent(nEventId, rOldValue, rNewValue);
 }
 
 ValueSetAcc::ValueSetAcc(ValueSet* pValueSet) :
