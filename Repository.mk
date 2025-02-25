@@ -529,7 +529,7 @@ $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,ooo, \
     icg \
     sdui \
     $(if $(ENABLE_GEN),vclplug_gen) \
-    $(if $(filter $(OS),WNT),vclplug_win) \
+    $(if $(filter $(OS)-$(USE_HEADLESS_CODE),WNT-),vclplug_win) \
     $(if $(filter $(OS),MACOSX),vclplug_osx) \
 ))
 

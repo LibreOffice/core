@@ -28,6 +28,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/UnixWrappers.h>
 #include <unx/helper.hxx>
 
 #include <tuple>
@@ -140,7 +141,7 @@ void psp::getPrinterPathList( std::vector< OUString >& rPathList, const char* pS
             aDir += OString::Concat("/") + pSubDir;
         }
         struct stat aStat;
-        if( stat( aDir.getStr(), &aStat ) || ! S_ISDIR( aStat.st_mode ) )
+        if( wrap_stat( aDir.getStr(), &aStat ) || ! S_ISDIR( aStat.st_mode ) )
             continue;
 
         rPathList.push_back( OStringToOUString( aDir, aEncoding ) );
@@ -195,7 +196,7 @@ OUString const & psp::getFontPath()
             OUString sPath = aConfigPath + "/" LIBO_SHARE_FOLDER "/fonts";
             // check existence of config path
             struct stat aStat;
-            if( 0 != stat( OUStringToOString( sPath, osl_getThreadTextEncoding() ).getStr(), &aStat )
+            if( 0 != wrap_stat( OUStringToOString( sPath, osl_getThreadTextEncoding() ).getStr(), &aStat )
                 || ! S_ISDIR( aStat.st_mode ) )
                 aConfigPath.clear();
             else
@@ -236,7 +237,7 @@ void psp::normPath( OString& rPath )
 
     if( ( aPath.indexOf("./") != -1 ||
           aPath.indexOf( '~' ) != -1 )
-        && realpath( aPath.getStr(), buf ) )
+        && wrap_realpath( aPath.getStr(), buf ) )
     {
         rPath = buf;
     }

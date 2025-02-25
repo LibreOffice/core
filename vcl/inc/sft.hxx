@@ -469,7 +469,7 @@ class TrueTypeFont;
  */
     SFErrCodes VCL_DLLPUBLIC OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum,
                                               TrueTypeFont** ttf, const FontCharMapRef xCharMap = nullptr);
-#if !defined(_WIN32)
+#if !defined(_WIN32) || defined(DO_USE_TTF_ON_WIN32)
 /**
  * TrueTypeFont constructor.
  * Reads the font file and allocates the memory for the structure.
@@ -686,6 +686,7 @@ class TrueTypeFont final : public AbstractTrueTypeFont
 
 public:
         sal_Int32   fsize;
+        intptr_t    mmhandle;
         sal_uInt8   *ptr;
         sal_uInt32  ntables;
 

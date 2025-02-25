@@ -18,7 +18,6 @@
  */
 
 #include <memory>
-#include <unistd.h>
 #include <osl/thread.h>
 
 #include <unx/fontmanager.hxx>
@@ -29,6 +28,7 @@
 #include <vcl/fontcharmap.hxx>
 
 #include <tools/urlobj.hxx>
+#include <tools/UnixWrappers.h>
 
 #include <o3tl/string_view.hxx>
 #include <osl/file.hxx>
@@ -202,7 +202,7 @@ std::vector<PrintFontManager::PrintFont> PrintFontManager::analyzeFontFile( int 
     else
     {
         // #i1872# reject unreadable files
-        if( access( aFullPath.getStr(), R_OK ) )
+        if( wrap_access( aFullPath.getStr(), R_OK ) )
             return aNewFonts;
 
         bSupported = false;
