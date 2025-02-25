@@ -607,6 +607,443 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf96708)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), nMasterPageCnt2);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_default_master)
+{
+    // Copying/pasting slide referring to a master page.
+    createSdImpressDoc("odp/tdf96206.odp");
+
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    const sal_uInt16 nMasterPageCnt1 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), nMasterPageCnt1);
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+    const sal_uInt16 nMasterPageCnt2 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(nMasterPageCnt1 + 1), nMasterPageCnt2);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617)
+{
+    // Copying/pasting slide referring to a master page.
+    createSdImpressDoc("odp/tdf96708.odp");
+
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    const sal_uInt16 nMasterPageCnt1 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), nMasterPageCnt1);
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+    const sal_uInt16 nMasterPageCnt2 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(nMasterPageCnt1 + 1), nMasterPageCnt2);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_test_master_name)
+{
+    // Copying/pasting slide referring to a master page.
+    createSdImpressDoc("odp/tdf96708.odp");
+
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+    // Get the master page name
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    SdPage* pMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
+    OUString aMasterPageName = pMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"Master0"_ustr, aMasterPageName);
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+    SdPage* pNewMasterPage = pDoc->GetMasterSdPage(4, PageKind::Standard);
+    OUString aNewMasterPageName = pNewMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"1_Master0"_ustr, aNewMasterPageName);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_test_defult_master_name)
+{
+    // Copying/pasting slide referring to a master page.
+    createSdImpressDoc();
+
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+    // Get the master page name
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    SdPage* pMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
+    OUString aMasterPageName = pMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"Default"_ustr, aMasterPageName);
+
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+
+    SdPage* pNewMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
+    OUString aNewMasterPageName = pNewMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"1_Default"_ustr, aNewMasterPageName);
+
+    rSSController.GetClipboard().DoPaste(true);
+
+    SdPage* pNewMasterPage2 = pDoc->GetMasterSdPage(1, PageKind::Standard);
+    OUString aNewMasterPageName2 = pNewMasterPage2->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"2_Default"_ustr, aNewMasterPageName2);
+}
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_basic_master_name)
+{
+    // Basic test for copying/pasting slide referring to a master page
+    createSdImpressDoc("odp/tdf96708.odp");
+
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    SdPage* pMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
+    OUString aMasterPageName = pMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"Master0"_ustr, aMasterPageName);
+
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+
+    SdPage* pNewMasterPage = pDoc->GetMasterSdPage(4, PageKind::Standard);
+    OUString aNewMasterPageName = pNewMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"1_Master0"_ustr, aNewMasterPageName);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_leading_underscore_master_name)
+{
+    // Test master page name with underscore at first position
+    createSdImpressDoc("odp/tdf96708.odp");
+
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    SdPage* pMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
+    // Rename the master page with leading underscore
+    pDoc->RenameLayoutTemplate(pMasterPage->GetLayoutName(), "_Master0");
+
+    OUString aMasterPageName = pMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"_Master0"_ustr, aMasterPageName);
+
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+
+    SdPage* pNewMasterPage = pDoc->GetMasterSdPage(4, PageKind::Standard);
+    OUString aNewMasterPageName = pNewMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"1__Master0"_ustr, aNewMasterPageName);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_middle_underscore_master_name)
+{
+    // Test master page name with underscore in the middle
+    createSdImpressDoc("odp/tdf96708.odp");
+
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    SdPage* pMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
+    // Rename the master page with middle underscore
+    pDoc->RenameLayoutTemplate(pMasterPage->GetLayoutName(), "Master_0");
+
+    OUString aMasterPageName = pMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"Master_0"_ustr, aMasterPageName);
+
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+
+    SdPage* pNewMasterPage = pDoc->GetMasterSdPage(4, PageKind::Standard);
+    OUString aNewMasterPageName = pNewMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"1_Master_0"_ustr, aNewMasterPageName);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_trailing_underscore_master_name)
+{
+    // Test master page name with underscore at the end
+    createSdImpressDoc("odp/tdf96708.odp");
+
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    SdPage* pMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
+    // Rename the master page with trailing underscore
+    pDoc->RenameLayoutTemplate(pMasterPage->GetLayoutName(), "Master0_");
+
+    OUString aMasterPageName = pMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"Master0_"_ustr, aMasterPageName);
+
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+
+    SdPage* pNewMasterPage = pDoc->GetMasterSdPage(4, PageKind::Standard);
+    OUString aNewMasterPageName = pNewMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"1_Master0_"_ustr, aNewMasterPageName);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_space_in_master_name)
+{
+    // Test master page name with space in the middle
+    createSdImpressDoc("odp/tdf96708.odp");
+
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    SdPage* pMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
+    // Rename the master page with space in the middle
+    pDoc->RenameLayoutTemplate(pMasterPage->GetLayoutName(), "Master 0");
+
+    OUString aMasterPageName = pMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"Master 0"_ustr, aMasterPageName);
+
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+
+    SdPage* pNewMasterPage = pDoc->GetMasterSdPage(4, PageKind::Standard);
+    OUString aNewMasterPageName = pNewMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"1_Master 0"_ustr, aNewMasterPageName);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy)
+{
+    // Test master page name with double copy
+    createSdImpressDoc();
+
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+    // Set edit master page mode
+    rSSController.ChangeEditMode(EditMode::MasterPage);
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    // Get the master page name
+    const sal_uInt16 nMasterPageCnt1 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), nMasterPageCnt1);
+    SdPage* pMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
+    // Rename the master page with master name
+    pDoc->RenameLayoutTemplate(pMasterPage->GetLayoutName(), "master");
+    OUString aMasterPageName = pMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"master"_ustr, aMasterPageName);
+
+    // Reslect the master page
+    rSSController.GetPageSelector().DeselectAllPages();
+    rSSController.GetPageSelector().SelectPage(pMasterPage);
+
+    // Copy and paste the master page
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+
+    const sal_uInt16 nMasterPageCnt2 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), nMasterPageCnt2);
+
+    SdPage* pNewMasterPage = pDoc->GetMasterSdPage(1, PageKind::Standard);
+    OUString aNewMasterPageName = pNewMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"1_master"_ustr, aNewMasterPageName);
+
+    // Reslect the master page
+    rSSController.GetPageSelector().DeselectAllPages();
+    rSSController.GetPageSelector().SelectPage(pMasterPage);
+
+    // Copy again
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+    const sal_uInt16 nMasterPageCnt3 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(3), nMasterPageCnt3);
+    SdPage* pNewMasterPage2 = pDoc->GetMasterSdPage(2, PageKind::Standard);
+    OUString aNewMasterPageName2 = pNewMasterPage2->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"2_master"_ustr, aNewMasterPageName2);
+
+    // Reslect the master page
+    rSSController.GetPageSelector().DeselectAllPages();
+    rSSController.GetPageSelector().SelectPage(pMasterPage);
+
+    // Copy again
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+
+    const sal_uInt16 nMasterPageCnt4 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4), nMasterPageCnt4);
+    SdPage* pNewMasterPage3 = pDoc->GetMasterSdPage(3, PageKind::Standard);
+    OUString aNewMasterPageName3 = pNewMasterPage3->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"3_master"_ustr, aNewMasterPageName3);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_Default)
+{
+    // Test master page name with double copy
+    createSdImpressDoc();
+
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+    // Set edit master page mode
+    rSSController.ChangeEditMode(EditMode::MasterPage);
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    // Get the master page name
+    const sal_uInt16 nMasterPageCnt1 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), nMasterPageCnt1);
+    SdPage* pMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
+    // Rename the master page with default name
+    pDoc->RenameLayoutTemplate(pMasterPage->GetLayoutName(), "Default");
+    OUString aMasterPageName = pMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"Default"_ustr, aMasterPageName);
+
+    // Reslect the master page
+    rSSController.GetPageSelector().DeselectAllPages();
+    rSSController.GetPageSelector().SelectPage(pMasterPage);
+
+    // Copy and paste the master page
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+
+    const sal_uInt16 nMasterPageCnt2 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2), nMasterPageCnt2);
+
+    SdPage* pNewMasterPage = pDoc->GetMasterSdPage(1, PageKind::Standard);
+    OUString aNewMasterPageName = pNewMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"1_Default"_ustr, aNewMasterPageName);
+
+    // Reslect the master page
+    rSSController.GetPageSelector().DeselectAllPages();
+    rSSController.GetPageSelector().SelectPage(pMasterPage);
+    // Copy again
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+    const sal_uInt16 nMasterPageCnt3 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(3), nMasterPageCnt3);
+    SdPage* pNewMasterPage2 = pDoc->GetMasterSdPage(2, PageKind::Standard);
+    OUString aNewMasterPageName2 = pNewMasterPage2->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"2_Default"_ustr, aNewMasterPageName2);
+
+    // Reslect the master page
+    rSSController.GetPageSelector().DeselectAllPages();
+    rSSController.GetPageSelector().SelectPage(pMasterPage);
+    // Copy again
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+    const sal_uInt16 nMasterPageCnt4 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4), nMasterPageCnt4);
+    SdPage* pNewMasterPage3 = pDoc->GetMasterSdPage(3, PageKind::Standard);
+    OUString aNewMasterPageName3 = pNewMasterPage3->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"3_Default"_ustr, aNewMasterPageName3);
+}
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_Double_Copy_CopiedPage)
+{
+    // Test master page name with double copy for copied page which dosen`t have a normal page created
+    createSdImpressDoc("odp/tdf96708.odp");
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+    // Set edit master page mode
+    rSSController.ChangeEditMode(EditMode::MasterPage);
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    // Get the master page name
+    const sal_uInt16 nMasterPageCnt1 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), nMasterPageCnt1);
+    SdPage* pMasterPage = pDoc->GetMasterSdPage(3, PageKind::Standard);
+    OUString aMasterPageName = pMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"Master3"_ustr, aMasterPageName);
+
+    // Reslect the master page
+    rSSController.GetPageSelector().DeselectAllPages();
+    rSSController.GetPageSelector().SelectPage(pMasterPage);
+    // Copy and paste the master page
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+
+    const sal_uInt16 nMasterPageCnt2 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(5), nMasterPageCnt2);
+    SdPage* pNewMasterPage = pDoc->GetMasterSdPage(4, PageKind::Standard);
+    OUString aNewMasterPageName = pNewMasterPage->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"1_Master3"_ustr, aNewMasterPageName);
+
+    // Reslect the master page
+    rSSController.GetPageSelector().DeselectAllPages();
+    rSSController.GetPageSelector().SelectPage(pNewMasterPage);
+    // Copy again
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+
+    const sal_uInt16 nMasterPageCnt3 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(6), nMasterPageCnt3);
+    SdPage* pNewMasterPage2 = pDoc->GetMasterSdPage(5, PageKind::Standard);
+    OUString aNewMasterPageName2 = pNewMasterPage2->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"2_Master3"_ustr, aNewMasterPageName2);
+
+    // Reslect the master page
+    rSSController.GetPageSelector().DeselectAllPages();
+    rSSController.GetPageSelector().SelectPage(pNewMasterPage2);
+    // Copy again
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+
+    const sal_uInt16 nMasterPageCnt4 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(7), nMasterPageCnt4);
+    SdPage* pNewMasterPage3 = pDoc->GetMasterSdPage(6, PageKind::Standard);
+    OUString aNewMasterPageName3 = pNewMasterPage3->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"3_Master3"_ustr, aNewMasterPageName3);
+
+    // Reslect the master page
+    rSSController.GetPageSelector().DeselectAllPages();
+    rSSController.GetPageSelector().SelectPage(pNewMasterPage);
+    // Copy again
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+
+    const sal_uInt16 nMasterPageCnt5 = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), nMasterPageCnt5);
+    SdPage* pNewMasterPage4 = pDoc->GetMasterSdPage(7, PageKind::Standard);
+    OUString aNewMasterPageName4 = pNewMasterPage4->GetName();
+    CPPUNIT_ASSERT_EQUAL(u"4_Master3"_ustr, aNewMasterPageName4);
+}
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testUndoMergeMasterPage)
+{
+    // Test undo for merging master pages only
+    createSdImpressDoc("odp/tdf96708.odp");
+
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+
+    // Get document and check initial master page count
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    const sal_uInt16 nInitialMasterPageCount = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), nInitialMasterPageCount);
+
+    // Copy and paste master page only
+    rSSController.GetClipboard().DoCopy(true);
+    rSSController.GetClipboard().DoPaste(true);
+
+    // Check that a master page was added
+    const sal_uInt16 nAfterPasteMasterPageCount = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(nInitialMasterPageCount + 1),
+                         nAfterPasteMasterPageCount);
+
+    // Undo the master page merge
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    // Check that the master page count is back to the initial value
+    const sal_uInt16 nAfterUndoMasterPageCount = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(nInitialMasterPageCount, nAfterUndoMasterPageCount);
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf139996)
 {
     createSdImpressDoc();

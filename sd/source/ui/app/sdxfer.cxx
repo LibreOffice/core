@@ -656,7 +656,7 @@ void SdTransferable::SetObjectDescriptor( std::unique_ptr<TransferableObjectDesc
     PrepareOLE( *mpObjDesc );
 }
 
-void SdTransferable::SetPageBookmarks( std::vector<OUString> && rPageBookmarks, bool bPersistent )
+void SdTransferable::SetPageBookmarks( std::vector<OUString> && rPageBookmarks, bool bPersistent, bool bMergeMasterPagesOnly )
 {
     if( !mpSourceDoc )
         return;
@@ -673,7 +673,7 @@ void SdTransferable::SetPageBookmarks( std::vector<OUString> && rPageBookmarks, 
     if( bPersistent )
     {
         mpSdDrawDocument->CreateFirstPages(mpSourceDoc);
-        mpSdDrawDocument->ImportDocumentPages(rPageBookmarks, 1, mpSourceDoc->GetDocSh());
+        mpSdDrawDocument->ImportDocumentPages(rPageBookmarks, 1, mpSourceDoc->GetDocSh(), bMergeMasterPagesOnly);
     }
     else
     {

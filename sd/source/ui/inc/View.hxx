@@ -109,8 +109,8 @@ public:
     virtual void            MarkListHasChanged() override;
     void                    SelectAll();
     void                    DoCut();
-    void                    DoCopy();
-    void                    DoPaste(::sd::Window* pWindow=nullptr);
+    void                    DoCopy(bool bMergeMasterPagesOnly = false );
+    void                    DoPaste(::sd::Window* pWindow=nullptr, bool bMergeMasterPagesOnly = false);
     virtual void            DoConnect(SdrOle2Obj* pOleObj) override;
     virtual bool            SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr = false);
     void                    StartDrag( const Point& rStartPos, vcl::Window* pWindow );

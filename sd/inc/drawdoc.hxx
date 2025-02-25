@@ -179,6 +179,7 @@ struct InsertBookmarkOptions
     bool bNoDialogs;          // No dialogs allowed
     bool bCopy;               // Copy source document
     bool bMergeMasterPages;   // Merge master pages
+    bool bMergeMasterPagesOnly; // Only merge master pages
     bool bPreservePageNames;  // Preserve page names
     bool bIsClipboardOperation; // Operation triggered by clipboard
     bool bIsDragAndDropOperation; // Operation triggered by drag and drop
@@ -187,60 +188,66 @@ struct InsertBookmarkOptions
 
     InsertBookmarkOptions()
         : bLink(false), bReplace(false), bNoDialogs(false),
-          bCopy(true), bMergeMasterPages(true), bPreservePageNames(false),
-          bIsClipboardOperation(false), bIsDragAndDropOperation(false),
-          bIsSameDocumentOperation(false), bIsFileDocument(false)
+          bCopy(true), bMergeMasterPages(true), bMergeMasterPagesOnly(false),
+          bPreservePageNames(false), bIsClipboardOperation(false),
+          bIsDragAndDropOperation(false), bIsSameDocumentOperation(false),
+          bIsFileDocument(false)
     {}
 
     // Preset for paste operation
-    static InsertBookmarkOptions ForPaste(bool bMergeMasterPages) {
+    static InsertBookmarkOptions ForPaste(bool bMergeMasterPages, bool bMergeMasterPagesOnly = false) {
         InsertBookmarkOptions options;
         options.bIsClipboardOperation = true;
         options.bMergeMasterPages = bMergeMasterPages;
+        options.bMergeMasterPagesOnly = bMergeMasterPagesOnly;
         // All defaults are fine for paste
         return options;
     }
 
     // Preset for file insert operation
-    static InsertBookmarkOptions ForFileInsert(bool bLinkPages) {
+    static InsertBookmarkOptions ForFileInsert(bool bLinkPages, bool bMergeMasterPagesOnly = false) {
         InsertBookmarkOptions options;
         options.bLink = bLinkPages;
         options.bIsFileDocument = true;
+        options.bMergeMasterPagesOnly = bMergeMasterPagesOnly;
         return options;
     }
 
     // Preset for drag and drop operation
-    static InsertBookmarkOptions ForDragDrop(bool bMergeMasterPages) {
+    static InsertBookmarkOptions ForDragDrop(bool bMergeMasterPages, bool bMergeMasterPagesOnly = false) {
         InsertBookmarkOptions options;
         options.bIsDragAndDropOperation = true;
         options.bNoDialogs = true;
         options.bMergeMasterPages = bMergeMasterPages;
+        options.bMergeMasterPagesOnly = bMergeMasterPagesOnly;
         return options;
     }
 
     // Preset for page link resolution
-    static InsertBookmarkOptions ForPageLinks(bool bCopySource, bool bNoDialogs) {
+    static InsertBookmarkOptions ForPageLinks(bool bCopySource, bool bNoDialogs, bool bMergeMasterPagesOnly = false) {
         InsertBookmarkOptions options;
         options.bLink = true;
         options.bReplace = true;
         options.bPreservePageNames = true;
         options.bCopy = bCopySource;
         options.bNoDialogs = bNoDialogs;
+        options.bMergeMasterPagesOnly = bMergeMasterPagesOnly;
         return options;
     }
 
     // Preset for internal document operations
-    static InsertBookmarkOptions ForInternalOps(bool bPreserveNames) {
+    static InsertBookmarkOptions ForInternalOps(bool bPreserveNames, bool bMergeMasterPagesOnly = false) {
         InsertBookmarkOptions options;
         options.bNoDialogs = true;
         options.bMergeMasterPages = false;
         options.bPreservePageNames = bPreserveNames;
         options.bIsSameDocumentOperation = true;
+        options.bMergeMasterPagesOnly = bMergeMasterPagesOnly;
         return options;
     }
 
     // Preset for document import operations
-    static InsertBookmarkOptions ForDocumentImport() {
+    static InsertBookmarkOptions ForDocumentImport(bool bMergeMasterPagesOnly = false) {
         InsertBookmarkOptions options;
         options.bLink = false;            // No linking for document import
         options.bReplace = true;          // Replace pages when importing document
@@ -249,6 +256,7 @@ struct InsertBookmarkOptions
         options.bMergeMasterPages = true; // Always merge master pages
         options.bPreservePageNames = false; // Don't preserve page names
         options.bIsFileDocument = true;   // This is a file document operation
+        options.bMergeMasterPagesOnly = bMergeMasterPagesOnly;// Only merge master pages
         return options;
     }
 };
@@ -284,11 +292,11 @@ struct DocumentPageCounts
     sal_uInt16 nMasterPageCount;   // Count of master pages in destination document
     sal_uInt16 nNewMPageCount;     // Count of new master pages after processing
 
-    DocumentPageCounts(sal_uInt16 destCount, sal_uInt16 sourceCount, sal_uInt16 masterCount)
+    DocumentPageCounts(sal_uInt16 destCount, sal_uInt16 sourceCount, sal_uInt16 masterCount, sal_uInt16 newmasterCount)
         : nDestPageCount(destCount)
         , nSourcePageCount(sourceCount)
         , nMasterPageCount(masterCount)
-        , nNewMPageCount(0)
+        , nNewMPageCount(newmasterCount)
     {}
 
     // Check if all counts are valid (non-zero)
@@ -432,7 +440,7 @@ public:
      */
     void insertAllPages(PageInsertionParams& rParams,
         const InsertBookmarkOptions& rOptions,
-        const sal_uInt16& nBMSdPageCount);
+        const DocumentPageCounts& rPageCounts);
 
     /**
      * Determine whether objects should be scaled during insertion
@@ -447,7 +455,8 @@ public:
     void collectLayoutsToTransfer(const PageNameList& rBookmarkList,
         SdDrawDocument* pBookmarkDoc,
         SlideLayoutNameList& rLayoutsToTransfer,
-        const sal_uInt16& nBMSdPageCount);
+        const DocumentPageCounts& rPageCounts,
+        bool bMergeMasterPagesOnly);
 
     /**
      * Transfer layout styles from source document to destination
@@ -620,6 +629,7 @@ public:
      * @param nInsertPos Position where pages should be inserted
      * @param pBookmarkDocSh Source document shell
      * @param bMergeMasterPages Whether to merge master pages from source
+     * @param bMergeMasterPagesOnly Whether to only merge master pages (not content pages)
      * @return true if operation was successful
      */
     bool PasteBookmarkAsPage(
@@ -627,7 +637,8 @@ public:
         PageNameList *pExchangeList,
         sal_uInt16 nInsertPos,
         ::sd::DrawDocShell* pBookmarkDocSh,
-        bool bMergeMasterPages);
+        bool bMergeMasterPages,
+        bool bMergeMasterPagesOnly = false);
 
     /**
      * Insert pages from external files
@@ -641,6 +652,7 @@ public:
      * @param bLink Whether to link to the source pages instead of copying
      * @param nInsertPos Position where pages should be inserted
      * @param pBookmarkDocSh Source document shell
+     * @param bMergeMasterPagesOnly Whether to only merge master pages (not content pages)
      * @return true if operation was successful
      */
     bool InsertFileAsPage(
@@ -648,7 +660,8 @@ public:
         PageNameList *pExchangeList,
         bool bLink,
         sal_uInt16 nInsertPos,
-        ::sd::DrawDocShell* pBookmarkDocSh);
+        ::sd::DrawDocShell* pBookmarkDocSh,
+        bool bMergeMasterPagesOnly = false);
 
     /**
      * Handle drag and drop operations
@@ -661,13 +674,15 @@ public:
      * @param nInsertPos Position where pages should be inserted
      * @param pBookmarkDocSh Source document shell
      * @param bMergeMasterPages Whether to merge master pages from source
+     * @param bMergeMasterPagesOnly Whether to only merge master pages (not content pages)
      * @return true if operation was successful
      */
     bool DropBookmarkAsPage(
         const PageNameList &rBookmarkList,
         sal_uInt16 nInsertPos,
         ::sd::DrawDocShell* pBookmarkDocSh,
-        bool bMergeMasterPages);
+        bool bMergeMasterPages,
+        bool bMergeMasterPagesOnly = false);
 
     /**
      * Resolve page links
@@ -680,13 +695,15 @@ public:
      * @param nInsertPos Position where resolved pages should be inserted
      * @param bNoDialogs Whether to suppress dialogs during operation
      * @param bCopy Whether to copy the linked pages
+     * @param bMergeMasterPagesOnly Whether to only merge master pages (not content pages)
      * @return true if operation was successful
      */
     bool ResolvePageLinks(
         const PageNameList &rBookmarkList,
         sal_uInt16 nInsertPos,
         bool bNoDialogs,
-        bool bCopy);
+        bool bCopy,
+        bool bMergeMasterPagesOnly = false);
 
     /**
      * Copy or move pages within the same document
@@ -699,13 +716,15 @@ public:
      * @param pExchangeList Optional list of names to use for the destination pages
      * @param nInsertPos Position where pages should be inserted
      * @param bPreservePageNames Whether to preserve original page names
+     * @param bMergeMasterPagesOnly Whether to only merge master pages (not content pages)
      * @return true if operation was successful
      */
     bool CopyOrMovePagesWithinDocument(
         const PageNameList &rBookmarkList,
         PageNameList *pExchangeList,
         sal_uInt16 nInsertPos,
-        bool bPreservePageNames);
+        bool bPreservePageNames,
+        bool bMergeMasterPagesOnly = false);
 
     /**
      * Import a whole document
@@ -717,12 +736,14 @@ public:
      * @param rBookmarkList List of page names to be imported (empty for all pages)
      * @param nInsertPos Position where imported pages should be inserted
      * @param pBookmarkDocSh Source document shell
+     * @param bMergeMasterPagesOnly Whether to only merge master pages (not content pages)
      * @return true if operation was successful
      */
     bool ImportDocumentPages(
         const PageNameList &rBookmarkList,
         sal_uInt16 nInsertPos,
-        ::sd::DrawDocShell* pBookmarkDocSh);
+        ::sd::DrawDocShell* pBookmarkDocSh,
+        bool bMergeMasterPagesOnly = false);
 
     SAL_DLLPRIVATE bool InsertBookmarkAsObject(const PageNameList &rBookmarkList,
                                     const PageNameList &rExchangeList,
@@ -818,7 +839,7 @@ public:
     SAL_DLLPRIVATE void                SetTextDefaults() const;
 
     SAL_DLLPRIVATE void                CreateLayoutTemplates();
-    SAL_DLLPRIVATE void                RenameLayoutTemplate(const OUString& rOldLayoutName, const OUString& rNewName);
+    void                               RenameLayoutTemplate(const OUString& rOldLayoutName, const OUString& rNewName);
 
     SAL_DLLPRIVATE void                CreateDefaultCellStyles();
 
@@ -975,6 +996,18 @@ public:
 
     SAL_DLLPRIVATE static void SetCalcFieldValueHdl( ::Outliner* pOutliner);
 
+    /** Extract the base layout name from a layout name by removing the separator and anything after it
+     * @param rLayoutName The full layout name that may include a separator and suffix
+     * @return The base layout name without separator and suffix
+     */
+    static OUString GetBaseLayoutName(std::u16string_view rLayoutName);
+
+    /** Generate a new layout name based on the original name by appending a number to it
+     * @param aOriginalName The original layout name
+     * @return A new layout name that is unique and based on the original name
+     */
+    static OUString GenerateNewLayoutName(std::u16string_view rOriginalName);
+
     SAL_DLLPRIVATE sal_uInt16 GetAnnotationAuthorIndex( const OUString& rAuthor );
 
     SAL_DLLPRIVATE bool IsEmbedFonts() const { return mbEmbedFonts; }
@@ -993,6 +1026,21 @@ public:
     void setImagePreferredDPI(sal_Int32 nValue) { mnImagePreferredDPI = nValue; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+
+    /** Create a new master page based on an existing master page.
+     *  This function is useful for copy/paste operations of master pages.
+     *
+     *  @param pSourceMasterPage The master page to copy from.
+     *  @param pBookmarkDoc The document containing the source master page. If null, assumes this document.
+     *  @param bUndo Whether to support undo for this operation.
+     *  @param sNewName Optional new name for the master page. If empty, a new name will be generated.
+     *  @return The newly created master page.
+     */
+    SdPage* AddNewMasterPageFromExisting(
+        SdPage* pSourceMasterPage,
+        SdDrawDocument* pBookmarkDoc = nullptr,
+        bool bUndo = true,
+        const OUString& sNewName = OUString());
 
 private:
 

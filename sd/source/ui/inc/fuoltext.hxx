@@ -44,8 +44,8 @@ public:
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
     virtual void DoCut() override;
-    virtual void DoCopy() override;
-    virtual void DoPaste() override;
+    virtual void DoCopy(bool bMergeMasterPagesOnly = false ) override;
+    virtual void DoPaste(bool bMergeMasterPagesOnly = false ) override;
     virtual void DoPasteUnformatted() override;
 
     /** Call this method when the text in the outliner (may) have changed.

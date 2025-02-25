@@ -52,10 +52,10 @@ public:
     virtual void DoCut() override;
 
     /// Forward to the clipboard manager.
-    virtual void DoCopy() override;
+    virtual void DoCopy(bool bMergeMasterPagesOnly = false) override;
 
     /// Forward to the clipboard manager.
-    virtual void DoPaste() override;
+    virtual void DoPaste(bool bMergeMasterPagesOnly = false) override;
 
     /** is called when the current function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also

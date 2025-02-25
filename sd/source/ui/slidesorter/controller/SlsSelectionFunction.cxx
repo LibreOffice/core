@@ -563,14 +563,14 @@ void SelectionFunction::DoCut()
     mrController.GetClipboard().DoCut();
 }
 
-void SelectionFunction::DoCopy()
+void SelectionFunction::DoCopy(bool bMergeMasterPagesOnly )
 {
-    mrController.GetClipboard().DoCopy();
+    mrController.GetClipboard().DoCopy(bMergeMasterPagesOnly);
 }
 
-void SelectionFunction::DoPaste()
+void SelectionFunction::DoPaste(bool bMergeMasterPagesOnly )
 {
-    mrController.GetClipboard().DoPaste();
+    mrController.GetClipboard().DoPaste(bMergeMasterPagesOnly);
 }
 
 bool SelectionFunction::cancel()

@@ -275,7 +275,7 @@ void FuSimpleOutlinerText::DoCut()
 /**
  * Copy object to clipboard
  */
-void FuSimpleOutlinerText::DoCopy()
+void FuSimpleOutlinerText::DoCopy(bool /*bMergeMasterPagesOnly*/)
 {
     mpSimpleOutlinerView->GetViewByWindow(mpWindow)->Copy();
 }
@@ -283,7 +283,7 @@ void FuSimpleOutlinerText::DoCopy()
 /**
  * Paste object from clipboard
  */
-void FuSimpleOutlinerText::DoPaste()
+void FuSimpleOutlinerText::DoPaste(bool /*bMergeMasterPagesOnly*/)
 {
     mpSimpleOutlinerView->GetViewByWindow(mpWindow)->PasteSpecial();
 }

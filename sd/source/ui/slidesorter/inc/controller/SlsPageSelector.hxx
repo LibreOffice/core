@@ -79,7 +79,7 @@ public:
     /** Select the descriptor that is associated with the given page.  The
         selection state of the other descriptors is not affected.
     */
-    void SelectPage(const SdPage* pPage);
+    SD_DLLPUBLIC void SelectPage(const SdPage* pPage);
     /** Select the specified descriptor.  The selection state of the other
         descriptors is not affected.
     */
