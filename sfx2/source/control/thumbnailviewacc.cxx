@@ -71,7 +71,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAcces
     if( !pItem )
         throw lang::IndexOutOfBoundsException();
 
-    uno::Reference< accessibility::XAccessible >  xRet = pItem->GetAccessible( /*bIsTransientChildrenDisabled*/false );
+    uno::Reference< accessibility::XAccessible >  xRet = pItem->GetAccessible();
     return xRet;
 }
 
@@ -248,7 +248,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAcces
         if( THUMBNAILVIEW_ITEM_NONEITEM != nItemPos )
         {
             ThumbnailViewItem* const pItem = mpThumbnailView->mFilteredItemList[nItemPos];
-            xRet = pItem->GetAccessible( /*bIsTransientChildrenDisabled*/false );
+            xRet = pItem->GetAccessible();
         }
     }
 
@@ -412,7 +412,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getSelec
 
         if (pItem && mpThumbnailView->IsItemSelected(pItem->mnId)
             && (nSelectedChildIndex == static_cast<sal_Int32>(nSel++)))
-            xRet = pItem->GetAccessible( /*bIsTransientChildrenDisabled*/false );
+            xRet = pItem->GetAccessible();
     }
 
     return xRet;

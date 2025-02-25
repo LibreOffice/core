@@ -111,10 +111,10 @@ void ThumbnailViewItem::setTitle (const OUString& rTitle)
         maTitle = rTitle;
 }
 
-const rtl::Reference< ThumbnailViewItemAcc > & ThumbnailViewItem::GetAccessible( bool bIsTransientChildrenDisabled )
+const rtl::Reference< ThumbnailViewItemAcc > & ThumbnailViewItem::GetAccessible()
 {
     if( !mxAcc.is() )
-        mxAcc = new ThumbnailViewItemAcc( this, bIsTransientChildrenDisabled );
+        mxAcc = new ThumbnailViewItemAcc(this, false);
 
     return mxAcc;
 }

@@ -293,7 +293,7 @@ void ThumbnailView::ImplDeleteItems()
         {
             css::uno::Any aOldAny, aNewAny;
 
-            aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(pItem->GetAccessible( false ));
+            aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(pItem->GetAccessible());
             ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
         }
 
@@ -433,11 +433,9 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
         {
             css::uno::Any aOldAny, aNewAny;
             if (bIsVisible)
-                aNewAny <<= css::uno::Reference<css::accessibility::XAccessible>(
-                    rItem.GetAccessible(false));
+                aNewAny <<= css::uno::Reference<css::accessibility::XAccessible>(rItem.GetAccessible());
             else
-                aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(
-                    rItem.GetAccessible(false));
+                aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(rItem.GetAccessible());
             ImplFireAccessibleEvent(css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny);
         }
     };
@@ -1141,7 +1139,7 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
         return;
 
     // focus event (select)
-    const rtl::Reference<ThumbnailViewItemAcc> & pItemAcc = pItem->GetAccessible( false );
+    const rtl::Reference<ThumbnailViewItemAcc>& pItemAcc = pItem->GetAccessible();
 
     if( pItemAcc )
     {
@@ -1224,7 +1222,7 @@ void ThumbnailView::filterItems(const std::function<bool (const ThumbnailViewIte
                 {
                     css::uno::Any aOldAny, aNewAny;
 
-                    aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(pItem->GetAccessible( false ));
+                    aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(pItem->GetAccessible());
                     ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
                 }
 

@@ -110,8 +110,7 @@ public:
 
     void setTitle (const OUString& rTitle);
 
-    rtl::Reference< ThumbnailViewItemAcc > const &
-                        GetAccessible( bool bIsTransientChildrenDisabled );
+    rtl::Reference<ThumbnailViewItemAcc> const & GetAccessible();
 
     void setDrawArea (const tools::Rectangle &area);
 
