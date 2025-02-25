@@ -138,7 +138,7 @@ void MissingPluginInstaller::report(
     rtl::Reference<MissingPluginInstallerThread> launch;
     {
         std::unique_lock g(mutex_);
-        if (reported_.find(detStr) != reported_.end()) {
+        if (reported_.contains(detStr)) {
             return;
         }
         auto & i = queued_[detStr];
