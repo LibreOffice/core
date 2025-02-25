@@ -1033,6 +1033,8 @@ WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS,
         // Map the DoNotBreakWrappedTables compat flag to <w:doNotBreakWrappedTables>.
         rpFS->singleElementNS(XML_w, XML_doNotBreakWrappedTables);
     }
+    if (rIDSA.get(DocumentSettingId::MS_WORD_UL_TRAIL_SPACE))
+        rpFS->singleElementNS(XML_w, XML_ulTrailSpace);
 }
 
 void DocxExport::WriteSettings()
