@@ -408,28 +408,12 @@ ValueSetAcc::~ValueSetAcc()
 
 void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
 {
-    if( !nEventId )
-        return;
+    NotifyAccessibleEvent(nEventId, rOldValue, rNewValue);
+}
 
-    ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >                  aTmpListeners( mxEventListeners );
-    accessibility::AccessibleEventObject                                                        aEvtObject;
-
-    aEvtObject.EventId = nEventId;
-    aEvtObject.Source = getXWeak();
-    aEvtObject.NewValue = rNewValue;
-    aEvtObject.OldValue = rOldValue;
-    aEvtObject.IndexHint = -1;
-
-    for (auto const& tmpListener : aTmpListeners)
-    {
-        try
-        {
-            tmpListener->notifyEvent( aEvtObject );
-        }
-        catch(const uno::Exception&)
-        {
-        }
-    }
+bool ValueSetAcc::HasAccessibleListeners() const
+{
+    return comphelper::OAccessibleComponentHelper::hasAccessibleListeners();
 }
 
 void ValueSetAcc::GetFocus()
@@ -618,58 +602,6 @@ lang::Locale SAL_CALL ValueSetAcc::getLocale()
     return aRet;
 }
 
-
-void SAL_CALL ValueSetAcc::addAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
-{
-    ThrowIfDisposed(false);
-    std::unique_lock aGuard (m_aMutex);
-
-    if( !rxListener.is() )
-           return;
-
-    bool bFound = false;
-
-    for (auto const& eventListener : mxEventListeners)
-    {
-        if(eventListener == rxListener)
-        {
-            bFound = true;
-            break;
-        }
-    }
-
-    if (!bFound)
-        mxEventListeners.push_back( rxListener );
-}
-
-
-void SAL_CALL ValueSetAcc::removeAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
-{
-    ThrowIfDisposed(false);
-    std::unique_lock aGuard (m_aMutex);
-
-    if( rxListener.is() )
-    {
-        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::iterator aIter =
-            std::find(mxEventListeners.begin(), mxEventListeners.end(), rxListener);
-
-        if (aIter != mxEventListeners.end())
-            mxEventListeners.erase(aIter);
-    }
-}
-
-
-sal_Bool SAL_CALL ValueSetAcc::containsPoint( const awt::Point& aPoint )
-{
-    ThrowIfDisposed();
-    const awt::Rectangle    aRect( getBounds() );
-    const Point             aSize( aRect.Width, aRect.Height );
-    const Point             aNullPoint, aTestPoint( aPoint.X, aPoint.Y );
-
-    return tools::Rectangle( aNullPoint, aSize ).Contains( aTestPoint );
-}
-
-
 uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessibleAtPoint( const awt::Point& aPoint )
 {
     ThrowIfDisposed();
@@ -691,12 +623,8 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
     return xRet;
 }
 
-
-awt::Rectangle SAL_CALL ValueSetAcc::getBounds()
+awt::Rectangle ValueSetAcc::implGetBounds()
 {
-    ThrowIfDisposed();
-    const SolarMutexGuard aSolarGuard;
-
     weld::DrawingArea* pDrawingArea = mpValueSet->GetDrawingArea();
     if (!pDrawingArea)
         return css::awt::Rectangle();
@@ -719,42 +647,6 @@ awt::Rectangle SAL_CALL ValueSetAcc::getBounds()
     }
 
     return vcl::unohelper::ConvertToAWTRect(aBounds);
-}
-
-awt::Point SAL_CALL ValueSetAcc::getLocation()
-{
-    ThrowIfDisposed();
-    const awt::Rectangle    aRect( getBounds() );
-    awt::Point              aRet;
-
-    aRet.X = aRect.X;
-    aRet.Y = aRect.Y;
-
-    return aRet;
-}
-
-awt::Point SAL_CALL ValueSetAcc::getLocationOnScreen()
-{
-    ThrowIfDisposed();
-    const SolarMutexGuard aSolarGuard;
-
-    weld::DrawingArea* pDrawingArea = mpValueSet->GetDrawingArea();
-    if (!pDrawingArea)
-        return css::awt::Point();
-
-    return vcl::unohelper::ConvertToAWTPoint(pDrawingArea->get_accessible_location_on_screen());
-}
-
-awt::Size SAL_CALL ValueSetAcc::getSize()
-{
-    ThrowIfDisposed();
-    const awt::Rectangle    aRect( getBounds() );
-    awt::Size               aRet;
-
-    aRet.Width = aRect.Width;
-    aRet.Height = aRect.Height;
-
-    return aRet;
 }
 
 void SAL_CALL ValueSetAcc::grabFocus()
@@ -883,31 +775,6 @@ void ValueSetAcc::Invalidate()
     mpValueSet = nullptr;
 }
 
-void ValueSetAcc::disposing(std::unique_lock<std::mutex>& rGuard)
-{
-    // Make a copy of the list and clear the original.
-    ::std::vector<uno::Reference<accessibility::XAccessibleEventListener> > aListenerListCopy = std::move(mxEventListeners);
-
-    if (aListenerListCopy.empty())
-        return;
-
-    rGuard.unlock();
-    // Inform all listeners that this objects is disposing.
-    lang::EventObject aEvent (static_cast<accessibility::XAccessible*>(this));
-    for (auto const& listenerCopy : aListenerListCopy)
-    {
-        try
-        {
-            listenerCopy->disposing (aEvent);
-        }
-        catch(const uno::Exception&)
-        {
-            // Ignore exceptions.
-        }
-    }
-}
-
-
 sal_uInt16 ValueSetAcc::getItemCount() const
 {
     sal_uInt16 nCount = mpValueSet->ImplGetVisibleItemCount();
@@ -940,13 +807,7 @@ ValueSetItem* ValueSetAcc::getItem (sal_uInt16 nIndex) const
 
 void ValueSetAcc::ThrowIfDisposed(bool bCheckValueSet)
 {
-    if (m_bDisposed)
-    {
-        SAL_WARN("svx", "Calling disposed object. Throwing exception:");
-        throw lang::DisposedException (
-            u"object has been already disposed"_ustr,
-            getXWeak());
-    }
+    ensureAlive();
 
     if (bCheckValueSet && !mpValueSet)
     {
