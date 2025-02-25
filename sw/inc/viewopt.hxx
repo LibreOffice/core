@@ -137,6 +137,8 @@ struct ViewOptFlags1
             && bShowChangesInMargin == rOther.bShowChangesInMargin
             && bShowChangesInMargin2 == rOther.bShowChangesInMargin2;
     }
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 enum class ViewOptCoreFlags2 {
@@ -859,6 +861,8 @@ public:
 
     // Useful for when getting the current view SwViewOption is not possible otherwise
     static const SwViewOption& GetCurrentViewOptions();
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 inline bool SwViewOption::operator==( const SwViewOption &rOpt ) const
