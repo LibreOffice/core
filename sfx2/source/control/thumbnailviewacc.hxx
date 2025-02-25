@@ -47,7 +47,7 @@ class ThumbnailViewAcc :
 {
 public:
 
-    ThumbnailViewAcc( ThumbnailView* pParent );
+    ThumbnailViewAcc(ThumbnailView* pThumbnailView);
     virtual ~ThumbnailViewAcc() override;
 
     void FireAccessibleEvent( short nEventId,
@@ -113,7 +113,7 @@ public:
 private:
     ::std::vector< css::uno::Reference<
         css::accessibility::XAccessibleEventListener > >   mxEventListeners;
-    ThumbnailView*                                               mpParent;
+    ThumbnailView* mpThumbnailView;
 
     /** Tell all listeners that the object is dying.  This callback is
         usually called from the WeakComponentImplHelper class.

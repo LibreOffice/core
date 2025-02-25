@@ -35,8 +35,8 @@
 
 using namespace ::com::sun::star;
 
-ThumbnailViewAcc::ThumbnailViewAcc( ThumbnailView* pParent ) :
-    mpParent( pParent )
+ThumbnailViewAcc::ThumbnailViewAcc(ThumbnailView* pThumbnailView)
+    : mpThumbnailView(pThumbnailView)
 {
 }
 
@@ -55,7 +55,7 @@ sal_Int64 SAL_CALL ThumbnailViewAcc::getAccessibleChildCount()
     const SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
 
-    return mpParent->ImplGetVisibleItemCount();
+    return mpThumbnailView->ImplGetVisibleItemCount();
 }
 
 uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAccessibleChild( sal_Int64 i )
@@ -79,7 +79,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAcces
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    return mpParent->GetDrawingArea()->get_accessible_parent();
+    return mpThumbnailView->GetDrawingArea()->get_accessible_parent();
 }
 
 sal_Int64 SAL_CALL ThumbnailViewAcc::getAccessibleIndexInParent()
@@ -138,9 +138,9 @@ OUString SAL_CALL ThumbnailViewAcc::getAccessibleName()
     const SolarMutexGuard aSolarGuard;
     OUString              aRet;
 
-    if (mpParent)
+    if (mpThumbnailView)
     {
-        aRet = mpParent->GetAccessibleName();
+        aRet = mpThumbnailView->GetAccessibleName();
     }
 
     return aRet;
@@ -238,16 +238,16 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAcces
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    const sal_uInt16                                    nItemId = mpParent->GetItemId( Point( aPoint.X, aPoint.Y ) );
+    const sal_uInt16 nItemId = mpThumbnailView->GetItemId(Point(aPoint.X, aPoint.Y));
     uno::Reference< accessibility::XAccessible >    xRet;
 
     if ( nItemId )
     {
-        const size_t nItemPos = mpParent->GetItemPos( nItemId );
+        const size_t nItemPos = mpThumbnailView->GetItemPos(nItemId);
 
         if( THUMBNAILVIEW_ITEM_NONEITEM != nItemPos )
         {
-            ThumbnailViewItem *const pItem = mpParent->mFilteredItemList[nItemPos];
+            ThumbnailViewItem* const pItem = mpThumbnailView->mFilteredItemList[nItemPos];
             xRet = pItem->GetAccessible( /*bIsTransientChildrenDisabled*/false );
         }
     }
@@ -260,7 +260,7 @@ awt::Rectangle SAL_CALL ThumbnailViewAcc::getBounds()
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
     const Point         aOutPos;
-    const Size          aOutSize( mpParent->GetOutputSizePixel() );
+    const Size aOutSize(mpThumbnailView->GetOutputSizePixel());
     awt::Rectangle      aRet;
 
     aRet.X = aOutPos.X();
@@ -323,7 +323,7 @@ void SAL_CALL ThumbnailViewAcc::grabFocus()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    mpParent->GrabFocus();
+    mpThumbnailView->GrabFocus();
 }
 
 sal_Int32 SAL_CALL ThumbnailViewAcc::getForeground(  )
@@ -353,7 +353,7 @@ void SAL_CALL ThumbnailViewAcc::selectAccessibleChild( sal_Int64 nChildIndex )
     if(pItem == nullptr)
         throw lang::IndexOutOfBoundsException();
 
-    mpParent->SelectItem( pItem->mnId );
+    mpThumbnailView->SelectItem(pItem->mnId);
 }
 
 sal_Bool SAL_CALL ThumbnailViewAcc::isAccessibleChildSelected( sal_Int64 nChildIndex )
@@ -369,7 +369,7 @@ sal_Bool SAL_CALL ThumbnailViewAcc::isAccessibleChildSelected( sal_Int64 nChildI
     if (pItem == nullptr)
         throw lang::IndexOutOfBoundsException();
 
-    return mpParent->IsItemSelected( pItem->mnId );
+    return mpThumbnailView->IsItemSelected(pItem->mnId);
 }
 
 void SAL_CALL ThumbnailViewAcc::clearAccessibleSelection()
@@ -393,7 +393,7 @@ sal_Int64 SAL_CALL ThumbnailViewAcc::getSelectedAccessibleChildCount()
     {
         ThumbnailViewItem* pItem = getItem (i);
 
-        if( pItem && mpParent->IsItemSelected( pItem->mnId ) )
+        if (pItem && mpThumbnailView->IsItemSelected(pItem->mnId))
             ++nRet;
     }
 
@@ -410,7 +410,8 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getSelec
     {
         ThumbnailViewItem* pItem = getItem(i);
 
-        if( pItem && mpParent->IsItemSelected( pItem->mnId ) && ( nSelectedChildIndex == static_cast< sal_Int32 >( nSel++ ) ) )
+        if (pItem && mpThumbnailView->IsItemSelected(pItem->mnId)
+            && (nSelectedChildIndex == static_cast<sal_Int32>(nSel++)))
             xRet = pItem->GetAccessible( /*bIsTransientChildrenDisabled*/false );
     }
 
@@ -443,7 +444,7 @@ void ThumbnailViewAcc::disposing(std::unique_lock<std::mutex>& rGuard)
 
         // Reset the pointer to the parent.  It has to be the one who has
         // disposed us because he is dying.
-        mpParent = nullptr;
+        mpThumbnailView = nullptr;
 
         if (mxEventListeners.empty())
             return;
@@ -469,12 +470,12 @@ void ThumbnailViewAcc::disposing(std::unique_lock<std::mutex>& rGuard)
 
 sal_uInt16 ThumbnailViewAcc::getItemCount() const
 {
-    return mpParent->ImplGetVisibleItemCount();
+    return mpThumbnailView->ImplGetVisibleItemCount();
 }
 
 ThumbnailViewItem* ThumbnailViewAcc::getItem (sal_uInt16 nIndex) const
 {
-    return mpParent->ImplGetVisibleItem (nIndex);
+    return mpThumbnailView->ImplGetVisibleItem(nIndex);
 }
 
 void ThumbnailViewAcc::ThrowIfDisposed()
@@ -488,7 +489,7 @@ void ThumbnailViewAcc::ThrowIfDisposed()
     }
     else
     {
-        DBG_ASSERT (mpParent!=nullptr, "ValueSetAcc not disposed but mpParent == NULL");
+        DBG_ASSERT (mpThumbnailView!=nullptr, "ValueSetAcc not disposed but mpThumbnailView == NULL");
     }
 }
 
