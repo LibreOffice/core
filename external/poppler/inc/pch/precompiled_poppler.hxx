@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2025-01-08 10:27:46 using:
- ../master/bin/update_pch ../master/external/poppler poppler --cutoff=1 --exclude:system --include:module --include:local
+ Generated on 2025-02-25 16:55:58 using:
+ ./bin/update_pch ./external/poppler poppler --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./../master/external/poppler/inc/pch/precompiled_poppler.hxx "make ../master/external/poppler.build" --find-conflicts
+ ./bin/update_pch_bisect ././external/poppler/inc/pch/precompiled_poppler.hxx "make ./external/poppler.build" --find-conflicts
 */
 
 #include <sal/config.h>
@@ -56,10 +56,10 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <filesystem>
 #include <functional>
 #include <gbase64.h>
 #include <gbasename.h>
-#include <gdir.h>
 #include <gfile.h>
 #include <glibc.h>
 #include <gmem.h>
@@ -73,7 +73,6 @@
 #include <optional>
 #include <poppler-config.h>
 #include <random>
-#include <ranges>
 #include <regex>
 #include <set>
 #include <sstream>
@@ -96,7 +95,6 @@
 #include <goo/JpegWriter.h>
 #include <goo/PNGWriter.h>
 #include <goo/TiffWriter.h>
-#include <goo/gdir.h>
 #include <goo/gfile.h>
 #include <goo/glibc.h>
 #include <goo/gmem.h>
