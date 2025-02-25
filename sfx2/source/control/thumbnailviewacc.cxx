@@ -493,9 +493,10 @@ void ThumbnailViewAcc::ThrowIfDisposed()
     }
 }
 
-ThumbnailViewItemAcc::ThumbnailViewItemAcc( ThumbnailViewItem* pParent, bool bIsTransientChildrenDisabled ) :
-    mpParent( pParent ),
-    mbIsTransientChildrenDisabled( bIsTransientChildrenDisabled )
+ThumbnailViewItemAcc::ThumbnailViewItemAcc(ThumbnailViewItem* pThumbnailViewItem,
+                                           bool bIsTransientChildrenDisabled)
+    : mpThumbnailViewItem(pThumbnailViewItem)
+    , mbIsTransientChildrenDisabled(bIsTransientChildrenDisabled)
 {
 }
 
@@ -503,10 +504,10 @@ ThumbnailViewItemAcc::~ThumbnailViewItemAcc()
 {
 }
 
-void ThumbnailViewItemAcc::ParentDestroyed()
+void ThumbnailViewItemAcc::ThumbnailViewItemDestroyed()
 {
     std::scoped_lock aGuard( maMutex );
-    mpParent = nullptr;
+    mpThumbnailViewItem = nullptr;
 }
 
 void ThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
@@ -577,8 +578,8 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewItemAcc::getA
     const SolarMutexGuard aSolarGuard;
     uno::Reference< accessibility::XAccessible >    xRet;
 
-    if( mpParent )
-        xRet = mpParent->mrParent.getAccessible();
+    if (mpThumbnailViewItem)
+        xRet = mpThumbnailViewItem->mrParent.getAccessible();
 
     return xRet;
 }
@@ -590,11 +591,11 @@ sal_Int64 SAL_CALL ThumbnailViewItemAcc::getAccessibleIndexInParent()
     // parent.
     sal_Int64 nIndexInParent = -1;
 
-    if( mpParent )
+    if (mpThumbnailViewItem)
     {
         bool bDone = false;
 
-        sal_uInt16 nCount = mpParent->mrParent.ImplGetVisibleItemCount();
+        sal_uInt16 nCount = mpThumbnailViewItem->mrParent.ImplGetVisibleItemCount();
         ThumbnailViewItem* pItem;
         for (sal_uInt16 i=0; i<nCount && !bDone; i++)
         {
@@ -602,7 +603,7 @@ sal_Int64 SAL_CALL ThumbnailViewItemAcc::getAccessibleIndexInParent()
             // just in case the number of children changes in the meantime.
             try
             {
-                pItem = mpParent->mrParent.ImplGetVisibleItem (i);
+                pItem = mpThumbnailViewItem->mrParent.ImplGetVisibleItem(i);
             }
             catch (const lang::IndexOutOfBoundsException&)
             {
@@ -637,13 +638,13 @@ OUString SAL_CALL ThumbnailViewItemAcc::getAccessibleName()
     const SolarMutexGuard aSolarGuard;
     OUString aRet;
 
-    if( mpParent )
+    if (mpThumbnailViewItem)
     {
-        aRet = mpParent->maTitle;
+        aRet = mpThumbnailViewItem->maTitle;
 
         if( aRet.isEmpty() )
         {
-            aRet = "Item " + OUString::number(static_cast<sal_Int32>(mpParent->mnId));
+            aRet = "Item " + OUString::number(static_cast<sal_Int32>(mpThumbnailViewItem->mnId));
         }
     }
 
@@ -660,7 +661,7 @@ sal_Int64 SAL_CALL ThumbnailViewItemAcc::getAccessibleStateSet()
     const SolarMutexGuard aSolarGuard;
     sal_Int64 nStateSet = 0;
 
-    if( mpParent )
+    if (mpThumbnailViewItem)
     {
         nStateSet |= accessibility::AccessibleStateType::ENABLED;
         nStateSet |= accessibility::AccessibleStateType::SENSITIVE;
@@ -672,10 +673,10 @@ sal_Int64 SAL_CALL ThumbnailViewItemAcc::getAccessibleStateSet()
         nStateSet |= accessibility::AccessibleStateType::SELECTABLE;
         nStateSet |= accessibility::AccessibleStateType::FOCUSABLE;
 
-        if( mpParent->isSelected() )
+        if (mpThumbnailViewItem->isSelected())
         {
             nStateSet |= accessibility::AccessibleStateType::SELECTED;
-            if (mpParent->mrParent.HasChildFocus())
+            if (mpThumbnailViewItem->mrParent.HasChildFocus())
                 nStateSet |= accessibility::AccessibleStateType::FOCUSED;
         }
     }
@@ -756,9 +757,9 @@ awt::Rectangle SAL_CALL ThumbnailViewItemAcc::getBounds()
     const SolarMutexGuard aSolarGuard;
     awt::Rectangle      aRet;
 
-    if( mpParent )
+    if (mpThumbnailViewItem)
     {
-        tools::Rectangle   aRect( mpParent->getDrawArea() );
+        tools::Rectangle aRect(mpThumbnailViewItem->getDrawArea());
         tools::Rectangle   aParentRect;
 
         // get position of the accessible parent in screen coordinates
@@ -800,10 +801,11 @@ awt::Point SAL_CALL ThumbnailViewItemAcc::getLocationOnScreen()
     const SolarMutexGuard aSolarGuard;
     awt::Point          aRet;
 
-    if (mpParent)
+    if (mpThumbnailViewItem)
     {
-        const Point aPos = mpParent->getDrawArea().TopLeft();
-        const Point aScreenPos(mpParent->mrParent.GetDrawingArea()->get_accessible_location_on_screen());
+        const Point aPos = mpThumbnailViewItem->getDrawArea().TopLeft();
+        const Point aScreenPos(
+            mpThumbnailViewItem->mrParent.GetDrawingArea()->get_accessible_location_on_screen());
 
         aRet.X = aPos.X() + aScreenPos.X();
         aRet.Y = aPos.Y() + aScreenPos.X();

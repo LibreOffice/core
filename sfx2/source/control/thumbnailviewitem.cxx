@@ -63,7 +63,7 @@ ThumbnailViewItem::~ThumbnailViewItem()
 {
     if( mxAcc.is() )
     {
-        mxAcc->ParentDestroyed();
+        mxAcc->ThumbnailViewItemDestroyed();
     }
 }
 

@@ -156,15 +156,14 @@ private:
     ::std::vector< css::uno::Reference< css::accessibility::XAccessibleEventListener > >
                                                                         mxEventListeners;
     std::mutex                                                          maMutex;
-    ThumbnailViewItem*                                                  mpParent;
+    ThumbnailViewItem*                                                  mpThumbnailViewItem;
     bool                                                                mbIsTransientChildrenDisabled;
 
 public:
-
-    ThumbnailViewItemAcc( ThumbnailViewItem* pParent, bool bIsTransientChildrenDisabled );
+    ThumbnailViewItemAcc(ThumbnailViewItem* pThumbnailViewItem, bool bIsTransientChildrenDisabled);
     virtual ~ThumbnailViewItemAcc() override;
 
-    void    ParentDestroyed();
+    void ThumbnailViewItemDestroyed();
 
 public:
 
