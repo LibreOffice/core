@@ -157,10 +157,9 @@ private:
                                                                         mxEventListeners;
     std::mutex                                                          maMutex;
     ThumbnailViewItem*                                                  mpThumbnailViewItem;
-    bool                                                                mbIsTransientChildrenDisabled;
 
 public:
-    ThumbnailViewItemAcc(ThumbnailViewItem* pThumbnailViewItem, bool bIsTransientChildrenDisabled);
+    ThumbnailViewItemAcc(ThumbnailViewItem* pThumbnailViewItem);
     virtual ~ThumbnailViewItemAcc() override;
 
     void ThumbnailViewItemDestroyed();

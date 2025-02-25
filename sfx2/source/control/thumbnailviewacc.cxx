@@ -493,10 +493,8 @@ void ThumbnailViewAcc::ThrowIfDisposed()
     }
 }
 
-ThumbnailViewItemAcc::ThumbnailViewItemAcc(ThumbnailViewItem* pThumbnailViewItem,
-                                           bool bIsTransientChildrenDisabled)
+ThumbnailViewItemAcc::ThumbnailViewItemAcc(ThumbnailViewItem* pThumbnailViewItem)
     : mpThumbnailViewItem(pThumbnailViewItem)
-    , mbIsTransientChildrenDisabled(bIsTransientChildrenDisabled)
 {
 }
 
@@ -665,9 +663,7 @@ sal_Int64 SAL_CALL ThumbnailViewItemAcc::getAccessibleStateSet()
         nStateSet |= accessibility::AccessibleStateType::SENSITIVE;
         nStateSet |= accessibility::AccessibleStateType::SHOWING;
         nStateSet |= accessibility::AccessibleStateType::VISIBLE;
-        if ( !mbIsTransientChildrenDisabled )
-            nStateSet |= accessibility::AccessibleStateType::TRANSIENT;
-
+        nStateSet |= accessibility::AccessibleStateType::TRANSIENT;
         nStateSet |= accessibility::AccessibleStateType::SELECTABLE;
         nStateSet |= accessibility::AccessibleStateType::FOCUSABLE;
 

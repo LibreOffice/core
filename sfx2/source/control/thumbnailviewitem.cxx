@@ -114,7 +114,7 @@ void ThumbnailViewItem::setTitle (const OUString& rTitle)
 const rtl::Reference< ThumbnailViewItemAcc > & ThumbnailViewItem::GetAccessible()
 {
     if( !mxAcc.is() )
-        mxAcc = new ThumbnailViewItemAcc(this, false);
+        mxAcc = new ThumbnailViewItemAcc(this);
 
     return mxAcc;
 }
