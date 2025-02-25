@@ -43,68 +43,56 @@ OUString SmResId(TranslateId aId) { return Translate::get(aId, SmModule::get()->
 
 OUString SmLocalizedSymbolData::GetUiSymbolName( std::u16string_view rExportName )
 {
-    OUString aRes;
-
-    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_UI_SYMBOL_NAMES); ++i)
+    auto it = std::find_if(std::begin(RID_UI_SYMBOL_NAMES), std::end(RID_UI_SYMBOL_NAMES),
+        [&rExportName](const auto& rUISymbolTranslateId)
+        { return o3tl::equalsAscii(rExportName, rUISymbolTranslateId.getId()); });
+    if (it != std::end(RID_UI_SYMBOL_NAMES))
     {
-        if (o3tl::equalsAscii(rExportName, RID_UI_SYMBOL_NAMES[i].getId()))
-        {
-            aRes = SmResId(RID_UI_SYMBOL_NAMES[i]);
-            break;
-        }
+        return SmResId(*it);
     }
 
-    return aRes;
+    return {};
 }
 
 OUString SmLocalizedSymbolData::GetExportSymbolName( std::u16string_view rUiName )
 {
-    OUString aRes;
-
-    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_UI_SYMBOL_NAMES); ++i)
+    auto it = std::find_if(std::begin(RID_UI_SYMBOL_NAMES), std::end(RID_UI_SYMBOL_NAMES),
+        [&rUiName](const auto& rUISymbolTranslateId)
+        { return rUiName == SmResId(rUISymbolTranslateId); });
+    if (it != std::end(RID_UI_SYMBOL_NAMES))
     {
-        if (rUiName == SmResId(RID_UI_SYMBOL_NAMES[i]))
-        {
-            const char *pKey = RID_UI_SYMBOL_NAMES[i].getId();
-            aRes = OUString(pKey, strlen(pKey), RTL_TEXTENCODING_UTF8);
-            break;
-        }
+        const char *pKey = it->getId();
+        return OUString(pKey, strlen(pKey), RTL_TEXTENCODING_UTF8);
     }
 
-    return aRes;
+    return {};
 }
 
 OUString SmLocalizedSymbolData::GetUiSymbolSetName( std::u16string_view rExportName )
 {
-    OUString aRes;
-
-    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_UI_SYMBOLSET_NAMES); ++i)
+    auto it = std::find_if(std::begin(RID_UI_SYMBOLSET_NAMES), std::end(RID_UI_SYMBOLSET_NAMES),
+        [&rExportName](const auto& rUISymbolSetTranslateId)
+        { return o3tl::equalsAscii(rExportName, rUISymbolSetTranslateId.getId()); });
+    if (it != std::end(RID_UI_SYMBOLSET_NAMES))
     {
-        if (o3tl::equalsAscii(rExportName, RID_UI_SYMBOLSET_NAMES[i].getId()))
-        {
-            aRes = SmResId(RID_UI_SYMBOLSET_NAMES[i]);
-            break;
-        }
+        return SmResId(*it);
     }
 
-    return aRes;
+    return {};
 }
 
 OUString SmLocalizedSymbolData::GetExportSymbolSetName( std::u16string_view rUiName )
 {
-    OUString aRes;
-
-    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_UI_SYMBOLSET_NAMES); ++i)
+    auto it = std::find_if(std::begin(RID_UI_SYMBOLSET_NAMES), std::end(RID_UI_SYMBOLSET_NAMES),
+        [&rUiName](const auto& rUISymbolSetTranslateId)
+        { return rUiName == SmResId(rUISymbolSetTranslateId); });
+    if (it != std::end(RID_UI_SYMBOLSET_NAMES))
     {
-        if (rUiName == SmResId(RID_UI_SYMBOLSET_NAMES[i]))
-        {
-            const char *pKey = RID_UI_SYMBOLSET_NAMES[i].getId();
-            aRes = OUString(pKey, strlen(pKey), RTL_TEXTENCODING_UTF8);
-            break;
-        }
+        const char *pKey = it->getId();
+        return OUString(pKey, strlen(pKey), RTL_TEXTENCODING_UTF8);
     }
 
-    return aRes;
+    return {};
 }
 
 SFX_IMPL_INTERFACE(SmModule, SfxModule)
