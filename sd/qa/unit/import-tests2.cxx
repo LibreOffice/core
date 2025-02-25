@@ -628,7 +628,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf103477)
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf164640)
 {
-    createSdImpressDoc("odp/tdf164640.odp");
+    createSdImpressDoc();
 
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
@@ -636,22 +636,49 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf164640)
 
     SdStyleSheetPool* const pPool(pDoc->GetSdStyleSheetPool());
 
-    OUString aStyleName(SdResId(STR_PSEUDOSHEET_OUTLINE) + " 2");
-    SfxStyleSheetBase* pStyleSheet = pPool->Find(aStyleName, SfxStyleFamily::Pseudo);
-    CPPUNIT_ASSERT(pStyleSheet);
+    for (sal_Int32 nLevel = 1; nLevel < 10; nLevel++)
+    {
+        OString aMsg = "Fails on level " + OString::number(nLevel);
 
-    const SvxNumBulletItem& rNumFmt = pStyleSheet->GetItemSet().Get(EE_PARA_NUMBULLET);
-    sal_UCS4 aBullet1 = rNumFmt.GetNumRule().GetLevel(0).GetBulletChar();
-    CPPUNIT_ASSERT_EQUAL(sal_UCS4(0x25CF), aBullet1);
+        OUString aStyleName(SdResId(STR_PSEUDOSHEET_OUTLINE) + " " + OUString::number(nLevel));
+        SfxStyleSheetBase* pStyleSheet = pPool->Find(aStyleName, SfxStyleFamily::Pseudo);
+        CPPUNIT_ASSERT(pStyleSheet);
 
-    sal_UCS4 aBullet2 = rNumFmt.GetNumRule().GetLevel(1).GetBulletChar();
-    // Without the fix in place, this test would have failed with
-    // - Expected: 8211
-    // - Actual  : 9679
-    CPPUNIT_ASSERT_EQUAL(sal_UCS4(0x2013), aBullet2);
+        const SvxNumBulletItem& rNumFmt = pStyleSheet->GetItemSet().Get(EE_PARA_NUMBULLET);
+        sal_UCS4 aBullet1 = rNumFmt.GetNumRule().GetLevel(0).GetBulletChar();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x25CF), aBullet1);
 
-    sal_UCS4 aBullet3 = rNumFmt.GetNumRule().GetLevel(2).GetBulletChar();
-    CPPUNIT_ASSERT_EQUAL(sal_UCS4(0x25CF), aBullet3);
+        sal_UCS4 aBullet2 = rNumFmt.GetNumRule().GetLevel(1).GetBulletChar();
+        // Without the fix in place, this test would have failed with
+        // - Expected: 8211
+        // - Actual  : 9679
+        // - Fails on level 2
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x2013), aBullet2);
+
+        sal_UCS4 aBullet3 = rNumFmt.GetNumRule().GetLevel(2).GetBulletChar();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x25CF), aBullet3);
+
+        sal_UCS4 aBullet4 = rNumFmt.GetNumRule().GetLevel(3).GetBulletChar();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x2013), aBullet4);
+
+        sal_UCS4 aBullet5 = rNumFmt.GetNumRule().GetLevel(4).GetBulletChar();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x25CF), aBullet5);
+
+        sal_UCS4 aBullet6 = rNumFmt.GetNumRule().GetLevel(5).GetBulletChar();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x25CF), aBullet6);
+
+        sal_UCS4 aBullet7 = rNumFmt.GetNumRule().GetLevel(6).GetBulletChar();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x25CF), aBullet7);
+
+        sal_UCS4 aBullet8 = rNumFmt.GetNumRule().GetLevel(7).GetBulletChar();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x25CF), aBullet8);
+
+        sal_UCS4 aBullet9 = rNumFmt.GetNumRule().GetLevel(8).GetBulletChar();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x25CF), aBullet9);
+
+        sal_UCS4 aBullet10 = rNumFmt.GetNumRule().GetLevel(9).GetBulletChar();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x25CF), aBullet10);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf105150)
