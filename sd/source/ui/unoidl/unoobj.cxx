@@ -387,7 +387,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL SdXShape::getProper
     SdExtPropertySetInfoCache::iterator aIter( rCache.find( nObjId ) );
     if( aIter == rCache.end() )
     {
-        uno::Reference< beans::XPropertySetInfo > xInfo( mpShape->_getPropertySetInfo() );
+        rtl::Reference< SfxItemPropertySetInfo > xInfo( mpShape->_getPropertySetInfo() );
         pInfo = new SfxExtItemPropertySetInfo( mpMap, xInfo->getProperties() );
 
         rCache.insert(std::make_pair(nObjId, pInfo));

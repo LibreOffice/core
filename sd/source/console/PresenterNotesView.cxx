@@ -133,8 +133,7 @@ void SAL_CALL PresenterNotesView::disposing()
 
     // Dispose tool bar.
     {
-        Reference<XComponent> xComponent = mpToolBar;
-        mpToolBar = nullptr;
+        rtl::Reference<PresenterToolBar> xComponent = std::move(mpToolBar);
         if (xComponent.is())
             xComponent->dispose();
     }
@@ -153,7 +152,7 @@ void SAL_CALL PresenterNotesView::disposing()
 
     // Dispose close button
     {
-        Reference<XComponent> xComponent = mpCloseButton;
+        rtl::Reference<XComponent> xComponent = mpCloseButton;
         mpCloseButton = nullptr;
         if (xComponent.is())
             xComponent->dispose();

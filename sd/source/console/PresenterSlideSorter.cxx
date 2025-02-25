@@ -350,15 +350,13 @@ void SAL_CALL PresenterSlideSorter::disposing()
 
     if (mpVerticalScrollBar.is())
     {
-        Reference<lang::XComponent> xComponent = mpVerticalScrollBar;
-        mpVerticalScrollBar = nullptr;
+        rtl::Reference<PresenterScrollBar> xComponent = std::move(mpVerticalScrollBar);
         if (xComponent.is())
             xComponent->dispose();
     }
     if (mpCloseButton.is())
     {
-        Reference<lang::XComponent> xComponent = mpCloseButton;
-        mpCloseButton = nullptr;
+        rtl::Reference<PresenterButton> xComponent = std::move(mpCloseButton);
         if (xComponent.is())
             xComponent->dispose();
     }

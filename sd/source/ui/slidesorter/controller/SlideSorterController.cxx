@@ -140,9 +140,8 @@ SlideSorterController::~SlideSorterController()
 {
     try
     {
-        uno::Reference<lang::XComponent> xComponent = mpListener;
-        if (xComponent.is())
-            xComponent->dispose();
+        if (mpListener.is())
+            mpListener->dispose();
     }
     catch( uno::Exception& )
     {

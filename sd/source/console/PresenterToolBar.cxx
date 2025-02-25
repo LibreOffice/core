@@ -419,11 +419,7 @@ void SAL_CALL PresenterToolBar::disposing()
         for (const rtl::Reference<Element>& pElement : *rxPart)
         {
             if (pElement)
-            {
-                Reference<lang::XComponent> xComponent = pElement;
-                if (xComponent.is())
-                    xComponent->dispose();
-            }
+                pElement->dispose();
         }
     }
 
@@ -1053,8 +1049,7 @@ PresenterToolBarView::~PresenterToolBarView()
 
 void SAL_CALL PresenterToolBarView::disposing()
 {
-    Reference<lang::XComponent> xComponent = mpToolBar;
-    mpToolBar = nullptr;
+    rtl::Reference<PresenterToolBar> xComponent = std::move(mpToolBar);
     if (xComponent.is())
         xComponent->dispose();
 
@@ -1111,9 +1106,8 @@ sal_Bool SAL_CALL PresenterToolBarView::isAnchorOnly()
 
 void SAL_CALL PresenterToolBarView::setCurrentPage (const Reference<drawing::XDrawPage>& rxSlide)
 {
-    Reference<drawing::XDrawView> xToolBar = mpToolBar;
-    if (xToolBar.is())
-        xToolBar->setCurrentPage(rxSlide);
+    if (mpToolBar.is())
+        mpToolBar->setCurrentPage(rxSlide);
 }
 
 Reference<drawing::XDrawPage> SAL_CALL PresenterToolBarView::getCurrentPage()

@@ -201,8 +201,7 @@ void PresenterController::disposing()
         mxController = nullptr;
     }
 
-    Reference<XComponent> xWindowManagerComponent = mpWindowManager;
-    mpWindowManager = nullptr;
+    rtl::Reference<PresenterWindowManager> xWindowManagerComponent = std::move(mpWindowManager);
     if (xWindowManagerComponent.is())
         xWindowManagerComponent->dispose();
 
@@ -216,8 +215,7 @@ void PresenterController::disposing()
     mxNextSlide = nullptr;
     mpTheme.reset();
     {
-        Reference<lang::XComponent> xComponent = mpPaneBorderPainter;
-        mpPaneBorderPainter = nullptr;
+        rtl::Reference<PresenterPaneBorderPainter> xComponent = std::move(mpPaneBorderPainter);
         if (xComponent.is())
             xComponent->dispose();
     }

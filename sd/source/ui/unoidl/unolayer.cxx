@@ -542,8 +542,8 @@ uno::Any SAL_CALL SdLayerManager::getByIndex( sal_Int32 nLayer )
     if( mpModel->mpDoc )
     {
         SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
-        uno::Reference<drawing::XLayer> xLayer (GetLayer (rLayerAdmin.GetLayer(static_cast<sal_uInt16>(nLayer))));
-        aAny <<= xLayer;
+        rtl::Reference<SdLayer> xLayer (GetLayer (rLayerAdmin.GetLayer(static_cast<sal_uInt16>(nLayer))));
+        aAny <<= uno::Reference<drawing::XLayer>(xLayer);
     }
     return aAny;
 }

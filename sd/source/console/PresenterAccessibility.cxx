@@ -1630,9 +1630,8 @@ void AccessibleNotes::SetTextView (
     // manager).
     for (const auto& rxChild : aChildren)
     {
-        Reference<lang::XComponent> xComponent = rxChild;
-        if (xComponent.is())
-            xComponent->dispose();
+        if (rxChild.is())
+            rxChild->dispose();
     }
 
     // This class acts as a controller of who broadcasts caret motion

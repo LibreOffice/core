@@ -186,8 +186,7 @@ void SAL_CALL PresenterHelpView::disposing()
 
     if (mpCloseButton.is())
     {
-        Reference<lang::XComponent> xComponent = mpCloseButton;
-        mpCloseButton = nullptr;
+        rtl::Reference<PresenterButton> xComponent = std::move(mpCloseButton);
         if (xComponent.is())
             xComponent->dispose();
     }
