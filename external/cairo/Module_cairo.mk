@@ -10,12 +10,28 @@
 $(eval $(call gb_Module_Module,cairo))
 
 $(eval $(call gb_Module_add_targets,cairo,\
+	UnpackedTarball_cairo \
+	UnpackedTarball_pixman \
+))
+
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Module_add_targets,cairo,\
+	StaticLibrary_pixman \
+	Library_cairo \
+	Package_cairo \
+	Package_pixman \
+))
+
+else
+
+$(eval $(call gb_Module_add_targets,cairo,\
 	ExternalPackage_cairo \
 	ExternalPackage_pixman \
 	ExternalProject_cairo \
 	ExternalProject_pixman \
-	UnpackedTarball_cairo \
-	UnpackedTarball_pixman \
 ))
+
+endif
 
 # vim: set noet sw=4 ts=4:
