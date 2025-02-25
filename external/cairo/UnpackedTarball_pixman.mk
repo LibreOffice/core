@@ -13,6 +13,10 @@ $(eval $(call gb_UnpackedTarball_set_tarball,pixman,$(PIXMAN_TARBALL),,cairo))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,pixman,2))
 
+ifeq ($(OS)-$(ENABLE_HEADLESS),WNT-TRUE)
+$(eval $(call gb_UnpackedTarball_add_file,pixman,config.h,external/cairo/configs/wnt_pixman_config.h))
+endif
+
 $(eval $(call gb_UnpackedTarball_add_patches,pixman,\
 	external/cairo/pixman/pixman-0.24.4.patch \
 	external/cairo/pixman/pixman-ubsan.patch \
