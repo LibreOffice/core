@@ -54,9 +54,9 @@ ValueSetItem::~ValueSetItem()
     }
 }
 
-const rtl::Reference< ValueItemAcc > & ValueSetItem::GetAccessible()
+const rtl::Reference<ValueItemAcc>& ValueSetItem::GetAccessible(bool bCreate)
 {
-    if( !mxAcc.is() )
+    if (!mxAcc.is() && bCreate)
         mxAcc = new ValueItemAcc(this);
 
     return mxAcc;

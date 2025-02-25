@@ -59,7 +59,7 @@ struct ValueSetItem
     explicit ValueSetItem( ValueSet& rParent );
     ~ValueSetItem();
 
-    const rtl::Reference< ValueItemAcc > & GetAccessible();
+    const rtl::Reference<ValueItemAcc>& GetAccessible(bool bCreate = true);
 };
 
 class ValueSetAcc final

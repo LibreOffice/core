@@ -125,10 +125,10 @@ Reference<XAccessible> ValueSet::CreateAccessible()
 
 ValueSet::~ValueSet()
 {
+    ImplDeleteItems();
+
     if (mxAccessible)
         mxAccessible->Invalidate();
-
-    ImplDeleteItems();
 }
 
 void ValueSet::ImplDeleteItems()
@@ -137,14 +137,18 @@ void ValueSet::ImplDeleteItems()
 
     for ( size_t i = 0; i < n; ++i )
     {
-        ValueSetItem* pItem = mItemList[i].get();
-        if ( pItem->mbVisible && ImplHasAccessibleListeners() )
+        if (ValueSetItem* pItem = mItemList[i].get())
         {
-            Any aOldAny;
-            Any aNewAny;
+            rtl::Reference<ValueItemAcc> xItemAcc = pItem->GetAccessible(false);
+            if (xItemAcc.is())
+            {
+                Any aOldAny;
+                Any aNewAny;
+                aOldAny <<= Reference<XAccessible>(xItemAcc);
+                ImplFireAccessibleEvent(AccessibleEventId::CHILD, aOldAny, aNewAny);
 
-            aOldAny <<= Reference< XAccessible >(pItem->GetAccessible());
-            ImplFireAccessibleEvent(AccessibleEventId::CHILD, aOldAny, aNewAny);
+                xItemAcc->dispose();
+            }
         }
 
         mItemList[i].reset();
