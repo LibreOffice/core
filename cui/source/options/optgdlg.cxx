@@ -1062,11 +1062,12 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
 void OfaViewTabPage::UpdateHardwareAccelStatus()
 {
     // #i95644# HW accel (unified to disable mechanism)
+    bool bHardwareAccRO = pCanvasSettings->IsHardwareAccelerationRO();
     if(pCanvasSettings->IsHardwareAccelerationAvailable())
     {
         m_xUseHardwareAccell->set_active(pCanvasSettings->IsHardwareAccelerationEnabled());
-        m_xUseHardwareAccell->set_sensitive(!pCanvasSettings->IsHardwareAccelerationRO());
-        m_xUseHardwareAccellImg->set_visible(pCanvasSettings->IsHardwareAccelerationRO());
+        m_xUseHardwareAccell->set_sensitive(!bHardwareAccRO);
+        m_xUseHardwareAccellImg->set_visible(bHardwareAccRO);
     }
     else
     {
@@ -1075,7 +1076,7 @@ void OfaViewTabPage::UpdateHardwareAccelStatus()
         m_xUseHardwareAccellImg->set_visible(true);
     }
 #if HAVE_FEATURE_SKIA
-    m_xUseHardwareAccell->set_sensitive(!m_xUseSkia->get_active());
+    m_xUseHardwareAccell->set_sensitive(!bHardwareAccRO && !m_xUseSkia->get_active());
 #endif
 }
 
