@@ -32,8 +32,6 @@
 #include <mutex>
 #include <queue>
 
-#include <sys/time.h>
-
 #ifdef IOS
 #define SvpSalInstance AquaSalInstance
 #endif
@@ -94,7 +92,7 @@ public:
 // (Wakeup is only called by SvpSalTimer and SvpSalFrame)
 class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance, public SalUserEventList
 {
-    timeval                 m_aTimeout;
+    sal_uInt64              m_nTimeout; // in microseconds
     sal_uLong               m_nTimeoutMS;
     oslThreadIdentifier     m_MainThread;
 

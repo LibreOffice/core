@@ -21,8 +21,9 @@
 
 #include <mutex>
 
+#if !defined(ANDROID) && !defined(IOS) && !defined(EMSCRIPTEN)
 #include <pthread.h>
-#include <sys/time.h>
+#endif
 
 #include <sal/types.h>
 
@@ -46,10 +47,9 @@
 
 #include <salframe.hxx>
 #include <svdata.hxx>
-// FIXME: remove when we re-work the svp mainloop
-#include <unx/salunxtime.h>
 #include <tools/debug.hxx>
 #include <comphelper/lok.hxx>
+#include <tools/time.hxx>
 #include <o3tl/unreachable.hxx>
 
 #if defined EMSCRIPTEN
@@ -91,9 +91,8 @@ static void atfork_child()
 SvpSalInstance::SvpSalInstance( std::unique_ptr<SalYieldMutex> pMutex )
     : SalGenericInstance( std::move(pMutex) )
 {
-    m_aTimeout.tv_sec       = 0;
-    m_aTimeout.tv_usec      = 0;
-    m_nTimeoutMS            = 0;
+    m_nTimeout = 0;
+    m_nTimeoutMS = 0;
 
     m_MainThread = osl::Thread::getCurrentIdentifier();
     if( s_pDefaultInstance == nullptr )
@@ -153,18 +152,17 @@ void SvpSalInstance::Wakeup(SvpRequest const request)
 bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
 {
     bool bRet = false;
-    if( m_aTimeout.tv_sec ) // timer is started
+    if( m_nTimeout ) // timer is started
     {
-        timeval aTimeOfDay;
-        gettimeofday( &aTimeOfDay, nullptr );
-        if( aTimeOfDay >= m_aTimeout )
+        sal_uInt64 nTimeOfDay = tools::Time::GetMonotonicTicks();
+        if( nTimeOfDay >= m_nTimeout )
         {
             bRet = true;
             if( bExecuteTimers )
             {
                 // timed out, update timeout
-                m_aTimeout = aTimeOfDay;
-                m_aTimeout += m_nTimeoutMS;
+                m_nTimeout = nTimeOfDay;
+                m_nTimeout += m_nTimeoutMS*1000;
 
                 osl::Guard< comphelper::SolarMutex > aGuard( GetYieldMutex() );
 
@@ -447,14 +445,12 @@ bool SvpSalInstance::ImplYield(bool bWait, bool bHandleAllCurrentEvents)
     sal_Int64 nTimeoutMicroS = 0;
     if (bMustSleep)
     {
-        if (m_aTimeout.tv_sec) // Timer is started.
+        if (m_nTimeout) // Timer is started.
         {
-            timeval Timeout;
+            sal_uInt64 nTimeout = tools::Time::GetMonotonicTicks();
             // determine remaining timeout.
-            gettimeofday (&Timeout, nullptr);
-            if (m_aTimeout > Timeout)
-                nTimeoutMicroS = ((m_aTimeout.tv_sec - Timeout.tv_sec) * 1000 * 1000 +
-                                  (m_aTimeout.tv_usec - Timeout.tv_usec));
+            if (m_nTimeout > nTimeout)
+                nTimeoutMicroS = m_nTimeout - nTimeout;
         }
         else
             nTimeoutMicroS = -1; // wait until something happens
@@ -552,20 +548,19 @@ OUString SvpSalInstance::GetConnectionIdentifier()
 
 void SvpSalInstance::StopTimer()
 {
-    m_aTimeout.tv_sec   = 0;
-    m_aTimeout.tv_usec  = 0;
-    m_nTimeoutMS        = 0;
+    m_nTimeout = 0;
+    m_nTimeoutMS = 0;
 }
 
 void SvpSalInstance::StartTimer( sal_uInt64 nMS )
 {
-    timeval aPrevTimeout (m_aTimeout);
-    gettimeofday (&m_aTimeout, nullptr);
+    sal_uInt64 nPrevTimeout (m_nTimeout);
+    m_nTimeout = tools::Time::GetMonotonicTicks();
 
     m_nTimeoutMS  = nMS;
-    m_aTimeout    += m_nTimeoutMS;
+    m_nTimeout    += m_nTimeoutMS * 1000;
 
-    if ((aPrevTimeout > m_aTimeout) || (aPrevTimeout.tv_sec == 0))
+    if ((nPrevTimeout > m_nTimeout) || (nPrevTimeout < 1000000))
     {
         // Wakeup from previous timeout (or stopped timer).
         Wakeup();
