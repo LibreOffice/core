@@ -1603,6 +1603,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128156)
     assertXPath(pXmlDoc, "//w:ins", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf165330)
+{
+    loadAndSave("CT-with-frame.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // check that *both* tracked changes were round tripped
+    assertXPathContent(pXmlDoc, "//w:p[1]/w:ins/w:r/w:t", u"world! ");
+    assertXPathContent(pXmlDoc, "//w:p[3]/w:ins/w:r/w:t", u"hello ");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf125546)
 {
     loadAndSave("tdf125546.docx");

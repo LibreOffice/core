@@ -3105,6 +3105,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     else
         SetIsPreviousParagraphFramed(false);
 
+    m_bIsActualParagraphFramed = false;
     m_StreamStateStack.top().bRemoveThisParagraph = false;
     if( !IsInHeaderFooter() && !IsInShape()
         && (!pParaContext || !pParaContext->props().IsFrameMode()) )
@@ -9713,8 +9714,6 @@ void DomainMapper_Impl::ExecuteFrameConversion()
         {
             DBG_UNHANDLED_EXCEPTION( "writerfilter.dmapper", "Exception caught when converting to frame");
         }
-
-        m_bIsActualParagraphFramed = false;
 
         if (redPos.size() == m_aStoredRedlines[StoredRedlines::FRAME].size())
         {
