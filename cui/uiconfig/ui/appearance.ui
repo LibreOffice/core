@@ -333,6 +333,8 @@
                             <property name="focus-on-click">False</property>
                             <property name="receives-default">True</property>
                             <property name="halign">start</property>
+                            <property name="draw-indicator">True</property>
+                            <property name="label" translatable="no"></property>
                             <child>
                               <placeholder/>
                             </child>
