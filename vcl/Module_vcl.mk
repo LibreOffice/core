@@ -140,7 +140,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
 ))
 endif
 
-ifeq ($(OS),WNT)
+ifeq ($(OS)-$(USE_HEADLESS_CODE),WNT-)
 $(eval $(call gb_Module_add_targets,vcl,\
     WinResTarget_vcl \
     Library_vclplug_win \

@@ -24,11 +24,6 @@
 
 #include <sal/types.h>
 
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
-
 #include <i18nlangtag/mslangid.hxx>
 #include <jobdata.hxx>
 #include <vcl/settings.hxx>

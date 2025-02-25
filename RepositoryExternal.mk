@@ -1214,12 +1214,32 @@ endef
 
 else # !SYSTEM_CAIRO
 
-ifneq ($(filter-out MACOSX$(ENABLE_HEADLESS) WNT,$(OS)),)
+ifneq ($(filter-out MACOSX$(ENABLE_HEADLESS) WNT$(ENABLE_HEADLESS),$(OS)),)
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	cairo \
     pixman \
 ))
+
+ifeq ($(COM)-$(ENABLE_HEADLESS),MSC-TRUE)
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+	cairo \
+	pixman \
+))
+
+define gb_LinkTarget__use_pixman
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,pixman)/pixman \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_libraries,$(1),\
+	pixman \
+)
+
+endef
+
+endif
 
 define gb_LinkTarget__use_cairo
 $(call gb_LinkTarget_use_package,$(1),cairo)
@@ -1234,9 +1254,14 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(if $(filter EMSCRIPTEN,$(OS)), \
 		$(gb_UnpackedTarball_workdir)/cairo/src/.libs/libcairo.a \
-		$(gb_UnpackedTarball_workdir)/pixman/pixman/.libs/libpixman-1.a, \
-		-L$(gb_UnpackedTarball_workdir)/cairo/src/.libs -lcairo \
-		-L$(gb_UnpackedTarball_workdir)/pixman/pixman/.libs -lpixman-1) \
+		$(gb_UnpackedTarball_workdir)/pixman/pixman/.libs/libpixman-1.a \
+	, \
+		$(if $(filter WNT,$(OS)), \
+			$(WORKDIR)/LinkTarget/Library/icairo.lib \
+		, \
+			-L$(gb_UnpackedTarball_workdir)/cairo/src/.libs -lcairo \
+			-L$(gb_UnpackedTarball_workdir)/pixman/pixman/.libs -lpixman-1) \
+		) \
 )
 
 endef
@@ -1323,7 +1348,11 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 
 $(call gb_LinkTarget_add_libs,$(1),\
-    -L$(gb_UnpackedTarball_workdir)/fontconfig/src/.libs -lfontconfig \
+	$(if $(filter WNT,$(OS)), \
+		$(WORKDIR)/LinkTarget/StaticLibrary/fontconfig.lib \
+	, \
+		-L$(gb_UnpackedTarball_workdir)/fontconfig/src/.libs -lfontconfig \
+	) \
 )
 
 endef
@@ -4050,7 +4079,7 @@ $(call gb_Executable_add_runtime_dependencies,gengal,\
 	$(call gb_Library_get_target_for_build,$(CPPU_ENV_FOR_BUILD)_uno) \
 	$(call gb_Library_get_target_for_build,localedata_en) \
 	$(if $(filter MACOSX,$(OS_FOR_BUILD)),$(call gb_Library_get_target_for_build,vclplug_osx)) \
-	$(if $(filter WNT,$(OS_FOR_BUILD)),$(call gb_Library_get_target_for_build,vclplug_win)) \
+	$(if $(filter WNT-,$(OS_FOR_BUILD)-$(USE_HEADLESS_CODE)),$(call gb_Library_get_target_for_build,vclplug_win)) \
 	$(if $(filter host,$(gb_Side)),$(call gb_Package_get_target,postprocess_images)) \
 	$(call gb_Package_get_target_for_build,postprocess_registry) \
 	$(INSTROOT_FOR_BUILD)/$(LIBO_URE_ETC_FOLDER)/$(call gb_Helper_get_rcfile,uno) \

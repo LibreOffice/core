@@ -21,7 +21,7 @@
 
 #include <mutex>
 
-#if !defined(ANDROID) && !defined(IOS) && !defined(EMSCRIPTEN)
+#if !defined(ANDROID) && !defined(IOS) && !defined(EMSCRIPTEN) && !defined(_WIN32)
 #include <pthread.h>
 #endif
 
@@ -97,7 +97,7 @@ SvpSalInstance::SvpSalInstance( std::unique_ptr<SalYieldMutex> pMutex )
     m_MainThread = osl::Thread::getCurrentIdentifier();
     if( s_pDefaultInstance == nullptr )
         s_pDefaultInstance = this;
-#if !defined(ANDROID) && !defined(IOS) && !defined(EMSCRIPTEN)
+#if !defined(ANDROID) && !defined(IOS) && !defined(EMSCRIPTEN) && !defined(_WIN32)
     pthread_atfork(nullptr, nullptr, atfork_child);
 #endif
 #if defined EMSCRIPTEN

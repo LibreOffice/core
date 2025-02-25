@@ -34,9 +34,6 @@
 #include <string_view>
 
 // For spawning PDF and FAX generation
-#include <unistd.h>
-#include <sys/wait.h>
-#include <sys/stat.h>
 
 #include <comphelper/fileurl.hxx>
 #include <o3tl/safeint.hxx>

@@ -15,6 +15,7 @@
 #include <config_buildconfig.h>
 #include <config_cairo_rgba.h>
 #include <config_features.h>
+#include <config_vclplug.h>
 #include <editeng/unolingu.hxx>
 
 #include <stdio.h>
@@ -180,7 +181,7 @@
 #include <vcl/ImageTree.hxx>
 #include <vcl/ITiledRenderable.hxx>
 #include <vcl/dialoghelper.hxx>
-#ifdef _WIN32
+#if defined(_WIN32) && !USE_HEADLESS_CODE
 #include <vcl/BitmapTools.hxx>
 #endif
 #include <unicode/uchar.h>
@@ -4340,7 +4341,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
         pDevice->Pop();
     }
 
-#ifdef _WIN32
+#if defined(_WIN32) && !USE_HEADLESS_CODE
     // pBuffer was not used there
     pDevice->EnableMapMode(false);
     BitmapEx aBmpEx = pDevice->GetBitmapEx({ 0, 0 }, { nCanvasWidth, nCanvasHeight });
