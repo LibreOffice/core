@@ -72,6 +72,9 @@ namespace basegfx { class B2DPolyPolygon; }
 class VCL_DLLPUBLIC FreetypeManager final
 {
 public:
+    FreetypeManager(const FreetypeManager&) = delete;
+    FreetypeManager& operator=(const FreetypeManager&) = delete;
+
     SAL_DLLPRIVATE ~FreetypeManager();
 
     static FreetypeManager& get();

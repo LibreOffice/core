@@ -23,7 +23,7 @@
 
 #include <textrender.hxx>
 
-class FreetypeFontInstance;
+#include <unx/freetype_glyphcache.hxx>
 
 // Generic implementation that uses freetype, but DrawTextLayout()
 // still needs implementing (e.g. by Cairo or Skia).

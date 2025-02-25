@@ -1048,7 +1048,11 @@ cygwin*|wsl*)
     # look at $host etc that much, it mostly uses its own $_os
     # variable, set here in this case statement.
 
-    using_freetype_fontconfig=no
+    if test "$enable_headless" != "yes"; then
+        using_freetype_fontconfig=no
+    else
+        using_freetype_fontconfig=yes
+    fi
     using_x11=no
     test_unix_dlapi=no
     test_openldap=no
@@ -1323,6 +1327,14 @@ if test "$using_freetype_fontconfig" = yes; then
     if test "$using_headless_plugin" = yes; then
         AC_DEFINE(ENABLE_HEADLESS)
         ENABLE_HEADLESS=TRUE
+    fi
+    if test "$_os" = "WINNT" -a "$enable_headless" = yes; then
+        # We build them, don't do any pkg-config checks
+        test_fontconfig=no
+        test_freetype=no
+        ENBALE_FONTCONFIG=TRUE
+        ENBALE_FREETYPE=TRUE
+        BUILD_TYPE="$BUILD_TYPE FONTCONFIG FREETYPE"
     fi
 else
     test_fontconfig=no
@@ -1933,7 +1945,7 @@ AC_ARG_ENABLE(gen,
 
 AC_ARG_ENABLE(headless,
     AS_HELP_STRING([--enable-headless],
-        [Enable headless plugin (svp) even on macOS.]),
+        [Enable headless plugin (svp) even on macOS or Windows.]),
 ,using_headless_plugin=yes)
 
 AC_ARG_ENABLE(gui,
@@ -10354,6 +10366,9 @@ else
     FREETYPE_LIBS_internal="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib -lfreetype"
 fi
 libo_CHECK_SYSTEM_MODULE([freetype],[FREETYPE],[freetype2 >= 9.9.3],,system,TRUE)
+if test "$_os" = WINNT -a "$ENABLE_HEADLESS" = TRUE; then
+    FREETYPE_CFLAGS="$FREETYPE_CFLAGS_internal"
+fi
 
 # ===================================================================
 # Check for system libxslt
