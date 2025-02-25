@@ -51,16 +51,17 @@
 
 #include <vector>
 
-// TODO: move file mapping stuff to OSL
-#include <unistd.h>
-#include <dlfcn.h>
+#include <tools/UnixWrappers.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <sys/mman.h>
 #include <unx/fontmanager.hxx>
 #include <impfontcharmap.hxx>
 
 static FT_Library aLibFT = nullptr;
+
+#ifdef _WIN32
+#define strncasecmp(x,y,z) _strnicmp(x,y,z)
+#endif
 
 // TODO: remove when the priorities are selected by UI
 // if (AH==0) => disable autohinting
@@ -108,10 +109,10 @@ bool FreetypeFontFile::Map()
         if( sscanf( pFileName, "/:FD:/%d%n", &nFD, &n ) == 1 && pFileName[n] == '\0' )
         {
             lseek( nFD, 0, SEEK_SET );
-            nFile = dup( nFD );
+            nFile = wrap_dup( nFD );
         }
         else
-            nFile = open( pFileName, O_RDONLY );
+            nFile = wrap_open( pFileName, O_RDONLY, 0 );
         if( nFile < 0 )
         {
             SAL_WARN("vcl.unx.freetype", "open('" << maNativeFileName << "') failed: " << strerror(errno));
@@ -119,16 +120,16 @@ bool FreetypeFontFile::Map()
         }
 
         struct stat aStat;
-        int nRet = fstat( nFile, &aStat );
+        int nRet = wrap_fstat( nFile, &aStat );
         if (nRet < 0)
         {
             SAL_WARN("vcl.unx.freetype", "fstat on '" << maNativeFileName << "' failed: " << strerror(errno));
-            close (nFile);
+            wrap_close (nFile);
             return false;
         }
         mnFileSize = aStat.st_size;
         mpFileMap = static_cast<unsigned char*>(
-            mmap( nullptr, mnFileSize, PROT_READ, MAP_SHARED, nFile, 0 ));
+            wrap_mmap( mnFileSize, nFile, &mnHandle ));
         if( mpFileMap == MAP_FAILED )
         {
             SAL_WARN("vcl.unx.freetype", "mmap of '" << maNativeFileName << "' failed: " << strerror(errno));
@@ -136,7 +137,7 @@ bool FreetypeFontFile::Map()
         }
         else
             SAL_INFO("vcl.unx.freetype", "mmap'ed '" << maNativeFileName << "' successfully");
-        close( nFile );
+        wrap_close( nFile );
     }
 
     return (mpFileMap != nullptr);
@@ -149,7 +150,7 @@ void FreetypeFontFile::Unmap()
     assert(mnRefCount >= 0 && "how did this go negative\n");
     if (mpFileMap)
     {
-        munmap(mpFileMap, mnFileSize);
+        wrap_munmap(mpFileMap, mnFileSize, mnHandle);
         mpFileMap = nullptr;
     }
 }

@@ -28,12 +28,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <fcntl.h>
-#ifdef UNX
-#include <sys/mman.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#endif
 #include <sft.hxx>
 #include <impfontcharmap.hxx>
 #ifdef SYSTEM_LIBFIXMATH
@@ -51,6 +45,7 @@
 #include <o3tl/string_view.hxx>
 #include <osl/endian.h>
 #include <osl/thread.h>
+#include <tools/UnixWrappers.h>
 #include <unotools/tempfile.hxx>
 #include <fontsubset.hxx>
 #include <algorithm>
@@ -828,7 +823,7 @@ int CountTTCFonts(const char* fname)
     }
     else
 #endif
-        fd = fopen(fname, "rb");
+        fd = wrap_fopen(fname, "rb");
 
     if (!fd)
         return 0;
@@ -865,7 +860,7 @@ int CountTTCFonts(const char* fname)
     return nFonts;
 }
 
-#if !defined(_WIN32)
+#if !defined(_WIN32) || defined(DO_USE_TTF_ON_WIN32)
 SFErrCodes OpenTTFontFile(const char* fname, sal_uInt32 facenum, TrueTypeFont** ttf,
                           const FontCharMapRef xCharMap)
 {
@@ -885,6 +880,7 @@ SFErrCodes OpenTTFontFile(const char* fname, sal_uInt32 facenum, TrueTypeFont** 
         goto cleanup;
     }
 
+#ifdef LINUX
     int nFD;
     int n;
     if (sscanf(fname, "/:FD:/%d%n", &nFD, &n) == 1 && fname[n] == '\0')
@@ -893,14 +889,15 @@ SFErrCodes OpenTTFontFile(const char* fname, sal_uInt32 facenum, TrueTypeFont** 
         fd = dup(nFD);
     }
     else
-        fd = open(fname, O_RDONLY);
+#endif
+        fd = wrap_open(fname, O_RDONLY, 0);
 
     if (fd == -1) {
         ret = SFErrCodes::BadFile;
         goto cleanup;
     }
 
-    if (fstat(fd, &st) == -1) {
+    if (wrap_fstat(fd, &st) == -1) {
         ret = SFErrCodes::FileIo;
         goto cleanup;
     }
@@ -916,7 +913,7 @@ SFErrCodes OpenTTFontFile(const char* fname, sal_uInt32 facenum, TrueTypeFont** 
         goto cleanup;
     }
 
-    if (((*ttf)->ptr = static_cast<sal_uInt8 *>(mmap(nullptr, (*ttf)->fsize, PROT_READ, MAP_SHARED, fd, 0))) == MAP_FAILED) {
+    if (((*ttf)->ptr = static_cast<sal_uInt8 *>(wrap_mmap((*ttf)->fsize, fd, &(*ttf)->mmhandle))) == MAP_FAILED) {
         ret = SFErrCodes::Memory;
         goto cleanup;
     }
@@ -924,7 +921,7 @@ SFErrCodes OpenTTFontFile(const char* fname, sal_uInt32 facenum, TrueTypeFont** 
     ret = (*ttf)->open(facenum);
 
 cleanup:
-    if (fd != -1) close(fd);
+    if (fd != -1) wrap_close(fd);
     if (ret != SFErrCodes::Ok)
     {
         delete *ttf;
@@ -992,9 +989,9 @@ TrueTypeFont::TrueTypeFont(const char* pFileName, const FontCharMapRef xCharMap)
 
 TrueTypeFont::~TrueTypeFont()
 {
-#if !defined(_WIN32)
+#if !defined(_WIN32) || defined(DO_USE_TTF_ON_WIN32)
     if (!fileName().empty())
-        munmap(ptr, fsize);
+        wrap_munmap(ptr, fsize, mmhandle);
 #endif
 }
 
