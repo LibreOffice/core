@@ -794,7 +794,6 @@ awt::Point SAL_CALL ThumbnailViewItemAcc::getLocation()
     return aRet;
 }
 
-// get position of the accessible parent in screen coordinates
 awt::Point SAL_CALL ThumbnailViewItemAcc::getLocationOnScreen()
 {
     const SolarMutexGuard aSolarGuard;
