@@ -436,11 +436,10 @@ Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  )
 
     SDBThreadAttach t;
     rtl::Reference<java_sql_Statement> pStatement = new java_sql_Statement( t.pEnv, *this );
-    Reference< XStatement > xStmt = pStatement;
-    m_aStatements.emplace_back(xStmt);
+    m_aStatements.emplace_back(Reference< XStatement >(pStatement));
 
     m_aLogger.log( LogLevel::FINE, STR_LOG_CREATED_STATEMENT_ID, pStatement->getStatementObjectID() );
-    return xStmt;
+    return pStatement;
 }
 
 Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareStatement( const OUString& sql )
@@ -452,11 +451,10 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareStatement( 
     SDBThreadAttach t;
 
     rtl::Reference<java_sql_PreparedStatement> pStatement = new java_sql_PreparedStatement( t.pEnv, *this, sql );
-    Reference< XPreparedStatement > xReturn( pStatement );
-    m_aStatements.emplace_back(xReturn);
+    m_aStatements.emplace_back(Reference< XPreparedStatement >( pStatement ));
 
     m_aLogger.log( LogLevel::FINE, STR_LOG_PREPARED_STATEMENT_ID, pStatement->getStatementObjectID() );
-    return xReturn;
+    return pStatement;
 }
 
 Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const OUString& sql )
@@ -468,11 +466,10 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const
     SDBThreadAttach t;
 
     rtl::Reference<java_sql_CallableStatement> pStatement = new java_sql_CallableStatement( t.pEnv, *this, sql );
-    Reference< XPreparedStatement > xStmt( pStatement );
-    m_aStatements.emplace_back(xStmt);
+    m_aStatements.emplace_back(Reference< XPreparedStatement >( pStatement ));
 
     m_aLogger.log( LogLevel::FINE, STR_LOG_PREPARED_CALL_ID, pStatement->getStatementObjectID() );
-    return xStmt;
+    return pStatement;
 }
 
 OUString SAL_CALL java_sql_Connection::nativeSQL( const OUString& sql )

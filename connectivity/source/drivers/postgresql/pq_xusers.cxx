@@ -95,14 +95,13 @@ void Users::refresh()
         {
             rtl::Reference<User> pUser =
                 new User( m_xMutex, m_origin, m_pSettings );
-            Reference< css::beans::XPropertySet > prop = pUser;
 
             OUString name = xRow->getString( 1);
             pUser->setPropertyValue_NoBroadcast_public(
                 st.NAME , Any(xRow->getString( TABLE_INDEX_CATALOG+1) ) );
 
             {
-                m_values.push_back( Any( prop ) );
+                m_values.push_back( Any( Reference< css::beans::XPropertySet >(pUser) ) );
                 map[ name ] = tableIndex;
                 ++tableIndex;
             }

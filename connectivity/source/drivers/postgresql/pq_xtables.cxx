@@ -106,7 +106,6 @@ void Tables::refresh()
             // instead offer a factory interface
             rtl::Reference<Table> pTable =
                 new Table( m_xMutex, m_origin, m_pSettings );
-            Reference< css::beans::XPropertySet > prop = pTable;
 
             OUString name = xRow->getString( TABLE_INDEX_NAME+1);
             OUString schema = xRow->getString( TABLE_INDEX_SCHEMA+1);
@@ -131,7 +130,7 @@ void Tables::refresh()
                            css::sdbcx::Privilege::DROP ) ) );
 
             {
-                m_values.push_back( Any( prop ) );
+                m_values.push_back( Any( Reference< css::beans::XPropertySet >(pTable) ) );
                 map[ schema + "." + name ] = tableIndex;
                 ++tableIndex;
             }

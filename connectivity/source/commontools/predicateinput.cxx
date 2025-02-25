@@ -312,11 +312,10 @@ namespace dbtools
                                                                 OUString(),
                                                                 OUString(),
                                                                 OUString());
-        Reference<XPropertySet> xColumn = pColumn;
         pColumn->setFunction(true);
         pColumn->setRealName(sField);
 
-        std::unique_ptr<OSQLParseNode> pParseNode = implPredicateTree( sError, _rPredicateValue, xColumn );
+        std::unique_ptr<OSQLParseNode> pParseNode = implPredicateTree( sError, _rPredicateValue, pColumn );
         if(pParseNode)
         {
             implParseNode(std::move(pParseNode), true) >>= sReturn;

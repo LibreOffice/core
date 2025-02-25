@@ -127,13 +127,12 @@ void IndexColumns::refresh()
 
             rtl::Reference<IndexColumn> pIndexColumn =
                 new IndexColumn( m_xMutex, m_origin, m_pSettings );
-            Reference< css::beans::XPropertySet > prop = pIndexColumn;
 
             columnMetaData2SDBCX( pIndexColumn.get(), xRow );
             pIndexColumn->setPropertyValue_NoBroadcast_public(
                 st.IS_ASCENDING , Any( false ) );
 
-            m_values[ index ] <<= prop;
+            m_values[ index ] <<= Reference< css::beans::XPropertySet >(pIndexColumn);
             m_name2index[ columnName ] = index;
         }
     }

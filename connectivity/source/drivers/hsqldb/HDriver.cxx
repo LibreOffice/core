@@ -370,7 +370,7 @@ namespace connectivity
                         xComp->addEventListener(this);
 
                     // we want to close all connections when the office shuts down
-                    static Reference< XTerminateListener> s_xTerminateListener = [&]()
+                    static rtl::Reference< OConnectionController > s_xTerminateListener = [&]()
                     {
                         Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext );
 

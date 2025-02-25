@@ -120,7 +120,6 @@ void KeyColumns::refresh()
 
             rtl::Reference<KeyColumn> pKeyColumn =
                 new KeyColumn( m_xMutex, m_origin, m_pSettings );
-            Reference< css::beans::XPropertySet > prop = pKeyColumn;
 
             OUString name = columnMetaData2SDBCX( pKeyColumn.get(), xRow );
             if( keyindex < m_foreignColumnNames.getLength() )
@@ -130,7 +129,7 @@ void KeyColumns::refresh()
             }
 
             {
-                m_values.emplace_back(prop);
+                m_values.emplace_back(Reference< css::beans::XPropertySet >(pKeyColumn));
                 map[ name ] = columnIndex;
                 ++columnIndex;
             }

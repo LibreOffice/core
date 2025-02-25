@@ -155,7 +155,6 @@ void Keys::refresh()
         {
             rtl::Reference<Key> pKey =
                 new Key( m_xMutex, m_origin, m_pSettings , m_schemaName, m_tableName );
-            Reference< css::beans::XPropertySet > prop = pKey;
 
             pKey->setPropertyValue_NoBroadcast_public(
                 st.NAME, Any( xRow->getString( 1 ) ) );
@@ -191,7 +190,7 @@ void Keys::refresh()
 
             {
                 map[ xRow->getString( 1 ) ] = keyIndex;
-                m_values.push_back( Any( prop ) );
+                m_values.push_back( Any( Reference< css::beans::XPropertySet >(pKey) ) );
                 ++keyIndex;
             }
         }

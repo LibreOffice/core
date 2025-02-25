@@ -303,7 +303,6 @@ void Columns::refresh()
         {
             rtl::Reference<Column> pColumn =
                 new Column( m_xMutex, m_origin, m_pSettings );
-            Reference< css::beans::XPropertySet > prop = pColumn;
 
             OUString name = columnMetaData2SDBCX( pColumn.get(), xRow );
 //             pColumn->addPropertyChangeListener(
@@ -317,7 +316,7 @@ void Columns::refresh()
 //                     name ) );
 
             {
-                m_values.emplace_back(prop);
+                m_values.emplace_back(Reference< css::beans::XPropertySet >(pColumn));
                 map[ name ] = columnIndex;
                 ++columnIndex;
             }

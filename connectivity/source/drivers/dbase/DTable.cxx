@@ -2170,7 +2170,6 @@ void ODbaseTable::alterColumn(sal_Int32 index,
         OUString sTempName = createTempFile();
 
         rtl::Reference<ODbaseTable> pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
-        Reference<XPropertySet> xHoldTable = pNewTable;
         pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),Any(sTempName));
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
         OSL_ENSURE(xAppend.is(),"ODbaseTable::alterColumn: No XAppend interface!");
@@ -2239,8 +2238,8 @@ void ODbaseTable::alterColumn(sal_Int32 index,
                 ::dbtools::throwGenericSQLException( sError, *this );
             }
             // release the temp file
+            ::comphelper::disposeComponent(pNewTable);
             pNewTable = nullptr;
-            ::comphelper::disposeComponent(xHoldTable);
         }
         else
         {

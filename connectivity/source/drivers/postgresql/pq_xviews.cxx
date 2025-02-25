@@ -109,14 +109,13 @@ void Views::refresh()
             command = xRow->getString( 3 );
 
             rtl::Reference<View> pView = new View (m_xMutex, m_origin, m_pSettings );
-            Reference< css::beans::XPropertySet > prop = pView;
 
             pView->setPropertyValue_NoBroadcast_public(st.NAME , Any(table) );
             pView->setPropertyValue_NoBroadcast_public(st.SCHEMA_NAME, Any(schema) );
             pView->setPropertyValue_NoBroadcast_public(st.COMMAND, Any(command) );
 
             {
-                m_values.push_back( Any( prop ) );
+                m_values.push_back( Any( Reference< css::beans::XPropertySet >(pView) ) );
                 map[ schema + "." + table ] = viewIndex;
                 ++viewIndex;
             }

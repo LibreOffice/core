@@ -1563,8 +1563,7 @@ bool OResultSet::isRowDeleted() const
 
 void SAL_CALL OResultSet::disposing( const EventObject& Source )
 {
-    Reference<XPropertySet> xProp = m_pTable;
-    if(m_pTable.is() && Source.Source == xProp)
+    if(m_pTable.is() && Source.Source == Reference<XPropertySet>(m_pTable))
     {
         m_pTable.clear();
     }

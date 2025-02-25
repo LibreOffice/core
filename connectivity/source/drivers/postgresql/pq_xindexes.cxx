@@ -142,7 +142,6 @@ void Indexes::refresh()
             bool isUnique = row->getBoolean( C_IS_UNIQUE );
             bool isPrimary = row->getBoolean( C_IS_PRIMARY );
             bool isClusterd = row->getBoolean( C_IS_CLUSTERED );
-            Reference< css::beans::XPropertySet > prop = pIndex;
             pIndex->setPropertyValue_NoBroadcast_public(
                 st.IS_UNIQUE, Any( isUnique ) );
             pIndex->setPropertyValue_NoBroadcast_public(
@@ -164,7 +163,7 @@ void Indexes::refresh()
                 st.PRIVATE_COLUMN_INDEXES, Any( columnNames ));
 
             {
-                m_values.emplace_back(prop);
+                m_values.emplace_back(Reference< css::beans::XPropertySet >(pIndex));
                 map[ currentIndexName ] = index;
                 ++index;
             }
