@@ -4398,11 +4398,11 @@ sal_Int32 SAL_CALL ScCellRangesObj::getCount()
 uno::Any SAL_CALL ScCellRangesObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<table::XCellRange> xRange(GetObjectByIndex_Impl(nIndex));
+    rtl::Reference<ScCellRangeObj> xRange(GetObjectByIndex_Impl(nIndex));
     if (!xRange.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xRange);
+    return uno::Any(uno::Reference<table::XCellRange>(xRange));
 
 }
 
@@ -8575,11 +8575,11 @@ uno::Any SAL_CALL ScCellFormatsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference<table::XCellRange> xRange(GetObjectByIndex_Impl(nIndex));
+    rtl::Reference<ScCellRangeObj> xRange(GetObjectByIndex_Impl(nIndex));
     if (!xRange.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xRange);
+    return uno::Any(uno::Reference<table::XCellRange>(xRange));
 
 }
 

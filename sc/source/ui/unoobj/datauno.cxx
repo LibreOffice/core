@@ -587,11 +587,11 @@ sal_Int32 SAL_CALL ScSubTotalDescriptorBase::getCount()
 uno::Any SAL_CALL ScSubTotalDescriptorBase::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XSubTotalField> xField(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
+    rtl::Reference<ScSubTotalFieldObj> xField(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
     if (!xField.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xField);
+    return uno::Any(uno::Reference<sheet::XSubTotalField>(xField));
 }
 
 uno::Type SAL_CALL ScSubTotalDescriptorBase::getElementType()
@@ -2187,11 +2187,11 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByIndex( sal_Int32 nIndex )
     if (nIndex < 0)
         throw lang::IndexOutOfBoundsException();
 
-    uno::Reference<sheet::XDatabaseRange> xRange(GetObjectByIndex_Impl(static_cast<size_t>(nIndex)));
+    rtl::Reference<ScDatabaseRangeObj> xRange(GetObjectByIndex_Impl(static_cast<size_t>(nIndex)));
     if (!xRange.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xRange);
+    return uno::Any(uno::Reference<sheet::XDatabaseRange>(xRange));
 }
 
 uno::Type SAL_CALL ScDatabaseRangesObj::getElementType()
@@ -2210,11 +2210,11 @@ sal_Bool SAL_CALL ScDatabaseRangesObj::hasElements()
 uno::Any SAL_CALL ScDatabaseRangesObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XDatabaseRange> xRange(GetObjectByName_Impl(aName));
+    rtl::Reference<ScDatabaseRangeObj> xRange(GetObjectByName_Impl(aName));
     if (!xRange.is())
         throw container::NoSuchElementException();
 
-    return uno::Any(xRange);
+    return uno::Any(uno::Reference<sheet::XDatabaseRange>(xRange));
 }
 
 uno::Sequence<OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()

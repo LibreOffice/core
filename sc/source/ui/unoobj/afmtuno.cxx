@@ -275,10 +275,10 @@ sal_Int32 SAL_CALL ScAutoFormatsObj::getCount()
 uno::Any SAL_CALL ScAutoFormatsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< container::XNamed >  xFormat(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
+    rtl::Reference< ScAutoFormatObj > xFormat(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
     if (!xFormat.is())
         throw lang::IndexOutOfBoundsException();
-    return uno::Any(xFormat);
+    return uno::Any(uno::Reference< container::XNamed >(xFormat));
 }
 
 uno::Type SAL_CALL ScAutoFormatsObj::getElementType()
@@ -297,10 +297,10 @@ sal_Bool SAL_CALL ScAutoFormatsObj::hasElements()
 uno::Any SAL_CALL ScAutoFormatsObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< container::XNamed >  xFormat(GetObjectByName_Impl(aName));
+    rtl::Reference< ScAutoFormatObj > xFormat(GetObjectByName_Impl(aName));
     if (!xFormat.is())
         throw container::NoSuchElementException();
-    return uno::Any(xFormat);
+    return uno::Any(uno::Reference< container::XNamed >(xFormat));
 }
 
 uno::Sequence<OUString> SAL_CALL ScAutoFormatsObj::getElementNames()

@@ -830,18 +830,14 @@ void ScXMLChangeCellContext::CreateTextPContext(bool bIsNewParagraph)
 
     mpEditTextObj = new ScEditEngineTextObj();
     mpEditTextObj->GetEditEngine()->SetEditTextObjectPool(pDoc->GetEditPool());
-    uno::Reference <text::XText> xText(mpEditTextObj);
-    if (xText.is())
+    uno::Reference<text::XTextCursor> xTextCursor(mpEditTextObj->createTextCursor());
+    if (bIsNewParagraph)
     {
-        uno::Reference<text::XTextCursor> xTextCursor(xText->createTextCursor());
-        if (bIsNewParagraph)
-        {
-            xText->setString(sText);
-            xTextCursor->gotoEnd(false);
-            xText->insertControlCharacter(xTextCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
-        }
-        GetScImport().GetTextImport()->SetCursor(xTextCursor);
+        mpEditTextObj->setString(sText);
+        xTextCursor->gotoEnd(false);
+        mpEditTextObj->insertControlCharacter(xTextCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
     }
+    GetScImport().GetTextImport()->SetCursor(xTextCursor);
 }
 
 void SAL_CALL ScXMLChangeCellContext::endFastElement( sal_Int32 /*nElement*/ )

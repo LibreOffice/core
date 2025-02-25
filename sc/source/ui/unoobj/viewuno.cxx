@@ -1014,11 +1014,11 @@ sal_Int32 SAL_CALL ScTabViewObj::getCount()
 uno::Any SAL_CALL ScTabViewObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XViewPane> xPane(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
+    rtl::Reference<ScViewPaneObj> xPane(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
     if (!xPane.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xPane);
+    return uno::Any(uno::Reference<sheet::XViewPane>(xPane));
 }
 
 uno::Type SAL_CALL ScTabViewObj::getElementType()

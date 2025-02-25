@@ -503,11 +503,11 @@ sal_Int32 SAL_CALL ScStyleFamiliesObj::getCount()
 uno::Any SAL_CALL ScStyleFamiliesObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< container::XNameContainer >  xFamily(GetObjectByIndex_Impl(nIndex));
+    rtl::Reference< ScStyleFamilyObj >  xFamily(GetObjectByIndex_Impl(nIndex));
     if (!xFamily.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xFamily);
+    return uno::Any(uno::Reference< container::XNameContainer >(xFamily));
 }
 
 uno::Type SAL_CALL ScStyleFamiliesObj::getElementType()
@@ -526,11 +526,11 @@ sal_Bool SAL_CALL ScStyleFamiliesObj::hasElements()
 uno::Any SAL_CALL ScStyleFamiliesObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< container::XNameContainer >  xFamily(GetObjectByName_Impl(aName));
+    rtl::Reference< ScStyleFamilyObj >  xFamily(GetObjectByName_Impl(aName));
     if (!xFamily.is())
         throw container::NoSuchElementException();
 
-    return uno::Any(xFamily);
+    return uno::Any(uno::Reference< container::XNameContainer >(xFamily));
 }
 
 uno::Sequence<OUString> SAL_CALL ScStyleFamiliesObj::getElementNames()
@@ -827,11 +827,11 @@ sal_Int32 SAL_CALL ScStyleFamilyObj::getCount()
 uno::Any SAL_CALL ScStyleFamilyObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< style::XStyle >  xObj(GetObjectByIndex_Impl(nIndex));
+    rtl::Reference< ScStyleObj >  xObj(GetObjectByIndex_Impl(nIndex));
     if (!xObj.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xObj);
+    return uno::Any(uno::Reference< style::XStyle >(xObj));
 }
 
 uno::Type SAL_CALL ScStyleFamilyObj::getElementType()
@@ -850,12 +850,12 @@ sal_Bool SAL_CALL ScStyleFamilyObj::hasElements()
 uno::Any SAL_CALL ScStyleFamilyObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< style::XStyle > xObj(
+    rtl::Reference< ScStyleObj > xObj(
         GetObjectByName_Impl( ScStyleNameConversion::ProgrammaticToDisplayName( aName, eFamily ) ));
     if (!xObj.is())
         throw container::NoSuchElementException();
 
-    return uno::Any(xObj);
+    return uno::Any(uno::Reference< style::XStyle >(xObj));
 }
 
 uno::Sequence<OUString> SAL_CALL ScStyleFamilyObj::getElementNames()

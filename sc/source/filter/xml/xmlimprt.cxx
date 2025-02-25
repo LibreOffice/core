@@ -976,8 +976,7 @@ void ScXMLImport::SetStyleToRanges()
 
     if (!sPrevStyleName.isEmpty())
     {
-        uno::Reference <beans::XPropertySet> xProperties (mxSheetCellRanges);
-        if (xProperties.is())
+        if (mxSheetCellRanges.is())
         {
             XMLTableStylesContext *pStyles(static_cast<XMLTableStylesContext *>(GetAutoStyles()));
             XMLTableStyleContext* pStyle = nullptr;
@@ -986,12 +985,12 @@ void ScXMLImport::SetStyleToRanges()
                         XmlStyleFamily::TABLE_CELL, sPrevStyleName, true)));
             if (pStyle)
             {
-                pStyle->FillPropertySet(xProperties);
+                pStyle->FillPropertySet(mxSheetCellRanges);
                 // here needs to be the cond format import method
                 sal_Int32 nNumberFormat(pStyle->GetNumberFormat());
-                SetType(xProperties, nNumberFormat, nPrevCellType, sPrevCurrency);
+                SetType(mxSheetCellRanges, nNumberFormat, nPrevCellType, sPrevCurrency);
 
-                css::uno::Any aAny = xProperties->getPropertyValue(u"FormatID"_ustr);
+                css::uno::Any aAny = mxSheetCellRanges->getPropertyValue(u"FormatID"_ustr);
                 sal_uInt64 nKey = 0;
                 if ((aAny >>= nKey) && nKey)
                 {
@@ -1016,10 +1015,10 @@ void ScXMLImport::SetStyleToRanges()
             }
             else
             {
-                xProperties->setPropertyValue(SC_UNONAME_CELLSTYL, uno::Any(GetStyleDisplayName( XmlStyleFamily::TABLE_CELL, sPrevStyleName )));
+                mxSheetCellRanges->setPropertyValue(SC_UNONAME_CELLSTYL, uno::Any(GetStyleDisplayName( XmlStyleFamily::TABLE_CELL, sPrevStyleName )));
                 sal_Int32 nNumberFormat(GetStyleNumberFormats()->GetStyleNumberFormat(sPrevStyleName));
                 bool bInsert(nNumberFormat == -1);
-                SetType(xProperties, nNumberFormat, nPrevCellType, sPrevCurrency);
+                SetType(mxSheetCellRanges, nNumberFormat, nPrevCellType, sPrevCurrency);
                 if (bInsert)
                     GetStyleNumberFormats()->AddStyleNumberFormat(sPrevStyleName, nNumberFormat);
             }

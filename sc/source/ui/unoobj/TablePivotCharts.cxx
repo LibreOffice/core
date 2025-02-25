@@ -128,8 +128,6 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
     rtl::Reference<sc::PivotTableDataProvider> pPivotTableDataProvider(new sc::PivotTableDataProvider(rDoc));
     pPivotTableDataProvider->setPivotTableName(rDataPilotName);
 
-    uno::Reference<chart2::data::XDataProvider> xDataProvider(pPivotTableDataProvider);
-
     uno::Reference<chart2::data::XDataReceiver> xReceiver;
 
     if (xObject.is())
@@ -137,7 +135,7 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
 
     if (xReceiver.is())
     {
-        xReceiver->attachDataProvider(xDataProvider);
+        xReceiver->attachDataProvider(uno::Reference<chart2::data::XDataProvider>(pPivotTableDataProvider));
 
         uno::Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(cppu::getXWeak(m_pDocShell->GetModel()), uno::UNO_QUERY);
         xReceiver->attachNumberFormatsSupplier(xNumberFormatsSupplier);

@@ -592,11 +592,11 @@ sal_Int32 SAL_CALL ScNamedRangesObj::getCount()
 uno::Any SAL_CALL ScNamedRangesObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< sheet::XNamedRange >  xRange(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
+    rtl::Reference< ScNamedRangeObj >  xRange(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
     if ( !xRange.is() )
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xRange);
+    return uno::Any(uno::Reference< sheet::XNamedRange >(xRange));
 }
 
 uno::Type SAL_CALL ScNamedRangesObj::getElementType()
@@ -642,11 +642,11 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScNamedRangesObj )
 uno::Any SAL_CALL ScNamedRangesObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< sheet::XNamedRange >  xRange(GetObjectByName_Impl(aName));
+    rtl::Reference< ScNamedRangeObj >  xRange(GetObjectByName_Impl(aName));
     if ( !xRange.is() )
         throw container::NoSuchElementException();
 
-    return uno::Any(xRange);
+    return uno::Any(uno::Reference< sheet::XNamedRange >(xRange));
 }
 
 uno::Sequence<OUString> SAL_CALL ScNamedRangesObj::getElementNames()
@@ -1126,11 +1126,11 @@ sal_Int32 SAL_CALL ScLabelRangesObj::getCount()
 uno::Any SAL_CALL ScLabelRangesObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< sheet::XLabelRange >  xRange(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
+    rtl::Reference< ScLabelRangeObj >  xRange(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
     if ( !xRange.is() )
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xRange);
+    return uno::Any(uno::Reference< sheet::XLabelRange >(xRange));
 }
 
 uno::Type SAL_CALL ScLabelRangesObj::getElementType()

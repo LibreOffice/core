@@ -4458,11 +4458,11 @@ sal_Int32 SAL_CALL ScTableSheetsObj::getCount()
 uno::Any SAL_CALL ScTableSheetsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XSpreadsheet> xSheet(GetObjectByIndex_Impl(nIndex));
+    rtl::Reference<ScTableSheetObj> xSheet(GetObjectByIndex_Impl(nIndex));
     if (!xSheet.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xSheet);
+    return uno::Any(uno::Reference<sheet::XSpreadsheet>(xSheet));
 
 //    return uno::Any();
 }
@@ -4483,11 +4483,11 @@ sal_Bool SAL_CALL ScTableSheetsObj::hasElements()
 uno::Any SAL_CALL ScTableSheetsObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XSpreadsheet> xSheet(GetObjectByName_Impl(aName));
+    rtl::Reference<ScTableSheetObj> xSheet(GetObjectByName_Impl(aName));
     if (!xSheet.is())
         throw container::NoSuchElementException();
 
-    return uno::Any(xSheet);
+    return uno::Any(uno::Reference<sheet::XSpreadsheet>(xSheet));
 }
 
 uno::Sequence<OUString> SAL_CALL ScTableSheetsObj::getElementNames()
@@ -4629,11 +4629,11 @@ sal_Int32 SAL_CALL ScTableColumnsObj::getCount()
 uno::Any SAL_CALL ScTableColumnsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<table::XCellRange> xColumn(GetObjectByIndex_Impl(nIndex));
+    rtl::Reference<ScTableColumnObj> xColumn(GetObjectByIndex_Impl(nIndex));
     if (!xColumn.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xColumn);
+    return uno::Any(uno::Reference<table::XCellRange>(xColumn));
 
 }
 
@@ -4651,11 +4651,11 @@ sal_Bool SAL_CALL ScTableColumnsObj::hasElements()
 uno::Any SAL_CALL ScTableColumnsObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<table::XCellRange> xColumn(GetObjectByName_Impl(aName));
+    rtl::Reference<ScTableColumnObj> xColumn(GetObjectByName_Impl(aName));
     if (!xColumn.is())
         throw container::NoSuchElementException();
 
-    return uno::Any(xColumn);
+    return uno::Any(uno::Reference<table::XCellRange>(xColumn));
 }
 
 uno::Sequence<OUString> SAL_CALL ScTableColumnsObj::getElementNames()
@@ -4871,11 +4871,11 @@ sal_Int32 SAL_CALL ScTableRowsObj::getCount()
 uno::Any SAL_CALL ScTableRowsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<table::XCellRange> xRow(GetObjectByIndex_Impl(nIndex));
+    rtl::Reference<ScTableRowObj> xRow(GetObjectByIndex_Impl(nIndex));
     if (!xRow.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xRow);
+    return uno::Any(uno::Reference<table::XCellRange>(xRow));
 }
 
 uno::Type SAL_CALL ScTableRowsObj::getElementType()
@@ -5180,11 +5180,11 @@ sal_Int32 SAL_CALL ScAnnotationsObj::getCount()
 uno::Any SAL_CALL ScAnnotationsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XSheetAnnotation> xAnnotation(GetObjectByIndex_Impl(nIndex));
+    rtl::Reference<ScAnnotationObj> xAnnotation(GetObjectByIndex_Impl(nIndex));
     if (!xAnnotation.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xAnnotation);
+    return uno::Any(uno::Reference<sheet::XSheetAnnotation>(xAnnotation));
 }
 
 uno::Type SAL_CALL ScAnnotationsObj::getElementType()
@@ -5334,11 +5334,11 @@ sal_Int32 SAL_CALL ScScenariosObj::getCount()
 uno::Any SAL_CALL ScScenariosObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XScenario> xScen(GetObjectByIndex_Impl(nIndex));
+    rtl::Reference<ScTableSheetObj> xScen(GetObjectByIndex_Impl(nIndex));
     if (!xScen.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xScen);
+    return uno::Any(uno::Reference<sheet::XScenario>(xScen));
 }
 
 uno::Type SAL_CALL ScScenariosObj::getElementType()
@@ -5355,11 +5355,11 @@ sal_Bool SAL_CALL ScScenariosObj::hasElements()
 uno::Any SAL_CALL ScScenariosObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XScenario> xScen(GetObjectByName_Impl(aName));
+    rtl::Reference<ScTableSheetObj> xScen(GetObjectByName_Impl(aName));
     if (!xScen.is())
         throw container::NoSuchElementException();
 
-    return uno::Any(xScen);
+    return uno::Any(uno::Reference<sheet::XScenario>(xScen));
 }
 
 uno::Sequence<OUString> SAL_CALL ScScenariosObj::getElementNames()

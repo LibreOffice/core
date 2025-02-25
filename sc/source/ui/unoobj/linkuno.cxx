@@ -469,11 +469,11 @@ sal_Int32 SAL_CALL ScSheetLinksObj::getCount()
 uno::Any SAL_CALL ScSheetLinksObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<beans::XPropertySet> xLink(GetObjectByIndex_Impl(nIndex));
+    rtl::Reference<ScSheetLinkObj> xLink(GetObjectByIndex_Impl(nIndex));
     if (!xLink.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xLink);
+    return uno::Any(uno::Reference<beans::XPropertySet>(xLink));
 }
 
 uno::Type SAL_CALL ScSheetLinksObj::getElementType()
@@ -490,11 +490,11 @@ sal_Bool SAL_CALL ScSheetLinksObj::hasElements()
 uno::Any SAL_CALL ScSheetLinksObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<beans::XPropertySet> xLink(GetObjectByName_Impl(aName));
+    rtl::Reference<ScSheetLinkObj> xLink(GetObjectByName_Impl(aName));
     if (!xLink.is())
         throw container::NoSuchElementException();
 
-    return uno::Any(xLink);
+    return uno::Any(uno::Reference<beans::XPropertySet>(xLink));
 }
 
 sal_Bool SAL_CALL ScSheetLinksObj::hasByName( const OUString& aName )
@@ -967,11 +967,11 @@ sal_Int32 SAL_CALL ScAreaLinksObj::getCount()
 uno::Any SAL_CALL ScAreaLinksObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XAreaLink> xLink(GetObjectByIndex_Impl(nIndex));
+    rtl::Reference<ScAreaLinkObj> xLink(GetObjectByIndex_Impl(nIndex));
     if (!xLink.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xLink);
+    return uno::Any(uno::Reference<sheet::XAreaLink>(xLink));
 
 }
 
@@ -1251,11 +1251,11 @@ sal_Int32 SAL_CALL ScDDELinksObj::getCount()
 uno::Any SAL_CALL ScDDELinksObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XDDELink> xLink(GetObjectByIndex_Impl(nIndex));
+    rtl::Reference<ScDDELinkObj> xLink(GetObjectByIndex_Impl(nIndex));
     if (!xLink.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(xLink);
+    return uno::Any(uno::Reference<sheet::XDDELink>(xLink));
 }
 
 uno::Type SAL_CALL ScDDELinksObj::getElementType()
@@ -1272,11 +1272,11 @@ sal_Bool SAL_CALL ScDDELinksObj::hasElements()
 uno::Any SAL_CALL ScDDELinksObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<sheet::XDDELink> xLink(GetObjectByName_Impl(aName));
+    rtl::Reference<ScDDELinkObj> xLink(GetObjectByName_Impl(aName));
     if (!xLink.is())
         throw container::NoSuchElementException();
 
-    return uno::Any(xLink);
+    return uno::Any(uno::Reference<sheet::XDDELink>(xLink));
 }
 
 uno::Sequence<OUString> SAL_CALL ScDDELinksObj::getElementNames()

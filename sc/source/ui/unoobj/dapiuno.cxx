@@ -490,10 +490,10 @@ sal_Int32 SAL_CALL ScDataPilotTablesObj::getCount()
 Any SAL_CALL ScDataPilotTablesObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    Reference<XDataPilotTable2> xTable(GetObjectByIndex_Impl(nIndex));
+    rtl::Reference<ScDataPilotTableObj> xTable(GetObjectByIndex_Impl(nIndex));
     if (!xTable.is())
         throw IndexOutOfBoundsException();
-    return Any( xTable );
+    return Any( Reference<XDataPilotTable2>(xTable) );
 }
 
 uno::Type SAL_CALL ScDataPilotTablesObj::getElementType()
@@ -512,10 +512,10 @@ sal_Bool SAL_CALL ScDataPilotTablesObj::hasElements()
 Any SAL_CALL ScDataPilotTablesObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
-    Reference<XDataPilotTable2> xTable(GetObjectByName_Impl(aName));
+    rtl::Reference<ScDataPilotTableObj> xTable(GetObjectByName_Impl(aName));
     if (!xTable.is())
         throw NoSuchElementException();
-    return Any( xTable );
+    return Any( Reference<XDataPilotTable2>(xTable) );
 }
 
 Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
@@ -1559,10 +1559,10 @@ sal_Int32 SAL_CALL ScDataPilotFieldsObj::getCount()
 Any SAL_CALL ScDataPilotFieldsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    Reference< XPropertySet > xField( GetObjectByIndex_Impl( nIndex ) );
+    rtl::Reference< ScDataPilotFieldObj > xField( GetObjectByIndex_Impl( nIndex ) );
     if (!xField.is())
         throw IndexOutOfBoundsException();
-    return Any( xField );
+    return Any( Reference< XPropertySet >(xField) );
 }
 
 // XElementAccess
@@ -1583,10 +1583,10 @@ sal_Bool SAL_CALL ScDataPilotFieldsObj::hasElements()
 Any SAL_CALL ScDataPilotFieldsObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
-    Reference<XPropertySet> xField(GetObjectByName_Impl(aName));
+    rtl::Reference<ScDataPilotFieldObj> xField(GetObjectByName_Impl(aName));
     if (!xField.is())
         throw NoSuchElementException();
-    return Any( xField );
+    return Any( Reference<XPropertySet>(xField) );
 }
 
 Sequence<OUString> SAL_CALL ScDataPilotFieldsObj::getElementNames()

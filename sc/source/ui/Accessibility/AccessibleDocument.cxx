@@ -487,7 +487,7 @@ ScChildrenShapes::GetAccessibleCaption (const css::uno::Reference < css::drawing
     if (it == maShapesMap.end())
         return nullptr;
     ScAccessibleShapeData* pShape = it->second;
-    css::uno::Reference< css::accessibility::XAccessible > xNewChild( pShape->pAccShape );
+    rtl::Reference< ::accessibility::AccessibleShape > xNewChild( pShape->pAccShape );
     if(xNewChild)
         return xNewChild;
     return nullptr;
@@ -1089,8 +1089,7 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
                 aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
             }
             aEvent.Source = uno::Reference< XAccessible >(mpAccessibleDocument);
-            uno::Reference< XAccessible > xChild( rpShape->pAccShape );
-            aEvent.NewValue <<= xChild;
+            aEvent.NewValue <<= uno::Reference< XAccessible >( rpShape->pAccShape );
             mpAccessibleDocument->CommitChange(aEvent);
         }
     }
@@ -1099,8 +1098,7 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
         AccessibleEventObject aEvent;
         aEvent.EventId =  AccessibleEventId::SELECTION_CHANGED_REMOVE;
         aEvent.Source = uno::Reference< XAccessible >(mpAccessibleDocument);
-        uno::Reference< XAccessible > xChild( rpShape->pAccShape );
-        aEvent.NewValue <<= xChild;
+        aEvent.NewValue <<= uno::Reference< XAccessible >( rpShape->pAccShape );
         mpAccessibleDocument->CommitChange(aEvent);
     }
     for(ScAccessibleShapeData*& pShapeData : aShapesList)
@@ -1505,9 +1503,8 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 mpTempAccEdit = new ScAccessibleEditObject(this, rViewData.GetEditView(meSplitPos),
                     mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(),
                     ScResId(STR_ACC_EDITLINE_DESCR), ScAccessibleEditObject::CellInEditMode);
-                uno::Reference<XAccessible> xAcc = mpTempAccEdit;
 
-                AddChild(xAcc, true);
+                AddChild(uno::Reference<XAccessible>(mpTempAccEdit), true);
 
                 if (mpAccessibleSpreadsheet.is())
                     mpAccessibleSpreadsheet->LostFocus();

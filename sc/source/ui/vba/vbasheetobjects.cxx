@@ -220,8 +220,8 @@ sal_Int32 ScVbaObjectContainer::insertShape( const uno::Reference< drawing::XSha
 uno::Any ScVbaObjectContainer::createCollectionObject( const uno::Any& rSource )
 {
     uno::Reference< drawing::XShape > xShape( rSource, uno::UNO_QUERY_THROW );
-    uno::Reference< excel::XSheetObject > xSheetObject( implCreateVbaObject( xShape ) );
-    return uno::Any( xSheetObject );
+    rtl::Reference< ScVbaSheetObjectBase > xSheetObject( implCreateVbaObject( xShape ) );
+    return uno::Any( uno::Reference< excel::XSheetObject >(xSheetObject) );
 }
 
 uno::Any ScVbaObjectContainer::getItemByStringIndex( const OUString& rIndex )

@@ -890,7 +890,6 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
 
         auto xObjectHelper = SvXMLEmbeddedObjectHelper::Create(
             xStorage, *pObjSh, SvXMLEmbeddedObjectHelperMode::Write);
-        uno::Reference<document::XEmbeddedObjectResolver> xObjectResolver(xObjectHelper);
 
         // styles export
 
@@ -901,7 +900,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
                 Any(xGraphicStorageHandler),
                 Any(xStatusIndicator),
                 Any(xWriter),
-                Any(xObjectResolver)
+                Any(uno::Reference<document::XEmbeddedObjectResolver>(xObjectHelper))
             };
 
             SAL_INFO( "sc.filter", "styles export start" );
@@ -926,7 +925,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
                 Any(xGraphicStorageHandler),
                 Any(xStatusIndicator),
                 Any(xWriter),
-                Any(xObjectResolver)
+                Any(uno::Reference<document::XEmbeddedObjectResolver>(xObjectHelper))
             };
 
             SAL_INFO( "sc.filter", "content export start" );

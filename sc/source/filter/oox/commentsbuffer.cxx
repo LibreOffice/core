@@ -174,9 +174,8 @@ namespace
             }
 
             // insert text and convert text formatting
-            Reference< XText > xAnnoText( xAnnoShape );
             xAnnoShape->addActionLock();
-            mxText->convert( xAnnoText );
+            mxText->convert( Reference< XText >( xAnnoShape ) );
             xAnnoShape->removeActionLock();
         }
 

@@ -1165,7 +1165,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScEditFieldObj::getAnchor()
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScEditFieldObj::getPropertySetInfo()
 {
     SolarMutexGuard aGuard;
-    uno::Reference<beans::XPropertySetInfo> aRef = pPropSet->getPropertySetInfo();
+    rtl::Reference<SfxItemPropertySetInfo> aRef = pPropSet->getPropertySetInfo();
     return aRef;
 }
 
