@@ -32,17 +32,15 @@ class SwTextGuess
 {
     css::uno::Reference< css::linguistic2::XHyphenatedWord >  m_xHyphWord;
     std::unique_ptr<SwHangingPortion> m_pHanging; // for hanging punctuation
-    TextFrameIndex m_nCutPos;         // this character doesn't fit
-    TextFrameIndex m_nBreakStart;     // start index of word containing line break
-    TextFrameIndex m_nBreakPos;       // start index of break position
-    TextFrameIndex m_nFieldDiff;      // absolute positions can be wrong if we
+    TextFrameIndex m_nCutPos{ 0 }; // this character doesn't fit
+    TextFrameIndex m_nBreakStart{ 0 }; // start index of word containing line break
+    TextFrameIndex m_nBreakPos{ 0 }; // start index of break position
+    TextFrameIndex m_nFieldDiff{ 0 }; // absolute positions can be wrong if we
                                // a field in the text has been expanded
-    SwTwips m_nBreakWidth; // width of the broken portion
-    SwTwips m_nExtraBlankWidth; // width of spaces after the break
+    SwTwips m_nBreakWidth{ 0 }; // width of the broken portion
+    SwTwips m_nExtraBlankWidth{ 0 }; // width of spaces after the break
 public:
-    SwTextGuess(): m_nCutPos(0), m_nBreakStart(0),
-                   m_nBreakPos(0), m_nFieldDiff(0), m_nBreakWidth(0), m_nExtraBlankWidth(0)
-        { }
+    SwTextGuess() = default;
 
     // true, if current portion still fits to current line
     bool Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,

@@ -362,7 +362,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     }
 
     ExtraShrunkWidth( 0 );
-    std::unique_ptr<SwTextGuess> pGuess(new SwTextGuess());
+    std::unique_ptr<SwTextGuess> pGuess(new SwTextGuess);
     bool bFull = !pGuess->Guess( *this, rInf, Height() );
 
     // tdf#158776 for the last full text portion, call Guess() again to allow more text in the
@@ -403,7 +403,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
         if ( nSpacesInLine > 0 )
         {
             SwTwips nOldWidth = pGuess->BreakWidth();
-            pGuess.reset(new SwTextGuess());
+            pGuess.reset(new SwTextGuess);
             bFull = !pGuess->Guess( *this, rInf, Height(), nSpacesInLine );
 
             if ( pGuess->BreakWidth() > nOldWidth )
