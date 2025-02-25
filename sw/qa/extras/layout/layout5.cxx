@@ -1219,6 +1219,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf164932)
     assertXPath(pDump, "//SwLineLayout", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf164903)
+{
+    // ignore top margin of inline heading, like MSO does
+    createSwDoc("tdf164903.docx");
+    auto pDump = parseLayoutDump();
+    auto nInlineHeadingHeight
+        = getXPath(pDump, "/root/page[1]/body/txt[6]/infos/bounds", "height").toInt32();
+    // This was 493 (adding top margin to the height of the Inline Heading frame)
+    CPPUNIT_ASSERT_GREATER(sal_Int32(250), nInlineHeadingHeight);
+    CPPUNIT_ASSERT_LESS(sal_Int32(260), nInlineHeadingHeight);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf135991)
 {
     createSwDoc("tdf135991.odt");
