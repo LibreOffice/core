@@ -108,7 +108,7 @@ void SwLineLayout::DeleteNext()
 
 void SwLineLayout::Height(const SwTwips nNew, const bool bText)
 {
-    SwPosSize::Height(nNew);
+    SwPositiveSize::Height(nNew);
     if (bText)
         m_nTextHeight = nNew;
 }

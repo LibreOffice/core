@@ -425,7 +425,7 @@ void SwDoubleLinePortion::FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxW
         if( SW_SCRIPTS > m_pBracket->nPreScript )
             aTmpFnt.SetActual( m_pBracket->nPreScript );
         SwFontSave aSave( rInf, &aTmpFnt );
-        SwPosSize aSize = rInf.GetTextSize( aStr );
+        SwPositiveSize aSize = rInf.GetTextSize( aStr );
         m_pBracket->nAscent = rInf.GetAscent();
         m_pBracket->nHeight = aSize.Height();
         aTmpFnt.SetActual( nActualScr );
@@ -449,7 +449,7 @@ void SwDoubleLinePortion::FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxW
         if( SW_SCRIPTS > m_pBracket->nPostScript )
             aTmpFnt.SetActual( m_pBracket->nPostScript );
         SwFontSave aSave( rInf, &aTmpFnt );
-        SwPosSize aSize = rInf.GetTextSize( aStr );
+        SwPositiveSize aSize = rInf.GetTextSize( aStr );
         const sal_uInt16 nTmpAsc = rInf.GetAscent();
         if( nTmpAsc > m_pBracket->nAscent )
         {

@@ -41,7 +41,7 @@ public:
 
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
-    virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
+    virtual SwPositiveSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 
     // #i98418#

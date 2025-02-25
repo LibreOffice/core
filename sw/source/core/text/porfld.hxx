@@ -103,7 +103,7 @@ public:
     virtual SwFieldPortion *Clone( const OUString &rExpand ) const;
 
     // Extra GetTextSize because of pFnt
-    virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
+    virtual SwPositiveSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;

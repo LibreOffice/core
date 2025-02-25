@@ -726,7 +726,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         if (m_nBreakPos > m_nCutPos && m_nBreakPos != TextFrameIndex(COMPLETE_STRING))
         {
             const TextFrameIndex nHangingLen = m_nBreakPos - m_nCutPos;
-            SwPosSize aTmpSize = rInf.GetTextSize( &rSI, m_nCutPos, nHangingLen );
+            SwPositiveSize aTmpSize = rInf.GetTextSize( &rSI, m_nCutPos, nHangingLen );
             aTmpSize.Width(aTmpSize.Width() + nLeftRightBorderSpace);
             OSL_ENSURE( !m_pHanging, "A hanging portion is hanging around" );
             m_pHanging.reset( new SwHangingPortion( std::move(aTmpSize) ) );

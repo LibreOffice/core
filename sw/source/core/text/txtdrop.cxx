@@ -432,7 +432,7 @@ bool SwDropPortion::FormatText( SwTextFormatInfo &rInf )
     return true;
 }
 
-SwPosSize SwDropPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
+SwPositiveSize SwDropPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 {
     SwTwips nMyX = 0;
     TextFrameIndex nIdx(0);
@@ -461,7 +461,7 @@ SwPosSize SwDropPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 
     // robust
     SwFontSave aFontSave( rInf, pCurrPart ? &pCurrPart->GetFont() : nullptr );
-    SwPosSize aPosSize( SwTextPortion::GetTextSize( rInf ) );
+    SwPositiveSize aPosSize( SwTextPortion::GetTextSize( rInf ) );
     aPosSize.Width( aPosSize.Width() + nMyX );
 
     const_cast<SwTextSizeInfo&>(rInf).SetIdx( nOldIdx );

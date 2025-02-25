@@ -403,7 +403,7 @@ void SwTextSizeInfo::NoteAnimation() const
             "SwTextSizeInfo::NoteAnimation() changed m_pOut" );
 }
 
-SwPosSize SwTextSizeInfo::GetTextSize( OutputDevice* pOutDev,
+SwPositiveSize SwTextSizeInfo::GetTextSize( OutputDevice* pOutDev,
                                      const SwScriptInfo* pSI,
                                      const OUString& rText,
                                      const TextFrameIndex nIndex,
@@ -415,10 +415,10 @@ SwPosSize SwTextSizeInfo::GetTextSize( OutputDevice* pOutDev,
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( 0 );
-    return SwPosSize(m_pFnt->GetTextSize_( aDrawInf ));
+    return SwPositiveSize(m_pFnt->GetTextSize_( aDrawInf ));
 }
 
-SwPosSize
+SwPositiveSize
 SwTextSizeInfo::GetTextSize(std::optional<SwLinePortionLayoutContext> nLayoutContext) const
 {
     const SwScriptInfo& rSI =
@@ -438,7 +438,7 @@ SwTextSizeInfo::GetTextSize(std::optional<SwLinePortionLayoutContext> nLayoutCon
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
-    return SwPosSize(m_pFnt->GetTextSize_( aDrawInf ));
+    return SwPositiveSize(m_pFnt->GetTextSize_( aDrawInf ));
 }
 
 void SwTextSizeInfo::GetTextSize(const SwScriptInfo* pSI, const TextFrameIndex nIndex,
@@ -455,7 +455,7 @@ void SwTextSizeInfo::GetTextSize(const SwScriptInfo* pSI, const TextFrameIndex n
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
-    SwPosSize aSize( m_pFnt->GetTextSize_( aDrawInf ) );
+    SwPositiveSize aSize( m_pFnt->GetTextSize_( aDrawInf ) );
     nMaxSizeDiff = aDrawInf.GetKanaDiff();
     nExtraAscent = aDrawInf.GetExtraAscent();
     nExtraDescent = aDrawInf.GetExtraDescent();

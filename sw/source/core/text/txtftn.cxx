@@ -1423,7 +1423,7 @@ void SwFootnotePortion::Paint( const SwTextPaintInfo &rInf ) const
     SwExpandPortion::Paint( rInf );
 }
 
-SwPosSize SwFootnotePortion::GetTextSize( const SwTextSizeInfo &rInfo ) const
+SwPositiveSize SwFootnotePortion::GetTextSize( const SwTextSizeInfo &rInfo ) const
 {
     // #i98418#
 //    SwFootnoteSave aFootnoteSave( rInfo, pFootnote );

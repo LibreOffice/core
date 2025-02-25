@@ -41,12 +41,12 @@ TextFrameIndex SwGluePortion::GetModelPositionForViewPoint(const SwTwips nOfst) 
         return TextFrameIndex(nOfst / (Width() / sal_Int32(GetLen())));
 }
 
-SwPosSize SwGluePortion::GetTextSize( const SwTextSizeInfo &rInf ) const
+SwPositiveSize SwGluePortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 {
     if (TextFrameIndex(1) >= GetLen() || rInf.GetLen() > GetLen() || !Width() || !GetLen())
-        return SwPosSize(*this);
+        return SwPositiveSize(*this);
     else
-        return SwPosSize((Width() / sal_Int32(GetLen())) * sal_Int32(rInf.GetLen()), Height());
+        return SwPositiveSize((Width() / sal_Int32(GetLen())) * sal_Int32(rInf.GetLen()), Height());
 }
 
 bool SwGluePortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const
@@ -88,7 +88,7 @@ void SwGluePortion::Paint( const SwTextPaintInfo &rInf ) const
     if (TextFrameIndex(1) == GetLen())
     {
         OUString aBullet( CH_BULLET );
-        SwPosSize aBulletSize( rInf.GetTextSize( aBullet ) );
+        SwPositiveSize aBulletSize( rInf.GetTextSize( aBullet ) );
         Point aPos( rInf.GetPos() );
         aPos.AdjustX((Width()/2) - (aBulletSize.Width()/2) );
         SwTextPaintInfo aInf( rInf, &aBullet );

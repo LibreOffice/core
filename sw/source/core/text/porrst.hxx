@@ -133,7 +133,7 @@ class SwHangingPortion : public SwTextPortion
 {
     SwTwips m_nInnerWidth;
 public:
-    explicit SwHangingPortion( SwPosSize aSize ) : m_nInnerWidth( aSize.Width() )
+    explicit SwHangingPortion( SwPositiveSize aSize ) : m_nInnerWidth( aSize.Width() )
     {
         SetWhichPor( PortionType::Hanging );
         SetLen(TextFrameIndex(1));

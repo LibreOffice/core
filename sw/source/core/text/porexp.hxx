@@ -28,7 +28,7 @@ public:
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual TextFrameIndex GetModelPositionForViewPoint(SwTwips nOfst) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
-    virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
+    virtual SwPositiveSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 
     // Accessibility: pass information about this portion to the PortionHandler

@@ -49,7 +49,7 @@ void SwExpandPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-SwPosSize SwExpandPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
+SwPositiveSize SwExpandPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 {
     SwTextSlot aDiffText( &rInf, this, false, false );
     return rInf.GetTextSize();
@@ -223,7 +223,7 @@ void SwBlankPortion::Paint( const SwTextPaintInfo &rInf ) const
                                     : u"°"_ustr
                                 : u"-"_ustr); //CHAR_HARDHYPHEN
 
-        SwPosSize aMarkerSize(rInf.GetTextSize(aMarker));
+        SwPositiveSize aMarkerSize(rInf.GetTextSize(aMarker));
         Point aPos(rInf.GetPos());
 
         std::shared_ptr<SwRect> pPortionRect = std::make_shared<SwRect>();

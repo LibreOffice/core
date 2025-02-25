@@ -288,7 +288,7 @@ bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess const &rGu
 
         // length of pHyphPor is adjusted
         pHyphPor->SetLen( TextFrameIndex(aAltText.getLength() + 1) );
-        static_cast<SwPosSize&>(*pHyphPor) = pHyphPor->GetTextSize( rInf );
+        static_cast<SwPositiveSize&>(*pHyphPor) = pHyphPor->GetTextSize( rInf );
         pHyphPor->SetLen( TextFrameIndex(aAltSpell.nChangedLength + nTmpLen) );
     }
     else
@@ -304,7 +304,7 @@ bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess const &rGu
         rInf.GetFont()->GetFontCacheId( nTmpFontCacheId, nFntIdx, rInf.GetFont()->GetActual() );
         if( !nLastFontCacheId || nLastFontCacheId != nTmpFontCacheId ) {
             nLastFontCacheId = nTmpFontCacheId;
-            static_cast<SwPosSize&>(*pHyphPor) = pHyphPor->GetTextSize( rInf );
+            static_cast<SwPositiveSize&>(*pHyphPor) = pHyphPor->GetTextSize( rInf );
             aMiniCacheH = pHyphPor->Height();
             aMiniCacheW = pHyphPor->Width();
         } else {
@@ -449,7 +449,7 @@ void SwSoftHyphPortion::Paint( const SwTextPaintInfo &rInf ) const
             OUString aMarker = u"-"_ustr;
             SwTextPaintInfo aInf(rInf, &aMarker);
             SwTextPortion aMarkerPor;
-            SwPosSize aMarkerSize(rInf.GetTextSize(aMarker));
+            SwPositiveSize aMarkerSize(rInf.GetTextSize(aMarker));
             aMarkerPor.Width(aMarkerSize.Width());
             aMarkerPor.Height(aMarkerSize.Height());
             aMarkerPor.SetAscent(GetAscent());

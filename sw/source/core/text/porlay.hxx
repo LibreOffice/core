@@ -108,8 +108,8 @@ private:
 
     void DeleteNext();
 public:
-    // From SwPosSize
-    using SwPosSize::Height;
+    // From SwPositiveSize
+    using SwPositiveSize::Height;
     virtual void Height(const SwTwips nNew, const bool bText = true) override;
 
     // From SwLinePortion

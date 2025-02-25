@@ -513,10 +513,10 @@ void SwFieldPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-SwPosSize SwFieldPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
+SwPositiveSize SwFieldPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 {
     SwFontSave aSave( rInf, m_pFont.get() );
-    SwPosSize aSize( SwExpandPortion::GetTextSize( rInf ) );
+    SwPositiveSize aSize( SwExpandPortion::GetTextSize( rInf ) );
     return aSize;
 }
 

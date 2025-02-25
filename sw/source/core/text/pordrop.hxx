@@ -85,7 +85,7 @@ public:
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
             void PaintDrop( const SwTextPaintInfo &rInf ) const;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
-    virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
+    virtual SwPositiveSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual TextFrameIndex GetModelPositionForViewPoint(SwTwips nOfst) const override;
 
     sal_uInt16 GetLines() const { return m_nLines; }

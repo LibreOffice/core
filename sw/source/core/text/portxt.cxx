@@ -583,9 +583,9 @@ TextFrameIndex SwTextPortion::GetModelPositionForViewPoint(const SwTwips nOfst) 
 }
 
 // The GetTextSize() assumes that the own length is correct
-SwPosSize SwTextPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
+SwPositiveSize SwTextPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 {
-    SwPosSize aSize = rInf.GetTextSize(GetLayoutContext());
+    SwPositiveSize aSize = rInf.GetTextSize(GetLayoutContext());
     if( !GetJoinBorderWithPrev() )
         aSize.Width(aSize.Width() + rInf.GetFont()->GetLeftBorderSpace() );
     if( !GetJoinBorderWithNext() )
@@ -817,12 +817,12 @@ bool SwTextInputFieldPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &
     return true;
 }
 
-SwPosSize SwTextInputFieldPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
+SwPositiveSize SwTextInputFieldPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 {
     SwTextSlot aFormatText( &rInf, this, true, false );
     if (rInf.GetLen() == TextFrameIndex(0))
     {
-        return SwPosSize( 0, 0 );
+        return SwPositiveSize( 0, 0 );
     }
 
     return rInf.GetTextSize();
@@ -841,9 +841,9 @@ SwHolePortion::SwHolePortion( const SwTextPortion &rPor )
 SwLinePortion *SwHolePortion::Compress() { return this; }
 
 // The GetTextSize() assumes that the own length is correct
-SwPosSize SwHolePortion::GetTextSize(const SwTextSizeInfo& rInf) const
+SwPositiveSize SwHolePortion::GetTextSize(const SwTextSizeInfo& rInf) const
 {
-    SwPosSize aSize = rInf.GetTextSize();
+    SwPositiveSize aSize = rInf.GetTextSize();
     if (!GetJoinBorderWithPrev())
         aSize.Width(aSize.Width() + rInf.GetFont()->GetLeftBorderSpace());
     if (!GetJoinBorderWithNext())

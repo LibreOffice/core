@@ -21,27 +21,27 @@
 #include <tools/gen.hxx>
 #include <swtypes.hxx>
 
-// Compared to the SV sizes SwPosSize is always positive
-class SwPosSize
+// Compared to the SV sizes SwPositiveSize is always positive
+class SwPositiveSize
 {
     SwTwips m_nWidth;
     SwTwips m_nHeight;
 public:
-    SwPosSize( const SwTwips nW = 0, const SwTwips nH = 0 )
+    SwPositiveSize( const SwTwips nW = 0, const SwTwips nH = 0 )
         : m_nWidth(nW)
         , m_nHeight(nH)
     {
     }
-    explicit SwPosSize( const Size &rSize )
+    explicit SwPositiveSize( const Size &rSize )
         : m_nWidth(SwTwips(rSize.Width()))
         , m_nHeight(SwTwips(rSize.Height()))
     {
     }
-    virtual ~SwPosSize() {}
-    SwPosSize(SwPosSize const &) = default;
-    SwPosSize(SwPosSize &&) = default;
-    SwPosSize & operator =(SwPosSize const &) = default;
-    SwPosSize & operator =(SwPosSize &&) = default;
+    virtual ~SwPositiveSize() {}
+    SwPositiveSize(SwPositiveSize const &) = default;
+    SwPositiveSize(SwPositiveSize &&) = default;
+    SwPositiveSize & operator =(SwPositiveSize const &) = default;
+    SwPositiveSize & operator =(SwPositiveSize &&) = default;
     SwTwips Height() const { return m_nHeight; }
     virtual void Height(const SwTwips nNew, const bool = true) { m_nHeight = nNew; }
     SwTwips Width() const { return m_nWidth; }
@@ -57,7 +57,7 @@ public:
         m_nHeight = SwTwips(rSize.Width());
         m_nWidth = SwTwips(rSize.Height());
     }
-    SwPosSize& operator=( const Size &rSize )
+    SwPositiveSize& operator=( const Size &rSize )
     {
         m_nWidth  = SwTwips(rSize.Width());
         m_nHeight = SwTwips(rSize.Height());

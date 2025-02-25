@@ -33,7 +33,7 @@ class SwPortionHandler;
 
 /// Base class for anything that can be part of a line in the Writer layout.
 /// Typically owned by SwLineLayout.
-class SAL_DLLPUBLIC_RTTI SwLinePortion: public SwPosSize
+class SAL_DLLPUBLIC_RTTI SwLinePortion: public SwPositiveSize
 {
 protected:
     // Here we have areas with different attributes
@@ -145,7 +145,7 @@ public:
     SwLinePortion *FindLastPortion();
 
     virtual TextFrameIndex GetModelPositionForViewPoint(SwTwips nOfst) const;
-    virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const;
+    virtual SwPositiveSize GetTextSize( const SwTextSizeInfo &rInfo ) const;
     void CalcTextSize( const SwTextSizeInfo &rInfo );
 
     // Output
@@ -184,7 +184,7 @@ public:
 
 inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)
 {
-    *static_cast<SwPosSize*>(this) = rPortion;
+    *static_cast<SwPositiveSize*>(this) = rPortion;
     mnLineLength = rPortion.mnLineLength;
     mnAscent = rPortion.mnAscent;
     mnHangingBaseline = rPortion.mnHangingBaseline;
@@ -198,7 +198,7 @@ inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)
 }
 
 inline SwLinePortion::SwLinePortion(const SwLinePortion &rPortion) :
-    SwPosSize( rPortion ),
+    SwPositiveSize( rPortion ),
     mpNextPortion( nullptr ),
     mnLineLength( rPortion.mnLineLength ),
     mnAscent( rPortion.mnAscent ),

@@ -247,19 +247,19 @@ public:
 
     sal_uInt16      GetTextHeight() const;
 
-    SwPosSize GetTextSize( OutputDevice* pOut, const SwScriptInfo* pSI,
+    SwPositiveSize GetTextSize( OutputDevice* pOut, const SwScriptInfo* pSI,
                           const OUString& rText, TextFrameIndex nIdx,
                           TextFrameIndex nLen ) const;
-    SwPosSize GetTextSize(std::optional<SwLinePortionLayoutContext> nLayoutContext
+    SwPositiveSize GetTextSize(std::optional<SwLinePortionLayoutContext> nLayoutContext
                           = std::nullopt) const;
     void GetTextSize(const SwScriptInfo* pSI, TextFrameIndex nIdx, TextFrameIndex nLen,
                      std::optional<SwLinePortionLayoutContext> nLayoutContext,
                      const sal_uInt16 nComp, SwTwips& nMinSize, tools::Long& nMaxSizeDiff,
                      SwTwips& nExtraAscent, SwTwips& nExtraDescent,
                      vcl::text::TextLayoutCache const* = nullptr) const;
-    inline SwPosSize GetTextSize(const SwScriptInfo* pSI, TextFrameIndex nIdx,
+    inline SwPositiveSize GetTextSize(const SwScriptInfo* pSI, TextFrameIndex nIdx,
                                  TextFrameIndex nLen) const;
-    inline SwPosSize GetTextSize( const OUString &rText ) const;
+    inline SwPositiveSize GetTextSize( const OUString &rText ) const;
 
     TextFrameIndex GetTextBreak( const tools::Long nLineWidth,
                             const TextFrameIndex nMaxLen,
@@ -774,12 +774,12 @@ inline sal_uInt16 SwTextSizeInfo::GetHangingBaseline() const
     return const_cast<SwFont*>(GetFont())->GetHangingBaseline( m_pVsh, *GetOut() );
 }
 
-inline SwPosSize SwTextSizeInfo::GetTextSize( const OUString &rText ) const
+inline SwPositiveSize SwTextSizeInfo::GetTextSize( const OUString &rText ) const
 {
     return GetTextSize(m_pOut, nullptr, rText, TextFrameIndex(0), TextFrameIndex(rText.getLength()));
 }
 
-inline SwPosSize SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI,
+inline SwPositiveSize SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI,
                                             TextFrameIndex const nNewIdx,
                                             TextFrameIndex const nNewLen) const
 {

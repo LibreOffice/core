@@ -138,12 +138,12 @@ void SwLinePortion::PrePaint( const SwTextPaintInfo& rInf,
 void SwLinePortion::CalcTextSize( const SwTextSizeInfo &rInf )
 {
     if( GetLen() == rInf.GetLen()  )
-        *static_cast<SwPosSize*>(this) = GetTextSize( rInf );
+        *static_cast<SwPositiveSize*>(this) = GetTextSize( rInf );
     else
     {
         SwTextSizeInfo aInf( rInf );
         aInf.SetLen( GetLen() );
-        *static_cast<SwPosSize*>(this) = GetTextSize( aInf );
+        *static_cast<SwPositiveSize*>(this) = GetTextSize( aInf );
     }
 }
 
@@ -230,11 +230,11 @@ TextFrameIndex SwLinePortion::GetModelPositionForViewPoint(const SwTwips nOfst) 
         return TextFrameIndex(0);
 }
 
-SwPosSize SwLinePortion::GetTextSize( const SwTextSizeInfo & ) const
+SwPositiveSize SwLinePortion::GetTextSize( const SwTextSizeInfo & ) const
 {
     OSL_ENSURE( false, "SwLinePortion::GetTextSize: don't ask me about sizes, "
                    "I'm only a stupid SwLinePortion" );
-    return SwPosSize();
+    return SwPositiveSize();
 }
 
 bool SwLinePortion::Format( SwTextFormatInfo &rInf )

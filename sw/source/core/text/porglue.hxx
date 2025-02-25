@@ -45,7 +45,7 @@ public:
     inline void AdjFixWidth();
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual TextFrameIndex GetModelPositionForViewPoint(SwTwips nOfst) const override;
-    virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
+    virtual SwPositiveSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
 
     void dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText, TextFrameIndex& nOffset) const override;
