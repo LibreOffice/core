@@ -610,13 +610,11 @@ sal_Int64 SAL_CALL ThumbnailViewItemAcc::getAccessibleIndexInParent()
                 pItem = nullptr;
             }
 
-            // Do not create an accessible object for the test.
-            if (pItem != nullptr && pItem->mxAcc.is())
-                if (pItem->GetAccessible( mbIsTransientChildrenDisabled ).get() == this )
-                {
-                    nIndexInParent = i;
-                    bDone = true;
-                }
+            if (pItem && pItem == mpThumbnailViewItem)
+            {
+                nIndexInParent = i;
+                bDone = true;
+            }
         }
     }
 
