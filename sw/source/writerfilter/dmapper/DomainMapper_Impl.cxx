@@ -2987,6 +2987,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     else
         SetIsPreviousParagraphFramed(false);
 
+    m_bIsActualParagraphFramed = false;
     m_StreamStateStack.top().bRemoveThisParagraph = false;
     if( !IsInHeaderFooter() && !IsInShape()
         && (!pParaContext || !pParaContext->props().IsFrameMode()) )
