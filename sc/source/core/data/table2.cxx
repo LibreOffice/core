@@ -2417,13 +2417,30 @@ bool ScTable::IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
     return bEmpty;
 }
 
+//  Return value = new nArrY
 SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCOL nX2,
                             SCCOL nCol, SCROW nAttrRow1, SCROW nAttrRow2, SCSIZE nArrY,
-                            const ScPatternAttr* pPattern, const SfxItemSet* pCondSet )
+                            const ScPatternAttr* pPattern, const SfxItemSet* pCondSet,
+                            FillMaxRotCacheMap* pCache )
 {
-    //  Return value = new nArrY
+    // Use a cache to lookup nRotDir, because it gets expensive when painting large spreadsheets
+    // with lots of conditional formatting.
+    ScRotateDir nRotDir;
+    if (pCache)
+    {
+        auto aKey = std::make_pair(pPattern, pCondSet);
+        auto it = pCache->find(aKey);
+        if (it != pCache->end())
+            nRotDir = it->second;
+        else
+        {
+            nRotDir = pPattern->GetRotateDir( pCondSet );
+            pCache->insert({aKey, nRotDir});
+        }
+    }
+    else
+        nRotDir = pPattern->GetRotateDir( pCondSet );
 
-    ScRotateDir nRotDir = pPattern->GetRotateDir( pCondSet );
     if ( nRotDir != ScRotateDir::NONE )
     {
         bool bHit = true;
@@ -2498,8 +2515,13 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
 
     SCROW nY1 = pRowInfo[0].nRowNo;
     SCROW nY2 = pRowInfo[nArrCount-1].nRowNo;
-
-    for (SCCOL nCol : GetColumnsRange(0, rDocument.MaxCol()))
+    FillMaxRotCacheMap aCacheMap;
+    std::unordered_map<OUString, SfxStyleSheetBase*> aStyleSheetCache;
+    SCCOL nStartCol = 0;
+    SCCOL nEndCol = rDocument.MaxCol();
+    bool bShrunk = false;
+    ShrinkToUsedDataArea(bShrunk, nStartCol, nY1, nEndCol, nY2, /*bColumnsOnly*/false, false, false, nullptr);
+    for (SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol)
     {
         if (!ColHidden(nCol))
         {
@@ -2535,13 +2557,20 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
                                     OUString  aStyleName = static_cast<const ScCondFormatEntry*>(pEntry)->GetStyle();
                                     if (!aStyleName.isEmpty())
                                     {
-                                        SfxStyleSheetBase* pStyleSheet =
-                                            pStylePool->Find( aStyleName, SfxStyleFamily::Para );
+                                        SfxStyleSheetBase* pStyleSheet;
+                                        auto it = aStyleSheetCache.find(aStyleName);
+                                        if (it != aStyleSheetCache.end())
+                                            pStyleSheet = it->second;
+                                        else
+                                        {
+                                            pStyleSheet = pStylePool->Find( aStyleName, SfxStyleFamily::Para );
+                                            aStyleSheetCache.insert({aStyleName, pStyleSheet});
+                                        }
                                         if ( pStyleSheet )
                                         {
                                             FillMaxRot( pRowInfo, nArrCount, nX1, nX2,
                                                     nCol, nAttrRow1, nAttrRow2,
-                                                    nArrY, pPattern, &pStyleSheet->GetItemSet() );
+                                                    nArrY, pPattern, &pStyleSheet->GetItemSet(), &aCacheMap);
                                             //  not changing nArrY
                                         }
                                     }
@@ -2553,7 +2582,7 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
 
                 nArrY = FillMaxRot( pRowInfo, nArrCount, nX1, nX2,
                                     nCol, nAttrRow1, nAttrRow2,
-                                    nArrY, pPattern, nullptr );
+                                    nArrY, pPattern, nullptr, &aCacheMap );
 
                 pPattern = aIter.GetNext( nAttrCol, nAttrRow1, nAttrRow2 );
             }

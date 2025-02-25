@@ -1331,9 +1331,19 @@ private:
 
     void        SetLoadingMedium(bool bLoading);
 
+    struct FillMaxRotCacheMapHash
+    {
+        size_t operator()(const std::pair<const ScPatternAttr*, const SfxItemSet*>& rPair) const noexcept
+        {
+            return std::hash<const ScPatternAttr*>{}(rPair.first) ^ (std::hash<const SfxItemSet*>{}(rPair.second) << 1);
+        }
+    };
+    typedef std::unordered_map<std::pair<const ScPatternAttr*, const SfxItemSet*>, ScRotateDir, FillMaxRotCacheMapHash> FillMaxRotCacheMap;
+
     SCSIZE      FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCOL nX2,
                             SCCOL nCol, SCROW nAttrRow1, SCROW nAttrRow2, SCSIZE nArrY,
-                            const ScPatternAttr* pPattern, const SfxItemSet* pCondSet );
+                            const ScPatternAttr* pPattern, const SfxItemSet* pCondSet,
+                            FillMaxRotCacheMap* pCache);
 
     // idle calculation of OutputDevice text width for cell
     // also invalidates script type, broadcasts for "calc as shown"
