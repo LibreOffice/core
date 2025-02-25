@@ -3405,7 +3405,6 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                     gProp.pSLines->LockLines( true );
                     const IDocumentDrawModelAccess& rIDDMA = pSh->getIDocumentDrawModelAccess();
                     pSh->Imp()->PaintLayer( rIDDMA.GetHellId(),
-                                            /*pPrintData*/nullptr,
                                             *pPage, pPage->getFrameArea(),
                                             &aPageBackgrdColor,
                                             pPage->IsRightToLeft(),
@@ -3422,7 +3421,6 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                     gProp.pSLines->LockLines( true );
                     const IDocumentDrawModelAccess& rIDDMA = pSh->getIDocumentDrawModelAccess();
                     pSh->Imp()->PaintLayer( rIDDMA.GetHeaderFooterHellId(),
-                                            /*pPrintData*/nullptr,
                                             *pPage, pPage->getFrameArea(),
                                             &aPageBackgrdColor,
                                             pPage->IsRightToLeft(),
@@ -3468,7 +3466,6 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                 if ( pSh->Imp()->HasDrawView() )
                 {
                     pSh->Imp()->PaintLayer( pSh->GetDoc()->getIDocumentDrawModelAccess().GetHeavenId(),
-                                            /*pPrintData*/nullptr,
                                             *pPage, pPage->getFrameArea(),
                                             &aPageBackgrdColor,
                                             pPage->IsRightToLeft(),
@@ -7833,11 +7830,11 @@ void SwFrame::Retouch( const SwPageFrame * pPage, const SwRect &rRect ) const
                 SwViewObjectContactRedirector aSwRedirector( *pSh );
                 // <--
 
-                pSh->Imp()->PaintLayer( rIDDMA.GetHellId(), nullptr,
+                pSh->Imp()->PaintLayer( rIDDMA.GetHellId(),
                                         *pPage, rRetouche, &aPageBackgrdColor,
                                         pPage->IsRightToLeft(),
                                         &aSwRedirector );
-                pSh->Imp()->PaintLayer( rIDDMA.GetHeavenId(), nullptr,
+                pSh->Imp()->PaintLayer( rIDDMA.GetHeavenId(),
                                         *pPage, rRetouche, &aPageBackgrdColor,
                                         pPage->IsRightToLeft(),
                                         &aSwRedirector );
@@ -8152,7 +8149,7 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap, const sal_uInt32 /*nMaxim
         // --> OD #i76669#
         SwViewObjectContactRedirector aSwRedirector( *pSh );
         // <--
-        pImp->PaintLayer( rIDDMA.GetHellId(), nullptr,
+        pImp->PaintLayer( rIDDMA.GetHellId(),
                           *pFlyPage, aOut, &aPageBackgrdColor,
                           pFlyPage->IsRightToLeft(),
                           &aSwRedirector );
@@ -8160,7 +8157,7 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap, const sal_uInt32 /*nMaxim
         if ( pFly->IsFlyInContentFrame() )
             pFly->PaintSwFrame( *pDev, aOut );
         gProp.pSLines->PaintLines( pDev, gProp );
-        pImp->PaintLayer( rIDDMA.GetHeavenId(), nullptr,
+        pImp->PaintLayer( rIDDMA.GetHeavenId(),
                           *pFlyPage, aOut, &aPageBackgrdColor,
                           pFlyPage->IsRightToLeft(),
                           &aSwRedirector );

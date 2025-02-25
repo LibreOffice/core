@@ -193,7 +193,6 @@ public:
      * the draw view for painting layers "hell" and "heaven"
      */
     void   PaintLayer( const SdrLayerID _nLayerID,
-                       SwPrintData const*const pPrintData,
                        SwPageFrame const& rPageFrame,
                        const SwRect& _rRect,
                        const Color* _pPageBackgrdColor,
