@@ -401,23 +401,20 @@ Range Layouter::GetRangeOfVisiblePageObjects (const ::tools::Rectangle& aVisible
     return mpImplementation->GetRangeOfVisiblePageObjects(aVisibleArea);
 }
 
-sal_Int32 Layouter::GetIndexAtPoint (
-    const Point& rPosition,
-    const bool bIncludePageBorders,
-    const bool bClampToValidRange) const
+sal_Int32 Layouter::GetIndexAtPoint(const Point& rPosition) const
 {
     const sal_Int32 nRow (
         mpImplementation->GetRowAtPosition (
             rPosition.Y(),
-            bIncludePageBorders,
-            bIncludePageBorders ? Implementation::GM_PAGE_BORDER : Implementation::GM_NONE));
+            /*bIncludePageBorders*/false,
+            Implementation::GM_NONE));
     const sal_Int32 nColumn (
         mpImplementation->GetColumnAtPosition (
             rPosition.X(),
-            bIncludePageBorders,
-            bIncludePageBorders ? Implementation::GM_PAGE_BORDER : Implementation::GM_NONE));
+            /*bIncludePageBorders*/false,
+            Implementation::GM_NONE));
 
-    return mpImplementation->GetIndex(nRow,nColumn,bClampToValidRange);
+    return mpImplementation->GetIndex(nRow,nColumn, /*bClampToValidRange*/ false);
 }
 
 //===== Layouter::Implementation ==============================================

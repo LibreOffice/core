@@ -392,13 +392,13 @@ bool GoPrevious( SwNode& rNd, SwContentIndex& rIdx, SwCursorSkipMode nMode )
     return false;
 }
 
-static SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool bChk )
+static SwContentNode* GoPreviousNds( SwNodeIndex * pIdx )
 {
     SwNodeIndex aIdx( *pIdx );
     SwContentNode* pNd = SwNodes::GoPrevious( &aIdx );
     if( pNd )
     {
-        if( bChk && SwNodeOffset(1) != pIdx->GetIndex() - aIdx.GetIndex() &&
+        if( SwNodeOffset(1) != pIdx->GetIndex() - aIdx.GetIndex() &&
             !CheckNodesRange( pIdx->GetNode(), aIdx.GetNode(), true ) )
                 pNd = nullptr;
         else
@@ -1156,7 +1156,7 @@ void GoEndSection( SwPosition * pPos )
     do { SwNodes::GoEndOfSection( &pPos->nNode ); } while( nLevel-- );
 
     // now on an EndNode, thus to the previous ContentNode
-    if( SwContentNode* pCNd = GoPreviousNds( &pPos->nNode, true ) )
+    if( SwContentNode* pCNd = GoPreviousNds( &pPos->nNode ) )
         pPos->AssignEndIndex(*pCNd);
 }
 

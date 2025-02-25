@@ -4274,8 +4274,7 @@ void ColorListBox::SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton)
 }
 
 ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl,
-                           TopLevelParentFunction aTopLevelParentFunction,
-                           const ColorListBox* pCache)
+                           TopLevelParentFunction aTopLevelParentFunction)
     : m_xButton(std::move(pControl))
     , m_aColorWrapper(this)
     , m_aAutoDisplayColor(Application::GetSettings().GetStyleSettings().GetDialogColor())
@@ -4285,14 +4284,7 @@ ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl,
 {
     m_xButton->connect_toggled(LINK(this, ColorListBox, ToggleHdl));
     m_aSelectedColor = GetAutoColor(m_nSlotId);
-    if (!pCache)
-        LockWidthRequest(CalcBestWidthRequest());
-    else
-    {
-        LockWidthRequest(pCache->m_xButton->get_size_request().Width());
-        m_xPaletteManager.reset(pCache->m_xPaletteManager->Clone());
-        m_xPaletteManager->SetColorSelectFunction(std::ref(m_aColorWrapper));
-    }
+    LockWidthRequest(CalcBestWidthRequest());
     ShowPreview(m_aSelectedColor);
 }
 

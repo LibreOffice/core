@@ -62,7 +62,7 @@ class UNLESS_MERGELIBS(DLLPUBLIC_PACKAGE) InflaterBytes final
     sal_Int32   doInflateBytes (sal_Int8* pOutBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
 
 public:
-    InflaterBytes(bool bNoWrap);
+    InflaterBytes();
     ~InflaterBytes();
     void setInput( const sal_Int8* pBuffer, sal_Int32 nLen );
     bool finished() const { return bFinished; }

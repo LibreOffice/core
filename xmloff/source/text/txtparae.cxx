@@ -652,8 +652,7 @@ void FieldParamExporter::ExportParameter(const OUString& sKey, const OUString& s
 
 void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
                                   const Reference < XPropertySet > & rPropSet,
-                                  const std::span<const XMLPropertyState> aAddStates,
-                                  bool bDontSeek )
+                                  const std::span<const XMLPropertyState> aAddStates )
 {
     rtl::Reference < SvXMLExportPropertyMapper > xPropMapper;
     switch( nFamily )
@@ -778,7 +777,7 @@ void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
     }
     if (aPropStates.size()) // could change after the previous check
     {
-        GetAutoStylePool().Add( nFamily, sParent, std::vector(aPropStates), bDontSeek );
+        GetAutoStylePool().Add( nFamily, sParent, std::vector(aPropStates), /*bDontSeek*/false );
         if( !sCondParent.isEmpty() && sParent != sCondParent )
             GetAutoStylePool().Add( nFamily, sCondParent, std::move(aPropStates) );
     }
@@ -2600,7 +2599,7 @@ void XMLTextParagraphExport::exportTextField(
     SAL_WARN_IF( !xTxtFld.is(), "xmloff", "text field missing" );
     if( xTxtFld.is() )
     {
-        exportTextField(xTxtFld, bAutoStyles, bIsProgress, true, pPrevCharIsSpace);
+        exportTextField(xTxtFld, bAutoStyles, bIsProgress, pPrevCharIsSpace);
     }
     else
     {
@@ -2612,12 +2611,12 @@ void XMLTextParagraphExport::exportTextField(
 void XMLTextParagraphExport::exportTextField(
         const Reference < XTextField > & xTextField,
         const bool bAutoStyles, const bool bIsProgress,
-        const bool bRecursive, bool *const pPrevCharIsSpace)
+        bool *const pPrevCharIsSpace)
 {
     if ( bAutoStyles )
     {
         m_pFieldExport->ExportFieldAutoStyle( xTextField, bIsProgress,
-                bRecursive );
+                /*bRecursive*/ true );
     }
     else
     {

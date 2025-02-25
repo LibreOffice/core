@@ -258,7 +258,7 @@ public:
     void ResetToolBars (ToolBarGroup eGroup);
     void ResetAllToolBars();
     void AddToolBar (ToolBarGroup eGroup, const OUString& rsToolBarName);
-    void AddToolBarShell (ToolBarGroup eGroup, ShellId nToolBarId, bool bAddBar = true);
+    void AddToolBarShell (ToolBarGroup eGroup, ShellId nToolBarId);
     void RemoveToolBar (ToolBarGroup eGroup, const OUString& rsToolBarName);
 
     /** Release all tool bar shells and the associated framework tool bars.
@@ -394,7 +394,7 @@ void ToolBarManager::AddToolBarShell (
     if (mpImpl != nullptr)
     {
         UpdateLock aLock (shared_from_this());
-        mpImpl->AddToolBarShell(eGroup,nToolBarId,/*bAddBar*/true);
+        mpImpl->AddToolBarShell(eGroup,nToolBarId);
     }
 }
 
@@ -623,23 +623,13 @@ void ToolBarManager::Implementation::RemoveToolBar (
 
 void ToolBarManager::Implementation::AddToolBarShell (
     ToolBarGroup eGroup,
-    ShellId nToolBarId,
-    bool bAddBar)
+    ShellId nToolBarId)
 {
     ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
     if (pMainViewShell != nullptr)
     {
         maToolBarShellList.AddShellId(eGroup,nToolBarId);
-        if (bAddBar)
-        {
-            GetToolBarRules().SubShellAdded(eGroup, nToolBarId);
-        }
-        else
-        {
-            mbPostUpdatePending = true;
-            if (mnLockCount == 0)
-                PostUpdate();
-        }
+        GetToolBarRules().SubShellAdded(eGroup, nToolBarId);
     }
 }
 

@@ -1229,7 +1229,7 @@ SwContentFrame *SwContentNode::getLayoutFrame( const SwRootFrame* _pRoot,
                                             pPos, pViewPosAndCalcFrame));
 }
 
-SwRect SwContentNode::FindLayoutRect( const bool bPrtArea, const Point* pPoint ) const
+SwRect SwContentNode::FindLayoutRect( const Point* pPoint ) const
 {
     SwRect aRet;
     std::pair<Point, bool> tmp;
@@ -1241,7 +1241,7 @@ SwRect SwContentNode::FindLayoutRect( const bool bPrtArea, const Point* pPoint )
     SwContentFrame* pFrame = static_cast<SwContentFrame*>( ::GetFrameOfModify( nullptr, *this,
                                 FRM_CNTNT, nullptr, pPoint ? &tmp : nullptr) );
     if( pFrame )
-        aRet = bPrtArea ? pFrame->getFramePrintArea() : pFrame->getFrameArea();
+        aRet = pFrame->getFrameArea();
     return aRet;
 }
 

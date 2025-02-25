@@ -449,8 +449,7 @@ public:
             std::pair<Point, bool> const* pViewPosAndCalcFrame = nullptr) const;
     /** @return the real size of the frame or an empty rectangle if
        no layout exists. Needed for export filters. */
-    SW_DLLPUBLIC SwRect FindLayoutRect( const bool bPrtArea = false,
-                            const Point* pPoint = nullptr  ) const;
+    SW_DLLPUBLIC SwRect FindLayoutRect( const Point* pPoint = nullptr ) const;
     SW_DLLPUBLIC SwRect FindPageFrameRect() const;
 
     /** Method creates all views of document for given node. The content

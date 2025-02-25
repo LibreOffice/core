@@ -1360,10 +1360,7 @@ void MultiSelectionModeHandler::UpdateSelection()
     const sal_Int32 nPageCount (rModel.GetPageCount());
 
     const sal_Int32 nIndexUnderMouse (
-        mrSlideSorter.GetView().GetLayouter().GetIndexAtPoint (
-            maSecondCorner,
-            false,
-            false));
+        mrSlideSorter.GetView().GetLayouter().GetIndexAtPoint(maSecondCorner));
     if (nIndexUnderMouse < 0 || nIndexUnderMouse >= nPageCount)
         return;
 

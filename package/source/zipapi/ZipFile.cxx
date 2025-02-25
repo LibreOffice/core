@@ -1905,7 +1905,7 @@ void ZipFile::getSizeAndCRC( sal_Int64 nOffset, sal_Int64 nCompressedSize, sal_I
 
     CRC32 aCRC;
     sal_Int64 nRealSize = 0;
-    ZipUtils::InflaterBytes aInflaterLocal( true );
+    ZipUtils::InflaterBytes aInflaterLocal;
     sal_Int32 nBlockSize = static_cast< sal_Int32 > (::std::min( nCompressedSize, static_cast< sal_Int64 >( 32000 ) ) );
     std::vector < sal_Int8 > aBuffer(nBlockSize);
     std::vector< sal_Int8 > aData( nBlockSize );

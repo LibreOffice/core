@@ -142,25 +142,11 @@ public:
         @param rPosition
             The position is expected to be in model coordinates relative to
             the page origin.
-        @param bIncludePageBorders
-            When <TRUE/> then include the page borders into the calculation,
-            i.e. when a point lies in the border of a page object but not on
-            the actual page area the index of that page is returned;
-            otherwise -1 would be returned to indicate that no page object
-            has been hit.
-        @param bClampToValidRange
-            When <TRUE/> then values outside the valid range [0,mnPageCount)
-            are mapped to 0 (when smaller than 0) or mnPageCount-1 when
-            equal to or larger than mnPageCount.
-            When <FALSE/> then -1 is returned for values outside the valid range.
         @return
             The returned index may be larger than the number of existing
             page objects.
     */
-    sal_Int32 GetIndexAtPoint (
-        const Point& rModelPosition,
-        const bool bIncludePageBorders,
-        const bool bClampToValidRange = true) const;
+    sal_Int32 GetIndexAtPoint(const Point& rModelPosition) const;
 
     /** Return an object that describes the logical and visual properties of
         where to do an insert operation when the user would release the

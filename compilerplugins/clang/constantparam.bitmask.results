@@ -10,16 +10,16 @@ dbaccess/source/filter/xml/xmlExport.hxx:162
 include/basegfx/polygon/b2dpolygontools.hxx:145
     enum CutFlagValue findCut(const class basegfx::B2DPoint &,const class basegfx::B2DVector &,const class basegfx::B2DPoint &,const class basegfx::B2DVector &,enum CutFlagValue,double *,double *)
     enum CutFlagValue aCutFlags setBits=0x1
-include/framework/framelistanalyzer.hxx:185
+include/framework/framelistanalyzer.hxx:184
     void framework::FrameListAnalyzer::FrameListAnalyzer(const class com::sun::star::uno::Reference<class com::sun::star::frame::XFramesSupplier> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,enum FrameAnalyzerFlags)
     enum FrameAnalyzerFlags eDetectMode setBits=0x4
-include/sfx2/objsh.hxx:489
+include/sfx2/objsh.hxx:493
     void SfxObjectShell::FinishedLoading(enum SfxLoadedFlags)
     enum SfxLoadedFlags nWhich setBits=0x1
-include/svtools/brwbox.hxx:514
+include/svtools/brwbox.hxx:522
     void BrowseBox::InsertDataColumn(unsigned short,const class rtl::OUString &,long,enum HeaderBarItemBits,unsigned short)
     enum HeaderBarItemBits nBits setBits=0x400 clearBits=0x3ec
-include/vcl/wizardmachine.hxx:139
+include/vcl/wizardmachine.hxx:133
     void vcl::WizardMachine::WizardMachine(class weld::Window *,enum WizardButtonFlags)
     enum WizardButtonFlags _nButtonFlags setBits=0xf
 sc/inc/rangeutl.hxx:169
@@ -28,22 +28,22 @@ sc/inc/rangeutl.hxx:169
 sc/inc/xmlwrap.hxx:88
     _Bool ScXMLImportWrapper::Import(enum ImportFlags,class ErrCodeMsg &)
     enum ImportFlags nMode setBits=0x1
-sc/source/ui/view/cellsh1.cxx:106
+sc/source/ui/view/cellsh1.cxx:108
     enum InsertDeleteFlags FlagsFromString(const class rtl::OUString &,enum InsertDeleteFlags)
     enum InsertDeleteFlags nFlagsMask setBits=0x487f clearBits=0x3600
-sc/source/ui/view/cellsh1.cxx:129
+sc/source/ui/view/cellsh1.cxx:131
     class rtl::OUString FlagsToString(enum InsertDeleteFlags,enum InsertDeleteFlags)
     enum InsertDeleteFlags nFlagsMask setBits=0x487f clearBits=0x3600
 starmath/inc/mathml/export.hxx:199
     void SmMLExport::SmMLExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
     enum SvXMLExportFlags nExportFlags setBits=0x8000 clearBits=0x7a00
-sw/source/core/view/viewsh.cxx:830
+sw/source/core/view/viewsh.cxx:859
     void lcl_InvalidateAllContent(class SwViewShell &,enum SwInvalidateFlags)
     enum SwInvalidateFlags nInv setBits=0x2
-sw/source/filter/html/swhtml.hxx:698
+sw/source/filter/html/swhtml.hxx:700
     void SwHTMLParser::SetFrameFormatAttrs(class SfxItemSet &,enum HtmlFrameFormatFlags,class SfxItemSet &)
     enum HtmlFrameFormatFlags nFlags setBits=0x1
-sw/source/filter/ww8/wrtw8esh.cxx:1542
+sw/source/filter/ww8/wrtw8esh.cxx:1548
     enum ShapeFlag AddMirrorFlags(enum ShapeFlag,const class SwMirrorGrf &)
     enum ShapeFlag nFlags setBits=0xa00 clearBits=0x5ef
 xmloff/inc/MetaExportComponent.hxx:31

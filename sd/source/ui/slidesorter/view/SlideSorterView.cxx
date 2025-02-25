@@ -189,7 +189,7 @@ sal_Int32 SlideSorterView::GetPageIndexAtPoint (const Point& rWindowPosition) co
     sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if (pWindow)
     {
-        nIndex = mpLayouter->GetIndexAtPoint(pWindow->PixelToLogic(rWindowPosition), false, false);
+        nIndex = mpLayouter->GetIndexAtPoint(pWindow->PixelToLogic(rWindowPosition));
 
         // Clip the page index against the page count.
         if (nIndex >= mrModel.GetPageCount())

@@ -134,7 +134,7 @@ sal_Int32 Inflater::doInflateBytes (Sequence < sal_Int8 >  &rBuffer, sal_Int32 n
     return 0;
 }
 
-InflaterBytes::InflaterBytes(bool bNoWrap)
+InflaterBytes::InflaterBytes()
 : bFinished(false),
   nOffset(0),
   nLength(0),
@@ -144,7 +144,7 @@ InflaterBytes::InflaterBytes(bool bNoWrap)
     /* memset to 0 to set zalloc/opaque etc */
     memset (pStream.get(), 0, sizeof(*pStream));
     sal_Int32 nRes;
-    nRes = inflateInit2(pStream.get(), bNoWrap ? -MAX_WBITS : MAX_WBITS);
+    nRes = inflateInit2(pStream.get(), -MAX_WBITS);
     switch (nRes)
     {
         case Z_OK:

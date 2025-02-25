@@ -255,7 +255,7 @@ protected:
     void exportTextField(
         const css::uno::Reference< css::text::XTextField> & xTextField,
         const bool bAutoStyles, const bool bProgress,
-        const bool bRecursive, bool * pPrevCharIsSpace);
+        bool * pPrevCharIsSpace);
 
     void exportAnyTextFrame(
         const css::uno::Reference< css::text::XTextContent > & rTextContent,
@@ -396,7 +396,7 @@ public:
     void Add(
         XmlStyleFamily nFamily,
         const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
-        std::span<const XMLPropertyState> aAddStates = {}, bool bDontSeek = false );
+        std::span<const XMLPropertyState> aAddStates = {} );
 
     /// find style name for specified family and parent
     OUString Find(
