@@ -524,7 +524,8 @@ void Scheduler::CallbackTaskScheduling()
     rSchedCtx.mpSchedulerStack = pMostUrgent;
     rSchedCtx.mpSchedulerStackTop = pMostUrgent;
 
-    bool bIsHighPriorityIdle = pMostUrgent->mePriority >= TaskPriority::HIGH_IDLE;
+    // high priority idle handlers have smaller numerical values for mePriority
+    bool bIsLowerPriorityIdle = pMostUrgent->mePriority >= TaskPriority::HIGH_IDLE;
 
     // invoke the task
     Unlock();
@@ -533,7 +534,7 @@ void Scheduler::CallbackTaskScheduling()
     // in the OS event queue. This will often effectively compress such events and repaint only
     // once at the end, improving performance in cases such as repeated zooming with a complex document.
     bool bDelayInvoking
-        = bIsHighPriorityIdle
+        = bIsLowerPriorityIdle
           && (rSchedCtx.mnIdlesLockCount > 0
               || Application::AnyInput(VclInputFlags::MOUSE | VclInputFlags::KEYBOARD | VclInputFlags::PAINT));
 
