@@ -111,6 +111,9 @@ namespace comphelper
                     sal_Int32 nIndexHint = -1
                 );
 
+        /// returns whether any accessible listeners are registered
+        bool hasAccessibleListeners() const;
+
         // life time control
         /// checks whether the object is alive (returns <TRUE/> then) or disposed
         bool    isAlive() const;

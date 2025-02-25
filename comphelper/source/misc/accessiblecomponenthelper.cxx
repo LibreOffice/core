@@ -127,6 +127,10 @@ namespace comphelper
         AccessibleEventNotifier::addEvent( m_nClientId, aEvent );
     }
 
+    bool OCommonAccessibleComponent::hasAccessibleListeners() const
+    {
+        return m_nClientId != 0;
+    }
 
     bool OCommonAccessibleComponent::isAlive() const
     {
