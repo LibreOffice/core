@@ -10,8 +10,21 @@
 $(eval $(call gb_Module_Module,freetype))
 
 $(eval $(call gb_Module_add_targets,freetype,\
-	ExternalProject_freetype \
 	UnpackedTarball_freetype \
 ))
+
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Module_add_targets,freetype,\
+	StaticLibrary_freetype \
+))
+
+else
+
+$(eval $(call gb_Module_add_targets,freetype,\
+	ExternalProject_freetype \
+))
+
+endif
 
 # vim: set noet sw=4 ts=4:
