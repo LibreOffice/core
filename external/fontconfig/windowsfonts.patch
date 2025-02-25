@@ -1,0 +1,55 @@
+Use newer API to get the Windows fonts directory, and convert from
+UTF-16 to UTF-8, assuming that the returned pathname will be treated
+as UTF-8 anyway, and converted to UTF-16 before opening fonts in it
+etc.
+
+But probaly fontconfig asumes system codepage for pathnames it uses on
+Windows all over the place anyway, so things are really messed up. Oh
+well.
+
+--- src/fcxml.c
++++ src/fcxml.c
+@@ -58,6 +58,8 @@
+ 
+ #ifdef _WIN32
+ #include <mbstring.h>
++#include <wchar.h>
++#include <Shlobj.h>
+ extern FcChar8 fontconfig_instprefix[];
+ pfnGetSystemWindowsDirectory pGetSystemWindowsDirectory = NULL;
+ pfnSHGetFolderPathA pSHGetFolderPathA = NULL;
+@@ -1386,18 +1387,25 @@
+     }
+     else if (strcmp ((const char *) path, "WINDOWSFONTDIR") == 0)
+     {
+-	int rc;
+-	path = buffer;
+-	_ensureWin32GettersReady();
+-	rc = pGetSystemWindowsDirectory ((LPSTR) buffer, sizeof (buffer) - 20);
+-	if (rc == 0 || rc > sizeof (buffer) - 20)
++	wchar_t *wpath;
++	int size_needed;
++	
++	if (!SUCCEEDED(SHGetKnownFolderPath(&FOLDERID_Fonts, 0, NULL, &wpath)))
+ 	{
+-	    FcConfigMessage (parse, FcSevereError, "GetSystemWindowsDirectory failed");
++	    FcConfigMessage (parse, FcSevereError, "SHGetKnownFolderPath for FOLDERID_Fonts failed");
+ 	    return NULL;
+ 	}
+-	if (path [strlen ((const char *) path) - 1] != '\\')
+-	    strcat ((char *) path, "\\");
+-	strcat ((char *) path, "fonts");
++	/* We assume that the code using fontconfig handles UTF-8 strings and not system codepage */
++	size_needed = WideCharToMultiByte (CP_UTF8, 0, wpath, wcslen(wpath), NULL, 0, NULL, NULL);
++	if (size_needed <= 0 || size_needed > sizeof(buffer))
++	{
++	    FcConfigMessage (parse, FcSevereError, "WideCharToMultiByte failed");
++	    CoTaskMemFree (wpath);
++	    return NULL;
++	}
++	path = buffer;
++	WideCharToMultiByte(CP_UTF8, 0, wpath, wcslen(wpath), path, size_needed, NULL, NULL);
++	CoTaskMemFree (wpath);
+     }
+     else
+     {
