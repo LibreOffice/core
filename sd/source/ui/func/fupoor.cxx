@@ -888,22 +888,22 @@ void FuPoor::DoCut()
 /**
  * Copy object to clipboard
  */
-void FuPoor::DoCopy()
+void FuPoor::DoCopy(bool bMergeMasterPagesOnly )
 {
     if (mpView)
     {
-        mpView->DoCopy();
+        mpView->DoCopy(bMergeMasterPagesOnly);
     }
 }
 
 /**
  * Paste object from clipboard
  */
-void FuPoor::DoPaste()
+void FuPoor::DoPaste(bool bMergeMasterPagesOnly )
 {
     if (mpView)
     {
-        mpView->DoPaste(mpWindow);
+        mpView->DoPaste(mpWindow, bMergeMasterPagesOnly);
     }
 }
 

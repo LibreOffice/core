@@ -216,7 +216,7 @@ public:
         this method should be called between calls to
         PrepareEditModeChange() and FinishEditModeChange().
     */
-    void ChangeEditMode(EditMode eEditMode);
+    SD_DLLPUBLIC void ChangeEditMode(EditMode eEditMode);
 
     /** Finish the change of the edit mode.  Here we may select a page or
         restore a previously saved selection.

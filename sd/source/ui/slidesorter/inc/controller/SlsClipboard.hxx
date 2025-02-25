@@ -67,9 +67,9 @@ public:
     // Exported for unit test
     SD_DLLPUBLIC void DoCut ();
     // Exported for unit test
-    SD_DLLPUBLIC void DoCopy();
+    SD_DLLPUBLIC void DoCopy(bool bMergeMasterPagesOnly = false );
     // Exported for unit test
-    SD_DLLPUBLIC void DoPaste();
+    SD_DLLPUBLIC void DoPaste(bool bMergeMasterPagesOnly = false );
     void DoDelete ();
 
     void StartDrag (
@@ -119,7 +119,8 @@ private:
 
     void CreateSlideTransferable (
         vcl::Window* pWindow,
-        bool bDrag);
+        bool bDrag,
+        bool bMergeMasterPagesOnly = false);
 
 public:
     /** Determine the position of where to insert the pages in the current
@@ -144,7 +145,7 @@ private:
         @return
             The number of inserted pages is returned.
     */
-    sal_Int32 PasteTransferable (sal_Int32 nInsertPosition);
+    sal_Int32 PasteTransferable (sal_Int32 nInsertPosition, bool bMergeMasterPagesOnly = false);
 
     /** Select a range of pages of the model.  Typically usage is the
         selection of newly inserted pages.

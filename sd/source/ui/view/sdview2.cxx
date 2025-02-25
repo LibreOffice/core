@@ -258,7 +258,7 @@ void View::DoCut()
     }
 }
 
-void View::DoCopy()
+void View::DoCopy(bool /*bMergeMasterPagesOnly*/)
 {
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 
@@ -272,7 +272,7 @@ void View::DoCopy()
     }
 }
 
-void View::DoPaste (::sd::Window* pWindow)
+void View::DoPaste (::sd::Window* pWindow,bool /*bMergeMasterPagesOnly*/)
 {
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mpViewSh->GetActiveWindow() ) );
     if( !aDataHelper.GetTransferable().is() )

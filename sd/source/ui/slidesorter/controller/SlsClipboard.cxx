@@ -189,6 +189,14 @@ void Clipboard::HandleSlotCall (SfxRequest& rRequest)
                 else
                     DoCopy();
             }
+            else
+            {
+                // Copying master pages only.
+                if(xFunc.is())
+                    xFunc->DoCopy(true);
+                else
+                    DoCopy(true);
+            }
             rRequest.Done();
             break;
 
@@ -205,6 +213,16 @@ void Clipboard::HandleSlotCall (SfxRequest& rRequest)
                     xFunc->DoPaste();
                 else
                     DoPaste();
+            }
+            else
+            {
+                // Pasting master pages only.
+                view::SlideSorterView::DrawLock aLock (mrSlideSorter);
+                SelectionObserver::Context aContext (mrSlideSorter);
+                if(xFunc.is())
+                    xFunc->DoPaste(true);
+                else
+                    DoPaste(true);
             }
             rRequest.Done();
             break;
@@ -233,12 +251,12 @@ void Clipboard::DoDelete()
     }
 }
 
-void Clipboard::DoCopy ()
+void Clipboard::DoCopy (bool bMergeMasterPagesOnly )
 {
-    CreateSlideTransferable( nullptr, false );
+    CreateSlideTransferable( nullptr, false, bMergeMasterPagesOnly);
 }
 
-void Clipboard::DoPaste ()
+void Clipboard::DoPaste (bool bMergeMasterPagesOnly )
 {
     SdTransferable* pClipTransferable = SdModule::get()->pTransferClip;
 
@@ -250,7 +268,7 @@ void Clipboard::DoPaste ()
     if (nInsertPosition >= 0)
     {
         // Paste the pages from the clipboard.
-        sal_Int32 nInsertPageCount = PasteTransferable(nInsertPosition);
+        sal_Int32 nInsertPageCount = PasteTransferable(nInsertPosition, bMergeMasterPagesOnly);
         // Select the pasted pages and make the first of them the
         // current page.
         mrSlideSorter.GetContentWindow()->GrabFocus();
@@ -299,7 +317,7 @@ sal_Int32 Clipboard::GetInsertionPosition ()
     return nInsertPosition;
 }
 
-sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
+sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition, bool bMergeMasterPagesOnly)
 {
     SdTransferable* pClipTransferable = SdModule::get()->pTransferClip;
     model::SlideSorterModel& rModel (mrSlideSorter.GetModel());
@@ -317,7 +335,8 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
             nullptr,
             nInsertIndex,
             pClipTransferable->GetPageDocShell(),
-            bMergeMasterPages);
+            bMergeMasterPages,
+            bMergeMasterPagesOnly);
     }
     else
     {
@@ -337,7 +356,8 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
                 nullptr,
                 nInsertIndex,
                 pDataDocSh,
-                bMergeMasterPages);
+                bMergeMasterPages,
+                bMergeMasterPagesOnly);
         }
     }
     mrController.HandleModelChange();
@@ -368,7 +388,8 @@ void Clipboard::SelectPageRange (sal_Int32 nFirstIndex, sal_Int32 nPageCount)
 
 void Clipboard::CreateSlideTransferable (
     vcl::Window* pWindow,
-    bool bDrag)
+    bool bDrag,
+    bool bMergeMasterPagesOnly)
 {
     std::vector<OUString> aBookmarkList;
 
@@ -469,7 +490,7 @@ void Clipboard::CreateSlideTransferable (
 
     {
         TemporarySlideTrackingDeactivator aDeactivator (mrController);
-        pTransferable->SetPageBookmarks (std::move(aBookmarkList), !bDrag);
+        pTransferable->SetPageBookmarks (std::move(aBookmarkList), !bDrag, bMergeMasterPagesOnly);
     }
 
     if (bDrag)

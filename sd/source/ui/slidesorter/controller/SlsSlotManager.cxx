@@ -761,10 +761,6 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
         {
             if (rSet.GetItemState(SID_CUT) == SfxItemState::DEFAULT)
                 rSet.DisableItem(SID_CUT);
-            if (rSet.GetItemState(SID_COPY) == SfxItemState::DEFAULT)
-                rSet.DisableItem(SID_COPY);
-            if (rSet.GetItemState(SID_PASTE) == SfxItemState::DEFAULT)
-                rSet.DisableItem(SID_PASTE);
             if (rSet.GetItemState(SID_PASTE_SPECIAL) == SfxItemState::DEFAULT)
                 rSet.DisableItem(SID_PASTE_SPECIAL);
         }
