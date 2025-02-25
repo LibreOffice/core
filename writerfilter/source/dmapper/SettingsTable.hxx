@@ -76,6 +76,7 @@ public:
     bool GetLongerSpaceSequence() const;
     bool GetNoLeading() const;
     bool GetNoHyphenateCaps() const;
+    bool GetMsWordUlTrailSpace() const;
     sal_Int16 GetHyphenationZone() const;
 
     const OUString& GetDecimalSymbol() const;

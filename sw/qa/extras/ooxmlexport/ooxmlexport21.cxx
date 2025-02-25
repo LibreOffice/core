@@ -468,6 +468,32 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentWithChildrenTdf163092)
     CPPUNIT_ASSERT_EQUAL(parents[sComment3Id], sComment2Id);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace)
+{
+    createSwDoc("UnderlineTrailingSpace.docx");
+    {
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xSettings(
+            xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(true),
+                             xSettings->getPropertyValue(u"MsWordUlTrailSpace"_ustr));
+    }
+
+    // Test also after save-and-reload:
+    saveAndReload(u"Office Open XML Text"_ustr);
+    {
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xSettings(
+            xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(uno::Any(true),
+                             xSettings->getPropertyValue(u"MsWordUlTrailSpace"_ustr));
+    }
+
+    // Check that the compat setting is exported in OOXML
+    xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
+    assertXPath(pXmlSettings, "/w:settings/w:compat/w:ulTrailSpace"_ostr);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
