@@ -9915,6 +9915,8 @@ void DomainMapper_Impl::ApplySettingsTable()
                 = m_pSettingsTable->GetWriteProtectionSettings();
         if (aWriteProtection.hasElements())
                 xSettings->setPropertyValue(u"ModifyPasswordInfo"_ustr, uno::Any(aWriteProtection));
+        if (m_pSettingsTable->GetMsWordUlTrailSpace())
+            xSettings->setPropertyValue(u"MsWordUlTrailSpace"_ustr, uno::Any(true));
     }
     catch(const uno::Exception&)
     {

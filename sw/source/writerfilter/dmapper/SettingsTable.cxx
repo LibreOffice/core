@@ -95,6 +95,7 @@ struct SettingsTable_Impl
     bool                m_bNoColumnBalance;
     bool                m_bAutoHyphenation;
     bool                m_bNoHyphenateCaps;
+    bool                m_bMsWordUlTrailSpace = false;
     sal_Int16           m_nHyphenationZone;
     sal_Int16           m_nConsecutiveHyphenLimit;
     sal_Int16           m_nUseWord2013TrackBottomHyphenation;
@@ -456,6 +457,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
             m_pImpl->m_bEndnoteIsCollectAtSectionEnd = true;
         }
         break;
+    case NS_ooxml::LN_CT_Compat_ulTrailSpace:
+        m_pImpl->m_bMsWordUlTrailSpace = true;
+        break;
     default:
     {
 #ifdef DBG_UTIL
@@ -559,6 +563,11 @@ bool SettingsTable::GetReadOnly() const
 bool SettingsTable::GetNoHyphenateCaps() const
 {
     return m_pImpl->m_bNoHyphenateCaps;
+}
+
+bool SettingsTable::GetMsWordUlTrailSpace() const
+{
+    return m_pImpl->m_bMsWordUlTrailSpace;
 }
 
 sal_Int16 SettingsTable::GetHyphenationZone() const

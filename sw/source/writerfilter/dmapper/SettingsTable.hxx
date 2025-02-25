@@ -78,6 +78,7 @@ public:
     bool GetLongerSpaceSequence() const;
     bool GetNoLeading() const;
     bool GetNoHyphenateCaps() const;
+    bool GetMsWordUlTrailSpace() const;
     sal_Int16 GetHyphenationZone() const;
     sal_Int16 GetConsecutiveHyphenLimit() const;
     bool GetHyphenationKeep() const;
