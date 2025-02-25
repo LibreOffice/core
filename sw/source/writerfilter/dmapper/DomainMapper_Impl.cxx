@@ -2802,6 +2802,19 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         // its default "anchored as character" setting
                         xFrameProps->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE), uno::Any(text::TextContentAnchorType_AS_CHARACTER));
 
+                        // tdf#164903 empty top and bottom margins to emulate the behaviour of style separators
+                        uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xFrame, uno::UNO_QUERY);
+                        if ( xParaEnumAccess.is() && !pParaContext->isSet(PROP_PARA_TOP_MARGIN) )
+                        {
+                            uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+                            if ( xParaEnum.is() )
+                            {
+                                uno::Reference<beans::XPropertySet> xParaProps(xParaEnum->nextElement(), uno::UNO_QUERY);
+                                if ( xParaProps.is() )
+                                    xParaProps->setPropertyValue(u"ParaTopMargin"_ustr, uno::Any(sal_Int32(0)));
+                            }
+                        }
+
                         m_StreamStateStack.top().bIsInlineParagraph = false;
                         m_StreamStateStack.top().bIsPreviousInlineParagraph = true;
                     }
