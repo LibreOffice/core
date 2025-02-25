@@ -626,6 +626,34 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf103477)
                                  pNumFmt->GetNumRule().GetLevel(1).GetBulletColor());
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf164640)
+{
+    createSdImpressDoc("odp/tdf164640.odp");
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    SdStyleSheetPool* const pPool(pDoc->GetSdStyleSheetPool());
+
+    OUString aStyleName(SdResId(STR_PSEUDOSHEET_OUTLINE) + " 2");
+    SfxStyleSheetBase* pStyleSheet = pPool->Find(aStyleName, SfxStyleFamily::Pseudo);
+    CPPUNIT_ASSERT(pStyleSheet);
+
+    const SvxNumBulletItem& rNumFmt = pStyleSheet->GetItemSet().Get(EE_PARA_NUMBULLET);
+    sal_UCS4 aBullet1 = rNumFmt.GetNumRule().GetLevel(0).GetBulletChar();
+    CPPUNIT_ASSERT_EQUAL(sal_UCS4(0x25CF), aBullet1);
+
+    sal_UCS4 aBullet2 = rNumFmt.GetNumRule().GetLevel(1).GetBulletChar();
+    // Without the fix in place, this test would have failed with
+    // - Expected: 8211
+    // - Actual  : 9679
+    CPPUNIT_ASSERT_EQUAL(sal_UCS4(0x2013), aBullet2);
+
+    sal_UCS4 aBullet3 = rNumFmt.GetNumRule().GetLevel(2).GetBulletChar();
+    CPPUNIT_ASSERT_EQUAL(sal_UCS4(0x25CF), aBullet3);
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf105150)
 {
     createSdImpressDoc("pptx/tdf105150.pptx");
