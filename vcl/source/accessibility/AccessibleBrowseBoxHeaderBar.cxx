@@ -293,11 +293,6 @@ OUString SAL_CALL AccessibleBrowseBoxHeaderBar::getImplementationName()
     return u"com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderBar"_ustr;
 }
 
-Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxHeaderBar::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 // internal virtual methods ---------------------------------------------------
 
 tools::Rectangle AccessibleBrowseBoxHeaderBar::implGetBoundingBox()

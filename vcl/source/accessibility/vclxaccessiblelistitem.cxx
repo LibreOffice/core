@@ -141,13 +141,6 @@ awt::Rectangle VCLXAccessibleListItem::implGetBounds()
     return vcl::unohelper::ConvertToAWTRect(aRect);
 }
 
-// XTypeProvider
-
-Sequence< sal_Int8 > VCLXAccessibleListItem::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 // XComponent
 
 void SAL_CALL VCLXAccessibleListItem::disposing()

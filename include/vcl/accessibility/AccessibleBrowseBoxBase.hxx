@@ -159,11 +159,6 @@ public:
     */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
 
-    // XTypeProvider
-
-    /** @return  a unique implementation ID. */
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-
     // XServiceInfo
 
     /** @return  Whether the specified service is supported by this class. */

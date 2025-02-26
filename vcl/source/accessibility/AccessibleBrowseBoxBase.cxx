@@ -215,13 +215,6 @@ void SAL_CALL AccessibleBrowseBoxBase::focusLost( const css::awt::FocusEvent& )
     commitEvent(AccessibleEventId::STATE_CHANGED,aEmpty,aFocused);
 }
 
-// XTypeProvider
-
-Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxBase::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 // XServiceInfo
 
 sal_Bool SAL_CALL AccessibleBrowseBoxBase::supportsService(

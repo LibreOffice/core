@@ -92,9 +92,6 @@ public:
                                    sal_Int32 _nPos,
                                    const css::uno::Reference< css::accessibility::XAccessible >& _xParent );
 
-    // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;

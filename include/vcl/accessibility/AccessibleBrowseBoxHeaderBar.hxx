@@ -149,9 +149,6 @@ public:
     /** @return  The name of this class. */
     virtual OUString SAL_CALL getImplementationName() override;
 
-    /** @return  a unique implementation ID. */
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-
 private:
     // internal virtual methods
 

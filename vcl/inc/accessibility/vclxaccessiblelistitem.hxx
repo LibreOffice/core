@@ -85,9 +85,6 @@ public:
     void                    SetSelected( bool _bSelected );
     void                    SetVisible( bool _bVisible );
 
-    // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;

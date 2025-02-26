@@ -169,14 +169,6 @@ void AccessibleIconChoiceCtrlEntry::implGetSelection( sal_Int32& nStartIndex, sa
     nEndIndex = 0;
 }
 
-// XTypeProvider
-
-
-Sequence< sal_Int8 > AccessibleIconChoiceCtrlEntry::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 // XComponent
 
 void SAL_CALL AccessibleIconChoiceCtrlEntry::disposing()
