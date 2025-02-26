@@ -60,7 +60,7 @@ struct Foo
 };
 void f(Foo* f)
 {
-    // expected-error@+1 {{simplify [loplugin:simplifyconstruct]}}
+    // expected-error@+1 {{simplify construction, just use 'Foo a(...);' [loplugin:simplifyconstruct]}}
     rtl::Reference<Foo> x = rtl::Reference(f);
 }
 }
@@ -80,7 +80,7 @@ namespace test5
 {
 void f()
 {
-    // expected-error@+1 {{simplify [loplugin:simplifyconstruct]}}
+    // expected-error@+1 {{simplify construction, just use 'Foo a(...);' [loplugin:simplifyconstruct]}}
     tools::Rectangle x = tools::Rectangle(10, 10, 10, 10);
     (void)x;
 }

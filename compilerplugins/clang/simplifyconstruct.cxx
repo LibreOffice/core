@@ -96,7 +96,8 @@ bool SimplifyConstruct::VisitVarDecl(VarDecl const* varDecl)
     if (compiler.getSourceManager().isMacroBodyExpansion(init->getBeginLoc()))
         return true;
 
-    report(DiagnosticsEngine::Warning, "simplify", varDecl->getLocation())
+    report(DiagnosticsEngine::Warning, "simplify construction, just use 'Foo a(...);'",
+           varDecl->getLocation())
         << varDecl->getSourceRange();
 
     return true;
