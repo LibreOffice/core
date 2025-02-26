@@ -58,7 +58,8 @@ class ScJumpMatrix;
 struct ScRefCellValue;
 
 enum MatchMode{ exactorNA=0, exactorS=-1, exactorG=1, wildcard=2, regex=3 };
-enum IgnoreValues{ DEFAULT=0, BLANKS=1, ERRORS=2, ALL=3 };
+// mode for the TOCOL and TOROW formula functions
+enum class IgnoreValues{ DEFAULT=0, BLANKS=1, ERRORS=2, ALL=3 };
 
 struct VectorSearchArguments
 {
