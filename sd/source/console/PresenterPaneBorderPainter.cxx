@@ -24,7 +24,6 @@
 #include <PresenterHelper.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/FillRule.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
@@ -125,7 +124,7 @@ private:
     typedef ::std::map<OUString, std::shared_ptr<RendererPaneStyle> > RendererPaneStyleContainer;
     RendererPaneStyleContainer maRendererPaneStyles;
     Reference<rendering::XCanvas> mxCanvas;
-    Reference<drawing::XPresenterHelper> mxPresenterHelper;
+    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
     css::rendering::ViewState maViewState;
     Reference<rendering::XPolyPolygon2D> mxViewStateClip;
     bool mbHasCallout;
