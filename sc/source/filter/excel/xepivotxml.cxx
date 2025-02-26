@@ -776,8 +776,11 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     std::vector<tools::Long> aPageFields;
     std::vector<DataField> aDataFields;
 
-    tools::Long nRowItemsCount = 0; // for <rowItems count="..."> of pivotTable*.xml
-    tools::Long nColItemsCount = 0; // for <colItems count="..."> of pivotTable*.xml
+    // we should always export <rowItems> and <colItems>, even if the pivot table
+    // does not contain col/row items. otherwise, in Excel, pivot table will not
+    // have all context menu items.
+    tools::Long nRowItemsCount = 1; // for <rowItems count="..."> of pivotTable*.xml
+    tools::Long nColItemsCount = 1; // for <colItems count="..."> of pivotTable*.xml
     tools::Long nDataDimCount = rSaveData.GetDataDimensionCount();
     // Use dimensions in the save data to get their correct ordering.
     // Dimension order here is significant as they specify the order of
@@ -1064,7 +1067,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
 
         if (strcmp(toOOXMLAxisType(eOrient), "axisCol") == 0)
             nColItemsCount = nItemsCount;
-        else
+        else if (strcmp(toOOXMLAxisType(eOrient), "axisRow") == 0)
             nRowItemsCount = nItemsCount;
 
         for (const auto & nMember : aMemberSequence)
@@ -1110,7 +1113,18 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         // export nRowItemsCount times <i> and <x> elements
         for (tools::Long nCount = 0; nCount < nRowItemsCount; ++nCount)
         {
-            pPivotStrm->startElement(XML_i);
+            /* we should add t="grand" to the last <i> element. Otherwise, Excel will not
+            have all functions in the context menu of the pivot table. Especially for the
+            "Grand Total" column/row cells.
+
+            note: it is not completely clear that the last <i> element always gets t="grand".
+            however, testing on the some docs indicate that t="grand" should be
+            in the last element, so let's try this here. */
+            if (nCount == nRowItemsCount - 1)
+                pPivotStrm->startElement(XML_i, XML_t, "grand");
+            else
+                pPivotStrm->startElement(XML_i);
+
             pPivotStrm->singleElement(XML_x, XML_v, OString::number(nCount));
             pPivotStrm->endElement(XML_i);
         }
@@ -1141,7 +1155,18 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         // export nColItemsCount times <i> and <x> elements
         for (tools::Long nCount = 0; nCount < nColItemsCount; ++nCount)
         {
-            pPivotStrm->startElement(XML_i);
+            /* we should add t="grand" to the last <i> element. Otherwise, Excel will not
+            have all functions in the context menu of the pivot table. Especially for the
+            "Grand Total" column/row cells.
+
+            note: it is not completely clear that the last <i> element always gets t="grand".
+            however, testing on the some docs indicate that t="grand" should be
+            in the last element, so let's try this here. */
+            if (nCount == nColItemsCount - 1)
+                pPivotStrm->startElement(XML_i, XML_t, "grand");
+            else
+                pPivotStrm->startElement(XML_i);
+
             pPivotStrm->singleElement(XML_x, XML_v, OString::number(nCount));
             pPivotStrm->endElement(XML_i);
         }
