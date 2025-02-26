@@ -83,7 +83,7 @@ private:
     ScAddress maPos;
     ScViewData* mpViewData;
 
-    std::shared_ptr<ScCondFormatDlgData> mpDlgItem;
+    std::shared_ptr<ScCondFormatDlgData> mpDlgData;
 
     OUString msBaseTitle;
 

@@ -429,7 +429,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     , mpViewData(pViewData)
     // previous version based on SfxPoolItem used SfxPoolItem::Clone here, so make a copy
     // using copy constructor
-    , mpDlgItem(std::make_shared<ScCondFormatDlgData>(*rItem))
+    , mpDlgData(std::make_shared<ScCondFormatDlgData>(*rItem))
     , mpLastEdit(nullptr)
     , mxBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
     , mxBtnAdd(m_xBuilder->weld_button(u"add"_ustr))
@@ -447,12 +447,12 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     mxRbRange->SetReferences(this, mxEdRange.get());
 
     ScConditionalFormat* pFormat = nullptr;
-    mnKey = mpDlgItem->GetIndex();
-    if (mpDlgItem->IsManaged() && mpDlgItem->GetConditionalFormatList())
+    mnKey = mpDlgData->GetIndex();
+    if (mpDlgData->IsManaged() && mpDlgData->GetConditionalFormatList())
     {
-        pFormat = mpDlgItem->GetConditionalFormatList()->GetFormat(mnKey);
+        pFormat = mpDlgData->GetConditionalFormatList()->GetFormat(mnKey);
     }
-    else if (!mpDlgItem->IsManaged())
+    else if (!mpDlgData->IsManaged())
     {
         ScDocument& rDoc = mpViewData->GetDocument();
         pFormat = rDoc.GetCondFormList(mpViewData->GetTabNo())->GetFormat ( mnKey );
@@ -476,7 +476,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     }
     maPos = aRange.GetTopLeftCorner();
 
-    mxCondFormList->init(pFormat, aRange, maPos, mpDlgItem->GetDialogType());
+    mxCondFormList->init(pFormat, aRange, maPos, mpDlgData->GetDialogType());
 
     mxBtnOk->connect_clicked(LINK(this, ScCondFormatDlg, BtnPressedHdl ) );
     mxBtnAdd->connect_clicked( LINK( mxCondFormList.get(), ScCondFormatList, AddBtnHdl ) );
@@ -615,7 +615,7 @@ void ScCondFormatDlg::OkPressed()
 {
     std::unique_ptr<ScConditionalFormat> pFormat = GetConditionalFormat();
 
-    if (!mpDlgItem->IsManaged())
+    if (!mpDlgData->IsManaged())
     {
         if(pFormat)
         {
@@ -629,7 +629,7 @@ void ScCondFormatDlg::OkPressed()
     }
     else
     {
-        ScConditionalFormatList* pList = mpDlgItem->GetConditionalFormatList();
+        ScConditionalFormatList* pList = mpDlgData->GetConditionalFormatList();
         sal_uInt32 nKey = mnKey;
         if (mnKey == 0)
         {
@@ -643,8 +643,10 @@ void ScCondFormatDlg::OkPressed()
             pList->InsertNew(std::move(pFormat));
         }
 
-        mpViewData->GetViewShell()->setScCondFormatDlgItem(mpDlgItem);
+        // provide needed DialogData
+        mpViewData->GetViewShell()->setScCondFormatDlgData(mpDlgData);
         SetDispatcherLock( false );
+
         // Queue message to open Conditional Format Manager Dialog
         GetBindings().GetDispatcher()->Execute( SID_OPENDLG_CONDFRMT_MANAGER,
                                             SfxCallMode::ASYNCHRON );
@@ -656,10 +658,12 @@ void ScCondFormatDlg::OkPressed()
 //
 void ScCondFormatDlg::CancelPressed()
 {
-    if ( mpDlgItem->IsManaged() )
+    if ( mpDlgData->IsManaged() )
     {
-        mpViewData->GetViewShell()->setScCondFormatDlgItem(mpDlgItem);
+        // provide needed DialogData
+        mpViewData->GetViewShell()->setScCondFormatDlgData(mpDlgData);
         SetDispatcherLock( false );
+
         // Queue message to open Conditional Format Manager Dialog
         GetBindings().GetDispatcher()->Execute( SID_OPENDLG_CONDFRMT_MANAGER,
                                             SfxCallMode::ASYNCHRON );
