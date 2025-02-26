@@ -298,7 +298,7 @@ public:
     /// @see vcl::ITiledRenderable::getViewRenderState().
     SD_DLLPUBLIC OString getViewRenderState(SfxViewShell* pViewShell = nullptr) override;
 
-    virtual void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand) override;
+    SD_DLLPUBLIC virtual void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand) override;
 
     /// @see vcl::ITiledRenderable::getPresentationInfo().
     SD_DLLPUBLIC OString getPresentationInfo() const override;
