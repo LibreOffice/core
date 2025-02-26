@@ -22,6 +22,7 @@
 #include "queryparam.hxx"
 #include "mtvelements.hxx"
 #include "types.hxx"
+#include "lookupsearchmode.hxx"
 
 struct ScComplexRefData;
 class ScSortedRangeCache;
@@ -269,10 +270,13 @@ public:
     void            AdvanceQueryParamEntryField();
     void            AdvanceQueryParamEntryFieldForBinarySearch();
 
-    void            SetSortedBinarySearchMode( sal_Int8 nSearchMode )
+    void            SetSortedBinarySearchMode( LookupSearchMode nSearchMode )
                         {
-                            nSortedBinarySearch = sal::static_int_cast<sal_uInt8>(nSearchMode == 2 ?
-                                nSearchbAscd : (nSearchMode == -2 ? nSearchbDesc : nBinarySearchDisabled));
+                            nSortedBinarySearch =
+                                nSearchMode == LookupSearchMode::BinaryAscending
+                                ? nSearchbAscd
+                                : (nSearchMode == LookupSearchMode::BinaryDescending
+                                   ? nSearchbDesc : nBinarySearchDisabled);
                         }
 
     void            SetLookupMode( sal_uInt16 nVal )

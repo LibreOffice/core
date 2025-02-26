@@ -5009,16 +5009,16 @@ void ScInterpreter::ScMatch()
     {
         case -1 :
             vsa.eMatchMode  = exactorG;
-            vsa.eSearchMode = searchbdesc;
+            vsa.eSearchMode = LookupSearchMode::BinaryDescending;
             break;
         case 0 :
             vsa.eMatchMode  = exactorNA;
-            vsa.eSearchMode = searchfwd;
+            vsa.eSearchMode = LookupSearchMode::Forward;
             break;
         case 1 :
             // default value
             vsa.eMatchMode  = exactorS;
-            vsa.eSearchMode = searchbasc;
+            vsa.eSearchMode = LookupSearchMode::BinaryAscending;
             break;
         default :
             PushIllegalParameter();
@@ -5170,7 +5170,7 @@ void ScInterpreter::ScXMatch()
     {
         sal_Int16 k = GetInt16();
         if (k >= -2 && k <= 2 && k != 0)
-            vsa.eSearchMode = static_cast<SearchMode>(k);
+            vsa.eSearchMode = static_cast<LookupSearchMode>(k);
         else
         {
             PushIllegalParameter();
@@ -5178,7 +5178,7 @@ void ScInterpreter::ScXMatch()
         }
     }
     else
-        vsa.eSearchMode = searchfwd;
+        vsa.eSearchMode = LookupSearchMode::Forward;
 
     // get match mode
     if (nParamCount >= 3)
@@ -7826,7 +7826,7 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
         else
         {
             ScAddress aResultPos( nCol1, nRow1, nTab1);
-            bFound = LookupQueryWithCache( aResultPos, aParam, refData, 1 /*searchfwd*/, SC_OPCODE_V_LOOKUP );
+            bFound = LookupQueryWithCache( aResultPos, aParam, refData, LookupSearchMode::Forward, SC_OPCODE_V_LOOKUP );
             nRow = aResultPos.Row();
             nCol = nSpIndex;
         }
@@ -7925,7 +7925,7 @@ void ScInterpreter::ScXLookup()
     {
         sal_Int16 k = GetInt16();
         if ( k >= -2 && k <= 2 && k != 0 )
-            vsa.eSearchMode = static_cast<SearchMode>(k);
+            vsa.eSearchMode = static_cast<LookupSearchMode>(k);
         else
         {
             PushIllegalParameter();
@@ -7933,7 +7933,7 @@ void ScInterpreter::ScXLookup()
         }
     }
     else
-        vsa.eSearchMode = searchfwd;
+        vsa.eSearchMode = LookupSearchMode::Forward;
 
     if ( nParamCount >= 5 )
     {
@@ -12330,7 +12330,7 @@ bool ScInterpreter::SearchMatrixForValue( VectorSearchArguments& vsa, ScQueryPar
 
     switch ( vsa.eSearchMode )
     {
-        case searchfwd :
+        case LookupSearchMode::Forward :
         {
             switch ( vsa.eMatchMode )
             {
@@ -12391,7 +12391,7 @@ bool ScInterpreter::SearchMatrixForValue( VectorSearchArguments& vsa, ScQueryPar
         }
         break;
 
-        case searchrev:
+        case LookupSearchMode::Reverse:
             {
                 switch ( vsa.eMatchMode )
                 {
@@ -12452,11 +12452,11 @@ bool ScInterpreter::SearchMatrixForValue( VectorSearchArguments& vsa, ScQueryPar
             }
             break;
 
-        case searchbasc:
-        case searchbdesc:
+        case LookupSearchMode::BinaryAscending:
+        case LookupSearchMode::BinaryDescending:
             {
                 // binary search for non-equality mode (the source data is sorted)
-                bool bAscOrder = ( vsa.eSearchMode == searchbasc );
+                bool bAscOrder = ( vsa.eSearchMode == LookupSearchMode::BinaryAscending );
                 SCSIZE nFirst = 0;
                 SCSIZE nLast  = nMatCount - 1;
                 for ( SCSIZE nLen = nLast - nFirst; nLen > 0; nLen = nLast - nFirst )
@@ -12534,10 +12534,10 @@ bool ScInterpreter::SearchRangeForValue( VectorSearchArguments& vsa, ScQueryPara
     vsa.bVLookup = ( vsa.nCol1 == vsa.nCol2 );
     switch ( vsa.eSearchMode )
     {
-        case searchfwd:
-        case searchrev:
-        case searchbasc:
-        case searchbdesc:
+        case LookupSearchMode::Forward:
+        case LookupSearchMode::Reverse:
+        case LookupSearchMode::BinaryAscending:
+        case LookupSearchMode::BinaryDescending:
             {
                 if (vsa.bVLookup)
                 {
@@ -12551,7 +12551,7 @@ bool ScInterpreter::SearchRangeForValue( VectorSearchArguments& vsa, ScQueryPara
                 else
                 {
                     rParam.bByRow = false;
-                    bool bBinarySearch = vsa.eSearchMode == searchbasc || vsa.eSearchMode == searchbdesc;
+                    bool bBinarySearch = vsa.eSearchMode == LookupSearchMode::BinaryAscending || vsa.eSearchMode == LookupSearchMode::BinaryDescending;
                     if (bBinarySearch && (vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP || vsa.nSearchOpCode == SC_OPCODE_X_MATCH))
                     {
                         ScQueryCellIteratorSortedCache aCellIter(mrDoc, mrContext, rParam.nTab, rParam, false, false);
@@ -12567,7 +12567,7 @@ bool ScInterpreter::SearchRangeForValue( VectorSearchArguments& vsa, ScQueryPara
                     else
                     {
                         // search of columns in row
-                        bool bReverseSearch = (vsa.eSearchMode == searchrev);
+                        bool bReverseSearch = (vsa.eSearchMode == LookupSearchMode::Reverse);
                         ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, vsa.nTab1, rParam, false, bReverseSearch);
                         // Advance Entry.nField in Iterator if column changed
                         aCellIter.SetAdvanceQueryParamEntryField(true);
@@ -12618,7 +12618,7 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
     rParam.nTab  = vsa.nTab1;
 
     ScQueryEntry& rEntry = rParam.GetEntry(0);
-    rEntry.nField = vsa.eSearchMode != searchrev ? vsa.nCol1 : vsa.nCol2;
+    rEntry.nField = vsa.eSearchMode != LookupSearchMode::Reverse ? vsa.nCol1 : vsa.nCol2;
     rEntry.bDoQuery = true;
     switch ( vsa.eMatchMode )
     {
@@ -12640,7 +12640,7 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
             if ( vsa.nSearchOpCode == SC_OPCODE_X_LOOKUP || vsa.nSearchOpCode == SC_OPCODE_X_MATCH )
             {
                 // Wildcard/Regex search mode with binary search is not allowed
-                if (vsa.eSearchMode == searchbasc || vsa.eSearchMode == searchbdesc)
+                if (vsa.eSearchMode == LookupSearchMode::BinaryAscending || vsa.eSearchMode == LookupSearchMode::BinaryDescending)
                 {
                     PushNoValue();
                     return false;
@@ -12744,14 +12744,14 @@ bool ScInterpreter::SearchVectorForValue( VectorSearchArguments& vsa )
 
 static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInterpreterContext& rContext,
         const ScQueryParam & rParam, const ScQueryEntry & rEntry, const ScFormulaCell* cell,
-        const ScComplexRefData* refData, sal_Int8 nSearchMode, sal_uInt16 nOpCode )
+        const ScComplexRefData* refData, LookupSearchMode nSearchMode, sal_uInt16 nOpCode )
 {
     if (rEntry.eOp != SC_EQUAL)
     {
         // range lookup <= or >=
         SCCOL nCol;
         SCROW nRow;
-        bool bBinarySearch = static_cast<SearchMode>(nSearchMode) == searchbasc || static_cast<SearchMode>(nSearchMode) == searchbdesc;
+        bool bBinarySearch = nSearchMode == LookupSearchMode::BinaryAscending || nSearchMode == LookupSearchMode::BinaryDescending;
         if ((bBinarySearch && (nOpCode == SC_OPCODE_X_LOOKUP || nOpCode == SC_OPCODE_X_MATCH)) ||
             ScQueryCellIteratorSortedCache::CanBeUsed(rDoc, rParam, rParam.nTab, cell, refData, rContext))
         {
@@ -12767,7 +12767,7 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInter
         }
         else
         {
-            bool bReverse = (static_cast<SearchMode>(nSearchMode) == searchrev);
+            bool bReverse = nSearchMode == LookupSearchMode::Reverse;
             ScQueryCellIteratorDirect aCellIter(rDoc, rContext, rParam.nTab, rParam, false, bReverse);
 
             aCellIter.SetSortedBinarySearchMode(nSearchMode);
@@ -12788,7 +12788,7 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInter
         bool bBinary = rParam.bByRow &&
             (bLiteral || rEntry.GetQueryItem().meType == ScQueryEntry::ByValue);
 
-        if( bBinary && (static_cast<SearchMode>(nSearchMode) == searchbasc || static_cast<SearchMode>(nSearchMode) == searchbdesc ||
+        if( bBinary && (nSearchMode == LookupSearchMode::BinaryAscending || nSearchMode == LookupSearchMode::BinaryDescending ||
             ScQueryCellIteratorSortedCache::CanBeUsed(rDoc, rParam, rParam.nTab, cell, refData, rContext)))
         {
             ScQueryCellIteratorSortedCache aCellIter( rDoc, rContext, rParam.nTab, rParam, false, false );
@@ -12804,7 +12804,7 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInter
         else
         {
             ScQueryCellIteratorDirect aCellIter( rDoc, rContext, rParam.nTab, rParam, false,
-                static_cast<SearchMode>(nSearchMode) == searchrev);
+                nSearchMode == LookupSearchMode::Reverse);
             aCellIter.SetSortedBinarySearchMode(nSearchMode);
             aCellIter.SetLookupMode(nOpCode);
             if (aCellIter.GetFirst())
@@ -12858,7 +12858,7 @@ static SCROW lcl_getPrevRowWithEmptyValueLookup( const ScLookupCache& rCache,
 
 bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
         const ScQueryParam & rParam, const ScComplexRefData* refData,
-        sal_Int8 nSearchMode, sal_uInt16 nOpCode ) const
+        LookupSearchMode nSearchMode, sal_uInt16 nOpCode ) const
 {
     bool bFound = false;
     const ScQueryEntry& rEntry = rParam.GetEntry(0);

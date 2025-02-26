@@ -33,6 +33,7 @@
 #include <queryentry.hxx>
 #include <sortparam.hxx>
 #include "parclass.hxx"
+#include <lookupsearchmode.hxx>
 
 #include <unordered_map>
 #include <memory>
@@ -57,7 +58,6 @@ class ScJumpMatrix;
 struct ScRefCellValue;
 
 enum MatchMode{ exactorNA=0, exactorS=-1, exactorG=1, wildcard=2, regex=3 };
-enum SearchMode{ searchfwd=1, searchrev=-1, searchbasc=2, searchbdesc=-2 };
 enum IgnoreValues{ DEFAULT=0, BLANKS=1, ERRORS=2, ALL=3 };
 
 struct VectorSearchArguments
@@ -89,7 +89,7 @@ struct VectorSearchArguments
     svl::SharedString sSearchStr;
     bool bVLookup;
 
-    // search mode (only XLOOKUP has all 4 options, MATCH only uses searchfwd)
+    // search mode (only XLOOKUP has all 4 options, MATCH only uses Forward)
     // optional 6th argument to set search mode
     //   1 - Perform a search starting at the first item. This is the default.
     //  -1 - Perform a reverse search starting at the last item.
@@ -98,7 +98,7 @@ struct VectorSearchArguments
     //  -2 - Perform a binary search that relies on lookup_array being sorted in descending order.
     //       If not sorted, invalid results will be returned.
     //
-    SearchMode eSearchMode = searchfwd;
+    LookupSearchMode eSearchMode = LookupSearchMode::Forward;
 
     // search variables
     SCSIZE nHitIndex = 0;
@@ -561,7 +561,7 @@ private:
     inline void TreatDoubleError( double& rVal );
     // Lookup using ScLookupCache, @returns true if found and result address
     bool LookupQueryWithCache( ScAddress & o_rResultPos, const ScQueryParam & rParam,
-            const ScComplexRefData* refData, sal_Int8 nSearchMode, sal_uInt16 nOpCode ) const;
+            const ScComplexRefData* refData, LookupSearchMode nSearchMode, sal_uInt16 nOpCode ) const;
 
     void ScIfJump();
     void ScIfError( bool bNAonly );

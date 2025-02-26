@@ -28,6 +28,7 @@
 class ScDocument;
 struct ScLookupCacheMap;
 struct ScQueryEntry;
+enum class LookupSearchMode;
 
 /** Lookup cache for one range used with interpreter functions such as VLOOKUP
     and MATCH. Caches query for a specific row and the resulting address looked
@@ -35,7 +36,6 @@ struct ScQueryEntry;
     performed, which usually occur to obtain a different offset column of the
     same query.
  */
-
 class ScLookupCache final : public SvtListener
 {
 public:
@@ -56,14 +56,6 @@ public:
         GREATER_EQUAL
     };
 
-    enum SearchMode
-    {
-        SEARCHFWD = 1,
-        SEARCHREV = -1,
-        SEARCHBASC = 2,
-        SEARCHDESC = -2
-    };
-
     class QueryCriteria
     {
         union
@@ -74,7 +66,7 @@ public:
         bool                mbAlloc;
         bool                mbString;
         QueryOp             meOp;
-        SearchMode          meSearchMode;
+        LookupSearchMode    meSearchMode;
 
         void deleteString()
         {
@@ -86,12 +78,12 @@ public:
 
     public:
 
-        explicit QueryCriteria( const ScQueryEntry & rEntry, sal_Int8 nSearchMode );
+        explicit QueryCriteria( const ScQueryEntry & rEntry, LookupSearchMode nSearchMode );
         QueryCriteria( const QueryCriteria & r );
         ~QueryCriteria();
 
         QueryOp getQueryOp() const { return meOp; }
-        SearchMode getSearchMode() const { return meSearchMode; }
+        LookupSearchMode getSearchMode() const { return meSearchMode; }
 
         void setDouble( double fVal )
         {
@@ -163,9 +155,9 @@ private:
         SCROW           mnRow;
         SCTAB           mnTab;
         QueryOp         meOp;
-        SearchMode      meSearchMode;
+        LookupSearchMode meSearchMode;
 
-        QueryKey( const ScAddress & rAddress, const QueryOp eOp, SearchMode eSearchMode ) :
+        QueryKey( const ScAddress & rAddress, const QueryOp eOp, LookupSearchMode eSearchMode ) :
             mnRow( rAddress.Row()),
             mnTab( rAddress.Tab()),
             meOp( eOp),

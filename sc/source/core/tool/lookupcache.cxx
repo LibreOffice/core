@@ -24,8 +24,8 @@
 
 #include <sal/log.hxx>
 
-ScLookupCache::QueryCriteria::QueryCriteria( const ScQueryEntry& rEntry, sal_Int8 nSearchMode ) :
-    mfVal(0.0), mbAlloc(false), mbString(false), meSearchMode(static_cast<SearchMode>(nSearchMode))
+ScLookupCache::QueryCriteria::QueryCriteria( const ScQueryEntry& rEntry, LookupSearchMode nSearchMode ) :
+    mfVal(0.0), mbAlloc(false), mbString(false), meSearchMode(nSearchMode)
 {
     switch (rEntry.eOp)
     {
