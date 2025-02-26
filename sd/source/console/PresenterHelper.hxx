@@ -26,12 +26,9 @@
 namespace sdext::presenter
 {
 /** Collection of helper functions that do not fit in anywhere else.
-    Provide access to frequently used strings of the drawing framework.
 */
 namespace PresenterHelper
 {
-extern const OUString msFullScreenPaneURL;
-
 /** Return the slide show controller of a running presentation that has
     the same document as the given framework controller.
     @return

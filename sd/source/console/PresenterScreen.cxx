@@ -48,6 +48,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing::framework;
 
+constexpr OUString FULL_SCREEN_PANE_URL = u"private:resource/pane/FullScreenPane"_ustr;
+
 namespace sdext::presenter {
 
 namespace {
@@ -574,7 +576,7 @@ Reference<drawing::framework::XResourceId> PresenterScreen::GetMainPaneId (
 
     return ResourceId::create(
         Reference<XComponentContext>(mxContextWeak),
-        PresenterHelper::msFullScreenPaneURL
+        FULL_SCREEN_PANE_URL
                 + "?FullScreen="
                 + fullScreenStr
                 + "&ScreenNumber="
