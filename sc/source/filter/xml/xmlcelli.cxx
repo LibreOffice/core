@@ -917,18 +917,26 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
         double fDate;
         if (rXMLImport.GetMM100UnitConverter().convertDateTime(fDate, mxAnnotationData->maCreateDate))
         {
-            SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
-
-            // Date string is in format ISO 8601 inside <dc:date>
-            // i.e: 2024-08-14 or 2024-08-14T23:55:06 or 20240814T235506
-            // Time always has prefix 'T'
-            sal_uInt32 nfIndex = pNumForm->GetFormatIndex(
-                mxAnnotationData->maCreateDate.indexOf('T') > -1 ? NF_DATETIME_SYS_DDMMYYYY_HHMMSS
-                                                                 : NF_DATE_SYS_DDMMYYYY,
-                LANGUAGE_SYSTEM);
             OUString aDate;
-            const Color* pColor = nullptr;
-            pNumForm->GetOutputString( fDate, nfIndex, aDate, &pColor );
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                //online handles the date format itself in browser
+                aDate = mxAnnotationData->maCreateDate;
+            }
+            else
+            {
+                SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
+
+                // Date string is in format ISO 8601 inside <dc:date>
+                // i.e: 2024-08-14 or 2024-08-14T23:55:06 or 20240814T235506
+                // Time always has prefix 'T'
+                sal_uInt32 nfIndex = pNumForm->GetFormatIndex(
+                    mxAnnotationData->maCreateDate.indexOf('T') > -1 ? NF_DATETIME_SYS_DDMMYYYY_HHMMSS
+                                                                    : NF_DATE_SYS_DDMMYYYY,
+                    LANGUAGE_SYSTEM);
+                const Color* pColor = nullptr;
+                pNumForm->GetOutputString( fDate, nfIndex, aDate, &pColor );
+            }
             pNote->SetDate( aDate );
         }
         pNote->SetAuthor( mxAnnotationData->maAuthor );
