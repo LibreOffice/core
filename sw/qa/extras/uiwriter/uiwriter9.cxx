@@ -808,6 +808,51 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testParagraphStyleCloneFormatting)
                          getProperty<OUString>(getParagraph(2), u"ParaStyleName"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf122756)
+{
+    createSwDoc("tdf122756.odt");
+
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+
+    uno::Reference<text::XTextRange> xCellA1(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"€ 100,00"_ustr, xCellA1->getString());
+
+    uno::Reference<text::XTextRange> xCellA2(xTable->getCellByName(u"A2"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"100"_ustr, xCellA2->getString());
+
+    // Cursor is already on cell A1
+    uno::Sequence aArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr, uno::Any(false)) };
+    dispatchCommand(mxComponent, u".uno:FormatPaintbrush"_ustr, aArgs);
+
+    // Disable map mode, so that it's possible to send mouse event coordinates
+    // directly in twips.
+    SwEditWin& rEditWin = getSwDocShell()->GetView()->GetEditWin();
+    rEditWin.EnableMapMode(false);
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+
+    // move to cell A2
+    pWrtShell->Down(/*bSelect=*/false, 1);
+    Point aPoint = pShellCursor->GetSttPos();
+
+    // click on cell A2
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    pTextDoc->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,
+                             MOUSE_LEFT, 0);
+    pTextDoc->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aPoint.getX(), aPoint.getY(), 1,
+                             MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(u"€ 100,00"_ustr, xCellA1->getString());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: € 100,00
+    // - Actual  : 100
+    CPPUNIT_ASSERT_EQUAL(u"€ 100,00"_ustr, xCellA2->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf161172)
 {
     // Given a paragraph manually made a member of a list:
