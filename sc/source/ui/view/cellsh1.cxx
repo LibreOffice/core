@@ -2952,7 +2952,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         else if (nRet == DLG_RET_ADD)
                         {
                             // Put the xml string parameter to initialize the
-                            // Conditional Format Dialog. ( add new ). Proivde
+                            // Conditional Format Dialog. ( add new ). Provide
                             // new DialogData
                             pTabViewShell->setScCondFormatDlgData(
                                 std::make_shared<ScCondFormatDlgData>(
@@ -2970,7 +2970,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             sal_uInt32 nIndex = pFormat ? pFormat->GetKey() : sal_uInt32(-1);
                             // Put the xml string parameter to initialize the
                             // Conditional Format Dialog. ( edit selected conditional format ).
-                            // Proivde new DialogData
+                            // Provide new DialogData
                             pTabViewShell->setScCondFormatDlgData(
                                 std::make_shared<ScCondFormatDlgData>(
                                     std::shared_ptr<ScConditionalFormatList>(
