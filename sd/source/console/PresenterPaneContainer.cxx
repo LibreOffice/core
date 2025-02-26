@@ -19,7 +19,6 @@
 
 #include "PresenterPaneContainer.hxx"
 #include "PresenterPaneBase.hxx"
-#include <PresenterHelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

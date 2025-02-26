@@ -21,6 +21,7 @@
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANECONTAINER_HXX
 
 #include "PresenterPaneBase.hxx"
+#include <PresenterHelper.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
@@ -151,7 +152,7 @@ public:
         const css::lang::EventObject& rEvent) override;
 
 private:
-    css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
+    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
 };
 
 } // end of namespace ::sdext::presenter

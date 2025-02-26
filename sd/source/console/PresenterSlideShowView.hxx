@@ -185,7 +185,7 @@ private:
     css::uno::Reference<css::awt::XWindow> mxWindow;
     css::uno::Reference<css::awt::XWindow> mxViewWindow;
     css::uno::Reference<css::drawing::framework::XPane> mxTopPane;
-    css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
+    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
     css::uno::Reference<css::rendering::XPolyPolygon2D> mxBackgroundPolygon1;
     css::uno::Reference<css::rendering::XPolyPolygon2D> mxBackgroundPolygon2;
     bool mbIsViewAdded;

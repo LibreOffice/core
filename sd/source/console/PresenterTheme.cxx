@@ -22,9 +22,9 @@
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterConfigurationAccess.hxx"
 #include <PresenterHelper.hxx>
-#include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/rendering/PanoseWeight.hpp>
 #include <osl/diagnose.h>
+#include <rtl/ref.hxx>
 #include <map>
 #include <numeric>
 #include <utility>
@@ -84,7 +84,7 @@ class ReadContext
 public:
     Reference<XComponentContext> mxComponentContext;
     Reference<rendering::XCanvas> mxCanvas;
-    Reference<drawing::XPresenterHelper> mxPresenterHelper;
+    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
 
     ReadContext (
         const Reference<XComponentContext>& rxContext,

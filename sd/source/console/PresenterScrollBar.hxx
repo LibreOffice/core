@@ -21,12 +21,13 @@
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERSCROLLBAR_HXX
 
 #include "PresenterBitmapContainer.hxx"
+#include <PresenterHelper.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <rtl/ref.hxx>
 
 #include <functional>
 #include <memory>
@@ -149,7 +150,7 @@ protected:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     css::uno::Reference<css::awt::XWindow> mxWindow;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
-    css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
+    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
     std::shared_ptr<PresenterPaintManager> mpPaintManager;
     double mnThumbPosition;
     double mnTotalSize;
