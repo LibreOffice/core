@@ -134,8 +134,24 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf123225PivotTableRowColItems
     xmlDocUniquePtr pSheet = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
-    // be sure that we have <rowItems> and <colItems> element
-    // under <pivotTableDefinition> after export of the .ods to .xlsx
+    /*
+        - be sure that we have <rowItems> and <colItems> element
+        under <pivotTableDefinition> after export of the .ods to .xlsx
+
+            otherwise:
+            1) Excel will fail to open the xlsx document, you will get an error message.
+            2) Excel will open the file without any errors but:
+                2.1) context menu -by right clicking on the pivot table- will have
+                    less or more items than it should have after "refresh".
+                2.2) if e.g. trying to sort the items you will get "Cannot determine
+                    which PivotTable field to sort by" warning.
+
+        - after exporting the .ods as .xlsx and opening the .xlsx document in Excel:
+        the count attribute of rowItems(or colItems) should have the expected value.
+        otherwise, context menu on the pivot table will have less/more items
+        than it should have after "refresh". we shouldn't need "refresh" to use all
+        functions/items in the context menu.
+    */
 
     // Row items <rowItems>
 
@@ -160,6 +176,62 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf123225PivotTableRowColItems
     assertXPath(pSheet, "/x:pivotTableDefinition/x:colItems/x:i[1]/x:x"_ostr, 1);
     // check if <x/> of the first <i> element, has v="0" attribute value
     assertXPath(pSheet, "/x:pivotTableDefinition/x:colItems/x:i[1]/x:x"_ostr, "v"_ostr, "0");
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf123225PivotTableNoColItems)
+{
+    createScDoc("ods/tdf123225_pivotTable_no_col_items.ods");
+    save(u"Calc Office Open XML"_ustr);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    /*
+        - after exporting the .ods to .xlsx, we should have t="grand" in the
+        last <i> element of the <rowItems> and <colItems>. Otherwise, Excel will not
+        have all functions in the context menu of the pivot table. Especially for the
+        "Grand Total" column/row cells.
+
+        - additionally, we should always export a single <rowItems> and <colItems> regardless of
+        whether the document has row/col items. Otherwise, in Excel, context menu on some
+        cells of the pivot table, will not have the expected context menu items.
+
+        - this tdf123225_pivotTable_no_col_items.ods document does not have
+        axisCol (DataPilotFieldOrientation_COLUMN) and that means <colItems> should not exist
+        during export. But in Excel, if pivot table refreshed, there will be
+
+        <colItems count="1">
+            <i/>
+        </colItems>
+
+        in the xl/pivotTables/pivotTable1.xml. So, that means we should export <colItems>
+        without checking the existence of it.
+        For the sake of completeness, <colItems> exported as:
+
+        <colItems count="1">
+            <i t="grand">
+                <x v="0"/>
+            </i>
+        </colItems>
+    */
+
+    // Row items <rowItems>
+
+    // check if <rowItems count="3">
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:rowItems"_ostr, "count"_ostr, "3");
+    // check if last <i> element, has t="grand"
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:rowItems/x:i[last()]"_ostr, "t"_ostr, "grand");
+
+    // Column items <colItems>
+
+    // check if <colItems count="1">
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:colItems"_ostr, "count"_ostr, "1");
+    // check if <colItems> has only a single <i> element
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:colItems/x:i"_ostr, 1);
+    // check if <i> element has t="grand"
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:colItems/x:i"_ostr, "t"_ostr, "grand");
+    // check if <i> has <x v="0"/>
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:colItems/x:i/x:x"_ostr, "v"_ostr, "0");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableNamedRangeSourceODS)
