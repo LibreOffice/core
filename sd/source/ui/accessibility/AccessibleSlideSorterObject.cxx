@@ -55,15 +55,12 @@ AccessibleSlideSorterObject::AccessibleSlideSorterObject(
     sal_uInt16 nPageNumber)
     : mxParent(rxParent),
       mnPageNumber(nPageNumber),
-      mrSlideSorter(rSlideSorter),
-      mnClientId(0)
+      mrSlideSorter(rSlideSorter)
 {
 }
 
 AccessibleSlideSorterObject::~AccessibleSlideSorterObject()
 {
-    if ( ! IsDisposed())
-        dispose();
 }
 
 void AccessibleSlideSorterObject::FireAccessibleEvent (
@@ -71,27 +68,7 @@ void AccessibleSlideSorterObject::FireAccessibleEvent (
     const uno::Any& rOldValue,
     const uno::Any& rNewValue)
 {
-    if (mnClientId != 0)
-    {
-        AccessibleEventObject aEventObject;
-
-        aEventObject.Source = Reference<XWeak>(this);
-        aEventObject.EventId = nEventId;
-        aEventObject.NewValue = rNewValue;
-        aEventObject.OldValue = rOldValue;
-
-        comphelper::AccessibleEventNotifier::addEvent(mnClientId, aEventObject);
-    }
-}
-
-void AccessibleSlideSorterObject::disposing(std::unique_lock<std::mutex>&)
-{
-    // Send a disposing to all listeners.
-    if (mnClientId != 0)
-    {
-        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing(mnClientId, *this);
-        mnClientId =  0;
-    }
+    NotifyAccessibleEvent(nEventId, rOldValue, rNewValue);
 }
 
 //===== XAccessible ===========================================================
@@ -217,64 +194,7 @@ lang::Locale SAL_CALL AccessibleSlideSorterObject::getLocale()
     throw IllegalAccessibleComponentStateException();
 }
 
-//===== XAccessibleEventBroadcaster ===========================================
-
-void SAL_CALL AccessibleSlideSorterObject::addAccessibleEventListener(
-    const Reference<XAccessibleEventListener>& rxListener)
-{
-    if (!rxListener.is())
-        return;
-
-    const std::unique_lock aGuard(m_aMutex);
-
-    if (IsDisposed())
-    {
-        uno::Reference<uno::XInterface> x (static_cast<lang::XComponent *>(this), uno::UNO_QUERY);
-        rxListener->disposing (lang::EventObject (x));
-    }
-    else
-    {
-        if (mnClientId == 0)
-            mnClientId = comphelper::AccessibleEventNotifier::registerClient();
-        comphelper::AccessibleEventNotifier::addEventListener(mnClientId, rxListener);
-    }
-}
-
-void SAL_CALL AccessibleSlideSorterObject::removeAccessibleEventListener(
-    const Reference<XAccessibleEventListener>& rxListener)
-{
-    ThrowIfDisposed();
-    if (!rxListener.is())
-        return;
-
-    const std::unique_lock aGuard(m_aMutex);
-
-    if (!mnClientId)
-        return;
-
-    sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, rxListener );
-    if ( !nListenerCount )
-    {
-        // no listeners anymore
-        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-        // and at least to us not firing any events anymore, in case somebody calls
-        // NotifyAccessibleEvent, again
-        comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
-        mnClientId = 0;
-    }
-}
-
 //===== XAccessibleComponent ==================================================
-
-sal_Bool SAL_CALL AccessibleSlideSorterObject::containsPoint(const awt::Point& aPoint)
-{
-    ThrowIfDisposed();
-    const awt::Size aSize (getSize());
-    return (aPoint.X >= 0)
-        && (aPoint.X < aSize.Width)
-        && (aPoint.Y >= 0)
-        && (aPoint.Y < aSize.Height);
-}
 
 Reference<XAccessible> SAL_CALL
     AccessibleSlideSorterObject::getAccessibleAtPoint(const awt::Point& )
@@ -282,12 +202,8 @@ Reference<XAccessible> SAL_CALL
     return nullptr;
 }
 
-awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds()
+awt::Rectangle AccessibleSlideSorterObject::implGetBounds()
 {
-    ThrowIfDisposed ();
-
-    const SolarMutexGuard aSolarGuard;
-
     ::tools::Rectangle aBBox (
         mrSlideSorter.GetView().GetLayouter().GetPageObjectLayouter()->GetBoundingBox(
             mrSlideSorter.GetModel().GetPageDescriptor(mnPageNumber),
@@ -309,38 +225,6 @@ awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds()
         aBBox.Top(),
         aBBox.GetWidth(),
         aBBox.GetHeight());
-}
-
-awt::Point SAL_CALL AccessibleSlideSorterObject::getLocation ()
-{
-    ThrowIfDisposed ();
-    const awt::Rectangle aBBox (getBounds());
-    return awt::Point(aBBox.X, aBBox.Y);
-}
-
-awt::Point SAL_CALL AccessibleSlideSorterObject::getLocationOnScreen()
-{
-    ThrowIfDisposed ();
-
-    const SolarMutexGuard aSolarGuard;
-
-    awt::Point aLocation (getLocation());
-
-    if (mxParent.is())
-    {
-        const awt::Point aParentLocationOnScreen(mxParent->getLocationOnScreen());
-        aLocation.X += aParentLocationOnScreen.X;
-        aLocation.Y += aParentLocationOnScreen.Y;
-    }
-
-    return aLocation;
-}
-
-awt::Size SAL_CALL AccessibleSlideSorterObject::getSize()
-{
-    ThrowIfDisposed ();
-    const awt::Rectangle aBBox (getBounds());
-    return awt::Size(aBBox.Width,aBBox.Height);
 }
 
 void SAL_CALL AccessibleSlideSorterObject::grabFocus()
@@ -388,17 +272,7 @@ uno::Sequence< OUString> SAL_CALL
 
 void AccessibleSlideSorterObject::ThrowIfDisposed()
 {
-    if (m_bDisposed)
-    {
-        SAL_WARN("sd", "Calling disposed object. Throwing exception:");
-        throw lang::DisposedException (u"object has been already disposed"_ustr,
-            static_cast<uno::XWeak*>(this));
-    }
-}
-
-bool AccessibleSlideSorterObject::IsDisposed() const
-{
-    return m_bDisposed;
+    ensureAlive();
 }
 
 SdPage* AccessibleSlideSorterObject::GetPage() const

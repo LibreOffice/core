@@ -23,9 +23,6 @@
 
 #include <comphelper/compbase.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <rtl/ref.hxx>
 
@@ -34,17 +31,11 @@ namespace sd::slidesorter { class SlideSorter; }
 
 namespace accessibility {
 
-typedef comphelper::WeakComponentImplHelper<
-    css::accessibility::XAccessible,
-    css::accessibility::XAccessibleEventBroadcaster,
-    css::accessibility::XAccessibleContext,
-    css::accessibility::XAccessibleComponent,
-    css::lang::XServiceInfo > AccessibleSlideSorterObjectBase;
-
 /** This class makes page objects of the slide sorter accessible.
 */
 class AccessibleSlideSorterObject
-    : public AccessibleSlideSorterObjectBase
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
+                                         css::accessibility::XAccessible, css::lang::XServiceInfo>
 {
 public:
     /** Create a new object that represents a page object in the slide
@@ -75,21 +66,10 @@ public:
         const css::uno::Any& rOldValue,
         const css::uno::Any& rNewValue);
 
-    virtual void disposing(std::unique_lock<std::mutex>&) override;
-
     //===== XAccessible =======================================================
 
     virtual css::uno::Reference<css::accessibility::XAccessibleContext > SAL_CALL
         getAccessibleContext() override;
-
-    //===== XAccessibleEventBroadcaster =======================================
-    virtual void SAL_CALL
-        addAccessibleEventListener(
-            const css::uno::Reference<css::accessibility::XAccessibleEventListener >& rxListener) override;
-
-    virtual void SAL_CALL
-        removeAccessibleEventListener(
-            const css::uno::Reference<css::accessibility::XAccessibleEventListener >& rxListener ) override;
 
     //=====  XAccessibleContext  ==============================================
 
@@ -123,22 +103,13 @@ public:
     virtual css::lang::Locale SAL_CALL
         getLocale() override;
 
+    // OCommonAccessibleComponent
+    virtual css::awt::Rectangle implGetBounds() override;
+
     //=====  XAccessibleComponent  ================================================
-
-    virtual sal_Bool SAL_CALL containsPoint (
-        const css::awt::Point& aPoint) override;
-
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
         getAccessibleAtPoint (
             const css::awt::Point& aPoint) override;
-
-    virtual css::awt::Rectangle SAL_CALL getBounds() override;
-
-    virtual css::awt::Point SAL_CALL getLocation() override;
-
-    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
-
-    virtual css::awt::Size SAL_CALL getSize() override;
 
     virtual void SAL_CALL grabFocus() override;
 
@@ -167,7 +138,6 @@ private:
     rtl::Reference<AccessibleSlideSorterView> mxParent;
     sal_uInt16 mnPageNumber;
     ::sd::slidesorter::SlideSorter& mrSlideSorter;
-    sal_uInt32 mnClientId;
 
     /** Check whether or not the object has been disposed (or is in the
         state of being disposed).  If that is the case then
@@ -177,14 +147,6 @@ private:
         @throws css::lang::DisposedException
     */
     void ThrowIfDisposed();
-
-    /** Check whether or not the object has been disposed (or is in the
-        state of being disposed).
-
-        @return sal_True, if the object is disposed or in the course
-        of being disposed. Otherwise, sal_False is returned.
-    */
-    bool IsDisposed() const;
 };
 
 } // end of namespace ::accessibility
