@@ -19,7 +19,6 @@ TIMESTAMPURL ?= "http://timestamp.globalsign.com/scripts/timestamp.dll"
 
 $(gb_CustomTarget_workdir)/postprocess/signing/signing.done: \
 	$(SRCDIR)/postprocess/signing/signing.pl \
-	$(SRCDIR)/postprocess/signing/no_signing.txt \
 	$(call gb_Module_get_target,extras) \
 	$(call gb_Postprocess_get_target,AllLibraries) \
 	$(call gb_Postprocess_get_target,AllExecutables) \
@@ -31,8 +30,7 @@ $(gb_CustomTarget_workdir)/postprocess/signing/signing.done:
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 ifeq ($(COM),MSC)
 	EXCLUDELIST=$(shell $(gb_MKTEMP)) && \
-	cat $(SRCDIR)/postprocess/signing/no_signing.txt > $$EXCLUDELIST && \
-	echo "$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_filename,$(lib)))" | tr ' ' '\n' >> $$EXCLUDELIST && \
+	echo "$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_filename,$(lib)))" | tr ' ' '\n' > $$EXCLUDELIST && \
 	$(if $(BUILD_X64),chmod u+w $(foreach lib,$(MSVC_DLLS),$(INSTDIR)/program/shlxthdl/$(lib)) &&) \
 	$(PERL) $(SRCDIR)/postprocess/signing/signing.pl \
 			-e $$EXCLUDELIST \
