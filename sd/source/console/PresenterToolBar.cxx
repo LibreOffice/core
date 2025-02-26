@@ -104,7 +104,7 @@ public:
     Context() = default;
     Context(const Context&) = delete;
     Context& operator=(const Context&) = delete;
-    Reference<drawing::XPresenterHelper> mxPresenterHelper;
+    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
 };
 
