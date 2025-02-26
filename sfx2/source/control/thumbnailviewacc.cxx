@@ -187,54 +187,6 @@ lang::Locale SAL_CALL ThumbnailViewAcc::getLocale()
     return aRet;
 }
 
-void SAL_CALL ThumbnailViewAcc::addAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
-{
-    ThrowIfDisposed();
-    std::unique_lock aGuard (m_aMutex);
-
-    if( !rxListener.is() )
-        return;
-
-    bool bFound = false;
-
-    for (auto const& eventListener : mxEventListeners)
-    {
-        if( eventListener == rxListener )
-        {
-            bFound = true;
-            break;
-        }
-    }
-
-    if (!bFound)
-        mxEventListeners.push_back( rxListener );
-}
-
-void SAL_CALL ThumbnailViewAcc::removeAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
-{
-    ThrowIfDisposed();
-    std::unique_lock aGuard (m_aMutex);
-
-    if( rxListener.is() )
-    {
-        std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::iterator aIter =
-            std::find(mxEventListeners.begin(), mxEventListeners.end(), rxListener);
-
-        if (aIter != mxEventListeners.end())
-            mxEventListeners.erase( aIter );
-    }
-}
-
-sal_Bool SAL_CALL ThumbnailViewAcc::containsPoint( const awt::Point& aPoint )
-{
-    ThrowIfDisposed();
-    const awt::Rectangle    aRect( getBounds() );
-    const Point             aSize( aRect.Width, aRect.Height );
-    const Point             aNullPoint, aTestPoint( aPoint.X, aPoint.Y );
-
-    return tools::Rectangle( aNullPoint, aSize ).Contains( aTestPoint );
-}
-
 uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAccessibleAtPoint( const awt::Point& aPoint )
 {
     ThrowIfDisposed();
@@ -256,10 +208,8 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAcces
     return xRet;
 }
 
-awt::Rectangle SAL_CALL ThumbnailViewAcc::getBounds()
+awt::Rectangle ThumbnailViewAcc::implGetBounds()
 {
-    ThrowIfDisposed();
-    const SolarMutexGuard aSolarGuard;
     const Point         aOutPos;
     const Size aOutSize(mpThumbnailView->GetOutputSizePixel());
     awt::Rectangle      aRet;
@@ -268,54 +218,6 @@ awt::Rectangle SAL_CALL ThumbnailViewAcc::getBounds()
     aRet.Y = aOutPos.Y();
     aRet.Width = aOutSize.Width();
     aRet.Height = aOutSize.Height();
-
-    return aRet;
-}
-
-awt::Point SAL_CALL ThumbnailViewAcc::getLocation()
-{
-    ThrowIfDisposed();
-    const awt::Rectangle    aRect( getBounds() );
-    awt::Point              aRet;
-
-    aRet.X = aRect.X;
-    aRet.Y = aRect.Y;
-
-    return aRet;
-}
-
-awt::Point SAL_CALL ThumbnailViewAcc::getLocationOnScreen()
-{
-    ThrowIfDisposed();
-    const SolarMutexGuard aSolarGuard;
-    awt::Point aScreenLoc(0, 0);
-
-    uno::Reference<accessibility::XAccessible> xParent(getAccessibleParent());
-    if (xParent)
-    {
-        uno::Reference<accessibility::XAccessibleContext> xParentContext(xParent->getAccessibleContext());
-        uno::Reference<accessibility::XAccessibleComponent> xParentComponent(xParentContext, css::uno::UNO_QUERY);
-        OSL_ENSURE( xParentComponent.is(), "ThumbnailViewAcc::getLocationOnScreen: no parent component!" );
-        if ( xParentComponent.is() )
-        {
-            awt::Point aParentScreenLoc( xParentComponent->getLocationOnScreen() );
-            awt::Point aOwnRelativeLoc( getLocation() );
-            aScreenLoc.X = aParentScreenLoc.X + aOwnRelativeLoc.X;
-            aScreenLoc.Y = aParentScreenLoc.Y + aOwnRelativeLoc.Y;
-        }
-    }
-
-    return aScreenLoc;
-}
-
-awt::Size SAL_CALL ThumbnailViewAcc::getSize()
-{
-    ThrowIfDisposed();
-    const awt::Rectangle    aRect( getBounds() );
-    awt::Size               aRet;
-
-    aRet.Width = aRect.Width;
-    aRet.Height = aRect.Height;
 
     return aRet;
 }
@@ -433,42 +335,6 @@ void SAL_CALL ThumbnailViewAcc::deselectAccessibleChild( sal_Int64 nChildIndex)
 //FIXME TODO        ;
 }
 
-void ThumbnailViewAcc::disposing(std::unique_lock<std::mutex>& rGuard)
-{
-    ::std::vector<uno::Reference<accessibility::XAccessibleEventListener> > aListenerListCopy;
-
-    // unlock because we need to take solar and the lock mutex in the correct order
-    rGuard.unlock();
-    {
-        const SolarMutexGuard aSolarGuard;
-        std::unique_lock aGuard (m_aMutex);
-
-        // Reset the pointer to the parent.  It has to be the one who has
-        // disposed us because he is dying.
-        mpThumbnailView = nullptr;
-
-        if (mxEventListeners.empty())
-            return;
-
-        // Make a copy of the list and clear the original.
-        aListenerListCopy = std::move(mxEventListeners);
-    }
-
-    // Inform all listeners that this objects is disposing.
-    lang::EventObject aEvent (static_cast<accessibility::XAccessible*>(this));
-    for (auto const& listener : aListenerListCopy)
-    {
-        try
-        {
-            listener->disposing (aEvent);
-        }
-        catch(const uno::Exception&)
-        {
-            // Ignore exceptions.
-        }
-    }
-}
-
 sal_uInt16 ThumbnailViewAcc::getItemCount() const
 {
     return mpThumbnailView->ImplGetVisibleItemCount();
@@ -481,45 +347,19 @@ ThumbnailViewItem* ThumbnailViewAcc::getItem (sal_uInt16 nIndex) const
 
 void ThumbnailViewAcc::ThrowIfDisposed()
 {
-    if (m_bDisposed)
-    {
-        SAL_WARN("sfx", "Calling disposed object. Throwing exception:");
-        throw lang::DisposedException (
-            u"object has been already disposed"_ustr,
-            getXWeak());
-    }
-    else
-    {
-        DBG_ASSERT (mpThumbnailView!=nullptr, "ValueSetAcc not disposed but mpThumbnailView == NULL");
-    }
+    ensureAlive();
+
+    DBG_ASSERT (mpThumbnailView!=nullptr, "ValueSetAcc not disposed but mpThumbnailView == NULL");
 }
 
 void ThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
 {
-    if( !nEventId )
-        return;
+    NotifyAccessibleEvent(nEventId, rOldValue, rNewValue);
+}
 
-    std::unique_lock aGuard(m_aMutex);
-    ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > > aTmpListeners( mxEventListeners );
-    aGuard.unlock();
-    accessibility::AccessibleEventObject aEvtObject;
-
-    aEvtObject.EventId = nEventId;
-    aEvtObject.Source = getXWeak();
-    aEvtObject.NewValue = rNewValue;
-    aEvtObject.OldValue = rOldValue;
-    aEvtObject.IndexHint = -1;
-
-    for (auto const& tmpListener : aTmpListeners)
-    {
-        try
-        {
-            tmpListener->notifyEvent( aEvtObject );
-        }
-        catch(const uno::Exception&)
-        {
-        }
-    }
+bool ThumbnailViewAcc::HasAccessibleListeners() const
+{
+    return OAccessibleComponentHelper::hasAccessibleListeners();
 }
 
 void ThumbnailViewAcc::GetFocus()

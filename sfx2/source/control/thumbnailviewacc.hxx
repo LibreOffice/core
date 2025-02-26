@@ -19,30 +19,20 @@
 
 #pragma once
 
+#include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/compbase.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-
-#include <vector>
 
 class ThumbnailView;
 class ThumbnailViewItem;
 
-typedef comphelper::WeakComponentImplHelper<
-    css::accessibility::XAccessible,
-    css::accessibility::XAccessibleEventBroadcaster,
-    css::accessibility::XAccessibleContext,
-    css::accessibility::XAccessibleComponent,
-    css::accessibility::XAccessibleSelection >
-    ValueSetAccComponentBase;
-
-class ThumbnailViewAcc :
-    public ValueSetAccComponentBase
+class ThumbnailViewAcc
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
+                                         css::accessibility::XAccessible,
+                                         css::accessibility::XAccessibleSelection>
 {
 public:
 
@@ -53,11 +43,7 @@ public:
                               const css::uno::Any& rOldValue,
                               const css::uno::Any& rNewValue );
 
-    bool HasAccessibleListeners() const
-    {
-        std::unique_lock aGuard (m_aMutex);
-        return( mxEventListeners.size() > 0 );
-    }
+    bool HasAccessibleListeners() const;
 
 public:
     /** Called by the corresponding ValueSet when it gets the focus.
@@ -73,10 +59,6 @@ public:
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
-    // XAccessibleEventBroadcaster
-    virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-    virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
@@ -89,13 +71,11 @@ public:
     virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override;
     virtual css::lang::Locale SAL_CALL getLocale(  ) override;
 
+    // OCommonAccessibleComponent
+    virtual css::awt::Rectangle implGetBounds() override;
+
     // XAccessibleComponent
-    virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-    virtual css::awt::Rectangle SAL_CALL getBounds(  ) override;
-    virtual css::awt::Point SAL_CALL getLocation(  ) override;
-    virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
-    virtual css::awt::Size SAL_CALL getSize(  ) override;
     virtual void SAL_CALL grabFocus(  ) override;
     virtual sal_Int32 SAL_CALL getForeground(  ) override;
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
@@ -110,14 +90,7 @@ public:
     virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
 private:
-    ::std::vector< css::uno::Reference<
-        css::accessibility::XAccessibleEventListener > >   mxEventListeners;
     ThumbnailView* mpThumbnailView;
-
-    /** Tell all listeners that the object is dying.  This callback is
-        usually called from the WeakComponentImplHelper class.
-    */
-    virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     /** Return the number of items.  This takes the None-Item into account.
     */
