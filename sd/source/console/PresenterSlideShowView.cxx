@@ -21,7 +21,6 @@
 #include "PresenterSlideShowView.hxx"
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterGeometryHelper.hxx"
-#include "PresenterHelper.hxx"
 #include "PresenterPaneContainer.hxx"
 #include <DrawController.hxx>
 #include <com/sun/star/awt/InvalidateStyle.hpp>
@@ -33,6 +32,8 @@
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
+#include <com/sun/star/presentation/XPresentationSupplier.hpp>
+#include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
@@ -42,6 +43,33 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
+
+namespace {
+/** Return the slide show controller of a running presentation that has
+    the same document as the given framework controller.
+    @return
+        When no presentation is running this method returns an empty reference.
+*/
+Reference<presentation::XSlideShowController> lcl_GetSlideShowController (
+    const Reference<frame::XController>& rxController)
+{
+    Reference<presentation::XSlideShowController> xSlideShowController;
+
+    if( rxController.is() ) try
+        {
+            Reference<css::presentation::XPresentationSupplier> xPS ( rxController->getModel(), UNO_QUERY_THROW);
+
+            Reference<css::presentation::XPresentation2> xPresentation(xPS->getPresentation(), UNO_QUERY_THROW);
+
+            xSlideShowController = xPresentation->getController();
+        }
+        catch(RuntimeException&)
+        {
+        }
+
+    return xSlideShowController;
+}
+}
 
 namespace sdext::presenter {
 
@@ -57,7 +85,7 @@ PresenterSlideShowView::PresenterSlideShowView (
       mpPresenterController(std::move(xPresenterController)),
       mxViewId(std::move(xViewId)),
       mxController(rxController),
-      mxSlideShowController(PresenterHelper::GetSlideShowController(rxController)),
+      mxSlideShowController(lcl_GetSlideShowController(rxController)),
       mbIsViewAdded(false),
       mnPageAspectRatio(28.0/21.0),
       maBroadcaster(m_aMutex),

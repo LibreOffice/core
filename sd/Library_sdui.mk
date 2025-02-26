@@ -101,7 +101,6 @@ $(eval $(call gb_Library_add_exception_objects,sdui,\
     sd/source/console/PresenterFrameworkObserver \
     sd/source/console/PresenterGeometryHelper \
     sd/source/console/PresenterHelpView \
-    sd/source/console/PresenterHelper \
     sd/source/console/PresenterNotesView \
     sd/source/console/PresenterPaintManager \
     sd/source/console/PresenterPane \

@@ -21,7 +21,6 @@
 #include "PresenterConfigurationAccess.hxx"
 #include "PresenterController.hxx"
 #include "PresenterFrameworkObserver.hxx"
-#include "PresenterHelper.hxx"
 #include "PresenterPaneContainer.hxx"
 #include "PresenterPaneFactory.hxx"
 #include "PresenterViewFactory.hxx"
