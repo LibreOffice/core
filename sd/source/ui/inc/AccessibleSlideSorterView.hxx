@@ -19,13 +19,10 @@
 
 #pragma once
 
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
@@ -38,22 +35,14 @@ namespace accessibility {
 
 class AccessibleSlideSorterObject;
 
-typedef ::cppu::WeakComponentImplHelper<
-    css::accessibility::XAccessible,
-    css::accessibility::XAccessibleEventBroadcaster,
-    css::accessibility::XAccessibleContext,
-    css::accessibility::XAccessibleComponent,
-    css::accessibility::XAccessibleSelection,
-    css::lang::XServiceInfo
-    > AccessibleSlideSorterViewBase;
-
 /** This class makes the SlideSorterViewShell accessible.  It uses objects
     of the AccessibleSlideSorterObject class to the make the page objects
     accessible.
 */
 class AccessibleSlideSorterView
-    : public cppu::BaseMutex,
-      public AccessibleSlideSorterViewBase
+    : public cppu::ImplInheritanceHelper<
+          comphelper::OAccessibleComponentHelper, css::accessibility::XAccessible,
+          css::accessibility::XAccessibleSelection, css::lang::XServiceInfo>
 {
 public:
     AccessibleSlideSorterView(
@@ -63,11 +52,6 @@ public:
     void Init();
 
     virtual ~AccessibleSlideSorterView() override;
-
-    /** This method acts like a dispose call.  It sends a disposing to all
-        of its listeners.  It may be called twice.
-    */
-    void Destroyed();
 
     void FireAccessibleEvent (
         short nEventId,
@@ -86,15 +70,6 @@ public:
 
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL
         getAccessibleContext() override;
-
-    //===== XAccessibleEventBroadcaster =======================================
-    virtual void SAL_CALL
-        addAccessibleEventListener(
-            const css::uno::Reference< css::accessibility::XAccessibleEventListener >& rxListener) override;
-
-    virtual void SAL_CALL
-        removeAccessibleEventListener(
-            const css::uno::Reference< css::accessibility::XAccessibleEventListener >& rxListener ) override;
 
     //=====  XAccessibleContext  ==============================================
 
@@ -134,22 +109,14 @@ public:
     virtual css::lang::Locale SAL_CALL
         getLocale() override;
 
-    //=====  XAccessibleComponent  ================================================
+    // OCommonAccessibleComponent
+    virtual css::awt::Rectangle implGetBounds() override;
 
-    virtual sal_Bool SAL_CALL containsPoint (
-        const css::awt::Point& aPoint) override;
+    //=====  XAccessibleComponent  ================================================
 
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
         getAccessibleAtPoint (
             const css::awt::Point& aPoint) override;
-
-    virtual css::awt::Rectangle SAL_CALL getBounds() override;
-
-    virtual css::awt::Point SAL_CALL getLocation() override;
-
-    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
-
-    virtual css::awt::Size SAL_CALL getSize() override;
 
     virtual void SAL_CALL grabFocus() override;
 
@@ -198,8 +165,6 @@ private:
     ::std::unique_ptr<Implementation> mpImpl;
 
     ::sd::slidesorter::SlideSorter& mrSlideSorter;
-
-    sal_uInt32 mnClientId;
 
     VclPtr<vcl::Window> mpContentWindow;
 

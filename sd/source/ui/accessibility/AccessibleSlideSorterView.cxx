@@ -113,9 +113,7 @@ private:
 AccessibleSlideSorterView::AccessibleSlideSorterView(
     ::sd::slidesorter::SlideSorter& rSlideSorter,
     vcl::Window* pContentWindow)
-    : AccessibleSlideSorterViewBase(m_aMutex),
-      mrSlideSorter(rSlideSorter),
-      mnClientId(0),
+    : mrSlideSorter(rSlideSorter),
       mpContentWindow(pContentWindow)
 {
 }
@@ -127,7 +125,6 @@ void AccessibleSlideSorterView::Init()
 
 AccessibleSlideSorterView::~AccessibleSlideSorterView()
 {
-    Destroyed ();
 }
 
 void AccessibleSlideSorterView::FireAccessibleEvent (
@@ -135,27 +132,13 @@ void AccessibleSlideSorterView::FireAccessibleEvent (
     const uno::Any& rOldValue,
     const uno::Any& rNewValue )
 {
-    if (mnClientId != 0)
-    {
-        AccessibleEventObject aEventObject;
-
-        aEventObject.Source = Reference<XWeak>(this);
-        aEventObject.EventId = nEventId;
-        aEventObject.NewValue = rNewValue;
-        aEventObject.OldValue = rOldValue;
-        aEventObject.IndexHint = -1;
-
-        comphelper::AccessibleEventNotifier::addEvent (mnClientId, aEventObject);
-    }
+    NotifyAccessibleEvent(nEventId, rOldValue, rNewValue);
 }
 
 void SAL_CALL AccessibleSlideSorterView::disposing()
 {
-    if (mnClientId != 0)
-    {
-        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
-        mnClientId = 0;
-    }
+    OAccessibleComponentHelper::disposing();
+
     mpImpl.reset();
 }
 
@@ -169,18 +152,6 @@ AccessibleSlideSorterObject* AccessibleSlideSorterView::GetAccessibleChildImplem
         pResult = mpImpl->GetVisibleChild(nIndex);
 
     return pResult;
-}
-
-void AccessibleSlideSorterView::Destroyed()
-{
-    ::osl::MutexGuard aGuard (m_aMutex);
-
-    // Send a disposing to all listeners.
-    if (mnClientId != 0)
-    {
-        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
-        mnClientId = 0;
-    }
 }
 
 //=====  XAccessible  =========================================================
@@ -318,63 +289,7 @@ lang::Locale SAL_CALL AccessibleSlideSorterView::getLocale()
         return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
-void SAL_CALL AccessibleSlideSorterView::addAccessibleEventListener(
-    const Reference<XAccessibleEventListener >& rxListener)
-{
-    if (!rxListener.is())
-        return;
-
-    const osl::MutexGuard aGuard(m_aMutex);
-
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        uno::Reference<uno::XInterface> x (static_cast<lang::XComponent *>(this), uno::UNO_QUERY);
-        rxListener->disposing (lang::EventObject (x));
-    }
-    else
-    {
-        if ( ! mnClientId)
-            mnClientId = comphelper::AccessibleEventNotifier::registerClient();
-        comphelper::AccessibleEventNotifier::addEventListener(mnClientId, rxListener);
-    }
-}
-
-void SAL_CALL AccessibleSlideSorterView::removeAccessibleEventListener(
-    const Reference<XAccessibleEventListener >& rxListener)
-{
-    ThrowIfDisposed();
-    if (!rxListener.is())
-        return;
-
-    const osl::MutexGuard aGuard(m_aMutex);
-
-    if (mnClientId == 0)
-        return;
-
-    sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener(
-        mnClientId, rxListener );
-    if ( !nListenerCount )
-    {
-        // no listeners anymore -> revoke ourself. This may lead to
-        // the notifier thread dying (if we were the last client),
-        // and at least to us not firing any events anymore, in case
-        // somebody calls NotifyAccessibleEvent, again
-        comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
-        mnClientId = 0;
-    }
-}
-
 //===== XAccessibleComponent ==================================================
-
-sal_Bool SAL_CALL AccessibleSlideSorterView::containsPoint (const awt::Point& aPoint)
-{
-    ThrowIfDisposed();
-    const awt::Rectangle aBBox (getBounds());
-    return (aPoint.X >= 0)
-        && (aPoint.X < aBBox.Width)
-        && (aPoint.Y >= 0)
-        && (aPoint.Y < aBBox.Height);
-}
 
 Reference<XAccessible> SAL_CALL
     AccessibleSlideSorterView::getAccessibleAtPoint (const awt::Point& aPoint)
@@ -393,10 +308,8 @@ Reference<XAccessible> SAL_CALL
     return xAccessible;
 }
 
-awt::Rectangle SAL_CALL AccessibleSlideSorterView::getBounds()
+awt::Rectangle AccessibleSlideSorterView::implGetBounds()
 {
-    ThrowIfDisposed();
-    const SolarMutexGuard aSolarGuard;
     awt::Rectangle aBBox;
 
     if (mpContentWindow != nullptr)
@@ -411,61 +324,6 @@ awt::Rectangle SAL_CALL AccessibleSlideSorterView::getBounds()
     }
 
     return aBBox;
-}
-
-awt::Point SAL_CALL AccessibleSlideSorterView::getLocation()
-{
-    ThrowIfDisposed();
-    awt::Point aLocation;
-
-    if (mpContentWindow != nullptr)
-    {
-        const Point aPosition (mpContentWindow->GetPosPixel());
-        aLocation.X = aPosition.X();
-        aLocation.Y = aPosition.Y();
-    }
-
-    return aLocation;
-}
-
-/** Calculate the location on screen from the parent's location on screen
-    and our own relative location.
-*/
-awt::Point SAL_CALL AccessibleSlideSorterView::getLocationOnScreen()
-{
-    ThrowIfDisposed();
-    const SolarMutexGuard aSolarGuard;
-    awt::Point aParentLocationOnScreen;
-
-    Reference<XAccessible> xParent (getAccessibleParent());
-    if (xParent.is())
-    {
-        Reference<XAccessibleComponent> xParentComponent (
-            xParent->getAccessibleContext(), uno::UNO_QUERY);
-        if (xParentComponent.is())
-            aParentLocationOnScreen = xParentComponent->getLocationOnScreen();
-    }
-
-    awt::Point aLocationOnScreen (getLocation());
-    aLocationOnScreen.X += aParentLocationOnScreen.X;
-    aLocationOnScreen.Y += aParentLocationOnScreen.Y;
-
-    return aLocationOnScreen;
-}
-
-awt::Size SAL_CALL AccessibleSlideSorterView::getSize()
-{
-    ThrowIfDisposed();
-    awt::Size aSize;
-
-    if (mpContentWindow != nullptr)
-    {
-        const Size aOutputSize (mpContentWindow->GetOutputSizePixel());
-        aSize.Width = aOutputSize.Width();
-        aSize.Height = aOutputSize.Height();
-    }
-
-    return aSize;
 }
 
 void SAL_CALL AccessibleSlideSorterView::grabFocus()
