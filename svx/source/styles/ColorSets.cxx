@@ -198,36 +198,21 @@ OUString findUniqueName(std::unordered_set<OUString> const& rNames, OUString con
 
 } // end anonymous namespace
 
-void ColorSets::insert(model::ColorSet const& rNewColorSet, IdenticalNameAction eAction)
+void ColorSets::insert(model::ColorSet const& rNewColorSet)
 {
-    if (eAction == IdenticalNameAction::Overwrite)
-    {
-        for (model::ColorSet& rColorSet : maColorSets)
-        {
-            if (rColorSet.getName() == rNewColorSet.getName())
-            {
-                rColorSet = rNewColorSet;
-                return;
-            }
-        }
-        // color set not found, so insert it
-        maColorSets.push_back(rNewColorSet);
-        writeToUserFolder(rNewColorSet);
-    }
-    else if (eAction == IdenticalNameAction::AutoRename)
-    {
-        std::unordered_set<OUString> aNames;
-        for (model::ColorSet& rColorSet : maColorSets)
-            aNames.insert(rColorSet.getName());
+    // auto-rename if it already exists
 
-        OUString aName = findUniqueName(aNames, rNewColorSet.getName());
+    std::unordered_set<OUString> aNames;
+    for (model::ColorSet& rColorSet : maColorSets)
+        aNames.insert(rColorSet.getName());
 
-        model::ColorSet aNewColorSet = rNewColorSet;
-        aNewColorSet.setName(aName);
+    OUString aName = findUniqueName(aNames, rNewColorSet.getName());
 
-        maColorSets.push_back(aNewColorSet);
-        writeToUserFolder(aNewColorSet);
-    }
+    model::ColorSet aNewColorSet = rNewColorSet;
+    aNewColorSet.setName(aName);
+
+    maColorSets.push_back(aNewColorSet);
+    writeToUserFolder(aNewColorSet);
 }
 
 void ColorSets::writeToUserFolder(model::ColorSet const& rNewColorSet)

@@ -102,7 +102,7 @@ void ThemeDialog::runThemeColorEditDialog()
         auto aColorSet = mxSubDialog->getColorSet();
         if (!aColorSet.getName().isEmpty())
         {
-            ColorSets::get().insert(aColorSet, ColorSets::IdenticalNameAction::AutoRename);
+            ColorSets::get().insert(aColorSet);
             maColorSets.clear();
             mxValueSetThemeColors->Clear();
 
