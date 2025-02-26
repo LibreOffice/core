@@ -76,7 +76,7 @@ void AccessibleSlideSorterObject::FireAccessibleEvent (
 Reference<XAccessibleContext> SAL_CALL
     AccessibleSlideSorterObject::getAccessibleContext()
 {
-    ThrowIfDisposed();
+    ensureAlive();
     return this;
 }
 
@@ -84,25 +84,25 @@ Reference<XAccessibleContext> SAL_CALL
 
 sal_Int64 SAL_CALL AccessibleSlideSorterObject::getAccessibleChildCount()
 {
-    ThrowIfDisposed();
+    ensureAlive();
     return 0;
 }
 
 Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleChild (sal_Int64 )
 {
-    ThrowIfDisposed();
+    ensureAlive();
     throw lang::IndexOutOfBoundsException();
 }
 
 Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleParent()
 {
-    ThrowIfDisposed();
+    ensureAlive();
     return mxParent;
 }
 
 sal_Int64 SAL_CALL AccessibleSlideSorterObject::getAccessibleIndexInParent()
 {
-    ThrowIfDisposed();
+    ensureAlive();
     const SolarMutexGuard aSolarGuard;
     sal_Int64 nIndexInParent(-1);
 
@@ -122,19 +122,19 @@ sal_Int64 SAL_CALL AccessibleSlideSorterObject::getAccessibleIndexInParent()
 
 sal_Int16 SAL_CALL AccessibleSlideSorterObject::getAccessibleRole()
 {
-    ThrowIfDisposed();
+    ensureAlive();
     return AccessibleRole::SHAPE;
 }
 
 OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleDescription()
 {
-    ThrowIfDisposed();
+    ensureAlive();
     return SdResId(STR_PAGE);
 }
 
 OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleName()
 {
-    ThrowIfDisposed();
+    ensureAlive();
     const SolarMutexGuard aSolarGuard;
 
     SdPage* pPage = GetPage();
@@ -147,14 +147,14 @@ OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleName()
 Reference<XAccessibleRelationSet> SAL_CALL
     AccessibleSlideSorterObject::getAccessibleRelationSet()
 {
-    ThrowIfDisposed();
+    ensureAlive();
     return Reference<XAccessibleRelationSet>();
 }
 
 sal_Int64 SAL_CALL
     AccessibleSlideSorterObject::getAccessibleStateSet()
 {
-    ThrowIfDisposed();
+    ensureAlive();
     const SolarMutexGuard aSolarGuard;
     sal_Int64 nStateSet = 0;
 
@@ -182,7 +182,7 @@ sal_Int64 SAL_CALL
 
 lang::Locale SAL_CALL AccessibleSlideSorterObject::getLocale()
 {
-    ThrowIfDisposed();
+    ensureAlive();
     // Delegate request to parent.
     if (mxParent.is())
     {
@@ -234,7 +234,7 @@ void SAL_CALL AccessibleSlideSorterObject::grabFocus()
 
 sal_Int32 SAL_CALL AccessibleSlideSorterObject::getForeground()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     svtools::ColorConfig aColorConfig;
     Color nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
     return static_cast<sal_Int32>(nColor);
@@ -242,7 +242,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getForeground()
 
 sal_Int32 SAL_CALL AccessibleSlideSorterObject::getBackground()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     Color nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
     return sal_Int32(nColor);
 }
@@ -262,17 +262,12 @@ sal_Bool SAL_CALL AccessibleSlideSorterObject::supportsService (const OUString& 
 uno::Sequence< OUString> SAL_CALL
        AccessibleSlideSorterObject::getSupportedServiceNames()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
 
     return uno::Sequence<OUString> {
         u"com.sun.star.accessibility.Accessible"_ustr,
         u"com.sun.star.accessibility.AccessibleContext"_ustr
     };
-}
-
-void AccessibleSlideSorterObject::ThrowIfDisposed()
-{
-    ensureAlive();
 }
 
 SdPage* AccessibleSlideSorterObject::GetPage() const
