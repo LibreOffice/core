@@ -299,7 +299,7 @@ awt::Point SAL_CALL ThumbnailViewItemAcc::getLocationOnScreen()
             mpThumbnailViewItem->mrParent.GetDrawingArea()->get_accessible_location_on_screen());
 
         aRet.X = aPos.X() + aScreenPos.X();
-        aRet.Y = aPos.Y() + aScreenPos.X();
+        aRet.Y = aPos.Y() + aScreenPos.Y();
     }
 
     return aRet;
