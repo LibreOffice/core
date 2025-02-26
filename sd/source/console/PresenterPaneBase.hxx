@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANEBASE_HXX
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANEBASE_HXX
 
+#include <PresenterHelper.hxx>
+
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/XWindowListener.hpp>
@@ -101,7 +103,7 @@ protected:
     css::uno::Reference<css::rendering::XCanvas> mxContentCanvas;
     css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;
     css::uno::Reference<css::drawing::framework::XPaneBorderPainter> mxBorderPainter;
-    css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
+    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
     OUString msTitle;
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
 
