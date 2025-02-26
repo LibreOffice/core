@@ -31,7 +31,7 @@ namespace sdext::presenter {
 
 PresenterPaintManager::PresenterPaintManager (
     const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
-    css::uno::Reference<css::drawing::XPresenterHelper> xPresenterHelper,
+    rtl::Reference<sd::presenter::PresenterHelper> xPresenterHelper,
     rtl::Reference<PresenterPaneContainer> xPaneContainer)
     : mxParentWindow(rxParentWindow),
       mxParentWindowPeer(rxParentWindow, UNO_QUERY),

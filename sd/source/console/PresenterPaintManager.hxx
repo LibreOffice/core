@@ -20,9 +20,10 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPAINTMANAGER_HXX
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPAINTMANAGER_HXX
 
+#include <PresenterHelper.hxx>
+
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <rtl/ref.hxx>
 
 #include <functional>
@@ -45,7 +46,7 @@ public:
     */
     PresenterPaintManager (
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
-        css::uno::Reference<css::drawing::XPresenterHelper> xPresenterHelper,
+        rtl::Reference<sd::presenter::PresenterHelper> xPresenterHelper,
         rtl::Reference<PresenterPaneContainer> xPaneContainer);
 
     ::std::function<void (const css::awt::Rectangle& rRepaintBox)>
@@ -78,7 +79,7 @@ public:
 private:
     css::uno::Reference<css::awt::XWindow> mxParentWindow;
     css::uno::Reference<css::awt::XWindowPeer> mxParentWindowPeer;
-    css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
+    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
     ::rtl::Reference<PresenterPaneContainer> mpPaneContainer;
 };
 
