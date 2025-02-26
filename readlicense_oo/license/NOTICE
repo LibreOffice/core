@@ -24,7 +24,6 @@ As part of the base system this product also includes code from the following
 Apache projects:
 - Apache Lucene
 - Apache Jakarta HttpClient - used by MediaWiki Publisher extension
-- Apache Tomcat - used by MediaWiki Publisher extension
 
 The notices from these projects are following:
 
@@ -39,22 +38,6 @@ The snowball stemmers in
 were developed by Martin Porter and Richard Boulton.
 The full snowball package is available from
   http://snowball.tartarus.org/
-
-Apache Tomcat
-Copyright 1999-2012 The Apache Software Foundation
-
-This product includes software developed by
-The Apache Software Foundation (http://www.apache.org/).
-
-Java Management Extensions (JMX) support is provided by
-the MX4J package, which is open source software.  The
-original software and related information is available
-at http://mx4j.sourceforge.net/.
-
-Java compilation software for JSP pages is provided by Eclipse,
-which is open source software.  The original software and
-related information is available at
-http://www.eclipse.org/.
 
 ____
 
