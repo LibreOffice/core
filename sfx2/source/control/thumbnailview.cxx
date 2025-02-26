@@ -165,12 +165,12 @@ ThumbnailView::ThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std:
 
 ThumbnailView::~ThumbnailView()
 {
+    ImplDeleteItems();
+
     if (mxAccessible.is())
         mxAccessible->dispose();
 
     mpItemAttrs.reset();
-
-    ImplDeleteItems();
 }
 
 bool ThumbnailView::MouseMove(const MouseEvent& rMEvt)
@@ -290,12 +290,14 @@ void ThumbnailView::ImplDeleteItems()
             // fire accessible event???
         }
 
-        if ( pItem->isVisible() && ImplHasAccessibleListeners() )
+        rtl::Reference<ThumbnailViewItemAcc> xItemAcc = pItem->GetAccessible(false);
+        if (xItemAcc.is())
         {
             css::uno::Any aOldAny, aNewAny;
-
             aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(pItem->GetAccessible());
             ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
+
+            xItemAcc->dispose();
         }
 
         mItemList[i].reset();

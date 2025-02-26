@@ -111,9 +111,9 @@ void ThumbnailViewItem::setTitle (const OUString& rTitle)
         maTitle = rTitle;
 }
 
-const rtl::Reference< ThumbnailViewItemAcc > & ThumbnailViewItem::GetAccessible()
+const rtl::Reference<ThumbnailViewItemAcc>& ThumbnailViewItem::GetAccessible(bool bCreate)
 {
-    if( !mxAcc.is() )
+    if (!mxAcc.is() && bCreate)
         mxAcc = new ThumbnailViewItemAcc(this);
 
     return mxAcc;
