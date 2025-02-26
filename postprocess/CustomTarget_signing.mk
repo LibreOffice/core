@@ -52,6 +52,7 @@ ifeq ($(COM),MSC)
 			$(INSTDIR)/$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/*.pyd \
 			$(INSTDIR)/$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/distutils/command/*.exe \
 			$(INSTDIR)/program/shlxthdl/*.dll \
+			$(INSTDIR)/intl/*.dll \
 			$(INSTDIR)/sdk/cli/*.dll \
 			$(INSTDIR)/sdk/bin/*.exe \
 	&& rm $$EXCLUDELIST && touch $@
