@@ -471,7 +471,7 @@ Public Function AlignRange(Optional ByVal TargetRange As Variant _
 &apos;&apos;&apos;	The impacted cells may be determined with a filter formula and its scope.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		TargetRange : the cell or the range as a string in which cells should be re-aligned.
-&apos;&apos;&apos;		Alignment: a string combining 1 or 2 of next characters:
+&apos;&apos;&apos;		Alignment: a string combining 1 or 2 of next characters (other characters are ignored):
 &apos;&apos;&apos;			L	align Left
 &apos;&apos;&apos;			R	align Right
 &apos;&apos;&apos;			C	Center gorizontally
@@ -485,7 +485,7 @@ Public Function AlignRange(Optional ByVal TargetRange As Variant _
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A string representing the updated range
 &apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		oDoc.AlignRange(&quot;SheetX.A1:J30&quot;, &quot;MC&quot;, FilterFormula := &quot;IsNumeric(A1), FilterScope := &quot;CELL&quot;)
+&apos;&apos;&apos;		oDoc.AlignRange(&quot;SheetX.A1:J30&quot;, &quot;Middle,Center&quot;, FilterFormula := &quot;IsNumeric(A1), FilterScope := &quot;CELL&quot;)
 &apos;&apos;&apos;			&apos;	Align to the middle of the cells, horizontally and vertically
 
 Dim sAlign As String			&apos;	Return value
@@ -522,12 +522,12 @@ Try:
 	If Len(FilterFormula) = 0 Then vRanges = Array(oRange) Else vRanges() = _ComputeFilter(oRange, FilterFormula, UCase(FilterScope))
 	For Each oARange In vRanges
 		With oARange.XCellRange
-			If InStr(Alignment, &quot;L&quot;) &gt; 0 Then .ParaAdjust = com.sun.star.style.ParagraphAdjust.LEFT
-			If InStr(Alignment, &quot;C&quot;) &gt; 0 Then .ParaAdjust = com.sun.star.style.ParagraphAdjust.CENTER
-			If InStr(Alignment, &quot;R&quot;) &gt; 0 Then .ParaAdjust = com.sun.star.style.ParagraphAdjust.RIGHT
-			If InStr(Alignment, &quot;B&quot;) &gt; 0 Then .VertJustify = com.sun.star.table.CellVertJustify.BOTTOM
-			If InStr(Alignment, &quot;M&quot;) &gt; 0 Then .VertJustify = com.sun.star.table.CellVertJustify.CENTER
-			If InStr(Alignment, &quot;T&quot;) &gt; 0 Then .VertJustify = com.sun.star.table.CellVertJustify.TOP
+			If InStr(1, Alignment, &quot;L&quot;, 0) &gt; 0 Then .ParaAdjust = com.sun.star.style.ParagraphAdjust.LEFT
+			If InStr(1, Alignment, &quot;C&quot;, 0) &gt; 0 Then .ParaAdjust = com.sun.star.style.ParagraphAdjust.CENTER
+			If InStr(1, Alignment, &quot;R&quot;, 0) &gt; 0 Then .ParaAdjust = com.sun.star.style.ParagraphAdjust.RIGHT
+			If InStr(1, Alignment, &quot;B&quot;, 0) &gt; 0 Then .VertJustify = com.sun.star.table.CellVertJustify.BOTTOM
+			If InStr(1, Alignment, &quot;M&quot;, 0) &gt; 0 Then .VertJustify = com.sun.star.table.CellVertJustify.CENTER
+			If InStr(1, Alignment, &quot;T&quot;, 0) &gt; 0 Then .VertJustify = com.sun.star.table.CellVertJustify.TOP
 		End With
 	Next oARange
 
@@ -555,7 +555,7 @@ Public Function BorderRange(Optional ByVal TargetRange As Variant _
 &apos;&apos;&apos;	To clear the full range use Border = &quot;&quot; without the FilterFormula argument.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		TargetRange : the cell or the range as a string on which borders should be applied
-&apos;&apos;&apos;		Borders: a string combining next characters:
+&apos;&apos;&apos;		Borders: a string combining next characters (other characters are ignored):
 &apos;&apos;&apos;			B	Bottom outer line
 &apos;&apos;&apos;			L	Left outer line
 &apos;&apos;&apos;			T	Top outer line
@@ -1759,7 +1759,7 @@ Public Function DecorateFont(Optional ByVal TargetRange As Variant _
 &apos;&apos;&apos;		TargetRange : the cell or the range as a string in which cell fonts should be re-decorated.
 &apos;&apos;&apos;		FontName: the name of the font to be used. The name is not checked. Default = no change.
 &apos;&apos;&apos;		FontSize: the size of the font in pixels. Default = no change.
-&apos;&apos;&apos;		Decoration: a string combining 1 or more of next characters (default = no change):
+&apos;&apos;&apos;		Decoration: a string combining 1 or more of next characters (other characters are ignored). Default = no change:
 &apos;&apos;&apos;			B	Bold
 &apos;&apos;&apos;			U	Underline
 &apos;&apos;&apos;			I	Italic
@@ -1817,10 +1817,10 @@ Try:
 			If Len(FontName) &gt; 0 Then .CharFontName = FontName
 			If FontSize &gt; 0 Then .CharHeight = FontSize
 			If Len(Decoration) &gt; 0 Then
-				If InStr(Decoration, &quot;B&quot;) &gt; 0 Then .CharWeight = com.sun.star.awt.FontWeight.BOLD
-				If InStr(Decoration, &quot;U&quot;) &gt; 0 Then .CharUnderline = com.sun.star.awt.FontUnderline.SINGLE
-				If InStr(Decoration, &quot;I&quot;) &gt; 0 Then .CharPosture = com.sun.star.awt.FontSlant.ITALIC
-				If InStr(Decoration, &quot;S&quot;) &gt; 0 Then .CharStrikeout = com.sun.star.awt.FontStrikeout.SINGLE
+				If InStr(1, Decoration, &quot;B&quot;, 0) &gt; 0 Then .CharWeight = com.sun.star.awt.FontWeight.BOLD
+				If InStr(1, Decoration, &quot;U&quot;, 0) &gt; 0 Then .CharUnderline = com.sun.star.awt.FontUnderline.SINGLE
+				If InStr(1, Decoration, &quot;I&quot;, 0) &gt; 0 Then .CharPosture = com.sun.star.awt.FontSlant.ITALIC
+				If InStr(1, Decoration, &quot;S&quot;, 0) &gt; 0 Then .CharStrikeout = com.sun.star.awt.FontStrikeout.SINGLE
 			End If
 		End With
 	Next ODRange
@@ -4406,7 +4406,7 @@ Try:
 			iDefaultStyle = com.sun.star.table.BorderLineStyle.SOLID
 
 			&apos;	Bottom borders
-			If InStr(pvBorders, &quot;B&quot;) &gt; 0 Then
+			If InStr(1, pvBorders, &quot;B&quot;, 0) &gt; 0 Then
 				With oTableBorder
 					.BottomLine.LineStyle = iDefaultStyle
 					.BottomLine.LineWidth = cstLineWidth
@@ -4415,7 +4415,7 @@ Try:
 			End If
 
 			&apos;	Left borders
-			If InStr(pvBorders, &quot;L&quot;) &gt; 0 Then
+			If InStr(1, pvBorders, &quot;L&quot;, 0) &gt; 0 Then
 				With oTableBorder
 					.LeftLine.LineStyle = iDefaultStyle
 					.LeftLine.LineWidth = cstLineWidth
@@ -4424,7 +4424,7 @@ Try:
 			End If
 
 			&apos;	Top borders
-			If InStr(pvBorders, &quot;T&quot;) &gt; 0 Then
+			If InStr(1, pvBorders, &quot;T&quot;, 0) &gt; 0 Then
 				With oTableBorder
 					.TopLine.LineStyle = iDefaultStyle
 					.TopLine.LineWidth = cstLineWidth
@@ -4433,7 +4433,7 @@ Try:
 			End If
 
 			&apos;	Right borders
-			If InStr(pvBorders, &quot;R&quot;) &gt; 0 Then
+			If InStr(1, pvBorders, &quot;R&quot;, 0) &gt; 0 Then
 				With oTableBorder
 					.RightLine.LineStyle = iDefaultStyle
 					.RightLine.LineWidth = cstLineWidth
@@ -4442,7 +4442,7 @@ Try:
 			End If
 
 			&apos;	Horizontal inner borders
-			If InStr(pvBorders, &quot;H&quot;) &gt; 0 Then
+			If InStr(1, pvBorders, &quot;H&quot;, 0) &gt; 0 Then
 				With oTableBorder
 					.HorizontalLine.LineStyle = iDefaultStyle
 					.HorizontalLine.LineWidth = cstLineWidth
@@ -4451,7 +4451,7 @@ Try:
 			End If
 
 			&apos;	Vertical inner borders
-			If InStr(pvBorders, &quot;V&quot;) &gt; 0 Then
+			If InStr(1, pvBorders, &quot;V&quot;, 0) &gt; 0 Then
 				With oTableBorder
 					.VerticalLine.LineStyle = iDefaultStyle
 					.VerticalLine.LineWidth = cstLineWidth
@@ -4460,7 +4460,7 @@ Try:
 			End If
 
 			&apos;	Bottom-up diagonal
-			If InStr(pvBorders, &quot;U&quot;) &gt; 0 Then
+			If InStr(1, pvBorders, &quot;U&quot;, 0) &gt; 0 Then
 				Set oBorderLine = New com.sun.star.table.BorderLine2
 				With oBorderLine
 					.LineStyle = iDefaultStyle
@@ -4470,7 +4470,7 @@ Try:
 			End If
 
 			&apos;	Top-down diagonal
-			If InStr(pvBorders, &quot;D&quot;) &gt; 0 Then
+			If InStr(1, pvBorders, &quot;D&quot;, 0) &gt; 0 Then
 				Set oBorderLine = New com.sun.star.table.BorderLine2
 				With oBorderLine
 					.LineStyle = iDefaultStyle
