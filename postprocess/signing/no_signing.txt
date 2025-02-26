@@ -1,13 +1,3 @@
-cli_basetypes.dll
-cli_cppuhelper.dll
-cli_uretypes.dll
-cli_oootypes.dll
-cli_ure.dll
-policy.1.0.cli_uretypes.dll
-policy.1.0.cli_oootypes.dll
-policy.1.0.cli_ure.dll
-policy.1.0.cli_cppuhelper.dll
-policy.1.0.cli_basetypes.dll
 Windows6.1-KB2999226-x64.msu
 Windows6.1-KB2999226-x86.msu
 Windows8.1-KB2999226-x64.msu
