@@ -19,12 +19,15 @@
 
 #pragma once
 
+#include "AccessibleSlideSorterView.hxx"
+
 #include <comphelper/compbase.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <rtl/ref.hxx>
 
 class SdPage;
 namespace sd::slidesorter { class SlideSorter; }
@@ -54,7 +57,7 @@ public:
             The number of the page in the range [0,nPageCount).
     */
     AccessibleSlideSorterObject(
-        const css::uno::Reference<css::accessibility::XAccessible >& rxParent,
+        const rtl::Reference<AccessibleSlideSorterView>& rxParent,
         ::sd::slidesorter::SlideSorter& rSlideSorter,
         sal_uInt16 nPageNumber);
     virtual ~AccessibleSlideSorterObject() override;
@@ -161,7 +164,7 @@ public:
         getSupportedServiceNames() override;
 
 private:
-    css::uno::Reference<css::accessibility::XAccessible> mxParent;
+    rtl::Reference<AccessibleSlideSorterView> mxParent;
     sal_uInt16 mnPageNumber;
     ::sd::slidesorter::SlideSorter& mrSlideSorter;
     sal_uInt32 mnClientId;

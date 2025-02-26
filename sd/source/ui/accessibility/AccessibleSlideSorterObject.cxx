@@ -50,7 +50,7 @@ using namespace ::com::sun::star::accessibility;
 namespace accessibility {
 
 AccessibleSlideSorterObject::AccessibleSlideSorterObject(
-    const Reference<XAccessible>& rxParent,
+    const rtl::Reference<AccessibleSlideSorterView>& rxParent,
     ::sd::slidesorter::SlideSorter& rSlideSorter,
     sal_uInt16 nPageNumber)
     : mxParent(rxParent),
@@ -131,18 +131,13 @@ sal_Int64 SAL_CALL AccessibleSlideSorterObject::getAccessibleIndexInParent()
 
     if (mxParent.is())
     {
-        Reference<XAccessibleContext> xParentContext (mxParent->getAccessibleContext());
-        if (xParentContext.is())
-        {
-            sal_Int64 nChildCount (xParentContext->getAccessibleChildCount());
-            for (sal_Int64 i=0; i<nChildCount; ++i)
-                if (xParentContext->getAccessibleChild(i).get()
-                    == static_cast<XAccessible*>(this))
-                {
-                    nIndexInParent = i;
-                    break;
-                }
-        }
+        sal_Int64 nChildCount (mxParent->getAccessibleChildCount());
+        for (sal_Int64 i=0; i<nChildCount; ++i)
+            if (mxParent->getAccessibleChild(i).get() == static_cast<XAccessible*>(this))
+            {
+                nIndexInParent = i;
+                break;
+            }
     }
 
     return nIndexInParent;
@@ -214,9 +209,7 @@ lang::Locale SAL_CALL AccessibleSlideSorterObject::getLocale()
     // Delegate request to parent.
     if (mxParent.is())
     {
-        Reference<XAccessibleContext> xParentContext (mxParent->getAccessibleContext());
-        if (xParentContext.is())
-            return xParentContext->getLocale ();
+        return mxParent->getLocale ();
     }
 
     //  No locale and no parent.  Therefore throw exception to indicate this
@@ -303,16 +296,12 @@ awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds()
 
     if (mxParent.is())
     {
-        Reference<XAccessibleComponent> xParentComponent(mxParent->getAccessibleContext(), UNO_QUERY);
-        if (xParentComponent.is())
-        {
-            awt::Rectangle aParentBBox (xParentComponent->getBounds());
-            aBBox.Intersection(::tools::Rectangle(
-                aParentBBox.X,
-                aParentBBox.Y,
-                aParentBBox.Width,
-                aParentBBox.Height));
-        }
+        awt::Rectangle aParentBBox (mxParent->getBounds());
+        aBBox.Intersection(::tools::Rectangle(
+            aParentBBox.X,
+            aParentBBox.Y,
+            aParentBBox.Width,
+            aParentBBox.Height));
     }
 
     return awt::Rectangle(
@@ -339,13 +328,9 @@ awt::Point SAL_CALL AccessibleSlideSorterObject::getLocationOnScreen()
 
     if (mxParent.is())
     {
-        Reference<XAccessibleComponent> xParentComponent(mxParent->getAccessibleContext(),UNO_QUERY);
-        if (xParentComponent.is())
-        {
-            const awt::Point aParentLocationOnScreen(xParentComponent->getLocationOnScreen());
-            aLocation.X += aParentLocationOnScreen.X;
-            aLocation.Y += aParentLocationOnScreen.Y;
-        }
+        const awt::Point aParentLocationOnScreen(mxParent->getLocationOnScreen());
+        aLocation.X += aParentLocationOnScreen.X;
+        aLocation.Y += aParentLocationOnScreen.Y;
     }
 
     return aLocation;
