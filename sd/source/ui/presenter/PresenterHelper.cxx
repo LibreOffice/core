@@ -21,7 +21,7 @@
 
 #include <cstddef>
 
-#include "PresenterHelper.hxx"
+#include <PresenterHelper.hxx>
 #include "PresenterCanvas.hxx"
 #include <cppcanvas/vclfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>

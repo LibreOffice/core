@@ -9217,6 +9217,7 @@ sd/inc/CustomAnimationPreset.hxx
 sd/inc/EffectMigration.hxx
 sd/inc/FactoryIds.hxx
 sd/inc/OutlinerIterator.hxx
+sd/inc/PresenterHelper.hxx
 sd/inc/TransitionPreset.hxx
 sd/inc/animations.hxx
 sd/inc/anminfo.hxx
@@ -9707,7 +9708,6 @@ sd/source/ui/presenter/CanvasUpdateRequester.cxx
 sd/source/ui/presenter/PresenterCanvas.cxx
 sd/source/ui/presenter/PresenterCanvas.hxx
 sd/source/ui/presenter/PresenterHelper.cxx
-sd/source/ui/presenter/PresenterHelper.hxx
 sd/source/ui/presenter/PresenterPreviewCache.cxx
 sd/source/ui/presenter/PresenterPreviewCache.hxx
 sd/source/ui/presenter/PresenterTextView.cxx
