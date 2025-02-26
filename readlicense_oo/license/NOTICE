@@ -23,7 +23,6 @@ ____
 As part of the base system this product also includes code from the following
 Apache projects:
 - Apache Lucene
-- Apache Jakarta HttpClient - used by MediaWiki Publisher extension
 
 The notices from these projects are following:
 
