@@ -22,6 +22,7 @@
 #include <redline.hxx>
 #include <doc.hxx>
 #include <editsh.hxx>
+#include <viewopt.hxx>
 #include <frmtool.hxx>
 
 RedlineFlags SwEditShell::GetRedlineFlags() const
@@ -35,6 +36,16 @@ void SwEditShell::SetRedlineFlags( RedlineFlags eMode )
     {
         CurrShell aCurr( this );
         StartAllAction();
+
+        // Recording is per-view, the rest if per-document.
+        auto bRedlineRecordingOn = bool(eMode & RedlineFlags::On);
+        SwViewOption aOpt(*GetViewOptions());
+        if (aOpt.IsRedlineRecordingOn() != bRedlineRecordingOn)
+        {
+            aOpt.SetRedlineRecordingOn(bRedlineRecordingOn);
+            ApplyViewOptions(aOpt);
+        }
+
         GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eMode );
         EndAllAction();
     }
