@@ -40,7 +40,6 @@ $(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/scripts.xsl,$(gb_
 $(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/tables.xsl,$(gb_UnpackedTarball_workdir)/xsltml/tables.xsl))
 $(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/tokens.xsl,$(gb_UnpackedTarball_workdir)/xsltml/tokens.xsl))
 $(eval $(call gb_Extension_add_file,wiki-publisher,filter/odt2mediawiki.xsl,$(SRCDIR)/swext/mediawiki/src/filter/odt2mediawiki.xsl))
-$(eval $(call gb_Extension_add_file,wiki-publisher,license/THIRDPARTYLICENSEREADME.html,$(SRCDIR)/swext/mediawiki/src/THIRDPARTYLICENSEREADME.html))
 $(eval $(call gb_Extension_add_file,wiki-publisher,templates/MediaWiki/mediawiki.ott,$(SRCDIR)/swext/mediawiki/src/filter/mediawiki.ott))
 $(eval $(call gb_Extension_add_helpfile,wiki-publisher,$(SRCDIR)/swext/mediawiki/help,com.sun.wiki-publisher/wikisend.xhp,wikisend.xhp))
 $(eval $(call gb_Extension_add_helpfile,wiki-publisher,$(SRCDIR)/swext/mediawiki/help,com.sun.wiki-publisher/wikiformats.xhp,wikiformats.xhp))
