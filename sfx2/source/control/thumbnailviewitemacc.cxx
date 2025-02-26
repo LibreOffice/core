@@ -192,58 +192,13 @@ lang::Locale SAL_CALL ThumbnailViewItemAcc::getLocale()
     return aRet;
 }
 
-void SAL_CALL ThumbnailViewItemAcc::addAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
-{
-    std::scoped_lock aGuard( maMutex );
-
-    if( !rxListener.is() )
-        return;
-
-    bool bFound = false;
-
-    for (auto const& eventListener : mxEventListeners)
-    {
-        if( eventListener == rxListener )
-        {
-            bFound = true;
-            break;
-        }
-    }
-
-    if (!bFound)
-        mxEventListeners.push_back( rxListener );
-}
-
-void SAL_CALL ThumbnailViewItemAcc::removeAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
-{
-    std::scoped_lock aGuard( maMutex );
-
-    if( rxListener.is() )
-    {
-        std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::iterator aIter =
-            std::find(mxEventListeners.begin(), mxEventListeners.end(), rxListener);
-
-        if (aIter != mxEventListeners.end())
-            mxEventListeners.erase( aIter );
-    }
-}
-
-sal_Bool SAL_CALL ThumbnailViewItemAcc::containsPoint( const awt::Point& aPoint )
-{
-    const awt::Rectangle    aRect( getBounds() );
-    const Point             aSize( aRect.Width, aRect.Height );
-    const Point             aNullPoint, aTestPoint( aPoint.X, aPoint.Y );
-
-    return tools::Rectangle( aNullPoint, aSize ).Contains( aTestPoint );
-}
-
 uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewItemAcc::getAccessibleAtPoint( const awt::Point& )
 {
     uno::Reference< accessibility::XAccessible > xRet;
     return xRet;
 }
 
-awt::Rectangle SAL_CALL ThumbnailViewItemAcc::getBounds()
+awt::Rectangle ThumbnailViewItemAcc::implGetBounds()
 {
     const SolarMutexGuard aSolarGuard;
     awt::Rectangle      aRet;
@@ -272,46 +227,6 @@ awt::Rectangle SAL_CALL ThumbnailViewItemAcc::getBounds()
         aRet.Width = aRect.GetWidth();
         aRet.Height = aRect.GetHeight();
     }
-
-    return aRet;
-}
-
-awt::Point SAL_CALL ThumbnailViewItemAcc::getLocation()
-{
-    const awt::Rectangle    aRect( getBounds() );
-    awt::Point              aRet;
-
-    aRet.X = aRect.X;
-    aRet.Y = aRect.Y;
-
-    return aRet;
-}
-
-awt::Point SAL_CALL ThumbnailViewItemAcc::getLocationOnScreen()
-{
-    const SolarMutexGuard aSolarGuard;
-    awt::Point          aRet;
-
-    if (mpThumbnailViewItem)
-    {
-        const Point aPos = mpThumbnailViewItem->getDrawArea().TopLeft();
-        const Point aScreenPos(
-            mpThumbnailViewItem->mrParent.GetDrawingArea()->get_accessible_location_on_screen());
-
-        aRet.X = aPos.X() + aScreenPos.X();
-        aRet.Y = aPos.Y() + aScreenPos.Y();
-    }
-
-    return aRet;
-}
-
-awt::Size SAL_CALL ThumbnailViewItemAcc::getSize()
-{
-    const awt::Rectangle    aRect( getBounds() );
-    awt::Size               aRet;
-
-    aRet.Width = aRect.Width;
-    aRet.Height = aRect.Height;
 
     return aRet;
 }
