@@ -32,7 +32,6 @@
 #include "PresenterTheme.hxx"
 #include "PresenterViewFactory.hxx"
 #include "PresenterWindowManager.hxx"
-#include <PresenterHelper.hxx>
 #include <DrawController.hxx>
 
 #include <com/sun/star/awt/Key.hpp>
@@ -218,10 +217,9 @@ void PresenterController::disposing()
     }
     mpCanvasHelper.reset();
     {
-        Reference<lang::XComponent> xComponent (mxPresenterHelper, UNO_QUERY);
-        mxPresenterHelper = nullptr;
-        if (xComponent.is())
-            xComponent->dispose();
+        if (mxPresenterHelper.is())
+            mxPresenterHelper->dispose();
+        mxPresenterHelper.clear();
     }
     mpPaintManager.reset();
     mnPendingSlideNumber = -1;
@@ -460,8 +458,7 @@ const std::shared_ptr<PresenterCanvasHelper>& PresenterController::GetCanvasHelp
 {
     return mpCanvasHelper;
 }
-
-const Reference<drawing::XPresenterHelper>& PresenterController::GetPresenterHelper() const
+const rtl::Reference<sd::presenter::PresenterHelper>& PresenterController::GetPresenterHelper() const
 {
     return mxPresenterHelper;
 }

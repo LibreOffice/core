@@ -23,6 +23,7 @@
 #include "PresenterAccessibility.hxx"
 #include "PresenterPaneContainer.hxx"
 #include "PresenterTheme.hxx"
+#include <PresenterHelper.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/awt/XKeyListener.hpp>
@@ -108,7 +109,7 @@ public:
     const rtl::Reference<PresenterPaneContainer>& GetPaneContainer() const;
     const ::rtl::Reference<PresenterPaneBorderPainter>& GetPaneBorderPainter() const;
     const std::shared_ptr<PresenterCanvasHelper>& GetCanvasHelper() const;
-    const css::uno::Reference<css::drawing::XPresenterHelper>& GetPresenterHelper() const;
+    const rtl::Reference<sd::presenter::PresenterHelper>& GetPresenterHelper() const;
     const std::shared_ptr<PresenterPaintManager>& GetPaintManager() const;
     double GetSlideAspectRatio() const;
     void ShowView (const OUString& rsViewURL);
@@ -196,7 +197,7 @@ private:
     css::uno::Reference<css::awt::XWindow> mxMainWindow;
     ::rtl::Reference<PresenterPaneBorderPainter> mpPaneBorderPainter;
     std::shared_ptr<PresenterCanvasHelper> mpCanvasHelper;
-    css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
+    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
     std::shared_ptr<PresenterPaintManager> mpPaintManager;
     sal_Int32 mnPendingSlideNumber;
     css::uno::Reference<css::util::XURLTransformer> mxUrlTransformer;

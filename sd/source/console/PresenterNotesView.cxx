@@ -172,7 +172,7 @@ void PresenterNotesView::CreateToolBar (
     if (!rpPresenterController)
         return;
 
-    Reference<drawing::XPresenterHelper> xPresenterHelper (
+    rtl::Reference<sd::presenter::PresenterHelper> xPresenterHelper (
         rpPresenterController->GetPresenterHelper());
     if ( ! xPresenterHelper.is())
         return;
