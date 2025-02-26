@@ -38,7 +38,7 @@ PresenterBitmapContainer::PresenterBitmapContainer (
     std::shared_ptr<PresenterBitmapContainer> xParentContainer,
     const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
     css::uno::Reference<css::rendering::XCanvas> xCanvas,
-    css::uno::Reference<css::drawing::XPresenterHelper> xPresenterHelper)
+    rtl::Reference<sd::presenter::PresenterHelper> xPresenterHelper)
     : mpParentContainer(std::move(xParentContainer)),
       mxCanvas(std::move(xCanvas)),
       mxPresenterHelper(std::move(xPresenterHelper))
@@ -62,7 +62,7 @@ PresenterBitmapContainer::PresenterBitmapContainer (
     std::shared_ptr<PresenterBitmapContainer> xParentContainer,
     const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
     css::uno::Reference<css::rendering::XCanvas> xCanvas,
-    css::uno::Reference<css::drawing::XPresenterHelper> xPresenterHelper)
+    rtl::Reference<sd::presenter::PresenterHelper> xPresenterHelper)
     : mpParentContainer(std::move(xParentContainer)),
       mxCanvas(std::move(xCanvas)),
       mxPresenterHelper(std::move(xPresenterHelper))
@@ -131,7 +131,7 @@ void PresenterBitmapContainer::LoadBitmaps (
 std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapContainer::LoadBitmap (
     const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
     const OUString& rsPath,
-    const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper,
+    const rtl::Reference<sd::presenter::PresenterHelper>& rxPresenterHelper,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
     const std::shared_ptr<BitmapDescriptor>& rpDefault)
 {
@@ -177,7 +177,7 @@ void PresenterBitmapContainer::ProcessBitmap (
 
 std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapContainer::LoadBitmap (
     const Reference<beans::XPropertySet>& rxProperties,
-    const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper,
+    const rtl::Reference<sd::presenter::PresenterHelper>& rxPresenterHelper,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
     const std::shared_ptr<BitmapDescriptor>& rpDefault)
 {
