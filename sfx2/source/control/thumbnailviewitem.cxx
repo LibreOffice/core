@@ -19,7 +19,7 @@
 
 #include <sfx2/thumbnailviewitem.hxx>
 #include <sfx2/thumbnailview.hxx>
-#include "thumbnailviewacc.hxx"
+#include "thumbnailviewitemacc.hxx"
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

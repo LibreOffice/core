@@ -15,6 +15,7 @@
 #include <utility>
 
 #include "thumbnailviewacc.hxx"
+#include "thumbnailviewitemacc.hxx"
 
 #include <basegfx/color/bcolortools.hxx>
 #include <comphelper/processfactory.hxx>

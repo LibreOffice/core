@@ -163,6 +163,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/listview \
     sfx2/source/control/thumbnailviewitem \
     sfx2/source/control/thumbnailviewacc \
+    sfx2/source/control/thumbnailviewitemacc \
     sfx2/source/control/thumbnailview \
     sfx2/source/control/charmapcontrol \
     sfx2/source/control/charwin \

@@ -145,58 +145,6 @@ private:
     void ThrowIfDisposed();
 };
 
-
-class ThumbnailViewItemAcc : public ::cppu::WeakImplHelper< css::accessibility::XAccessible,
-                                                     css::accessibility::XAccessibleEventBroadcaster,
-                                                     css::accessibility::XAccessibleContext,
-                                                     css::accessibility::XAccessibleComponent>
-{
-private:
-
-    ::std::vector< css::uno::Reference< css::accessibility::XAccessibleEventListener > >
-                                                                        mxEventListeners;
-    std::mutex                                                          maMutex;
-    ThumbnailViewItem*                                                  mpThumbnailViewItem;
-
-public:
-    ThumbnailViewItemAcc(ThumbnailViewItem* pThumbnailViewItem);
-    virtual ~ThumbnailViewItemAcc() override;
-
-    void ThumbnailViewItemDestroyed();
-
-public:
-
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
-
-    // XAccessibleEventBroadcaster
-    virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-    virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-
-    // XAccessibleContext
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
-    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent(  ) override;
-    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
-    virtual OUString SAL_CALL getAccessibleDescription(  ) override;
-    virtual OUString SAL_CALL getAccessibleName(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override;
-    virtual css::lang::Locale SAL_CALL getLocale(  ) override;
-
-    // XAccessibleComponent
-    virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-    virtual css::awt::Rectangle SAL_CALL getBounds(  ) override;
-    virtual css::awt::Point SAL_CALL getLocation(  ) override;
-    virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
-    virtual css::awt::Size SAL_CALL getSize(  ) override;
-    virtual void SAL_CALL grabFocus(  ) override;
-    virtual sal_Int32 SAL_CALL getForeground(  ) override;
-    virtual sal_Int32 SAL_CALL getBackground(  ) override;
-};
-
 #endif // INCLUDED_SFX2_SOURCE_CONTROL_THUMBNAILVIEWACC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

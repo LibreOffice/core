@@ -10130,6 +10130,8 @@ sfx2/source/control/templateviewitem.cxx
 sfx2/source/control/thumbnailview.cxx
 sfx2/source/control/thumbnailviewacc.cxx
 sfx2/source/control/thumbnailviewacc.hxx
+sfx2/source/control/thumbnailviewitemacc.cxx
+sfx2/source/control/thumbnailviewitemacc.hxx
 sfx2/source/control/thumbnailviewitem.cxx
 sfx2/source/control/unoctitm.cxx
 sfx2/source/dialog/backingcomp.cxx
