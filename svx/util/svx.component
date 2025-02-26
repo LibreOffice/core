@@ -66,6 +66,10 @@
       constructor="com_sun_star_svx_MatchCaseToolboxController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.svx.MatchDiacriticsToolboxController"
+      constructor="com_sun_star_svx_MatchDiacriticsToolboxController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
   <implementation name="com.sun.star.svx.SearchFormattedToolboxController"
       constructor="com_sun_star_svx_SearchFormattedToolboxController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>

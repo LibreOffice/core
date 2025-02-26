@@ -1410,6 +1410,7 @@
 
 #define RID_SVXSTR_FINDBAR_FIND                             NC_("RID_SVXSTR_FINDBAR_FIND", "Find")
 #define RID_SVXSTR_FINDBAR_MATCHCASE                        NC_("RID_SVXSTR_FINDBAR_MATCHCASE", "Match Case")
+#define RID_SVXSTR_FINDBAR_MATCHDIACRITICS                  NC_("RID_SVXSTR_FINDBAR_MATCHDIACRITICS", "Match Diacritics")
 #define RID_SVXSTR_FINDBAR_SEARCHFORMATTED                  NC_("RID_SVXSTR_FINDBAR_SEARCHFORMATTED", "Formatted Display")
 
 #define STR_IMAGE_ORIGINAL_SIZE                             NC_("STR_IMAGE_ORIGINAL_SIZE", "$(WIDTH) × $(HEIGHT) ($(WIDTH_IN_PX) × $(HEIGHT_IN_PX) px)")

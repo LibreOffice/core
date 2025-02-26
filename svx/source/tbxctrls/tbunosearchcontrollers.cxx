@@ -72,6 +72,7 @@ constexpr OUString COMMAND_DOWNSEARCH = u".uno:DownSearch"_ustr;
 constexpr OUString COMMAND_UPSEARCH = u".uno:UpSearch"_ustr;
 constexpr OUStringLiteral COMMAND_FINDALL = u".uno:FindAll";
 constexpr OUString COMMAND_MATCHCASE = u".uno:MatchCase"_ustr;
+constexpr OUString COMMAND_MATCHDIACRITICS = u".uno:MatchDiacritics"_ustr;
 constexpr OUString COMMAND_SEARCHFORMATTED = u".uno:SearchFormattedDisplayString"_ustr;
 
 class CheckButtonItemWindow final : public InterimItemWindow
@@ -91,6 +92,12 @@ public:
     bool get_active() const
     {
         return m_xWidget->get_active();
+    }
+
+    void set_active(bool bActive)
+    {
+        if (m_xWidget)
+            m_xWidget->set_active(bActive);
     }
 
     virtual void dispose() override
@@ -128,6 +135,7 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
 
     OUString sFindText;
     bool aMatchCase = false;
+    bool aMatchDiacritics = false;
     bool bSearchFormatted = false;
     if ( pToolBox )
     {
@@ -150,6 +158,11 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
                 CheckButtonItemWindow* pItemWin = static_cast<CheckButtonItemWindow*>(pToolBox->GetItemWindow(id));
                 if (pItemWin)
                     aMatchCase = pItemWin->get_active();
+            } else if ( sItemCommand == COMMAND_MATCHDIACRITICS )
+            {
+                CheckButtonItemWindow* pItemWin = static_cast<CheckButtonItemWindow*>(pToolBox->GetItemWindow(id));
+                if (pItemWin)
+                    aMatchDiacritics = pItemWin->get_active();
             } else if ( sItemCommand == COMMAND_SEARCHFORMATTED )
             {
                 CheckButtonItemWindow* pItemWin = static_cast<CheckButtonItemWindow*>(pToolBox->GetItemWindow(id));
@@ -162,9 +175,10 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
     TransliterationFlags nFlags = TransliterationFlags::NONE;
     if (!aMatchCase)
         nFlags |= TransliterationFlags::IGNORE_CASE;
+    if (!aMatchDiacritics)
+        nFlags |= TransliterationFlags::IGNORE_DIACRITICS_CTL;
     if (SvtCTLOptions::IsCTLFontEnabled())
-        nFlags |= TransliterationFlags::IGNORE_DIACRITICS_CTL
-                  | TransliterationFlags::IGNORE_KASHIDA_CTL;
+        nFlags |= TransliterationFlags::IGNORE_KASHIDA_CTL;
 
     auto aArgs( comphelper::InitPropertySequence( {
         { "SearchItem.SearchString", css::uno::Any( sFindText ) },
@@ -825,6 +839,8 @@ public:
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
+    virtual void SAL_CALL click() override;
+
 private:
     VclPtr<CheckButtonItemWindow> m_xMatchCaseControl;
 };
@@ -891,6 +907,117 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL MatchCaseToolboxController::cr
 // XStatusListener
 void SAL_CALL MatchCaseToolboxController::statusChanged( const css::frame::FeatureStateEvent& )
 {
+}
+
+void SAL_CALL MatchCaseToolboxController::click()
+{
+    if (m_xMatchCaseControl)
+    {
+        bool bCurrent = m_xMatchCaseControl->get_active();
+        m_xMatchCaseControl->set_active(!bCurrent);
+    }
+}
+
+typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServiceInfo> MatchDiacriticsToolboxController_Base;
+class MatchDiacriticsToolboxController : public MatchDiacriticsToolboxController_Base
+{
+public:
+    MatchDiacriticsToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    // XComponent
+    virtual void SAL_CALL dispose() override;
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+
+    // XToolbarController
+    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
+
+    // XStatusListener
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
+
+    virtual void SAL_CALL click() override;
+
+private:
+    VclPtr<CheckButtonItemWindow> m_xMatchDiacriticsControl;
+};
+
+MatchDiacriticsToolboxController::MatchDiacriticsToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+    : MatchDiacriticsToolboxController_Base( rxContext,
+        css::uno::Reference< css::frame::XFrame >(),
+        COMMAND_MATCHDIACRITICS )
+    , m_xMatchDiacriticsControl(nullptr)
+{
+}
+
+// XServiceInfo
+OUString SAL_CALL MatchDiacriticsToolboxController::getImplementationName()
+{
+    return u"com.sun.star.svx.MatchDiacriticsToolboxController"_ustr;
+}
+
+sal_Bool SAL_CALL MatchDiacriticsToolboxController::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL MatchDiacriticsToolboxController::getSupportedServiceNames()
+{
+    return { u"com.sun.star.frame.ToolbarController"_ustr };
+}
+
+// XComponent
+void SAL_CALL MatchDiacriticsToolboxController::dispose()
+{
+    SolarMutexGuard aSolarMutexGuard;
+
+    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, m_aCommandURL);
+
+    svt::ToolboxController::dispose();
+
+    m_xMatchDiacriticsControl.disposeAndClear();
+}
+
+// XInitialization
+void SAL_CALL MatchDiacriticsToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+{
+    svt::ToolboxController::initialize(aArguments);
+
+    SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(this), m_aCommandURL);
+}
+
+css::uno::Reference< css::awt::XWindow > SAL_CALL MatchDiacriticsToolboxController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& xParent )
+{
+    css::uno::Reference< css::awt::XWindow > xItemWindow;
+
+    VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xParent );
+    if ( pParent )
+    {
+        ToolBox* pToolbar = static_cast<ToolBox*>(pParent.get());
+        m_xMatchDiacriticsControl = VclPtr<CheckButtonItemWindow>::Create(pToolbar, SvxResId(RID_SVXSTR_FINDBAR_MATCHDIACRITICS));
+    }
+    xItemWindow = VCLUnoHelper::GetInterface(m_xMatchDiacriticsControl);
+
+    return xItemWindow;
+}
+
+// XStatusListener
+void SAL_CALL MatchDiacriticsToolboxController::statusChanged( const css::frame::FeatureStateEvent& )
+{
+}
+
+void SAL_CALL MatchDiacriticsToolboxController::click()
+{
+    if (m_xMatchDiacriticsControl)
+    {
+        bool bCurrent = m_xMatchDiacriticsControl->get_active();
+        m_xMatchDiacriticsControl->set_active(!bCurrent);
+    }
 }
 
 typedef cppu::ImplInheritanceHelper< ::svt::ToolboxController, css::lang::XServiceInfo> SearchFormattedToolboxController_Base;
@@ -1480,6 +1607,14 @@ com_sun_star_svx_MatchCaseToolboxController_get_implementation(
     css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new MatchCaseToolboxController(context));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+com_sun_star_svx_MatchDiacriticsToolboxController_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new MatchDiacriticsToolboxController(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

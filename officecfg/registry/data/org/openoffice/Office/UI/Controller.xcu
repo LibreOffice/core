@@ -1478,6 +1478,17 @@
           <value>com.sun.star.svx.MatchCaseToolboxController</value>
         </prop>
       </node>
+      <node oor:name="com.sun.star.svx.MatchDiacriticsToolboxController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:MatchDiacritics</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.MatchDiacriticsToolboxController</value>
+        </prop>
+      </node>
       <node oor:name="com.sun.star.svx.SearchFormattedToolboxController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:SearchFormattedDisplayString</value>

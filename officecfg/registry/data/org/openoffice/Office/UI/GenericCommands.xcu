@@ -1735,6 +1735,11 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value xml:lang="en-US">Match Case</value>
         </prop>
       </node>
+      <node oor:name=".uno:MatchDiacritics" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Match Diacritics</value>
+        </prop>
+      </node>
       <node oor:name=".uno:SearchFormattedDisplayString" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Search Formatted Display String</value>
