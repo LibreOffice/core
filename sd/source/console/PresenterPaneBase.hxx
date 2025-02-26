@@ -25,7 +25,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/XWindowListener.hpp>
-#include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/drawing/framework/XPaneBorderPainter.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

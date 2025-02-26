@@ -28,7 +28,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/awt/XKeyListener.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
-#include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>

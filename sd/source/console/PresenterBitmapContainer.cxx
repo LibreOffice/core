@@ -21,7 +21,6 @@
 #include "PresenterConfigurationAccess.hxx"
 #include <PresenterHelper.hxx>
 
-#include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <utility>
 #include <osl/diagnose.h>

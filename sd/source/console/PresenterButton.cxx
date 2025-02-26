@@ -25,7 +25,6 @@
 #include "PresenterUIPainter.hxx"
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <utility>

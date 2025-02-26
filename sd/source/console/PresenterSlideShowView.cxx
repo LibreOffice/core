@@ -31,7 +31,6 @@
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>

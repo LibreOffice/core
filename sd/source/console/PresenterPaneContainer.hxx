@@ -23,7 +23,6 @@
 #include "PresenterPaneBase.hxx"
 #include <PresenterHelper.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
