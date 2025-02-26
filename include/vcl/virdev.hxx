@@ -55,8 +55,7 @@ private:
     bool                mbForceZeroExtleadBug;
 
     SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, tools::Long nDX, tools::Long nDY, const SystemGraphicsData *pData = nullptr );
-    SAL_DLLPRIVATE bool InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
-                                                     sal_uInt8* pBuffer );
+    SAL_DLLPRIVATE bool InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase );
 
     VirtualDevice (const VirtualDevice &) = delete;
     VirtualDevice & operator= (const VirtualDevice &) = delete;

@@ -254,8 +254,7 @@ void VirtualDevice::dispose()
     OutputDevice::dispose();
 }
 
-bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
-                                                 sal_uInt8 *const pBuffer)
+bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase)
 {
     SAL_INFO( "vcl.virdev",
               "VirtualDevice::InnerImplSetOutputSizePixel( " << rNewSize.Width() << ", "
@@ -282,11 +281,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
 
     if ( bErase )
     {
-        if ( pBuffer )
-            bRet = mpVirDev->SetSizeUsingBuffer( nNewWidth, nNewHeight, pBuffer );
-        else
-            bRet = mpVirDev->SetSize( nNewWidth, nNewHeight );
-
+        bRet = mpVirDev->SetSize( nNewWidth, nNewHeight );
         if ( bRet )
         {
             mnOutWidth  = rNewSize.Width();
@@ -296,7 +291,6 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
     }
     else
     {
-        assert(!pBuffer && "passing pBuffer without bErase is not supported");
         std::unique_ptr<SalVirtualDevice> pNewVirDev;
         ImplSVData*         pSVData = ImplGetSVData();
 
@@ -359,7 +353,7 @@ void VirtualDevice::ImplFillOpaqueRectangle( const tools::Rectangle& rRect )
 
 bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, bool bErase, bool bAlphaMaskTransparent )
 {
-    if( InnerImplSetOutputSizePixel(rNewSize, bErase, /*pBuffer*/nullptr) )
+    if( InnerImplSetOutputSizePixel(rNewSize, bErase) )
     {
         if (meFormatAndAlpha != DeviceFormat::WITHOUT_ALPHA)
         {
@@ -372,7 +366,7 @@ bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, bool bErase, bool 
             if( !mpAlphaVDev )
             {
                 mpAlphaVDev = VclPtr<VirtualDevice>::Create(*this, meFormatAndAlpha);
-                mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase, nullptr);
+                mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase);
                 mpAlphaVDev->SetBackground( Wallpaper(bAlphaMaskTransparent ? COL_ALPHA_TRANSPARENT : COL_ALPHA_OPAQUE) );
                 mpAlphaVDev->Erase();
             }
