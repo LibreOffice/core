@@ -173,7 +173,7 @@ public:
     /// Also collect used field masters (if pUsedMasters is set)
     /// to be called for every field during style export.
     void ExportFieldAutoStyle(const css::uno::Reference < css::text::XTextField > & rTextField,
-                 const bool bProgress, const bool bRecursive );
+                 const bool bProgress );
 
     /// export field declarations.
     /// to be called once at beginning of document body.

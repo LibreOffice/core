@@ -422,6 +422,10 @@ include/svx/charmap.hxx:150
     void SvxShowCharSet::DrawChars_Impl(class OutputDevice &,int,int)
     int n2
     LastInView()
+include/svx/colorbox.hxx:48
+    void ColorListBox::LockWidthRequest(int)
+    int nWidthRequest
+    CalcBestWidthRequest()
 include/svx/colorwindow.hxx:110
     void ColorWindow::ColorWindow(class rtl::OUString,class std::shared_ptr<class PaletteManager>,class ColorStatus &,unsigned short,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,const class MenuOrToolMenuButton &,class std::function<class weld::Window *(void)>,class std::function<void (const class rtl::OUString &, const struct NamedColor &)>)
     class rtl::OUString rCommand
@@ -494,7 +498,7 @@ include/vcl/toolkit/svlbitm.hxx:111
     void SvLBoxString::SvLBoxString(class rtl::OUString)
     class rtl::OUString aText
     ""
-include/vcl/virdev.hxx:126
+include/vcl/virdev.hxx:125
     _Bool VirtualDevice::SetOutputSizePixelScaleOffsetAndLOKBuffer(const class Size &,const class Fraction &,const class Point &,unsigned char *)
     const class Point & rNewOffset
     Point()

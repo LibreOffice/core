@@ -2615,8 +2615,7 @@ void XMLTextParagraphExport::exportTextField(
 {
     if ( bAutoStyles )
     {
-        m_pFieldExport->ExportFieldAutoStyle( xTextField, bIsProgress,
-                /*bRecursive*/ true );
+        m_pFieldExport->ExportFieldAutoStyle( xTextField, bIsProgress );
     }
     else
     {

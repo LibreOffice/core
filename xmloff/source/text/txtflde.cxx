@@ -763,8 +763,7 @@ bool XMLTextFieldExport::IsStringField(
 /// export the styles needed by the given field. Called on first pass
 /// through document
 void XMLTextFieldExport::ExportFieldAutoStyle(
-    const Reference<XTextField> & rTextField, const bool bProgress,
-    const bool bRecursive )
+    const Reference<XTextField> & rTextField, const bool bProgress )
 {
     // get property set
     Reference<XPropertySet> xPropSet(rTextField, UNO_QUERY);
@@ -854,7 +853,6 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
 
     case FIELD_ID_META:
         // recurse into content (does not export element, so can be done first)
-        if (bRecursive)
         {
             bool dummy_for_autostyles(true);
             ExportMetaField(xPropSet, true, bProgress, dummy_for_autostyles);

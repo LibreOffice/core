@@ -2942,7 +2942,7 @@ sw/qa/core/Test-BigPtrArray.cxx:53
     void fillBigPtrArray(class BigPtrArray &,int)
     int numEntries
     10
-sw/qa/extras/ooxmlexport/ooxmlexport12.cxx:2161
+sw/qa/extras/ooxmlexport/ooxmlexport12.cxx:2171
     _Bool lcl_nearEqual(const int,const int,int)
     int nMaxDiff
     5

@@ -37,7 +37,7 @@ sc/source/ui/view/cellsh1.cxx:131
 starmath/inc/mathml/export.hxx:199
     void SmMLExport::SmMLExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
     enum SvXMLExportFlags nExportFlags setBits=0x8000 clearBits=0x7a00
-sw/source/core/view/viewsh.cxx:859
+sw/source/core/view/viewsh.cxx:862
     void lcl_InvalidateAllContent(class SwViewShell &,enum SwInvalidateFlags)
     enum SwInvalidateFlags nInv setBits=0x2
 sw/source/filter/html/swhtml.hxx:700

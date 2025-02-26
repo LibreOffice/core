@@ -1074,10 +1074,6 @@ include/package/Inflater.hxx:43
     void ZipUtils::Inflater::Inflater(_Bool)
     _Bool bNoWrap
     1
-include/package/Inflater.hxx:65
-    void ZipUtils::InflaterBytes::InflaterBytes(_Bool)
-    _Bool bNoWrap
-    1
 include/package/Inflater.hxx:69
     int ZipUtils::InflaterBytes::doInflateSegment(signed char *,int,int,int)
     int nNewOffset
@@ -1341,14 +1337,6 @@ include/svtools/valueset.hxx:313
 include/svtools/valueset.hxx:350
     void ValueSet::SetItemColor(unsigned short,const class Color &)
     unsigned short nItemId
-    1
-include/svx/colorbox.hxx:56
-    void ColorListBox::ColorListBox(class std::unique_ptr<class weld::MenuButton>,class std::function<class weld::Window *(void)>,const class ColorListBox *)
-    const class ColorListBox * pCache
-    0
-include/svx/ColorSets.hxx:42
-    void svx::ColorSets::insert(const class model::ColorSet &,enum svx::ColorSets::IdenticalNameAction)
-    enum svx::ColorSets::IdenticalNameAction eAction
     1
 include/svx/ctredlin.hxx:218
     void SvxTPFilter::SelectedAuthorPos(int)
@@ -1982,10 +1970,6 @@ include/vcl/vectorgraphicdata.hxx:84
     void VectorGraphicData::VectorGraphicData(class BinaryDataContainer,enum VectorGraphicDataType,int)
     enum VectorGraphicDataType eVectorDataType
     0
-include/vcl/virdev.hxx:58
-    _Bool VirtualDevice::InnerImplSetOutputSizePixel(const class Size &,_Bool,unsigned char *)
-    unsigned char * pBuffer
-    0
 include/vcl/weld.hxx:423
     void weld::Grid::set_child_column_span(class weld::Widget &,int)
     int nCols
@@ -2054,16 +2038,12 @@ include/xmloff/txtparae.hxx:227
     void XMLTextParagraphExport::exportText(const class com::sun::star::uno::Reference<class com::sun::star::text::XText> &,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextSection> &,_Bool,_Bool,_Bool)
     _Bool bExportParagraph
     1
-include/xmloff/txtparae.hxx:255
-    void XMLTextParagraphExport::exportTextField(const class com::sun::star::uno::Reference<class com::sun::star::text::XTextField> &,const _Bool,const _Bool,const _Bool,_Bool *)
-    const _Bool bRecursive
-    1
 include/xmloff/txtparae.hxx:269
     void XMLTextParagraphExport::exportTextFrame(const class com::sun::star::uno::Reference<class com::sun::star::text::XTextContent> &,_Bool,_Bool,_Bool,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> *)
     _Bool bExportContent
     1
-include/xmloff/txtparae.hxx:396
-    void XMLTextParagraphExport::Add(enum XmlStyleFamily,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,class std::span<const struct XMLPropertyState>,_Bool)
+include/xmloff/xmlaustp.hxx:115
+    class rtl::OUString SvXMLAutoStylePoolP::Add(enum XmlStyleFamily,const class rtl::OUString &,class std::vector<struct XMLPropertyState> &&,_Bool)
     _Bool bDontSeek
     0
 include/xmloff/XMLEventExport.hxx:89
@@ -2662,19 +2642,19 @@ sc/inc/postit.hxx:64
     void ScPostIt::ScPostIt(class ScDocument &,const class ScAddress &,unsigned int)
     unsigned int nPostItId
     0
-sc/inc/queryiter.hxx:368
+sc/inc/queryiter.hxx:372
     void ScQueryCellIteratorSortedCache::ScQueryCellIteratorSortedCache(class ScDocument &,struct ScInterpreterContext &,short,const struct ScQueryParam &,_Bool,_Bool)
     _Bool bMod
     0
-sc/inc/queryiter.hxx:368
+sc/inc/queryiter.hxx:372
     void ScQueryCellIteratorSortedCache::ScQueryCellIteratorSortedCache(class ScDocument &,struct ScInterpreterContext &,short,const struct ScQueryParam &,_Bool,_Bool)
     _Bool bReverse
     0
-sc/inc/queryiter.hxx:418
+sc/inc/queryiter.hxx:422
     void ScCountIfCellIteratorSortedCache::ScCountIfCellIteratorSortedCache(class ScDocument &,struct ScInterpreterContext &,short,const struct ScQueryParam &,_Bool,_Bool)
     _Bool bMod
     0
-sc/inc/queryiter.hxx:418
+sc/inc/queryiter.hxx:422
     void ScCountIfCellIteratorSortedCache::ScCountIfCellIteratorSortedCache(class ScDocument &,struct ScInterpreterContext &,short,const struct ScQueryParam &,_Bool,_Bool)
     _Bool bReverse
     0
@@ -2926,11 +2906,11 @@ sc/source/core/data/postit.cxx:371
     void (anonymous namespace)::ScNoteCaptionCreator::ScNoteCaptionCreator(class ScDocument &,const class ScAddress &,class rtl::Reference<class SdrCaptionObj> &,_Bool)
     _Bool bShown
     1
-sc/source/core/inc/interpre.hxx:501
+sc/source/core/inc/interpre.hxx:502
     short ScInterpreter::GetInt16WithDefault(short)
     short nDefault
     1
-sc/source/core/inc/interpre.hxx:505
+sc/source/core/inc/interpre.hxx:506
     _Bool ScInterpreter::GetBoolWithDefault(_Bool)
     _Bool bDefault
     0
@@ -3582,18 +3562,6 @@ sd/source/ui/slidesorter/inc/controller/SlsPageSelector.hxx:100
     _Bool sd::slidesorter::controller::PageSelector::IsPageExcluded(int)
     int nPageIndex
     0
-sd/source/ui/slidesorter/inc/view/SlsLayouter.hxx:160
-    int sd::slidesorter::view::Layouter::GetIndexAtPoint(const class Point &,const _Bool,const _Bool) const
-    const _Bool bIncludePageBorders
-    0
-sd/source/ui/slidesorter/inc/view/SlsLayouter.hxx:160
-    int sd::slidesorter::view::Layouter::GetIndexAtPoint(const class Point &,const _Bool,const _Bool) const
-    const _Bool bClampToValidRange
-    0
-sd/source/ui/view/ToolBarManager.cxx:261
-    void sd::ToolBarManager::Implementation::AddToolBarShell(enum sd::ToolBarManager::ToolBarGroup,enum ToolbarId,_Bool)
-    _Bool bAddBar
-    1
 sdext/source/minimizer/configurationaccess.hxx:90
     short ConfigurationAccess::GetConfigProperty(const enum PPPOptimizerTokenEnum,const short) const
     const short nDefault
@@ -3934,10 +3902,6 @@ sw/inc/node.hxx:443
     _Bool SwContentNode::GoNext(struct SwPosition &,enum SwCursorSkipMode) const
     enum SwCursorSkipMode nMode
     0
-sw/inc/node.hxx:452
-    class SwRect SwContentNode::FindLayoutRect(const _Bool,const class Point *) const
-    const _Bool bPrtArea
-    0
 sw/inc/pam.hxx:199
     void SwPaM::SwPaM(const class SwNodeIndex &,const class SwNodeIndex &,struct o3tl::strong_int<int, struct Tag_SwNodeOffset>,struct o3tl::strong_int<int, struct Tag_SwNodeOffset>,class SwPaM *)
     class SwPaM * pRing
@@ -4042,10 +4006,6 @@ sw/source/core/access/accmap.cxx:429
     void SwAccessibleEvent_Impl::SwAccessibleEvent_Impl(enum SwAccessibleEvent_Impl::EventType,class SwAccessibleContext *,class sw::access::SwAccessibleChild,const enum AccessibleStates)
     enum SwAccessibleEvent_Impl::EventType eT
     0
-sw/source/core/crsr/pam.cxx:395
-    class SwContentNode * GoPreviousNds(class SwNodeIndex *,_Bool)
-    _Bool bChk
-    1
 sw/source/core/crsr/swcrsr.cxx:75
     void (anonymous namespace)::PercentHdl::PercentHdl(unsigned long,unsigned long,class SwDocShell *)
     unsigned long nStt
@@ -4117,10 +4077,6 @@ sw/source/core/inc/UndoDelete.hxx:71
 sw/source/core/inc/UndoTable.hxx:263
     void SwUndoTableNumFormat::SwUndoTableNumFormat(const class SwTableBox &,const class SfxItemSet *)
     const class SfxItemSet * pNewSet
-    0
-sw/source/core/inc/viewimp.hxx:195
-    void SwViewShellImp::PaintLayer(const struct o3tl::strong_int<short, struct SdrLayerIDTag>,const class SwPrintData *const,const class SwPageFrame &,const class SwRect &,const class Color *,const _Bool,class sdr::contact::ViewObjectContactRedirector *)
-    const class SwPrintData *const pPrintData
     0
 sw/source/core/inc/wrong.hxx:346
     void SwWrongList::InsertSubList(int,int,unsigned short,class SwWrongList *)
@@ -4730,6 +4686,10 @@ xmlhelp/source/cxxhelp/provider/databases.hxx:377
     void chelp::DataBaseIterator::DataBaseIterator(class chelp::Databases &,const class rtl::OUString &,const class rtl::OUString &,_Bool)
     _Bool bHelpText
     0
+xmloff/inc/txtflde.hxx:175
+    void XMLTextFieldExport::ExportFieldAutoStyle(const class com::sun::star::uno::Reference<class com::sun::star::text::XTextField> &,const _Bool,const _Bool)
+    const _Bool bRecursive
+    1
 xmloff/inc/txtflde.hxx:260
     void XMLTextFieldExport::ProcessIntegerDef(enum xmloff::token::XMLTokenEnum,int,int)
     int nDefault
