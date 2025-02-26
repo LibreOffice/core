@@ -426,20 +426,18 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         }
         case WID_CONDFRMT_REF:
         {
-            // Get the pool item stored by Conditional Format Manager Dialog.
-            const std::shared_ptr<ScCondFormatDlgData>& rDlgItem(getScCondFormatDlgItem());
+            // Get the DialogData stored by Conditional Format Manager Dialog.
+            const std::shared_ptr<ScCondFormatDlgData>& rDlgData(getScCondFormatDlgData());
 
-            if (rDlgItem)
+            if (rDlgData)
             {
                 ScViewData& rViewData = GetViewData();
                 rViewData.SetRefTabNo( rViewData.GetTabNo() );
 
-                xResult = std::make_shared<ScCondFormatDlg>(pB, pCW, pParent, &rViewData, rDlgItem);
+                xResult = std::make_shared<ScCondFormatDlg>(pB, pCW, pParent, &rViewData, rDlgData);
 
-                // Remove the pool item stored by Conditional Format Manager Dialog.
-                // tdf#160252 still needed *after* change to ScCondFormatDlgData due to
-                // UnitTest UITest_conditional_format
-                setScCondFormatDlgItem(nullptr);
+                // Remove the DialogData stored by Conditional Format Manager Dialog.
+                setScCondFormatDlgData(nullptr);
             }
 
             break;
