@@ -1188,6 +1188,7 @@ Reference< XShape > const & Shape::createAndInsert(
     }
 
     // special for lineshape
+    uno::Sequence< uno::Sequence< awt::Point > > aPolyPolySequence( 1 );
     if (bLineShape)
     {
         ::basegfx::B2DPolygon aPoly;
@@ -1226,11 +1227,14 @@ Reference< XShape > const & Shape::createAndInsert(
 
             pPoints[i] = awt::Point(static_cast<sal_Int32>(aPoint.getX()), static_cast<sal_Int32>(aPoint.getY()));
         }
-        uno::Sequence< uno::Sequence< awt::Point > > aPolyPolySequence( 1 );
         aPolyPolySequence.getArray()[ 0 ] = std::move(aPointSequence);
 
-        maShapeProperties.setProperty(PROP_PolyPolygon, aPolyPolySequence);
+        if (!(bTopWriterLine && !maSize.Width))
+        {
+            maShapeProperties.setProperty(PROP_PolyPolygon, aPolyPolySequence);
+        }
     }
+    HomogenMatrix3 aMatrix;
     if ( aServiceName == "com.sun.star.drawing.ConnectorShape" )
     {
         ::basegfx::B2DPolygon aPoly;
@@ -1249,7 +1253,6 @@ Reference< XShape > const & Shape::createAndInsert(
     else if (!bLineShape || bTopWriterLine)
     {
         // now set transformation for this object
-        HomogenMatrix3 aMatrix;
 
         aMatrix.Line1.Column1 = aTransformation.get(0,0);
         aMatrix.Line1.Column2 = aTransformation.get(0,1);
@@ -1263,7 +1266,10 @@ Reference< XShape > const & Shape::createAndInsert(
         aMatrix.Line3.Column2 = 0;
         aMatrix.Line3.Column3 = 1;
 
-        maShapeProperties.setProperty(PROP_Transformation, aMatrix);
+        if (!(bTopWriterLine && !maSize.Width))
+        {
+            maShapeProperties.setProperty(PROP_Transformation, aMatrix);
+        }
     }
 
     Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
@@ -1275,6 +1281,14 @@ Reference< XShape > const & Shape::createAndInsert(
     Reference< XPropertySet > xSet( mxShape, UNO_QUERY );
     if (xSet.is())
     {
+        if (bTopWriterLine && !maSize.Width)
+        {
+            // Entirely vertical line, set the points and the transform separately to match the ODF
+            // import.
+            xSet->setPropertyValue(u"PolyPolygon"_ustr, Any(aPolyPolySequence));
+            xSet->setPropertyValue(u"Transformation"_ustr, Any(aMatrix));
+        }
+
         if( !msName.isEmpty() )
         {
             Reference< container::XNamed > xNamed( mxShape, UNO_QUERY );
