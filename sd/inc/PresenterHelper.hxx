@@ -21,25 +21,19 @@
 
 #include "sddllapi.h"
 
-#include <com/sun/star/drawing/XPresenterHelper.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <comphelper/compbase.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace sd::presenter {
 
-typedef comphelper::WeakComponentImplHelper<
-    css::lang::XInitialization,
-    css::drawing::XPresenterHelper
-> PresenterHelperInterfaceBase;
-
-/** Implementation of the XPresenterHelper interface: functionality that can
-    not be implemented in an extension.
-*/
 class SD_DLLPUBLIC PresenterHelper final
-    : public PresenterHelperInterfaceBase
+    : public comphelper::WeakComponentImplHelper<css::lang::XInitialization>
 {
 public:
     explicit PresenterHelper (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
@@ -51,41 +45,114 @@ public:
 
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
-    // XPresenterHelper
-
-    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL createWindow (
+    /** Create a new window as child window of the given parent window.
+        @param xParentWindow
+            The parent window of the new window.
+        @param bCreateSystemChildWindow
+            When `TRUE` then the new window will be a system window that,
+            in the context of the presenter screen, can not be painted over
+            by other windows that lie behind it.
+        @param bInitiallyVisible
+            When `TRUE` the new window will be visible from the start,
+            i.e. a window listener will not receive a windowShown signal.
+        @param bEnableChildTransparentMode
+            When `TRUE` the parent window is painted behind its child
+            windows. This is one half of allowing child windows to be
+            transparent.
+        @param bEnableParentClip
+            When `TRUE` then the parent window is not clipped where its
+            child windows are painted.  This is the other half of allowing
+            child windows to be transparent.
+    */
+    virtual css::uno::Reference<css::awt::XWindow> createWindow (
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         sal_Bool bCreateSystemChildWindow,
         sal_Bool bInitiallyVisible,
         sal_Bool bEnableChildTransparentMode,
-        sal_Bool bEnableParentClip) override;
+        sal_Bool bEnableParentClip);
 
-    virtual css::uno::Reference<css::rendering::XCanvas> SAL_CALL createSharedCanvas (
+    /** Create a new canvas for the given window.  The new canvas is a
+        wrapper around the given shared canvas.  The wrapper only modifies
+        the origin in all output and clipping methods.
+        @param xUpdateCanvas
+            This canvas is used to call updateScreen() on.  May be `NULL`
+        @param xUpdateWindow
+            The window that belongs to the update canvas.  May also be
+            `NULL` (is expected to b `NULL` whenever xUpdateCanvas is.)
+        @param xSharedCanvas
+            The canvas that is shared by the wrapper.
+        @param xSharedWindow
+            The window of the shared canvas.  This is used to determine the
+            proper offset.
+        @param xWindow
+            The canvas is created for this window.  Must not be `NULL`
+    */
+    virtual css::uno::Reference<css::rendering::XCanvas> createSharedCanvas (
         const css::uno::Reference<css::rendering::XSpriteCanvas>& rxUpdateCanvas,
         const css::uno::Reference<css::awt::XWindow>& rxUpdateWindow,
         const css::uno::Reference<css::rendering::XCanvas>& rxSharedCanvas,
         const css::uno::Reference<css::awt::XWindow>& rxSharedWindow,
-        const css::uno::Reference<css::awt::XWindow>& rxWindow) override;
+        const css::uno::Reference<css::awt::XWindow>& rxWindow);
 
-    virtual css::uno::Reference<css::rendering::XCanvas> SAL_CALL createCanvas (
+    /** Create a new canvas for the given window.
+        @param xWindow
+            The canvas is created for this window.  Must not be `NULL`
+        @param nRequestedCanvasFeatureList
+            List of requested features that the new canvas should (has to)
+            provide.  Use only values from the CanvasFeature
+            constants group.
+        @param sOptionalCanvasServiceName
+            When an explicit service name is given then a new object of this
+            service is created.  This service name lets the caller select a
+            specific canvas implementation, e.g. with or without hardware
+            acceleration.
+    */
+    virtual css::uno::Reference<css::rendering::XCanvas> createCanvas (
         const css::uno::Reference<css::awt::XWindow>& rxWindow,
         sal_Int16 nRequestedCanvasFeatures,
-        const OUString& rsOptionalCanvasServiceName) override;
+        const OUString& rsOptionalCanvasServiceName);
 
-    virtual void SAL_CALL toTop (
-        const css::uno::Reference<css::awt::XWindow>& rxWindow) override;
+    /** Move the specified window to the top of its stacking order.  As a
+        result the window will be painted over all its overlapping
+        siblings.
+        @param xWindow
+            This window will be moved to the top of its stacking order.
+    */
+    virtual void toTop (
+        const css::uno::Reference<css::awt::XWindow>& rxWindow);
 
-    virtual css::uno::Reference<css::rendering::XBitmap> SAL_CALL loadBitmap (
+    /** Load a bitmap with a given ID.
+        @param id
+            The ID of the bitmap.
+        @param xCanvas
+            The bitmap is created to be compatible, and possibly optimized,
+            for this canvas.
+    */
+    virtual css::uno::Reference<css::rendering::XBitmap> loadBitmap (
         const OUString& rsURL,
-        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas) override;
+        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
 
-    virtual void SAL_CALL captureMouse (const css::uno::Reference<css::awt::XWindow>& rxWindow) override;
+    /** Capture the mouse so that no other window will receive mouse events.
+        Note that this is a potentially dangerous method.  Not calling
+        releaseMouse eventually can lead to an unresponsive application.
+        @param xWindow
+            The window for which mouse events will be notified even when the
+            mouse pointer moves outside the window or over other windows.
+    */
+    virtual void captureMouse (const css::uno::Reference<css::awt::XWindow>& rxWindow);
 
-    virtual void SAL_CALL releaseMouse (const css::uno::Reference<css::awt::XWindow>& rxWindow) override;
+    /** Release a previously captured mouse.
+        @param xWindow
+            The window from which the mouse will be released.
+    */
+    virtual void releaseMouse (const css::uno::Reference<css::awt::XWindow>& rxWindow);
 
-    virtual css::awt::Rectangle SAL_CALL getWindowExtentsRelative (
+    /** Return the bounding box of the given child window relative to the
+        direct or indirect parent window.
+    */
+    virtual css::awt::Rectangle getWindowExtentsRelative (
         const css::uno::Reference<css::awt::XWindow>& rxChildWindow,
-        const css::uno::Reference<css::awt::XWindow>& rxParentWindow) override;
+        const css::uno::Reference<css::awt::XWindow>& rxParentWindow);
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;

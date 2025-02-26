@@ -55,9 +55,8 @@ PresenterHelper::~PresenterHelper()
 
 void SAL_CALL PresenterHelper::initialize (const Sequence<Any>&) {}
 
-//----- XPaneHelper ----------------------------------------------------
 
-Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
+Reference<awt::XWindow> PresenterHelper::createWindow (
     const Reference<awt::XWindow>& rxParentWindow,
     sal_Bool bCreateSystemChildWindow,
     sal_Bool bInitiallyVisible,
@@ -104,7 +103,7 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
     return xWindow;
 }
 
-Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createSharedCanvas (
+Reference<rendering::XCanvas> PresenterHelper::createSharedCanvas (
     const Reference<rendering::XSpriteCanvas>& rxUpdateCanvas,
     const Reference<awt::XWindow>& rxUpdateWindow,
     const Reference<rendering::XCanvas>& rxSharedCanvas,
@@ -129,7 +128,7 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createSharedCanvas (
             rxWindow);
 }
 
-Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createCanvas (
+Reference<rendering::XCanvas> PresenterHelper::createCanvas (
     const Reference<awt::XWindow>& rxWindow,
     sal_Int16,
     const OUString& rsOptionalCanvasServiceName)
@@ -158,8 +157,7 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createCanvas (
         UNO_QUERY);
 }
 
-void SAL_CALL PresenterHelper::toTop (
-    const Reference<awt::XWindow>& rxWindow)
+void PresenterHelper::toTop(const Reference<awt::XWindow>& rxWindow)
 {
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(rxWindow);
     if (pWindow)
@@ -178,7 +176,7 @@ struct IdMapEntry {
 
 }
 
-Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
+Reference<rendering::XBitmap> PresenterHelper::loadBitmap (
     const OUString& id,
     const Reference<rendering::XCanvas>& rxCanvas)
 {
@@ -413,7 +411,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
     return nullptr;
 }
 
-void SAL_CALL PresenterHelper::captureMouse (
+void PresenterHelper::captureMouse (
     const Reference<awt::XWindow>& rxWindow)
 {
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
@@ -426,7 +424,7 @@ void SAL_CALL PresenterHelper::captureMouse (
     }
 }
 
-void SAL_CALL PresenterHelper::releaseMouse (const Reference<awt::XWindow>& rxWindow)
+void PresenterHelper::releaseMouse (const Reference<awt::XWindow>& rxWindow)
 {
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 

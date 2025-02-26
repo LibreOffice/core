@@ -263,7 +263,6 @@ excludelist:
     - com/sun/star/frame/XStatusListener.hpp
     sd/source/ui/presenter/PresenterHelper.hxx:
     # base class has to be a complete type
-    - com/sun/star/drawing/XPresenterHelper.hpp
     - com/sun/star/lang/XInitialization.hpp
     sd/source/ui/presenter/PresenterPreviewCache.hxx:
     # base class has to be a complete type
