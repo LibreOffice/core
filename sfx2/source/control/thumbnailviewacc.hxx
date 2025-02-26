@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SOURCE_CONTROL_THUMBNAILVIEWACC_HXX
-#define INCLUDED_SFX2_SOURCE_CONTROL_THUMBNAILVIEWACC_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/compbase.hxx>
@@ -144,7 +143,5 @@ private:
     */
     void ThrowIfDisposed();
 };
-
-#endif // INCLUDED_SFX2_SOURCE_CONTROL_THUMBNAILVIEWACC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
