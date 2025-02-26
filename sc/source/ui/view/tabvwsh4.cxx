@@ -1800,7 +1800,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,
     nCurRefDlgId(0),
     mbInSwitch(false),
     m_pDragData(new ScDragData),
-    m_pScCondFormatDlgItem()
+    m_pScCondFormatDlgData()
 {
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
 
