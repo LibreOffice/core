@@ -64,6 +64,10 @@ struct ViewOptFlags1
     bool bTreatSubOutlineLevelsAsContent : 1;
     bool bShowInlineTooltips : 1; //tooltips on tracked changes
     bool bViewMetachars : 1;
+
+    /// Track changes: recording is on
+    bool bRedlineRecordingOn : 1;
+
     bool bPageback : 1;
     bool bShowOutlineContentVisibilityButton : 1;
     bool bShowChangesInMargin : 1; //tracked deletions in margin
@@ -97,6 +101,7 @@ struct ViewOptFlags1
         , bTreatSubOutlineLevelsAsContent(false)
         , bShowInlineTooltips(false)
         , bViewMetachars(false)
+        , bRedlineRecordingOn(false)
         , bPageback(true)
         , bShowOutlineContentVisibilityButton(false)
         , bShowChangesInMargin(false)
@@ -132,6 +137,7 @@ struct ViewOptFlags1
             && bTreatSubOutlineLevelsAsContent == rOther.bTreatSubOutlineLevelsAsContent
             && bShowInlineTooltips == rOther.bShowInlineTooltips
             && bViewMetachars == rOther.bViewMetachars
+            && bRedlineRecordingOn == rOther.bRedlineRecordingOn
             && bPageback == rOther.bPageback
             && bShowOutlineContentVisibilityButton == rOther.bShowOutlineContentVisibilityButton
             && bShowChangesInMargin == rOther.bShowChangesInMargin
@@ -552,6 +558,10 @@ public:
     { return !m_bReadonly && m_nCoreOptions.bViewMetachars; }
     void SetViewMetaChars( bool b)
     { m_nCoreOptions.bViewMetachars = b; }
+
+    bool IsRedlineRecordingOn() const { return m_nCoreOptions.bRedlineRecordingOn; }
+
+    void SetRedlineRecordingOn(bool b) { m_nCoreOptions.bRedlineRecordingOn = b; }
 
     bool IsSynchronize() const
     {  return m_nCoreOptions.bSynchronize; }

@@ -743,6 +743,10 @@ void ViewOptFlags1::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(bViewMetachars).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("bRedlineRecordingOn"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(bRedlineRecordingOn).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("bPageback"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(bPageback).getStr()));
