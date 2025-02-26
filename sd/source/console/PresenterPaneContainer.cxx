@@ -19,6 +19,7 @@
 
 #include "PresenterPaneContainer.hxx"
 #include "PresenterPaneBase.hxx"
+#include <PresenterHelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -30,15 +31,7 @@ PresenterPaneContainer::PresenterPaneContainer (
     const Reference<XComponentContext>& rxContext)
     : PresenterPaneContainerInterfaceBase(m_aMutex)
 {
-    Reference<lang::XMultiComponentFactory> xFactory (rxContext->getServiceManager());
-    if (xFactory.is())
-    {
-        mxPresenterHelper.set(
-            xFactory->createInstanceWithContext(
-                u"com.sun.star.comp.Draw.PresenterHelper"_ustr,
-                rxContext),
-            UNO_QUERY_THROW);
-    }
+    mxPresenterHelper = new sd::presenter::PresenterHelper(rxContext);
 }
 
 PresenterPaneContainer::~PresenterPaneContainer()

@@ -55,18 +55,6 @@ PresenterHelper::~PresenterHelper()
 
 void SAL_CALL PresenterHelper::initialize (const Sequence<Any>&) {}
 
-OUString PresenterHelper::getImplementationName() {
-    return u"com.sun.star.comp.Draw.PresenterHelper"_ustr;
-}
-
-sal_Bool PresenterHelper::supportsService(OUString const & ServiceName) {
-    return cppu::supportsService(this, ServiceName);
-}
-
-css::uno::Sequence<OUString> PresenterHelper::getSupportedServiceNames() {
-    return {u"com.sun.star.drawing.PresenterHelper"_ustr};
-}
-
 //----- XPaneHelper ----------------------------------------------------
 
 Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
@@ -466,14 +454,5 @@ awt::Rectangle PresenterHelper::getWindowExtentsRelative (
 }
 
 } // end of namespace ::sd::presenter
-
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_Draw_PresenterHelper_get_implementation(css::uno::XComponentContext* context,
-                                                          css::uno::Sequence<css::uno::Any> const &)
-{
-    return cppu::acquire(new sd::presenter::PresenterHelper(context));
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

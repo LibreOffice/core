@@ -23,6 +23,7 @@
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterPaintManager.hxx"
 #include "PresenterUIPainter.hxx"
+#include <PresenterHelper.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
@@ -102,22 +103,12 @@ PresenterButton::PresenterButton (
 {
     try
     {
-        Reference<lang::XMultiComponentFactory> xFactory (rxComponentContext->getServiceManager());
-        if ( ! xFactory.is())
-            throw RuntimeException();
-
-        mxPresenterHelper.set(
-            xFactory->createInstanceWithContext(
-                u"com.sun.star.comp.Draw.PresenterHelper"_ustr,
-                rxComponentContext),
-            UNO_QUERY_THROW);
-
-        if (mxPresenterHelper.is())
-            mxWindow = mxPresenterHelper->createWindow(rxParentWindow,
-                false,
-                false,
-                false,
-                false);
+        mxPresenterHelper = new sd::presenter::PresenterHelper(rxComponentContext);
+        mxWindow = mxPresenterHelper->createWindow(rxParentWindow,
+            false,
+            false,
+            false,
+            false);
 
         // Make the background transparent.
         Reference<awt::XWindowPeer> xPeer (mxWindow, UNO_QUERY_THROW);

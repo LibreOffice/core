@@ -19,6 +19,7 @@
 
 #include "PresenterController.hxx"
 #include "PresenterSpritePane.hxx"
+#include <PresenterHelper.hxx>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
 using namespace ::com::sun::star;
@@ -33,13 +34,7 @@ PresenterSpritePane::PresenterSpritePane (const Reference<XComponentContext>& rx
     : PresenterPaneBase(rxContext, rpPresenterController),
       mpSprite(std::make_shared<PresenterSprite>())
 {
-    Reference<lang::XMultiComponentFactory> xFactory (
-        mxComponentContext->getServiceManager(), UNO_SET_THROW);
-    mxPresenterHelper.set(
-        xFactory->createInstanceWithContext(
-            u"com.sun.star.comp.Draw.PresenterHelper"_ustr,
-            mxComponentContext),
-        UNO_QUERY_THROW);
+    mxPresenterHelper = new sd::presenter::PresenterHelper(mxComponentContext);
 }
 
 PresenterSpritePane::~PresenterSpritePane()

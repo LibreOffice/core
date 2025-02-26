@@ -21,6 +21,7 @@
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterTheme.hxx"
+#include <PresenterHelper.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
@@ -370,15 +371,7 @@ PresenterPaneBorderPainter::Renderer::Renderer (
       maViewState(geometry::AffineMatrix2D(1,0,0, 0,1,0), nullptr),
       mbHasCallout(false)
 {
-    Reference<lang::XMultiComponentFactory> xFactory (rxContext->getServiceManager());
-    if (xFactory.is())
-    {
-        mxPresenterHelper.set(
-            xFactory->createInstanceWithContext(
-                u"com.sun.star.comp.Draw.PresenterHelper"_ustr,
-                rxContext),
-            UNO_QUERY_THROW);
-    }
+    mxPresenterHelper = new sd::presenter::PresenterHelper(rxContext);
 }
 
 void PresenterPaneBorderPainter::Renderer::SetCanvas (const Reference<rendering::XCanvas>& rxCanvas)

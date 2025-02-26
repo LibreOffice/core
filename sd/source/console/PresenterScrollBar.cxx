@@ -24,6 +24,7 @@
 #include "PresenterPaintManager.hxx"
 #include "PresenterTimer.hxx"
 #include "PresenterUIPainter.hxx"
+#include <PresenterHelper.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
@@ -88,22 +89,12 @@ PresenterScrollBar::PresenterScrollBar (
 {
     try
     {
-        Reference<lang::XMultiComponentFactory> xFactory (rxComponentContext->getServiceManager());
-        if ( ! xFactory.is())
-            throw RuntimeException();
-
-        mxPresenterHelper.set(
-            xFactory->createInstanceWithContext(
-                u"com.sun.star.comp.Draw.PresenterHelper"_ustr,
-                rxComponentContext),
-            UNO_QUERY_THROW);
-
-        if (mxPresenterHelper.is())
-            mxWindow = mxPresenterHelper->createWindow(rxParentWindow,
-                false,
-                false,
-                false,
-                false);
+        mxPresenterHelper = new sd::presenter::PresenterHelper(rxComponentContext);
+        mxWindow = mxPresenterHelper->createWindow(rxParentWindow,
+            false,
+            false,
+            false,
+            false);
 
         // Make the background transparent.  The slide show paints its own background.
         Reference<awt::XWindowPeer> xPeer (mxWindow, UNO_QUERY_THROW);

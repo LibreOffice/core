@@ -22,6 +22,7 @@
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterPaneContainer.hxx"
+#include <PresenterHelper.hxx>
 #include <DrawController.hxx>
 #include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
@@ -106,12 +107,7 @@ void PresenterSlideShowView::LateInit()
     Reference<lang::XComponent> xSlideShowComponent (mxSlideShow, UNO_QUERY);
     xSlideShowComponent->addEventListener(static_cast<awt::XWindowListener*>(this));
 
-    Reference<lang::XMultiComponentFactory> xFactory (
-        mxComponentContext->getServiceManager(), UNO_SET_THROW);
-    mxPresenterHelper.set (xFactory->createInstanceWithContext(
-                   u"com.sun.star.comp.Draw.PresenterHelper"_ustr,
-                   mxComponentContext),
-               UNO_QUERY_THROW);
+    mxPresenterHelper = new sd::presenter::PresenterHelper(mxComponentContext);
 
     // Use view id and controller to retrieve window and canvas from
     // configuration controller.

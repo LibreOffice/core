@@ -21,6 +21,7 @@
 #include "PresenterBitmapContainer.hxx"
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterConfigurationAccess.hxx"
+#include <PresenterHelper.hxx>
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/rendering/PanoseWeight.hpp>
 #include <osl/diagnose.h>
@@ -651,15 +652,7 @@ ReadContext::ReadContext (
     : mxComponentContext(rxContext),
       mxCanvas(rxCanvas)
 {
-    Reference<lang::XMultiComponentFactory> xFactory (rxContext->getServiceManager());
-    if (xFactory.is())
-    {
-        mxPresenterHelper.set(
-            xFactory->createInstanceWithContext(
-                u"com.sun.star.comp.Draw.PresenterHelper"_ustr,
-                rxContext),
-            UNO_QUERY_THROW);
-    }
+    mxPresenterHelper = new sd::presenter::PresenterHelper(rxContext);
 }
 
 PresenterTheme::SharedFontDescriptor ReadContext::ReadFont (

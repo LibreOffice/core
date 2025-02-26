@@ -32,6 +32,7 @@
 #include "PresenterTheme.hxx"
 #include "PresenterViewFactory.hxx"
 #include "PresenterWindowManager.hxx"
+#include <PresenterHelper.hxx>
 #include <DrawController.hxx>
 
 #include <com/sun/star/awt/Key.hpp>
@@ -146,11 +147,7 @@ PresenterController::PresenterController (
         rxContext->getServiceManager();
     if ( ! xFactory.is())
         return;
-    mxPresenterHelper.set(
-        xFactory->createInstanceWithContext(
-            u"com.sun.star.drawing.PresenterHelper"_ustr,
-            rxContext),
-        UNO_QUERY_THROW);
+    mxPresenterHelper = new sd::presenter::PresenterHelper(rxContext);
 
     if (mxSlideShowController.is())
     {

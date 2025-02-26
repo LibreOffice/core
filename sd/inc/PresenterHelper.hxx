@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include "sddllapi.h"
+
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -30,14 +32,13 @@ namespace sd::presenter {
 
 typedef comphelper::WeakComponentImplHelper<
     css::lang::XInitialization,
-    css::lang::XServiceInfo,
     css::drawing::XPresenterHelper
 > PresenterHelperInterfaceBase;
 
 /** Implementation of the XPresenterHelper interface: functionality that can
     not be implemented in an extension.
 */
-class PresenterHelper final
+class SD_DLLPUBLIC PresenterHelper final
     : public PresenterHelperInterfaceBase
 {
 public:
@@ -49,10 +50,6 @@ public:
     // XInitialize
 
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments) override;
-
-    OUString SAL_CALL getImplementationName() override;
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XPresenterHelper
 

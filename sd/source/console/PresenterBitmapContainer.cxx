@@ -19,6 +19,7 @@
 
 #include "PresenterBitmapContainer.hxx"
 #include "PresenterConfigurationAccess.hxx"
+#include <PresenterHelper.hxx>
 
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -79,15 +80,7 @@ void PresenterBitmapContainer::Initialize (
 
     // Create an object that is able to load the bitmaps in a format that is
     // supported by the canvas.
-    Reference<lang::XMultiComponentFactory> xFactory =
-        rxComponentContext->getServiceManager();
-    if ( ! xFactory.is())
-        return;
-    mxPresenterHelper.set(
-        xFactory->createInstanceWithContext(
-            u"com.sun.star.drawing.PresenterHelper"_ustr,
-            rxComponentContext),
-        UNO_QUERY_THROW);
+    mxPresenterHelper = new sd::presenter::PresenterHelper(rxComponentContext);
 }
 
 PresenterBitmapContainer::~PresenterBitmapContainer()
