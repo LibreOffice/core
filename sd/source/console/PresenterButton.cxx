@@ -23,7 +23,6 @@
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterPaintManager.hxx"
 #include "PresenterUIPainter.hxx"
-#include <PresenterHelper.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/drawing/XPresenterHelper.hpp>

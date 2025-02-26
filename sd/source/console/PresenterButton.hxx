@@ -22,6 +22,7 @@
 
 #include "PresenterBitmapContainer.hxx"
 #include "PresenterTheme.hxx"
+#include <PresenterHelper.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
@@ -89,7 +90,7 @@ private:
     std::shared_ptr<PresenterTheme> mpTheme;
     css::uno::Reference<css::awt::XWindow> mxWindow;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
-    css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
+    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
     const OUString msText;
     const PresenterTheme::SharedFontDescriptor mpFont;
     const PresenterTheme::SharedFontDescriptor mpMouseOverFont;
