@@ -751,6 +751,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf160898)
     pWrtShell->SelAll();
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf164949)
+{
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+
+    dispatchCommand(mxComponent, u".uno:SelectTable"_ustr, {});
+
+    uno::Sequence aArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr, uno::Any(false)) };
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, u".uno:FormatPaintbrush"_ustr, aArgs);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testParagraphStyleCloneFormatting)
 {
     createSwDoc();
