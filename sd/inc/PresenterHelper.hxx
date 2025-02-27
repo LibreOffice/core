@@ -64,7 +64,7 @@ public:
             child windows are painted.  This is the other half of allowing
             child windows to be transparent.
     */
-    virtual css::uno::Reference<css::awt::XWindow> createWindow (
+    static css::uno::Reference<css::awt::XWindow> createWindow (
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         sal_Bool bCreateSystemChildWindow,
         sal_Bool bInitiallyVisible,

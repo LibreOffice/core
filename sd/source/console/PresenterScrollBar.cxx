@@ -90,7 +90,7 @@ PresenterScrollBar::PresenterScrollBar (
     try
     {
         mxPresenterHelper = new sd::presenter::PresenterHelper(rxComponentContext);
-        mxWindow = mxPresenterHelper->createWindow(rxParentWindow,
+        mxWindow = sd::presenter::PresenterHelper::createWindow(rxParentWindow,
             false,
             false,
             false,

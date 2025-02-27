@@ -178,7 +178,7 @@ void PresenterNotesView::CreateToolBar (
         return;
 
     // Create a new window as container of the tool bar.
-    mxToolBarWindow = xPresenterHelper->createWindow(
+    mxToolBarWindow = sd::presenter::PresenterHelper::createWindow(
         mxParentWindow,
         false,
         true,
