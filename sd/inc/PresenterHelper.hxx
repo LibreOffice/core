@@ -121,14 +121,14 @@ public:
     static void toTop(const css::uno::Reference<css::awt::XWindow>& rxWindow);
 
     /** Load a bitmap with a given ID.
-        @param id
+        @param sId
             The ID of the bitmap.
         @param xCanvas
             The bitmap is created to be compatible, and possibly optimized,
             for this canvas.
     */
     virtual css::uno::Reference<css::rendering::XBitmap> loadBitmap (
-        const OUString& rsURL,
+        std::u16string_view sId,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
 
     /** Capture the mouse so that no other window will receive mouse events.
