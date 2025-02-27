@@ -253,13 +253,11 @@ void PresenterPaneBase::CreateWindows (
 
     mxBorderWindow = sd::presenter::PresenterHelper::createWindow(
         mxParentWindow,
-        false,
         bIsWindowVisibleOnCreation,
         false,
         false);
     mxContentWindow = sd::presenter::PresenterHelper::createWindow(
         mxBorderWindow,
-        false,
         bIsWindowVisibleOnCreation,
         false,
         false);

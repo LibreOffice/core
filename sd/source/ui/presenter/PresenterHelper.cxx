@@ -41,7 +41,6 @@ namespace sd::presenter {
 
 Reference<awt::XWindow> PresenterHelper::createWindow (
     const Reference<awt::XWindow>& rxParentWindow,
-    bool bCreateSystemChildWindow,
     bool bInitiallyVisible,
     bool bEnableChildTransparentMode,
     bool bEnableParentClip)
@@ -49,15 +48,7 @@ Reference<awt::XWindow> PresenterHelper::createWindow (
     VclPtr<vcl::Window> pParentWindow(VCLUnoHelper::GetWindow(rxParentWindow));
 
     // Create a new window.
-    VclPtr<vcl::Window> pWindow;
-    if (bCreateSystemChildWindow)
-    {
-        pWindow = VclPtr<WorkWindow>::Create(pParentWindow, WB_SYSTEMCHILDWINDOW);
-    }
-    else
-    {
-        pWindow = VclPtr<vcl::Window>::Create(pParentWindow);
-    }
+    VclPtr<vcl::Window> pWindow = VclPtr<vcl::Window>::Create(pParentWindow);
     Reference<awt::XWindow> xWindow (pWindow->GetComponentInterface(), UNO_QUERY);
 
     if (bEnableChildTransparentMode)

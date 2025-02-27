@@ -92,7 +92,6 @@ PresenterScrollBar::PresenterScrollBar (
         mxWindow = sd::presenter::PresenterHelper::createWindow(rxParentWindow,
             false,
             false,
-            false,
             false);
 
         // Make the background transparent.  The slide show paints its own background.

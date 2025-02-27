@@ -102,7 +102,6 @@ PresenterButton::PresenterButton(
         mxWindow = sd::presenter::PresenterHelper::createWindow(rxParentWindow,
             false,
             false,
-            false,
             false);
 
         // Make the background transparent.

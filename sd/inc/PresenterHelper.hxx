@@ -41,10 +41,6 @@ public:
     /** Create a new window as child window of the given parent window.
         @param rxParentWindow
             The parent window of the new window.
-        @param bCreateSystemChildWindow
-            When `true` then the new window will be a system window that,
-            in the context of the presenter screen, can not be painted over
-            by other windows that lie behind it.
         @param bInitiallyVisible
             When `true` the new window will be visible from the start,
             i.e. a window listener will not receive a windowShown signal.
@@ -59,7 +55,6 @@ public:
     */
     static css::uno::Reference<css::awt::XWindow> createWindow (
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
-        bool bCreateSystemChildWindow,
         bool bInitiallyVisible,
         bool bEnableChildTransparentMode,
         bool bEnableParentClip);
