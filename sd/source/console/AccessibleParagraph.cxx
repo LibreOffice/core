@@ -124,7 +124,7 @@ AccessibleParagraph::AccessibleParagraph(
 Reference<XAccessibleRelationSet> SAL_CALL
     AccessibleParagraph::getAccessibleRelationSet()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     rtl::Reference<AccessibleRelationSet> pSet (new AccessibleRelationSet);
 
@@ -152,7 +152,7 @@ Reference<XAccessibleRelationSet> SAL_CALL
 
 sal_Int32 SAL_CALL AccessibleParagraph::getCaretPosition()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     sal_Int32 nPosition (-1);
     if (mpParagraph)
@@ -163,7 +163,7 @@ sal_Int32 SAL_CALL AccessibleParagraph::getCaretPosition()
 
 sal_Bool SAL_CALL AccessibleParagraph::setCaretPosition (sal_Int32 nIndex)
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     if (mpParagraph)
     {
@@ -176,7 +176,7 @@ sal_Bool SAL_CALL AccessibleParagraph::setCaretPosition (sal_Int32 nIndex)
 
 sal_Unicode SAL_CALL AccessibleParagraph::getCharacter (sal_Int32 nIndex)
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     if (!mpParagraph)
         throw lang::IndexOutOfBoundsException(u"no text support in current mode"_ustr, static_cast<uno::XWeak*>(this));
@@ -188,7 +188,7 @@ Sequence<css::beans::PropertyValue> SAL_CALL
         ::sal_Int32 nIndex,
         const css::uno::Sequence<OUString>& rRequestedAttributes)
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
 #if OSL_DEBUG_LEVEL > 0
     SAL_INFO( "sdext.presenter", __func__ << " at " << this << ", " << nIndex << " returns empty set" );
@@ -211,7 +211,7 @@ Sequence<css::beans::PropertyValue> SAL_CALL
 awt::Rectangle SAL_CALL AccessibleParagraph::getCharacterBounds (
     sal_Int32 nIndex)
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     awt::Rectangle aCharacterBox;
     if (nIndex < 0)
@@ -237,7 +237,7 @@ awt::Rectangle SAL_CALL AccessibleParagraph::getCharacterBounds (
 
 sal_Int32 SAL_CALL AccessibleParagraph::getCharacterCount()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     sal_Int32 nCount (0);
     if (mpParagraph)
@@ -249,27 +249,27 @@ sal_Int32 SAL_CALL AccessibleParagraph::getCharacterCount()
 sal_Int32 SAL_CALL AccessibleParagraph::getIndexAtPoint (
     const css::awt::Point& )
 {
-    ThrowIfDisposed();
+    ensureAlive();
     return -1;
 }
 
 OUString SAL_CALL AccessibleParagraph::getSelectedText()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     return getTextRange(getSelectionStart(), getSelectionEnd());
 }
 
 sal_Int32 SAL_CALL AccessibleParagraph::getSelectionStart()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     return getCaretPosition();
 }
 
 sal_Int32 SAL_CALL AccessibleParagraph::getSelectionEnd()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     return getCaretPosition();
 }
@@ -278,14 +278,14 @@ sal_Bool SAL_CALL AccessibleParagraph::setSelection (
     sal_Int32 nStartIndex,
     sal_Int32)
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     return setCaretPosition(nStartIndex);
 }
 
 OUString SAL_CALL AccessibleParagraph::getText()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     OUString sText;
     if (mpParagraph)
@@ -298,7 +298,7 @@ OUString SAL_CALL AccessibleParagraph::getTextRange (
     sal_Int32 nLocalStartIndex,
     sal_Int32 nLocalEndIndex)
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     OUString sText;
     if (mpParagraph)
@@ -315,7 +315,7 @@ TextSegment SAL_CALL AccessibleParagraph::getTextAtIndex (
     sal_Int32 nLocalCharacterIndex,
     sal_Int16 nTextType)
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     TextSegment aSegment;
     if (mpParagraph)
@@ -328,7 +328,7 @@ TextSegment SAL_CALL AccessibleParagraph::getTextBeforeIndex (
     sal_Int32 nLocalCharacterIndex,
     sal_Int16 nTextType)
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     TextSegment aSegment;
     if (mpParagraph)
@@ -341,7 +341,7 @@ TextSegment SAL_CALL AccessibleParagraph::getTextBehindIndex (
     sal_Int32 nLocalCharacterIndex,
     sal_Int16 nTextType)
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     TextSegment aSegment;
     if (mpParagraph)
@@ -354,7 +354,7 @@ sal_Bool SAL_CALL AccessibleParagraph::copyText (
     sal_Int32,
     sal_Int32)
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     // Return false because copying to clipboard is not supported.
     // It IS supported in the notes view.  There is no need to duplicate

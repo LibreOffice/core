@@ -85,7 +85,7 @@ void SAL_CALL AccessibleObject::disposing()
 Reference<XAccessibleContext> SAL_CALL
     AccessibleObject::getAccessibleContext()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     return this;
 }
@@ -94,7 +94,7 @@ Reference<XAccessibleContext> SAL_CALL
 
 sal_Int64 SAL_CALL AccessibleObject::getAccessibleChildCount()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     return maChildren.size();
 }
@@ -102,7 +102,7 @@ sal_Int64 SAL_CALL AccessibleObject::getAccessibleChildCount()
 Reference<XAccessible> SAL_CALL
     AccessibleObject::getAccessibleChild (sal_Int64 nIndex)
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     if (nIndex<0 || o3tl::make_unsigned(nIndex)>=maChildren.size())
         throw lang::IndexOutOfBoundsException(u"invalid child index"_ustr, static_cast<uno::XWeak*>(this));
@@ -113,7 +113,7 @@ Reference<XAccessible> SAL_CALL
 Reference<XAccessible> SAL_CALL
     AccessibleObject::getAccessibleParent()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     return mxParentAccessible;
 }
@@ -121,7 +121,7 @@ Reference<XAccessible> SAL_CALL
 sal_Int64 SAL_CALL
     AccessibleObject::getAccessibleIndexInParent()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     const Reference<XAccessible> xThis (this);
     if (mxParentAccessible.is())
@@ -142,7 +142,7 @@ sal_Int64 SAL_CALL
 sal_Int16 SAL_CALL
     AccessibleObject::getAccessibleRole()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     return mnRole;
 }
@@ -150,7 +150,7 @@ sal_Int16 SAL_CALL
 OUString SAL_CALL
     AccessibleObject::getAccessibleDescription()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     return OUString();
 }
@@ -158,7 +158,7 @@ OUString SAL_CALL
 OUString SAL_CALL
     AccessibleObject::getAccessibleName()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     return msName;
 }
@@ -166,7 +166,7 @@ OUString SAL_CALL
 Reference<XAccessibleRelationSet> SAL_CALL
     AccessibleObject::getAccessibleRelationSet()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     return nullptr;
 }
@@ -174,7 +174,7 @@ Reference<XAccessibleRelationSet> SAL_CALL
 sal_Int64 SAL_CALL
     AccessibleObject::getAccessibleStateSet()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     return mnStateSet;
 }
@@ -182,7 +182,7 @@ sal_Int64 SAL_CALL
 lang::Locale SAL_CALL
     AccessibleObject::getLocale()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     if (mxParentAccessible.is())
     {
@@ -198,7 +198,7 @@ lang::Locale SAL_CALL
 Reference<XAccessible> SAL_CALL
     AccessibleObject::getAccessibleAtPoint (const awt::Point&)
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     return Reference<XAccessible>();
 }
@@ -213,7 +213,7 @@ awt::Rectangle AccessibleObject::implGetBounds()
 
 void SAL_CALL AccessibleObject::grabFocus()
 {
-    ThrowIfDisposed();
+    ensureAlive();
     if (mxBorderWindow.is())
         mxBorderWindow->setFocus();
     else if (mxContentWindow.is())
@@ -222,14 +222,14 @@ void SAL_CALL AccessibleObject::grabFocus()
 
 sal_Int32 SAL_CALL AccessibleObject::getForeground()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     return 0x00ffffff;
 }
 
 sal_Int32 SAL_CALL AccessibleObject::getBackground()
 {
-    ThrowIfDisposed();
+    ensureAlive();
 
     return 0x00000000;
 }
@@ -400,12 +400,6 @@ awt::Size AccessibleObject::GetSize()
     }
     else
         return awt::Size();
-}
-
-void AccessibleObject::ThrowIfDisposed() const
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-        throw lang::DisposedException(u"object has already been disposed"_ustr, uno::Reference<uno::XInterface>(const_cast<uno::XWeak*>(static_cast<uno::XWeak const *>(this))));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -139,9 +139,6 @@ protected:
     virtual bool GetWindowState (const sal_Int64 nType) const;
 
     void UpdateState (const sal_Int64 aState, const bool bValue);
-
-    /// @throws css::lang::DisposedException
-    void ThrowIfDisposed() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
