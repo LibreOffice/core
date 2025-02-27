@@ -409,6 +409,16 @@ sub create_epm_header
         }
     }
 
+    if (!$foundreadmefile && $variableshashref->{'NO_README_IN_ROOTDIR'})
+    {
+        $infoline = "Fallback to dummy readme file\n";
+        push(@installer::globals::logfileinfo, $infoline);
+
+        $foundreadmefile = 1;
+        $line = "%readme DUMMY\n";
+        push(@epmheader, $line);
+    }
+
     # searching for and license file
 
     if ( $license_in_package_defined )
