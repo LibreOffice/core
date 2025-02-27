@@ -26,7 +26,7 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes" context="deleterow|delete_label">Delete Row Action</property>
+        <property name="label" translatable="yes" context="deleterow|delete_label">Delete Row</property>
         <property name="use-underline">True</property>
         <property name="mnemonic-widget">ed_find</property>
       </object>

@@ -26,7 +26,7 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes" context="swaprows|action">Swap Rows Action</property>
+        <property name="label" translatable="yes" context="swaprows|action">Swap Rows</property>
         <property name="use-underline">True</property>
         <property name="mnemonic-widget">ed_row1</property>
       </object>

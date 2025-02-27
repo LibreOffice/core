@@ -141,7 +141,6 @@ public:
 
     static std::shared_ptr<DataProvider> getDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource);
 
-    static std::vector<OUString> getDataProviders();
 };
 
 }

@@ -785,12 +785,6 @@ ScDataProviderDlg::ScDataProviderDlg(weld::Window* pParent, std::shared_ptr<ScDo
     bool bSuccess = mxDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     SAL_WARN_IF(!bSuccess, "sc", "temporary warning");
 
-    auto aDataProvider = sc::DataProviderFactory::getDataProviders();
-    for (const auto& rDataProvider : aDataProvider)
-    {
-        mxProviderList->append_text(rDataProvider);
-    }
-
     mxOKBtn->connect_clicked(LINK(this, ScDataProviderDlg, ApplyQuitHdl));
     mxCancelBtn->connect_clicked(LINK(this, ScDataProviderDlg, CancelQuitHdl));
     mxAddTransformationBtn->connect_clicked(LINK(this, ScDataProviderDlg, TransformationListHdl));
@@ -897,16 +891,15 @@ IMPL_LINK_NOARG(ScDataProviderDlg, TransformationSelectHdl, weld::ComboBox&, voi
 
 sc::ExternalDataSource ScDataProviderDlg::getDataSource(ScDocument* pDoc)
 {
-    sc::ExternalDataSource aSource(mxEditURL->get_text(), mxProviderList->get_active_text(), pDoc);
+    sc::ExternalDataSource aSource(mxEditURL->get_text(), mxProviderList->get_active_id(), pDoc);
 
-    OUString aID = mxEditID->get_text();
-    aSource.setID(aID);
+    aSource.setID(mxProviderList->get_active_id());
     return aSource;
 }
 
 void ScDataProviderDlg::isValid()
 {
-    bool bValid = !mxProviderList->get_active_text().isEmpty();
+    bool bValid = !mxProviderList->get_active_id().isEmpty();
     bValid &= !mxEditURL->get_text().isEmpty();
     updateApplyBtn(bValid);
 }

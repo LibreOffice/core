@@ -117,6 +117,11 @@
                           <object class="GtkComboBoxText" id="select_db_range">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="select_db_range-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dataproviderdlg|extended_tip|select_dg_range">The database range to receive the data from the provider.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -128,7 +133,7 @@
                           <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="label" translatable="yes" context="dataproviderdlg/provider">Data Provider:</property>
+                            <property name="label" translatable="yes" context="dataproviderdlg/provider">Data Format:</property>
                             <property name="use-underline">True</property>
                             <property name="mnemonic-widget">provider_lst</property>
                             <property name="xalign">0</property>
@@ -142,6 +147,17 @@
                           <object class="GtkComboBoxText" id="provider_lst">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <items>
+                              <item id="org.libreoffice.calc.csv">CSV</item>
+                              <item id="org.libreoffice.calc.html">HTML</item>
+                              <item id="org.libreoffice.calc.xml">XML</item>
+                              <item id="org.libreoffice.calc.sql">SQL</item>
+                            </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="provider_lst-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dataproviderdlg|extended_tip|provider_lst">The format of the data to be imported.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -168,6 +184,11 @@
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="truncate-multiline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="ed_url-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dataproviderdlg|extended_tip|ed_url">The URL of the data provider.For local file, insert the file path and name. For web service, insert the URL.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -191,7 +212,7 @@
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="label" translatable="yes" context="dataproviderdlg/id">Id / Xpath:</property>
+                            <property name="label" translatable="yes" context="dataproviderdlg/id">Identifier:</property>
                             <property name="use-underline">True</property>
                             <property name="mnemonic-widget">ed_id</property>
                             <property name="xalign">0</property>
@@ -206,6 +227,11 @@
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="truncate-multiline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="ed_id-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dataproviderdlg|extended_tip|ed_id">The table identifier in the HTML source or the XPath in XML source.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -262,6 +288,11 @@
                             <property name="halign">end</property>
                             <property name="margin-end">12</property>
                             <property name="use-underline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="add_transformation-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dataproviderdlg|extended_tip|add_transformation">Includes the selected transformation to the transformation set. Transformations are included at the bottom of the list.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -274,7 +305,7 @@
                             <property name="can-focus">False</property>
                             <property name="hexpand">True</property>
                             <items>
-                              <item id="0" translatable="yes" context="dataproviderdlg|transformation_list">Delete Column</item>
+                              <item id="0" translatable="yes" context="dataproviderdlg|transformation_list">Delete Columns</item>
                               <item id="1" translatable="yes" context="dataproviderdlg|transformation_list">Delete Row</item>
                               <item id="2" translatable="yes" context="dataproviderdlg|transformation_list">Swap Rows</item>
                               <item id="3" translatable="yes" context="dataproviderdlg|transformation_list">Split Column</item>
@@ -282,11 +313,16 @@
                               <item id="5" translatable="yes" context="dataproviderdlg|transformation_list">Text Transformation</item>
                               <item id="6" translatable="yes" context="dataproviderdlg|transformation_list">Sort Columns</item>
                               <item id="7" translatable="yes" context="dataproviderdlg|transformation_list">Aggregate Functions</item>
-                              <item id="8" translatable="yes" context="dataproviderdlg|transformation_list">Number Transformations</item>
-                              <item id="9" translatable="yes" context="dataproviderdlg|transformation_list">Replace Null Transformations</item>
-                              <item id="10" translatable="yes" context="dataproviderdlg|transformation_list">Date &amp; Time Transformations</item>
-                              <item id="11" translatable="yes" context="dataproviderdlg|transformation_list">Find Replace Transformation</item>
+                              <item id="8" translatable="yes" context="dataproviderdlg|transformation_list">Numeric</item>
+                              <item id="9" translatable="yes" context="dataproviderdlg|transformation_list">Replace Null</item>
+                              <item id="10" translatable="yes" context="dataproviderdlg|transformation_list">Date and Time</item>
+                              <item id="11" translatable="yes" context="dataproviderdlg|transformation_list">Find and Replace</item>
                             </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="transformation_box-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dataproviderdlg|extended_tip|transformation_box">Available transformations that can be applied t the provided data.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left-attach">0</property>
@@ -393,6 +429,11 @@
                         <property name="halign">end</property>
                         <property name="margin-end">6</property>
                         <property name="use-underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="apply-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dataproviderdlg|extended_tip|apply">Applies the transformations to the provided data and displays results in the Preview area for inspection.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
