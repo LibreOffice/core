@@ -1223,7 +1223,7 @@ void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
 
         m_rDoc.SetInXMLImport( bSaveInXMLImportFlag );
     }
-    meRedlineFlags = eMode;
+    SetRedlineFlags_intern(eMode);
     m_rDoc.getIDocumentState().SetModified();
 
     // #TODO - add 'SwExtraRedlineTable' also ?
@@ -1241,6 +1241,20 @@ bool DocumentRedlineManager::IsIgnoreRedline() const
 
 void DocumentRedlineManager::SetRedlineFlags_intern(RedlineFlags eMode)
 {
+    SwDocShell* pDocShell = m_rDoc.GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell ? pDocShell->GetWrtShell() : nullptr;
+    if (pWrtShell)
+    {
+        // Recording can be per-view, the rest is per-document.
+        auto bRedlineRecordingOn = bool(eMode & RedlineFlags::On);
+        SwViewOption aOpt(*pWrtShell->GetViewOptions());
+        if (aOpt.IsRedlineRecordingOn() != bRedlineRecordingOn)
+        {
+            aOpt.SetRedlineRecordingOn(bRedlineRecordingOn);
+            pWrtShell->ApplyViewOptions(aOpt);
+        }
+    }
+
     meRedlineFlags = eMode;
 }
 
@@ -1324,9 +1338,9 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
             RedlineFlags eOld = meRedlineFlags;
             // Set to NONE, so that the Delete::Redo merges the Redline data correctly!
             // The ShowMode needs to be retained!
-            meRedlineFlags = eOld & ~RedlineFlags(RedlineFlags::On | RedlineFlags::Ignore);
+            SetRedlineFlags_intern(eOld & ~RedlineFlags(RedlineFlags::On | RedlineFlags::Ignore));
             m_rDoc.getIDocumentContentOperations().DeleteAndJoin( *pNewRedl );
-            meRedlineFlags = eOld;
+            SetRedlineFlags_intern(eOld);
         }
         delete pNewRedl;
         pNewRedl = nullptr;
@@ -1826,7 +1840,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
 
                     // Set to NONE, so that the Delete::Redo merges the Redline data correctly!
                     // The ShowMode needs to be retained!
-                    meRedlineFlags = eOld & ~RedlineFlags(RedlineFlags::On | RedlineFlags::Ignore);
+                    SetRedlineFlags_intern(eOld & ~RedlineFlags(RedlineFlags::On | RedlineFlags::Ignore));
                     switch( eCmpPos )
                     {
                     case SwComparePosition::Equal:
@@ -1925,7 +1939,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         break;
                     }
 
-                    meRedlineFlags = eOld;
+                    SetRedlineFlags_intern(eOld);
                 }
                 else
                 {
@@ -2489,9 +2503,9 @@ bool DocumentRedlineManager::AppendTableRowRedline( SwTableRowRedline* pNewRedl 
             RedlineFlags eOld = meRedlineFlags;
             // Set to NONE, so that the Delete::Redo merges the Redline data correctly!
             // The ShowMode needs to be retained!
-            meRedlineFlags = eOld & ~(RedlineFlags::On | RedlineFlags::Ignore);
+            SetRedlineFlags_intern(eOld & ~(RedlineFlags::On | RedlineFlags::Ignore));
             DeleteAndJoin( *pNewRedl );
-            meRedlineFlags = eOld;
+            SetRedlineFlags_intern(eOld);
         }
         delete pNewRedl, pNewRedl = 0;
         */
@@ -2531,9 +2545,9 @@ bool DocumentRedlineManager::AppendTableCellRedline( SwTableCellRedline* pNewRed
             RedlineFlags eOld = meRedlineFlags;
             // Set to NONE, so that the Delete::Redo merges the Redline data correctly!
             // The ShowMode needs to be retained!
-            meRedlineFlags = eOld & ~(RedlineFlags::On | RedlineFlags::Ignore);
+            SetRedlineFlags_intern(eOld & ~(RedlineFlags::On | RedlineFlags::Ignore));
             DeleteAndJoin( *pNewRedl );
-            meRedlineFlags = eOld;
+            SetRedlineFlags_intern(eOld);
         }
         delete pNewRedl, pNewRedl = 0;
         */
