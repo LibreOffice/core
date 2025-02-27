@@ -789,9 +789,9 @@ void SwLineLayout::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
 
 void SwLineLayout::ResetFlags()
 {
-    m_bFormatAdj = m_bDummy = m_bEndHyph = m_bMidHyph = m_bLastHyph = m_bFly
-    = m_bRest = m_bBlinking = m_bClipping = m_bContent = m_bRedline
-    = m_bRedlineEnd = m_bForcedLeftMargin = m_bHanging = false;
+    m_bFormatAdj = m_bDummy = m_bEndHyph = m_bMidHyph = m_bLastHyph = m_bFly = m_bRest = m_bBlinking
+        = m_bClipping = m_bContent = m_bRedline = m_bRedlineEnd = m_bForcedLeftMargin = m_bHanging
+        = m_bKashidaAllowed = false;
     m_eRedlineEnd = RedlineType::None;
 }
 
@@ -2289,19 +2289,10 @@ bool SwScriptInfo::IsKashidaLine(TextFrameIndex const nCharIdx) const
     return true;
 }
 
-void SwScriptInfo::ClearNoKashidaLine(TextFrameIndex const nStt, TextFrameIndex const nLen)
+void SwScriptInfo::ClearNoKashidaLines()
 {
-    size_t i = 0;
-    while (i < m_NoKashidaLine.size())
-    {
-        if (nStt + nLen > m_NoKashidaLine[i] && nStt < m_NoKashidaLineEnd[i])
-        {
-            m_NoKashidaLine.erase(m_NoKashidaLine.begin() + i);
-            m_NoKashidaLineEnd.erase(m_NoKashidaLineEnd.begin() + i);
-        }
-        else
-            ++i;
-    }
+    m_NoKashidaLine.clear();
+    m_NoKashidaLineEnd.clear();
 }
 
 // mark the given character indices as invalid kashida positions

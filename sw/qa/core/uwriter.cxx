@@ -1986,9 +1986,9 @@ void SwDocTest::testTdf156211()
 
     CPPUNIT_ASSERT(!oSI.IsKashidaLine(TextFrameIndex{ 95 }));
 
-    oSI.ClearNoKashidaLine(TextFrameIndex{ 0 }, TextFrameIndex{ 89 });
+    oSI.ClearNoKashidaLines();
 
-    CPPUNIT_ASSERT(!oSI.IsKashidaLine(TextFrameIndex{ 95 }));
+    CPPUNIT_ASSERT(oSI.IsKashidaLine(TextFrameIndex{ 95 }));
 }
 
 void SwDocTest::testFillRubyList()
