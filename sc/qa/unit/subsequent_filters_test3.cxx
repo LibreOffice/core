@@ -1512,6 +1512,19 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf103960)
                          pDoc->GetString(0, 0, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf164895)
+{
+    createScDoc("xlsx/tdf164895.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pDoc->GetString(ScAddress(3, 7, 0)));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 30
+    // - Actual  : Err:504
+    CPPUNIT_ASSERT_EQUAL(u"30"_ustr, pDoc->GetString(ScAddress(2, 7, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testRhbz1390776)
 {
     createScDoc("xml/rhbz1390776.xml");
