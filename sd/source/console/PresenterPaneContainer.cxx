@@ -26,11 +26,9 @@ using namespace ::com::sun::star::drawing::framework;
 
 namespace sdext::presenter {
 
-PresenterPaneContainer::PresenterPaneContainer (
-    const Reference<XComponentContext>& rxContext)
+PresenterPaneContainer::PresenterPaneContainer()
     : PresenterPaneContainerInterfaceBase(m_aMutex)
 {
-    mxPresenterHelper = new sd::presenter::PresenterHelper(rxContext);
 }
 
 PresenterPaneContainer::~PresenterPaneContainer()
@@ -291,8 +289,7 @@ void PresenterPaneContainer::ToTop (const SharedPaneDescriptor& rpDescriptor)
     if (iPane == iEnd)
         return;
 
-    if (mxPresenterHelper.is())
-        mxPresenterHelper->toTop(rpDescriptor->mxBorderWindow);
+    sd::presenter::PresenterHelper::toTop(rpDescriptor->mxBorderWindow);
 
     maPanes.erase(iPane);
     maPanes.push_back(rpDescriptor);

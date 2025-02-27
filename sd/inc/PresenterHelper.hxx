@@ -118,8 +118,7 @@ public:
         @param xWindow
             This window will be moved to the top of its stacking order.
     */
-    virtual void toTop (
-        const css::uno::Reference<css::awt::XWindow>& rxWindow);
+    static void toTop(const css::uno::Reference<css::awt::XWindow>& rxWindow);
 
     /** Load a bitmap with a given ID.
         @param id

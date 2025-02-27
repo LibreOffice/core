@@ -332,8 +332,7 @@ void PresenterScreen::InitializePresenterScreen()
 
     try
     {
-        Reference<XComponentContext> xContext (mxContextWeak);
-        mpPaneContainer = new PresenterPaneContainer(xContext);
+        mpPaneContainer = new PresenterPaneContainer();
 
         Reference<XPresentationSupplier> xPS ( mxModel, UNO_QUERY_THROW);
         Reference<XPresentation2> xPresentation(xPS->getPresentation(), UNO_QUERY_THROW);
@@ -363,6 +362,7 @@ void PresenterScreen::InitializePresenterScreen()
         rtl::Reference<::sd::framework::ConfigurationController> xCC( mxController->getConfigurationControllerImpl());
         mxConfigurationControllerWeak = xCC.get();
 
+        Reference<XComponentContext> xContext(mxContextWeak);
         Reference<drawing::framework::XResourceId> xMainPaneId(
             GetMainPaneId(xPresentation, xContext));
         // An empty reference means that the presenter screen can
@@ -632,7 +632,7 @@ void PresenterScreen::ShutdownPresenterScreen()
         mpPresenterController->dispose();
         mpPresenterController.clear();
     }
-    mpPaneContainer = new PresenterPaneContainer(Reference<XComponentContext>(mxContextWeak));
+    mpPaneContainer = new PresenterPaneContainer();
 }
 
 void PresenterScreen::SetupPaneFactory (const Reference<XComponentContext>& rxContext)

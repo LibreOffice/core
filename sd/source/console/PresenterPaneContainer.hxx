@@ -52,8 +52,7 @@ class PresenterPaneContainer
       public PresenterPaneContainerInterfaceBase
 {
 public:
-    explicit PresenterPaneContainer (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    explicit PresenterPaneContainer();
     virtual ~PresenterPaneContainer() override;
     PresenterPaneContainer(const PresenterPaneContainer&) = delete;
     PresenterPaneContainer& operator=(const PresenterPaneContainer&) = delete;
@@ -149,9 +148,6 @@ public:
 
     virtual void SAL_CALL disposing (
         const css::lang::EventObject& rEvent) override;
-
-private:
-    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
 };
 
 } // end of namespace ::sdext::presenter

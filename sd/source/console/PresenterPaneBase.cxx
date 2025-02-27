@@ -274,8 +274,7 @@ const Reference<awt::XWindow>& PresenterPaneBase::GetBorderWindow() const
 
 void PresenterPaneBase::ToTop()
 {
-    if (mxPresenterHelper.is())
-        mxPresenterHelper->toTop(mxContentWindow);
+    sd::presenter::PresenterHelper::toTop(mxContentWindow);
 }
 
 void PresenterPaneBase::PaintBorder (const awt::Rectangle& rUpdateBox)
