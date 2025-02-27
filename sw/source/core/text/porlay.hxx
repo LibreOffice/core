@@ -81,6 +81,7 @@ private:
     SwLineLayout *m_pNext;                // The next Line
     std::unique_ptr<std::vector<tools::Long>> m_pLLSpaceAdd;     // Used for justified alignment
     std::unique_ptr<std::deque<sal_uInt16>> m_pKanaComp;  // Used for Kana compression
+    std::vector<sal_Int32> m_aInvalidKashida;
     SwTwips m_nRealHeight;             // The height resulting from line spacing and register
     SwTwips m_nTextHeight;             // The max height of all non-FlyCnt portions in this Line
     SwTwips m_nExtraAscent = 0;
@@ -99,6 +100,7 @@ private:
     bool m_bRedlineEnd: 1; // Redlining for paragraph mark: tracked change at the end
     bool m_bForcedLeftMargin : 1; // Left adjustment moved by the Fly
     bool m_bHanging : 1; // Contains a hanging portion in the margin
+    bool m_bKashidaAllowed : 1;
 
     enum RedlineType m_eRedlineEnd; // redline type of pilcrow and line break symbols
 
@@ -147,6 +149,8 @@ public:
     bool HasForcedLeftMargin() const { return m_bForcedLeftMargin; }
     void SetHanging( const bool bNew ) { m_bHanging = bNew; }
     bool IsHanging() const { return m_bHanging; }
+    void SetKashidaAllowed(bool bNew) { m_bKashidaAllowed = bNew; }
+    bool KashidaAllowed() const { return m_bKashidaAllowed; }
 
     // Respecting empty dummy lines
     void SetDummy( const bool bNew ) { m_bDummy = bNew; }
@@ -209,6 +213,14 @@ public:
     void FinishKanaComp() { m_pKanaComp.reset(); }
     std::deque<sal_uInt16>* GetpKanaComp() const { return m_pKanaComp.get(); }
     std::deque<sal_uInt16>& GetKanaComp() { return *m_pKanaComp; }
+
+    void ClearInvalidKashida() { m_aInvalidKashida.clear(); }
+    void AddInvalidKashida(std::span<const sal_Int32> aNew)
+    {
+        std::copy(aNew.begin(), aNew.end(), std::back_inserter(m_aInvalidKashida));
+    }
+    void AddInvalidKashida(sal_Int32 nNew) { m_aInvalidKashida.push_back(nNew); }
+    std::span<const sal_Int32> GetInvalidKashida() const { return m_aInvalidKashida; }
 
     /** determine ascent and descent for positioning of as-character anchored
         object
