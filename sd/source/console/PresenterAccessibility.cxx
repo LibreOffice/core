@@ -70,10 +70,7 @@ class PresenterAccessible::AccessibleObject
       public PresenterAccessibleObjectInterfaceBase
 {
 public:
-    AccessibleObject (
-        css::lang::Locale aLocale,
-        const sal_Int16 nRole,
-        OUString sName);
+    AccessibleObject(const sal_Int16 nRole, OUString sName);
     void LateInitialization();
 
     virtual void SetWindow (
@@ -174,7 +171,6 @@ protected:
     OUString msName;
     css::uno::Reference<css::awt::XWindow2> mxContentWindow;
     css::uno::Reference<css::awt::XWindow2> mxBorderWindow;
-    const css::lang::Locale maLocale;
     const sal_Int16 mnRole;
     sal_Int64 mnStateSet;
     bool mbIsFocused;
@@ -239,8 +235,7 @@ class PresenterAccessible::AccessibleParagraph
     : public PresenterAccessibleParagraphInterfaceBase
 {
 public:
-    AccessibleParagraph (
-        const css::lang::Locale& rLocale,
+    AccessibleParagraph(
         const OUString& rsName,
         SharedPresenterTextParagraph pParagraph,
         const sal_Int32 nParagraphIndex);
@@ -321,8 +316,7 @@ class AccessibleConsole
 {
 public:
     static rtl::Reference<PresenterAccessible::AccessibleObject> Create (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const lang::Locale& rLocale)
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext)
     {
         OUString sName (u"Presenter Console"_ustr);
         PresenterConfigurationAccess aConfiguration (
@@ -333,8 +327,7 @@ public:
             >>= sName;
 
         rtl::Reference<PresenterAccessible::AccessibleObject> pObject (
-            new PresenterAccessible::AccessibleObject(
-                rLocale, AccessibleRole::PANEL, sName));
+            new PresenterAccessible::AccessibleObject(AccessibleRole::PANEL, sName));
         pObject->LateInitialization();
         pObject->UpdateStateSet();
 
@@ -349,7 +342,6 @@ class AccessiblePreview
 public:
     static rtl::Reference<PresenterAccessible::AccessibleObject> Create (
         const Reference<css::uno::XComponentContext>& rxContext,
-        const lang::Locale& rLocale,
         const Reference<awt::XWindow>& rxContentWindow,
         const Reference<awt::XWindow>& rxBorderWindow)
     {
@@ -365,7 +357,6 @@ public:
 
         rtl::Reference<PresenterAccessible::AccessibleObject> pObject (
             new PresenterAccessible::AccessibleObject(
-                rLocale,
                 AccessibleRole::LABEL,
                 sName));
         pObject->LateInitialization();
@@ -381,13 +372,10 @@ public:
 class AccessibleNotes : public PresenterAccessible::AccessibleObject
 {
 public:
-    AccessibleNotes (
-        const css::lang::Locale& rLocale,
-        const OUString& rsName);
+    AccessibleNotes(const OUString& rsName);
 
     static rtl::Reference<PresenterAccessible::AccessibleObject> Create (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const lang::Locale& rLocale,
         const Reference<awt::XWindow>& rxContentWindow,
         const Reference<awt::XWindow>& rxBorderWindow,
         const std::shared_ptr<PresenterTextView>& rpTextView);
@@ -552,7 +540,6 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (
         {
             mpAccessiblePreview = AccessiblePreview::Create(
                 mxComponentContext,
-                lang::Locale(),
                 mxPreviewContentWindow,
                 mxPreviewBorderWindow);
             mpAccessibleConsole->AddChild(mpAccessiblePreview);
@@ -576,7 +563,6 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (
     {
         mpAccessibleNotes = AccessibleNotes::Create(
             mxComponentContext,
-            lang::Locale(),
             mxNotesContentWindow,
             mxNotesBorderWindow,
             rpNotesTextView);
@@ -636,7 +622,7 @@ Reference<XAccessibleContext> SAL_CALL PresenterAccessible::getAccessibleContext
             mxMainWindow->addFocusListener(this);
         }
         mpAccessibleConsole = AccessibleConsole::Create(
-            mxComponentContext, css::lang::Locale());
+            mxComponentContext);
         mpAccessibleConsole->SetWindow(mxMainWindow, nullptr);
         mpAccessibleConsole->SetAccessibleParent(mxAccessibleParent);
         UpdateAccessibilityHierarchy();
@@ -683,13 +669,11 @@ void SAL_CALL PresenterAccessible::initialize (const css::uno::Sequence<css::uno
 
 //===== PresenterAccessible::AccessibleObject =========================================
 
-PresenterAccessible::AccessibleObject::AccessibleObject (
-    lang::Locale aLocale,
+PresenterAccessible::AccessibleObject::AccessibleObject(
     const sal_Int16 nRole,
     OUString sName)
     : PresenterAccessibleObjectInterfaceBase(m_aMutex),
       msName(std::move(sName)),
-      maLocale(std::move(aLocale)),
       mnRole(nRole),
       mnStateSet(0),
       mbIsFocused(false)
@@ -848,7 +832,7 @@ lang::Locale SAL_CALL
         if (xParentContext.is())
             return xParentContext->getLocale();
     }
-    return maLocale;
+    return css::lang::Locale();
 }
 
 //-----  XAccessibleComponent  ------------------------------------------------
@@ -1233,12 +1217,11 @@ AccessibleRelation SAL_CALL AccessibleRelationSet::getRelationByType(AccessibleR
 
 //===== PresenterAccessible::AccessibleParagraph ==============================
 
-PresenterAccessible::AccessibleParagraph::AccessibleParagraph (
-    const lang::Locale& rLocale,
+PresenterAccessible::AccessibleParagraph::AccessibleParagraph(
     const OUString& rsName,
     SharedPresenterTextParagraph xParagraph,
     const sal_Int32 nParagraphIndex)
-    : PresenterAccessibleParagraphInterfaceBase(rLocale, AccessibleRole::PARAGRAPH, rsName),
+    : PresenterAccessibleParagraphInterfaceBase(AccessibleRole::PARAGRAPH, rsName),
       mpParagraph(std::move(xParagraph)),
       mnParagraphIndex(nParagraphIndex)
 {
@@ -1553,16 +1536,13 @@ bool PresenterAccessible::AccessibleParagraph::GetWindowState (const sal_Int64 n
 
 //===== AccessibleNotes =======================================================
 
-AccessibleNotes::AccessibleNotes (
-    const css::lang::Locale& rLocale,
-    const OUString& rsName)
-    : AccessibleObject(rLocale,AccessibleRole::PANEL,rsName)
+AccessibleNotes::AccessibleNotes(const OUString& rsName)
+    : AccessibleObject(AccessibleRole::PANEL, rsName)
 {
 }
 
 rtl::Reference<PresenterAccessible::AccessibleObject> AccessibleNotes::Create (
     const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-    const lang::Locale& rLocale,
     const Reference<awt::XWindow>& rxContentWindow,
     const Reference<awt::XWindow>& rxBorderWindow,
     const std::shared_ptr<PresenterTextView>& rpTextView)
@@ -1578,9 +1558,7 @@ rtl::Reference<PresenterAccessible::AccessibleObject> AccessibleNotes::Create (
     }
 
     rtl::Reference<AccessibleNotes> pObject (
-        new AccessibleNotes(
-            rLocale,
-            sName));
+        new AccessibleNotes(sName));
     pObject->LateInitialization();
     pObject->SetTextView(rpTextView);
     pObject->UpdateStateSet();
@@ -1614,7 +1592,6 @@ void AccessibleNotes::SetTextView (
     {
         rtl::Reference<PresenterAccessible::AccessibleParagraph> pParagraph (
             new PresenterAccessible::AccessibleParagraph(
-                css::lang::Locale(),
                 "Paragraph"+OUString::number(nIndex),
                 rpTextView->GetParagraph(nIndex),
                 nIndex));
