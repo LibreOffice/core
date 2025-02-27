@@ -374,15 +374,10 @@ sal_Bool SAL_CALL AccessibleParagraph::scrollSubstringTo(
 
 awt::Point AccessibleParagraph::GetRelativeLocation()
 {
-    awt::Point aLocation (AccessibleObject::GetRelativeLocation());
     if (mpParagraph)
-    {
-        const awt::Point aParagraphLocation (mpParagraph->GetRelativeLocation());
-        aLocation.X += aParagraphLocation.X;
-        aLocation.Y += aParagraphLocation.Y;
-    }
+        return mpParagraph->GetRelativeLocation();
 
-    return aLocation;
+    return css::awt::Point(0, 0);
 }
 
 awt::Size AccessibleParagraph::GetSize()
@@ -391,24 +386,6 @@ awt::Size AccessibleParagraph::GetSize()
         return mpParagraph->GetSize();
     else
         return AccessibleObject::GetSize();
-}
-
-awt::Point AccessibleParagraph::GetAbsoluteParentLocation()
-{
-    if (mxParentAccessible.is())
-    {
-        Reference<XAccessibleContext> xParentContext =
-            mxParentAccessible->getAccessibleContext();
-        if (xParentContext.is())
-        {
-            Reference<XAccessibleComponent> xGrandParentComponent(
-                xParentContext->getAccessibleParent(), UNO_QUERY);
-            if (xGrandParentComponent.is())
-                return xGrandParentComponent->getLocationOnScreen();
-        }
-    }
-
-    return awt::Point();
 }
 
 bool AccessibleParagraph::GetWindowState (const sal_Int64 nType) const

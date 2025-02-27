@@ -161,7 +161,7 @@ protected:
 
     virtual awt::Point GetRelativeLocation();
     virtual awt::Size GetSize();
-    virtual awt::Point GetAbsoluteParentLocation();
+    awt::Point GetAbsoluteParentLocation();
 
     virtual bool GetWindowState (const sal_Int64 nType) const;
 

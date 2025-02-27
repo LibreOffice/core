@@ -108,7 +108,6 @@ public:
 protected:
     virtual awt::Point GetRelativeLocation() override;
     virtual awt::Size GetSize() override;
-    virtual awt::Point GetAbsoluteParentLocation() override;
     virtual bool GetWindowState (const sal_Int64 nType) const override;
 
 private:
