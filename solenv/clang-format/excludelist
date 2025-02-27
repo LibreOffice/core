@@ -9257,6 +9257,8 @@ sd/source/console/AccessibleFocusManager.cxx
 sd/source/console/AccessibleFocusManager.hxx
 sd/source/console/AccessibleObject.cxx
 sd/source/console/AccessibleObject.hxx
+sd/source/console/AccessibleParagraph.cxx
+sd/source/console/AccessibleParagraph.hxx
 sd/source/console/PresenterAccessibility.cxx
 sd/source/console/PresenterAccessibility.hxx
 sd/source/console/PresenterBitmapContainer.cxx
