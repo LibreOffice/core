@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <compare>
 #include <ostream>
 #include <tuple>
 
@@ -127,15 +126,7 @@ namespace basegfx
 
         friend auto operator <=>(B2DPoint const & a, B2DPoint const & b)
         {
-            // Avoid compilation failure with Android NDK 23.2, where std::tuple operator <=> isn't
-            // yet implemented (and where __cpp_lib_three_way_comparison happens to not be defined
-            // in <compare>, so discriminate on that):
-#if defined __cpp_lib_three_way_comparison
             return std::tie(a.mnX, a.mnY) <=> std::tie(b.mnX, b.mnY);
-#else
-            auto const comp = a.mnX <=> b.mnX;
-            return comp == 0 ? a.mnY <=> b.mnY : comp;
-#endif
         }
     };
 
