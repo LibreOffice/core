@@ -26,6 +26,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
+#include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -36,19 +37,9 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::accessibility::XAccessible,
-        css::accessibility::XAccessibleContext,
-        css::accessibility::XAccessibleComponent,
-        css::accessibility::XAccessibleEventBroadcaster,
-        css::awt::XWindowListener
-    > AccessibleObjectInterfaceBase;
-}
-
 class AccessibleObject
-    : public ::cppu::BaseMutex,
-      public AccessibleObjectInterfaceBase
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
+                                         css::accessibility::XAccessible, css::awt::XWindowListener>
 {
 public:
     AccessibleObject(const sal_Int16 nRole, OUString sName);
@@ -105,34 +96,15 @@ public:
 
     //-----  XAccessibleComponent  --------------------------------------------
 
-    virtual sal_Bool SAL_CALL containsPoint (
-        const css::awt::Point& aPoint) override;
-
     virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL
         getAccessibleAtPoint (
             const css::awt::Point& aPoint) override;
-
-    virtual css::awt::Rectangle SAL_CALL getBounds() override;
-
-    virtual css::awt::Point SAL_CALL getLocation() override;
-
-    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
-
-    virtual css::awt::Size SAL_CALL getSize() override;
 
     virtual void SAL_CALL grabFocus() override;
 
     virtual sal_Int32 SAL_CALL getForeground() override;
 
     virtual sal_Int32 SAL_CALL getBackground() override;
-
-    //-----  XAccessibleEventBroadcaster --------------------------------------
-
-    virtual void SAL_CALL addAccessibleEventListener (
-            const css::uno::Reference<css::accessibility::XAccessibleEventListener>& rxListener) override;
-
-    virtual void SAL_CALL removeAccessibleEventListener (
-            const css::uno::Reference<css::accessibility::XAccessibleEventListener>& rxListener) override;
 
     //----- XWindowListener ---------------------------------------------------
 
@@ -157,11 +129,12 @@ protected:
     bool mbIsFocused;
     css::uno::Reference<css::accessibility::XAccessible> mxParentAccessible;
     ::std::vector<rtl::Reference<AccessibleObject> > maChildren;
-    ::std::vector<Reference<XAccessibleEventListener> > maListeners;
+
+    // OCommonAccessibleComponent
+    virtual css::awt::Rectangle implGetBounds() override;
 
     virtual awt::Point GetRelativeLocation();
     virtual awt::Size GetSize();
-    awt::Point GetAbsoluteParentLocation();
 
     virtual bool GetWindowState (const sal_Int64 nType) const;
 

@@ -29,8 +29,7 @@
 AccessibleObject::AccessibleObject(
     const sal_Int16 nRole,
     OUString sName)
-    : AccessibleObjectInterfaceBase(m_aMutex),
-      msName(std::move(sName)),
+    : msName(std::move(sName)),
       mnRole(nRole),
       mnStateSet(0),
       mbIsFocused(false)
@@ -75,6 +74,8 @@ void AccessibleObject::SetAccessibleParent (
 
 void SAL_CALL AccessibleObject::disposing()
 {
+    OAccessibleComponentHelper::disposing();
+
     AccessibleFocusManager::Instance()->RemoveFocusableObject(this);
     SetWindow(nullptr, nullptr);
 }
@@ -194,23 +195,6 @@ lang::Locale SAL_CALL
 
 //-----  XAccessibleComponent  ------------------------------------------------
 
-sal_Bool SAL_CALL AccessibleObject::containsPoint (
-    const awt::Point& rPoint)
-{
-    ThrowIfDisposed();
-
-    if (mxContentWindow.is())
-    {
-        const awt::Rectangle aBox (getBounds());
-        return rPoint.X>=aBox.X
-            && rPoint.Y>=aBox.Y
-            && rPoint.X<aBox.X+aBox.Width
-            && rPoint.Y<aBox.Y+aBox.Height;
-    }
-    else
-        return false;
-}
-
 Reference<XAccessible> SAL_CALL
     AccessibleObject::getAccessibleAtPoint (const awt::Point&)
 {
@@ -219,44 +203,12 @@ Reference<XAccessible> SAL_CALL
     return Reference<XAccessible>();
 }
 
-awt::Rectangle SAL_CALL AccessibleObject::getBounds()
+awt::Rectangle AccessibleObject::implGetBounds()
 {
-    ThrowIfDisposed();
-
     const awt::Point aLocation (GetRelativeLocation());
     const awt::Size aSize (GetSize());
 
     return awt::Rectangle (aLocation.X, aLocation.Y, aSize.Width, aSize.Height);
-}
-
-awt::Point SAL_CALL AccessibleObject::getLocation()
-{
-    ThrowIfDisposed();
-
-    const awt::Point aLocation (GetRelativeLocation());
-
-    return aLocation;
-}
-
-awt::Point SAL_CALL AccessibleObject::getLocationOnScreen()
-{
-    ThrowIfDisposed();
-
-    awt::Point aRelativeLocation (GetRelativeLocation());
-    awt::Point aParentLocationOnScreen (GetAbsoluteParentLocation());
-
-    return awt::Point(
-        aRelativeLocation.X + aParentLocationOnScreen.X,
-        aRelativeLocation.Y + aParentLocationOnScreen.Y);
-}
-
-awt::Size SAL_CALL AccessibleObject::getSize()
-{
-    ThrowIfDisposed();
-
-    const awt::Size aSize (GetSize());
-
-    return aSize;
 }
 
 void SAL_CALL AccessibleObject::grabFocus()
@@ -280,39 +232,6 @@ sal_Int32 SAL_CALL AccessibleObject::getBackground()
     ThrowIfDisposed();
 
     return 0x00000000;
-}
-
-//----- XAccessibleEventBroadcaster -------------------------------------------
-
-void SAL_CALL AccessibleObject::addAccessibleEventListener (
-    const Reference<XAccessibleEventListener>& rxListener)
-{
-    if (!rxListener.is())
-        return;
-
-    const osl::MutexGuard aGuard(m_aMutex);
-
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        uno::Reference<uno::XInterface> xThis (static_cast<XWeak*>(this), UNO_QUERY);
-        rxListener->disposing (lang::EventObject(xThis));
-    }
-    else
-    {
-        maListeners.push_back(rxListener);
-    }
-}
-
-void SAL_CALL AccessibleObject::removeAccessibleEventListener (
-    const Reference<XAccessibleEventListener>& rxListener)
-{
-    ThrowIfDisposed();
-    if (rxListener.is())
-    {
-        const osl::MutexGuard aGuard(m_aMutex);
-
-        std::erase(maListeners, rxListener);
-    }
 }
 
 //----- XWindowListener ---------------------------------------------------
@@ -451,32 +370,7 @@ void AccessibleObject::FireAccessibleEvent (
     const uno::Any& rOldValue,
     const uno::Any& rNewValue )
 {
-    AccessibleEventObject aEventObject;
-
-    aEventObject.Source = Reference<XWeak>(this);
-    aEventObject.EventId = nEventId;
-    aEventObject.NewValue = rNewValue;
-    aEventObject.OldValue = rOldValue;
-
-    ::std::vector<Reference<XAccessibleEventListener> > aListenerCopy(maListeners);
-    for (const auto& rxListener : aListenerCopy)
-    {
-        try
-        {
-            rxListener->notifyEvent(aEventObject);
-        }
-        catch (const lang::DisposedException&)
-        {
-            // Listener has been disposed and should have been removed
-            // already.
-            removeAccessibleEventListener(rxListener);
-        }
-        catch (const Exception&)
-        {
-            // Ignore all other exceptions and assume that they are
-            // caused by a temporary problem.
-        }
-    }
+    NotifyAccessibleEvent(nEventId, rOldValue, rNewValue);
 }
 
 awt::Point AccessibleObject::GetRelativeLocation()
@@ -506,17 +400,6 @@ awt::Size AccessibleObject::GetSize()
     }
     else
         return awt::Size();
-}
-
-awt::Point AccessibleObject::GetAbsoluteParentLocation()
-{
-    Reference<XAccessibleComponent> xParentComponent;
-    if (mxParentAccessible.is())
-        xParentComponent.set( mxParentAccessible->getAccessibleContext(), UNO_QUERY);
-    if (xParentComponent.is())
-        return xParentComponent->getLocationOnScreen();
-    else
-        return awt::Point();
 }
 
 void AccessibleObject::ThrowIfDisposed() const
