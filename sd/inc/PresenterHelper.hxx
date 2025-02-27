@@ -138,13 +138,13 @@ public:
             The window for which mouse events will be notified even when the
             mouse pointer moves outside the window or over other windows.
     */
-    virtual void captureMouse (const css::uno::Reference<css::awt::XWindow>& rxWindow);
+    static void captureMouse(const css::uno::Reference<css::awt::XWindow>& rxWindow);
 
     /** Release a previously captured mouse.
         @param rxWindow
             The window from which the mouse will be released.
     */
-    virtual void releaseMouse (const css::uno::Reference<css::awt::XWindow>& rxWindow);
+    static void releaseMouse(const css::uno::Reference<css::awt::XWindow>& rxWindow);
 
     /** Return the bounding box of the given child window relative to the
         direct or indirect parent window.

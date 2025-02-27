@@ -150,7 +150,6 @@ protected:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     css::uno::Reference<css::awt::XWindow> mxWindow;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
-    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
     std::shared_ptr<PresenterPaintManager> mpPaintManager;
     double mnThumbPosition;
     double mnTotalSize;

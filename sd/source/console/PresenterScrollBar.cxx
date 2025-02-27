@@ -89,7 +89,6 @@ PresenterScrollBar::PresenterScrollBar (
 {
     try
     {
-        mxPresenterHelper = new sd::presenter::PresenterHelper(rxComponentContext);
         mxWindow = sd::presenter::PresenterHelper::createWindow(rxParentWindow,
             false,
             false,
@@ -334,8 +333,7 @@ void SAL_CALL PresenterScrollBar::mouseReleased (const css::awt::MouseEvent&)
 {
     mpMousePressRepeater->Stop();
 
-    if (mxPresenterHelper.is())
-        mxPresenterHelper->releaseMouse(mxWindow);
+    sd::presenter::PresenterHelper::releaseMouse(mxWindow);
 }
 
 void SAL_CALL PresenterScrollBar::mouseEntered (const css::awt::MouseEvent&) {}
@@ -378,8 +376,7 @@ void SAL_CALL PresenterScrollBar::mouseDragged (const css::awt::MouseEvent& rEve
 
     mpMousePressRepeater->Stop();
 
-    if (mxPresenterHelper.is())
-        mxPresenterHelper->captureMouse(mxWindow);
+    sd::presenter::PresenterHelper::captureMouse(mxWindow);
 
     const double nDragDistance (GetDragDistance(rEvent.X,rEvent.Y));
     UpdateDragAnchor(nDragDistance);
