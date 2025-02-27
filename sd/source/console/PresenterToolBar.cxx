@@ -104,7 +104,6 @@ public:
     Context() = default;
     Context(const Context&) = delete;
     Context& operator=(const Context&) = delete;
-    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
 };
 
@@ -597,10 +596,8 @@ void PresenterToolBar::CreateControls (
         PresenterConfigurationAccess::GetConfigurationNode(xToolBarNode, u"Entries"_ustr),
         UNO_QUERY);
     Context aContext;
-    aContext.mxPresenterHelper = mpPresenterController->GetPresenterHelper();
     aContext.mxCanvas = mxCanvas;
     if (xEntries.is()
-        && aContext.mxPresenterHelper.is()
         && aContext.mxCanvas.is())
     {
         PresenterConfigurationAccess::ForAll(
