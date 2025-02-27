@@ -39,23 +39,6 @@ using namespace ::com::sun::star::uno;
 
 namespace sd::presenter {
 
-//===== PresenterHelper =======================================================
-
-PresenterHelper::PresenterHelper (
-    const Reference<XComponentContext>& rxContext)
-    : mxComponentContext(rxContext)
-{
-}
-
-PresenterHelper::~PresenterHelper()
-{
-}
-
-//----- XInitialize -----------------------------------------------------------
-
-void SAL_CALL PresenterHelper::initialize (const Sequence<Any>&) {}
-
-
 Reference<awt::XWindow> PresenterHelper::createWindow (
     const Reference<awt::XWindow>& rxParentWindow,
     bool bCreateSystemChildWindow,

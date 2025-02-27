@@ -23,7 +23,6 @@
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <comphelper/compbase.hxx>
@@ -33,17 +32,11 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace sd::presenter {
 
 class SD_DLLPUBLIC PresenterHelper final
-    : public comphelper::WeakComponentImplHelper<css::lang::XInitialization>
 {
 public:
-    explicit PresenterHelper (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~PresenterHelper() override;
+    PresenterHelper() = delete;
     PresenterHelper(const PresenterHelper&) = delete;
     PresenterHelper& operator=(const PresenterHelper&) = delete;
-
-    // XInitialize
-
-    virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
     /** Create a new window as child window of the given parent window.
         @param rxParentWindow
@@ -134,9 +127,6 @@ public:
     static css::awt::Rectangle getWindowExtentsRelative(
         const css::uno::Reference<css::awt::XWindow>& rxChildWindow,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow);
-
-private:
-    css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
 };
 
 } // end of namespace ::sd::presenter
