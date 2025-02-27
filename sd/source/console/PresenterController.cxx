@@ -754,6 +754,9 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
 void SAL_CALL PresenterController::disposing (
     const lang::EventObject& rEvent)
 {
+    if (mpAccessibleObject)
+        mpAccessibleObject->dispose();
+
     if (rEvent.Source.get() == static_cast<cppu::OWeakObject*>(mxController.get()))
         mxController = nullptr;
     else if (rEvent.Source == mxConfigurationController)

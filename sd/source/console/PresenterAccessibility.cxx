@@ -232,6 +232,7 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (
         if (mpAccessiblePreview.is())
         {
             mpAccessibleConsole->RemoveChild(mpAccessiblePreview);
+            mpAccessiblePreview->dispose();
             mpAccessiblePreview = nullptr;
         }
 
@@ -254,6 +255,7 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (
     if (mpAccessibleNotes.is())
     {
         mpAccessibleConsole->RemoveChild(mpAccessibleNotes);
+        mpAccessibleNotes->dispose();
         mpAccessibleNotes = nullptr;
     }
 
@@ -304,8 +306,16 @@ void SAL_CALL PresenterAccessible::disposing()
             mxMainPane->setAccessible(nullptr);
     }
 
+    if (mpAccessiblePreview)
+        mpAccessiblePreview->dispose();
     mpAccessiblePreview = nullptr;
+
+    if (mpAccessibleNotes)
+        mpAccessibleNotes->dispose();
     mpAccessibleNotes = nullptr;
+
+    if (mpAccessibleConsole)
+        mpAccessibleConsole->dispose();
     mpAccessibleConsole = nullptr;
 }
 
