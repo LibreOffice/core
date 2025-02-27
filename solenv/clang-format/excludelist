@@ -9253,6 +9253,10 @@ sd/qa/unit/dialogs-test.cxx
 sd/qa/unit/filters-test.cxx
 sd/qa/unit/tiledrendering/tiledrendering.cxx
 sd/qa/unit/uimpress.cxx
+sd/source/console/AccessibleFocusManager.cxx
+sd/source/console/AccessibleFocusManager.hxx
+sd/source/console/AccessibleObject.cxx
+sd/source/console/AccessibleObject.hxx
 sd/source/console/PresenterAccessibility.cxx
 sd/source/console/PresenterAccessibility.hxx
 sd/source/console/PresenterBitmapContainer.cxx

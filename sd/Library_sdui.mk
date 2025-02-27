@@ -91,6 +91,8 @@ $(eval $(call gb_Library_add_exception_objects,sdui,\
     sd/source/ui/dlg/vectdlg \
     sd/source/ui/dlg/PhotoAlbumDialog \
     sd/source/ui/dlg/BulletAndPositionDlg \
+    sd/source/console/AccessibleFocusManager \
+    sd/source/console/AccessibleObject \
     sd/source/console/PresenterAccessibility \
     sd/source/console/PresenterBitmapContainer \
     sd/source/console/PresenterButton \

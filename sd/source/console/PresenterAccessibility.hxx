@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "AccessibleObject.hxx"
 #include "PresenterPaneContainer.hxx"
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -79,8 +80,6 @@ public:
     //----- XInitialization ---------------------------------------------------
 
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments) override;
-
-    class AccessibleObject;
     class AccessibleParagraph;
 
 private:

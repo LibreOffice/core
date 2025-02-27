@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "AccessibleFocusManager.hxx"
 #include "PresenterAccessibility.hxx"
 #include "PresenterTextView.hxx"
 #include "PresenterConfigurationAccess.hxx"
@@ -51,144 +52,7 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
-//===== PresenterAccessibleObject =============================================
-
 namespace sdext::presenter {
-
-namespace {
-    typedef ::cppu::WeakComponentImplHelper <
-        css::accessibility::XAccessible,
-        css::accessibility::XAccessibleContext,
-        css::accessibility::XAccessibleComponent,
-        css::accessibility::XAccessibleEventBroadcaster,
-        css::awt::XWindowListener
-    > PresenterAccessibleObjectInterfaceBase;
-}
-
-class PresenterAccessible::AccessibleObject
-    : public ::cppu::BaseMutex,
-      public PresenterAccessibleObjectInterfaceBase
-{
-public:
-    AccessibleObject(const sal_Int16 nRole, OUString sName);
-    void LateInitialization();
-
-    virtual void SetWindow (
-        const css::uno::Reference<css::awt::XWindow>& rxContentWindow,
-        const css::uno::Reference<css::awt::XWindow>& rxBorderWindow);
-    void SetAccessibleParent (const css::uno::Reference<css::accessibility::XAccessible>& rxAccessibleParent);
-
-    virtual void SAL_CALL disposing() override;
-
-    void AddChild (const ::rtl::Reference<AccessibleObject>& rpChild);
-    void RemoveChild (const ::rtl::Reference<AccessibleObject>& rpChild);
-
-    void SetIsFocused (const bool bIsFocused);
-    void SetAccessibleName (const OUString& rsName);
-
-    void FireAccessibleEvent (
-        const sal_Int16 nEventId,
-        const css::uno::Any& rOldValue,
-        const css::uno::Any& rNewValue);
-
-    void UpdateStateSet();
-
-    //----- XAccessible -------------------------------------------------------
-
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext> SAL_CALL
-        getAccessibleContext() override;
-
-    //-----  XAccessibleContext  ----------------------------------------------
-
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
-
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (sal_Int64 nIndex) override;
-
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL getAccessibleParent() override;
-
-    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
-
-    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
-
-    virtual OUString SAL_CALL getAccessibleDescription() override;
-
-    virtual OUString SAL_CALL getAccessibleName() override;
-
-    virtual css::uno::Reference<css::accessibility::XAccessibleRelationSet> SAL_CALL
-        getAccessibleRelationSet() override;
-
-    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
-
-    virtual css::lang::Locale SAL_CALL getLocale() override;
-
-    //-----  XAccessibleComponent  --------------------------------------------
-
-    virtual sal_Bool SAL_CALL containsPoint (
-        const css::awt::Point& aPoint) override;
-
-    virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL
-        getAccessibleAtPoint (
-            const css::awt::Point& aPoint) override;
-
-    virtual css::awt::Rectangle SAL_CALL getBounds() override;
-
-    virtual css::awt::Point SAL_CALL getLocation() override;
-
-    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
-
-    virtual css::awt::Size SAL_CALL getSize() override;
-
-    virtual void SAL_CALL grabFocus() override;
-
-    virtual sal_Int32 SAL_CALL getForeground() override;
-
-    virtual sal_Int32 SAL_CALL getBackground() override;
-
-    //-----  XAccessibleEventBroadcaster --------------------------------------
-
-    virtual void SAL_CALL addAccessibleEventListener (
-            const css::uno::Reference<css::accessibility::XAccessibleEventListener>& rxListener) override;
-
-    virtual void SAL_CALL removeAccessibleEventListener (
-            const css::uno::Reference<css::accessibility::XAccessibleEventListener>& rxListener) override;
-
-    //----- XWindowListener ---------------------------------------------------
-
-    virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent) override;
-
-    virtual void SAL_CALL windowMoved (const css::awt::WindowEvent& rEvent) override;
-
-    virtual void SAL_CALL windowShown (const css::lang::EventObject& rEvent) override;
-
-    virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent) override;
-
-    //----- XEventListener ----------------------------------------------------
-
-    virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent) override;
-
-protected:
-    OUString msName;
-    css::uno::Reference<css::awt::XWindow2> mxContentWindow;
-    css::uno::Reference<css::awt::XWindow2> mxBorderWindow;
-    const sal_Int16 mnRole;
-    sal_Int64 mnStateSet;
-    bool mbIsFocused;
-    css::uno::Reference<css::accessibility::XAccessible> mxParentAccessible;
-    ::std::vector<rtl::Reference<AccessibleObject> > maChildren;
-    ::std::vector<Reference<XAccessibleEventListener> > maListeners;
-
-    virtual awt::Point GetRelativeLocation();
-    virtual awt::Size GetSize();
-    virtual awt::Point GetAbsoluteParentLocation();
-
-    virtual bool GetWindowState (const sal_Int64 nType) const;
-
-    void UpdateState (const sal_Int64 aState, const bool bValue);
-
-    /// @throws css::lang::DisposedException
-    void ThrowIfDisposed() const;
-};
 
 namespace {
 
@@ -226,7 +90,7 @@ private:
 //===== PresenterAccessibleParagraph ==========================================
 
 typedef ::cppu::ImplInheritanceHelper <
-    PresenterAccessible::AccessibleObject,
+    AccessibleObject,
     css::accessibility::XAccessibleText
     > PresenterAccessibleParagraphInterfaceBase;
 }
@@ -315,7 +179,7 @@ namespace {
 class AccessibleConsole
 {
 public:
-    static rtl::Reference<PresenterAccessible::AccessibleObject> Create (
+    static rtl::Reference<AccessibleObject> Create (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)
     {
         OUString sName (u"Presenter Console"_ustr);
@@ -326,8 +190,8 @@ public:
         aConfiguration.GetConfigurationNode(u"Presenter/Accessibility/Console/String"_ustr)
             >>= sName;
 
-        rtl::Reference<PresenterAccessible::AccessibleObject> pObject (
-            new PresenterAccessible::AccessibleObject(AccessibleRole::PANEL, sName));
+        rtl::Reference<AccessibleObject> pObject (
+            new AccessibleObject(AccessibleRole::PANEL, sName));
         pObject->LateInitialization();
         pObject->UpdateStateSet();
 
@@ -340,7 +204,7 @@ public:
 class AccessiblePreview
 {
 public:
-    static rtl::Reference<PresenterAccessible::AccessibleObject> Create (
+    static rtl::Reference<AccessibleObject> Create (
         const Reference<css::uno::XComponentContext>& rxContext,
         const Reference<awt::XWindow>& rxContentWindow,
         const Reference<awt::XWindow>& rxBorderWindow)
@@ -355,8 +219,8 @@ public:
                 >>= sName;
         }
 
-        rtl::Reference<PresenterAccessible::AccessibleObject> pObject (
-            new PresenterAccessible::AccessibleObject(
+        rtl::Reference<AccessibleObject> pObject (
+            new AccessibleObject(
                 AccessibleRole::LABEL,
                 sName));
         pObject->LateInitialization();
@@ -369,12 +233,12 @@ public:
 
 //===== AccessibleNotes =======================================================
 
-class AccessibleNotes : public PresenterAccessible::AccessibleObject
+class AccessibleNotes : public AccessibleObject
 {
 public:
     AccessibleNotes(const OUString& rsName);
 
-    static rtl::Reference<PresenterAccessible::AccessibleObject> Create (
+    static rtl::Reference<AccessibleObject> Create (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const Reference<awt::XWindow>& rxContentWindow,
         const Reference<awt::XWindow>& rxBorderWindow,
@@ -394,31 +258,6 @@ private:
         const sal_Int32 nOldCharacterIndex,
         const sal_Int32 nNewParagraphIndex,
         const sal_Int32 nNewCharacterIndex);
-};
-
-//===== AccessibleFocusManager ================================================
-
-/** A singleton class that makes sure that only one accessibility object in
-    the PresenterConsole hierarchy has the focus.
-*/
-class AccessibleFocusManager
-{
-public:
-    static std::shared_ptr<AccessibleFocusManager> const & Instance();
-
-    void AddFocusableObject (const ::rtl::Reference<PresenterAccessible::AccessibleObject>& rpObject);
-    void RemoveFocusableObject (const ::rtl::Reference<PresenterAccessible::AccessibleObject>& rpObject);
-
-    void FocusObject (const ::rtl::Reference<PresenterAccessible::AccessibleObject>& rpObject);
-
-    ~AccessibleFocusManager();
-
-private:
-    static std::shared_ptr<AccessibleFocusManager> mpInstance;
-    ::std::vector<rtl::Reference<PresenterAccessible::AccessibleObject> > maFocusableObjects;
-    bool m_isInDtor = false;
-
-    AccessibleFocusManager();
 };
 
 }
@@ -665,507 +504,6 @@ void SAL_CALL PresenterAccessible::initialize (const css::uno::Sequence<css::uno
         if (mpAccessibleConsole.is())
             mpAccessibleConsole->SetAccessibleParent(mxAccessibleParent);
     }
-}
-
-//===== PresenterAccessible::AccessibleObject =========================================
-
-PresenterAccessible::AccessibleObject::AccessibleObject(
-    const sal_Int16 nRole,
-    OUString sName)
-    : PresenterAccessibleObjectInterfaceBase(m_aMutex),
-      msName(std::move(sName)),
-      mnRole(nRole),
-      mnStateSet(0),
-      mbIsFocused(false)
-{
-}
-
-void PresenterAccessible::AccessibleObject::LateInitialization()
-{
-    AccessibleFocusManager::Instance()->AddFocusableObject(this);
-}
-
-void PresenterAccessible::AccessibleObject::SetWindow (
-    const Reference<awt::XWindow>& rxContentWindow,
-    const Reference<awt::XWindow>& rxBorderWindow)
-{
-    Reference<awt::XWindow2> xContentWindow (rxContentWindow, UNO_QUERY);
-
-    if (mxContentWindow.get() == xContentWindow.get())
-        return;
-
-    if (mxContentWindow.is())
-    {
-        mxContentWindow->removeWindowListener(this);
-    }
-
-    mxContentWindow = std::move(xContentWindow);
-    mxBorderWindow.set(rxBorderWindow, UNO_QUERY);
-
-    if (mxContentWindow.is())
-    {
-        mxContentWindow->addWindowListener(this);
-    }
-
-    UpdateStateSet();
-}
-
-void PresenterAccessible::AccessibleObject::SetAccessibleParent (
-    const Reference<XAccessible>& rxAccessibleParent)
-{
-    mxParentAccessible = rxAccessibleParent;
-}
-
-void SAL_CALL PresenterAccessible::AccessibleObject::disposing()
-{
-    AccessibleFocusManager::Instance()->RemoveFocusableObject(this);
-    SetWindow(nullptr, nullptr);
-}
-
-//----- XAccessible -------------------------------------------------------
-
-Reference<XAccessibleContext> SAL_CALL
-    PresenterAccessible::AccessibleObject::getAccessibleContext()
-{
-    ThrowIfDisposed();
-
-    return this;
-}
-
-//-----  XAccessibleContext  ----------------------------------------------
-
-sal_Int64 SAL_CALL PresenterAccessible::AccessibleObject::getAccessibleChildCount()
-{
-    ThrowIfDisposed();
-
-    return maChildren.size();
-}
-
-Reference<XAccessible> SAL_CALL
-    PresenterAccessible::AccessibleObject::getAccessibleChild (sal_Int64 nIndex)
-{
-    ThrowIfDisposed();
-
-    if (nIndex<0 || o3tl::make_unsigned(nIndex)>=maChildren.size())
-        throw lang::IndexOutOfBoundsException(u"invalid child index"_ustr, static_cast<uno::XWeak*>(this));
-
-    return maChildren[nIndex];
-}
-
-Reference<XAccessible> SAL_CALL
-    PresenterAccessible::AccessibleObject::getAccessibleParent()
-{
-    ThrowIfDisposed();
-
-    return mxParentAccessible;
-}
-
-sal_Int64 SAL_CALL
-    PresenterAccessible::AccessibleObject::getAccessibleIndexInParent()
-{
-    ThrowIfDisposed();
-
-    const Reference<XAccessible> xThis (this);
-    if (mxParentAccessible.is())
-    {
-        const Reference<XAccessibleContext> xContext (mxParentAccessible->getAccessibleContext());
-        for (sal_Int64 nIndex = 0, nCount=xContext->getAccessibleChildCount();
-             nIndex<nCount;
-             ++nIndex)
-        {
-            if (xContext->getAccessibleChild(nIndex) == xThis)
-                return nIndex;
-        }
-    }
-
-    return 0;
-}
-
-sal_Int16 SAL_CALL
-    PresenterAccessible::AccessibleObject::getAccessibleRole()
-{
-    ThrowIfDisposed();
-
-    return mnRole;
-}
-
-OUString SAL_CALL
-    PresenterAccessible::AccessibleObject::getAccessibleDescription()
-{
-    ThrowIfDisposed();
-
-    return msName;
-}
-
-OUString SAL_CALL
-    PresenterAccessible::AccessibleObject::getAccessibleName()
-{
-    ThrowIfDisposed();
-
-    return msName;
-}
-
-Reference<XAccessibleRelationSet> SAL_CALL
-    PresenterAccessible::AccessibleObject::getAccessibleRelationSet()
-{
-    ThrowIfDisposed();
-
-    return nullptr;
-}
-
-sal_Int64 SAL_CALL
-    PresenterAccessible::AccessibleObject::getAccessibleStateSet()
-{
-    ThrowIfDisposed();
-
-    return mnStateSet;
-}
-
-lang::Locale SAL_CALL
-    PresenterAccessible::AccessibleObject::getLocale()
-{
-    ThrowIfDisposed();
-
-    if (mxParentAccessible.is())
-    {
-        Reference<XAccessibleContext> xParentContext (mxParentAccessible->getAccessibleContext());
-        if (xParentContext.is())
-            return xParentContext->getLocale();
-    }
-    return css::lang::Locale();
-}
-
-//-----  XAccessibleComponent  ------------------------------------------------
-
-sal_Bool SAL_CALL PresenterAccessible::AccessibleObject::containsPoint (
-    const awt::Point& rPoint)
-{
-    ThrowIfDisposed();
-
-    if (mxContentWindow.is())
-    {
-        const awt::Rectangle aBox (getBounds());
-        return rPoint.X>=aBox.X
-            && rPoint.Y>=aBox.Y
-            && rPoint.X<aBox.X+aBox.Width
-            && rPoint.Y<aBox.Y+aBox.Height;
-    }
-    else
-        return false;
-}
-
-Reference<XAccessible> SAL_CALL
-    PresenterAccessible::AccessibleObject::getAccessibleAtPoint (const awt::Point&)
-{
-    ThrowIfDisposed();
-
-    return Reference<XAccessible>();
-}
-
-awt::Rectangle SAL_CALL PresenterAccessible::AccessibleObject::getBounds()
-{
-    ThrowIfDisposed();
-
-    const awt::Point aLocation (GetRelativeLocation());
-    const awt::Size aSize (GetSize());
-
-    return awt::Rectangle (aLocation.X, aLocation.Y, aSize.Width, aSize.Height);
-}
-
-awt::Point SAL_CALL PresenterAccessible::AccessibleObject::getLocation()
-{
-    ThrowIfDisposed();
-
-    const awt::Point aLocation (GetRelativeLocation());
-
-    return aLocation;
-}
-
-awt::Point SAL_CALL PresenterAccessible::AccessibleObject::getLocationOnScreen()
-{
-    ThrowIfDisposed();
-
-    awt::Point aRelativeLocation (GetRelativeLocation());
-    awt::Point aParentLocationOnScreen (GetAbsoluteParentLocation());
-
-    return awt::Point(
-        aRelativeLocation.X + aParentLocationOnScreen.X,
-        aRelativeLocation.Y + aParentLocationOnScreen.Y);
-}
-
-awt::Size SAL_CALL PresenterAccessible::AccessibleObject::getSize()
-{
-    ThrowIfDisposed();
-
-    const awt::Size aSize (GetSize());
-
-    return aSize;
-}
-
-void SAL_CALL PresenterAccessible::AccessibleObject::grabFocus()
-{
-    ThrowIfDisposed();
-    if (mxBorderWindow.is())
-        mxBorderWindow->setFocus();
-    else if (mxContentWindow.is())
-        mxContentWindow->setFocus();
-}
-
-sal_Int32 SAL_CALL PresenterAccessible::AccessibleObject::getForeground()
-{
-    ThrowIfDisposed();
-
-    return 0x00ffffff;
-}
-
-sal_Int32 SAL_CALL PresenterAccessible::AccessibleObject::getBackground()
-{
-    ThrowIfDisposed();
-
-    return 0x00000000;
-}
-
-//----- XAccessibleEventBroadcaster -------------------------------------------
-
-void SAL_CALL PresenterAccessible::AccessibleObject::addAccessibleEventListener (
-    const Reference<XAccessibleEventListener>& rxListener)
-{
-    if (!rxListener.is())
-        return;
-
-    const osl::MutexGuard aGuard(m_aMutex);
-
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        uno::Reference<uno::XInterface> xThis (static_cast<XWeak*>(this), UNO_QUERY);
-        rxListener->disposing (lang::EventObject(xThis));
-    }
-    else
-    {
-        maListeners.push_back(rxListener);
-    }
-}
-
-void SAL_CALL PresenterAccessible::AccessibleObject::removeAccessibleEventListener (
-    const Reference<XAccessibleEventListener>& rxListener)
-{
-    ThrowIfDisposed();
-    if (rxListener.is())
-    {
-        const osl::MutexGuard aGuard(m_aMutex);
-
-        std::erase(maListeners, rxListener);
-    }
-}
-
-//----- XWindowListener ---------------------------------------------------
-
-void SAL_CALL PresenterAccessible::AccessibleObject::windowResized (
-    const css::awt::WindowEvent&)
-{
-    FireAccessibleEvent(AccessibleEventId::BOUNDRECT_CHANGED, Any(), Any());
-}
-
-void SAL_CALL PresenterAccessible::AccessibleObject::windowMoved (
-    const css::awt::WindowEvent&)
-{
-    FireAccessibleEvent(AccessibleEventId::BOUNDRECT_CHANGED, Any(), Any());
-}
-
-void SAL_CALL PresenterAccessible::AccessibleObject::windowShown (
-    const css::lang::EventObject&)
-{
-    UpdateStateSet();
-}
-
-void SAL_CALL PresenterAccessible::AccessibleObject::windowHidden (
-    const css::lang::EventObject&)
-{
-    UpdateStateSet();
-}
-
-//----- XEventListener --------------------------------------------------------
-
-void SAL_CALL PresenterAccessible::AccessibleObject::disposing (const css::lang::EventObject& rEvent)
-{
-    if (rEvent.Source == mxContentWindow)
-    {
-        mxContentWindow = nullptr;
-        mxBorderWindow = nullptr;
-    }
-    else
-    {
-        SetWindow(nullptr, nullptr);
-    }
-}
-
-//----- private ---------------------------------------------------------------
-
-bool PresenterAccessible::AccessibleObject::GetWindowState (const sal_Int64 nType) const
-{
-    switch (nType)
-    {
-        case AccessibleStateType::ENABLED:
-            return mxContentWindow.is() && mxContentWindow->isEnabled();
-
-        case AccessibleStateType::FOCUSABLE:
-            return true;
-
-        case AccessibleStateType::FOCUSED:
-            return mbIsFocused;
-
-        case AccessibleStateType::SHOWING:
-            return mxContentWindow.is() && mxContentWindow->isVisible();
-
-        default:
-            return false;
-    }
-}
-
-void PresenterAccessible::AccessibleObject::UpdateStateSet()
-{
-    UpdateState(AccessibleStateType::FOCUSABLE, true);
-    UpdateState(AccessibleStateType::VISIBLE, true);
-    UpdateState(AccessibleStateType::ENABLED, true);
-    UpdateState(AccessibleStateType::MULTI_LINE, true);
-    UpdateState(AccessibleStateType::SENSITIVE, true);
-
-    UpdateState(AccessibleStateType::ENABLED, GetWindowState(AccessibleStateType::ENABLED));
-    UpdateState(AccessibleStateType::FOCUSED, GetWindowState(AccessibleStateType::FOCUSED));
-    UpdateState(AccessibleStateType::SHOWING, GetWindowState(AccessibleStateType::SHOWING));
-    //    UpdateState(AccessibleStateType::ACTIVE, GetWindowState(AccessibleStateType::ACTIVE));
-}
-
-void PresenterAccessible::AccessibleObject::UpdateState(
-    const sal_Int64 nState,
-    const bool bValue)
-{
-    if (((mnStateSet & nState) != 0) == bValue)
-        return;
-    if (bValue)
-    {
-        mnStateSet |= nState;
-        FireAccessibleEvent(AccessibleEventId::STATE_CHANGED, Any(), Any(nState));
-    }
-    else
-    {
-        mnStateSet &= ~nState;
-        FireAccessibleEvent(AccessibleEventId::STATE_CHANGED, Any(nState), Any());
-    }
-}
-
-void PresenterAccessible::AccessibleObject::AddChild (
-    const ::rtl::Reference<AccessibleObject>& rpChild)
-{
-    maChildren.push_back(rpChild);
-    rpChild->SetAccessibleParent(this);
-    FireAccessibleEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any());
-}
-
-void PresenterAccessible::AccessibleObject::RemoveChild (
-    const ::rtl::Reference<AccessibleObject>& rpChild)
-{
-    rpChild->SetAccessibleParent(Reference<XAccessible>());
-    maChildren.erase(::std::find(maChildren.begin(), maChildren.end(), rpChild));
-    FireAccessibleEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any());
-}
-
-void PresenterAccessible::AccessibleObject::SetIsFocused (const bool bIsFocused)
-{
-    if (mbIsFocused != bIsFocused)
-    {
-        mbIsFocused = bIsFocused;
-        UpdateStateSet();
-    }
-}
-
-void PresenterAccessible::AccessibleObject::SetAccessibleName (const OUString& rsName)
-{
-    if (msName != rsName)
-    {
-        const OUString sOldName(msName);
-        msName = rsName;
-        FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, Any(sOldName), Any(msName));
-    }
-}
-
-void PresenterAccessible::AccessibleObject::FireAccessibleEvent (
-    const sal_Int16 nEventId,
-    const uno::Any& rOldValue,
-    const uno::Any& rNewValue )
-{
-    AccessibleEventObject aEventObject;
-
-    aEventObject.Source = Reference<XWeak>(this);
-    aEventObject.EventId = nEventId;
-    aEventObject.NewValue = rNewValue;
-    aEventObject.OldValue = rOldValue;
-
-    ::std::vector<Reference<XAccessibleEventListener> > aListenerCopy(maListeners);
-    for (const auto& rxListener : aListenerCopy)
-    {
-        try
-        {
-            rxListener->notifyEvent(aEventObject);
-        }
-        catch (const lang::DisposedException&)
-        {
-            // Listener has been disposed and should have been removed
-            // already.
-            removeAccessibleEventListener(rxListener);
-        }
-        catch (const Exception&)
-        {
-            // Ignore all other exceptions and assume that they are
-            // caused by a temporary problem.
-        }
-    }
-}
-
-awt::Point PresenterAccessible::AccessibleObject::GetRelativeLocation()
-{
-    awt::Point aLocation;
-    if (mxContentWindow.is())
-    {
-        const awt::Rectangle aContentBox (mxContentWindow->getPosSize());
-        aLocation.X = aContentBox.X;
-        aLocation.Y = aContentBox.Y;
-        if (mxBorderWindow.is())
-        {
-            const awt::Rectangle aBorderBox (mxBorderWindow->getPosSize());
-            aLocation.X += aBorderBox.X;
-            aLocation.Y += aBorderBox.Y;
-        }
-    }
-    return aLocation;
-}
-
-awt::Size PresenterAccessible::AccessibleObject::GetSize()
-{
-    if (mxContentWindow.is())
-    {
-        const awt::Rectangle aBox (mxContentWindow->getPosSize());
-        return awt::Size(aBox.Width, aBox.Height);
-    }
-    else
-        return awt::Size();
-}
-
-awt::Point PresenterAccessible::AccessibleObject::GetAbsoluteParentLocation()
-{
-    Reference<XAccessibleComponent> xParentComponent;
-    if (mxParentAccessible.is())
-        xParentComponent.set( mxParentAccessible->getAccessibleContext(), UNO_QUERY);
-    if (xParentComponent.is())
-        return xParentComponent->getLocationOnScreen();
-    else
-        return awt::Point();
-}
-
-void PresenterAccessible::AccessibleObject::ThrowIfDisposed() const
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-        throw lang::DisposedException(u"object has already been disposed"_ustr, uno::Reference<uno::XInterface>(const_cast<uno::XWeak*>(static_cast<uno::XWeak const *>(this))));
 }
 
 
@@ -1541,7 +879,7 @@ AccessibleNotes::AccessibleNotes(const OUString& rsName)
 {
 }
 
-rtl::Reference<PresenterAccessible::AccessibleObject> AccessibleNotes::Create (
+rtl::Reference<AccessibleObject> AccessibleNotes::Create (
     const css::uno::Reference<css::uno::XComponentContext>& rxContext,
     const Reference<awt::XWindow>& rxContentWindow,
     const Reference<awt::XWindow>& rxBorderWindow,
@@ -1570,7 +908,7 @@ rtl::Reference<PresenterAccessible::AccessibleObject> AccessibleNotes::Create (
 void AccessibleNotes::SetTextView (
     const std::shared_ptr<PresenterTextView>& rpTextView)
 {
-    ::std::vector<rtl::Reference<PresenterAccessible::AccessibleObject> > aChildren;
+    ::std::vector<rtl::Reference<AccessibleObject> > aChildren;
 
     // Release any listeners to the current text view.
     if (mpTextView)
@@ -1674,70 +1012,6 @@ void AccessibleNotes::NotifyCaretChange (
             Any(nOldCharacterIndex),
             Any(nNewCharacterIndex));
     }
-}
-
-
-//===== AccessibleFocusManager ================================================
-
-std::shared_ptr<AccessibleFocusManager> AccessibleFocusManager::mpInstance;
-
-std::shared_ptr<AccessibleFocusManager> const & AccessibleFocusManager::Instance()
-{
-    if ( ! mpInstance)
-    {
-        mpInstance.reset(new AccessibleFocusManager());
-    }
-    return mpInstance;
-}
-
-AccessibleFocusManager::AccessibleFocusManager()
-{
-}
-
-AccessibleFocusManager::~AccessibleFocusManager()
-{
-    // copy member to stack, then drop it - otherwise will get use-after-free
-    // from AccessibleObject::disposing(), it will call ~Reference *twice*
-    auto const temp(std::move(maFocusableObjects));
-    (void) temp;
-    m_isInDtor = true;
-}
-
-void AccessibleFocusManager::AddFocusableObject (
-    const ::rtl::Reference<PresenterAccessible::AccessibleObject>& rpObject)
-{
-    OSL_ASSERT(rpObject.is());
-    OSL_ASSERT(::std::find(maFocusableObjects.begin(),maFocusableObjects.end(), rpObject)==maFocusableObjects.end());
-
-    maFocusableObjects.push_back(rpObject);
-}
-
-void AccessibleFocusManager::RemoveFocusableObject (
-    const ::rtl::Reference<PresenterAccessible::AccessibleObject>& rpObject)
-{
-    ::std::vector<rtl::Reference<PresenterAccessible::AccessibleObject> >::iterator iObject (
-        ::std::find(maFocusableObjects.begin(),maFocusableObjects.end(), rpObject));
-
-    if (iObject != maFocusableObjects.end())
-        maFocusableObjects.erase(iObject);
-    else
-    {
-        OSL_ASSERT(m_isInDtor); // in dtor, was removed already
-    }
-}
-
-void AccessibleFocusManager::FocusObject (
-    const ::rtl::Reference<PresenterAccessible::AccessibleObject>& rpObject)
-{
-    // Remove the focus of any of the other focusable objects.
-    for (auto& rxObject : maFocusableObjects)
-    {
-        if (rxObject!=rpObject)
-            rxObject->SetIsFocused(false);
-    }
-
-    if (rpObject.is())
-        rpObject->SetIsFocused(true);
 }
 
 } // end of namespace ::sd::presenter
