@@ -853,7 +853,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testPdfExportAsOdg)
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : -1
-    CPPUNIT_ASSERT_EQUAL(1, aGraphic.getPageNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aGraphic.getPageNumber());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
