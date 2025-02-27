@@ -1118,7 +1118,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             "Grand Total" column/row cells.
 
             note: it is not completely clear that the last <i> element always gets t="grand".
-            however, testing on the some docs indicate that t="grand" should be
+            however, testing on the same docs indicate that t="grand" should be
             in the last element, so let's try this here. */
             if (nCount == nRowItemsCount - 1)
                 pPivotStrm->startElement(XML_i, XML_t, "grand");
