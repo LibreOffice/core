@@ -476,4 +476,8 @@
 #define STR_MANY_MASTER_PAGES                           NC_("STR_MANY_MASTER_PAGES", "%n Master Slides")
 #define STR_MANY_MASTER_PAGES_DETAIL                    NC_("STR_MANY_MASTER_PAGES_DETAIL", "Large amounts of Master Slides degrade loading performance")
 
+#define STR_A11Y_PRESENTER_CONSOLE                      NC_("STR_A11Y_PRESENTER_CONSOLE", "Presenter Console")
+#define STR_A11Y_PRESENTER_PREVIEW                      NC_("STR_A11Y_PRESENTER_PREVIEW", "Current Slide Info")
+#define STR_A11Y_PRESENTER_NOTES                        NC_("STR_A11Y_PRESENTER_NOTES", "Presenter Notes")
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

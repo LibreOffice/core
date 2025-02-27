@@ -20,11 +20,13 @@
 #include "AccessibleFocusManager.hxx"
 #include "PresenterAccessibility.hxx"
 #include "PresenterTextView.hxx"
-#include "PresenterConfigurationAccess.hxx"
 #include "PresenterNotesView.hxx"
 #include "PresenterPaneBase.hxx"
 #include "PresenterPaneContainer.hxx"
 #include "PresenterPaneFactory.hxx"
+
+#include <strings.hrc>
+#include <sdresid.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
@@ -59,17 +61,9 @@ namespace {
 class AccessibleConsole
 {
 public:
-    static rtl::Reference<AccessibleObject> Create (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+    static rtl::Reference<AccessibleObject> Create()
     {
-        OUString sName (u"Presenter Console"_ustr);
-        PresenterConfigurationAccess aConfiguration (
-            rxContext,
-            u"/org.openoffice.Office.PresenterScreen/"_ustr,
-            PresenterConfigurationAccess::READ_ONLY);
-        aConfiguration.GetConfigurationNode(u"Presenter/Accessibility/Console/String"_ustr)
-            >>= sName;
-
+        const OUString sName = SdResId(STR_A11Y_PRESENTER_CONSOLE);
         rtl::Reference<AccessibleObject> pObject (
             new AccessibleObject(AccessibleRole::PANEL, sName));
         pObject->LateInitialization();
@@ -84,21 +78,11 @@ public:
 class AccessiblePreview
 {
 public:
-    static rtl::Reference<AccessibleObject> Create (
-        const Reference<css::uno::XComponentContext>& rxContext,
+    static rtl::Reference<AccessibleObject> Create(
         const Reference<awt::XWindow>& rxContentWindow,
         const Reference<awt::XWindow>& rxBorderWindow)
     {
-        OUString sName (u"Presenter Notes Window"_ustr);
-        {
-            PresenterConfigurationAccess aConfiguration (
-                rxContext,
-                u"/org.openoffice.Office.PresenterScreen/"_ustr,
-                PresenterConfigurationAccess::READ_ONLY);
-            aConfiguration.GetConfigurationNode(u"Presenter/Accessibility/Preview/String"_ustr)
-                >>= sName;
-        }
-
+        const OUString sName = SdResId(STR_A11Y_PRESENTER_PREVIEW);
         rtl::Reference<AccessibleObject> pObject (
             new AccessibleObject(
                 AccessibleRole::LABEL,
@@ -118,8 +102,7 @@ class AccessibleNotes : public AccessibleObject
 public:
     AccessibleNotes(const OUString& rsName);
 
-    static rtl::Reference<AccessibleObject> Create (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    static rtl::Reference<AccessibleObject> Create(
         const Reference<awt::XWindow>& rxContentWindow,
         const Reference<awt::XWindow>& rxBorderWindow,
         const std::shared_ptr<PresenterTextView>& rpTextView);
@@ -258,7 +241,6 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (
         if (mxPreviewContentWindow.is())
         {
             mpAccessiblePreview = AccessiblePreview::Create(
-                mxComponentContext,
                 mxPreviewContentWindow,
                 mxPreviewBorderWindow);
             mpAccessibleConsole->AddChild(mpAccessiblePreview);
@@ -281,7 +263,6 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (
     if (mxNotesContentWindow.is())
     {
         mpAccessibleNotes = AccessibleNotes::Create(
-            mxComponentContext,
             mxNotesContentWindow,
             mxNotesBorderWindow,
             rpNotesTextView);
@@ -340,8 +321,7 @@ Reference<XAccessibleContext> SAL_CALL PresenterAccessible::getAccessibleContext
             mxMainWindow = xMainPane->getWindow();
             mxMainWindow->addFocusListener(this);
         }
-        mpAccessibleConsole = AccessibleConsole::Create(
-            mxComponentContext);
+        mpAccessibleConsole = AccessibleConsole::Create();
         mpAccessibleConsole->SetWindow(mxMainWindow, nullptr);
         mpAccessibleConsole->SetAccessibleParent(mxAccessibleParent);
         UpdateAccessibilityHierarchy();
@@ -393,22 +373,12 @@ AccessibleNotes::AccessibleNotes(const OUString& rsName)
 {
 }
 
-rtl::Reference<AccessibleObject> AccessibleNotes::Create (
-    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+rtl::Reference<AccessibleObject> AccessibleNotes::Create(
     const Reference<awt::XWindow>& rxContentWindow,
     const Reference<awt::XWindow>& rxBorderWindow,
     const std::shared_ptr<PresenterTextView>& rpTextView)
 {
-    OUString sName (u"Presenter Notes Text"_ustr);
-    {
-        PresenterConfigurationAccess aConfiguration (
-            rxContext,
-            u"/org.openoffice.Office.PresenterScreen/"_ustr,
-            PresenterConfigurationAccess::READ_ONLY);
-        aConfiguration.GetConfigurationNode(u"Presenter/Accessibility/Notes/String"_ustr)
-            >>= sName;
-    }
-
+    const OUString sName = SdResId(STR_A11Y_PRESENTER_NOTES);
     rtl::Reference<AccessibleNotes> pObject (
         new AccessibleNotes(sName));
     pObject->LateInitialization();

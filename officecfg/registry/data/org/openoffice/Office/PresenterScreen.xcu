@@ -2088,17 +2088,17 @@
     <node oor:name="Accessibility">
       <node oor:name="Console" oor:op="replace">
         <prop oor:name="String">
-          <value xml:lang="en-US">Presenter Console</value>
+          <value xml:lang="en-US">DUMMY_NO_MORE_USED</value>
         </prop>
       </node>
       <node oor:name="Preview" oor:op="replace">
         <prop oor:name="String">
-          <value xml:lang="en-US">Current Slide Info</value>
+          <value xml:lang="en-US">DUMMY_NO_MORE_USED</value>
         </prop>
       </node>
       <node oor:name="Notes" oor:op="replace">
         <prop oor:name="String">
-          <value xml:lang="en-US">Presenter Notes</value>
+          <value xml:lang="en-US">DUMMY_NO_MORE_USED</value>
         </prop>
       </node>
     </node>
