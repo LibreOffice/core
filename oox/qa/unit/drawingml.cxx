@@ -746,7 +746,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testToplevelLineHorOffsetDOCX)
     double fShearX = 0;
     aMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 1
+    // - Expected: 1.78
     // - Actual  : 4094.76362560479
     // i.e. this was a horizontal line, not a vertical one.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.78, aScale.getX(), 0.01);
