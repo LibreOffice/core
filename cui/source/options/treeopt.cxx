@@ -473,6 +473,10 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(weld::Window* pParent, bool fromExten
     , eRestartReason(svtools::RESTART_REASON_NONE)
 {
     Size aSize(xTreeLB->get_approximate_digit_width() * 100, xTreeLB->get_height_rows(30));
+    AbsoluteScreenPixelRectangle aScreen
+        = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
+    // clamp height to max of 80% of screen height to make buttons accessible on smaller screens
+    aSize.setHeight(std::min(static_cast<tools::Long>(aScreen.GetHeight() * 0.8), aSize.Height()));
     xTabBox->set_size_request(aSize.Width(), aSize.Height());
     xTreeLB->set_size_request(xTreeLB->get_approximate_digit_width() * 35, aSize.Height());
 
