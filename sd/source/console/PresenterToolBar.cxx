@@ -1358,7 +1358,7 @@ void ElementMode::ReadElementMode (
     Reference<container::XHierarchicalNameAccess> xIconNode (
         PresenterConfigurationAccess::GetProperty(xProperties, u"Icon"_ustr), UNO_QUERY);
     mpIcon = PresenterBitmapContainer::LoadBitmap(
-        xIconNode, u""_ustr, rContext.mxPresenterHelper, rContext.mxCanvas,
+        xIconNode, u""_ustr, rContext.mxCanvas,
         rpDefaultMode != nullptr ? rpDefaultMode->mpIcon : SharedBitmapDescriptor());
     }
     catch(Exception&)

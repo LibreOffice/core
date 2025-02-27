@@ -112,7 +112,6 @@ public:
     static std::shared_ptr<BitmapDescriptor> LoadBitmap (
         const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
         const OUString& rsPathToBitmapNode,
-        const rtl::Reference<sd::presenter::PresenterHelper>& rxPresenterHelper,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const std::shared_ptr<BitmapDescriptor>& rpDefaultBitmap);
 
@@ -130,7 +129,6 @@ private:
         const css::uno::Reference<css::beans::XPropertySet>& rProperties);
     static std::shared_ptr<BitmapDescriptor> LoadBitmap (
         const css::uno::Reference<css::beans::XPropertySet>& rxProperties,
-        const rtl::Reference<sd::presenter::PresenterHelper>& rxPresenterHelper,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor>& rpDefault);
     static BitmapDescriptor::TexturingMode

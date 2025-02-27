@@ -130,7 +130,6 @@ void PresenterBitmapContainer::LoadBitmaps (
 std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapContainer::LoadBitmap (
     const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
     const OUString& rsPath,
-    const rtl::Reference<sd::presenter::PresenterHelper>& rxPresenterHelper,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
     const std::shared_ptr<BitmapDescriptor>& rpDefault)
 {
@@ -146,7 +145,6 @@ std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapConta
             if (xBitmapProperties.is())
                 pBitmap = LoadBitmap(
                     xBitmapProperties,
-                    rxPresenterHelper,
                     rxCanvas,
                     rpDefault);
         }
@@ -169,19 +167,16 @@ void PresenterBitmapContainer::ProcessBitmap (
 
     maIconContainer[sName] = LoadBitmap(
         rxProperties,
-        mxPresenterHelper,
         mxCanvas,
         SharedBitmapDescriptor());
 }
 
 std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapContainer::LoadBitmap (
     const Reference<beans::XPropertySet>& rxProperties,
-    const rtl::Reference<sd::presenter::PresenterHelper>& rxPresenterHelper,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
     const std::shared_ptr<BitmapDescriptor>& rpDefault)
 {
     OSL_ASSERT(rxCanvas.is());
-    OSL_ASSERT(rxPresenterHelper.is());
 
     SharedBitmapDescriptor pBitmap = std::make_shared<BitmapDescriptor>(rpDefault);
 

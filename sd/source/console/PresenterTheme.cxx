@@ -580,7 +580,6 @@ void PresenterTheme::Theme::Read (
     mpBackground = PresenterBitmapContainer::LoadBitmap(
         mxThemeRoot,
         u"Background"_ustr,
-        rReadContext.mxPresenterHelper,
         rReadContext.mxCanvas,
         SharedBitmapDescriptor());
 
@@ -957,7 +956,6 @@ void ViewStyleContainer::ProcessViewStyle(
     SharedBitmapDescriptor pBackground (PresenterBitmapContainer::LoadBitmap(
         xBackgroundNode,
         OUString(),
-        rReadContext.mxPresenterHelper,
         rReadContext.mxCanvas,
         SharedBitmapDescriptor()));
     if (pBackground && pBackground->GetNormalBitmap().is())
