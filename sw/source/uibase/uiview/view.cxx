@@ -121,6 +121,7 @@
 #include <svx/svdview.hxx>
 #include <node2lay.hxx>
 #include <cntfrm.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -858,6 +859,9 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
     SvtLinguOptions aLinguOpt;
     SvtLinguConfig().GetOptions( aLinguOpt );
     aUsrPref.SetOnlineSpell( aLinguOpt.bIsSpellAuto );
+
+    // Inherit the per-view setting from the per-document one.
+    aUsrPref.SetRedlineRecordingOn(rDocSh.GetDoc()->getIDocumentRedlineAccess().IsRedlineOn());
 
     bool bOldShellWasSrcView = false;
 
