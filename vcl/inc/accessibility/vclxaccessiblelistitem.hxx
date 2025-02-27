@@ -28,15 +28,6 @@
 #include <accessibility/vclxaccessiblelist.hxx>
 #include <tools/gen.hxx>
 
-// forward ---------------------------------------------------------------
-
-namespace com::sun::star::awt {
-    struct Point;
-    struct Rectangle;
-    struct Size;
-    class XFocusListener;
-}
-
 // class VCLXAccessibleListItem ------------------------------------------
 
 /** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry
