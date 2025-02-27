@@ -43,7 +43,7 @@ enum class RedlineFlags
 {
     NONE                 = 0x000, ///< no RedlineFlags
     On                   = 0x001, ///< RedlineFlags on
-    Ignore               = 0x002, ///< ignore Redlines
+    Ignore               = 0x002, ///< ignore Redlines (only set from code, temporarily)
     ShowInsert           = 0x010, ///< show all inserts
     ShowDelete           = 0x020, ///< show all deletes
     ShowMask             = ShowInsert | ShowDelete,
