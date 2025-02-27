@@ -803,7 +803,11 @@ TextSegment PresenterTextParagraph::GetTextSegment (
         case AccessibleTextType::CHARACTER:
         case AccessibleTextType::GLYPH:
         case AccessibleTextType::ATTRIBUTE_RUN:
-            return CreateTextSegment(nIndex+nOffset, nIndex+nOffset+1);
+        {
+            const sal_Int32 nStartIndex = nIndex + nOffset;
+            const sal_Int32 nEndIndex = nStartIndex < GetCharacterCount() ? nStartIndex + 1 : nStartIndex;
+            return CreateTextSegment(nStartIndex, nEndIndex);
+        }
     }
 
     return TextSegment(OUString(), 0,0);
