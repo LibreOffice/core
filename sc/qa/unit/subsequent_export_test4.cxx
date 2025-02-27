@@ -187,6 +187,33 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf162948)
     verify();
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf165383)
+{
+    auto verify = [this]() {
+        ScDocument* pDoc = getScDoc();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetCondFormList(0)->size());
+
+        ScConditionalFormat* pFormat = pDoc->GetCondFormat(0, 0, 0);
+        CPPUNIT_ASSERT(pFormat);
+
+        const ScFormatEntry* pEntry = pFormat->GetEntry(0);
+        CPPUNIT_ASSERT(pEntry);
+        CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Condition, pEntry->GetType());
+        const ScConditionEntry* pConditionEntry = static_cast<const ScConditionEntry*>(pEntry);
+        CPPUNIT_ASSERT_EQUAL(ScConditionMode::Direct, pConditionEntry->GetOperation());
+        // Without the fix in place, this test would have failed after the roundtrip with
+        // - Expected: SUM($A$1:A1) > 10
+        // - Actual  : SUM($A$1) > 10
+        CPPUNIT_ASSERT_EQUAL(u"SUM($A$1:A1) > 10"_ustr,
+                             pConditionEntry->GetExpression(ScAddress(0, 0, 0), 0));
+    };
+
+    createScDoc("ods/tdf165383.ods");
+    verify();
+    saveAndReload(u"Calc Office Open XML"_ustr);
+    verify();
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testCommentTextHAlignment)
 {
     // Testing comment text alignments.
