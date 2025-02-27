@@ -630,32 +630,6 @@ void PresenterPaneBorderPainter::Renderer::PaintBitmap(
         return;
     }
 
-    /*
-    Reference<rendering::XBitmap> xMaskedBitmap (
-        PresenterBitmapHelper::FillMaskedWithColor (
-            mxCanvas,
-            Reference<rendering::XIntegerBitmap>(xBitmap, UNO_QUERY),
-            rBitmap.mxMaskBitmap,
-            0x00ff0000,
-            rBackgroundBitmap.maReplacementColor));
-    if (xMaskedBitmap.is())
-        xBitmap = xMaskedBitmap;
-    else if (rBitmap.mxMaskBitmap.is() && mxPresenterHelper.is())
-    {
-        const static sal_Int32 nOutsideMaskColor (0x00ff0000);
-        Reference<rendering::XIntegerBitmap> xMask (
-            mxPresenterHelper->createMask(
-                mxCanvas,
-                rBitmap.mxMaskBitmap,
-                nOutsideMaskColor,
-                false));
-        xBitmap = mxPresenterHelper->applyBitmapMaskWithColor(
-            mxCanvas,
-            Reference<rendering::XIntegerBitmap>(xBitmap, UNO_QUERY),
-            xMask,
-            rBackgroundBitmap.maReplacementColor);
-    }
-    */
     rendering::RenderState aRenderState (
         geometry::AffineMatrix2D(
             double(nW)/rpBitmap->mnWidth, 0, nX,
