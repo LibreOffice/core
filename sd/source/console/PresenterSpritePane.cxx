@@ -135,7 +135,7 @@ void PresenterSpritePane::UpdateCanvases()
 
     // The content canvas is a wrapper of the border canvas.
     if (mxBorderCanvas.is())
-        mxContentCanvas = mxPresenterHelper->createSharedCanvas(
+        mxContentCanvas = sd::presenter::PresenterHelper::createSharedCanvas(
             mxParentCanvas,
             mxParentWindow,
             mxBorderCanvas,

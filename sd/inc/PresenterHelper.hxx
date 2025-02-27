@@ -87,7 +87,7 @@ public:
         @param xWindow
             The canvas is created for this window.  Must not be `NULL`
     */
-    virtual css::uno::Reference<css::rendering::XCanvas> createSharedCanvas (
+    static css::uno::Reference<css::rendering::XCanvas> createSharedCanvas (
         const css::uno::Reference<css::rendering::XSpriteCanvas>& rxUpdateCanvas,
         const css::uno::Reference<css::awt::XWindow>& rxUpdateWindow,
         const css::uno::Reference<css::rendering::XCanvas>& rxSharedCanvas,

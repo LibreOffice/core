@@ -90,7 +90,6 @@ private:
     std::shared_ptr<PresenterTheme> mpTheme;
     css::uno::Reference<css::awt::XWindow> mxWindow;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
-    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
     const OUString msText;
     const PresenterTheme::SharedFontDescriptor mpFont;
     const PresenterTheme::SharedFontDescriptor mpMouseOverFont;
@@ -101,8 +100,7 @@ private:
     css::uno::Reference<css::rendering::XBitmap> mxNormalBitmap;
     css::uno::Reference<css::rendering::XBitmap> mxMouseOverBitmap;
 
-    PresenterButton (
-        const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
+    PresenterButton(
         ::rtl::Reference<PresenterController> xPresenterController,
         std::shared_ptr<PresenterTheme> xTheme,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,

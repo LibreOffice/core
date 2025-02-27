@@ -65,7 +65,6 @@ const double gnVerticalBorder (5);
 
         rtl::Reference<PresenterButton> pButton (
             new PresenterButton(
-                rxComponentContext,
                 rpPresenterController,
                 rpTheme,
                 rxParentWindow,
@@ -80,8 +79,7 @@ const double gnVerticalBorder (5);
         return nullptr;
 }
 
-PresenterButton::PresenterButton (
-    const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
+PresenterButton::PresenterButton(
     ::rtl::Reference<PresenterController> xPresenterController,
     std::shared_ptr<PresenterTheme> xTheme,
     const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
@@ -101,7 +99,6 @@ PresenterButton::PresenterButton (
 {
     try
     {
-        mxPresenterHelper = new sd::presenter::PresenterHelper(rxComponentContext);
         mxWindow = sd::presenter::PresenterHelper::createWindow(rxParentWindow,
             false,
             false,
@@ -181,10 +178,10 @@ void PresenterButton::SetCanvas (
             xComponent->dispose();
     }
 
-    if (!(mxPresenterHelper.is() && rxParentCanvas.is() && rxParentWindow.is()))
+    if (!(rxParentCanvas.is() && rxParentWindow.is()))
         return;
 
-    mxCanvas = mxPresenterHelper->createSharedCanvas (
+    mxCanvas = sd::presenter::PresenterHelper::createSharedCanvas (
         Reference<rendering::XSpriteCanvas>(rxParentCanvas, UNO_QUERY),
         rxParentWindow,
         rxParentCanvas,

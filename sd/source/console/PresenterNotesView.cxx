@@ -172,11 +172,6 @@ void PresenterNotesView::CreateToolBar (
     if (!rpPresenterController)
         return;
 
-    rtl::Reference<sd::presenter::PresenterHelper> xPresenterHelper (
-        rpPresenterController->GetPresenterHelper());
-    if ( ! xPresenterHelper.is())
-        return;
-
     // Create a new window as container of the tool bar.
     mxToolBarWindow = sd::presenter::PresenterHelper::createWindow(
         mxParentWindow,
@@ -184,7 +179,7 @@ void PresenterNotesView::CreateToolBar (
         true,
         false,
         false);
-    mxToolBarCanvas = xPresenterHelper->createSharedCanvas (
+    mxToolBarCanvas = sd::presenter::PresenterHelper::createSharedCanvas (
         Reference<rendering::XSpriteCanvas>(mxCanvas, UNO_QUERY),
         mxParentWindow,
         mxCanvas,

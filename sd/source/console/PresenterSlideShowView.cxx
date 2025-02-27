@@ -837,7 +837,7 @@ Reference<rendering::XCanvas> PresenterSlideShowView::CreateViewCanvas (
     const Reference<awt::XWindow>& rxViewWindow) const
 {
     // Create a canvas for the view window.
-    return mxPresenterHelper->createSharedCanvas(
+    return sd::presenter::PresenterHelper::createSharedCanvas(
         Reference<rendering::XSpriteCanvas>(mxTopPane->getCanvas(), UNO_QUERY),
         mxTopPane->getWindow(),
         mxTopPane->getCanvas(),

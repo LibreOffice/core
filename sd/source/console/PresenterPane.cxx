@@ -127,13 +127,13 @@ void PresenterPane::CreateCanvases (
     if ( ! rxParentCanvas.is())
         return;
 
-    mxBorderCanvas = mxPresenterHelper->createSharedCanvas(
+    mxBorderCanvas = sd::presenter::PresenterHelper::createSharedCanvas(
         rxParentCanvas,
         mxParentWindow,
         rxParentCanvas,
         mxParentWindow,
         mxBorderWindow);
-    mxContentCanvas = mxPresenterHelper->createSharedCanvas(
+    mxContentCanvas = sd::presenter::PresenterHelper::createSharedCanvas(
         rxParentCanvas,
         mxParentWindow,
         rxParentCanvas,

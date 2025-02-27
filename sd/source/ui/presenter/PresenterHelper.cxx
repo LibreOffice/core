@@ -114,7 +114,7 @@ Reference<rendering::XCanvas> PresenterHelper::createSharedCanvas (
         || ! rxSharedWindow.is()
         || ! rxWindow.is())
     {
-        throw RuntimeException(u"illegal argument"_ustr, static_cast<XWeak*>(this));
+        throw RuntimeException(u"illegal argument"_ustr);
     }
 
     if (rxWindow == rxSharedWindow)
