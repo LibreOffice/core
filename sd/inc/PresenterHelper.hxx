@@ -127,7 +127,7 @@ public:
             The bitmap is created to be compatible, and possibly optimized,
             for this canvas.
     */
-    virtual css::uno::Reference<css::rendering::XBitmap> loadBitmap (
+    static css::uno::Reference<css::rendering::XBitmap> loadBitmap(
         std::u16string_view sId,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
 

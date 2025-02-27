@@ -1936,7 +1936,7 @@ void VerticalSeparator::Paint (
             PresenterCanvasHelper::SetDeviceColor(aRenderState, pFont->mnColor);
     }
 
-    Reference<rendering::XBitmap> xBitmap(mpToolBar->GetPresenterController()->GetPresenterHelper()->loadBitmap(u"bitmaps/Separator.png", rxCanvas));
+    Reference<rendering::XBitmap> xBitmap(sd::presenter::PresenterHelper::loadBitmap(u"bitmaps/Separator.png", rxCanvas));
     if (!xBitmap.is())
         return;
 

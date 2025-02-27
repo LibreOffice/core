@@ -196,7 +196,7 @@ std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapConta
         {
             pBitmap->SetBitmap(
                 BitmapDescriptor::Normal,
-                rxPresenterHelper->loadBitmap(sFileName, rxCanvas));
+                sd::presenter::PresenterHelper::loadBitmap(sFileName, rxCanvas));
         }
         catch (Exception&)
         {}
@@ -205,7 +205,7 @@ std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapConta
         {
             pBitmap->SetBitmap(
                 BitmapDescriptor::MouseOver,
-                rxPresenterHelper->loadBitmap(sFileName, rxCanvas));
+                sd::presenter::PresenterHelper::loadBitmap(sFileName, rxCanvas));
         }
         catch (Exception&)
         {}
@@ -214,7 +214,7 @@ std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapConta
         {
             pBitmap->SetBitmap(
                 BitmapDescriptor::ButtonDown,
-                rxPresenterHelper->loadBitmap(sFileName, rxCanvas));
+                sd::presenter::PresenterHelper::loadBitmap(sFileName, rxCanvas));
         }
         catch (Exception&)
         {}
@@ -223,7 +223,7 @@ std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapConta
         {
             pBitmap->SetBitmap(
                 BitmapDescriptor::Disabled,
-                rxPresenterHelper->loadBitmap(sFileName, rxCanvas));
+                sd::presenter::PresenterHelper::loadBitmap(sFileName, rxCanvas));
         }
         catch (Exception&)
         {}
@@ -232,7 +232,7 @@ std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapConta
         {
             pBitmap->SetBitmap(
                 BitmapDescriptor::Mask,
-                rxPresenterHelper->loadBitmap(sFileName, rxCanvas));
+                sd::presenter::PresenterHelper::loadBitmap(sFileName, rxCanvas));
         }
         catch (Exception&)
         {}
