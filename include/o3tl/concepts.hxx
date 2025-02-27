@@ -45,4 +45,11 @@ template <typename T> concept floating_point = std::is_floating_point_v<T>;
 
 #endif
 
+// Common concepts
+namespace o3tl
+{
+template <typename T> concept type_32_bit = sizeof(T) == 4;
+template <typename T> concept type_64_bit = sizeof(T) == 8;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
