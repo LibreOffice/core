@@ -49,27 +49,27 @@ public:
         @param xParentWindow
             The parent window of the new window.
         @param bCreateSystemChildWindow
-            When `TRUE` then the new window will be a system window that,
+            When `true` then the new window will be a system window that,
             in the context of the presenter screen, can not be painted over
             by other windows that lie behind it.
         @param bInitiallyVisible
-            When `TRUE` the new window will be visible from the start,
+            When `true` the new window will be visible from the start,
             i.e. a window listener will not receive a windowShown signal.
         @param bEnableChildTransparentMode
-            When `TRUE` the parent window is painted behind its child
+            When `true` the parent window is painted behind its child
             windows. This is one half of allowing child windows to be
             transparent.
         @param bEnableParentClip
-            When `TRUE` then the parent window is not clipped where its
+            When `true` then the parent window is not clipped where its
             child windows are painted.  This is the other half of allowing
             child windows to be transparent.
     */
     static css::uno::Reference<css::awt::XWindow> createWindow (
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
-        sal_Bool bCreateSystemChildWindow,
-        sal_Bool bInitiallyVisible,
-        sal_Bool bEnableChildTransparentMode,
-        sal_Bool bEnableParentClip);
+        bool bCreateSystemChildWindow,
+        bool bInitiallyVisible,
+        bool bEnableChildTransparentMode,
+        bool bEnableParentClip);
 
     /** Create a new canvas for the given window.  The new canvas is a
         wrapper around the given shared canvas.  The wrapper only modifies

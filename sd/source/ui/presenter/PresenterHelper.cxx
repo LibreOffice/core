@@ -58,10 +58,10 @@ void SAL_CALL PresenterHelper::initialize (const Sequence<Any>&) {}
 
 Reference<awt::XWindow> PresenterHelper::createWindow (
     const Reference<awt::XWindow>& rxParentWindow,
-    sal_Bool bCreateSystemChildWindow,
-    sal_Bool bInitiallyVisible,
-    sal_Bool bEnableChildTransparentMode,
-    sal_Bool bEnableParentClip)
+    bool bCreateSystemChildWindow,
+    bool bInitiallyVisible,
+    bool bEnableChildTransparentMode,
+    bool bEnableParentClip)
 {
     VclPtr<vcl::Window> pParentWindow(VCLUnoHelper::GetWindow(rxParentWindow));
 
