@@ -285,6 +285,50 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableSplitBug)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableInSectionTruncated)
+{
+    createDoc("table-in-section-truncated.fodt");
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt", 20);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section/txt", 0);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row/cell/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row/cell/txt", 2);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt", 0);
+
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/infos/bounds", "bottom", "11032");
+        discardDumpedLayout();
+    }
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->Down(false, 19);
+    lcl_dispatchCommand(mxComponent, ".uno:InsertPagebreak", {});
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt", 20);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section/txt", 0);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row/cell/txt", 0);
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row/cell/txt", 3);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/txt", 1);
+
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/infos/bounds", "top", "10369");
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/infos/bounds", "top", "10369");
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/infos/bounds", "height", "940");
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/txt/infos/bounds", "bottom",
+                    "11584");
+        // problem was that the section bottom did not grow enough (only 11309)
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/infos/bounds", "bottom", "11584");
+        discardDumpedLayout();
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableInSectionSplitLoop)
 {
     createDoc("table-in-section-split-loop.fodt");
