@@ -4224,8 +4224,9 @@ void DomainMapper::ResetStyleProperties()
                                 pContext->Insert(ePropertyId, uno::Any(0l));
                             }
                             break;
+                        case PROP_PARA_BOTTOM_MARGIN:
                         case PROP_PARA_RIGHT_MARGIN:
-                            pContext->Insert(ePropertyId, uno::Any(0l));
+                            pContext->Insert(ePropertyId, uno::Any(sal_Int32(0)));
                             break;
                         case PROP_PARA_LAST_LINE_ADJUST:
                         case PROP_PARA_ADJUST:
@@ -4239,6 +4240,14 @@ void DomainMapper::ResetStyleProperties()
                             break;
                         case PROP_FILL_COLOR:
                             pContext->Insert(ePropertyId, uno::Any(sal_Int32(COL_TRANSPARENT)));
+                            break;
+                        case PROP_PARA_LINE_SPACING:
+                            {
+                                style::LineSpacing aLineSpacing;
+                                aLineSpacing.Mode = style::LineSpacingMode::PROP;
+                                aLineSpacing.Height = sal_Int32(100);
+                                pContext->Insert(ePropertyId, uno::Any(aLineSpacing));
+                            }
                             break;
                         case INVALID:
                         default:

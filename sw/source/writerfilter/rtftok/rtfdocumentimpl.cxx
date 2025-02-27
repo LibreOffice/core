@@ -275,6 +275,32 @@ static void lcl_DestinationToMath(OUStringBuffer* pDestinationText,
     rMathBuffer.appendClosingTag(M_TOKEN(r));
 }
 
+static writerfilter::Reference<Properties>::Pointer_t
+lcl_findParentStyle(std::shared_ptr<RTFReferenceTable::Entries_t> pStyleTableEntries,
+                    RTFValue::Pointer_t const pStyle, const OUString& rBase)
+{
+    writerfilter::Reference<Properties>::Pointer_t ret;
+    if (!pStyle)
+        return ret;
+    auto itParent = pStyleTableEntries->begin();
+    while (itParent != pStyleTableEntries->end())
+    {
+        RTFValue::Pointer_t const pParentName
+            = static_cast<RTFReferenceProperties&>(*itParent->second)
+                  .getSprms()
+                  .find(NS_ooxml::LN_CT_Style_name);
+        if (pParentName && pParentName->getString().equals(rBase)
+            && !pParentName->getString().equals(pStyle->getString()))
+            break;
+        ++itParent;
+    }
+    if (itParent != pStyleTableEntries->end())
+    {
+        ret = itParent->second;
+    }
+    return ret;
+}
+
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
                                  uno::Reference<io::XInputStream> const& xInputStream,
                                  rtl::Reference<SwXTextDocument> const& xDstDoc,
@@ -527,6 +553,7 @@ RTFDocumentImpl::getProperties(const RTFSprms& rAttributes, RTFSprms const& rSpr
     if (!m_aStates.empty())
         nStyle = m_aStates.top().getCurrentStyleIndex();
     auto it = m_pStyleTableEntries->find(nStyle);
+
     if (it != m_pStyleTableEntries->end())
     {
         // cloneAndDeduplicate() wants to know about only a single "style", so
@@ -2185,12 +2212,9 @@ RTFError RTFDocumentImpl::pushState()
 
 writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::createStyleProperties()
 {
-    int nBasedOn = 0;
     RTFValue::Pointer_t pBasedOn
         = m_aStates.top().getTableSprms().find(NS_ooxml::LN_CT_Style_basedOn);
-    if (pBasedOn)
-        nBasedOn = pBasedOn->getInt();
-    if (nBasedOn == 0)
+    if (!pBasedOn)
     {
         // No parent style, then mimic what Word does: ignore attributes which
         // would set a margin as formatting, but with a default value.
@@ -2243,13 +2267,13 @@ RTFReferenceTable::Entries_t RTFDocumentImpl::deduplicateStyleTable()
                 NS_ooxml::LN_CT_Style_basedOn));
         if (pBasedOn)
         {
-            int const nBasedOn(pBasedOn->getInt());
-            // don't deduplicate yourself - especially a potential problem for the default style.
-            if (it.first == nBasedOn)
-                continue;
+            RTFValue::Pointer_t const pStyleName(
+                static_cast<RTFReferenceProperties&>(*pStyle).getSprms().find(
+                    NS_ooxml::LN_CT_Style_name));
+            writerfilter::Reference<Properties>::Pointer_t parentStyle
+                = lcl_findParentStyle(m_pStyleTableEntries, pStyleName, pBasedOn->getString());
 
-            auto const itParent(m_pStyleTableEntries->find(nBasedOn)); // definition as read!
-            if (itParent != m_pStyleTableEntries->end())
+            if (parentStyle.is())
             {
                 auto const pStyleType(
                     static_cast<RTFReferenceProperties&>(*pStyle).getAttributes().find(
@@ -2258,20 +2282,19 @@ RTFReferenceTable::Entries_t RTFDocumentImpl::deduplicateStyleTable()
                 int const nStyleType(pStyleType->getInt());
                 RTFSprms sprms(
                     static_cast<RTFReferenceProperties&>(*pStyle).getSprms().cloneAndDeduplicate(
-                        static_cast<RTFReferenceProperties&>(*itParent->second).getSprms(),
-                        nStyleType));
+                        static_cast<RTFReferenceProperties&>(*parentStyle).getSprms(), nStyleType));
                 RTFSprms attributes(
                     static_cast<RTFReferenceProperties&>(*pStyle)
                         .getAttributes()
                         .cloneAndDeduplicate(
-                            static_cast<RTFReferenceProperties&>(*itParent->second).getAttributes(),
+                            static_cast<RTFReferenceProperties&>(*parentStyle).getAttributes(),
                             nStyleType));
 
                 ret[it.first] = new RTFReferenceProperties(std::move(attributes), std::move(sprms));
             }
             else
             {
-                SAL_WARN("writerfilter.rtf", "parent style not found: " << nBasedOn);
+                SAL_WARN("writerfilter.rtf", "parent style not found: " << pBasedOn->getString());
             }
         }
     }

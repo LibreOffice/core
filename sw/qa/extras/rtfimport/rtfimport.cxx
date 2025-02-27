@@ -2001,6 +2001,18 @@ CPPUNIT_TEST_FIXTURE(Test, test165333Tdf)
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xRun2, u"CharHidden"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, test165483Tdf)
+{
+    createSwDoc("165483.rtf");
+    uno::Reference<text::XTextRange> const xRun1(
+        getRun(uno::Reference<text::XTextRange>(getParagraphOrTable(1), uno::UNO_QUERY), 1));
+    uno::Reference<beans::XPropertySet> xStyle(
+        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Based On Table Normal Copy"_ustr),
+        uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun1, u"ParaBottomMargin"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xStyle, u"ParaBottomMargin"_ustr));
+}
+
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();

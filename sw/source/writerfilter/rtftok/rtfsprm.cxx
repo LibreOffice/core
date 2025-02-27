@@ -182,6 +182,14 @@ static RTFValue::Pointer_t getDefaultSPRM(Id const id, Id nStyleType)
     {
         switch (id)
         {
+            case NS_ooxml::LN_CT_PPrBase_spacing:
+            {
+                RTFSprms aAttributes;
+                RTFSprms aSprms;
+                aAttributes.set(NS_ooxml::LN_CT_Spacing_after, new RTFValue(0l));
+                return new RTFValue(aAttributes, aSprms);
+            }
+            break;
             case NS_ooxml::LN_CT_Spacing_before:
             case NS_ooxml::LN_CT_Spacing_after:
             case NS_ooxml::LN_CT_Ind_left:
@@ -224,6 +232,7 @@ static bool isSPRMDeduplicateDenylist(Id nId, RTFSprms* pDirect)
 {
     switch (nId)
     {
+        case NS_ooxml::LN_CT_Style_type: //never remove the style type
         // See the NS_ooxml::LN_CT_PPrBase_tabs handler in DomainMapper,
         // deduplication is explicitly not wanted for these tokens.
         case NS_ooxml::LN_CT_TabStop_val:
