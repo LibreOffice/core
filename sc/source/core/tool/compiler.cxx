@@ -1430,7 +1430,9 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         }
 
         makeSingleCellStr(rLimits, rBuf, aRef.Ref1, aAbs1);
-        if (!bSingleRef && (aAbs1.Row() != aAbs2.Row() || aAbs1.Col() != aAbs2.Col()))
+        if (!bSingleRef &&
+                (aAbs1.Row() != aAbs2.Row() || aRef.Ref1.IsRowRel() != aRef.Ref2.IsRowRel() ||
+                 aAbs1.Col() != aAbs2.Col() || aRef.Ref1.IsColRel() != aRef.Ref2.IsColRel()))
         {
             rBuf.append( ':' );
             makeSingleCellStr(rLimits, rBuf, aRef.Ref2, aAbs2);
@@ -1778,7 +1780,8 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         // additional condition similar to ConventionXL_A1::makeRefStr() could
         // be
         //
-        //   && (aAbsRef.aStart.Row() != aAbsRef.aEnd.Row() || aAbsRef.aStart.Col() != aAbsRef.aEnd.Col())
+        //   && (aAbsRef.aStart.Row() != aAbsRef.aEnd.Row() || rRef.Ref1.IsRowRel() != rRef.Ref2.IsRowRel() ||
+        //       aAbsRef.aStart.Col() != aAbsRef.aEnd.Col() || rRef.Ref1.IsColRel() != rRef.Ref2.IsColRel())
         if (!bSingleRef)
         {
             rBuf.append( ':' );
