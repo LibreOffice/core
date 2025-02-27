@@ -174,10 +174,7 @@ void PresenterNotesView::CreateToolBar (
 
     // Create a new window as container of the tool bar.
     mxToolBarWindow = sd::presenter::PresenterHelper::createWindow(
-        mxParentWindow,
-        true,
-        false,
-        false);
+        mxParentWindow, true);
     mxToolBarCanvas = sd::presenter::PresenterHelper::createSharedCanvas (
         Reference<rendering::XSpriteCanvas>(mxCanvas, UNO_QUERY),
         mxParentWindow,

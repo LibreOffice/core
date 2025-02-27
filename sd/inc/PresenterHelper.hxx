@@ -44,20 +44,10 @@ public:
         @param bInitiallyVisible
             When `true` the new window will be visible from the start,
             i.e. a window listener will not receive a windowShown signal.
-        @param bEnableChildTransparentMode
-            When `true` the parent window is painted behind its child
-            windows. This is one half of allowing child windows to be
-            transparent.
-        @param bEnableParentClip
-            When `true` then the parent window is not clipped where its
-            child windows are painted.  This is the other half of allowing
-            child windows to be transparent.
     */
     static css::uno::Reference<css::awt::XWindow> createWindow (
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
-        bool bInitiallyVisible,
-        bool bEnableChildTransparentMode,
-        bool bEnableParentClip);
+        bool bInitiallyVisible);
 
     /** Create a new canvas for the given window.  The new canvas is a
         wrapper around the given shared canvas.  The wrapper only modifies

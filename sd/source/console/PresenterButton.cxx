@@ -99,10 +99,7 @@ PresenterButton::PresenterButton(
 {
     try
     {
-        mxWindow = sd::presenter::PresenterHelper::createWindow(rxParentWindow,
-            false,
-            false,
-            false);
+        mxWindow = sd::presenter::PresenterHelper::createWindow(rxParentWindow, false);
 
         // Make the background transparent.
         Reference<awt::XWindowPeer> xPeer (mxWindow, UNO_QUERY_THROW);

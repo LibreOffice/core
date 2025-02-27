@@ -252,15 +252,9 @@ void PresenterPaneBase::CreateWindows (
         return;
 
     mxBorderWindow = sd::presenter::PresenterHelper::createWindow(
-        mxParentWindow,
-        bIsWindowVisibleOnCreation,
-        false,
-        false);
+        mxParentWindow, bIsWindowVisibleOnCreation);
     mxContentWindow = sd::presenter::PresenterHelper::createWindow(
-        mxBorderWindow,
-        bIsWindowVisibleOnCreation,
-        false,
-        false);
+        mxBorderWindow, bIsWindowVisibleOnCreation);
 }
 
 const Reference<awt::XWindow>& PresenterPaneBase::GetBorderWindow() const

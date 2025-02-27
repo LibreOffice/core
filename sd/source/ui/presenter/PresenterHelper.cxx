@@ -41,9 +41,7 @@ namespace sd::presenter {
 
 Reference<awt::XWindow> PresenterHelper::createWindow (
     const Reference<awt::XWindow>& rxParentWindow,
-    bool bInitiallyVisible,
-    bool bEnableChildTransparentMode,
-    bool bEnableParentClip)
+    bool bInitiallyVisible)
 {
     VclPtr<vcl::Window> pParentWindow(VCLUnoHelper::GetWindow(rxParentWindow));
 
@@ -51,28 +49,12 @@ Reference<awt::XWindow> PresenterHelper::createWindow (
     VclPtr<vcl::Window> pWindow = VclPtr<vcl::Window>::Create(pParentWindow);
     Reference<awt::XWindow> xWindow (pWindow->GetComponentInterface(), UNO_QUERY);
 
-    if (bEnableChildTransparentMode)
-    {
-        // Make the frame window transparent and make the parent able to
-        // draw behind it.
-        if (pParentWindow)
-            pParentWindow->EnableChildTransparentMode();
-    }
-
     pWindow->Show(bInitiallyVisible);
 
     pWindow->SetMapMode(MapMode(MapUnit::MapPixel));
     pWindow->SetBackground();
-    if ( ! bEnableParentClip)
-    {
-        pWindow->SetParentClipMode(ParentClipMode::NoClip);
-        pWindow->SetPaintTransparent(true);
-    }
-    else
-    {
-        pWindow->SetParentClipMode(ParentClipMode::Clip);
-        pWindow->SetPaintTransparent(false);
-    }
+    pWindow->SetParentClipMode(ParentClipMode::NoClip);
+    pWindow->SetPaintTransparent(true);
 
     return xWindow;
 }
