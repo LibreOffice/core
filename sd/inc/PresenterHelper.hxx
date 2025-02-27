@@ -46,7 +46,7 @@ public:
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
     /** Create a new window as child window of the given parent window.
-        @param xParentWindow
+        @param rxParentWindow
             The parent window of the new window.
         @param bCreateSystemChildWindow
             When `true` then the new window will be a system window that,
@@ -74,17 +74,17 @@ public:
     /** Create a new canvas for the given window.  The new canvas is a
         wrapper around the given shared canvas.  The wrapper only modifies
         the origin in all output and clipping methods.
-        @param xUpdateCanvas
+        @param rxUpdateCanvas
             This canvas is used to call updateScreen() on.  May be `NULL`
-        @param xUpdateWindow
+        @param rxUpdateWindow
             The window that belongs to the update canvas.  May also be
             `NULL` (is expected to b `NULL` whenever xUpdateCanvas is.)
-        @param xSharedCanvas
+        @param rxSharedCanvas
             The canvas that is shared by the wrapper.
-        @param xSharedWindow
+        @param rxSharedWindow
             The window of the shared canvas.  This is used to determine the
             proper offset.
-        @param xWindow
+        @param rxWindow
             The canvas is created for this window.  Must not be `NULL`
     */
     static css::uno::Reference<css::rendering::XCanvas> createSharedCanvas (
@@ -95,13 +95,13 @@ public:
         const css::uno::Reference<css::awt::XWindow>& rxWindow);
 
     /** Create a new canvas for the given window.
-        @param xWindow
+        @param rxWindow
             The canvas is created for this window.  Must not be `NULL`
         @param nRequestedCanvasFeatureList
             List of requested features that the new canvas should (has to)
             provide.  Use only values from the CanvasFeature
             constants group.
-        @param sOptionalCanvasServiceName
+        @param rsOptionalCanvasServiceName
             When an explicit service name is given then a new object of this
             service is created.  This service name lets the caller select a
             specific canvas implementation, e.g. with or without hardware
@@ -115,7 +115,7 @@ public:
     /** Move the specified window to the top of its stacking order.  As a
         result the window will be painted over all its overlapping
         siblings.
-        @param xWindow
+        @param rxWindow
             This window will be moved to the top of its stacking order.
     */
     static void toTop(const css::uno::Reference<css::awt::XWindow>& rxWindow);
@@ -123,7 +123,7 @@ public:
     /** Load a bitmap with a given ID.
         @param sId
             The ID of the bitmap.
-        @param xCanvas
+        @param rxCanvas
             The bitmap is created to be compatible, and possibly optimized,
             for this canvas.
     */
@@ -141,7 +141,7 @@ public:
     virtual void captureMouse (const css::uno::Reference<css::awt::XWindow>& rxWindow);
 
     /** Release a previously captured mouse.
-        @param xWindow
+        @param rxWindow
             The window from which the mouse will be released.
     */
     virtual void releaseMouse (const css::uno::Reference<css::awt::XWindow>& rxWindow);
