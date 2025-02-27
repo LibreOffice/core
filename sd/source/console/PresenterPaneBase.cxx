@@ -39,8 +39,6 @@ PresenterPaneBase::PresenterPaneBase (
       mpPresenterController(std::move(xPresenterController)),
       mxComponentContext(rxContext)
 {
-    if (mpPresenterController)
-        mxPresenterHelper = mpPresenterController->GetPresenterHelper();
 }
 
 PresenterPaneBase::~PresenterPaneBase()
@@ -250,7 +248,7 @@ void SAL_CALL PresenterPaneBase::disposing (const lang::EventObject& rEvent)
 void PresenterPaneBase::CreateWindows (
     const bool bIsWindowVisibleOnCreation)
 {
-    if (!(mxPresenterHelper.is() && mxParentWindow.is()))
+    if (!mxParentWindow.is())
         return;
 
     mxBorderWindow = sd::presenter::PresenterHelper::createWindow(

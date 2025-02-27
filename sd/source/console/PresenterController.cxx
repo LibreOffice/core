@@ -1081,7 +1081,7 @@ void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
     if (xPane2.is())
         xPane2->setVisible(true);
 
-    mpPaintManager = std::make_shared<PresenterPaintManager>(mxMainWindow, mxPresenterHelper, mpPaneContainer);
+    mpPaintManager = std::make_shared<PresenterPaintManager>(mxMainWindow, mpPaneContainer);
 
     mxCanvas.set(rxPane->getCanvas(), UNO_QUERY);
 

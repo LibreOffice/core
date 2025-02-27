@@ -102,7 +102,6 @@ protected:
     css::uno::Reference<css::rendering::XCanvas> mxContentCanvas;
     css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;
     css::uno::Reference<css::drawing::framework::XPaneBorderPainter> mxBorderPainter;
-    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
     OUString msTitle;
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
 

@@ -149,7 +149,7 @@ public:
     /** Return the bounding box of the given child window relative to the
         direct or indirect parent window.
     */
-    virtual css::awt::Rectangle getWindowExtentsRelative (
+    static css::awt::Rectangle getWindowExtentsRelative(
         const css::uno::Reference<css::awt::XWindow>& rxChildWindow,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow);
 

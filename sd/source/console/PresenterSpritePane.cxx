@@ -34,7 +34,6 @@ PresenterSpritePane::PresenterSpritePane (const Reference<XComponentContext>& rx
     : PresenterPaneBase(rxContext, rpPresenterController),
       mpSprite(std::make_shared<PresenterSprite>())
 {
-    mxPresenterHelper = new sd::presenter::PresenterHelper(mxComponentContext);
 }
 
 PresenterSpritePane::~PresenterSpritePane()
@@ -82,7 +81,7 @@ void SAL_CALL PresenterSpritePane::windowMoved (const awt::WindowEvent& rEvent)
     PresenterPaneBase::windowMoved(rEvent);
 
     awt::Rectangle aBox (
-        mxPresenterHelper->getWindowExtentsRelative(mxBorderWindow, mxParentWindow));
+        sd::presenter::PresenterHelper::getWindowExtentsRelative(mxBorderWindow, mxParentWindow));
     mpSprite->MoveTo(geometry::RealPoint2D(aBox.X, aBox.Y));
     mpSprite->Update();
 }

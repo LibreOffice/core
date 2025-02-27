@@ -46,7 +46,6 @@ public:
     */
     PresenterPaintManager (
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
-        rtl::Reference<sd::presenter::PresenterHelper> xPresenterHelper,
         rtl::Reference<PresenterPaneContainer> xPaneContainer);
 
     ::std::function<void (const css::awt::Rectangle& rRepaintBox)>
@@ -79,7 +78,6 @@ public:
 private:
     css::uno::Reference<css::awt::XWindow> mxParentWindow;
     css::uno::Reference<css::awt::XWindowPeer> mxParentWindowPeer;
-    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
     ::rtl::Reference<PresenterPaneContainer> mpPaneContainer;
 };
 

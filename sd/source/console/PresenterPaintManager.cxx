@@ -31,11 +31,9 @@ namespace sdext::presenter {
 
 PresenterPaintManager::PresenterPaintManager (
     const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
-    rtl::Reference<sd::presenter::PresenterHelper> xPresenterHelper,
     rtl::Reference<PresenterPaneContainer> xPaneContainer)
     : mxParentWindow(rxParentWindow),
       mxParentWindowPeer(rxParentWindow, UNO_QUERY),
-      mxPresenterHelper(std::move(xPresenterHelper)),
       mpPaneContainer(std::move(xPaneContainer))
 {
 }
@@ -73,10 +71,10 @@ void PresenterPaintManager::Invalidate (
     {
         // Window is transparent and parent window(s) have to be painted as
         // well.  Invalidate the parent explicitly.
-        if (mxPresenterHelper.is() && mxParentWindowPeer.is())
+        if (mxParentWindowPeer.is())
         {
             const awt::Rectangle aBBox (
-                mxPresenterHelper->getWindowExtentsRelative(rxWindow, mxParentWindow));
+                sd::presenter::PresenterHelper::getWindowExtentsRelative(rxWindow, mxParentWindow));
             mxParentWindowPeer->invalidateRect(aBBox, nInvalidateFlags);
         }
     }
@@ -116,10 +114,10 @@ void PresenterPaintManager::Invalidate (
     {
         // Window is transparent and parent window(s) have to be painted as
         // well.  Invalidate the parent explicitly.
-        if (mxPresenterHelper.is() && mxParentWindowPeer.is())
+        if (mxParentWindowPeer.is())
         {
             const awt::Rectangle aBBox (
-                mxPresenterHelper->getWindowExtentsRelative(rxWindow, mxParentWindow));
+                sd::presenter::PresenterHelper::getWindowExtentsRelative(rxWindow, mxParentWindow));
             mxParentWindowPeer->invalidateRect(
                 awt::Rectangle(
                     rRepaintBox.X + aBBox.X,

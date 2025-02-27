@@ -106,8 +106,6 @@ void PresenterSlideShowView::LateInit()
     Reference<lang::XComponent> xSlideShowComponent (mxSlideShow, UNO_QUERY);
     xSlideShowComponent->addEventListener(static_cast<awt::XWindowListener*>(this));
 
-    mxPresenterHelper = new sd::presenter::PresenterHelper(mxComponentContext);
-
     // Use view id and controller to retrieve window and canvas from
     // configuration controller.
     Reference<XConfigurationController> xCC (mxController->getConfigurationController());
@@ -475,7 +473,7 @@ void SAL_CALL PresenterSlideShowView::setMouseCursor(::sal_Int16 nPointerShape)
 awt::Rectangle SAL_CALL PresenterSlideShowView::getCanvasArea(  )
 {
     if( mxViewWindow.is() && mxTopPane.is() )
-        return mxPresenterHelper->getWindowExtentsRelative( mxViewWindow, mxTopPane->getWindow() );
+        return sd::presenter::PresenterHelper::getWindowExtentsRelative( mxViewWindow, mxTopPane->getWindow() );
 
     awt::Rectangle aRectangle;
 

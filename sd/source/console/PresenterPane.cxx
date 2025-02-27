@@ -35,7 +35,6 @@ PresenterPane::PresenterPane (
         const ::rtl::Reference<PresenterController>& rpPresenterController)
     : PresenterPaneBase(rxContext, rpPresenterController)
 {
-    mxPresenterHelper = new sd::presenter::PresenterHelper(mxComponentContext);
 }
 
 PresenterPane::~PresenterPane()
@@ -120,8 +119,6 @@ void SAL_CALL PresenterPane::windowPaint (const awt::PaintEvent& rEvent)
 void PresenterPane::CreateCanvases (
     const Reference<rendering::XSpriteCanvas>& rxParentCanvas)
 {
-    if ( ! mxPresenterHelper.is())
-        return;
     if ( ! mxParentWindow.is())
         return;
     if ( ! rxParentCanvas.is())
