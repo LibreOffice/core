@@ -84,7 +84,6 @@ class ReadContext
 public:
     Reference<XComponentContext> mxComponentContext;
     Reference<rendering::XCanvas> mxCanvas;
-    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
 
     ReadContext (
         const Reference<XComponentContext>& rxContext,
@@ -651,7 +650,6 @@ ReadContext::ReadContext (
     : mxComponentContext(rxContext),
       mxCanvas(rxCanvas)
 {
-    mxPresenterHelper = new sd::presenter::PresenterHelper(rxContext);
 }
 
 PresenterTheme::SharedFontDescriptor ReadContext::ReadFont (
