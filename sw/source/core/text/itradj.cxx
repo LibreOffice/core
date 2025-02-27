@@ -140,7 +140,8 @@ void SwTextAdjuster::FormatBlock( )
 
 static bool lcl_CheckKashidaPositions(SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwTextIter& rItr,
                                       sal_Int32& rKashidas, TextFrameIndex& nGluePortion,
-                                      bool& rRemovedAllKashida)
+                                      bool& rRemovedAllKashida, SwLineLayout* pCurrLine,
+                                      TextFrameIndex nCurrLineBase)
 {
     rRemovedAllKashida = true;
 
@@ -225,7 +226,6 @@ static bool lcl_CheckKashidaPositions(SwScriptInfo& rSI, SwTextSizeInfo& rInf, S
                    [](TextFrameIndex nPos) { return static_cast<sal_Int32>(nPos); });
 
     std::vector<sal_Int32> aKashidaPosDropped;
-    std::vector<TextFrameIndex> aCastKashidaPosDropped;
 
     sal_Int32 nKashidaIdx = 0;
     while ( rKashidas && nIdx < nEnd )
@@ -278,11 +278,13 @@ static bool lcl_CheckKashidaPositions(SwScriptInfo& rSI, SwTextSizeInfo& rInf, S
                 rInf.GetRefDev()->SetLayoutMode(nOldLayout);
                 if ( nKashidasDropped )
                 {
-                    aCastKashidaPosDropped.clear();
-                    std::transform(std::cbegin(aKashidaPosDropped), std::cend(aKashidaPosDropped),
-                                   std::back_inserter(aCastKashidaPosDropped),
-                                   [](sal_Int32 nPos) { return TextFrameIndex{ nPos }; });
-                    rSI.MarkKashidasInvalid(nKashidasDropped, aCastKashidaPosDropped.data());
+                    // Convert dropped kashida positions so they are relative to the line
+                    for (auto& rPos : aKashidaPosDropped)
+                    {
+                        rPos = rPos - static_cast<sal_Int32>(nCurrLineBase);
+                    }
+
+                    pCurrLine->AddInvalidKashida(aKashidaPosDropped);
                     rKashidas -= nKashidasDropped;
                     nGluePortion -= TextFrameIndex(nKashidasDropped);
                 }
@@ -296,8 +298,10 @@ static bool lcl_CheckKashidaPositions(SwScriptInfo& rSI, SwTextSizeInfo& rInf, S
     return (rKashidas > 0);
 }
 
-static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwTextIter& rItr, sal_Int32& rKashidas,
-                             TextFrameIndex& nGluePortion, const tools::Long nGluePortionWidth, tools::Long& nSpaceAdd )
+static bool lcl_CheckKashidaWidth(SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwTextIter& rItr,
+                                  sal_Int32& rKashidas, TextFrameIndex& nGluePortion,
+                                  const tools::Long nGluePortionWidth, tools::Long& nSpaceAdd,
+                                  SwLineLayout* pCurrLine, TextFrameIndex const nCurrLineBase)
 {
     // check kashida width
     // if width is smaller than minimal kashida width allowed by fonts in the current line
@@ -340,8 +344,19 @@ static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwT
                     nSpaceAdd = nGluePortionWidth / sal_Int32(nGluePortion);
                     bAddSpaceChanged = true;
                 }
-                if( nKashidasDropped )
-                   rSI.MarkKashidasInvalid( nKashidasDropped, nIdx, nNext - nIdx );
+
+                // Remove nKashidasDropped kashida from nIdx to nNext:
+                for (size_t nKashIdx = 0; nKashidasDropped && nKashIdx < rSI.CountKashida();
+                     ++nKashIdx)
+                {
+                    TextFrameIndex nKashPos = rSI.GetKashida(nKashIdx);
+                    if (nKashPos >= nIdx && nKashPos < nNext)
+                    {
+                        pCurrLine->AddInvalidKashida(
+                            static_cast<sal_Int32>(nKashPos - nCurrLineBase));
+                        --nKashidasDropped;
+                    }
+                }
             }
             if ( bAddSpaceChanged )
                 break; // start all over again
@@ -373,19 +388,26 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
     SwTextSizeInfo aInf ( GetTextFrame() );
     SwTextIter aItr ( GetTextFrame(), &aInf );
 
+    TextFrameIndex nLineBase{ 0 };
+
     if ( rSI.CountKashida() )
     {
         while (aItr.GetCurr() != pCurrent && aItr.GetNext())
            aItr.Next();
 
+        nLineBase = aItr.GetStart();
+
         if( bSkipKashida )
         {
             rSI.SetNoKashidaLine ( aItr.GetStart(), aItr.GetLength());
+            pCurrent->SetKashidaAllowed(false);
         }
         else
         {
-            rSI.ClearKashidaInvalid ( aItr.GetStart(), aItr.GetLength() );
-            rSI.ClearNoKashidaLine( aItr.GetStart(), aItr.GetLength() );
+            rSI.ClearKashidaInvalid();
+            rSI.ClearNoKashidaLines();
+            pCurrent->SetKashidaAllowed(true);
+            pCurrent->ClearInvalidKashida();
         }
     }
 
@@ -468,7 +490,7 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                     // if two characters are replaced by a ligature glyph, there will be no place for a kashida
                     bool bRemovedAllKashida = false;
                     if (!lcl_CheckKashidaPositions(rSI, aInf, aItr, nKashidas, nGluePortion,
-                                                   bRemovedAllKashida))
+                                                   bRemovedAllKashida, pCurrent, nLineBase))
                     {
                         // all kashida positions are invalid
                         // do regular blank justification
@@ -500,7 +522,9 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                     // i60594
                     if( rSI.CountKashida() && !bSkipKashida )
                     {
-                        if( !lcl_CheckKashidaWidth( rSI, aInf, aItr, nKashidas, nGluePortion, nGluePortionWidth, nSpaceAdd ))
+                        if (!lcl_CheckKashidaWidth(rSI, aInf, aItr, nKashidas, nGluePortion,
+                                                   nGluePortionWidth, nSpaceAdd, pCurrent,
+                                                   nLineBase))
                         {
                             // no kashidas left
                             // do regular blank justification
@@ -535,6 +559,43 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
             break;
         }
         pPos = pPos->GetNextPortion();
+    }
+
+    // tdf#164140: Rebuild kashida exclusion indices after line adjustment
+    if (rSI.CountKashida())
+    {
+        rSI.ClearNoKashidaLines();
+        rSI.ClearKashidaInvalid();
+
+        SwTextSizeInfo aKashInf(GetTextFrame());
+        SwTextIter aKashItr(GetTextFrame(), &aKashInf);
+
+        std::vector<TextFrameIndex> aInvalidKashida;
+        while (true)
+        {
+            const SwLineLayout* pCurrLine = aKashItr.GetCurr();
+            if (!pCurrLine->KashidaAllowed())
+            {
+                rSI.SetNoKashidaLine(aKashItr.GetStart(), aKashItr.GetLength());
+            }
+
+            for (auto nKashIdx : pCurrLine->GetInvalidKashida())
+            {
+                aInvalidKashida.push_back(aKashItr.GetStart() + TextFrameIndex{ nKashIdx });
+            }
+
+            if (!aKashItr.GetNextLine())
+            {
+                break;
+            }
+
+            aKashItr.NextLine();
+        }
+
+        if (!aInvalidKashida.empty())
+        {
+            rSI.MarkKashidasInvalid(aInvalidKashida.size(), aInvalidKashida.data());
+        }
     }
 }
 

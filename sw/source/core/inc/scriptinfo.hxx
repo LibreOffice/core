@@ -296,10 +296,7 @@ public:
 
 /** Clears array of kashidas marked as invalid
  */
-    void ClearKashidaInvalid(TextFrameIndex const nStt, TextFrameIndex const nLen)
-    {
-        MarkOrClearKashidaInvalid(nStt, nLen, false, 0);
-    }
+    void ClearKashidaInvalid() { m_KashidaInvalid.clear(); }
 
 /** Marks nCnt kashida positions as invalid
    pKashidaPositions: array of char indices relative to the paragraph
@@ -337,16 +334,28 @@ public:
 */
     void SetNoKashidaLine(TextFrameIndex nStt, TextFrameIndex nLen);
 
-/** Clear forced blank justification for a given line.
-   nStt Start char index of the line referring to the paragraph.
-   nLen Number of characters in the line
+/** Clear all forced blank justification data for the paragraph.
 */
-    void ClearNoKashidaLine(TextFrameIndex nStt, TextFrameIndex nLen);
+    void ClearNoKashidaLines();
 
 /** Checks whether the character is on a line excluded from kashida justification.
    nCharIdx Char index within the paragraph.
 */
     bool IsKashidaLine(TextFrameIndex nCharIdx) const;
+
+/** Returns an ordered copy of the no kashida lines, for testing purposes.
+*/
+    std::set<std::tuple<sal_Int32, sal_Int32>> GetNoKashidaLines() const
+    {
+        std::set<std::tuple<sal_Int32, sal_Int32>> stValue;
+        for (size_t nLine = 0; nLine < m_NoKashidaLine.size(); ++nLine)
+        {
+            stValue.emplace(static_cast<sal_Int32>(m_NoKashidaLine.at(nLine)),
+                            static_cast<sal_Int32>(m_NoKashidaLineEnd.at(nLine)));
+        }
+
+        return stValue;
+    }
 
 /** Checks if text is in a script that allows kashida justification.
 
