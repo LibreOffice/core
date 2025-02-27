@@ -140,14 +140,6 @@ PresenterController::PresenterController (
     mpPaneBorderPainter = new PresenterPaneBorderPainter(rxContext);
     mpWindowManager->SetPaneBorderPainter(mpPaneBorderPainter);
 
-    // Create an object that is able to load the bitmaps in a format that is
-    // supported by the canvas.
-    Reference<lang::XMultiComponentFactory> xFactory =
-        rxContext->getServiceManager();
-    if ( ! xFactory.is())
-        return;
-    mxPresenterHelper = new sd::presenter::PresenterHelper(rxContext);
-
     if (mxSlideShowController.is())
     {
         mxSlideShowController->activate();
@@ -166,10 +158,7 @@ PresenterController::PresenterController (
     maInstances[mxController->getFrame()] = this;
 
     // Create a URLTransformer.
-    if (xFactory.is())
-    {
-        mxUrlTransformer.set(util::URLTransformer::create(mxComponentContext));
-    }
+    mxUrlTransformer.set(util::URLTransformer::create(mxComponentContext));
 }
 
 PresenterController::~PresenterController()
@@ -216,11 +205,6 @@ void PresenterController::disposing()
             xComponent->dispose();
     }
     mpCanvasHelper.reset();
-    {
-        if (mxPresenterHelper.is())
-            mxPresenterHelper->dispose();
-        mxPresenterHelper.clear();
-    }
     mpPaintManager.reset();
     mnPendingSlideNumber = -1;
     {
@@ -457,10 +441,6 @@ const ::rtl::Reference<PresenterPaneBorderPainter>& PresenterController::GetPane
 const std::shared_ptr<PresenterCanvasHelper>& PresenterController::GetCanvasHelper() const
 {
     return mpCanvasHelper;
-}
-const rtl::Reference<sd::presenter::PresenterHelper>& PresenterController::GetPresenterHelper() const
-{
-    return mxPresenterHelper;
 }
 
 const std::shared_ptr<PresenterPaintManager>& PresenterController::GetPaintManager() const

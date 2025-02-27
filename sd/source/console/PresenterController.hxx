@@ -108,7 +108,6 @@ public:
     const rtl::Reference<PresenterPaneContainer>& GetPaneContainer() const;
     const ::rtl::Reference<PresenterPaneBorderPainter>& GetPaneBorderPainter() const;
     const std::shared_ptr<PresenterCanvasHelper>& GetCanvasHelper() const;
-    const rtl::Reference<sd::presenter::PresenterHelper>& GetPresenterHelper() const;
     const std::shared_ptr<PresenterPaintManager>& GetPaintManager() const;
     double GetSlideAspectRatio() const;
     void ShowView (const OUString& rsViewURL);
@@ -196,7 +195,6 @@ private:
     css::uno::Reference<css::awt::XWindow> mxMainWindow;
     ::rtl::Reference<PresenterPaneBorderPainter> mpPaneBorderPainter;
     std::shared_ptr<PresenterCanvasHelper> mpCanvasHelper;
-    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
     std::shared_ptr<PresenterPaintManager> mpPaintManager;
     sal_Int32 mnPendingSlideNumber;
     css::uno::Reference<css::util::XURLTransformer> mxUrlTransformer;
