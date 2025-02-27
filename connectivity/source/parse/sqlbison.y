@@ -233,12 +233,12 @@ using namespace connectivity;
 %type <pParseNode> datetime_primary datetime_value_fct time_zone time_zone_specifier /*interval_term*/ interval_qualifier
 %type <pParseNode> start_field non_second_datetime_field end_field single_datetime_field extract_field datetime_field time_zone_field
 %type <pParseNode> char_length_exp octet_length_exp bit_length_exp select_sublist string_value_exp
-%type <pParseNode> char_value_exp concatenation char_factor char_primary string_value_fct char_substring_fct
+%type <pParseNode> char_value_exp concatenation char_factor char_primary string_value_fct char_substring_fct fold
 %type <pParseNode> form_conversion char_translation trim_fct trim_operands trim_spec bit_value_fct bit_substring_fct op_column_commalist
 %type <pParseNode> /*bit_concatenation*/ bit_value_exp bit_factor bit_primary collate_clause char_value_fct unique_spec value_exp_commalist in_predicate_value unique_test update_source
 %type <pParseNode> function_arg_commalist3 string_function_3Argument function_arg_commalist4 string_function_4Argument function_arg_commalist2 string_function_1Argument string_function_2Argument
 %type <pParseNode> date_function_0Argument date_function_1Argument function_name12 function_name23 function_name1 function_name2 function_name3 function_name0 numeric_function_0Argument numeric_function_1Argument numeric_function_2Argument
-%type <pParseNode> all query_primary sql_not for_length comparison column_val  cross_union /*opt_schema_element_list*/
+%type <pParseNode> all query_primary sql_not for_length upper_lower comparison column_val  cross_union /*opt_schema_element_list*/
 %type <pParseNode> /*op_authorization op_schema*/ nil_fkt schema_element base_table_def base_table_element base_table_element_commalist
 %type <pParseNode> column_def odbc_fct_spec	odbc_call_spec odbc_fct_type op_parameter union_statement
 %type <pParseNode> op_odbc_call_parameter odbc_parameter_commalist odbc_parameter function_args_commalist function_arg
@@ -1929,12 +1929,10 @@ string_function_1Argument:
 		SQL_TOKEN_LENGTH
 	|	SQL_TOKEN_ASCII
 	|	SQL_TOKEN_LCASE
-	|	SQL_TOKEN_LOWER
 	|	SQL_TOKEN_LTRIM
 	|	SQL_TOKEN_RTRIM
 	|	SQL_TOKEN_SPACE
 	|	SQL_TOKEN_UCASE
-	|	SQL_TOKEN_UPPER
 	;
 
 string_function_2Argument:
@@ -3251,6 +3249,7 @@ bit_primary:
 	;
 char_value_fct:
 		char_substring_fct
+	  | fold
 	  | form_conversion
 		{
 			$$ = SQL_NEW_RULE;
@@ -3289,6 +3288,20 @@ char_substring_fct:
 			$$->append(newNode(")", SQLNodeType::Punctuation));
 		}
 	|	SQL_TOKEN_SUBSTRING '(' value_exp_commalist ')'
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append(newNode("(", SQLNodeType::Punctuation));
+			$$->append($3);
+			$$->append(newNode(")", SQLNodeType::Punctuation));
+		}
+	;
+upper_lower:
+		SQL_TOKEN_UPPER
+	|	SQL_TOKEN_LOWER
+	;
+fold:
+		upper_lower '(' value_exp ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
