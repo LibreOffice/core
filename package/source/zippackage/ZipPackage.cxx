@@ -1214,7 +1214,8 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const std::vector<
         { u"xml"_ustr, u"application/xml"_ustr },
         { u"rels"_ustr, u"application/vnd.openxmlformats-package.relationships+xml"_ustr },
         { u"png"_ustr, u"image/png"_ustr },
-        { u"jpeg"_ustr, u"image/jpeg"_ustr }
+        { u"jpeg"_ustr, u"image/jpeg"_ustr },
+        { u"fntdata"_ustr, u"application/x-fontdata"_ustr }
     };
 
     uno::Sequence< beans::StringPair > aOverridesSequence(aManList.size());

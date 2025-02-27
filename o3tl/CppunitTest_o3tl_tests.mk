@@ -38,6 +38,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,o3tl_tests,\
 	o3tl/qa/test-typed_flags \
 	o3tl/qa/test-unit_conversion \
 	o3tl/qa/test-vector_pool \
+	o3tl/qa/BigEndianTypesTest \
 ))
 
 # vim: set noet sw=4:

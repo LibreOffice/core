@@ -27,6 +27,7 @@
 #include <oox/export/shapes.hxx>
 #include <svx/svdlayer.hxx>
 #include <unokywds.hxx>
+#include <osl/file.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -60,6 +61,8 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/hash.hxx>
+#include <vcl/embeddedfontshelper.hxx>
 
 #include <oox/export/utils.hxx>
 #include <oox/export/ThemeExport.hxx>
@@ -76,13 +79,18 @@
 #include <svx/ColorSets.hxx>
 #include <sdmod.hxx>
 #include <sdpage.hxx>
+#include <unomodel.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/font/EOTConverter.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <utility>
+#include <unordered_map>
+#include <unordered_set>
+
 #if OSL_DEBUG_LEVEL > 1
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #endif
@@ -393,6 +401,12 @@ void PowerPointExport::writeDocumentProperties()
         try
         {
             xSettings->getPropertyValue(u"LoadReadonly"_ustr) >>= bSecurityOptOpenReadOnly;
+
+            xSettings->getPropertyValue(u"EmbedFonts"_ustr) >>= mbEmbedFonts;
+            xSettings->getPropertyValue(u"EmbedOnlyUsedFonts"_ustr) >>= mbEmbedUsedOnly;
+            xSettings->getPropertyValue(u"EmbedLatinScriptFonts"_ustr)  >>= mbEmbedLatinScript;
+            xSettings->getPropertyValue(u"EmbedAsianScriptFonts"_ustr)  >>= mbEmbedAsianScript;
+            xSettings->getPropertyValue(u"EmbedComplexScriptFonts"_ustr) >>= mbEmbedComplexScript;
         }
         catch( Exception& )
         {
@@ -454,7 +468,10 @@ bool PowerPointExport::exportDocument()
                 oox::getRelationship(Relationship::THEME),
                 u"theme/theme1.xml");
 
-    mPresentationFS->startElementNS(XML_p, XML_presentation, presentationNamespaces(*this));
+    auto pAttributes = presentationNamespaces(*this);
+    if (mbEmbedFonts)
+        pAttributes->add(XML_embedTrueTypeFonts, "1");
+    mPresentationFS->startElementNS(XML_p, XML_presentation, pAttributes);
 
     mXStatusIndicator = getStatusIndicator();
 
@@ -473,6 +490,7 @@ bool PowerPointExport::exportDocument()
     mPresentationFS->singleElementNS(XML_p, XML_notesSz,
                                      XML_cx, OString::number(PPTtoEMU(maNotesPageSize.Width)),
                                      XML_cy, OString::number(PPTtoEMU(maNotesPageSize.Height)));
+    WriteEmbeddedFontList();
 
     WriteCustomSlideShow();
 
@@ -510,6 +528,209 @@ bool PowerPointExport::exportDocument()
 ::oox::ole::VbaProject* PowerPointExport::implCreateVbaProject() const
 {
     return new ::oox::ole::VbaProject(getComponentContext(), getModel(), u"Impress");
+}
+
+namespace
+{
+struct EmbeddedFont
+{
+    OUString sFamilyName;
+
+    OString aRegularRelID;
+    OString aBoldRelID;
+    OString aItalicRelID;
+    OString aBoldItalicRelID;
+};
+} // end anonymous namespace
+
+// Writers the list of all embedded fonts and reference to the fonts
+void PowerPointExport::WriteEmbeddedFontList()
+{
+    if (!mbEmbedFonts)
+        return;
+
+    SdDrawDocument* pDocument = nullptr;
+    if (auto* pSdXImpressDocument = dynamic_cast<SdXImpressDocument*>(mXModel.get()))
+        pDocument = pSdXImpressDocument->GetDoc();
+
+    if (!pDocument)
+        return;
+
+    int nextFontId = 1;
+
+    std::unordered_set<OUString> aFontFamilyNameSet;
+    std::unordered_map<std::string, OString> aFontDeduplicationMap;
+
+    std::vector<EmbeddedFont> aEmbeddedFontInfo;
+
+    uno::Reference<beans::XPropertySet> xProperties(mXModel, UNO_QUERY);
+    if (!xProperties.is())
+        return;
+
+    uno::Sequence<uno::Any> aAnySeq;
+    if (!(xProperties->getPropertyValue("Fonts") >>= aAnySeq))
+        return;
+
+    if (aAnySeq.getLength() % 5 != 0)
+        return;
+
+    int nLen = aAnySeq.getLength() / 5;
+    int nSeqIndex = 0;
+
+    for (int i = 0; i < nLen; i++)
+    {
+        OUString sFamilyName;
+        OUString sStyleName;
+        sal_uInt16 eFamily = FAMILY_DONTKNOW;
+        sal_uInt16 ePitch = PITCH_DONTKNOW;
+        sal_uInt16 eCharSet = RTL_TEXTENCODING_DONTKNOW;
+
+        aAnySeq[nSeqIndex++] >>= sFamilyName;
+        aAnySeq[nSeqIndex++] >>= sStyleName;
+        aAnySeq[nSeqIndex++] >>= eFamily;
+        aAnySeq[nSeqIndex++] >>= ePitch;
+        aAnySeq[nSeqIndex++] >>= eCharSet;
+
+        if (aFontFamilyNameSet.contains(sFamilyName))
+            continue;
+
+        static std::vector<std::pair<FontItalic, FontWeight>> aFontVariantCombinations =
+        {
+            { ITALIC_NONE, WEIGHT_NORMAL },
+            { ITALIC_NONE, WEIGHT_BOLD },
+            { ITALIC_NORMAL, WEIGHT_NORMAL },
+            { ITALIC_NORMAL, WEIGHT_BOLD }
+        };
+
+        EmbeddedFont aInfo;
+        aInfo.sFamilyName = sFamilyName;
+
+        for (auto [eItalic, eWeight] : aFontVariantCombinations)
+        {
+            OUString sFontUrl = EmbeddedFontsHelper::fontFileUrl(
+                                    sFamilyName, FontFamily(eFamily), eItalic, eWeight, FontPitch(ePitch),
+                                    EmbeddedFontsHelper::FontRights::ViewingAllowed);
+
+            if (sFontUrl.isEmpty())
+                continue;
+
+            osl::File aFile(sFontUrl);
+            if (aFile.open(osl_File_OpenFlag_Read ) != osl::File::E_None)
+                continue;
+
+            std::vector<sal_uInt8> rFontData;
+
+            std::array<sal_uInt8, 4096> buffer;
+            sal_uInt64 readSize;
+
+            comphelper::Hash aHashCalc(comphelper::HashType::SHA256);
+
+            OString uRelID;
+
+            // Read file
+            for(;;)
+            {
+                sal_Bool eof;
+
+                if (aFile.isEndOfFile(&eof) != osl::File::E_None)
+                {
+                    SAL_WARN("sw.ww8", "Error reading font file " << sFontUrl);
+                    break;
+                }
+                if (eof)
+                    break;
+
+                if (aFile.read(buffer.data(), 4096, readSize) != osl::File::E_None)
+                {
+                    SAL_WARN("sw.ww8", "Error reading font file " << sFontUrl);
+                    break;
+                }
+
+                if (readSize == 0)
+                    break;
+
+                rFontData.insert(rFontData.end(), buffer.data(), buffer.data() + readSize);
+                aHashCalc.update(reinterpret_cast<const unsigned char*>(buffer.data()), readSize);
+            }
+
+            std::string aHash =  comphelper::hashToString(aHashCalc.finalize());
+            auto iterator = aFontDeduplicationMap.find(aHash);
+            if (iterator == aFontDeduplicationMap.end())
+            {
+                std::vector<sal_uInt8> rEOT;
+
+                font::FontDataContainer aContainer(rFontData);
+                font::EOTConverter aConverter(aContainer);
+                if (!aConverter.convert(rEOT))
+                    continue;
+
+                OUString sFontFileName = "font" + OUString::number(nextFontId) + ".fntdata";
+                OUString sArchivePath = "ppt/fonts/" + sFontFileName;
+                uno::Reference<css::io::XOutputStream> xOutStream = openFragmentStream(sArchivePath, u"application/x-fontdata"_ustr);
+                xOutStream->writeBytes(uno::Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(rEOT.data()), rEOT.size()));
+                xOutStream->closeOutput();
+
+                OUString sRelID = addRelation(mPresentationFS->getOutputStream(),
+                                              oox::getRelationship(Relationship::FONT),
+                                              Concat2View("fonts/font" + OUString::number(nextFontId) + ".fntdata"));
+
+                ++nextFontId;
+
+                uRelID = OUStringToOString(sRelID, RTL_TEXTENCODING_UTF8);
+                aFontDeduplicationMap.emplace(aHash, uRelID);
+            }
+            else
+            {
+                uRelID = iterator->second;
+            }
+
+            if (eItalic == ITALIC_NONE && eWeight == WEIGHT_NORMAL)
+            {
+                aInfo.aRegularRelID = uRelID;
+            }
+            else if (eItalic == ITALIC_NONE && eWeight == WEIGHT_BOLD)
+            {
+                aInfo.aBoldRelID = uRelID;
+            }
+            else if (eItalic == ITALIC_NORMAL && eWeight == WEIGHT_NORMAL)
+            {
+                aInfo.aItalicRelID = uRelID;
+            }
+            else if (eItalic == ITALIC_NORMAL && eWeight == WEIGHT_BOLD)
+            {
+                aInfo.aBoldItalicRelID = uRelID;
+            }
+        }
+
+        aEmbeddedFontInfo.push_back(aInfo);
+        aFontFamilyNameSet.insert(sFamilyName);
+    }
+
+    // if there are fonts to embed and font embeding enabled
+    mPresentationFS->startElementNS(XML_p, XML_embeddedFontLst);
+    for (auto const& rInfo : aEmbeddedFontInfo)
+    {
+        mPresentationFS->startElementNS(XML_p, XML_embeddedFont);
+
+        mPresentationFS->singleElementNS(XML_p, XML_font,
+            //XML_charset, OUString::number(0),
+            XML_typeface, rInfo.sFamilyName);
+
+        if (!rInfo.aRegularRelID.isEmpty())
+            mPresentationFS->singleElementNS(XML_p, XML_regular, FSNS(XML_r, XML_id), rInfo.aRegularRelID);
+
+        if (!rInfo.aBoldRelID.isEmpty())
+            mPresentationFS->singleElementNS(XML_p, XML_bold, FSNS(XML_r, XML_id), rInfo.aBoldRelID);
+
+        if (!rInfo.aItalicRelID.isEmpty())
+            mPresentationFS->singleElementNS(XML_p, XML_italic, FSNS(XML_r, XML_id), rInfo.aItalicRelID);
+
+        if (!rInfo.aBoldItalicRelID.isEmpty())
+            mPresentationFS->singleElementNS(XML_p, XML_boldItalic, FSNS(XML_r, XML_id), rInfo.aBoldItalicRelID);
+
+        mPresentationFS->endElementNS(XML_p, XML_embeddedFont);
+    }
+    mPresentationFS->endElementNS(XML_p, XML_embeddedFontLst);
 }
 
 void PowerPointExport::WriteCustomSlideShow()
