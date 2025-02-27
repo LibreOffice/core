@@ -28,8 +28,6 @@
 
 class SvtIconChoiceCtrl;
 
-/** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry
-*/
 class AccessibleIconChoiceCtrl final :
     public cppu::ImplInheritanceHelper<
         VCLXAccessibleComponent,

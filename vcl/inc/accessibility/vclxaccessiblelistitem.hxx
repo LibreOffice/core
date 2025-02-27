@@ -28,10 +28,6 @@
 #include <accessibility/vclxaccessiblelist.hxx>
 #include <tools/gen.hxx>
 
-// class VCLXAccessibleListItem ------------------------------------------
-
-/** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry
-*/
 class VCLXAccessibleListItem final
     : public cppu::ImplInheritanceHelper<
           comphelper::OAccessibleComponentHelper, css::accessibility::XAccessible,

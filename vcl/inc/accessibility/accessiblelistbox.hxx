@@ -32,8 +32,6 @@ class AccessibleListBoxEntry;
 class SvTreeListBox;
 class SvTreeListEntry;
 
-/** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry
-*/
 class AccessibleListBox :
     public cppu::ImplInheritanceHelper<
         VCLXAccessibleComponent,
