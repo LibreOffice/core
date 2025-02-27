@@ -403,6 +403,47 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableSplitBug)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableInSectionTruncated)
+{
+    createSwDoc("table-in-section-truncated.fodt");
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt", 20);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section/txt", 0);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row/cell/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row/cell/txt", 2);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt", 0);
+
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/infos/bounds", "bottom", u"11032"_ustr);
+        discardDumpedLayout();
+    }
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Down(false, 19);
+    dispatchCommand(mxComponent, u".uno:InsertPagebreak"_ustr, {});
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt", 20);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section/txt", 0);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row/cell/txt", 0);
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row/cell/txt", 3);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/txt", 1);
+
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/infos/bounds", "top", u"10369"_ustr);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/infos/bounds", "top", u"10369"_ustr);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/infos/bounds", "height", u"940"_ustr);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/txt/infos/bounds", "bottom",
+                    u"11584"_ustr);
+        // problem was that the section bottom did not grow enough (only 11309)
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/infos/bounds", "bottom", u"11584"_ustr);
+        discardDumpedLayout();
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableInSectionSplitLoop)
 {
     createSwDoc("table-in-section-split-loop.fodt");
