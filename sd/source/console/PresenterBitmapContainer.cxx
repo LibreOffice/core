@@ -36,14 +36,10 @@ PresenterBitmapContainer::PresenterBitmapContainer (
     const OUString& rsConfigurationBase,
     std::shared_ptr<PresenterBitmapContainer> xParentContainer,
     const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
-    css::uno::Reference<css::rendering::XCanvas> xCanvas,
-    rtl::Reference<sd::presenter::PresenterHelper> xPresenterHelper)
+    css::uno::Reference<css::rendering::XCanvas> xCanvas)
     : mpParentContainer(std::move(xParentContainer)),
-      mxCanvas(std::move(xCanvas)),
-      mxPresenterHelper(std::move(xPresenterHelper))
+      mxCanvas(std::move(xCanvas))
 {
-    Initialize(rxComponentContext);
-
     // Get access to the configuration.
     PresenterConfigurationAccess aConfiguration (
         rxComponentContext,
@@ -59,27 +55,11 @@ PresenterBitmapContainer::PresenterBitmapContainer (
 PresenterBitmapContainer::PresenterBitmapContainer (
     const css::uno::Reference<css::container::XNameAccess>& rxRootNode,
     std::shared_ptr<PresenterBitmapContainer> xParentContainer,
-    const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
-    css::uno::Reference<css::rendering::XCanvas> xCanvas,
-    rtl::Reference<sd::presenter::PresenterHelper> xPresenterHelper)
+    css::uno::Reference<css::rendering::XCanvas> xCanvas)
     : mpParentContainer(std::move(xParentContainer)),
-      mxCanvas(std::move(xCanvas)),
-      mxPresenterHelper(std::move(xPresenterHelper))
+      mxCanvas(std::move(xCanvas))
 {
-    Initialize(rxComponentContext);
-
     LoadBitmaps(rxRootNode);
-}
-
-void PresenterBitmapContainer::Initialize (
-    const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext)
-{
-    if (  mxPresenterHelper.is())
-        return;
-
-    // Create an object that is able to load the bitmaps in a format that is
-    // supported by the canvas.
-    mxPresenterHelper = new sd::presenter::PresenterHelper(rxComponentContext);
 }
 
 PresenterBitmapContainer::~PresenterBitmapContainer()

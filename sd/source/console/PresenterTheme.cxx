@@ -598,7 +598,7 @@ void PresenterTheme::Theme::Read (
             PresenterConfigurationAccess::GetConfigurationNode(mxThemeRoot, u"Bitmaps"_ustr), UNO_QUERY),
         mpParentTheme != nullptr ? mpParentTheme->mpIconContainer
                                  : std::shared_ptr<PresenterBitmapContainer>(),
-        rReadContext.mxComponentContext, rReadContext.mxCanvas);
+        rReadContext.mxCanvas);
 
     // Read fonts.
     Reference<container::XNameAccess> xFontNode(
@@ -850,8 +850,7 @@ void PaneStyleContainer::ProcessPaneStyle(
             xBitmapsNode,
             pStyle->mpParentStyle != nullptr ? pStyle->mpParentStyle->mpBitmaps
                                              : std::shared_ptr<PresenterBitmapContainer>(),
-            rReadContext.mxComponentContext, rReadContext.mxCanvas,
-            rReadContext.mxPresenterHelper);
+            rReadContext.mxCanvas);
     }
 
     mStyles.push_back(pStyle);

@@ -90,20 +90,14 @@ public:
         const OUString& rsConfigurationBase,
         std::shared_ptr<PresenterBitmapContainer> xParentContainer,
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
-        css::uno::Reference<css::rendering::XCanvas> xCanvas,
-        rtl::Reference<sd::presenter::PresenterHelper> xPresenterHelper = nullptr);
+        css::uno::Reference<css::rendering::XCanvas> xCanvas);
     PresenterBitmapContainer (
         const css::uno::Reference<css::container::XNameAccess>& rsRootNode,
         std::shared_ptr<PresenterBitmapContainer> xParentContainer,
-        const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
-        css::uno::Reference<css::rendering::XCanvas> xCanvas,
-        rtl::Reference<sd::presenter::PresenterHelper> xPresenterHelper = nullptr);
+        css::uno::Reference<css::rendering::XCanvas> xCanvas);
     ~PresenterBitmapContainer();
     PresenterBitmapContainer(const PresenterBitmapContainer&) = delete;
     PresenterBitmapContainer& operator=(const PresenterBitmapContainer&) = delete;
-
-    void Initialize (
-        const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext);
 
     /** Return the bitmap set that is associated with the given name.
     */
@@ -120,7 +114,6 @@ private:
     typedef ::std::map<OUString, std::shared_ptr<BitmapDescriptor> > BitmapContainer;
     BitmapContainer maIconContainer;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
-    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
 
     void LoadBitmaps (
         const css::uno::Reference<css::container::XNameAccess>& rsRootNode);
