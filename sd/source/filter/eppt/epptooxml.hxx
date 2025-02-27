@@ -201,6 +201,14 @@ private:
     void WriteVBA();
 
     void WriteModifyVerifier();
+
+    bool mbEmbedFonts = false;
+    bool mbEmbedUsedOnly = false;
+    bool mbEmbedLatinScript = true;
+    bool mbEmbedAsianScript = true;
+    bool mbEmbedComplexScript = true;
+
+    void WriteEmbeddedFontList();
 };
 
 }
