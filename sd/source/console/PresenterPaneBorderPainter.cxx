@@ -95,9 +95,7 @@ namespace {
 class  PresenterPaneBorderPainter::Renderer
 {
 public:
-    Renderer (
-        const Reference<XComponentContext>& rxContext,
-        std::shared_ptr<PresenterTheme> xTheme);
+    Renderer(std::shared_ptr<PresenterTheme> xTheme);
 
     void SetCanvas (const Reference<rendering::XCanvas>& rxCanvas);
     void PaintBorder (
@@ -124,7 +122,6 @@ private:
     typedef ::std::map<OUString, std::shared_ptr<RendererPaneStyle> > RendererPaneStyleContainer;
     RendererPaneStyleContainer maRendererPaneStyles;
     Reference<rendering::XCanvas> mxCanvas;
-    rtl::Reference<sd::presenter::PresenterHelper> mxPresenterHelper;
     css::rendering::ViewState maViewState;
     Reference<rendering::XPolyPolygon2D> mxViewStateClip;
     bool mbHasCallout;
@@ -297,7 +294,7 @@ bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanva
     if (bModified)
     {
         if (mpRenderer == nullptr)
-            mpRenderer.reset(new Renderer(mxContext, mpTheme));
+            mpRenderer.reset(new Renderer(mpTheme));
         else
             mpRenderer->SetCanvas(rxCanvas);
     }
@@ -320,7 +317,7 @@ void PresenterPaneBorderPainter::SetTheme (const std::shared_ptr<PresenterTheme>
 {
     mpTheme = rpTheme;
     if (mpRenderer == nullptr)
-        mpRenderer.reset(new Renderer(mxContext, mpTheme));
+        mpRenderer.reset(new Renderer(mpTheme));
 }
 
 awt::Rectangle PresenterPaneBorderPainter::AddBorder (
@@ -363,14 +360,11 @@ void PresenterPaneBorderPainter::ThrowIfDisposed() const
 
 //===== PresenterPaneBorderPainter::Renderer =====================================
 
-PresenterPaneBorderPainter::Renderer::Renderer (
-    const Reference<XComponentContext>& rxContext,
-    std::shared_ptr<PresenterTheme> xTheme)
+PresenterPaneBorderPainter::Renderer::Renderer(std::shared_ptr<PresenterTheme> xTheme)
     : mpTheme(std::move(xTheme)),
       maViewState(geometry::AffineMatrix2D(1,0,0, 0,1,0), nullptr),
       mbHasCallout(false)
 {
-    mxPresenterHelper = new sd::presenter::PresenterHelper(rxContext);
 }
 
 void PresenterPaneBorderPainter::Renderer::SetCanvas (const Reference<rendering::XCanvas>& rxCanvas)
