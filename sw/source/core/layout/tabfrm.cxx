@@ -2968,8 +2968,17 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     }
                 }
                 if( IsInSct() || GetUpper()->IsInTab() || bFlySplit )
-                    nDeadLine = aRectFnSet.YInc( nDeadLine,
-                                        GetUpper()->Grow( LONG_MAX, true ) );
+                {
+                    auto const nGrow{GetUpper()->Grow(LONG_MAX, true)};
+                    if (nGrow != 0)
+                    {
+                        if (GetUpper()->IsSctFrame()) // what about table cell?
+                        {
+                            GetUpper()->InvalidateSize_();
+                        }
+                        nDeadLine = aRectFnSet.YInc(nDeadLine, nGrow);
+                    }
+                }
 
                 {
                     SwFrameDeleteGuard g(Lower()); // tdf#134965 prevent RemoveFollowFlowLine()
