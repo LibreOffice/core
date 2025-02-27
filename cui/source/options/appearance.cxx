@@ -376,6 +376,13 @@ IMPL_LINK(SvxAppearanceTabPage, AddRemoveSchemeHdl, weld::Button&, rButton, void
             m_xSchemeList->append_text(sName);
             m_xSchemeList->set_active_text(sName);
             SchemeChangeHdl(*m_xSchemeList);
+
+            ColorConfigValue aValue;
+            aValue.nDarkColor = COL_AUTO;
+            aValue.nLightColor = COL_AUTO;
+
+            for (size_t i = 0; i < WINDOWCOLOR; ++i)
+                pColorConfig->SetColorValue(static_cast<ColorConfigEntry>(i), aValue);
         }
     }
     else
