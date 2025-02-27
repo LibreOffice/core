@@ -364,7 +364,7 @@ OUString encloseOrEscapeLiteral(const OUString& string, bool force)
 
     OUString resultString = result.makeStringAndClear();
     const SmTokenTableEntry* tkn = GetTokenTableEntry(resultString);
-    // excluding function and operator as they take arguments and can't treat them as litral or else arguments are not displayed correctly
+    // excluding function and operator as they take arguments and can't treat them as literal or else arguments are not displayed correctly
     if (tkn && tkn->nGroup != TG::Function && tkn->nGroup != TG::Oper)
     {
         resultString = "\"" + resultString + "\"";
