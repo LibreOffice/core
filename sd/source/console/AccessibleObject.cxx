@@ -151,7 +151,7 @@ OUString SAL_CALL
 {
     ThrowIfDisposed();
 
-    return msName;
+    return OUString();
 }
 
 OUString SAL_CALL
