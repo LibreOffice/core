@@ -94,24 +94,6 @@ public:
         const css::uno::Reference<css::awt::XWindow>& rxSharedWindow,
         const css::uno::Reference<css::awt::XWindow>& rxWindow);
 
-    /** Create a new canvas for the given window.
-        @param rxWindow
-            The canvas is created for this window.  Must not be `NULL`
-        @param nRequestedCanvasFeatureList
-            List of requested features that the new canvas should (has to)
-            provide.  Use only values from the CanvasFeature
-            constants group.
-        @param rsOptionalCanvasServiceName
-            When an explicit service name is given then a new object of this
-            service is created.  This service name lets the caller select a
-            specific canvas implementation, e.g. with or without hardware
-            acceleration.
-    */
-    virtual css::uno::Reference<css::rendering::XCanvas> createCanvas (
-        const css::uno::Reference<css::awt::XWindow>& rxWindow,
-        sal_Int16 nRequestedCanvasFeatures,
-        const OUString& rsOptionalCanvasServiceName);
-
     /** Move the specified window to the top of its stacking order.  As a
         result the window will be painted over all its overlapping
         siblings.

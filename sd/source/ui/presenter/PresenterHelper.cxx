@@ -128,35 +128,6 @@ Reference<rendering::XCanvas> PresenterHelper::createSharedCanvas (
             rxWindow);
 }
 
-Reference<rendering::XCanvas> PresenterHelper::createCanvas (
-    const Reference<awt::XWindow>& rxWindow,
-    sal_Int16,
-    const OUString& rsOptionalCanvasServiceName)
-{
-    // No shared window is given or an explicit canvas service name is
-    // specified.  Create a new canvas.
-    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(rxWindow);
-    if (!pWindow)
-        throw RuntimeException();
-
-    Sequence<Any> aArg{ // common: first any is VCL pointer to window (for VCL canvas)
-                        Any(reinterpret_cast<sal_Int64>(pWindow.get())),
-                        Any(css::awt::Rectangle()),
-                        Any(false),
-                        Any(rxWindow)
-    };
-
-    Reference<lang::XMultiServiceFactory> xFactory (
-        mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
-    return Reference<rendering::XCanvas>(
-        xFactory->createInstanceWithArguments(
-            !rsOptionalCanvasServiceName.isEmpty()
-                ? rsOptionalCanvasServiceName
-                : u"com.sun.star.rendering.Canvas.VCL"_ustr,
-            aArg),
-        UNO_QUERY);
-}
-
 void PresenterHelper::toTop(const Reference<awt::XWindow>& rxWindow)
 {
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(rxWindow);
