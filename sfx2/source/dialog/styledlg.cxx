@@ -46,7 +46,7 @@ SfxStyleDialogController::SfxStyleDialogController
     AddTabPage(u"organizer"_ustr, SfxManageStyleSheetPage::Create, nullptr);
 
     // With new template always set the management page as the current page
-    if (rStyle.GetName().isEmpty())
+    if (rStyle.GetName().isEmpty() || GetCurPageId().isEmpty())
         SetCurPageId(u"organizer"_ustr);
     else
     {
