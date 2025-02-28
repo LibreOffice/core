@@ -29,25 +29,25 @@ class CondFormatContext;
 class ColorScaleContext final : public WorksheetContextBase
 {
 public:
-    explicit ColorScaleContext( CondFormatContext& rFragment, CondFormatRuleRef xRule );
+    explicit ColorScaleContext( CondFormatContext& rFragment, CondFormatRule& rRule );
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onStartElement( const AttributeList& rAttribs ) override;
 
 private:
-    CondFormatRuleRef mxRule;
+    CondFormatRule& mrRule;
 };
 
 class DataBarContext final : public WorksheetContextBase
 {
 public:
-    explicit DataBarContext( CondFormatContext& rFormat, CondFormatRuleRef xRule );
+    explicit DataBarContext( CondFormatContext& rFormat, CondFormatRule& rRule );
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onStartElement( const AttributeList& rAttribs ) override;
 
 private:
-    CondFormatRuleRef mxRule;
+    CondFormatRule& mrRule;
 };
 
 class IconSetContext final : public WorksheetContextBase
@@ -81,7 +81,7 @@ private:
     virtual void        onEndRecord() override;
 
     CondFormatRef       mxCondFmt;
-    CondFormatRuleRef   mxRule;
+    std::unique_ptr<CondFormatRule>   mxRule;
 };
 
 } // namespace oox::xls

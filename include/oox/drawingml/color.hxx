@@ -130,6 +130,8 @@ public:
 
     model::ComplexColor getComplexColor() const;
 
+    bool operator==(const Color&) const;
+
 private:
     /** Internal helper for getColor(). */
     void                setResolvedRgb( ::Color nRgb ) const;
@@ -161,6 +163,8 @@ private:
         sal_Int32           mnValue;
 
         explicit            Transformation( sal_Int32 nToken, sal_Int32 nValue ) : mnToken( nToken ), mnValue( nValue ) {}
+
+        bool operator==(const Transformation&) const noexcept = default;
     };
 
     mutable ColorMode   meMode;         /// Current color mode.

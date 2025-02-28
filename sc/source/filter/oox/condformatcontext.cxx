@@ -29,9 +29,9 @@ namespace oox::xls {
 
 using ::oox::core::ContextHandlerRef;
 
-ColorScaleContext::ColorScaleContext( CondFormatContext& rFragment, CondFormatRuleRef xRule ) :
+ColorScaleContext::ColorScaleContext( CondFormatContext& rFragment, CondFormatRule& rRule ) :
     WorksheetContextBase( rFragment ),
-    mxRule(std::move( xRule ))
+    mrRule( rRule )
 {
 }
 
@@ -57,17 +57,17 @@ void ColorScaleContext::onStartElement( const AttributeList& rAttribs )
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( cfvo ):
-            mxRule->getColorScale()->importCfvo( rAttribs );
+            mrRule.getColorScale()->importCfvo( rAttribs );
         break;
         case XLS_TOKEN( color ):
-            mxRule->getColorScale()->importColor( rAttribs );
+            mrRule.getColorScale()->importColor( rAttribs );
         break;
     }
 }
 
-DataBarContext::DataBarContext( CondFormatContext& rFragment, CondFormatRuleRef xRule ) :
+DataBarContext::DataBarContext( CondFormatContext& rFragment, CondFormatRule& rRule ) :
     WorksheetContextBase( rFragment ),
-    mxRule(std::move( xRule ))
+    mrRule( rRule )
 {
 }
 
@@ -93,13 +93,13 @@ void DataBarContext::onStartElement( const AttributeList& rAttribs )
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( dataBar ):
-            mxRule->getDataBar()->importAttribs( rAttribs );
+            mrRule.getDataBar()->importAttribs( rAttribs );
         break;
         case XLS_TOKEN( cfvo ):
-            mxRule->getDataBar()->importCfvo( rAttribs );
+            mrRule.getDataBar()->importCfvo( rAttribs );
         break;
         case XLS_TOKEN( color ):
-            mxRule->getDataBar()->importColor( rAttribs );
+            mrRule.getDataBar()->importColor( rAttribs );
         break;
     }
 }
@@ -181,9 +181,9 @@ ContextHandlerRef CondFormatContext::onCreateContext( sal_Int32 nElement, const 
             if (nElement == XLS_TOKEN( formula ))
                 return this;
             else if (nElement == XLS_TOKEN( colorScale ) )
-                return new ColorScaleContext( *this, mxRule );
+                return new ColorScaleContext( *this, *mxRule );
             else if (nElement == XLS_TOKEN( dataBar ) )
-                return new DataBarContext( *this, mxRule );
+                return new DataBarContext( *this, *mxRule );
             else if (nElement == XLS_TOKEN( iconSet ) )
                 return new IconSetContext(*this, mxRule->getIconSet());
             else if (nElement == XLS_TOKEN( extLst ) )
@@ -204,12 +204,7 @@ void CondFormatContext::onEndElement()
             break;
         case XLS_TOKEN( cfRule ):
             if (mxCondFmt && mxRule)
-            {
-                ScRangeList aRanges = mxCondFmt->getRanges();
-                if ((aRanges.size() == 1 && aRanges.GetCellCount() == 1) ||
-                    !getCondFormats().insertRule(mxCondFmt, mxRule))
-                    mxCondFmt->insertRule(mxRule);
-            }
+                mxCondFmt->insertRule(std::move(mxRule));
         break;
     }
 }

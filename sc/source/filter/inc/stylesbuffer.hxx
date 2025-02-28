@@ -154,6 +154,8 @@ struct FontModel
 
     explicit            FontModel();
 
+    bool operator==(const FontModel&) const;
+
     void                setBiff12Scheme( sal_uInt8 nScheme );
     void                setBiffHeight( sal_uInt16 nHeight );
     void                setBiffWeight( sal_uInt16 nWeight );
@@ -279,6 +281,8 @@ struct AlignmentModel
 
     explicit            AlignmentModel();
 
+    bool operator==(const AlignmentModel&) const = default;
+
     /** Sets horizontal alignment from the passed BIFF data. */
     void                setBiffHorAlign( sal_uInt8 nHorAlign );
     /** Sets vertical alignment from the passed BIFF data. */
@@ -339,6 +343,8 @@ struct ProtectionModel
     bool                mbLocked;           /// True = locked against editing.
     bool                mbHidden;           /// True = formula is hidden.
 
+    bool operator==(const ProtectionModel&) const = default;
+
     explicit            ProtectionModel();
 };
 
@@ -374,6 +380,8 @@ public:
     /** Returns the converted API protection data struct. */
     const ApiProtectionData& getApiData() const { return maApiData; }
 
+    const ProtectionModel& getModelData() const { return maModel; }
+
     void                fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
 private:
     ProtectionModel     maModel;            /// Protection model data.
@@ -392,6 +400,8 @@ struct BorderLineModel
 
     explicit            BorderLineModel( bool bDxf );
 
+    bool operator==(const BorderLineModel&) const;
+
     /** Sets the passed BIFF line style. */
     void                setBiffStyle( sal_Int32 nLineStyle );
 };
@@ -408,6 +418,8 @@ struct BorderModel
     bool                mbDiagBLtoTR;       /// True = bottom-left to top-right on.
 
     explicit            BorderModel( bool bDxf );
+
+    bool operator==(const BorderModel&) const = default;
 };
 
 /** Contains API attributes of a complete cell border. */
@@ -457,6 +469,8 @@ public:
     /** Returns the converted API border data struct. */
     const ApiBorderData& getApiData() const { return maApiData; }
 
+    const BorderModel& getModelData() const { return maModel; }
+
     void fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
 
 private:
@@ -489,6 +503,8 @@ struct PatternFillModel
 
     explicit            PatternFillModel( bool bDxf );
 
+    bool operator==(const PatternFillModel&) const;
+
     /** Sets the passed BIFF pattern identifier. */
     void                setBiffPattern( sal_Int32 nPattern );
 };
@@ -512,6 +528,8 @@ struct GradientFillModel
     void                readGradient( SequenceInputStream& rStrm );
     /** Reads BIFF12 gradient stop settings from a FILL or DXF record. */
     void                readGradientStop( SequenceInputStream& rStrm, bool bDxf );
+
+    bool operator==(const GradientFillModel&) const = default;
 };
 
 /** Contains API fill attributes. */
@@ -561,9 +579,13 @@ public:
 
     void                fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
 
-private:
     typedef std::shared_ptr< PatternFillModel >   PatternModelRef;
     typedef std::shared_ptr< GradientFillModel >  GradientModelRef;
+
+    const PatternModelRef & getPatternModel() const { return mxPatternModel; }
+    const GradientModelRef & getGradientModel() const {return mxGradientModel; }
+
+private:
 
     PatternModelRef     mxPatternModel;
     GradientModelRef    mxGradientModel;
@@ -664,6 +686,7 @@ typedef std::shared_ptr< Xf > XfRef;
 
 class Dxf : public WorkbookHelper
 {
+friend struct CondFormatEquals;
 public:
     explicit            Dxf( const WorkbookHelper& rHelper );
 

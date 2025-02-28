@@ -299,6 +299,27 @@ Color::Color() :
 {
 }
 
+bool Color::operator==(const Color& rhs) const
+{
+    if (meMode != rhs.meMode)
+        return false;
+    if (maTransforms != rhs.maTransforms)
+        return false;
+    if (mnC1 != rhs.mnC1)
+        return false;
+    if (mnC2 != rhs.mnC2)
+        return false;
+    if (mnC3 != rhs.mnC3)
+        return false;
+    if (mnAlpha != rhs.mnAlpha)
+        return false;
+    if (msSchemeName != rhs.msSchemeName)
+        return false;
+    if (meThemeColorType != rhs.meThemeColorType)
+        return false;
+    return true;
+}
+
 ::Color Color::getDmlPresetColor( sal_Int32 nToken, ::Color nDefaultRgb )
 {
     /*  Do not pass nDefaultRgb to ContainerHelper::getVectorElement(), to be

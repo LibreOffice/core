@@ -40,6 +40,8 @@ struct NumFmtModel
     sal_Int16           mnPredefId;
 
     explicit            NumFmtModel();
+
+    bool operator==(const NumFmtModel&) const = default;
 };
 
 /** Contains all API number format attributes. */
@@ -51,7 +53,7 @@ struct ApiNumFmtData
 };
 
 /** Contains all data for a number format code. */
-class NumberFormat : public WorkbookHelper
+class NumberFormat final : public WorkbookHelper
 {
 public:
     explicit            NumberFormat( const WorkbookHelper& rHelper );
@@ -72,6 +74,8 @@ public:
                             const css::uno::Reference< css::util::XNumberFormats >& rxNumFmts,
                             const css::lang::Locale& rFromLocale );
     sal_uInt32          fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
+
+    const NumFmtModel &  getModel() const { return maModel; }
 
 private:
     NumFmtModel         maModel;

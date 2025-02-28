@@ -500,6 +500,37 @@ void FontModel::setBiffEscapement( sal_uInt16 nEscapement )
     mnEscapement = STATIC_ARRAY_SELECT( spnEscapes, nEscapement, XML_baseline );
 }
 
+bool FontModel::operator==(const FontModel& rhs) const
+{
+    if (maName != rhs.maName)
+        return false;
+    if (maColor != rhs.maColor)
+        return false;
+    if (mnScheme != rhs.mnScheme)
+        return false;
+    if (mnFamily != rhs.mnFamily)
+        return false;
+    if (mnCharSet != rhs.mnCharSet)
+        return false;
+    if (mfHeight != rhs.mfHeight)
+        return false;
+    if (mnUnderline != rhs.mnUnderline)
+        return false;
+    if (mnEscapement != rhs.mnEscapement)
+        return false;
+    if (mbBold != rhs.mbBold)
+        return false;
+    if (mbItalic != rhs.mbItalic)
+        return false;
+    if (mbStrikeout != rhs.mbStrikeout)
+        return false;
+    if (mbOutline != rhs.mbOutline)
+        return false;
+    if (mbShadow != rhs.mbShadow)
+        return false;
+    return true;
+}
+
 ApiFontUsedFlags::ApiFontUsedFlags( bool bAllUsed ) :
     mbNameUsed( bAllUsed ),
     mbColorUsed( bAllUsed ),
@@ -1442,6 +1473,17 @@ void BorderLineModel::setBiffStyle( sal_Int32 nLineStyle )
     mnStyle = STATIC_ARRAY_SELECT( spnStyleIds, nLineStyle, XML_none );
 }
 
+bool BorderLineModel::operator==(const BorderLineModel& rhs) const
+{
+    if (maColor != rhs.maColor)
+        return false;
+    if (mnStyle != rhs.mnStyle)
+        return false;
+    if (mbUsed != rhs.mbUsed)
+        return false;
+    return true;
+}
+
 BorderModel::BorderModel( bool bDxf ) :
     maLeft( bDxf ),
     maRight( bDxf ),
@@ -1697,6 +1739,25 @@ void PatternFillModel::setBiffPattern( sal_Int32 nPattern )
         XML_lightVertical, XML_lightDown, XML_lightUp, XML_lightGrid,
         XML_lightTrellis, XML_gray125, XML_gray0625 };
     mnPattern = STATIC_ARRAY_SELECT( spnPatternIds, nPattern, XML_none );
+}
+
+bool PatternFillModel::operator==(const PatternFillModel& rhs) const
+{
+    if (maPatternColor != rhs.maPatternColor)
+        return false;
+    if (maFilterPatternColor != rhs.maFilterPatternColor)
+        return false;
+    if (maFillColor != rhs.maFillColor)
+        return false;
+    if (mnPattern != rhs.mnPattern)
+        return false;
+    if (mbPattColorUsed != rhs.mbPattColorUsed)
+        return false;
+    if (mbFillColorUsed != rhs.mbFillColorUsed)
+        return false;
+    if (mbPatternUsed != rhs.mbPatternUsed)
+        return false;
+    return true;
 }
 
 GradientFillModel::GradientFillModel() :
