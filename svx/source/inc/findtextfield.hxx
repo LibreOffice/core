@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/toolbox.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -31,7 +32,7 @@ class AcceleratorExecute;
 class FindTextFieldControl final : public InterimItemWindow
 {
 public:
-    FindTextFieldControl(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> xFrame,
+    FindTextFieldControl(ToolBox* pParent, css::uno::Reference<css::frame::XFrame> xFrame,
                          css::uno::Reference<css::uno::XComponentContext> xContext);
 
     virtual void dispose() override;

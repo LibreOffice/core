@@ -56,7 +56,6 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/labelitemwindow.hxx>
 #include <svx/srchdlg.hxx>
@@ -195,7 +194,7 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
 // tdf#154818 - remember last search string
 OUString FindTextFieldControl::m_sRememberedSearchString;
 
-FindTextFieldControl::FindTextFieldControl( vcl::Window* pParent,
+FindTextFieldControl::FindTextFieldControl(ToolBox* pParent,
     css::uno::Reference< css::frame::XFrame > xFrame,
     css::uno::Reference< css::uno::XComponentContext > xContext) :
     InterimItemWindow(pParent, u"svx/ui/findbox.ui"_ustr, u"FindBox"_ustr),
