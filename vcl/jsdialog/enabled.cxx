@@ -324,6 +324,7 @@ bool isBuilderEnabledForPopup(std::u16string_view rUIFile)
         || rUIFile == u"svx/ui/colorwindow.ui"
         || rUIFile == u"svx/ui/currencywindow.ui"
         || rUIFile == u"svx/ui/floatingareastyle.ui"
+        || rUIFile == u"svx/ui/floatingframeborder.ui"
         || rUIFile == u"svx/ui/floatinglineend.ui"
         || rUIFile == u"svx/ui/floatinglineproperty.ui"
         || rUIFile == u"svx/ui/floatinglinestyle.ui"
