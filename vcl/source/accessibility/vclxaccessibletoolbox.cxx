@@ -85,11 +85,10 @@ namespace
 
     public:
         OToolBoxWindowItem(sal_Int32 _nIndexInParent,
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const css::uno::Reference< css::accessibility::XAccessible >& _rxInnerAccessible,
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParentAccessible
             ) : OAccessibleWrapper(
-            _rxContext,
+            comphelper::getProcessComponentContext(),
             _rxInnerAccessible,
             _rxParentAccessible)
             ,m_nIndexInParent(_nIndexInParent)
@@ -631,8 +630,8 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
             auto const xInnerAcc(pItemWindow->GetAccessible());
             if (xInnerAcc) // else child is being disposed - avoid crashing
             {
-                rtl::Reference<OToolBoxWindowItem> xChild2(new OToolBoxWindowItem(0,
-                    ::comphelper::getProcessComponentContext(), xInnerAcc, xParent));
+                rtl::Reference<OToolBoxWindowItem> xChild2(
+                    new OToolBoxWindowItem(0, xInnerAcc, xParent));
                 xChild->SetChild( xChild2 );
             }
         }
