@@ -31,6 +31,8 @@ namespace frm
 {
 
 class OEditModel;
+class OFormattedModel;
+class OEditBaseModel;
 
 //= OFormattedFieldWrapper
 
@@ -44,11 +46,11 @@ class OFormattedFieldWrapper final : public OFormattedFieldWrapper_Base
     css::uno::Reference< css::uno::XComponentContext> m_xContext;
     OUString m_implementationName;
 
-    css::uno::Reference< css::uno::XAggregation>      m_xAggregate;
+    rtl::Reference< OEditBaseModel >      m_xAggregate; // either OEditModel or OFormattedModel
 
     rtl::Reference< OEditModel > m_pEditPart;
     // if we act as formatted this is used to write the EditModel part
-    css::uno::Reference< css::io::XPersistObject>     m_xFormattedPart;
+    rtl::Reference< OEditBaseModel >     m_xFormattedPart;
 
     OFormattedFieldWrapper(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory,
                            OUString const & implementationName);

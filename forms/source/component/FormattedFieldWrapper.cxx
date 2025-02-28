@@ -87,14 +87,13 @@ Reference< XCloneable > SAL_CALL OFormattedFieldWrapper::createClone()
     auto xCloneAccess = query_aggregation<XCloneable>(m_xAggregate);
 
     // clone the aggregate
-    if ( xCloneAccess.is() )
+    if ( m_xAggregate.is() )
     {
-        Reference< XCloneable > xClone = xCloneAccess->createClone();
-        xRef->m_xAggregate.set(xClone, UNO_QUERY);
+        rtl::Reference< OEditBaseModel > xClone = static_cast<OEditBaseModel*>(m_xAggregate->createClone().get());
+        xRef->m_xAggregate = xClone;
         OSL_ENSURE(xRef->m_xAggregate.is(), "invalid aggregate cloned !");
 
-        xRef->m_xFormattedPart.set(
-            Reference< XInterface >(xClone), css::uno::UNO_QUERY);
+        xRef->m_xFormattedPart = xClone;
 
         if ( m_pEditPart.is() )
         {
@@ -211,10 +210,9 @@ void SAL_CALL OFormattedFieldWrapper::write(const Reference<XObjectOutputStream>
         throw RuntimeException( OUString(), *this );
 
     // for this we transfer the current props of the formatted part to the edit part
-    Reference<XPropertySet>  xFormatProps(m_xFormattedPart, UNO_QUERY);
 
     Locale aAppLanguage = Application::GetSettings().GetUILanguageTag().getLocale();
-    dbtools::TransferFormComponentProperties(xFormatProps, m_pEditPart, aAppLanguage);
+    dbtools::TransferFormComponentProperties(m_xFormattedPart, m_pEditPart, aAppLanguage);
 
     // then write the edit part, after switching to "fake mode"
     m_pEditPart->enableFormattedWriteFake();
@@ -283,7 +281,7 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
             m_xFormattedPart.set(new OFormattedModel(m_xContext));
             m_xFormattedPart->read(_rxInStream);
             m_pEditPart = std::move(pBasicReader);
-            m_xAggregate.set( m_xFormattedPart, UNO_QUERY );
+            m_xAggregate = m_xFormattedPart;
         }
     }
 
@@ -304,25 +302,9 @@ void OFormattedFieldWrapper::ensureAggregate()
     {
         // instantiate an EditModel (the only place where we are allowed to decide that we're a FormattedModel
         // is in ::read)
-        css::uno::Reference<css::uno::XInterface>  xEditModel = m_xContext->getServiceManager()->createInstanceWithContext(FRM_SUN_COMPONENT_TEXTFIELD, m_xContext);
-        if (!xEditModel.is())
-        {
-            // arghhh... instantiate it directly... it's dirty, but we really need this aggregate
-            rtl::Reference<OEditModel> pModel = new OEditModel(m_xContext);
-            xEditModel.set(static_cast<XWeak*>(pModel.get()), css::uno::UNO_QUERY);
-        }
-
-        m_xAggregate.set(xEditModel, UNO_QUERY);
+        rtl::Reference<OEditModel> xEditModel = new OEditModel(m_xContext);
+        m_xAggregate = xEditModel;
         DBG_ASSERT(m_xAggregate.is(), "OFormattedFieldWrapper::ensureAggregate : the OEditModel didn't have an XAggregation interface !");
-
-        {
-            Reference< XServiceInfo > xSI(m_xAggregate, UNO_QUERY);
-            if (!xSI.is())
-            {
-                OSL_FAIL("OFormattedFieldWrapper::ensureAggregate: the aggregate has no XServiceInfo!");
-                m_xAggregate.clear();
-            }
-        }
     }
 
     osl_atomic_increment(&m_refCount);
