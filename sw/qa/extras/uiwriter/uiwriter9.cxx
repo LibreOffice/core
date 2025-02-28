@@ -50,6 +50,7 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <fmtinfmt.hxx>
 #include <rootfrm.hxx>
+#include <svx/svxids.hrc>
 #include <svx/svdview.hxx>
 #include <svx/svdmark.hxx>
 
@@ -473,6 +474,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf139631)
     // Actual: New ."
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
                 "portion", u"New.\"");
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf165351)
+{
+    createSwDoc("tdf165351.fodt");
+
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    // Move the cursor into the fly frame
+    pWrtShell->GotoFly(u"Frame1"_ustr, FLYCNTTYPE_FRM, false);
+    pWrtShell->EndOfSection();
+    pWrtShell->GoNextCell(/*bAppendLine=*/true);
+    pWrtShell->Undo();
+    // getting this item crashed
+    SfxItemSet temp{ pDoc->GetAttrPool(), svl::Items<SID_RULER_LR_MIN_MAX, SID_RULER_LR_MIN_MAX> };
+    pWrtShell->GetView().StateTabWin(temp);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
