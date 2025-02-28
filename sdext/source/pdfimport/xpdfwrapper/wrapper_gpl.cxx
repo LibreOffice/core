@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 
     /* Get data directory location */
 #ifdef SYSTEM_POPPLER
-#if POPPLER_CHECK_VERSION(25, 0, 2)
+#if POPPLER_CHECK_VERSION(25, 2, 0)
     const std::string datadir = "";
 #else
     const char* datadir = nullptr;
