@@ -1663,7 +1663,12 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             pPrv = pFrame;
 
             if ( !pTable->empty() && bObjsDirect && !isFlyCreationSuppressed )
+            {
                 AppendObjs( pTable, nIndex, pFrame, pPage, pDoc );
+                // tdf#165351 from SwCellFrame ctor, this may set inf flags
+                // before the SwCellFrame has an upper, so reset here
+                pFrame->InvalidateInfFlags();
+            }
         }
         else if ( pNd->IsTableNode() )
         {   //Should we have encountered a table?
