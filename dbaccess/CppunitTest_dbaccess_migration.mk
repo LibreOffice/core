@@ -7,15 +7,15 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CppunitTest_CppunitTest,dbaccess_hsql_binary_import))
+$(eval $(call gb_CppunitTest_CppunitTest,dbaccess_migration))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,dbaccess_hsql_binary_import, \
-    dbaccess/qa/unit/hsql_binary_import \
+$(eval $(call gb_CppunitTest_add_exception_objects,dbaccess_migration, \
+    dbaccess/qa/unit/migration \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,dbaccess_hsql_binary_import,boost_headers))
+$(eval $(call gb_CppunitTest_use_external,dbaccess_migration,boost_headers))
 
-$(eval $(call gb_CppunitTest_use_libraries,dbaccess_hsql_binary_import, \
+$(eval $(call gb_CppunitTest_use_libraries,dbaccess_migration, \
     basegfx \
     comphelper \
     cppu \
@@ -54,25 +54,25 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_hsql_binary_import, \
     xo \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,dbaccess_hsql_binary_import))
-$(eval $(call gb_CppunitTest_use_vcl,dbaccess_hsql_binary_import))
+$(eval $(call gb_CppunitTest_use_ure,dbaccess_migration))
+$(eval $(call gb_CppunitTest_use_vcl,dbaccess_migration))
 
-$(eval $(call gb_CppunitTest_set_include,dbaccess_hsql_binary_import,\
+$(eval $(call gb_CppunitTest_set_include,dbaccess_migration,\
 	-I$(SRCDIR)/dbaccess/source/filter/hsqldb \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_custom_headers,dbaccess_hsql_binary_import,\
+$(eval $(call gb_CppunitTest_use_custom_headers,dbaccess_migration,\
 	officecfg/registry \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,dbaccess_hsql_binary_import,\
+$(eval $(call gb_CppunitTest_use_api,dbaccess_migration,\
     offapi \
     oovbaapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_components,dbaccess_hsql_binary_import,\
+$(eval $(call gb_CppunitTest_use_components,dbaccess_migration,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
@@ -109,6 +109,6 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_hsql_binary_import,\
     xmloff/util/xo \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,dbaccess_hsql_binary_import))
+$(eval $(call gb_CppunitTest_use_configuration,dbaccess_migration))
 
 # vim: set noet sw=4 ts=4:
