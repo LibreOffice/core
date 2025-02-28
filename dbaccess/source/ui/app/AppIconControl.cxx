@@ -79,17 +79,16 @@ void OApplicationIconControl::Fill()
                         { RID_STR_FORMS_CONTAINER, E_FORM, BMP_FORMFOLDER_TREE_L },
                         { RID_STR_REPORTS_CONTAINER, E_REPORT, BMP_REPORTFOLDER_TREE_L } };
 
-    for (const CategoryDescriptor& aCategorie : aCategories)
+    for (const CategoryDescriptor& aCategory : aCategories)
     {
         // E_TABLE is 0, but 0 means void so use id of enum + 1
-        std::unique_ptr<ThumbnailViewItem> xItem(
-            new ThumbnailViewItem(*this, aCategorie.eType + 1));
+        std::unique_ptr<ThumbnailViewItem> xItem(new ThumbnailViewItem(*this, aCategory.eType + 1));
         xItem->mbBorder = false;
-        xItem->maPreview1 = BitmapEx(aCategorie.aImageResId);
+        xItem->maPreview1 = BitmapEx(aCategory.aImageResId);
         const Size& rSize = xItem->maPreview1.GetSizePixel();
         m_nMaxWidth = std::max(m_nMaxWidth, rSize.Width());
         m_nMaxHeight = std::max(m_nMaxHeight, rSize.Height());
-        xItem->maTitle = DBA_RES(aCategorie.pLabelResId);
+        xItem->maTitle = DBA_RES(aCategory.pLabelResId);
         m_nMaxWidth = std::max<tools::Long>(m_nMaxWidth, GetTextWidth(xItem->maTitle));
         AppendItem(std::move(xItem));
     }
