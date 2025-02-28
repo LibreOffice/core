@@ -1766,7 +1766,8 @@ bool SfxObjectShell::SaveTo_Impl
             assert(xOuterStorage.is());
             assert(!rMedium.GetErrorCode());
             // the outer storage needs the same properties as the inner one
-            SetupStorage(xOuterStorage, SOFFICE_FILEFORMAT_CURRENT, false);
+            bool const isTemplate{rMedium.GetFilter()->IsOwnTemplateFormat()};
+            SetupStorage(xOuterStorage, SOFFICE_FILEFORMAT_CURRENT, isTemplate);
 
             uno::Reference<io::XStream> const xEncryptedInnerPackage =
                 xOuterStorage->openStreamElement(
