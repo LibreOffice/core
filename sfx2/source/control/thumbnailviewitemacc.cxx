@@ -34,8 +34,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-#include <mutex>
-
 using namespace ::com::sun::star;
 
 ThumbnailViewItemAcc::ThumbnailViewItemAcc(ThumbnailViewItem* pThumbnailViewItem)
@@ -49,7 +47,7 @@ ThumbnailViewItemAcc::~ThumbnailViewItemAcc()
 
 void ThumbnailViewItemAcc::ThumbnailViewItemDestroyed()
 {
-    std::scoped_lock aGuard( maMutex );
+    SolarMutexGuard aSolarGuard;
     mpThumbnailViewItem = nullptr;
 }
 

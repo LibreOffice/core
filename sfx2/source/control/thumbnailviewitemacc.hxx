@@ -30,7 +30,6 @@ class ThumbnailViewItemAcc
                                          css::accessibility::XAccessible>
 {
 private:
-    std::mutex                                                          maMutex;
     ThumbnailViewItem*                                                  mpThumbnailViewItem;
 
 public:
