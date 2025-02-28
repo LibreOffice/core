@@ -2128,6 +2128,38 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf164417)
         1, getXPathPosition(pSheet1, "//x:autoFilter/x:filterColumn/x:filters", "dateGroupItem"));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf165503)
+{
+    createScDoc("xlsx/tdf165503.xlsx");
+
+    // FIXME: Invalid content was found starting with element 'c:noMultiLvlLbl'
+    skipValidation();
+    save(u"Calc Office Open XML"_ustr);
+
+    xmlDocUniquePtr pChart1 = parseExport(u"xl/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pChart1);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 44199
+    // - Actual  : 1/3/2021
+    // The textual date output can depend on locale, but it'll differ from expected value either way
+    assertXPathContent(pChart1,
+                       "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:cat/c:numRef/"
+                       "c:numCache/c:pt[@idx=\"0\"]",
+                       u"44199");
+    // And similarly
+    assertXPathContent(pChart1,
+                       "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:cat/c:numRef/"
+                       "c:numCache/c:pt[@idx=\"4\"]",
+                       u"44844");
+
+    // There should be no node with idx 5 (cell is empty)
+    const int aNodes = countXPathNodes(
+        pChart1, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:cat/c:numRef/"
+                 "c:numCache/c:pt[@idx=\"5\"]");
+    CPPUNIT_ASSERT_EQUAL(0, aNodes);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
