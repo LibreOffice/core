@@ -1124,7 +1124,7 @@ void SfxObjectShell::SetInitialized_Impl( const bool i_fromInitNew )
 }
 
 
-bool SfxObjectShell::IsChangeRecording() const
+bool SfxObjectShell::IsChangeRecording(SfxViewShell* /*pViewShell*/) const
 {
     // currently this function needs to be overwritten by Writer and Calc only
     SAL_WARN( "sfx.doc", "function not implemented" );
