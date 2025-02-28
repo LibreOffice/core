@@ -1346,11 +1346,22 @@ const ::sfx2::IXmlIdRegistry* SwDocShell::GetXmlIdRegistry() const
     return m_xDoc ? &m_xDoc->GetXmlIdRegistry() : nullptr;
 }
 
-bool SwDocShell::IsChangeRecording() const
+bool SwDocShell::IsChangeRecording(SfxViewShell* pViewShell) const
 {
-    if (!m_pWrtShell)
+    SwWrtShell* pWrtShell = nullptr;
+    auto pView = dynamic_cast<SwView*>(pViewShell);
+    if (pView)
+    {
+        pWrtShell = pView->GetWrtShellPtr();
+    }
+    if (!pWrtShell)
+    {
+        pWrtShell = m_pWrtShell;
+    }
+
+    if (!pWrtShell)
         return false;
-    return bool(m_pWrtShell->GetRedlineFlags() & RedlineFlags::On);
+    return bool(pWrtShell->GetRedlineFlags() & RedlineFlags::On);
 }
 
 bool SwDocShell::HasChangeRecordProtection() const

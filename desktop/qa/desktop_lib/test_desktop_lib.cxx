@@ -186,7 +186,6 @@ public:
     void testBinaryCallback();
     void testInput();
     void testRedlineWriter();
-    void testTrackChanges();
     void testRedlineCalc();
     void testPaintPartTile();
     void testPaintPartTileDifferentSchemes();
@@ -259,7 +258,6 @@ public:
     CPPUNIT_TEST(testBinaryCallback);
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testRedlineWriter);
-    CPPUNIT_TEST(testTrackChanges);
     CPPUNIT_TEST(testRedlineCalc);
     CPPUNIT_TEST(testPaintPartTile);
     CPPUNIT_TEST(testPaintPartTileDifferentSchemes);
@@ -1043,26 +1041,6 @@ void DesktopLOKTest::testWriterComments()
     auto xTextField = xTextPortion->getPropertyValue("TextField").get< uno::Reference<beans::XPropertySet> >();
     // This was empty, typed characters ended up in the body text.
     CPPUNIT_ASSERT_EQUAL(OUString("test"), xTextField->getPropertyValue("Content").get<OUString>());
-}
-
-void DesktopLOKTest::testTrackChanges()
-{
-    // Load a document and create two views.
-    LibLibreOffice_Impl aOffice;
-    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
-    pDocument->pClass->createView(pDocument);
-    pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
-    Scheduler::ProcessEventsToIdle();
-
-    // Enable track changes and assert that both views get notified.
-    m_nTrackChanges = 0;
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:TrackChanges", nullptr, false);
-    Scheduler::ProcessEventsToIdle();
-    // This was 1, only the active view was notified.
-    CPPUNIT_ASSERT_EQUAL(2, m_nTrackChanges);
 }
 
 void DesktopLOKTest::testSheetOperations()

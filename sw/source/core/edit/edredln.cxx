@@ -26,7 +26,7 @@
 
 RedlineFlags SwEditShell::GetRedlineFlags() const
 {
-    return GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags();
+    return GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags(this);
 }
 
 void SwEditShell::SetRedlineFlags( RedlineFlags eMode )
