@@ -3003,25 +3003,42 @@ void ChartExport::exportSeriesCategory( const Reference< chart2::data::XDataSequ
         pFS->writeEscaped(aCellRange);
         pFS->endElement(FSNS(XML_c, XML_f));
 
-        ::std::vector< OUString > aCategories;
-        lcl_fillCategoriesIntoStringVector(xValueSeq, aCategories);
-        sal_Int32 ptCount = aCategories.size();
         pFS->startElement(FSNS(XML_c, bWriteDateCategories ? XML_numCache : XML_strCache));
         if (bWriteDateCategories)
         {
             pFS->startElement(FSNS(XML_c, XML_formatCode));
             pFS->writeEscaped(aNumberFormatString);
             pFS->endElement(FSNS(XML_c, XML_formatCode));
-        }
 
-        pFS->singleElement(FSNS(XML_c, XML_ptCount), XML_val, OString::number(ptCount));
-        for (sal_Int32 i = 0; i < ptCount; i++)
+            std::vector<double> aDateCategories = lcl_getAllValuesFromSequence(xValueSeq);
+            const sal_Int32 ptCount = aDateCategories.size();
+            pFS->singleElement(FSNS(XML_c, XML_ptCount), XML_val, OString::number(ptCount));
+            for (sal_Int32 i = 0; i < ptCount; i++)
+            {
+                if (!std::isnan(aDateCategories[i]))
+                {
+                    pFS->startElement(FSNS(XML_c, XML_pt), XML_idx, OString::number(i));
+                    pFS->startElement(FSNS(XML_c, XML_v));
+                    pFS->write(OString::number(aDateCategories[i]));
+                    pFS->endElement(FSNS(XML_c, XML_v));
+                    pFS->endElement(FSNS(XML_c, XML_pt));
+                }
+            }
+        }
+        else
         {
-            pFS->startElement(FSNS(XML_c, XML_pt), XML_idx, OString::number(i));
-            pFS->startElement(FSNS(XML_c, XML_v));
-            pFS->writeEscaped(aCategories[i]);
-            pFS->endElement(FSNS(XML_c, XML_v));
-            pFS->endElement(FSNS(XML_c, XML_pt));
+            std::vector<OUString> aCategories;
+            lcl_fillCategoriesIntoStringVector(xValueSeq, aCategories);
+            const sal_Int32 ptCount = aCategories.size();
+            pFS->singleElement(FSNS(XML_c, XML_ptCount), XML_val, OString::number(ptCount));
+            for (sal_Int32 i = 0; i < ptCount; i++)
+            {
+                pFS->startElement(FSNS(XML_c, XML_pt), XML_idx, OString::number(i));
+                pFS->startElement(FSNS(XML_c, XML_v));
+                pFS->writeEscaped(aCategories[i]);
+                pFS->endElement(FSNS(XML_c, XML_v));
+                pFS->endElement(FSNS(XML_c, XML_pt));
+            }
         }
 
         pFS->endElement(FSNS(XML_c, bWriteDateCategories ? XML_numCache : XML_strCache));
