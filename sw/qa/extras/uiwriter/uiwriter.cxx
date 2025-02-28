@@ -8365,6 +8365,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf160898)
     pWrtShell->SelAll();
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf165351)
+{
+    SwDoc* pDoc = createDoc("tdf165351.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Move the cursor into the fly frame
+    pWrtShell->GotoFly("Frame1", FLYCNTTYPE_FRM, false);
+    pWrtShell->EndOfSection();
+    pWrtShell->GoNextCell(/*bAppendLine=*/true);
+    pWrtShell->Undo();
+    // getting this item crashed
+    SfxItemSet temp{ pDoc->GetAttrPool(), svl::Items<SID_RULER_LR_MIN_MAX, SID_RULER_LR_MIN_MAX>{} };
+    pWrtShell->GetView().StateTabWin(temp);
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
 
