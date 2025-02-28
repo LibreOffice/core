@@ -358,6 +358,156 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testLoadVisibleArea)
     SwPageFrame* pPage3 = pPage2->GetNext()->DynCastPageFrame();
     CPPUNIT_ASSERT(pPage3->IsInvalidContent());
 }
+
+std::vector<OString> FilterStateChanges(const std::vector<OString>& rChanges,
+                                        std::string_view rPrefix)
+{
+    std::vector<OString> aRet;
+    for (const auto& rChange : rChanges)
+    {
+        if (rChange.startsWith(rPrefix))
+        {
+            aRet.push_back(rChange);
+        }
+    }
+    return aRet;
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewEnableOne)
+{
+    // Given a document with two views:
+    SwXTextDocument* pXTextDocument = createDoc();
+    CPPUNIT_ASSERT(pXTextDocument);
+    SwTestViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    SfxLokHelper::createView();
+    SwTestViewCallback aView2;
+    int nView2 = SfxLokHelper::getView();
+
+    // When recording changes in view1:
+    SfxLokHelper::setView(nView1);
+    aView1.m_aStateChanges.clear();
+    aView2.m_aStateChanges.clear();
+    comphelper::dispatchCommand(".uno:TrackChanges", {});
+
+    // Then make sure view1 gets a state track changes state change, but not view2:
+    // Filter out .uno:ModifiedStatus=true, which is not interesting here.
+    std::vector<OString> aRecord1 = FilterStateChanges(aView1.m_aStateChanges, ".uno:TrackChanges");
+    CPPUNIT_ASSERT(!aRecord1.empty());
+    std::vector<OString> aRecord2 = FilterStateChanges(aView2.m_aStateChanges, ".uno:TrackChanges");
+    CPPUNIT_ASSERT(aRecord2.empty());
+
+    // And given a reset state (both view1 and view2 recording is disabled):
+    comphelper::dispatchCommand(".uno:TrackChanges", {});
+
+    // When recording changes in view2:
+    SfxLokHelper::setView(nView2);
+    aView1.m_aStateChanges.clear();
+    aView2.m_aStateChanges.clear();
+    comphelper::dispatchCommand(".uno:TrackChanges", {});
+
+    // Then make sure view2 gets a state track changes state change, but not view1:
+    CPPUNIT_ASSERT(aView1.m_aStateChanges.empty());
+    CPPUNIT_ASSERT(!aView2.m_aStateChanges.empty());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewEnableBoth)
+{
+    // Given a document with 2 views, view1 record changes:
+    SwXTextDocument* pXTextDocument = createDoc();
+    CPPUNIT_ASSERT(pXTextDocument);
+    SwTestViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SfxLokHelper::createView();
+    SwTestViewCallback aView2;
+    int nView2 = SfxLokHelper::getView();
+    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SfxLokHelper::setView(nView1);
+    comphelper::dispatchCommand(".uno:TrackChanges", {});
+    SfxLokHelper::setView(nView2);
+    CPPUNIT_ASSERT(pWrtShell1->GetViewOptions()->IsRedlineRecordingOn());
+    CPPUNIT_ASSERT(!pWrtShell2->GetViewOptions()->IsRedlineRecordingOn());
+
+    // When turning on track changes for view2:
+    comphelper::dispatchCommand(".uno:TrackChanges", {});
+
+    // Then make sure both views have track changes turned on:
+    CPPUNIT_ASSERT(pWrtShell1->GetViewOptions()->IsRedlineRecordingOn());
+    // Without the accompanying fix in place, this test would have failed, .uno:TrackChanges in
+    // view2 was ignored when view1 already tracked changes.
+    CPPUNIT_ASSERT(pWrtShell2->GetViewOptions()->IsRedlineRecordingOn());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewInsert)
+{
+    // Given 2 views, view 1 records changes, view does not record changes:
+    SwXTextDocument* pXTextDocument = createDoc();
+    CPPUNIT_ASSERT(pXTextDocument);
+    SwTestViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell1->Insert(u"X"_ustr);
+    SfxLokHelper::createView();
+    SwTestViewCallback aView2;
+    int nView2 = SfxLokHelper::getView();
+    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SfxLokHelper::setView(nView1);
+    comphelper::dispatchCommand(".uno:TrackChanges", {});
+
+    // When view 1 types:
+    pWrtShell1->SttEndDoc(/*bStt=*/true);
+    pWrtShell1->Insert(u"A"_ustr);
+    // Then make sure a redline is created:
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pWrtShell1->GetRedlineCount());
+
+    // When view 2 types:
+    SfxLokHelper::setView(nView2);
+    pWrtShell2->SttEndDoc(/*bStt=*/false);
+    pWrtShell2->Insert(u"Z"_ustr);
+    // Then make sure no redline is created:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the insertion in view 2 was recorded.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pWrtShell2->GetRedlineCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewDelete)
+{
+    // Given 2 views, view 1 records changes, view does not record changes:
+    SwXTextDocument* pXTextDocument = createDoc();
+    CPPUNIT_ASSERT(pXTextDocument);
+    SwTestViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell1->Insert(u"test"_ustr);
+    SfxLokHelper::createView();
+    SwTestViewCallback aView2;
+    int nView2 = SfxLokHelper::getView();
+    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SfxLokHelper::setView(nView1);
+    comphelper::dispatchCommand(".uno:TrackChanges", {});
+
+    // When view 1 deletes:
+    pWrtShell1->SttEndDoc(/*bStt=*/true);
+    pWrtShell1->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell1->DelRight();
+    // Then make sure a redline is created:
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pWrtShell1->GetRedlineCount());
+
+    // When view 2 deletes:
+    SfxLokHelper::setView(nView2);
+    pWrtShell2->SttEndDoc(/*bStt=*/false);
+    pWrtShell2->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell2->DelLeft();
+    // Then make sure no redline is created:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the deletion in view 2 was recorded.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pWrtShell2->GetRedlineCount());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -425,7 +425,7 @@ public:
 
     // password protection for Calc (derived from SfxObjectShell)
     // see also:    FID_CHG_RECORD, SID_CHG_PROTECT
-    virtual bool    IsChangeRecording() const override;
+    virtual bool    IsChangeRecording(SfxViewShell* pViewShell = nullptr) const override;
     virtual bool    HasChangeRecordProtection() const override;
     virtual void    SetChangeRecording( bool bActivate, bool bLockAllViews = false ) override;
     virtual void    SetProtectionPassword( const OUString &rPassword ) override;

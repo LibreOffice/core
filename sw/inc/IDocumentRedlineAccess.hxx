@@ -38,6 +38,7 @@ class SwPaM;
 struct SwPosition;
 class SwStartNode;
 class SwNode;
+class SwViewShell;
 
 enum class RedlineFlags
 {
@@ -99,7 +100,7 @@ public:
         @returns
         the currently set redline mode
     */
-     virtual RedlineFlags GetRedlineFlags() const = 0;
+     virtual RedlineFlags GetRedlineFlags(const SwViewShell* pViewShell = nullptr) const = 0;
 
     /** Set a new redline mode.
 

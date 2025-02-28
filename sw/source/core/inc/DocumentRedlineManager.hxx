@@ -34,9 +34,9 @@ public:
 
     /**
      * Replaced by SwRootFrame::IsHideRedlines() (this is model-level redline
-     * hiding).
+     * hiding) for hide/show.
      */
-    virtual RedlineFlags GetRedlineFlags() const override;
+    virtual RedlineFlags GetRedlineFlags(const SwViewShell* pViewShell = nullptr) const override;
 
     virtual void SetRedlineFlags_intern(/*[in]*/RedlineFlags eMode) override;
 

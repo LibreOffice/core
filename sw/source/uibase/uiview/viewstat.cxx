@@ -332,7 +332,7 @@ void SwView::GetState(SfxItemSet &rSet)
             }
             break;
             case FN_REDLINE_ON:
-                rSet.Put( SfxBoolItem( nWhich, GetDocShell()->IsChangeRecording() ) );
+                rSet.Put( SfxBoolItem( nWhich, GetDocShell()->IsChangeRecording(this) ) );
                 // When the view is new (e.g. on load), show the Hidden Track Changes infobar
                 // if Show Changes is disabled, but recording of changes is enabled
                 // or hidden tracked changes are there already in the document.
@@ -340,7 +340,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 // enabled, see in sfx2.
                 if ( m_bForceChangesToolbar && m_pWrtShell->GetLayout()->IsHideRedlines() )
                 {
-                    bool isRecording = GetDocShell()->IsChangeRecording();
+                    bool isRecording = GetDocShell()->IsChangeRecording(this);
                     bool hasRecorded =
                         m_pWrtShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().size();
                     if ( isRecording || hasRecorded )
