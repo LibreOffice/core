@@ -633,7 +633,6 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
             {
                 rtl::Reference<OToolBoxWindowItem> xChild2(new OToolBoxWindowItem(0,
                     ::comphelper::getProcessComponentContext(), xInnerAcc, xParent));
-                pItemWindow->SetAccessible(xChild2);
                 xChild->SetChild( xChild2 );
             }
         }
