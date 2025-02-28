@@ -48,6 +48,7 @@
 #include <fmtinfmt.hxx>
 #include <rootfrm.hxx>
 
+#include <svx/svxids.hrc>
 #include <svx/svdview.hxx>
 #include <svx/svdmark.hxx>
 
@@ -403,6 +404,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159816)
     // or in BigPtrArray::operator[] (tdf#159816):
     // Assertion failed: idx < m_nSize
     xTransfer->PrivateDrop(*pWrtShell, ptTo, /*bMove=*/true, /*bXSelection=*/true);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf165351)
+{
+    createSwDoc("tdf165351.fodt");
+
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    // Move the cursor into the fly frame
+    pWrtShell->GotoFly(u"Frame1"_ustr, FLYCNTTYPE_FRM, false);
+    pWrtShell->EndOfSection();
+    pWrtShell->GoNextCell(/*bAppendLine=*/true);
+    pWrtShell->Undo();
+    // getting this item crashed
+    SfxItemSet temp{ pDoc->GetAttrPool(), svl::Items<SID_RULER_LR_MIN_MAX, SID_RULER_LR_MIN_MAX> };
+    pWrtShell->GetView().StateTabWin(temp);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
