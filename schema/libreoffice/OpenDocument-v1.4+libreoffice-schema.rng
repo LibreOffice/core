@@ -3108,6 +3108,14 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <rng:define name="style-paragraph-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:hyphenation-keep-line">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
   <!-- https://issues.oasis-open.org/browse/OFFICE-4165 -->
   <rng:define name="cssLength">
     <rng:data type="string">

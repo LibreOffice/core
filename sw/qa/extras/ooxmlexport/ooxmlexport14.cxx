@@ -1496,6 +1496,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160518_page_in_text_body_style)
     assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='allowHyphenationAtTrackBottom']", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf160518_auto_in_text_body_style)
+{
+    // text body style contains hyphenation settings
+    loadAndReload("tdf160518_auto_in_text_body_style.fodt");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='useWord2013TrackBottomHyphenation']", "val", u"1");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[@w:name='allowHyphenationAtTrackBottom']", "val", u"1");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf165354)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();

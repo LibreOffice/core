@@ -1073,6 +1073,7 @@ namespace xmloff::token {
         TOKEN( "hyperlink-behaviour",             XML_HYPERLINK_BEHAVIOUR ),
         TOKEN( "hyphenate",                       XML_HYPHENATE ),
         TOKEN( "hyphenation-keep",                XML_HYPHENATION_KEEP ),
+        TOKEN( "hyphenation-keep-line",           XML_HYPHENATION_KEEP_LINE ),
         TOKEN( "hyphenation-keep-type",           XML_HYPHENATION_KEEP_TYPE ),
         TOKEN( "hyphenation-ladder-count",        XML_HYPHENATION_LADDER_COUNT ),
         TOKEN( "hyphenation-push-char-count",     XML_HYPHENATION_PUSH_CHAR_COUNT ),

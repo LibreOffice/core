@@ -973,6 +973,7 @@ hyperlink
 hyperlink-behaviour
 hyphenate
 hyphenation-keep
+hyphenation-keep-line
 hyphenation-keep-type
 hyphenation-ladder-count
 hyphenation-push-char-count

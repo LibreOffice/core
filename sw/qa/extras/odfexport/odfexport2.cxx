@@ -171,7 +171,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_spread)
         return;
 
     // fo:hyphenation-keep="page" loext:hyphenation-keep-type="spread"
-    loadAndReload("tdf132599_page.fodt");
+    loadAndReload("tdf132599_spread.fodt");
     // shift last line of right page, resulting 3 pages
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 }
@@ -300,6 +300,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_auto_in_text_body_style)
 
     // fo:hyphenation-keep="auto" defined in text body style
     loadAndReload("tdf160518_auto_in_text_body_style.fodt");
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf165354_page)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
+        return;
+
+    // fo:hyphenation-keep="page" defined in direct paragraph formatting
+    loadAndReload("tdf165354_page.fodt");
+    // This was 3 in tdf132599, but now 2, shifting only the last hyphenated word,
+    // not the full line, because of loext:hyphenation-keep-line=true
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
