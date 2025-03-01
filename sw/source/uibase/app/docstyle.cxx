@@ -3096,7 +3096,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             if( !bAll )
             {
                 // then also the ones, that we are mapping:
-                static sal_uInt16 aPoolIds[] = {
+                static constexpr sal_uInt16 aPoolIds[] = {
                     RES_POOLCOLL_SEND_ADDRESS, //  --> ADDRESS
                     RES_POOLCOLL_TABLE_HDLN,    //  --> TH
                     RES_POOLCOLL_TABLE,     //  --> TD
@@ -3110,20 +3110,17 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                     RES_POOLCOLL_HEADLINE5, //  --> H5
                     RES_POOLCOLL_HEADLINE6, //  --> H6
                     RES_POOLCOLL_FOOTNOTE,
-                    RES_POOLCOLL_ENDNOTE,
-                    0
+                    RES_POOLCOLL_ENDNOTE
                     };
 
-                sal_uInt16* pPoolIds = aPoolIds;
                 OUString s;
-                while( *pPoolIds )
+                for( const sal_uInt16 nPoolId : aPoolIds )
                 {
-                    if( !bIsSearchUsed || rDoc.getIDocumentStylePoolAccess().IsPoolTextCollUsed( *pPoolIds ) )
+                    if( !bIsSearchUsed || rDoc.getIDocumentStylePoolAccess().IsPoolTextCollUsed( nPoolId ) )
                     {
-                        s = SwStyleNameMapper::GetUIName( *pPoolIds, ProgName(s) );
+                        s = SwStyleNameMapper::GetUIName( nPoolId, ProgName(s) );
                         m_aLst.Append( SfxStyleFamily::Para, s);
                     }
-                    ++pPoolIds;
                 }
             }
         }
