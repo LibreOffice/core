@@ -1430,7 +1430,7 @@ private:
                 return false;
         }
         // todo: I'm not bothering to properly check the following fields
-        // because I ran out of enthusiasm, so we wont detect duplicates if they
+        // because I ran out of enthusiasm, so we won't detect duplicates if they
         // contain data here.
         if (lhs->mpDataBar.get() != rhs->mpDataBar.get())
             return false;
