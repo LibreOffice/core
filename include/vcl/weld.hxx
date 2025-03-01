@@ -2713,7 +2713,7 @@ public:
     virtual int adjustment_get_step_increment() const = 0;
     virtual void adjustment_set_step_increment(int size) = 0;
     virtual int adjustment_get_lower() const = 0;
-    virtual void adjustment_set_lower(int upper) = 0;
+    virtual void adjustment_set_lower(int lower) = 0;
 
     virtual int get_scroll_thickness() const = 0;
     virtual void set_scroll_thickness(int nThickness) = 0;
