@@ -8634,7 +8634,7 @@ private:
     {
         GtkInstanceScrollbar* pThis = static_cast<GtkInstanceScrollbar*>(widget);
         SolarMutexGuard aGuard;
-        pThis->signal_adjustment_changed();
+        pThis->signal_adjustment_value_changed();
     }
 
 #if GTK_CHECK_VERSION(4, 0, 0)

@@ -2693,10 +2693,10 @@ public:
 
 class VCL_DLLPUBLIC Scrollbar : virtual public Widget
 {
-    Link<Scrollbar&, void> m_aChangeHdl;
+    Link<Scrollbar&, void> m_aValueChangeHdl;
 
 protected:
-    void signal_adjustment_changed() { m_aChangeHdl.Call(*this); }
+    void signal_adjustment_value_changed() { m_aValueChangeHdl.Call(*this); }
 
 public:
     virtual void adjustment_configure(int value, int lower, int upper, int step_increment,
@@ -2721,7 +2721,10 @@ public:
 
     virtual ScrollType get_scroll_type() const = 0;
 
-    void connect_adjustment_changed(const Link<Scrollbar&, void>& rLink) { m_aChangeHdl = rLink; }
+    void connect_adjustment_value_changed(const Link<Scrollbar&, void>& rLink)
+    {
+        m_aValueChangeHdl = rLink;
+    }
 };
 
 class VCL_DLLPUBLIC SizeGroup

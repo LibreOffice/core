@@ -2634,7 +2634,10 @@ public:
 };
 }
 
-IMPL_LINK_NOARG(SalInstanceScrollbar, ScrollHdl, ScrollBar*, void) { signal_adjustment_changed(); }
+IMPL_LINK_NOARG(SalInstanceScrollbar, ScrollHdl, ScrollBar*, void)
+{
+    signal_adjustment_value_changed();
+}
 
 SalInstanceNotebook::SalInstanceNotebook(TabControl* pNotebook, SalInstanceBuilder* pBuilder,
                                          bool bTakeOwnership)

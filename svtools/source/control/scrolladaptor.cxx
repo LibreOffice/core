@@ -105,7 +105,7 @@ void ScrollAdaptor::EnableRTL(bool bEnable) { m_xScrollBar->set_direction(bEnabl
 void ScrollAdaptor::SetScrollHdl(const Link<weld::Scrollbar&, void>& rLink)
 {
     m_aLink = rLink;
-    m_xScrollBar->connect_adjustment_changed(rLink);
+    m_xScrollBar->connect_adjustment_value_changed(rLink);
 }
 
 void ScrollAdaptor::SetMouseReleaseHdl(const Link<const MouseEvent&, bool>& rLink)
