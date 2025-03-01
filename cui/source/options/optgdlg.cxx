@@ -52,6 +52,7 @@
 #include <GraphicsTestsDialog.hxx>
 #include <unotools/searchopt.hxx>
 #include <sal/log.hxx>
+#include <officecfg/Office/Canvas.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <comphelper/configuration.hxx>
@@ -421,10 +422,7 @@ class CanvasSettings
 public:
     CanvasSettings();
 
-    bool    IsHardwareAccelerationEnabled() const;
     bool    IsHardwareAccelerationAvailable() const;
-    bool    IsHardwareAccelerationRO() const;
-    void    EnabledHardwareAcceleration( bool _bEnabled ) const;
 
 private:
     typedef std::vector< std::pair<OUString,Sequence<OUString> > > ServiceVector;
@@ -520,48 +518,6 @@ bool CanvasSettings::IsHardwareAccelerationAvailable() const
     }
 
     return mbHWAccelAvailable;
-}
-
-bool CanvasSettings::IsHardwareAccelerationEnabled() const
-{
-    bool bForceLastEntry(false);
-    if( !mxForceFlagNameAccess.is() )
-        return true;
-
-    if( !(mxForceFlagNameAccess->getByName(u"ForceSafeServiceImpl"_ustr) >>= bForceLastEntry) )
-        return true;
-
-    return !bForceLastEntry;
-}
-
-bool CanvasSettings::IsHardwareAccelerationRO() const
-{
-    Reference< XPropertySet > xSet(mxForceFlagNameAccess, UNO_QUERY);
-    if (!xSet.is())
-        return true;
-
-    Reference< XPropertySetInfo > xInfo = xSet->getPropertySetInfo();
-    Property aProp = xInfo->getPropertyByName(u"ForceSafeServiceImpl"_ustr);
-    return ((aProp.Attributes & css::beans::PropertyAttribute::READONLY ) == css::beans::PropertyAttribute::READONLY);
-}
-
-void CanvasSettings::EnabledHardwareAcceleration( bool _bEnabled ) const
-{
-    Reference< XNameReplace > xNameReplace(
-        mxForceFlagNameAccess, UNO_QUERY );
-
-    if( !xNameReplace.is() )
-        return;
-
-    xNameReplace->replaceByName( u"ForceSafeServiceImpl"_ustr, Any(!_bEnabled) );
-
-    Reference< XChangesBatch > xChangesBatch(
-        mxForceFlagNameAccess, UNO_QUERY );
-
-    if( !xChangesBatch.is() )
-        return;
-
-    xChangesBatch->commitChanges();
 }
 
 // class OfaViewTabPage --------------------------------------------------
@@ -880,7 +836,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     {
         if(m_xUseHardwareAccell->get_state_changed_from_saved())
         {
-            pCanvasSettings->EnabledHardwareAcceleration(m_xUseHardwareAccell->get_active());
+            officecfg::Office::Canvas::ForceSafeServiceImpl::set(m_xUseHardwareAccell->get_active(), xChanges);
             bModified = true;
         }
     }
@@ -1062,10 +1018,10 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
 void OfaViewTabPage::UpdateHardwareAccelStatus()
 {
     // #i95644# HW accel (unified to disable mechanism)
-    bool bHardwareAccRO = pCanvasSettings->IsHardwareAccelerationRO();
+    bool bHardwareAccRO = officecfg::Office::Canvas::ForceSafeServiceImpl::isReadOnly();
     if(pCanvasSettings->IsHardwareAccelerationAvailable())
     {
-        m_xUseHardwareAccell->set_active(pCanvasSettings->IsHardwareAccelerationEnabled());
+        m_xUseHardwareAccell->set_active(officecfg::Office::Canvas::ForceSafeServiceImpl::get());
         m_xUseHardwareAccell->set_sensitive(!bHardwareAccRO);
         m_xUseHardwareAccellImg->set_visible(bHardwareAccRO);
     }
