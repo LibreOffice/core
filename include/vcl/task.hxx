@@ -32,6 +32,7 @@ enum class TaskPriority
     HIGH_IDLE,     ///< Important idle events to be run before processing drawing events
     RESIZE,        ///< Resize runs before repaint, so we won't paint twice
     REPAINT,       ///< All repaint events should go in here
+    SKIA_FLUSH,    ///< tdf#165277 Skia needs to flush immediately before POST_PAINT tasks on macOS
     POST_PAINT,    ///< Everything running directly after painting
     DEFAULT_IDLE,  ///< Default idle priority
     LOWEST,        ///< Low, very idle cleanup tasks
