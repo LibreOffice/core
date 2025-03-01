@@ -89,11 +89,10 @@ Reference< XCloneable > SAL_CALL OFormattedFieldWrapper::createClone()
     // clone the aggregate
     if ( m_xAggregate.is() )
     {
-        rtl::Reference< OEditBaseModel > xClone = static_cast<OEditBaseModel*>(m_xAggregate->createClone().get());
-        xRef->m_xAggregate = xClone;
+        xRef->m_xAggregate.set(static_cast<OEditBaseModel*>(m_xAggregate->createClone().get()));
         OSL_ENSURE(xRef->m_xAggregate.is(), "invalid aggregate cloned !");
 
-        xRef->m_xFormattedPart = xClone;
+        xRef->m_xFormattedPart = xRef->m_xAggregate;
 
         if ( m_pEditPart.is() )
         {
