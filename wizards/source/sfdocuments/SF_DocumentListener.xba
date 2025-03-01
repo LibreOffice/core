@@ -47,7 +47,8 @@ Dim oController As Object						&apos;	com.sun.star.frame.Controller
 Dim oListener As Object							&apos;	com.sun.star.sheet.XRangeSelectionListener
 Dim lCountLoops As Long							&apos;	Sleep cycles counter
 
-Const cstListenerPrefix = &quot;_SFRGSEL_&quot;			&apos;	Prefix used for naming events Subs
+Const cstListenerPrefix = &quot;SFDocuments.SF_DocumentListener._SFRGSEL_&quot;
+												&apos;	Prefix used for naming events Subs
 Const cstSleep = 50								&apos;	Sleep steps in ms while waiting for the end of the interaction
 Const cstMaxSleep = (60 * 5 * 1000) / cstSleep	&apos;	Never sleep more than 5 minutes. Afterwards, processing continues
 

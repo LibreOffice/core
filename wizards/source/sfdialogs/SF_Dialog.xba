@@ -1989,7 +1989,8 @@ Try:
 		_DialogModel.DesktopAsParent = Not ( _BuiltFromScratch And _BuiltInPython )
 		_DialogControl.setVisible(True)
 		&apos;	Watch the window Close button
-		Set oListener = CreateUnoListener(&quot;_SFNONMODAL_&quot;, &quot;com.sun.star.awt.XTopWindowListener&quot;)
+		Set oListener = CreateUnoListener(&quot;SFDialogs.SF_DialogListener._SFNONMODAL_&quot; _
+											, &quot;com.sun.star.awt.XTopWindowListener&quot;)
 		_DialogControl.addTopWindowListener(oListener)
 		lExecute = 0
 	End If
@@ -2359,7 +2360,8 @@ Dim bManager As Boolean				&apos;	Return value
 Dim vControls As Variant			&apos;	Array of involved controls
 Dim oControl As Object				&apos;	A DialogControl object
 Dim i As Long
-Const cstPrefix = &quot;_SFTAB_&quot;		&apos;	Prefix of Subs to trigger when involved controls are clicked
+Const cstPrefix = &quot;SFDialogs.SF_DialogListener._SFTAB_&quot;
+							&apos;	Prefix of Subs to trigger when involved controls are clicked
 Const cstComma = &quot;,&quot;
 
 Const cstThisSub = &quot;SFDialogs.Dialog.SetPageManager&quot;

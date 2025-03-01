@@ -2308,7 +2308,8 @@ Const cstSubArgs = &quot;Value&quot;
 					End If
 					&apos;	Setup a new fresh listener
 					If Len(pvValue) &gt; 0 Then
-						Set _ExpandListener = CreateUnoListener(&quot;_SFEXP_&quot;, &quot;com.sun.star.awt.tree.XTreeExpansionListener&quot;)
+						Set _ExpandListener = CreateUnoListener(&quot;SFDialogs.SF_DialogListener._SFEXP_&quot; _
+													, &quot;com.sun.star.awt.tree.XTreeExpansionListener&quot;)
 						_ControlView.addTreeExpansionListener(_ExpandListener)
 						_OnNodeExpanded = pvValue
 					End If
@@ -2326,7 +2327,8 @@ Const cstSubArgs = &quot;Value&quot;
 					End If
 					&apos;	Setup a new fresh listener
 					If Len(pvValue) &gt; 0 Then
-						Set _SelectListener = CreateUnoListener(&quot;_SFSEL_&quot;, &quot;com.sun.star.view.XSelectionChangeListener&quot;)
+						Set _SelectListener = CreateUnoListener(&quot;SFDialogs.SF_DialogListener._SFSEL_&quot; _
+													, &quot;com.sun.star.view.XSelectionChangeListener&quot;)
 						_ControlView.addSelectionChangeListener(_SelectListener)
 						_OnNodeSelected = pvValue
 					End If

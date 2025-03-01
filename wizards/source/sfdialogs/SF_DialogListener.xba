@@ -564,7 +564,9 @@ Try:
 			Case &quot;XActionListener&quot;
 				._ActionCounter = ._ActionCounter + iCounterIncrement
 				If ._ActionCounter = 1 Then
-					If IsNull(._ActionListener) Then Set ._ActionListener = CreateUnoListener(&quot;_SFACTION_&quot;, cstPrefix &amp; sListener)
+					If IsNull(._ActionListener) Then
+						Set ._ActionListener = CreateUnoListener(&quot;SFDialogs.SF_DialogListener._SFACTION_&quot;, cstPrefix &amp; sListener)
+					End If
 					If iCounterIncrement = 1 Then oView.addActionListener(._ActionListener)
 				ElseIf ._ActionCounter &lt;= 0 Then
 					If Not IsNull(._ActionListener) Then oView.removeActionListener(._ActionListener)
@@ -573,7 +575,9 @@ Try:
 			Case &quot;XAdjustmentListener&quot;
 				._AdjustmentCounter = ._AdjustmentCounter + iCounterIncrement
 				If ._AdjustmentCounter = 1 Then
-					If IsNull(._AdjustmentListener) Then Set ._AdjustmentListener = CreateUnoListener(&quot;_SFADJUST_&quot;, cstPrefix &amp; sListener)
+					If IsNull(._AdjustmentListener) Then
+						Set ._AdjustmentListener = CreateUnoListener(&quot;SFDialogs.SF_DialogListener._SFADJUST_&quot;, cstPrefix &amp; sListener)
+					End If
 					If iCounterIncrement = 1 Then oView.addAdjustmentListener(._AdjustmentListener)
 				ElseIf ._AdjustmentCounter &lt;= 0 Then
 					If Not IsNull(._AdjustmentListener) Then oView.removeAdjustmentListener(._AdjustmentListener)
@@ -582,7 +586,9 @@ Try:
 			Case &quot;XFocusListener&quot;
 				._FocusCounter = ._FocusCounter + iCounterIncrement
 				If ._FocusCounter = 1 Then
-					If IsNull(._FocusListener) Then Set ._FocusListener = CreateUnoListener(&quot;_SFFOCUS_&quot;, cstPrefix &amp; sListener)
+					If IsNull(._FocusListener) Then
+						Set ._FocusListener = CreateUnoListener(&quot;SFDialogs.SF_DialogListener._SFFOCUS_&quot;, cstPrefix &amp; sListener)
+					End If
 					If iCounterIncrement = 1 Then oView.addFocusListener(._FocusListener)
 				ElseIf ._FocusCounter &lt;= 0 Then
 					If Not IsNull(._FocusListener) Then oView.removeFocusListener(._FocusListener)
@@ -591,7 +597,9 @@ Try:
 			Case &quot;XItemListener&quot;
 				._ItemCounter = ._ItemCounter + iCounterIncrement
 				If ._ItemCounter = 1 Then
-					If IsNull(._ItemListener) Then Set ._ItemListener = CreateUnoListener(&quot;_SFITEM_&quot;, cstPrefix &amp; sListener)
+					If IsNull(._ItemListener) Then
+						Set ._ItemListener = CreateUnoListener(&quot;SFDialogs.SF_DialogListener._SFITEM_&quot;, cstPrefix &amp; sListener)
+					End If
 					If iCounterIncrement = 1 Then oView.addItemListener(._ItemListener)
 				ElseIf ._ItemCounter &lt;= 0 Then
 					If Not IsNull(._ItemListener) Then oView.removeItemListener(._ItemListener)
@@ -600,7 +608,9 @@ Try:
 			Case &quot;XKeyListener&quot;
 				._KeyCounter = ._KeyCounter + iCounterIncrement
 				If ._KeyCounter= 1 Then
-					If IsNull(._KeyListener) Then Set ._KeyListener = CreateUnoListener(&quot;_SFKEY_&quot;, cstPrefix &amp; sListener)
+					If IsNull(._KeyListener) Then
+						Set ._KeyListener = CreateUnoListener(&quot;SFDialogs.SF_DialogListener._SFKEY_&quot;, cstPrefix &amp; sListener)
+					End If
 					If iCounterIncrement = 1 Then oView.addKeyListener(._KeyListener)
 				ElseIf ._KeyCounter &lt;= 0 Then
 					If Not IsNull(._KeyListener) Then oView.removeKeyListener(._KeyListener)
@@ -609,7 +619,9 @@ Try:
 			Case &quot;XMouseListener&quot;
 				._MouseCounter = ._MouseCounter + iCounterIncrement
 				If ._MouseCounter= 1 Then
-					If IsNull(._MouseListener) Then Set ._MouseListener = CreateUnoListener(&quot;_SFMOUSE_&quot;, cstPrefix &amp; sListener)
+					If IsNull(._MouseListener) Then
+						Set ._MouseListener = CreateUnoListener(&quot;SFDialogs.SF_DialogListener._SFMOUSE_&quot;, cstPrefix &amp; sListener)
+					End If
 					If iCounterIncrement = 1 Then oView.addMouseListener(._MouseListener)
 				ElseIf ._MouseCounter &lt;= 0 Then
 					If Not IsNull(._MouseListener) Then oView.removeMouseListener(._MouseListener)
@@ -618,7 +630,9 @@ Try:
 			Case &quot;XMouseMotionListener&quot;
 				._MouseMotionCounter = ._MouseMotionCounter + iCounterIncrement
 				If ._MouseMotionCounter = 1 Then
-					If IsNull(._MouseMotionListener) Then Set ._MouseMotionListener = CreateUnoListener(&quot;_SFMOVE_&quot;, cstPrefix &amp; sListener)
+					If IsNull(._MouseMotionListener) Then
+						Set ._MouseMotionListener = CreateUnoListener(&quot;SFDialogs.SF_DialogListener._SFMOVE_&quot;, cstPrefix &amp; sListener)
+					End If
 					If iCounterIncrement = 1 Then oView.addMouseMotionListener(._MouseMotionListener)
 				ElseIf ._MouseMotionCounter &lt;= 0 Then
 					If Not IsNull(._MouseMotionListener) Then oView.removeMouseMotionListener(._MouseMotionListener)
@@ -627,7 +641,9 @@ Try:
 			Case &quot;XTextListener&quot;
 				._TextCounter = ._TextCounter + iCounterIncrement
 				If ._TextCounter = 1 Then
-					If IsNull(._TextListener) Then Set ._TextListener = CreateUnoListener(&quot;_SFTEXT_&quot;, cstPrefix &amp; sListener)
+					If IsNull(._TextListener) Then
+						Set ._TextListener = CreateUnoListener(&quot;SFDialogs.SF_DialogListener._SFTEXT_&quot;, cstPrefix &amp; sListener)
+					End If
 					If iCounterIncrement = 1 Then oView.addTextListener(._TextListener)
 				ElseIf ._TextCounter &lt;= 0 Then
 					If Not IsNull(._TextListener) Then oView.removeTextListener(._TextListener)

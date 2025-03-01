@@ -29,7 +29,7 @@ Dim MenuListener				As Object		&apos; com.sun.star.awt.XMenuListener
 
 REM =========================================================== PRIVATE CONSTANTS
 
-Private Const _MenuListenerPrefix		= &quot;_SFMENU_&quot;
+Private Const _MenuListenerPrefix		= &quot;SFWidgets.SF_MenuListener._SFMENU_&quot;
 Private Const _MenuListener				= &quot;com.sun.star.awt.XMenuListener&quot;
 Private Const cstUnoPrefix				= &quot;.uno:&quot;
 Private Const cstScriptArg				= &quot;:::&quot;
