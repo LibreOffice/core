@@ -26,11 +26,12 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapColor.hxx>
-#include <BitmapDuoToneFilter.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
+
+#include <bitmap/BitmapDuoToneFilter.hxx>
 
 using namespace com::sun::star;
 
