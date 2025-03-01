@@ -610,6 +610,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
 
 SvxBitmapTabPage::SvxPresetListBoxValueSet::SvxPresetListBoxValueSet(std::unique_ptr<weld::ScrolledWindow> pWindow)
     : SvxPresetListBox(std::move(pWindow))
+    , m_pSvxBitmapTabPage(nullptr)
 {
 }
 
