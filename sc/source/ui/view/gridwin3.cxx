@@ -55,7 +55,8 @@ bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
 {
     bool bRet = false;
     FuPoor* pDraw = mrViewData.GetView()->GetDrawFuncPtr();
-    pDraw->ResetSelectionHasChanged();
+    if (pDraw)
+        pDraw->ResetSelectionHasChanged();
     ScDrawView* pDrView = mrViewData.GetScDrawView();
     if (pDraw && !mrViewData.IsRefMode())
     {
