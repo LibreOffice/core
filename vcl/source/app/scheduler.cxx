@@ -518,6 +518,36 @@ void Scheduler::CallbackTaskScheduling()
 
     bool bIsHighPriorityIdle = pMostUrgent->mePriority >= TaskPriority::HIGH_IDLE;
 
+#ifdef MACOSX
+    // tdf#165277 On macOS, only delay priorities lower than POST_PAINT
+    // macOS bugs tdf#157312 and tdf#163945 were fixed by firing the
+    // Skia flush task with TaskPriority::POST_PAINT.
+    // The problem is that this method often executes within an
+    // NSTimer and NSTimers are always fired while LibreOffice is in
+    // -[NSApp nextEventMatchingMask:untilDate:inMode:dequeue:].
+    // Since fetching the next native event doesn't handle pending
+    // events until *after* all of the pending NSTimers have fired,
+    // calling SalInstance::AnyInput() will almost always return true
+    // due to the pending events that will be handled immediately
+    // after all of the the pending NSTimers have fired.
+    // The result is that the Skia flush task is frequently delayed
+    // and, in cases like tdf#165277, a user's attempts to get
+    // LibreOffice to paint the window through key and mouse events
+    // leads to an endless delaying of the Skia flush task.
+    // After experimenting with both Skia/Metal and Skia/Raster,
+    // tdf#165277 requires the Skia flush task to run immediately
+    // before the TaskPriority::POST_PAINT tasks. After that, all
+    // TaskPriority::POST_PAINT tasks must run so the Skia flush
+    // task now uses the TaskPriority::SKIA_FLUSH priority on macOS.
+    // One positive side effect of this change is that live resizing
+    // on macOS is now much smoother. Even with Skia disabled (which
+    // does not paint using a task but does use tasks to handle live
+    // resizing), the content resizes much more quickly when a user
+    // repidly changes window's size.
+    if (bIsHighPriorityIdle && pMostUrgent->mePriority <= TaskPriority::POST_PAINT)
+        bIsHighPriorityIdle = false;
+#endif
+
     // invoke the task
     Unlock();
 
