@@ -554,7 +554,7 @@ struct _LibreOfficeKitDocumentClass
 
     /// @see lok::Document::renderNextSlideLayer
     bool (*renderNextSlideLayer)(
-        LibreOfficeKitDocument* pThis, unsigned char* pBuffer, bool* bIsBitmapLayer, double* pScale, char** pJsonMessage);
+        LibreOfficeKitDocument* pThis, unsigned char* pBuffer, bool* bIsBitmapLayer, char** pJsonMessage);
 
     /// @see lok::Document::setViewOption
     void (*setViewOption)(LibreOfficeKitDocument* pThis, const char* pOption, const char* pValue);

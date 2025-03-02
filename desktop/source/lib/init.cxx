@@ -1343,7 +1343,7 @@ static bool doc_createSlideRenderer(
 static void doc_postSlideshowCleanup(LibreOfficeKitDocument* pThis);
 
 static bool doc_renderNextSlideLayer(
-    LibreOfficeKitDocument* pThis, unsigned char* pBuffer, bool* bIsBitmapLayer, double* pScale, char** pJsonMsg);
+    LibreOfficeKitDocument* pThis, unsigned char* pBuffer, bool* bIsBitmapLayer, char** pJsonMsg);
 
 static void doc_setViewOption(LibreOfficeKitDocument* pDoc, const char* pOption, const char* pValue);
 
@@ -5724,7 +5724,7 @@ static void doc_postSlideshowCleanup(LibreOfficeKitDocument* pThis)
 }
 
 static bool doc_renderNextSlideLayer(
-    LibreOfficeKitDocument* pThis, unsigned char* pBuffer, bool* pIsBitmapLayer, double* pScale, char** pJsonMessage)
+    LibreOfficeKitDocument* pThis, unsigned char* pBuffer, bool* pIsBitmapLayer, char** pJsonMessage)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -5737,7 +5737,7 @@ static bool doc_renderNextSlideLayer(
     }
     OUString sJsonMesssage;
     bool bIsBitmapLayer = false;
-    bool bDone = pDoc->renderNextSlideLayer(pBuffer, bIsBitmapLayer, *pScale, sJsonMesssage);
+    bool bDone = pDoc->renderNextSlideLayer(pBuffer, bIsBitmapLayer, sJsonMesssage);
 
     if (pJsonMessage)
         *pJsonMessage = convertOUString(sJsonMesssage);

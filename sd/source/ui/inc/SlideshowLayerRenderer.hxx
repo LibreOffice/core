@@ -185,7 +185,7 @@ public:
      * The properties of the layer are written to the input string in JSON format.
      *
      * @returns false, if nothing was rendered and rendering is done */
-    bool render(unsigned char* pBuffer, double& scale, OString& rJsonMsg);
+    bool render(unsigned char* pBuffer, OString& rJsonMsg);
 };
 
 } // end of namespace sd

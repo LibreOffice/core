@@ -405,7 +405,7 @@ public:
     }
 
     /** render slideshow layer*/
-    virtual bool renderNextSlideLayer(unsigned char* /*pBuffer*/, bool& /*bIsBitmapLayer*/, double& /*rScale*/, OUString& /*rJsonMsg*/)
+    virtual bool renderNextSlideLayer(unsigned char* /*pBuffer*/, bool& /*bIsBitmapLayer*/, OUString& /*rJsonMsg*/)
     {
         return true;
     }
