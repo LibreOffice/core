@@ -848,7 +848,7 @@
         "--env=GIO_EXTRA_MODULES=/app/lib/gio/modules",
         "--env=JAVA_HOME=/app/jre",
         "--env=LIBO_FLATPAK=1",
-        "--own-name=org.libreoffice.LibreOfficeIpc0",
+        "--own-name=de.allotropia.ZetaOfficeIpc0",
         "--talk-name=org.gtk.vfs.*",
         "--talk-name=com.canonical.AppMenu.Registrar"
     ]

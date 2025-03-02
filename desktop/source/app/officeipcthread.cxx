@@ -475,7 +475,7 @@ RequestHandler::Status DbusIpcThread::enable(rtl::Reference<IpcThread> * thread)
     }
     for (;;) {
         int n = dbus_bus_request_name(
-            con.connection, "org.libreoffice.LibreOfficeIpc0",
+            con.connection, "de.allotropia.ZetaOfficeIpc0",
             DBUS_NAME_FLAG_DO_NOT_QUEUE, &e);
         assert((n == -1) == bool(dbus_error_is_set(&e)));
         switch (n) {
@@ -508,9 +508,9 @@ RequestHandler::Status DbusIpcThread::enable(rtl::Reference<IpcThread> * thread)
                 char const * argstr = buf.getStr();
                 DbusMessageHolder msg(
                     dbus_message_new_method_call(
-                        "org.libreoffice.LibreOfficeIpc0",
-                        "/org/libreoffice/LibreOfficeIpc0",
-                        "org.libreoffice.LibreOfficeIpcIfc0", "Execute"));
+                        "de.allotropia.ZetaOfficeIpc0",
+                        "/de/allotropia/ZetaOfficeIpc0",
+                        "de.allotropia.ZetaOfficeIpcIfc0", "Execute"));
                 if (msg.message == nullptr) {
                     SAL_WARN(
                         "desktop.app", "dbus_message_new_method_call failed");
@@ -573,7 +573,7 @@ void DbusIpcThread::execute()
                 break;
             }
             if (!dbus_message_is_method_call(
-                    msg.message, "org.libreoffice.LibreOfficeIpcIfc0",
+                    msg.message, "de.allotropia.ZetaOfficeIpcIfc0",
                     "Execute"))
             {
                 SAL_INFO("desktop.app", "unknown DBus message ignored");
