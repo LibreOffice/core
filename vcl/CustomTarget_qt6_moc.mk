@@ -40,6 +40,7 @@ $(call gb_CustomTarget_get_target,vcl/qt6) : \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceProgressBar.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceRadioButton.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceScale.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceScrollbar.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceScrolledWindow.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceSpinButton.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceTextView.moc \

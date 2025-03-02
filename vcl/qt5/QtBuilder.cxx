@@ -35,6 +35,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QScrollArea>
+#include <QtWidgets/QScrollBar>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QTabWidget>
@@ -313,6 +314,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         setCheckButtonProperties(*pRadioButton, rMap);
         extractRadioButtonGroup(sID, rMap);
         pObject = pRadioButton;
+    }
+    else if (sName == u"GtkScrollbar")
+    {
+        pObject = new QScrollBar(pParentWidget);
     }
     else if (sName == u"GtkScrolledWindow")
     {

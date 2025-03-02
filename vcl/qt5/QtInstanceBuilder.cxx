@@ -35,6 +35,7 @@
 #include <QtInstanceProgressBar.hxx>
 #include <QtInstanceRadioButton.hxx>
 #include <QtInstanceScale.hxx>
+#include <QtInstanceScrollbar.hxx>
 #include <QtInstanceScrolledWindow.hxx>
 #include <QtInstanceSpinButton.hxx>
 #include <QtInstanceTextView.hxx>
@@ -456,10 +457,12 @@ std::unique_ptr<weld::Toolbar> QtInstanceBuilder::weld_toolbar(const OUString& r
     return xRet;
 }
 
-std::unique_ptr<weld::Scrollbar> QtInstanceBuilder::weld_scrollbar(const OUString&)
+std::unique_ptr<weld::Scrollbar> QtInstanceBuilder::weld_scrollbar(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QScrollBar* pScrollBar = m_xBuilder->get<QScrollBar>(rId);
+    std::unique_ptr<weld::Scrollbar> xRet(
+        pScrollBar ? std::make_unique<QtInstanceScrollbar>(pScrollBar) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::SizeGroup> QtInstanceBuilder::create_size_group()
