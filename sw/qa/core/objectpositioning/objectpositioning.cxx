@@ -502,7 +502,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertShapeOnAsCharImg_tdf16890)
         comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(KEY_MOD1) } }));
     dispatchCommand(mxComponent, ".uno:BasicShapes.rectangle", aArgs);
 
-    // Check that hte new shape is anchored at para (i.e. has an anchor node)
+    // Check that the new shape is anchored at para (i.e. has an anchor node)
     const auto& rFrmFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(size_t(o3tl::make_unsigned(2)), rFrmFormats.size());
     auto pShape = rFrmFormats[1];
