@@ -538,7 +538,7 @@ void Scheduler::CallbackTaskScheduling()
     // events until *after* all of the pending NSTimers have fired,
     // calling SalInstance::AnyInput() will almost always return true
     // due to the pending events that will be handled immediately
-    // after all of the the pending NSTimers have fired.
+    // after all of the pending NSTimers have fired.
     // The result is that the Skia flush task is frequently delayed
     // and, in cases like tdf#165277, a user's attempts to get
     // LibreOffice to paint the window through key and mouse events
