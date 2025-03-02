@@ -552,7 +552,7 @@ void Scheduler::CallbackTaskScheduling()
     // on macOS is now much smoother. Even with Skia disabled (which
     // does not paint using a task but does use tasks to handle live
     // resizing), the content resizes much more quickly when a user
-    // repidly changes window's size.
+    // rapidly changes window's size.
     if (bIsLowerPriorityIdle && pMostUrgent->mePriority <= TaskPriority::POST_PAINT)
         bIsLowerPriorityIdle = false;
 #endif
