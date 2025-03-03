@@ -8,6 +8,7 @@
  */
 
 #include <sal/config.h>
+#include <config_feature_opencl.h>
 
 #include "helper/qahelper.hxx"
 
@@ -58,7 +59,9 @@ void ScParallelismTest::setUp()
 {
     ScModelTestBase::setUp();
 
+#if HAVE_FEATURE_OPENCL
     sc::FormulaGroupInterpreter::disableOpenCL_UnitTestsOnly();
+#endif
 
     m_bThreadingFlagCfg = getThreadingFlag();
     if (!m_bThreadingFlagCfg)
