@@ -20,8 +20,11 @@
 
 #include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/headbar.hxx>
+#include <unotools/weakref.hxx>
 
-typedef std::vector<css::uno::WeakReference<css::accessibility::XAccessible>> ListItems;
+class VCLXAccessibleHeaderBarItem;
+
+typedef std::vector<unotools::WeakReference<VCLXAccessibleHeaderBarItem>> ListItems;
 
 class VCLXAccessibleHeaderBar final : public VCLXAccessibleComponent
 {
@@ -44,7 +47,7 @@ public:
 
 public:
     virtual void SAL_CALL disposing() override;
-    css::uno::Reference<css::accessibility::XAccessible> CreateChild(sal_Int32 i);
+    rtl::Reference<VCLXAccessibleHeaderBarItem> CreateChild(sal_Int32 i);
 
 private:
     ListItems m_aAccessibleChildren;

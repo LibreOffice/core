@@ -395,19 +395,17 @@ OUString SAL_CALL AccessibleListBoxEntry::getAccessibleName(  )
 
 Reference< XAccessibleRelationSet > SAL_CALL AccessibleListBoxEntry::getAccessibleRelationSet(  )
 {
-    Reference< XAccessibleRelationSet > xRelSet;
     Reference< XAccessible > xParent;
     if ( m_aEntryPath.size() > 1 ) // not a root entry
         xParent = implGetParentAccessible();
-    if ( xParent.is() )
-    {
-        rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-        Sequence<Reference<XAccessible>> aSequence { xParent };
-        pRelationSetHelper->AddRelation(
-            AccessibleRelation( AccessibleRelationType_NODE_CHILD_OF, aSequence ) );
-        xRelSet = pRelationSetHelper;
-    }
-    return xRelSet;
+    if ( !xParent )
+        return nullptr;
+
+    rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSetHelper = new utl::AccessibleRelationSetHelper;
+    Sequence<Reference<XAccessible>> aSequence { xParent };
+    pRelationSetHelper->AddRelation(
+        AccessibleRelation( AccessibleRelationType_NODE_CHILD_OF, aSequence ) );
+    return pRelationSetHelper;
 }
 
 sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleStateSet(  )

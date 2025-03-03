@@ -350,16 +350,12 @@ const BitmapEx& Graphic::GetBitmapExRef() const
 
 uno::Reference<css::graphic::XGraphic> Graphic::GetXGraphic() const
 {
-    uno::Reference<css::graphic::XGraphic> xGraphic;
+    if (GetType() == GraphicType::NONE)
+        return nullptr;
 
-    if (GetType() != GraphicType::NONE)
-    {
-        rtl::Reference<unographic::Graphic> pUnoGraphic = new unographic::Graphic;
-        pUnoGraphic->init(*this);
-        xGraphic = pUnoGraphic;
-    }
-
-    return xGraphic;
+    rtl::Reference<unographic::Graphic> pUnoGraphic = new unographic::Graphic;
+    pUnoGraphic->init(*this);
+    return pUnoGraphic;
 }
 
 Size Graphic::GetPrefSize() const

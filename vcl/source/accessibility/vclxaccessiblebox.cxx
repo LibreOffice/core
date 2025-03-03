@@ -290,40 +290,37 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int64
     if (i<0 || i>=implGetAccessibleChildCount())
         throw IndexOutOfBoundsException();
 
-    Reference< XAccessible > xChild;
-    if (IsValid())
-    {
-        if (i==1 || ! m_bHasTextChild)
-        {
-            // List.
-            if ( ! m_xList.is())
-            {
-                m_xList = new VCLXAccessibleList(GetWindow(),
-                    (m_aBoxType == LISTBOX ? VCLXAccessibleList::LISTBOX : VCLXAccessibleList::COMBOBOX),
-                                                                    this);
-                m_xList->SetIndexInParent(i);
-            }
-            xChild = m_xList;
-        }
-        else
-        {
-            // Text Field.
-            if ( ! m_xText.is())
-            {
-                if (m_aBoxType==COMBOBOX)
-                {
-                    VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
-                    if (pComboBox && pComboBox->GetSubEdit())
-                        m_xText = pComboBox->GetSubEdit()->GetAccessible();
-                }
-                else if (m_bIsDropDownBox)
-                    m_xText = new VCLXAccessibleTextField(GetWindow(), this);
-            }
-            xChild = m_xText;
-        }
-    }
+    if (!IsValid())
+        return nullptr;
 
-    return xChild;
+    if (i==1 || ! m_bHasTextChild)
+    {
+        // List.
+        if ( ! m_xList.is())
+        {
+            m_xList = new VCLXAccessibleList(GetWindow(),
+                (m_aBoxType == LISTBOX ? VCLXAccessibleList::LISTBOX : VCLXAccessibleList::COMBOBOX),
+                                                                this);
+            m_xList->SetIndexInParent(i);
+        }
+        return m_xList;
+    }
+    else
+    {
+        // Text Field.
+        if ( ! m_xText.is())
+        {
+            if (m_aBoxType==COMBOBOX)
+            {
+                VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
+                if (pComboBox && pComboBox->GetSubEdit())
+                    m_xText = pComboBox->GetSubEdit()->GetAccessible();
+            }
+            else if (m_bIsDropDownBox)
+                m_xText = new VCLXAccessibleTextField(GetWindow(), this);
+        }
+        return m_xText;
+    }
 }
 
 sal_Int16 SAL_CALL VCLXAccessibleBox::getAccessibleRole()

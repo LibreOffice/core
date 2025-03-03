@@ -544,7 +544,7 @@ SvHeaderTabListBox::~SvHeaderTabListBox()
 
 void SvHeaderTabListBox::dispose()
 {
-    for (css::uno::Reference<css::accessibility::XAccessible>& rxChild : m_aAccessibleChildren)
+    for (rtl::Reference<AccessibleBrowseBoxHeaderCell>& rxChild : m_aAccessibleChildren)
         comphelper::disposeComponent(rxChild);
     m_aAccessibleChildren.clear();
     m_xAccessible.clear();
@@ -871,11 +871,11 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleColumnHeader( sal_u
     if ( m_aAccessibleChildren.empty() )
     {
         const sal_uInt16 nColumnCount = GetColumnCount();
-        m_aAccessibleChildren.assign( nColumnCount, Reference< XAccessible >() );
+        m_aAccessibleChildren.resize( nColumnCount );
     }
 
     // get header
-    Reference< XAccessible > xChild = m_aAccessibleChildren[ _nColumn ];
+    rtl::Reference< AccessibleBrowseBoxHeaderCell > xChild = m_aAccessibleChildren[ _nColumn ];
     // already exists?
     if (!xChild.is() && m_xAccessible.is())
     {

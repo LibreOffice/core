@@ -176,23 +176,19 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicProvider::getImplementationId()
 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( std::u16string_view rResourceURL )
 {
-    uno::Reference< ::graphic::XGraphic >   xRet;
     sal_Int32                               nIndex = 0;
 
-    if( o3tl::getToken(rResourceURL, 0, '/', nIndex ) == u"private:memorygraphic" )
-    {
-        sal_Int64 nGraphicAddress = o3tl::toInt64(o3tl::getToken(rResourceURL, 0, '/', nIndex ));
+    if( o3tl::getToken(rResourceURL, 0, '/', nIndex ) != u"private:memorygraphic" )
+        return nullptr;
 
-        if( nGraphicAddress )
-        {
-            rtl::Reference<::unographic::Graphic> pUnoGraphic = new ::unographic::Graphic;
+    sal_Int64 nGraphicAddress = o3tl::toInt64(o3tl::getToken(rResourceURL, 0, '/', nIndex ));
+    if( nGraphicAddress == 0 )
+        return nullptr;
 
-            pUnoGraphic->init( *reinterpret_cast< ::Graphic* >( nGraphicAddress ) );
-            xRet = pUnoGraphic;
-        }
-    }
+    rtl::Reference<::unographic::Graphic> pUnoGraphic = new ::unographic::Graphic;
 
-    return xRet;
+    pUnoGraphic->init( *reinterpret_cast< ::Graphic* >( nGraphicAddress ) );
+    return pUnoGraphic;
 }
 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( std::u16string_view rResourceURL )

@@ -71,7 +71,7 @@ css::uno::Reference<css::accessibility::XAccessible>
     if (i < 0 || i >= getAccessibleChildCount())
         throw IndexOutOfBoundsException();
 
-    Reference<XAccessible> xChild;
+    rtl::Reference<VCLXAccessibleHeaderBarItem> xChild;
     // search for the child
     if (o3tl::make_unsigned(i) >= m_aAccessibleChildren.size())
         xChild = CreateChild(i);
@@ -97,10 +97,9 @@ void SAL_CALL VCLXAccessibleHeaderBar::disposing()
     VCLXAccessibleComponent::disposing();
 }
 
-css::uno::Reference<css::accessibility::XAccessible>
-VCLXAccessibleHeaderBar::CreateChild(sal_Int32 i)
+rtl::Reference<VCLXAccessibleHeaderBarItem> VCLXAccessibleHeaderBar::CreateChild(sal_Int32 i)
 {
-    Reference<XAccessible> xChild;
+    rtl::Reference<VCLXAccessibleHeaderBarItem> xChild;
 
     sal_uInt16 nPos = static_cast<sal_uInt16>(i);
     if (nPos >= m_aAccessibleChildren.size())
@@ -109,7 +108,7 @@ VCLXAccessibleHeaderBar::CreateChild(sal_Int32 i)
 
         // insert into the container
         xChild = new VCLXAccessibleHeaderBarItem(m_pHeadBar, i);
-        m_aAccessibleChildren[nPos] = xChild;
+        m_aAccessibleChildren[nPos] = xChild.get();
     }
     else
     {
@@ -118,7 +117,7 @@ VCLXAccessibleHeaderBar::CreateChild(sal_Int32 i)
         if (!xChild.is())
         {
             xChild = new VCLXAccessibleHeaderBarItem(m_pHeadBar, i);
-            m_aAccessibleChildren[nPos] = xChild;
+            m_aAccessibleChildren[nPos] = xChild.get();
         }
     }
     return xChild;

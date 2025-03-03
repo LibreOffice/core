@@ -210,7 +210,7 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-        Reference< XAccessible > xNewAcc;
+        rtl::Reference< VCLXAccessibleListItem > xNewAcc;
         if ( m_pListBoxHelper )
         {
             sal_Int32 i=0;
@@ -227,7 +227,7 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
                     if (bNowSelected && !rxChild->IsSelected())
                     {
                         xNewAcc = rxChild;
-                        aNewValue <<= xNewAcc;
+                        aNewValue <<= Reference< XAccessible >(xNewAcc);
                     }
                     else if (rxChild->IsSelected())
                         m_nLastSelectedPos = i;
@@ -250,7 +250,7 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
             {
                 if ( m_nLastSelectedPos != LISTBOX_ENTRY_NOTFOUND )
                     aOldValue <<= getAccessibleChild( m_nLastSelectedPos );
-                aNewValue <<= xNewAcc;
+                aNewValue <<= Reference< XAccessible >(xNewAcc);
             }
         }
     }
@@ -559,7 +559,7 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleList::getAccessibleChild (sal_Int6
     if ( i < 0 || i >= getAccessibleChildCount() )
         throw IndexOutOfBoundsException();
 
-    Reference< XAccessible > xChild;
+    rtl::Reference< VCLXAccessibleListItem > xChild;
     // search for the child
     if ( o3tl::make_unsigned(i) >= m_aAccessibleChildren.size() )
         xChild = CreateChild (i);
@@ -652,7 +652,7 @@ void VCLXAccessibleList::UpdateEntryRange_Impl()
     m_nLastTopEntry = nTop;
 }
 
-bool VCLXAccessibleList::checkEntrySelected(sal_Int32 _nPos,Any& _rNewValue,Reference< XAccessible >& _rxNewAcc)
+bool VCLXAccessibleList::checkEntrySelected(sal_Int32 _nPos,Any& _rNewValue, rtl::Reference< VCLXAccessibleListItem >& _rxNewAcc)
 {
     OSL_ENSURE(m_pListBoxHelper,"Helper is not valid!");
     bool bNowSelected = false;
@@ -662,7 +662,7 @@ bool VCLXAccessibleList::checkEntrySelected(sal_Int32 _nPos,Any& _rNewValue,Refe
         if ( bNowSelected )
         {
             _rxNewAcc = CreateChild(_nPos);
-            _rNewValue <<= _rxNewAcc;
+            _rNewValue <<= uno::Reference<XAccessible>(_rxNewAcc);
         }
     }
     return bNowSelected;
@@ -676,7 +676,7 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_Int32)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-        Reference< XAccessible > xNewAcc;
+        rtl::Reference< VCLXAccessibleListItem > xNewAcc;
 
         if ( m_pListBoxHelper )
         {
@@ -694,7 +694,7 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_Int32)
                     if (bNowSelected && !rxChild->IsSelected())
                     {
                         xNewAcc = rxChild;
-                        aNewValue <<= xNewAcc;
+                        aNewValue <<= Reference< XAccessible >(xNewAcc);
                     }
                     else if (rxChild->IsSelected())
                         m_nLastSelectedPos = i;
@@ -717,7 +717,7 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_Int32)
             {
                 if ( m_nLastSelectedPos != LISTBOX_ENTRY_NOTFOUND )
                     aOldValue <<= getAccessibleChild( m_nLastSelectedPos );
-                aNewValue <<= xNewAcc;
+                aNewValue <<= Reference< XAccessible >(xNewAcc);
             }
             if (m_pListBoxHelper->IsInDropDown())
             {

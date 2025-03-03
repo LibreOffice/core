@@ -239,7 +239,7 @@ Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrl::getSelectedAccessibl
     if ( nSelectedChildIndex < 0 || nSelectedChildIndex >= getSelectedAccessibleChildCount() )
         throw IndexOutOfBoundsException();
 
-    Reference< XAccessible > xChild;
+    rtl::Reference< AccessibleIconChoiceCtrlEntry > xChild;
     sal_Int32 nSelCount = 0;
     VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
     sal_Int32 nCount = pCtrl->GetEntryCount();

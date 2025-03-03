@@ -84,6 +84,7 @@ class HeaderBar;
 namespace vcl {
     struct SvHeaderTabListBoxImpl;
 }
+class AccessibleBrowseBoxHeaderCell;
 
 class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvHeaderTabListBox : public SvTabListBox, public vcl::IAccessibleTableProvider
 {
@@ -91,7 +92,7 @@ private:
     bool                            m_bFirstPaint;
     VclPtr<HeaderBar> m_xHeaderBar;
     rtl::Reference<AccessibleTabListBox>  m_xAccessible;
-    std::vector<css::uno::Reference<css::accessibility::XAccessible>> m_aAccessibleChildren;
+    std::vector<rtl::Reference<AccessibleBrowseBoxHeaderCell>> m_aAccessibleChildren;
 
     Link<SvTreeListEntry*, bool> m_aEditingEntryHdl;
     Link<const IterString&, bool> m_aEditedEntryHdl;

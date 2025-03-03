@@ -163,7 +163,7 @@ private:
     void UpdateSelection_Impl(sal_Int32 nPos = 0);
     bool checkEntrySelected(sal_Int32 _nPos,
                             css::uno::Any& _rNewValue,
-                            css::uno::Reference< css::accessibility::XAccessible >& _rxNewAcc);
+                            rtl::Reference< VCLXAccessibleListItem >& _rxNewAcc);
     void notifyVisibleStates(bool _bSetNew );
     void UpdateVisibleLineCount();
 };
