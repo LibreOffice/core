@@ -33,6 +33,7 @@ else
 $(eval $(call gb_UnpackedTarball_add_patches,lpsolve,\
 	external/lpsolve/lp_solve_5.5.patch \
 	external/lpsolve/lpsolve-ubsan.patch.0 \
+	external/lpsolve/system-colamd.diff \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,lpsolve,lpsolve55/ccc.static,external/lpsolve/ccc.static))
