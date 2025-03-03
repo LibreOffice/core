@@ -116,17 +116,12 @@ static TextFrameIndex lcl_AddSpace(const SwTextSizeInfo &rInf,
     // Kashida Justification: Insert Kashidas
     if ( nEnd > nPos && pSI && COMPLEX == nScript )
     {
-        if (SwScriptInfo::IsKashidaScriptText(*pStr, nPos, nEnd - nPos) && pSI->CountKashida())
+        if (pSI->ParagraphContainsKashidaScript()
+            && SwScriptInfo::IsKashidaScriptText(*pStr, nPos, nEnd - nPos))
         {
-            const sal_Int32 nKashRes = pSI->KashidaJustify(nullptr, nullptr, nPos, nEnd - nPos);
-            // i60591: need to check result of KashidaJustify
-            // determine if kashida justification is applicable
-            if (nKashRes != -1)
-            {
-                // tdf#163105: For kashida justification, also expand whitespace.
-                auto nCntLatin = lcl_AddSpace_Latin(rInf, pStr, rPor, nPos, nEnd, pSI, nScript);
-                return nCntLatin + TextFrameIndex{ nKashRes };
-            }
+            // tdf#163105: For kashida justification, also expand whitespace.
+            return lcl_AddSpace_Latin(rInf, pStr, rPor, nPos, nEnd, pSI, nScript)
+                   + TextFrameIndex{ pSI->CountKashidaPositions(nPos, nEnd) };
         }
     }
 
