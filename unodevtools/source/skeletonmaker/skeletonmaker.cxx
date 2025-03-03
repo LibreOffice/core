@@ -75,6 +75,10 @@ const char usageText[] =
 "                           add-in as well. Default is a minimal add-in component\n"
 "                           skeleton based on the configuration coming with the\n"
 "                           office since OO.org 2.0.4.\n"
+"    -pr                    specifies that the generated Java code skeleton use passive\n"
+"    --passive-registration registration. The methods __getComponentFactory() and\n"
+"                           __writeRegistryServiceInfo() will not be created.\n"
+"                           This option is not yet implemented for '--cpp' target language\n"
 "    -o <path>              path specifies an existing directory where the\n"
 "                           output files are generated to, only valid for\n"
 "                           sub-command 'component'. If path=stdout the generated\n"
@@ -121,7 +125,7 @@ void printUsageAndExit(const char* programname, const char* version)
 
 SAL_IMPLEMENT_MAIN()
 {
-    const char* const version = "0.4";
+    const char* const version = "0.5";
     const char* const programname = "uno-skeletonmaker";
 
     sal_uInt32 nCount = rtl_getAppCommandArgCount();
@@ -205,6 +209,11 @@ SAL_IMPLEMENT_MAIN()
         if ( readOption( "bc", &nPos, arg) ||
              readOption( "backward-compatible", &nPos, arg) ) {
             options.backwardcompatible = true;
+            continue;
+        }
+        if ( readOption( "pr", &nPos, arg) ||
+             readOption( "passive-registration", &nPos, arg) ) {
+            options.passiveregistration = true;
             continue;
         }
         if ( readOption( "propertysetmixin", &nPos, arg) ) {

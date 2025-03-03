@@ -39,7 +39,8 @@ AttributeInfo;
 struct ProgramOptions {
     ProgramOptions(): all(false), dump(false), license(false),
                       shortnames(false), supportpropertysetmixin(false),
-                      backwardcompatible(false), language(1), componenttype(1) {}
+                      backwardcompatible(false), passiveregistration(false),
+                      language(1), componenttype(1) {}
 
     bool all;
     bool dump;
@@ -47,6 +48,7 @@ struct ProgramOptions {
     bool shortnames;
     bool supportpropertysetmixin;
     bool backwardcompatible;
+    bool passiveregistration;
     // language specifier - is extendable
     // 1 = Java
     // 2 = C++
