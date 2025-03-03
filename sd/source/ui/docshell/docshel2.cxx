@@ -39,9 +39,6 @@
 #include <rtl/character.hxx>
 #include <tools/debug.hxx>
 
-#include <sfx2/lokhelper.hxx>
-#include <comphelper/lok.hxx>
-
 namespace sd {
 
 /**
@@ -150,15 +147,6 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect,
 void DrawDocShell::Connect(ViewShell* pViewSh)
 {
     mpViewShell = pViewSh;
-
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        SfxViewShell* sfxViewShell = mpViewShell->GetViewShell();
-        if (sfxViewShell)
-        {
-            mpViewShell->GetViewShell()->libreOfficeKitViewInvalidateTilesCallback(nullptr, sfxViewShell->getPart(), sfxViewShell->getEditMode());
-        }
-    }
 }
 
 void DrawDocShell::Disconnect(ViewShell const * pViewSh)
