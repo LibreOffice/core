@@ -791,7 +791,7 @@ void SwLineLayout::ResetFlags()
 {
     m_bFormatAdj = m_bDummy = m_bEndHyph = m_bMidHyph = m_bLastHyph = m_bFly = m_bRest = m_bBlinking
         = m_bClipping = m_bContent = m_bRedline = m_bRedlineEnd = m_bForcedLeftMargin = m_bHanging
-        = m_bKashidaAllowed = false;
+        = false;
     m_eRedlineEnd = RedlineType::None;
 }
 
@@ -1303,8 +1303,6 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
     size_t nCnt = 0;
     // counter for compression information arrays
     size_t nCntComp = 0;
-    // counter for kashida array
-    size_t nCntKash = 0;
 
     sal_Int16 nScript = i18n::ScriptType::LATIN;
 
@@ -1340,15 +1338,6 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                 if ( nChg <= GetCompStart( nCntComp ) )
                     break;
                 nCntComp++;
-            }
-        }
-        if ( bAdjustBlock )
-        {
-            while( nCntKash < CountKashida() )
-            {
-                if ( nChg <= GetKashida( nCntKash ) )
-                    break;
-                nCntKash++;
             }
         }
     }
@@ -1394,17 +1383,6 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
     // remove invalid entries from compression information arrays
     m_CompressionChanges.erase(m_CompressionChanges.begin() + nCntComp,
             m_CompressionChanges.end());
-
-    // get the start of the last kashida group
-    TextFrameIndex nLastKashida = nChg;
-    if( nCntKash && i18n::ScriptType::COMPLEX == nScript )
-    {
-        --nCntKash;
-        nLastKashida = GetKashida( nCntKash );
-    }
-
-    // remove invalid entries from kashida array
-    m_Kashida.erase(m_Kashida.begin() + nCntKash, m_Kashida.end());
 
     // Construct the script change scanner and advance it to the change range
     auto pDirScanner = i18nutil::MakeDirectionChangeScanner(rText, m_nDefaultDir);
@@ -1505,73 +1483,21 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                 }
             }
         }
-
-        // we search for connecting opportunities (kashida)
-        else if ( bAdjustBlock && i18n::ScriptType::COMPLEX == nScript )
+        else if (bAdjustBlock && i18n::ScriptType::COMPLEX == nScript)
         {
-            // sw_redlinehide: this is the only place that uses SwScanner with
-            // frame text, so we convert to sal_Int32 here
-            std::function<LanguageType (sal_Int32, sal_Int32, bool)> const pGetLangOfCharM(
-                [&pMerged](sal_Int32 const nBegin, sal_uInt16 const script, bool const bNoChar)
-                    {
-                        std::pair<SwTextNode const*, sal_Int32> const pos(
-                            sw::MapViewToModel(*pMerged, TextFrameIndex(nBegin)));
-                        return pos.first->GetLang(pos.second, bNoChar ? 0 : 1, script);
-                    });
-            std::function<LanguageType (sal_Int32, sal_Int32, bool)> const pGetLangOfChar1(
-                [&rNode](sal_Int32 const nBegin, sal_uInt16 const script, bool const bNoChar)
-                    { return rNode.GetLang(nBegin, bNoChar ? 0 : 1, script); });
-            auto pGetLangOfChar(pMerged ? pGetLangOfCharM : pGetLangOfChar1);
-            SwScanner aScanner( std::move(pGetLangOfChar), rText, nullptr, ModelToViewHelper(),
-                                i18n::WordType::DICTIONARY_WORD,
-                                sal_Int32(nLastKashida), sal_Int32(nChg));
-
-            // the search has to be performed on a per word base
-            while ( aScanner.NextWord() )
+            if (SwScriptInfo::IsKashidaScriptText(
+                    rText, TextFrameIndex{ stChange.m_nStartIndex },
+                    TextFrameIndex{ stChange.m_nEndIndex - stChange.m_nStartIndex }))
             {
-                if (SwScriptInfo::IsKashidaScriptText(rText, TextFrameIndex{ aScanner.GetBegin() },
-                                                      TextFrameIndex{ aScanner.GetLen() }))
-                {
-                    const OUString& rWord = aScanner.GetWord();
-                    auto stKashidaPos = i18nutil::GetWordKashidaPosition(rWord);
-
-                    if (stKashidaPos.has_value())
-                    {
-                        // Only populate kashida positions for the invalidated tail
-                        TextFrameIndex nNewKashidaPos{ aScanner.GetBegin() + stKashidaPos->nIndex };
-                        if (nNewKashidaPos >= nLastKashida)
-                        {
-                            m_Kashida.insert(m_Kashida.begin() + nCntKash, nNewKashidaPos);
-                            nCntKash++;
-                        }
-                    }
-                }
-            } // end of kashida search
+                m_bParagraphContainsKashidaScript = true;
+            }
         }
 
         if (nChg < TextFrameIndex(rText.getLength()))
             nScript = static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType(rText, sal_Int32(nChg)));
 
         nLastCompression = nChg;
-        nLastKashida = nChg;
     }
-
-#if OSL_DEBUG_LEVEL > 0
-    // check kashida data
-    TextFrameIndex nTmpKashidaPos(-1);
-    bool bWrongKash = false;
-    for (size_t i = 0; i < m_Kashida.size(); ++i)
-    {
-        TextFrameIndex nCurrKashidaPos = GetKashida( i );
-        if ( nCurrKashidaPos <= nTmpKashidaPos )
-        {
-            bWrongKash = true;
-            break;
-        }
-        nTmpKashidaPos = nCurrKashidaPos;
-    }
-    SAL_WARN_IF( bWrongKash, "sw.core", "Kashida array contains wrong data" );
-#endif
 
     // remove invalid entries from direction information arrays
     m_DirectionChanges.clear();
@@ -2039,96 +1965,6 @@ tools::Long SwScriptInfo::Compress(KernArray& rKernArray, TextFrameIndex nIdx, T
     return nSub;
 }
 
-// Note on calling KashidaJustify():
-// Kashida positions may be marked as invalid. Therefore KashidaJustify may return the clean
-// total number of kashida positions, or the number of kashida positions after some positions
-// have been dropped, depending on the state of the m_KashidaInvalid set.
-
-sal_Int32 SwScriptInfo::KashidaJustify( KernArray* pKernArray,
-                                        sal_Bool* pKashidaArray,
-                                        TextFrameIndex const nStt,
-                                        TextFrameIndex const nLen,
-                                        tools::Long nSpaceAdd ) const
-{
-    SAL_WARN_IF( !nLen, "sw.core", "Kashida justification without text?!" );
-
-    if( !IsKashidaLine(nStt))
-        return -1;
-
-    // evaluate kashida information in collected in SwScriptInfo
-
-    size_t nCntKash = 0;
-    while( nCntKash < CountKashida() )
-    {
-        if ( nStt <= GetKashida( nCntKash ) )
-            break;
-        ++nCntKash;
-    }
-
-    const TextFrameIndex nEnd = nStt + nLen;
-
-    size_t nCntKashEnd = nCntKash;
-    while ( nCntKashEnd < CountKashida() )
-    {
-        if ( nEnd <= GetKashida( nCntKashEnd ) )
-            break;
-        ++nCntKashEnd;
-    }
-
-    size_t nActualKashCount = nCntKashEnd - nCntKash;
-    for (size_t i = nCntKash; i < nCntKashEnd; ++i)
-    {
-        if ( nActualKashCount && !IsKashidaValid ( i ) )
-            --nActualKashCount;
-    }
-
-    if ( !pKernArray )
-        return nActualKashCount;
-
-    // do nothing if there is no more kashida
-    if ( nCntKash < CountKashida() )
-    {
-        // skip any invalid kashidas
-        while (nCntKash < nCntKashEnd && !IsKashidaValid(nCntKash))
-            ++nCntKash;
-
-        TextFrameIndex nIdx = nCntKash < nCntKashEnd && IsKashidaValid(nCntKash)
-            ? GetKashida(nCntKash)
-            : nEnd;
-        tools::Long nKashAdd = nSpaceAdd;
-
-        while ( nIdx < nEnd )
-        {
-            TextFrameIndex nArrayPos = nIdx - nStt;
-
-            // mark Kashida insertion positions, code in VCL will use this
-            // array to know where to insert Kashida.
-            if (pKashidaArray)
-                pKashidaArray[sal_Int32(nArrayPos)] = true;
-
-            // next kashida position
-            ++nCntKash;
-            while (nCntKash < nCntKashEnd && !IsKashidaValid(nCntKash))
-                ++nCntKash;
-
-            nIdx = nCntKash < nCntKashEnd && IsKashidaValid(nCntKash) ? GetKashida(nCntKash) : nEnd;
-            if ( nIdx > nEnd )
-                nIdx = nEnd;
-
-            const TextFrameIndex nArrayEnd = nIdx - nStt;
-
-            while ( nArrayPos < nArrayEnd )
-            {
-                (*pKernArray)[sal_Int32(nArrayPos)] += nKashAdd;
-                ++nArrayPos;
-            }
-            nKashAdd += nSpaceAdd;
-        }
-    }
-
-    return 0;
-}
-
 // Checks if the text is in Arabic or Syriac. Note that only the first
 // character has to be checked because a ctl portion only contains one
 // script, see NewTextPortion
@@ -2171,155 +2007,24 @@ bool SwScriptInfo::IsKashidaScriptText(const OUString& rText,
     return false;
 }
 
-bool SwScriptInfo::IsKashidaValid(size_t const nKashPos) const
+tools::Long SwScriptInfo::CountKashidaPositions(TextFrameIndex nIdx, TextFrameIndex nEnd) const
 {
-    return m_KashidaInvalid.find(nKashPos) == m_KashidaInvalid.end();
-}
-
-void SwScriptInfo::ClearKashidaInvalid(size_t const nKashPos)
-{
-    m_KashidaInvalid.erase(nKashPos);
-}
-
-// bMark == true:
-// marks the first valid kashida in the given text range as invalid
-// bMark == false:
-// clears all kashida invalid flags in the given text range
-bool SwScriptInfo::MarkOrClearKashidaInvalid(
-    TextFrameIndex const nStt, TextFrameIndex const nLen,
-    bool bMark, sal_Int32 nMarkCount)
-{
-    size_t nCntKash = 0;
-    while( nCntKash < CountKashida() )
+    tools::Long nCount = 0;
+    for (const auto& nPos : m_Kashida)
     {
-        if ( nStt <= GetKashida( nCntKash ) )
+        if (nPos >= nEnd)
             break;
-        nCntKash++;
+
+        if (nPos >= nIdx)
+            ++nCount;
     }
 
-    const TextFrameIndex nEnd = nStt + nLen;
-
-    while ( nCntKash < CountKashida() )
-    {
-        if ( nEnd <= GetKashida( nCntKash ) )
-            break;
-        if(bMark)
-        {
-            if ( MarkKashidaInvalid ( nCntKash ) )
-            {
-                --nMarkCount;
-                if (!nMarkCount)
-                    return true;
-            }
-        }
-        else
-        {
-            ClearKashidaInvalid ( nCntKash );
-        }
-        nCntKash++;
-    }
-    return false;
+    return nCount;
 }
 
-bool SwScriptInfo::MarkKashidaInvalid(size_t const nKashPos)
+void SwScriptInfo::ReplaceKashidaPositions(std::vector<TextFrameIndex> aKashidaPositions)
 {
-    return m_KashidaInvalid.insert(nKashPos).second;
-}
-
-// retrieve the kashida positions in the given text range
-void SwScriptInfo::GetKashidaPositions(
-    TextFrameIndex const nStt, TextFrameIndex const nLen,
-    std::vector<TextFrameIndex>& rKashidaPosition)
-{
-    size_t nCntKash = 0;
-    while( nCntKash < CountKashida() )
-    {
-        if ( nStt <= GetKashida( nCntKash ) )
-            break;
-        nCntKash++;
-    }
-
-    const TextFrameIndex nEnd = nStt + nLen;
-
-    size_t nCntKashEnd = nCntKash;
-    while ( nCntKashEnd < CountKashida() )
-    {
-        if ( nEnd <= GetKashida( nCntKashEnd ) )
-            break;
-        rKashidaPosition.push_back(GetKashida(nCntKashEnd));
-        nCntKashEnd++;
-    }
-}
-
-void SwScriptInfo::ReplaceKashidaPositions(TextFrameIndex const nStt, TextFrameIndex const nEnd,
-                                           const std::vector<TextFrameIndex>& rKashidaPositions)
-{
-    auto it = m_Kashida.begin();
-    while (it != m_Kashida.end() && *it < nStt)
-    {
-        ++it;
-    }
-
-    it = m_Kashida.insert(it, rKashidaPositions.begin(), rKashidaPositions.end());
-
-    it += rKashidaPositions.size();
-    auto jt = it;
-    while (jt != m_Kashida.end() && *jt < nEnd)
-    {
-        ++jt;
-    }
-
-    m_Kashida.erase(it, jt);
-}
-
-void SwScriptInfo::SetNoKashidaLine(TextFrameIndex const nStt, TextFrameIndex const nLen)
-{
-    m_NoKashidaLine.push_back( nStt );
-    m_NoKashidaLineEnd.push_back( nStt + nLen );
-}
-
-// determines if the line uses kashida justification
-bool SwScriptInfo::IsKashidaLine(TextFrameIndex const nCharIdx) const
-{
-    for (size_t i = 0; i < m_NoKashidaLine.size(); ++i)
-    {
-        if (nCharIdx >= m_NoKashidaLine[i] && nCharIdx < m_NoKashidaLineEnd[i])
-            return false;
-    }
-    return true;
-}
-
-void SwScriptInfo::ClearNoKashidaLines()
-{
-    m_NoKashidaLine.clear();
-    m_NoKashidaLineEnd.clear();
-}
-
-// mark the given character indices as invalid kashida positions
-void SwScriptInfo::MarkKashidasInvalid(sal_Int32 const nCnt,
-        const TextFrameIndex* pKashidaPositions)
-{
-    SAL_WARN_IF( !pKashidaPositions || nCnt == 0, "sw.core", "Where are kashidas?" );
-
-    size_t nCntKash = 0;
-    sal_Int32 nKashidaPosIdx = 0;
-
-    while (nCntKash < CountKashida() && nKashidaPosIdx < nCnt)
-    {
-        assert(pKashidaPositions && "Where are kashidas?");
-
-        if ( pKashidaPositions [nKashidaPosIdx] > GetKashida( nCntKash ) )
-        {
-            ++nCntKash;
-            continue;
-        }
-
-        if ( pKashidaPositions [nKashidaPosIdx] != GetKashida( nCntKash ) || !IsKashidaValid ( nCntKash ) )
-            return; // something is wrong
-
-        MarkKashidaInvalid ( nCntKash );
-        nKashidaPosIdx++;
-    }
+    m_Kashida = std::move(aKashidaPositions);
 }
 
 TextFrameIndex SwScriptInfo::ThaiJustify( std::u16string_view aText, KernArray* pKernArray,

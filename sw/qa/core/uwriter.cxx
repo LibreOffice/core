@@ -131,7 +131,6 @@ public:
     void test64kPageDescs();
     void testTdf92308();
     void testTableCellComparison();
-    void testTdf156211();
     void testFillRubyList();
     void testSetRubyList();
 
@@ -171,7 +170,6 @@ public:
     CPPUNIT_TEST(test64kPageDescs);
     CPPUNIT_TEST(testTdf92308);
     CPPUNIT_TEST(testTableCellComparison);
-    CPPUNIT_TEST(testTdf156211);
     CPPUNIT_TEST(testFillRubyList);
     CPPUNIT_TEST(testSetRubyList);
     CPPUNIT_TEST_SUITE_END();
@@ -1977,18 +1975,6 @@ void SwDocTest::tearDown()
     m_xDocShRef.clear();
 
     BootstrapFixture::tearDown();
-}
-
-void SwDocTest::testTdf156211()
-{
-    SwScriptInfo oSI;
-    oSI.SetNoKashidaLine(TextFrameIndex{ 89 }, TextFrameIndex{ 95 });
-
-    CPPUNIT_ASSERT(!oSI.IsKashidaLine(TextFrameIndex{ 95 }));
-
-    oSI.ClearNoKashidaLines();
-
-    CPPUNIT_ASSERT(oSI.IsKashidaLine(TextFrameIndex{ 95 }));
 }
 
 void SwDocTest::testFillRubyList()

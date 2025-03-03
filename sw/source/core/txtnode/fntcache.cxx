@@ -1153,9 +1153,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                                           rInf.GetLen()))
                     {
                         aKashidaArray.resize(aKernArray.size(), false);
-                        if ( pSI && pSI->CountKashida() &&
-                            pSI->KashidaJustify( &aKernArray, aKashidaArray.data(), rInf.GetIdx(),
-                                                 rInf.GetLen(), nSpaceAdd ) != -1 )
+                        if (pSI && pSI->ParagraphContainsKashidaScript()
+                            && sw::Justify::KashidaJustify(
+                                pSI->GetKashidaPositions(), aKernArray, aKashidaArray.data(),
+                                static_cast<sal_Int32>(rInf.GetIdx()),
+                                static_cast<sal_Int32>(rInf.GetLen()), nSpaceAdd))
                         {
                             bSpecialJust = true;
 
@@ -1370,9 +1372,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 if (SwScriptInfo::IsKashidaScriptText(rInf.GetText(), rInf.GetIdx(), rInf.GetLen()))
                 {
                     aKashidaArray.resize(aKernArray.size(), false);
-                    if ( pSI && pSI->CountKashida() &&
-                         pSI->KashidaJustify( &aKernArray, aKashidaArray.data(), rInf.GetIdx(),
-                                              rInf.GetLen(), nSpaceAdd ) != -1 )
+                    if (pSI && pSI->ParagraphContainsKashidaScript()
+                        && sw::Justify::KashidaJustify(
+                            pSI->GetKashidaPositions(), aKernArray, aKashidaArray.data(),
+                            static_cast<sal_Int32>(rInf.GetIdx()),
+                            static_cast<sal_Int32>(rInf.GetLen()), nSpaceAdd))
                     {
                         // Intentionally do not clear nSpaceAdd for kashida justification.
                         // The rest of the space will be handled below.
@@ -1861,9 +1865,11 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
         {
             if (SwScriptInfo::IsKashidaScriptText(rInf.GetText(), rInf.GetIdx(), rInf.GetLen()))
             {
-                if ( pSI && pSI->CountKashida() &&
-                    pSI->KashidaJustify( &aKernArray, nullptr, rInf.GetIdx(), rInf.GetLen(),
-                                         nSpaceAdd ) != -1 )
+                if (pSI && pSI->ParagraphContainsKashidaScript()
+                    && sw::Justify::KashidaJustify(pSI->GetKashidaPositions(), aKernArray, nullptr,
+                                                   static_cast<sal_Int32>(rInf.GetIdx()),
+                                                   static_cast<sal_Int32>(rInf.GetLen()),
+                                                   nSpaceAdd))
                 {
                     // Intentionally do not clear nSpaceAdd for kashida justification.
                     // The rest of the space will be handled below.
