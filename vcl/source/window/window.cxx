@@ -225,6 +225,9 @@ void Window::dispose()
         mpWindowImpl->mxAccessible.clear();
     }
 
+    if (mpWindowImpl->mpAccessibleInfos)
+        mpWindowImpl->mpAccessibleInfos->xAccessibleParent.clear();
+
     ImplSVData* pSVData = ImplGetSVData();
 
     if ( ImplGetSVHelpData().mpHelpWin && (ImplGetSVHelpData().mpHelpWin->GetParent() == this) )

@@ -194,6 +194,7 @@ struct ImplAccessibleInfos
                         pAccessibleName;
     std::optional<OUString>
                         pAccessibleDescription;
+    css::uno::Reference<css::accessibility::XAccessible> xAccessibleParent;
     VclPtr<vcl::Window> pLabeledByWindow;
     VclPtr<vcl::Window> pLabelForWindow;
 

@@ -29,9 +29,9 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/vclevent.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
-#include <comphelper/accessiblewrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 
 using namespace ::comphelper;
@@ -39,75 +39,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
-
-namespace
-{
-
-    // = OToolBoxWindowItemContext
-
-    /** XAccessibleContext implementation for a toolbox item which is represented by a VCL Window
-    */
-    class OToolBoxWindowItemContext final : public OAccessibleContextWrapper
-    {
-        sal_Int32 m_nIndexInParent;
-    public:
-        OToolBoxWindowItemContext(sal_Int32 _nIndexInParent,
-            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
-            const css::uno::Reference< css::accessibility::XAccessibleContext >& _rxInnerAccessibleContext,
-            const css::uno::Reference< css::accessibility::XAccessible >& _rxOwningAccessible,
-            const css::uno::Reference< css::accessibility::XAccessible >& _rxParentAccessible
-            ) : OAccessibleContextWrapper(
-            _rxContext,
-            _rxInnerAccessibleContext,
-            _rxOwningAccessible,
-            _rxParentAccessible     )
-            ,m_nIndexInParent(_nIndexInParent)
-        {
-        }
-        virtual sal_Int64 SAL_CALL getAccessibleIndexInParent(  ) override;
-    };
-
-
-    sal_Int64 SAL_CALL OToolBoxWindowItemContext::getAccessibleIndexInParent(  )
-    {
-        return m_nIndexInParent;
-    }
-
-
-    // = OToolBoxWindowItem
-
-    /** XAccessible implementation for a toolbox item which is represented by a VCL Window
-    */
-    class OToolBoxWindowItem : public OAccessibleWrapper
-    {
-    private:
-        sal_Int32 m_nIndexInParent;
-
-    public:
-        OToolBoxWindowItem(sal_Int32 _nIndexInParent,
-            const css::uno::Reference< css::accessibility::XAccessible >& _rxInnerAccessible,
-            const css::uno::Reference< css::accessibility::XAccessible >& _rxParentAccessible
-            ) : OAccessibleWrapper(
-            comphelper::getProcessComponentContext(),
-            _rxInnerAccessible,
-            _rxParentAccessible)
-            ,m_nIndexInParent(_nIndexInParent)
-        {
-        }
-
-    protected:
-        // OAccessibleWrapper
-        virtual rtl::Reference<OAccessibleContextWrapper> createAccessibleContext(
-                const css::uno::Reference< css::accessibility::XAccessibleContext >& _rxInnerContext
-            ) override;
-    };
-
-    rtl::Reference<OAccessibleContextWrapper> OToolBoxWindowItem::createAccessibleContext(
-            const Reference< XAccessibleContext >& _rxInnerContext )
-    {
-        return new OToolBoxWindowItemContext( m_nIndexInParent, getComponentContext(), _rxInnerContext, this, getParent() );
-    }
-}
 
 // VCLXAccessibleToolBox
 
@@ -626,13 +557,11 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
         xChild = new VCLXAccessibleToolBoxItem( pToolBox, i );
         if ( pItemWindow )
         {
-            rtl::Reference<VCLXAccessibleToolBoxItem> xParent = xChild;
             auto const xInnerAcc(pItemWindow->GetAccessible());
             if (xInnerAcc) // else child is being disposed - avoid crashing
             {
-                rtl::Reference<OToolBoxWindowItem> xChild2(
-                    new OToolBoxWindowItem(0, xInnerAcc, xParent));
-                xChild->SetChild( xChild2 );
+                pItemWindow->SetAccessibleParent(xChild);
+                xChild->SetChild(xInnerAcc);
             }
         }
         if ( nHighlightItemId > ToolBoxItemId(0) && nItemId == nHighlightItemId )
