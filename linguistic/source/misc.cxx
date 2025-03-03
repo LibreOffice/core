@@ -498,63 +498,60 @@ sal_Int32 GetPosInWordToCheck( std::u16string_view rTxt, sal_Int32 nPos )
     return nRes;
 }
 
-uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
+rtl::Reference< HyphenatedWord > RebuildHyphensAndControlChars(
         const OUString &rOrigWord,
         uno::Reference< XHyphenatedWord > const &rxHyphWord )
 {
-    uno::Reference< XHyphenatedWord > xRes;
-    if (!rOrigWord.isEmpty() && rxHyphWord.is())
+    if (rOrigWord.isEmpty() || !rxHyphWord.is())
+        return nullptr;
+
+    sal_Int16    nChgPos = 0,
+             nChgLen = 0;
+    OUString aRplc;
+    bool bAltSpelling = GetAltSpelling( nChgPos, nChgLen, aRplc, rxHyphWord );
+
+    OUString aOrigHyphenatedWord;
+    sal_Int16 nOrigHyphenPos        = -1;
+    sal_Int16 nOrigHyphenationPos   = -1;
+    if (!bAltSpelling)
     {
-        sal_Int16    nChgPos = 0,
-                 nChgLen = 0;
-        OUString aRplc;
-        bool bAltSpelling = GetAltSpelling( nChgPos, nChgLen, aRplc, rxHyphWord );
-
-        OUString aOrigHyphenatedWord;
-        sal_Int16 nOrigHyphenPos        = -1;
-        sal_Int16 nOrigHyphenationPos   = -1;
-        if (!bAltSpelling)
-        {
-            aOrigHyphenatedWord = rOrigWord;
-            nOrigHyphenPos      = GetOrigWordPos( rOrigWord, rxHyphWord->getHyphenPos() );
-            nOrigHyphenationPos = GetOrigWordPos( rOrigWord, rxHyphWord->getHyphenationPos() );
-        }
-        else
-        {
-            //! should at least work with the German words
-            //! B-"u-c-k-er and Sc-hif-fah-rt
-
-            sal_Int16 nPos = GetOrigWordPos( rOrigWord, nChgPos );
-
-            // get words like Sc-hif-fah-rt to work correct
-            sal_Int16 nHyphenationPos = rxHyphWord->getHyphenationPos();
-            if (nChgPos > nHyphenationPos)
-                --nPos;
-
-            std::u16string_view aLeft = rOrigWord.subView( 0, nPos );
-            std::u16string_view aRight = rOrigWord.subView( nPos ); // FIXME: changes at the right side
-
-            aOrigHyphenatedWord =  aLeft + aRplc + aRight;
-
-            nOrigHyphenPos      = sal::static_int_cast< sal_Int16 >(aLeft.size() +
-                                  rxHyphWord->getHyphenPos() - nChgPos);
-            nOrigHyphenationPos = GetOrigWordPos( rOrigWord, nHyphenationPos );
-        }
-
-        if (nOrigHyphenPos == -1  ||  nOrigHyphenationPos == -1)
-        {
-            SAL_WARN( "linguistic", "failed to get nOrigHyphenPos or nOrigHyphenationPos" );
-        }
-        else
-        {
-            LanguageType nLang = LinguLocaleToLanguage( rxHyphWord->getLocale() );
-            xRes = new HyphenatedWord(
-                        rOrigWord, nLang, nOrigHyphenationPos,
-                        aOrigHyphenatedWord, nOrigHyphenPos );
-        }
-
+        aOrigHyphenatedWord = rOrigWord;
+        nOrigHyphenPos      = GetOrigWordPos( rOrigWord, rxHyphWord->getHyphenPos() );
+        nOrigHyphenationPos = GetOrigWordPos( rOrigWord, rxHyphWord->getHyphenationPos() );
     }
-    return xRes;
+    else
+    {
+        //! should at least work with the German words
+        //! B-"u-c-k-er and Sc-hif-fah-rt
+
+        sal_Int16 nPos = GetOrigWordPos( rOrigWord, nChgPos );
+
+        // get words like Sc-hif-fah-rt to work correct
+        sal_Int16 nHyphenationPos = rxHyphWord->getHyphenationPos();
+        if (nChgPos > nHyphenationPos)
+            --nPos;
+
+        std::u16string_view aLeft = rOrigWord.subView( 0, nPos );
+        std::u16string_view aRight = rOrigWord.subView( nPos ); // FIXME: changes at the right side
+
+        aOrigHyphenatedWord =  aLeft + aRplc + aRight;
+
+        nOrigHyphenPos      = sal::static_int_cast< sal_Int16 >(aLeft.size() +
+                              rxHyphWord->getHyphenPos() - nChgPos);
+        nOrigHyphenationPos = GetOrigWordPos( rOrigWord, nHyphenationPos );
+    }
+
+    if (nOrigHyphenPos != -1  &&  nOrigHyphenationPos != -1)
+    {
+        SAL_WARN( "linguistic", "failed to get nOrigHyphenPos or nOrigHyphenationPos" );
+        return nullptr;
+    }
+
+    LanguageType nLang = LinguLocaleToLanguage( rxHyphWord->getLocale() );
+    return new HyphenatedWord(
+                rOrigWord, nLang, nOrigHyphenationPos,
+                aOrigHyphenatedWord, nOrigHyphenPos );
+
 }
 
 bool IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, LanguageType nLanguage )

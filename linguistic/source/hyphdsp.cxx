@@ -72,171 +72,168 @@ void HyphenatorDispatcher::ClearSvcList()
 }
 
 
-Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
+rtl::Reference< HyphenatedWord >  HyphenatorDispatcher::buildHyphWord(
             const OUString& rOrigWord,
             const Reference<XDictionaryEntry> &xEntry,
             LanguageType nLang, sal_Int16 nMaxLeading )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Reference< XHyphenatedWord > xRes;
+    if (!xEntry.is())
+        return nullptr;
 
-    if (xEntry.is())
+    OUString aText( xEntry->getDictionaryWord() );
+    sal_Int32 nTextLen = aText.getLength();
+
+    // trailing '=' means "hyphenation should not be possible"
+    if (nTextLen <= 0  ||  aText[ nTextLen - 1 ] == '=' || aText[ nTextLen - 1 ] == '[')
+        return nullptr;
+
+    sal_Int16 nHyphenationPos = -1;
+    sal_Int16 nOrigHyphPos = -1;
+
+    OUStringBuffer aTmp( nTextLen );
+    bool  bSkip = false;
+    bool  bSkip2 = false;
+    sal_Int32 nHyphIdx = -1;
+    sal_Int32 nLeading = 0;
+    for (sal_Int32 i = 0;  i < nTextLen;  i++)
     {
-        OUString aText( xEntry->getDictionaryWord() );
-        sal_Int32 nTextLen = aText.getLength();
-
-        // trailing '=' means "hyphenation should not be possible"
-        if (nTextLen > 0  &&  aText[ nTextLen - 1 ] != '=' && aText[ nTextLen - 1 ] != '[')
+        sal_Unicode cTmp = aText[i];
+        if (cTmp == '[' || cTmp == ']')
+            bSkip2 = !bSkip2;
+        if (cTmp != '=' && !bSkip2 && cTmp != ']')
         {
-            sal_Int16 nHyphenationPos = -1;
-            sal_Int16 nOrigHyphPos = -1;
-
-            OUStringBuffer aTmp( nTextLen );
-            bool  bSkip = false;
-            bool  bSkip2 = false;
-            sal_Int32 nHyphIdx = -1;
-            sal_Int32 nLeading = 0;
-            for (sal_Int32 i = 0;  i < nTextLen;  i++)
+            aTmp.append( cTmp );
+            nLeading++;
+            bSkip = false;
+            nHyphIdx++;
+        }
+        else
+        {
+            if (!bSkip  &&  nHyphIdx >= 0)
             {
-                sal_Unicode cTmp = aText[i];
-                if (cTmp == '[' || cTmp == ']')
-                    bSkip2 = !bSkip2;
-                if (cTmp != '=' && !bSkip2 && cTmp != ']')
-                {
-                    aTmp.append( cTmp );
-                    nLeading++;
-                    bSkip = false;
-                    nHyphIdx++;
-                }
-                else
-                {
-                    if (!bSkip  &&  nHyphIdx >= 0)
-                    {
-                        if (nLeading <= nMaxLeading) {
-                            nHyphenationPos = static_cast<sal_Int16>(nHyphIdx);
-                            nOrigHyphPos = i;
-                        }
-                    }
-                    bSkip = true;   //! multiple '=' should count as one only
+                if (nLeading <= nMaxLeading) {
+                    nHyphenationPos = static_cast<sal_Int16>(nHyphIdx);
+                    nOrigHyphPos = i;
                 }
             }
+            bSkip = true;   //! multiple '=' should count as one only
+        }
+    }
 
-            if (nHyphenationPos > 0)
-            {
+    if (nHyphenationPos <= 0)
+        return nullptr;
+
 #if OSL_DEBUG_LEVEL > 0
-                {
-                    if (std::u16string_view(aTmp) != rOrigWord)
-                    {
-                        // both words should only differ by a having a trailing '.'
-                        // character or not...
-                        std::u16string_view aShorter(aTmp), aLonger(rOrigWord);
-                        if (aTmp.getLength() > rOrigWord.getLength())
-                            std::swap(aShorter, aLonger);
-                        sal_Int32 nS = aShorter.size();
-                        sal_Int32 nL = aLonger.size();
-                        if (nS > 0 && nL > 0)
-                        {
-                            assert( ((nS + 1 == nL) && aLonger[nL-1] == '.') && "HyphenatorDispatcher::buildHyphWord: unexpected difference between words!" );
-                        }
-                    }
-                }
-#endif
-                sal_Int32 nHyphenPos = -1;
-                if (aText[ nOrigHyphPos ] == '[')  // alternative hyphenation
-                {
-                    sal_Int16 split = 0;
-                    sal_Unicode c = aText [ nOrigHyphPos + 1 ];
-                    sal_Int32 endhyphpat = aText.indexOf( ']', nOrigHyphPos );
-                    if ('0' <= c && c <= '9')
-                    {
-                        split = c - '0';
-                        nOrigHyphPos++;
-                    }
-                    if (endhyphpat > -1)
-                    {
-                        OUStringBuffer aTmp2 ( aTmp.copy(0, std::max (nHyphenationPos + 1 - split, 0) ) );
-                        aTmp2.append( aText.subView( nOrigHyphPos + 1, endhyphpat - nOrigHyphPos - 1) );
-                        nHyphenPos = aTmp2.getLength();
-                        aTmp2.append( aTmp.subView( nHyphenationPos + 1 ) );
-                        //! take care of #i22591#
-                        if (rOrigWord[ rOrigWord.getLength() - 1 ] == '.')
-                            aTmp2.append( '.' );
-                        aText = aTmp2.makeStringAndClear();
-                    }
-                }
-                if (nHyphenPos == -1)
-                    aText = rOrigWord;
-
-                xRes = new HyphenatedWord( rOrigWord, nLang, nHyphenationPos,
-                                aText, (nHyphenPos > -1) ? nHyphenPos - 1 : nHyphenationPos);
+    {
+        if (std::u16string_view(aTmp) != rOrigWord)
+        {
+            // both words should only differ by a having a trailing '.'
+            // character or not...
+            std::u16string_view aShorter(aTmp), aLonger(rOrigWord);
+            if (aTmp.getLength() > rOrigWord.getLength())
+                std::swap(aShorter, aLonger);
+            sal_Int32 nS = aShorter.size();
+            sal_Int32 nL = aLonger.size();
+            if (nS > 0 && nL > 0)
+            {
+                assert( ((nS + 1 == nL) && aLonger[nL-1] == '.') && "HyphenatorDispatcher::buildHyphWord: unexpected difference between words!" );
             }
         }
     }
+#endif
+    sal_Int32 nHyphenPos = -1;
+    if (aText[ nOrigHyphPos ] == '[')  // alternative hyphenation
+    {
+        sal_Int16 split = 0;
+        sal_Unicode c = aText [ nOrigHyphPos + 1 ];
+        sal_Int32 endhyphpat = aText.indexOf( ']', nOrigHyphPos );
+        if ('0' <= c && c <= '9')
+        {
+            split = c - '0';
+            nOrigHyphPos++;
+        }
+        if (endhyphpat > -1)
+        {
+            OUStringBuffer aTmp2 ( aTmp.copy(0, std::max (nHyphenationPos + 1 - split, 0) ) );
+            aTmp2.append( aText.subView( nOrigHyphPos + 1, endhyphpat - nOrigHyphPos - 1) );
+            nHyphenPos = aTmp2.getLength();
+            aTmp2.append( aTmp.subView( nHyphenationPos + 1 ) );
+            //! take care of #i22591#
+            if (rOrigWord[ rOrigWord.getLength() - 1 ] == '.')
+                aTmp2.append( '.' );
+            aText = aTmp2.makeStringAndClear();
+        }
+    }
+    if (nHyphenPos == -1)
+        aText = rOrigWord;
+
+    rtl::Reference< HyphenatedWord > xRes = new HyphenatedWord( rOrigWord, nLang, nHyphenationPos,
+                    aText, (nHyphenPos > -1) ? nHyphenPos - 1 : nHyphenationPos);
+
 
     return xRes;
 }
 
 
-Reference< XPossibleHyphens > HyphenatorDispatcher::buildPossHyphens(
+rtl::Reference<PossibleHyphens> HyphenatorDispatcher::buildPossHyphens(
             const Reference< XDictionaryEntry > &xEntry, LanguageType nLanguage )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Reference<XPossibleHyphens> xRes;
+    if (!xEntry.is())
+        return nullptr;
 
-    if (xEntry.is())
+    // text with hyphenation info
+    OUString aText( xEntry->getDictionaryWord() );
+    sal_Int32 nTextLen = aText.getLength();
+
+    // trailing '=' means "hyphenation should not be possible"
+    if (nTextLen <= 0  ||  aText[ nTextLen - 1 ] == '=' || aText[ nTextLen - 1 ] == '[')
+        return nullptr;
+
+    // sequence to hold hyphenation positions
+    Sequence< sal_Int16 > aHyphPos( nTextLen );
+    sal_Int16 *pPos = aHyphPos.getArray();
+    sal_Int32 nHyphCount = 0;
+
+    OUStringBuffer aTmp( nTextLen );
+    bool  bSkip = false;
+    bool  bSkip2 = false;
+    sal_Int32 nHyphIdx = -1;
+    for (sal_Int32 i = 0;  i < nTextLen;  i++)
     {
-        // text with hyphenation info
-        OUString aText( xEntry->getDictionaryWord() );
-        sal_Int32 nTextLen = aText.getLength();
-
-        // trailing '=' means "hyphenation should not be possible"
-        if (nTextLen > 0  &&  aText[ nTextLen - 1 ] != '=' && aText[ nTextLen - 1 ] != '[')
+        sal_Unicode cTmp = aText[i];
+        if (cTmp == '[' || cTmp == ']')
+            bSkip2 = !bSkip2;
+        if (cTmp != '=' && !bSkip2 && cTmp != ']')
         {
-            // sequence to hold hyphenation positions
-            Sequence< sal_Int16 > aHyphPos( nTextLen );
-            sal_Int16 *pPos = aHyphPos.getArray();
-            sal_Int32 nHyphCount = 0;
-
-            OUStringBuffer aTmp( nTextLen );
-            bool  bSkip = false;
-            bool  bSkip2 = false;
-            sal_Int32 nHyphIdx = -1;
-            for (sal_Int32 i = 0;  i < nTextLen;  i++)
-            {
-                sal_Unicode cTmp = aText[i];
-                if (cTmp == '[' || cTmp == ']')
-                    bSkip2 = !bSkip2;
-                if (cTmp != '=' && !bSkip2 && cTmp != ']')
-                {
-                    aTmp.append( cTmp );
-                    bSkip = false;
-                    nHyphIdx++;
-                }
-                else
-                {
-                    if (!bSkip  &&  nHyphIdx >= 0)
-                        pPos[ nHyphCount++ ] = static_cast<sal_Int16>(nHyphIdx);
-                    bSkip = true;   //! multiple '=' should count as one only
-                }
-            }
-
-            // ignore (multiple) trailing '='
-            if (bSkip  &&  nHyphIdx >= 0)
-            {
-                nHyphCount--;
-            }
-            DBG_ASSERT( nHyphCount >= 0, "lng : invalid hyphenation count");
-
-            if (nHyphCount > 0)
-            {
-                aHyphPos.realloc( nHyphCount );
-                xRes = new PossibleHyphens( aTmp.makeStringAndClear(), nLanguage,
-                                aText, aHyphPos );
-            }
+            aTmp.append( cTmp );
+            bSkip = false;
+            nHyphIdx++;
+        }
+        else
+        {
+            if (!bSkip  &&  nHyphIdx >= 0)
+                pPos[ nHyphCount++ ] = static_cast<sal_Int16>(nHyphIdx);
+            bSkip = true;   //! multiple '=' should count as one only
         }
     }
+
+    // ignore (multiple) trailing '='
+    if (bSkip  &&  nHyphIdx >= 0)
+    {
+        nHyphCount--;
+    }
+    DBG_ASSERT( nHyphCount >= 0, "lng : invalid hyphenation count");
+
+    if (nHyphCount <= 0)
+        return nullptr;
+
+    aHyphPos.realloc( nHyphCount );
+    rtl::Reference<PossibleHyphens> xRes = new PossibleHyphens( aTmp.makeStringAndClear(), nLanguage,
+                    aText, aHyphPos );
 
     return xRes;
 }

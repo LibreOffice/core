@@ -32,7 +32,7 @@
 #include "defs.hxx"
 
 class LngSvcMgr;
-
+namespace linguistic { class HyphenatedWord; class PossibleHyphens; }
 
 class HyphenatorDispatcher :
     public cppu::WeakImplHelper
@@ -60,12 +60,12 @@ class HyphenatorDispatcher :
 
     void    ClearSvcList();
 
-    static css::uno::Reference< css::linguistic2::XHyphenatedWord>
+    static rtl::Reference< linguistic::HyphenatedWord >
             buildHyphWord( const OUString& rOrigWord,
                 const css::uno::Reference< css::linguistic2::XDictionaryEntry> &xEntry,
                 LanguageType nLang, sal_Int16 nMaxLeading );
 
-    static css::uno::Reference< css::linguistic2::XPossibleHyphens >
+    static rtl::Reference< linguistic::PossibleHyphens >
             buildPossHyphens( const css::uno::Reference< css::linguistic2::XDictionaryEntry > &xEntry,
                     LanguageType nLanguage );
 
