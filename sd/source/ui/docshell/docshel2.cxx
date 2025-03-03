@@ -59,34 +59,39 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect,
     pView->SetPageVisible(false);
     pView->SetGlueVisible(false);
 
+    // tdf#93357 - display first page as thumbnail in the recent documents view
     SdPage* pSelectedPage = nullptr;
-
-    const std::vector<std::unique_ptr<sd::FrameView>> &rViews = mpDoc->GetFrameViewList();
-    if( !rViews.empty() )
+    if (nAspect == ASPECT_THUMBNAIL && pOut->GetOutDevType() == OUTDEV_VIRDEV)
+        pSelectedPage = mpDoc->GetSdPage(0, PageKind::Standard);
+    else
     {
-        sd::FrameView* pFrameView = rViews[0].get();
-        if( pFrameView->GetPageKind() == PageKind::Standard )
+        const std::vector<std::unique_ptr<sd::FrameView>> &rViews = mpDoc->GetFrameViewList();
+        if( !rViews.empty() )
         {
-            sal_uInt16 nSelectedPage = pFrameView->GetSelectedPage();
-            pSelectedPage = mpDoc->GetSdPage(nSelectedPage, PageKind::Standard);
-        }
-    }
-
-    if( nullptr == pSelectedPage )
-    {
-        SdPage* pPage = nullptr;
-        sal_uInt16 nPageCnt = mpDoc->GetSdPageCount(PageKind::Standard);
-
-        for (sal_uInt16 i = 0; i < nPageCnt; i++)
-        {
-            pPage = mpDoc->GetSdPage(i, PageKind::Standard);
-
-            if ( pPage->IsSelected() )
-                pSelectedPage = pPage;
+            sd::FrameView* pFrameView = rViews[0].get();
+            if( pFrameView->GetPageKind() == PageKind::Standard )
+            {
+                sal_uInt16 nSelectedPage = pFrameView->GetSelectedPage();
+                pSelectedPage = mpDoc->GetSdPage(nSelectedPage, PageKind::Standard);
+            }
         }
 
         if( nullptr == pSelectedPage )
-            pSelectedPage = mpDoc->GetSdPage(0, PageKind::Standard);
+        {
+            SdPage* pPage = nullptr;
+            sal_uInt16 nPageCnt = mpDoc->GetSdPageCount(PageKind::Standard);
+
+            for (sal_uInt16 i = 0; i < nPageCnt; i++)
+            {
+                pPage = mpDoc->GetSdPage(i, PageKind::Standard);
+
+                if ( pPage->IsSelected() )
+                    pSelectedPage = pPage;
+            }
+
+            if( nullptr == pSelectedPage )
+                pSelectedPage = mpDoc->GetSdPage(0, PageKind::Standard);
+        }
     }
 
     ::tools::Rectangle aVisArea = GetVisArea(nAspect);
