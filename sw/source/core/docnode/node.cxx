@@ -2116,8 +2116,16 @@ void SwNode::RemoveAnchoredFly(SwFrameFormat *const pFlyFormat)
 //    assert(&pFlyFormat->GetAnchor(false).GetContentAnchor()->nNode.GetNode() == this);
     assert(IsTextNode() || IsStartNode() || IsTableNode());
     assert(m_pAnchoredFlys);
+    if (!m_pAnchoredFlys) // problem was fixed in newer branches
+    {
+        return;
+    }
     auto it(std::find(m_pAnchoredFlys->begin(), m_pAnchoredFlys->end(), pFlyFormat));
     assert(it != m_pAnchoredFlys->end());
+    if (it == m_pAnchoredFlys->end()) // problem was fixed in newer branches
+    {
+        return;
+    }
     m_pAnchoredFlys->erase(it);
     if (m_pAnchoredFlys->empty())
     {
