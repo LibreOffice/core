@@ -38,6 +38,9 @@ Module gid_Module_Prg_Impress_Bin
     Files = (auto_impress_ALL,
     gid_File_Extra_Urldesktop_Impress,gid_File_Extra_Urlnew_Impress,gid_File_Extra_Urlstart_Impress,gid_File_Extra_Urltasks_Impress,
     gid_File_Share_Registry_Impress_Xcd,
+#if defined LINUX && !defined USING_X11
+    gid_File_Share_Registry_Ogltrans_Xcd,
+#endif
     gid_File_Tmp_Userinstall_Impress_Inf);
 End
 
@@ -76,5 +79,14 @@ Module gid_Module_Prg_Impress_Other_Reg
     Styles = (HIDDEN_ROOT);
     Default = YES;
 End
+
+#if defined LINUX && !defined USING_X11
+File gid_File_Share_Registry_Ogltrans_Xcd
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Share_Registry;
+    Name = "ogltrans.xcd";
+End
+#endif
 
 #include "alllangmodules_impress.inc"
