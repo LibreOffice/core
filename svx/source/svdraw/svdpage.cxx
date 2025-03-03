@@ -1743,6 +1743,11 @@ SdrLayerAdmin& SdrPage::GetLayerAdmin()
     return *mpLayerAdmin;
 }
 
+OUString SdrPage::GetLayoutName() const
+{
+    return OUString();
+}
+
 void SdrPage::SetInserted( bool bIns )
 {
     if( mbInserted == bIns )
