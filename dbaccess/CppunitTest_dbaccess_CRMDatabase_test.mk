@@ -48,4 +48,8 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,dbaccess_CRMDatabase_test, \
     dbaccess \
 ))
 
+$(eval $(call gb_CppunitTest_use_jars,dbaccess_CRMDatabase_test, \
+    sdbc_hsqldb \
+))
+
 # vim: set noet sw=4 ts=4:
