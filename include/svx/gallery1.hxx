@@ -41,11 +41,11 @@ class SVXCORE_DLLPUBLIC GalleryThemeEntry
 private:
 
     std::unique_ptr<GalleryFileStorageEntry> mpGalleryStorageEngineEntry;
-    OUString                aName;
-    sal_uInt32              nId;
-    bool                    bReadOnly;
-    bool                    bModified;
-    bool                    bThemeNameFromResource;
+    OUString                maName;
+    sal_uInt32              mnId;
+    bool                    mbReadOnly;
+    bool                    mbModified;
+    bool                    mbThemeNameFromResource;
 
 public:
                             GalleryThemeEntry( bool bCreateUniqueURL,
@@ -61,20 +61,20 @@ public:
 
     std::unique_ptr<GalleryFileStorage> createGalleryStorageEngine(GalleryObjectCollection& mrGalleryObjectCollection);
 
-    const OUString&         GetThemeName() const { return aName; }
+    const OUString&         GetThemeName() const { return maName; }
 
-    bool                    IsReadOnly() const { return bReadOnly; }
+    bool                    IsReadOnly() const { return mbReadOnly; }
     bool                    IsDefault() const;
 
-    bool                    IsHidden() const { return aName.match("private://gallery/hidden/"); }
+    bool                    IsHidden() const { return maName.match("private://gallery/hidden/"); }
 
-    bool                    IsModified() const { return bModified; }
-    void                    SetModified( bool bSet ) { bModified = ( bSet && !IsReadOnly() ); }
+    bool                    IsModified() const { return mbModified; }
+    void                    SetModified( bool bSet ) { mbModified = ( bSet && !IsReadOnly() ); }
 
     void                    SetName( const OUString& rNewName );
-    bool                    IsNameFromResource() const { return bThemeNameFromResource; }
+    bool                    IsNameFromResource() const { return mbThemeNameFromResource; }
 
-    sal_uInt32              GetId() const { return nId; }
+    sal_uInt32              GetId() const { return mnId; }
     void                    SetId( sal_uInt32 nNewId, bool bResetThemeName );
 
 

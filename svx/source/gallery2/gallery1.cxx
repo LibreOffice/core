@@ -112,9 +112,9 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
                                       const INetURLObject& rBaseURL, const OUString& rName,
                                       bool _bReadOnly, bool _bNewFile,
                                       sal_uInt32 _nId, bool _bThemeNameFromResource ) :
-        nId                     ( _nId ),
-        bReadOnly               ( _bReadOnly ),
-        bThemeNameFromResource  ( _bThemeNameFromResource )
+        mnId                     ( _nId ),
+        mbReadOnly               ( _bReadOnly ),
+        mbThemeNameFromResource  ( _bThemeNameFromResource )
 {
     INetURLObject aURL( rBaseURL );
     DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
@@ -129,38 +129,38 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
 
     SetModified( _bNewFile );
 
-    aName = mpGalleryStorageEngineEntry->ReadStrFromIni( u"name" );
+    maName = mpGalleryStorageEngineEntry->ReadStrFromIni( u"name" );
 
     // This is awful - we shouldn't use these resources if we
     // possibly can avoid them
-    if( aName.isEmpty() && nId && bThemeNameFromResource )
+    if( maName.isEmpty() && mnId && mbThemeNameFromResource )
     {
         //some of these are supposed to *not* be localized
         //so catch them before looking up the resource
         for (size_t i = 0; i < SAL_N_ELEMENTS(aUnlocalized); ++i)
         {
-            if (aUnlocalized[i].first == nId)
+            if (aUnlocalized[i].first == mnId)
             {
-                aName = aUnlocalized[i].second;
+                maName = aUnlocalized[i].second;
                 break;
             }
         }
         //look up the rest of the ids in string resources
-        if (aName.isEmpty())
+        if (maName.isEmpty())
         {
             for (size_t i = 0; i < SAL_N_ELEMENTS(aLocalized); ++i)
             {
-                if (aLocalized[i].first == nId)
+                if (aLocalized[i].first == mnId)
                 {
-                    aName = SvxResId(aLocalized[i].second);
+                    maName = SvxResId(aLocalized[i].second);
                     break;
                 }
             }
         }
     }
 
-    if( aName.isEmpty() )
-        aName = rName;
+    if( maName.isEmpty() )
+        maName = rName;
 }
 
 GalleryThemeEntry::~GalleryThemeEntry()
@@ -178,7 +178,7 @@ GalleryTheme* GalleryThemeEntry::createGalleryTheme(Gallery* pGallery)
 
 std::unique_ptr<GalleryFileStorage> GalleryThemeEntry::createGalleryStorageEngine(GalleryObjectCollection& mrGalleryObjectCollection)
 {
-    return mpGalleryStorageEngineEntry->createGalleryStorageEngine(mrGalleryObjectCollection, bReadOnly);
+    return mpGalleryStorageEngineEntry->createGalleryStorageEngine(mrGalleryObjectCollection, mbReadOnly);
 }
 
 void GalleryTheme::InsertAllThemes(weld::ComboBox& rListBox)
@@ -192,19 +192,19 @@ void GalleryTheme::InsertAllThemes(weld::ComboBox& rListBox)
 
 void GalleryThemeEntry::SetName( const OUString& rNewName )
 {
-    if( aName != rNewName )
+    if( maName != rNewName )
     {
-        aName = rNewName;
+        maName = rNewName;
         SetModified( true );
-        bThemeNameFromResource = false;
+        mbThemeNameFromResource = false;
     }
 }
 
 void GalleryThemeEntry::SetId( sal_uInt32 nNewId, bool bResetThemeName )
 {
-    nId = nNewId;
+    mnId = nNewId;
     SetModified( true );
-    bThemeNameFromResource = ( nId && bResetThemeName );
+    mbThemeNameFromResource = ( mnId && bResetThemeName );
 }
 
 void GalleryThemeEntry::removeTheme()
@@ -721,7 +721,7 @@ void Gallery::ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener )
 
 bool GalleryThemeEntry::IsDefault() const
 {
-    return nId > 0 && nId != GALLERY_THEME_MYTHEME;
+    return mnId > 0 && mnId != GALLERY_THEME_MYTHEME;
 }
 
 GalleryStorageLocations& GalleryThemeEntry::getGalleryStorageLocations() const
