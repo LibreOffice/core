@@ -116,6 +116,7 @@
 #include <fmtrfmrk.hxx>
 #include <txtrfmrk.hxx>
 #include <translatehelper.hxx>
+#include <rootfrm.hxx>
 
 FlyMode SwBaseShell::s_eFrameMode = FLY_DRAG_END;
 
@@ -2158,6 +2159,35 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 }
                 if (bDisable)
                     rSet.DisableItem(nWhich);
+            }
+            break;
+            case FN_SET_TRACKED_CHANGES_IN_TEXT:
+            {
+                bool bShowRedlines = !rSh.GetLayout()->IsHideRedlines();
+                const SwViewOption* pOptions = rSh.GetViewOptions();
+                // First setting is false: inline.
+                bool bAllInText = bShowRedlines && !pOptions->IsShowChangesInMargin();
+                rSet.Put(SfxBoolItem(nWhich, bAllInText));
+            }
+            break;
+            case FN_SET_TRACKED_DELETIONS_IN_MARGIN:
+            {
+                bool bShowRedlines = !rSh.GetLayout()->IsHideRedlines();
+                const SwViewOption* pOptions = rSh.GetViewOptions();
+                // Second setting is false: show deletions in margin.
+                bool bDelInMargin = bShowRedlines && pOptions->IsShowChangesInMargin()
+                                    && !pOptions->IsShowChangesInMargin2();
+                rSet.Put(SfxBoolItem(nWhich, bDelInMargin));
+            }
+            break;
+            case FN_SET_TRACKED_INSERTIONS_IN_MARGIN:
+            {
+                bool bShowRedlines = !rSh.GetLayout()->IsHideRedlines();
+                const SwViewOption* pOptions = rSh.GetViewOptions();
+                // Second setting is true: show insertions in margin.
+                bool bInsInMargin = bShowRedlines && pOptions->IsShowChangesInMargin()
+                                    && pOptions->IsShowChangesInMargin2();
+                rSet.Put(SfxBoolItem(nWhich, bInsInMargin));
             }
             break;
         }
