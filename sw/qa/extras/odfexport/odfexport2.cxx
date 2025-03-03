@@ -941,6 +941,13 @@ DECLARE_ODFEXPORT_TEST(testTdf143605, "tdf143605.odt")
     CPPUNIT_ASSERT_EQUAL(u"."_ustr, getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf165115)
+{
+    // Test saving a template file with password protection
+    createSwDoc();
+    saveAndReload("writer8_template", "test");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf57317_autoListName)
 {
     createSwDoc("tdf57317_autoListName.odt");
