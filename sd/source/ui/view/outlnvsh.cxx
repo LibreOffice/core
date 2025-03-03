@@ -1318,7 +1318,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
         if( nPos >= GetDoc()->GetSdPageCount( PageKind::Standard ) )
             nPos = 0;
 
-        SdPage* pPage = GetDoc()->GetSdPage( static_cast<sal_uInt16>(nPos), PageKind::Standard );
+        SdrPage* pPage = GetDoc()->GetSdPage( static_cast<sal_uInt16>(nPos), PageKind::Standard );
 
         if (GetDoc()->GetDocumentType() == DocumentType::Draw)
             aPageStr = SdResId(STR_SD_PAGE_COUNT_DRAW);

@@ -192,11 +192,12 @@ OUString SAL_CALL SdStyleFamily::getName()
         if( pPage == nullptr )
             throw DisposedException();
 
-        const OUString& rLayoutName = pPage->GetLayoutName();
-        sal_Int32 nIndex = rLayoutName.indexOf(SD_LT_SEPARATOR);
-        if (nIndex != -1)
-            return rLayoutName.copy(0, nIndex);
-        return rLayoutName;
+        OUString aLayoutName( pPage->GetLayoutName() );
+        sal_Int32 nIndex = aLayoutName.indexOf(SD_LT_SEPARATOR);
+        if( nIndex != -1 )
+            aLayoutName = aLayoutName.copy(0, nIndex);
+
+        return aLayoutName;
     }
     else
     {

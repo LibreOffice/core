@@ -106,9 +106,10 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
             // about this
             if( bRenameDuplicates && aTest != SdResId( STR_LAYOUT_DEFAULT_NAME ) && !(pTestPage->Equals(*pBMMPage)) )
             {
-                OUString aOldPageLayoutName = pBMMPage->GetLayoutName();
-                pBookmarkDoc->RenameLayoutTemplate(aOldPageLayoutName, pBMMPage->GetName() + "_");
+                pBookmarkDoc->RenameLayoutTemplate(
+                    pBMMPage->GetLayoutName(), pBMMPage->GetName() + "_");
                 aLayout = pBMMPage->GetName();
+
                 break;
             }
             else
@@ -1389,7 +1390,7 @@ static bool isMasterPageLayoutNameUnique(const SdDrawDocument& rDoc, std::u16str
 
     for(sal_uInt16 a(0); a < nPageCount; a++)
     {
-        const SdPage* pCandidate = static_cast<const SdPage*>(rDoc.GetMasterPage(a));
+        const SdrPage* pCandidate = rDoc.GetMasterPage(a);
         OUString aPageLayoutName(pCandidate->GetLayoutName());
         sal_Int32 nIndex = aPageLayoutName.indexOf(SD_LT_SEPARATOR);
         if( nIndex != -1 )
