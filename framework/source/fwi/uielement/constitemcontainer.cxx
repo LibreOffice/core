@@ -100,7 +100,7 @@ ConstItemContainer::ConstItemContainer( const Reference< XIndexAccess >& rSource
                     }
 
                     if ( xIndexAccess.is() && nContainerIndex >= 0 )
-                        aPropSeq.getArray()[nContainerIndex].Value <<= deepCopyContainer( xIndexAccess );
+                        aPropSeq.getArray()[nContainerIndex].Value <<= Reference<XIndexAccess>(deepCopyContainer( xIndexAccess ));
 
                     m_aItemVector.push_back( aPropSeq );
                 }
@@ -136,24 +136,22 @@ void ConstItemContainer::copyItemContainer( const std::vector< Sequence< Propert
         }
 
         if ( xIndexAccess.is() && nContainerIndex >= 0 )
-            aPropSeq.getArray()[nContainerIndex].Value <<= deepCopyContainer( xIndexAccess );
+            aPropSeq.getArray()[nContainerIndex].Value <<= Reference<XIndexAccess>(deepCopyContainer( xIndexAccess ));
 
         m_aItemVector.push_back( aPropSeq );
     }
 }
 
-Reference< XIndexAccess > ConstItemContainer::deepCopyContainer( const Reference< XIndexAccess >& rSubContainer )
+rtl::Reference< ConstItemContainer > ConstItemContainer::deepCopyContainer( const Reference< XIndexAccess >& rSubContainer )
 {
-    Reference< XIndexAccess > xReturn;
+    rtl::Reference< ConstItemContainer > xReturn;
     if ( rSubContainer.is() )
     {
         ItemContainer* pSource = dynamic_cast<ItemContainer*>( rSubContainer.get() );
-        rtl::Reference<ConstItemContainer> pSubContainer;
         if ( pSource )
-            pSubContainer = new ConstItemContainer( *pSource );
+            xReturn = new ConstItemContainer( *pSource );
         else
-            pSubContainer = new ConstItemContainer( rSubContainer );
-        xReturn = pSubContainer;
+            xReturn = new ConstItemContainer( rSubContainer );
     }
 
     return xReturn;

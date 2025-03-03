@@ -55,7 +55,7 @@ css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration
 
     // Set default return value, if method failed.
     // If no desktop exist and there is no task container - return an empty enumeration!
-    css::uno::Reference< XEnumeration > xReturn;
+    rtl::Reference< OComponentEnumeration > xReturn;
 
     // Try to "lock" the desktop for access to task container.
     css::uno::Reference< XInterface > xLock = m_xOwner.get();

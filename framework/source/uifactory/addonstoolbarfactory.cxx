@@ -173,7 +173,7 @@ Reference< XUIElement > SAL_CALL AddonsToolBarFactory::createUIElement(
         throw IllegalArgumentException();
 
     // Identify frame and determine module identifier to look for context based buttons
-    Reference< css::ui::XUIElement > xToolBar;
+    rtl::Reference< AddonsToolBarWrapper > xToolBar;
     if ( xFrame.is() &&
          aConfigData.hasElements() &&
          hasButtonsInContext( aConfigData, xFrame ))

@@ -90,7 +90,7 @@ RootItemContainer::RootItemContainer( const Reference< XIndexAccess >& rSourceCo
                 }
 
                 if ( xIndexAccess.is() && nContainerIndex >= 0 )
-                    aPropSeq.getArray()[nContainerIndex].Value <<= deepCopyContainer( xIndexAccess );
+                    aPropSeq.getArray()[nContainerIndex].Value <<= Reference<XIndexAccess>(deepCopyContainer( xIndexAccess ));
 
                 m_aItemVector.push_back( aPropSeq );
             }
@@ -121,18 +121,16 @@ Sequence< Type > SAL_CALL RootItemContainer::getTypes(  )
     );
 }
 
-Reference< XIndexAccess > RootItemContainer::deepCopyContainer( const Reference< XIndexAccess >& rSubContainer )
+rtl::Reference< ItemContainer > RootItemContainer::deepCopyContainer( const Reference< XIndexAccess >& rSubContainer )
 {
-    Reference< XIndexAccess > xReturn;
+    rtl::Reference< ItemContainer > xReturn;
     if ( rSubContainer.is() )
     {
         ConstItemContainer* pSource = dynamic_cast<ConstItemContainer*>( rSubContainer.get() );
-        rtl::Reference<ItemContainer> pSubContainer;
         if ( pSource )
-            pSubContainer = new ItemContainer( *pSource, m_aShareMutex );
+            xReturn = new ItemContainer( *pSource, m_aShareMutex );
         else
-            pSubContainer = new ItemContainer( rSubContainer, m_aShareMutex );
-        xReturn = pSubContainer;
+            xReturn = new ItemContainer( rSubContainer, m_aShareMutex );
     }
 
     return xReturn;

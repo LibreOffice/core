@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/propshlp.hxx>
@@ -36,6 +37,7 @@
 namespace framework
 {
 class ConstItemContainer;
+class ItemContainer;
 
 typedef ::cppu::WeakImplHelper<
             css::container::XIndexContainer,
@@ -107,7 +109,7 @@ class RootItemContainer final : private cppu::BaseMutex,
         RootItemContainer& operator=( const RootItemContainer& ) = delete;
         RootItemContainer( const RootItemContainer& ) = delete;
 
-        css::uno::Reference< css::container::XIndexAccess > deepCopyContainer( const css::uno::Reference< css::container::XIndexAccess >& rSubContainer );
+        rtl::Reference< ItemContainer > deepCopyContainer( const css::uno::Reference< css::container::XIndexAccess >& rSubContainer );
 
         mutable ShareableMutex                                            m_aShareMutex;
         std::vector< css::uno::Sequence< css::beans::PropertyValue > >    m_aItemVector;

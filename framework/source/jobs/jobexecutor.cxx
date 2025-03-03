@@ -166,7 +166,7 @@ JobExecutor::~JobExecutor()
 
 void JobExecutor::disposing(std::unique_lock<std::mutex>& /*rGuard*/) {
     css::uno::Reference<css::container::XContainer> notifier;
-    css::uno::Reference<css::container::XContainerListener> listener;
+    rtl::Reference<WeakContainerListener> listener;
     if (m_aConfig.getMode() != ConfigAccess::E_CLOSED) {
         notifier.set(m_aConfig.cfg(), css::uno::UNO_QUERY);
         listener = m_xConfigListener;

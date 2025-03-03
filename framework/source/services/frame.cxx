@@ -2117,7 +2117,7 @@ void SAL_CALL XFrameImpl::disposing()
 
     // interception/dispatch chain must be destructed explicitly
     // Otherwise some dispatches and/or interception objects won't die.
-    css::uno::Reference< css::lang::XEventListener > xDispatchHelper;
+    rtl::Reference< InterceptionHelper > xDispatchHelper;
     {
         SolarMutexGuard g;
         xDispatchHelper = m_xDispatchHelper;
@@ -2321,7 +2321,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL XFrameImpl::queryDispatch(
     else
     {
         // We use a helper to support these interface and an interceptor mechanism.
-        css::uno::Reference<css::frame::XDispatchProvider> disp;
+        rtl::Reference<InterceptionHelper> disp;
         {
             SolarMutexGuard g;
             disp = m_xDispatchHelper;
@@ -2353,7 +2353,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL XFra
     checkDisposed();
 
     // We use a helper to support these interface and an interceptor mechanism.
-    css::uno::Reference<css::frame::XDispatchProvider> disp;
+    rtl::Reference<InterceptionHelper> disp;
     {
         SolarMutexGuard g;
         disp = m_xDispatchHelper;
@@ -2383,7 +2383,7 @@ void SAL_CALL XFrameImpl::registerDispatchProviderInterceptor(
 
     checkDisposed();
 
-    css::uno::Reference< css::frame::XDispatchProviderInterception > xInterceptionHelper;
+    rtl::Reference< InterceptionHelper > xInterceptionHelper;
     {
         SolarMutexGuard g;
         xInterceptionHelper = m_xDispatchHelper;
@@ -2402,7 +2402,7 @@ void SAL_CALL XFrameImpl::releaseDispatchProviderInterceptor(
 
     // Sometimes we are called during our dispose() method
 
-    css::uno::Reference< css::frame::XDispatchProviderInterception > xInterceptionHelper;
+    rtl::Reference< InterceptionHelper > xInterceptionHelper;
     {
         SolarMutexGuard g;
         xInterceptionHelper = m_xDispatchHelper;

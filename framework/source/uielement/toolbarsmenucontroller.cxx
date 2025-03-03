@@ -508,7 +508,7 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
 // XMenuListener
 void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
 {
-    Reference< css::awt::XPopupMenu >   xPopupMenu;
+    rtl::Reference< VCLXPopupMenu >     xPopupMenu;
     Reference< XComponentContext >      xContext;
     Reference< XURLTransformer >        xURLTransformer;
     Reference< XFrame >                 xFrame;

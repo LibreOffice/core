@@ -383,7 +383,7 @@ void SAL_CALL RecentFilesMenuController::statusChanged( const FeatureStateEvent&
 
 void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
 {
-    Reference< css::awt::XPopupMenu > xPopupMenu;
+    rtl::Reference< VCLXPopupMenu > xPopupMenu;
 
     {
         std::unique_lock aLock(m_aMutex);

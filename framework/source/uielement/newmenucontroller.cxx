@@ -397,7 +397,7 @@ void SAL_CALL NewMenuController::statusChanged( const FeatureStateEvent& Event )
 // XMenuListener
 void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
 {
-    Reference< css::awt::XPopupMenu > xPopupMenu;
+    rtl::Reference< VCLXPopupMenu > xPopupMenu;
     Reference< XComponentContext >    xContext;
 
     {
@@ -409,17 +409,13 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
     if ( !xPopupMenu.is() )
         return;
 
-    VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(dynamic_cast<VCLXMenu*>( xPopupMenu.get() ));
-    if ( !pPopupMenu )
-        return;
-
     OUString aURL;
     OUString aTargetFrame( m_aTargetFrame );
 
     {
         SolarMutexGuard aSolarMutexGuard;
-        aURL = pPopupMenu->getCommand(rEvent.MenuId);
-        void* nAttributePtr = pPopupMenu->getUserValue(rEvent.MenuId);
+        aURL = xPopupMenu->getCommand(rEvent.MenuId);
+        void* nAttributePtr = xPopupMenu->getUserValue(rEvent.MenuId);
         MenuAttributes* pAttributes = static_cast<MenuAttributes *>(nAttributePtr);
         if (pAttributes)
             aTargetFrame = pAttributes->aTargetFrame;
