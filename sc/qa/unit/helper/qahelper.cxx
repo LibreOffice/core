@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_feature_opencl.h>
+
 #include "qahelper.hxx"
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/propertysequence.hxx>
@@ -651,6 +653,8 @@ void ScModelTestBase::miscRowHeightsTest( TestParam const * aTestValues, unsigne
     }
 }
 
+#if HAVE_FEATURE_OPENCL
+
 void ScModelTestBase::enableOpenCL()
 {
     /**
@@ -665,7 +669,9 @@ void ScModelTestBase::disableOpenCL()
     sc::FormulaGroupInterpreter::disableOpenCL_UnitTestsOnly();
 }
 
-void ScModelTestBase::initTestEnv(std::u16string_view fileName)
+#endif
+
+void ScModelTestBase::initTestEnv([[maybe_unused]] std::u16string_view fileName)
 {
     // Some documents contain macros, disable them, otherwise
     // the "Error, BASIC runtime error." dialog is prompted
@@ -678,6 +684,7 @@ void ScModelTestBase::initTestEnv(std::u16string_view fileName)
     aMacroValue.State = beans::PropertyState_DIRECT_VALUE;
     args.push_back(aMacroValue);
 
+#if HAVE_FEATURE_OPENCL
     disableOpenCL();
     CPPUNIT_ASSERT(!ScCalcConfig::isOpenCLEnabled());
 
@@ -698,6 +705,7 @@ void ScModelTestBase::initTestEnv(std::u16string_view fileName)
     // Check there are 2 documents
     uno::Reference<frame::XFrames> xFrames = mxDesktop->getFrames();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xFrames->getCount());
+#endif // HAVE_FEATURE_OPENCL
 }
 
 ScRange ScUcalcTestBase::insertRangeData(

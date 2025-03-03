@@ -1,6 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 
 #include <sal/config.h>
+#include <config_feature_opencl.h>
 
 #include "helper/qahelper.hxx"
 
@@ -48,7 +49,9 @@ void ScParallelismTest::setUp()
 {
     ScUcalcTestBase::setUp();
 
+#if HAVE_FEATURE_OPENCL
     sc::FormulaGroupInterpreter::disableOpenCL_UnitTestsOnly();
+#endif
 
     m_bThreadingFlagCfg = getThreadingFlag();
     if (!m_bThreadingFlagCfg)
