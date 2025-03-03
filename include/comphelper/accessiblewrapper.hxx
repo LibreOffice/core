@@ -105,9 +105,6 @@ namespace comphelper
         virtual ~OAccessibleWrapper( ) override;
 
     private:
-        rtl::Reference<OAccessibleContextWrapper> createAccessibleContext(
-            const css::uno::Reference<css::accessibility::XAccessibleContext>& _rxInnerContext);
-
         OAccessibleWrapper( const OAccessibleWrapper& ) = delete;
         OAccessibleWrapper& operator=( const OAccessibleWrapper& ) = delete;
     };

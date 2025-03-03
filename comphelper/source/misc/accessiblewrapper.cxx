@@ -305,13 +305,6 @@ namespace comphelper
         return m_aContext;
     }
 
-
-    rtl::Reference<OAccessibleContextWrapper> OAccessibleWrapper::createAccessibleContext( const Reference< XAccessibleContext >& _rxInnerContext )
-    {
-        return new OAccessibleContextWrapper( getComponentContext(), _rxInnerContext, this, m_xParentAccessible );
-    }
-
-
     Reference< XAccessibleContext > SAL_CALL OAccessibleWrapper::getAccessibleContext(  )
     {
         // see if the context is still alive (we cache it)
@@ -322,7 +315,7 @@ namespace comphelper
             Reference< XAccessibleContext > xInnerContext = m_xInnerAccessible->getAccessibleContext( );
             if ( xInnerContext.is() )
             {
-                xContext = createAccessibleContext( xInnerContext );
+                xContext = new OAccessibleContextWrapper(getComponentContext(), xInnerContext, this, m_xParentAccessible);
                 // cache it
                 m_aContext = WeakReference< XAccessibleContext >( xContext );
             }
