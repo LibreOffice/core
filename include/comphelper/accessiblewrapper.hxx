@@ -101,9 +101,6 @@ namespace comphelper
         virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL
                     getAccessibleContext(  ) override final;
 
-        const css::uno::Reference< css::accessibility::XAccessible >&
-                    getParent() const { return m_xParentAccessible; }
-
     protected:
         virtual ~OAccessibleWrapper( ) override;
 
