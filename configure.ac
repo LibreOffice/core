@@ -2737,6 +2737,11 @@ AC_ARG_WITH(system-lpsolve,
         [Use lpsolve already on system.]),,
     [with_system_lpsolve="$with_system_libs"])
 
+AC_ARG_WITH(system-colamd,
+    AS_HELP_STRING([--with-system-colamd],
+        [Use COLAMD already on system.]),,
+    [with_system_colamd="$with_system_libs"])
+
 AC_ARG_WITH(system-coinmp,
     AS_HELP_STRING([--with-system-coinmp],
         [Use CoinMP already on system.]),,
@@ -12084,8 +12089,34 @@ if test "$ENABLE_LPSOLVE" = TRUE; then
         AC_MSG_RESULT([internal])
         SYSTEM_LPSOLVE=
         BUILD_TYPE="$BUILD_TYPE LPSOLVE"
+        AC_MSG_CHECKING([which colamd to use])
+        if test "$with_system_colamd" = "yes"; then
+               AC_MSG_RESULT([external])
+               SYSTEM_COLAMD=TRUE
+               # This assumes suitesparse, which has
+               # /usr/lib/x86_64-linux-gnu/pkgconfig/COLAMD.pc
+               PKG_CHECK_MODULES([COLAMD], [COLAMD],
+                      [],
+                      [
+                       # older versions don't. Look in /usr/include/suitesparse
+                       COLAMD_CFLAGS=-I/usr/include/suitesparse
+                       save_CFLAGS=$CFLAGS
+                       CFLAGS="$CFLAGS $COLAMD_CFLAGS"
+                       AC_CHECK_HEADER(colamd.h, [],
+                               [ AC_MSG_ERROR(colamd.h header not found.)], [])
+                       CFLAGS=$save_CFLAGS
+                       AC_CHECK_LIB(colamd, colamd)
+                       COLAMD_LIBS=-lcolamd
+                     ])
+       else
+               AC_MSG_RESULT([internal])
+               SYSTEM_COLAMD=
+       fi
     fi
 fi
+AC_SUBST(SYSTEM_COLAMD)
+AC_SUBST(COLAMD_CFLAGS)
+AC_SUBST(COLAMD_LIBS)
 AC_SUBST(SYSTEM_LPSOLVE)
 
 dnl ===================================================================
