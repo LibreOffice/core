@@ -1051,44 +1051,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf164140)
         = dynamic_cast<SwTextFrame&>(*pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower());
     const SwScriptInfo* pSI = pTextFrame.GetScriptInfo();
 
-    // Prior to editing, the three complete lines should be flagged as no-kashida:
-    auto stBeforeLines = pSI->GetNoKashidaLines();
-
-    CPPUNIT_ASSERT_EQUAL(size_t(4), stBeforeLines.size());
-    auto stBeforeIt = stBeforeLines.begin();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), std::get<0>(*stBeforeIt));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(88), std::get<1>(*stBeforeIt));
-    ++stBeforeIt;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(88), std::get<0>(*stBeforeIt));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(180), std::get<1>(*stBeforeIt));
-    ++stBeforeIt;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(180), std::get<0>(*stBeforeIt));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(269), std::get<1>(*stBeforeIt));
-    ++stBeforeIt;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(269), std::get<0>(*stBeforeIt));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(312), std::get<1>(*stBeforeIt));
+    // Prior to editing, there should be no kashida
+    auto stBeforeKashida = pSI->GetKashidaPositions();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), stBeforeKashida.size());
 
     // Insert text at the beginning of the document
     pWrtShell->Insert(u"A"_ustr);
 
-    // After editing, the three complete lines should still be flagged as no-kashida
-    auto stAfterLines = pSI->GetNoKashidaLines();
-
-    // Without the fix, this will be 2
-    CPPUNIT_ASSERT_EQUAL(size_t(4), stAfterLines.size());
-
-    auto stAfterIt = stAfterLines.begin();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), std::get<0>(*stAfterIt));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(89), std::get<1>(*stAfterIt));
-    ++stAfterIt;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(89), std::get<0>(*stAfterIt));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(181), std::get<1>(*stAfterIt));
-    ++stAfterIt;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(181), std::get<0>(*stAfterIt));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(270), std::get<1>(*stAfterIt));
-    ++stAfterIt;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(270), std::get<0>(*stAfterIt));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(313), std::get<1>(*stAfterIt));
+    // After editing, there should still be no room for kashida
+    // Without the fix, this will be non-zero
+    auto stAfterKashida = pSI->GetKashidaPositions();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), stAfterKashida.size());
 }
 
 } // end of anonymous namespace

@@ -66,11 +66,7 @@ private:
         DirectionChangeInfo(TextFrameIndex pos, sal_uInt8 typ) : position(pos), type(typ) {};
     };
     std::vector<DirectionChangeInfo> m_DirectionChanges;
-    std::deque<TextFrameIndex> m_Kashida;
-    /// indexes into m_Kashida
-    std::unordered_set<size_t> m_KashidaInvalid;
-    std::deque<TextFrameIndex> m_NoKashidaLine;
-    std::deque<TextFrameIndex> m_NoKashidaLineEnd;
+    std::vector<TextFrameIndex> m_Kashida;
     std::vector<TextFrameIndex> m_HiddenChg;
     std::vector<std::tuple<TextFrameIndex, MarkKind, Color, OUString, OUString>> m_Bookmarks;
     //! Records a single change in compression.
@@ -88,13 +84,8 @@ private:
 
     TextFrameIndex m_nInvalidityPos;
     sal_uInt8 m_nDefaultDir;
+    bool m_bParagraphContainsKashidaScript = false;
 
-    bool IsKashidaValid(size_t nKashPos) const;
-    // returns true if nKashPos is newly marked invalid
-    bool MarkKashidaInvalid(size_t nKashPos);
-    void ClearKashidaInvalid(size_t nKashPos);
-    bool MarkOrClearKashidaInvalid(TextFrameIndex nStt, TextFrameIndex nLen,
-            bool bMark, sal_Int32 nMarkCount);
     // examines the range [ nStart, nStart + nEnd ] if there are kanas
     // returns start index of kana entry in array, otherwise SAL_MAX_SIZE
     size_t HasKana(TextFrameIndex nStart, TextFrameIndex nEnd) const;
@@ -149,16 +140,7 @@ public:
         return m_DirectionChanges[ nCnt ].type;
     }
 
-    size_t CountKashida() const
-    {
-        return m_Kashida.size();
-    }
-
-    TextFrameIndex GetKashida(const size_t nCnt) const
-    {
-        assert(nCnt < m_Kashida.size());
-        return m_Kashida[nCnt];
-    }
+    bool ParagraphContainsKashidaScript() const { return m_bParagraphContainsKashidaScript; }
 
     size_t CountCompChg() const { return m_CompressionChanges.size(); };
     TextFrameIndex GetCompStart(const size_t nCnt) const
@@ -277,85 +259,20 @@ public:
                    const bool bCentered,
                    Point* pPoint = nullptr ) const;
 
-/** Performs a kashida justification on the kerning array
-
-    @descr  Add some extra space for kashida justification to the
-            positions in the kerning array.
-    @param  pKernArray
-                The printers kerning array. Optional.
-    @param  nStt
-                Start referring to the paragraph.
-    @param  nLen
-                The number of characters to be considered.
-    @param  nSpaceAdd
-                The value which has to be added to a kashida opportunity.
-    @return The number of kashida opportunities in the given range
+/** retrieves kashida opportunities for the paragraph.
 */
-    sal_Int32 KashidaJustify( KernArray* pKernArray, sal_Bool* pKashidaArray,
-          TextFrameIndex nStt, TextFrameIndex nLen, tools::Long nSpaceAdd = 0) const;
+    std::span<TextFrameIndex const> GetKashidaPositions() const { return m_Kashida; }
 
-/** Clears array of kashidas marked as invalid
- */
-    void ClearKashidaInvalid() { m_KashidaInvalid.clear(); }
-
-/** Marks nCnt kashida positions as invalid
-   pKashidaPositions: array of char indices relative to the paragraph
+/** returns the count of kashida opportunities for a substring.
 */
-    void MarkKashidasInvalid(sal_Int32 nCnt, const TextFrameIndex* pKashidaPositions);
+    tools::Long CountKashidaPositions(TextFrameIndex nIdx, TextFrameIndex nEnd) const;
 
-/** Marks nCnt kashida positions as invalid
-    in the given text range
- */
-    bool MarkKashidasInvalid(sal_Int32 const nCnt,
-            TextFrameIndex const nStt, TextFrameIndex const nLen)
-    {
-        return MarkOrClearKashidaInvalid(nStt, nLen, true, nCnt);
-    }
+/** replaces kashida opportunities for the paragraph
 
-/** retrieves kashida opportunities for a given text range.
-
-   rKashidaPositions: buffer to receive the char indices of the
+   aKashidaPositions: buffer containing char indices of the
                       kashida opportunities relative to the paragraph
 */
-    void GetKashidaPositions(TextFrameIndex nStt, TextFrameIndex nLen,
-                             std::vector<TextFrameIndex>& rKashidaPosition);
-
-/** replaces kashida opportunities for a given text range.
-
-   rKashidaPositions: buffer containing char indices of the
-                      kashida opportunities relative to the paragraph
-*/
-    void ReplaceKashidaPositions(TextFrameIndex nStt, TextFrameIndex nEnd,
-                                 const std::vector<TextFrameIndex>& rKashidaPositions);
-
-/** Use regular blank justification instead of kashdida justification for the given line of text.
-   nStt Start char index of the line referring to the paragraph.
-   nLen Number of characters in the line
-*/
-    void SetNoKashidaLine(TextFrameIndex nStt, TextFrameIndex nLen);
-
-/** Clear all forced blank justification data for the paragraph.
-*/
-    void ClearNoKashidaLines();
-
-/** Checks whether the character is on a line excluded from kashida justification.
-   nCharIdx Char index within the paragraph.
-*/
-    bool IsKashidaLine(TextFrameIndex nCharIdx) const;
-
-/** Returns an ordered copy of the no kashida lines, for testing purposes.
-*/
-    std::set<std::tuple<sal_Int32, sal_Int32>> GetNoKashidaLines() const
-    {
-        std::set<std::tuple<sal_Int32, sal_Int32>> stValue;
-        for (size_t nLine = 0; nLine < m_NoKashidaLine.size(); ++nLine)
-        {
-            stValue.emplace(static_cast<sal_Int32>(m_NoKashidaLine.at(nLine)),
-                            static_cast<sal_Int32>(m_NoKashidaLineEnd.at(nLine)));
-        }
-
-        return stValue;
-    }
+    void ReplaceKashidaPositions(std::vector<TextFrameIndex> aKashidaPositions);
 
 /** Checks if text is in a script that allows kashida justification.
 

@@ -292,6 +292,46 @@ void SnapToGridEdge(KernArray& rKernArray, sal_Int32 nLen, tools::Long nGridWidt
         ++nLast;
     }
 }
+
+bool KashidaJustify(std::span<TextFrameIndex const> aKashPositions, KernArray& rKernArray,
+                    sal_Bool* pKashidaArray, sal_Int32 nStt, sal_Int32 nLen, tools::Long nSpaceAdd)
+{
+    SAL_WARN_IF(!nLen, "sw.core", "Kashida justification without text?!");
+
+    auto stKashPosIt = aKashPositions.begin();
+
+    tools::Long nKashAdd = 0;
+    bool bHasAnyKashida = false;
+    for (sal_Int32 nIdx = 0; nIdx < nLen; ++nIdx)
+    {
+        bool bInsert = false;
+        while (stKashPosIt != aKashPositions.end())
+        {
+            auto nRelKashIdx = static_cast<sal_Int32>(*stKashPosIt) - nStt;
+            bInsert = (nRelKashIdx == nIdx);
+
+            if (nRelKashIdx >= nIdx)
+                break;
+
+            ++stKashPosIt;
+        }
+
+        if (bInsert)
+        {
+            if (pKashidaArray)
+            {
+                pKashidaArray[nIdx] = true;
+            }
+
+            nKashAdd += nSpaceAdd;
+            bHasAnyKashida = true;
+        }
+
+        rKernArray[nIdx] += nKashAdd;
+    }
+
+    return bHasAnyKashida;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

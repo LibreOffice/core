@@ -9,6 +9,7 @@
 
 #pragma once
 #include <sal/types.h>
+#include <TextFrameIndex.hxx>
 
 namespace sw::Justify
 {
@@ -63,6 +64,17 @@ SW_DLLPUBLIC tools::Long SnapToGrid(KernArray& rKernArray, std::u16string_view a
 SW_DLLPUBLIC void SnapToGridEdge(KernArray& rKernArray, sal_Int32 nLen, tools::Long nGridWidth,
                                  tools::Long nSpace, tools::Long nKern, tools::Long nBaseFontSize,
                                  bool bUseMsoCompatibleGrid);
+
+/// Performs a kashida justification on the kerning array
+/// @param aKashPositions Array of kashida insertion positions relative to paragraph
+/// @param[in,out] rKernArray text positions from OutDev::GetTextArray()
+/// @param[out] pKashidaArray Array marking locations for inserted tatweel glyphs. Optional.
+/// @param nStt String start index relative to the paragraph
+/// @param nLen Length of substring
+/// @param nSpaceAdd Amount of space to add to each kashida insertion opportunity
+SW_DLLPUBLIC bool KashidaJustify(std::span<TextFrameIndex const> aKashPositions,
+                                 KernArray& rKernArray, sal_Bool* pKashidaArray, sal_Int32 nStt,
+                                 sal_Int32 nLen, tools::Long nSpaceAdd);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
