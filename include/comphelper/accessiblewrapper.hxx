@@ -104,15 +104,13 @@ namespace comphelper
         const css::uno::Reference< css::accessibility::XAccessible >&
                     getParent() const { return m_xParentAccessible; }
 
-        // own overridables
-        virtual rtl::Reference<OAccessibleContextWrapper> createAccessibleContext(
-                const css::uno::Reference< css::accessibility::XAccessibleContext >& _rxInnerContext
-            );
-
     protected:
         virtual ~OAccessibleWrapper( ) override;
 
     private:
+        rtl::Reference<OAccessibleContextWrapper> createAccessibleContext(
+            const css::uno::Reference<css::accessibility::XAccessibleContext>& _rxInnerContext);
+
         OAccessibleWrapper( const OAccessibleWrapper& ) = delete;
         OAccessibleWrapper& operator=( const OAccessibleWrapper& ) = delete;
     };
