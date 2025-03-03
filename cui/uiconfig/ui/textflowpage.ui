@@ -469,6 +469,26 @@
                     <property name="top-attach">3</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkCheckButton" id="checkMoveLine">
+                    <property name="label" translatable="yes" context="textflowpage|checkMoveLine">Move Line</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="inconsistent">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkMoveLine-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkMoveLine">Deselect this check box, if you don't want to move the entire hyphenated line to the next text block.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">0</property>
