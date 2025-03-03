@@ -191,11 +191,7 @@ Reference<XAccessible > SAL_CALL AccessibleSlideSorterView::getAccessibleParent(
     Reference<XAccessible> xParent;
 
     if (mpContentWindow != nullptr)
-    {
-        vcl::Window* pParent = mpContentWindow->GetAccessibleParentWindow();
-        if (pParent != nullptr)
-            xParent = pParent->GetAccessible();
-    }
+        xParent = mpContentWindow->GetAccessibleParent();
 
     return xParent;
 }

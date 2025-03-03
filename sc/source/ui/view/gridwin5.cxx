@@ -405,7 +405,7 @@ css::uno::Reference< css::accessibility::XAccessible >
     }
 
     rtl::Reference<ScAccessibleDocument> pAccessibleDocument =
-        new ScAccessibleDocument(GetAccessibleParentWindow()->GetAccessible(),
+        new ScAccessibleDocument(GetAccessibleParent(),
             mrViewData.GetViewShell(), eWhich);
     pAccessibleDocument->PreInit();
 

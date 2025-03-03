@@ -1522,7 +1522,7 @@ css::uno::Reference<css::accessibility::XAccessible> ScPreview::CreateAccessible
     }
 
     rtl::Reference<ScAccessibleDocumentPagePreview> pAccessible =
-        new ScAccessibleDocumentPagePreview( GetAccessibleParentWindow()->GetAccessible(), pViewShell );
+        new ScAccessibleDocumentPagePreview(GetAccessibleParent(), pViewShell );
 
     xAcc = pAccessible;
     SetAccessible(xAcc);

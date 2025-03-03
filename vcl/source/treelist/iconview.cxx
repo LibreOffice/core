@@ -226,14 +226,11 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
 
 css::uno::Reference<css::accessibility::XAccessible> IconView::CreateAccessible()
 {
-    if (vcl::Window* pParent = GetAccessibleParentWindow())
+    if (auto xAccParent = GetAccessibleParent())
     {
-        if (auto xAccParent = pParent->GetAccessible())
-        {
-            // need to be done here to get the vclxwindow later on in the accessible
-            css::uno::Reference<css::awt::XVclWindowPeer> xHoldAlive(GetComponentInterface());
-            return AccessibleFactory::createAccessibleIconView(*this, xAccParent);
-        }
+        // need to be done here to get the vclxwindow later on in the accessible
+        css::uno::Reference<css::awt::XVclWindowPeer> xHoldAlive(GetComponentInterface());
+        return AccessibleFactory::createAccessibleIconView(*this, xAccParent);
     }
     return {};
 }

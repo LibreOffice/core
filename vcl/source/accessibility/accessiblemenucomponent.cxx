@@ -151,11 +151,7 @@ Reference< XAccessible > OAccessibleMenuComponent::getAccessibleParent(  )
     {
         vcl::Window* pWindow = m_pMenu->GetWindow();
         if ( pWindow )
-        {
-            vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
-            if ( pParent )
-                xParent = pParent->GetAccessible();
-        }
+            xParent = pWindow->GetAccessibleParent();
     }
 
     return xParent;

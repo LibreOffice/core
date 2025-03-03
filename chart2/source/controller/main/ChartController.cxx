@@ -1560,11 +1560,7 @@ void ChartController::impl_initializeAccessible( AccessibleChartView& rAccChartV
         SolarMutexGuard aGuard;
         auto pChartWindow(GetChartWindow());
         if( pChartWindow )
-        {
-            vcl::Window* pParentWin( pChartWindow->GetAccessibleParentWindow());
-            if( pParentWin )
-                xParent.set( pParentWin->GetAccessible());
-        }
+            xParent.set(pChartWindow->GetAccessibleParent());
     }
 
     rAccChartView.initialize(*this, getChartModel(), m_xChartView, xParent, m_xViewWindow);

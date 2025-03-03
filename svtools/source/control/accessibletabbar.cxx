@@ -253,11 +253,7 @@ namespace accessibility
 
         Reference< XAccessible > xParent;
         if ( m_pTabBar )
-        {
-            vcl::Window* pParent = m_pTabBar->GetAccessibleParentWindow();
-            if ( pParent )
-                xParent = pParent->GetAccessible();
-        }
+            xParent = m_pTabBar->GetAccessibleParent();
 
         return xParent;
     }

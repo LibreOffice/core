@@ -566,15 +566,10 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleParent(  )
 {
     OExternalLockGuard aGuard( this );
 
-    Reference< XAccessible > xParent;
     if ( m_pDialogWindow )
-    {
-        vcl::Window* pParent = m_pDialogWindow->GetAccessibleParentWindow();
-        if ( pParent )
-            xParent = pParent->GetAccessible();
-    }
+        return m_pDialogWindow->GetAccessibleParent();
 
-    return xParent;
+    return nullptr;
 }
 
 

@@ -1832,7 +1832,7 @@ css::uno::Reference<css::accessibility::XAccessible>
                 pWindow,
                 this,
                 GetViewShell()->GetController(),
-                pWindow->GetAccessibleParentWindow()->GetAccessible());
+                pWindow->GetAccessibleParent());
         pDocumentView->Init();
         return pDocumentView;
     }

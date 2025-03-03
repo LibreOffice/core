@@ -65,7 +65,7 @@ SwAccessibleDocumentBase::SwAccessibleDocumentBase(
         std::shared_ptr<SwAccessibleMap> const& pMap)
     : SwAccessibleContext(pMap, AccessibleRole::DOCUMENT_TEXT,
                           pMap->GetShell()->GetLayout())
-    , mxParent(pMap->GetShell()->GetWin()->GetAccessibleParentWindow()->GetAccessible())
+    , mxParent(pMap->GetShell()->GetWin()->GetAccessibleParent())
     , mpChildWin(nullptr)
 {
 }

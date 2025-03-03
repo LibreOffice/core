@@ -627,17 +627,12 @@ IMPL_LINK_NOARG(SvHeaderTabListBox, ScrollHdl_Impl, SvTreeListBox*, void)
 
 IMPL_LINK_NOARG(SvHeaderTabListBox, CreateAccessibleHdl_Impl, HeaderBar*, void)
 {
-    vcl::Window* pParent = m_xHeaderBar->GetAccessibleParentWindow();
-    DBG_ASSERT( pParent, "SvHeaderTabListBox..CreateAccessibleHdl_Impl - accessible parent not found" );
-    if ( pParent )
+    css::uno::Reference< XAccessible > xAccParent = m_xHeaderBar->GetAccessibleParent();
+    if ( xAccParent.is() )
     {
-        css::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
-        if ( xAccParent.is() )
-        {
-            Reference<XAccessible> xAccessible = new AccessibleBrowseBoxHeaderBar(
-                xAccParent, *this, AccessibleBrowseBoxObjType::ColumnHeaderBar);
-            m_xHeaderBar->SetAccessible(xAccessible);
-        }
+        Reference<XAccessible> xAccessible = new AccessibleBrowseBoxHeaderBar(
+            xAccParent, *this, AccessibleBrowseBoxObjType::ColumnHeaderBar);
+        m_xHeaderBar->SetAccessible(xAccessible);
     }
 }
 
@@ -1108,20 +1103,14 @@ vcl::Window* SvHeaderTabListBox::GetWindowInstance()
 
 Reference< XAccessible > SvHeaderTabListBox::CreateAccessible()
 {
-    vcl::Window* pParent = GetAccessibleParentWindow();
-    DBG_ASSERT( pParent, "SvHeaderTabListBox::::CreateAccessible - accessible parent not found" );
-
     if (m_xAccessible.is())
         return m_xAccessible;
 
-    if (pParent)
+    Reference< XAccessible > xAccParent = GetAccessibleParent();
+    if ( xAccParent.is() )
     {
-        Reference< XAccessible > xAccParent = pParent->GetAccessible();
-        if ( xAccParent.is() )
-        {
-            m_xAccessible = new AccessibleTabListBox(xAccParent, *this);
-            return m_xAccessible;
-        }
+        m_xAccessible = new AccessibleTabListBox(xAccParent, *this);
+        return m_xAccessible;
     }
     return nullptr;
 }

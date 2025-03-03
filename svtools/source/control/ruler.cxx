@@ -2757,9 +2757,7 @@ void Ruler::DrawTicks()
 
 uno::Reference< XAccessible > Ruler::CreateAccessible()
 {
-    vcl::Window* pParent = GetAccessibleParentWindow();
-    assert(pParent && "Ruler::CreateAccessible(): No Parent!");
-    uno::Reference< XAccessible >   xAccParent  = pParent->GetAccessible();
+    uno::Reference<XAccessible> xAccParent = GetAccessibleParent();
     if( xAccParent.is() )
     {
         OUString aStr;

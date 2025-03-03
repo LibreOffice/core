@@ -215,6 +215,14 @@ vcl::Window* Window::GetAccessibleChildWindow( sal_uInt16 n )
     return pChild;
 }
 
+css::uno::Reference<css::accessibility::XAccessible> Window::GetAccessibleParent() const
+{
+    if (vcl::Window* pAccessibleParentWin = GetAccessibleParentWindow())
+        return pAccessibleParentWin->GetAccessible();
+
+    return nullptr;
+}
+
 void Window::SetAccessibleRole( sal_uInt16 nRole )
 {
     if ( !mpWindowImpl->mpAccessibleInfos )

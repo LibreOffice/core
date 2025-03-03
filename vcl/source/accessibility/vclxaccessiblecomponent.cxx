@@ -538,11 +538,7 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
 
     uno::Reference< accessibility::XAccessible > xAcc;
     if ( GetWindow() )
-    {
-        vcl::Window* pParent = GetWindow()->GetAccessibleParentWindow();
-        if ( pParent )
-            xAcc = pParent->GetAccessible();
-    }
+        xAcc = GetWindow()->GetAccessibleParent();
     return xAcc;
 }
 

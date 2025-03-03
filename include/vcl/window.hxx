@@ -1131,6 +1131,8 @@ public:
     sal_uInt16                          GetAccessibleChildWindowCount();
     vcl::Window*                        GetAccessibleChildWindow( sal_uInt16 n );
 
+    css::uno::Reference<css::accessibility::XAccessible> GetAccessibleParent() const;
+
     void                                SetAccessibleRole( sal_uInt16 nRole );
     sal_uInt16                          GetAccessibleRole() const;
 
