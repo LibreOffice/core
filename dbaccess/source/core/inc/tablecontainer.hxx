@@ -50,9 +50,9 @@ namespace dbaccess
         virtual OUString getTableTypeRestriction() const override;
 
         // ::connectivity::sdbcx::OCollection
-        virtual connectivity::sdbcx::ObjectType     createObject(const OUString& _rName) override;
+        virtual css::uno::Reference< css::beans::XPropertySet >     createObject(const OUString& _rName) override;
         virtual css::uno::Reference< css::beans::XPropertySet >   createDescriptor() override;
-        virtual connectivity::sdbcx::ObjectType appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
         virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
 
         virtual void disposing() override;

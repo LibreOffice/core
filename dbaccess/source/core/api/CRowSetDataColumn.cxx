@@ -205,9 +205,9 @@ ORowSetDataColumns::~ORowSetDataColumns()
 {
 }
 
-sdbcx::ObjectType ORowSetDataColumns::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > ORowSetDataColumns::createObject(const OUString& _rName)
 {
-    connectivity::sdbcx::ObjectType xNamed;
+    css::uno::Reference< css::beans::XPropertySet > xNamed;
 
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
     ::connectivity::OSQLColumns::Vector::const_iterator first =  ::connectivity::find(m_aColumns->begin(),m_aColumns->end(),_rName,aCase);

@@ -40,7 +40,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-sdbcx::ObjectType OIndexes::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > OIndexes::createObject(const OUString& _rName)
 {
     return new OAdoIndex(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
@@ -56,7 +56,7 @@ Reference< XPropertySet > OIndexes::createDescriptor()
 }
 
 // XAppend
-sdbcx::ObjectType OIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+css::uno::Reference< css::beans::XPropertySet > OIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     OAdoIndex* pIndex = dynamic_cast<OAdoIndex*>(descriptor.get());
     if ( pIndex == nullptr )

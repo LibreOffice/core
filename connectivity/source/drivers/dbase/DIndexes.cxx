@@ -31,7 +31,7 @@ using namespace ::connectivity::dbase;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-sdbcx::ObjectType ODbaseIndexes::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > ODbaseIndexes::createObject(const OUString& _rName)
 {
     OUString sFile = m_pTable->getConnection()->getURL() +
         OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER) +
@@ -45,7 +45,7 @@ sdbcx::ObjectType ODbaseIndexes::createObject(const OUString& _rName)
         ::dbtools::throwGenericSQLException( sError, *m_pTable );
     }
 
-    sdbcx::ObjectType xRet;
+    css::uno::Reference< css::beans::XPropertySet > xRet;
     std::unique_ptr<SvStream> pFileStream = ::connectivity::file::OFileTable::createStream_simpleError(sFile, StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
     if(pFileStream)
     {
@@ -84,7 +84,7 @@ Reference< XPropertySet > ODbaseIndexes::createDescriptor()
 }
 
 // XAppend
-sdbcx::ObjectType ODbaseIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+css::uno::Reference< css::beans::XPropertySet > ODbaseIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     ODbaseIndex* pIndex = dynamic_cast<ODbaseIndex*>(descriptor.get());
     if(pIndex)

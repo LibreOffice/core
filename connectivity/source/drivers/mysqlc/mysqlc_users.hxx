@@ -21,9 +21,10 @@ class Users : public ::connectivity::sdbcx::OCollection
 protected:
     // OCollection
     virtual void impl_refresh() override;
-    virtual ::connectivity::sdbcx::ObjectType createObject(const OUString& rName) override;
+    virtual ::css::uno::Reference<css::beans::XPropertySet>
+    createObject(const OUString& rName) override;
     virtual css::uno::Reference<css::beans::XPropertySet> createDescriptor() override;
-    virtual ::connectivity::sdbcx::ObjectType
+    virtual ::css::uno::Reference<css::beans::XPropertySet>
     appendObject(const OUString& rName,
                  const css::uno::Reference<css::beans::XPropertySet>& rDescriptor) override;
 

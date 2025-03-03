@@ -28,7 +28,7 @@ namespace connectivity::calc
         class OCalcTables : public OCalcTables_BASE
         {
         protected:
-            virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
+            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
         public:
             OCalcTables(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                 const ::std::vector< OUString> &_rVector) : OCalcTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)

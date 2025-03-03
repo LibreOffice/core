@@ -162,13 +162,13 @@ void lcl_createDefinitionObject(const OUString& _rName
 
 }
 
-connectivity::sdbcx::ObjectType OTableContainer::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > OTableContainer::createObject(const OUString& _rName)
 {
     Reference<XColumnsSupplier > xSup;
     if(m_xMasterContainer.is() && m_xMasterContainer->hasByName(_rName))
         xSup.set(m_xMasterContainer->getByName(_rName),UNO_QUERY);
 
-    connectivity::sdbcx::ObjectType xRet;
+    css::uno::Reference< css::beans::XPropertySet > xRet;
     if ( m_xMetaData.is() )
     {
         Reference<XPropertySet> xTableDefinition;
@@ -221,7 +221,7 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const OUString& _r
             xRet = pTable;
             pTable->construct();
         }
-        Reference<XPropertySet> xDest(xRet,UNO_QUERY);
+        Reference<XPropertySet> xDest(xRet);
         if ( xTableDefinition.is() )
             ::comphelper::copyProperties(xTableDefinition,xDest);
 
@@ -260,7 +260,7 @@ Reference< XPropertySet > OTableContainer::createDescriptor()
 }
 
 // XAppend
-ObjectType OTableContainer::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+css::uno::Reference< css::beans::XPropertySet > OTableContainer::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     // append the new table with a create stmt
     OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
@@ -346,7 +346,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
         OUString sComposedName;
 
         bool bIsView = false;
-        Reference<XPropertySet> xTable(getObject(_nPos),UNO_QUERY);
+        Reference<XPropertySet> xTable(getObject(_nPos));
         if ( xTable.is() && m_xMetaData.is() )
         {
             OUString sSchema,sCatalog,sTable;
@@ -399,7 +399,7 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event )
     {
         if(!m_xMasterContainer.is() || m_xMasterContainer->hasByName(sName))
         {
-            ObjectType xName = createObject(sName);
+            css::uno::Reference< css::beans::XPropertySet > xName = createObject(sName);
             insertElement(sName,xName);
             // and notify our listeners
             ContainerEvent aEvent(static_cast<XContainer*>(this), Any(sName), Any(xName), Any());

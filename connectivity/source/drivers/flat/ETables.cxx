@@ -25,7 +25,7 @@ using namespace connectivity;
 using namespace connectivity::flat;
 using namespace connectivity::file;
 
-sdbcx::ObjectType OFlatTables::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > OFlatTables::createObject(const OUString& _rName)
 {
     rtl::Reference<OFlatTable> pRet = new OFlatTable(this, static_cast<OFlatConnection*>(static_cast<OFileCatalog&>(m_rParent).getConnection()),
                                         _rName,u"TABLE"_ustr);

@@ -27,14 +27,16 @@ protected:
 
     // OCollection
     virtual void impl_refresh() override;
-    virtual ::connectivity::sdbcx::ObjectType createObject(const OUString& rName) override;
+    virtual ::css::uno::Reference<css::beans::XPropertySet>
+    createObject(const OUString& rName) override;
     virtual css::uno::Reference<css::beans::XPropertySet> createDescriptor() override;
-    virtual ::connectivity::sdbcx::ObjectType
+    virtual ::css::uno::Reference<css::beans::XPropertySet>
     appendObject(const OUString& rName,
                  const css::uno::Reference<css::beans::XPropertySet>& rDescriptor) override;
 
     void createTable(const css::uno::Reference<css::beans::XPropertySet>& descriptor);
-    virtual OUString getNameForObject(const sdbcx::ObjectType& _xObject) override;
+    virtual OUString
+    getNameForObject(const css::uno::Reference<css::beans::XPropertySet>& _xObject) override;
     // XDrop
     virtual void dropObject(sal_Int32 nPosition, const OUString& rName) override;
 

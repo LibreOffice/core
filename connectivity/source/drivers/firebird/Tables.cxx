@@ -41,7 +41,7 @@ void Tables::impl_refresh()
     static_cast<Catalog&>(m_rParent).refreshTables();
 }
 
-ObjectType Tables::createObject(const OUString& rName)
+css::uno::Reference< css::beans::XPropertySet > Tables::createObject(const OUString& rName)
 {
     // Only retrieving a single table, so table type is irrelevant (param 4)
     uno::Reference< XResultSet > xTables = m_xMetaData->getTables(Any(),
@@ -57,7 +57,7 @@ ObjectType Tables::createObject(const OUString& rName)
     if (!xTables->next())
         throw RuntimeException();
 
-    ObjectType xRet(new Table(this,
+    css::uno::Reference< css::beans::XPropertySet > xRet(new Table(this,
                               m_rMutex,
                               m_xMetaData->getConnection(),
                               xRow->getString(3), // Name
@@ -126,7 +126,7 @@ uno::Reference< XPropertySet > Tables::createDescriptor()
 }
 
 //----- XAppend ---------------------------------------------------------------
-ObjectType Tables::appendObject(const OUString& rName,
+css::uno::Reference< css::beans::XPropertySet > Tables::appendObject(const OUString& rName,
                                 const uno::Reference< XPropertySet >& rDescriptor)
 {
    /* OUString sSql(::dbtools::createSqlCreateTableStatement(rDescriptor,

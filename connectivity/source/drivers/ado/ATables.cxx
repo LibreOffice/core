@@ -44,7 +44,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-sdbcx::ObjectType OTables::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > OTables::createObject(const OUString& _rName)
 {
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
     return new OAdoTable(this,isCaseSensitive(),m_pCatalog,m_aCollection.GetItem(_rName));
@@ -63,7 +63,7 @@ Reference< XPropertySet > OTables::createDescriptor()
 }
 
 // XAppend
-sdbcx::ObjectType OTables::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
+css::uno::Reference< css::beans::XPropertySet > OTables::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
     OAdoTable* pTable = dynamic_cast<OAdoTable*>( descriptor.get() );
     if ( pTable == nullptr )

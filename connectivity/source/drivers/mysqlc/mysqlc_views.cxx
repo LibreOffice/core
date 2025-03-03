@@ -34,7 +34,8 @@ connectivity::mysqlc::Views::Views(const css::uno::Reference<css::sdbc::XConnect
 {
 }
 
-connectivity::sdbcx::ObjectType connectivity::mysqlc::Views::createObject(const OUString& _rName)
+css::uno::Reference<css::beans::XPropertySet>
+connectivity::mysqlc::Views::createObject(const OUString& _rName)
 {
     OUString sCatalog, sSchema, sTable;
     ::dbtools::qualifiedNameComponents(m_xMetaData, _rName, sCatalog, sSchema, sTable,
@@ -53,7 +54,7 @@ css::uno::Reference<css::beans::XPropertySet> connectivity::mysqlc::Views::creat
 }
 
 // XAppend
-connectivity::sdbcx::ObjectType connectivity::mysqlc::Views::appendObject(
+css::uno::Reference<css::beans::XPropertySet> connectivity::mysqlc::Views::appendObject(
     const OUString& _rForName, const css::uno::Reference<css::beans::XPropertySet>& descriptor)
 {
     createView(descriptor);

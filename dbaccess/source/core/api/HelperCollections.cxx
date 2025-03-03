@@ -71,7 +71,7 @@ namespace dbaccess
         OPrivateColumns_Base::disposing();
     }
 
-    connectivity::sdbcx::ObjectType OPrivateColumns::createObject(const OUString& _rName)
+    css::uno::Reference< css::beans::XPropertySet > OPrivateColumns::createObject(const OUString& _rName)
     {
         if ( m_aColumns.is() )
         {
@@ -80,21 +80,21 @@ namespace dbaccess
                 aIter = findRealName(m_aColumns->begin(),m_aColumns->end(),_rName,UStringMixEqual(isCaseSensitive()));
 
             if(aIter != m_aColumns->end())
-                return connectivity::sdbcx::ObjectType(*aIter,UNO_QUERY);
+                return *aIter;
 
             OSL_FAIL("Column not found in collection!");
         }
         return nullptr;
     }
 
-    connectivity::sdbcx::ObjectType OPrivateTables::createObject(const OUString& _rName)
+    css::uno::Reference< css::beans::XPropertySet > OPrivateTables::createObject(const OUString& _rName)
     {
         if ( !m_aTables.empty() )
         {
             OSQLTables::iterator aIter = m_aTables.find(_rName);
             OSL_ENSURE(aIter != m_aTables.end(),"Table not found!");
             OSL_ENSURE(aIter->second.is(),"Table is null!");
-            return connectivity::sdbcx::ObjectType(m_aTables.find(_rName)->second,UNO_QUERY);
+            return css::uno::Reference< css::beans::XPropertySet >(m_aTables.find(_rName)->second,UNO_QUERY);
         }
         return nullptr;
     }

@@ -79,7 +79,7 @@ namespace dbaccess
     {
         ::rtl::Reference< ::connectivity::OSQLColumns> m_aColumns;
     protected:
-        virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName) override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
         virtual void impl_refresh() override;
     public:
         ORowSetDataColumns(

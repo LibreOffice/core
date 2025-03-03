@@ -32,10 +32,10 @@ namespace connectivity::ado
             WpADOViews  m_aCollection;
             OCatalog*   m_pCatalog;
         protected:
-            virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
+            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
             virtual void impl_refresh() override;
             virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
-            virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+            virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
             virtual void dropObject(sal_Int32 _nPos,const OUString& _sElementName) override;
         public:
             OViews(OCatalog* _pParent, ::osl::Mutex& _rMutex,

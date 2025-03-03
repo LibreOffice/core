@@ -28,7 +28,7 @@ namespace connectivity::evoab
         {
             OEvoabTable*    m_pTable;
 
-            virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
+            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
             virtual void impl_refresh() override;
 
         public:

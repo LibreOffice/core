@@ -44,7 +44,7 @@ OUsers::OUsers( ::cppu::OWeakObject& _rParent,
 }
 
 
-sdbcx::ObjectType OUsers::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > OUsers::createObject(const OUString& _rName)
 {
     return new OHSQLUser(m_xConnection,_rName);
 }
@@ -60,7 +60,7 @@ Reference< XPropertySet > OUsers::createDescriptor()
 }
 
 // XAppend
-sdbcx::ObjectType OUsers::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+css::uno::Reference< css::beans::XPropertySet > OUsers::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
     OUString sPassword;

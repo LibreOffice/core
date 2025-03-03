@@ -40,7 +40,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 
-sdbcx::ObjectType OKeys::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > OKeys::createObject(const OUString& _rName)
 {
     return new OAdoKey(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
@@ -56,7 +56,7 @@ Reference< XPropertySet > OKeys::createDescriptor()
 }
 
 // XAppend
-sdbcx::ObjectType OKeys::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
+css::uno::Reference< css::beans::XPropertySet > OKeys::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
     OAdoKey* pKey = dynamic_cast<OAdoKey*>( descriptor.get() );
     if ( pKey == nullptr)

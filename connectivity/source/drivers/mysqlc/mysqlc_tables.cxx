@@ -45,7 +45,8 @@ static void lcl_unescape(OUString& rName)
     rName = rName.replaceAll("``", "`");
 }
 
-connectivity::sdbcx::ObjectType connectivity::mysqlc::Tables::createObject(const OUString& rName)
+css::uno::Reference<css::beans::XPropertySet>
+connectivity::mysqlc::Tables::createObject(const OUString& rName)
 {
     OUString sCatalog, sSchema, sTable;
     ::dbtools::qualifiedNameComponents(m_xMetaData, rName, sCatalog, sSchema, sTable,
@@ -73,7 +74,7 @@ connectivity::sdbcx::ObjectType connectivity::mysqlc::Tables::createObject(const
     if (!xTables->next())
         throw css::uno::RuntimeException();
 
-    connectivity::sdbcx::ObjectType xRet(
+    css::uno::Reference<css::beans::XPropertySet> xRet(
         new Table(this, m_rMutex, m_xMetaData->getConnection(),
                   xRow->getString(1), // Catalog
                   xRow->getString(2), // Schema
@@ -111,7 +112,7 @@ void connectivity::mysqlc::Tables::createTable(
 }
 
 // XAppend
-connectivity::sdbcx::ObjectType connectivity::mysqlc::Tables::appendObject(
+css::uno::Reference<css::beans::XPropertySet> connectivity::mysqlc::Tables::appendObject(
     const OUString& _rForName, const css::uno::Reference<css::beans::XPropertySet>& descriptor)
 {
     createTable(descriptor);
@@ -131,8 +132,8 @@ void connectivity::mysqlc::Tables::appendNew(const OUString& _rsNewTable)
         aListenerLoop.next()->elementInserted(aEvent);
 }
 
-OUString
-connectivity::mysqlc::Tables::getNameForObject(const connectivity::sdbcx::ObjectType& _xObject)
+OUString connectivity::mysqlc::Tables::getNameForObject(
+    const css::uno::Reference<css::beans::XPropertySet>& _xObject)
 {
     OSL_ENSURE(_xObject.is(), "OTables::getNameForObject: Object is NULL!");
     return ::dbtools::composeTableName(m_xMetaData, _xObject,

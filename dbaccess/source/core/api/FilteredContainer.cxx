@@ -381,7 +381,7 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
         }
     }
 
-    OUString OFilteredContainer::getNameForObject(const ObjectType& _xObject)
+    OUString OFilteredContainer::getNameForObject(const css::uno::Reference< css::beans::XPropertySet >& _xObject)
     {
         OSL_ENSURE( _xObject.is(), "OFilteredContainer::getNameForObject: Object is NULL!" );
         return ::dbtools::composeTableName( m_xMetaData, _xObject, ::dbtools::EComposeRule::InDataManipulation, false );

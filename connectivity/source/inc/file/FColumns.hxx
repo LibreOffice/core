@@ -31,7 +31,7 @@ namespace connectivity::file
         protected:
             OFileTable* m_pTable;
 
-            virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
+            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
             virtual void impl_refresh() override;
         public:
             OColumns(   OFileTable* _pTable,

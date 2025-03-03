@@ -216,11 +216,11 @@ void OColumns::impl_refresh()
         m_pRefreshColumns->refreshColumns();
 }
 
-connectivity::sdbcx::ObjectType OColumns::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > OColumns::createObject(const OUString& _rName)
 {
     OSL_ENSURE(m_pColFactoryImpl, "OColumns::createObject: no column factory!");
 
-    connectivity::sdbcx::ObjectType xRet;
+    css::uno::Reference< css::beans::XPropertySet > xRet;
     if ( m_pColFactoryImpl )
     {
         xRet = m_pColFactoryImpl->createColumn(_rName);
@@ -229,7 +229,7 @@ connectivity::sdbcx::ObjectType OColumns::createObject(const OUString& _rName)
             xChild->setParent(static_cast<XChild*>(static_cast<TXChild*>(this)));
     }
 
-    Reference<XPropertySet> xDest(xRet,UNO_QUERY);
+    Reference<XPropertySet> xDest(xRet);
     if ( m_pMediator && xDest.is() )
         m_pMediator->notifyElementCreated(_rName,xDest);
 
@@ -325,9 +325,9 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  )
 }
 
 // XAppend
-sdbcx::ObjectType OColumns::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+css::uno::Reference< css::beans::XPropertySet > OColumns::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    sdbcx::ObjectType xReturn;
+    css::uno::Reference< css::beans::XPropertySet > xReturn;
 
     Reference< XAppend > xAppend( m_xDrvColumns, UNO_QUERY );
     if ( xAppend.is() )

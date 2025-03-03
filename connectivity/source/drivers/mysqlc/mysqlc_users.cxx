@@ -38,7 +38,7 @@ void Users::impl_refresh()
     // TODO: IMPLEMENT ME
 }
 
-ObjectType Users::createObject(const OUString& rName)
+css::uno::Reference<css::beans::XPropertySet> Users::createObject(const OUString& rName)
 {
     return new OUserExtend(m_xMetaData->getConnection(), rName);
 }
@@ -52,8 +52,8 @@ uno::Reference<XPropertySet> Users::createDescriptor()
 }
 
 //----- XAppend ---------------------------------------------------------------
-ObjectType Users::appendObject(const OUString& rName,
-                               const uno::Reference<XPropertySet>& descriptor)
+css::uno::Reference<css::beans::XPropertySet>
+Users::appendObject(const OUString& rName, const uno::Reference<XPropertySet>& descriptor)
 {
     OUString aSql(u"GRANT USAGE ON * TO "_ustr);
     OUString aQuote = m_xMetaData->getIdentifierQuoteString();

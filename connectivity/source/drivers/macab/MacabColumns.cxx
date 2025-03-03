@@ -36,7 +36,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 
-sdbcx::ObjectType MacabColumns::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > MacabColumns::createObject(const OUString& _rName)
 {
     const Any aCatalog;
     const OUString sCatalogName;
@@ -45,7 +45,7 @@ sdbcx::ObjectType MacabColumns::createObject(const OUString& _rName)
     Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(
         aCatalog, sSchemaName, sTableName, _rName);
 
-    sdbcx::ObjectType xRet;
+    css::uno::Reference< css::beans::XPropertySet > xRet;
     if (xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);

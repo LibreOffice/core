@@ -36,7 +36,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-sdbcx::ObjectType MacabTables::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > MacabTables::createObject(const OUString& _rName)
 {
     OUString aName,aSchema;
     aSchema = "%";
@@ -46,7 +46,7 @@ sdbcx::ObjectType MacabTables::createObject(const OUString& _rName)
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(), aSchema, aName, aTypes);
 
-    sdbcx::ObjectType xRet;
+    css::uno::Reference< css::beans::XPropertySet > xRet;
     if (xResult.is())
     {
         Reference< XRow > xRow(xResult, UNO_QUERY);

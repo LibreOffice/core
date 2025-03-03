@@ -92,7 +92,7 @@ rtl::Reference<OColumn> ODBTable::createColumn(const OUString& _rName) const
     else
     {
         OColumns* pColumns = static_cast<OColumns*>(m_xColumns.get());
-        xProp.set(pColumns->createBaseObject(_rName),UNO_QUERY);
+        xProp = pColumns->createBaseObject(_rName);
     }
 
     Reference<XPropertySet> xColumnDefinition;

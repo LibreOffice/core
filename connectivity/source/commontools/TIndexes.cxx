@@ -50,13 +50,13 @@ OIndexesHelper::OIndexesHelper(OTableHelper* _pTable,
 }
 
 
-sdbcx::ObjectType OIndexesHelper::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > OIndexesHelper::createObject(const OUString& _rName)
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
     if ( !xConnection.is() )
         return nullptr;
 
-    sdbcx::ObjectType xRet;
+    css::uno::Reference< css::beans::XPropertySet > xRet;
     OUString aName,aQualifier;
     sal_Int32 nLen = _rName.indexOf('.');
     if ( nLen != -1 )
@@ -122,7 +122,7 @@ Reference< XPropertySet > OIndexesHelper::createDescriptor()
 }
 
 // XAppend
-sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+css::uno::Reference< css::beans::XPropertySet > OIndexesHelper::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
     if ( !xConnection.is() )

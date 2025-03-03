@@ -28,7 +28,7 @@ namespace connectivity::evoab
         {
             css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
         protected:
-            virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
+            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
             virtual void impl_refresh() override;
         public:
             OEvoabTables(css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData,

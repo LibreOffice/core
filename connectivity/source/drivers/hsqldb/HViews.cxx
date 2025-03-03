@@ -48,7 +48,7 @@ HViews::HViews( const Reference< XConnection >& _rxConnection, ::cppu::OWeakObje
 }
 
 
-sdbcx::ObjectType HViews::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > HViews::createObject(const OUString& _rName)
 {
     OUString sCatalog,sSchema,sTable;
     ::dbtools::qualifiedNameComponents(m_xMetaData,
@@ -79,7 +79,7 @@ Reference< XPropertySet > HViews::createDescriptor()
 }
 
 // XAppend
-sdbcx::ObjectType HViews::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+css::uno::Reference< css::beans::XPropertySet > HViews::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     createView(descriptor);
     return createObject( _rForName );

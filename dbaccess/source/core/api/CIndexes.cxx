@@ -29,9 +29,9 @@ using namespace ::com::sun::star::container;
 using namespace dbaccess;
 
 
-ObjectType OIndexes::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > OIndexes::createObject(const OUString& _rName)
 {
-    ObjectType xRet;
+    css::uno::Reference< css::beans::XPropertySet > xRet;
     if ( m_xIndexes.is() && m_xIndexes->hasByName(_rName) )
         xRet.set(m_xIndexes->getByName(_rName),UNO_QUERY);
     else
@@ -50,7 +50,7 @@ Reference< XPropertySet > OIndexes::createDescriptor()
 }
 
 // XAppend
-ObjectType OIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+css::uno::Reference< css::beans::XPropertySet > OIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     Reference<XAppend> xData( m_xIndexes,UNO_QUERY);
     if ( !xData.is() )

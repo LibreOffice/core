@@ -62,7 +62,7 @@ namespace dbaccess
         // ::connectivity::sdbcx::OCollection
         virtual void impl_refresh() override;
 
-        virtual OUString getNameForObject(const ::connectivity::sdbcx::ObjectType& _xObject) override;
+        virtual OUString getNameForObject(const ::css::uno::Reference< css::beans::XPropertySet >& _xObject) override;
 
         /** tell the container to free all elements and all additional resources.<BR>
             After using this method the object may be reconstructed by calling one of the <code>construct</code> methods.

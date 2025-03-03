@@ -39,7 +39,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-sdbcx::ObjectType OUsers::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > OUsers::createObject(const OUString& _rName)
 {
     return new OAdoUser(m_pCatalog,isCaseSensitive(),_rName);
 }
@@ -55,7 +55,7 @@ Reference< XPropertySet > OUsers::createDescriptor()
 }
 
 // XAppend
-sdbcx::ObjectType OUsers::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+css::uno::Reference< css::beans::XPropertySet > OUsers::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     OUserExtend* pUser = dynamic_cast<OUserExtend*>( descriptor.get() );
     if ( pUser == nullptr )

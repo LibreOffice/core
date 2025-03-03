@@ -28,7 +28,7 @@ using OWriterTables_BASE = file::OTables;
 class OWriterTables : public OWriterTables_BASE
 {
 protected:
-    sdbcx::ObjectType createObject(const OUString& rName) override;
+    css::uno::Reference<css::beans::XPropertySet> createObject(const OUString& rName) override;
 
 public:
     OWriterTables(const css::uno::Reference<css::sdbc::XDatabaseMetaData>& _rMetaData,

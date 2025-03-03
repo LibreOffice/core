@@ -26,11 +26,11 @@ namespace connectivity::firebird
 
             // OCollection
             virtual void impl_refresh() override;
-            virtual ::connectivity::sdbcx::ObjectType createObject(
+            virtual css::uno::Reference< css::beans::XPropertySet > createObject(
                                                 const OUString& rName) override;
             virtual css::uno::Reference< css::beans::XPropertySet >
                     createDescriptor() override;
-            virtual ::connectivity::sdbcx::ObjectType appendObject(
+            virtual ::css::uno::Reference< css::beans::XPropertySet > appendObject(
                         const OUString& rName,
                         const css::uno::Reference< css::beans::XPropertySet >& rDescriptor) override;
 

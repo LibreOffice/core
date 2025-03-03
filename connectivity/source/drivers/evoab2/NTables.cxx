@@ -31,13 +31,13 @@ using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 
-ObjectType OEvoabTables::createObject(const OUString& aName)
+css::uno::Reference< css::beans::XPropertySet > OEvoabTables::createObject(const OUString& aName)
 {
     Sequence< OUString > aTypes { u"TABLE"_ustr };
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),u"%"_ustr,aName,aTypes);
 
-    ObjectType xRet;
+    css::uno::Reference< css::beans::XPropertySet > xRet;
     if(xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);

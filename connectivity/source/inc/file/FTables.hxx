@@ -29,7 +29,7 @@ namespace connectivity::file
             public sdbcx::OCollection
         {
         protected:
-            virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
+            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
             virtual void impl_refresh() override;
         public:
             OTables(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,

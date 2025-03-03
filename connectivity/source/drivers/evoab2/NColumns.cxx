@@ -30,7 +30,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace connectivity::evoab;
 
 
-sdbcx::ObjectType OEvoabColumns::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > OEvoabColumns::createObject(const OUString& _rName)
 {
     const Any aCatalog;
     const OUString sCatalogName;
@@ -42,7 +42,7 @@ sdbcx::ObjectType OEvoabColumns::createObject(const OUString& _rName)
         sTableName,
         _rName);
 
-    sdbcx::ObjectType xRet;
+    css::uno::Reference< css::beans::XPropertySet > xRet;
     if (xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);

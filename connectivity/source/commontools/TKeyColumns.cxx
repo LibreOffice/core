@@ -41,7 +41,7 @@ OKeyColumnsHelper::OKeyColumnsHelper(   OTableKeyHelper* _pKey,
 {
 }
 
-sdbcx::ObjectType OKeyColumnsHelper::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > OKeyColumnsHelper::createObject(const OUString& _rName)
 {
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
     OUString aCatalog, aSchema, aTable;
@@ -70,7 +70,7 @@ sdbcx::ObjectType OKeyColumnsHelper::createObject(const OUString& _rName)
         }
     }
 
-    sdbcx::ObjectType xRet;
+    css::uno::Reference< css::beans::XPropertySet > xRet;
 
     // now describe the column _rName and set his related column
     xResult = m_pKey->getTable()->getMetaData()->getColumns(Catalog, aSchema, aTable, _rName);

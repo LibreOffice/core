@@ -28,7 +28,7 @@ using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 
-sdbcx::ObjectType OColumns::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > OColumns::createObject(const OUString& _rName)
 {
     const OUString sCatalogName;
     const OUString sSchemaName(m_pTable->getSchema());
@@ -36,7 +36,7 @@ sdbcx::ObjectType OColumns::createObject(const OUString& _rName)
     Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(Any(),
     sSchemaName, sTableName, _rName);
 
-    sdbcx::ObjectType xRet;
+    css::uno::Reference< css::beans::XPropertySet > xRet;
     if(xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);

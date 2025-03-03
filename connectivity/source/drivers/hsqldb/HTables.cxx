@@ -39,7 +39,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace dbtools;
 
-sdbcx::ObjectType OTables::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > OTables::createObject(const OUString& _rName)
 {
     OUString sCatalog,sSchema,sTable;
     ::dbtools::qualifiedNameComponents(m_xMetaData,_rName,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
@@ -51,7 +51,7 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
         aCatalog <<= sCatalog;
     Reference< XResultSet > xResult = m_xMetaData->getTables(aCatalog,sSchema,sTable,sTableTypes);
 
-    sdbcx::ObjectType xRet;
+    css::uno::Reference< css::beans::XPropertySet > xRet;
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
@@ -94,7 +94,7 @@ Reference< XPropertySet > OTables::createDescriptor()
 }
 
 // XAppend
-sdbcx::ObjectType OTables::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+css::uno::Reference< css::beans::XPropertySet > OTables::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     createTable(descriptor);
     return createObject( _rForName );
@@ -165,7 +165,7 @@ void OTables::appendNew(const OUString& _rsNewTable)
         aListenerLoop.next()->elementInserted(aEvent);
 }
 
-OUString OTables::getNameForObject(const sdbcx::ObjectType& _xObject)
+OUString OTables::getNameForObject(const css::uno::Reference< css::beans::XPropertySet >& _xObject)
 {
     OSL_ENSURE(_xObject.is(),"OTables::getNameForObject: Object is NULL!");
     return ::dbtools::composeTableName( m_xMetaData, _xObject, ::dbtools::EComposeRule::InDataManipulation, false );

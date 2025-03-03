@@ -60,7 +60,7 @@ class OEmptyCollection : public sdbcx::OCollection
 {
 protected:
     virtual void impl_refresh() override;
-    virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName) override;
+    virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
 public:
     OEmptyCollection(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) : OCollection(_rParent, true, _rMutex, std::vector< OUString>()){}
 };
@@ -69,9 +69,9 @@ void OEmptyCollection::impl_refresh()
 {
 }
 
-connectivity::sdbcx::ObjectType OEmptyCollection::createObject(const OUString& /*_rName*/)
+css::uno::Reference< css::beans::XPropertySet > OEmptyCollection::createObject(const OUString& /*_rName*/)
 {
-    return connectivity::sdbcx::ObjectType();
+    return css::uno::Reference< css::beans::XPropertySet >();
 }
 
 // ORowSetBase

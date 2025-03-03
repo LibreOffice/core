@@ -78,9 +78,9 @@ css::uno::Sequence< OUString > SAL_CALL OViewContainer::getSupportedServiceNames
 }
 
 
-ObjectType OViewContainer::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > OViewContainer::createObject(const OUString& _rName)
 {
-    ObjectType xProp;
+    css::uno::Reference< css::beans::XPropertySet > xProp;
     if ( m_xMasterContainer.is() && m_xMasterContainer->hasByName(_rName) )
         xProp.set(m_xMasterContainer->getByName(_rName),UNO_QUERY);
 
@@ -119,7 +119,7 @@ Reference< XPropertySet > OViewContainer::createDescriptor()
 }
 
 // XAppend
-ObjectType OViewContainer::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+css::uno::Reference< css::beans::XPropertySet > OViewContainer::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     // append the new table with a create stmt
     OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
@@ -171,7 +171,7 @@ void OViewContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
     {
         OUString sComposedName;
 
-        Reference<XPropertySet> xTable(getObject(_nPos),UNO_QUERY);
+        Reference<XPropertySet> xTable(getObject(_nPos));
         if ( xTable.is() )
         {
             OUString sCatalog,sSchema,sTable;

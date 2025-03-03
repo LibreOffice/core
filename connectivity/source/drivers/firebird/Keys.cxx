@@ -37,7 +37,7 @@ void Keys::dropObject(sal_Int32 nPosition, const OUString& sName)
     if (m_pTable->isNew())
         return;
 
-    uno::Reference<XPropertySet> xKey(getObject(nPosition), UNO_QUERY);
+    uno::Reference<XPropertySet> xKey(getObject(nPosition));
 
     if (xKey.is())
     {

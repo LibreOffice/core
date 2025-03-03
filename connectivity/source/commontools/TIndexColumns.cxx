@@ -39,7 +39,7 @@ OIndexColumns::OIndexColumns(   OIndexHelper* _pIndex,
 {
 }
 
-sdbcx::ObjectType OIndexColumns::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > OIndexColumns::createObject(const OUString& _rName)
 {
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
     OUString aCatalog, aSchema, aTable;
@@ -65,7 +65,7 @@ sdbcx::ObjectType OIndexColumns::createObject(const OUString& _rName)
     xResult = m_pIndex->getTable()->getConnection()->getMetaData()->getColumns(
         Catalog, aSchema, aTable, _rName);
 
-    sdbcx::ObjectType xRet;
+    css::uno::Reference< css::beans::XPropertySet > xRet;
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);

@@ -64,7 +64,7 @@ OColumnsHelper::~OColumnsHelper()
 {
 }
 
-sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > OColumnsHelper::createObject(const OUString& _rName)
 {
     assert(m_pTable && "NO Table set. Error!");
     Reference<XConnection> xConnection = m_pTable->getConnection();
@@ -92,7 +92,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
         nDataType       = aFind->second.second;
     } // if ( aFind != m_pImpl->m_aColumnInfo.end() )
 
-    sdbcx::ObjectType xRet;
+    css::uno::Reference< css::beans::XPropertySet > xRet;
     const ColumnDesc* pColDesc = m_pTable->getColumnDescription(_rName);
     if ( pColDesc )
     {
@@ -156,7 +156,7 @@ Reference< XPropertySet > OColumnsHelper::createDescriptor()
 }
 
 // XAppend
-sdbcx::ObjectType OColumnsHelper::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+css::uno::Reference< css::beans::XPropertySet > OColumnsHelper::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     OSL_ENSURE(m_pTable,"OColumnsHelper::appendByDescriptor: Table is null!");

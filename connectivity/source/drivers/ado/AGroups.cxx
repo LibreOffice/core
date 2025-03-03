@@ -40,7 +40,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
 
-sdbcx::ObjectType OGroups::createObject(const OUString& _rName)
+css::uno::Reference< css::beans::XPropertySet > OGroups::createObject(const OUString& _rName)
 {
     return new OAdoGroup(m_pCatalog,isCaseSensitive(),_rName);
 }
@@ -56,7 +56,7 @@ Reference< XPropertySet > OGroups::createDescriptor()
 }
 
 // XAppend
-sdbcx::ObjectType OGroups::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+css::uno::Reference< css::beans::XPropertySet > OGroups::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     OAdoGroup* pGroup = dynamic_cast<OAdoGroup*>(descriptor.get());
     if ( pGroup == nullptr )
