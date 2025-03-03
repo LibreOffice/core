@@ -6236,7 +6236,6 @@ if test "$cross_compiling" = "yes"; then
         JAVA_HOME
         JAVAIFLAGS
         JDK
-        JDK_SECURITYMANAGER_DISALLOWED
         LIBO_BIN_FOLDER
         LIBO_LIB_FOLDER
         LIBO_URE_LIB_FOLDER
@@ -9081,7 +9080,6 @@ dnl ===================================================================
 
 # Whether all the complexity here actually is needed any more or not, no idea.
 
-JDK_SECURITYMANAGER_DISALLOWED=
 MODULAR_JAVA=
 if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
     _gij_longver=0
@@ -9105,12 +9103,6 @@ if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
 
             if test "$_jdk_ver" -lt 10800; then
                 AC_MSG_ERROR([JDK is too old, you need at least 8 ($_jdk_ver < 10800)])
-            fi
-            dnl TODO: Presumably, the Security Manager will not merely be disallowed, but be
-            dnl completely removed in some Java version > 18 (see
-            dnl <https://openjdk.java.net/jeps/411> "Deprecate the Security Manager for Removal"):
-            if test "$_jdk_ver" -ge 180000; then
-                JDK_SECURITYMANAGER_DISALLOWED=TRUE
             fi
 
             JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*java,,p"`
@@ -9421,7 +9413,6 @@ if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
     JAVA_HOME_FOR_BUILD=$JAVA_HOME
     JAVAIFLAGS_FOR_BUILD=$JAVAIFLAGS
     JDK_FOR_BUILD=$JDK
-    JDK_SECURITYMANAGER_DISALLOWED_FOR_BUILD=$JDK_SECURITYMANAGER_DISALLOWED
 fi
 
 AC_SUBST(JAVACFLAGS)
@@ -9433,7 +9424,6 @@ AC_SUBST(JAVA_HOME)
 AC_SUBST(JAVA_HOME_FOR_BUILD)
 AC_SUBST(JDK)
 AC_SUBST(JDK_FOR_BUILD)
-AC_SUBST(JDK_SECURITYMANAGER_DISALLOWED_FOR_BUILD)
 AC_SUBST(JAVA_SOURCE_VER)
 AC_SUBST(JAVA_TARGET_VER)
 AC_SUBST(MODULAR_JAVA)

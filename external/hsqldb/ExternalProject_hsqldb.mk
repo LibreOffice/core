@@ -22,8 +22,6 @@ $(call gb_ExternalProject_get_state_target,hsqldb,build) :
 	$(call gb_Trace_StartRange,hsqldb,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		unset MSYS_NO_PATHCONV && JAVA_HOME=$(JAVA_HOME_FOR_BUILD) \
-		$(if $(JDK_SECURITYMANAGER_DISALLOWED_FOR_BUILD), \
-		    ANT_OPTS="$$ANT_OPTS -Djava.security.manager=allow") \
 		$(ICECREAM_RUN) "$(ANT)" \
 			$(if $(verbose),-v,-q) \
 			-f build/build.xml \
