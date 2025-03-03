@@ -24,6 +24,8 @@
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
 #include <Window.hxx>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <vcl/vclevent.hxx>
 #include <svx/fmshell.hxx>
 #include <osl/diagnose.h>
@@ -156,6 +158,13 @@ void FormShellManager::RegisterAtCenterPane()
     mpSubShellFactory = std::make_shared<FormShellManagerFactory>(*pShell, *this);
     mrBase.GetViewShellManager()->AddSubShellFactory(pShell,mpSubShellFactory);
     mrBase.GetViewShellManager()->ActivateSubShell(*pShell, ToolbarId::FormLayer_Toolbox);
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SfxViewShell* sfxViewShell = pShell->GetViewShell();
+        if (sfxViewShell)
+            pShell->GetViewShell()->libreOfficeKitViewInvalidateTilesCallback(nullptr, sfxViewShell->getPart(), sfxViewShell->getEditMode());
+    }
 }
 
 void FormShellManager::UnregisterAtCenterPane()
