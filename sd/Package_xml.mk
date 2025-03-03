@@ -12,6 +12,7 @@ $(eval $(call gb_Package_Package,sd_xml,$(SRCDIR)/sd/xml))
 $(eval $(call gb_Package_add_files,sd_xml,$(LIBO_SHARE_FOLDER)/config/soffice.cfg/simpress,\
 	effects.xml \
 	transitions.xml \
+	$(if $(filter LINUX,$(OS)),$(if $(USING_X11),,transitions-ogl.xml)) \
 	layoutlist.xml  \
 	objectlist.xml  \
 	styles.xml \
