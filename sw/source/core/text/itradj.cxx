@@ -61,9 +61,10 @@ void SwTextAdjuster::FormatBlock( )
         const SwLinePortion *pPos = m_pCurr->GetNextPortion();
         while( pPos && bSkip )
         {
-            if( // don't calculate with the terminating space,
+            if( !pPos->InGlueGrp() &&
+                // don't calculate with the terminating space,
                 // otherwise it would result justified line mistakenly
-                pPos->GetNextPortion() || !pPos->IsHolePortion() )
+                ( pPos->GetNextPortion() || !pPos->IsHolePortion() ) )
             {
                 nBreakWidth += pPos->Width();
             }
@@ -426,8 +427,6 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
 
     while( pPos )
     {
-        nBreakWidth += pPos->Width();
-
         if ( ( bDoNotJustifyLinesWithManualBreak || bDoNotJustifyTab ) &&
              pPos->IsBreakPortion() && !IsLastBlock() )
         {
@@ -551,6 +550,10 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
             }
             else
                 ++nGluePortion;
+        }
+        else
+        {
+            nBreakWidth += pPos->Width();
         }
         GetInfo().SetIdx( GetInfo().GetIdx() + pPos->GetLen() );
         if ( pPos == pStopAt )

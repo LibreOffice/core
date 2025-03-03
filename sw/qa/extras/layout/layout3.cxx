@@ -488,6 +488,22 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf161810)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf164905)
+{
+    createSwDoc("tdf164905.docx");
+    // Ensure that all text portions are calculated before testing.
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // This was 9 (resulting broken ToC layout)
+    assertXPath(pXmlDoc, "//SwGluePortion", 3);
+    // For example, it was an unnecessary glue portion here
+    assertXPath(pXmlDoc,
+                "/root/page/body/section[2]/txt[1]/SwParaPortion/SwLineLayout/SwGluePortion", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf163149)
 {
     createSwDoc("tdf163149.docx");
