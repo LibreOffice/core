@@ -80,7 +80,7 @@
             </accessibility>
             <child internal-child="accessible">
               <object class="AtkObject" id="spacingpreset-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="PageFooterPanel|spacingpreset|extended_tip">Enter the amount of space that you want to maintain between the bottom edge of the header and the top edge of the document text.</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="PageFooterPanel|spacingpreset|extended_tip">Enter the amount of space that you want to maintain between the top edge of the footer and the bottom edge of the document text.</property>
               </object>
             </child>
           </object>
