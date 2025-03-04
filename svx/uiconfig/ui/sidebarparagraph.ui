@@ -76,7 +76,7 @@
         <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="border-width">6</property>
-        <property name="row-spacing">1</property>
+        <property name="row-spacing">3</property>
         <property name="column-spacing">6</property>
         <property name="column-homogeneous">True</property>
         <child>
