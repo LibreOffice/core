@@ -2541,7 +2541,7 @@ void SvxExtParagraphTabPage::HyphenClickHdl()
     m_xAcrossColumnBox->set_sensitive(bEnable);
     m_xAcrossPageBox->set_sensitive(bEnable);
     m_xAcrossSpreadBox->set_sensitive(bEnable);
-    // only sensitive, if the hyphenation is disabled accross spreads
+    // only sensitive, if the hyphenation is disabled across spreads
     m_xAcrossMoveLineBox->set_sensitive( m_xAcrossSpreadBox->get_state() != TRISTATE_TRUE );
     m_xHyphenBox->set_state(bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
 }
@@ -2693,7 +2693,7 @@ IMPL_LINK(SvxExtParagraphTabPage, AcrossSpreadHdl_Impl, weld::Toggleable&, rTogg
         m_xAcrossColumnBox->set_state( TRISTATE_TRUE );
         m_xAcrossPageBox->set_state( TRISTATE_TRUE );
     }
-    // only sensitive, if the hyphenation is disabled accross spreads
+    // only sensitive, if the hyphenation is disabled across spreads
     bool bAcrossSpread = m_xAcrossSpreadBox->get_state() == TRISTATE_TRUE;
     m_xAcrossMoveLineBox->set_sensitive( !bAcrossSpread );
     if ( bAcrossSpread )
