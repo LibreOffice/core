@@ -185,7 +185,7 @@ namespace
 
 std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile, sal_uInt64 nLOKWindowId)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::LibreOfficeKit::isActive() && !jsdialog::isIgnored(rUIFile))
     {
         if (jsdialog::isBuilderEnabledForSidebar(rUIFile))
             return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, nLOKWindowId);
@@ -195,7 +195,7 @@ std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent,
             return JSInstanceBuilder::CreateMenuBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
         else if (jsdialog::isBuilderEnabled(rUIFile, bMobile))
             return JSInstanceBuilder::CreateDialogBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
-        else if (!jsdialog::isIgnored(rUIFile))
+        else
             SAL_WARN("vcl", "UI file not enabled for JSDialogs: " << rUIFile);
     }
 
@@ -204,7 +204,7 @@ std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent,
 
 std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::LibreOfficeKit::isActive() && !jsdialog::isIgnored(rUIFile))
     {
         // Notebookbar sub controls
         if (jsdialog::isInterimBuilderEnabledForNotebookbar(rUIFile))
@@ -215,7 +215,7 @@ std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pP
         else if (jsdialog::isBuilderEnabledForAddressInput(rUIFile))
             return JSInstanceBuilder::CreateAddressInputBuilder(
                 pParent, AllSettings::GetUIRootDir(), rUIFile, nLOKWindowId);
-        else if (!jsdialog::isIgnored(rUIFile))
+        else
             SAL_WARN("vcl", "UI file not enabled for JSDialogs: " << rUIFile);
     }
 
