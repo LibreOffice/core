@@ -4279,7 +4279,7 @@ const TranslateId SC_OPCODE_DROP_ARY[] =
     NC_("SC_OPCODE_DROP", "The array from which to drop rows or columns."),
     NC_("SC_OPCODE_DROP", "Rows"),
     NC_("SC_OPCODE_DROP", "The number of rows to drop. A negative value drops from the end of the array."),
-    NC_("SC_OPCODE_DROP", "Column"),
+    NC_("SC_OPCODE_DROP", "Columns"),
     NC_("SC_OPCODE_DROP", "The number of columns to drop. A negative value drops from the end of the array.")
 };
 
@@ -4291,7 +4291,7 @@ const TranslateId SC_OPCODE_EXPAND_ARY[] =
     NC_("SC_OPCODE_EXPAND", "The array to expand."),
     NC_("SC_OPCODE_EXPAND", "Rows"),
     NC_("SC_OPCODE_EXPAND", "The number of rows in the expanded array. If missing, rows will not be expanded."),
-    NC_("SC_OPCODE_EXPAND", "Column"),
+    NC_("SC_OPCODE_EXPAND", "Columns"),
     NC_("SC_OPCODE_EXPAND", "The number of columns in the expanded array. If missing, columns will not be expanded."),
     NC_("SC_OPCODE_EXPAND", "Pad with"),
     NC_("SC_OPCODE_EXPAND", "The value with which to pad. The default is #N/A.")
@@ -4300,20 +4300,20 @@ const TranslateId SC_OPCODE_EXPAND_ARY[] =
 // -=*# Resource for function HSTACK #*=-
 const TranslateId SC_OPCODE_HSTACK_ARY[] =
 {
-    NC_("SC_OPCODE_HSTACK", "Appends arrays horizontally to create a larger array"),
+    NC_("SC_OPCODE_HSTACK", "Appends arrays horizontally to create a larger array."),
     NC_("SC_OPCODE_HSTACK", "Array"),
     NC_("SC_OPCODE_HSTACK", "The first array to append."),
-    NC_("SC_OPCODE_HSTACK", "Array "),
+    NC_("SC_OPCODE_HSTACK", "Array"),
     NC_("SC_OPCODE_HSTACK", "Array 1, Array 2,... The following arrays to append. If an array has fewer rows, #N/A error will be returned in the additional rows."),
 };
 
 // -=*# Resource for function VSTACK #*=-
 const TranslateId SC_OPCODE_VSTACK_ARY[] =
 {
-    NC_("SC_OPCODE_VSTACK", "Appends arrays vertically to create a larger array"),
+    NC_("SC_OPCODE_VSTACK", "Appends arrays vertically to create a larger array."),
     NC_("SC_OPCODE_VSTACK", "Array"),
     NC_("SC_OPCODE_VSTACK", "The first array to append."),
-    NC_("SC_OPCODE_VSTACK", "Array "),
+    NC_("SC_OPCODE_VSTACK", "Array"),
     NC_("SC_OPCODE_VSTACK", "Array 1, Array 2,... The following arrays to append. If an array has fewer columns, #N/A error will be returned in the additional columns."),
 };
 
@@ -4325,14 +4325,14 @@ const TranslateId SC_OPCODE_TAKE_ARY[] =
     NC_("SC_OPCODE_TAKE", "The array from which to take rows or columns."),
     NC_("SC_OPCODE_TAKE", "Rows"),
     NC_("SC_OPCODE_TAKE", "The number of rows to take. A negative value takes from the end of the array."),
-    NC_("SC_OPCODE_TAKE", "Column"),
+    NC_("SC_OPCODE_TAKE", "Columns"),
     NC_("SC_OPCODE_TAKE", "The number of columns to take. A negative value takes from the end of the array.")
 };
 
 // -=*# Resource for function TOCOL #*=-
 const TranslateId SC_OPCODE_TOCOL_ARY[] =
 {
-    NC_("SC_OPCODE_TOCOL", "transforms an array into a single column."),
+    NC_("SC_OPCODE_TOCOL", "Transforms an array into a single column."),
     NC_("SC_OPCODE_TOCOL", "Array"),
     NC_("SC_OPCODE_TOCOL", "The range or array to return as a single column."),
     NC_("SC_OPCODE_TOCOL", "Ignore"),
