@@ -444,16 +444,6 @@ void SwFlyFrame::InitDrawObj(SwFrame& rAnchorFrame)
         if (!rAnchorFrame.FindFooterOrHeader())
             nHellId = rIDDMA.GetHeaderFooterHellId();
     }
-    bool bNoClippingWithWrapPolygon = rIDSA.get(DocumentSettingId::NO_CLIPPING_WITH_WRAP_POLYGON);
-    if (bNoClippingWithWrapPolygon && isOpaque)
-    {
-        if (GetFrameFormat()->GetSurround().IsContour())
-        {
-            GetVirtDrawObj()->SetLayer(nHellId);
-            return;
-        }
-
-    }
     GetVirtDrawObj()->SetLayer( isOpaque ? nHeavenId :nHellId );
 }
 
