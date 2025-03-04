@@ -29,6 +29,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <connectivity/CommonTools.hxx>
+#include <unotools/weakref.hxx>
 
 
 namespace connectivity
@@ -39,14 +40,19 @@ namespace connectivity
 
     namespace mysql
     {
+        class OMySQLCatalog;
+
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver
                                                ,   css::sdbcx::XDataDefinitionSupplier
                                                ,   css::lang::XServiceInfo
                                                >   ODriverDelegator_BASE;
 
-        typedef std::pair< css::uno::WeakReferenceHelper,OMetaConnection*> TWeakConnectionPair;
-        typedef std::pair< css::uno::WeakReferenceHelper,TWeakConnectionPair> TWeakPair;
-        typedef std::vector< TWeakPair > TWeakPairVector;
+        struct TConnectionInfo
+        {
+            css::uno::WeakReference<css::sdbc::XConnection> xConn;
+            unotools::WeakReference<OMySQLCatalog> xCatalog;
+            OMetaConnection* pMetaConn;
+        };
         typedef std::map< OUString, css::uno::Reference< css::sdbc::XDriver > > TJDBCDrivers;
 
         /** delegates all calls to the original driver and extend the existing one with the SDBCX layer.
@@ -56,7 +62,7 @@ namespace connectivity
                                 ,public ODriverDelegator_BASE
         {
             TJDBCDrivers                                              m_aJdbcDrivers; // all jdbc drivers
-            TWeakPairVector                                           m_aConnections; //  vector containing a list
+            std::vector<TConnectionInfo>                              m_aConnections; //  vector containing a list
                                                                                                 //  of all the Connection objects
                                                                                                 //  for this Driver
             css::uno::Reference< css::sdbc::XDriver >                 m_xODBCDriver;

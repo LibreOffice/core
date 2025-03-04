@@ -80,11 +80,10 @@ void ODriverDelegator::disposing()
 
     for (auto const& connection : m_aConnections)
     {
-        Reference<XInterface> xTemp = connection.first.get();
+        Reference<XConnection> xTemp(connection.xConn);
         ::comphelper::disposeComponent(xTemp);
     }
     m_aConnections.clear();
-    TWeakPairVector().swap(m_aConnections);
 
     ODriverDelegator_BASE::disposing();
 }
@@ -260,9 +259,7 @@ Reference<XConnection> SAL_CALL ODriverDelegator::connect(const OUString& url,
                 auto pMetaConnection = comphelper::getFromUnoTunnel<OMetaConnection>(xConnection);
                 if (pMetaConnection)
                     pMetaConnection->setURL(url);
-                m_aConnections.emplace_back(
-                    WeakReferenceHelper(xConnection),
-                    TWeakConnectionPair(WeakReferenceHelper(), pMetaConnection));
+                m_aConnections.push_back({ xConnection, nullptr, pMetaConnection });
             }
         }
     }
@@ -320,40 +317,38 @@ ODriverDelegator::getDataDefinitionByConnection(const Reference<XConnection>& co
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(ODriverDelegator_BASE::rBHelper.bDisposed);
 
-    Reference<XTablesSupplier> xTab;
+    rtl::Reference<OMySQLCatalog> xTab;
     auto pConnection = comphelper::getFromUnoTunnel<OMetaConnection>(connection);
     if (pConnection)
     {
-        TWeakPairVector::iterator i
-            = std::find_if(m_aConnections.begin(), m_aConnections.end(),
-                           [&pConnection](const TWeakPairVector::value_type& rConnection) {
-                               return rConnection.second.second == pConnection;
-                           });
+        auto i = std::find_if(m_aConnections.begin(), m_aConnections.end(),
+                              [&pConnection](const TConnectionInfo& rConnection) {
+                                  return rConnection.pMetaConn == pConnection;
+                              });
         if (i != m_aConnections.end())
         {
-            xTab.set(i->second.first.get(), UNO_QUERY);
+            xTab = i->xCatalog.get();
             if (!xTab.is())
             {
                 xTab = new OMySQLCatalog(connection);
-                i->second.first = WeakReferenceHelper(xTab);
+                i->xCatalog = xTab.get();
             }
         }
     } // if (pConnection)
     if (!xTab.is())
     {
-        TWeakPairVector::iterator i
-            = std::find_if(m_aConnections.begin(), m_aConnections.end(),
-                           [&connection](const TWeakPairVector::value_type& rConnection) {
-                               Reference<XConnection> xTemp(rConnection.first.get(), UNO_QUERY);
-                               return xTemp == connection;
-                           });
+        auto i = std::find_if(m_aConnections.begin(), m_aConnections.end(),
+                              [&connection](const TConnectionInfo& rConnection) {
+                                  Reference<XConnection> xTemp(rConnection.xConn);
+                                  return xTemp == connection;
+                              });
         if (i != m_aConnections.end())
         {
-            xTab.set(i->second.first.get(), UNO_QUERY);
+            xTab = i->xCatalog.get();
             if (!xTab.is())
             {
                 xTab = new OMySQLCatalog(connection);
-                i->second.first = WeakReferenceHelper(xTab);
+                i->xCatalog = xTab.get();
             }
         }
     }
