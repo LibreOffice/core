@@ -269,12 +269,13 @@ public:
     ///
     /// Start of the tag that encloses the run, fills the info according to
     /// the value of pRedlineData.
-    void StartRedline( const SwRedlineData * pRedlineData, bool bLastRun );
+    void StartRedline(const SwRedlineData* pRedlineData, bool bLastRun,
+                      bool bParagraphProps = false);
 
     /// Output redlining.
     ///
     /// End of the tag that encloses the run.
-    void EndRedline( const SwRedlineData * pRedlineData, bool bLastRun );
+    void EndRedline(const SwRedlineData* pRedlineData, bool bLastRun, bool bParagraphProps = false);
 
     virtual void SetStateOfFlyFrame( FlyProcessingState nStateOfFlyFrame ) override;
     virtual void SetAnchorIsLinkedToNode( bool bAnchorLinkedToNode ) override;
@@ -779,7 +780,8 @@ private:
             bool bFrom, const SwRedlineData* pRedlineData);
     void DoWriteMoveRangeTagEnd(sal_Int32 nId, bool bFrom);
     void DoWriteBookmarksStart(std::vector<OUString>& rStarts, const SwRedlineData* pRedlineData = nullptr);
-    void DoWriteBookmarksEnd(std::vector<OUString>& rEnds);
+    void DoWriteBookmarksEnd(std::vector<OUString>& rEnds, bool bWriteAllBookmarks = true,
+                             bool bWriteOnlyMoveRanges = false);
     void DoWriteBookmarkStartIfExist(sal_Int32 nRunPos);
     void DoWriteBookmarkEndIfExist(sal_Int32 nRunPos);
 

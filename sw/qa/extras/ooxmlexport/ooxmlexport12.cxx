@@ -1229,28 +1229,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf145720)
     loadAndSave("tdf104797.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // These were 0 (missing move*FromRange* elements)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]//w:moveFromRangeStart", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFromRangeEnd", 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]//w:moveToRangeStart", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveToRangeEnd", 1);
 
     // paired names
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", "name",
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFromRangeStart", "name",
                 u"move471382752");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "name",
-                u"move471382752");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveToRangeStart", "name", u"move471382752");
 
     // mandatory authors and dates
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", "author",
-                u"Tekijä");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "author",
-                u"Tekijä");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFromRangeStart", "author", u"Tekijä");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveToRangeStart", "author", u"Tekijä");
     // no date (anonymized change)
     // This failed, date was exported as w:date="0-00-00T00:00:00Z", and later "1970-01-01T00:00:00Z"
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart",
-                           "date");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart",
-                           "date");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFromRangeStart", "date");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveToRangeStart", "date");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf150166)
@@ -1553,11 +1548,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132271)
     loadAndSave("tdf149388.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import change tracking in floating tables
-    assertXPath(pXmlDoc, "//w:del", 1);
-    assertXPath(pXmlDoc, "//w:ins", 1);
-    // tracked text moving recognized during the import
-    assertXPath(pXmlDoc, "//w:moveFrom", 1);
-    assertXPath(pXmlDoc, "//w:moveTo", 1);
+    assertXPath(pXmlDoc, "//w:del", 2);
+    assertXPath(pXmlDoc, "//w:ins", 2);
+    assertXPath(pXmlDoc, "//w:moveFrom", 0);
+    assertXPath(pXmlDoc, "//w:moveTo", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf149388_fly)
@@ -1578,11 +1572,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136667)
     loadAndSave("tdf149388_fly.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import change tracking in floating tables
-    assertXPath(pXmlDoc, "//w:del", 1);
-    assertXPath(pXmlDoc, "//w:ins", 3);
-    // tracked text moving recognized during the import
-    assertXPath(pXmlDoc, "//w:moveFrom", 1);
-    assertXPath(pXmlDoc, "//w:moveTo", 1);
+    assertXPath(pXmlDoc, "//w:del", 2);
+    assertXPath(pXmlDoc, "//w:ins", 4);
+    assertXPath(pXmlDoc, "//w:moveFrom", 0);
+    assertXPath(pXmlDoc, "//w:moveTo", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136850)
