@@ -357,6 +357,14 @@ void SwView::GetState(SfxItemSet &rSet)
                 }
                 m_bForceChangesToolbar = false;
             break;
+            case FN_TRACK_CHANGES_IN_THIS_VIEW:
+            {
+            }
+            break;
+            case FN_TRACK_CHANGES_IN_ALL_VIEWS:
+            {
+            }
+            break;
             case FN_REDLINE_PROTECT :
                 rSet.Put( SfxBoolItem( nWhich, GetDocShell()->HasChangeRecordProtection() ) );
             break;

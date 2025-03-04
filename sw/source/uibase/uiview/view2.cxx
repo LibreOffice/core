@@ -736,15 +736,27 @@ void SwView::Execute(SfxRequest &rReq)
         }
         break;
         case FN_REDLINE_ON:
+        case FN_TRACK_CHANGES_IN_THIS_VIEW:
+        case FN_TRACK_CHANGES_IN_ALL_VIEWS:
         {
+            std::optional<bool> oOn;
             if( pArgs &&
                 SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem ))
+            {
+                oOn = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+            }
+            else if (nSlot == FN_TRACK_CHANGES_IN_THIS_VIEW || nSlot == FN_TRACK_CHANGES_IN_ALL_VIEWS)
+            {
+                oOn = true;
+            }
+
+            if (oOn.has_value())
             {
                 IDocumentRedlineAccess& rIDRA = m_pWrtShell->getIDocumentRedlineAccess();
                 Sequence <sal_Int8> aPasswd = rIDRA.GetRedlinePassword();
                 if( aPasswd.hasElements() )
                 {
-                    OSL_ENSURE( !static_cast<const SfxBoolItem*>(pItem)->GetValue(), "SwView::Execute(): password set and redlining off doesn't match!" );
+                    OSL_ENSURE( !oOn.value(), "SwView::Execute(): password set and redlining off doesn't match!" );
 
                     // xmlsec05:    new password dialog
                     SfxPasswordDialog aPasswdDlg(GetFrameWeld());
@@ -792,13 +804,18 @@ void SwView::Execute(SfxRequest &rReq)
                 }
 
                 SwDocShell* pDocShell = GetDocShell();
-                pDocShell->SetChangeRecording( static_cast<const SfxBoolItem*>(pItem)->GetValue(), /*bLockAllViews=*/true );
+                bool bRecordAllViews = nSlot != FN_TRACK_CHANGES_IN_THIS_VIEW;
+                pDocShell->SetChangeRecording( oOn.value(), /*bLockAllViews=*/true, bRecordAllViews );
 
                 // Notify all view shells of this document, as the track changes mode is document-global.
                 for (SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst(pDocShell); pViewFrame; pViewFrame = SfxViewFrame::GetNext(*pViewFrame, pDocShell))
                 {
                     pViewFrame->GetBindings().Invalidate(FN_REDLINE_ON);
                     pViewFrame->GetBindings().Update(FN_REDLINE_ON);
+                    pViewFrame->GetBindings().Invalidate(FN_TRACK_CHANGES_IN_THIS_VIEW);
+                    pViewFrame->GetBindings().Update(FN_TRACK_CHANGES_IN_THIS_VIEW);
+                    pViewFrame->GetBindings().Invalidate(FN_TRACK_CHANGES_IN_ALL_VIEWS);
+                    pViewFrame->GetBindings().Update(FN_TRACK_CHANGES_IN_ALL_VIEWS);
                 }
             }
         }

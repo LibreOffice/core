@@ -8504,6 +8504,57 @@ SfxBoolItem SetTrackedInsertionsInMargin FN_SET_TRACKED_INSERTIONS_IN_MARGIN
     GroupId = SfxGroupId::View;
 ]
 
+SfxVoidItem RecordTrackedChangesMenu FN_RECORD_TRACKED_CHANGES_MENU
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
+
+SfxBoolItem TrackChangesInThisView FN_TRACK_CHANGES_IN_THIS_VIEW
+()
+[
+    AutoUpdate = TRUE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
+
+SfxBoolItem TrackChangesInAllViews FN_TRACK_CHANGES_IN_ALL_VIEWS
+()
+[
+    AutoUpdate = TRUE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
+
 SfxBoolItem UseHeaderFooterMenu FN_USE_HEADERFOOTERMENU
 ()
 [
