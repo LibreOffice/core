@@ -84,7 +84,6 @@ void ODatabaseMetaDataResultSet::disposing()
 
     m_pConnection->freeStatementHandle(m_aStatementHandle);
 
-    m_aStatement.clear();
     m_xMetaData.clear();
     m_pConnection.clear();
 }

@@ -68,7 +68,6 @@ namespace connectivity::odbc
             std::map<sal_Int32,SWORD>                   m_aODBCColumnTypes;
 
             SQLHANDLE                                   m_aStatementHandle;   // ... until freed
-            css::uno::WeakReferenceHelper               m_aStatement;
             rtl::Reference<OResultSetMetaData>          m_xMetaData;
             std::unique_ptr<SQLUSMALLINT[]>             m_pRowStatusArray;
             rtl::Reference<OConnection>                 m_pConnection;
