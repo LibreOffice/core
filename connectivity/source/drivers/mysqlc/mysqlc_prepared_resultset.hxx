@@ -56,7 +56,7 @@ class OPreparedResultSet final : public cppu::BaseMutex,
                                  public OPropertyArrayUsageHelper<OPreparedResultSet>
 {
     OConnection& m_rConnection;
-    css::uno::WeakReferenceHelper m_aStatement;
+    unotools::WeakReference<OPreparedStatement> m_xStatement;
     rtl::Reference<OResultSetMetaData> m_xMetaData;
 
     // non-owning pointers

@@ -180,7 +180,7 @@ OPreparedResultSet::OPreparedResultSet(OConnection& rConn, OPreparedStatement* p
     : OPreparedResultSet_BASE(m_aMutex)
     , OPropertySetHelper(OPreparedResultSet_BASE::rBHelper)
     , m_rConnection(rConn)
-    , m_aStatement(css::uno::Reference(cppu::getXWeak(pStmt)))
+    , m_xStatement(pStmt)
     , m_pStmt(pMyStmt)
     , m_encoding(rConn.getConnectionEncoding())
     , m_nColumnCount(mysql_stmt_field_count(pMyStmt))
@@ -198,7 +198,7 @@ void OPreparedResultSet::disposing()
 
     MutexGuard aGuard(m_aMutex);
 
-    m_aStatement.clear();
+    m_xStatement.clear();
     m_xMetaData = nullptr;
 }
 
@@ -689,7 +689,7 @@ uno::Reference<uno::XInterface> SAL_CALL OPreparedResultSet::getStatement()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedResultSet_BASE::rBHelper.bDisposed);
 
-    return m_aStatement.get();
+    return cppu::getXWeak(m_xStatement.get().get());
 }
 
 sal_Bool SAL_CALL OPreparedResultSet::rowDeleted()
