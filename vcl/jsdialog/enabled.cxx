@@ -10,480 +10,462 @@
 #include <comphelper/string.hxx>
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
-#include <frozen/unordered_map.h>
+#include <frozen/unordered_set.h>
 #include <jsdialog/enabled.hxx>
 #include <vector>
 
 namespace
 {
-enum JSDialogEnabledType
-{
-    Ignore = 0,
-    Dialog = 1,
-    Popup = 2,
-    Menu = 3,
-    Sidebar = 4,
-    Notebookbar = 5,
-    AddressInput = 6,
-    Formulabar = 7,
-    MobileDialog = 8,
-};
-
 // ========== IGNORED ======================================================= //
 
 constexpr auto IgnoredList
-    = frozen::make_unordered_map<std::u16string_view, JSDialogEnabledType>({
-        { u"modules/swriter/ui/annotation.ui", JSDialogEnabledType::Ignore },
-        { u"sfx/ui/deck.ui", JSDialogEnabledType::Ignore },
-        { u"sfx/ui/tabbar.ui", JSDialogEnabledType::Ignore },
-        { u"sfx/ui/tabbarcontents.ui", JSDialogEnabledType::Ignore },
-        { u"svt/ui/scrollbars.ui", JSDialogEnabledType::Ignore },
-        { u"svx/ui/selectionmenu.ui", JSDialogEnabledType::Ignore },
-        { u"svx/ui/stylemenu.ui", JSDialogEnabledType::Ignore },
-        { u"svt/ui/tabbuttons.ui", JSDialogEnabledType::Ignore },
-        { u"svx/ui/toolbarpopover.ui", JSDialogEnabledType::Ignore }
+    = frozen::make_unordered_set<std::u16string_view>({
+        { u"modules/swriter/ui/annotation.ui" },
+        { u"sfx/ui/deck.ui" },
+        { u"sfx/ui/tabbar.ui" },
+        { u"sfx/ui/tabbarcontents.ui" },
+        { u"svt/ui/scrollbars.ui" },
+        { u"svx/ui/selectionmenu.ui" },
+        { u"svx/ui/stylemenu.ui" },
+        { u"svt/ui/tabbuttons.ui" },
+        { u"svx/ui/toolbarpopover.ui" }
     });
 
 // ========== MOBILE DIALOGS ================================================= //
 
 constexpr auto MobileDialogList
-    = frozen::make_unordered_map<std::u16string_view, JSDialogEnabledType>({
-        { u"modules/swriter/ui/watermarkdialog.ui", JSDialogEnabledType::MobileDialog },
-        { u"modules/swriter/ui/wordcount-mobile.ui", JSDialogEnabledType::MobileDialog },
-        { u"svx/ui/findreplacedialog-mobile.ui", JSDialogEnabledType::MobileDialog }
+    = frozen::make_unordered_set<std::u16string_view>({
+        { u"modules/swriter/ui/watermarkdialog.ui" },
+        { u"modules/swriter/ui/wordcount-mobile.ui" },
+        { u"svx/ui/findreplacedialog-mobile.ui" }
     });
 
 // ========== DIALOGS ======================================================= //
 // Split into few - to allow constexpr and manage order
 
 constexpr auto CuiDialogList
-    = frozen::make_unordered_map<std::u16string_view, JSDialogEnabledType>({
+    = frozen::make_unordered_set<std::u16string_view>({
         // cui
-        { u"cui/ui/areatabpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/areadialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/asiantypography.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/borderpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/bulletandposition.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/cellalignment.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/charnamepage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/colorpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/colorpickerdialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/croppage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/effectspage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/eventassigndialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/fontfeaturesdialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/formatcellsdialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/formatnumberdialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/gradientpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/hatchpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/hyperlinkdialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/hyperlinkinternetpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/hyperlinkmailpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/imagetabpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/linedialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/lineendstabpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/linestyletabpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/linetabpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/macroselectordialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/namedialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/numberingformatpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/numberingoptionspage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/numberingpositionpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/objectnamedialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/objecttitledescdialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/optlingupage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/pageformatpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/paragalignpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/paraindentspacing.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/paratabspage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/password.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/pastespecial.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/patterntabpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/pickbulletpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/pickgraphicpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/picknumberingpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/pickoutlinepage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/positionpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/positionsizedialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/possizetabpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/rotationtabpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/shadowtabpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/slantcornertabpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/spinbox.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/queryduplicatedialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/similaritysearchdialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/specialcharacters.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/spellingdialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/spelloptionsdialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/splitcellsdialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/textflowpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/thesaurus.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/transparencytabpage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/twolinespage.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/widgettestdialog.ui", JSDialogEnabledType::Dialog },
-        { u"cui/ui/qrcodegen.ui", JSDialogEnabledType::Dialog }
+        { u"cui/ui/areatabpage.ui" },
+        { u"cui/ui/areadialog.ui" },
+        { u"cui/ui/asiantypography.ui" },
+        { u"cui/ui/borderpage.ui" },
+        { u"cui/ui/bulletandposition.ui" },
+        { u"cui/ui/cellalignment.ui" },
+        { u"cui/ui/charnamepage.ui" },
+        { u"cui/ui/colorpage.ui" },
+        { u"cui/ui/colorpickerdialog.ui" },
+        { u"cui/ui/croppage.ui" },
+        { u"cui/ui/effectspage.ui" },
+        { u"cui/ui/eventassigndialog.ui" },
+        { u"cui/ui/fontfeaturesdialog.ui" },
+        { u"cui/ui/formatcellsdialog.ui" },
+        { u"cui/ui/formatnumberdialog.ui" },
+        { u"cui/ui/gradientpage.ui" },
+        { u"cui/ui/hatchpage.ui" },
+        { u"cui/ui/hyperlinkdialog.ui" },
+        { u"cui/ui/hyperlinkinternetpage.ui" },
+        { u"cui/ui/hyperlinkmailpage.ui" },
+        { u"cui/ui/imagetabpage.ui" },
+        { u"cui/ui/linedialog.ui" },
+        { u"cui/ui/lineendstabpage.ui" },
+        { u"cui/ui/linestyletabpage.ui" },
+        { u"cui/ui/linetabpage.ui" },
+        { u"cui/ui/macroselectordialog.ui" },
+        { u"cui/ui/namedialog.ui" },
+        { u"cui/ui/numberingformatpage.ui" },
+        { u"cui/ui/numberingoptionspage.ui" },
+        { u"cui/ui/numberingpositionpage.ui" },
+        { u"cui/ui/objectnamedialog.ui" },
+        { u"cui/ui/objecttitledescdialog.ui" },
+        { u"cui/ui/optlingupage.ui" },
+        { u"cui/ui/pageformatpage.ui" },
+        { u"cui/ui/paragalignpage.ui" },
+        { u"cui/ui/paraindentspacing.ui" },
+        { u"cui/ui/paratabspage.ui" },
+        { u"cui/ui/password.ui" },
+        { u"cui/ui/pastespecial.ui" },
+        { u"cui/ui/patterntabpage.ui" },
+        { u"cui/ui/pickbulletpage.ui" },
+        { u"cui/ui/pickgraphicpage.ui" },
+        { u"cui/ui/picknumberingpage.ui" },
+        { u"cui/ui/pickoutlinepage.ui" },
+        { u"cui/ui/positionpage.ui" },
+        { u"cui/ui/positionsizedialog.ui" },
+        { u"cui/ui/possizetabpage.ui" },
+        { u"cui/ui/rotationtabpage.ui" },
+        { u"cui/ui/shadowtabpage.ui" },
+        { u"cui/ui/slantcornertabpage.ui" },
+        { u"cui/ui/spinbox.ui" },
+        { u"cui/ui/queryduplicatedialog.ui" },
+        { u"cui/ui/similaritysearchdialog.ui" },
+        { u"cui/ui/specialcharacters.ui" },
+        { u"cui/ui/spellingdialog.ui" },
+        { u"cui/ui/spelloptionsdialog.ui" },
+        { u"cui/ui/splitcellsdialog.ui" },
+        { u"cui/ui/textflowpage.ui" },
+        { u"cui/ui/thesaurus.ui" },
+        { u"cui/ui/transparencytabpage.ui" },
+        { u"cui/ui/twolinespage.ui" },
+        { u"cui/ui/widgettestdialog.ui" },
+        { u"cui/ui/qrcodegen.ui" }
     });
 
 constexpr auto SfxDialogList
-    = frozen::make_unordered_map<std::u16string_view, JSDialogEnabledType>({
+    = frozen::make_unordered_set<std::u16string_view>({
         // sfx
-        { u"sfx/ui/cmisinfopage.ui", JSDialogEnabledType::Dialog },
-        { u"sfx/ui/custominfopage.ui", JSDialogEnabledType::Dialog },
-        { u"sfx/ui/descriptioninfopage.ui", JSDialogEnabledType::Dialog },
-        { u"sfx/ui/documentinfopage.ui", JSDialogEnabledType::Dialog },
-        { u"sfx/ui/documentfontspage.ui", JSDialogEnabledType::Dialog },
-        { u"sfx/ui/documentpropertiesdialog.ui", JSDialogEnabledType::Dialog },
-        { u"sfx/ui/editdurationdialog.ui", JSDialogEnabledType::Dialog },
-        { u"svx/ui/headfootformatpage.ui", JSDialogEnabledType::Dialog },
-        { u"sfx/ui/linefragment.ui", JSDialogEnabledType::Dialog },
-        { u"sfx/ui/managestylepage.ui", JSDialogEnabledType::Dialog },
-        { u"sfx/ui/newstyle.ui", JSDialogEnabledType::Dialog },
-        { u"sfx/ui/password.ui", JSDialogEnabledType::Dialog }
+        { u"sfx/ui/cmisinfopage.ui" },
+        { u"sfx/ui/custominfopage.ui" },
+        { u"sfx/ui/descriptioninfopage.ui" },
+        { u"sfx/ui/documentinfopage.ui" },
+        { u"sfx/ui/documentfontspage.ui" },
+        { u"sfx/ui/documentpropertiesdialog.ui" },
+        { u"sfx/ui/editdurationdialog.ui" },
+        { u"svx/ui/headfootformatpage.ui" },
+        { u"sfx/ui/linefragment.ui" },
+        { u"sfx/ui/managestylepage.ui" },
+        { u"sfx/ui/newstyle.ui" },
+        { u"sfx/ui/password.ui" }
     });
 
 constexpr auto ScalcDialogList
-    = frozen::make_unordered_map<std::u16string_view, JSDialogEnabledType>({
+    = frozen::make_unordered_set<std::u16string_view>({
         // scalc
-        { u"modules/scalc/ui/advancedfilterdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/analysisofvariancedialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/cellprotectionpage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/chardialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/chisquaretestdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/colwidthdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/conditionaleasydialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/condformatmanager.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/correlationdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/covariancedialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/datafielddialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/datafieldoptionsdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/definename.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/deletecells.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/deletecontents.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/descriptivestatisticsdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/erroralerttabpage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/exponentialsmoothingdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/formatcellsdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/fourieranalysisdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/goalseekdlg.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/groupdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/headerfootercontent.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/headerfooterdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/imoptdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/insertcells.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/managenamesdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/movecopysheet.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/movingaveragedialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/optimalcolwidthdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/optimalrowheightdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/pagetemplatedialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/paratemplatedialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/pastespecial.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/pivotfielddialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/pivottablelayoutdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/protectsheetdlg.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/regressiondialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/rowheightdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/samplingdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/selectsource.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/sheetprintpage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/simplerefdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/sortcriteriapage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/sortdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/sortkey.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/sortoptionspage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/sparklinedialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/standardfilterdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/textimportcsv.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/ttestdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/ungroupdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/validationcriteriapage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/validationdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/validationhelptabpage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/warnautocorrect.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/ztestdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/definedatabaserangedialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/scalc/ui/selectrange.ui", JSDialogEnabledType::Dialog }
+        { u"modules/scalc/ui/advancedfilterdialog.ui" },
+        { u"modules/scalc/ui/analysisofvariancedialog.ui" },
+        { u"modules/scalc/ui/cellprotectionpage.ui" },
+        { u"modules/scalc/ui/chardialog.ui" },
+        { u"modules/scalc/ui/chisquaretestdialog.ui" },
+        { u"modules/scalc/ui/colwidthdialog.ui" },
+        { u"modules/scalc/ui/conditionaleasydialog.ui" },
+        { u"modules/scalc/ui/condformatmanager.ui" },
+        { u"modules/scalc/ui/correlationdialog.ui" },
+        { u"modules/scalc/ui/covariancedialog.ui" },
+        { u"modules/scalc/ui/datafielddialog.ui" },
+        { u"modules/scalc/ui/datafieldoptionsdialog.ui" },
+        { u"modules/scalc/ui/definename.ui" },
+        { u"modules/scalc/ui/deletecells.ui" },
+        { u"modules/scalc/ui/deletecontents.ui" },
+        { u"modules/scalc/ui/descriptivestatisticsdialog.ui" },
+        { u"modules/scalc/ui/erroralerttabpage.ui" },
+        { u"modules/scalc/ui/exponentialsmoothingdialog.ui" },
+        { u"modules/scalc/ui/formatcellsdialog.ui" },
+        { u"modules/scalc/ui/fourieranalysisdialog.ui" },
+        { u"modules/scalc/ui/goalseekdlg.ui" },
+        { u"modules/scalc/ui/groupdialog.ui" },
+        { u"modules/scalc/ui/headerfootercontent.ui" },
+        { u"modules/scalc/ui/headerfooterdialog.ui" },
+        { u"modules/scalc/ui/imoptdialog.ui" },
+        { u"modules/scalc/ui/insertcells.ui" },
+        { u"modules/scalc/ui/managenamesdialog.ui" },
+        { u"modules/scalc/ui/movecopysheet.ui" },
+        { u"modules/scalc/ui/movingaveragedialog.ui" },
+        { u"modules/scalc/ui/optimalcolwidthdialog.ui" },
+        { u"modules/scalc/ui/optimalrowheightdialog.ui" },
+        { u"modules/scalc/ui/pagetemplatedialog.ui" },
+        { u"modules/scalc/ui/paratemplatedialog.ui" },
+        { u"modules/scalc/ui/pastespecial.ui" },
+        { u"modules/scalc/ui/pivotfielddialog.ui" },
+        { u"modules/scalc/ui/pivottablelayoutdialog.ui" },
+        { u"modules/scalc/ui/protectsheetdlg.ui" },
+        { u"modules/scalc/ui/regressiondialog.ui" },
+        { u"modules/scalc/ui/rowheightdialog.ui" },
+        { u"modules/scalc/ui/samplingdialog.ui" },
+        { u"modules/scalc/ui/selectsource.ui" },
+        { u"modules/scalc/ui/sheetprintpage.ui" },
+        { u"modules/scalc/ui/simplerefdialog.ui" },
+        { u"modules/scalc/ui/sortcriteriapage.ui" },
+        { u"modules/scalc/ui/sortdialog.ui" },
+        { u"modules/scalc/ui/sortkey.ui" },
+        { u"modules/scalc/ui/sortoptionspage.ui" },
+        { u"modules/scalc/ui/sparklinedialog.ui" },
+        { u"modules/scalc/ui/standardfilterdialog.ui" },
+        { u"modules/scalc/ui/textimportcsv.ui" },
+        { u"modules/scalc/ui/ttestdialog.ui" },
+        { u"modules/scalc/ui/ungroupdialog.ui" },
+        { u"modules/scalc/ui/validationcriteriapage.ui" },
+        { u"modules/scalc/ui/validationdialog.ui" },
+        { u"modules/scalc/ui/validationhelptabpage.ui" },
+        { u"modules/scalc/ui/warnautocorrect.ui" },
+        { u"modules/scalc/ui/ztestdialog.ui" },
+        { u"modules/scalc/ui/definedatabaserangedialog.ui" },
+        { u"modules/scalc/ui/selectrange.ui" }
     });
 
 constexpr auto SwriterDialogList
-= frozen::make_unordered_map<std::u16string_view, JSDialogEnabledType>({
+= frozen::make_unordered_set<std::u16string_view>({
         // swriter
-        { u"modules/swriter/ui/bulletsandnumbering.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/captionoptions.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/characterproperties.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/charurlpage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/columndialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/columnpage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/contentcontroldlg.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/contentcontrollistitemdlg.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/dropcapspage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/dropdownfielddialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/editsectiondialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/endnotepage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/footendnotedialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/footnoteareapage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/footnotepage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/footnotesendnotestabpage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/formatsectiondialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/formattablepage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/framedialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/frmaddpage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/frmurlpage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/frmtypepage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/indentpage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/indexentry.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/inforeadonlydialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/insertbreak.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/insertcaption.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/insertsectiondialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/linenumbering.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/newuserindexdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/numparapage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/objectdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/pagenumberdlg.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/paradialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/picturedialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/picturepage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/sectionpage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/sortdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/splittable.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/tablecolumnpage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/tableproperties.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/tabletextflowpage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/templatedialog1.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/templatedialog2.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/templatedialog8.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/textgridpage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/titlepage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/tocdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/tocentriespage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/tocindexpage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/tocstylespage.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/translationdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/watermarkdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/wordcount.ui", JSDialogEnabledType::Dialog },
-        { u"modules/swriter/ui/wrappage.ui", JSDialogEnabledType::Dialog }
+        { u"modules/swriter/ui/bulletsandnumbering.ui" },
+        { u"modules/swriter/ui/captionoptions.ui" },
+        { u"modules/swriter/ui/characterproperties.ui" },
+        { u"modules/swriter/ui/charurlpage.ui" },
+        { u"modules/swriter/ui/columndialog.ui" },
+        { u"modules/swriter/ui/columnpage.ui" },
+        { u"modules/swriter/ui/contentcontroldlg.ui" },
+        { u"modules/swriter/ui/contentcontrollistitemdlg.ui" },
+        { u"modules/swriter/ui/dropcapspage.ui" },
+        { u"modules/swriter/ui/dropdownfielddialog.ui" },
+        { u"modules/swriter/ui/editsectiondialog.ui" },
+        { u"modules/swriter/ui/endnotepage.ui" },
+        { u"modules/swriter/ui/footendnotedialog.ui" },
+        { u"modules/swriter/ui/footnoteareapage.ui" },
+        { u"modules/swriter/ui/footnotepage.ui" },
+        { u"modules/swriter/ui/footnotesendnotestabpage.ui" },
+        { u"modules/swriter/ui/formatsectiondialog.ui" },
+        { u"modules/swriter/ui/formattablepage.ui" },
+        { u"modules/swriter/ui/framedialog.ui" },
+        { u"modules/swriter/ui/frmaddpage.ui" },
+        { u"modules/swriter/ui/frmurlpage.ui" },
+        { u"modules/swriter/ui/frmtypepage.ui" },
+        { u"modules/swriter/ui/indentpage.ui" },
+        { u"modules/swriter/ui/indexentry.ui" },
+        { u"modules/swriter/ui/inforeadonlydialog.ui" },
+        { u"modules/swriter/ui/insertbreak.ui" },
+        { u"modules/swriter/ui/insertcaption.ui" },
+        { u"modules/swriter/ui/insertsectiondialog.ui" },
+        { u"modules/swriter/ui/linenumbering.ui" },
+        { u"modules/swriter/ui/newuserindexdialog.ui" },
+        { u"modules/swriter/ui/numparapage.ui" },
+        { u"modules/swriter/ui/objectdialog.ui" },
+        { u"modules/swriter/ui/pagenumberdlg.ui" },
+        { u"modules/swriter/ui/paradialog.ui" },
+        { u"modules/swriter/ui/picturedialog.ui" },
+        { u"modules/swriter/ui/picturepage.ui" },
+        { u"modules/swriter/ui/sectionpage.ui" },
+        { u"modules/swriter/ui/sortdialog.ui" },
+        { u"modules/swriter/ui/splittable.ui" },
+        { u"modules/swriter/ui/tablecolumnpage.ui" },
+        { u"modules/swriter/ui/tableproperties.ui" },
+        { u"modules/swriter/ui/tabletextflowpage.ui" },
+        { u"modules/swriter/ui/templatedialog1.ui" },
+        { u"modules/swriter/ui/templatedialog2.ui" },
+        { u"modules/swriter/ui/templatedialog8.ui" },
+        { u"modules/swriter/ui/textgridpage.ui" },
+        { u"modules/swriter/ui/titlepage.ui" },
+        { u"modules/swriter/ui/tocdialog.ui" },
+        { u"modules/swriter/ui/tocentriespage.ui" },
+        { u"modules/swriter/ui/tocindexpage.ui" },
+        { u"modules/swriter/ui/tocstylespage.ui" },
+        { u"modules/swriter/ui/translationdialog.ui" },
+        { u"modules/swriter/ui/watermarkdialog.ui" },
+        { u"modules/swriter/ui/wordcount.ui" },
+        { u"modules/swriter/ui/wrappage.ui" }
 });
 
 constexpr auto SimpressDialogList
-    = frozen::make_unordered_map<std::u16string_view, JSDialogEnabledType>({
+    = frozen::make_unordered_set<std::u16string_view>({
         // simpress
-        { u"modules/simpress/ui/customanimationeffecttab.ui", JSDialogEnabledType::Dialog },
-        { u"modules/simpress/ui/customanimationproperties.ui", JSDialogEnabledType::Dialog },
-        { u"modules/simpress/ui/customanimationtexttab.ui", JSDialogEnabledType::Dialog },
-        { u"modules/simpress/ui/customanimationtimingtab.ui", JSDialogEnabledType::Dialog },
-        { u"modules/simpress/ui/headerfooterdialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/simpress/ui/headerfootertab.ui", JSDialogEnabledType::Dialog },
-        { u"modules/simpress/ui/interactiondialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/simpress/ui/interactionpage.ui", JSDialogEnabledType::Dialog }
+        { u"modules/simpress/ui/customanimationeffecttab.ui" },
+        { u"modules/simpress/ui/customanimationproperties.ui" },
+        { u"modules/simpress/ui/customanimationtexttab.ui" },
+        { u"modules/simpress/ui/customanimationtimingtab.ui" },
+        { u"modules/simpress/ui/headerfooterdialog.ui" },
+        { u"modules/simpress/ui/headerfootertab.ui" },
+        { u"modules/simpress/ui/interactiondialog.ui" },
+        { u"modules/simpress/ui/interactionpage.ui" }
     });
 
 constexpr auto SdrawDialogList
-    = frozen::make_unordered_map<std::u16string_view, JSDialogEnabledType>({
+    = frozen::make_unordered_set<std::u16string_view>({
     // sdraw
-    { u"modules/sdraw/ui/drawchardialog.ui", JSDialogEnabledType::Dialog },
-    { u"modules/sdraw/ui/drawpagedialog.ui", JSDialogEnabledType::Dialog },
-    { u"modules/sdraw/ui/drawparadialog.ui", JSDialogEnabledType::Dialog }
+    { u"modules/sdraw/ui/drawchardialog.ui" },
+    { u"modules/sdraw/ui/drawpagedialog.ui" },
+    { u"modules/sdraw/ui/drawparadialog.ui" }
     });
 
 constexpr auto SchartDialogList
-    = frozen::make_unordered_map<std::u16string_view, JSDialogEnabledType>({
+    = frozen::make_unordered_set<std::u16string_view>({
         // schart
-        { u"modules/schart/ui/attributedialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/schart/ui/charttypedialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/schart/ui/datarangedialog.ui", JSDialogEnabledType::Dialog },
-        { u"modules/schart/ui/insertaxisdlg.ui", JSDialogEnabledType::Dialog },
-        { u"modules/schart/ui/inserttitledlg.ui", JSDialogEnabledType::Dialog },
-        { u"modules/schart/ui/smoothlinesdlg.ui", JSDialogEnabledType::Dialog },
-        { u"modules/schart/ui/steppedlinesdlg.ui", JSDialogEnabledType::Dialog },
-        { u"modules/schart/ui/tp_ChartType.ui", JSDialogEnabledType::Dialog },
-        { u"modules/schart/ui/tp_DataSource.ui", JSDialogEnabledType::Dialog },
-        { u"modules/schart/ui/tp_RangeChooser.ui", JSDialogEnabledType::Dialog },
-        { u"modules/schart/ui/tp_Trendline.ui", JSDialogEnabledType::Dialog },
-        { u"modules/schart/ui/wizelementspage.ui", JSDialogEnabledType::Dialog }
+        { u"modules/schart/ui/attributedialog.ui" },
+        { u"modules/schart/ui/charttypedialog.ui" },
+        { u"modules/schart/ui/datarangedialog.ui" },
+        { u"modules/schart/ui/insertaxisdlg.ui" },
+        { u"modules/schart/ui/inserttitledlg.ui" },
+        { u"modules/schart/ui/smoothlinesdlg.ui" },
+        { u"modules/schart/ui/steppedlinesdlg.ui" },
+        { u"modules/schart/ui/tp_ChartType.ui" },
+        { u"modules/schart/ui/tp_DataSource.ui" },
+        { u"modules/schart/ui/tp_RangeChooser.ui" },
+        { u"modules/schart/ui/tp_Trendline.ui" },
+        { u"modules/schart/ui/wizelementspage.ui" }
     });
 
 constexpr auto OtherDialogList
-    = frozen::make_unordered_map<std::u16string_view, JSDialogEnabledType>({
+    = frozen::make_unordered_set<std::u16string_view>({
         // formula
-        { u"formula/ui/formuladialog.ui", JSDialogEnabledType::Dialog },
-        { u"formula/ui/functionpage.ui", JSDialogEnabledType::Dialog },
-        { u"formula/ui/parameter.ui", JSDialogEnabledType::Dialog },
-        { u"formula/ui/structpage.ui", JSDialogEnabledType::Dialog },
+        { u"formula/ui/formuladialog.ui" },
+        { u"formula/ui/functionpage.ui" },
+        { u"formula/ui/parameter.ui" },
+        { u"formula/ui/structpage.ui" },
         // svx
-        { u"svx/ui/acceptrejectchangesdialog.ui", JSDialogEnabledType::Dialog },
-        { u"svx/ui/accessibilitycheckdialog.ui", JSDialogEnabledType::Dialog },
-        { u"svx/ui/accessibilitycheckentry.ui", JSDialogEnabledType::Dialog },
-        { u"svx/ui/compressgraphicdialog.ui", JSDialogEnabledType::Dialog },
-        { u"svx/ui/findreplacedialog.ui", JSDialogEnabledType::Dialog },
-        { u"svx/ui/fontworkgallerydialog.ui", JSDialogEnabledType::Dialog },
-        { u"svx/ui/headfootformatpage.ui", JSDialogEnabledType::Dialog },
-        { u"svx/ui/redlinecontrol.ui", JSDialogEnabledType::Dialog },
-        { u"svx/ui/redlinefilterpage.ui", JSDialogEnabledType::Dialog },
-        { u"svx/ui/redlineviewpage.ui", JSDialogEnabledType::Dialog },
-        { u"svx/ui/themecoloreditdialog.ui", JSDialogEnabledType::Dialog },
-        { u"svx/ui/themedialog.ui", JSDialogEnabledType::Dialog },
+        { u"svx/ui/acceptrejectchangesdialog.ui" },
+        { u"svx/ui/accessibilitycheckdialog.ui" },
+        { u"svx/ui/accessibilitycheckentry.ui" },
+        { u"svx/ui/compressgraphicdialog.ui" },
+        { u"svx/ui/findreplacedialog.ui" },
+        { u"svx/ui/fontworkgallerydialog.ui" },
+        { u"svx/ui/headfootformatpage.ui" },
+        { u"svx/ui/redlinecontrol.ui" },
+        { u"svx/ui/redlinefilterpage.ui" },
+        { u"svx/ui/redlineviewpage.ui" },
+        { u"svx/ui/themecoloreditdialog.ui" },
+        { u"svx/ui/themedialog.ui" },
         // uui
-        { u"uui/ui/logindialog.ui", JSDialogEnabledType::Dialog },
-        { u"uui/ui/macrowarnmedium.ui", JSDialogEnabledType::Dialog },
+        { u"uui/ui/logindialog.ui" },
+        { u"uui/ui/macrowarnmedium.ui" },
         // vcl
-        { u"vcl/ui/wizard.ui", JSDialogEnabledType::Dialog },
+        { u"vcl/ui/wizard.ui" },
         // filter
-        { u"filter/ui/pdfgeneralpage.ui", JSDialogEnabledType::Dialog },
-        { u"filter/ui/pdflinkspage.ui", JSDialogEnabledType::Dialog },
-        { u"filter/ui/pdfoptionsdialog.ui", JSDialogEnabledType::Dialog },
-        { u"filter/ui/pdfsecuritypage.ui", JSDialogEnabledType::Dialog },
-        { u"filter/ui/pdfsignpage.ui", JSDialogEnabledType::Dialog },
-        { u"filter/ui/pdfuserinterfacepage.ui", JSDialogEnabledType::Dialog },
-        { u"filter/ui/pdfviewpage.ui", JSDialogEnabledType::Dialog },
-        { u"filter/ui/warnpdfdialog.ui", JSDialogEnabledType::Dialog },
+        { u"filter/ui/pdfgeneralpage.ui" },
+        { u"filter/ui/pdflinkspage.ui" },
+        { u"filter/ui/pdfoptionsdialog.ui" },
+        { u"filter/ui/pdfsecuritypage.ui" },
+        { u"filter/ui/pdfsignpage.ui" },
+        { u"filter/ui/pdfuserinterfacepage.ui" },
+        { u"filter/ui/pdfviewpage.ui" },
+        { u"filter/ui/warnpdfdialog.ui" },
         // writerperfect
-        { u"writerperfect/ui/exportepub.ui", JSDialogEnabledType::Dialog },
-        { u"writerperfect/ui/wpftencodingdialog.ui", JSDialogEnabledType::Dialog },
+        { u"writerperfect/ui/exportepub.ui" },
+        { u"writerperfect/ui/wpftencodingdialog.ui" },
         // xmlsec
-        { u"xmlsec/ui/certgeneral.ui", JSDialogEnabledType::Dialog },
-        { u"xmlsec/ui/certpage.ui", JSDialogEnabledType::Dialog },
-        { u"xmlsec/ui/digitalsignaturesdialog.ui", JSDialogEnabledType::Dialog },
-        { u"xmlsec/ui/selectcertificatedialog.ui", JSDialogEnabledType::Dialog },
-        { u"xmlsec/ui/viewcertdialog.ui", JSDialogEnabledType::Dialog }
+        { u"xmlsec/ui/certgeneral.ui" },
+        { u"xmlsec/ui/certpage.ui" },
+        { u"xmlsec/ui/digitalsignaturesdialog.ui" },
+        { u"xmlsec/ui/selectcertificatedialog.ui" },
+        { u"xmlsec/ui/viewcertdialog.ui" }
     });
 
 // ========== POPUP ====================================================== //
 
 constexpr auto PopupList
-    = frozen::make_unordered_map<std::u16string_view, JSDialogEnabledType>({
+    = frozen::make_unordered_set<std::u16string_view>({
         // scalc
-        { u"modules/scalc/ui/filterdropdown.ui", JSDialogEnabledType::Popup },
-        { u"modules/scalc/ui/filterlist.ui", JSDialogEnabledType::Popup },
-        { u"modules/scalc/ui/filtersubdropdown.ui", JSDialogEnabledType::Popup },
-        { u"modules/scalc/ui/floatingborderstyle.ui", JSDialogEnabledType::Popup },
-        { u"modules/scalc/ui/floatinglinestyle.ui", JSDialogEnabledType::Popup },
+        { u"modules/scalc/ui/filterdropdown.ui" },
+        { u"modules/scalc/ui/filterlist.ui" },
+        { u"modules/scalc/ui/filtersubdropdown.ui" },
+        { u"modules/scalc/ui/floatingborderstyle.ui" },
+        { u"modules/scalc/ui/floatinglinestyle.ui" },
         // svt
-        { u"svt/ui/datewindow.ui", JSDialogEnabledType::Popup },
-        { u"svt/ui/linewindow.ui", JSDialogEnabledType::Popup },
+        { u"svt/ui/datewindow.ui" },
+        { u"svt/ui/linewindow.ui" },
         // svx
-        { u"svx/ui/colorwindow.ui", JSDialogEnabledType::Popup },
-        { u"svx/ui/currencywindow.ui", JSDialogEnabledType::Popup },
-        { u"svx/ui/floatingareastyle.ui", JSDialogEnabledType::Popup },
-        { u"svx/ui/floatingframeborder.ui", JSDialogEnabledType::Popup },
-        { u"svx/ui/floatinglineend.ui", JSDialogEnabledType::Popup },
-        { u"svx/ui/floatinglineproperty.ui", JSDialogEnabledType::Popup },
-        { u"svx/ui/floatinglinestyle.ui", JSDialogEnabledType::Popup },
-        { u"svx/ui/fontworkalignmentcontrol.ui", JSDialogEnabledType::Popup },
-        { u"svx/ui/fontworkcharacterspacingcontrol.ui", JSDialogEnabledType::Popup },
-        { u"svx/ui/numberingwindow.ui", JSDialogEnabledType::Popup },
-        { u"svx/ui/paralinespacingcontrol.ui", JSDialogEnabledType::Popup },
-        { u"svx/ui/textcharacterspacingcontrol.ui", JSDialogEnabledType::Popup },
-        { u"svx/ui/textunderlinecontrol.ui", JSDialogEnabledType::Popup }
+        { u"svx/ui/colorwindow.ui" },
+        { u"svx/ui/currencywindow.ui" },
+        { u"svx/ui/floatingareastyle.ui" },
+        { u"svx/ui/floatingframeborder.ui" },
+        { u"svx/ui/floatinglineend.ui" },
+        { u"svx/ui/floatinglineproperty.ui" },
+        { u"svx/ui/floatinglinestyle.ui" },
+        { u"svx/ui/fontworkalignmentcontrol.ui" },
+        { u"svx/ui/fontworkcharacterspacingcontrol.ui" },
+        { u"svx/ui/numberingwindow.ui" },
+        { u"svx/ui/paralinespacingcontrol.ui" },
+        { u"svx/ui/textcharacterspacingcontrol.ui" },
+        { u"svx/ui/textunderlinecontrol.ui" }
     });
 
 // ========== MENU ======================================================= //
 
 constexpr auto MenuList
-    = frozen::make_unordered_map<std::u16string_view, JSDialogEnabledType>({
-        { u"sfx/ui/stylecontextmenu.ui", JSDialogEnabledType::Menu }
+    = frozen::make_unordered_set<std::u16string_view>({
+        { u"sfx/ui/stylecontextmenu.ui" }
     });
 
 // ========== SIDEBAR ==================================================== //
 
 constexpr auto SidebarList
-    = frozen::make_unordered_map<std::u16string_view, JSDialogEnabledType>({
+    = frozen::make_unordered_set<std::u16string_view>({
         // scalc
-        { u"modules/scalc/ui/functionpanel.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/scalc/ui/navigatorpanel.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/scalc/ui/sidebaralignment.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/scalc/ui/sidebarcellappearance.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/scalc/ui/sidebarnumberformat.ui", JSDialogEnabledType::Sidebar },
+        { u"modules/scalc/ui/functionpanel.ui" },
+        { u"modules/scalc/ui/navigatorpanel.ui" },
+        { u"modules/scalc/ui/sidebaralignment.ui" },
+        { u"modules/scalc/ui/sidebarcellappearance.ui" },
+        { u"modules/scalc/ui/sidebarnumberformat.ui" },
         // schart
-        { u"modules/schart/ui/sidebaraxis.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/schart/ui/sidebarelements.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/schart/ui/sidebarerrorbar.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/schart/ui/sidebarseries.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/schart/ui/sidebartype.ui", JSDialogEnabledType::Sidebar },
+        { u"modules/schart/ui/sidebaraxis.ui" },
+        { u"modules/schart/ui/sidebarelements.ui" },
+        { u"modules/schart/ui/sidebarerrorbar.ui" },
+        { u"modules/schart/ui/sidebarseries.ui" },
+        { u"modules/schart/ui/sidebartype.ui" },
         // simpress
-        { u"modules/simpress/ui/customanimationfragment.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/simpress/ui/customanimationspanel.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/simpress/ui/layoutpanel.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/simpress/ui/masterpagepanel.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/simpress/ui/masterpagepanelall.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/simpress/ui/masterpagepanelrecent.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/simpress/ui/navigatorpanel.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/simpress/ui/sidebarslidebackground.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/simpress/ui/slidetransitionspanel.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/simpress/ui/tabledesignpanel.ui", JSDialogEnabledType::Sidebar },
+        { u"modules/simpress/ui/customanimationfragment.ui" },
+        { u"modules/simpress/ui/customanimationspanel.ui" },
+        { u"modules/simpress/ui/layoutpanel.ui" },
+        { u"modules/simpress/ui/masterpagepanel.ui" },
+        { u"modules/simpress/ui/masterpagepanelall.ui" },
+        { u"modules/simpress/ui/masterpagepanelrecent.ui" },
+        { u"modules/simpress/ui/navigatorpanel.ui" },
+        { u"modules/simpress/ui/sidebarslidebackground.ui" },
+        { u"modules/simpress/ui/slidetransitionspanel.ui" },
+        { u"modules/simpress/ui/tabledesignpanel.ui" },
         // smath
-        { u"modules/smath/ui/sidebarelements_math.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/smath/ui/sidebarproperties_math.ui", JSDialogEnabledType::Sidebar },
+        { u"modules/smath/ui/sidebarelements_math.ui" },
+        { u"modules/smath/ui/sidebarproperties_math.ui" },
         // swriter
-        { u"modules/swriter/ui/a11ycheckissuespanel.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/swriter/ui/managechangessidebar.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/swriter/ui/navigatorpanel.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/swriter/ui/pagefooterpanel.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/swriter/ui/pageformatpanel.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/swriter/ui/pageheaderpanel.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/swriter/ui/pagestylespanel.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/swriter/ui/sidebarstylepresets.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/swriter/ui/sidebartableedit.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/swriter/ui/sidebartheme.ui", JSDialogEnabledType::Sidebar },
-        { u"modules/swriter/ui/sidebarwrap.ui", JSDialogEnabledType::Sidebar },
+        { u"modules/swriter/ui/a11ycheckissuespanel.ui" },
+        { u"modules/swriter/ui/managechangessidebar.ui" },
+        { u"modules/swriter/ui/navigatorpanel.ui" },
+        { u"modules/swriter/ui/pagefooterpanel.ui" },
+        { u"modules/swriter/ui/pageformatpanel.ui" },
+        { u"modules/swriter/ui/pageheaderpanel.ui" },
+        { u"modules/swriter/ui/pagestylespanel.ui" },
+        { u"modules/swriter/ui/sidebarstylepresets.ui" },
+        { u"modules/swriter/ui/sidebartableedit.ui" },
+        { u"modules/swriter/ui/sidebartheme.ui" },
+        { u"modules/swriter/ui/sidebarwrap.ui" },
         // sfx
-        { u"sfx/ui/panel.ui", JSDialogEnabledType::Sidebar },
-        { u"sfx/ui/templatepanel.ui", JSDialogEnabledType::Sidebar },
+        { u"sfx/ui/panel.ui" },
+        { u"sfx/ui/templatepanel.ui" },
         // svx
-        { u"svx/ui/defaultshapespanel.ui", JSDialogEnabledType::Sidebar },
-        { u"svx/ui/inspectortextpanel.ui", JSDialogEnabledType::Sidebar },
-        { u"svx/ui/mediaplayback.ui", JSDialogEnabledType::Sidebar },
-        { u"svx/ui/sidebararea.ui", JSDialogEnabledType::Sidebar },
-        { u"svx/ui/sidebareffect.ui", JSDialogEnabledType::Sidebar },
-        { u"svx/ui/sidebarempty.ui", JSDialogEnabledType::Sidebar },
-        { u"svx/ui/sidebarfontwork.ui", JSDialogEnabledType::Sidebar },
-        { u"svx/ui/sidebargallery.ui", JSDialogEnabledType::Sidebar },
-        { u"svx/ui/sidebargraphic.ui", JSDialogEnabledType::Sidebar },
-        { u"svx/ui/sidebarline.ui", JSDialogEnabledType::Sidebar },
-        { u"svx/ui/sidebarlists.ui", JSDialogEnabledType::Sidebar },
-        { u"svx/ui/sidebarparagraph.ui", JSDialogEnabledType::Sidebar },
-        { u"svx/ui/sidebarpossize.ui", JSDialogEnabledType::Sidebar },
-        { u"svx/ui/sidebarshadow.ui", JSDialogEnabledType::Sidebar },
-        { u"svx/ui/sidebarstylespanel.ui", JSDialogEnabledType::Sidebar },
-        { u"svx/ui/sidebartextpanel.ui", JSDialogEnabledType::Sidebar }
+        { u"svx/ui/defaultshapespanel.ui" },
+        { u"svx/ui/inspectortextpanel.ui" },
+        { u"svx/ui/mediaplayback.ui" },
+        { u"svx/ui/sidebararea.ui" },
+        { u"svx/ui/sidebareffect.ui" },
+        { u"svx/ui/sidebarempty.ui" },
+        { u"svx/ui/sidebarfontwork.ui" },
+        { u"svx/ui/sidebargallery.ui" },
+        { u"svx/ui/sidebargraphic.ui" },
+        { u"svx/ui/sidebarline.ui" },
+        { u"svx/ui/sidebarlists.ui" },
+        { u"svx/ui/sidebarparagraph.ui" },
+        { u"svx/ui/sidebarpossize.ui" },
+        { u"svx/ui/sidebarshadow.ui" },
+        { u"svx/ui/sidebarstylespanel.ui" },
+        { u"svx/ui/sidebartextpanel.ui" }
     });
 
 // ========== NOTEBOOKBAR ================================================= //
 
 constexpr auto NotebookbarList
-    = frozen::make_unordered_map<std::u16string_view, JSDialogEnabledType>({
-        { u"modules/scalc/ui/numberbox.ui", JSDialogEnabledType::Notebookbar },
-        { u"svx/ui/fontnamebox.ui", JSDialogEnabledType::Notebookbar },
-        { u"svx/ui/fontsizebox.ui", JSDialogEnabledType::Notebookbar },
-        { u"svx/ui/stylespreview.ui", JSDialogEnabledType::Notebookbar }
+    = frozen::make_unordered_set<std::u16string_view>({
+        { u"modules/scalc/ui/numberbox.ui" },
+        { u"svx/ui/fontnamebox.ui" },
+        { u"svx/ui/fontsizebox.ui" },
+        { u"svx/ui/stylespreview.ui" }
     });
 
 // ========== ADDRESSINPUT ================================================ //
 
 constexpr auto AddressInputList
-    = frozen::make_unordered_map<std::u16string_view, JSDialogEnabledType>({
-        { u"modules/scalc/ui/posbox.ui", JSDialogEnabledType::AddressInput }
+    = frozen::make_unordered_set<std::u16string_view>({
+        { u"modules/scalc/ui/posbox.ui" }
     });
 
 // ========== FORMULABAR ================================================== //
 
 constexpr auto FormulabarList
-    = frozen::make_unordered_map<std::u16string_view, JSDialogEnabledType>({
-        { u"modules/scalc/ui/inputbar.ui", JSDialogEnabledType::Formulabar }
+    = frozen::make_unordered_set<std::u16string_view>({
+        { u"modules/scalc/ui/inputbar.ui" }
     });
 
 // ========== LOOKUP ====================================================== //
 
-inline bool isInMap(const auto& rList, std::u16string_view rUIFile, JSDialogEnabledType eType)
+inline bool isInMap(const auto& rList, std::u16string_view rUIFile)
 {
     auto aFound = rList.find(rUIFile);
     if (aFound != rList.end())
-    {
-        bool bIsMatchingType = aFound->second == eType;
-        assert(bIsMatchingType);
-        return bIsMatchingType;
-    }
-
+        return true;
     return false;
 }
 
@@ -511,7 +493,7 @@ namespace jsdialog
 
 bool isIgnored(std::u16string_view rUIFile)
 {
-    return isInMap(IgnoredList, rUIFile, JSDialogEnabledType::Ignore);
+    return isInMap(IgnoredList, rUIFile);
 }
 
 bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
@@ -519,32 +501,32 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
     // mobile only dialogs
     if (bMobile)
     {
-        if (isInMap(MobileDialogList, rUIFile, JSDialogEnabledType::MobileDialog))
+        if (isInMap(MobileDialogList, rUIFile))
             return true;
     }
 
-    if (isInMap(CuiDialogList, rUIFile, JSDialogEnabledType::Dialog))
+    if (isInMap(CuiDialogList, rUIFile))
         return true;
 
-    if (isInMap(SfxDialogList, rUIFile, JSDialogEnabledType::Dialog))
+    if (isInMap(SfxDialogList, rUIFile))
         return true;
 
-    if (isInMap(ScalcDialogList, rUIFile, JSDialogEnabledType::Dialog))
+    if (isInMap(ScalcDialogList, rUIFile))
         return true;
 
-    if (isInMap(SwriterDialogList, rUIFile, JSDialogEnabledType::Dialog))
+    if (isInMap(SwriterDialogList, rUIFile))
         return true;
 
-    if (isInMap(SimpressDialogList, rUIFile, JSDialogEnabledType::Dialog))
+    if (isInMap(SimpressDialogList, rUIFile))
         return true;
 
-    if (isInMap(SdrawDialogList, rUIFile, JSDialogEnabledType::Dialog))
+    if (isInMap(SdrawDialogList, rUIFile))
         return true;
 
-    if (isInMap(SchartDialogList, rUIFile, JSDialogEnabledType::Dialog))
+    if (isInMap(SchartDialogList, rUIFile))
         return true;
 
-    if (isInMap(OtherDialogList, rUIFile, JSDialogEnabledType::Dialog))
+    if (isInMap(OtherDialogList, rUIFile))
         return true;
 
     return isEnabledAtRunTime(rUIFile);
@@ -552,32 +534,32 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
 
 bool isBuilderEnabledForPopup(std::u16string_view rUIFile)
 {
-    return isInMap(PopupList, rUIFile, JSDialogEnabledType::Popup);
+    return isInMap(PopupList, rUIFile);
 }
 
 bool isBuilderEnabledForMenu(std::u16string_view rUIFile)
 {
-    return isInMap(MenuList, rUIFile, JSDialogEnabledType::Menu);
+    return isInMap(MenuList, rUIFile);
 }
 
 bool isBuilderEnabledForSidebar(std::u16string_view rUIFile)
 {
-    return isInMap(SidebarList, rUIFile, JSDialogEnabledType::Sidebar);
+    return isInMap(SidebarList, rUIFile);
 }
 
 bool isInterimBuilderEnabledForNotebookbar(std::u16string_view rUIFile)
 {
-    return isInMap(NotebookbarList, rUIFile, JSDialogEnabledType::Notebookbar);
+    return isInMap(NotebookbarList, rUIFile);
 }
 
 bool isBuilderEnabledForAddressInput(std::u16string_view rUIFile)
 {
-    return isInMap(AddressInputList, rUIFile, JSDialogEnabledType::AddressInput);
+    return isInMap(AddressInputList, rUIFile);
 }
 
 bool isBuilderEnabledForFormulabar(std::u16string_view rUIFile)
 {
-    return isInMap(FormulabarList, rUIFile, JSDialogEnabledType::Formulabar);
+    return isInMap(FormulabarList, rUIFile);
 }
 } // end of jsdialog
 
