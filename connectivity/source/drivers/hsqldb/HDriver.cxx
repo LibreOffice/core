@@ -102,7 +102,7 @@ namespace connectivity
         {
             for (const auto& rConnection : m_aConnections)
             {
-                Reference<XInterface > xTemp = rConnection.first.get();
+                Reference<XConnection> xTemp(rConnection.xOrigConn);
                 ::comphelper::disposeComponent(xTemp);
             }
         }
@@ -111,7 +111,6 @@ namespace connectivity
             // not interested in
         }
         m_aConnections.clear();
-        TWeakPairVector().swap(m_aConnections);
 
         cppu::WeakComponentImplHelperBase::disposing();
     }
@@ -380,7 +379,7 @@ namespace connectivity
                     }();
                     Reference< XComponent> xIfc = new OHsqlConnection( this, xOrig, m_xContext );
                     xConnection.set(xIfc,UNO_QUERY);
-                    m_aConnections.push_back(TWeakPair(WeakReferenceHelper(xOrig),TWeakConnectionPair(sKey,TWeakRefPair(WeakReferenceHelper(xConnection),WeakReferenceHelper()))));
+                    m_aConnections.push_back( { xOrig, sKey, xConnection, nullptr } );
 
                     Reference<XTransactionBroadcaster> xBroad(xStorage,UNO_QUERY);
                     if ( xBroad.is() )
@@ -464,18 +463,18 @@ namespace connectivity
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(ODriverDelegator_BASE::rBHelper.bDisposed);
 
-        Reference< XTablesSupplier > xTab;
+        rtl::Reference< OHCatalog > xTab;
 
-        TWeakPairVector::iterator i = std::find_if(m_aConnections.begin(), m_aConnections.end(),
-            [&connection](const TWeakPairVector::value_type& rConnection) {
-                return rConnection.second.second.first.get() == connection.get(); });
+        auto i = std::find_if(m_aConnections.begin(), m_aConnections.end(),
+            [&connection](const TConnectionInfo& rConnection) {
+                return rConnection.xConn.get() == connection.get(); });
         if (i != m_aConnections.end())
         {
-            xTab.set(i->second.second.second,UNO_QUERY);
+            xTab = i->xCatalog.get();
             if ( !xTab.is() )
             {
                 xTab = new OHCatalog(connection);
-                i->second.second.second = WeakReferenceHelper(xTab);
+                i->xCatalog = xTab.get();
             }
         }
 
@@ -517,13 +516,13 @@ namespace connectivity
         ::dbtools::throwFeatureNotImplementedSQLException( u"XCreateCatalog::createCatalog"_ustr, *this );
     }
 
-    void ODriverDelegator::shutdownConnection(const TWeakPairVector::iterator& _aIter )
+    void ODriverDelegator::shutdownConnection(const std::vector<TConnectionInfo>::iterator& _aIter )
     {
         OSL_ENSURE(m_aConnections.end() != _aIter,"Iterator equals .end()");
         bool bLastOne = true;
         try
         {
-            Reference<XConnection> _xConnection(_aIter->first.get(),UNO_QUERY);
+            Reference<XConnection> _xConnection(_aIter->xOrigConn);
 
             if ( _xConnection.is() )
             {
@@ -546,7 +545,7 @@ namespace connectivity
         {
             // Reference<XTransactionListener> xListener(*this,UNO_QUERY);
             // a shutdown should commit all changes to the db files
-            StorageContainer::revokeStorage(_aIter->second.first,nullptr);
+            StorageContainer::revokeStorage(_aIter->sKey,nullptr);
         }
         if ( !m_bInShutDownConnections )
             m_aConnections.erase(_aIter);
@@ -558,8 +557,8 @@ namespace connectivity
         Reference<XConnection> xCon(Source.Source,UNO_QUERY);
         if ( xCon.is() )
         {
-            TWeakPairVector::iterator i = std::find_if(m_aConnections.begin(), m_aConnections.end(),
-                [&xCon](const TWeakPairVector::value_type& rConnection) { return rConnection.first.get() == xCon.get(); });
+            auto i = std::find_if(m_aConnections.begin(), m_aConnections.end(),
+                [&xCon](const TConnectionInfo& rConnection) { return rConnection.xOrigConn.get() == xCon.get(); });
 
             if (i != m_aConnections.end())
                 shutdownConnection(i);
@@ -570,9 +569,9 @@ namespace connectivity
             if ( xStorage.is() )
             {
                 OUString sKey = StorageContainer::getRegisteredKey(xStorage);
-                TWeakPairVector::iterator i = std::find_if(m_aConnections.begin(),m_aConnections.end(),
-                    [&sKey] (const TWeakPairVector::value_type& conn) {
-                        return conn.second.first == sKey;
+                auto i = std::find_if(m_aConnections.begin(),m_aConnections.end(),
+                    [&sKey] (const TConnectionInfo& conn) {
+                        return conn.sKey == sKey;
                     });
 
                 if ( i != m_aConnections.end() )
@@ -588,7 +587,7 @@ namespace connectivity
         {
             try
             {
-                Reference<XConnection> xCon(rConnection.first,UNO_QUERY);
+                Reference<XConnection> xCon(rConnection.xOrigConn);
                 ::comphelper::disposeComponent(xCon);
             }
             catch(Exception&)
@@ -605,7 +604,7 @@ namespace connectivity
         {
             try
             {
-                Reference<XFlushable> xCon(rConnection.second.second.first.get(),UNO_QUERY);
+                Reference<XFlushable> xCon(rConnection.xConn.get(),UNO_QUERY);
                 if (xCon.is())
                     xCon->flush();
             }
@@ -625,9 +624,9 @@ namespace connectivity
         if ( sKey.isEmpty() )
             return;
 
-        TWeakPairVector::const_iterator i = std::find_if(m_aConnections.begin(), m_aConnections.end(),
-            [&sKey] (const TWeakPairVector::value_type& conn) {
-                return conn.second.first == sKey;
+        auto i = std::find_if(m_aConnections.begin(), m_aConnections.end(),
+            [&sKey] (const TConnectionInfo& conn) {
+                return conn.sKey == sKey;
             });
 
         OSL_ENSURE( i != m_aConnections.end(), "ODriverDelegator::preCommit: they're committing a storage which I do not know!" );
@@ -636,7 +635,7 @@ namespace connectivity
 
         try
         {
-            Reference<XConnection> xConnection(i->first,UNO_QUERY);
+            Reference<XConnection> xConnection(i->xOrigConn);
             if ( xConnection.is() )
             {
                 Reference< XStatement> xStmt = xConnection->createStatement();

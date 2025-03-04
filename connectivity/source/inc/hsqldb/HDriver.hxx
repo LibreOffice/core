@@ -27,10 +27,13 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <connectivity/CommonTools.hxx>
+#include <unotools/weakref.hxx>
 
 
 namespace connectivity::hsqldb
     {
+        class OHCatalog;
+
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver
                                                  , css::sdbcx::XDataDefinitionSupplier
                                                  , css::lang::XServiceInfo
@@ -38,11 +41,13 @@ namespace connectivity::hsqldb
                                                  , css::embed::XTransactionListener
                                                >   ODriverDelegator_BASE;
 
-        typedef std::pair< css::uno::WeakReferenceHelper,css::uno::WeakReferenceHelper> TWeakRefPair;
-        typedef std::pair< OUString ,TWeakRefPair > TWeakConnectionPair;
-
-        typedef std::pair< css::uno::WeakReferenceHelper,TWeakConnectionPair> TWeakPair;
-        typedef std::vector< TWeakPair > TWeakPairVector;
+        struct TConnectionInfo
+        {
+            css::uno::WeakReference<css::sdbc::XConnection> xOrigConn;
+            OUString sKey;
+            css::uno::WeakReference<css::sdbc::XConnection> xConn;
+            unotools::WeakReference<OHCatalog> xCatalog;
+        };
 
 
         /** delegates all calls to the original driver and extend the existing one with the SDBCX layer.
@@ -51,7 +56,7 @@ namespace connectivity::hsqldb
         class ODriverDelegator final : public ::cppu::BaseMutex
                                 ,public ODriverDelegator_BASE
         {
-            TWeakPairVector                                           m_aConnections; //  vector containing a list
+            std::vector<TConnectionInfo>                              m_aConnections; //  vector containing a list
                                                                                       //  of all the Connection objects
                                                                                       //  for this Driver
             css::uno::Reference< css::sdbc::XDriver >                 m_xDriver;
@@ -69,7 +74,7 @@ namespace connectivity::hsqldb
                 @param  _aIter
                     The connection to shut down and storage to revoke.
             */
-            void shutdownConnection(const TWeakPairVector::iterator& _aIter);
+            void shutdownConnection(const std::vector<TConnectionInfo>::iterator& _aIter);
 
         public:
             /** creates a new delegator for a HSQLDB driver
