@@ -107,6 +107,11 @@ public:
 
     virtual void Invoke() override
     {
+        // Related: tdf#156855 force reload of both native and theme colors
+        int nMode = MiscSettings::GetAppColorMode();
+        if (!nMode)
+            MiscSettings::SetAppColorMode(nMode);
+
         AquaSalInstance *pInst = GetSalData()->mpInstance;
         SalFrame *pAnyFrame = pInst->anyFrame();
         if( pAnyFrame )
