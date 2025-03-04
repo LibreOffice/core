@@ -41,7 +41,7 @@
     <string name="action_add_slide">Aggiungi diapositiva</string>
     <string name="action_save">Salva</string>
     <string name="action_fromat">Attiva formato</string>
-    <string name="save_alert_dialog_title">Salvare il documento prima di chiuderlo\?</string>
+    <string name="save_alert_dialog_title">Salvare il documento prima di chiuderlo?</string>
     <string name="pdf_export_finished">Esportazione in PDF terminata</string>
     <string name="calc_show">Mostra</string>
     <string name="action_pwd_dialog_cancel">Annulla</string>
@@ -105,7 +105,7 @@
     <string name="alert_ok">OK</string>
     <string name="UNO_commands_string_value_hint">Valore</string>
     <string name="sheet">Foglio</string>
-    <string name="compress_photo_title">Comprimere la foto\?</string>
+    <string name="compress_photo_title">Comprimere la foto?</string>
     <string name="take_photo">Fai una foto</string>
     <string name="unable_to_save">Impossibile salvare il file</string>
     <string name="insert_table">Inserisci tabella</string>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LibreOffice Viewer</string>
-    <string name="app_name_settings">LibreOffice Viewer Instellings</string>
-    <string name="app_version">Version: %1$s&lt;br&gt;Build ID: &lt;a href=https://hub.libreoffice.org/git-core/%2$s&gt;%2$s&lt;/a&gt;</string>
-    <string name="app_description">LibreOffice Viewer is \'n dokumentleser gebaseer op LibreOffice.</string>
+    <string name="app_name">LibreOffice Leser</string>
+    <string name="app_name_settings">LibreOffice Leser Instellings</string>
+    <string name="app_version">Weergawe: %1$s&lt;br&gt;Build ID: &lt;a href=https://hub.libreoffice.org/git-core/%2$s&gt;%2$s&lt;/a&gt;</string>
+    <string name="app_description">LibreOffice Viewer is \'n dokument-leser gebaseer op LibreOffice.</string>
     <string name="app_credits">https://www.libreoffice.org</string>
     <string name="app_vendor">Hierdie weergawe is verskaf deur $VENDOR.</string>
     <string name="readonly_file">Hierdie lêer is lees-alleen.</string>
@@ -37,7 +37,7 @@
     <string name="action_UNO_commands">Stuur UNO Opdrag</string>
     <string name="message_saved">Stoor omvattend</string>
     <string name="message_saving">Stoor die dokument…</string>
-    <string name="message_saving_failed">Stoor van die dokument het misluk.</string>
+    <string name="message_saving_failed">Stoor van die dokument misluk.</string>
     <string name="password">Wagwoord</string>
     <string name="action_undo">Maak Ongedaan</string>
     <string name="action_redo">Herdoen</string>
@@ -66,10 +66,10 @@
     <string name="alert_ok">OK</string>
     <string name="pref_experimental_editing_summary">Skakel die eksperimentele wysigingsmodus aan. Gebruik op eie risiko.</string>
     <string name="action_back">Terug</string>
-    <string name="calc_optimal_length_default_text">\"Voer in, Ekstra Lengte in 100ste/mm</string>
+    <string name="calc_optimal_length_default_text">Voer in, Ekstra Lengte in 100ste/mm</string>
     <string name="calc_alert_double_click_optimal_length">Wenk: Dubbelklik op \'n opskrif, stel die optimale breedte/hoogte.</string>
     <string name="action_add_worksheet">Voeg Werkblad By</string>
-    <string name="action_pwd_dialog_title">Asseblief voer in die wagwoord</string>
+    <string name="action_pwd_dialog_title">Voer in die wagwoord, asseblief</string>
     <string name="select_photo">Selekteer Foto</string>
     <string name="select_photo_title">Kies \'n Prent</string>
     <string name="no_camera_found">Geen Kamera gevind nie</string>
@@ -79,10 +79,10 @@
     <string name="compress_photo_no_compress">Moenie Kompakteer</string>
     <string name="action_copy">Kopieer</string>
     <string name="action_paste">Plak</string>
-    <string name="action_cut">Uitsny</string>
+    <string name="action_cut">Uitknip</string>
     <string name="compress_photo_title">Wil u die foto kompakteer?</string>
     <string name="take_photo">Neem die Foto</string>
-    <string name="action_text_copied">"Teks na knipbord  gekopieer"</string>
+    <string name="action_text_copied">Teks na knipbord gekopieer</string>
     <string name="insert_table">Tabel invoeg</string>
     <string name="select_insert_options">Kies invoeg-opsies:</string>
     <string name="select_delete_options">Kies verwyder-opsies:</string>
@@ -90,8 +90,8 @@
     <string name="action_delete_worksheet">Verwyder werkblad</string>
     <string name="action_delete_slide">Verwyder skyfie</string>
     <string name="name_already_used">Gegewe naam word reeds in gebruik.</string>
-    <string name="part_name_changed">Die naam vir die seksie is gewysig.</string>
-    <string name="part_deleted">Die seksie is verwyder.</string>
+    <string name="part_name_changed">Die naam vir die gedeelte is gewysig.</string>
+    <string name="part_deleted">Die gedeelte is verwyder.</string>
     <string name="UNO_commands_string_hint">UNO-opdrag</string>
     <string name="UNO_commands_string_type_hint">Tipe</string>
     <string name="UNO_commands_string_value_hint">Waarde</string>
@@ -104,13 +104,13 @@
     <string name="pdf_export_finished">PDF-uitskryf is voltooid</string>
     <string name="unable_to_export_pdf">Kan nie in PDF-formaat uitskryf nie</string>
     <string name="error">Foutief</string>
-    <string name="enter_part_name">Voer die seksienaam in</string>
+    <string name="enter_part_name">Voer gedeeltelike naam in</string>
     <string name="bmp_null">Bmp is nul!</string>
     <string name="page">Bladsy</string>
     <string name="sheet">Blad</string>
     <string name="slide">Skyfie</string>
-    <string name="part">Seksie</string>
-    <string name="highlight_color">Beklemtoningkleur</string>
+    <string name="part">Gedeelte</string>
+    <string name="highlight_color">Beklemtoningskleur</string>
     <string name="font_color">Font Kleur</string>
     <string name="action_rename_slide">Hernoem Skyfie</string>
     <string name="automatic">Automaties</string>

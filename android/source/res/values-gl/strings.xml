@@ -61,7 +61,7 @@
     <string name="compress_photo_smallest_size">Tamaño menor</string>
     <string name="compress_photo_medium_size">Tamaño mediano</string>
     <string name="compress_photo_max_quality">Calidade máxima</string>
-    <string name="compress_photo_title">Desexa comprimir a foto\?</string>
+    <string name="compress_photo_title">Desexa comprimir a foto?</string>
     <string name="action_copy">Copiar</string>
     <string name="action_paste">Pegar</string>
     <string name="action_cut">Cortar</string>
@@ -109,7 +109,7 @@
     <string name="pref_developer_mode_summary">Activar modo de desenvolvemento, no que se poden enviar ordes de UNO dentro da app. Úseo baixo a súa responsabilidade.</string>
     <string name="message_saved">Gardar completo</string>
     <string name="password">Contrasinal</string>
-    <string name="save_alert_dialog_title">Gardar o documento antes de pechar\?</string>
+    <string name="save_alert_dialog_title">Gardar o documento antes de pechar?</string>
     <string name="action_cancel">Cancelar</string>
     <string name="calc_alert_double_click_optimal_length">Suxestión: Tocar dúas veces nunha cabeceira estabelece a largura/altura ideais.</string>
     <string name="action_pwd_dialog_title">Introduza contrasinal</string>
