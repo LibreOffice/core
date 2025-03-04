@@ -59,7 +59,7 @@
     <string name="calc_optimal_height">Altura ideal</string>
     <string name="calc_optimal_width">Largura ideal</string>
     <string name="calc_optimal_length_confirm">OK</string>
-    <string name="save_alert_dialog_title">Salvar documento antes de fechar\?</string>
+    <string name="save_alert_dialog_title">Salvar documento antes de fechar?</string>
     <string name="action_add_worksheet">Adicionar planilha</string>
     <string name="action_pwd_dialog_OK">OK</string>
     <string name="calc_optimal_length_default_text">Insira o comprimento extra em centésimos de milímetro.</string>
@@ -75,7 +75,7 @@
     <string name="compress_photo_medium_size">Tamanho médio</string>
     <string name="compress_photo_max_quality">Qualidade máxima</string>
     <string name="compress_photo_no_compress">Não comprimir</string>
-    <string name="compress_photo_title">Deseja comprimir a foto\?</string>
+    <string name="compress_photo_title">Deseja comprimir a foto?</string>
     <string name="action_copy">Copiar</string>
     <string name="action_paste">Colar</string>
     <string name="action_cut">Cortar</string>

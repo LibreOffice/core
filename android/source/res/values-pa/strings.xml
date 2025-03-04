@@ -91,7 +91,7 @@
     <string name="search_find_previous">ਪਿੱਛੇ ਲੱਭੋ</string>
     <string name="file_icon_desc">ਫਾਈਲ-ਆਈਕਾਨ</string>
     <string name="message_saving">…ਦਸਤਾਵੇਜ਼ ਸੰਭਾਲਿਆ ਜਾ ਰਿਹਾ ਹੈ</string>
-    <string name="save_alert_dialog_title">ਕੀ ਬੰਦ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਦਸਤਾਵੇਜ਼ ਨੂੰ ਸੰਭਾਲਣਾ ਹੈ\?</string>
+    <string name="save_alert_dialog_title">ਕੀ ਬੰਦ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਦਸਤਾਵੇਜ਼ ਨੂੰ ਸੰਭਾਲਣਾ ਹੈ?</string>
     <string name="action_text_copied">ਲਿਖਤ ਨੂੰ ਕਲਿੱਪਬੋਰਡ ਵਿੱਚ ਕਾਪੀ ਗਿਆ</string>
     <string name="action_add_slide">ਸਲਾਈਡ ਜੋੜੋ</string>
     <string name="take_photo">ਫੋਟੋ ਲਵੋ</string>
@@ -102,7 +102,7 @@
     <string name="action_rename_slide">ਸਲਾਈਡ ਦਾ ਨਾਂ ਬਦਲੋ</string>
     <string name="calc_optimal_length">ਅਨੁਕੂਲ ਲੰਬਾਈ</string>
     <string name="calc_optimal_height">ਉਚਾਈ ਅਨੁਕੂਲ ਕਰੋ</string>
-    <string name="compress_photo_title">ਕੀ ਤੁਸੀਂ ਫੋਟੋ ਨੂੰ ਕੰਪਰੈੱਸ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ\?</string>
+    <string name="compress_photo_title">ਕੀ ਤੁਸੀਂ ਫੋਟੋ ਨੂੰ ਕੰਪਰੈੱਸ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?</string>
     <string name="action_UNO_commands">UNO ਕਮਾਂਡ ਭੇਜੋ</string>
     <string name="UNO_commands_string_hint">UNO ਕਮਾਂਡ</string>
     <string name="UNO_commands_string_type_hint">ਕਿਸਮ</string>

@@ -18,7 +18,7 @@
     <string name="new_spreadsheet">Új táblázat</string>
     <string name="select_file_to_open">Fájl kiválasztása</string>
     <string name="action_save_as">Mentés másként…</string>
-    <string name="save_alert_dialog_title">Bezárás előtt menti a dokumentumot\?</string>
+    <string name="save_alert_dialog_title">Bezárás előtt menti a dokumentumot?</string>
     <string name="message_saving_failed">A dokumentum mentése meghiúsult.</string>
     <string name="calc_optimal_length">Optimális hossz</string>
     <string name="new_drawing">Új rajz</string>
@@ -109,7 +109,7 @@
     <string name="alert_ok">OK</string>
     <string name="UNO_commands_string_value_hint">Érték</string>
     <string name="sheet">Munkalap</string>
-    <string name="compress_photo_title">Szeretné tömöríteni a fényképet\?</string>
+    <string name="compress_photo_title">Szeretné tömöríteni a fényképet?</string>
     <string name="take_photo">Fényképezés</string>
     <string name="unable_to_save">Nem lehet menteni a fájlt</string>
     <string name="insert_table">Táblázat beszúrása</string>

@@ -61,7 +61,7 @@
     <string name="compress_photo_smallest_size">Maint Lleiaf</string>
     <string name="compress_photo_medium_size">Maint Canolig</string>
     <string name="compress_photo_max_quality">Ansawdd Gorau</string>
-    <string name="compress_photo_title">Hoffech chi gywasgu\'r ffoto\?</string>
+    <string name="compress_photo_title">Hoffech chi gywasgu\'r ffoto?</string>
     <string name="action_cut">Torri</string>
     <string name="action_back">Nôl</string>
     <string name="insert_table">Mewnosod tabl</string>
@@ -104,7 +104,7 @@
     <string name="select_photo">Dewis Ffoto</string>
     <string name="name_already_used">Mae\'r enw eisoes yn cael ei ddefnyddio.</string>
     <string name="action_search">Chwilio</string>
-    <string name="save_alert_dialog_title">Cadw\'r ddogfen cyn cau\?</string>
+    <string name="save_alert_dialog_title">Cadw\'r ddogfen cyn cau?</string>
     <string name="calc_optimal_width">Lled Gorau</string>
     <string name="action_UNO_commands">Anfon Cmd UNO</string>
     <string name="message_saving_failed">Methodd cadw dogfen</string>

@@ -108,4 +108,12 @@
     <string name="compress_photo_no_compress">Moenie Kompakteer</string>
     <string name="compress_photo_title">Wil u die foto kompakteer?</string>
     <string name="action_delete_worksheet">Verwyder werkblad</string>
+    <string name="calc_optimal_length">Optimale Lengte</string>
+    <string name="calc_show">Vertoon</string>
+    <string name="pref_experimental_editing">Eksperimentele Modus</string>
+    <string name="pref_experimental_editing_summary">Skakel die eksperimentele wysigingsmodus aan. Gebruik op eie risiko.</string>
+    <string name="calc_adjust_width">Wydte Aanpas</string>
+    <string name="calc_adjust_length">Lengte Aanpas</string>
+    <string name="calc_adjust_height">Hoogte Aanpas</string>
+    <string name="action_print">UItdruk</string>
 </resources>

@@ -62,7 +62,7 @@
     <string name="compress_photo_smallest_size">Kleinste maat</string>
     <string name="compress_photo_medium_size">Middelgroot</string>
     <string name="compress_photo_no_compress">Niet comprimeren</string>
-    <string name="compress_photo_title">Wilt u de foto comprimeren\?</string>
+    <string name="compress_photo_title">Wilt u de foto comprimeren?</string>
     <string name="action_paste">Plakken</string>
     <string name="action_cut">Knippen</string>
     <string name="insert_table">Tabel invoegen</string>
@@ -91,7 +91,7 @@
     <string name="unable_to_save">Kan bestand niet opslaan</string>
     <string name="error">Fout</string>
     <string name="enter_part_name">Voer de sectienaam in</string>
-    <string name="bmp_null">Bmp is null!</string>
+    <string name="bmp_null">Bmp is ongeldig</string>
     <string name="sheet">Blad</string>
     <string name="slide">Dia</string>
     <string name="part">Sectie</string>
@@ -107,7 +107,7 @@
     <string name="pref_developer_mode_summary">Schakel de ontwikkelaarsmodus in, waarin u UNO-opdrachten binnen de app kunt verzenden. Gebruik op eigen risico.</string>
     <string name="action_save_as">Opslaan als…</string>
     <string name="message_saved">Opslaan voltooit</string>
-    <string name="save_alert_dialog_title">Het document opslaan voordat u het sluit\?</string>
+    <string name="save_alert_dialog_title">Het document opslaan voordat u het sluit?</string>
     <string name="calc_optimal_length_default_text">Extra lengte invoeren in 100ste/mm</string>
     <string name="compress_photo_max_quality">Maximale kwaliteit</string>
     <string name="action_copy">Kopiëren</string>
