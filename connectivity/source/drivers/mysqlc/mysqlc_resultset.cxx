@@ -108,7 +108,7 @@ OResultSet::OResultSet(OConnection& rConn, OCommonStatement* pStmt, MYSQL_RES* p
     : OResultSet_BASE(m_aMutex)
     , OPropertySetHelper(OResultSet_BASE::rBHelper)
     , m_pMysql(rConn.getMysqlConnection())
-    , m_aStatement(css::uno::Reference(cppu::getXWeak(pStmt)))
+    , m_aStatement(pStmt)
     , m_pResult(pResult)
     , m_encoding(_encoding)
 {
@@ -672,7 +672,7 @@ uno::Reference<uno::XInterface> SAL_CALL OResultSet::getStatement()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    return m_aStatement.get();
+    return cppu::getXWeak(m_aStatement.get().get());
 }
 
 sal_Bool SAL_CALL OResultSet::rowDeleted()
