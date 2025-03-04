@@ -51,7 +51,7 @@ void OEvoabDriver::disposing()
     // when driver will be destroyed so all our connections have to be destroyed as well
     for (const auto& rxConnection : m_xConnections)
     {
-        Reference< XComponent > xComp(rxConnection.get(), UNO_QUERY);
+        rtl::Reference< OEvoabConnection > xComp(rxConnection);
         if (xComp.is())
         {
             try
@@ -65,7 +65,6 @@ void OEvoabDriver::disposing()
         }
     }
     m_xConnections.clear();
-    connectivity::OWeakRefArray().swap(m_xConnections); // this really clears
 
     ODriver_BASE::disposing();
 }
@@ -104,7 +103,7 @@ Reference< XConnection > SAL_CALL OEvoabDriver::connect( const OUString& url, co
 
     rtl::Reference<OEvoabConnection> pCon = new OEvoabConnection( *this );
     pCon->construct(url,info);
-    m_xConnections.push_back(WeakReferenceHelper(*pCon));
+    m_xConnections.push_back(pCon);
 
     return pCon;
 }

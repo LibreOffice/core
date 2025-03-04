@@ -27,11 +27,14 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <connectivity/CommonTools.hxx>
+#include <unotools/weakref.hxx>
 
 inline constexpr OUString EVOAB_DRIVER_IMPL_NAME = u"com.sun.star.comp.sdbc.evoab.OEvoabDriver"_ustr;
 
 namespace connectivity::evoab
     {
+        class OEvoabConnection;
+
         typedef ::cppu::WeakComponentImplHelper< css::sdbc::XDriver,
                                                  css::lang::XServiceInfo > ODriver_BASE;
 
@@ -39,7 +42,7 @@ namespace connectivity::evoab
         class OEvoabDriver final : public ODriver_BASE
         {
             ::osl::Mutex                                        m_aMutex;
-            connectivity::OWeakRefArray                         m_xConnections;
+            std::vector<unotools::WeakReference<OEvoabConnection>> m_xConnections;
             css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 
         public:
