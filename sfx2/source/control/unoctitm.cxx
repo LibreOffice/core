@@ -1158,6 +1158,8 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"Underline", { PayloadType::IsActivePayload, true } },
         { u"ModifiedStatus", { PayloadType::IsActivePayload, true } },
         { u"TrackChanges", { PayloadType::IsActivePayload, true } },
+        { u"TrackChangesInThisView", { PayloadType::IsActivePayload, true } },
+        { u"TrackChangesInAllViews", { PayloadType::IsActivePayload, true } },
         { u"ShowTrackedChanges", { PayloadType::IsActivePayload, true } },
         { u"AlignLeft", { PayloadType::IsActivePayload, true } },
         { u"AlignHorizontalCenter", { PayloadType::IsActivePayload, true } },

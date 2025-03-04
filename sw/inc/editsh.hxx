@@ -951,7 +951,7 @@ public:
 
     /// For Redlining.
     RedlineFlags GetRedlineFlags() const;
-    void SetRedlineFlags( RedlineFlags eMode );
+    void SetRedlineFlags( RedlineFlags eMode, bool bRecordAllViews = true );
     bool IsRedlineOn() const;
     SwRedlineTable::size_type GetRedlineCount() const;
     const SwRangeRedline& GetRedline( SwRedlineTable::size_type nPos ) const;

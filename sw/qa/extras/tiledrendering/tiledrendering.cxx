@@ -4850,7 +4850,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewEnableOne)
     SfxLokHelper::setView(nView1);
     aView1.m_aStateChanges.clear();
     aView2.m_aStateChanges.clear();
-    comphelper::dispatchCommand(".uno:TrackChanges", {});
+    comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
 
     // Then make sure view1 gets a state track changes state change, but not view2:
     // Filter out .uno:ModifiedStatus=true, which is not interesting here.
@@ -4860,13 +4860,13 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewEnableOne)
     CPPUNIT_ASSERT(aRecord2.empty());
 
     // And given a reset state (both view1 and view2 recording is disabled):
-    comphelper::dispatchCommand(".uno:TrackChanges", {});
+    comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
 
     // When recording changes in view2:
     SfxLokHelper::setView(nView2);
     aView1.m_aStateChanges.clear();
     aView2.m_aStateChanges.clear();
-    comphelper::dispatchCommand(".uno:TrackChanges", {});
+    comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
 
     // Then make sure view2 gets a state track changes state change, but not view1:
     CPPUNIT_ASSERT(aView1.m_aStateChanges.empty());
@@ -4886,13 +4886,13 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewEnableBoth)
     int nView2 = SfxLokHelper::getView();
     SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
     SfxLokHelper::setView(nView1);
-    comphelper::dispatchCommand(".uno:TrackChanges", {});
+    comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
     SfxLokHelper::setView(nView2);
     CPPUNIT_ASSERT(pWrtShell1->GetViewOptions()->IsRedlineRecordingOn());
     CPPUNIT_ASSERT(!pWrtShell2->GetViewOptions()->IsRedlineRecordingOn());
 
     // When turning on track changes for view2:
-    comphelper::dispatchCommand(".uno:TrackChanges", {});
+    comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
 
     // Then make sure both views have track changes turned on:
     CPPUNIT_ASSERT(pWrtShell1->GetViewOptions()->IsRedlineRecordingOn());
@@ -4915,7 +4915,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewInsert)
     int nView2 = SfxLokHelper::getView();
     SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
     SfxLokHelper::setView(nView1);
-    comphelper::dispatchCommand(".uno:TrackChanges", {});
+    comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
 
     // When view 1 types:
     pWrtShell1->SttEndDoc(/*bStt=*/true);
@@ -4949,7 +4949,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewDelete)
     int nView2 = SfxLokHelper::getView();
     SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
     SfxLokHelper::setView(nView1);
-    comphelper::dispatchCommand(".uno:TrackChanges", {});
+    comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
 
     // When view 1 deletes:
     pWrtShell1->SttEndDoc(/*bStt=*/true);
@@ -4969,6 +4969,39 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewDelete)
     // - Actual  : 2
     // i.e. the deletion in view 2 was recorded.
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pWrtShell2->GetRedlineCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerDocInsert)
+{
+    // Given 2 views, view 1 turns on per-doc change recording:
+    SwXTextDocument* pXTextDocument = createDoc();
+    CPPUNIT_ASSERT(pXTextDocument);
+    ViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell1->Insert(u"X"_ustr);
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    int nView2 = SfxLokHelper::getView();
+    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SfxLokHelper::setView(nView1);
+    comphelper::dispatchCommand(".uno:TrackChanges", {});
+
+    // When view 1 types:
+    pWrtShell1->SttEndDoc(/*bStt=*/true);
+    pWrtShell1->Insert(u"A"_ustr);
+    // Then make sure a redline is created:
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pWrtShell1->GetRedlineCount());
+
+    // When view 2 types:
+    SfxLokHelper::setView(nView2);
+    pWrtShell2->SttEndDoc(/*bStt=*/false);
+    pWrtShell2->Insert(u"Z"_ustr);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. track changes recording was unconditionally per-view.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pWrtShell2->GetRedlineCount());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

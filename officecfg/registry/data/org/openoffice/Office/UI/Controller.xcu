@@ -579,6 +579,20 @@
           <value>statisticsmenu</value>
         </prop>
       </node>
+      <node oor:name="c46" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:RecordTrackedChangesMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>recordtrackedchanges</value>
+        </prop>
+      </node>
       <node oor:name="WindowListMenu" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:WindowList</value>
@@ -805,6 +819,20 @@
         </prop>
         <prop oor:name="Value">
           <value>.uno:ShowTrackedChangesMenu</value>
+        </prop>
+      </node>
+      <node oor:name="RecordTrackedChangesController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:TrackChanges</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>.uno:RecordTrackedChangesMenu</value>
         </prop>
       </node>
       <node oor:name="ConnectorToolBox" oor:op="replace">

@@ -205,6 +205,9 @@ class SwUINumRuleItem;
 #define FN_SET_TRACKED_DELETIONS_IN_MARGIN     (FN_VIEW + 68)  /* Show final text (deletions in margin) */
 #define FN_SET_TRACKED_INSERTIONS_IN_MARGIN    (FN_VIEW + 69)  /* Show original text (insertions in margin) */
 #define FN_OUTLINE_LEVELS_SHOWN                (FN_VIEW + 70)
+#define FN_RECORD_TRACKED_CHANGES_MENU         (FN_VIEW + 71)  /* Menu for the track changes record modes */
+#define FN_TRACK_CHANGES_IN_THIS_VIEW          (FN_VIEW + 72)  /* Record track changes only in this view */
+#define FN_TRACK_CHANGES_IN_ALL_VIEWS          (FN_VIEW + 73)  /* Record track changes only in all views */
 
 // Region: Insert
 #define FN_INSERT_BOOKMARK      (FN_INSERT + 2 )  /* Bookmark */

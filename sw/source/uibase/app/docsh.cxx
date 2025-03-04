@@ -1371,7 +1371,7 @@ bool SwDocShell::HasChangeRecordProtection() const
     return m_pWrtShell->getIDocumentRedlineAccess().GetRedlinePassword().hasElements();
 }
 
-void SwDocShell::SetChangeRecording( bool bActivate, bool bLockAllViews )
+void SwDocShell::SetChangeRecording( bool bActivate, bool bLockAllViews, bool bRecordAllViews )
 {
     RedlineFlags nOn = bActivate ? RedlineFlags::On : RedlineFlags::NONE;
     RedlineFlags nMode = m_pWrtShell->GetRedlineFlags();
@@ -1379,11 +1379,11 @@ void SwDocShell::SetChangeRecording( bool bActivate, bool bLockAllViews )
     {
         // tdf#107870: prevent jumping to cursor
         auto aViewGuard(LockAllViews());
-        m_pWrtShell->SetRedlineFlagsAndCheckInsMode( (nMode & ~RedlineFlags::On) | nOn );
+        m_pWrtShell->SetRedlineFlagsAndCheckInsMode( (nMode & ~RedlineFlags::On) | nOn, bRecordAllViews );
     }
     else
     {
-        m_pWrtShell->SetRedlineFlagsAndCheckInsMode( (nMode & ~RedlineFlags::On) | nOn );
+        m_pWrtShell->SetRedlineFlagsAndCheckInsMode( (nMode & ~RedlineFlags::On) | nOn, bRecordAllViews );
     }
 }
 

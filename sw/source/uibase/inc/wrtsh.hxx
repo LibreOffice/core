@@ -172,7 +172,7 @@ public:
     void    SetInsMode( bool bOn = true );
     void    ToggleInsMode() { SetInsMode( !m_bIns ); }
     bool    IsInsMode() const { return m_bIns; }
-    void    SetRedlineFlagsAndCheckInsMode( RedlineFlags eMode );
+    void    SetRedlineFlagsAndCheckInsMode( RedlineFlags eMode, bool bRecordAllViews = true );
 
     void    EnterSelFrameMode(const Point *pStartDrag = nullptr);
     void    LeaveSelFrameMode();

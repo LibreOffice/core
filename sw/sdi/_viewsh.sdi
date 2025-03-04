@@ -149,6 +149,25 @@ interface BaseTextEditView
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
+    FN_TRACK_CHANGES_IN_THIS_VIEW
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    FN_TRACK_CHANGES_IN_ALL_VIEWS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    FN_RECORD_TRACKED_CHANGES_MENU
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     FN_REDLINE_SHOW // status()
     [
         ExecMethod = Execute;

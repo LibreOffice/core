@@ -107,14 +107,14 @@ public:
         @param eMode
         [in] the new redline mode.
     */
-    virtual void SetRedlineFlags_intern(/*[in]*/RedlineFlags eMode) = 0;
+    virtual void SetRedlineFlags_intern(/*[in]*/RedlineFlags eMode, bool bRecordAllViews = true) = 0;
 
     /** Set a new redline mode.
 
         @param eMode
         [in] the new redline mode.
     */
-    virtual void SetRedlineFlags(/*[in]*/RedlineFlags eMode) = 0;
+    virtual void SetRedlineFlags(/*[in]*/RedlineFlags eMode, bool bRecordAllViews = true) = 0;
 
     /** Query if redlining is on.
 
