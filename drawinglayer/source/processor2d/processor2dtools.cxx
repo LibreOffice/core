@@ -108,35 +108,41 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
     // possibility to deactivate for easy test/request testing
     static bool bUsePrimitiveRenderer(nullptr == std::getenv("DISABLE_SYSTEM_DEPENDENT_PRIMITIVE_RENDERER"));
 
-    if (bUsePrimitiveRenderer
+    if (bUsePrimitiveRenderer)
+    {
         // tdf#165061 do not use SDPR when RTL is enabled, SDPR is designed
         // for rendering EditViews and does not support RTL (yet?)
-        && !rTargetOutDev.IsRTLEnabled())
-    {
-        SystemGraphicsData aData(rTargetOutDev.GetSystemGfxData());
+        // tdf#165437 also need to check for HasMirroredGraphics to
+        // get *all* mirrorings covered
+        const bool bMirrored(rTargetOutDev.IsRTLEnabled() || rTargetOutDev.HasMirroredGraphics());
 
-        // create CairoPixelProcessor2D, make use of the possibility to
-        // add an initial clip relative to the real pixel dimensions of
-        // the target surface. This is e.g. needed here due to the
-        // existence of 'virtual' target surfaces that internally use an
-        // offset and limited pixel size, mainly used for UI elements.
-        // let the CairoPixelProcessor2D do this, it has internal,
-        // system-specific possibilities to do that in an elegant and
-        // efficient way (using cairo_surface_create_for_rectangle).
-        std::unique_ptr<CairoPixelProcessor2D> aRetval(
-            std::make_unique<CairoPixelProcessor2D>(
-                rViewInformation2D, static_cast<cairo_surface_t*>(aData.pSurface),
-                rTargetOutDev.GetOutOffXPixel(), rTargetOutDev.GetOutOffYPixel(),
-                rTargetOutDev.GetOutputWidthPixel(), rTargetOutDev.GetOutputHeightPixel()));
-
-        if (aRetval->valid())
+        if (!bMirrored)
         {
-            // if we construct a CairoPixelProcessor2D from OutputDevice,
-            // additionally set the XGraphics that can be obtained from
-            // there. It may be used e.g. to render FormControls directly
-            aRetval->setXGraphics(rTargetOutDev.CreateUnoGraphics());
+            SystemGraphicsData aData(rTargetOutDev.GetSystemGfxData());
 
-            return aRetval;
+            // create CairoPixelProcessor2D, make use of the possibility to
+            // add an initial clip relative to the real pixel dimensions of
+            // the target surface. This is e.g. needed here due to the
+            // existence of 'virtual' target surfaces that internally use an
+            // offset and limited pixel size, mainly used for UI elements.
+            // let the CairoPixelProcessor2D do this, it has internal,
+            // system-specific possibilities to do that in an elegant and
+            // efficient way (using cairo_surface_create_for_rectangle).
+            std::unique_ptr<CairoPixelProcessor2D> aRetval(
+                std::make_unique<CairoPixelProcessor2D>(
+                    rViewInformation2D, static_cast<cairo_surface_t*>(aData.pSurface),
+                    rTargetOutDev.GetOutOffXPixel(), rTargetOutDev.GetOutOffYPixel(),
+                    rTargetOutDev.GetOutputWidthPixel(), rTargetOutDev.GetOutputHeightPixel()));
+
+            if (aRetval->valid())
+            {
+                // if we construct a CairoPixelProcessor2D from OutputDevice,
+                // additionally set the XGraphics that can be obtained from
+                // there. It may be used e.g. to render FormControls directly
+                aRetval->setXGraphics(rTargetOutDev.CreateUnoGraphics());
+
+                return aRetval;
+            }
         }
     }
 #endif
