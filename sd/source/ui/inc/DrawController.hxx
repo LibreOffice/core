@@ -139,7 +139,7 @@ public:
     */
     void BroadcastContextChange() const;
     void NotifyAccUpdate();
-    void fireChangeLayer( css::uno::Reference< css::drawing::XLayer>* pCurrentLayer ) noexcept;
+    void fireChangeLayer( const css::uno::Reference< css::drawing::XLayer>& xNewLayer ) noexcept;
     // change the parameter to int
     //void fireSwitchCurrentPage( String pageName) throw();
     void fireSwitchCurrentPage( sal_Int32 pageIndex) noexcept;
@@ -279,7 +279,7 @@ private:
     using cppu::OPropertySetHelper::disposing;
     using cppu::OPropertySetHelper::getFastPropertyValue;
 
-    css::uno::Reference< css::drawing::XLayer>* mpCurrentLayer;
+    css::uno::Reference< css::drawing::XLayer> mxCurrentLayer;
 
     const css::uno::Type m_aSelectionTypeIdentifier;
 

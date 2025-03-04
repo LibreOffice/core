@@ -631,7 +631,7 @@ void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
             *this,
             *GetView()));
         css::uno::Reference< css::drawing::XLayer> rLayer = pUnoDrawView->getActiveLayer();
-        GetViewShellBase().GetDrawController()->fireChangeLayer( &rLayer );
+        GetViewShellBase().GetDrawController()->fireChangeLayer( rLayer );
     }
 }
 

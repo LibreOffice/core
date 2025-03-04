@@ -61,7 +61,6 @@ DrawController::DrawController (ViewShellBase& rBase) noexcept
     : DrawControllerInterfaceBase(&rBase),
       BroadcastHelperOwner(SfxBaseController::m_aMutex),
       OPropertySetHelper(BroadcastHelperOwner::maBroadcastHelper),
-      mpCurrentLayer(nullptr),
       m_aSelectionTypeIdentifier(
         cppu::UnoType<view::XSelectionChangeListener>::get()),
       mpBase(&rBase),
@@ -452,19 +451,19 @@ void DrawController::NotifyAccUpdate()
     fire (&nHandle, &aNewValue, &aOldValue, 1, false);
 }
 
-void DrawController::fireChangeLayer( css::uno::Reference< css::drawing::XLayer>* pCurrentLayer ) noexcept
+void DrawController::fireChangeLayer( const css::uno::Reference< css::drawing::XLayer>& xNewLayer ) noexcept
 {
-    if( pCurrentLayer != mpCurrentLayer )
+    if( xNewLayer != mxCurrentLayer )
     {
         sal_Int32 nHandle = PROPERTY_ACTIVE_LAYER;
 
-        Any aNewValue ( *pCurrentLayer);
+        Any aNewValue ( *xNewLayer);
 
         Any aOldValue ;
 
         fire (&nHandle, &aNewValue, &aOldValue, 1, false);
 
-        mpCurrentLayer = pCurrentLayer;
+        mxCurrentLayer = xNewLayer;
     }
 }
 
