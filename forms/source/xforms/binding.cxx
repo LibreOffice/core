@@ -644,13 +644,22 @@ void Binding::valueModified()
     Reference<XInterface> xSource = static_cast<XPropertySet*>( this );
     ::std::for_each( maModifyListeners.begin(),
               maModifyListeners.end(),
-                     ::std::bind( lcl_modified, std::placeholders::_1, xSource ) );
+                    [xSource](const css::uno::Reference<css::util::XModifyListener>& xListener)
+                    {
+                        return lcl_modified(xListener, xSource);
+                    });
     ::std::for_each( maListEntryListeners.begin(),
               maListEntryListeners.end(),
-                     ::std::bind( lcl_listentry, std::placeholders::_1, xSource ) );
+                    [xSource](const css::uno::Reference<css::form::binding::XListEntryListener>& xListener)
+                    {
+                        return lcl_listentry(xListener,xSource);
+                    });
     ::std::for_each( maValidityListeners.begin(),
               maValidityListeners.end(),
-                     ::std::bind( lcl_validate, std::placeholders::_1, xSource ) );
+                    [xSource](const css::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener)
+                    {
+                        lcl_validate(xListener, xSource);
+                    });
 
     // now distribute MIPs to children
     if( xNode.is() )

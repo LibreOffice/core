@@ -3970,10 +3970,22 @@ SvNFEngine::Accessor SvNFEngine::GetRWPolicy(SvNFFormatData& rFormatData)
 {
     return
     {
-        std::bind(SvNFEngine::GetCLOffsetRW, std::ref(rFormatData), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3),
-        std::bind(SvNFEngine::CacheFormatRW, std::ref(rFormatData), std::placeholders::_1, std::placeholders::_2),
-        std::bind(SvNFEngine::FindFormatRW, std::ref(rFormatData), std::placeholders::_1),
-        std::bind(SvNFEngine::DefaultCurrencyRW, std::ref(rFormatData), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4)
+        [&rFormatData](SvNFLanguageData& rCurrentLanguage, const NativeNumberWrapper& rNatNum, LanguageType eLnge)
+        {
+            return SvNFEngine::GetCLOffsetRW(rFormatData, rCurrentLanguage, rNatNum, eLnge);
+        },
+        [&rFormatData](sal_uInt32 nSearch, sal_uInt32 nFormat)
+        {
+            return SvNFEngine::CacheFormatRW(rFormatData, nSearch, nFormat);
+        },
+        [&rFormatData](sal_uInt32 nSearch)
+        {
+            return SvNFEngine::FindFormatRW(rFormatData, nSearch);
+        },
+        [&rFormatData](SvNFLanguageData& rCurrentLanguage, const NativeNumberWrapper& rNatNum, sal_uInt32 CLOffset, LanguageType eLnge)
+        {
+            return SvNFEngine::DefaultCurrencyRW(rFormatData, rCurrentLanguage, rNatNum, CLOffset, eLnge);
+        }
     };
 }
 
@@ -3993,10 +4005,22 @@ SvNFEngine::Accessor SvNFEngine::GetROPolicy(const SvNFFormatData& rFormatData, 
     assert(g_CurrencyTableInitialized && "ensure PrepForRoMode is called");
     return
     {
-        std::bind(SvNFEngine::GetCLOffsetRO, std::ref(rFormatData), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3),
-        std::bind(SvNFEngine::CacheFormatRO, std::ref(rFormatCache), std::placeholders::_1, std::placeholders::_2),
-        std::bind(SvNFEngine::FindFormatRO, std::ref(rFormatData), std::ref(rFormatCache), std::placeholders::_1),
-        std::bind(SvNFEngine::DefaultCurrencyRO, std::ref(rFormatData), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4)
+        [&rFormatData](SvNFLanguageData& rCurrentLanguage, const NativeNumberWrapper& rNatNum, LanguageType eLnge)
+        {
+            return SvNFEngine::GetCLOffsetRO(rFormatData, rCurrentLanguage, rNatNum, eLnge);
+        },
+        [&rFormatCache](sal_uInt32 nSearch, sal_uInt32 nFormat)
+        {
+            return SvNFEngine::CacheFormatRO(rFormatCache, nSearch, nFormat);
+        },
+        [&rFormatData, rFormatCache](sal_uInt32 nSearch)
+        {
+            return SvNFEngine::FindFormatRO(rFormatData, rFormatCache, nSearch);
+        },
+        [&rFormatData](SvNFLanguageData& rCurrentLanguage, const NativeNumberWrapper& rNatNum, sal_uInt32 CLOffset, LanguageType eLnge)
+        {
+            return SvNFEngine::DefaultCurrencyRO(rFormatData, rCurrentLanguage, rNatNum, CLOffset, eLnge);
+        }
     };
 }
 

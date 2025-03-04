@@ -187,70 +187,100 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
         case DIST_UNIFORM:
         {
             std::uniform_real_distribution<> distribution(parameter1, parameter2);
-            auto rng = std::bind(distribution, seed);
+            auto rng = [&distribution, seed]() mutable
+            {
+                return distribution(seed);
+            };
             GenerateNumbers(rng, STR_DISTRIBUTION_UNIFORM_REAL, aDecimalPlaces);
             break;
         }
         case DIST_UNIFORM_INTEGER:
         {
             std::uniform_int_distribution<sal_Int64> distribution(parameterInteger1, parameterInteger2);
-            auto rng = std::bind(distribution, seed);
+            auto rng = [&distribution, seed]() mutable
+            {
+                return distribution(seed);
+            };
             GenerateNumbers(rng, STR_DISTRIBUTION_UNIFORM_INTEGER, aDecimalPlaces);
             break;
         }
         case DIST_NORMAL:
         {
             std::normal_distribution<> distribution(parameter1, parameter2);
-            auto rng = std::bind(distribution, seed);
+            auto rng = [&distribution, seed]() mutable
+            {
+                return distribution(seed);
+            };
             GenerateNumbers(rng, STR_DISTRIBUTION_NORMAL, aDecimalPlaces);
             break;
         }
         case DIST_CAUCHY:
         {
             std::cauchy_distribution<> distribution(parameter1);
-            auto rng = std::bind(distribution, seed);
+            auto rng = [&distribution, seed]() mutable
+            {
+                return distribution(seed);
+            };
             GenerateNumbers(rng, STR_DISTRIBUTION_CAUCHY, aDecimalPlaces);
             break;
         }
         case DIST_BERNOULLI:
         {
             std::bernoulli_distribution distribution(parameter1);
-            auto rng = std::bind(distribution, seed);
+            auto rng = [&distribution, seed]() mutable
+            {
+                return distribution(seed);
+            };
             GenerateNumbers(rng, STR_DISTRIBUTION_BERNOULLI, aDecimalPlaces);
             break;
         }
         case DIST_BINOMIAL:
         {
             std::binomial_distribution<> distribution(parameterInteger2, parameter1);
-            auto rng = std::bind(distribution, seed);
+            auto rng = [&distribution, seed]() mutable
+            {
+                return distribution(seed);
+            };
             GenerateNumbers(rng, STR_DISTRIBUTION_BINOMIAL, aDecimalPlaces);
             break;
         }
         case DIST_CHI_SQUARED:
         {
             std::chi_squared_distribution<> distribution(parameter1);
-            auto rng = std::bind(distribution, seed);
+            auto rng = [&distribution, seed]() mutable
+            {
+                return distribution(seed);
+            };
             GenerateNumbers(rng, STR_DISTRIBUTION_CHI_SQUARED, aDecimalPlaces);
             break;
         }
         case DIST_GEOMETRIC:
         {
             std::geometric_distribution<> distribution(parameter1);
-            auto rng = std::bind(distribution, seed);
+            auto rng = [&distribution, seed]() mutable
+            {
+                return distribution(seed);
+            };
             GenerateNumbers(rng, STR_DISTRIBUTION_GEOMETRIC, aDecimalPlaces);
             break;
         }
         case DIST_NEGATIVE_BINOMIAL:
         {
             std::negative_binomial_distribution<> distribution(parameterInteger2, parameter1);
-            auto rng = std::bind(distribution, seed);
+            auto rng = [&distribution, seed]() mutable
+            {
+                return distribution(seed);
+            };
             GenerateNumbers(rng, STR_DISTRIBUTION_NEGATIVE_BINOMIAL, aDecimalPlaces);
             break;
         }
         case DIST_POISSON:
         {
             std::poisson_distribution<> distribution(parameter1);
-            auto rng = std::bind(distribution, seed);
+            auto rng = [&distribution, seed]() mutable
+            {
+                return distribution(seed);
+            };
             GenerateNumbers(rng, STR_DISTRIBUTION_POISSON, aDecimalPlaces);
             break;
         }
