@@ -36,7 +36,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <unotools/weakref.hxx>
 
-namespace dbaccess { class OConnection; }
+namespace dbaccess { class OConnection; class OResultSet; }
 
 //  OStatementBase
 
@@ -55,7 +55,7 @@ protected:
     unotools::WeakReference<::dbaccess::OConnection> m_xParent;
     ::osl::Mutex            m_aCancelMutex;
 
-    css::uno::WeakReferenceHelper                   m_aResultSet;
+    unotools::WeakReference<::dbaccess::OResultSet> m_xWeakResultSet;
     css::uno::Reference< css::beans::XPropertySet > m_xAggregateAsSet;
     css::uno::Reference< css::util::XCancellable >  m_xAggregateAsCancellable;
     bool                m_bUseBookmarks;

@@ -187,14 +187,14 @@ Reference< XResultSet >  OPreparedStatement::executeQuery()
 
     disposeResultSet();
 
-    Reference< XResultSet > xResultSet;
+    rtl::Reference< OResultSet > xResultSet;
     Reference< XResultSet > xDrvResultSet = Reference< XPreparedStatement >( m_xAggregateAsSet, UNO_QUERY_THROW )->executeQuery();
     if (xDrvResultSet.is())
     {
         xResultSet = new OResultSet(xDrvResultSet, *this, m_pColumns->isCaseSensitive());
 
         // keep the resultset weak
-        m_aResultSet = xResultSet;
+        m_xWeakResultSet = xResultSet.get();
     }
     return xResultSet;
 }

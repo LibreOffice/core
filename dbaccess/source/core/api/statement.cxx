@@ -123,10 +123,9 @@ void OStatementBase::release() noexcept
 void OStatementBase::disposeResultSet()
 {
     // free the cursor if alive
-    Reference< XComponent > xComp(m_aResultSet.get(), UNO_QUERY);
-    if (xComp.is())
-        xComp->dispose();
-    m_aResultSet.clear();
+    if (auto xRes = m_xWeakResultSet.get())
+        xRes->dispose();
+    m_xWeakResultSet.clear();
 }
 
 // OComponentHelper
@@ -454,7 +453,7 @@ Reference< XResultSet > OStatement::executeQuery( const OUString& _rSQL )
     ::connectivity::checkDisposed(WeakComponentImplHelper::rBHelper.bDisposed);
 
     disposeResultSet();
-    Reference< XResultSet > xResultSet;
+    rtl::Reference< OResultSet > xResultSet;
 
     OUString sSQL( impl_doEscapeProcessing_nothrow( _rSQL ) );
 
@@ -468,7 +467,7 @@ Reference< XResultSet > OStatement::executeQuery( const OUString& _rSQL )
         xResultSet = new OResultSet( xInnerResultSet, *this, bCaseSensitive );
 
         // keep the resultset weak
-        m_aResultSet = xResultSet;
+        m_xWeakResultSet = xResultSet.get();
     }
 
     return xResultSet;
