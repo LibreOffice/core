@@ -1218,6 +1218,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf164176, "tdf164176.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), sPresentation.indexOf("_x000a_"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf165059_moveFromTo)
+{
+    loadAndSave("tdf165059_broken.docx");
+    // Without the fix, exported contains w:move* ouside of move ranges
+    // Outside move range tags ins/del are valid
+    xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(p_XmlDoc);
+    assertXPath(p_XmlDoc, "//w:moveTo"_ostr, 0);
+    assertXPath(p_XmlDoc, "//w:ins"_ostr, 1);
+    assertXPath(p_XmlDoc, "//w:moveFrom"_ostr, 0);
+    assertXPath(p_XmlDoc, "//w:del"_ostr, 1);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
