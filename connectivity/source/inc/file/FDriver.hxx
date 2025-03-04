@@ -25,9 +25,12 @@
 #include <cppuhelper/compbase.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <file/filedllapi.hxx>
+#include <unotools/weakref.hxx>
 
 namespace connectivity::file
     {
+        class OConnection;
+
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver,
                                                    css::lang::XServiceInfo,
                                                    css::sdbcx::XDataDefinitionSupplier> ODriver_BASE;
@@ -37,7 +40,7 @@ namespace connectivity::file
         protected:
             ::osl::Mutex                                        m_aMutex;
 
-            connectivity::OWeakRefArray                         m_xConnections; //  vector containing a list
+            std::vector<unotools::WeakReference<OConnection>>   m_xConnections; //  vector containing a list
                                                                                 //  of all the Connection objects
                                                                                 //  for this Driver
             css::uno::Reference< css::uno::XComponentContext > m_xContext;

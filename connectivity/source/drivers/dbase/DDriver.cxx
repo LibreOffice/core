@@ -66,7 +66,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const S
 
     rtl::Reference<ODbaseConnection> pCon = new ODbaseConnection(this);
     pCon->construct(url,info);
-    m_xConnections.push_back(WeakReferenceHelper(*pCon));
+    m_xConnections.push_back(pCon.get());
 
     return pCon;
 }

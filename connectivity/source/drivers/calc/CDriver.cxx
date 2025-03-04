@@ -70,7 +70,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url,
 
     rtl::Reference<OCalcConnection> pCon = new OCalcConnection(this);
     pCon->construct(url,info);
-    m_xConnections.push_back(WeakReferenceHelper(*pCon));
+    m_xConnections.push_back(pCon.get());
 
     return pCon;
 }

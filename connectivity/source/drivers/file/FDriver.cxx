@@ -50,7 +50,7 @@ void OFileDriver::disposing()
 
     for (auto const& connection : m_xConnections)
     {
-        Reference< XComponent > xComp(connection.get(), UNO_QUERY);
+        rtl::Reference< OConnection > xComp(connection);
         if (xComp.is())
             xComp->dispose();
     }
@@ -85,7 +85,7 @@ Reference< XConnection > SAL_CALL OFileDriver::connect( const OUString& url, con
 
     rtl::Reference<OConnection> pCon = new OConnection(this);
     pCon->construct(url,info);
-    m_xConnections.push_back(WeakReferenceHelper(*pCon));
+    m_xConnections.push_back(pCon);
 
     return pCon;
 }
@@ -176,7 +176,7 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection
     {
         for (auto const& elem : m_xConnections)
         {
-            if (static_cast<OConnection*>( Reference< XConnection >::query(elem.get()).get() ) == pSearchConnection)
+            if (elem.get().get() == pSearchConnection)
                 return pSearchConnection->createCatalog();
         }
     }
