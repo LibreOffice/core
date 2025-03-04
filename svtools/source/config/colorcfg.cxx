@@ -507,10 +507,14 @@ ColorConfig::ColorConfig()
     ++nColorRefCount_Impl;
     m_pImpl->AddListener(this);
     SetupTheme();
+
+    ::Application::AddEventListener( LINK(this, ColorConfig, DataChangedHdl) );
 }
 
 ColorConfig::~ColorConfig()
 {
+    ::Application::RemoveEventListener( LINK(this, ColorConfig, DataChangedHdl) );
+
     if (comphelper::IsFuzzing())
         return;
     std::unique_lock aGuard( ColorMutex_Impl() );
@@ -750,6 +754,20 @@ const OUString& ColorConfig::GetCurrentSchemeName()
 
     m_pImpl->SetCurrentSchemeName(AUTOMATIC_COLOR_SCHEME);
     return m_pImpl->GetLoadedScheme();
+}
+
+IMPL_LINK( ColorConfig, DataChangedHdl, VclSimpleEvent&, rEvent, void )
+{
+    if (rEvent.GetId() == VclEventId::ApplicationDataChanged)
+    {
+        DataChangedEvent* pData = static_cast<DataChangedEvent*>(static_cast<VclWindowEvent&>(rEvent).GetData());
+        if (pData->GetType() == DataChangedEventType::SETTINGS &&
+            pData->GetFlags() & AllSettingsFlags::STYLE)
+        {
+            ThemeColors::SetThemeLoaded(false);
+            SetupTheme();
+        }
+    }
 }
 
 EditableColorConfig::EditableColorConfig() :

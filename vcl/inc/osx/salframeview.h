@@ -112,6 +112,8 @@ enum class SalEvent;
     NSAttributedString* mpLastMarkedText;
     BOOL            mbTextInputWantsNonRepeatKeyDown;
     NSTrackingArea* mpLastTrackingArea;
+
+    BOOL            mbInViewDidChangeEffectiveAppearance;
 }
 +(void)unsetMouseFrame: (AquaSalFrame*)pFrame;
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
@@ -269,6 +271,8 @@ enum class SalEvent;
 -(NSArray *)accessibilitySelectedChildren;
 -(NSArray *)accessibilityChildren;
 -(NSArray <id<NSAccessibilityElement>> *)accessibilityChildrenInNavigationOrder;
+
+-(void)viewDidChangeEffectiveAppearance;
 
 @end
 
