@@ -13,6 +13,20 @@
 
 namespace jsdialog
 {
+bool isIgnored(std::u16string_view rUIFile)
+{
+    if (rUIFile == u"sfx/ui/deck.ui"
+        || rUIFile == u"svt/ui/scrollbars.ui"
+        || rUIFile == u"svx/ui/selectionmenu.ui"
+        || rUIFile == u"svx/ui/stylemenu.ui"
+        || rUIFile == u"svt/ui/tabbuttons.ui"
+        || rUIFile == u"svx/ui/toolbarpopover.ui"
+        || rUIFile == u"svx/ui/toolbarpopover.ui")
+        return true;
+
+    return false;
+}
+
 bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
 {
     // mobile only dialogs
