@@ -561,6 +561,12 @@ QtInstance::ImplCreateDropTarget(const SystemEnvData* pSysEnv)
     return vcl::X11DnDHelper(new QtDropTarget(), pSysEnv->aShellWindow);
 }
 
+const cairo_font_options_t* QtInstance::GetCairoFontOptions()
+{
+    static cairo_font_options_t* gOptions = cairo_font_options_create();
+    return gOptions;
+}
+
 IMPL_LINK_NOARG(QtInstance, updateStyleHdl, Timer*, void)
 {
     SolarMutexGuard aGuard;

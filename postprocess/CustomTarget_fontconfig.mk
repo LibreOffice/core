@@ -22,6 +22,13 @@ endif
 $(gb_CustomTarget_workdir)/postprocess/fontconfig/fc_local.conf:
 	printf '<?xml version="1.0"?>\n<!DOCTYPE fontconfig SYSTEM "/etc/fonts/conf.d/fonts.dtd">\n<fontconfig>\n' >$@
 	cat $(SRCDIR)/extras/source/truetype/symbol/fc_local.snippet >>$@
+ifeq (EMSCRIPTEN,$(OS))
+	cat $(SRCDIR)/extras/source/truetype/symbol/fc_10-antialias.snippet >>$@
+	cat $(SRCDIR)/extras/source/truetype/symbol/fc_10-hinting.snippet >>$@
+	cat $(SRCDIR)/extras/source/truetype/symbol/fc_10-hinting-style.snippet >>$@
+	cat $(SRCDIR)/extras/source/truetype/symbol/fc_10-no-autohint.snippet >>$@
+	cat $(SRCDIR)/extras/source/truetype/symbol/fc_11-lcdfilter-default.snippet >>$@
+endif
 ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
 	cat $(SRCDIR)/external/more_fonts/fc_local.snippet >>$@
 endif
