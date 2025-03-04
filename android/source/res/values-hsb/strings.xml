@@ -33,7 +33,7 @@
     <string name="password">Hesło</string>
     <string name="action_undo">Cofnyć</string>
     <string name="action_redo">Wospjetować</string>
-    <string name="save_alert_dialog_title">Dokument do začinjenja składować\?</string>
+    <string name="save_alert_dialog_title">Dokument do začinjenja składować?</string>
     <string name="save_document">SKŁADOWAĆ</string>
     <string name="action_cancel">Přetorhnyć</string>
     <string name="no_save_document">NĚ</string>
@@ -60,7 +60,7 @@
     <string name="no_camera_found">Žana kamera namakana</string>
     <string name="compress_photo_smallest_size">Najmjeńša wulkosć</string>
     <string name="compress_photo_max_quality">Maksimalna kwalita</string>
-    <string name="compress_photo_title">Chceće foto komprimować\?</string>
+    <string name="compress_photo_title">Chceće foto komprimować?</string>
     <string name="action_copy">Kopěrować</string>
     <string name="action_paste">Zasadźić</string>
     <string name="action_cut">Wutřihać</string>

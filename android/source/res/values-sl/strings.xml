@@ -105,7 +105,7 @@
     <string name="UNO_commands_string_hint">Ukaz UNO</string>
     <string name="message_saving">Shranjevanje dokumenta …</string>
     <string name="calc_optimal_length">Optimalna dolžina</string>
-    <string name="compress_photo_title">Ali želite stisniti fotografijo\?</string>
+    <string name="compress_photo_title">Ali želite stisniti fotografijo?</string>
     <string name="password">Geslo</string>
     <string name="action_copy">Kopiraj</string>
     <string name="calc_insert_before">Vstavi</string>
@@ -113,7 +113,7 @@
     <string name="pref_experimental_editing_summary">Omogočite poskusni način urejanja. Uporabljajte na lastno odgovornost.</string>
     <string name="action_exportToPDF">Izvozi v PDF</string>
     <string name="select_file_to_open">Izberite datoteko, ki jo želite odpreti.</string>
-    <string name="save_alert_dialog_title">Ali želite shraniti dokument pred zapiranjem\?</string>
+    <string name="save_alert_dialog_title">Ali želite shraniti dokument pred zapiranjem?</string>
     <string name="action_text_copied">Besedilo je kopirano v odložišče</string>
     <string name="calc_alert_double_click_optimal_length">Namig: dvakrat tapnite glavo, da nastavite optimalno širino/višino.</string>
 </resources>

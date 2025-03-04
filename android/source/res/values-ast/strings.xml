@@ -35,7 +35,7 @@
     <string name="action_save_as">Guardar como…</string>
     <string name="message_saving">Guardando’l documentu…</string>
     <string name="message_saving_failed">Nun se pudo guardar el documentu.</string>
-    <string name="save_alert_dialog_title">¿Quies guardar el documentu enantes de zarralu\?</string>
+    <string name="save_alert_dialog_title">¿Quies guardar el documentu enantes de zarralu?</string>
     <string name="save_document">GUARDAR</string>
     <string name="action_cancel">Encaboxar</string>
     <string name="about_notice">Amosar l\'avisu</string>
@@ -75,7 +75,7 @@
     <string name="compress_photo_medium_size">Tamañu mediu</string>
     <string name="compress_photo_max_quality">Calidá máxima</string>
     <string name="compress_photo_no_compress">Nun comprimir</string>
-    <string name="compress_photo_title">¿Quies comprimir la foto\?</string>
+    <string name="compress_photo_title">¿Quies comprimir la foto?</string>
     <string name="action_copy">Copia</string>
     <string name="action_paste">Apegar</string>
     <string name="action_cut">Cortar</string>
