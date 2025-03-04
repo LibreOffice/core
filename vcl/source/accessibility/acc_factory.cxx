@@ -40,7 +40,6 @@
 #include <accessibility/vclxaccessibletabcontrol.hxx>
 #include <accessibility/vclxaccessibletabpagewindow.hxx>
 #include <accessibility/accessibletablistbox.hxx>
-#include <accessibility/accessibleiconchoicectrl.hxx>
 #include <accessibility/AccessibleIconView.hxx>
 #include <accessibility/accessiblelistbox.hxx>
 #include <accessibility/textwindowaccessibility.hxx>
@@ -179,13 +178,6 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(Heade
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(FormattedField* pFormattedField)
 {
     return new SVTXAccessibleNumericField(pFormattedField);
-}
-
-Reference<XAccessible>
-AccessibleFactory::createAccessibleIconChoiceCtrl(SvtIconChoiceCtrl& _rIconCtrl,
-                                                  const Reference<XAccessible>& _xParent)
-{
-    return new AccessibleIconChoiceCtrl( _rIconCtrl, _xParent );
 }
 
 Reference<XAccessibleContext>

@@ -52,7 +52,6 @@ class PushButton;
 class RadioButton;
 class ScrollBar;
 class SvHeaderTabListBox;
-class SvtIconChoiceCtrl;
 class ToolBox;
 class SvTreeListBox;
 class TextEngine;
@@ -89,10 +88,6 @@ public:
     createAccessibleContext(FormattedField* pFormattedField);
     static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleContext(vcl::Window* pWindow);
-
-    static css::uno::Reference<css::accessibility::XAccessible> createAccessibleIconChoiceCtrl(
-        SvtIconChoiceCtrl& _rIconCtrl,
-        const css::uno::Reference<css::accessibility::XAccessible>& _xParent);
 
     static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleTextWindowContext(vcl::Window* pWindow, TextEngine& rEngine, TextView& rView);

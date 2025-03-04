@@ -31,6 +31,7 @@
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
+#include <accessibility/accessibleiconchoicectrl.hxx>
 #include <verticaltabctrl.hxx>
 
 using namespace ::com::sun::star::accessibility;
@@ -327,14 +328,11 @@ void SvtIconChoiceCtrl::CallImplEventListeners(VclEventId nEvent, void* pData)
 }
 css::uno::Reference< XAccessible > SvtIconChoiceCtrl::CreateAccessible()
 {
-    css::uno::Reference< XAccessible > xAccessible;
     css::uno::Reference< XAccessible > xAccParent = GetAccessibleParent();
     if ( xAccParent.is() )
-    {
-        css::uno::Reference< css::awt::XVclWindowPeer > xHoldAlive(GetComponentInterface());
-        xAccessible = AccessibleFactory::createAccessibleIconChoiceCtrl(*this, xAccParent);
-    }
-    return xAccessible;
+        return new AccessibleIconChoiceCtrl(*this, xAccParent);
+
+    return nullptr;
 }
 
 struct VerticalTabPageData
