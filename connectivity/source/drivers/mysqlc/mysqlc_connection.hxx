@@ -37,6 +37,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
+#include <unotools/weakref.hxx>
 
 #include <mysql.h>
 
@@ -54,6 +55,8 @@ class ODatabaseMetaData;
 
 namespace mysqlc
 {
+class OCommonStatement;
+
 typedef ::cppu::WeakComponentImplHelper<css::sdbc::XConnection, css::sdbc::XWarningsSupplier,
                                         css::lang::XUnoTunnel, css::lang::XServiceInfo>
     OMetaConnection_BASE;
@@ -74,8 +77,6 @@ class MysqlCDriver;
 
 typedef OMetaConnection_BASE OConnection_BASE;
 
-typedef std::vector<css::uno::WeakReferenceHelper> OWeakRefArray;
-
 class OConnection final : public cppu::BaseMutex, public OConnection_BASE
 {
 private:
@@ -89,9 +90,8 @@ private:
     css::uno::WeakReference<css::sdbcx::XTablesSupplier> m_xCatalog;
     css::uno::WeakReference<css::sdbc::XDatabaseMetaData> m_xMetaData;
 
-    OWeakRefArray m_aStatements; // vector containing a list
-        // of all the Statement objects
-        // for this Connection
+    // vector containing a list of all the Statement objects for this Connection.
+    std::vector<unotools::WeakReference<OCommonStatement>> m_aStatements;
 
     rtl::Reference<MysqlCDriver> m_xDriver; // Pointer to the owning driver object
 public:

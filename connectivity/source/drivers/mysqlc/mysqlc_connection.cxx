@@ -218,8 +218,8 @@ Reference<XStatement> SAL_CALL OConnection::createStatement()
 
     // create a statement
     // the statement can only be executed once
-    Reference<XStatement> xReturn = new OStatement(this);
-    m_aStatements.push_back(WeakReferenceHelper(xReturn));
+    rtl::Reference<OStatement> xReturn = new OStatement(this);
+    m_aStatements.push_back(xReturn.get());
 
     return xReturn;
 }
@@ -240,8 +240,8 @@ Reference<XPreparedStatement> SAL_CALL OConnection::prepareStatement(const OUStr
                                                      mysql_sqlstate(&m_mysql), nErrorNum, *this,
                                                      getConnectionEncoding());
 
-    Reference<XPreparedStatement> xStatement = new OPreparedStatement(this, pStmt);
-    m_aStatements.push_back(WeakReferenceHelper(xStatement));
+    rtl::Reference<OPreparedStatement> xStatement = new OPreparedStatement(this, pStmt);
+    m_aStatements.push_back(xStatement.get());
     return xStatement;
 }
 
@@ -432,7 +432,7 @@ void OConnection::disposing()
 
     for (auto const& statement : m_aStatements)
     {
-        Reference<XComponent> xComp(statement.get(), UNO_QUERY);
+        rtl::Reference<OCommonStatement> xComp(statement.get());
         if (xComp.is())
         {
             xComp->dispose();

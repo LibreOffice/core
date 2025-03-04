@@ -30,6 +30,8 @@ namespace connectivity::mysqlc
 using css::uno::Reference;
 using css::uno::Sequence;
 
+typedef std::vector<css::uno::WeakReferenceHelper> OWeakRefArray;
+
 Reference<css::uno::XInterface>
 MysqlCDriver_CreateInstance(const Reference<css::lang::XMultiServiceFactory>& _rxFactory);
 
