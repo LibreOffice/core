@@ -359,10 +359,10 @@
     (void)pNotification;
     SolarMutexGuard aGuard;
 
-    AquaSalInstance *pInst = GetSalData()->mpInstance;
-    SalFrame *pAnyFrame = pInst->anyFrame();
-    if(  pAnyFrame )
-        pAnyFrame->CallCallback( SalEvent::SettingsChanged, nullptr );
+    // Related: tdf#156855 delay SalEvent::SettingsChanged event
+    // -[SalFrameView viewDidChangeEffectiveAppearance] needs to delay
+    // so be safe and do the same here.
+    GetSalData()->mpInstance->delayedSettingsChanged( true );
 }
 
 -(void)screenParametersChanged: (NSNotification*) pNotification

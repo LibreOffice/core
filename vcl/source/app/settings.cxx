@@ -2310,21 +2310,14 @@ bool MiscSettings::GetEnableLocalizedDecimalSep() const
 
 int MiscSettings::GetDarkMode()
 {
-    return officecfg::Office::Common::Appearance::ApplicationAppearance::get();
+    // MiscSettings::GetAppColorMode() replaces MiscSettings::GetDarkMode()
+    return MiscSettings::GetAppColorMode();
 }
 
 void MiscSettings::SetDarkMode(int nMode)
 {
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Appearance::ApplicationAppearance::set(nMode, batch);
-    batch->commit();
-
-    vcl::Window *pWin = Application::GetFirstTopLevelWindow();
-    while (pWin)
-    {
-        pWin->ImplGetFrame()->UpdateDarkMode();
-        pWin = Application::GetNextTopLevelWindow(pWin);
-    }
+    // MiscSettings::SetAppColorMode() replaces MiscSettings::SetDarkMode()
+    MiscSettings::SetAppColorMode(nMode);
 }
 
 bool MiscSettings::GetUseDarkMode()
@@ -2344,9 +2337,58 @@ int MiscSettings::GetAppColorMode()
 
 void MiscSettings::SetAppColorMode(int nMode)
 {
+    // Partial: tdf#156855 update native and LibreOffice dark mode states
+    // Updating the dark mode state of everything all at once does not
+    // solve all failures to update colors when the light/dark mode
+    // changes, but it eliminates enough failures that the UI is now
+    // generally readble without restarting LibreOffice.
+    // Important: all of the following steps must be done. Otherwise,
+    // changing the macOS light/dark mode preference while LibreOffice
+    // is running will cause the color mode state change to fail.
+
+    // 1. Save the new mode.
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Appearance::ApplicationAppearance::set(nMode, batch);
     batch->commit();
+
+    // 2. Force the native windows to update their dark mode state so
+    //    that we can fetch the correct native colors.
+    vcl::Window *pWin = Application::GetFirstTopLevelWindow();
+    while (pWin)
+    {
+        pWin->ImplGetFrame()->UpdateDarkMode();
+        pWin = Application::GetNextTopLevelWindow(pWin);
+    }
+
+#ifdef MACOSX
+    // 3. Reset the native colors in AllSettings. Note: the current theme
+    //    is disabled during this step to stop SalFrame::UpdateSettings()
+    //    from adding the current theme's colors which are still set to
+    //    the previous light/dark mode's colors.
+    if (ThemeColors::IsThemeCached())
+        ThemeColors::SetThemeCached(false);
+    AllSettings aSettings = Application::GetSettings();
+    Application::MergeSystemSettings(aSettings);
+    Application *pApp = GetpApp();
+    if (pApp)
+        pApp->OverrideSystemSettings(aSettings);
+    Application::SetSettings(aSettings);
+
+    // 4. Force the current theme's ColorConfig to reload itself
+    //    with the correct light/dark mode colors. It will also
+    //    merge the native colors updated in the previous step.
+    DataChangedEvent aDCEvt(DataChangedEventType::SETTINGS);
+    Application::ImplCallEventListenersApplicationDataChanged(&aDCEvt);
+    Application::NotifyAllWindows(aDCEvt);
+#else
+    // Note for Windows and Linux: the above macOS code doesn't appear
+    // to work as expected on Windows and Linux. One thing that might
+    // make the above code work on those platforms is by delaying the
+    // firing of the SalEvent::SettingsChanged event. macos uses the
+    // AquaSalInstance::delayedSettingsChanged() method to delay firing
+    // and also invalidate all the open windows so that may need to be
+    // moved to the SalInstance base class.
+#endif
 }
 
 bool MiscSettings::GetUseReducedAnimation()

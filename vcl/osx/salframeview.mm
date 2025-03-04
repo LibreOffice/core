@@ -936,6 +936,8 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
         mpLastMarkedText = nil;
         mbTextInputWantsNonRepeatKeyDown = NO;
         mpLastTrackingArea = nil;
+
+        mbInViewDidChangeEffectiveAppearance = NO;
     }
 
     return self;
@@ -2834,6 +2836,29 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
 -(NSArray <id<NSAccessibilityElement>> *)accessibilityChildrenInNavigationOrder
 {
     return [self accessibilityChildren];
+}
+
+-(void)viewDidChangeEffectiveAppearance
+{
+    if (mbInViewDidChangeEffectiveAppearance)
+        return;
+
+    mbInViewDidChangeEffectiveAppearance = YES;
+
+    // Related: tdf#156855 force the current theme to reload its colors
+    // This call is called when the macOS light/dark mode changes while
+    // LibreOffice is running. Send a SalEvent::SettingsChanged event
+    // but do it in an idle timer. Otherwise, an infinite recursion
+    // can occur.
+    NSWindow *pWindow = [self window];
+    if (pWindow && ([pWindow isVisible] || [pWindow isMiniaturized]))
+    {
+        SolarMutexGuard aGuard;
+
+        GetSalData()->mpInstance->delayedSettingsChanged(true);
+    }
+
+    mbInViewDidChangeEffectiveAppearance = NO;
 }
 
 @end

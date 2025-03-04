@@ -25,6 +25,8 @@
 #include <unotools/options.hxx>
 #include <memory>
 
+#include <tools/link.hxx>
+#include <vcl/vclevent.hxx>
 
 namespace svtools{
 enum ColorConfigEntry : int
@@ -292,6 +294,8 @@ public:
 
     void                    LoadThemeColorsFromRegistry();
     void                    SetupTheme();
+
+    DECL_LINK(DataChangedHdl, VclSimpleEvent&, void);
 };
 
 class SVT_DLLPUBLIC EditableColorConfig
