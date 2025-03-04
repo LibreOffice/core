@@ -197,6 +197,8 @@ std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent,
             return JSInstanceBuilder::CreateMenuBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
         else if (jsdialog::isBuilderEnabled(rUIFile, bMobile))
             return JSInstanceBuilder::CreateDialogBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
+        else if (!jsdialog::isIgnored(rUIFile))
+            SAL_WARN("vcl", "UI file not enabled for JSDialogs: " << rUIFile);
     }
 
     return ImplGetSVData()->mpDefInst->CreateBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
@@ -215,6 +217,8 @@ std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pP
         else if (jsdialog::isBuilderEnabledForAddressInput(rUIFile))
             return JSInstanceBuilder::CreateAddressInputBuilder(
                 pParent, AllSettings::GetUIRootDir(), rUIFile, nLOKWindowId);
+        else if (!jsdialog::isIgnored(rUIFile))
+            SAL_WARN("vcl", "UI file not enabled for JSDialogs: " << rUIFile);
     }
 
     return ImplGetSVData()->mpDefInst->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, bAllowCycleFocusOut, nLOKWindowId);
