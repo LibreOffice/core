@@ -87,7 +87,6 @@ void ODatabaseMetaDataResultSet::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
     if(m_pRecordSet)
         m_pRecordSet->Close();
-    m_aStatement.clear();
     m_xMetaData.clear();
 }
 
@@ -508,7 +507,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::previous(  )
 
 Reference< XInterface > SAL_CALL ODatabaseMetaDataResultSet::getStatement(  )
 {
-    return m_aStatement.get();
+    return nullptr;
 }
 
 

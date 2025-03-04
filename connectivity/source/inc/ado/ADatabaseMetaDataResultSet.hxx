@@ -63,7 +63,7 @@ namespace connectivity::ado
             std::map<sal_Int32, std::map< sal_Int32,OUString> >::iterator    m_aIntValueRangeIter;
 
             ADORecordset*                   m_pRecordSet;
-            css::uno::WeakReferenceHelper   m_aStatement;
+            css::uno::WeakReferenceHelper   m_aStatement1;
             css::uno::Reference< css::sdbc::XResultSetMetaData>  m_xMetaData;
             OLEVariant                      m_aValue;
             sal_Int32                       m_nRowPos;
