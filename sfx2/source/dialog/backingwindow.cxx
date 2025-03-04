@@ -104,8 +104,6 @@ public:
 
     void ConfigureForWidth(int nWidth)
     {
-        if (maBrandImage.GetSizePixel().Width() == nWidth)
-            return;
         LoadImageForWidth(nWidth);
         m_BmpSize = maBrandImage.GetSizePixel();
         set_size_request(m_BmpSize.Width(), m_BmpSize.Height());
