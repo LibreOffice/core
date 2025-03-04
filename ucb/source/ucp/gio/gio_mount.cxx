@@ -45,18 +45,15 @@ static void ooo_mount_operation_ask_password (GMountOperation   *op,
 
 static void ooo_mount_operation_init (OOoMountOperation *op)
 {
-    op->m_pPrevPassword = nullptr;
-    op->m_pPrevUsername = nullptr;
+    op->m_aPrevPassword.clear();
+    op->m_aPrevUsername.clear();
 }
 
-static void ooo_mount_operation_finalize (GObject *object)
+void ooo_mount_operation_finalize (GObject *object)
 {
     OOoMountOperation *mount_op = OOO_MOUNT_OPERATION (object);
-    if (mount_op->m_pPrevUsername)
-        free(mount_op->m_pPrevUsername);
-    if (mount_op->m_pPrevPassword)
-        free(mount_op->m_pPrevPassword);
-    mount_op->context.reset();
+
+    mount_op->~OOoMountOperation();
 
     G_OBJECT_CLASS (ooo_mount_operation_parent_class)->finalize (object);
 }
@@ -96,7 +93,7 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
     OOoMountOperation *pThis = reinterpret_cast<OOoMountOperation*>(op);
     GlibThreadDefaultMainContextScope scope(pThis->context.get());
 
-    const css::uno::Reference< css::ucb::XCommandEnvironment > &xEnv = *(pThis->pEnv);
+    const css::uno::Reference< css::ucb::XCommandEnvironment > &xEnv = pThis->xEnv;
 
     if (xEnv.is())
       xIH = xEnv->getInteractionHandler();
@@ -123,11 +120,8 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
           ? ucbhelper::SimpleAuthenticationRequest::ENTITY_MODIFY
           : ucbhelper::SimpleAuthenticationRequest::ENTITY_NA;
 
-    OUString aPrevPassword, aPrevUsername;
-    if (pThis->m_pPrevUsername)
-        aPrevUsername = OUString(pThis->m_pPrevUsername, strlen(pThis->m_pPrevUsername), RTL_TEXTENCODING_UTF8);
-    if (pThis->m_pPrevPassword)
-        aPrevPassword = OUString(pThis->m_pPrevPassword, strlen(pThis->m_pPrevPassword), RTL_TEXTENCODING_UTF8);
+    OUString aPrevPassword = pThis->m_aPrevUsername;
+    OUString aPrevUsername = pThis->m_aPrevPassword;
 
     //The damn dialog is stupidly broken, so do like webdav, i.e. "#102871#"
     if ( aUserName.isEmpty() )
@@ -191,20 +185,17 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
             break;
     }
 
-    if (pThis->m_pPrevPassword)
-        free(pThis->m_pPrevPassword);
-    pThis->m_pPrevPassword = strdup(OUStringToOString(aPassword, RTL_TEXTENCODING_UTF8).getStr());
-    if (pThis->m_pPrevUsername)
-        free(pThis->m_pPrevUsername);
-    pThis->m_pPrevUsername = strdup(OUStringToOString(aUserName, RTL_TEXTENCODING_UTF8).getStr());
+    pThis->m_aPrevPassword = aPassword;
+    pThis->m_aPrevUsername = aUserName;
     g_mount_operation_reply (op, G_MOUNT_OPERATION_HANDLED);
 }
 
 GMountOperation *ooo_mount_operation_new(ucb::ucp::gio::glib::MainContextRef && context, const css::uno::Reference< css::ucb::XCommandEnvironment >& rEnv)
 {
-    OOoMountOperation *pRet = static_cast<OOoMountOperation*>(g_object_new (OOO_TYPE_MOUNT_OPERATION, nullptr));
+    void* pMem = g_object_new (OOO_TYPE_MOUNT_OPERATION, nullptr);
+    OOoMountOperation *pRet = new (pMem) OOoMountOperation;
     pRet->context = std::move(context);
-    pRet->pEnv = &rEnv;
+    pRet->xEnv = rEnv;
     return &pRet->parent_instance;
 }
 

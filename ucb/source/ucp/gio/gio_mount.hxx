@@ -55,17 +55,20 @@ using MainContextRef = std::unique_ptr<GMainContext, detail::MainContextUnref>;
 
 struct OOoMountOperation
 {
+    friend GMountOperation *ooo_mount_operation_new(ucb::ucp::gio::glib::MainContextRef &&, const css::uno::Reference< css::ucb::XCommandEnvironment >&);
+    friend void ooo_mount_operation_finalize(GObject *);
+
     GMountOperation parent_instance;
 
     ucb::ucp::gio::glib::MainContextRef context;
-    const css::uno::Reference< css::ucb::XCommandEnvironment > *pEnv;
-    char *m_pPrevUsername;
-    char *m_pPrevPassword;
+    css::uno::Reference< css::ucb::XCommandEnvironment > xEnv;
+    OUString m_aPrevUsername;
+    OUString m_aPrevPassword;
 
 private:
     // Managed via ooo_mount_operation_new and ooo_mount_operation_finalize:
-    OOoMountOperation() = delete;
-    ~OOoMountOperation() = delete;
+    OOoMountOperation() = default;
+    ~OOoMountOperation() = default;
 };
 
 struct OOoMountOperationClass
