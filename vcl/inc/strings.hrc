@@ -64,7 +64,7 @@
 #define SV_STDTEXT_SERVICENOTAVAILABLE               NC_("SV_STDTEXT_SERVICENOTAVAILABLE", "The component (%s) could not be loaded.\nPlease start setup with the repair option.")
 
 #define SV_STDTEXT_ABOUT                             NC_("SV_STDTEXT_ABOUT", "About %PRODUCTNAME")
-#define SV_STDTEXT_PREFERENCES                       NC_("SV_STDTEXT_PREFERENCES", "Preferences...")
+#define SV_STDTEXT_PREFERENCES                       NC_("SV_STDTEXT_PREFERENCES", "Settings...")
 #define SV_STDTEXT_ALLFILETYPES                      NC_("SV_STDTEXT_ALLFILETYPES", "Any type")
 
 #define SV_ACCESSERROR_NO_FONTS                      NC_("SV_ACCESSERROR_NO_FONTS", "No fonts could be found on the system.")
