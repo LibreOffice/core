@@ -222,6 +222,9 @@ public:
     virtual css::uno::Reference<css::uno::XInterface>
     ImplCreateDropTarget(const SystemEnvData*) override;
 
+    // for qt font options
+    virtual const cairo_font_options_t* GetCairoFontOptions() override;
+
     // whether to reduce animations; KFSalInstance overrides this to read Plasma settings
     virtual bool GetUseReducedAnimation() { return false; }
     void UpdateStyle(bool bFontsChanged);
