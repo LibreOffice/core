@@ -49,7 +49,7 @@ void ODBCDriver::disposing()
 
     for (auto const& connection : m_xConnections)
     {
-        Reference< XComponent > xComp(connection.get(), UNO_QUERY);
+        rtl::Reference< OConnection > xComp(connection);
         if (xComp.is())
             xComp->dispose();
     }
@@ -87,7 +87,7 @@ Reference< XConnection > SAL_CALL ODBCDriver::connect( const OUString& url, cons
 
     rtl::Reference<OConnection> pCon = new OConnection(EnvironmentHandle(), this);
     pCon->Construct(url,info);
-    m_xConnections.push_back(WeakReferenceHelper(*pCon));
+    m_xConnections.push_back(pCon);
 
     return pCon;
 }
