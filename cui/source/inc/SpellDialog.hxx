@@ -150,6 +150,8 @@ private:
     css::uno::Reference<
         css::linguistic2::XSpellChecker1 >     xSpell;
 
+    std::unordered_map<OUString, OUString> m_aDictIdToName;
+
     std::unique_ptr<weld::Label> m_xAltTitle;
     std::unique_ptr<weld::Label> m_xResumeFT;
     std::unique_ptr<weld::Label> m_xNoSuggestionsFT;
