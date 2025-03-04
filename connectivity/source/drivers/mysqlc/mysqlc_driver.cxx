@@ -41,7 +41,7 @@ void MysqlCDriver::disposing()
     // when driver will be destroyed so all our connections have to be destroyed as well
     for (auto const& connection : m_xConnections)
     {
-        Reference<XComponent> xComp(connection.get(), UNO_QUERY);
+        rtl::Reference<OConnection> xComp(connection);
         if (xComp.is())
         {
             xComp->dispose();
@@ -89,7 +89,7 @@ Reference<XConnection> SAL_CALL MysqlCDriver::connect(const OUString& url,
     rtl::Reference<OConnection> pCon = new OConnection(*this);
 
     pCon->construct(url, info);
-    m_xConnections.push_back(WeakReferenceHelper(*pCon));
+    m_xConnections.push_back(pCon);
     return pCon;
 }
 

@@ -30,8 +30,6 @@ namespace connectivity::mysqlc
 using css::uno::Reference;
 using css::uno::Sequence;
 
-typedef std::vector<css::uno::WeakReferenceHelper> OWeakRefArray;
-
 Reference<css::uno::XInterface>
 MysqlCDriver_CreateInstance(const Reference<css::lang::XMultiServiceFactory>& _rxFactory);
 
@@ -46,7 +44,7 @@ class MysqlCDriver : public ODriver_BASE
 protected:
     Reference<css::lang::XMultiServiceFactory> m_xFactory;
     ::osl::Mutex m_aMutex; // mutex is need to control member access
-    OWeakRefArray m_xConnections; // vector containing a list
+    std::vector<unotools::WeakReference<OConnection>> m_xConnections; // vector containing a list
         // of all the Connection objects
         // for this Driver
 public:
