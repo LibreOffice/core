@@ -106,7 +106,6 @@ void ODatabaseMetaDataResultSet::disposing(std::unique_lock<std::mutex>& rGuard)
 {
     OPropertySetHelper::disposing(rGuard);
 
-    m_aStatement.clear();
     m_xMetaData.clear();
     m_aRowsIter = m_aRows.end();
     m_aRows.clear();
@@ -371,7 +370,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::previous(  )
 
 Reference< XInterface > SAL_CALL ODatabaseMetaDataResultSet::getStatement(  )
 {
-    return m_aStatement.get();
+    return nullptr;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  )

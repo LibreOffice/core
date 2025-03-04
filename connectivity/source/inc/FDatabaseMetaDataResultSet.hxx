@@ -107,7 +107,6 @@ namespace connectivity
 
     private:
         ORowSetValue                    m_aEmptyValue;
-        css::uno::WeakReferenceHelper    m_aStatement;
         rtl::Reference< ODatabaseMetaDataResultSetMetaData>        m_xMetaData;
         sal_Int32                       m_nColPos;
 
