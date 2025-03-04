@@ -1653,13 +1653,13 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
 
     if ( pRedlineParagraphMarkerDeleted )
     {
-        StartRedline( pRedlineParagraphMarkerDeleted, /*bLastRun=*/true );
-        EndRedline( pRedlineParagraphMarkerDeleted, /*bLastRun=*/true );
+        StartRedline(pRedlineParagraphMarkerDeleted, /*bLastRun=*/true, /*bParagraphProps=*/true);
+        EndRedline(pRedlineParagraphMarkerDeleted, /*bLastRun=*/true, /*bParagraphProps=*/true);
     }
     if ( pRedlineParagraphMarkerInserted )
     {
-        StartRedline( pRedlineParagraphMarkerInserted, /*bLastRun=*/true );
-        EndRedline( pRedlineParagraphMarkerInserted, /*bLastRun=*/true );
+        StartRedline(pRedlineParagraphMarkerInserted, /*bLastRun=*/true, /*bParagraphProps=*/true);
+        EndRedline(pRedlineParagraphMarkerInserted, /*bLastRun=*/true, /*bParagraphProps=*/true);
     }
 
     // mergeTopMarks() after paragraph mark properties child elements.
@@ -1971,6 +1971,13 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
         m_nHyperLinkCount.back()++;
     }
 
+    // XML_r node should be surrounded with bookmark-begin and bookmark-end nodes if it has bookmarks.
+    // The same is applied for permission ranges.
+    // But due to unit test "testFdo85542" let's output bookmark-begin with bookmark-end.
+    DoWriteBookmarksStart(m_rBookmarksStart, m_pMoveRedlineData);
+    DoWriteBookmarksEnd(m_rBookmarksEnd, false, false); // Write non-moverange bookmarks
+    DoWritePermissionsStart();
+    DoWriteAnnotationMarks();
     // if there is some redlining in the document, output it
     bool bSkipRedline = false;
     if (nLen == 1)
@@ -1988,14 +1995,6 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     {
         StartRedline(m_pRedlineData, bLastRun);
     }
-
-    // XML_r node should be surrounded with bookmark-begin and bookmark-end nodes if it has bookmarks.
-    // The same is applied for permission ranges.
-    // But due to unit test "testFdo85542" let's output bookmark-begin with bookmark-end.
-    DoWriteBookmarksStart(m_rBookmarksStart, m_pMoveRedlineData);
-    DoWriteBookmarksEnd(m_rBookmarksEnd);
-    DoWritePermissionsStart();
-    DoWriteAnnotationMarks();
 
     if (m_closeHyperlinkInThisRun && m_nHyperLinkCount.back() > 0 && !m_hyperLinkAnchor.isEmpty()
         && m_hyperLinkAnchor.startsWith("_Toc"))
@@ -2070,6 +2069,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     {
         EndRedline(m_pRedlineData, bLastRun);
     }
+    DoWriteBookmarksEnd(m_rBookmarksEnd, false, true); // Write moverange bookmarks
 
     if (nLen != -1)
     {
@@ -2201,7 +2201,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     }
 
     DoWriteBookmarksStart(m_rFinalBookmarksStart);
-    DoWriteBookmarksEnd(m_rFinalBookmarksEnd);
+    DoWriteBookmarksEnd(m_rFinalBookmarksEnd); // Write all final bookmarks
     DoWriteBookmarkEndIfExist(nPos);
 }
 
@@ -2316,28 +2316,37 @@ void DocxAttributeOutput::DoWriteBookmarksStart(std::vector<OUString>& rStarts, 
 }
 
 /// export the end bookmarks
-void DocxAttributeOutput::DoWriteBookmarksEnd(std::vector<OUString>& rEnds)
+void DocxAttributeOutput::DoWriteBookmarksEnd(std::vector<OUString>& rEnds, bool bWriteAllBookmarks,
+                                              bool bWriteOnlyMoveRanges)
 {
-    for (const OUString & bookmarkName : rEnds)
+    auto bookmarkNameIt = rEnds.begin();
+    while (bookmarkNameIt != rEnds.end())
     {
         // Get the id of the bookmark
-        auto pPos = m_rOpenedBookmarksIds.find(bookmarkName);
+        auto pPos = m_rOpenedBookmarksIds.find(*bookmarkNameIt);
 
         if (pPos != m_rOpenedBookmarksIds.end())
         {
             bool bMove = false;
             bool bFrom = false;
-            GetExport().BookmarkToWord(bookmarkName, &bMove, &bFrom);
+            GetExport().BookmarkToWord(*bookmarkNameIt, &bMove, &bFrom);
             // Output the bookmark (including MoveBookmark of the tracked moving)
-            if ( bMove )
-                DoWriteMoveRangeTagEnd(pPos->second, bFrom);
-            else
-                DoWriteBookmarkTagEnd(pPos->second);
+            if (bWriteAllBookmarks || (bMove == bWriteOnlyMoveRanges))
+            {
+                if (bMove)
+                    DoWriteMoveRangeTagEnd(pPos->second, bFrom);
+                else
+                    DoWriteBookmarkTagEnd(pPos->second);
 
-            m_rOpenedBookmarksIds.erase(bookmarkName);
+                m_rOpenedBookmarksIds.erase(*bookmarkNameIt);
+                bookmarkNameIt = rEnds.erase(bookmarkNameIt);
+            }
+            else
+                ++bookmarkNameIt;
         }
+        else
+            bookmarkNameIt = rEnds.erase(bookmarkNameIt);
     }
-    rEnds.clear();
 }
 
 // For construction of the special bookmark name template for permissions:
@@ -4199,7 +4208,8 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 // The difference between 'Redline' and 'StartRedline'+'EndRedline' is that:
 // 'Redline' is used for tracked changes of formatting information of a run like Bold, Underline. (the '<w:rPrChange>' is inside the 'run' node)
 // 'StartRedline' is used to output tracked changes of run insertion and deletion (the run is inside the '<w:ins>' node)
-void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData, bool bLastRun )
+void DocxAttributeOutput::StartRedline(const SwRedlineData* pRedlineData, bool bLastRun,
+                                       bool bParagraphProps)
 {
     if ( !pRedlineData )
         return;
@@ -4222,9 +4232,18 @@ void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData, bool
     const DateTime aDateTime = pRedlineData->GetTimeStamp();
     bool bNoDate = bRemovePersonalInfo ||
         ( aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1 && aDateTime.GetDay() == 1 );
-    bool bMoved = pRedlineData->IsMoved() &&
-       // tdf#150166 save tracked moving around TOC as w:ins, w:del
-       SwDoc::GetCurTOX(*m_rExport.m_pCurPam->GetPoint()) == nullptr;
+    bool isInMoveBookmark = false;
+    for (const auto& openedBookmark : m_rOpenedBookmarksIds)
+    {
+        if (openedBookmark.first.startsWith(u"__RefMove"))
+        {
+            isInMoveBookmark = true;
+            break;
+        }
+    }
+    bool bMoved = (isInMoveBookmark || bParagraphProps) && pRedlineData->IsMoved() &&
+                  // tdf#150166 save tracked moving around TOC as w:ins, w:del
+                  SwDoc::GetCurTOX(*m_rExport.m_pCurPam->GetPoint()) == nullptr;
     switch ( pRedlineData->GetType() )
     {
         case RedlineType::Insert:
@@ -4252,14 +4271,24 @@ void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData, bool
     }
 }
 
-void DocxAttributeOutput::EndRedline( const SwRedlineData * pRedlineData, bool bLastRun )
+void DocxAttributeOutput::EndRedline(const SwRedlineData* pRedlineData, bool bLastRun,
+                                     bool bParagraphProps)
 {
     if ( !pRedlineData || m_bWritingField )
         return;
 
-    bool bMoved = pRedlineData->IsMoved() &&
-       // tdf#150166 save tracked moving around TOC as w:ins, w:del
-       SwDoc::GetCurTOX(*m_rExport.m_pCurPam->GetPoint()) == nullptr;
+    bool isInMoveBookmark = false;
+    for (const auto& openedBookmark : m_rOpenedBookmarksIds)
+    {
+        if (openedBookmark.first.startsWith(u"__RefMove"))
+        {
+            isInMoveBookmark = true;
+            break;
+        }
+    }
+    bool bMoved = (isInMoveBookmark || bParagraphProps) && pRedlineData->IsMoved() &&
+                  // tdf#150166 save tracked moving around TOC as w:ins, w:del
+                  SwDoc::GetCurTOX(*m_rExport.m_pCurPam->GetPoint()) == nullptr;
     switch ( pRedlineData->GetType() )
     {
         case RedlineType::Insert:

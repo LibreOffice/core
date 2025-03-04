@@ -494,6 +494,21 @@ CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace)
     assertXPath(pXmlSettings, "/w:settings/w:compat/w:ulTrailSpace"_ostr);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf165059_moveFromTo, "tdf165059_broken.docx")
+{
+    if (isExported())
+    {
+        // Without the fix, exported contains w:move* ouside of move ranges
+        // Outside move range tags ins/del are valid
+        xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
+        CPPUNIT_ASSERT(p_XmlDoc);
+        assertXPath(p_XmlDoc, "//w:moveTo"_ostr, 0);
+        assertXPath(p_XmlDoc, "//w:ins"_ostr, 1);
+        assertXPath(p_XmlDoc, "//w:moveFrom"_ostr, 0);
+        assertXPath(p_XmlDoc, "//w:del"_ostr, 1);
+    }
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
