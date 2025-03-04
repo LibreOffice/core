@@ -33,6 +33,7 @@ enum JSDialogEnabledType
 
 constexpr auto IgnoredList
     = frozen::make_unordered_map<std::u16string_view, JSDialogEnabledType>({
+        { u"modules/swriter/ui/annotation.ui", JSDialogEnabledType::Ignore },
         { u"sfx/ui/deck.ui", JSDialogEnabledType::Ignore },
         { u"sfx/ui/tabbar.ui", JSDialogEnabledType::Ignore },
         { u"sfx/ui/tabbarcontents.ui", JSDialogEnabledType::Ignore },
@@ -485,6 +486,24 @@ inline bool isInMap(const auto& rList, std::u16string_view rUIFile, JSDialogEnab
 
     return false;
 }
+
+inline bool isEnabledAtRunTime(std::u16string_view rUIFile)
+{
+    const char* pEnabledDialog = getenv("SAL_JSDIALOG_ENABLE");
+    if (pEnabledDialog)
+    {
+        OUString sAllEnabledDialogs(pEnabledDialog, strlen(pEnabledDialog), RTL_TEXTENCODING_UTF8);
+        std::vector<OUString> aEnabledDialogsVector
+            = comphelper::string::split(sAllEnabledDialogs, ':');
+        for (const auto& rDialog : aEnabledDialogsVector)
+        {
+            if (rUIFile == rDialog)
+                return true;
+        }
+    }
+
+    return false;
+}
 } // end of namespace
 
 namespace jsdialog
@@ -528,20 +547,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
     if (isInMap(OtherDialogList, rUIFile, JSDialogEnabledType::Dialog))
         return true;
 
-    const char* pEnabledDialog = getenv("SAL_JSDIALOG_ENABLE");
-    if (pEnabledDialog)
-    {
-        OUString sAllEnabledDialogs(pEnabledDialog, strlen(pEnabledDialog), RTL_TEXTENCODING_UTF8);
-        std::vector<OUString> aEnabledDialogsVector
-            = comphelper::string::split(sAllEnabledDialogs, ':');
-        for (const auto& rDialog : aEnabledDialogsVector)
-        {
-            if (rUIFile == rDialog)
-                return true;
-        }
-    }
-
-    return false;
+    return isEnabledAtRunTime(rUIFile);
 }
 
 bool isBuilderEnabledForPopup(std::u16string_view rUIFile)
