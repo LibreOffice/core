@@ -29,13 +29,13 @@ RedlineFlags SwEditShell::GetRedlineFlags() const
     return GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags(this);
 }
 
-void SwEditShell::SetRedlineFlags( RedlineFlags eMode )
+void SwEditShell::SetRedlineFlags( RedlineFlags eMode, bool bRecordAllViews )
 {
     if( eMode != GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags() )
     {
         CurrShell aCurr( this );
         StartAllAction();
-        GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eMode );
+        GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eMode, bRecordAllViews );
         EndAllAction();
     }
 }

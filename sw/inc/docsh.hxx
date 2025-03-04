@@ -323,7 +323,7 @@ public:
      see also:    FN_REDLINE_ON, FN_REDLINE_ON */
     virtual bool    IsChangeRecording(SfxViewShell* pViewShell = nullptr) const override;
     virtual bool    HasChangeRecordProtection() const override;
-    virtual void    SetChangeRecording( bool bActivate, bool bLockAllViews = false ) override;
+    virtual void    SetChangeRecording( bool bActivate, bool bLockAllViews = false, bool bRecordAllViews = true ) override;
     virtual void    SetProtectionPassword( const OUString &rPassword ) override;
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
 

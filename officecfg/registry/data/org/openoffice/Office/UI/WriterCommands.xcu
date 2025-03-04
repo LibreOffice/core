@@ -925,6 +925,22 @@
           <value xml:lang="en-US">~Insertions In Margin</value>
         </prop>
       </node>
+      <node oor:name=".uno:TrackChangesInThisView" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Record changes in this view</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Changes in this view</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:TrackChangesInAllViews" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Record changes in all views</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">~Changes in all views</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ToggleObjectLayer" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Change Position</value>

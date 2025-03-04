@@ -1171,7 +1171,7 @@ RedlineFlags DocumentRedlineManager::GetRedlineFlags(const SwViewShell* pViewShe
     return eRedlineFlags;
 }
 
-void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
+void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode, bool bRecordAllViews )
 {
     if( GetRedlineFlags() == eMode )
         return;
@@ -1244,7 +1244,7 @@ void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
 
         m_rDoc.SetInXMLImport( bSaveInXMLImportFlag );
     }
-    SetRedlineFlags_intern(eMode);
+    SetRedlineFlags_intern(eMode, bRecordAllViews);
     m_rDoc.getIDocumentState().SetModified();
 
     // #TODO - add 'SwExtraRedlineTable' also ?
@@ -1260,19 +1260,27 @@ bool DocumentRedlineManager::IsIgnoreRedline() const
     return bool(RedlineFlags::Ignore & GetRedlineFlags());
 }
 
-void DocumentRedlineManager::SetRedlineFlags_intern(RedlineFlags eMode)
+void DocumentRedlineManager::SetRedlineFlags_intern(RedlineFlags eMode, bool bRecordAllViews)
 {
     SwDocShell* pDocShell = m_rDoc.GetDocShell();
     SwViewShell* pViewShell = pDocShell ? pDocShell->GetWrtShell() : nullptr;
     if (pViewShell)
     {
-        // Recording can be per-view, the rest is per-document.
-        auto bRedlineRecordingOn = bool(eMode & RedlineFlags::On);
-        SwViewOption aOpt(*pViewShell->GetViewOptions());
-        if (aOpt.IsRedlineRecordingOn() != bRedlineRecordingOn)
+        // Recording may be per-view, the rest is per-document.
+        for(SwViewShell& rSh : pViewShell->GetRingContainer())
         {
-            aOpt.SetRedlineRecordingOn(bRedlineRecordingOn);
-            pViewShell->ApplyViewOptions(aOpt);
+            if (!bRecordAllViews && &rSh != pViewShell)
+            {
+                continue;
+            }
+
+            auto bRedlineRecordingOn = bool(eMode & RedlineFlags::On);
+            SwViewOption aOpt(*rSh.GetViewOptions());
+            if (aOpt.IsRedlineRecordingOn() != bRedlineRecordingOn)
+            {
+                aOpt.SetRedlineRecordingOn(bRedlineRecordingOn);
+                rSh.ApplyViewOptions(aOpt);
+            }
         }
     }
 

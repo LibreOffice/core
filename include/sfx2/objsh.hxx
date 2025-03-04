@@ -696,7 +696,7 @@ public:
     // slots used for Calc:         FID_CHG_RECORD, SID_CHG_PROTECT
     virtual bool    IsChangeRecording(SfxViewShell* pViewShell = nullptr) const;
     virtual bool    HasChangeRecordProtection() const;
-    virtual void    SetChangeRecording( bool bActivate, bool bLockAllViews = false );
+    virtual void    SetChangeRecording( bool bActivate, bool bLockAllViews = false, bool bRecordAllViews = true );
     virtual void    SetProtectionPassword( const OUString &rPassword );
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash );
 

@@ -179,7 +179,7 @@ public:
     void    SetInsMode( bool bOn = true );
     void    ToggleInsMode() { SetInsMode( !m_bIns ); }
     bool    IsInsMode() const { return m_bIns; }
-    SW_DLLPUBLIC void SetRedlineFlagsAndCheckInsMode( RedlineFlags eMode );
+    SW_DLLPUBLIC void SetRedlineFlagsAndCheckInsMode( RedlineFlags eMode, bool bRecordAllViews = true );
 
     SW_DLLPUBLIC void EnterSelFrameMode(const Point *pStartDrag = nullptr);
     SW_DLLPUBLIC void LeaveSelFrameMode();

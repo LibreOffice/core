@@ -950,7 +950,7 @@ public:
 
     /// For Redlining.
     SW_DLLPUBLIC RedlineFlags GetRedlineFlags() const;
-    SW_DLLPUBLIC void SetRedlineFlags( RedlineFlags eMode );
+    SW_DLLPUBLIC void SetRedlineFlags( RedlineFlags eMode, bool bRecordAllViews = true );
     bool IsRedlineOn() const;
     SW_DLLPUBLIC SwRedlineTable::size_type GetRedlineCount() const;
     const SwRangeRedline& GetRedline( SwRedlineTable::size_type nPos ) const;
