@@ -786,6 +786,7 @@ int SpellDialog::InitUserDicts()
     // list suitable dictionaries
     bool bEnable = false;
     m_xAddToDictMB->clear();
+    m_aDictIdToName.clear();
     sal_uInt16 nItemId = 1;     // menu items should be enumerated from 1 and not 0
     for (auto& xDicTmp : pImpl->aDics)
     {
@@ -809,7 +810,11 @@ int SpellDialog::InitUserDicts()
                         xSvcInfo->getImplementationName());
             }
 
-            m_xAddToDictMB->append_item(OUString::number(nItemId), xDicTmp->getName(), aDictionaryImageUrl);
+            OUString sDictId = OUString::number(nItemId);
+            m_xAddToDictMB->append_item(sDictId,
+                                        m_xAddToDictMB->escape_ui_str(xDicTmp->getName()),
+                                        aDictionaryImageUrl);
+            m_aDictIdToName[sDictId] = xDicTmp->getName();
 
             ++nItemId;
         }
@@ -843,7 +848,7 @@ void SpellDialog::AddToDictionaryExecute(const OUString& rItemId)
     //manually changed
     const OUString aNewWord = m_xSentenceED->GetErrorText();
 
-    OUString aDicName(m_xAddToDictMB->get_item_label(rItemId));
+    OUString aDicName(m_aDictIdToName[rItemId]);
 
     uno::Reference< linguistic2::XDictionary >      xDic;
     uno::Reference< linguistic2::XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );
