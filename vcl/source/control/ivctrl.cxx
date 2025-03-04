@@ -328,11 +328,7 @@ void SvtIconChoiceCtrl::CallImplEventListeners(VclEventId nEvent, void* pData)
 }
 css::uno::Reference< XAccessible > SvtIconChoiceCtrl::CreateAccessible()
 {
-    css::uno::Reference< XAccessible > xAccParent = GetAccessibleParent();
-    if ( xAccParent.is() )
-        return new AccessibleIconChoiceCtrl(*this, xAccParent);
-
-    return nullptr;
+    return new AccessibleIconChoiceCtrl(*this);
 }
 
 struct VerticalTabPageData

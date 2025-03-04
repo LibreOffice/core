@@ -34,12 +34,7 @@ class AccessibleIconChoiceCtrl final :
         css::accessibility::XAccessible,
         css::accessibility::XAccessibleSelection>
 {
-    css::uno::Reference< css::accessibility::XAccessible > m_xParent;
-
     virtual ~AccessibleIconChoiceCtrl() override = default;
-
-    /** this function is called upon disposing the component */
-    virtual void SAL_CALL   disposing() override;
 
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     virtual void    FillAccessibleStateSet( sal_Int64& rStateSet ) override;
@@ -50,12 +45,8 @@ public:
     /** OAccessibleBase needs a valid view
         @param  _rIconCtrl
             is the box for which we implement an accessible object
-        @param  _xParent
-            is our parent accessible object
     */
-    AccessibleIconChoiceCtrl(
-        SvtIconChoiceCtrl& _rIconCtrl,
-        const css::uno::Reference<css::accessibility::XAccessible>& _xParent);
+    AccessibleIconChoiceCtrl(SvtIconChoiceCtrl& _rIconCtrl);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -67,7 +58,6 @@ public:
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
     virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
     virtual OUString SAL_CALL getAccessibleDescription(  ) override;
     virtual OUString SAL_CALL getAccessibleName(  ) override;

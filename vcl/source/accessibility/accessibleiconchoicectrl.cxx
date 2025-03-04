@@ -36,10 +36,8 @@ using namespace ::com::sun::star;
 
 // Ctor() and Dtor()
 
-AccessibleIconChoiceCtrl::AccessibleIconChoiceCtrl(SvtIconChoiceCtrl& _rIconCtrl,
-                                                   const Reference<XAccessible>& _xParent)
+AccessibleIconChoiceCtrl::AccessibleIconChoiceCtrl(SvtIconChoiceCtrl& _rIconCtrl)
     : ImplInheritanceHelper(&_rIconCtrl)
-    , m_xParent(_xParent)
 {
 }
 
@@ -91,15 +89,6 @@ void AccessibleIconChoiceCtrl::ProcessWindowEvent( const VclWindowEvent& rVclWin
     }
 }
 
-// XComponent
-
-void SAL_CALL AccessibleIconChoiceCtrl::disposing()
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    m_xParent = nullptr;
-}
-
 // XServiceInfo
 
 OUString SAL_CALL AccessibleIconChoiceCtrl::getImplementationName()
@@ -140,14 +129,6 @@ Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrl::getAccessibleChild( 
 
     VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
     return new AccessibleIconChoiceCtrlEntry( *pCtrl, i, this );
-}
-
-Reference< XAccessible > SAL_CALL AccessibleIconChoiceCtrl::getAccessibleParent(  )
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ensureAlive();
-    return m_xParent;
 }
 
 sal_Int16 SAL_CALL AccessibleIconChoiceCtrl::getAccessibleRole(  )
