@@ -233,6 +233,29 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf123225PivotTableNoColItems)
     assertXPath(pSheet, "/x:pivotTableDefinition/x:colItems/x:i/x:x", "v", u"0");
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf123225PivotTableEmptyRowColItems)
+{
+    // this doc contains blank row/col items
+    // <sharedItems containsBlank="1" count="..."> (xl/pivotCache/pivotCacheDefinition1.xml)
+    createScDoc("ods/tdf123225_pivotTable_empty_row_col_items.ods");
+    save(u"Calc Office Open XML"_ustr);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    // Row items <rowItems>
+
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:rowItems", 1);
+    // check if <rowItems count="4">
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:rowItems", "count", u"4");
+
+    // Column items <colItems>
+
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:colItems", 1);
+    // check if <colItems count="5">
+    assertXPath(pSheet, "/x:pivotTableDefinition/x:colItems", "count", u"5");
+}
+
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableNamedRangeSourceODS)
 {
     createScDoc("ods/pivot-table-named-range-source.ods");
