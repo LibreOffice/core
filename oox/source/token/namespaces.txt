@@ -92,6 +92,10 @@ c15                     http://schemas.microsoft.com/office/drawing/2012/chart
 xr2                     http://schemas.microsoft.com/office/spreadsheetml/2015/revision2
 xr16                    http://schemas.microsoft.com/office/spreadsheetml/2017/revision16
 
+# MSO 2014 extensions ---------------------------------------------------------
+
+chartex                 http://schemas.microsoft.com/office/drawing/2014/chartex
+
 # extlst namespaces
 
 adec                    http://schemas.microsoft.com/office/drawing/2017/decorative

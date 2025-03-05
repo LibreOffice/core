@@ -154,6 +154,7 @@ const Sequence< beans::Pair< OUString, sal_Int32 > >& NamespaceIds()
              NMSP_xr16},
             {u"http://schemas.microsoft.com/office/drawing/2017/decorative"_ustr, NMSP_adec},
             {u"http://schemas.microsoft.com/office/drawing/2016/SVG/main"_ustr, NMSP_asvg},
+            {u"http://schemas.microsoft.com/office/drawing/2014/chartex"_ustr, NMSP_chartex},
         };
     return SINGLETON;
 };

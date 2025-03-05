@@ -1179,6 +1179,7 @@ chartPlus
 chartSpace
 chartStar
 chartX
+chartex
 chartreuse
 chartsheet
 checkBox
