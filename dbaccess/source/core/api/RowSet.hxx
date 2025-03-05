@@ -52,6 +52,8 @@
 
 namespace dbaccess
 {
+    class ORowSetClone;
+
     typedef ::cppu::WeakAggComponentImplHelper12    <   css::sdb::XResultSetAccess
                                                     ,   css::sdb::XRowSetApproveBroadcaster
                                                     ,   css::sdb::XRowsChangeBroadcaster
@@ -83,7 +85,7 @@ namespace dbaccess
         css::uno::Reference< css::sdb::XSingleSelectQueryComposer >   m_xComposer;
         css::uno::Reference< css::container::XNameAccess >    m_xColumns; // the columns from a table or query
 
-        connectivity::OWeakRefArray                 m_aClones;
+        std::vector<unotools::WeakReference<ORowSetClone>>    m_aClones;
         /** our parameters as XPropertySet instances and ORowSetValue instances
         */
         ::dbtools::param::ParametersContainerRef    m_pParameters;

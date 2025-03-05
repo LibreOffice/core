@@ -479,7 +479,7 @@ void ORowSet::freeResources( bool _bComplete )
     // free all clones
     for (auto const& clone : m_aClones)
     {
-        Reference< XComponent > xComp(clone.get(), UNO_QUERY);
+        rtl::Reference< ORowSetClone > xComp(clone);
         if (xComp.is())
             xComp->dispose();
     }
@@ -2045,7 +2045,7 @@ Reference< XResultSet > SAL_CALL ORowSet::createResultSet(  )
     if(m_xStatement.is())
     {
         rtl::Reference<ORowSetClone> pClone = new ORowSetClone( m_aContext, *this, m_pMutex );
-        m_aClones.emplace_back(css::uno::Reference< css::uno::XWeak >(pClone));
+        m_aClones.emplace_back(pClone);
         return pClone;
     }
     return Reference< XResultSet >();
@@ -2117,7 +2117,7 @@ void ORowSet::notifyRowSetAndClonesRowDelete( const Any& _rBookmark )
     // notify the clones
     for (auto const& elem : m_aClones)
     {
-        rtl::Reference<ORowSetClone> pClone = dynamic_cast<ORowSetClone*>(elem.get().get());
+        rtl::Reference<ORowSetClone> pClone = elem.get();
         if(pClone)
             pClone->onDeleteRow( _rBookmark );
     }
@@ -2130,7 +2130,7 @@ void ORowSet::notifyRowSetAndClonesRowDeleted( const Any& _rBookmark, sal_Int32 
     // notify the clones
     for (auto const& clone : m_aClones)
     {
-        rtl::Reference<ORowSetClone> pClone = dynamic_cast<ORowSetClone*>(clone.get().get());
+        rtl::Reference<ORowSetClone> pClone = clone.get();
         if(pClone)
             pClone->onDeletedRow( _rBookmark, _nPos );
     }
