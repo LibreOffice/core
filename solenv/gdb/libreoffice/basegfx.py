@@ -60,8 +60,11 @@ class B2DPolygonPrinter(object):
     def _count(self):
         # It's a call into the inferior (being debugged) process.
         # Will not work with core dumps and can cause a deadlock.
-        return int(gdb.parse_and_eval(
-                "(('basegfx::B2DPolygon' *) {})->count()".format(self.value.address)))
+        if self.value.__str__() == "<unavailable>":
+            return 0
+        else:
+            return int(gdb.parse_and_eval(
+                    "(('basegfx::B2DPolygon' *) {})->count()".format(self.value.address)))
 
     def _isEmpty(self):
         return self._count() == 0
@@ -69,8 +72,11 @@ class B2DPolygonPrinter(object):
     def _hasCurves(self):
         # It's a call into the inferior (being debugged) process.
         # Will not work with core dumps and can cause a deadlock.
-        return int(gdb.parse_and_eval(
-                "(('basegfx::B2DPolygon' *) {})->areControlPointsUsed()".format(self.value.address))) != 0
+        if self.value.__str__() == "<unavailable>":
+            return False
+        else:
+            return int(gdb.parse_and_eval(
+                    "(('basegfx::B2DPolygon' *) {})->areControlPointsUsed()".format(self.value.address))) != 0
 
     def _children(self):
         if self._hasCurves():
@@ -110,7 +116,9 @@ class B2DPolygonPrinter(object):
             return self
 
         def __next__(self):
-            if self.index >= self.count:
+            if self.value.__str__() == "<unavailable>":
+                raise StopIteration()
+           if self.index >= self.count:
                 raise StopIteration()
             points = self.value['mpPolygon']['m_pimpl'].dereference()['m_value']['maPoints']['maVector']
             currPoint = (points['_M_impl']['_M_start'] + self.index).dereference()
@@ -151,14 +159,20 @@ class B2DPolyPolygonPrinter(object):
     def _count(self):
         # It's a call into the inferior (being debugged) process.
         # Will not work with core dumps and can cause a deadlock.
-        return int(gdb.parse_and_eval(
-                "(('basegfx::B2DPolyPolygon' *) {})->count()".format(self.value.address)))
+        if self.value.__str__() == "<unavailable>":
+            return 0
+        else:
+            return int(gdb.parse_and_eval(
+                    "(('basegfx::B2DPolyPolygon' *) {})->count()".format(self.value.address)))
 
     def _isClosed(self):
         # It's a call into the inferior (being debugged) process.
         # Will not work with core dumps and can cause a deadlock.
-        return int(gdb.parse_and_eval(
-                "(('basegfx::B2DPolyPolygon' *) {})->isClosed()".format(self.value.address))) != 0
+        if self.value.__str__() == "<unavailable>":
+            return True
+        else:
+            return int(gdb.parse_and_eval(
+                    "(('basegfx::B2DPolyPolygon' *) {})->isClosed()".format(self.value.address))) != 0
 
     def _isEmpty(self):
         return self._count() == 0
