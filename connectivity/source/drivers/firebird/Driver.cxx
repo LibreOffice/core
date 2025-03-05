@@ -99,7 +99,7 @@ void FirebirdDriver::disposing()
 
     for (auto const& elem : m_xConnections)
     {
-        Reference< XComponent > xComp(elem.get(), UNO_QUERY);
+        rtl::Reference< Connection > xComp(elem.get());
         if (xComp.is())
             xComp->dispose();
     }
@@ -151,7 +151,7 @@ Reference< XConnection > SAL_CALL FirebirdDriver::connect(
     rtl::Reference<Connection> pCon = new Connection();
     pCon->construct(url, info);
 
-    m_xConnections.emplace_back(*pCon);
+    m_xConnections.push_back(pCon);
 
     return pCon;
 }

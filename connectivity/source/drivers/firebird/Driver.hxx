@@ -27,6 +27,7 @@
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/weakref.hxx>
 
 namespace connectivity::firebird
     {
@@ -50,7 +51,8 @@ namespace connectivity::firebird
 
         protected:
             ::osl::Mutex                m_aMutex;       // mutex is need to control member access
-            OWeakRefArray               m_xConnections; //  vector containing a list
+            std::vector<unotools::WeakReference<Connection>>
+                                        m_xConnections; //  vector containing a list
                                                         //  of all the Connection objects
                                                         //  for this Driver
 
