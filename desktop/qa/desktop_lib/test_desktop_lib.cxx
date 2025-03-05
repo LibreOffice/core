@@ -178,6 +178,7 @@ public:
     void testTileInvalidationCompression();
     void testPartInInvalidation();
     void testBinaryCallback();
+    void testOmitInvalidate();
     void testInput();
     void testRedlineWriter();
     void testRedlineCalc();
@@ -250,6 +251,7 @@ public:
     CPPUNIT_TEST(testTileInvalidationCompression);
     CPPUNIT_TEST(testPartInInvalidation);
     CPPUNIT_TEST(testBinaryCallback);
+    CPPUNIT_TEST(testOmitInvalidate);
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testRedlineWriter);
     CPPUNIT_TEST(testRedlineCalc);
@@ -1991,6 +1993,7 @@ void DesktopLOKTest::testBinaryCallback()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
         handler->setViewId(SfxLokHelper::getView());
 
+        handler->tilePainted(/*nPart=*/INT_MIN, /*nMode=*/0, rect1);
         handler->libreOfficeKitViewInvalidateTilesCallback(&rect1, INT_MIN, 0);
 
         Scheduler::ProcessEventsToIdle();
@@ -2005,6 +2008,7 @@ void DesktopLOKTest::testBinaryCallback()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
         handler->setViewId(SfxLokHelper::getView());
 
+        handler->tilePainted(/*nPart=*/INT_MIN, /*nMode=*/0, rect1);
         handler->libreOfficeKitViewInvalidateTilesCallback(nullptr, INT_MIN, 0);
 
         Scheduler::ProcessEventsToIdle();
@@ -2012,6 +2016,65 @@ void DesktopLOKTest::testBinaryCallback()
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
         CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[0]));
         CPPUNIT_ASSERT_EQUAL(std::string("EMPTY"), std::get<1>(notifs[0]));
+    }
+}
+
+void DesktopLOKTest::testOmitInvalidate()
+{
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    tools::Rectangle aRectangle{Point(0, 0), Size(10, 10)};
+
+    {
+        // Given a clean state:
+        std::vector<std::tuple<int, std::string>> aCallbacks;
+        std::unique_ptr<CallbackFlushHandler> pHandler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &aCallbacks));
+        pHandler->setViewId(0);
+
+        // When emitting just an invalidation:
+        pHandler->libreOfficeKitViewInvalidateTilesCallback(&aRectangle, /*nPart=*/0, /*nMode=*/0);
+
+        // Then make sure that's filtered out:
+        Scheduler::ProcessEventsToIdle();
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 0
+        // - Actual  : 1
+        // i.e. invalidation was emitted when we haven't rendered any tiles yet.
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aCallbacks.size());
+    }
+
+    {
+        // Given a clean state:
+        std::vector<std::tuple<int, std::string>> aCallbacks;
+        std::unique_ptr<CallbackFlushHandler> pHandler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &aCallbacks));
+        pHandler->setViewId(0);
+
+        // When emitting an invalidation outside the painted area:
+        pHandler->tilePainted(/*nPart=*/0, /*nMode=*/0, aRectangle);
+        tools::Rectangle aElsewhere{Point(20, 20), Size(10, 10)};
+        pHandler->libreOfficeKitViewInvalidateTilesCallback(&aElsewhere, /*nPart=*/0, /*nMode=*/0);
+
+        // Then make sure that's filtered out:
+        Scheduler::ProcessEventsToIdle();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aCallbacks.size());
+    }
+
+    {
+        // Given a clean state:
+        std::vector<std::tuple<int, std::string>> aCallbacks;
+        std::unique_ptr<CallbackFlushHandler> pHandler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &aCallbacks));
+        pHandler->setViewId(0);
+
+        // When emitting an invalidation partly outside the painted area:
+        pHandler->tilePainted(/*nPart=*/0, /*nMode=*/0, aRectangle);
+        tools::Rectangle aLarger{Point(0, 0), Size(20, 10)};
+        pHandler->libreOfficeKitViewInvalidateTilesCallback(&aLarger, /*nPart=*/0, /*nMode=*/0);
+
+        // Then make sure that's cropped:
+        Scheduler::ProcessEventsToIdle();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aCallbacks.size());
+        CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(aCallbacks[0]));
+        // x, y, w, h, part, mode; so this is cropped.
+        CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 9, 9, 0, 0"), std::get<1>(aCallbacks[0]));
     }
 }
 
