@@ -1108,7 +1108,7 @@ class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
     DECL_LINK(PageNumHdl, weld::Toggleable&, void);
     DECL_LINK(TargetTypeHdl, weld::ComboBox&, void);
 
-    void SetFields(const OUString pFields[], bool bNewEntry, bool bSetIdentifier);
+    void SetFields(const OUString pFields[], bool bNewEntry);
 
 public:
     SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
@@ -1724,33 +1724,32 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
             ++nRightRow;
         bLeft = !bLeft;
     }
-    SetFields(pFields, bNewEntry, !bNewEntry);
+    SetFields(pFields, bNewEntry);
     assert(m_xTypeListBox && "this will exist after the loop");
     EnableHdl(*m_xTypeListBox);
 }
 
-void SwCreateAuthEntryDlg_Impl::SetFields(const OUString pFields[], bool bNewEntry, bool bSetIdentifier) {
+void SwCreateAuthEntryDlg_Impl::SetFields(const OUString pFields[], bool bNewEntry) {
     for (int nIndex = 0; nIndex < AUTH_FIELD_END; ++nIndex)
     {
         switch (const TextInfo aCurInfo = aTextInfoArr[nIndex]; aCurInfo.nToxField)
         {
         case AUTH_FIELD_IDENTIFIER:
-            if (!bNewEntry && bSetIdentifier)
+            if (bNewEntry)
             {
+                assert(m_pEdits[nIndex]);
+                m_pEdits[nIndex]->set_text(pFields[aCurInfo.nToxField]);
+            } else {
                 assert(m_xIdentifierBox);
                 m_xIdentifierBox->set_entry_text(pFields[aCurInfo.nToxField]);
             }
             break;
         case AUTH_FIELD_AUTHORITY_TYPE:
-            if (!pFields[aCurInfo.nToxField].isEmpty())
             {
-                m_xTypeListBox->set_active(pFields[aCurInfo.nToxField].toInt32());
+                int v = !pFields[aCurInfo.nToxField].isEmpty() ? pFields[aCurInfo.nToxField].toInt32() : -1;
+                m_xTypeListBox->set_active(v);
+                break;
             }
-            else
-            {
-                m_xTypeListBox->clear();
-            }
-            break;
         case AUTH_FIELD_TARGET_TYPE:
             assert(m_xTargetTypeListBox && "No TargetType ListBox");
             if (!pFields[aCurInfo.nToxField].isEmpty())
@@ -1843,7 +1842,7 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, weld::ComboBox&, rBox, void)
     OUString sFields[AUTH_FIELD_END];
     for(int ii = 0; ii < AUTH_FIELD_END; ++ii)
         sFields[ii] = pEntry->GetAuthorField(ToxAuthorityField(ii));
-    SetFields(sFields, false, false);
+    SetFields(sFields, false);
 }
 
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, weld::Entry&, rEdit, void)
