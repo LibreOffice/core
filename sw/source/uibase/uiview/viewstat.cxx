@@ -332,7 +332,8 @@ void SwView::GetState(SfxItemSet &rSet)
             }
             break;
             case FN_REDLINE_ON:
-                rSet.Put( SfxBoolItem( nWhich, GetDocShell()->IsChangeRecording(this) ) );
+                // Enabled at least in this view.
+                rSet.Put( SfxBoolItem( nWhich, GetDocShell()->IsChangeRecording(this, /*bRecordAllViews=*/false) ) );
                 // When the view is new (e.g. on load), show the Hidden Track Changes infobar
                 // if Show Changes is disabled, but recording of changes is enabled
                 // or hidden tracked changes are there already in the document.
@@ -340,7 +341,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 // enabled, see in sfx2.
                 if ( m_bForceChangesToolbar && m_pWrtShell->GetLayout()->IsHideRedlines() )
                 {
-                    bool isRecording = GetDocShell()->IsChangeRecording(this);
+                    bool isRecording = GetDocShell()->IsChangeRecording(this, /*bRecordAllViews=*/false);
                     bool hasRecorded =
                         m_pWrtShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().size();
                     if ( isRecording || hasRecorded )
@@ -359,10 +360,15 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case FN_TRACK_CHANGES_IN_THIS_VIEW:
             {
+                // Enabled in this view, but not in all views.
+                bool bOn = GetDocShell()->IsChangeRecording(this, /*bRecordAllViews=*/false) && !GetDocShell()->IsChangeRecording(this);
+                rSet.Put(SfxBoolItem(nWhich, bOn));
             }
             break;
             case FN_TRACK_CHANGES_IN_ALL_VIEWS:
             {
+                // Enabled in all views.
+                rSet.Put(SfxBoolItem(nWhich, GetDocShell()->IsChangeRecording(this)));
             }
             break;
             case FN_REDLINE_PROTECT :
