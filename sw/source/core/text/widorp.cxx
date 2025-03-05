@@ -499,6 +499,16 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
             bKeep = false;
         }
 
+        // remove remaining NoHyphOffset after enabling Hyphenate Across Spread (!bKeep) or
+        // enabling Move Line (!bKeepLine), and invalidate the master to update the last line
+        if ( (!bKeep || !bKeepLine) &&
+                    pMaster->GetNoHyphOffset() != TextFrameIndex(COMPLETE_STRING) )
+        {
+            pMaster->SetNoHyphOffset(TextFrameIndex(COMPLETE_STRING));
+            pMaster->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
+            pMaster->InvalidateSize_();
+        }
+
         if ( bKeep && pMasterPara && pMasterPara->GetNext() )
         {
             // calculate the beginning of last hyphenated line
@@ -524,6 +534,9 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
                 if ( bKeepLine && nExtraWidLines )
                 {
                     pMaster->SetNoHyphOffset(nIdx);
+                    // update also columns and frames
+                    pMaster->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
+                    pMaster->InvalidateSize_();
                     nExtraWidLines = 0; // no need to shift the full line
                 }
                 // shift full line:
@@ -537,11 +550,19 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
                 if ( pPrev->IsLastHyph() )
                     pPrev->SetLastHyph( false );
             }
-            else if ( !pNext->IsEndHyph() && pMaster->GetNoHyphOffset() != nIdx )
+
+            // update the old line with disabled hyphenation, i.e. when there is a line
+            // with disabled hyphenation, but it is not the last line any more
+            TextFrameIndex nNoHyphIdx = pMaster->GetNoHyphOffset();
+            if ( nNoHyphIdx != TextFrameIndex(COMPLETE_STRING) && nNoHyphIdx != nIdx )
             {
-                // not hyphenated and not a last line with forbidden hyphenation:
                 // enable hyphenation for all the lines in the TextFrame again
                 pMaster->SetNoHyphOffset(TextFrameIndex(COMPLETE_STRING));
+                // update all the previous lines before the previous offset, e.g.
+                // when deleting all the lines before the last line with disabled hyphenation
+                // results a starting line with disabled hyphenation -> repaint it with enabled
+                // hyphenation again
+                pMaster->InvalidateRange_(SwCharRange(TextFrameIndex(0), nNoHyphIdx));
             }
         }
     }
