@@ -1319,6 +1319,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="MenuPage-Theme">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ThemeDialog</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkSeparatorMenuItem" id="MenuPage-separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
