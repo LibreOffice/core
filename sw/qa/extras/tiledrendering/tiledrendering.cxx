@@ -4860,7 +4860,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewEnableOne)
     CPPUNIT_ASSERT(aRecord2.empty());
 
     // And given a reset state (both view1 and view2 recording is disabled):
-    comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
+    comphelper::dispatchCommand(".uno:TrackChanges", {});
 
     // When recording changes in view2:
     SfxLokHelper::setView(nView2);
@@ -5002,6 +5002,99 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerDocInsert)
     // - Actual  : 1
     // i.e. track changes recording was unconditionally per-view.
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pWrtShell2->GetRedlineCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesStates)
+{
+    // Given a document with 2 views:
+    SwXTextDocument* pXTextDocument = createDoc();
+    CPPUNIT_ASSERT(pXTextDocument);
+    ViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    SwView* pView1 = pXTextDocument->GetDocShell()->GetView();
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    SwView* pView2 = pXTextDocument->GetDocShell()->GetView();
+    SfxLokHelper::setView(nView1);
+
+    // When enabling recording in view1 only:
+    pView1->GetViewFrame().GetDispatcher()->Execute(FN_TRACK_CHANGES_IN_THIS_VIEW,
+                                                    SfxCallMode::SYNCHRON);
+
+    // Then make sure the "is record", "is record for this view on" and "is record for all views on"
+    // statuses are correct:
+    std::unique_ptr<SfxPoolItem> pItem;
+    pView1->GetViewFrame().GetBindings().QueryState(FN_REDLINE_ON, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_REDLINE_ON), pItem->Which());
+    // Without the accompanying fix in place, this test would have failed, enabling recording for
+    // this view didn't enable the toolbar button in the same view, which looked confusing.
+    CPPUNIT_ASSERT(dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+    pView1->GetViewFrame().GetBindings().QueryState(FN_TRACK_CHANGES_IN_THIS_VIEW, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_TRACK_CHANGES_IN_THIS_VIEW), pItem->Which());
+    CPPUNIT_ASSERT(dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+    pView1->GetViewFrame().GetBindings().QueryState(FN_TRACK_CHANGES_IN_ALL_VIEWS, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_TRACK_CHANGES_IN_ALL_VIEWS), pItem->Which());
+    CPPUNIT_ASSERT(!dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+    pView2->GetViewFrame().GetBindings().QueryState(FN_REDLINE_ON, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_REDLINE_ON), pItem->Which());
+    CPPUNIT_ASSERT(!dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+    pView2->GetViewFrame().GetBindings().QueryState(FN_TRACK_CHANGES_IN_THIS_VIEW, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_TRACK_CHANGES_IN_THIS_VIEW), pItem->Which());
+    CPPUNIT_ASSERT(!dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+    pView2->GetViewFrame().GetBindings().QueryState(FN_TRACK_CHANGES_IN_ALL_VIEWS, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_TRACK_CHANGES_IN_ALL_VIEWS), pItem->Which());
+    CPPUNIT_ASSERT(!dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+
+    // When disabling recording:
+    SfxBoolItem aOn(FN_REDLINE_ON, false);
+    pView1->GetViewFrame().GetDispatcher()->ExecuteList(FN_REDLINE_ON, SfxCallMode::SYNCHRON,
+                                                        { &aOn });
+
+    // Then make sure the "is record", "is record for this view on" and "is record for all views on"
+    // statuses are correct:
+    pView1->GetViewFrame().GetBindings().QueryState(FN_REDLINE_ON, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_REDLINE_ON), pItem->Which());
+    CPPUNIT_ASSERT(!dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+    pView1->GetViewFrame().GetBindings().QueryState(FN_TRACK_CHANGES_IN_THIS_VIEW, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_TRACK_CHANGES_IN_THIS_VIEW), pItem->Which());
+    CPPUNIT_ASSERT(!dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+    pView1->GetViewFrame().GetBindings().QueryState(FN_TRACK_CHANGES_IN_ALL_VIEWS, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_TRACK_CHANGES_IN_ALL_VIEWS), pItem->Which());
+    CPPUNIT_ASSERT(!dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+    pView2->GetViewFrame().GetBindings().QueryState(FN_REDLINE_ON, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_REDLINE_ON), pItem->Which());
+    CPPUNIT_ASSERT(!dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+    pView2->GetViewFrame().GetBindings().QueryState(FN_TRACK_CHANGES_IN_THIS_VIEW, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_TRACK_CHANGES_IN_THIS_VIEW), pItem->Which());
+    CPPUNIT_ASSERT(!dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+    pView2->GetViewFrame().GetBindings().QueryState(FN_TRACK_CHANGES_IN_ALL_VIEWS, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_TRACK_CHANGES_IN_ALL_VIEWS), pItem->Which());
+    CPPUNIT_ASSERT(!dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+
+    // When enabling recording in all views:
+    pView1->GetViewFrame().GetDispatcher()->Execute(FN_TRACK_CHANGES_IN_ALL_VIEWS,
+                                                    SfxCallMode::SYNCHRON);
+
+    // Then make sure the "is record", "is record for this view on" and "is record for all views on"
+    // statuses are correct:
+    pView1->GetViewFrame().GetBindings().QueryState(FN_REDLINE_ON, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_REDLINE_ON), pItem->Which());
+    CPPUNIT_ASSERT(dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+    pView1->GetViewFrame().GetBindings().QueryState(FN_TRACK_CHANGES_IN_THIS_VIEW, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_TRACK_CHANGES_IN_THIS_VIEW), pItem->Which());
+    CPPUNIT_ASSERT(!dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+    pView1->GetViewFrame().GetBindings().QueryState(FN_TRACK_CHANGES_IN_ALL_VIEWS, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_TRACK_CHANGES_IN_ALL_VIEWS), pItem->Which());
+    CPPUNIT_ASSERT(dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+    pView2->GetViewFrame().GetBindings().QueryState(FN_REDLINE_ON, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_REDLINE_ON), pItem->Which());
+    CPPUNIT_ASSERT(dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+    pView2->GetViewFrame().GetBindings().QueryState(FN_TRACK_CHANGES_IN_THIS_VIEW, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_TRACK_CHANGES_IN_THIS_VIEW), pItem->Which());
+    CPPUNIT_ASSERT(!dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+    pView2->GetViewFrame().GetBindings().QueryState(FN_TRACK_CHANGES_IN_ALL_VIEWS, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_TRACK_CHANGES_IN_ALL_VIEWS), pItem->Which());
+    CPPUNIT_ASSERT(dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
