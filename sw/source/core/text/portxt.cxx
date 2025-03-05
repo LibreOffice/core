@@ -227,11 +227,12 @@ static void GetLimitedStringPart(const SwTextFormatInfo& rInf, TextFrameIndex nI
                                  TextFrameIndex nLength, sal_uInt16 nComp, SwTwips nOriginalWidth,
                                  SwTwips nMaxWidth, TextFrameIndex& rOutLength, SwTwips& rOutWidth)
 {
-    assert(nMaxWidth >= 0);
     assert(nLength >= TextFrameIndex(0));
     const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
     rOutLength = nLength;
     rOutWidth = nOriginalWidth;
+    if (nMaxWidth < 0)
+        nMaxWidth = 0;
     while (rOutWidth > nMaxWidth)
     {
         TextFrameIndex nNewOnLineLengthGuess(rOutLength.get() * nMaxWidth / rOutWidth);
