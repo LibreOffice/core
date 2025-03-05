@@ -115,6 +115,8 @@ namespace desktop {
 
         void setViewId( int viewId ) { m_viewId = viewId; }
 
+        DESKTOP_DLLPUBLIC void tilePainted(int nPart, int nMode, const tools::Rectangle& rRectangle);
+
         // SfxLockCallbackInterface
         virtual void libreOfficeKitViewCallback(int nType, const OString& pPayload) override;
         virtual void libreOfficeKitViewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) override;
@@ -209,6 +211,9 @@ namespace desktop {
         std::map<int, OString> m_states;
         std::unordered_map<OString, OString> m_lastStateChange;
         std::unordered_map<int, std::unordered_map<int, OString>> m_viewStates;
+
+        /// BBox of already painted tiles: part number -> part mode -> rectangle.
+        std::map<int, std::map<int, tools::Rectangle>> m_aPaintedTiles;
 
         // For some types only the last message matters (see isUpdatedType()) or only the last message
         // per each viewId value matters (see isUpdatedTypePerViewId()), so instead of using push model
