@@ -57,6 +57,7 @@
       <menu:menuitem menu:id=".uno:MoveSlideLast"/>
     </menu:menupopup>
   </menu:menu>
+  <menu:menuitem menu:id=".uno:PresentationLayout"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:SlideSetup"/>
 </menu:menupopup>
