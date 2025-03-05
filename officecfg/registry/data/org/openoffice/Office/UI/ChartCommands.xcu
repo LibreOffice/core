@@ -145,7 +145,7 @@
       <!-- sub menu - format arrangement -->
       <node oor:name=".uno:Forward" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Bring ~Forward</value>
+          <value xml:lang="en-US">Forward One</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -153,7 +153,7 @@
       </node>
       <node oor:name=".uno:Backward" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Send Back~ward</value>
+          <value xml:lang="en-US">Backward One</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
