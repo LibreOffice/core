@@ -861,6 +861,12 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     // NB: Excel's range does not include page field area (if any).
     ScRange aOutRange = rDPObj.GetOutputRangeByType(sheet::DataPilotOutputRangeType::TABLE);
 
+    // normalize the order to prevent negative row/col counts - just in case.
+    aOutRange.PutInOrder();
+    // both start and end cells are included. subtraction excludes the start cells, therefore add +1.
+    SCROW pivotTableRowCount = aOutRange.aEnd.Row() - aOutRange.aStart.Row() + 1;
+    SCCOL pivotTableColCount = aOutRange.aEnd.Col() - aOutRange.aStart.Col() + 1;
+
     sal_Int32 nFirstHeaderRow = rDPObj.GetHideHeader() ? 0 : (rDPObj.GetHeaderLayout() ? 2 : 1);
     sal_Int32 nFirstDataRow = rDPObj.GetHideHeader() ? 1 : 2;
     sal_Int32 nFirstDataCol = 1;
@@ -1058,15 +1064,8 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             pAttList->add( XML_outline, ToPsz10(false));
         pPivotStrm->startElement(XML_pivotField, pAttList);
 
-        tools::Long nItemsCount
-            = static_cast<tools::Long>(aMemberSequence.size() + aSubtotalSequence.size());
         pPivotStrm->startElement(XML_items,
-            XML_count, OString::number(nItemsCount));
-
-        if (strcmp(toOOXMLAxisType(eOrient), "axisCol") == 0)
-            nColItemsCount = nItemsCount;
-        else if (strcmp(toOOXMLAxisType(eOrient), "axisRow") == 0)
-            nRowItemsCount = nItemsCount;
+            XML_count, OString::number(static_cast<tools::Long>(aMemberSequence.size() + aSubtotalSequence.size())));
 
         for (const auto & nMember : aMemberSequence)
         {
@@ -1076,6 +1075,11 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             pItemAttList->add(XML_x, OString::number(static_cast<tools::Long>(nMember.first)));
             pPivotStrm->singleElement(XML_item, pItemAttList);
         }
+
+        if (strcmp(toOOXMLAxisType(eOrient), "axisCol") == 0)
+            nColItemsCount = pivotTableColCount - nFirstDataCol;
+        else if (strcmp(toOOXMLAxisType(eOrient), "axisRow") == 0)
+            nRowItemsCount = pivotTableRowCount - nFirstDataRow;
 
         for (const OString& sSubtotal : aSubtotalSequence)
         {
