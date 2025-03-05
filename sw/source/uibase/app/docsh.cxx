@@ -1355,7 +1355,7 @@ const ::sfx2::IXmlIdRegistry* SwDocShell::GetXmlIdRegistry() const
     return m_xDoc ? &m_xDoc->GetXmlIdRegistry() : nullptr;
 }
 
-bool SwDocShell::IsChangeRecording(SfxViewShell* pViewShell) const
+bool SwDocShell::IsChangeRecording(SfxViewShell* pViewShell, bool bRecordAllViews) const
 {
     SwWrtShell* pWrtShell = nullptr;
     auto pView = dynamic_cast<SwView*>(pViewShell);
@@ -1370,7 +1370,25 @@ bool SwDocShell::IsChangeRecording(SfxViewShell* pViewShell) const
 
     if (!pWrtShell)
         return false;
-    return bool(pWrtShell->GetRedlineFlags() & RedlineFlags::On);
+
+    auto bOn = bool(pWrtShell->GetRedlineFlags() & RedlineFlags::On);
+    if (bOn)
+    {
+        if (bRecordAllViews)
+        {
+            for (SwViewShell& rSh : pWrtShell->GetRingContainer())
+            {
+                if (!rSh.GetViewOptions()->IsRedlineRecordingOn())
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 bool SwDocShell::HasChangeRecordProtection() const

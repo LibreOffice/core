@@ -3394,7 +3394,7 @@ void ScDocShellModificator::SetDocumentModified()
     }
 }
 
-bool ScDocShell::IsChangeRecording(SfxViewShell* /*pViewShell*/) const
+bool ScDocShell::IsChangeRecording(SfxViewShell* /*pViewShell*/, bool /*bRecordAllViews*/) const
 {
     ScChangeTrack* pChangeTrack = m_pDocument->GetChangeTrack();
     return pChangeTrack != nullptr;
