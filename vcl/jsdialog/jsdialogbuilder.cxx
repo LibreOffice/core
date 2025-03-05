@@ -519,11 +519,9 @@ std::unique_ptr<weld::Container> JSInstanceBuilder::weld_container(const OUStrin
         // use parent builder to send update - avoid multiple calls from many builders
         vcl::Window* pParent = pContainer->GetParent();
         OUString sId = OUString::number(m_nWindowId);
-        while (pParent)
+        auto aWidgetMap = Widgets().Find(sId);
+        while (pParent && aWidgetMap && !aWidgetMap->Find(pParent->get_id()))
         {
-            auto aWidgetMap = Widgets().Find(sId);
-            if (!aWidgetMap || !aWidgetMap->Find(pParent->get_id()))
-                break;
             pParent = pParent->GetParent();
         }
 
