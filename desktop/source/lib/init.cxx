@@ -1715,7 +1715,34 @@ void CallbackFlushHandler::libreOfficeKitViewCallbackWithViewId(int nType, const
 
 void CallbackFlushHandler::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode)
 {
-    CallbackData callbackData(pRect, nPart, nMode);
+    tools::Rectangle& rPaintedTiles = m_aPaintedTiles[nPart][nMode];
+    if (rPaintedTiles.IsEmpty())
+    {
+        // We have not sent any tiles: don't send invalidations.
+        return;
+    }
+
+    tools::Rectangle aRect;
+    if (pRect)
+    {
+        // We got an invalidate: crop it against the bbox.
+        aRect = *pRect;
+        aRect.Intersection(rPaintedTiles);
+        if (aRect.IsEmpty())
+        {
+            return;
+        }
+    }
+    else
+    {
+        // EMPTY invalidation: reset the bbox.
+        rPaintedTiles = tools::Rectangle();
+        // nullptr pRect means: invalidate everything.
+        aRect = RectangleAndPart::emptyAllRectangle;
+    }
+
+    // RectangleAndPart ctor doesn't store &aRect, so this is OK.
+    CallbackData callbackData(&aRect, nPart, nMode);
     queue(LOK_CALLBACK_INVALIDATE_TILES, callbackData);
 }
 
@@ -2618,6 +2645,13 @@ void CallbackFlushHandler::addViewStates(int viewId)
 void CallbackFlushHandler::removeViewStates(int viewId)
 {
     m_viewStates.erase(viewId);
+}
+
+void CallbackFlushHandler::tilePainted(int nPart, int nMode, const tools::Rectangle& rRectangle)
+{
+    // Painted a new tile: grow the bbox.
+    tools::Rectangle& rPaintedTiles = m_aPaintedTiles[nPart][nMode];
+    rPaintedTiles.Union(rRectangle);
 }
 
 
@@ -4468,6 +4502,13 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
     }
 
     enableViewCallbacks(pDocument, nOrigViewId);
+
+    auto it = pDocument->mpCallbackFlushHandlers.find(nOrigViewId);
+    if (it != pDocument->mpCallbackFlushHandlers.end())
+    {
+        tools::Rectangle aRectangle{Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight)};
+        it->second->tilePainted(nPart, nMode, aRectangle);
+    }
 }
 
 static int doc_getTileMode(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
