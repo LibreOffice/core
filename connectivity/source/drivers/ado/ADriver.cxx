@@ -63,7 +63,7 @@ void ODriver::disposing()
 
     for (auto& rxConnection : m_xConnections)
     {
-        Reference< XComponent > xComp(rxConnection.get(), UNO_QUERY);
+        rtl::Reference< OConnection > xComp(rxConnection.get());
         if (xComp.is())
             xComp->dispose();
     }
@@ -96,8 +96,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const S
     // we need to wrap the connection as the construct call might throw
     rtl::Reference<OConnection> pCon(new OConnection(this));
     pCon->construct(url,info);
-    OConnection* pPtr = pCon.get();
-    m_xConnections.push_back(WeakReferenceHelper(*pPtr));
+    m_xConnections.push_back(pCon);
 
     return pCon;
 }

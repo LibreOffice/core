@@ -23,12 +23,15 @@
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <unotools/weakref.hxx>
 #include <connectivity/CommonTools.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace connectivity::ado
 {
+        class OConnection;
+
         typedef ::cppu::WeakComponentImplHelper< css::sdbc::XDriver,
                                                  css::sdbcx::XDataDefinitionSupplier,
                                                  css::lang::XServiceInfo
@@ -37,7 +40,8 @@ namespace connectivity::ado
         {
             ::osl::Mutex                            m_aMutex;
 
-            connectivity::OWeakRefArray             m_xConnections; //  vector containing a list
+            std::vector<unotools::WeakReference<OConnection>>
+                                                    m_xConnections; //  vector containing a list
                                                         //  of all the Connection objects
                                                         //  for this Driver
             css::uno::Reference< css::uno::XComponentContext > m_xContext;
