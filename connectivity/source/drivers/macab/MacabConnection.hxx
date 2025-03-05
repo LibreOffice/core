@@ -38,8 +38,6 @@ namespace connectivity::macab
         class MacabDriver;
         class MacabAddressBook;
 
-        typedef std::vector< css::uno::WeakReferenceHelper > OWeakRefArray;
-
         typedef connectivity::OMetaConnection MacabConnection_BASE;
 
         class MacabConnection : public MacabConnection_BASE
