@@ -111,7 +111,7 @@ Reference< XStatement >  OConnection::createStatement()
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
-    Reference< XStatement > xStatement;
+    rtl::Reference< OStatement > xStatement;
     Reference< XStatement > xMasterStatement = m_xMasterConnection->createStatement();
     if ( xMasterStatement.is() )
     {
@@ -127,7 +127,7 @@ Reference< XPreparedStatement >  OConnection::prepareStatement(const OUString& s
     checkDisposed();
 
     // TODO convert the SQL to SQL the driver understands
-    Reference< XPreparedStatement > xStatement;
+    rtl::Reference< OPreparedStatement > xStatement;
     Reference< XPreparedStatement > xMasterStatement = m_xMasterConnection->prepareStatement(sql);
     if ( xMasterStatement.is() )
     {
@@ -142,7 +142,7 @@ Reference< XPreparedStatement >  OConnection::prepareCall(const OUString& sql)
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
-    Reference< XPreparedStatement > xStatement;
+    rtl::Reference< OCallableStatement > xStatement;
     Reference< XPreparedStatement > xMasterStatement = m_xMasterConnection->prepareCall(sql);
     if ( xMasterStatement.is() )
     {
@@ -428,7 +428,7 @@ void OConnection::disposing()
 
     for (auto const& statement : m_aStatements)
     {
-        Reference<XComponent> xComp(statement.get(),UNO_QUERY);
+        rtl::Reference<OStatementBase> xComp(statement.get());
         ::comphelper::disposeComponent(xComp);
     }
     m_aStatements.clear();

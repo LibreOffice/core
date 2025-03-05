@@ -49,6 +49,8 @@
 #include <connectivity/warningscontainer.hxx>
 #include <unotools/weakref.hxx>
 
+class OStatementBase;
+
 namespace dbaccess
 {
 
@@ -76,7 +78,9 @@ class OConnection final     :public OConnection_Base
     unotools::WeakReference<ODatabaseSource> m_xParent;
     css::uno::Reference< css::sdbcx::XTablesSupplier >
                                           m_xMasterTables; // just to avoid the recreation of the catalog
-    connectivity::OWeakRefArray           m_aStatements;
+    // contains OStatement and OPreparedStatement
+    std::vector<unotools::WeakReference<OStatementBase>>
+                                          m_aStatements;
     rtl::Reference< OQueryContainer >     m_xQueries;
     connectivity::OWeakRefArray           m_aComposers;
 
