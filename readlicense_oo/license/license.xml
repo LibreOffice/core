@@ -13,11 +13,10 @@
     <p>Third Party Code Additional copyright notices and license terms applicable to portions of the Software can be
     found <a href="#thirdparty">below</a> in this document.</p>
     <p>All trademarks and registered trademarks mentioned herein are the property of their respective owners.</p>
-    <p>Copyright © 2000–2024 LibreOffice contributors. All rights reserved.</p>
-    <p>This product is based on OpenOffice.org. Portions of this software are copyright © 2000-2011, Oracle and/or its
+    <p>Copyright © 2025 allotropia software GmbH. All rights reserved.</p>
+    <p>This product is based on LibreOffice which was based on OpenOffice.org. Portions of this software are copyright © 2000-2011, Oracle and/or its
     affiliates.</p>
-    <p>This product has been created by The Document Foundation, incorporating many modifications from different
-    contributors, see <a href="http://www.libreoffice.org/">http://www.libreoffice.org/</a> for more details.</p>
+    <p>This product has been created by allotropia software GmbH, see <a href="https://zetaoffice.net/">https://zetaoffice.net/</a> for more details.</p>
     <p><strong>Note:</strong> Do not translate or localize this document. Only English version is legally binding.</p>
     <h2>Contents</h2>
     <p><a href="#a__Libraries">Libraries</a></p>
@@ -2280,7 +2279,7 @@
     </div>
     <hr />
     <h1><a id="a__Extensions" name="a__Extensions">Extensions</a></h1>
-    <p>Only third party extensions are listed here whose source code is not in the LibreOffice tree.</p>
+    <p>Only third party extensions are listed here whose source code is not in the ZetaOffice tree.</p>
     <div class="NUMBERTEXT"><!-- FIXME: license_*.xsl written in XSLT 1.0 matches this when LIBNUMBERTEXT is defined -->
         <h2>Numbertext</h2>
         <p>The following software may be included in this product: Numbertext. Use of any of this software is governed
