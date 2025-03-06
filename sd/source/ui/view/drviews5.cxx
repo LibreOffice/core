@@ -54,6 +54,7 @@
 #include <ViewShellBase.hxx>
 #include <FormShellManager.hxx>
 #include <DrawController.hxx>
+#include <unolayer.hxx>
 #include <memory>
 #include <comphelper/lok.hxx>
 
@@ -630,8 +631,8 @@ void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
         rtl::Reference<SdUnoDrawView> pUnoDrawView(new SdUnoDrawView (
             *this,
             *GetView()));
-        css::uno::Reference< css::drawing::XLayer> rLayer = pUnoDrawView->getActiveLayer();
-        GetViewShellBase().GetDrawController()->fireChangeLayer( rLayer );
+        rtl::Reference<SdLayer> xLayer = pUnoDrawView->getActiveLayer();
+        GetViewShellBase().GetDrawController()->fireChangeLayer( xLayer );
     }
 }
 

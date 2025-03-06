@@ -336,30 +336,27 @@ Reference<XResource> PresenterViewFactory::CreateView(
 Reference<XView> PresenterViewFactory::CreateSlideShowView(
     const Reference<XResourceId>& rxViewId) const
 {
-    Reference<XView> xView;
-
     if ( ! mxConfigurationController.is())
-        return xView;
+        return nullptr;
     if ( ! mxComponentContext.is())
-        return xView;
+        return nullptr;
 
     try
     {
-        rtl::Reference<PresenterSlideShowView> pShowView (
+        rtl::Reference<PresenterSlideShowView> xView;
+        xView =
             new PresenterSlideShowView(
                 mxComponentContext,
                 rxViewId,
                 mxControllerWeak.get(),
-                mpPresenterController));
-        pShowView->LateInit();
-        xView = pShowView;
+                mpPresenterController);
+        xView->LateInit();
+        return xView;
     }
     catch (RuntimeException&)
     {
-        xView = nullptr;
+        return nullptr;
     }
-
-    return xView;
 }
 
 Reference<XView> PresenterViewFactory::CreateSlidePreviewView(

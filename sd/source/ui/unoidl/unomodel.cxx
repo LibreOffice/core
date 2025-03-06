@@ -134,7 +134,7 @@
 
 #include <strings.hrc>
 #include <strings.hxx>
-#include "unolayer.hxx"
+#include <unolayer.hxx>
 #include <unopage.hxx>
 #include "unocpres.hxx"
 #include "unoobj.hxx"

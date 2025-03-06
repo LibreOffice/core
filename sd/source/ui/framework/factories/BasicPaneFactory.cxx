@@ -335,14 +335,10 @@ void SAL_CALL BasicPaneFactory::disposing (
 Reference<XResource> BasicPaneFactory::CreateFrameWindowPane (
     const Reference<XResourceId>& rxPaneId)
 {
-    Reference<XResource> xPane;
+    if (!mpViewShellBase)
+        return nullptr;
 
-    if (mpViewShellBase != nullptr)
-    {
-        xPane = new FrameWindowPane(rxPaneId, mpViewShellBase->GetViewWindow());
-    }
-
-    return xPane;
+    return new FrameWindowPane(rxPaneId, mpViewShellBase->GetViewWindow());
 }
 
 Reference<XResource> BasicPaneFactory::CreateFullScreenPane (
@@ -363,47 +359,43 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
     const Reference<XResourceId>& rxPaneId,
     const PaneDescriptor& rDescriptor)
 {
-    Reference<XResource> xPane;
+    if (!mpViewShellBase)
+        return nullptr;
 
-    if (mpViewShellBase != nullptr)
+    // Create the corresponding shell and determine the id of the child window.
+    sal_uInt16 nChildWindowId = 0;
+    ::std::unique_ptr<SfxShell> pShell;
+    switch (rDescriptor.mePaneId)
     {
-        // Create the corresponding shell and determine the id of the child window.
-        sal_uInt16 nChildWindowId = 0;
-        ::std::unique_ptr<SfxShell> pShell;
-        switch (rDescriptor.mePaneId)
-        {
-            case LeftImpressPaneId:
-                pShell.reset(new LeftImpressPaneShell());
-                nChildWindowId = ::sd::LeftPaneImpressChildWindow::GetChildWindowId();
-                break;
+        case LeftImpressPaneId:
+            pShell.reset(new LeftImpressPaneShell());
+            nChildWindowId = ::sd::LeftPaneImpressChildWindow::GetChildWindowId();
+            break;
 
-            case BottomImpressPaneId:
-                pShell.reset(new BottomImpressPaneShell());
-                nChildWindowId = ::sd::BottomPaneImpressChildWindow::GetChildWindowId();
-                break;
+        case BottomImpressPaneId:
+            pShell.reset(new BottomImpressPaneShell());
+            nChildWindowId = ::sd::BottomPaneImpressChildWindow::GetChildWindowId();
+            break;
 
-            case LeftDrawPaneId:
-                pShell.reset(new LeftDrawPaneShell());
-                nChildWindowId = ::sd::LeftPaneDrawChildWindow::GetChildWindowId();
-                break;
+        case LeftDrawPaneId:
+            pShell.reset(new LeftDrawPaneShell());
+            nChildWindowId = ::sd::LeftPaneDrawChildWindow::GetChildWindowId();
+            break;
 
-            default:
-                break;
-        }
-
-        // With shell and child window id create the ChildWindowPane
-        // wrapper.
-        if (pShell != nullptr)
-        {
-            xPane = new ChildWindowPane(
-                rxPaneId,
-                nChildWindowId,
-                *mpViewShellBase,
-                std::move(pShell));
-        }
+        default:
+            break;
     }
 
-    return xPane;
+    // With shell and child window id create the ChildWindowPane
+    // wrapper.
+    if (!pShell)
+        return nullptr;
+
+    return new ChildWindowPane(
+            rxPaneId,
+            nChildWindowId,
+            *mpViewShellBase,
+            std::move(pShell));
 }
 
 void BasicPaneFactory::ThrowIfDisposed() const

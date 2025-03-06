@@ -258,7 +258,7 @@ bool SdGRFFilter::Export()
                 const sal_uInt16 nFilter = rGraphicFilter.GetExportFormatNumberForTypeName( aTypeName );
                 if ( nFilter != GRFILTER_FORMAT_NOTFOUND )
                 {
-                    uno::Reference< task::XInteractionHandler > xInteractionHandler;
+                    rtl::Reference< SdGRFFilter_ImplInteractionHdl > xInteractionHandler;
 
                     beans::PropertyValues aArgs;
                     TransformItems( SID_SAVEASDOC, rSet, aArgs );
@@ -281,7 +281,7 @@ bool SdGRFFilter::Export()
                             if ( rArg.Value >>= xHdl )
                             {
                                 xInteractionHandler = new SdGRFFilter_ImplInteractionHdl( xHdl );
-                                rArg.Value <<= xInteractionHandler;
+                                rArg.Value <<= uno::Reference< task::XInteractionHandler >(xInteractionHandler);
                             }
                         }
                     }
@@ -313,8 +313,8 @@ bool SdGRFFilter::Export()
                     bRet = xExporter->filter( aArgs );
                     if ( !bRet && xInteractionHandler.is() )
                         SdGRFFilter::HandleGraphicFilterError(
-                            static_cast< SdGRFFilter_ImplInteractionHdl* >( xInteractionHandler.get() )->GetErrorCode(),
-                                            rGraphicFilter.GetLastError() );
+                            xInteractionHandler->GetErrorCode(),
+                            rGraphicFilter.GetLastError() );
                 }
             }
         }

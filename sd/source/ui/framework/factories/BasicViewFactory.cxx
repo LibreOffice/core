@@ -152,7 +152,6 @@ void BasicViewFactory::disposing(std::unique_lock<std::mutex>&)
 Reference<XResource> SAL_CALL BasicViewFactory::createResource (
     const Reference<XResourceId>& rxViewId)
 {
-    Reference<XResource> xView;
     const bool bIsCenterPane (
         rxViewId->isBoundToURL(FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT));
 
@@ -178,26 +177,26 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
     if (mpBase != nullptr)
         pFrame = &mpBase->GetViewFrame();
 
-    if (pFrame != nullptr && mpBase!=nullptr && pWindow!=nullptr)
+    if (!pFrame || !mpBase || !pWindow)
+        return nullptr;
+
+    // Try to get the view from the cache.
+    std::shared_ptr<ViewDescriptor> pDescriptor (GetViewFromCache(rxViewId, xPane));
+
+    // When the requested view is not in the cache then create a new view.
+    if (pDescriptor == nullptr)
     {
-        // Try to get the view from the cache.
-        std::shared_ptr<ViewDescriptor> pDescriptor (GetViewFromCache(rxViewId, xPane));
-
-        // When the requested view is not in the cache then create a new view.
-        if (pDescriptor == nullptr)
-        {
-            pDescriptor = CreateView(rxViewId, *pFrame, *pWindow, xPane, pFrameView, bIsCenterPane);
-        }
-
-        xView = pDescriptor->mxView;
-
-        mpViewShellContainer->push_back(pDescriptor);
-
-        if (bIsCenterPane)
-            ActivateCenterView(pDescriptor);
-        else
-            pWindow->Resize();
+        pDescriptor = CreateView(rxViewId, *pFrame, *pWindow, xPane, pFrameView, bIsCenterPane);
     }
+
+    rtl::Reference<ViewShellWrapper> xView = pDescriptor->mxView;
+
+    mpViewShellContainer->push_back(pDescriptor);
+
+    if (bIsCenterPane)
+        ActivateCenterView(pDescriptor);
+    else
+        pWindow->Resize();
 
     return xView;
 }

@@ -9247,6 +9247,7 @@ sd/inc/stlsheet.hxx
 sd/inc/strings.hxx
 sd/inc/undo/undofactory.hxx
 sd/inc/undo/undomanager.hxx
+sd/inc/unolayer.hxx
 sd/qa/unit/SVGExportTests.cxx
 sd/qa/unit/activex-controls-tests.cxx
 sd/qa/unit/dialogs-test.cxx
@@ -9874,7 +9875,6 @@ sd/source/ui/unoidl/unocpres.cxx
 sd/source/ui/unoidl/unocpres.hxx
 sd/source/ui/unoidl/unodoc.cxx
 sd/source/ui/unoidl/unolayer.cxx
-sd/source/ui/unoidl/unolayer.hxx
 sd/source/ui/unoidl/unomodel.cxx
 sd/source/ui/unoidl/unomodule.cxx
 sd/source/ui/unoidl/unomodule.hxx

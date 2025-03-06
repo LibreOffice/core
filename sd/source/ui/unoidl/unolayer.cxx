@@ -20,7 +20,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-#include "unolayer.hxx"
+#include <unolayer.hxx>
 
 #include <comphelper/extract.hxx>
 #include <editeng/unoipset.hxx>
@@ -421,7 +421,7 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal
     if( mpModel == nullptr )
         throw lang::DisposedException();
 
-    uno::Reference< drawing::XLayer > xLayer;
+    rtl::Reference< SdLayer > xLayer;
 
     if( mpModel->mpDoc )
     {
@@ -495,18 +495,17 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::getLayerForShape( con
     if( mpModel == nullptr )
         throw lang::DisposedException();
 
-    uno::Reference< drawing::XLayer >  xLayer;
+    if(!mpModel->mpDoc)
+        return nullptr;
 
-    if(mpModel->mpDoc)
-    {
-        SdrObject* pObj = SdrObject::getSdrObjectFromXShape( xShape );
-        if(pObj)
-        {
-            SdrLayerID aId = pObj->GetLayer();
-            SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
-            xLayer = GetLayer (rLayerAdmin.GetLayerPerID(aId));
-        }
-    }
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape( xShape );
+    if(!pObj)
+        return nullptr;
+
+    SdrLayerID aId = pObj->GetLayer();
+    SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
+
+    rtl::Reference< SdLayer > xLayer = GetLayer (rLayerAdmin.GetLayerPerID(aId));
     return xLayer;
 }
 

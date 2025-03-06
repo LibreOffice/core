@@ -519,7 +519,6 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
         }
     }
 
-    uno::Reference< text::XTextRange >  xFound;
     ESelection aSel;
 
     if( xText.is() )
@@ -533,29 +532,26 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
             break;
     }
 
-    if( Search( aText, nStartPos, nEndPos, pDescr ) )
+    if( !Search( aText, nStartPos, nEndPos, pDescr ) )
+        return nullptr;
+
+    if( nStartPos > nTextLen || nEndPos > nTextLen )
     {
-        if( nStartPos <= nTextLen && nEndPos <= nTextLen )
-        {
-            ESelection aSelection( pConvertPara[nStartPos], pConvertPos[nStartPos],
-                             pConvertPara[nEndPos], pConvertPos[nEndPos] );
-
-            SvxUnoTextBase* pParent = comphelper::getFromUnoTunnel<SvxUnoTextBase>( xParent );
-
-            if(pParent)
-            {
-                rtl::Reference<SvxUnoTextRange> pRange = new SvxUnoTextRange( *pParent );
-                xFound = pRange;
-                pRange->SetSelection(aSelection);
-            }
-        }
-        else
-        {
-            OSL_FAIL("Array overflow while searching!");
-        }
+        OSL_FAIL("Array overflow while searching!");
+        return nullptr;
     }
 
-    return xFound;
+    ESelection aSelection( pConvertPara[nStartPos], pConvertPos[nStartPos],
+                     pConvertPara[nEndPos], pConvertPos[nEndPos] );
+
+    SvxUnoTextBase* pParent = comphelper::getFromUnoTunnel<SvxUnoTextBase>( xParent );
+    if(!pParent)
+        return nullptr;
+
+    rtl::Reference<SvxUnoTextRange> pRange = new SvxUnoTextRange( *pParent );
+    pRange->SetSelection(aSelection);
+
+    return pRange;
 }
 
 bool SdUnoSearchReplaceShape::Search( const OUString& rText, sal_Int32& nStartPos, sal_Int32& nEndPos, SdUnoSearchReplaceDescriptor* pDescr ) noexcept

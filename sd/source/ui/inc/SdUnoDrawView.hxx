@@ -20,9 +20,11 @@
 #pragma once
 
 #include "DrawSubController.hxx"
+#include <rtl/ref.hxx>
 
 class SdXImpressDocument;
 namespace com::sun::star::drawing { class XLayer; }
+class SdLayer;
 
 namespace sd {
 
@@ -78,7 +80,7 @@ public:
             The returned value may be empty when the internal state of this
             view is not valid (like during destruction.)
     */
-    css::uno::Reference< css::drawing::XLayer> getActiveLayer() const;
+    rtl::Reference<SdLayer> getActiveLayer() const;
 
 private:
     bool getMasterPageMode() const noexcept;

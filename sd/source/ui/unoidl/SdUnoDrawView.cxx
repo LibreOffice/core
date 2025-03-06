@@ -23,7 +23,7 @@
 #include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
 #include <drawdoc.hxx>
-#include "unolayer.hxx"
+#include <unolayer.hxx>
 #include <unomodel.hxx>
 #include <Window.hxx>
 #include <pres.hxx>
@@ -90,37 +90,31 @@ void SdUnoDrawView::setLayerMode (bool bLayerMode) noexcept
     }
 }
 
-Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer() const
+rtl::Reference<SdLayer> SdUnoDrawView::getActiveLayer() const
 {
-    Reference<drawing::XLayer> xCurrentLayer;
+    // Retrieve the layer manager from the model.
+    SdXImpressDocument* pModel = GetModel();
+    if (pModel == nullptr)
+        return nullptr;
 
-    do
-    {
-        // Retrieve the layer manager from the model.
-        SdXImpressDocument* pModel = GetModel();
-        if (pModel == nullptr)
-            break;
+    SdDrawDocument* pSdModel = pModel->GetDoc();
+    if (pSdModel == nullptr)
+        return nullptr;
 
-        SdDrawDocument* pSdModel = pModel->GetDoc();
-        if (pSdModel == nullptr)
-            break;
+    // From the model get the current SdrLayer object via the layer admin.
+    SdrLayerAdmin& rLayerAdmin = pSdModel->GetLayerAdmin ();
+    SdrLayer* pLayer = rLayerAdmin.GetLayer (mrView.GetActiveLayer());
+    if (pLayer == nullptr)
+        return nullptr;
 
-        // From the model get the current SdrLayer object via the layer admin.
-        SdrLayerAdmin& rLayerAdmin = pSdModel->GetLayerAdmin ();
-        SdrLayer* pLayer = rLayerAdmin.GetLayer (mrView.GetActiveLayer());
-        if (pLayer == nullptr)
-            break;
+    // Get the corresponding XLayer object from the implementation
+    // object of the layer manager.
+    Reference<drawing::XLayerManager> xManager (pModel->getLayerManager(), uno::UNO_QUERY);
+    SdLayerManager* pManager = dynamic_cast<SdLayerManager*> (xManager.get());
+    if (!pManager)
+        return nullptr;
 
-        // Get the corresponding XLayer object from the implementation
-        // object of the layer manager.
-        Reference<drawing::XLayerManager> xManager (pModel->getLayerManager(), uno::UNO_QUERY);
-        SdLayerManager* pManager = dynamic_cast<SdLayerManager*> (xManager.get());
-        if (pManager != nullptr)
-            xCurrentLayer = pManager->GetLayer (pLayer);
-    }
-    while (false);
-
-    return xCurrentLayer;
+    return pManager->GetLayer (pLayer);
 }
 
 void SdUnoDrawView::setActiveLayer (const Reference<drawing::XLayer>& rxLayer)
@@ -369,7 +363,7 @@ Any SAL_CALL SdUnoDrawView::getFastPropertyValue (
             break;
 
         case DrawController::PROPERTY_ACTIVE_LAYER:
-            aValue <<= getActiveLayer();
+            aValue <<= Reference<XLayer>(getActiveLayer());
             break;
 
         case DrawController::PROPERTY_ZOOMVALUE:

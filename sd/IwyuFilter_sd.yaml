@@ -84,6 +84,10 @@ excludelist:
     sd/inc/undo/undoobjects.hxx:
     # base class has to be a complete type
     - tools/weakbase.hxx
+    sd/inc/unolayer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/XLayer.hpp
+    - com/sun/star/drawing/XLayerManager.hpp
     sd/source/filter/eppt/eppt.hxx:
     # base class has to be a complete type
     - escherex.hxx
@@ -313,10 +317,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/document/XExtendedFilterDetection.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    sd/source/ui/unoidl/unolayer.hxx:
-    # base class has to be a complete type
-    - com/sun/star/drawing/XLayer.hpp
-    - com/sun/star/drawing/XLayerManager.hpp
     sd/source/ui/unoidl/unocpres.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XIndexContainer.hpp

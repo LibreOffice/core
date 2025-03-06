@@ -20,7 +20,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include "unowcntr.hxx"
-#include "unolayer.hxx"
+#include <unolayer.hxx>
 
 using namespace ::com::sun::star;
 
