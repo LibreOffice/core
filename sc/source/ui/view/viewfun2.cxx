@@ -1557,11 +1557,11 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                         if (eCellType != CELLTYPE_EDIT)
                             continue;
 
-                        const std::vector<editeng::MisspellRanges>* pRanges = pWin->GetAutoSpellData(nColItr, nStartRow);
-                        if ( !pRanges )
+                        sc::MisspellRangeResult aRangeResult = pWin->GetAutoSpellData(nColItr, nStartRow);
+                        if (!aRangeResult.HasRanges())
                             continue;
                         for ( SCROW nRowItr = nStartRow + 1; nRowItr <= nEndRow; ++nRowItr )
-                            pWin->SetAutoSpellData(nColItr, nRowItr, pRanges);
+                            pWin->SetAutoSpellData(nColItr, nRowItr, aRangeResult);
                     }
                     break;
                 case FILL_TO_TOP:
@@ -1571,11 +1571,11 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                         if (eCellType != CELLTYPE_EDIT)
                             continue;
 
-                        const std::vector<editeng::MisspellRanges>* pRanges = pWin->GetAutoSpellData(nColItr, nEndRow);
-                        if ( !pRanges )
+                        sc::MisspellRangeResult aRangeResult = pWin->GetAutoSpellData(nColItr, nEndRow);
+                        if (!aRangeResult.HasRanges())
                             continue;
                         for ( SCROW nRowItr = nEndRow - 1; nRowItr >= nStartRow; --nRowItr )
-                            pWin->SetAutoSpellData(nColItr, nRowItr, pRanges);
+                            pWin->SetAutoSpellData(nColItr, nRowItr, aRangeResult);
                     }
                     break;
                 case FILL_TO_RIGHT:
@@ -1585,11 +1585,11 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                         if (eCellType != CELLTYPE_EDIT)
                             continue;
 
-                        const std::vector<editeng::MisspellRanges>* pRanges = pWin->GetAutoSpellData(nStartCol, nRowItr);
-                        if ( !pRanges )
+                        sc::MisspellRangeResult aRangeResult = pWin->GetAutoSpellData(nStartCol, nRowItr);
+                        if (!aRangeResult.HasRanges())
                             continue;
                         for ( SCCOL nColItr = nStartCol + 1; nColItr <= nEndCol; ++nColItr )
-                            pWin->SetAutoSpellData(nColItr, nRowItr, pRanges);
+                            pWin->SetAutoSpellData(nColItr, nRowItr, aRangeResult);
                     }
                     break;
                 case FILL_TO_LEFT:
@@ -1599,23 +1599,22 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                         if (eCellType != CELLTYPE_EDIT)
                             continue;
 
-                        const std::vector<editeng::MisspellRanges>* pRanges = pWin->GetAutoSpellData(nEndCol, nRowItr);
-                        if ( !pRanges )
+                        sc::MisspellRangeResult aRangeResult = pWin->GetAutoSpellData(nEndCol, nRowItr);
+                        if (!aRangeResult.HasRanges())
                             continue;
                         for ( SCCOL nColItr = nEndCol - 1; nColItr >= nStartCol; --nColItr )
-                            pWin->SetAutoSpellData(nColItr, nRowItr, pRanges);
+                            pWin->SetAutoSpellData(nColItr, nRowItr, aRangeResult);
                     }
                     break;
             }
             return;
         }
 
-        typedef const std::vector<editeng::MisspellRanges>* MisspellRangesType;
         SCROW nRowRepeatSize = nEndRow - nStartRow + 1;
         SCCOL nColRepeatSize = nEndCol - nStartCol + 1;
         SCROW nTillRow = 0;
         SCCOL nTillCol = 0;
-        std::vector<std::vector<MisspellRangesType>> aSourceSpellRanges(nRowRepeatSize, std::vector<MisspellRangesType>(nColRepeatSize, nullptr));
+        std::vector<std::vector<sc::MisspellRangeResult>> aSourceSpellRanges(nRowRepeatSize, std::vector<sc::MisspellRangeResult>(nColRepeatSize));
 
         for ( SCROW nRowIdx = 0; nRowIdx < nRowRepeatSize; ++nRowIdx )
         {
@@ -1638,10 +1637,10 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                     for ( SCROW nRowItr = nEndRow + 1; nRowItr <= nTillRow; ++nRowItr )
                     {
                         size_t nSourceRowIdx = ( nRowItr - nEndRow - 1 ) % nRowRepeatSize;
-                        MisspellRangesType pRanges = aSourceSpellRanges[nSourceRowIdx][nColItr - nStartCol];
-                        if ( !pRanges )
+                        sc::MisspellRangeResult aRangeResult = aSourceSpellRanges[nSourceRowIdx][nColItr - nStartCol];
+                        if (!aRangeResult.HasRanges())
                             continue;
-                        pWin->SetAutoSpellData(nColItr, nRowItr, pRanges);
+                        pWin->SetAutoSpellData(nColItr, nRowItr, aRangeResult);
                     }
                 }
                 break;
@@ -1653,10 +1652,10 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                     for ( SCROW nRowItr = nStartRow - 1; nRowItr >= nTillRow; --nRowItr )
                     {
                         size_t nSourceRowIdx = nRowRepeatSize - 1 - ( ( nStartRow - 1 - nRowItr ) % nRowRepeatSize );
-                        MisspellRangesType pRanges = aSourceSpellRanges[nSourceRowIdx][nColItr - nStartCol];
-                        if ( !pRanges )
+                        sc::MisspellRangeResult aRangeResult = aSourceSpellRanges[nSourceRowIdx][nColItr - nStartCol];
+                        if (!aRangeResult.HasRanges())
                             continue;
-                        pWin->SetAutoSpellData(nColItr, nRowItr, pRanges);
+                        pWin->SetAutoSpellData(nColItr, nRowItr, aRangeResult);
                     }
                 }
                 break;
@@ -1668,10 +1667,10 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                     size_t nSourceColIdx = ( nColItr - nEndCol - 1 ) % nColRepeatSize;
                     for ( SCROW nRowItr = nStartRow; nRowItr <= nEndRow; ++nRowItr )
                     {
-                        MisspellRangesType pRanges = aSourceSpellRanges[nRowItr - nStartRow][nSourceColIdx];
-                        if ( !pRanges )
+                        sc::MisspellRangeResult aRangeResult = aSourceSpellRanges[nRowItr - nStartRow][nSourceColIdx];
+                        if (!aRangeResult.HasRanges())
                             continue;
-                        pWin->SetAutoSpellData(nColItr, nRowItr, pRanges);
+                        pWin->SetAutoSpellData(nColItr, nRowItr, aRangeResult);
                     }
                 }
                 break;
@@ -1683,10 +1682,10 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                     size_t nSourceColIdx = nColRepeatSize - 1 - ( ( nStartCol - 1 - nColItr ) % nColRepeatSize );
                     for ( SCROW nRowItr = nStartRow; nRowItr <= nEndRow; ++nRowItr )
                     {
-                        MisspellRangesType pRanges = aSourceSpellRanges[nRowItr - nStartRow][nSourceColIdx];
-                        if ( !pRanges )
+                        sc::MisspellRangeResult aRangeResult = aSourceSpellRanges[nRowItr - nStartRow][nSourceColIdx];
+                        if (!aRangeResult.HasRanges())
                             continue;
-                        pWin->SetAutoSpellData(nColItr, nRowItr, pRanges);
+                        pWin->SetAutoSpellData(nColItr, nRowItr, aRangeResult);
                     }
                 }
                 break;

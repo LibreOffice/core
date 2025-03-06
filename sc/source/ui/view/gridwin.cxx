@@ -6103,21 +6103,21 @@ void ScGridWindow::ResetAutoSpellForContentChange()
         mpSpellCheckCxt->resetForContentChange();
 }
 
-void ScGridWindow::SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges )
+void ScGridWindow::SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const sc::MisspellRangeResult& rRangeResult )
 {
     if (!mpSpellCheckCxt)
         return;
 
-    mpSpellCheckCxt->setMisspellRanges(nPosX, nPosY, pRanges);
+    mpSpellCheckCxt->setMisspellRanges(nPosX, nPosY, rRangeResult);
 }
 
-const std::vector<editeng::MisspellRanges>* ScGridWindow::GetAutoSpellData( SCCOL nPosX, SCROW nPosY )
+sc::MisspellRangeResult ScGridWindow::GetAutoSpellData( SCCOL nPosX, SCROW nPosY )
 {
     if (!mpSpellCheckCxt)
-        return nullptr;
+        return {};
 
     if (!maVisibleRange.isInside(nPosX, nPosY))
-        return nullptr;
+        return {};
 
     return mpSpellCheckCxt->getMisspellRanges(nPosX, nPosY);
 }

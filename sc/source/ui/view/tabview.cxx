@@ -2543,14 +2543,14 @@ void ScTabView::ResetAutoSpellForContentChange()
     }
 }
 
-void ScTabView::SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges )
+void ScTabView::SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const sc::MisspellRangeResult& rRangeResult )
 {
     for (VclPtr<ScGridWindow> & pWin: pGridWin)
     {
         if (!pWin)
             continue;
 
-        pWin->SetAutoSpellData(nPosX, nPosY, pRanges);
+        pWin->SetAutoSpellData(nPosX, nPosY, rRangeResult);
     }
 }
 

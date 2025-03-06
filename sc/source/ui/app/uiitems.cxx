@@ -38,8 +38,7 @@ ScInputStatusItem::ScInputStatusItem(
     aStartPos   ( rStartPos ),
     aEndPos     ( rEndPos ),
     aString     (std::move( _aString )),
-    pEditData   ( pData ? pData->Clone() : nullptr ),
-    mpMisspellRanges(nullptr)
+    pEditData   ( pData ? pData->Clone() : nullptr )
 {
 }
 
@@ -50,7 +49,7 @@ ScInputStatusItem::ScInputStatusItem( const ScInputStatusItem& rItem ) :
     aEndPos     ( rItem.aEndPos ),
     aString     ( rItem.aString ),
     pEditData   ( rItem.pEditData ? rItem.pEditData->Clone() : nullptr ),
-    mpMisspellRanges(rItem.mpMisspellRanges)
+    maMisspellRanges(rItem.maMisspellRanges)
 {
 }
 
@@ -74,9 +73,9 @@ ScInputStatusItem* ScInputStatusItem::Clone( SfxItemPool * ) const
     return new ScInputStatusItem( *this );
 }
 
-void ScInputStatusItem::SetMisspellRanges( const std::vector<editeng::MisspellRanges>* pRanges )
+void ScInputStatusItem::SetMisspellRanges( const sc::MisspellRangeResult& rRanges )
 {
-    mpMisspellRanges = pRanges;
+    maMisspellRanges = rRanges;
 }
 
 // ScPaintHint was moved to hints.cxx

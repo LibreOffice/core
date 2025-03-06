@@ -21,6 +21,7 @@
 
 #include <address.hxx>
 #include <cellvalue.hxx>
+#include <spellcheckcontext.hxx>
 #include <tools/color.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
@@ -153,7 +154,7 @@ private:
         const SfxItemSet*       mpOldCondSet;
         const SfxItemSet*       mpOldPreviewFontSet;
         RowInfo*                mpThisRowInfo;
-        const std::vector<editeng::MisspellRanges>* mpMisspellRanges;
+        sc::MisspellRangeResult maMisspellRanges;
 
         explicit DrawEditParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue);
 
