@@ -1235,6 +1235,7 @@ Reference< XShape > const & Shape::createAndInsert(
         }
     }
     HomogenMatrix3 aMatrix;
+    tools::Rectangle aOrigSize;
     if ( aServiceName == "com.sun.star.drawing.ConnectorShape" )
     {
         ::basegfx::B2DPolygon aPoly;
@@ -2007,6 +2008,10 @@ Reference< XShape > const & Shape::createAndInsert(
         if (mbWps && aServiceName == "com.sun.star.drawing.LineShape" && !pParentGroupShape)
             mxShape->setPosition(maPosition);
 
+        SdrObject* pShape = SdrObject::getSdrObjectFromXShape(mxShape);
+        if (pShape)
+            aOrigSize = pShape->GetLogicRect();
+
         if (bIsConnectorShape)
         {
             msConnectorName = mpCustomShapePropertiesPtr->getShapePresetTypeName();
@@ -2304,16 +2309,14 @@ Reference< XShape > const & Shape::createAndInsert(
             }
 
             SdrObject* pShape = SdrObject::getSdrObjectFromXShape(mxShape);
-            if (pShape && bAutoHeight && bIsCustomShape)
+            if (pShape && bAutoHeight)
             {
-                tools::Rectangle aOrigSize(aShapeRectHmm.X, aShapeRectHmm.Y,
-                    aShapeRectHmm.X + aShapeRectHmm.Width, aShapeRectHmm.Y + aShapeRectHmm.Height);
-                tools::Rectangle aAdaptSize = pShape->GetLogicRect();
-                // a little tolerance same as in \svx\source\svdraw\svdoashp.cxx:AdjustTextFrameWidthAndHeight
-                if (std::abs(aOrigSize.GetHeight() - aAdaptSize.GetHeight()) > 1)
+                tools::Rectangle aAutoSize = pShape->GetLogicRect();
+                // little tolerance same as in \svx\source\svdraw\svdoashp.cxx:AdjustTextFrameWidthAndHeight
+                if (!aOrigSize.IsEmpty() && (std::abs(aOrigSize.GetHeight() - aAutoSize.GetHeight()) > 1 ||
+                    std::abs(aOrigSize.GetWidth() - aAutoSize.GetWidth()) > 1))
                 {
-                    aAdaptSize.setHeight(aOrigSize.GetHeight());
-                    pShape->NbcSetLogicRect(aAdaptSize, false);
+                    pShape->NbcSetLogicRect(aOrigSize, false);
                 }
             }
         }
