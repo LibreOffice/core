@@ -1045,7 +1045,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                         ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
                           aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
                     {
-                        InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), u""_ustr );
+                        InsertURLField(aINetBookmark.GetURL(), aINetBookmark.GetDescription(), u""_ustr, u""_ustr);
                     }
                 }
             }
@@ -1547,14 +1547,18 @@ void DrawViewShell::FuSupportRotate(SfxRequest const &rReq)
 }
 
 void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
-                                   const OUString& rTarget)
+                                   const OUString& rTarget, OUString const& rAltText)
 {
     OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
+
+    SvxURLField aURLField(rURL, rText, SvxURLFormat::Repr);
+    aURLField.SetTargetFrame(rTarget);
+    aURLField.SetName(rAltText);
 
     if (pOLV)
     {
         ESelection aSel( pOLV->GetSelection() );
-        SvxFieldItem aURLItem( SvxURLField( rURL, rText, SvxURLFormat::Repr ), EE_FEATURE_FIELD );
+        SvxFieldItem const aURLItem(aURLField, EE_FEATURE_FIELD);
         pOLV->InsertField( aURLItem );
         if (aSel.start.nIndex <= aSel.end.nIndex)
             aSel.end.nIndex = aSel.start.nIndex + 1;
@@ -1568,8 +1572,6 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
         pOutl->Init( OutlinerMode::TextObject );
         OutlinerMode nOutlMode = pOutl->GetOutlinerMode();
 
-        SvxURLField aURLField(rURL, rText, SvxURLFormat::Repr);
-        aURLField.SetTargetFrame(rTarget);
         SvxFieldItem aURLItem(aURLField, EE_FEATURE_FIELD);
         pOutl->QuickInsertField( aURLItem, ESelection() );
         std::optional<OutlinerParaObject> pOutlParaObject = pOutl->CreateParaObject();
