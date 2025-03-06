@@ -450,8 +450,10 @@ void SwView::NoRotate()
 
 void SwView::ToggleRotate()
 {
-    if (m_pWrtShell->GetSelectedObjCount() &&
-        m_pWrtShell->GetDrawView()->IsRotateAllowed())
+    if ((m_pWrtShell->GetSelectedObjCount() &&
+        m_pWrtShell->GetDrawView()->IsRotateAllowed()) ||
+          (m_pWrtShell->IsRotationOfSwGrfNodePossible() &&
+              m_pWrtShell->GetDrawViewWithValidMarkList()->IsRotateAllowed()))
     {
         if (IsDrawRotate())
             m_pWrtShell->SetDragMode(SdrDragMode::Move);
