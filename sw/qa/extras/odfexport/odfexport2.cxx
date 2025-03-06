@@ -1764,6 +1764,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf71583)
                         "page-count-range");
 }
 
+DECLARE_ODFEXPORT_TEST(testSaveFieldmarkStyle, "tdf165315.rtf")
+{
+    uno::Reference<beans::XPropertySet> xRunProperties(getRun(getParagraph(2), 2), uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xBookmark = getProperty<uno::Reference<text::XTextContent>>(xRunProperties, u"Bookmark"_ustr);
+    CPPUNIT_ASSERT(xBookmark.is());
+    uno::Reference<beans::XPropertySet> xRangePropSet(xBookmark->getAnchor(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xRangePropSet.is());
+    double nFontHeight = getProperty<double>(xRangePropSet, u"CharHeight"_ustr);
+    CPPUNIT_ASSERT(nFontHeight < 12.5);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

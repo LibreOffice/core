@@ -183,6 +183,7 @@ constexpr OUStringLiteral gsTextFieldStart( u"TextFieldStart"  );
 constexpr OUStringLiteral gsTextFieldSep(u"TextFieldSeparator");
 constexpr OUStringLiteral gsTextFieldEnd( u"TextFieldEnd"  );
 constexpr OUStringLiteral gsTextFieldStartEnd( u"TextFieldStartEnd"  );
+constexpr OUStringLiteral gsPropertyCharStyleNames(u"CharStyleNames");
 
 namespace
 {
@@ -2514,39 +2515,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType == gsTextFieldStartEnd)
             {
-                if (!bAutoStyles)
-                {
-                    if (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
-                    {
-                        Reference<XNamed> xBookmark(xPropSet->getPropertyValue(gsBookmark), UNO_QUERY);
-                        if (xBookmark.is())
-                        {
-                            GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
-                        }
-                        Reference< css::text::XFormField > xFormField(xPropSet->getPropertyValue(gsBookmark), UNO_QUERY);
-                        if (xFormField.is())
-                        {
-                            GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
-                        }
-                        GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, false);
-                        if (xFormField.is())
-                        {
-                            FieldParamExporter(&GetExport(), xFormField->getParameters()).Export();
-                        }
-                        GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, false);
-                    }
-                    else
-                    {
-                        Reference<XNamed> xBookmark(xPropSet->getPropertyValue(gsBookmark), UNO_QUERY);
-                        if (xBookmark.is())
-                        {
-                            GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
-                            SvXMLElementExport aElem( GetExport(), !bAutoStyles,
-                                XML_NAMESPACE_TEXT, XML_BOOKMARK,
-                                false, false );
-                        }
-                    }
-                }
+                exportTextFieldStartEnd(xPropSet, bAutoStyles);
             }
             else if (sType == gsSoftPageBreak)
             {
@@ -2623,6 +2592,83 @@ void XMLTextParagraphExport::exportTextField(
     {
         assert(pPrevCharIsSpace);
         m_pFieldExport->ExportField(xTextField, bIsProgress, *pPrevCharIsSpace);
+    }
+}
+
+void XMLTextParagraphExport::exportTextFieldStartEnd(const Reference < XPropertySet >& xPropSet, const bool bAutoStyles)
+{
+    if (!bAutoStyles)
+    {
+        if (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+        {
+            bool bHasStyle = false;
+            Reference<XNamed> xBookmark(xPropSet->getPropertyValue(gsBookmark), UNO_QUERY);
+            if (xBookmark.is())
+            {
+                Reference<XTextContent> xBookmarkContent(xPropSet->getPropertyValue(gsBookmark), UNO_QUERY);
+                Reference<XPropertySet> xRangePropSet(xBookmarkContent->getAnchor(), UNO_QUERY);
+                const XMLPropertyState **pStates = nullptr;
+                // find out whether we need to set the style
+                bool bIsUICharStyle;
+                bool bHasAutoStyle;
+                OUString sStyle = GetExport().GetTextParagraphExport()->
+                    FindTextStyle( xRangePropSet, bIsUICharStyle, bHasAutoStyle, pStates );
+                bHasStyle = !sStyle.isEmpty();
+                Reference<XPropertySetInfo> xRangePropSetInfo;
+                XMLTextCharStyleNamesElementExport aCharStylesExport(
+                    GetExport(), bIsUICharStyle &&
+                                    GetExport().GetTextParagraphExport()
+                                        ->GetCharStyleNamesPropInfoCache().hasProperty(
+                                                xRangePropSet, xRangePropSetInfo ), bHasAutoStyle,
+                    xRangePropSet, gsPropertyCharStyleNames );
+
+                if( bHasStyle )
+                {
+                    // export <text:span> element
+                    GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                                    GetExport().EncodeStyleName( sStyle ) );
+                }
+            }
+            SvXMLElementExport aSpan( GetExport(), bHasStyle,
+                                        XML_NAMESPACE_TEXT, XML_SPAN,
+                                        false, false);
+            if (xBookmark.is())
+            {
+                GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
+            }
+            Reference< css::text::XFormField > xFormField(xPropSet->getPropertyValue(gsBookmark), UNO_QUERY);
+            if (xFormField.is())
+            {
+                GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
+            }
+            GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, false);
+            if (xFormField.is())
+            {
+                FieldParamExporter(&GetExport(), xFormField->getParameters()).Export();
+            }
+            GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, false);
+        }
+        else
+        {
+            Reference<XNamed> xBookmark(xPropSet->getPropertyValue(gsBookmark), UNO_QUERY);
+            if (xBookmark.is())
+            {
+                GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
+                SvXMLElementExport aElem( GetExport(), !bAutoStyles,
+                    XML_NAMESPACE_TEXT, XML_BOOKMARK,
+                    false, false );
+            }
+        }
+    }
+    else
+    {
+        Reference<XTextContent> xBookmark(xPropSet->getPropertyValue(gsBookmark), UNO_QUERY);
+        if (xBookmark.is())
+        {
+            Reference<XPropertySet> xRangePropSet(xBookmark->getAnchor(), UNO_QUERY);
+            GetExport().GetTextParagraphExport()->Add(XmlStyleFamily::TEXT_TEXT,
+                                                        xRangePropSet);
+        }
     }
 }
 

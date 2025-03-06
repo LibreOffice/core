@@ -258,6 +258,10 @@ protected:
         const bool bAutoStyles, const bool bProgress,
         const bool bRecursive, bool * pPrevCharIsSpace);
 
+    void exportTextFieldStartEnd(
+        const css::uno::Reference< css::beans::XPropertySet > & xPropSet,
+        const bool bAutoStyles);
+
     void exportAnyTextFrame(
         const css::uno::Reference< css::text::XTextContent > & rTextContent,
         FrameType eTxpe,
