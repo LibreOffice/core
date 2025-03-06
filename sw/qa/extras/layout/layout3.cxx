@@ -902,6 +902,84 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, tdf165354_frames_on_right_pages_no_hyphena
                 "portion", u"space, ");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf165354_long_paragraph)
+{
+    // disabled hyphenation on page 1 (no hyphenation at all on page 2,
+    // only in first line of page 3, which resulted broken layout)
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
+        return;
+
+    createSwDoc("tdf165354_long_paragraph.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // 3-page paragraph, loext:hyphenation-keep-line="true"
+    // This started with "tially" (not disabled hyphenation, because of
+    // the first hyphenated line on the third page)
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt/SwParaPortion/SwLineLayout[1]", "portion",
+                u"inertially. Even just one ");
+
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt/SwParaPortion/SwLineLayout[12]", "portion",
+                u"of the Earth is space, ");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf165354_long_paragraph_2)
+{
+    // disabled hyphenation on page 1 and page 2
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
+        return;
+
+    createSwDoc("tdf165354_long_paragraph_2.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // 3-page paragraph, loext:hyphenation-keep-line="true"
+    // This started with "tially" (not disabled hyphenation, because of
+    // the first hyphenated line on the third page)
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt/SwParaPortion/SwLineLayout[1]", "portion",
+                u"inertially. Even just one ");
+
+    // disabled hyphenation by loext:hyphenation-keep-type="page"
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt/SwParaPortion/SwLineLayout[12]", "portion",
+                u"of the Earth is space ");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf165354_long_paragraph_3)
+{
+    // disabled hyphenation on page 1, enabled on page 2
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
+        return;
+
+    createSwDoc("tdf165354_long_paragraph_3.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // 3-page paragraph, loext:hyphenation-keep-line="true"
+    // This started with "tially" (not disabled hyphenation, because of
+    // the first hyphenated line on the third page)
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt/SwParaPortion/SwLineLayout[1]", "portion",
+                u"inertially. Even just one ");
+
+    // not disabled hyphenation by loext:hyphenation-keep-type="spread"
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt/SwParaPortion/SwLineLayout[12]", "portion",
+                u"of the Earth is space ex");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf106234)
 {
     createSwDoc("tdf106234.fodt");

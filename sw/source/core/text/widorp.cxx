@@ -471,8 +471,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
     // the column, page or spread (but not more)
     // hyphenation-keep-line: disable hyphenation in the last line instead of truncating it
     int nExtraWidLines = 0;
-    if( rLine.GetLineNr() >= m_nWidLines && pMaster->HasPara() &&
-        ( rLine.GetLineNr() == m_nWidLines || !rLine.GetCurr()->IsEndHyph() ) )
+    if( rLine.GetLineNr() >= m_nWidLines && pMaster->HasPara() )
     {
         SwParaPortion *pMasterPara = pMaster->GetPara();
         const SwAttrSet& rSet = pFrame->GetTextNodeForParaProps()->GetSwAttrSet();
