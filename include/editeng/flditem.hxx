@@ -136,9 +136,9 @@ public:
 
 
 enum class SvxURLFormat {
-    AppDefault = 0, // Set as in App
-    Url,            // Represent URL
-    Repr            // Constitute representation
+    AppDefault = 0, // App setting
+    Url,            // Show URL
+    Repr            // Show representation
 };
 
 class EDITENG_DLLPUBLIC SvxURLField final : public SvxFieldData
@@ -146,8 +146,9 @@ class EDITENG_DLLPUBLIC SvxURLField final : public SvxFieldData
 private:
     SvxURLFormat            eFormat;
     OUString                aURL;               // URL-Address
-    OUString                aRepresentation;    // What is shown
-    OUString                aTargetFrame;       // In what Frame
+    OUString                aRepresentation;    // Text shown in document
+    OUString                aTargetFrame;       // Frame to open in
+    OUString                m_Name;             // Alt-text
 
 public:
     static constexpr auto CLASS_ID = css::text::textfield::Type::URL;
@@ -161,6 +162,9 @@ public:
 
     const OUString&         GetRepresentation() const { return aRepresentation; }
     void                    SetRepresentation( const OUString& rRep ) { aRepresentation= rRep; }
+
+    OUString const&         GetName() const { return m_Name; }
+    void                    SetName(OUString const& rName) { m_Name = rName; }
 
     const OUString&         GetTargetFrame() const { return aTargetFrame; }
     void                    SetTargetFrame( const OUString& rFrm ) { aTargetFrame = rFrm; }
