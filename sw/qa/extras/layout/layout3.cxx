@@ -753,7 +753,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf165354_column)
     // loext:hyphenation-keep-type="column" hyphenation-keep-line="true"
     // 2nd frame: shifted hyphenated word (no hyphenation at the end of the first column)
     assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt/section/column[2]/body/txt/SwParaPortion/SwLineLayout[1]",
+                "/root/page[1]/body/section/column[2]/body/txt/SwParaPortion/SwLineLayout[1]",
                 "portion", u"iner");
 }
 
