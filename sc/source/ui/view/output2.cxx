@@ -2489,8 +2489,7 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
     mpOldPattern(nullptr),
     mpOldCondSet(nullptr),
     mpOldPreviewFontSet(nullptr),
-    mpThisRowInfo(nullptr),
-    mpMisspellRanges(nullptr)
+    mpThisRowInfo(nullptr)
 {}
 
 bool ScOutputData::DrawEditParam::readCellContent(
@@ -2534,8 +2533,8 @@ bool ScOutputData::DrawEditParam::readCellContent(
             lcl_SetEditColor( *mpEngine, *pColor );
     }
 
-    if (mpMisspellRanges)
-        mpEngine->SetAllMisspellRanges(*mpMisspellRanges);
+    if (maMisspellRanges.mpRanges)
+        mpEngine->SetAllMisspellRanges(*maMisspellRanges.mpRanges);
 
     return true;
 }
@@ -4600,7 +4599,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         aParam.mpOldPreviewFontSet = pOldPreviewFontSet;
                         aParam.mpThisRowInfo = pThisRowInfo;
                         if (mpSpellCheckCxt)
-                            aParam.mpMisspellRanges = mpSpellCheckCxt->getMisspellRanges(nCellX, nCellY);
+                            aParam.maMisspellRanges = mpSpellCheckCxt->getMisspellRanges(nCellX, nCellY);
 
                         if (aParam.meHorJustAttr == SvxCellHorJustify::Repeat)
                         {

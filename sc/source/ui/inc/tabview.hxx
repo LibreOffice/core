@@ -622,7 +622,7 @@ public:
     void EnableAutoSpell( bool bEnable );
     void ResetAutoSpell();
     void ResetAutoSpellForContentChange();
-    void SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges );
+    void SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const sc::MisspellRangeResult& rRangeResult );
     /// @see ScModelObj::getRowColumnHeaders().
     void getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::JsonWriter& rJsonWriter);
     /// @see ScModelObj::getSheetGeometryData()

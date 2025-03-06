@@ -56,28 +56,53 @@ class SpellCheckContext::SpellCheckCache
 
     };
 
-    typedef std::vector<editeng::MisspellRanges> MisspellType;
-    typedef std::unordered_map<CellPos, std::unique_ptr<MisspellType>, CellPos::Hash> CellMapType;
-    typedef std::unordered_map<const rtl_uString*, std::unique_ptr<MisspellType>> SharedStringMapType;
-    typedef std::unordered_map<CellPos, LanguageType, CellPos::Hash> CellLangMapType;
+    struct LangSharedString
+    {
+        struct Hash
+        {
+            size_t operator() (const LangSharedString& rKey) const
+            {
+                std::size_t seed = 0;
+                o3tl::hash_combine(seed, rKey.meLang.get());
+                o3tl::hash_combine(seed, rKey.mpString);
+                return seed;
+            }
+        };
+
+        LanguageType meLang;
+        const rtl_uString* mpString;
+
+        LangSharedString(LanguageType eLang, const ScRefCellValue& rCell)
+            : meLang(eLang)
+            , mpString(rCell.getSharedString()->getData())
+        {
+        }
+
+        bool operator== (const LangSharedString& r) const
+        {
+            return meLang == r.meLang && mpString == r.mpString;
+        }
+    };
+
+    typedef std::unordered_map<CellPos, std::unique_ptr<MisspellRangesVec>, CellPos::Hash> CellMapType;
+    typedef std::unordered_map<LangSharedString, std::unique_ptr<MisspellRangesVec>, LangSharedString::Hash> SharedStringMapType;
 
     SharedStringMapType  maStringMisspells;
     CellMapType          maEditTextMisspells;
-    CellLangMapType      maCellLanguages;
-    LanguageType         meDefCellLanguage;
 
 public:
 
-    SpellCheckCache(LanguageType eDefaultCellLanguage) : meDefCellLanguage(eDefaultCellLanguage)
+    SpellCheckCache()
     {
     }
 
-    bool query(SCCOL nCol, SCROW nRow, const ScRefCellValue& rCell, MisspellType*& rpRanges) const
+    bool query(SCCOL nCol, SCROW nRow, LanguageType eLang,
+               const ScRefCellValue& rCell, MisspellRangesVec*& rpRanges) const
     {
         CellType eType = rCell.getType();
         if (eType == CELLTYPE_STRING)
         {
-            SharedStringMapType::const_iterator it = maStringMisspells.find(rCell.getSharedString()->getData());
+            SharedStringMapType::const_iterator it = maStringMisspells.find(LangSharedString(eLang, rCell));
             if (it == maStringMisspells.end())
                 return false; // Not available
 
@@ -99,38 +124,22 @@ public:
         return true;
     }
 
-    void set(SCCOL nCol, SCROW nRow, const ScRefCellValue& rCell, std::unique_ptr<MisspellType> pRanges)
+    void set(SCCOL nCol, SCROW nRow, LanguageType eLang,
+             const ScRefCellValue& rCell, std::unique_ptr<MisspellRangesVec> pRanges)
     {
         CellType eType = rCell.getType();
         if (eType == CELLTYPE_STRING)
-            maStringMisspells.insert_or_assign(rCell.getSharedString()->getData(), std::move(pRanges));
+        {
+            maStringMisspells.insert_or_assign(LangSharedString(eLang, rCell), std::move(pRanges));
+        }
         else if (eType == CELLTYPE_EDIT)
             maEditTextMisspells.insert_or_assign(CellPos(nCol, nRow), std::move(pRanges));
     }
 
-    LanguageType getLanguage(SCCOL nCol, SCROW nRow) const
-    {
-        CellLangMapType::const_iterator it = maCellLanguages.find(CellPos(nCol, nRow));
-        if (it == maCellLanguages.end())
-            return meDefCellLanguage;
-
-        return it->second;
-    }
-
-    void setLanguage(LanguageType eCellLang, SCCOL nCol, SCROW nRow)
-    {
-        if (eCellLang == meDefCellLanguage)
-            maCellLanguages.erase(CellPos(nCol, nRow));
-        else
-            maCellLanguages.insert_or_assign(CellPos(nCol, nRow), eCellLang);
-    }
-
-    void clear(LanguageType eDefaultCellLanguage)
+    void clear()
     {
         maStringMisspells.clear();
         maEditTextMisspells.clear();
-        maCellLanguages.clear();
-        meDefCellLanguage = eDefaultCellLanguage;
     }
 
     void clearEditTextMap()
@@ -159,31 +168,31 @@ struct SpellCheckContext::SpellCheckResult
 {
     SCCOL mnCol;
     SCROW mnRow;
-    const std::vector<editeng::MisspellRanges>* pRanges;
+    MisspellRangeResult maRanges;
 
-    SpellCheckResult() : mnCol(-1), mnRow(-1), pRanges(nullptr) {}
+    SpellCheckResult() : mnCol(-1), mnRow(-1) {}
 
-    void set(SCCOL nCol, SCROW nRow, const std::vector<editeng::MisspellRanges>* pMisspells)
+    void set(SCCOL nCol, SCROW nRow, const MisspellRangeResult& rMisspells)
     {
         mnCol = nCol;
         mnRow = nRow;
-        pRanges = pMisspells;
+        maRanges = rMisspells;
     }
 
-    const std::vector<editeng::MisspellRanges>* query(SCCOL nCol, SCROW nRow) const
+    MisspellRangeResult query(SCCOL nCol, SCROW nRow) const
     {
         assert(mnCol == nCol);
         assert(mnRow == nRow);
         (void)nCol;
         (void)nRow;
-        return pRanges;
+        return maRanges;
     }
 
     void clear()
     {
         mnCol = -1;
         mnRow = -1;
-        pRanges = nullptr;
+        maRanges = {};
     }
 };
 
@@ -217,10 +226,10 @@ void SpellCheckContext::setTabNo(SCTAB nTab)
 bool SpellCheckContext::isMisspelled(SCCOL nCol, SCROW nRow) const
 {
     const_cast<SpellCheckContext*>(this)->ensureResults(nCol, nRow);
-    return mpResult->query(nCol, nRow);
+    return mpResult->query(nCol, nRow).mpRanges;
 }
 
-const std::vector<editeng::MisspellRanges>* SpellCheckContext::getMisspellRanges(
+sc::MisspellRangeResult SpellCheckContext::getMisspellRanges(
     SCCOL nCol, SCROW nRow ) const
 {
     const_cast<SpellCheckContext*>(this)->ensureResults(nCol, nRow);
@@ -228,7 +237,7 @@ const std::vector<editeng::MisspellRanges>* SpellCheckContext::getMisspellRanges
 }
 
 void SpellCheckContext::setMisspellRanges(
-    SCCOL nCol, SCROW nRow, const std::vector<editeng::MisspellRanges>* pRanges )
+    SCCOL nCol, SCROW nRow, const sc::MisspellRangeResult& rRangeResult )
 {
     if (!mpEngine || !mpCache)
         reset();
@@ -239,9 +248,9 @@ void SpellCheckContext::setMisspellRanges(
     if (eType != CELLTYPE_STRING && eType != CELLTYPE_EDIT)
         return;
 
-    typedef std::vector<editeng::MisspellRanges> MisspellType;
-    std::unique_ptr<MisspellType> pMisspells(pRanges ? new MisspellType(*pRanges) : nullptr);
-    mpCache->set(nCol, nRow, aCell, std::move(pMisspells));
+    const MisspellRangesVec* pRanges = rRangeResult.mpRanges;
+    std::unique_ptr<MisspellRangesVec> pMisspells(pRanges ? new MisspellRangesVec(*pRanges) : nullptr);
+    mpCache->set(nCol, nRow, rRangeResult.meCellLang, aCell, std::move(pMisspells));
 }
 
 void SpellCheckContext::reset()
@@ -274,7 +283,7 @@ void SpellCheckContext::ensureResults(SCCOL nCol, SCROW nRow)
             ScRangeList aPivotRanges = pDPs->GetAllTableRanges(mnTab);
             if (aPivotRanges.Contains(ScRange(ScAddress(nCol, nRow, mnTab)))) // Don't spell check within pivot tables
             {
-                mpResult->set(nCol, nRow, nullptr);
+                mpResult->set(nCol, nRow, {});
                 return;
             }
         }
@@ -286,7 +295,7 @@ void SpellCheckContext::ensureResults(SCCOL nCol, SCROW nRow)
     if (eType != CELLTYPE_STRING && eType != CELLTYPE_EDIT)
     {
         // No spell-check required.
-        mpResult->set(nCol, nRow, nullptr);
+        mpResult->set(nCol, nRow, {});
         return;
     }
 
@@ -303,27 +312,17 @@ void SpellCheckContext::ensureResults(SCCOL nCol, SCROW nRow)
 
     if (eCellLang == LANGUAGE_NONE)
     {
-        mpResult->set(nCol, nRow, nullptr); // No need to spell check this cell.
+        mpResult->set(nCol, nRow, {}); // No need to spell check this cell.
         return;
     }
 
-    typedef std::vector<editeng::MisspellRanges> MisspellType;
-
-    LanguageType eCachedCellLang = mpCache->getLanguage(nCol, nRow);
-
-    if (eCellLang != eCachedCellLang)
-        mpCache->setLanguage(eCellLang, nCol, nRow);
-
-    else
+    MisspellRangesVec* pCacheRanges = nullptr;
+    bool bFound = mpCache->query(nCol, nRow, eCellLang, aCell, pCacheRanges);
+    if (bFound)
     {
-        MisspellType* pRanges = nullptr;
-        bool bFound = mpCache->query(nCol, nRow, aCell, pRanges);
-        if (bFound)
-        {
-            // Cache hit.
-            mpResult->set(nCol, nRow, pRanges);
-            return;
-        }
+        // Cache hit.
+        mpResult->set(nCol, nRow, MisspellRangeResult(pCacheRanges, eCellLang));
+        return;
     }
 
     // Cache miss, the cell needs spell-check..
@@ -337,10 +336,10 @@ void SpellCheckContext::ensureResults(SCCOL nCol, SCROW nRow)
 
     mpStatus->mbModified = false;
     mpEngine->CompleteOnlineSpelling();
-    std::unique_ptr<MisspellType> pRanges;
+    std::unique_ptr<MisspellRangesVec> pRanges;
     if (mpStatus->mbModified)
     {
-        pRanges.reset(new MisspellType);
+        pRanges.reset(new MisspellRangesVec);
         mpEngine->GetAllMisspellRanges(*pRanges);
 
         if (pRanges->empty())
@@ -348,8 +347,8 @@ void SpellCheckContext::ensureResults(SCCOL nCol, SCROW nRow)
     }
     // else : No change in status for EditStatusFlags::WRONGWORDCHANGED => no spell errors (which is the default status).
 
-    mpResult->set(nCol, nRow, pRanges.get());
-    mpCache->set(nCol, nRow, aCell, std::move(pRanges));
+    mpResult->set(nCol, nRow, MisspellRangeResult(pRanges.get(), eCellLang));
+    mpCache->set(nCol, nRow, eCellLang, aCell, std::move(pRanges));
 }
 
 void SpellCheckContext::resetCache(bool bContentChangeOnly)
@@ -360,11 +359,11 @@ void SpellCheckContext::resetCache(bool bContentChangeOnly)
         mpResult->clear();
 
     if (!mpCache)
-        mpCache.reset(new SpellCheckCache(meLanguage));
+        mpCache.reset(new SpellCheckCache);
     else if (bContentChangeOnly)
         mpCache->clearEditTextMap();
     else
-        mpCache->clear(meLanguage);
+        mpCache->clear();
 }
 
 void SpellCheckContext::setup()

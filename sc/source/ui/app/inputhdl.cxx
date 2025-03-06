@@ -3471,8 +3471,14 @@ void ScInputHandler::EnterHandler2(ScEnterMode nBlockMode, bool bForget, OUStrin
             ScInputStatusItem aItemCorrected(FID_INPUTLINE_STATUS,
                                              aCursorPos, aCursorPos, aCursorPos,
                                              aString, pObject.get());
+
+            sc::MisspellRangeResult aMisspellRangeResult;
             if ( !aMisspellRanges.empty() )
-                aItemCorrected.SetMisspellRanges(&aMisspellRanges);
+            {
+                aMisspellRangeResult.meCellLang = mpEditEngine->GetDefaultLanguage();
+                aMisspellRangeResult.mpRanges = &aMisspellRanges;
+                aItemCorrected.SetMisspellRanges(aMisspellRangeResult);
+            }
 
             aArgs[0] = &aItemCorrected;
             rBindings.Execute(nId, aArgs);

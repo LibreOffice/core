@@ -21,16 +21,13 @@
 
 #include <scdllapi.h>
 #include <sortparam.hxx>
+#include <spellcheckcontext.hxx>
 #include <subtotalparam.hxx>
 #include <paramisc.hxx>
 #include <svl/poolitem.hxx>
 
 #include <memory>
 #include <vector>
-
-namespace editeng {
-    struct MisspellRanges;
-}
 
 class ScEditEngineDefaulter;
 class EditTextObject;
@@ -47,7 +44,7 @@ class ScInputStatusItem : public SfxPoolItem
     ScAddress           aEndPos;
     OUString            aString;
     std::unique_ptr<EditTextObject>             pEditData;
-    const std::vector<editeng::MisspellRanges>* mpMisspellRanges;
+    sc::MisspellRangeResult maMisspellRanges;
 
 public:
 
@@ -69,8 +66,8 @@ public:
     const OUString&         GetString() const   { return aString; }
     const EditTextObject*   GetEditData() const { return pEditData.get(); }
 
-    void SetMisspellRanges( const std::vector<editeng::MisspellRanges>* pRanges );
-    const std::vector<editeng::MisspellRanges>* GetMisspellRanges() const { return mpMisspellRanges;}
+    void SetMisspellRanges( const sc::MisspellRangeResult& rRanges );
+    const sc::MisspellRangeResult& GetMisspellRanges() const { return maMisspellRanges;}
 };
 
 #define SC_TAB_INSERTED     1
