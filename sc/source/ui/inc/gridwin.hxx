@@ -38,6 +38,7 @@ namespace editeng {
 }
 
 namespace sc {
+    struct MisspellRangeResult;
     class SpellCheckContext;
 }
 
@@ -468,8 +469,8 @@ public:
     void SetAutoSpellContext( const std::shared_ptr<sc::SpellCheckContext> &ctx );
     void ResetAutoSpell();
     void ResetAutoSpellForContentChange();
-    void SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges );
-    const std::vector<editeng::MisspellRanges>* GetAutoSpellData( SCCOL nPosX, SCROW nPosY );
+    void SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const sc::MisspellRangeResult& rRangeResult );
+    sc::MisspellRangeResult GetAutoSpellData( SCCOL nPosX, SCROW nPosY );
     bool InsideVisibleRange( SCCOL nPosX, SCROW nPosY );
 
     void UpdateSparklineGroupOverlay();
