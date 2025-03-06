@@ -2333,8 +2333,6 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     SwRects const aTmp(GetCursorRectsContainingText(mrSh));
                     OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
                     OUString altText(p->rINetAttr.GetINetFormat().GetName());
-                    if (altText.isEmpty())
-                        altText = mrSh.GetSelText();
 
                     const SwPageFrame* pSelectionPage =
                         static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
@@ -2458,7 +2456,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 {
                     Point aNullPt;
                     const SwRect aLinkRect = pFrameFormat->FindLayoutRect( false, &aNullPt );
-                    OUString const formatName(pFrameFormat->GetName());
+                    OUString const linkName(pItem->GetName());
                     // Link PageNums
                     std::vector<sal_Int32> aLinkPageNums = CalcOutputPageNums( aLinkRect );
 
@@ -2467,7 +2465,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     {
                         tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, aLinkRect.SVRect()));
                         const sal_Int32 nLinkId =
-                            pPDFExtOutDevData->CreateLink(aRect, formatName, aLinkPageNum);
+                            pPDFExtOutDevData->CreateLink(aRect, linkName, aLinkPageNum);
 
                         // Store link info for tagged pdf output:
                         const IdMapEntry aLinkEntry(aLinkRect, nLinkId);
@@ -2488,7 +2486,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                             {
                                 const SwTextNode* pTNd = pAnchorNode->GetTextNode();
                                 if ( pTNd )
-                                    MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, aLinkRect, nDestId, aURL, bInternal, formatName);
+                                    MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, aLinkRect, nDestId, aURL, bInternal, linkName);
                             }
                         }
                     }
@@ -2587,7 +2585,6 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
 
                     // #i44368# Links in Header/Footer
                     const bool bHeaderFooter = pDoc->IsInHeaderFooter( *pTNd );
-                    OUString const content(pField->ExpandField(true, mrSh.GetLayout()));
 
                     // Create links for all selected rectangles:
                     const size_t nNumOfRects = aTmp.size();
@@ -2604,7 +2601,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                             // Link Export
                             aRect = SwRectToPDFRect(pCurrPage, rLinkRect.SVRect());
                             const sal_Int32 nLinkId =
-                                pPDFExtOutDevData->CreateLink(aRect, content, aLinkPageNum);
+                                pPDFExtOutDevData->CreateLink(aRect, rRefName, aLinkPageNum);
 
                             // Store link info for tagged pdf output:
                             const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
@@ -2616,7 +2613,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                             // #i44368# Links in Header/Footer
                             if ( bHeaderFooter )
                             {
-                                MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, u""_ustr, true, content);
+                                MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, u""_ustr, true, rRefName);
                             }
                         }
                     }
@@ -2701,7 +2698,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     OUString const numStrRef(pTextFootnote->GetFootnote().GetViewNumStr(*pDoc, mrSh.GetLayout(), false));
 
                     // Export back link
-                    const sal_Int32 nBackLinkId = pPDFExtOutDevData->CreateLink(aFootnoteSymbolRect, numStrSymbol, nDestPageNum);
+                    const sal_Int32 nBackLinkId = pPDFExtOutDevData->CreateLink(aFootnoteSymbolRect, numStrRef, nDestPageNum);
                     // Destination Export
                     const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
                     mrSh.GotoFootnoteAnchor();
@@ -2710,7 +2707,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     pCurrPage = static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
                     // Link Export
                     aRect = SwRectToPDFRect(pCurrPage, aLinkRect.SVRect());
-                    const sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink(aRect, numStrRef, aLinkPageNum);
+                    const sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink(aRect, numStrSymbol, aLinkPageNum);
                     // Back link destination Export
                     const sal_Int32 nBackDestId = pPDFExtOutDevData->CreateDest(aRect, aLinkPageNum);
                     // Store link info for tagged pdf output:
@@ -3052,7 +3049,7 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
                 continue;
             }
 
-            OUString const content(rAuthorityField.ExpandField(true, mrSh.GetLayout()));
+            OUString const content(rAuthorityField.GetAuthority(mrSh.GetLayout()));
 
             // Select the field.
             mrSh.SwCursorShell::SetMark();
@@ -3103,7 +3100,7 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
                 continue;
             }
 
-            OUString const content(rAuthorityField.ExpandField(true, mrSh.GetLayout()));
+            OUString const content(rAuthorityField.GetAuthority(mrSh.GetLayout()));
 
             // Select the field.
             mrSh.SwCursorShell::SetMark();

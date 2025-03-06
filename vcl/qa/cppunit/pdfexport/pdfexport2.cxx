@@ -2968,7 +2968,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"https://klexikon.zum.de/wiki/Kläranlage"_ustr,
+                    u"wiki-seite"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 CPPUNIT_ASSERT_EQUAL("Link"_ostr, pASubtype->GetValue());
                 auto pAA
@@ -3041,9 +3041,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
                 CPPUNIT_ASSERT_EQUAL("Link"_ostr, pASubtype->GetValue());
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
-                CPPUNIT_ASSERT_EQUAL(
-                    u"https://de.wikipedia.org/wiki/Kläranlage#Mechanische_Vorreinigung"_ustr,
-                    ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
+                CPPUNIT_ASSERT(!pAContents);
                 CPPUNIT_ASSERT_EQUAL("Link"_ostr, pASubtype->GetValue());
                 auto pAA
                     = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pAnnot->Lookup("A"_ostr));
@@ -3117,8 +3115,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"https://vr-easy.com/tour/usr/220113-virtuellerschulausflug/#pano=24"_ustr,
-                    ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
+                    u"tour"_ustr, ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 CPPUNIT_ASSERT_EQUAL("Link"_ostr, pASubtype->GetValue());
                 auto pAA
                     = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pAnnot->Lookup("A"_ostr));
@@ -3712,7 +3709,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFlyFrameHyperlinkAnnot)
 
     auto pContents
         = dynamic_cast<vcl::filter::PDFHexStringElement*>(pAnnot->Lookup("Contents"_ostr));
-    CPPUNIT_ASSERT_EQUAL(u"Image2"_ustr,
+    CPPUNIT_ASSERT_EQUAL(u"Ship to Bugzilla"_ustr,
                          ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pContents));
 
     auto pStructParent
@@ -4281,6 +4278,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testURIs)
         xCursor->gotoEnd(/*bExpand=*/true);
         uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
         xCursorProps->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(URIs[i].in));
+        xCursorProps->setPropertyValue(u"HyperLinkName"_ustr, uno::Any(u"Testname"_ustr));
 
         // Save as PDF.
         aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
@@ -4323,7 +4321,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testURIs)
         // Check it matches
         CPPUNIT_ASSERT_EQUAL(URIs[i].out, pURIElem->GetValue());
         // tdf#148934 check a11y
-        CPPUNIT_ASSERT_EQUAL(u"Test pdf"_ustr, ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+        CPPUNIT_ASSERT_EQUAL(u"Testname"_ustr, ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
                                                    *dynamic_cast<vcl::filter::PDFHexStringElement*>(
                                                        pAnnot->Lookup("Contents"_ostr))));
     }

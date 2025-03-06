@@ -2303,7 +2303,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"Error: Reference source not found"_ustr,
+                    u"__RefHeading___Toc1501_2152971747"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 auto pStructParent = dynamic_cast<vcl::filter::PDFNumberElement*>(
                     pAnnot->Lookup("StructParent"_ostr));
@@ -2370,7 +2370,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"Error: Reference source not found"_ustr,
+                    u"__RefHeading___Toc1501_2152971747"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 auto pStructParent = dynamic_cast<vcl::filter::PDFNumberElement*>(
                     pAnnot->Lookup("StructParent"_ostr));
@@ -2436,7 +2436,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"Error: Reference source not found"_ustr,
+                    u"__RefHeading___Toc1501_2152971747"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 auto pStructParent = dynamic_cast<vcl::filter::PDFNumberElement*>(
                     pAnnot->Lookup("StructParent"_ostr));
@@ -2502,7 +2502,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"Error: Reference source not found"_ustr,
+                    u"__RefHeading___Toc1501_2152971747"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 auto pStructParent = dynamic_cast<vcl::filter::PDFNumberElement*>(
                     pAnnot->Lookup("StructParent"_ostr));
@@ -2568,7 +2568,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"Error: Reference source not found"_ustr,
+                    u"__RefHeading___Toc1501_2152971747"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 auto pStructParent = dynamic_cast<vcl::filter::PDFNumberElement*>(
                     pAnnot->Lookup("StructParent"_ostr));
@@ -2693,7 +2693,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816Link)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"https://www.mozilla.org/en-US/firefox/119.0/releasenotes/"_ustr,
+                    u"Firefox119"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 auto pStructParent = dynamic_cast<vcl::filter::PDFNumberElement*>(
                     pAnnot->Lookup("StructParent"_ostr));
@@ -2760,7 +2760,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816Link)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"https://www.mozilla.org/en-US/firefox/119.0/releasenotes/"_ustr,
+                    u"Firefox119"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 auto pStructParent = dynamic_cast<vcl::filter::PDFNumberElement*>(
                     pAnnot->Lookup("StructParent"_ostr));
@@ -2849,7 +2849,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816Link)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"https://www.mozilla.org/en-US/firefox/118.0/releasenotes/"_ustr,
+                    u"Firefox118"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 auto pStructParent = dynamic_cast<vcl::filter::PDFNumberElement*>(
                     pAnnot->Lookup("StructParent"_ostr));
@@ -2916,7 +2916,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816Link)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"https://www.mozilla.org/en-US/firefox/118.0/releasenotes/"_ustr,
+                    u"Firefox118"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 auto pStructParent = dynamic_cast<vcl::filter::PDFNumberElement*>(
                     pAnnot->Lookup("StructParent"_ostr));
@@ -3072,7 +3072,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142806)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"foo foo foo foo"_ustr,
+                    u"quadfoo"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 auto pStructParent = dynamic_cast<vcl::filter::PDFNumberElement*>(
                     pAnnot->Lookup("StructParent"_ostr));
@@ -3138,7 +3138,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142806)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"foo foo foo foo"_ustr,
+                    u"quadfoo"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 auto pStructParent = dynamic_cast<vcl::filter::PDFNumberElement*>(
                     pAnnot->Lookup("StructParent"_ostr));
@@ -3204,7 +3204,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142806)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"foo foo foo foo"_ustr,
+                    u"quadfoo"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 auto pStructParent = dynamic_cast<vcl::filter::PDFNumberElement*>(
                     pAnnot->Lookup("StructParent"_ostr));
@@ -3270,7 +3270,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142806)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"foo foo foo foo"_ustr,
+                    u"quadfoo"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 auto pStructParent = dynamic_cast<vcl::filter::PDFNumberElement*>(
                     pAnnot->Lookup("StructParent"_ostr));
@@ -3348,7 +3348,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142806)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"foo foo foo foo"_ustr,
+                    u"__RefHeading___Toc17_3815242785"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 auto pStructParent = dynamic_cast<vcl::filter::PDFNumberElement*>(
                     pAnnot->Lookup("StructParent"_ostr));
@@ -3414,7 +3414,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142806)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"foo foo foo foo"_ustr,
+                    u"__RefHeading___Toc17_3815242785"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 auto pStructParent = dynamic_cast<vcl::filter::PDFNumberElement*>(
                     pAnnot->Lookup("StructParent"_ostr));
@@ -3480,7 +3480,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142806)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"foo foo foo foo"_ustr,
+                    u"__RefHeading___Toc17_3815242785"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 auto pStructParent = dynamic_cast<vcl::filter::PDFNumberElement*>(
                     pAnnot->Lookup("StructParent"_ostr));
@@ -3546,7 +3546,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142806)
                 auto pAContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
                     pAnnot->Lookup("Contents"_ostr));
                 CPPUNIT_ASSERT_EQUAL(
-                    u"foo foo foo foo"_ustr,
+                    u"__RefHeading___Toc17_3815242785"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
                 auto pStructParent = dynamic_cast<vcl::filter::PDFNumberElement*>(
                     pAnnot->Lookup("StructParent"_ostr));
