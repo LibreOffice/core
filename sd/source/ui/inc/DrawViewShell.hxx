@@ -133,7 +133,7 @@ public:
     virtual void    SetZoom( ::tools::Long nZoom ) override;
     virtual void    SetZoomRect( const ::tools::Rectangle& rZoomRect ) override;
 
-    void            InsertURLField(const OUString& rURL, const OUString& rText, const OUString& rTarget);
+    void            InsertURLField(const OUString& rURL, const OUString& rText, const OUString& rTarget, OUString const& rAltText);
     void            InsertURLButton(const OUString& rURL, const OUString& rText, const OUString& rTarget,
                                     const Point* pPos);
 
