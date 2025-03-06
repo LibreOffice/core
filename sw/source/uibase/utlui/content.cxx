@@ -5502,7 +5502,7 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
                 SwNode* pEndNode = &rNodes.GetEndOfContent();
 
                 // tdf#163646 - Show in the tooltip for heading entries in Writer Navigator the
-                // outline word and character count of the heading ncluding the outline word and
+                // outline word and character count of the heading including the outline word and
                 // character count of all sub headings
                 int nEntryDepth = m_xTreeView->get_iter_depth(rEntry);
                 std::unique_ptr<weld::TreeIter> xIter = m_xTreeView->make_iterator(&rEntry);
