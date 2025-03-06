@@ -29,6 +29,7 @@
 
 #include <svx/svdview.hxx>
 #include <flyfrm.hxx>
+#include <fmturl.hxx>
 #include <unotextrange.hxx>
 #include <txatbase.hxx>
 #include <txtfrm.hxx>
@@ -83,6 +84,7 @@ void AccessibilityIssue::gotoIssue() const
         case IssueObject::GRAPHIC:
         case IssueObject::OLE:
         case IssueObject::TEXTFRAME:
+        case IssueObject::HYPERLINKFLY:
         {
             bool bSelected = pWrtShell->GotoFly(TempIssueObject.m_sObjectID, FLYCNTTYPE_ALL, true);
 
@@ -245,6 +247,7 @@ bool AccessibilityIssue::canQuickFixIssue() const
            || m_eIssueObject == IssueObject::DOCUMENT_TITLE
            || m_eIssueObject == IssueObject::DOCUMENT_BACKGROUND
            || m_eIssueObject == IssueObject::LANGUAGE_NOT_SET
+           || m_eIssueObject == IssueObject::HYPERLINKFLY
            || m_eIssueObject == IssueObject::HYPERLINKTEXT;
 }
 
@@ -332,6 +335,7 @@ void AccessibilityIssue::quickFixIssue() const
         }
         break;
         case IssueObject::HYPERLINKTEXT:
+        case IssueObject::HYPERLINKFLY:
         {
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             SwWrtShell* pWrtShell = pShell->GetWrtShell();
@@ -340,18 +344,35 @@ void AccessibilityIssue::quickFixIssue() const
                 SwResId(STR_HYPERLINK_NO_NAME_DLG)));
             if (aNameDialog->Execute() == RET_OK)
             {
-                SwContentNode* pContentNode = m_pNode->GetContentNode();
-                SwPosition aStart(*pContentNode, m_nStart);
-                SwPosition aEnd(*pContentNode, m_nEnd);
-                uno::Reference<text::XTextRange> xRun
-                    = SwXTextRange::CreateXTextRange(*m_pDoc, aStart, &aEnd);
-                if (xRun.is())
+                if (m_eIssueObject == IssueObject::HYPERLINKTEXT)
                 {
-                    uno::Reference<beans::XPropertySet> xProperties(xRun, uno::UNO_QUERY);
-                    if (xProperties->getPropertySetInfo()->hasPropertyByName(u"HyperLinkName"_ustr))
+                    SwContentNode* pContentNode = m_pNode->GetContentNode();
+                    SwPosition aStart(*pContentNode, m_nStart);
+                    SwPosition aEnd(*pContentNode, m_nEnd);
+                    uno::Reference<text::XTextRange> xRun
+                        = SwXTextRange::CreateXTextRange(*m_pDoc, aStart, &aEnd);
+                    if (xRun.is())
                     {
-                        xProperties->setPropertyValue(u"HyperLinkName"_ustr,
-                                                      uno::Any(aNameDialog->GetName()));
+                        uno::Reference<beans::XPropertySet> xProperties(xRun, uno::UNO_QUERY);
+                        if (xProperties->getPropertySetInfo()->hasPropertyByName(
+                                u"HyperLinkName"_ustr))
+                        {
+                            xProperties->setPropertyValue(u"HyperLinkName"_ustr,
+                                                          uno::Any(aNameDialog->GetName()));
+                        }
+                    }
+                }
+                else
+                {
+                    SwFlyFrameFormat* const pFlyFormat{ const_cast<SwFlyFrameFormat*>(
+                        m_pDoc->FindFlyByName(m_sObjectID)) };
+                    if (pFlyFormat)
+                    {
+                        SwFormatURL item{ pFlyFormat->GetURL() };
+                        item.SetName(aNameDialog->GetName());
+                        SwAttrSet set{ m_pDoc->GetAttrPool(), svl::Items<RES_URL, RES_URL> };
+                        set.Put(item);
+                        m_pDoc->SetFlyFrameAttr(*pFlyFormat, set);
                     }
                 }
                 pWrtShell->SetModified();
