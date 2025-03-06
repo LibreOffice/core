@@ -26,7 +26,7 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes" context="mergecolumnentry|name">Merge Column</property>
+        <property name="label" translatable="yes" context="mergecolumnentry|name">Merge Columns</property>
         <property name="use-underline">True</property>
         <property name="mnemonic-widget">ed_separator</property>
       </object>
@@ -43,7 +43,12 @@
         <property name="hexpand">True</property>
         <property name="width-chars">10</property>
         <property name="truncate-multiline">True</property>
-        <property name="placeholder-text" translatable="yes" context="mergecolumnentry/separator">Separator</property>
+        <property name="placeholder-text" translatable="yes" context="mergecolumnentry/separator">Separator string</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="ed_separator-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="mergecolumnentry|extended_tip|ed_separator">Character or string added between the values in each row of the columns to merge.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>
@@ -57,7 +62,12 @@
         <property name="hexpand">True</property>
         <property name="width-chars">10</property>
         <property name="truncate-multiline">True</property>
-        <property name="placeholder-text" translatable="yes" context="mergecolumnentry/cols">Columns</property>
+        <property name="placeholder-text" translatable="yes" context="mergecolumnentry/cols">Cols(; Separated)</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="ed_columns-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="mergecolumnentry|extended_tip|ed_columns">List of column indexes to merge, separated by semicolons.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">1</property>

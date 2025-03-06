@@ -44,6 +44,11 @@
         <property name="width-chars">7</property>
         <property name="truncate-multiline">True</property>
         <property name="placeholder-text" translatable="yes" context="findreplace|find">Find</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="ed_find-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="findreplaceentry|extended_tip|ed_find">The value to find.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>
@@ -58,6 +63,11 @@
         <property name="width-chars">7</property>
         <property name="truncate-multiline">True</property>
         <property name="placeholder-text" translatable="yes" context="findreplace|replace">Replace With</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="ed_replace-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="findreplaceentry|extended_tip|ed_replace">The replacement value.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">1</property>
@@ -72,6 +82,11 @@
         <property name="width-chars">6</property>
         <property name="truncate-multiline">True</property>
         <property name="placeholder-text" translatable="yes" context="findreplace|columns">Column</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="ed_columns-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="findreplaceentry|extended_tip|ed_columns">The index of the column to find value and replace it.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">2</property>

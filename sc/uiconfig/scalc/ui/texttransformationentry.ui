@@ -63,7 +63,12 @@
         <property name="hexpand">True</property>
         <property name="width-chars">10</property>
         <property name="truncate-multiline">True</property>
-        <property name="placeholder-text" translatable="yes" context="texttransformationentry/cols">Columns</property>
+        <property name="placeholder-text" translatable="yes" context="texttransformationentry/cols">Cols(; Separated)</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="ed_columns-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="texttransformationentry|extended_tip|ed_columns">List of column indexes to perform the text transformation, separated by semicolons.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">1</property>

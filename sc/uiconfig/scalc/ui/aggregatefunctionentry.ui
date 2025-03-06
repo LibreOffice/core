@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
   <!-- n-columns=3 n-rows=3 -->
@@ -64,6 +64,11 @@
         <property name="width-chars">10</property>
         <property name="truncate-multiline">True</property>
         <property name="placeholder-text" translatable="yes" context="aggregatefunctionentry/cols">Columns</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="ed_columns-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="aggregatefunctionentry|extended_tip|ed_columns">Column index in the database range.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">1</property>

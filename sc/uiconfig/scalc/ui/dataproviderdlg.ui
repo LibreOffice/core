@@ -306,7 +306,7 @@
                             <property name="hexpand">True</property>
                             <items>
                               <item id="0" translatable="yes" context="dataproviderdlg|transformation_list">Delete Columns</item>
-                              <item id="1" translatable="yes" context="dataproviderdlg|transformation_list">Delete Row</item>
+                              <item id="1" translatable="yes" context="dataproviderdlg|transformation_list">Delete Rows</item>
                               <item id="2" translatable="yes" context="dataproviderdlg|transformation_list">Swap Rows</item>
                               <item id="3" translatable="yes" context="dataproviderdlg|transformation_list">Split Column</item>
                               <item id="4" translatable="yes" context="dataproviderdlg|transformation_list">Merge Columns</item>
@@ -320,7 +320,7 @@
                             </items>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="transformation_box-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="dataproviderdlg|extended_tip|transformation_box">Available transformations that can be applied t the provided data.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dataproviderdlg|extended_tip|transformation_box">Available transformations that can be applied to the provided data.</property>
                               </object>
                             </child>
                           </object>

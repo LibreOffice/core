@@ -43,7 +43,12 @@
         <property name="hexpand">True</property>
         <property name="width-chars">10</property>
         <property name="truncate-multiline">True</property>
-        <property name="placeholder-text" translatable="yes" context="sorttransformationentry/cols">Column</property>
+        <property name="placeholder-text" translatable="yes" context="sorttransformationentry/cols">Column index</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="ed_columns-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="sorttransformationentry|extended_tip|ed_columns">The column index for sorting data.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">1</property>

@@ -44,6 +44,11 @@
         <property name="width-chars">10</property>
         <property name="truncate-multiline">True</property>
         <property name="placeholder-text" translatable="yes" context="swaprows|row1">First Row</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="ed_row1-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="swaprowsentry|extended_tip|ed_row1">The first row to swap position with the second row.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">0</property>
@@ -58,6 +63,11 @@
         <property name="width-chars">10</property>
         <property name="truncate-multiline">True</property>
         <property name="placeholder-text" translatable="yes" context="swaprows|row2">Second Row</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="ed_row2-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="swaprowsentry|extended_tip|ed_row2">The second row to swap position with the first row.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">1</property>

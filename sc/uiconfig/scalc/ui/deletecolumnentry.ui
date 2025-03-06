@@ -46,7 +46,7 @@
         <property name="placeholder-text" translatable="yes" context="deletecolumnentry/cols">Cols(; Separated)</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="ed_columns-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="deletecolumnentry|extended_tip|ed_columns">List of columns to delete, separated by semi-colons.</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="deletecolumnentry|extended_tip|ed_columns">List of column indexes to delete, separated by semicolons.</property>
           </object>
         </child>
       </object>
