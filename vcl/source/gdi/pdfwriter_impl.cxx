@@ -3816,8 +3816,11 @@ bool PDFWriterImpl::emitLinkAnnotations()
         appendFixedInt( rLink.m_aRect.Bottom(), aLine );
         aLine.append( "]" );
         // ISO 14289-1:2014, Clause: 7.18.5
-        aLine.append("/Contents");
-        appendUnicodeTextStringEncrypt(rLink.m_AltText, rLink.m_nObject, aLine);
+        if (!rLink.m_AltText.isEmpty())
+        {
+            aLine.append("/Contents");
+            appendUnicodeTextStringEncrypt(rLink.m_AltText, rLink.m_nObject, aLine);
+        }
         if( rLink.m_nDest >= 0 )
         {
             aLine.append( "/Dest" );
