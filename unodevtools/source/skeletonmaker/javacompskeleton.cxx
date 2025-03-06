@@ -47,7 +47,7 @@ static void generateImports(std::ostream & o, ProgramOptions const & options,
     if (options.componenttype == 3)
         o << "import com.sun.star.uno.UnoRuntime;\n";
     o << "import com.sun.star.uno.XComponentContext;\n";
-    if (serviceobject) {
+    if (serviceobject && !options.passiveregistration) {
         o << "import com.sun.star.lib.uno.helper.Factory;\n";
         o << "import com.sun.star.lang.XSingleComponentFactory;\n";
         o << "import com.sun.star.registry.XRegistryKey;\n";
