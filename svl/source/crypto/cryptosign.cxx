@@ -2100,22 +2100,29 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     if (pAttribute)
         rInformation.bHasSigningCertificate = true;
 
+    SECItem aSignedDigestItem {siBuffer, nullptr, 0};
+
     SECItem* pContentInfoContentData = pCMSSignedData->contentInfo.content.data;
     if (bNonDetached && pContentInfoContentData && pContentInfoContentData->data)
     {
         // Not a detached signature.
-        if (!std::memcmp(pActualResultBuffer, pContentInfoContentData->data, nMaxResultLen) && nActualResultLen == pContentInfoContentData->len)
-            rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+        if (nActualResultLen == pContentInfoContentData->len &&
+            !std::memcmp(pActualResultBuffer, pContentInfoContentData->data, nMaxResultLen) &&
+            HASH_HashBuf(eHashType, pActualResultBuffer, pContentInfoContentData->data, nActualResultLen) == SECSuccess)
+        {
+            aSignedDigestItem.data = pActualResultBuffer;
+            aSignedDigestItem.len = nActualResultLen;
+        }
     }
     else
     {
         // Detached, the usual case.
-        SECItem aActualResultItem;
-        aActualResultItem.data = pActualResultBuffer;
-        aActualResultItem.len = nActualResultLen;
-        if (NSS_CMSSignerInfo_Verify(pCMSSignerInfo, &aActualResultItem, nullptr) == SECSuccess)
-            rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+        aSignedDigestItem.data = pActualResultBuffer;
+        aSignedDigestItem.len = nActualResultLen;
     }
+
+    if (aSignedDigestItem.data && NSS_CMSSignerInfo_Verify(pCMSSignerInfo, &aSignedDigestItem, nullptr) == SECSuccess)
+            rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
 
     // Everything went fine
     SECITEM_FreeItem(&aOidData.oid, false);
@@ -2149,19 +2156,21 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
         return false;
     }
 
-    // Update the message with the content blob.
-    if (!CryptMsgUpdate(hMsg, aData.data(), aData.size(), FALSE))
+    if (!bNonDetached)
     {
-        SAL_WARN("svl.crypto", "ValidateSignature, CryptMsgUpdate() for the content failed: " << WindowsErrorString(GetLastError()));
-        return false;
-    }
+        // Update the message with the content blob.
+        if (!CryptMsgUpdate(hMsg, aData.data(), aData.size(), FALSE))
+        {
+            SAL_WARN("svl.crypto", "ValidateSignature, CryptMsgUpdate() for the content failed: " << WindowsErrorString(GetLastError()));
+            return false;
+        }
 
-    if (!CryptMsgUpdate(hMsg, nullptr, 0, TRUE))
-    {
-        SAL_WARN("svl.crypto", "ValidateSignature, CryptMsgUpdate() for the last content failed: " << WindowsErrorString(GetLastError()));
-        return false;
+        if (!CryptMsgUpdate(hMsg, nullptr, 0, TRUE))
+        {
+            SAL_WARN("svl.crypto", "ValidateSignature, CryptMsgUpdate() for the last content failed: " << WindowsErrorString(GetLastError()));
+            return false;
+        }
     }
-
     // Get the CRYPT_ALGORITHM_IDENTIFIER from the message.
     DWORD nDigestID = 0;
     if (!CryptMsgGetParam(hMsg, CMSG_SIGNER_HASH_ALGORITHM_PARAM, 0, nullptr, &nDigestID))
@@ -2237,6 +2246,8 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
         rInformation.X509Datas.emplace_back(temp);
     }
 
+    std::vector<BYTE> aContentParam;
+
     if (bNonDetached)
     {
         // Not a detached signature.
@@ -2247,19 +2258,16 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
             return false;
         }
 
-        std::vector<BYTE> aContentParam(nContentParam);
+        aContentParam.resize(nContentParam);
         if (!CryptMsgGetParam(hMsg, CMSG_CONTENT_PARAM, 0, aContentParam.data(), &nContentParam))
         {
             SAL_WARN("svl.crypto", "ValidateSignature: CryptMsgGetParam() failed");
             return false;
         }
-
-        if (VerifyNonDetachedSignature(aData, aContentParam))
-            rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
     }
-    else
+
+    if (!bNonDetached || VerifyNonDetachedSignature(aData, aContentParam))
     {
-        // Detached, the usual case.
         // Use the CERT_INFO from the signer certificate to verify the signature.
         if (CryptMsgControl(hMsg, 0, CMSG_CTRL_VERIFY_SIGNATURE, pSignerCertContext->pCertInfo))
             rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
