@@ -54,6 +54,9 @@
                   <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                     <child>
                       <object class="GtkCellRendererPixbuf" id="cellrenderertext1"/>
+                      <attributes>
+                        <attribute name="surface">0</attribute>
+                      </attributes>
                     </child>
                   </object>
                 </child>
