@@ -44,6 +44,7 @@
 #include <o3tl/vector_utils.hxx>
 #include <svx/swframetypes.hxx>
 #include <fmtanchr.hxx>
+#include <fmturl.hxx>
 #include <dcontact.hxx>
 #include <unotext.hxx>
 #include <svx/svdoashp.hxx>
@@ -2613,13 +2614,39 @@ public:
 } // end anonymous namespace
 
 // Check Shapes, TextBox
-void AccessibilityCheck::checkObject(SwNode* pCurrent, SdrObject* pObject)
+void AccessibilityCheck::checkObject(SwNode* pCurrent, SwFrameFormat const& rFrameFormat)
 {
+    SdrObject const* const pObject{ rFrameFormat.FindSdrObject() };
     if (!pObject)
         return;
 
+    // check hyperlink
+    if (SwFormatURL const* const pItem{ rFrameFormat.GetItemIfSet(RES_URL, false) })
+    {
+        OUString const sHyperlink{ pItem->GetURL() };
+        if (!sHyperlink.isEmpty() && pItem->GetName().isEmpty())
+        {
+            INetURLObject const aHyperlink(sHyperlink);
+            if (aHyperlink.GetProtocol() != INetProtocol::NotValid)
+            {
+                std::shared_ptr<sw::AccessibilityIssue> pNameIssue
+                    = lclAddIssue(m_aIssueCollection, SwResId(STR_HYPERLINK_NO_NAME),
+                                  sfx::AccessibilityIssueID::HYPERLINK_NO_NAME,
+                                  sfx::AccessibilityIssueLevel::WARNLEV);
+
+                if (pNameIssue)
+                {
+                    pNameIssue->setIssueObject(IssueObject::HYPERLINKFLY);
+                    pNameIssue->setObjectID(rFrameFormat.GetName());
+                    pNameIssue->setNode(pCurrent);
+                    pNameIssue->setDoc(*m_pDoc);
+                }
+            }
+        }
+    }
+
     // Check for fontworks.
-    if (SdrObjCustomShape* pCustomShape = dynamic_cast<SdrObjCustomShape*>(pObject))
+    if (SdrObjCustomShape const* pCustomShape = dynamic_cast<SdrObjCustomShape const*>(pObject))
     {
         const SdrCustomShapeGeometryItem& rGeometryItem
             = pCustomShape->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
@@ -2764,9 +2791,7 @@ void AccessibilityCheck::check()
 
             for (SwFrameFormat* const& pFrameFormat : pNode->GetAnchoredFlys())
             {
-                SdrObject* pObject = pFrameFormat->FindSdrObject();
-                if (pObject)
-                    checkObject(pNode, pObject);
+                checkObject(pNode, *pFrameFormat);
             }
         }
     }
