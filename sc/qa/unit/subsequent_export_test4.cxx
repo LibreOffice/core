@@ -2176,12 +2176,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf165503)
     // The textual date output can depend on locale, but it'll differ from expected value either way
     assertXPathContent(pChart1,
                        "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:cat/c:numRef/"
-                       "c:numCache/c:pt[@idx=\"0\"]",
+                       "c:numCache/c:pt[@idx=\"0\"]/c:v",
                        u"44199");
     // And similarly
     assertXPathContent(pChart1,
                        "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:cat/c:numRef/"
-                       "c:numCache/c:pt[@idx=\"4\"]",
+                       "c:numCache/c:pt[@idx=\"4\"]/c:v",
                        u"44844");
 
     // There should be no node with idx 5 (cell is empty)
