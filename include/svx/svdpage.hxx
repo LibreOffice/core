@@ -526,8 +526,6 @@ public:
     const SdrLayerAdmin& GetLayerAdmin() const;
     SdrLayerAdmin& GetLayerAdmin();
 
-    virtual OUString GetLayoutName() const;
-
     /// for snap-to-grid in Writer, also for AlignObjects if 1 object is marked
     /// if pRect != null, then the pages that are intersected by this Rect,
     /// otherwise the visible pages

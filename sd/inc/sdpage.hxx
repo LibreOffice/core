@@ -252,7 +252,7 @@ public:
                          const ::tools::Rectangle& rOldBoundRect) override;
 
     void             SetLayoutName(const OUString& aName);
-    virtual OUString GetLayoutName() const override       { return maLayoutName; }
+    const OUString& GetLayoutName() const { return maLayoutName; }
 
     void            SetFileName(const OUString& aName) { maFileName = aName; }
     const OUString& GetFileName() const       { return maFileName; }

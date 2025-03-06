@@ -83,7 +83,8 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
     {
         // rename MasterPage -> rename LayoutTemplate
         pPageToRename = GetDoc()->GetMasterSdPage( maTabControl->GetPagePos(nPageId), ePageKind );
-        GetDoc()->RenameLayoutTemplate( pPageToRename->GetLayoutName(), rName );
+        OUString aOldPageLayoutName = pPageToRename->GetLayoutName();
+        GetDoc()->RenameLayoutTemplate(aOldPageLayoutName, rName);
     }
 
     bool bSuccess = (rName == pPageToRename->GetName());
