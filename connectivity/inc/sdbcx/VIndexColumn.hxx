@@ -24,35 +24,35 @@
 #include <connectivity/sdbcx/VColumn.hxx>
 
 namespace connectivity::sdbcx
+{
+    class OIndexColumn;
+    typedef ::comphelper::OIdPropertyArrayUsageHelper<OIndexColumn> OIndexColumn_PROP;
+
+    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) OIndexColumn :
+        public OColumn, public OIndexColumn_PROP
     {
-        class OIndexColumn;
-        typedef ::comphelper::OIdPropertyArrayUsageHelper<OIndexColumn> OIndexColumn_PROP;
+        bool    m_IsAscending;
+    protected:
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    public:
+        OIndexColumn(   bool _bCase);
+        OIndexColumn(   bool IsAscending,
+                        const OUString& Name,
+                        const OUString& TypeName,
+                        const OUString& DefaultValue,
+                        sal_Int32       IsNullable,
+                        sal_Int32       Precision,
+                        sal_Int32       Scale,
+                        sal_Int32       Type,
+                        bool            _bCase,
+                        const OUString& CatalogName,
+                        const OUString& SchemaName,
+                        const OUString& TableName);
 
-        class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) OIndexColumn :
-            public OColumn, public OIndexColumn_PROP
-        {
-            bool    m_IsAscending;
-        protected:
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
-            virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-        public:
-            OIndexColumn(   bool _bCase);
-            OIndexColumn(   bool IsAscending,
-                            const OUString& Name,
-                            const OUString& TypeName,
-                            const OUString& DefaultValue,
-                            sal_Int32       IsNullable,
-                            sal_Int32       Precision,
-                            sal_Int32       Scale,
-                            sal_Int32       Type,
-                            bool            _bCase,
-                            const OUString& CatalogName,
-                            const OUString& SchemaName,
-                            const OUString& TableName);
-
-            virtual void construct() override;
-            DECLARE_SERVICE_INFO();
-        };
+        virtual void construct() override;
+        DECLARE_SERVICE_INFO();
+    };
 
 }
 

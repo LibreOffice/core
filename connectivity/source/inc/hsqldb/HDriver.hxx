@@ -31,96 +31,96 @@
 
 
 namespace connectivity::hsqldb
+{
+    class OHCatalog;
+
+    typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver
+                                             , css::sdbcx::XDataDefinitionSupplier
+                                             , css::lang::XServiceInfo
+                                             , css::sdbcx::XCreateCatalog
+                                             , css::embed::XTransactionListener
+                                           >   ODriverDelegator_BASE;
+
+    struct TConnectionInfo
     {
-        class OHCatalog;
-
-        typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver
-                                                 , css::sdbcx::XDataDefinitionSupplier
-                                                 , css::lang::XServiceInfo
-                                                 , css::sdbcx::XCreateCatalog
-                                                 , css::embed::XTransactionListener
-                                               >   ODriverDelegator_BASE;
-
-        struct TConnectionInfo
-        {
-            css::uno::WeakReference<css::sdbc::XConnection> xOrigConn;
-            OUString sKey;
-            css::uno::WeakReference<css::sdbc::XConnection> xConn;
-            unotools::WeakReference<OHCatalog> xCatalog;
-        };
+        css::uno::WeakReference<css::sdbc::XConnection> xOrigConn;
+        OUString sKey;
+        css::uno::WeakReference<css::sdbc::XConnection> xConn;
+        unotools::WeakReference<OHCatalog> xCatalog;
+    };
 
 
-        /** delegates all calls to the original driver and extend the existing one with the SDBCX layer.
+    /** delegates all calls to the original driver and extend the existing one with the SDBCX layer.
 
+    */
+    class ODriverDelegator final : public ::cppu::BaseMutex
+                            ,public ODriverDelegator_BASE
+    {
+        std::vector<TConnectionInfo>                              m_aConnections; //  vector containing a list
+                                                                                  //  of all the Connection objects
+                                                                                  //  for this Driver
+        css::uno::Reference< css::sdbc::XDriver >                 m_xDriver;
+        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        bool                                                      m_bInShutDownConnections;
+
+        /** load the driver we want to delegate.
+            The <member>m_xDriver</member> may be <NULL/> if the driver could not be loaded.
+            @return
+                The driver which was currently selected.
         */
-        class ODriverDelegator final : public ::cppu::BaseMutex
-                                ,public ODriverDelegator_BASE
-        {
-            std::vector<TConnectionInfo>                              m_aConnections; //  vector containing a list
-                                                                                      //  of all the Connection objects
-                                                                                      //  for this Driver
-            css::uno::Reference< css::sdbc::XDriver >                 m_xDriver;
-            css::uno::Reference< css::uno::XComponentContext >        m_xContext;
-            bool                                                      m_bInShutDownConnections;
+        css::uno::Reference< css::sdbc::XDriver > const & loadDriver( );
 
-            /** load the driver we want to delegate.
-                The <member>m_xDriver</member> may be <NULL/> if the driver could not be loaded.
-                @return
-                    The driver which was currently selected.
-            */
-            css::uno::Reference< css::sdbc::XDriver > const & loadDriver( );
+        /** shut down the connection and revoke the storage from the map
+            @param  _aIter
+                The connection to shut down and storage to revoke.
+        */
+        void shutdownConnection(const std::vector<TConnectionInfo>::iterator& _aIter);
 
-            /** shut down the connection and revoke the storage from the map
-                @param  _aIter
-                    The connection to shut down and storage to revoke.
-            */
-            void shutdownConnection(const std::vector<TConnectionInfo>::iterator& _aIter);
+    public:
+        /** creates a new delegator for a HSQLDB driver
+        */
+        ODriverDelegator(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
-        public:
-            /** creates a new delegator for a HSQLDB driver
-            */
-            ODriverDelegator(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+        // XServiceInfo
+        DECLARE_SERVICE_INFO();
 
-            // XServiceInfo
-            DECLARE_SERVICE_INFO();
+        // XDriver
+        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) override;
+        virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual sal_Int32 SAL_CALL getMajorVersion(  ) override;
+        virtual sal_Int32 SAL_CALL getMinorVersion(  ) override;
 
-            // XDriver
-            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
-            virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) override;
-            virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
-            virtual sal_Int32 SAL_CALL getMajorVersion(  ) override;
-            virtual sal_Int32 SAL_CALL getMinorVersion(  ) override;
+        // XDataDefinitionSupplier
+        virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByConnection( const css::uno::Reference< css::sdbc::XConnection >& connection ) override;
+        virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByURL( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
 
-            // XDataDefinitionSupplier
-            virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByConnection( const css::uno::Reference< css::sdbc::XConnection >& connection ) override;
-            virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByURL( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        // XCreateCatalog
+        virtual void SAL_CALL createCatalog( const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
 
-            // XCreateCatalog
-            virtual void SAL_CALL createCatalog( const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        // XEventListener
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
-            // XEventListener
-            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+        // XTransactionListener
+        virtual void SAL_CALL preCommit( const css::lang::EventObject& aEvent ) override;
+        virtual void SAL_CALL commited( const css::lang::EventObject& aEvent ) override;
+        virtual void SAL_CALL preRevert( const css::lang::EventObject& aEvent ) override;
+        virtual void SAL_CALL reverted( const css::lang::EventObject& aEvent ) override;
 
-            // XTransactionListener
-            virtual void SAL_CALL preCommit( const css::lang::EventObject& aEvent ) override;
-            virtual void SAL_CALL commited( const css::lang::EventObject& aEvent ) override;
-            virtual void SAL_CALL preRevert( const css::lang::EventObject& aEvent ) override;
-            virtual void SAL_CALL reverted( const css::lang::EventObject& aEvent ) override;
+        void shutdownConnections();
+        void flushConnections();
+    private:
+        /// dtor
+        virtual ~ODriverDelegator() override;
+        // OComponentHelper
+        virtual void SAL_CALL disposing() override;
 
-            void shutdownConnections();
-            void flushConnections();
-        private:
-            /// dtor
-            virtual ~ODriverDelegator() override;
-            // OComponentHelper
-            virtual void SAL_CALL disposing() override;
-
-            /** called when we connected to a newly created embedded database
-            */
-            void onConnectedNewDatabase(
-                const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
-            );
-        };
+        /** called when we connected to a newly created embedded database
+        */
+        void onConnectedNewDatabase(
+            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
+        );
+    };
 
 
 }   // namespace connectivity::hsqldb

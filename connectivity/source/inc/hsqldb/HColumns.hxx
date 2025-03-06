@@ -21,35 +21,35 @@
 #include <connectivity/sdbcx/VColumn.hxx>
 
 namespace connectivity::hsqldb
+{
+    class OHSQLColumns : public OColumnsHelper
     {
-        class OHSQLColumns : public OColumnsHelper
-        {
-        protected:
-            virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
-        public:
-            OHSQLColumns(   ::cppu::OWeakObject& _rParent
-                            ,::osl::Mutex& _rMutex
-                            ,const ::std::vector< OUString> &_rVector
-                        );
-        };
+    protected:
+        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+    public:
+        OHSQLColumns(   ::cppu::OWeakObject& _rParent
+                        ,::osl::Mutex& _rMutex
+                        ,const ::std::vector< OUString> &_rVector
+                    );
+    };
 
-        class OHSQLColumn;
-        typedef ::comphelper::OIdPropertyArrayUsageHelper<OHSQLColumn> OHSQLColumn_PROP;
+    class OHSQLColumn;
+    typedef ::comphelper::OIdPropertyArrayUsageHelper<OHSQLColumn> OHSQLColumn_PROP;
 
-        class OHSQLColumn : public sdbcx::OColumn,
-                                public OHSQLColumn_PROP
-        {
-            OUString m_sAutoIncrement;
-        protected:
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    class OHSQLColumn : public sdbcx::OColumn,
+                            public OHSQLColumn_PROP
+    {
+        OUString m_sAutoIncrement;
+    protected:
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
+        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
-        public:
-            OHSQLColumn();
-            virtual void construct() override;
+    public:
+        OHSQLColumn();
+        virtual void construct() override;
 
-            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-        };
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    };
 
 }
 

@@ -34,112 +34,112 @@ namespace com::sun::star::sdbc { class XDatabaseMetaData; }
 namespace com::sun::star::sdbc { class XResultSetMetaData; }
 
 namespace connectivity::parse
+{
+    class OParseColumn;
+
+    typedef sdbcx::OColumn OParseColumn_BASE;
+    typedef ::comphelper::OPropertyArrayUsageHelper<OParseColumn> OParseColumn_PROP;
+
+    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) OParseColumn final :
+        public OParseColumn_BASE, public OParseColumn_PROP
     {
-        class OParseColumn;
+        OUString    m_aRealName;
+        OUString    m_sLabel;
+        bool        m_bFunction;
+        bool        m_bDbasePrecisionChanged;
+        bool        m_bAggregateFunction;
+        bool        m_bIsSearchable;
 
-        typedef sdbcx::OColumn OParseColumn_BASE;
-        typedef ::comphelper::OPropertyArrayUsageHelper<OParseColumn> OParseColumn_PROP;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
+        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
-        class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) OParseColumn final :
-            public OParseColumn_BASE, public OParseColumn_PROP
-        {
-            OUString    m_aRealName;
-            OUString    m_sLabel;
-            bool        m_bFunction;
-            bool        m_bDbasePrecisionChanged;
-            bool        m_bAggregateFunction;
-            bool        m_bIsSearchable;
+        virtual ~OParseColumn() override;
+    public:
+        OParseColumn(const css::uno::Reference< css::beans::XPropertySet>& _xColumn, bool _bCase);
+        OParseColumn(const OUString& Name,
+                const OUString& TypeName,
+                const OUString& DefaultValue,
+                const OUString& Description,
+                sal_Int32       IsNullable,
+                sal_Int32       Precision,
+                sal_Int32       Scale,
+                sal_Int32       Type,
+                bool            IsAutoIncrement,
+                bool            IsCurrency,
+                bool            _bCase,
+                const OUString& CatalogName,
+                const OUString& SchemaName,
+                const OUString& TableName);
 
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+        virtual void construct() override;
 
-            virtual ~OParseColumn() override;
-        public:
-            OParseColumn(const css::uno::Reference< css::beans::XPropertySet>& _xColumn, bool _bCase);
-            OParseColumn(const OUString& Name,
-                    const OUString& TypeName,
-                    const OUString& DefaultValue,
-                    const OUString& Description,
-                    sal_Int32       IsNullable,
-                    sal_Int32       Precision,
-                    sal_Int32       Scale,
-                    sal_Int32       Type,
-                    bool            IsAutoIncrement,
-                    bool            IsCurrency,
-                    bool            _bCase,
-                    const OUString& CatalogName,
-                    const OUString& SchemaName,
-                    const OUString& TableName);
+        void setRealName(const OUString& _rName)  { m_aRealName  = _rName; }
+        void setLabel(const OUString& i_sLabel)   { m_sLabel  = i_sLabel; }
+        void setTableName(const OUString& _rName) { m_TableName = _rName; }
+        void setFunction(bool _bFunction)            { m_bFunction  = _bFunction; }
+        void setAggregateFunction(bool _bFunction)   { m_bAggregateFunction = _bFunction; }
+        void setIsSearchable( bool _bIsSearchable )  { m_bIsSearchable = _bIsSearchable; }
+        const OUString& getRealName()   const { return  m_aRealName; }
 
-            virtual void construct() override;
-
-            void setRealName(const OUString& _rName)  { m_aRealName  = _rName; }
-            void setLabel(const OUString& i_sLabel)   { m_sLabel  = i_sLabel; }
-            void setTableName(const OUString& _rName) { m_TableName = _rName; }
-            void setFunction(bool _bFunction)            { m_bFunction  = _bFunction; }
-            void setAggregateFunction(bool _bFunction)   { m_bAggregateFunction = _bFunction; }
-            void setIsSearchable( bool _bIsSearchable )  { m_bIsSearchable = _bIsSearchable; }
-            const OUString& getRealName()   const { return  m_aRealName; }
-
-            /** creates a collection of OParseColumn, as described by a result set meta data instance.
-            */
-            static ::rtl::Reference< OSQLColumns >
-                createColumnsForResultSet(
-                    const css::uno::Reference< css::sdbc::XResultSetMetaData >& _rxResMetaData,
-                    const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMetaData,
-                    const css::uno::Reference< css::container::XNameAccess>& i_xQueryColumns
-                );
-
-            typedef std::map<OUString, int> StringMap;
-            /** creates a single OParseColumn, as described by a result set meta data instance.
-                The column names are unique.
-            */
-            static rtl::Reference<OParseColumn>
-                createColumnForResultSet(
-                    const css::uno::Reference< css::sdbc::XResultSetMetaData >& _rxResMetaData,
-                    const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMetaData,
-                    sal_Int32 _nColumnPos,
-                    StringMap& _rColumns
-                );
-
-        private:
-            using OParseColumn_BASE::createArrayHelper;
-        };
-
-        class OOrderColumn;
-
-        typedef sdbcx::OColumn OOrderColumn_BASE;
-        typedef ::comphelper::OPropertyArrayUsageHelper<OOrderColumn> OOrderColumn_PROP;
-
-        class OOrderColumn final :
-            public OOrderColumn_BASE, public OOrderColumn_PROP
-        {
-            const   bool        m_bAscending;
-
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
-
-            virtual ~OOrderColumn() override;
-        public:
-            OOrderColumn(
-                const css::uno::Reference< css::beans::XPropertySet>& _xColumn,
-                const OUString& i_rOriginatingTableName,
-                bool _bCase,
-                bool _bAscending
+        /** creates a collection of OParseColumn, as described by a result set meta data instance.
+        */
+        static ::rtl::Reference< OSQLColumns >
+            createColumnsForResultSet(
+                const css::uno::Reference< css::sdbc::XResultSetMetaData >& _rxResMetaData,
+                const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMetaData,
+                const css::uno::Reference< css::container::XNameAccess>& i_xQueryColumns
             );
 
-            OOrderColumn(
-                const css::uno::Reference< css::beans::XPropertySet>& _xColumn,
-                bool _bCase,
-                bool _bAscending
+        typedef std::map<OUString, int> StringMap;
+        /** creates a single OParseColumn, as described by a result set meta data instance.
+            The column names are unique.
+        */
+        static rtl::Reference<OParseColumn>
+            createColumnForResultSet(
+                const css::uno::Reference< css::sdbc::XResultSetMetaData >& _rxResMetaData,
+                const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMetaData,
+                sal_Int32 _nColumnPos,
+                StringMap& _rColumns
             );
 
-            virtual void construct() override;
+    private:
+        using OParseColumn_BASE::createArrayHelper;
+    };
 
-            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-        private:
-            using OOrderColumn_BASE::createArrayHelper;
-        };
+    class OOrderColumn;
+
+    typedef sdbcx::OColumn OOrderColumn_BASE;
+    typedef ::comphelper::OPropertyArrayUsageHelper<OOrderColumn> OOrderColumn_PROP;
+
+    class OOrderColumn final :
+        public OOrderColumn_BASE, public OOrderColumn_PROP
+    {
+        const   bool        m_bAscending;
+
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
+        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+
+        virtual ~OOrderColumn() override;
+    public:
+        OOrderColumn(
+            const css::uno::Reference< css::beans::XPropertySet>& _xColumn,
+            const OUString& i_rOriginatingTableName,
+            bool _bCase,
+            bool _bAscending
+        );
+
+        OOrderColumn(
+            const css::uno::Reference< css::beans::XPropertySet>& _xColumn,
+            bool _bCase,
+            bool _bAscending
+        );
+
+        virtual void construct() override;
+
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    private:
+        using OOrderColumn_BASE::createArrayHelper;
+    };
 
 }
 

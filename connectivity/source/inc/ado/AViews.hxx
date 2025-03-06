@@ -27,25 +27,25 @@
 namespace connectivity::ado
 {
 
-        class OViews : public sdbcx::OCollection
+    class OViews : public sdbcx::OCollection
+    {
+        WpADOViews  m_aCollection;
+        OCatalog*   m_pCatalog;
+    protected:
+        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual void impl_refresh() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void dropObject(sal_Int32 _nPos,const OUString& _sElementName) override;
+    public:
+        OViews(OCatalog* _pParent, ::osl::Mutex& _rMutex,
+            const ::std::vector< OUString> &_rVector,
+            WpADOViews const & _rCollection,bool _bCase) : sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)
+            ,m_aCollection(_rCollection)
+            ,m_pCatalog(_pParent)
         {
-            WpADOViews  m_aCollection;
-            OCatalog*   m_pCatalog;
-        protected:
-            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
-            virtual void impl_refresh() override;
-            virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
-            virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
-            virtual void dropObject(sal_Int32 _nPos,const OUString& _sElementName) override;
-        public:
-            OViews(OCatalog* _pParent, ::osl::Mutex& _rMutex,
-                const ::std::vector< OUString> &_rVector,
-                WpADOViews const & _rCollection,bool _bCase) : sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)
-                ,m_aCollection(_rCollection)
-                ,m_pCatalog(_pParent)
-            {
-            }
-        };
+        }
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

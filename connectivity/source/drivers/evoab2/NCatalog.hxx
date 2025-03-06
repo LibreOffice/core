@@ -23,21 +23,21 @@
 
 namespace connectivity::evoab
 {
-        class OEvoabConnection;
-        class OEvoabCatalog : public connectivity::sdbcx::OCatalog
-        {
-            OEvoabConnection *m_pConnection;
-        public:
-            explicit OEvoabCatalog(OEvoabConnection *_pCon);
-            OEvoabConnection* getConnection() const { return m_pConnection; }
-            virtual void refreshTables() override;
-            virtual void refreshViews() override {}
-            virtual void refreshGroups() override {}
-            virtual void refreshUsers() override {}
- // XTablesSupplier
-            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(
-                                        ) override;
-        };
+    class OEvoabConnection;
+    class OEvoabCatalog : public connectivity::sdbcx::OCatalog
+    {
+        OEvoabConnection *m_pConnection;
+    public:
+        explicit OEvoabCatalog(OEvoabConnection *_pCon);
+        OEvoabConnection* getConnection() const { return m_pConnection; }
+        virtual void refreshTables() override;
+        virtual void refreshViews() override {}
+        virtual void refreshGroups() override {}
+        virtual void refreshUsers() override {}
+// XTablesSupplier
+        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(
+                                    ) override;
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

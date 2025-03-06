@@ -24,19 +24,19 @@
 
 namespace connectivity::macab
 {
-        class MacabColumns : public sdbcx::OCollection
-        {
-        protected:
-            MacabTable* m_pTable;
+    class MacabColumns : public sdbcx::OCollection
+    {
+    protected:
+        MacabTable* m_pTable;
 
-            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
-            virtual void impl_refresh() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual void impl_refresh() override;
 
-        public:
-            MacabColumns(   MacabTable* _pTable,
-                        ::osl::Mutex& _rMutex,
-                        const ::std::vector< OUString> &_rVector);
-        };
+    public:
+        MacabColumns(   MacabTable* _pTable,
+                    ::osl::Mutex& _rMutex,
+                    const ::std::vector< OUString> &_rVector);
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

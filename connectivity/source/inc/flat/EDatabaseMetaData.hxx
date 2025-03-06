@@ -22,22 +22,22 @@
 #include <file/FDatabaseMetaData.hxx>
 
 namespace connectivity::flat
+{
+
+    //************ Class: java.sql.DatabaseMetaDataDate
+
+
+    class OFlatDatabaseMetaData :   public file::ODatabaseMetaData
     {
+        virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
+    protected:
+        virtual ~OFlatDatabaseMetaData() override;
+    public:
+        OFlatDatabaseMetaData(file::OConnection* _pCon);
 
-        //************ Class: java.sql.DatabaseMetaDataDate
-
-
-        class OFlatDatabaseMetaData :   public file::ODatabaseMetaData
-        {
-            virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
-        protected:
-            virtual ~OFlatDatabaseMetaData() override;
-        public:
-            OFlatDatabaseMetaData(file::OConnection* _pCon);
-
-            virtual OUString SAL_CALL getURL(  ) override;
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
-        };
+        virtual OUString SAL_CALL getURL(  ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
+    };
 
 }
 

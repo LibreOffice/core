@@ -23,15 +23,15 @@
 
 namespace connectivity::calc
 {
-        class OCalcConnection;
-        class OCalcCatalog : public file::OFileCatalog
-        {
-    public:
-            virtual void refreshTables() override;
+    class OCalcConnection;
+    class OCalcCatalog : public file::OFileCatalog
+    {
+public:
+        virtual void refreshTables() override;
 
-        public:
-            OCalcCatalog(OCalcConnection* _pCon);
-        };
+    public:
+        OCalcCatalog(OCalcConnection* _pCon);
+    };
 
 }
 

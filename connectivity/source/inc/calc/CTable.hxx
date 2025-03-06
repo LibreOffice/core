@@ -32,40 +32,40 @@ namespace com::sun::star::util {
 
 
 namespace connectivity::calc
+{
+    typedef component::OComponentTable OCalcTable_BASE;
+    class OCalcConnection;
+
+    class OCalcTable :  public OCalcTable_BASE
     {
-        typedef component::OComponentTable OCalcTable_BASE;
-        class OCalcConnection;
+    private:
+        std::vector<sal_Int32> m_aTypes;      // holds all type for columns just to avoid to ask the propertyset
+        css::uno::Reference< css::sheet::XSpreadsheet >           m_xSheet;
+        OCalcConnection* m_pCalcConnection;
+        sal_Int32 m_nStartCol;
+        sal_Int32 m_nStartRow;
+        sal_Int32 m_nDataCols;
+        bool      m_bHasHeaders;
+        css::uno::Reference< css::util::XNumberFormats > m_xFormats;
+        ::Date m_aNullDate;
 
-        class OCalcTable :  public OCalcTable_BASE
-        {
-        private:
-            std::vector<sal_Int32> m_aTypes;      // holds all type for columns just to avoid to ask the propertyset
-            css::uno::Reference< css::sheet::XSpreadsheet >           m_xSheet;
-            OCalcConnection* m_pCalcConnection;
-            sal_Int32 m_nStartCol;
-            sal_Int32 m_nStartRow;
-            sal_Int32 m_nDataCols;
-            bool      m_bHasHeaders;
-            css::uno::Reference< css::util::XNumberFormats > m_xFormats;
-            ::Date m_aNullDate;
+        void fillColumns();
 
-            void fillColumns();
+    public:
+        OCalcTable( sdbcx::OCollection* _pTables,OCalcConnection* _pConnection,
+                const OUString& Name,
+                const OUString& Type,
+                const OUString& Description = OUString(),
+                const OUString& SchemaName = OUString(),
+                const OUString& CatalogName = OUString()
+            );
 
-        public:
-            OCalcTable( sdbcx::OCollection* _pTables,OCalcConnection* _pConnection,
-                    const OUString& Name,
-                    const OUString& Type,
-                    const OUString& Description = OUString(),
-                    const OUString& SchemaName = OUString(),
-                    const OUString& CatalogName = OUString()
-                );
+        virtual bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData) override;
 
-            virtual bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData) override;
+        virtual void SAL_CALL disposing() override;
 
-            virtual void SAL_CALL disposing() override;
-
-            void construct() override;
-        };
+        void construct() override;
+    };
 
 }
 

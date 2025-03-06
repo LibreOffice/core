@@ -24,31 +24,31 @@
 
 namespace connectivity::macab
 {
-        typedef connectivity::sdbcx::OTable MacabTable_TYPEDEF;
+    typedef connectivity::sdbcx::OTable MacabTable_TYPEDEF;
 
-        class MacabTable : public MacabTable_TYPEDEF
-        {
-            css::uno::Reference< css::sdbc::XDatabaseMetaData > m_xMetaData;
-            MacabConnection* m_pConnection;
+    class MacabTable : public MacabTable_TYPEDEF
+    {
+        css::uno::Reference< css::sdbc::XDatabaseMetaData > m_xMetaData;
+        MacabConnection* m_pConnection;
 
-        public:
-            MacabTable( sdbcx::OCollection* _pTables, MacabConnection* _pConnection);
-            MacabTable( sdbcx::OCollection* _pTables,
-                    MacabConnection* _pConnection,
-                    const OUString& Name,
-                    const OUString& Type,
-                    const OUString& Description = OUString(),
-                    const OUString& SchemaName = OUString(),
-                    const OUString& CatalogName = OUString()
-                );
+    public:
+        MacabTable( sdbcx::OCollection* _pTables, MacabConnection* _pConnection);
+        MacabTable( sdbcx::OCollection* _pTables,
+                MacabConnection* _pConnection,
+                const OUString& Name,
+                const OUString& Type,
+                const OUString& Description = OUString(),
+                const OUString& SchemaName = OUString(),
+                const OUString& CatalogName = OUString()
+            );
 
-            MacabConnection* getConnection() { return m_pConnection;}
+        MacabConnection* getConnection() { return m_pConnection;}
 
-            virtual void refreshColumns() override;
+        virtual void refreshColumns() override;
 
-            OUString const & getTableName() const { return m_Name; }
-            OUString const & getSchema() const { return m_SchemaName; }
-        };
+        OUString const & getTableName() const { return m_Name; }
+        OUString const & getSchema() const { return m_SchemaName; }
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,104 +24,104 @@
 #include <connectivity/odbc.hxx>
 
 namespace connectivity::odbc
+{
+    class OOO_DLLPUBLIC_ODBCBASE OBoundParam
     {
-        class OOO_DLLPUBLIC_ODBCBASE OBoundParam
+
+    public:
+        OBoundParam()
+            : binaryData(nullptr)
+            , paramLength(0)
+            , paramInputStreamLen(0)
         {
+        }
+        ~OBoundParam()
+        {
+            free(binaryData);
+        }
 
-        public:
-            OBoundParam()
-                : binaryData(nullptr)
-                , paramLength(0)
-                , paramInputStreamLen(0)
-            {
-            }
-            ~OBoundParam()
-            {
-                free(binaryData);
-            }
+        // allocBindDataBuffer
+        // Allocates and returns a new bind data buffer of the specified
+        // length
 
-            // allocBindDataBuffer
-            // Allocates and returns a new bind data buffer of the specified
-            // length
+        void* allocBindDataBuffer (sal_Int32 bufLen)
+        {
+            // Reset the input stream and sequence, we are doing a new bind
+            setInputStream (nullptr, 0);
+            aSequence.realloc(0);
 
-            void* allocBindDataBuffer (sal_Int32 bufLen)
-            {
-                // Reset the input stream and sequence, we are doing a new bind
-                setInputStream (nullptr, 0);
-                aSequence.realloc(0);
+            free(binaryData);
+            binaryData = (bufLen > 0) ? malloc(bufLen) : nullptr;
 
-                free(binaryData);
-                binaryData = (bufLen > 0) ? malloc(bufLen) : nullptr;
-
-                return binaryData;
-            }
+            return binaryData;
+        }
 
 
-            // getBindLengthBuffer
-            // Returns the length buffer to be used when binding to a parameter
+        // getBindLengthBuffer
+        // Returns the length buffer to be used when binding to a parameter
 
-            SQLLEN& getBindLengthBuffer ()
-            {
-                return paramLength;
-            }
-
-
-            // setInputStream
-            // Sets the input stream for the bound parameter
-
-            void setInputStream(const css::uno::Reference< css::io::XInputStream>& inputStream,
-                                sal_Int32 len)
-            {
-                paramInputStream = inputStream;
-                paramInputStreamLen = len;
-            }
-
-            void setSequence(const css::uno::Sequence< sal_Int8 >& _aSequence)
-            {
-                aSequence = _aSequence;
-            }
+        SQLLEN& getBindLengthBuffer ()
+        {
+            return paramLength;
+        }
 
 
-            // getInputStream
-            // Gets the input stream for the bound parameter
+        // setInputStream
+        // Sets the input stream for the bound parameter
 
-            const css::uno::Reference< css::io::XInputStream>& getInputStream () const
-            {
-                return paramInputStream;
-            }
+        void setInputStream(const css::uno::Reference< css::io::XInputStream>& inputStream,
+                            sal_Int32 len)
+        {
+            paramInputStream = inputStream;
+            paramInputStreamLen = len;
+        }
 
-
-            // getInputStreamLen
-            // Gets the input stream length for the bound parameter
-
-            sal_Int32 getInputStreamLen () const
-            {
-                return paramInputStreamLen;
-            }
+        void setSequence(const css::uno::Sequence< sal_Int8 >& _aSequence)
+        {
+            aSequence = _aSequence;
+        }
 
 
-        private:
+        // getInputStream
+        // Gets the input stream for the bound parameter
 
-            // Data attributes
+        const css::uno::Reference< css::io::XInputStream>& getInputStream () const
+        {
+            return paramInputStream;
+        }
 
 
-            void  *binaryData;       // Storage area to be used
-                                     // when binding the parameter
+        // getInputStreamLen
+        // Gets the input stream length for the bound parameter
 
-            SQLLEN paramLength;      // Storage area to be used
-                                     // for the bound length of the
-                                     // parameter.  Note that this
-                                     // data is in native format.
+        sal_Int32 getInputStreamLen () const
+        {
+            return paramInputStreamLen;
+        }
 
-            css::uno::Reference< css::io::XInputStream> paramInputStream;
-            css::uno::Sequence< sal_Int8 > aSequence;
-                                        // When an input stream is
-                                        // bound to a parameter, a
-                                        // reference to the input stream is saved
-                                        // until not needed anymore.
 
-            sal_Int32 paramInputStreamLen;                // Length of input stream
-       };
+    private:
+
+        // Data attributes
+
+
+        void  *binaryData;       // Storage area to be used
+                                 // when binding the parameter
+
+        SQLLEN paramLength;      // Storage area to be used
+                                 // for the bound length of the
+                                 // parameter.  Note that this
+                                 // data is in native format.
+
+        css::uno::Reference< css::io::XInputStream> paramInputStream;
+        css::uno::Sequence< sal_Int8 > aSequence;
+                                    // When an input stream is
+                                    // bound to a parameter, a
+                                    // reference to the input stream is saved
+                                    // until not needed anymore.
+
+        sal_Int32 paramInputStreamLen;                // Length of input stream
+   };
 
 }
 

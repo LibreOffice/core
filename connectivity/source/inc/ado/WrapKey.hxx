@@ -26,29 +26,29 @@
 
 namespace connectivity::ado
 {
-        class WpADOKey : public WpOLEBase<ADOKey>
-        {
-        public:
-            WpADOKey() = default;
-            WpADOKey(const WpADOKey& rhs) : WpOLEBase<ADOKey>(rhs) {}
+    class WpADOKey : public WpOLEBase<ADOKey>
+    {
+    public:
+        WpADOKey() = default;
+        WpADOKey(const WpADOKey& rhs) : WpOLEBase<ADOKey>(rhs) {}
 
-            WpADOKey& operator=(const WpADOKey& rhs)
-                {WpOLEBase<ADOKey>::operator=(rhs); return *this;}
+        WpADOKey& operator=(const WpADOKey& rhs)
+            {WpOLEBase<ADOKey>::operator=(rhs); return *this;}
 
-            void Create();
+        void Create();
 
-            OUString get_Name() const;
-            void put_Name(std::u16string_view _rName);
-            KeyTypeEnum get_Type() const;
-            void put_Type(const KeyTypeEnum& _eNum) ;
-            OUString get_RelatedTable() const;
-            void put_RelatedTable(std::u16string_view _rName);
-            RuleEnum get_DeleteRule() const;
-            void put_DeleteRule(const RuleEnum& _eNum) ;
-            RuleEnum get_UpdateRule() const;
-            void put_UpdateRule(const RuleEnum& _eNum) ;
-            WpADOColumns get_Columns() const;
-        };
+        OUString get_Name() const;
+        void put_Name(std::u16string_view _rName);
+        KeyTypeEnum get_Type() const;
+        void put_Type(const KeyTypeEnum& _eNum) ;
+        OUString get_RelatedTable() const;
+        void put_RelatedTable(std::u16string_view _rName);
+        RuleEnum get_DeleteRule() const;
+        void put_DeleteRule(const RuleEnum& _eNum) ;
+        RuleEnum get_UpdateRule() const;
+        void put_UpdateRule(const RuleEnum& _eNum) ;
+        WpADOColumns get_Columns() const;
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

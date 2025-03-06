@@ -14,25 +14,25 @@
 #include <connectivity/TIndexes.hxx>
 
 namespace connectivity::firebird
-    {
+{
 
-        /**
-         * Firebird has a non-standard DROP INDEX statement, hence we need
-         * to override OIndexesHelper::dropObject
-         */
-        class Indexes: public ::connectivity::OIndexesHelper
-        {
-        private:
-            Table* m_pTable;
-        protected:
-            // XDrop
-            virtual void dropObject(sal_Int32 nPosition,
-                                    const OUString& sIndexName) override;
-        public:
-            Indexes(Table* pTable,
-                    ::osl::Mutex& rMutex,
-                    const std::vector< OUString>& rVector);
-        };
+    /**
+     * Firebird has a non-standard DROP INDEX statement, hence we need
+     * to override OIndexesHelper::dropObject
+     */
+    class Indexes: public ::connectivity::OIndexesHelper
+    {
+    private:
+        Table* m_pTable;
+    protected:
+        // XDrop
+        virtual void dropObject(sal_Int32 nPosition,
+                                const OUString& sIndexName) override;
+    public:
+        Indexes(Table* pTable,
+                ::osl::Mutex& rMutex,
+                const std::vector< OUString>& rVector);
+    };
 
 } // namespace connectivity::firebird
 

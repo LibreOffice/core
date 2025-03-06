@@ -29,10 +29,10 @@
 
 namespace connectivity::macab
 {
-        class MacabGroup: public MacabRecords {
-            public:
-                MacabGroup(const ABAddressBookRef _addressBook, const MacabRecords *_allRecords, const ABGroupRef _xGroup);
-        };
+    class MacabGroup: public MacabRecords {
+        public:
+            MacabGroup(const ABAddressBookRef _addressBook, const MacabRecords *_allRecords, const ABGroupRef _xGroup);
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,62 +30,62 @@
 #include <unotools/weakref.hxx>
 
 namespace connectivity::firebird
+{
+    // The SQL dialect in use
+    // Has to be used in various isc_* calls.
+    // 3: Is IB6 -- minimum required for delimited identifiers.
+    // SQL_DIALECT_V6 = 3, it's the last current version
+    // SQL_DIALECT_CURRENT is an alias for SQL_DIALECT_V6
+    // See src/dsql/sqlda_pub.h for full details
+
+    typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver,
+                                               css::sdbcx::XDataDefinitionSupplier,
+                                               css::lang::XServiceInfo > ODriver_BASE;
+
+    class FirebirdDriver : public ODriver_BASE
     {
-        // The SQL dialect in use
-        // Has to be used in various isc_* calls.
-        // 3: Is IB6 -- minimum required for delimited identifiers.
-        // SQL_DIALECT_V6 = 3, it's the last current version
-        // SQL_DIALECT_CURRENT is an alias for SQL_DIALECT_V6
-        // See src/dsql/sqlda_pub.h for full details
+    private:
+        css::uno::Reference<css::uno::XComponentContext> m_aContext;
+        ::utl::TempFileNamed m_firebirdTMPDirectory;
+        ::utl::TempFileNamed m_firebirdLockDirectory;
 
-        typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver,
-                                                   css::sdbcx::XDataDefinitionSupplier,
-                                                   css::lang::XServiceInfo > ODriver_BASE;
+    protected:
+        ::osl::Mutex                m_aMutex;       // mutex is need to control member access
+        std::vector<unotools::WeakReference<Connection>>
+                                    m_xConnections; //  vector containing a list
+                                                    //  of all the Connection objects
+                                                    //  for this Driver
 
-        class FirebirdDriver : public ODriver_BASE
-        {
-        private:
-            css::uno::Reference<css::uno::XComponentContext> m_aContext;
-            ::utl::TempFileNamed m_firebirdTMPDirectory;
-            ::utl::TempFileNamed m_firebirdLockDirectory;
+    public:
 
-        protected:
-            ::osl::Mutex                m_aMutex;       // mutex is need to control member access
-            std::vector<unotools::WeakReference<Connection>>
-                                        m_xConnections; //  vector containing a list
-                                                        //  of all the Connection objects
-                                                        //  for this Driver
+        explicit FirebirdDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+        virtual ~FirebirdDriver() override;
+        const css::uno::Reference<css::uno::XComponentContext>& getContext() const { return m_aContext; }
 
-        public:
+        // OComponentHelper
+        virtual void SAL_CALL disposing() override;
 
-            explicit FirebirdDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
-            virtual ~FirebirdDriver() override;
-            const css::uno::Reference<css::uno::XComponentContext>& getContext() const { return m_aContext; }
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-            // OComponentHelper
-            virtual void SAL_CALL disposing() override;
+        // XDriver
+        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) override;
+        virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual sal_Int32 SAL_CALL getMajorVersion(  ) override;
+        virtual sal_Int32 SAL_CALL getMinorVersion(  ) override;
 
-            // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName(  ) override;
-            virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-            // XDriver
-            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
-            virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) override;
-            virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
-            virtual sal_Int32 SAL_CALL getMajorVersion(  ) override;
-            virtual sal_Int32 SAL_CALL getMinorVersion(  ) override;
-
-            // XDataDefinitionSupplier
-            virtual css::uno::Reference< css::sdbcx::XTablesSupplier >
-                SAL_CALL getDataDefinitionByConnection(
-                    const css::uno::Reference< css::sdbc::XConnection >& rxConnection) override;
-            virtual css::uno::Reference< css::sdbcx::XTablesSupplier >
-                SAL_CALL getDataDefinitionByURL(
-                    const OUString& rsURL,
-                    const css::uno::Sequence< css::beans::PropertyValue >& rInfo) override;
-        };
+        // XDataDefinitionSupplier
+        virtual css::uno::Reference< css::sdbcx::XTablesSupplier >
+            SAL_CALL getDataDefinitionByConnection(
+                const css::uno::Reference< css::sdbc::XConnection >& rxConnection) override;
+        virtual css::uno::Reference< css::sdbcx::XTablesSupplier >
+            SAL_CALL getDataDefinitionByURL(
+                const OUString& rsURL,
+                const css::uno::Sequence< css::beans::PropertyValue >& rInfo) override;
+    };
 
 }
 

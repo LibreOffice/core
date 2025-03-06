@@ -15,15 +15,15 @@
 
 namespace connectivity::firebird
 {
-        class Columns: public ::connectivity::OColumnsHelper
-        {
-        protected:
-            virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
-        public:
-            Columns(Table& rTable,
-                    ::osl::Mutex& rMutex,
-                    const ::std::vector< OUString> &_rVector);
-        };
+    class Columns: public ::connectivity::OColumnsHelper
+    {
+    protected:
+        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+    public:
+        Columns(Table& rTable,
+                ::osl::Mutex& rMutex,
+                const ::std::vector< OUString> &_rVector);
+    };
 
 } // namespace connectivity::firebird
 

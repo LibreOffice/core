@@ -32,48 +32,48 @@
 #include <unotools/weakref.hxx>
 
 namespace connectivity::odbc
+{
+    class OConnection;
+
+    typedef ::cppu::WeakComponentImplHelper< css::sdbc::XDriver, css::lang::XServiceInfo > ODriver_BASE;
+
+    class OOO_DLLPUBLIC_ODBCBASE SAL_NO_VTABLE ODBCDriver : public ODriver_BASE
     {
-        class OConnection;
+    protected:
+        ::osl::Mutex                            m_aMutex;
 
-        typedef ::cppu::WeakComponentImplHelper< css::sdbc::XDriver, css::lang::XServiceInfo > ODriver_BASE;
+        std::vector<unotools::WeakReference<OConnection>>
+                                                m_xConnections; //  vector containing a list
+                                                    //  of all the Connection objects
+                                                    //  for this Driver
 
-        class OOO_DLLPUBLIC_ODBCBASE SAL_NO_VTABLE ODBCDriver : public ODriver_BASE
-        {
-        protected:
-            ::osl::Mutex                            m_aMutex;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-            std::vector<unotools::WeakReference<OConnection>>
-                                                    m_xConnections; //  vector containing a list
-                                                        //  of all the Connection objects
-                                                        //  for this Driver
+        virtual SQLHANDLE EnvironmentHandle() = 0;
 
-            css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    public:
 
-            virtual SQLHANDLE EnvironmentHandle() = 0;
+        ODBCDriver(css::uno::Reference< css::uno::XComponentContext > xContext);
 
-        public:
+        // only possibility to get the odbc functions
+        virtual const Functions& functions() const = 0;
+        // OComponentHelper
+        virtual void SAL_CALL disposing() override;
 
-            ODBCDriver(css::uno::Reference< css::uno::XComponentContext > xContext);
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-            // only possibility to get the odbc functions
-            virtual const Functions& functions() const = 0;
-            // OComponentHelper
-            virtual void SAL_CALL disposing() override;
+        // XDriver
+        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) override;
+        virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual sal_Int32 SAL_CALL getMajorVersion(  ) override;
+        virtual sal_Int32 SAL_CALL getMinorVersion(  ) override;
 
-            // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName(  ) override;
-            virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-            // XDriver
-            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
-            virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) override;
-            virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
-            virtual sal_Int32 SAL_CALL getMajorVersion(  ) override;
-            virtual sal_Int32 SAL_CALL getMinorVersion(  ) override;
-
-            const css::uno::Reference< css::uno::XComponentContext >& getContext() const { return m_xContext; }
-        };
+        const css::uno::Reference< css::uno::XComponentContext >& getContext() const { return m_xContext; }
+    };
 
 }
 

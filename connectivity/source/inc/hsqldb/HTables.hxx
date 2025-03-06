@@ -22,31 +22,31 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <utility>
 namespace connectivity::hsqldb
+{
+    class OTables final : public sdbcx::OCollection
     {
-        class OTables final : public sdbcx::OCollection
-        {
-            css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
+        css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
 
-            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
-            virtual void impl_refresh() override;
-            virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
-            virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
-            virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual void impl_refresh() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
 
-            void createTable( const css::uno::Reference< css::beans::XPropertySet >& descriptor );
-            virtual OUString getNameForObject(const css::uno::Reference< css::beans::XPropertySet >& _xObject) override;
-        public:
-            OTables(css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-                const ::std::vector< OUString> &_rVector) : sdbcx::OCollection(_rParent, true, _rMutex, _rVector)
-                ,m_xMetaData(std::move(_xMetaData))
-            {}
+        void createTable( const css::uno::Reference< css::beans::XPropertySet >& descriptor );
+        virtual OUString getNameForObject(const css::uno::Reference< css::beans::XPropertySet >& _xObject) override;
+    public:
+        OTables(css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+            const ::std::vector< OUString> &_rVector) : sdbcx::OCollection(_rParent, true, _rMutex, _rVector)
+            ,m_xMetaData(std::move(_xMetaData))
+        {}
 
-            // only the name is identical to ::cppu::OComponentHelper
-            virtual void disposing() override;
+        // only the name is identical to ::cppu::OComponentHelper
+        virtual void disposing() override;
 
-            // XDrop
-            void appendNew(const OUString& _rsNewTable);
-        };
+        // XDrop
+        void appendNew(const OUString& _rsNewTable);
+    };
 
 }
 

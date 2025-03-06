@@ -22,48 +22,48 @@
 #include <file/fcomp.hxx>
 
 namespace connectivity::file
+{
+    class OConnection;
+    class OSQLAnalyzer final
     {
-        class OConnection;
-        class OSQLAnalyzer final
-        {
-            typedef std::pair< ::rtl::Reference<OPredicateCompiler>,::rtl::Reference<OPredicateInterpreter> > TPredicates;
+        typedef std::pair< ::rtl::Reference<OPredicateCompiler>,::rtl::Reference<OPredicateInterpreter> > TPredicates;
 
-            std::vector< TPredicates >        m_aSelectionEvaluations;
-            ::rtl::Reference<OPredicateCompiler>        m_aCompiler;
-            ::rtl::Reference<OPredicateInterpreter> m_aInterpreter;
-            OConnection*                        m_pConnection;
+        std::vector< TPredicates >        m_aSelectionEvaluations;
+        ::rtl::Reference<OPredicateCompiler>        m_aCompiler;
+        ::rtl::Reference<OPredicateInterpreter> m_aInterpreter;
+        OConnection*                        m_pConnection;
 
-            mutable bool                    m_bHasSelectionCode;
-            mutable bool                    m_bSelectionFirstTime;
+        mutable bool                    m_bHasSelectionCode;
+        mutable bool                    m_bSelectionFirstTime;
 
-            static void bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow);
+        static void bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow);
 
-        public:
-            OSQLAnalyzer(OConnection* _pConnection);
-            ~OSQLAnalyzer();
+    public:
+        OSQLAnalyzer(OConnection* _pConnection);
+        ~OSQLAnalyzer();
 
-            OConnection* getConnection() const { return m_pConnection; }
-            void bindEvaluationRow(OValueRefRow const & _pRow); // Bind an evaluation row to the restriction
-            /** bind the select columns if they contain a function which needs a row value
-                @param  _pRow   the result row
-            */
-            void bindSelectRow(const OValueRefRow& _pRow);
+        OConnection* getConnection() const { return m_pConnection; }
+        void bindEvaluationRow(OValueRefRow const & _pRow); // Bind an evaluation row to the restriction
+        /** bind the select columns if they contain a function which needs a row value
+            @param  _pRow   the result row
+        */
+        void bindSelectRow(const OValueRefRow& _pRow);
 
-            /** binds the row to parameter for the restrictions
-                @param  _pRow   the parameter row
-            */
-            void bindParameterRow(OValueRefRow const & _pRow);
+        /** binds the row to parameter for the restrictions
+            @param  _pRow   the parameter row
+        */
+        void bindParameterRow(OValueRefRow const & _pRow);
 
-            void dispose();
-            void start(OSQLParseNode const * pSQLParseNode);
-            bool hasRestriction() const;
-            bool hasFunctions() const;
-            bool evaluateRestriction()   { return m_aInterpreter->start(); }
-            void setSelectionEvaluationResult(OValueRefRow const & _pRow,const std::vector<sal_Int32>& _rColumnMapping);
-            void setOrigColumns(const css::uno::Reference< css::container::XNameAccess>& rCols);
-            static OOperandAttr* createOperandAttr(sal_Int32 _nPos,
-                                                    const css::uno::Reference< css::beans::XPropertySet>& _xCol);
-        };
+        void dispose();
+        void start(OSQLParseNode const * pSQLParseNode);
+        bool hasRestriction() const;
+        bool hasFunctions() const;
+        bool evaluateRestriction()   { return m_aInterpreter->start(); }
+        void setSelectionEvaluationResult(OValueRefRow const & _pRow,const std::vector<sal_Int32>& _rColumnMapping);
+        void setOrigColumns(const css::uno::Reference< css::container::XNameAccess>& rCols);
+        static OOperandAttr* createOperandAttr(sal_Int32 _nPos,
+                                                const css::uno::Reference< css::beans::XPropertySet>& _xCol);
+    };
 
 }
 

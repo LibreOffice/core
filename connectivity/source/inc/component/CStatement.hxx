@@ -22,17 +22,17 @@
 #include <file/FStatement.hxx>
 
 namespace connectivity::component
+{
+    class OConnection;
+    /// Statement implementation for Writer tables and Calc sheets.
+    class OOO_DLLPUBLIC_FILE OComponentStatement : public file::OStatement
     {
-        class OConnection;
-        /// Statement implementation for Writer tables and Calc sheets.
-        class OOO_DLLPUBLIC_FILE OComponentStatement : public file::OStatement
-        {
-        protected:
-            virtual rtl::Reference<file::OResultSet> createResultSet() override;
-        public:
-            OComponentStatement( file::OConnection* _pConnection) : file::OStatement( _pConnection){}
-            DECLARE_SERVICE_INFO();
-        };
+    protected:
+        virtual rtl::Reference<file::OResultSet> createResultSet() override;
+    public:
+        OComponentStatement( file::OConnection* _pConnection) : file::OStatement( _pConnection){}
+        DECLARE_SERVICE_INFO();
+    };
 
 }
 

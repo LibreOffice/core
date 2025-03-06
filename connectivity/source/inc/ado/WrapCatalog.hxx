@@ -26,25 +26,25 @@
 
 namespace connectivity::ado
 {
-        class WpADOCatalog : public WpOLEBase<_ADOCatalog>
-        {
-        public:
-            WpADOCatalog(_ADOCatalog* pInt = nullptr)  :   WpOLEBase<_ADOCatalog>(pInt){}
-            WpADOCatalog(const WpADOCatalog& rhs) : WpOLEBase<_ADOCatalog>(rhs) {}
+    class WpADOCatalog : public WpOLEBase<_ADOCatalog>
+    {
+    public:
+        WpADOCatalog(_ADOCatalog* pInt = nullptr)  :   WpOLEBase<_ADOCatalog>(pInt){}
+        WpADOCatalog(const WpADOCatalog& rhs) : WpOLEBase<_ADOCatalog>(rhs) {}
 
-            WpADOCatalog& operator=(const WpADOCatalog& rhs)
-                {WpOLEBase<_ADOCatalog>::operator=(rhs); return *this;}
+        WpADOCatalog& operator=(const WpADOCatalog& rhs)
+            {WpOLEBase<_ADOCatalog>::operator=(rhs); return *this;}
 
-            OUString GetObjectOwner(std::u16string_view _rName, ObjectTypeEnum _eNum);
+        OUString GetObjectOwner(std::u16string_view _rName, ObjectTypeEnum _eNum);
 
-            void putref_ActiveConnection(IDispatch* pCon);
-            WpADOTables     get_Tables();
-            WpADOViews      get_Views();
-            WpADOGroups     get_Groups();
-            WpADOUsers      get_Users();
-            ADOProcedures*  get_Procedures();
-            void Create();
-        };
+        void putref_ActiveConnection(IDispatch* pCon);
+        WpADOTables     get_Tables();
+        WpADOViews      get_Views();
+        WpADOGroups     get_Groups();
+        WpADOUsers      get_Users();
+        ADOProcedures*  get_Procedures();
+        void Create();
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

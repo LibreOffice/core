@@ -26,27 +26,27 @@
 
 namespace connectivity::ado
 {
-        class WpADOIndex : public WpOLEBase<_ADOIndex>
-        {
-        public:
-            WpADOIndex() = default;
-            WpADOIndex(const WpADOIndex& rhs) : WpOLEBase<_ADOIndex>(rhs) {}
+    class WpADOIndex : public WpOLEBase<_ADOIndex>
+    {
+    public:
+        WpADOIndex() = default;
+        WpADOIndex(const WpADOIndex& rhs) : WpOLEBase<_ADOIndex>(rhs) {}
 
-            WpADOIndex& operator=(const WpADOIndex& rhs)
-                {WpOLEBase<_ADOIndex>::operator=(rhs); return *this;}
+        WpADOIndex& operator=(const WpADOIndex& rhs)
+            {WpOLEBase<_ADOIndex>::operator=(rhs); return *this;}
 
-            void Create();
+        void Create();
 
-            OUString get_Name() const;
-            void            put_Name(std::u16string_view _rName);
-            bool            get_Clustered() const;
-            void            put_Clustered(bool _b);
-            bool            get_Unique() const;
-            void            put_Unique(bool _b);
-            bool            get_PrimaryKey() const;
-            void            put_PrimaryKey(bool _b);
-            WpADOColumns    get_Columns() const;
-        };
+        OUString get_Name() const;
+        void            put_Name(std::u16string_view _rName);
+        bool            get_Clustered() const;
+        void            put_Clustered(bool _b);
+        bool            get_Unique() const;
+        void            put_Unique(bool _b);
+        bool            get_PrimaryKey() const;
+        void            put_PrimaryKey(bool _b);
+        WpADOColumns    get_Columns() const;
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,58 +32,58 @@
 namespace com::sun::star::sdbc { class XDatabaseMetaData; }
 
 namespace connectivity::sdbcx
+{
+
+    typedef ::cppu::WeakImplHelper< css::lang::XServiceInfo,
+                                    css::container::XNamed> OView_BASE;
+
+
+    class OOO_DLLPUBLIC_DBTOOLS OView :
+                    public ::comphelper::OMutexAndBroadcastHelper,
+                    public OView_BASE,
+                    public ::comphelper::OIdPropertyArrayUsageHelper<OView>,
+                    public ODescriptor
     {
+    protected:
+        OUString m_CatalogName;
+        OUString m_SchemaName;
+        OUString m_Command;
+        sal_Int32       m_CheckOption;
+        // need for the getName method
+        css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
 
-        typedef ::cppu::WeakImplHelper< css::lang::XServiceInfo,
-                                        css::container::XNamed> OView_BASE;
+        // OPropertyArrayUsageHelper
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
+        // OPropertySetHelper
+        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
+    public:
+        DECLARE_SERVICE_INFO();
 
-        class OOO_DLLPUBLIC_DBTOOLS OView :
-                        public ::comphelper::OMutexAndBroadcastHelper,
-                        public OView_BASE,
-                        public ::comphelper::OIdPropertyArrayUsageHelper<OView>,
-                        public ODescriptor
-        {
-        protected:
-            OUString m_CatalogName;
-            OUString m_SchemaName;
-            OUString m_Command;
-            sal_Int32       m_CheckOption;
-            // need for the getName method
-            css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
+        OView(bool _bCase, css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData);
+        OView(  bool _bCase,
+                const OUString& _rName,
+                css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData,
+                OUString _sCommand = OUString(),
+                OUString _sSchemaName = OUString(),
+                OUString _sCatalogName = OUString());
+        virtual ~OView() override;
 
-            // OPropertyArrayUsageHelper
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
-            // OPropertySetHelper
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+        // ODescriptor
+        virtual void construct() override;
 
-        public:
-            DECLARE_SERVICE_INFO();
-
-            OView(bool _bCase, css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData);
-            OView(  bool _bCase,
-                    const OUString& _rName,
-                    css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData,
-                    OUString _sCommand = OUString(),
-                    OUString _sSchemaName = OUString(),
-                    OUString _sCatalogName = OUString());
-            virtual ~OView() override;
-
-            // ODescriptor
-            virtual void construct() override;
-
-            // XInterface
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-            virtual void SAL_CALL acquire() noexcept override;
-            virtual void SAL_CALL release() noexcept override;
-            //XTypeProvider
-            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-            // XPropertySet
-            virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-            // XNamed
-            virtual OUString SAL_CALL getName(  ) override;
-            virtual void SAL_CALL setName( const OUString& ) override;
-        };
+        // XInterface
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
+        //XTypeProvider
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        // XPropertySet
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+        // XNamed
+        virtual OUString SAL_CALL getName(  ) override;
+        virtual void SAL_CALL setName( const OUString& ) override;
+    };
 
 }
 

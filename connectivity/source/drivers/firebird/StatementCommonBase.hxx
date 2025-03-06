@@ -37,98 +37,98 @@
 #include <com/sun/star/util/XCancellable.hpp>
 
 namespace connectivity::firebird
+{
+    class OResultSet;
+
+    typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XWarningsSupplier,
+                                               css::util::XCancellable,
+                                               css::sdbc::XCloseable,
+                                               css::sdbc::XMultipleResults> OStatementCommonBase_Base;
+
+    class OStatementCommonBase  :   public  OStatementCommonBase_Base,
+                                    public  ::cppu::OPropertySetHelper,
+                                    public  OPropertyArrayUsageHelper<OStatementCommonBase>
+
     {
-        class OResultSet;
+    protected:
+        ::osl::Mutex        m_aMutex;
 
-        typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XWarningsSupplier,
-                                                   css::util::XCancellable,
-                                                   css::sdbc::XCloseable,
-                                                   css::sdbc::XMultipleResults> OStatementCommonBase_Base;
+        rtl::Reference<OResultSet> m_xResultSet;   // The last ResultSet created
+        //  for this Statement
 
-        class OStatementCommonBase  :   public  OStatementCommonBase_Base,
-                                        public  ::cppu::OPropertySetHelper,
-                                        public  OPropertyArrayUsageHelper<OStatementCommonBase>
+        ::rtl::Reference<Connection>                m_pConnection;
 
-        {
-        protected:
-            ::osl::Mutex        m_aMutex;
+        ISC_STATUS_ARRAY                            m_statusVector;
+        isc_stmt_handle                             m_aStatementHandle;
 
-            rtl::Reference<OResultSet> m_xResultSet;   // The last ResultSet created
-            //  for this Statement
+    protected:
+        virtual void disposeResultSet();
+        /// @throws css::sdbc::SQLException
+        void freeStatementHandle();
 
-            ::rtl::Reference<Connection>                m_pConnection;
+        // OPropertyArrayUsageHelper
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
+        // OPropertySetHelper
+        using OPropertySetHelper::getFastPropertyValue;
+        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+        virtual sal_Bool SAL_CALL convertFastPropertyValue(
+                                                            css::uno::Any & rConvertedValue,
+                                                            css::uno::Any & rOldValue,
+                                                            sal_Int32 nHandle,
+                                                            const css::uno::Any& rValue ) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+                                                            sal_Int32 nHandle,
+                                                            const css::uno::Any& rValue) override;
+        virtual void SAL_CALL getFastPropertyValue(
+                                                            css::uno::Any& rValue,
+                                                            sal_Int32 nHandle) const override;
+        virtual ~OStatementCommonBase() override;
 
-            ISC_STATUS_ARRAY                            m_statusVector;
-            isc_stmt_handle                             m_aStatementHandle;
+        /// @throws css::sdbc::SQLException
+        void prepareAndDescribeStatement(std::u16string_view sqlIn, XSQLDA*& pOutSqlda);
 
-        protected:
-            virtual void disposeResultSet();
-            /// @throws css::sdbc::SQLException
-            void freeStatementHandle();
+        /// @throws css::sdbc::SQLException
+        short getSqlInfoItem(char aInfoItem);
+        /// @throws css::sdbc::SQLException
+        bool isDDLStatement();
+        /// @throws css::sdbc::SQLException
+        sal_Int32 getStatementChangeCount();
 
-            // OPropertyArrayUsageHelper
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
-            // OPropertySetHelper
-            using OPropertySetHelper::getFastPropertyValue;
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
-            virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                                                                css::uno::Any & rConvertedValue,
-                                                                css::uno::Any & rOldValue,
-                                                                sal_Int32 nHandle,
-                                                                const css::uno::Any& rValue ) override;
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                                                                sal_Int32 nHandle,
-                                                                const css::uno::Any& rValue) override;
-            virtual void SAL_CALL getFastPropertyValue(
-                                                                css::uno::Any& rValue,
-                                                                sal_Int32 nHandle) const override;
-            virtual ~OStatementCommonBase() override;
+    public:
 
-            /// @throws css::sdbc::SQLException
-            void prepareAndDescribeStatement(std::u16string_view sqlIn, XSQLDA*& pOutSqlda);
+        explicit OStatementCommonBase(Connection* _pConnection);
+        using OStatementCommonBase_Base::operator css::uno::Reference< css::uno::XInterface >;
 
-            /// @throws css::sdbc::SQLException
-            short getSqlInfoItem(char aInfoItem);
-            /// @throws css::sdbc::SQLException
-            bool isDDLStatement();
-            /// @throws css::sdbc::SQLException
-            sal_Int32 getStatementChangeCount();
+        // OComponentHelper
+        virtual void SAL_CALL disposing() override {
+            disposeResultSet();
+            OStatementCommonBase_Base::disposing();
+        }
+        // XInterface
+        virtual void SAL_CALL release() noexcept override;
+        virtual void SAL_CALL acquire() noexcept override;
+        // XInterface
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        //XTypeProvider
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
-        public:
+        // XPropertySet
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
-            explicit OStatementCommonBase(Connection* _pConnection);
-            using OStatementCommonBase_Base::operator css::uno::Reference< css::uno::XInterface >;
+        // XWarningsSupplier - UNSUPPORTED
+        virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+        virtual void SAL_CALL clearWarnings(  ) override;
+        // XMultipleResults - UNSUPPORTED
+        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getResultSet(  ) override;
+        virtual sal_Int32 SAL_CALL getUpdateCount(  ) override;
+        virtual sal_Bool SAL_CALL getMoreResults(  ) override;
 
-            // OComponentHelper
-            virtual void SAL_CALL disposing() override {
-                disposeResultSet();
-                OStatementCommonBase_Base::disposing();
-            }
-            // XInterface
-            virtual void SAL_CALL release() noexcept override;
-            virtual void SAL_CALL acquire() noexcept override;
-            // XInterface
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-            //XTypeProvider
-            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        // XCancellable
+        virtual void SAL_CALL cancel(  ) override;
+        // XCloseable
+        virtual void SAL_CALL close(  ) override;
 
-            // XPropertySet
-            virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-
-            // XWarningsSupplier - UNSUPPORTED
-            virtual css::uno::Any SAL_CALL getWarnings(  ) override;
-            virtual void SAL_CALL clearWarnings(  ) override;
-            // XMultipleResults - UNSUPPORTED
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getResultSet(  ) override;
-            virtual sal_Int32 SAL_CALL getUpdateCount(  ) override;
-            virtual sal_Bool SAL_CALL getMoreResults(  ) override;
-
-            // XCancellable
-            virtual void SAL_CALL cancel(  ) override;
-            // XCloseable
-            virtual void SAL_CALL close(  ) override;
-
-        };
+    };
 
 }
 

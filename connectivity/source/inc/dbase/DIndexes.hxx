@@ -23,27 +23,27 @@
 #include <dbase/DTable.hxx>
 
 namespace connectivity::dbase
+{
+    class ODbaseTable;
+
+    typedef sdbcx::OCollection ODbaseIndexes_BASE;
+
+    class ODbaseIndexes : public ODbaseIndexes_BASE
     {
-        class ODbaseTable;
+        ODbaseTable*    m_pTable;
+    protected:
+        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual void impl_refresh() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
+    public:
+        ODbaseIndexes(ODbaseTable* _pTable, ::osl::Mutex& _rMutex,
+            const ::std::vector< OUString> &_rVector) : ODbaseIndexes_BASE(*_pTable,_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
+            , m_pTable(_pTable)
+        {}
 
-        typedef sdbcx::OCollection ODbaseIndexes_BASE;
-
-        class ODbaseIndexes : public ODbaseIndexes_BASE
-        {
-            ODbaseTable*    m_pTable;
-        protected:
-            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
-            virtual void impl_refresh() override;
-            virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
-            virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
-            virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
-        public:
-            ODbaseIndexes(ODbaseTable* _pTable, ::osl::Mutex& _rMutex,
-                const ::std::vector< OUString> &_rVector) : ODbaseIndexes_BASE(*_pTable,_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
-                , m_pTable(_pTable)
-            {}
-
-        };
+    };
 
 }
 

@@ -23,50 +23,50 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 
 namespace connectivity::hsqldb
+{
+    typedef connectivity::sdbcx::OUser OUser_TYPEDEF;
+
+    class OHSQLUser : public OUser_TYPEDEF
     {
-        typedef connectivity::sdbcx::OUser OUser_TYPEDEF;
+        css::uno::Reference< css::sdbc::XConnection > m_xConnection;
 
-        class OHSQLUser : public OUser_TYPEDEF
-        {
-            css::uno::Reference< css::sdbc::XConnection > m_xConnection;
+        static OUString getPrivilegeString(sal_Int32 nRights);
+        // return the privileges and additional the grant rights
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
+        void findPrivilegesAndGrantPrivileges(const OUString& objName, sal_Int32 objType,sal_Int32& nRights,sal_Int32& nRightsWithGrant);
+    public:
+        virtual void refreshGroups() override;
+    public:
+        OHSQLUser(  css::uno::Reference< css::sdbc::XConnection > _xConnection);
+        OHSQLUser(  css::uno::Reference< css::sdbc::XConnection > _xConnection, const OUString& Name);
 
-            static OUString getPrivilegeString(sal_Int32 nRights);
-            // return the privileges and additional the grant rights
-            /// @throws css::sdbc::SQLException
-            /// @throws css::uno::RuntimeException
-            void findPrivilegesAndGrantPrivileges(const OUString& objName, sal_Int32 objType,sal_Int32& nRights,sal_Int32& nRightsWithGrant);
-        public:
-            virtual void refreshGroups() override;
-        public:
-            OHSQLUser(  css::uno::Reference< css::sdbc::XConnection > _xConnection);
-            OHSQLUser(  css::uno::Reference< css::sdbc::XConnection > _xConnection, const OUString& Name);
+        // XUser
+        virtual void SAL_CALL changePassword( const OUString& objPassword, const OUString& newPassword ) override;
+        // XAuthorizable
+        virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) override;
+        virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) override;
+        virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
+        virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
+    };
 
-            // XUser
-            virtual void SAL_CALL changePassword( const OUString& objPassword, const OUString& newPassword ) override;
-            // XAuthorizable
-            virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) override;
-            virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) override;
-            virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
-            virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
-        };
+    class OUserExtend;
+    typedef ::comphelper::OPropertyArrayUsageHelper<OUserExtend> OUserExtend_PROP;
 
-        class OUserExtend;
-        typedef ::comphelper::OPropertyArrayUsageHelper<OUserExtend> OUserExtend_PROP;
+    class OUserExtend : public OHSQLUser,
+                        public OUserExtend_PROP
+    {
+        OUString m_Password;
+    protected:
+        // OPropertyArrayUsageHelper
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
+        // OPropertySetHelper
+        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    public:
+        OUserExtend(const css::uno::Reference< css::sdbc::XConnection >& _xConnection);
 
-        class OUserExtend : public OHSQLUser,
-                            public OUserExtend_PROP
-        {
-            OUString m_Password;
-        protected:
-            // OPropertyArrayUsageHelper
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
-            // OPropertySetHelper
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
-        public:
-            OUserExtend(const css::uno::Reference< css::sdbc::XConnection >& _xConnection);
-
-            virtual void construct() override;
-        };
+        virtual void construct() override;
+    };
 
 }
 

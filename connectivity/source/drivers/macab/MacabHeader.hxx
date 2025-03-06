@@ -27,35 +27,35 @@
 
 namespace connectivity::macab
 {
-        class MacabHeader: public MacabRecord{
-            protected:
-                macabfield **sortRecord(sal_Int32 _start, sal_Int32 _length);
-            public:
-                MacabHeader();
-                MacabHeader(const sal_Int32 _size, macabfield **_fields);
-                virtual ~MacabHeader() override;
-                void operator+= (const MacabHeader *r);
-                OUString getString(const sal_Int32 i) const;
-                void sortRecord();
-                sal_Int32 getColumnNumber(std::u16string_view s) const;
+    class MacabHeader: public MacabRecord{
+        protected:
+            macabfield **sortRecord(sal_Int32 _start, sal_Int32 _length);
+        public:
+            MacabHeader();
+            MacabHeader(const sal_Int32 _size, macabfield **_fields);
+            virtual ~MacabHeader() override;
+            void operator+= (const MacabHeader *r);
+            OUString getString(const sal_Int32 i) const;
+            void sortRecord();
+            sal_Int32 getColumnNumber(std::u16string_view s) const;
 
-                static sal_Int32 compareFields(const macabfield *_field1, const macabfield *_field2);
+            static sal_Int32 compareFields(const macabfield *_field1, const macabfield *_field2);
 
-                MacabHeader *begin();
-                sal_Int32 end() const;
-                class iterator{
-                    protected:
-                        sal_Int32 id;
-                        MacabHeader *record;
-                    public:
-                        iterator& operator= (MacabHeader *_record);
-                        iterator();
-                        void operator++ ();
-                        bool operator!= (const sal_Int32 i) const;
-                        bool operator== (const sal_Int32 i) const;
-                        macabfield *operator* () const;
-                };
-        };
+            MacabHeader *begin();
+            sal_Int32 end() const;
+            class iterator{
+                protected:
+                    sal_Int32 id;
+                    MacabHeader *record;
+                public:
+                    iterator& operator= (MacabHeader *_record);
+                    iterator();
+                    void operator++ ();
+                    bool operator!= (const sal_Int32 i) const;
+                    bool operator== (const sal_Int32 i) const;
+                    macabfield *operator* () const;
+            };
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

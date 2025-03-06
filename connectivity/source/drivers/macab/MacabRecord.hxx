@@ -34,38 +34,38 @@
 
 namespace connectivity::macab
 {
-        /* a MacabRecord is at root a list of macabfields (which is just
-         * something to hold both a CFTypeRef (a CoreFoundation object) and
-         * its Address Book type.
-         */
-        struct macabfield
-        {
-            CFTypeRef value;
-            ABPropertyType type;
-        };
+    /* a MacabRecord is at root a list of macabfields (which is just
+     * something to hold both a CFTypeRef (a CoreFoundation object) and
+     * its Address Book type.
+     */
+    struct macabfield
+    {
+        CFTypeRef value;
+        ABPropertyType type;
+    };
 
-        class MacabRecord{
-            protected:
-                sal_Int32 size;
-                std::unique_ptr<macabfield *[]> fields;
-            protected:
-                void releaseFields();
-            public:
-                MacabRecord();
-                explicit MacabRecord(const sal_Int32 _size);
-                virtual ~MacabRecord();
-                void insertAtColumn (CFTypeRef _value, ABPropertyType _type, const sal_Int32 _column);
-                bool contains(const macabfield *_field) const;
-                bool contains(const CFTypeRef _value) const;
-                sal_Int32 getSize() const;
-                macabfield *copy(const sal_Int32 i) const;
-                macabfield *get(const sal_Int32 i) const;
+    class MacabRecord{
+        protected:
+            sal_Int32 size;
+            std::unique_ptr<macabfield *[]> fields;
+        protected:
+            void releaseFields();
+        public:
+            MacabRecord();
+            explicit MacabRecord(const sal_Int32 _size);
+            virtual ~MacabRecord();
+            void insertAtColumn (CFTypeRef _value, ABPropertyType _type, const sal_Int32 _column);
+            bool contains(const macabfield *_field) const;
+            bool contains(const CFTypeRef _value) const;
+            sal_Int32 getSize() const;
+            macabfield *copy(const sal_Int32 i) const;
+            macabfield *get(const sal_Int32 i) const;
 
-                static sal_Int32 compareFields(const macabfield *_field1, const macabfield *_field2);
-                static macabfield *createMacabField(const OUString& _newFieldString, const ABPropertyType _abtype);
-                static OUString fieldToString(const macabfield *_aField);
+            static sal_Int32 compareFields(const macabfield *_field1, const macabfield *_field2);
+            static macabfield *createMacabField(const OUString& _newFieldString, const ABPropertyType _abtype);
+            static OUString fieldToString(const macabfield *_aField);
 
-        };
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

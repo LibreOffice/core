@@ -26,32 +26,32 @@
 
 namespace connectivity::ado
 {
-        class WpADOCatalog;
+    class WpADOCatalog;
 
-        class WpADOTable : public WpOLEBase<_ADOTable>
-        {
-        public:
-            WpADOTable() = default;
-            WpADOTable(const WpADOTable& rhs) : WpOLEBase<_ADOTable>(rhs) {}
+    class WpADOTable : public WpOLEBase<_ADOTable>
+    {
+    public:
+        WpADOTable() = default;
+        WpADOTable(const WpADOTable& rhs) : WpOLEBase<_ADOTable>(rhs) {}
 
-            WpADOTable& operator=(const WpADOTable& rhs)
-                {WpOLEBase<_ADOTable>::operator=(rhs); return *this;}
+        WpADOTable& operator=(const WpADOTable& rhs)
+            {WpOLEBase<_ADOTable>::operator=(rhs); return *this;}
 
-            void Create();
+        void Create();
 
-            OUString get_Name() const;
-            void            put_Name(std::u16string_view _rName);
-            OUString get_Type() const;
-            WpADOColumns    get_Columns() const;
-            WpADOIndexes    get_Indexes() const;
-            WpADOKeys       get_Keys() const;
-            WpADOCatalog    get_ParentCatalog() const;
-            WpADOProperties get_Properties() const;
-            void            putref_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject);
-        };
+        OUString get_Name() const;
+        void            put_Name(std::u16string_view _rName);
+        OUString get_Type() const;
+        WpADOColumns    get_Columns() const;
+        WpADOIndexes    get_Indexes() const;
+        WpADOKeys       get_Keys() const;
+        WpADOCatalog    get_ParentCatalog() const;
+        WpADOProperties get_Properties() const;
+        void            putref_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject);
+    };
 
 
-        typedef WpOLEAppendCollection<ADOTables, WpADOTable>     WpADOTables;
+    typedef WpOLEAppendCollection<ADOTables, WpADOTable>     WpADOTables;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

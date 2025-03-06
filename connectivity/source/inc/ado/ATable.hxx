@@ -25,45 +25,45 @@
 
 namespace connectivity::ado
 {
-        typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
-        typedef connectivity::sdbcx::OTableDescriptor_BASE OTableDescriptor_BASE_TYPEDEF;
+    typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
+    typedef connectivity::sdbcx::OTableDescriptor_BASE OTableDescriptor_BASE_TYPEDEF;
 
-        class OAdoTable :   public OTable_TYPEDEF
-        {
-            WpADOTable      m_aTable;
-            OCatalog*       m_pCatalog;
+    class OAdoTable :   public OTable_TYPEDEF
+    {
+        WpADOTable      m_aTable;
+        OCatalog*       m_pCatalog;
 
-        protected:
-            void fillPropertyValues();
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) override;
+    protected:
+        void fillPropertyValues();
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) override;
 
-        public:
-            virtual void refreshColumns() override;
-            virtual void refreshKeys() override;
-            virtual void refreshIndexes() override;
+    public:
+        virtual void refreshColumns() override;
+        virtual void refreshKeys() override;
+        virtual void refreshIndexes() override;
 
-            // ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing() override;
+        // ::cppu::OComponentHelper
+        virtual void SAL_CALL disposing() override;
 
-        public:
-            OAdoTable(sdbcx::OCollection* _pTables,bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable);
-            OAdoTable(sdbcx::OCollection* _pTables,bool _bCase,OCatalog* _pCatalog);
+    public:
+        OAdoTable(sdbcx::OCollection* _pTables,bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable);
+        OAdoTable(sdbcx::OCollection* _pTables,bool _bCase,OCatalog* _pCatalog);
 
 
-            virtual OUString SAL_CALL getName() override;
-            OUString getSchema() const { return m_SchemaName; }
-            virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const override;
+        virtual OUString SAL_CALL getName() override;
+        OUString getSchema() const { return m_SchemaName; }
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const override;
 
-            // XRename
-            virtual void SAL_CALL rename( const OUString& newName ) override;
+        // XRename
+        virtual void SAL_CALL rename( const OUString& newName ) override;
 
-            // XAlterTable
-            virtual void SAL_CALL alterColumnByName( const OUString& colName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
-            virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        // XAlterTable
+        virtual void SAL_CALL alterColumnByName( const OUString& colName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
 
-            WpADOTable getImpl() const { return m_aTable;}
-            OCatalog* getCatalog() const { return m_pCatalog; }
-        };
+        WpADOTable getImpl() const { return m_aTable;}
+        OCatalog* getCatalog() const { return m_pCatalog; }
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

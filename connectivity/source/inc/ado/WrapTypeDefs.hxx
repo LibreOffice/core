@@ -21,21 +21,21 @@
 
 namespace connectivity::ado
 {
-        class WpADOTable;
-        class WpADOKey;
-        class WpADOIndex;
-        class WpADOColumn;
-        class WpADOGroup;
-        class WpADOView;
-        class WpADOUser;
+    class WpADOTable;
+    class WpADOKey;
+    class WpADOIndex;
+    class WpADOColumn;
+    class WpADOGroup;
+    class WpADOView;
+    class WpADOUser;
 
-        typedef WpOLEAppendCollection<ADOTables,    WpADOTable>     WpADOTables;
-        typedef WpOLEAppendCollection<ADOKeys,      WpADOKey>       WpADOKeys;
-        typedef WpOLEAppendCollection<ADOIndexes,   WpADOIndex>     WpADOIndexes;
-        typedef WpOLEAppendCollection<ADOColumns,   WpADOColumn>    WpADOColumns;
-        typedef WpOLEAppendCollection<ADOGroups,    WpADOGroup>     WpADOGroups;
-        typedef WpOLEAppendCollection<ADOViews,     WpADOView>      WpADOViews;
-        typedef WpOLEAppendCollection<ADOUsers,     WpADOUser>      WpADOUsers;
+    typedef WpOLEAppendCollection<ADOTables,    WpADOTable>     WpADOTables;
+    typedef WpOLEAppendCollection<ADOKeys,      WpADOKey>       WpADOKeys;
+    typedef WpOLEAppendCollection<ADOIndexes,   WpADOIndex>     WpADOIndexes;
+    typedef WpOLEAppendCollection<ADOColumns,   WpADOColumn>    WpADOColumns;
+    typedef WpOLEAppendCollection<ADOGroups,    WpADOGroup>     WpADOGroups;
+    typedef WpOLEAppendCollection<ADOViews,     WpADOView>      WpADOViews;
+    typedef WpOLEAppendCollection<ADOUsers,     WpADOUser>      WpADOUsers;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

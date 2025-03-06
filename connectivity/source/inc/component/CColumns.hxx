@@ -22,20 +22,20 @@
 #include <file/FColumns.hxx>
 
 namespace connectivity::component
+{
+    /// Columns implementation for Writer tables and Calc sheets.
+    class OComponentColumns : public file::OColumns
     {
-        /// Columns implementation for Writer tables and Calc sheets.
-        class OComponentColumns : public file::OColumns
-        {
-        protected:
-            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
-        public:
-            OComponentColumns(file::OFileTable* _pTable,
-                            ::osl::Mutex& _rMutex,
-                            const ::std::vector< OUString> &_rVector
-                         ) : file::OColumns(_pTable,_rMutex,_rVector)
-            {}
+    protected:
+        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+    public:
+        OComponentColumns(file::OFileTable* _pTable,
+                        ::osl::Mutex& _rMutex,
+                        const ::std::vector< OUString> &_rVector
+                     ) : file::OColumns(_pTable,_rMutex,_rVector)
+        {}
 
-        };
+    };
 
 }
 

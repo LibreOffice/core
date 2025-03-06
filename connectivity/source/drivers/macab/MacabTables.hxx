@@ -24,26 +24,26 @@
 
 namespace connectivity::macab
 {
-        class MacabTables : public sdbcx::OCollection
-        {
-            css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
+    class MacabTables : public sdbcx::OCollection
+    {
+        css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
 
-        protected:
-            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
-            virtual void impl_refresh() override;
+    protected:
+        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual void impl_refresh() override;
 
-        public:
-            MacabTables(
-                const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,
-                ::cppu::OWeakObject& _rParent,
-                ::osl::Mutex& _rMutex,
-                const ::std::vector< OUString> &_rVector)
-                : sdbcx::OCollection(_rParent,true,_rMutex,_rVector),
-                  m_xMetaData(_rMetaData)
-                { }
+    public:
+        MacabTables(
+            const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,
+            ::cppu::OWeakObject& _rParent,
+            ::osl::Mutex& _rMutex,
+            const ::std::vector< OUString> &_rVector)
+            : sdbcx::OCollection(_rParent,true,_rMutex,_rVector),
+              m_xMetaData(_rMetaData)
+            { }
 
-            virtual void disposing() override;
-        };
+        virtual void disposing() override;
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

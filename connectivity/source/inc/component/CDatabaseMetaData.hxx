@@ -22,25 +22,25 @@
 #include <file/FDatabaseMetaData.hxx>
 
 namespace connectivity::component
+{
+
+    //************ Class: java.sql.DatabaseMetaDataDate
+
+
+    class OOO_DLLPUBLIC_FILE OComponentDatabaseMetaData :   public file::ODatabaseMetaData
     {
-
-        //************ Class: java.sql.DatabaseMetaDataDate
-
-
-        class OOO_DLLPUBLIC_FILE OComponentDatabaseMetaData :   public file::ODatabaseMetaData
-        {
-            virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
-            virtual sal_Int32 SAL_CALL getMaxBinaryLiteralLength(  ) override;
-            virtual sal_Int32 SAL_CALL getMaxCharLiteralLength(  ) override;
-            virtual sal_Int32 SAL_CALL getMaxColumnNameLength(  ) override;
-            virtual sal_Int32 SAL_CALL getMaxColumnsInIndex(  ) override;
-            virtual sal_Int32 SAL_CALL getMaxColumnsInTable(  ) override;
-        protected:
-            virtual ~OComponentDatabaseMetaData() override;
-        public:
-            OComponentDatabaseMetaData(file::OConnection* _pCon);
-        };
+        virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
+        virtual sal_Int32 SAL_CALL getMaxBinaryLiteralLength(  ) override;
+        virtual sal_Int32 SAL_CALL getMaxCharLiteralLength(  ) override;
+        virtual sal_Int32 SAL_CALL getMaxColumnNameLength(  ) override;
+        virtual sal_Int32 SAL_CALL getMaxColumnsInIndex(  ) override;
+        virtual sal_Int32 SAL_CALL getMaxColumnsInTable(  ) override;
+    protected:
+        virtual ~OComponentDatabaseMetaData() override;
+    public:
+        OComponentDatabaseMetaData(file::OConnection* _pCon);
+    };
 
 }
 

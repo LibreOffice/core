@@ -24,29 +24,29 @@
 
 namespace connectivity::ado
 {
-        class OConnection;
-        typedef sdbcx::OColumn OColumn_ADO;
-        class OAdoColumn :  public OColumn_ADO
-        {
-            WpADOColumn     m_aColumn;
-            OConnection*    m_pConnection;
-            OUString m_ReferencedColumn;
-            bool            m_IsAscending;
+    class OConnection;
+    typedef sdbcx::OColumn OColumn_ADO;
+    class OAdoColumn :  public OColumn_ADO
+    {
+        WpADOColumn     m_aColumn;
+        OConnection*    m_pConnection;
+        OUString m_ReferencedColumn;
+        bool            m_IsAscending;
 
-            void fillPropertyValues();
-        protected:
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                                    sal_Int32 nHandle,
-                                    const css::uno::Any& rValue
-                                     ) override;
-        public:
-            OAdoColumn(bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn);
-            OAdoColumn(bool _bCase,OConnection* _pConnection);
-            // ODescriptor
-            virtual void construct() override;
+        void fillPropertyValues();
+    protected:
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+                                sal_Int32 nHandle,
+                                const css::uno::Any& rValue
+                                 ) override;
+    public:
+        OAdoColumn(bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn);
+        OAdoColumn(bool _bCase,OConnection* _pConnection);
+        // ODescriptor
+        virtual void construct() override;
 
-            WpADOColumn     getColumnImpl() const;
-        };
+        WpADOColumn     getColumnImpl() const;
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

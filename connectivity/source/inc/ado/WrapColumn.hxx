@@ -28,35 +28,35 @@
 
 namespace connectivity::ado
 {
-        class WpADOColumn : public WpOLEBase<_ADOColumn>
-        {
-        public:
-            WpADOColumn() = default;
-            WpADOColumn(const WpADOColumn& rhs) : WpOLEBase<_ADOColumn>(rhs) {}
+    class WpADOColumn : public WpOLEBase<_ADOColumn>
+    {
+    public:
+        WpADOColumn() = default;
+        WpADOColumn(const WpADOColumn& rhs) : WpOLEBase<_ADOColumn>(rhs) {}
 
-            void Create();
+        void Create();
 
-            WpADOColumn& operator=(const WpADOColumn& rhs)
-                {WpOLEBase<_ADOColumn>::operator=(rhs); return *this;}
+        WpADOColumn& operator=(const WpADOColumn& rhs)
+            {WpOLEBase<_ADOColumn>::operator=(rhs); return *this;}
 
-            OUString get_Name() const;
-            OUString get_RelatedColumn() const;
-            void put_Name(std::u16string_view _rName);
-            void put_RelatedColumn(std::u16string_view _rName);
-            DataTypeEnum get_Type() const;
-            void put_Type(const DataTypeEnum& _eNum) ;
-            sal_Int32 get_Precision() const;
-            void put_Precision(sal_Int32 _nPre) ;
-            sal_uInt8 get_NumericScale() const;
-            void put_NumericScale(sal_Int8 _nScale);
-            SortOrderEnum get_SortOrder() const;
-            void put_SortOrder(SortOrderEnum _nScale);
-            sal_Int32 get_DefinedSize() const;
-            ColumnAttributesEnum get_Attributes() const;
-            bool put_Attributes(const ColumnAttributesEnum& _eNum);
-            WpADOProperties get_Properties() const;
-            void put_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject);
-        };
+        OUString get_Name() const;
+        OUString get_RelatedColumn() const;
+        void put_Name(std::u16string_view _rName);
+        void put_RelatedColumn(std::u16string_view _rName);
+        DataTypeEnum get_Type() const;
+        void put_Type(const DataTypeEnum& _eNum) ;
+        sal_Int32 get_Precision() const;
+        void put_Precision(sal_Int32 _nPre) ;
+        sal_uInt8 get_NumericScale() const;
+        void put_NumericScale(sal_Int8 _nScale);
+        SortOrderEnum get_SortOrder() const;
+        void put_SortOrder(SortOrderEnum _nScale);
+        sal_Int32 get_DefinedSize() const;
+        ColumnAttributesEnum get_Attributes() const;
+        bool put_Attributes(const ColumnAttributesEnum& _eNum);
+        WpADOProperties get_Properties() const;
+        void put_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject);
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

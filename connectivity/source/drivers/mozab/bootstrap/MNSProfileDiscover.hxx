@@ -32,47 +32,47 @@ namespace connectivity::mozab { class ProfileStruct; }
 
 typedef std::map<OUString, ::connectivity::mozab::ProfileStruct> ProfileList;
 namespace connectivity::mozab
+{
+    class ProfileStruct
     {
-        class ProfileStruct
-        {
-        public:
-            ProfileStruct();
-            ProfileStruct(OUString aProfileName, OUString aProfilePath);
-            const OUString& getProfileName() const { return profileName;}
-            const OUString& getProfilePath() const;
-        private:
-            OUString profileName;
-            OUString profilePath;
-        };
+    public:
+        ProfileStruct();
+        ProfileStruct(OUString aProfileName, OUString aProfilePath);
+        const OUString& getProfileName() const { return profileName;}
+        const OUString& getProfilePath() const;
+    private:
+        OUString profileName;
+        OUString profilePath;
+    };
 
-        class ProductStruct
-        {
-        public:
-            OUString mCurrentProfileName;
-            ProfileList mProfileList;
-        };
+    class ProductStruct
+    {
+    public:
+        OUString mCurrentProfileName;
+        ProfileList mProfileList;
+    };
 
-        //Used to query profiles information
-        class ProfileAccess final
-        {
-        public:
-            ~ProfileAccess();
-            ProfileAccess();
-            /// @throws css::uno::RuntimeException
-            OUString getProfilePath( css::mozilla::MozillaProductType product, const OUString& profileName );
-            /// @throws css::uno::RuntimeException
-            ::sal_Int32 getProfileCount( css::mozilla::MozillaProductType product );
-            /// @throws css::uno::RuntimeException
-            ::sal_Int32 getProfileList( css::mozilla::MozillaProductType product, css::uno::Sequence< OUString >& list );
-            /// @throws css::uno::RuntimeException
-            OUString getDefaultProfile( css::mozilla::MozillaProductType product );
-            /// @throws css::uno::RuntimeException
-            bool getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName );
-        private:
-            ProductStruct m_ProductProfileList[4];
-            void      LoadProductsInfo();
-            void      LoadXPToolkitProfiles(MozillaProductType product);
-        };
+    //Used to query profiles information
+    class ProfileAccess final
+    {
+    public:
+        ~ProfileAccess();
+        ProfileAccess();
+        /// @throws css::uno::RuntimeException
+        OUString getProfilePath( css::mozilla::MozillaProductType product, const OUString& profileName );
+        /// @throws css::uno::RuntimeException
+        ::sal_Int32 getProfileCount( css::mozilla::MozillaProductType product );
+        /// @throws css::uno::RuntimeException
+        ::sal_Int32 getProfileList( css::mozilla::MozillaProductType product, css::uno::Sequence< OUString >& list );
+        /// @throws css::uno::RuntimeException
+        OUString getDefaultProfile( css::mozilla::MozillaProductType product );
+        /// @throws css::uno::RuntimeException
+        bool getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName );
+    private:
+        ProductStruct m_ProductProfileList[4];
+        void      LoadProductsInfo();
+        void      LoadXPToolkitProfiles(MozillaProductType product);
+    };
 
 }
 

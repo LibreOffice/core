@@ -36,107 +36,107 @@
 namespace connectivity::macab
 {
 
-        inline OUString CFStringToOUString(const CFStringRef sOrig)
-        {
-            /* Copied all-but directly from code by Florian Heckl in
-             * cws_src680_aquafilepicker01
-             * File was: fpicker/source/aqua/CFStringUtilities
-             * I only removed commented debugging lines and changed variable
-             * names.
+    inline OUString CFStringToOUString(const CFStringRef sOrig)
+    {
+        /* Copied all-but directly from code by Florian Heckl in
+         * cws_src680_aquafilepicker01
+         * File was: fpicker/source/aqua/CFStringUtilities
+         * I only removed commented debugging lines and changed variable
+         * names.
+         */
+        if (nullptr == sOrig) {
+                return OUString();
+        }
+
+        CFRetain(sOrig);
+        CFIndex nStringLength = CFStringGetLength(sOrig);
+
+        auto const unichars = std::make_unique<UniChar[]>(nStringLength+1);
+
+        //'close' the string buffer correctly
+        unichars[nStringLength] = '\0';
+
+        CFStringGetCharacters (sOrig, CFRangeMake(0,nStringLength), unichars.get());
+        CFRelease(sOrig);
+
+        return OUString(reinterpret_cast<sal_Unicode *>(unichars.get()));
+    }
+
+
+    inline CFStringRef OUStringToCFString(const OUString& aString)
+    {
+        /* Copied directly from code by Florian Heckl in
+         * cws_src680_aquafilepicker01
+         * File was: fpicker/source/aqua/CFStringUtilities
+         */
+
+        CFStringRef ref = CFStringCreateWithCharacters(kCFAllocatorDefault, reinterpret_cast<UniChar const *>(aString.getStr()), aString.getLength());
+
+        return ref;
+    }
+
+
+    inline css::util::DateTime CFDateToDateTime(const CFDateRef _cfDate)
+    {
+            /* Carbon can give us the time since 2001 of any CFDateRef,
+             * and it also stores the time since 1970 as a constant,
+             * basically allowing us to get the unixtime of any
+             * CFDateRef. From there, it is just a matter of choosing what
+             * we want to do with it.
              */
-            if (nullptr == sOrig) {
-                    return OUString();
-            }
-
-            CFRetain(sOrig);
-            CFIndex nStringLength = CFStringGetLength(sOrig);
-
-            auto const unichars = std::make_unique<UniChar[]>(nStringLength+1);
-
-            //'close' the string buffer correctly
-            unichars[nStringLength] = '\0';
-
-            CFStringGetCharacters (sOrig, CFRangeMake(0,nStringLength), unichars.get());
-            CFRelease(sOrig);
-
-            return OUString(reinterpret_cast<sal_Unicode *>(unichars.get()));
-        }
+        css::util::DateTime nRet;
+        double timeSince2001 = CFDateGetAbsoluteTime(_cfDate);
+        time_t unixtime = timeSince2001+kCFAbsoluteTimeIntervalSince1970;
+        struct tm *ptm = localtime(&unixtime);
+        nRet.Year = ptm->tm_year+1900;
+        nRet.Month = ptm->tm_mon+1;
+        nRet.Day = ptm->tm_mday;
+        nRet.Hours = ptm->tm_hour;
+        nRet.Minutes = ptm->tm_min;
+        nRet.Seconds = ptm->tm_sec;
+        nRet.NanoSeconds = 0;
+        return nRet;
+    }
 
 
-        inline CFStringRef OUStringToCFString(const OUString& aString)
+    inline OUString fixLabel(const OUString& _originalLabel)
+    {
+        /* Get the length, and make sure that there is actually a string
+         * here.
+         */
+        if(_originalLabel.startsWith("_$!<"))
         {
-            /* Copied directly from code by Florian Heckl in
-             * cws_src680_aquafilepicker01
-             * File was: fpicker/source/aqua/CFStringUtilities
-             */
-
-            CFStringRef ref = CFStringCreateWithCharacters(kCFAllocatorDefault, reinterpret_cast<UniChar const *>(aString.getStr()), aString.getLength());
-
-            return ref;
+            return _originalLabel.copy(4,_originalLabel.getLength()-8);
         }
 
+        return _originalLabel;
+    }
 
-        inline css::util::DateTime CFDateToDateTime(const CFDateRef _cfDate)
+
+    inline sal_Int32 ABTypeToDataType(const ABPropertyType _abType)
+    {
+        sal_Int32 dataType;
+        switch(_abType)
         {
-                /* Carbon can give us the time since 2001 of any CFDateRef,
-                 * and it also stores the time since 1970 as a constant,
-                 * basically allowing us to get the unixtime of any
-                 * CFDateRef. From there, it is just a matter of choosing what
-                 * we want to do with it.
-                 */
-            css::util::DateTime nRet;
-            double timeSince2001 = CFDateGetAbsoluteTime(_cfDate);
-            time_t unixtime = timeSince2001+kCFAbsoluteTimeIntervalSince1970;
-            struct tm *ptm = localtime(&unixtime);
-            nRet.Year = ptm->tm_year+1900;
-            nRet.Month = ptm->tm_mon+1;
-            nRet.Day = ptm->tm_mday;
-            nRet.Hours = ptm->tm_hour;
-            nRet.Minutes = ptm->tm_min;
-            nRet.Seconds = ptm->tm_sec;
-            nRet.NanoSeconds = 0;
-            return nRet;
+            case kABStringProperty:
+                dataType = css::sdbc::DataType::CHAR;
+                break;
+            case kABDateProperty:
+                dataType = css::sdbc::DataType::TIMESTAMP;
+                break;
+            case kABIntegerProperty:
+                dataType = css::sdbc::DataType::INTEGER;
+                break;
+            case kABRealProperty:
+                dataType = css::sdbc::DataType::FLOAT;
+                break;
+            default:
+                dataType = -1;
         }
+        return dataType;
+    }
 
-
-        inline OUString fixLabel(const OUString& _originalLabel)
-        {
-            /* Get the length, and make sure that there is actually a string
-             * here.
-             */
-            if(_originalLabel.startsWith("_$!<"))
-            {
-                return _originalLabel.copy(4,_originalLabel.getLength()-8);
-            }
-
-            return _originalLabel;
-        }
-
-
-        inline sal_Int32 ABTypeToDataType(const ABPropertyType _abType)
-        {
-            sal_Int32 dataType;
-            switch(_abType)
-            {
-                case kABStringProperty:
-                    dataType = css::sdbc::DataType::CHAR;
-                    break;
-                case kABDateProperty:
-                    dataType = css::sdbc::DataType::TIMESTAMP;
-                    break;
-                case kABIntegerProperty:
-                    dataType = css::sdbc::DataType::INTEGER;
-                    break;
-                case kABRealProperty:
-                    dataType = css::sdbc::DataType::FLOAT;
-                    break;
-                default:
-                    dataType = -1;
-            }
-            return dataType;
-        }
-
-        void impl_throwError(TranslateId pErrorId);
+    void impl_throwError(TranslateId pErrorId);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,17 +22,17 @@
 #include <file/FPreparedStatement.hxx>
 
 namespace connectivity::component
+{
+    class OConnection;
+    /// Prepared statement implementation for Writer tables and Calc sheets.
+    class OOO_DLLPUBLIC_FILE OComponentPreparedStatement : public file::OPreparedStatement
     {
-        class OConnection;
-        /// Prepared statement implementation for Writer tables and Calc sheets.
-        class OOO_DLLPUBLIC_FILE OComponentPreparedStatement : public file::OPreparedStatement
-        {
-        protected:
-            virtual rtl::Reference<file::OResultSet> createResultSet() override;
-        public:
-            OComponentPreparedStatement( file::OConnection* _pConnection) : file::OPreparedStatement( _pConnection){}
-            DECLARE_SERVICE_INFO();
-        };
+    protected:
+        virtual rtl::Reference<file::OResultSet> createResultSet() override;
+    public:
+        OComponentPreparedStatement( file::OConnection* _pConnection) : file::OPreparedStatement( _pConnection){}
+        DECLARE_SERVICE_INFO();
+    };
 
 }
 

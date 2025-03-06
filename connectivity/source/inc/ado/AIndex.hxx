@@ -25,22 +25,22 @@
 
 namespace connectivity::ado
 {
-        class OConnection;
-        class OAdoIndex : public sdbcx::OIndex
-        {
-            WpADOIndex      m_aIndex;
-            OConnection*    m_pConnection;
-        protected:
-            void fillPropertyValues();
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) override;
-        public:
-            virtual void refreshColumns() override;
-        public:
-            OAdoIndex(bool _bCase,  OConnection* _pConnection,ADOIndex* _pIndex);
-            OAdoIndex(bool _bCase,  OConnection* _pConnection);
+    class OConnection;
+    class OAdoIndex : public sdbcx::OIndex
+    {
+        WpADOIndex      m_aIndex;
+        OConnection*    m_pConnection;
+    protected:
+        void fillPropertyValues();
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) override;
+    public:
+        virtual void refreshColumns() override;
+    public:
+        OAdoIndex(bool _bCase,  OConnection* _pConnection,ADOIndex* _pIndex);
+        OAdoIndex(bool _bCase,  OConnection* _pConnection);
 
-            WpADOIndex      getImpl() const { return m_aIndex;}
-        };
+        WpADOIndex      getImpl() const { return m_aIndex;}
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,36 +24,36 @@
 #include <file/filedllapi.hxx>
 
 namespace connectivity::file
+{
+    class OConnection;
+    class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE OFileCatalog :
+        public connectivity::sdbcx::OCatalog
     {
-        class OConnection;
-        class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE OFileCatalog :
-            public connectivity::sdbcx::OCatalog
-        {
-        protected:
-            OConnection*                                        m_pConnection;
+    protected:
+        OConnection*                                        m_pConnection;
 
-            /** builds the name which should be used to access the object later on in the collection.
-                Will only be called in fillNames.
-                @param  _xRow
-                    The current row from the resultset given to fillNames.
-            */
-            virtual OUString buildName(  const css::uno::Reference< css::sdbc::XRow >& _xRow) override;
+        /** builds the name which should be used to access the object later on in the collection.
+            Will only be called in fillNames.
+            @param  _xRow
+                The current row from the resultset given to fillNames.
+        */
+        virtual OUString buildName(  const css::uno::Reference< css::sdbc::XRow >& _xRow) override;
 
-        public:
-            virtual void refreshTables() override;
-            virtual void refreshViews() override;
-            virtual void refreshGroups() override;
-            virtual void refreshUsers() override;
+    public:
+        virtual void refreshTables() override;
+        virtual void refreshViews() override;
+        virtual void refreshGroups() override;
+        virtual void refreshUsers() override;
 
-        public:
-            OFileCatalog(OConnection* _pCon);
-            OConnection*    getConnection() { return m_pConnection; }
+    public:
+        OFileCatalog(OConnection* _pCon);
+        OConnection*    getConnection() { return m_pConnection; }
 
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-            // ::cppu::OComponentHelper
-            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-            virtual void SAL_CALL disposing() override;
-        };
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        // ::cppu::OComponentHelper
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual void SAL_CALL disposing() override;
+    };
 
 }
 

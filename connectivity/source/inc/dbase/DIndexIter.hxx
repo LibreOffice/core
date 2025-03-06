@@ -24,43 +24,43 @@
 #include <dbase/dindexnode.hxx>
 
 namespace connectivity::dbase
+{
+
+    // IndexIterator
+
+    class OIndexIterator final
     {
+        file::OBoolOperator*    m_pOperator;
+        const file::OOperand*   m_pOperand;
+        rtl::Reference<ODbaseIndex> m_xIndex;
+        ONDXPagePtr             m_aRoot,
+                                m_aCurLeaf;
+        sal_uInt16              m_nCurNode;
 
-        // IndexIterator
+        sal_uInt32 Find(bool bFirst);
+        sal_uInt32 GetCompare(bool bFirst);
+        sal_uInt32 GetLike(bool bFirst);
+        sal_uInt32 GetNull(bool bFirst);
+        sal_uInt32 GetNotNull(bool bFirst);
 
-        class OIndexIterator final
+        ONDXKey* GetFirstKey(ONDXPage* pPage,
+                            const file::OOperand& rKey);
+        ONDXKey* GetNextKey();
+
+    public:
+        OIndexIterator(ODbaseIndex* pInd)
+            :m_pOperator(nullptr)
+            ,m_pOperand(nullptr)
+            ,m_xIndex(pInd)
+            ,m_nCurNode(NODE_NOTFOUND)
         {
-            file::OBoolOperator*    m_pOperator;
-            const file::OOperand*   m_pOperand;
-            rtl::Reference<ODbaseIndex> m_xIndex;
-            ONDXPagePtr             m_aRoot,
-                                    m_aCurLeaf;
-            sal_uInt16              m_nCurNode;
+        }
 
-            sal_uInt32 Find(bool bFirst);
-            sal_uInt32 GetCompare(bool bFirst);
-            sal_uInt32 GetLike(bool bFirst);
-            sal_uInt32 GetNull(bool bFirst);
-            sal_uInt32 GetNotNull(bool bFirst);
+        ~OIndexIterator();
+        sal_uInt32 First();
+        sal_uInt32 Next();
 
-            ONDXKey* GetFirstKey(ONDXPage* pPage,
-                                const file::OOperand& rKey);
-            ONDXKey* GetNextKey();
-
-        public:
-            OIndexIterator(ODbaseIndex* pInd)
-                :m_pOperator(nullptr)
-                ,m_pOperand(nullptr)
-                ,m_xIndex(pInd)
-                ,m_nCurNode(NODE_NOTFOUND)
-            {
-            }
-
-            ~OIndexIterator();
-            sal_uInt32 First();
-            sal_uInt32 Next();
-
-        };
+    };
 
 }
 

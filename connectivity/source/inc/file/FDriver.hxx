@@ -28,46 +28,46 @@
 #include <unotools/weakref.hxx>
 
 namespace connectivity::file
+{
+    class OConnection;
+
+    typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver,
+                                               css::lang::XServiceInfo,
+                                               css::sdbcx::XDataDefinitionSupplier> ODriver_BASE;
+
+    class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE OFileDriver : public ODriver_BASE
     {
-        class OConnection;
+    protected:
+        ::osl::Mutex                                        m_aMutex;
 
-        typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver,
-                                                   css::lang::XServiceInfo,
-                                                   css::sdbcx::XDataDefinitionSupplier> ODriver_BASE;
+        std::vector<unotools::WeakReference<OConnection>>   m_xConnections; //  vector containing a list
+                                                                            //  of all the Connection objects
+                                                                            //  for this Driver
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    public:
+        OFileDriver(css::uno::Reference< css::uno::XComponentContext > _xContext);
 
-        class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE OFileDriver : public ODriver_BASE
-        {
-        protected:
-            ::osl::Mutex                                        m_aMutex;
+        // OComponentHelper
+        virtual void SAL_CALL disposing() override;
 
-            std::vector<unotools::WeakReference<OConnection>>   m_xConnections; //  vector containing a list
-                                                                                //  of all the Connection objects
-                                                                                //  for this Driver
-            css::uno::Reference< css::uno::XComponentContext > m_xContext;
-        public:
-            OFileDriver(css::uno::Reference< css::uno::XComponentContext > _xContext);
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-            // OComponentHelper
-            virtual void SAL_CALL disposing() override;
+        // XDriver
+        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) override;
+        virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual sal_Int32 SAL_CALL getMajorVersion(  ) override;
+        virtual sal_Int32 SAL_CALL getMinorVersion(  ) override;
 
-            // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName(  ) override;
-            virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        // XDataDefinitionSupplier
+        virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByConnection( const css::uno::Reference< css::sdbc::XConnection >& connection ) override;
+        virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByURL( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
 
-            // XDriver
-            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
-            virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) override;
-            virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
-            virtual sal_Int32 SAL_CALL getMajorVersion(  ) override;
-            virtual sal_Int32 SAL_CALL getMinorVersion(  ) override;
-
-            // XDataDefinitionSupplier
-            virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByConnection( const css::uno::Reference< css::sdbc::XConnection >& connection ) override;
-            virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByURL( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
-
-            const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() const { return m_xContext; }
-        };
+        const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() const { return m_xContext; }
+    };
 
 }
 

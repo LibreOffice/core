@@ -24,60 +24,60 @@
 
 namespace connectivity::ado
 {
-        class OCatalog;
-        typedef connectivity::sdbcx::OUser OUser_TYPEDEF;
-        typedef connectivity::sdbcx::OUser_BASE OUser_BASE_TYPEDEF;
+    class OCatalog;
+    typedef connectivity::sdbcx::OUser OUser_TYPEDEF;
+    typedef connectivity::sdbcx::OUser_BASE OUser_BASE_TYPEDEF;
 
-        class OAdoUser : public OUser_TYPEDEF
-        {
-        protected:
-            WpADOUser   m_aUser;
-            OCatalog*   m_pCatalog;
+    class OAdoUser : public OUser_TYPEDEF
+    {
+    protected:
+        WpADOUser   m_aUser;
+        OCatalog*   m_pCatalog;
 
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                            sal_Int32 nHandle,
-                            const css::uno::Any& rValue
-                         ) override;
-            virtual void SAL_CALL getFastPropertyValue(
-                                    css::uno::Any& rValue,
-                                    sal_Int32 nHandle
-                                         ) const override;
-        public:
-            virtual void refreshGroups() override;
-        public:
-            OAdoUser(OCatalog* _pParent,bool _bCase,    ADOUser* _pUser=nullptr);
-            OAdoUser(OCatalog* _pParent,bool _bCase,  const OUString& Name);
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+                        sal_Int32 nHandle,
+                        const css::uno::Any& rValue
+                     ) override;
+        virtual void SAL_CALL getFastPropertyValue(
+                                css::uno::Any& rValue,
+                                sal_Int32 nHandle
+                                     ) const override;
+    public:
+        virtual void refreshGroups() override;
+    public:
+        OAdoUser(OCatalog* _pParent,bool _bCase,    ADOUser* _pUser=nullptr);
+        OAdoUser(OCatalog* _pParent,bool _bCase,  const OUString& Name);
 
-            // XUser
-            virtual void SAL_CALL changePassword( const OUString& objPassword, const OUString& newPassword ) override;
-            // XAuthorizable
-            virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) override;
-            virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) override;
-            virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
-            virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
+        // XUser
+        virtual void SAL_CALL changePassword( const OUString& objPassword, const OUString& newPassword ) override;
+        // XAuthorizable
+        virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) override;
+        virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) override;
+        virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
+        virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
 
-            WpADOUser getImpl() const { return m_aUser;}
-        };
+        WpADOUser getImpl() const { return m_aUser;}
+    };
 
-        class OUserExtend;
-        typedef ::comphelper::OPropertyArrayUsageHelper<OUserExtend> OUserExtend_PROP;
+    class OUserExtend;
+    typedef ::comphelper::OPropertyArrayUsageHelper<OUserExtend> OUserExtend_PROP;
 
-        class OUserExtend : public OAdoUser,
-                            public OUserExtend_PROP
-        {
-        protected:
-            OUString m_Password;
-            // OPropertyArrayUsageHelper
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
-            // OPropertySetHelper
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
-        public:
-            OUserExtend(OCatalog* _pParent,bool _bCase,ADOUser* _pUser=nullptr);
-            OUserExtend(OCatalog* _pParent,bool _bCase,const OUString& Name);
+    class OUserExtend : public OAdoUser,
+                        public OUserExtend_PROP
+    {
+    protected:
+        OUString m_Password;
+        // OPropertyArrayUsageHelper
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
+        // OPropertySetHelper
+        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    public:
+        OUserExtend(OCatalog* _pParent,bool _bCase,ADOUser* _pUser=nullptr);
+        OUserExtend(OCatalog* _pParent,bool _bCase,const OUString& Name);
 
-            virtual void construct() override;
-            OUString getPassword() const { return m_Password;}
-        };
+        virtual void construct() override;
+        OUString getPassword() const { return m_Password;}
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

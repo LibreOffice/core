@@ -23,23 +23,23 @@
 
 
 namespace connectivity::hsqldb
+{
+    class ODriverDelegator;
+    class OConnectionController : public ::cppu::WeakImplHelper< css::frame::XTerminateListener >
     {
-        class ODriverDelegator;
-        class OConnectionController : public ::cppu::WeakImplHelper< css::frame::XTerminateListener >
-        {
-            ODriverDelegator* m_pDriver;
-            protected:
-                virtual ~OConnectionController() override {m_pDriver = nullptr;}
-            public:
-                explicit OConnectionController(ODriverDelegator* _pDriver) : m_pDriver(_pDriver){}
+        ODriverDelegator* m_pDriver;
+        protected:
+            virtual ~OConnectionController() override {m_pDriver = nullptr;}
+        public:
+            explicit OConnectionController(ODriverDelegator* _pDriver) : m_pDriver(_pDriver){}
 
-                // XEventListener
-                virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+            // XEventListener
+            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
-                // XTerminateListener
-                virtual void SAL_CALL queryTermination( const css::lang::EventObject& aEvent ) override;
-                virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) override;
-        };
+            // XTerminateListener
+            virtual void SAL_CALL queryTermination( const css::lang::EventObject& aEvent ) override;
+            virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) override;
+    };
 
 }   // namespace connectivity::hsqldb
 

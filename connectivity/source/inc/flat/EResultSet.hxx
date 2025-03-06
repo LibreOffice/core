@@ -24,46 +24,46 @@
 #include <cppuhelper/implbase1.hxx>
 
 namespace connectivity::flat
+{
+    class OFlatResultSet;
+    // these typedef's are only necessary for the compiler
+    typedef ::cppu::ImplHelper1<  css::sdbcx::XRowLocate> OFlatResultSet_BASE;
+    typedef file::OResultSet                                            OFlatResultSet_BASE2;
+    typedef ::comphelper::OPropertyArrayUsageHelper<OFlatResultSet>     OFlatResultSet_BASE3;
+
+
+    class OFlatResultSet :  public OFlatResultSet_BASE2,
+                            public OFlatResultSet_BASE,
+                            public OFlatResultSet_BASE3
     {
-        class OFlatResultSet;
-        // these typedef's are only necessary for the compiler
-        typedef ::cppu::ImplHelper1<  css::sdbcx::XRowLocate> OFlatResultSet_BASE;
-        typedef file::OResultSet                                            OFlatResultSet_BASE2;
-        typedef ::comphelper::OPropertyArrayUsageHelper<OFlatResultSet>     OFlatResultSet_BASE3;
+        bool m_bBookmarkable;
+    protected:
+        // OPropertyArrayUsageHelper
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
+        // OPropertySetHelper
+        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    public:
+        DECLARE_SERVICE_INFO();
 
+        OFlatResultSet( file::OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&   _aSQLIterator);
 
-        class OFlatResultSet :  public OFlatResultSet_BASE2,
-                                public OFlatResultSet_BASE,
-                                public OFlatResultSet_BASE3
-        {
-            bool m_bBookmarkable;
-        protected:
-            // OPropertyArrayUsageHelper
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
-            // OPropertySetHelper
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
-        public:
-            DECLARE_SERVICE_INFO();
+        // XInterface
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
+        //XTypeProvider
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        // XPropertySet
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
-            OFlatResultSet( file::OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&   _aSQLIterator);
-
-            // XInterface
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-            virtual void SAL_CALL acquire() noexcept override;
-            virtual void SAL_CALL release() noexcept override;
-            //XTypeProvider
-            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-            // XPropertySet
-            virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-
-            // XRowLocate
-            virtual css::uno::Any SAL_CALL getBookmark(  ) override;
-            virtual sal_Bool SAL_CALL moveToBookmark( const css::uno::Any& bookmark ) override;
-            virtual sal_Bool SAL_CALL moveRelativeToBookmark( const css::uno::Any& bookmark, sal_Int32 rows ) override;
-            virtual sal_Int32 SAL_CALL compareBookmarks( const css::uno::Any& first, const css::uno::Any& second ) override;
-            virtual sal_Bool SAL_CALL hasOrderedBookmarks(  ) override;
-            virtual sal_Int32 SAL_CALL hashBookmark( const css::uno::Any& bookmark ) override;
-        };
+        // XRowLocate
+        virtual css::uno::Any SAL_CALL getBookmark(  ) override;
+        virtual sal_Bool SAL_CALL moveToBookmark( const css::uno::Any& bookmark ) override;
+        virtual sal_Bool SAL_CALL moveRelativeToBookmark( const css::uno::Any& bookmark, sal_Int32 rows ) override;
+        virtual sal_Int32 SAL_CALL compareBookmarks( const css::uno::Any& first, const css::uno::Any& second ) override;
+        virtual sal_Bool SAL_CALL hasOrderedBookmarks(  ) override;
+        virtual sal_Int32 SAL_CALL hashBookmark( const css::uno::Any& bookmark ) override;
+    };
 
 }
 

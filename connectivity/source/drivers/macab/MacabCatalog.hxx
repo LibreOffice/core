@@ -23,29 +23,29 @@
 
 namespace connectivity::macab
 {
-        class MacabConnection;
+    class MacabConnection;
 
-        class MacabCatalog : public connectivity::sdbcx::OCatalog
-        {
-            MacabConnection* m_pConnection;     // used to get the metadata
+    class MacabCatalog : public connectivity::sdbcx::OCatalog
+    {
+        MacabConnection* m_pConnection;     // used to get the metadata
 
-        public:
-            explicit MacabCatalog(MacabConnection* _pCon);
+    public:
+        explicit MacabCatalog(MacabConnection* _pCon);
 
-            MacabConnection* getConnection() const { return m_pConnection; }
+        MacabConnection* getConnection() const { return m_pConnection; }
 
-            static const OUString& getDot();
+        static const OUString& getDot();
 
-            // implementation of the pure virtual methods
-            virtual void refreshTables() override;
-            virtual void refreshViews() override;
-            virtual void refreshGroups() override;
-            virtual void refreshUsers() override;
+        // implementation of the pure virtual methods
+        virtual void refreshTables() override;
+        virtual void refreshViews() override;
+        virtual void refreshGroups() override;
+        virtual void refreshUsers() override;
 
-            // XTablesSupplier
-            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(
-                    ) override;
-        };
+        // XTablesSupplier
+        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(
+                ) override;
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

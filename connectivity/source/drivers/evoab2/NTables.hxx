@@ -24,21 +24,21 @@
 
 namespace connectivity::evoab
 {
-        class OEvoabTables : public sdbcx::OCollection
-        {
-            css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
-        protected:
-            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
-            virtual void impl_refresh() override;
-        public:
-            OEvoabTables(css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData,
-                         ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-                         const ::std::vector< OUString> &_rVector) :
-                    sdbcx::OCollection(_rParent,true,_rMutex,_rVector),
-                    m_xMetaData(std::move(_xMetaData))
-                        {}
-            virtual void disposing() override;
-        };
+    class OEvoabTables : public sdbcx::OCollection
+    {
+        css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
+    protected:
+        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual void impl_refresh() override;
+    public:
+        OEvoabTables(css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData,
+                     ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+                     const ::std::vector< OUString> &_rVector) :
+                sdbcx::OCollection(_rParent,true,_rMutex,_rVector),
+                m_xMetaData(std::move(_xMetaData))
+                    {}
+        virtual void disposing() override;
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

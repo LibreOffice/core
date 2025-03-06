@@ -29,110 +29,110 @@
 #include <comphelper/interfacecontainer2.hxx>
 
 namespace connectivity::hsqldb
+{
+    class SAL_NO_VTABLE IMethodGuardAccess
     {
-        class SAL_NO_VTABLE IMethodGuardAccess
+    public:
+        virtual ::osl::Mutex&   getMutex() const = 0;
+        virtual void            checkDisposed() const = 0;
+
+    protected:
+        ~IMethodGuardAccess() {}
+    };
+
+
+    // OHsqlConnection - wraps all methods to the real connection from the driver
+    // but when disposed it doesn't dispose the real connection
+
+    typedef ::cppu::ImplInheritanceHelper<     OConnectionWrapper
+                                           ,   css::util::XFlushable
+                                           ,   css::sdb::application::XTableUIProvider
+                                           >   OHsqlConnection_BASE;
+
+    class OHsqlConnection   :public OHsqlConnection_BASE
+                            ,public IMethodGuardAccess
+    {
+    private:
+        ::comphelper::OInterfaceContainerHelper2                          m_aFlushListeners;
+        css::uno::Reference< css::sdbc::XDriver >                         m_xDriver;
+        css::uno::Reference< css::uno::XComponentContext >                m_xContext;
+        bool                                                              m_bIni;
+        bool                                                              m_bReadOnly;
+
+    protected:
+        virtual void SAL_CALL disposing() override;
+        virtual ~OHsqlConnection() override;
+
+    public:
+        OHsqlConnection(
+            const css::uno::Reference< css::sdbc::XDriver >& _rxDriver,
+            const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
+            const css::uno::Reference< css::uno::XComponentContext>& _rxContext
+        );
+
+        // XServiceInfo
+        DECLARE_SERVICE_INFO();
+
+        // IMethodGuardAccess
+        virtual ::osl::Mutex&   getMutex() const override;
+        virtual void            checkDisposed() const override;
+
+        // XFlushable
+        virtual void SAL_CALL flush(  ) override;
+        virtual void SAL_CALL addFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
+        virtual void SAL_CALL removeFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
+
+        // XTableUIProvider
+        virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL getTableIcon( const OUString& TableName, ::sal_Int32 ColorMode ) override;
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getTableEditor( const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& DocumentUI, const OUString& TableName ) override;
+
+    private:
+
+        /** retrieves our table container
+            @return
+                our table container. Guaranteed to not be <NULL/>.
+            @throws css::lang::WrappedTargetException
+                if a non-RuntimeException is caught during obtaining the container.
+            @throws css::uno::RuntimeException
+                if a serious error occurs
+            @precond
+                We're not disposed.
+        */
+        css::uno::Reference< css::container::XNameAccess >
+                impl_getTableContainer_throw();
+
+        /** checks whether the given table name denotes an existing table
+            @param _rTableName
+                the fully name of the table to check for existence
+            @throws css::lang::IllegalArgumentException
+                if the name does not denote an existing table
+            @precond
+                We're not disposed.
+        */
+        void    impl_checkExistingTable_throw( const OUString& _rTableName );
+
+        /** checks whether the given table name refers to a HSQL TEXT TABLE
+        */
+        bool    impl_isTextTable_nothrow( const OUString& _rTableName );
+
+        /** retrieves the icon for HSQL TEXT TABLEs
+        */
+        css::uno::Reference< css::graphic::XGraphic >
+            impl_getTextTableIcon_nothrow();
+    };
+
+
+    // OHsqlConnection
+
+    class MethodGuard : public ::osl::MutexGuard
+    {
+    public:
+        MethodGuard( const IMethodGuardAccess& _rComponent )
+            : ::osl::MutexGuard( _rComponent.getMutex() )
         {
-        public:
-            virtual ::osl::Mutex&   getMutex() const = 0;
-            virtual void            checkDisposed() const = 0;
-
-        protected:
-            ~IMethodGuardAccess() {}
-        };
-
-
-        // OHsqlConnection - wraps all methods to the real connection from the driver
-        // but when disposed it doesn't dispose the real connection
-
-        typedef ::cppu::ImplInheritanceHelper<     OConnectionWrapper
-                                               ,   css::util::XFlushable
-                                               ,   css::sdb::application::XTableUIProvider
-                                               >   OHsqlConnection_BASE;
-
-        class OHsqlConnection   :public OHsqlConnection_BASE
-                                ,public IMethodGuardAccess
-        {
-        private:
-            ::comphelper::OInterfaceContainerHelper2                          m_aFlushListeners;
-            css::uno::Reference< css::sdbc::XDriver >                         m_xDriver;
-            css::uno::Reference< css::uno::XComponentContext >                m_xContext;
-            bool                                                              m_bIni;
-            bool                                                              m_bReadOnly;
-
-        protected:
-            virtual void SAL_CALL disposing() override;
-            virtual ~OHsqlConnection() override;
-
-        public:
-            OHsqlConnection(
-                const css::uno::Reference< css::sdbc::XDriver >& _rxDriver,
-                const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
-                const css::uno::Reference< css::uno::XComponentContext>& _rxContext
-            );
-
-            // XServiceInfo
-            DECLARE_SERVICE_INFO();
-
-            // IMethodGuardAccess
-            virtual ::osl::Mutex&   getMutex() const override;
-            virtual void            checkDisposed() const override;
-
-            // XFlushable
-            virtual void SAL_CALL flush(  ) override;
-            virtual void SAL_CALL addFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
-            virtual void SAL_CALL removeFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
-
-            // XTableUIProvider
-            virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL getTableIcon( const OUString& TableName, ::sal_Int32 ColorMode ) override;
-            virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getTableEditor( const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& DocumentUI, const OUString& TableName ) override;
-
-        private:
-
-            /** retrieves our table container
-                @return
-                    our table container. Guaranteed to not be <NULL/>.
-                @throws css::lang::WrappedTargetException
-                    if a non-RuntimeException is caught during obtaining the container.
-                @throws css::uno::RuntimeException
-                    if a serious error occurs
-                @precond
-                    We're not disposed.
-            */
-            css::uno::Reference< css::container::XNameAccess >
-                    impl_getTableContainer_throw();
-
-            /** checks whether the given table name denotes an existing table
-                @param _rTableName
-                    the fully name of the table to check for existence
-                @throws css::lang::IllegalArgumentException
-                    if the name does not denote an existing table
-                @precond
-                    We're not disposed.
-            */
-            void    impl_checkExistingTable_throw( const OUString& _rTableName );
-
-            /** checks whether the given table name refers to a HSQL TEXT TABLE
-            */
-            bool    impl_isTextTable_nothrow( const OUString& _rTableName );
-
-            /** retrieves the icon for HSQL TEXT TABLEs
-            */
-            css::uno::Reference< css::graphic::XGraphic >
-                impl_getTextTableIcon_nothrow();
-        };
-
-
-        // OHsqlConnection
-
-        class MethodGuard : public ::osl::MutexGuard
-        {
-        public:
-            MethodGuard( const IMethodGuardAccess& _rComponent )
-                : ::osl::MutexGuard( _rComponent.getMutex() )
-            {
-                _rComponent.checkDisposed();
-            }
-        };
+            _rComponent.checkDisposed();
+        }
+    };
 
 }
 

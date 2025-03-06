@@ -32,100 +32,100 @@
 
 namespace connectivity::ado
 {
-        struct OExtendedTypeInfo
+    struct OExtendedTypeInfo
+    {
+        ::connectivity::OTypeInfo       aSimpleType;    // the general type info
+        DataTypeEnum                    eType;
+
+        OUString getDBName() const { return aSimpleType.aTypeName; }
+    };
+
+    class WpADOConnection;
+    class ODriver;
+    typedef std::multimap<DataTypeEnum, OExtendedTypeInfo*>       OTypeInfoMap;
+    typedef connectivity::OMetaConnection                           OConnection_BASE;
+
+
+    class OConnection : public OConnection_BASE
+    {
+    protected:
+
+        // Data attributes
+
+        OTypeInfoMap                m_aTypeInfo;    //  vector containing an entry
+                                                                            //  for each row returned by
+                                                                            //  DatabaseMetaData.getTypeInfo.
+        unotools::WeakReference<OCatalog>      m_xCatalog;
+        ODriver*                    m_pDriver;
+    private:
+        WpADOConnection             m_aAdoConnection;
+        sal_Int32                   m_nEngineType;
+        bool                        m_bClosed;
+        bool                        m_bAutocommit;
+
+    protected:
+        /// @throws css::sdbc::SQLException
+        void buildTypeInfo();
+    public:
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
+        OConnection(ODriver*        _pDriver);
+        //  OConnection(const SQLHANDLE _pConnectionHandle);
+        ~OConnection() override;
+        void construct(std::u16string_view url,const css::uno::Sequence< css::beans::PropertyValue >& info);
+
+        //XUnoTunnel
+        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+        static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
+        // XServiceInfo
+        DECLARE_SERVICE_INFO();
+        // OComponentHelper
+        virtual void SAL_CALL disposing() override;
+
+        // XConnection
+        virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
+        virtual OUString SAL_CALL nativeSQL( const OUString& sql ) override;
+        virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit ) override;
+        virtual sal_Bool SAL_CALL getAutoCommit(  ) override;
+        virtual void SAL_CALL commit(  ) override;
+        virtual void SAL_CALL rollback(  ) override;
+        virtual sal_Bool SAL_CALL isClosed(  ) override;
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
+        virtual void SAL_CALL setReadOnly( sal_Bool readOnly ) override;
+        virtual sal_Bool SAL_CALL isReadOnly(  ) override;
+        virtual void SAL_CALL setCatalog( const OUString& catalog ) override;
+        virtual OUString SAL_CALL getCatalog(  ) override;
+        virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) override;
+        virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) override;
+        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTypeMap(  ) override;
+        virtual void SAL_CALL setTypeMap( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        // XCloseable
+        virtual void SAL_CALL close(  ) override;
+        // XWarningsSupplier
+        virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+        virtual void SAL_CALL clearWarnings(  ) override;
+
+        WpADOConnection& getConnection() { return m_aAdoConnection; }
+        void setCatalog(OCatalog* _pCatalog) { m_xCatalog = _pCatalog; }
+
+        const OTypeInfoMap* getTypeInfo() const { return &m_aTypeInfo;}
+        OCatalog* getAdoCatalog() const
         {
-            ::connectivity::OTypeInfo       aSimpleType;    // the general type info
-            DataTypeEnum                    eType;
+            return m_xCatalog.get().get();
+        }
 
-            OUString getDBName() const { return aSimpleType.aTypeName; }
-        };
+        sal_Int32 getEngineType()   const { return m_nEngineType; }
+        ODriver*  getDriver()       const { return m_pDriver; }
 
-        class WpADOConnection;
-        class ODriver;
-        typedef std::multimap<DataTypeEnum, OExtendedTypeInfo*>       OTypeInfoMap;
-        typedef connectivity::OMetaConnection                           OConnection_BASE;
-
-
-        class OConnection : public OConnection_BASE
-        {
-        protected:
-
-            // Data attributes
-
-            OTypeInfoMap                m_aTypeInfo;    //  vector containing an entry
-                                                                                //  for each row returned by
-                                                                                //  DatabaseMetaData.getTypeInfo.
-            unotools::WeakReference<OCatalog>      m_xCatalog;
-            ODriver*                    m_pDriver;
-        private:
-            WpADOConnection             m_aAdoConnection;
-            sal_Int32                   m_nEngineType;
-            bool                        m_bClosed;
-            bool                        m_bAutocommit;
-
-        protected:
-            /// @throws css::sdbc::SQLException
-            void buildTypeInfo();
-        public:
-            /// @throws css::sdbc::SQLException
-            /// @throws css::uno::RuntimeException
-            OConnection(ODriver*        _pDriver);
-            //  OConnection(const SQLHANDLE _pConnectionHandle);
-            ~OConnection() override;
-            void construct(std::u16string_view url,const css::uno::Sequence< css::beans::PropertyValue >& info);
-
-            //XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-            static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
-            // XServiceInfo
-            DECLARE_SERVICE_INFO();
-            // OComponentHelper
-            virtual void SAL_CALL disposing() override;
-
-            // XConnection
-            virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
-            virtual OUString SAL_CALL nativeSQL( const OUString& sql ) override;
-            virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit ) override;
-            virtual sal_Bool SAL_CALL getAutoCommit(  ) override;
-            virtual void SAL_CALL commit(  ) override;
-            virtual void SAL_CALL rollback(  ) override;
-            virtual sal_Bool SAL_CALL isClosed(  ) override;
-            virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
-            virtual void SAL_CALL setReadOnly( sal_Bool readOnly ) override;
-            virtual sal_Bool SAL_CALL isReadOnly(  ) override;
-            virtual void SAL_CALL setCatalog( const OUString& catalog ) override;
-            virtual OUString SAL_CALL getCatalog(  ) override;
-            virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) override;
-            virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) override;
-            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTypeMap(  ) override;
-            virtual void SAL_CALL setTypeMap( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-            // XCloseable
-            virtual void SAL_CALL close(  ) override;
-            // XWarningsSupplier
-            virtual css::uno::Any SAL_CALL getWarnings(  ) override;
-            virtual void SAL_CALL clearWarnings(  ) override;
-
-            WpADOConnection& getConnection() { return m_aAdoConnection; }
-            void setCatalog(OCatalog* _pCatalog) { m_xCatalog = _pCatalog; }
-
-            const OTypeInfoMap* getTypeInfo() const { return &m_aTypeInfo;}
-            OCatalog* getAdoCatalog() const
-            {
-                return m_xCatalog.get().get();
-            }
-
-            sal_Int32 getEngineType()   const { return m_nEngineType; }
-            ODriver*  getDriver()       const { return m_pDriver; }
-
-            static const OExtendedTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
-                               DataTypeEnum _nType,
-                               const OUString& _sTypeName,
-                               sal_Int32 _nPrecision,
-                               sal_Int32 _nScale,
-                               bool& _brForceToType);
-        };
+        static const OExtendedTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
+                           DataTypeEnum _nType,
+                           const OUString& _sTypeName,
+                           sal_Int32 _nPrecision,
+                           sal_Int32 _nScale,
+                           bool& _brForceToType);
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

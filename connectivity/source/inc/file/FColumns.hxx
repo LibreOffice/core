@@ -25,22 +25,22 @@
 #include <file/filedllapi.hxx>
 
 namespace connectivity::file
+{
+    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_FILE) OColumns : public sdbcx::OCollection
     {
-        class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_FILE) OColumns : public sdbcx::OCollection
-        {
-        protected:
-            OFileTable* m_pTable;
+    protected:
+        OFileTable* m_pTable;
 
-            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
-            virtual void impl_refresh() override;
-        public:
-            OColumns(   OFileTable* _pTable,
-                        ::osl::Mutex& _rMutex,
-                        const ::std::vector< OUString> &_rVector
-                    ) : sdbcx::OCollection(*_pTable,_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
-                ,m_pTable(_pTable)
-            {}
-        };
+        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual void impl_refresh() override;
+    public:
+        OColumns(   OFileTable* _pTable,
+                    ::osl::Mutex& _rMutex,
+                    const ::std::vector< OUString> &_rVector
+                ) : sdbcx::OCollection(*_pTable,_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
+            ,m_pTable(_pTable)
+        {}
+    };
 
 }
 

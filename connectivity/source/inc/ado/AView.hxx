@@ -25,23 +25,23 @@
 namespace connectivity::ado
 {
 
-        typedef sdbcx::OView OView_ADO;
+    typedef sdbcx::OView OView_ADO;
 
-        class OAdoView :     public OView_ADO
-        {
-            WpADOView       m_aView;
+    class OAdoView :     public OView_ADO
+    {
+        WpADOView       m_aView;
 
-        protected:
-            // OPropertySetHelper
-            virtual void SAL_CALL getFastPropertyValue(
-                                css::uno::Any& rValue,
-                                sal_Int32 nHandle
-                                         ) const override;
-        public:
-            OAdoView(bool _bCase, ADOView* _pView=nullptr);
+    protected:
+        // OPropertySetHelper
+        virtual void SAL_CALL getFastPropertyValue(
+                            css::uno::Any& rValue,
+                            sal_Int32 nHandle
+                                     ) const override;
+    public:
+        OAdoView(bool _bCase, ADOView* _pView=nullptr);
 
-            WpADOView getImpl() const { return m_aView;}
-        };
+        WpADOView getImpl() const { return m_aView;}
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

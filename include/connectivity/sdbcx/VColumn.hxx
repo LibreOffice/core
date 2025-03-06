@@ -31,83 +31,83 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace connectivity::sdbcx
+{
+    class OColumn;
+    typedef ::comphelper::OIdPropertyArrayUsageHelper<OColumn> OColumn_PROP;
+
+    typedef ::cppu::WeakComponentImplHelper< css::container::XNamed,
+                                             css::lang::XServiceInfo> OColumnDescriptor_BASE;
+    typedef ::cppu::ImplHelper1< css::sdbcx::XDataDescriptorFactory > OColumn_BASE;
+
+
+    class OOO_DLLPUBLIC_DBTOOLS OColumn :
+                                public cppu::BaseMutex,
+                                public OColumn_BASE,
+                                public OColumnDescriptor_BASE,
+                                public OColumn_PROP,
+                                public ODescriptor
     {
-        class OColumn;
-        typedef ::comphelper::OIdPropertyArrayUsageHelper<OColumn> OColumn_PROP;
+    protected:
+        OUString        m_TypeName;
+        OUString        m_Description;
+        OUString        m_DefaultValue;
 
-        typedef ::cppu::WeakComponentImplHelper< css::container::XNamed,
-                                                 css::lang::XServiceInfo> OColumnDescriptor_BASE;
-        typedef ::cppu::ImplHelper1< css::sdbcx::XDataDescriptorFactory > OColumn_BASE;
+        sal_Int32       m_IsNullable;
+        sal_Int32       m_Precision;
+        sal_Int32       m_Scale;
+        sal_Int32       m_Type;
 
+        bool            m_IsAutoIncrement;
+        bool            m_IsRowVersion;
+        bool            m_IsCurrency;
 
-        class OOO_DLLPUBLIC_DBTOOLS OColumn :
-                                    public cppu::BaseMutex,
-                                    public OColumn_BASE,
-                                    public OColumnDescriptor_BASE,
-                                    public OColumn_PROP,
-                                    public ODescriptor
-        {
-        protected:
-            OUString        m_TypeName;
-            OUString        m_Description;
-            OUString        m_DefaultValue;
+        OUString       m_CatalogName;
+        OUString       m_SchemaName;
+        OUString       m_TableName;
 
-            sal_Int32       m_IsNullable;
-            sal_Int32       m_Precision;
-            sal_Int32       m_Scale;
-            sal_Int32       m_Type;
+        using OColumnDescriptor_BASE::rBHelper;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
-            bool            m_IsAutoIncrement;
-            bool            m_IsRowVersion;
-            bool            m_IsCurrency;
+        virtual ~OColumn() override;
+    public:
+        virtual void    SAL_CALL acquire() noexcept override;
+        virtual void    SAL_CALL release() noexcept override;
 
-            OUString       m_CatalogName;
-            OUString       m_SchemaName;
-            OUString       m_TableName;
+        OColumn(    bool _bCase);
+        OColumn(    const OUString& Name,
+                    OUString TypeName,
+                    OUString DefaultValue,
+                    OUString Description,
+                    sal_Int32       IsNullable,
+                    sal_Int32       Precision,
+                    sal_Int32       Scale,
+                    sal_Int32       Type,
+                    bool            IsAutoIncrement,
+                    bool            IsRowVersion,
+                    bool            IsCurrency,
+                    bool            _bCase,
+                    OUString CatalogName,
+                    OUString SchemaName,
+                    OUString TableName);
 
-            using OColumnDescriptor_BASE::rBHelper;
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
-            virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-
-            virtual ~OColumn() override;
-        public:
-            virtual void    SAL_CALL acquire() noexcept override;
-            virtual void    SAL_CALL release() noexcept override;
-
-            OColumn(    bool _bCase);
-            OColumn(    const OUString& Name,
-                        OUString TypeName,
-                        OUString DefaultValue,
-                        OUString Description,
-                        sal_Int32       IsNullable,
-                        sal_Int32       Precision,
-                        sal_Int32       Scale,
-                        sal_Int32       Type,
-                        bool            IsAutoIncrement,
-                        bool            IsRowVersion,
-                        bool            IsCurrency,
-                        bool            _bCase,
-                        OUString CatalogName,
-                        OUString SchemaName,
-                        OUString TableName);
-
-            DECLARE_SERVICE_INFO();
-            //XInterface
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-            //XTypeProvider
-            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-            // ODescriptor
-            virtual void construct() override;
-            // ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing() override;
-            // XPropertySet
-            virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-            // XNamed
-            virtual OUString SAL_CALL getName(  ) override;
-            virtual void SAL_CALL setName( const OUString& aName ) override;
-            // XDataDescriptorFactory
-            virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) override;
-        };
+        DECLARE_SERVICE_INFO();
+        //XInterface
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        //XTypeProvider
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        // ODescriptor
+        virtual void construct() override;
+        // ::cppu::OComponentHelper
+        virtual void SAL_CALL disposing() override;
+        // XPropertySet
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+        // XNamed
+        virtual OUString SAL_CALL getName(  ) override;
+        virtual void SAL_CALL setName( const OUString& aName ) override;
+        // XDataDescriptorFactory
+        virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) override;
+    };
 
 }
 

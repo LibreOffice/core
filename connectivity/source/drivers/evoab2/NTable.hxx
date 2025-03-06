@@ -24,29 +24,29 @@
 
 namespace connectivity::evoab
 {
-        typedef connectivity::sdbcx::OTable OEvoabTable_TYPEDEF;
+    typedef connectivity::sdbcx::OTable OEvoabTable_TYPEDEF;
 
-        class OEvoabTable : public OEvoabTable_TYPEDEF
-        {
-            OEvoabConnection* m_pConnection;
+    class OEvoabTable : public OEvoabTable_TYPEDEF
+    {
+        OEvoabConnection* m_pConnection;
 
-        public:
-            OEvoabTable(    sdbcx::OCollection* _pTables,
-                    OEvoabConnection* _pConnection,
-                    const OUString& Name,
-                    const OUString& Type,
-                    const OUString& Description,
-                    const OUString& SchemaName,
-                    const OUString& CatalogName
-                );
+    public:
+        OEvoabTable(    sdbcx::OCollection* _pTables,
+                OEvoabConnection* _pConnection,
+                const OUString& Name,
+                const OUString& Type,
+                const OUString& Description,
+                const OUString& SchemaName,
+                const OUString& CatalogName
+            );
 
-            OEvoabConnection* getConnection() { return m_pConnection;}
+        OEvoabConnection* getConnection() { return m_pConnection;}
 
-            virtual void refreshColumns() override;
+        virtual void refreshColumns() override;
 
-            OUString const & getTableName() const { return m_Name; }
-            OUString const & getSchema() const { return m_SchemaName; }
-        };
+        OUString const & getTableName() const { return m_Name; }
+        OUString const & getSchema() const { return m_SchemaName; }
+    };
 }
 
 

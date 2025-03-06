@@ -33,128 +33,128 @@
 
 namespace connectivity::macab
 {
-        class MacabConnection;
-        class MacabDriver;
+    class MacabConnection;
+    class MacabDriver;
 
-        typedef void*   (SAL_CALL * ConnectionFactoryFunction)( void* _pDriver );
+    typedef void*   (SAL_CALL * ConnectionFactoryFunction)( void* _pDriver );
 
-        typedef std::vector< css::uno::WeakReferenceHelper > OWeakRefArray;
-
-
-        // = MacabImplModule
-
-        class MacabImplModule
-        {
-        private:
-            /// Did we already attempt to load the module and to retrieve the symbols?
-            bool    m_bAttemptedLoadModule;
-            oslModule                   m_hConnectorModule;
-            ConnectionFactoryFunction   m_pConnectionFactoryFunc;
-
-        public:
-            MacabImplModule();
-
-            /** determines whether there is a mac OS present in the environment
-            */
-            bool isMacOSPresent();
-
-            /** initializes the implementation module.
-
-                @throws css::uno::RuntimeException
-                    if the module could be loaded, but required symbols are missing
-                @throws css::sdbc::SQLException
-                    if no Mac OS was found at all
-            */
-            void init();
-
-            /** shuts down the impl module
-            */
-            void shutdown();
-
-            /** creates a new connection
-                @precond
-                    <member>init</member> has been called before
-                @throws css::uno::RuntimeException
-                    if no connection object could be created (which is a severe error, normally impossible)
-            */
-            MacabConnection*  createConnection( MacabDriver* _pDriver ) const;
-
-        private:
-            /** loads the implementation module and retrieves the needed symbols
-
-                Save against being called multiple times.
-
-                @return <TRUE/> if the module could be loaded successfully.
-
-                @throws css::uno::RuntimeException
-                    if the module could be loaded, but required symbols are missing
-            */
-            bool    impl_loadModule();
-
-            /** unloads the implementation module, and resets all function pointers to <NULL/>
-                @precond m_hConnectorModule is not <NULL/>
-            */
-            void    impl_unloadModule();
-        };
+    typedef std::vector< css::uno::WeakReferenceHelper > OWeakRefArray;
 
 
-        // = MacabDriver
+    // = MacabImplModule
 
-        typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver,
-                                                   css::lang::XServiceInfo,
-                                                   css::frame::XTerminateListener > MacabDriver_BASE;
-        class MacabDriver : public MacabDriver_BASE
-        {
-        protected:
-            ::osl::Mutex                m_aMutex;           // mutex is need to control member access
-            OWeakRefArray               m_xConnections;     // vector containing a list of all the
-                                                            //  MacabConnection objects for this Driver
-            css::uno::Reference< css::uno::XComponentContext >
-                                        m_xContext;       // the multi-service factory
-            MacabImplModule             m_aImplModule;
+    class MacabImplModule
+    {
+    private:
+        /// Did we already attempt to load the module and to retrieve the symbols?
+        bool    m_bAttemptedLoadModule;
+        oslModule                   m_hConnectorModule;
+        ConnectionFactoryFunction   m_pConnectionFactoryFunc;
 
-        public:
-            css::uno::Reference< css::uno::XComponentContext > const &
-            getComponentContext() const { return m_xContext; }
+    public:
+        MacabImplModule();
 
-            /** returns the path of our configuration settings
-            */
-            static OUString  impl_getConfigurationSettingsPath();
+        /** determines whether there is a mac OS present in the environment
+        */
+        bool isMacOSPresent();
 
-            explicit MacabDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
-        protected:
+        /** initializes the implementation module.
 
-            // OComponentHelper
-            virtual void SAL_CALL disposing() override;
+            @throws css::uno::RuntimeException
+                if the module could be loaded, but required symbols are missing
+            @throws css::sdbc::SQLException
+                if no Mac OS was found at all
+        */
+        void init();
 
-            // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName(  ) override;
-            virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        /** shuts down the impl module
+        */
+        void shutdown();
 
-            // XDriver
-            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
-            virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) override;
-            virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
-            virtual sal_Int32 SAL_CALL getMajorVersion() override;
-            virtual sal_Int32 SAL_CALL getMinorVersion() override;
+        /** creates a new connection
+            @precond
+                <member>init</member> has been called before
+            @throws css::uno::RuntimeException
+                if no connection object could be created (which is a severe error, normally impossible)
+        */
+        MacabConnection*  createConnection( MacabDriver* _pDriver ) const;
 
-            // XTerminateListener
-            virtual void SAL_CALL queryTermination( const css::lang::EventObject& Event ) override;
-            virtual void SAL_CALL notifyTermination( const css::lang::EventObject& Event ) override;
+    private:
+        /** loads the implementation module and retrieves the needed symbols
 
-            // XEventListener
-            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+            Save against being called multiple times.
 
-        private:
-            /** shuts down the library which contains the real implementations
+            @return <TRUE/> if the module could be loaded successfully.
 
-                This method is safe against being called multiple times
+            @throws css::uno::RuntimeException
+                if the module could be loaded, but required symbols are missing
+        */
+        bool    impl_loadModule();
 
-                @precond our mutex is locked
-            */
-            void impl_shutdownImplementationModule();
-        };
+        /** unloads the implementation module, and resets all function pointers to <NULL/>
+            @precond m_hConnectorModule is not <NULL/>
+        */
+        void    impl_unloadModule();
+    };
+
+
+    // = MacabDriver
+
+    typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver,
+                                               css::lang::XServiceInfo,
+                                               css::frame::XTerminateListener > MacabDriver_BASE;
+    class MacabDriver : public MacabDriver_BASE
+    {
+    protected:
+        ::osl::Mutex                m_aMutex;           // mutex is need to control member access
+        OWeakRefArray               m_xConnections;     // vector containing a list of all the
+                                                        //  MacabConnection objects for this Driver
+        css::uno::Reference< css::uno::XComponentContext >
+                                    m_xContext;       // the multi-service factory
+        MacabImplModule             m_aImplModule;
+
+    public:
+        css::uno::Reference< css::uno::XComponentContext > const &
+        getComponentContext() const { return m_xContext; }
+
+        /** returns the path of our configuration settings
+        */
+        static OUString  impl_getConfigurationSettingsPath();
+
+        explicit MacabDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+    protected:
+
+        // OComponentHelper
+        virtual void SAL_CALL disposing() override;
+
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+
+        // XDriver
+        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) override;
+        virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual sal_Int32 SAL_CALL getMajorVersion() override;
+        virtual sal_Int32 SAL_CALL getMinorVersion() override;
+
+        // XTerminateListener
+        virtual void SAL_CALL queryTermination( const css::lang::EventObject& Event ) override;
+        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& Event ) override;
+
+        // XEventListener
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+
+    private:
+        /** shuts down the library which contains the real implementations
+
+            This method is safe against being called multiple times
+
+            @precond our mutex is locked
+        */
+        void impl_shutdownImplementationModule();
+    };
 
 }
 

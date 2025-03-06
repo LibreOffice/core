@@ -24,20 +24,20 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 
 namespace connectivity::file
+{
+    class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE OTables :
+        public sdbcx::OCollection
     {
-        class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE OTables :
-            public sdbcx::OCollection
-        {
-        protected:
-            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
-            virtual void impl_refresh() override;
-        public:
-            OTables(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-                const ::std::vector< OUString> &_rVector) : sdbcx::OCollection(_rParent,_rMetaData->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
-            {}
+    protected:
+        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual void impl_refresh() override;
+    public:
+        OTables(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+            const ::std::vector< OUString> &_rVector) : sdbcx::OCollection(_rParent,_rMetaData->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
+        {}
 
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-        };
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+    };
 
 }
 

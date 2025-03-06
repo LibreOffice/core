@@ -25,48 +25,48 @@
 #include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity::sdbcx
+{
+
+    // = ODescriptor
+
+    typedef ::comphelper::OPropertyContainer ODescriptor_PBASE;
+    class OOO_DLLPUBLIC_DBTOOLS ODescriptor
+                :public ODescriptor_PBASE
     {
+    protected:
+        OUString         m_Name;
 
-        // = ODescriptor
+        /** helper for derived classes to implement OPropertyArrayUsageHelper::createArrayHelper
 
-        typedef ::comphelper::OPropertyContainer ODescriptor_PBASE;
-        class OOO_DLLPUBLIC_DBTOOLS ODescriptor
-                    :public ODescriptor_PBASE
-        {
-        protected:
-            OUString         m_Name;
+            This method just calls describeProperties, and flags all properties as READONLY if and
+            only if we do *not* act as descriptor, but as final object.
 
-            /** helper for derived classes to implement OPropertyArrayUsageHelper::createArrayHelper
+            @seealso    isNew
+        */
+        ::cppu::IPropertyArrayHelper*   doCreateArrayHelper() const;
 
-                This method just calls describeProperties, and flags all properties as READONLY if and
-                only if we do *not* act as descriptor, but as final object.
+    private:
+        comphelper::UStringMixEqual m_aCase;
+        bool                        m_bNew;
 
-                @seealso    isNew
-            */
-            ::cppu::IPropertyArrayHelper*   doCreateArrayHelper() const;
+    public:
+        ODescriptor(::cppu::OBroadcastHelper& _rBHelper, bool _bCase, bool _bNew = false);
 
-        private:
-            comphelper::UStringMixEqual m_aCase;
-            bool                        m_bNew;
+        virtual ~ODescriptor() override;
 
-        public:
-            ODescriptor(::cppu::OBroadcastHelper& _rBHelper, bool _bCase, bool _bNew = false);
+        bool     isNew()  const         { return m_bNew;    }
+        void     setNew(bool _bNew);
 
-            virtual ~ODescriptor() override;
+        bool     isCaseSensitive() const { return m_aCase.isCaseSensitive(); }
 
-            bool     isNew()  const         { return m_bNew;    }
-            void     setNew(bool _bNew);
+        virtual void construct();
 
-            bool     isCaseSensitive() const { return m_aCase.isCaseSensitive(); }
+        /// @throws css::uno::RuntimeException
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  );
 
-            virtual void construct();
-
-            /// @throws css::uno::RuntimeException
-            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  );
-
-            // retrieves the ODescriptor implementation of a given UNO component, and returns its ->isNew flag
-            static bool isNew( const css::uno::Reference< css::uno::XInterface >& _rxDescriptor );
-        };
+        // retrieves the ODescriptor implementation of a given UNO component, and returns its ->isNew flag
+        static bool isNew( const css::uno::Reference< css::uno::XInterface >& _rxDescriptor );
+    };
 
 }
 

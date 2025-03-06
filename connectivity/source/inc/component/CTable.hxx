@@ -31,35 +31,35 @@ namespace com::sun::star::util {
 
 
 namespace connectivity::component
+{
+    typedef file::OFileTable OComponentTable_BASE;
+
+    /// Shared Table base class for Writer tables and Calc sheets.
+    class OOO_DLLPUBLIC_FILE OComponentTable :  public OComponentTable_BASE
     {
-        typedef file::OFileTable OComponentTable_BASE;
+    protected:
+        sal_Int32 m_nDataRows;
 
-        /// Shared Table base class for Writer tables and Calc sheets.
-        class OOO_DLLPUBLIC_FILE OComponentTable :  public OComponentTable_BASE
-        {
-        protected:
-            sal_Int32 m_nDataRows;
+        virtual void FileClose() override;
+    public:
+        OComponentTable( sdbcx::OCollection* _pTables,file::OConnection* _pConnection,
+                const OUString& Name,
+                const OUString& Type,
+                const OUString& Description,
+                const OUString& SchemaName,
+                const OUString& CatalogName
+            );
 
-            virtual void FileClose() override;
-        public:
-            OComponentTable( sdbcx::OCollection* _pTables,file::OConnection* _pConnection,
-                    const OUString& Name,
-                    const OUString& Type,
-                    const OUString& Description,
-                    const OUString& SchemaName,
-                    const OUString& CatalogName
-                );
+        virtual void refreshColumns() override;
+        virtual void refreshIndexes() override;
 
-            virtual void refreshColumns() override;
-            virtual void refreshIndexes() override;
+        virtual sal_Int32 getCurrentLastPos() const override;
+        virtual bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) override;
 
-            virtual sal_Int32 getCurrentLastPos() const override;
-            virtual bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) override;
-
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-            //XTypeProvider
-            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-        };
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        //XTypeProvider
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    };
 
 }
 

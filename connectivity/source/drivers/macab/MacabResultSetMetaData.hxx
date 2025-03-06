@@ -27,54 +27,54 @@
 
 namespace connectivity::macab
 {
-        /*
-        **  MacabResultSetMetaData
-        */
-        class MacabResultSetMetaData : public ::cppu::WeakImplHelper< css::sdbc::XResultSetMetaData>
-        {
-            MacabConnection*                m_pConnection;
-            OUString                 m_sTableName;
-            std::vector<sal_Int32>    m_aMacabFields; // for each selected column, contains the number
-                                                        //  of the corresponding AddressBook field
+    /*
+    **  MacabResultSetMetaData
+    */
+    class MacabResultSetMetaData : public ::cppu::WeakImplHelper< css::sdbc::XResultSetMetaData>
+    {
+        MacabConnection*                m_pConnection;
+        OUString                 m_sTableName;
+        std::vector<sal_Int32>    m_aMacabFields; // for each selected column, contains the number
+                                                    //  of the corresponding AddressBook field
 
-        protected:
-            virtual ~MacabResultSetMetaData() override;
+    protected:
+        virtual ~MacabResultSetMetaData() override;
 
-        public:
-            MacabResultSetMetaData(MacabConnection* _pConnection, OUString const & _sTableName);
+    public:
+        MacabResultSetMetaData(MacabConnection* _pConnection, OUString const & _sTableName);
 
-            // avoid ambiguous cast error from the compiler
-            operator css::uno::Reference< css::sdbc::XResultSetMetaData > () noexcept
-                { return this; }
+        // avoid ambiguous cast error from the compiler
+        operator css::uno::Reference< css::sdbc::XResultSetMetaData > () noexcept
+            { return this; }
 
-            /// @throws css::sdbc::SQLException
-            void setMacabFields(
-                const ::rtl::Reference<connectivity::OSQLColumns> &xColumns);
-            sal_uInt32 fieldAtColumn(sal_Int32 columnIndex) const
-                { return m_aMacabFields[columnIndex - 1]; }
+        /// @throws css::sdbc::SQLException
+        void setMacabFields(
+            const ::rtl::Reference<connectivity::OSQLColumns> &xColumns);
+        sal_uInt32 fieldAtColumn(sal_Int32 columnIndex) const
+            { return m_aMacabFields[columnIndex - 1]; }
 
-            virtual sal_Int32 SAL_CALL getColumnCount(  ) override;
-            virtual sal_Bool SAL_CALL isAutoIncrement( sal_Int32 column ) override;
-            virtual sal_Bool SAL_CALL isCaseSensitive( sal_Int32 column ) override;
-            virtual sal_Bool SAL_CALL isSearchable( sal_Int32 column ) override;
-            virtual sal_Bool SAL_CALL isCurrency( sal_Int32 column ) override;
-            virtual sal_Int32 SAL_CALL isNullable( sal_Int32 column ) override;
-            virtual sal_Bool SAL_CALL isSigned( sal_Int32 column ) override;
-            virtual sal_Int32 SAL_CALL getColumnDisplaySize( sal_Int32 column ) override;
-            virtual OUString SAL_CALL getColumnLabel( sal_Int32 column ) override;
-            virtual OUString SAL_CALL getColumnName( sal_Int32 column ) override;
-            virtual OUString SAL_CALL getSchemaName( sal_Int32 column ) override;
-            virtual sal_Int32 SAL_CALL getPrecision( sal_Int32 column ) override;
-            virtual sal_Int32 SAL_CALL getScale( sal_Int32 column ) override;
-            virtual OUString SAL_CALL getTableName( sal_Int32 column ) override;
-            virtual OUString SAL_CALL getCatalogName( sal_Int32 column ) override;
-            virtual sal_Int32 SAL_CALL getColumnType( sal_Int32 column ) override;
-            virtual OUString SAL_CALL getColumnTypeName( sal_Int32 column ) override;
-            virtual sal_Bool SAL_CALL isReadOnly( sal_Int32 column ) override;
-            virtual sal_Bool SAL_CALL isWritable( sal_Int32 column ) override;
-            virtual sal_Bool SAL_CALL isDefinitelyWritable( sal_Int32 column ) override;
-            virtual OUString SAL_CALL getColumnServiceName( sal_Int32 column ) override;
-        };
+        virtual sal_Int32 SAL_CALL getColumnCount(  ) override;
+        virtual sal_Bool SAL_CALL isAutoIncrement( sal_Int32 column ) override;
+        virtual sal_Bool SAL_CALL isCaseSensitive( sal_Int32 column ) override;
+        virtual sal_Bool SAL_CALL isSearchable( sal_Int32 column ) override;
+        virtual sal_Bool SAL_CALL isCurrency( sal_Int32 column ) override;
+        virtual sal_Int32 SAL_CALL isNullable( sal_Int32 column ) override;
+        virtual sal_Bool SAL_CALL isSigned( sal_Int32 column ) override;
+        virtual sal_Int32 SAL_CALL getColumnDisplaySize( sal_Int32 column ) override;
+        virtual OUString SAL_CALL getColumnLabel( sal_Int32 column ) override;
+        virtual OUString SAL_CALL getColumnName( sal_Int32 column ) override;
+        virtual OUString SAL_CALL getSchemaName( sal_Int32 column ) override;
+        virtual sal_Int32 SAL_CALL getPrecision( sal_Int32 column ) override;
+        virtual sal_Int32 SAL_CALL getScale( sal_Int32 column ) override;
+        virtual OUString SAL_CALL getTableName( sal_Int32 column ) override;
+        virtual OUString SAL_CALL getCatalogName( sal_Int32 column ) override;
+        virtual sal_Int32 SAL_CALL getColumnType( sal_Int32 column ) override;
+        virtual OUString SAL_CALL getColumnTypeName( sal_Int32 column ) override;
+        virtual sal_Bool SAL_CALL isReadOnly( sal_Int32 column ) override;
+        virtual sal_Bool SAL_CALL isWritable( sal_Int32 column ) override;
+        virtual sal_Bool SAL_CALL isDefinitelyWritable( sal_Int32 column ) override;
+        virtual OUString SAL_CALL getColumnServiceName( sal_Int32 column ) override;
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,61 +27,61 @@ struct ADOConnection;
 namespace connectivity::ado
 {
 
-        class WpADOField;
-        class ADOS
-        {
-        public:
-            static BSTR GetKeyStr();
+    class WpADOField;
+    class ADOS
+    {
+    public:
+        static BSTR GetKeyStr();
 
-            static const CLSID  CLSID_ADOCATALOG_25;
-            static const IID    IID_ADOCATALOG_25;
+        static const CLSID  CLSID_ADOCATALOG_25;
+        static const IID    IID_ADOCATALOG_25;
 
-            static const CLSID  CLSID_ADOCONNECTION_21;
-            static const IID    IID_ADOCONNECTION_21;
+        static const CLSID  CLSID_ADOCONNECTION_21;
+        static const IID    IID_ADOCONNECTION_21;
 
-            static const CLSID  CLSID_ADOCOMMAND_21;
-            static const IID    IID_ADOCOMMAND_21;
+        static const CLSID  CLSID_ADOCOMMAND_21;
+        static const IID    IID_ADOCOMMAND_21;
 
-            static const CLSID  CLSID_ADORECORDSET_21;
-            static const IID    IID_ADORECORDSET_21;
+        static const CLSID  CLSID_ADORECORDSET_21;
+        static const IID    IID_ADORECORDSET_21;
 
-            static const CLSID  CLSID_ADOINDEX_25;
-            static const IID    IID_ADOINDEX_25;
+        static const CLSID  CLSID_ADOINDEX_25;
+        static const IID    IID_ADOINDEX_25;
 
-            static const CLSID  CLSID_ADOCOLUMN_25;
-            static const IID    IID_ADOCOLUMN_25;
+        static const CLSID  CLSID_ADOCOLUMN_25;
+        static const IID    IID_ADOCOLUMN_25;
 
-            static const CLSID  CLSID_ADOKEY_25;
-            static const IID    IID_ADOKEY_25;
+        static const CLSID  CLSID_ADOKEY_25;
+        static const IID    IID_ADOKEY_25;
 
-            static const CLSID  CLSID_ADOTABLE_25;
-            static const IID    IID_ADOTABLE_25;
+        static const CLSID  CLSID_ADOTABLE_25;
+        static const IID    IID_ADOTABLE_25;
 
-            static const CLSID  CLSID_ADOGROUP_25;
-            static const IID    IID_ADOGROUP_25;
+        static const CLSID  CLSID_ADOGROUP_25;
+        static const IID    IID_ADOGROUP_25;
 
-            static const CLSID  CLSID_ADOUSER_25;
-            static const IID    IID_ADOUSER_25;
+        static const CLSID  CLSID_ADOUSER_25;
+        static const IID    IID_ADOUSER_25;
 
-            static const CLSID  CLSID_ADOVIEW_25;
-            static const IID    IID_ADOVIEW_25;
+        static const CLSID  CLSID_ADOVIEW_25;
+        static const IID    IID_ADOVIEW_25;
 
-            /// @throws css::sdbc::SQLException
-            /// @throws css::uno::RuntimeException
-            static void ThrowException(ADOConnection* _pAdoCon,const css::uno::Reference< css::uno::XInterface >& _xInterface);
-            static sal_Int32 MapADOType2Jdbc(DataTypeEnum eType);
-            static DataTypeEnum MapJdbc2ADOType(sal_Int32 _nType,sal_Int32 _nJetEngine);
-            static bool isJetEngine(sal_Int32 _nEngineType);
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
+        static void ThrowException(ADOConnection* _pAdoCon,const css::uno::Reference< css::uno::XInterface >& _xInterface);
+        static sal_Int32 MapADOType2Jdbc(DataTypeEnum eType);
+        static DataTypeEnum MapJdbc2ADOType(sal_Int32 _nType,sal_Int32 _nJetEngine);
+        static bool isJetEngine(sal_Int32 _nEngineType);
 
-            static ObjectTypeEnum   mapObjectType2Ado(sal_Int32 objType);
-            static sal_Int32        mapAdoType2Object(ObjectTypeEnum objType);
-            static sal_Int32        mapAdoRights2Sdbc(RightsEnum eRights);
-            static sal_Int32        mapRights2Ado(sal_Int32 nRights);
+        static ObjectTypeEnum   mapObjectType2Ado(sal_Int32 objType);
+        static sal_Int32        mapAdoType2Object(ObjectTypeEnum objType);
+        static sal_Int32        mapAdoRights2Sdbc(RightsEnum eRights);
+        static sal_Int32        mapRights2Ado(sal_Int32 nRights);
 
-            /// @throws css::sdbc::SQLException
-            /// @throws css::uno::RuntimeException
-            static WpADOField       getField(ADORecordset* _pRecordSet,sal_Int32 _nColumnIndex);
-        };
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
+        static WpADOField       getField(ADORecordset* _pRecordSet,sal_Int32 _nColumnIndex);
+    };
 
 
 }

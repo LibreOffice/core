@@ -32,74 +32,74 @@
 
 namespace connectivity::evoab {
 
-        namespace SDBCAddress {
-            typedef enum {
-                Unknown     = 0,
-                EVO_LOCAL       = 1,
-                EVO_LDAP    = 2,
-                EVO_GWISE   = 3
-            } sdbc_address_type;
-        }
+    namespace SDBCAddress {
+        typedef enum {
+            Unknown     = 0,
+            EVO_LOCAL       = 1,
+            EVO_LDAP    = 2,
+            EVO_GWISE   = 3
+        } sdbc_address_type;
+    }
 
-        typedef connectivity::OMetaConnection               OConnection_BASE; // implements basics and text encoding
+    typedef connectivity::OMetaConnection               OConnection_BASE; // implements basics and text encoding
 
-        class OEvoabConnection final :public OConnection_BASE
-        {
-        private:
-            const OEvoabDriver&             m_rDriver;
-            SDBCAddress::sdbc_address_type  m_eSDBCAddressType;
-            css::uno::Reference< css::sdbcx::XTablesSupplier >
-                                            m_xCatalog;
-            OString                         m_aPassword;
-            ::dbtools::WarningsContainer    m_aWarnings;
+    class OEvoabConnection final :public OConnection_BASE
+    {
+    private:
+        const OEvoabDriver&             m_rDriver;
+        SDBCAddress::sdbc_address_type  m_eSDBCAddressType;
+        css::uno::Reference< css::sdbcx::XTablesSupplier >
+                                        m_xCatalog;
+        OString                         m_aPassword;
+        ::dbtools::WarningsContainer    m_aWarnings;
 
-            virtual ~OEvoabConnection() override;
+        virtual ~OEvoabConnection() override;
 
-        public:
-            explicit OEvoabConnection( OEvoabDriver const & _rDriver );
-            /// @throws css::sdbc::SQLException
-            void construct(const OUString& _rUrl,const css::uno::Sequence< css::beans::PropertyValue >& _rInfo );
+    public:
+        explicit OEvoabConnection( OEvoabDriver const & _rDriver );
+        /// @throws css::sdbc::SQLException
+        void construct(const OUString& _rUrl,const css::uno::Sequence< css::beans::PropertyValue >& _rInfo );
 
-            void         setPassword( OString const & aStr ) { m_aPassword = aStr; }
-            // own methods
-            const OEvoabDriver& getDriver() const { return m_rDriver; }
+        void         setPassword( OString const & aStr ) { m_aPassword = aStr; }
+        // own methods
+        const OEvoabDriver& getDriver() const { return m_rDriver; }
 
-            SDBCAddress::sdbc_address_type getSDBCAddressType() const { return m_eSDBCAddressType;}
-            void setSDBCAddressType(SDBCAddress::sdbc_address_type _eSDBCAddressType) {m_eSDBCAddressType = _eSDBCAddressType;}
+        SDBCAddress::sdbc_address_type getSDBCAddressType() const { return m_eSDBCAddressType;}
+        void setSDBCAddressType(SDBCAddress::sdbc_address_type _eSDBCAddressType) {m_eSDBCAddressType = _eSDBCAddressType;}
 
-            // OComponentHelper
-            virtual void SAL_CALL disposing() override;
+        // OComponentHelper
+        virtual void SAL_CALL disposing() override;
 
-            // XServiceInfo
-            DECLARE_SERVICE_INFO();
+        // XServiceInfo
+        DECLARE_SERVICE_INFO();
 
-            // XConnection
-            css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog();
-            virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
-            virtual OUString SAL_CALL nativeSQL( const OUString& sql ) override;
-            virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit ) override;
-            virtual sal_Bool SAL_CALL getAutoCommit(  ) override;
-            virtual void SAL_CALL commit(  ) override;
-            virtual void SAL_CALL rollback(  ) override;
-            virtual sal_Bool SAL_CALL isClosed(  ) override;
-            virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
-            virtual void SAL_CALL setReadOnly( sal_Bool readOnly ) override;
-            virtual sal_Bool SAL_CALL isReadOnly(  ) override;
-            virtual void SAL_CALL setCatalog( const OUString& catalog ) override;
-            virtual OUString SAL_CALL getCatalog(  ) override;
-            virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) override;
-            virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) override;
-            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTypeMap(  ) override;
-            virtual void SAL_CALL setTypeMap( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        // XConnection
+        css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog();
+        virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
+        virtual OUString SAL_CALL nativeSQL( const OUString& sql ) override;
+        virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit ) override;
+        virtual sal_Bool SAL_CALL getAutoCommit(  ) override;
+        virtual void SAL_CALL commit(  ) override;
+        virtual void SAL_CALL rollback(  ) override;
+        virtual sal_Bool SAL_CALL isClosed(  ) override;
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
+        virtual void SAL_CALL setReadOnly( sal_Bool readOnly ) override;
+        virtual sal_Bool SAL_CALL isReadOnly(  ) override;
+        virtual void SAL_CALL setCatalog( const OUString& catalog ) override;
+        virtual OUString SAL_CALL getCatalog(  ) override;
+        virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) override;
+        virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) override;
+        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTypeMap(  ) override;
+        virtual void SAL_CALL setTypeMap( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
 
-            // XCloseable
-            virtual void SAL_CALL close(  ) override;
-            // XWarningsSupplier
-            virtual css::uno::Any SAL_CALL getWarnings(  ) override;
-            virtual void SAL_CALL clearWarnings(  ) override;
-        };
+        // XCloseable
+        virtual void SAL_CALL close(  ) override;
+        // XWarningsSupplier
+        virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+        virtual void SAL_CALL clearWarnings(  ) override;
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

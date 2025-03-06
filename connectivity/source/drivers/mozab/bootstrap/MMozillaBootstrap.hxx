@@ -29,49 +29,49 @@
 
 namespace connectivity::mozab
 {
-        typedef ::cppu::WeakComponentImplHelper<   css::mozilla::XMozillaBootstrap,
-                                                   css::lang::XServiceInfo > OMozillaBootstrap_BASE;
-        class ProfileAccess;
-        class ProfileManager;
-        class MozillaBootstrap : public OMozillaBootstrap_BASE
-        {
-        private:
-            ::osl::Mutex                m_aMutex;       // mutex is need to control member access
-            virtual ~MozillaBootstrap() override;
-            std::unique_ptr<ProfileAccess> m_ProfileAccess;
-        public:
+    typedef ::cppu::WeakComponentImplHelper<   css::mozilla::XMozillaBootstrap,
+                                               css::lang::XServiceInfo > OMozillaBootstrap_BASE;
+    class ProfileAccess;
+    class ProfileManager;
+    class MozillaBootstrap : public OMozillaBootstrap_BASE
+    {
+    private:
+        ::osl::Mutex                m_aMutex;       // mutex is need to control member access
+        virtual ~MozillaBootstrap() override;
+        std::unique_ptr<ProfileAccess> m_ProfileAccess;
+    public:
 
-            MozillaBootstrap();
+        MozillaBootstrap();
 
-            // OComponentHelper
-            virtual void SAL_CALL disposing() override;
+        // OComponentHelper
+        virtual void SAL_CALL disposing() override;
 
-            // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName(  ) override;
-            virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-            // XMozillaBootstrap
+        // XMozillaBootstrap
 
-            // XProfileDiscover
-            virtual ::sal_Int32 SAL_CALL getProfileCount( css::mozilla::MozillaProductType product) override;
-            virtual ::sal_Int32 SAL_CALL getProfileList( css::mozilla::MozillaProductType product, css::uno::Sequence< OUString >& list ) override;
-            virtual OUString SAL_CALL getDefaultProfile( css::mozilla::MozillaProductType product ) override;
-            virtual OUString SAL_CALL getProfilePath( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
-            virtual sal_Bool SAL_CALL isProfileLocked( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
-            virtual sal_Bool SAL_CALL getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
+        // XProfileDiscover
+        virtual ::sal_Int32 SAL_CALL getProfileCount( css::mozilla::MozillaProductType product) override;
+        virtual ::sal_Int32 SAL_CALL getProfileList( css::mozilla::MozillaProductType product, css::uno::Sequence< OUString >& list ) override;
+        virtual OUString SAL_CALL getDefaultProfile( css::mozilla::MozillaProductType product ) override;
+        virtual OUString SAL_CALL getProfilePath( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
+        virtual sal_Bool SAL_CALL isProfileLocked( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
+        virtual sal_Bool SAL_CALL getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
 
-            // XProfileManager
-            virtual ::sal_Int32 SAL_CALL bootupProfile( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
-            virtual ::sal_Int32 SAL_CALL shutdownProfile(  ) override;
-            virtual css::mozilla::MozillaProductType SAL_CALL getCurrentProduct(  ) override;
-            virtual OUString SAL_CALL getCurrentProfile(  ) override;
-            virtual sal_Bool SAL_CALL isCurrentProfileLocked(  ) override;
-            virtual OUString SAL_CALL setCurrentProfile( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
+        // XProfileManager
+        virtual ::sal_Int32 SAL_CALL bootupProfile( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
+        virtual ::sal_Int32 SAL_CALL shutdownProfile(  ) override;
+        virtual css::mozilla::MozillaProductType SAL_CALL getCurrentProduct(  ) override;
+        virtual OUString SAL_CALL getCurrentProfile(  ) override;
+        virtual sal_Bool SAL_CALL isCurrentProfileLocked(  ) override;
+        virtual OUString SAL_CALL setCurrentProfile( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
 
-            // XProxyRunner
-            virtual ::sal_Int32 SAL_CALL Run( const css::uno::Reference< css::mozilla::XCodeProxy >& aCode ) override;
-        };
+        // XProxyRunner
+        virtual ::sal_Int32 SAL_CALL Run( const css::uno::Reference< css::mozilla::XCodeProxy >& aCode ) override;
+    };
 
 }
 

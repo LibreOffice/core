@@ -32,28 +32,28 @@
 
 namespace connectivity::macab
 {
-        class MacabAddressBook
-        {
-            protected:
-                ABAddressBookRef m_aAddressBook;
-                MacabRecords *m_xMacabRecords;
-                std::vector<MacabGroup *> m_xMacabGroups;
-                bool m_bRetrievedGroups;
+    class MacabAddressBook
+    {
+        protected:
+            ABAddressBookRef m_aAddressBook;
+            MacabRecords *m_xMacabRecords;
+            std::vector<MacabGroup *> m_xMacabGroups;
+            bool m_bRetrievedGroups;
 
-            public:
-                MacabAddressBook();
-                ~MacabAddressBook();
-                static const OUString & getDefaultTableName();
+        public:
+            MacabAddressBook();
+            ~MacabAddressBook();
+            static const OUString & getDefaultTableName();
 
-                MacabRecords *getMacabRecords();
-                std::vector<MacabGroup *> getMacabGroups();
+            MacabRecords *getMacabRecords();
+            std::vector<MacabGroup *> getMacabGroups();
 
-                MacabGroup *getMacabGroup(std::u16string_view _groupName);
-                MacabRecords *getMacabRecords(std::u16string_view _tableName);
+            MacabGroup *getMacabGroup(std::u16string_view _groupName);
+            MacabRecords *getMacabRecords(std::u16string_view _tableName);
 
-                MacabGroup *getMacabGroupMatch(const OUString& _groupName);
-                MacabRecords *getMacabRecordsMatch(const OUString& _tableName);
-        };
+            MacabGroup *getMacabGroupMatch(const OUString& _groupName);
+            MacabRecords *getMacabRecordsMatch(const OUString& _tableName);
+    };
 
 }
 

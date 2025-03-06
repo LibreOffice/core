@@ -21,39 +21,39 @@
 #include <sdbcx/VCatalog.hxx>
 
 namespace connectivity::mysql
+{
+    // please don't name the class the same name as in another namespaces
+    // some compilers have problems with this task as I noticed on windows
+    class OMySQLCatalog : public connectivity::sdbcx::OCatalog
     {
-        // please don't name the class the same name as in another namespaces
-        // some compilers have problems with this task as I noticed on windows
-        class OMySQLCatalog : public connectivity::sdbcx::OCatalog
-        {
-            css::uno::Reference< css::sdbc::XConnection > m_xConnection;
+        css::uno::Reference< css::sdbc::XConnection > m_xConnection;
 
-            /** calls XDatabaseMetaData::getTables.
-                @param  _sKindOfObject
-                    The type of tables to be fetched.
-                @param  _rNames
-                    The container for the names to be filled. <OUT/>
-            */
-            void refreshObjects(const css::uno::Sequence< OUString >& _sKindOfObject,::std::vector< OUString>& _rNames);
+        /** calls XDatabaseMetaData::getTables.
+            @param  _sKindOfObject
+                The type of tables to be fetched.
+            @param  _rNames
+                The container for the names to be filled. <OUT/>
+        */
+        void refreshObjects(const css::uno::Sequence< OUString >& _sKindOfObject,::std::vector< OUString>& _rNames);
 
-        public:
-            // implementation of the pure virtual methods
-            virtual void refreshTables() override;
-            virtual void refreshViews() override ;
-            virtual void refreshGroups() override;
-            virtual void refreshUsers() override ;
+    public:
+        // implementation of the pure virtual methods
+        virtual void refreshTables() override;
+        virtual void refreshViews() override ;
+        virtual void refreshGroups() override;
+        virtual void refreshUsers() override ;
 
-        public:
-            OMySQLCatalog(const css::uno::Reference< css::sdbc::XConnection >& _xConnection);
+    public:
+        OMySQLCatalog(const css::uno::Reference< css::sdbc::XConnection >& _xConnection);
 
-            sdbcx::OCollection*      getPrivateTables()  const { return m_pTables.get();}
-            sdbcx::OCollection*      getPrivateViews()   const { return m_pViews.get(); }
-            const css::uno::Reference< css::sdbc::XConnection >& getConnection() const { return m_xConnection; }
+        sdbcx::OCollection*      getPrivateTables()  const { return m_pTables.get();}
+        sdbcx::OCollection*      getPrivateViews()   const { return m_pViews.get(); }
+        const css::uno::Reference< css::sdbc::XConnection >& getConnection() const { return m_xConnection; }
 
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-            // ::cppu::OComponentHelper
-            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-        };
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        // ::cppu::OComponentHelper
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    };
 
 }
 

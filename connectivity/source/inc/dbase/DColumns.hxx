@@ -22,22 +22,22 @@
 #include <file/FColumns.hxx>
 
 namespace connectivity::dbase
+{
+    class ODbaseColumns : public file::OColumns
     {
-        class ODbaseColumns : public file::OColumns
-        {
-        protected:
-            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
-            virtual void impl_refresh() override;
-            virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
-            virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
-            virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
-        public:
-            ODbaseColumns(file::OFileTable* _pTable,
-                            ::osl::Mutex& _rMutex,
-                            const ::std::vector< OUString> &_rVector
-                         ) : file::OColumns(_pTable,_rMutex,_rVector)
-            {}
-        };
+    protected:
+        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual void impl_refresh() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
+    public:
+        ODbaseColumns(file::OFileTable* _pTable,
+                        ::osl::Mutex& _rMutex,
+                        const ::std::vector< OUString> &_rVector
+                     ) : file::OColumns(_pTable,_rMutex,_rVector)
+        {}
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,30 +22,30 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <utility>
 namespace connectivity::mysql
+{
+    class OViews final : public sdbcx::OCollection
     {
-        class OViews final : public sdbcx::OCollection
-        {
-            css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
-            bool m_bInDrop;
-            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
-            virtual void impl_refresh() override;
-            virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
-            virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
-            virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
+        css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
+        bool m_bInDrop;
+        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual void impl_refresh() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
 
-            void createView( const css::uno::Reference< css::beans::XPropertySet >& descriptor );
-        public:
-            OViews(css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-                const ::std::vector< OUString> &_rVector) : sdbcx::OCollection(_rParent, true, _rMutex, _rVector)
-                ,m_xMetaData(std::move(_xMetaData))
-                ,m_bInDrop(false)
-            {}
+        void createView( const css::uno::Reference< css::beans::XPropertySet >& descriptor );
+    public:
+        OViews(css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+            const ::std::vector< OUString> &_rVector) : sdbcx::OCollection(_rParent, true, _rMutex, _rVector)
+            ,m_xMetaData(std::move(_xMetaData))
+            ,m_bInDrop(false)
+        {}
 
-            // only the name is identical to ::cppu::OComponentHelper
-            virtual void disposing() override;
+        // only the name is identical to ::cppu::OComponentHelper
+        virtual void disposing() override;
 
-            void dropByNameImpl(const OUString& elementName);
-        };
+        void dropByNameImpl(const OUString& elementName);
+    };
 
 }
 

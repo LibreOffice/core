@@ -26,9 +26,9 @@
 
 namespace connectivity::sdbcx
 {
-        typedef cppu::WeakComponentImplHelper< css::sdbcx::XColumnsSupplier,
-                                                  css::container::XNamed,
-                                                  css::lang::XServiceInfo> ODescriptor_BASE;
+    typedef cppu::WeakComponentImplHelper< css::sdbcx::XColumnsSupplier,
+                                              css::container::XNamed,
+                                              css::lang::XServiceInfo> ODescriptor_BASE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

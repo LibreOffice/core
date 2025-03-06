@@ -42,54 +42,54 @@
 #include <uno/environment.hxx>
 
 namespace connectivity::hsqldb
+{
+    class StreamHelper
     {
-        class StreamHelper
-        {
-            css::uno::Reference< css::io::XStream>        m_xStream;
-            css::uno::Reference< css::io::XSeekable>      m_xSeek;
-            css::uno::Reference< css::io::XOutputStream>  m_xOutputStream;
-            css::uno::Reference< css::io::XInputStream>   m_xInputStream;
-        public:
-            StreamHelper(const css::uno::Reference< css::io::XStream>& _xStream);
-            ~StreamHelper();
+        css::uno::Reference< css::io::XStream>        m_xStream;
+        css::uno::Reference< css::io::XSeekable>      m_xSeek;
+        css::uno::Reference< css::io::XOutputStream>  m_xOutputStream;
+        css::uno::Reference< css::io::XInputStream>   m_xInputStream;
+    public:
+        StreamHelper(const css::uno::Reference< css::io::XStream>& _xStream);
+        ~StreamHelper();
 
-            css::uno::Reference< css::io::XInputStream> const &   getInputStream();
-            css::uno::Reference< css::io::XOutputStream> const &  getOutputStream();
-            css::uno::Reference< css::io::XSeekable> const &      getSeek();
-        };
+        css::uno::Reference< css::io::XInputStream> const &   getInputStream();
+        css::uno::Reference< css::io::XOutputStream> const &  getOutputStream();
+        css::uno::Reference< css::io::XSeekable> const &      getSeek();
+    };
 
 
-        typedef std::map< OUString, std::shared_ptr<StreamHelper> > TStreamMap;
+    typedef std::map< OUString, std::shared_ptr<StreamHelper> > TStreamMap;
 
-        struct StorageData {
-            css::uno::Reference<css::embed::XStorage> storage;
-            css::uno::Environment storageEnvironment;
-            OUString url;
-            TStreamMap streams;
+    struct StorageData {
+        css::uno::Reference<css::embed::XStorage> storage;
+        css::uno::Environment storageEnvironment;
+        OUString url;
+        TStreamMap streams;
 
-            css::uno::Reference<css::embed::XStorage> mapStorage() const;
-        };
+        css::uno::Reference<css::embed::XStorage> mapStorage() const;
+    };
 
-        typedef std::map<OUString, StorageData> TStorages;
-        /** contains all storages so far accessed.
-        */
-        class StorageContainer
-        {
-        public:
-            static OUString registerStorage(const css::uno::Reference< css::embed::XStorage>& _xStorage,const OUString& _sURL);
-            static TStorages::mapped_type getRegisteredStorage(const OUString& _sKey);
-            static OUString getRegisteredKey(const css::uno::Reference< css::embed::XStorage>& _xStorage);
-            static void revokeStorage(const OUString& _sKey,const css::uno::Reference< css::embed::XTransactionListener>& _xListener);
+    typedef std::map<OUString, StorageData> TStorages;
+    /** contains all storages so far accessed.
+    */
+    class StorageContainer
+    {
+    public:
+        static OUString registerStorage(const css::uno::Reference< css::embed::XStorage>& _xStorage,const OUString& _sURL);
+        static TStorages::mapped_type getRegisteredStorage(const OUString& _sKey);
+        static OUString getRegisteredKey(const css::uno::Reference< css::embed::XStorage>& _xStorage);
+        static void revokeStorage(const OUString& _sKey,const css::uno::Reference< css::embed::XTransactionListener>& _xListener);
 
-            static TStreamMap::mapped_type registerStream(JNIEnv * env,jstring name, jstring key,sal_Int32 _nMode);
-            static void revokeStream(JNIEnv * env,jstring name, jstring key);
-            static TStreamMap::mapped_type getRegisteredStream( JNIEnv * env, jstring name, jstring key);
+        static TStreamMap::mapped_type registerStream(JNIEnv * env,jstring name, jstring key,sal_Int32 _nMode);
+        static void revokeStream(JNIEnv * env,jstring name, jstring key);
+        static TStreamMap::mapped_type getRegisteredStream( JNIEnv * env, jstring name, jstring key);
 
-            static OUString jstring2ustring(JNIEnv * env, jstring jstr);
-            static OUString removeURLPrefix(std::u16string_view _sURL, std::u16string_view _sFileURL);
-            static OUString removeOldURLPrefix(const OUString& _sURL);
-            static void throwJavaException(const css::uno::Exception& _aException,JNIEnv * env);
-        };
+        static OUString jstring2ustring(JNIEnv * env, jstring jstr);
+        static OUString removeURLPrefix(std::u16string_view _sURL, std::u16string_view _sFileURL);
+        static OUString removeOldURLPrefix(const OUString& _sURL);
+        static void throwJavaException(const css::uno::Exception& _aException,JNIEnv * env);
+    };
 
 }   // namespace connectivity::hsqldb
 

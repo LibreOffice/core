@@ -13,40 +13,40 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 
 namespace connectivity::firebird
+{
+
+    /**
+     * This implements com.sun.star.sdbcx.Container.
+     */
+    class Users: public ::connectivity::sdbcx::OCollection
     {
+        css::uno::Reference< css::sdbc::XDatabaseMetaData >
+            m_xMetaData;
+    protected:
 
-        /**
-         * This implements com.sun.star.sdbcx.Container.
-         */
-        class Users: public ::connectivity::sdbcx::OCollection
-        {
-            css::uno::Reference< css::sdbc::XDatabaseMetaData >
-                m_xMetaData;
-        protected:
+        // OCollection
+        virtual void impl_refresh() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createObject(
+                                            const OUString& rName) override;
+        virtual css::uno::Reference< css::beans::XPropertySet >
+                createDescriptor() override;
+        virtual ::css::uno::Reference< css::beans::XPropertySet > appendObject(
+                    const OUString& rName,
+                    const css::uno::Reference< css::beans::XPropertySet >& rDescriptor) override;
 
-            // OCollection
-            virtual void impl_refresh() override;
-            virtual css::uno::Reference< css::beans::XPropertySet > createObject(
-                                                const OUString& rName) override;
-            virtual css::uno::Reference< css::beans::XPropertySet >
-                    createDescriptor() override;
-            virtual ::css::uno::Reference< css::beans::XPropertySet > appendObject(
-                        const OUString& rName,
-                        const css::uno::Reference< css::beans::XPropertySet >& rDescriptor) override;
+    public:
+        Users(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& rMetaData,
+              ::cppu::OWeakObject& rParent,
+              ::osl::Mutex& rMutex,
+              ::std::vector< OUString> const & rNames);
 
-        public:
-            Users(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& rMetaData,
-                  ::cppu::OWeakObject& rParent,
-                  ::osl::Mutex& rMutex,
-                  ::std::vector< OUString> const & rNames);
+        // TODO: we should also implement XDataDescriptorFactory, XRefreshable,
+        // XAppend,  etc., but all are optional.
 
-            // TODO: we should also implement XDataDescriptorFactory, XRefreshable,
-            // XAppend,  etc., but all are optional.
+        // XDrop
+        virtual void dropObject(sal_Int32 nPosition, const OUString& rName) override;
 
-            // XDrop
-            virtual void dropObject(sal_Int32 nPosition, const OUString& rName) override;
-
-        };
+    };
 
 } // namespace connectivity::firebird
 

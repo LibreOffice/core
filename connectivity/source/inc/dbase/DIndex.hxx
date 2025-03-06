@@ -26,109 +26,109 @@
 inline constexpr OString dBASE_III_GROUP = "dBase III"_ostr;
 
 namespace connectivity::dbase
+{
+    class OIndexIterator;
+    class ONDXKey;
+
+    typedef sdbcx::OIndex ODbaseIndex_BASE;
+
+    class ODbaseIndex : public ODbaseIndex_BASE
     {
-        class OIndexIterator;
-        class ONDXKey;
+        friend SvStream& WriteODbaseIndex(SvStream &rStream, const ODbaseIndex&);
+        friend SvStream& operator >> (SvStream &rStream, ODbaseIndex&);
 
-        typedef sdbcx::OIndex ODbaseIndex_BASE;
+        friend class ONDXNode;
+        friend class ONDXPage;
+        friend class ONDXPagePtr;
+        friend class OIndexIterator;
 
-        class ODbaseIndex : public ODbaseIndex_BASE
+    public:
+
+        // Header struct - stays in memory
+
+        struct NDXHeader
         {
-            friend SvStream& WriteODbaseIndex(SvStream &rStream, const ODbaseIndex&);
-            friend SvStream& operator >> (SvStream &rStream, ODbaseIndex&);
-
-            friend class ONDXNode;
-            friend class ONDXPage;
-            friend class ONDXPagePtr;
-            friend class OIndexIterator;
-
-        public:
-
-            // Header struct - stays in memory
-
-            struct NDXHeader
-            {
-                sal_uInt32  db_rootpage;                    /* Rootpage position                */
-                sal_uInt32  db_pagecount;                   /* Page count                       */
-                sal_uInt8   db_free[4];                     /* Reserved                         */
-                sal_uInt16  db_keylen;                      /* Key length                       */
-                sal_uInt16  db_maxkeys;                     /* Maximum number of keys per page  */
-                sal_uInt16  db_keytype;                     /* Type of key:
-                                                               0 = Text
-                                                               1 = Numerical                    */
-                sal_uInt16  db_keyrec;                      /* Length of an index record
-                                                               RecordNumber + keylen            */
-                sal_uInt8   db_free1[3];                    /* Reserved                         */
-                sal_uInt8   db_unique;                      /* Unique                           */
-                char        db_name[488];                   /* index_name (field name)          */
-            };
-
-        private:
-            std::unique_ptr<SvStream> m_pFileStream;        // Stream to read/write the index
-            NDXHeader       m_aHeader = {};
-            std::vector<ONDXPage*>
-                            m_aCollector;                   // Pool of obsolete pages
-            ONDXPagePtr     m_aRoot,                        // Root of the B+ tree
-                            m_aCurLeaf;                     // Current leaf
-            sal_uInt16      m_nCurNode;                     // Position of the current node
-
-            sal_uInt32      m_nPageCount,
-                            m_nRootPage;
-
-            ODbaseTable*    m_pTable;
-            bool        m_bUseCollector : 1;            // Use the Garbage Collector
-
-            OUString getCompletePath() const;
-            void closeImpl();
-            // Closes and kills the index file and throws an error
-            void impl_killFileAndthrowError_throw(TranslateId pErrorId, const OUString& _sFile);
-        protected:
-            virtual ~ODbaseIndex() override;
-        public:
-            ODbaseIndex(ODbaseTable* _pTable);
-            ODbaseIndex(ODbaseTable* _pTable,const NDXHeader& _aHeader,const OUString& Name);
-
-            void openIndexFile();
-            virtual void refreshColumns() override;
-
-            const ODbaseTable* getTable() const { return m_pTable; }
-            const NDXHeader& getHeader() const { return m_aHeader; }
-            std::unique_ptr<OIndexIterator> createIterator();
-
-            void SetRootPos(sal_uInt32 nPos)        {m_nRootPage = nPos;}
-            void SetPageCount(sal_uInt32 nCount)    {m_nPageCount = nCount;}
-
-            sal_uInt32 GetPageCount() const         {return m_nPageCount;}
-
-            sal_uInt16 GetMaxNodes() const          {return m_aHeader.db_maxkeys;}
-
-            bool Insert(sal_uInt32 nRec, const ORowSetValue& rValue);
-            bool Update(sal_uInt32 nRec, const ORowSetValue&, const ORowSetValue&);
-            bool Delete(sal_uInt32 nRec, const ORowSetValue& rValue);
-            bool Find(sal_uInt32 nRec, const ORowSetValue& rValue);
-
-            void createINFEntry();
-            void CreateImpl();
-            void DropImpl();
-
-            DECLARE_SERVICE_INFO();
-        protected:
-
-            ONDXPage* CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent = nullptr, bool bLoad = false);
-            void Collect(ONDXPage*);
-            ONDXPagePtr const & getRoot();
-
-            bool isUnique() const { return m_IsUnique; }
-            bool UseCollector() const {return m_bUseCollector;}
-            // Tree operations
-            void Release(bool bSave = true);
-            bool ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue);
+            sal_uInt32  db_rootpage;                    /* Rootpage position                */
+            sal_uInt32  db_pagecount;                   /* Page count                       */
+            sal_uInt8   db_free[4];                     /* Reserved                         */
+            sal_uInt16  db_keylen;                      /* Key length                       */
+            sal_uInt16  db_maxkeys;                     /* Maximum number of keys per page  */
+            sal_uInt16  db_keytype;                     /* Type of key:
+                                                           0 = Text
+                                                           1 = Numerical                    */
+            sal_uInt16  db_keyrec;                      /* Length of an index record
+                                                           RecordNumber + keylen            */
+            sal_uInt8   db_free1[3];                    /* Reserved                         */
+            sal_uInt8   db_unique;                      /* Unique                           */
+            char        db_name[488];                   /* index_name (field name)          */
         };
 
-        SvStream& WriteODbaseIndex(SvStream &rStream, const ODbaseIndex&);
-        SvStream& operator >> (SvStream &rStream, ODbaseIndex&);
+    private:
+        std::unique_ptr<SvStream> m_pFileStream;        // Stream to read/write the index
+        NDXHeader       m_aHeader = {};
+        std::vector<ONDXPage*>
+                        m_aCollector;                   // Pool of obsolete pages
+        ONDXPagePtr     m_aRoot,                        // Root of the B+ tree
+                        m_aCurLeaf;                     // Current leaf
+        sal_uInt16      m_nCurNode;                     // Position of the current node
 
-        void ReadHeader(SvStream & rStream, ODbaseIndex::NDXHeader & rHeader);
+        sal_uInt32      m_nPageCount,
+                        m_nRootPage;
+
+        ODbaseTable*    m_pTable;
+        bool        m_bUseCollector : 1;            // Use the Garbage Collector
+
+        OUString getCompletePath() const;
+        void closeImpl();
+        // Closes and kills the index file and throws an error
+        void impl_killFileAndthrowError_throw(TranslateId pErrorId, const OUString& _sFile);
+    protected:
+        virtual ~ODbaseIndex() override;
+    public:
+        ODbaseIndex(ODbaseTable* _pTable);
+        ODbaseIndex(ODbaseTable* _pTable,const NDXHeader& _aHeader,const OUString& Name);
+
+        void openIndexFile();
+        virtual void refreshColumns() override;
+
+        const ODbaseTable* getTable() const { return m_pTable; }
+        const NDXHeader& getHeader() const { return m_aHeader; }
+        std::unique_ptr<OIndexIterator> createIterator();
+
+        void SetRootPos(sal_uInt32 nPos)        {m_nRootPage = nPos;}
+        void SetPageCount(sal_uInt32 nCount)    {m_nPageCount = nCount;}
+
+        sal_uInt32 GetPageCount() const         {return m_nPageCount;}
+
+        sal_uInt16 GetMaxNodes() const          {return m_aHeader.db_maxkeys;}
+
+        bool Insert(sal_uInt32 nRec, const ORowSetValue& rValue);
+        bool Update(sal_uInt32 nRec, const ORowSetValue&, const ORowSetValue&);
+        bool Delete(sal_uInt32 nRec, const ORowSetValue& rValue);
+        bool Find(sal_uInt32 nRec, const ORowSetValue& rValue);
+
+        void createINFEntry();
+        void CreateImpl();
+        void DropImpl();
+
+        DECLARE_SERVICE_INFO();
+    protected:
+
+        ONDXPage* CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent = nullptr, bool bLoad = false);
+        void Collect(ONDXPage*);
+        ONDXPagePtr const & getRoot();
+
+        bool isUnique() const { return m_IsUnique; }
+        bool UseCollector() const {return m_bUseCollector;}
+        // Tree operations
+        void Release(bool bSave = true);
+        bool ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue);
+    };
+
+    SvStream& WriteODbaseIndex(SvStream &rStream, const ODbaseIndex&);
+    SvStream& operator >> (SvStream &rStream, ODbaseIndex&);
+
+    void ReadHeader(SvStream & rStream, ODbaseIndex::NDXHeader & rHeader);
 }
 
 

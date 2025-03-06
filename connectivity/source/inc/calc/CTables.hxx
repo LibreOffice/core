@@ -22,18 +22,18 @@
 #include <file/FTables.hxx>
 
 namespace connectivity::calc
-    {
-        typedef file::OTables OCalcTables_BASE;
+{
+    typedef file::OTables OCalcTables_BASE;
 
-        class OCalcTables : public OCalcTables_BASE
-        {
-        protected:
-            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
-        public:
-            OCalcTables(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-                const ::std::vector< OUString> &_rVector) : OCalcTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)
-            {}
-        };
+    class OCalcTables : public OCalcTables_BASE
+    {
+    protected:
+        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+    public:
+        OCalcTables(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+            const ::std::vector< OUString> &_rVector) : OCalcTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)
+        {}
+    };
 
 }
 

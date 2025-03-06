@@ -25,31 +25,31 @@
 
 namespace connectivity::ado
 {
-        typedef sdbcx::OKey OKey_ADO;
+    typedef sdbcx::OKey OKey_ADO;
 
-        class OConnection;
-        class OAdoKey : public OKey_ADO
-        {
-            WpADOKey        m_aKey;
-            OConnection*    m_pConnection;
-        protected:
-            void fillPropertyValues();
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) override;
-        public:
-            virtual void refreshColumns() override;
-        public:
-            OAdoKey(bool _bCase,OConnection* _pConnection,ADOKey* _pKey);
-            OAdoKey(bool _bCase,OConnection* _pConnection);
+    class OConnection;
+    class OAdoKey : public OKey_ADO
+    {
+        WpADOKey        m_aKey;
+        OConnection*    m_pConnection;
+    protected:
+        void fillPropertyValues();
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) override;
+    public:
+        virtual void refreshColumns() override;
+    public:
+        OAdoKey(bool _bCase,OConnection* _pConnection,ADOKey* _pKey);
+        OAdoKey(bool _bCase,OConnection* _pConnection);
 
-            WpADOKey        getImpl() const { return m_aKey;}
-            // map the update/delete rules
-            static RuleEnum Map2Rule(sal_Int32 _eNum);
-            static sal_Int32 MapRule(const RuleEnum& _eNum);
+        WpADOKey        getImpl() const { return m_aKey;}
+        // map the update/delete rules
+        static RuleEnum Map2Rule(sal_Int32 _eNum);
+        static sal_Int32 MapRule(const RuleEnum& _eNum);
 
-            // map the keytypes
-            static sal_Int32 MapKeyRule(const KeyTypeEnum& _eNum);
-            static KeyTypeEnum Map2KeyRule(sal_Int32 _eNum);
-        };
+        // map the keytypes
+        static sal_Int32 MapKeyRule(const KeyTypeEnum& _eNum);
+        static KeyTypeEnum Map2KeyRule(sal_Int32 _eNum);
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,16 +22,16 @@
 #include <file/FPreparedStatement.hxx>
 
 namespace connectivity::flat
+{
+    class OConnection;
+    class OFlatPreparedStatement : public file::OPreparedStatement
     {
-        class OConnection;
-        class OFlatPreparedStatement : public file::OPreparedStatement
-        {
-        protected:
-            virtual rtl::Reference<file::OResultSet> createResultSet() override;
-        public:
-            OFlatPreparedStatement( file::OConnection* _pConnection) : file::OPreparedStatement( _pConnection){}
-            DECLARE_SERVICE_INFO();
-        };
+    protected:
+        virtual rtl::Reference<file::OResultSet> createResultSet() override;
+    public:
+        OFlatPreparedStatement( file::OConnection* _pConnection) : file::OPreparedStatement( _pConnection){}
+        DECLARE_SERVICE_INFO();
+    };
 
 }
 

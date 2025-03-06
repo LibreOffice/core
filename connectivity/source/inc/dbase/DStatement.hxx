@@ -22,16 +22,16 @@
 #include <file/FStatement.hxx>
 
 namespace connectivity::dbase
+{
+    class OConnection;
+    class ODbaseStatement : public file::OStatement
     {
-        class OConnection;
-        class ODbaseStatement : public file::OStatement
-        {
-        protected:
-            virtual rtl::Reference<file::OResultSet> createResultSet() override;
-        public:
-            ODbaseStatement( file::OConnection* _pConnection) : file::OStatement( _pConnection){}
-            DECLARE_SERVICE_INFO();
-        };
+    protected:
+        virtual rtl::Reference<file::OResultSet> createResultSet() override;
+    public:
+        ODbaseStatement( file::OConnection* _pConnection) : file::OStatement( _pConnection){}
+        DECLARE_SERVICE_INFO();
+    };
 
 }
 

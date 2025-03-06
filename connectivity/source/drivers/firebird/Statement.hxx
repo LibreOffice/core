@@ -25,59 +25,59 @@
 #include <com/sun/star/sdbc/XBatchExecution.hpp>
 
 namespace connectivity::firebird
+{
+
+    typedef ::cppu::ImplHelper1< css::sdbc::XStatement >
+        OStatement_Base;
+
+    class OStatement :  public OStatementCommonBase,
+                        public OStatement_Base,
+                        public css::sdbc::XBatchExecution,
+                        public css::lang::XServiceInfo
     {
+        XSQLDA* m_pSqlda;
+    protected:
+        virtual ~OStatement() override {}
 
-        typedef ::cppu::ImplHelper1< css::sdbc::XStatement >
-            OStatement_Base;
+    public:
+        // a constructor, which is required for returning objects:
+        explicit OStatement( Connection* _pConnection)
+            : OStatementCommonBase( _pConnection),
+              m_pSqlda(nullptr)
+        {}
 
-        class OStatement :  public OStatementCommonBase,
-                            public OStatement_Base,
-                            public css::sdbc::XBatchExecution,
-                            public css::lang::XServiceInfo
-        {
-            XSQLDA* m_pSqlda;
-        protected:
-            virtual ~OStatement() override {}
+        virtual void disposeResultSet() override;
 
-        public:
-            // a constructor, which is required for returning objects:
-            explicit OStatement( Connection* _pConnection)
-                : OStatementCommonBase( _pConnection),
-                  m_pSqlda(nullptr)
-            {}
+        DECLARE_SERVICE_INFO();
 
-            virtual void disposeResultSet() override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
 
-            DECLARE_SERVICE_INFO();
+        // XStatement
+        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL
+            executeQuery(const OUString& sql) override;
+        virtual sal_Int32 SAL_CALL executeUpdate(const OUString& sqlIn) override;
+        virtual sal_Bool SAL_CALL
+            execute(const OUString& sql) override;
+        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL
+            getConnection() override;
 
-            virtual void SAL_CALL acquire() noexcept override;
-            virtual void SAL_CALL release() noexcept override;
+        // XBatchExecution - UNSUPPORTED
+        virtual void SAL_CALL addBatch( const OUString& sql ) override;
+        virtual void SAL_CALL clearBatch(  ) override;
+        virtual css::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) override;
 
-            // XStatement
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL
-                executeQuery(const OUString& sql) override;
-            virtual sal_Int32 SAL_CALL executeUpdate(const OUString& sqlIn) override;
-            virtual sal_Bool SAL_CALL
-                execute(const OUString& sql) override;
-            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL
-                getConnection() override;
+        // XInterface
+        virtual css::uno::Any SAL_CALL
+            queryInterface(const css::uno::Type & rType) override;
 
-            // XBatchExecution - UNSUPPORTED
-            virtual void SAL_CALL addBatch( const OUString& sql ) override;
-            virtual void SAL_CALL clearBatch(  ) override;
-            virtual css::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) override;
+        //XTypeProvider
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL
+            getTypes() override;
+        // OComponentHelper
+        virtual void SAL_CALL disposing() override;
 
-            // XInterface
-            virtual css::uno::Any SAL_CALL
-                queryInterface(const css::uno::Type & rType) override;
-
-            //XTypeProvider
-            virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-                getTypes() override;
-            // OComponentHelper
-            virtual void SAL_CALL disposing() override;
-
-        };
+    };
 
 }
 

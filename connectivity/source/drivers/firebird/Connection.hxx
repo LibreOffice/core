@@ -42,200 +42,200 @@
 #include <com/sun/star/util/XModifiable.hpp>
 
 namespace connectivity::firebird
+{
+
+    typedef ::cppu::WeakComponentImplHelper< css::document::XDocumentEventListener,
+                                             css::lang::XServiceInfo,
+                                             css::lang::XUnoTunnel,
+                                             css::sdbc::XConnection,
+                                             css::sdbc::XWarningsSupplier
+                                           > Connection_BASE;
+
+    class OStatementCommonBase;
+    class FirebirdDriver;
+    class ODatabaseMetaData;
+
+
+    typedef std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
+    typedef std::vector< css::uno::WeakReferenceHelper > OWeakRefArray;
+
+    class Connection final : public Connection_BASE
     {
+        ::osl::Mutex        m_aMutex;
 
-        typedef ::cppu::WeakComponentImplHelper< css::document::XDocumentEventListener,
-                                                 css::lang::XServiceInfo,
-                                                 css::lang::XUnoTunnel,
-                                                 css::sdbc::XConnection,
-                                                 css::sdbc::XWarningsSupplier
-                                               > Connection_BASE;
+        TTypeInfoVector     m_aTypeInfo;    //  vector containing an entry
+                                                                //  for each row returned by
+                                                                //  DatabaseMetaData.getTypeInfo.
 
-        class OStatementCommonBase;
-        class FirebirdDriver;
-        class ODatabaseMetaData;
+        /** The URL passed to us when opening, i.e. of the form sdbc:* */
+        OUString     m_sConnectionURL;
+        /**
+         * The URL passed to firebird, i.e. either a local file (for a
+         * temporary .fdb extracted from a .odb or a normal local file) or
+         * a remote url.
+         */
+        OUString     m_sFirebirdURL;
 
+        /* EMBEDDED MODE DATA */
+        /** Denotes that we have a database stored within a .odb file. */
+        bool            m_bIsEmbedded;
 
-        typedef std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
-        typedef std::vector< css::uno::WeakReferenceHelper > OWeakRefArray;
+        /**
+         * Handle for the parent DatabaseDocument. We need to notify this
+         * whenever any data is written to our temporary database so that
+         * the user is able to save this back to the .odb file.
+         *
+         * Note that this is ONLY set in embedded mode.
+         */
+        css::uno::Reference< css::util::XModifiable >
+            m_xParentDocument;
 
-        class Connection final : public Connection_BASE
-        {
-            ::osl::Mutex        m_aMutex;
+        /**
+         * Handle for the folder within the .odb where we store our .fbk
+         * (Only used if m_bIsEmbedded is true).
+         */
+        css::uno::Reference< css::embed::XStorage >
+            m_xEmbeddedStorage;
+        /**
+         * The temporary folder where we extract the .fbk from a .odb,
+         * and also store the temporary .fdb
+         * It is only valid if m_bIsEmbedded is true.
+         *
+         * The extracted .fbk is written in firebird.fbk, the temporary
+         * .fdb is stored as firebird.fdb.
+         */
+        std::unique_ptr< ::utl::TempFileNamed >  m_pDatabaseFileDir;
+        /**
+         * Path for our extracted .fbk file.
+         *
+         * (The temporary .fdb is our m_sFirebirdURL.)
+         */
+        OUString m_sFBKPath;
 
-            TTypeInfoVector     m_aTypeInfo;    //  vector containing an entry
-                                                                    //  for each row returned by
-                                                                    //  DatabaseMetaData.getTypeInfo.
+        void loadDatabaseFile(const OUString& pSrcLocation, const OUString& pTmpLocation);
 
-            /** The URL passed to us when opening, i.e. of the form sdbc:* */
-            OUString     m_sConnectionURL;
-            /**
-             * The URL passed to firebird, i.e. either a local file (for a
-             * temporary .fdb extracted from a .odb or a normal local file) or
-             * a remote url.
-             */
-            OUString     m_sFirebirdURL;
+        /**
+         * Run the backup service, use nAction =
+         * isc_action_svc_backup to backup, nAction = isc_action_svc_restore
+         * to restore.
+         */
+        void runBackupService(const short nAction);
 
-            /* EMBEDDED MODE DATA */
-            /** Denotes that we have a database stored within a .odb file. */
-            bool            m_bIsEmbedded;
+        isc_svc_handle attachServiceManager();
 
-            /**
-             * Handle for the parent DatabaseDocument. We need to notify this
-             * whenever any data is written to our temporary database so that
-             * the user is able to save this back to the .odb file.
-             *
-             * Note that this is ONLY set in embedded mode.
-             */
-            css::uno::Reference< css::util::XModifiable >
-                m_xParentDocument;
+        void detachServiceManager(isc_svc_handle pServiceHandle);
 
-            /**
-             * Handle for the folder within the .odb where we store our .fbk
-             * (Only used if m_bIsEmbedded is true).
-             */
-            css::uno::Reference< css::embed::XStorage >
-                m_xEmbeddedStorage;
-            /**
-             * The temporary folder where we extract the .fbk from a .odb,
-             * and also store the temporary .fdb
-             * It is only valid if m_bIsEmbedded is true.
-             *
-             * The extracted .fbk is written in firebird.fbk, the temporary
-             * .fdb is stored as firebird.fdb.
-             */
-            std::unique_ptr< ::utl::TempFileNamed >  m_pDatabaseFileDir;
-            /**
-             * Path for our extracted .fbk file.
-             *
-             * (The temporary .fdb is our m_sFirebirdURL.)
-             */
-            OUString m_sFBKPath;
+        /** We are using an external (local) file */
+        bool                m_bIsFile;
 
-            void loadDatabaseFile(const OUString& pSrcLocation, const OUString& pTmpLocation);
+        /* CONNECTION PROPERTIES */
+        bool                m_bIsAutoCommit;
+        bool                m_bIsReadOnly;
+        sal_Int32           m_aTransactionIsolation;
 
-            /**
-             * Run the backup service, use nAction =
-             * isc_action_svc_backup to backup, nAction = isc_action_svc_restore
-             * to restore.
-             */
-            void runBackupService(const short nAction);
+        isc_db_handle       m_aDBHandle;
+        isc_tr_handle       m_aTransactionHandle;
 
-            isc_svc_handle attachServiceManager();
+        css::uno::WeakReference< css::sdbcx::XTablesSupplier>
+                            m_xCatalog;
+        css::uno::WeakReference< css::sdbc::XDatabaseMetaData >
+                            m_xMetaData;
+        /** Statements owned by this connection. */
+        OWeakRefArray       m_aStatements;
 
-            void detachServiceManager(isc_svc_handle pServiceHandle);
+        /// @throws css::sdbc::SQLException
+        void buildTypeInfo();
 
-            /** We are using an external (local) file */
-            bool                m_bIsFile;
+        /**
+         * Creates a new transaction with the desired parameters, if
+         * necessary discarding an existing transaction. This has to be done
+         * anytime we change the transaction isolation, or autocommitting.
+         *
+         * @throws css::sdbc::SQLException
+         */
+        void setupTransaction();
+        void disposeStatements();
 
-            /* CONNECTION PROPERTIES */
-            bool                m_bIsAutoCommit;
-            bool                m_bIsReadOnly;
-            sal_Int32           m_aTransactionIsolation;
+    public:
+        explicit Connection();
+        virtual ~Connection() override;
 
-            isc_db_handle       m_aDBHandle;
-            isc_tr_handle       m_aTransactionHandle;
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
+        void construct( const OUString& url,
+                                const css::uno::Sequence< css::beans::PropertyValue >& info);
 
-            css::uno::WeakReference< css::sdbcx::XTablesSupplier>
-                                m_xCatalog;
-            css::uno::WeakReference< css::sdbc::XDatabaseMetaData >
-                                m_xMetaData;
-            /** Statements owned by this connection. */
-            OWeakRefArray       m_aStatements;
+        const OUString& getConnectionURL()  const   {return m_sConnectionURL;}
+        bool            isEmbedded()        const   {return m_bIsEmbedded;}
+        isc_db_handle&  getDBHandle()               {return m_aDBHandle;}
+        /// @throws css::sdbc::SQLException
+        isc_tr_handle&  getTransaction();
 
-            /// @throws css::sdbc::SQLException
-            void buildTypeInfo();
+        /**
+         * Create a new Blob tied to this connection. Blobs are tied to a
+         * transaction and not to a statement, hence the connection should
+         * deal with their management.
+         *
+         * @throws css::sdbc::SQLException
+         * @throws css::uno::RuntimeException
+         */
+        css::uno::Reference< css::sdbc::XBlob>
+            createBlob(ISC_QUAD const * pBlobID);
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
+        css::uno::Reference< css::sdbc::XClob>
+            createClob(ISC_QUAD const * pBlobID);
 
-            /**
-             * Creates a new transaction with the desired parameters, if
-             * necessary discarding an existing transaction. This has to be done
-             * anytime we change the transaction isolation, or autocommitting.
-             *
-             * @throws css::sdbc::SQLException
-             */
-            void setupTransaction();
-            void disposeStatements();
+        /**
+         * Create and/or connect to the sdbcx Catalog. This is completely
+         * unrelated to the SQL "Catalog".
+         */
+        css::uno::Reference< css::sdbcx::XTablesSupplier >
+            createCatalog();
 
-        public:
-            explicit Connection();
-            virtual ~Connection() override;
+        /**
+        * Backup and store embedded extracted database to the .odb file
+        */
+        void storeDatabase();
 
-            /// @throws css::sdbc::SQLException
-            /// @throws css::uno::RuntimeException
-            void construct( const OUString& url,
-                                    const css::uno::Sequence< css::beans::PropertyValue >& info);
+        // OComponentHelper
+        virtual void SAL_CALL disposing() override;
 
-            const OUString& getConnectionURL()  const   {return m_sConnectionURL;}
-            bool            isEmbedded()        const   {return m_bIsEmbedded;}
-            isc_db_handle&  getDBHandle()               {return m_aDBHandle;}
-            /// @throws css::sdbc::SQLException
-            isc_tr_handle&  getTransaction();
+        // XServiceInfo
+        DECLARE_SERVICE_INFO();
+        // XUnoTunnel
+        virtual sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8>& rId) override;
+        static const css::uno::Sequence<sal_Int8> & getUnoTunnelId();
+        // XConnection
+        virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
+        virtual OUString SAL_CALL nativeSQL( const OUString& sql ) override;
+        virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit ) override;
+        virtual sal_Bool SAL_CALL getAutoCommit(  ) override;
+        virtual void SAL_CALL commit(  ) override;
+        virtual void SAL_CALL rollback(  ) override;
+        virtual sal_Bool SAL_CALL isClosed(  ) override;
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
+        virtual void SAL_CALL setReadOnly( sal_Bool readOnly ) override;
+        virtual sal_Bool SAL_CALL isReadOnly(  ) override;
+        virtual void SAL_CALL setCatalog( const OUString& catalog ) override;
+        virtual OUString SAL_CALL getCatalog(  ) override;
+        virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) override;
+        virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) override;
+        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTypeMap(  ) override;
+        virtual void SAL_CALL setTypeMap( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        // XCloseable
+        virtual void SAL_CALL close(  ) override;
+        // XWarningsSupplier
+        virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+        virtual void SAL_CALL clearWarnings(  ) override;
+        // XDocumentEventListener
+        virtual void SAL_CALL documentEventOccured( const css::document::DocumentEvent& Event ) override;
+        // css.lang.XEventListener
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
-            /**
-             * Create a new Blob tied to this connection. Blobs are tied to a
-             * transaction and not to a statement, hence the connection should
-             * deal with their management.
-             *
-             * @throws css::sdbc::SQLException
-             * @throws css::uno::RuntimeException
-             */
-            css::uno::Reference< css::sdbc::XBlob>
-                createBlob(ISC_QUAD const * pBlobID);
-            /// @throws css::sdbc::SQLException
-            /// @throws css::uno::RuntimeException
-            css::uno::Reference< css::sdbc::XClob>
-                createClob(ISC_QUAD const * pBlobID);
-
-            /**
-             * Create and/or connect to the sdbcx Catalog. This is completely
-             * unrelated to the SQL "Catalog".
-             */
-            css::uno::Reference< css::sdbcx::XTablesSupplier >
-                createCatalog();
-
-            /**
-            * Backup and store embedded extracted database to the .odb file
-            */
-            void storeDatabase();
-
-            // OComponentHelper
-            virtual void SAL_CALL disposing() override;
-
-            // XServiceInfo
-            DECLARE_SERVICE_INFO();
-            // XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8>& rId) override;
-            static const css::uno::Sequence<sal_Int8> & getUnoTunnelId();
-            // XConnection
-            virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
-            virtual OUString SAL_CALL nativeSQL( const OUString& sql ) override;
-            virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit ) override;
-            virtual sal_Bool SAL_CALL getAutoCommit(  ) override;
-            virtual void SAL_CALL commit(  ) override;
-            virtual void SAL_CALL rollback(  ) override;
-            virtual sal_Bool SAL_CALL isClosed(  ) override;
-            virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
-            virtual void SAL_CALL setReadOnly( sal_Bool readOnly ) override;
-            virtual sal_Bool SAL_CALL isReadOnly(  ) override;
-            virtual void SAL_CALL setCatalog( const OUString& catalog ) override;
-            virtual OUString SAL_CALL getCatalog(  ) override;
-            virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) override;
-            virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) override;
-            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTypeMap(  ) override;
-            virtual void SAL_CALL setTypeMap( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-            // XCloseable
-            virtual void SAL_CALL close(  ) override;
-            // XWarningsSupplier
-            virtual css::uno::Any SAL_CALL getWarnings(  ) override;
-            virtual void SAL_CALL clearWarnings(  ) override;
-            // XDocumentEventListener
-            virtual void SAL_CALL documentEventOccured( const css::document::DocumentEvent& Event ) override;
-            // css.lang.XEventListener
-            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-
-        };
+    };
 
 }
 

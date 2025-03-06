@@ -31,68 +31,68 @@
 #include <cppuhelper/implbase1.hxx>
 
 namespace connectivity::sdbcx
+{
+    class OCollection;
+    class OIndex;
+    typedef ::cppu::ImplHelper1< css::sdbcx::XDataDescriptorFactory > OIndex_BASE;
+    typedef ::comphelper::OIdPropertyArrayUsageHelper<OIndex> OIndex_PROP;
+
+    class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) OIndex :
+                                public cppu::BaseMutex,
+                                public ODescriptor_BASE,
+                                public IRefreshableColumns,
+                                public OIndex_PROP,
+                                public ODescriptor,
+                                public OIndex_BASE
     {
-        class OCollection;
-        class OIndex;
-        typedef ::cppu::ImplHelper1< css::sdbcx::XDataDescriptorFactory > OIndex_BASE;
-        typedef ::comphelper::OIdPropertyArrayUsageHelper<OIndex> OIndex_PROP;
+    protected:
+        OUString        m_Catalog;
+        bool            m_IsUnique;
+        bool            m_IsPrimaryKeyIndex;
+        bool            m_IsClustered;
 
-        class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBTOOLS) OIndex :
-                                    public cppu::BaseMutex,
-                                    public ODescriptor_BASE,
-                                    public IRefreshableColumns,
-                                    public OIndex_PROP,
-                                    public ODescriptor,
-                                    public OIndex_BASE
-        {
-        protected:
-            OUString        m_Catalog;
-            bool            m_IsUnique;
-            bool            m_IsPrimaryKeyIndex;
-            bool            m_IsClustered;
+        // no Reference! see OCollection::acquire
+        std::unique_ptr<OCollection> m_pColumns;
 
-            // no Reference! see OCollection::acquire
-            std::unique_ptr<OCollection> m_pColumns;
+        using ODescriptor_BASE::rBHelper;
+        virtual void refreshColumns() override;
+        // OPropertyArrayUsageHelper
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    public:
+        OIndex(bool _bCase);
+        OIndex( const OUString& Name,
+                OUString Catalog,
+                bool _isUnique,
+                bool _isPrimaryKeyIndex,
+                bool _isClustered,
+                bool _bCase);
 
-            using ODescriptor_BASE::rBHelper;
-            virtual void refreshColumns() override;
-            // OPropertyArrayUsageHelper
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
-            virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-        public:
-            OIndex(bool _bCase);
-            OIndex( const OUString& Name,
-                    OUString Catalog,
-                    bool _isUnique,
-                    bool _isPrimaryKeyIndex,
-                    bool _isClustered,
-                    bool _bCase);
+        virtual ~OIndex( ) override;
 
-            virtual ~OIndex( ) override;
+        DECLARE_SERVICE_INFO();
 
-            DECLARE_SERVICE_INFO();
+        //XInterface
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
+        //XTypeProvider
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        // ODescriptor
+        virtual void construct() override;
+        // ::cppu::OComponentHelper
+        virtual void SAL_CALL disposing() override;
+        // XPropertySet
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+        // XColumnsSupplier
+        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getColumns(  ) override;
 
-            //XInterface
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-            virtual void SAL_CALL acquire() noexcept override;
-            virtual void SAL_CALL release() noexcept override;
-            //XTypeProvider
-            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-            // ODescriptor
-            virtual void construct() override;
-            // ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing() override;
-            // XPropertySet
-            virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-            // XColumnsSupplier
-            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getColumns(  ) override;
-
-            // XNamed
-            virtual OUString SAL_CALL getName(  ) override;
-            virtual void SAL_CALL setName( const OUString& aName ) override;
-            // XDataDescriptorFactory
-            virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) override;
-        };
+        // XNamed
+        virtual OUString SAL_CALL getName(  ) override;
+        virtual void SAL_CALL setName( const OUString& aName ) override;
+        // XDataDescriptorFactory
+        virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) override;
+    };
 
 }
 

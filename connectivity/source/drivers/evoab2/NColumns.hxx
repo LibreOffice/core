@@ -24,21 +24,21 @@
 
 namespace connectivity::evoab
 {
-        class OEvoabColumns final : public sdbcx::OCollection
-        {
-            OEvoabTable*    m_pTable;
+    class OEvoabColumns final : public sdbcx::OCollection
+    {
+        OEvoabTable*    m_pTable;
 
-            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
-            virtual void impl_refresh() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual void impl_refresh() override;
 
-        public:
-            OEvoabColumns(  OEvoabTable* _pTable,
-                        ::osl::Mutex& _rMutex,
-                        const ::std::vector< OUString> &_rVector
-                        ) : sdbcx::OCollection(*_pTable,true,_rMutex,_rVector),
-                            m_pTable(_pTable)
-            { }
-        };
+    public:
+        OEvoabColumns(  OEvoabTable* _pTable,
+                    ::osl::Mutex& _rMutex,
+                    const ::std::vector< OUString> &_rVector
+                    ) : sdbcx::OCollection(*_pTable,true,_rMutex,_rVector),
+                        m_pTable(_pTable)
+        { }
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

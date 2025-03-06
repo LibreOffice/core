@@ -29,74 +29,74 @@
 namespace connectivity::ado
 {
 
-        //************ Class: ResultSetMetaData
+    //************ Class: ResultSetMetaData
 
-        typedef ::cppu::WeakImplHelper< css::sdbc::XResultSetMetaData>   ODatabaseMetaResultSetMetaData_BASE;
+    typedef ::cppu::WeakImplHelper< css::sdbc::XResultSetMetaData>   ODatabaseMetaResultSetMetaData_BASE;
 
-        class ODatabaseMetaDataResultSetMetaData :  public  ODatabaseMetaResultSetMetaData_BASE
+    class ODatabaseMetaDataResultSetMetaData :  public  ODatabaseMetaResultSetMetaData_BASE
+    {
+        friend class ODatabaseMetaDataResultSet;
+
+        const std::vector<sal_Int32> &m_vMapping; // when not every column is needed
+        std::map<sal_Int32,connectivity::OColumn> m_mColumns;
+        std::map<sal_Int32,connectivity::OColumn>::const_iterator m_mColumnsIter;
+
+        ADORecordset*   m_pRecordSet;
+        sal_Int32       m_nColCount;
+
+    private:
+        ODatabaseMetaDataResultSetMetaData( const ODatabaseMetaDataResultSetMetaData& );            // never implemented
+        ODatabaseMetaDataResultSetMetaData& operator=( const ODatabaseMetaDataResultSetMetaData& ); // never implemented
+
+    protected:
+        void setColumnPrivilegesMap();
+        void setColumnsMap();
+        void setTablesMap();
+        void setProcedureColumnsMap();
+        void setPrimaryKeysMap();
+        void setIndexInfoMap();
+        void setTablePrivilegesMap();
+        void setCrossReferenceMap();
+        void setTypeInfoMap();
+        void setProceduresMap();
+    public:
+        // a Constructor, that is needed for when Returning the Object is needed:
+        ODatabaseMetaDataResultSetMetaData( ADORecordset* _pRecordSet ,ODatabaseMetaDataResultSet* _pRes)
+                :   m_vMapping(_pRes->getColumnMapping()),
+                    m_pRecordSet(_pRecordSet),
+                    m_nColCount(m_vMapping.size()-1)
         {
-            friend class ODatabaseMetaDataResultSet;
+            if(m_pRecordSet)
+                m_pRecordSet->AddRef();
+        }
+        ~ODatabaseMetaDataResultSetMetaData() override;
 
-            const std::vector<sal_Int32> &m_vMapping; // when not every column is needed
-            std::map<sal_Int32,connectivity::OColumn> m_mColumns;
-            std::map<sal_Int32,connectivity::OColumn>::const_iterator m_mColumnsIter;
+        /// Avoid ambiguous cast error from the compiler.
+        operator css::uno::Reference< css::sdbc::XResultSetMetaData > () noexcept
+        { return this; }
 
-            ADORecordset*   m_pRecordSet;
-            sal_Int32       m_nColCount;
-
-        private:
-            ODatabaseMetaDataResultSetMetaData( const ODatabaseMetaDataResultSetMetaData& );            // never implemented
-            ODatabaseMetaDataResultSetMetaData& operator=( const ODatabaseMetaDataResultSetMetaData& ); // never implemented
-
-        protected:
-            void setColumnPrivilegesMap();
-            void setColumnsMap();
-            void setTablesMap();
-            void setProcedureColumnsMap();
-            void setPrimaryKeysMap();
-            void setIndexInfoMap();
-            void setTablePrivilegesMap();
-            void setCrossReferenceMap();
-            void setTypeInfoMap();
-            void setProceduresMap();
-        public:
-            // a Constructor, that is needed for when Returning the Object is needed:
-            ODatabaseMetaDataResultSetMetaData( ADORecordset* _pRecordSet ,ODatabaseMetaDataResultSet* _pRes)
-                    :   m_vMapping(_pRes->getColumnMapping()),
-                        m_pRecordSet(_pRecordSet),
-                        m_nColCount(m_vMapping.size()-1)
-            {
-                if(m_pRecordSet)
-                    m_pRecordSet->AddRef();
-            }
-            ~ODatabaseMetaDataResultSetMetaData() override;
-
-            /// Avoid ambiguous cast error from the compiler.
-            operator css::uno::Reference< css::sdbc::XResultSetMetaData > () noexcept
-            { return this; }
-
-            virtual sal_Int32 SAL_CALL getColumnCount(  ) override;
-            virtual sal_Bool SAL_CALL isAutoIncrement( sal_Int32 column ) override;
-            virtual sal_Bool SAL_CALL isCaseSensitive( sal_Int32 column ) override;
-            virtual sal_Bool SAL_CALL isSearchable( sal_Int32 column ) override;
-            virtual sal_Bool SAL_CALL isCurrency( sal_Int32 column ) override;
-            virtual sal_Int32 SAL_CALL isNullable( sal_Int32 column ) override;
-            virtual sal_Bool SAL_CALL isSigned( sal_Int32 column ) override;
-            virtual sal_Int32 SAL_CALL getColumnDisplaySize( sal_Int32 column ) override;
-            virtual OUString SAL_CALL getColumnLabel( sal_Int32 column ) override;
-            virtual OUString SAL_CALL getColumnName( sal_Int32 column ) override;
-            virtual OUString SAL_CALL getSchemaName( sal_Int32 column ) override;
-            virtual sal_Int32 SAL_CALL getPrecision( sal_Int32 column ) override;
-            virtual sal_Int32 SAL_CALL getScale( sal_Int32 column ) override;
-            virtual OUString SAL_CALL getTableName( sal_Int32 column ) override;
-            virtual OUString SAL_CALL getCatalogName( sal_Int32 column ) override;
-            virtual sal_Int32 SAL_CALL getColumnType( sal_Int32 column ) override;
-            virtual OUString SAL_CALL getColumnTypeName( sal_Int32 column ) override;
-            virtual sal_Bool SAL_CALL isReadOnly( sal_Int32 column ) override;
-            virtual sal_Bool SAL_CALL isWritable( sal_Int32 column ) override;
-            virtual sal_Bool SAL_CALL isDefinitelyWritable( sal_Int32 column ) override;
-            virtual OUString SAL_CALL getColumnServiceName( sal_Int32 column ) override;
-        };
+        virtual sal_Int32 SAL_CALL getColumnCount(  ) override;
+        virtual sal_Bool SAL_CALL isAutoIncrement( sal_Int32 column ) override;
+        virtual sal_Bool SAL_CALL isCaseSensitive( sal_Int32 column ) override;
+        virtual sal_Bool SAL_CALL isSearchable( sal_Int32 column ) override;
+        virtual sal_Bool SAL_CALL isCurrency( sal_Int32 column ) override;
+        virtual sal_Int32 SAL_CALL isNullable( sal_Int32 column ) override;
+        virtual sal_Bool SAL_CALL isSigned( sal_Int32 column ) override;
+        virtual sal_Int32 SAL_CALL getColumnDisplaySize( sal_Int32 column ) override;
+        virtual OUString SAL_CALL getColumnLabel( sal_Int32 column ) override;
+        virtual OUString SAL_CALL getColumnName( sal_Int32 column ) override;
+        virtual OUString SAL_CALL getSchemaName( sal_Int32 column ) override;
+        virtual sal_Int32 SAL_CALL getPrecision( sal_Int32 column ) override;
+        virtual sal_Int32 SAL_CALL getScale( sal_Int32 column ) override;
+        virtual OUString SAL_CALL getTableName( sal_Int32 column ) override;
+        virtual OUString SAL_CALL getCatalogName( sal_Int32 column ) override;
+        virtual sal_Int32 SAL_CALL getColumnType( sal_Int32 column ) override;
+        virtual OUString SAL_CALL getColumnTypeName( sal_Int32 column ) override;
+        virtual sal_Bool SAL_CALL isReadOnly( sal_Int32 column ) override;
+        virtual sal_Bool SAL_CALL isWritable( sal_Int32 column ) override;
+        virtual sal_Bool SAL_CALL isDefinitelyWritable( sal_Int32 column ) override;
+        virtual OUString SAL_CALL getColumnServiceName( sal_Int32 column ) override;
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

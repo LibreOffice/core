@@ -12,24 +12,24 @@
 #include <connectivity/TKeys.hxx>
 
 namespace connectivity::firebird
+{
+
+    class Table;
+
+    class Keys: public ::connectivity::OKeysHelper
     {
+    private:
+        Table* m_pTable;
 
-        class Table;
+    public:
+        Keys(Table* pTable,
+             ::osl::Mutex& rMutex,
+             const ::std::vector< OUString>& rNames);
 
-        class Keys: public ::connectivity::OKeysHelper
-        {
-        private:
-            Table* m_pTable;
+    // OKeysHelper / XDrop
+    void dropObject(sal_Int32 nPosition, const OUString& sName) override;
 
-        public:
-            Keys(Table* pTable,
-                 ::osl::Mutex& rMutex,
-                 const ::std::vector< OUString>& rNames);
-
-        // OKeysHelper / XDrop
-        void dropObject(sal_Int32 nPosition, const OUString& sName) override;
-
-        };
+    };
 
 }
 

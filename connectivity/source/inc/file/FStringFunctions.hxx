@@ -22,247 +22,247 @@
 #include <file/fcode.hxx>
 
 namespace connectivity::file
+{
+    /** UCASE(str)
+        UPPER(str)
+            Returns the string str with all characters changed to uppercase according to the current character set mapping (the default is ISO-8859-1 Latin1):
+
+        > SELECT UCASE('Hej');
+                -> 'HEJ'
+
+    */
+    class OOp_Upper : public OUnaryOperator
     {
-        /** UCASE(str)
-            UPPER(str)
-                Returns the string str with all characters changed to uppercase according to the current character set mapping (the default is ISO-8859-1 Latin1):
+    protected:
+        virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
+    };
 
-            > SELECT UCASE('Hej');
-                    -> 'HEJ'
+    /** LCASE(str)
+        LOWER(str)
+            Returns the string str with all characters changed to lowercase according to the current character set mapping (the default is ISO-8859-1 Latin1):
 
-        */
-        class OOp_Upper : public OUnaryOperator
-        {
-        protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
-        };
+        > SELECT LCASE('QUADRATICALLY');
+                -> 'quadratically'
 
-        /** LCASE(str)
-            LOWER(str)
-                Returns the string str with all characters changed to lowercase according to the current character set mapping (the default is ISO-8859-1 Latin1):
+    */
+    class OOp_Lower : public OUnaryOperator
+    {
+    protected:
+        virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
+    };
 
-            > SELECT LCASE('QUADRATICALLY');
-                    -> 'quadratically'
+    /** ASCII(str)
+        Returns the ASCII code value of the leftmost character of the string str. Returns 0 if str is the empty string. Returns NULL if str is NULL:
 
-        */
-        class OOp_Lower : public OUnaryOperator
-        {
-        protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
-        };
+        > SELECT ASCII('2');
+            -> 50
+        > SELECT ASCII(2);
+            -> 50
+        > SELECT ASCII('dx');
+            -> 100
 
-        /** ASCII(str)
-            Returns the ASCII code value of the leftmost character of the string str. Returns 0 if str is the empty string. Returns NULL if str is NULL:
+    */
+    class OOp_Ascii : public OUnaryOperator
+    {
+    protected:
+        virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
+    };
 
-            > SELECT ASCII('2');
-                -> 50
-            > SELECT ASCII(2);
-                -> 50
-            > SELECT ASCII('dx');
-                -> 100
+    /** LENGTH(str)
+        OCTET_LENGTH(str)
+        CHAR_LENGTH(str)
+        CHARACTER_LENGTH(str)
+            Returns the length of the string str:
 
-        */
-        class OOp_Ascii : public OUnaryOperator
-        {
-        protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
-        };
+        > SELECT LENGTH('text');
+                -> 4
+        > SELECT OCTET_LENGTH('text');
+                -> 4
 
-        /** LENGTH(str)
-            OCTET_LENGTH(str)
-            CHAR_LENGTH(str)
-            CHARACTER_LENGTH(str)
-                Returns the length of the string str:
+    */
+    class OOp_CharLength : public OUnaryOperator
+    {
+    protected:
+        virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
+    };
 
-            > SELECT LENGTH('text');
-                    -> 4
-            > SELECT OCTET_LENGTH('text');
-                    -> 4
+    /** CHAR(N,...)
+        CHAR() interprets the arguments as integers and returns a string consisting of the characters given by the ASCII code values of those integers. NULL values are skipped:
 
-        */
-        class OOp_CharLength : public OUnaryOperator
-        {
-        protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
-        };
+        > SELECT CHAR(ascii('t'),ascii('e'),ascii('s'),ascii('t'));
+            -> 'test'
+        > SELECT CHAR(77,77.3,'77.3');
+            -> 'MMM'
 
-        /** CHAR(N,...)
-            CHAR() interprets the arguments as integers and returns a string consisting of the characters given by the ASCII code values of those integers. NULL values are skipped:
+    */
+    class OOp_Char : public ONthOperator
+    {
+    protected:
+        virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
+    };
 
-            > SELECT CHAR(ascii('t'),ascii('e'),ascii('s'),ascii('t'));
-                -> 'test'
-            > SELECT CHAR(77,77.3,'77.3');
-                -> 'MMM'
+    /** CONCAT(str1,str2,...)
+        Returns the string that results from concatenating the arguments. Returns NULL if any argument is NULL. May have more than 2 arguments. A numeric argument is converted to the equivalent string form:
 
-        */
-        class OOp_Char : public ONthOperator
-        {
-        protected:
-            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
-        };
+        > SELECT CONCAT('OO', 'o', 'OO');
+            -> 'OOoOO'
+        > SELECT CONCAT('OO', NULL, 'OO');
+            -> NULL
+        > SELECT CONCAT(14.3);
+            -> '14.3'
 
-        /** CONCAT(str1,str2,...)
-            Returns the string that results from concatenating the arguments. Returns NULL if any argument is NULL. May have more than 2 arguments. A numeric argument is converted to the equivalent string form:
+    */
+    class OOp_Concat : public ONthOperator
+    {
+    protected:
+        virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
+    };
 
-            > SELECT CONCAT('OO', 'o', 'OO');
-                -> 'OOoOO'
-            > SELECT CONCAT('OO', NULL, 'OO');
-                -> NULL
-            > SELECT CONCAT(14.3);
-                -> '14.3'
+    /** LOCATE(substr,str)
+        POSITION(substr IN str)
+        Returns the position of the first occurrence of substring substr in string str. Returns 0 if substr is not in str:
 
-        */
-        class OOp_Concat : public ONthOperator
-        {
-        protected:
-            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
-        };
+        > SELECT LOCATE('bar', 'foobarbar');
+                -> 4
+        > SELECT LOCATE('xbar', 'foobar');
+                -> 0
+        LOCATE(substr,str,pos)
+        Returns the position of the first occurrence of substring substr in string str, starting at position pos. Returns 0 if substr is not in str:
 
-        /** LOCATE(substr,str)
-            POSITION(substr IN str)
-            Returns the position of the first occurrence of substring substr in string str. Returns 0 if substr is not in str:
+        > SELECT LOCATE('bar', 'foobarbar',5);
+            -> 7
 
-            > SELECT LOCATE('bar', 'foobarbar');
-                    -> 4
-            > SELECT LOCATE('xbar', 'foobar');
-                    -> 0
-            LOCATE(substr,str,pos)
-            Returns the position of the first occurrence of substring substr in string str, starting at position pos. Returns 0 if substr is not in str:
+    */
+    class OOp_Locate : public ONthOperator
+    {
+    protected:
+        virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
+    };
 
-            > SELECT LOCATE('bar', 'foobarbar',5);
-                -> 7
+    /** SUBSTRING(str,pos)
+        SUBSTRING(str FROM pos)
+            Returns a substring from string str starting at position pos:
 
-        */
-        class OOp_Locate : public ONthOperator
-        {
-        protected:
-            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
-        };
-
-        /** SUBSTRING(str,pos)
-            SUBSTRING(str FROM pos)
-                Returns a substring from string str starting at position pos:
-
-            > SELECT SUBSTRING('Quadratically',5);
-                    -> 'ratically'
-            > SELECT SUBSTRING('foobarbar' FROM 4);
-                    -> 'barbar'
-            SUBSTRING(str,pos,len)
-            SUBSTRING(str FROM pos FOR len)
-                Returns a substring len characters long from string str, starting at position pos. The variant form that uses FROM is SQL-92 syntax:
-
-            > SELECT SUBSTRING('Quadratically',5,6);
-                    -> 'ratica'
-
-        */
-        class OOp_SubString : public ONthOperator
-        {
-        protected:
-            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
-        };
-
-        /** LTRIM(str)
-            Returns the string str with leading space characters removed:
-
-            > SELECT LTRIM('  barbar');
+        > SELECT SUBSTRING('Quadratically',5);
+                -> 'ratically'
+        > SELECT SUBSTRING('foobarbar' FROM 4);
                 -> 'barbar'
+        SUBSTRING(str,pos,len)
+        SUBSTRING(str FROM pos FOR len)
+            Returns a substring len characters long from string str, starting at position pos. The variant form that uses FROM is SQL-92 syntax:
 
-        */
-        class OOp_LTrim : public OUnaryOperator
-        {
-        protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
-        };
+        > SELECT SUBSTRING('Quadratically',5,6);
+                -> 'ratica'
 
-        /** RTRIM(str)
-            Returns the string str with trailing space characters removed:
+    */
+    class OOp_SubString : public ONthOperator
+    {
+    protected:
+        virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
+    };
 
-            > SELECT RTRIM('barbar   ');
-                -> 'barbar'
+    /** LTRIM(str)
+        Returns the string str with leading space characters removed:
 
-        */
-        class OOp_RTrim : public OUnaryOperator
-        {
-        protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
-        };
+        > SELECT LTRIM('  barbar');
+            -> 'barbar'
 
-        /** SPACE(N)
-            Returns a string consisting of N space characters:
+    */
+    class OOp_LTrim : public OUnaryOperator
+    {
+    protected:
+        virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
+    };
 
-            > SELECT SPACE(6);
-                -> '      '
+    /** RTRIM(str)
+        Returns the string str with trailing space characters removed:
 
-        */
-        class OOp_Space : public OUnaryOperator
-        {
-        protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
-        };
+        > SELECT RTRIM('barbar   ');
+            -> 'barbar'
 
-        /** REPLACE(str,from_str,to_str)
-            Returns the string str with all occurrences of the string from_str replaced by the string to_str:
+    */
+    class OOp_RTrim : public OUnaryOperator
+    {
+    protected:
+        virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
+    };
 
-            > SELECT REPLACE('www.OOo.com', 'w', 'Ww');
-                -> 'WwWwWw.OOo.com'
+    /** SPACE(N)
+        Returns a string consisting of N space characters:
 
-        */
-        class OOp_Replace : public ONthOperator
-        {
-        protected:
-            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
-        };
+        > SELECT SPACE(6);
+            -> '      '
 
-        /** REPEAT(str,count)
-            Returns a string consisting of the string str repeated count times. If count <= 0, returns an empty string. Returns NULL if str or count are NULL:
+    */
+    class OOp_Space : public OUnaryOperator
+    {
+    protected:
+        virtual ORowSetValue operate(const ORowSetValue& lhs) const override;
+    };
 
-            > SELECT REPEAT('OOo', 3);
-                -> 'OOoOOoOOo'
+    /** REPLACE(str,from_str,to_str)
+        Returns the string str with all occurrences of the string from_str replaced by the string to_str:
 
-        */
-        class OOp_Repeat : public OBinaryOperator
-        {
-        protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const override;
-        };
+        > SELECT REPLACE('www.OOo.com', 'w', 'Ww');
+            -> 'WwWwWw.OOo.com'
 
-        /** INSERT(str,pos,len,newstr)
-            Returns the string str, with the substring beginning at position pos and len characters long replaced by the string newstr:
+    */
+    class OOp_Replace : public ONthOperator
+    {
+    protected:
+        virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
+    };
 
-            > SELECT INSERT('Quadratic', 3, 4, 'What');
-                -> 'QuWhattic'
+    /** REPEAT(str,count)
+        Returns a string consisting of the string str repeated count times. If count <= 0, returns an empty string. Returns NULL if str or count are NULL:
 
-        */
-        class OOp_Insert : public ONthOperator
-        {
-        protected:
-            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
-        };
+        > SELECT REPEAT('OOo', 3);
+            -> 'OOoOOoOOo'
 
-        /** LEFT(str,len)
-            Returns the leftmost len characters from the string str:
+    */
+    class OOp_Repeat : public OBinaryOperator
+    {
+    protected:
+        virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const override;
+    };
 
-            > SELECT LEFT('foobarbar', 5);
-                -> 'fooba'
+    /** INSERT(str,pos,len,newstr)
+        Returns the string str, with the substring beginning at position pos and len characters long replaced by the string newstr:
 
-        */
-        class OOp_Left : public OBinaryOperator
-        {
-        protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const override;
-        };
+        > SELECT INSERT('Quadratic', 3, 4, 'What');
+            -> 'QuWhattic'
 
-        /** RIGHT(str,len)
-            Returns the rightmost len characters from the string str:
+    */
+    class OOp_Insert : public ONthOperator
+    {
+    protected:
+        virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
+    };
 
-            > SELECT RIGHT('foobarbar', 4);
-                -> 'rbar'
-        */
-        class OOp_Right : public OBinaryOperator
-        {
-        protected:
-            virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const override;
-        };
+    /** LEFT(str,len)
+        Returns the leftmost len characters from the string str:
+
+        > SELECT LEFT('foobarbar', 5);
+            -> 'fooba'
+
+    */
+    class OOp_Left : public OBinaryOperator
+    {
+    protected:
+        virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const override;
+    };
+
+    /** RIGHT(str,len)
+        Returns the rightmost len characters from the string str:
+
+        > SELECT RIGHT('foobarbar', 4);
+            -> 'rbar'
+    */
+    class OOp_Right : public OBinaryOperator
+    {
+    protected:
+        virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const override;
+    };
 
 }
 

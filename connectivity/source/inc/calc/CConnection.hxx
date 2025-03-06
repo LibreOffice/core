@@ -34,115 +34,115 @@ namespace utl { class CloseVeto; }
 
 
 namespace connectivity::calc
+{
+    class ODriver;
+    class OCalcConnection : public file::OConnection
     {
-        class ODriver;
-        class OCalcConnection : public file::OConnection
+        // the spreadsheet document:
+        css::uno::Reference< css::sheet::XSpreadsheetDocument > m_xDoc;
+        OUString m_sPassword;
+        OUString m_aFileName;
+        oslInterlockedCount m_nDocCount;
+
+        class CloseVetoButTerminateListener : public cppu::WeakComponentImplHelper<css::frame::XTerminateListener>
         {
-            // the spreadsheet document:
-            css::uno::Reference< css::sheet::XSpreadsheetDocument > m_xDoc;
-            OUString m_sPassword;
-            OUString m_aFileName;
-            oslInterlockedCount m_nDocCount;
-
-            class CloseVetoButTerminateListener : public cppu::WeakComponentImplHelper<css::frame::XTerminateListener>
-            {
-            private:
-                /// close listener that vetoes so nobody else disposes m_xDoc
-                std::unique_ptr<utl::CloseVeto> m_pCloseListener;
-                /// but also listen to XDesktop and if app is terminating anyway, dispose m_xDoc while
-                /// its still possible to do so properly
-                css::uno::Reference<css::frame::XDesktop2> m_xDesktop;
-                osl::Mutex m_aMutex;
-            public:
-                CloseVetoButTerminateListener()
-                    : cppu::WeakComponentImplHelper<css::frame::XTerminateListener>(m_aMutex)
-                {
-                }
-
-                void start(const css::uno::Reference<css::uno::XInterface>& rCloseable,
-                           const css::uno::Reference<css::frame::XDesktop2>& rDesktop)
-                {
-                    m_xDesktop = rDesktop;
-                    m_xDesktop->addTerminateListener(this);
-                    m_pCloseListener.reset(new utl::CloseVeto(rCloseable, true));
-                }
-
-                void stop()
-                {
-                    m_pCloseListener.reset();
-                    if (!m_xDesktop.is())
-                        return;
-                    m_xDesktop->removeTerminateListener(this);
-                    m_xDesktop.clear();
-                }
-
-                // XTerminateListener
-                virtual void SAL_CALL queryTermination(const css::lang::EventObject& /*rEvent*/) override
-                {
-                }
-
-                virtual void SAL_CALL notifyTermination(const css::lang::EventObject& /*rEvent*/) override
-                {
-                    stop();
-                }
-
-                virtual void SAL_CALL disposing() override
-                {
-                    stop();
-                    cppu::WeakComponentImplHelperBase::disposing();
-                }
-
-                virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override
-                {
-                    const bool bShutDown = (rEvent.Source == m_xDesktop);
-                    if (bShutDown)
-                        stop();
-                }
-            };
-
-            rtl::Reference<CloseVetoButTerminateListener> m_xCloseVetoButTerminateListener;
-
+        private:
+            /// close listener that vetoes so nobody else disposes m_xDoc
+            std::unique_ptr<utl::CloseVeto> m_pCloseListener;
+            /// but also listen to XDesktop and if app is terminating anyway, dispose m_xDoc while
+            /// its still possible to do so properly
+            css::uno::Reference<css::frame::XDesktop2> m_xDesktop;
+            osl::Mutex m_aMutex;
         public:
-            OCalcConnection(ODriver* _pDriver);
-            virtual ~OCalcConnection() override;
-
-            virtual void construct(const OUString& _rUrl,
-                                   const css::uno::Sequence< css::beans::PropertyValue >& _rInfo ) override;
-
-            // XServiceInfo
-            DECLARE_SERVICE_INFO();
-
-            // OComponentHelper
-            virtual void SAL_CALL disposing() override;
-
-            // XConnection
-            virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
-            virtual css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog() override;
-            virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
-
-            // no interface methods
-            css::uno::Reference< css::sheet::XSpreadsheetDocument> const & acquireDoc();
-            void releaseDoc();
-
-            class ODocHolder
+            CloseVetoButTerminateListener()
+                : cppu::WeakComponentImplHelper<css::frame::XTerminateListener>(m_aMutex)
             {
-                OCalcConnection* m_pConnection;
-                css::uno::Reference< css::sheet::XSpreadsheetDocument> m_xDoc;
-            public:
-                ODocHolder(OCalcConnection* _pConnection) : m_pConnection(_pConnection)
-                {
-                    m_xDoc = m_pConnection->acquireDoc();
-                }
-                ~ODocHolder()
-                {
-                    m_xDoc.clear();
-                    m_pConnection->releaseDoc();
-                }
-                const css::uno::Reference< css::sheet::XSpreadsheetDocument>& getDoc() const { return m_xDoc; }
-            };
+            }
+
+            void start(const css::uno::Reference<css::uno::XInterface>& rCloseable,
+                       const css::uno::Reference<css::frame::XDesktop2>& rDesktop)
+            {
+                m_xDesktop = rDesktop;
+                m_xDesktop->addTerminateListener(this);
+                m_pCloseListener.reset(new utl::CloseVeto(rCloseable, true));
+            }
+
+            void stop()
+            {
+                m_pCloseListener.reset();
+                if (!m_xDesktop.is())
+                    return;
+                m_xDesktop->removeTerminateListener(this);
+                m_xDesktop.clear();
+            }
+
+            // XTerminateListener
+            virtual void SAL_CALL queryTermination(const css::lang::EventObject& /*rEvent*/) override
+            {
+            }
+
+            virtual void SAL_CALL notifyTermination(const css::lang::EventObject& /*rEvent*/) override
+            {
+                stop();
+            }
+
+            virtual void SAL_CALL disposing() override
+            {
+                stop();
+                cppu::WeakComponentImplHelperBase::disposing();
+            }
+
+            virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override
+            {
+                const bool bShutDown = (rEvent.Source == m_xDesktop);
+                if (bShutDown)
+                    stop();
+            }
         };
+
+        rtl::Reference<CloseVetoButTerminateListener> m_xCloseVetoButTerminateListener;
+
+    public:
+        OCalcConnection(ODriver* _pDriver);
+        virtual ~OCalcConnection() override;
+
+        virtual void construct(const OUString& _rUrl,
+                               const css::uno::Sequence< css::beans::PropertyValue >& _rInfo ) override;
+
+        // XServiceInfo
+        DECLARE_SERVICE_INFO();
+
+        // OComponentHelper
+        virtual void SAL_CALL disposing() override;
+
+        // XConnection
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
+        virtual css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog() override;
+        virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
+
+        // no interface methods
+        css::uno::Reference< css::sheet::XSpreadsheetDocument> const & acquireDoc();
+        void releaseDoc();
+
+        class ODocHolder
+        {
+            OCalcConnection* m_pConnection;
+            css::uno::Reference< css::sheet::XSpreadsheetDocument> m_xDoc;
+        public:
+            ODocHolder(OCalcConnection* _pConnection) : m_pConnection(_pConnection)
+            {
+                m_xDoc = m_pConnection->acquireDoc();
+            }
+            ~ODocHolder()
+            {
+                m_xDoc.clear();
+                m_pConnection->releaseDoc();
+            }
+            const css::uno::Reference< css::sheet::XSpreadsheetDocument>& getDoc() const { return m_xDoc; }
+        };
+    };
 
 }
 

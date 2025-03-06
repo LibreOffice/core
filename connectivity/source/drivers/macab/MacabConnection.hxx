@@ -30,79 +30,79 @@
 namespace connectivity::macab
 {
 
-        typedef ::cppu::WeakComponentImplHelper<css::sdbc::XConnection,
-                                                css::sdbc::XWarningsSupplier,
-                                                css::lang::XServiceInfo
-                                            > OMetaConnection_BASE;
+    typedef ::cppu::WeakComponentImplHelper<css::sdbc::XConnection,
+                                            css::sdbc::XWarningsSupplier,
+                                            css::lang::XServiceInfo
+                                        > OMetaConnection_BASE;
 
-        class MacabDriver;
-        class MacabAddressBook;
+    class MacabDriver;
+    class MacabAddressBook;
 
-        typedef connectivity::OMetaConnection MacabConnection_BASE;
+    typedef connectivity::OMetaConnection MacabConnection_BASE;
 
-        class MacabConnection : public MacabConnection_BASE
-        {
-        protected:
+    class MacabConnection : public MacabConnection_BASE
+    {
+    protected:
 
-            // Data attributes
+        // Data attributes
 
-            MacabAddressBook*                       m_pAddressBook; // the address book
-            MacabDriver*                            m_pDriver;      // pointer to the owning driver object
-            css::uno::Reference< css::sdbcx::XTablesSupplier>
-                                                    m_xCatalog;     // needed for the SQL interpreter
+        MacabAddressBook*                       m_pAddressBook; // the address book
+        MacabDriver*                            m_pDriver;      // pointer to the owning driver object
+        css::uno::Reference< css::sdbcx::XTablesSupplier>
+                                                m_xCatalog;     // needed for the SQL interpreter
 
-        private:
-            bool doIsClosed();
+    private:
+        bool doIsClosed();
 
-            void doClose();
+        void doClose();
 
-        public:
-            /// @throws css::sdbc::SQLException
-            virtual void construct( const OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info);
+    public:
+        /// @throws css::sdbc::SQLException
+        virtual void construct( const OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info);
 
-            explicit MacabConnection(MacabDriver* _pDriver);
-            virtual ~MacabConnection() override;
+        explicit MacabConnection(MacabDriver* _pDriver);
+        virtual ~MacabConnection() override;
 
-            // OComponentHelper
-            virtual void SAL_CALL disposing() override;
+        // OComponentHelper
+        virtual void SAL_CALL disposing() override;
 
-            // XServiceInfo
-            DECLARE_SERVICE_INFO();
+        // XServiceInfo
+        DECLARE_SERVICE_INFO();
 
-            // XConnection
-            virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
-            virtual OUString SAL_CALL nativeSQL( const OUString& sql ) override;
-            virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit ) override;
-            virtual sal_Bool SAL_CALL getAutoCommit(  ) override;
-            virtual void SAL_CALL commit(  ) override;
-            virtual void SAL_CALL rollback(  ) override;
-            virtual sal_Bool SAL_CALL isClosed(  ) override;
-            virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
-            virtual void SAL_CALL setReadOnly( sal_Bool readOnly ) override;
-            virtual sal_Bool SAL_CALL isReadOnly(  ) override;
-            virtual void SAL_CALL setCatalog( const OUString& catalog ) override;
-            virtual OUString SAL_CALL getCatalog(  ) override;
-            virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) override;
-            virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) override;
-            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTypeMap(  ) override;
-            virtual void SAL_CALL setTypeMap( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        // XConnection
+        virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
+        virtual OUString SAL_CALL nativeSQL( const OUString& sql ) override;
+        virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit ) override;
+        virtual sal_Bool SAL_CALL getAutoCommit(  ) override;
+        virtual void SAL_CALL commit(  ) override;
+        virtual void SAL_CALL rollback(  ) override;
+        virtual sal_Bool SAL_CALL isClosed(  ) override;
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
+        virtual void SAL_CALL setReadOnly( sal_Bool readOnly ) override;
+        virtual sal_Bool SAL_CALL isReadOnly(  ) override;
+        virtual void SAL_CALL setCatalog( const OUString& catalog ) override;
+        virtual OUString SAL_CALL getCatalog(  ) override;
+        virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) override;
+        virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) override;
+        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTypeMap(  ) override;
+        virtual void SAL_CALL setTypeMap( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
 
-            // XCloseable
-            virtual void SAL_CALL close(  ) override;
+        // XCloseable
+        virtual void SAL_CALL close(  ) override;
 
-            // XWarningsSupplier
-            virtual css::uno::Any SAL_CALL getWarnings(  ) override;
-            virtual void SAL_CALL clearWarnings(  ) override;
+        // XWarningsSupplier
+        virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+        virtual void SAL_CALL clearWarnings(  ) override;
 
-            // needed for the SQL interpreter
-            css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog();
+        // needed for the SQL interpreter
+        css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog();
 
-            // accessors
-            MacabDriver*         getDriver()         const { return m_pDriver;}
-                   MacabAddressBook* getAddressBook()   const;
-        };
+        // accessors
+        MacabDriver*         getDriver()         const { return m_pDriver;}
+               MacabAddressBook* getAddressBook()   const;
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

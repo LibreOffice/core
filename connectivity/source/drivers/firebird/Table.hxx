@@ -18,63 +18,63 @@
 #include <connectivity/TTableHelper.hxx>
 
 namespace connectivity::firebird
+{
+
+    /**
+     * Implements sdbcx.Table. We don't support table renaming (XRename)
+     * hence the appropriate methods are overridden.
+     */
+    class Table: public OTableHelper
     {
+    private:
+        ::osl::Mutex& m_rMutex;
+        sal_Int32 m_nPrivileges;
 
         /**
-         * Implements sdbcx.Table. We don't support table renaming (XRename)
-         * hence the appropriate methods are overridden.
+         * Get the ALTER TABLE [TABLE] ALTER [COLUMN] String.
+         * Includes a trailing space.
          */
-        class Table: public OTableHelper
-        {
-        private:
-            ::osl::Mutex& m_rMutex;
-            sal_Int32 m_nPrivileges;
+        OUString getAlterTableColumn(std::u16string_view rColumn);
 
-            /**
-             * Get the ALTER TABLE [TABLE] ALTER [COLUMN] String.
-             * Includes a trailing space.
-             */
-            OUString getAlterTableColumn(std::u16string_view rColumn);
+    protected:
+        void construct() override;
 
-        protected:
-            void construct() override;
+    public:
+        Table(Tables* pTables,
+              ::osl::Mutex& rMutex,
+              const css::uno::Reference< css::sdbc::XConnection >& _xConnection);
+        Table(Tables* pTables,
+              ::osl::Mutex& rMutex,
+              const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
+              const OUString& rName,
+              const OUString& rType,
+              const OUString& rDescription);
 
-        public:
-            Table(Tables* pTables,
-                  ::osl::Mutex& rMutex,
-                  const css::uno::Reference< css::sdbc::XConnection >& _xConnection);
-            Table(Tables* pTables,
-                  ::osl::Mutex& rMutex,
-                  const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
-                  const OUString& rName,
-                  const OUString& rType,
-                  const OUString& rDescription);
+        // OTableHelper
+        virtual ::connectivity::sdbcx::OCollection* createColumns(
+            const ::std::vector< OUString>& rNames) override;
+        virtual ::connectivity::sdbcx::OCollection* createKeys(
+            const ::std::vector< OUString>& rNames) override;
+        virtual ::connectivity::sdbcx::OCollection* createIndexes(
+            const ::std::vector< OUString>& rNames) override;
 
-            // OTableHelper
-            virtual ::connectivity::sdbcx::OCollection* createColumns(
-                const ::std::vector< OUString>& rNames) override;
-            virtual ::connectivity::sdbcx::OCollection* createKeys(
-                const ::std::vector< OUString>& rNames) override;
-            virtual ::connectivity::sdbcx::OCollection* createIndexes(
-                const ::std::vector< OUString>& rNames) override;
+        // XAlterTable
+        /**
+         * See css::sdbcx::ColumnDescriptor for details of
+         * rDescriptor.
+         */
+        virtual void SAL_CALL alterColumnByName(
+                const OUString& rColName,
+                const css::uno::Reference< css::beans::XPropertySet >& rDescriptor) override;
 
-            // XAlterTable
-            /**
-             * See css::sdbcx::ColumnDescriptor for details of
-             * rDescriptor.
-             */
-            virtual void SAL_CALL alterColumnByName(
-                    const OUString& rColName,
-                    const css::uno::Reference< css::beans::XPropertySet >& rDescriptor) override;
+        // XRename -- UNSUPPORTED
+        virtual void SAL_CALL rename(const OUString& sName) override;
 
-            // XRename -- UNSUPPORTED
-            virtual void SAL_CALL rename(const OUString& sName) override;
+        //XInterface
+        virtual css::uno::Any
+                SAL_CALL queryInterface(const css::uno::Type & rType) override;
 
-            //XInterface
-            virtual css::uno::Any
-                    SAL_CALL queryInterface(const css::uno::Type & rType) override;
-
-        };
+    };
 
 } // namespace connectivity::firebird
 

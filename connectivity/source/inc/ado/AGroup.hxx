@@ -24,35 +24,35 @@
 
 namespace connectivity::ado
 {
-        typedef sdbcx::OGroup OGroup_ADO;
-        class OCatalog;
+    typedef sdbcx::OGroup OGroup_ADO;
+    class OCatalog;
 
-        class OAdoGroup :   public OGroup_ADO
-        {
-            WpADOGroup      m_aGroup;
-            OCatalog*       m_pCatalog;
+    class OAdoGroup :   public OGroup_ADO
+    {
+        WpADOGroup      m_aGroup;
+        OCatalog*       m_pCatalog;
 
-            static sal_Int32 MapRight(RightsEnum _eNum);
-            static RightsEnum Map2Right(sal_Int32 _eNum);
-            static ObjectTypeEnum MapObjectType(sal_Int32 ObjType);
-        protected:
-            virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue,sal_Int32 nHandle) const override;
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) override;
+        static sal_Int32 MapRight(RightsEnum _eNum);
+        static RightsEnum Map2Right(sal_Int32 _eNum);
+        static ObjectTypeEnum MapObjectType(sal_Int32 ObjType);
+    protected:
+        virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue,sal_Int32 nHandle) const override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) override;
 
-        public:
-            virtual void refreshUsers() override;
-        public:
-            OAdoGroup(OCatalog* _pParent,bool _bCase, ADOGroup* _pGroup=nullptr);
-            OAdoGroup(OCatalog* _pParent,bool _bCase, const OUString& Name);
+    public:
+        virtual void refreshUsers() override;
+    public:
+        OAdoGroup(OCatalog* _pParent,bool _bCase, ADOGroup* _pGroup=nullptr);
+        OAdoGroup(OCatalog* _pParent,bool _bCase, const OUString& Name);
 
-            // XAuthorizable
-            virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) override;
-            virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) override;
-            virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
-            virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
+        // XAuthorizable
+        virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) override;
+        virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) override;
+        virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
+        virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
 
-            WpADOGroup getImpl() const { return m_aGroup; }
-        };
+        WpADOGroup getImpl() const { return m_aGroup; }
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,16 +22,16 @@
 #include <file/FCatalog.hxx>
 
 namespace connectivity::dbase
+{
+    class ODbaseConnection;
+    class ODbaseCatalog : public file::OFileCatalog
     {
-        class ODbaseConnection;
-        class ODbaseCatalog : public file::OFileCatalog
-        {
-    public:
-            virtual void refreshTables() override;
+public:
+        virtual void refreshTables() override;
 
-        public:
-            ODbaseCatalog(ODbaseConnection* _pCon);
-        };
+    public:
+        ODbaseCatalog(ODbaseConnection* _pCon);
+    };
 
 }
 

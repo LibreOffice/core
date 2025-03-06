@@ -11,21 +11,21 @@
 #include <connectivity/sdbcx/VColumn.hxx>
 
 namespace connectivity::firebird
+{
+    class Column;
+    typedef ::comphelper::OIdPropertyArrayUsageHelper<Column> Column_PROP;
+    class Column : public sdbcx::OColumn,
+                       public Column_PROP
     {
-        class Column;
-        typedef ::comphelper::OIdPropertyArrayUsageHelper<Column> Column_PROP;
-        class Column : public sdbcx::OColumn,
-                           public Column_PROP
-        {
-            OUString m_sAutoIncrement;
-        protected:
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
-        public:
-            Column();
-            virtual void construct() override;
-            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-        };
+        OUString m_sAutoIncrement;
+    protected:
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
+        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+    public:
+        Column();
+        virtual void construct() override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    };
 
 }
 

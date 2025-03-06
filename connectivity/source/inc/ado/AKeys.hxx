@@ -24,30 +24,30 @@
 
 namespace connectivity::ado
 {
-        class OConnection;
-        class OKeys : public sdbcx::OCollection
-        {
-            WpADOKeys       m_aCollection;
-            OConnection*    m_pConnection;
+    class OConnection;
+    class OKeys : public sdbcx::OCollection
+    {
+        WpADOKeys       m_aCollection;
+        OConnection*    m_pConnection;
 
-        protected:
-            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
-            virtual void impl_refresh() override;
-            virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
-            virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
-            virtual void dropObject(sal_Int32 _nPos,const OUString& _sElementName) override;
-        public:
-            OKeys(::cppu::OWeakObject& _rParent,
-                     ::osl::Mutex& _rMutex,
-                     const ::std::vector< OUString> &_rVector,
-                     const WpADOKeys& _rCollection,
-                     bool _bCase,
-                     OConnection* _pConnection) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
-                ,m_aCollection(_rCollection)
-                ,m_pConnection(_pConnection)
-            {
-            }
-        };
+    protected:
+        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual void impl_refresh() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void dropObject(sal_Int32 _nPos,const OUString& _sElementName) override;
+    public:
+        OKeys(::cppu::OWeakObject& _rParent,
+                 ::osl::Mutex& _rMutex,
+                 const ::std::vector< OUString> &_rVector,
+                 const WpADOKeys& _rCollection,
+                 bool _bCase,
+                 OConnection* _pConnection) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
+            ,m_aCollection(_rCollection)
+            ,m_pConnection(_pConnection)
+        {
+        }
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

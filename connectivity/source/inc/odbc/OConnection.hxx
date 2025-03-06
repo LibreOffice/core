@@ -35,92 +35,92 @@
 #include <map>
 
 namespace connectivity::odbc
+{
+    class ODBCDriver;
+    class Functions;
+
+    typedef connectivity::OMetaConnection OConnection_BASE;
+    typedef std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
+
+    class OConnection final :
+                        public OConnection_BASE,
+                        public OAutoRetrievingBase
     {
-        class ODBCDriver;
-        class Functions;
+        // Data attributes
 
-        typedef connectivity::OMetaConnection OConnection_BASE;
-        typedef std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
-
-        class OConnection final :
-                            public OConnection_BASE,
-                            public OAutoRetrievingBase
-        {
-            // Data attributes
-
-            std::map< SQLHANDLE, rtl::Reference<OConnection>> m_aConnections; // holds all connections which are need for several statements
+        std::map< SQLHANDLE, rtl::Reference<OConnection>> m_aConnections; // holds all connections which are need for several statements
 
 
-            OUString        m_sUser;        //  the user name
-            rtl::Reference<ODBCDriver>
-                            m_xDriver;      //  Pointer to the owning
-                                            //  driver object
+        OUString        m_sUser;        //  the user name
+        rtl::Reference<ODBCDriver>
+                        m_xDriver;      //  Pointer to the owning
+                                        //  driver object
 
-            SQLHANDLE       m_aConnectionHandle;
-            SQLHANDLE       m_pDriverHandleCopy;    // performance reason
-            sal_Int32       m_nStatementCount;
-            bool            m_bClosed;
-            bool            m_bUseCatalog;  // should we use the catalog on filebased databases
-            bool            m_bUseOldDateFormat;
-            bool            m_bIgnoreDriverPrivileges;
-            bool            m_bPreventGetVersionColumns;    // #i60273#
-            bool            m_bReadOnly;
+        SQLHANDLE       m_aConnectionHandle;
+        SQLHANDLE       m_pDriverHandleCopy;    // performance reason
+        sal_Int32       m_nStatementCount;
+        bool            m_bClosed;
+        bool            m_bUseCatalog;  // should we use the catalog on filebased databases
+        bool            m_bUseOldDateFormat;
+        bool            m_bIgnoreDriverPrivileges;
+        bool            m_bPreventGetVersionColumns;    // #i60273#
+        bool            m_bReadOnly;
 
 
-            SQLRETURN       OpenConnection(const OUString& aConnectStr,sal_Int32 nTimeOut, bool bSilent);
+        SQLRETURN       OpenConnection(const OUString& aConnectStr,sal_Int32 nTimeOut, bool bSilent);
 
-        public:
-            const Functions& functions() const;
-            /// @throws css::sdbc::SQLException
-            SQLRETURN       Construct( const OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info);
+    public:
+        const Functions& functions() const;
+        /// @throws css::sdbc::SQLException
+        SQLRETURN       Construct( const OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info);
 
-            OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver*  _pDriver);
-            //  OConnection(const SQLHANDLE _pConnectionHandle);
-            virtual ~OConnection() override;
+        OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver*  _pDriver);
+        //  OConnection(const SQLHANDLE _pConnectionHandle);
+        virtual ~OConnection() override;
 
-            // OComponentHelper
-            virtual void SAL_CALL disposing() override;
+        // OComponentHelper
+        virtual void SAL_CALL disposing() override;
 
-            // XServiceInfo
-            DECLARE_SERVICE_INFO();
-            // XConnection
-            virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
-            virtual OUString SAL_CALL nativeSQL( const OUString& sql ) override;
-            virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit ) override;
-            virtual sal_Bool SAL_CALL getAutoCommit(  ) override;
-            virtual void SAL_CALL commit(  ) override;
-            virtual void SAL_CALL rollback(  ) override;
-            virtual sal_Bool SAL_CALL isClosed(  ) override;
-            virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
-            virtual void SAL_CALL setReadOnly( sal_Bool readOnly ) override;
-            virtual sal_Bool SAL_CALL isReadOnly(  ) override;
-            virtual void SAL_CALL setCatalog( const OUString& catalog ) override;
-            virtual OUString SAL_CALL getCatalog(  ) override;
-            virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) override;
-            virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) override;
-            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTypeMap(  ) override;
-            virtual void SAL_CALL setTypeMap( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-            // XCloseable
-            virtual void SAL_CALL close(  ) override;
-            // XWarningsSupplier
-            virtual css::uno::Any SAL_CALL getWarnings(  ) override;
-            virtual void SAL_CALL clearWarnings(  ) override;
+        // XServiceInfo
+        DECLARE_SERVICE_INFO();
+        // XConnection
+        virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
+        virtual OUString SAL_CALL nativeSQL( const OUString& sql ) override;
+        virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit ) override;
+        virtual sal_Bool SAL_CALL getAutoCommit(  ) override;
+        virtual void SAL_CALL commit(  ) override;
+        virtual void SAL_CALL rollback(  ) override;
+        virtual sal_Bool SAL_CALL isClosed(  ) override;
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
+        virtual void SAL_CALL setReadOnly( sal_Bool readOnly ) override;
+        virtual sal_Bool SAL_CALL isReadOnly(  ) override;
+        virtual void SAL_CALL setCatalog( const OUString& catalog ) override;
+        virtual OUString SAL_CALL getCatalog(  ) override;
+        virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) override;
+        virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) override;
+        virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTypeMap(  ) override;
+        virtual void SAL_CALL setTypeMap( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        // XCloseable
+        virtual void SAL_CALL close(  ) override;
+        // XWarningsSupplier
+        virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+        virtual void SAL_CALL clearWarnings(  ) override;
 
-            SQLHANDLE       getConnection() { return m_aConnectionHandle; }
+        SQLHANDLE       getConnection() { return m_aConnectionHandle; }
 
-            // should we use the catalog on filebased databases
-            bool     isCatalogUsed()                     const { return m_bUseCatalog; }
-            bool     isIgnoreDriverPrivilegesEnabled()   const { return m_bIgnoreDriverPrivileges; }
-            bool     preventGetVersionColumns()          const { return m_bPreventGetVersionColumns; }
-            bool     useOldDateFormat()                  const { return m_bUseOldDateFormat; }
-            ODBCDriver*      getDriver()                 const { return m_xDriver.get();}
+        // should we use the catalog on filebased databases
+        bool     isCatalogUsed()                     const { return m_bUseCatalog; }
+        bool     isIgnoreDriverPrivilegesEnabled()   const { return m_bIgnoreDriverPrivileges; }
+        bool     preventGetVersionColumns()          const { return m_bPreventGetVersionColumns; }
+        bool     useOldDateFormat()                  const { return m_bUseOldDateFormat; }
+        ODBCDriver*      getDriver()                 const { return m_xDriver.get();}
 
-            SQLHANDLE       createStatementHandle();
-            // close and free the handle and set it to SQL_NULLHANDLE
-            void            freeStatementHandle(SQLHANDLE& _pHandle);
-        };
+        SQLHANDLE       createStatementHandle();
+        // close and free the handle and set it to SQL_NULLHANDLE
+        void            freeStatementHandle(SQLHANDLE& _pHandle);
+    };
 
 }
 

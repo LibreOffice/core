@@ -33,91 +33,91 @@ namespace com::sun::star::util
 
 namespace connectivity::ado
 {
-        class OLEVariant    :   public ::tagVARIANT
+    class OLEVariant    :   public ::tagVARIANT
+    {
+    public:
+        OLEVariant();
+        OLEVariant(const VARIANT& varSrc);
+        OLEVariant(const OLEVariant& varSrc)    ;
+        OLEVariant(bool x)  ;
+        OLEVariant(sal_Bool) = delete;
+        OLEVariant(sal_Int8 n)  ;
+        OLEVariant(sal_Int16 n) ;
+        OLEVariant(sal_Int32 n) ;
+        OLEVariant(sal_Int64 x) ;
+
+        OLEVariant(std::u16string_view us);
+        OLEVariant(const OUString& us)
+            : OLEVariant(std::u16string_view(us))
         {
-        public:
-            OLEVariant();
-            OLEVariant(const VARIANT& varSrc);
-            OLEVariant(const OLEVariant& varSrc)    ;
-            OLEVariant(bool x)  ;
-            OLEVariant(sal_Bool) = delete;
-            OLEVariant(sal_Int8 n)  ;
-            OLEVariant(sal_Int16 n) ;
-            OLEVariant(sal_Int32 n) ;
-            OLEVariant(sal_Int64 x) ;
+        }
+        ~OLEVariant()                   ;
+        OLEVariant(const css::util::Date& x );
+        OLEVariant(const css::util::Time& x );
+        OLEVariant(const css::util::DateTime& x );
+        OLEVariant(float x);
+        OLEVariant(const double &x);
+        OLEVariant(IDispatch* pDispInterface);
+        OLEVariant(const css::uno::Sequence< sal_Int8 >& x);
+        OLEVariant& operator=(const OLEVariant& varSrc);
+        // Assign a const VARIANT& (::VariantCopy handles everything)
 
-            OLEVariant(std::u16string_view us);
-            OLEVariant(const OUString& us)
-                : OLEVariant(std::u16string_view(us))
-            {
-            }
-            ~OLEVariant()                   ;
-            OLEVariant(const css::util::Date& x );
-            OLEVariant(const css::util::Time& x );
-            OLEVariant(const css::util::DateTime& x );
-            OLEVariant(float x);
-            OLEVariant(const double &x);
-            OLEVariant(IDispatch* pDispInterface);
-            OLEVariant(const css::uno::Sequence< sal_Int8 >& x);
-            OLEVariant& operator=(const OLEVariant& varSrc);
-            // Assign a const VARIANT& (::VariantCopy handles everything)
+        OLEVariant& operator=(const tagVARIANT& varSrc);
+        // Assign a const VARIANT* (::VariantCopy handles everything)
 
-            OLEVariant& operator=(const tagVARIANT& varSrc);
-            // Assign a const VARIANT* (::VariantCopy handles everything)
+        OLEVariant& operator=(const VARIANT* pSrc);
+        void setByte(sal_uInt8 n)               ;
+        void setInt16(sal_Int16 n)              ;
+        void setInt32(sal_Int32 n)              ;
+        void setFloat(float f)                  ;
+        void setDouble(double d)                ;
+        void setDate(DATE d)                    ;
+        void setChar(unsigned char a)           ;
+        void setCurrency(double aCur)           ;
+        void setBool(bool b)                    ;
+        void setString(std::u16string_view us);
+        void setNoArg()                         ;
 
-            OLEVariant& operator=(const VARIANT* pSrc);
-            void setByte(sal_uInt8 n)               ;
-            void setInt16(sal_Int16 n)              ;
-            void setInt32(sal_Int32 n)              ;
-            void setFloat(float f)                  ;
-            void setDouble(double d)                ;
-            void setDate(DATE d)                    ;
-            void setChar(unsigned char a)           ;
-            void setCurrency(double aCur)           ;
-            void setBool(bool b)                    ;
-            void setString(std::u16string_view us);
-            void setNoArg()                         ;
+        void setIDispatch(IDispatch* pDispInterface);
+        void setNull()   ;
+        void setEmpty()  ;
 
-            void setIDispatch(IDispatch* pDispInterface);
-            void setNull()   ;
-            void setEmpty()  ;
+        void setUI1SAFEARRAYPtr(SAFEARRAY* pSafeAr);
+        void setArray(SAFEARRAY* pSafeArray, VARTYPE vtType);
+        bool isNull() const  ;
+        bool isEmpty() const ;
 
-            void setUI1SAFEARRAYPtr(SAFEARRAY* pSafeAr);
-            void setArray(SAFEARRAY* pSafeArray, VARTYPE vtType);
-            bool isNull() const  ;
-            bool isEmpty() const ;
+        VARTYPE getType() const ;
+        void ChangeType(VARTYPE vartype, const OLEVariant* pSrc);
 
-            VARTYPE getType() const ;
-            void ChangeType(VARTYPE vartype, const OLEVariant* pSrc);
+        OUString        getString()     const;
+        bool            getBool()       const;
+        IUnknown*       getIUnknown()   const;
+        IDispatch*      getIDispatch()  const;
+        sal_uInt8       getByte()       const;
+        sal_Int16       getInt16()      const;
+        sal_Int8        getInt8()       const;
+        sal_Int32       getInt32()      const;
+        sal_uInt32      getUInt32()     const;
+        float           getFloat()      const;
+        double          getDouble()     const;
+        double          getDateAsDouble() const;
+        CY              getCurrency()   const;
+        css::util::Date getDate()       const;
+        css::util::Time getTime()       const;
+        css::util::DateTime getDateTime() const;
+        css::uno::Sequence<sal_Int8> getByteSequence() const;
+        SAFEARRAY*      getUI1SAFEARRAYPtr() const;
+        css::uno::Any makeAny() const;
 
-            OUString        getString()     const;
-            bool            getBool()       const;
-            IUnknown*       getIUnknown()   const;
-            IDispatch*      getIDispatch()  const;
-            sal_uInt8       getByte()       const;
-            sal_Int16       getInt16()      const;
-            sal_Int8        getInt8()       const;
-            sal_Int32       getInt32()      const;
-            sal_uInt32      getUInt32()     const;
-            float           getFloat()      const;
-            double          getDouble()     const;
-            double          getDateAsDouble() const;
-            CY              getCurrency()   const;
-            css::util::Date getDate()       const;
-            css::util::Time getTime()       const;
-            css::util::DateTime getDateTime() const;
-            css::uno::Sequence<sal_Int8> getByteSequence() const;
-            SAFEARRAY*      getUI1SAFEARRAYPtr() const;
-            css::uno::Any makeAny() const;
+        static VARIANT_BOOL VariantBool(bool bEinBoolean);
 
-            static VARIANT_BOOL VariantBool(bool bEinBoolean);
+    private:
+        void CHS();
 
-        private:
-            void CHS();
+        void set(double n);
 
-            void set(double n);
-
-        };
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

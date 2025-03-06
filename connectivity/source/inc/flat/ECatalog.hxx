@@ -22,16 +22,16 @@
 #include <file/FCatalog.hxx>
 
 namespace connectivity::flat
+{
+    class OFlatConnection;
+    class OFlatCatalog : public file::OFileCatalog
     {
-        class OFlatConnection;
-        class OFlatCatalog : public file::OFileCatalog
-        {
-    public:
-            virtual void refreshTables() override;
+public:
+        virtual void refreshTables() override;
 
-        public:
-            OFlatCatalog(OFlatConnection* _pCon);
-        };
+    public:
+        OFlatCatalog(OFlatConnection* _pCon);
+    };
 
 }
 

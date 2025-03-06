@@ -24,24 +24,24 @@
 #include <dbase/DTable.hxx>
 
 namespace connectivity::dbase
+{
+    class ODbaseIndexColumns : public sdbcx::OCollection
     {
-        class ODbaseIndexColumns : public sdbcx::OCollection
-        {
-            ODbaseIndex* m_pIndex;
-        protected:
-            virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
-            virtual void impl_refresh() override;
-            virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
-            virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
-        public:
-            ODbaseIndexColumns( ODbaseIndex* _pIndex,
-                                ::osl::Mutex& _rMutex,
-                                const ::std::vector< OUString> &_rVector)
-                        : sdbcx::OCollection(*_pIndex,_pIndex->getTable()->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
-                        , m_pIndex(_pIndex)
-            {}
+        ODbaseIndex* m_pIndex;
+    protected:
+        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual void impl_refresh() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+    public:
+        ODbaseIndexColumns( ODbaseIndex* _pIndex,
+                            ::osl::Mutex& _rMutex,
+                            const ::std::vector< OUString> &_rVector)
+                    : sdbcx::OCollection(*_pIndex,_pIndex->getTable()->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
+                    , m_pIndex(_pIndex)
+        {}
 
-        };
+    };
 
 }
 

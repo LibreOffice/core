@@ -39,158 +39,158 @@
 #include <unotools/weakref.hxx>
 
 namespace connectivity::file
+{
+    class OResultSet;
+    class OFileTable;
+    typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XWarningsSupplier,
+                                               css::util::XCancellable,
+                                               css::sdbc::XCloseable> OStatement_BASE;
+
+
+    //************ Class: java.sql.Statement
+
+    class OOO_DLLPUBLIC_FILE OStatement_Base :
+                                    public  cppu::BaseMutex,
+                                    public  OStatement_BASE,
+                                    public  ::comphelper::OPropertyContainer,
+                                    public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>
+
     {
-        class OResultSet;
-        class OFileTable;
-        typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XWarningsSupplier,
-                                                   css::util::XCancellable,
-                                                   css::sdbc::XCloseable> OStatement_BASE;
+    protected:
+        std::vector<sal_Int32>                    m_aColMapping; // pos 0 is unused so we don't have to decrement 1 every time
+        std::vector<sal_Int32>                    m_aParameterIndexes; // maps the parameter index to column index
+        std::vector<sal_Int32>                    m_aOrderbyColumnNumber;
+        std::vector<TAscendingOrder>              m_aOrderbyAscending;
+
+        css::sdbc::SQLWarning                              m_aLastWarning;
+        unotools::WeakReference< OResultSet>               m_xResultSet;   // The last ResultSet created
+        css::uno::Reference< css::sdbc::XDatabaseMetaData> m_xDBMetaData;
+        css::uno::Reference< css::container::XNameAccess>  m_xColNames; // table columns                                                          //  for this Statement
 
 
-        //************ Class: java.sql.Statement
+        connectivity::OSQLParser                    m_aParser;
+        connectivity::OSQLParseTreeIterator         m_aSQLIterator;
 
-        class OOO_DLLPUBLIC_FILE OStatement_Base :
-                                        public  cppu::BaseMutex,
-                                        public  OStatement_BASE,
-                                        public  ::comphelper::OPropertyContainer,
-                                        public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>
+        rtl::Reference<OConnection>                 m_pConnection;// The owning Connection object
+        connectivity::OSQLParseNode*                m_pParseTree;
+        std::unique_ptr<OSQLAnalyzer>               m_pSQLAnalyzer; //the sql analyzer used by the resultset
 
-        {
-        protected:
-            std::vector<sal_Int32>                    m_aColMapping; // pos 0 is unused so we don't have to decrement 1 every time
-            std::vector<sal_Int32>                    m_aParameterIndexes; // maps the parameter index to column index
-            std::vector<sal_Int32>                    m_aOrderbyColumnNumber;
-            std::vector<TAscendingOrder>              m_aOrderbyAscending;
+        rtl::Reference<OFileTable>                  m_pTable;       // the current table
+        OValueRefRow                                m_aSelectRow;
+        OValueRefRow                                m_aRow;
+        OValueRefRow                                m_aEvaluateRow; // contains all values of a row
+        ORefAssignValues                            m_aAssignValues; // needed for insert,update and parameters
+                                                                // to compare with the restrictions
 
-            css::sdbc::SQLWarning                              m_aLastWarning;
-            unotools::WeakReference< OResultSet>               m_xResultSet;   // The last ResultSet created
-            css::uno::Reference< css::sdbc::XDatabaseMetaData> m_xDBMetaData;
-            css::uno::Reference< css::container::XNameAccess>  m_xColNames; // table columns                                                          //  for this Statement
+        OUString                                    m_aCursorName;
+        sal_Int32                                   m_nMaxFieldSize;
+        sal_Int32                                   m_nMaxRows;
+        sal_Int32                                   m_nQueryTimeOut;
+        sal_Int32                                   m_nFetchSize;
+        sal_Int32                                   m_nResultSetType;
+        sal_Int32                                   m_nFetchDirection;
+        sal_Int32                                   m_nResultSetConcurrency;
+        bool                                        m_bEscapeProcessing;
 
+    protected:
+        // initialize the column index map (mapping select columns to table columns)
+        void createColumnMapping();
+        // searches the statement for sort criteria
+        void analyzeSQL();
+        void setOrderbyColumn( connectivity::OSQLParseNode const * pColumnRef,
+                               connectivity::OSQLParseNode const * pAscendingDescending);
 
-            connectivity::OSQLParser                    m_aParser;
-            connectivity::OSQLParseTreeIterator         m_aSQLIterator;
+        virtual void initializeResultSet(OResultSet* _pResult);
 
-            rtl::Reference<OConnection>                 m_pConnection;// The owning Connection object
-            connectivity::OSQLParseNode*                m_pParseTree;
-            std::unique_ptr<OSQLAnalyzer>               m_pSQLAnalyzer; //the sql analyzer used by the resultset
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
+        void closeResultSet();
 
-            rtl::Reference<OFileTable>                  m_pTable;       // the current table
-            OValueRefRow                                m_aSelectRow;
-            OValueRefRow                                m_aRow;
-            OValueRefRow                                m_aEvaluateRow; // contains all values of a row
-            ORefAssignValues                            m_aAssignValues; // needed for insert,update and parameters
-                                                                    // to compare with the restrictions
+        void disposeResultSet();
+        void GetAssignValues();
+        void SetAssignValue(const OUString& aColumnName,
+                               const OUString& aValue,
+                               bool bSetNull = false,
+                               sal_uInt32 nParameter=SQL_NO_PARAMETER);
+        void ParseAssignValues( const std::vector< OUString>& aColumnNameList,
+                                connectivity::OSQLParseNode* pRow_Value_Constructor_Elem, sal_Int32 nIndex);
 
-            OUString                                    m_aCursorName;
-            sal_Int32                                   m_nMaxFieldSize;
-            sal_Int32                                   m_nMaxRows;
-            sal_Int32                                   m_nQueryTimeOut;
-            sal_Int32                                   m_nFetchSize;
-            sal_Int32                                   m_nResultSetType;
-            sal_Int32                                   m_nFetchDirection;
-            sal_Int32                                   m_nResultSetConcurrency;
-            bool                                        m_bEscapeProcessing;
+        virtual void parseParamterElem(const OUString& _sColumnName,OSQLParseNode* pRow_Value_Constructor_Elem);
+        // factory method for resultset's
+        virtual rtl::Reference<OResultSet> createResultSet() = 0;
+        // OPropertyArrayUsageHelper
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
+        // OPropertySetHelper
+        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+        virtual ~OStatement_Base() override;
+    public:
+        connectivity::OSQLParseNode* getParseTree() const { return m_pParseTree;}
 
-        protected:
-            // initialize the column index map (mapping select columns to table columns)
-            void createColumnMapping();
-            // searches the statement for sort criteria
-            void analyzeSQL();
-            void setOrderbyColumn( connectivity::OSQLParseNode const * pColumnRef,
-                                   connectivity::OSQLParseNode const * pAscendingDescending);
+        OStatement_Base(OConnection* _pConnection );
 
-            virtual void initializeResultSet(OResultSet* _pResult);
+        OConnection* getOwnConnection() const { return m_pConnection.get(); }
 
-            /// @throws css::sdbc::SQLException
-            /// @throws css::uno::RuntimeException
-            void closeResultSet();
+        using OStatement_BASE::operator css::uno::Reference< css::uno::XInterface >;
 
-            void disposeResultSet();
-            void GetAssignValues();
-            void SetAssignValue(const OUString& aColumnName,
-                                   const OUString& aValue,
-                                   bool bSetNull = false,
-                                   sal_uInt32 nParameter=SQL_NO_PARAMETER);
-            void ParseAssignValues( const std::vector< OUString>& aColumnNameList,
-                                    connectivity::OSQLParseNode* pRow_Value_Constructor_Elem, sal_Int32 nIndex);
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
+        virtual void construct(const OUString& sql);
 
-            virtual void parseParamterElem(const OUString& _sColumnName,OSQLParseNode* pRow_Value_Constructor_Elem);
-            // factory method for resultset's
-            virtual rtl::Reference<OResultSet> createResultSet() = 0;
-            // OPropertyArrayUsageHelper
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
-            // OPropertySetHelper
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
-            virtual ~OStatement_Base() override;
-        public:
-            connectivity::OSQLParseNode* getParseTree() const { return m_pParseTree;}
+        // OComponentHelper
+        virtual void SAL_CALL disposing() override;
+        // XInterface
+        //      virtual void SAL_CALL release() throw(css::uno::RuntimeException) = 0;
+        virtual void SAL_CALL acquire() noexcept override;
+        // XInterface
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        //XTypeProvider
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
-            OStatement_Base(OConnection* _pConnection );
+        // XPropertySet
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+        // XWarningsSupplier
+        virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+        virtual void SAL_CALL clearWarnings(  ) override;
+        // XCancellable
+        virtual void SAL_CALL cancel(  ) override;
+        // XCloseable
+        virtual void SAL_CALL close(  ) override;
+    };
 
-            OConnection* getOwnConnection() const { return m_pConnection.get(); }
+    class OOO_DLLPUBLIC_FILE OStatement_BASE2 : public OStatement_Base
 
-            using OStatement_BASE::operator css::uno::Reference< css::uno::XInterface >;
+    {
+    public:
+        OStatement_BASE2(OConnection* _pConnection ) : OStatement_Base(_pConnection ) {}
+        // OComponentHelper
+        virtual void SAL_CALL disposing() override;
+        // XInterface
+        virtual void SAL_CALL release() noexcept override;
+    };
 
-            /// @throws css::sdbc::SQLException
-            /// @throws css::uno::RuntimeException
-            virtual void construct(const OUString& sql);
+    typedef ::cppu::ImplHelper2< css::sdbc::XStatement,css::lang::XServiceInfo > OStatement_XStatement;
+    class OOO_DLLPUBLIC_FILE OStatement :
+                        public OStatement_BASE2,
+                        public OStatement_XStatement
+    {
+    protected:
+        // factory method for resultset's
+        virtual rtl::Reference<OResultSet> createResultSet() override;
+    public:
+        // a Constructor, that is needed for when Returning the Object is needed:
+        OStatement( OConnection* _pConnection) : OStatement_BASE2( _pConnection){}
+        DECLARE_SERVICE_INFO();
 
-            // OComponentHelper
-            virtual void SAL_CALL disposing() override;
-            // XInterface
-            //      virtual void SAL_CALL release() throw(css::uno::RuntimeException) = 0;
-            virtual void SAL_CALL acquire() noexcept override;
-            // XInterface
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-            //XTypeProvider
-            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        virtual void SAL_CALL acquire() noexcept override;
+        virtual void SAL_CALL release() noexcept override;
 
-            // XPropertySet
-            virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-            // XWarningsSupplier
-            virtual css::uno::Any SAL_CALL getWarnings(  ) override;
-            virtual void SAL_CALL clearWarnings(  ) override;
-            // XCancellable
-            virtual void SAL_CALL cancel(  ) override;
-            // XCloseable
-            virtual void SAL_CALL close(  ) override;
-        };
-
-        class OOO_DLLPUBLIC_FILE OStatement_BASE2 : public OStatement_Base
-
-        {
-        public:
-            OStatement_BASE2(OConnection* _pConnection ) : OStatement_Base(_pConnection ) {}
-            // OComponentHelper
-            virtual void SAL_CALL disposing() override;
-            // XInterface
-            virtual void SAL_CALL release() noexcept override;
-        };
-
-        typedef ::cppu::ImplHelper2< css::sdbc::XStatement,css::lang::XServiceInfo > OStatement_XStatement;
-        class OOO_DLLPUBLIC_FILE OStatement :
-                            public OStatement_BASE2,
-                            public OStatement_XStatement
-        {
-        protected:
-            // factory method for resultset's
-            virtual rtl::Reference<OResultSet> createResultSet() override;
-        public:
-            // a Constructor, that is needed for when Returning the Object is needed:
-            OStatement( OConnection* _pConnection) : OStatement_BASE2( _pConnection){}
-            DECLARE_SERVICE_INFO();
-
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-            virtual void SAL_CALL acquire() noexcept override;
-            virtual void SAL_CALL release() noexcept override;
-
-            // XStatement
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) override ;
-            virtual sal_Int32 SAL_CALL executeUpdate( const OUString& sql ) override ;
-            virtual sal_Bool SAL_CALL execute( const OUString& sql ) override ;
-            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override ;
-        };
+        // XStatement
+        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) override ;
+        virtual sal_Int32 SAL_CALL executeUpdate( const OUString& sql ) override ;
+        virtual sal_Bool SAL_CALL execute( const OUString& sql ) override ;
+        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override ;
+    };
 
 }
 

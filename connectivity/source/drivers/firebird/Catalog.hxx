@@ -12,28 +12,28 @@
 #include <sdbcx/VCatalog.hxx>
 
 namespace connectivity::firebird
+{
+    class Catalog: public ::connectivity::sdbcx::OCatalog
     {
-        class Catalog: public ::connectivity::sdbcx::OCatalog
-        {
-            css::uno::Reference< css::sdbc::XConnection >
-                m_xConnection;
+        css::uno::Reference< css::sdbc::XConnection >
+            m_xConnection;
 
-        public:
-            explicit Catalog(const css::uno::Reference< css::sdbc::XConnection >& rConnection);
+    public:
+        explicit Catalog(const css::uno::Reference< css::sdbc::XConnection >& rConnection);
 
-            // OCatalog
-            virtual void refreshTables() override;
-            virtual void refreshViews() override;
+        // OCatalog
+        virtual void refreshTables() override;
+        virtual void refreshViews() override;
 
-            // IRefreshableGroups
-            virtual void refreshGroups() override;
+        // IRefreshableGroups
+        virtual void refreshGroups() override;
 
-            // IRefreshableUsers
-            virtual void refreshUsers() override;
+        // IRefreshableUsers
+        virtual void refreshUsers() override;
 
-            sdbcx::OCollection* getPrivateTables() const { return m_pTables.get(); }
-            sdbcx::OCollection* getPrivateViews() const { return m_pViews.get(); }
-        };
+        sdbcx::OCollection* getPrivateTables() const { return m_pTables.get(); }
+        sdbcx::OCollection* getPrivateViews() const { return m_pViews.get(); }
+    };
 
 } // namespace connectivity::firebird
 

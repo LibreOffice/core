@@ -22,24 +22,24 @@
 #include <file/FConnection.hxx>
 
 namespace connectivity::dbase
+{
+    class ODriver;
+    class ODbaseConnection : public file::OConnection
     {
-        class ODriver;
-        class ODbaseConnection : public file::OConnection
-        {
-        protected:
-            virtual ~ODbaseConnection() override;
-        public:
-            ODbaseConnection(ODriver*   _pDriver);
-            // XServiceInfo
-            DECLARE_SERVICE_INFO();
+    protected:
+        virtual ~ODbaseConnection() override;
+    public:
+        ODbaseConnection(ODriver*   _pDriver);
+        // XServiceInfo
+        DECLARE_SERVICE_INFO();
 
-            // XConnection
-            virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
-            virtual css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog() override;
-            virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
-        };
+        // XConnection
+        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
+        virtual css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog() override;
+        virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
+        virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
+    };
 
 }
 

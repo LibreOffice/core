@@ -27,85 +27,85 @@
 #include <comphelper/IdPropArrayHelper.hxx>
 
 namespace connectivity::hsqldb
+{
+
+    class OHSQLTable;
+    typedef ::comphelper::OIdPropertyArrayUsageHelper< OHSQLTable > OHSQLTable_PROP;
+    class OHSQLTable :  public OTableHelper
+                        ,public OHSQLTable_PROP
     {
+        sal_Int32 m_nPrivileges; // we have to set our privileges by our own
 
-        class OHSQLTable;
-        typedef ::comphelper::OIdPropertyArrayUsageHelper< OHSQLTable > OHSQLTable_PROP;
-        class OHSQLTable :  public OTableHelper
-                            ,public OHSQLTable_PROP
-        {
-            sal_Int32 m_nPrivileges; // we have to set our privileges by our own
-
-            /** executes the statement.
-                @param  _rStatement
-                    The statement to execute.
-                */
-            void executeStatement(const OUString& _rStatement );
-        protected:
-
-            /** creates the column collection for the table
-                @param  _rNames
-                    The column names.
+        /** executes the statement.
+            @param  _rStatement
+                The statement to execute.
             */
-            virtual sdbcx::OCollection* createColumns(const ::std::vector< OUString>& _rNames) override;
+        void executeStatement(const OUString& _rStatement );
+    protected:
 
-            /** creates the key collection for the table
-                @param  _rNames
-                    The key names.
-            */
-            virtual sdbcx::OCollection* createKeys(const ::std::vector< OUString>& _rNames) override;
+        /** creates the column collection for the table
+            @param  _rNames
+                The column names.
+        */
+        virtual sdbcx::OCollection* createColumns(const ::std::vector< OUString>& _rNames) override;
 
-            /** creates the index collection for the table
-                @param  _rNames
-                    The index names.
-            */
-            virtual sdbcx::OCollection* createIndexes(const ::std::vector< OUString>& _rNames) override;
+        /** creates the key collection for the table
+            @param  _rNames
+                The key names.
+        */
+        virtual sdbcx::OCollection* createKeys(const ::std::vector< OUString>& _rNames) override;
 
-            /** used to implement the creation of the array helper which is shared amongst all instances of the class.
-                This method needs to be implemented in derived classes.
-                <BR>
-                The method gets called with s_aMutex acquired.
-                @return                         a pointer to the newly created array helper. Must not be NULL.
-            */
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const override;
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
+        /** creates the index collection for the table
+            @param  _rNames
+                The index names.
+        */
+        virtual sdbcx::OCollection* createIndexes(const ::std::vector< OUString>& _rNames) override;
 
-        public:
-            OHSQLTable( sdbcx::OCollection* _pTables,
-                            const css::uno::Reference< css::sdbc::XConnection >& _xConnection);
-            OHSQLTable( sdbcx::OCollection* _pTables,
-                            const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
-                            const OUString& Name,
-                            const OUString& Type,
-                            const OUString& Description,
-                            const OUString& SchemaName,
-                            const OUString& CatalogName,
-                            sal_Int32 _nPrivileges
-                );
+        /** used to implement the creation of the array helper which is shared amongst all instances of the class.
+            This method needs to be implemented in derived classes.
+            <BR>
+            The method gets called with s_aMutex acquired.
+            @return                         a pointer to the newly created array helper. Must not be NULL.
+        */
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const override;
+        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
-            // ODescriptor
-            virtual void construct() override;
+    public:
+        OHSQLTable( sdbcx::OCollection* _pTables,
+                        const css::uno::Reference< css::sdbc::XConnection >& _xConnection);
+        OHSQLTable( sdbcx::OCollection* _pTables,
+                        const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
+                        const OUString& Name,
+                        const OUString& Type,
+                        const OUString& Description,
+                        const OUString& SchemaName,
+                        const OUString& CatalogName,
+                        sal_Int32 _nPrivileges
+            );
 
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-            //XTypeProvider
-            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-            // XAlterTable
-            virtual void SAL_CALL alterColumnByName( const OUString& colName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        // ODescriptor
+        virtual void construct() override;
 
-            // XRename
-            virtual void SAL_CALL rename( const OUString& newName ) override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+        //XTypeProvider
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        // XAlterTable
+        virtual void SAL_CALL alterColumnByName( const OUString& colName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
 
-            /**
-                returns the ALTER TABLE XXX COLUMN statement
-            */
-            OUString getAlterTableColumnPart() const;
+        // XRename
+        virtual void SAL_CALL rename( const OUString& newName ) override;
 
-            // some methods to alter table structures
-            void alterColumnType(sal_Int32 nNewType,const OUString& _rColName,const css::uno::Reference< css::beans::XPropertySet >& _xDescriptor);
-            void alterDefaultValue(std::u16string_view _sNewDefault,const OUString& _rColName);
-            void dropDefaultValue(const OUString& _sNewDefault);
+        /**
+            returns the ALTER TABLE XXX COLUMN statement
+        */
+        OUString getAlterTableColumnPart() const;
 
-        };
+        // some methods to alter table structures
+        void alterColumnType(sal_Int32 nNewType,const OUString& _rColName,const css::uno::Reference< css::beans::XPropertySet >& _xDescriptor);
+        void alterDefaultValue(std::u16string_view _sNewDefault,const OUString& _rColName);
+        void dropDefaultValue(const OUString& _sNewDefault);
+
+    };
 
 }
 

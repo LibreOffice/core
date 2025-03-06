@@ -27,84 +27,84 @@ namespace cppu { class IPropertyArrayHelper; }
 namespace com::sun::star::lang { class XComponent; }
 
 namespace connectivity::firebird
+{
+    /// @throws css::lang::DisposedException
+    void checkDisposed(bool _bThrow);
+
+
+    template <class TYPE>
+    class OPropertyArrayUsageHelper
     {
-        /// @throws css::lang::DisposedException
-        void checkDisposed(bool _bThrow);
+    protected:
+        static sal_Int32                        s_nRefCount;
+        static ::cppu::IPropertyArrayHelper*    s_pProps;
+        static ::osl::Mutex                     s_aMutex;
+
+    public:
+        OPropertyArrayUsageHelper();
+        virtual ~OPropertyArrayUsageHelper();
+
+        /** call this in the getInfoHelper method of your derived class. The method returns the array helper of the
+            class, which is created if necessary.
+        */
+        ::cppu::IPropertyArrayHelper*   getArrayHelper();
+
+    protected:
+        /** used to implement the creation of the array helper which is shared amongst all instances of the class.
+            This method needs to be implemented in derived classes.
+            <BR>
+            The method gets called with s_aMutex acquired.
+            @return                         a pointer to the newly created array helper. Must not be NULL.
+        */
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const = 0;
+    };
+
+    template<class TYPE>
+    sal_Int32                       OPropertyArrayUsageHelper< TYPE >::s_nRefCount  = 0;
+
+    template<class TYPE>
+    ::cppu::IPropertyArrayHelper*   OPropertyArrayUsageHelper< TYPE >::s_pProps = nullptr;
+
+    template<class TYPE>
+    ::osl::Mutex                    OPropertyArrayUsageHelper< TYPE >::s_aMutex;
 
 
-        template <class TYPE>
-        class OPropertyArrayUsageHelper
+    template <class TYPE>
+    OPropertyArrayUsageHelper<TYPE>::OPropertyArrayUsageHelper()
+    {
+        ::osl::MutexGuard aGuard(s_aMutex);
+        ++s_nRefCount;
+    }
+
+
+    template <class TYPE>
+    OPropertyArrayUsageHelper<TYPE>::~OPropertyArrayUsageHelper()
+    {
+        ::osl::MutexGuard aGuard(s_aMutex);
+        OSL_ENSURE(s_nRefCount > 0, "OPropertyArrayUsageHelper::~OPropertyArrayUsageHelper : suspicious call : have a refcount of 0 !");
+        if (!--s_nRefCount)
         {
-        protected:
-            static sal_Int32                        s_nRefCount;
-            static ::cppu::IPropertyArrayHelper*    s_pProps;
-            static ::osl::Mutex                     s_aMutex;
-
-        public:
-            OPropertyArrayUsageHelper();
-            virtual ~OPropertyArrayUsageHelper();
-
-            /** call this in the getInfoHelper method of your derived class. The method returns the array helper of the
-                class, which is created if necessary.
-            */
-            ::cppu::IPropertyArrayHelper*   getArrayHelper();
-
-        protected:
-            /** used to implement the creation of the array helper which is shared amongst all instances of the class.
-                This method needs to be implemented in derived classes.
-                <BR>
-                The method gets called with s_aMutex acquired.
-                @return                         a pointer to the newly created array helper. Must not be NULL.
-            */
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const = 0;
-        };
-
-        template<class TYPE>
-        sal_Int32                       OPropertyArrayUsageHelper< TYPE >::s_nRefCount  = 0;
-
-        template<class TYPE>
-        ::cppu::IPropertyArrayHelper*   OPropertyArrayUsageHelper< TYPE >::s_pProps = nullptr;
-
-        template<class TYPE>
-        ::osl::Mutex                    OPropertyArrayUsageHelper< TYPE >::s_aMutex;
+            delete s_pProps;
+            s_pProps = nullptr;
+        }
+    }
 
 
-        template <class TYPE>
-        OPropertyArrayUsageHelper<TYPE>::OPropertyArrayUsageHelper()
+    template <class TYPE>
+    ::cppu::IPropertyArrayHelper* OPropertyArrayUsageHelper<TYPE>::getArrayHelper()
+    {
+        OSL_ENSURE(s_nRefCount, "OPropertyArrayUsageHelper::getArrayHelper : suspicious call : have a refcount of 0 !");
+        if (!s_pProps)
         {
             ::osl::MutexGuard aGuard(s_aMutex);
-            ++s_nRefCount;
-        }
-
-
-        template <class TYPE>
-        OPropertyArrayUsageHelper<TYPE>::~OPropertyArrayUsageHelper()
-        {
-            ::osl::MutexGuard aGuard(s_aMutex);
-            OSL_ENSURE(s_nRefCount > 0, "OPropertyArrayUsageHelper::~OPropertyArrayUsageHelper : suspicious call : have a refcount of 0 !");
-            if (!--s_nRefCount)
-            {
-                delete s_pProps;
-                s_pProps = nullptr;
-            }
-        }
-
-
-        template <class TYPE>
-        ::cppu::IPropertyArrayHelper* OPropertyArrayUsageHelper<TYPE>::getArrayHelper()
-        {
-            OSL_ENSURE(s_nRefCount, "OPropertyArrayUsageHelper::getArrayHelper : suspicious call : have a refcount of 0 !");
             if (!s_pProps)
             {
-                ::osl::MutexGuard aGuard(s_aMutex);
-                if (!s_pProps)
-                {
-                    s_pProps = createArrayHelper();
-                    OSL_ENSURE(s_pProps, "OPropertyArrayUsageHelper::getArrayHelper : createArrayHelper returned nonsense !");
-                }
+                s_pProps = createArrayHelper();
+                OSL_ENSURE(s_pProps, "OPropertyArrayUsageHelper::getArrayHelper : createArrayHelper returned nonsense !");
             }
-            return s_pProps;
         }
+        return s_pProps;
+    }
 
 }
 

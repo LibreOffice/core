@@ -23,27 +23,27 @@
 
 namespace connectivity::ado
 {
-        class OConnection;
+    class OConnection;
 
-        class OCatalog : public connectivity::sdbcx::OCatalog
-        {
-            WpADOCatalog    m_aCatalog;
-            OConnection*    m_pConnection;
+    class OCatalog : public connectivity::sdbcx::OCatalog
+    {
+        WpADOCatalog    m_aCatalog;
+        OConnection*    m_pConnection;
 
-        public:
-            virtual void refreshTables() override;
-            virtual void refreshViews() override;
-            virtual void refreshGroups() override;
-            virtual void refreshUsers() override;
+    public:
+        virtual void refreshTables() override;
+        virtual void refreshViews() override;
+        virtual void refreshGroups() override;
+        virtual void refreshUsers() override;
 
-        public:
-            OCatalog(_ADOCatalog* _pCatalog,OConnection* _pCon);
-            ~OCatalog() override;
+    public:
+        OCatalog(_ADOCatalog* _pCatalog,OConnection* _pCon);
+        ~OCatalog() override;
 
-            OConnection*        getConnection()     const { return m_pConnection;   }
-            sdbcx::OCollection* getPrivateTables()  const { return m_pTables.get(); }
-            WpADOCatalog        getCatalog()        const { return m_aCatalog;      }
-        };
+        OConnection*        getConnection()     const { return m_pConnection;   }
+        sdbcx::OCollection* getPrivateTables()  const { return m_pTables.get(); }
+        WpADOCatalog        getCatalog()        const { return m_aCatalog;      }
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
