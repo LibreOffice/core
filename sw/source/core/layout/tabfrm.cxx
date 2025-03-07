@@ -5055,7 +5055,7 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
     return nHeight;
 }
 
-// Calculate the maximum border-line thickness (CalcLineWidth) off all the cells in the row
+// Calculate the maximum border-line thickness (CalcLineWidth) of all the cells in the row
 static sal_uInt16 lcl_GetLineWidth(const SwRowFrame& rRow, const SvxBoxItemLine& rLine)
 {
     sal_uInt16 nBorderThickness = 0;
