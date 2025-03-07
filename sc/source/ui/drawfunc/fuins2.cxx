@@ -137,7 +137,7 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
     }
     else
     {
-        xDataProvider.set(new ScChart2DataProvider(&rScDoc));
+        xDataProvider = new ScChart2DataProvider(&rScDoc);
     }
 
     xReceiver->attachDataProvider(xDataProvider);

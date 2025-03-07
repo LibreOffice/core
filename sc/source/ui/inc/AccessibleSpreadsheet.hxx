@@ -251,7 +251,7 @@ private:
     bool            mbIsSpreadsheet;
     bool            mbDelIns;
     bool            mbIsFocusSend;
-    typedef std::map<ScMyAddress,css::uno::Reference< css::accessibility::XAccessible > >
+    typedef std::map<ScMyAddress, rtl::Reference<ScAccessibleCell> >
         MAP_ADDR_XACC;
     MAP_ADDR_XACC m_mapSelectionSend;
     bool          m_bFormulaMode;

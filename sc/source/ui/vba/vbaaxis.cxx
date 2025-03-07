@@ -78,26 +78,26 @@ ScVbaAxis::Delete(  )
  uno::Reference< ::ooo::vba::excel::XAxisTitle > SAL_CALL
 ScVbaAxis::getAxisTitle(  )
 {
-    uno::Reference< excel::XAxisTitle > xAxisTitle;
+    rtl::Reference< ScVbaAxisTitle > xAxisTitle;
     try
     {
         ScVbaChart* pChart = getChartPtr();
 
-        if (getHasTitle() )
+        if (!getHasTitle() )
+            return nullptr;
+
+        int nType = getType();
+        switch(nType)
         {
-            int nType = getType();
-            switch(nType)
-            {
-                case xlCategory:
-                    xAxisTitle =  new ScVbaAxisTitle(this, mxContext, pChart->xAxisXSupplier->getXAxisTitle());
-                    break;
-                case xlSeriesAxis:
-                    xAxisTitle = new ScVbaAxisTitle(this, mxContext, pChart->xAxisZSupplier->getZAxisTitle());
-                    break;
-                default: // xlValue:
-                    xAxisTitle = new ScVbaAxisTitle(this, mxContext, pChart->xAxisYSupplier->getYAxisTitle());
-                    break;
-            }
+            case xlCategory:
+                xAxisTitle =  new ScVbaAxisTitle(this, mxContext, pChart->xAxisXSupplier->getXAxisTitle());
+                break;
+            case xlSeriesAxis:
+                xAxisTitle = new ScVbaAxisTitle(this, mxContext, pChart->xAxisZSupplier->getZAxisTitle());
+                break;
+            default: // xlValue:
+                xAxisTitle = new ScVbaAxisTitle(this, mxContext, pChart->xAxisYSupplier->getYAxisTitle());
+                break;
         }
     }
     catch (const uno::Exception& e)

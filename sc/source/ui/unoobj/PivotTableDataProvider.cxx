@@ -575,27 +575,23 @@ void PivotTableDataProvider::collectPivotTableData()
     m_bNeedsUpdate = false;
 }
 
-uno::Reference<chart2::data::XDataSequence>
+rtl::Reference<PivotTableDataSequence>
 PivotTableDataProvider::assignValuesToDataSequence(size_t nIndex)
 {
-    uno::Reference<chart2::data::XDataSequence> xDataSequence;
     if (nIndex >= m_aDataRowVector.size())
-        return xDataSequence;
+        return nullptr;
 
     OUString sDataID = lcl_identifierForData(nIndex);
 
     std::vector<ValueAndFormat> const & rRowOfData = m_aDataRowVector[nIndex];
     rtl::Reference<PivotTableDataSequence> pSequence(new PivotTableDataSequence(m_pDocument, sDataID, std::vector(rRowOfData)));
     pSequence->setRole(u"values-y"_ustr);
-    xDataSequence = pSequence;
-    return xDataSequence;
+    return pSequence;
 }
 
-uno::Reference<chart2::data::XDataSequence>
+rtl::Reference<PivotTableDataSequence>
 PivotTableDataProvider::assignLabelsToDataSequence(size_t nIndex)
 {
-    uno::Reference<chart2::data::XDataSequence> xDataSequence;
-
     OUString sLabelID = lcl_identifierForLabel(nIndex);
 
     OUStringBuffer aLabel;
@@ -626,26 +622,21 @@ PivotTableDataProvider::assignLabelsToDataSequence(size_t nIndex)
     rtl::Reference<PivotTableDataSequence> pSequence(new PivotTableDataSequence(m_pDocument,
                                                std::move(sLabelID), std::move(aLabelVector)));
     pSequence->setRole(u"values-y"_ustr);
-    xDataSequence = pSequence;
-    return xDataSequence;
+    return pSequence;
 }
 
-css::uno::Reference<css::chart2::data::XDataSequence>
+rtl::Reference<PivotTableDataSequence>
     PivotTableDataProvider::assignFirstCategoriesToDataSequence()
 {
-    uno::Reference<chart2::data::XDataSequence> xDataSequence;
-
     if (m_aCategoriesColumnOrientation.empty())
-        return xDataSequence;
+        return nullptr;
 
     std::vector<ValueAndFormat> const & rCategories = m_aCategoriesColumnOrientation.back();
 
     rtl::Reference<PivotTableDataSequence> pSequence(new PivotTableDataSequence(m_pDocument,
                                                lcl_identifierForCategories(), std::vector(rCategories)));
     pSequence->setRole(u"categories"_ustr);
-    xDataSequence = pSequence;
-
-    return xDataSequence;
+    return pSequence;
 }
 
 uno::Reference<chart2::data::XDataSource>

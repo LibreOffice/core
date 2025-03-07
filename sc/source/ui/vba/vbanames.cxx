@@ -116,7 +116,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
                 throw uno::RuntimeException( u"This Name is not valid ."_ustr );
         }
     }
-    uno::Reference< table::XCellRange > xUnoRange;
+    rtl::Reference< ScCellRangeObj > xUnoRange;
     if ( RefersTo.hasValue() || RefersToR1C1.hasValue() || RefersToR1C1Local.hasValue() )
     {
         OUString sFormula;

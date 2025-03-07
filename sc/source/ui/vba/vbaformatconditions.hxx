@@ -29,6 +29,7 @@ namespace ooo::vba::excel { class XRange; }
 namespace ooo::vba::excel { class XStyle; }
 namespace ooo::vba::excel { class XStyles; }
 class ScVbaStyles;
+class ScVbaFormatCondition;
 
 // This class is used only as a target for casting, it seems,
 // and no objects of this type are created as such, I think.
@@ -44,7 +45,7 @@ public:
     void notifyRange();
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< ov::excel::XFormatCondition > Add( ::sal_Int32 Type, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2, const css::uno::Reference< ov::excel::XStyle >& _xCalcStyle );
+    rtl::Reference< ScVbaFormatCondition > Add( ::sal_Int32 Type, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2, const css::uno::Reference< ov::excel::XStyle >& _xCalcStyle );
     /// @throws css::script::BasicErrorException
     static OUString getA1Formula(const css::uno::Any& _aFormula);
     OUString getStyleName();

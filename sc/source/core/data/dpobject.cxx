@@ -2039,7 +2039,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     //  query old state
 
     tools::Long nHierCount = 0;
-    uno::Reference<container::XIndexAccess> xHiers;
+    rtl::Reference<ScNameToIndexAccess> xHiers;
     uno::Reference<sheet::XHierarchiesSupplier> xHierSupp( xDim, uno::UNO_QUERY );
     if ( xHierSupp.is() )
     {
@@ -2054,7 +2054,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     if ( !xHier.is() ) return;
 
     tools::Long nLevCount = 0;
-    uno::Reference<container::XIndexAccess> xLevels;
+    rtl::Reference<ScNameToIndexAccess> xLevels;
     uno::Reference<sheet::XLevelsSupplier> xLevSupp( xHier, uno::UNO_QUERY );
     if ( xLevSupp.is() )
     {

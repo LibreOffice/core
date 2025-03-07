@@ -517,7 +517,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
     tools::Long nCount = maMemberHash.size();
 
     tools::Long nHierCount = 0;
-    uno::Reference<container::XIndexAccess> xHiers;
+    rtl::Reference<ScNameToIndexAccess> xHiers;
     uno::Reference<sheet::XHierarchiesSupplier> xHierSupp( xDim, uno::UNO_QUERY );
     if ( xHierSupp.is() )
     {
@@ -530,7 +530,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
     for (tools::Long nHier=0; nHier<nHierCount; nHier++)
     {
         tools::Long nLevCount = 0;
-        uno::Reference<container::XIndexAccess> xLevels;
+        rtl::Reference<ScNameToIndexAccess> xLevels;
         uno::Reference<sheet::XLevelsSupplier> xLevSupp(xHiers->getByIndex(nHier), uno::UNO_QUERY);
         if ( xLevSupp.is() )
         {

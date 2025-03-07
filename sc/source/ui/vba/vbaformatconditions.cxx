@@ -134,7 +134,7 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
     return Add( _nType, _aOperator, _aFormula1, _aFormula2, uno::Reference< excel::XStyle >() );
 }
 
-uno::Reference< excel::XFormatCondition >
+rtl::Reference< ScVbaFormatCondition >
 ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, const uno::Any& _aFormula1, const uno::Any& _aFormula2, const css::uno::Reference< excel::XStyle >& _xStyle  )
 {
     // #TODO
@@ -145,7 +145,7 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
     // [*] reason: getA1Formula method below is just a hook and just
     // returns what it gets ( e.g. doesn't convert anything )
     uno::Reference< excel::XStyle > xStyle( _xStyle );
-    uno::Reference< excel::XFormatCondition > xFormatCondition;
+    rtl::Reference< ScVbaFormatCondition > xFormatCondition;
     try
     {
         OUString sStyleName;

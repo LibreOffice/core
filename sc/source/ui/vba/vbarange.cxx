@@ -197,9 +197,9 @@ static uno::Any lcl_makeRange( const uno::Reference< XHelperInterface >& rParent
     return uno::Any( uno::Reference< excel::XRange >( new ScVbaRange( rParent, rContext, xCellRange, bIsRows, bIsColumns ) ) );
 }
 
-static uno::Reference< excel::XRange > lcl_makeXRangeFromSheetCellRanges( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< sheet::XSheetCellRanges >& xLocSheetCellRanges, ScDocShell* pDoc )
+static rtl::Reference< ScVbaRange > lcl_makeXRangeFromSheetCellRanges( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< sheet::XSheetCellRanges >& xLocSheetCellRanges, ScDocShell* pDoc )
 {
-    uno::Reference< excel::XRange > xRange;
+    rtl::Reference< ScVbaRange > xRange;
     const uno::Sequence< table::CellRangeAddress  > sAddresses = xLocSheetCellRanges->getRangeAddresses();
     ScRangeList aCellRanges;
     if ( sAddresses.hasElements() )

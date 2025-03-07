@@ -5321,7 +5321,7 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
     }
 
     bool bVBACompat = false;
-    uno::Reference <container::XNameAccess> xCodeNameAccess;
+    rtl::Reference<XMLCodeNameProvider> xCodeNameAccess;
     OSL_ENSURE( pDoc, "ScXMLExport::GetConfigurationSettings - no ScDocument!" );
     // tdf#71271 - add code names regardless of VBA compatibility mode
     if (pDoc)
@@ -5359,7 +5359,7 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
     if( xCodeNameAccess.is() )
     {
         pProps[nCount].Name = "ScriptConfiguration";
-        pProps[nCount].Value <<= xCodeNameAccess;
+        pProps[nCount].Value <<= uno::Reference<container::XNameAccess>(xCodeNameAccess);
         ++nCount;
     }
 }
