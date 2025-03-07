@@ -62,16 +62,16 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
     m_nDefTabInMm100( 2000 ), // 2 cm
     m_bIsSquaredPageMode(false),
     m_bIsAlignMathObjectsToBaseline(false),
+    m_bApplyCharUnit(false),
+    m_bUseDefaultZoom(true),
+    m_nDefaultZoomValue(100),
+    m_eDefaultZoomType(SvxZoomType::PERCENT),
     m_aContentConfig(bWeb, *this),
     m_aLayoutConfig(bWeb, *this),
     m_aGridConfig(bWeb, *this),
     m_aCursorConfig(*this),
     m_pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : nullptr),
-    m_aFmtAidsAutoComplConfig(*this),
-    m_bApplyCharUnit(false),
-    m_bUseDefaultZoom(true),
-    m_nDefaultZoomValue(100),
-    m_eDefaultZoomType(SvxZoomType::PERCENT)
+    m_aFmtAidsAutoComplConfig(*this)
 {
     if (comphelper::IsFuzzing())
     {
