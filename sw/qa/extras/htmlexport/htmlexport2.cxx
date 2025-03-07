@@ -1622,6 +1622,20 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifNoTargetInA)
     assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:a", "target");
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifNoObjectBorderExport)
+{
+    // Given a document with an image with black border
+    createSwDoc("img_with_border.fodt");
+
+    // When exporting to XHTML:
+    ExportToReqif();
+
+    // Check that there's no 'font' element that used to be exported, containing the border color:
+    xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
+    // Without the accompanying fix in place, this test would have failed
+    assertXPath(pXmlDoc, "//reqif-xhtml:font", 0);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
