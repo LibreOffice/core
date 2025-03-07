@@ -261,8 +261,8 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
         gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pLists[i], false, false, 0 );
         gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pListLabels[i], false, false, 0 );
 #else
-        gtk_box_append(GTK_BOX(m_pHBoxs[i]), m_pLists[i]);
         gtk_box_append(GTK_BOX(m_pHBoxs[i]), m_pListLabels[i]);
+        gtk_box_append(GTK_BOX(m_pHBoxs[i]), m_pLists[i]);
 #endif
         gtk_label_set_mnemonic_widget( GTK_LABEL(m_pListLabels[i]), m_pLists[i] );
         gtk_box_set_spacing( GTK_BOX( m_pHBoxs[i] ), 12 );
