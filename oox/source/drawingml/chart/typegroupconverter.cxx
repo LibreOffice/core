@@ -67,6 +67,7 @@ const char SERVICE_CHART2_PIE[]       = "com.sun.star.chart2.PieChartType";
 const char SERVICE_CHART2_SCATTER[]   = "com.sun.star.chart2.ScatterChartType";
 const char SERVICE_CHART2_BUBBLE[]    = "com.sun.star.chart2.BubbleChartType";
 const char SERVICE_CHART2_SURFACE[]   = "com.sun.star.chart2.ColumnChartType";    // Todo
+const char SERVICE_CHART2_FUNNEL[]    = "com.sun.star.chart2.FunnelChartType";
 const char SERVICE_CHART2_HISTO[]     = "com.sun.star.chart2.HistogramChartType";
 
 namespace csscd = css::chart::DataLabelPlacement;
@@ -87,7 +88,8 @@ const TypeGroupInfo spTypeInfos[] =
     { TYPEID_OFPIE,     TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,       VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, true,  true,  true,  true,  false, false, false },
     { TYPEID_SCATTER,   TYPECATEGORY_SCATTER, SERVICE_CHART2_SCATTER,   VARPOINTMODE_SINGLE, csscd::RIGHT,         false, false, false, false, false, false, false },
     { TYPEID_BUBBLE,    TYPECATEGORY_SCATTER, SERVICE_CHART2_BUBBLE,    VARPOINTMODE_SINGLE, csscd::RIGHT,         false, true,  false, false, false, false, false },
-    { TYPEID_SURFACE,   TYPECATEGORY_SURFACE, SERVICE_CHART2_SURFACE,   VARPOINTMODE_NONE,   csscd::RIGHT,         false, true,  false, true,  false, false, false }
+    { TYPEID_SURFACE,   TYPECATEGORY_SURFACE, SERVICE_CHART2_SURFACE,   VARPOINTMODE_NONE,   csscd::RIGHT,         false, true,  false, true,  false, false, false },
+    { TYPEID_FUNNEL,    TYPECATEGORY_FUNNEL,  SERVICE_CHART2_FUNNEL,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, false, false }
 };
 
 const TypeGroupInfo saUnknownTypeInfo =
@@ -155,6 +157,7 @@ TypeGroupConverter::TypeGroupConverter( const ConverterRoot& rParent, TypeGroupM
         case C_TOKEN( barChart ):       ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_BAR;       mb3dChart = false;  break;
         case C_TOKEN( bubbleChart ):    ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_BUBBLE;    mb3dChart = false;  break;
         case C_TOKEN( doughnutChart ):  ENSURE_AXESCOUNT( 0, 0 ); eTypeId = TYPEID_DOUGHNUT;  mb3dChart = false;  break;
+        case CX_TOKEN( funnel ):        ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_FUNNEL;    mb3dChart = false;  break;
         case C_TOKEN( line3DChart ):    ENSURE_AXESCOUNT( 3, 3 ); eTypeId = TYPEID_LINE;      mb3dChart = true;   break;
         case C_TOKEN( lineChart ):      ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_LINE;      mb3dChart = false;  break;
         case C_TOKEN( ofPieChart ):     ENSURE_AXESCOUNT( 0, 0 ); eTypeId = TYPEID_OFPIE;     mb3dChart = false;  break;

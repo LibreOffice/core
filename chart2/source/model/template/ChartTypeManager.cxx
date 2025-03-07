@@ -30,6 +30,7 @@
 #include "StockChartTypeTemplate.hxx"
 #include "NetChartTypeTemplate.hxx"
 #include "BubbleChartTypeTemplate.hxx"
+#include "FunnelChartTypeTemplate.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -118,6 +119,7 @@ enum TemplateId
     TEMPLATE_STOCKVOLUMELOWHIGHCLOSE,
     TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE,
     TEMPLATE_BUBBLE,
+    TEMPLATE_FUNNEL,
 //    TEMPLATE_SURFACE,
 //     TEMPLATE_ADDIN,
     TEMPLATE_NOT_FOUND = 0xffff
@@ -196,6 +198,7 @@ const tTemplateMapType & lcl_DefaultChartTypeMap()
         {"com.sun.star.chart2.template.StockVolumeLowHighClose",        TEMPLATE_STOCKVOLUMELOWHIGHCLOSE},
         {"com.sun.star.chart2.template.StockVolumeOpenLowHighClose",    TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE},
         {"com.sun.star.chart2.template.Bubble",                         TEMPLATE_BUBBLE},
+        {"com.sun.star.chart2.template.Funnel",                         TEMPLATE_FUNNEL},
 //      {"com.sun.star.chart2.template.Surface",                        TEMPLATE_SURFACE},
 //      {"com.sun.star.chart2.template.Addin",                          TEMPLATE_ADDIN},
         };
@@ -532,6 +535,11 @@ rtl::Reference< ::chart::ChartTypeTemplate > ChartTypeManager::createTemplate(
             xTemplate.set( new BubbleChartTypeTemplate( m_xContext, aServiceSpecifier ));
             break;
 
+        // Funnel chart
+        case TEMPLATE_FUNNEL:
+            xTemplate.set( new FunnelChartTypeTemplate( m_xContext,
+                        aServiceSpecifier));
+            break;
         case TEMPLATE_NOT_FOUND:
             SAL_WARN("chart2", "Couldn't instantiate service: "<< aServiceSpecifier );
             assert(false);

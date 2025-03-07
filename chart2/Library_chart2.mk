@@ -317,6 +317,8 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/model/template/ColumnLineDataInterpreter \
     chart2/source/model/template/DataInterpreter \
     chart2/source/model/template/FilledNetChartType \
+    chart2/source/model/template/FunnelChartType \
+    chart2/source/model/template/FunnelChartTypeTemplate \
     chart2/source/model/template/HistogramChartType \
     chart2/source/model/template/HistogramChartTypeTemplate \
     chart2/source/model/template/HistogramDataInterpreter \
