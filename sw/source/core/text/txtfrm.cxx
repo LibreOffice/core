@@ -1520,20 +1520,25 @@ bool SwTextFrame::IsHiddenNowImpl() const
     {
         TextFrameIndex nHiddenStart(COMPLETE_STRING);
         TextFrameIndex nHiddenEnd(0);
+        bool hasHidden{false};
         if (auto const pScriptInfo = GetScriptInfo())
         {
-            pScriptInfo->GetBoundsOfHiddenRange(TextFrameIndex(0),
+            hasHidden = pScriptInfo->GetBoundsOfHiddenRange(TextFrameIndex(0),
                     nHiddenStart, nHiddenEnd);
         }
         else // ParaPortion is created in Format, but this is called earlier
         {
             SwScriptInfo aInfo;
             aInfo.InitScriptInfoHidden(*m_pMergedPara->pFirstNode, m_pMergedPara.get());
-            aInfo.GetBoundsOfHiddenRange(TextFrameIndex(0),
+            hasHidden = aInfo.GetBoundsOfHiddenRange(TextFrameIndex(0),
                         nHiddenStart, nHiddenEnd);
         }
-        if (TextFrameIndex(0) == nHiddenStart &&
-            TextFrameIndex(GetText().getLength()) <= nHiddenEnd)
+        if ((TextFrameIndex(0) == nHiddenStart
+                && TextFrameIndex(GetText().getLength()) <= nHiddenEnd)
+            // special case: GetBoundsOfHiddenRange doesn't assign!
+            // but it does return that there *is* something hidden, in case
+            // the frame is empty then the whole thing must be hidden
+            || (hasHidden && m_pMergedPara->mergedText.isEmpty()))
         {
             bHiddenCharsHidePara = true;
         }

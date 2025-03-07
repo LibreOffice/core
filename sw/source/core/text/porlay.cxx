@@ -1151,8 +1151,19 @@ void SwScriptInfo::InitScriptInfoHidden(const SwTextNode& rNode,
         SwTextNode const* pNode(nullptr);
         TextFrameIndex nOffset(0);
         std::optional<std::vector<sw::Extent>::const_iterator> oPrevIter;
-        for (auto iter = pMerged->extents.begin(); iter != pMerged->extents.end();
-             oPrevIter = iter)
+        if (pMerged->extents.empty())
+        {
+            Range aRange(0, pMerged->pLastNode->Len() > 0 ? pMerged->pLastNode->Len() - 1 : 0);
+            MultiSelection aHiddenMulti(aRange);
+            CalcHiddenRanges(*pMerged->pLastNode, aHiddenMulti, nullptr);
+            if (aHiddenMulti.GetRangeCount() != 0)
+            {
+                m_HiddenChg.push_back(TextFrameIndex(0));
+                m_HiddenChg.push_back(TextFrameIndex(0));
+            }
+        }
+        else for (auto iter = pMerged->extents.begin();
+                    iter != pMerged->extents.end(); oPrevIter = iter)
         {
             if (iter->pNode == pNode)
             {
