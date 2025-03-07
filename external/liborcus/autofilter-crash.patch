@@ -1,0 +1,34 @@
+From 2ff46664c61f2cce545ac7ca972d6e9c6ffa270d Mon Sep 17 00:00:00 2001
+From: Kohei Yoshida <kohei.yoshida@gmail.com>
+Date: Thu, 27 Feb 2025 21:39:52 -0500
+Subject: [PATCH] Filter node stack may be empty when no filtering is applied
+
+But when the stack is not empty, then the assert condition still
+stands.  This is related to #207.
+---
+ src/liborcus/xls_xml_auto_filter_context.cpp | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/src/liborcus/xls_xml_auto_filter_context.cpp b/src/liborcus/xls_xml_auto_filter_context.cpp
+index 509c0b25..34a9210c 100644
+--- a/src/liborcus/xls_xml_auto_filter_context.cpp
++++ b/src/liborcus/xls_xml_auto_filter_context.cpp
+@@ -193,9 +193,12 @@ void xls_xml_auto_filter_context::end_auto_filter()
+     if (!mp_auto_filter)
+         return;
+ 
+-    assert(m_filter_node_stack.size() == 1u); // root node
+-    m_filter_node_stack.back()->commit();
+-    m_filter_node_stack.pop_back();
++    if (!m_filter_node_stack.empty())
++    {
++        assert(m_filter_node_stack.size() == 1u); // root node
++        m_filter_node_stack.back()->commit();
++        m_filter_node_stack.pop_back();
++    }
+     mp_auto_filter->commit();
+ }
+ 
+-- 
+2.34.1
+

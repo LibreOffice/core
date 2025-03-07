@@ -18,6 +18,7 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/editobj.hxx>
 
+#include "orcus_autofilter.hxx"
 #include "sharedformulagroups.hxx"
 
 #include <conditio.hxx>
@@ -366,7 +367,7 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
     friend class ScOrcusArrayFormula;
 
     ScDocumentImport& mrDoc;
-    SCTAB mnTab;
+    const SCTAB mnTab;
     ScOrcusFactory& mrFactory;
     ScOrcusStyles& mrStyles;
     sc::SharedFormulaGroups maFormulaGroups;
@@ -376,6 +377,7 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
     ScOrcusNamedExpression maNamedExpressions;
     ScOrcusFormula maFormula;
     ScOrcusArrayFormula maArrayFormula;
+    ScOrcusAutoFilter maAutoFilter;
 
     int mnCellCount;
 
@@ -384,7 +386,7 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
     ScDocumentImport& getDoc();
 
 public:
-    ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& rFactory);
+    ScOrcusSheet(ScDocumentImport& rDoc, const ScOrcusGlobalSettings& rGS, SCTAB nTab, ScOrcusFactory& rFactory);
 
     virtual orcus::spreadsheet::iface::import_sheet_properties* get_sheet_properties() override;
     virtual orcus::spreadsheet::iface::import_conditional_format* get_conditional_format() override;
@@ -410,6 +412,9 @@ public:
     virtual orcus::spreadsheet::range_size_t get_sheet_size() const override;
 
     virtual void fill_down_cells(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, orcus::spreadsheet::row_t range_size) override;
+
+    virtual orcus::spreadsheet::iface::import_auto_filter*
+        start_auto_filter(const orcus::spreadsheet::range_t& range) override;
 
     SCTAB getIndex() const { return mnTab; }
 

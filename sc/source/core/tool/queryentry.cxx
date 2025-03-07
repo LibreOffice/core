@@ -56,6 +56,15 @@ ScQueryEntry::ScQueryEntry(const ScQueryEntry& r) :
 {
 }
 
+ScQueryEntry::ScQueryEntry(ScQueryEntry&& r) noexcept :
+    bDoQuery(r.bDoQuery),
+    nField(r.nField),
+    eOp(r.eOp),
+    eConnect(r.eConnect),
+    maQueryItems(std::move(r.maQueryItems))
+{
+}
+
 ScQueryEntry::~ScQueryEntry()
 {
 }

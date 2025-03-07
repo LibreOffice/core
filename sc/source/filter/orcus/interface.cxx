@@ -329,7 +329,7 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(
         // The calc document initializes with one sheet already present.
         assert(maDoc.getSheetCount() == 1);
         maDoc.setSheetName(0, aTabName);
-        maSheets.push_back(std::make_unique<ScOrcusSheet>(maDoc, 0, *this));
+        maSheets.push_back(std::make_unique<ScOrcusSheet>(maDoc, maGlobalSettings, 0, *this));
         return maSheets.back().get();
     }
 
@@ -337,7 +337,7 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(
         return nullptr;
 
     SCTAB nTab = maDoc.getSheetCount() - 1;
-    maSheets.push_back(std::make_unique<ScOrcusSheet>(maDoc, nTab, *this));
+    maSheets.push_back(std::make_unique<ScOrcusSheet>(maDoc, maGlobalSettings, nTab, *this));
     return maSheets.back().get();
 }
 
@@ -373,7 +373,7 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(std::string_v
         return it->get();
 
     // Create a new orcus sheet instance for this.
-    maSheets.push_back(std::make_unique<ScOrcusSheet>(maDoc, nTab, *this));
+    maSheets.push_back(std::make_unique<ScOrcusSheet>(maDoc, maGlobalSettings, nTab, *this));
     return maSheets.back().get();
 }
 
@@ -389,7 +389,7 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::get_sheet(orcus::spread
         return it->get();
 
     // Create a new orcus sheet instance for this.
-    maSheets.push_back(std::make_unique<ScOrcusSheet>(maDoc, nTab, *this));
+    maSheets.push_back(std::make_unique<ScOrcusSheet>(maDoc, maGlobalSettings, nTab, *this));
     return maSheets.back().get();
 }
 
@@ -963,7 +963,7 @@ void ScOrcusConditionalFormat::commit_format()
     mpCurrentFormat.reset(new ScConditionalFormat(0, &mrDoc));
 }
 
-ScOrcusSheet::ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& rFactory) :
+ScOrcusSheet::ScOrcusSheet(ScDocumentImport& rDoc, const ScOrcusGlobalSettings& rGS, SCTAB nTab, ScOrcusFactory& rFactory) :
     mrDoc(rDoc),
     mnTab(nTab),
     mrFactory(rFactory),
@@ -973,6 +973,7 @@ ScOrcusSheet::ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& r
     maNamedExpressions(rDoc, rFactory.getGlobalSettings(), nTab),
     maFormula(*this),
     maArrayFormula(*this),
+    maAutoFilter(rDoc, rGS, nTab),
     mnCellCount(0)
 {
 }
@@ -1299,6 +1300,12 @@ void ScOrcusSheet::fill_down_cells(os::row_t row, os::col_t col, os::row_t range
 {
     mrFactory.pushFillDownCellsToken(ScAddress(col, row, mnTab), range_size);
     cellInserted();
+}
+
+os::iface::import_auto_filter* ScOrcusSheet::start_auto_filter(const os::range_t& range)
+{
+    maAutoFilter.reset(range);
+    return &maAutoFilter;
 }
 
 const sc::SharedFormulaGroups& ScOrcusSheet::getSharedFormulaGroups() const

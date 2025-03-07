@@ -234,6 +234,7 @@ $(eval $(call gb_Library_use_externals,scfilt,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,scfilt,\
+	sc/source/filter/orcus/autofilter \
 	sc/source/filter/orcus/interface \
 	sc/source/filter/orcus/orcusfiltersimpl \
 	sc/source/filter/orcus/xmlcontext \

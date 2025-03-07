@@ -66,6 +66,7 @@ struct SC_DLLPUBLIC ScQueryEntry final
 
     ScQueryEntry();
     ScQueryEntry(const ScQueryEntry& r);
+    ScQueryEntry(ScQueryEntry&& r) noexcept;
     ~ScQueryEntry();
 
     /// creates pSearchParam and pSearchText if necessary
