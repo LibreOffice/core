@@ -51,6 +51,8 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
             {
                 case C_TOKEN( chartSpace ):
                     return this;
+                case CX_TOKEN(chartSpace) :
+                    break;
             }
         break;
 
@@ -134,6 +136,8 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                     return new View3DContext( *this, mrModel.mxView3D.create(bMSO2007Document) );
             }
         break;
+        case CX_TOKEN(chartSpace) :
+            break;
     }
     return nullptr;
 }

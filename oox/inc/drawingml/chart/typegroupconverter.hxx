@@ -49,6 +49,7 @@ enum TypeId
     TYPEID_SCATTER,                 /// Scatter (XY) chart.
     TYPEID_BUBBLE,                  /// Bubble chart.
     TYPEID_SURFACE,                 /// Surface chart.
+    TYPEID_FUNNEL,                  /// Funnel chart.
     TYPEID_UNKNOWN                  /// Default for unknown chart types.
 };
 
@@ -60,6 +61,7 @@ enum TypeCategory
     TYPECATEGORY_RADAR,             /// Radar charts (linear or filled).
     TYPECATEGORY_PIE,               /// Pie and donut charts.
     TYPECATEGORY_SCATTER,           /// Scatter and bubble charts.
+    TYPECATEGORY_FUNNEL,            /// Funnel charts. TODO: can this be BAR?
     TYPECATEGORY_SURFACE            /// Surface charts.
 };
 

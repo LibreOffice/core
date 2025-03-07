@@ -160,6 +160,8 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/model/template/ColumnLineChartTypeTemplate \
     chart2/source/model/template/ColumnLineDataInterpreter \
     chart2/source/model/template/DataInterpreter \
+    chart2/source/model/template/FunnelChartType \
+    chart2/source/model/template/FunnelChartTypeTemplate \
     chart2/source/model/template/FilledNetChartType \
     chart2/source/model/template/LineChartType \
     chart2/source/model/template/LineChartTypeTemplate \

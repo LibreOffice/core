@@ -161,6 +161,10 @@ ContextHandlerRef GraphicalObjectFrameContext::onCreateContext( sal_Int32 aEleme
             else if ( sUri == "http://schemas.openxmlformats.org/drawingml/2006/chart" ||
                     sUri == "http://purl.oclc.org/ooxml/drawingml/chart" )
                 return new ChartGraphicDataContext( *this, mpShapePtr, mbEmbedShapesInChart );
+            else if ( sUri == "http://schemas.microsoft.com/office/drawing/2014/chartex" )
+                // Is there a corresponding purl.oclc.org URL? At this time
+                // (2025) those don't seem to be active.
+                return new ChartGraphicDataContext( *this, mpShapePtr, mbEmbedShapesInChart );
             else if ( sUri == "http://schemas.openxmlformats.org/drawingml/2006/table" ||
                     sUri == "http://purl.oclc.org/ooxml/drawingml/table" )
                 return new table::TableContext( *this, mpShapePtr );
@@ -326,7 +330,7 @@ ChartGraphicDataContext::ChartGraphicDataContext( ContextHandler2Helper const & 
 
 ContextHandlerRef ChartGraphicDataContext::onCreateContext( ::sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    if( nElement == C_TOKEN( chart ) )
+    if( nElement == C_TOKEN( chart ) || nElement == CX_TOKEN( chart ))
     {
         mrChartShapeInfo.maFragmentPath = getFragmentPathFromRelId( rAttribs.getStringDefaulted( R_TOKEN( id )) );
     }

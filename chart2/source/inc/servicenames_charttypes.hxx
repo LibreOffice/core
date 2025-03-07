@@ -40,5 +40,7 @@ inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK
     = u"com.sun.star.chart2.CandleStickChartType"_ustr;
 inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE
     = u"com.sun.star.chart2.BubbleChartType"_ustr;
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_FUNNEL
+    = u"com.sun.star.chart2.FunnelChartType"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -242,7 +242,8 @@ bool ContextHandler2Helper::prepareMceContext( sal_Int32 nElement, const Attribu
                     u"p14",
                     u"p15",
                     u"x12ac",
-                    u"v"
+                    u"v",
+                    u"cx2"
                 };
 
                 for (size_t pos = 0; pos != std::u16string_view::npos;)
