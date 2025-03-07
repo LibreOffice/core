@@ -902,6 +902,29 @@ void SAL_CALL SalGtkFilePicker::setTitle( const OUString& rTitle )
     implsetTitle(rTitle);
 }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+namespace
+{
+
+GtkColumnView* lcl_findColumnView(GtkWidget* pWidget)
+{
+    if (GTK_IS_COLUMN_VIEW(pWidget))
+        return GTK_COLUMN_VIEW(pWidget);
+
+    GtkWidget* pChild = gtk_widget_get_first_child(GTK_WIDGET(pWidget));
+    while (pChild)
+    {
+        if (GtkColumnView* pColumnView = lcl_findColumnView(pChild))
+            return pColumnView;
+        pChild = gtk_widget_get_next_sibling(pChild);
+    }
+
+    return nullptr;
+}
+
+}
+#endif
+
 sal_Int16 SAL_CALL SalGtkFilePicker::execute()
 {
     SolarMutexGuard g;
@@ -937,8 +960,16 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute()
         g_signal_connect( GTK_FILE_CHOOSER( m_pDialog ), "selection-changed",
             G_CALLBACK( selection_changed_cb ), static_cast<gpointer>(this) );
 #else
-    // no replacement in 4-0 that I can see :-(
-    mnHID_SelectionChange = 0;
+    // GtkFileChooser::selection-changed was dropped in GTK 4
+    // Make use of GTK implementation details to connect to
+    // GtkSelectionModel::selection-changed signal of the underlying model instead
+    GtkColumnView* pColumnView = lcl_findColumnView(m_pDialog);
+    assert(pColumnView && "Couldn't find the file dialog's column view");
+    GtkSelectionModel* pSelectionModel = gtk_column_view_get_model(pColumnView);
+    assert(pSelectionModel);
+    mnHID_SelectionChange
+        = g_signal_connect(pSelectionModel, "selection-changed", G_CALLBACK(selection_changed_cb),
+                           static_cast<gpointer>(this));
 #endif
 
     int btn = GTK_RESPONSE_NO;
@@ -1540,7 +1571,12 @@ void SalGtkFilePicker::folder_changed_cb( GtkFileChooser *, SalGtkFilePicker *po
     pobjFP->impl_directoryChanged( evt );
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 void SalGtkFilePicker::selection_changed_cb( GtkFileChooser *, SalGtkFilePicker *pobjFP )
+#else
+void SalGtkFilePicker::selection_changed_cb(GtkSelectionModel*, guint, guint,
+                                            SalGtkFilePicker* pobjFP)
+#endif
 {
     FilePickerEvent evt;
     SAL_INFO( "vcl.gtk", "selection_changed, isn't it great " << pobjFP );

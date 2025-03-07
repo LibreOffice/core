@@ -229,7 +229,12 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         static void filter_changed_cb( GtkFileChooser *file_chooser, GParamSpec *pspec, SalGtkFilePicker *pobjFP );
         static void type_changed_cb( GtkTreeSelection *selection, SalGtkFilePicker *pobjFP );
         static void folder_changed_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         static void selection_changed_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
+#else
+        static void selection_changed_cb(GtkSelectionModel* pSelectionModel, guint nPosition,
+                                         guint nItemCount, SalGtkFilePicker* pobjFP);
+#endif
         static void update_preview_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
         static void dialog_mapped_cb(GtkWidget *widget, SalGtkFilePicker *pobjFP);
     public:
