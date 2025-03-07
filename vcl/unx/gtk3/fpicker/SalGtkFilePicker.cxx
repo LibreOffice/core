@@ -323,6 +323,9 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_file_chooser_set_extra_widget( GTK_FILE_CHOOSER( m_pDialog ), m_pVBox );
+#else
+    GtkBox* pContentBox = GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(m_pDialog)));
+    gtk_box_append(pContentBox, m_pVBox);
 #endif
 
     m_pPreview = gtk_image_new();
