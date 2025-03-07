@@ -202,16 +202,14 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     // this method will modify the document directly -> lock SolarMutex
     SolarMutexGuard aGuard;
 
-    uno::Reference < XPropertySet > xPropSet;
-
     sal_Int32 nPos = rHRef.indexOf( ':' );
     if( -1 == nPos )
-        return xPropSet;
+        return nullptr;
 
     OUString aObjName( rHRef.copy( nPos+1) );
 
     if( aObjName.isEmpty() )
-        return xPropSet;
+        return nullptr;
 
     OTextCursorHelper* pTextCursor = dynamic_cast<OTextCursorHelper*>(GetCursor().get());
     SAL_WARN_IF(!pTextCursor, "sw.uno", "SwXTextCursor missing");
@@ -322,7 +320,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     }
 
     if( !pFrameFormat )
-        return xPropSet;
+        return nullptr;
 
     if( IsInsertMode() )
     {
@@ -332,7 +330,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
             pOLENd->SetOLESizeInvalid( true );
     }
 
-    xPropSet = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+    rtl::Reference<SwXTextEmbeddedObject> xPropSet = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
                 *pDoc, pFrameFormat);
     if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
     {
@@ -511,8 +509,6 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     // this method will modify the document directly -> lock SolarMutex
     SolarMutexGuard aGuard;
 
-    uno::Reference < XPropertySet > xPropSet;
-
     OTextCursorHelper* pTextCursor = dynamic_cast<OTextCursorHelper*>(GetCursor().get());
     assert( pTextCursor && "SwXTextCursor missing" );
     SwDoc *pDoc = static_cast<SwXMLImport&>(rImport).getDoc();
@@ -529,8 +525,9 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
                      aURLObj.SetURL( URIHelper::SmartRel2Abs(
                                 INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) );
     if( !bValidURL )
-        return xPropSet;
+        return nullptr;
 
+    rtl::Reference < SwXTextEmbeddedObject > xPropSet;
     uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     try
     {
@@ -602,7 +599,6 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
     // this method will modify the document directly -> lock SolarMutex
     SolarMutexGuard aGuard;
 
-    uno::Reference < XPropertySet > xPropSet;
     OTextCursorHelper* pTextCursor = dynamic_cast<OTextCursorHelper*>(GetCursor().get());
     assert( pTextCursor && "SwXTextCursor missing" );
     SwDoc *pDoc = pTextCursor->GetDoc();
@@ -628,7 +624,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
         pDoc->getIDocumentContentOperations().InsertEmbObject( *pTextCursor->GetPaM(),
         ::svt::EmbeddedObjectRef(aAppletImpl.GetApplet(), embed::Aspects::MSOLE_CONTENT),
         &aAppletImpl.GetItemSet());
-    xPropSet = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+    rtl::Reference<SwXTextEmbeddedObject> xPropSet = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
                 *pDoc, pFrameFormat);
     if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
     {
@@ -644,7 +640,6 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
         const OUString& rHRef,
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
-    uno::Reference < XPropertySet > xPropSet;
     OTextCursorHelper* pTextCursor = dynamic_cast<OTextCursorHelper*>(GetCursor().get());
     assert( pTextCursor && "SwXTextCursor missing" );
     SwDoc *pDoc = pTextCursor->GetDoc();
@@ -661,8 +656,9 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
                      aURLObj.SetURL( URIHelper::SmartRel2Abs( INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) );
     bool bValidMimeType = !rMimeType.isEmpty();
     if( !bValidURL && !bValidMimeType )
-        return xPropSet;
+        return nullptr;
 
+    rtl::Reference < SwXTextEmbeddedObject > xPropSet;
     uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     try
     {
@@ -721,7 +717,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
     // this method will modify the document directly -> lock SolarMutex
     SolarMutexGuard aGuard;
 
-    uno::Reference < XPropertySet > xPropSet;
+    rtl::Reference < SwXTextEmbeddedObject > xPropSet;
     OTextCursorHelper* pTextCursor = dynamic_cast<OTextCursorHelper*>(GetCursor().get());
     assert( pTextCursor && "SwXTextCursor missing" );
     SwDoc *pDoc = pTextCursor->GetDoc();

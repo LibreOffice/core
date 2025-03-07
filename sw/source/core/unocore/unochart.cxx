@@ -521,8 +521,6 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     if (m_bDisposed)
         throw lang::DisposedException();
 
-    uno::Reference< chart2::data::XDataSource > xRes;
-
     if (!m_pDoc)
         throw uno::RuntimeException(u"Not connected to a document."_ustr);
 
@@ -537,7 +535,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     sal_Int32 nArgs = rArguments.getLength();
     OSL_ENSURE( nArgs != 0, "no properties provided" );
     if (nArgs == 0)
-        return xRes;
+        return nullptr;
     for (const beans::PropertyValue& rArg : rArguments)
     {
         if ( rArg.Name == "DataRowSource" )
@@ -608,14 +606,14 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
             //Therefore we need to shift the range one row up
             SwRangeDescriptor aDesc;
             if (aRangeRepresentation.isEmpty())
-                return xRes;        // we can't handle this thus returning an empty references
+                return nullptr;        // we can't handle this thus returning an empty references
 
             aRangeRepresentation = aRangeRepresentation.copy( 1 ); // get rid of '.' to have only the cell range left
             FillRangeDescriptor( aDesc, aRangeRepresentation );
             aDesc.Normalize();
 
             if (aDesc.nTop <= 0)    // no chance to shift the range one row up?
-                return xRes;        // we can't handle this thus returning an empty references
+                return nullptr;        // we can't handle this thus returning an empty references
 
             aDesc.nTop      -= 1;
             aDesc.nBottom   -= 1;
@@ -643,7 +641,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
 
     SwTable* pTable = SwTable::FindTable(pTableFormat);
     if (pTable->IsTableComplex())
-        return xRes; // we can't handle this thus returning an empty references
+        return nullptr; // we can't handle this thus returning an empty references
 
     // get a character map in the size of the table to mark
     // all the ranges to use in
@@ -771,7 +769,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     // now we should have all necessary data to build a proper DataSource
     // thus if we came this far there should be no further problem
     if (bTestOnly)
-        return xRes;    // have createDataSourcePossible return true
+        return nullptr;    // have createDataSourcePossible return true
 
     // create data source from found label and data sequences
     uno::Sequence<uno::Reference<chart2::data::XDataSequence>> aLabelSeqs(nNumLDS);
@@ -884,8 +882,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
         OSL_ENSURE(nNewCnt == nNumLDS, "unexpected size of resulting sequence");
     }
 
-    xRes = new SwChartDataSource(aLDS);
-    return xRes;
+    return new SwChartDataSource(aLDS);
 }
 
 sal_Bool SAL_CALL SwChartDataProvider::createDataSourcePossible(
@@ -1303,11 +1300,9 @@ uno::Reference< chart2::data::XDataSequence > SwChartDataProvider::Impl_createDa
     if (aDesc.nTop != aDesc.nBottom  &&  aDesc.nLeft != aDesc.nRight)
         throw lang::IllegalArgumentException();
 
-    uno::Reference< chart2::data::XDataSequence > xDataSeq;
-    if (!bTestOnly)
-        xDataSeq = new SwChartDataSequence( *this, *pTableFormat, pUnoCursor );
-
-    return xDataSeq;
+    if (bTestOnly)
+        return nullptr;
+    return new SwChartDataSequence( *this, *pTableFormat, pUnoCursor );
 }
 
 sal_Bool SAL_CALL SwChartDataProvider::createDataSequenceByRangeRepresentationPossible(

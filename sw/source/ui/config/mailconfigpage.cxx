@@ -356,7 +356,7 @@ void SwTestAccountSettingsDialog::Test()
         }
         if(m_bStop)
             return;
-        uno::Reference<XAuthenticator> xAuthenticator;
+        rtl::Reference<SwAuthenticator> xAuthenticator;
         if(m_pParent->m_pConfigItem->IsAuthentication() &&
                 !m_pParent->m_pConfigItem->IsSMTPAfterPOP() &&
                 !m_pParent->m_pConfigItem->GetMailUserName().isEmpty())

@@ -147,25 +147,21 @@ uno::Reference< text::XText >  SwXTextPortion::getText()
 uno::Reference< text::XTextRange >  SwXTextPortion::getStart()
 {
     SolarMutexGuard aGuard;
-    uno::Reference< text::XTextRange >  xRet;
     SwUnoCursor& rUnoCursor = GetCursor();
 
     SwPaM aPam(*rUnoCursor.Start());
     uno::Reference< text::XText > xParent = getText();
-    xRet = new SwXTextRange(aPam, xParent);
-    return xRet;
+    return new SwXTextRange(aPam, xParent);
 }
 
 uno::Reference< text::XTextRange >  SwXTextPortion::getEnd()
 {
     SolarMutexGuard aGuard;
-    uno::Reference< text::XTextRange >  xRet;
     SwUnoCursor& rUnoCursor = GetCursor();
 
     SwPaM aPam(*rUnoCursor.End());
     uno::Reference< text::XText > xParent = getText();
-    xRet = new SwXTextRange(aPam, xParent);
-    return xRet;
+    return new SwXTextRange(aPam, xParent);
 }
 
 OUString SwXTextPortion::getString()

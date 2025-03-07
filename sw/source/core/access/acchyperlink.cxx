@@ -118,21 +118,18 @@ OUString SAL_CALL SwAccessibleHyperlink::getAccessibleActionDescription(
 uno::Reference< XAccessibleKeyBinding > SAL_CALL
     SwAccessibleHyperlink::getAccessibleActionKeyBinding( sal_Int32 )
 {
-    uno::Reference< XAccessibleKeyBinding > xKeyBinding;
+    if( !isValid() )
+        return nullptr;
 
-    if( isValid() )
-    {
-        rtl::Reference<::comphelper::OAccessibleKeyBindingHelper> pKeyBindingHelper =
-               new ::comphelper::OAccessibleKeyBindingHelper();
-        xKeyBinding = pKeyBindingHelper;
+    rtl::Reference<::comphelper::OAccessibleKeyBindingHelper> xKeyBinding =
+           new ::comphelper::OAccessibleKeyBindingHelper();
 
-        awt::KeyStroke aKeyStroke;
-        aKeyStroke.Modifiers = 0;
-        aKeyStroke.KeyCode = KEY_RETURN;
-        aKeyStroke.KeyChar = 0;
-        aKeyStroke.KeyFunc = 0;
-        pKeyBindingHelper->AddKeyBinding( aKeyStroke );
-    }
+    awt::KeyStroke aKeyStroke;
+    aKeyStroke.Modifiers = 0;
+    aKeyStroke.KeyCode = KEY_RETURN;
+    aKeyStroke.KeyChar = 0;
+    aKeyStroke.KeyFunc = 0;
+    xKeyBinding->AddKeyBinding( aKeyStroke );
 
     return xKeyBinding;
 }

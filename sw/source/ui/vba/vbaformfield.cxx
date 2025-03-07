@@ -120,17 +120,14 @@ uno::Any SwVbaFormField::Next()
 
 uno::Reference<word::XRange> SwVbaFormField::Range()
 {
-    uno::Reference<word::XRange> xRet;
     SwDoc* pDoc = m_xTextDocument->GetDocShell()->GetDoc();
-    if (pDoc)
-    {
-        rtl::Reference<SwXTextRange> xText(SwXTextRange::CreateXTextRange(
-            *pDoc, m_rFormField.GetMarkStart(), &m_rFormField.GetMarkEnd()));
-        if (xText.is())
-            xRet = new SwVbaRange(mxParent, mxContext, m_xTextDocument, xText->getStart(),
-                                  xText->getEnd());
-    }
-    return xRet;
+    if (!pDoc)
+        return nullptr;
+    rtl::Reference<SwXTextRange> xText(SwXTextRange::CreateXTextRange(
+        *pDoc, m_rFormField.GetMarkStart(), &m_rFormField.GetMarkEnd()));
+    if (!xText.is())
+        return nullptr;
+    return new SwVbaRange(mxParent, mxContext, m_xTextDocument, xText->getStart(), xText->getEnd());
 }
 
 OUString SwVbaFormField::getDefaultPropertyName() { return u"Type"_ustr; }

@@ -3237,23 +3237,21 @@ uno::Reference<table::XCell> SAL_CALL
 SwXCellRange::getCellByPosition(sal_Int32 nColumn, sal_Int32 nRow)
 {
     SolarMutexGuard aGuard;
-    uno::Reference< table::XCell >  aRet;
+    rtl::Reference< SwXCell >  pXCell;
     SwFrameFormat *const pFormat = m_pImpl->GetFrameFormat();
     if(pFormat)
     {
         if(nColumn >= 0 && nRow >= 0 &&
              m_pImpl->GetColumnCount() > nColumn && m_pImpl->GetRowCount() > nRow )
         {
-            rtl::Reference<SwXCell> pXCell = lcl_CreateXCell(pFormat,
+            pXCell = lcl_CreateXCell(pFormat,
                     m_pImpl->m_RangeDescriptor.nLeft + nColumn,
                     m_pImpl->m_RangeDescriptor.nTop + nRow);
-            if(pXCell)
-                aRet = pXCell;
         }
     }
-    if(!aRet.is())
+    if(!pXCell.is())
         throw lang::IndexOutOfBoundsException();
-    return aRet;
+    return pXCell;
 }
 
 uno::Reference<table::XCellRange> SAL_CALL

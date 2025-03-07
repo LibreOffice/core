@@ -1029,7 +1029,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
-        uno::Reference< text::XTextRange >  xTextRg;
+        rtl::Reference< SwXTextRange >  xTextRg;
         text::TextContentAnchorType nAnchorType = text::TextContentAnchorType_AS_CHARACTER;
         bool bSetPos = false, bSetSurround = false;
         sal_Int32 nXPos = 0, nYPos = 0;
@@ -1127,7 +1127,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                 xTextRg = new SwXTextRange( *m_pPam, xDummyTextRef );
             }
 
-            aTmp <<= xTextRg;
+            aTmp <<= uno::Reference< text::XTextRange >(xTextRg);
             xShapePropSet->setPropertyValue(u"TextRange"_ustr, aTmp );
         }
 

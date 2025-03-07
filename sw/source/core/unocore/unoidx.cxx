@@ -1970,15 +1970,12 @@ SwXDocumentIndexMark::getAnchor()
     {
         aPam.GetPoint()->AdjustContent(1);
     }
-    uno::Reference< text::XTextRange > xRet;
-    if(SwDocShell* pShell = m_pImpl->m_pDoc->GetDocShell())
-    {
-        const rtl::Reference< SwXTextDocument > xModel =
-            pShell->GetBaseModel();
-        xRet = new SwXTextRange(aPam, xModel->getText());
-    }
-
-    return xRet;
+    SwDocShell* pShell = m_pImpl->m_pDoc->GetDocShell();
+    if (!pShell)
+        return nullptr;
+    const rtl::Reference< SwXTextDocument > xModel =
+        pShell->GetBaseModel();
+    return new SwXTextRange(aPam, xModel->getText());
 }
 
 void SAL_CALL

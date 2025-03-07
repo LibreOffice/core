@@ -120,7 +120,6 @@ Reference< XAccessibleKeyBinding > SAL_CALL
 {
     SolarMutexGuard g;
 
-    Reference< XAccessibleKeyBinding > xKeyBinding;
 
     if(nIndex < 0 || nIndex >= getAccessibleActionCount())
         throw lang::IndexOutOfBoundsException();
@@ -137,19 +136,18 @@ Reference< XAccessibleKeyBinding > SAL_CALL
     else if (!aURL.GetURL().isEmpty())
         bIsValid = true;
 
-    if(bIsValid)
-    {
-        rtl::Reference<::comphelper::OAccessibleKeyBindingHelper> pKeyBindingHelper =
-            new ::comphelper::OAccessibleKeyBindingHelper();
-        xKeyBinding = pKeyBindingHelper;
+    if(!bIsValid)
+        return nullptr;
 
-        css::awt::KeyStroke aKeyStroke;
-        aKeyStroke.Modifiers = 0;
-        aKeyStroke.KeyCode = KEY_RETURN;
-        aKeyStroke.KeyChar = 0;
-        aKeyStroke.KeyFunc = 0;
-        pKeyBindingHelper->AddKeyBinding( aKeyStroke );
-    }
+    rtl::Reference< ::comphelper::OAccessibleKeyBindingHelper > xKeyBinding =
+            new ::comphelper::OAccessibleKeyBindingHelper();
+
+    css::awt::KeyStroke aKeyStroke;
+    aKeyStroke.Modifiers = 0;
+    aKeyStroke.KeyCode = KEY_RETURN;
+    aKeyStroke.KeyChar = 0;
+    aKeyStroke.KeyFunc = 0;
+    xKeyBinding->AddKeyBinding( aKeyStroke );
 
     return xKeyBinding;
 }

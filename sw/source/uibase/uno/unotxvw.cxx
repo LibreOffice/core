@@ -1273,7 +1273,6 @@ uno::Reference< text::XText >  SwXTextViewCursor::getText()
 uno::Reference< text::XTextRange > SwXTextViewCursor::getStart()
 {
     SolarMutexGuard aGuard;
-    uno::Reference< text::XTextRange >  xRet;
     if(!m_pView)
         throw uno::RuntimeException();
 
@@ -1283,15 +1282,13 @@ uno::Reference< text::XTextRange > SwXTextViewCursor::getStart()
     SwWrtShell& rSh = m_pView->GetWrtShell();
     SwPaM* pShellCursor = rSh.GetCursor();
     SwDoc* pDoc = m_pView->GetDocShell()->GetDoc();
-    xRet = SwXTextRange::CreateXTextRange(*pDoc, *pShellCursor->Start(), nullptr);
 
-    return xRet;
+    return SwXTextRange::CreateXTextRange(*pDoc, *pShellCursor->Start(), nullptr);
 }
 
 uno::Reference< text::XTextRange > SwXTextViewCursor::getEnd()
 {
     SolarMutexGuard aGuard;
-    rtl::Reference<SwXTextRange> xRet;
     if(!m_pView)
         throw uno::RuntimeException();
 
@@ -1301,9 +1298,8 @@ uno::Reference< text::XTextRange > SwXTextViewCursor::getEnd()
     SwWrtShell& rSh = m_pView->GetWrtShell();
     SwPaM* pShellCursor = rSh.GetCursor();
     SwDoc* pDoc = m_pView->GetDocShell()->GetDoc();
-    xRet = SwXTextRange::CreateXTextRange(*pDoc, *pShellCursor->End(), nullptr);
 
-    return xRet;
+    return SwXTextRange::CreateXTextRange(*pDoc, *pShellCursor->End(), nullptr);
 }
 
 OUString SwXTextViewCursor::getString()

@@ -548,21 +548,19 @@ sal_Bool SwVbaContentControl::getShowingPlaceholderText() { return m_pCC->GetSho
 
 uno::Reference<word::XRange> SwVbaContentControl::getRange()
 {
-    uno::Reference<word::XRange> xRet;
     SwTextNode* pTextNode = m_pCC->GetTextNode();
-    if (pTextNode && m_pCC->GetTextAttr())
-    {
-        // Don't select the text attribute itself at the start.
-        SwPosition aStart(*pTextNode, m_pCC->GetTextAttr()->GetStart() + 1);
-        // Don't select the CH_TXTATR_BREAKWORD itself at the end.
-        SwPosition aEnd(*pTextNode, *m_pCC->GetTextAttr()->End() - 1);
-        rtl::Reference<SwXTextRange> xText(
-            SwXTextRange::CreateXTextRange(pTextNode->GetDoc(), aStart, &aEnd));
-        if (xText.is())
-            xRet = new SwVbaRange(mxParent, mxContext, mxTextDocument, xText->getStart(),
-                                  xText->getEnd());
-    }
-    return xRet;
+    if (!pTextNode || !m_pCC->GetTextAttr())
+        return nullptr;
+
+    // Don't select the text attribute itself at the start.
+    SwPosition aStart(*pTextNode, m_pCC->GetTextAttr()->GetStart() + 1);
+    // Don't select the CH_TXTATR_BREAKWORD itself at the end.
+    SwPosition aEnd(*pTextNode, *m_pCC->GetTextAttr()->End() - 1);
+    rtl::Reference<SwXTextRange> xText(
+        SwXTextRange::CreateXTextRange(pTextNode->GetDoc(), aStart, &aEnd));
+    if (!xText.is())
+        return nullptr;
+    return new SwVbaRange(mxParent, mxContext, mxTextDocument, xText->getStart(), xText->getEnd());
 }
 
 OUString SwVbaContentControl::getRepeatingSectionItemTitle()

@@ -130,7 +130,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
             xInMailService->connect(xConnectionContext, xAuthenticator);
             rxInMailService = std::move(xInMailService);
         }
-        uno::Reference< mail::XAuthenticator> xAuthenticator;
+        rtl::Reference<SwAuthenticator> xAuthenticator;
         if(rConfigItem.IsAuthentication() &&
                 !rConfigItem.IsSMTPAfterPOP() &&
                 !rConfigItem.GetMailUserName().isEmpty())

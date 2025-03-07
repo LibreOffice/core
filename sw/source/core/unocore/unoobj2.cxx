@@ -941,7 +941,7 @@ SwXTextRange::getStart()
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference< text::XTextRange >  xRet;
+    rtl::Reference< SwXTextRange >  xRet;
     ::sw::mark::MarkBase const * const pBkmk = m_pMark;
     if (!m_xParentText.is())
     {
@@ -978,7 +978,7 @@ SwXTextRange::getEnd()
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference< text::XTextRange >  xRet;
+    rtl::Reference< SwXTextRange >  xRet;
     ::sw::mark::MarkBase const * const pBkmk = m_pMark;
     if (!m_xParentText.is())
     {

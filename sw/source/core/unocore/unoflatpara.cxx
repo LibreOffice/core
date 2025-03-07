@@ -366,9 +366,8 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference< text::XFlatParagraph > xRet;
     if (!mpDoc)
-        return xRet;
+        return nullptr;
 
     SwTextNode* pRet = nullptr;
     if ( mbAutomatic )
@@ -386,7 +385,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
                 // this method is supposed to return an empty paragraph in case Online Checking is disabled
                 if ( ( mnType == text::TextMarkupType::PROOFREADING || mnType == text::TextMarkupType::SPELLCHECK )
                     && !pViewShell->GetViewOptions()->IsOnlineSpell() )
-                    return xRet;
+                    return nullptr;
 
                 // search for invalid content:
                 SwContentFrame* pCnt = pCurrentPage->ContainsContent();
@@ -479,16 +478,14 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
         }
     }
 
-    if ( pRet )
-    {
-        // Expand the string:
-        const ModelToViewHelper aConversionMap(*pRet, mpDoc->getIDocumentLayoutAccess().GetCurrentLayout());
-        const OUString& aExpandText = aConversionMap.getViewText();
+    if ( !pRet )
+        return nullptr;
 
-        xRet = new SwXFlatParagraph( *pRet, aExpandText, aConversionMap );
-    }
+    // Expand the string:
+    const ModelToViewHelper aConversionMap(*pRet, mpDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    const OUString& aExpandText = aConversionMap.getViewText();
 
-    return xRet;
+    return new SwXFlatParagraph( *pRet, aExpandText, aConversionMap );
 }
 
 uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getLastPara()
@@ -500,19 +497,18 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference< text::XFlatParagraph > xRet;
     if (!mpDoc)
-        return xRet;
+        return nullptr;
 
     SwXFlatParagraph* const pFlatParagraph(dynamic_cast<SwXFlatParagraph*>(xPara.get()));
     SAL_WARN_IF(!pFlatParagraph, "sw.core", "invalid argument");
     if ( !pFlatParagraph )
-        return xRet;
+        return nullptr;
 
     SwTextNode const*const pCurrentNode = pFlatParagraph->GetTextNode();
 
     if ( !pCurrentNode )
-        return xRet;
+        return nullptr;
 
     SwTextNode* pNextTextNode = nullptr;
     const SwNodes& rNodes = pCurrentNode->GetDoc().GetNodes();
@@ -525,35 +521,32 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
             break;
     }
 
-    if ( pNextTextNode )
-    {
-        // Expand the string:
-        const ModelToViewHelper aConversionMap(*pNextTextNode, mpDoc->getIDocumentLayoutAccess().GetCurrentLayout());
-        const OUString& aExpandText = aConversionMap.getViewText();
+    if ( !pNextTextNode )
+        return nullptr;
 
-        xRet = new SwXFlatParagraph( *pNextTextNode, aExpandText, aConversionMap );
-    }
+    // Expand the string:
+    const ModelToViewHelper aConversionMap(*pNextTextNode, mpDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    const OUString& aExpandText = aConversionMap.getViewText();
 
-    return xRet;
+    return new SwXFlatParagraph( *pNextTextNode, aExpandText, aConversionMap );
 }
 
 uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(const uno::Reference< text::XFlatParagraph > & xPara )
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference< text::XFlatParagraph > xRet;
     if (!mpDoc)
-        return xRet;
+        return nullptr;
 
     SwXFlatParagraph* const pFlatParagraph(dynamic_cast<SwXFlatParagraph*>(xPara.get()));
     SAL_WARN_IF(!pFlatParagraph, "sw.core", "invalid argument");
     if ( !pFlatParagraph )
-        return xRet;
+        return nullptr;
 
     SwTextNode const*const pCurrentNode = pFlatParagraph->GetTextNode();
 
     if ( !pCurrentNode )
-        return xRet;
+        return nullptr;
 
     SwTextNode* pPrevTextNode = nullptr;
     const SwNodes& rNodes = pCurrentNode->GetDoc().GetNodes();
@@ -566,16 +559,14 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(c
             break;
     }
 
-    if ( pPrevTextNode )
-    {
-        // Expand the string:
-        const ModelToViewHelper aConversionMap(*pPrevTextNode, mpDoc->getIDocumentLayoutAccess().GetCurrentLayout());
-        const OUString& aExpandText = aConversionMap.getViewText();
+    if ( !pPrevTextNode )
+        return nullptr;
 
-        xRet = new SwXFlatParagraph( *pPrevTextNode, aExpandText, aConversionMap );
-    }
+    // Expand the string:
+    const ModelToViewHelper aConversionMap(*pPrevTextNode, mpDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    const OUString& aExpandText = aConversionMap.getViewText();
 
-    return xRet;
+    return new SwXFlatParagraph( *pPrevTextNode, aExpandText, aConversionMap );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
