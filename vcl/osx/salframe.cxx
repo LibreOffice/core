@@ -1455,14 +1455,22 @@ void AquaSalFrame::UpdateDarkMode()
                 [NSApp setAppearance: nil];
             break;
         case 1: // light
-            if (!pCurrentAppearance || [NSAppearanceNameAqua isEqualToString: [pCurrentAppearance name]])
+            if (!pCurrentAppearance || ![NSAppearanceNameAqua isEqualToString: [pCurrentAppearance name]])
                 [NSApp setAppearance: [NSAppearance appearanceNamed: NSAppearanceNameAqua]];
             break;
         case 2: // dark
-            if (!pCurrentAppearance || [NSAppearanceNameDarkAqua isEqualToString: [pCurrentAppearance name]])
+            if (!pCurrentAppearance || ![NSAppearanceNameDarkAqua isEqualToString: [pCurrentAppearance name]])
                 [NSApp setAppearance: [NSAppearance appearanceNamed: NSAppearanceNameDarkAqua]];
             break;
     }
+
+    // Related: tdf#165266 sync NSView's appearance to NSApp's appearance
+    // Invoking -[NSApp setAppearance:] does immediately update the
+    // appearance of each NSWindow's titlebar, but it does not appear
+    // to update any NSView's appearance so explicitly sync appearances.
+    NSAppearance *pNewAppearance = [NSApp appearance];
+    if (mpNSView.appearance != pNewAppearance)
+        mpNSView.appearance = pNewAppearance;
 }
 
 bool AquaSalFrame::GetUseDarkMode() const
