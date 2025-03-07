@@ -22,6 +22,7 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <editeng/unolingu.hxx>
 #include <o3tl/string_view.hxx>
+#include <vcl/scheduler.hxx>
 
 #include <unotxdoc.hxx>
 #include <rootfrm.hxx>
@@ -910,6 +911,53 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152872)
                 "C DE");
     // 5 is empty and hidden
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds"_ostr, "height"_ostr, "0");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaBreaks)
+{
+    createSwDoc("section-break-hidden-paragraphs.rtf");
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetShowHiddenChar(true);
+    aViewOptions.SetViewMetaChars(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+    Scheduler::ProcessEventsToIdle();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout", "portion",
+                "First");
+    // actually Word shows an additional paragraph before the table
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt", 3);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/SwParaPortion/SwLineLayout", "portion", "");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/infos/bounds", "top", "18846");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/infos/bounds", "height", "269");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[2]/infos/bounds", "top", "19115");
+    // this was 450 on master? just important it's not 0
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[2]/infos/bounds", "height", "447");
+    // this was 19565 on master
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab[1]/infos/bounds", "top", "19562");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[3]/SwParaPortion/SwLineLayout", "portion", "End");
+    discardDumpedLayout();
+
+    aViewOptions.SetViewMetaChars(false);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+    Scheduler::ProcessEventsToIdle();
+
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout", "portion",
+                "First");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt", 2);
+    // this one is merged; if it were 2 0-height frames that would work too
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/infos/bounds", "top", "18846");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/infos/bounds", "height", "0");
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab[1]/infos/bounds", "top", "18846");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[2]/SwParaPortion/SwLineLayout", "portion", "End");
+    discardDumpedLayout();
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaProps)
