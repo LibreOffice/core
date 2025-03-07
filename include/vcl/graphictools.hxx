@@ -263,7 +263,7 @@ public:
         components, a to d rotation, scale and shear (for details,
         look up your favorite linear algebra/computer graphics book).
      */
-    struct UNLESS_MERGELIBS(VCL_DLLPUBLIC) Transform
+    struct VCL_DLLPUBLIC Transform
     {
         enum { MatrixSize=6 };
         Transform();
