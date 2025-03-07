@@ -191,6 +191,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     for( i = 0; i < TOGGLE_LAST; i++ )
     {
         m_pToggles[i] = gtk_check_button_new();
+        gtk_widget_set_visible(m_pToggles[i], false);
 
 #define LABEL_TOGGLE( elem ) \
         case elem : \
@@ -223,10 +224,12 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     for( i = 0; i < LIST_LAST; i++ )
     {
         m_pHBoxs[i] = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+        gtk_widget_set_visible(m_pHBoxs[i], false);
 
         GtkListStore *pListStores[ LIST_LAST ];
         pListStores[i] = gtk_list_store_new (1, G_TYPE_STRING);
         m_pLists[i] = gtk_combo_box_new_with_model(GTK_TREE_MODEL(pListStores[i]));
+        gtk_widget_set_visible(m_pLists[i], false);
         g_object_unref (pListStores[i]); // owned by the widget.
         GtkCellRenderer *pCell = gtk_cell_renderer_text_new ();
         gtk_cell_layout_pack_start(
@@ -235,6 +238,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
             GTK_CELL_LAYOUT (m_pLists[i]), pCell, "text", 0, nullptr);
 
         m_pListLabels[i] = gtk_label_new( "" );
+        gtk_widget_set_visible(m_pListLabels[i], false);
 
 #define LABEL_LIST( elem ) \
         case elem : \
