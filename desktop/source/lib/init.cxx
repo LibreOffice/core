@@ -1627,6 +1627,12 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
     m_states.emplace(LOK_CALLBACK_RULER_UPDATE, "NIL"_ostr);
     m_states.emplace(LOK_CALLBACK_VERTICAL_RULER_UPDATE, "NIL"_ostr);
     m_states.emplace(LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE, "NIL"_ostr);
+
+    if (char* pViewRenderState = pDocument->pClass->getCommandValues(pDocument, ".uno:ViewRenderState"))
+    {
+        m_aViewRenderState = pViewRenderState;
+        free(pViewRenderState);
+    }
 }
 
 void CallbackFlushHandler::stop()
@@ -1830,6 +1836,10 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
     else if (type == LOK_CALLBACK_COMMENT)
     {
         bIsComment = true;
+    }
+    else if (type == LOK_CALLBACK_VIEW_RENDER_STATE)
+    {
+        m_aViewRenderState = aCallbackData.getPayload();
     }
 
     if (callbacksDisabled() && !bIsChartActive && !bIsComment)
@@ -4503,11 +4513,28 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
 
     enableViewCallbacks(pDocument, nOrigViewId);
 
-    auto it = pDocument->mpCallbackFlushHandlers.find(nOrigViewId);
-    if (it != pDocument->mpCallbackFlushHandlers.end())
+    // Inform all views with the same view render state about the paint, so they know if makes sense
+    // to invalidate those areas later.
+    tools::Rectangle aRectangle{Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight)};
+    pDocument->updateViewsForPaintedTile(nOrigViewId, nPart, nMode, aRectangle);
+}
+
+void LibLODocument_Impl::updateViewsForPaintedTile(int nOrigViewId, int nPart, int nMode, const tools::Rectangle& rRectangle)
+{
+    auto it = mpCallbackFlushHandlers.find(nOrigViewId);
+    if (it == mpCallbackFlushHandlers.end())
     {
-        tools::Rectangle aRectangle{Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight)};
-        it->second->tilePainted(nPart, nMode, aRectangle);
+        return;
+    }
+
+    const OString& rViewRenderState = it->second->getViewRenderState();
+    for (const auto& rHandler : mpCallbackFlushHandlers)
+    {
+        if (rHandler.second->getViewRenderState() != rViewRenderState)
+        {
+            continue;
+        }
+        rHandler.second->tilePainted(nPart, nMode, rRectangle);
     }
 }
 
