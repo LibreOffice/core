@@ -58,8 +58,7 @@ struct PrefixEntry
 
 }
 
-typedef std::unordered_map<
-    OUString, std::unique_ptr<PrefixEntry> > t_OUString2PrefixMap;
+typedef std::unordered_map< OUString, PrefixEntry > t_OUString2PrefixMap;
 
 namespace {
 
@@ -225,7 +224,7 @@ inline sal_Int32 DocumentHandlerImpl::getUidByPrefix(
             m_prefixes.find( rPrefix ) );
         if (iFind != m_prefixes.end())
         {
-            const PrefixEntry & rPrefixEntry = *iFind->second;
+            const PrefixEntry & rPrefixEntry = iFind->second;
             SAL_WARN_IF( rPrefixEntry.m_Uids.empty(), "xmlscript.xmlhelper", "rPrefixEntry.m_Uids is empty" );
             m_nLastPrefix_lookup = rPrefixEntry.m_Uids.back();
             m_aLastPrefix_lookup = rPrefix;
@@ -246,16 +245,16 @@ inline void DocumentHandlerImpl::pushPrefix(
     sal_Int32 nUid = getUidByURI( rURI );
 
     // mark prefix with id
-    t_OUString2PrefixMap::const_iterator iFind( m_prefixes.find( rPrefix ) );
+    t_OUString2PrefixMap::iterator iFind( m_prefixes.find( rPrefix ) );
     if (iFind == m_prefixes.end()) // unused prefix
     {
-        PrefixEntry * pEntry = new PrefixEntry();
-        pEntry->m_Uids.push_back( nUid ); // latest id for prefix
-        m_prefixes[rPrefix].reset(pEntry);
+        PrefixEntry aEntry;
+        aEntry.m_Uids.push_back( nUid ); // latest id for prefix
+        m_prefixes[rPrefix] = std::move(aEntry);
     }
     else
     {
-        PrefixEntry& rEntry = *iFind->second;
+        PrefixEntry& rEntry = iFind->second;
         SAL_WARN_IF(rEntry.m_Uids.empty(), "xmlscript.xmlhelper", "pEntry->m_Uids is empty");
         rEntry.m_Uids.push_back(nUid);
     }
@@ -270,7 +269,7 @@ inline void DocumentHandlerImpl::popPrefix(
     t_OUString2PrefixMap::iterator iFind( m_prefixes.find( rPrefix ) );
     if (iFind != m_prefixes.end()) // unused prefix
     {
-        PrefixEntry& rEntry = *iFind->second;
+        PrefixEntry& rEntry = iFind->second;
         rEntry.m_Uids.pop_back(); // pop last id for prefix
         if (rEntry.m_Uids.empty()) // erase prefix key
         {
