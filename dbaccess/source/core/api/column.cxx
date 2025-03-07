@@ -220,18 +220,17 @@ css::uno::Reference< css::beans::XPropertySet > OColumns::createObject(const OUS
 {
     OSL_ENSURE(m_pColFactoryImpl, "OColumns::createObject: no column factory!");
 
-    css::uno::Reference< css::beans::XPropertySet > xRet;
+    rtl::Reference< OColumn > xRet;
     if ( m_pColFactoryImpl )
     {
         xRet = m_pColFactoryImpl->createColumn(_rName);
-        Reference<XChild> xChild(xRet,UNO_QUERY);
+        Reference<XChild> xChild(cppu::getXWeak(xRet.get()),UNO_QUERY);
         if ( xChild.is() )
             xChild->setParent(static_cast<XChild*>(static_cast<TXChild*>(this)));
     }
 
-    Reference<XPropertySet> xDest(xRet);
-    if ( m_pMediator && xDest.is() )
-        m_pMediator->notifyElementCreated(_rName,xDest);
+    if ( m_pMediator && xRet.is() )
+        m_pMediator->notifyElementCreated(_rName, Reference<XPropertySet>(xRet));
 
     return xRet;
 }

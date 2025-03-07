@@ -298,7 +298,7 @@ Reference< XVeto > SAL_CALL OQueryContainer::approveInsertElement( const Contain
     OSL_VERIFY( Event.Accessor >>= sName );
     Reference< XContent > xElement( Event.Element, UNO_QUERY_THROW );
 
-    Reference< XVeto > xReturn;
+    rtl::Reference< Veto > xReturn;
     try
     {
         getElementApproval()->approveElement( sName );
@@ -357,7 +357,7 @@ Reference< XContent > OQueryContainer::implCreateWrapper(const OUString& _rName)
 Reference< XContent > OQueryContainer::implCreateWrapper(const Reference< XContent >& _rxCommandDesc)
 {
     Reference<XNameContainer> xContainer(_rxCommandDesc,UNO_QUERY);
-    Reference< XContent > xReturn;
+    rtl::Reference< OContentHelper > xReturn;
     if ( xContainer .is() )
     {
         xReturn = create( xContainer, m_xConnection, m_aContext, m_pWarnings ).

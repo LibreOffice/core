@@ -55,6 +55,7 @@ namespace dbaccess
 {
 
 class OSharedConnectionManager;
+class OConnection;
 
 // ODatabaseSource
 typedef ::cppu::WeakComponentImplHelper<   css::lang::XServiceInfo
@@ -200,7 +201,7 @@ private:
         const OUString& _rUid, const OUString& _rPwd
         );
 
-    css::uno::Reference< css::sdbc::XConnection > buildIsolatedConnection(
+    rtl::Reference< OConnection > buildIsolatedConnection(
         const OUString& user, const OUString& password
         );
 

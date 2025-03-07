@@ -56,6 +56,7 @@ namespace comphelper
 namespace dbaccess
 {
 class OCommandContainer;
+class OConnection;
 
 typedef std::vector< css::uno::WeakReference< css::sdbc::XConnection > > OWeakConnectionArray;
 
@@ -110,7 +111,7 @@ class OSharedConnectionManager : public ::cppu::WeakImplHelper< css::lang::XEven
     // contains the currently used master connections
     struct TConnectionHolder
     {
-        css::uno::Reference< css::sdbc::XConnection >    xMasterConnection;
+        rtl::Reference< OConnection >    xMasterConnection;
         oslInterlockedCount         nALiveCount;
     };
 

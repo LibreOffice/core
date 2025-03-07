@@ -607,13 +607,12 @@ void ODBTableDecorator::columnDropped(const OUString& _sName)
 
 Reference< XPropertySet > ODBTableDecorator::createColumnDescriptor()
 {
-    Reference<XDataDescriptorFactory> xNames;
-    if(m_xTable.is())
-        xNames.set(m_xTable->getColumns(),UNO_QUERY);
-    Reference< XPropertySet > xRet;
-    if ( xNames.is() )
-        xRet = new OTableColumnDescriptorWrapper( xNames->createDataDescriptor(), false, true );
-    return xRet;
+    if(!m_xTable.is())
+        return nullptr;
+    Reference<XDataDescriptorFactory> xNames(m_xTable->getColumns(),UNO_QUERY);
+    if ( !xNames.is() )
+        return nullptr;
+    return new OTableColumnDescriptorWrapper( xNames->createDataDescriptor(), false, true );
 }
 
 void SAL_CALL ODBTableDecorator::acquire() noexcept

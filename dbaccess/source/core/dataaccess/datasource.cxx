@@ -313,10 +313,10 @@ Reference<XConnection> OSharedConnectionManager::getConnection( const OUString& 
         aIter = m_aConnections.emplace(nId,aHolder).first;
     }
 
-    Reference<XConnection> xRet;
+    rtl::Reference<OSharedConnection> xRet;
     if ( aIter->second.xMasterConnection.is() )
     {
-        Reference< XAggregation > xConProxy = m_xProxyFactory->createProxy(aIter->second.xMasterConnection);
+        Reference< XAggregation > xConProxy = m_xProxyFactory->createProxy(cppu::getXWeak(aIter->second.xMasterConnection.get()));
         xRet = new OSharedConnection(xConProxy);
         m_aSharedConnection.emplace(xRet,aIter);
         addEventListener(xRet,aIter);
@@ -1115,18 +1115,16 @@ Reference< XConnection > ODatabaseSource::connectWithCompletion( const Reference
     }
 }
 
-Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const OUString& user, const OUString& password)
+rtl::Reference< OConnection > ODatabaseSource::buildIsolatedConnection(const OUString& user, const OUString& password)
 {
-    Reference< XConnection > xConn;
     Reference< XConnection > xSdbcConn = buildLowLevelConnection(user, password);
     OSL_ENSURE( xSdbcConn.is(), "ODatabaseSource::buildIsolatedConnection: invalid return value of buildLowLevelConnection!" );
     // buildLowLevelConnection is expected to always succeed
-    if ( xSdbcConn.is() )
-    {
-        // build a connection server and return it (no stubs)
-        xConn = new OConnection(*this, xSdbcConn, m_pImpl->m_aContext);
-    }
-    return xConn;
+    if ( !xSdbcConn.is() )
+        return nullptr;
+
+    // build a connection server and return it (no stubs)
+    return new OConnection(*this, xSdbcConn, m_pImpl->m_aContext);
 }
 
 Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, const OUString& password,bool _bIsolated)
