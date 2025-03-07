@@ -18699,6 +18699,8 @@ private:
                                          gpointer widget)
     {
         GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
+        if (pThis->SwapForRTL())
+            x = gtk_widget_get_allocated_width(pGtkWidget) - 1 - x;
         tools::Rectangle aHelpArea(x, y);
         OUString aTooltip = pThis->signal_query_tooltip(aHelpArea);
         if (aTooltip.isEmpty())
