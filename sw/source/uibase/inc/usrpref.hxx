@@ -160,19 +160,22 @@ class SwMasterUsrPref : public SwViewOption
     bool    m_bIsSquaredPageMode; //default page mode for text grid
     bool    m_bIsAlignMathObjectsToBaseline;
 
-    SwContentViewConfig m_aContentConfig;
-    SwLayoutViewConfig  m_aLayoutConfig;
-    SwGridConfig        m_aGridConfig;
-    SwCursorConfig      m_aCursorConfig;
-    std::unique_ptr<SwWebColorConfig>   m_pWebColorConfig;
-    SwFmtAidsAutoComplConfig m_aFmtAidsAutoComplConfig;
-
     bool m_bApplyCharUnit; // apply_char_unit
 
     // Scale
     bool              m_bUseDefaultZoom;
     sal_uInt16        m_nDefaultZoomValue;  // percent.
     SvxZoomType       m_eDefaultZoomType;
+
+    // Note that these write to SwMasterUsrPref during their ctor
+    // so any members initialized after their ctor's are called
+    // will overwrite their loaded config settings
+    SwContentViewConfig m_aContentConfig;
+    SwLayoutViewConfig  m_aLayoutConfig;
+    SwGridConfig        m_aGridConfig;
+    SwCursorConfig      m_aCursorConfig;
+    std::unique_ptr<SwWebColorConfig>   m_pWebColorConfig;
+    SwFmtAidsAutoComplConfig m_aFmtAidsAutoComplConfig;
 
 public:
     SwMasterUsrPref(bool bWeb);
