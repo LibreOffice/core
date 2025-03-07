@@ -1334,6 +1334,9 @@ SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter& rWrt, const S
         }
     }
 
+    if (rWrt.mbReqIF)
+        nFrameOpts &= ~HtmlFrmOpts::Border;
+
     // <font color = ...>...<img ... >...</font>
     sal_uInt16 nBorderWidth = 0;
     const SvxBoxItem* pBoxItem;
