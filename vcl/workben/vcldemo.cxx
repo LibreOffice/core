@@ -405,7 +405,7 @@ public:
                     0xd8, 0xab, 0xd8, 0xa9, 0xd9, 0x8c, 0x00
                 };
                 aText = OUString(reinterpret_cast<char const *>(pTextUTF8),
-                                 SAL_N_ELEMENTS( pTextUTF8 ) - 1,
+                                 std::size( pTextUTF8 ) - 1,
                                  RTL_TEXTENCODING_UTF8);
             }
             else
@@ -813,11 +813,11 @@ public:
                     0, 0, 0, 0, 0
                 };
                 DemoRenderer::clearRects(rDev, aRegions);
-                assert(aRegions.size() <= SAL_N_ELEMENTS(nStartCols));
-                assert(aRegions.size() <= SAL_N_ELEMENTS(nEndCols));
-                assert(aRegions.size() <= SAL_N_ELEMENTS(eStyles));
-                assert(aRegions.size() <= SAL_N_ELEMENTS(nAngles));
-                assert(aRegions.size() <= SAL_N_ELEMENTS(nBorders));
+                assert(aRegions.size() <= std::size(nStartCols));
+                assert(aRegions.size() <= std::size(nEndCols));
+                assert(aRegions.size() <= std::size(eStyles));
+                assert(aRegions.size() <= std::size(nAngles));
+                assert(aRegions.size() <= std::size(nBorders));
                 for (size_t i = 0; i < aRegions.size(); i++)
                 {
                     tools::Rectangle aSub = aRegions[i];
@@ -1201,7 +1201,7 @@ public:
                 "cmd/lc_basicshapes.rectangle.png",
                 "cmd/lc_basicshapes.round-rectangle.png"
             };
-            for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); i++)
+            for (size_t i = 0; i < std::size(pNames); i++)
             {
                 maIconNames.push_back(OUString::createFromAscii(pNames[i]));
                 maIcons.emplace_back(maIconNames[i]);
@@ -2003,7 +2003,7 @@ public:
 
 IMPL_LINK(DemoWidgets, CursorButtonClick, Button*, pButton, void)
 {
-    for (size_t i=0; i<SAL_N_ELEMENTS(gvPointerData); ++i)
+    for (size_t i=0; i<std::size(gvPointerData); ++i)
     {
         if (mvCursorButtons[i].get() == pButton)
         {
