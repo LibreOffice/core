@@ -9572,9 +9572,9 @@ void ScInterpreter::ScUnique()
 }
 
 void ScInterpreter::replaceNamesToResult( const std::unordered_map<OUString, formula::FormulaToken*>& rResultIndexes,
-    std::unique_ptr<ScTokenArray>& pTokens, short nStartPos, short nEndPos )
+    ScTokenArray& rTokens, short nStartPos, short nEndPos )
 {
-    formula::FormulaTokenArrayPlainIterator aIterResult(*pTokens);
+    formula::FormulaTokenArrayPlainIterator aIterResult(rTokens);
     aIterResult.Jump(nStartPos + 1);
     for (FormulaToken* t = aIterResult.GetNextStringName(); t; t = aIterResult.GetNextStringName())
     {
@@ -9582,23 +9582,23 @@ void ScInterpreter::replaceNamesToResult( const std::unordered_map<OUString, for
             break;
         auto iRes = rResultIndexes.find(t->GetString().getString());
         if (iRes != rResultIndexes.end())
-            pTokens->ReplaceRPNToken(aIterResult.GetIndex() - 1, iRes->second->Clone());
+            rTokens.ReplaceRPNToken(aIterResult.GetIndex() - 1, iRes->second->Clone());
     }
 }
 
-std::unique_ptr<ScTokenArray> ScInterpreter::checkPushTokens(const std::unique_ptr<ScTokenArray>& pTokens, short nStartPos, short nEndPos)
+ScTokenArray ScInterpreter::checkPushTokens(const ScTokenArray& rTokens, short nStartPos, short nEndPos)
 {
-    formula::FormulaTokenArrayPlainIterator aIterResult(*pTokens);
+    formula::FormulaTokenArrayPlainIterator aIterResult(rTokens);
     aIterResult.Jump(nStartPos + 1);
-    unique_ptr<ScTokenArray> pTempTokens(new ScTokenArray(mrDoc));
+    ScTokenArray aTempTokens(mrDoc);
     for (FormulaToken* t = aIterResult.NextRPN(); t; t = aIterResult.NextRPN())
     {
         if (aIterResult.GetIndex() > nEndPos)
             break;
 
-        pTempTokens->AddToken(*t->Clone());
+        aTempTokens.AddToken(*t->Clone());
     }
-    return pTempTokens;
+    return aTempTokens;
 }
 
 void ScInterpreter::ScLet()
@@ -9618,7 +9618,7 @@ void ScInterpreter::ScLet()
     std::unordered_map<OUString, formula::FormulaToken*> nResultIndexes;
     formula::FormulaTokenArrayPlainIterator aIter(*pArr);
     // clone tokens for replacing string name tokens
-    unique_ptr<ScTokenArray> pValueTokens = pArr->Clone();
+    ScTokenArray aValueTokens = pArr->CloneValue();
 
     // name and function pairs parameter
     while (nJumpCount > 1)
@@ -9642,20 +9642,20 @@ void ScInterpreter::ScLet()
         nJumpCount--;
 
         // replace names with result tokens
-        replaceNamesToResult(nResultIndexes, pValueTokens, pJump[nOrgJumpCount - nJumpCount], pJump[nOrgJumpCount - nJumpCount + 1]);
+        replaceNamesToResult(nResultIndexes, aValueTokens, pJump[nOrgJumpCount - nJumpCount], pJump[nOrgJumpCount - nJumpCount + 1]);
 
-        unique_ptr<ScTokenArray> pTempTokens = checkPushTokens(pValueTokens, pJump[nOrgJumpCount - nJumpCount], pJump[nOrgJumpCount - nJumpCount + 1]);
+        ScTokenArray aTempTokens = checkPushTokens(aValueTokens, pJump[nOrgJumpCount - nJumpCount], pJump[nOrgJumpCount - nJumpCount + 1]);
 
         // calculate the inner results unless we already have a push result token
-        if (pTempTokens->GetLen() == 0)
+        if (aTempTokens.GetLen() == 0)
         {
             PushIllegalParameter();
             aCode.Jump(pJump[nOrgJumpCount], pJump[nOrgJumpCount]);
             return;
         }
-        else if (pTempTokens->GetLen() == 1 && pTempTokens->GetArray()[0]->GetOpCode() == ocPush)
+        else if (aTempTokens.GetLen() == 1 && aTempTokens.GetArray()[0]->GetOpCode() == ocPush)
         {
-            if (!nResultIndexes.insert(std::make_pair(aStrName, pTempTokens->GetArray()[0]->Clone())).second)
+            if (!nResultIndexes.insert(std::make_pair(aStrName, aTempTokens.GetArray()[0]->Clone())).second)
             {
                 PushIllegalParameter();
                 aCode.Jump(pJump[nOrgJumpCount], pJump[nOrgJumpCount]);
@@ -9664,7 +9664,7 @@ void ScInterpreter::ScLet()
         }
         else
         {
-            ScInterpreter aInt(mrDoc.GetFormulaCell(aPos), mrDoc, mrContext, aPos, *pValueTokens);
+            ScInterpreter aInt(mrDoc.GetFormulaCell(aPos), mrDoc, mrContext, aPos, aValueTokens);
             aInt.aCode.Jump(pJump[nOrgJumpCount - nJumpCount], pJump[nOrgJumpCount - nJumpCount + 1], pJump[nOrgJumpCount - nJumpCount + 1]);
             while (aInt.aCode.HasStacked())
                 aInt.aCode.FrontPop();
@@ -9701,10 +9701,10 @@ void ScInterpreter::ScLet()
 
     // last parameter: calculation
     // replace names with result tokens
-    replaceNamesToResult(nResultIndexes, pValueTokens, pJump[nOrgJumpCount - nJumpCount], pJump[nOrgJumpCount - nJumpCount + 1]);
+    replaceNamesToResult(nResultIndexes, aValueTokens, pJump[nOrgJumpCount - nJumpCount], pJump[nOrgJumpCount - nJumpCount + 1]);
 
     // calculate the final result
-    ScInterpreter aInt(mrDoc.GetFormulaCell(aPos), mrDoc, mrContext, aPos, *pValueTokens);
+    ScInterpreter aInt(mrDoc.GetFormulaCell(aPos), mrDoc, mrContext, aPos, aValueTokens);
     aInt.aCode.Jump(pJump[nOrgJumpCount - nJumpCount], pJump[nOrgJumpCount - nJumpCount + 1], pJump[nOrgJumpCount - nJumpCount + 1]);
     while (aInt.aCode.HasStacked())
         aInt.aCode.FrontPop();
@@ -9733,7 +9733,6 @@ void ScInterpreter::ScLet()
     }
 
     nJumpCount--;
-    pValueTokens.reset();
     aCode.Jump(pJump[nOrgJumpCount], pJump[nOrgJumpCount]);
 }
 
