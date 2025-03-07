@@ -116,6 +116,7 @@ namespace desktop {
         void setViewId( int viewId ) { m_viewId = viewId; }
 
         DESKTOP_DLLPUBLIC void tilePainted(int nPart, int nMode, const tools::Rectangle& rRectangle);
+        const OString& getViewRenderState() const { return m_aViewRenderState; }
 
         // SfxLockCallbackInterface
         virtual void libreOfficeKitViewCallback(int nType, const OString& pPayload) override;
@@ -235,6 +236,7 @@ namespace desktop {
         boost::container::flat_map<int, std::vector<PerViewIdData>> m_updatedTypesPerViewId; // key is view, index is type
 
         LibreOfficeKitDocument* m_pDocument;
+        OString m_aViewRenderState;
         int m_viewId = -1; // view id of the associated SfxViewShell
         LibreOfficeKitCallback m_pCallback;
         ImplSVEvent* m_pFlushEvent;
@@ -256,6 +258,8 @@ namespace desktop {
         explicit LibLODocument_Impl(css::uno::Reference<css::lang::XComponent> xComponent,
                                     int nDocumentId);
         ~LibLODocument_Impl();
+
+        void updateViewsForPaintedTile(int nOrigViewId, int nPart, int nMode, const tools::Rectangle& rRectangle);
     };
 
     struct DESKTOP_DLLPUBLIC LibLibreOffice_Impl : public _LibreOfficeKit
