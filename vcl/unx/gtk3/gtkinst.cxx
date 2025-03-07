@@ -18926,7 +18926,12 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         tools::Rectangle aRect(Point(x, y), Size(width, height));
         aRect = m_xDevice->LogicToPixel(aRect);
-        gtk_widget_queue_draw_area(GTK_WIDGET(m_pDrawingArea), aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight());
+
+        x = aRect.Left();
+        if (SwapForRTL())
+            x = gtk_widget_get_allocated_width(m_pWidget) - aRect.GetWidth() - 1 - x;
+
+        gtk_widget_queue_draw_area(GTK_WIDGET(m_pDrawingArea), x, aRect.Top(), aRect.GetWidth(), aRect.GetHeight());
 #else
         (void)x; (void)y; (void)width; (void)height;
         queue_draw();
