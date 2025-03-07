@@ -1550,7 +1550,12 @@ Reference< XShape > const & Shape::createAndInsert(
                     .maPropertyMap.getProperty(PROP_TextAutoGrowHeight)
                     .get<bool>();
 
-                if (bAutoGrowHeight && nShapeRotateInclCamera == 0)
+                bool bWrap = getTextBody()
+                    ->getTextProperties()
+                    .maPropertyMap.getProperty(PROP_TextWordWrap)
+                    .get<bool>();
+
+                if (bAutoGrowHeight && !bWrap && nShapeRotateInclCamera == 0)
                 {
                     mpTextBody->getTextProperties().maPropertyMap.setProperty(
                         PROP_TextHorizontalAdjust, lcl_convertTextAdjust(
