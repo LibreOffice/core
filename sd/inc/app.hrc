@@ -368,6 +368,8 @@
 #define SID_EXPAND_PAGE                     (SID_SD_START+343)
 #define SID_SUMMARY_PAGE                    (SID_SD_START+344)
 #define SID_LEAVE_ALL_GROUPS                (SID_SD_START+345)
+#define SID_COPY_SLIDE                      (SID_SD_START+346)
+#define SID_PASTE_SLIDE                     (SID_SD_START+347)
     // FREE
 #define SID_SLIDE_MASTER_MODE               TypedWhichId<SfxBoolItem>(SID_SD_START+348)
     // FREE

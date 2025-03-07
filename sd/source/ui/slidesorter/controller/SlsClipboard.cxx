@@ -55,6 +55,7 @@
 #include <DrawDocShell.hxx>
 #include <sdpage.hxx>
 #include <sdtreelb.hxx>
+#include <app.hrc>
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <sfx2/request.hxx>
@@ -170,6 +171,7 @@ void Clipboard::HandleSlotCall (SfxRequest& rRequest)
             break;
 
         case SID_COPY:
+        case SID_COPY_SLIDE:
             if (mrSlideSorter.GetModel().GetEditMode() != EditMode::MasterPage)
             {
                 if(xFunc.is())
@@ -181,6 +183,7 @@ void Clipboard::HandleSlotCall (SfxRequest& rRequest)
             break;
 
         case SID_PASTE:
+        case SID_PASTE_SLIDE:
             // Prevent redraws while inserting pages from the clipboard
             // because the intermediate inconsistent state might lead to
             // a crash.
