@@ -141,13 +141,17 @@ class SwMasterUsrPref : public SwViewOption
     bool    m_bIsSquaredPageMode; //default page mode for text grid
     bool    m_bIsAlignMathObjectsToBaseline;
 
+    bool m_bApplyCharUnit; // apply_char_unit
+
+    // Note that these write to SwMasterUsrPref during their ctor
+    // so any members initialized after their ctor's are called
+    // will overwrite their loaded config settings
     SwContentViewConfig m_aContentConfig;
     SwLayoutViewConfig  m_aLayoutConfig;
     SwGridConfig        m_aGridConfig;
     SwCursorConfig      m_aCursorConfig;
     std::unique_ptr<SwWebColorConfig>   m_pWebColorConfig;
 
-    bool m_bApplyCharUnit; // apply_char_unit
 public:
     SwMasterUsrPref(bool bWeb);
     ~SwMasterUsrPref();

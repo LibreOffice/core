@@ -58,12 +58,12 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
     m_nDefTabInMm100( 2000 ), // 2 cm
     m_bIsSquaredPageMode(false),
     m_bIsAlignMathObjectsToBaseline(false),
+    m_bApplyCharUnit(false),
     m_aContentConfig(bWeb, *this),
     m_aLayoutConfig(bWeb, *this),
     m_aGridConfig(bWeb, *this),
     m_aCursorConfig(*this),
-    m_pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : nullptr),
-    m_bApplyCharUnit(false)
+    m_pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : nullptr)
 {
     if (utl::ConfigManager::IsFuzzing())
     {
