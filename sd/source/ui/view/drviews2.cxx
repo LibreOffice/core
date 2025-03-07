@@ -192,6 +192,7 @@
 #include <SlideSorterViewShell.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsPageSelector.hxx>
+#include <controller/SlsClipboard.hxx>
 #include <tools/GraphicSizeCheck.hxx>
 
 #include <theme/ThemeColorChanger.hxx>
@@ -4255,6 +4256,17 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             Cancel();
             break;
 
+        case SID_PASTE_SLIDE:
+        case SID_COPY_SLIDE:
+        {
+            sd::slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase())
+                ->GetSlideSorter()
+                .GetController()
+                .FuSupport(rReq);
+            Cancel();
+            rReq.Done();
+        }
+        break;
         default:
         {
             SAL_WARN( "sd.ui", "Slot without function" );
