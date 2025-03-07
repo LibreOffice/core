@@ -335,14 +335,12 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
             xRenderedShape.get());
     }
 
-    Reference< drawing::XShape > xShape;
+    if (!xRenderedShape)
+        return nullptr;
 
-    if (xRenderedShape)
-    {
-        aCustomShape2d.ApplyGluePoints(xRenderedShape.get());
-        xShape = SvxDrawPage::CreateShapeByTypeAndInventor( xRenderedShape->GetObjIdentifier(),
-            xRenderedShape->GetObjInventor(), xRenderedShape.get() );
-    }
+    aCustomShape2d.ApplyGluePoints(xRenderedShape.get());
+    rtl::Reference< SvxShape > xShape = SvxDrawPage::CreateShapeByTypeAndInventor( xRenderedShape->GetObjIdentifier(),
+        xRenderedShape->GetObjInventor(), xRenderedShape.get() );
 
     return xShape;
 }

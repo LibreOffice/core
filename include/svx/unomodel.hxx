@@ -30,8 +30,10 @@
 #include <svx/fmdmod.hxx>
 #include <svx/svxdllapi.h>
 #include <cppuhelper/weakref.hxx>
+#include <unotools/weakref.hxx>
 
 class SdrModel;
+class SvxUnoDrawPagesAccess;
 
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxUnoDrawingModel
 :   public SfxBaseModel, // implements SfxListener, OWEAKOBJECT & other
@@ -45,7 +47,7 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxUnoDrawingModel
 private:
     SdrModel* mpDoc;
 
-    css::uno::WeakReference< css::drawing::XDrawPages > mxDrawPagesAccess;
+    unotools::WeakReference< SvxUnoDrawPagesAccess > mxDrawPagesAccess;
 
     css::uno::Reference< css::uno::XInterface > mxDashTable;
     css::uno::Reference< css::uno::XInterface > mxGradientTable;

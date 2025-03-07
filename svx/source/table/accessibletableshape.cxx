@@ -484,31 +484,23 @@ sal_Int32 SAL_CALL AccessibleTableShape::getAccessibleColumnExtentAt( sal_Int32 
 
 Reference< XAccessibleTable > SAL_CALL AccessibleTableShape::getAccessibleRowHeaders(  )
 {
-    Reference< XAccessibleTable > xRet;
     SvxTableController* pController = getTableController();
-    if( pController )
-    {
-        if( pController->isRowHeader() )
-        {
-            xRet = new AccessibleTableHeaderShape( this, true );
-        }
-    }
-    return xRet;
+    if( !pController )
+        return nullptr;
+    if( !pController->isRowHeader() )
+        return nullptr;
+    return new AccessibleTableHeaderShape( this, true );
 }
 
 
 Reference< XAccessibleTable > SAL_CALL AccessibleTableShape::getAccessibleColumnHeaders(  )
 {
-    Reference< XAccessibleTable > xRet;
     SvxTableController* pController = getTableController();
-    if( pController )
-    {
-        if( pController->isColumnHeader() )
-        {
-            xRet = new AccessibleTableHeaderShape( this, false );
-        }
-    }
-    return xRet;
+    if( !pController )
+        return nullptr;
+    if( !pController->isColumnHeader() )
+        return nullptr;
+    return new AccessibleTableHeaderShape( this, false );
 }
 
 

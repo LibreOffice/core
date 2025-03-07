@@ -202,21 +202,14 @@ sal_Bool SAL_CALL GalleryThemeProvider::hasByName( const OUString& rName )
 uno::Reference< gallery::XGalleryTheme > SAL_CALL GalleryThemeProvider::insertNewByName( const OUString& rThemeName )
 {
     const SolarMutexGuard aGuard;
-    uno::Reference< gallery::XGalleryTheme >    xRet;
 
-    if( mpGallery )
-    {
-        if( mpGallery->HasTheme( rThemeName ) )
-        {
-            throw container::ElementExistException();
-        }
-        else if( mpGallery->CreateTheme( rThemeName ) )
-        {
-            xRet = new ::unogallery::GalleryTheme( rThemeName );
-        }
-    }
-
-    return xRet;
+    if( !mpGallery )
+        return nullptr;
+    if( mpGallery->HasTheme( rThemeName ) )
+        throw container::ElementExistException();
+    if( !mpGallery->CreateTheme( rThemeName ) )
+        return nullptr;
+    return new ::unogallery::GalleryTheme( rThemeName );
 }
 
 

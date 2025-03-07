@@ -297,10 +297,13 @@ uno::Reference< drawing::XDrawPages > SAL_CALL SvxUnoDrawingModel::getDrawPages(
 {
     ::SolarMutexGuard aGuard;
 
-    uno::Reference< drawing::XDrawPages >  xDrawPages( mxDrawPagesAccess );
+    rtl::Reference< SvxUnoDrawPagesAccess >  xDrawPages( mxDrawPagesAccess );
 
     if( !xDrawPages.is() )
-        mxDrawPagesAccess = xDrawPages = new SvxUnoDrawPagesAccess(*this);
+    {
+        xDrawPages = new SvxUnoDrawPagesAccess(*this);
+        mxDrawPagesAccess = xDrawPages.get();
+    }
 
     return xDrawPages;
 }
