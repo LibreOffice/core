@@ -1399,6 +1399,7 @@ namespace osl_Forbidden
                                          false, File::isForbidden(maScratchGood + "/notthere/file", osl_File_OpenFlag_Write));
         }
 
+/*
         void open()
         {
             File::setAllowedPaths(maScratchGood);
@@ -1441,7 +1442,7 @@ namespace osl_Forbidden
             CPPUNIT_ASSERT_EQUAL_MESSAGE(errorToStr(nError2).getStr(), osl::FileBase::E_None, nError2);
 #endif
         }
-
+*/
         CPPUNIT_TEST_SUITE(Forbidden);
         CPPUNIT_TEST(forbidden);
 //        CPPUNIT_TEST(open);
