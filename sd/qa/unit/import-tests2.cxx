@@ -37,6 +37,8 @@
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
 #include <com/sun/star/drawing/GluePoint2.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/container/XIdentifierAccess.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
@@ -146,6 +148,21 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf165321)
     // Actual  : shape height: 3
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3597), xShape->getSize().Height);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6402), xShape->getSize().Width);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf165341)
+{
+    createSdImpressDoc("pptx/tdf165341.pptx");
+
+    uno::Reference<drawing::XShape> xShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+    uno::Reference<beans::XPropertySet> xProp(xShape, uno::UNO_QUERY);
+    drawing::TextHorizontalAdjust eHori;
+    CPPUNIT_ASSERT(xProp->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eHori);
+    drawing::TextVerticalAdjust eVert;
+    CPPUNIT_ASSERT(xProp->getPropertyValue(u"TextVerticalAdjust"_ustr) >>= eVert);
+    CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust::TextHorizontalAdjust_CENTER, eHori);
+    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust::TextVerticalAdjust_TOP, eVert);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf157285)
