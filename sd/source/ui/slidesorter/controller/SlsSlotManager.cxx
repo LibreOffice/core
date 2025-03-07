@@ -365,6 +365,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
             break;
 
         case SID_PASTE:
+        case SID_PASTE_SLIDE:
         {
             SdTransferable* pTransferClip = SD_MOD()->pTransferClip;
             if( pTransferClip )
@@ -392,6 +393,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
         case SID_CUT:
         case SID_COPY:
         case SID_DELETE:
+        case SID_COPY_SLIDE:
             mrSlideSorter.GetView().EndTextEditAllViews();
             mrSlideSorter.GetController().GetClipboard().HandleSlotCall(rRequest);
             break;
@@ -699,14 +701,16 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
 {
     SdTransferable* pTransferClip = SD_MOD()->pTransferClip;
 
-    if (rSet.GetItemState(SID_PASTE)  == SfxItemState::DEFAULT
-        || rSet.GetItemState(SID_PASTE_SPECIAL)  == SfxItemState::DEFAULT)
+    if (rSet.GetItemState(SID_PASTE) == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_PASTE_SPECIAL) == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_PASTE_SLIDE) == SfxItemState::DEFAULT)
     {
         // no own clipboard data?
         if ( !pTransferClip || !pTransferClip->GetDocShell().is() )
         {
             rSet.DisableItem(SID_PASTE);
             rSet.DisableItem(SID_PASTE_SPECIAL);
+            rSet.DisableItem(SID_PASTE_SLIDE);
         }
         else
         {

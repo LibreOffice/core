@@ -1067,6 +1067,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_PASTE );
         rSet.DisableItem( SID_PASTE_SPECIAL );
         rSet.DisableItem( SID_PASTE_UNFORMATTED );
+        rSet.DisableItem( SID_PASTE_SLIDE );
         rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
 
         rSet.DisableItem( SID_INSERT_FLD_DATE_FIX );
@@ -1608,6 +1609,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.DisableItem(SID_INSERT_SIGNATURELINE);
         }
     }
+
+    if (!SD_MOD()->pTransferClip)
+        rSet.DisableItem(SID_PASTE_SLIDE);
 
     GetModeSwitchingMenuState (rSet);
 }
