@@ -112,9 +112,6 @@ enum class SalEvent;
     NSAttributedString* mpLastMarkedText;
     BOOL            mbTextInputWantsNonRepeatKeyDown;
     NSTrackingArea* mpLastTrackingArea;
-
-    NSTimeInterval  mfLastScrollEventTime;
-    NSEventModifierFlags mnLastScrollModifierFlags;
 }
 +(void)unsetMouseFrame: (AquaSalFrame*)pFrame;
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;

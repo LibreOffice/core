@@ -45,8 +45,6 @@
 
 #define WHEEL_EVENT_FACTOR 1.5
 
-const static NSTimeInterval fScrollEventTimeoutTime = 1.0f;
-
 static sal_uInt16 ImplGetModifierMask( unsigned int nMask )
 {
     sal_uInt16 nRet = 0;
@@ -238,6 +236,11 @@ static void freezeWindowSizeAndReschedule( NSWindow *pWindow )
             [pWindow setMaxSize:aMaxSize];
         }
     }
+}
+
+static bool isMouseScrollWheelEvent( NSEvent *pEvent )
+{
+    return ( pEvent && [pEvent type] == NSEventTypeScrollWheel && [pEvent phase] == NSEventPhaseNone && [pEvent momentumPhase] == NSEventPhaseNone );
 }
 
 static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
@@ -926,9 +929,6 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
         mpLastMarkedText = nil;
         mbTextInputWantsNonRepeatKeyDown = NO;
         mpLastTrackingArea = nil;
-
-        mfLastScrollEventTime = 0.0f;
-        mnLastScrollModifierFlags = 0;
     }
 
     return self;
@@ -1343,35 +1343,17 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
         mpFrame->mnLastEventTime = static_cast<sal_uInt64>( [pEvent timestamp] * 1000.0 );
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
 
-        // tdf#151423 use the same modifier keys during a scrolling session
-        // Revert commit f5ef5eafdf70a36edd5129147502a9c74df89456 as it
-        // completely disabled the ability to zoom on mice with limited
-        // support for gestures such as the Apple Magic Mouse by pressing
-        // pressing the Command key while scrolling. So try a different
-        // approach and use the modifier keys that were pressed when the
-        // current scrolling session was started for the entire scrolling
-        // session.
-        // Unfortunately, session state changes such as a scrolling session
-        // began or ended are not fired when scrolling with a regular mouse
-        // scrollwheel so use a significant pause between scrolling events
-        // as a rough indicator that a new scrolling session has begun.
-        if( [pEvent momentumPhase] == NSEventPhaseNone && mnLastScrollModifierFlags != [pEvent modifierFlags] )
-        {
-            if( [pEvent timestamp] - mfLastScrollEventTime > fScrollEventTimeoutTime )
-                mnLastScrollModifierFlags = [pEvent modifierFlags];
-        }
-
         // merge pending scroll wheel events
         CGFloat dX = 0.0;
         CGFloat dY = 0.0;
+        bool bAllowModifiers = isMouseScrollWheelEvent( pEvent );
         for(;;)
         {
-            mfLastScrollEventTime = [pEvent timestamp];
             dX += [pEvent deltaX];
             dY += [pEvent deltaY];
             NSEvent* pNextEvent = [NSApp nextEventMatchingMask: NSEventMaskScrollWheel
                 untilDate: nil inMode: NSDefaultRunLoopMode dequeue: YES ];
-            if( !pNextEvent )
+            if( !pNextEvent || ( isMouseScrollWheelEvent( pNextEvent ) != bAllowModifiers ) )
                 break;
             pEvent = pNextEvent;
         }
@@ -1383,7 +1365,16 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
         aEvent.mnTime         = mpFrame->mnLastEventTime;
         aEvent.mnX = static_cast<tools::Long>(aPt.x) - mpFrame->GetUnmirroredGeometry().x();
         aEvent.mnY = static_cast<tools::Long>(aPt.y) - mpFrame->GetUnmirroredGeometry().y();
-        aEvent.mnCode         = ImplGetModifierMask( mnLastScrollModifierFlags );
+        // tdf#151423 Only allow modifiers for mouse scrollwheel events
+        // The Command modifier converts scrollwheel events into
+        // magnification events and the Shift modifier converts vertical
+        // scrollwheel events into horizontal scrollwheel events. This
+        // behavior is reasonable for mouse scrollwheel events since many
+        // mice only have a single, vertical scrollwheel but trackpads
+        // already have specific gestures for magnification and horizontal
+        // scrolling. So, behave like most macOS applications and ignore
+        // all modifiers if this a trackpad scrollwheel event.
+        aEvent.mnCode         = bAllowModifiers ? ImplGetModifierMask( mpFrame->mnLastModifierFlags ) : 0;
         aEvent.mbDeltaIsPixel = false;
 
         if( AllSettings::GetLayoutRTL() )
