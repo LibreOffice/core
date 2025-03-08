@@ -54,6 +54,13 @@ Size IconView::GetEntrySize(const SvTreeListEntry& entry) const
     return { GetEntryWidth(), GetEntryHeight() };
 }
 
+void IconView::UpdateEntrySize(const Image& pImage)
+{
+    int spacing = nSpacing * 2;
+    SetEntryHeight(pImage.GetSizePixel().getHeight() + spacing);
+    SetEntryWidth(pImage.GetSizePixel().getWidth() + spacing);
+}
+
 void IconView::CalcEntryHeight(SvTreeListEntry const* pEntry)
 {
     int nHeight = nSpacing * 2;
