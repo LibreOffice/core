@@ -320,7 +320,7 @@ Reference< beans::XPropertySet >
         if( !xResult.is() )
         {
             Reference< beans::XPropertySet > xParentProperties;
-            Reference< util::XModifyListener > xModifyEventForwarder;
+            rtl::Reference< ModifyEventForwarder > xModifyEventForwarder;
             {
                 MutexGuard aGuard( m_aMutex );
                 xParentProperties = this;
@@ -343,7 +343,7 @@ Reference< beans::XPropertySet >
 void SAL_CALL DataSeries::resetDataPoint( sal_Int32 nIndex )
 {
     Reference< beans::XPropertySet > xDataPointProp;
-    Reference< util::XModifyListener > xModifyEventForwarder;
+    rtl::Reference< ModifyEventForwarder > xModifyEventForwarder;
     {
         MutexGuard aGuard( m_aMutex );
         xModifyEventForwarder = m_xModifyEventForwarder;
@@ -367,7 +367,7 @@ void SAL_CALL DataSeries::resetDataPoint( sal_Int32 nIndex )
 void SAL_CALL DataSeries::resetAllDataPoints()
 {
     tDataPointAttributeContainer  aOldAttributedDataPoints;
-    Reference< util::XModifyListener > xModifyEventForwarder;
+    rtl::Reference< ModifyEventForwarder > xModifyEventForwarder;
     {
         MutexGuard aGuard( m_aMutex );
         xModifyEventForwarder = m_xModifyEventForwarder;
@@ -383,7 +383,7 @@ void SAL_CALL DataSeries::setData( const uno::Sequence< Reference< chart2::data:
 {
     tDataSequenceContainer aOldDataSequences;
     tDataSequenceContainer aNewDataSequences;
-    Reference< util::XModifyListener > xModifyEventForwarder;
+    rtl::Reference< ModifyEventForwarder > xModifyEventForwarder;
     {
         MutexGuard aGuard( m_aMutex );
         xModifyEventForwarder = m_xModifyEventForwarder;
@@ -403,7 +403,7 @@ void DataSeries::setData( const std::vector< uno::Reference< chart2::data::XLabe
 {
     tDataSequenceContainer aOldDataSequences;
     tDataSequenceContainer aNewDataSequences;
-    Reference< util::XModifyListener > xModifyEventForwarder;
+    rtl::Reference< ModifyEventForwarder > xModifyEventForwarder;
     {
         MutexGuard aGuard( m_aMutex );
         xModifyEventForwarder = m_xModifyEventForwarder;
@@ -434,7 +434,7 @@ void SAL_CALL DataSeries::addRegressionCurve(
 {
     auto pRegressionCurve = dynamic_cast<RegressionCurveModel*>(xRegressionCurve.get());
     assert(pRegressionCurve);
-    Reference< util::XModifyListener > xModifyEventForwarder;
+    rtl::Reference< ModifyEventForwarder > xModifyEventForwarder;
     {
         MutexGuard aGuard( m_aMutex );
         xModifyEventForwarder = m_xModifyEventForwarder;
@@ -455,7 +455,7 @@ void SAL_CALL DataSeries::removeRegressionCurve(
     auto pRegressionCurve = dynamic_cast<RegressionCurveModel*>(xRegressionCurve.get());
     assert(pRegressionCurve);
 
-    Reference< util::XModifyListener > xModifyEventForwarder;
+    rtl::Reference< ModifyEventForwarder > xModifyEventForwarder;
     {
         MutexGuard aGuard( m_aMutex );
         xModifyEventForwarder = m_xModifyEventForwarder;
@@ -489,7 +489,7 @@ void SAL_CALL DataSeries::setRegressionCurves(
         assert(pRegressionCurve);
         aNewCurves.push_back(pRegressionCurve);
     }
-    Reference< util::XModifyListener > xModifyEventForwarder;
+    rtl::Reference< ModifyEventForwarder > xModifyEventForwarder;
     {
         MutexGuard aGuard( m_aMutex );
         xModifyEventForwarder = m_xModifyEventForwarder;

@@ -354,7 +354,7 @@ Axis::~Axis()
 
 void Axis::AllocateSubGrids()
 {
-    Reference< util::XModifyListener > xModifyEventForwarder;
+    rtl::Reference< ModifyEventForwarder > xModifyEventForwarder;
     Reference< lang::XEventListener > xEventListener;
     std::vector< rtl::Reference< GridProperties > > aOldBroadcasters;
     std::vector< rtl::Reference< GridProperties > > aNewBroadcasters;
@@ -397,7 +397,7 @@ void Axis::AllocateSubGrids()
 // ____ XAxis ____
 void SAL_CALL Axis::setScaleData( const chart2::ScaleData& rScaleData )
 {
-    Reference< util::XModifyListener > xModifyEventForwarder;
+    rtl::Reference< ModifyEventForwarder > xModifyEventForwarder;
     Reference< lang::XEventListener > xEventListener;
     Reference< chart2::data::XLabeledDataSequence > xOldCategories;
     Reference< chart2::data::XLabeledDataSequence > xNewCategories = rScaleData.Categories;
@@ -480,7 +480,7 @@ void SAL_CALL Axis::setTitleObject( const Reference< chart2::XTitle >& xNewTitle
 
 void Axis::setTitleObject( const rtl::Reference< Title >& xNewTitle )
 {
-    Reference< util::XModifyListener > xModifyEventForwarder;
+    rtl::Reference< ModifyEventForwarder > xModifyEventForwarder;
     rtl::Reference< Title > xOldTitle;
     {
         MutexGuard aGuard( m_aMutex );

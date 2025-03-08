@@ -815,7 +815,7 @@ css::awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAx
 // ____ XAxisSupplier ____
 Reference< XAxis > SAL_CALL DiagramWrapper::getAxis( sal_Int32 nDimensionIndex )
 {
-    Reference< XAxis > xAxis;
+    rtl::Reference< AxisWrapper > xAxis;
     if(!nDimensionIndex)
     {
         if( !m_xXAxis.is() )
@@ -839,7 +839,7 @@ Reference< XAxis > SAL_CALL DiagramWrapper::getAxis( sal_Int32 nDimensionIndex )
 
 Reference< XAxis > SAL_CALL DiagramWrapper::getSecondaryAxis( sal_Int32 nDimensionIndex )
 {
-    Reference< XAxis > xAxis;
+    rtl::Reference< AxisWrapper > xAxis;
     if(!nDimensionIndex)
     {
         if( !m_xSecondXAxis.is() )

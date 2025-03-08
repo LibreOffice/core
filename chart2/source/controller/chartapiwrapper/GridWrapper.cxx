@@ -101,7 +101,7 @@ void SAL_CALL GridWrapper::removeEventListener(
 
 Reference< beans::XPropertySet > GridWrapper::getInnerPropertySet()
 {
-    Reference< beans::XPropertySet > xRet;
+    rtl::Reference< GridProperties > xRet;
     try
     {
         rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );

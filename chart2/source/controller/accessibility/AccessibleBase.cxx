@@ -558,7 +558,7 @@ sal_Bool SAL_CALL AccessibleBase::containsPoint( const awt::Point& aPoint )
 Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleAtPoint( const awt::Point& aPoint )
 {
     CheckDisposeState();
-    Reference< XAccessible > aResult;
+    rtl::Reference< AccessibleBase > aResult;
     awt::Rectangle aRect( getBounds());
 
     // children are positioned relative to this object, so translate bound rect

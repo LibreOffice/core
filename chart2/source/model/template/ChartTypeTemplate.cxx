@@ -800,7 +800,7 @@ void ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(
 
     OUString aNewChartType( xNewChartType->getChartType() );
 
-    Reference< beans::XPropertySet > xSource;
+    rtl::Reference< ChartType > xSource;
     for( rtl::Reference< ChartType > const & xOldType : rOldChartTypesSeq )
     {
         if( xOldType.is() && xOldType->getChartType() == aNewChartType )
