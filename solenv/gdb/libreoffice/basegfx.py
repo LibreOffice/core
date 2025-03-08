@@ -118,7 +118,7 @@ class B2DPolygonPrinter(object):
         def __next__(self):
             if self.value.__str__() == "<unavailable>":
                 raise StopIteration()
-           if self.index >= self.count:
+            if self.index >= self.count:
                 raise StopIteration()
             points = self.value['mpPolygon']['m_pimpl'].dereference()['m_value']['maPoints']['maVector']
             currPoint = (points['_M_impl']['_M_start'] + self.index).dereference()
