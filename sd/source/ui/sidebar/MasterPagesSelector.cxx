@@ -584,16 +584,20 @@ void MasterPagesSelector::UpdateItemList (::std::unique_ptr<ItemList> && pNewIte
 
 css::ui::LayoutSize MasterPagesSelector::GetHeightForWidth(const sal_Int32 nWidth)
 {
-    if (maIconViewId == "masterpageall_icons")
-        return css::ui::LayoutSize(-1, -1, -1);
+    // there is no way to get margin of item programatically, we use value provided in ui file.
+    const int nMargin = 6;
+    sal_Int32 nColumnCount = nWidth / (mxPreviewIconView->get_item_width() + (5 * nMargin));
+    if (nColumnCount < 1)
+        nColumnCount = 1;
 
-    const sal_uInt32 nItemWidth = mxPreviewIconView->get_item_width();
-    sal_Int32 nMinimumHeight = mxPreviewIconView->get_preferred_size().getHeight();
-    const sal_Int32 itemsInRows = floor(nWidth / nItemWidth);
-    sal_Int32 totalItems = mxPreviewIconView->n_children();
-    if (itemsInRows > 0)
-        nMinimumHeight = ((totalItems / itemsInRows) + 1) * nMinimumHeight;
-    return css::ui::LayoutSize(nMinimumHeight, nMinimumHeight, nMinimumHeight);
+    sal_Int32 nTotalItems = mxPreviewIconView->n_children();
+    sal_Int32 nRowCount = (nTotalItems + nColumnCount - 1) / nColumnCount;
+    if (nRowCount < 1)
+        nRowCount = 1;
+
+    sal_Int32 nPreferedHeight
+        = nRowCount * (mxPreviewIconView->get_rect(nTotalItems - 1).GetHeight() + (2 * nMargin));
+    return css::ui::LayoutSize(nPreferedHeight, nPreferedHeight, nPreferedHeight);
 }
 
 } // end of namespace sd::sidebar
