@@ -10,7 +10,6 @@
 #pragma once
 
 #include <vcl/image.hxx>
-#include <o3tl/enumarray.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -19,6 +18,8 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include <map>
+#include <tuple>
 
 namespace vcl
 {
@@ -31,17 +32,18 @@ private:
     std::vector<OUString> m_aImageCommandNameVector;
     std::vector<OUString> m_aImageNameVector;
 
-    o3tl::enumarray<ImageType, std::unique_ptr<ImageList>> m_pImageList;
+    std::map<std::tuple<ImageType, ImageWritingDirection>, std::unique_ptr<ImageList>> m_pImageList;
     OUString m_sIconTheme;
 
-    ImageList* getImageList(ImageType nImageType);
+    ImageList* getImageList(ImageType nImageType, ImageWritingDirection nImageDir);
 
 public:
     CommandImageResolver();
     ~CommandImageResolver();
 
     void registerCommands(const css::uno::Sequence<OUString>& aCommandSequence);
-    Image getImageFromCommandURL(ImageType nImageType, const OUString& rCommandURL);
+    Image getImageFromCommandURL(ImageType nImageType, ImageWritingDirection nImageDir,
+                                 const OUString& rCommandURL);
 
     std::vector<OUString>& getCommandNames() { return m_aImageCommandNameVector; }
 

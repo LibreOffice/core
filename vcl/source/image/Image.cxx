@@ -101,6 +101,14 @@ BitmapEx Image::GetBitmapEx() const
         return BitmapEx();
 }
 
+void Image::SetOptional(bool bValue)
+{
+    if (mpImplData)
+    {
+        mpImplData->SetOptional(bValue);
+    }
+}
+
 bool Image::operator==(const Image& rImage) const
 {
     bool bRet = false;

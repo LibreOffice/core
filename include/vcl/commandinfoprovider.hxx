@@ -80,12 +80,14 @@ namespace vcl::CommandInfoProvider {
     VCL_DLLPUBLIC css::uno::Reference<css::graphic::XGraphic> GetXGraphicForCommand(
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        vcl::ImageType eImageType = vcl::ImageType::Small);
+        vcl::ImageType eImageType = vcl::ImageType::Small,
+        vcl::ImageWritingDirection eImageDir = vcl::ImageWritingDirection::DontCare);
 
     VCL_DLLPUBLIC Image GetImageForCommand(
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        vcl::ImageType eImageType = vcl::ImageType::Small);
+        vcl::ImageType eImageType = vcl::ImageType::Small,
+        vcl::ImageWritingDirection eImageDir = vcl::ImageWritingDirection::DontCare);
 
     VCL_DLLPUBLIC sal_Int32 GetPropertiesForCommand(
         const OUString& rsCommandName,

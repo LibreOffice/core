@@ -40,6 +40,8 @@ private:
     BitmapEx maBitmapEx;
     BitmapEx maDisabledBitmapEx;
 
+    bool bOptional = false;
+
     bool loadStockAtScale(SalGraphics* pGraphics, BitmapEx &rBitmapEx);
 
 public:
@@ -63,6 +65,8 @@ public:
     BitmapEx const & getBitmapEx(bool bDisabled = false);
     /// Taking account of HiDPI scaling
     BitmapEx const & getBitmapExForHiDPI(bool bDisabled, SalGraphics* pGraphics);
+
+    void SetOptional(bool bValue);
 
     bool isEqual(const ImplImage &ref) const;
     bool isSizeEmpty() const

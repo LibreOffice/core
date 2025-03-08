@@ -394,6 +394,20 @@ void ImageOrientationController::statusChanged(const css::frame::FeatureStateEve
             OUString aCommand = m_pToolbar->get_item_ident(i);
             if (vcl::CommandInfoProvider::IsMirrored(aCommand, getModuleName()))
             {
+                if (m_bMirrored)
+                {
+                    // Search for a specialized mirrored graphic
+                    auto xRltbGraphic = vcl::CommandInfoProvider::GetXGraphicForCommand(
+                        aCommand, m_xFrame, m_pToolbar->get_icon_size(),
+                        vcl::ImageWritingDirection::RightLeftTopBottom);
+                    if (xRltbGraphic)
+                    {
+                        m_pToolbar->set_item_image_mirrored(aCommand, false);
+                        m_pToolbar->set_item_image(aCommand, xRltbGraphic);
+                        continue;
+                    }
+                }
+
                 m_pToolbar->set_item_image_mirrored(aCommand, m_bMirrored);
                 auto xGraphic(vcl::CommandInfoProvider::GetXGraphicForCommand(
                     aCommand, m_xFrame, m_pToolbar->get_icon_size()));
@@ -408,8 +422,25 @@ void ImageOrientationController::statusChanged(const css::frame::FeatureStateEve
         {
             ToolBoxItemId nItemId = pToolBox->GetItemId(i);
             OUString aCommand = pToolBox->GetItemCommand(nItemId);
+
+            bool bCmdMirrored = vcl::CommandInfoProvider::IsMirrored(aCommand, getModuleName());
+            if (bCmdMirrored && m_bMirrored)
+            {
+                // Search for a specialized mirrored graphic
+                auto xRltbGraphic = vcl::CommandInfoProvider::GetXGraphicForCommand(
+                    aCommand, m_xFrame, pToolBox->GetImageSize(),
+                    vcl::ImageWritingDirection::RightLeftTopBottom);
+                if (xRltbGraphic)
+                {
+                    pToolBox->SetItemImageMirrorMode(nItemId, false);
+                    pToolBox->SetItemImageAngle(nItemId, m_nRotationAngle);
+                    pToolBox->SetItemImage(nItemId, Image{ xRltbGraphic });
+                    continue;
+                }
+            }
+
             bool bModified = false;
-            if (vcl::CommandInfoProvider::IsMirrored(aCommand, getModuleName()))
+            if (bCmdMirrored)
             {
                 pToolBox->SetItemImageMirrorMode(nItemId, m_bMirrored);
                 bModified = true;

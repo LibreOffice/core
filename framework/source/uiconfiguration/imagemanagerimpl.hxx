@@ -30,6 +30,7 @@
 #include <comphelper/interfacecontainer4.hxx>
 #include <rtl/ustring.hxx>
 
+#include <o3tl/enumarray.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
@@ -47,8 +48,11 @@ namespace framework
             CmdImageList(css::uno::Reference< css::uno::XComponentContext > xContext, OUString aModuleIdentifier);
             virtual ~CmdImageList();
 
-            virtual Image getImageFromCommandURL(vcl::ImageType nImageType, const OUString& rCommandURL);
-            virtual bool hasImage(vcl::ImageType nImageType, const OUString& rCommandURL);
+            virtual Image getImageFromCommandURL(vcl::ImageType nImageType,
+                                                 vcl::ImageWritingDirection nImageDir,
+                                                 const OUString& rCommandURL);
+            virtual bool hasImage(vcl::ImageType nImageType, vcl::ImageWritingDirection nImageDir,
+                                  const OUString& rCommandURL);
             virtual std::vector<OUString>& getImageCommandNames();
 
         protected:
@@ -68,8 +72,11 @@ namespace framework
             explicit GlobalImageList(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
             virtual ~GlobalImageList() override;
 
-            virtual Image                           getImageFromCommandURL( vcl::ImageType nImageType, const OUString& rCommandURL ) override;
-            virtual bool                            hasImage( vcl::ImageType nImageType, const OUString& rCommandURL ) override;
+            virtual Image getImageFromCommandURL(vcl::ImageType nImageType,
+                                                 vcl::ImageWritingDirection nImageDir,
+                                                 const OUString& rCommandURL) override;
+            virtual bool hasImage(vcl::ImageType nImageType, vcl::ImageWritingDirection nImageDir,
+                                  const OUString& rCommandURL) override;
             virtual ::std::vector< OUString >&      getImageCommandNames() override;
     };
 

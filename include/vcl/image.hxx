@@ -48,6 +48,7 @@ public:
 
     Size GetSizePixel() const;
     BitmapEx GetBitmapEx() const;
+    void SetOptional(bool bValue);
 
     bool operator!() const
     {

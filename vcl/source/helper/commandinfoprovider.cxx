@@ -339,17 +339,24 @@ OUString GetRealCommandForCommand(const css::uno::Sequence<css::beans::PropertyV
 
 Reference<graphic::XGraphic> GetXGraphicForCommand(const OUString& rsCommandName,
                                                    const Reference<frame::XFrame>& rxFrame,
-                                                   vcl::ImageType eImageType)
+                                                   vcl::ImageType eImageType,
+                                                   vcl::ImageWritingDirection eImageDir)
 {
     if (rsCommandName.isEmpty())
         return nullptr;
 
-    sal_Int16 nImageType(ui::ImageType::COLOR_NORMAL | ui::ImageType::SIZE_DEFAULT);
+    sal_Int16 nImageType(ui::ImageType::COLOR_NORMAL | ui::ImageType::SIZE_DEFAULT
+                         | ui::ImageType::DIR_LR_TB);
 
     if (eImageType == vcl::ImageType::Size26)
         nImageType |= ui::ImageType::SIZE_LARGE;
     else if (eImageType == vcl::ImageType::Size32)
         nImageType |= ui::ImageType::SIZE_32;
+
+    if (eImageDir == vcl::ImageWritingDirection::RightLeftTopBottom)
+    {
+        nImageType |= ui::ImageType::DIR_RL_TB;
+    }
 
     try
     {
@@ -392,11 +399,10 @@ Reference<graphic::XGraphic> GetXGraphicForCommand(const OUString& rsCommandName
     return nullptr;
 }
 
-Image GetImageForCommand(const OUString& rsCommandName,
-                         const Reference<frame::XFrame>& rxFrame,
-                         vcl::ImageType eImageType)
+Image GetImageForCommand(const OUString& rsCommandName, const Reference<frame::XFrame>& rxFrame,
+                         vcl::ImageType eImageType, vcl::ImageWritingDirection eImageDir)
 {
-    return Image(GetXGraphicForCommand(rsCommandName, rxFrame, eImageType));
+    return Image(GetXGraphicForCommand(rsCommandName, rxFrame, eImageType, eImageDir));
 }
 
 sal_Int32 GetPropertiesForCommand (

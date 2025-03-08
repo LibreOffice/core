@@ -51,6 +51,13 @@ constants ImageType
      */
     const short COLOR_HIGHCONTRAST = 4;
 
+    /** an image unspecialized, or for lr-tb writing.
+     */
+    const short DIR_LR_TB = 0;
+
+    /** an image specialized for rl-tb writing.
+     */
+    const short DIR_RL_TB = 8;
 };
 
 }; }; }; };

@@ -92,15 +92,16 @@ bool ImplImage::loadStockAtScale(SalGraphics* pGraphics, BitmapEx &rBitmapEx)
             if (!ImageTree::get().loadImage(aFileName, aIconTheme, aBitmapEx, true,
                                             nScalePercentage, eScalingFlags))
             {
-                SAL_WARN("vcl", "Failed to load scaled image from " << maStockName <<
-                         " and " << aFileName << " at " << fScale);
+                SAL_WARN_IF(!bOptional, "vcl",
+                            "Failed to load scaled image from " << maStockName << " and "
+                                                                << aFileName << " at " << fScale);
                 return false;
             }
         }
         else
         {
-            SAL_WARN("vcl", "Failed to load scaled image from " << maStockName <<
-                     " at " << fScale);
+            SAL_WARN_IF(!bOptional, "vcl",
+                        "Failed to load scaled image from " << maStockName << " at " << fScale);
             return false;
         }
     }
@@ -123,7 +124,7 @@ Size ImplImage::getSizePixel()
             aRet = maSizePixel;
         }
         else
-            SAL_WARN("vcl", "Failed to load stock icon " << maStockName);
+            SAL_WARN_IF(!bOptional, "vcl", "Failed to load stock icon " << maStockName);
     }
     return aRet;
 }
@@ -148,6 +149,8 @@ BitmapEx const & ImplImage::getBitmapEx(bool bDisabled)
 
     return maBitmapEx;
 }
+
+void ImplImage::SetOptional(bool bValue) { bOptional = bValue; }
 
 bool ImplImage::isEqual(const ImplImage &ref) const
 {

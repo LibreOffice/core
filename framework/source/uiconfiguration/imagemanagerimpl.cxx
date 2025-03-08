@@ -62,8 +62,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ui;
 using namespace ::cppu;
 
-const sal_Int16 MAX_IMAGETYPE_VALUE       = css::ui::ImageType::SIZE_32;
-
 constexpr OUString IMAGE_FOLDER = u"images"_ustr;
 constexpr OUString BITMAPS_FOLDER = u"Bitmaps"_ustr;
 
@@ -83,6 +81,10 @@ constexpr o3tl::enumarray<vcl::ImageType, OUString> BITMAP_FILE_NAMES
 
 namespace framework
 {
+namespace
+{
+using ImageIndex = std::tuple<vcl::ImageType, vcl::ImageWritingDirection>;
+}
 
 static GlobalImageList*     pGlobalImageList = nullptr;
 
@@ -159,14 +161,16 @@ void CmdImageList::initialize()
     m_bInitialized = true;
 }
 
-
-Image CmdImageList::getImageFromCommandURL(vcl::ImageType nImageType, const OUString& rCommandURL)
+Image CmdImageList::getImageFromCommandURL(vcl::ImageType nImageType,
+                                           vcl::ImageWritingDirection nImageDir,
+                                           const OUString& rCommandURL)
 {
     initialize();
-    return m_aResolver.getImageFromCommandURL(nImageType, rCommandURL);
+    return m_aResolver.getImageFromCommandURL(nImageType, nImageDir, rCommandURL);
 }
 
-bool CmdImageList::hasImage(vcl::ImageType /*nImageType*/, const OUString& rCommandURL)
+bool CmdImageList::hasImage(vcl::ImageType /*nImageType*/, vcl::ImageWritingDirection /*nImageDir*/,
+                            const OUString& rCommandURL)
 {
     initialize();
     return m_aResolver.hasImage(rCommandURL);
@@ -189,16 +193,19 @@ GlobalImageList::~GlobalImageList()
     pGlobalImageList = nullptr;
 }
 
-Image GlobalImageList::getImageFromCommandURL( vcl::ImageType nImageType, const OUString& rCommandURL )
+Image GlobalImageList::getImageFromCommandURL(vcl::ImageType nImageType,
+                                              vcl::ImageWritingDirection nImageDir,
+                                              const OUString& rCommandURL)
 {
-    std::unique_lock guard( getGlobalImageListMutex() );
-    return CmdImageList::getImageFromCommandURL( nImageType, rCommandURL );
+    std::unique_lock guard(getGlobalImageListMutex());
+    return CmdImageList::getImageFromCommandURL(nImageType, nImageDir, rCommandURL);
 }
 
-bool GlobalImageList::hasImage( vcl::ImageType nImageType, const OUString& rCommandURL )
+bool GlobalImageList::hasImage(vcl::ImageType nImageType, vcl::ImageWritingDirection nImageDir,
+                               const OUString& rCommandURL)
 {
-    std::unique_lock guard( getGlobalImageListMutex() );
-    return CmdImageList::hasImage( nImageType, rCommandURL );
+    std::unique_lock guard(getGlobalImageListMutex());
+    return CmdImageList::hasImage(nImageType, nImageDir, rCommandURL);
 }
 
 ::std::vector< OUString >& GlobalImageList::getImageCommandNames()
@@ -235,14 +242,36 @@ static bool implts_checkAndScaleGraphic( uno::Reference< XGraphic >& rOutGraphic
     return true;
 }
 
-static vcl::ImageType implts_convertImageTypeToIndex( sal_Int16 nImageType )
+static std::optional<ImageIndex> implts_convertImageTypeToIndex(sal_Int16 nImageType)
 {
+    sal_Int16 nSanitize = 0;
+
+    vcl::ImageType nType = vcl::ImageType::Size16;
+    vcl::ImageWritingDirection nDir = vcl::ImageWritingDirection::DontCare;
+
     if (nImageType & css::ui::ImageType::SIZE_LARGE)
-        return vcl::ImageType::Size26;
+    {
+        nType = vcl::ImageType::Size26;
+        nSanitize |= css::ui::ImageType::SIZE_LARGE;
+    }
     else if (nImageType & css::ui::ImageType::SIZE_32)
-        return vcl::ImageType::Size32;
-    else
-        return vcl::ImageType::Size16;
+    {
+        nType = vcl::ImageType::Size32;
+        nSanitize |= css::ui::ImageType::SIZE_32;
+    }
+
+    if (nImageType & css::ui::ImageType::DIR_RL_TB)
+    {
+        nDir = vcl::ImageWritingDirection::RightLeftTopBottom;
+        nSanitize |= css::ui::ImageType::DIR_RL_TB;
+    }
+
+    if (nSanitize != nImageType)
+    {
+        return std::nullopt;
+    }
+
+    return ImageIndex{ nType, nDir };
 }
 
 ImageList* ImageManagerImpl::implts_getUserImageList( vcl::ImageType nImageType )
@@ -632,7 +661,9 @@ Sequence< OUString > ImageManagerImpl::getAllImageNames( ::sal_Int16 nImageType 
 
     std::unordered_set< OUString > aImageCmdNames;
 
-    vcl::ImageType nIndex = implts_convertImageTypeToIndex( nImageType );
+    auto nIndex = implts_convertImageTypeToIndex(nImageType);
+    if (!nIndex.has_value())
+        throw IllegalArgumentException();
 
     sal_uInt32 i( 0 );
     if ( m_bUseGlobal )
@@ -650,7 +681,7 @@ Sequence< OUString > ImageManagerImpl::getAllImageNames( ::sal_Int16 nImageType 
             aImageCmdNames.insert( rModuleImageNameVector[i] );
     }
 
-    ImageList* pImageList = implts_getUserImageList(nIndex);
+    ImageList* pImageList = implts_getUserImageList(std::get<0>(*nIndex));
     std::vector< OUString > rUserImageNames;
     pImageList->GetImageNames( rUserImageNames );
     const sal_uInt32 nUserCount = rUserImageNames.size();
@@ -668,20 +699,24 @@ bool ImageManagerImpl::hasImage( ::sal_Int16 nImageType, const OUString& aComman
     if ( m_bDisposed )
         throw DisposedException();
 
-    if (( nImageType < 0 ) || ( nImageType > MAX_IMAGETYPE_VALUE ))
+    auto nIndex = implts_convertImageTypeToIndex(nImageType);
+    if (!nIndex.has_value())
         throw IllegalArgumentException();
 
-    vcl::ImageType nIndex = implts_convertImageTypeToIndex( nImageType );
-    if ( m_bUseGlobal && implts_getGlobalImageList()->hasImage( nIndex, aCommandURL ))
+    if (m_bUseGlobal
+        && implts_getGlobalImageList()->hasImage(std::get<0>(*nIndex), std::get<1>(*nIndex),
+                                                 aCommandURL))
         return true;
     else
     {
-        if ( m_bUseGlobal && implts_getDefaultImageList()->hasImage( nIndex, aCommandURL ))
+        if (m_bUseGlobal
+            && implts_getDefaultImageList()->hasImage(std::get<0>(*nIndex), std::get<1>(*nIndex),
+                                                      aCommandURL))
             return true;
         else
         {
             // User layer
-            ImageList* pImageList = implts_getUserImageList(nIndex);
+            ImageList* pImageList = implts_getUserImageList(std::get<0>(*nIndex));
             if ( pImageList )
                 return ( pImageList->GetImagePos( aCommandURL ) != IMAGELIST_IMAGE_NOTFOUND );
         }
@@ -708,12 +743,12 @@ Sequence< uno::Reference< XGraphic > > ImageManagerImpl::getImages(
     if ( m_bDisposed )
         throw DisposedException();
 
-    if (( nImageType < 0 ) || ( nImageType > MAX_IMAGETYPE_VALUE ))
+    auto nIndex = implts_convertImageTypeToIndex(nImageType);
+    if (!nIndex.has_value())
         throw IllegalArgumentException();
 
     Sequence< uno::Reference< XGraphic > > aGraphSeq( aCommandURLSequence.getLength() );
 
-    vcl::ImageType                    nIndex            = implts_convertImageTypeToIndex( nImageType );
     rtl::Reference< GlobalImageList > rGlobalImageList;
     CmdImageList*                     pDefaultImageList = nullptr;
     if ( m_bUseGlobal )
@@ -721,7 +756,7 @@ Sequence< uno::Reference< XGraphic > > ImageManagerImpl::getImages(
         rGlobalImageList  = implts_getGlobalImageList();
         pDefaultImageList = implts_getDefaultImageList();
     }
-    ImageList*                        pUserImageList    = implts_getUserImageList(nIndex);
+    ImageList* pUserImageList = implts_getUserImageList(std::get<0>(*nIndex));
 
     // We have to search our image list in the following order:
     // 1. user image list (read/write)
@@ -734,10 +769,16 @@ Sequence< uno::Reference< XGraphic > > ImageManagerImpl::getImages(
         Image aImage = pUserImageList->GetImage( rURL );
         if ( !aImage && m_bUseGlobal )
         {
-            aImage = pDefaultImageList->getImageFromCommandURL( nIndex, rURL );
-            if ( !aImage )
-                aImage = rGlobalImageList->getImageFromCommandURL( nIndex, rURL );
+            aImage = pDefaultImageList->getImageFromCommandURL(std::get<0>(*nIndex),
+                                                               std::get<1>(*nIndex), rURL);
+            if (!aImage)
+                aImage = rGlobalImageList->getImageFromCommandURL(std::get<0>(*nIndex),
+                                                                  std::get<1>(*nIndex), rURL);
         }
+
+        // tdf#70102: Writing direction specializations are always optional. Suppress
+        // missing image file warnings on load.
+        aImage.SetOptional(std::get<1>(*nIndex) != vcl::ImageWritingDirection::DontCare);
 
         aGraphSeqRange[n++] = GetXGraphic(aImage);
     }
@@ -760,21 +801,21 @@ void ImageManagerImpl::replaceImages(
         if ( m_bDisposed )
             throw DisposedException();
 
-        if (( aCommandURLSequence.getLength() != aGraphicsSequence.getLength() ) ||
-            (( nImageType < 0 ) || ( nImageType > MAX_IMAGETYPE_VALUE )))
+        auto nIndex = implts_convertImageTypeToIndex(nImageType);
+        if ((aCommandURLSequence.getLength() != aGraphicsSequence.getLength())
+            || (!nIndex.has_value()))
             throw IllegalArgumentException();
 
         if ( m_bReadOnly )
             throw IllegalAccessException();
 
-        vcl::ImageType nIndex = implts_convertImageTypeToIndex( nImageType );
-        ImageList* pImageList = implts_getUserImageList(nIndex);
+        ImageList* pImageList = implts_getUserImageList(std::get<0>(*nIndex));
 
         uno::Reference< XGraphic > xGraphic;
         for ( sal_Int32 i = 0; i < aCommandURLSequence.getLength(); i++ )
         {
             // Check size and scale. If we don't have any graphics ignore it
-            if ( !implts_checkAndScaleGraphic( xGraphic, aGraphicsSequence[i], nIndex ))
+            if (!implts_checkAndScaleGraphic(xGraphic, aGraphicsSequence[i], std::get<0>(*nIndex)))
                 continue;
 
             sal_uInt16 nPos = pImageList->GetImagePos( aCommandURLSequence[i] );
@@ -797,7 +838,7 @@ void ImageManagerImpl::replaceImages(
         if (( pInsertedImages != nullptr ) || (  pReplacedImages != nullptr ))
         {
             m_bModified = true;
-            m_bUserImageListModified[nIndex] = true;
+            m_bUserImageListModified[std::get<0>(*nIndex)] = true;
         }
     }
 
@@ -838,13 +879,13 @@ void ImageManagerImpl::removeImages( ::sal_Int16 nImageType, const Sequence< OUS
         if ( m_bDisposed )
             throw DisposedException();
 
-        if (( nImageType < 0 ) || ( nImageType > MAX_IMAGETYPE_VALUE ))
+        auto nIndex = implts_convertImageTypeToIndex(nImageType);
+        if (!nIndex.has_value())
             throw IllegalArgumentException();
 
         if ( m_bReadOnly )
             throw IllegalAccessException();
 
-        vcl::ImageType nIndex = implts_convertImageTypeToIndex( nImageType );
         rtl::Reference< GlobalImageList > rGlobalImageList;
         CmdImageList*                     pDefaultImageList = nullptr;
         if ( m_bUseGlobal )
@@ -852,7 +893,7 @@ void ImageManagerImpl::removeImages( ::sal_Int16 nImageType, const Sequence< OUS
             rGlobalImageList  = implts_getGlobalImageList();
             pDefaultImageList = implts_getDefaultImageList();
         }
-        ImageList*                        pImageList        = implts_getUserImageList(nIndex);
+        ImageList* pImageList = implts_getUserImageList(std::get<0>(*nIndex));
         uno::Reference<XGraphic> xEmptyGraphic;
 
         for ( const OUString& rURL : aCommandURLSequence )
@@ -867,9 +908,11 @@ void ImageManagerImpl::removeImages( ::sal_Int16 nImageType, const Sequence< OUS
                 {
                     // Check, if we have an image in our module/global image list. If we find one =>
                     // this is a replace instead of a remove operation!
-                    Image aNewImage = pDefaultImageList->getImageFromCommandURL( nIndex, rURL );
-                    if ( !aNewImage )
-                        aNewImage = rGlobalImageList->getImageFromCommandURL( nIndex, rURL );
+                    Image aNewImage = pDefaultImageList->getImageFromCommandURL(
+                        std::get<0>(*nIndex), std::get<1>(*nIndex), rURL);
+                    if (!aNewImage)
+                        aNewImage = rGlobalImageList->getImageFromCommandURL(
+                            std::get<0>(*nIndex), std::get<1>(*nIndex), rURL);
                     if ( !aNewImage )
                     {
                         if ( !pRemovedImages )
@@ -895,7 +938,7 @@ void ImageManagerImpl::removeImages( ::sal_Int16 nImageType, const Sequence< OUS
         if (( pReplacedImages != nullptr ) || ( pRemovedImages != nullptr ))
         {
             m_bModified = true;
-            m_bUserImageListModified[nIndex] = true;
+            m_bUserImageListModified[std::get<0>(*nIndex)] = true;
         }
     }
 
@@ -1003,9 +1046,11 @@ void ImageManagerImpl::reload()
                 {
                     if ( m_bUseGlobal )
                     {
-                        Image aImage = pDefaultImageList->getImageFromCommandURL( i, oldUserCmdImage.first );
-                        if ( !aImage )
-                            aImage = rGlobalImageList->getImageFromCommandURL( i, oldUserCmdImage.first );
+                        Image aImage = pDefaultImageList->getImageFromCommandURL(
+                            i, vcl::ImageWritingDirection::DontCare, oldUserCmdImage.first);
+                        if (!aImage)
+                            aImage = rGlobalImageList->getImageFromCommandURL(
+                                i, vcl::ImageWritingDirection::DontCare, oldUserCmdImage.first);
 
                         if ( !aImage )
                         {

@@ -21,11 +21,13 @@ namespace vcl
 namespace
 {
 
-constexpr o3tl::enumarray<ImageType, OUString> ImageType_Prefixes
-{
-    u"cmd/sc_"_ustr,
-    u"cmd/lc_"_ustr,
-    u"cmd/32/"_ustr
+std::map<std::tuple<ImageType, ImageWritingDirection>, OUString> const ImageType_Prefixes{
+    { { ImageType::Size16, ImageWritingDirection::DontCare }, u"cmd/sc_"_ustr },
+    { { ImageType::Size26, ImageWritingDirection::DontCare }, u"cmd/lc_"_ustr },
+    { { ImageType::Size32, ImageWritingDirection::DontCare }, u"cmd/32/"_ustr },
+    { { ImageType::Size16, ImageWritingDirection::RightLeftTopBottom }, u"cmd/rltb/sc_"_ustr },
+    { { ImageType::Size26, ImageWritingDirection::RightLeftTopBottom }, u"cmd/rltb/lc_"_ustr },
+    { { ImageType::Size32, ImageWritingDirection::RightLeftTopBottom }, u"cmd/rltb/32/"_ustr },
 };
 
 OUString lclConvertToCanonicalName(const OUString& rFileName)
@@ -116,32 +118,36 @@ bool CommandImageResolver::hasImage(const OUString& rCommandURL)
     return pIterator != m_aCommandToImageNameMap.end();
 }
 
-ImageList* CommandImageResolver::getImageList(ImageType nImageType)
+ImageList* CommandImageResolver::getImageList(ImageType nImageType, ImageWritingDirection nImageDir)
 {
     const OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 
     if (sIconTheme != m_sIconTheme)
     {
         m_sIconTheme = sIconTheme;
-        for (auto& rp : m_pImageList)
-            rp.reset();
+        m_pImageList.clear();
     }
 
-    if (!m_pImageList[nImageType])
+    auto stKey = std::make_tuple(nImageType, nImageDir);
+    if (auto it = m_pImageList.find(stKey); it != m_pImageList.end())
     {
-        const OUString& sIconPath = ImageType_Prefixes[nImageType];
-        m_pImageList[nImageType].reset( new ImageList(m_aImageNameVector, sIconPath) );
+        return it->second.get();
     }
 
-    return m_pImageList[nImageType].get();
+    const OUString& sIconPath = ImageType_Prefixes.at(stKey);
+    auto pImageList = std::make_unique<ImageList>(m_aImageNameVector, sIconPath);
+
+    return m_pImageList.emplace(stKey, std::move(pImageList)).first->second.get();
 }
 
-Image CommandImageResolver::getImageFromCommandURL(ImageType nImageType, const OUString& rCommandURL)
+Image CommandImageResolver::getImageFromCommandURL(ImageType nImageType,
+                                                   ImageWritingDirection nImageDir,
+                                                   const OUString& rCommandURL)
 {
     CommandToImageNameMap::const_iterator pIterator = m_aCommandToImageNameMap.find(rCommandURL);
     if (pIterator != m_aCommandToImageNameMap.end())
     {
-        ImageList* pImageList = getImageList(nImageType);
+        ImageList* pImageList = getImageList(nImageType, nImageDir);
         return pImageList->GetImage(pIterator->second);
     }
     return Image();

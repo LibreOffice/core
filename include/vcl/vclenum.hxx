@@ -308,6 +308,15 @@ namespace vcl
         Small = Size16,
         LAST = Size32,
     };
+
+    // Specifies a writing direction-based specialization for an image.
+    // Sets do not necessarily provide all possible specializations.
+    enum class ImageWritingDirection
+    {
+        LeftRightTopBottom = 0,
+        RightLeftTopBottom,
+        DontCare = LeftRightTopBottom,
+    };
 }
 
 enum class DrawFrameStyle
