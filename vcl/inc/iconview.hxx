@@ -22,6 +22,7 @@
 
 #include <tools/json_writer.hxx>
 #include <vcl/toolkit/treelistbox.hxx>
+#include <vcl/image.hxx>
 
 class IconView final : public SvTreeListBox
 {
@@ -50,6 +51,9 @@ public:
 
     /// returns string with encoded image for an entry
     OUString renderEntry(int pos, int dpix, int dpiy) const;
+
+    /// Update entry size based on image size
+    void UpdateEntrySize(const Image& pImage);
 
 protected:
     virtual void CalcEntryHeight(SvTreeListEntry const* pEntry) override;

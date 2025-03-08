@@ -5732,10 +5732,7 @@ void SalInstanceIconView::set_image(int pos, VirtualDevice& rIcon)
     SvLBoxContextBmp* aItem
         = static_cast<SvLBoxContextBmp*>(aEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
 
-    const Point aNull(0, 0);
-    const Size aSize = rIcon.GetOutputSize();
-    Image aImage(rIcon.GetBitmapEx(aNull, aSize));
-
+    Image aImage = createImage(rIcon);
     if (aItem == nullptr)
     {
         aEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
@@ -5744,10 +5741,9 @@ void SalInstanceIconView::set_image(int pos, VirtualDevice& rIcon)
     {
         aItem->SetBitmap1(aImage);
         aItem->SetBitmap2(aImage);
-    }
-
-    if (!m_xIconView->GetModel()->IsEnableInvalidate())
+        m_xIconView->UpdateEntrySize(aImage);
         m_xIconView->ModelHasEntryInvalidated(aEntry);
+    }
 }
 
 void SalInstanceIconView::remove(int pos)
