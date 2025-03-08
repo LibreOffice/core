@@ -8185,7 +8185,6 @@ sc/source/filter/inc/namebuff.hxx
 sc/source/filter/inc/numberformatsbuffer.hxx
 sc/source/filter/inc/ooxformulaparser.hxx
 sc/source/filter/inc/op.h
-sc/source/filter/inc/orcusinterface.hxx
 sc/source/filter/inc/otlnbuff.hxx
 sc/source/filter/inc/pagesettings.hxx
 sc/source/filter/inc/pivotcachebuffer.hxx
@@ -8345,9 +8344,6 @@ sc/source/filter/oox/worksheetbuffer.cxx
 sc/source/filter/oox/worksheetfragment.cxx
 sc/source/filter/oox/worksheethelper.cxx
 sc/source/filter/oox/worksheetsettings.cxx
-sc/source/filter/orcus/filterdetect.cxx
-sc/source/filter/orcus/interface.cxx
-sc/source/filter/orcus/xmlcontext.cxx
 sc/source/filter/qpro/qpro.cxx
 sc/source/filter/qpro/qproform.cxx
 sc/source/filter/qpro/qprostyle.cxx
