@@ -474,6 +474,8 @@ void PDFIProcessor::strokePath( const uno::Reference< rendering::XPolyPolygon2D 
 void PDFIProcessor::fillPath( const uno::Reference< rendering::XPolyPolygon2D >& rPath )
 {
     basegfx::B2DPolyPolygon aPoly=basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
+    aPoly = basegfx::utils::createNonzeroConform(aPoly);
+
     aPoly.transform(getCurrentContext().Transformation);
 
     basegfx::B2DPolyPolygon aCurClip = getCurrentContext().Clip;
