@@ -609,10 +609,14 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
 namespace
 {
 constexpr OUStringLiteral sSettingsType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings";
+constexpr OUStringLiteral sEndnotesType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes";
+constexpr OUStringLiteral sFootnotesType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes";
 constexpr OUStringLiteral sStylesType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles";
 constexpr OUStringLiteral sFonttableType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable";
 constexpr OUStringLiteral sWebSettings = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings";
 constexpr OUStringLiteral sSettingsTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/settings";
+constexpr OUStringLiteral sEndnoteTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/endnotes";
+constexpr OUStringLiteral sFootnoteTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/footnotes";
 constexpr OUStringLiteral sStylesTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/styles";
 constexpr OUStringLiteral sFonttableTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/fontTable";
 constexpr OUStringLiteral sWebSettingsStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/webSettings";
@@ -624,6 +628,8 @@ constexpr OUStringLiteral sTargetMode = u"TargetMode";
 constexpr OUString sContentType = u"_contentType"_ustr;
 constexpr OUStringLiteral sRelDom = u"_relDom";
 constexpr OUStringLiteral sSettingsContentType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml";
+constexpr OUStringLiteral sEndnotesContentType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml";
+constexpr OUStringLiteral sFootnotesContentType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml";
 constexpr OUStringLiteral sStylesContentType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml";
 constexpr OUStringLiteral sWebsettingsContentType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml";
 constexpr OUStringLiteral sFonttableContentType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml";
@@ -663,6 +669,16 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
         {
             nType = OOXMLStream::SETTINGS;
             aRelDefinition.put(sContentType, sSettingsContentType);
+        }
+        else if (gType == sEndnotesType || gType == sEndnoteTypeStrict)
+        {
+            nType = OOXMLStream::ENDNOTES;
+            aRelDefinition.put(sContentType, sEndnotesContentType);
+        }
+        else if (gType == sFootnotesType || gType == sFootnoteTypeStrict)
+        {
+            nType = OOXMLStream::FOOTNOTES;
+            aRelDefinition.put(sContentType, sFootnotesContentType);
         }
         else if (gType == sStylesType || gType == sStylesTypeStrict)
         {
