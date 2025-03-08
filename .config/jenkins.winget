@@ -3,9 +3,8 @@
 # This configuration is for a minimal installation of Visual Studio meant for CI use or setups with
 # remote access with no need for convenience features of the IDE. It installs the dependencies
 # without additional recommended packages. If you want to use the IDE to edit code, you probably
-# want to use the regular configuration.dsc.yaml (or launch Visual Studio Installer afterwards, pick
+# want to use the regular configuration.winget (or launch Visual Studio Installer afterwards, pick
 # modify and then unselect and reselect the "Desktop Development with C++" workload)
-# (the allowPrerelease directive refers to the DSC module)
 
 properties:
   resources:
@@ -13,12 +12,11 @@ properties:
       id: VisualStudio
       directives:
         description: Install Visual Studio 2022 Community
-        allowPrerelease: true
       settings:
         id: Microsoft.VisualStudio.2022.Community
         source: winget
     - resource: Microsoft.VisualStudio.DSC/VSComponents
-      id: minimal LibreOffice Components 
+      id: minimal LibreOffice Components
       dependsOn:
         - VisualStudio
       directives:

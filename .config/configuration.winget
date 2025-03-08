@@ -4,7 +4,6 @@
 # required components to build LibreOffice, excluding the components to cross-compile for ARM64
 # It includes recommended packages as if you had selected the "Desktop development with C++"
 # workload in the in the UI driven installer.
-# (the allowPrerelease directive refers to the DSC module)
 
 properties:
   resources:
@@ -12,12 +11,11 @@ properties:
       id: VisualStudio
       directives:
         description: Install Visual Studio 2022 Community
-        allowPrerelease: true
       settings:
         id: Microsoft.VisualStudio.2022.Community
         source: winget
     - resource: Microsoft.VisualStudio.DSC/VSComponents
-      id: LibreOffice Components including recommended packages 
+      id: LibreOffice Components including recommended packages
       dependsOn:
         - VisualStudio
       directives:
