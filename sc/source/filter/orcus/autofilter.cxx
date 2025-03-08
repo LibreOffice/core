@@ -6,7 +6,7 @@
  */
 
 #include <orcus_autofilter.hxx>
-#include <orcusinterface.hxx>
+#include <orcus_global.hxx>
 #include <dbdata.hxx>
 #include <globalnames.hxx>
 #include <queryparam.hxx>

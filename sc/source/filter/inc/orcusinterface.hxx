@@ -19,6 +19,7 @@
 #include <editeng/editobj.hxx>
 
 #include "orcus_autofilter.hxx"
+#include "orcus_global.hxx"
 #include "sharedformulagroups.hxx"
 
 #include <conditio.hxx>
@@ -26,7 +27,6 @@
 #include <rtl/strbuf.hxx>
 #include <editeng/borderline.hxx>
 
-#include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/spreadsheet/import_interface_styles.hpp>
 #include <orcus/spreadsheet/import_interface_underline.hpp>
 #include <orcus/spreadsheet/import_interface_strikethrough.hpp>
@@ -44,38 +44,6 @@ class ScOrcusImportFontStyle;
 class ScOrcusSharedStrings;
 class SfxItemSet;
 namespace com::sun::star::task { class XStatusIndicator; }
-
-class ScOrcusGlobalSettings : public orcus::spreadsheet::iface::import_global_settings
-{
-    ScDocumentImport& mrDoc;
-    formula::FormulaGrammar::Grammar meCalcGrammar;
-    orcus::spreadsheet::formula_grammar_t meOrcusGrammar;
-    rtl_TextEncoding mnTextEncoding;
-
-public:
-    ScOrcusGlobalSettings(ScDocumentImport& rDoc);
-
-    virtual void set_origin_date(int year, int month, int day) override;
-    virtual void set_character_set(orcus::character_set_t cs) override;
-
-    virtual void set_default_formula_grammar(orcus::spreadsheet::formula_grammar_t grammar) override;
-    virtual orcus::spreadsheet::formula_grammar_t get_default_formula_grammar() const override;
-
-    formula::FormulaGrammar::Grammar getCalcGrammar() const
-    {
-        return meCalcGrammar;
-    }
-
-    rtl_TextEncoding getTextEncoding() const
-    {
-        return mnTextEncoding;
-    }
-
-    ScDocumentImport& getDoc() const
-    {
-        return mrDoc;
-    }
-};
 
 class ScOrcusRefResolver : public orcus::spreadsheet::iface::import_reference_resolver
 {
