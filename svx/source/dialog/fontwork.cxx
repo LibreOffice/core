@@ -39,7 +39,7 @@
 #include <svx/fontwork.hxx>
 #include <svl/itemset.hxx>
 
-#define WIDTH_CHARS 10
+constexpr int WIDTH_CHARS = 10;
 
 SFX_IMPL_DOCKINGWINDOW_WITHID( SvxFontWorkChildWindow, SID_FONTWORK );
 
