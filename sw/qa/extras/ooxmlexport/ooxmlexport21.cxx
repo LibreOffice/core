@@ -1285,7 +1285,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace)
 CPPUNIT_TEST_FIXTURE(Test, testTdf165059_moveFromTo)
 {
     loadAndSave("tdf165059_broken.docx");
-    // Without the fix, exported contains w:move* ouside of move ranges
+    // Without the fix, exported contains w:move* outside of move ranges
     // Outside move range tags ins/del are valid
     xmlDocUniquePtr p_XmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(p_XmlDoc);
