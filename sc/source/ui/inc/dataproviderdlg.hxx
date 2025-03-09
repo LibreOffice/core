@@ -94,6 +94,7 @@ public:
 
     sc::ExternalDataSource getDataSource(ScDocument* pDoc);
 
+    void clearTablePreview();
     void import(ScDocument& rDoc, bool bInternal = false);
 };
 

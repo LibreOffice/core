@@ -869,6 +869,7 @@ IMPL_LINK_NOARG(ScDataProviderDlg, URLEditHdl, weld::Entry&, void)
 IMPL_LINK_NOARG(ScDataProviderDlg, ApplyBtnHdl, weld::Button&, void)
 {
     updateApplyBtn(true);
+    clearTablePreview();
     import(*mxDoc, true);
 }
 
@@ -1002,6 +1003,16 @@ bool hasDBName(const OUString& rName, ScDBCollection* pDBCollection)
     return false;
 }
 
+}
+
+// tdf#165502 Clear the contents of the temporary ScDocument in mxDoc and adds a sheet to
+// store the data to be previewed. This is needed if the newly imported content is smaller
+// than the previously shown content
+void ScDataProviderDlg::clearTablePreview()
+{
+    mxDoc->Clear();
+    // The name "test" below is just a dummy name for the tab that will hold the data
+    mxDoc->InsertTab(0, u"test"_ustr);
 }
 
 void ScDataProviderDlg::import(ScDocument& rDoc, bool bInternal)
