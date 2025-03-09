@@ -39,6 +39,7 @@ class PasswordToOpenModifyDialog : public SfxDialogController
     std::unique_ptr<weld::Entry> m_xReenterPasswdToModifyED;
     std::unique_ptr<weld::Label> m_xReenterPasswdToModifyInd;
     std::shared_ptr<weld::MessageDialog> m_xErrorBox;
+    std::array<std::unique_ptr<weld::ToggleButton>, 4> m_xPass;
 
     OUString                    m_aOneMismatch;
     OUString                    m_aTwoMismatch;
@@ -54,6 +55,7 @@ class PasswordToOpenModifyDialog : public SfxDialogController
     DECL_LINK(OkBtnClickHdl, weld::Button&, void);
     DECL_LINK(ReadonlyOnOffHdl, weld::Toggleable&, void);
     DECL_LINK(ChangeHdl, weld::Entry&, void);
+    DECL_LINK(ShowHdl, weld::Toggleable&, void);
 
     PasswordToOpenModifyDialog( const PasswordToOpenModifyDialog & ) = delete;
     PasswordToOpenModifyDialog & operator = ( const PasswordToOpenModifyDialog & ) = delete;
