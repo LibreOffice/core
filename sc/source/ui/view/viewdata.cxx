@@ -3787,6 +3787,8 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
 
     OUString sName;
     GetDocument().GetName( nTabNo, sName );
+    // tdf#150317 - sync visible tab (later used for, e.g., thumbnail generation)
+    GetDocument().SetVisibleTab(nTabNo);
     pSettings[SC_ACTIVE_TABLE].Name = SC_ACTIVETABLE;
     pSettings[SC_ACTIVE_TABLE].Value <<= sName;
     pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Name = SC_HORIZONTALSCROLLBARWIDTH;
