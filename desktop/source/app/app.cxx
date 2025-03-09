@@ -1595,24 +1595,7 @@ int Desktop::Main()
     pExecGlobals->bRestartRequested = xRestartManager->isRestartRequested(true);
     if ( !pExecGlobals->bRestartRequested )
     {
-#ifdef MACOSX
-        // Related: tdf#41775 show Start Center even if loading a document
-        // If LibreOffice is launched by opening a document from the
-        // Finder, dragging it to the Dock, or including it in the
-        // command line arguments, the Start Center doesn't get created
-        // when all of the document windows are closed. So, the old
-        // "File only" menubar is displayed.
-        // On macOS, the Start Center's menubar is the "no windows open"
-        // menubar. This is done by making a native copy of the Start
-        // Center's menubar each time it is opened (note: on macOS the
-        // Start Center window can be closed and reopened repeatedly)
-        // so pre-populate the "no windows open" menubar by opening the
-        // Start Center even if a document is going to be loaded.
-        if ((/* !rCmdLineArgs.WantsToLoadDocument() && */
-#else
-        if ((!rCmdLineArgs.WantsToLoadDocument() &&
-#endif
-            !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsQuickstart()) &&
+        if ((!rCmdLineArgs.WantsToLoadDocument() && !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsQuickstart()) &&
             (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE)) &&
             (!bExistsRecoveryData                                                  ) &&
             (!bExistsSessionData                                                   ) &&
