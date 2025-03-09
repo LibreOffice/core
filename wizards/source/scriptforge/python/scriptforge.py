@@ -2139,6 +2139,9 @@ class SFDialogs:
             return self.ExecMethod(self.vbMethod, 'CreateTableControl', controlname, place, border,
                                    rowheaders, columnheaders, scrollbars, gridlines)
 
+        def CreateTabPageContainer(self, controlname, place, tabheaders, border = '3D'):
+            return self.ExecMethod(self.vbMethod, 'CreateTabPageContainer', controlname, place, tabheaders, border)
+
         def CreateTextField(self, controlname, place, border = '3D', multiline = False,
                             maximumlength = 0, passwordcharacter = ''):
             return self.ExecMethod(self.vbMethod, 'CreateTextField', controlname, place, border,
@@ -2226,14 +2229,14 @@ class SFDialogs:
                                  OnFocusLost = 2, OnItemStateChanged = 2, OnKeyPressed = 2,
                                  OnKeyReleased = 2, OnMouseDragged = 2, OnMouseEntered = 2,
                                  OnMouseExited = 2, OnMouseMoved = 2, OnMousePressed = 2,
-                                 OnMouseReleased = 2, OnNodeExpanded = 2, OnNodeSelected = 2,
+                                 OnMouseReleased = 2, OnNodeExpanded = 2, OnNodeSelected = 2, OnTabSelected = 2,
                                  OnTextChanged = 2, Page = 2, Parent = 0, Picture = 2,
                                  RootNode = 0, RowSource = 2, TabIndex = 2, Text = 0, TipText = 2,
                                  TripleState = 2, URL = 2, Value = 3, Visible = 2, Width = 2,
                                  X = 2, Y = 2, XControlModel = 0, XControlView = 0,
                                  XGridColumnModel = 0, XGridDataModel = 0, XTreeDataModel = 0)
 
-        # Root related properties do not start with X and, nevertheless, return a UNO object
+        # Root or node related properties do not start with X and, nevertheless, return a UNO object
         @property
         def CurrentNode(self):
             return self.EXEC(self.objectreference, self.vbGet + self.flgUno, 'CurrentNode')

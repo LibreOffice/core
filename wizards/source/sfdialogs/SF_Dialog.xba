@@ -110,12 +110,15 @@ Type _PageManager
 	ControlName As String					&apos; Case-sensitive name of control involved in page management
 	PageMgtType As Integer					&apos; One of the PILOTCONTROL, TABCONTROL, NEXTCONTROL, BACKCONTROL constants
 	PageNumber As Long						&apos; When &gt; 0, the page to activate for tab controls
-	ListenerType As Integer					&apos; One of the ITEMSTATECHANGED, ACTIONPERFORMED constants
+	ListenerType As Integer					&apos; One of the ITEMSTATECHANGED, ACTIONPERFORMED or TABSELECTED constants
 End Type
 
 Private _PageManagement		As Variant		&apos; Array of _PageManager objects, one entry by involved control
+Private _TabPageContainer	As String		&apos; The name of the unique tab page container control
 Private _ItemListener		As Object		&apos; com.sun.star.awt.XItemListener
 Private _ActionListener		As Object		&apos; com.sun.star.awt.XActionListener
+Private _TabPageContainerListener	As Object
+											&apos; com.sun.star.awt.tab.XTabPageContainerListener
 Private _LastPage			As Long			&apos; When &gt; 0, the last page in a tabbed dialog
 
 &apos;	Updatable events
@@ -156,8 +159,10 @@ Private Const PILOTCONTROL		= 1
 Private Const TABCONTROL		= 2
 Private Const BACKCONTROL		= 3
 Private Const NEXTCONTROL		= 4
+Private Const TABPAGE			= 5
 Private Const ITEMSTATECHANGED	= 1
 Private Const ACTIONPERFORMED	= 2
+Private Const TABSELECTED		= 3
 
 REM ====================================================== CONSTRUCTOR/DESTRUCTOR
 
@@ -185,8 +190,10 @@ Private Sub Class_Initialize()
 	_Height = -1
 
 	_PageManagement = Array()
+	_TabPageContainer = &quot;&quot;
 	Set _ItemListener = Nothing
 	Set _ActionListener = Nothing
+	Set _TabPageContainerListener = Nothing
 	_LastPage = 0
 
 	Set _FocusListener = Nothing
@@ -1731,6 +1738,94 @@ Finally:
 End Function	&apos;	SFDialogs.SF_Dialog.CreateTableControl
 
 REM -----------------------------------------------------------------------------
+Public Function CreateTabPageContainer(Optional ByVal ControlName As Variant _
+									, Optional ByRef Place As Variant _
+									, Optional ByRef TabHeaders As Variant _
+									, Optional ByVal Border As Variant _
+									) As Object
+&apos;&apos;&apos;	Create a new control of type TabPageContainer in the actual dialog.
+&apos;&apos;&apos;	Only one such creation is allowed per dialog.
+&apos;&apos;&apos;	A TabPageContainer control will be automatically coupled with a PageManager setup.
+&apos;&apos;&apos;
+&apos;&apos;&apos;	This type of control has no equivalent in the Basic IDE. The actual method
+&apos;&apos;&apos;	may nevertheless be applied to a dialog built in the IDE.
+&apos;&apos;&apos;
+&apos;&apos;&apos;	It is recommended for control stacking reasons to define a tab container
+&apos;&apos;&apos;	control AFTER all or most other editable controls.
+&apos;&apos;&apos;
+&apos;&apos;&apos;	The creation request is ignored if the dialog is already displayed.
+&apos;&apos;&apos;
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;			TabHeaders: an array of strings to define the texts displayed in each individual tabs
+1&apos;&apos;&apos;		Border: &quot;3D&quot; (default) or &quot;FLAT&quot; or &quot;NONE&quot;
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myTabContainer = dialog.CreateTabPageContainer(&quot;TabContainer1&quot;, Array(20, 20, 60, 15), _
+&apos;&apos;&apos;				TabHeaders := Array(&quot;Modules&quot;, &quot;Dialogs&quot;, &quot;Libraries&quot;))
+
+Dim oControl As Object			&apos;	Return value
+Dim iBorder As Integer			&apos;	Alias of border
+Dim vPropNames As Variant		&apos;	Array of names of specific arguments
+Dim vPropValues As Variant		&apos;	Array of values of specific arguments
+Dim oTabPageModel As Object		&apos;	stardiv.Toolkit.UnoControlTabPageModel
+Dim oToolkit As Object			&apos;	com.sun.star.awt.Toolkit
+Dim iPage As Integer			&apos;	Actual page number
+Dim i As Integer
+
+Const cstThisSub = &quot;SFDialogs.Dialog.CreateTabContainer&quot;
+Const cstSubArgs = &quot;ControlName, Place, TabHeaders, [Border=&quot;&quot;3D&quot;&quot;|&quot;&quot;FLAT&quot;&quot;|&quot;&quot;NONE&quot;&quot;]&quot;
+
+Check:
+	Set oControl = Nothing
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place) Then GoTo Finally
+
+	If IsMissing(Border) Or IsEmpty(Border) Then Border = &quot;3D&quot;
+	If Not ScriptForge.SF_Utils._ValidateArray(TabHeaders, &quot;TabHeaders&quot;, 1, V_STRING, True) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(Border, &quot;Border&quot;, V_STRING, Array(&quot;3D&quot;, &quot;FLAT&quot;, &quot;NONE&quot;)) Then GoTo Finally
+
+	If _Displayed Then GoTo Finally		&apos;	Ignore the call when dialog is displayed to enable peer creation below
+	If Len(_TabPageContainer) &gt; 0 Then GoTo Finally		&apos;	A tab page container must be unique in a dialog
+
+Try:
+	&apos;	Handle specific arguments
+	iBorder = ScriptForge.SF_Array.IndexOf(Array(&quot;NONE&quot;, &quot;3D&quot;, &quot;FLAT&quot;), Border)
+	vPropNames = Array(&quot;Border&quot;)
+	vPropValues = Array(iBorder)
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(&quot;tab.UnoControlTabPageContainerModel&quot;, ControlName, Place, vPropNames, vPropValues)
+
+	&apos;	Create the peer dialog window, preamble of the determination of the ActiveTabPageID
+	_DialogControl.setVisible(False)	&apos;	Differ the display of the dialog later than at createPeer()
+	Set oToolkit = CreateUnoService(&quot;com.sun.star.awt.Toolkit&quot;)
+	_DialogControl.createPeer(oToolkit, Null)
+
+	With oControl
+		&apos;	Store the tab headers
+		._TabHeaders = TabHeaders
+		&apos;	Insert the individual tab pages
+		For i = LBound(TabHeaders) To UBound(TabHeaders)
+			Set oTabPageModel = _DialogModel.createInstance(&quot;com.sun.star.awt.tab.UnoControlTabPageModel&quot;)
+			oTabPageModel.initialize (Array (i - LBound(TabHeaders) + 1))		&apos;	TabPageID&apos;s start at 1
+			oTabPageModel.Title = TabHeaders(i)
+			._ControlModel.insertByIndex(i - LBound(TabHeaders), oTabPageModel)
+		Next i
+		&apos;	Determine the default tab page
+		iPage = _DialogModel.Step
+		._ControlView.ActiveTabPageID = Iif(iPage = 0, 1, iPage)
+	End With
+
+	&apos;	Register the unique tab page container
+	_TabPageContainer = ControlName
+
+Finally:
+	Set CreateTabPageContainer = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+End Function	&apos;	SFDialogs.SF_Dialog.CreateTabPageContainer
+
+REM -----------------------------------------------------------------------------
 Public Function CreateTextField(Optional ByVal ControlName As Variant _
 								, Optional ByRef Place As Variant _
 								, Optional ByVal Border As Variant _
@@ -2158,6 +2253,7 @@ Public Function Methods() As Variant
 					, &quot;CreateRadioButton&quot; _
 					, &quot;CreateScrollBar&quot; _
 					, &quot;CreateTableControl&quot; _
+					, &quot;CreateTabPageContainer&quot; _
 					, &quot;CreateTextField&quot; _
 					, &quot;CreateTimeField&quot; _
 					, &quot;CreateTreeControl&quot; _
@@ -2216,7 +2312,7 @@ Check:
 	End If
 
 Try:
-	vWrongTypes = Array(&quot;FixedLine&quot;, &quot;GroupBox&quot;, &quot;ProgressBar&quot;)
+	vWrongTypes = Array(&quot;FixedLine&quot;, &quot;GroupBox&quot;, &quot;ProgressBar&quot;, &quot;TabPageContainer&quot;)
 
 	&apos;	Remove all existing tabulations
 	vControlNames = _DialogModel.getElementNames()
@@ -2330,19 +2426,20 @@ Public Function SetPageManager(Optional ByVal PilotControls As Variant _
 &apos;&apos;&apos;	and all controls with a page value of 2 become visible.
 &apos;&apos;&apos;
 &apos;&apos;&apos;	The arguments define which controls are involved in the orchestration of the displayed pages.
-&apos;&apos;&apos;	Possible options:
+&apos;&apos;&apos;	If any, the predefined TabPageContainer control is implicitly part of the process.
+&apos;&apos;&apos;	Possible additional options:
 &apos;&apos;&apos;		- select a value in a list- or combobox
 &apos;&apos;&apos;		- select an item in a group of radio buttons
 &apos;&apos;&apos;		- select a button linked to a page - placed side-by-side the buttons can simulate a tabbed interface
 &apos;&apos;&apos;		- press a NEXT or BACK button like in many wizards
-&apos;&apos;&apos;	Those options may be combined. The control updates will be synchronized.
+&apos;&apos;&apos;	Those options may be combined. The updates of all the involved controls will be synchronized.
 &apos;&apos;&apos;	The method will set the actual page number to 1. Afterwards the Page property may be used to display any other page
 &apos;&apos;&apos;	
 &apos;&apos;&apos;	The SetPageManager() method is to be run only once and before the Execute() statement.
 &apos;&apos;&apos;	If invoked several times, subsequent calls will be ignored.
 &apos;&apos;&apos;	The method will define new listeners on the concerned controls, addressing generic routines.
 &apos;&apos;&apos;	The corresponding events will be fired during the dialog execution.
-&apos;&apos;&apos;	Preset events (in the Basic IDE) will be preserved and executed immediately AFTER the page change.
+&apos;&apos;&apos;	Predefined events (in the Basic IDE) will be preserved and executed immediately AFTER the page change.
 &apos;&apos;&apos;	The listeners will be removed at dialog termination.
 &apos;&apos;&apos;
 &apos;&apos;&apos;	Args:
@@ -2355,6 +2452,9 @@ Public Function SetPageManager(Optional ByVal PilotControls As Variant _
 &apos;&apos;&apos;		True when successful
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		dialog.SetPageManager(PilotControls := &quot;aListBox,aComboBox&quot;)	&apos;	2 controls may cause page changes
+&apos;&apos;&apos;			or
+&apos;&apos;&apos;		Set oTabs = dialog.CreateTabPageContainer(...)
+&apos;&apos;&apos;		dialog.SetPageManager()		&apos;	Only the TabPageContainer is involved
 
 Dim bManager As Boolean				&apos;	Return value
 Dim vControls As Variant			&apos;	Array of involved controls
@@ -2388,6 +2488,7 @@ Try:
 	&apos;	Common listeners to all involved controls
 	Set _ItemListener = CreateUnoListener(cstPrefix, &quot;com.sun.star.awt.XItemListener&quot;)
 	Set _ActionListener	= CreateUnoListener(cstPrefix, &quot;com.sun.star.awt.XActionListener&quot;)
+	Set _TabPageContainerListener = CreateUnoListener(cstPrefix, &quot;com.sun.star.awt.tab.XTabPageContainerListener&quot;)
 
 	&apos;	Register the arguments in the _PageManagement array, control by control
 	&apos;	Pilot controls
@@ -2410,6 +2511,10 @@ Try:
 		For i = 0 To UBound(vControls)
 			If Not _RegisterPageListener(Trim(vControls(i)), &quot;Button&quot;, Iif(i = 0, BACKCONTROL, NEXTCONTROL), 0, ACTIONPERFORMED) Then GoTo Catch
 		Next i
+	End If
+	&apos;	Tab page container
+	If Len(_TabPageContainer) &gt; 0 Then
+		If Not _RegisterPageListener(_TabPageContainer, &quot;TabPageContainer&quot;, TABPAGE, 0, TABSELECTED) Then GoTo Catch
 	End If
 
 	&apos;	Set the initial page to 1
@@ -2836,8 +2941,8 @@ Try:
 	&apos;		The Next button must be dimmed when last page otherwise enabled
 	For Each oPageManager In _PageManagement
 		With oPageManager
-		lPage = .PageNumber
-		Set oControl = Controls(.ControlName)
+			lPage = .PageNumber
+			Set oControl = Controls(.ControlName)
 			With oControl
 				Select Case .ControlType
 					Case &quot;ListBox&quot;, &quot;ComboBox&quot;
@@ -2854,6 +2959,8 @@ Try:
 								.Enabled = ( _LastPage = 0 Or plPage &lt; _LastPage )
 							Case Else
 						End Select
+					Case &quot;TabPageContainer&quot;
+						._ControlView.ActiveTabPageID = plPage
 					Case Else
 				End Select
 			End With
@@ -3020,14 +3127,15 @@ Private Function _RegisterPageListener(ByVal psControlName As String _
 											, ByVal plPageNumber As Long _
 											, ByVal piListener As Integer _
 											) As Boolean
-&apos;&apos;&apos;	Insert a new entry in the _PageManagement array when 1st argument is a listbox, a combobox or a button
+&apos;&apos;&apos;	Insert a new entry in the _PageManagement array when 1st argument is a listbox, a combobox,
+&apos;&apos;&apos;	a button or a tabpagecontainer.
 &apos;&apos;&apos;	or insert a new entry in the _PageManagement array by radio button in the same group as the 1st argument
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		psControlName: name of the involved control
 &apos;&apos;&apos;		psControlTypes: comma-separated list of allowed control types
-&apos;&apos;&apos;		piMgtType: one of the PILOTCONTROL, TABCONTROL, BACKCONTROL, NEXTCONTROL constants
+&apos;&apos;&apos;		piMgtType: one of the PILOTCONTROL, TABCONTROL, BACKCONTROL, NEXTCONTROL, TABPAGE constants
 &apos;&apos;&apos;		plPageNumber: when &gt; 0 the page to jump to when control is clicked
-&apos;&apos;&apos;		piListener: one of the ACTIONPERFORMED, ITEMSTATECHANGED constants
+&apos;&apos;&apos;		piListener: one of the ACTIONPERFORMED, ITEMSTATECHANGED, TABSELECTED constants
 
 Dim bRegister As Boolean			&apos;	Return value
 Dim oControl As Object				&apos;	A DialogControl object
@@ -3070,6 +3178,8 @@ Try:
 					._ControlView.addActionListener(_ActionListener)
 				ElseIf piListener = ITEMSTATECHANGED Then
 					._ControlView.addItemListener(_ItemListener)
+				ElseIf piListener = TABSELECTED Then
+					._ControlView.addTabPageContainerListener(_TabPageContainerListener)
 				End If
 			End With
 		Next i

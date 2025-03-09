@@ -123,6 +123,10 @@ Private _OnMouseDragged		As String		&apos; Script to invoke when mouse is dragge
 Private _OnMouseMoved		As String		&apos; Script to invoke when mouse is moved across the control
 Private _MouseMotionCounter	As Integer	&apos; Counts the number of events set on the listener
 &apos; ---
+Private _TabPageContainerListener	As Object	&apos; com.sun.star.awt.XTabPageContainerListener
+Private _OnTabSelected		As String		&apos; Script to invoke when a new tab is selected
+Private _TabPageContainerCounter	As Integer	&apos; Counts the number of events set on the listener
+&apos; ---
 Private _TextListener		As Object		&apos; com.sun.star.awt.XTextListener
 Private _OnTextChanged		As String		&apos; Script to invoke when textual content has changed
 Private _TextCounter		As Integer		&apos; Counts the number of events set on the listener
@@ -130,30 +134,34 @@ Private _TextCounter		As Integer		&apos; Counts the number of events set on the 
 &apos;	Table control attributes
 Private _ColumnWidths		As Variant		&apos; Array of column widths
 
+&apos;	TabPageContainer attributes
+Private _TabHeaders			As Variant		&apos; Array of tab page headers as strings
+
 REM ============================================================ MODULE CONSTANTS
 
-Private Const CTLBUTTON			= &quot;Button&quot;
-Private Const CTLCHECKBOX		= &quot;CheckBox&quot;
-Private Const CTLCOMBOBOX		= &quot;ComboBox&quot;
-Private Const CTLCURRENCYFIELD	= &quot;CurrencyField&quot;
-Private Const CTLDATEFIELD		= &quot;DateField&quot;
-Private Const CTLFILECONTROL	= &quot;FileControl&quot;
-Private Const CTLFIXEDLINE		= &quot;FixedLine&quot;
-Private Const CTLFIXEDTEXT		= &quot;FixedText&quot;
-Private Const CTLFORMATTEDFIELD	= &quot;FormattedField&quot;
-Private Const CTLGROUPBOX		= &quot;GroupBox&quot;
-Private Const CTLHYPERLINK		= &quot;Hyperlink&quot;
-Private Const CTLIMAGECONTROL	= &quot;ImageControl&quot;
-Private Const CTLLISTBOX		= &quot;ListBox&quot;
-Private Const CTLNUMERICFIELD	= &quot;NumericField&quot;
-Private Const CTLPATTERNFIELD	= &quot;PatternField&quot;
-Private Const CTLPROGRESSBAR	= &quot;ProgressBar&quot;
-Private Const CTLRADIOBUTTON	= &quot;RadioButton&quot;
-Private Const CTLSCROLLBAR		= &quot;ScrollBar&quot;
-Private Const CTLTABLECONTROL	= &quot;TableControl&quot;
-Private Const CTLTEXTFIELD		= &quot;TextField&quot;
-Private Const CTLTIMEFIELD		= &quot;TimeField&quot;
-Private Const CTLTREECONTROL	= &quot;TreeControl&quot;
+Private Const CTLBUTTON				= &quot;Button&quot;
+Private Const CTLCHECKBOX			= &quot;CheckBox&quot;
+Private Const CTLCOMBOBOX			= &quot;ComboBox&quot;
+Private Const CTLCURRENCYFIELD		= &quot;CurrencyField&quot;
+Private Const CTLDATEFIELD			= &quot;DateField&quot;
+Private Const CTLFILECONTROL		= &quot;FileControl&quot;
+Private Const CTLFIXEDLINE			= &quot;FixedLine&quot;
+Private Const CTLFIXEDTEXT			= &quot;FixedText&quot;
+Private Const CTLFORMATTEDFIELD		= &quot;FormattedField&quot;
+Private Const CTLGROUPBOX			= &quot;GroupBox&quot;
+Private Const CTLHYPERLINK			= &quot;Hyperlink&quot;
+Private Const CTLIMAGECONTROL		= &quot;ImageControl&quot;
+Private Const CTLLISTBOX			= &quot;ListBox&quot;
+Private Const CTLNUMERICFIELD		= &quot;NumericField&quot;
+Private Const CTLPATTERNFIELD		= &quot;PatternField&quot;
+Private Const CTLPROGRESSBAR		= &quot;ProgressBar&quot;
+Private Const CTLRADIOBUTTON		= &quot;RadioButton&quot;
+Private Const CTLSCROLLBAR			= &quot;ScrollBar&quot;
+Private Const CTLTABLECONTROL		= &quot;TableControl&quot;
+Private Const CTLTABPAGECONTAINER	= &quot;TabPageContainer&quot;
+Private Const CTLTEXTFIELD			= &quot;TextField&quot;
+Private Const CTLTIMEFIELD			= &quot;TimeField&quot;
+Private Const CTLTREECONTROL		= &quot;TreeControl&quot;
 
 REM ====================================================== CONSTRUCTOR/DESTRUCTOR
 
@@ -211,11 +219,15 @@ Private Sub Class_Initialize()
 	Set _ItemListener = Nothing
 	_OnItemStateChanged = &quot;&quot;
 	_ItemCounter = 0
+	Set _TabPageContainerListener = Nothing
+	_OnTabSelected = &quot;&quot;
+	_TabPageContainerCounter = 0
 	Set _TextListener = Nothing
 	_OnTextChanged = &quot;&quot;
 	_TextCounter = 0
 
 	_ColumnWidths = Array()
+	_TabHeaders = Array()
 End Sub		&apos;	SFDialogs.SF_DialogControl Constructor
 
 REM -----------------------------------------------------------------------------
@@ -563,6 +575,18 @@ Property Let OnNodeSelected(Optional ByVal pvOnNodeSelected As Variant)
 &apos;&apos;&apos;	Set the updatable property OnNodeSelected
 	_PropertySet(&quot;OnNodeSelected&quot;, pvOnNodeSelected)
 End Property	&apos;	SFDialogs.SF_DialogControl.OnNodeSelected (let)
+
+REM -----------------------------------------------------------------------------
+Property Get OnTabSelected() As Variant
+&apos;&apos;&apos;	Get the script associated with the OnTabSelected event
+	OnTabSelected = _PropertyGet(&quot;OnTabSelected&quot;)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnTabSelected (get)
+
+REM -----------------------------------------------------------------------------
+Property Let OnTabSelected(Optional ByVal pvTextChanged As Variant)
+&apos;&apos;&apos;	Set the updatable property OnTabSelected
+	_PropertySet(&quot;OnTabSelected&quot;, pvTextChanged)
+End Property	&apos;	SFDialogs.SF_DialogControl.OnTabSelected (let)
 
 REM -----------------------------------------------------------------------------
 Property Get OnTextChanged() As Variant
@@ -1161,6 +1185,7 @@ Public Function Properties() As Variant
 					, &quot;OnMouseReleased&quot; _
 					, &quot;OnNodeExpanded&quot; _
 					, &quot;OnNodeSelected&quot; _
+					, &quot;OnTabSelected&quot; _
 					, &quot;OnTextChanged&quot; _
 					, &quot;Page&quot; _
 					, &quot;Parent&quot; _
@@ -1675,6 +1700,8 @@ Private Function _GetListener(ByVal psEventName As String) As String
 			_GetListener = &quot;XMouseMotionListener&quot;
 		Case UCase(&quot;OnMouseEntered&quot;), UCase(&quot;OnMouseExited&quot;), UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;)
 			_GetListener = &quot;XMouseListener&quot;
+		Case UCase(&quot;OnTabSelected&quot;)
+			_GetListener = &quot;tab.XTabPageContainerListener&quot;
 		Case UCase(&quot;OnTextChanged&quot;)
 			_GetListener = &quot;XTextListener&quot;
 		Case Else
@@ -1714,6 +1741,8 @@ Try:
 			_ControlType = CTLTABLECONTROL
 			Set _GridColumnModel = _ControlModel.ColumnModel
 			Set _GridDataModel = _ControlModel.GridDataModel
+		Case &quot;UnoControlTabPageContainerModel&quot;
+			_ControlType = CTLTABPAGECONTAINER
 		Case Else					:	_ControlType = sType
 	End Select
 
@@ -1893,7 +1922,7 @@ Const cstSubArgs = &quot;&quot;
 		Case UCase(&quot;OnActionPerformed&quot;), UCase(&quot;OnAdjustmentValueChanged&quot;), UCase(&quot;OnFocusGained&quot;), UCase(&quot;OnFocusLost&quot;) _
 				, UCase(&quot;OnItemStateChanged&quot;), UCase(&quot;OnKeyPressed&quot;), UCase(&quot;OnKeyReleased&quot;) _
 				, UCase(&quot;OnMouseDragged&quot;), UCase(&quot;OnMouseEntered&quot;), UCase(&quot;OnMouseExited&quot;), UCase(&quot;OnMouseMoved&quot;) _
-				, UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;), UCase(&quot;OnTextChanged&quot;)
+				, UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;), UCase(&quot;OnTabSelected&quot;), UCase(&quot;OnTextChanged&quot;)
 			Set oControlEvents = _ControlModel.getEvents()
 			sEventName = &quot;com.sun.star.awt.&quot; &amp; _GetListener(psProperty) &amp; &quot;::&quot; &amp; _GetEventName(psProperty)
 			If oControlEvents.hasByName(sEventName) Then
@@ -1914,6 +1943,7 @@ Const cstSubArgs = &quot;&quot;
 					Case UCase(&quot;OnMouseMoved&quot;)				:	_PropertyGet = _OnMouseMoved
 					Case UCase(&quot;OnMousePressed&quot;)			:	_PropertyGet = _OnMousePressed
 					Case UCase(&quot;OnMouseReleased&quot;)			:	_PropertyGet = _OnMouseReleased
+					Case UCase(&quot;OnTabSelected&quot;)				:	_PropertyGet = _OnTabSelected
 					Case UCase(&quot;OnTextChanged&quot;)				:	_PropertyGet = _OnTextChanged
 					Case Else								:	_PropertyGet = &quot;&quot;
 				End Select
@@ -2051,6 +2081,8 @@ Const cstSubArgs = &quot;&quot;
 							If lIndex &gt;= 0 Then vGet = _GridDataModel.getRowData(lIndex)
 						End If
 					End If					
+				Case CTLTABPAGECONTAINER
+					If oSession.HasUnoProperty(_ControlView, &quot;ActiveTabPageID&quot;) Then vGet = _ControlView.ActiveTabPageID Else vGet = 0
 				Case CTLTIMEFIELD
 					vGet = CDate(0)
 					If oSession.HasUnoProperty(_ControlModel, &quot;Time&quot;) Then
@@ -2125,7 +2157,8 @@ Dim lFormatKey As Long						&apos;	Format index for formatted fields
 Dim oLocale As Object						&apos;	com.sun.star.lang.Locale
 Dim vSelection As Variant					&apos;	Alias of Model.SelectedItems
 Dim vList As Variant						&apos;	Alias of Model.StringItemList
-Dim lIndex As Long							&apos;	Index in StringItemList
+Dim lIndex As Long							&apos;	Index in StringItemList or _TabHeaders
+Dim vValue As Variant						&apos;	Alias of pvValue
 Dim sItem As String							&apos;	A single item
 Dim vCtlTypes As Variant					&apos;	Array of allowed control types
 Dim i As Long
@@ -2276,7 +2309,7 @@ Const cstSubArgs = &quot;Value&quot;
 		Case UCase(&quot;OnActionPerformed&quot;), UCase(&quot;OnAdjustmentValueChanged&quot;), UCase(&quot;OnFocusGained&quot;), UCase(&quot;OnFocusLost&quot;) _
 				, UCase(&quot;OnItemStateChanged&quot;), UCase(&quot;OnKeyPressed&quot;), UCase(&quot;OnKeyReleased&quot;) _
 				, UCase(&quot;OnMouseDragged&quot;), UCase(&quot;OnMouseEntered&quot;), UCase(&quot;OnMouseExited&quot;), UCase(&quot;OnMouseMoved&quot;) _
-				, UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;), UCase(&quot;OnTextChanged&quot;)
+				, UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;), UCase(&quot;OnTabSelected&quot;), UCase(&quot;OnTextChanged&quot;)
 			If Not ScriptForge.SF_Utils._Validate(pvValue, psProperty, V_STRING) Then GoTo Catch
 			&apos;	Check control type for not universal event types
 			Select Case UCase(psProperty)
@@ -2287,6 +2320,8 @@ Const cstSubArgs = &quot;Value&quot;
 					End Select
 				Case UCase(&quot;OnAdjustmentValueChanged&quot;)
 					If _ControlType &lt;&gt; CTLSCROLLBAR Then GoTo CatchType
+				Case UCase(&quot;OnTabSelected&quot;)
+					If _ControlType &lt;&gt; CTLTABPAGECONTAINER Then GoTo CatchType
 				Case UCase(&quot;OnTextChanged&quot;)
 					Select Case _ControlType
 						Case CTLCOMBOBOX, CTLCURRENCYFIELD, CTLDATEFIELD, CTLFILECONTROL, CTLFORMATTEDFIELD _
@@ -2460,6 +2495,17 @@ Const cstSubArgs = &quot;Value&quot;
 						If pvValue &gt; _ControlModel.ScrollValueMax Then pvValue = _ControlModel.ScrollValueMax
 					End If
 					If oSession.HasUnoProperty(_ControlModel, &quot;ScrollValue&quot;) Then _ControlModel.ScrollValue = pvValue
+				Case CTLTABPAGECONTAINER
+					If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Value&quot;, Array(V_STRING, ScriptForge.V_NUMERIC)) Then GoTo Finally
+					If oSession.HasUNOProperty(_ControlView, &quot;ActiveTabPageID&quot;) Then
+						If VarType(pvValue) = V_STRING Then
+							lIndex = ScriptForge.SF_Array.IndexOf(_TabHeaders, pvValue, CaseSensitive := True)
+							vValue = lIndex - LBound(_TabHeaders) + 1
+						Else
+							vValue = CInt(pvValue)
+						End If
+						If vValue &gt;= 1 And vValue &lt;= _ControlModel.Count Then _ControlView.ActiveTabPageID = vValue
+					End If
 				Case CTLTIMEFIELD
 					If Not ScriptForge.SF_Utils._Validate(pvValue, &quot;Value&quot;, V_DATE) Then GoTo Finally
 					If oSession.HasUnoProperty(_ControlModel, &quot;Time&quot;) Then

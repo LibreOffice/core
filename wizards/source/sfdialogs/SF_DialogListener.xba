@@ -32,7 +32,7 @@ Option Explicit
 &apos;&apos;&apos;			The described events are processed thru UNO listeners
 &apos;&apos;&apos;
 &apos;&apos;&apos;			&quot;On&quot; events defined by code, prefix =	_SFACTION_, _SFADJUST_, _SFFOCUS_, _SFKEY_, _SFMOUSE_,
-&apos;&apos;&apos;			-----------								_SFMOVE_, _SFITEM_, _SFADJUST_, _SFTEXT_
+&apos;&apos;&apos;			-----------								_SFMOVE_, _SFITEM_, _SFADJUST_, _SFSELTAB_, _SFTEXT_
 &apos;&apos;&apos;				All event types applicable on dialogs and control types &lt;&gt; TreeControl
 &apos;&apos;&apos;				The events MUST NOT be preset in the Basic IDE
 &apos;&apos;&apos;
@@ -199,6 +199,37 @@ Try:
 Finally:
 	Exit Sub
 End Sub			&apos;	SFDialogs.SF_Dialoglistener._SFTAB_itemStateChanged
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFTAB_tabPageActivated(Optional ByRef poEvent As Object)
+&apos;&apos;&apos;	Event triggered by a tab page container configured through the dialog page manager
+
+Dim oControl As Object			&apos;	The DialogControl instance having caused the event
+Dim sName As String				&apos;	Control name
+Dim oDialog As Object			&apos;	The parent Dialog instance
+Dim oPageManager As Object		&apos;	An entry in dialog._PageManagement
+
+Check:
+	On Local Error GoTo Finally		&apos;	Never interrupt !!
+	Set oControl = CreateScriptService(&quot;DialogEvent&quot;, poEvent)
+	If IsNull(oControl) Then GoTo Finally
+
+Try:
+	Set oDialog = oControl.Parent
+	With oDialog
+		sName = oControl.Name
+		&apos;	Find entry in page manager settings
+		For Each oPageManager In ._PageManagement
+			If oPageManager.ControlName = sName Then
+				.Page = poEvent.TabPageID
+				Exit For
+			End If
+		Next oPageManager
+	End With
+
+Finally:
+	Exit Sub
+End Sub			&apos;	SFDialogs.SF_Dialoglistener._SFTAB_actionPerformed
 
 REM -----------------------------------------------------------------------------
 Public Sub _SFTAB_disposing(Optional ByRef poEvent As Object)
@@ -385,6 +416,21 @@ Public Sub _SFMOVE_disposing()
 End Sub
 
 REM -----------------------------------------------------------------------------
+Public Sub _SFSELTAB_tabPageActivated(Optional ByRef poEvent As Object)
+&apos;&apos;&apos;	Triggered by the OnTabSelected event in a dialog control
+&apos;&apos;&apos;	The event is triggered thru a com.sun.star.awt.tab.XTabPageContainerListener
+&apos;&apos;&apos;	The argument is passed to a user routine stored in the SF_DialogControl instance
+&apos;&apos;&apos;		as a scripting framework URI
+
+	_TriggerEvent(&quot;tabPageActivated&quot;, poEvent)
+
+End Sub			&apos;	SFDialogs.SF_Dialoglistener._SFSELTAB_tabPageActivated
+
+REM -----------------------------------------------------------------------------
+Public Sub _SFSELTAB_disposing()
+End Sub
+
+REM -----------------------------------------------------------------------------
 Public Sub _SFTEXT_textChanged(Optional ByRef poEvent As Object)
 &apos;&apos;&apos;	Triggered by the OnTextChanged event in a dialog control
 &apos;&apos;&apos;	The event is triggered thru a com.sun.star.awt.XTextListener
@@ -393,7 +439,7 @@ Public Sub _SFTEXT_textChanged(Optional ByRef poEvent As Object)
 
 	_TriggerEvent(&quot;textChanged&quot;, poEvent)
 
-End Sub			&apos;	SFDialogs.SF_Dialoglistener. _SFTEXT_textChanged
+End Sub			&apos;	SFDialogs.SF_Dialoglistener._SFTEXT_textChanged
 
 REM -----------------------------------------------------------------------------
 Public Sub _SFTEXT_disposing()
@@ -544,6 +590,9 @@ Try:
 			Case UCase(&quot;OnMouseReleased&quot;)
 				sPrevious = ._OnMouseReleased
 				._OnMouseReleased = psScript
+			Case UCase(&quot;OnTabSelected&quot;)
+				sPrevious = ._OnTabSelected
+				._OnTabSelected = psScript
 			Case UCase(&quot;OnTextChanged&quot;)
 				sPrevious = ._OnTextChanged
 				._OnTextChanged = psScript
@@ -638,6 +687,17 @@ Try:
 					If Not IsNull(._MouseMotionListener) Then oView.removeMouseMotionListener(._MouseMotionListener)
 					._MouseMotionCounter = 0		&apos;	Prevent negative values
 				End If
+			Case &quot;tab.XTabPageContainerListener&quot;
+				._TabPageContainerCounter = ._TabPageContainerCounter + iCounterIncrement
+				If ._TabPageContainerCounter = 1 Then
+					If IsNull(._TabPageContainerListener) Then
+						Set ._TabPageContainerListener = CreateUnoListener(&quot;SFDialogs.SF_DialogListener._SFSELTAB_&quot;, cstPrefix &amp; sListener)
+					End If
+					If iCounterIncrement = 1 Then oView.addTabPageContainerListener(._TabPageContainerListener)
+				ElseIf ._TabPageContainerCounter &lt;= 0 Then
+					If Not IsNull(._TabPageContainerListener) Then oView.removeTabPageContainerListener(._TabPageContainerListener)
+					._TabPageContainerCounter = 0		&apos;	Prevent negative values
+				End If
 			Case &quot;XTextListener&quot;
 				._TextCounter = ._TextCounter + iCounterIncrement
 				If ._TextCounter = 1 Then
@@ -691,6 +751,7 @@ Try:
 			Case &quot;mouseMoved&quot;				:	sScript = .OnMouseMoved
 			Case &quot;mousePressed&quot;				:	sScript = .OnMousePressed
 			Case &quot;mouseReleased&quot;			:	sScript = .OnMouseReleased
+			Case &quot;tabPageActivated&quot;			:	sScript = .OnTabSelected
 			Case &quot;textChanged&quot;				:	sScript = .OnTextChanged
 			Case Else						:	sScript = &quot;&quot;		&apos;	Should not happen
 		End Select

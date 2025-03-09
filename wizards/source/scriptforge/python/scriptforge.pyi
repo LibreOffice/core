@@ -3886,6 +3886,36 @@ class SFDialogs:
                 """
             ...
 
+        def CreateTabPageContainer(self,
+                                   controlname: str,
+                                   place: Union[UNO, Tuple[int, int, int, int]],
+                                   tabheaders: Tuple[str, ...],
+                                   border: Literal["3D", "FLAT", "NONE"] = ...,
+                                   ) -> Optional[DIALOGCONTROL]:
+            """
+                Create a new control of type TabPageContainer in the actual dialog. Only one such creation is allowed
+                per dialog.
+
+                This type of control has no equivalent in the Basic IDE. The actual method may nevertheless be applied
+                to a dialog built in the IDE. It is recommended for control stacking reasons to define a tab
+                container control AFTER all or most other editable controls.
+
+                The creation request is ignored if the dialog is already displayed.
+                    Args
+                        ``controlname``:  the name of the new control. It must not exist yet.
+
+                        ``place``: the size and position expressed in "``APPFONT units``". Either:
+                            - a tuple (X, Y, Width, Height).
+                            - a ``com.sun.star.awt.Rectangle`` structure.
+
+                        ``tabheaders``: a tuple of strings to define the texts displayed in each respective tab.
+
+                        ``border``: "3D" (default), "FLAT" or "NONE".
+                    Returns
+                        A ``SFDialogs.SF_DialogControl`` instance or ``None``.
+                """
+            ...
+
         def CreateTextField(self,
                             controlname: str,
                             place: Union[UNO, Tuple[int, int, int, int]],
@@ -4052,20 +4082,21 @@ class SFDialogs:
                 Defines which controls in a dialog are responsible for switching pages, making it easier
                 to orchestrate the ``Page`` property of a dialog and its controls.
 
-                Dialogs may have multiple pages and the currently visible page is defined by the ``Page``dialog property.
-                If the ``Page`` property is left unchanged, the default visible page is equal to ``0`` (zero), meaning
-                that no particular page is defined and all visible controls are displayed regardless of the value set in
-                their own ``Page`` property.
+                Dialogs may have multiple pages and the currently visible page is defined by the ``Page``dialog
+                property. If the ``Page`` property is left unchanged, the default visible page is equal to ``0`` (zero),
+                meaning that no particular page is defined and all visible controls are displayed regardless of
+                the value set in their own ``Page`` property.
 
                 When the ``Page`` property of a dialog is changed to some other value such as ``1``, ``2``, ``3``
                 and so forth, then only the controls whose ``Page`` property match the current dialog page will
                 be displayed.
 
-                By using the SetPageManager method it is possible to define four types of page managers:
+                By using the SetPageManager method it is possible to define five types of page managers:
                     - List box or combo box: in this case, each entry in the list box or combo box corresponds to a page. The first item refers to Page 1, the second items refers to Page 2 and so on.
                     - Group of radio buttons: defines a group of radio buttons that will control which page is visible.
                     - Sequence of buttons: defines a set of buttons, each of which corresponding to a dialog page. This can be used to emulate a tabbed interface by placing buttons side by side in the dialog.
                     - Previous/Next buttons: defines which buttons in the dialog that will be used to navigate to the Previous/Next page in the dialog.
+                    - If the dialog contains a TabPageContainer control, the control always contributes implicitly to the page management.
 
                 This method is supposed to be called just once before calling the ``Execute()`` method.
                 Subsequent calls are ignored.
@@ -4079,14 +4110,15 @@ class SFDialogs:
                         they are associated with.
 
                         ``wizardcontrols``: a comma-separated list with the names of two buttons that will be used
-                        s the ``Previous/Next`` buttons.
+                        as the ``Previous/Next`` buttons.
 
                         ``lastpage``: the number of the last available page.
                         It is recommended to specify this value when using the ``Previous/Next`` page manager.
                     Returns
                         ``True`` on success.
-                    Tip
+                    Note
                         It is possible to use more than one page management mechanism at the same time.
+                        They will all be synchronized to point to the actual dialog page number.
                 """
             ...
 
@@ -4178,6 +4210,10 @@ class SFDialogs:
         """ Get/set the macro triggered by the ``Expansion button is pressed on a node in a tree control`` event. """
         OnNodeSelected: SCRIPT_URI
         """ Get/set the macro triggered by the ``Node in a tree control is selected`` event."""
+        OnTabSelected: SCRIPT_URI
+        """ Get/set the macro triggered by the ``Tab in a TabPageContainer control is selected`` event."""
+        OnTextChanged: SCRIPT_URI
+        """ Get/set the macro triggered by the ``Text modified`` event."""
 
         Page: int
         """ A dialog may have several pages that can be traversed by the user step by step.
@@ -4220,6 +4256,7 @@ class SFDialogs:
         - ``RadioButton``: bool - Each button has its own name. They are linked together if their TAB positions are contiguous. If a radiobutton is set to ``True``, the other related buttons are automatically set to ``False``.
         - ``ScrollBar``: int - Must be within the predefined bounds.
         - ``TableControl``: List[Any] - The data of the currently selected row.
+        - ``TabPageContainer``: int, str - The index (starting from 1) of the selected tab.
         - ``TextField``: str - The text appearing in the control.
         - ``TimeField``: datetime.datetime.
         Not applicable to ``FixedLine, FixedText, GroupBox, Hyperlink, ImageControl`` and ``TreeControl`` dialog controls.
