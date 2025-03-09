@@ -1304,6 +1304,13 @@ bool ScURLTransformer::isExternalURL(const OUString& rURL) const
 
 void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
 {
+    // Return early if unknown shape type, otherwise bogus drawing XML gets written
+    if (!ShapeExport::IsShapeTypeKnown(mxShape))
+    {
+        SAL_INFO("sc.filter", "unknown shape");
+        return;
+    }
+
     // Do not output any of the detective shapes and validation circles.
     SdrObject* pObject = SdrObject::getSdrObjectFromXShape(mxShape);
     if (pObject)
