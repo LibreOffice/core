@@ -29,11 +29,13 @@ class PasswordDialog : public weld::GenericDialogController
     std::unique_ptr<weld::Label> m_xFTConfirmPassword;
     std::unique_ptr<weld::Entry> m_xEDConfirmPassword;
     std::unique_ptr<weld::Button> m_xOKBtn;
+    std::array<std::unique_ptr<weld::ToggleButton>, 2> m_xPass;
     sal_uInt16      nMinLen;
     OUString        aPasswdMismatch;
 
 
     DECL_LINK(OKHdl_Impl, weld::Button&, void);
+    DECL_LINK(ShowHdl, weld::Toggleable&, void);
 
 public:
     PasswordDialog(weld::Window* pParent, css::task::PasswordRequestMode nDlgMode, const std::locale& rLocale, const OUString& aDocURL,

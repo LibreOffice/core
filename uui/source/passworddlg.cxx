@@ -26,6 +26,7 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <bitmaps.hlst>
 
 using namespace ::com::sun::star;
 
@@ -54,12 +55,28 @@ PasswordDialog::PasswordDialog(weld::Window* pParent,
         xBox->run();
     }
 
+    m_xPass[0] = m_xBuilder->weld_toggle_button(u"togglebt1"_ustr);
+    m_xPass[1] = m_xBuilder->weld_toggle_button(u"togglebt2"_ustr);
+
+    Link<weld::Toggleable&, void> aToggleLink = LINK(this, PasswordDialog, ShowHdl);
+
+    for (auto& aPass : m_xPass)
+    {
+        if (aPass->get_active())
+            aPass->set_from_icon_name(RID_SVXBMP_SHOWPASS);
+        else
+            aPass->set_from_icon_name(RID_SVXBMP_HIDEPASS);
+        aPass->connect_toggled(aToggleLink);
+    }
+
     // default settings for enter password or reenter passwd...
     OUString aTitle(Translate::get(STR_TITLE_ENTER_PASSWORD, rResLocale));
     m_xFTConfirmPassword->hide();
     m_xEDConfirmPassword->hide();
+    m_xPass[1]->hide();
     m_xFTConfirmPassword->set_sensitive(false);
     m_xEDConfirmPassword->set_sensitive(false);
+    m_xPass[1]->set_sensitive(false);
 
     // settings for create password
     if (nDialogMode == task::PasswordRequestMode_PASSWORD_CREATE)
@@ -117,6 +134,41 @@ IMPL_LINK_NOARG(PasswordDialog, OKHdl_Impl, weld::Button&, void)
     }
     else if (bValid)
         m_xDialog->response(RET_OK);
+}
+
+IMPL_LINK(PasswordDialog, ShowHdl, weld::Toggleable& ,rToggleable, void)
+{
+    bool bChecked = rToggleable.get_active();
+    if (&rToggleable == m_xPass[0].get())
+    {
+        if (bChecked)
+        {
+            m_xPass[0]->set_from_icon_name(RID_SVXBMP_SHOWPASS);
+            m_xEDPassword->set_visibility(true);
+            m_xEDPassword->grab_focus();
+        }
+        else
+        {
+            m_xPass[0]->set_from_icon_name(RID_SVXBMP_HIDEPASS);
+            m_xEDPassword->set_visibility(false);
+            m_xEDPassword->grab_focus();
+        }
+    }
+    else if (&rToggleable == m_xPass[1].get())
+    {
+        if (bChecked)
+        {
+            m_xPass[1]->set_from_icon_name(RID_SVXBMP_SHOWPASS);
+            m_xEDConfirmPassword->set_visibility(true);
+            m_xEDConfirmPassword->grab_focus();
+        }
+        else
+        {
+            m_xPass[1]->set_from_icon_name(RID_SVXBMP_HIDEPASS);
+            m_xEDConfirmPassword->set_visibility(false);
+            m_xEDConfirmPassword->grab_focus();
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
