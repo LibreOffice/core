@@ -34,6 +34,10 @@ CustomWeld::CustomWeld(weld::Builder& rBuilder, const OUString& rDrawingId,
     m_xDrawingArea->connect_focus_in(LINK(this, CustomWeld, DoGetFocus));
     m_xDrawingArea->connect_focus_out(LINK(this, CustomWeld, DoLoseFocus));
     m_xDrawingArea->connect_key_press(LINK(this, CustomWeld, DoKeyPress));
+    // tdf#143909 if we accept input, then we need to listen for key releases as well
+    // so that they are forwarded to any potential input methods that activated on
+    // key press.
+    m_xDrawingArea->connect_key_release(LINK(this, CustomWeld, DoKeyRelease));
     m_xDrawingArea->connect_focus_rect(LINK(this, CustomWeld, DoFocusRect));
     m_xDrawingArea->connect_style_updated(LINK(this, CustomWeld, DoStyleUpdated));
     m_xDrawingArea->connect_command(LINK(this, CustomWeld, DoCommand));
@@ -76,6 +80,11 @@ IMPL_LINK_NOARG(CustomWeld, DoLoseFocus, weld::Widget&, void) { m_rWidgetControl
 IMPL_LINK(CustomWeld, DoKeyPress, const KeyEvent&, rKEvt, bool)
 {
     return m_rWidgetController.KeyInput(rKEvt);
+}
+
+IMPL_LINK(CustomWeld, DoKeyRelease, const KeyEvent&, rKEvt, bool)
+{
+    return m_rWidgetController.KeyUp(rKEvt);
 }
 
 IMPL_LINK_NOARG(CustomWeld, DoFocusRect, weld::Widget&, tools::Rectangle)
