@@ -39,6 +39,7 @@ public:
     virtual void StyleUpdated() { Invalidate(); }
     virtual bool Command(const CommandEvent&) { return false; }
     virtual bool KeyInput(const KeyEvent&) { return false; }
+    virtual bool KeyUp(const KeyEvent&) { return false; }
     virtual tools::Rectangle GetFocusRect() { return tools::Rectangle(); }
     virtual FactoryFunction GetUITestFactory() const { return nullptr; }
     virtual OUString RequestHelp(tools::Rectangle&) { return OUString(); }
@@ -160,6 +161,7 @@ private:
     DECL_DLLPRIVATE_LINK(DoGetFocus, weld::Widget&, void);
     DECL_DLLPRIVATE_LINK(DoLoseFocus, weld::Widget&, void);
     DECL_DLLPRIVATE_LINK(DoKeyPress, const KeyEvent&, bool);
+    DECL_DLLPRIVATE_LINK(DoKeyRelease, const KeyEvent&, bool);
     DECL_DLLPRIVATE_LINK(DoFocusRect, weld::Widget&, tools::Rectangle);
     DECL_DLLPRIVATE_LINK(DoCommand, const CommandEvent&, bool);
     DECL_DLLPRIVATE_LINK(DoStyleUpdated, weld::Widget&, void);
