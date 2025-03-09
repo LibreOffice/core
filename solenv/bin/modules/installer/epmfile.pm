@@ -2403,7 +2403,7 @@ sub put_systemintegration_into_installset
 
     # Finding the modules defined in scp (with flag SYSTEMMODULE)
     # Getting name of package from scp-Module
-    # Search package in list off all include files
+    # Search package in list of all include files
     # Copy file into installation set and unpack it (always tar.gz)
     # tar.gz can contain a different number of packages -> automatically create hidden sub modules
 
