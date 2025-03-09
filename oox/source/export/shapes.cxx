@@ -2103,6 +2103,16 @@ constexpr auto constMap = frozen::make_unordered_map<std::u16string_view, ShapeC
 
 } // end anonymous namespace
 
+
+bool ShapeExport::IsShapeTypeKnown(const Reference<XShape>& xShape)
+{
+    if (!xShape)
+        return false;
+
+    const OUString sShapeType = xShape->getShapeType();
+    return constMap.find(sShapeType) != constMap.end();
+}
+
 ShapeExport& ShapeExport::WriteShape( const Reference< XShape >& xShape )
 {
     if (!xShape)
