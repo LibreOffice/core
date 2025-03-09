@@ -2160,6 +2160,22 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf165503)
     CPPUNIT_ASSERT_EQUAL(0, aNodes);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf165655)
+{
+    createScDoc("xlsx/tdf165655.xlsx");
+
+    save(u"Calc Office Open XML"_ustr);
+
+    xmlDocUniquePtr pDrawing = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    CPPUNIT_ASSERT(pDrawing);
+
+    // Original has 3 drawingML and 1 VML objects
+    // Not sure if the VML dropdown should be exported, but as long as it cannot be
+    //  exported properly, it should not be exported at all (only the 3 drawingMLs)
+    const int aNodes = countXPathNodes(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor");
+    CPPUNIT_ASSERT_EQUAL(3, aNodes);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
