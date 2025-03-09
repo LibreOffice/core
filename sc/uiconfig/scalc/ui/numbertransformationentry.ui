@@ -75,7 +75,7 @@
         <property name="placeholder-text" translatable="yes" context="numbertransformationentry/cols">Cols(; Separated)</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="ed_columns-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="numbertransformationentry|extended_tip|ed_columns">List of column indexes to apply the numerc transformation, separated by semicolons.</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="numbertransformationentry|extended_tip|ed_columns">List of column indexes to apply the numeric transformation, separated by semicolons.</property>
           </object>
         </child>
       </object>
