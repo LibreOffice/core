@@ -466,7 +466,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
 
     /**
-     * Give a list off all field title names to insert the field title names, call layout()
+     * Give a list of all field title names to insert the field title names, call layout()
      */
     public void insertFieldTitles(String[] _aFieldTitleNames)
     {
@@ -580,7 +580,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
 
     /**
-     * Give a list off all field names to insert the field names, call layout()
+     * Give a list of all field names to insert the field names, call layout()
      */
     public void insertFieldNames(String[] _aFieldNames)
     {
