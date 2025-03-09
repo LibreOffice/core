@@ -4833,12 +4833,12 @@ bool isRequestedSlideValid(SdDrawDocument* mpDoc, sal_Int32 nSlideNumber, const 
 {
     try
     {
-        uno::Reference<drawing::XDrawPagesSupplier> xDrawPages(getXWeak(mpDoc->getUnoModel()), uno::UNO_QUERY_THROW);
-        uno::Reference<container::XIndexAccess> xSlides(xDrawPages->getDrawPages(), uno::UNO_QUERY_THROW);
-        uno::Reference<drawing::XDrawPage> xSlide(xSlides->getByIndex(nSlideNumber), uno::UNO_QUERY_THROW);
-        if (xSlide.is())
+        SdXImpressDocument* pDoc = mpDoc->getUnoModel();
+        rtl::Reference<SdDrawPagesAccess> xDrawPages = pDoc->getSdDrawPages();
+        SdGenericDrawPage* pSlide(xDrawPages->getDrawPageByIndex(nSlideNumber));
+        if (pSlide)
         {
-            return slideHash == GetInterfaceHash(xSlide);
+            return slideHash == GetInterfaceHash(cppu::getXWeak(pSlide));
         }
     }
     catch (uno::Exception&)
@@ -4862,7 +4862,7 @@ bool SdXImpressDocument::createSlideRenderer(
     if (!pPage)
         return false;
 
-    mpSlideshowLayerRenderer.reset(new SlideshowLayerRenderer(*pPage, bRenderBackground, bRenderMasterPage));
+    mpSlideshowLayerRenderer.reset(new SlideshowLayerRenderer(*pPage, rSlideHash, bRenderBackground, bRenderMasterPage));
     Size aDesiredSize(nViewWidth, nViewHeight);
     Size aCalculatedSize = mpSlideshowLayerRenderer->calculateAndSetSizePixel(aDesiredSize);
     nViewWidth = aCalculatedSize.Width();

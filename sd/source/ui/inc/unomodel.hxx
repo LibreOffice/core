@@ -312,7 +312,7 @@ public:
     /// @see vcl::ITiledRenderable::renderNextSlideLayer().
     SD_DLLPUBLIC bool renderNextSlideLayer(unsigned char* pBuffer, bool& bIsBitmapLayer, double& rScale, OUString& rJsonMsg) override;
 
-    rtl::Reference< SdDrawPagesAccess > getSdDrawPages();
+    SD_DLLPUBLIC rtl::Reference< SdDrawPagesAccess > getSdDrawPages();
 
     // XComponent
 
@@ -366,7 +366,7 @@ public:
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
-    SdGenericDrawPage* getDrawPageByIndex( sal_Int32 Index );
+    SD_DLLPUBLIC SdGenericDrawPage* getDrawPageByIndex( sal_Int32 Index );
 };
 
 /***********************************************************************

@@ -167,6 +167,7 @@ class SD_DLLPUBLIC SlideshowLayerRenderer
 {
 private:
     SdrPage& mrPage;
+    OString msSlideHash;
     SdrModel& mrModel;
     Size maSlideSize;
     RenderState maRenderState;
@@ -184,7 +185,8 @@ private:
     void cleanup();
 
 public:
-    SlideshowLayerRenderer(SdrPage& rPage, bool bRenderBackground, bool bRenderMasterPage);
+    SlideshowLayerRenderer(SdrPage& rPage, const OString& rSlideHash,
+                           bool bRenderBackground, bool bRenderMasterPage);
 
     /** Calculate and set the slide size depending on input desired size (in pixels)
      *
