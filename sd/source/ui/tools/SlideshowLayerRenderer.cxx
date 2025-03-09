@@ -663,9 +663,10 @@ SdrObject* getObjectForShape(uno::Reference<drawing::XShape> const& xShape)
 
 } // end anonymous namespace
 
-SlideshowLayerRenderer::SlideshowLayerRenderer(SdrPage& rPage, bool bRenderBackground,
-                                               bool bRenderMasterPage)
+SlideshowLayerRenderer::SlideshowLayerRenderer(SdrPage& rPage, const OString& rSlideHash,
+                                               bool bRenderBackground, bool bRenderMasterPage)
     : mrPage(rPage)
+    , msSlideHash(rSlideHash)
     , mrModel(rPage.getSdrModelFromSdrPage())
     , mbRenderBackground(bRenderBackground)
     , mbRenderMasterPage(bRenderMasterPage)
@@ -941,7 +942,7 @@ void SlideshowLayerRenderer::writeBackgroundJSON(OString& rJsonMsg)
     ::tools::JsonWriter aJsonWriter;
     aJsonWriter.put("group", maRenderState.stageString());
     aJsonWriter.put("index", maRenderState.currentIndex());
-    aJsonWriter.put("slideHash", GetInterfaceHash(GetXDrawPageForSdrPage(&mrPage)));
+    aJsonWriter.put("slideHash", msSlideHash);
     aJsonWriter.put("type", "bitmap");
     writeContentNode(aJsonWriter);
     rJsonMsg = aJsonWriter.finishAndGetAsOString();
@@ -953,7 +954,7 @@ void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg, RenderPass const& rRen
     ::tools::JsonWriter aJsonWriter;
     aJsonWriter.put("group", maRenderState.stageString());
     aJsonWriter.put("index", maRenderState.currentIndex());
-    aJsonWriter.put("slideHash", GetInterfaceHash(GetXDrawPageForSdrPage(&mrPage)));
+    aJsonWriter.put("slideHash", msSlideHash);
 
     SdrObject* pObject = rRenderPass.mpObject;
     sal_Int32 nParagraph = rRenderPass.mnParagraph;
