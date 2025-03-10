@@ -196,6 +196,33 @@ void CellAttributeHelper::CellStyleDeleted(const ScStyleSheet& rStyle)
     }
 }
 
+void CellAttributeHelper::RenameCellStyle(ScStyleSheet& rStyle, const OUString& rNewName)
+{
+    std::vector<const ScPatternAttr*> aChanged;
+
+    const OUString& rCandidateStyleName = rStyle.GetName();
+    auto it = maRegisteredCellAttributes.lower_bound(&rCandidateStyleName);
+    while(it != maRegisteredCellAttributes.end())
+    {
+        const ScPatternAttr* pCheck = *it;
+        if (CompareStringPtr(pCheck->GetStyleName(), &rCandidateStyleName) != 0)
+            break;
+        if (&rStyle == pCheck->GetStyleSheet())
+        {
+            aChanged.push_back(pCheck);
+            // The name will change, we have to re-insert it
+            it = maRegisteredCellAttributes.erase(it);
+        }
+        else
+            ++it;
+    }
+
+    rStyle.SetName(rNewName);
+
+    for (const ScPatternAttr* p : aChanged)
+        maRegisteredCellAttributes.insert(p);
+}
+
 void CellAttributeHelper::CellStyleCreated(ScDocument& rDoc, const OUString& rName)
 {
     // If a style was created, don't keep any pattern with its name string in the pool,
