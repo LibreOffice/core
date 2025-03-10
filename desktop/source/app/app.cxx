@@ -2205,7 +2205,7 @@ void Desktop::OpenClients()
         // If LibreOffice is launched from the command line with a
         // document path parameter, the Start Center doesn't get
         // created when all of the document windows are closed. This
-        // causes the the old "File only" menubar to be displayed
+        // causes the old "File only" menubar to be displayed
         // instead of the Start Center's menubar.
         if (!rArgs.IsQuickstart() && !rArgs.IsInvisible())
         {
@@ -2235,7 +2235,7 @@ void Desktop::OpenClients()
         // If LibreOffice is launched from by opening a document from the
         // Finder or dragging it onto the application's Dock icon, the
         // the Start Center doesn't get created when all of the document
-        // windows are closed. This causes the the old "File only" menubar
+        // windows are closed. This causes the old "File only" menubar
         // to be displayed instead of the Start Center's menubar.
         if (!rArgs.IsQuickstart() && !rArgs.IsInvisible())
         {
@@ -2307,7 +2307,7 @@ void Desktop::OpenDefault()
     // Related: tdf#41775 show Start Center before loading documents
     // If LibreOffice is launched from the command line with a module
     // argument, the Start Center doesn't get created when all of the
-    // document windows are closed. This causes the the old "File only"
+    // document windows are closed. This causes the old "File only"
     // menubar to be displayed instead of the Start Center's menubar.
     if (aOpt.IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE))
         ShowBackingComponent(nullptr);
