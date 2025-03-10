@@ -61,7 +61,9 @@
 #include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <unordered_map>
+#ifndef _WIN32
 #include <dlfcn.h>
+#endif
 
 using namespace com::sun::star;
 
