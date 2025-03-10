@@ -3662,9 +3662,12 @@ external/clucene/configs/clucene-config-generic.h
 external/fontconfig/configs/wnt_fontconfig_config.h
 external/fontconfig/configs/wnt_fontconfig_fcalias.h
 external/fontconfig/configs/wnt_fontconfig_fcaliastail.h
+external/fontconfig/configs/wnt_fontconfig_fccase.h
 external/fontconfig/configs/wnt_fontconfig_fcftalias.h
 external/fontconfig/configs/wnt_fontconfig_fcftaliastail.h
+external/fontconfig/configs/wnt_fontconfig_fclang.h
 external/fontconfig/configs/wnt_fontconfig_fcobjshash.h
+external/fontconfig/configs/wnt_fontconfig_fcstdint.h
 external/libjpeg-turbo/jconfig.h
 external/libjpeg-turbo/jconfigint.h
 external/libjpeg-turbo/jversion.h
