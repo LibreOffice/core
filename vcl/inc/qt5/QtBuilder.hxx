@@ -39,10 +39,10 @@ private:
     std::vector<std::pair<QWidget*, QWidget*>> m_aWidgetReplacements;
 
 public:
-    QtBuilder(QObject* pParent, std::u16string_view sUIRoot, const OUString& rUIFile);
+    QtBuilder(QWidget* pParent, std::u16string_view sUIRoot, const OUString& rUIFile);
     virtual ~QtBuilder();
 
-    template <typename T = QObject> T* get(const OUString& rId);
+    template <typename T = QWidget> T* get(const OUString& rId);
 
     QObject* makeObject(QObject* pParent, std::u16string_view sName, std::string_view sType,
                         const OUString& sID, stringmap& rMap);
@@ -104,8 +104,8 @@ private:
 
 template <typename T> inline T* QtBuilder::get(const OUString& rId)
 {
-    QObject* w = get_by_name(rId);
-    return static_cast<T*>(w);
+    QWidget* pWidget = get_by_name(rId);
+    return static_cast<T*>(pWidget);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

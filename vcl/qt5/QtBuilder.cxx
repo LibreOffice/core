@@ -53,7 +53,7 @@ QString convertAccelerator(const OUString& rText)
 }
 }
 
-QtBuilder::QtBuilder(QObject* pParent, std::u16string_view sUIRoot, const OUString& rUIFile)
+QtBuilder::QtBuilder(QWidget* pParent, std::u16string_view sUIRoot, const OUString& rUIFile)
     : WidgetBuilder(sUIRoot, rUIFile, false)
 {
     processUIFile(pParent);
