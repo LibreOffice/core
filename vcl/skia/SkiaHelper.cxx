@@ -51,7 +51,7 @@ bool isAlphaMaskBlendingEnabled() { return false; }
 #include <SkPaint.h>
 #include <SkSurface.h>
 #include <SkGraphics.h>
-#include <GrDirectContext.h>
+#include <ganesh/GrDirectContext.h>
 #include <SkRuntimeEffect.h>
 #include <SkStream.h>
 #include <SkTileMode.h>
