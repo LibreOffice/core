@@ -656,9 +656,16 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
         mpFrame->mbNativeFullScreen = true;
 
         if( mpFrame->mbInternalFullScreen && !NSIsEmptyRect( mpFrame->maInternalFullScreenRestoreRect ) )
+        {
             mpFrame->maNativeFullScreenRestoreRect = mpFrame->maInternalFullScreenRestoreRect;
+        }
         else
-            mpFrame->maNativeFullScreenRestoreRect = [mpFrame->getNSWindow() frame];
+        {
+            // Related: tdf#128186 restore rectangles are in VCL coordinates
+            NSRect aFrame = [mpFrame->getNSWindow() frame];
+            mpFrame->CocoaToVCL( aFrame );
+            mpFrame->maNativeFullScreenRestoreRect = aFrame;
+        }
 
         updateMenuBarVisibility( mpFrame );
     }

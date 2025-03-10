@@ -794,7 +794,8 @@ bool AquaSalFrame::GetWindowState(vcl::WindowData* pState)
 
         pState->rMask() |= vcl::WindowDataMask::MaximizedX | vcl::WindowDataMask::MaximizedY | vcl::WindowDataMask::MaximizedWidth | vcl::WindowDataMask::MaximizedHeight;
 
-        pState->setState(vcl::WindowState::Maximized);
+        // tdf#128186 use non-full screen values for native full screen windows
+        pState->setState(vcl::WindowState::Normal);
     }
     else
     {
@@ -948,9 +949,16 @@ void AquaSalFrame::doShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
         }
 
         if( mbNativeFullScreen && !NSIsEmptyRect( maNativeFullScreenRestoreRect ) )
+        {
             maInternalFullScreenRestoreRect = maNativeFullScreenRestoreRect;
+        }
         else
-            maInternalFullScreenRestoreRect = [mpNSWindow frame];
+        {
+            // Related: tdf#128186 restore rectangles are in VCL coordinates
+            NSRect aFrame = [mpNSWindow frame];
+            CocoaToVCL( aFrame );
+            maInternalFullScreenRestoreRect = aFrame;
+        }
 
         // Related: tdf#161623 do not add the window's titlebar height
         // to the window's frame as that will cause the titlebar to be
