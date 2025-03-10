@@ -10,8 +10,8 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,pixman))
 
 $(eval $(call gb_StaticLibrary_set_include,pixman,\
-	-I$(call gb_UnpackedTarball_get_dir,pixman) \
-	-I$(call gb_UnpackedTarball_get_dir,pixman)/pixman \
+	-I$(gb_UnpackedTarball_workdir)/pixman \
+	-I$(gb_UnpackedTarball_workdir)/pixman/pixman \
 	$$(INCLUDE) \
 ))
 

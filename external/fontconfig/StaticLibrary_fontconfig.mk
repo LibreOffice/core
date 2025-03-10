@@ -12,9 +12,9 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,fontconfig))
 
 $(eval $(call gb_StaticLibrary_set_include,fontconfig,\
-	-I$(call gb_UnpackedTarball_get_dir,fontconfig) \
-	-I$(call gb_UnpackedTarball_get_dir,freetype)/include \
-	-I$(call gb_UnpackedTarball_get_dir,expat)/lib \
+	-I$(gb_UnpackedTarball_workdir)/fontconfig \
+	-I$(gb_UnpackedTarball_workdir)/freetype/include \
+	-I$(gb_UnpackedTarball_workdir)/expat/lib \
 	$$(INCLUDE) \
 ))
 
