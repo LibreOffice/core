@@ -8,6 +8,7 @@
  */
 
 #include <QtHyperlinkLabel.hxx>
+#include <QtHyperlinkLabel.moc>
 
 QtHyperlinkLabel::QtHyperlinkLabel(QWidget* pParent)
     : QLabel(pParent)

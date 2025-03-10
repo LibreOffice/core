@@ -18,6 +18,8 @@
  */
 class QtHyperlinkLabel : public QLabel
 {
+    Q_OBJECT
+
     QString m_sDisplayText;
     QString m_sUri;
 
