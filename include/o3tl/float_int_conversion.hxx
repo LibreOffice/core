@@ -7,22 +7,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_O3TL_FLOAT_INT_CONVERSION_HXX
-#define INCLUDED_O3TL_FLOAT_INT_CONVERSION_HXX
+#pragma once
 
 #include <sal/config.h>
 
 #include <cmath>
 #include <limits>
 #include <type_traits>
+#include <o3tl/concepts.hxx>
 
 namespace o3tl
 {
 // Return true iff `value` of floating-point type `F` converts to a value of integral type `I` no
 // smaller than `min`:
-template <typename F, typename I>
-constexpr std::enable_if_t<std::is_floating_point_v<F> && std::is_integral_v<I>, bool>
-convertsToAtLeast(F value, I min)
+template <floating_point F, integral I> constexpr bool convertsToAtLeast(F value, I min)
 {
     // If `F(min)`, `F(min) - F(1)` are too large in magnitude for `F`'s precision, then they either
     // fall into the same bucket, in which case we should return false if `value` represents that
@@ -33,9 +31,7 @@ convertsToAtLeast(F value, I min)
 
 // Return true iff `value` of floating-point type `F` converts to a value of integral type `I` no
 // larger than `max`:
-template <typename F, typename I>
-constexpr std::enable_if_t<std::is_floating_point_v<F> && std::is_integral_v<I>, bool>
-convertsToAtMost(F value, I max)
+template <floating_point F, integral I> constexpr bool convertsToAtMost(F value, I max)
 {
     // If `F(max)`, `F(max) + F(1)` are too large in magnitude for `F`'s precision, then they either
     // fall into the same bucket, in which case we should return false if `value` represents that
@@ -46,9 +42,7 @@ convertsToAtMost(F value, I max)
 
 // Casts a floating-point to an integer, avoiding overflow. Used like:
 //     sal_Int64 n = o3tl::saturating_cast<sal_Int64>(f);
-template <typename I, typename F>
-constexpr std::enable_if_t<std::is_floating_point_v<F> && std::is_integral_v<I>, I>
-saturating_cast(F f)
+template <integral I, floating_point F> constexpr I saturating_cast(F f)
 {
     if constexpr (std::is_signed_v<I>)
         if (!convertsToAtLeast(f, std::numeric_limits<I>::min()))
@@ -61,12 +55,10 @@ saturating_cast(F f)
 // Return `value` of floating-point type `F` rounded to the nearest integer away from zero (which
 // can be useful in calls to convertsToAtLeast/Most(roundAway(x), n), to reject x that are
 // smaller/larger than n because they have a fractional part):
-template <typename F> std::enable_if_t<std::is_floating_point_v<F>, F> roundAway(F value)
+template <floating_point F> F roundAway(F value)
 {
     return value >= 0 ? std::ceil(value) : std::floor(value);
 }
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
