@@ -63,6 +63,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 
+#include <config_emscripten.h>
 #include <oox/core/fastparser.hxx>
 #include <svx/svdpage.hxx>
 #include <comphelper/threadpool.hxx>
@@ -329,6 +330,12 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
          nSheetsLeft++;
     }
 
+#if defined EMSCRIPTEN && !HAVE_EMSCRIPTEN_JSPI
+    // Hack around Application::Yield() deliberately calling std::abort() in the standard (non-JSPI)
+    // Emscripten case; so instead of yielding (which implicitly releases the SolarMutex), just
+    // release the SolarMutex so that the WorkerThreads can proceed:
+    SolarMutexReleaser rel;
+#else
     // coverity[loop_top] - this isn't an infinite loop where nSheetsLeft gets decremented by the above threads
     while( nSheetsLeft > 0 && !Application::IsQuit())
     {
@@ -337,6 +344,7 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
         // bar updating.
         Application::Yield();
     }
+#endif
     rSharedPool.waitUntilDone(pTag);
 
     // threads joined in ThreadPool destructor
