@@ -12,7 +12,7 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,freetype))
 
 $(eval $(call gb_StaticLibrary_set_include,freetype,\
-	-I$(call gb_UnpackedTarball_get_dir,freetype)/include \
+	-I$(gb_UnpackedTarball_workdir)/freetype/include \
 	$$(INCLUDE) \
 ))
 

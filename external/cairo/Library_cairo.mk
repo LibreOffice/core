@@ -10,11 +10,11 @@
 $(eval $(call gb_Library_Library,cairo))
 
 $(eval $(call gb_Library_set_include,cairo,\
-	-I$(call gb_UnpackedTarball_get_dir,cairo) \
-	-I$(call gb_UnpackedTarball_get_dir,cairo)/src \
-	-I$(call gb_UnpackedTarball_get_dir,pixman)/pixman \
-	-I$(call gb_UnpackedTarball_get_dir,freetype)/include \
-	-I$(call gb_UnpackedTarball_get_dir,fontconfig) \
+	-I$(gb_UnpackedTarball_workdir)/cairo \
+	-I$(gb_UnpackedTarball_workdir)/cairo/src \
+	-I$(gb_UnpackedTarball_workdir)/pixman/pixman \
+	-I$(gb_UnpackedTarball_workdir)/freetype/include \
+	-I$(gb_UnpackedTarball_workdir)/fontconfig \
 	$$(INCLUDE) \
 ))
 
