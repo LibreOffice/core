@@ -2517,7 +2517,13 @@ void ShapeExport::WriteBorderLine(const sal_Int32 xml_line_element, const Border
         if ( rBorderLine.Color == sal_Int32( COL_AUTO ) )
             mpFS->singleElementNS(XML_a, XML_noFill);
         else
-            DrawingML::WriteSolidFill( ::Color(ColorTransparency, rBorderLine.Color) );
+        {
+            ::Color nColor(ColorTransparency, rBorderLine.Color);
+            if (nColor.IsTransparent())
+                DrawingML::WriteSolidFill( nColor, nColor.GetAlpha() );
+            else
+                DrawingML::WriteSolidFill( nColor );
+        }
 
         OUString sBorderStyle;
         sal_Int16 nStyle = rBorderLine.LineStyle;
