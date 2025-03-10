@@ -2265,13 +2265,10 @@ tools::Rectangle Menu::GetCharacterBounds( sal_uInt16 nItemID, tools::Long nInde
         ImplFillLayoutData();
     if( mpLayoutData )
     {
-        for( size_t i = 0; i < mpLayoutData->m_aLineItemIds.size(); i++ )
+        auto it = std::find(mpLayoutData->m_aLineItemIds.begin(), mpLayoutData->m_aLineItemIds.end(), nItemID);
+        if (it != mpLayoutData->m_aLineItemIds.end())
         {
-            if( mpLayoutData->m_aLineItemIds[i] == nItemID )
-            {
-                nItemIndex = mpLayoutData->m_aLineIndices[i];
-                break;
-            }
+            nItemIndex = mpLayoutData->m_aLineIndices[std::distance(mpLayoutData->m_aLineItemIds.begin(), it)];
         }
     }
     return (mpLayoutData && nItemIndex != -1) ? mpLayoutData->GetCharacterBounds( nItemIndex+nIndex ) : tools::Rectangle();
