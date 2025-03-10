@@ -84,6 +84,7 @@ public:
     void testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef const & xDocShRef, SCROW nRow1, SCROW nRow2,
             bool bCheckRelativeInSheet );
     void testSortWithFormattingXLS();
+    void testForcepoint107();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
@@ -108,6 +109,7 @@ public:
     CPPUNIT_TEST(testSortWithSharedFormulasODS);
     CPPUNIT_TEST(testSortWithSheetExternalReferencesODS);
     CPPUNIT_TEST(testSortWithFormattingXLS);
+    CPPUNIT_TEST(testForcepoint107);
 
     CPPUNIT_TEST_SUITE_END();
 
