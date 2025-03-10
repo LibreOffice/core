@@ -152,6 +152,7 @@ void CellAttributeHelper::doUnregister(const ScPatternAttr& rCandidate)
     if (mpLastHit == &rCandidate)
         mpLastHit = nullptr;
 
+    assert(maRegisteredCellAttributes.find(&rCandidate) != maRegisteredCellAttributes.end());
     maRegisteredCellAttributes.erase(&rCandidate);
     delete &rCandidate;
 }
