@@ -92,6 +92,7 @@ public:
 
     void CellStyleDeleted(const ScStyleSheet& rStyle);
     void CellStyleCreated(ScDocument& rDoc, const OUString& rName);
+    void RenameCellStyle(ScStyleSheet& rStyle, const OUString& rNewName);
     void UpdateAllStyleSheets(ScDocument& rDoc);
     void AllStylesToNames();
     void ReIndexRegistered();

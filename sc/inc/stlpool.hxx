@@ -56,6 +56,9 @@ public:
     // Finds Para style with given name case-insensitively, or STR_STYLENAME_STANDARD
     ScStyleSheet*       FindAutoStyle(const OUString& rName);
 
+    // Rename rStyle to rNewName, and update CellAttribute holder
+    SC_DLLPUBLIC void Rename(SfxStyleSheetBase& rStyle, const OUString& rNewName, SfxStyleFamily eFam);
+
     SC_DLLPUBLIC virtual SfxStyleSheetBase& Make( const OUString&, SfxStyleFamily eFam,
                                      SfxStyleSearchBits nMask = SfxStyleSearchBits::All,
                                      const OUString& rParentStyleSheetName = u""_ustr) override;

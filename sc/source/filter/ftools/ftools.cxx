@@ -231,7 +231,7 @@ ScStyleSheet& lclMakeStyleSheet( ScStyleSheetPool& rPool, const OUString& rStyle
     // rename existing style
     if( pOldStyleSheet && bForceName )
     {
-        pOldStyleSheet->SetName( aNewName );
+        rPool.Rename(*pOldStyleSheet, aNewName, eFamily);
         aNewName = rStyleName;
     }
 
