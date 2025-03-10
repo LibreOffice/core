@@ -38,9 +38,9 @@ public:
      */
     virtual RedlineFlags GetRedlineFlags(const SwViewShell* pViewShell = nullptr) const override;
 
-    virtual void SetRedlineFlags_intern(/*[in]*/RedlineFlags eMode, bool bRecordAllViews = true) override;
+    virtual void SetRedlineFlags_intern(/*[in]*/RedlineFlags eMode, bool bRecordAllViews = true, bool bRecordModeChange = false) override;
 
-    virtual void SetRedlineFlags(/*[in]*/RedlineFlags eMode, bool bRecordAllViews = true) override;
+    virtual void SetRedlineFlags(/*[in]*/RedlineFlags eMode, bool bRecordAllViews = true, bool bRecordModeChange = false) override;
 
     virtual bool IsRedlineOn() const override;
 

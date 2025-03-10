@@ -446,6 +446,32 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewEnableBoth)
     CPPUNIT_ASSERT(pWrtShell2->GetViewOptions()->IsRedlineRecordingOn());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewAllToOneTransition)
+{
+    // Given 2 views, recording is on in all views:
+    SwXTextDocument* pXTextDocument = createDoc();
+    CPPUNIT_ASSERT(pXTextDocument);
+    SwTestViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SfxLokHelper::createView();
+    SwTestViewCallback aView2;
+    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SfxLokHelper::setView(nView1);
+    comphelper::dispatchCommand(".uno:TrackChangesInAllViews", {});
+    CPPUNIT_ASSERT(pWrtShell1->GetViewOptions()->IsRedlineRecordingOn());
+    CPPUNIT_ASSERT(pWrtShell2->GetViewOptions()->IsRedlineRecordingOn());
+
+    // When limiting recording to just view 1:
+    comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
+
+    // Then make sure view 2 has recording off:
+    CPPUNIT_ASSERT(pWrtShell1->GetViewOptions()->IsRedlineRecordingOn());
+    // Without the accompanying fix in place, this test would have failed,
+    // .uno:TrackChangesInThisView didn't turn off recording for view 2.
+    CPPUNIT_ASSERT(!pWrtShell2->GetViewOptions()->IsRedlineRecordingOn());
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewInsert)
 {
     // Given 2 views, view 1 records changes, view does not record changes:
