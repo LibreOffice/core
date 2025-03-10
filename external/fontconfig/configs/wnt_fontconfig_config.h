@@ -6,10 +6,10 @@
 /* Define if building universal (internal helper macro) */
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
 
-/* The normal alignment of `double', in bytes. */
+/* The normal alignment of 'double', in bytes. */
 #define ALIGNOF_DOUBLE 8
 
-/* The normal alignment of `void *', in bytes. */
+/* The normal alignment of 'void *', in bytes. */
 #define ALIGNOF_VOID_P 8
 
 /* Use libxml2 instead of Expat */
@@ -32,7 +32,7 @@
 #define FC_GPERF_SIZE_T size_t
 
 /* Define to nothing if C supports flexible array members, and to 1 if it does
-   not. That way, with a declaration like `struct s { int n; double
+   not. That way, with a declaration like 'struct s { int n; double
    d[FLEXIBLE_ARRAY_MEMBER]; };', the struct hack can be used with pre-C99
    compilers. When computing the size of such an object, don't use 'sizeof
    (struct s)' as it overestimates the size. Use 'offsetof (struct s, d)'
@@ -61,46 +61,46 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 /* #undef HAVE_DLFCN_H */
 
-/* Define to 1 if you don't have `vprintf' but do have `_doprnt.' */
+/* Define to 1 if you don't have 'vprintf' but do have '_doprnt.' */
 /* #undef HAVE_DOPRNT */
 
 /* Define to 1 if you have the <fcntl.h> header file. */
 #define HAVE_FCNTL_H 1
 
-/* Define to 1 if you have the `fstatfs' function. */
+/* Define to 1 if you have the 'fstatfs' function. */
 /* #undef HAVE_FSTATFS */
 
-/* Define to 1 if you have the `fstatvfs' function. */
+/* Define to 1 if you have the 'fstatvfs' function. */
 /* #undef HAVE_FSTATVFS */
 
-/* Define to 1 if you have the `FT_Done_MM_Var' function. */
+/* Define to 1 if you have the 'FT_Done_MM_Var' function. */
 #define HAVE_FT_DONE_MM_VAR 1
 
-/* Define to 1 if you have the `FT_Get_BDF_Property' function. */
+/* Define to 1 if you have the 'FT_Get_BDF_Property' function. */
 /* #undef HAVE_FT_GET_BDF_PROPERTY */
 
-/* Define to 1 if you have the `FT_Get_PS_Font_Info' function. */
+/* Define to 1 if you have the 'FT_Get_PS_Font_Info' function. */
 #define HAVE_FT_GET_PS_FONT_INFO 1
 
-/* Define to 1 if you have the `FT_Get_X11_Font_Format' function. */
+/* Define to 1 if you have the 'FT_Get_X11_Font_Format' function. */
 /* #undef HAVE_FT_GET_X11_FONT_FORMAT */
 
-/* Define to 1 if you have the `FT_Has_PS_Glyph_Names' function. */
+/* Define to 1 if you have the 'FT_Has_PS_Glyph_Names' function. */
 #define HAVE_FT_HAS_PS_GLYPH_NAMES 1
 
-/* Define to 1 if you have the `getexecname' function. */
+/* Define to 1 if you have the 'getexecname' function. */
 /* #undef HAVE_GETEXECNAME */
 
-/* Define to 1 if you have the `getopt' function. */
+/* Define to 1 if you have the 'getopt' function. */
 /* #undef HAVE_GETOPT */
 
-/* Define to 1 if you have the `getopt_long' function. */
+/* Define to 1 if you have the 'getopt_long' function. */
 /* #undef HAVE_GETOPT_LONG */
 
-/* Define to 1 if you have the `getpagesize' function. */
+/* Define to 1 if you have the 'getpagesize' function. */
 /* #undef HAVE_GETPAGESIZE */
 
-/* Define to 1 if you have the `getprogname' function. */
+/* Define to 1 if you have the 'getprogname' function. */
 /* #undef HAVE_GETPROGNAME */
 
 /* Define if the GNU gettext() function is already present or preinstalled. */
@@ -115,31 +115,31 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
 
-/* Define to 1 if you have the `link' function. */
+/* Define to 1 if you have the 'link' function. */
 /* #undef HAVE_LINK */
 
-/* Define to 1 if you have the `lrand48' function. */
+/* Define to 1 if you have the 'lrand48' function. */
 /* #undef HAVE_LRAND48 */
 
-/* Define to 1 if you have the `lstat' function. */
+/* Define to 1 if you have the 'lstat' function. */
 /* #undef HAVE_LSTAT */
 
 /* Define to 1 if you have the <minix/config.h> header file. */
 /* #undef HAVE_MINIX_CONFIG_H */
 
-/* Define to 1 if you have the `mkdtemp' function. */
+/* Define to 1 if you have the 'mkdtemp' function. */
 /* #undef HAVE_MKDTEMP */
 
-/* Define to 1 if you have the `mkostemp' function. */
+/* Define to 1 if you have the 'mkostemp' function. */
 /* #undef HAVE_MKOSTEMP */
 
-/* Define to 1 if you have the `mkstemp' function. */
+/* Define to 1 if you have the 'mkstemp' function. */
 /* #undef HAVE_MKSTEMP */
 
-/* Define to 1 if you have a working `mmap' system call. */
+/* Define to 1 if you have a working 'mmap' system call. */
 /* #undef HAVE_MMAP */
 
-/* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
+/* Define to 1 if you have the <ndir.h> header file, and it defines 'DIR'. */
 /* #undef HAVE_NDIR_H */
 
 /* Define to 1 if you have the 'posix_fadvise' function. */
@@ -151,19 +151,19 @@
 /* Have PTHREAD_PRIO_INHERIT. */
 /* #undef HAVE_PTHREAD_PRIO_INHERIT */
 
-/* Define to 1 if you have the `rand' function. */
+/* Define to 1 if you have the 'rand' function. */
 #define HAVE_RAND 1
 
-/* Define to 1 if you have the `random' function. */
+/* Define to 1 if you have the 'random' function. */
 /* #undef HAVE_RANDOM */
 
-/* Define to 1 if you have the `random_r' function. */
+/* Define to 1 if you have the 'random_r' function. */
 /* #undef HAVE_RANDOM_R */
 
-/* Define to 1 if you have the `rand_r' function. */
+/* Define to 1 if you have the 'rand_r' function. */
 /* #undef HAVE_RAND_R */
 
-/* Define to 1 if you have the `readlink' function. */
+/* Define to 1 if you have the 'readlink' function. */
 /* #undef HAVE_READLINK */
 
 /* Define to 1 if you have the <sched.h> header file. */
@@ -187,10 +187,10 @@
 /* Define to 1 if you have the <stdlib.h> header file. */
 #define HAVE_STDLIB_H 1
 
-/* Define to 1 if you have the `strerror' function. */
+/* Define to 1 if you have the 'strerror' function. */
 #define HAVE_STRERROR 1
 
-/* Define to 1 if you have the `strerror_r' function. */
+/* Define to 1 if you have the 'strerror_r' function. */
 /* #undef HAVE_STRERROR_R */
 
 /* Define to 1 if you have the <strings.h> header file. */
@@ -199,32 +199,32 @@
 /* Define to 1 if you have the <string.h> header file. */
 #define HAVE_STRING_H 1
 
-/* Define to 1 if `d_type' is a member of `struct dirent'. */
+/* Define to 1 if 'd_type' is a member of 'struct dirent'. */
 /* #undef HAVE_STRUCT_DIRENT_D_TYPE */
 
-/* Define to 1 if `f_flags' is a member of `struct statfs'. */
+/* Define to 1 if 'f_flags' is a member of 'struct statfs'. */
 /* #undef HAVE_STRUCT_STATFS_F_FLAGS */
 
-/* Define to 1 if `f_fstypename' is a member of `struct statfs'. */
+/* Define to 1 if 'f_fstypename' is a member of 'struct statfs'. */
 /* #undef HAVE_STRUCT_STATFS_F_FSTYPENAME */
 
-/* Define to 1 if `f_basetype' is a member of `struct statvfs'. */
+/* Define to 1 if 'f_basetype' is a member of 'struct statvfs'. */
 /* #undef HAVE_STRUCT_STATVFS_F_BASETYPE */
 
-/* Define to 1 if `f_fstypename' is a member of `struct statvfs'. */
+/* Define to 1 if 'f_fstypename' is a member of 'struct statvfs'. */
 /* #undef HAVE_STRUCT_STATVFS_F_FSTYPENAME */
 
-/* Define to 1 if `st_mtim' is a member of `struct stat'. */
+/* Define to 1 if 'st_mtim' is a member of 'struct stat'. */
 /* #undef HAVE_STRUCT_STAT_ST_MTIM */
 
-/* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
+/* Define to 1 if you have the <sys/dir.h> header file, and it defines 'DIR'.
    */
 /* #undef HAVE_SYS_DIR_H */
 
 /* Define to 1 if you have the <sys/mount.h> header file. */
 /* #undef HAVE_SYS_MOUNT_H */
 
-/* Define to 1 if you have the <sys/ndir.h> header file, and it defines `DIR'.
+/* Define to 1 if you have the <sys/ndir.h> header file, and it defines 'DIR'.
    */
 /* #undef HAVE_SYS_NDIR_H */
 
@@ -249,7 +249,7 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 /* #undef HAVE_UNISTD_H */
 
-/* Define to 1 if you have the `vprintf' function. */
+/* Define to 1 if you have the 'vprintf' function. */
 /* #undef HAVE_VPRINTF */
 
 /* Can use #warning in C files */
@@ -261,10 +261,10 @@
 /* Use xmlparse.h instead of expat.h */
 /* #undef HAVE_XMLPARSE_H */
 
-/* Define to 1 if you have the `XML_SetDoctypeDeclHandler' function. */
+/* Define to 1 if you have the 'XML_SetDoctypeDeclHandler' function. */
 #define HAVE_XML_SETDOCTYPEDECLHANDLER 1
 
-/* Define to 1 if you have the `_mktemp_s' function. */
+/* Define to 1 if you have the '_mktemp_s' function. */
 /* #undef HAVE__MKTEMP_S */
 
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
@@ -280,7 +280,7 @@
 #define PACKAGE_NAME "fontconfig"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "fontconfig 2.14.2"
+#define PACKAGE_STRING "fontconfig 2.16.0"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "fontconfig"
@@ -289,31 +289,31 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2.14.2"
+#define PACKAGE_VERSION "2.16.0"
 
 /* Define to necessary symbol if this constant uses a non-standard name on
    your system. */
 /* #undef PTHREAD_CREATE_JOINABLE */
 
-/* The size of `char', as computed by sizeof. */
+/* The size of 'char', as computed by sizeof. */
 /* #undef SIZEOF_CHAR */
 
-/* The size of `int', as computed by sizeof. */
+/* The size of 'int', as computed by sizeof. */
 /* #undef SIZEOF_INT */
 
-/* The size of `long', as computed by sizeof. */
+/* The size of 'long', as computed by sizeof. */
 /* #undef SIZEOF_LONG */
 
-/* The size of `short', as computed by sizeof. */
+/* The size of 'short', as computed by sizeof. */
 /* #undef SIZEOF_SHORT */
 
-/* The size of `void*', as computed by sizeof. */
+/* The size of 'void*', as computed by sizeof. */
 /* #undef SIZEOF_VOIDP */
 
-/* The size of `void *', as computed by sizeof. */
+/* The size of 'void *', as computed by sizeof. */
 #define SIZEOF_VOID_P 8
 
-/* Define to 1 if all of the C90 standard headers exist (not just the ones
+/* Define to 1 if all of the C89 standard headers exist (not just the ones
    required in a freestanding environment). This macro is provided for
    backward compatibility; new code need not use it. */
 #define STDC_HEADERS 1
@@ -321,7 +321,7 @@
 /* Use iconv. */
 /* #undef USE_ICONV */
 
-/* Enable extensions on AIX 3, Interix.  */
+/* Enable extensions on AIX, Interix, z/OS.  */
 #ifndef _ALL_SOURCE
 /* #undef _ALL_SOURCE */
 #endif
@@ -372,31 +372,35 @@
 #endif
 /* Enable extensions specified by ISO/IEC TS 18661-5:2014.  */
 #ifndef __STDC_WANT_IEC_60559_ATTRIBS_EXT__
-#define __STDC_WANT_IEC_60559_ATTRIBS_EXT__ 1
+# define __STDC_WANT_IEC_60559_ATTRIBS_EXT__ 1
 #endif
 /* Enable extensions specified by ISO/IEC TS 18661-1:2014.  */
 #ifndef __STDC_WANT_IEC_60559_BFP_EXT__
-#define __STDC_WANT_IEC_60559_BFP_EXT__ 1
+# define __STDC_WANT_IEC_60559_BFP_EXT__ 1
 #endif
 /* Enable extensions specified by ISO/IEC TS 18661-2:2015.  */
 #ifndef __STDC_WANT_IEC_60559_DFP_EXT__
-#define __STDC_WANT_IEC_60559_DFP_EXT__ 1
+# define __STDC_WANT_IEC_60559_DFP_EXT__ 1
+#endif
+/* Enable extensions specified by C23 Annex F.  */
+#ifndef __STDC_WANT_IEC_60559_EXT__
+# define __STDC_WANT_IEC_60559_EXT__ 1
 #endif
 /* Enable extensions specified by ISO/IEC TS 18661-4:2015.  */
 #ifndef __STDC_WANT_IEC_60559_FUNCS_EXT__
-#define __STDC_WANT_IEC_60559_FUNCS_EXT__ 1
+# define __STDC_WANT_IEC_60559_FUNCS_EXT__ 1
 #endif
-/* Enable extensions specified by ISO/IEC TS 18661-3:2015.  */
+/* Enable extensions specified by C23 Annex H and ISO/IEC TS 18661-3:2015.  */
 #ifndef __STDC_WANT_IEC_60559_TYPES_EXT__
-#define __STDC_WANT_IEC_60559_TYPES_EXT__ 1
+# define __STDC_WANT_IEC_60559_TYPES_EXT__ 1
 #endif
 /* Enable extensions specified by ISO/IEC TR 24731-2:2010.  */
 #ifndef __STDC_WANT_LIB_EXT2__
-#define __STDC_WANT_LIB_EXT2__ 1
+# define __STDC_WANT_LIB_EXT2__ 1
 #endif
 /* Enable extensions specified by ISO/IEC 24747:2009.  */
 #ifndef __STDC_WANT_MATH_SPEC_FUNCS__
-#define __STDC_WANT_MATH_SPEC_FUNCS__ 1
+# define __STDC_WANT_MATH_SPEC_FUNCS__ 1
 #endif
 /* Enable extensions on HP NonStop.  */
 #ifndef _TANDEM_SOURCE
@@ -409,30 +413,36 @@
 #endif
 
 /* Version number of package */
-#define VERSION "2.14.2"
+#define VERSION "2.16.0"
 
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */
 #if defined AC_APPLE_UNIVERSAL_BUILD
-#if defined __BIG_ENDIAN__
-#define WORDS_BIGENDIAN 1
-#endif
+# if defined __BIG_ENDIAN__
+#  define WORDS_BIGENDIAN 1
+# endif
 #else
-#ifndef WORDS_BIGENDIAN
+# ifndef WORDS_BIGENDIAN
 /* #  undef WORDS_BIGENDIAN */
-#endif
+# endif
 #endif
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 /* #undef _FILE_OFFSET_BITS */
 
-/* Define for large files, on AIX-style hosts. */
+/* Define to 1 on platforms where this makes off_t a 64-bit type. */
 /* #undef _LARGE_FILES */
 
-/* Define to empty if `const' does not conform to ANSI C. */
+/* Number of bits in time_t, on hosts where this is settable. */
+/* #undef _TIME_BITS */
+
+/* Define to 1 on platforms where this makes time_t a 64-bit type. */
+/* #undef __MINGW_USE_VC2005_COMPAT */
+
+/* Define to empty if 'const' does not conform to ANSI C. */
 /* #undef const */
 
-/* Define to `__inline__' or `__inline' if that's what the C compiler
+/* Define to '__inline__' or '__inline' if that's what the C compiler
    calls it, or to nothing if 'inline' is not supported under any name.  */
 #ifndef __cplusplus
 /* #undef inline */

@@ -31,11 +31,14 @@ $(eval $(call gb_UnpackedTarball_add_patches,fontconfig,\
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,fontconfig,config.h,external/fontconfig/configs/wnt_fontconfig_config.h))
+$(eval $(call gb_UnpackedTarball_add_file,fontconfig,fc-case/fccase.h,external/fontconfig/configs/wnt_fontconfig_fccase.h))
+$(eval $(call gb_UnpackedTarball_add_file,fontconfig,fc-lang/fclang.h,external/fontconfig/configs/wnt_fontconfig_fclang.h))
 $(eval $(call gb_UnpackedTarball_add_file,fontconfig,src/fcalias.h,external/fontconfig/configs/wnt_fontconfig_fcalias.h))
 $(eval $(call gb_UnpackedTarball_add_file,fontconfig,src/fcaliastail.h,external/fontconfig/configs/wnt_fontconfig_fcaliastail.h))
 $(eval $(call gb_UnpackedTarball_add_file,fontconfig,src/fcftalias.h,external/fontconfig/configs/wnt_fontconfig_fcftalias.h))
 $(eval $(call gb_UnpackedTarball_add_file,fontconfig,src/fcftaliastail.h,external/fontconfig/configs/wnt_fontconfig_fcftaliastail.h))
 $(eval $(call gb_UnpackedTarball_add_file,fontconfig,src/fcobjshash.h,external/fontconfig/configs/wnt_fontconfig_fcobjshash.h))
+$(eval $(call gb_UnpackedTarball_add_file,fontconfig,src/fcstdint.h,external/fontconfig/configs/wnt_fontconfig_fcstdint.h))
 
 endif
 
