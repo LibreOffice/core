@@ -2171,10 +2171,12 @@ AC_ARG_ENABLE(wasm-strip,
 ,)
 
 AC_ARG_WITH(main-module,
-    AS_HELP_STRING([--with-main-module=<writer/calc>],
+    AS_HELP_STRING([--with-main-module=<writer/calc/impress>],
         [Specify which main module to build for wasm.
         Default value is 'writer'.]),
 , [with_main_module='calc writer'])
+# Don't include impress by default. Debug builds become too large for Chromium
+# with 'calc impress writer' enabled. (buffer source exceeds maximum size)
 
 if test "$_os" = Emscripten; then
     AC_ARG_ENABLE(emscripten-jspi,
@@ -3281,20 +3283,13 @@ if test "$enable_wasm_strip" = "yes"; then
     enable_randr=no
     enable_report_builder=no
     enable_scripting=no
+    enable_sdremote=no
     enable_sdremote_bluetooth=no
     enable_skia=no
     enable_xmlhelp=no
     enable_zxing=no
     test_libepubgen=no
-    test_libcdr=no
     test_libcmis=no
-    test_libetonyek=no
-    test_libfreehand=no
-    test_libmspub=no
-    test_libpagemaker=no
-    test_libqxp=no
-    test_libvisio=no
-    test_libzmf=no
     with_galleries=no
     with_gssapi=no
     with_templates=no
@@ -4179,20 +4174,37 @@ if test "$cross_compiling" = "yes"; then
         ENABLE_WASM_STRIP=TRUE
     fi
     if test "$_os" = "Emscripten"; then
+        ENABLE_WASM_STRIP_ACCESSIBILITY=TRUE
+        ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS=TRUE
         ENABLE_WASM_STRIP_CALC=TRUE
         ENABLE_WASM_STRIP_WRITER=TRUE
         for i in $with_main_module; do
             case "$i" in
             calc)
+                ENABLE_WASM_STRIP_ACCESSIBILITY=
                 ENABLE_WASM_STRIP_CALC=
                 ;;
             writer)
                 ENABLE_WASM_STRIP_WRITER=
                 ;;
+            impress)
+                ENABLE_WASM_STRIP_ACCESSIBILITY=
+                ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS=
+                ;;
             *)
                 AC_MSG_ERROR([Unknown --with-main-module "$i"])
             esac
         done
+        if test "$ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS" = TRUE; then
+            test_libcdr=no
+            test_libetonyek=no
+            test_libfreehand=no
+            test_libmspub=no
+            test_libpagemaker=no
+            test_libqxp=no
+            test_libvisio=no
+            test_libzmf=no
+        fi
     fi
 else
     CROSS_COMPILING=
@@ -4201,7 +4213,9 @@ fi
 AC_SUBST(CROSS_COMPILING)
 AC_SUBST(ENABLE_WASM_STRIP)
 AC_SUBST(ENABLE_WASM_STRIP_WRITER)
+AC_SUBST(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS)
 AC_SUBST(ENABLE_WASM_STRIP_CALC)
+AC_SUBST(ENABLE_WASM_STRIP_ACCESSIBILITY)
 
 if test "$enable_emscripten_jspi" = yes; then
     ENABLE_EMSCRIPTEN_JSPI=TRUE
