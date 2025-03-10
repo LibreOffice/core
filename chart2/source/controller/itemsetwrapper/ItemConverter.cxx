@@ -28,6 +28,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 #include <utility>
+#include <chartview/ChartSfxItemIds.hxx>
 
 using namespace ::com::sun::star;
 
@@ -156,8 +157,30 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     tPropertyNameWithMemberId aProperty;
     uno::Any aValue;
 
+    // tdf#165491 the Item with WhichID SCHATTR_STAT_KIND_ERROR *has* to
+    // be handled 1st since it sets additional information about the
+    // ErrorBarStyle at uno::Reference< beans::XPropertySet > xErrorBarProp
+    // that the processing of the *other* Items already need access to,
+    // see 'case SCHATTR_STAT_KIND_ERROR' in
+    // StatisticsItemConverter::ApplySpecialItem. This worked before the
+    // change of SfxItemSet to use a std::unordered_set since the order
+    // of Items was fix and - since SCHATTR_STAT_KIND_ERROR had the
+    // lowest WhichID - was handled 1st. Not sure if that was by purpose
+    // and it was known that this was necessary - there are no comments
+    // hinting to that. In general it is bad style to rely on the 'order'
+    // of Items being processed - there is no order defined in general.
+    {
+        const SfxPoolItem* pItem(nullptr);
+        if (SfxItemState::SET == rItemSet.GetItemState(SCHATTR_STAT_KIND_ERROR, false, &pItem))
+            if(!GetItemProperty(pItem->Which(), aProperty))
+                bItemsChanged = ApplySpecialItem(pItem->Which(), rItemSet);
+    }
+
     for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
+        if (SCHATTR_STAT_KIND_ERROR == pItem->Which())
+            continue;
+
         if( aIter.GetItemState( false ) == SfxItemState::SET )
         {
             if( GetItemProperty( pItem->Which(), aProperty ))
