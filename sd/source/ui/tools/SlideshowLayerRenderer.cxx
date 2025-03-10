@@ -165,17 +165,24 @@ bool isGroup(SdrObject* pObject) { return pObject->getChildrenOfSdrObject() != n
 
 /// Sets visible for all kinds of polypolys in the container
 void changePolyPolys(
-    drawinglayer::primitive2d::Primitive2DContainer& rContainer, bool bRenderObject,
+    const drawinglayer::primitive2d::Primitive2DContainer& rContainer, bool bRenderObject,
     std::vector<drawinglayer::primitive2d::Primitive2DReference>& rPrimitivesToUnhide)
 {
     for (auto& pBasePrimitive : rContainer)
     {
-        if (pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D
+        if (pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_GROUPPRIMITIVE2D)
+        {
+            auto& rGroupPrimitive = static_cast<drawinglayer::primitive2d::GroupPrimitive2D&>(*(pBasePrimitive.get()));
+            const drawinglayer::primitive2d::Primitive2DContainer& rChildren = rGroupPrimitive.getChildren();
+            changePolyPolys(rChildren, bRenderObject, rPrimitivesToUnhide);
+        }
+        else if (pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D
             || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D
             || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D
             || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONHATCHPRIMITIVE2D
             || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONHAIRLINEPRIMITIVE2D
-            || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D)
+            || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D
+            || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONRGBAPRIMITIVE2D)
         {
             pBasePrimitive->setVisible(bRenderObject);
             if (!bRenderObject)
