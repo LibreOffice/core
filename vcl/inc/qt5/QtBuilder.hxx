@@ -30,19 +30,8 @@
 class QtBuilder : public WidgetBuilder<QObject, QObject*, QMenu, QMenu*>
 {
 private:
-    QWidget* get_by_name(std::u16string_view sID);
-    struct WinAndId
-    {
-        OUString m_sID;
-        QWidget* m_pWidget;
-        WinAndId(OUString sId, QWidget* pWidget)
-            : m_sID(std::move(sId))
-            , m_pWidget(pWidget)
-        {
-        }
-    };
-
-    std::vector<WinAndId> m_aChildren;
+    QWidget* get_by_name(const OUString& rId);
+    std::unordered_map<OUString, QWidget*> m_aWidgets;
 
     // vector of pairs, each containing:
     // * a widget to remove from the widget hierarchy and delete (first item)
@@ -53,7 +42,7 @@ public:
     QtBuilder(QObject* pParent, std::u16string_view sUIRoot, const OUString& rUIFile);
     virtual ~QtBuilder();
 
-    template <typename T = QObject> T* get(std::u16string_view sID);
+    template <typename T = QObject> T* get(const OUString& rId);
 
     QObject* makeObject(QObject* pParent, std::u16string_view sName, std::string_view sType,
                         const OUString& sID, stringmap& rMap);
@@ -91,7 +80,7 @@ public:
                                   const OUString& rID, stringmap& rProps, stringmap& rAtkProps,
                                   accelmap& rAccels) override;
 
-    virtual void set_response(std::u16string_view sID, int nResponse) override;
+    virtual void set_response(const OUString& rId, int nResponse) override;
 
 private:
     static void deleteObject(QObject* pObject);
@@ -113,9 +102,9 @@ private:
                                            const stringmap& rPackingProperties);
 };
 
-template <typename T> inline T* QtBuilder::get(std::u16string_view sID)
+template <typename T> inline T* QtBuilder::get(const OUString& rId)
 {
-    QObject* w = get_by_name(sID);
+    QObject* w = get_by_name(rId);
     return static_cast<T*>(w);
 }
 

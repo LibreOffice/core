@@ -3618,9 +3618,9 @@ vcl::Window *VclBuilder::get_by_name(std::u16string_view sID)
     return nullptr;
 }
 
-void VclBuilder::set_response(std::u16string_view sID, int nResponse)
+void VclBuilder::set_response(const OUString& rId, int nResponse)
 {
-    PushButton* pPushButton = get<PushButton>(sID);
+    PushButton* pPushButton = get<PushButton>(rId);
     assert(pPushButton);
     Dialog* pDialog = pPushButton->GetParentDialog();
     assert(pDialog);

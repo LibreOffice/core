@@ -65,13 +65,11 @@ QtBuilder::QtBuilder(QObject* pParent, std::u16string_view sUIRoot, const OUStri
 
 QtBuilder::~QtBuilder() {}
 
-QWidget* QtBuilder::get_by_name(std::u16string_view sID)
+QWidget* QtBuilder::get_by_name(const OUString& rID)
 {
-    for (auto const& child : m_aChildren)
-    {
-        if (child.m_sID == sID)
-            return child.m_pWidget;
-    }
+    auto aIt = m_aWidgets.find(rID);
+    if (aIt != m_aWidgets.end())
+        return aIt->second;
 
     return nullptr;
 }
@@ -459,7 +457,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     }
 
     if (pWidget)
-        m_aChildren.emplace_back(sID, pWidget);
+        m_aWidgets[sID] = pWidget;
 
     return pObject;
 }
@@ -714,9 +712,9 @@ void QtBuilder::applyTabChildProperties(QObject* pParent, const std::vector<OUSt
                                          rProperties.at(u"label"_ustr));
 }
 
-void QtBuilder::set_response(std::u16string_view sID, int nResponse)
+void QtBuilder::set_response(const OUString& rId, int nResponse)
 {
-    QPushButton* pPushButton = get<QPushButton>(sID);
+    QPushButton* pPushButton = get<QPushButton>(rId);
     assert(pPushButton);
     pPushButton->setProperty(QtInstanceMessageDialog::PROPERTY_VCL_RESPONSE_CODE, nResponse);
 }
