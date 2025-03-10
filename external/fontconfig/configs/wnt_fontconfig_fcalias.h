@@ -64,6 +64,10 @@ extern __typeof (FcConfigSetRescanInterval) IA__FcConfigSetRescanInterval FC_ATT
 #define FcConfigSetRescanInterval IA__FcConfigSetRescanInterval
 extern __typeof (FcConfigGetFonts) IA__FcConfigGetFonts FC_ATTRIBUTE_VISIBILITY_HIDDEN;
 #define FcConfigGetFonts IA__FcConfigGetFonts
+extern __typeof (FcConfigAcceptFont) IA__FcConfigAcceptFont FC_ATTRIBUTE_VISIBILITY_HIDDEN;
+#define FcConfigAcceptFont IA__FcConfigAcceptFont
+extern __typeof (FcConfigAcceptFilter) IA__FcConfigAcceptFilter FC_ATTRIBUTE_VISIBILITY_HIDDEN;
+#define FcConfigAcceptFilter IA__FcConfigAcceptFilter
 extern __typeof (FcConfigAppFontAddFile) IA__FcConfigAppFontAddFile FC_ATTRIBUTE_VISIBILITY_HIDDEN;
 #define FcConfigAppFontAddFile IA__FcConfigAppFontAddFile
 extern __typeof (FcConfigAppFontAddDir) IA__FcConfigAppFontAddDir FC_ATTRIBUTE_VISIBILITY_HIDDEN;
@@ -78,6 +82,8 @@ extern __typeof (FcConfigGetSysRoot) IA__FcConfigGetSysRoot FC_ATTRIBUTE_VISIBIL
 #define FcConfigGetSysRoot IA__FcConfigGetSysRoot
 extern __typeof (FcConfigSetSysRoot) IA__FcConfigSetSysRoot FC_ATTRIBUTE_VISIBILITY_HIDDEN;
 #define FcConfigSetSysRoot IA__FcConfigSetSysRoot
+extern __typeof (FcConfigSetFontSetFilter) IA__FcConfigSetFontSetFilter FC_ATTRIBUTE_VISIBILITY_HIDDEN;
+#define FcConfigSetFontSetFilter IA__FcConfigSetFontSetFilter
 extern __typeof (FcConfigFileInfoIterInit) IA__FcConfigFileInfoIterInit FC_ATTRIBUTE_VISIBILITY_HIDDEN;
 #define FcConfigFileInfoIterInit IA__FcConfigFileInfoIterInit
 extern __typeof (FcConfigFileInfoIterNext) IA__FcConfigFileInfoIterNext FC_ATTRIBUTE_VISIBILITY_HIDDEN;
