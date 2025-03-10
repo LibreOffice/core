@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <editeng/eeitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/langitem.hxx>
@@ -202,7 +204,9 @@ void AnnotationTextWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
     pDrawingArea->set_cursor(PointerStyle::Text);
 
+#if !ENABLE_WASM_STRIP_ACCESSIBILITY
     InitAccessible();
+#endif
 }
 
 // see SwAnnotationWin in sw for something similar

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_wasm_strip.h>
+
 #include <starmath.hrc>
 #include <helpids.h>
 
@@ -126,7 +128,9 @@ void SmEditTextWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
     pEditEngine->SetStatusEventHdl(LINK(this, SmEditTextWindow, EditStatusHdl));
 
+#if !ENABLE_WASM_STRIP_ACCESSIBILITY
     InitAccessible();
+#endif
 
     //Apply zoom to smeditwindow text
     if(GetEditView())
