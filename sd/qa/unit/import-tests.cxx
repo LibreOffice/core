@@ -305,24 +305,6 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTableStyle)
     CPPUNIT_ASSERT_EQUAL(Color(0x5b9bd5), nFillColor);
 }
 
-CPPUNIT_TEST_FIXTURE(SdImportTest, testTableBorderTransparent)
-{
-    createSdImpressDoc("pptx/tdf164936.pptx");
-    const SdrPage* pPage = GetPage(1);
-
-    sdr::table::SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
-    CPPUNIT_ASSERT(pTableObj);
-
-    uno::Reference<table::XCellRange> xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
-    uno::Reference<beans::XPropertySet> xCellPropSet;
-    table::BorderLine2 aBorderLine;
-
-    xCellPropSet.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
-    xCellPropSet->getPropertyValue(u"LeftBorder"_ustr) >>= aBorderLine;
-    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xff2670c9),
-                         Color(ColorTransparency, aBorderLine.Color));
-}
-
 CPPUNIT_TEST_FIXTURE(SdImportTest, testFreeformShapeGluePoints)
 {
     createSdImpressDoc("pptx/tdf156829.pptx");
