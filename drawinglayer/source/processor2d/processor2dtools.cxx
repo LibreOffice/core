@@ -22,7 +22,7 @@
 #include "vclmetafileprocessor2d.hxx"
 #include <config_vclplug.h>
 
-#if defined(_WIN32)
+#if defined(_WIN32) && !USE_HEADLESS_CODE
 #include <drawinglayer/processor2d/d2dpixelprocessor2d.hxx>
 #include <vcl/sysdata.hxx>
 #elif USE_HEADLESS_CODE
@@ -77,7 +77,7 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
     OutputDevice& rTargetOutDev,
     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
 {
-#if defined(_WIN32)
+#if defined(_WIN32) && !USE_HEADLESS_CODE
     // Windows: make dependent on TEST_SYSTEM_PRIMITIVE_RENDERER
     static bool bUsePrimitiveRenderer(nullptr != std::getenv("TEST_SYSTEM_PRIMITIVE_RENDERER"));
 
