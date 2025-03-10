@@ -436,7 +436,7 @@ QtInstanceBuilder::weld_drawing_area(const OUString& rId, const a11yref&, Factor
 
 std::unique_ptr<weld::Menu> QtInstanceBuilder::weld_menu(const OUString& rId)
 {
-    QMenu* pMenu = m_xBuilder->get<QMenu>(rId);
+    QMenu* pMenu = m_xBuilder->get_menu(rId);
     std::unique_ptr<weld::Menu> xRet(pMenu ? std::make_unique<QtInstanceMenu>(pMenu) : nullptr);
     return xRet;
 }
