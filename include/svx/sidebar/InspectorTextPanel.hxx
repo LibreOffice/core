@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <svx/svxdllapi.h>
 
@@ -41,7 +42,9 @@ struct TreeNode
     {
     }
 };
-class SVX_DLLPUBLIC InspectorTextPanel : public PanelLayout
+class SVX_DLLPUBLIC InspectorTextPanel
+    : public PanelLayout,
+      public sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
     virtual ~InspectorTextPanel() override;
@@ -52,8 +55,23 @@ public:
 
     void updateEntries(const std::vector<TreeNode>& rStore, const sal_Int32 nParIdx);
 
+    virtual void NotifyItemUpdate(const sal_uInt16 nSId, const SfxItemState eState,
+                                  const SfxPoolItem* pState) override;
+    virtual void GetControlState(const sal_uInt16 /*nSId*/,
+                                 boost::property_tree::ptree& /*rState*/) override{};
+
 private:
     std::unique_ptr<weld::TreeView> mpListBoxStyles;
+
+    std::unique_ptr<weld::Toolbar> mpToolbar;
+
+    sal_uInt16 nSlotDFStyles;
+
+    sfx2::sidebar::ControllerItem mParaController;
+    sfx2::sidebar::ControllerItem mCharController;
+    sfx2::sidebar::ControllerItem mDFController;
+
+    DECL_LINK(ToolbarHdl, const OUString&, void);
 };
 
 } // end of namespace svx::sidebar
