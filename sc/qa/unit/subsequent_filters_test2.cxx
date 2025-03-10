@@ -368,6 +368,22 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testColumnStyleAutoFilterXLSX)
     CPPUNIT_ASSERT(!rAttr.HasAutoFilter());
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf154311)
+{
+    createScDoc("xml/tdf154311.xml");
+    ScDocument* pDoc = getScDoc();
+
+    // From Column A to Y
+    for (SCCOL nCol = 0; nCol <= 24; ++nCol)
+    {
+        const ScPatternAttr* pPattern = pDoc->GetPattern(nCol, 10, 0);
+        CPPUNIT_ASSERT(pPattern);
+
+        const ScMergeFlagAttr& rAttr = pPattern->GetItem(ATTR_MERGE_FLAG);
+        CPPUNIT_ASSERT(rAttr.HasAutoFilter());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testSharedFormulaHorizontalXLS)
 {
     createScDoc("xls/shared-formula/horizontal.xls");

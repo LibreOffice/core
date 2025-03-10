@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="http://www.w3.org/TR/REC-html40">
+    <Styles>
+        <Style ss:ID="Default" ss:Name="Normal">
+            <Alignment ss:Vertical="Bottom"/>
+            <Borders/>
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8"/>
+            <Interior/>
+            <NumberFormat/>
+            <Protection/>
+        </Style>
+        <Style ss:ID="sDateTime">
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8"/>
+            <NumberFormat ss:Format="m/d/yy\ h:mm;@"/>
+        </Style>
+        <Style ss:ID="sHeader1">
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="14" ss:Bold="1"/>
+        </Style>
+        <Style ss:ID="sHeader2">
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8" ss:Bold="1"/>
+        </Style>
+        <Style ss:ID="sHeader3">
+            <Alignment ss:Vertical="Center"/>
+            <Borders>
+                <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+                <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+            </Borders>
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8" ss:Color="#FFFFFF" ss:Bold="1"/>
+            <Interior ss:Color="#333399" ss:Pattern="Solid"/>
+            <NumberFormat ss:Format="@"/>
+        </Style>
+        <Style ss:ID="sIndent0">
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8"/>
+        </Style>
+        <Style ss:ID="sIndent1">
+            <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:Indent="1"/>
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8"/>
+        </Style>
+        <Style ss:ID="sIndent2">
+            <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:Indent="2"/>
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8"/>
+        </Style>
+        <Style ss:ID="sIndent3">
+            <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:Indent="3"/>
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8"/>
+        </Style>
+        <Style ss:ID="sIndent4">
+            <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:Indent="4"/>
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8"/>
+        </Style>
+        <Style ss:ID="sIndent5">
+            <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:Indent="5"/>
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8"/>
+        </Style>
+        <Style ss:ID="sIndent6">
+            <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:Indent="6"/>
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8"/>
+        </Style>
+        <Style ss:ID="sIndent7">
+            <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:Indent="7"/>
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8"/>
+        </Style>
+        <Style ss:ID="sIndent8">
+            <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:Indent="8"/>
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8"/>
+        </Style>
+        <Style ss:ID="sIndent9">
+            <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:Indent="9"/>
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8"/>
+        </Style>
+        <Style ss:ID="sIndent10">
+            <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:Indent="10"/>
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8"/>
+        </Style>
+        <Style ss:ID="sIndent11">
+            <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:Indent="11"/>
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8"/>
+        </Style>
+        <Style ss:ID="sIndent12">
+            <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:Indent="12"/>
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8"/>
+        </Style>
+        <Style ss:ID="sIndent13">
+            <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:Indent="13"/>
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8"/>
+        </Style>
+        <Style ss:ID="sIndent14">
+            <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:Indent="14"/>
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8"/>
+        </Style>
+        <Style ss:ID="sIndent15">
+            <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:Indent="15"/>
+            <Font ss:FontName="Tahoma" x:CharSet="204" x:Family="Swiss" ss:Size="8"/>
+        </Style>
+    </Styles>
+    <Worksheet ss:Name="MLO">
+        <Table x:FullColumns="1" x:FullRows="1">
+            <Column ss:Width="18.75"/>
+            <Column ss:Width="72.75"/>
+            <Column ss:Width="311.25"/>
+            <Column ss:Width="60.75" ss:StyleID="sDateTime"/>
+            <Column ss:Width="55.5" ss:StyleID="sDateTime"/>
+            <Column ss:Width="66"/>
+            <Column ss:Width="50"/>
+            <Column ss:Width="63"/>
+            <Column ss:Width="75"/>
+            <Column ss:Width="53.25"/>
+            <Column ss:Width="52.5" ss:StyleID="sDateTime"/>
+            <Column ss:Width="53.25" ss:StyleID="sDateTime"/>
+            <Column ss:Width="63" ss:StyleID="sDateTime"/>
+            <Column ss:Width="48.75"/>
+            <Column ss:Width="52.5"/>
+            <Column ss:Width="36"/>
+            <Column ss:Width="58.5"/>
+            <Column ss:Width="81"/>
+            <Column ss:Width="78"/>
+            <Column ss:Width="63"/>
+            <Column ss:Width="93.75"/>
+            <Column ss:Width="96.75"/>
+            <Column ss:Width="69.75"/>
+            <Column ss:Width="136.5"/>
+            <Column ss:Width="74.25"/>
+            <Column ss:Width="134.25"/>
+            <Row ss:AutoFitHeight="0" ss:Height="24.75">
+                <Cell ss:Index="2" ss:StyleID="sHeader1"><Data ss:Type="String">MyLife Organized Excel Export File</Data></Cell>
+            </Row>
+            <Row ss:Index="3">
+                <Cell ss:Index="3" ss:StyleID="sHeader2"><Data ss:Type="String">File name:</Data></Cell>
+                <Cell><Data ss:Type="String">D:\Donnees\x2002063\Mes documents\MyLifeOrganized\MyLifeOrganizedDemo.ml</Data></Cell>
+            </Row>
+            <Row>
+                <Cell ss:Index="3" ss:StyleID="sHeader2"><Data ss:Type="String">Export time:</Data></Cell>
+                <Cell><Data ss:Type="String">22/10/2007 11:31:17</Data></Cell>
+            </Row>
+            <Row>
+                <Cell ss:Index="3" ss:StyleID="sHeader2"/>
+            </Row>
+            <Row>
+                <Cell ss:Index="3" ss:StyleID="sHeader2"><Data ss:Type="String">Number of tasks:</Data></Cell>
+                <Cell><Data ss:Type="String">73</Data></Cell>
+            </Row>
+            <Row>
+                <Cell ss:Index="3" ss:StyleID="sHeader2"><Data ss:Type="String">Number of completed tasks:</Data></Cell>
+                <Cell><Data ss:Type="String">15</Data></Cell>
+            </Row>
+            <Row>
+                <Cell ss:Index="3" ss:StyleID="sHeader2"><Data ss:Type="String">Number of projects:</Data></Cell>
+                <Cell><Data ss:Type="String">7</Data></Cell>
+            </Row>
+            <Row>
+                <Cell ss:Index="3" ss:StyleID="sHeader2"><Data ss:Type="String">Total time required (min/max)</Data></Cell>
+                <Cell><Data ss:Type="String">513 hours, 25 min / 879 hours, 13 min</Data></Cell>
+            </Row>
+            <Row ss:Index="11" ss:AutoFitHeight="0" ss:Height="10.5" ss:StyleID="sHeader3">
+                <Cell ss:Index="2"><Data ss:Type="String">Is completed</Data></Cell>
+                <Cell><Data ss:Type="String">Task name</Data></Cell>
+                <Cell><Data ss:Type="String">Start time</Data></Cell>
+                <Cell><Data ss:Type="String">Due time</Data></Cell>
+                <Cell><Data ss:Type="String">Recurrence</Data></Cell>
+                <Cell><Data ss:Type="String">Places</Data></Cell>
+                <Cell><Data ss:Type="String">Notes</Data></Cell>
+                <Cell><Data ss:Type="String">Outlined task name</Data></Cell>
+                <Cell><Data ss:Type="String">Full path</Data></Cell>
+                <Cell><Data ss:Type="String">Created</Data></Cell>
+                <Cell><Data ss:Type="String">Modified</Data></Cell>
+                <Cell><Data ss:Type="String">Completed</Data></Cell>
+                <Cell><Data ss:Type="String">Importance</Data></Cell>
+                <Cell><Data ss:Type="String">Urgency</Data></Cell>
+                <Cell><Data ss:Type="String">Goal</Data></Cell>
+                <Cell><Data ss:Type="String">Project (immediate)</Data></Cell>
+                <Cell><Data ss:Type="String">Project (top level)</Data></Cell>
+                <Cell><Data ss:Type="String">Is project</Data></Cell>
+                <Cell><Data ss:Type="String">Project Status </Data></Cell>
+                <Cell><Data ss:Type="String">Project Completion %</Data></Cell>
+                <Cell><Data ss:Type="String">Task Effort</Data></Cell>
+                <Cell><Data ss:Type="String">Min time required</Data></Cell>
+                <Cell><Data ss:Type="String">Max time required</Data></Cell>
+                <Cell><Data ss:Type="String">Hide in To-Do</Data></Cell>
+                <Cell><Data ss:Type="String">Complete subtasks in order</Data></Cell>
+                <Cell><Data ss:Type="String">Has subtasks</Data></Cell>
+                <Cell><Data ss:Type="String">Has uncompleted subtasks</Data></Cell>
+                <Cell><Data ss:Type="String">Priority By Importance</Data></Cell>
+                <Cell><Data ss:Type="String">Priority By Urgency</Data></Cell>
+                <Cell><Data ss:Type="String">Priority By Both</Data></Cell>
+                </Row>
+      <Row>
+        <Cell ss:Index="2"/>
+        <Cell>
+          <Data ss:Type="String">Business and Career</Data>
+        </Cell>
+        <Cell/>
+        <Cell/>
+        <Cell/>
+        <Cell>
+          <Data ss:Type="String">@Office</Data>
+        </Cell>
+        <Cell/>
+        <Cell ss:StyleID="sIndent0">
+          <Data ss:Type="String">Business and Career</Data>
+        </Cell>
+        <Cell>
+          <Data ss:Type="String">\</Data>
+        </Cell>
+        <Cell>
+          <Data ss:Type="DateTime">2007-10-22T11:27:38</Data>
+        </Cell>
+        <Cell>
+          <Data ss:Type="DateTime">2007-10-22T11:27:38</Data>
+        </Cell>
+        <Cell/>
+        <Cell>
+          <Data ss:Type="Number">75</Data>
+        </Cell>
+        <Cell>
+          <Data ss:Type="Number">100</Data>
+        </Cell>
+        <Cell/>
+        <Cell/>
+        <Cell/>
+        <Cell/>
+        <Cell/>
+        <Cell/>
+        <Cell>
+          <Data ss:Type="Number">50</Data>
+        </Cell>
+        <Cell/>
+        <Cell/>
+        <Cell/>
+        <Cell/>
+        <Cell>
+          <Data ss:Type="String">+</Data>
+        </Cell>
+        <Cell>
+          <Data ss:Type="String">+</Data>
+        </Cell>
+        <Cell>
+          <Data ss:Type="Number">0</Data>
+        </Cell>
+        <Cell>
+          <Data ss:Type="Number">0</Data>
+        </Cell>
+        <Cell>
+          <Data ss:Type="Number">0</Data>
+        </Cell>
+      </Row>
+    </Table>
+        <AutoFilter x:Range="R11C1:R12C25" xmlns="urn:schemas-microsoft-com:office:excel">
+        </AutoFilter>
+    </Worksheet>
+</Workbook>
