@@ -34,6 +34,8 @@
 #include <rtl/crc.h>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/safeint.hxx>
+#include <o3tl/strong_int.hxx>
 
 #include <algorithm>
 #include <iterator>
