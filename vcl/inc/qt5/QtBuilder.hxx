@@ -105,6 +105,7 @@ private:
 template <typename T> inline T* QtBuilder::get(const OUString& rId)
 {
     QWidget* pWidget = get_by_name(rId);
+    assert(!pWidget || qobject_cast<T*>(pWidget));
     return static_cast<T*>(pWidget);
 }
 
