@@ -701,6 +701,16 @@
         </info>
         <value>15</value>
       </prop>
+      <group oor:name="macOS">
+        <prop oor:name="IgnoreKeysWhenScrollingWithTrackpadOrMagicMouse" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+             <desc>Specifies if the Command, Option, Control, and Shift keys
+             should be ignored or not when scrolling on a trackpad or a
+             Magic Mouse.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+      </group>
     </group>
     <group oor:name="Passwords">
       <info>
