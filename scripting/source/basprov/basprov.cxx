@@ -265,7 +265,7 @@ namespace basprov
 
         SolarMutexGuard aGuard;
 
-        Reference< provider::XScript > xScript;
+        rtl::Reference< BasicScriptImpl > xScript;
         Reference< uri::XUriReferenceFactory > xFac ( uri::UriReferenceFactory::create( m_xContext )  );
 
         Reference<  uri::XUriReference > uriRef = xFac->parse( scriptURI );

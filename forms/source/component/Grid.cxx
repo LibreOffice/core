@@ -311,9 +311,9 @@ Reference<XPropertySet> SAL_CALL OGridControlModel::createColumn(const OUString&
     const Sequence< OUString >& rColumnTypes = frm::getColumnTypes();
     return createColumnById( ::detail::findPos( ColumnType, rColumnTypes ) );
 }
-Reference<XPropertySet>  OGridControlModel::createColumnById(sal_Int32 nTypeId) const
+rtl::Reference<OGridColumn>  OGridControlModel::createColumnById(sal_Int32 nTypeId) const
 {
-    Reference<XPropertySet>  xReturn;
+    rtl::Reference<OGridColumn>  xReturn;
     switch (nTypeId)
     {
         case TYPE_CHECKBOX:         xReturn = new CheckBoxColumn( getContext() ); break;
@@ -863,7 +863,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
             // reading the model names
             OUString sModelName;
             _rxInStream >> sModelName;
-            Reference<XPropertySet>  xCol(createColumnById(getColumnTypeByModelName(sModelName)));
+            rtl::Reference<OGridColumn> xCol(createColumnById(getColumnTypeByModelName(sModelName)));
             DBG_ASSERT(xCol.is(), "OGridControlModel::read : unknown column type !");
             sal_Int32 nObjLen = _rxInStream->readLong();
             if (nObjLen)
@@ -871,8 +871,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
                 sal_Int32 nMark = xMark->createMark();
                 if (xCol.is())
                 {
-                    OGridColumn* pCol = comphelper::getFromUnoTunnel<OGridColumn>(xCol);
-                    pCol->read(_rxInStream);
+                    xCol->read(_rxInStream);
                 }
                 xMark->jumpToMark(nMark);
                 _rxInStream->skipBytes(nObjLen);

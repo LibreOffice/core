@@ -32,6 +32,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <unotools/weakref.hxx>
 #include <map>
 #include <utility>
 
@@ -97,7 +98,7 @@ namespace logging
     private:
         ::osl::Mutex                    m_aMutex;
         Reference<XComponentContext>    m_xContext;
-        std::map< OUString, WeakReference<XLogger> > m_aLoggerMap;
+        std::map< OUString, unotools::WeakReference<EventLogger> > m_aLoggerMap;
 
     public:
         explicit LoggerPool( const Reference< XComponentContext >& _rxContext );
@@ -236,13 +237,13 @@ namespace logging
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WeakReference< XLogger >& rLogger( m_aLoggerMap[ _rName ] );
-        Reference< XLogger > xLogger( rLogger );
+        unotools::WeakReference< EventLogger >& rLogger( m_aLoggerMap[ _rName ] );
+        rtl::Reference< EventLogger > xLogger( rLogger );
         if ( !xLogger.is() )
         {
             // never requested before, or already dead
             xLogger = new EventLogger( m_xContext, _rName );
-            rLogger = xLogger;
+            rLogger = xLogger.get();
         }
 
         return xLogger;

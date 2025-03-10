@@ -661,7 +661,7 @@ static bool UCBOpenContentSync(
          !aScheme.equalsIgnoreAsciiCase( "https" ) )
         xLockBytes->SetStreamValid();
 
-    Reference< XPropertiesChangeListener > xListener;
+    rtl::Reference< UcbPropertiesChangeListener_Impl > xListener;
     Reference< XPropertiesChangeNotifier > xProps(xContent,UNO_QUERY);
     if(xProps.is()) {
         xListener =

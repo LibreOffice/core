@@ -23,6 +23,7 @@
 
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
+#include <rtl/ref.hxx>
 
 //  namespaces
 
@@ -98,7 +99,7 @@ Sequence< Type > SAL_CALL OConnectionPointContainerHelper::getConnectionPointTyp
 Reference< XConnectionPoint > SAL_CALL OConnectionPointContainerHelper::queryConnectionPoint( const Type& aType )
 {
     // Set default return value, if method failed.
-    Reference< XConnectionPoint > xConnectionPoint;
+    rtl::Reference< OConnectionPointHelper > xConnectionPoint;
 
     // Get all elements of the container, which have the searched type.
     comphelper::OInterfaceContainerHelper2* pSpecialContainer = m_aMultiTypeContainer.getContainer( aType );

@@ -738,7 +738,7 @@ void OWriteStream_Impl::Commit()
         if ( m_pAntiImpl )
             m_pAntiImpl->DeInit();
 
-        uno::Reference< io::XInputStream > xInStream;
+        rtl::Reference< OSelfTerminateFileStream > xInStream;
         try
         {
             xInStream = new OSelfTerminateFileStream(m_xContext, std::move(*m_oTempFile));

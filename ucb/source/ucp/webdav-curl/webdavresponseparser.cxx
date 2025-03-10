@@ -954,8 +954,7 @@ namespace
                 // create parser; connect parser and filter
                 rtl::Reference<WebDAVResponseParser> const pWebDAVResponseParser(
                         new WebDAVResponseParser(eWebDAVResponseParserMode));
-                uno::Reference< xml::sax::XDocumentHandler > xWebDAVHdl(pWebDAVResponseParser);
-                xParser->setDocumentHandler(xWebDAVHdl);
+                xParser->setDocumentHandler(pWebDAVResponseParser);
 
                 // finally, parse the stream
                 xParser->parseStream(myInputSource);

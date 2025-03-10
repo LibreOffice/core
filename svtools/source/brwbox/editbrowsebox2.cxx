@@ -40,17 +40,15 @@ namespace svt
 Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(sal_Int32 _nRow, sal_uInt16 _nColumnPos,const TriState& eState)
 {
     Reference< XAccessible > xAccessible( GetAccessible() );
-    Reference< XAccessibleContext > xAccContext;
-    if ( xAccessible.is() )
-        xAccContext = xAccessible->getAccessibleContext();
+    if ( !xAccessible.is() )
+        return nullptr;
 
-    Reference< XAccessible > xReturn;
-    if ( xAccContext.is() )
-    {
-        xReturn = new AccessibleCheckBoxCell(xAccContext->getAccessibleChild(::vcl::BBINDEX_TABLE),
-                                             *this, _nRow, _nColumnPos, eState, true);
-    }
-    return xReturn;
+    Reference< XAccessibleContext > xAccContext = xAccessible->getAccessibleContext();
+    if ( !xAccContext.is() )
+        return nullptr;
+
+    return new AccessibleCheckBoxCell(xAccContext->getAccessibleChild(::vcl::BBINDEX_TABLE),
+                                         *this, _nRow, _nColumnPos, eState, true);
 }
 
 sal_Int32 EditBrowseBox::GetAccessibleControlCount() const

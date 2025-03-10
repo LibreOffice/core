@@ -733,7 +733,6 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
     if (!bUseBufferedStream)
         return xSrcStream;
 
-    uno::Reference<io::XInputStream> xBufStream;
 #ifndef EMSCRIPTEN
     static const sal_Int32 nThreadingThreshold = 10000;
 
@@ -748,13 +747,11 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
             || !rData.is()
             || rData->m_nEncAlg != xml::crypto::CipherID::AES_GCM_W3C))
     {
-        xBufStream = new XBufferedThreadedStream(xSrcStream, xSrcStream->getSize());
+        return new XBufferedThreadedStream(xSrcStream, xSrcStream->getSize());
     }
-    else
 #endif
-        xBufStream = new XBufferedStream(xSrcStream);
 
-    return xBufStream;
+    return new XBufferedStream(xSrcStream);
 }
 
 uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(

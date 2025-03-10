@@ -836,7 +836,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nR
 {
     OSL_ENSURE(m_xAccessible.is(), "Invalid call: Accessible is null");
 
-    Reference< XAccessible > xChild;
+    rtl::Reference< AccessibleBrowseBoxCell > xChild;
 
     TriState eState = TRISTATE_INDET;
     bool bIsCheckBox = IsCellCheckBox( _nRow, _nColumnPos, eState );

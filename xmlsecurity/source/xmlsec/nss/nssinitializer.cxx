@@ -570,15 +570,14 @@ css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL ONSSInitializer
     if ( aParams.hasElements() )
         throw css::lang::IllegalArgumentException(u"Unexpected arguments provided for digest creation."_ustr, css::uno::Reference< css::uno::XInterface >(), 2 );
 
-    css::uno::Reference< css::xml::crypto::XDigestContext > xResult;
-    if( initNSS( m_xContext ) )
-    {
-        PK11Context* pContext = PK11_CreateDigestContext( nNSSDigestID );
-        if ( pContext && PK11_DigestBegin( pContext ) == SECSuccess )
-            xResult = new ODigestContext( pContext, nDigestLength, b1KData );
-    }
+    if( !initNSS( m_xContext ) )
+        return nullptr;
 
-    return xResult;
+    PK11Context* pContext = PK11_CreateDigestContext( nNSSDigestID );
+    if ( !pContext || PK11_DigestBegin( pContext ) != SECSuccess )
+        return nullptr;
+
+    return new ODigestContext( pContext, nDigestLength, b1KData );
 }
 
 css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL ONSSInitializer::getCipherContext( ::sal_Int32 nCipherID, const css::uno::Sequence< ::sal_Int8 >& aKey, const css::uno::Sequence< ::sal_Int8 >& aInitializationVector, sal_Bool bEncryption, const css::uno::Sequence< css::beans::NamedValue >& aParams )

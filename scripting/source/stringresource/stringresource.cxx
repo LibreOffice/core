@@ -1252,7 +1252,7 @@ class BinaryInput
 public:
     BinaryInput( const Sequence< ::sal_Int8 >& aData );
 
-    Reference< io::XInputStream > getInputStreamForSection( sal_Int32 nSize );
+    rtl::Reference< utl::TempFileFastService > getInputStreamForSection( sal_Int32 nSize );
 
     void seek( sal_Int32 nPos );
     sal_Int32 getPosition() const
@@ -1274,21 +1274,20 @@ BinaryInput::BinaryInput( const Sequence< ::sal_Int8 >& aData )
     m_nSize = m_aData.getLength();
 }
 
-Reference< io::XInputStream > BinaryInput::getInputStreamForSection( sal_Int32 nSize )
+rtl::Reference< utl::TempFileFastService > BinaryInput::getInputStreamForSection( sal_Int32 nSize )
 {
-    Reference< io::XInputStream > xIn;
+    rtl::Reference< utl::TempFileFastService > xTempOut;
     if( m_nCurPos + nSize <= m_nSize )
     {
-        rtl::Reference< utl::TempFileFastService > xTempOut = new utl::TempFileFastService;
+        xTempOut = new utl::TempFileFastService;
         Sequence< sal_Int8 > aSection( m_pData + m_nCurPos, nSize );
         xTempOut->writeBytes( aSection );
         xTempOut->seek( 0 );
-        xIn = xTempOut;
     }
     else
         OSL_FAIL( "BinaryInput::getInputStreamForSection(): Read past end" );
 
-    return xIn;
+    return xTempOut;
 }
 
 void BinaryInput::seek( sal_Int32 nPos )
@@ -1403,7 +1402,7 @@ void StringResourcePersistenceImpl::importBinary( const Sequence< ::sal_Int8 >& 
 
         sal_Int32 nAfterStringPos = aIn.getPosition();
         sal_Int32 nSize = pPositions[i+1] - nAfterStringPos;
-        Reference< io::XInputStream > xInput = aIn.getInputStreamForSection( nSize );
+        rtl::Reference< utl::TempFileFastService > xInput = aIn.getInputStreamForSection( nSize );
         if( xInput.is() )
         {
             LocaleItem* pLocaleItem = new LocaleItem( std::move(aLocale) );

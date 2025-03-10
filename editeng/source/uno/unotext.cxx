@@ -300,53 +300,47 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getStart()
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference< text::XTextRange > xRange;
-
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
-    if( pForwarder )
-    {
-        CheckSelection( maSelection, pForwarder );
+    if( !pForwarder )
+        return nullptr;
 
-        SvxUnoTextBase* pText = comphelper::getFromUnoTunnel<SvxUnoTextBase>( getText() );
+    CheckSelection( maSelection, pForwarder );
 
-        if(pText == nullptr)
-            throw uno::RuntimeException(u"Failed to retrieve a valid text base object from the Uno Tunnel"_ustr);
+    SvxUnoTextBase* pText = comphelper::getFromUnoTunnel<SvxUnoTextBase>( getText() );
 
-        rtl::Reference<SvxUnoTextRange> pRange = new SvxUnoTextRange( *pText );
-        xRange = pRange;
+    if(pText == nullptr)
+        throw uno::RuntimeException(u"Failed to retrieve a valid text base object from the Uno Tunnel"_ustr);
 
-        ESelection aNewSel = maSelection;
-        aNewSel.CollapseToStart();
-        pRange->SetSelection( aNewSel );
-    }
+    rtl::Reference<SvxUnoTextRange> pRange = new SvxUnoTextRange( *pText );
 
-    return xRange;
+    ESelection aNewSel = maSelection;
+    aNewSel.CollapseToStart();
+    pRange->SetSelection( aNewSel );
+
+    return pRange;
 }
 
 uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getEnd()
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference< text::XTextRange > xRet;
-
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
-    if( pForwarder )
-    {
-        CheckSelection( maSelection, pForwarder );
+    if( !pForwarder )
+        return nullptr;
 
-        SvxUnoTextBase* pText = comphelper::getFromUnoTunnel<SvxUnoTextBase>( getText() );
+    CheckSelection( maSelection, pForwarder );
 
-        if(pText == nullptr)
-            throw uno::RuntimeException(u"Failed to retrieve a valid text base object from the Uno Tunnel"_ustr);
+    SvxUnoTextBase* pText = comphelper::getFromUnoTunnel<SvxUnoTextBase>( getText() );
 
-        rtl::Reference<SvxUnoTextRange> pNew = new SvxUnoTextRange( *pText );
-        xRet = pNew;
+    if(pText == nullptr)
+        throw uno::RuntimeException(u"Failed to retrieve a valid text base object from the Uno Tunnel"_ustr);
 
-        ESelection aNewSel = maSelection;
-        aNewSel.CollapseToEnd();
-        pNew->SetSelection( aNewSel );
-    }
-    return xRet;
+    rtl::Reference<SvxUnoTextRange> pNew = new SvxUnoTextRange( *pText );
+
+    ESelection aNewSel = maSelection;
+    aNewSel.CollapseToEnd();
+    pNew->SetSelection( aNewSel );
+    return pNew;
 }
 
 OUString SAL_CALL SvxUnoTextRangeBase::getString()
@@ -2071,28 +2065,26 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::finishParagraph(
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference< text::XTextRange > xRet;
     SvxEditSource *pEditSource = GetEditSource();
     SvxTextForwarder *pTextForwarder = pEditSource ? pEditSource->GetTextForwarder() : nullptr;
-    if (pTextForwarder)
-    {
-        sal_Int32 nParaCount = pTextForwarder->GetParagraphCount();
-        DBG_ASSERT( nParaCount > 0, "paragraph count is 0 or negative" );
-        pTextForwarder->AppendParagraph();
+    if (!pTextForwarder)
+        return nullptr;
 
-        // set properties for the previously last paragraph
-        sal_Int32 nPara = nParaCount - 1;
-        ESelection aSel(nPara, 0);
-        SfxItemSet aItemSet( *pTextForwarder->GetEmptyItemSetPtr() );
-        SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps,
-                ImplGetSvxUnoOutlinerTextCursorSfxPropertySet(), pTextForwarder, nPara );
-        pTextForwarder->QuickSetAttribs( aItemSet, aSel );
-        pEditSource->UpdateData();
-        rtl::Reference<SvxUnoTextRange> pRange = new SvxUnoTextRange( *this );
-        xRet = pRange;
-        pRange->SetSelection( aSel );
-    }
-    return xRet;
+    sal_Int32 nParaCount = pTextForwarder->GetParagraphCount();
+    DBG_ASSERT( nParaCount > 0, "paragraph count is 0 or negative" );
+    pTextForwarder->AppendParagraph();
+
+    // set properties for the previously last paragraph
+    sal_Int32 nPara = nParaCount - 1;
+    ESelection aSel(nPara, 0);
+    SfxItemSet aItemSet( *pTextForwarder->GetEmptyItemSetPtr() );
+    SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps,
+            ImplGetSvxUnoOutlinerTextCursorSfxPropertySet(), pTextForwarder, nPara );
+    pTextForwarder->QuickSetAttribs( aItemSet, aSel );
+    pEditSource->UpdateData();
+    rtl::Reference<SvxUnoTextRange> pRange = new SvxUnoTextRange( *this );
+    pRange->SetSelection( aSel );
+    return pRange;
 }
 
 uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::insertTextPortion(
@@ -2102,38 +2094,35 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::insertTextPortion(
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference< text::XTextRange > xRet;
-
     if (!rTextRange.is())
-        return xRet;
+        return nullptr;
 
     SvxUnoTextRangeBase* pRange = comphelper::getFromUnoTunnel<SvxUnoTextRange>(rTextRange);
     if (!pRange)
-        return xRet;
+        return nullptr;
 
     SvxEditSource *pEditSource = GetEditSource();
     SvxTextForwarder *pTextForwarder = pEditSource ? pEditSource->GetTextForwarder() : nullptr;
 
-    if (pTextForwarder)
-    {
-        pRange->setString(rText);
+    if (!pTextForwarder)
+        return nullptr;
 
-        ESelection aSelection(pRange->GetSelection());
+    pRange->setString(rText);
 
-        pTextForwarder->RemoveAttribs(aSelection);
-        pEditSource->UpdateData();
+    ESelection aSelection(pRange->GetSelection());
 
-        SfxItemSet aItemSet( *pTextForwarder->GetEmptyItemSetPtr() );
-        SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps,
-                ImplGetSvxTextPortionSfxPropertySet(), pTextForwarder, aSelection.start.nPara );
-        pTextForwarder->QuickSetAttribs( aItemSet, aSelection);
-        rtl::Reference<SvxUnoTextRange> pNewRange = new SvxUnoTextRange( *this );
-        xRet = pNewRange;
-        pNewRange->SetSelection(aSelection);
-        for( const beans::PropertyValue& rProp : rCharAndParaProps )
-            pNewRange->setPropertyValue( rProp.Name, rProp.Value );
-    }
-    return xRet;
+    pTextForwarder->RemoveAttribs(aSelection);
+    pEditSource->UpdateData();
+
+    SfxItemSet aItemSet( *pTextForwarder->GetEmptyItemSetPtr() );
+    SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps,
+            ImplGetSvxTextPortionSfxPropertySet(), pTextForwarder, aSelection.start.nPara );
+    pTextForwarder->QuickSetAttribs( aItemSet, aSelection);
+    rtl::Reference<SvxUnoTextRange> pNewRange = new SvxUnoTextRange( *this );
+    pNewRange->SetSelection(aSelection);
+    for( const beans::PropertyValue& rProp : rCharAndParaProps )
+        pNewRange->setPropertyValue( rProp.Name, rProp.Value );
+    return pNewRange;
 }
 
 // css::text::XTextPortionAppend (new import API)
@@ -2145,33 +2134,31 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendTextPortion(
 
     SvxEditSource *pEditSource = GetEditSource();
     SvxTextForwarder *pTextForwarder = pEditSource ? pEditSource->GetTextForwarder() : nullptr;
-    uno::Reference< text::XTextRange > xRet;
-    if (pTextForwarder)
-    {
-        sal_Int32 nParaCount = pTextForwarder->GetParagraphCount();
-        DBG_ASSERT( nParaCount > 0, "paragraph count is 0 or negative" );
-        sal_Int32 nPara = nParaCount - 1;
-        SfxItemSet aSet( pTextForwarder->GetParaAttribs( nPara ) );
-        sal_Int32 nStart = pTextForwarder->AppendTextPortion( nPara, rText, aSet );
-        pEditSource->UpdateData();
-        sal_Int32 nEnd   = pTextForwarder->GetTextLen( nPara );
+    if (!pTextForwarder)
+        return nullptr;
 
-        // set properties for the new text portion
-        ESelection aSel( nPara, nStart, nPara, nEnd );
-        pTextForwarder->RemoveAttribs( aSel );
-        pEditSource->UpdateData();
+    sal_Int32 nParaCount = pTextForwarder->GetParagraphCount();
+    DBG_ASSERT( nParaCount > 0, "paragraph count is 0 or negative" );
+    sal_Int32 nPara = nParaCount - 1;
+    SfxItemSet aSet( pTextForwarder->GetParaAttribs( nPara ) );
+    sal_Int32 nStart = pTextForwarder->AppendTextPortion( nPara, rText, aSet );
+    pEditSource->UpdateData();
+    sal_Int32 nEnd   = pTextForwarder->GetTextLen( nPara );
 
-        SfxItemSet aItemSet( *pTextForwarder->GetEmptyItemSetPtr() );
-        SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps,
-                ImplGetSvxTextPortionSfxPropertySet(), pTextForwarder, nPara );
-        pTextForwarder->QuickSetAttribs( aItemSet, aSel );
-        rtl::Reference<SvxUnoTextRange> pRange = new SvxUnoTextRange( *this );
-        xRet = pRange;
-        pRange->SetSelection( aSel );
-        for( const beans::PropertyValue& rProp : rCharAndParaProps )
-            pRange->setPropertyValue( rProp.Name, rProp.Value );
-    }
-    return xRet;
+    // set properties for the new text portion
+    ESelection aSel( nPara, nStart, nPara, nEnd );
+    pTextForwarder->RemoveAttribs( aSel );
+    pEditSource->UpdateData();
+
+    SfxItemSet aItemSet( *pTextForwarder->GetEmptyItemSetPtr() );
+    SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps,
+            ImplGetSvxTextPortionSfxPropertySet(), pTextForwarder, nPara );
+    pTextForwarder->QuickSetAttribs( aItemSet, aSel );
+    rtl::Reference<SvxUnoTextRange> pRange = new SvxUnoTextRange( *this );
+    pRange->SetSelection( aSel );
+    for( const beans::PropertyValue& rProp : rCharAndParaProps )
+        pRange->setPropertyValue( rProp.Name, rProp.Value );
+    return pRange;
 }
 
 void SvxUnoTextBase::copyText(

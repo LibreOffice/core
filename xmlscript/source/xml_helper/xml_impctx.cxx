@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sal/log.hxx>
+#include <rtl/ref.hxx>
 
 #include <memory>
 #include <mutex>
@@ -418,7 +419,7 @@ void DocumentHandlerImpl::startElement(
     Reference< xml::sax::XAttributeList > const & xAttribs )
 {
     Reference< xml::input::XElement > xCurrentElement;
-    Reference< xml::input::XAttributes > xAttributes;
+    rtl::Reference< ExtendedAttributes > xAttributes;
     sal_Int32 nUid;
     OUString aLocalName;
     ElementEntry elementEntry;

@@ -69,12 +69,10 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewItemAcc::getA
 uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewItemAcc::getAccessibleParent()
 {
     const SolarMutexGuard aSolarGuard;
-    uno::Reference< accessibility::XAccessible >    xRet;
 
-    if (mpThumbnailViewItem)
-        xRet = mpThumbnailViewItem->mrParent.getAccessible();
-
-    return xRet;
+    if (!mpThumbnailViewItem)
+        return nullptr;
+    return mpThumbnailViewItem->mrParent.getAccessible();
 }
 
 sal_Int64 SAL_CALL ThumbnailViewItemAcc::getAccessibleIndexInParent()

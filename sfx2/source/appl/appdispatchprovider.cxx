@@ -109,11 +109,10 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
     SolarMutexGuard guard;
 
     bool                bMasterCommand( false );
-    Reference < XDispatch > xDisp;
     const SfxSlot* pSlot = nullptr;
     SfxApplication* pApp = SfxGetpApp();
     if ( !pApp )
-        return xDisp;
+        return nullptr;
     SfxDispatcher* pAppDisp = pApp->GetAppDispatcher_Impl();
     if ( aURL.Protocol == "slot:" || aURL.Protocol == "commandId:" )
     {
@@ -131,15 +130,14 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
             pSlot = pAppDisp->GetSlot( aURL.Main );
     }
 
-    if ( pSlot )
-    {
-        rtl::Reference<SfxOfficeDispatch> pDispatch = new SfxOfficeDispatch( pAppDisp, pSlot, aURL ) ;
-        pDispatch->SetFrame(m_xFrame);
-        pDispatch->SetMasterUnoCommand( bMasterCommand );
-        xDisp = pDispatch;
-    }
+    if ( !pSlot )
+        return nullptr;
 
-    return xDisp;
+    rtl::Reference<SfxOfficeDispatch> pDispatch = new SfxOfficeDispatch( pAppDisp, pSlot, aURL ) ;
+    pDispatch->SetFrame(m_xFrame);
+    pDispatch->SetMasterUnoCommand( bMasterCommand );
+
+    return pDispatch;
 }
 
 Sequence< Reference < XDispatch > > SAL_CALL SfxAppDispatchProvider::queryDispatches( const Sequence < DispatchDescriptor >& seqDescriptor )

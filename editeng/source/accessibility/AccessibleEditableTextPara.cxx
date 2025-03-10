@@ -2510,7 +2510,7 @@ namespace accessibility
 
     css::uno::Reference< css::accessibility::XAccessibleHyperlink > SAL_CALL AccessibleEditableTextPara::getHyperLink( ::sal_Int32 nLinkIndex )
     {
-        css::uno::Reference< css::accessibility::XAccessibleHyperlink > xRef;
+        rtl::Reference< AccessibleHyperlink > xRef;
 
         SvxAccessibleTextAdapter& rT = GetTextForwarder();
         const sal_Int32 nPara = GetParagraphIndex();

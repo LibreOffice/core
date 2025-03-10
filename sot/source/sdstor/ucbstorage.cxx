@@ -654,7 +654,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const OUString& rName, StreamMode 
     try
     {
         // create the content
-        Reference< css::ucb::XCommandEnvironment > xComEnv;
+        rtl::Reference< ::ucbhelper::CommandEnvironment > xComEnv;
 
         OUString aTemp( rName );
 
@@ -1656,7 +1656,7 @@ void UCBStorage_Impl::CreateContent()
     try
     {
         // create content; where to put StreamMode ?! ( already done when opening the file of the package ? )
-        Reference< css::ucb::XCommandEnvironment > xComEnv;
+        rtl::Reference< ::ucbhelper::CommandEnvironment > xComEnv;
 
         OUString aTemp( m_aURL );
 
@@ -1728,7 +1728,7 @@ void UCBStorage_Impl::ReadContent()
                     // streams can be external OLE objects, so they are now folders, but storages!
                     OUString aName( m_aURL + "/" + xRow->getString(1));
 
-                    Reference< css::ucb::XCommandEnvironment > xComEnv;
+                    rtl::Reference< ::ucbhelper::CommandEnvironment > xComEnv;
                     if ( m_bRepairPackage )
                     {
                         xComEnv = new ::ucbhelper::CommandEnvironment( Reference< css::task::XInteractionHandler >(),

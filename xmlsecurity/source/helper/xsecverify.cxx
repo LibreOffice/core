@@ -58,20 +58,15 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
         return nullptr;
     }
 
-    sal_Int32 nIdOfSignatureElementCollector;
-    css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > xReferenceResolvedListener;
-
-    nIdOfSignatureElementCollector =
+    sal_Int32 nIdOfSignatureElementCollector =
         m_xSAXEventKeeper->addSecurityElementCollector( css::xml::crypto::sax::ElementMarkPriority_BEFOREMODIFY, false);
 
     m_xSAXEventKeeper->setSecurityId(nIdOfSignatureElementCollector, nSecurityId);
 
-        /*
-         * create a SignatureVerifier
-         */
-    xReferenceResolvedListener = new SignatureVerifierImpl;
-
-    css::uno::Reference<css::lang::XInitialization> xInitialization(xReferenceResolvedListener, css::uno::UNO_QUERY);
+    /*
+     * create a SignatureVerifier
+     */
+    rtl::Reference< SignatureVerifierImpl > xReferenceResolvedListener = new SignatureVerifierImpl;
 
     css::uno::Sequence<css::uno::Any> args
     {
@@ -81,19 +76,15 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
         Any(m_xSecurityContext),
         Any(m_xXMLSignature)
     };
-    xInitialization->initialize(args);
+    xReferenceResolvedListener->initialize(args);
 
-    css::uno::Reference< css::xml::crypto::sax::XSignatureVerifyResultBroadcaster >
-        signatureVerifyResultBroadcaster(xReferenceResolvedListener, css::uno::UNO_QUERY);
-
-    signatureVerifyResultBroadcaster->addSignatureVerifyResultListener( this );
+    xReferenceResolvedListener->addSignatureVerifyResultListener( this );
 
     m_xSAXEventKeeper->addReferenceResolvedListener(
         nIdOfSignatureElementCollector,
         xReferenceResolvedListener);
 
-    css::uno::Reference<css::xml::crypto::sax::XKeyCollector> keyCollector (xReferenceResolvedListener, css::uno::UNO_QUERY);
-    keyCollector->setKeyId(0);
+    xReferenceResolvedListener->setKeyId(0);
 
     return xReferenceResolvedListener;
 }

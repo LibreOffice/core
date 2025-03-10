@@ -670,9 +670,7 @@ public:
 uno::Reference<XFastContextHandler> SAL_CALL
 SmMLImportContext::createFastChildContext(sal_Int32, const uno::Reference<XFastAttributeList>&)
 {
-    uno::Reference<xml::sax::XFastContextHandler> xContext;
-    xContext = new SmMLImportContext(static_cast<SmMLImport&>(GetImport()), &m_pElement);
-    return xContext;
+    return new SmMLImportContext(static_cast<SmMLImport&>(GetImport()), &m_pElement);
 }
 
 void SmMLImportContext::declareMlError()

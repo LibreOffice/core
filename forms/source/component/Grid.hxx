@@ -176,7 +176,7 @@ private:
             ElementDescription* _pElement
         ) override;
 
-    css::uno::Reference< css::beans::XPropertySet>  createColumnById(sal_Int32 nTypeId) const;
+    rtl::Reference<OGridColumn> createColumnById(sal_Int32 nTypeId) const;
 
     virtual ElementDescription* createElementMetaData( ) override;
 

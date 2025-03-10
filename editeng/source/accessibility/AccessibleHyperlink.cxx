@@ -78,22 +78,19 @@ namespace accessibility
 
     uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL AccessibleHyperlink::getAccessibleActionKeyBinding( sal_Int32 nIndex )
     {
-        uno::Reference< css::accessibility::XAccessibleKeyBinding > xKeyBinding;
+        if( !isValid() || ( nIndex != 0 ) )
+            return nullptr;
 
-        if( isValid() && ( nIndex == 0 ) )
-        {
-            rtl::Reference<::comphelper::OAccessibleKeyBindingHelper> pKeyBindingHelper = new ::comphelper::OAccessibleKeyBindingHelper();
-            xKeyBinding = pKeyBindingHelper;
+        rtl::Reference<::comphelper::OAccessibleKeyBindingHelper> pKeyBindingHelper = new ::comphelper::OAccessibleKeyBindingHelper();
 
-            awt::KeyStroke aKeyStroke;
-            aKeyStroke.Modifiers = 0;
-            aKeyStroke.KeyCode = KEY_RETURN;
-            aKeyStroke.KeyChar = 0;
-            aKeyStroke.KeyFunc = 0;
-            pKeyBindingHelper->AddKeyBinding( aKeyStroke );
-        }
+        awt::KeyStroke aKeyStroke;
+        aKeyStroke.Modifiers = 0;
+        aKeyStroke.KeyCode = KEY_RETURN;
+        aKeyStroke.KeyChar = 0;
+        aKeyStroke.KeyFunc = 0;
+        pKeyBindingHelper->AddKeyBinding( aKeyStroke );
 
-        return xKeyBinding;
+        return pKeyBindingHelper;
     }
 
     // XAccessibleHyperlink

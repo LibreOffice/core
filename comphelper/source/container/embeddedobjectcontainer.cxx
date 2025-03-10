@@ -47,6 +47,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <sal/log.hxx>
+#include <rtl/ref.hxx>
 
 #include <officecfg/Office/Common.hxx>
 
@@ -1433,23 +1434,23 @@ uno::Reference< io::XInputStream > EmbeddedObjectContainer::GetGraphicReplacemen
                                                                 const uno::Reference< embed::XEmbeddedObject >& xObj,
                                                                 OUString* pMediaType )
 {
-    uno::Reference< io::XInputStream > xInStream;
-    if ( xObj.is() )
-    {
-        try
-        {
-            // retrieving of the visual representation can switch object to running state
-            embed::VisualRepresentation aRep = xObj->getPreferredVisualRepresentation( nViewAspect );
-            if ( pMediaType )
-                *pMediaType = aRep.Flavor.MimeType;
+    if ( !xObj.is() )
+        return nullptr;
 
-            uno::Sequence < sal_Int8 > aSeq;
-            aRep.Data >>= aSeq;
-            xInStream = new ::comphelper::SequenceInputStream( aSeq );
-        }
-        catch (const uno::Exception&)
-        {
-        }
+    rtl::Reference< ::comphelper::SequenceInputStream > xInStream;
+    try
+    {
+        // retrieving of the visual representation can switch object to running state
+        embed::VisualRepresentation aRep = xObj->getPreferredVisualRepresentation( nViewAspect );
+        if ( pMediaType )
+            *pMediaType = aRep.Flavor.MimeType;
+
+        uno::Sequence < sal_Int8 > aSeq;
+        aRep.Data >>= aSeq;
+        xInStream = new ::comphelper::SequenceInputStream( aSeq );
+    }
+    catch (const uno::Exception&)
+    {
     }
 
     return xInStream;

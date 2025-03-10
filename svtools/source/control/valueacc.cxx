@@ -98,12 +98,10 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibl
 uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibleParent()
 {
     const SolarMutexGuard aSolarGuard;
-    uno::Reference< accessibility::XAccessible >    xRet;
 
-    if (mpValueSetItem)
-        xRet = mpValueSetItem->mrParent.mxAccessible;
-
-    return xRet;
+    if (!mpValueSetItem)
+        return nullptr;
+    return mpValueSetItem->mrParent.mxAccessible;
 }
 
 
@@ -497,21 +495,17 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
+
     const sal_uInt16 nItemId = mpValueSet->GetItemId(Point(aPoint.X, aPoint.Y));
-    uno::Reference< accessibility::XAccessible >    xRet;
+    if ( !nItemId )
+        return nullptr;
 
-    if ( nItemId )
-    {
-        const size_t nItemPos = mpValueSet->GetItemPos(nItemId);
+    const size_t nItemPos = mpValueSet->GetItemPos(nItemId);
+    if( VALUESET_ITEM_NONEITEM == nItemPos )
+        return nullptr;
 
-        if( VALUESET_ITEM_NONEITEM != nItemPos )
-        {
-            ValueSetItem* const pItem = mpValueSet->mItemList[nItemPos].get();
-            xRet = pItem->GetAccessible();
-        }
-    }
-
-    return xRet;
+    ValueSetItem* const pItem = mpValueSet->mItemList[nItemPos].get();
+    return pItem->GetAccessible();
 }
 
 awt::Rectangle ValueSetAcc::implGetBounds()
@@ -633,7 +627,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getSelectedAc
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    uno::Reference< accessibility::XAccessible >    xRet;
+    rtl::Reference< ValueItemAcc >    xRet;
 
     for( sal_uInt16 i = 0, nCount = getItemCount(), nSel = 0; ( i < nCount ) && !xRet.is(); i++ )
     {

@@ -483,7 +483,7 @@ namespace accessibility
     {
         OExternalLockGuard aGuard( this );
 
-        Reference< XAccessible > xChild;
+        rtl::Reference< AccessibleTabBarPage > xChild;
         for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
         {
             rtl::Reference< AccessibleTabBarPage > xAcc = getAccessibleChildImpl( i );

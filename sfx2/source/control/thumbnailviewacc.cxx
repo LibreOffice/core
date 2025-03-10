@@ -191,19 +191,17 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAcces
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
+
     const sal_uInt16 nItemId = mpThumbnailView->GetItemId(Point(aPoint.X, aPoint.Y));
-    uno::Reference< accessibility::XAccessible >    xRet;
+    if ( !nItemId )
+        return nullptr;
 
-    if ( nItemId )
-    {
-        const size_t nItemPos = mpThumbnailView->GetItemPos(nItemId);
+    const size_t nItemPos = mpThumbnailView->GetItemPos(nItemId);
+    if( THUMBNAILVIEW_ITEM_NONEITEM == nItemPos )
+        return nullptr;
 
-        if( THUMBNAILVIEW_ITEM_NONEITEM != nItemPos )
-        {
-            ThumbnailViewItem* const pItem = mpThumbnailView->mFilteredItemList[nItemPos];
-            xRet = pItem->GetAccessible();
-        }
-    }
+    ThumbnailViewItem* const pItem = mpThumbnailView->mFilteredItemList[nItemPos];
+    rtl::Reference<ThumbnailViewItemAcc> xRet = pItem->GetAccessible();
 
     return xRet;
 }
@@ -307,7 +305,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getSelec
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    uno::Reference< accessibility::XAccessible >    xRet;
+    rtl::Reference< ThumbnailViewItemAcc > xRet;
 
     for( sal_uInt16 i = 0, nCount = getItemCount(), nSel = 0; ( i < nCount ) && !xRet.is(); i++ )
     {

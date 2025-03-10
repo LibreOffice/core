@@ -1214,29 +1214,25 @@ Reference< XCloneable > SAL_CALL AnimationNode::createClone()
 {
     std::unique_lock aGuard( m_aMutex );
 
-    Reference< XCloneable > xNewNode;
+    rtl::Reference< AnimationNode > xNewNode;
     try
     {
         xNewNode = new AnimationNode( *this );
 
         if( !maChildren.empty() )
         {
-            Reference< XTimeContainer > xContainer( xNewNode, UNO_QUERY );
-            if( xContainer.is() )
+            for (auto const& child : maChildren)
             {
-                for (auto const& child : maChildren)
+                Reference< XCloneable > xCloneable(child, UNO_QUERY );
+                if( xCloneable.is() ) try
                 {
-                    Reference< XCloneable > xCloneable(child, UNO_QUERY );
-                    if( xCloneable.is() ) try
-                    {
-                        Reference< XAnimationNode > xNewChildNode( xCloneable->createClone(), UNO_QUERY );
-                        if( xNewChildNode.is() )
-                            xContainer->appendChild( xNewChildNode );
-                    }
-                    catch(const Exception&)
-                    {
-                        SAL_INFO("animations", "animations::AnimationNode::createClone(), exception caught!");
-                    }
+                    Reference< XAnimationNode > xNewChildNode( xCloneable->createClone(), UNO_QUERY );
+                    if( xNewChildNode.is() )
+                        xNewNode->appendChild( xNewChildNode );
+                }
+                catch(const Exception&)
+                {
+                    SAL_INFO("animations", "animations::AnimationNode::createClone(), exception caught!");
                 }
             }
         }

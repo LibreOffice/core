@@ -222,16 +222,13 @@ uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::ge
 {
     OExternalLockGuard aGuard( this );
 
-    uno::Reference< css::accessibility::XAccessible >    xRet;
     const sal_uInt16 nItemId = sal::static_int_cast<sal_uInt16>(
         m_pParent->PixelToMapIndex( Point( aPoint.X, aPoint.Y ) ));
 
-    if( sal_uInt16(-1) != nItemId )
-    {
-        SvxShowCharSetItem* pItem = m_pParent->ImplGetItem( nItemId );
-        xRet = pItem->GetAccessible();
-    }
-    return xRet;
+    if( sal_uInt16(-1) == nItemId )
+        return nullptr;
+    SvxShowCharSetItem* pItem = m_pParent->ImplGetItem( nItemId );
+    return pItem->GetAccessible();
 }
 
 void SAL_CALL SvxShowCharSetAcc::grabFocus()

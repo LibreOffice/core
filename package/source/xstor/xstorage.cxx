@@ -3364,7 +3364,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
     if ( sStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( sStreamName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
-    uno::Reference < io::XInputStream > xTempIn;
+    rtl::Reference < utl::TempFileFastService > xTempIn;
     try
     {
         SotElement_Impl* pElement = m_pImpl->FindElement( sStreamName );
@@ -3385,16 +3385,15 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
         if ( !xRawInStream.is() )
             throw io::IOException( THROW_WHERE );
 
-        rtl::Reference < utl::TempFileFastService > xTempFile = new utl::TempFileFastService;
-        xTempIn = xTempFile;
+        xTempIn = new utl::TempFileFastService;
 
-        if ( !xTempFile )
+        if ( !xTempIn )
             throw io::IOException( THROW_WHERE );
 
         // Copy temporary file to a new one
-        ::comphelper::OStorageHelper::CopyInputToOutput( xRawInStream, xTempFile );
-        xTempFile->closeOutput();
-        xTempFile->seek( 0 );
+        ::comphelper::OStorageHelper::CopyInputToOutput( xRawInStream, xTempIn );
+        xTempIn->closeOutput();
+        xTempIn->seek( 0 );
 
     }
     catch( const embed::InvalidStorageException& )

@@ -120,15 +120,11 @@ void  SIDEModel::notImplemented()
 css::uno::Reference< css::uno::XInterface > SAL_CALL SIDEModel::getCurrentSelection()
 {
     SolarMutexGuard aGuard;
-    uno::Reference<container::XEnumeration> xEnum;
     Shell* pShell = GetShell();
-
-    if (pShell)
-    {
-        OUString sText = GetShell()->GetSelectionText(false);
-        xEnum = new SelectionEnumeration(sText);
-    }
-    return xEnum;
+    if (!pShell)
+        return nullptr;
+    OUString sText = GetShell()->GetSelectionText(false);
+    return uno::Reference<container::XEnumeration>(new SelectionEnumeration(sText));
 }
 
 } // namespace basctl

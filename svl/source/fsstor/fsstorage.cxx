@@ -413,7 +413,7 @@ uno::Reference< embed::XStorage > FSStorage::openStorageElementImpl(
         throw io::IOException(); // TODO:
 
     uno::Reference< ucb::XCommandEnvironment > xDummyEnv; // TODO: provide InteractionHandler if any
-    uno::Reference< embed::XStorage > xResult;
+    rtl::Reference< FSStorage > xResult;
     try
     {
         if ( nStorageMode & embed::ElementModes::WRITE )
@@ -478,7 +478,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::cloneStreamElement( const OUSt
     INetURLObject aFileURL( m_aURL );
     aFileURL.Append( aStreamName );
 
-    uno::Reference < io::XStream > xTempResult;
+    rtl::Reference < utl::TempFileFastService > xTempResult;
     try
     {
         uno::Reference< ucb::XCommandEnvironment > xDummyEnv;

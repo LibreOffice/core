@@ -139,7 +139,7 @@ void SAL_CALL OGroup::setFooterOn( sal_Bool _footeron )
 
 uno::Reference< report::XSection > SAL_CALL OGroup::getHeader()
 {
-    uno::Reference< report::XSection > xRet;
+    rtl::Reference< OSection > xRet;
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         xRet = m_xHeader;
@@ -152,7 +152,7 @@ uno::Reference< report::XSection > SAL_CALL OGroup::getHeader()
 
 uno::Reference< report::XSection > SAL_CALL OGroup::getFooter()
 {
-    uno::Reference< report::XSection > xRet;
+    rtl::Reference< OSection > xRet;
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         xRet = m_xFooter;

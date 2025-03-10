@@ -68,23 +68,23 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        Reference< XNode > aNode;
         xmlNodePtr pNode = m_pElement->GetNodePtr();
-        if (pNode != nullptr)
+        if (pNode == nullptr)
+            return nullptr;
+
+        rtl::Reference< CNode > aNode;
+        OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
+        xmlChar const * pName = reinterpret_cast<xmlChar const *>(o1.getStr());
+        xmlAttrPtr cur = pNode->properties;
+        while (cur != nullptr)
         {
-            OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
-            xmlChar const * pName = reinterpret_cast<xmlChar const *>(o1.getStr());
-            xmlAttrPtr cur = pNode->properties;
-            while (cur != nullptr)
+            if( strcmp(reinterpret_cast<char const *>(pName), reinterpret_cast<char const *>(cur->name)) == 0)
             {
-                if( strcmp(reinterpret_cast<char const *>(pName), reinterpret_cast<char const *>(cur->name)) == 0)
-                {
-                    aNode = m_pElement->GetOwnerDocument().GetCNode(
-                                   reinterpret_cast<xmlNodePtr>(cur));
-                    break;
-                }
-                cur = cur->next;
+                aNode = m_pElement->GetOwnerDocument().GetCNode(
+                               reinterpret_cast<xmlNodePtr>(cur));
+                break;
             }
+            cur = cur->next;
         }
         return aNode;
     }
@@ -98,28 +98,28 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        Reference< XNode > aNode;
         xmlNodePtr pNode = m_pElement->GetNodePtr();
-        if (pNode != nullptr)
+        if (pNode == nullptr)
+            return nullptr;
+
+        rtl::Reference< CNode > aNode;
+        OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
+        xmlChar const * pName = reinterpret_cast<xmlChar const *>(o1.getStr());
+        OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
+        xmlChar const* pSearchNs =
+            reinterpret_cast<xmlChar const*>(o2.getStr());
+        xmlNsPtr const pNs = xmlSearchNsByHref(pNode->doc, pNode, pSearchNs);
+        xmlAttrPtr cur = pNode->properties;
+        while (cur != nullptr && pNs != nullptr)
         {
-            OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
-            xmlChar const * pName = reinterpret_cast<xmlChar const *>(o1.getStr());
-            OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
-            xmlChar const* pSearchNs =
-                reinterpret_cast<xmlChar const*>(o2.getStr());
-            xmlNsPtr const pNs = xmlSearchNsByHref(pNode->doc, pNode, pSearchNs);
-            xmlAttrPtr cur = pNode->properties;
-            while (cur != nullptr && pNs != nullptr)
+            if( strcmp(reinterpret_cast<char const *>(pName), reinterpret_cast<char const *>(cur->name)) == 0 &&
+                cur->ns == pNs)
             {
-                if( strcmp(reinterpret_cast<char const *>(pName), reinterpret_cast<char const *>(cur->name)) == 0 &&
-                    cur->ns == pNs)
-                {
-                    aNode = m_pElement->GetOwnerDocument().GetCNode(
-                                  reinterpret_cast<xmlNodePtr>(cur));
-                    break;
-                }
-                cur = cur->next;
+                aNode = m_pElement->GetOwnerDocument().GetCNode(
+                              reinterpret_cast<xmlNodePtr>(cur));
+                break;
             }
+            cur = cur->next;
         }
         return aNode;
     }
@@ -132,23 +132,23 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        Reference< XNode > aNode;
         xmlNodePtr pNode = m_pElement->GetNodePtr();
-        if (pNode != nullptr)
+        if (pNode == nullptr)
+            return nullptr;
+
+        rtl::Reference< CNode > aNode;
+        xmlAttrPtr cur = pNode->properties;
+        sal_Int32 count = 0;
+        while (cur != nullptr)
         {
-            xmlAttrPtr cur = pNode->properties;
-            sal_Int32 count = 0;
-            while (cur != nullptr)
+            if (count == index)
             {
-                if (count == index)
-                {
-                    aNode = m_pElement->GetOwnerDocument().GetCNode(
-                                reinterpret_cast<xmlNodePtr>(cur));
-                    break;
-                }
-                count++;
-                cur = cur->next;
+                aNode = m_pElement->GetOwnerDocument().GetCNode(
+                            reinterpret_cast<xmlNodePtr>(cur));
+                break;
             }
+            count++;
+            cur = cur->next;
         }
         return aNode;
     }
