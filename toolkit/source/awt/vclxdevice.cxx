@@ -63,16 +63,14 @@ css::uno::Reference< css::awt::XDevice > VCLXDevice::createDevice( sal_Int32 nWi
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Reference< css::awt::XDevice >  xRef;
-    if ( GetOutputDevice() )
-    {
-        rtl::Reference<VCLXVirtualDevice> pVDev = new VCLXVirtualDevice;
-        VclPtrInstance<VirtualDevice> pVclVDev( *GetOutputDevice() );
-        pVclVDev->SetOutputSizePixel( Size( nWidth, nHeight ) );
-        pVDev->SetVirtualDevice( pVclVDev );
-        xRef = pVDev;
-    }
-    return xRef;
+    if ( !GetOutputDevice() )
+        return nullptr;
+
+    rtl::Reference<VCLXVirtualDevice> pVDev = new VCLXVirtualDevice;
+    VclPtrInstance<VirtualDevice> pVclVDev( *GetOutputDevice() );
+    pVclVDev->SetOutputSizePixel( Size( nWidth, nHeight ) );
+    pVDev->SetVirtualDevice( pVclVDev );
+    return pVDev;
 }
 
 css::awt::DeviceInfo VCLXDevice::getInfo()
@@ -110,30 +108,25 @@ css::uno::Reference< css::awt::XFont > VCLXDevice::getFont( const css::awt::Font
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Reference< css::awt::XFont >  xRef;
-    if( mpOutputDevice )
-    {
-        rtl::Reference<VCLXFont> pMetric
-            = new VCLXFont(*this, VCLUnoHelper::CreateFont(rDescriptor, mpOutputDevice->GetFont()));
-        xRef = pMetric;
-    }
-    return xRef;
+    if( !mpOutputDevice )
+        return nullptr;
+
+    rtl::Reference<VCLXFont> pMetric
+        = new VCLXFont(*this, VCLUnoHelper::CreateFont(rDescriptor, mpOutputDevice->GetFont()));
+    return pMetric;
 }
 
 css::uno::Reference< css::awt::XBitmap > VCLXDevice::createBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Reference< css::awt::XBitmap >  xBmp;
-    if( mpOutputDevice )
-    {
-        BitmapEx aBmp = mpOutputDevice->GetBitmapEx( Point( nX, nY ), Size( nWidth, nHeight ) );
+    if( !mpOutputDevice )
+        return nullptr;
 
-        rtl::Reference<VCLXBitmap> pBmp = new VCLXBitmap;
-        pBmp->SetBitmap( aBmp );
-        xBmp = pBmp;
-    }
-    return xBmp;
+    BitmapEx aBmp = mpOutputDevice->GetBitmapEx( Point( nX, nY ), Size( nWidth, nHeight ) );
+    rtl::Reference<VCLXBitmap> pBmp = new VCLXBitmap;
+    pBmp->SetBitmap( aBmp );
+    return pBmp;
 }
 
 css::uno::Reference< css::awt::XDisplayBitmap > VCLXDevice::createDisplayBitmap( const css::uno::Reference< css::awt::XBitmap >& rxBitmap )

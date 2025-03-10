@@ -1980,17 +1980,15 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( con
         pChildWindow.reset(VclPtr<WorkWindow>::Create(nullptr, Parent));
     }
 
-    css::uno::Reference< css::awt::XVclWindowPeer > xPeer;
-    if ( pChildWindow )
-    {
-        rtl::Reference<VCLXTopWindow> pPeer = new VCLXTopWindow;
-        SolarMutexGuard aGuard;
-        pPeer->SetWindow( pChildWindow );
-        xPeer = pPeer;
-        pChildWindow->SetWindowPeer(xPeer, pPeer.get());
-    }
+    if ( !pChildWindow )
+        return nullptr;
 
-    return xPeer;
+    rtl::Reference<VCLXTopWindow> pPeer = new VCLXTopWindow;
+    SolarMutexGuard aGuard;
+    pPeer->SetWindow( pChildWindow );
+    pChildWindow->SetWindowPeer(pPeer, pPeer.get());
+
+    return pPeer;
 }
 
 // css::awt::XMessageBoxFactory

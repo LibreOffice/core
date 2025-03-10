@@ -193,20 +193,19 @@ AbsoluteScreenPixelRectangle AccessibleGridControlHeader::implGetBoundingBoxOnSc
 Reference< XAccessible > AccessibleGridControlHeader::implGetChild(
         sal_Int32 nRow, sal_uInt32 nColumnPos )
 {
-    Reference< XAccessible > xChild;
     if (m_eObjType == AccessibleTableControlObjType::COLUMNHEADERBAR)
     {
         rtl::Reference<AccessibleGridControlHeaderCell> pColHeaderCell = new AccessibleGridControlHeaderCell(nColumnPos, this, m_aTable,
                                                                                                              AccessibleTableControlObjType::COLUMNHEADERCELL);
-        xChild = pColHeaderCell;
+        return pColHeaderCell;
     }
     else if (m_eObjType == AccessibleTableControlObjType::ROWHEADERBAR)
     {
         rtl::Reference<AccessibleGridControlHeaderCell> pRowHeaderCell = new AccessibleGridControlHeaderCell(nRow, this, m_aTable,
                                                                                                              AccessibleTableControlObjType::ROWHEADERCELL);
-        xChild = pRowHeaderCell;
+        return pRowHeaderCell;
     }
-    return xChild;
+    return nullptr;
 }
 
 } // namespace accessibility

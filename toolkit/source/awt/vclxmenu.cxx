@@ -399,46 +399,44 @@ css::uno::Reference< css::awt::XPopupMenu > VCLXMenu::getPopupMenu(
     SolarMutexGuard aSolarGuard;
     std::unique_lock aGuard( maMutex );
 
-    css::uno::Reference< css::awt::XPopupMenu >  aRef;
-    Menu* pMenu = mpMenu ? mpMenu->GetPopupMenu( nItemId ) : nullptr;
-    if ( pMenu )
+    if ( !mpMenu )
+        return nullptr;
+    Menu* pMenu = mpMenu->GetPopupMenu( nItemId );
+    if ( !pMenu )
+        return nullptr;
+
+    for ( size_t n = maPopupMenuRefs.size(); n; )
     {
-        for ( size_t n = maPopupMenuRefs.size(); n; )
+        css::uno::Reference< css::awt::XPopupMenu >& rRef = maPopupMenuRefs[ --n ];
+        Menu* pM = static_cast<VCLXMenu*>(rRef.get())->GetMenu();
+        if ( pM == pMenu )
         {
-            css::uno::Reference< css::awt::XPopupMenu >& rRef = maPopupMenuRefs[ --n ];
-            Menu* pM = static_cast<VCLXMenu*>(rRef.get())->GetMenu();
-            if ( pM == pMenu )
-            {
-                aRef = rRef;
-                break;
-            }
-        }
-        /*
-           If the popup menu is not inserted via setPopupMenu then
-           maPopupMenuRefs won't have an entry for it, so create an XPopupMenu
-           for it now.
-
-           This means that this vcl PopupMenu "pMenu" either existed as a child
-           of the vcl Menu "mpMenu" before the VCLXMenu was created for that or
-           it was added directly via vcl.
-        */
-        if( !aRef.is() )
-        {
-            aRef = new VCLXPopupMenu( static_cast<PopupMenu*>(pMenu) );
-            /*
-               In any case, the VCLXMenu has ownership of "mpMenu" and will
-               destroy it in the VCLXMenu dtor.
-
-               Similarly because VCLXPopupMenu takes ownership of the vcl
-               PopupMenu "pMenu", the underlying vcl popup will be destroyed
-               when VCLXPopupMenu is, so we should add it now to
-               maPopupMenuRefs to ensure its lifecycle is at least bound to
-               the VCLXMenu that owns the parent "mpMenu" similarly to
-               PopupMenus added via the more conventional setPopupMenu.
-            */
-            maPopupMenuRefs.push_back( aRef );
+            return rRef;
         }
     }
+
+    /*
+       If the popup menu is not inserted via setPopupMenu then
+       maPopupMenuRefs won't have an entry for it, so create an XPopupMenu
+       for it now.
+
+       This means that this vcl PopupMenu "pMenu" either existed as a child
+       of the vcl Menu "mpMenu" before the VCLXMenu was created for that or
+       it was added directly via vcl.
+    */
+    rtl::Reference< VCLXPopupMenu > aRef = new VCLXPopupMenu( static_cast<PopupMenu*>(pMenu) );
+    /*
+       In any case, the VCLXMenu has ownership of "mpMenu" and will
+       destroy it in the VCLXMenu dtor.
+
+       Similarly because VCLXPopupMenu takes ownership of the vcl
+       PopupMenu "pMenu", the underlying vcl popup will be destroyed
+       when VCLXPopupMenu is, so we should add it now to
+       maPopupMenuRefs to ensure its lifecycle is at least bound to
+       the VCLXMenu that owns the parent "mpMenu" similarly to
+       PopupMenus added via the more conventional setPopupMenu.
+    */
+    maPopupMenuRefs.push_back( aRef );
     return aRef;
 }
 
