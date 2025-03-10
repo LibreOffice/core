@@ -67,7 +67,7 @@ $(eval $(call gb_Library_use_system_win32_libs,drawinglayer,\
 ))
 endif
 
-ifeq ($(OS),WNT)
+ifeq ($(OS)-$(USE_HEADLESS_CODE),WNT-)
 $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/processor2d/d2dpixelprocessor2d \
     drawinglayer/source/processor2d/SDPRProcessor2dTools \
