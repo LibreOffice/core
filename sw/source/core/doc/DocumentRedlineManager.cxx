@@ -1171,9 +1171,9 @@ RedlineFlags DocumentRedlineManager::GetRedlineFlags(const SwViewShell* pViewShe
     return eRedlineFlags;
 }
 
-void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode, bool bRecordAllViews )
+void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode, bool bRecordAllViews, bool bRecordModeChange )
 {
-    if( GetRedlineFlags() == eMode )
+    if( GetRedlineFlags() == eMode && !bRecordModeChange )
         return;
 
     if( (RedlineFlags::ShowMask & GetRedlineFlags()) != (RedlineFlags::ShowMask & eMode)
@@ -1244,7 +1244,7 @@ void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode, bool bRecordAl
 
         m_rDoc.SetInXMLImport( bSaveInXMLImportFlag );
     }
-    SetRedlineFlags_intern(eMode, bRecordAllViews);
+    SetRedlineFlags_intern(eMode, bRecordAllViews, bRecordModeChange);
     m_rDoc.getIDocumentState().SetModified();
 
     // #TODO - add 'SwExtraRedlineTable' also ?
@@ -1260,7 +1260,7 @@ bool DocumentRedlineManager::IsIgnoreRedline() const
     return bool(RedlineFlags::Ignore & GetRedlineFlags());
 }
 
-void DocumentRedlineManager::SetRedlineFlags_intern(RedlineFlags eMode, bool bRecordAllViews)
+void DocumentRedlineManager::SetRedlineFlags_intern(RedlineFlags eMode, bool bRecordAllViews, bool bRecordModeChange)
 {
     SwDocShell* pDocShell = m_rDoc.GetDocShell();
     SwViewShell* pViewShell = pDocShell ? pDocShell->GetWrtShell() : nullptr;
@@ -1269,16 +1269,43 @@ void DocumentRedlineManager::SetRedlineFlags_intern(RedlineFlags eMode, bool bRe
         // Recording may be per-view, the rest is per-document.
         for(SwViewShell& rSh : pViewShell->GetRingContainer())
         {
-            if (!bRecordAllViews && &rSh != pViewShell)
-            {
-                continue;
-            }
-
             auto bRedlineRecordingOn = bool(eMode & RedlineFlags::On);
             SwViewOption aOpt(*rSh.GetViewOptions());
-            if (aOpt.IsRedlineRecordingOn() != bRedlineRecordingOn)
+            bool bOn = aOpt.IsRedlineRecordingOn();
+            if (bRedlineRecordingOn)
             {
-                aOpt.SetRedlineRecordingOn(bRedlineRecordingOn);
+                // We'll want some kind of recording enabled.
+                if (bRecordAllViews)
+                {
+                    // Enable for all views: turn it on everywhere.
+                    bOn = true;
+                }
+                else
+                {
+                    // Enable it for this view was requested.
+                    if (bRecordModeChange)
+                    {
+                        // Transitioning from "all views" to "this view", turn it off everywhere
+                        // except in this view.
+                        bOn = &rSh == pViewShell;
+                    }
+                    else if (&rSh == pViewShell)
+                    {
+                        // Transitioning from "no record": just touch the current view, leave
+                        // others unchanged.
+                        bOn = true;
+                    }
+                }
+            }
+            else
+            {
+                // Disable everywhere.
+                bOn = false;
+            }
+
+            if (aOpt.IsRedlineRecordingOn() != bOn)
+            {
+                aOpt.SetRedlineRecordingOn(bOn);
                 rSh.ApplyViewOptions(aOpt);
             }
         }

@@ -23,6 +23,7 @@
 #include <doc.hxx>
 #include <editsh.hxx>
 #include <frmtool.hxx>
+#include <docsh.hxx>
 
 RedlineFlags SwEditShell::GetRedlineFlags() const
 {
@@ -31,11 +32,13 @@ RedlineFlags SwEditShell::GetRedlineFlags() const
 
 void SwEditShell::SetRedlineFlags( RedlineFlags eMode, bool bRecordAllViews )
 {
-    if( eMode != GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags() )
+    SwDocShell* pDocSh = GetDoc()->GetDocShell();
+    bool bRecordModeChange = bRecordAllViews != pDocSh->IsChangeRecording(nullptr, bRecordAllViews);
+    if( eMode != GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags() || bRecordModeChange )
     {
         CurrShell aCurr( this );
         StartAllAction();
-        GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eMode, bRecordAllViews );
+        GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eMode, bRecordAllViews, bRecordModeChange );
         EndAllAction();
     }
 }
