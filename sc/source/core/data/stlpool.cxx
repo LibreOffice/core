@@ -114,6 +114,17 @@ rtl::Reference<SfxStyleSheetBase> ScStyleSheetPool::Create( const SfxStyleSheetB
     return new ScStyleSheet( static_cast<const ScStyleSheet&>(rStyle) );
 }
 
+void ScStyleSheetPool::Rename(SfxStyleSheetBase& rStyle, const OUString& rNewName, SfxStyleFamily eFamily)
+{
+    if (eFamily == SfxStyleFamily::Para)
+    {
+        assert(nullptr != pDoc);
+        pDoc->getCellAttributeHelper().RenameCellStyle(static_cast<ScStyleSheet&>(rStyle), rNewName);
+        return;
+    }
+    rStyle.SetName(rNewName);
+}
+
 void ScStyleSheetPool::Remove( SfxStyleSheetBase* pStyle )
 {
     if ( pStyle )
