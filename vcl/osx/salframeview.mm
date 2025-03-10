@@ -22,6 +22,7 @@
 #include <memory>
 
 #include <basegfx/numeric/ftools.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <sal/macros.h>
 #include <tools/helpers.hxx>
 #include <tools/long.hxx>
@@ -240,6 +241,19 @@ static void freezeWindowSizeAndReschedule( NSWindow *pWindow )
 
 static bool isMouseScrollWheelEvent( NSEvent *pEvent )
 {
+    // tdf#151423 allow trackpad or Magic Mouse to behave like a regular mouse
+    // Give both trackpad and Magic Mouse users the option to restore
+    // the legacy zoom via Command+swipe gesture.
+    // The IgnoreKeysWhenScrollingWithTrackpadOrMagicMouse preference is
+    // set to true by default and that disables zooming via swiping.
+    // The problem is that while trackpad users are able to zoom via a
+    // magnify gesture, the Magic Mouse doesn't have a magnify gesture.
+    // Since I have not found a reliable way to distinguish a Magic Mouse
+    // from a trackpad, Magic Mouse users have no obvious replacement
+    // for the zoom via Command+swipe gesture.
+    if ( !officecfg::Office::Common::VCL::macOS::IgnoreKeysWhenScrollingWithTrackpadOrMagicMouse::get() )
+        return true;
+
     return ( pEvent && [pEvent type] == NSEventTypeScrollWheel && [pEvent phase] == NSEventPhaseNone && [pEvent momentumPhase] == NSEventPhaseNone );
 }
 
