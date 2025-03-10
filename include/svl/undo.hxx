@@ -302,8 +302,10 @@ public:
     bool            HasTopUndoActionMark( UndoStackMark const i_mark );
 
     /** removes the oldest Undo actions from the stack
+    * @returns false if it could not do anything (can happen when the action is very large)
     */
-    void            RemoveOldestUndoAction();
+    [[nodiscard]]
+    bool            RemoveOldestUndoAction();
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 

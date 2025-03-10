@@ -1173,19 +1173,21 @@ void SfxUndoManager::UndoMark(UndoStackMark i_mark)
 }
 
 
-void SfxUndoManager::RemoveOldestUndoAction()
+bool SfxUndoManager::RemoveOldestUndoAction()
 {
     UndoManagerGuard aGuard( *m_xData );
 
     if ( IsInListAction() && ( m_xData->maUndoArray.nCurUndoAction == 1 ) )
     {
-        assert(!"SfxUndoManager::RemoveOldestUndoActions: cannot remove a not-yet-closed list action!");
-        return;
+        // this can happen if we are performing a very large writer edit (e.g. removing a very large table)
+        SAL_WARN("svl", "SfxUndoManager::RemoveOldestUndoActions: cannot remove a not-yet-closed list action!");
+        return false;
     }
 
     aGuard.markForDeletion( m_xData->maUndoArray.Remove( 0 ) );
     --m_xData->maUndoArray.nCurUndoAction;
     ImplCheckEmptyActions();
+    return true;
 }
 
 void SfxUndoManager::dumpAsXml(xmlTextWriterPtr pWriter) const
