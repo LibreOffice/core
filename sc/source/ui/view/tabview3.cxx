@@ -638,6 +638,7 @@ void ScTabView::SelectionChanged(bool bFromPaste)
     rBindings.Invalidate( SID_SORT_ASCENDING );
     rBindings.Invalidate( SID_SORT_DESCENDING );
     rBindings.Invalidate( SID_SELECT_UNPROTECTED_CELLS );
+    rBindings.Invalidate( SID_CLEAR_AUTO_FILTER );
     if (!comphelper::LibreOfficeKit::isActive())
         rBindings.Invalidate( SID_LANGUAGE_STATUS );
 

@@ -63,6 +63,7 @@ interface CellSelection
     FID_VALIDATION          [ ExecMethod = ExecuteDB; StateMethod = GetBlockState; ]
     FID_CURRENTVALIDATION   [ ExecMethod = ExecuteDB; StateMethod = GetBlockState; ]
     SID_TEXT_TO_COLUMNS     [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_CLEAR_AUTO_FILTER   [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
 
     // } database operations
 

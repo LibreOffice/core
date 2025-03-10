@@ -1069,6 +1069,23 @@ SfxVoidItem DataFilterRemoveFilter SID_UNFILTER
     GroupId = SfxGroupId::Data;
 ]
 
+SfxVoidItem ClearAutoFilter SID_CLEAR_AUTO_FILTER
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Data;
+]
+
 
 SfxVoidItem DataFilterSpecialFilter SID_SPECIAL_FILTER
 ()

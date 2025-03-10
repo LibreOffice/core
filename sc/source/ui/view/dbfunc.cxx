@@ -446,6 +446,32 @@ void ScDBFunc::HideAutoFilter()
     rBindings.Invalidate( SID_AUTOFILTER_HIDE );
 }
 
+void ScDBFunc::ClearAutoFilter()
+{
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    SCCOL nCol = GetViewData().GetCurX();
+    SCROW nRow = GetViewData().GetCurY();
+    SCTAB nTab = GetViewData().GetTabNo();
+
+    ScDBData* pDBData = rDoc.GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);
+
+    ScQueryParam aParam;
+    pDBData->GetQueryParam(aParam);
+
+    aParam.RemoveAllEntriesByField(nCol);
+    aParam.eSearchType = utl::SearchParam::SearchType::Normal;
+    aParam.bCaseSens = false;
+    aParam.bDuplicate = true;
+    aParam.bInplace = true;
+
+    Query(aParam, nullptr, true);
+
+    SfxBindings& rBindings = GetViewData().GetBindings();
+    rBindings.Invalidate( SID_CLEAR_AUTO_FILTER );
+}
+
 //      Re-Import
 
 bool ScDBFunc::ImportData( const ScImportParam& rParam )

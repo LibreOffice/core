@@ -933,6 +933,11 @@
           <value xml:lang="en-US">Selection List</value>
         </prop>
       </node>
+      <node oor:name=".uno:ClearAutoFilter" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Clear AutoFilter</value>
+        </prop>
+      </node>
       <node oor:name=".uno:DeleteCell" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Delete C~ells...</value>

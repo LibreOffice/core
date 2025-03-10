@@ -684,6 +684,11 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             }
             break;
 
+        case SID_CLEAR_AUTO_FILTER:
+            pTabViewShell->ClearAutoFilter();
+            rReq.Done();
+            break;
+
         case SID_AUTO_FILTER:
             pTabViewShell->ToggleAutoFilter();
             rReq.Done();
@@ -1298,6 +1303,46 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
 
                     if ( !bAnyQuery )
                         rSet.DisableItem( nWhich );
+                }
+                break;
+
+                case SID_CLEAR_AUTO_FILTER:
+                {
+                    const ScTableProtection* pTabProt = rDoc.GetTabProtection(nTab);
+                    if (pTabProt && pTabProt->isProtected() && !pTabProt->isOptionEnabled(ScTableProtection::AUTOFILTER))
+                    {
+                        rSet.DisableItem(nWhich);
+                    }
+                    else
+                    {
+                        if (!bAutoFilterTested)
+                        {
+                            bAutoFilter = rDoc.HasAutoFilter(nPosX, nPosY, nTab);
+                            bAutoFilterTested = true;
+                        }
+
+                        SCCOL nStartCol = GetViewData().GetCurX();
+                        SCROW nStartRow = GetViewData().GetCurY();
+                        SCTAB nStartTab = GetViewData().GetTabNo();
+                        bool bAnyQuery = false;
+
+                        ScQueryParam aParam;
+                        ScDBData* pDBData = rDoc.GetDBAtCursor( nStartCol, nStartRow, nStartTab, ScDBDataPortion::AREA );
+
+                        if(pDBData)
+                        {
+                            pDBData->GetQueryParam(aParam);
+                            std::vector<ScQueryEntry*> aEntries = aParam.FindAllEntriesByField(nStartCol);
+                            if(aEntries.size())
+                            {
+                                bAnyQuery = true;
+                            }
+                        }
+
+
+                        if(!bAutoFilter || !bAnyQuery)
+                            rSet.DisableItem(nWhich);
+                    }
                 }
                 break;
 

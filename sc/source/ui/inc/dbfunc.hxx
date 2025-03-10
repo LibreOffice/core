@@ -58,6 +58,7 @@ public:
 
     void            ToggleAutoFilter();
     void            HideAutoFilter();
+    void            ClearAutoFilter();
 
     void            RepeatDB( bool bRecord = true );
 

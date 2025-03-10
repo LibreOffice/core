@@ -602,6 +602,7 @@
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:DataFilterRemoveFilter"/>
           <menu:menuitem menu:id=".uno:DataFilterHideAutoFilter"/>
+          <menu:menuitem menu:id=".uno:ClearAutoFilter"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:HandleDuplicateRecords"/>

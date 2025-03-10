@@ -629,6 +629,7 @@ static_assert(SID_PREVIEW_END < SID_KEYFUNC_START, "calc slots ids trampling inf
 #define SID_UNGROUP_SPARKLINES      (SID_NEW_SLOTS+115)
 #define SID_EDIT_SPARKLINE          (SID_NEW_SLOTS+116)
 #define SID_SC_OPT_LINKS            TypedWhichId<SfxBoolItem>(SID_NEW_SLOTS + 117)
+#define SID_CLEAR_AUTO_FILTER       (SID_NEW_SLOTS+118)
 
 // idl parameter
 
