@@ -92,23 +92,23 @@ bool                KillFile( const INetURLObject& rURL );
 
 class SgaIMapInfo final : public SdrObjUserData, public SfxListener
 {
-    ImageMap                aImageMap;
+    ImageMap                m_aImageMap;
 
 public:
                             SgaIMapInfo() : SdrObjUserData( SdrInventor::SgaImap, ID_IMAPINFO ) {};
 
                             SgaIMapInfo( const ImageMap& rImageMap) :
                                 SdrObjUserData( SdrInventor::SgaImap, ID_IMAPINFO ),
-                                aImageMap( rImageMap ) {};
+                                m_aImageMap( rImageMap ) {};
 
     virtual std::unique_ptr<SdrObjUserData> Clone( SdrObject* ) const override
                             {
                                 SgaIMapInfo* pInfo = new SgaIMapInfo;
-                                pInfo->aImageMap = aImageMap;
+                                pInfo->m_aImageMap = m_aImageMap;
                                 return std::unique_ptr<SdrObjUserData>(pInfo);
                             }
 
-    const ImageMap&         GetImageMap() const { return aImageMap; }
+    const ImageMap&         GetImageMap() const { return m_aImageMap; }
 };
 
 class GraphicFilter;
