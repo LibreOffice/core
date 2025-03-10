@@ -129,7 +129,7 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 
 private:
-    bool            ImplStartExecute();
+    bool            ImplStartExecute(bool async);
     static void     ImplEndExecuteModal();
     void            ImplSetModalInputMode(bool bModal);
 

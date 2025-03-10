@@ -904,7 +904,7 @@ bool Dialog::Close()
     }
 }
 
-bool Dialog::ImplStartExecute()
+bool Dialog::ImplStartExecute(bool async)
 {
     setDeferredProperties();
 
@@ -939,6 +939,14 @@ bool Dialog::ImplStartExecute()
 #else
             SetLOKNotifier(mpDialogImpl->m_aInstallLOKNotifierHdl.Call(nullptr));
 #endif
+        }
+        if (!async && Application::IsOnSystemEventLoop())
+        {
+            // As long as Application::Yield deliberately calls std::abort when trying to
+            // synchronously execute modal dialogs, better cancel them here for now as a hack:
+            SAL_WARN(
+                "vcl", "cancel synchronous execution of modal dialog " << ImplGetDialogText(this));
+            return false;
         }
 
         switch ( Application::GetDialogCancelMode() )
@@ -1069,7 +1077,7 @@ short Dialog::Execute()
             mbInSyncExecute = false;
         });
 
-    if ( !ImplStartExecute() )
+    if ( !ImplStartExecute(false) )
         return 0;
 
     // Yield util EndDialog is called or dialog gets destroyed
@@ -1108,7 +1116,7 @@ short Dialog::Execute()
 bool Dialog::StartExecuteAsync( VclAbstractDialog::AsyncContext &rCtx )
 {
     const bool bModal = GetType() != WindowType::MODELESSDIALOG;
-    if (!ImplStartExecute())
+    if (!ImplStartExecute(true))
     {
         rCtx.mxOwner.disposeAndClear();
         rCtx.mxOwnerDialogController.reset();
