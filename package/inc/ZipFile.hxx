@@ -80,7 +80,7 @@ private:
             ZipEntry const & rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             sal_Int8 nStreamMode,
-            ::std::optional<sal_Int64> oDecryptedSize,
+            bool bDecrypt,
             const bool bUseBufferedStream = true,
             const OUString& aMediaType = OUString() );
 
@@ -118,7 +118,7 @@ public:
     css::uno::Reference< css::io::XInputStream > getRawData(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
-            ::std::optional<sal_Int64> oDecryptedSize,
+            bool bDecrypt,
             const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
             const bool bUseBufferedStream = true );
 
@@ -159,19 +159,18 @@ public:
     css::uno::Reference< css::io::XInputStream > getInputStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
-            ::std::optional<sal_Int64> oDecryptedSize,
+            bool bDecrypt,
             const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder );
 
     css::uno::Reference< css::io::XInputStream > getDataStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
-            ::std::optional<sal_Int64> oEncryptedSize,
+            bool bDecrypt,
             const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder );
 
     css::uno::Reference< css::io::XInputStream > getWrappedRawStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
-            sal_Int64 nDecryptedSize,
             const OUString& aMediaType,
             const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder );
 

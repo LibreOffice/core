@@ -86,10 +86,7 @@ void ZipOutputStream::rawCloseEntry( bool bEncrypt )
         writeEXT(*m_pCurrentEntry);
 
     if (bEncrypt)
-    {
         m_pCurrentEntry->nMethod = STORED;
-        assert(m_pCurrentEntry->nSize == m_pCurrentEntry->nCompressedSize);
-    }
 
     m_pCurrentEntry = nullptr;
 }

@@ -625,14 +625,14 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
             ZipEntry const & rEntry,
             const ::rtl::Reference< EncryptionData > &rData,
             sal_Int8 nStreamMode,
-            ::std::optional<sal_Int64> const oDecryptedSize,
+            bool bIsEncrypted,
             const bool bUseBufferedStream,
             const OUString& aMediaType )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     rtl::Reference< XUnbufferedStream > xSrcStream = new XUnbufferedStream(
-        m_xContext, aMutexHolder, rEntry, xStream, rData, nStreamMode, oDecryptedSize, aMediaType, bRecoveryMode);
+        m_xContext, aMutexHolder, rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode);
 
     if (!bUseBufferedStream)
         return xSrcStream.get();
@@ -655,7 +655,7 @@ std::unique_ptr<ZipEnumeration> ZipFile::entries()
 
 uno::Reference< XInputStream > ZipFile::getInputStream( ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData > &rData,
-        ::std::optional<sal_Int64> const oDecryptedSize,
+        bool bIsEncrypted,
         const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
@@ -670,19 +670,19 @@ uno::Reference< XInputStream > ZipFile::getInputStream( ZipEntry& rEntry,
 
     // if we have a digest, then this file is an encrypted one and we should
     // check if we can decrypt it or not
-    if (oDecryptedSize && rData.is() && rData->m_aDigest.hasElements())
+    if ( bIsEncrypted && rData.is() && rData->m_aDigest.hasElements() )
         bNeedRawStream = !hasValidPassword ( rEntry, rData );
 
     return createStreamForZipEntry ( aMutexHolder,
                                     rEntry,
                                     rData,
                                     bNeedRawStream ? UNBUFF_STREAM_RAW : UNBUFF_STREAM_DATA,
-                                    oDecryptedSize);
+                                    bIsEncrypted );
 }
 
 uno::Reference< XInputStream > ZipFile::getDataStream( ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData > &rData,
-        ::std::optional<sal_Int64> const oDecryptedSize,
+        bool bIsEncrypted,
         const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
@@ -693,7 +693,7 @@ uno::Reference< XInputStream > ZipFile::getDataStream( ZipEntry& rEntry,
     // An exception must be thrown in case stream is encrypted and
     // there is no key or the key is wrong
     bool bNeedRawStream = false;
-    if (oDecryptedSize)
+    if ( bIsEncrypted )
     {
         // in case no digest is provided there is no way
         // to detect password correctness
@@ -713,12 +713,12 @@ uno::Reference< XInputStream > ZipFile::getDataStream( ZipEntry& rEntry,
                                     rEntry,
                                     rData,
                                     bNeedRawStream ? UNBUFF_STREAM_RAW : UNBUFF_STREAM_DATA,
-                                    oDecryptedSize);
+                                    bIsEncrypted );
 }
 
 uno::Reference< XInputStream > ZipFile::getRawData( ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData >& rData,
-        ::std::optional<sal_Int64> const oDecryptedSize,
+        bool bIsEncrypted,
         const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
         const bool bUseBufferedStream )
 {
@@ -727,14 +727,12 @@ uno::Reference< XInputStream > ZipFile::getRawData( ZipEntry& rEntry,
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
 
-    return createStreamForZipEntry(aMutexHolder, rEntry, rData,
-            UNBUFF_STREAM_RAW, oDecryptedSize, bUseBufferedStream);
+    return createStreamForZipEntry ( aMutexHolder, rEntry, rData, UNBUFF_STREAM_RAW, bIsEncrypted, bUseBufferedStream );
 }
 
 uno::Reference< XInputStream > ZipFile::getWrappedRawStream(
         ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData >& rData,
-        sal_Int64 const nDecryptedSize,
         const OUString& aMediaType,
         const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder )
 {
@@ -746,8 +744,7 @@ uno::Reference< XInputStream > ZipFile::getWrappedRawStream(
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
 
-    return createStreamForZipEntry(aMutexHolder, rEntry, rData,
-            UNBUFF_STREAM_WRAPPEDRAW, nDecryptedSize, true, aMediaType);
+    return createStreamForZipEntry ( aMutexHolder, rEntry, rData, UNBUFF_STREAM_WRAPPEDRAW, true, true, aMediaType );
 }
 
 sal_uInt64 ZipFile::readLOC(ZipEntry &rEntry)
