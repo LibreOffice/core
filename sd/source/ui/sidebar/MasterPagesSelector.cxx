@@ -584,7 +584,7 @@ void MasterPagesSelector::UpdateItemList (::std::unique_ptr<ItemList> && pNewIte
 
 css::ui::LayoutSize MasterPagesSelector::GetHeightForWidth(const sal_Int32 nWidth)
 {
-    // there is no way to get margin of item programatically, we use value provided in ui file.
+    // there is no way to get margin of item programmatically, we use value provided in ui file.
     const int nMargin = 6;
     sal_Int32 nColumnCount = nWidth / (mxPreviewIconView->get_item_width() + (5 * nMargin));
     if (nColumnCount < 1)
