@@ -289,36 +289,104 @@ bool QtInstanceWidget::get_vexpand() const
     return true;
 }
 
-void QtInstanceWidget::set_margin_top(int) { assert(false && "Not implemented yet"); }
+void QtInstanceWidget::set_margin_top(int nMargin)
+{
+    SolarMutexGuard g;
 
-void QtInstanceWidget::set_margin_bottom(int) { assert(false && "Not implemented yet"); }
+    GetQtInstance().RunInMainThread([&] {
+        QMargins aMargins = m_pWidget->contentsMargins();
+        aMargins.setTop(nMargin);
+        m_pWidget->setContentsMargins(aMargins);
+    });
+}
 
-void QtInstanceWidget::set_margin_start(int) { assert(false && "Not implemented yet"); }
+void QtInstanceWidget::set_margin_bottom(int nMargin)
+{
+    SolarMutexGuard g;
 
-void QtInstanceWidget::set_margin_end(int) { assert(false && "Not implemented yet"); }
+    GetQtInstance().RunInMainThread([&] {
+        QMargins aMargins = m_pWidget->contentsMargins();
+        aMargins.setBottom(nMargin);
+        m_pWidget->setContentsMargins(aMargins);
+    });
+}
+
+void QtInstanceWidget::set_margin_start(int nMargin)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QMargins aMargins = m_pWidget->contentsMargins();
+        if (m_pWidget->isRightToLeft())
+            aMargins.setRight(nMargin);
+        else
+            aMargins.setLeft(nMargin);
+        m_pWidget->setContentsMargins(aMargins);
+    });
+}
+
+void QtInstanceWidget::set_margin_end(int nMargin)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QMargins aMargins = m_pWidget->contentsMargins();
+        if (m_pWidget->isRightToLeft())
+            aMargins.setLeft(nMargin);
+        else
+            aMargins.setRight(nMargin);
+        m_pWidget->setContentsMargins(aMargins);
+    });
+}
 
 int QtInstanceWidget::get_margin_top() const
 {
-    assert(false && "Not implemented yet");
-    return 0;
+    SolarMutexGuard g;
+
+    int nMargin = 0;
+    GetQtInstance().RunInMainThread([&] { nMargin = m_pWidget->contentsMargins().top(); });
+
+    return nMargin;
 }
 
 int QtInstanceWidget::get_margin_bottom() const
 {
-    assert(false && "Not implemented yet");
-    return 0;
+    SolarMutexGuard g;
+
+    int nMargin = 0;
+    GetQtInstance().RunInMainThread([&] { nMargin = m_pWidget->contentsMargins().bottom(); });
+
+    return nMargin;
 }
 
 int QtInstanceWidget::get_margin_start() const
 {
-    assert(false && "Not implemented yet");
-    return 0;
+    SolarMutexGuard g;
+
+    int nMargin = 0;
+    GetQtInstance().RunInMainThread([&] {
+        if (m_pWidget->isRightToLeft())
+            nMargin = m_pWidget->contentsMargins().right();
+        else
+            nMargin = m_pWidget->contentsMargins().left();
+    });
+
+    return nMargin;
 }
 
 int QtInstanceWidget::get_margin_end() const
 {
-    assert(false && "Not implemented yet");
-    return 0;
+    SolarMutexGuard g;
+
+    int nMargin = 0;
+    GetQtInstance().RunInMainThread([&] {
+        if (m_pWidget->isRightToLeft())
+            nMargin = m_pWidget->contentsMargins().left();
+        else
+            nMargin = m_pWidget->contentsMargins().right();
+    });
+
+    return nMargin;
 }
 
 void QtInstanceWidget::set_accessible_name(const OUString& rName)

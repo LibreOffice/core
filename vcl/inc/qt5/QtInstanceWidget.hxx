@@ -84,13 +84,13 @@ public:
 
     virtual bool get_vexpand() const override;
 
-    virtual void set_margin_top(int) override;
+    virtual void set_margin_top(int nMargin) override;
 
-    virtual void set_margin_bottom(int) override;
+    virtual void set_margin_bottom(int nMargin) override;
 
-    virtual void set_margin_start(int) override;
+    virtual void set_margin_start(int nMargin) override;
 
-    virtual void set_margin_end(int) override;
+    virtual void set_margin_end(int nMargin) override;
 
     virtual int get_margin_top() const override;
 
