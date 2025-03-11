@@ -148,6 +148,9 @@ namespace jsdialog
 // type used to store key-value pairs to put in the generated messages
 typedef std::unordered_map<OString, OUString> ActionDataMap;
 
+VCL_DLLPUBLIC void SendNavigatorForView(const sal_uInt64 nShellId);
+VCL_DLLPUBLIC void SendSidebarForView(const sal_uInt64 nShellId);
+
 /// execute action on a widget
 VCL_DLLPUBLIC bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget,
                                  const StringMap& rData);

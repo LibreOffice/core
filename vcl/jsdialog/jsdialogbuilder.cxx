@@ -29,6 +29,7 @@
 #include <tools/stream.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <wizdlg.hxx>
+#include <jsdialog/enabled.hxx>
 
 namespace
 {
@@ -178,32 +179,41 @@ void JSInstanceBuilder::initializePopupSender()
 }
 
 void JSInstanceBuilder::initializeSidebarSender(sal_uInt64 nLOKWindowId,
-                                                const std::u16string_view& rUIFile)
+                                                const std::u16string_view& rUIFile,
+                                                const std::u16string_view& sTypeOfJSON)
 {
-    m_sTypeOfJSON = "sidebar";
+    m_sTypeOfJSON = sTypeOfJSON;
     m_nWindowId = nLOKWindowId;
 
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
 
     m_aParentDialog = pRoot->GetParentWithLOKNotifier();
 
-    if (rUIFile == u"sfx/ui/panel.ui")
-    {
-        // builder for Panel, get SidebarDockingWindow as m_aContentWindow
-        m_aContentWindow = pRoot;
-        for (int i = 0; i < 7 && m_aContentWindow; i++)
-            m_aContentWindow = m_aContentWindow->GetParent();
-    }
-    else
+    bool bIsSidebarPanel = (rUIFile == u"sfx/ui/panel.ui");
+    bool bIsNavigatorPanel = jsdialog::isBuilderEnabledForNavigator(rUIFile);
+
+    // builder for Panel, PanelLayout, and DockingWindow
+    // get SidebarDockingWindow, or SwNavigatorWin as m_aContentWindow
+    //      PanelLayout  : 9 levels up from pRoot
+    //      Panel        : 7 levels up from pRoot
+    //      DockingWindow: 3 levels up from pRoot
+    unsigned nLevelsUp = 9;
+    if (bIsSidebarPanel)
+        nLevelsUp = 7;
+    else if (bIsNavigatorPanel)
+        nLevelsUp = 3;
+
+    if (nLevelsUp > 0)
     {
         // embedded fragments cannot send close message for whole sidebar
         if (rUIFile == u"modules/simpress/ui/customanimationfragment.ui")
             m_bCanClose = false;
 
-        // builder for PanelLayout, get SidebarDockingWindow as m_aContentWindow
         m_aContentWindow = pRoot;
-        for (int i = 0; i < 9 && m_aContentWindow; i++)
+        for (unsigned i = 0; i < nLevelsUp && m_aContentWindow; i++)
+        {
             m_aContentWindow = m_aContentWindow->GetParent();
+        }
     }
 
     InsertWindowToMap(getMapIdFromWindowId());
@@ -285,7 +295,7 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, vcl::Window* pVclPar
             break;
 
         case JSInstanceBuilder::Type::Sidebar:
-            initializeSidebarSender(nLOKWindowId, rUIFile);
+            initializeSidebarSender(nLOKWindowId, rUIFile, sTypeOfJSON);
             break;
 
         case JSInstanceBuilder::Type::Notebookbar:
@@ -325,10 +335,12 @@ std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateNotebookbarBuilder(
 std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateSidebarBuilder(weld::Widget* pParent,
                                                                            const OUString& rUIRoot,
                                                                            const OUString& rUIFile,
+                                                                           const OUString& jsonType,
                                                                            sal_uInt64 nLOKWindowId)
 {
     return std::make_unique<JSInstanceBuilder>(pParent, nullptr, rUIRoot, rUIFile,
-                                               JSInstanceBuilder::Type::Sidebar, nLOKWindowId);
+                                               JSInstanceBuilder::Type::Sidebar, nLOKWindowId,
+                                               jsonType);
 }
 
 std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreatePopupBuilder(weld::Widget* pParent,
@@ -528,8 +540,11 @@ std::unique_ptr<weld::Container> JSInstanceBuilder::weld_container(const OUStrin
         if (pParent)
             jsdialog::SendFullUpdate(sId, pParent->get_id());
 
-        // this is nested builder, don't close parent dialog on destroy (eg. single tab page is closed)
-        m_bCanClose = false;
+        // Navigator is currently just a panellayout but we treat it as its own dialog in online
+        // this is a hack to get it to close atm but probably need a better solution
+        if (id != u"NavigatorPanel")
+            // this is nested builder, don't close parent dialog on destroy (eg. single tab page is closed)
+            m_bCanClose = false;
         m_bIsNestedBuilder = true;
     }
 
