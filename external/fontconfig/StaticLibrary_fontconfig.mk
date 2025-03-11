@@ -28,6 +28,8 @@ $(eval $(call gb_StaticLibrary_add_defs,fontconfig,\
 	-wd4200 \
 	-wd4245 \
 	-wd4267 \
+	-wd4456 \
+	-wd4457 \
 	-wd4701 \
 	-wd4703 \
 	-DHAVE_CONFIG_H \
