@@ -18,7 +18,12 @@ $(eval $(call gb_StaticLibrary_set_include,freetype,\
 	$$(INCLUDE) \
 ))
 
+# Ignore warnings, warnings in this code is not our problem, or is it?
+
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,freetype))
+
 $(eval $(call gb_StaticLibrary_add_defs,freetype,\
+	-DDLG_STATIC \
 	-DZ_PREFIX \
 	-DFT2_BUILD_LIBRARY \
 	-DFT_DEBUG_LOGGING \
