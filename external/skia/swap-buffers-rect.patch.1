@@ -26,7 +26,7 @@ diff -ur skia.org/tools/window/unix/RasterWindowContext_unix.cpp skia/tools/wind
 --- skia.org/tools/window/unix/RasterWindowContext_unix.cpp	2024-10-05 18:16:04.521814026 +0200
 +++ skia/tools/window/unix/RasterWindowContext_unix.cpp	2024-10-05 18:18:49.554847490 +0200
 @@ -24,7 +24,7 @@
-     void setDisplayParams(const DisplayParams& params) override;
+     void setDisplayParams(std::unique_ptr<const DisplayParams> params) override;
 
  protected:
 -    void onSwapBuffers() override;
@@ -70,7 +70,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.h skia/tools/window/VulkanWin
 --- skia.org/tools/window/VulkanWindowContext.h	2024-10-05 18:16:04.521814026 +0200
 +++ skia/tools/window/VulkanWindowContext.h	2024-10-05 18:19:54.713202674 +0200
 @@ -70,7 +70,7 @@
-     bool createSwapchain(int width, int height, const DisplayParams& params);
+     bool createSwapchain(int width, int height);
      bool createBuffers(VkFormat format, VkImageUsageFlags, SkColorType colorType, VkSharingMode);
      void destroyBuffers();
 -    void onSwapBuffers() override;
@@ -83,7 +83,7 @@ diff -ur skia.org/tools/window/win/RasterWindowContext_win.cpp skia/tools/window
 --- skia.org/tools/window/win/RasterWindowContext_win.cpp	2024-10-05 18:16:04.521814026 +0200
 +++ skia/tools/window/win/RasterWindowContext_win.cpp	2024-10-05 18:20:58.138561375 +0200
 @@ -27,7 +27,7 @@
-     void setDisplayParams(const DisplayParams& params) override;
+     void setDisplayParams(std::unique_ptr<const DisplayParams> params) override;
 
  protected:
 -    void onSwapBuffers() override;
@@ -125,7 +125,7 @@ diff -ur skia.org/tools/window/WindowContext.cpp skia/tools/window/WindowContext
 +    this->onSwapBuffers(rect);
  }
 
- #if defined(SK_GRAPHITE)
+ bool WindowContext::supportsGpuTimer() const {
 diff -ur skia.org/tools/window/WindowContext.h skia/tools/window/WindowContext.h
 --- skia.org/tools/window/WindowContext.h	2024-10-05 18:16:04.521814026 +0200
 +++ skia/tools/window/WindowContext.h	2024-10-05 18:22:12.945998819 +0200
