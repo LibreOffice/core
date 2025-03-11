@@ -1,10 +1,10 @@
 diff -ur skia.org/include/ports/SkFontMgr_fontconfig.h skia/include/ports/SkFontMgr_fontconfig.h
 --- skia.org/include/ports/SkFontMgr_fontconfig.h	2024-10-09 10:25:16.421928663 +0200
 +++ skia/include/ports/SkFontMgr_fontconfig.h	2024-10-09 10:27:17.914640682 +0200
-@@ -19,4 +19,9 @@
-  */
+@@ -21,4 +21,9 @@
+ class SkFontScanner;
+ SK_API sk_sp<SkFontMgr> SkFontMgr_New_FontConfig(FcConfig* fc, std::unique_ptr<SkFontScanner> scanner);
  SK_API sk_sp<SkFontMgr> SkFontMgr_New_FontConfig(FcConfig* fc);
-
 +struct _FcPattern;
 +typedef struct _FcPattern FcPattern;
 +class SkTypeface;
@@ -22,13 +22,13 @@ diff -ur skia.org/src/ports/SkFontMgr_fontconfig.cpp skia/src/ports/SkFontMgr_fo
      sk_sp<SkTypeface> createTypefaceFromFcPattern(SkAutoFcPattern pattern) const {
          if (!pattern) {
              return nullptr;
-@@ -966,6 +967,16 @@
-     }
- };
+@@ -1043,6 +1044,16 @@
+     return sk_make_sp<SkFontMgr_fontconfig>(fc, std::move(scanner));
+ }
 
 -sk_sp<SkFontMgr> SkFontMgr_New_FontConfig(FcConfig* fc) {
 +SK_API sk_sp<SkFontMgr> SkFontMgr_New_FontConfig(FcConfig* fc) {
-     return sk_make_sp<SkFontMgr_fontconfig>(fc);
+     return sk_make_sp<SkFontMgr_fontconfig>(fc, SkFontScanner_Make_FreeType());
  }
 +
 +SK_API sk_sp<SkTypeface> SkFontMgr_createTypefaceFromFcPattern(const sk_sp<SkFontMgr>& mgr, FcPattern* pattern)
