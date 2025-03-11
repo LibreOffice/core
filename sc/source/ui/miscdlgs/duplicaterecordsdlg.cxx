@@ -133,7 +133,6 @@ void ScDuplicateRecordsDlg::InsertEntry(const OUString& rTxt, bool bToggle)
     const int nRow = m_xCheckList->n_children() - 1;
     m_xCheckList->set_toggle(nRow, bToggle ? TRISTATE_TRUE : TRISTATE_FALSE);
     m_xCheckList->set_text(nRow, rTxt, 0);
-    m_xCheckList->set_sensitive(m_xAllChkBtn->get_state() != TRISTATE_TRUE);
 }
 
 void ScDuplicateRecordsDlg::Init()
@@ -171,7 +170,7 @@ void ScDuplicateRecordsDlg::Init()
         !officecfg::Office::Calc::Misc::HandleDuplicateRecords::RemoveRecords::get());
 
     SetDialogLabels();
-    m_xAllChkBtn->set_state(TRISTATE_FALSE);
+    m_xAllChkBtn->set_state(TRISTATE_TRUE);
     SetDialogData(true);
 }
 
@@ -200,13 +199,18 @@ IMPL_LINK_NOARG(ScDuplicateRecordsDlg, RecordsChkHdl, const weld::TreeView::iter
 
     if (nRet == nTotalCount)
         m_xAllChkBtn->set_state(TRISTATE_TRUE);
-    else
+    else if (nRet == 0)
         m_xAllChkBtn->set_state(TRISTATE_FALSE);
+    else
+        m_xAllChkBtn->set_state(TRISTATE_INDET);
 }
 
 IMPL_LINK_NOARG(ScDuplicateRecordsDlg, AllCheckBtnHdl, weld::Toggleable&, void)
 {
-    SetDialogData(true);
+    if (m_xAllChkBtn->get_state() == TRISTATE_TRUE)
+        SetDialogData(true);
+    else
+        SetDialogData(false);
 }
 
 IMPL_LINK_NOARG(ScDuplicateRecordsDlg, OkHdl, weld::Button&, void)
