@@ -70,48 +70,46 @@ css::uno::Reference< css::beans::XPropertySet > OKeyColumnsHelper::createObject(
         }
     }
 
-    css::uno::Reference< css::beans::XPropertySet > xRet;
-
     // now describe the column _rName and set his related column
     xResult = m_pKey->getTable()->getMetaData()->getColumns(Catalog, aSchema, aTable, _rName);
 
-    if ( xResult.is() )
-    {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        if ( xResult->next() )
-        {
-            if ( xRow->getString(4) == _rName )
-            {
-                sal_Int32 nDataType = xRow->getInt(5);
-                OUString aTypeName(xRow->getString(6));
-                sal_Int32 nSize = xRow->getInt(7);
-                sal_Int32 nDec  = xRow->getInt(9);
-                sal_Int32 nNull = xRow->getInt(11);
-                OUString sColumnDef;
-                try
-                {
-                    sColumnDef = xRow->getString(13);
-                }
-                catch(const SQLException&)
-                {
-                    // sometimes we get an error when asking for this param
-                }
+    if ( !xResult.is() )
+        return nullptr;
 
-                xRet = new OKeyColumn(aRefColumnName,
-                                    _rName,
-                                    aTypeName,
-                                    sColumnDef,
-                                    nNull,
-                                    nSize,
-                                    nDec,
-                                    nDataType,
-                                    isCaseSensitive(),
-                                    aCatalog,
-                                    aSchema,
-                                    aTable);
-            }
-        }
+    Reference< XRow > xRow(xResult,UNO_QUERY);
+    if ( !xResult->next() )
+        return nullptr;
+
+    if ( xRow->getString(4) != _rName )
+        return nullptr;
+
+    sal_Int32 nDataType = xRow->getInt(5);
+    OUString aTypeName(xRow->getString(6));
+    sal_Int32 nSize = xRow->getInt(7);
+    sal_Int32 nDec  = xRow->getInt(9);
+    sal_Int32 nNull = xRow->getInt(11);
+    OUString sColumnDef;
+    try
+    {
+        sColumnDef = xRow->getString(13);
     }
+    catch(const SQLException&)
+    {
+        // sometimes we get an error when asking for this param
+    }
+
+    rtl::Reference<OKeyColumn> xRet = new OKeyColumn(aRefColumnName,
+                        _rName,
+                        aTypeName,
+                        sColumnDef,
+                        nNull,
+                        nSize,
+                        nDec,
+                        nDataType,
+                        isCaseSensitive(),
+                        aCatalog,
+                        aSchema,
+                        aTable);
 
     return xRet;
 }

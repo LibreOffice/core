@@ -408,100 +408,100 @@ namespace
                                           bool _bIsCurrency,
                                           sal_Int32 _nDataType)
     {
-        Reference<XPropertySet> xProp;
         Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
         Reference< XResultSet > xResult = xMetaData->getColumns(_aCatalog, _aSchema, _aTable, _rQueryName);
         OUString sCatalog;
         _aCatalog >>= sCatalog;
 
-        if ( xResult.is() )
+        if ( !xResult.is() )
+            return nullptr;
+
+        rtl::Reference<connectivity::sdbcx::OColumn> xProp;
+        UStringMixEqual aMixCompare(_bCase);
+        Reference< XRow > xRow(xResult,UNO_QUERY);
+        while( xResult->next() )
         {
-            UStringMixEqual aMixCompare(_bCase);
-            Reference< XRow > xRow(xResult,UNO_QUERY);
-            while( xResult->next() )
+            if ( aMixCompare(xRow->getString(4),_rName) )
             {
-                if ( aMixCompare(xRow->getString(4),_rName) )
+                sal_Int32       nField5 = xRow->getInt(5);
+                OUString aField6 = xRow->getString(6);
+                sal_Int32       nField7 = xRow->getInt(7)
+                            ,   nField9 = xRow->getInt(9)
+                            ,   nField11= xRow->getInt(11);
+                OUString sField12 = xRow->getString(12),
+                                sField13 = xRow->getString(13);
+                ::comphelper::disposeComponent(xRow);
+
+                bool bAutoIncrement = _bIsAutoIncrement
+                        ,bIsCurrency    = _bIsCurrency;
+                if ( _bQueryForInfo )
                 {
-                    sal_Int32       nField5 = xRow->getInt(5);
-                    OUString aField6 = xRow->getString(6);
-                    sal_Int32       nField7 = xRow->getInt(7)
-                                ,   nField9 = xRow->getInt(9)
-                                ,   nField11= xRow->getInt(11);
-                    OUString sField12 = xRow->getString(12),
-                                    sField13 = xRow->getString(13);
-                    ::comphelper::disposeComponent(xRow);
+                    const OUString sQuote = xMetaData->getIdentifierQuoteString();
+                    OUString sQuotedName  = ::dbtools::quoteName(sQuote,_rName);
+                    OUString sComposedName = composeTableNameForSelect(_xConnection, getString( _aCatalog ), _aSchema, _aTable );
 
-                    bool bAutoIncrement = _bIsAutoIncrement
-                            ,bIsCurrency    = _bIsCurrency;
-                    if ( _bQueryForInfo )
+                    ColumnInformationMap aInfo((UStringMixLess(_bCase)));
+                    collectColumnInformation(_xConnection,sComposedName,sQuotedName,aInfo);
+                    ColumnInformationMap::const_iterator aIter = aInfo.begin();
+                    if ( aIter != aInfo.end() )
                     {
-                        const OUString sQuote = xMetaData->getIdentifierQuoteString();
-                        OUString sQuotedName  = ::dbtools::quoteName(sQuote,_rName);
-                        OUString sComposedName = composeTableNameForSelect(_xConnection, getString( _aCatalog ), _aSchema, _aTable );
-
-                        ColumnInformationMap aInfo((UStringMixLess(_bCase)));
-                        collectColumnInformation(_xConnection,sComposedName,sQuotedName,aInfo);
-                        ColumnInformationMap::const_iterator aIter = aInfo.begin();
-                        if ( aIter != aInfo.end() )
-                        {
-                            bAutoIncrement  = aIter->second.first.first;
-                            bIsCurrency     = aIter->second.first.second;
-                            if ( DataType::OTHER == nField5 )
-                                nField5     = aIter->second.second;
-                        }
+                        bAutoIncrement  = aIter->second.first.first;
+                        bIsCurrency     = aIter->second.first.second;
+                        if ( DataType::OTHER == nField5 )
+                            nField5     = aIter->second.second;
                     }
-                    else if ( DataType::OTHER == nField5 )
-                        nField5 = _nDataType;
+                }
+                else if ( DataType::OTHER == nField5 )
+                    nField5 = _nDataType;
 
-                    if ( nField11 != ColumnValue::NO_NULLS )
+                if ( nField11 != ColumnValue::NO_NULLS )
+                {
+                    try
                     {
-                        try
+                        if ( _xPrimaryKeyColumns.is() )
                         {
-                            if ( _xPrimaryKeyColumns.is() )
-                            {
-                                if ( _xPrimaryKeyColumns->hasByName(_rName) )
-                                    nField11 = ColumnValue::NO_NULLS;
+                            if ( _xPrimaryKeyColumns->hasByName(_rName) )
+                                nField11 = ColumnValue::NO_NULLS;
 
-                            }
-                            else
+                        }
+                        else
+                        {
+                            Reference< XResultSet > xPKeys = xMetaData->getPrimaryKeys( _aCatalog, _aSchema, _aTable );
+                            Reference< XRow > xPKeyRow( xPKeys, UNO_QUERY_THROW );
+                            while( xPKeys->next() ) // there can be only one primary key
                             {
-                                Reference< XResultSet > xPKeys = xMetaData->getPrimaryKeys( _aCatalog, _aSchema, _aTable );
-                                Reference< XRow > xPKeyRow( xPKeys, UNO_QUERY_THROW );
-                                while( xPKeys->next() ) // there can be only one primary key
+                                OUString sKeyColumn = xPKeyRow->getString(4);
+                                if ( aMixCompare(_rName,sKeyColumn) )
                                 {
-                                    OUString sKeyColumn = xPKeyRow->getString(4);
-                                    if ( aMixCompare(_rName,sKeyColumn) )
-                                    {
-                                        nField11 = ColumnValue::NO_NULLS;
-                                        break;
-                                    }
+                                    nField11 = ColumnValue::NO_NULLS;
+                                    break;
                                 }
                             }
                         }
-                        catch(SQLException&)
-                        {
-                            TOOLS_WARN_EXCEPTION( "connectivity.commontools", "lcl_createSDBCXColumn" );
-                        }
                     }
-
-                    xProp = new connectivity::sdbcx::OColumn(_rName,
-                                                aField6,
-                                                sField13,
-                                                sField12,
-                                                nField11,
-                                                nField7,
-                                                nField9,
-                                                nField5,
-                                                bAutoIncrement,
-                                                false,
-                                                bIsCurrency,
-                                                _bCase,
-                                                sCatalog,
-                                                _aSchema,
-                                                _aTable);
-
-                    break;
+                    catch(SQLException&)
+                    {
+                        TOOLS_WARN_EXCEPTION( "connectivity.commontools", "lcl_createSDBCXColumn" );
+                    }
                 }
+
+                xProp = new connectivity::sdbcx::OColumn(_rName,
+                                            aField6,
+                                            sField13,
+                                            sField12,
+                                            nField11,
+                                            nField7,
+                                            nField9,
+                                            nField5,
+                                            bAutoIncrement,
+                                            false,
+                                            bIsCurrency,
+                                            _bCase,
+                                            sCatalog,
+                                            _aSchema,
+                                            _aTable);
+
+                break;
             }
         }
 

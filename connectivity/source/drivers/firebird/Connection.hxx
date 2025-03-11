@@ -27,6 +27,7 @@
 #include <memory>
 #include <OTypeInfo.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/weakref.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/document/DocumentEvent.hpp>
@@ -54,6 +55,7 @@ namespace connectivity::firebird
     class OStatementCommonBase;
     class FirebirdDriver;
     class ODatabaseMetaData;
+    class Catalog;
 
 
     typedef std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
@@ -136,9 +138,9 @@ namespace connectivity::firebird
         isc_db_handle       m_aDBHandle;
         isc_tr_handle       m_aTransactionHandle;
 
-        css::uno::WeakReference< css::sdbcx::XTablesSupplier>
+        unotools::WeakReference< Catalog >
                             m_xCatalog;
-        css::uno::WeakReference< css::sdbc::XDatabaseMetaData >
+        unotools::WeakReference< ODatabaseMetaData >
                             m_xMetaData;
         /** Statements owned by this connection. */
         OWeakRefArray       m_aStatements;

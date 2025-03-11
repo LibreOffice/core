@@ -65,33 +65,33 @@ css::uno::Reference< css::beans::XPropertySet > OIndexColumns::createObject(cons
     xResult = m_pIndex->getTable()->getConnection()->getMetaData()->getColumns(
         Catalog, aSchema, aTable, _rName);
 
-    css::uno::Reference< css::beans::XPropertySet > xRet;
-    if ( xResult.is() )
-    {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        while( xResult->next() )
-        {
-            if ( xRow->getString(4) == _rName )
-            {
-                sal_Int32 nDataType = xRow->getInt(5);
-                OUString aTypeName(xRow->getString(6));
-                sal_Int32 nSize = xRow->getInt(7);
-                sal_Int32 nDec  = xRow->getInt(9);
-                sal_Int32 nNull = xRow->getInt(11);
-                OUString aColumnDef(xRow->getString(13));
+    if ( !xResult.is() )
+        return nullptr;
 
-                xRet = new OIndexColumn(bAsc,
-                                        _rName,
-                                        aTypeName,
-                                        aColumnDef,
-                                        nNull,
-                                        nSize,
-                                        nDec,
-                                        nDataType,
-                                        true,
-                                        aCatalog, aSchema, aTable);
-                break;
-            }
+    rtl::Reference< OIndexColumn > xRet;
+    Reference< XRow > xRow(xResult,UNO_QUERY);
+    while( xResult->next() )
+    {
+        if ( xRow->getString(4) == _rName )
+        {
+            sal_Int32 nDataType = xRow->getInt(5);
+            OUString aTypeName(xRow->getString(6));
+            sal_Int32 nSize = xRow->getInt(7);
+            sal_Int32 nDec  = xRow->getInt(9);
+            sal_Int32 nNull = xRow->getInt(11);
+            OUString aColumnDef(xRow->getString(13));
+
+            xRet = new OIndexColumn(bAsc,
+                                    _rName,
+                                    aTypeName,
+                                    aColumnDef,
+                                    nNull,
+                                    nSize,
+                                    nDec,
+                                    nDataType,
+                                    true,
+                                    aCatalog, aSchema, aTable);
+            break;
         }
     }
 

@@ -51,28 +51,28 @@ css::uno::Reference< css::beans::XPropertySet > OTables::createObject(const OUSt
         aCatalog <<= sCatalog;
     Reference< XResultSet > xResult = m_xMetaData->getTables(aCatalog,sSchema,sTable,sTableTypes);
 
-    css::uno::Reference< css::beans::XPropertySet > xRet;
-    if ( xResult.is() )
-    {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        if ( xResult->next() ) // there can be only one table with this name
-        {
-            sal_Int32 nPrivileges = ::dbtools::getTablePrivileges( m_xMetaData, sCatalog, sSchema, sTable );
-            if ( m_xMetaData->isReadOnly() )
-                nPrivileges &= ~( Privilege::INSERT | Privilege::UPDATE | Privilege::DELETE | Privilege::CREATE | Privilege::ALTER | Privilege::DROP );
+    if ( !xResult.is() )
+        return nullptr;
 
-            // obtain privileges
-            xRet = new OHSQLTable( this
-                                                ,static_cast<OHCatalog&>(m_rParent).getConnection()
-                                                ,sTable
-                                                ,xRow->getString(4)
-                                                ,xRow->getString(5)
-                                                ,sSchema
-                                                ,sCatalog
-                                                ,nPrivileges);
-        }
-        ::comphelper::disposeComponent(xResult);
+    rtl::Reference< OHSQLTable > xRet;
+    Reference< XRow > xRow(xResult,UNO_QUERY);
+    if ( xResult->next() ) // there can be only one table with this name
+    {
+        sal_Int32 nPrivileges = ::dbtools::getTablePrivileges( m_xMetaData, sCatalog, sSchema, sTable );
+        if ( m_xMetaData->isReadOnly() )
+            nPrivileges &= ~( Privilege::INSERT | Privilege::UPDATE | Privilege::DELETE | Privilege::CREATE | Privilege::ALTER | Privilege::DROP );
+
+        // obtain privileges
+        xRet = new OHSQLTable( this
+                                ,static_cast<OHCatalog&>(m_rParent).getConnection()
+                                ,sTable
+                                ,xRow->getString(4)
+                                ,xRow->getString(5)
+                                ,sSchema
+                                ,sCatalog
+                                ,nPrivileges);
     }
+    ::comphelper::disposeComponent(xResult);
 
     return xRet;
 }

@@ -52,7 +52,7 @@ OKeysHelper::OKeysHelper(   OTableHelper* _pTable,
 
 css::uno::Reference< css::beans::XPropertySet > OKeysHelper::createObject(const OUString& _rName)
 {
-    css::uno::Reference< css::beans::XPropertySet > xRet;
+    rtl::Reference< OTableKeyHelper > xRet;
 
     if(!_rName.isEmpty())
     {

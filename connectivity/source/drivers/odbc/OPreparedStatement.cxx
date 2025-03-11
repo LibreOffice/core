@@ -231,7 +231,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    Reference< XResultSet > rs;
+    rtl::Reference< OResultSet > rs;
 
     prepareStatement();
 

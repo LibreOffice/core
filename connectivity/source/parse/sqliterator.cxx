@@ -1587,7 +1587,7 @@ void OSQLParseTreeIterator::setSelectColumnName(const OUString & rColumnName,con
         // without table specified
         if ( !bFkt )
         {
-            Reference< XPropertySet> xNewColumn;
+            rtl::Reference< OParseColumn> xNewColumn;
 
             for (auto const& table : *m_pImpl->m_pTables)
             {

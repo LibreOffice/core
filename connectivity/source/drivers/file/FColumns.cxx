@@ -36,31 +36,31 @@ css::uno::Reference< css::beans::XPropertySet > OColumns::createObject(const OUS
     Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(Any(),
     sSchemaName, sTableName, _rName);
 
-    css::uno::Reference< css::beans::XPropertySet > xRet;
-    if(xResult.is())
+    if(!xResult.is())
+        return nullptr;
+
+    rtl::Reference< sdbcx::OColumn > xRet;
+    Reference< XRow > xRow(xResult,UNO_QUERY);
+    while(xResult->next())
     {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        while(xResult->next())
+        if(xRow->getString(4) == _rName)
         {
-            if(xRow->getString(4) == _rName)
-            {
-                xRet = new sdbcx::OColumn(_rName,
-                                            xRow->getString(6),
-                                            xRow->getString(13),
-                                            xRow->getString(12),
-                                            xRow->getInt(11),
-                                            xRow->getInt(7),
-                                            xRow->getInt(9),
-                                            xRow->getInt(5),
-                                            false,
-                                            false,
-                                            false,
-                                            m_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
-                                            sCatalogName,
-                                            sSchemaName,
-                                            sTableName);
-                break;
-            }
+            xRet = new sdbcx::OColumn(_rName,
+                                        xRow->getString(6),
+                                        xRow->getString(13),
+                                        xRow->getString(12),
+                                        xRow->getInt(11),
+                                        xRow->getInt(7),
+                                        xRow->getInt(9),
+                                        xRow->getInt(5),
+                                        false,
+                                        false,
+                                        false,
+                                        m_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
+                                        sCatalogName,
+                                        sSchemaName,
+                                        sTableName);
+            break;
         }
     }
 

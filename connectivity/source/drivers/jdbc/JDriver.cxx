@@ -68,12 +68,11 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const OUString& url,
 {
     m_aLogger.log( LogLevel::INFO, STR_LOG_DRIVER_CONNECTING_URL, url );
 
-    Reference< XConnection > xOut;
+    rtl::Reference< java_sql_Connection > xOut;
     if ( acceptsURL(url ) )
     {
-        rtl::Reference<java_sql_Connection> pConnection = new java_sql_Connection( *this );
-        xOut = pConnection;
-        if ( !pConnection->construct(url,info) )
+        xOut = new java_sql_Connection( *this );
+        if ( !xOut->construct(url,info) )
             xOut.clear(); // an error occurred and the java driver didn't throw an exception
         else
             m_aLogger.log( LogLevel::INFO, STR_LOG_DRIVER_SUCCESS );

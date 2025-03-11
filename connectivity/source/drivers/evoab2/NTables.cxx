@@ -37,21 +37,21 @@ css::uno::Reference< css::beans::XPropertySet > OEvoabTables::createObject(const
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),u"%"_ustr,aName,aTypes);
 
-    css::uno::Reference< css::beans::XPropertySet > xRet;
-    if(xResult.is())
+    rtl::Reference< OEvoabTable > xRet;
+    if(!xResult.is())
+        return nullptr;
+
+    Reference< XRow > xRow(xResult,UNO_QUERY);
+    if(xResult->next()) // there can be only one table with this name
     {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        if(xResult->next()) // there can be only one table with this name
-        {
-            xRet = new OEvoabTable(
-                    this,
-                    static_cast<OEvoabCatalog&>(m_rParent).getConnection(),
-                    aName,
-                    xRow->getString(4),
-                    xRow->getString(5),
-                    u""_ustr,
-                    u""_ustr);
-        }
+        xRet = new OEvoabTable(
+                this,
+                static_cast<OEvoabCatalog&>(m_rParent).getConnection(),
+                aName,
+                xRow->getString(4),
+                xRow->getString(5),
+                u""_ustr,
+                u""_ustr);
     }
 
     ::comphelper::disposeComponent(xResult);

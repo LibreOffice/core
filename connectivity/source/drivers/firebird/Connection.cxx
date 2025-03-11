@@ -709,11 +709,11 @@ Reference< XDatabaseMetaData > SAL_CALL Connection::getMetaData(  )
 
     // here we have to create the class with biggest interface
     // The answer is 42 :-)
-    Reference< XDatabaseMetaData > xMetaData = m_xMetaData;
+    rtl::Reference< ODatabaseMetaData > xMetaData = m_xMetaData.get();
     if(!xMetaData.is())
     {
         xMetaData = new ODatabaseMetaData(this); // need the connection because it can return it
-        m_xMetaData = xMetaData;
+        m_xMetaData = xMetaData.get();
     }
 
     return xMetaData;
@@ -879,7 +879,7 @@ void Connection::disposing()
 
     disposeStatements();
 
-    m_xMetaData = css::uno::WeakReference< css::sdbc::XDatabaseMetaData>();
+    m_xMetaData.clear();
 
     ISC_STATUS_ARRAY status;            /* status vector */
     if (m_aTransactionHandle)
@@ -949,18 +949,13 @@ uno::Reference< XTablesSupplier > Connection::createCatalog()
     MutexGuard aGuard(m_aMutex);
 
     // m_xCatalog is a weak reference. Reuse it if it still exists.
-    Reference< XTablesSupplier > xCatalog = m_xCatalog;
-    if (xCatalog.is())
-    {
-        return xCatalog;
-    }
-    else
+    rtl::Reference< Catalog > xCatalog = m_xCatalog.get();
+    if (!xCatalog.is())
     {
         xCatalog = new Catalog(this);
-        m_xCatalog = xCatalog;
-        return m_xCatalog;
+        m_xCatalog = xCatalog.get();
     }
-
+    return xCatalog;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

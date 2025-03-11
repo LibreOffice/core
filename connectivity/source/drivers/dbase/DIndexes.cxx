@@ -45,23 +45,8 @@ css::uno::Reference< css::beans::XPropertySet > ODbaseIndexes::createObject(cons
         ::dbtools::throwGenericSQLException( sError, *m_pTable );
     }
 
-    css::uno::Reference< css::beans::XPropertySet > xRet;
     std::unique_ptr<SvStream> pFileStream = ::connectivity::file::OFileTable::createStream_simpleError(sFile, StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
-    if(pFileStream)
-    {
-        pFileStream->SetEndian(SvStreamEndian::LITTLE);
-        pFileStream->SetBufferSize(DINDEX_PAGE_SIZE);
-        ODbaseIndex::NDXHeader aHeader;
-
-        pFileStream->Seek(0);
-        ReadHeader(*pFileStream, aHeader);
-        pFileStream.reset();
-
-        rtl::Reference<ODbaseIndex> pIndex = new ODbaseIndex(m_pTable,aHeader,_rName);
-        xRet = pIndex;
-        pIndex->openIndexFile();
-    }
-    else
+    if(!pFileStream)
     {
         const OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
                 STR_COULD_NOT_LOAD_FILE,
@@ -69,7 +54,18 @@ css::uno::Reference< css::beans::XPropertySet > ODbaseIndexes::createObject(cons
              ) );
         ::dbtools::throwGenericSQLException( sError, *m_pTable );
     }
-    return xRet;
+
+    pFileStream->SetEndian(SvStreamEndian::LITTLE);
+    pFileStream->SetBufferSize(DINDEX_PAGE_SIZE);
+    ODbaseIndex::NDXHeader aHeader;
+
+    pFileStream->Seek(0);
+    ReadHeader(*pFileStream, aHeader);
+    pFileStream.reset();
+
+    rtl::Reference<ODbaseIndex> pIndex = new ODbaseIndex(m_pTable,aHeader,_rName);
+    pIndex->openIndexFile();
+    return pIndex;
 }
 
 void ODbaseIndexes::impl_refresh(  )

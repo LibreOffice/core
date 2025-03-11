@@ -42,33 +42,32 @@ css::uno::Reference< css::beans::XPropertySet > OEvoabColumns::createObject(cons
         sTableName,
         _rName);
 
-    css::uno::Reference< css::beans::XPropertySet > xRet;
-    if (xResult.is())
-    {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
+    if (!xResult.is())
+        return nullptr;
 
-        while (xResult->next())
+    rtl::Reference< OColumn > xRet;
+    Reference< XRow > xRow(xResult,UNO_QUERY);
+    while (xResult->next())
+    {
+        if (xRow->getString(4) == _rName)
         {
-            if (xRow->getString(4) == _rName)
-            {
-                xRet = new OColumn(
-                        _rName,
-                        xRow->getString(6),
-                        xRow->getString(13),
-                        xRow->getString(12),
-                        xRow->getInt(11),
-                        xRow->getInt(7),
-                        xRow->getInt(9),
-                        xRow->getInt(5),
-                        false,
-                        false,
-                        false,
-                        true,
-                        sCatalogName,
-                        sSchemaName,
-                        sTableName);
-                break;
-            }
+            xRet = new OColumn(
+                    _rName,
+                    xRow->getString(6),
+                    xRow->getString(13),
+                    xRow->getString(12),
+                    xRow->getInt(11),
+                    xRow->getInt(7),
+                    xRow->getInt(9),
+                    xRow->getInt(5),
+                    false,
+                    false,
+                    false,
+                    true,
+                    sCatalogName,
+                    sSchemaName,
+                    sTableName);
+            break;
         }
     }
 

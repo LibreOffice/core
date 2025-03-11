@@ -56,7 +56,7 @@ css::uno::Reference< css::beans::XPropertySet > OIndexesHelper::createObject(con
     if ( !xConnection.is() )
         return nullptr;
 
-    css::uno::Reference< css::beans::XPropertySet > xRet;
+    rtl::Reference< OIndexHelper > xRet;
     OUString aName,aQualifier;
     sal_Int32 nLen = _rName.indexOf('.');
     if ( nLen != -1 )

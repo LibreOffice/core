@@ -54,7 +54,7 @@ css::uno::Reference<css::beans::XPropertySet> OTables::createObject(const OUStri
         aCatalog <<= sCatalog;
     Reference<XResultSet> xResult = m_xMetaData->getTables(aCatalog, sSchema, sTable, sTableTypes);
 
-    css::uno::Reference<css::beans::XPropertySet> xRet;
+    rtl::Reference<OMySQLTable> xRet;
     if (xResult.is())
     {
         Reference<XRow> xRow(xResult, UNO_QUERY);
