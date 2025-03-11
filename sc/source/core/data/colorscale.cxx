@@ -155,16 +155,17 @@ ScColorScaleEntry::ScColorScaleEntry():
     mnVal(0),
     mpFormat(nullptr),
     meType(COLORSCALE_VALUE),
-    mbGreaterThanOrEqual(true)
+    meMode(ScConditionMode::EqGreater)
 {
 }
 
-ScColorScaleEntry::ScColorScaleEntry(double nVal, const Color& rCol, ScColorScaleEntryType eType):
+ScColorScaleEntry::ScColorScaleEntry(double nVal, const Color& rCol, ScColorScaleEntryType eType,
+                                        ScConditionMode eMode):
     mnVal(nVal),
     mpFormat(nullptr),
     maColor(rCol),
     meType(eType),
-    mbGreaterThanOrEqual(true)
+    meMode(eMode)
 {
 }
 
@@ -173,7 +174,7 @@ ScColorScaleEntry::ScColorScaleEntry(const ScColorScaleEntry& rEntry):
     mpFormat(rEntry.mpFormat),
     maColor(rEntry.maColor),
     meType(rEntry.meType),
-    mbGreaterThanOrEqual(true)
+    meMode(rEntry.meMode)
 {
     setListener();
     if(rEntry.mpCell)
@@ -189,7 +190,7 @@ ScColorScaleEntry::ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& 
     mpFormat(rEntry.mpFormat),
     maColor(rEntry.maColor),
     meType(rEntry.meType),
-    mbGreaterThanOrEqual(true)
+    meMode(rEntry.meMode)
 {
     setListener();
     if(rEntry.mpCell)
@@ -251,14 +252,14 @@ double ScColorScaleEntry::GetValue() const
     return mnVal;
 }
 
-bool ScColorScaleEntry::GetGreaterThanOrEqual() const
+ScConditionMode ScColorScaleEntry::GetMode() const
 {
-    return mbGreaterThanOrEqual;
+    return meMode;
 }
 
-void ScColorScaleEntry::SetGreaterThanOrEqual(bool bGreaterThanOrEqual)
+void ScColorScaleEntry::SetMode(ScConditionMode eMode)
 {
-    mbGreaterThanOrEqual = bGreaterThanOrEqual;
+    meMode = eMode;
 }
 
 void ScColorScaleEntry::SetValue(double nValue)
@@ -1080,6 +1081,28 @@ void ScDataBarFormat::EnsureSize()
     }
 }
 
+static bool Compare(double nVal1, double nVal2, const ScIconSetFormat::const_iterator& itr)
+{
+    switch ((*itr)->GetMode())
+    {
+        case ScConditionMode::Equal:
+            return nVal1 == nVal2;
+        case ScConditionMode::Less:
+            return nVal1 < nVal2;
+        case ScConditionMode::Greater:
+            return nVal1 > nVal2;
+        case ScConditionMode::EqLess:
+            return nVal1 <= nVal2;
+        case ScConditionMode::EqGreater:
+            return nVal1 >= nVal2;
+        case ScConditionMode::NotEqual:
+            return nVal1 != nVal2;
+        default:
+            break;
+    }
+    return false;
+}
+
 ScIconSetFormatData::ScIconSetFormatData(ScIconSetFormatData const& rOther)
     : eIconSetType(rOther.eIconSetType)
     , mbShowValue(rOther.mbShowValue)
@@ -1145,37 +1168,30 @@ std::unique_ptr<ScIconSetInfo> ScIconSetFormat::GetIconSetInfo(const ScAddress& 
     // now we have for sure a value
     double nVal = rCell.getValue();
 
-    if (mpFormatData->m_Entries.size() < 2)
+    if (mpFormatData->m_Entries.size() < 3)
         return nullptr;
 
     double nMin = GetMinValue();
     double nMax = GetMaxValue();
 
-    sal_Int32 nIndex = 0;
+    sal_Int32 nIndex = -1;
     const_iterator itr = begin();
-    ++itr;
-    double nValMax = CalcValue(nMin, nMax, itr);
-
-    ++itr;
-    bool bGreaterThanOrEqual = true;
-    while(itr != end() && nVal >= nValMax)
+    ScConditionMode eMode = ScConditionMode::EqGreater;
+    double nValRef = 0;
+    int i = 0;
+    while(itr != end())
     {
-        bGreaterThanOrEqual = (*itr)->GetGreaterThanOrEqual();
-        ++nIndex;
-        nValMax = CalcValue(nMin, nMax, itr);
-        ++itr;
+        nValRef = CalcValue(nMin, nMax, itr);
+        if (Compare(nVal, nValRef, itr))
+        {
+            nIndex = i;
+            eMode = (*itr)->GetMode();
+        }
+        itr++;
+        i++;
     }
-
-    if (bGreaterThanOrEqual)
-    {
-        if(nVal >= nValMax)
-            ++nIndex;
-    }
-    else
-    {
-        if(nVal > nValMax)
-            ++nIndex;
-    }
+    if (nIndex == -1)
+        return nullptr;
 
     std::unique_ptr<ScIconSetInfo> pInfo(new ScIconSetInfo);
 
@@ -1208,6 +1224,7 @@ std::unique_ptr<ScIconSetInfo> ScIconSetFormat::GetIconSetInfo(const ScAddress& 
     }
 
     pInfo->mbShowValue = mpFormatData->mbShowValue;
+    pInfo->eConditionMode = eMode;
     return pInfo;
 }
 

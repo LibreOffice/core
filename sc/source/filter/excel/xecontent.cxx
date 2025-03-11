@@ -1254,7 +1254,7 @@ void XclExpCfvo::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->startElement( XML_cfvo,
             XML_type, getColorScaleType(mrEntry, mbFirst),
             XML_val, aValue,
-            XML_gte, sax_fastparser::UseIf("0", !mrEntry.GetGreaterThanOrEqual()));
+            XML_gte, sax_fastparser::UseIf("0", mrEntry.GetMode() != ScConditionMode::EqGreater));
 
     rWorksheet->endElement( XML_cfvo );
 }

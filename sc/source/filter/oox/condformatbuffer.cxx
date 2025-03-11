@@ -120,7 +120,7 @@ void SetCfvoData( ColorScaleRuleModelEntry* pEntry, const AttributeList& rAttrib
     if (!aGreaterThanOrEqual.isEmpty())
     {
         if (!aGreaterThanOrEqual.toBoolean())
-            pEntry->mbGreaterThanOrEqual = false;
+            pEntry->meMode = ScConditionMode::Greater;
     }
 
     if (aVal != "\"\"")
@@ -331,7 +331,7 @@ ScColorScaleEntry* ConvertToModel( const ColorScaleRuleModelEntry& rEntry, ScDoc
             pEntry->SetFormula(rEntry.maFormula, *pDoc, rAddr, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
         }
 
-        pEntry->SetGreaterThanOrEqual(rEntry.mbGreaterThanOrEqual);
+        pEntry->SetMode(rEntry.meMode);
 
         return pEntry;
 }

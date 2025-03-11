@@ -48,12 +48,14 @@ private:
     ScConditionalFormat* mpFormat;
     Color maColor;
     ScColorScaleEntryType meType;
-    bool mbGreaterThanOrEqual;
+    ScConditionMode meMode;
 
     void setListener();
 
 public:
-    SC_DLLPUBLIC ScColorScaleEntry(double nVal, const Color& rCol, ScColorScaleEntryType eType = COLORSCALE_VALUE);
+    SC_DLLPUBLIC ScColorScaleEntry(double nVal, const Color& rCol,
+                                   ScColorScaleEntryType eType = COLORSCALE_VALUE,
+                                   ScConditionMode eMode = ScConditionMode::EqGreater);
     SC_DLLPUBLIC ScColorScaleEntry();
     ScColorScaleEntry(const ScColorScaleEntry& rEntry);
     ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& rEntry);
@@ -63,8 +65,8 @@ public:
     void SetColor(const Color&);
     SC_DLLPUBLIC double GetValue() const;
     SC_DLLPUBLIC void SetValue(double nValue);
-    SC_DLLPUBLIC bool GetGreaterThanOrEqual() const;
-    SC_DLLPUBLIC void SetGreaterThanOrEqual(bool bGreaterThanOrEqual);
+    SC_DLLPUBLIC ScConditionMode GetMode() const;
+    SC_DLLPUBLIC void SetMode(ScConditionMode eMode);
     SC_DLLPUBLIC void SetFormula(const OUString& rFormula, ScDocument& rDoc, const ScAddress& rAddr,
             formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT);
 

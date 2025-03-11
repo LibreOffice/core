@@ -4965,7 +4965,7 @@ void ScXMLExport::ExportConditionalFormat(ScDocument& rDoc, SCTAB nTab)
                     else
                         AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::number(it->GetValue()));
 
-                    if (!it->GetGreaterThanOrEqual())
+                    if (it->GetMode() != ScConditionMode::EqGreater)
                         AddAttribute(XML_NAMESPACE_CALC_EXT, XML_GREATER_EQUAL, OUString::boolean(false));
 
                     AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*it));

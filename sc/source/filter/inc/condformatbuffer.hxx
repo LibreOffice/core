@@ -80,7 +80,7 @@ struct ColorScaleRuleModelEntry
     bool mbPercentile;
     bool mbNum;
     OUString maFormula;
-    bool mbGreaterThanOrEqual;
+    ScConditionMode meMode;
 
     ColorScaleRuleModelEntry():
         maColor(),
@@ -90,7 +90,7 @@ struct ColorScaleRuleModelEntry
         mbPercent(false),
         mbPercentile(false),
         mbNum(false),
-        mbGreaterThanOrEqual(true) {}
+        meMode(ScConditionMode::EqGreater) {}
 
     bool operator==(const ColorScaleRuleModelEntry &) const = default;
 };
