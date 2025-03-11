@@ -74,8 +74,8 @@ diff -ur skia.org/tools/window/MetalWindowContext.h skia/tools/window/MetalWindo
 diff -ur skia.org/tools/window/MetalWindowContext.mm skia/tools/window/MetalWindowContext.mm
 --- skia.org/tools/window/MetalWindowContext.mm	2024-10-10 14:11:32.362258108 +0200
 +++ skia/tools/window/MetalWindowContext.mm	2024-10-10 14:11:44.341323063 +0200
-@@ -35,50 +35,84 @@
- }
+@@ -33,54 +33,88 @@
+         , fDrawableHandle(nil) {}
 
  void MetalWindowContext::initializeContext() {
 +    fShared = fGlobalShared;
@@ -93,10 +93,10 @@ diff -ur skia.org/tools/window/MetalWindowContext.mm skia/tools/window/MetalWind
 +    d->fDevice.reset(MTLCreateSystemDefaultDevice());
 +    d->fQueue.reset([*d->fDevice newCommandQueue]);
 
-     if (fDisplayParams.fMSAASampleCount > 1) {
+     if (fDisplayParams->msaaSampleCount() > 1) {
          if (@available(macOS 10.11, iOS 9.0, tvOS 9.0, *)) {
--            if (![*fDevice supportsTextureSampleCount:fDisplayParams.fMSAASampleCount]) {
-+            if (![*d->fDevice supportsTextureSampleCount:fDisplayParams.fMSAASampleCount]) {
+-            if (![*fDevice supportsTextureSampleCount:fDisplayParams->msaaSampleCount()]) {
++            if (![*d->fDevice supportsTextureSampleCount:fDisplayParams->msaaSampleCount()]) {
 +                fGlobalShared.reset();
                  return;
              }
@@ -105,7 +105,7 @@ diff -ur skia.org/tools/window/MetalWindowContext.mm skia/tools/window/MetalWind
              return;
          }
      }
--    fSampleCount = fDisplayParams.fMSAASampleCount;
+-    fSampleCount = fDisplayParams->msaaSampleCount();
 -    fStencilBits = 8;
 -
 -    fValid = this->onInitializeContext();
@@ -113,13 +113,17 @@ diff -ur skia.org/tools/window/MetalWindowContext.mm skia/tools/window/MetalWind
      GrMtlBackendContext backendContext = {};
 -    backendContext.fDevice.retain((GrMTLHandle)fDevice.get());
 -    backendContext.fQueue.retain((GrMTLHandle)fQueue.get());
--    fContext = GrDirectContexts::MakeMetal(backendContext, fDisplayParams.fGrContextOptions);
--    if (!fContext && fDisplayParams.fMSAASampleCount > 1) {
+-    fContext = GrDirectContexts::MakeMetal(backendContext, fDisplayParams->grContextOptions());
+-    if (!fContext && fDisplayParams->msaaSampleCount() > 1) {
 +    backendContext.fDevice.retain((GrMTLHandle)d->fDevice.get());
 +    backendContext.fQueue.retain((GrMTLHandle)d->fQueue.get());
-+    d->fContext = GrDirectContexts::MakeMetal(backendContext, fDisplayParams.fGrContextOptions);
-+    if (!d->fContext && fDisplayParams.fMSAASampleCount > 1) {
-         fDisplayParams.fMSAASampleCount /= 2;
++    d->fContext = GrDirectContexts::MakeMetal(backendContext, fDisplayParams->grContextOptions());
++    if (!d->fContext && fDisplayParams->msaaSampleCount() > 1) {
+         auto newParams = DisplayParamsBuilder(fDisplayParams.get());
+         newParams.msaaSampleCount(fDisplayParams->msaaSampleCount() / 2);
+         // Don't call this->setDisplayParams because that also calls
+         // destroyContext() and initializeContext().
+         fDisplayParams = newParams.build();
 +        fGlobalShared.reset();
          this->initializeContext();
          return;
@@ -130,7 +134,7 @@ diff -ur skia.org/tools/window/MetalWindowContext.mm skia/tools/window/MetalWind
 +
 +    fContext = fShared->fContext;
 +
-+    fSampleCount = fDisplayParams.fMSAASampleCount;
++    fSampleCount = fDisplayParams->msaaSampleCount();
 +    fStencilBits = 8;
 +
 +    fValid = this->onInitializeContext();
@@ -224,7 +228,7 @@ diff -ur skia.org/tools/window/unix/GaneshVulkanWindowContext_unix.cpp.orig skia
 @@ -68,7 +71,7 @@
      };
      std::unique_ptr<WindowContext> ctx(new internal::VulkanWindowContext(
-             displayParams, createVkSurface, canPresent, instProc));
+             std::move(displayParams), createVkSurface, canPresent, instProc));
 -    if (!ctx->isValid()) {
 +    if (!ctx->isValid() && createVkSurface != nullptr) {
          return nullptr;
@@ -249,7 +253,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 
  namespace skwindow::internal {
 
-@@ -55,32 +59,43 @@
+@@ -55,36 +59,47 @@
  }
 
  void VulkanWindowContext::initializeContext() {
@@ -269,11 +273,17 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 +    skgpu::VulkanBackendContext& backendContext = fGlobalShared->backendContext;
      skgpu::VulkanExtensions extensions;
      VkPhysicalDeviceFeatures2 features;
-     if (!sk_gpu_test::CreateVkBackendContext(getInstanceProc, &backendContext, &extensions,
--                                             &features, &fDebugCallback, &fPresentQueueIndex,
-+                                             &d->features, &d->fDebugCallback, &d->fPresentQueueIndex,
+     if (!sk_gpu_test::CreateVkBackendContext(getInstanceProc,
+                                              &backendContext,
+                                              &extensions,
+-                                             &features,
+-                                             &fDebugCallback,
+-                                             &fPresentQueueIndex,
++                                             &d->features,
++                                             &d->fDebugCallback,
++                                             &d->fPresentQueueIndex,
                                               fCanPresentFn,
-                                              fDisplayParams.fCreateProtectedNativeBackend)) {
+                                              fDisplayParams->createProtectedNativeBackend())) {
 +        sk_gpu_test::FreeVulkanFeaturesStructs(&d->features);
 +        fGlobalShared.reset();
          sk_gpu_test::FreeVulkanFeaturesStructs(&features);
@@ -330,7 +340,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 -    GET_PROC(DestroyInstance);
 -    if (fDebugCallback != VK_NULL_HANDLE) {
 -        GET_PROC(DestroyDebugReportCallbackEXT);
-+    d->fContext = GrDirectContexts::MakeVulkan(backendContext, fDisplayParams.fGrContextOptions);
++    d->fContext = GrDirectContexts::MakeVulkan(backendContext, fDisplayParams->grContextOptions());
 +
 +    GET_PROC_GLOBAL(DestroyInstance);
 +    GET_DEV_PROC_GLOBAL(DestroyDevice);
@@ -364,7 +374,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
      GET_DEV_PROC(CreateSwapchainKHR);
      GET_DEV_PROC(DestroySwapchainKHR);
      GET_DEV_PROC(GetSwapchainImagesKHR);
-@@ -121,56 +154,44 @@
+@@ -121,55 +154,43 @@
      GET_DEV_PROC(QueuePresentKHR);
      GET_DEV_PROC(GetDeviceQueue);
 
@@ -378,7 +388,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 -                                                  skgpu::ThreadSafe::kNo,
 -                                                  /*blockSize=*/std::nullopt);
 -
--    fContext = GrDirectContexts::MakeVulkan(backendContext, fDisplayParams.fGrContextOptions);
+-    fContext = GrDirectContexts::MakeVulkan(backendContext, fDisplayParams->grContextOptions());
 +    // No actual window, used just to create the shared GrContext.
 +    if(fCreateVkSurfaceFn == nullptr)
 +        return;
@@ -404,7 +414,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
          return;
      }
 
-     if (!this->createSwapchain(-1, -1, fDisplayParams)) {
+     if (!this->createSwapchain(-1, -1)) {
          this->destroyContext();
 -        sk_gpu_test::FreeVulkanFeaturesStructs(&features);
          return;
@@ -415,8 +425,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 -    sk_gpu_test::FreeVulkanFeaturesStructs(&features);
  }
 
- bool VulkanWindowContext::createSwapchain(int width, int height,
-                                           const DisplayParams& params) {
+ bool VulkanWindowContext::createSwapchain(int width, int height) {
      // check for capabilities
      VkSurfaceCapabilitiesKHR caps;
 -    VkResult res = fGetPhysicalDeviceSurfaceCapabilitiesKHR(fPhysicalDevice, fSurface, &caps);
@@ -520,7 +529,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
          info.fLevelCount = 1;
 -        info.fCurrentQueueFamily = fPresentQueueIndex;
 +        info.fCurrentQueueFamily = fShared->fPresentQueueIndex;
-         info.fProtected = skgpu::Protected(fDisplayParams.fCreateProtectedNativeBackend);
+         info.fProtected = skgpu::Protected(fDisplayParams->createProtectedNativeBackend());
          info.fSharingMode = sharingMode;
 
 @@ -418,8 +438,8 @@
@@ -642,7 +651,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
      }
      if (VK_ERROR_OUT_OF_DATE_KHR == res) {
          // tear swapchain down and try again
-         if (!this->createSwapchain(-1, -1, fDisplayParams)) {
+         if (!this->createSwapchain(-1, -1)) {
 -            GR_VK_CALL(fInterface, DestroySemaphore(fDevice, semaphore, nullptr));
 +            GR_VK_CALL(fShared->fInterface, DestroySemaphore(fShared->fDevice, semaphore, nullptr));
              return nullptr;
@@ -704,10 +713,10 @@ diff -ur skia.org/tools/window/VulkanWindowContext.h skia/tools/window/VulkanWin
 -    bool isValid() override { return fDevice != VK_NULL_HANDLE; }
 +    bool isValid() override { return fSurface != VK_NULL_HANDLE; }
 
-     void resize(int w, int h) override {
-         this->createSwapchain(w, h, fDisplayParams);
+     void resize(int w, int h) override { this->createSwapchain(w, h); }
+
 @@ -45,9 +49,15 @@
-     VulkanWindowContext(const DisplayParams&, CreateVkSurfaceFn, CanPresentFn,
+                         CanPresentFn,
                          PFN_vkGetInstanceProcAddr);
 
 +    static const VkPhysicalDeviceProperties& getPhysDeviceProperties() {
@@ -810,8 +819,8 @@ diff -ur skia.org/tools/window/win/VulkanWindowContext_win.cpp skia/tools/window
                                    uint32_t queueFamilyIndex) {
 @@ -66,7 +69,7 @@
 
-     std::unique_ptr<WindowContext> ctx(
-             new internal::VulkanWindowContext(params, createVkSurface, canPresent, instProc));
+     std::unique_ptr<WindowContext> ctx(new internal::VulkanWindowContext(
+             std::move(params), createVkSurface, canPresent, instProc));
 -    if (!ctx->isValid()) {
 +    if (!ctx->isValid() && createVkSurface != nullptr) {
          return nullptr;

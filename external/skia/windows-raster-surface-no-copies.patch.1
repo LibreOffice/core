@@ -18,8 +18,8 @@ diff -ur skia.org/tools/window/win/RasterWindowContext_win.cpp skia/tools/window
 +    // Do not use a packed DIB bitmap, SkSurface_Raster::onNewImageSnapshot() does
 +    // a deep copy if it does not own the pixels.
 
-     SkImageInfo info = SkImageInfo::Make(w, h, fDisplayParams.fColorType, kPremul_SkAlphaType,
-                                          fDisplayParams.fColorSpace);
+     SkImageInfo info = SkImageInfo::Make(
+             w, h, fDisplayParams->colorType(), kPremul_SkAlphaType, fDisplayParams->colorSpace());
 -    fBackbufferSurface = SkSurfaces::WrapPixels(info, pixels, sizeof(uint32_t) * w);
 +    fBackbufferSurface = SkSurfaces::Raster(info);
  }

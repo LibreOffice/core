@@ -104,18 +104,20 @@ void WinSkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
     assert(!mWindowContext);
     assert(!mSurface);
     SkiaZone zone;
-    skwindow::DisplayParams displayParams;
     assert(GetWidth() > 0 && GetHeight() > 0);
-    displayParams.fSurfaceProps = *surfaceProps();
+    skwindow::DisplayParamsBuilder aDispParamBuilder;
+    aDispParamBuilder.surfaceProps(*surfaceProps());
     switch (forceRaster ? RenderRaster : renderMethodToUse())
     {
         case RenderRaster:
-            mWindowContext = skwindow::MakeRasterForWin(mWinParent.gethWnd(), displayParams);
+            mWindowContext
+                = skwindow::MakeRasterForWin(mWinParent.gethWnd(), aDispParamBuilder.build());
             if (mWindowContext)
                 mSurface = mWindowContext->getBackbufferSurface();
             break;
         case RenderVulkan:
-            mWindowContext = skwindow::MakeVulkanForWin(mWinParent.gethWnd(), displayParams);
+            mWindowContext
+                = skwindow::MakeVulkanForWin(mWinParent.gethWnd(), aDispParamBuilder.build());
             // See flushSurfaceToWindowContext().
             if (mWindowContext)
                 mSurface = createSkSurface(GetWidth(), GetHeight());
@@ -416,8 +418,8 @@ namespace
 std::unique_ptr<skwindow::WindowContext> createVulkanWindowContext(bool /*temporary*/)
 {
     SkiaZone zone;
-    skwindow::DisplayParams displayParams;
-    return skwindow::MakeVulkanForWin(nullptr, displayParams);
+    skwindow::DisplayParamsBuilder displayParams;
+    return skwindow::MakeVulkanForWin(nullptr, displayParams.build());
 }
 }
 

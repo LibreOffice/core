@@ -67,14 +67,14 @@ X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
                                             RenderMethod renderMethod, bool temporary)
 {
     SkiaZone zone;
-    skwindow::DisplayParams displayParams;
-    displayParams.fColorType = kN32_SkColorType;
+    skwindow::DisplayParamsBuilder displayParamsBuilder;
+    displayParamsBuilder.colorType(kN32_SkColorType);
 #if defined LINUX
     // WORKAROUND: VSync causes freezes that can even temporarily freeze the entire desktop.
     // This happens even with the latest 450.66 drivers despite them claiming a fix for vsync.
     // https://forums.developer.nvidia.com/t/hangs-freezes-when-vulkan-v-sync-vk-present-mode-fifo-khr-is-enabled/67751
     if (getVendor() == DriverBlocklist::VendorNVIDIA)
-        displayParams.fDisableVsync = true;
+        displayParamsBuilder.disableVsync(true);
 #endif
     skwindow::XlibWindowInfo winInfo;
     assert(display);
@@ -103,17 +103,19 @@ X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
     switch (renderMethod)
     {
         case RenderRaster:
+        {
             // Make sure we ask for color type that matches the X11 visual. If red mask
             // is larger value than blue mask, then on little endian this means blue is first.
             // This should also preferably match SK_R32_SHIFT set in config_skia.h, as that
             // improves performance, the common setup seems to be BGRA (possibly because of
             // choosing OpenGL-capable visual).
-            displayParams.fColorType
-                = (visual->red_mask > visual->blue_mask ? kBGRA_8888_SkColorType
-                                                        : kRGBA_8888_SkColorType);
-            return skwindow::MakeRasterForXlib(winInfo, displayParams);
+            displayParamsBuilder.colorType(visual->red_mask > visual->blue_mask
+                                               ? kBGRA_8888_SkColorType
+                                               : kRGBA_8888_SkColorType);
+            return skwindow::MakeRasterForXlib(winInfo, displayParamsBuilder.build());
+        }
         case RenderVulkan:
-            return skwindow::MakeGaneshVulkanForXlib(winInfo, displayParams);
+            return skwindow::MakeGaneshVulkanForXlib(winInfo, displayParamsBuilder.build());
         case RenderMetal:
             abort();
             break;
