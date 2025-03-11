@@ -172,7 +172,7 @@ XMLDrawingPageStyleContext::XMLDrawingPageStyleContext(
     size_t size(1); // for the -1 entry
     for (ContextID_Index_Pair const* pTemp(pContextIDs); pTemp->nContextID != -1; ++size, ++pTemp);
     m_pContextIDs.reset(new ContextID_Index_Pair[size]);
-    std::memcpy(m_pContextIDs.get(), pContextIDs, size * sizeof(ContextID_Index_Pair));
+    std::copy(pContextIDs, pContextIDs + size, m_pContextIDs.get());
 }
 
 SdXMLDrawingPageStyleContext::SdXMLDrawingPageStyleContext(
