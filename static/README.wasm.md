@@ -433,7 +433,7 @@ For instance, this autogen.input works for me:
 `--disable-crashdump`
 `--host=wasm32-local-emscripten`
 `--disable-gui`
-`--with-main-module=writer`
+`--with-wasm-module=writer`
 `--with-package-format=emscripten`
 
 For building LO core for use in COWASM, it is known to work to use
