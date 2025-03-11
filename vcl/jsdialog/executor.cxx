@@ -91,6 +91,16 @@ StringMap jsonToStringMap(const char* pJSON)
     return aArgs;
 }
 
+void SendNavigatorForView(const sal_uInt64 nShellId)
+{
+    jsdialog::SendFullUpdate(OUString::number(nShellId) + "navigator", "NavigatorPanel");
+}
+
+void SendSidebarForView(const sal_uInt64 nShellId)
+{
+    jsdialog::SendFullUpdate(OUString::number(nShellId) + "sidebar", "Panel");
+}
+
 void SendFullUpdate(const OUString& nWindowId, const OUString& rWidget)
 {
     auto aWidgetMap = JSInstanceBuilder::Widgets().Find(nWindowId);

@@ -5093,6 +5093,8 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
 
         if (jsdialog::ExecuteAction(sCurrentShellId + "sidebar", sControlId, aMap))
             return;
+        if (jsdialog::ExecuteAction(sCurrentShellId + "navigator", sControlId, aMap))
+            return;
         if (jsdialog::ExecuteAction(sCurrentShellId + "notebookbar", sControlId, aMap))
             return;
         if (jsdialog::ExecuteAction(sCurrentShellId + "formulabar", sControlId, aMap))
@@ -5103,6 +5105,9 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
         // these dialogs are created with WindowId "0"
         if (!SfxViewShell::Current() && jsdialog::ExecuteAction(u"0"_ustr, sControlId, aMap))
             return;
+
+        // force resend - used in mobile-wizard
+        jsdialog::SendSidebarForView(nCurrentShellId);
     }
     catch (std::out_of_range& e)
     {
@@ -5110,6 +5115,7 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
         assert(false);
     }
     catch (...) {}
+
 }
 
 

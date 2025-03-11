@@ -93,7 +93,8 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
 
     void initializeDialogSender();
     void initializePopupSender();
-    void initializeSidebarSender(sal_uInt64 nLOKWindowId, const std::u16string_view& rUIFile);
+    void initializeSidebarSender(sal_uInt64 nLOKWindowId, const std::u16string_view& rUIFile,
+                                 const std::u16string_view& sTypeOfJSON);
     void initializeNotebookbarSender(sal_uInt64 nLOKWindowId);
     void initializeFormulabarSender(sal_uInt64 nLOKWindowId, const std::u16string_view& sTypeOfJSON,
                                     vcl::Window* pVclParent);
@@ -148,10 +149,9 @@ public:
     CreateNotebookbarBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
                              const css::uno::Reference<css::frame::XFrame>& rFrame,
                              sal_uInt64 nWindowId = 0);
-    static std::unique_ptr<JSInstanceBuilder> CreateSidebarBuilder(weld::Widget* pParent,
-                                                                   const OUString& rUIRoot,
-                                                                   const OUString& rUIFile,
-                                                                   sal_uInt64 nLOKWindowId = 0);
+    static std::unique_ptr<JSInstanceBuilder>
+    CreateSidebarBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+                         const OUString& jsonType, sal_uInt64 nLOKWindowId = 0);
 
     static std::unique_ptr<JSInstanceBuilder>
     CreatePopupBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);

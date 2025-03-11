@@ -3574,16 +3574,6 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         rReq.Done();
         return;
     }
-    if (nSID == SID_NAVIGATOR)
-    {
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            ShowChildWindow(SID_SIDEBAR);
-            ::sfx2::sidebar::Sidebar::ShowDeck(u"NavigatorDeck", this, true);
-            rReq.Done();
-            return;
-        }
-    }
 
     bool bHasChild = HasChildWindow(nSID);
     bool bShow = pShowItem ? pShowItem->GetValue() : !bHasChild;

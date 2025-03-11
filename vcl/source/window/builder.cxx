@@ -188,11 +188,13 @@ std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent,
     if (comphelper::LibreOfficeKit::isActive() && !jsdialog::isIgnored(rUIFile))
     {
         if (jsdialog::isBuilderEnabledForSidebar(rUIFile))
-            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, nLOKWindowId);
+            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "sidebar", nLOKWindowId);
         else if (jsdialog::isBuilderEnabledForPopup(rUIFile))
             return JSInstanceBuilder::CreatePopupBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
         else if (jsdialog::isBuilderEnabledForMenu(rUIFile))
             return JSInstanceBuilder::CreateMenuBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
+        else if (jsdialog::isBuilderEnabledForNavigator(rUIFile))
+            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "navigator", nLOKWindowId);
         else if (jsdialog::isBuilderEnabled(rUIFile, bMobile))
             return JSInstanceBuilder::CreateDialogBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
         else

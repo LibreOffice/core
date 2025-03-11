@@ -48,6 +48,8 @@
 #include <DrawViewShell.hxx>
 #include <utility>
 
+#include <vcl/jsdialog/executor.hxx>
+
 #include <vcl/commandevent.hxx>
 #include <comphelper/lok.hxx>
 
@@ -69,6 +71,12 @@ SdNavigatorWin::SdNavigatorWin(weld::Widget* pParent, SfxBindings* pInBindings, 
     , meDragType ( NAVIGATOR_DRAGTYPE_EMBEDDED )
     , mpBindings ( pInBindings )
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
+        jsdialog::SendNavigatorForView(nShellId);
+    }
+
     mxTlbObjects->SetViewFrame( mpBindings->GetDispatcher()->GetFrame() );
 
     mxTlbObjects->connect_row_activated(LINK(this, SdNavigatorWin, ClickObjectHdl));

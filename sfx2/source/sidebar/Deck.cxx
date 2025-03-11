@@ -41,7 +41,7 @@ void Deck::LOKSendSidebarFullUpdate()
     if (comphelper::LibreOfficeKit::isActive())
     {
         sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
-        jsdialog::SendFullUpdate(OUString::number(nShellId) + "sidebar", u"Panel"_ustr);
+        jsdialog::SendSidebarForView(nShellId);
     }
 }
 

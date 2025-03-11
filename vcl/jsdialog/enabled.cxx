@@ -386,7 +386,6 @@ constexpr auto SidebarList
     = frozen::make_unordered_set<std::u16string_view>({
         // scalc
         { u"modules/scalc/ui/functionpanel.ui" },
-        { u"modules/scalc/ui/navigatorpanel.ui" },
         { u"modules/scalc/ui/sidebaralignment.ui" },
         { u"modules/scalc/ui/sidebarcellappearance.ui" },
         { u"modules/scalc/ui/sidebarnumberformat.ui" },
@@ -403,7 +402,6 @@ constexpr auto SidebarList
         { u"modules/simpress/ui/masterpagepanel.ui" },
         { u"modules/simpress/ui/masterpagepanelall.ui" },
         { u"modules/simpress/ui/masterpagepanelrecent.ui" },
-        { u"modules/simpress/ui/navigatorpanel.ui" },
         { u"modules/simpress/ui/sidebarslidebackground.ui" },
         { u"modules/simpress/ui/slidetransitionspanel.ui" },
         { u"modules/simpress/ui/tabledesignpanel.ui" },
@@ -413,7 +411,6 @@ constexpr auto SidebarList
         // swriter
         { u"modules/swriter/ui/a11ycheckissuespanel.ui" },
         { u"modules/swriter/ui/managechangessidebar.ui" },
-        { u"modules/swriter/ui/navigatorpanel.ui" },
         { u"modules/swriter/ui/pagefooterpanel.ui" },
         { u"modules/swriter/ui/pageformatpanel.ui" },
         { u"modules/swriter/ui/pageheaderpanel.ui" },
@@ -443,6 +440,14 @@ constexpr auto SidebarList
         { u"svx/ui/sidebarstylespanel.ui" },
         { u"svx/ui/sidebartextpanel.ui" }
     });
+
+// ========== NAVIGATOR ================================================= //
+constexpr auto NavigatorList
+    = frozen::make_unordered_set<std::u16string_view>({
+        { u"modules/swriter/ui/navigatorpanel.ui"},
+        { u"modules/scalc/ui/navigatorpanel.ui"},
+        { u"modules/simpress/ui/navigatorpanel.ui"}
+});
 
 // ========== NOTEBOOKBAR ================================================= //
 
@@ -557,6 +562,11 @@ bool isBuilderEnabledForMenu(std::u16string_view rUIFile)
 bool isBuilderEnabledForSidebar(std::u16string_view rUIFile)
 {
     return isInMap(SidebarList, rUIFile);
+}
+
+bool isBuilderEnabledForNavigator(std::u16string_view rUIFile)
+{
+        return isInMap(NavigatorList, rUIFile);
 }
 
 bool isInterimBuilderEnabledForNotebookbar(std::u16string_view rUIFile)
