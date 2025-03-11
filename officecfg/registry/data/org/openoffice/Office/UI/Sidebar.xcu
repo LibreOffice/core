@@ -435,7 +435,7 @@
           <value>PropertyDeck</value>
         </prop>
         <prop oor:name="DefaultMenuCommand">
-          <value>.uno:SidebarDeck.StyleListDeck</value>
+          <value>.uno:EditStyle</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
