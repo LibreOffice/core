@@ -2170,11 +2170,11 @@ AC_ARG_ENABLE(wasm-strip,
         [Strip the static build like for WASM/emscripten platform.]),
 ,)
 
-AC_ARG_WITH(main-module,
-    AS_HELP_STRING([--with-main-module=<writer/calc/impress>],
+AC_ARG_WITH(wasm-module,
+    AS_HELP_STRING([--with-wasm-module=<writer/calc/impress>],
         [Specify which main module to build for wasm.
-        Default value is 'writer'.]),
-, [with_main_module='calc writer'])
+        Default value is 'calc writer'.]),
+, [with_wasm_module='calc writer'])
 # Don't include impress by default. Debug builds become too large for Chromium
 # with 'calc impress writer' enabled. (buffer source exceeds maximum size)
 
@@ -4178,7 +4178,7 @@ if test "$cross_compiling" = "yes"; then
         ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS=TRUE
         ENABLE_WASM_STRIP_CALC=TRUE
         ENABLE_WASM_STRIP_WRITER=TRUE
-        for i in $with_main_module; do
+        for i in $with_wasm_module; do
             case "$i" in
             calc)
                 ENABLE_WASM_STRIP_ACCESSIBILITY=
@@ -4192,7 +4192,7 @@ if test "$cross_compiling" = "yes"; then
                 ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS=
                 ;;
             *)
-                AC_MSG_ERROR([Unknown --with-main-module "$i"])
+                AC_MSG_ERROR([Unknown --with-wasm-module "$i"])
             esac
         done
         if test "$ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS" = TRUE; then
