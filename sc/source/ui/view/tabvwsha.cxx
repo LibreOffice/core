@@ -940,7 +940,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
     const sal_uInt16  nSlotId = rReq.GetSlot();
     if ( !pArgs && nSlotId != SID_STYLE_NEW_BY_EXAMPLE && nSlotId != SID_STYLE_UPDATE_BY_EXAMPLE )
     {
-        // in case of vertical toolbar
+        // in case of vertical toolbar, sidebar shortcut icon
         GetDispatcher()->Execute( SID_STYLE_DESIGNER, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
         return;
     }
