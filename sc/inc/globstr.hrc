@@ -588,6 +588,7 @@
 #define STR_SENSITIVITY_INCREASE                NC_("STR_SENSITIVITY_INCREASE", "Allowable Increase")
 #define STR_SENSITIVITY_SHADOWPRICE             NC_("STR_SENSITIVITY_SHADOWPRICE", "Shadow Price")
 #define STR_SENSITIVITY_RHS                     NC_("STR_SENSITIVITY_RHS", "Constraint R.H. Side")
+#define STD_ERR_CSV_PARSE                       NC_("STD_ERR_CSV_PARSE", "An error occurred while parsing the CSV file.")
 
 #endif
 

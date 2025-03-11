@@ -10,6 +10,7 @@
 #include <dataprovider.hxx>
 #include <datatransformation.hxx>
 #include <datamapper.hxx>
+#include <exception>
 #include <stringutil.hxx>
 
 #include <tools/stream.hxx>
@@ -72,6 +73,7 @@ CSVFetchThread::CSVFetchThread(
     , mbTerminate(false)
     , maDataTransformations(std::move(rDataTransformations))
     , maImportFinishedHdl(std::move(aImportFinishedHdl))
+    , mbIsParseError(false)
 {
     maConfig.delimiters.push_back(',');
     maConfig.text_qualifier = '"';
@@ -105,7 +107,18 @@ void CSVFetchThread::execute()
 
     CSVHandler aHdl(&mrDocument);
     orcus::csv_parser<CSVHandler> parser(aBuffer, aHdl, maConfig);
-    parser.parse();
+
+    try
+    {
+        parser.parse();
+    }
+    catch(const orcus::parse_error&)
+    {
+        mbIsParseError = true;
+        mpLastException = std::current_exception();
+        RequestTerminate();
+        return;
+    }
 
     for (const auto& itr : maDataTransformations)
     {
@@ -146,6 +159,14 @@ void CSVDataProvider::Import()
     {
         SolarMutexReleaser aReleaser;
         mxCSVFetchThread->join();
+
+        // tdf#165658 An exception may have happened during the parsing of the file.
+        // Since parsing happens in a separate thread, here we need to check if
+        // something wrong happened and then rethrow the exception
+        if (mxCSVFetchThread->IsParseError())
+        {
+            std::rethrow_exception(mxCSVFetchThread->GetLastException());
+        }
     }
 }
 

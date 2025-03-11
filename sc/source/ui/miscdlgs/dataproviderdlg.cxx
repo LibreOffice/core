@@ -8,6 +8,8 @@
  */
 
 #include <dataproviderdlg.hxx>
+#include <scresid.hxx>
+#include <globstr.hrc>
 
 #include <document.hxx>
 #include <dataprovider.hxx>
@@ -1033,7 +1035,19 @@ void ScDataProviderDlg::import(ScDocument& rDoc, bool bInternal)
             return;
         rDoc.GetExternalDataMapper().insertDataSource(aSource);
     }
-    aSource.refresh(&rDoc, true);
+
+    try
+    {
+        aSource.refresh(&rDoc, true);
+    }
+    catch(const orcus::parse_error&)
+    {
+        std::unique_ptr<weld::MessageDialog> xMsgBox(Application::CreateMessageDialog(m_xDialog.get(),
+                                                  VclMessageType::Error, VclButtonsType::Close,
+                                                  ScResId(STD_ERR_CSV_PARSE)));
+        xMsgBox->run();
+    }
+
     mxTable->Invalidate();
 }
 
