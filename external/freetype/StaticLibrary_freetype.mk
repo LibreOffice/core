@@ -17,6 +17,9 @@ $(eval $(call gb_StaticLibrary_set_include,freetype,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_defs,freetype,\
+	-wd4005 \
+	-wd4267 \
+	-DDLG_STATIC \
 	-DZ_PREFIX \
 	-DFT2_BUILD_LIBRARY \
 	-DFT_DEBUG_LOGGING \
