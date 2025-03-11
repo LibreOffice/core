@@ -32,14 +32,16 @@ RedlineFlags SwEditShell::GetRedlineFlags() const
 
 void SwEditShell::SetRedlineFlags( RedlineFlags eMode, bool bRecordAllViews )
 {
-    SwDocShell* pDocSh = GetDoc()->GetDocShell();
-    bool bRecordModeChange = bRecordAllViews != pDocSh->IsChangeRecording(nullptr, bRecordAllViews);
-    if( eMode != GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags() || bRecordModeChange )
+    if (SwDocShell* pDocSh = GetDoc()->GetDocShell())
     {
-        CurrShell aCurr( this );
-        StartAllAction();
-        GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eMode, bRecordAllViews, bRecordModeChange );
-        EndAllAction();
+        bool bRecordModeChange = bRecordAllViews != pDocSh->IsChangeRecording(nullptr, bRecordAllViews);
+        if( eMode != GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags() || bRecordModeChange )
+        {
+            CurrShell aCurr( this );
+            StartAllAction();
+            GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eMode, bRecordAllViews, bRecordModeChange );
+            EndAllAction();
+        }
     }
 }
 
