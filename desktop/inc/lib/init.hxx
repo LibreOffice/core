@@ -115,7 +115,7 @@ namespace desktop {
 
         void setViewId( int viewId ) { m_viewId = viewId; }
 
-        void tilePainted(int nPart, int nMode, const tools::Rectangle& rRectangle);
+        DESKTOP_DLLPUBLIC void tilePainted(int nPart, int nMode, const tools::Rectangle& rRectangle);
         const OString& getViewRenderState() const { return m_aViewRenderState; }
 
         // SfxLockCallbackInterface
