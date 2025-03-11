@@ -317,6 +317,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkCodecImageGenerator \
     UnpackedTarball/skia/src/codec/SkColorPalette \
     UnpackedTarball/skia/src/codec/SkExif \
+    UnpackedTarball/skia/src/codec/SkGainmapInfo \
     UnpackedTarball/skia/src/codec/SkImageGenerator_FromEncoded \
     UnpackedTarball/skia/src/codec/SkMaskSwizzler \
     UnpackedTarball/skia/src/codec/SkPixmapUtils \
@@ -341,6 +342,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkPngCodec \
     UnpackedTarball/skia/src/codec/SkPngCodecBase \
+    UnpackedTarball/skia/src/codec/SkPngCompositeChunkReader \
 ))
 
 
@@ -362,7 +364,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/base/SkQuads \
     UnpackedTarball/skia/src/base/SkSafeMath \
     UnpackedTarball/skia/src/base/SkSemaphore \
-    UnpackedTarball/skia/src/base/SkSharedMutex \
     UnpackedTarball/skia/src/base/SkSpinlock \
     UnpackedTarball/skia/src/base/SkTDArray \
     UnpackedTarball/skia/src/base/SkTSearch \
@@ -639,7 +640,13 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/encode/SkICC \
 ))
 
-# from file skia/gn/core.gni:792, target "skia_encode_png_srcs"
+# from file skia/gn/core.gni:792, target "skia_encode_png_base"
+#
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/encode/SkPngEncoderBase \
+))
+
+# from file skia/gn/core.gni:800, target "skia_encode_png_srcs"
 #
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/encode/SkPngEncoderImpl \
@@ -708,6 +715,12 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/effects/imagefilters/SkPictureImageFilter \
     UnpackedTarball/skia/src/effects/imagefilters/SkRuntimeImageFilter \
     UnpackedTarball/skia/src/effects/imagefilters/SkShaderImageFilter \
+))
+
+# from file skia/gn/ports.gni:130, target "skia_ports_typeface_proxy_sources"
+#
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/ports/SkTypeface_proxy \
 ))
 
 # from file skia/gn/sksl.gni:42, target "skia_sksl_sources"
@@ -846,7 +859,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/utils/SkEventTracer \
     UnpackedTarball/skia/src/utils/SkFloatToDecimal \
     UnpackedTarball/skia/src/sksl/SkSLModuleDataDefault \
-    UnpackedTarball/skia/src/utils/SkJSON \
     UnpackedTarball/skia/src/utils/SkJSONWriter \
     UnpackedTarball/skia/src/utils/SkMatrix22 \
     UnpackedTarball/skia/src/utils/SkMultiPictureDocument \
