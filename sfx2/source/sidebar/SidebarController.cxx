@@ -362,8 +362,12 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
         maContextChangeUpdate.RequestCall(); // async call, not a prob
                                              // calling with held
                                              // solarmutex
-        // TODO: this call is redundant but mandatory for unit test to update context on document loading
-        if (!comphelper::LibreOfficeKit::isActive())
+
+        bool bSwitchedApp = maRequestedContext.msApplication != maCurrentContext.msApplication;
+        // Happens on reattach of sidebar to frame or context change
+        // LOK performance impact: prevents to switch sidebar on every keypress in multi user case
+        // Allow when enters embedded OLE (eg. Math formula editor second time)
+        if (!comphelper::LibreOfficeKit::isActive() || bSwitchedApp)
             UpdateConfigurations();
     }
 }
@@ -550,8 +554,10 @@ void SidebarController::UpdateConfigurations()
         && mnRequestedForceFlags == SwitchFlag_NoForce)
         return;
 
-    if ((maCurrentContext.msApplication != "none") &&
-            !maCurrentContext.msApplication.isEmpty())
+    bool bIsLOK = comphelper::LibreOfficeKit::isActive();
+
+    if (!bIsLOK && maCurrentContext.msApplication != "none" &&
+        !maCurrentContext.msApplication.isEmpty())
     {
         mpResourceManager->SaveDecksSettings(maCurrentContext);
         mpResourceManager->SetLastActiveDeck(maCurrentContext, msCurrentDeckId);
@@ -559,11 +565,22 @@ void SidebarController::UpdateConfigurations()
 
     // get last active deck for this application on first update
     if (!maRequestedContext.msApplication.isEmpty() &&
-            (maCurrentContext.msApplication != maRequestedContext.msApplication))
+        (maCurrentContext.msApplication != maRequestedContext.msApplication))
     {
-        OUString sLastActiveDeck = mpResourceManager->GetLastActiveDeck( maRequestedContext );
-        if (!sLastActiveDeck.isEmpty())
-            msCurrentDeckId = sLastActiveDeck;
+        if (bIsLOK)
+        {
+            // LOK has no last-used memory
+            const auto& rOverrides = mpResourceManager->GetDeckOverrides();
+            const auto aOverride = rOverrides.find(maRequestedContext.msApplication);
+            if (aOverride != rOverrides.end())
+                msCurrentDeckId = aOverride->second;
+        }
+        else
+        {
+            OUString sLastActiveDeck = mpResourceManager->GetLastActiveDeck( maRequestedContext );
+            if (!sLastActiveDeck.isEmpty())
+                msCurrentDeckId = sLastActiveDeck;
+        }
     }
 
     maCurrentContext = maRequestedContext;

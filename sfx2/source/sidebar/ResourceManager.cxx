@@ -33,7 +33,6 @@
 
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
-#include <vcl/EnumContext.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -237,6 +236,7 @@ const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatc
 
 const OUString& ResourceManager::GetLastActiveDeck( const Context& rContext )
 {
+    assert(!comphelper::LibreOfficeKit::isActive());
     if( maLastActiveDecks.find( rContext.msApplication ) == maLastActiveDecks.end())
         return maLastActiveDecks[u"any"_ustr];
     else
@@ -245,6 +245,7 @@ const OUString& ResourceManager::GetLastActiveDeck( const Context& rContext )
 
 void ResourceManager::SetLastActiveDeck( const Context& rContext, const OUString &rsDeckId )
 {
+    assert(!comphelper::LibreOfficeKit::isActive());
     maLastActiveDecks[rContext.msApplication] = rsDeckId;
 }
 
@@ -299,6 +300,9 @@ void ResourceManager::ReadDeckList()
 
 void ResourceManager::SaveDecksSettings(const Context& rContext)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     for (auto const& deck : maDecks)
     {
        const ContextList::Entry* pMatchingEntry = deck->maContextList.GetMatch(rContext);
@@ -403,6 +407,9 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
 
 void ResourceManager::SaveLastActiveDeck(const Context& rContext, const OUString& rActiveDeck)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     maLastActiveDecks[rContext.msApplication] = rActiveDeck;
 
     std::set<OUString> aLastActiveDecks;
@@ -467,6 +474,9 @@ void ResourceManager::ReadPanelList()
 
 void ResourceManager::ReadLastActive()
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     const Sequence <OUString> aLastActive (officecfg::Office::UI::Sidebar::Content::LastActiveDeck::get());
 
     for (const auto& rDeckInfo : aLastActive)
@@ -488,9 +498,15 @@ void ResourceManager::ReadLastActive()
     }
 
     // Set up a default for Math - will do nothing if already set
-    maLastActiveDecks.emplace(
-        vcl::EnumContext::GetApplicationName(vcl::EnumContext::Application::Formula),
-        "ElementsDeck");
+    for (const auto& aOverrideDeck : GetDeckOverrides())
+        maLastActiveDecks.emplace(aOverrideDeck.first, aOverrideDeck.second);
+}
+
+void ResourceManager::SetupOverrides()
+{
+    maApplicationDeckOverrides = {
+        { vcl::EnumContext::GetApplicationName(vcl::EnumContext::Application::Formula), "ElementsDeck" }
+    };
 }
 
 void ResourceManager::ReadContextList (
