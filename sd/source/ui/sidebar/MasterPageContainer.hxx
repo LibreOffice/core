@@ -76,7 +76,7 @@ public:
 
     /** Return the preview size in pixels.
     */
-    Size const& GetPreviewSizePixel() const;
+    const Size& GetPreviewSizePixel() const;
 
     enum PreviewState
     {
