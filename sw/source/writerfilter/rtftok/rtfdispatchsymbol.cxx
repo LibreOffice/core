@@ -202,7 +202,8 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 bufferProperties(m_aTableBufferStack.back(), pPValue, nullptr);
                 auto pCValue = new RTFValue(m_aStates.top().getCharacterAttributes(),
                                             m_aStates.top().getCharacterSprms());
-                bufferProperties(m_aTableBufferStack.back(), pCValue, nullptr);
+                bufferProperties(m_aTableBufferStack.back(), pCValue, nullptr,
+                                 NS_ooxml::LN_Value_ST_StyleType_character);
             }
 
             RTFValue::Pointer_t pValue;
