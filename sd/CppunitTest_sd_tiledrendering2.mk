@@ -30,6 +30,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_tiledrendering2, \
     svt \
     svxcore \
     sd \
+    sdqahelper \
     test \
     unotest \
     vcl \
@@ -46,6 +47,7 @@ $(eval $(call gb_CppunitTest_set_include,sd_tiledrendering2,\
     -I$(SRCDIR)/sd/inc \
     -I$(SRCDIR)/sd/source/ui/inc \
     -I$(SRCDIR)/sd/qa/unit \
+	-I$(SRCDIR)/sd/qa/inc \
     $$(INCLUDE) \
 ))
 

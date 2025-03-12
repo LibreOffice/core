@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sdtiledrenderingtest.hxx>
 #include "tiledrenderingmodeltestbase.cxx"
 
 #include <app.hrc>

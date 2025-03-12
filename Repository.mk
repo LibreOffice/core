@@ -593,6 +593,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	vclbootstrapprotector \
 	scqahelper \
 	swqahelper \
+	sdqahelper \
 	wpftqahelper \
 	precompiled_system \
 	$(if $(ENABLE_CLI),$(if $(filter MSC,$(COM)),cli_cppuhelper)) \
