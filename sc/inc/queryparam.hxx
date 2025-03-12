@@ -58,7 +58,7 @@ struct SAL_DLLPUBLIC_RTTI ScQueryParamBase
     SC_DLLPUBLIC ScQueryEntry& GetEntry(SCSIZE n);
     SC_DLLPUBLIC ScQueryEntry& AppendEntry();
     ScQueryEntry* FindEntryByField(SCCOLROW nField, bool bNew);
-    std::vector<ScQueryEntry*> FindAllEntriesByField(SCCOLROW nField);
+    SC_DLLPUBLIC std::vector<ScQueryEntry*> FindAllEntriesByField(SCCOLROW nField);
     SC_DLLPUBLIC bool RemoveEntryByField(SCCOLROW nField);
     SC_DLLPUBLIC void RemoveAllEntriesByField(SCCOLROW nField);
     void Resize(size_t nNew);

@@ -76,6 +76,12 @@ SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const ScRange
 
 SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const OpCode& rCode);
 
+namespace svl {
+
+SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const SharedString& rStr);
+
+}
+
 SCQAHELPER_DLLPUBLIC bool checkOutput(
     const ScDocument* pDoc, const ScRange& aOutRange,
     const std::vector<std::vector<const char*>>& aCheck, const char* pCaption );

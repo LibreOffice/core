@@ -69,13 +69,13 @@ FormulaGrammarSwitch::~FormulaGrammarSwitch()
 // calc data structure pretty printer
 std::ostream& operator<<(std::ostream& rStrm, const ScAddress& rAddr)
 {
-    rStrm << "Col: " << rAddr.Col() << " Row: " << rAddr.Row() << " Tab: " << rAddr.Tab() << "\n";
+    rStrm << "(Col: " << rAddr.Col() << "; Row: " << rAddr.Row() << "; Tab: " << rAddr.Tab() << ")";
     return rStrm;
 }
 
 std::ostream& operator<<(std::ostream& rStrm, const ScRange& rRange)
 {
-    rStrm << "ScRange: " << rRange.aStart << rRange.aEnd << "\n";
+    rStrm << rRange.aStart << "-" << rRange.aEnd;
     return rStrm;
 }
 
@@ -91,6 +91,16 @@ std::ostream& operator<<(std::ostream& rStrm, const OpCode& rCode)
 {
     rStrm << static_cast<sal_uInt16>(rCode);
     return rStrm;
+}
+
+namespace svl {
+
+std::ostream& operator<<(std::ostream& rStrm, const SharedString& rStr)
+{
+    rStrm << "(s='" << rStr.getString() << "'; ics='" << rStr.getIgnoreCaseString() << "')";
+    return rStrm;
+}
+
 }
 
 void ScModelTestBase::loadFile(const OUString& aFileName, std::string& aContent)
