@@ -2341,7 +2341,7 @@ void MiscSettings::SetAppColorMode(int nMode)
     // Updating the dark mode state of everything all at once does not
     // solve all failures to update colors when the light/dark mode
     // changes, but it eliminates enough failures that the UI is now
-    // generally readble without restarting LibreOffice.
+    // generally readable without restarting LibreOffice.
     // Important: all of the following steps must be done. Otherwise,
     // changing the macOS light/dark mode preference while LibreOffice
     // is running will cause the color mode state change to fail.
