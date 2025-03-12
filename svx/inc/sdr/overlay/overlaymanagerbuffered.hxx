@@ -62,6 +62,9 @@ namespace sdr::overlay
             // complete redraw
             virtual void completeRedraw(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice = nullptr) const override;
 
+            // flush. Do buffered updates.
+            virtual void flush() override;
+
             // invalidate the given range at local OutputDevice
             virtual void invalidateRange(const basegfx::B2DRange& rRange) override;
         };

@@ -388,6 +388,12 @@ namespace sdr::overlay
             OverlayManager::completeRedraw(rRegion, pPreRenderDevice);
         }
 
+        void OverlayManagerBuffered::flush()
+        {
+            // call timer handler direct
+            ImpBufferTimerHandler(nullptr);
+        }
+
         void OverlayManagerBuffered::invalidateRange(const basegfx::B2DRange& rRange)
         {
             if(rRange.isEmpty())
