@@ -172,7 +172,7 @@ void changePolyPolys(
     {
         if (pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_GROUPPRIMITIVE2D)
         {
-            auto& rGroupPrimitive = static_cast<drawinglayer::primitive2d::GroupPrimitive2D&>(*(pBasePrimitive.get()));
+            auto& rGroupPrimitive = static_cast<drawinglayer::primitive2d::GroupPrimitive2D&>(*pBasePrimitive);
             const drawinglayer::primitive2d::Primitive2DContainer& rChildren = rGroupPrimitive.getChildren();
             changePolyPolys(rChildren, bRenderObject, rPrimitivesToUnhide);
         }

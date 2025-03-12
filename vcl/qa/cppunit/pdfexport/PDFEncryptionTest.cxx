@@ -351,7 +351,7 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testFileEncryption)
         = parseHex("90e657b78c0315610f3f421bd396ff635fa8fe3cf2ea399e7e1ae23e6185b4fc");
     std::vector<sal_uInt8> aIV = parseHex("d07efca5cce3c18fd8e344d45d826886");
 
-    constexpr const auto aData = std::to_array<sal_uInt8>({ 'e', 'n', '-', 'G', 'B' });
+    static constexpr const auto aData = std::to_array<sal_uInt8>({ 'e', 'n', '-', 'G', 'B' });
 
     std::vector<sal_uInt8> aEncryptedBuffer;
 

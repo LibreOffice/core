@@ -315,12 +315,6 @@ namespace
             m_xBtnLicense->connect_clicked( LINK(this, LicenseDialog, LicenseHdl) );
             m_xBtnEula->connect_clicked( LINK(this, LicenseDialog, EulaHdl) );
         }
-
-        virtual short run() override
-        {
-            short nRet = GenericDialogController::run();
-            return nRet;
-        }
     };
 
     IMPL_LINK_NOARG(LicenseDialog, EulaHdl, weld::Button&, void)

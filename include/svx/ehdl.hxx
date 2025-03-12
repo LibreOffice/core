@@ -15,7 +15,7 @@
 class SVX_DLLPUBLIC SvxErrorContext : public SfxErrorContext
 {
 public:
-    SvxErrorContext(sal_uInt16 nCtxIdP, OUString aArg1, weld::Window* pWin);
+    SvxErrorContext(sal_uInt16 nCtxIdP, const OUString& aArg1, weld::Window* pWin);
 
 private:
     virtual OUString Translate(TranslateId aId) const;

@@ -502,7 +502,7 @@ void Writer::Impl_writeText(const Point& rPos, const OUString& rText, const Kern
         }
         else
         {
-            pOwnArray.reset(new KernArray());
+            pOwnArray.reset(new KernArray);
             aNormSize = Size(
                 basegfx::fround<tools::Long>(mpVDev->GetTextArray(rText, pOwnArray.get()).nWidth),
                 0);

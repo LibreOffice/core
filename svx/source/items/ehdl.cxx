@@ -11,8 +11,8 @@
 #include <svx/ehdl.hxx>
 #include <svx/svxerr.hxx>
 
-SvxErrorContext::SvxErrorContext(sal_uInt16 nCtxIdP, OUString aArgOne, weld::Window* pWin)
-    : SfxErrorContext(nCtxIdP, aArgOne, pWin, RID_SVXERRCTX)
+SvxErrorContext::SvxErrorContext(sal_uInt16 nCtxIdP, const OUString& rArgOne, weld::Window* pWin)
+    : SfxErrorContext(nCtxIdP, rArgOne, pWin, RID_SVXERRCTX)
 {
 }
 
