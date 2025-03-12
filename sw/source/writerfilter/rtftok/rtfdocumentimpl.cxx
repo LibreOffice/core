@@ -2382,7 +2382,8 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
             else
             {
                 auto pFFValue = new RTFValue(aFFAttributes, aFFSprms);
-                bufferProperties(*m_aStates.top().getCurrentBuffer(), pFFValue, nullptr);
+                bufferProperties(*m_aStates.top().getCurrentBuffer(), pFFValue, nullptr,
+                                 NS_ooxml::LN_Value_ST_StyleType_character);
             }
             m_aFormfieldAttributes.clear();
             m_aFormfieldSprms.clear();
@@ -2584,7 +2585,8 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 Mapper().props(new RTFReferenceProperties(lcl_getBookmarkProperties(nPos, aStr)));
             else
                 bufferProperties(*m_aStates.top().getCurrentBuffer(),
-                                 new RTFValue(lcl_getBookmarkProperties(nPos, aStr)), nullptr);
+                                 new RTFValue(lcl_getBookmarkProperties(nPos, aStr)), nullptr,
+                                 NS_ooxml::LN_Value_ST_StyleType_character);
         }
         break;
         case Destination::BOOKMARKEND:
@@ -2599,7 +2601,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
             else
                 bufferProperties(*m_aStates.top().getCurrentBuffer(),
                                  new RTFValue(lcl_getBookmarkProperties(m_aBookmarks[aStr], aStr)),
-                                 nullptr);
+                                 nullptr, NS_ooxml::LN_Value_ST_StyleType_character);
         }
         break;
         case Destination::INDEXENTRY:
@@ -2906,7 +2908,8 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
             else
             {
                 auto const pValue2 = new RTFValue(aAttributes, RTFSprms());
-                bufferProperties(*m_aStates.top().getCurrentBuffer(), pValue2, nullptr);
+                bufferProperties(*m_aStates.top().getCurrentBuffer(), pValue2, nullptr,
+                                 NS_ooxml::LN_Value_ST_StyleType_character);
             }
         }
         break;
@@ -3697,7 +3700,8 @@ RTFError RTFDocumentImpl::popState()
             Mapper().props(new RTFReferenceProperties(RTFSprms(), std::move(aTCSprms)));
         else
             bufferProperties(*m_aStates.top().getCurrentBuffer(),
-                             new RTFValue(RTFSprms(), aTCSprms), nullptr);
+                             new RTFValue(RTFSprms(), aTCSprms), nullptr,
+                             NS_ooxml::LN_Value_ST_StyleType_character);
     }
 
     // This is the end of the doc, see if we need to close the last section.
