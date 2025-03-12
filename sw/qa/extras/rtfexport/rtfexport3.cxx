@@ -200,6 +200,29 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116436_tableBackground)
     verify();
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf164945)
+{
+    auto verify = [this]() {
+        uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY_THROW);
+        uno::Reference<text::XText> xA1(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY_THROW);
+        auto borderA1(
+            getProperty<table::BorderLine2>(getParagraphOfText(1, xA1), u"BottomBorder"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), borderA1.InnerLineWidth);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(18), borderA1.OuterLineWidth);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), borderA1.LineDistance);
+        uno::Reference<text::XText> xB1(xTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY_THROW);
+        auto borderB1(
+            getProperty<table::BorderLine2>(getParagraphOfText(1, xB1), u"BottomBorder"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), borderB1.InnerLineWidth);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(18), borderB1.OuterLineWidth);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), borderB1.LineDistance);
+    };
+    createSwDoc("noparaborder.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf122589_firstSection)
 {
     auto verify = [this]() {
