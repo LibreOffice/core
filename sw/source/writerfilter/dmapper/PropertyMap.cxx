@@ -1670,60 +1670,93 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 // it to apply the page style; see "nightmare scenario" in
                 // wwSectionManager::InsertSegments()
                 auto xTextAppend = rDM_Impl.GetCurrentXText();
-                uno::Reference<container::XEnumerationAccess> const xCursor(
-                    xTextAppend->createTextCursorByRange(
-                        uno::Reference<text::XTextContent>(static_cast<cppu::OWeakObject*>(xSection.get()), uno::UNO_QUERY_THROW)->getAnchor()),
-                    uno::UNO_QUERY_THROW);
-                uno::Reference<container::XEnumeration> const xEnum(
-                        xCursor->createEnumeration());
-                bool isFound = false;
-                while (xEnum->hasMoreElements())
+                // if no section could be created due to a table at the given position
+                if (!xSection.is() && m_xPreStartingRange.is())
                 {
-                    uno::Reference<beans::XPropertySet> xElem;
-                    xEnum->nextElement() >>= xElem;
-                    if (xElem->getPropertySetInfo()->hasPropertyByName(u"BreakType"_ustr))
+                    //similar hack as below
+                    uno::Reference<beans::XPropertySet> const xPSRange(m_xPreStartingRange, uno::UNO_QUERY_THROW);
+                    style::BreakType eBreakType;
+                    if ((xPSRange->getPropertyValue(u"BreakType"_ustr) >>= eBreakType) && eBreakType == style::BreakType_PAGE_BEFORE)
                     {
-                        style::BreakType eBreakType;
-                        if ((xElem->getPropertyValue(u"BreakType"_ustr) >>= eBreakType) && eBreakType == style::BreakType_PAGE_BEFORE)
+                        xPSRange->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME), uno::Any(m_sPageStyleName));
+                        m_aPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(true));
+                        if (0 <= m_nPageNumber)
                         {
-                            // tdf#112201: do *not* use m_sFirstPageStyleName here!
-                            xElem->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME), uno::Any(m_sPageStyleName));
-                            m_aPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(true));
-                            isFound = true;
-                            break;
+                            sal_Int16 nPageNumber = static_cast< sal_Int16 >(m_nPageNumber);
+                            xPSRange->setPropertyValue(getPropertyName(PROP_PAGE_NUMBER_OFFSET),
+                                uno::Any(nPageNumber));
                         }
                     }
                 }
-                uno::Reference<text::XParagraphCursor> const xPCursor(xCursor, uno::UNO_QUERY_THROW);
-                float fCharHeight = 0;
-                if (!isFound)
-                {   // HACK: try the last paragraph of the previous section
-                    xPCursor->gotoPreviousParagraph(false);
-                    uno::Reference<beans::XPropertySet> const xPSCursor(xCursor, uno::UNO_QUERY_THROW);
-                    style::BreakType eBreakType;
-                    if ((xPSCursor->getPropertyValue(u"BreakType"_ustr) >>= eBreakType) && eBreakType == style::BreakType_PAGE_BEFORE)
-                    {
-                        xPSCursor->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME), uno::Any(m_sPageStyleName));
-                        m_aPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(true));
-                        isFound = true;
-                    }
-                    else
-                    {
-                        xPSCursor->getPropertyValue(u"CharHeight"_ustr) >>= fCharHeight;
-                    }
-                }
-                if (!isFound && fCharHeight <= 1.0)
+                else
                 {
-                    // If still not found, see if the last paragraph is ~invisible, and work with
-                    // the last-in-practice paragraph.
-                    xPCursor->gotoPreviousParagraph(false);
-                    uno::Reference<beans::XPropertySet> xPropertySet(xCursor, uno::UNO_QUERY_THROW);
-                    OUString aPageDescName;
-                    if ((xPropertySet->getPropertyValue(u"PageDescName"_ustr) >>= aPageDescName) && !aPageDescName.isEmpty())
+                    bool isFound = false;
+                    uno::Reference<container::XEnumerationAccess> const xCursor(
+                        xTextAppend->createTextCursorByRange(
+                            uno::Reference<text::XTextContent>(static_cast<cppu::OWeakObject*>(xSection.get()), uno::UNO_QUERY_THROW)->getAnchor()),
+                        uno::UNO_QUERY_THROW);
+                    uno::Reference<container::XEnumeration> const xEnum(
+                            xCursor->createEnumeration());
+                    while (xEnum->hasMoreElements())
                     {
-                        uno::Reference<beans::XPropertySet> xPageStyle(rDM_Impl.GetPageStyles()->getByName(aPageDescName), uno::UNO_QUERY);
-                        xPageStyle->setPropertyValue(u"FollowStyle"_ustr, uno::Any(m_sPageStyleName));
-                        m_aPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(true));
+                        uno::Reference<beans::XPropertySet> xElem;
+                        xEnum->nextElement() >>= xElem;
+                        if (xElem->getPropertySetInfo()->hasPropertyByName(u"BreakType"_ustr))
+                        {
+                            style::BreakType eBreakType;
+                            if ((xElem->getPropertyValue(u"BreakType"_ustr) >>= eBreakType) && eBreakType == style::BreakType_PAGE_BEFORE)
+                            {
+                                // tdf#112201: do *not* use m_sFirstPageStyleName here!
+                                xElem->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME), uno::Any(m_sPageStyleName));
+                                m_aPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(true));
+                                isFound = true;
+                                if (0 <= m_nPageNumber)
+                                {
+                                    sal_Int16 nPageNumber = static_cast< sal_Int16 >(m_nPageNumber);
+                                    xElem->setPropertyValue(getPropertyName(PROP_PAGE_NUMBER_OFFSET),
+                                        uno::Any(nPageNumber));
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    uno::Reference<text::XParagraphCursor> const xPCursor(xCursor, uno::UNO_QUERY_THROW);
+                    float fCharHeight = 0;
+                    if (!isFound)
+                    {   // HACK: try the last paragraph of the previous section
+                        xPCursor->gotoPreviousParagraph(false);
+                        uno::Reference<beans::XPropertySet> const xPSCursor(xCursor, uno::UNO_QUERY_THROW);
+                        style::BreakType eBreakType;
+                        if ((xPSCursor->getPropertyValue(u"BreakType"_ustr) >>= eBreakType) && eBreakType == style::BreakType_PAGE_BEFORE)
+                        {
+                            xPSCursor->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME), uno::Any(m_sPageStyleName));
+                            m_aPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(true));
+                            isFound = true;
+                            if (0 <= m_nPageNumber)
+                            {
+                                sal_Int16 nPageNumber = static_cast< sal_Int16 >(m_nPageNumber);
+                                xPSCursor->setPropertyValue(getPropertyName(PROP_PAGE_NUMBER_OFFSET),
+                                    uno::Any(nPageNumber));
+                            }
+                        }
+                        else
+                        {
+                            xPSCursor->getPropertyValue(u"CharHeight"_ustr) >>= fCharHeight;
+                        }
+                    }
+                    if (!isFound && fCharHeight <= 1.0)
+                    {
+                        // If still not found, see if the last paragraph is ~invisible, and work with
+                        // the last-in-practice paragraph.
+                        xPCursor->gotoPreviousParagraph(false);
+                        uno::Reference<beans::XPropertySet> xPropertySet(xCursor, uno::UNO_QUERY_THROW);
+                        OUString aPageDescName;
+                        if ((xPropertySet->getPropertyValue(u"PageDescName"_ustr) >>= aPageDescName) && !aPageDescName.isEmpty())
+                        {
+                            uno::Reference<beans::XPropertySet> xPageStyle(rDM_Impl.GetPageStyles()->getByName(aPageDescName), uno::UNO_QUERY);
+                            xPageStyle->setPropertyValue(u"FollowStyle"_ustr, uno::Any(m_sPageStyleName));
+                            m_aPageStyle->setPropertyValue(getPropertyName(PROP_FIRST_IS_SHARED), uno::Any(true));
+                        }
                     }
                 }
             }
@@ -2113,6 +2146,22 @@ void SectionPropertyMap::ApplyProperties_( const uno::Reference< beans::XPropert
 sal_Int32 SectionPropertyMap::GetPageWidth() const
 {
     return getProperty( PROP_WIDTH )->second.get<sal_Int32>();
+}
+
+//create a pre-starting-range
+void SectionPropertyMap::SetStart( const uno::Reference< text::XTextRange >& xRange )
+{
+    m_xStartingRange = xRange;
+    try
+    {
+        uno::Reference<text::XParagraphCursor> const xPCursor(
+            m_xStartingRange->getText()->createTextCursorByRange(m_xStartingRange), uno::UNO_QUERY_THROW);
+        xPCursor->gotoPreviousParagraph(false);
+        m_xPreStartingRange = xPCursor;
+    }
+    catch (const uno::Exception&)
+    {
+    }
 }
 
 StyleSheetPropertyMap::StyleSheetPropertyMap()

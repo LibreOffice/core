@@ -855,6 +855,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115153)
                          getProperty<sal_Int32>(xShape, u"VertOrientPosition"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, test165717Tdf)
+{
+    createSwDoc("165717.rtf");
+
+    uno::Reference<beans::XPropertySet> const xPara3PS(getParagraphOrTable(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Converted1"_ustr, getProperty<OUString>(xPara3PS, u"PageDescName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(xPara3PS, u"PageNumberOffset"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFdo68291)
 {
     createSwDoc("fdo68291.odt");

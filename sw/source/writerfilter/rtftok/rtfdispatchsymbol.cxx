@@ -134,8 +134,10 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             m_bHadSect = true;
             if (m_bIgnoreNextContSectBreak || m_aStates.top().getFrame().hasProperties())
             {
-                // testContSectionPageBreak: need \par now
-                dispatchSymbol(RTFKeyword::PAR);
+                if (m_aStates.top().getFrame().hasProperties())
+                { // testTdf158586_0: convert \sect to \par inside frame
+                    dispatchSymbol(RTFKeyword::PAR);
+                } // testContSectionPageBreak: no \par when break ignored
                 m_bIgnoreNextContSectBreak = false;
             }
             else

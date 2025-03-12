@@ -713,14 +713,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112202, "090716_Studentische_Arbeit_VWS.docx")
         "portion"_ostr, u"Titel der studentischen Arbeit"_ustr);
     assertXPath(pXmlDoc, "/root/page[5]/header//anchored"_ostr, 0);
 
-    // page 6: same as page 4
-    assertXPath(pXmlDoc, "/root/page[6]/header/txt"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[6]/header/tab"_ostr, 1);
-    assertXPath(
-        pXmlDoc,
-        "/root/page[6]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
-        "portion"_ostr, u"Titel der studentischen Arbeit"_ustr);
-    assertXPath(pXmlDoc, "/root/page[6]/header//anchored"_ostr, 0);
+    // page 7: same as page 4
+    // page 6 is automatically empty since page number is applied with tdf#165717 tdf#165718
+    assertXPath(pXmlDoc, "/root/page[7]/header/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[7]/header/tab", 1);
+    assertXPath(pXmlDoc,
+                "/root/page[7]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/"
+                "SwParaPortion",
+                "portion", u"Titel der studentischen Arbeit"_ustr);
+    assertXPath(pXmlDoc, "/root/page[7]/header//anchored", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf79435_legacyInputFields)

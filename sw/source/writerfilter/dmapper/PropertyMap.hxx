@@ -254,6 +254,7 @@ private:
 
     bool                                            m_bIsFirstSection;
     css::uno::Reference< css::text::XTextRange >    m_xStartingRange;
+    css::uno::Reference< css::text::XTextRange >    m_xPreStartingRange;
 
     OUString m_sPageStyleName;
     rtl::Reference<SwXPageStyle>                    m_aPageStyle;
@@ -353,7 +354,7 @@ public:
 
     bool IsFirstSection() const { return m_bIsFirstSection; }
 
-    void SetStart( const css::uno::Reference< css::text::XTextRange >& xRange ) { m_xStartingRange = xRange; }
+    void SetStart( const css::uno::Reference< css::text::XTextRange >& xRange );
 
     const css::uno::Reference< css::text::XTextRange >& GetStartingRange() const { return m_xStartingRange; }
 
