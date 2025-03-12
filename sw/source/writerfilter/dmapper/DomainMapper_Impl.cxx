@@ -9863,22 +9863,6 @@ void DomainMapper_Impl::ApplySettingsTable()
         // i.e. it typesets the same text with less lines and pages.
         if (m_pSettingsTable->GetWordCompatibilityMode() >= 15)
             xSettings->setPropertyValue(u"JustifyLinesWithShrinking"_ustr, uno::Any( true ));
-
-        if (m_pSettingsTable->GetWordCompatibilityMode() > 12)
-        {
-            // impossible to be importing as a 2007-only format when compat mode is not equal to 12,
-            // so change from ECMA_376_1ST_EDITION to ISOIEC_29500_2008
-            // so that at export time it will not be forced into compat12 mode.
-            OUString sFilterName;
-            comphelper::SequenceAsHashMap aMap(m_xTextDocument->getArgs());
-            aMap["FilterName"] >>=  sFilterName;
-            if (sFilterName == "MS Word 2007 XML")
-            {
-                m_xTextDocument->setArgs(
-                    { comphelper::makePropertyValue("FilterName", OUString("Office Open XML Text")) });
-            }
-        }
-
         if (m_pSettingsTable->GetUsePrinterMetrics())
             xSettings->setPropertyValue(u"PrinterIndependentLayout"_ustr, uno::Any(document::PrinterIndependentLayout::DISABLED));
         if( m_pSettingsTable->GetEmbedTrueTypeFonts())
