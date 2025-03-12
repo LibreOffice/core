@@ -12139,7 +12139,6 @@ if test "$_os" = "SunOS" -o "$_os" = "Darwin" -o "$_os" = "FreeBSD"; then
     else
         if $GNUPATCH --version | grep "2\.0-.*-Apple" >/dev/null 2>/dev/null; then
             AC_MSG_RESULT([no, but accepted (Apple patch)])
-            add_warning "patch utility is not GNU patch. Apple's patch should work OK, but it might experience issues where GNU patch doesn't."
         else
             AC_MSG_ERROR([no, GNU patch needed. install or specify with --with-gnu-patch=/path/to/it])
         fi
