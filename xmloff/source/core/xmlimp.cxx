@@ -1787,7 +1787,7 @@ void SvXMLImport::SetError(
 {
     // create error list on demand
     if ( !mpXMLErrors )
-        mpXMLErrors = std::make_unique<XMLErrors>();
+        mpXMLErrors = std::make_unique<XMLErrors>(nullptr);
 
     // save error information
     // use document locator (if none supplied)

@@ -62,6 +62,8 @@
 
 #include <comphelper/documentconstants.hxx>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
+#include <xmloff/xmlexp.hxx>
+#include <sfx2/viewsh.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -574,6 +576,11 @@ bool SwXMLWriter::WriteThroughComponent(
     // filter!
     SAL_INFO( "sw.filter", "call filter()" );
     uno::Reference<XFilter> xFilter( xExporter, UNO_QUERY );
+    auto pFilter = dynamic_cast<SvXMLExport*>(xFilter.get());
+    if (pFilter)
+    {
+        pFilter->SetLibreOfficeKitNotifier(SfxViewShell::Current());
+    }
     return xFilter->filter( rMediaDesc );
 }
 
