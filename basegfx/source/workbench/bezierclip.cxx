@@ -307,20 +307,18 @@ bool Impl_calcSafeParams_clip( double&          t1,
          << "'-' using ($1):($2) title \"control polygon\" with lp, "
          << "'-' using ($1):($2) title \"convex hull\" with lp" << std::endl;
 
-    unsigned int k;
-    for( k=0; k<poly.size(); ++k )
+    for(const Point2D& Point: poly)
     {
-        std::cout << poly[k].x << " " << poly[k].y << std::endl;
+        std::cout << Point.x << " " << Point.y << std::endl;
     }
-    std::cout << poly[0].x << " " << poly[0].y << std::endl;
-    std::cout << "e" << std::endl;
 
-    for( k=0; k<convHull.size(); ++k )
+    std::cout << poly[0].x << " " << poly[0].y << std::endl << "e" << std::endl;
+
+    for(const Point2D& hullPoint : convHull)
     {
-        std::cout << convHull[k].x << " " << convHull[k].y << std::endl;
+        std::cout << hullPoint.x << " " << hullPoint.y << std::endl;
     }
-    std::cout << convHull[0].x << " " << convHull[0].y << std::endl;
-    std::cout << "e" << std::endl;
+    std::cout << convHull[0].x << " " << convHull[0].y << std::endl << "e" << std::endl;
 
     return bRet;
 #endif
@@ -849,20 +847,18 @@ bool Impl_calcSafeParams_focus( double&         t1,
     std::cout << "'-' using ($1):($2) title \"control polygon\" with lp, "
          << "'-' using ($1):($2) title \"convex hull\" with lp" << std::endl;
 
-    unsigned int count;
-    for( count=0; count<controlPolygon.size(); ++count )
-    {
-        std::cout << controlPolygon[count].x << " " << controlPolygon[count].y << std::endl;
-    }
-    std::cout << controlPolygon[0].x << " " << controlPolygon[0].y << std::endl;
-    std::cout << "e" << std::endl;
 
-    for( count=0; count<convHull.size(); ++count )
+    for(const Point2D& Point : controlPolygon)
     {
-        std::cout << convHull[count].x << " " << convHull[count].y << std::endl;
+        std::cout << Point.x << " " << Point.y << std::endl;
     }
-    std::cout << convHull[0].x << " " << convHull[0].y << std::endl;
-    std::cout << "e" << std::endl;
+    std::cout << controlPolygon[0].x << " " << controlPolygon[0].y << std::endl << "e" << std::endl;
+
+    for(const Point2D& hullPoint : convHull)
+    {
+        std::cout << hullPoint.x << " " << hullPoint.y << std::endl;
+    }
+    std::cout << convHull[0].x << " " << convHull[0].y << std::endl << "e" << std::endl;
 
     return bRet;
 #endif
@@ -1193,8 +1189,8 @@ void clipBezier( std::back_insert_iterator< std::vector< std::pair<double, doubl
     std::vector< Bezier > c2_segments( results.size()+1 );
     Bezier c1_remainder( c1 );
     Bezier c2_remainder( c2 );
-    unsigned int i;
-    for( i=0; i<results.size(); ++i )
+
+    for(int i = 0; i < results.size(); ++i)
     {
         Bezier c1_part2;
         Impl_deCasteljauAt( c1_segments[i], c1_part2, c1_remainder, results[i].first );
@@ -1204,8 +1200,8 @@ void clipBezier( std::back_insert_iterator< std::vector< std::pair<double, doubl
         Impl_deCasteljauAt( c2_segments[i], c2_part2, c2_remainder, results[i].second );
         c2_remainder = c2_part2;
     }
-    c1_segments[i] = c1_remainder;
-    c2_segments[i] = c2_remainder;
+    c1_segments.back() = c1_remainder;
+    c2_segments.back() = c2_remainder;
 
     // now, c1/c2_segments contain all segments, then
     // clip every resulting segment against every other
@@ -1363,12 +1359,11 @@ int main(int argc, const char *argv[])
 
         Polygon2D convHull( convexHull(aTestPoly) );
 
-        for( k=0; k<convHull.size(); ++k )
+        for(const auto& hullPoint: convHull)
         {
-            std::cout << convHull[k].x << " " << convHull[k].y << std::endl;
+            std::cout << hullPoint.x << " " << hullPoint.y << std::endl;
         }
-        std::cout << convHull[0].x << " " << convHull[0].y << std::endl;
-        std::cout << "e" << std::endl;
+        std::cout << convHull[0].x << " " << convHull[0].y << std::endl << "e" << std::endl;
     }
 #endif
 
@@ -1616,20 +1611,17 @@ int main(int argc, const char *argv[])
 
         Polygon2D convHull( convexHull( poly ) );
 
-        unsigned int k;
-        for( k=0; k<poly.size(); ++k )
+        for(const Point2D& Point : poly)
         {
-            std::cout << poly[k].x << " " << poly[k].y << std::endl;
+            std::cout << Point.x << " " << Point.y << std::endl;
         }
-        std::cout << poly[0].x << " " << poly[0].y << std::endl;
-        std::cout << "e" << std::endl;
+        std::cout << poly[0].x << " " << poly[0].y << std::endl << "e" << std::endl;
 
-        for( k=0; k<convHull.size(); ++k )
+        for(const Point2D& hullPoint : convHull)
         {
-            std::cout << convHull[k].x << " " << convHull[k].y << std::endl;
+            std::cout << hullPoint.x << " " << hullPoint.y << std::endl;
         }
-        std::cout << convHull[0].x << " " << convHull[0].y << std::endl;
-        std::cout << "e" << std::endl;
+        std::cout << convHull[0].x << " " << convHull[0].y << std::endl << "e" << std::endl;
 
         safeParamsBase_xOffset += 2;
     }
@@ -1985,15 +1977,15 @@ int main(int argc, const char *argv[])
 
             clipBezier( ii, 0.00001, c1, c2 );
 
-            for( k=0; k<result.size(); ++k )
+            for(const auto& pair : result)
             {
-                std::cout << result[k].first << std::endl;
+                std::cout << pair.first << std::endl;
             }
             std::cout << "e" << std::endl;
 
-            for( k=0; k<result.size(); ++k )
+            for(const auto& pair : result)
             {
-                std::cout << result[k].second << std::endl;
+                std::cout << pair.second << std::endl;
             }
             std::cout << "e" << std::endl;
         }
