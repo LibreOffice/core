@@ -28,6 +28,7 @@ $(eval $(call gb_Module_add_l10n_targets,sd,\
 
 ifeq ($(filter DRAGONFLY FREEBSD,$(OS)),)
 $(eval $(call gb_Module_add_slowcheck_targets,sd,\
+	Library_sdqahelper \
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
 		CppunitTest_sd_uimpress) \
     CppunitTest_sd_import_tests \
