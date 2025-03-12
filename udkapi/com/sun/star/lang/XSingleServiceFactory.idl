@@ -25,10 +25,11 @@ module com {  module sun {  module star {  module lang {
 /** Factory interface to produce instances of an implementation
     of a service specification.
 
-    This interface is deprecated.  Please use XSingleComponentFactory.
+    This interface is mostly deprecated.  Please use XSingleComponentFactory.
+    However, it is still used for specific tasks, e.g. by com::sun::star::script::Invocation or
+    com::sun::star::configuration::SimpleSetUpdate.
 
     @see XInitialization
-    @deprecated
 */
 published interface XSingleServiceFactory: com::sun::star::uno::XInterface
 {
