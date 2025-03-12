@@ -4279,6 +4279,21 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
 
     short nPara = SVBT16ToUInt16( pData );
 
+    auto stIndentValue = SvxIndentValue::zero();
+    switch (nId)
+    {
+        case NS_sprm::PDxcRight::val:
+        case NS_sprm::PDxcLeft::val:
+        case NS_sprm::PDxcLeft1::val:
+            stIndentValue = SvxIndentValue{ static_cast<double>(nPara) / 100.0,
+                                            css::util::MeasureUnit::FONT_CJK_ADVANCE };
+            break;
+
+        default:
+            stIndentValue = SvxIndentValue::twips(nPara);
+            break;
+    }
+
     SfxPoolItem const* pItem(GetFormatAttr(RES_MARGIN_FIRSTLINE));
     ::std::unique_ptr<SvxFirstLineIndentItem> pFirstLine(pItem
             ? static_cast<SvxFirstLineIndentItem*>(pItem->Clone())
@@ -4348,13 +4363,27 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
     bool bFirstLineOfstSet(false); // #i103711#
     bool bLeftIndentSet( false ); // #i105414#
 
+    // tdf#80596: PDxc* always overrides PDxa*
+    auto fnSelectPDxcOverride = [](SvxIndentValue stPrev, SvxIndentValue stNew)
+    {
+        if (stPrev.m_nUnit == css::util::MeasureUnit::TWIP
+            || stNew.m_nUnit != css::util::MeasureUnit::TWIP)
+        {
+            return stNew;
+        }
+
+        return stPrev;
+    };
+
     switch (nId)
     {
         //sprmPDxaLeft
         case NS_sprm::v6::sprmPDxaLeft:
         case NS_sprm::PDxaLeft80::val:
         case NS_sprm::PDxaLeft::val:
-            pLeftMargin->SetTextLeft(SvxIndentValue::twips(nPara));
+        case NS_sprm::PDxcLeft::val:
+            pLeftMargin->SetTextLeft(
+                fnSelectPDxcOverride(pLeftMargin->GetTextLeft(), stIndentValue));
             if (m_pCurrentColl && m_nCurrentColl < m_vColl.size())
             {
                 m_vColl[m_nCurrentColl].m_bListRelevantIndentSet = true;
@@ -4365,6 +4394,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         case NS_sprm::v6::sprmPDxaLeft1:
         case NS_sprm::PDxaLeft180::val:
         case NS_sprm::PDxaLeft1::val:
+        case NS_sprm::PDxcLeft1::val:
             /*
             As part of an attempt to break my spirit ww 8+ formats can contain
             ww 7- lists. If they do and the list is part of the style, then
@@ -4383,13 +4413,22 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
                 {
                     const SvxFirstLineIndentItem & rFirstLine =
                         m_vColl[m_nCurrentColl].m_pFormat->GetFormatAttr(RES_MARGIN_FIRSTLINE);
-                    // tdf#80596: TODO handle sprmPDxcLeft1
-                    nPara = nPara - rFirstLine.ResolveTextFirstLineOffset({});
+                    auto stValue = rFirstLine.GetTextFirstLineOffset();
+
+                    if (stValue.m_nUnit == stIndentValue.m_nUnit)
+                    {
+                        stIndentValue.m_dValue -= stValue.m_dValue;
+                    }
+                    else
+                    {
+                        stIndentValue = SvxIndentValue::twips(
+                            nPara - rFirstLine.ResolveTextFirstLineOffset({}));
+                    }
                 }
             }
 
-            // tdf#80596: TODO handle sprmPDxcLeft1
-            pFirstLine->SetTextFirstLineOffset(SvxIndentValue::twips(nPara));
+            pFirstLine->SetTextFirstLineOffset(
+                fnSelectPDxcOverride(pFirstLine->GetTextFirstLineOffset(), stIndentValue));
 
             if (!m_pCurrentColl)
             {
@@ -4420,7 +4459,8 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         case NS_sprm::v6::sprmPDxaRight:
         case NS_sprm::PDxaRight80::val:
         case NS_sprm::PDxaRight::val:
-            pRightMargin->SetRight(SvxIndentValue::twips(nPara));
+        case NS_sprm::PDxcRight::val:
+            pRightMargin->SetRight(fnSelectPDxcOverride(pRightMargin->GetRight(), stIndentValue));
             break;
         default:
             return;
@@ -6194,6 +6234,9 @@ static const wwSprmDispatcher *GetWW8SprmDispatcher()
         {NS_sprm::PDxaLeft::val,          &SwWW8ImplReader::Read_LR},
         {NS_sprm::PDxaLeft1::val,         &SwWW8ImplReader::Read_LR},
         {NS_sprm::PDxaRight::val,         &SwWW8ImplReader::Read_LR},
+        {NS_sprm::PDxcLeft::val,          &SwWW8ImplReader::Read_LR},
+        {NS_sprm::PDxcLeft1::val,         &SwWW8ImplReader::Read_LR},
+        {NS_sprm::PDxcRight::val,         &SwWW8ImplReader::Read_LR},
         {NS_sprm::TFAutofit::val,         nullptr},
         {NS_sprm::TPc::val,               nullptr},
         {NS_sprm::TDxaAbs::val,           nullptr},

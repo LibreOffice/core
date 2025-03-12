@@ -4350,28 +4350,51 @@ void WW8AttributeOutput::FormatPaperBin( const SvxPaperBinItem& rPaperBin )
 
 void WW8AttributeOutput::FormatFirstLineIndent(SvxFirstLineIndentItem const& rFirstLine)
 {
-    // tdf#80596: TODO export sprmPDxcLeft1 for first line indents in ICs
-    // sprmPDxaLeft1
-    m_rWW8Export.InsUInt16( 0x8460 );        //asian version ?
-    m_rWW8Export.InsUInt16(rFirstLine.ResolveTextFirstLineOffset({}));
+    auto stOffset = rFirstLine.GetTextFirstLineOffset();
+    if (stOffset.m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
+    {
+        // sprmPDxcLeft1
+        m_rWW8Export.InsUInt16(0x4457);
+        m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(stOffset.m_dValue * 100.0));
+    }
+    else
+    {
+        // sprmPDxaLeft1
+        m_rWW8Export.InsUInt16(0x8460);
+        m_rWW8Export.InsUInt16(rFirstLine.ResolveTextFirstLineOffset({}));
+    }
 }
 
 void WW8AttributeOutput::FormatTextLeftMargin(SvxTextLeftMarginItem const& rTextLeftMargin)
-{                                          // normal paragraphs
-    // sprmPDxaLeft
-    m_rWW8Export.InsUInt16( 0x845E );        //asian version ?
-    m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rTextLeftMargin.ResolveTextLeft({})));
+{
+    auto stOffset = rTextLeftMargin.GetTextLeft();
+    if (stOffset.m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
+    {
+        // sprmPDxcLeft
+        m_rWW8Export.InsUInt16(0x4456);
+        m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(stOffset.m_dValue * 100.0));
+    }
+    else
+    {
+        // sprmPDxaLeft
+        m_rWW8Export.InsUInt16(0x845E);
+        m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rTextLeftMargin.ResolveTextLeft({})));
+    }
 }
 
 void WW8AttributeOutput::FormatRightMargin(SvxRightMarginItem const& rRightMargin)
 {
-    // (paragraph case, this will be an else branch once others are converted)
-#if 0
+    auto stOffset = rRightMargin.GetRight();
+    if (stOffset.m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
+    {
+        // sprmPDxcRight
+        m_rWW8Export.InsUInt16(0x4455);
+        m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(stOffset.m_dValue * 100.0));
+    }
     else
-#endif
-    {                                          // normal paragraphs
+    {
         // sprmPDxaRight
-        m_rWW8Export.InsUInt16( 0x845D );        //asian version ?
+        m_rWW8Export.InsUInt16(0x845D);
         m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rRightMargin.ResolveRight({})));
     }
 }
@@ -4420,18 +4443,45 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
     }
     else
     {                                          // normal paragraphs
-        // sprmPDxaLeft
-        m_rWW8Export.InsUInt16( 0x845E );        //asian version ?
-        m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rLR.ResolveTextLeft({})));
+        if (rLR.GetTextLeft().m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
+        {
+            // sprmPDxcLeft
+            m_rWW8Export.InsUInt16(0x4456);
+            m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rLR.GetTextLeft().m_dValue * 100.0));
+        }
+        else
+        {
+            // sprmPDxaLeft
+            m_rWW8Export.InsUInt16(0x845E);
+            m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rLR.ResolveTextLeft({})));
+        }
 
-        // sprmPDxaRight
-        m_rWW8Export.InsUInt16( 0x845D );        //asian version ?
-        m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rLR.ResolveRight({})));
+        if (rLR.GetRight().m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
+        {
+            // sprmPDxcRight
+            m_rWW8Export.InsUInt16(0x4455);
+            m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rLR.GetRight().m_dValue * 100.0));
+        }
+        else
+        {
+            // sprmPDxaRight
+            m_rWW8Export.InsUInt16(0x845D);
+            m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rLR.ResolveRight({})));
+        }
 
-        // sprmPDxaLeft1
-        // tdf#80596: TODO export sprmPDxcLeft1 for first line indents in ICs
-        m_rWW8Export.InsUInt16( 0x8460 );        //asian version ?
-        m_rWW8Export.InsUInt16(rLR.ResolveTextFirstLineOffset({}));
+        if (rLR.GetTextFirstLineOffset().m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
+        {
+            // sprmPDxcLeft1
+            m_rWW8Export.InsUInt16(0x4457);
+            m_rWW8Export.InsUInt16(
+                o3tl::narrowing<sal_uInt16>(rLR.GetTextFirstLineOffset().m_dValue * 100.0));
+        }
+        else
+        {
+            // sprmPDxaLeft1
+            m_rWW8Export.InsUInt16(0x8460);
+            m_rWW8Export.InsUInt16(rLR.ResolveTextFirstLineOffset({}));
+        }
     }
 }
 
