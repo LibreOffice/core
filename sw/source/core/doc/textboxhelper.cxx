@@ -90,9 +90,8 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
     }
 
     // Create the associated TextFrame and insert it into the document.
-    uno::Reference<text::XTextContent> xTextFrame(
-        SwXServiceProvider::MakeInstance(SwServiceType::TypeTextFrame, *pShape->GetDoc()),
-        uno::UNO_QUERY);
+    rtl::Reference<SwXTextFrame> xTextFrame
+        = SwXTextFrame::CreateXTextFrame(*pShape->GetDoc(), nullptr);
 
     uno::Reference<text::XTextRange> xAnchor;
     uno::Reference<text::XTextContent> xAnchorProvider(pObject->getWeakUnoShape().get(),
@@ -118,18 +117,19 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
     {
         // insertTextContentWithProperties would fail if xAnchor is in a different XText
         assert(xAnchor->getText() == xTextContentAppend);
-        xTextContentAppend->insertTextContentWithProperties(xTextFrame, {}, xAnchor);
+        xTextContentAppend->insertTextContentWithProperties(
+            uno::Reference<text::XTextContent>(cppu::getXWeak(xTextFrame.get()), uno::UNO_QUERY),
+            {}, xAnchor);
     }
     else
     {
-        xTextContentAppend->appendTextContent(xTextFrame, uno::Sequence<beans::PropertyValue>());
+        xTextContentAppend->appendTextContent(
+            uno::Reference<text::XTextContent>(cppu::getXWeak(xTextFrame.get()), uno::UNO_QUERY),
+            uno::Sequence<beans::PropertyValue>());
     }
 
     // Link FLY and DRAW formats, so it becomes a text box (needed for syncProperty calls).
-    uno::Reference<text::XTextFrame> xRealTextFrame(xTextFrame, uno::UNO_QUERY);
-    auto pTextFrame = dynamic_cast<SwXTextFrame*>(xRealTextFrame.get());
-    assert(nullptr != pTextFrame);
-    SwFrameFormat* pFormat = pTextFrame->GetFrameFormat();
+    SwFrameFormat* pFormat = xTextFrame->GetFrameFormat();
 
     assert(nullptr != dynamic_cast<SwDrawFrameFormat*>(pShape));
     assert(nullptr != dynamic_cast<SwFlyFrameFormat*>(pFormat));
@@ -148,27 +148,23 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
         pFormat->SetOtherTextBoxFormats(pTextBox);
     }
     // Initialize properties.
-    uno::Reference<beans::XPropertySet> xPropertySet(xTextFrame, uno::UNO_QUERY);
     uno::Any aEmptyBorder{ table::BorderLine2() };
-    xPropertySet->setPropertyValue(UNO_NAME_TOP_BORDER, aEmptyBorder);
-    xPropertySet->setPropertyValue(UNO_NAME_BOTTOM_BORDER, aEmptyBorder);
-    xPropertySet->setPropertyValue(UNO_NAME_LEFT_BORDER, aEmptyBorder);
-    xPropertySet->setPropertyValue(UNO_NAME_RIGHT_BORDER, aEmptyBorder);
+    xTextFrame->setPropertyValue(UNO_NAME_TOP_BORDER, aEmptyBorder);
+    xTextFrame->setPropertyValue(UNO_NAME_BOTTOM_BORDER, aEmptyBorder);
+    xTextFrame->setPropertyValue(UNO_NAME_LEFT_BORDER, aEmptyBorder);
+    xTextFrame->setPropertyValue(UNO_NAME_RIGHT_BORDER, aEmptyBorder);
 
-    xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::Any(sal_Int32(100)));
+    xTextFrame->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::Any(sal_Int32(100)));
 
-    xPropertySet->setPropertyValue(UNO_NAME_SIZE_TYPE, uno::Any(text::SizeType::FIX));
+    xTextFrame->setPropertyValue(UNO_NAME_SIZE_TYPE, uno::Any(text::SizeType::FIX));
 
-    xPropertySet->setPropertyValue(UNO_NAME_SURROUND, uno::Any(text::WrapTextMode_THROUGH));
+    xTextFrame->setPropertyValue(UNO_NAME_SURROUND, uno::Any(text::WrapTextMode_THROUGH));
 
-    uno::Reference<container::XNamed> xNamed(xTextFrame, uno::UNO_QUERY);
-    assert(!xNamed->getName().isEmpty());
-    (void)xNamed;
+    assert(!xTextFrame->getName().isEmpty());
 
     // Link its text range to the original shape.
-    uno::Reference<text::XTextRange> xTextBox(xTextFrame, uno::UNO_QUERY_THROW);
     SwUnoInternalPaM aInternalPaM(*pShape->GetDoc());
-    if (sw::XTextRangeToSwPaM(aInternalPaM, xTextBox))
+    if (sw::XTextRangeToSwPaM(aInternalPaM, xTextFrame))
     {
         SwAttrSet aSet(pShape->GetAttrSet());
         SwFormatContent aContent(aInternalPaM.GetPointNode().StartOfSectionNode());
@@ -221,9 +217,8 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
     if (pObject)
     {
         auto pSourceText = DynCastSdrTextObj(pObject);
-        uno::Reference<text::XTextRange> xDestText(xRealTextFrame, uno::UNO_QUERY);
 
-        xDestText->setString(sCopyableText);
+        xTextFrame->setString(sCopyableText);
 
         if (pSourceText)
             pSourceText->SetText(OUString());
