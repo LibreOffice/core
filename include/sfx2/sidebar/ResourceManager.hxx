@@ -20,6 +20,7 @@
 
 #include <unotools/confignode.hxx>
 #include <map>
+#include <vcl/EnumContext.hxx>
 #include <vector>
 #include <set>
 
@@ -89,6 +90,11 @@ public:
                                             const css::uno::Reference<css::frame::XController>& rxController);
 
     const OUString& GetLastActiveDeck( const Context& rContext );
+    const std::map<OUString, OUString>& GetDeckOverrides() {
+        if (maApplicationDeckOverrides.empty())
+            SetupOverrides();
+        return maApplicationDeckOverrides;
+    }
     void SetLastActiveDeck( const Context& rContext, const OUString& rsDeckId );
 
     /** Remember the expansions state per panel and context.
@@ -107,10 +113,13 @@ private:
     PanelContainer maPanels;
     mutable std::set<OUString> maProcessedApplications;
     std::map<OUString, OUString> maLastActiveDecks;
+    // always jump to Deck on Application type, override last used
+    std::map<OUString, OUString> maApplicationDeckOverrides;
 
     void ReadDeckList();
     void ReadPanelList();
     void ReadLastActive();
+    void SetupOverrides();
     static void ReadContextList(const utl::OConfigurationNode& rNode,
                          ContextList& rContextList,
                          const OUString& rsDefaultMenuCommand);
