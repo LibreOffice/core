@@ -207,7 +207,7 @@ static oslPipe osl_psz_createPipe(const char *pszPipeName, oslPipeOptions Option
 
     SAL_INFO("sal.osl.pipe", "new pipe on fd " << pPipe->m_Socket << " '" << name << "'");
 
-    if (isForbidden(name.getStr(), osl_File_OpenFlag_Create))
+    if (isForbidden(name, osl_File_OpenFlag_Create))
         return nullptr;
 
     addr.sun_family = AF_UNIX;

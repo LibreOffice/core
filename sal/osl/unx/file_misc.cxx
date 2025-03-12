@@ -143,7 +143,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
 
     osl_systemPathRemoveSeparator(path.pData);
 
-    if (isForbidden(path.getStr(), osl_File_OpenFlag_Read))
+    if (isForbidden(path, osl_File_OpenFlag_Read))
         return osl_File_E_ACCES;
 
 #ifdef MACOSX
@@ -559,7 +559,7 @@ oslFileError SAL_CALL osl_createDirectoryPath(
 
     osl::systemPathRemoveSeparator(sys_path);
 
-    if (isForbidden(sys_path.getStr(), osl_File_OpenFlag_Create))
+    if (isForbidden(sys_path, osl_File_OpenFlag_Create))
         return osl_File_E_ACCES;
 
     return create_dir_recursively_(sys_path.pData->buffer, aDirectoryCreationCallbackFunc, pData);

@@ -24,6 +24,7 @@
 #include <osl/detail/file.h>
 #include <rtl/byteseq.h>
 #include <rtl/string.hxx>
+#include <o3tl/string_view.hxx>
 
 #include "system.hxx"
 #include "createfilehandlefromfd.hxx"
@@ -831,14 +832,14 @@ static std::vector<OString> allowedPathsRead;
 static std::vector<OString> allowedPathsReadWrite;
 static std::vector<OString> allowedPathsExecute;
 
-static OString getParentFolder(const OString &rFilePath)
+static OString getParentFolder(std::string_view rFilePath)
 {
-    sal_Int32 n = rFilePath.lastIndexOf('/');
+    sal_Int32 n = rFilePath.find_last_of('/');
     OString folderPath;
     if (n < 1)
-        folderPath = ".";
+        folderPath = "."_ostr;
     else
-        folderPath = rFilePath.copy(0, n);
+        folderPath = OString(rFilePath.substr(0, n));
 
     return folderPath;
 }
@@ -860,7 +861,7 @@ SAL_DLLPUBLIC void osl_setAllowedPaths(
     do
     {
         OString aPath = rtl::OUStringToOString(
-            aPaths.getToken(0, ':', nIndex),
+            o3tl::getToken(aPaths, 0, ':', nIndex),
             RTL_TEXTENCODING_UTF8);
 
         if (aPath.getLength() == 0)
