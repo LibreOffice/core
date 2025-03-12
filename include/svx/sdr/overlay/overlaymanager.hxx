@@ -90,6 +90,9 @@ namespace sdr::overlay
             // complete redraw
             virtual void completeRedraw(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice = nullptr) const;
 
+            // flush. Do buffered updates.
+            virtual void flush();
+
             // get the OutputDevice
             OutputDevice& getOutputDevice() const { return mrOutputDevice; }
 

@@ -2225,6 +2225,18 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
                 pGridWin[i]->DeleteAutoFillOverlay();
                 pGridWin[i]->DeleteCopySourceOverlay();
 
+                // tdf#165621 allow the Overlay to quickly update, necessary
+                // for clean graphical refreshes
+                // NOTE: This also works using Application::Reschedule(true), but
+                // triggers CppunitTest_desktop_lib "DesktopLOKTest::testRedlineCalc",
+                // probably due to not only the timer triggering but 'other' stuff
+                // that better runs later (...?). Not doing it - as long as we need
+                // to do it - is safer, but forces to keep that flush just for this
+                // single usage
+                rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = pGridWin[i]->getOverlayManager();
+                if (xOverlayManager.is())
+                    xOverlayManager->flush();
+
                 // MapMode must be set after HideCursor
                 pGridWin[i]->SetMapMode(aViewData.GetLogicMode());
 
