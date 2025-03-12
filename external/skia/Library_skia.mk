@@ -362,6 +362,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/base/SkMalloc \
     UnpackedTarball/skia/src/base/SkMathPriv \
     UnpackedTarball/skia/src/base/SkQuads \
+    UnpackedTarball/skia/src/base/SkSharedMutex \
     UnpackedTarball/skia/src/base/SkSafeMath \
     UnpackedTarball/skia/src/base/SkSemaphore \
     UnpackedTarball/skia/src/base/SkSpinlock \
@@ -461,6 +462,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkMaskBlurFilter \
     UnpackedTarball/skia/src/core/SkMaskCache \
     UnpackedTarball/skia/src/core/SkMaskFilter \
+    UnpackedTarball/skia/src/core/SkMaskFilterBase \
     UnpackedTarball/skia/src/core/SkMaskGamma \
     UnpackedTarball/skia/src/core/SkMasks \
     UnpackedTarball/skia/src/core/SkMatrix \

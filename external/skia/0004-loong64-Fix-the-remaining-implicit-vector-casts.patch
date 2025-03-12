@@ -158,7 +158,7 @@ index 42e9cd8aa229..97dfe7213d42 100644
 +        return (U32)__lasx_xvftintrz_w_s(v + 0.5f);
      }
  
-     SI U32 round(F v, F scale) {
+     SI U16 pack(U32 v) {
 @@ -963,8 +961,8 @@ namespace SK_OPTS_NS {
      }
  
@@ -280,8 +280,8 @@ index 42e9cd8aa229..97dfe7213d42 100644
 +        return (U32)__lsx_vftintrz_w_s(v + 0.5f);
 +    }
  
-     SI U32 round(F v, F scale) {
-         F t = F() + 0.5f;
+     SI U16 pack(U32 v) {
+         __m128i tmp = __lsx_vsat_wu(v, 15);
 @@ -1177,12 +1175,12 @@ namespace SK_OPTS_NS {
      }
  
