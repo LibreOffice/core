@@ -172,17 +172,23 @@ void changePolyPolys(
     {
         if (pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_GROUPPRIMITIVE2D)
         {
-            auto& rGroupPrimitive = static_cast<drawinglayer::primitive2d::GroupPrimitive2D&>(*pBasePrimitive);
-            const drawinglayer::primitive2d::Primitive2DContainer& rChildren = rGroupPrimitive.getChildren();
+            auto& rGroupPrimitive
+                = static_cast<drawinglayer::primitive2d::GroupPrimitive2D&>(*pBasePrimitive);
+            const drawinglayer::primitive2d::Primitive2DContainer& rChildren
+                = rGroupPrimitive.getChildren();
             changePolyPolys(rChildren, bRenderObject, rPrimitivesToUnhide);
         }
         else if (pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D
-            || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D
-            || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D
-            || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONHATCHPRIMITIVE2D
-            || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONHAIRLINEPRIMITIVE2D
-            || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D
-            || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONRGBAPRIMITIVE2D)
+                 || pBasePrimitive->getPrimitive2DID()
+                        == PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D
+                 || pBasePrimitive->getPrimitive2DID()
+                        == PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D
+                 || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONHATCHPRIMITIVE2D
+                 || pBasePrimitive->getPrimitive2DID()
+                        == PRIMITIVE2D_ID_POLYPOLYGONHAIRLINEPRIMITIVE2D
+                 || pBasePrimitive->getPrimitive2DID()
+                        == PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D
+                 || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONRGBAPRIMITIVE2D)
         {
             pBasePrimitive->setVisible(bRenderObject);
             if (!bRenderObject)
@@ -636,8 +642,7 @@ SdrObject* getObjectForShape(uno::Reference<drawing::XShape> const& xShape)
 } // end anonymous namespace
 
 SlideshowLayerRenderer::SlideshowLayerRenderer(SdrPage& rPage, const OString& rSlideHash,
-                                               bool bRenderBackground,
-                                               bool bRenderMasterPage)
+                                               bool bRenderBackground, bool bRenderMasterPage)
     : mrPage(rPage)
     , msSlideHash(rSlideHash)
     , mrModel(rPage.getSdrModelFromSdrPage())
