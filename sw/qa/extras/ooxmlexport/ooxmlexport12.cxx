@@ -713,14 +713,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTd112202)
                     "portion", u"Titel der studentischen Arbeit");
         assertXPath(pXmlDoc, "/root/page[5]/header//anchored", 0);
 
-        // page 6: same as page 4
-        assertXPath(pXmlDoc, "/root/page[6]/header/txt", 1);
-        assertXPath(pXmlDoc, "/root/page[6]/header/tab", 1);
+        // page 7: same as page 4
+        // page 6 is automatically empty since page number is applied with tdf#165717 tdf#165718
+        assertXPath(pXmlDoc, "/root/page[7]/header/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[7]/header/tab", 1);
         assertXPath(pXmlDoc,
-                    "/root/page[6]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/"
+                    "/root/page[7]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/"
                     "SwParaPortion",
                     "portion", u"Titel der studentischen Arbeit");
-        assertXPath(pXmlDoc, "/root/page[6]/header//anchored", 0);
+        assertXPath(pXmlDoc, "/root/page[7]/header//anchored", 0);
     };
 
     createSwDoc("090716_Studentische_Arbeit_VWS.docx");

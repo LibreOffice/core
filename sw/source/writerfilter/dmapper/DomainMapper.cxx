@@ -4582,7 +4582,7 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
             }
 
             bool bRemove = (!m_pImpl->GetParaChanged() && m_pImpl->GetRemoveThisPara()) ||
-                           (!m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr()
+                           (!IsRTFImport() && !m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr()
                             && !bSingleParagraphAfterRedline
                             && !bIsColumnBreak
                             && !m_pImpl->GetIsLastSectionGroup() // testContSectionPageBreak
