@@ -2286,7 +2286,7 @@ void SvXMLExport::SetError(
 
     // create error list on demand
     if ( mpXMLErrors == nullptr )
-        mpXMLErrors.reset( new XMLErrors() );
+        mpXMLErrors.reset( new XMLErrors(mpNotifier) );
 
     // save error information
     mpXMLErrors->AddRecord( nId, rMsgParams, rExceptionMessage, rLocator );
@@ -2440,6 +2440,11 @@ bool SvXMLExport::SetNullDateOnUnitConverter()
 OUString const & SvXMLExport::GetImageFilterName() const
 {
     return msImgFilterName;
+}
+
+void SvXMLExport::SetLibreOfficeKitNotifier(vcl::ILibreOfficeKitNotifier* pNotifier)
+{
+    mpNotifier = pNotifier;
 }
 
 void SvXMLElementExport::StartElement(
