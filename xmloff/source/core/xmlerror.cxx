@@ -27,6 +27,10 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/lok.hxx>
+#include <tools/json_writer.hxx>
+#include <vcl/IDialogRenderable.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
@@ -78,7 +82,8 @@ ErrorRecord::ErrorRecord( sal_Int32 nID, const Sequence<OUString>& rParams,
 {
 }
 
-XMLErrors::XMLErrors()
+XMLErrors::XMLErrors(vcl::ILibreOfficeKitNotifier* pNotifier)
+    : mpNotifier(pNotifier)
 {
 }
 
@@ -97,6 +102,25 @@ void XMLErrors::AddRecord(
 {
     m_aErrors.emplace_back( nId, rParams, rExceptionMessage,
                                     nRow, nColumn, rPublicId, rSystemId );
+
+    if (comphelper::LibreOfficeKit::isActive() && mpNotifier)
+    {
+        // The outer error is logged in sfx2, mentioning just the stream name. Also log here the
+        // inner error, which potentially contains the location of an uncaught exception.
+        sal_Int32 nFlags = (nId & XMLERROR_MASK_FLAG);
+        if (nFlags & (XMLERROR_FLAG_ERROR | XMLERROR_FLAG_SEVERE | XMLERROR_API))
+        {
+            tools::JsonWriter aWriter;
+            {
+                aWriter.put("classification", "error");
+                aWriter.put("code", "");
+                aWriter.put("kind", "");
+                aWriter.put("cmd", "");
+                aWriter.put("message", rExceptionMessage);
+            }
+            mpNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_ERROR, aWriter.finishAndGetAsOString());
+        }
+    }
 
 #ifdef DBG_UTIL
 
