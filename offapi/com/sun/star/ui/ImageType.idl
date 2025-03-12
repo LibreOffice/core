@@ -51,11 +51,10 @@ constants ImageType
      */
     const short COLOR_HIGHCONTRAST = 4;
 
-    /** an image unspecialized, or for lr-tb writing.
-     */
-    const short DIR_LR_TB = 0;
+    /** an image specialized for rl-tb writing. if unset, the
+        image is unspecialized or for lr-tb writing.
 
-    /** an image specialized for rl-tb writing.
+        @since LibreOffice 25.8
      */
     const short DIR_RL_TB = 8;
 };

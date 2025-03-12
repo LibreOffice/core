@@ -345,8 +345,7 @@ Reference<graphic::XGraphic> GetXGraphicForCommand(const OUString& rsCommandName
     if (rsCommandName.isEmpty())
         return nullptr;
 
-    sal_Int16 nImageType(ui::ImageType::COLOR_NORMAL | ui::ImageType::SIZE_DEFAULT
-                         | ui::ImageType::DIR_LR_TB);
+    sal_Int16 nImageType(ui::ImageType::COLOR_NORMAL | ui::ImageType::SIZE_DEFAULT);
 
     if (eImageType == vcl::ImageType::Size26)
         nImageType |= ui::ImageType::SIZE_LARGE;
