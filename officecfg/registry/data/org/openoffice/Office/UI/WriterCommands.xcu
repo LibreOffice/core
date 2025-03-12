@@ -149,10 +149,10 @@
           <value xml:lang="en-US">Table of Contents</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Table of Contents, Index or Citation</value>
+          <value xml:lang="en-US">Insert Table of Contents, Index or Bibliography</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Table of Contents, Index or Citation...</value>
+          <value xml:lang="en-US">Table of Contents, Index or Bibliography...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
