@@ -85,6 +85,8 @@ public:
     };
     PreviewState GetPreviewState(Token aToken);
 
+    const Size& GetPreviewSizePixel();
+
     /** This method is typically called for entries in the container for
         which GetPreviewState() returns OS_CREATABLE.  The creation of the
         preview is then scheduled to be executed asynchronously at a later

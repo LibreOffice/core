@@ -103,6 +103,8 @@ public:
 
     void ReleaseDescriptor (Token aToken);
 
+    const Size& GetPreviewSizePixel(PreviewSize pPreviewSize);
+
     /** Called by the MasterPageContainerFiller to notify that all master
         pages from template documents have been added.
     */
@@ -442,6 +444,11 @@ std::shared_ptr<MasterPageDescriptor> MasterPageContainer::GetDescriptorForToken
 void MasterPageContainer::InvalidatePreview (MasterPageContainer::Token aToken)
 {
     mpImpl->InvalidatePreview(aToken);
+}
+
+const Size& MasterPageContainer::GetPreviewSizePixel()
+{
+    return mpImpl->GetPreviewSizePixel(mePreviewSize);
 }
 
 Image MasterPageContainer::GetPreviewForToken (MasterPageContainer::Token aToken)
@@ -807,6 +814,14 @@ SdDrawDocument* MasterPageContainer::Implementation::GetDocument()
 {
     GetModel();
     return mpDocument;
+}
+
+const Size& MasterPageContainer::Implementation::GetPreviewSizePixel(PreviewSize pPreviewSize)
+{
+    if (pPreviewSize == PreviewSize::SMALL)
+        return maSmallPreviewSizePixel;
+    else
+        return maLargePreviewSizePixel;
 }
 
 Image MasterPageContainer::Implementation::GetPreviewSubstitution (

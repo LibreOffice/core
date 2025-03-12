@@ -585,7 +585,8 @@ css::ui::LayoutSize MasterPagesSelector::GetHeightForWidth(const sal_Int32 nWidt
 {
     // there is no way to get margin of item programmatically, we use value provided in ui file.
     const int nMargin = 6;
-    sal_Int32 nColumnCount = nWidth / (mxPreviewIconView->get_item_width() + (5 * nMargin));
+    const Size& previewSize = mpContainer->GetPreviewSizePixel();
+    sal_Int32 nColumnCount = nWidth / (previewSize.Width() + (2 * nMargin));
     if (nColumnCount < 1)
         nColumnCount = 1;
 
@@ -594,8 +595,7 @@ css::ui::LayoutSize MasterPagesSelector::GetHeightForWidth(const sal_Int32 nWidt
     if (nRowCount < 1)
         nRowCount = 1;
 
-    sal_Int32 nPreferedHeight
-        = nRowCount * (mxPreviewIconView->get_rect(nTotalItems - 1).GetHeight() + (2 * nMargin));
+    sal_Int32 nPreferedHeight = nRowCount * (previewSize.getHeight() + (4 * nMargin));
     return css::ui::LayoutSize(nPreferedHeight, nPreferedHeight, nPreferedHeight);
 }
 
