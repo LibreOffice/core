@@ -389,27 +389,12 @@ public:
         {
             rDev.SetClipRegion( vcl::Region(r) );
 
-            OUString aText;
+            const OUString aText = bArabicText?u"واحِدٌ اثْنَانِ ثَلاثَةٌ"_ustr
+                                              :u"Click any rect to zoom!"_ustr;
 
             // To have more text displayed one after the other (overlapping, and in different colours), then
             // change this value
             const int nPrintNumCopies=1;
-
-            if (bArabicText)
-            {
-                const unsigned char pTextUTF8[] = {
-                    0xd9, 0x88, 0xd8, 0xa7, 0xd8, 0xad, 0xd9, 0x90,
-                    0xd8, 0xaf, 0xd9, 0x92, 0x20, 0xd8, 0xa5, 0xd8,
-                    0xab, 0xd9, 0x8d, 0xd9, 0x86, 0xd9, 0x8a, 0xd9,
-                    0x86, 0x20, 0xd8, 0xab, 0xd9, 0x84, 0xd8, 0xa7,
-                    0xd8, 0xab, 0xd8, 0xa9, 0xd9, 0x8c, 0x00
-                };
-                aText = OUString(reinterpret_cast<char const *>(pTextUTF8),
-                                 std::size( pTextUTF8 ) - 1,
-                                 RTL_TEXTENCODING_UTF8);
-            }
-            else
-                aText = "Click any rect to zoom!!!!";
 
             std::vector<OUString> aFontNames =
             {
