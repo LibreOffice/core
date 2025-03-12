@@ -133,21 +133,6 @@
             <property name="row-spacing">6</property>
             <property name="column-spacing">12</property>
             <child>
-              <object class="GtkLabel" id="frame_label">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes" context="hyperlinkinternetpage|frame_label">F_rame:</property>
-                <property name="use-underline">True</property>
-                <property name="mnemonic-widget">frame</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="name_label">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -180,27 +165,13 @@
               </packing>
             </child>
             <child>
-              <!-- n-columns=4 n-rows=1 -->
+              <!-- n-columns=2 n-rows=1 -->
               <object class="GtkGrid" id="grid4">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">12</property>
-                <child>
-                  <object class="GtkLabel" id="form_label">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="hyperlinkinternetpage|form_label">F_orm:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">form</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
                 <child>
                   <object class="GtkComboBoxText" id="form">
                     <property name="visible">True</property>
@@ -213,7 +184,7 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">2</property>
+                    <property name="left-attach">0</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
@@ -230,29 +201,27 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">3</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="frame">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="frame-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkinternetpage|extended_tip|frame">Enter the name of the frame that you want the linked file to open in, or select a predefined frame from the list. If you leave this box blank, the linked file opens in the current browser window.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
+                    <property name="left-attach">1</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="form_label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="hyperlinkinternetpage|form_label">F_orm:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">form</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
                 <property name="top-attach">0</property>
               </packing>
             </child>
@@ -281,12 +250,5 @@
       </object>
     </child>
   </object>
-  <object class="GtkSizeGroup" id="sizegroup1">
-    <widgets>
-      <widget name="target_label"/>
-      <widget name="frame_label"/>
-      <widget name="indication_label"/>
-      <widget name="name_label"/>
-    </widgets>
-  </object>
+  <object class="GtkSizeGroup" id="sizegroup1"/>
 </interface>

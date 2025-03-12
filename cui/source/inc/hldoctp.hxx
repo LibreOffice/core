@@ -53,8 +53,7 @@ private:
 
     void FillDlgFields(const OUString& rStrURL) override;
     void GetCurrentItemData ( OUString& rStrURL, OUString& aStrName,
-                             OUString& aStrIntName, OUString& aStrFrame,
-                             SvxLinkInsertMode& eMode ) override;
+                             OUString& aStrIntName, SvxLinkInsertMode& eMode ) override;
     virtual bool   ShouldOpenMarkWnd () override {return m_bMarkWndOpen;}
     virtual void   SetMarkWndShouldOpen (bool bOpen) override {m_bMarkWndOpen=bOpen;}
     OUString GetCurrentURL() const;

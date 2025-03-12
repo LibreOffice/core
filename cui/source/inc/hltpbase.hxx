@@ -46,13 +46,11 @@ public:
 class SvxHyperlinkTabPageBase : public IconChoicePage
 {
 private:
-    std::unique_ptr<weld::ComboBox> mxCbbFrame;
     std::unique_ptr<weld::ComboBox> mxLbForm;
     std::unique_ptr<weld::Entry> mxEdIndication;
     std::unique_ptr<weld::Entry> mxEdText;
     std::unique_ptr<weld::Button> mxBtScript;
     std::unique_ptr<weld::Label> mxFormLabel;
-    std::unique_ptr<weld::Label> mxFrameLabel;
 
     bool                        mbIsCloseDisabled;
 
@@ -76,12 +74,10 @@ protected:
     void FillStandardDlgFields ( const SvxHyperlinkItem* pHyperlinkItem );
     virtual void FillDlgFields(const OUString& rStrURL) = 0;
     virtual void GetCurrentItemData     ( OUString& rStrURL, OUString& aStrName,
-                                         OUString& aStrIntName, OUString& aStrFrame,
-                                         SvxLinkInsertMode& eMode ) = 0;
+                                         OUString& aStrIntName, SvxLinkInsertMode& eMode ) = 0;
 
     void         GetDataFromCommonFields( OUString& aStrName,
-                                          OUString& aStrIntName, OUString& aStrFrame,
-                                          SvxLinkInsertMode& eMode );
+                                          OUString& aStrIntName, SvxLinkInsertMode& eMode );
 
     DECL_LINK (ClickScriptHdl_Impl, weld::Button&, void ); ///< Button : Script
 

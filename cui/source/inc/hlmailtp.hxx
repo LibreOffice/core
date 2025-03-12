@@ -45,8 +45,7 @@ private:
 protected:
     virtual void FillDlgFields(const OUString& rStrURL) override;
     virtual void GetCurrentItemData ( OUString& rStrURL, OUString& aStrName,
-                                     OUString& aStrIntName, OUString& aStrFrame,
-                                     SvxLinkInsertMode& eMode ) override;
+                                     OUString& aStrIntName, SvxLinkInsertMode& eMode ) override;
 
 public:
     SvxHyperlinkMailTp(weld::Container* pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet);

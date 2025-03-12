@@ -106,13 +106,11 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase(weld::Container* pParent,
                                                  const OUString& rID,
                                                  const SfxItemSet* pItemSet)
   : IconChoicePage(pParent, rUIXMLDescription, rID, pItemSet)
-  , mxCbbFrame(xBuilder->weld_combo_box(u"frame"_ustr))
   , mxLbForm(xBuilder->weld_combo_box(u"form"_ustr))
   , mxEdIndication(xBuilder->weld_entry(u"indication"_ustr))
   , mxEdText(xBuilder->weld_entry(u"name"_ustr))
   , mxBtScript(xBuilder->weld_button(u"script"_ustr))
   , mxFormLabel(xBuilder->weld_label(u"form_label"_ustr))
-  , mxFrameLabel(xBuilder->weld_label(u"frame_label"_ustr))
   , mbIsCloseDisabled( false )
   , mpDialog( pDlg )
   , mbStdControlsInit( false )
@@ -137,26 +135,7 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
 {
     if ( !mbStdControlsInit )
     {
-        SfxDispatcher* pDispatch = GetDispatcher();
-        SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : nullptr;
-        SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetFrame() : nullptr;
-        if ( pFrame )
-        {
-            TargetList aList;
-            SfxFrame::GetDefaultTargetList(aList);
-            if( !aList.empty() )
-            {
-                size_t nCount = aList.size();
-                size_t i;
-                for ( i = 0; i < nCount; i++ )
-                {
-                    mxCbbFrame->append_text( aList.at( i ) );
-                }
-            }
-        }
-
         mxBtScript->set_from_icon_name(RID_SVXBMP_SCRIPT);
-
         mxBtScript->connect_clicked ( LINK ( this, SvxHyperlinkTabPageBase, ClickScriptHdl_Impl ) );
     }
 
@@ -232,11 +211,6 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( const SvxHyperlinkItem* pH
 {
     if (!comphelper::LibreOfficeKit::isActive())
     {
-        // Frame
-        sal_Int32 nPos = mxCbbFrame->find_text(pHyperlinkItem->GetTargetFrame());
-        if (nPos != -1)
-            mxCbbFrame->set_active(nPos);
-
         // Form
         OUString aStrFormText = CuiResId( RID_CUISTR_HYPERDLG_FROM_TEXT );
 
@@ -258,10 +232,8 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( const SvxHyperlinkItem* pH
     }
     else
     {
-        mxCbbFrame->hide();
         mxLbForm->hide();
         mxFormLabel->hide();
-        mxFrameLabel->hide();
     }
 
     // URL
@@ -418,12 +390,11 @@ OUString SvxHyperlinkTabPageBase::GetSchemeFromURL( const OUString& rStrURL )
 }
 
 void SvxHyperlinkTabPageBase::GetDataFromCommonFields( OUString& aStrName,
-                                             OUString& aStrIntName, OUString& aStrFrame,
+                                             OUString& aStrIntName,
                                              SvxLinkInsertMode& eMode )
 {
     aStrIntName = mxEdText->get_text();
     aStrName    = mxEdIndication->get_text();
-    aStrFrame   = mxCbbFrame->get_active_text();
 
     sal_Int32 nPos = mxLbForm->get_active();
     if (nPos == -1)
@@ -462,17 +433,17 @@ void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet )
 // Fill output-ItemSet
 bool SvxHyperlinkTabPageBase::FillItemSet( SfxItemSet* rOut)
 {
-    OUString aStrURL, aStrName, aStrIntName, aStrFrame;
+    OUString aStrURL, aStrName, aStrIntName;
     SvxLinkInsertMode eMode;
 
-    GetCurrentItemData ( aStrURL, aStrName, aStrIntName, aStrFrame, eMode);
+    GetCurrentItemData ( aStrURL, aStrName, aStrIntName, eMode);
     if ( aStrName.isEmpty() ) //automatically create a visible name if the link is created without name
         aStrName = CreateUiNameFromURL(aStrURL);
 
     HyperDialogEvent nEvents = GetMacroEvents();
     SvxMacroTableDtor* pTable = GetMacroTable();
 
-    SvxHyperlinkItem aItem( SID_HYPERLINK_SETLINK, aStrName, aStrURL, aStrFrame,
+    SvxHyperlinkItem aItem( SID_HYPERLINK_SETLINK, aStrName, aStrURL, OUString(),
                             aStrIntName, eMode, nEvents, pTable );
     rOut->Put (aItem);
 
@@ -505,17 +476,17 @@ DeactivateRC SvxHyperlinkTabPageBase::DeactivatePage( SfxItemSet* _pSet)
     HideMarkWnd ();
 
     // retrieve data of dialog
-    OUString aStrURL, aStrName, aStrIntName, aStrFrame;
+    OUString aStrURL, aStrName, aStrIntName;
     SvxLinkInsertMode eMode;
 
-    GetCurrentItemData ( aStrURL, aStrName, aStrIntName, aStrFrame, eMode);
+    GetCurrentItemData ( aStrURL, aStrName, aStrIntName, eMode);
 
     HyperDialogEvent nEvents = GetMacroEvents();
     SvxMacroTableDtor* pTable = GetMacroTable();
 
     if( _pSet )
     {
-        SvxHyperlinkItem aItem( SID_HYPERLINK_GETLINK, aStrName, aStrURL, aStrFrame,
+        SvxHyperlinkItem aItem( SID_HYPERLINK_GETLINK, aStrName, aStrURL, OUString(),
                                 aStrIntName, eMode, nEvents, pTable );
         _pSet->Put( aItem );
     }
