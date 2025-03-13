@@ -4370,6 +4370,20 @@ void WW8AttributeOutput::FormatTextLeftMargin(SvxTextLeftMarginItem const& rText
     auto stOffset = rTextLeftMargin.GetTextLeft();
     if (stOffset.m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
     {
+        // tdf#80596: DOC stores sprmPDxaLeft and sprmPDxcLeft differently with
+        // hanging indentation. The left margin must be adjusted before exporting.
+        const SfxItemSet* pSet = GetExport().m_pISet;
+        if (pSet && pSet->HasItem(RES_MARGIN_FIRSTLINE))
+        {
+            const SvxFirstLineIndentItem* pItem = pSet->GetItem(RES_MARGIN_FIRSTLINE);
+            auto stFirstLine = pItem->GetTextFirstLineOffset();
+            if (stFirstLine.m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE
+                && stFirstLine.m_dValue < 0.0)
+            {
+                stOffset.m_dValue += stFirstLine.m_dValue;
+            }
+        }
+
         // sprmPDxcLeft
         m_rWW8Export.InsUInt16(0x4456);
         m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(stOffset.m_dValue * 100.0));

@@ -4307,6 +4307,20 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             ? static_cast<SvxRightMarginItem*>(pItem->Clone())
             : new SvxRightMarginItem(RES_MARGIN_RIGHT));
 
+    // tdf#80596: DOC stores sprmPDxaLeft and sprmPDxcLeft differently with hanging
+    // indentation. The left margin must be adjusted before applying changes.
+    if (pFirstLine->GetTextFirstLineOffset().m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE
+        && pLeftMargin->GetTextLeft().m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
+    {
+        auto dFirstIndent = pFirstLine->GetTextFirstLineOffset().m_dValue;
+        if (dFirstIndent < 0.0)
+        {
+            auto stLeft = pLeftMargin->GetTextLeft();
+            stLeft.m_dValue += dFirstIndent;
+            pLeftMargin->SetTextLeft(stLeft);
+        }
+    }
+
     // Fix the regression issue: #i99822#: Discussion?
     // Since the list level formatting doesn't apply into paragraph style
     // for list levels of mode LABEL_ALIGNMENT.(see ww8par3.cxx
@@ -4464,6 +4478,44 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             break;
         default:
             return;
+    }
+
+    // tdf#80596: DOC ignores non-Ch indentation if any Ch indentation is set
+    if (pFirstLine->GetTextFirstLineOffset().m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE
+        || pLeftMargin->GetTextLeft().m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE
+        || pRightMargin->GetRight().m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
+    {
+        SvxIndentValue stCjkZero{ 0.0, css::util::MeasureUnit::FONT_CJK_ADVANCE };
+
+        if (pFirstLine->GetTextFirstLineOffset().m_nUnit
+            != css::util::MeasureUnit::FONT_CJK_ADVANCE)
+        {
+            pFirstLine->SetTextFirstLineOffset(stCjkZero);
+        }
+
+        if (pLeftMargin->GetTextLeft().m_nUnit != css::util::MeasureUnit::FONT_CJK_ADVANCE)
+        {
+            pLeftMargin->SetTextLeft(stCjkZero);
+        }
+
+        if (pRightMargin->GetRight().m_nUnit != css::util::MeasureUnit::FONT_CJK_ADVANCE)
+        {
+            pRightMargin->SetRight(stCjkZero);
+        }
+    }
+
+    // tdf#80596: DOC stores sprmPDxaLeft and sprmPDxcLeft differently with hanging
+    // indentation. The left margin must be adjusted after applying changes.
+    if (pFirstLine->GetTextFirstLineOffset().m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE
+        && pLeftMargin->GetTextLeft().m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
+    {
+        auto dFirstIndent = pFirstLine->GetTextFirstLineOffset().m_dValue;
+        if (dFirstIndent < 0.0)
+        {
+            auto stLeft = pLeftMargin->GetTextLeft();
+            stLeft.m_dValue -= dFirstIndent;
+            pLeftMargin->SetTextLeft(stLeft);
+        }
     }
 
     NewAttr(*pFirstLine, bFirstLineOfstSet, false); // #i103711#, #i105414#

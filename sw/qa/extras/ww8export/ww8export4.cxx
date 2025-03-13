@@ -634,9 +634,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf54862)
     verify();
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf83844)
+CPPUNIT_TEST_FIXTURE(Test, testTdf80596)
 {
-    createSwDoc("tdf83844.fodt");
+    createSwDoc("tdf80596.fodt");
 
     auto fnVerify = [this]
     {
@@ -650,6 +650,29 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf83844)
                     u"C C C C C C C C ");
         assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[4]", "portion",
                     u"D D D D");
+    };
+
+    fnVerify();
+    saveAndReload(mpFilter);
+    fnVerify();
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf80596Hanging)
+{
+    createSwDoc("tdf80596-hanging.fodt");
+
+    auto fnVerify = [this]
+    {
+        auto pXmlDoc = parseLayoutDump();
+
+        assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]", "portion",
+                    u"A A A A A A A A A ");
+        assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]", "portion",
+                    u"B B B B B B ");
+        assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[3]", "portion",
+                    u"C C C C C C C ");
+        assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[4]", "portion",
+                    u"D D");
     };
 
     fnVerify();

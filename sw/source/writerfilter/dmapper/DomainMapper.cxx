@@ -555,6 +555,16 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
                                                  uno::Any(nParaLeftMargin));
             }
             break;
+        case NS_ooxml::LN_CT_Ind_startChars:
+        case NS_ooxml::LN_CT_Ind_leftChars:
+            if (m_pImpl->GetTopContext())
+            {
+                css::beans::Pair<double, sal_Int16> stVal{
+                    static_cast<double>(nIntValue) / 100.0, css::util::MeasureUnit::FONT_CJK_ADVANCE
+                };
+                m_pImpl->GetTopContext()->Insert(PROP_PARA_LEFT_MARGIN_UNIT, uno::Any(stVal));
+            }
+            break;
         case NS_ooxml::LN_CT_Ind_end:
         case NS_ooxml::LN_CT_Ind_right:
             if (m_pImpl->GetTopContext())
@@ -574,6 +584,18 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
             }
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, u"right"_ustr, OUString::number(nIntValue));
             break;
+        case NS_ooxml::LN_CT_Ind_endChars:
+        case NS_ooxml::LN_CT_Ind_rightChars:
+            if (m_pImpl->GetTopContext())
+            {
+                css::beans::Pair<double, sal_Int16> stVal{
+                    static_cast<double>(nIntValue) / 100.0, css::util::MeasureUnit::FONT_CJK_ADVANCE
+                };
+                m_pImpl->GetTopContext()->Insert(PROP_PARA_RIGHT_MARGIN_UNIT, uno::Any(stVal));
+            }
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, u"rightChars"_ustr,
+                                   OUString::number(nIntValue));
+            break;
         case NS_ooxml::LN_CT_Ind_hanging:
             if (m_pImpl->GetTopContext())
             {
@@ -585,6 +607,17 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
                 sal_Int32 nParaLeftMargin = m_pImpl->getCurrentNumberingProperty(u"IndentAt"_ustr);
                 if (nParaLeftMargin != 0)
                     m_pImpl->GetTopContext()->Insert(PROP_PARA_LEFT_MARGIN, uno::Any(nParaLeftMargin), /*bOverwrite=*/false);
+            }
+            break;
+        case NS_ooxml::LN_CT_Ind_hangingChars:
+            if (m_pImpl->GetTopContext())
+            {
+                css::beans::Pair<double, sal_Int16> stVal{
+                    static_cast<double>(nIntValue) / -100.0,
+                    css::util::MeasureUnit::FONT_CJK_ADVANCE
+                };
+
+                m_pImpl->GetTopContext()->Insert(PROP_PARA_FIRST_LINE_INDENT_UNIT, uno::Any(stVal));
             }
             break;
         case NS_ooxml::LN_CT_Ind_firstLine:
@@ -601,8 +634,14 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
                                                  uno::Any(nParaFirstLineIndent));
             }
             break;
-        case NS_ooxml::LN_CT_Ind_rightChars:
-            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, u"rightChars"_ustr, OUString::number(nIntValue));
+        case NS_ooxml::LN_CT_Ind_firstLineChars:
+            if (m_pImpl->GetTopContext())
+            {
+                css::beans::Pair<double, sal_Int16> stVal{
+                    static_cast<double>(nIntValue) / 100.0, css::util::MeasureUnit::FONT_CJK_ADVANCE
+                };
+                m_pImpl->GetTopContext()->Insert(PROP_PARA_FIRST_LINE_INDENT_UNIT, uno::Any(stVal));
+            }
             break;
 
         case NS_ooxml::LN_CT_EastAsianLayout_id:

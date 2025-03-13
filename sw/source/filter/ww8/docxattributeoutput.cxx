@@ -9329,7 +9329,24 @@ void DocxAttributeOutput::FormatPaperBin(const SvxPaperBinItem& rPaperBin)
 
 void DocxAttributeOutput::FormatFirstLineIndent(SvxFirstLineIndentItem const& rFirstLine)
 {
-    // tdf#83844: TODO: export FONT_CJK_ADVANCE first line indent as HangingChars/FirstLineChars
+    // tdf#83844: export FONT_CJK_ADVANCE first line indent as hangingChars/firstLineChars
+    auto stValue = rFirstLine.GetTextFirstLineOffset();
+    if (stValue.m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
+    {
+        if (stValue.m_dValue >= 0.0)
+        {
+            AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, XML_firstLineChars),
+                          OString::number(stValue.m_dValue * 100.0));
+        }
+        else
+        {
+            AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, XML_hangingChars),
+                          OString::number(stValue.m_dValue * -100.0));
+        }
+
+        return;
+    }
+
     sal_Int32 const nFirstLineAdjustment(rFirstLine.ResolveTextFirstLineOffset({}));
     if (nFirstLineAdjustment > 0)
     {
@@ -9367,21 +9384,49 @@ void DocxAttributeOutput::FormatTextLeftMargin(SvxTextLeftMarginItem const& rTex
         }
     }
     bool const bEcma1st(m_rExport.GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION);
+
+    // tdf#83844: export FONT_CJK_ADVANCE left margin as leftChars/startChars
+    auto stValue = pTextLeftMargin->GetTextLeft();
+    if (stValue.m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
+    {
+        // tdf#83844: DOCX stores left and leftChars differently with hanging
+        // indentation. The left margin must be adjusted before exporting.
+        const SfxItemSet* pSet = GetExport().m_pISet;
+        if (pSet && pSet->HasItem(RES_MARGIN_FIRSTLINE))
+        {
+            const SvxFirstLineIndentItem* pItem = pSet->GetItem(RES_MARGIN_FIRSTLINE);
+            auto stFirstLine = pItem->GetTextFirstLineOffset();
+            if (stFirstLine.m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE
+                && stFirstLine.m_dValue < 0.0)
+            {
+                stValue.m_dValue += stFirstLine.m_dValue;
+            }
+        }
+
+        AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, (bEcma1st ? XML_leftChars : XML_startChars)),
+                      OString::number(stValue.m_dValue * 100.0));
+        return;
+    }
+
     AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, (bEcma1st ? XML_left : XML_start)),
                   OString::number(pTextLeftMargin->ResolveTextLeft({})));
 }
 
 void DocxAttributeOutput::FormatRightMargin(SvxRightMarginItem const& rRightMargin)
 {
-    // (paragraph case, this will be an else branch once others are converted)
-#if 0
-    else
-#endif
+    bool const bEcma1st(m_rExport.GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION);
+
+    // tdf#83844: export FONT_CJK_ADVANCE right margin as rightChars/endChars
+    auto stValue = rRightMargin.GetRight();
+    if (stValue.m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
     {
-        bool const bEcma1st(m_rExport.GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION);
-        AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, (bEcma1st ? XML_right : XML_end)),
-                      OString::number(rRightMargin.ResolveRight({})));
+        AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, (bEcma1st ? XML_rightChars : XML_endChars)),
+                      OString::number(stValue.m_dValue * 100.0));
+        return;
     }
+
+    AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, (bEcma1st ? XML_right : XML_end)),
+                  OString::number(rRightMargin.ResolveRight({})));
 }
 
 void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )

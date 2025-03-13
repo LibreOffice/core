@@ -3047,10 +3047,60 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 // Left, Right, and Hanging settings are also grouped. Ensure that all or none are set.
                 if (xParaProps)
                 {
+                    // tdf#83844: DOCX ignores non-Ch indentation if any Ch indentation is set
+                    bool bLeftChSet = pParaContext->isSet(PROP_PARA_LEFT_MARGIN_UNIT);
+                    bool bRightChSet = pParaContext->isSet(PROP_PARA_RIGHT_MARGIN_UNIT);
+                    bool bFirstChSet = pParaContext->isSet(PROP_PARA_FIRST_LINE_INDENT_UNIT);
+                    bool bAnyChSet = bLeftChSet || bRightChSet || bFirstChSet;
+                    if (bAnyChSet)
+                    {
+                        // Remove all non-Ch indentation from properties
+                        css::beans::Pair<double, sal_Int16> stZero{
+                            0.0, css::util::MeasureUnit::FONT_CJK_ADVANCE
+                        };
+
+                        auto stLeftCh = stZero;
+                        auto stRightCh = stZero;
+                        auto stFirstCh = stZero;
+
+                        if (bLeftChSet)
+                        {
+                            pParaContext->getProperty(PROP_PARA_LEFT_MARGIN_UNIT)->second
+                                >>= stLeftCh;
+                        }
+
+                        if (bRightChSet)
+                        {
+                            pParaContext->getProperty(PROP_PARA_RIGHT_MARGIN_UNIT)->second
+                                >>= stRightCh;
+                        }
+
+                        if (bFirstChSet)
+                        {
+                            pParaContext->getProperty(PROP_PARA_FIRST_LINE_INDENT_UNIT)->second
+                                >>= stFirstCh;
+                        }
+
+                        // tdf#83844: DOCX stores left and leftChars differently with hanging
+                        // indentation. Character-based hanging indentation must be pre-added
+                        // to the left margin here.
+                        if (stFirstCh.First < 0.0)
+                        {
+                            stLeftCh.First -= stFirstCh.First;
+                        }
+
+                        xParaProps->setPropertyValue(u"ParaLeftMarginUnit"_ustr,
+                                                     uno::Any{ stLeftCh });
+                        xParaProps->setPropertyValue(u"ParaRightMarginUnit"_ustr,
+                                                     uno::Any{ stRightCh });
+                        xParaProps->setPropertyValue(u"ParaFirstLineIndentUnit"_ustr,
+                                                     uno::Any{ stFirstCh });
+                    }
+
                     const bool bLeftSet  = pParaContext->isSet(PROP_PARA_LEFT_MARGIN);
                     const bool bRightSet = pParaContext->isSet(PROP_PARA_RIGHT_MARGIN);
                     const bool bFirstSet = pParaContext->isSet(PROP_PARA_FIRST_LINE_INDENT);
-                    if (bLeftSet != bRightSet || bRightSet != bFirstSet)
+                    if (!bAnyChSet && (bLeftSet != bRightSet || bRightSet != bFirstSet))
                     {
                         if ( !bLeftSet )
                         {
