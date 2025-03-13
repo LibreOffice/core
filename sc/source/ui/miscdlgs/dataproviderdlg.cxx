@@ -920,13 +920,13 @@ void ScDataProviderDlg::updateApplyBtn(bool bValidConfig)
 
 void ScDataProviderDlg::deleteColumn()
 {
-    std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
+    auto adeleteTransformation = [this](sal_uInt32 nIndex) {deletefromList(nIndex);};
     maControls.emplace_back(std::make_unique<ScDeleteColumnTransformationControl>(mxDoc.get(), mxTransformationList.get(), mnIndex++, adeleteTransformation));
 }
 
 void ScDataProviderDlg::splitColumn()
 {
-    std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
+    auto adeleteTransformation = [this](sal_uInt32 nIndex) {deletefromList(nIndex);};
     maControls.emplace_back(std::make_unique<ScSplitColumnTransformationControl>(mxDoc.get(), mxTransformationList.get(), mnIndex++, adeleteTransformation));
 }
 
@@ -935,61 +935,61 @@ void ScDataProviderDlg::mergeColumns()
     SCCOL nStartCol = -1;
     SCCOL nEndCol = -1;
     mxTable->getColRange(nStartCol, nEndCol);
-    std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
+    auto adeleteTransformation = [this](sal_uInt32 nIndex) {deletefromList(nIndex);};
     maControls.emplace_back(std::make_unique<ScMergeColumnTransformationControl>(mxDoc.get(), mxTransformationList.get(), nStartCol, nEndCol, mnIndex++, adeleteTransformation));
 }
 
 void ScDataProviderDlg::textTransformation()
 {
-    std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
+    auto adeleteTransformation = [this](sal_uInt32 nIndex) {deletefromList(nIndex);};
     maControls.emplace_back(std::make_unique<ScColumnTextTransformation>(mxDoc.get(), mxTransformationList.get(), mnIndex++, adeleteTransformation));
 }
 
 void ScDataProviderDlg::sortTransformation()
 {
-    std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
+    auto adeleteTransformation = [this](sal_uInt32 nIndex) {deletefromList(nIndex);};
     maControls.emplace_back(std::make_unique<ScSortTransformationControl>(mxDoc.get(), mxTransformationList.get(), mnIndex++, adeleteTransformation));
 }
 
 void ScDataProviderDlg::aggregateFunction()
 {
-    std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
+    auto adeleteTransformation = [this](sal_uInt32 nIndex) {deletefromList(nIndex);};
     maControls.emplace_back(std::make_unique<ScAggregateFunction>(mxDoc.get(), mxTransformationList.get(), mnIndex++, adeleteTransformation));
 }
 
 void ScDataProviderDlg::numberTransformation()
 {
-    std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
+    auto adeleteTransformation = [this](sal_uInt32 nIndex) {deletefromList(nIndex);};
     maControls.emplace_back(std::make_unique<ScNumberTransformation>(mxDoc.get(), mxTransformationList.get(), mnIndex++, adeleteTransformation));
 }
 
 void ScDataProviderDlg::replaceNullTransformation()
 {
-    std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
+    auto adeleteTransformation = [this](sal_uInt32 nIndex) {deletefromList(nIndex);};
     maControls.emplace_back(std::make_unique<ScReplaceNullTransformation>(mxDoc.get(), mxTransformationList.get(), mnIndex++, adeleteTransformation));
 }
 
 void ScDataProviderDlg::dateTimeTransformation()
 {
-    std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
+    auto adeleteTransformation = [this](sal_uInt32 nIndex) {deletefromList(nIndex);};
     maControls.emplace_back(std::make_unique<ScDateTimeTransformation>(mxDoc.get(), mxTransformationList.get(), mnIndex++, adeleteTransformation));
 }
 
 void ScDataProviderDlg::findReplaceTransformation()
 {
-    std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList, this, std::placeholders::_1);
+    auto adeleteTransformation = [this](sal_uInt32 nIndex) {deletefromList(nIndex);};
     maControls.emplace_back(std::make_unique<ScFindReplaceTransformation>(mxDoc.get(), mxTransformationList.get(), mnIndex++, adeleteTransformation));
 }
 
 void ScDataProviderDlg::deleteRowTransformation()
 {
-    std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList, this, std::placeholders::_1);
+    auto adeleteTransformation = [this](sal_uInt32 nIndex) {deletefromList(nIndex);};
     maControls.emplace_back(std::make_unique<ScDeleteRowTransformation>(mxDoc.get(), mxTransformationList.get(), mnIndex++, adeleteTransformation));
 }
 
 void ScDataProviderDlg::swapRowsTransformation()
 {
-    std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList, this, std::placeholders::_1);
+    auto adeleteTransformation = [this](sal_uInt32 nIndex) {deletefromList(nIndex);};
     maControls.emplace_back(std::make_unique<ScSwapRowsTransformation>(mxDoc.get(), mxTransformationList.get(), mnIndex++, adeleteTransformation));
 }
 
