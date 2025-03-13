@@ -8,7 +8,6 @@
  */
 
 #include <sdtiledrenderingtest.hxx>
-#include "tiledrenderingmodeltestbase.cxx"
 
 #include <app.hrc>
 #include <test/helper/transferable.hxx>
@@ -42,6 +41,8 @@
 #include <ViewShell.hxx>
 #include <SlideshowLayerRenderer.hxx>
 #include <sdpage.hxx>
+#include <unomodel.hxx>
+#include <drawdoc.hxx>
 #include <undo/undomanager.hxx>
 #include <sfx2/request.hxx>
 
@@ -56,6 +57,7 @@
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <chrono>
 #include <cstdlib>
@@ -592,9 +594,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testViewCursors)
 {
     // Create two views.
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
     SfxLokHelper::createView();
-    ViewCallback aView2;
+    SdTestViewCallback aView2;
 
     // Select the shape in the second view.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -614,10 +616,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testViewCursorParts)
 {
     // Create two views.
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
     SfxLokHelper::createView();
     pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2;
+    SdTestViewCallback aView2;
 
     // Select the shape in the second view.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -648,7 +650,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorViews)
     // Create the first view.
     SdXImpressDocument* pXImpressDocument = createDoc("title-shape.odp");
     int nView1 = SfxLokHelper::getView();
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
 
     // Begin text edit on the only object on the slide.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -670,7 +672,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorViews)
     // Make sure that typing in the first view causes an invalidation in the
     // second view as well, even if the second view was created after begin
     // text edit in the first view.
-    ViewCallback aView2;
+    SdTestViewCallback aView2;
     // This failed: the second view didn't get a lock notification, even if the
     // first view already started text edit.
     CPPUNIT_ASSERT(aView2.m_bViewLock);
@@ -691,7 +693,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_SingleClick)
 
     // Load doc.
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
 
     // Begin text edit on the only object on the slide.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -740,7 +742,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_DoubleClick)
 
     // Create the first view.
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
 
     // Begin text edit on the only object on the slide.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -772,7 +774,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_MultiView)
     // Create the first view.
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     const int nView1 = SfxLokHelper::getView();
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
 
     // Begin text edit on the only object on the slide.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -791,7 +793,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_MultiView)
     CPPUNIT_ASSERT_EQUAL(false, aView1.m_aViewCursorVisibilities[nView2]);
 
     // Also check that the second view gets the notifications.
-    ViewCallback aView2;
+    SdTestViewCallback aView2;
 
     SfxLokHelper::setView(nView1);
 
@@ -820,7 +822,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_Escape)
 {
     // Load doc.
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
 
     // Begin text edit on the only object on the slide.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -860,7 +862,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testViewLock)
 {
     // Load a document that has a shape and create two views.
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
     SfxLokHelper::createView();
     pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
 
@@ -954,7 +956,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateViewGraphicSelection)
 {
     // Load a document and register a callback.
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
 
     // Select the only shape in the document and assert that the graphic selection is changed.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -975,7 +977,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateViewGraphicSelection)
 
     // Check that when the first view has a shape selected and we register a
     // callback on the second view, then it gets a "graphic view selection".
-    ViewCallback aView2;
+    SdTestViewCallback aView2;
     // This failed, the created new view had no "view selection" of the first
     // view's selected shape.
     CPPUNIT_ASSERT(aView2.m_bGraphicViewSelectionInvalidated);
@@ -985,7 +987,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateViewTextCursor)
 {
     // Load a document and register a callback.
     SdXImpressDocument* pXImpressDocument = createDoc("title-shape.odp");
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
 
     // Begin text edit.
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
@@ -1009,7 +1011,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCreateViewTextCursor)
     aView1.m_aViewCursorVisibilities.clear();
     SfxLokHelper::createView();
     pXImpressDocument->initializeForTiledRendering({});
-    ViewCallback aView2;
+    SdTestViewCallback aView2;
     bool bFoundCursor = false;
     for (const auto& rInvalidation : aView1.m_aViewCursorInvalidations)
     {
@@ -1102,7 +1104,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostKeyEventInvalidation)
     // Load a document and begin text edit on the first slide.
     SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
     CPPUNIT_ASSERT_EQUAL(0, pXImpressDocument->getPart());
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdrView* pView = pViewShell->GetView();
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
@@ -1115,7 +1117,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostKeyEventInvalidation)
     // Create a second view and begin text edit there as well, in parallel.
     SfxLokHelper::createView();
     pXImpressDocument->initializeForTiledRendering({});
-    ViewCallback aView2;
+    SdTestViewCallback aView2;
     pXImpressDocument->setPart(1);
     sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
     SdrView* pView2 = pViewShell2->GetView();
@@ -1351,7 +1353,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShowAndUseGridCallbacks)
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
 
-    ViewCallback aView;
+    SdTestViewCallback aView;
 
     dispatchCommand(mxComponent, ".uno:GridVisible", uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(), ".uno:GridVisible=true") != aView.m_aStateChanged.end());
@@ -1376,7 +1378,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     {
         {".uno:Author", uno::Any(u"LOK User1"_ustr)},
     }));
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
     int nView1 = SfxLokHelper::getView();
 
     SfxLokHelper::createView();
@@ -1385,7 +1387,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
         {".uno:Author", uno::Any(u"LOK User2"_ustr)},
     }));
     pXImpressDocument->initializeForTiledRendering(aArgs);
-    ViewCallback aView2;
+    SdTestViewCallback aView2;
     int nView2 = SfxLokHelper::getView();
 
     SfxLokHelper::setView(nView1);
@@ -1484,7 +1486,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
         {".uno:Author", uno::Any(u"LOK User1"_ustr)},
     }));
 
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
 
     // Add a new comment
     aArgs = comphelper::InitPropertySequence(
@@ -1530,7 +1532,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
         {".uno:Author", uno::Any(u"LOK User1"_ustr)},
     }));
 
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
 
     // Add a new comment
     aArgs = comphelper::InitPropertySequence(
@@ -1567,7 +1569,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiViewInsertDeletePage)
 {
     // Load the document.
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
     int nView1 = SfxLokHelper::getView();
     uno::Sequence<beans::PropertyValue> aArgs;
     SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
@@ -1575,7 +1577,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiViewInsertDeletePage)
     // Create second view
     SfxLokHelper::createView();
     pXImpressDocument->initializeForTiledRendering(aArgs);
-    ViewCallback aView2;
+    SdTestViewCallback aView2;
     int nView2 = SfxLokHelper::getView();
 
     // the document has 8 slides
@@ -1605,7 +1607,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiViewInsertDeletePage2)
 {
     // Load the document.
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
     int nView1 = SfxLokHelper::getView();
     uno::Sequence<beans::PropertyValue> aArgs;
     SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
@@ -1613,7 +1615,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiViewInsertDeletePage2)
     // Create second view
     SfxLokHelper::createView();
     pXImpressDocument->initializeForTiledRendering(aArgs);
-    ViewCallback aView2;
+    SdTestViewCallback aView2;
     int nView2 = SfxLokHelper::getView();
 
     // the document has 8 slides
@@ -2115,11 +2117,11 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetViewRenderState)
 
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     int nFirstViewId = SfxLokHelper::getView();
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
     CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pXImpressDocument->getViewRenderState());
     // Create a second view
     SfxLokHelper::createView();
-    ViewCallback aView2;
+    SdTestViewCallback aView2;
     CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pXImpressDocument->getViewRenderState());
     // Set to dark scheme
     {
@@ -2183,7 +2185,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
     }
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     int nFirstViewId = SfxLokHelper::getView();
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
     // Switch first view to light scheme
     {
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
@@ -2198,7 +2200,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
     // Create second view
     SfxLokHelper::createView();
     int nSecondViewId = SfxLokHelper::getView();
-    ViewCallback aView2;
+    SdTestViewCallback aView2;
     // Set second view to dark scheme
     {
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
@@ -2261,7 +2263,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertDeletePageInvalidation)
 {
     // Load the document.
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
     CPPUNIT_ASSERT_EQUAL(8, pXImpressDocument->getParts());
 
     // Insert slide
@@ -2371,7 +2373,7 @@ void lcl_extractHandleParameters(std::string_view selection, sal_uInt32& id, sal
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMoveShapeHandle)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
-    ViewCallback aView1;
+    SdTestViewCallback aView1;
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pPage = pViewShell->GetActualPage();
     SdrObject* pObject = pPage->GetObj(0);
@@ -2672,7 +2674,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarHide)
 {
     // Given an impress document, with a visible sidebar:
     createDoc("dummy.odp");
-    ViewCallback aView;
+    SdTestViewCallback aView;
     sfx2::sidebar::Sidebar::Setup(u"");
     Scheduler::ProcessEventsToIdle();
     aView.m_aStateChanges.clear();
@@ -2690,7 +2692,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarHide)
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testStartPresentation)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("test.ppsx");
-    ViewCallback aView;
+    SdTestViewCallback aView;
     CPPUNIT_ASSERT(pXImpressDocument->GetDoc()->GetStartWithPresentation());
     Scheduler::ProcessEventsToIdle();
 

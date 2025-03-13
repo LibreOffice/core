@@ -9,8 +9,6 @@
 
 #include <sdtiledrenderingtest.hxx>
 
-#include <boost/property_tree/json_parser.hpp>
-
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/lokhelper.hxx>
@@ -197,6 +195,150 @@ xmlDocUniquePtr SdTiledRenderingTest::parseXmlDump()
     auto pCharBuffer = xmlBufferContent(m_pXmlBuffer);
     SAL_INFO("test", "SdTiledRenderingTest::parseXmlDump: pCharBuffer is '" << pCharBuffer << "'");
     return xmlDocUniquePtr(xmlParseDoc(pCharBuffer));
+}
+
+SdTestViewCallback::SdTestViewCallback()
+    : m_bGraphicSelectionInvalidated(false)
+    , m_bGraphicViewSelectionInvalidated(false)
+    , m_nPart(0)
+    , m_bCursorVisibleChanged(false)
+    , m_bCursorVisible(false)
+    , m_bViewLock(false)
+    , m_bTilesInvalidated(false)
+    , m_bViewSelectionSet(false)
+    , m_callbackWrapper(&callback, this)
+    , invalidatedAll(false)
+    , editModeOfInvalidation(0)
+    , partOfInvalidation(0)
+{
+    mpViewShell = SfxViewShell::Current();
+    mpViewShell->setLibreOfficeKitViewCallback(&m_callbackWrapper);
+    mnView = SfxLokHelper::getView();
+    m_callbackWrapper.setLOKViewId(mnView);
+}
+
+SdTestViewCallback::~SdTestViewCallback()
+{
+    SfxLokHelper::setView(mnView);
+    mpViewShell->setLibreOfficeKitViewCallback(nullptr);
+}
+
+void SdTestViewCallback::callback(int nType, const char* pPayload, void* pData)
+{
+    static_cast<SdTestViewCallback*>(pData)->callbackImpl(nType, pPayload);
+}
+
+void SdTestViewCallback::callbackImpl(int nType, const char* pPayload)
+{
+    switch (nType)
+    {
+        case LOK_CALLBACK_INVALIDATE_TILES:
+        {
+            m_bTilesInvalidated = true;
+            OString text(pPayload);
+            if (!text.startsWith("EMPTY"))
+            {
+                uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(
+                    OUString::createFromAscii(pPayload));
+                CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
+                tools::Rectangle aInvalidationRect;
+                aInvalidationRect.SetLeft(aSeq[0].toInt32());
+                aInvalidationRect.SetTop(aSeq[1].toInt32());
+                aInvalidationRect.setWidth(aSeq[2].toInt32());
+                aInvalidationRect.setHeight(aSeq[3].toInt32());
+                m_aInvalidations.push_back(aInvalidationRect);
+            }
+            else
+            {
+                editModeOfInvalidation = mpViewShell->getEditMode();
+                partOfInvalidation = mpViewShell->getPart();
+                invalidatedAll = true;
+            }
+        }
+        break;
+        case LOK_CALLBACK_GRAPHIC_SELECTION:
+        {
+            m_bGraphicSelectionInvalidated = true;
+            m_ShapeSelection = OString(pPayload);
+        }
+        break;
+        case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
+        {
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            if (aTree.get_child("part").get_value<int>() == m_nPart)
+                // Ignore callbacks which are for a different part.
+                m_bGraphicViewSelectionInvalidated = true;
+        }
+        break;
+        case LOK_CALLBACK_CURSOR_VISIBLE:
+        {
+            m_bCursorVisibleChanged = true;
+            m_bCursorVisible = (std::string_view("true") == pPayload);
+        }
+        break;
+        case LOK_CALLBACK_VIEW_LOCK:
+        {
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            m_bViewLock = aTree.get_child("rectangle").get_value<std::string>() != "EMPTY";
+        }
+        break;
+        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
+        {
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            int nViewId = aTree.get_child("viewId").get_value<int>();
+            m_aViewCursorInvalidations[nViewId] = true;
+        }
+        break;
+        case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
+        {
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            const int nViewId = aTree.get_child("viewId").get_value<int>();
+            m_aViewCursorVisibilities[nViewId] = std::string_view("true") == pPayload;
+        }
+        break;
+        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+        {
+            m_bViewSelectionSet = true;
+        }
+        break;
+        case LOK_CALLBACK_COMMENT:
+        {
+            m_aCommentCallbackResult.clear();
+            std::stringstream aStream(pPayload);
+            boost::property_tree::read_json(aStream, m_aCommentCallbackResult);
+            m_aCommentCallbackResult = m_aCommentCallbackResult.get_child("comment");
+        }
+        break;
+        case LOK_CALLBACK_STATE_CHANGED:
+        {
+            std::stringstream aStream(pPayload);
+            if (!aStream.str().starts_with("{"))
+            {
+                m_aStateChanged.push_back(aStream.str());
+                break;
+            }
+
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            auto it = aTree.find("commandName");
+            if (it == aTree.not_found())
+            {
+                break;
+            }
+
+            std::string aCommandName = it->second.get_value<std::string>();
+            m_aStateChanges[aCommandName] = aTree;
+        }
+        break;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

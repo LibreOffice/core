@@ -8,7 +8,6 @@
  */
 
 #include <sdtiledrenderingtest.hxx>
-#include "tiledrenderingmodeltestbase.cxx"
 
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <vcl/scheduler.hxx>
@@ -18,12 +17,15 @@
 
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
+#include <unomodel.hxx>
+
+using namespace css;
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarSwitchDeck)
 {
     // Given an impress document, with a visible sidebar (ModifyPage deck):
     createDoc("dummy.odp");
-    ViewCallback aView;
+    SdTestViewCallback aView;
     sfx2::sidebar::Sidebar::Setup(u"");
     Scheduler::ProcessEventsToIdle();
     aView.m_aStateChanges.clear();
@@ -54,7 +56,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertSignatureLineExternal)
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
     sd::View* pView = pViewShell->GetView();
     pView->SetAuthor("myauthor");
-    ViewCallback aView;
+    SdTestViewCallback aView;
 
     // When inserting a signature line for electronic (external) signing:
     aArgs = {
@@ -114,7 +116,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesViewInvalidations)
 {
     // Given a document with 2 slides.
     SdXImpressDocument* pXImpressDocument = createDoc("NotesView.odp");
-    ViewCallback aView;
+    SdTestViewCallback aView;
     CPPUNIT_ASSERT_EQUAL(2, pXImpressDocument->getParts());
 
     // Switching to the second slide.

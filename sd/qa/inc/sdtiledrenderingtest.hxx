@@ -11,6 +11,8 @@
 
 #include <test/unoapixml_test.hxx>
 
+#include <boost/property_tree/json_parser.hpp>
+
 #include <osl/conditn.hxx>
 #include <test/lokcallback.hxx>
 
@@ -49,6 +51,43 @@ protected:
     osl::Condition m_aDocumentSizeCondition;
     xmlBufferPtr m_pXmlBuffer;
     TestLokCallbackWrapper m_callbackWrapper;
+};
+
+/// A view callback tracks callbacks invoked on one specific view.
+class SDQAHELPER_DLLPUBLIC SdTestViewCallback final
+{
+    SfxViewShell* mpViewShell;
+    int mnView;
+
+public:
+    bool m_bGraphicSelectionInvalidated;
+    bool m_bGraphicViewSelectionInvalidated;
+    /// Our current part, to be able to decide if a view cursor/selection is relevant for us.
+    int m_nPart;
+    bool m_bCursorVisibleChanged;
+    bool m_bCursorVisible;
+    bool m_bViewLock;
+    bool m_bTilesInvalidated;
+    std::vector<tools::Rectangle> m_aInvalidations;
+    std::map<int, bool> m_aViewCursorInvalidations;
+    std::map<int, bool> m_aViewCursorVisibilities;
+    bool m_bViewSelectionSet;
+    boost::property_tree::ptree m_aCommentCallbackResult;
+    OString m_ShapeSelection;
+    std::vector<std::string> m_aStateChanged;
+    std::map<std::string, boost::property_tree::ptree> m_aStateChanges;
+    TestLokCallbackWrapper m_callbackWrapper;
+    bool invalidatedAll;
+    int editModeOfInvalidation;
+    int partOfInvalidation;
+
+    SdTestViewCallback();
+
+    ~SdTestViewCallback();
+
+    static void callback(int nType, const char* pPayload, void* pData);
+
+    void callbackImpl(int nType, const char* pPayload);
 };
 
 #endif // INCLUDED_SD_QA_INC_SDTILEDRENDERINGTEST_HXX
