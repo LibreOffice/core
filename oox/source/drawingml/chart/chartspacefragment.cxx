@@ -52,7 +52,7 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                 case C_TOKEN( chartSpace ):
                     return this;
                 case CX_TOKEN(chartSpace) :
-                    break;
+                    return this;
             }
         break;
 
@@ -136,7 +136,52 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                     return new View3DContext( *this, mrModel.mxView3D.create(bMSO2007Document) );
             }
         break;
+
+        // chartex handling
         case CX_TOKEN(chartSpace) :
+            switch (nElement) {
+                case CX_TOKEN(chartData):
+                    // TODO
+                    return nullptr;
+                case CX_TOKEN(chart):
+                    return this;
+                case CX_TOKEN(spPr):
+                    return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
+                case CX_TOKEN(txPr):
+                    return new TextBodyContext( *this, mrModel.mxTextProp.create() );
+                case CX_TOKEN(clrMapOvr):
+                    // TODO
+                    return nullptr;
+                case CX_TOKEN(fmtOvrs):
+                    // TODO
+                    return nullptr;
+                case CX_TOKEN(printSettings):
+                    // TODO
+                    return nullptr;
+                case CX_TOKEN(extLst):
+                    // TODO
+                    return nullptr;
+                default:
+                    // shouldn't happen
+                    assert(false);
+
+            }
+            break;
+        case CX_TOKEN(chart) :
+            switch (nElement) {
+                case CX_TOKEN(title):
+                    return new TitleContext( *this, mrModel.mxTitle.create() );
+                case CX_TOKEN(plotArea):
+                    return new PlotAreaContext( *this, mrModel.mxPlotArea.create() );
+                case CX_TOKEN(legend):
+                    return new LegendContext( *this, mrModel.mxLegend.create() );
+                case CX_TOKEN(extLst):
+                    // TODO
+                    return nullptr;
+                default:
+                    // shouldn't happen
+                    assert(false);
+            }
             break;
     }
     return nullptr;

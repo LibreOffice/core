@@ -272,6 +272,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FUNNEL)   // TODO: check this
         )
     {
         aRet.realloc(5);
@@ -620,6 +621,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
     OUString aChartTypeName = xChartType->getChartType();
     if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) ||
         aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) ||
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FUNNEL) ||
         aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
     {
         aRet.realloc( 2 );
