@@ -416,6 +416,7 @@ void A11yCheckIssuesPanel::populateIssues()
             case sfx::AccessibilityIssueID::AVOID_FOOTNOTES:
             case sfx::AccessibilityIssueID::AVOID_ENDNOTES:
             case sfx::AccessibilityIssueID::FONTWORKS:
+            case sfx::AccessibilityIssueID::LINK_IN_HEADER_FOOTER:
             {
                 if (!pIssue->getHidden())
                     addEntryForGroup(AccessibilityCheckGroups::Other, nIndices, pIssue);

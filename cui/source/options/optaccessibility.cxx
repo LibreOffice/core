@@ -47,6 +47,7 @@ namespace
         { u"HyperlinkText"_ustr, { sfx::AccessibilityIssueID::HYPERLINK_IS_TEXT, STR_HYPERLINK_TEXT_IS_LINK } },
         { u"HyperlinkShort"_ustr, { sfx::AccessibilityIssueID::HYPERLINK_SHORT, STR_HYPERLINK_TEXT_IS_SHORT } },
         { u"HyperlinkNoName"_ustr, { sfx::AccessibilityIssueID::HYPERLINK_NO_NAME, STR_HYPERLINK_NO_NAME } },
+        { u"LinkInHeaderOrFooter"_ustr, { sfx::AccessibilityIssueID::LINK_IN_HEADER_FOOTER, STR_LINK_TEXT_IS_NOT_NESTED } },
         { u"FakeFootnotes"_ustr, { sfx::AccessibilityIssueID::FAKE_FOOTNOTE, STR_AVOID_FAKE_FOOTNOTES } },
         { u"FakeCaptions"_ustr, { sfx::AccessibilityIssueID::FAKE_CAPTION, STR_AVOID_FAKE_CAPTIONS } },
         { u"ManualNumbering"_ustr, { sfx::AccessibilityIssueID::MANUAL_NUMBERING, STR_FAKE_NUMBERING } },
@@ -239,6 +240,10 @@ bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )
 
                 case sfx::AccessibilityIssueID::HYPERLINK_NO_NAME:
                     officecfg::Office::Common::AccessibilityIssues::HyperlinkNoName::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::LINK_IN_HEADER_FOOTER:
+                    officecfg::Office::Common::AccessibilityIssues::LinkInHeaderOrFooter::set(bChecked, batch);
                     break;
 
                 case sfx::AccessibilityIssueID::FAKE_FOOTNOTE:
@@ -447,6 +452,10 @@ void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet* )
 
             case sfx::AccessibilityIssueID::HYPERLINK_NO_NAME:
                 bChecked = officecfg::Office::Common::AccessibilityIssues::HyperlinkNoName::get();
+                break;
+
+            case sfx::AccessibilityIssueID::LINK_IN_HEADER_FOOTER:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::LinkInHeaderOrFooter::get();
                 break;
 
             case sfx::AccessibilityIssueID::FAKE_FOOTNOTE:

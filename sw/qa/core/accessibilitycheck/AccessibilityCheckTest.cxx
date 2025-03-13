@@ -155,6 +155,21 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testHyperlinks)
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[4]->m_eIssueID);
 }
 
+CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testNestedlinks)
+{
+    createSwDoc("NestedLinks.odt");
+    SwDoc* pDoc = getSwDoc();
+    sw::AccessibilityCheck aCheck(pDoc);
+    aCheck.check();
+    auto& aIssues = aCheck.getIssueCollection().getIssues();
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aIssues.size());
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::LINK_IN_HEADER_FOOTER, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueLevel::WARNLEV, aIssues[0]->m_eIssueLvl);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::LINK_IN_HEADER_FOOTER, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueLevel::WARNLEV, aIssues[1]->m_eIssueLvl);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::LINK_IN_HEADER_FOOTER, aIssues[2]->m_eIssueID);
+}
+
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckHighlightedText)
 {
     createSwDoc("HighlightTest.odt");

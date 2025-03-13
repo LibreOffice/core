@@ -37,6 +37,7 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <ftnidx.hxx>
+#include <authfld.hxx>
 #include <txtftn.hxx>
 #include <txtfrm.hxx>
 #include <svl/itemiter.hxx>
@@ -187,6 +188,12 @@ void lcl_SetHiddenIssues(std::shared_ptr<sw::AccessibilityIssue>& pIssue)
         case sfx::AccessibilityIssueID::HYPERLINK_NO_NAME:
         {
             if (!officecfg::Office::Common::AccessibilityIssues::HyperlinkNoName::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::LINK_IN_HEADER_FOOTER:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::LinkInHeaderOrFooter::get())
                 pIssue->setHidden(true);
         }
         break;
@@ -603,6 +610,7 @@ private:
         for (size_t i = 0; i < rHints.Count(); ++i)
         {
             const SwTextAttr* pTextAttr = rHints.Get(i);
+            SwDoc& rDocument = pTextNode->GetDoc();
             if (pTextAttr->Which() == RES_TXTATR_INETFMT)
             {
                 OUString sHyperlink = pTextAttr->GetINetFormat().GetValue();
@@ -634,7 +642,6 @@ private:
                     {
                         pIssue->setIssueObject(IssueObject::TEXT);
                         pIssue->setNode(pTextNode);
-                        SwDoc& rDocument = pTextNode->GetDoc();
                         pIssue->setDoc(rDocument);
                         pIssue->setStart(nStart);
                         pIssue->setEnd(nStart + sRunText.getLength());
@@ -645,21 +652,79 @@ private:
                         OUString sHyperlinkName = pTextAttr->GetINetFormat().GetName();
                         if (sHyperlinkName.isEmpty())
                         {
-                            std::shared_ptr<sw::AccessibilityIssue> pNameIssue
-                                = lclAddIssue(m_rIssueCollection, SwResId(STR_HYPERLINK_NO_NAME),
-                                              sfx::AccessibilityIssueID::HYPERLINK_NO_NAME,
-                                              sfx::AccessibilityIssueLevel::WARNLEV);
+                            pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_HYPERLINK_NO_NAME),
+                                                 sfx::AccessibilityIssueID::HYPERLINK_NO_NAME,
+                                                 sfx::AccessibilityIssueLevel::WARNLEV);
 
-                            if (pNameIssue)
+                            if (pIssue)
                             {
-                                pNameIssue->setIssueObject(IssueObject::HYPERLINKTEXT);
-                                pNameIssue->setNode(pTextNode);
-                                SwDoc& rDocument = pTextNode->GetDoc();
-                                pNameIssue->setDoc(rDocument);
-                                pNameIssue->setStart(nStart);
-                                pNameIssue->setEnd(nStart + sRunText.getLength());
+                                pIssue->setIssueObject(IssueObject::HYPERLINKTEXT);
+                                pIssue->setNode(pTextNode);
+                                pIssue->setDoc(rDocument);
+                                pIssue->setStart(nStart);
+                                pIssue->setEnd(nStart + sRunText.getLength());
                             }
                         }
+                    }
+
+                    // check Hyperlinks in Header/Footer --> annotation is not nested
+                    if (rDocument.IsInHeaderFooter(*pTextNode))
+                    {
+                        pIssue
+                            = lclAddIssue(m_rIssueCollection, SwResId(STR_LINK_TEXT_IS_NOT_NESTED),
+                                          sfx::AccessibilityIssueID::LINK_IN_HEADER_FOOTER,
+                                          sfx::AccessibilityIssueLevel::WARNLEV);
+
+                        if (pIssue)
+                        {
+                            pIssue->setIssueObject(IssueObject::TEXT);
+                            pIssue->setNode(pTextNode);
+                            pIssue->setDoc(rDocument);
+                            pIssue->setStart(nStart);
+                            pIssue->setEnd(nStart + sRunText.getLength());
+                        }
+                    }
+                }
+            }
+
+            // check other Link's in Header/Footer --> annotation is not nested
+            if (pTextAttr->Which() == RES_TXTATR_FIELD && rDocument.IsInHeaderFooter(*pTextNode))
+            {
+                bool bWarning = false;
+                const SwField* pField = pTextAttr->GetFormatField().GetField();
+                if (SwFieldIds::GetRef == pField->Which())
+                {
+                    bWarning = true;
+                }
+                else if (SwFieldIds::TableOfAuthorities == pField->Which())
+                {
+                    const auto& rAuthorityField = *static_cast<const SwAuthorityField*>(pField);
+                    if (auto targetType = rAuthorityField.GetTargetType();
+                        targetType == SwAuthorityField::TargetType::None)
+                    {
+                        bWarning = false;
+                    }
+                    else
+                    {
+                        bWarning = true;
+                    }
+                }
+
+                if (bWarning)
+                {
+                    auto pIssue
+                        = lclAddIssue(m_rIssueCollection, SwResId(STR_LINK_TEXT_IS_NOT_NESTED),
+                                      sfx::AccessibilityIssueID::LINK_IN_HEADER_FOOTER,
+                                      sfx::AccessibilityIssueLevel::WARNLEV);
+
+                    if (pIssue)
+                    {
+                        sal_Int32 nStart = pTextAttr->GetStart();
+                        pIssue->setIssueObject(IssueObject::TEXT);
+                        pIssue->setNode(pTextNode);
+                        pIssue->setDoc(rDocument);
+                        pIssue->setStart(nStart);
+                        pIssue->setEnd(nStart + 1);
                     }
                 }
             }

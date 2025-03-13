@@ -6411,6 +6411,16 @@
          </info>
          <value>true</value>
        </prop>
+      <prop oor:name="LinkInHeaderOrFooter" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of links and reference fields are used in the
+            header or footer.
+          </desc>
+          <label>Enable/Disable not nested link structure elements accessibility check.</label>
+        </info>
+        <value>true</value>
+      </prop>
        <prop oor:name="FakeFootnotes" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>

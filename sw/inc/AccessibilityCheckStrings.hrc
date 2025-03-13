@@ -20,6 +20,7 @@
 #define STR_HYPERLINK_TEXT_IS_LINK      NC_("STR_HYPERLINK_TEXT_IS_LINK", "Hyperlink text is the same as the link address “%LINK%”.")
 #define STR_HYPERLINK_TEXT_IS_SHORT     NC_("STR_HYPERLINK_TEXT_IS_SHORT", "Hyperlink text is too short.")
 #define STR_HYPERLINK_NO_NAME           NC_("STR_HYPERLINK_NO_NAME", "Missing 'Name' property of hyperlink.")
+#define STR_LINK_TEXT_IS_NOT_NESTED     NC_("STR_LINK_TEXT_IS_NOT_NESTED", "Avoid using links and reference fields in the header or footer.")
 #define STR_TEXT_CONTRAST               NC_("STR_TEXT_CONTRAST", "Text contrast is too low.")
 #define STR_TEXT_BLINKING               NC_("STR_TEXT_BLINKING", "Blinking text.")
 #define STR_AVOID_FOOTNOTES             NC_("STR_AVOID_FOOTNOTES", "Avoid footnotes.")
