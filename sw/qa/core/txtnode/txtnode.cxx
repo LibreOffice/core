@@ -586,6 +586,30 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testCopyCommentsWithReplies)
     CPPUNIT_ASSERT_EQUAL(comments[2]->GetName(), comments[3]->GetParentName());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testNodeSplitStyleListLevel)
+{
+    // Given a document with a 3rd paragraph where the list level as direct formatting differs from
+    // the list level from style:
+    createSwDoc("node-split-style-list-level.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false, /*nCount=*/2);
+    pWrtShell->EndPara();
+
+    // When pressing enter at the end of the paragraph:
+    pWrtShell->SplitNode();
+
+    SwTextNode* pNext = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4
+    // - Actual  : 3
+    // i.e. the list level for the new paragraph changed on a simple node split.
+    CPPUNIT_ASSERT_EQUAL(4, pNext->GetAttrListLevel());
+    pWrtShell->Up(/*bSelect=*/false, /*nCount=*/1);
+    SwTextNode* pPrevious = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    // Same happened for the old paragraph.
+    CPPUNIT_ASSERT_EQUAL(4, pPrevious->GetAttrListLevel());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

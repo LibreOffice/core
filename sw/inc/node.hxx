@@ -497,7 +497,7 @@ public:
     const SwAttrSet *GetpSwAttrSet() const { return mpAttrSet.get(); }
     bool  HasSwAttrSet() const { return mpAttrSet != nullptr; }
 
-    virtual SwFormatColl* ChgFormatColl( SwFormatColl* );
+    virtual SwFormatColl* ChgFormatColl( SwFormatColl*, bool bSetListLevel = true );
     SwFormatColl* GetFormatColl() const { return const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(GetRegisteredIn())); }
 
     inline SwFormatColl& GetAnyFormatColl() const;
