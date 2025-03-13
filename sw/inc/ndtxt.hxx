@@ -464,9 +464,10 @@ public:
     bool Convert( SwConversionArgs & );
 
     inline SwTextFormatColl *GetTextColl() const;
-    virtual SwFormatColl *ChgFormatColl( SwFormatColl* ) override;
+    virtual SwFormatColl *ChgFormatColl( SwFormatColl*, bool bSetListLevel = true ) override;
     void ChgTextCollUpdateNum( const SwTextFormatColl* pOld,
-                                const SwTextFormatColl* pNew );
+                                const SwTextFormatColl* pNew,
+                                bool bSetListLevel = true );
 
     /** Copy collection with all auto formats to dest-node.
         The latter might be in another document!

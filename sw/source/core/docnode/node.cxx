@@ -1258,7 +1258,7 @@ SwRect SwContentNode::FindPageFrameRect() const
 
 sal_Int32 SwContentNode::Len() const { return 0; }
 
-SwFormatColl *SwContentNode::ChgFormatColl( SwFormatColl *pNewColl )
+SwFormatColl *SwContentNode::ChgFormatColl( SwFormatColl *pNewColl, bool /*bSetListLevel*/ )
 {
     OSL_ENSURE( pNewColl, "Collectionpointer is 0." );
     SwFormatColl *pOldColl = GetFormatColl();
