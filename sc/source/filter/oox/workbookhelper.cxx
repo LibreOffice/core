@@ -31,6 +31,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/diagnose_ex.hxx>
 #include <o3tl/any.hxx>
 #include <osl/thread.h>
 #include <osl/diagnose.h>
@@ -60,6 +61,7 @@
 #include <docsh.hxx>
 #include <document.hxx>
 #include <docuno.hxx>
+#include <dbdocfun.hxx>
 #include <rangenam.hxx>
 #include <tokenarray.hxx>
 #include <tokenuno.hxx>
@@ -159,7 +161,7 @@ public:
     /** Creates and returns a defined name on the-fly in the correct Calc sheet. */
     WorkbookHelper::RangeDataRet createLocalNamedRangeObject(OUString& orName, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab);
     /** Creates and returns a database range on-the-fly in the Calc document. */
-    Reference< XDatabaseRange > createDatabaseRangeObject( OUString& orName, const ScRange& rRangeAddr );
+    rtl::Reference<ScDatabaseRangeObj> createDatabaseRangeObject( OUString& orName, const ScRange& rRangeAddr );
     /** Creates and returns an unnamed database range on-the-fly in the Calc document. */
     Reference< XDatabaseRange > createUnnamedDatabaseRangeObject( const ScRange& rRangeAddr );
     /** Finds the (already existing) database range of the given formula token index. */
@@ -444,31 +446,38 @@ WorkbookHelper::RangeDataRet WorkbookGlobals::createLocalNamedRangeObject(
     return aScRangeData;
 }
 
-Reference< XDatabaseRange > WorkbookGlobals::createDatabaseRangeObject( OUString& orName, const ScRange& rRangeAddr )
+rtl::Reference<ScDatabaseRangeObj> WorkbookGlobals::createDatabaseRangeObject( OUString& orName, const ScRange& rRangeAddr )
 {
     // validate cell range
     ScRange aDestRange = rRangeAddr;
     bool bValidRange = getAddressConverter().validateCellRange( aDestRange, true, true );
 
+    ScDocShell* pDocSh = getScDocument().GetDocumentShell();
     // create database range and insert it into the Calc document
-    Reference< XDatabaseRange > xDatabaseRange;
-    if( bValidRange && !orName.isEmpty() ) try
+    if( bValidRange && !orName.isEmpty() && pDocSh) try
     {
         // find an unused name
-        PropertySet aDocProps(( Reference< css::beans::XPropertySet >(mxDoc) ));
-        Reference< XDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY_THROW );
-        orName = ContainerHelper::getUnusedName( xDatabaseRanges, orName, '_' );
+        OUString aNewName = orName;
+        sal_Int32 nIndex = -1;
+        ScDBCollection* pNames = pDocSh->GetDocument().GetDBCollection();
+        while (pNames && pNames->getNamedDBs().findByUpperName(ScGlobal::getCharClass().uppercase(aNewName)) != nullptr )
+            aNewName = orName + OUStringChar('_') + OUString::number( nIndex++ );
+        orName = aNewName;
         // create the database range
         CellRangeAddress aApiRange( aDestRange.aStart.Tab(), aDestRange.aStart.Col(), aDestRange.aStart.Row(),
                                     aDestRange.aEnd.Col(), aDestRange.aEnd.Row() );
-        xDatabaseRanges->addNewByName( orName, aApiRange );
-        xDatabaseRange.set( xDatabaseRanges->getByName( orName ), UNO_QUERY );
+        ScDBDocFunc aFunc(*pDocSh);
+        ScRange aNameRange( static_cast<SCCOL>(aApiRange.StartColumn), static_cast<SCROW>(aApiRange.StartRow), aApiRange.Sheet,
+                            static_cast<SCCOL>(aApiRange.EndColumn),   static_cast<SCROW>(aApiRange.EndRow),   aApiRange.Sheet );
+        if(!( aFunc.AddDBRange( orName, aNameRange ) ))
+            throw RuntimeException(u"Could not add database range"_ustr);
+        return new ScDatabaseRangeObj(pDocSh, orName);
     }
     catch( Exception& )
     {
+        DBG_UNHANDLED_EXCEPTION("sc");
     }
-    OSL_ENSURE( xDatabaseRange.is(), "WorkbookGlobals::createDatabaseRangeObject - cannot create database range" );
-    return xDatabaseRange;
+    return {};
 }
 
 Reference< XDatabaseRange > WorkbookGlobals::createUnnamedDatabaseRangeObject( const ScRange& rRangeAddr )
@@ -914,7 +923,7 @@ WorkbookHelper::RangeDataRet WorkbookHelper::createLocalNamedRangeObject(OUStrin
     return mrBookGlob.createLocalNamedRangeObject(orName, nIndex, nNameFlags, nTab);
 }
 
-Reference< XDatabaseRange > WorkbookHelper::createDatabaseRangeObject( OUString& orName, const ScRange& rRangeAddr ) const
+rtl::Reference<ScDatabaseRangeObj> WorkbookHelper::createDatabaseRangeObject( OUString& orName, const ScRange& rRangeAddr ) const
 {
     return mrBookGlob.createDatabaseRangeObject( orName, rRangeAddr );
 }

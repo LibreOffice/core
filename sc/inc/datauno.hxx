@@ -22,7 +22,7 @@
 #include "global.hxx"
 #include "queryparam.hxx"
 #include "subtotalparam.hxx"
-
+#include "dapiuno.hxx"
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XSheetFilterDescriptor.hpp>
@@ -370,7 +370,7 @@ public:
 
 //  ScDataPilotFilterDescriptor - FilterDescriptor of a DataPilotDescriptors
 
-class ScDataPilotFilterDescriptor final : public ScFilterDescriptorBase
+class SC_DLLPUBLIC ScDataPilotFilterDescriptor final : public ScFilterDescriptorBase
 {
 private:
     rtl::Reference<ScDataPilotDescriptorBase>  mxParent;
@@ -407,7 +407,7 @@ private:
     void                    Refreshed_Impl();
 
 public:
-    ScDatabaseRangeObj(ScDocShell* pDocSh, OUString aNm);
+    SC_DLLPUBLIC ScDatabaseRangeObj(ScDocShell* pDocSh, OUString aNm);
     SC_DLLPUBLIC ScDatabaseRangeObj(ScDocShell* pDocSh, const SCTAB nTab);
     virtual ~ScDatabaseRangeObj() override;
 
@@ -424,7 +424,7 @@ public:
     virtual void SAL_CALL   setName( const OUString& aName ) override;
 
                             // XDatabaseRange
-    virtual css::table::CellRangeAddress SAL_CALL getDataArea() override;
+    SC_DLLPUBLIC virtual css::table::CellRangeAddress SAL_CALL getDataArea() override;
     virtual void SAL_CALL   setDataArea( const css::table::CellRangeAddress& aDataArea ) override;
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
                             getSortDescriptor() override;
@@ -449,9 +449,9 @@ public:
                             // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
+    SC_DLLPUBLIC virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
                                     const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+    SC_DLLPUBLIC virtual css::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName ) override;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
                                     const css::uno::Reference<

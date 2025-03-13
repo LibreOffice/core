@@ -59,7 +59,7 @@ class ScEditEngineDefaulter;
 class ScDBData;
 class ScRangeData;
 class ScModelObj;
-
+class ScDatabaseRangeObj;
 namespace oox::xls {
 
 enum class FontClassification : sal_uInt8
@@ -232,8 +232,7 @@ public:
     /** Creates and returns a database range on-the-fly in the Calc document.
         The range will not be buffered in the global table buffer.
         @param orName  (in/out-parameter) Returns the resulting used name. */
-    css::uno::Reference< css::sheet::XDatabaseRange >
-                        createDatabaseRangeObject(
+    rtl::Reference<ScDatabaseRangeObj> createDatabaseRangeObject(
                             OUString& orName,
                             const ScRange& rRangeAddr ) const;
 

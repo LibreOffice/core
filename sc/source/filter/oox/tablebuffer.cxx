@@ -33,7 +33,7 @@
 #include <addressconverter.hxx>
 #include <biffhelper.hxx>
 #include <docuno.hxx>
-
+#include <datauno.hxx>
 namespace oox::xls {
 
 using namespace ::com::sun::star::sheet;
@@ -98,13 +98,10 @@ void Table::finalizeImport()
     {
         maDBRangeName = maModel.maDisplayName;
 
-        Reference< XDatabaseRange > xDatabaseRange(
-            createDatabaseRangeObject( maDBRangeName, maModel.maRange ), UNO_SET_THROW);
+        rtl::Reference<ScDatabaseRangeObj> xDatabaseRange = createDatabaseRangeObject(maDBRangeName, maModel.maRange );
         ::css::table::CellRangeAddress aAddressRange = xDatabaseRange->getDataArea();
         maDestRange = ScRange( aAddressRange.StartColumn, aAddressRange.StartRow, aAddressRange.Sheet,
                                aAddressRange.EndColumn, aAddressRange.EndRow, aAddressRange.Sheet );
-
-        PropertySet aPropSet( xDatabaseRange );
 
         // Default HasHeader is true at ScDBData.
         if (maModel.mnHeaderRows != 1)
@@ -112,18 +109,18 @@ void Table::finalizeImport()
             SAL_WARN_IF( maModel.mnHeaderRows > 1, "sc.filter",
                     "Table HeaderRows > 1 not supported: " << maModel.mnHeaderRows);
             if (maModel.mnHeaderRows == 0)
-                aPropSet.setProperty( PROP_ContainsHeader, false);
+                xDatabaseRange->setPropertyValue( u"ContainsHeader"_ustr, css::uno::Any(false));
         }
 
         if (maModel.mnTotalsRows > 0)
         {
             SAL_WARN_IF( maModel.mnTotalsRows > 1, "sc.filter",
                     "Table TotalsRows > 1 not supported: " << maModel.mnTotalsRows);
-            aPropSet.setProperty( PROP_TotalsRow, true);
+            xDatabaseRange->setPropertyValue( u"TotalsRow"_ustr, css::uno::Any(true));
         }
 
         // get formula token index of the database range
-        if( !aPropSet.getProperty( mnTokenIndex, PROP_TokenIndex ) )
+        if( !(xDatabaseRange->getPropertyValue(u"TokenIndex"_ustr) >>= mnTokenIndex))
             mnTokenIndex = -1;
     }
     catch( Exception& )

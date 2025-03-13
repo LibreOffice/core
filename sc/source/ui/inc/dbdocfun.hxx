@@ -69,7 +69,7 @@ public:
     void            DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                                     bool bRecord, bool bApi );
 
-    bool AddDBRange( const OUString& rName, const ScRange& rRange );
+    SC_DLLPUBLIC bool AddDBRange( const OUString& rName, const ScRange& rRange );
     bool DeleteDBRange( const OUString& rName );
     bool RenameDBRange( const OUString& rOld, const OUString& rNew );
     void ModifyDBData( const ScDBData& rNewData );  // Name unveraendert
