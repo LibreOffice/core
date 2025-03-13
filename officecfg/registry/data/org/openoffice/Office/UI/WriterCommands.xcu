@@ -1583,6 +1583,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:BreakAboveTable" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Paragraph Break Above Table</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Inserts a paragraph break above the table if it is the first element in the page.</value>
+        </prop>
+      </node>
       <node oor:name=".uno:FootnoteDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Footnote/Endnote Settings...</value>

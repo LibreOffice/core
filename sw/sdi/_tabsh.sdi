@@ -24,6 +24,11 @@ interface BaseTextTable
         ExecMethod = Execute ;
         StateMethod = NoState ;
     ]
+    FN_BREAK_ABOVE_TABLE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
     SID_ATTR_BRUSH
     [
         ExecMethod = Execute ;

@@ -6454,6 +6454,24 @@ SfxVoidItem TableDialog FN_FORMAT_TABLE_DLG
     GroupId = SfxGroupId::Table;
 ]
 
+SfxVoidItem BreakAboveTable FN_BREAK_ABOVE_TABLE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerItem;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Table;
+]
+
 SfxBoolItem TableModeFix FN_TABLE_MODE_FIX
 ()
 [

@@ -148,6 +148,7 @@
   <menu:menuitem menu:id=".uno:OpenSmartTagMenuOnCursor"/>
   <menu:menuitem menu:id=".uno:ThesaurusFromContext"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:BreakAboveTable"/>
   <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>
   <menu:menuitem menu:id=".uno:TableDialog"/>
 </menu:menupopup>

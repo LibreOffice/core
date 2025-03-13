@@ -420,6 +420,7 @@ class SwUINumRuleItem;
 #define FN_CONVERT_TEXT_TO_TABLE    (FN_FORMAT + 131)  /* convert selected text to table */
 #define FN_CONVERT_TABLE_TO_TEXT    (FN_FORMAT + 132)  /* convert a table to text */
 #define FN_TABLE_SORT_DIALOG        (FN_FORMAT + 133)  /* sorting in tables*/
+#define FN_BREAK_ABOVE_TABLE        (FN_FORMAT + 134)
 
 // Region: Page Template
 #define FN_PAGE_STYLE_SET_LR_MARGIN (FN_FORMAT + 130) /* left / right margin */

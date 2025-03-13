@@ -73,6 +73,9 @@
 #include <tblsel.hxx>
 #include <viewopt.hxx>
 #include <tabfrm.hxx>
+#include <frame.hxx>
+#include <pagefrm.hxx>
+#include <cntfrm.hxx>
 
 #include <strings.hrc>
 #include <cmdid.h>
@@ -598,6 +601,12 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case FN_INSERT_TABLE:
             InsertTable( rReq );
             break;
+        case FN_BREAK_ABOVE_TABLE:
+        {
+            rSh.MoveTable( GotoCurrTable, fnTableStart );
+            rSh.SplitNode( false );
+            break;
+        }
         case FN_FORMAT_TABLE_DLG:
         {
             //#127012# get the bindings before the dialog is called
@@ -1539,7 +1548,25 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                     rSet.Put(SfxBoolItem(nSlot, bSet));
                 }
                 break;
+            case FN_BREAK_ABOVE_TABLE:
+                {
+                    // exec just moves on top and adds the break, which however makes only sense if the table
+                    // is the very first item of the document; the command should be hidden otherwise
+                    SwContentFrame* curFrame = rSh.GetCurrFrame();
+                    SwPageFrame* pageFrame = curFrame->FindPageFrame();
+                    SwFrame* frame = pageFrame->Lower();
 
+                    while(!frame->IsContentFrame())
+                    {
+                        frame = frame->GetLower();
+                    }
+
+                    if(frame->FindTabFrame() != curFrame->FindTabFrame())
+                    {
+                        rSet.DisableItem(nSlot);
+                    }
+                }
+                break;
             case SID_ATTR_PARA_SPLIT:
                 rSet.Put( pFormat->GetKeep() );
                 break;
