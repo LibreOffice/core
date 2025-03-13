@@ -583,9 +583,10 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
         // another thread, leading to an std::abort() at the end.
         SolarMutexGuard g;
 
-        return vcl::solarthread::syncExecute(std::bind(&LoadEnv::loadComponentFromURL, xThis,
-                                                       m_xContext, sURL, sTargetFrameName,
-                                                       nSearchFlags, lArguments));
+        return vcl::solarthread::syncExecute([this, xThis, sURL, sTargetFrameName, nSearchFlags, lArguments] {
+            return LoadEnv::loadComponentFromURL(xThis, m_xContext, sURL, sTargetFrameName,
+                                                 nSearchFlags, lArguments);
+        });
     }
     else
     {
