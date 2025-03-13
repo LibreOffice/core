@@ -51,7 +51,7 @@ ShadowPrimitive2D::ShadowPrimitive2D(basegfx::B2DHomMatrix aShadowTransform,
     , maLastClippedRange()
 {
     // activate callback to flush buffered decomposition content
-    setCallbackSeconds(15);
+    activateFlushOnTimer();
 }
 
 bool ShadowPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const

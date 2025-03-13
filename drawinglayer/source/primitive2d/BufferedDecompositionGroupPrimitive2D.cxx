@@ -21,140 +21,80 @@
 
 #include <drawinglayer/primitive2d/BufferedDecompositionGroupPrimitive2D.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-
-namespace
-{
-class LocalCallbackTimer : public salhelper::Timer
-{
-protected:
-    drawinglayer::primitive2d::BufferedDecompositionGroupPrimitive2D* pCustomer;
-
-public:
-    explicit LocalCallbackTimer(
-        drawinglayer::primitive2d::BufferedDecompositionGroupPrimitive2D& rCustomer)
-        : pCustomer(&rCustomer)
-    {
-    }
-
-    void clearCallback() { pCustomer = nullptr; }
-
-protected:
-    virtual void SAL_CALL onShot() override;
-};
-
-void SAL_CALL LocalCallbackTimer::onShot()
-{
-    if (nullptr != pCustomer)
-        flushBufferedDecomposition(*pCustomer);
-}
-}
+#include <drawinglayer/primitive2d/BufferedDecompositionFlusher.hxx>
 
 namespace drawinglayer::primitive2d
 {
-void flushBufferedDecomposition(BufferedDecompositionGroupPrimitive2D& rTarget)
-{
-    rTarget.acquire();
-    rTarget.setBuffered2DDecomposition(Primitive2DContainer());
-    rTarget.release();
-}
-
 bool BufferedDecompositionGroupPrimitive2D::hasBuffered2DDecomposition() const
 {
-    if (0 != maCallbackSeconds)
-    {
-        std::lock_guard Guard(maCallbackLock);
+    if (!mbFlushOnTimer)
         return !maBuffered2DDecomposition.empty();
-    }
     else
     {
+        std::lock_guard Guard(maCallbackLock);
         return !maBuffered2DDecomposition.empty();
     }
 }
 
 void BufferedDecompositionGroupPrimitive2D::setBuffered2DDecomposition(Primitive2DContainer&& rNew)
 {
-    if (0 == maCallbackSeconds)
+    if (!mbFlushOnTimer)
     {
         // no flush used, just set
         maBuffered2DDecomposition = std::move(rNew);
-        return;
     }
-
-    if (maCallbackTimer.is())
+    else
     {
-        if (rNew.empty())
-        {
-            // stop timer
-            maCallbackTimer->stop();
-        }
-        else
-        {
-            // decomposition changed, touch
-            maCallbackTimer->setRemainingTime(salhelper::TTimeValue(maCallbackSeconds, 0));
-            if (!maCallbackTimer->isTicking())
-                maCallbackTimer->start();
-        }
-    }
-    else if (!rNew.empty())
-    {
-        // decomposition defined/set/changed, init & start timer
-        maCallbackTimer.set(new LocalCallbackTimer(*this));
-        maCallbackTimer->setRemainingTime(salhelper::TTimeValue(maCallbackSeconds, 0));
-        maCallbackTimer->start();
-    }
+        // decomposition changed, touch
+        maLastAccess = std::chrono::steady_clock::now();
+        BufferedDecompositionFlusher::update(this);
 
-    // tdf#158913 need to secure change when flush/multithreading is in use
-    std::lock_guard Guard(maCallbackLock);
-    maBuffered2DDecomposition = std::move(rNew);
+        // tdf#158913 need to secure change when flush/multithreading is in use
+        std::lock_guard Guard(maCallbackLock);
+        maBuffered2DDecomposition = std::move(rNew);
+    }
 }
 
 BufferedDecompositionGroupPrimitive2D::BufferedDecompositionGroupPrimitive2D(
     Primitive2DContainer&& aChildren)
     : GroupPrimitive2D(std::move(aChildren))
-    , maCallbackTimer()
     , maCallbackLock()
-    , maCallbackSeconds(0)
+    , mbFlushOnTimer(false)
 {
 }
 
-BufferedDecompositionGroupPrimitive2D::~BufferedDecompositionGroupPrimitive2D()
-{
-    if (maCallbackTimer.is())
-    {
-        // no more decomposition, end callback
-        static_cast<LocalCallbackTimer*>(maCallbackTimer.get())->clearCallback();
-        maCallbackTimer->stop();
-    }
-}
+BufferedDecompositionGroupPrimitive2D::~BufferedDecompositionGroupPrimitive2D() {}
 
 void BufferedDecompositionGroupPrimitive2D::get2DDecomposition(
     Primitive2DDecompositionVisitor& rVisitor,
     const geometry::ViewInformation2D& rViewInformation) const
 {
-    if (!hasBuffered2DDecomposition())
-    {
-        Primitive2DContainer aNewSequence;
-        create2DDecomposition(aNewSequence, rViewInformation);
-        const_cast<BufferedDecompositionGroupPrimitive2D*>(this)->setBuffered2DDecomposition(
-            std::move(aNewSequence));
-    }
-
-    if (0 == maCallbackSeconds)
+    if (!mbFlushOnTimer)
     {
         // no flush/multithreading is in use, just call
+        if (maBuffered2DDecomposition.empty())
+            create2DDecomposition(maBuffered2DDecomposition, rViewInformation);
         rVisitor.visit(maBuffered2DDecomposition);
-        return;
     }
-
-    // decomposition was used, touch/restart time
-    if (maCallbackTimer)
-        maCallbackTimer->setRemainingTime(salhelper::TTimeValue(maCallbackSeconds, 0));
-
-    // tdf#158913 need to secure 'visit' when flush/multithreading is in use,
-    // so that the local non-ref-Counted instance of the decomposition gets not
-    // manipulated (e.g. deleted)
-    std::lock_guard Guard(maCallbackLock);
-    rVisitor.visit(maBuffered2DDecomposition);
+    else
+    {
+        // tdf#158913 need to secure 'visit' when flush/multithreading is in use,
+        // so that the local non-ref-Counted instance of the decomposition gets not
+        // manipulated (e.g. deleted)
+        Primitive2DContainer xTmp;
+        {
+            // only hold the lock for long enough to get a valid reference
+            std::lock_guard Guard(maCallbackLock);
+            maLastAccess = std::chrono::steady_clock::now();
+            if (maBuffered2DDecomposition.empty())
+            {
+                create2DDecomposition(maBuffered2DDecomposition, rViewInformation);
+                BufferedDecompositionFlusher::update(this);
+            }
+            xTmp = maBuffered2DDecomposition;
+        }
+        rVisitor.visit(xTmp);
+    }
 }
 
 } // end of namespace drawinglayer::primitive2d

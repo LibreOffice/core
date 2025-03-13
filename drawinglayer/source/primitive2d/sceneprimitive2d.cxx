@@ -633,7 +633,7 @@ namespace drawinglayer::primitive2d
             mfOldDiscreteSizeY(0.0)
         {
             // activate callback to flush buffered decomposition content
-            setCallbackSeconds(45);
+            activateFlushOnTimer();
         }
 
         bool ScenePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const

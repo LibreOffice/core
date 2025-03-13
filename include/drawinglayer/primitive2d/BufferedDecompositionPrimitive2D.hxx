@@ -22,7 +22,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <salhelper/timer.hxx>
+#include <chrono>
 
 namespace drawinglayer::geometry
 {
@@ -31,6 +31,8 @@ class ViewInformation2D;
 
 namespace drawinglayer::primitive2d
 {
+class BufferedDecompositionFlusher;
+
 /** BufferedDecompositionPrimitive2D class
 
     Baseclass for all C++ implementations of css::graphic::XPrimitive2D
@@ -64,15 +66,15 @@ class DRAWINGLAYERCORE_DLLPUBLIC BufferedDecompositionPrimitive2D : public BaseP
 {
 private:
     // exclusive helper for Primitive2DFlusher
-    friend void flushBufferedDecomposition(BufferedDecompositionPrimitive2D&);
+    friend class BufferedDecompositionFlusher;
 
     /// a sequence used for buffering the last create2DDecomposition() result
-    Primitive2DReference maBuffered2DDecomposition;
+    mutable Primitive2DReference maBuffered2DDecomposition;
 
     /// offer callback mechanism to flush buffered content timer-based
-    ::rtl::Reference<::salhelper::Timer> maCallbackTimer;
     mutable std::mutex maCallbackLock;
-    sal_uInt16 maCallbackSeconds;
+    mutable std::chrono::time_point<std::chrono::steady_clock> maLastAccess;
+    bool mbFlushOnTimer;
 
 protected:
     /** access methods to maBuffered2DDecomposition. The usage of this methods may allow
@@ -90,7 +92,7 @@ protected:
     // callback mechanism to flush buffered content timer-based will be activated.
     // it is protected since the idea is that this gets called in the constructor
     // of derived classes.
-    void setCallbackSeconds(sal_uInt16 nNew) { maCallbackSeconds = nNew; }
+    void activateFlushOnTimer() { mbFlushOnTimer = true; }
 
 public:
     // constructor/destructor

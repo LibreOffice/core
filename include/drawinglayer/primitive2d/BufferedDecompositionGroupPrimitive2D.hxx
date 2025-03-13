@@ -21,10 +21,12 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
-#include <salhelper/timer.hxx>
+#include <chrono>
 
 namespace drawinglayer::primitive2d
 {
+class BufferedDecompositionFlusher;
+
 /** BufferedDecompositionGroupPrimitive2D class
 
     Baseclass for all C++ implementations which are derived from GroupPrimitive2D
@@ -33,20 +35,20 @@ namespace drawinglayer::primitive2d
     For discussion please refer to BufferedDecompositionPrimitive2D, this is the same
     but for GroupPrimitive2D which want to buffer their decomposition
  */
-class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) BufferedDecompositionGroupPrimitive2D
+class UNLESS_MERGELIBS(DRAWINGLAYERCORE_DLLPUBLIC) BufferedDecompositionGroupPrimitive2D
     : public GroupPrimitive2D
 {
 private:
     // exclusive helper for Primitive2DFlusher
-    friend void flushBufferedDecomposition(BufferedDecompositionGroupPrimitive2D&);
+    friend class BufferedDecompositionFlusher;
 
     /// a sequence used for buffering the last create2DDecomposition() result
-    Primitive2DContainer maBuffered2DDecomposition;
+    mutable Primitive2DContainer maBuffered2DDecomposition;
 
     /// offer callback mechanism to flush buffered content timer-based
-    ::rtl::Reference<::salhelper::Timer> maCallbackTimer;
     mutable std::mutex maCallbackLock;
-    sal_uInt16 maCallbackSeconds;
+    mutable std::chrono::time_point<std::chrono::steady_clock> maLastAccess;
+    bool mbFlushOnTimer;
 
 protected:
     /// identical to BufferedDecompositionPrimitive2D, see there please
@@ -62,7 +64,7 @@ protected:
     // callback mechanism to flush buffered content timer-based will be activated.
     // it is protected since the idea is that this gets called in the constructor
     // of derived classes.
-    void setCallbackSeconds(sal_uInt16 nNew) { maCallbackSeconds = nNew; }
+    void activateFlushOnTimer() { mbFlushOnTimer = true; }
 
 public:
     /// constructor/destructor. For GroupPrimitive2D we need the child parameter, too.

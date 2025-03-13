@@ -46,7 +46,10 @@ $(eval $(call gb_Library_use_custom_headers,drawinglayercore,\
 $(eval $(call gb_Library_add_exception_objects,drawinglayercore,\
     drawinglayer/source/primitive2d/baseprimitive2d \
     drawinglayer/source/primitive2d/BufferedDecompositionPrimitive2D \
+    drawinglayer/source/primitive2d/BufferedDecompositionFlusher \
+    drawinglayer/source/primitive2d/BufferedDecompositionGroupPrimitive2D \
     drawinglayer/source/primitive2d/Primitive2DContainer \
+    drawinglayer/source/primitive2d/groupprimitive2d \
     drawinglayer/source/primitive2d/Tools \
     drawinglayer/source/geometry/viewinformation2d \
 ))

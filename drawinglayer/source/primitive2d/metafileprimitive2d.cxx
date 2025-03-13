@@ -91,7 +91,7 @@ namespace drawinglayer::primitive2d
             maMetaFile(rMetaFile)
         {
             // activate callback to flush buffered decomposition content
-            setCallbackSeconds(20);
+            activateFlushOnTimer();
         }
 
         bool MetafilePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const

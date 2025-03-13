@@ -60,7 +60,7 @@ namespace drawinglayer::primitive2d
             - ModifiedColorPrimitive2D (for a stack of color modifications)
             - TransformPrimitive2D (for a transformation stack)
          */
-        class DRAWINGLAYER_DLLPUBLIC GroupPrimitive2D : public BasePrimitive2D
+        class DRAWINGLAYERCORE_DLLPUBLIC GroupPrimitive2D : public BasePrimitive2D
         {
         private:
             /// the children. Declared private since this shall never be changed at all after construction

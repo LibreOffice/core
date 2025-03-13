@@ -109,7 +109,6 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/bitmapprimitive2d \
     drawinglayer/source/primitive2d/BitmapAlphaPrimitive2D \
     drawinglayer/source/primitive2d/borderlineprimitive2d \
-    drawinglayer/source/primitive2d/BufferedDecompositionGroupPrimitive2D \
     drawinglayer/source/primitive2d/controlprimitive2d \
     drawinglayer/source/primitive2d/cropprimitive2d \
     drawinglayer/source/primitive2d/discretebitmapprimitive2d \
@@ -125,7 +124,6 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/graphicprimitivehelper2d \
     drawinglayer/source/primitive2d/graphicprimitive2d \
     drawinglayer/source/primitive2d/gridprimitive2d \
-    drawinglayer/source/primitive2d/groupprimitive2d \
     drawinglayer/source/primitive2d/helplineprimitive2d \
     drawinglayer/source/primitive2d/hiddengeometryprimitive2d \
     drawinglayer/source/primitive2d/invertprimitive2d \
