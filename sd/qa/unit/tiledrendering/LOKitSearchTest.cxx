@@ -8,7 +8,6 @@
  */
 
 #include <sdtiledrenderingtest.hxx>
-#include "tiledrenderingmodeltestbase.cxx"
 
 #include <test/helper/transferable.hxx>
 
