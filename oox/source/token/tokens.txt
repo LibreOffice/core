@@ -750,6 +750,7 @@ axPos
 axis
 axisCol
 axisColor
+axisId
 axisPage
 axisPosition
 axisRow
@@ -967,6 +968,7 @@ bottomRight
 boundingCube
 box
 boxPr
+boxWhisker
 br
 bracePair
 bracketPair
@@ -1172,6 +1174,7 @@ characteristic
 charset
 chart
 chartAndTx
+chartData
 chartFormat
 chartFormats
 chartObject
@@ -1260,6 +1263,7 @@ clrTo
 clrVal
 clsid
 clustered
+clusteredColumn
 cm
 cmAuthor
 cmAuthorLst
@@ -1654,11 +1658,14 @@ dataDxfId
 dataExtractLoad
 dataField
 dataFields
+dataId
+dataLabels
 dataModel
 dataModelExt
 dataOnRows
 dataOnly
 dataPosition
+dataPt
 dataRef
 dataRefs
 dataSource
@@ -2353,6 +2360,7 @@ flythrough
 fmla
 fmt
 fmtId
+fmtOvrs
 fmtScheme
 fmtid
 focus
@@ -3019,8 +3027,10 @@ layout
 layoutDef
 layoutDefHdr
 layoutDefHdrLst
+layoutId
 layoutInCell
 layoutNode
+layoutPr
 layoutRawTableWidth
 layoutTableRowsApart
 layoutTarget
@@ -3897,6 +3907,7 @@ parameterType
 parameters
 parent
 parentSet
+paretoLine
 parsePre
 partyFavor
 partyGlass
@@ -4056,6 +4067,8 @@ plaqueTabs
 plastic
 plcHide
 plotArea
+plotAreaRegion
+plotSurface
 plotVisOnly
 plum
 plus
@@ -4299,6 +4312,7 @@ refreshOnLoad
 refreshedBy
 refreshedDate
 refreshedVersion
+regionMap
 regroupid
 regrouptable
 regular
@@ -5076,6 +5090,7 @@ summaryBelow
 summaryLength
 summaryRight
 sun
+sunburst
 sunrise
 sunset
 sup
@@ -5435,6 +5450,7 @@ translucentPowder
 transp
 trapezoid
 tree
+treemap
 trees
 trellis
 trend
@@ -5646,6 +5662,8 @@ val
 valAx
 value
 valueBetween
+valueColors
+valueColorPositions
 valueEqual
 valueGreaterThan
 valueGreaterThanOrEqual
@@ -5728,6 +5746,7 @@ wR
 warmMatte
 warning
 warp
+waterfall
 watermarks
 wavAudioFile
 wave

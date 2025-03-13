@@ -396,6 +396,21 @@ ContextHandlerRef SurfaceTypeGroupContext::onCreateContext( sal_Int32 nElement, 
     return nullptr;
 }
 
+ChartexTypeGroupContext::ChartexTypeGroupContext( ContextHandler2Helper& rParent, TypeGroupModel& rModel ) :
+    TypeGroupContextBase( rParent, rModel )
+{
+}
+
+ChartexTypeGroupContext::~ChartexTypeGroupContext()
+{
+}
+
+ContextHandlerRef ChartexTypeGroupContext::onCreateContext( [[maybe_unused]] sal_Int32 nElement,
+        [[maybe_unused]] const AttributeList& rAttribs )
+{
+    return new ChartexSeriesContext( *this, mrModel.maSeries.create(false) );
+}
+
 } // namespace oox::drawingml::chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

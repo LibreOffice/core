@@ -445,6 +445,7 @@ ContextHandlerRef SeriesContextBase::onCreateContext( sal_Int32 nElement, const 
                         mrModel.mxLabels->mpLabelsSource = &rLabelsSource;
                     return new DataSourceContext( *this, rLabelsSource );
             }
+            break;
     }
     return nullptr;
 }
@@ -742,6 +743,53 @@ ContextHandlerRef SurfaceSeriesContext::onCreateContext( sal_Int32 nElement, con
                     return new DataSourceContext( *this, mrModel.maSources.create( SeriesModel::VALUES ) );
             }
         break;
+    }
+    return SeriesContextBase::onCreateContext( nElement, rAttribs );
+}
+
+ChartexSeriesContext::ChartexSeriesContext( ContextHandler2Helper& rParent, SeriesModel& rModel ) :
+    SeriesContextBase( rParent, rModel )
+{
+}
+
+ChartexSeriesContext::~ChartexSeriesContext()
+{
+}
+
+ContextHandlerRef ChartexSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    switch( getCurrentElement() )
+    {
+        case CX_TOKEN( tx ):
+            // TODO
+            return nullptr;
+        case CX_TOKEN( spPr ):
+            // TODO
+            return nullptr;
+        case CX_TOKEN( valueColors ):
+            // TODO
+            return nullptr;
+        case CX_TOKEN( valueColorPositions ):
+            // TODO
+            return nullptr;
+        case CX_TOKEN( dataPt ):
+            // TODO
+            return nullptr;
+        case CX_TOKEN( dataLabels ):
+            // TODO
+            return nullptr;
+        case CX_TOKEN( dataId ):
+            // TODO
+            return nullptr;
+        case CX_TOKEN( layoutPr ):
+            // TODO
+            return nullptr;
+        case CX_TOKEN( axisId ):
+            // TODO
+            return nullptr;
+        case CX_TOKEN( extLst ):
+            // TODO
+            return nullptr;
     }
     return SeriesContextBase::onCreateContext( nElement, rAttribs );
 }
