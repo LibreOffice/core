@@ -1657,7 +1657,8 @@ void SwTextNode::Update(
 }
 
 void SwTextNode::ChgTextCollUpdateNum(const SwTextFormatColl* pOldColl,
-                                      const SwTextFormatColl* pNewColl)
+                                      const SwTextFormatColl* pNewColl,
+                                      bool bSetListLevel)
 {
     SwDoc& rDoc = GetDoc();
     // query the OutlineLevel and if it changed, notify the Nodes-Array!
@@ -1667,7 +1668,7 @@ void SwTextNode::ChgTextCollUpdateNum(const SwTextFormatColl* pOldColl,
     const int nNewLevel = pNewColl && pNewColl->IsAssignedToListLevelOfOutlineStyle() ?
                      pNewColl->GetAssignedOutlineStyleLevel() : MAXLEVEL;
 
-    if ( MAXLEVEL != nNewLevel && -1 != nNewLevel )
+    if ( MAXLEVEL != nNewLevel && -1 != nNewLevel && bSetListLevel )
     {
         SetAttrListLevel(nNewLevel);
     }
@@ -3068,6 +3069,36 @@ bool SwTextNode::HasMarkedLabel() const
 }
 // <- #i27615#
 
+namespace
+{
+/// Decides if a list level direct formatting on a paragraph needs copying to a next, new paragraph.
+bool CopyDirectListLevel(SwTextNode* pTextNode)
+{
+    SwTextFormatColl* pColl = pTextNode->GetTextColl();
+    if (!pColl)
+    {
+        // No style, so can't have a conflict with a direct formatting.
+        return false;
+    }
+
+    if (&pColl->GetNextTextFormatColl() != pColl)
+    {
+        // Style has a custom follow style, changing list level is OK.
+        return false;
+    }
+
+    if (!pColl->IsAssignedToListLevelOfOutlineStyle())
+    {
+        // Paragraph style has no own list level, no conflict.
+        return false;
+    }
+
+    // Copy is needed if the old paragraph had a direct formatting, which may be different and has
+    // to be kept during the paragraph split.
+    return pTextNode->HasAttrListLevel();
+}
+}
+
 SwTextNode* SwTextNode::MakeNewTextNode( SwNode& rPosNd, bool bNext,
                                        bool bChgFollow )
 {
@@ -3166,7 +3197,9 @@ SwTextNode* SwTextNode::MakeNewTextNode( SwNode& rPosNd, bool bNext,
         ( bChgFollow && pColl != GetTextColl() ))
         return pNode;       // that ought to be enough?
 
-    pNode->ChgTextCollUpdateNum( nullptr, pColl ); // for numbering/outline
+    bool bSetListLevel = !CopyDirectListLevel(this);
+
+    pNode->ChgTextCollUpdateNum( nullptr, pColl, bSetListLevel ); // for numbering/outline
     if( bNext || !bChgFollow )
         return pNode;
 
@@ -3184,7 +3217,7 @@ SwTextNode* SwTextNode::MakeNewTextNode( SwNode& rPosNd, bool bNext,
             }
         }
     }
-    ChgFormatColl( pNextColl );
+    ChgFormatColl( pNextColl, bSetListLevel );
 
     return pNode;
 }
@@ -4147,7 +4180,7 @@ namespace {
     }
 }
 
-SwFormatColl* SwTextNode::ChgFormatColl( SwFormatColl *pNewColl )
+SwFormatColl* SwTextNode::ChgFormatColl( SwFormatColl *pNewColl, bool bSetListLevel )
 {
     OSL_ENSURE( pNewColl,"ChgFormatColl: Collectionpointer has value 0." );
     assert( dynamic_cast<const SwTextFormatColl *>(pNewColl) && "ChgFormatColl: is not a Text Collection pointer." );
@@ -4174,7 +4207,7 @@ SwFormatColl* SwTextNode::ChgFormatColl( SwFormatColl *pNewColl )
     // only for real nodes-array
     if( GetNodes().IsDocNodes() )
     {
-        ChgTextCollUpdateNum( pOldColl, static_cast<SwTextFormatColl *>(pNewColl) );
+        ChgTextCollUpdateNum( pOldColl, static_cast<SwTextFormatColl *>(pNewColl), bSetListLevel );
     }
 
     return pOldColl;
