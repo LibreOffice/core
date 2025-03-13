@@ -616,12 +616,12 @@ Check:
 
 	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place := Null) Then GoTo Finally
 
-	If Not ScriptForge.SF_Utils._Validate(SourceName, &quot;SourceName&quot;, V_String, _DialogModel.getElementNames(), True) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(SourceName, &quot;SourceName&quot;, V_STRING, _DialogModel.getElementNames(), True) Then GoTo Finally
 	If Not ScriptForge.SF_Utils._Validate(Left, &quot;Left&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
 	If Not ScriptForge.SF_Utils._Validate(Top, &quot;Top&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
 
 Try:
-	&apos;	All control types are presumes cloneable
+	&apos;	All control types are presumed cloneable
 	Set oSourceModel = _DialogModel.getByName(SourceName)
 	Set oControlModel = oSourceModel.createClone()
 	oControlModel.Name = ControlName
@@ -2226,6 +2226,98 @@ Catch:
 End Function    &apos;   SFDialogs.SF_Dialog.GetTextsFromL10N
 
 REM -----------------------------------------------------------------------------
+Public Function ImportControl(Optional ByRef SourceDialog As Variant _
+								, Optional ByVal SourceName As Variant _
+								, Optional ByVal ControlName As Variant _
+								, Optional ByVal Page As Variant _
+								, Optional ByVal OffsetX As Variant _
+								, Optional ByVal OffsetY As Variant _
+								, Optional ByVal IncludeOnProperties As Variant _
+								) As Object
+&apos;&apos;&apos;	Import and duplicate an existing control of any type from one dialog to the actual dialog.
+&apos;&apos;&apos;	The duplicated control is left unchanged. The new control can be renamed and relocated.
+&apos;&apos;&apos;	The events, when defined, may optionally be imported too.
+&apos;&apos;&apos;	Specific args:
+&apos;&apos;&apos;		SourceDialog: a SF_Dialog class instance.
+&apos;&apos;&apos;			The dialog must be at least &quot;created&quot; (with CreateScriptService).
+&apos;&apos;&apos;		SourceName: the name of the control to import
+&apos;&apos;&apos;		ControlName: the name of the new control. It must not exist yet. Default = SourceName
+&apos;&apos;&apos;		Page: the page number of the new control. Default = 0
+&apos;&apos;&apos;		OffsetX, OffsetY: the number of pixels to add to the source control coordinates in &quot;Map AppFont&quot; units.
+&apos;&apos;&apos;			The default = 0. May be negative.
+&apos;&apos;&apos;		IncludeOnProperties: when True (default = False) include the OnXXX event properties.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		an instance of the SF_DialogControl class or Nothing
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Set myButton2 = dialog.ImportControl(otherdialog, &quot;Button01&quot;, &quot;Button2&quot;, OffsetX := 30, OffsetY := 30)
+
+Dim oControl As Object			&apos;	Return value
+Dim oSourceModel As Object		&apos;	com.sun.star.awt.XControlModel of the source
+Dim oControlModel As Object		&apos;	com.sun.star.awt.XControlModel of the new control
+Dim vProperties As Variant		&apos;	Array of property names
+Dim sProperty As String			&apos;	A single item in vProperties
+Dim oSourceControl As Object	&apos;	The SF_DialogControl instance representing the input control
+Dim sOnEvent As String			&apos;	An OnEvent property
+
+Const cstThisSub = &quot;SFDialogs.Dialog.ImportControl&quot;
+Const cstSubArgs = &quot;SourceDialog, SourceName, [ControlName=&quot;&quot;&quot;&quot;], [Page=0], &quot; _
+					&amp; &quot;[OffsetX=0], [OffsetY=0], [IncludeOnProperties=False]&quot;
+
+Check:
+	Set oControl = Nothing
+
+	If IsMissing(ControlName) Or IsEmpty(ControlName) Then ControlName = SourceName
+	If VarType(ControlName) = V_STRING Then			&apos;	Typically a Python call will pass a zero-length string
+		If ControlName = &quot;&quot; Then ControlName = SourceName
+	End If
+	If IsMissing(Page) Or IsEmpty(Page) Then Page = 0
+	If IsMissing(OffsetX) Or IsEmpty(OffsetX) Then OffsetX = 0
+	If IsMissing(OffsetY) Or IsEmpty(OffsetY) Then OffsetY = 0
+	If IsMissing(IncludeOnProperties) Or IsEmpty(IncludeOnProperties) Then IncludeOnProperties = False
+
+	If Not _CheckNewControl(cstThisSub, cstSubArgs, ControlName, Place := Null) Then GoTo Finally
+
+	If Not ScriptForge.SF_Utils._Validate(SourceDialog, &quot;SourceDialog&quot;, ScriptForge.V_OBJECT, , , &quot;DIALOG&quot;) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(SourceName, &quot;SourceName&quot;, V_STRING, SourceDialog._DialogModel.getElementNames(), True) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(Page, &quot;Page&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(OffsetX, &quot;OffsetX&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(OffsetY, &quot;OffsetY&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	If Not ScriptForge.SF_Utils._Validate(IncludeOnProperties, &quot;IncludeOnProperties&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+
+Try:
+	&apos;	All control types are presumed Importable
+	Set oSourceModel = SourceDialog._DialogModel.getByName(SourceName)
+	Set oControlModel = oSourceModel.createClone()
+	oControlModel.Name = ControlName
+
+	&apos;	Create the control
+	Set oControl = _CreateNewControl(oControlModel, ControlName, _
+						Array(oSourceModel.PositionX + OffsetX, oSourceModel.PositionY + OffsetY))
+
+	&apos;	Display the control in the requested page
+	oControl.Page = Page
+
+	&apos;	Copy the OnEvent properties
+	If IncludeOnProperties Then
+		vProperties = oControl.Properties()
+		Set oSourceControl = SourceDialog.Controls(SourceName)
+		For Each sProperty In vProperties
+			If Left(sProperty, 2) = &quot;On&quot; Then
+				sOnEvent = oSourceControl._PropertyGet(sProperty, &quot;&quot;)	&apos;	Default = zero-length string
+				If Len(sOnEvent) &gt; 0 Then oControl._PropertySet(sProperty, sOnEvent)
+			End If
+		Next sProperty
+	End If
+
+Finally:
+	Set ImportControl = oControl
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDialogs.SF_Dialog.ImportControl
+
+REM -----------------------------------------------------------------------------
 Public Function Methods() As Variant
 &apos;&apos;&apos;	Return the list of public methods of the Model service as an array
 
@@ -2260,6 +2352,7 @@ Public Function Methods() As Variant
 					, &quot;EndExecute&quot; _
 					, &quot;Execute&quot; _
 					, &quot;GetTextsFromL10N&quot; _
+					, &quot;ImportControl&quot; _
 					, &quot;OrderTabs&quot; _
 					, &quot;Resize&quot; _
 					, &quot;SetPageManager&quot; _

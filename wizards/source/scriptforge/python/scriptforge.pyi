@@ -4033,6 +4033,41 @@ class SFDialogs:
                 """
             ...
 
+        def ImportControl(self, sourcedialog: DIALOG,
+                          sourcename: str,
+                          controlname: str = ...,
+                          page: int = ...,
+                          offsetx: int = ...,
+                          offsety: int = ...,
+                          includeonproperties: bool = ...) -> DIALOGCONTROL:
+            """
+                Import and duplicate an existing control of any type from one dialog to the actual dialog.
+                The duplicated control is left unchanged. The new control can be renamed and relocated.
+                The events, when defined, may optionally be imported too.
+
+                Args
+                    ``sourcedialog``: a ``SFDialogs.SF_Dialog`` class instance. The dialog must be at least 'created'
+                    (with CreateScriptService).
+
+                    ``sourcename``:  the name of the control to import.
+
+                    ``controlname``: the name of the new control. It must not exist yet. Default = id. ``sourcename``.
+
+                    ``page``: the page number of the new control. Default = 0.
+
+                    ``offsetx``, ``offsety``: the number of pixels to add to the source control coordinates
+                    in "Map AppFont" units. Default = 0. Their values may be negative.
+
+                    ``includeonproperties``: when True (default = False) include the OnXXX event properties
+                    in the import.
+                Returns
+                    An instance of the ``SFDialogs.SF_DialogControl`` class or ``None``.
+                Note
+                    Use the ``page`` argument to load in a multi-pages dialog individual smaller dialogs,
+                    one per page, designed in the Basic IDE.
+                """
+            ...
+
         def OrderTabs(self, tabslist: Sequence[str], start: int = ..., increment: int = ...) -> bool:
             """
                 Set the tabulation index of a series of controls.

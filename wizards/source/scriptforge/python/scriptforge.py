@@ -2170,6 +2170,12 @@ class SFDialogs:
             l10nobj = l10n.objectreference if isinstance(l10n, SFScriptForge.SF_L10N) else l10n
             return self.ExecMethod(self.vbMethod + self.flgObject, 'GetTextsFromL10N', l10nobj)
 
+        def ImportControl(self, sourcedialog, sourcename, controlname = '', page = 0, offsetx = 0, offsety = 0,
+                          includeonproperties = False):
+            dialogobj = sourcedialog.objectreference if isinstance(sourcedialog, SFDialogs.SF_Dialog) else sourcedialog
+            return self.ExecMethod(self.vbMethod + self.flgObject, 'ImportControl', dialogobj, sourcename,
+                                   controlname, page, offsetx, offsety, includeonproperties)
+
         def OrderTabs(self, tabslist, start = 1, increment = 1):
             return self.ExecMethod(self.vbMethod, 'OrderTabs', tabslist, start, increment)
 
