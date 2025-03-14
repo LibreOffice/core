@@ -2033,6 +2033,33 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160306)
     CPPUNIT_ASSERT_EQUAL(u"57.38"_ustr, output);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf147265)
+{
+    SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_US);
+    bool bBanking = true;
+    const NfCurrencyEntry& rCurrencyEntryUS
+        = SvNumberFormatter::GetCurrencyEntry(LANGUAGE_ENGLISH_US);
+    const NfCurrencyEntry& rCurrencyEntryCAN
+        = SvNumberFormatter::GetCurrencyEntry(LANGUAGE_ENGLISH_CAN);
+
+    // Add US formats, and then Canadian formats, and then US formats again.
+    // The default for the US format should stay the same.
+    NfWSStringsDtor aWSStringsDtor;
+    sal_uInt16 nDefault1
+        = aFormatter.GetCurrencyFormatStrings(aWSStringsDtor, rCurrencyEntryUS, bBanking);
+    aFormatter.GetCurrencyFormatStrings(aWSStringsDtor, rCurrencyEntryCAN, bBanking);
+    sal_uInt16 nDefault2
+        = aFormatter.GetCurrencyFormatStrings(aWSStringsDtor, rCurrencyEntryUS, bBanking);
+
+    // Without the fix, we always returned the final element of the array, because we add the
+    // element that should be the default last. However, if we try to add an element that is
+    // already present in the array, then we don't add it, so the final element of the array
+    // isn't necessarily the default. In this case, the final element would actually be the
+    // Canadian default format, which is a different index in the array from the American
+    // default format.
+    CPPUNIT_ASSERT_EQUAL(nDefault1, nDefault2);
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
