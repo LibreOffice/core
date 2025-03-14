@@ -22,8 +22,10 @@
 
 #include <i18nlangtag/lang.h>
 #include "modeltoviewhelper.hxx"
+#include <unotools/charclass.hxx>
 
 #include <functional>
+#include <optional>
 
 class SwTextNode;
 
@@ -43,6 +45,8 @@ class SwScanner
     sal_Int32 m_nBegin;
     sal_Int32 m_nLength;
     sal_Int32 m_nOverriddenDashCount;
+    // caches the CharClass for m_aCurrentLang, which can be expensive to repeatedly retrieve
+    std::optional<CharClass> moCharClass;
     LanguageType m_aCurrentLang;
     sal_uInt16 m_nWordType;
     bool m_bClip;
