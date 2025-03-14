@@ -131,6 +131,11 @@ LIBO_UDK_3.6 { # symbols available in >= LibO 3.6
             # non-virtual thunk to salhelper::Thread::run()
 } UDK_3.1;
 
+PRIVATE_1.0 {
+        _ZN9salhelper5Timer10joinThreadEv;
+        _ZN9salhelper5Timer11startThreadEv;
+};
+
 # Unique libstdc++ symbols:
 GLIBCXX_3.4 {
     global:

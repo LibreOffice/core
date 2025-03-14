@@ -20,16 +20,15 @@
 
 #include <osl/thread.hxx>
 
-#include <condition_variable>
 #include <mutex>
+#include <condition_variable>
 
 using namespace salhelper;
 
 class salhelper::TimerManager final : public osl::Thread
 {
 public:
-    TimerManager();
-
+    TimerManager(salhelper::Timer* &pHead, std::mutex &Lock);
     ~TimerManager();
 
     /// register timer
@@ -48,24 +47,65 @@ protected:
     /// Checking and triggering of a timer event
     void checkForTimeout();
 
-    /// sorted-queue data
-    salhelper::Timer*       m_pHead;
+    salhelper::Timer*           &m_pHead;
     bool m_terminate;
     /// List Protection
-    std::mutex                  m_Lock;
+    std::mutex                  &m_Lock;
     /// Signal the insertion of a timer
     std::condition_variable     m_notEmpty;
 
     /// "Singleton Pattern"
     //static salhelper::TimerManager* m_pManager;
-
 };
 
-namespace
+namespace {
+class TimerManagerImpl final
 {
-    salhelper::TimerManager& getTimerManager()
+    std::mutex m_Lock; // shared lock with each impl. thread
+    salhelper::Timer* m_pHead; // the underlying shared queue
+    std::shared_ptr<TimerManager> m_pImpl;
+
+public:
+    TimerManagerImpl() : m_pHead(nullptr) { }
+
+    void joinThread()
     {
-        static salhelper::TimerManager aManager;
+        m_pImpl.reset();
+    }
+
+    void startThread()
+    {
+        std::lock_guard Guard(m_Lock);
+        if (m_pHead)
+            ensureThread();
+    }
+
+    std::shared_ptr<TimerManager> ensureThread()
+    {
+        if (!m_pImpl)
+            m_pImpl.reset(new TimerManager(m_pHead, m_Lock));
+        return m_pImpl;
+    }
+
+    void registerTimer(salhelper::Timer* pTimer)
+    {
+        ensureThread()->registerTimer(pTimer);
+    }
+
+    void unregisterTimer(salhelper::Timer * pTimer)
+    {
+        ensureThread()->unregisterTimer(pTimer);
+    }
+
+    bool lookupTimer(const salhelper::Timer* pTimer)
+    {
+        return ensureThread()->lookupTimer(pTimer);
+    }
+};
+
+    TimerManagerImpl& getTimerManager()
+    {
+        static TimerManagerImpl aManager;
         return aManager;
     }
 }
@@ -195,6 +235,16 @@ TTimeValue Timer::getRemainingTime() const
     return TTimeValue(secs, nsecs);
 }
 
+void Timer::joinThread()
+{
+    getTimerManager().joinThread();
+}
+
+void Timer::startThread()
+{
+    getTimerManager().startThread();
+}
+
 /** The timer manager cleanup has been removed (no thread is killed anymore),
     so the thread leaks.
 
@@ -205,8 +255,8 @@ TTimeValue Timer::getRemainingTime() const
             when there are no timers anymore !
 **/
 
-TimerManager::TimerManager() :
-    m_pHead(nullptr), m_terminate(false)
+TimerManager::TimerManager(salhelper::Timer* &pHead, std::mutex &Lock) :
+    m_pHead(pHead), m_terminate(false), m_Lock(Lock)
 {
     // start thread
     create();
@@ -387,7 +437,6 @@ void TimerManager::run()
 
         checkForTimeout();
     }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
