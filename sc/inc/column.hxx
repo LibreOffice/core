@@ -175,11 +175,6 @@ public:
     bool        TestInsertRow( SCSIZE nSize ) const;
     void        InsertRow( SCROW nStartRow, SCSIZE nSize );
     void        DeleteRow( SCROW nStartRow, SCSIZE nSize );
-
-    // Applies a function to the selected ranges.
-    // The function looks like
-    //     ApplyDataFunc(ScColumnData& applyTo, SCROW nTop, SCROW nBottom)
-    template <typename ApplyDataFunc> void Apply(const ScMarkData&, SCCOL, ApplyDataFunc);
 };
 
 // Use protected inheritance to prevent publishing some internal ScColumnData
@@ -1068,24 +1063,6 @@ inline void ScColumnData::InsertRow( SCROW nStartRow, SCSIZE nSize )
 inline void ScColumnData::DeleteRow(SCROW nStartRow, SCSIZE nSize)
 {
     pAttrArray->DeleteRow( nStartRow, nSize );
-}
-
-template <typename ApplyDataFunc>
-void ScColumnData::Apply(const ScMarkData& rMark, SCCOL nCol, ApplyDataFunc apply)
-{
-    if (rMark.IsMultiMarked())
-    {
-        ScMultiSelIter aMultiIter(rMark.GetMultiSelData(), nCol);
-        SCROW nTop, nBottom;
-        while (aMultiIter.Next(nTop, nBottom))
-            apply(*this, nTop, nBottom);
-    }
-    else if (rMark.IsMarked())
-    {
-        const ScRange& aRange = rMark.GetMarkArea();
-        if (aRange.aStart.Col() <= nCol && nCol <= aRange.aEnd.Col())
-            apply(*this, aRange.aStart.Row(), aRange.aEnd.Row());
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

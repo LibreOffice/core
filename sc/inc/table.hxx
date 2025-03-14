@@ -155,6 +155,9 @@ private:
     const Iterator maEnd;
 };
 
+template <typename T>
+concept ColumnDataApply = std::is_invocable_v<T, ScColumnData&, SCROW, SCROW>;
+
 class ScTable
 {
 private:
@@ -1458,11 +1461,14 @@ private:
     // as few columns as needed, and applies the rest to default column data.
     // The function looks like
     //     ApplyDataFunc(ScColumnData& applyTo, SCROW nTop, SCROW nBottom)
-    template <typename ApplyDataFunc>
+    template <ColumnDataApply ApplyDataFunc>
     void ApplyWithAllocation(const ScMarkData&, ApplyDataFunc);
+
+    // Applies a function to the selected ranges in a given column.
+    template <ColumnDataApply ApplyDataFunc> void Apply(const ScMarkData&, SCCOL, ApplyDataFunc);
 };
 
-template <typename ApplyDataFunc>
+template <ColumnDataApply ApplyDataFunc>
 void ScTable::ApplyWithAllocation(const ScMarkData& rMark, ApplyDataFunc apply)
 {
     if (!rMark.GetTableSelect(nTab) || !(rMark.IsMultiMarked() || rMark.IsMarked()))
@@ -1476,7 +1482,7 @@ void ScTable::ApplyWithAllocation(const ScMarkData& rMark, ApplyDataFunc apply)
         if (lastChangeCol >= 0)
             CreateColumnIfNotExists(lastChangeCol);
 
-        aDefaultColData.Apply(rMark, GetDoc().MaxCol(), apply);
+        Apply(rMark, GetDoc().MaxCol(), apply);
     }
     else // need to allocate all columns affected
     {
@@ -1487,7 +1493,20 @@ void ScTable::ApplyWithAllocation(const ScMarkData& rMark, ApplyDataFunc apply)
     // The loop should go not to lastChangeCol, but over all columns, to apply to already allocated
     // in the "StartOfEqualColumns" range
     for (SCCOL i = 0; i < aCol.size(); i++)
-        aCol[i].Apply(rMark, i, apply);
+        Apply(rMark, i, apply);
+}
+
+template <ColumnDataApply ApplyDataFunc>
+void ScTable::Apply(const ScMarkData& rMark, SCCOL nCol, ApplyDataFunc apply)
+{
+    if (rMark.IsMultiMarked())
+    {
+        ScColumnData& rCol = GetColumnData(nCol);
+        ScMultiSelIter aMultiIter(rMark.GetMultiSelData(), nCol);
+        SCROW nTop, nBottom;
+        while (aMultiIter.Next(nTop, nBottom))
+            apply(rCol, nTop, nBottom);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
