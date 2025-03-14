@@ -77,6 +77,7 @@
 #include <rtl/uri.hxx>
 #include <svl/cryptosign.hxx>
 #include <linguistic/misc.hxx>
+#include <salhelper/timer.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/base64.hxx>
@@ -3580,11 +3581,15 @@ static int lo_joinThreads(LibreOfficeKit* /* pThis */)
             comphelper::getProcessComponentContext()),
         css::uno::UNO_QUERY_THROW)->flush();
 
+    salhelper::Timer::joinThread();
+
     return 1;
 }
 
 static void lo_startThreads(LibreOfficeKit* /* pThis */)
 {
+    salhelper::Timer::startThread();
+
     auto ucpWebdav = xContext->getServiceManager()->createInstanceWithContext(
         "com.sun.star.ucb.WebDAVManager", xContext);
     auto joinable = dynamic_cast<comphelper::LibreOfficeKit::ThreadJoinable *>(ucpWebdav.get());

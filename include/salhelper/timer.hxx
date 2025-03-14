@@ -177,6 +177,14 @@ public:
      */
     TTimeValue  SAL_CALL getRemainingTime() const;
 
+    /** Internal method to shutdown the timer thread
+     */
+    static void SAL_CALL joinThread();
+
+    /** Internal method to re-start the timer thread if necessary
+     */
+    static void SAL_CALL startThread();
+
 protected:
 
     /** Destructor.
