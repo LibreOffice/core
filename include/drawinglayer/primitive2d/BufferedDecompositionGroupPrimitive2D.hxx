@@ -50,7 +50,7 @@ private:
 
 protected:
     /// identical to BufferedDecompositionPrimitive2D, see there please
-    const Primitive2DContainer& getBuffered2DDecomposition() const;
+    bool hasBuffered2DDecomposition() const;
     void setBuffered2DDecomposition(Primitive2DContainer&& rNew);
 
     /// method which is to be used to implement the local decomposition of a 2D group primitive.

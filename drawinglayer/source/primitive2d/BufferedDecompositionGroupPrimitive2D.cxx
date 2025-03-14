@@ -58,16 +58,17 @@ void flushBufferedDecomposition(BufferedDecompositionGroupPrimitive2D& rTarget)
     rTarget.release();
 }
 
-const Primitive2DContainer&
-BufferedDecompositionGroupPrimitive2D::getBuffered2DDecomposition() const
+bool BufferedDecompositionGroupPrimitive2D::hasBuffered2DDecomposition() const
 {
-    if (0 != maCallbackSeconds && maCallbackTimer.is())
+    if (0 != maCallbackSeconds)
     {
-        // decomposition was used, touch/restart time
-        maCallbackTimer->setRemainingTime(salhelper::TTimeValue(maCallbackSeconds, 0));
+        std::lock_guard Guard(maCallbackLock);
+        return !maBuffered2DDecomposition.empty();
     }
-
-    return maBuffered2DDecomposition;
+    else
+    {
+        return !maBuffered2DDecomposition.empty();
+    }
 }
 
 void BufferedDecompositionGroupPrimitive2D::setBuffered2DDecomposition(Primitive2DContainer&& rNew)
@@ -130,7 +131,7 @@ void BufferedDecompositionGroupPrimitive2D::get2DDecomposition(
     Primitive2DDecompositionVisitor& rVisitor,
     const geometry::ViewInformation2D& rViewInformation) const
 {
-    if (getBuffered2DDecomposition().empty())
+    if (!hasBuffered2DDecomposition())
     {
         Primitive2DContainer aNewSequence;
         create2DDecomposition(aNewSequence, rViewInformation);
@@ -141,15 +142,19 @@ void BufferedDecompositionGroupPrimitive2D::get2DDecomposition(
     if (0 == maCallbackSeconds)
     {
         // no flush/multithreading is in use, just call
-        rVisitor.visit(getBuffered2DDecomposition());
+        rVisitor.visit(maBuffered2DDecomposition);
         return;
     }
+
+    // decomposition was used, touch/restart time
+    if (maCallbackTimer)
+        maCallbackTimer->setRemainingTime(salhelper::TTimeValue(maCallbackSeconds, 0));
 
     // tdf#158913 need to secure 'visit' when flush/multithreading is in use,
     // so that the local non-ref-Counted instance of the decomposition gets not
     // manipulated (e.g. deleted)
     std::lock_guard Guard(maCallbackLock);
-    rVisitor.visit(getBuffered2DDecomposition());
+    rVisitor.visit(maBuffered2DDecomposition);
 }
 
 } // end of namespace drawinglayer::primitive2d

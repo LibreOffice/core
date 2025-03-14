@@ -268,7 +268,7 @@ void SoftEdgePrimitive2D::get2DDecomposition(
                                            fDiscreteSoftRadius, rViewInformation))
             break;
 
-        if (!getBuffered2DDecomposition().empty())
+        if (hasBuffered2DDecomposition())
         {
             // First check is to detect if the last created decompose is capable
             // to represent the now requested visualization (see similar
@@ -295,7 +295,7 @@ void SoftEdgePrimitive2D::get2DDecomposition(
             }
         }
 
-        if (!getBuffered2DDecomposition().empty())
+        if (hasBuffered2DDecomposition())
         {
             // Second check is to react on changes of the DiscreteSoftRadius when
             // zooming in/out (see similar implementation at GlowPrimitive2D).
@@ -321,7 +321,7 @@ void SoftEdgePrimitive2D::get2DDecomposition(
             }
         }
 
-        if (getBuffered2DDecomposition().empty())
+        if (!hasBuffered2DDecomposition())
         {
             // refresh last used DiscreteSoftRadius and ClippedRange to new remembered values
             const_cast<SoftEdgePrimitive2D*>(this)->mfLastDiscreteSoftRadius = fDiscreteSoftRadius;

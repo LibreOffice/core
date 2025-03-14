@@ -261,7 +261,7 @@ void GlowPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisit
                                        fDiscreteGlowRadius, rViewInformation))
         return;
 
-    if (!getBuffered2DDecomposition().empty())
+    if (hasBuffered2DDecomposition())
     {
         // First check is to detect if the last created decompose is capable
         // to represent the now requested visualization.
@@ -295,7 +295,7 @@ void GlowPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisit
         }
     }
 
-    if (!getBuffered2DDecomposition().empty())
+    if (hasBuffered2DDecomposition())
     {
         // Second check is to react on changes of the DiscreteGlowRadius when
         // zooming in/out.
@@ -324,7 +324,7 @@ void GlowPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisit
         }
     }
 
-    if (getBuffered2DDecomposition().empty())
+    if (!hasBuffered2DDecomposition())
     {
         // refresh last used DiscreteGlowRadius and ClippedRange to new remembered values
         const_cast<GlowPrimitive2D*>(this)->mfLastDiscreteGlowRadius = fDiscreteGlowRadius;
