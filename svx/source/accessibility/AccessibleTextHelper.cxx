@@ -489,8 +489,14 @@ namespace accessibility
     {
         try
         {
+            if( !maEditSource.IsValid() )
+                return;
+            SvxEditViewForwarder* pViewForwarder = maEditSource.GetEditViewForwarder();
+            if( !pViewForwarder || !pViewForwarder->IsValid())
+                return;
+
             ESelection aSelection;
-            if( GetEditViewForwarder().GetSelection( aSelection ) )
+            if( pViewForwarder->GetSelection( aSelection ) )
             {
                 if( maLastSelection != aSelection &&
                     aSelection.end.nPara < maParaManager.GetNum() )
