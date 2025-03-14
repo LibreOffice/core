@@ -144,7 +144,7 @@ namespace drawinglayer::primitive2d
             sal_Int16 nCurrentlyValidPageNumber(0);
             sal_Int16 nCurrentlyValidPageCount(0);
 
-            if(getBuffered2DDecomposition())
+            if(hasBuffered2DDecomposition())
             {
                 bool bDoDelete(false);
 
@@ -202,7 +202,7 @@ namespace drawinglayer::primitive2d
                 }
             }
 
-            if(!getBuffered2DDecomposition())
+            if(!hasBuffered2DDecomposition())
             {
                 if(!bCurrentlyVisualizingPageIsSet && mbContainsPageField)
                 {

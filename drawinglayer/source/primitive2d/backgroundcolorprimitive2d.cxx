@@ -87,13 +87,13 @@ namespace drawinglayer::primitive2d
 
         void BackgroundColorPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
-            if(getBuffered2DDecomposition() && (maLastViewport != rViewInformation.getViewport()))
+            if(hasBuffered2DDecomposition() && (maLastViewport != rViewInformation.getViewport()))
             {
                 // conditions of last local decomposition have changed, delete
                 const_cast< BackgroundColorPrimitive2D* >(this)->setBuffered2DDecomposition(nullptr);
             }
 
-            if(!getBuffered2DDecomposition())
+            if(!hasBuffered2DDecomposition())
             {
                 // remember ViewRange
                 const_cast< BackgroundColorPrimitive2D* >(this)->maLastViewport = rViewInformation.getViewport();

@@ -79,7 +79,7 @@ protected:
         later thread-safe stuff to be added if needed. Only to be used by getDecomposition()
         implementations for buffering the last decomposition.
      */
-    const Primitive2DReference& getBuffered2DDecomposition() const;
+    bool hasBuffered2DDecomposition() const;
     void setBuffered2DDecomposition(Primitive2DReference rNew);
 
     /** method which is to be used to implement the local decomposition of a 2D primitive. */

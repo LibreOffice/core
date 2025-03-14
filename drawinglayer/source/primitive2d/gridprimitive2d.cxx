@@ -309,7 +309,7 @@ namespace drawinglayer::primitive2d
 
         void GridPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
-            if(getBuffered2DDecomposition())
+            if(hasBuffered2DDecomposition())
             {
                 if(maLastViewport != rViewInformation.getViewport() || maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
@@ -318,7 +318,7 @@ namespace drawinglayer::primitive2d
                 }
             }
 
-            if(!getBuffered2DDecomposition())
+            if(!hasBuffered2DDecomposition())
             {
                 // remember ViewRange and ViewTransformation
                 const_cast< GridPrimitive2D* >(this)->maLastObjectToViewTransformation = rViewInformation.getObjectToViewTransformation();

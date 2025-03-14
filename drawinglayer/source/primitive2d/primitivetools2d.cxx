@@ -30,13 +30,13 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DVector aDiscreteVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
             const double fDiscreteUnit(std::min(fabs(aDiscreteVector.getX()), fabs(aDiscreteVector.getY())));
 
-            if(getBuffered2DDecomposition() && !basegfx::fTools::equal(fDiscreteUnit, getDiscreteUnit()))
+            if(hasBuffered2DDecomposition() && !basegfx::fTools::equal(fDiscreteUnit, getDiscreteUnit()))
             {
                 // conditions of last local decomposition have changed, delete
                 const_cast< DiscreteMetricDependentPrimitive2D* >(this)->setBuffered2DDecomposition(nullptr);
             }
 
-            if(!getBuffered2DDecomposition())
+            if(!hasBuffered2DDecomposition())
             {
                 // remember new valid DiscreteUnit
                 const_cast< DiscreteMetricDependentPrimitive2D* >(this)->mfDiscreteUnit = fDiscreteUnit;
@@ -54,13 +54,13 @@ namespace drawinglayer::primitive2d
             // get the current Viewport
             const basegfx::B2DRange& rViewport = rViewInformation.getViewport();
 
-            if(getBuffered2DDecomposition() && !rViewport.equal(getViewport()))
+            if(hasBuffered2DDecomposition() && !rViewport.equal(getViewport()))
             {
                 // conditions of last local decomposition have changed, delete
                 const_cast< ViewportDependentPrimitive2D* >(this)->setBuffered2DDecomposition(nullptr);
             }
 
-            if(!getBuffered2DDecomposition())
+            if(!hasBuffered2DDecomposition())
             {
                 // remember new valid DiscreteUnit
                 const_cast< ViewportDependentPrimitive2D* >(this)->maViewport = rViewport;
@@ -75,13 +75,13 @@ namespace drawinglayer::primitive2d
             // get the current ViewTransformation
             const basegfx::B2DHomMatrix& rViewTransformation = rViewInformation.getViewTransformation();
 
-            if(getBuffered2DDecomposition() && rViewTransformation != getViewTransformation())
+            if(hasBuffered2DDecomposition() && rViewTransformation != getViewTransformation())
             {
                 // conditions of last local decomposition have changed, delete
                 const_cast< ViewTransformationDependentPrimitive2D* >(this)->setBuffered2DDecomposition(nullptr);
             }
 
-            if(!getBuffered2DDecomposition())
+            if(!hasBuffered2DDecomposition())
             {
                 // remember new valid ViewTransformation
                 const_cast< ViewTransformationDependentPrimitive2D* >(this)->maViewTransformation = rViewTransformation;
@@ -96,7 +96,7 @@ namespace drawinglayer::primitive2d
             // get the current ViewTransformation
             const basegfx::B2DHomMatrix& rViewTransformation = rViewInformation.getViewTransformation();
 
-            if(getBuffered2DDecomposition() && rViewTransformation != getViewTransformation())
+            if(hasBuffered2DDecomposition() && rViewTransformation != getViewTransformation())
             {
                 // conditions of last local decomposition have changed, delete
                 const_cast< ObjectAndViewTransformationDependentPrimitive2D* >(this)->setBuffered2DDecomposition(nullptr);
@@ -105,13 +105,13 @@ namespace drawinglayer::primitive2d
             // get the current ObjectTransformation
             const basegfx::B2DHomMatrix& rObjectTransformation = rViewInformation.getObjectTransformation();
 
-            if(getBuffered2DDecomposition() && rObjectTransformation != getObjectTransformation())
+            if(hasBuffered2DDecomposition() && rObjectTransformation != getObjectTransformation())
             {
                 // conditions of last local decomposition have changed, delete
                 const_cast< ObjectAndViewTransformationDependentPrimitive2D* >(this)->setBuffered2DDecomposition(nullptr);
             }
 
-            if(!getBuffered2DDecomposition())
+            if(!hasBuffered2DDecomposition())
             {
                 // remember new valid ViewTransformation, and ObjectTransformation
                 const_cast< ObjectAndViewTransformationDependentPrimitive2D* >(this)->maViewTransformation = rViewTransformation;

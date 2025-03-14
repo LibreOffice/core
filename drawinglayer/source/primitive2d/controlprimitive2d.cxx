@@ -333,7 +333,7 @@ namespace drawinglayer::primitive2d
             // destroy existing decomposition. To detect change, use size of unit size in view coordinates
             const basegfx::B2DVector aNewScaling(rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
 
-            if(getBuffered2DDecomposition())
+            if(hasBuffered2DDecomposition())
             {
                 if(!maLastViewScaling.equal(aNewScaling))
                 {
@@ -342,7 +342,7 @@ namespace drawinglayer::primitive2d
                 }
             }
 
-            if(!getBuffered2DDecomposition())
+            if(!hasBuffered2DDecomposition())
             {
                 // remember ViewTransformation
                 const_cast< ControlPrimitive2D* >(this)->maLastViewScaling = aNewScaling;

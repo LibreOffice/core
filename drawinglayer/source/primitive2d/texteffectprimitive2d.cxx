@@ -214,7 +214,7 @@ void TextEffectPrimitive2D::get2DDecomposition(
     Primitive2DDecompositionVisitor& rVisitor,
     const geometry::ViewInformation2D& rViewInformation) const
 {
-    if (getBuffered2DDecomposition())
+    if (hasBuffered2DDecomposition())
     {
         if (maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
         {
@@ -223,7 +223,7 @@ void TextEffectPrimitive2D::get2DDecomposition(
         }
     }
 
-    if (!getBuffered2DDecomposition())
+    if (!hasBuffered2DDecomposition())
     {
         // remember ViewRange and ViewTransformation
         const_cast<TextEffectPrimitive2D*>(this)->maLastObjectToViewTransformation

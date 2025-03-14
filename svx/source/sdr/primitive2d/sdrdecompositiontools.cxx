@@ -322,7 +322,7 @@ void SlideBackgroundFillPrimitive2D::get2DDecomposition(
     basegfx::B2DVector aPageSize;
     drawinglayer::attribute::SdrFillAttribute aFill;
 
-    if(getBuffered2DDecomposition())
+    if(hasBuffered2DDecomposition())
     {
         aFill = getMasterPageFillAttribute(rViewInformation, aPageSize);
 
@@ -333,7 +333,7 @@ void SlideBackgroundFillPrimitive2D::get2DDecomposition(
         }
     }
 
-    if(!getBuffered2DDecomposition())
+    if(!hasBuffered2DDecomposition())
     {
         // remember last Fill
         const_cast< SlideBackgroundFillPrimitive2D* >(this)->maLastFill = std::move(aFill);

@@ -687,7 +687,7 @@ namespace drawinglayer::primitive2d
             bool bNeedNewDecomposition(false);
             bool bDiscreteSizesAreCalculated(false);
 
-            if(getBuffered2DDecomposition())
+            if(hasBuffered2DDecomposition())
             {
                 basegfx::B2DRange aVisibleDiscreteRange;
                 calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
@@ -718,7 +718,7 @@ namespace drawinglayer::primitive2d
                 const_cast< ScenePrimitive2D* >(this)->setBuffered2DDecomposition(nullptr);
             }
 
-            if(!getBuffered2DDecomposition())
+            if(!hasBuffered2DDecomposition())
             {
                 if(!bDiscreteSizesAreCalculated)
                 {

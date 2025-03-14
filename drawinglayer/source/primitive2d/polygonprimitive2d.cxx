@@ -298,7 +298,7 @@ void PolygonMarkerPrimitive2D::get2DDecomposition(
 {
     bool bNeedNewDecomposition(false);
 
-    if (getBuffered2DDecomposition())
+    if (hasBuffered2DDecomposition())
     {
         if (rViewInformation.getInverseObjectToViewTransformation()
             != maLastInverseObjectToViewTransformation)
@@ -313,7 +313,7 @@ void PolygonMarkerPrimitive2D::get2DDecomposition(
         const_cast<PolygonMarkerPrimitive2D*>(this)->setBuffered2DDecomposition(nullptr);
     }
 
-    if (!getBuffered2DDecomposition())
+    if (!hasBuffered2DDecomposition())
     {
         // remember last used InverseObjectToViewTransformation
         PolygonMarkerPrimitive2D* pThat = const_cast<PolygonMarkerPrimitive2D*>(this);

@@ -896,7 +896,7 @@ namespace drawinglayer::primitive2d
                 {
                     // conditions of last local decomposition have changed, delete
                     // possible content
-                    if(getBuffered2DDecomposition())
+                    if(hasBuffered2DDecomposition())
                     {
                         const_cast< SdrFrameBorderPrimitive2D* >(this)->setBuffered2DDecomposition(nullptr);
                     }
