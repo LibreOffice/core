@@ -1255,6 +1255,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165059_moveFromTo)
     assertXPath(p_XmlDoc, "//w:ins"_ostr, 1);
     assertXPath(p_XmlDoc, "//w:moveFrom"_ostr, 0);
     assertXPath(p_XmlDoc, "//w:del"_ostr, 1);
+    assertXPath(p_XmlDoc, "//w:delText"_ostr, 1);
 }
 
 } // end of anonymous namespace

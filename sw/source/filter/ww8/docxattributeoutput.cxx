@@ -3860,9 +3860,18 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
     // the text run is usually XML_t, with the exception of the deleted (and not moved) text
     sal_Int32 nTextToken = XML_t;
 
-    bool bMoved = m_pRedlineData && m_pRedlineData->IsMoved() &&
-       // tdf#150166 save tracked moving around TOC as w:ins, w:del
-       SwDoc::GetCurTOX(*m_rExport.m_pCurPam->GetPoint()) == nullptr;
+    bool isInMoveBookmark = false;
+    for (const auto& openedBookmark : m_rOpenedBookmarksIds)
+    {
+        if (openedBookmark.first.startsWith(u"__RefMove"))
+        {
+            isInMoveBookmark = true;
+            break;
+        }
+    }
+    bool bMoved = isInMoveBookmark && m_pRedlineData && m_pRedlineData->IsMoved() &&
+                  // tdf#150166 save tracked moving around TOC as w:ins, w:del
+                  SwDoc::GetCurTOX(*m_rExport.m_pCurPam->GetPoint()) == nullptr;
 
     if ( m_pRedlineData && m_pRedlineData->GetType() == RedlineType::Delete && !bMoved )
     {
