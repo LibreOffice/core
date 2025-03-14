@@ -177,15 +177,21 @@ namespace
 
         void flushAll() override
         {
-            std::unique_lock aGuard(m_aMutex);
-
-            if(maTimer)
+            EntryMap aTmpEntries;
             {
-                maTimer->Stop();
-                maTimer.reset();
-            }
+                std::unique_lock aGuard(m_aMutex);
 
-            maEntries.clear();
+                if(maTimer)
+                {
+                    maTimer->Stop();
+                    maTimer.reset();
+                }
+
+                aTmpEntries = std::move(maEntries);
+            }
+            // we need to destruct the entries outside the lock, because
+            // we might call back into endUsage() and that will take the lock again and deadlock.
+            aTmpEntries.clear();
         }
     };
 
