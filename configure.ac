@@ -1001,7 +1001,7 @@ cygwin*|wsl*)
     LINKFLAGSNOUNDEFS=
 
     if test "$host_cpu" = "aarch64"; then
-        build_skia=no
+        build_skia=yes
         enable_gpgmepp=no
         enable_coinmp=no
         enable_firebird_sdbc=no
@@ -4118,6 +4118,7 @@ cygwin*|wsl*)
         WIN_HOST_ARCH="x64"
         WIN_MULTI_ARCH="x86"
         WIN_HOST_BITS=64
+        WIN_CLANG_TARGET="x86_64-pc-windows-msvc"
         ;;
     i*86)
         CPUNAME=INTEL
@@ -4126,6 +4127,7 @@ cygwin*|wsl*)
         WIN_HOST_ARCH="x86"
         WIN_HOST_BITS=32
         WIN_OTHER_ARCH="x64"
+        WIN_CLANG_TARGET="i686-pc-windows-msvc"
         ;;
     aarch64)
         CPUNAME=AARCH64
@@ -4135,6 +4137,7 @@ cygwin*|wsl*)
         SCPDEFS="$SCPDEFS -DWINDOWS_AARCH64"
         WIN_HOST_ARCH="arm64"
         WIN_HOST_BITS=64
+        WIN_CLANG_TARGET="arm64-pc-windows-msvc"
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
@@ -12828,7 +12831,7 @@ if test \( "$ENABLE_SKIA" = TRUE -o "$ENABLE_PDFIUM" = TRUE \) -a "$COM_IS_CLANG
             fi
             if test -n "$LO_CLANG_CC"; then
                 dnl explicitly set -m32/-m64
-                LO_CLANG_CC="$LO_CLANG_CC -m$WIN_HOST_BITS"
+                LO_CLANG_CC="$LO_CLANG_CC --target=$WIN_CLANG_TARGET -m$WIN_HOST_BITS"
                 LO_CLANG_CXX="$LO_CLANG_CC"
                 AC_MSG_RESULT([$LO_CLANG_CC])
             else

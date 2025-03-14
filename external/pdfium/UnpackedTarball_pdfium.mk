@@ -16,6 +16,10 @@ pdfium_patches += constexpr-template.patch
 
 pdfium_patches += system-abseil.diff
 
+ifeq ($(OS),WNT)
+pdfium_patches += pdfium-vs2019-arm64_no-__umulh.patch.1
+endif
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,pdfium,$(PDFIUM_TARBALL)))
