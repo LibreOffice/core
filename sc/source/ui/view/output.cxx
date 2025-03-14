@@ -1083,17 +1083,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
     tools::Long nOneYLogic = aOnePixel.Height();
 
     // See more about bWorksInPixels in ScOutputData::DrawGrid
-    bool bWorksInPixels = false;
-    if (eType == OUTTYPE_WINDOW)
-        bWorksInPixels = true;
-
-    tools::Long nOneX = 1;
-    tools::Long nOneY = 1;
-    if (!bWorksInPixels)
-    {
-        nOneX = nOneXLogic;
-        nOneY = nOneYLogic;
-    }
+    bool bWorksInPixels = (eType == OUTTYPE_WINDOW);
 
     tools::Rectangle aRect;
 
@@ -1143,9 +1133,9 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                 tools::Long nPosX = nScrX;
 
                 if ( bLayoutRTL )
-                    nPosX += nMirrorW - nOneX;
+                    nPosX += nMirrorW - 1;
 
-                aRect = tools::Rectangle(nPosX, nPosY - nOneY, nPosX, nPosY - nOneY + nRowHeight);
+                aRect = tools::Rectangle(nPosX, nPosY - 1, nPosX, nPosY - 1 + nRowHeight);
                 if (bWorksInPixels)
                     aRect = rRenderContext.PixelToLogic(aRect); // internal data in pixels, but we'll be drawing in logic units
 
@@ -2388,23 +2378,6 @@ void ScOutputData::DrawChangeTrack()
 
 void ScOutputData::DrawSparklines(vcl::RenderContext& rRenderContext)
 {
-    Size aOnePixel = rRenderContext.PixelToLogic(Size(1,1));
-    tools::Long nOneXLogic = aOnePixel.Width();
-    tools::Long nOneYLogic = aOnePixel.Height();
-
-    // See more about bWorksInPixels in ScOutputData::DrawGrid
-    bool bWorksInPixels = false;
-    if (eType == OUTTYPE_WINDOW)
-        bWorksInPixels = true;
-
-    tools::Long nOneX = 1;
-    tools::Long nOneY = 1;
-    if (!bWorksInPixels)
-    {
-        nOneX = nOneXLogic;
-        nOneY = nOneYLogic;
-    }
-
     tools::Long nInitPosX = nScrX;
     if ( bLayoutRTL )
         nInitPosX += nMirrorW - 1;              // always in pixels
@@ -2445,7 +2418,7 @@ void ScOutputData::DrawSparklines(vcl::RenderContext& rRenderContext)
                     Size aSize(nWidth, nHeight);
 
                     sc::SparklineRenderer renderer(*mpDoc);
-                    renderer.render(pSparkline, rRenderContext, tools::Rectangle(aPoint, aSize), nOneX, nOneY, double(aZoomX), double(aZoomY));
+                    renderer.render(pSparkline, rRenderContext, tools::Rectangle(aPoint, aSize), 1, 1, double(aZoomX), double(aZoomY));
                 }
 
                 nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
