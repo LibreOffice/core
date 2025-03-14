@@ -667,6 +667,23 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesStates)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_TRACK_CHANGES_IN_ALL_VIEWS), pItem->Which());
     CPPUNIT_ASSERT(dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
 }
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testControlCodesCursor)
+{
+    // Given a document with hidden formatting marks:
+    SwXTextDocument* pXTextDocument = createDoc();
+    CPPUNIT_ASSERT(pXTextDocument);
+    SwTestViewCallback aView1;
+    aView1.m_bCursorVisible = false;
+
+    // When showing formatting marks:
+    dispatchCommand(mxComponent, ".uno:ControlCodes", {});
+
+    // Then make sure this doesn't result in a LOK_CALLBACK_CURSOR_VISIBLE callback:
+    // Without the accompanying fix in place, this test would have failed, the view jumped to the
+    // cursor when showing formatting marks.
+    CPPUNIT_ASSERT(!aView1.m_bCursorVisible);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
