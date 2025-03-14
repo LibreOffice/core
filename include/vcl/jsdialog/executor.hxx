@@ -150,7 +150,7 @@ typedef std::unordered_map<OString, OUString> ActionDataMap;
 
 /// execute action on a widget
 VCL_DLLPUBLIC bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget,
-                                 StringMap& rData);
+                                 const StringMap& rData);
 /// send full update message to the client
 VCL_DLLPUBLIC void SendFullUpdate(const OUString& nWindowId, const OUString& rWidget);
 /// send action message to the client

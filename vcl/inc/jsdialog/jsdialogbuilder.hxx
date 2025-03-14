@@ -119,7 +119,8 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
     friend class JSAssistant;
 
     friend VCL_DLLPUBLIC bool jsdialog::ExecuteAction(const OUString& nWindowId,
-                                                      const OUString& rWidget, StringMap& rData);
+                                                      const OUString& rWidget,
+                                                      const StringMap& rData);
     friend VCL_DLLPUBLIC void jsdialog::SendFullUpdate(const OUString& nWindowId,
                                                        const OUString& rWidget);
     friend VCL_DLLPUBLIC void jsdialog::SendAction(const OUString& nWindowId,
