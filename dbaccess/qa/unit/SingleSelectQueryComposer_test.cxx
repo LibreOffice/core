@@ -108,7 +108,7 @@ void SingleSelectQueryComposerTest::testSetCommand()
 
     CPPUNIT_ASSERT_EQUAL(sQuery, m_xComposer->getQuery());
 
-    // CommandType::COMMMAND
+    // CommandType::COMMAND
     const OUString sCommand
         = u"SELECT * FROM \"orders for customer\" WHERE \"Product Name\" = 'test'"_ustr;
     m_xComposer->setCommand(sCommand, CommandType::COMMAND);
