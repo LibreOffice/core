@@ -100,7 +100,17 @@ static void lcl_SetUIPrefs(const SwViewOption &rPref, SwView* pView, SwViewShell
         pView->CreateTab();
     else
         pView->KillTab();
-    pView->SetZoom(rPref.GetZoomType(), rPref.GetZoom(), true);
+
+    bool bWeb = dynamic_cast<const SwWebView*>(pView) != nullptr;
+    SwModule* pModule = SwModule::get();
+    auto pUsrPref = const_cast<SwMasterUsrPref*>(pModule->GetUsrPref(bWeb));
+    if (rPref.GetZoomType() != pUsrPref->GetZoomType() || rPref.GetZoom() != pUsrPref->GetZoom())
+    {
+        // The current zoom is different, then set the new type and value. See how
+        // SwView::SetZoom_() stores these applied values in SwMasterUsrPref.
+        pView->SetZoom(rPref.GetZoomType(), rPref.GetZoom(), true);
+    }
+
     pView->GetPostItMgr()->PrepareView(true);
 }
 

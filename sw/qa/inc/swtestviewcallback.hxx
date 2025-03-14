@@ -54,6 +54,7 @@ public:
     std::vector<OString> m_aStateChanges;
     TestLokCallbackWrapper m_callbackWrapper;
     OString m_aExportFile;
+    bool m_bCursorVisible = false;
 
     SwTestViewCallback(SfxViewShell* pViewShell = nullptr,
                        std::function<void(SwTestViewCallback&)> const& rBeforeInstallFunc = {});

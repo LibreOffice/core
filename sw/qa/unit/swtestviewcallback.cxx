@@ -199,6 +199,11 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_aExportFile = aPayload;
             break;
         }
+        case LOK_CALLBACK_CURSOR_VISIBLE:
+        {
+            m_bCursorVisible = aPayload == "true";
+            break;
+        }
     }
 }
 
