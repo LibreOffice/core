@@ -157,8 +157,14 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     if( nStyle & WB_DROPDOWN )
     {
         m_pFloatWin = VclPtr<ImplListBoxFloatingWindow>::Create( this );
-        if (!IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus))
-            m_pFloatWin->RequestDoubleBuffering(true);
+        // For Kit jsdialogs we don't need or want a buffer the size of
+        // the ComboBox dropdown taking up memory which is unnecessary
+        // in that case.
+        if (!comphelper::LibreOfficeKit::isActive())
+        {
+            if (!IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus))
+                m_pFloatWin->RequestDoubleBuffering(true);
+        }
         m_pFloatWin->SetAutoWidth( true );
         m_pFloatWin->SetPopupModeEndHdl(LINK(this, ComboBox, ImplPopupModeEndHdl));
 
