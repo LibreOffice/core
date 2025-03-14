@@ -35,7 +35,6 @@
 #include <osl/diagnose.h>
 #include <officecfg/Office/Writer.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <unotools/charclass.hxx>
 #include <sal/log.hxx>
 #include <swmodule.hxx>
 #include <splargs.hxx>
@@ -778,15 +777,21 @@ SwScanner::SwScanner(std::function<LanguageType(sal_Int32, sal_Int32, bool)> aGe
 
     assert(m_aPreDashReplacementText.getLength() == m_aText.getLength());
 
+    LanguageType aNewLang;
     if ( m_pLanguage )
     {
-        m_aCurrentLang = *m_pLanguage;
+        aNewLang = *m_pLanguage;
     }
     else
     {
         ModelToViewHelper::ModelPosition aModelBeginPos =
             m_ModelToView.ConvertToModelPosition( m_nBegin );
-        m_aCurrentLang = m_pGetLangOfChar(aModelBeginPos.mnPos, 0, true);
+        aNewLang = m_pGetLangOfChar(aModelBeginPos.mnPos, 0, true);
+    }
+    if (m_aCurrentLang != aNewLang)
+    {
+        m_aCurrentLang = aNewLang;
+        moCharClass.reset();
     }
 }
 
@@ -855,8 +860,6 @@ bool SwScanner::NextWord()
     m_nBegin = m_nBegin + m_nLength;
     Boundary aBound;
 
-    std::optional<CharClass> xLocalCharClass;
-
     while ( true )
     {
         // skip non-letter characters:
@@ -869,13 +872,19 @@ bool SwScanner::NextWord()
                     const sal_uInt16 nNextScriptType = g_pBreakIt->GetBreakIter()->getScriptType( m_aText, m_nBegin );
                     ModelToViewHelper::ModelPosition aModelBeginPos =
                         m_ModelToView.ConvertToModelPosition( m_nBegin );
-                    m_aCurrentLang = m_pGetLangOfChar(aModelBeginPos.mnPos, nNextScriptType, false);
+                    LanguageType aNewLang = m_pGetLangOfChar(aModelBeginPos.mnPos, nNextScriptType, false);
+                    if (aNewLang != m_aCurrentLang)
+                    {
+                        m_aCurrentLang = aNewLang;
+                        moCharClass.reset();
+                    }
                 }
 
                 if ( m_nWordType != i18n::WordType::WORD_COUNT )
                 {
-                    xLocalCharClass.emplace(LanguageTag( g_pBreakIt->GetLocale( m_aCurrentLang ) ));
-                    if ( xLocalCharClass->isLetterNumeric(OUString(m_aText[m_nBegin])) )
+                    if (!moCharClass)
+                        moCharClass.emplace(LanguageTag( g_pBreakIt->GetLocale( m_aCurrentLang ) ));
+                    if ( moCharClass->isLetterNumeric(OUString(m_aText[m_nBegin])) )
                         break;
                 }
                 else
