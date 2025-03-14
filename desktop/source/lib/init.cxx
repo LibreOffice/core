@@ -5045,18 +5045,18 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
 {
     SolarMutexGuard aGuard;
 
-    StringMap aMap(jsdialog::jsonToStringMap(pArguments));
+    const StringMap aMap(jsdialog::jsonToStringMap(pArguments));
 
     if (aMap.find(u"id"_ustr) == aMap.end())
         return;
 
-    sal_uInt64 nCurrentShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
+    const sal_uInt64 nCurrentShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
 
     try
     {
-        OUString sControlId = aMap[u"id"_ustr];
+        const OUString sControlId = aMap.at(u"id"_ustr);
         OUString sWindowId = OUString::number(nWindowId);
-        OUString sCurrentShellId = OUString::number(nCurrentShellId);
+        const OUString sCurrentShellId = OUString::number(nCurrentShellId);
 
         // special values for window id
         if (nWindowId == static_cast<unsigned long long int>(-1))
@@ -5088,7 +5088,13 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
         // force resend - used in mobile-wizard
         jsdialog::SendFullUpdate(sCurrentShellId + "sidebar", u"Panel"_ustr);
 
-    } catch(...) {}
+    }
+    catch (std::out_of_range& e)
+    {
+        SAL_WARN("lok", "jsdialog::ExecuteAction syntax error - field not found in '" << e.what() << "'");
+        assert(false);
+    }
+    catch (...) {}
 }
 
 

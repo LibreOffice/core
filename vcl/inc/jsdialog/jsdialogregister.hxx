@@ -19,11 +19,12 @@ template <class T> class WidgetRegister
     // Map to remember the LOKWindowId <-> widget binding.
     std::map<OUString, T> m_aWidgetMap;
     std::map<OUString, T>& Map() { return m_aWidgetMap; }
+    const std::map<OUString, T>& Map() const { return m_aWidgetMap; }
 
 public:
     void Remember(const OUString& rId, T pWidget);
     void Forget(const OUString& rId);
-    T Find(const OUString& rId);
+    T Find(const OUString& rId) const;
 };
 
 template <class T> void WidgetRegister<T>::Remember(const OUString& nWindowId, T pMenu)
@@ -38,7 +39,7 @@ template <class T> void WidgetRegister<T>::Forget(const OUString& nWindowId)
         Map().erase(it);
 }
 
-template <class T> T WidgetRegister<T>::Find(const OUString& nWindowId)
+template <class T> T WidgetRegister<T>::Find(const OUString& nWindowId) const
 {
     const auto it = Map().find(nWindowId);
 
