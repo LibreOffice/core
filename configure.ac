@@ -7193,9 +7193,18 @@ if test "$_os" = "WINNT"; then
         echo $WINDOWS_SDK_LIB_SUBDIR
         # Assuming maximum of 5 digits for each part and ignoring last part
         SDK_NORMALIZED_VER=$(echo $WINDOWS_SDK_LIB_SUBDIR | awk -F. '{printf("%d%05d%05d\n", $1, $2, $3)}')
-        # 10.0.20348.0 is the minimum required version
-        if test "$SDK_NORMALIZED_VER" -lt 100000020348; then
-            AC_MSG_ERROR([You need Windows SDK greater than or equal 10.0.20348.0])
+        if test "$SDK_NORMALIZED_VER" -lt 100000022000; then
+            if test "$WIN_HOST_ARCH" = "arm64" -a \( "$enable_skia" != "no" -o "$enable_pdfium" != "no" \) ; then
+                AC_MSG_ERROR([You need Windows SDK 10.0.22000 or later to build for Windows arm64 with skia or pdfium. Install a newer version of the SDK or disable skia and pdfium])
+            fi
+            # 10.0.20348.0 is the minimum required version,
+            # but it makes sense to align with arm64 baseline.
+            # Give people a heads-up to update their systems before enforcing it
+            if test "$SDK_NORMALIZED_VER" -lt 100000020348; then
+                AC_MSG_ERROR([You need Windows SDK greater than or equal 10.0.20348.0])
+            else
+                add_warning "build requirements might be bumped to Windows SDK >= 10.0.22000 soon"
+            fi
         fi
     fi
 
