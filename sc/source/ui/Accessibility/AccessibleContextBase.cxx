@@ -162,13 +162,6 @@ sal_Bool SAL_CALL ScAccessibleContextBase::containsPoint(const awt::Point& rPoin
         .Contains(vcl::unohelper::ConvertToVCLPoint(rPoint));
 }
 
-uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAtPoint(
-        const awt::Point& /* rPoint */ )
-{
-    OSL_FAIL("not implemented");
-    return uno::Reference<XAccessible>();
-}
-
 awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
 {
     SolarMutexGuard aGuard;
@@ -237,19 +230,6 @@ sal_Int32 SAL_CALL ScAccessibleContextBase::getBackground(  )
 }
 
 //=====  XAccessibleContext  ==================================================
-
-sal_Int64 SAL_CALL ScAccessibleContextBase::getAccessibleChildCount()
-{
-    OSL_FAIL("should be implemented in the abrevated class");
-    return 0;
-}
-
-uno::Reference<XAccessible> SAL_CALL
-    ScAccessibleContextBase::getAccessibleChild(sal_Int64 /* nIndex */)
-{
-    OSL_FAIL("should be implemented in the abrevated class");
-    return uno::Reference<XAccessible>();
-}
 
 uno::Reference<XAccessible> SAL_CALL
        ScAccessibleContextBase::getAccessibleParent()
@@ -472,18 +452,6 @@ void ScAccessibleContextBase::CommitFocusLost() const
     aEvent.OldValue <<= AccessibleStateType::FOCUSED;
 
     CommitChange(aEvent);
-}
-
-AbsoluteScreenPixelRectangle ScAccessibleContextBase::GetBoundingBoxOnScreen() const
-{
-    OSL_FAIL("not implemented");
-    return AbsoluteScreenPixelRectangle();
-}
-
-tools::Rectangle ScAccessibleContextBase::GetBoundingBox() const
-{
-    OSL_FAIL("not implemented");
-    return tools::Rectangle();
 }
 
 void ScAccessibleContextBase::IsObjectValid() const

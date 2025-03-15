@@ -88,10 +88,6 @@ public:
     virtual sal_Bool SAL_CALL containsPoint(
         const css::awt::Point& rPoint ) override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-        SAL_CALL getAccessibleAtPoint(
-        const css::awt::Point& rPoint ) override;
-
     virtual css::awt::Rectangle SAL_CALL getBounds(  ) override;
 
     virtual css::awt::Point SAL_CALL getLocation(  ) override;
@@ -107,13 +103,6 @@ public:
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
 
     ///=====  XAccessibleContext  ==============================================
-
-    /// Return the number of currently visible children.
-    virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
-
-    /// Return the specified child or NULL if index is invalid.
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild(sal_Int64 nIndex) override;
 
     /// Return a reference to the parent.
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
@@ -196,12 +185,12 @@ protected:
     /// Return the object's current bounding box relative to the desktop.
     ///
     /// @throws css::uno::RuntimeException
-    virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() const;
+    virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() const = 0;
 
     /// Return the object's current bounding box relative to the parent object.
     ///
     /// @throws css::uno::RuntimeException
-    virtual tools::Rectangle GetBoundingBox() const;
+    virtual tools::Rectangle GetBoundingBox() const = 0;
 
 public:
     /// Calls all Listener to tell they the change.
