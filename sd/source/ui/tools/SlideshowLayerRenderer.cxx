@@ -143,7 +143,7 @@ void changeBackground(drawinglayer::primitive2d::Primitive2DContainer const& rCo
     }
 }
 
-/// Find the text block in the primitive containder, decompose if necessary
+/// Find the text block in the primitive container, decompose if necessary
 drawinglayer::primitive2d::TextHierarchyBlockPrimitive2D*
 findTextBlock(drawinglayer::primitive2d::Primitive2DContainer const& rContainer,
               drawinglayer::geometry::ViewInformation2D const& rViewInformation2D)
