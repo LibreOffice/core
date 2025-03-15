@@ -1084,10 +1084,11 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
 
     // See more about bWorksInPixels in ScOutputData::DrawGrid
     bool bWorksInPixels = (eType == OUTTYPE_WINDOW);
+    const tools::Long nOneX = bWorksInPixels ? 1 : nOneXLogic;
+    const tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+    const tools::Long nSignedOneX = nOneX * nLayoutSign;
 
     tools::Rectangle aRect;
-
-    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     rRenderContext.SetLineColor();
 
@@ -1131,9 +1132,8 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                 }
 
                 tools::Long nPosX = nScrX;
-
                 if ( bLayoutRTL )
-                    nPosX += nMirrorW - 1;
+                    nPosX += nMirrorW - nOneX;
 
                 aRect = tools::Rectangle(nPosX, nPosY - 1, nPosX, nPosY - 1 + nRowHeight);
                 if (bWorksInPixels)
@@ -1218,6 +1218,9 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                     drawCells(rRenderContext, pColor, pBackground, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo, mpDoc->GetIconSetBitmapMap());
 
                     nPosX = nNewPosX;
+                    // tdf#135891 - adjust the x position to ensure the correct starting point
+                    if (!bWorksInPixels && ((nX == 0 && !bLayoutRTL) || (nX == nX1 && bLayoutRTL)))
+                        nPosX += nSignedOneX;
                 }
 
                 tools::Long nPosXLogic = nPosX;
