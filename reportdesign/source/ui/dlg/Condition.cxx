@@ -304,15 +304,15 @@ void Condition::setCondition( const uno::Reference< report::XFormatCondition >& 
 
 void Condition::updateToolbar(const uno::Reference< report::XReportControlFormat >& _xReportControlFormat)
 {
-    OUString aItems[] = { u"bold"_ustr, u"italic"_ustr, u"underline"_ustr, u"fontdialog"_ustr };
+    static constexpr OUString aItems[] = { u"bold"_ustr, u"italic"_ustr, u"underline"_ustr, u"fontdialog"_ustr };
 
     OSL_ENSURE(_xReportControlFormat.is(),"XReportControlFormat is NULL!");
     if ( !_xReportControlFormat.is() )
         return;
 
-    for (size_t j = 0; j < SAL_N_ELEMENTS(aItems); ++j)
+    for (const auto& rItem : aItems)
     {
-        m_xActions->set_item_active(aItems[j], OReportController::isFormatCommandEnabled(mapToolbarItemToSlotId(aItems[j]),
+        m_xActions->set_item_active(rItem, OReportController::isFormatCommandEnabled(mapToolbarItemToSlotId(rItem),
             _xReportControlFormat));
     }
 
