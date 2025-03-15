@@ -52,7 +52,7 @@ public:
         return m_aComboListBox.GetDropDownPosSizePixel();
     }
 
-    virtual tools::Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const override
+    virtual tools::Rectangle GetBoundingRectangle(sal_Int32 nItem) const override
     {
         tools::Rectangle aRect;
         if ( m_aComboListBox.IsInDropDown() && IsEntryVisible( nItem ) )

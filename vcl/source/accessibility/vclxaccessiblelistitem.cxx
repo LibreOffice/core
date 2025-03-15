@@ -69,7 +69,7 @@ VCLXAccessibleListItem::VCLXAccessibleListItem(sal_Int32 _nIndexInParent,
     assert(m_xParent.is());
     IComboListBoxHelper* pListBoxHelper = m_xParent->getListBoxHelper();
     if (pListBoxHelper)
-        m_sEntryText = pListBoxHelper->GetEntry(static_cast<sal_uInt16>(_nIndexInParent));
+        m_sEntryText = pListBoxHelper->GetEntry(_nIndexInParent);
 }
 
 void VCLXAccessibleListItem::SetSelected( bool _bSelected )
@@ -132,7 +132,7 @@ awt::Rectangle VCLXAccessibleListItem::implGetBounds()
     IComboListBoxHelper* pListBoxHelper = m_xParent.is() ? m_xParent->getListBoxHelper() : nullptr;
     if (pListBoxHelper)
     {
-        aRect = pListBoxHelper->GetBoundingRectangle(static_cast<sal_uInt16>(m_nIndexInParent));
+        aRect = pListBoxHelper->GetBoundingRectangle(m_nIndexInParent);
         // convert position relative to the combobox/listbox (parent's parent) to position relative
         // to direct parent by subtracting parent's relative position in the combobox/listbox
         aRect -= vcl::unohelper::ConvertToVCLPoint(m_xParent->getLocation());
@@ -323,7 +323,7 @@ awt::Rectangle SAL_CALL VCLXAccessibleListItem::getCharacterBounds( sal_Int32 nI
     if (pListBoxHelper)
     {
         tools::Rectangle aCharRect = pListBoxHelper->GetEntryCharacterBounds( m_nIndexInParent, nIndex );
-        tools::Rectangle aItemRect = pListBoxHelper->GetBoundingRectangle( static_cast<sal_uInt16>(m_nIndexInParent) );
+        tools::Rectangle aItemRect = pListBoxHelper->GetBoundingRectangle(m_nIndexInParent);
         aCharRect.Move( -aItemRect.Left(), -aItemRect.Top() );
         aBounds = vcl::unohelper::ConvertToAWTRect(aCharRect);
     }
@@ -347,7 +347,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getIndexAtPoint( const awt::Point& aP
     if (pListBoxHelper)
     {
         sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
-        tools::Rectangle aItemRect = pListBoxHelper->GetBoundingRectangle( static_cast<sal_uInt16>(m_nIndexInParent) );
+        tools::Rectangle aItemRect = pListBoxHelper->GetBoundingRectangle(m_nIndexInParent);
         Point aPnt(vcl::unohelper::ConvertToVCLPoint(aPoint));
         aPnt += aItemRect.TopLeft();
         sal_Int32 nI = pListBoxHelper->GetIndexForPoint( aPnt, nPos );
