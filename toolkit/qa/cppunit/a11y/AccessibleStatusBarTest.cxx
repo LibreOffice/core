@@ -34,8 +34,8 @@
 #include <vcl/scheduler.hxx>
 
 #include <test/a11y/AccessibilityTools.hxx>
-#include "XAccessibleComponentTester.hxx"
-#include "XAccessibleContextTester.hxx"
+#include <test/a11y/XAccessibleComponentTester.hxx>
+#include <test/a11y/XAccessibleContextTester.hxx>
 #include "XAccessibleExtendedComponentTester.hxx"
 #include "XAccessibleEventBroadcasterTester.hxx"
 

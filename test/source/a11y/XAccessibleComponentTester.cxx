@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "XAccessibleComponentTester.hxx"
-
 #include <cppunit/TestAssert.h>
 
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -31,6 +29,7 @@
 #include <tools/color.hxx>
 
 #include <test/a11y/AccessibilityTools.hxx>
+#include <test/a11y/XAccessibleComponentTester.hxx>
 
 using namespace css;
 
