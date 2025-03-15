@@ -317,7 +317,7 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int64
                     m_xText = pComboBox->GetSubEdit()->GetAccessible();
             }
             else if (m_bIsDropDownBox)
-                m_xText = new VCLXAccessibleTextField(GetWindow(), this);
+                m_xText = new VCLXAccessibleTextField(GetAs<ListBox>(), this);
         }
         return m_xText;
     }

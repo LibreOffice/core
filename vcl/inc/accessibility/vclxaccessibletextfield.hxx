@@ -22,10 +22,10 @@
 #include <accessibility/vclxaccessibletextcomponent.hxx>
 
 #include <cppuhelper/implbase.hxx>
+#include <vcl/toolkit/lstbox.hxx>
 
-/** This class represents non editable text fields.  The object passed to
-    the constructor is expected to be a list (a ListBox to be
-    more specific).  From this always the selected item is token to be made
+/** This class represents non editable text fields.
+    From the ListBox passed to the constructer, always the selected item is token to be made
     accessible by this class.  When the selected item changes then also the
     exported text changes.
 */
@@ -33,7 +33,7 @@ class VCLXAccessibleTextField final :
     public cppu::ImplInheritanceHelper<VCLXAccessibleTextComponent, css::accessibility::XAccessible>
 {
 public:
-    VCLXAccessibleTextField(vcl::Window* pWindow,
+    VCLXAccessibleTextField(ListBox* pListBox,
                             const css::uno::Reference<css::accessibility::XAccessible>& _xParent);
 
     // XAccessible
