@@ -2373,7 +2373,9 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
                             nHgt = rR.getOpenHeight();
                         }
                     }
+                    // cleanup outliner
                     rOutliner.Clear();
+                    rOutliner.SetFixedCellHeight(false);
                 }
             }
             else
