@@ -352,7 +352,7 @@ public:
             mpCurrentRenderPass->meStage = eCurrentStage;
             closeRenderPass();
         }
-        // No specal handling is needed, just add the object to the current rendering pass
+        // No special handling is needed, just add the object to the current rendering pass
         else
         {
             mpCurrentRenderPass->maObjectsAndParagraphs.emplace(pObject, std::deque<sal_Int32>());
