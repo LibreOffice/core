@@ -1135,6 +1135,10 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                 if ( bLayoutRTL )
                     nPosX += nMirrorW - nOneX;
 
+                // tdf#135891 - adjust the x position to ensure the correct starting point
+                if (!bWorksInPixels)
+                    nPosX -= nLayoutSign + 1;
+
                 aRect = tools::Rectangle(nPosX, nPosY - 1, nPosX, nPosY - 1 + nRowHeight);
                 if (bWorksInPixels)
                     aRect = rRenderContext.PixelToLogic(aRect); // internal data in pixels, but we'll be drawing in logic units
@@ -1219,8 +1223,8 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
 
                     nPosX = nNewPosX;
                     // tdf#135891 - adjust the x position to ensure the correct starting point
-                    if (!bWorksInPixels && ((nX == 0 && !bLayoutRTL) || (nX == nX1 && bLayoutRTL)))
-                        nPosX += nSignedOneX;
+                    if (!bWorksInPixels && nX == nX1)
+                        nPosX += nSignedOneX + 1;
                 }
 
                 tools::Long nPosXLogic = nPosX;

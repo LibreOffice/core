@@ -541,7 +541,9 @@ void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPri
 
     //  If no lines, still leave space for grid lines
     //  (would be elseways cut away)
-    nScrX += 1;
+    // tdf#135891 - adjust the x position to ensure the correct starting point
+    const Size aOnePixel = pDev->PixelToLogic(Size(1, 1));
+    nScrX += aOnePixel.Width();
     nScrY += 1;
 
     ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, &rDoc, nTab,
