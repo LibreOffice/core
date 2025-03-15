@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <tools/color.hxx>
+#include <vcl/unohelp.hxx>
 
 #include <test/a11y/AccessibilityTools.hxx>
 #include <test/a11y/XAccessibleComponentTester.hxx>
@@ -186,12 +187,29 @@ void XAccessibleComponentTester::testAccessibleAtPoint()
         CPPUNIT_ASSERT_MESSAGE("Child not found at point", xAccAtPoint.is());
         if (!AccessibilityTools::equals(child, xAccAtPoint))
         {
-            auto idxExpected = childContext->getAccessibleIndexInParent();
-            auto idxResult = xAccAtPoint->getAccessibleContext()->getAccessibleIndexInParent();
             std::cout << "The child found (" << AccessibilityTools::debugString(xAccAtPoint)
                       << ") is not the expected one (" << AccessibilityTools::debugString(child)
                       << ")" << std::endl;
-            if (idxExpected < idxResult)
+
+            const bool bDirectChild
+                = xAccAtPoint->getAccessibleContext()->getAccessibleParent()->getAccessibleContext()
+                  == mxContext;
+            CPPUNIT_ASSERT_MESSAGE("Accessible returned by "
+                                   "XAccessibleComponent::getAccessibleAtPoint has different "
+                                   "parent",
+                                   bDirectChild);
+
+            css::uno::Reference<css::accessibility::XAccessibleComponent> xComponentAtPoint(
+                xAccAtPoint->getAccessibleContext(), css::uno::UNO_QUERY_THROW);
+            const bool bContainsPoint
+                = vcl::unohelper::ConvertToVCLRect(xComponentAtPoint->getBounds())
+                      .Contains(Point(childBounds.X, childBounds.Y));
+            CPPUNIT_ASSERT_MESSAGE("Accessible returned by "
+                                   "XAccessibleComponent::getAccessibleAtPoint doesn't contain the "
+                                   "point",
+                                   bContainsPoint);
+
+            if (bContainsPoint)
             {
                 std::cout << "-- it probably is hidden behind?  Skipping." << std::endl;
             }
