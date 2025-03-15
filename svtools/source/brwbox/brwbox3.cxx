@@ -68,12 +68,9 @@ Reference<XAccessible> BrowseBox::getAccessibleTable()
 
 Reference< XAccessible > BrowseBox::CreateAccessible()
 {
-    vcl::Window* pParent = GetAccessibleParentWindow();
-    DBG_ASSERT( pParent, "BrowseBox::CreateAccessible - parent not found" );
-
-    if (pParent && !m_xAccessible)
+    if (!m_xAccessible)
     {
-        Reference< XAccessible > xAccParent = pParent->GetAccessible();
+        Reference<XAccessible> xAccParent = GetAccessibleParent();
         if( xAccParent.is() )
         {
             m_xAccessible = new AccessibleBrowseBox(xAccParent, *this);
