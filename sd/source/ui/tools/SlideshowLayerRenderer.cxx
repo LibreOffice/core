@@ -224,7 +224,7 @@ void modifyParagraphs(drawinglayer::primitive2d::Primitive2DContainer& rContaine
     }
 }
 
-/// Analyze the renderng and create rendering passes
+/// Analyze the rendering and create rendering passes
 class AnalyzeRenderingRedirector : public sdr::contact::ViewObjectContactRedirector
 {
 protected:
