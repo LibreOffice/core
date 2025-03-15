@@ -469,13 +469,8 @@ const SwBoxAutoFormat& SwTableAutoFormat::GetBoxFormat( sal_uInt8 nPos ) const
     SwBoxAutoFormat* pFormat = m_aBoxAutoFormat[ nPos ];
     if( pFormat )      // if is set -> copy
         return *pFormat;
-    else            // else return the default
-    {
-        // If it doesn't exist yet:
-        if( !s_pDefaultBoxAutoFormat )
-            s_pDefaultBoxAutoFormat = new SwBoxAutoFormat;
-        return *s_pDefaultBoxAutoFormat;
-    }
+    // else return the default
+    return SwTableAutoFormat::GetDefaultBoxFormat();
 }
 
 SwBoxAutoFormat& SwTableAutoFormat::GetBoxFormat( sal_uInt8 nPos )
@@ -484,12 +479,7 @@ SwBoxAutoFormat& SwTableAutoFormat::GetBoxFormat( sal_uInt8 nPos )
 
     SwBoxAutoFormat** pFormat = &m_aBoxAutoFormat[ nPos ];
     if( !*pFormat )
-    {
-        // If default doesn't exist yet:
-        if( !s_pDefaultBoxAutoFormat )
-            s_pDefaultBoxAutoFormat = new SwBoxAutoFormat();
-        *pFormat = new SwBoxAutoFormat(*s_pDefaultBoxAutoFormat);
-    }
+        *pFormat = new SwBoxAutoFormat(SwTableAutoFormat::GetDefaultBoxFormat());
     return **pFormat;
 }
 
@@ -845,14 +835,9 @@ bool SwTableAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 
     for( int i = 0; bRet && i < 16; ++i )
     {
-        SwBoxAutoFormat* pFormat = m_aBoxAutoFormat[ i ];
-        if( !pFormat )     // if not set -> write default
-        {
-            // If it doesn't exist yet:
-            if( !s_pDefaultBoxAutoFormat )
-                s_pDefaultBoxAutoFormat = new SwBoxAutoFormat;
-            pFormat = s_pDefaultBoxAutoFormat;
-        }
+        const SwBoxAutoFormat* pFormat = m_aBoxAutoFormat[ i ];
+        if (!pFormat)     // if not set -> write default
+            pFormat = &SwTableAutoFormat::GetDefaultBoxFormat();
         bRet = pFormat->Save( rStream, fileVersion );
     }
     return bRet;
