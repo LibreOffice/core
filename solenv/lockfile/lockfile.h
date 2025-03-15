@@ -10,8 +10,8 @@
  *	General Public License can be found in `/usr/doc/copyright/LGPL'.
  *	You can also find a copy on the GNU website at http://www.gnu.org/
  */
-#ifndef LOCKFILE_H_
-#define LOCKFILE_H_
+
+#pragma once
 
 #ifdef  __cplusplus
 extern "C" {
@@ -68,5 +68,3 @@ int lockfile_create_set_tmplock(const char *lockfile, volatile char **tmplock,
 #ifdef  __cplusplus
 }
 #endif
-
-#endif /* _LOCKFILE_H */
