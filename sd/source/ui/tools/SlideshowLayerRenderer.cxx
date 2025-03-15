@@ -284,7 +284,7 @@ public:
         RenderStage eCurrentStage
             = pPage->IsMasterPage() ? RenderStage::Master : RenderStage::Slide;
 
-        // We switched from master objecst to slide objects
+        // We switched from master objects to slide objects
         if (eCurrentStage == RenderStage::Slide && mePreviousStage == RenderStage::Master)
             closeRenderPass();
 
