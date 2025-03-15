@@ -2339,17 +2339,15 @@ namespace svt::table
     }
 
     const rtl::Reference<accessibility::AccessibleGridControl>&
-    TableControl_Impl::getAccessible(vcl::Window& i_parentWindow)
+    TableControl_Impl::getAccessible(const css::uno::Reference<css::accessibility::XAccessible>& rxParent)
     {
         if (m_xAccessibleTable.is())
             return m_xAccessibleTable;
 
         DBG_TESTSOLARMUTEX();
-
-        Reference<XAccessible> const xAccParent = i_parentWindow.GetAccessible();
-        if (xAccParent.is())
+        if (rxParent.is())
         {
-            m_xAccessibleTable = new accessibility::AccessibleGridControl(xAccParent, m_rAntiImpl);
+            m_xAccessibleTable = new accessibility::AccessibleGridControl(rxParent, m_rAntiImpl);
         }
 
         return m_xAccessibleTable;

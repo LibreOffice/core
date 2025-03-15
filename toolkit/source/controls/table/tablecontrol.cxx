@@ -313,10 +313,8 @@ namespace svt::table
 
     Reference< XAccessible > TableControl::CreateAccessible()
     {
-        vcl::Window* pParent = GetAccessibleParentWindow();
-        ENSURE_OR_RETURN( pParent, "TableControl::CreateAccessible - parent not found", nullptr );
-
-        return m_pImpl->getAccessible( *pParent );
+        css::uno::Reference<css::accessibility::XAccessible> xParent = GetAccessibleParent();
+        return m_pImpl->getAccessible(xParent);
     }
 
     OUString TableControl::GetAccessibleObjectName( AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const
