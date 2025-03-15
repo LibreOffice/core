@@ -653,22 +653,20 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
 // accessibility::XAccessibleComponent
 awt::Rectangle VCLXAccessibleComponent::implGetBounds()
 {
-    awt::Rectangle aBounds ( 0, 0, 0, 0 );
-
     VclPtr<vcl::Window> pWindow = GetWindow();
-    if ( pWindow )
-    {
-        AbsoluteScreenPixelRectangle aRect = pWindow->GetWindowExtentsAbsolute();
-        aBounds = vcl::unohelper::ConvertToAWTRect(aRect);
-        vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
-        if ( pParent )
-        {
-            AbsoluteScreenPixelRectangle aParentRect = pParent->GetWindowExtentsAbsolute();
-            awt::Point aParentScreenLoc = vcl::unohelper::ConvertToAWTPoint(aParentRect.TopLeft());
-            aBounds.X -= aParentScreenLoc.X;
-            aBounds.Y -= aParentScreenLoc.Y;
-        }
-    }
+    if (!pWindow)
+        return awt::Rectangle();
+
+    AbsoluteScreenPixelRectangle aRect = pWindow->GetWindowExtentsAbsolute();
+    awt::Rectangle aBounds = vcl::unohelper::ConvertToAWTRect(aRect);
+    vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
+    if (!pParent)
+        return aBounds;
+
+    AbsoluteScreenPixelRectangle aParentRect = pParent->GetWindowExtentsAbsolute();
+    awt::Point aParentScreenLoc = vcl::unohelper::ConvertToAWTPoint(aParentRect.TopLeft());
+    aBounds.X -= aParentScreenLoc.X;
+    aBounds.Y -= aParentScreenLoc.Y;
 
     return aBounds;
 }
