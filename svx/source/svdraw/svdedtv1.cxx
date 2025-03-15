@@ -22,6 +22,7 @@
 #include <editeng/eeitem.hxx>
 #include <math.h>
 #include <svl/itemiter.hxx>
+#include <sal/log.hxx>
 #include <svl/whiter.hxx>
 #include <tools/bigint.hxx>
 #include <vcl/svapp.hxx>
@@ -220,11 +221,20 @@ void SdrEditView::MoveMarkedObj(const Size& rSiz, bool bCopy)
 
 bool SdrEditView::IsMarkedObjSizeValid(Size& aTargetSize)
 {
-    SdrMark* pM=GetMarkedObjectList().GetMark(0);
-    SdrObject* pO=pM->GetMarkedSdrObj();
-    if (!pO->IsSizeValid(aTargetSize))
-        return false;
-    return true;
+    if (SdrMark* pM=GetMarkedObjectList().GetMark(0))
+    {
+        if (SdrObject* pO=pM->GetMarkedSdrObj())
+        {
+            if (pO->IsSizeValid(aTargetSize))
+                return true;
+        }
+        else
+            SAL_WARN("svx", "no MarkedSdrObj found");
+    }
+    else
+        SAL_WARN("svx", "no SdrMark found");
+
+    return false;
 }
 
 void SdrEditView::ResizeMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy)
