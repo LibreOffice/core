@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "XAccessibleEventBroadcasterTester.hxx"
-
 #include <iostream>
 
 #include <cppunit/TestAssert.h>
@@ -39,6 +37,7 @@
 #include <sal/log.hxx>
 
 #include <test/a11y/AccessibilityTools.hxx>
+#include <test/a11y/XAccessibleEventBroadcasterTester.hxx>
 
 using namespace css;
 

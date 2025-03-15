@@ -49,6 +49,8 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/a11y/AccessibilityTools \
 	test/source/a11y/XAccessibleComponentTester \
 	test/source/a11y/XAccessibleContextTester \
+	test/source/a11y/XAccessibleEventBroadcasterTester \
+	test/source/a11y/XAccessibleExtendedComponentTester \
 	test/source/a11y/accessibletestbase \
 	test/source/a11y/eventposter \
 	test/source/beans/xpropertyset \

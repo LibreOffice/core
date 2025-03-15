@@ -36,8 +36,8 @@
 #include <test/a11y/AccessibilityTools.hxx>
 #include <test/a11y/XAccessibleComponentTester.hxx>
 #include <test/a11y/XAccessibleContextTester.hxx>
-#include "XAccessibleExtendedComponentTester.hxx"
-#include "XAccessibleEventBroadcasterTester.hxx"
+#include <test/a11y/XAccessibleExtendedComponentTester.hxx>
+#include <test/a11y/XAccessibleEventBroadcasterTester.hxx>
 
 using namespace css;
 

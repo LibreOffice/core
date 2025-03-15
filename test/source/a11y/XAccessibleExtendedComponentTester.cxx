@@ -17,32 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#include <iostream>
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
+#include <test/a11y/XAccessibleExtendedComponentTester.hxx>
 
-class XAccessibleExtendedComponentTester
+/**
+ * @brief Just calls the method.
+ */
+void XAccessibleExtendedComponentTester::testGetTitledBorderText()
 {
-protected:
-    const css::uno::Reference<css::accessibility::XAccessibleExtendedComponent> mxExtendedComponent;
+    auto titleBorderText = mxExtendedComponent->getTitledBorderText();
+    std::cout << "getTitledBorderText(): '" << titleBorderText << "'" << std::endl;
+}
 
-public:
-    XAccessibleExtendedComponentTester(
-        const css::uno::Reference<css::accessibility::XAccessibleExtendedComponent>&
-            extendedComponent)
-        : mxExtendedComponent(extendedComponent)
-    {
-    }
-
-    void testGetTitledBorderText();
-    void testGetToolTipText();
-
-    void testAll()
-    {
-        testGetTitledBorderText();
-        testGetToolTipText();
-    }
-};
+/**
+ * @brief Just calls the method.
+ */
+void XAccessibleExtendedComponentTester::testGetToolTipText()
+{
+    auto toolTipText = mxExtendedComponent->getToolTipText();
+    std::cout << "getToolTipText(): '" << toolTipText << "'" << std::endl;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

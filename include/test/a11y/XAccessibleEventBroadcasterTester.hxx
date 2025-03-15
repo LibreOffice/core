@@ -19,12 +19,14 @@
 
 #pragma once
 
+#include <test/testdllapi.hxx>
+
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 
-class XAccessibleEventBroadcasterTester
+class OOO_DLLPUBLIC_TEST XAccessibleEventBroadcasterTester
 {
 private:
     const css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster> mxBroadcaster;

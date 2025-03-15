@@ -11,8 +11,6 @@ $(eval $(call gb_CppunitTest_CppunitTest,toolkit_a11y))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,toolkit_a11y, \
 	toolkit/qa/cppunit/a11y/AccessibleStatusBarTest \
-	toolkit/qa/cppunit/a11y/XAccessibleEventBroadcasterTester \
-	toolkit/qa/cppunit/a11y/XAccessibleExtendedComponentTester \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,toolkit_a11y, \

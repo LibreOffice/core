@@ -17,28 +17,34 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "XAccessibleExtendedComponentTester.hxx"
+#pragma once
 
-#include <iostream>
+#include <test/testdllapi.hxx>
 
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 
-/**
- * @brief Just calls the method.
- */
-void XAccessibleExtendedComponentTester::testGetTitledBorderText()
+class OOO_DLLPUBLIC_TEST XAccessibleExtendedComponentTester
 {
-    auto titleBorderText = mxExtendedComponent->getTitledBorderText();
-    std::cout << "getTitledBorderText(): '" << titleBorderText << "'" << std::endl;
-}
+protected:
+    const css::uno::Reference<css::accessibility::XAccessibleExtendedComponent> mxExtendedComponent;
 
-/**
- * @brief Just calls the method.
- */
-void XAccessibleExtendedComponentTester::testGetToolTipText()
-{
-    auto toolTipText = mxExtendedComponent->getToolTipText();
-    std::cout << "getToolTipText(): '" << toolTipText << "'" << std::endl;
-}
+public:
+    XAccessibleExtendedComponentTester(
+        const css::uno::Reference<css::accessibility::XAccessibleExtendedComponent>&
+            extendedComponent)
+        : mxExtendedComponent(extendedComponent)
+    {
+    }
+
+    void testGetTitledBorderText();
+    void testGetToolTipText();
+
+    void testAll()
+    {
+        testGetTitledBorderText();
+        testGetToolTipText();
+    }
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
