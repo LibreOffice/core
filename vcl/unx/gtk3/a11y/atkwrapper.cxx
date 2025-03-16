@@ -1030,7 +1030,15 @@ atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessib
             {
                 const SystemEnvData* pEnvData = static_cast<SystemChildWindow*>(xWindow.get())->GetSystemData();
                 if (GtkWidget *pSysObj = pEnvData ? static_cast<GtkWidget*>(pEnvData->pWidget) : nullptr)
+                {
                     pWrap->mpSysObjChild = gtk_widget_get_accessible(pSysObj);
+                    AtkObject* pParent = atk_object_wrapper_ref(xWindow->GetAccessible());
+                    if (pParent)
+                    {
+                        atk_object_set_parent(pWrap->mpSysObjChild, pParent);
+                        g_object_unref(pParent);
+                    }
+                }
             }
         }
 
