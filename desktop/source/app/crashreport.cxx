@@ -188,13 +188,13 @@ OUString CrashReporter::getLoggedUnoCommands()
 {
     osl::MutexGuard aGuard(maUnoLogCmdMutex);
 
-    std::u16string_view aCommandSeperator;
+    OUString aCommandSeperator="";
     OUStringBuffer aUnoCommandBuffer;
 
     for( auto& unocommand: maloggedUnoCommands)
     {
         aUnoCommandBuffer.append(aCommandSeperator + unocommand);
-        aCommandSeperator=u","_ustr;
+        aCommandSeperator=",";
     }
     return aUnoCommandBuffer.makeStringAndClear();
 }
