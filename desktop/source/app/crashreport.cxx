@@ -21,6 +21,7 @@
 #include <config_folders.h>
 
 #include <string>
+#include <string_view>
 #include <regex>
 
 
@@ -188,13 +189,13 @@ OUString CrashReporter::getLoggedUnoCommands()
 {
     osl::MutexGuard aGuard(maUnoLogCmdMutex);
 
-    OUString aCommandSeperator="";
+    std::u16string_view aCommandSeperator=u"";
     OUStringBuffer aUnoCommandBuffer;
 
     for( auto& unocommand: maloggedUnoCommands)
     {
         aUnoCommandBuffer.append(aCommandSeperator + unocommand);
-        aCommandSeperator=",";
+        aCommandSeperator=u",";
     }
     return aUnoCommandBuffer.makeStringAndClear();
 }
