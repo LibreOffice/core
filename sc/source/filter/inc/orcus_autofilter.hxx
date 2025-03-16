@@ -74,7 +74,7 @@ private:
     std::unique_ptr<ScOrcusAutoFilterNode> mxChild;
 
     SCCOL mnStartCol = -1;
-    ScQueryConnect meConn;
+    ScQueryConnect meConn = ScQueryConnect::SC_AND;
     bool mbHasRegex = false;
 
     std::vector<ScQueryEntry> maEntries;
