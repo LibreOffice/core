@@ -4534,8 +4534,8 @@ void SwXTextTableStyle::SetPhysical()
             const std::vector<sal_Int32> aTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
             for (size_t i=0; i<aTableTemplateMap.size(); ++i)
             {
-                SwBoxAutoFormat* pOldBoxFormat = &m_pTableAutoFormat->GetBoxFormat(aTableTemplateMap[i]);
-                rtl::Reference<SwXTextCellStyle> xCellStyle(pOldBoxFormat->GetXObject());
+                const SwBoxAutoFormat& rOldBoxFormat = m_pTableAutoFormat->GetBoxFormat(aTableTemplateMap[i]);
+                rtl::Reference<SwXTextCellStyle> xCellStyle(rOldBoxFormat.GetXObject());
                 if (!xCellStyle.is())
                     continue;
                 SwBoxAutoFormat& rNewBoxFormat = pTableAutoFormat->GetBoxFormat(aTableTemplateMap[i]);
