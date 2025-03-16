@@ -133,9 +133,9 @@ void Provider::dispatch(css::util::URL const&, css::uno::Sequence<css::beans::Pr
 
 cppu::ImplementationEntry const services[]
     = { { &Provider::static_create, &Provider::static_getImplementationName,
-          &Provider::static_getSupportedServiceNames, &cppu::createSingleComponentFactory, NULL,
+          &Provider::static_getSupportedServiceNames, &cppu::createSingleComponentFactory, nullptr,
           0 },
-        { NULL, NULL, NULL, NULL, NULL, 0 } };
+        { nullptr, nullptr, nullptr, nullptr, nullptr, 0 } };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void*
