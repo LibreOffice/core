@@ -127,7 +127,8 @@ Provider::queryDispatches(css::uno::Sequence<css::frame::DispatchDescriptor> con
 void Provider::dispatch(css::util::URL const&, css::uno::Sequence<css::beans::PropertyValue> const&)
 {
     // Crash LibreOffice
-    *((char*)NULL) = 0;
+    char volatile* p = nullptr;
+    *p = 0;
 }
 
 cppu::ImplementationEntry const services[]
