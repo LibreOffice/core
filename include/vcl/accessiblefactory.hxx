@@ -91,10 +91,6 @@ public:
 
     static css::uno::Reference<css::accessibility::XAccessibleContext>
     createAccessibleTextWindowContext(vcl::Window* pWindow, TextEngine& rEngine, TextView& rView);
-
-    static css::uno::Reference<css::accessibility::XAccessible>
-    createAccessibleIconView(SvTreeListBox& _rListBox,
-                             const css::uno::Reference<css::accessibility::XAccessible>& _xParent);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <accessibility/AccessibleIconView.hxx>
+
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/toolkit/viewdataentry.hxx>
@@ -234,11 +236,8 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
 css::uno::Reference<css::accessibility::XAccessible> IconView::CreateAccessible()
 {
     if (auto xAccParent = GetAccessibleParent())
-    {
-        // need to be done here to get the vclxwindow later on in the accessible
-        css::uno::Reference<css::awt::XVclWindowPeer> xHoldAlive(GetComponentInterface());
-        return AccessibleFactory::createAccessibleIconView(*this, xAccParent);
-    }
+        return new AccessibleIconView(*this, xAccParent);
+
     return {};
 }
 

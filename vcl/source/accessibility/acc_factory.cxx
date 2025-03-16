@@ -187,11 +187,4 @@ AccessibleFactory::createAccessibleTextWindowContext(vcl::Window* pWindow, TextE
     return new Document(pWindow, rEngine, rView );
 }
 
-Reference<XAccessible>
-AccessibleFactory::createAccessibleIconView(SvTreeListBox& _rListBox,
-                                            const Reference<XAccessible>& _xParent)
-{
-    return new AccessibleIconView( _rListBox, _xParent );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
