@@ -496,7 +496,7 @@ namespace accessibility
                     Point aPos = vcl::unohelper::ConvertToVCLPoint(rPoint);
                     if ( aRect.Contains( aPos ) )
                     {
-                        xChild = xAcc;
+                        xChild = std::move(xAcc);
                         break;
                     }
                 }
