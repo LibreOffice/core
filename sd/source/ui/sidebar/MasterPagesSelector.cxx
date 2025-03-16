@@ -60,7 +60,6 @@ MasterPagesSelector::MasterPagesSelector(weld::Widget* pParent, SdDrawDocument& 
     , mrDocument(rDocument)
     , mrBase(rBase)
     , mxSidebar(std::move(xSidebar))
-    , maIconViewId(rIconViewId)
 {
     mxPreviewIconView->connect_item_activated(LINK(this, MasterPagesSelector, MasterPageSelected));
     mxPreviewIconView->connect_mouse_press(LINK(this, MasterPagesSelector, MousePressHdl));

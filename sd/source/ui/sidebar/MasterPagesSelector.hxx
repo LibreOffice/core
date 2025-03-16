@@ -150,7 +150,6 @@ protected:
 
 private:
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
-    OUString maIconViewId;
 
     /** The offset between ValueSet index and MasterPageContainer::Token
         last seen.  This value is used heuristically to speed up the lookup
