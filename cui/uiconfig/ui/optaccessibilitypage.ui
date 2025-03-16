@@ -612,7 +612,7 @@
           <object class="GtkLabel" id="label11">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="optaccessibilitypage|label11">Online Accessibility Check Options</property>
+            <property name="label" translatable="yes" context="optaccessibilitypage|label11">Accessibility Check Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

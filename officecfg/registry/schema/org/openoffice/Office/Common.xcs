@@ -6219,10 +6219,10 @@
        <prop oor:name="OnlineAccessibilityCheck" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>
-            Enables online accessibility check, which checks for accessibility issues inside the document structure
+            Enables accessibility check, which checks for accessibility issues inside the document structure
             while the user edits the document.
           </desc>
-          <label>Enable/Disable online accessibility check.</label>
+          <label>Enable/Disable accessibility check.</label>
          </info>
          <value>false</value>
        </prop>
