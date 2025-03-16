@@ -8081,6 +8081,13 @@ static void preloadData()
     {
         auto xComp = xCompLoader->loadComponentFromURL(component.factory, u"_blank"_ustr, 0, szEmptyArgs);
 
+        if (component.factory == "private:factory/swriter")
+        {
+            // Query document styles to initialize writer's on-demand created table style globals
+            char *pThrowaway = getComponentStyles(xComp, LOK_DOCTYPE_TEXT, ".uno:StyleApply");
+            free(pThrowaway);
+        }
+
         uno::Reference<frame::XModel> xModel(xComp, uno::UNO_QUERY);
         css::uno::Reference<css::frame::XController> xController(xModel ? xModel->getCurrentController() : nullptr);
         css::uno::Reference<css::frame::XFrame> xFrame(xController ? xController->getFrame() : nullptr);
