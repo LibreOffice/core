@@ -63,6 +63,7 @@
 
 #include <sal/log.hxx>
 #include <utility>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/lok.hxx>
 #include <o3tl/any.hxx>
@@ -7986,11 +7987,17 @@ static void preloadData()
 #pragma GCC diagnostic pop
 #endif
 
-    static constexpr OUString preloadComponents[] = {
-        u"private:factory/swriter"_ustr,
-        u"private:factory/scalc"_ustr,
-        u"private:factory/simpress"_ustr,
-        u"private:factory/sdraw"_ustr
+    struct PreloadComponent
+    {
+        OUString factory;
+        OUString sampleImage;
+    };
+
+    static constexpr PreloadComponent preloadComponents[] = {
+        { u"private:factory/swriter"_ustr, u".uno:StyleApply"_ustr },
+        { u"private:factory/scalc"_ustr, u".uno:NumberFormatCurrency"_ustr },
+        { u"private:factory/simpress"_ustr, u".uno:MoveSlideLast"_ustr },
+        { u"private:factory/sdraw"_ustr, u".uno:MovePageLast"_ustr }
     };
     // getting the remote LibreOffice service manager
     uno::Reference<frame::XDesktop2> xCompLoader(frame::Desktop::create(xContext));
@@ -7999,7 +8006,21 @@ static void preloadData()
     uno::Sequence<css::beans::PropertyValue> szEmptyArgs(0);
     for (const auto& component : preloadComponents)
     {
-        auto xComp = xCompLoader->loadComponentFromURL(component, u"_blank"_ustr, 0, szEmptyArgs);
+        auto xComp = xCompLoader->loadComponentFromURL(component.factory, u"_blank"_ustr, 0, szEmptyArgs);
+
+        uno::Reference<frame::XModel> xModel(xComp, uno::UNO_QUERY);
+        css::uno::Reference<css::frame::XController> xController(xModel ? xModel->getCurrentController() : nullptr);
+        css::uno::Reference<css::frame::XFrame> xFrame(xController ? xController->getFrame() : nullptr);
+        SAL_WARN_IF(!xFrame, "lok", "Unable to get ImageList for:" << component.factory);
+        if (xFrame)
+        {
+            // Query for some image specific to this module to load all the modules command images.
+            vcl::CommandInfoProvider::GetXGraphicForCommand(component.sampleImage, xFrame);
+            // Query for some image that is in the global command list of commands to populate that
+            // separate cache
+            vcl::CommandInfoProvider::GetXGraphicForCommand(u".uno:CharFontName"_ustr, xFrame);
+        }
+
         xComp->dispose();
     }
 
