@@ -241,6 +241,10 @@ ScOrcusAutoFilter::ScOrcusAutoFilter(ScDocumentImport& rDoc, const ScOrcusGlobal
     : mrDoc(rDoc)
     , maNode(rDoc.getDoc(), rGS)
     , mnTab(nTab)
+    , mnCol1(-1)
+    , mnCol2(-1)
+    , mnRow1(-1)
+    , mnRow2(-1)
 {
 }
 
