@@ -1146,7 +1146,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_toolkit/AccessibleCheckBox \
     qadevOOo/tests/java/mod/_toolkit/AccessibleComboBox \
     qadevOOo/tests/java/mod/_toolkit/AccessibleDropDownComboBox \
-    qadevOOo/tests/java/mod/_toolkit/AccessibleDropDownListBox \
     qadevOOo/tests/java/mod/_toolkit/AccessibleEdit \
     qadevOOo/tests/java/mod/_toolkit/AccessibleFixedText \
     qadevOOo/tests/java/mod/_toolkit/AccessibleList \

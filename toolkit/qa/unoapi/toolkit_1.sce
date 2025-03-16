@@ -20,7 +20,6 @@
 #i88332 -o toolkit.AccessibleCheckBox
 #i86008 -o toolkit.AccessibleComboBox
 -o toolkit.AccessibleDropDownComboBox
--o toolkit.AccessibleDropDownListBox
 #i86110 -o toolkit.AccessibleEdit
 -o toolkit.AccessibleFixedText
 #i86110 -o toolkit.AccessibleList

@@ -85,6 +85,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
 
 ifneq ($(ENABLE_ATSPI_TESTS),)
 $(eval $(call gb_Module_add_check_targets,vcl,\
+    CppunitTest_vcl_a11y \
     CppunitTest_vcl_gtk3_a11y \
 ))
 endif
