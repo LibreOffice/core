@@ -418,13 +418,13 @@ uno::Sequence< OUString> SAL_CALL
 OUString
     ScAccessibleContextBase::createAccessibleDescription()
 {
-    OSL_FAIL("should be implemented in the abrevated class");
+    OSL_FAIL("should be implemented in the abbreviated class");
     return OUString();
 }
 
 OUString ScAccessibleContextBase::createAccessibleName()
 {
-    OSL_FAIL("should be implemented in the abrevated class");
+    OSL_FAIL("should be implemented in the abbreviated class");
     return OUString();
 }
 

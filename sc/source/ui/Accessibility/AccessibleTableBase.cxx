@@ -355,13 +355,13 @@ OUString ScAccessibleTableBase::createAccessibleName()
 uno::Reference<XAccessibleRelationSet> SAL_CALL
     ScAccessibleTableBase::getAccessibleRelationSet()
 {
-    OSL_FAIL("should be implemented in the abrevated class");
+    OSL_FAIL("should be implemented in the abbreviated class");
     return uno::Reference<XAccessibleRelationSet>();
 }
 
 sal_Int64 SAL_CALL ScAccessibleTableBase::getAccessibleStateSet()
 {
-    OSL_FAIL("should be implemented in the abrevated class");
+    OSL_FAIL("should be implemented in the abbreviated class");
     return 0;
 }
 
