@@ -42,6 +42,7 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
+#include <sal/types.h>
 #include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>
 
@@ -384,7 +385,7 @@ public:
     virtual void            PutData( const ScQueryParam& rParam ) override;
 };
 
-class ScDatabaseRangeObj final : public cppu::WeakImplHelper<
+class SAL_DLLPUBLIC_RTTI ScDatabaseRangeObj final : public cppu::WeakImplHelper<
                                 css::sheet::XDatabaseRange,
                                 css::util::XRefreshable,
                                 css::container::XNamed,
