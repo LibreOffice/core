@@ -188,13 +188,6 @@ AccessibleFactory::createAccessibleTextWindowContext(vcl::Window* pWindow, TextE
 }
 
 Reference<XAccessible>
-AccessibleFactory::createAccessibleTreeListBox(SvTreeListBox& _rListBox,
-                                               const Reference<XAccessible>& _xParent)
-{
-    return new AccessibleListBox( _rListBox, _xParent );
-}
-
-Reference<XAccessible>
 AccessibleFactory::createAccessibleIconView(SvTreeListBox& _rListBox,
                                             const Reference<XAccessible>& _xParent)
 {
