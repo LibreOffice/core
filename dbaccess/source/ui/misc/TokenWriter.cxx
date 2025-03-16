@@ -74,7 +74,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::util;
 
-#define CELL_X                      1437
+constexpr sal_Int32 CELL_X = 1437;
 
 ODatabaseImportExport::ODatabaseImportExport(const svx::ODataAccessDescriptor& _aDataDescriptor,
                                              const Reference< XComponentContext >& _rM,
