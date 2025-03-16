@@ -6440,13 +6440,11 @@ static char* getFontSubset (std::string_view aFontName)
     return pJson;
 }
 
-static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
+static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>& rComponent, int docType, const char* pCommand)
 {
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-
     boost::property_tree::ptree aTree;
     aTree.put("commandName", pCommand);
-    uno::Reference<css::style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocument->mxComponent, uno::UNO_QUERY);
+    uno::Reference<css::style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(rComponent, uno::UNO_QUERY);
     const uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
     if (!xStyleFamilies.is())
     {
@@ -6480,7 +6478,7 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
         // should be shown in the normal dropdown, which we should add to the start of the list
         // to simplify their selection.
         if (sStyleFam == "ParagraphStyles"
-            && doc_getDocumentType(pThis) == LOK_DOCTYPE_TEXT)
+            && docType == LOK_DOCTYPE_TEXT)
         {
             for (const OUString& rStyle: aWriterStyles)
             {
@@ -6498,7 +6496,7 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
             // Filter out the default styles - they are already at the top
             // of the list
             if (aDefaultStyleNames.find(rStyle) == aDefaultStyleNames.end() ||
-                (sStyleFam != "ParagraphStyles" || doc_getDocumentType(pThis) != LOK_DOCTYPE_TEXT) )
+                (sStyleFam != "ParagraphStyles" || docType != LOK_DOCTYPE_TEXT) )
             {
                 boost::property_tree::ptree aChild;
                 aChild.put("", rStyle.toUtf8());
@@ -6565,6 +6563,12 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
     strcpy(pJson, aStream.str().c_str());
     pJson[aStream.str().size()] = '\0';
     return pJson;
+}
+
+static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
+{
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    return getComponentStyles(pDocument->mxComponent, doc_getDocumentType(pThis), pCommand);
 }
 
 namespace {
