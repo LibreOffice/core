@@ -23,7 +23,6 @@
 #include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>

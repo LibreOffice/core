@@ -33,7 +33,6 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
