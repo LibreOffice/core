@@ -47,6 +47,8 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
+constexpr SvLBoxTabFlags MYTABMASK = SvLBoxTabFlags::ADJUST_FLAGS | SvLBoxTabFlags::FORCE;
+
 namespace {
     OString lcl_extractPngString(const BitmapEx& rImage)
     {
@@ -287,8 +289,10 @@ void SvTabListBox::SetTabs(const std::vector<tools::Long>& rTabPositions, MapUni
         aSize = LogicToLogic( aSize, &aMMSource, &aMMDest );
         tools::Long nNewTab = aSize.Width();
         mvTabList[nIdx].SetPos( nNewTab );
+        mvTabList[nIdx].nFlags &= MYTABMASK;
     }
-
+    // by default, 1st one is editable, others not; override with set_column_editables
+    mvTabList[0].nFlags |= SvLBoxTabFlags::EDITABLE;
     SvTreeListBox::nTreeFlags |= SvTreeFlags::RECALCTABS;
     if( IsUpdateMode() )
         Invalidate();
