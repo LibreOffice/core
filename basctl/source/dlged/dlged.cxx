@@ -48,6 +48,7 @@
 #include <xmlscript/xml_helper.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <osl/diagnose.h>
+#include <algorithm>
 
 namespace basctl
 {
@@ -637,7 +638,7 @@ static void implCopyStreamToByteSequence( const Reference< XInputStream >& xStre
 
         sal_Int32 nPos = bytes.getLength();
         bytes.realloc( nPos + nRead );
-        memcpy( bytes.getArray() + nPos, readBytes.getConstArray(), static_cast<sal_uInt32>(nRead) );
+        std::copy(readBytes.getConstArray(), readBytes.getConstArray() + static_cast<sal_uInt32>(nRead), bytes.getArray() + nPos);
     }
 }
 
@@ -761,8 +762,8 @@ void DlgEditor::Copy()
             pCombinedData[i] = sal_Int8( n & 0xff );
             n >>= 8;
         }
-        memcpy( pCombinedData + 4, DialogModelBytes.getConstArray(), nDialogDataLen );
-        memcpy( pCombinedData + nResOffset, aResData.getConstArray(), nResDataLen );
+        std::copy(DialogModelBytes.getConstArray(), DialogModelBytes.getConstArray() + nDialogDataLen, pCombinedData + 4);
+        std::copy(aResData.getConstArray(), aResData.getConstArray() + nResDataLen, pCombinedData + nResOffset);
 
         Sequence< Any > aSeqData
         {
@@ -859,10 +860,10 @@ void DlgEditor::Paste()
             sal_Int32 nDialogDataLen = nTotalLen - nResDataLen - 4;
 
             DialogModelBytes.realloc(nDialogDataLen);
-            memcpy(DialogModelBytes.getArray(), aCombinedData.getConstArray() + 4, nDialogDataLen);
+            std::copy(aCombinedData.getConstArray() + 4, aCombinedData.getConstArray() + 4 + nDialogDataLen, DialogModelBytes.getArray());
 
             aResData.realloc(nResDataLen);
-            memcpy(aResData.getArray(), aCombinedData.getConstArray() + nResOffset, nResDataLen);
+            std::copy(aCombinedData.getConstArray() + nResOffset, aCombinedData.getConstArray() + nResOffset + nResDataLen, aResData.getArray());
         }
     }
     else

@@ -30,6 +30,7 @@
 #include <codegen.hxx>
 #include <memory>
 #include <string_view>
+#include <algorithm>
 
 SbiImage::SbiImage()
     : bError(false)
@@ -576,7 +577,7 @@ void SbiImage::AddString( const OUString& r )
     if( !bError )
     {
         mvStringOffsets[ nStringIdx++ ] = nStringOff;
-        memcpy( pStrings.get() + nStringOff, r.getStr(), len * sizeof( sal_Unicode ) );
+        std::copy(r.getStr(), r.getStr() + len, pStrings.get() + nStringOff);
         nStringOff = nStringOff + len;
         // Last String? The update the size of the buffer
         if( nStringIdx >= mvStringOffsets.size() )
