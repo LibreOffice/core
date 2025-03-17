@@ -122,12 +122,24 @@ void SwAnchoredObjectPosition::GetInfoAboutObj()
     // determine, if anchored object has not to be captured on the page.
     // the following conditions must be hold to *not* capture it:
     // - corresponding document compatibility flag is set
-    // - it's a drawing object or it's a non-textbox fly frame with wrap-though
+    // - shape is considered:
+    //   - draw case: wrap through or is not part of a textbox
+    //   - fly case: wrap through and is not part of a textbox
     // - it doesn't follow the text flow
     {
-        bool bTextBox = SwTextBoxHelper::isTextBox(mpFrameFormat, RES_FLYFRMFMT);
         bool bWrapThrough = mpFrameFormat->GetSurround().GetSurround() == css::text::WrapTextMode_THROUGH;
-        mbDoNotCaptureAnchoredObj = ((!mbIsObjFly || !bTextBox) && bWrapThrough) && !mbFollowTextFlow &&
+        bool bConsidered{};
+        if (mbIsObjFly)
+        {
+            bool bTextBox = SwTextBoxHelper::isTextBox(mpFrameFormat, RES_FLYFRMFMT);
+            bConsidered = bWrapThrough && !bTextBox;
+        }
+        else
+        {
+            bool bTextBox = SwTextBoxHelper::isTextBox(mpFrameFormat, RES_DRAWFRMFMT);
+            bConsidered = bWrapThrough || !bTextBox;
+        }
+        mbDoNotCaptureAnchoredObj = bConsidered && !mbFollowTextFlow &&
                                     mpFrameFormat->getIDocumentSettingAccess().get(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE);
     }
 }
