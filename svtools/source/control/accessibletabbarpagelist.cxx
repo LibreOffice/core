@@ -483,7 +483,7 @@ namespace accessibility
     {
         OExternalLockGuard aGuard( this );
 
-        rtl::Reference< AccessibleTabBarPage > xChild;
+        Point aPos = vcl::unohelper::ConvertToVCLPoint(rPoint);
         for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
         {
             rtl::Reference< AccessibleTabBarPage > xAcc = getAccessibleChildImpl( i );
@@ -493,17 +493,13 @@ namespace accessibility
                 if ( xComp.is() )
                 {
                     tools::Rectangle aRect = vcl::unohelper::ConvertToVCLRect(xComp->getBounds());
-                    Point aPos = vcl::unohelper::ConvertToVCLPoint(rPoint);
                     if ( aRect.Contains( aPos ) )
-                    {
-                        xChild = std::move(xAcc);
-                        break;
-                    }
+                        return xAcc;
                 }
             }
         }
 
-        return xChild;
+        return nullptr;
     }
 
 
