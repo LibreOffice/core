@@ -196,7 +196,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 rNewSet.Put( aItemSet, false );
 
                 rDoc.ApplySelectionPattern( aNewAttrs, rDoc.GetPreviewSelection() );
-                pTabViewShell->UpdateSelectionArea( aFuncMark, &aAttr );
+                pTabViewShell->UpdateSelectionArea(aFuncMark, &aAttr, /*adjustHeight*/ false);
             }
         }
         else
@@ -218,7 +218,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
                 rNewSet.Put( aItemSet, false );
                 rDoc.ApplySelectionPattern( aNewAttrs, aPreviewMark );
-                pTabViewShell->UpdateSelectionArea( aPreviewMark, &aAttr );
+                pTabViewShell->UpdateSelectionArea(aPreviewMark, &aAttr, /*adjustHeight*/ false);
             }
         }
     }
@@ -945,7 +945,8 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_ATTR_CHAR_ENDPREVIEW_FONT:
             {
                 rDoc.SetPreviewFont(nullptr);
-                pTabViewShell->UpdateSelectionArea( rDoc.GetPreviewSelection() );
+                pTabViewShell->UpdateSelectionArea(rDoc.GetPreviewSelection(), nullptr,
+                                                   /*adjustHeight*/ false);
                 break;
             }
             case SID_ATTR_CHAR_COLOR:
@@ -1026,7 +1027,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     aFuncMark.SetMarkArea( aRange );
                 }
                 rDoc.SetPreviewSelection( aFuncMark );
-                pTabViewShell->UpdateSelectionArea( aFuncMark );
+                pTabViewShell->UpdateSelectionArea(aFuncMark, nullptr, /*adjustHeight*/ false);
                 break;
             }
             case SID_ATTR_CHAR_OVERLINE:
