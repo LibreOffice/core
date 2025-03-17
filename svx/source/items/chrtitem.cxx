@@ -100,13 +100,13 @@ bool SvxChartTextOrderItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMe
 
 SvxDoubleItem::SvxDoubleItem(double fValue, TypedWhichId<SvxDoubleItem> nId) :
     SfxPoolItem(nId),
-    fVal(fValue)
+    m_fVal(fValue)
 {
 }
 
 SvxDoubleItem::SvxDoubleItem(const SvxDoubleItem& rItem) :
     SfxPoolItem(rItem),
-    fVal(rItem.fVal)
+    m_fVal(rItem.m_fVal)
 {
 }
 
@@ -115,7 +115,7 @@ bool SvxDoubleItem::GetPresentation
               MapUnit /*ePresentationMetric*/, OUString& rText,
               const IntlWrapper& rIntlWrapper) const
 {
-    rText = ::rtl::math::doubleToUString( fVal, rtl_math_StringFormat_E, 4,
+    rText = ::rtl::math::doubleToUString( m_fVal, rtl_math_StringFormat_E, 4,
         rIntlWrapper.getLocaleData()->getNumDecimalSep()[0], true );
     return true;
 }
@@ -123,7 +123,7 @@ bool SvxDoubleItem::GetPresentation
 bool SvxDoubleItem::operator == (const SfxPoolItem& rItem) const
 {
     assert(SfxPoolItem::operator==(rItem));
-    return static_cast<const SvxDoubleItem&>(rItem).fVal == fVal;
+    return static_cast<const SvxDoubleItem&>(rItem).m_fVal == m_fVal;
 }
 
 SvxDoubleItem* SvxDoubleItem::Clone(SfxItemPool* /*pPool*/) const
@@ -133,14 +133,14 @@ SvxDoubleItem* SvxDoubleItem::Clone(SfxItemPool* /*pPool*/) const
 
 bool SvxDoubleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
-    rVal <<= fVal;
+    rVal <<= m_fVal;
     return true;
 }
 
 bool SvxDoubleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
-    return rVal >>= fVal;
+    return rVal >>= m_fVal;
 }
 
 SvxChartKindErrorItem::SvxChartKindErrorItem(SvxChartKindError eOrient,

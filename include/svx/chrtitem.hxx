@@ -128,7 +128,7 @@ public:
 
 class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxDoubleItem final : public SfxPoolItem
 {
-    double fVal;
+    double m_fVal;
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -147,7 +147,7 @@ public:
     virtual bool             operator == (const SfxPoolItem&) const override;
     virtual SvxDoubleItem* Clone(SfxItemPool *pPool = nullptr) const override;
 
-    double GetValue() const { return fVal; }
+    double GetValue() const { return m_fVal; }
 };
 
 #endif // INCLUDED_SVX_CHRTITEM_HXX
