@@ -3247,7 +3247,8 @@ void ScViewFunc::InsertNameList()
         pDocSh->UpdateOle(GetViewData());
 }
 
-void ScViewFunc::UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAttr  )
+void ScViewFunc::UpdateSelectionArea(const ScMarkData& rSel, ScPatternAttr* pAttr,
+                                     bool adjustHeight)
 {
     ScDocShell* pDocShell = GetViewData().GetDocShell();
     ScRange aMarkRange;
@@ -3281,8 +3282,11 @@ void ScViewFunc::UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAt
     pDocShell->PostPaint( nStartCol, nStartRow, nStartTab,
         nEndCol,   nEndRow,   nEndTab,
         PaintPartFlags::Grid, nExtFlags | SC_PF_TESTMERGE );
-    ScTabViewShell* pTabViewShell = GetViewData().GetViewShell();
-    pTabViewShell->AdjustBlockHeight(false, const_cast<ScMarkData*>(&rSel));
+    if (adjustHeight)
+    {
+        ScTabViewShell* pTabViewShell = GetViewData().GetViewShell();
+        pTabViewShell->AdjustBlockHeight(false, const_cast<ScMarkData*>(&rSel));
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
