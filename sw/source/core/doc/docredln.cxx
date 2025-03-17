@@ -2387,6 +2387,7 @@ void SwRangeRedline::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwRangeRedline"));
 
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("id"), "%s", BAD_CAST(OString::number(m_nId).getStr()));
 
     const SwRedlineData* pRedlineData = m_pRedlineData;
     while (pRedlineData)
