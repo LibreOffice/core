@@ -290,6 +290,15 @@ constexpr auto SchartDialogList
         { u"modules/schart/ui/wizelementspage.ui" }
     });
 
+constexpr auto SmathDialogList
+    = frozen::make_unordered_set<std::u16string_view>({
+        // smath
+        { u"modules/smath/ui/alignmentdialog.ui" },
+        { u"modules/smath/ui/fontsizedialog.ui" },
+        { u"modules/smath/ui/fonttypedialog.ui" },
+        { u"modules/smath/ui/spacingdialog.ui" },
+    });
+
 constexpr auto OtherDialogList
     = frozen::make_unordered_set<std::u16string_view>({
         // formula
@@ -524,6 +533,9 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         return true;
 
     if (isInMap(SchartDialogList, rUIFile))
+        return true;
+
+    if (isInMap(SmathDialogList, rUIFile))
         return true;
 
     if (isInMap(OtherDialogList, rUIFile))
