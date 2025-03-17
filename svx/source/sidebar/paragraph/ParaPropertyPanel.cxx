@@ -262,6 +262,7 @@ void ParaPropertyPanel::fill_hyphenzone(SvxHyphenZoneItem & rHyphen)
                     : mxTBxHyphenation->get_item_active("HyphenateLastFullLine")
                         ? 3
                         : 4;
+    rHyphen.SetKeepLine(mbKeepLine);
 }
 
 // for hyphenation
@@ -524,6 +525,11 @@ void ParaPropertyPanel::StateChangedHyphenationImpl( SfxItemState eState, const 
         mxTBxHyphenation->set_item_active("HyphenateColumn", !pOldItem->IsKeep() || pOldItem->GetKeepType() < 3);
         mxTBxHyphenation->set_item_active("HyphenatePage", !pOldItem->IsKeep() || pOldItem->GetKeepType() < 2);
         mxTBxHyphenation->set_item_active("HyphenateSpread", !pOldItem->IsKeep() || pOldItem->GetKeepType() < 1);
+        // When hyphenation is disabled, set HyphenationKeepLine to the default true (i.e. Move Line = false),
+        // so enabling hyphenation on the sidebar will result the preferred "Move Line = false" state.
+        // When hyphenation is enabled, store and use the actual value of HyphenationKeepLine at
+        // changing HyphenationKeepType using the sidebar buttons.
+        mbKeepLine = !bHyph || pOldItem->IsKeepLine();
         set_hyphenation_other_visible( bHyph );
     }
 }
@@ -601,6 +607,7 @@ ParaPropertyPanel::ParaPropertyPanel(weld::Widget* pParent,
       mxCompound(m_xBuilder->weld_metric_spin_button(u"compound"_ustr, FieldUnit::CHAR)),
       mxWordLength(m_xBuilder->weld_metric_spin_button(u"wordlength"_ustr, FieldUnit::CHAR)),
       mxZone(m_xBuilder->weld_metric_spin_button(u"zone"_ustr, FieldUnit::CM)),
+      mbKeepLine(false),
       mbUpdatingHyphenateButtons(false),
       maTxtLeft (0),
       maUpper (0),

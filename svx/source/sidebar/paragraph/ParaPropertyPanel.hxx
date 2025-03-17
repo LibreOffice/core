@@ -115,6 +115,7 @@ private:
     std::optional<SvxRelativeField> mxCompound;
     std::optional<SvxRelativeField> mxWordLength;
     std::optional<SvxRelativeField> mxZone;
+    bool mbKeepLine;
     bool mbUpdatingHyphenateButtons;
 
     // Data Member
