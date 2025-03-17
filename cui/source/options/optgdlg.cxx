@@ -374,11 +374,11 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
 #endif
 
 #if defined(_WIN32)
-    const SfxPoolItem* pItem = nullptr;
-    SfxItemState eState = rSet->GetItemState( SID_ATTR_QUICKLAUNCHER, false, &pItem );
-    if ( SfxItemState::SET == eState )
-        m_xQuickLaunchCB->set_active( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
-    else if ( SfxItemState::DISABLED == eState )
+    if (const SfxBoolItem* pItem = rSet->GetItemIfSet( SID_ATTR_QUICKLAUNCHER, false ))
+    {
+        m_xQuickLaunchCB->set_active( pItem->GetValue() );
+    }
+    else
     {
         // quickstart not installed
         m_xQuickStarterFrame->hide();
