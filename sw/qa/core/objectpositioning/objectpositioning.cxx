@@ -512,6 +512,34 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertShapeOnAsCharImg_tdf16890)
     // - Expression: pShape->GetAnchor().GetAnchorNode()
     CPPUNIT_ASSERT(pShape->GetAnchor().GetAnchorNode());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testDoNotCaptureDrawObjsDrawObjNoCapture)
+{
+    // Given a document with a draw object, which is positined outside the page frame:
+    createSwDoc("do-not-capture-draw-objs-draw-obj-no-capture.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure the draw object is not captured on page 1:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage);
+    CPPUNIT_ASSERT(pPage->GetSortedObjs());
+    const SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPageObjs.size());
+    SwAnchoredObject* pDrawObj = rPageObjs[0];
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(RES_DRAWFRMFMT),
+                         pDrawObj->GetFrameFormat()->Which());
+    SwTwips nDrawObjLeft = pDrawObj->GetObjRect().Left();
+    SwTwips nPageLeft = pPage->getFrameArea().Left();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 284
+    // - Actual  : 284
+    // i.e. the draw object was captured inside the page frame, but it was not in Word.
+    CPPUNIT_ASSERT_GREATER(nDrawObjLeft, nPageLeft);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
