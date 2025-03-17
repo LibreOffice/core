@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_features.h>
+
 #include "htmlmodeltestbase.hxx"
 
 #include <memory>
@@ -1171,6 +1173,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_ExportFormulasAsPDF)
     };
     saveWithParams(aStoreProperties);
 
+#if HAVE_FEATURE_PDFIMPORT
     // Make sure that the formula is exported as PDF:
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
     assertXPath(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p[2]/reqif-xhtml:object",
@@ -1188,6 +1191,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_ExportFormulasAsPDF)
 
     CPPUNIT_ASSERT_EQUAL(u"pdf_Portable_Document_Format"_ustr,
                          xTypeDetection->queryTypeByDescriptor(descr, true));
+#endif
 }
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_NoBrClearForImageWrap)

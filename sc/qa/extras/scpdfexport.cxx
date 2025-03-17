@@ -229,6 +229,12 @@ void ScPDFExportTest::testPopupRectangleSize_Tdf162955()
     ScRange aRange(0, 0, 0, 0, 0, 0);
     exportToPDF(xModel, aRange);
 
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     // Parse the export result with pdfium.
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
