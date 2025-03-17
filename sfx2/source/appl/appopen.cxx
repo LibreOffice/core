@@ -44,7 +44,9 @@
 #include <rtl/ustring.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/synchronousdispatch.hxx>
@@ -634,7 +636,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if ( pRemoteDialogItem && pRemoteDialogItem->GetValue())
             nDialog = SFX2_IMPL_DIALOG_REMOTE;
 
-        sal_Int16 nDialogType = ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION;
+        sal_Int16 nDialogType = ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION_FILTEROPTIONS;
         FileDialogFlags eDialogFlags = FileDialogFlags::MultiSelection;
         const SfxBoolItem* pSignPDFItem = rReq.GetArg<SfxBoolItem>(SID_SIGNPDF);
         if (pSignPDFItem && pSignPDFItem->GetValue())
@@ -655,15 +657,15 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if ( pDenyListItem )
             pDenyListItem->GetStringList( aDenyList );
 
+        bool bShowFilterDialog = true;
         weld::Window* pTopWindow = GetTopWindow();
         ErrCode nErr = sfx2::FileOpenDialog_Impl(pTopWindow,
                 nDialogType,
                 eDialogFlags, aURLList,
-                aFilter, pSet, &aPath, nDialog, sStandardDir, aDenyList);
+                aFilter, pSet, &aPath, nDialog, sStandardDir, aDenyList, bShowFilterDialog);
 
         if ( nErr == ERRCODE_ABORT )
         {
-            aURLList.clear();
             return;
         }
 
@@ -710,6 +712,11 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 rReq.AppendItem(SfxStringItem(SID_DOC_SERVICE, aDocService));
             }
 
+            // The actual use of bShowFilterDialog will be in the recursive call to OpenDocExec_Impl
+            std::optional<css::uno::ContextLayer> oLayer;
+            if (bShowFilterDialog)
+                oLayer.emplace(comphelper::NewFlagContext(u"ShowFilterDialog"_ustr));
+
             for (auto const& url : aURLList)
             {
                 rReq.RemoveItem( SID_FILE_NAME );
@@ -740,10 +747,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 }
             }
 
-            aURLList.clear();
             return;
         }
-        aURLList.clear();
     }
 
     bool bHyperlinkUsed = false;
@@ -1077,6 +1082,12 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     {
         auto nIndex = static_cast<sal_Int32>(std::distance(std::cbegin(aArgs), pArg));
         comphelper::removeElementAt(aArgs, nIndex);
+    }
+    if (comphelper::IsContextFlagActive(u"ShowFilterDialog"_ustr))
+    {
+        const auto i = aArgs.getLength();
+        aArgs.realloc(i + 1);
+        aArgs.getArray()[i] = comphelper::makePropertyValue(u"ShowFilterDialog"_ustr, true);
     }
 
     // TODO/LATER: either remove LinkItem or create an asynchronous process for it

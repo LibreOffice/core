@@ -45,6 +45,7 @@ private:
     css::uno::Reference< css::io::XInputStream > xInputStream;
     css::uno::Reference< css::awt::XWindow > xDialogParent;
     bool         bExport;
+    bool mbForceShow = false;
 
 public:
                             ScFilterOptionsObj();

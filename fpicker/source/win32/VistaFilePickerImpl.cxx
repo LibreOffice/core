@@ -543,6 +543,7 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
             break;
 
         case css::ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION :
+        case css::ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION_FILTEROPTIONS :
         case css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS :
             aGUID = CLIENTID_FILEDIALOG_OPTIONS;
             break;

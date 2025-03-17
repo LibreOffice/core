@@ -299,7 +299,8 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              const OUString* pPath,
                              sal_Int16 nDialog,
                              const OUString& rStandardDir,
-                             const css::uno::Sequence< OUString >& rDenyList = css::uno::Sequence< OUString >());
+                             const css::uno::Sequence< OUString >& rDenyList,
+                             bool& rShowFilterDialog );
 
 css::uno::Reference<css::ui::dialogs::XFolderPicker2> SFX2_DLLPUBLIC createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Window* pPreferredParent);
 

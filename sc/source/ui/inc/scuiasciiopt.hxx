@@ -84,6 +84,7 @@ class ScImportAsciiDlg : public weld::GenericDialogController
     std::unique_ptr<weld::Label> mxAltTitle;
 
     std::unique_ptr<ScCsvTableBox> mxTableBox;
+    std::unique_ptr<weld::CheckButton> mxCkbAlwaysShowOnImport;
 
 public:
                                 ScImportAsciiDlg(

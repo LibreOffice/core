@@ -43,6 +43,7 @@
 #include <unicode/ucsdet.h>
 #include <sfx2/objsh.hxx>
 #include <svx/txenctab.hxx>
+#include <unotools/filteroptions_settings.hxx>
 #include <unotools/viewoptions.hxx>
 
 //! TODO make dynamic
@@ -373,6 +374,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     , mxLbType(m_xBuilder->weld_combo_box(u"columntype"_ustr))
     , mxAltTitle(m_xBuilder->weld_label(u"textalttitle"_ustr))
     , mxTableBox(new ScCsvTableBox(*m_xBuilder))
+    , mxCkbAlwaysShowOnImport(m_xBuilder->weld_check_button(u"alwaysshowonimport"_ustr))
 {
     SvtViewOptions aDlgOpt(EViewType::Dialog, "TextImportCsvDialog");
     if (aDlgOpt.Exists())
@@ -390,6 +392,9 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
                 aName += OUString::Concat(" - [") + aDatName + "]";
                 m_xDialog->set_title(aName);
             }
+            mxCkbAlwaysShowOnImport->show();
+            mxCkbAlwaysShowOnImport->set_active(
+                utl::isShowFilterOptionsDialog(SC_TEXT_CSV_FILTER_NAME));
             break;
         default:
             break;
@@ -689,6 +694,18 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
 
 void ScImportAsciiDlg::SaveParameters()
 {
+    if (mxCkbAlwaysShowOnImport->get_visible())
+    {
+        bool value(mxCkbAlwaysShowOnImport->get_active());
+        if (value != utl::isShowFilterOptionsDialog(SC_TEXT_CSV_FILTER_NAME))
+        {
+            auto pChange(comphelper::ConfigurationChanges::create());
+            auto xFilterDialogSettings(
+                utl::getSettingsForFilterOptions(SC_TEXT_CSV_FILTER_NAME, pChange));
+            xFilterDialogSettings->setPropertyValue(u"show"_ustr, Any(value));
+            pChange->commit();
+        }
+    }
     lcl_SaveSeparators( GetSeparators(), mxCbTextSep->get_active_text(), mxCkbAsOnce->get_active(),
                      mxCkbQuotedAsText->get_active(), mxCkbDetectNumber->get_active(), mxCkbDetectScientificNumber->get_active(),
                      mxRbFixed->get_active() ? FIXED : (mxRbDetectSep->get_active() ? DETECT_SEPARATOR : SEPARATOR),

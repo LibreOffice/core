@@ -1498,6 +1498,18 @@
         </prop>
       </group>
     </group>
+    <group oor:name="FilterDialogSettings">
+      <info>
+        <desc>Configuration related to display of a filter's settings dialog</desc>
+      </info>
+      <prop oor:name="show" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>A filter's settings dialog may be set to show or not.</desc>
+          <label>Show settings dialog for this filter</label>
+        </info>
+        <value>true</value>
+      </prop>
+    </group>
   </templates>
   <component>
     <group oor:name="FilterClassification">
@@ -1589,6 +1601,12 @@
           <value>30000</value>
         </prop>
       </group>
+      <set oor:name="ShowFilterDialog" oor:node-type="FilterDialogSettings">
+        <info>
+          <desc>Contains the flags controlling if a filter fialog should be shown for a given filter. The default is true.</desc>
+          <label>Should the settings dialog be shown for this filter</label>
+        </info>
+      </set>
     </group>
   </component>
 </oor:component-schema>

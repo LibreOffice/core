@@ -1807,6 +1807,13 @@ void SalGtkFilePicker::impl_initialize(GtkWidget* pParentWidget, sal_Int16 templ
             mbToggleVisibility[READONLY] = true;
             mbListVisibility[VERSION] = true;
             break;
+        case FILEOPEN_READONLY_VERSION_FILTEROPTIONS:
+            eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
+            first_button_text = sOpen.getStr();
+            mbToggleVisibility[FILTEROPTIONS] = true;
+            mbToggleVisibility[READONLY] = true;
+            mbListVisibility[VERSION] = true;
+            break;
         case FILEOPEN_LINK_PREVIEW:
             eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
             first_button_text = sOpen.getStr();

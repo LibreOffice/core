@@ -221,6 +221,11 @@ void ControlHelper::initialize( sal_Int16 nTemplateId )
             m_bToggleVisibility[READONLY] = true;
             m_bListVisibility[VERSION] = true;
             break;
+        case FILEOPEN_READONLY_VERSION_FILTEROPTIONS:
+            m_bToggleVisibility[FILTEROPTIONS] = true;
+            m_bToggleVisibility[READONLY] = true;
+            m_bListVisibility[VERSION] = true;
+            break;
         case FILEOPEN_LINK_PREVIEW:
             m_bToggleVisibility[LINK] = true;
             m_bToggleVisibility[PREVIEW] = true;

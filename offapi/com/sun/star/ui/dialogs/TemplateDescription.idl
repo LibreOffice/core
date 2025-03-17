@@ -142,6 +142,17 @@ published constants TemplateDescription
         @since LibreOffice 6.1
     */
     const short FILEOPEN_LINK_PREVIEW_IMAGE_ANCHOR             = 13;
+
+    /** A FileOpen dialog with additional controls.
+        <ul>
+            <li>A checkbox "Read only"</li>
+            <li>A checkbox "Filter Options"</li>
+            <li>A listbox "Version" for selecting a document version</li>
+        </ul>
+
+        @since LibreOffice 25.8
+    */
+    const short FILEOPEN_READONLY_VERSION_FILTEROPTIONS        = 14;
 };
 
 

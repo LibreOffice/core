@@ -104,7 +104,7 @@
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
-                  <!-- n-columns=2 n-rows=3 -->
+                  <!-- n-columns=2 n-rows=4 -->
                   <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -868,6 +868,22 @@
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="alwaysshowonimport">
+                        <property name="label" translatable="yes" context="textimportcsv|alwaysshow">_Always show on import</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="active">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                        <property name="padding">5</property>
                       </packing>
                     </child>
                   </object>

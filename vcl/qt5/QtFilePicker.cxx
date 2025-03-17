@@ -680,6 +680,12 @@ void QtFilePicker::applyTemplate(sal_Int16 nTemplateId)
             addCustomControl(LISTBOX_VERSION);
             break;
 
+        case FILEOPEN_READONLY_VERSION_FILTEROPTIONS:
+            addCustomControl(CHECKBOX_READONLY);
+            addCustomControl(LISTBOX_VERSION);
+            addCustomControl(CHECKBOX_FILTEROPTIONS);
+            break;
+
         case FILEOPEN_LINK_PREVIEW:
             addCustomControl(CHECKBOX_LINK);
             addCustomControl(CHECKBOX_PREVIEW);

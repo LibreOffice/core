@@ -73,6 +73,7 @@
 #include <svl/intitem.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <unotools/filteroptions_settings.hxx>
 #include <unotools/viewoptions.hxx>
 #include <svtools/helpids.h>
 #include <comphelper/docpasswordrequest.hxx>
@@ -439,6 +440,7 @@ bool FileDialogHelper_Impl::isInOpenMode() const
         case FILEOPEN_PLAY:
         case FILEOPEN_LINK_PLAY:
         case FILEOPEN_READONLY_VERSION:
+        case FILEOPEN_READONLY_VERSION_FILTEROPTIONS:
         case FILEOPEN_LINK_PREVIEW:
         case FILEOPEN_PREVIEW:
             bRet = true;
@@ -452,10 +454,22 @@ void FileDialogHelper_Impl::updateFilterOptionsBox()
     if ( !m_bHaveFilterOptions )
         return;
 
-    updateExtendedControl(
-        ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS,
-        CheckFilterOptionsCapability( getCurrentSfxFilter() )
-    );
+    bool bFilterOptionsEnabled = CheckFilterOptionsCapability(getCurrentSfxFilter());
+
+    updateExtendedControl(ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS,
+                          bFilterOptionsEnabled);
+
+    if (isInOpenMode())
+    {
+        if (auto xCtrlAccess = mxFileDlg.query<XFilePickerControlAccess>())
+        {
+            OUString filter;
+            getRealFilter(filter);
+            bool bChecked = bFilterOptionsEnabled && utl::isShowFilterOptionsDialog(filter);
+            xCtrlAccess->setValue(ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0,
+                                  Any(bChecked));
+        }
+    }
 }
 
 void FileDialogHelper_Impl::updateExportButton()
@@ -876,6 +890,7 @@ static open_or_save_t lcl_OpenOrSave(sal_Int16 const nDialogType)
         case FILEOPEN_PLAY:
         case FILEOPEN_LINK_PLAY:
         case FILEOPEN_READONLY_VERSION:
+        case FILEOPEN_READONLY_VERSION_FILTEROPTIONS:
         case FILEOPEN_LINK_PREVIEW:
         case FILEOPEN_PREVIEW:
             return OPEN;
@@ -1063,6 +1078,18 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
             case FILEOPEN_READONLY_VERSION:
                 nTemplateDescription = TemplateDescription::FILEOPEN_READONLY_VERSION;
+                mbHasVersions = true;
+                break;
+
+            case FILEOPEN_READONLY_VERSION_FILTEROPTIONS:
+                nTemplateDescription = TemplateDescription::FILEOPEN_READONLY_VERSION_FILTEROPTIONS;
+                m_bHaveFilterOptions = true;
+                if( xFactory.is() )
+                {
+                    mxFilterCFG.set(
+                        xFactory->createInstance( u"com.sun.star.document.FilterFactory"_ustr ),
+                        UNO_QUERY );
+                }
                 mbHasVersions = true;
                 break;
 
@@ -2891,7 +2918,8 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              const OUString* pPath,
                              sal_Int16 nDialog,
                              const OUString& rStandardDir,
-                             const css::uno::Sequence< OUString >& rDenyList )
+                             const css::uno::Sequence< OUString >& rDenyList,
+                             bool& rShowFilterDialog )
 {
     ErrCode nRet;
     std::unique_ptr<FileDialogHelper> pDialog;
@@ -2912,6 +2940,11 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
 
     if (rpSet && nFlags & FileDialogFlags::SignPDF)
         rpSet->Put(SfxBoolItem(SID_DOC_READONLY, true));
+
+    uno::Reference< ui::dialogs::XFilePickerControlAccess > xExtFileDlg( pDialog->GetFilePicker(), uno::UNO_QUERY );
+    uno::Any aVal = xExtFileDlg->getValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0 );
+    aVal >>= rShowFilterDialog;
+
     return nRet;
 }
 

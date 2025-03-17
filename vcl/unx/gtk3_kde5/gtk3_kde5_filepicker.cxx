@@ -389,6 +389,12 @@ void SAL_CALL Gtk3KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args
             addCustomControl(LISTBOX_VERSION);
             break;
 
+        case FILEOPEN_READONLY_VERSION_FILTEROPTIONS:
+            addCustomControl(CHECKBOX_READONLY);
+            addCustomControl(LISTBOX_VERSION);
+            addCustomControl(CHECKBOX_FILTEROPTIONS);
+            break;
+
         case FILEOPEN_LINK_PREVIEW:
             addCustomControl(CHECKBOX_LINK);
             addCustomControl(CHECKBOX_PREVIEW);
