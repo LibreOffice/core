@@ -9,6 +9,7 @@
 -->
 <menu:menupopup xmlns:menu="http://openoffice.org/2001/menu">
   <menu:menuitem menu:id=".uno:GlueInsertPoint"/>
+  <menu:menuitem menu:id=".uno:GlueDeletePoint"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:GlueEscapeDirectionLeft"/>
   <menu:menuitem menu:id=".uno:GlueEscapeDirectionTop"/>
