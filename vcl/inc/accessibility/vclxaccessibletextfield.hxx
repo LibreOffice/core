@@ -25,7 +25,7 @@
 #include <vcl/toolkit/lstbox.hxx>
 
 /** This class represents non editable text fields.
-    From the ListBox passed to the constructer, always the selected item is token to be made
+    From the ListBox passed to the constructor, always the selected item is token to be made
     accessible by this class.  When the selected item changes then also the
     exported text changes.
 */
