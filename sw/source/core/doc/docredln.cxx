@@ -897,17 +897,15 @@ OUString SwRedlineTable::getTextOfArea(size_type rPosStart, size_type rPosEnd) c
     // But at import time some text is not present there yet
     // we have to collect them 1 by 1
 
-    OUString sRet = u""_ustr;
+    OUStringBuffer sRet(256);
 
     for (size_type nIdx = rPosStart; nIdx <= rPosEnd; ++nIdx)
     {
         SwRangeRedline* pRedline = (*this)[nIdx];
-        bool bStartWithNonTextNode = false;
 
-        OUString sNew;
         if (nullptr == pRedline->GetContentIdx())
         {
-            sNew = pRedline->GetText();
+            pRedline->AppendTextTo(sRet);
         }
         else // otherwise it is saved in pContentSect, e.g. during ODT import
         {
@@ -915,21 +913,18 @@ OUString SwRedlineTable::getTextOfArea(size_type rPosStart, size_type rPosEnd) c
                               *pRedline->GetContentIdx()->GetNode().EndOfSectionNode());
             if (!aTmpPaM.Start()->nNode.GetNode().GetTextNode())
             {
-                bStartWithNonTextNode = true;
+                OUString sNew = aTmpPaM.GetText();
+                if (sNew[0] == CH_TXTATR_NEWLINE)
+                    sRet.append(sNew.subView(1));
+                else
+                    sRet.append(sNew);
             }
-            sNew = aTmpPaM.GetText();
+            else
+                aTmpPaM.AppendTextTo(sRet); // append contents of aTmpPaM to sRet
         }
-
-        if (bStartWithNonTextNode &&
-            sNew[0] == CH_TXTATR_NEWLINE)
-        {
-            sRet += sNew.subView(1);
-        }
-        else
-            sRet += sNew;
     }
 
-    return sRet;
+    return sRet.makeStringAndClear();
 }
 
 bool SwRedlineTable::isMoved(size_type rPos) const

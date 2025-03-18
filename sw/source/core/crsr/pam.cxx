@@ -1292,8 +1292,13 @@ bool GoCurrSection( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 
 OUString SwPaM::GetText() const
 {
-    OUStringBuffer aResult;
+    OUStringBuffer aResult(256);
+    AppendTextTo(aResult);
+    return aResult.makeStringAndClear();
+}
 
+void SwPaM::AppendTextTo(OUStringBuffer& rResult) const
+{
     SwNodeIndex aNodeIndex = Start()->nNode;
 
     // The first node can be already the end node.
@@ -1309,7 +1314,7 @@ OUString SwPaM::GetText() const
         {
             if (!bIsStartNode)
             {
-                aResult.append(CH_TXTATR_NEWLINE); // use newline for para break
+                rResult.append(CH_TXTATR_NEWLINE); // use newline for para break
             }
             const OUString& aTmpStr = pTextNode->GetText();
 
@@ -1323,11 +1328,11 @@ OUString SwPaM::GetText() const
                     ? End()->GetContentIndex()
                     : aTmpStr.getLength();
 
-                aResult.append(aTmpStr.subView(nStart, nEnd-nStart));
+                rResult.append(aTmpStr.subView(nStart, nEnd-nStart));
             }
             else
             {
-                aResult.append(aTmpStr);
+                rResult.append(aTmpStr);
             }
         }
 
@@ -1339,8 +1344,6 @@ OUString SwPaM::GetText() const
         ++aNodeIndex;
         bIsStartNode = false;
     }
-
-    return aResult.makeStringAndClear();
 }
 
 void SwPaM::InvalidatePaM()

@@ -309,6 +309,8 @@ public:
     }
 
     OUString GetText() const;
+    // copy text into buffer
+    void AppendTextTo(rtl::OUStringBuffer& rBuffer) const;
     void InvalidatePaM();
     SwPaM* GetNext()
         { return GetNextInRing(); }
