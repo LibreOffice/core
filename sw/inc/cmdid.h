@@ -143,7 +143,7 @@ class SwUINumRuleItem;
 #define FN_NUM_CONTINUE              (FN_EDIT2 + 36)    /* continue previous numbering */
 #define FN_REDLINE_ACCEPT_DIRECT     (FN_EDIT2 + 37)    /* accept redline at current position*/
 #define FN_REDLINE_REJECT_DIRECT     (FN_EDIT2 + 38)    /* reject redline at current position*/
-// free
+#define FN_REDLINE_REINSTATE_DIRECT  (FN_EDIT2 + 39)    /* reinstate redline at current position*/
 // free
 #define FN_REDLINE_NEXT_CHANGE       (FN_EDIT2 + 41)    /* Go to the next change */
 #define FN_REDLINE_PREV_CHANGE       (FN_EDIT2 + 42)    /* Go to the previous change */

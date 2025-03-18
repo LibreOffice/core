@@ -211,6 +211,12 @@ interface BaseTextEditView
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
     ]
+    FN_REDLINE_REINSTATE_DIRECT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnMailboxEditor";
+    ]
     FN_REDLINE_NEXT_CHANGE
     [
         ExecMethod = Execute ;

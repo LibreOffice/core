@@ -204,7 +204,7 @@ public:
     /// See SwXTextDocument::getTrackedChangeAuthors().
     void                GetRedlineAuthorInfo(tools::JsonWriter& rJsonWriter);
     std::size_t         InsertRedlineAuthor(const OUString& rAuthor);
-    void                SetRedlineAuthor(const OUString& rAuthor); // for unit tests
+    SW_DLLPUBLIC void   SetRedlineAuthor(const OUString& rAuthor); // for unit tests
 
     void                GetInsertAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet);
     void                GetDeletedAuthorAttr(std::size_t nAuthor, SfxItemSet &rSet);

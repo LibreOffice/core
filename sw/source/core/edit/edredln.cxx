@@ -80,6 +80,29 @@ bool SwEditShell::AcceptRedline( SwRedlineTable::size_type nPos )
     return bRet;
 }
 
+void SwEditShell::ReinstateRedline(SwRedlineTable::size_type nPos)
+{
+    CurrShell aCurr(this);
+    StartAllAction();
+
+    if (!IsRedlineOn())
+    {
+        RedlineFlags nMode = GetRedlineFlags();
+        SetRedlineFlags(nMode | RedlineFlags::On, /*bRecordAllViews=*/false);
+    }
+
+    const SwRangeRedline& rRedline = GetRedline(nPos);
+    SwPaM aPaM(*rRedline.GetPoint());
+    aPaM.SetMark();
+    *aPaM.GetMark() = *rRedline.GetMark();
+    if (rRedline.GetType() == RedlineType::Insert)
+    {
+        DeleteSel(aPaM, /*isArtificialSelection=*/true);
+    }
+
+    EndAllAction();
+}
+
 bool SwEditShell::RejectRedline( SwRedlineTable::size_type nPos )
 {
     CurrShell aCurr( this );

@@ -959,6 +959,7 @@ public:
     SW_DLLPUBLIC bool RejectRedline( SwRedlineTable::size_type nPos );
     bool AcceptRedlinesInSelection();
     bool RejectRedlinesInSelection();
+    void ReinstateRedline(SwRedlineTable::size_type nPos);
 
     /** Search Redline for this Data and @return position in array.
      If not found, return SwRedlineTable::npos. */
