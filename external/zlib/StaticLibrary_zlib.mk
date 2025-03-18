@@ -26,6 +26,7 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,zlib,\
 	UnpackedTarball/zlib/inflate \
 	UnpackedTarball/zlib/inftrees \
 	UnpackedTarball/zlib/trees \
+	UnpackedTarball/zlib/uncompr \
 	UnpackedTarball/zlib/zutil \
 ))
 
