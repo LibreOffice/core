@@ -515,7 +515,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertShapeOnAsCharImg_tdf16890)
 
 CPPUNIT_TEST_FIXTURE(Test, testDoNotCaptureDrawObjsDrawObjNoCapture)
 {
-    // Given a document with a draw object, which is positined outside the page frame:
+    // Given a document with a draw object, which is positioned outside the page frame:
     createSwDoc("do-not-capture-draw-objs-draw-obj-no-capture.docx");
 
     // When laying out that document:
