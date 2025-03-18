@@ -92,9 +92,18 @@ struct HashImpl
             }
         }
         mpContext = HASH_Create(getNSSType());
-        HASH_Begin(mpContext);
 #elif USE_TLS_OPENSSL
         mpContext = EVP_MD_CTX_create();
+#endif
+
+        initialize();
+    }
+
+    void initialize()
+    {
+#if USE_TLS_NSS
+        HASH_Begin(mpContext);
+#elif USE_TLS_OPENSSL
         EVP_DigestInit_ex(mpContext, getOpenSSLType(), nullptr);
 #endif
     }
@@ -128,6 +137,11 @@ void Hash::update(const unsigned char* pInput, size_t length)
     (void)pInput;
     (void)length;
 #endif
+}
+
+void Hash::initialize()
+{
+    mpImpl->initialize();
 }
 
 std::vector<unsigned char> Hash::finalize()
