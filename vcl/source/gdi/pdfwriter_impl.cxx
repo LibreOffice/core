@@ -6179,6 +6179,11 @@ bool PDFWriterImpl::emitTrailer()
         aLine.append( "]\n" );
     }
 
+    // After calling m_DocDigest.finalize(), we need to initialize the hash again,
+    // otherwise, m_DocDigest.update() inside writeBuffer will fail with
+    // Assertion failure: rv == SECSuccess, at sechash.c:140
+    m_DocDigest.initialize();
+
     aLine.append( ">>\n"
                   "startxref\n" );
     aLine.append( static_cast<sal_Int64>(nXRefOffset) );

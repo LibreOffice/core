@@ -66,6 +66,8 @@ public:
         update(rInput.data(), rInput.size());
     }
 
+    void initialize();
+
     std::vector<unsigned char> finalize();
 
     static std::vector<unsigned char> calculateHash(const unsigned char* pInput, size_t length, HashType eType);
