@@ -56,6 +56,8 @@ public:
 
     void update(const unsigned char* pInput, size_t length);
 
+    void initialize();
+
     std::vector<unsigned char> finalize();
 
     static std::vector<unsigned char> calculateHash(const unsigned char* pInput, size_t length, HashType eType);
