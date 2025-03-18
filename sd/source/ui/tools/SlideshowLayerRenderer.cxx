@@ -792,7 +792,7 @@ bool SlideshowLayerRenderer::render(unsigned char* pBuffer, double& rScale, OStr
 
         auto const& rRenderPass = maRenderState.maRenderPasses.front();
         maRenderState.meStage = rRenderPass.meStage;
-        if (!rRenderPass.mbPlaceholder) // no need to render if placehodler
+        if (!rRenderPass.mbPlaceholder) // no need to render if placeholder
         {
             RenderPassObjectRedirector aRedirector(maRenderState, rRenderPass);
             createViewAndDraw(aRenderContext, &aRedirector);
