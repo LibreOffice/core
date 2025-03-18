@@ -1046,16 +1046,16 @@ static bool is_floppy_volume_mount_point(const OUString& path)
     systemPathEnsureSeparator(p);
 
     WCHAR vn[51];
-    if (GetVolumeNameForVolumeMountPointW(o3tl::toW(p.getStr()), vn, SAL_N_ELEMENTS(vn)))
+    if (GetVolumeNameForVolumeMountPointW(o3tl::toW(p.getStr()), vn, std::size(vn)))
     {
         WCHAR vnfloppy[51];
         if (is_floppy_A_present() &&
-            GetVolumeNameForVolumeMountPointW(FLOPPY_A, vnfloppy, SAL_N_ELEMENTS(vnfloppy)) &&
+            GetVolumeNameForVolumeMountPointW(FLOPPY_A, vnfloppy, std::size(vnfloppy)) &&
             (0 == wcscmp(vn, vnfloppy)))
             return true;
 
         if (is_floppy_B_present() &&
-            GetVolumeNameForVolumeMountPointW(FLOPPY_B, vnfloppy, SAL_N_ELEMENTS(vnfloppy)) &&
+            GetVolumeNameForVolumeMountPointW(FLOPPY_B, vnfloppy, std::size(vnfloppy)) &&
             (0 == wcscmp(vn, vnfloppy)))
             return true;
     }
@@ -1113,7 +1113,7 @@ static UINT get_volume_mount_point_drive_type(const OUString& path)
     systemPathEnsureSeparator(p);
 
     WCHAR vn[51];
-    if (GetVolumeNameForVolumeMountPointW(o3tl::toW(p.getStr()), vn, SAL_N_ELEMENTS(vn)))
+    if (GetVolumeNameForVolumeMountPointW(o3tl::toW(p.getStr()), vn, std::size(vn)))
         return GetDriveTypeW(vn);
 
     return DRIVE_NO_ROOT_DIR;
@@ -1356,7 +1356,7 @@ static oslFileError osl_getDriveInfo(
             case DRIVE_REMOTE:
             {
                 WCHAR szBuffer[1024];
-                DWORD const dwBufsizeConst = SAL_N_ELEMENTS(szBuffer);
+                DWORD const dwBufsizeConst = std::size(szBuffer);
                 DWORD dwBufsize = dwBufsizeConst;
 
                 DWORD dwResult = WNetGetConnectionW( cDrive, szBuffer, &dwBufsize );
@@ -1375,7 +1375,7 @@ static oslFileError osl_getDriveInfo(
             case DRIVE_FIXED:
             {
                 WCHAR szVolumeNameBuffer[1024];
-                DWORD const dwBufsizeConst = SAL_N_ELEMENTS(szVolumeNameBuffer);
+                DWORD const dwBufsizeConst = std::size(szVolumeNameBuffer);
 
                 if ( GetVolumeInformationW( cRoot, szVolumeNameBuffer, dwBufsizeConst, nullptr, nullptr, nullptr, nullptr, 0 ) )
                 {
