@@ -603,6 +603,8 @@ SalLayoutGlyphs* ImplEntryType::GetTextGlyphs(const OutputDevice* pOutputDevice)
 
 void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
 {
+    const bool bIsUserDrawEnabled = IsUserDrawEnabled();
+
     ImplEntryMetrics aMetrics;
     aMetrics.bText = !rEntry.maStr.isEmpty();
     aMetrics.bImage = !!rEntry.maImage;
@@ -612,7 +614,7 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
     aMetrics.nImgWidth = 0;
     aMetrics.nImgHeight = 0;
 
-    if ( aMetrics.bText )
+    if (aMetrics.bText && !bIsUserDrawEnabled)
     {
         if( rEntry.mnFlags & ListBoxEntryFlags::MultiLine )
         {
@@ -657,7 +659,6 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
 
     }
 
-    bool bIsUserDrawEnabled = IsUserDrawEnabled();
     if (bIsUserDrawEnabled || aMetrics.bImage)
     {
         aMetrics.nEntryWidth = std::max( aMetrics.nImgWidth, maUserItemSize.Width() );
