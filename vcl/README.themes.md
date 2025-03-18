@@ -8,7 +8,7 @@ It is suggested that you have the code open side-by-side and first read some par
 
 LibreOffice VCL (a bunch of  interfaces and a base implementation) has four main platform  specific implementations (gtk, qt, win,
 osx). Each VCL plugin has an `UpdateSettings(AllSettings&  rSettings)` function somewhere. This function reads styling information
-like colors from  the platfrom specific widget toolkit and  loads the information into the `StyleSettings`  instance passed in the
+like colors from  the platform specific widget toolkit and  loads the information into the `StyleSettings`  instance passed in the
 argument (indirectly through `AllSettings`).
 
 ## The StyleSettings Instance
@@ -65,7 +65,7 @@ in the code. The  default value is `ENABLED` and the  only way for the user to d
 configuration.
 
 > It's still a  dispute whether to enable  or disable a theming by  default, so please refer to  the .xcs file and  don't take the
-> explaination for implementation.
+> explanation for implementation.
 
 ```cpp
 enum class ThemeState
@@ -172,7 +172,7 @@ struct ColorConfigValue
 ```
 
 Each color entry has two color values, one for light and  one for dark. Based on the `ApplicationAppearance`, either light or dark
-color value is used. Since the  nColor "variable name" is used in 250+ places in the codebase,  I found it unreasonible to replace
+color value is used. Since the nColor "variable name" is used in 250+ places in the codebase, I found it unreasonable to replace
 all the 250+ references with a conditional like this.
 
 ```cpp
@@ -184,7 +184,7 @@ else
 ```
 
 This would have been very inefficient because `IsDarkMode()` is a virtual function (being called 250+ times, maybe every frame??).
-So  instaed  of  using a  conditional,  I  use  `nColor`  as  the cache.  When  the  colors  are  loaded from  the  registry  (see
+So  instead  of  using a  conditional,  I  use  `nColor`  as  the cache.  When  the  colors  are  loaded from  the  registry  (see
 `ColorConfig_Impl::Load`), I cache  the value into `nColor` based  on `ApplicationAppearance` value (whether light  or dark mode).
 And since we ask the user to restart the application after changing appearance or color values, caching works without any issues.
 
