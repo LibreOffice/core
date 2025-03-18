@@ -110,7 +110,11 @@ int main(int argc, char **argv)
 
     /* Get data directory location */
 #ifdef SYSTEM_POPPLER
+#if POPPLER_CHECK_VERSION(25, 2, 0)
+    const std::string datadir = "";
+#else
     const char* datadir = nullptr;
+#endif
 #else
     /* Creates an absolute path to the poppler_data directory, by taking the path
      * to the xpdfimport executable (provided in argv[0], and concatenating a

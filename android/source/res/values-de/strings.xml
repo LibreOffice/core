@@ -38,7 +38,7 @@
     <string name="message_saved">Speichern beendet</string>
     <string name="message_saving">Dokument wird gespeichert…</string>
     <string name="message_saving_failed">Speichern des Dokuments ist fehlgeschlagen.</string>
-    <string name="password">Passwort</string>
+    <string name="password">Kennwort</string>
     <string name="action_undo">Rückgängig</string>
     <string name="action_redo">Wiederherstellen</string>
     <!-- Save Alert dialog strings -->
@@ -68,7 +68,7 @@
     <!-- Password dialog strings -->
     <string name="action_pwd_dialog_OK">OK</string>
     <string name="action_pwd_dialog_cancel">Abbrechen</string>
-    <string name="action_pwd_dialog_title">Bitte Passwort eingeben</string>
+    <string name="action_pwd_dialog_title">Bitte Kennwort eingeben</string>
     <!-- Insert Image Strings -->
     <string name="take_photo">Foto Machen</string>
     <string name="select_photo">Foto Auswählen</string>
@@ -137,18 +137,4 @@
     <string name="create_file">Neue Datei erstellen</string>
     <string name="search_find_next">Nächste suchen</string>
     <string name="search_find_previous">Vorherige suchen</string>
-    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">OK</string>
-    <string name="message_save_incomplete">Speichern unvollständig. Gab es Änderungen?</string>
-    <string name="action_underline">Unterstrichen</string>
-    <string name="unable_to_go_further">Kann nicht weiter gehen.</string>
-    <string name="action_bold">Fett</string>
-    <string name="browser_app_name">LibreOffice Browser</string>
-    <string name="menu_search">Suchen</string>
-    <string name="app_about_name"><b>LibreOffice Viewer \'Beta\'</b></string>
-    <string name="action_strikeout">Durchgestrichen</string>
-    <string name="search_not_found">Suchbegriff nicht gefunden</string>
-    <string name="menu_preferences">Einstellungen</string>
-    <string name="directory_not_saved">Verzeichnis nicht gespeichert.</string>
-    <string name="action_italic">Kursiv</string>
-    <string name="alert_copy_svg_slide_show_to_clipboard">Ihr Android-Gerät unterstützt keine In-App-SVG-Präsentation. Wir haben den Link zur Präsentation in die Zwischenablage kopiert. Drücken Sie den Home-Button, öffnen Sie einen modernen Web-Browser, fügen Sie in die Adressleiste ein und los.</string>
 </resources>

@@ -1748,7 +1748,8 @@ void SwRangeRedline::InvalidateRange(Invalidation const eWhy)
 
 /** Calculates the start and end position of the intersection rTmp and
     text node nNdIdx */
-void SwRangeRedline::CalcStartEnd( SwNodeOffset nNdIdx, sal_Int32& rStart, sal_Int32& rEnd ) const
+bool SwRangeRedline::CalcStartEnd(SwNodeOffset const nNdIdx,
+        sal_Int32 & rStart, sal_Int32 & rEnd) const
 {
     auto [pRStt, pREnd] = StartEnd(); // SwPosition*
     if( pRStt->GetNodeIndex() < nNdIdx )
@@ -1767,6 +1768,7 @@ void SwRangeRedline::CalcStartEnd( SwNodeOffset nNdIdx, sal_Int32& rStart, sal_I
         {
             rStart = COMPLETE_STRING;
             rEnd = COMPLETE_STRING;
+            return true;
         }
     }
     else if( pRStt->GetNodeIndex() == nNdIdx )
@@ -1782,6 +1784,7 @@ void SwRangeRedline::CalcStartEnd( SwNodeOffset nNdIdx, sal_Int32& rStart, sal_I
         rStart = COMPLETE_STRING;
         rEnd = COMPLETE_STRING;
     }
+    return false;
 }
 
 static void lcl_storeAnnotationMarks(SwDoc& rDoc, const SwPosition* pStt, const SwPosition* pEnd)

@@ -32,7 +32,7 @@
     <string name="password">Пароль</string>
     <string name="action_undo">Відміна</string>
     <string name="action_redo">Повтор</string>
-    <string name="save_alert_dialog_title">Зберегти документ перед закриттям\?</string>
+    <string name="save_alert_dialog_title">Зберегти документ перед закриттям?</string>
     <string name="save_document">Зберегти</string>
     <string name="action_cancel">Відмовитись</string>
     <string name="no_save_document">НІ</string>
@@ -60,7 +60,7 @@
     <string name="compress_photo_medium_size">Середній розмір</string>
     <string name="compress_photo_max_quality">Макс. якість</string>
     <string name="compress_photo_no_compress">Не стискати</string>
-    <string name="compress_photo_title">Бажаєте стиснути фото\?</string>
+    <string name="compress_photo_title">Бажаєте стиснути фото?</string>
     <string name="action_copy">Копіювати</string>
     <string name="action_cut">Вирізати</string>
     <string name="action_text_copied">Текст скопійовано до буфера</string>

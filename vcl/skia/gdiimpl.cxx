@@ -245,8 +245,14 @@ public:
         : Idle(get_debug_name(pGraphics))
         , mpGraphics(pGraphics)
     {
+#ifdef MACOSX
+        // tdf#165277 Skia needs to flush immediately before POST_PAINT
+        // tasks on macOS
+        SetPriority(TaskPriority::SKIA_FLUSH);
+#else
         // We don't want to be swapping before we've painted.
         SetPriority(TaskPriority::POST_PAINT);
+#endif
     }
 #ifndef NDEBUG
     virtual ~SkiaFlushIdle() { free(debugname); }
@@ -273,11 +279,12 @@ public:
         // tdf#157312 and tdf#163945 Lower Skia flush timer priority on macOS
         // On macOS, flushing with Skia/Metal is noticeably slower than
         // with Skia/Raster. So lower the flush timer priority to
-        // TaskPriority::POST_PAINT so that the flush timer runs less
+        // TaskPriority::SKIA_FLUSH so that the flush timer runs less
         // frequently but each pass copies a more up-to-date offscreen
         // surface.
-        // TODO: fix tdf#163734 on macOS
-        SetPriority(TaskPriority::POST_PAINT);
+        // tdf#165277 Skia needs to flush immediately before POST_PAINT
+        // tasks on macOS
+        SetPriority(TaskPriority::SKIA_FLUSH);
 #else
         SetPriority(TaskPriority::HIGHEST);
 #endif
@@ -318,7 +325,13 @@ void SkiaSalGraphicsImpl::createSurface()
 
     // We don't want to be swapping before we've painted.
     mFlush->Stop();
+#ifdef MACOSX
+    // tdf#165277 Skia needs to flush immediately before POST_PAINT
+    // tasks on macOS
+    mFlush->SetPriority(TaskPriority::SKIA_FLUSH);
+#else
     mFlush->SetPriority(TaskPriority::POST_PAINT);
+#endif
 }
 
 void SkiaSalGraphicsImpl::createWindowSurface(bool forceRaster)

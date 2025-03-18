@@ -5147,7 +5147,9 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     // Note this doesn't just check IsStartNode() because SwDoc::AppendDoc()
     // intentionally sets it to the body start node, perhaps it should just
     // call SplitNode instead?
-    if (!pStt->GetNode().IsSectionNode() && !pStt->GetNode().IsTableNode())
+    if ((!pStt->GetNode().IsSectionNode() && !pStt->GetNode().IsTableNode())
+        || (pCopyPam->GetPoint()->GetContentIndex() != 0 // also if node will split
+            && pCopyPam->GetPoint()->GetContentIndex() != pCopyPam->GetPoint()->GetNode().GetContentNode()->Len()))
     {
         bCanMoveBack = pCopyPam->Move(fnMoveBackward, GoInContent);
     }
@@ -5341,7 +5343,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                     --aRg.aEnd;
                 }
             }
-            assert(!bCanMoveBack);
+            assert((nDeleteTextNodes.get() != 0) == bCanMoveBack);
         }
 
         pDestTextNd = aInsPos.GetNode().GetTextNode();
@@ -5546,11 +5548,6 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     {
         // Reset the offset to 0 as it was before the insertion
         pCopyPam->GetPoint()->Adjust(SwNodeOffset(+1));
-
-        // If the next node is a start node, then step back: SetInsertRange()
-        // will add 1 in this case, but that is too much...
-        if (pCopyPam->GetPoint()->GetNode().IsStartNode())
-            pCopyPam->GetPoint()->Adjust(SwNodeOffset(-1));
     }
     oInsContentIndex.reset();
     pCopyPam->Exchange();

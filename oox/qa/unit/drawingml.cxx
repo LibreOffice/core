@@ -749,7 +749,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testToplevelLineHorOffsetDOCX)
     // - Expected: 1
     // - Actual  : 4094.76362560479
     // i.e. this was a horizontal line, not a vertical one.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1, aScale.getX(), 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.78, aScale.getX(), 0.01);
     // 1473682 EMUs in mm100 is 4093.56.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4094, aScale.getY(), 0.01);
     // 343535 EMUs in mm100 is 954.27.
@@ -762,8 +762,28 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testToplevelLineHorOffsetDOCX)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aPoly.getLength());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aPoly[0].X);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aPoly[0].Y);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aPoly[1].X);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aPoly[1].X);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4094), aPoly[1].Y);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testDOCXVerticalLineRotation)
+{
+    // Given a file with a vertical line:
+    // When loading that file:
+    loadFromFile(u"line-vertical-rotation.docx");
+
+    // Then make sure the vertical line shape has no rotation:
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    sal_Int32 nRotateAngle{};
+    xShape->getPropertyValue(u"RotateAngle"_ustr) >>= nRotateAngle;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 27004
+    // i.e. there was an unwanted rotation, the line looked horizontal while it should be vertical.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nRotateAngle);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

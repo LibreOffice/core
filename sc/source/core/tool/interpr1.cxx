@@ -8554,18 +8554,30 @@ void ScInterpreter::ScSort()
             aSortData.maKeyState[i].bAscending = (aSortOrderValues[0] == 1.0);
     }
 
-    // sorting...
-    std::vector<SCCOLROW> aOrderIndices = GetSortOrder(aSortData, pMatSrc);
-    // create sorted matrix
-    ScMatrixRef pResMat = CreateSortedMatrix(aSortData, pMatSrc,
-        ScRange(aSortData.nCol1, aSortData.nRow1, aSortData.nSourceTab,
-                aSortData.nCol2, aSortData.nRow2, aSortData.nSourceTab),
-                aOrderIndices, nsC, nsR);
-
-    if (pResMat)
-        PushMatrix(pResMat);
+    if ((aSortData.bByRow && nsR == 1) || (!aSortData.bByRow && nsC == 1))
+    {
+        // No need to sort
+        if (pMatSrc)
+            PushMatrix(pMatSrc);
+        else
+            PushDoubleRef(aSortData.nCol1, aSortData.nRow1, aSortData.nSourceTab,
+                aSortData.nCol2, aSortData.nRow2, aSortData.nSourceTab);
+    }
     else
-        PushIllegalParameter();
+    {
+        // sorting...
+        std::vector<SCCOLROW> aOrderIndices = GetSortOrder(aSortData, pMatSrc);
+        // create sorted matrix
+        ScMatrixRef pResMat = CreateSortedMatrix(aSortData, pMatSrc,
+            ScRange(aSortData.nCol1, aSortData.nRow1, aSortData.nSourceTab,
+                aSortData.nCol2, aSortData.nRow2, aSortData.nSourceTab),
+            aOrderIndices, nsC, nsR);
+
+        if (pResMat)
+            PushMatrix(pResMat);
+        else
+            PushIllegalParameter();
+    }
 }
 
 void ScInterpreter::ScSortBy()
@@ -8582,6 +8594,7 @@ void ScInterpreter::ScSortBy()
 
     ScSortParam aSortData;
     aSortData.maKeyState.resize(nSortCount);
+    bool bNoNeedToSort = false;
 
     // 127th, ..., 3rd and 2nd argument: sort by range/array and sort orders pair
     sal_uInt8 nSortBy = nSortCount;
@@ -8640,6 +8653,8 @@ void ScInterpreter::ScSortBy()
                         aSortData.bByRow = true;
                     else if (nbyR == 1 && nbyC > 1)
                         aSortData.bByRow = false;
+                    else if (nbyC == 1 && nbyR == 1)
+                        bNoNeedToSort = true;
                     else
                     {
                         PushIllegalParameter();
@@ -8776,17 +8791,28 @@ void ScInterpreter::ScSortBy()
         aSortData.nRow2 = nCheckMatrixRow - 1;
     }
 
-    // sorting...
-    std::vector<SCCOLROW> aOrderIndices = GetSortOrder(aSortData, pFullMatSortBy);
-    // create sorted matrix
-    ScMatrixRef pResMat = CreateSortedMatrix(aSortData, pMatSrc,
-        ScRange(nSortCol1, nSortRow1, nSortTab1, nSortCol2, nSortRow2, nSortTab2),
-        aOrderIndices, nsC, nsR);
-
-    if (pResMat)
-        PushMatrix(pResMat);
+    if (bNoNeedToSort)
+    {
+        // no need to sort
+        if (pMatSrc)
+            PushMatrix(pMatSrc);
+        else
+            PushDoubleRef(nSortCol1, nSortRow1, nSortTab1, nSortCol2, nSortRow2, nSortTab2);
+    }
     else
-        PushIllegalParameter();
+    {
+        // sorting...
+        std::vector<SCCOLROW> aOrderIndices = GetSortOrder(aSortData, pFullMatSortBy);
+        // create sorted matrix
+        ScMatrixRef pResMat = CreateSortedMatrix(aSortData, pMatSrc,
+            ScRange(nSortCol1, nSortRow1, nSortTab1, nSortCol2, nSortRow2, nSortTab2),
+            aOrderIndices, nsC, nsR);
+
+        if (pResMat)
+            PushMatrix(pResMat);
+        else
+            PushIllegalParameter();
+    }
 }
 
 void ScInterpreter::ScUnique()

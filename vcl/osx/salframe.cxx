@@ -1444,22 +1444,32 @@ void AquaSalFrame::getResolution( sal_Int32& o_rDPIX, sal_Int32& o_rDPIY )
 
 void AquaSalFrame::UpdateDarkMode()
 {
-    if (@available(macOS 10.14, iOS 13, *))
+    NSAppearance *pCurrentAppearance = [NSApp appearance];
+
+    switch (MiscSettings::GetDarkMode())
     {
-        switch (MiscSettings::GetDarkMode())
-        {
-            case 0: // auto
-            default:
+        case 0: // auto
+        default:
+            if (pCurrentAppearance)
                 [NSApp setAppearance: nil];
-                break;
-            case 1: // light
+            break;
+        case 1: // light
+            if (!pCurrentAppearance || ![NSAppearanceNameAqua isEqualToString: [pCurrentAppearance name]])
                 [NSApp setAppearance: [NSAppearance appearanceNamed: NSAppearanceNameAqua]];
-                break;
-            case 2: // dark
+            break;
+        case 2: // dark
+            if (!pCurrentAppearance || ![NSAppearanceNameDarkAqua isEqualToString: [pCurrentAppearance name]])
                 [NSApp setAppearance: [NSAppearance appearanceNamed: NSAppearanceNameDarkAqua]];
-                break;
-        }
+            break;
     }
+
+    // Related: tdf#165266 sync NSView's appearance to NSApp's appearance
+    // Invoking -[NSApp setAppearance:] does immediately update the
+    // appearance of each NSWindow's titlebar, but it does not appear
+    // to update any NSView's appearance so explicitly sync appearances.
+    NSAppearance *pNewAppearance = [NSApp appearance];
+    if (mpNSView.appearance != pNewAppearance)
+        mpNSView.appearance = pNewAppearance;
 }
 
 bool AquaSalFrame::GetUseDarkMode() const
@@ -1493,6 +1503,31 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
         return;
 
     OSX_SALDATA_RUNINMAIN( UpdateSettings( rSettings ) )
+
+    // tdf#165266 Force NSColor to use current effective appearance
+    // +[NSAppearance setCurrentAppearance:] is deprecated and calling
+    // that appears to do less and less with each new version of macos
+    // or Xcode so run all system +[NSColor ...] calls in a block passed
+    // to -[NSAppearance performAsCurrentDrawingAppearance:].
+    UpdateDarkMode();
+    if (@available(macOS 11, *))
+    {
+        assert(mpNSView);
+        [mpNSView.effectiveAppearance performAsCurrentDrawingAppearance:^() {
+            doUpdateSettings( rSettings );
+            return;
+        }];
+    }
+    else
+    {
+        doUpdateSettings( rSettings );
+    }
+}
+
+void AquaSalFrame::doUpdateSettings( AllSettings& rSettings )
+{
+    assert(mpNSWindow);
+    assert(mpNSView);
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
         // "'lockFocus' is deprecated: first deprecated in macOS 10.14 - To draw, subclass NSView

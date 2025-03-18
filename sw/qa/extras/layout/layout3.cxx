@@ -294,6 +294,72 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testSectionPageBreaksWithNestedSectionWith
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf159029)
+{
+    createSwDoc("2024-01-19_merged-cells-on-separate-pages-vertical-alignement.odt");
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/infos/bounds", "top",
+                    u"1970"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/txt[1]/infos/bounds", "top",
+                    u"1970"_ustr);
+        discardDumpedLayout();
+    }
+
+    // set vert orient
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GotoTable("Table1");
+    pWrtShell->Right(SwCursorSkipMode::Cells, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->SetBoxAlign(css::text::VertOrientation::BOTTOM);
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/infos/bounds", "top",
+                    u"1970"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/txt[1]/infos/bounds", "top",
+                    u"15494"_ustr);
+        discardDumpedLayout();
+    }
+
+    // delete
+    pWrtShell->SttEndDoc(true);
+    pWrtShell->DelRight();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/infos/bounds", "top",
+                    u"1694"_ustr);
+        // the problem was that this moved to the top of the cell
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/txt[1]/infos/bounds", "top",
+                    u"15494"_ustr);
+        discardDumpedLayout();
+    }
+
+    pWrtShell->Undo();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/infos/bounds", "top",
+                    u"1970"_ustr);
+        // the problem was that this moved to the top of the cell
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/txt[1]/infos/bounds", "top",
+                    u"15494"_ustr);
+        discardDumpedLayout();
+    }
+
+    pWrtShell->Redo();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/infos/bounds", "top",
+                    u"1694"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/txt[1]/infos/bounds", "top",
+                    u"15494"_ustr);
+        discardDumpedLayout();
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf137523)
 {
     createSwDoc("tdf137523-1-min.fodt");

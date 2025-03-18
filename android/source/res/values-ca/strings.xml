@@ -39,7 +39,7 @@
     <string name="password">Contrasenya</string>
     <string name="action_undo">Desfés</string>
     <string name="action_redo">Refés</string>
-    <string name="save_alert_dialog_title">Voleu desar el document abans de tancar-lo\?</string>
+    <string name="save_alert_dialog_title">Voleu desar el document abans de tancar-lo?</string>
     <string name="save_document">DESA</string>
     <string name="no_save_document">NO</string>
     <string name="action_presentation">Presentació de diapositives</string>
@@ -98,7 +98,7 @@
     <string name="compress_photo_medium_size">Mida mitjana</string>
     <string name="compress_photo_max_quality">Màxima qualitat</string>
     <string name="compress_photo_no_compress">Sense compressió</string>
-    <string name="compress_photo_title">Voleu comprimir la foto\?</string>
+    <string name="compress_photo_title">Voleu comprimir la foto?</string>
     <string name="select_insert_options">Trieu les opcions d\'inserció:</string>
     <string name="select_delete_options">Trieu les opcions de supressió:</string>
     <string name="action_rename_worksheet">Canvia el nom del full de càcul</string>

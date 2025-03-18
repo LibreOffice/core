@@ -671,8 +671,8 @@ void DomainMapper_Impl::RemoveDummyParaForTableInSection()
 }
 void DomainMapper_Impl::AddDummyParaForTableInSection()
 {
-    // Shapes and textboxes can't have sections.
-    if (IsInShape() || m_StreamStateStack.top().bIsInTextBox)
+    // Shapes, headers, and textboxes can't have sections.
+    if (IsInShape() || IsInHeaderFooter() || m_StreamStateStack.top().bIsInTextBox)
         return;
 
     if (!m_aTextAppendStack.empty())
@@ -2988,6 +2988,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     else
         SetIsPreviousParagraphFramed(false);
 
+    m_bIsActualParagraphFramed = false;
     m_StreamStateStack.top().bRemoveThisParagraph = false;
     if( !IsInHeaderFooter() && !IsInShape()
         && (!pParaContext || !pParaContext->props().IsFrameMode()) )

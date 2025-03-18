@@ -60,7 +60,7 @@
     <string name="password">Mot de passe</string>
     <string name="action_undo">Annuler</string>
     <string name="action_redo">Rétablir</string>
-    <string name="save_alert_dialog_title">Enregistrer le document avant de le fermer \?</string>
+    <string name="save_alert_dialog_title">Enregistrer le document avant de le fermer ?</string>
     <string name="save_document">ENREGISTRER</string>
     <string name="action_cancel">Annuler</string>
     <string name="no_save_document">NON</string>
@@ -77,7 +77,7 @@
     <string name="compress_photo_medium_size">Taille moyenne</string>
     <string name="compress_photo_max_quality">Qualité maximale</string>
     <string name="compress_photo_no_compress">Ne pas compresser</string>
-    <string name="compress_photo_title">Voulez-vous compresser la photo \?</string>
+    <string name="compress_photo_title">Voulez-vous compresser la photo ?</string>
     <string name="action_copy">Copier</string>
     <string name="action_paste">Coller</string>
     <string name="action_cut">Couper</string>

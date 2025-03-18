@@ -1639,12 +1639,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128156)
     assertXPath(pXmlDoc, "//w:ins"_ostr, 2);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf165330)
+{
+    loadAndSave("CT-with-frame.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // check that *both* tracked changes were round tripped
+    assertXPathContent(pXmlDoc, "//w:p[1]/w:ins/w:r/w:t", u"world! "_ustr);
+    assertXPathContent(pXmlDoc, "//w:p[3]/w:ins/w:r/w:t", u"hello "_ustr);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf125546)
 {
     loadAndSave("tdf125546.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // compress redlines (it was 15)
-    assertXPath(pXmlDoc, "//w:rPrChange"_ostr, 2);
+    assertXPath(pXmlDoc, "//w:rPrChange"_ostr, 3);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testLabelWidthAndPosition_Left_FirstLineIndent)

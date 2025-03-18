@@ -452,7 +452,7 @@ namespace com::sun::star {
     }
 }
 
-struct UNLESS_MERGELIBS(MSFILTER_DLLPUBLIC) EscherConnectorListEntry
+struct MSFILTER_DLLPUBLIC EscherConnectorListEntry
 {
     css::uno::Reference< css::drawing::XShape >   mXConnector;
     css::awt::Point                               maPointA;

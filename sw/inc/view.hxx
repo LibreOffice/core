@@ -453,7 +453,7 @@ public:
     tools::Long            SetHScrollMax(tools::Long lMax);
 
     void            SpellError(LanguageType eLang);
-    bool            ExecSpellPopup( const Point& rPt );
+    bool            ExecSpellPopup(const Point& rPt, bool bIsMouseEvent);
     void            ExecSmartTagPopup( const Point& rPt );
 
     DECL_DLLPRIVATE_LINK( OnlineSpellCallback, SpellCallbackInfo&, void );

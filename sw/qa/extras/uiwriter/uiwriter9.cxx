@@ -44,6 +44,7 @@
 #include <wrtsh.hxx>
 #include <unotxdoc.hxx>
 #include <ndtxt.hxx>
+#include <itabenum.hxx>
 #include <toxmgr.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -51,6 +52,8 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <fmtinfmt.hxx>
 #include <rootfrm.hxx>
+
+#include <svx/svxids.hrc>
 #include <svx/svdview.hxx>
 #include <svx/svdmark.hxx>
 
@@ -118,6 +121,80 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158785)
     aContentAtPos = IsAttrAtPos::InetAttr;
     pWrtShell->GetContentAtPos(aLogicR, aContentAtPos);
     CPPUNIT_ASSERT_EQUAL(IsAttrAtPos::NONE, aContentAtPos.eContentAtPos);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159377)
+{
+    createSwDoc();
+
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+
+    dispatchCommand(mxComponent, u".uno:SelectTable"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    pWrtShell->InsertFootnote(u""_ustr);
+    CPPUNIT_ASSERT(pWrtShell->IsCursorInFootnote());
+
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(28), pDoc->GetNodes().Count());
+
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    // this pasted the 4 text nodes in the table, but no table nodes
+    // as currently tables aren't allowed in footnotes
+
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(32), pDoc->GetNodes().Count());
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT(pWrtShell->IsCursorInFootnote());
+    // problem was that this was 29 with an extra text node in the footnote
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(28), pDoc->GetNodes().Count());
+
+    pWrtShell->Redo();
+
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(32), pDoc->GetNodes().Count());
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(28), pDoc->GetNodes().Count());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testPasteTableInMiddleOfParagraph)
+{
+    createSwDoc();
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+
+    dispatchCommand(mxComponent, u".uno:SelectTable"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    pWrtShell->Undo();
+
+    pWrtShell->Insert(u"AB"_ustr);
+
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    pWrtShell->Undo();
+
+    // the problem was that the A was missing
+    CPPUNIT_ASSERT_EQUAL(OUString("AB"),
+                         pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
+
+    pWrtShell->Redo();
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(OUString("AB"),
+                         pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf111969)
@@ -332,6 +409,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159816)
     // or in BigPtrArray::operator[] (tdf#159816):
     // Assertion failed: idx < m_nSize
     xTransfer->PrivateDrop(*pWrtShell, ptTo, /*bMove=*/true, /*bXSelection=*/true);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf165351)
+{
+    createSwDoc("tdf165351.fodt");
+
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    // Move the cursor into the fly frame
+    pWrtShell->GotoFly(u"Frame1"_ustr, FLYCNTTYPE_FRM, false);
+    pWrtShell->EndOfSection();
+    pWrtShell->GoNextCell(/*bAppendLine=*/true);
+    pWrtShell->Undo();
+    // getting this item crashed
+    SfxItemSet temp{ pDoc->GetAttrPool(), svl::Items<SID_RULER_LR_MIN_MAX, SID_RULER_LR_MIN_MAX> };
+    pWrtShell->GetView().StateTabWin(temp);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
