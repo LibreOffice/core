@@ -887,6 +887,7 @@ void SwView::Execute(SfxRequest &rReq)
         case FN_REDLINE_REJECT_DIRECT:
         case FN_REDLINE_ACCEPT_TONEXT:
         case FN_REDLINE_REJECT_TONEXT:
+        case FN_REDLINE_REINSTATE_DIRECT:
         {
             SwDoc *pDoc = m_pWrtShell->GetDoc();
             SwPaM *pCursor = m_pWrtShell->GetCursor();
@@ -1066,6 +1067,10 @@ void SwView::Execute(SfxRequest &rReq)
                 {
                     if (FN_REDLINE_ACCEPT_DIRECT == nSlot || FN_REDLINE_ACCEPT_TONEXT == nSlot)
                         m_pWrtShell->AcceptRedline(nRedline);
+                    else if (nSlot == FN_REDLINE_REINSTATE_DIRECT)
+                    {
+                        m_pWrtShell->ReinstateRedline(nRedline);
+                    }
                     else
                         m_pWrtShell->RejectRedline(nRedline);
                 }

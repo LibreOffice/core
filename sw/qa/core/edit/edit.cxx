@@ -13,6 +13,9 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <unotxdoc.hxx>
+#include <IDocumentRedlineAccess.hxx>
+#include <swmodule.hxx>
+#include <redline.hxx>
 
 namespace
 {
@@ -76,6 +79,42 @@ CPPUNIT_TEST_FIXTURE(Test, testDeleteSelNormalize)
     // so we started to type between the field start and the field separator, nothing was visible on
     // the screen.
     CPPUNIT_ASSERT_EQUAL(nExpectedCharPos, rCursor.nContent.GetIndex());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateSingleInsert)
+{
+    // Given a document with a single insertion:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert("aaa");
+    SwModule* pModule = SwModule::get();
+    pModule->SetRedlineAuthor("Alice");
+    RedlineFlags nMode = pWrtShell->GetRedlineFlags();
+    pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
+    pWrtShell->Insert("bbb");
+    pWrtShell->SetRedlineFlags(nMode);
+    pWrtShell->Insert("ccc");
+
+    // When a 2nd user reinstates that change:
+    pModule->SetRedlineAuthor("Bob");
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:ReinstateTrackedChange", {});
+
+    // Then make sure this results in a delete on top of an insert:
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+    const SwRangeRedline* pRedline = rRedlines[0];
+    const SwRedlineData& rRedlineData = pRedline->GetRedlineData(0);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1 (Delete)
+    // - Actual  : 0 (Insert)
+    // i.e. reinstate didn't happen.
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlineData.GetType());
+    CPPUNIT_ASSERT(rRedlineData.Next());
+    const SwRedlineData& rInnerRedlineData = *rRedlineData.Next();
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rInnerRedlineData.GetType());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
