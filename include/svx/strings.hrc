@@ -1802,7 +1802,7 @@
 #define RID_SUBSETSTR_KAWI                                  NC_("RID_SUBSETMAP", "Kawi")
 #define RID_SUBSETSTR_NAG_MUNDARI                           NC_("RID_SUBSETMAP", "Nag Mundari")
 #define RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_I    NC_("RID_SUBSETMAP", "CJK Unified Ideographs Extension I")
-#define RID_SUBSETSTR_EGYPTIAN_HIEROGLYPHS_EXTENDED_A  NC_("RID_SUBSETMAP", "Egyptian Hieroglyphs Extended-A")
+#define RID_SUBSETSTR_EGYPTIAN_HIEROGLYPHS_EXTENDED_A       NC_("RID_SUBSETMAP", "Egyptian Hieroglyphs Extended-A")
 #define RID_SUBSETSTR_GARAY                                 NC_("RID_SUBSETMAP", "Garay")
 #define RID_SUBSETSTR_GURUNG_KHEMA                          NC_("RID_SUBSETMAP", "Gurung Khema")
 #define RID_SUBSETSTR_KIRAT_RAI                             NC_("RID_SUBSETMAP", "Kirat Rai")
