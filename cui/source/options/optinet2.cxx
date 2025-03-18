@@ -397,7 +397,7 @@ bool SvxProxyTabPage::FillItemSet(SfxItemSet* )
 
 void SvxProxyTabPage::EnableControls_Impl()
 {
-    bool bEnable = !officecfg::Inet::Settings::ooInetNoProxy::isReadOnly();
+    bool bEnable = !officecfg::Inet::Settings::ooInetProxyType::isReadOnly();
     m_xProxyModeFT->set_sensitive(bEnable);
     m_xProxyModeLB->set_sensitive(bEnable);
     m_xProxyModeImg->set_visible(!bEnable);
