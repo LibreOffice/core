@@ -147,70 +147,66 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
     ScDocument&         rDoc        = pDocSh->GetDocument();
     SfxStyleSheetBasePool*  pStylePool  = rDoc.GetStyleSheetPool();
 
-    if ( (nSlotId == SID_STYLE_PREVIEW)
-        || (nSlotId ==  SID_STYLE_END_PREVIEW) )
+    if (nSlotId == SID_STYLE_PREVIEW)
     {
-        if (nSlotId == SID_STYLE_PREVIEW)
+        SfxStyleFamily eFamily = SfxStyleFamily::Para;
+        const SfxUInt16Item* pFamItem;
+        if ( pArgs && (pFamItem = pArgs->GetItemIfSet( SID_STYLE_FAMILY )) )
+            eFamily = static_cast<SfxStyleFamily>(pFamItem->GetValue());
+        const SfxPoolItem* pNameItem;
+        OUString aStyleName;
+        if (pArgs && SfxItemState::SET == pArgs->GetItemState( nSlotId, true, &pNameItem ))
+            aStyleName = static_cast<const SfxStringItem*>(pNameItem)->GetValue();
+        if ( eFamily == SfxStyleFamily::Para ) // CellStyles
         {
-            SfxStyleFamily eFamily = SfxStyleFamily::Para;
-            const SfxUInt16Item* pFamItem;
-            if ( pArgs && (pFamItem = pArgs->GetItemIfSet( SID_STYLE_FAMILY )) )
-                eFamily = static_cast<SfxStyleFamily>(pFamItem->GetValue());
-            const SfxPoolItem* pNameItem;
-            OUString aStyleName;
-            if (pArgs && SfxItemState::SET == pArgs->GetItemState( nSlotId, true, &pNameItem ))
-                aStyleName = static_cast<const SfxStringItem*>(pNameItem)->GetValue();
-            if ( eFamily == SfxStyleFamily::Para ) // CellStyles
+            ScMarkData aFuncMark( rViewData.GetMarkData() );
+            ScViewUtil::UnmarkFiltered( aFuncMark, rDoc );
+            aFuncMark.MarkToMulti();
+
+            if ( !aFuncMark.IsMarked() && !aFuncMark.IsMultiMarked() )
             {
-                ScMarkData aFuncMark( rViewData.GetMarkData() );
-                ScViewUtil::UnmarkFiltered( aFuncMark, rDoc );
-                aFuncMark.MarkToMulti();
-
-                if ( !aFuncMark.IsMarked() && !aFuncMark.IsMultiMarked() )
-                {
-                    SCCOL nCol = rViewData.GetCurX();
-                    SCROW nRow = rViewData.GetCurY();
-                    SCTAB nTab = rViewData.GetTabNo();
-                    ScRange aRange( nCol, nRow, nTab );
-                    aFuncMark.SetMarkArea( aRange );
-                }
-                rDoc.SetPreviewSelection( aFuncMark );
-                ScStyleSheet* pPreviewStyle = static_cast<ScStyleSheet*>( pStylePool->Find( aStyleName, eFamily ) );
-                rDoc.SetPreviewCellStyle( pPreviewStyle  );
-                ScPatternAttr aAttr( *rDoc.GetSelectionPattern( aFuncMark ) );
-                aAttr.SetStyleSheet( pPreviewStyle );
-
-                SfxItemSet aItemSet( GetPool() );
-
-                ScPatternAttr aNewAttrs(GetViewData().GetDocument().getCellAttributeHelper());
-                SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
-                rNewSet.Put( aItemSet, false );
-
-                rDoc.ApplySelectionPattern( aNewAttrs, rDoc.GetPreviewSelection() );
-                pTabViewShell->UpdateSelectionArea(aFuncMark, &aAttr, /*adjustHeight*/ false);
+                SCCOL nCol = rViewData.GetCurX();
+                SCROW nRow = rViewData.GetCurY();
+                SCTAB nTab = rViewData.GetTabNo();
+                ScRange aRange( nCol, nRow, nTab );
+                aFuncMark.SetMarkArea( aRange );
             }
+            rDoc.SetPreviewSelection( aFuncMark );
+            ScStyleSheet* pPreviewStyle = static_cast<ScStyleSheet*>( pStylePool->Find( aStyleName, eFamily ) );
+            rDoc.SetPreviewCellStyle( pPreviewStyle  );
+            ScPatternAttr aAttr( *rDoc.GetSelectionPattern( aFuncMark ) );
+            aAttr.SetStyleSheet( pPreviewStyle );
+
+            SfxItemSet aItemSet( GetPool() );
+
+            ScPatternAttr aNewAttrs(GetViewData().GetDocument().getCellAttributeHelper());
+            SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
+            rNewSet.Put( aItemSet, false );
+
+            rDoc.ApplySelectionPattern( aNewAttrs, rDoc.GetPreviewSelection() );
+            pTabViewShell->UpdateSelectionArea(aFuncMark, &aAttr, /*adjustHeight*/ false);
         }
-        else
+    }
+    else if (nSlotId ==  SID_STYLE_END_PREVIEW)
+    {
+        // No mark at all happens when creating a new document, in which
+        // case the selection pattern obtained would be empty (created of
+        // GetPool()) anyway and nothing needs to be applied.
+        ScMarkData aPreviewMark( rDoc.GetPreviewSelection());
+        if (aPreviewMark.IsMarked() || aPreviewMark.IsMultiMarked())
         {
-            // No mark at all happens when creating a new document, in which
-            // case the selection pattern obtained would be empty (created of
-            // GetPool()) anyway and nothing needs to be applied.
-            ScMarkData aPreviewMark( rDoc.GetPreviewSelection());
-            if (aPreviewMark.IsMarked() || aPreviewMark.IsMultiMarked())
-            {
-                ScPatternAttr aAttr( *rDoc.GetSelectionPattern( aPreviewMark ) );
-                if ( ScStyleSheet* pPreviewStyle = rDoc.GetPreviewCellStyle() )
-                    aAttr.SetStyleSheet( pPreviewStyle );
-                rDoc.SetPreviewCellStyle(nullptr);
+            ScPatternAttr aAttr( *rDoc.GetSelectionPattern( aPreviewMark ) );
+            if ( ScStyleSheet* pPreviewStyle = rDoc.GetPreviewCellStyle() )
+                aAttr.SetStyleSheet( pPreviewStyle );
+            rDoc.SetPreviewCellStyle(nullptr);
 
-                SfxItemSet aItemSet( GetPool() );
+            SfxItemSet aItemSet( GetPool() );
 
-                ScPatternAttr aNewAttrs(GetViewData().GetDocument().getCellAttributeHelper());
-                SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
-                rNewSet.Put( aItemSet, false );
-                rDoc.ApplySelectionPattern( aNewAttrs, aPreviewMark );
-                pTabViewShell->UpdateSelectionArea(aPreviewMark, &aAttr, /*adjustHeight*/ false);
-            }
+            ScPatternAttr aNewAttrs(GetViewData().GetDocument().getCellAttributeHelper());
+            SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
+            rNewSet.Put( aItemSet, false );
+            rDoc.ApplySelectionPattern( aNewAttrs, aPreviewMark );
+            pTabViewShell->UpdateSelectionArea(aPreviewMark, &aAttr, /*adjustHeight*/ false);
         }
     }
     else if (nSlotId == SID_CLASSIFICATION_APPLY)
