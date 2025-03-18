@@ -1396,7 +1396,13 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
 // Test that changing the theme in one view doesn't change it in the other view
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
 {
-    Color aDarkColor(0x1c, 0x1c, 0x1c);
+    // NOTE: DOCCOLOR:dark was changed to COL_WHITE for 25.2.2, please read tdf#165803 for the reasons.
+    // TODO: Change-Id: Ib1ff7f2ca14110270baa8d6790d76696fd268183 (this patch) is a temporary fix for 25.2.2.
+    //       looking for/working towards better solutions
+    //
+    // document color canot be used to determine which theme is being used (light/dark), as they both use white
+    // document background color.
+    Color aDarkColor(COL_WHITE);
     addDarkLightThemes(aDarkColor, COL_WHITE);
     SwXTextDocument* pXTextDocument = createDoc();
     int nFirstViewId = SfxLokHelper::getView();

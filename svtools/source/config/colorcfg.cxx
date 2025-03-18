@@ -611,7 +611,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
 
     static const Color cAutoColors[][nColorTypes] =
     {
-        { COL_WHITE,        Color(0x1C1C1C) }, // DOCCOLOR
+        { COL_WHITE,        COL_WHITE       }, // DOCCOLOR
         { COL_LIGHTGRAY,    Color(0x808080) }, // DOCBOUNDARIES
         { Color(0xDFDFDE),  Color(0x333333) }, // APPBACKGROUND
         { COL_LIGHTGRAY,    Color(0x808080) }, // TABLEBOUNDARIES
@@ -635,7 +635,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
         { COL_LIGHTGREEN,   COL_LIGHTGREEN  }, // HTMLCOMMENT
         { COL_LIGHTRED,     COL_LIGHTRED    }, // HTMLKEYWORD
         { COL_GRAY,         COL_GRAY        }, // HTMLUNKNOWN
-        { COL_GRAY3,        COL_GRAY7       }, // CALCGRID
+        { COL_GRAY3,        COL_GRAY3       }, // CALCGRID
         { COL_LIGHTBLUE,    COL_LIGHTBLUE   }, // CALCCELLFOCUS
         { COL_BLUE,         COL_BLUE        }, // CALCPAGEBREAK
         { Color(0x2300dc),  Color(0x2300DC) }, // CALCPAGEBREAKMANUAL
