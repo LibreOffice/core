@@ -1527,6 +1527,12 @@ sal_Int32 ZipFile::readCEN()
             throw ZipException(u"Count != Total"_ustr );
         if (!unallocated.empty())
         {
+            if (std::all_of(unallocated.begin(), unallocated.end(), [](auto const& it) {
+                    return it.second - it.first == 12 || it.second - it.first == 16;
+                }))
+            {
+                throw ZipException(u"Zip file has holes the size of data descriptors; producer forgot to set flag bit 3?"_ustr);
+            }
             throw ZipException(u"Zip file has holes! It will leak!"_ustr);
         }
     }
