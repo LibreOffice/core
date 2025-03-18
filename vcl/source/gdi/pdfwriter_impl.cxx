@@ -6151,7 +6151,7 @@ bool PDFWriterImpl::emitTrailer()
         aLine.append( "> ]\n" );
     }
 
-    // Writes the /DocChecksum - hash off the PDF stream
+    // Writes the /DocChecksum - hash of the PDF stream
     // This entry is not defined in the standard, so don't write it if we
     // are using PDF/UA or PDF/A as the compliance checkers will complain.
     // Actually we shouldn't write it at all...
