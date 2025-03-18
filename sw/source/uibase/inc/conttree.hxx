@@ -141,6 +141,8 @@ class SwContentTree final : public SfxListener
     ImplSVEvent* m_nRowActivateEventId = nullptr;
     bool m_bSelectTo = false;
 
+    bool m_bEditing = false;
+
     std::unique_ptr<weld::TreeIter> m_xOverlayCompareEntry;
     std::unique_ptr<sdr::overlay::OverlayObject> m_xOverlayObject;
 
@@ -223,6 +225,10 @@ class SwContentTree final : public SfxListener
     DECL_LINK(OverlayObjectDelayTimerHdl, Timer *, void);
     DECL_LINK(MouseMoveHdl, const MouseEvent&, bool);
     DECL_LINK(MousePressHdl, const MouseEvent&, bool);
+
+    DECL_LINK(EditingEntryHdl, const weld::TreeIter&, bool);
+    typedef std::pair<const weld::TreeIter&, OUString> IterString;
+    DECL_LINK(EditedEntryHdl, const IterString&, bool);
 
 public:
     SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigationPI* pDialog);

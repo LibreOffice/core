@@ -93,6 +93,7 @@ public:
 
     bool        IsInvisible() const {return m_bInvisible;}
     void        SetInvisible(){ m_bInvisible = true;}
+    void        SetName(const OUString& rStr) {m_sContentName = rStr;}
 };
 
 #endif

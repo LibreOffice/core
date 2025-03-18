@@ -401,7 +401,7 @@
       <object class="GtkMenuItem" id="502">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_RENAME">_Rename...</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_RENAME">_Rename</property>
         <property name="use-underline">True</property>
       </object>
     </child>
