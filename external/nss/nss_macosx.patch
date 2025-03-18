@@ -78,9 +78,9 @@ diff -ru a/nss/coreconf/Darwin.mk b/nss/coreconf/Darwin.mk
 diff -ru a/nss/Makefile b/nss/Makefile
 --- a/a/nss/Makefile	2014-09-29 16:50:22.990304789 +0100
 +++ b/b/nss/Makefile	2014-09-29 16:51:59.207931908 +0100
-@@ -82,6 +82,9 @@
- ifeq ($(OS_TARGET),WIN95)
- NSPR_CONFIGURE_OPTS += --enable-win32-target=WIN95
+@@ -81,6 +81,9 @@
+ ifdef USE_64
+ NSPR_CONFIGURE_OPTS += --enable-64bit
  endif
 +ifdef MACOS_SDK_DIR
 +NSPR_CONFIGURE_OPTS += --with-macos-sdk=$(MACOS_SDK_DIR)
