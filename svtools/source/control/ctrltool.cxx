@@ -133,8 +133,8 @@ static int sortWeightValue(FontWeight eWeight)
     return 0; // eWeight == WEIGHT_NORMAL
 }
 
-static sal_Int32 ImplCompareFontMetric( ImplFontListFontMetric* pInfo1,
-                                          ImplFontListFontMetric* pInfo2 )
+static sal_Int32 ImplCompareFontMetric(const ImplFontListFontMetric* pInfo1,
+                                       const ImplFontListFontMetric* pInfo2)
 {
     //Sort non italic before italics
     if ( pInfo1->GetItalic() < pInfo2->GetItalic() )
