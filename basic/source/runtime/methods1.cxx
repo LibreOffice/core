@@ -755,7 +755,7 @@ void SbRtl_DimArray(StarBASIC *, SbxArray & rPar, bool)
 // 1st parameter = the object's name as string
 void SbRtl_FindObject(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
+    if (rPar.Count() != 2)
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
 
@@ -776,7 +776,7 @@ void SbRtl_FindObject(StarBASIC *, SbxArray & rPar, bool)
 // 2nd parameter = the property's name as string
 void SbRtl_FindPropertyObject(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 3)
+    if (rPar.Count() != 3)
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
 
