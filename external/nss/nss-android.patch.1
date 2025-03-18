@@ -41,7 +41,7 @@ diff -ur nss.org/nspr/configure nss/nspr/configure
 diff -ur nss.org/nss/Makefile nss/nss/Makefile
 --- nss.org/nss/Makefile	2017-09-07 15:29:44.933245745 +0200
 +++ nss/nss/Makefile	2017-09-07 15:32:04.347181076 +0200
-@@ -65,7 +65,7 @@
+@@ -67,7 +67,7 @@
  
  ifeq ($(OS_TARGET),Android)
  NSPR_CONFIGURE_OPTS += --with-android-ndk=$(ANDROID_NDK) \
@@ -50,16 +50,14 @@ diff -ur nss.org/nss/Makefile nss/nss/Makefile
                         --with-android-version=$(OS_TARGET_RELEASE) \
                         --with-android-toolchain=$(ANDROID_TOOLCHAIN) \
                         --with-android-platform=$(ANDROID_SYSROOT)
---- nss/nss/Makefile.orig	2019-11-26 14:52:15.934561202 +0100
-+++ nss/nss/Makefile	2019-11-26 14:52:20.538559612 +0100
-@@ -140,7 +140,6 @@
- 
+@@ -143,7 +143,6 @@
+ ifndef NSS_DISABLE_NSPR_TESTS
  build_nspr: $(NSPR_CONFIG_STATUS)
  	$(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME)
 -	$(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME)/pr/tests
- 
- install_nspr: build_nspr
- 	$(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME) install
+ else
+ build_nspr: $(NSPR_CONFIG_STATUS)
+ 	$(MAKE) -C $(CORE_DEPTH)/../nspr/$(OBJDIR_NAME)
 --- nss/nss/lib/ckfw/builtins/manifest.mn.orig	2019-11-26 15:18:22.185985193 +0100
 +++ nss/nss/lib/ckfw/builtins/manifest.mn	2019-11-26 15:18:29.281982387 +0100
 @@ -5,7 +5,7 @@
