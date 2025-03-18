@@ -1995,6 +1995,13 @@ CPPUNIT_TEST_FIXTURE(Test, test165333Tdf)
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xRun2, u"CharHidden"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, test165805Tdf)
+{
+    createSwDoc("165805.rtf");
+    //without page break there would be only one page
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, test165483Tdf)
 {
     createSwDoc("165483.rtf");
