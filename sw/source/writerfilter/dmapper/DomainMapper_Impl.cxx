@@ -1608,7 +1608,9 @@ void DomainMapper_Impl::deferBreak( BreakType deferredBreakType)
     case PAGE_BREAK:
             // See SwWW8ImplReader::HandlePageBreakChar(), page break should be
             // ignored inside tables.
-            if (0 < m_StreamStateStack.top().nTableDepth)
+            // but not in RTF import
+
+            if (0 < m_StreamStateStack.top().nTableDepth && !IsRTFImport())
                 return;
 
             m_StreamStateStack.top().bIsPageBreakDeferred = true;
