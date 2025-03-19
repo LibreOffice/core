@@ -155,7 +155,7 @@ class SVL_DLLPUBLIC SfxItemPool : public salhelper::SimpleReferenceObject
     friend class SfxAllItemSet;
 
     // allow ItemSetTooling to access
-    friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, bool);
+    friend SfxPoolItem const* implCreateItemEntry(const SfxItemPool&, SfxPoolItem const*, bool);
     friend void implCleanupItemEntry(SfxPoolItem const*);
 
     SfxBroadcaster                  aBC;
@@ -186,7 +186,7 @@ public:
         const std::function<SfxPoolItem*(sal_uInt16)>& rCallback = std::function<SfxPoolItem*(sal_uInt16)>());
 protected:
     const ItemInfo* impCheckItemInfoForClone(const ItemInfo* pInfo);
-    void impClearUserDefault(userItemInfos::iterator& rHit);
+    void impClearUserDefault(const userItemInfos::iterator& rHit);
     void impCreateUserDefault(const SfxPoolItem& rItem);
 private:
     void cleanupItemInfos();

@@ -37,7 +37,7 @@ namespace o3tl
         typedef std::size_t ref_count_t;
         static void incrementCount( ref_count_t& rCount ) { ++rCount; }
         static bool decrementCount( ref_count_t& rCount ) { return --rCount != 0; }
-        static std::size_t getCount( ref_count_t& rCount) { return rCount; }
+        static std::size_t getCount( ref_count_t rCount) { return rCount; }
     };
 
     /** Thread-safe refcounting
@@ -53,7 +53,7 @@ namespace o3tl
         {
             return (--rCount) != 0;
         }
-        static std::size_t getCount( ref_count_t& rCount) { return rCount; }
+        static std::size_t getCount( const ref_count_t& rCount) { return rCount; }
     };
 
     /** Copy-on-write wrapper.

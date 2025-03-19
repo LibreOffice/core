@@ -181,7 +181,7 @@ protected:
        @param bVetoable true means fire to VetoableChangeListener, false means fire to
                   XPropertyChangedListener and XMultiPropertyChangedListener.
      */
-    void fire(std::unique_lock<std::mutex>& rGuard, sal_Int32* pnHandles,
+    void fire(std::unique_lock<std::mutex>& rGuard, const sal_Int32* pnHandles,
               const css::uno::Any* pNewValues, const css::uno::Any* pOldValues, sal_Int32 nCount,
               bool bVetoable);
 

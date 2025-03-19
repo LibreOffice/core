@@ -117,7 +117,7 @@ namespace basegfx
     }
 
     /* Compute the determinant, given the adjoint matrix */
-    double B2DHomMatrix::computeDeterminant(double (&dst)[6]) const
+    double B2DHomMatrix::computeDeterminant(const double (&dst)[6]) const
     {
         return mfValues[0][0] * dst[0] + mfValues[0][1] * dst[3];
     }

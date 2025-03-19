@@ -747,7 +747,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
 
 OUString URIHelper::FindFirstDOIInText(std::u16string_view rText,
                                        sal_Int32 & rBegin,
-                                       sal_Int32 & rEnd,
+                                       const sal_Int32 & rEnd,
                                        CharClass const & rCharClass)
 {
     if (rBegin > rEnd || rEnd > static_cast<sal_Int32>(rText.size()))

@@ -577,7 +577,7 @@ class SVL_DLLPUBLIC SfxPoolItem
     friend class ItemInfoDynamic;
 
     // allow ItemSetTooling to access
-    friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, bool);
+    friend SfxPoolItem const* implCreateItemEntry(const SfxItemPool&, SfxPoolItem const*, bool);
     friend void implCleanupItemEntry(SfxPoolItem const*);
 
     mutable sal_uInt32 m_nRefCount;
@@ -761,7 +761,7 @@ private:
 class SVL_DLLPUBLIC ItemInstanceManager
 {
     // allow *only* ItemSetTooling to access
-    friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, bool);
+    friend SfxPoolItem const* implCreateItemEntry(const SfxItemPool&, SfxPoolItem const*, bool);
     friend void implCleanupItemEntry(SfxPoolItem const*);
 
     // Define for which SfxItemType to register

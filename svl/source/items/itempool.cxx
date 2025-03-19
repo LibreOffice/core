@@ -289,7 +289,7 @@ const ItemInfo* SfxItemPool::impCheckItemInfoForClone(const ItemInfo* pInfo)
     return new ItemInfoUser(*pInfo, *this, *pItem);
 }
 
-void SfxItemPool::impClearUserDefault(userItemInfos::iterator& rHit)
+void SfxItemPool::impClearUserDefault(const userItemInfos::iterator& rHit)
 {
     if (rHit == maUserItemInfos.end())
         // does not exist

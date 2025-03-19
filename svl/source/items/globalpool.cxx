@@ -251,7 +251,7 @@ public:
 // the single static instance that takes over that global Item sharing
 static InstanceManagerHelper aInstanceManagerHelper;
 
-SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource,
+SfxPoolItem const* implCreateItemEntry(const SfxItemPool& rPool, SfxPoolItem const* pSource,
                                        bool bPassingOwnership)
 {
     if (nullptr == pSource)

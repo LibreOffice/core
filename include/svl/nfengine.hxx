@@ -294,7 +294,7 @@ public:
                                 SvNFFormatData::DefaultFormatKeysMap& rFormatCache);
 
     static void ChangeIntl(SvNFLanguageData& rCurrentLanguage, LanguageType eLnge);
-    static void ChangeNullDate(SvNFLanguageData& rCurrentLanguage, sal_uInt16 nDay,
+    static void ChangeNullDate(const SvNFLanguageData& rCurrentLanguage, sal_uInt16 nDay,
                                sal_uInt16 nMonth, sal_Int16 nYear);
 
     static sal_uInt32 GetFormatIndex(SvNFLanguageData& rCurrentLanguage, const Accessor& rFuncs,
@@ -344,7 +344,7 @@ public:
                                         const SvNFFormatData& rFormatData, sal_uInt32 nFormat);
 
     /// Count of decimals
-    static sal_uInt16 GetFormatPrecision(SvNFLanguageData& rCurrentLanguage,
+    static sal_uInt16 GetFormatPrecision(const SvNFLanguageData& rCurrentLanguage,
                                          const SvNFFormatData& rFormatData, sal_uInt32 nFormat);
 
     static OUString GetInputLineString(SvNFLanguageData& rCurrentLanguage,

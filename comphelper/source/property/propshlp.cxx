@@ -511,7 +511,7 @@ void OPropertySetHelper::impl_fireAll(std::unique_lock<std::mutex>& rGuard, sal_
          additionalEvents + i_count, false);
 }
 
-void OPropertySetHelper::fire(std::unique_lock<std::mutex>& rGuard, sal_Int32* pnHandles,
+void OPropertySetHelper::fire(std::unique_lock<std::mutex>& rGuard, const sal_Int32* pnHandles,
                               const Any* pNewValues, const Any* pOldValues,
                               sal_Int32 nHandles, // This is the Count of the array
                               bool bVetoable)

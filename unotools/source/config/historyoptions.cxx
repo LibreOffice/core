@@ -56,10 +56,11 @@ static void TruncateList(
         sal_uInt32 nSize);
 
 static void PrependItem(const uno::Reference<container::XNameAccess>& xCfg,
-                        uno::Reference<container::XNameContainer>& xList, std::u16string_view sURL);
+                        const uno::Reference<container::XNameContainer>& xList,
+                        std::u16string_view sURL);
 static void MoveItemToUnpinned(const uno::Reference<container::XNameAccess>& xCfg,
-                               uno::Reference<container::XNameContainer>& xOrderList,
-                               uno::Reference<container::XNameContainer>& xItemList,
+                               const uno::Reference<container::XNameContainer>& xOrderList,
+                               const uno::Reference<container::XNameContainer>& xItemList,
                                std::u16string_view sURL);
 
 static sal_uInt32 GetCapacity(const uno::Reference<container::XNameAccess>& xCommonXCU, EHistoryType eHistory);
@@ -484,7 +485,7 @@ static void TruncateList(
 }
 
 static void PrependItem(const uno::Reference<container::XNameAccess>& xCfg,
-                        uno::Reference<container::XNameContainer>& xList, std::u16string_view sURL)
+                        const uno::Reference<container::XNameContainer>& xList, std::u16string_view sURL)
 {
     uno::Reference<beans::XPropertySet> xSet;
     const sal_Int32 nLength = xList->getElementNames().getLength();
@@ -516,8 +517,8 @@ static void PrependItem(const uno::Reference<container::XNameAccess>& xCfg,
 }
 
 static void MoveItemToUnpinned(const uno::Reference<container::XNameAccess>& xCfg,
-                               uno::Reference<container::XNameContainer>& xOrderList,
-                               uno::Reference<container::XNameContainer>& xItemList,
+                               const uno::Reference<container::XNameContainer>& xOrderList,
+                               const uno::Reference<container::XNameContainer>& xItemList,
                                std::u16string_view sURL)
 {
     uno::Reference<beans::XPropertySet> xSet;

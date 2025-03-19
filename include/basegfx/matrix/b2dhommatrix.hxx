@@ -132,7 +132,7 @@ namespace basegfx
 
     private:
         void computeAdjoint(double (&dst)[6]) const;
-        double computeDeterminant(double (&dst)[6]) const;
+        double computeDeterminant(const double (&dst)[6]) const;
         void doMulMatrix(const B2DHomMatrix& rMat);
     };
 

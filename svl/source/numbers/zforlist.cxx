@@ -278,7 +278,7 @@ void SvNFEngine::ChangeIntl(SvNFLanguageData& rCurrentLanguage, LanguageType eLn
     rCurrentLanguage.ChangeIntl(eLnge);
 }
 
-void SvNFEngine::ChangeNullDate(SvNFLanguageData& rCurrentLanguage, sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear)
+void SvNFEngine::ChangeNullDate(const SvNFLanguageData& rCurrentLanguage, sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear)
 {
     rCurrentLanguage.pFormatScanner->ChangeNullDate(nDay, nMonth, nYear);
     rCurrentLanguage.pStringScanner->ChangeNullDate(nDay, nMonth, nYear);
@@ -2534,7 +2534,7 @@ void SvNumberFormatter::GetFormatSpecialInfo(sal_uInt32 nFormat,
     }
 }
 
-sal_uInt16 SvNFEngine::GetFormatPrecision(SvNFLanguageData& rCurrentLanguage,
+sal_uInt16 SvNFEngine::GetFormatPrecision(const SvNFLanguageData& rCurrentLanguage,
                                           const SvNFFormatData& rFormatData,
                                           sal_uInt32 nFormat)
 {

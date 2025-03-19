@@ -42,7 +42,7 @@ SVL_DLLPUBLIC void listSfxItemSetUsage();
 #endif
 
 // ItemSet/ItemPool helpers
-SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource, bool bPassingOwnership);
+SfxPoolItem const* implCreateItemEntry(const SfxItemPool& rPool, SfxPoolItem const* pSource, bool bPassingOwnership);
 void implCleanupItemEntry(const SfxPoolItem* pSource);
 
 // coverity[ missing_move_assignment : SUPPRESS] - don't report about missing move assignment
@@ -85,7 +85,7 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
     friend class SfxAllItemSet;
 
     // allow ItemSetTooling to access
-    friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, bool);
+    friend SfxPoolItem const* implCreateItemEntry(const SfxItemPool&, SfxPoolItem const*, bool);
     friend void implCleanupItemEntry(const SfxPoolItem*);
 
     SfxItemPool*      m_pPool;         ///< pool that stores the items

@@ -122,7 +122,7 @@ SVL_DLLPUBLIC OUString FindFirstURLInText(OUString const & rText,
 
 SVL_DLLPUBLIC OUString FindFirstDOIInText(std::u16string_view rText,
                                           sal_Int32 & rBegin,
-                                          sal_Int32 & rEnd,
+                                          const sal_Int32 & rEnd,
                                           CharClass const & rCharClass);
 
 /** Remove any password component from both absolute and relative URLs.
