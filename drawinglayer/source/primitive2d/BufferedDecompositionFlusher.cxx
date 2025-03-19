@@ -38,12 +38,32 @@ namespace drawinglayer::primitive2d
     It is very simple, scales to lots and lots of primitives without needing lots of timers, and performs
     very little work in the common case.
 */
+namespace
+{
+class FlusherDeinit : public tools::DeleteOnDeinitBase
+{
+    rtl::Reference<BufferedDecompositionFlusher> m_xTimer;
+    virtual void doCleanup() override
+    {
+        m_xTimer->stop();
+        m_xTimer = nullptr;
+    }
+
+public:
+    FlusherDeinit()
+    {
+        m_xTimer = new BufferedDecompositionFlusher;
+        addDeinitContainer(this);
+    }
+
+    BufferedDecompositionFlusher* get() { return m_xTimer.get(); }
+};
+}
 
 static BufferedDecompositionFlusher* getInstance()
 {
-    static tools::DeleteRtlReferenceOnDeinit<BufferedDecompositionFlusher> gaTimer(
-        new BufferedDecompositionFlusher);
-    return gaTimer.get().get();
+    static FlusherDeinit gaTimer;
+    return gaTimer.get();
 }
 
 // static
