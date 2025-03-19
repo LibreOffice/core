@@ -1027,6 +1027,8 @@ sal_uInt16 SfxItemSet::ClearAllItemsImpl()
         }
 
         implCleanupItemEntry(rCandidate);
+
+        rCandidate = nullptr; // clear entry in itemset!
     }
 
     // remember count before resetting it, that is the retval
