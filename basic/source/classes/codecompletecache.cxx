@@ -43,7 +43,7 @@ CodeCompleteOptions::CodeCompleteOptions()
 
 bool CodeCompleteOptions::IsCodeCompleteOn()
 {
-    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions().bIsCodeCompleteOn;
+    return theCodeCompleteOptions().bIsCodeCompleteOn;
 }
 
 void CodeCompleteOptions::SetCodeCompleteOn( bool b )
@@ -53,7 +53,7 @@ void CodeCompleteOptions::SetCodeCompleteOn( bool b )
 
 bool CodeCompleteOptions::IsExtendedTypeDeclaration()
 {
-    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions().bExtendedTypeDeclarationOn;
+    return theCodeCompleteOptions().bExtendedTypeDeclarationOn;
 }
 
 void CodeCompleteOptions::SetExtendedTypeDeclaration( bool b )
@@ -63,7 +63,7 @@ void CodeCompleteOptions::SetExtendedTypeDeclaration( bool b )
 
 bool CodeCompleteOptions::IsProcedureAutoCompleteOn()
 {
-    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions().bIsProcedureAutoCompleteOn;
+    return theCodeCompleteOptions().bIsProcedureAutoCompleteOn;
 }
 
 void CodeCompleteOptions::SetProcedureAutoCompleteOn( bool b )
@@ -73,7 +73,7 @@ void CodeCompleteOptions::SetProcedureAutoCompleteOn( bool b )
 
 bool CodeCompleteOptions::IsAutoCloseQuotesOn()
 {
-    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions().bIsAutoCloseQuotesOn;
+    return theCodeCompleteOptions().bIsAutoCloseQuotesOn;
 }
 
 void CodeCompleteOptions::SetAutoCloseQuotesOn( bool b )
@@ -83,7 +83,7 @@ void CodeCompleteOptions::SetAutoCloseQuotesOn( bool b )
 
 bool CodeCompleteOptions::IsAutoCloseParenthesisOn()
 {
-    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions().bIsAutoCloseParenthesisOn;
+    return theCodeCompleteOptions().bIsAutoCloseParenthesisOn;
 }
 
 void CodeCompleteOptions::SetAutoCloseParenthesisOn( bool b )
@@ -93,7 +93,7 @@ void CodeCompleteOptions::SetAutoCloseParenthesisOn( bool b )
 
 bool CodeCompleteOptions::IsAutoCorrectOn()
 {
-    return officecfg::Office::Common::Misc::ExperimentalMode::get() && theCodeCompleteOptions().bIsAutoCorrectOn;
+    return theCodeCompleteOptions().bIsAutoCorrectOn;
 }
 
 void CodeCompleteOptions::SetAutoCorrectOn( bool b )
