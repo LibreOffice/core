@@ -875,17 +875,29 @@ void ScCellIterator::init()
     while (maEndPos.Tab() > 0 && !mrDoc.maTabs[maEndPos.Tab()])
         maEndPos.IncTab(-1); // Only the tables in use
 
-    if (maStartPos.Tab() > maEndPos.Tab())
-        maStartPos.SetTab(maEndPos.Tab());
-
-    if (!mrDoc.maTabs[maStartPos.Tab()])
+    if (maStartPos.Tab() > maEndPos.Tab() || !mrDoc.maTabs[maStartPos.Tab()])
     {
         assert(!"Table not found");
-        maStartPos = ScAddress(mrDoc.MaxCol()+1, mrDoc.MaxRow()+1, MAXTAB+1); // -> Abort on GetFirst.
+        maStartPos = ScAddress(mrDoc.MaxCol()+1, mrDoc.MaxRow()+1, MAXTAB+1); // -> Abort on first().
     }
     else
     {
-        maStartPos.SetCol(mrDoc.maTabs[maStartPos.Tab()]->ClampToAllocatedColumns(maStartPos.Col()));
+        for (auto tabNo = maStartPos.Tab();; ++tabNo)
+        {
+            const auto& pTab = mrDoc.maTabs[tabNo];
+            if (pTab && maStartPos.Col() < pTab->GetAllocatedColumnsCount())
+            {
+                // Found the first table with allocated columns in range
+                maStartPos.SetTab(tabNo);
+                break;
+            }
+            if (tabNo == maEndPos.Tab())
+            {
+                // No allocated columns found in the range -> return false from first().
+                maStartPos = ScAddress(mrDoc.MaxCol() + 1, mrDoc.MaxRow() + 1, MAXTAB + 1);
+                break;
+            }
+        }
     }
 
     maCurPos = maStartPos;
