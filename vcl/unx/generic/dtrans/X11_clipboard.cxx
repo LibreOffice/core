@@ -116,7 +116,7 @@ void X11Clipboard::clearContents()
     // copy member references on stack so they can be called
     // without having the mutex
     Reference< XClipboardOwner > xOwner( m_aOwner );
-    Reference< XTransferable > xKeepAlive( m_aContents );
+    Reference< XTransferable > xTrans( m_aContents );
     // clear members
     m_aOwner.clear();
     m_aContents.clear();
@@ -126,7 +126,7 @@ void X11Clipboard::clearContents()
 
     // inform previous owner of lost ownership
     if ( xOwner.is() )
-        xOwner->lostOwnership(xThis, m_aContents);
+        xOwner->lostOwnership(xThis, xTrans);
 }
 
 Reference< XTransferable > SAL_CALL X11Clipboard::getContents()
