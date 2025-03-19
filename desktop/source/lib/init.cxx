@@ -5052,8 +5052,12 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
 
     const StringMap aMap(jsdialog::jsonToStringMap(pArguments));
 
-    if (aMap.find(u"id"_ustr) == aMap.end())
+    if (aMap.find(u"id"_ustr) == aMap.end() || aMap.at(u"id"_ustr).isEmpty())
+    {
+        SAL_WARN("lok", "sendDialogEvent: no widget id set");
+        assert(false);
         return;
+    }
 
     const sal_uInt64 nCurrentShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
 
