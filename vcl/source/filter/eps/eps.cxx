@@ -2057,11 +2057,11 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
 
     if ( maLastFont != maFont )
     {
-        if ( maFont.GetPitch() == PITCH_FIXED )         // a little bit font selection
+        if ( maFont.GetPitchMaybeAskConfig() == PITCH_FIXED )         // a little bit font selection
             ImplDefineFont( "Courier", "Oblique" );
         else if ( maFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
             ImplWriteLine( "/Symbol findfont" );
-        else if ( maFont.GetFamilyType() == FAMILY_SWISS )
+        else if ( maFont.GetFamilyTypeMaybeAskConfig() == FAMILY_SWISS )
             ImplDefineFont( "Helvetica", "Oblique" );
         else
             ImplDefineFont( "Times", "Italic" );
@@ -2091,18 +2091,18 @@ void PSWriter::ImplDefineFont( const char* pOriginalName, const char* pItalic )
 {
     mpPS->WriteUChar( '/' );             //convert the font pOriginalName using ISOLatin1Encoding
     mpPS->WriteOString( pOriginalName );
-    switch ( maFont.GetWeight() )
+    switch ( maFont.GetWeightMaybeAskConfig() )
     {
         case WEIGHT_SEMIBOLD :
         case WEIGHT_BOLD :
         case WEIGHT_ULTRABOLD :
         case WEIGHT_BLACK :
             mpPS->WriteOString( "-Bold" );
-            if ( maFont.GetItalic() != ITALIC_NONE )
+            if ( maFont.GetItalicMaybeAskConfig() != ITALIC_NONE )
                 mpPS->WriteOString( pItalic );
             break;
         default:
-            if ( maFont.GetItalic() != ITALIC_NONE )
+            if ( maFont.GetItalicMaybeAskConfig() != ITALIC_NONE )
                 mpPS->WriteOString( pItalic );
             break;
     }

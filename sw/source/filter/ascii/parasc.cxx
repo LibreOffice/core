@@ -137,8 +137,8 @@ SwASCIIParser::SwASCIIParser(SwDoc& rD, const SwPaM& rCursor, SvStream& rIn, boo
     vcl::Font aTextFont(m_rOpt.GetFontName(), Size(0, 10));
     if (m_rDoc.getIDocumentDeviceAccess().getPrinter(false))
         aTextFont = m_rDoc.getIDocumentDeviceAccess().getPrinter(false)->GetFontMetric(aTextFont);
-    SvxFontItem aFont( aTextFont.GetFamilyType(), aTextFont.GetFamilyName(),
-                       OUString(), aTextFont.GetPitch(), aTextFont.GetCharSet(), RES_CHRATR_FONT );
+    SvxFontItem aFont( aTextFont.GetFamilyTypeMaybeAskConfig(), aTextFont.GetFamilyName(),
+                       OUString(), aTextFont.GetPitchMaybeAskConfig(), aTextFont.GetCharSet(), RES_CHRATR_FONT );
     m_oItemSet->Put(aFont);
     aFont.SetWhich(RES_CHRATR_CJK_FONT);
     m_oItemSet->Put(aFont);

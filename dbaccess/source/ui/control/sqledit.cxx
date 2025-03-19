@@ -96,13 +96,13 @@ void SQLEditView::SetItemPoolFont(SfxItemPool* pItemPool)
     Size aFontSize(0, officecfg::Office::Common::Font::SourceViewFont::FontHeight::get());
     vcl::Font aAppFont(sFontName, aFontSize);
 
-    pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
+    pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyTypeMaybeAskConfig(), aAppFont.GetFamilyName(),
                                               u""_ustr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
                                               EE_CHAR_FONTINFO));
-    pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
+    pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyTypeMaybeAskConfig(), aAppFont.GetFamilyName(),
                                               u""_ustr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
                                               EE_CHAR_FONTINFO_CJK));
-    pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
+    pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyTypeMaybeAskConfig(), aAppFont.GetFamilyName(),
                                               u""_ustr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
                                               EE_CHAR_FONTINFO_CTL));
 

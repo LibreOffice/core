@@ -56,7 +56,7 @@ namespace frm
         // defaults
         vcl::Font aFont = Application::GetSettings().GetStyleSettings().GetAppFont();
         aFont.SetFamilyName( u"Times New Roman"_ustr );
-        pPool->SetUserDefaultItem( SvxFontItem( aFont.GetFamilyType(), aFont.GetFamilyName(), OUString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO ) );
+        pPool->SetUserDefaultItem( SvxFontItem( aFont.GetFamilyTypeMaybeAskConfig(), aFont.GetFamilyName(), OUString(), aFont.GetPitchMaybeAskConfig(), aFont.GetCharSet(), EE_CHAR_FONTINFO ) );
 
         // 12 pt font size
         MapMode aPointMapMode( MapUnit::MapPoint );

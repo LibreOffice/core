@@ -425,13 +425,13 @@ namespace
 
         _rFont.SetLanguage(_pLanguageLB->get_active_id());
 
-        _rFont.SetFamily( aFontMetrics.GetFamilyType() );
+        _rFont.SetFamily( aFontMetrics.GetFamilyTypeMaybeAskConfig() );
         _rFont.SetFamilyName( aFontMetrics.GetFamilyName() );
         _rFont.SetStyleName( aFontMetrics.GetStyleName() );
-        _rFont.SetPitch( aFontMetrics.GetPitch() );
+        _rFont.SetPitch( aFontMetrics.GetPitchMaybeAskConfig() );
         _rFont.SetCharSet( aFontMetrics.GetCharSet() );
-        _rFont.SetWeight( aFontMetrics.GetWeight() );
-        _rFont.SetItalic( aFontMetrics.GetItalic() );
+        _rFont.SetWeight( aFontMetrics.GetWeightMaybeAskConfig() );
+        _rFont.SetItalic( aFontMetrics.GetItalicMaybeAskConfig() );
         _rFont.SetFontSize( aFontMetrics.GetFontSize() );
 
         return aFontMetrics;
@@ -874,8 +874,8 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     if (nEntryPos >= m_pImpl->m_nExtraEntryPos)
         aStyleBoxText.clear();
     FontMetric aInfo( pFontList->Get( aFontName, aStyleBoxText ) );
-    SvxFontItem aFontItem( aInfo.GetFamilyType(), aInfo.GetFamilyName(), aInfo.GetStyleName(),
-                           aInfo.GetPitch(), aInfo.GetCharSet(), nWhich );
+    SvxFontItem aFontItem( aInfo.GetFamilyTypeMaybeAskConfig(), aInfo.GetFamilyName(), aInfo.GetStyleName(),
+                           aInfo.GetPitchMaybeAskConfig(), aInfo.GetCharSet(), nWhich );
     pOld = GetOldItem( rSet, nSlot );
 
     if ( pOld )
@@ -911,7 +911,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
         case Ctl : nSlot = SID_ATTR_CHAR_CTL_WEIGHT; break;
     }
     nWhich = GetWhich( nSlot );
-    FontWeight eWeight = aInfo.GetWeight();
+    FontWeight eWeight = aInfo.GetWeightMaybeAskConfig();
     if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
         eWeight = WEIGHT_NORMAL;
     SvxWeightItem aWeightItem( eWeight, nWhich );
@@ -930,7 +930,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
         bChanged = pStyleBox->get_saved_value().isEmpty();
 
         if ( m_pImpl->m_bInSearchMode && bChanged &&
-             aInfo.GetWeight() == WEIGHT_NORMAL && aInfo.GetItalic() != ITALIC_NONE )
+             aInfo.GetWeightMaybeAskConfig() == WEIGHT_NORMAL && aInfo.GetItalicMaybeAskConfig() != ITALIC_NONE )
             bChanged = false;
     }
 
@@ -960,7 +960,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
         case Ctl : nSlot = SID_ATTR_CHAR_CTL_POSTURE; break;
     }
     nWhich = GetWhich( nSlot );
-    FontItalic eItalic = aInfo.GetItalic();
+    FontItalic eItalic = aInfo.GetItalicMaybeAskConfig();
     if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
         eItalic = ITALIC_NONE;
     SvxPostureItem aPostureItem( eItalic, nWhich );
@@ -979,7 +979,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
         bChanged = pStyleBox->get_saved_value().isEmpty();
 
         if ( m_pImpl->m_bInSearchMode && bChanged &&
-             aInfo.GetItalic() == ITALIC_NONE && aInfo.GetWeight() != WEIGHT_NORMAL )
+             aInfo.GetItalicMaybeAskConfig() == ITALIC_NONE && aInfo.GetWeightMaybeAskConfig() != WEIGHT_NORMAL )
             bChanged = false;
     }
 

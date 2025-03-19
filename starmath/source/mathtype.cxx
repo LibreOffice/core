@@ -3265,9 +3265,9 @@ void MathType::HandleText(SmNode *pNode)
             pS->WriteUChar( CHAR );
 
         sal_uInt8 nFace = 0x1;
-        if (pNode->GetFont().GetItalic() == ITALIC_NORMAL)
+        if (pNode->GetFont().GetItalicMaybeAskConfig() == ITALIC_NORMAL)
             nFace = 0x3;
-        else if (pNode->GetFont().GetWeight() == WEIGHT_BOLD)
+        else if (pNode->GetFont().GetWeightMaybeAskConfig() == WEIGHT_BOLD)
             nFace = 0x7;
         pS->WriteUChar( nFace+128 ); //typeface
         sal_uInt16 nChar = pTemp->GetText()[i];

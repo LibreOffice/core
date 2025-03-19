@@ -206,13 +206,13 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
             const Size         aSize( nFontEM, nFontEM );
 
             // Font Weight
-            if( aFont.GetWeight() != WEIGHT_NORMAL )
+            if( aFont.GetWeightMaybeAskConfig() != WEIGHT_NORMAL )
                 aFontWeight = "bold";
             else
                 aFontWeight = "normal";
 
             // Font Italic
-            if( aFont.GetItalic() != ITALIC_NONE )
+            if( aFont.GetItalicMaybeAskConfig() != ITALIC_NONE )
                 aFontStyle = "italic";
             else
                 aFontStyle = "normal";

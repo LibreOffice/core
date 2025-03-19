@@ -156,8 +156,8 @@ void EditRTFParser::AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& r
     aSz = mpEditEngine->GetRefDevice()->LogicToLogic(aSz, &aPntMode, &_aEditMapMode);
     SvxFontHeightItem aFontHeightItem( aSz.Width(), 100, EE_CHAR_FONTHEIGHT );
     vcl::Font aDefFont( GetFont( nDefFont ) );
-    SvxFontItem aFontItem( aDefFont.GetFamilyType(), aDefFont.GetFamilyName(),
-                    aDefFont.GetStyleName(), aDefFont.GetPitch(), aDefFont.GetCharSet(), EE_CHAR_FONTINFO );
+    SvxFontItem aFontItem( aDefFont.GetFamilyTypeMaybeAskConfig(), aDefFont.GetFamilyName(),
+                    aDefFont.GetStyleName(), aDefFont.GetPitchMaybeAskConfig(), aDefFont.GetCharSet(), EE_CHAR_FONTINFO );
 
     sal_Int32 nStartPara = mpEditEngine->GetEditDoc().GetPos( rStart.GetNode() );
     sal_Int32 nEndPara = mpEditEngine->GetEditDoc().GetPos( rEnd.GetNode() );

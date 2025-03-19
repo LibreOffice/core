@@ -1077,8 +1077,8 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     {
         std::unique_ptr<SvxFontItem> aNewFontItem(aFont->Clone());
         aNewFontItem->SetFamilyName( aNewFont.GetFamilyName() );
-        aNewFontItem->SetFamily(  aNewFont.GetFamilyType());
-        aNewFontItem->SetPitch(   aNewFont.GetPitch());
+        aNewFontItem->SetFamily(  aNewFont.GetFamilyTypeMaybeAskConfig());
+        aNewFontItem->SetPitch(   aNewFont.GetPitchMaybeAskConfig());
         aNewFontItem->SetCharSet( aNewFont.GetCharSet() );
 
         SfxItemSet aRestoreSet(SfxItemSet::makeFixedSfxItemSet<

@@ -596,14 +596,14 @@ static void lcl_html_setFixedFontProperty(
     rPropSet->setPropertyValue(u"FontStyleName"_ustr,
                                 aTmp );
 
-    aTmp <<= static_cast<sal_Int16>(aFixedFont.GetFamilyType());
+    aTmp <<= static_cast<sal_Int16>(aFixedFont.GetFamilyTypeMaybeAskConfig());
     rPropSet->setPropertyValue(u"FontFamily"_ustr, aTmp );
 
     aTmp <<= static_cast<sal_Int16>(aFixedFont.GetCharSet());
     rPropSet->setPropertyValue(u"FontCharset"_ustr,
                                 aTmp );
 
-    aTmp <<= static_cast<sal_Int16>(aFixedFont.GetPitch());
+    aTmp <<= static_cast<sal_Int16>(aFixedFont.GetPitchMaybeAskConfig());
     rPropSet->setPropertyValue(u"FontPitch"_ustr, aTmp );
 
     aTmp <<= float(10.0);

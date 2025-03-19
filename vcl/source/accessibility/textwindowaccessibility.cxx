@@ -848,7 +848,7 @@ Document::retrieveCharacterAttributes(
 
     //character posture
     aAttrib.Name = "CharPosture";
-    aAttrib.Value <<= vcl::unohelper::ConvertFontSlant(aFont.GetItalic());
+    aAttrib.Value <<= vcl::unohelper::ConvertFontSlant(aFont.GetItalicMaybeAskConfig());
     aAttribs.push_back(aAttrib);
 
     //character relief
@@ -870,7 +870,7 @@ Document::retrieveCharacterAttributes(
 
     //character weight
     aAttrib.Name = "CharWeight";
-    aAttrib.Value <<= static_cast<float>(aFont.GetWeight());
+    aAttrib.Value <<= static_cast<float>(aFont.GetWeightMaybeAskConfig());
     aAttribs.push_back(aAttrib);
 
     //character alignment

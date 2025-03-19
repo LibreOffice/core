@@ -77,8 +77,8 @@ namespace {
 SvxFontItem* getDefaultFontItem(LanguageType eLang, DefaultFontType nFontType, sal_uInt16 nItemId)
 {
     vcl::Font aDefFont = OutputDevice::GetDefaultFont( nFontType, eLang, GetDefaultFontFlags::OnlyOne );
-    SvxFontItem* pNewItem = new SvxFontItem( aDefFont.GetFamilyType(), aDefFont.GetFamilyName(), aDefFont.GetStyleName(),
-            aDefFont.GetPitch(), aDefFont.GetCharSet(), nItemId );
+    SvxFontItem* pNewItem = new SvxFontItem( aDefFont.GetFamilyTypeMaybeAskConfig(), aDefFont.GetFamilyName(), aDefFont.GetStyleName(),
+            aDefFont.GetPitchMaybeAskConfig(), aDefFont.GetCharSet(), nItemId );
 
     return pNewItem;
 }

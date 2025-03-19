@@ -1319,16 +1319,19 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testUnallocatedColumnsAttributes)
     CPPUNIT_ASSERT_EQUAL(INITIALCOLCOUNT, pDoc->GetAllocatedColumnsCount(0));
     vcl::Font aFont;
     pDoc->GetPattern(pDoc->MaxCol(), 0, 0)->fillFontOnly(aFont);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD,
+                                 aFont.GetWeightMaybeAskConfig());
 
     goToCell(u"A2:CV2"_ustr); // first 100 cells in row 2
     dispatchCommand(mxComponent, u".uno:Bold"_ustr, {});
     // These need to be explicitly allocated.
     CPPUNIT_ASSERT_EQUAL(SCCOL(100), pDoc->GetAllocatedColumnsCount(0));
     pDoc->GetPattern(99, 1, 0)->fillFontOnly(aFont);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD,
+                                 aFont.GetWeightMaybeAskConfig());
     pDoc->GetPattern(100, 1, 0)->fillFontOnly(aFont);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should not be bold", WEIGHT_NORMAL, aFont.GetWeight());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should not be bold", WEIGHT_NORMAL,
+                                 aFont.GetWeightMaybeAskConfig());
 
     goToCell("CW3:" + pDoc->MaxColAsString() + "3"); // All but first 100 cells in row 3.
     dispatchCommand(mxComponent, u".uno:Bold"_ustr, {});
@@ -1336,9 +1339,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testUnallocatedColumnsAttributes)
     // by the default attribute.
     CPPUNIT_ASSERT_EQUAL(SCCOL(100), pDoc->GetAllocatedColumnsCount(0));
     pDoc->GetPattern(99, 2, 0)->fillFontOnly(aFont);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should not be bold", WEIGHT_NORMAL, aFont.GetWeight());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should not be bold", WEIGHT_NORMAL,
+                                 aFont.GetWeightMaybeAskConfig());
     pDoc->GetPattern(100, 2, 0)->fillFontOnly(aFont);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD,
+                                 aFont.GetWeightMaybeAskConfig());
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testAutoSum)

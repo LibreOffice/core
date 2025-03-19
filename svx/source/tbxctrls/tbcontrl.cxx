@@ -1793,7 +1793,7 @@ void SvxFontNameBox_Base::CheckAndMarkUnknownFont()
     vcl::Font font = m_xWidget->get_entry_font();
     if (fontname.isEmpty() || CheckFontIsAvailable(fontname))
     {
-        if( font.GetItalic() != ITALIC_NONE )
+        if( font.GetItalicMaybeAskConfig() != ITALIC_NONE )
         {
             font.SetItalic( ITALIC_NONE );
             m_xWidget->set_entry_font(font);
@@ -1802,7 +1802,7 @@ void SvxFontNameBox_Base::CheckAndMarkUnknownFont()
     }
     else
     {
-        if( font.GetItalic() != ITALIC_NORMAL )
+        if( font.GetItalicMaybeAskConfig() != ITALIC_NORMAL )
         {
             font.SetItalic( ITALIC_NORMAL );
             m_xWidget->set_entry_font(font);
@@ -1986,14 +1986,14 @@ void SvxFontNameBox_Base::Select(bool bNonTravelSelect)
     if ( pFontList )
     {
         FontMetric aFontMetric( pFontList->Get(m_xWidget->get_active_text(),
-            aCurFont.GetWeight(),
-            aCurFont.GetItalic() ) );
+            aCurFont.GetWeightMaybeAskConfig(),
+            aCurFont.GetItalicMaybeAskConfig() ) );
         aCurFont = aFontMetric;
 
-        pFontItem.reset( new SvxFontItem( aFontMetric.GetFamilyType(),
+        pFontItem.reset( new SvxFontItem( aFontMetric.GetFamilyTypeMaybeAskConfig(),
             aFontMetric.GetFamilyName(),
             aFontMetric.GetStyleName(),
-            aFontMetric.GetPitch(),
+            aFontMetric.GetPitchMaybeAskConfig(),
             aFontMetric.GetCharSet(),
             SID_ATTR_CHAR_FONT ) );
 

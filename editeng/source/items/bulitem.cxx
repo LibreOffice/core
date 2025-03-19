@@ -64,7 +64,7 @@ void SvxBulletItem::CopyValidProperties( const SvxBulletItem& rCopyFrom )
     vcl::Font _aFont = GetFont();
     vcl::Font aNewFont = rCopyFrom.GetFont();
     _aFont.SetFamilyName( aNewFont.GetFamilyName() );
-    _aFont.SetFamily( aNewFont.GetFamilyType() );
+    _aFont.SetFamily( aNewFont.GetFamilyTypeMaybeAskConfig() );
     _aFont.SetStyleName( aNewFont.GetStyleName() );
     _aFont.SetColor( aNewFont.GetColor() );
     SetSymbol( rCopyFrom.cSymbol );

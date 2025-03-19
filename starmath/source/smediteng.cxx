@@ -139,9 +139,9 @@ void SmEditEngine::setSmItemPool(SfxItemPool* mpItemPool, const SvtLinguOptions&
         vcl::Font aFont = OutputDevice::GetDefaultFont(aFontData.nFontType, nLang,
                                                        GetDefaultFontFlags::OnlyOne);
         aFont.SetColor(aTextColor);
-        mpItemPool->SetUserDefaultItem(SvxFontItem(aFont.GetFamilyType(), aFont.GetFamilyName(),
-                                                   aFont.GetStyleName(), aFont.GetPitch(),
-                                                   aFont.GetCharSet(), aFontData.nFontInfoId));
+        mpItemPool->SetUserDefaultItem(SvxFontItem(
+            aFont.GetFamilyTypeMaybeAskConfig(), aFont.GetFamilyName(), aFont.GetStyleName(),
+            aFont.GetPitchMaybeAskConfig(), aFont.GetCharSet(), aFontData.nFontInfoId));
     }
 
     // Set font heights

@@ -228,8 +228,8 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                         const OUString& aFontName(pFontItem->GetValue());
                         vcl::Font aFont(aFontName, Size(1,1)); // Size only because of CTOR
                         aNewItem = std::make_shared<SvxFontItem>(
-                            aFont.GetFamilyType(), aFont.GetFamilyName(),
-                            aFont.GetStyleName(), aFont.GetPitch(),
+                            aFont.GetFamilyTypeMaybeAskConfig(), aFont.GetFamilyName(),
+                            aFont.GetStyleName(), aFont.GetPitchMaybeAskConfig(),
                             aFont.GetCharSet(), ATTR_FONT);
                     }
                     else

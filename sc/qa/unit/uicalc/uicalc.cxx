@@ -1939,7 +1939,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
     const ScPatternAttr* pPattern = pDoc->GetPattern(0, 1, 0);
     vcl::Font aFont;
     pPattern->fillFontOnly(aFont);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD,
+                                 aFont.GetWeightMaybeAskConfig());
 
     goToCell(u"A1:A3"_ustr);
 
@@ -1965,7 +1966,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
 
     pPattern = pDoc->GetPattern(1, 0, 0);
     pPattern->fillFontOnly(aFont);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD,
+                                 aFont.GetWeightMaybeAskConfig());
 }
 
 // Test the call of .uno:PasteAsLink (tdf#90101)
@@ -1994,7 +1996,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteAsLink)
     const ScPatternAttr* pPattern = pDoc->GetPattern(0, 1, 0);
     vcl::Font aFont;
     pPattern->fillFontOnly(aFont);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD,
+                                 aFont.GetWeightMaybeAskConfig());
 
     goToCell(u"A1:A3"_ustr);
 
@@ -2018,7 +2021,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteAsLink)
     pPattern = pDoc->GetPattern(2, 1, 0);
     pPattern->fillFontOnly(aFont);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be normal (cell attributes should not be copied)",
-                                 WEIGHT_NORMAL, aFont.GetWeight());
+                                 WEIGHT_NORMAL, aFont.GetWeightMaybeAskConfig());
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119659)

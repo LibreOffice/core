@@ -139,8 +139,8 @@ namespace
             vcl::Font aFnt( OutputDevice::GetDefaultFont( nFntType,
                                     nLng, GetDefaultFontFlags::OnlyOne ) );
 
-            rSet.Put( SvxFontItem( aFnt.GetFamilyType(), aFnt.GetFamilyName(),
-                                OUString(), aFnt.GetPitch(),
+            rSet.Put( SvxFontItem( aFnt.GetFamilyTypeMaybeAskConfig(), aFnt.GetFamilyName(),
+                                OUString(), aFnt.GetPitchMaybeAskConfig(),
                                 aFnt.GetCharSet(), n.nResFntId ));
         }
     }
@@ -168,8 +168,8 @@ namespace
             vcl::Font aFnt( OutputDevice::GetDefaultFont( n.nFntType,
                                     nLng, GetDefaultFontFlags::OnlyOne ) );
 
-            rSet.Put( SvxFontItem( aFnt.GetFamilyType(), aFnt.GetFamilyName(),
-                                OUString(), aFnt.GetPitch(),
+            rSet.Put( SvxFontItem( aFnt.GetFamilyTypeMaybeAskConfig(), aFnt.GetFamilyName(),
+                                OUString(), aFnt.GetPitchMaybeAskConfig(),
                                 aFnt.GetCharSet(), n.nResFntId ));
         }
     }
@@ -808,8 +808,8 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                     vcl::Font aFnt( OutputDevice::GetDefaultFont( nFontTypes[i],
                                             nLng, GetDefaultFontFlags::OnlyOne ) );
 
-                    aSet.Put( SvxFontItem( aFnt.GetFamilyType(), aFnt.GetFamilyName(),
-                                            OUString(), aFnt.GetPitch(),
+                    aSet.Put( SvxFontItem( aFnt.GetFamilyTypeMaybeAskConfig(), aFnt.GetFamilyName(),
+                                            OUString(), aFnt.GetPitchMaybeAskConfig(),
                                             aFnt.GetCharSet(), aFontWhich[i] ));
                 }
 

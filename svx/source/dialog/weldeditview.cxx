@@ -112,15 +112,15 @@ void WeldEditView::makeEditEngine()
 
     vcl::Font aAppFont(Application::GetSettings().GetStyleSettings().GetAppFont());
 
-    pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
-                                              u""_ustr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
-                                              EE_CHAR_FONTINFO));
-    pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
-                                              u""_ustr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
-                                              EE_CHAR_FONTINFO_CJK));
-    pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
-                                              u""_ustr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
-                                              EE_CHAR_FONTINFO_CTL));
+    pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyTypeMaybeAskConfig(),
+                                              aAppFont.GetFamilyName(), u""_ustr, PITCH_DONTKNOW,
+                                              RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO));
+    pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyTypeMaybeAskConfig(),
+                                              aAppFont.GetFamilyName(), u""_ustr, PITCH_DONTKNOW,
+                                              RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO_CJK));
+    pItemPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyTypeMaybeAskConfig(),
+                                              aAppFont.GetFamilyName(), u""_ustr, PITCH_DONTKNOW,
+                                              RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO_CTL));
 
     pItemPool->SetUserDefaultItem(
         SvxFontHeightItem(aAppFont.GetFontHeight() * 20, 100, EE_CHAR_FONTHEIGHT));

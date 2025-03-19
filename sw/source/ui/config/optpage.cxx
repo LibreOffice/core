@@ -921,8 +921,8 @@ static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
     if( pPrt )
         aFont = pPrt->GetFontMetric( aFont );
     SwTextFormatColl *pColl = pWrtShell->GetTextCollFromPool(nType);
-    pColl->SetFormatAttr(SvxFontItem(aFont.GetFamilyType(), aFont.GetFamilyName(),
-                OUString(), aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
+    pColl->SetFormatAttr(SvxFontItem(aFont.GetFamilyTypeMaybeAskConfig(), aFont.GetFamilyName(),
+                OUString(), aFont.GetPitchMaybeAskConfig(), aFont.GetCharSet(), nFontWhich));
 }
 
 static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
@@ -1014,8 +1014,8 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
             vcl::Font aFont( sStandard, Size( 0, 10 ) );
             if( pPrinter )
                 aFont = pPrinter->GetFontMetric( aFont );
-            m_pWrtShell->SetDefault(SvxFontItem(aFont.GetFamilyType(), aFont.GetFamilyName(),
-                                  OUString(), aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
+            m_pWrtShell->SetDefault(SvxFontItem(aFont.GetFamilyTypeMaybeAskConfig(), aFont.GetFamilyName(),
+                                  OUString(), aFont.GetPitchMaybeAskConfig(), aFont.GetCharSet(), nFontWhich));
             SwTextFormatColl *pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_STANDARD);
             pColl->ResetFormatAttr(nFontWhich);
             bMod = true;

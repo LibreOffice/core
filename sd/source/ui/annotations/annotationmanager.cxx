@@ -113,7 +113,7 @@ SfxItemPool* GetAnnotationPool()
         s_pAnnotationPool->SetUserDefaultItem(SvxFontHeightItem(423,100,EE_CHAR_FONTHEIGHT));
 
         vcl::Font aAppFont( Application::GetSettings().GetStyleSettings().GetAppFont() );
-        s_pAnnotationPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyType(),aAppFont.GetFamilyName(),u""_ustr,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
+        s_pAnnotationPool->SetUserDefaultItem(SvxFontItem(aAppFont.GetFamilyTypeMaybeAskConfig(),aAppFont.GetFamilyName(),u""_ustr,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
     }
 
     return s_pAnnotationPool.get();

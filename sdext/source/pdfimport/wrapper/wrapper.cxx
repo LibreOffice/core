@@ -639,28 +639,28 @@ void LineParser::readFont()
             }
 
             // Font weight
-            if (aFontReadResult.GetWeight() == WEIGHT_THIN)
+            if (aFontReadResult.GetWeightMaybeAskConfig() == WEIGHT_THIN)
                 aResult.fontWeight = u"100"_ustr;
-            else if (aFontReadResult.GetWeight() == WEIGHT_ULTRALIGHT)
+            else if (aFontReadResult.GetWeightMaybeAskConfig() == WEIGHT_ULTRALIGHT)
                 aResult.fontWeight = u"200"_ustr;
-            else if (aFontReadResult.GetWeight() == WEIGHT_LIGHT)
+            else if (aFontReadResult.GetWeightMaybeAskConfig() == WEIGHT_LIGHT)
                 aResult.fontWeight = u"300"_ustr;
-            else if (aFontReadResult.GetWeight() == WEIGHT_SEMILIGHT)
+            else if (aFontReadResult.GetWeightMaybeAskConfig() == WEIGHT_SEMILIGHT)
                 aResult.fontWeight = u"350"_ustr;
             // no need to check "normal" here as this is default in nFontWeight above
-            else if (aFontReadResult.GetWeight() == WEIGHT_SEMIBOLD)
+            else if (aFontReadResult.GetWeightMaybeAskConfig() == WEIGHT_SEMIBOLD)
                 aResult.fontWeight = u"600"_ustr;
-            else if (aFontReadResult.GetWeight() == WEIGHT_BOLD)
+            else if (aFontReadResult.GetWeightMaybeAskConfig() == WEIGHT_BOLD)
                 aResult.fontWeight = u"bold"_ustr;
-            else if (aFontReadResult.GetWeight() == WEIGHT_ULTRABOLD)
+            else if (aFontReadResult.GetWeightMaybeAskConfig() == WEIGHT_ULTRABOLD)
                 aResult.fontWeight = u"800"_ustr;
-            else if (aFontReadResult.GetWeight() == WEIGHT_BLACK)
+            else if (aFontReadResult.GetWeightMaybeAskConfig() == WEIGHT_BLACK)
                 aResult.fontWeight = u"900"_ustr;
             SAL_INFO("sdext.pdfimport", aResult.fontWeight);
 
             // Italic
-            aResult.isItalic = (aFontReadResult.GetItalic() == ITALIC_OBLIQUE ||
-                                aFontReadResult.GetItalic() == ITALIC_NORMAL);
+            aResult.isItalic = (aFontReadResult.GetItalicMaybeAskConfig() == ITALIC_OBLIQUE ||
+                                aFontReadResult.GetItalicMaybeAskConfig() == ITALIC_NORMAL);
         } else  // font detection failed
         {
             SAL_WARN("sdext.pdfimport",

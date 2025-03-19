@@ -2853,7 +2853,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 SfxAllItemSet aSet( GetPool() );
                 aSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
-                aSet.Put( SvxFontItem( aCurFont.GetFamilyType(), aCurFont.GetFamilyName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), GetPool().GetWhichIDFromSlotID(SID_ATTR_CHAR_FONT) ) );
+                aSet.Put( SvxFontItem( aCurFont.GetFamilyTypeMaybeAskConfig(), aCurFont.GetFamilyName(), aCurFont.GetStyleName(), aCurFont.GetPitchMaybeAskConfig(), aCurFont.GetCharSet(), GetPool().GetWhichIDFromSlotID(SID_ATTR_CHAR_FONT) ) );
                 SfxViewFrame& rViewFrame = pTabViewShell->GetViewFrame();
                 auto xFrame = rViewFrame.GetFrame().GetFrameInterface();
                 VclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(pTabViewShell->GetFrameWeld(), aSet, xFrame));

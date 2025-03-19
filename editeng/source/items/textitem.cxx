@@ -2931,10 +2931,10 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rCo
                                                   aOutTypeArr[ n ].nLanguage,
                                                   GetDefaultFontFlags::OnlyOne ) );
         SvxFontItem* pItem = aItemArr[ n ];
-        pItem->SetFamily( aFont.GetFamilyType() );
+        pItem->SetFamily( aFont.GetFamilyTypeMaybeAskConfig() );
         pItem->SetFamilyName( aFont.GetFamilyName() );
         pItem->SetStyleName( OUString() );
-        pItem->SetPitch( aFont.GetPitch());
+        pItem->SetPitch( aFont.GetPitchMaybeAskConfig());
         pItem->SetCharSet(aFont.GetCharSet());
     }
 }

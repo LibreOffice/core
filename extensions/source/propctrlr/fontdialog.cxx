@@ -516,10 +516,10 @@ namespace pcr
             typedef std::array<ItemInfoStatic, FontItemIds::CFID_LAST_ITEM_ID - FontItemIds::CFID_FIRST_ITEM_ID + 1> ItemInfoArrayCntChrDlg;
             ItemInfoArrayCntChrDlg maItemInfos {{
                 // m_nWhich, m_pItem, m_nSlotID, m_nItemInfoFlags
-                { FontItemIds::CFID_FONT, new SvxFontItem(maDefaultVCLFont.GetFamilyType(), maDefaultVCLFont.GetFamilyName(), maDefaultVCLFont.GetStyleName(), maDefaultVCLFont.GetPitch(), maDefaultVCLFont.GetCharSet(), FontItemIds::CFID_FONT), SID_ATTR_CHAR_FONT, SFX_ITEMINFOFLAG_NONE },
+                { FontItemIds::CFID_FONT, new SvxFontItem(maDefaultVCLFont.GetFamilyTypeMaybeAskConfig(), maDefaultVCLFont.GetFamilyName(), maDefaultVCLFont.GetStyleName(), maDefaultVCLFont.GetPitchMaybeAskConfig(), maDefaultVCLFont.GetCharSet(), FontItemIds::CFID_FONT), SID_ATTR_CHAR_FONT, SFX_ITEMINFOFLAG_NONE },
                 { FontItemIds::CFID_HEIGHT, new SvxFontHeightItem(maDefaultVCLFont.GetFontHeight(), 100, FontItemIds::CFID_HEIGHT), SID_ATTR_CHAR_FONTHEIGHT, SFX_ITEMINFOFLAG_NONE },
-                { FontItemIds::CFID_WEIGHT, new SvxWeightItem(maDefaultVCLFont.GetWeight(), FontItemIds::CFID_WEIGHT), SID_ATTR_CHAR_WEIGHT, SFX_ITEMINFOFLAG_NONE },
-                { FontItemIds::CFID_POSTURE, new SvxPostureItem(maDefaultVCLFont.GetItalic(), FontItemIds::CFID_POSTURE), SID_ATTR_CHAR_POSTURE, SFX_ITEMINFOFLAG_NONE },
+                { FontItemIds::CFID_WEIGHT, new SvxWeightItem(maDefaultVCLFont.GetWeightMaybeAskConfig(), FontItemIds::CFID_WEIGHT), SID_ATTR_CHAR_WEIGHT, SFX_ITEMINFOFLAG_NONE },
+                { FontItemIds::CFID_POSTURE, new SvxPostureItem(maDefaultVCLFont.GetItalicMaybeAskConfig(), FontItemIds::CFID_POSTURE), SID_ATTR_CHAR_POSTURE, SFX_ITEMINFOFLAG_NONE },
                 { FontItemIds::CFID_LANGUAGE, new SvxLanguageItem(Application::GetSettings().GetUILanguageTag().getLanguageType(), FontItemIds::CFID_LANGUAGE), SID_ATTR_CHAR_LANGUAGE, SFX_ITEMINFOFLAG_NONE },
                 { FontItemIds::CFID_UNDERLINE, new SvxUnderlineItem(maDefaultVCLFont.GetUnderline(), FontItemIds::CFID_UNDERLINE), SID_ATTR_CHAR_UNDERLINE, SFX_ITEMINFOFLAG_NONE },
                 { FontItemIds::CFID_STRIKEOUT, new SvxCrossedOutItem(maDefaultVCLFont.GetStrikeout(), FontItemIds::CFID_STRIKEOUT), SID_ATTR_CHAR_STRIKEOUT, SFX_ITEMINFOFLAG_NONE },
@@ -527,10 +527,10 @@ namespace pcr
                 { FontItemIds::CFID_CHARCOLOR, new SvxColorItem(maDefaultVCLFont.GetColor(), FontItemIds::CFID_CHARCOLOR), SID_ATTR_CHAR_COLOR, SFX_ITEMINFOFLAG_NONE },
                 { FontItemIds::CFID_RELIEF, new SvxCharReliefItem(maDefaultVCLFont.GetRelief(), FontItemIds::CFID_RELIEF), SID_ATTR_CHAR_RELIEF, SFX_ITEMINFOFLAG_NONE },
                 { FontItemIds::CFID_EMPHASIS, new SvxEmphasisMarkItem(maDefaultVCLFont.GetEmphasisMark(), FontItemIds::CFID_EMPHASIS), SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEMINFOFLAG_NONE },
-                { FontItemIds::CFID_CJK_FONT, new SvxFontItem(maDefaultVCLFont.GetFamilyType(), maDefaultVCLFont.GetFamilyName(), maDefaultVCLFont.GetStyleName(), maDefaultVCLFont.GetPitch(), maDefaultVCLFont.GetCharSet(), FontItemIds::CFID_CJK_FONT), 0, SFX_ITEMINFOFLAG_NONE },
+                { FontItemIds::CFID_CJK_FONT, new SvxFontItem(maDefaultVCLFont.GetFamilyTypeMaybeAskConfig(), maDefaultVCLFont.GetFamilyName(), maDefaultVCLFont.GetStyleName(), maDefaultVCLFont.GetPitchMaybeAskConfig(), maDefaultVCLFont.GetCharSet(), FontItemIds::CFID_CJK_FONT), 0, SFX_ITEMINFOFLAG_NONE },
                 { FontItemIds::CFID_CJK_HEIGHT, new SvxFontHeightItem(maDefaultVCLFont.GetFontHeight(), 100, FontItemIds::CFID_CJK_HEIGHT), 0, SFX_ITEMINFOFLAG_NONE },
-                { FontItemIds::CFID_CJK_WEIGHT, new SvxWeightItem(maDefaultVCLFont.GetWeight(), FontItemIds::CFID_CJK_WEIGHT), 0, SFX_ITEMINFOFLAG_NONE },
-                { FontItemIds::CFID_CJK_POSTURE, new SvxPostureItem(maDefaultVCLFont.GetItalic(), FontItemIds::CFID_CJK_POSTURE), 0, SFX_ITEMINFOFLAG_NONE },
+                { FontItemIds::CFID_CJK_WEIGHT, new SvxWeightItem(maDefaultVCLFont.GetWeightMaybeAskConfig(), FontItemIds::CFID_CJK_WEIGHT), 0, SFX_ITEMINFOFLAG_NONE },
+                { FontItemIds::CFID_CJK_POSTURE, new SvxPostureItem(maDefaultVCLFont.GetItalicMaybeAskConfig(), FontItemIds::CFID_CJK_POSTURE), 0, SFX_ITEMINFOFLAG_NONE },
                 { FontItemIds::CFID_CJK_LANGUAGE, new SvxLanguageItem(Application::GetSettings().GetUILanguageTag().getLanguageType(), FontItemIds::CFID_CJK_LANGUAGE), 0, SFX_ITEMINFOFLAG_NONE },
                 { FontItemIds::CFID_CASEMAP, new SvxCaseMapItem(SvxCaseMap::NotMapped, FontItemIds::CFID_CASEMAP), 0, SFX_ITEMINFOFLAG_NONE },
                 { FontItemIds::CFID_CONTOUR, new SvxContourItem(false, FontItemIds::CFID_CONTOUR), 0, SFX_ITEMINFOFLAG_NONE },

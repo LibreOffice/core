@@ -410,8 +410,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         vcl::Font aFont(aFontName, Size(1,1)); // Size just because CTOR
                         // tdf#125054 see comment in drtxob.cxx, same ID
                         aNewItem = std::make_shared<SvxFontItem>(
-                            aFont.GetFamilyType(), aFont.GetFamilyName(),
-                            aFont.GetStyleName(), aFont.GetPitch(),
+                            aFont.GetFamilyTypeMaybeAskConfig(), aFont.GetFamilyName(),
+                            aFont.GetStyleName(), aFont.GetPitchMaybeAskConfig(),
                             aFont.GetCharSet(), ATTR_FONT);
                     }
                     else

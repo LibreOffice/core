@@ -947,9 +947,9 @@ void FontStyleBox::Fill( std::u16string_view rName, const FontList* pList )
         {
             aFontMetric = FontList::GetFontMetric( hFontMetric );
 
-            FontWeight  eWeight = aFontMetric.GetWeight();
-            FontItalic  eItalic = aFontMetric.GetItalic();
-            FontWidth   eWidth = aFontMetric.GetWidthType();
+            FontWeight  eWeight = aFontMetric.GetWeightMaybeAskConfig();
+            FontItalic  eItalic = aFontMetric.GetItalicMaybeAskConfig();
+            FontWidth   eWidth = aFontMetric.GetWidthTypeMaybeAskConfig();
             // Only if the attributes are different, we insert the
             // Font to avoid double Entries in different languages
             if ( (eWeight != eLastWeight) || (eItalic != eLastItalic) ||

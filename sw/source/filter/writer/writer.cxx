@@ -340,9 +340,9 @@ void Writer::PutNumFormatFontsInAttrPool()
                     else if( *pFont == *pDefFont )
                         bCheck = true;
 
-                    AddFontItem( rPool, SvxFontItem( pFont->GetFamilyType(),
+                    AddFontItem( rPool, SvxFontItem( pFont->GetFamilyTypeMaybeAskConfig(),
                                 pFont->GetFamilyName(), pFont->GetStyleName(),
-                                pFont->GetPitch(), pFont->GetCharSet(), RES_CHRATR_FONT ));
+                                pFont->GetPitchMaybeAskConfig(), pFont->GetCharSet(), RES_CHRATR_FONT ));
                 }
             }
         }

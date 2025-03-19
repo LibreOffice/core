@@ -653,7 +653,7 @@ bool TabBar::ImplCalcWidth()
 
     // retrieve width of tabs with bold font
     vcl::Font aFont = GetFont();
-    if (aFont.GetWeight() != WEIGHT_BOLD)
+    if (aFont.GetWeightMaybeAskConfig() != WEIGHT_BOLD)
     {
         aFont.SetWeight(WEIGHT_BOLD);
         SetFont(aFont);

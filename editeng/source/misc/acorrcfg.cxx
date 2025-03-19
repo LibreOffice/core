@@ -627,11 +627,11 @@ void SvxSwAutoCorrCfg::ImplCommit()
             // "Format/Option/ChangeToBullets/SpecialCharacter/Char"
          css::uno::Any(rSwFlags.aBulletFont.GetFamilyName()),
             // "Format/Option/ChangeToBullets/SpecialCharacter/Font"
-         css::uno::Any(sal_Int32(rSwFlags.aBulletFont.GetFamilyType())),
+         css::uno::Any(sal_Int32(rSwFlags.aBulletFont.GetFamilyTypeMaybeAskConfig())),
             // "Format/Option/ChangeToBullets/SpecialCharacter/FontFamily"
          css::uno::Any(sal_Int32(rSwFlags.aBulletFont.GetCharSet())),
             // "Format/Option/ChangeToBullets/SpecialCharacter/FontCharset"
-         css::uno::Any(sal_Int32(rSwFlags.aBulletFont.GetPitch())),
+         css::uno::Any(sal_Int32(rSwFlags.aBulletFont.GetPitchMaybeAskConfig())),
             // "Format/Option/ChangeToBullets/SpecialCharacter/FontPitch"
          css::uno::Any(rSwFlags.bRightMargin),
             // "Format/Option/CombineParagraphs"
@@ -671,11 +671,11 @@ void SvxSwAutoCorrCfg::ImplCommit()
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/Char"
          css::uno::Any(rSwFlags.aByInputBulletFont.GetFamilyName()),
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/Font"
-         css::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetFamilyType())),
+         css::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetFamilyTypeMaybeAskConfig())),
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily"
          css::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetCharSet())),
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset"
-         css::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetPitch())),
+         css::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetPitchMaybeAskConfig())),
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch"
          css::uno::Any(rSwFlags.bSetDOIAttr),
          css::uno::Any(rSwFlags.bSetNumRuleAfterSpace), // "Format/ByInput/ApplyNumberingAfterSpace"

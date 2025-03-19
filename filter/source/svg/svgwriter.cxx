@@ -444,14 +444,14 @@ void SVGAttributeWriter::setFontFamily()
     {
         const OUString& rsFontName = rCurFont.GetFamilyName();
         OUString sFontFamily( rsFontName.getToken( 0, ';' ) );
-        FontPitch ePitch = rCurFont.GetPitch();
+        FontPitch ePitch = rCurFont.GetPitchMaybeAskConfig();
         if( ePitch == PITCH_FIXED )
         {
             sFontFamily += ", monospace";
         }
         else
         {
-            FontFamily eFamily = rCurFont.GetFamilyType();
+            FontFamily eFamily = rCurFont.GetFamilyTypeMaybeAskConfig();
             if( eFamily == FAMILY_ROMAN )
                 sFontFamily += ", serif";
             else if( eFamily == FAMILY_SWISS )
@@ -846,13 +846,13 @@ void SVGTextWriter::addFontAttributes( bool bIsTextContainer )
 
     const OUString& rsCurFontName               = maCurrentFont.GetFamilyName();
     tools::Long nCurFontSize                       = maCurrentFont.GetFontHeight();
-    FontItalic eCurFontItalic                   = maCurrentFont.GetItalic();
-    FontWeight eCurFontWeight                   = maCurrentFont.GetWeight();
+    FontItalic eCurFontItalic                   = maCurrentFont.GetItalicMaybeAskConfig();
+    FontWeight eCurFontWeight                   = maCurrentFont.GetWeightMaybeAskConfig();
 
     const OUString& rsParFontName               = maParentFont.GetFamilyName();
     tools::Long nParFontSize                       = maParentFont.GetFontHeight();
-    FontItalic eParFontItalic                   = maParentFont.GetItalic();
-    FontWeight eParFontWeight                   = maParentFont.GetWeight();
+    FontItalic eParFontItalic                   = maParentFont.GetItalicMaybeAskConfig();
+    FontWeight eParFontWeight                   = maParentFont.GetWeightMaybeAskConfig();
 
 
     // Font Family
@@ -955,14 +955,14 @@ void SVGTextWriter::implSetFontFamily()
 {
     const OUString& rsFontName = maCurrentFont.GetFamilyName();
     OUString sFontFamily( rsFontName.getToken( 0, ';' ) );
-    FontPitch ePitch = maCurrentFont.GetPitch();
+    FontPitch ePitch = maCurrentFont.GetPitchMaybeAskConfig();
     if( ePitch == PITCH_FIXED )
     {
         sFontFamily += ", monospace";
     }
     else
     {
-        FontFamily eFamily = maCurrentFont.GetFamilyType();
+        FontFamily eFamily = maCurrentFont.GetFamilyTypeMaybeAskConfig();
         if( eFamily == FAMILY_ROMAN )
             sFontFamily += ", serif";
         else if( eFamily == FAMILY_SWISS )

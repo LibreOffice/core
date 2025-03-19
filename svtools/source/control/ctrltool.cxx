@@ -536,8 +536,8 @@ const OUString & FontList::GetFontMapText( const FontMetric& rInfo ) const
         ImplFontListFontMetric*   pFontMetric = pData->mpFirst;
         while ( pFontMetric )
         {
-            if ( (eWeight == pFontMetric->GetWeight()) &&
-                 (eItalic == pFontMetric->GetItalic()) )
+            if ( (eWeight == pFontMetric->GetWeightMaybeAskConfig()) &&
+                 (eItalic == pFontMetric->GetItalicMaybeAskConfig()) )
             {
                 bNotSynthetic = true;
                 break;
@@ -687,8 +687,8 @@ FontMetric FontList::Get(const OUString& rName,
         pFontNameInfo = pSearchInfo;
         while ( pSearchInfo )
         {
-            if ( (eWeight == pSearchInfo->GetWeight()) &&
-                 (eItalic == pSearchInfo->GetItalic()) )
+            if ( (eWeight == pSearchInfo->GetWeightMaybeAskConfig()) &&
+                 (eItalic == pSearchInfo->GetItalicMaybeAskConfig()) )
             {
                 pFontMetric = pSearchInfo;
                 break;

@@ -521,7 +521,7 @@ void MSWordExportBase::NumberingLevel(
 
         eChrSet = pBulletFont->GetCharSet();
         sFontName = pBulletFont->GetFamilyName();
-        eFamily = pBulletFont->GetFamilyType();
+        eFamily = pBulletFont->GetFamilyTypeMaybeAskConfig();
 
         if (IsOpenSymbol(sFontName))
             SubstituteBullet(sNumStr, eChrSet, sFontName);
@@ -547,7 +547,7 @@ void MSWordExportBase::NumberingLevel(
             if (sFontName.isEmpty())
                 sFontName = pBulletFont->GetFamilyName();
 
-            pPseudoFont.reset(new wwFont( sFontName, pBulletFont->GetPitch(),
+            pPseudoFont.reset(new wwFont( sFontName, pBulletFont->GetPitchMaybeAskConfig(),
                 eFamily, eChrSet));
         }
         else

@@ -96,7 +96,7 @@ css::uno::Any SAL_CALL FontIdentificator::getMaterial()
     aFD.Kerning             = false;
     aFD.WordLineMode        = false;
     aFD.Type                = 0;
-    switch( m_aFont.GetFamilyType() )
+    switch( m_aFont.GetFamilyTypeMaybeAskConfig() )
     {
     case FAMILY_DECORATIVE: aFD.Family = css::awt::FontFamily::DECORATIVE;break;
     case FAMILY_MODERN: aFD.Family = css::awt::FontFamily::MODERN;break;
@@ -108,7 +108,7 @@ css::uno::Any SAL_CALL FontIdentificator::getMaterial()
         aFD.Family = css::awt::FontFamily::DONTKNOW;
         break;
     }
-    switch( m_aFont.GetPitch() )
+    switch( m_aFont.GetPitchMaybeAskConfig() )
     {
     case PITCH_VARIABLE: aFD.Pitch = css::awt::FontPitch::VARIABLE;break;
     case PITCH_FIXED: aFD.Pitch = css::awt::FontPitch::FIXED;break;
@@ -116,7 +116,7 @@ css::uno::Any SAL_CALL FontIdentificator::getMaterial()
         aFD.Pitch = css::awt::FontPitch::DONTKNOW;
         break;
     }
-    switch( m_aFont.GetWeight() )
+    switch( m_aFont.GetWeightMaybeAskConfig() )
     {
     case WEIGHT_THIN: aFD.Weight = css::awt::FontWeight::THIN;break;
     case WEIGHT_ULTRALIGHT: aFD.Weight = css::awt::FontWeight::ULTRALIGHT;break;
@@ -132,7 +132,7 @@ css::uno::Any SAL_CALL FontIdentificator::getMaterial()
         aFD.Weight = css::awt::FontWeight::DONTKNOW;
         break;
     }
-    switch( m_aFont.GetItalic() )
+    switch( m_aFont.GetItalicMaybeAskConfig() )
     {
     case ITALIC_OBLIQUE: aFD.Slant = css::awt::FontSlant_OBLIQUE;break;
     case ITALIC_NORMAL: aFD.Slant = css::awt::FontSlant_ITALIC;break;

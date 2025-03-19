@@ -1753,10 +1753,10 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 m_aDelPam.SetMark();
                 *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(TextFrameIndex(1));
                 SetAllScriptItem( aSet,
-                     SvxFontItem( m_aFlags.aBulletFont.GetFamilyType(),
+                     SvxFontItem( m_aFlags.aBulletFont.GetFamilyTypeMaybeAskConfig(),
                                   m_aFlags.aBulletFont.GetFamilyName(),
                                   m_aFlags.aBulletFont.GetStyleName(),
-                                  m_aFlags.aBulletFont.GetPitch(),
+                                  m_aFlags.aBulletFont.GetPitchMaybeAskConfig(),
                                   m_aFlags.aBulletFont.GetCharSet(),
                                   RES_CHRATR_FONT ) );
                 m_pDoc->SetFormatItemByAutoFormat( m_aDelPam, aSet );

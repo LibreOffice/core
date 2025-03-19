@@ -449,8 +449,8 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
         FontMetric aMet = pPrt->GetFontMetric( );
         // Don't lose "faked" properties of the logical font that don't truly
         // exist in the physical font metrics which vcl which fake up for us
-        aMet.SetWeight(m_pScrFont->GetWeight());
-        aMet.SetItalic(m_pScrFont->GetItalic());
+        aMet.SetWeight(m_pScrFont->GetWeightMaybeAskConfig());
+        aMet.SetItalic(m_pScrFont->GetItalicMaybeAskConfig());
 
         m_bSymbol = RTL_TEXTENCODING_SYMBOL == aMet.GetCharSet();
 

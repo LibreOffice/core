@@ -374,11 +374,13 @@ int ListFonts::Main()
 
             FontMetric aFont = pOutDev->GetFontMetric();
 
-            std::cout << aFont.GetFamilyName() << "\n\tFamily type: " << aFont.GetFamilyType()
+            std::cout << aFont.GetFamilyName()
+                      << "\n\tFamily type: " << aFont.GetFamilyTypeMaybeAskConfig()
                       << "\n\tStyle name: " << aFont.GetStyleName()
-                      << "\n\tWeight: " << aFont.GetWeight() << "\n\tItalic: " << aFont.GetItalic()
-                      << "\n\tPitch: " << aFont.GetPitch()
-                      << "\n\tWidth type: " << aFont.GetWidthType()
+                      << "\n\tWeight: " << aFont.GetWeightMaybeAskConfig()
+                      << "\n\tItalic: " << aFont.GetItalicMaybeAskConfig()
+                      << "\n\tPitch: " << aFont.GetPitchMaybeAskConfig()
+                      << "\n\tWidth type: " << aFont.GetWidthTypeMaybeAskConfig()
                       << "\n\tAlignment: " << aFont.GetAlignment()
                       << "\n\tCharset: " << GetOctetTextEncodingName(aFont.GetCharSet())
                       << "\n\tAscent: " << aFont.GetAscent()

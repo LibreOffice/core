@@ -239,7 +239,7 @@ void ChartController::executeDispatch_InsertSpecialCharacter()
     aSet.Put( SfxBoolItem( FN_PARAM_2, true ) ); //maybe not necessary in future
 
     vcl::Font aCurFont = m_pDrawViewWrapper->getOutliner()->GetRefDevice()->GetFont();
-    aSet.Put( SvxFontItem( aCurFont.GetFamilyType(), aCurFont.GetFamilyName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), SID_ATTR_CHAR_FONT ) );
+    aSet.Put( SvxFontItem( aCurFont.GetFamilyTypeMaybeAskConfig(), aCurFont.GetFamilyName(), aCurFont.GetStyleName(), aCurFont.GetPitchMaybeAskConfig(), aCurFont.GetCharSet(), SID_ATTR_CHAR_FONT ) );
 
     VclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(GetChartFrame(), aSet, nullptr));
     pDlg->StartExecuteAsync(

@@ -179,8 +179,8 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                     aFont = pPrt->GetFontMetric( aFont );
                 }
 
-                pFontItem.reset(new SvxFontItem(aFont.GetFamilyType(), aFont.GetFamilyName(),
-                                                OUString(), aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
+                pFontItem.reset(new SvxFontItem(aFont.GetFamilyTypeMaybeAskConfig(), aFont.GetFamilyName(),
+                                                OUString(), aFont.GetPitchMaybeAskConfig(), aFont.GetCharSet(), nFontWhich));
             }
             else
             {
@@ -196,8 +196,8 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                     nFontTypes[i],
                     eLanguage,
                     GetDefaultFontFlags::OnlyOne );
-                pFontItem.reset(new SvxFontItem(aLangDefFont.GetFamilyType(), aLangDefFont.GetFamilyName(),
-                                                OUString(), aLangDefFont.GetPitch(), aLangDefFont.GetCharSet(), nFontWhich));
+                pFontItem.reset(new SvxFontItem(aLangDefFont.GetFamilyTypeMaybeAskConfig(), aLangDefFont.GetFamilyName(),
+                                                OUString(), aLangDefFont.GetPitchMaybeAskConfig(), aLangDefFont.GetCharSet(), nFontWhich));
             }
             m_xDoc->SetDefault(*pFontItem);
             if( !bHTMLTemplSet )
@@ -267,8 +267,8 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                     SfxItemState::SET != pColl->GetAttrSet().GetItemState(
                                                     nFontWhich, false ) )
                 {
-                    pColl->SetFormatAttr(SvxFontItem(aFont.GetFamilyType(), aFont.GetFamilyName(),
-                                                  OUString(), aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
+                    pColl->SetFormatAttr(SvxFontItem(aFont.GetFamilyTypeMaybeAskConfig(), aFont.GetFamilyName(),
+                                                  OUString(), aFont.GetPitchMaybeAskConfig(), aFont.GetCharSet(), nFontWhich));
                 }
             }
             sal_Int32 nFontHeight = pStdFont->GetFontHeight( static_cast< sal_Int8 >(aFontIdPoolId[nIdx]), 0, eLanguage );

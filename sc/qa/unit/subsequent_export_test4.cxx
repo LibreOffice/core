@@ -1580,13 +1580,15 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testWholeRowBold)
     CPPUNIT_ASSERT_EQUAL(SCCOL(INITIALCOLCOUNT), pDoc->GetAllocatedColumnsCount(0));
     vcl::Font aFont;
     pDoc->GetPattern(pDoc->MaxCol(), 1, 0)->fillFontOnly(aFont);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD,
+                                 aFont.GetWeightMaybeAskConfig());
 
     saveAndReload(u"Calc Office Open XML"_ustr);
     pDoc = getScDoc();
     CPPUNIT_ASSERT_EQUAL(SCCOL(INITIALCOLCOUNT), pDoc->GetAllocatedColumnsCount(0));
     pDoc->GetPattern(pDoc->MaxCol(), 1, 0)->fillFontOnly(aFont);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD,
+                                 aFont.GetWeightMaybeAskConfig());
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testXlsxRowsOrder)

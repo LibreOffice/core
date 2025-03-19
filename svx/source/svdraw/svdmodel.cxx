@@ -651,28 +651,28 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_Int32 nDefTextHgt )
 
     // get DEFAULTFONT_LATIN_TEXT and set at pool as dynamic default
     vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::LATIN_TEXT, nLanguage, GetDefaultFontFlags::OnlyOne));
-    aSvxFontItem.SetFamily(aFont.GetFamilyType());
+    aSvxFontItem.SetFamily(aFont.GetFamilyTypeMaybeAskConfig());
     aSvxFontItem.SetFamilyName(aFont.GetFamilyName());
     aSvxFontItem.SetStyleName(OUString());
-    aSvxFontItem.SetPitch( aFont.GetPitch());
+    aSvxFontItem.SetPitch( aFont.GetPitchMaybeAskConfig());
     aSvxFontItem.SetCharSet( aFont.GetCharSet() );
     pItemPool->SetUserDefaultItem(aSvxFontItem);
 
     // get DEFAULTFONT_CJK_TEXT and set at pool as dynamic default
     vcl::Font aFontCJK(OutputDevice::GetDefaultFont(DefaultFontType::CJK_TEXT, nLanguage, GetDefaultFontFlags::OnlyOne));
-    aSvxFontItemCJK.SetFamily( aFontCJK.GetFamilyType());
+    aSvxFontItemCJK.SetFamily( aFontCJK.GetFamilyTypeMaybeAskConfig());
     aSvxFontItemCJK.SetFamilyName(aFontCJK.GetFamilyName());
     aSvxFontItemCJK.SetStyleName(OUString());
-    aSvxFontItemCJK.SetPitch( aFontCJK.GetPitch());
+    aSvxFontItemCJK.SetPitch( aFontCJK.GetPitchMaybeAskConfig());
     aSvxFontItemCJK.SetCharSet( aFontCJK.GetCharSet());
     pItemPool->SetUserDefaultItem(aSvxFontItemCJK);
 
     // get DEFAULTFONT_CTL_TEXT and set at pool as dynamic default
     vcl::Font aFontCTL(OutputDevice::GetDefaultFont(DefaultFontType::CTL_TEXT, nLanguage, GetDefaultFontFlags::OnlyOne));
-    aSvxFontItemCTL.SetFamily(aFontCTL.GetFamilyType());
+    aSvxFontItemCTL.SetFamily(aFontCTL.GetFamilyTypeMaybeAskConfig());
     aSvxFontItemCTL.SetFamilyName(aFontCTL.GetFamilyName());
     aSvxFontItemCTL.SetStyleName(OUString());
-    aSvxFontItemCTL.SetPitch( aFontCTL.GetPitch() );
+    aSvxFontItemCTL.SetPitch( aFontCTL.GetPitchMaybeAskConfig() );
     aSvxFontItemCTL.SetCharSet( aFontCTL.GetCharSet());
     pItemPool->SetUserDefaultItem(aSvxFontItemCTL);
 

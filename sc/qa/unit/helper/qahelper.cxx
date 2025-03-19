@@ -198,10 +198,10 @@ void ScModelTestBase::testFormats(ScDocument* pDoc,std::u16string_view sFormat)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 12", tools::Long(240), aFont.GetFontSize().getHeight());
     pPattern = pDoc->GetPattern(0,2,1);
     pPattern->fillFontOnly(aFont);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be italic", ITALIC_NORMAL, aFont.GetItalic());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be italic", ITALIC_NORMAL, aFont.GetItalicMaybeAskConfig());
     pPattern = pDoc->GetPattern(0,4,1);
     pPattern->fillFontOnly(aFont);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeightMaybeAskConfig());
     pPattern = pDoc->GetPattern(1,0,1);
     pPattern->fillFontOnly(aFont);
     pPattern->fillColor(aComplexColor, ScAutoFontColorMode::Raw);

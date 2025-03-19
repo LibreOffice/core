@@ -268,7 +268,7 @@ void SmSymbolManager::Load()
         // make the new symbol a copy but with ITALIC_NORMAL, and add it to iGreek
         const SmSym &rSym = *aGreekSymbols[i];
         vcl::Font aFont( rSym.GetFace() );
-        OSL_ENSURE( aFont.GetItalic() == ITALIC_NONE, "expected Font with ITALIC_NONE, failed." );
+        OSL_ENSURE( aFont.GetItalicMaybeAskConfig() == ITALIC_NONE, "expected Font with ITALIC_NONE, failed." );
         aFont.SetItalic( ITALIC_NORMAL );
         OUString aSymbolName = "i" + rSym.GetUiName();
         SmSym aSymbol( aSymbolName, aFont, rSym.GetCharacter(),

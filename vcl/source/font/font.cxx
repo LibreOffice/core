@@ -368,7 +368,6 @@ void Font::Merge( const vcl::Font& rFont )
         SetCharSet( rFont.GetCharSet() );
         SetLanguageTag( rFont.GetLanguageTag() );
         SetCJKContextLanguageTag( rFont.GetCJKContextLanguageTag() );
-        // don't use access methods here, might lead to AskConfig(), if DONTKNOW
         SetFamily( rFont.GetFamilyType() );
         SetPitch( rFont.GetPitch() );
     }
@@ -926,11 +925,11 @@ Degree10 Font::GetOrientation() const { return mpImplFont->mnOrientation; }
 bool Font::IsVertical() const { return mpImplFont->mbVertical; }
 FontKerning Font::GetKerning() const { return mpImplFont->meKerning; }
 
-FontPitch Font::GetPitch() { return mpImplFont->GetPitch(); }
-FontWeight Font::GetWeight() { return mpImplFont->GetWeight(); }
-FontWidth Font::GetWidthType() { return mpImplFont->GetWidthType(); }
-FontItalic Font::GetItalic() { return mpImplFont->GetItalic(); }
-FontFamily Font::GetFamilyType() { return mpImplFont->GetFamilyType(); }
+FontPitch Font::GetPitchMaybeAskConfig() { return mpImplFont->GetPitch(); }
+FontWeight Font::GetWeightMaybeAskConfig() { return mpImplFont->GetWeight(); }
+FontWidth Font::GetWidthTypeMaybeAskConfig() { return mpImplFont->GetWidthType(); }
+FontItalic Font::GetItalicMaybeAskConfig() { return mpImplFont->GetItalic(); }
+FontFamily Font::GetFamilyTypeMaybeAskConfig() { return mpImplFont->GetFamilyType(); }
 
 FontPitch Font::GetPitch() const { return mpImplFont->GetPitchNoAsk(); }
 FontWeight Font::GetWeight() const { return mpImplFont->GetWeightNoAsk(); }

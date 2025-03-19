@@ -2882,7 +2882,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetHelpFont( aHelpFont );
     aStyleSettings.SetIconFont( aIconFont );
 
-    if ( aAppFont.GetWeight() > WEIGHT_NORMAL )
+    if ( aAppFont.GetWeightMaybeAskConfig() > WEIGHT_NORMAL )
         aAppFont.SetWeight( WEIGHT_NORMAL );
     aStyleSettings.SetToolFont( aAppFont );
     aStyleSettings.SetTabFont( aAppFont );

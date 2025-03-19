@@ -56,17 +56,17 @@ public:
     virtual             ~Font();
 
     const OUString&     GetFamilyName() const;
-    FontFamily          GetFamilyType();
+    FontFamily          GetFamilyTypeMaybeAskConfig();
     FontFamily          GetFamilyType() const;
     const OUString&     GetStyleName() const;
 
-    FontWeight          GetWeight();
+    FontWeight          GetWeightMaybeAskConfig();
     FontWeight          GetWeight() const;
-    FontItalic          GetItalic();
+    FontItalic          GetItalicMaybeAskConfig();
     FontItalic          GetItalic() const;
-    FontPitch           GetPitch();
+    FontPitch           GetPitchMaybeAskConfig();
     FontPitch           GetPitch() const;
-    FontWidth           GetWidthType();
+    FontWidth           GetWidthTypeMaybeAskConfig();
     FontWidth           GetWidthType() const;
     TextAlign           GetAlignment() const;
     rtl_TextEncoding    GetCharSet() const;
