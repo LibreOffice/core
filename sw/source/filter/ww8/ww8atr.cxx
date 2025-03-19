@@ -1596,7 +1596,7 @@ void WW8AttributeOutput::CharFontSize( const SvxFontHeightItem& rHeight )
     {
         m_rWW8Export.InsUInt16( nId );
 
-        m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>(( rHeight.GetHeight() + 5 ) / 10 ) );
+        m_rWW8Export.InsUInt16( ( rHeight.GetHeight() + 5 ) / 10 );
     }
 }
 
@@ -4019,7 +4019,7 @@ void WW8AttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
         {
             //"sprmPDxaWidth"
             m_rWW8Export.InsUInt16( NS_sprm::PDxaWidth::val );
-            m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>(rSize.GetWidth()) );
+            m_rWW8Export.InsUInt16( rSize.GetWidth() );
         }
 
         if ( rSize.GetHeight() )
@@ -4355,7 +4355,7 @@ void WW8AttributeOutput::FormatFirstLineIndent(SvxFirstLineIndentItem const& rFi
     {
         // sprmPDxcLeft1
         m_rWW8Export.InsUInt16(0x4457);
-        m_rWW8Export.InsInt16(o3tl::narrowing<sal_Int16>(stOffset.m_dValue * 100.0));
+        m_rWW8Export.InsInt16(stOffset.m_dValue * 100.0);
     }
     else
     {
@@ -4386,13 +4386,13 @@ void WW8AttributeOutput::FormatTextLeftMargin(SvxTextLeftMarginItem const& rText
 
         // sprmPDxcLeft
         m_rWW8Export.InsUInt16(0x4456);
-        m_rWW8Export.InsInt16(o3tl::narrowing<sal_Int16>(stOffset.m_dValue * 100.0));
+        m_rWW8Export.InsInt16(stOffset.m_dValue * 100.0);
     }
     else
     {
         // sprmPDxaLeft
         m_rWW8Export.InsUInt16(0x845E);
-        m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rTextLeftMargin.ResolveTextLeft({})));
+        m_rWW8Export.InsUInt16(rTextLeftMargin.ResolveTextLeft({}));
     }
 }
 
@@ -4403,13 +4403,13 @@ void WW8AttributeOutput::FormatRightMargin(SvxRightMarginItem const& rRightMargi
     {
         // sprmPDxcRight
         m_rWW8Export.InsUInt16(0x4455);
-        m_rWW8Export.InsInt16(o3tl::narrowing<sal_Int16>(stOffset.m_dValue * 100.0));
+        m_rWW8Export.InsInt16(stOffset.m_dValue * 100.0);
     }
     else
     {
         // sprmPDxaRight
         m_rWW8Export.InsUInt16(0x845D);
-        m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rRightMargin.ResolveRight({})));
+        m_rWW8Export.InsUInt16(rRightMargin.ResolveRight({}));
     }
 }
 
@@ -4423,7 +4423,7 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
         m_rWW8Export.InsUInt16( NS_sprm::LN_PDxaFromText10 );
         // use average, since WW only knows one value
         m_rWW8Export.InsUInt16(
-            o3tl::narrowing<sal_uInt16>((rLR.ResolveLeft({}) + rLR.ResolveRight({})) / 2));
+            (rLR.ResolveLeft({}) + rLR.ResolveRight({})) / 2);
     }
     else if ( m_rWW8Export.m_bOutPageDescs )                // PageDescs
     {
@@ -4461,26 +4461,26 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
         {
             // sprmPDxcLeft
             m_rWW8Export.InsUInt16(0x4456);
-            m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rLR.GetTextLeft().m_dValue * 100.0));
+            m_rWW8Export.InsUInt16(rLR.GetTextLeft().m_dValue * 100.0);
         }
         else
         {
             // sprmPDxaLeft
             m_rWW8Export.InsUInt16(0x845E);
-            m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rLR.ResolveTextLeft({})));
+            m_rWW8Export.InsUInt16(rLR.ResolveTextLeft({}));
         }
 
         if (rLR.GetRight().m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
         {
             // sprmPDxcRight
             m_rWW8Export.InsUInt16(0x4455);
-            m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rLR.GetRight().m_dValue * 100.0));
+            m_rWW8Export.InsUInt16(rLR.GetRight().m_dValue * 100.0);
         }
         else
         {
             // sprmPDxaRight
             m_rWW8Export.InsUInt16(0x845D);
-            m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rLR.ResolveRight({})));
+            m_rWW8Export.InsUInt16(rLR.ResolveRight({}));
         }
 
         if (rLR.GetTextFirstLineOffset().m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
@@ -4488,7 +4488,7 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
             // sprmPDxcLeft1
             m_rWW8Export.InsUInt16(0x4457);
             m_rWW8Export.InsUInt16(
-                o3tl::narrowing<sal_uInt16>(rLR.GetTextFirstLineOffset().m_dValue * 100.0));
+                rLR.GetTextFirstLineOffset().m_dValue * 100.0);
         }
         else
         {
@@ -4530,7 +4530,7 @@ void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
         // sprmPDyaFromText
         m_rWW8Export.InsUInt16( NS_sprm::PDyaFromText::val );
         // use average, since WW only knows one value
-        m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>( ( rUL.GetUpper() + rUL.GetLower() ) / 2 ) );
+        m_rWW8Export.InsUInt16( ( rUL.GetUpper() + rUL.GetLower() ) / 2 );
     }
     else if ( m_rWW8Export.m_bOutPageDescs )            // Page-UL
     {

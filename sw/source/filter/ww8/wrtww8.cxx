@@ -2218,7 +2218,7 @@ void WW8AttributeOutput::TableHeight(const ww8::WW8TableNodeInfoInner::Pointer_t
     if ( nHeight )
     {
         m_rWW8Export.InsUInt16( NS_sprm::TDyaRowHeight::val );
-        m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>(nHeight) );
+        m_rWW8Export.InsUInt16( nHeight );
     }
 
 }
