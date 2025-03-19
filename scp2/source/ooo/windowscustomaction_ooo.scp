@@ -263,7 +263,16 @@ WindowsCustomAction gid_Customaction_install_updateservice
     Source = "install_updateservice.dll";
     Target = "InstallUpdateservice";
     Inbinarytable = 1;
-    Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "InstallFinalize");
+    Assignment1 = ("InstallExecuteSequence", "(\&gm_o_Onlineupdate=3 Or (\!gm_o_Onlineupdate=3 And \&gm_o_Onlineupdate=-1)) And Not REMOVE=\"ALL\"", "InstallFinalize");
+End
+
+WindowsCustomAction gid_Customaction_remove_updateservice
+    Name = "remove_updateservice";
+    Typ = "3137";
+    Source = "install_updateservice.dll";
+    Target = "RemoveUpdateservice";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "Not (\&gm_o_Onlineupdate=3 Or (\!gm_o_Onlineupdate=3 And \&gm_o_Onlineupdate=-1)) And Not REMOVE=\"ALL\"", "InstallFinalize");
 End
 
 WindowsCustomAction gid_Customaction_uninstall_updateservice
@@ -272,7 +281,7 @@ WindowsCustomAction gid_Customaction_uninstall_updateservice
     Source = "install_updateservice.dll";
     Target = "UninstallUpdateservice";
     Inbinarytable = 1;
-    Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\"", "UnpublishComponents");
+    Assignment1 = ("InstallExecuteSequence", "(\&gm_o_Onlineupdate=3 Or (\!gm_o_Onlineupdate=3 And \&gm_o_Onlineupdate=-1)) And REMOVE=\"ALL\"", "UnpublishComponents");
 End
 
 #endif
