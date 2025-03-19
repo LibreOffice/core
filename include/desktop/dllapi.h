@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_INC_DESKTOPDLLAPI_H
-#define INCLUDED_DESKTOP_SOURCE_INC_DESKTOPDLLAPI_H
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -23,8 +22,6 @@
 #define CRASHREPORT_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
 #else
 #define CRASHREPORT_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
-#endif
-
 #endif
 
 /* vim: set shiftwidth=4 softtabstop=4 expandtab: */
