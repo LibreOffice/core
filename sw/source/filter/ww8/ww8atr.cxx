@@ -4355,7 +4355,7 @@ void WW8AttributeOutput::FormatFirstLineIndent(SvxFirstLineIndentItem const& rFi
     {
         // sprmPDxcLeft1
         m_rWW8Export.InsUInt16(0x4457);
-        m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(stOffset.m_dValue * 100.0));
+        m_rWW8Export.InsInt16(o3tl::narrowing<sal_Int16>(stOffset.m_dValue * 100.0));
     }
     else
     {
@@ -4386,7 +4386,7 @@ void WW8AttributeOutput::FormatTextLeftMargin(SvxTextLeftMarginItem const& rText
 
         // sprmPDxcLeft
         m_rWW8Export.InsUInt16(0x4456);
-        m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(stOffset.m_dValue * 100.0));
+        m_rWW8Export.InsInt16(o3tl::narrowing<sal_Int16>(stOffset.m_dValue * 100.0));
     }
     else
     {
@@ -4403,7 +4403,7 @@ void WW8AttributeOutput::FormatRightMargin(SvxRightMarginItem const& rRightMargi
     {
         // sprmPDxcRight
         m_rWW8Export.InsUInt16(0x4455);
-        m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(stOffset.m_dValue * 100.0));
+        m_rWW8Export.InsInt16(o3tl::narrowing<sal_Int16>(stOffset.m_dValue * 100.0));
     }
     else
     {
