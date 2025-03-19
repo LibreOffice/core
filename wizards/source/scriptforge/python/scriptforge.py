@@ -1409,6 +1409,14 @@ class SFScriptForge:
 
         pythonversion, pythonVersion = PythonVersion, PythonVersion
 
+        @property
+        def UntitledPrefix(self):
+            basic = SFScriptForge.SF_Basic()
+            desktop = basic.StarDesktop
+            return desktop.UntitledPrefix
+
+        untitledprefix, untitledPrefix = UntitledPrefix, UntitledPrefix
+
     # #########################################################################
     # SF_Region CLASS
     # #########################################################################

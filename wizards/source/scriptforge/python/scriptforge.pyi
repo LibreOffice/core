@@ -1507,6 +1507,8 @@ class SFScriptForge:
         SystemLocale: str
         """ The locale of the operating system as a string in the format "la-CO" (language-COUNTRY).
         This is equivalent to the ``Locale`` property.  """
+        UntitledPrefix: str
+        """ The prefix used to name new documents (in English = "Untitled ").   """
         UserData: DICTIONARY
         """ Returns a ``Dictionary`` instance containing key-value pairs in relation with the
         ``Tools - Options - User Data`` dialog. """
