@@ -270,7 +270,7 @@ bool ImplFontCache::GetCachedGlyphBoundRect(const LogicalFontInstance *pFont, sa
     return false;
 }
 
-void ImplFontCache::CacheGlyphBoundRect(const LogicalFontInstance *pFont, sal_GlyphId nID, basegfx::B2DRectangle &rRect)
+void ImplFontCache::CacheGlyphBoundRect(const LogicalFontInstance *pFont, sal_GlyphId nID, const basegfx::B2DRectangle &rRect)
 {
     if (!pFont->GetFontCache())
         return;

@@ -27,7 +27,7 @@ private:
 
 public:
     OpenTypeFeatureDefinitionListPrivate();
-    FeatureDefinition getDefinition(vcl::font::Feature& rFeature);
+    FeatureDefinition getDefinition(const vcl::font::Feature& rFeature);
     bool isRequired(sal_uInt32 nFeatureCode);
 };
 

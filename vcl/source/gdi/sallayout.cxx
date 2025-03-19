@@ -247,7 +247,7 @@ bool SalLayout::GetBoundRect(basegfx::B2DRectangle& rRect) const
     return bRet;
 }
 
-tools::Rectangle SalLayout::BoundRect2Rectangle(basegfx::B2DRectangle& rRect)
+tools::Rectangle SalLayout::BoundRect2Rectangle(const basegfx::B2DRectangle& rRect)
 {
     if (rRect.isEmpty())
         return {};

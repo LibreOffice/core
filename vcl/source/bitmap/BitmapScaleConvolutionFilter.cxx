@@ -79,7 +79,7 @@ void ImplCalculateContributions(const sal_Int32 nSoureSize, const sal_Int32 nDes
     }
 }
 
-bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rScaleX, const Kernel& rKernel)
+bool ImplScaleConvolutionHor(const Bitmap& rSource, Bitmap& rTarget, const double& rScaleX, const Kernel& rKernel)
 {
     // Do horizontal filtering
     OSL_ENSURE(rScaleX > 0.0, "Error in scaling: Mirror given in non-mirror-capable method (!)");
@@ -154,7 +154,7 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
     return true;
 }
 
-bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rScaleY, const Kernel& rKernel)
+bool ImplScaleConvolutionVer(const Bitmap& rSource, Bitmap& rTarget, const double& rScaleY, const Kernel& rKernel)
 {
     // Do vertical filtering
     OSL_ENSURE(rScaleY > 0.0, "Error in scaling: Mirror given in non-mirror-capable method (!)");

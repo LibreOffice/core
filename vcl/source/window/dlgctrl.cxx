@@ -1040,7 +1040,7 @@ void Window::ImplDlgCtrlNextWindow()
         pWindow->ImplControlFocus();
 }
 
-static void ImplDlgCtrlUpdateDefButton( vcl::Window* pParent, vcl::Window* pFocusWindow,
+static void ImplDlgCtrlUpdateDefButton( vcl::Window* pParent, const vcl::Window* pFocusWindow,
                                         bool bGetFocus )
 {
     PushButton* pOldDefButton   = nullptr;
@@ -1097,7 +1097,7 @@ static void ImplDlgCtrlUpdateDefButton( vcl::Window* pParent, vcl::Window* pFocu
     }
 }
 
-void Window::ImplDlgCtrlFocusChanged( vcl::Window* pWindow, bool bGetFocus )
+void Window::ImplDlgCtrlFocusChanged( const vcl::Window* pWindow, bool bGetFocus )
 {
     if ( mpWindowImpl->mpDlgCtrlDownWindow && !bGetFocus )
     {
@@ -1108,7 +1108,7 @@ void Window::ImplDlgCtrlFocusChanged( vcl::Window* pWindow, bool bGetFocus )
     ImplDlgCtrlUpdateDefButton( this, pWindow, bGetFocus );
 }
 
-vcl::Window* Window::ImplFindDlgCtrlWindow( vcl::Window* pWindow )
+vcl::Window* Window::ImplFindDlgCtrlWindow( const vcl::Window* pWindow )
 {
     sal_uInt16  nIndex;
     sal_uInt16  nFormStart;

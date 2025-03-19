@@ -60,7 +60,7 @@ bool validateUserPassword(const sal_uInt8* pPass, size_t nLength, std::vector<sa
     return aHash == aCalculatedHash;
 }
 
-bool validateOwnerPassword(const sal_uInt8* pPass, size_t nLength, std::vector<sal_uInt8>& U,
+bool validateOwnerPassword(const sal_uInt8* pPass, size_t nLength, const std::vector<sal_uInt8>& U,
                            std::vector<sal_uInt8>& O)
 {
     std::vector<sal_uInt8> aHash(O.begin(), O.begin() + KEY_SIZE);
@@ -93,7 +93,7 @@ void generateUandUE(const sal_uInt8* pPass, size_t nLength,
 
 /** Algorithm 9 */
 void generateOandOE(const sal_uInt8* pPass, size_t nLength,
-                    std::vector<sal_uInt8>& rFileEncryptionKey, std::vector<sal_uInt8>& U,
+                    std::vector<sal_uInt8>& rFileEncryptionKey, const std::vector<sal_uInt8>& U,
                     std::vector<sal_uInt8>& O, std::vector<sal_uInt8>& OE)
 {
     std::vector<sal_uInt8> aValidationSalt;

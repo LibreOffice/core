@@ -666,8 +666,8 @@ private:
     SAL_DLLPRIVATE bool                 ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput );
     SAL_DLLPRIVATE bool                 ImplHasDlgCtrl() const;
     SAL_DLLPRIVATE void                 ImplDlgCtrlNextWindow();
-    SAL_DLLPRIVATE void                 ImplDlgCtrlFocusChanged( vcl::Window* pWindow, bool bGetFocus );
-    SAL_DLLPRIVATE vcl::Window*         ImplFindDlgCtrlWindow( vcl::Window* pWindow );
+    SAL_DLLPRIVATE void                 ImplDlgCtrlFocusChanged( const vcl::Window* pWindow, bool bGetFocus );
+    SAL_DLLPRIVATE vcl::Window*         ImplFindDlgCtrlWindow( const vcl::Window* pWindow );
 
     SAL_DLLPRIVATE static void          ImplNewInputContext();
 

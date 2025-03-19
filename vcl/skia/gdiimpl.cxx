@@ -1283,7 +1283,7 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
     postDraw();
 }
 
-void SkiaSalGraphicsImpl::privateCopyBits(const SalTwoRect& rPosAry, SkiaSalGraphicsImpl* src)
+void SkiaSalGraphicsImpl::privateCopyBits(const SalTwoRect& rPosAry, const SkiaSalGraphicsImpl* src)
 {
     assert(mXorMode == XorMode::None);
     addUpdateRegion(SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,

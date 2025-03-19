@@ -125,7 +125,8 @@ void OpenTypeFeatureDefinitionListPrivate::init()
     });
 }
 
-FeatureDefinition OpenTypeFeatureDefinitionListPrivate::getDefinition(vcl::font::Feature& rFeature)
+FeatureDefinition
+OpenTypeFeatureDefinitionListPrivate::getDefinition(const vcl::font::Feature& rFeature)
 {
     if (rFeature.isCharacterVariant() || rFeature.isStylisticSet())
     {

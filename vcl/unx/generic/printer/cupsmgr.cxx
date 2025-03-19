@@ -244,7 +244,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
-static void SetIfCustomOption(PPDContext& rContext, const cups_option_t& rOption, rtl_TextEncoding aEncoding)
+static void SetIfCustomOption(const PPDContext& rContext, const cups_option_t& rOption, rtl_TextEncoding aEncoding)
 {
     if (strncmp(rOption.value, RTL_CONSTASCII_STRINGPARAM("Custom.")) == 0)
     {

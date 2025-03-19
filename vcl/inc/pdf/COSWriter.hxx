@@ -142,7 +142,7 @@ public:
         writeLiteralEncrypt(value, nObject);
     }
 
-    void writeHexArray(std::string_view key, sal_uInt8* pData, size_t nSize)
+    void writeHexArray(std::string_view key, const sal_uInt8* pData, size_t nSize)
     {
         mrBuffer.append(key);
         mrBuffer.append("<");
@@ -158,7 +158,7 @@ public:
         rBuffer.append(constHexDigits[nValue & 15]);
     }
 
-    static void appendHexArray(sal_uInt8* pArray, size_t nSize, OStringBuffer& rBuffer)
+    static void appendHexArray(const sal_uInt8* pArray, size_t nSize, OStringBuffer& rBuffer)
     {
         for (size_t i = 0; i < nSize; i++)
             appendHex(pArray[i], rBuffer);

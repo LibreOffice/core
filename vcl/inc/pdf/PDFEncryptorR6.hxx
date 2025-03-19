@@ -40,7 +40,8 @@ VCL_DLLPUBLIC bool validateUserPassword(const sal_uInt8* pUserPass, size_t nPass
  * Described in ISO 32000-2:2020(E) - 7.6.4.4.11
  */
 VCL_DLLPUBLIC bool validateOwnerPassword(const sal_uInt8* pUserPass, size_t nPasswordLength,
-                                         std::vector<sal_uInt8>& U, std::vector<sal_uInt8>& O);
+                                         const std::vector<sal_uInt8>& U,
+                                         std::vector<sal_uInt8>& O);
 
 /** Generates the encryption key - random data 32-byte */
 VCL_DLLPUBLIC std::vector<sal_uInt8> generateKey();
@@ -65,7 +66,7 @@ VCL_DLLPUBLIC void generateUandUE(const sal_uInt8* pUserPass, size_t nPasswordLe
  */
 VCL_DLLPUBLIC void generateOandOE(const sal_uInt8* pUserPass, size_t nPasswordLength,
                                   std::vector<sal_uInt8>& rFileEncryptionKey,
-                                  std::vector<sal_uInt8>& U, std::vector<sal_uInt8>& O,
+                                  const std::vector<sal_uInt8>& U, std::vector<sal_uInt8>& O,
                                   std::vector<sal_uInt8>& OE);
 
 /** Algorithm 8 step b) in reverse

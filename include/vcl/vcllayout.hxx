@@ -116,7 +116,7 @@ public:
     virtual bool GetOutline(basegfx::B2DPolyPolygonVector&) const;
     bool GetBoundRect(basegfx::B2DRectangle&) const;
 
-    static tools::Rectangle BoundRect2Rectangle(basegfx::B2DRectangle&);
+    static tools::Rectangle BoundRect2Rectangle(const basegfx::B2DRectangle&);
 
     virtual SalLayoutGlyphs GetGlyphs() const;
 

@@ -236,7 +236,7 @@ protected:
 
     void privateDrawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                               tools::Long nHeight, double nTransparency, bool blockAA = false);
-    void privateCopyBits(const SalTwoRect& rPosAry, SkiaSalGraphicsImpl* src);
+    void privateCopyBits(const SalTwoRect& rPosAry, const SkiaSalGraphicsImpl* src);
 
     void setProvider(SalGeometryProvider* provider) { mProvider = provider; }
 

@@ -1230,7 +1230,7 @@ public:
     void  createEmphasisMarks(
         FontEmphasisMark nFontEmphasisMark,
         tools::Long nEmphasisHeight,
-        SalLayout& rSalLayout,
+        const SalLayout& rSalLayout,
         const std::function<void(const basegfx::B2DPoint&, const basegfx::B2DPolyPolygon&,
             bool, const tools::Rectangle&, const tools::Rectangle&)>& rCallback) const;
 

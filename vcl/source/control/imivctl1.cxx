@@ -908,7 +908,7 @@ void SvxIconChoiceCtrl_Impl::PaintEmphasis(const tools::Rectangle& rTextRect,
 
 
 void SvxIconChoiceCtrl_Impl::PaintItem(const tools::Rectangle& rRect,
-    IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry, sal_uInt16 nPaintFlags,
+    IcnViewFieldType eItem, const SvxIconChoiceCtrlEntry* pEntry, sal_uInt16 nPaintFlags,
     vcl::RenderContext& rRenderContext )
 {
     if (eItem == IcnViewFieldType::Text)

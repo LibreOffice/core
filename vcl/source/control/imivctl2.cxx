@@ -329,7 +329,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pCt
     return nullptr;
 }
 
-SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pStart, bool bDown)
+SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( const SvxIconChoiceCtrlEntry* pStart, bool bDown)
 {
     const tools::Long nPos = static_cast<tools::Long>(pView->GetEntryListPos( pStart ));
     tools::Long nEntriesInView = pView->aOutputSize.Height() / pView->nGridDY;
@@ -353,7 +353,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pS
     return nullptr;
 }
 
-SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlEntry, bool bDown)
+SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( const SvxIconChoiceCtrlEntry* pCtrlEntry, bool bDown)
 {
     sal_uLong nPos = pView->GetEntryListPos( pCtrlEntry );
     if( bDown && nPos < (pView->maEntries.size() - 1) )

@@ -87,7 +87,7 @@ public:
                             int nFallbackLevel, OUString& rMissingCodes );
 
     bool GetCachedGlyphBoundRect(const LogicalFontInstance*, sal_GlyphId, basegfx::B2DRectangle&);
-    void CacheGlyphBoundRect(const LogicalFontInstance*, sal_GlyphId, basegfx::B2DRectangle&);
+    void CacheGlyphBoundRect(const LogicalFontInstance*, sal_GlyphId, const basegfx::B2DRectangle&);
 
     void                Invalidate();
 };

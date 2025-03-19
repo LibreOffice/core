@@ -24,7 +24,7 @@
 #include <vcl/vcllayout.hxx>
 
 void OutputDevice::createEmphasisMarks(
-    FontEmphasisMark nEmphasisMark, tools::Long nEmphasisHeight, SalLayout& rSalLayout,
+    FontEmphasisMark nEmphasisMark, tools::Long nEmphasisHeight, const SalLayout& rSalLayout,
     const std::function<void(const basegfx::B2DPoint&, const basegfx::B2DPolyPolygon&, bool,
                              const tools::Rectangle&, const tools::Rectangle&)>& rCallback) const
 {

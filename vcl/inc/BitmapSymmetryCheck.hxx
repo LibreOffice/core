@@ -19,7 +19,7 @@ class VCL_DLLPUBLIC BitmapSymmetryCheck final
 public:
     BitmapSymmetryCheck();
 
-    static bool check(Bitmap& rBitmap);
+    static bool check(const Bitmap& rBitmap);
 
 private:
     static bool checkImpl(BitmapReadAccess const* pReadAccess);

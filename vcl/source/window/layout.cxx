@@ -2195,7 +2195,7 @@ void VclScrolledWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
 }
 
 namespace {
-void lcl_dumpScrollbar(::tools::JsonWriter& rJsonWriter, ScrollBar& rScrollBar)
+void lcl_dumpScrollbar(::tools::JsonWriter& rJsonWriter, const ScrollBar& rScrollBar)
 {
     rJsonWriter.put("lower", rScrollBar.GetRangeMin());
     rJsonWriter.put("upper", rScrollBar.GetRangeMax());

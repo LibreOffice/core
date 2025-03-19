@@ -85,7 +85,7 @@ public:
 
     BitmapColor GetPixel(const Point& point) const { return GetPixel(point.Y(), point.X()); }
 
-    BitmapColor GetColorFromData(sal_uInt8* pData, tools::Long nX) const
+    BitmapColor GetColorFromData(const sal_uInt8* pData, tools::Long nX) const
     {
         if (HasPalette())
             return GetPaletteColor(GetIndexFromData(pData, nX));

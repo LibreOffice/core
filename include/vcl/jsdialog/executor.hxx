@@ -112,27 +112,27 @@ public:
 
     static void trigger_closed(weld::Popover& rPopover) { rPopover.popdown(); }
 
-    static void trigger_key_press(weld::Widget& rWidget, const KeyEvent& rEvent)
+    static void trigger_key_press(const weld::Widget& rWidget, const KeyEvent& rEvent)
     {
         rWidget.m_aKeyPressHdl.Call(rEvent);
     }
 
-    static void trigger_key_release(weld::Widget& rWidget, const KeyEvent& rEvent)
+    static void trigger_key_release(const weld::Widget& rWidget, const KeyEvent& rEvent)
     {
         rWidget.m_aKeyReleaseHdl.Call(rEvent);
     }
 
-    static void command(weld::DrawingArea& rArea, const CommandEvent& rCmd)
+    static void command(const weld::DrawingArea& rArea, const CommandEvent& rCmd)
     {
         rArea.m_aCommandHdl.Call(rCmd);
     }
 
-    static void enter_page(weld::Notebook& rNotebook, const OUString& rPage)
+    static void enter_page(const weld::Notebook& rNotebook, const OUString& rPage)
     {
         rNotebook.m_aEnterPageHdl.Call(rPage);
     }
 
-    static void leave_page(weld::Notebook& rNotebook, const OUString& rPage)
+    static void leave_page(const weld::Notebook& rNotebook, const OUString& rPage)
     {
         rNotebook.m_aLeavePageHdl.Call(rPage);
     }

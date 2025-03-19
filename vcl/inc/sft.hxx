@@ -605,7 +605,7 @@ class TrueTypeFont;
  * @ingroup sft
  *
  */
-void GetTTGlobalFontInfo(AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info);
+void GetTTGlobalFontInfo(const AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info);
 
 /**
  * Returns part of the head table info, normally collected by GetTTGlobalFontInfo.

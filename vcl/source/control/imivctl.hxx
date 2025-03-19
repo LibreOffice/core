@@ -253,7 +253,7 @@ public:
 
     static void         PaintEmphasis(const tools::Rectangle& rRect1, vcl::RenderContext& rRenderContext);
 
-    void                PaintItem(const tools::Rectangle& rRect, IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry,
+    void                PaintItem(const tools::Rectangle& rRect, IcnViewFieldType eItem, const SvxIconChoiceCtrlEntry* pEntry,
                             sal_uInt16 nPaintFlags, vcl::RenderContext& rRenderContext);
 
     // recalculates all BoundingRects if bMustRecalcBoundingRects == true
@@ -334,8 +334,8 @@ public:
 
     // for Cursortravelling etc.
     SvxIconChoiceCtrlEntry* GoLeftRight( SvxIconChoiceCtrlEntry*, bool bRight );
-    SvxIconChoiceCtrlEntry* GoUpDown( SvxIconChoiceCtrlEntry*, bool bDown );
-    SvxIconChoiceCtrlEntry* GoPageUpDown( SvxIconChoiceCtrlEntry*, bool bDown );
+    SvxIconChoiceCtrlEntry* GoUpDown( const SvxIconChoiceCtrlEntry*, bool bDown );
+    SvxIconChoiceCtrlEntry* GoPageUpDown( const SvxIconChoiceCtrlEntry*, bool bDown );
 };
 
 class IcnGridMap_Impl

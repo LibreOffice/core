@@ -326,7 +326,7 @@ bool ImplReadDIBPalette(SvStream& rIStm, BitmapPalette& rPal, bool bQuad)
     return rIStm.GetError() == ERRCODE_NONE;
 }
 
-BitmapColor SanitizePaletteIndex(sal_uInt8 nIndex, BitmapPalette& rPalette)
+BitmapColor SanitizePaletteIndex(sal_uInt8 nIndex, const BitmapPalette& rPalette)
 {
     const sal_uInt16 nPaletteEntryCount = rPalette.GetEntryCount();
     if (nPaletteEntryCount && nIndex >= nPaletteEntryCount)
@@ -340,7 +340,7 @@ BitmapColor SanitizePaletteIndex(sal_uInt8 nIndex, BitmapPalette& rPalette)
     return BitmapColor(nIndex);
 }
 
-bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header const & rHeader, BitmapWriteAccess& rAcc, BitmapPalette& rPalette, bool bRLE4)
+bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header const & rHeader, BitmapWriteAccess& rAcc, const BitmapPalette& rPalette, bool bRLE4)
 {
     Scanline pRLE = pBuffer;
     Scanline pEndRLE = pBuffer + rHeader.nSizeImage;
@@ -477,7 +477,7 @@ bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header const & rHeader, BitmapWriteA
     return true;
 }
 
-bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& rAcc, BitmapPalette& rPalette, BitmapWriteAccess* pAccAlpha,
+bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& rAcc, const BitmapPalette& rPalette, BitmapWriteAccess* pAccAlpha,
                      bool bTopDown, bool& rAlphaUsed, const sal_uInt64 nAlignedWidth)
 {
     sal_uInt32 nRMask(( rHeader.nBitCount == 16 ) ? 0x00007c00UL : 0x00ff0000UL);

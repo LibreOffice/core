@@ -1428,7 +1428,7 @@ SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
 
 namespace
 {
-void FillFontSubsetInfo(AbstractTrueTypeFont* ttf, FontSubsetInfo& rInfo)
+void FillFontSubsetInfo(const AbstractTrueTypeFont* ttf, FontSubsetInfo& rInfo)
 {
     TTGlobalFontInfo aTTInfo;
     GetTTGlobalFontInfo(ttf, &aTTInfo);
@@ -1568,7 +1568,7 @@ bool GetTTGlobalFontHeadInfo(const AbstractTrueTypeFont *ttf, int& xMin, int& yM
     return true;
 }
 
-void GetTTGlobalFontInfo(AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info)
+void GetTTGlobalFontInfo(const AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info)
 {
     int UPEm = ttf->unitsPerEm();
 

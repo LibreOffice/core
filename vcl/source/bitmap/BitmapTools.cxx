@@ -542,7 +542,7 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
     return BitmapEx(aDstBitmap, AlphaMask(aDstAlpha));
 }
 
-void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparence, float fTransparence, AlphaMask & rNewMask)
+void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparence, float fTransparence, const AlphaMask & rNewMask)
 {
     // mix existing and new alpha mask
     AlphaMask aOldMask;
@@ -729,7 +729,7 @@ static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, tools::Long nY, c
  * @param data will be filled with alpha data, if xBitmap is alpha/transparent image
  * @param bHasAlpha will be set to true if resulting surface has alpha
  **/
-void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, unsigned char*& data, bool& bHasAlpha, tools::Long& rnWidth, tools::Long& rnHeight )
+void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, const Bitmap & aBitmap, unsigned char*& data, bool& bHasAlpha, tools::Long& rnWidth, tools::Long& rnHeight )
 {
     const AlphaMask& aAlpha = aBmpEx.GetAlphaMask();
 
