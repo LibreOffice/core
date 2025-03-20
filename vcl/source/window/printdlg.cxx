@@ -198,9 +198,9 @@ bool PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
     {
         const CommandWheelData* pWheelData = rEvt.GetWheelData();
         if(pWheelData->GetDelta() > 0)
-            mpDialog->previewForward();
-        else if (pWheelData->GetDelta() < 0)
             mpDialog->previewBackward();
+        else if (pWheelData->GetDelta() < 0)
+            mpDialog->previewForward();
         return true;
     }
     return CustomWidgetController::Command(rEvt);
