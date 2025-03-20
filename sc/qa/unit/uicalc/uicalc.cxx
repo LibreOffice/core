@@ -981,6 +981,19 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf147744)
     pMod->SetInputOptions(aInputOption);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf165821)
+{
+    createScDoc();
+
+    insertStringToCell(u"A1"_ustr, u"=COUNTA(K:K)");
+
+    ScDocument* pDoc = getScDoc();
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138432)
 {
     createScDoc("tdf138432.ods");
