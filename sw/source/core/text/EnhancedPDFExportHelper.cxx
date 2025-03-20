@@ -567,7 +567,7 @@ bool SwTaggedPDFHelper::CheckReopenTag()
         {
             void const*const pKey = lcl_GetKeyFromFrame(*pKeyFrame);
             FrameTagSet& rFrameTagSet(mpPDFExtOutDevData->GetSwPDFState()->m_FrameTagSet);
-            if (rFrameTagSet.find(pKey) != rFrameTagSet.end()
+            if (rFrameTagSet.contains(pKey)
                 || rFrame.IsFlyFrame()) // for hell layer flys
             {
                 pReopenKey = pKey;
@@ -654,7 +654,7 @@ void SwTaggedPDFHelper::BeginTag(vcl::pdf::StructElement eType, const OUString& 
             if (pKey)
             {
                 FrameTagSet& rFrameTagSet(mpPDFExtOutDevData->GetSwPDFState()->m_FrameTagSet);
-                assert(rFrameTagSet.find(pKey) == rFrameTagSet.end());
+                assert(!rFrameTagSet.contains(pKey));
                 rFrameTagSet.emplace(pKey);
             }
         }
@@ -1461,7 +1461,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 }
 
                 FrameTagSet& rFrameTagSet(mpPDFExtOutDevData->GetSwPDFState()->m_FrameTagSet);
-                if (rFrameTagSet.find(pSection) != rFrameTagSet.end())
+                if (rFrameTagSet.contains(pSection))
                 {
                     // special case: section may have *multiple* master frames,
                     // when it is interrupted by nested section - reopen!
@@ -1573,7 +1573,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                         if (pTabFrame)
                         {
                             const SwTable* pTable = pTabFrame->GetTable();
-                            if (rTableCaptionsMap.find(pTable) != rTableCaptionsMap.end())
+                            if (rTableCaptionsMap.contains(pTable))
                             {
                                 // Reopen Caption tag:
                                 // - if the table has an above and below caption
