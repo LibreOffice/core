@@ -117,6 +117,56 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateSingleInsert)
     CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rInnerRedlineData.GetType());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateInsertsInSelection)
+{
+    // Given a document with two insertions:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert("aaa");
+    SwModule* pModule = SwModule::get();
+    pModule->SetRedlineAuthor("Alice");
+    RedlineFlags nMode = pWrtShell->GetRedlineFlags();
+    pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
+    pWrtShell->Insert("bbb");
+    pWrtShell->SetRedlineFlags(nMode);
+    pWrtShell->Insert("ccc");
+    pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
+    pWrtShell->Insert("ddd");
+    pWrtShell->SetRedlineFlags(nMode);
+    pWrtShell->Insert("eee");
+
+    // When a 2nd user reinstates those changes with a selection:
+    pModule->SetRedlineAuthor("Bob");
+    // Create a selection that excludes the initial "a" and the last "e":
+    pWrtShell->SttPara(/*bSelect=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->EndPara(/*bSelect=*/true);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:ReinstateTrackedChange", {});
+
+    // Then make sure this results in deletes on top of inserts:
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 0
+    // i.e. a reject was performed instead of a reinstate.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rRedlines.size());
+    const SwRangeRedline* pRedline1 = rRedlines[0];
+    const SwRedlineData& rRedlineData1 = pRedline1->GetRedlineData(0);
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlineData1.GetType());
+    CPPUNIT_ASSERT(rRedlineData1.Next());
+    const SwRedlineData& rInnerRedlineData1 = *rRedlineData1.Next();
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rInnerRedlineData1.GetType());
+    const SwRangeRedline* pRedline2 = rRedlines[1];
+    const SwRedlineData& rRedlineData2 = pRedline2->GetRedlineData(0);
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlineData2.GetType());
+    CPPUNIT_ASSERT(rRedlineData2.Next());
+    const SwRedlineData& rInnerRedlineData2 = *rRedlineData2.Next();
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rInnerRedlineData2.GetType());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
