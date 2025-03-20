@@ -867,7 +867,7 @@ void FontworkHelpers::collectCharColorProps(const uno::Reference<text::XText>& r
 }
 
 void FontworkHelpers::applyPropsToRuns(const std::vector<beans::PropertyValue>& rTextPropVec,
-                                       uno::Reference<text::XText>& rXText)
+                                       const uno::Reference<text::XText>& rXText)
 {
     if (!rXText.is())
         return;
@@ -1092,8 +1092,9 @@ bool lcl_getThemeColorTransformationValue(const model::ComplexColor& rComplexCol
 // Adds the child elements 'lumMod' and 'lumOff' to 'schemeClr' maCurrentElement of pGrabStack,
 // if such exist in rComplexColor. 'alpha' is contained in the maTransformations of rComplexColor
 // in case of gradient fill.
-void lcl_addColorTransformationToGrabBagStack(const model::ComplexColor& rComplexColor,
-                                              std::unique_ptr<oox::GrabBagStack>& pGrabBagStack)
+void lcl_addColorTransformationToGrabBagStack(
+    const model::ComplexColor& rComplexColor,
+    const std::unique_ptr<oox::GrabBagStack>& pGrabBagStack)
 {
     if (pGrabBagStack == nullptr)
         return;
@@ -1624,7 +1625,8 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
 }
 
 void FontworkHelpers::applyUpdatesToCharInteropGrabBag(
-    const std::vector<beans::PropertyValue>& rUpdatePropVec, uno::Reference<text::XText>& rXText)
+    const std::vector<beans::PropertyValue>& rUpdatePropVec,
+    const uno::Reference<text::XText>& rXText)
 {
     if (!rXText.is())
         return;

@@ -58,7 +58,7 @@ private:
     void saveThemeToGrabBag(const oox::drawingml::ThemePtr& pThemePtr, sal_Int32 nThemeIdx);
     void saveColorMapToGrabBag(const oox::drawingml::ClrMapPtr& pClrMapPtr);
     void importCustomSlideShow(std::vector<CustomShow>& rCustomShowList);
-    static void importSlideNames(::oox::core::XmlFilterBase& rFilter, const std::vector<SlidePersistPtr>& rSlidePersist);
+    static void importSlideNames(const ::oox::core::XmlFilterBase& rFilter, const std::vector<SlidePersistPtr>& rSlidePersist);
 
     std::vector< OUString > maSlideMasterVector;
     std::vector< OUString > maSlidesVector;

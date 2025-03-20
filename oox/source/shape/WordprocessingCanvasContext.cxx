@@ -32,7 +32,7 @@ using namespace com::sun::star;
 namespace oox::shape
 {
 WordprocessingCanvasContext::WordprocessingCanvasContext(FragmentHandler2 const& rParent,
-                                                         css::awt::Size& rSize)
+                                                         const css::awt::Size& rSize)
     : FragmentHandler2(rParent)
     , m_bFullWPGSupport(true)
 {

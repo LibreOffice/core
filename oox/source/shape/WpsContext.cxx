@@ -503,7 +503,7 @@ void lcl_setTextPropsToShape(const uno::Reference<beans::XPropertySet>& xShapePr
     }
 }
 
-void lcl_applyUsedTextPropsToAllTextRuns(uno::Reference<text::XText>& xText,
+void lcl_applyUsedTextPropsToAllTextRuns(const uno::Reference<text::XText>& xText,
                                          const std::vector<beans::PropertyValue>& aTextPropVec)
 {
     if (!xText.is())

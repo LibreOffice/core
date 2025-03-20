@@ -61,7 +61,7 @@ void collectCharColorProps(const css::uno::Reference<css::text::XText>& rXText,
 /** Applies all properties in rTextPropVec excluding "CharInteropGrabBag" to all non-empty runs in
     rXText.*/
 void applyPropsToRuns(const std::vector<css::beans::PropertyValue>& rTextPropVec,
-                      css::uno::Reference<css::text::XText>& rXText);
+                      const css::uno::Reference<css::text::XText>& rXText);
 
 /** Generates the properties "CharColor", "CharLumMod", "CharLumOff", "CharColorTheme",
     "CharComplexColor" and "CharTransparence" from the shape properties "FillColor",
@@ -80,7 +80,7 @@ void createCharInteropGrabBagUpdatesFromShapeProps(
 /** Puts all properties in rUpdatePropVec into the "CharInteropGrabBag" of all non-empty runs in rXText.
     Existing properties are overwritten.*/
 void applyUpdatesToCharInteropGrabBag(const std::vector<css::beans::PropertyValue>& rUpdatePropVec,
-                                      css::uno::Reference<css::text::XText>& rXText);
+                                      const css::uno::Reference<css::text::XText>& rXText);
 
 // ToDo: This is essentially the same as contained in method DrawingML::WriteOutline. Change it
 // there to use this method too, perhaps move this method to a common location.

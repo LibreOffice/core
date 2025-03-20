@@ -129,7 +129,7 @@ class Diagram
 {
 public:
     explicit Diagram();
-    void setData( OoxDiagramDataPtr& pData )
+    void setData( const OoxDiagramDataPtr& pData )
         { mpData = pData; }
     const OoxDiagramDataPtr& getData() const
         { return mpData; }

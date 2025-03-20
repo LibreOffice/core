@@ -390,7 +390,7 @@ void SlidePersist::hideShapesAsMasterShapes()
 }
 
 // This angle determines in the direction of the line
-static sal_Int32 lcl_GetAngle(uno::Reference<drawing::XShape>& rXShape, awt::Point& rPt)
+static sal_Int32 lcl_GetAngle(const uno::Reference<drawing::XShape>& rXShape, const awt::Point& rPt)
 {
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rXShape);
     tools::Rectangle aR(pObj->GetSnapRect());
@@ -429,8 +429,8 @@ Reference<XAnimationNode> SlidePersist::getAnimationNode(const OUString& sId) co
     return aResult;
 }
 
-static void lcl_SetEdgeLineValue(uno::Reference<drawing::XShape>& rXConnector,
-                                 oox::drawingml::ShapePtr& rShapePtr)
+static void lcl_SetEdgeLineValue(const uno::Reference<drawing::XShape>& rXConnector,
+                                 const oox::drawingml::ShapePtr& rShapePtr)
 {
     sal_Int32 nEdge = 0;
     awt::Point aStartPt, aEndPt;
@@ -517,7 +517,7 @@ static void lcl_SetEdgeLineValue(uno::Reference<drawing::XShape>& rXConnector,
 }
 
 // create connection between two shape with a connector shape.
-void SlidePersist::createConnectorShapeConnection(oox::drawingml::ShapePtr& pConnector)
+void SlidePersist::createConnectorShapeConnection(const oox::drawingml::ShapePtr& pConnector)
 {
     oox::drawingml::ConnectorShapePropertiesList aConnectorShapeProperties
         = pConnector->getConnectorShapeProperties();

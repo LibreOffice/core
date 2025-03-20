@@ -96,7 +96,8 @@ void getLOCurvedHandlePositionsHmm(const oox::drawingml::ShapePtr& pConnector,
  * @param pConnector is pointer to a oox::drawing::Shape that represents a connector shape.
  * @param [in] A flat map of target shape candidates, indexed by their msId.
 */
-void applyConnections(oox::drawingml::ShapePtr& pConnector, oox::drawingml::ShapeIdMap& rShapeMap);
+void applyConnections(const oox::drawingml::ShapePtr& pConnector,
+                      oox::drawingml::ShapeIdMap& rShapeMap);
 
 /**
  * Calculates the difference between handle positions in OOXML and the default handle positions in

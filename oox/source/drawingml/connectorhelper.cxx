@@ -290,7 +290,7 @@ void ConnectorHelper::getLOCurvedHandlePositionsHmm(
     }
 }
 
-void ConnectorHelper::applyConnections(oox::drawingml::ShapePtr& pConnector,
+void ConnectorHelper::applyConnections(const oox::drawingml::ShapePtr& pConnector,
                                        oox::drawingml::ShapeIdMap& rShapeMap)
 {
     uno::Reference<drawing::XShape> xConnector(pConnector->getXShape());

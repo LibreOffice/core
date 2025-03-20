@@ -85,7 +85,7 @@ public:
 
     void doAnchor(SdrObjGroup& rTarget, ::oox::drawingml::Shape& rRootShape);
     const std::shared_ptr< ::oox::drawingml::Theme >& getOrCreateThemePtr(
-        rtl::Reference< oox::shape::ShapeFilterBase>& rxFilter ) const;
+        const rtl::Reference< oox::shape::ShapeFilterBase>& rxFilter ) const;
 };
 
 }

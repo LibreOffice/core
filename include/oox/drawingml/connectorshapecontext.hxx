@@ -44,7 +44,7 @@ class ConnectorShapePropertiesContext : public ::oox::core::ContextHandler2
 
 public:
     ConnectorShapePropertiesContext(
-        ::oox::core::ContextHandler2Helper const& rParent, ShapePtr& pShapePtr,
+        ::oox::core::ContextHandler2Helper const& rParent, const ShapePtr& pShapePtr,
         std::vector<ConnectorShapeProperties>& rConnectorShapePropertiesList);
 
     virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 aElementToken,

@@ -126,7 +126,7 @@ PresentationFragmentHandler::~PresentationFragmentHandler() noexcept
 {
 }
 
-void PresentationFragmentHandler::importSlideNames(XmlFilterBase& rFilter, const std::vector<SlidePersistPtr>& rSlidePersist)
+void PresentationFragmentHandler::importSlideNames(const XmlFilterBase& rFilter, const std::vector<SlidePersistPtr>& rSlidePersist)
 {
     sal_Int32 nMaxPages = rSlidePersist.size();
     for (sal_Int32 nPage = 0; nPage < nMaxPages; nPage++)

@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 namespace oox::drawingml {
 
 ConnectorShapePropertiesContext::ConnectorShapePropertiesContext(
-    ContextHandler2Helper const& rParent, ShapePtr& pShapePtr,
+    ContextHandler2Helper const& rParent, const ShapePtr& pShapePtr,
     std::vector<ConnectorShapeProperties>& rConnectorShapePropertiesList)
     : ContextHandler2(rParent)
     , mrConnectorShapePropertiesList(rConnectorShapePropertiesList)
