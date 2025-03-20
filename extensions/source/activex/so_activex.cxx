@@ -731,8 +731,8 @@ STDAPI DllRegisterServer()
     {
         wchar_t pProgramPath[1024];
         wchar_t* pPathEnd = nullptr;
-        DWORD nLen = GetModuleFileNameW( aCurModule, pProgramPath, SAL_N_ELEMENTS(pProgramPath) );
-        if ( nLen && nLen < SAL_N_ELEMENTS(pProgramPath) )
+        DWORD nLen = GetModuleFileNameW( aCurModule, pProgramPath, std::size(pProgramPath) );
+        if ( nLen && nLen < std::size(pProgramPath) )
             pPathEnd = wcsrchr(pProgramPath, '\\');
         if (pPathEnd)
         {
