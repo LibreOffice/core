@@ -372,6 +372,11 @@ void EditView::YrsGetSelectionRectangles(
     }
 }
 
+bool EditView::YrsWriteEECursor(YTransaction *const pTxn, Branch const& rArray, YOutput const*const pCurrent)
+{
+    return getEditEngine().GetEditDoc().YrsWriteEECursor(pTxn, rArray, pCurrent, getImpl().GetEditSelection());
+}
+
 void EditView::YrsApplyEECursor(OString const& rPeerId, OUString const& rAuthor,
     ::std::pair<int64_t, int64_t> const point,
     ::std::optional<::std::pair<int64_t, int64_t>> const oMark)

@@ -740,7 +740,12 @@ void YrsReadCursor(ObserveCursorState & rState, OString const& rPeerId,
         {
             Branch const*const pArray{rCursor.value.y_type};
             auto const len{yarray_len(pArray)};
+#if defined(YRS_WEAK)
+            if (len == 2
+                && yarray_get(pArray, rState.pTxn, 0)->tag == Y_JSON_STR)
+#else
             if (len == 3 || len == 5)
+#endif
             {
                 ::std::unique_ptr<YOutput, YOutputDeleter> const pComment{yarray_get(pArray, rState.pTxn, 0)};
                 yvalidate(pComment->tag == Y_JSON_STR && pComment->len < SAL_MAX_INT32);
@@ -748,6 +753,20 @@ void YrsReadCursor(ObserveCursorState & rState, OString const& rPeerId,
                 YrsInvalidateEECursors(rState, rPeerId, &commentId);
                 YrsInvalidateSwCursors(rState, rPeerId, rAuthor, false);
                 ::std::optional<::std::pair<int64_t, int64_t>> oMark;
+#if defined(YRS_WEAK)
+                ::std::unique_ptr<YOutput, YOutputDeleter> const pWeak{yarray_get(pArray, rState.pTxn, 1)};
+                yvalidate(pWeak->tag == Y_WEAK_LINK);
+                Branch * pBranch{nullptr};
+                uint32_t start{SAL_MAX_UINT32};
+                uint32_t end{SAL_MAX_UINT32};
+                yweak_read(pWeak->value.y_type, rState.pTxn, &pBranch, &start, &end);
+                yvalidate(start < SAL_MAX_INT32 && end < SAL_MAX_INT32);
+                if (start != end)
+                {
+                    oMark.emplace(end, -1);
+                }
+                ::std::pair<int64_t, int64_t> const pos{start, -1};
+#else
                 if (len == 5)
                 {
                     ::std::unique_ptr<YOutput, YOutputDeleter> const pNode{
@@ -763,6 +782,7 @@ void YrsReadCursor(ObserveCursorState & rState, OString const& rPeerId,
                 ::std::unique_ptr<YOutput, YOutputDeleter> const pContent{yarray_get(pArray, rState.pTxn, 2)};
                 yvalidate(pContent->tag == Y_JSON_INT);
                 ::std::pair<int64_t, int64_t> const pos{pNode->value.integer, pContent->value.integer};
+#endif
                 rState.CursorUpdates.emplace_back(rPeerId, ::std::optional<OString>{commentId}, ::std::optional<OUString>{rAuthor}, pos, oMark);
             }
             else if (len == 2 || len == 4)
@@ -901,6 +921,15 @@ extern "C" void observe_cursors(void *const pState, uint32_t count, YEvent const
                 YrsReadCursor(rState, peerId, pChange[2].values[0], author, false);
                 break;
             }
+#if defined(YRS_WEAK)
+            case Y_WEAK_LINK:
+            {
+                // not sure what this is, but yffi doesn't have any API
+                // for it, let's hope we can just ignore it
+//                YWeakLinkEvent const*const pEvent{&events[i].content.weak};
+                break;
+            }
+#endif
             default:
                 assert(false);
         }
@@ -1263,6 +1292,12 @@ void DocumentStateManager::YrsNotifyCursorUpdate()
             pShell->GetView().GetPostItMgr()->GetActiveSidebarWin()})
     {
         // TODO StickyIndex cannot be inserted into YDoc ?
+#if defined(YRS_WEAK)
+        if (pWin->GetOutlinerView()->GetEditView().YrsWriteEECursor(pTxn, *pEntry->value.y_type, pCurrent.get()))
+        {
+            YrsCommitModified();
+        }
+#else
         ESelection const sel{pWin->GetOutlinerView()->GetSelection()};
         ::std::vector<YInput> positions;
         // the ID of the comment
@@ -1301,6 +1336,7 @@ void DocumentStateManager::YrsNotifyCursorUpdate()
                 YrsCommitModified();
             }
         }
+#endif
     }
     else if (!pShell->IsStdMode()
            || pShell->GetSelectedObjCount() != 0
@@ -1342,6 +1378,9 @@ void DocumentStateManager::YrsNotifyCursorUpdate()
         {
             if (pCurrent == nullptr || pCurrent->tag != Y_ARRAY
                 || yarray_len(pCurrent->value.y_type) != 2
+#if defined(YRS_WEAK)
+                || yarray_get(pCurrent->value.y_type, pTxn, 0)->tag != Y_JSON_INT
+#endif
                 || yarray_get(pCurrent->value.y_type, pTxn, 0)->value.integer != positions[0].value.integer
                 || yarray_get(pCurrent->value.y_type, pTxn, 1)->value.integer != positions[1].value.integer)
             {

@@ -2712,12 +2712,98 @@ void EditDoc::YrsReadEEState(YTransaction *const pTxn, ImpEditEngine & rIEE)
     rIEE.RemoveParagraph(nodes); // remove pre-existing one from InitDoc()
 }
 
+bool EditDoc::YrsWriteEECursor(YTransaction *const pTxn, Branch const& rArray,
+        YOutput const*const pCurrent, EditSelection const& rSelection)
+{
+    EditSelection sel{rSelection};
+    sel.Adjust(*this); // unfortunately min/max naming may be misleading...
+    YrsWrite const yw{GetYrsWrite(m_pYrsSupplier, m_CommentId)};
+    uint32_t start{0};
+    for (auto paras{GetPos(sel.Min().GetNode())}; paras != 0; --paras)
+    {
+        start += GetObject(paras-1)->Len() + 1;
+    }
+    uint32_t end{start};
+    start += sel.Min().GetIndex();
+    if (sel.HasRange())
+    {
+        auto const nStartNode{GetPos(sel.Min().GetNode())};
+        for (auto paras{GetPos(sel.Max().GetNode()) - nStartNode};
+            paras != 0; --paras)
+        {
+            end += GetObject(nStartNode + paras-1)->Len() + 1;
+        }
+        end += sel.Max().GetIndex();
+    }
+    else
+    {
+        end = start;
+    }
+    if (pCurrent != nullptr && pCurrent->tag == Y_ARRAY
+        && yarray_len(pCurrent->value.y_type) == 2
+        // could do without the comment id? no, empty-text leaves pBranch null!
+        && yarray_get(pCurrent->value.y_type, pTxn, 0)->tag == Y_JSON_STR
+        && strcmp(yarray_get(pCurrent->value.y_type, pTxn, 0)->value.str, m_CommentId.getStr()) == 0)
+    {
+        ::std::unique_ptr<YOutput, YOutputDeleter> const pWeak{yarray_get(pCurrent->value.y_type, pTxn, 1)};
+        yvalidate(pWeak->tag == Y_WEAK_LINK);
+        Branch * pBranch{nullptr};
+        uint32_t oldStart{SAL_MAX_UINT32};
+        uint32_t oldEnd{SAL_MAX_UINT32};
+        yweak_read(pWeak->value.y_type, pTxn, &pBranch, &oldStart, &oldEnd);
+        assert(oldStart != SAL_MAX_UINT32 && oldEnd != SAL_MAX_UINT32);
+        if (oldStart == start && oldEnd == end)
+        {
+            return false;
+        }
+    }
+
+    Weak const*const pWeak{ytext_quote(yw.pText, pTxn, start, end, Y_FALSE, Y_TRUE)};
+    ::std::vector<YInput> positions;
+    positions.push_back(yinput_string(m_CommentId.getStr()));
+    positions.push_back(yinput_weak(pWeak));
+    YInput const input{yinput_yarray(positions.data(), 2)};
+    yarray_remove_range(&rArray, pTxn, 1, 1);
+    yarray_insert_range(&rArray, pTxn, 1, &input, 1);
+//    yweak_destroy(pWeak); // NO! UAF
+    return true;
+}
+
 ::std::optional<EditSelection> EditDoc::YrsReadEECursor(
     ::std::pair<int64_t, int64_t> const i_point,
     ::std::optional<::std::pair<int64_t, int64_t>> const i_oMark)
 {
-    // TODO should not use ints here?
     ::std::optional<EditPaM> oMark;
+#if defined(YRS_WEAK)
+    auto start{i_point.first}; // returned from yweak_read(), need to convert
+    ContentNode * pNode{nullptr};
+    for (decltype(Count()) i = 0; i < Count(); ++i)
+    {
+        pNode = GetObject(i);
+        if (start <= o3tl::make_unsigned(pNode->Len()))
+        {
+            break;
+        }
+        start -= pNode->Len() + 1;
+    }
+    yvalidate(start <= o3tl::make_unsigned(pNode->Len()));
+    EditPaM point{pNode, static_cast<sal_Int32>(start)};
+    if (i_oMark)
+    {
+        auto end{i_oMark->first};
+        for (decltype(Count()) i = 0; i < Count(); ++i)
+        {
+            pNode = GetObject(i);
+            if (end <= o3tl::make_unsigned(pNode->Len()))
+            {
+                break;
+            }
+            end -= pNode->Len() + 1;
+        }
+        yvalidate(end <= o3tl::make_unsigned(pNode->Len()));
+        oMark.emplace(pNode, static_cast<sal_Int32>(end));
+    }
+#else
     if (i_oMark)
     {
 //        yvalidate(i_oMark->first < Count());
@@ -2750,6 +2836,7 @@ void EditDoc::YrsReadEEState(YTransaction *const pTxn, ImpEditEngine & rIEE)
         return {};
     }
     EditPaM point{&rNode, static_cast<sal_Int32>(i_point.second)};
+#endif
 
     return EditSelection{point, oMark ? *oMark : point};
 }

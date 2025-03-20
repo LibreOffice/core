@@ -42,6 +42,7 @@ class IYrsTransactionSupplier;
 typedef struct TransactionInner YTransaction;
 typedef struct YTextEvent YTextEvent;
 typedef struct Branch Branch;
+typedef struct YOutput YOutput;
 #endif
 
 class EditTextObject;
@@ -417,6 +418,7 @@ public:
     void YrsReadEEState(YTransaction *);
     void YrsApplyEEDelta(YTransaction *, YTextEvent const* pEvent);
     OString GetYrsCommentId() const;
+    bool YrsWriteEECursor(YTransaction *, Branch const& rArray, YOutput const* pCurrent);
     void YrsApplyEECursor(OString const& rPeerId, OUString const& rAuthor,
             ::std::pair<int64_t, int64_t> point,
             ::std::optional<::std::pair<int64_t, int64_t>> oMark);

@@ -9,6 +9,7 @@
 
 #pragma once
 
+#define YRS_WEAK
 extern "C" {
 #if defined(__clang__)
 #pragma clang diagnostic push
