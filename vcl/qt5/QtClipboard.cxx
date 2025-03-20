@@ -11,6 +11,7 @@
 #include <QtClipboard.hxx>
 #include <QtClipboard.moc>
 
+#include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 
@@ -23,6 +24,10 @@
 #include <cassert>
 #include <map>
 #include <utility>
+
+#if defined EMSCRIPTEN && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <emscripten.h>
+#endif
 
 QtClipboard::QtClipboard(OUString aModeString, const QClipboard::Mode aMode)
     : cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
@@ -144,6 +149,41 @@ void QtClipboard::setContents(
     }
 
     aGuard.clear();
+
+#if defined EMSCRIPTEN && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    // At least Qt5, in QWasmEventTranslator::processKeyboard in qbase
+    // src/plugins/platforms/wasm/qwasmeventtranslator.cpp, listens for Ctrl-C and initiates a
+    // browser Clipboard API writeText call, but (a) calls it before LO has sent the to-be-copied
+    // data to Qt (so calls it with old data), and (b) only works for Ctrl-C, not for Ctrl-X nor for
+    // cut/copy operations not initiated via the keyboard; so always do a writeText call here, and
+    // hope that the browser gives permission:
+    OUString textContents;
+    css::datatransfer::DataFlavor flav{ u"text/plain;charset=utf-16"_ustr, u""_ustr,
+                                        cppu::UnoType<OUString>::get() };
+    if (xTrans->isDataFlavorSupported(flav))
+    {
+        try
+        {
+            xTrans->getTransferData(flav) >>= textContents;
+        }
+        catch (css::io::IOException)
+        {
+            TOOLS_WARN_EXCEPTION("vcl.qt", "");
+        }
+    }
+    MAIN_THREAD_EM_ASM(
+        {
+            // clang-format off
+            try {
+                //TODO: Support embedded NULs:
+                navigator.clipboard.writeText(Module.UTF16ToString($0, 2 * $1));
+            } catch (e) {
+                console.warn("clipboard.writeText failed:", e);
+            }
+            // clang-format on
+        },
+        textContents.getStr(), textContents.getLength());
+#endif
 
     // we have to notify only an owner change, since handleChanged can't
     // access the previous owner anymore and can just handle lost ownership.
