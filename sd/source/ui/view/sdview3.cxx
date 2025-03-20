@@ -652,11 +652,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             pWorkPage->SetSdrObjListRectsDirty();
 
-            // #i120393# Clipboard data uses full object geometry range
-            const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
+            // tdf#118171 - snap rectangles of objects without line width
+            const Size aSize(pWorkPage->GetAllObjSnapRect().GetSize());
 
-            maDropPos.setX( pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 ) );
-            maDropPos.setY( pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 ) );
+            maDropPos.setX( pOwnData->GetBoundStartPos().X() + ( aSize.Width() >> 1 ) );
+            maDropPos.setY( pOwnData->GetBoundStartPos().Y() + ( aSize.Height() >> 1 ) );
 
             // delete pages, that are not of any interest for us
             for( ::tools::Long i = pWorkModel->GetPageCount() - 1; i >= 0; i-- )
@@ -838,11 +838,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     if( pOwnData )
                     {
-                        // #i120393# Clipboard data uses full object geometry range
-                        const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
+                        // tdf#118171 - snap rectangles of objects without line width
+                        const Size aSize(pWorkPage->GetAllObjSnapRect().GetSize());
 
-                        maDropPos.setX( pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 ) );
-                        maDropPos.setY( pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 ) );
+                        maDropPos.setX( pOwnData->GetBoundStartPos().X() + ( aSize.Width() >> 1 ) );
+                        maDropPos.setY( pOwnData->GetBoundStartPos().Y() + ( aSize.Height() >> 1 ) );
                     }
 
                     bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions);
@@ -912,11 +912,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     if( pOwnData )
                     {
-                        // #i120393# Clipboard data uses full object geometry range
-                        const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
+                        // tdf#118171 - snap rectangles of objects without line width
+                        const Size aSize(pWorkPage->GetAllObjSnapRect().GetSize());
 
-                        maDropPos.setX( pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 ) );
-                        maDropPos.setY( pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 ) );
+                        maDropPos.setX( pOwnData->GetBoundStartPos().X() + ( aSize.Width() >> 1 ) );
+                        maDropPos.setY( pOwnData->GetBoundStartPos().Y() + ( aSize.Height() >> 1 ) );
                     }
 
                     // delete pages, that are not of any interest for us
@@ -1238,11 +1238,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 pWorkPage->SetSdrObjListRectsDirty();
 
-                // #i120393# Clipboard data uses full object geometry range
-                const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
+                // tdf#118171 - snap rectangles of objects without line width
+                const Size aSize(pWorkPage->GetAllObjSnapRect().GetSize());
 
-                aInsertPos.setX( pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 ) );
-                aInsertPos.setY( pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 ) );
+                aInsertPos.setX( pOwnData->GetBoundStartPos().X() + ( aSize.Width() >> 1 ) );
+                aInsertPos.setY( pOwnData->GetBoundStartPos().Y() + ( aSize.Height() >> 1 ) );
             }
 
             // restrict movement to WorkArea
@@ -1270,11 +1270,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             pWorkPage->SetSdrObjListRectsDirty();
 
-            // #i120393# Clipboard data uses full object geometry range
-            const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
+            // tdf#118171 - snap rectangles of objects without line width
+            const Size aSize(pWorkPage->GetAllObjSnapRect().GetSize());
 
-            aInsertPos.setX( pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 ) );
-            aInsertPos.setY( pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 ) );
+            aInsertPos.setX( pOwnData->GetBoundStartPos().X() + ( aSize.Width() >> 1 ) );
+            aInsertPos.setY( pOwnData->GetBoundStartPos().Y() + ( aSize.Height() >> 1 ) );
         }
 
         bReturn = InsertMetaFile( rDataHelper, aInsertPos, pImageMap.get(), nFormat == SotClipboardFormatId::NONE );
@@ -1319,11 +1319,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 pWorkPage->SetSdrObjListRectsDirty();
 
-                // #i120393# Clipboard data uses full object geometry range
-                const Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
+                // tdf#118171 - snap rectangles of objects without line width
+                const Size aSize(pWorkPage->GetAllObjSnapRect().GetSize());
 
-                aInsertPos.setX( pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 ) );
-                aInsertPos.setY( pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 ) );
+                aInsertPos.setX( pOwnData->GetBoundStartPos().X() + ( aSize.Width() >> 1 ) );
+                aInsertPos.setY( pOwnData->GetBoundStartPos().Y() + ( aSize.Height() >> 1 ) );
             }
 
             // restrict movement to WorkArea

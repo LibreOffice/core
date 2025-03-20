@@ -92,6 +92,8 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDat
     // #112978# need to use GetAllMarkedBoundRect instead of GetAllMarkedRect to get
     // fat lines correctly
     const ::tools::Rectangle                 aMarkRect( GetAllMarkedBoundRect() );
+    // tdf#118171 - snap rectangles of objects without line width
+    const ::tools::Rectangle aMarkBoundRect(GetAllMarkedRect());
     std::unique_ptr<TransferableObjectDescriptor> pObjDesc(new TransferableObjectDescriptor);
     SdrOle2Obj*                     pSdrOleObj = nullptr;
     SdrPageView*                    pPgView = GetSdrPageView();
@@ -135,6 +137,7 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDat
     pObjDesc->maSize = aMarkRect.GetSize();
 
     pTransferable->SetStartPos( aMarkRect.TopLeft() );
+    pTransferable->SetBoundStartPos(aMarkBoundRect.TopLeft());
     pTransferable->SetObjectDescriptor( std::move(pObjDesc) );
     pTransferable->CopyToClipboard( mpViewSh->GetActiveWindow() );
 

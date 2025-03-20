@@ -124,7 +124,7 @@ public:
 
     void SetSdrObjListRectsDirty();
 
-    SAL_DLLPRIVATE const tools::Rectangle& GetAllObjSnapRect() const;
+    const tools::Rectangle& GetAllObjSnapRect() const;
     const tools::Rectangle& GetAllObjBoundRect() const;
 
     /// reformat all text objects, e.g. when changing printer

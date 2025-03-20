@@ -58,6 +58,10 @@ public:
     void                            SetStartPos( const Point& rStartPos ) { maStartPos = rStartPos; }
     const Point&                    GetStartPos() const { return maStartPos; }
 
+    // tdf#118171 - snap rectangles of objects without line width
+    void SetBoundStartPos(const Point& rBoundStartPos) { maBoundStartPos = rBoundStartPos; }
+    const Point& GetBoundStartPos() const { return maBoundStartPos; }
+
     void                            SetInternalMove( bool bSet ) { mbInternalMove = bSet; }
     bool                            IsInternalMove() const { return mbInternalMove; }
 
@@ -126,6 +130,7 @@ private:
     std::unique_ptr<ImageMap>       mpImageMap;
     ::tools::Rectangle                       maVisArea;
     Point                           maStartPos;
+    Point                           maBoundStartPos;
     bool                            mbInternalMove               : 1;
     bool                            mbOwnDocument                : 1;
     bool                            mbOwnView                    : 1;
