@@ -2354,7 +2354,7 @@ SfxChildWinInfo SvxSearchDialogWrapper::GetInfo() const
     return aInfo;
 }
 
-static void lcl_SetSearchLabelWindow(const OUString& rStr, SfxViewFrame& rViewFrame)
+static void lcl_SetSearchLabelWindow(const OUString& rStr, const SfxViewFrame& rViewFrame)
 {
     css::uno::Reference< css::beans::XPropertySet > xPropSet(
             rViewFrame.GetFrame().GetFrameInterface(), css::uno::UNO_QUERY_THROW);

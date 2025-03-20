@@ -40,7 +40,7 @@ private:
     std::unique_ptr<ColorListBox> mxFollowHyperlink;
 
 public:
-    ThemeColorEditDialog(weld::Window* pParent, model::ColorSet& rColorSet);
+    ThemeColorEditDialog(weld::Window* pParent, const model::ColorSet& rColorSet);
     virtual ~ThemeColorEditDialog() override;
     model::ColorSet getColorSet();
 };

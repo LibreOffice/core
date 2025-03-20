@@ -101,7 +101,7 @@ public:
     virtual void ActionChanged();
 
     // IASS: helper for IASS invalidates
-    void ActionChangedIfDifferentPageView(SdrPageView& rSdrPageView);
+    void ActionChangedIfDifferentPageView(const SdrPageView& rSdrPageView);
 
     // LazyInvalidate handling
     void triggerLazyInvalidate();

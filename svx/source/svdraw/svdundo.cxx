@@ -630,7 +630,7 @@ OUString SdrUndoGeoObj::GetComment() const
     return ImpGetDescriptionStr(STR_DragMethObjOwn);
 }
 
-SdrUndoDiagramModelData::SdrUndoDiagramModelData(SdrObject& rNewObj, svx::diagram::DiagramDataStatePtr& rStartState)
+SdrUndoDiagramModelData::SdrUndoDiagramModelData(SdrObject& rNewObj, const svx::diagram::DiagramDataStatePtr& rStartState)
 : SdrUndoObj(rNewObj)
 , m_aStartState(rStartState)
 , m_aEndState()

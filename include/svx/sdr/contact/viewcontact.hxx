@@ -122,7 +122,7 @@ public:
     virtual void ActionChanged();
 
     // IASS: helpers for IASS invalidates
-    void ActionChangedIfDifferentPageView(SdrPageView& rSdrPageView);
+    void ActionChangedIfDifferentPageView(const SdrPageView& rSdrPageView);
     bool hasMultipleViewObjectContacts() const;
 
     // access to the local primitive. This will ensure that the primitive is

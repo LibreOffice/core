@@ -219,7 +219,7 @@ void SdrEditView::MoveMarkedObj(const Size& rSiz, bool bCopy)
         EndUndo();
 }
 
-bool SdrEditView::IsMarkedObjSizeValid(Size& aTargetSize)
+bool SdrEditView::IsMarkedObjSizeValid(const Size& aTargetSize)
 {
     if (SdrMark* pM=GetMarkedObjectList().GetMark(0))
     {

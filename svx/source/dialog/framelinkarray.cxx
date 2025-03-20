@@ -285,7 +285,7 @@ namespace
 {
 struct RegisteredCellHash
 {
-    size_t operator()(Cell* const pCell) const
+    size_t operator()(const Cell* pCell) const
     {
         return pCell->hashCode();
     }
@@ -293,7 +293,7 @@ struct RegisteredCellHash
 
 struct RegisteredCellEquals
 {
-    bool operator()(Cell* const pCell1, Cell* const pCell2) const
+    bool operator()(const Cell* pCell1, const Cell* pCell2) const
     {
         return *pCell1 == *pCell2;
     }

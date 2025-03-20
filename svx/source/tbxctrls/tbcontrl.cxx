@@ -1328,7 +1328,7 @@ static bool SetFont(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont)
     return false;
 }
 
-static bool SetFontSize(vcl::RenderContext& rRenderContext, const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont)
+static bool SetFontSize(const vcl::RenderContext& rRenderContext, const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont)
 {
     sal_uInt16 nWhich;
     if (GetWhich(rSet, nSlot, nWhich))

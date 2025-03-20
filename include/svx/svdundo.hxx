@@ -235,7 +235,7 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrUndoDiagramModelData final : public
     void implUndoRedo(bool bUndo);
 
 public:
-    SdrUndoDiagramModelData(SdrObject& rNewObj, std::shared_ptr< svx::diagram::DiagramDataState >& rStartState);
+    SdrUndoDiagramModelData(SdrObject& rNewObj, const std::shared_ptr< svx::diagram::DiagramDataState >& rStartState);
     virtual ~SdrUndoDiagramModelData() override;
 
     virtual void Undo() override;

@@ -12,7 +12,7 @@
 
 namespace svx
 {
-ThemeColorEditDialog::ThemeColorEditDialog(weld::Window* pParent, model::ColorSet& rColorSet)
+ThemeColorEditDialog::ThemeColorEditDialog(weld::Window* pParent, const model::ColorSet& rColorSet)
     : GenericDialogController(pParent, u"svx/ui/themecoloreditdialog.ui"_ustr,
                               u"ThemeColorEditDialog"_ustr)
     , maColorSet(rColorSet)

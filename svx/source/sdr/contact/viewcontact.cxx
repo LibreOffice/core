@@ -204,7 +204,7 @@ void ViewContact::ActionChanged()
 }
 
 // IASS: helper for IASS invalidates
-void ViewContact::ActionChangedIfDifferentPageView(SdrPageView& rSdrPageView)
+void ViewContact::ActionChangedIfDifferentPageView(const SdrPageView& rSdrPageView)
 {
     const sal_uInt32 nCount(maViewObjectContactVector.size());
 

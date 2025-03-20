@@ -251,7 +251,7 @@ void ViewObjectContact::ActionChanged()
 }
 
 // IASS: helper for IASS invalidates
-void ViewObjectContact::ActionChangedIfDifferentPageView(SdrPageView& rSdrPageView)
+void ViewObjectContact::ActionChangedIfDifferentPageView(const SdrPageView& rSdrPageView)
 {
     SdrPageView* pSdrPageView(GetObjectContact().TryToGetSdrPageView());
 
