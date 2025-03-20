@@ -84,7 +84,7 @@ Connection::Connection()
     , m_bIsFile(false)
     , m_bIsAutoCommit(true)
     , m_bIsReadOnly(false)
-    , m_aTransactionIsolation(TransactionIsolation::REPEATABLE_READ)
+    , m_aTransactionIsolation(TransactionIsolation::READ_COMMITTED)
 #if SAL_TYPES_SIZEOFPOINTER == 8
     , m_aDBHandle(0)
     , m_aTransactionHandle(0)
