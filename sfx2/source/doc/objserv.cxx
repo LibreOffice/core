@@ -532,7 +532,7 @@ void ResetSignatureSelection(SfxObjectShell& rObjectShell, SfxViewShell& rViewSh
 }
 }
 
-static weld::Window* GetReqDialogParent(SfxRequest &rReq, SfxObjectShell& rShell)
+static weld::Window* GetReqDialogParent(const SfxRequest &rReq, const SfxObjectShell& rShell)
 {
     weld::Window* pDialogParent = rReq.GetFrameWeld();
     if (!pDialogParent)

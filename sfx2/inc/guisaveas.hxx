@@ -70,7 +70,7 @@ private:
 
     static bool FinishGUIStoreModel(::comphelper::SequenceAsHashMap::const_iterator& aFileNameIter,
                              ModelData_Impl& aModelData, bool bRemote, sal_Int16 nStoreMode,
-                             css::uno::Sequence< css::beans::PropertyValue >& aFilterProps,
+                             const css::uno::Sequence< css::beans::PropertyValue >& aFilterProps,
                              bool bSetStandardName, bool bPreselectPassword, bool bDialogUsed,
                              std::u16string_view aFilterFromMediaDescr, std::u16string_view aOldFilterName,
                              css::uno::Sequence< css::beans::PropertyValue >& aArgsSequence,

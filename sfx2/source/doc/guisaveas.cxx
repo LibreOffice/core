@@ -1635,7 +1635,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
 
 bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::const_iterator& aFileNameIter,
                                           ModelData_Impl& aModelData, bool bRemote, sal_Int16 nStoreMode,
-                                          uno::Sequence< beans::PropertyValue >& aFilterProps,
+                                          const uno::Sequence< beans::PropertyValue >& aFilterProps,
                                           bool bSetStandardName, bool bPreselectPassword, bool bDialogUsed,
                                           std::u16string_view aFilterFromMediaDescr,
                                           std::u16string_view aOldFilterName,

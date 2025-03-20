@@ -421,15 +421,15 @@ void lookForParentTable(const uno::Reference<accessibility::XAccessibleContext>&
     }
 }
 
-OUString truncateText(OUString& sText, sal_Int32 nNewLength)
+OUString truncateText(std::u16string_view sText, sal_Int32 nNewLength)
 {
     // truncate test to given length
-    OUString sNewText = sText.copy(0, nNewLength);
+    std::u16string_view sNewText = sText.substr(0, nNewLength);
     // try to truncate at a word
-    nNewLength = sNewText.lastIndexOf(" ");
-    if (nNewLength > 0)
-        sNewText = sNewText.copy(0, nNewLength);
-    return sNewText;
+    size_t nLastPos = sNewText.rfind(u" ");
+    if (nLastPos != 0 && nLastPos != std::u16string_view::npos)
+        sNewText = sNewText.substr(0, nLastPos);
+    return OUString(sNewText);
 }
 
 std::string stateSetToString(::sal_Int64 stateSet)
@@ -834,7 +834,7 @@ private:
                                   bool force, const std::string& msg = "");
     void resetParagraphInfo();
     void onFocusedParagraphInWriterTable(const uno::Reference<accessibility::XAccessibleTable>& xTable,
-                                         sal_Int64& nChildIndex,
+                                         sal_Int64 nChildIndex,
                                          const uno::Reference<accessibility::XAccessibleText>& xAccText);
     uno::Reference< accessibility::XAccessible >
     getSelectedObject(const accessibility::AccessibleEventObject& aEvent) const;
@@ -1270,7 +1270,7 @@ void LOKDocumentFocusListener::onShapeSelectionChanged(
 
 void LOKDocumentFocusListener::onFocusedParagraphInWriterTable(
     const uno::Reference<accessibility::XAccessibleTable>& xTable,
-    sal_Int64& nChildIndex,
+    sal_Int64 nChildIndex,
     const uno::Reference<accessibility::XAccessibleText>& xAccText
 )
 {
@@ -1399,7 +1399,7 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                                 // check if we are inside a table: in case notify table and current cell info
                                 bool isInsideTable = false;
                                 uno::Reference<XAccessibleTable> xTable;
-                                sal_Int64 nChildIndex;
+                                sal_Int64 nChildIndex = 0;
                                 lookForParentTable(xContext, xTable, nChildIndex);
                                 if (xTable.is())
                                 {

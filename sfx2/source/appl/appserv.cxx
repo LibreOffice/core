@@ -204,7 +204,7 @@ namespace
             TOOLS_INFO_EXCEPTION( "sfx.appl", "trying to load bibliography database");
         }
     }
-    void lcl_disableActiveEmbeddedObjects(SfxObjectShell* pObjSh)
+    void lcl_disableActiveEmbeddedObjects(const SfxObjectShell* pObjSh)
     {
         if (!pObjSh)
             return;

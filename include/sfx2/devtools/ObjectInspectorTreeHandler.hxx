@@ -44,7 +44,7 @@ private:
     // treeview sort and compare
     comphelper::string::NaturalStringSorter mxSorter;
     void setSortFunction(std::unique_ptr<weld::TreeView>& pTreeView);
-    sal_Int32 compare(std::unique_ptr<weld::TreeView>& pTreeView, const weld::TreeIter& rLeft,
+    sal_Int32 compare(const std::unique_ptr<weld::TreeView>& pTreeView, const weld::TreeIter& rLeft,
                       const weld::TreeIter& rRight);
 
     // treeview manipulation

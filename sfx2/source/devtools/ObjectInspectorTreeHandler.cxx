@@ -1003,7 +1003,7 @@ void ObjectInspectorTreeHandler::setSortFunction(std::unique_ptr<weld::TreeView>
         });
 }
 
-sal_Int32 ObjectInspectorTreeHandler::compare(std::unique_ptr<weld::TreeView>& pTreeView,
+sal_Int32 ObjectInspectorTreeHandler::compare(const std::unique_ptr<weld::TreeView>& pTreeView,
                                               const weld::TreeIter& rLeft,
                                               const weld::TreeIter& rRight)
 {

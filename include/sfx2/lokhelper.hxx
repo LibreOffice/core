@@ -284,7 +284,7 @@ class SfxLokLanguageGuard
     const SfxViewShell* m_pOldShell;
 
 public:
-    SfxLokLanguageGuard(SfxViewShell* pNewShell);
+    SfxLokLanguageGuard(const SfxViewShell* pNewShell);
     ~SfxLokLanguageGuard();
 };
 

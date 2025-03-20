@@ -709,7 +709,7 @@ static bool IsExpanded_Impl(const std::vector<OUString>& rEntries, std::u16strin
     return false;
 }
 
-static void lcl_Update(weld::TreeView& rTreeView, weld::TreeIter& rIter,
+static void lcl_Update(weld::TreeView& rTreeView, const weld::TreeIter& rIter,
                        const StyleTree_Impl& rEntry, SfxStyleFamily eFam, SfxViewShell* pViewSh)
 {
     const OUString& rName = rEntry.getName();

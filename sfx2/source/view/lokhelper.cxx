@@ -1398,7 +1398,7 @@ void SfxLokHelper::sendNetworkAccessError(std::string_view rAction)
     }
 }
 
-SfxLokLanguageGuard::SfxLokLanguageGuard(SfxViewShell* pNewShell)
+SfxLokLanguageGuard::SfxLokLanguageGuard(const SfxViewShell* pNewShell)
     : m_bSetLanguage(false)
     , m_pOldShell(nullptr)
 {

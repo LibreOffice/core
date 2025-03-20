@@ -949,7 +949,7 @@ void SfxObjectShell::DetectCharSet(SvStream& stream, rtl_TextEncoding& eCharSet,
     ucsdet_close(ucd);
 }
 
-void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding& eCharSet, OUString& separators, sal_Unicode cStringDelimiter)
+void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding eCharSet, OUString& separators, sal_Unicode cStringDelimiter)
 {
     OUString sLine;
     std::vector<std::unordered_map<sal_Unicode, sal_uInt32>> aLinesCharsCount;
