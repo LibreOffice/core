@@ -11,8 +11,16 @@ $(eval $(call gb_CustomTarget_CustomTarget,readlicense_oo/license))
 
 readlicense_oo_DIR := $(gb_CustomTarget_workdir)/readlicense_oo/license
 readlicense_oo_LICENSE_xml := $(SRCDIR)/readlicense_oo/license/license.xml
+create_SBOM := $(SRCDIR)/solenv/bin/create-sbom.py
+
+ifneq ($(OS),MACOSX)
+SBOM_DIR := $(INSTDIR)/sbom/
+else
+SBOM_DIR := $(INSTDIR)/Resources/sbom/
+endif
 
 $(call gb_CustomTarget_get_target,readlicense_oo/license) : $(readlicense_oo_DIR)/LICENSE.html
+$(call gb_CustomTarget_get_target,readlicense_oo/license) : SBOM
 
 ifeq ($(OS),WNT)
 $(call gb_CustomTarget_get_target,readlicense_oo/license) : $(readlicense_oo_DIR)/license.txt
@@ -71,5 +79,18 @@ $(readlicense_oo_DIR)/license.txt : \
 	)
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),AWK)
 endif
+
+SBOM : $(readlicense_oo_DIR)/LICENSE.html $(create_SBOM) \
+		$(call gb_ExternalExecutable_get_dependencies,python)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PY ,1)
+	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PY )
+	$(foreach v, \
+		$(filter PRODUCTNAME_WITHOUT_SPACES LIBO_VERSION% %TARBALL, $(.VARIABLES)), \
+		$(eval export $(v)=$($v)) \
+	)
+	$(call gb_ExternalExecutable_get_command,python) $(create_SBOM) $< $(readlicense_oo_DIR)
+	mkdir -p $(SBOM_DIR)
+	cp $(readlicense_oo_DIR)/*sbom.spdx.json $(SBOM_DIR)
+	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PY )
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

@@ -116,7 +116,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Af
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_AF );
-    Files = (gid_File_Extension_Dictionary_Af);
+    Files = (gid_File_Extension_Dictionary_Af, gid_File_Extension_Dictionary_Sbom_Af);
     InstallOrder = "2000";
     Sortkey = "500";
     Spellcheckerlanguage = "af";
@@ -127,7 +127,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_An
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_AN );
-    Files = (gid_File_Extension_Dictionary_An);
+    Files = (gid_File_Extension_Dictionary_An, gid_File_Extension_Dictionary_Sbom_An);
     InstallOrder = "2000";
     Sortkey = "510";
     Spellcheckerlanguage = "an";
@@ -138,7 +138,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Ar
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_AR );
-    Files = (gid_File_Extension_Dictionary_Ar);
+    Files = (gid_File_Extension_Dictionary_Ar, gid_File_Extension_Dictionary_Sbom_Ar);
     InstallOrder = "2000";
     Sortkey = "511";
     Spellcheckerlanguage = "ar";
@@ -149,7 +149,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Be
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_BE );
-    Files = (gid_File_Extension_Dictionary_Be);
+    Files = (gid_File_Extension_Dictionary_Be, gid_File_Extension_Dictionary_Sbom_Be);
     InstallOrder = "2000";
     Sortkey = "512";
     Spellcheckerlanguage = "be";
@@ -160,7 +160,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Bg
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_BG );
-    Files = (gid_File_Extension_Dictionary_Bg);
+    Files = (gid_File_Extension_Dictionary_Bg, gid_File_Extension_Dictionary_Sbom_Bg);
     InstallOrder = "2000";
     Sortkey = "513";
     Spellcheckerlanguage = "bg";
@@ -171,7 +171,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Bn
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_BN );
-    Files = (gid_File_Extension_Dictionary_Bn);
+    Files = (gid_File_Extension_Dictionary_Bn, gid_File_Extension_Dictionary_Sbom_Bn);
     InstallOrder = "2000";
     Sortkey = "514";
     Spellcheckerlanguage = "bn";
@@ -182,7 +182,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Bo
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_BO );
-    Files = (gid_File_Extension_Dictionary_Bo);
+    Files = (gid_File_Extension_Dictionary_Bo, gid_File_Extension_Dictionary_Sbom_Bo);
     InstallOrder = "2000";
     Sortkey = "525";
     Spellcheckerlanguage = "bo";
@@ -193,7 +193,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Br
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_BR );
-    Files = (gid_File_Extension_Dictionary_Br);
+    Files = (gid_File_Extension_Dictionary_Br, gid_File_Extension_Dictionary_Sbom_Br);
     InstallOrder = "2000";
     Sortkey = "515";
     Spellcheckerlanguage = "br";
@@ -204,7 +204,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Bs
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_BS );
-    Files = (gid_File_Extension_Dictionary_Bs);
+    Files = (gid_File_Extension_Dictionary_Bs, gid_File_Extension_Dictionary_Sbom_Bs);
     InstallOrder = "2000";
     Sortkey = "517";
     Spellcheckerlanguage = "bs";
@@ -215,7 +215,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Ca
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_CA );
-    Files = (gid_File_Extension_Dictionary_Ca);
+    Files = (gid_File_Extension_Dictionary_Ca, gid_File_Extension_Dictionary_Sbom_Ca);
     InstallOrder = "2000";
     Sortkey = "520";
     Spellcheckerlanguage = "ca";
@@ -226,7 +226,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Ckb
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_CKB );
-    Files = (gid_File_Extension_Dictionary_Ckb);
+    Files = (gid_File_Extension_Dictionary_Ckb, gid_File_Extension_Dictionary_Sbom_Ckb);
     InstallOrder = "2000";
     Sortkey = "525";
     Spellcheckerlanguage = "ckb";
@@ -237,7 +237,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Cs
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_CS );
-    Files = (gid_File_Extension_Dictionary_Cs);
+    Files = (gid_File_Extension_Dictionary_Cs, gid_File_Extension_Dictionary_Sbom_Cs);
     InstallOrder = "2000";
     Sortkey = "530";
     Spellcheckerlanguage = "cs";
@@ -248,7 +248,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Da
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_DA );
-    Files = (gid_File_Extension_Dictionary_Da);
+    Files = (gid_File_Extension_Dictionary_Da, gid_File_Extension_Dictionary_Sbom_Da);
     Sortkey = "540";
     InstallOrder = "2000";
     Spellcheckerlanguage = "da";
@@ -259,7 +259,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_De
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_DE );
-    Files = (gid_File_Extension_Dictionary_De);
+    Files = (gid_File_Extension_Dictionary_De, gid_File_Extension_Dictionary_Sbom_De);
     InstallOrder = "2000";
     Sortkey = "570";
     Spellcheckerlanguage = "de";
@@ -270,7 +270,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_En
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_EN );
-    Files = (gid_File_Extension_Dictionary_En, gid_File_Extra_Wordbook_en_US, gid_File_Extra_Wordbook_en_GB);
+    Files = (gid_File_Extension_Dictionary_En, gid_File_Extra_Wordbook_en_US, gid_File_Extra_Wordbook_en_GB, gid_File_Extension_Dictionary_Sbom_En);
     InstallOrder = "2000";
     Sortkey = "550";
     Spellcheckerlanguage = "en";
@@ -281,7 +281,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_El
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_EL );
-    Files = (gid_File_Extension_Dictionary_El);
+    Files = (gid_File_Extension_Dictionary_El, gid_File_Extension_Dictionary_Sbom_El);
     InstallOrder = "2000";
     Sortkey = "719";
     Spellcheckerlanguage = "el";
@@ -292,7 +292,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Eo
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_EO );
-    Files = (gid_File_Extension_Dictionary_Eo);
+    Files = (gid_File_Extension_Dictionary_Eo, gid_File_Extension_Dictionary_Sbom_Eo);
     InstallOrder = "2000";
     Sortkey = "721";
     Spellcheckerlanguage = "eo";
@@ -303,7 +303,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Es
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_ES );
-    Files = (gid_File_Extension_Dictionary_Es);
+    Files = (gid_File_Extension_Dictionary_Es, gid_File_Extension_Dictionary_Sbom_Es);
     InstallOrder = "2000";
     Sortkey = "720";
     Spellcheckerlanguage = "es";
@@ -314,7 +314,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Et
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_ET );
-    Files = (gid_File_Extension_Dictionary_Et);
+    Files = (gid_File_Extension_Dictionary_Et, gid_File_Extension_Dictionary_Sbom_Et);
     InstallOrder = "2000";
     Sortkey = "555";
     Spellcheckerlanguage = "et";
@@ -325,7 +325,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Fa
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_FA );
-    Files = (gid_File_Extension_Dictionary_Fa);
+    Files = (gid_File_Extension_Dictionary_Fa, gid_File_Extension_Dictionary_Sbom_Fa);
     InstallOrder = "2000";
     Sortkey = "658";
     Spellcheckerlanguage = "fa";
@@ -336,7 +336,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Fr
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_FR );
-    Files = (gid_File_Extension_Dictionary_Fr);
+    Files = (gid_File_Extension_Dictionary_Fr, gid_File_Extension_Dictionary_Sbom_Fr);
     InstallOrder = "2000";
     Sortkey = "560";
     Spellcheckerlanguage = "fr";
@@ -347,7 +347,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Gd
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_GD );
-    Files = (gid_File_Extension_Dictionary_Gd);
+    Files = (gid_File_Extension_Dictionary_Gd, gid_File_Extension_Dictionary_Sbom_Gd);
     InstallOrder = "2000";
     Sortkey = "563";
     Spellcheckerlanguage = "gd";
@@ -358,7 +358,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Gl
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_GL );
-    Files = (gid_File_Extension_Dictionary_Gl);
+    Files = (gid_File_Extension_Dictionary_Gl, gid_File_Extension_Dictionary_Sbom_Gl);
     InstallOrder = "2000";
     Sortkey = "565";
     Spellcheckerlanguage = "gl";
@@ -369,7 +369,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Gu
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_GU );
-    Files = (gid_File_Extension_Dictionary_Gu);
+    Files = (gid_File_Extension_Dictionary_Gu, gid_File_Extension_Dictionary_Sbom_Gu);
     InstallOrder = "2000";
     Sortkey = "567";
     Spellcheckerlanguage = "gu";
@@ -380,7 +380,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_He
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_HE );
-    Files = (gid_File_Extension_Dictionary_He);
+    Files = (gid_File_Extension_Dictionary_He, gid_File_Extension_Dictionary_Sbom_He);
     InstallOrder = "2000";
     Sortkey = "590";
     Spellcheckerlanguage = "he";
@@ -391,7 +391,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Hi
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_HI );
-    Files = (gid_File_Extension_Dictionary_Hi);
+    Files = (gid_File_Extension_Dictionary_Hi, gid_File_Extension_Dictionary_Sbom_Hi);
     InstallOrder = "2000";
     Sortkey = "595";
     Spellcheckerlanguage = "hi";
@@ -402,7 +402,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Hu
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_HU );
-    Files = (gid_File_Extension_Dictionary_Hu, gid_File_Extra_Wordbook_hu_AkH11);
+    Files = (gid_File_Extension_Dictionary_Hu, gid_File_Extra_Wordbook_hu_AkH11, gid_File_Extension_Dictionary_Sbom_Hu);
     InstallOrder = "2000";
     Sortkey = "600";
     Spellcheckerlanguage = "hu";
@@ -413,7 +413,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Hr
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_HR );
-    Files = (gid_File_Extension_Dictionary_Hr);
+    Files = (gid_File_Extension_Dictionary_Hr, gid_File_Extension_Dictionary_Sbom_Hr);
     InstallOrder = "2000";
     Sortkey = "605";
     Spellcheckerlanguage = "hr";
@@ -424,7 +424,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Id
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_ID );
-    Files = (gid_File_Extension_Dictionary_Id);
+    Files = (gid_File_Extension_Dictionary_Id, gid_File_Extension_Dictionary_Sbom_Id);
     InstallOrder = "2000";
     Sortkey = "607";
     Spellcheckerlanguage = "id";
@@ -435,7 +435,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Is
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_IS );
-    Files = (gid_File_Extension_Dictionary_Is);
+    Files = (gid_File_Extension_Dictionary_Is, gid_File_Extension_Dictionary_Sbom_Is);
     InstallOrder = "2000";
     Sortkey = "617";
     Spellcheckerlanguage = "is";
@@ -446,7 +446,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_It
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_IT );
-    Files = (gid_File_Extension_Dictionary_It);
+    Files = (gid_File_Extension_Dictionary_It, gid_File_Extension_Dictionary_Sbom_It);
     InstallOrder = "2000";
     Sortkey = "610";
     Spellcheckerlanguage = "it";
@@ -457,7 +457,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Kmr_Latn
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_KMR_LATN );
-    Files = (gid_File_Extension_Dictionary_Kmr_Latn);
+    Files = (gid_File_Extension_Dictionary_Kmr_Latn, gid_File_Extension_Dictionary_Sbom_Kmr_Latn);
     InstallOrder = "2000";
     Sortkey = "620";
     Spellcheckerlanguage = "kmr-Latn";
@@ -468,7 +468,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Ko
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_KO );
-    Files = (gid_File_Extension_Dictionary_Ko);
+    Files = (gid_File_Extension_Dictionary_Ko, gid_File_Extension_Dictionary_Sbom_Ko);
     InstallOrder = "2000";
     Sortkey = "623";
     Spellcheckerlanguage = "ko";
@@ -479,7 +479,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Lt
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_LT );
-    Files = (gid_File_Extension_Dictionary_Lt);
+    Files = (gid_File_Extension_Dictionary_Lt, gid_File_Extension_Dictionary_Sbom_Lt);
     InstallOrder = "2000";
     Sortkey = "630";
     Spellcheckerlanguage = "lt";
@@ -490,7 +490,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Lo
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_LO );
-    Files = (gid_File_Extension_Dictionary_Lo);
+    Files = (gid_File_Extension_Dictionary_Lo, gid_File_Extension_Dictionary_Sbom_Lo);
     InstallOrder = "2000";
     Sortkey = "633";
     Spellcheckerlanguage = "lo";
@@ -501,7 +501,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Lv
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_LV );
-    Files = (gid_File_Extension_Dictionary_Lv);
+    Files = (gid_File_Extension_Dictionary_Lv, gid_File_Extension_Dictionary_Sbom_Lv);
     InstallOrder = "2000";
     Sortkey = "635";
     Spellcheckerlanguage = "lv";
@@ -512,7 +512,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Mn
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_MN );
-    Files = (gid_File_Extension_Dictionary_Mn);
+    Files = (gid_File_Extension_Dictionary_Mn, gid_File_Extension_Dictionary_Sbom_Mn);
     InstallOrder = "2000";
     Sortkey = "637";
     Spellcheckerlanguage = "mn";
@@ -523,7 +523,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Ne
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_NE );
-    Files = (gid_File_Extension_Dictionary_Ne);
+    Files = (gid_File_Extension_Dictionary_Ne, gid_File_Extension_Dictionary_Sbom_Ne);
     InstallOrder = "2000";
     Sortkey = "640";
     Spellcheckerlanguage = "ne";
@@ -534,7 +534,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Nl
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_NL );
-    Files = (gid_File_Extension_Dictionary_Nl);
+    Files = (gid_File_Extension_Dictionary_Nl, gid_File_Extension_Dictionary_Sbom_Nl);
     InstallOrder = "2000";
     Sortkey = "545";
     Spellcheckerlanguage = "nl";
@@ -545,7 +545,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_No
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_NO );
-    Files = (gid_File_Extension_Dictionary_No);
+    Files = (gid_File_Extension_Dictionary_No, gid_File_Extension_Dictionary_Sbom_No);
     InstallOrder = "2000";
     Sortkey = "650";
     Spellcheckerlanguage = "no";
@@ -556,7 +556,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Oc
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_OC );
-    Files = (gid_File_Extension_Dictionary_Oc);
+    Files = (gid_File_Extension_Dictionary_Oc, gid_File_Extension_Dictionary_Sbom_Oc);
     InstallOrder = "2000";
     Sortkey = "655";
     Spellcheckerlanguage = "oc";
@@ -567,7 +567,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Pl
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_PL );
-    Files = (gid_File_Extension_Dictionary_Pl);
+    Files = (gid_File_Extension_Dictionary_Pl, gid_File_Extension_Dictionary_Sbom_Pl);
     InstallOrder = "2000";
     Sortkey = "660";
     Spellcheckerlanguage = "pl";
@@ -578,7 +578,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Pt_Br
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_PT_BR );
-    Files = (gid_File_Extension_Dictionary_Pt_Br);
+    Files = (gid_File_Extension_Dictionary_Pt_Br, gid_File_Extension_Dictionary_Sbom_Pt_Br);
     InstallOrder = "2000";
     Sortkey = "515";
     Spellcheckerlanguage = "pt-BR";
@@ -589,7 +589,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Pt_Pt
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_PT_PT );
-    Files = (gid_File_Extension_Dictionary_Pt_Pt);
+    Files = (gid_File_Extension_Dictionary_Pt_Pt, gid_File_Extension_Dictionary_Sbom_Pt_Pt);
     InstallOrder = "2000";
     Sortkey = "515";
     Spellcheckerlanguage = "pt-PT";
@@ -600,7 +600,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Ro
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_RO );
-    Files = (gid_File_Extension_Dictionary_Ro);
+    Files = (gid_File_Extension_Dictionary_Ro, gid_File_Extension_Dictionary_Sbom_Ro);
     InstallOrder = "2000";
     Sortkey = "670";
     Spellcheckerlanguage = "ro";
@@ -611,7 +611,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Ru
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_RU );
-    Files = (gid_File_Extension_Dictionary_Ru);
+    Files = (gid_File_Extension_Dictionary_Ru, gid_File_Extension_Dictionary_Sbom_Ru);
     InstallOrder = "2000";
     Sortkey = "680";
     Spellcheckerlanguage = "ru";
@@ -622,7 +622,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Si
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_SI );
-    Files = (gid_File_Extension_Dictionary_Si);
+    Files = (gid_File_Extension_Dictionary_Si, gid_File_Extension_Dictionary_Sbom_Si);
     InstallOrder = "2000";
     Sortkey = "690";
     Spellcheckerlanguage = "si";
@@ -633,7 +633,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Sk
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_SK );
-    Files = (gid_File_Extension_Dictionary_Sk);
+    Files = (gid_File_Extension_Dictionary_Sk, gid_File_Extension_Dictionary_Sbom_Sk);
     InstallOrder = "2000";
     Sortkey = "700";
     Spellcheckerlanguage = "sk";
@@ -644,7 +644,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Sl
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_SL );
-    Files = (gid_File_Extension_Dictionary_Sl, gid_File_Extra_Wordbook_sl);
+    Files = (gid_File_Extension_Dictionary_Sl, gid_File_Extra_Wordbook_sl, gid_File_Extension_Dictionary_Sbom_Sl);
     InstallOrder = "2000";
     Sortkey = "710";
     Spellcheckerlanguage = "sl";
@@ -655,7 +655,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Sq
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_SQ );
-    Files = (gid_File_Extension_Dictionary_Sq);
+    Files = (gid_File_Extension_Dictionary_Sq, gid_File_Extension_Dictionary_Sbom_Sq);
     InstallOrder = "2000";
     Sortkey = "505";
     Spellcheckerlanguage = "sq";
@@ -666,7 +666,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Sr
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_SR );
-    Files = (gid_File_Extension_Dictionary_Sr);
+    Files = (gid_File_Extension_Dictionary_Sr, gid_File_Extension_Dictionary_Sbom_Sr);
     InstallOrder = "2000";
     Sortkey = "690";
     Spellcheckerlanguage = "sr";
@@ -677,7 +677,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Sv
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_SV );
-    Files = (gid_File_Extension_Dictionary_Sv);
+    Files = (gid_File_Extension_Dictionary_Sv, gid_File_Extension_Dictionary_Sbom_Sv);
     InstallOrder = "2000";
     Sortkey = "740";
     Spellcheckerlanguage = "sv";
@@ -688,7 +688,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Sw
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_SW );
-    Files = (gid_File_Extension_Dictionary_Sw);
+    Files = (gid_File_Extension_Dictionary_Sw, gid_File_Extension_Dictionary_Sbom_Sw);
     InstallOrder = "2000";
     Sortkey = "730";
     Spellcheckerlanguage = "sw";
@@ -699,7 +699,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Te
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_TE );
-    Files = (gid_File_Extension_Dictionary_Te);
+    Files = (gid_File_Extension_Dictionary_Te, gid_File_Extension_Dictionary_Sbom_Te);
     InstallOrder = "2000";
     Sortkey = "748";
     Spellcheckerlanguage = "te";
@@ -710,7 +710,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Th
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_TH );
-    Files = (gid_File_Extension_Dictionary_Th);
+    Files = (gid_File_Extension_Dictionary_Th, gid_File_Extension_Dictionary_Sbom_Th);
     InstallOrder = "2000";
     Sortkey = "750";
     Spellcheckerlanguage = "th";
@@ -721,7 +721,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Tr
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_TR );
-    Files = (gid_File_Extension_Dictionary_Tr);
+    Files = (gid_File_Extension_Dictionary_Tr, gid_File_Extension_Dictionary_Sbom_Tr);
     InstallOrder = "2000";
     Sortkey = "505";
     Spellcheckerlanguage = "tr";
@@ -732,7 +732,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Uk
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_UK );
-    Files = (gid_File_Extension_Dictionary_Uk);
+    Files = (gid_File_Extension_Dictionary_Uk, gid_File_Extension_Dictionary_Sbom_Uk);
     InstallOrder = "2000";
     Sortkey = "755";
     Spellcheckerlanguage = "uk";
@@ -743,7 +743,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Vi
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_VI );
-    Files = (gid_File_Extension_Dictionary_Vi);
+    Files = (gid_File_Extension_Dictionary_Vi, gid_File_Extension_Dictionary_Sbom_Vi);
     InstallOrder = "2000";
     Sortkey = "760";
     Spellcheckerlanguage = "vi";
@@ -754,7 +754,7 @@ End
 
 Module gid_Module_Root_Extension_Dictionary_Zu
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_ZU );
-    Files = (gid_File_Extension_Dictionary_Zu);
+    Files = (gid_File_Extension_Dictionary_Zu, gid_File_Extension_Dictionary_Sbom_Zu);
     InstallOrder = "2000";
     Sortkey = "770";
     Spellcheckerlanguage = "zu";
