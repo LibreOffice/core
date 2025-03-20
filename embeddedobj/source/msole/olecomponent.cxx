@@ -511,12 +511,15 @@ sal::systools::COMReference<IStorage> OleComponentNative_Impl::CreateNewStorage(
 
     // write the stream to the temporary file
     if (url.isEmpty())
-        throw uno::RuntimeException(); // TODO
+        throw uno::RuntimeException(
+            u"Cannot create storage: Provided URL is empty."_ustr); // TODO
 
     // open an IStorage based on the temporary file
     OUString aTempFilePath;
     if (osl::FileBase::getSystemPathFromFileURL(url, aTempFilePath) != osl::FileBase::E_None)
-        throw uno::RuntimeException(); // TODO: something dangerous happened
+        throw uno::RuntimeException(
+            u"Failed to retrieve system path from file URL. Possible invalid or unsafe URL."_ustr
+        ); // TODO: something dangerous happened
 
     sal::systools::COMReference<IStorage> pStorage;
     HRESULT hr = StgCreateDocfile( o3tl::toW(aTempFilePath.getStr()), STGM_CREATE | STGM_READWRITE | STGM_TRANSACTED | STGM_DELETEONRELEASE, 0, &pStorage );
@@ -618,7 +621,9 @@ void OleComponent::InitializeObject_Impl()
 
     auto pViewObject2(m_pNativeImpl->m_pObj.QueryInterface<IViewObject2>(sal::systools::COM_QUERY));
     if (!pViewObject2)
-        throw uno::RuntimeException(); // TODO
+        throw uno::RuntimeException(
+             u"Failed to query IViewObject2 interface from native implementation object."_ustr
+        ); // TODO
 
     // remove all the caches
     if ( sal::systools::COMReference< IOleCache > pIOleCache{ m_pNativeImpl->m_pObj, sal::systools::COM_QUERY } )
@@ -643,7 +648,9 @@ void OleComponent::InitializeObject_Impl()
 
     auto pOleObject(m_pNativeImpl->m_pObj.QueryInterface<IOleObject>(sal::systools::COM_QUERY));
     if (!pOleObject)
-        throw uno::RuntimeException(); // Static objects are not supported, they should be inserted as graphics
+        throw uno::RuntimeException(
+             u"Failed to query IOleObject interface from native implementation object."_ustr
+        ); // Static objects are not supported, they should be inserted as graphics
 
     DWORD nOLEMiscFlags(0);
     pOleObject->GetMiscStatus(DVASPECT_CONTENT, reinterpret_cast<DWORD*>(&nOLEMiscFlags));
@@ -699,7 +706,7 @@ void OleComponent::LoadEmbeddedObject( const OUString& aTempURL )
     // open an IStorage based on the temporary file
     OUString aFilePath;
     if (osl::FileBase::getSystemPathFromFileURL(aTempURL, aFilePath) != ::osl::FileBase::E_None)
-        throw uno::RuntimeException(); // TODO: something dangerous happened
+        throw uno::RuntimeException( u"Failed to retrieve system path from file URL: Invalid or unsupported URL."_ustr); // TODO: something dangerous happened
 
     sal::systools::COMReference<IStorage> pStorage;
     HRESULT hr = StgOpenStorage(o3tl::toW(aFilePath.getStr()), nullptr,
@@ -712,7 +719,9 @@ void OleComponent::LoadEmbeddedObject( const OUString& aTempURL )
 
     hr = OleLoadSeh(pStorage, &m_pNativeImpl->m_pObj);
     if (FAILED(hr))
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(
+            "Failed to load OLE object from storage: " + comphelper::WindowsErrorStringFromHRESULT(hr)
+        );
 
     InitializeObject_Impl();
 }
@@ -722,12 +731,16 @@ void OleComponent::CreateObjectFromClipboard()
 {
     auto pStorage(m_pNativeImpl->CreateNewStorage(getTempURL()));
     if (!pStorage)
-        throw uno::RuntimeException(); // TODO
+        throw uno::RuntimeException(
+               u"Failed to create new storage for clipboard object."_ustr
+        ); // TODO
 
     IDataObject * pDO = nullptr;
     HRESULT hr = OleGetClipboard( &pDO );
     if (FAILED(hr))
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(
+            "Failed to retrieve clipboard data: " + comphelper::WindowsErrorStringFromHRESULT(hr)
+        );
 
     hr = OleQueryCreateFromData(pDO);
     if (S_OK == hr)
@@ -740,7 +753,9 @@ void OleComponent::CreateObjectFromClipboard()
                                 pStorage,
                                 IID_PPV_ARGS_Helper(&m_pNativeImpl->m_pObj) );
         if (FAILED(hr))
-            throw uno::RuntimeException();
+            throw uno::RuntimeException(
+                "Failed to create OLE object from clipboard data: " + comphelper::WindowsErrorStringFromHRESULT(hr)
+            );
     }
     else
     {
@@ -761,7 +776,9 @@ void OleComponent::CreateNewEmbeddedObject( const uno::Sequence< sal_Int8 >& aSe
 
     auto pStorage(m_pNativeImpl->CreateNewStorage(getTempURL()));
     if (!pStorage)
-        throw uno::RuntimeException(); // TODO
+        throw uno::RuntimeException(
+            u"Failed to retrieve CLSID from the provided sequence."_ustr
+        ); // TODO
 
     // FORMATETC aFormat = { CF_METAFILEPICT, NULL, nAspect, -1, TYMED_MFPICT }; // for OLE..._DRAW should be NULL
 
@@ -773,7 +790,9 @@ void OleComponent::CreateNewEmbeddedObject( const uno::Sequence< sal_Int8 >& aSe
                             pStorage,
                             IID_PPV_ARGS_Helper(&m_pNativeImpl->m_pObj) );
     if (FAILED(hr))
-        throw uno::RuntimeException(); // TODO
+        throw uno::RuntimeException(
+              u"Failed to create new storage for embedded object."_ustr
+        ); // TODO
 
     InitializeObject_Impl();
 
@@ -796,11 +815,15 @@ void OleComponent::CreateObjectFromFile( const OUString& aFileURL )
 {
     auto pStorage(m_pNativeImpl->CreateNewStorage(getTempURL()));
     if (!pStorage)
-        throw uno::RuntimeException(); // TODO:
+        throw uno::RuntimeException(
+            u"Failed to create new storage for OLE object from file."_ustr
+        ); // TODO:
 
     OUString aFilePath;
     if ( ::osl::FileBase::getSystemPathFromFileURL( aFileURL, aFilePath ) != ::osl::FileBase::E_None )
-        throw uno::RuntimeException(); // TODO: something dangerous happened
+        throw uno::RuntimeException(
+            "Failed to convert file URL to system path: " + aFileURL
+        ); // TODO: something dangerous happened
 
     HRESULT hr = OleCreateFromFile( CLSID_NULL,
                                     o3tl::toW(aFilePath.getStr()),
@@ -811,7 +834,9 @@ void OleComponent::CreateObjectFromFile( const OUString& aFileURL )
                                     pStorage,
                                     IID_PPV_ARGS_Helper(&m_pNativeImpl->m_pObj) );
     if (FAILED(hr))
-        throw uno::RuntimeException(); // TODO
+        throw uno::RuntimeException(
+            "Failed to create OLE object from file: " + comphelper::WindowsErrorStringFromHRESULT(hr)
+        ); // TODO
 
     InitializeObject_Impl();
 }
@@ -821,11 +846,15 @@ void OleComponent::CreateLinkFromFile( const OUString& aFileURL )
 {
     auto pStorage(m_pNativeImpl->CreateNewStorage(getTempURL()));
     if (!pStorage)
-        throw uno::RuntimeException(); // TODO:
+        throw uno::RuntimeException(
+            u"Failed to create new storage for linked OLE object."_ustr
+        ); // TODO:
 
     OUString aFilePath;
     if ( ::osl::FileBase::getSystemPathFromFileURL( aFileURL, aFilePath ) != ::osl::FileBase::E_None )
-        throw uno::RuntimeException(); // TODO: something dangerous happened
+        throw uno::RuntimeException(
+            u"Failed to convert file URL to system path: "_ustr + aFileURL
+        ); // TODO: something dangerous happened
 
     HRESULT hr = OleCreateLinkToFile( o3tl::toW(aFilePath.getStr()),
                                         IID_IUnknown,
@@ -835,7 +864,9 @@ void OleComponent::CreateLinkFromFile( const OUString& aFileURL )
                                         pStorage,
                                         IID_PPV_ARGS_Helper(&m_pNativeImpl->m_pObj) );
     if (FAILED(hr))
-        throw uno::RuntimeException(); // TODO
+        throw uno::RuntimeException(
+            "Failed to create linked OLE object from file: " + comphelper::WindowsErrorStringFromHRESULT(hr)
+        ); // TODO
 
     InitializeObject_Impl();
 }
@@ -859,7 +890,9 @@ void OleComponent::InitEmbeddedCopyOfLink( rtl::Reference<OleComponent> const & 
     if ( pDataObject && SUCCEEDED( OleQueryCreateFromData( pDataObject ) ) )
     {
         if (!pStorage)
-            throw uno::RuntimeException(); // TODO:
+            throw uno::RuntimeException(
+                 u"Failed to create storage for OLE object from IDataObject."_ustr
+            ); // TODO:
 
         OleCreateFromData( pDataObject,
                                 IID_IUnknown,
@@ -1625,7 +1658,9 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
 
         OSL_ENSURE( m_pUnoOleObject, "Unexpected object absence!" );
         if ( !m_pUnoOleObject )
-            throw uno::RuntimeException();
+            throw uno::RuntimeException(
+                  u"UNO OLE object is unexpectedly null."_ustr
+            );
 
         m_pUnoOleObject->StoreObjectToStream(xTempOutStream, aGuard);
 
