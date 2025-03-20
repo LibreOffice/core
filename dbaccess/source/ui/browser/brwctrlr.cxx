@@ -2197,7 +2197,7 @@ bool SbaXDataBrowserController::CommitCurrent()
 
     rtl::Reference< SbaXGridControl >  xActiveControl(getBrowserView()->getGridControl());
     Reference< css::form::XBoundControl >  xLockingTest(static_cast<cppu::OWeakObject*>(xActiveControl.get()), UNO_QUERY);
-    bool bControlIsLocked = xActiveControl.is() && xLockingTest->getLock();
+    bool bControlIsLocked = xLockingTest.is() && xLockingTest->getLock();
     if (xActiveControl.is() && !bControlIsLocked)
     {
         if (!xActiveControl->commit())
