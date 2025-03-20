@@ -193,7 +193,7 @@ typedef sw::ClientBase<SwModify> SwClient;
 // SwModify
 
 // class has a doubly linked list for dependencies
-class SW_DLLPUBLIC SwModify: public sw::ClientBase<SwModify>
+class SW_DLLPUBLIC SwModify: public SwClient
 {
     friend class sw::ClientIteratorBase;
     friend void sw::ClientNotifyAttrChg(SwModify&, const SwAttrSet&, SwAttrSet&, SwAttrSet&);
@@ -211,7 +211,7 @@ protected:
     void PrepareFormatDeath(const SwFormatChangeHint&);
 public:
     SwModify()
-        : sw::ClientBase<SwModify>(), m_pWriterListeners(nullptr), m_bModifyLocked(false)
+        : SwClient(), m_pWriterListeners(nullptr), m_bModifyLocked(false)
     {}
 
     // broadcasting mechanism
