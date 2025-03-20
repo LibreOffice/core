@@ -691,6 +691,9 @@ OUString GetUndoComment(SwUndoId eId)
         case SwUndoId::MAKE_ENDNOTES_FOOTNOTES:
             pId = STR_UNDO_MAKE_ENDNOTES_FOOTNOTES;
             break;
+        case SwUndoId::CONVERT_FIELD_TO_TEXT:
+            pId = STR_UNDO_CONVERT_FIELD_TO_TEXT;
+            break;
     }
 
     assert(pId);

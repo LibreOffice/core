@@ -1549,6 +1549,7 @@
 
 #define STR_UNDO_MAKE_FOOTNOTES_ENDNOTES NC_("STR_UNDO_MAKE_FOOTNOTES_ENDNOTES", "Make all footnotes endnotes")
 #define STR_UNDO_MAKE_ENDNOTES_FOOTNOTES NC_("STR_UNDO_MAKE_ENDNOTES_FOOTNOTES", "Make all endnotes footnotes")
+#define STR_UNDO_CONVERT_FIELD_TO_TEXT NC_("STR_UNDO_CONVERT_FIELD_TO_TEXT", "Convert field to text")
 
 // To translators: title, text, question for confirmation whether to switch overwrite mode on
 #define STR_QUERY_INSMODE_TITLE NC_("STR_QUERY_INSMODE_TITLE", "You are switching to the overwrite mode")
