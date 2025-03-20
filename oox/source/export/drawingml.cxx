@@ -4691,52 +4691,53 @@ void prepareTextArea(const EnhancedCustomShape2d& rEnhancedCustomShape2d,
     return;
 }
 
-void prepareGluePoints(const EnhancedCustomShape2d& rEnhancedCustomShape2d,
-                       std::vector<Guide>& rGuideList,
+OUString GetFormula(const OUString& sEquation, const OUString& sReplace, const OUString& sNewStr)
+{
+    OUString sFormula = sEquation;
+    size_t nPos = sFormula.indexOf(sReplace);
+    if (nPos != std::string::npos)
+    {
+        OUString sModifiedEquation = sFormula.replaceAt(nPos, sReplace.getLength(), sNewStr);
+        sFormula = "*/ " + sModifiedEquation;
+    }
+
+    return sFormula;
+}
+
+void prepareGluePoints(std::vector<Guide>& rGuideList,
+                       const css::uno::Sequence<OUString>& aEquations,
                        const uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rGluePoints,
-                       const uno::Sequence<drawing::EnhancedCustomShapeTextFrame>& aTextFrames)
+                       const bool bIsOOXML, const sal_Int32 nWidth, const sal_Int32 nHeight)
 {
     if (rGluePoints.hasElements())
     {
-        OString sWidth, sHeight;
-        if (aTextFrames.hasElements())
-        {
-            double fTop = 0.0, fLeft = 0.0, fBottom = 0.0, fRight = 0.0;
-
-            rEnhancedCustomShape2d.GetParameter(fTop, aTextFrames[0].TopLeft.First, true, false);
-            rEnhancedCustomShape2d.GetParameter(fLeft, aTextFrames[0].TopLeft.Second, true, false);
-            rEnhancedCustomShape2d.GetParameter(fBottom, aTextFrames[0].BottomRight.First, false,
-                                                true);
-            rEnhancedCustomShape2d.GetParameter(fRight, aTextFrames[0].BottomRight.Second, false,
-                                                true);
-
-            sWidth = OString::number(fLeft + fRight);
-            sHeight = OString::number(fTop + fBottom);
-        }
-        else
-        {
-            tools::Rectangle aLogicRectLO(rEnhancedCustomShape2d.GetLogicRect());
-            sal_Int32 nWidth = aLogicRectLO.Right() - aLogicRectLO.Left();
-            sal_Int32 nHeight = aLogicRectLO.Bottom() - aLogicRectLO.Top();
-            sWidth = OString::number(oox::drawingml::convertHmmToEmu(nWidth));
-            sHeight = OString::number(oox::drawingml::convertHmmToEmu(nHeight));
-        }
-
         sal_Int32 nIndex = 1;
         for (auto const& rGluePoint : rGluePoints)
         {
-            Guide aGuide;
-            double fRetValueX;
-            rEnhancedCustomShape2d.GetParameter(fRetValueX, rGluePoint.First, false, false);
-            aGuide.sName = "GluePoint"_ostr + OString::number(nIndex) + "X";
-            aGuide.sFormula = "*/ " + OString::number(fRetValueX) + " w " + sWidth;
-            rGuideList.push_back(aGuide);
+            sal_Int32 nIdx1 = -1;
+            sal_Int32 nIdx2 = -1;
+            rGluePoint.First.Value >>= nIdx1;
+            rGluePoint.Second.Value >>= nIdx2;
 
-            double fRetValueY;
-            rEnhancedCustomShape2d.GetParameter(fRetValueY, rGluePoint.Second, false, false);
-            aGuide.sName = "GluePoint"_ostr + OString::number(nIndex) + "Y";
-            aGuide.sFormula = "*/ " + OString::number(fRetValueY) + " h " + sHeight;
-            rGuideList.push_back(aGuide);
+            if (nIdx1 != -1 && nIdx2 != -1)
+            {
+                Guide aGuideX;
+                aGuideX.sName = "GluePoint"_ostr + OString::number(nIndex) + "X";
+                aGuideX.sFormula
+                    = (bIsOOXML && aEquations.hasElements())
+                          ? GetFormula(aEquations[nIdx1], "*logwidth/", " w ").toUtf8()
+                          : "*/ " + OString::number(nIdx1) + " w " + OString::number(nWidth);
+                rGuideList.push_back(aGuideX);
+
+                Guide aGuideY;
+                aGuideY.sName = "GluePoint"_ostr + OString::number(nIndex) + "Y";
+                aGuideY.sFormula
+                    = (bIsOOXML && aEquations.hasElements())
+                          ? GetFormula(aEquations[nIdx2], "*logheight/", " h ").toUtf8()
+                          : "*/ " + OString::number(nIdx2) + " h " + OString::number(nHeight);
+                rGuideList.push_back(aGuideY);
+            }
+
             nIndex++;
         }
     }
@@ -4776,8 +4777,28 @@ bool DrawingML::WriteCustomGeometry(
     uno::Sequence<beans::PropertyValue> aPathProp;
     pPathProp->Value >>= aPathProp;
 
+    auto pShapeType = std::find_if(std::cbegin(*pGeometrySeq), std::cend(*pGeometrySeq),
+                                   [](const PropertyValue& rProp) { return rProp.Name == "Type"; });
+    bool bOOXML = false;
+    if (pShapeType != std::cend(*pGeometrySeq))
+    {
+        OUString sShapeType;
+        pShapeType->Value >>= sShapeType;
+        if (sShapeType.startsWith("ooxml"))
+            bOOXML = true;
+    }
+
+    auto pEquationsProp
+        = std::find_if(std::cbegin(*pGeometrySeq), std::cend(*pGeometrySeq),
+                       [](const PropertyValue& rProp) { return rProp.Name == "Equations"; });
+
+    css::uno::Sequence<OUString> aEquationSeq;
+    if (pEquationsProp != std::cend(*pGeometrySeq))
+    {
+        pEquationsProp->Value >>= aEquationSeq;
+    }
+
     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aGluePoints;
-    uno::Sequence<drawing::EnhancedCustomShapeTextFrame> aTextFrames;
     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
     uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
     uno::Sequence<awt::Size> aPathSize;
@@ -4791,8 +4812,6 @@ bool DrawingML::WriteCustomGeometry(
             rPathProp.Value >>= aSegments;
         else if (rPathProp.Name == "GluePoints")
             rPathProp.Value >>= aGluePoints;
-        else if (rPathProp.Name == "TextFrames")
-            rPathProp.Value >>= aTextFrames;
         else if (rPathProp.Name == "SubViewSize")
             rPathProp.Value >>= aPathSize;
         else if (rPathProp.Name == "StretchX")
@@ -4828,50 +4847,6 @@ bool DrawingML::WriteCustomGeometry(
     // A EnhancedCustomShape2d caches the equation results. Therefore we use only one of it for the
     // entire method.
     const EnhancedCustomShape2d aCustomShape2d(const_cast<SdrObjCustomShape&>(rSdrObjCustomShape));
-
-    TextAreaRect aTextAreaRect;
-    std::vector<Guide> aGuideList; // for now only for <a:rect>
-    prepareTextArea(aCustomShape2d, aGuideList, aTextAreaRect);
-    prepareGluePoints(aCustomShape2d, aGuideList, aGluePoints, aTextFrames);
-    mpFS->startElementNS(XML_a, XML_custGeom);
-    mpFS->singleElementNS(XML_a, XML_avLst);
-    if (aGuideList.empty())
-    {
-        mpFS->singleElementNS(XML_a, XML_gdLst);
-    }
-    else
-    {
-        mpFS->startElementNS(XML_a, XML_gdLst);
-        for (auto const& elem : aGuideList)
-        {
-            mpFS->singleElementNS(XML_a, XML_gd, XML_name, elem.sName, XML_fmla, elem.sFormula);
-        }
-        mpFS->endElementNS(XML_a, XML_gdLst);
-    }
-    mpFS->singleElementNS(XML_a, XML_ahLst);
-
-    if (!aGuideList.empty())
-    {
-        mpFS->startElementNS(XML_a, XML_cxnLst);
-        for (auto it = aGuideList.begin(); it != aGuideList.end(); ++it)
-        {
-            auto aNextIt = std::next(it);
-            if (aNextIt != aGuideList.end() && it->sName.startsWith("GluePoint")
-                && aNextIt->sName.startsWith("GluePoint"))
-            {
-                mpFS->startElementNS(XML_a, XML_cxn, XML_ang, "0");
-                mpFS->singleElementNS(XML_a, XML_pos, XML_x, it->sName, XML_y, aNextIt->sName);
-                mpFS->endElementNS(XML_a, XML_cxn);
-
-                ++it;
-            }
-        }
-        mpFS->endElementNS(XML_a, XML_cxnLst);
-    }
-
-    mpFS->singleElementNS(XML_a, XML_rect, XML_l, aTextAreaRect.left, XML_t, aTextAreaRect.top,
-                          XML_r, aTextAreaRect.right, XML_b, aTextAreaRect.bottom);
-    mpFS->startElementNS(XML_a, XML_pathLst);
 
     // Prepare width and height for <a:path>
     bool bUseGlobalViewBox(false);
@@ -4941,6 +4916,50 @@ bool DrawingML::WriteCustomGeometry(
         // ToDo: Other values of left,top than 0,0 are not considered yet. Such would require a
         // shift of the resulting path coordinates.
     }
+
+    TextAreaRect aTextAreaRect;
+    std::vector<Guide> aGuideList; // for now only for <a:rect>
+    prepareTextArea(aCustomShape2d, aGuideList, aTextAreaRect);
+    prepareGluePoints(aGuideList, aEquationSeq, aGluePoints, bOOXML, nViewBoxWidth, nViewBoxHeight);
+    mpFS->startElementNS(XML_a, XML_custGeom);
+    mpFS->singleElementNS(XML_a, XML_avLst);
+    if (aGuideList.empty())
+    {
+        mpFS->singleElementNS(XML_a, XML_gdLst);
+    }
+    else
+    {
+        mpFS->startElementNS(XML_a, XML_gdLst);
+        for (auto const& elem : aGuideList)
+        {
+            mpFS->singleElementNS(XML_a, XML_gd, XML_name, elem.sName, XML_fmla, elem.sFormula);
+        }
+        mpFS->endElementNS(XML_a, XML_gdLst);
+    }
+    mpFS->singleElementNS(XML_a, XML_ahLst);
+
+    if (!aGuideList.empty())
+    {
+        mpFS->startElementNS(XML_a, XML_cxnLst);
+        for (auto it = aGuideList.begin(); it != aGuideList.end(); ++it)
+        {
+            auto aNextIt = std::next(it);
+            if (aNextIt != aGuideList.end() && it->sName.startsWith("GluePoint")
+                && aNextIt->sName.startsWith("GluePoint"))
+            {
+                mpFS->startElementNS(XML_a, XML_cxn, XML_ang, "0");
+                mpFS->singleElementNS(XML_a, XML_pos, XML_x, it->sName, XML_y, aNextIt->sName);
+                mpFS->endElementNS(XML_a, XML_cxn);
+
+                ++it;
+            }
+        }
+        mpFS->endElementNS(XML_a, XML_cxnLst);
+    }
+
+    mpFS->singleElementNS(XML_a, XML_rect, XML_l, aTextAreaRect.left, XML_t, aTextAreaRect.top,
+                          XML_r, aTextAreaRect.right, XML_b, aTextAreaRect.bottom);
+    mpFS->startElementNS(XML_a, XML_pathLst);
 
     // Iterate over subpaths
     sal_Int32 nPairIndex = 0; // index over "Coordinates"
