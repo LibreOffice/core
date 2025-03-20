@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <drawinglayer/primitive2d/BufferedDecompositionFlusher.hxx>
 #include <tools/lazydelete.hxx>
@@ -45,7 +46,9 @@ class FlusherDeinit : public tools::DeleteOnDeinitBase
     rtl::Reference<BufferedDecompositionFlusher> m_xTimer;
     virtual void doCleanup() override
     {
+        SAL_WARN("drawinglayer", "tearing down BufferedDecompositionFlusher");
         m_xTimer->stop();
+        m_xTimer->onTeardown();
         m_xTimer = nullptr;
     }
 
@@ -132,6 +135,19 @@ void SAL_CALL BufferedDecompositionFlusher::onShot()
         r->setBuffered2DDecomposition(Primitive2DContainer{});
     setRemainingTime(salhelper::TTimeValue(2, 0));
     start();
+}
+
+/// Only called by FlusherDeinit
+void BufferedDecompositionFlusher::onTeardown()
+{
+    std::unordered_set<rtl::Reference<BufferedDecompositionPrimitive2D>> aRemoved1;
+    std::unordered_set<rtl::Reference<BufferedDecompositionGroupPrimitive2D>> aRemoved2;
+    {
+        std::unique_lock l(maMutex);
+        aRemoved1 = std::move(maRegistered1);
+        aRemoved2 = std::move(maRegistered2);
+    }
+    // let them destruct outside the lock
 }
 
 } // end of namespace drawinglayer::primitive2d

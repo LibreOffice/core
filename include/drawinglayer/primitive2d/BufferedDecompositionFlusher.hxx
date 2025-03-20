@@ -34,6 +34,9 @@ public:
 
     BufferedDecompositionFlusher();
 
+    /// Only called by FlusherDeinit
+    void onTeardown();
+
 private:
     virtual void SAL_CALL onShot() override;
     void updateImpl(const BufferedDecompositionPrimitive2D*);
