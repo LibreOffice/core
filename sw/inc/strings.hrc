@@ -1503,6 +1503,7 @@
 #define STR_TABLE_PANEL_ALIGN_CENTER            NC_("sidebartableedit|aligncenterlabel", "Center")
 #define STR_TABLE_PANEL_ALIGN_MANUAL            NC_("sidebartableedit|alignmanuallabel", "Manual")
 
+#define STR_UNDO_CONVERT_FIELD_TO_TEXT NC_("STR_UNDO_CONVERT_FIELD_TO_TEXT", "Convert field to text")
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

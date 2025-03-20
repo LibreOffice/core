@@ -1642,7 +1642,7 @@ bool SwDoc::ConvertFieldToText(SwField& rField, SwRootFrame const& rLayout)
 {
     bool bRet = false;
     getIDocumentFieldsAccess().LockExpFields();
-    GetIDocumentUndoRedo().StartUndo( SwUndoId::UI_REPLACE, nullptr );
+    GetIDocumentUndoRedo().StartUndo( SwUndoId::CONVERT_FIELD_TO_TEXT, nullptr );
 
     SwFieldType* pFieldType = rField.GetTyp();
     SwFormatField* pFormatField = pFieldType->FindFormatForField(&rField);
@@ -1710,15 +1710,16 @@ bool SwDoc::ConvertFieldToText(SwField& rField, SwRootFrame const& rLayout)
     }
     if( bRet )
         getIDocumentState().SetModified();
-    GetIDocumentUndoRedo().EndUndo( SwUndoId::UI_REPLACE, nullptr );
+    GetIDocumentUndoRedo().EndUndo( SwUndoId::CONVERT_FIELD_TO_TEXT, nullptr );
     getIDocumentFieldsAccess().UnlockExpFields();
     return bRet;
 }
+
 bool SwDoc::ConvertFieldsToText(SwRootFrame const& rLayout)
 {
     bool bRet = false;
     getIDocumentFieldsAccess().LockExpFields();
-    GetIDocumentUndoRedo().StartUndo( SwUndoId::UI_REPLACE, nullptr );
+    GetIDocumentUndoRedo().StartUndo( SwUndoId::CONVERT_FIELD_TO_TEXT, nullptr );
 
     const bool bOnlyConvertDBFields
         = officecfg::Office::Writer::FormLetter::ConvertToTextOnlyMMFields::get();
@@ -1812,7 +1813,7 @@ bool SwDoc::ConvertFieldsToText(SwRootFrame const& rLayout)
 
     if( bRet )
         getIDocumentState().SetModified();
-    GetIDocumentUndoRedo().EndUndo( SwUndoId::UI_REPLACE, nullptr );
+    GetIDocumentUndoRedo().EndUndo( SwUndoId::CONVERT_FIELD_TO_TEXT, nullptr );
     getIDocumentFieldsAccess().UnlockExpFields();
     return bRet;
 

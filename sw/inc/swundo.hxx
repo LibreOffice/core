@@ -180,6 +180,7 @@ enum class SwUndoId
     CHANGE_THEME = 148,
     DELETE_SECTIONS = 149,
     FLYFRMFMT_DECORATIVE = 150,
+    CONVERT_FIELD_TO_TEXT = 151,
 };
 
 OUString GetUndoComment(SwUndoId eId);
