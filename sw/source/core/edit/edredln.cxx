@@ -78,6 +78,14 @@ bool SwEditShell::AcceptRedline( SwRedlineTable::size_type nPos )
     return bRet;
 }
 
+void SwEditShell::ReinstatePaM(const SwRangeRedline& rRedline, SwPaM& rPaM)
+{
+    if (rRedline.GetType() == RedlineType::Insert)
+    {
+        DeleteSel(rPaM, /*isArtificialSelection=*/true);
+    }
+}
+
 void SwEditShell::ReinstateRedline(SwRedlineTable::size_type nPos)
 {
     CurrShell aCurr(this);
@@ -93,10 +101,7 @@ void SwEditShell::ReinstateRedline(SwRedlineTable::size_type nPos)
     SwPaM aPaM(*rRedline.GetPoint());
     aPaM.SetMark();
     *aPaM.GetMark() = *rRedline.GetMark();
-    if (rRedline.GetType() == RedlineType::Insert)
-    {
-        DeleteSel(aPaM, /*isArtificialSelection=*/true);
-    }
+    ReinstatePaM(rRedline, aPaM);
 
     EndAllAction();
 }
@@ -170,6 +175,61 @@ bool SwEditShell::RejectRedlinesInSelection()
         bRet = GetDoc()->getIDocumentRedlineAccess().RejectRedline( *GetCursor(), true );
     EndAllAction();
     return bRet;
+}
+
+void SwEditShell::ReinstateRedlinesInSelection()
+{
+    CurrShell aCurr( this );
+    StartAllAction();
+    if (!IsRedlineOn())
+    {
+        RedlineFlags nMode = GetRedlineFlags();
+        SetRedlineFlags(nMode | RedlineFlags::On, /*bRecordAllViews=*/false);
+    }
+
+    SwPosition aCursorStart(*GetCursor()->Start());
+    SwPosition aCursorEnd(*GetCursor()->End());
+    SwRedlineTable& rTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    for (size_t nIndex = 0; nIndex < rTable.size(); ++nIndex)
+    {
+        const SwRangeRedline& rRedline = *rTable[nIndex];
+        if (!rRedline.HasMark() || !rRedline.IsVisible())
+        {
+            continue;
+        }
+
+        if (*rRedline.End() < aCursorStart)
+        {
+            // Ends before the selection, skip to the next redline.
+            continue;
+        }
+
+        if (*rRedline.Start() > aCursorEnd)
+        {
+            // Starts after the selection, can stop.
+            break;
+        }
+
+        // Check if the redline is only partially selected.
+        const SwPosition* pStart = rRedline.Start();
+        if (*pStart < aCursorStart)
+        {
+            pStart = &aCursorStart;
+        }
+        const SwPosition* pEnd = rRedline.End();
+        if (*pEnd > aCursorEnd)
+        {
+            pEnd = &aCursorEnd;
+        }
+
+        // Process the (partially) selected redline.
+        SwPaM aPaM(*pEnd);
+        aPaM.SetMark();
+        *aPaM.GetMark() = *pStart;
+        ReinstatePaM(rRedline, aPaM);
+    }
+
+    EndAllAction();
 }
 
 // Set the comment at the Redline

@@ -156,6 +156,8 @@ class SAL_DLLPUBLIC_RTTI SwEditShell : public SwCursorShell
 
     void SetSectionAttr_( SwSectionFormat& rSectFormat, const SfxItemSet& rSet );
 
+    void ReinstatePaM(const SwRangeRedline& rRedline, SwPaM& rPaM);
+
     using SwViewShell::UpdateFields;
     using sw::BroadcastingModify::GetInfo;
 
@@ -963,6 +965,7 @@ public:
     bool AcceptRedlinesInSelection();
     bool RejectRedlinesInSelection();
     void ReinstateRedline(SwRedlineTable::size_type nPos);
+    void ReinstateRedlinesInSelection();
 
     /** Search Redline for this Data and @return position in array.
      If not found, return SwRedlineTable::npos. */

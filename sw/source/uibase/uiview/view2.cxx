@@ -906,6 +906,7 @@ void SwView::Execute(SfxRequest &rReq)
             if( pCursor->HasMark() && nRedline == SwRedlineTable::npos)
             {
                 bool bAccept = FN_REDLINE_ACCEPT_DIRECT == nSlot || FN_REDLINE_ACCEPT_TONEXT == nSlot;
+                bool bReinstate = nSlot == FN_REDLINE_REINSTATE_DIRECT;
                 SwUndoId eUndoId = bAccept ? SwUndoId::ACCEPT_REDLINE : SwUndoId::REJECT_REDLINE;
                 SwWrtShell& rSh = GetWrtShell();
                 SwRewriter aRewriter;
@@ -917,6 +918,10 @@ void SwView::Execute(SfxRequest &rReq)
                 }
                 if ( bAccept )
                     m_pWrtShell->AcceptRedlinesInSelection();
+                else if (bReinstate)
+                {
+                    m_pWrtShell->ReinstateRedlinesInSelection();
+                }
                 else
                     m_pWrtShell->RejectRedlinesInSelection();
                 if ( bTableSelection )
