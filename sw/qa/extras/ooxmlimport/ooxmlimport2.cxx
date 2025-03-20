@@ -1338,6 +1338,26 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154370)
         CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
     }
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf153196)
+{
+    createSwDoc("A019_min.docx");
+
+    uno::Reference<beans::XPropertySet> xPageStyle;
+    getStyles("PageStyles")->getByName("Converted1") >>= xPageStyle;
+    sal_Int32 nLeftMargin{};
+    xPageStyle->getPropertyValue("LeftMargin") >>= nLeftMargin;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4265
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4265), nLeftMargin);
+    sal_Int32 nRightMargin{};
+    xPageStyle->getPropertyValue("RightMargin") >>= nRightMargin;
+    // - Expected: 0
+    // - Actual  : 4265
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nRightMargin);
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 } // end of anonymous namespace
