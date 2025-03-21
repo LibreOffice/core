@@ -167,6 +167,44 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateInsertsInSelection)
     CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rInnerRedlineData2.GetType());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateSinglePlainDelete)
+{
+    // Given a document with a single deletion:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert("abcd");
+    SwModule* pModule = SwModule::get();
+    pModule->SetRedlineAuthor("Alice");
+    RedlineFlags nMode = pWrtShell->GetRedlineFlags();
+    pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    pWrtShell->DelRight();
+    pWrtShell->SetRedlineFlags(nMode);
+
+    // When a 2nd user reinstates that change:
+    pModule->SetRedlineAuthor("Bob");
+    pWrtShell->EndPara(/*bSelect=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:ReinstateTrackedChange", {});
+
+    // Then make sure this results in an insert after a delete:
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. reinstate didn't do anything.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rRedlines.size());
+    const SwRangeRedline* pRedline1 = rRedlines[0];
+    const SwRedlineData& rRedlineData1 = pRedline1->GetRedlineData(0);
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlineData1.GetType());
+    const SwRangeRedline* pRedline2 = rRedlines[1];
+    const SwRedlineData& rRedlineData2 = pRedline2->GetRedlineData(0);
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlineData2.GetType());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
