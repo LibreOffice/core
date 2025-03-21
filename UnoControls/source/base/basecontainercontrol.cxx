@@ -190,40 +190,37 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
     // Ready for multithreading
     MutexGuard aGuard (m_aMutex);
 
-    size_t nControls = maControlInfoList.size();
+    // Search for right control
+    auto it = std::find_if(maControlInfoList.begin(), maControlInfoList.end(),
+        [&rControl](const IMPL_ControlInfo& control)
+        { return rControl == control.xControl; });
 
-    for ( size_t n = 0; n < nControls; n++ )
+    // if not found
+    if ( it == maControlInfoList.end() )
+        return;
+
+    // remove listener from control
+    it->xControl->removeEventListener (static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ));
+    it->xControl->setContext          ( Reference< XInterface >  ()   );
+
+    // ... free memory
+    maControlInfoList.erase(it);
+
+    // Send message to all other listener
+    comphelper::OInterfaceContainerHelper2 * pInterfaceContainer = m_aListeners.getContainer( cppu::UnoType<XContainerListener>::get());
+
+    if (pInterfaceContainer)
     {
-        // Search for right control
-        IMPL_ControlInfo* pControl = &maControlInfoList[ n ];
-        if ( rControl == pControl->xControl )
+        ContainerEvent  aEvent;
+
+        aEvent.Source    = *this;
+        aEvent.Element <<= rControl;
+
+        comphelper::OInterfaceIteratorHelper2 aIterator (*pInterfaceContainer);
+
+        while ( aIterator.hasMoreElements() )
         {
-            //.is it found ... remove listener from control
-            pControl->xControl->removeEventListener (static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ));
-            pControl->xControl->setContext          ( Reference< XInterface >  ()   );
-
-            // ... free memory
-            maControlInfoList.erase(maControlInfoList.begin() + n);
-
-            // Send message to all other listener
-            comphelper::OInterfaceContainerHelper2 * pInterfaceContainer = m_aListeners.getContainer( cppu::UnoType<XContainerListener>::get());
-
-            if (pInterfaceContainer)
-            {
-                ContainerEvent  aEvent;
-
-                aEvent.Source    = *this;
-                aEvent.Element <<= rControl;
-
-                comphelper::OInterfaceIteratorHelper2 aIterator (*pInterfaceContainer);
-
-                while ( aIterator.hasMoreElements() )
-                {
-                    static_cast<XContainerListener*>(aIterator.next())->elementRemoved (aEvent);
-                }
-            }
-            // Break "for" !
-            break;
+            static_cast<XContainerListener*>(aIterator.next())->elementRemoved (aEvent);
         }
     }
 }
