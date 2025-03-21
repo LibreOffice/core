@@ -151,8 +151,6 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
 
 }
 
-#define FUZZY_EDGE 400
-
 bool SwViewShellImp::IsDragPossible( const Point &rPoint )
 {
     if ( !HasDrawView() )
@@ -175,6 +173,7 @@ bool SwViewShellImp::IsDragPossible( const Point &rPoint )
     else
         aRect = GetShell().GetLayout()->getFrameArea();
 
+    constexpr tools::Long FUZZY_EDGE = 400;
     aRect.AddTop   (- FUZZY_EDGE );
     aRect.AddBottom(  FUZZY_EDGE );
     aRect.AddLeft  (- FUZZY_EDGE );
