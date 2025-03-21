@@ -84,6 +84,15 @@ void SwEditShell::ReinstatePaM(const SwRangeRedline& rRedline, SwPaM& rPaM)
     {
         DeleteSel(rPaM, /*isArtificialSelection=*/true);
     }
+    else if (rRedline.GetType() == RedlineType::Delete)
+    {
+        // Re-insert after the deletion.
+        OUString aText = rPaM.GetText();
+        ClearMark();
+        SwShellCursor* pCursor = getShellCursor(/*bBlock=*/true);
+        *pCursor->GetPoint() = *rPaM.End();
+        Insert2(aText);
+    }
 }
 
 void SwEditShell::ReinstateRedline(SwRedlineTable::size_type nPos)
