@@ -47,6 +47,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 
+#include <comphelper/getexpandeduri.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -418,6 +419,8 @@ bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedVal
                 sTemplateURL = SfxObjectFactory::GetStandardTemplate( sServiceName );
             else
                 sTemplateURL = SfxObjectFactory::GetStandardTemplate( SfxObjectShell::GetServiceNameFromFactory( sURL ) );
+            // tdf#165851 expand trusted urls from configuration here
+            sTemplateURL = comphelper::getExpandedUri(m_aContext, sTemplateURL);
         }
 
         if ( !sTemplateURL.isEmpty() )
