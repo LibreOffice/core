@@ -27,6 +27,7 @@
 #include <salgdi.hxx>
 #include <toolbarvalue.hxx>
 #include <menubarvalue.hxx>
+#include <scrollbarvalue.hxx>
 
 #include <cassert>
 

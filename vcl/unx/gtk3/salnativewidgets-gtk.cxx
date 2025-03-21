@@ -24,6 +24,7 @@
 #include <vcl/settings.hxx>
 #include <unx/fontmanager.hxx>
 #include <o3tl/string_view.hxx>
+#include <scrollbarvalue.hxx>
 
 #include <IconThemeSelector.hxx>
 #include "custom-theme.hxx"

@@ -31,6 +31,7 @@
 #include <rtl/math.hxx>
 #include <comphelper/lok.hxx>
 #include <toolbarvalue.hxx>
+#include <scrollbarvalue.hxx>
 
 // The only common SalFrame method
 

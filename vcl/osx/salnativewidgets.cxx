@@ -36,6 +36,8 @@
 #include <Carbon/Carbon.h>
 #include <postmac.h>
 
+#include <scrollbarvalue.hxx>
+
 #if HAVE_FEATURE_SKIA
 #include <vcl/skia/SkiaHelper.hxx>
 #endif

@@ -25,6 +25,7 @@
 #include <vcl/vclevent.hxx>
 
 #include <sal/log.hxx>
+#include <scrollbarvalue.hxx>
 
 /*  #i77549#
     HACK: for scrollbars in case of thumb rect, page up and page down rect we

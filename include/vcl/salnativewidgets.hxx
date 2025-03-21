@@ -286,40 +286,6 @@ class VCL_DLLPUBLIC ImplControlValue
         void         setNumericVal( tools::Long nNumeric ) { mNumber = nNumeric; }
 };
 
-/* ScrollbarValue:
- *
- *   Value container for scrollbars.
- */
-class SAL_DLLPUBLIC_RTTI ScrollbarValue final : public ImplControlValue
-{
-    public:
-        tools::Long            mnMin;
-        tools::Long            mnMax;
-        tools::Long            mnCur;
-        tools::Long            mnVisibleSize;
-        tools::Rectangle       maThumbRect;
-        tools::Rectangle       maButton1Rect;
-        tools::Rectangle       maButton2Rect;
-        ControlState    mnButton1State;
-        ControlState    mnButton2State;
-        ControlState    mnThumbState;
-
-        ScrollbarValue()
-        : ImplControlValue( ControlType::Scrollbar, 0 )
-        {
-            mnMin = 0; mnMax = 0; mnCur = 0; mnVisibleSize = 0;
-            mnButton1State = ControlState::NONE; mnButton2State = ControlState::NONE;
-            mnThumbState = ControlState::NONE;
-        };
-        virtual ~ScrollbarValue() override;
-        virtual ScrollbarValue* clone() const override;
-
-        ScrollbarValue(ScrollbarValue const &) = default;
-        ScrollbarValue(ScrollbarValue &&) = default;
-        ScrollbarValue & operator =(ScrollbarValue const &) = delete; // due to ImplControlValue
-        ScrollbarValue & operator =(ScrollbarValue &&) = delete; // due to ImplControlValue
-};
-
 class SAL_DLLPUBLIC_RTTI SliderValue final : public ImplControlValue
 {
     public:
