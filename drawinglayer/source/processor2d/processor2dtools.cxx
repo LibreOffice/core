@@ -18,13 +18,13 @@
  */
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/sysdata.hxx>
 #include "vclpixelprocessor2d.hxx"
 #include "vclmetafileprocessor2d.hxx"
 #include <config_vclplug.h>
 
 #if defined(_WIN32)
 #include <drawinglayer/processor2d/d2dpixelprocessor2d.hxx>
+#include <vcl/sysdata.hxx>
 #elif USE_HEADLESS_CODE
 #include <drawinglayer/processor2d/cairopixelprocessor2d.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -118,29 +118,15 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
 
         if (!bMirrored)
         {
-            SystemGraphicsData aData(rTargetOutDev.GetSystemGfxData());
-
-            // create CairoPixelProcessor2D, make use of the possibility to
-            // add an initial clip relative to the real pixel dimensions of
-            // the target surface. This is e.g. needed here due to the
-            // existence of 'virtual' target surfaces that internally use an
-            // offset and limited pixel size, mainly used for UI elements.
-            // let the CairoPixelProcessor2D do this, it has internal,
-            // system-specific possibilities to do that in an elegant and
-            // efficient way (using cairo_surface_create_for_rectangle).
+            // create CairoPixelProcessor2D associated with the given
+            // OutputDevice
             std::unique_ptr<CairoPixelProcessor2D> aRetval(
                 std::make_unique<CairoPixelProcessor2D>(
-                    rViewInformation2D, static_cast<cairo_surface_t*>(aData.pSurface),
-                    rTargetOutDev.GetOutOffXPixel(), rTargetOutDev.GetOutOffYPixel(),
-                    rTargetOutDev.GetOutputWidthPixel(), rTargetOutDev.GetOutputHeightPixel()));
+                    rTargetOutDev,
+                    rViewInformation2D));
 
             if (aRetval->valid())
             {
-                // if we construct a CairoPixelProcessor2D from OutputDevice,
-                // additionally set the XGraphics that can be obtained from
-                // there. It may be used e.g. to render FormControls directly
-                aRetval->setXGraphics(rTargetOutDev.CreateUnoGraphics());
-
                 return aRetval;
             }
         }
