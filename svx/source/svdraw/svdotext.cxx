@@ -783,8 +783,8 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
         {
             if( bHitTest ) // #i33696# take back fix #i27510#
             {
-                rOutliner.SetTextObj( this );
                 rOutliner.SetFixedCellHeight(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
+                rOutliner.SetTextObj( this );
             }
 
             rOutliner.SetUpdateLayout(true);
