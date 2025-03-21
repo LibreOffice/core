@@ -3636,14 +3636,8 @@ OString SwXTextDocument::getViewRenderState(SfxViewShell* pViewShell)
                 aState.append('P');
             if (pVOpt->IsOnlineSpell())
                 aState.append('S');
-            // NOTE: DOCCOLOR:dark was changed to COL_WHITE for 25.2.2, please read tdf#165803 for the reasons.
-            // TODO: Change-Id: Ib1ff7f2ca14110270baa8d6790d76696fd268183 (this patch) is a temporary fix for 25.2.2.
-            //       looking for/working towards better solutions.
-            //
-            // document color canot be used to determine which theme is being used (light/dark), as they both use white
-            // document background color.
-            // if (pVOpt->GetDocColor() == svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR, 1))
-            //     aState.append('D');
+            if (pVOpt->GetDocColor() == svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR, 1))
+                aState.append('D');
 
             if (pView->IsSpotlightParaStyles() || pView->IsSpotlightCharStyles())
             {
