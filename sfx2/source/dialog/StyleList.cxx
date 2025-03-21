@@ -760,7 +760,7 @@ static void lcl_Update(weld::TreeView& rTreeView, const weld::TreeIter& rIter,
 
     rTreeView.set_id(rIter, rName);
     rTreeView.set_text(rIter, rName);
-    rTreeView.set_image(rIter, *xDevice);
+    rTreeView.set_image(rIter, *xDevice, 0);
 }
 
 static void FillBox_Impl(weld::TreeView& rBox, StyleTreeArr_Impl& rTreeArray,

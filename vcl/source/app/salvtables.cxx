@@ -4533,7 +4533,7 @@ void SalInstanceTreeView::end_editing() { m_xTreeView->EndEditing(); }
 
 void SalInstanceTreeView::set_image(SvTreeListEntry* pEntry, const Image& rImage, int col)
 {
-    if (col == -1)
+    if (col == -1 || col == 0)
     {
         m_xTreeView->SetExpandedEntryBmp(pEntry, rImage);
         m_xTreeView->SetCollapsedEntryBmp(pEntry, rImage);
