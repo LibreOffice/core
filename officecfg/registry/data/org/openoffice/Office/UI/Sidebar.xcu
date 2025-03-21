@@ -698,7 +698,7 @@
             WriterVariants, Draw,       visible ;
             WriterVariants, DrawFontwork, visible ;
             Writer,         Graphic,    hidden  ;
-            Writer,         OLE,        hidden  ;
+            Writer,         OLE,        visible ;
             Writer,         Frame,      visible ;
           </value>
         </prop>
