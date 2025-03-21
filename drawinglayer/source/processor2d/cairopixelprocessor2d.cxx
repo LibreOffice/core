@@ -17,6 +17,7 @@
 #include <vcl/alpha.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/lok.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -949,9 +950,9 @@ bool checkCoordinateLimitWorkaroundNeededForUsedCairo()
 namespace drawinglayer::processor2d
 {
 CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation,
-                                             tools::Long nWidthPixel, tools::Long nHeightPixel,
-                                             bool bUseRGBA)
+                                             cairo_surface_t* pTarget)
     : BaseProcessor2D(rViewInformation)
+    , mpTargetOutputDevice(nullptr)
     , maBColorModifierStack()
     , mpOwnedSurface(nullptr)
     , mpRT(nullptr)
@@ -961,7 +962,42 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
           officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get())
     , mnClipRecursionCount(0)
     , mbCairoCoordinateLimitWorkaroundActive(false)
-    , maXGraphics()
+{
+    // no target, nothing to initialize
+    if (nullptr == pTarget)
+        return;
+
+    // create RenderTarget for full target
+    mpRT = cairo_create(pTarget);
+
+    if (nullptr == mpRT)
+        // error, invalid
+        return;
+
+    // initialize some basic used values/settings
+    cairo_set_antialias(mpRT, rViewInformation.getUseAntiAliasing() ? CAIRO_ANTIALIAS_DEFAULT
+                                                                    : CAIRO_ANTIALIAS_NONE);
+    cairo_set_fill_rule(mpRT, CAIRO_FILL_RULE_EVEN_ODD);
+    cairo_set_operator(mpRT, CAIRO_OPERATOR_OVER);
+
+    // evaluate if CairoCoordinateLimitWorkaround is needed
+    evaluateCairoCoordinateLimitWorkaround();
+}
+
+CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation,
+                                             tools::Long nWidthPixel, tools::Long nHeightPixel,
+                                             bool bUseRGBA)
+    : BaseProcessor2D(rViewInformation)
+    , mpTargetOutputDevice(nullptr)
+    , maBColorModifierStack()
+    , mpOwnedSurface(nullptr)
+    , mpRT(nullptr)
+    , mbRenderSimpleTextDirect(
+          officecfg::Office::Common::Drawinglayer::RenderSimpleTextDirect::get())
+    , mbRenderDecoratedTextDirect(
+          officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get())
+    , mnClipRecursionCount(0)
+    , mbCairoCoordinateLimitWorkaroundActive(false)
 {
     if (nWidthPixel <= 0 || nHeightPixel <= 0)
         // no size, invalid
@@ -991,11 +1027,10 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
     evaluateCairoCoordinateLimitWorkaround();
 }
 
-CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation,
-                                             cairo_surface_t* pTarget, tools::Long nOffsetPixelX,
-                                             tools::Long nOffsetPixelY, tools::Long nWidthPixel,
-                                             tools::Long nHeightPixel)
+CairoPixelProcessor2D::CairoPixelProcessor2D(OutputDevice& rOutputDevice,
+                                             const geometry::ViewInformation2D& rViewInformation)
     : BaseProcessor2D(rViewInformation)
+    , mpTargetOutputDevice(&rOutputDevice)
     , maBColorModifierStack()
     , mpOwnedSurface(nullptr)
     , mpRT(nullptr)
@@ -1005,12 +1040,20 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
           officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get())
     , mnClipRecursionCount(0)
     , mbCairoCoordinateLimitWorkaroundActive(false)
-    , maXGraphics()
 {
+    SystemGraphicsData aData(mpTargetOutputDevice->GetSystemGfxData());
+    cairo_surface_t* pTarget(static_cast<cairo_surface_t*>(aData.pSurface));
+
     // no target, nothing to initialize
     if (nullptr == pTarget)
         return;
 
+    // get evtl. offsets if OutputDevice is e.g. a OUTDEV_WINDOW
+    // to evaluate if initial clip is needed
+    const tools::Long nOffsetPixelX(mpTargetOutputDevice->GetOutOffXPixel());
+    const tools::Long nOffsetPixelY(mpTargetOutputDevice->GetOutOffYPixel());
+    const tools::Long nWidthPixel(mpTargetOutputDevice->GetOutputWidthPixel());
+    const tools::Long nHeightPixel(mpTargetOutputDevice->GetOutputHeightPixel());
     bool bClipNeeded(false);
 
     if (0 != nOffsetPixelX || 0 != nOffsetPixelY || 0 != nWidthPixel || 0 != nHeightPixel)
@@ -1036,14 +1079,22 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
 
     if (bClipNeeded)
     {
-        // optional: if the possibility to add an initial clip relative
-        // to the real pixel dimensions of the target surface is used,
-        // apply it here using that nice existing method of cairo
+        // Make use of the possibility to add an initial clip relative
+        // to the 'real' pixel dimensions of the target surface. This is e.g.
+        // needed here due to the existence of 'virtual' target surfaces that
+        // internally use an offset and limited pixel size, mainly used for
+        // UI elements.
+        // let the CairoPixelProcessor2D do this, it has internal,
+        // system-specific possibilities to do that in an elegant and
+        // efficient way (using cairo_surface_create_for_rectangle).
         mpOwnedSurface = cairo_surface_create_for_rectangle(pTarget, nOffsetPixelX, nOffsetPixelY,
                                                             nWidthPixel, nHeightPixel);
 
-        if (nullptr != mpOwnedSurface)
-            mpRT = cairo_create(mpOwnedSurface);
+        if (nullptr == mpOwnedSurface)
+            // error, invalid
+            return;
+
+        mpRT = cairo_create(mpOwnedSurface);
     }
     else
     {
@@ -1051,14 +1102,19 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
         mpRT = cairo_create(pTarget);
     }
 
-    if (nullptr != mpRT)
-    {
-        // initialize some basic used values/settings
-        cairo_set_antialias(mpRT, rViewInformation.getUseAntiAliasing() ? CAIRO_ANTIALIAS_DEFAULT
-                                                                        : CAIRO_ANTIALIAS_NONE);
-        cairo_set_fill_rule(mpRT, CAIRO_FILL_RULE_EVEN_ODD);
-        cairo_set_operator(mpRT, CAIRO_OPERATOR_OVER);
-    }
+    if (nullptr == mpRT)
+        // error, invalid
+        return;
+
+    // initialize some basic used values/settings
+    cairo_set_antialias(mpRT, rViewInformation.getUseAntiAliasing() ? CAIRO_ANTIALIAS_DEFAULT
+                                                                    : CAIRO_ANTIALIAS_NONE);
+    cairo_set_fill_rule(mpRT, CAIRO_FILL_RULE_EVEN_ODD);
+    cairo_set_operator(mpRT, CAIRO_OPERATOR_OVER);
+
+    // prepare output directly to pixels
+    mpTargetOutputDevice->Push(vcl::PushFlags::MAPMODE);
+    mpTargetOutputDevice->SetMapMode();
 
     // evaluate if CairoCoordinateLimitWorkaround is needed
     evaluateCairoCoordinateLimitWorkaround();
@@ -1066,6 +1122,8 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
 
 CairoPixelProcessor2D::~CairoPixelProcessor2D()
 {
+    if (nullptr != mpTargetOutputDevice) // restore MapMode
+        mpTargetOutputDevice->Pop();
     if (nullptr != mpRT)
         cairo_destroy(mpRT);
     if (nullptr != mpOwnedSurface)
@@ -3889,26 +3947,32 @@ void CairoPixelProcessor2D::processControlPrimitive2D(
 
     try
     {
-        if (getXGraphics().is())
+        if (nullptr != mpTargetOutputDevice)
         {
-            // Needs to be drawn. Link new graphics and view
-            const uno::Reference<awt::XControl>& rXControl(rControlPrimitive.getXControl());
-            uno::Reference<awt::XView> xControlView(rXControl, uno::UNO_QUERY_THROW);
-            const uno::Reference<awt::XGraphics> xOriginalGraphics(xControlView->getGraphics());
-            xControlView->setGraphics(getXGraphics());
+            const uno::Reference<awt::XGraphics> xTargetGraphics(
+                mpTargetOutputDevice->CreateUnoGraphics());
 
-            // get position
-            const basegfx::B2DHomMatrix aObjectToPixel(
-                getViewInformation2D().getObjectToViewTransformation()
-                * rControlPrimitive.getTransform());
-            const basegfx::B2DPoint aTopLeftPixel(aObjectToPixel * basegfx::B2DPoint(0.0, 0.0));
+            if (xTargetGraphics.is())
+            {
+                // Needs to be drawn. Link new graphics and view
+                const uno::Reference<awt::XControl>& rXControl(rControlPrimitive.getXControl());
+                uno::Reference<awt::XView> xControlView(rXControl, uno::UNO_QUERY_THROW);
+                const uno::Reference<awt::XGraphics> xOriginalGraphics(xControlView->getGraphics());
+                xControlView->setGraphics(xTargetGraphics);
 
-            xControlView->draw(basegfx::fround(aTopLeftPixel.getX()),
-                               basegfx::fround(aTopLeftPixel.getY()));
+                // get position
+                const basegfx::B2DHomMatrix aObjectToPixel(
+                    getViewInformation2D().getObjectToViewTransformation()
+                    * rControlPrimitive.getTransform());
+                const basegfx::B2DPoint aTopLeftPixel(aObjectToPixel * basegfx::B2DPoint(0.0, 0.0));
 
-            // restore original graphics
-            xControlView->setGraphics(xOriginalGraphics);
-            bDone = true;
+                xControlView->draw(basegfx::fround(aTopLeftPixel.getX()),
+                                   basegfx::fround(aTopLeftPixel.getY()));
+
+                // restore original graphics
+                xControlView->setGraphics(xOriginalGraphics);
+                bDone = true;
+            }
         }
     }
     catch (const uno::Exception&)

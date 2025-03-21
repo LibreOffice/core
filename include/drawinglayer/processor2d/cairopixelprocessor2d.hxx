@@ -13,7 +13,7 @@
 #include <basegfx/color/bcolormodifier.hxx>
 #include <tools/long.hxx>
 #include <sal/config.h>
-#include <com/sun/star/awt/XGraphics.hpp>
+#include <vcl/vclptr.hxx>
 
 // cairo-specific
 #include <cairo.h>
@@ -62,12 +62,16 @@ class B2DHomMatrixBufferedOnDemandDecompose;
 }
 
 class BitmapEx;
+class OutputDevice;
 class SalLayout;
 
 namespace drawinglayer::processor2d
 {
 class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : public BaseProcessor2D
 {
+    // the OutputDevice if this renderer is associated with one, else nullptr
+    VclPtr<OutputDevice> mpTargetOutputDevice;
+
     // the modifiedColorPrimitive stack
     basegfx::BColorModifierStack maBColorModifierStack;
 
@@ -89,9 +93,6 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
 
     // calculated result of if we are in outsideCairoCoordinateLimits mode
     bool mbCairoCoordinateLimitWorkaroundActive;
-
-    // the XGraphics which may be set using setXGraphics()
-    com::sun::star::uno::Reference<com::sun::star::awt::XGraphics> maXGraphics;
 
     // helpers for direct paints
     void paintPolyPolygonRGBA(const basegfx::B2DPolyPolygon& rPolyPolygon,
@@ -192,20 +193,21 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
 protected:
     bool hasError() const { return cairo_status(mpRT) != CAIRO_STATUS_SUCCESS; }
     bool hasRenderTarget() const { return nullptr != mpRT; }
-    const com::sun::star::uno::Reference<com::sun::star::awt::XGraphics>& getXGraphics() const
-    {
-        return maXGraphics;
-    }
+
+    // constructor to create a CairoPixelProcessor2D for
+    // the given cairo_surface_t pTarget. pTarget will not
+    // be owned and not destroyed, but be used as render
+    // target. You should check the result using valid()
+    CairoPixelProcessor2D(
+
+        // the ViewInformation
+        const geometry::ViewInformation2D& rViewInformation,
+
+        // the cairo render target
+        cairo_surface_t* pTarget);
 
 public:
     bool valid() const { return hasRenderTarget() && !hasError(); }
-
-    // set a XGraphics for this CairoPixelProcessor2D when it is available
-    void
-    setXGraphics(const com::sun::star::uno::Reference<com::sun::star::awt::XGraphics>& rXGraphics)
-    {
-        maXGraphics = rXGraphics;
-    }
 
     // read access to CairoCoordinateLimitWorkaround mechanism
     bool isCairoCoordinateLimitWorkaroundActive() const
@@ -227,24 +229,16 @@ public:
         // define RGBA (true) or RGB (false)
         bool bUseRGBA);
 
-    // constructor to create a CairoPixelProcessor2D for
-    // the given cairo_surface_t pTarget. pTarget will not
-    // be owned and not destroyed, but be used as render
-    // target. If needed you can define a sub-rectangle
-    // to which the rendering will be limited (clipped).
-    // You should check the result using valid()
+    // constructor to create a CairoPixelProcessor2D
+    // associated with an OutputDevice. You should
+    // check the result using valid()
     CairoPixelProcessor2D(
 
+        // the OutputDevice this processor shall be associated with
+        OutputDevice& rOutputDevice,
+
         // the initial ViewInformation
-        const geometry::ViewInformation2D& rViewInformation,
-
-        // the cairo render target
-        cairo_surface_t* pTarget,
-
-        // optional: possibility to add an initial clip relative to
-        // the real pixel dimensions of the target surface
-        tools::Long nOffsetPixelX = 0, tools::Long nOffsetPixelY = 0, tools::Long nWidthPixel = 0,
-        tools::Long nHeightPixel = 0);
+        const geometry::ViewInformation2D& rViewInformation);
 
     virtual ~CairoPixelProcessor2D() override;
 
