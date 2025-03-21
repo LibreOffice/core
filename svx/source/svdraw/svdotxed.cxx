@@ -75,8 +75,8 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
     if(pOutlinerParaObject!=nullptr)
     {
-        rOutl.SetText(*GetOutlinerParaObject());
         rOutl.SetFixedCellHeight(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
+        rOutl.SetText(*GetOutlinerParaObject());
     }
 
     // if necessary, set frame attributes for the first (new) paragraph of the

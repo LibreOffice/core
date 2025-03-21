@@ -2350,8 +2350,9 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
                     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
                     if( pOutlinerParaObject != nullptr )
                     {
+                        rOutliner.SetFixedCellHeight(
+                            GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
                         rOutliner.SetText(*pOutlinerParaObject);
-                        rOutliner.SetFixedCellHeight(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
                     }
                     if ( bWdtGrow )
                     {

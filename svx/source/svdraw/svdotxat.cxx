@@ -149,8 +149,8 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
         OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
         if (pOutlinerParaObject)
         {
-            rOutliner.SetText(*pOutlinerParaObject);
             rOutliner.SetFixedCellHeight(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
+            rOutliner.SetText(*pOutlinerParaObject);
         }
 
         if (bWdtGrow)
