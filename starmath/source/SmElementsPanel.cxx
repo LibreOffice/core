@@ -61,7 +61,10 @@ SmElementsPanel::SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBind
     mxElementsControl->setElementSetIndex(0);
     mxElementsControl->SetSelectHdl(LINK(this, SmElementsPanel, ElementClickHandler));
 
-    StartListening(*GetView());
+    SmViewShell* pViewSh = GetView();
+    SAL_WARN_IF(pViewSh, "starmath", "No View for SmElementsPanel to listen to");
+    if (pViewSh)
+        StartListening(*pViewSh);
 }
 
 SmElementsPanel::~SmElementsPanel()
