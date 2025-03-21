@@ -75,3 +75,9 @@ in `officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu`
 8 bit palettes are on the slow path for `quartz/svp/gtk3` so avoid using palettes with...
 
     $ optipng -nc <file>
+
+## How to minify SVG files
+
+Install https://github.com/tdewolff/minify and run
+
+    $ minify -o outputfile.svg inputfile.svg
