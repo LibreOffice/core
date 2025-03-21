@@ -32,6 +32,7 @@
 #include <o3tl/string_view.hxx>
 
 #include <doc.hxx>
+#include <fmtanchr.hxx>
 #include <pam.hxx>
 #include <shellio.hxx>
 #include <paratr.hxx>
@@ -492,6 +493,16 @@ bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
         SetFrameFormatAttrs( rItemSet,
                         HtmlFrameFormatFlags::Box|HtmlFrameFormatFlags::Padding|HtmlFrameFormatFlags::Background|HtmlFrameFormatFlags::Direction,
                         aFrameItemSet );
+
+        const SwFormatAnchor& rAnch = aFrameItemSet.Get(RES_ANCHOR);
+        if (SwNode* pAnchorNode = rAnch.GetAnchorNode())
+        {
+            if (pAnchorNode->IsEndNode())
+            {
+                SAL_WARN("sw.html", "Invalid EndNode Anchor");
+                aFrameItemSet.ClearItem(RES_ANCHOR);
+            }
+        }
 
         InsertFlyFrame(aFrameItemSet, pContext, rPropInfo.m_aId);
         pContext->SetPopStack( true );
