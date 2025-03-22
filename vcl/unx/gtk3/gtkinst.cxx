@@ -4763,7 +4763,7 @@ namespace
 
     OUString get_primary_text(GtkMessageDialog* pMessageDialog)
     {
-        gchar* pText = nullptr;
+        g_autofree char* pText = nullptr;
         g_object_get(G_OBJECT(pMessageDialog), "text", &pText, nullptr);
         return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
     }
@@ -4784,7 +4784,7 @@ namespace
 
     OUString get_secondary_text(GtkMessageDialog* pMessageDialog)
     {
-        gchar* pText = nullptr;
+        g_autofree char* pText = nullptr;
         g_object_get(G_OBJECT(pMessageDialog), "secondary-text", &pText, nullptr);
         return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
     }
