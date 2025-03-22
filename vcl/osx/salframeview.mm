@@ -320,12 +320,19 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
                                  defer: Application::IsHeadlessModeEnabled()];
 
     // Enable fullscreen options if available and useful
-    bool bAllowFullScreen = (SalFrameStyleFlags::NONE == (mpFrame->mnStyle & (SalFrameStyleFlags::DIALOG | SalFrameStyleFlags::TOOLTIP | SalFrameStyleFlags::SYSTEMCHILD | SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::TOOLWINDOW | SalFrameStyleFlags::INTRO)));
-    bAllowFullScreen &= (SalFrameStyleFlags::NONE == (~mpFrame->mnStyle & SalFrameStyleFlags::SIZEABLE));
-    bAllowFullScreen &= (mpFrame->mpParent == nullptr);
+    if ( officecfg::Office::Common::VCL::macOS::EnableNativeFullScreenWindows::get() )
+    {
+        bool bAllowFullScreen = (SalFrameStyleFlags::NONE == (mpFrame->mnStyle & (SalFrameStyleFlags::DIALOG | SalFrameStyleFlags::TOOLTIP | SalFrameStyleFlags::SYSTEMCHILD | SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::TOOLWINDOW | SalFrameStyleFlags::INTRO)));
+        bAllowFullScreen &= (SalFrameStyleFlags::NONE == (~mpFrame->mnStyle & SalFrameStyleFlags::SIZEABLE));
+        bAllowFullScreen &= (mpFrame->mpParent == nullptr);
+        [pNSWindow setCollectionBehavior: (bAllowFullScreen ? NSWindowCollectionBehaviorFullScreenPrimary : NSWindowCollectionBehaviorFullScreenAuxiliary)];
+    }
+    else
+    {
+        [pNSWindow setCollectionBehavior: NSWindowCollectionBehaviorFullScreenNone];
+    }
 
     [pNSWindow setReleasedWhenClosed: NO];
-    [pNSWindow setCollectionBehavior: (bAllowFullScreen ? NSWindowCollectionBehaviorFullScreenPrimary : NSWindowCollectionBehaviorFullScreenAuxiliary)];
 
     // Disable window restoration until we support it directly
     [pNSWindow setRestorable: NO];

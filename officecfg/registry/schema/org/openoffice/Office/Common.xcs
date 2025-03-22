@@ -702,6 +702,14 @@
         <value>15</value>
       </prop>
       <group oor:name="macOS">
+        <prop oor:name="EnableNativeFullScreenWindows" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+             <desc>Specifies if clicking the green button in a window's
+             titlebar causes the window to switch to native full screen
+             mode.</desc>
+          </info>
+          <value>true</value>
+        </prop>
         <prop oor:name="IgnoreKeysWhenScrollingWithTrackpadOrMagicMouse" oor:type="xs:boolean" oor:nillable="false">
           <info>
              <desc>Specifies if the Command, Option, Control, and Shift keys

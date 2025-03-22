@@ -400,6 +400,19 @@ void AquaSalMenu::setDefaultMenu()
         if( [pItem menu] == nil )
             [pMenu insertItem: pItem atIndex: i+1];
     }
+
+    // Related: tdf#128186 force key window to a native full screen window
+    // AquaSalMenu::setDefaultMenu() is generally called when the key
+    // window has been closed. When not in native full screen mode,
+    // macOS appears to automatically set the key window.
+    // However, closing a native full screen window sometimes causes
+    // the application to drop out of full screen mode even if there
+    // are still native full screen windows open. So, if the application
+    // is active, activate all windows to force macOS to set the key
+    // to a window rather than leaving the application in a state where
+    // the key window is nil.
+    if( [NSApp isActive] )
+        [[NSRunningApplication currentApplication] activateWithOptions: NSApplicationActivateAllWindows];
 }
 
 void AquaSalMenu::enableMainMenu( bool bEnable )
