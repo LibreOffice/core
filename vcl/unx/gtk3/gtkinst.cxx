@@ -24145,7 +24145,8 @@ private:
             }
 
             // if no tooltip reuse the label as default tooltip
-            if (!gtk_widget_get_tooltip_text(pWidget))
+            g_autofree char* pTooltipText = gtk_widget_get_tooltip_text(pWidget);
+            if (!pTooltipText)
             {
                 if (const gchar* label = gtk_tool_button_get_label(pToolButton))
                     gtk_widget_set_tooltip_text(pWidget, label);
