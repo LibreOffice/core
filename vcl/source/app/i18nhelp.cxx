@@ -47,7 +47,7 @@ vcl::I18nHelper::~I18nHelper()
 
 void vcl::I18nHelper::ImplDestroyWrappers()
 {
-    mpLocaleDataWrapper.reset();
+    mpLocaleDataWrapper = nullptr;
     mpTransliterationWrapper.reset();
 }
 
@@ -65,11 +65,11 @@ utl::TransliterationWrapper& vcl::I18nHelper::ImplGetTransliterationWrapper() co
     return *mpTransliterationWrapper;
 }
 
-LocaleDataWrapper& vcl::I18nHelper::ImplGetLocaleDataWrapper() const
+const LocaleDataWrapper& vcl::I18nHelper::ImplGetLocaleDataWrapper() const
 {
     if ( !mpLocaleDataWrapper )
     {
-        const_cast<vcl::I18nHelper*>(this)->mpLocaleDataWrapper.reset(new LocaleDataWrapper( m_xContext, maLanguageTag ));
+        const_cast<vcl::I18nHelper*>(this)->mpLocaleDataWrapper = LocaleDataWrapper::get( maLanguageTag );
     }
     return *mpLocaleDataWrapper;
 }

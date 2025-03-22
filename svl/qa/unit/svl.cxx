@@ -2009,8 +2009,8 @@ CPPUNIT_TEST_FIXTURE(Test, testLanguageNone)
     sal_uInt32 nKey = aFormatter.GetEntryKey(code, LANGUAGE_GERMAN);
     CPPUNIT_ASSERT(nKey != NUMBERFORMAT_ENTRY_NOT_FOUND);
     SvNumberformat const*const pFormat = aFormatter.GetEntry(nKey);
-    LocaleDataWrapper ldw(m_xContext, LanguageTag(pFormat->GetLanguage()));
-    CPPUNIT_ASSERT_EQUAL(u"dd.mm.yyyy"_ustr, pFormat->GetMappedFormatstring(keywords, ldw));
+    const LocaleDataWrapper* ldw = LocaleDataWrapper::get(LanguageTag(pFormat->GetLanguage()));
+    CPPUNIT_ASSERT_EQUAL(u"dd.mm.yyyy"_ustr, pFormat->GetMappedFormatstring(keywords, *ldw));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf160306)

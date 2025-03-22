@@ -4649,8 +4649,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     bInitializing = true;
 
     LanguageType eSysLang = SvtSysLocale().GetLanguageTag().getLanguageType();
-    std::optional<LocaleDataWrapper> pLocaleData(std::in_place,
-        ::comphelper::getProcessComponentContext(),
+    const LocaleDataWrapper* pLocaleData = LocaleDataWrapper::get(
         SvtSysLocale().GetLanguageTag() );
     // get user configured currency
     OUString aConfiguredCurrencyAbbrev;
@@ -4676,9 +4675,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     {
         LanguageType eLang = LanguageTag::convertToLanguageType( rLocale, false);
         theInstalledLocales.insert( eLang);
-        pLocaleData.emplace(
-            ::comphelper::getProcessComponentContext(),
-            LanguageTag(rLocale) );
+        pLocaleData = LocaleDataWrapper::get( LanguageTag(rLocale) );
         Sequence< Currency2 > aCurrSeq = pLocaleData->getAllCurrencies();
         sal_Int32 nCurrencyCount = aCurrSeq.getLength();
         Currency2 const * const pCurrencies = aCurrSeq.getConstArray();
@@ -4790,7 +4787,6 @@ void SvNumberFormatter::ImpInitCurrencyTable()
         LocaleDataWrapper::outputCheckMessage(
                 "SvNumberFormatter::ImpInitCurrencyTable: system currency not in I18N locale data.");
     }
-    pLocaleData.reset();
     SvtSysLocaleOptions::SetCurrencyChangeLink( LINK( nullptr, SvNumberFormatter, CurrencyChangeLink ) );
     bInitializing = false;
     g_CurrencyTableInitialized = true;

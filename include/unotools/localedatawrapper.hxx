@@ -119,11 +119,18 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
 
     SAL_DLLPRIVATE void loadDigitGrouping();
 
-public:
     LocaleDataWrapper(
         const css::uno::Reference< css::uno::XComponentContext > & rxContext,
         LanguageTag aLanguageTag
         );
+
+public:
+
+    /**
+     * retrieve a cached LocaleDataWrapper
+     */
+    static const LocaleDataWrapper* get(const LanguageTag& aLanguageTag);
+
     /**
         @param rOverrideDateAcceptancePatterns Override locale's date acceptance patterns.
             An empty sequence resets the patterns to the locale's pattern sequence.

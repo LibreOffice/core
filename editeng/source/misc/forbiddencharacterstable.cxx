@@ -44,8 +44,8 @@ SvxForbiddenCharactersTable::GetForbiddenCharacters(LanguageType nLanguage, bool
         pForbiddenCharacters = &(it->second);
     else if (bGetDefault && m_xContext.is())
     {
-        LocaleDataWrapper aWrapper(m_xContext, LanguageTag(nLanguage));
-        maMap[nLanguage] = aWrapper.getForbiddenCharacters();
+        const LocaleDataWrapper* pWrapper = LocaleDataWrapper::get(LanguageTag(nLanguage));
+        maMap[nLanguage] = pWrapper->getForbiddenCharacters();
         pForbiddenCharacters = &maMap[nLanguage];
     }
     return pForbiddenCharacters;

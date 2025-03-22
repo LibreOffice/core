@@ -224,14 +224,13 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
 
     if ( m_pFormatter )
     {
-        m_pLocaleData.reset( new LocaleDataWrapper( m_pFormatter->GetComponentContext(),
-            m_pFormatter->GetLanguageTag() ) );
+        m_pLocaleData = LocaleDataWrapper::get( m_pFormatter->GetLanguageTag() );
     }
     else
     {
         LanguageTag aLanguageTag( MsLangId::getConfiguredSystemLanguage() );
 
-        m_pLocaleData.reset( new LocaleDataWrapper( m_rExport.getComponentContext(), std::move(aLanguageTag) ) );
+        m_pLocaleData = LocaleDataWrapper::get( std::move(aLanguageTag) );
     }
 
     m_pUsedList.reset(new SvXMLNumUsedList_Impl);
@@ -254,14 +253,13 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
 
     if ( m_pFormatter )
     {
-        m_pLocaleData.reset( new LocaleDataWrapper( m_pFormatter->GetComponentContext(),
-            m_pFormatter->GetLanguageTag() ) );
+        m_pLocaleData = LocaleDataWrapper::get( m_pFormatter->GetLanguageTag() );
     }
     else
     {
         LanguageTag aLanguageTag( MsLangId::getConfiguredSystemLanguage() );
 
-        m_pLocaleData.reset( new LocaleDataWrapper( m_rExport.getComponentContext(), std::move(aLanguageTag) ) );
+        m_pLocaleData = LocaleDataWrapper::get( std::move(aLanguageTag) );
     }
 
     m_pUsedList.reset(new SvXMLNumUsedList_Impl);
@@ -1780,8 +1778,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         if ( nElemType == NF_KEY_NNNN )
                         {
                             //  write additional text element for separator
-                            m_pLocaleData.reset( new LocaleDataWrapper( m_pFormatter->GetComponentContext(),
-                                LanguageTag( nLang ) ) );
+                            m_pLocaleData = LocaleDataWrapper::get( LanguageTag( nLang ) );
                             AddToTextElement_Impl( m_pLocaleData->getLongDateDayOfWeekSep() );
                         }
                     }

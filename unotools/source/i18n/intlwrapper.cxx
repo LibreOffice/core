@@ -37,7 +37,7 @@ IntlWrapper::~IntlWrapper()
 
 void IntlWrapper::ImplNewLocaleData() const
 {
-    const_cast<IntlWrapper*>(this)->pLocaleData.reset( new LocaleDataWrapper( m_xContext, maLanguageTag ) );
+    const_cast<IntlWrapper*>(this)->pLocaleData = LocaleDataWrapper::get( maLanguageTag );
 }
 
 void IntlWrapper::ImplNewCollator( bool bCaseSensitive ) const

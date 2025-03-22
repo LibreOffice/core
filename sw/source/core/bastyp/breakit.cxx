@@ -75,10 +75,10 @@ void SwBreakIt::GetLocale_( const LanguageTag& rLanguageTag )
 
 void SwBreakIt::GetForbidden_( const LanguageType aLang )
 {
-    LocaleDataWrapper aWrap(m_xContext, GetLanguageTag(aLang));
+    const LocaleDataWrapper* pWrap = LocaleDataWrapper::get(GetLanguageTag(aLang));
 
     m_aForbiddenLang = aLang;
-    m_oForbidden.emplace(aWrap.getForbiddenCharacters());
+    m_oForbidden.emplace(pWrap->getForbiddenCharacters());
 }
 
 sal_uInt16 SwBreakIt::GetRealScriptOfText( const OUString& rText, sal_Int32 nPos ) const

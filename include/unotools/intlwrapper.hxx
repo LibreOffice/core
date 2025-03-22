@@ -54,7 +54,7 @@ private:
     LanguageTag         maLanguageTag;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-    std::unique_ptr<LocaleDataWrapper>  pLocaleData;
+    const LocaleDataWrapper*  pLocaleData { nullptr };
     std::optional<CollatorWrapper>    moCollator;
     std::optional<CollatorWrapper>    moCaseCollator;
 
@@ -69,7 +69,7 @@ public:
                                     {
                                         if ( !pLocaleData )
                                             ImplNewLocaleData();
-                                        return pLocaleData.get();
+                                        return pLocaleData;
                                     }
     /// case insensitive collator, simple IGNORE_CASE
     const CollatorWrapper*      getCollator() const

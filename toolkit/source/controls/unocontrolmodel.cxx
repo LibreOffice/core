@@ -330,14 +330,14 @@ css::uno::Any UnoControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
                 }
 
                 // the remaining is the locale
-                LocaleDataWrapper aLocaleInfo( m_xContext, LanguageTag(sDefaultCurrency) );
+                const LocaleDataWrapper* pLocaleInfo = LocaleDataWrapper::get( LanguageTag(sDefaultCurrency) );
                 if ( sBankSymbol.isEmpty() )
-                    sBankSymbol = aLocaleInfo.getCurrBankSymbol();
+                    sBankSymbol = pLocaleInfo->getCurrBankSymbol();
 
                 // look for the currency entry (for this language) which has the given bank symbol
-                const Sequence< Currency2 > aAllCurrencies = aLocaleInfo.getAllCurrencies();
+                const Sequence< Currency2 > aAllCurrencies = pLocaleInfo->getAllCurrencies();
 
-                OUString sCurrencySymbol = aLocaleInfo.getCurrSymbol();
+                OUString sCurrencySymbol = pLocaleInfo->getCurrSymbol();
                 if ( sBankSymbol.isEmpty() )
                 {
                     DBG_ASSERT( aAllCurrencies.hasElements(), "UnoControlModel::ImplGetDefaultValue: no currencies at all!" );
