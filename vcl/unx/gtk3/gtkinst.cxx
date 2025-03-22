@@ -24218,7 +24218,11 @@ private:
         if (m_pStringReplace)
         {
             // tdf#136498 %PRODUCTNAME shown in tool tips
+#if GTK_CHECK_VERSION(4, 0, 0)
             const char* pTooltip = gtk_widget_get_tooltip_text(pWidget);
+#else
+            g_autofree char* pTooltip = gtk_widget_get_tooltip_text(pWidget);
+#endif
             if (pTooltip && pTooltip[0])
             {
                 OUString aTooltip(pTooltip, strlen(pTooltip), RTL_TEXTENCODING_UTF8);
