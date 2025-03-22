@@ -236,7 +236,8 @@ bool SalLayout::GetBoundRect(basegfx::B2DRectangle& rRect) const
         {
             if (!aRectangle.isEmpty())
             {
-                aRectangle.transform(basegfx::utils::createTranslateB2DHomMatrix(aPos));
+                // translate rectangle to correct position
+                aRectangle.translate(aPos);
                 // merge rectangle
                 rRect.expand(aRectangle);
             }
