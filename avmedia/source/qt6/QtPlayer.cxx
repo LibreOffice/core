@@ -72,9 +72,11 @@ void SAL_CALL QtPlayer::stop()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    assert(m_xMediaPlayer);
-    // don't use QMediaPlayer::stop because XPlayer::stop should leave the position unchanged
-    m_xMediaPlayer->pause();
+    if (m_xMediaPlayer)
+    {
+        // don't use QMediaPlayer::stop because XPlayer::stop should leave the position unchanged
+        m_xMediaPlayer->pause();
+    }
 }
 
 sal_Bool SAL_CALL QtPlayer::isPlaying()
@@ -284,9 +286,13 @@ void SAL_CALL QtPlayer::disposing()
 
 QtPlayer::~QtPlayer()
 {
-    // ensure output objects get deleted as QMediaPlayer doesn't take ownership of them
-    std::unique_ptr<QObject> xVideoWidget(m_xMediaPlayer->videoOutput());
-    std::unique_ptr<QAudioOutput> xAudioOutput(m_xMediaPlayer->audioOutput());
+    if (m_xMediaPlayer)
+    {
+        // ensure output objects get deleted as QMediaPlayer doesn't take ownership of them
+        std::unique_ptr<QObject> xVideoWidget(m_xMediaPlayer->videoOutput());
+        std::unique_ptr<QAudioOutput> xAudioOutput(m_xMediaPlayer->audioOutput());
+    }
+
     m_xMediaPlayer.reset();
 }
 
