@@ -114,6 +114,7 @@ inline constexpr OUString PROPERTY_SHOW_SCROLLBARS = u"ShowScrollbars"_ustr;
 inline constexpr OUString PROPERTY_TABSTOP = u"Tabstop"_ustr;
 inline constexpr OUString PROPERTY_AUTOCOMPLETE = u"Autocomplete"_ustr;
 inline constexpr OUString PROPERTY_PRINTABLE = u"Printable"_ustr;
+inline constexpr OUString PROPERTY_PRIVILEGES = u"Privileges"_ustr;
 inline constexpr OUString PROPERTY_ECHO_CHAR = u"EchoChar"_ustr;
 inline constexpr OUString PROPERTY_ROWHEIGHT = u"RowHeight"_ustr;
 inline constexpr OUString PROPERTY_HELPTEXT = u"HelpText"_ustr;

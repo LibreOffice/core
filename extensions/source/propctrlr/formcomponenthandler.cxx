@@ -54,6 +54,7 @@
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
@@ -1513,6 +1514,9 @@ namespace pcr
             if ( !_bFirstTimeInit && m_bHaveCommand )
                 lcl_rebuildAndResetCommand( _rxInspectorUI, this );
             aDependentProperties.push_back( PROPERTY_ID_COMMAND );
+            aDependentProperties.push_back(PROPERTY_ID_ALLOWADDITIONS);
+            aDependentProperties.push_back(PROPERTY_ID_ALLOWEDITS);
+            aDependentProperties.push_back(PROPERTY_ID_ALLOWDELETIONS);
             break;  // case PROPERTY_ID_COMMANDTYPE
 
         // ----- DataSourceName -----
@@ -1536,6 +1540,9 @@ namespace pcr
         case PROPERTY_ID_COMMAND:
             aDependentProperties.push_back( PROPERTY_ID_FILTER );
             aDependentProperties.push_back( PROPERTY_ID_SORT );
+            aDependentProperties.push_back(PROPERTY_ID_ALLOWADDITIONS);
+            aDependentProperties.push_back(PROPERTY_ID_ALLOWEDITS);
+            aDependentProperties.push_back(PROPERTY_ID_ALLOWDELETIONS);
             if ( m_bComponentIsSubForm )
                 aDependentProperties.push_back( PROPERTY_ID_DETAILFIELDS );
             break;
@@ -1785,7 +1792,7 @@ namespace pcr
         }
     }
 
-    void FormComponentPropertyHandler::impl_updateDependentProperty_nothrow( PropertyId _nPropId, const Reference< XObjectInspectorUI >& _rxInspectorUI ) const
+    void FormComponentPropertyHandler::impl_updateDependentProperty_nothrow( PropertyId _nPropId, const Reference< XObjectInspectorUI >& _rxInspectorUI )
     {
         try
         {
@@ -1819,6 +1826,68 @@ namespace pcr
             }
             break;  // case PROPERTY_ID_STRINGITEMLIST
 
+            case PROPERTY_ID_ALLOWADDITIONS:
+            {
+                bool bEnable = false;
+                sal_Int32 nPrivileges = 0;
+                if (m_xComponent->getPropertySetInfo()->hasPropertyByName(PROPERTY_PRIVILEGES))
+                {
+                    m_xComponent->getPropertyValue(PROPERTY_PRIVILEGES) >>= nPrivileges;
+                    bEnable = (nPrivileges & css::sdbcx::Privilege::INSERT) != 0;
+                }
+                _rxInspectorUI->enablePropertyUI(
+                    impl_getPropertyNameFromId_nothrow(PROPERTY_ID_ALLOWADDITIONS),
+                    bEnable
+                );
+                // Set value to false if disabled
+                if (!bEnable)
+                {
+                    setPropertyValue(impl_getPropertyNameFromId_nothrow(PROPERTY_ID_ALLOWADDITIONS), Any(false));
+                }
+            }
+            break;
+
+            case PROPERTY_ID_ALLOWEDITS:
+            {
+                bool bEnable = false;
+                sal_Int32 nPrivileges = 0;
+                if (m_xComponent->getPropertySetInfo()->hasPropertyByName(PROPERTY_PRIVILEGES))
+                {
+                    m_xComponent->getPropertyValue(PROPERTY_PRIVILEGES) >>= nPrivileges;
+                    bEnable = (nPrivileges & css::sdbcx::Privilege::UPDATE) != 0;
+                }
+                _rxInspectorUI->enablePropertyUI(
+                    impl_getPropertyNameFromId_nothrow(PROPERTY_ID_ALLOWEDITS),
+                    bEnable
+                );
+                // Set value to false if disabled
+                if (!bEnable)
+                {
+                    setPropertyValue(impl_getPropertyNameFromId_nothrow(PROPERTY_ID_ALLOWEDITS), Any(false));
+                }
+            }
+            break;
+
+            case PROPERTY_ID_ALLOWDELETIONS:
+            {
+                bool bEnable = false;
+                sal_Int32 nPrivileges = 0;
+                if (m_xComponent->getPropertySetInfo()->hasPropertyByName(PROPERTY_PRIVILEGES))
+                {
+                    m_xComponent->getPropertyValue(PROPERTY_PRIVILEGES) >>= nPrivileges;
+                    bEnable = (nPrivileges & css::sdbcx::Privilege::DELETE) != 0;
+                }
+                _rxInspectorUI->enablePropertyUI(
+                    impl_getPropertyNameFromId_nothrow(PROPERTY_ID_ALLOWDELETIONS),
+                    bEnable
+                );
+                // Set value to false if disabled
+                if (!bEnable)
+                {
+                    setPropertyValue(impl_getPropertyNameFromId_nothrow(PROPERTY_ID_ALLOWDELETIONS), Any(false));
+                }
+            }
+            break;
             // ----- TypedItemList -----
             case PROPERTY_ID_TYPEDITEMLIST:
             {
