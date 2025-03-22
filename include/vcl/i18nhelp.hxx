@@ -45,7 +45,7 @@ class VCL_DLLPUBLIC I18nHelper
     LanguageTag                     maLanguageTag;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-    std::unique_ptr<LocaleDataWrapper>              mpLocaleDataWrapper;
+    const LocaleDataWrapper*              mpLocaleDataWrapper { nullptr };
     std::unique_ptr<utl::TransliterationWrapper>    mpTransliterationWrapper;
 
     bool                            mbTransliterateIgnoreCase;
@@ -53,7 +53,7 @@ class VCL_DLLPUBLIC I18nHelper
     SAL_DLLPRIVATE void             ImplDestroyWrappers();
 
     SAL_DLLPRIVATE utl::TransliterationWrapper&    ImplGetTransliterationWrapper() const;
-    SAL_DLLPRIVATE LocaleDataWrapper&              ImplGetLocaleDataWrapper() const;
+    SAL_DLLPRIVATE const LocaleDataWrapper&        ImplGetLocaleDataWrapper() const;
 
 public:
 

@@ -36,10 +36,9 @@ namespace
             return ScGlobal::getLocaleData().getNumDecimalSep();
         // LocaleDataWrapper can be expensive to construct, so cache the result for
         // repeated calls
-        static std::optional<LocaleDataWrapper> localeCache;
+        static const LocaleDataWrapper* localeCache { nullptr };
         if (!localeCache || localeCache->getLanguageTag().getLanguageType() != nFormatLang)
-            localeCache.emplace(
-                comphelper::getProcessComponentContext(), LanguageTag(nFormatLang));
+            localeCache = LocaleDataWrapper::get(LanguageTag(nFormatLang));
         return localeCache->getNumDecimalSep();
     }
 }

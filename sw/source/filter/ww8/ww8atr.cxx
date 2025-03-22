@@ -2744,11 +2744,10 @@ bool MSWordExportBase::GetNumberFormat(const SwField& rField, OUString& rStr)
         {
             nLng = pNumFormat->GetLanguage();
         }
-        LocaleDataWrapper aLocDat(pNFormatr->GetComponentContext(),
-                                  LanguageTag(nLng));
+        const LocaleDataWrapper* pLocDat = LocaleDataWrapper::get(LanguageTag(nLng));
 
         OUString sFormat(pNumFormat->GetMappedFormatstring(GetNfKeywordTable(),
-            aLocDat));
+            *pLocDat));
 
         if (!sFormat.isEmpty())
         {

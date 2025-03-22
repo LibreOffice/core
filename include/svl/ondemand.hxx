@@ -55,8 +55,8 @@ class OnDemandLocaleDataWrapper
     SvtSysLocale aSysLocale;
     LanguageType eCurrentLanguage;
     LanguageType eLastAnyLanguage;
-    std::optional<LocaleDataWrapper> moEnglish;
-    std::optional<LocaleDataWrapper> moAny;
+    const LocaleDataWrapper* mpEnglish{ nullptr };
+    const LocaleDataWrapper* mpAny{ nullptr };
     int nCurrent; // 0 == system, 1 == english, 2 == any
     bool bInitialized;
 
@@ -86,20 +86,20 @@ public:
             nCurrent = 0;
         else if (eLang == LANGUAGE_ENGLISH_US)
         {
-            if (!moEnglish)
-                moEnglish.emplace(m_xContext, rLanguageTag);
+            if (!mpEnglish)
+                mpEnglish = LocaleDataWrapper::get(rLanguageTag);
             nCurrent = 1;
         }
         else
         {
-            if (!moAny)
+            if (!mpAny)
             {
-                moAny.emplace(m_xContext, rLanguageTag);
+                mpAny = LocaleDataWrapper::get(rLanguageTag);
                 eLastAnyLanguage = eLang;
             }
             else if (eLastAnyLanguage != eLang)
             {
-                moAny.emplace(m_xContext, rLanguageTag);
+                mpAny = LocaleDataWrapper::get(rLanguageTag);
                 eLastAnyLanguage = eLang;
             }
             nCurrent = 2;
@@ -116,9 +116,9 @@ public:
             case 0:
                 return &aSysLocale.GetLocaleData();
             case 1:
-                return &*moEnglish;
+                return mpEnglish;
             case 2:
-                return &*moAny;
+                return mpAny;
             default:
                 assert(false);
                 return nullptr;

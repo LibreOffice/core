@@ -65,7 +65,7 @@ struct SvXMLNumFmtEntry
 class SvXMLNumImpData
 {
     SvNumberFormatter*  pFormatter;
-    std::unique_ptr<LocaleDataWrapper>  pLocaleData;
+    const LocaleDataWrapper*  pLocaleData { nullptr };
     std::vector<SvXMLNumFmtEntry> m_NameEntries;
 
     uno::Reference< uno::XComponentContext > m_xContext;
@@ -370,9 +370,7 @@ void SvXMLNumImpData::RemoveVolatileFormats()
 const LocaleDataWrapper& SvXMLNumImpData::GetLocaleData( LanguageType nLang )
 {
     if ( !pLocaleData || pLocaleData->getLanguageTag() != LanguageTag(nLang) )
-        pLocaleData = std::make_unique<LocaleDataWrapper>(
-               pFormatter ? pFormatter->GetComponentContext() : m_xContext,
-            LanguageTag( nLang ) );
+        pLocaleData = LocaleDataWrapper::get( LanguageTag( nLang ) );
     return *pLocaleData;
 }
 

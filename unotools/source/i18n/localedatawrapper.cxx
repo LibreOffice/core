@@ -43,6 +43,8 @@
 #include <tools/time.hxx>
 #include <tools/duration.hxx>
 #include <o3tl/string_view.hxx>
+#include <map>
+#include <mutex>
 #include <utility>
 
 const sal_uInt16 nCurrFormatDefault = 0;
@@ -58,6 +60,26 @@ namespace
 }
 
 sal_uInt8 LocaleDataWrapper::nLocaleDataChecking = 0;
+
+/**
+ * Loading LocaleDataWrapper can become expensive because of all the function-symbol lookups required, so
+ * we cache these.
+ */
+// static
+const LocaleDataWrapper* LocaleDataWrapper::get(const LanguageTag& aLanguageTag)
+{
+    static std::map<LanguageTag, std::unique_ptr<LocaleDataWrapper>> gCache;
+    static std::mutex gMutex;
+
+    std::unique_lock l(gMutex);
+    auto it = gCache.find(aLanguageTag);
+    if (it != gCache.end())
+        return it->second.get();
+    auto pNew = new LocaleDataWrapper(comphelper::getProcessComponentContext(), aLanguageTag);
+    gCache.insert({aLanguageTag, std::unique_ptr<LocaleDataWrapper>(pNew)});
+    return pNew;
+};
+
 
 LocaleDataWrapper::LocaleDataWrapper(
             const Reference< uno::XComponentContext > & rxContext,

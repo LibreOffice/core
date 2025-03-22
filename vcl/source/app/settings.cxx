@@ -282,9 +282,9 @@ struct ImplAllSettingsData
     SvtSysLocale                            maSysLocale;
     LanguageTag                             maLocale;
     LanguageTag                             maUILocale;
-    mutable std::unique_ptr<LocaleDataWrapper>      mpLocaleDataWrapper;
-    mutable std::unique_ptr<LocaleDataWrapper>      mpUILocaleDataWrapper;
-    mutable std::unique_ptr<LocaleDataWrapper>      mpNeutralLocaleDataWrapper;
+    mutable const LocaleDataWrapper*        mpLocaleDataWrapper { nullptr };
+    mutable const LocaleDataWrapper*        mpUILocaleDataWrapper { nullptr };
+    mutable const LocaleDataWrapper*        mpNeutralLocaleDataWrapper { nullptr };
     mutable std::unique_ptr<vcl::I18nHelper>        mpI18nHelper;
     mutable std::unique_ptr<vcl::I18nHelper>        mpUII18nHelper;
 
@@ -2545,9 +2545,6 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
 
 ImplAllSettingsData::~ImplAllSettingsData()
 {
-    mpLocaleDataWrapper.reset();
-    mpUILocaleDataWrapper.reset();
-    mpNeutralLocaleDataWrapper.reset();
     mpI18nHelper.reset();
     mpUII18nHelper.reset();
 }
@@ -2650,7 +2647,7 @@ void AllSettings::SetLanguageTag( const LanguageTag& rLanguageTag )
 
     if ( myData->mpLocaleDataWrapper )
     {
-        myData->mpLocaleDataWrapper.reset();
+        myData->mpLocaleDataWrapper = nullptr;
     }
     if ( myData->mpI18nHelper )
     {
@@ -2753,24 +2750,21 @@ const LanguageTag& AllSettings::GetUILanguageTag() const
 const LocaleDataWrapper& AllSettings::GetLocaleDataWrapper() const
 {
     if ( !mxData->mpLocaleDataWrapper )
-        mxData->mpLocaleDataWrapper.reset( new LocaleDataWrapper(
-            comphelper::getProcessComponentContext(), GetLanguageTag() ) );
+        mxData->mpLocaleDataWrapper = LocaleDataWrapper::get( GetLanguageTag() );
     return *mxData->mpLocaleDataWrapper;
 }
 
 const LocaleDataWrapper& AllSettings::GetUILocaleDataWrapper() const
 {
     if ( !mxData->mpUILocaleDataWrapper )
-        mxData->mpUILocaleDataWrapper.reset( new LocaleDataWrapper(
-            comphelper::getProcessComponentContext(), GetUILanguageTag() ) );
+        mxData->mpUILocaleDataWrapper = LocaleDataWrapper::get( GetUILanguageTag() );
     return *mxData->mpUILocaleDataWrapper;
 }
 
 const LocaleDataWrapper& AllSettings::GetNeutralLocaleDataWrapper() const
 {
     if ( !mxData->mpNeutralLocaleDataWrapper )
-        mxData->mpNeutralLocaleDataWrapper.reset( new LocaleDataWrapper(
-            comphelper::getProcessComponentContext(), LanguageTag(u"en-US"_ustr) ) );
+        mxData->mpNeutralLocaleDataWrapper = LocaleDataWrapper::get( LanguageTag(u"en-US"_ustr) );
     return *mxData->mpNeutralLocaleDataWrapper;
 }
 

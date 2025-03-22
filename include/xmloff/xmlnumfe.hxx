@@ -54,7 +54,7 @@ private:
     OUStringBuffer              m_sBlankWidthString;
     bool                        m_bHasText;
     std::unique_ptr<SvXMLNumUsedList_Impl>      m_pUsedList;
-    std::unique_ptr<LocaleDataWrapper>          m_pLocaleData;
+    const LocaleDataWrapper*    m_pLocaleData { nullptr };
 
     SAL_DLLPRIVATE void AddCalendarAttr_Impl( const OUString& rCalendar );
     SAL_DLLPRIVATE void AddStyleAttr_Impl( bool bLong );

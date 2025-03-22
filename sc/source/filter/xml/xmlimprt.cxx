@@ -809,11 +809,11 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, std::u16string_vi
                     {
                         {
                             ScXMLImport::MutexGuard aGuard(*this);
-                            LocaleDataWrapper aLocaleData( comphelper::getProcessComponentContext(), LanguageTag( aLocale) );
+                            const LocaleDataWrapper* pLocaleData = LocaleDataWrapper::get( LanguageTag( aLocale) );
                             sFormatString = "#" +
-                                    aLocaleData.getNumThousandSep() +
+                                    pLocaleData->getNumThousandSep() +
                                     "##0" +
-                                    aLocaleData.getNumDecimalSep() +
+                                    pLocaleData->getNumDecimalSep() +
                                     "00 [$" +
                                     rCurrency +
                                     "]";
