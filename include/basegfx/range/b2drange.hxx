@@ -114,6 +114,15 @@ namespace basegfx
         /** Transform Range by given transformation matrix. */
         BASEGFX_DLLPUBLIC void transform(const B2DHomMatrix& rMatrix);
 
+        /** Translate Range (ie. move).
+            Much faster equivalent of transform(createTranslateB2DHomMatrix(xx)). */
+        BASEGFX_DLLPUBLIC void translate(double fTranslateX, double fTranslateY);
+
+        inline void translate(const B2DTuple& rTranslate)
+        {
+            translate(rTranslate.getX(), rTranslate.getY());
+        }
+
         /** Transform Range by given transformation matrix.
 
             This operation transforms the Range by transforming all four possible

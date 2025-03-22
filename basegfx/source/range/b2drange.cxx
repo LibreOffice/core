@@ -48,6 +48,17 @@ namespace basegfx
         }
     }
 
+    void B2DRange::translate(double fTranslateX, double fTranslateY)
+    {
+        if(!(fTools::equalZero(fTranslateX) && fTools::equalZero(fTranslateY)))
+        {
+            *this = basegfx::B2DRange(fTranslateX + getMinX(),
+                                      fTranslateY + getMinY(),
+                                      fTranslateX + getMaxX(),
+                                      fTranslateY + getMaxY());
+        }
+    }
+
     B2DRange& B2DRange::operator*=(const basegfx::B2DHomMatrix& rMatrix)
     {
         transform(rMatrix);
