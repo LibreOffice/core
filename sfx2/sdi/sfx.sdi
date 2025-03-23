@@ -5066,7 +5066,7 @@ SfxVoidItem RedactDoc SID_REDACTDOC
 ]
 
 SfxVoidItem AutoRedactDoc SID_AUTOREDACTDOC
-(SfxStringItem URL SID_FILE_NAME, SfxStringItem FilterName SID_FILTER_NAME)
+(SfxStringItem URL SID_FILE_NAME, SfxStringItem FilterName SID_FILTER_NAME, SfxBoolItem RedactImages SID_REDACT_IMAGE)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

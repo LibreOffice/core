@@ -166,6 +166,7 @@
                   <item id="text" translatable="yes" context="addtargetdialog|type">Text</item>
                   <item id="regex" translatable="yes" context="addtargetdialog|type">Regular expression</item>
                   <item id="predefined" translatable="yes" context="addtargetdialog|type">Predefined</item>
+                  <item id="image" translatable="yes" context="addtargetdialog|type">All Images</item>
                 </items>
                 <accessibility>
                   <relation type="labelled-by" target="label_type"/>

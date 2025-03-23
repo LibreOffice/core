@@ -809,7 +809,16 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             SfxAutoRedactDialog aDlg(pDialogParent);
             sal_Int16 nResult = aDlg.run();
 
-            if (nResult != RET_OK || !aDlg.hasTargets() || !aDlg.isValidState())
+            const SfxBoolItem* redactImage = rReq.GetArg<SfxBoolItem>(SID_REDACT_IMAGE);
+
+            if (redactImage && redactImage->GetValue())
+            {
+                RedactionTarget* redactiontarget
+                    = new RedactionTarget({ "Images", RedactionTargetType::REDACTION_TARGET_IMAGE,
+                                            "All Images", false, false, 0 });
+                aRedactionTargets.push_back({*redactiontarget, redactiontarget->sName});
+            }
+            else if (nResult != RET_OK || !aDlg.hasTargets() || !aDlg.isValidState())
             {
                 //Do nothing
                 return;

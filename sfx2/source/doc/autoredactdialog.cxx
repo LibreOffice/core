@@ -39,6 +39,19 @@ int TargetsTable::GetRowByTargetName(std::u16string_view sName)
     return -1;
 }
 
+bool TargetsTable::HasTargetType(RedactionTargetType aTargetType)
+{
+    for (int i = 0, nCount = m_xControl->n_children(); i < nCount; ++i)
+    {
+        RedactionTarget* pTarget = weld::fromId<RedactionTarget*>(m_xControl->get_id(i));
+        if (pTarget->sType == aTargetType)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 TargetsTable::TargetsTable(std::unique_ptr<weld::TreeView> xControl)
     : m_xControl(std::move(xControl))
 {
@@ -65,6 +78,9 @@ OUString getTypeName(RedactionTargetType nType)
         case RedactionTargetType::REDACTION_TARGET_PREDEFINED:
             sTypeName = SfxResId(STR_REDACTION_TARGET_TYPE_PREDEF);
             break;
+        case RedactionTargetType::REDACTION_TARGET_IMAGE:
+            sTypeName = SfxResId(STR_REDACTION_TARGET_TYPE_IMAGE);
+            break;
         case RedactionTargetType::REDACTION_TARGET_UNKNOWN:
             sTypeName = SfxResId(STR_REDACTION_TARGET_TYPE_UNKNOWN);
             break;
@@ -88,6 +104,9 @@ OUString getTypeID(RedactionTargetType nType)
             break;
         case RedactionTargetType::REDACTION_TARGET_PREDEFINED:
             sTypeID = "predefined";
+            break;
+        case RedactionTargetType::REDACTION_TARGET_IMAGE:
+            sTypeID = "image";
             break;
         case RedactionTargetType::REDACTION_TARGET_UNKNOWN:
             sTypeID = "unknown";
@@ -224,6 +243,15 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, AddHdl, weld::Button&, void)
                 SfxResId(STR_REDACTION_TARGET_NAME_CLASH)));
             xBox->run();
         }
+        else if (aAddTargetDialog.getType() == REDACTION_TARGET_IMAGE
+                 && m_aTargetsBox.HasTargetType(REDACTION_TARGET_IMAGE))
+        {
+            bIncomplete = true;
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
+                SfxResId(STR_REDACTION_MULTI_IMAGE_TARGETS)));
+            xBox->run();
+        }
 
     } while (bIncomplete);
 
@@ -302,6 +330,16 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, weld::Button&, void)
                 SfxResId(STR_REDACTION_TARGET_NAME_CLASH)));
             xBox->run();
         }
+        else if (pTarget->sType != REDACTION_TARGET_IMAGE
+                 && aEditTargetDialog.getType() == REDACTION_TARGET_IMAGE
+                 && m_aTargetsBox.HasTargetType(REDACTION_TARGET_IMAGE))
+        {
+            bIncomplete = true;
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                getDialog(), VclMessageType::Warning, VclButtonsType::Ok,
+                SfxResId(STR_REDACTION_MULTI_IMAGE_TARGETS)));
+            xBox->run();
+        }
 
     } while (bIncomplete);
 
@@ -309,8 +347,16 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, weld::Button&, void)
     pTarget->sName = aEditTargetDialog.getName();
     pTarget->sType = aEditTargetDialog.getType();
     pTarget->sContent = aEditTargetDialog.getContent();
-    pTarget->bCaseSensitive = aEditTargetDialog.isCaseSensitive();
-    pTarget->bWholeWords = aEditTargetDialog.isWholeWords();
+    if (pTarget->sType == REDACTION_TARGET_IMAGE)
+    {
+        pTarget->bCaseSensitive = false;
+        pTarget->bWholeWords = false;
+    }
+    else
+    {
+        pTarget->bCaseSensitive = aEditTargetDialog.isCaseSensitive();
+        pTarget->bWholeWords = aEditTargetDialog.isWholeWords();
+    }
 
     // And sync the targets box row with the actual target data
     m_aTargetsBox.setRowData(nSelectedRow, pTarget);
@@ -667,6 +713,22 @@ IMPL_LINK_NOARG(SfxAddTargetDialog, SelectTypeHdl, weld::ComboBox&, void)
         m_xPredefContent->set_sensitive(true);
         m_xPredefContent->set_visible(true);
     }
+    else if (m_xType->get_active_id() == "image")
+    {
+        m_xLabelContent->set_sensitive(false);
+        m_xLabelContent->set_visible(false);
+        m_xContent->set_sensitive(false);
+        m_xContent->set_visible(false);
+        m_xWholeWords->set_sensitive(false);
+        m_xWholeWords->set_visible(false);
+        m_xCaseSensitive->set_sensitive(false);
+        m_xCaseSensitive->set_visible(false);
+
+        m_xLabelPredefContent->set_sensitive(false);
+        m_xLabelPredefContent->set_visible(false);
+        m_xPredefContent->set_sensitive(false);
+        m_xPredefContent->set_visible(false);
+    }
     else
     {
         m_xLabelPredefContent->set_sensitive(false);
@@ -727,6 +789,13 @@ SfxAddTargetDialog::SfxAddTargetDialog(weld::Window* pParent, const OUString& sN
         SelectTypeHdl(*m_xPredefContent);
         m_xPredefContent->set_active(o3tl::toInt32(o3tl::getToken(sContent, 0, ';')));
     }
+    else if (eTargetType == RedactionTargetType::REDACTION_TARGET_IMAGE)
+    {
+        m_xContent->set_visible(false);
+        m_xLabelContent->set_visible(false);
+        m_xCaseSensitive->set_visible(false);
+        m_xWholeWords->set_visible(false);
+    }
     else
     {
         m_xContent->set_text(sContent);
@@ -748,6 +817,8 @@ RedactionTargetType SfxAddTargetDialog::getType() const
         return RedactionTargetType::REDACTION_TARGET_REGEX;
     else if (sTypeID == "predefined")
         return RedactionTargetType::REDACTION_TARGET_PREDEFINED;
+    else if (sTypeID == "image")
+        return RedactionTargetType::REDACTION_TARGET_IMAGE;
     else
         return RedactionTargetType::REDACTION_TARGET_UNKNOWN;
 }
@@ -759,6 +830,8 @@ OUString SfxAddTargetDialog::getContent() const
         return OUString(OUString::number(m_xPredefContent->get_active()) + ";"
                         + m_xPredefContent->get_active_text());
     }
+    else if (m_xType->get_active_id() == "image")
+        return "All Images";
 
     return m_xContent->get_text();
 }

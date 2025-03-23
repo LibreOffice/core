@@ -482,6 +482,7 @@ class SvxZoomItem;
 #define SID_ASYNCHRON                       (SID_SFX_START + 813)
 #define SID_ACCESSIBILITY_CHECK_ONLINE      (SID_SFX_START + 814)
 #define SID_THEME_DIALOG                    (SID_SFX_START + 815)
+#define SID_REDACT_IMAGE                    (SID_SFX_START + 816)
 
 // default-ids for configuration
 #define SID_CONFIG                          TypedWhichId<SfxStringItem>(SID_SFX_START + 904)

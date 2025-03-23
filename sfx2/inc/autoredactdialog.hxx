@@ -20,6 +20,7 @@ enum RedactionTargetType
     REDACTION_TARGET_TEXT,
     REDACTION_TARGET_REGEX,
     REDACTION_TARGET_PREDEFINED,
+    REDACTION_TARGET_IMAGE,
     REDACTION_TARGET_UNKNOWN
 };
 
@@ -43,6 +44,7 @@ class TargetsTable
 public:
     TargetsTable(std::unique_ptr<weld::TreeView> xControl);
     void InsertTarget(RedactionTarget* pTarget);
+    bool HasTargetType(RedactionTargetType aTargetType);
     RedactionTarget* GetTargetByName(std::u16string_view sName);
     OUString GetNameProposal() const;
 

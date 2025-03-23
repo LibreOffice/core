@@ -189,6 +189,7 @@
 #define STR_REDACTION_TARGET_TYPE_TEXT          NC_("STR_REDACTION_TARGET_TYPE_TEXT", "Text")
 #define STR_REDACTION_TARGET_TYPE_REGEX         NC_("STR_REDACTION_TARGET_TYPE_REGEX", "Regular expression")
 #define STR_REDACTION_TARGET_TYPE_PREDEF        NC_("STR_REDACTION_TARGET_TYPE_PREDEF", "Predefined")
+#define STR_REDACTION_TARGET_TYPE_IMAGE         NC_("STR_REDACTION_TARGET_TYPE_IMAGE", "Image")
 #define STR_REDACTION_TARGET_TYPE_UNKNOWN       NC_("STR_REDACTION_TARGET_TYPE_UNKNOWN", "Unknown")
 
 // Translators: Values for the Case Sensitive and the Whole Words columns in Auto-redaction dialog
@@ -207,6 +208,7 @@
 #define STR_REDACTION_EDIT_TARGET               NC_("STR_REDACTION_EDIT_TARGET", "Edit Target")
 #define STR_REDACTION_TARGET_ADD_ERROR          NC_("STR_REDACTION_TARGET_ADD_ERROR", "An error occurred while adding new target. Please report this incident.")
 #define STR_REDACTION_NO_DRAW_WARNING           NC_("STR_REDACTION_NO_DRAW_WARNING", "Draw module is needed for redaction. Please make sure you have %PRODUCTNAME Draw installed and working correctly.")
+#define STR_REDACTION_MULTI_IMAGE_TARGETS       NC_("STR_REDACTION_MULTI_IMAGE_TARGETS", "An 'Image' target already exists, which redacts all the images in the document.")
 
 #define STR_SFX_FILEDLG_ACTUALVERSION           NC_("STR_SFX_FILEDLG_ACTUALVERSION", "Current version")
 #define STR_SFX_EXPLORERFILE_EXPORT             NC_("STR_SFX_EXPLORERFILE_EXPORT", "Export")

@@ -417,6 +417,12 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget& rRedactionTarge
                                           std::vector<::tools::Rectangle>& aRedactionRectangles,
                                           const uno::Reference<XComponent>& xComponent)
 {
+    if (rRedactionTarget.sType == RedactionTargetType::REDACTION_TARGET_IMAGE)
+    {
+        searchImagesInMetaFile(rMtf, aRedactionRectangles, xComponent);
+        return;
+    }
+
     // Initialize search
     i18nutil::SearchOptions2 aSearchOptions;
     fillSearchOptions(aSearchOptions, rRedactionTarget);
@@ -478,9 +484,91 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget& rRedactionTarge
     pOutputDevice->Pop();
 }
 
+void SfxRedactionHelper::searchImagesInMetaFile(
+    const GDIMetaFile& rMtf, std::vector<::tools::Rectangle>& aRedactionRectangles,
+    const uno::Reference<XComponent>& xComponent)
+{
+    OutputDevice* pOutputDevice
+        = SfxObjectShell::GetShellFromComponent(xComponent)->GetDocumentRefDev();
+    pOutputDevice->Push(::vcl::PushFlags::ALL);
+
+    MetaAction* pCurrAct;
+
+    for (pCurrAct = const_cast<GDIMetaFile&>(rMtf).FirstAction(); pCurrAct;
+         pCurrAct = const_cast<GDIMetaFile&>(rMtf).NextAction())
+    {
+        tools::Rectangle aImageRect;
+        Point aDestPt;
+        Size aDestSz;
+        bool bIsImage = true;
+
+        switch (pCurrAct->GetType())
+        {
+            case MetaActionType::BMP:
+            {
+                MetaBmpAction* pAction = static_cast<MetaBmpAction*>(pCurrAct);
+                aDestPt = pAction->GetPoint();
+                aDestSz = pAction->GetBitmap().GetSizePixel();
+                break;
+            }
+
+            case MetaActionType::BMPSCALE:
+            {
+                MetaBmpScaleAction* pAction = static_cast<MetaBmpScaleAction*>(pCurrAct);
+                aDestPt = pAction->GetPoint();
+                aDestSz = pAction->GetSize();
+                break;
+            }
+
+            case MetaActionType::BMPSCALEPART:
+            {
+                MetaBmpScalePartAction* pAction = static_cast<MetaBmpScalePartAction*>(pCurrAct);
+                aDestPt = pAction->GetDestPoint();
+                aDestSz = pAction->GetDestSize();
+                break;
+            }
+
+            case MetaActionType::BMPEX:
+            {
+                MetaBmpExAction* pAction = static_cast<MetaBmpExAction*>(pCurrAct);
+                aDestPt = pAction->GetPoint();
+                aDestSz = pAction->GetBitmapEx().GetSizePixel();
+                break;
+            }
+
+            case MetaActionType::BMPEXSCALE:
+            {
+                MetaBmpExScaleAction* pAction = static_cast<MetaBmpExScaleAction*>(pCurrAct);
+                aDestPt = pAction->GetPoint();
+                aDestSz = pAction->GetSize();
+                break;
+            }
+
+            case MetaActionType::BMPEXSCALEPART:
+            {
+                MetaBmpExScalePartAction* pAction
+                    = static_cast<MetaBmpExScalePartAction*>(pCurrAct);
+                aDestPt = pAction->GetDestPoint();
+                aDestSz = pAction->GetDestSize();
+                break;
+            }
+
+            default:
+                bIsImage = false;
+                break;
+        }
+
+        if (bIsImage)
+        {
+            aImageRect = tools::Rectangle(aDestPt, aDestSz);
+            aRedactionRectangles.push_back(aImageRect);
+        }
+    }
+}
+
 void SfxRedactionHelper::addRedactionRectToPage(
     const uno::Reference<XComponent>& xComponent, const uno::Reference<drawing::XDrawPage>& xPage,
-    const std::vector<::tools::Rectangle>& aNewRectangles)
+    const std::vector<::tools::Rectangle>& aNewRectangles, bool isImage)
 {
     if (!xComponent.is() || !xPage.is())
         return;
@@ -496,11 +584,22 @@ void SfxRedactionHelper::addRedactionRectToPage(
             xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xRectShapeProperySet(xRectShape, uno::UNO_QUERY);
 
-        xRectShapeProperySet->setPropertyValue(u"Name"_ustr,
-                                               uno::Any(u"RectangleRedactionShape"_ustr));
-        xRectShapeProperySet->setPropertyValue(u"FillTransparence"_ustr,
-                                               css::uno::Any(static_cast<sal_Int16>(50)));
-        xRectShapeProperySet->setPropertyValue(u"FillColor"_ustr, css::uno::Any(COL_GRAY7));
+        if (isImage)
+        {
+            xRectShapeProperySet->setPropertyValue(u"Name"_ustr,
+                                                   uno::Any(u"ImageRedactionShape"_ustr));
+            xRectShapeProperySet->setPropertyValue(u"FillTransparence"_ustr,
+                                                   css::uno::Any(static_cast<sal_Int16>(0)));
+            xRectShapeProperySet->setPropertyValue(u"FillColor"_ustr, css::uno::Any(COL_BLACK));
+        }
+        else
+        {
+            xRectShapeProperySet->setPropertyValue(u"Name"_ustr,
+                                                   uno::Any(u"RectangleRedactionShape"_ustr));
+            xRectShapeProperySet->setPropertyValue(u"FillTransparence"_ustr,
+                                                   css::uno::Any(static_cast<sal_Int16>(50)));
+            xRectShapeProperySet->setPropertyValue(u"FillColor"_ustr, css::uno::Any(COL_GRAY7));
+        }
         xRectShapeProperySet->setPropertyValue(
             u"LineStyle"_ustr, css::uno::Any(css::drawing::LineStyle::LineStyle_NONE));
 
@@ -524,7 +623,8 @@ void SfxRedactionHelper::autoRedactPage(const RedactionTarget& rRedactionTarget,
     searchInMetaFile(rRedactionTarget, rGDIMetaFile, aRedactionRectangles, xComponent);
 
     // Add the redaction rectangles to the page
-    addRedactionRectToPage(xComponent, xPage, aRedactionRectangles);
+    addRedactionRectToPage(xComponent, xPage, aRedactionRectangles,
+                           rRedactionTarget.sType == RedactionTargetType::REDACTION_TARGET_IMAGE);
 }
 
 namespace

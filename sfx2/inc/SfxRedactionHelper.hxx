@@ -106,11 +106,20 @@ public:
                                  const uno::Reference<XComponent>& xComponent);
 
     /*
+     * Used to find images to be redacted. Returns a list of rectangles to cover those
+     * areas to be redacted.
+     * */
+    static void searchImagesInMetaFile(const GDIMetaFile& rMtf,
+                                       std::vector<tools::Rectangle>& aRedactionRectangles,
+                                       const uno::Reference<XComponent>& xComponent);
+
+    /*
      * Draws a redaction rectangle on the draw page referenced with its page number (0-based)
      * */
     static void addRedactionRectToPage(const uno::Reference<XComponent>& xComponent,
                                        const uno::Reference<drawing::XDrawPage>& xPage,
-                                       const std::vector<tools::Rectangle>& aNewRectangles);
+                                       const std::vector<tools::Rectangle>& aNewRectangles,
+                                       bool isImage);
 
     /*
      * Search for the given term through the gdimetafile, which has the whole content of a draw page,
