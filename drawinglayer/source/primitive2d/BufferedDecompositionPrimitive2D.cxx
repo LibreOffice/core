@@ -82,9 +82,9 @@ void BufferedDecompositionPrimitive2D::get2DDecomposition(
         // manipulated (e.g. deleted)
         Primitive2DReference xTmp;
         {
+            maLastAccess = std::chrono::steady_clock::now();
             // only hold the lock for long enough to get a valid reference
             std::lock_guard Guard(maCallbackLock);
-            maLastAccess = std::chrono::steady_clock::now();
             if (!maBuffered2DDecomposition)
             {
                 maBuffered2DDecomposition = create2DDecomposition(rViewInformation);
