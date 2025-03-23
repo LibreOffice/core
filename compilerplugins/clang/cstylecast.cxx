@@ -42,8 +42,8 @@ bool areSimilar(QualType type1, QualType type2) {
             }
             auto t1a = t1->getAs<MemberPointerType>();
             auto t2a = t2->getAs<MemberPointerType>();
-            if (t1a->getClass()->getCanonicalTypeInternal()
-                != t2a->getClass()->getCanonicalTypeInternal())
+            if (compat::getClass(t1a)->getCanonicalTypeInternal()
+                != compat::getClass(t2a)->getCanonicalTypeInternal())
             {
                 return false;
             }

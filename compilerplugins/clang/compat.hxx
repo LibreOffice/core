@@ -278,6 +278,14 @@ inline unsigned getBitWidthValue(clang::FieldDecl const * decl, clang::ASTContex
 #endif
 }
 
+inline clang::Type const * getClass(clang::MemberPointerType const * type) {
+#if CLANG_VERSION >= 210000
+    return type->getQualifier()->getAsType();
+#else
+    return type->getClass();
+#endif
+}
+
 inline clang::TemplateTypeParmDecl const * getReplacedParameter(
     clang::SubstTemplateTypeParmType const * type)
 {
