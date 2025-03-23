@@ -2102,15 +2102,11 @@ bool OutputDevice::GetTextBoundRect(basegfx::B2DRectangle& rRect, const OUString
         if( bRet )
         {
             basegfx::B2DPoint aPos = pSalLayout->GetDrawPosition(basegfx::B2DPoint(nXOffset, 0));
-            auto m = basegfx::utils::createTranslateB2DHomMatrix(mnTextOffX - aPos.getX(),
-                                                                 mnTextOffY - aPos.getY());
-            aPixelRect.transform(m);
+            aPixelRect.translate(mnTextOffX - aPos.getX(), mnTextOffY - aPos.getY());
             rRect = PixelToLogic( aPixelRect );
             if (mbMap)
             {
-                m = basegfx::utils::createTranslateB2DHomMatrix(maMapRes.mnMapOfsX,
-                                                                maMapRes.mnMapOfsY);
-                rRect.transform(m);
+                rRect.translate(maMapRes.mnMapOfsX, maMapRes.mnMapOfsY);
             }
         }
     }

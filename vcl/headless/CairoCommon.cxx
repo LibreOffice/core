@@ -777,7 +777,7 @@ void CairoCommon::drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2, to
     CairoCommon::applyColor(cr, *m_oLineColor);
 
     basegfx::B2DRange extents = getClippedStrokeDamage(cr);
-    extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
+    extents.translate(0.5, 0.5);
 
     cairo_stroke(cr);
 
@@ -965,7 +965,7 @@ void CairoCommon::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
 
         // expand with possible StrokeDamage
         basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
-        stroke_extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
+        stroke_extents.translate(0.5, 0.5);
         extents.expand(stroke_extents);
 
         cairo_stroke(cr);
@@ -1295,7 +1295,7 @@ bool CairoCommon::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWid
 
         // expand with possible StrokeDamage
         basegfx::B2DRange stroke_extents = getClippedStrokeDamage(cr);
-        stroke_extents.transform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
+        stroke_extents.translate(0.5, 0.5);
         extents.expand(stroke_extents);
 
         cairo_stroke(cr);

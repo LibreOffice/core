@@ -273,8 +273,8 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                     aInputRectangle.getMinX(), aInputRectangle.getMinY(),
                     aInputRectangle.getMaxX() + fDeltaX, aInputRectangle.getMaxY() + fDeltaY);
 
-                aFinalRectangle.transform(basegfx::utils::createTranslateB2DHomMatrix(
-                    aTargetSurface.getMinX() - 0.5, aTargetSurface.getMinY() - 0.5));
+                aFinalRectangle.translate(aTargetSurface.getMinX() - 0.5,
+                                          aTargetSurface.getMinY() - 0.5);
 
                 basegfx::B2DPolygon aB2DPolygon = basegfx::utils::createPolygonFromRect(
                     aFinalRectangle, rRectangle.mnRx / aFinalRectangle.getWidth() * 2.0,
