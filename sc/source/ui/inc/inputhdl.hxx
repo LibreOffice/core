@@ -126,6 +126,8 @@ private:
 
     std::unique_ptr<ScRangeFindList>
                             pRangeFindList;
+    std::optional<ScEnterMode>
+                            monPrevBlockMode;
 
 private:
     void            UpdateActiveView();

@@ -2655,11 +2655,14 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
 
             if (aStr.startsWith("{=") && aStr.endsWith("}") )  // Matrix formula?
             {
+                monPrevBlockMode = ScEnterMode::MATRIX;
                 aStr = aStr.copy(1, aStr.getLength() -2);
                 mpEditEngine->SetTextCurrentDefaults(aStr);
                 if ( pInputWin )
                     pInputWin->SetTextString(aStr, true);
             }
+            else
+                monPrevBlockMode = ScEnterMode::NORMAL;
 
             UpdateAdjust( cTyped );
 
@@ -3145,6 +3148,10 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
     bInEnterHandler = true;
     bInOwnChange = true; // disable ModifyHdl (reset below)
     mbPartialPrefix = false;
+    // tdf#104888: Normal mode => Matrix mode should be treated as a modification of the formula
+    if( !bModified && monPrevBlockMode && monPrevBlockMode.value() == ScEnterMode::NORMAL && nBlockMode == ScEnterMode::MATRIX )
+        bModified = true;
+    monPrevBlockMode.reset();
 
     ImplCreateEditEngine();
 
