@@ -13,6 +13,7 @@
 #include <clang/AST/DeclTemplate.h>
 
 #include "check.hxx"
+#include "compat.hxx"
 
 namespace loplugin {
 
@@ -137,7 +138,7 @@ TypeCheck TypeCheck::MemberPointerOf() const {
     if (!type_.isNull()) {
         auto const t = type_->getAs<clang::MemberPointerType>();
         if (t != nullptr) {
-            return TypeCheck(t->getClass());
+            return TypeCheck(compat::getClass(t));
         }
     }
     return TypeCheck();

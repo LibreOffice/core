@@ -18,6 +18,7 @@
 #include "config_clang.h"
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 /**
@@ -290,7 +291,7 @@ static bool areTypesEqual(QualType lhs, QualType rhs)
         auto rhsMember = dyn_cast<MemberPointerType>(rhsType);
         if (!rhsMember)
             return false;
-        if (lhsMember->getClass() != rhsMember->getClass())
+        if (compat::getClass(lhsMember) != compat::getClass(rhsMember))
             return true;
         return areTypesEqual(lhsMember->getPointeeType(), rhsMember->getPointeeType());
     }
