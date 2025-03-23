@@ -11,8 +11,9 @@
 #include "net_proxy.hxx"
 
 #include <cstring>
-#include <unordered_map>
 #include <vector>
+
+#include <frozen/unordered_map.h>
 
 #include <bridges/net_uno/net_context.hxx>
 
@@ -22,7 +23,7 @@ namespace
 {
 size_t net_sizeof(typelib_TypeClass eTypeClass)
 {
-    static const std::unordered_map<typelib_TypeClass, size_t> s_sizes{
+    static constexpr frozen::unordered_map<typelib_TypeClass, size_t, 19> s_sizes{
         { typelib_TypeClass_BOOLEAN, sizeof(sal_Bool) },
         { typelib_TypeClass_BYTE, sizeof(sal_Int8) },
         { typelib_TypeClass_CHAR, sizeof(sal_Unicode) },

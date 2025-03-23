@@ -22,6 +22,11 @@ $(eval $(call gb_Library_use_libraries,net_uno,\
 	salhelper \
 ))
 
+$(eval $(call gb_Library_use_externals,net_uno,\
+    frozen \
+))
+
+
 $(eval $(call gb_Library_add_exception_objects,net_uno,\
 	bridges/source/net_uno/net_base \
 	bridges/source/net_uno/net_bridge \
