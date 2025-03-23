@@ -60,9 +60,8 @@ private:
     void Init();
     void GetRangeFromSelection();
 
-    template<class RNG>
-
-    void GenerateNumbers(RNG& randomGenerator, TranslateId pDistributionStringId, const std::optional<sal_Int8> aDecimalPlaces);
+    template<class DIST>
+    void GenerateNumbers(DIST& distribution, std::mt19937& seed, TranslateId pDistributionStringId, const std::optional<sal_Int8> aDecimalPlaces);
 
     void SelectGeneratorAndGenerateNumbers();
 
