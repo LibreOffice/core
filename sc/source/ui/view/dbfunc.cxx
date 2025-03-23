@@ -456,6 +456,8 @@ void ScDBFunc::ClearAutoFilter()
     SCTAB nTab = GetViewData().GetTabNo();
 
     ScDBData* pDBData = rDoc.GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);
+    if (!pDBData)
+        return;
 
     ScQueryParam aParam;
     pDBData->GetQueryParam(aParam);
