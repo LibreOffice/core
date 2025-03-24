@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_DRIVERBLOCKLIST_HXX
-#define INCLUDED_VCL_DRIVERBLOCKLIST_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <xmlreader/xmlreader.hxx>
@@ -170,7 +169,5 @@ inline uint64_t OpenGLVersion(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
 }
 
 } // namespace
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

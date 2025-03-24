@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SKIA_UTILS_H
-#define INCLUDED_VCL_INC_SKIA_UTILS_H
+#pragma once
 
 #include <vcl/skia/SkiaHelper.hxx>
 
@@ -356,7 +355,5 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
         return stream << "(null)";
     return stream << *image;
 }
-
-#endif // INCLUDED_VCL_INC_SKIA_UTILS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

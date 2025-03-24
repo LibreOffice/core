@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_SALFRAME_H
-#define INCLUDED_VCL_INC_OSX_SALFRAME_H
+#pragma once
 
 #include <premac.h>
 #include <IOKit/pwr_mgt/IOPMLib.h>
@@ -243,7 +242,5 @@ inline bool AquaSalFrame::isAlive( const AquaSalFrame* pFrame )
     AquaSalInstance *pInst = GetSalData()->mpInstance;
     return pInst && pInst->isFrameAlive( pFrame );
 }
-
-#endif // INCLUDED_VCL_INC_OSX_SALFRAME_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

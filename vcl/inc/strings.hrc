@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_STRINGS_HRC
-#define INCLUDED_VCL_INC_STRINGS_HRC
+#pragma once
 
 #define NC_(Context, String) TranslateId(Context, u8##String)
 
@@ -135,7 +134,5 @@
 #define RID_STR_ACC_SCROLLBAR_NAME_VERTICAL         NC_("RID_STR_ACC_SCROLLBAR_NAME_VERTICAL", "Vertical scroll bar")
 #define RID_STR_ACC_SCROLLBAR_NAME_HORIZONTAL       NC_("RID_STR_ACC_SCROLLBAR_NAME_HORIZONTAL", "Horizontal scroll bar")
 #define RID_STR_ACC_PANEL_DESCRIPTION               NC_("RID_STR_ACC_PANEL_DESCRIPTION", "Please press enter to go into child control for more operations")
-
-#endif // INCLUDED_VCL_INC_STRINGS_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

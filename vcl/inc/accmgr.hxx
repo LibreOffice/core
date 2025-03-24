@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_ACCMGR_HXX
-#define INCLUDED_VCL_INC_ACCMGR_HXX
+#pragma once
 
 #include <vector>
 #include <optional>
@@ -47,7 +46,5 @@ public:
 
     bool                IsAccelKey( const vcl::KeyCode& rKeyCode );
 };
-
-#endif // INCLUDED_VCL_INC_ACCMGR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

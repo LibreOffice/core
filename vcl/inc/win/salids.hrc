@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_WIN_SALIDS_HRC
-#define INCLUDED_VCL_INC_WIN_SALIDS_HRC
+#pragma once
 
 // Cursor
 #define SAL_RESID_POINTER_NULL                      10000
@@ -88,7 +87,5 @@
 #define SAL_RESID_BITMAP_50                                             11000
 
 #define SAL_RESID_ICON_DEFAULT                      1
-
-#endif // INCLUDED_VCL_INC_WIN_SALIDS_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

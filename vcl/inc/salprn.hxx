@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SALPRN_HXX
-#define INCLUDED_VCL_INC_SALPRN_HXX
+#pragma once
 
 #include <i18nutil/paper.hxx>
 #include <rtl/ustring.hxx>
@@ -124,7 +123,5 @@ public:
     virtual SalPrinterError         GetErrorCode() { return SalPrinterError::NONE; }
 
 };
-
-#endif // INCLUDED_VCL_INC_SALPRN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

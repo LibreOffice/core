@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_SALNATIVEWIDGETS_H
-#define INCLUDED_VCL_INC_OSX_SALNATIVEWIDGETS_H
+#pragma once
 
 #define TAB_HEIGHT 20             // height of tab header in pixels
 #define TAB_TEXT_MARGIN 12        // left/right margin of text within tab headers
@@ -63,7 +62,5 @@
 // native widget drawing code. As a workaround, an offset is considered for spinboxes to align spinboxes correctly.
 
 #define SPINBOX_OFFSET 1  // left offset for alignment with editboxes, comboboxes, and listboxes
-
-#endif // INCLUDED_VCL_INC_OSX_SALNATIVEWIDGETS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

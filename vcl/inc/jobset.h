@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_JOBSET_H
-#define INCLUDED_VCL_INC_JOBSET_H
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <i18nutil/paper.hxx>
@@ -105,7 +104,5 @@ public:
 // automatically be computed from paper width/height.
 // If paper width/height is 0, in the system-independent part it will
 // automatically be computed from paper format, if the latter is not PAPER_USER.
-
-#endif // INCLUDED_VCL_INC_JOBSET_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

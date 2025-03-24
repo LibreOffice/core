@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SALGEOM_HXX
-#define INCLUDED_VCL_INC_SALGEOM_HXX
+#pragma once
 
 #include <iostream>
 
@@ -84,7 +83,5 @@ public:
     virtual tools::Long GetHeight() const = 0;
     virtual bool IsOffScreen() const = 0;
 };
-
-#endif // INCLUDED_VCL_INC_SALGEOM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

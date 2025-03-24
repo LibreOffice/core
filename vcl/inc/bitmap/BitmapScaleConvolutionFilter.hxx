@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef VCL_INC_BITMAP_BITMAPSCALECONVOLUTIONFILTER_HXX
-#define VCL_INC_BITMAP_BITMAPSCALECONVOLUTIONFILTER_HXX
+#pragma once
 
 #include <vcl/bitmap/BitmapFilter.hxx>
 
@@ -72,7 +71,5 @@ public:
     }
 };
 }
-
-#endif // VCL_INC_BITMAPSCALECONVOLUTIONFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

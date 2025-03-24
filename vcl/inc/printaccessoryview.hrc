@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_PRINTACCESSORYVIEW_HRC
-#define INCLUDED_VCL_INC_PRINTACCESSORYVIEW_HRC
+#pragma once
 
 #include <unotools/resmgr.hxx>
 
@@ -32,7 +31,5 @@ const TranslateId SV_PRINT_NATIVE_STRINGS[] =
     NC_("SV_PRINT_NATIVE_STRINGS", "More"),
     NC_("SV_PRINT_NATIVE_STRINGS", "Print selection only")
 };
-
-#endif // INCLUDED_VCL_INC_PRINTACCESSORYVIEW_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_PRINT_H
-#define INCLUDED_VCL_INC_PRINT_H
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
@@ -67,7 +66,5 @@ void                    Add( std::unique_ptr<SalPrinterQueueInfo> pData );
 
 void ImplDeletePrnQueueList();
 void ImplUpdateJobSetupPaper( JobSetup& rJobSetup );
-
-#endif // INCLUDED_VCL_INC_PRINT_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

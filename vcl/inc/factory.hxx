@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_FACTORY_HXX
-#define INCLUDED_VCL_INC_FACTORY_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -51,8 +50,5 @@ css::uno::Reference<css::uno::XInterface> DropTarget_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory > const &);
 
 }
-
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

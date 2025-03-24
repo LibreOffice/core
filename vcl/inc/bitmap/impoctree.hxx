@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_IMPOCTREE_HXX
-#define INCLUDED_VCL_INC_IMPOCTREE_HXX
+#pragma once
 
 #include <vcl/BitmapColor.hxx>
 
@@ -104,7 +103,5 @@ inline BitmapColor ImpErrorQuad::ImplGetColor() const
                        std::clamp(nGreen, sal_Int16(0), sal_Int16(8160)) >> 5,
                        std::clamp(nBlue, sal_Int16(0), sal_Int16(8160)) >> 5);
 }
-
-#endif // INCLUDED_VCL_INC_IMPOCTREE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

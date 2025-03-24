@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SALFRAME_HXX
-#define INCLUDED_VCL_INC_SALFRAME_HXX
+#pragma once
 
 #include "impdel.hxx"
 #include "salwtype.hxx"
@@ -319,7 +318,5 @@ public:
     virtual void  SetTaskBarProgress(int /*nCurrentProgress*/) {}
     virtual void  SetTaskBarState(VclTaskBarStates /*eTaskBarState*/) {}
 };
-
-#endif // INCLUDED_VCL_INC_SALFRAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

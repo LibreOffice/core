@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_BITMAP_SCANLINETOOLS_HXX
-#define INCLUDED_VCL_INC_BITMAP_SCANLINETOOLS_HXX
+#pragma once
 
 #include <tools/color.hxx>
 #include <vcl/BitmapPalette.hxx>
@@ -174,7 +173,5 @@ std::unique_ptr<ScanlineTransformer> getScanlineTransformer(sal_uInt16 nBits,
     return nullptr;
 }
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

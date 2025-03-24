@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_SALOBJ_H
-#define INCLUDED_VCL_INC_OSX_SALOBJ_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -65,7 +64,5 @@ public:
     virtual void                    Show( bool bVisible ) override;
     virtual const SystemEnvData&    GetSystemData() const override;
 };
-
-#endif // INCLUDED_VCL_INC_OSX_SALOBJ_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

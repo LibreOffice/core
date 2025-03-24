@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_QUARTZ_COMMON_H
-#define INCLUDED_VCL_INC_QUARTZ_COMMON_H
+#pragma once
 
 #include <iostream>
 
@@ -35,7 +34,5 @@
 #include <vcl/salgtype.hxx>
 
 std::ostream &operator <<(std::ostream& s, CTFontRef pFont);
-
-#endif // INCLUDED_VCL_INC_QUARTZ_COMMON_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

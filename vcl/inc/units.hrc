@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNITS_HRC
-#define INCLUDED_VCL_INC_UNITS_HRC
+#pragma once
 
 #include <tools/fldunit.hxx>
 #include <unotools/resmgr.hxx>
@@ -63,7 +62,5 @@ std::pair<TranslateId, FieldUnit> SV_FUNIT_STRINGS[] =
     /* To translators: CSS unit 'ic'; CJK full-width advance in the current font */
     { NC_("SV_FUNIT_STRINGS", "ic"), FieldUnit::FONT_CJK_ADVANCE }
 };
-
-#endif // INCLUDED_VCL_INC_UNITS_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

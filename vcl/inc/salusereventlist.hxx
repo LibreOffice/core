@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SALUSEREVENTLIST_HXX
-#define INCLUDED_VCL_INC_SALUSEREVENTLIST_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <vcl/dllapi.h>
@@ -122,7 +121,5 @@ inline const SalFrameSet& SalUserEventList::getFrames() const
 {
     return m_aFrames;
 }
-
-#endif // INCLUDED_VCL_INC_SALUSEREVENTLIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

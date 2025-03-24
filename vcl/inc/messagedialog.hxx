@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_MESSAGEDIALOG_HXX
-#define INCLUDED_VCL_INC_MESSAGEDIALOG_HXX
+#pragma once
 
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/vclmedit.hxx>
@@ -53,7 +52,5 @@ public:
     void create_message_area();
     VclContainer* get_message_area() const { return m_pMessageBox.get(); }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

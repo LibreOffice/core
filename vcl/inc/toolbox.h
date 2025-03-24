@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_TOOLBOX_H
-#define INCLUDED_VCL_INC_TOOLBOX_H
+#pragma once
 
 #include <vcl/ctrl.hxx>
 #include <vcl/toolbox.hxx>
@@ -155,7 +154,5 @@ struct ImplToolBoxPrivateData
             mbWillUsePopupMode:1,   // this toolbox will be opened in popup mode
             mbDropDownByKeyboard:1; // tells whether a dropdown was started by key input
 };
-
-#endif // INCLUDED_VCL_INC_TOOLBOX_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

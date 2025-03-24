@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_SKIA_OSX_BITMAP_HXX
-#define INCLUDED_VCL_INC_SKIA_OSX_BITMAP_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -20,7 +19,5 @@ namespace SkiaHelper
 {
 VCL_PLUGIN_PUBLIC CGImageRef createCGImage(const Image& rImage);
 };
-
-#endif // INCLUDED_VCL_INC_SKIA_OSX_BITMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

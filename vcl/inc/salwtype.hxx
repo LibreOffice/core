@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SALWTYPE_HXX
-#define INCLUDED_VCL_INC_SALWTYPE_HXX
+#pragma once
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
@@ -281,7 +280,5 @@ struct SalGestureRotateEvent
 };
 
 typedef void (*SALTIMERPROC)();
-
-#endif // INCLUDED_VCL_INC_SALWTYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

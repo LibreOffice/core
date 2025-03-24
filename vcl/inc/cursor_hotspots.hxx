@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_INC_CURSOR_HOTSPOTS_HXX
-#define INCLUDED_VCL_INC_CURSOR_HOTSPOTS_HXX
+#pragma once
 
 #define help_curs_x_hot 0
 #define help_curs_y_hot 0
@@ -165,7 +164,5 @@
 #define window_sesize_curs_y_hot 10
 #define fatcross_curs_x_hot 15
 #define fatcross_curs_y_hot 15
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

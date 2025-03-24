@@ -37,8 +37,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_SFT_HXX
-#define INCLUDED_VCL_INC_SFT_HXX
+#pragma once
 
 #include <config_options.h>
 #include <rtl/ustring.hxx>
@@ -720,7 +719,5 @@ const sal_uInt8* TrueTypeFont::table(sal_uInt32 ord, sal_uInt32& size) const
 }
 
 } // namespace vcl
-
-#endif // INCLUDED_VCL_INC_SFT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

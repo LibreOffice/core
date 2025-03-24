@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_DISPLAYCONNECTIONDISPATCH_HXX
-#define INCLUDED_VCL_INC_DISPLAYCONNECTIONDISPATCH_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <com/sun/star/awt/XDisplayConnection.hpp>
@@ -55,9 +54,5 @@ public:
 };
 
 }
-
-
-
-#endif // INCLUDED_VCL_INC_DISPLAYCONNECTIONDISPATCH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

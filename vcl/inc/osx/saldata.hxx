@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_SALDATA_HXX
-#define INCLUDED_VCL_INC_OSX_SALDATA_HXX
+#pragma once
 
 #include <config_features.h>
 
@@ -103,7 +102,5 @@ public:
 
 bool ImplSalYieldMutexTryToAcquire();
 void ImplSalYieldMutexRelease();
-
-#endif // INCLUDED_VCL_INC_OSX_SALDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

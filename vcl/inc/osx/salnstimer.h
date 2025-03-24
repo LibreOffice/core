@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_SALNSTIMER_H
-#define INCLUDED_VCL_INC_OSX_SALNSTIMER_H
+#pragma once
 
 #include <premac.h>
 #include <Cocoa/Cocoa.h>
@@ -29,7 +28,5 @@
 }
 - (void)timerElapsed:(NSTimer*)pTimer;
 @end
-
-#endif // INCLUDED_VCL_INC_OSX_SALNSTIMER_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

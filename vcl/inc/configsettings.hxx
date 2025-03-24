@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VCL_CONFIGSETTINGS_HXX
-#define INCLUDED_VCL_CONFIGSETTINGS_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <unotools/configitem.hxx>
@@ -59,8 +58,5 @@ namespace vcl
 
 
 } // namespace vcl
-
-
-#endif // INCLUDED_VCL_CONFIGSETTINGS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

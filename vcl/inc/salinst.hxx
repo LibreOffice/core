@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SALINST_HXX
-#define INCLUDED_VCL_INC_SALINST_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <rtl/ref.hxx>
@@ -230,7 +229,5 @@ void DestroySalInstance( SalInstance* pInst );
 void SalAbort( const OUString& rErrorText, bool bDumpCore );
 
 const OUString& SalGetDesktopEnvironment();
-
-#endif // INCLUDED_VCL_INC_SALINST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

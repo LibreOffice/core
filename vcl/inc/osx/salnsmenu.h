@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_SALNSMENU_H
-#define INCLUDED_VCL_INC_OSX_SALNSMENU_H
+#pragma once
 
 class AquaSalMenu;
 class AquaSalMenuItem;
@@ -61,7 +60,5 @@ class AquaSalMenuItem;
 - (void)dealloc;
 - (BOOL)performKeyEquivalent:(NSEvent*)pEvent;
 @end
-
-#endif // INCLUDED_VCL_INC_OSX_SALNSMENU_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

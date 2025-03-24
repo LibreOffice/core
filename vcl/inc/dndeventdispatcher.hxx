@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_DNDEVENTDISPATCHER_HXX
-#define INCLUDED_VCL_INC_DNDEVENTDISPATCHER_HXX
+#pragma once
 
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
@@ -106,7 +105,5 @@ public:
 
     virtual void SAL_CALL disposing( const css::lang::EventObject& eo ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

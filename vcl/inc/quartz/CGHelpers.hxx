@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_QUARTZ_CGHELPER_HXX
-#define INCLUDED_VCL_INC_QUARTZ_CGHELPER_HXX
+#pragma once
 
 #include <premac.h>
 #include <CoreGraphics/CoreGraphics.h>
@@ -99,7 +98,5 @@ public:
 
     void restoreState() { CGContextRestoreGState(mpContext); }
 };
-
-#endif // INCLUDED_VCL_INC_QUARTZ_CGHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

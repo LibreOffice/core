@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef VCL_INC_NEWPRINTDLG_HXX
-#define VCL_INC_NEWPRINTDLG_HXX
+#pragma once
 
 #include <vcl/bitmapex.hxx>
 #include <vcl/gdimtf.hxx>
@@ -271,7 +270,5 @@ namespace vcl
         void tick();
     };
 }
-
-#endif // VCL_INC_NEWPRINTDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

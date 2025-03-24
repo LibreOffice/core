@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_DNDLCON_HXX
-#define INCLUDED_VCL_INC_DNDLCON_HXX
+#pragma once
 
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
@@ -129,7 +128,5 @@ public:
     virtual sal_Int8 SAL_CALL getDefaultActions(  ) override;
     virtual void SAL_CALL setDefaultActions( sal_Int8 actions ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

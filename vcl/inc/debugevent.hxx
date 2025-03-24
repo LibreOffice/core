@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_DEBUGEVENT_HXX
-#define INCLUDED_VCL_DEBUGEVENT_HXX
+#pragma once
 
 #include <vcl/timer.hxx>
 #include <sal/types.h>
@@ -29,7 +28,5 @@ class DebugEventInjector final : private Timer {
   public:
      static DebugEventInjector *getCreate();
 };
-
-#endif // INCLUDED_VCL_DEBUGEVENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_IMPGLYPHITEM_HXX
-#define INCLUDED_VCL_IMPGLYPHITEM_HXX
+#pragma once
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -163,7 +162,5 @@ private:
     rtl::Reference<LogicalFontInstance> m_rFontInstance;
     SalLayoutFlags mnFlags = SalLayoutFlags::NONE;
 };
-
-#endif // INCLUDED_VCL_IMPGLYPHITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

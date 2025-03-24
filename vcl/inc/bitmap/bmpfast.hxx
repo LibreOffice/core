@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_BMPFAST_HXX
-#define INCLUDED_VCL_INC_BMPFAST_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/Scanline.hxx>
@@ -45,7 +44,5 @@ bool ImplFastBitmapBlending( BitmapWriteAccess const & rDst,
     const SalTwoRect& rTwoRect );
 
 bool ImplFastEraseBitmap( BitmapBuffer&, const BitmapColor& );
-
-#endif // INCLUDED_VCL_INC_BMPFAST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_PRINT_HRC
-#define INCLUDED_VCL_INC_PRINT_HRC
+#pragma once
 
 #include <unotools/resmgr.hxx>
 
@@ -118,7 +117,5 @@ const TranslateId RID_STR_PAPERNAMES[] =
     // To translators: This is the last entry of the sequence of paper size names
     NC_("RID_STR_PAPERNAMES", "On-screen Show (16:10)")
 };
-
-#endif // INCLUDED_VCL_INC_PRINT_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

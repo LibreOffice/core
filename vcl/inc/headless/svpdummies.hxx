@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_HEADLESS_SVPDUMMIES_HXX
-#define INCLUDED_VCL_INC_HEADLESS_SVPDUMMIES_HXX
+#pragma once
 
 #include <vcl/sysdata.hxx>
 #include <unx/gensys.h>
@@ -58,7 +57,5 @@ public:
                                   const OUString& rMessage,
                                   const std::vector< OUString >& rButtons ) override;
 };
-
-#endif // INCLUDED_VCL_INC_HEADLESS_SVPDUMMIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

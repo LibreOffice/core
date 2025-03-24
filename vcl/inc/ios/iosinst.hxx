@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_IOS_IOSINST_HXX
-#define INCLUDED_VCL_INC_IOS_IOSINST_HXX
+#pragma once
 
 #include <premac.h>
 #include <CoreGraphics/CoreGraphics.h>
@@ -58,7 +57,5 @@ public:
     explicit SalData();
     virtual ~SalData();
 };
-
-#endif // INCLUDED_VCL_INC_IOS_IOSINST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

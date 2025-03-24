@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_HEADLESS_SVPVD_HXX
-#define INCLUDED_VCL_INC_HEADLESS_SVPVD_HXX
+#pragma once
 
 #include <salvd.hxx>
 #include <basegfx/vector/b2ivector.hxx>
@@ -61,7 +60,5 @@ public:
     virtual tools::Long GetWidth() const override;
     virtual tools::Long GetHeight() const override;
 };
-
-#endif // INCLUDED_VCL_INC_HEADLESS_SVPVD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

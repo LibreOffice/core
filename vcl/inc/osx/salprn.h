@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_SALPRN_H
-#define INCLUDED_VCL_INC_OSX_SALPRN_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -154,7 +153,5 @@ const double fPtTo100thMM = 35.27777778;
 inline int PtTo10Mu( double nPoints ) { return static_cast<int>((nPoints*fPtTo100thMM)+0.5); }
 
 inline double TenMuToPt( double nUnits ) { return floor((nUnits/fPtTo100thMM)+0.5); }
-
-#endif // INCLUDED_VCL_INC_OSX_SALPRN_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SALBMP_HXX
-#define INCLUDED_VCL_INC_SALBMP_HXX
+#pragma once
 
 #include <tools/gen.hxx>
 #include <tools/solar.h>
@@ -193,7 +192,5 @@ private:
     bool           mbChecksumValid;
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
