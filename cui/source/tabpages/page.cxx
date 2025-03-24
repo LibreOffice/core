@@ -786,6 +786,8 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
     {
         aPage.SetLandscape(bChecked);
         bMod = true;
+        m_xLandscapeBtn->save_state();
+        m_xPortraitBtn->save_state();
     }
 
     //Get the NumType value
