@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     external/nss/nss-win32-make.patch.1 \
     external/nss/ubsan.patch.0 \
     external/nss/clang-cl.patch.0 \
+    external/nss/winnt.patch.0 \
     external/nss/nss.vs2015.patch \
     external/nss/nss.vs2015.pdb.patch \
     external/nss/nss.bzmozilla1238154.patch \
@@ -27,6 +28,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     external/nss/macos-dlopen.patch.0 \
     external/nss/nss-restore-manual-pre-dependencies.patch.1 \
     external/nss/Wincompatible-function-pointer-types.patch.0 \
+    external/nss/nspr-win95-target.patch \
     $(if $(filter iOS,$(OS)), \
         external/nss/nss-ios.patch) \
     $(if $(filter ANDROID,$(OS)), \
