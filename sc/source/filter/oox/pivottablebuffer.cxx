@@ -1286,17 +1286,15 @@ void PivotTable::finalizeImport()
             return;
 
         // global data pilot properties
-        PropertySet aDescProp(( css::uno::Reference< css::beans::XPropertySet >(mxDPDescriptor) ));
-        aDescProp.setProperty( PROP_ColumnGrand, maDefModel.mbColGrandTotals );
-        aDescProp.setProperty( PROP_RowGrand, maDefModel.mbRowGrandTotals );
-        aDescProp.setProperty( PROP_ShowFilterButton, false );
-        aDescProp.setProperty( PROP_DrillDownOnDoubleClick, maDefModel.mbEnableDrill );
-
-        mpDPObject->SetHideHeader(maLocationModel.mnFirstHeaderRow == 0);
-
         if (auto* pSaveData = mpDPObject->GetSaveData())
+        {
+            pSaveData->SetColumnGrand(maDefModel.mbColGrandTotals);
+            pSaveData->SetRowGrand(maDefModel.mbRowGrandTotals);
+            pSaveData->SetDrillDown(maDefModel.mbEnableDrill);
+            pSaveData->SetFilterButton(false);
             pSaveData->SetExpandCollapse(maDefModel.mbShowDrill);
-
+        }
+        mpDPObject->SetHideHeader(maLocationModel.mnFirstHeaderRow == 0);
         // finalize all fields, this finds field names and creates grouping fields
         finalizeFieldsImport();
 
