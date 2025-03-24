@@ -1,0 +1,10 @@
+--- nss/coreconf/WINNT.mk	2025-03-24 14:11:13.771104127 +0100
++++ nss/coreconf/WINNT.mk	2025-03-24 14:11:13.771104127 +0100
+@@ -15,6 +15,3 @@
+ # Win NT needs -GT so that fibers can work
+ #
+ OS_CFLAGS += -GT
+-
+-# WINNT uses the lib prefix, Win95 doesn't
+-NSPR31_LIB_PREFIX = lib
+

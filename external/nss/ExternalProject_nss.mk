@@ -30,6 +30,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 			MOZ_DEBUG_SYMBOLS=1 \
 			MOZ_DEBUG_FLAGS=" " \
 			OPT_CODE_SIZE=0) \
+		OS_TARGET=WINNT \
 		USE_SYSTEM_ZLIB=1 \
 		$(if $(filter X86_64,$(CPUNAME)),USE_64=1) \
 		$(if $(filter AARCH64,$(CPUNAME)),USE_64=1 CPU_ARCH=aarch64) \
