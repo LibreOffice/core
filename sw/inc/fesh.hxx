@@ -256,7 +256,8 @@ public:
     virtual ~SwFEShell() override;
 
     /// Copy and Paste methods for internal clipboard.
-    SW_DLLPUBLIC void Copy( SwDoc& rClpDoc, const OUString* pNewClpText = nullptr );
+    /// bDeleteRedlines: if content inside a delete redline should be stripped away in rClpDoc.
+    SW_DLLPUBLIC void Copy( SwDoc& rClpDoc, const OUString* pNewClpText = nullptr, bool bDeleteRedlines = true );
     SW_DLLPUBLIC bool Paste( SwDoc& rClpDoc, bool bNestedTable = false );
 
     /// Paste some pages into another doc - used in mailmerge.
