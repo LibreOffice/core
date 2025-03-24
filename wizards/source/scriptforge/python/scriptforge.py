@@ -1126,9 +1126,9 @@ class SFScriptForge:
                 ctx.ServiceManager.createInstance('apso.python.script.organizer.impl')
                 # now we can use apso_utils library
                 from apso_utils import console
-                kwargs = {'loc': variables}
+                kwargs = {'loc': variables, 'BACKGROUND': background, 'FOREGROUND': foreground, 'prettyprint': False}
                 kwargs['loc'].setdefault('XSCRIPTCONTEXT', uno)
-                console(BACKGROUND = background, FOREGROUND = foreground, **kwargs)
+                console(**kwargs)
                 # An interprocess call is necessary to allow a redirection of STDOUT and STDERR by APSO
                 #   Choice is a minimalist call to a Basic routine: no arguments, a few lines of code
                 SFScriptForge.SF_Basic.GetGuiType()
