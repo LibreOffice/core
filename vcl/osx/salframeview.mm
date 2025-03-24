@@ -298,6 +298,31 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
     }
 }
 
+static void updateWindowCollectionBehavior( const AquaSalFrame *pFrame )
+{
+    if( !pFrame )
+        return;
+
+    // Enable fullscreen options if available and useful
+    NSWindowCollectionBehavior bOldCollectionBehavor = [pFrame->mpNSWindow collectionBehavior];
+    NSWindowCollectionBehavior bCollectionBehavor = NSWindowCollectionBehaviorFullScreenNone;
+    if ( officecfg::Office::Common::VCL::macOS::EnableNativeFullScreenWindows::get() )
+    {
+        bool bAllowFullScreen = (SalFrameStyleFlags::NONE == (pFrame->mnStyle & (SalFrameStyleFlags::DIALOG | SalFrameStyleFlags::TOOLTIP | SalFrameStyleFlags::SYSTEMCHILD | SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::TOOLWINDOW | SalFrameStyleFlags::INTRO)));
+        bAllowFullScreen &= (SalFrameStyleFlags::NONE == (~pFrame->mnStyle & SalFrameStyleFlags::SIZEABLE));
+        bAllowFullScreen &= (pFrame->mpParent == nullptr);
+
+        bCollectionBehavor = bAllowFullScreen ? NSWindowCollectionBehaviorFullScreenPrimary : NSWindowCollectionBehaviorFullScreenAuxiliary;
+    }
+    else
+    {
+        bCollectionBehavor = NSWindowCollectionBehaviorFullScreenNone;
+    }
+
+    if ( bCollectionBehavor != bOldCollectionBehavor )
+        [pFrame->mpNSWindow setCollectionBehavior: bCollectionBehavor];
+}
+
 @interface NSResponder (SalFrameWindow)
 -(BOOL)accessibilityIsIgnored;
 @end
@@ -319,18 +344,7 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
                                  backing: NSBackingStoreBuffered
                                  defer: Application::IsHeadlessModeEnabled()];
 
-    // Enable fullscreen options if available and useful
-    if ( officecfg::Office::Common::VCL::macOS::EnableNativeFullScreenWindows::get() )
-    {
-        bool bAllowFullScreen = (SalFrameStyleFlags::NONE == (mpFrame->mnStyle & (SalFrameStyleFlags::DIALOG | SalFrameStyleFlags::TOOLTIP | SalFrameStyleFlags::SYSTEMCHILD | SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::TOOLWINDOW | SalFrameStyleFlags::INTRO)));
-        bAllowFullScreen &= (SalFrameStyleFlags::NONE == (~mpFrame->mnStyle & SalFrameStyleFlags::SIZEABLE));
-        bAllowFullScreen &= (mpFrame->mpParent == nullptr);
-        [pNSWindow setCollectionBehavior: (bAllowFullScreen ? NSWindowCollectionBehaviorFullScreenPrimary : NSWindowCollectionBehaviorFullScreenAuxiliary)];
-    }
-    else
-    {
-        [pNSWindow setCollectionBehavior: NSWindowCollectionBehaviorFullScreenNone];
-    }
+    updateWindowCollectionBehavior( mpFrame );
 
     [pNSWindow setReleasedWhenClosed: NO];
 
@@ -417,6 +431,8 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
+        updateWindowCollectionBehavior( mpFrame );
+
         static const SalFrameStyleFlags nGuessDocument = SalFrameStyleFlags::MOVEABLE|
                                             SalFrameStyleFlags::SIZEABLE|
                                             SalFrameStyleFlags::CLOSEABLE;
@@ -719,7 +735,11 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
         if( !NSIsEmptyRect( mpFrame->maNativeFullScreenRestoreRect ) )
         {
             if ( !mpFrame->mbInternalFullScreen || NSIsEmptyRect( mpFrame->maInternalFullScreenRestoreRect ) )
-                [mpFrame->getNSWindow() setFrame: mpFrame->maNativeFullScreenRestoreRect display: mpFrame->mbShown ? YES : NO];
+            {
+                NSRect aFrame = mpFrame->maNativeFullScreenRestoreRect;
+                mpFrame->VCLToCocoa( aFrame );
+                [mpFrame->getNSWindow() setFrame: aFrame display: mpFrame->mbShown ? YES : NO];
+            }
 
             mpFrame->maNativeFullScreenRestoreRect = NSZeroRect;
         }

@@ -993,7 +993,11 @@ void AquaSalFrame::doShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
         if( !NSIsEmptyRect( maInternalFullScreenRestoreRect ) )
         {
             if( !mbNativeFullScreen || NSIsEmptyRect( maNativeFullScreenRestoreRect ) )
-                [mpNSWindow setFrame: maInternalFullScreenRestoreRect display: mbShown ? YES : NO];
+            {
+                NSRect aFrame = maInternalFullScreenRestoreRect;
+                VCLToCocoa( aFrame );
+                [mpNSWindow setFrame: aFrame display: mbShown ? YES : NO];
+            }
 
             maInternalFullScreenRestoreRect = NSZeroRect;
         }
