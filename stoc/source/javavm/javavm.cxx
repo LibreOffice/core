@@ -25,6 +25,7 @@
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/java/JavaNotFoundException.hpp>
 #include <com/sun/star/java/InvalidJavaSettingsException.hpp>
 #include <com/sun/star/java/RestartRequiredException.hpp>
@@ -54,6 +55,7 @@
 #include <jvmaccess/classpath.hxx>
 #include <jvmaccess/unovirtualmachine.hxx>
 #include <jvmaccess/virtualmachine.hxx>
+#include <osl/file.hxx>
 #include <rtl/process.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -321,34 +323,81 @@ void getDefaultLocaleFromConfig(
 }
 
 /// @throws css::uno::Exception
-void getJavaPropsFromSafetySettings(
+void getJavaPropsFromJavaSettings(
     stoc_javavm::JVM * pjvm,
-    const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
     const css::uno::Reference<css::uno::XComponentContext> &xCtx)
 {
-    css::uno::Reference<css::uno::XInterface> xConfRegistry =
-        xSMgr->createInstanceWithContext(
-            u"com.sun.star.configuration.ConfigurationRegistry"_ustr,
-            xCtx);
-    if(!xConfRegistry.is())
+    css::uno::Reference<css::lang::XMultiServiceFactory> xConfigProvider(
+        xCtx->getValueByName(
+            u"/singletons/com.sun.star.configuration.theDefaultProvider"_ustr),
+        css::uno::UNO_QUERY);
+
+    if (!xConfigProvider.is())
         throw css::uno::RuntimeException(
-            u"javavm.cxx: couldn't get ConfigurationRegistry"_ustr, nullptr);
+            u"javavm.cxx: couldn't get ConfigurationProvider"_ustr, nullptr);
 
-    css::uno::Reference<css::registry::XSimpleRegistry> xConfRegistry_simple(
-        xConfRegistry, css::uno::UNO_QUERY_THROW);
-    xConfRegistry_simple->open(
-        u"org.openoffice.Office.Java"_ustr,
-        true, false);
-    css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey =
-        xConfRegistry_simple->getRootKey();
+    css::beans::NamedValue aPath(u"nodepath"_ustr, css::uno::Any(u"org.openoffice.Office.Java/VirtualMachine"_ustr));
+    css::uno::Sequence<css::uno::Any> aArguments{ css::uno::Any(aPath) };
 
-    if (xRegistryRootKey.is())
+    css::uno::Reference<css::container::XNameAccess> xConfigAccess(xConfigProvider->createInstanceWithArguments(
+            u"com.sun.star.configuration.ConfigurationAccess"_ustr,
+            aArguments),
+        css::uno::UNO_QUERY);
+
+    if (!xConfigAccess.is())
+        throw css::uno::RuntimeException(
+            u"javavm.cxx: couldn't get ConfigurationAccess"_ustr, nullptr);
+
+    if (xConfigAccess->hasByName(u"InstrumentationAgents"_ustr))
     {
-        css::uno::Reference<css::registry::XRegistryKey> key_NetAccess= xRegistryRootKey->openKey(u"VirtualMachine/NetAccess"_ustr);
-        if (key_NetAccess.is()
-            && key_NetAccess->getValueType() != css::registry::RegistryValueType_NOT_DEFINED)
+        css::uno::Reference<css::container::XNameAccess> xAgentAccess;
+        xConfigAccess->getByName(u"InstrumentationAgents"_ustr) >>= xAgentAccess;
+        if (xAgentAccess.is() && xAgentAccess->hasElements())
         {
-            sal_Int32 val= key_NetAccess->getLongValue();
+            OUString sScheme(u"vnd.sun.star.expand:"_ustr);
+            css::uno::Reference<css::util::XMacroExpander> exp = css::util::theMacroExpander::get(xCtx);
+            css::uno::Sequence<OUString> aAgents = xAgentAccess->getElementNames();
+            for (auto const & sAgent : aAgents)
+            {
+                css::uno::Reference<css::container::XNameAccess> xAgent;
+                xAgentAccess->getByName(sAgent) >>= xAgent;
+                if (!xAgent->hasByName(u"URL"_ustr))
+                {
+                    SAL_WARN("stoc.java", "Cant retrieve URL property from InstrumentationAgent: " << sAgent);
+                    continue;
+                }
+                OUString sUrl;
+                xAgent->getByName(u"URL"_ustr) >>= sUrl;
+                if (sUrl.isEmpty())
+                {
+                    SAL_WARN("stoc.java", "Cant use empty URL property from InstrumentationAgent: " << sAgent);
+                    continue;
+                }
+                if (sUrl.startsWithIgnoreAsciiCase(sScheme))
+                {
+                    try {
+                        sUrl = exp->expandMacros(sUrl.copy(sScheme.getLength()));
+                    } catch (css::lang::IllegalArgumentException & exception) {
+                        SAL_WARN("stoc.java", exception.Message);
+                        continue;
+                    }
+                }
+                OUString sPath = sUrl;
+                osl::FileBase::RC nError = osl::FileBase::getSystemPathFromFileURL(sUrl, sPath);
+                if (nError != osl::FileBase::E_None)
+                {
+                    SAL_WARN("stoc.java", "Cant convert url to system path: " << sUrl);
+                    continue;
+                }
+                pjvm->pushProp("-javaagent:" + sPath);
+            }
+        }
+    }
+    if (xConfigAccess->hasByName(u"NetAccess"_ustr))
+    {
+        sal_Int32 val = 0;
+        if (xConfigAccess->getByName(u"NetAccess"_ustr) >>= val)
+        {
             OUString sVal;
             switch( val)
             {
@@ -362,20 +411,18 @@ void getJavaPropsFromSafetySettings(
             OUString sProperty = "appletviewer.security.mode=" + sVal;
             pjvm->pushProp(sProperty);
         }
-        css::uno::Reference<css::registry::XRegistryKey> key_CheckSecurity= xRegistryRootKey->openKey(
-            u"VirtualMachine/Security"_ustr);
-        if( key_CheckSecurity.is())
-        {
-            bool val = static_cast<bool>(key_CheckSecurity->getLongValue());
-            OUString sProperty(u"stardiv.security.disableSecurity="_ustr);
-            if( val)
-                sProperty += "false";
-            else
-                sProperty += "true";
-            pjvm->pushProp( sProperty);
-        }
     }
-    xConfRegistry_simple->close();
+    if (xConfigAccess->hasByName(u"Security"_ustr))
+    {
+        bool val = true;
+        xConfigAccess->getByName(u"Security"_ustr) >>= val;
+        OUString sProperty(u"stardiv.security.disableSecurity="_ustr);
+        if( val)
+            sProperty += "false";
+        else
+            sProperty += "true";
+        pjvm->pushProp(sProperty);
+    }
 }
 
 void setTimeZone(stoc_javavm::JVM * pjvm) noexcept {
@@ -426,10 +473,10 @@ void initVMConfiguration(
 
     try
     {
-        getJavaPropsFromSafetySettings(&jvm, xSMgr, xCtx);
+        getJavaPropsFromJavaSettings(&jvm, xCtx);
     }
     catch(const css::uno::Exception & exception) {
-        SAL_INFO("stoc", "couldn't get safety settings because of " << exception);
+        SAL_INFO("stoc", "couldn't get Java settings because of " << exception);
     }
 
     *pjvm = std::move(jvm);

@@ -19,6 +19,19 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Java" oor:package="org.openoffice.Office" xml:lang="en-US">
   <info/>
+  <templates>
+    <group oor:name="InstrumentationAgent">
+      <info>
+        <desc>Contains the Java instrumentation agents archives loaded at JVM startup.</desc>
+      </info>
+      <prop oor:name="URL" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>An extension can load its own Java instrumentation agent with the value: %origin%/lib/myagent.jar.</desc>
+          <label>Java instrumentation agent archive URL</label>
+        </info>
+      </prop>
+    </group>
+  </templates>
   <component>
     <group oor:name="VirtualMachine">
       <info>
@@ -63,6 +76,12 @@
         </info>
         <value>false</value>
       </prop>
+      <set oor:name="InstrumentationAgents" oor:node-type="InstrumentationAgent">
+        <info>
+          <desc>Specifies the Java archives from which the instrumentation agents will be loaded at JVM startup.</desc>
+          <label>Java instrumentation agent archives</label>
+        </info>
+      </set>
     </group>
   </component>
 </oor:component-schema>
