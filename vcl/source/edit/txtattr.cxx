@@ -71,23 +71,4 @@ bool TextAttribFontWeight::operator==( const TextAttrib& rAttr ) const
                 ( meWeight == static_cast<const TextAttribFontWeight&>(rAttr).meWeight ) );
 }
 
-TextAttribProtect::TextAttribProtect() :
-    TextAttrib( TEXTATTR_PROTECTED )
-{
-}
-
-void TextAttribProtect::SetFont( vcl::Font& ) const
-{
-}
-
-std::unique_ptr<TextAttrib> TextAttribProtect::Clone() const
-{
-    return std::unique_ptr<TextAttrib>(new TextAttribProtect());
-}
-
-bool TextAttribProtect::operator==( const TextAttrib& rAttr ) const
-{
-    return TextAttrib::operator==(rAttr );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

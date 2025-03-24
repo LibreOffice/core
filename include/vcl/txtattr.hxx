@@ -33,7 +33,6 @@ namespace vcl { class Font; }
 #define TEXTATTR_FONTWEIGHT 3
 
 #define TEXTATTR_USER_START 1000 //start id for user defined text attributes
-#define TEXTATTR_PROTECTED  4
 
 
 class VCL_DLLPUBLIC TextAttrib
@@ -89,18 +88,6 @@ public:
 
     FontWeight getFontWeight() const { return meWeight; }
 };
-
-class TextAttribProtect final : public TextAttrib
-{
-public:
-                            TextAttribProtect();
-
-    virtual void            SetFont( vcl::Font& rFont ) const override;
-    virtual std::unique_ptr<TextAttrib> Clone() const override;
-    virtual bool            operator==( const TextAttrib& rAttr ) const override;
-
-};
-
 
 class TextCharAttrib
 {
