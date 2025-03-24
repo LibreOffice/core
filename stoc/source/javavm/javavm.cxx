@@ -345,7 +345,8 @@ void getJavaPropsFromSafetySettings(
     if (xRegistryRootKey.is())
     {
         css::uno::Reference<css::registry::XRegistryKey> key_NetAccess= xRegistryRootKey->openKey(u"VirtualMachine/NetAccess"_ustr);
-        if (key_NetAccess.is())
+        if (key_NetAccess.is()
+            && key_NetAccess->getValueType() != css::registry::RegistryValueType_NOT_DEFINED)
         {
             sal_Int32 val= key_NetAccess->getLongValue();
             OUString sVal;
