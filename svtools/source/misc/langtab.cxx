@@ -190,9 +190,9 @@ static OUString lcl_getDescription( const LanguageTag& rTag )
 
 SvtLanguageTableImpl::SvtLanguageTableImpl()
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(STR_ARR_SVT_LANGUAGE_TABLE); ++i)
+    for (const auto& [rResId, rType] : STR_ARR_SVT_LANGUAGE_TABLE)
     {
-        m_aStrings.emplace_back(SvtResId(STR_ARR_SVT_LANGUAGE_TABLE[i].first), STR_ARR_SVT_LANGUAGE_TABLE[i].second);
+        m_aStrings.emplace_back(SvtResId(rResId), rType);
     }
 
     auto xNA = officecfg::VCL::ExtraLanguages::get();
