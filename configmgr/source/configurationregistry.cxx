@@ -411,9 +411,13 @@ sal_Int32 RegistryKey::getLongValue()
 {
     std::unique_lock g(service_.mutex_);
     service_.checkValid();
-    sal_Int32 v = 0;
-    if (value_ >>= v) {
-        return v;
+    sal_Int32 v1 = 0;
+    if (value_ >>= v1) {
+        return v1;
+    }
+    bool v2;
+    if (value_ >>= v2) {
+        return sal_Int32(v2);
     }
     throw css::registry::InvalidValueException(
         u"com.sun.star.configuration.ConfigurationRegistry"_ustr,
