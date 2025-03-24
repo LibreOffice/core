@@ -33,8 +33,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
         external/nss/nss-ios.patch) \
     $(if $(filter ANDROID,$(OS)), \
         external/nss/nss-android.patch.1) \
-    $(if $(filter MSC-INTEL,$(COM)-$(CPUNAME)), \
-        external/nss/nss.cygwin64.in32bit.patch) \
     $(if $(filter WNT,$(OS)), \
         external/nss/nss.windows.patch \
         external/nss/nss.nowerror.patch \
