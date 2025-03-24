@@ -403,7 +403,7 @@ namespace
     //source, so that we can WYSIWYG paste. If we want that the destinations
     //styles are used over the source styles, that's a matter of the
     //destination paste code to handle, not the source paste code.
-    void lclOverWriteDoc(SwWrtShell &rSrcWrtShell, SwDoc &rDest)
+    void lclOverWriteDoc(SwWrtShell &rSrcWrtShell, SwDoc &rDest, bool bDeleteRedlines = true)
     {
         const SwDoc &rSrc = *rSrcWrtShell.GetDoc();
 
@@ -414,7 +414,7 @@ namespace
         //by the selection, e.g. apply SwDoc::IsUsed on styles ?
         rDest.ReplaceStyles(rSrc, false);
 
-        rSrcWrtShell.Copy(rDest);
+        rSrcWrtShell.Copy(rDest, /*pNewClpText=*/nullptr, bDeleteRedlines);
 
         rDest.GetMetaFieldManager().copyDocumentProperties(rSrc);
     }
@@ -959,7 +959,7 @@ void SwTransferable::PrepareForCopyTextRange(SwPaM & rPaM)
     AddFormat( SotClipboardFormatId::STRING );
 }
 
-int SwTransferable::PrepareForCopy( bool bIsCut )
+int SwTransferable::PrepareForCopy( bool bIsCut, bool bDeleteRedlines )
 {
     int nRet = 1;
     if(!m_pWrtShell)
@@ -1065,7 +1065,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         SwDoc& rTmpDoc = lcl_GetDoc(*m_pClpDocFac);
 
         rTmpDoc.getIDocumentFieldsAccess().LockExpFields();     // Never update fields - leave text as is
-        lclOverWriteDoc(*m_pWrtShell, rTmpDoc);
+        lclOverWriteDoc(*m_pWrtShell, rTmpDoc, bDeleteRedlines);
 
         DeleteDDEAndReminderMarks(rTmpDoc);
 
@@ -1197,12 +1197,12 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
     return nRet;
 }
 
-int SwTransferable::Copy( bool bIsCut )
+int SwTransferable::Copy( bool bIsCut, bool bDeleteRedlines )
 {
     if (m_pWrtShell->GetView().GetObjectShell()->isContentExtractionLocked())
         return 0;
 
-    int nRet = PrepareForCopy( bIsCut );
+    int nRet = PrepareForCopy( bIsCut, bDeleteRedlines );
     if ( nRet )
     {
         CopyToClipboard( &m_pWrtShell->GetView().GetEditWin() );

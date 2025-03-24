@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <editeng/wghtitem.hxx>
+
 #include <docsh.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
@@ -16,6 +18,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <swmodule.hxx>
 #include <redline.hxx>
+#include <ndtxt.hxx>
 
 namespace
 {
@@ -203,6 +206,80 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateSinglePlainDelete)
     const SwRangeRedline* pRedline2 = rRedlines[1];
     const SwRedlineData& rRedlineData2 = pRedline2->GetRedlineData(0);
     CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlineData2.GetType());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateSingleRichDelete)
+{
+    // Given a document: a<del>b<b>c\nd</b>e</del>f:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert("abc");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("def");
+    SwModule* pModule = SwModule::get();
+    // Mark cd as bold:
+    pWrtShell->SttPara(/*bSelect=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
+    SwPaM* pCursor = pWrtShell->GetCursor();
+    CPPUNIT_ASSERT_EQUAL(u"c\nd"_ustr, pCursor->GetText());
+    SwView& rView = pWrtShell->GetView();
+    {
+        SvxWeightItem aWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
+        SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aSet(rView.GetPool());
+        aSet.Put(aWeightItem);
+        pWrtShell->SetAttrSet(aSet);
+    }
+    pModule->SetRedlineAuthor("Alice");
+    RedlineFlags nMode = pWrtShell->GetRedlineFlags();
+    pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+    pWrtShell->DelRight();
+    pWrtShell->SetRedlineFlags(nMode);
+
+    // When a 2nd user reinstates that change:
+    pModule->SetRedlineAuthor("Bob");
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:ReinstateTrackedChange", {});
+
+    // Then make sure this results in an insert after a delete:
+    // Expected document: a<del>b<b>c\nd</b>e</del><ins>b<b>c\nd</b>e</ins>f.
+    // First check the content.
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    const OUString& rPara1 = pCursor->GetPointNode().GetTextNode()->GetText();
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, rPara1);
+    pWrtShell->Down(/*bSelect=*/false);
+    const OUString& rPara2 = pCursor->GetPointNode().GetTextNode()->GetText();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: debc
+    // - Actual  : debc\ndef
+    // i.e. multi-paragraph delete was inserted with a literal newline character instead of creating
+    // a new text node.
+    CPPUNIT_ASSERT_EQUAL(u"debc"_ustr, rPara2);
+    pWrtShell->Down(/*bSelect=*/false);
+    const OUString& rPara3 = pCursor->GetPointNode().GetTextNode()->GetText();
+    CPPUNIT_ASSERT_EQUAL(u"def"_ustr, rPara3);
+    // Check if formatting was copied correctly.
+    pWrtShell->Up(/*bSelect=*/false);
+    pWrtShell->EndPara(/*bSelect=*/false);
+    SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aSet(rView.GetPool());
+    pWrtShell->GetCurAttr(aSet);
+    CPPUNIT_ASSERT(aSet.HasItem(RES_CHRATR_WEIGHT));
+    // Check the redline table: now the insert redline should be multi-paragraph.
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rRedlines.size());
+    const SwRangeRedline* pRedline1 = rRedlines[0];
+    const SwRedlineData& rRedlineData1 = pRedline1->GetRedlineData(0);
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlineData1.GetType());
+    const SwRangeRedline* pRedline2 = rRedlines[1];
+    const SwRedlineData& rRedlineData2 = pRedline2->GetRedlineData(0);
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlineData2.GetType());
+    CPPUNIT_ASSERT_GREATER(pRedline2->Start()->nNode, pRedline2->End()->nNode);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

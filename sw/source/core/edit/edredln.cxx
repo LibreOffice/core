@@ -24,6 +24,7 @@
 #include <editsh.hxx>
 #include <frmtool.hxx>
 #include <docsh.hxx>
+#include <swdtflvr.hxx>
 
 RedlineFlags SwEditShell::GetRedlineFlags() const
 {
@@ -89,11 +90,29 @@ void SwEditShell::ReinstatePaM(const SwRangeRedline& rRedline, SwPaM& rPaM)
     else if (rRedline.GetType() == RedlineType::Delete)
     {
         // Re-insert after the deletion.
-        OUString aText = rPaM.GetText();
-        ClearMark();
+        SwDocShell* pDocShell = GetDoc()->GetDocShell();
+        if (!pDocShell)
+        {
+            return;
+        }
+
+        SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+        if (!pWrtShell)
+        {
+            return;
+        }
+
         SwShellCursor* pCursor = getShellCursor(/*bBlock=*/true);
         *pCursor->GetPoint() = *rPaM.End();
-        Insert2(aText);
+        SetMark();
+        *pCursor->GetMark() = *rPaM.Start();
+        rtl::Reference<SwTransferable> pTransfer(new SwTransferable(*pWrtShell));
+        // Copy rich text, but don't strip out text inside delete redlines.
+        pTransfer->Copy(/*bIsCut=*/false, /*bDeleteRedlines=*/false);
+        ClearMark();
+        *pCursor->GetPoint() = *rPaM.End();
+        TransferableDataHelper aHelper(pTransfer);
+        SwTransferable::Paste(*pWrtShell, aHelper);
     }
 }
 

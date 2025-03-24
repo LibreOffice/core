@@ -179,8 +179,8 @@ public:
 
     // copy - methods and helper methods for the copy
     SW_DLLPUBLIC int  Cut();
-    SW_DLLPUBLIC int  Copy( bool bIsCut = false );
-    int  PrepareForCopy( bool bIsCut = false );
+    SW_DLLPUBLIC int  Copy( bool bIsCut = false, bool bDeleteRedlines = true );
+    int  PrepareForCopy( bool bIsCut = false, bool bDeleteRedlines = true );
     void PrepareForCopyTextRange(SwPaM & rPaM);
     void  CalculateAndCopy();                // special for Calculator
     bool  CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr );

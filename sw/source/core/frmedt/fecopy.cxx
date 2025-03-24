@@ -74,7 +74,7 @@
 using namespace ::com::sun::star;
 
 // Copy for the internal clipboard. Copies all selections to the clipboard.
-void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText )
+void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText, bool bDeleteRedlines )
 {
     rClpDoc.GetIDocumentUndoRedo().DoUndo(false); // always false!
 
@@ -118,7 +118,10 @@ void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText )
     }
 
     rClpDoc.getIDocumentFieldsAccess().LockExpFields();
-    rClpDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::DeleteRedlines );
+    if (bDeleteRedlines)
+    {
+        rClpDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::DeleteRedlines );
+    }
 
     // do we want to copy a FlyFrame?
     if( IsFrameSelected() )
