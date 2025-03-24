@@ -1,0 +1,11 @@
+--- a/nss/nss/Makefile    2025-03-24 15:04:03.270924656 +0100
++++ b/nss/nss/Makefile    2025-03-24 15:04:03.270924656 +0100
+@@ -63,6 +63,8 @@
+ # Translate coreconf build options to NSPR configure options.
+ #
+
++NSPR_CONFIGURE_OPTS += --enable-win32-target=WIN95
++
+ ifeq ($(OS_TARGET),Android)
+ NSPR_CONFIGURE_OPTS += --with-android-ndk=$(ANDROID_NDK) \
+                        --target=$(ANDROID_PREFIX) \
