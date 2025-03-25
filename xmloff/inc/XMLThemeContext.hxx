@@ -61,7 +61,7 @@ class XMLColorContext : public SvXMLImportContext
 public:
     XMLColorContext(SvXMLImport& rImport,
                     css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList,
-                    std::shared_ptr<model::ColorSet>& rpColorSet);
+                    const std::shared_ptr<model::ColorSet>& rpColorSet);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

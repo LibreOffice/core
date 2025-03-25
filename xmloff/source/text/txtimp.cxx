@@ -1003,7 +1003,7 @@ static bool lcl_HasListStyle( const OUString& sStyleName,
 }
 
 OUString XMLTextImportHelper::SetStyleAndAttrs(
-        SvXMLImport & rImport,
+        const SvXMLImport & rImport,
         const Reference < XTextCursor >& rCursor,
         const OUString& rStyleName,
         bool bPara,

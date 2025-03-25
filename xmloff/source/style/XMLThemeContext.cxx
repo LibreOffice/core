@@ -107,7 +107,7 @@ uno::Reference<xml::sax::XFastContextHandler>
 
 XMLColorContext::XMLColorContext(SvXMLImport& rImport,
                                  const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
-                                 std::shared_ptr<model::ColorSet>& rpColorSet)
+                                 const std::shared_ptr<model::ColorSet>& rpColorSet)
     : SvXMLImportContext(rImport)
 {
     OUString aName;

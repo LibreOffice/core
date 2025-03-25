@@ -168,7 +168,7 @@ public:
     // Add parameter <bOutlineLevelAttrFound> (#i73509#)
     // Add parameter <bSetListAttrs> in order to suppress the handling of the list attributes (#i80724#)
     OUString SetStyleAndAttrs(
-            SvXMLImport & rImport,
+            const SvXMLImport & rImport,
             const css::uno::Reference< css::text::XTextCursor >& rCursor,
             const OUString& rStyleName,
             bool bPara,
