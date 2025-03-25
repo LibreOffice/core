@@ -466,6 +466,34 @@ published service ParagraphProperties
             @since LibreOffice 25.8
          */
         [optional, property] boolean ParaHyphenationKeepLine;
+
+        /** specifies the paragraph end zone, i.e. allowed extra white space
+            in the last full line of paragraph before applying hyphenation.
+
+            @since LibreOffice 25.8
+         */
+        [optional, property] long ParaHyphenationZoneAlways;
+
+        /** specifies the column end zone, i.e. allowed extra white space
+            in the last line of columns before applying hyphenation.
+
+            @since LibreOffice 25.8
+         */
+        [optional, property] long ParaHyphenationZoneColumn;
+
+        /** specifies the page end zone, i.e. allowed extra white space
+            in the last line of page before applying hyphenation.
+
+            @since LibreOffice 25.8
+         */
+        [optional, property] long ParaHyphenationZonePage;
+
+        /** specifies the spread end zone, i.e. allowed extra white space
+            in the last line of spread before applying hyphenation.
+
+            @since LibreOffice 25.8
+         */
+        [optional, property] long ParaHyphenationZoneSpread;
 };
 
 

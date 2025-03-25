@@ -980,6 +980,38 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf165354_long_paragraph_3)
                 u"of the Earth is space ex");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf165984)
+{
+    // enabled hyphenation on page 1, disabled on page 2 by hyphenation-zone-page
+    // (no hyphenation, if the word part is completely inside the Page end zone:
+    // "iner-tially", but "except" and not "ex-cept")
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
+        return;
+
+    createSwDoc("tdf165984.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // paragraph with loext:hyphenation-zone-paragraph="7.62cm"
+    // This was "tially. Even" (now disabled hyphenation in the last full paragraph line)
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout[6]", "portion",
+                u"inertially. Even");
+
+    // 3-page paragraph, loext:hyphenation-zone-page="5.08cm"
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt/SwParaPortion/SwLineLayout[1]", "portion",
+                u"tially. Even just one ");
+
+    // disabled hyphenation by hyphenation-zone-page="5.08cm"
+    // This ended with "ex-"
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt/SwParaPortion/SwLineLayout[12]", "portion",
+                u"of the Earth is space ");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf106234)
 {
     createSwDoc("tdf106234.fodt");

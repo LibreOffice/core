@@ -280,11 +280,22 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         }
     }
 
-    bool bHyph = rInf.IsHyphenate() && !rInf.IsHyphForbud() &&
-        // disable hyphenation in the last line, when hyphenation-keep-line is enabled
-        ( rInf.GetTextFrame()->GetNoHyphOffset() == TextFrameIndex(COMPLETE_STRING) ||
+    bool bHyph = rInf.IsHyphenate() && !rInf.IsHyphForbud();
+    // disable hyphenation according to hyphenation-keep and hyphenation-keep-type,
+    // or modify hyphenation according to hyphenation-zone-column/page/spread (see widorp.cxx)
+    sal_Int16 nEndZone = 0;
+    if ( bHyph &&
+          rInf.GetTextFrame()->GetNoHyphOffset() != TextFrameIndex(COMPLETE_STRING) &&
           // when there is a portion in the last line, rInf.GetIdx() > GetNoHyphOffset()
-          rInf.GetTextFrame()->GetNoHyphOffset() > rInf.GetIdx() );
+          rInf.GetTextFrame()->GetNoHyphOffset() <= rInf.GetIdx() )
+    {
+          nEndZone = rInf.GetTextFrame()->GetNoHyphEndZone();
+          // disable hyphenation in the last line, when hyphenation-keep-line is enabled
+          // and hyphenation-keep, too (i.e. when end zone is not defined),
+          // also when the end zone is bigger, than the line width
+          if ( nEndZone < 0 || nEndZone >= nLineWidth )
+              bHyph = false;
+    }
     TextFrameIndex nHyphPos(0);
 
     // nCutPos is the first character not fitting to the current line
@@ -296,33 +307,76 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         // or 0, if the whole line in the hyphenation zone,
         // or -1, if no hyphenation zone defined (i.e. it is 0)
         sal_Int32 nHyphZone = -1;
+        sal_Int32 nParaZone = -1;
         const css::beans::PropertyValues & rHyphValues = rInf.GetHyphValues();
-        assert( rHyphValues.getLength() > 5 && rHyphValues[5].Name == UPN_HYPH_ZONE );
+        assert( rHyphValues.getLength() > 10 && rHyphValues[5].Name == UPN_HYPH_ZONE && rHyphValues[10].Name == UPN_HYPH_ZONE_ALWAYS );
         // hyphenation zone (distance from the line end in twips)
-        sal_uInt16 nTextHyphenZone;
-        if ( rHyphValues[5].Value >>= nTextHyphenZone )
+        sal_Int16 nTextHyphenZone = 0;
+        sal_Int16 nTextHyphenZoneAlways = 0;
+        rHyphValues[5].Value >>= nTextHyphenZone;
+        rHyphValues[10].Value >>= nTextHyphenZoneAlways;
+        if ( nTextHyphenZone || nTextHyphenZoneAlways || nEndZone )
+        {
             nHyphZone = nTextHyphenZone >= nLineWidth
                 ? 0
-                : sal_Int32(rInf.GetTextBreak( nLineWidth - nTextHyphenZone,
+                : sal_Int32(rInf.GetTextBreak( nLineWidth - (nEndZone ? nEndZone : nTextHyphenZone),
                                         nMaxLen, nMaxComp, rInf.GetCachedVclData().get() ));
-
+        }
         m_nCutPos = rInf.GetTextBreak( nLineWidth, nMaxLen, nMaxComp, nHyphPos, rInf.GetCachedVclData().get() );
 
-        // don't try to hyphenate in the hyphenation zone
-        if ( nHyphZone != -1 && TextFrameIndex(COMPLETE_STRING) != m_nCutPos )
+        if ( !nEndZone && nTextHyphenZoneAlways &&
+               // if paragraph end zone is not different from the hyphenation zone, skip its handling
+               nTextHyphenZoneAlways != nTextHyphenZone &&
+               // end of the paragraph
+               // FIXME: handle text portions
+               rInf.GetText().getLength() - sal_Int32(nHyphZone) <
+               sal_Int32(m_nCutPos) - sal_Int32(rInf.GetIdx() ) )
+        {
+            nParaZone = nTextHyphenZoneAlways >= nLineWidth
+                ? 0
+                : sal_Int32(rInf.GetTextBreak( nLineWidth - nTextHyphenZoneAlways,
+                                        nMaxLen, nMaxComp, rInf.GetCachedVclData().get() ));
+        }
+
+        // don't try to hyphenate in the hyphenation zone or in the paragraph end zone
+        // maximum end zone is the lower non-negative text break position
+        // (-1 means that no hyphenation zone is defined)
+        sal_Int32 nMaxZone = nParaZone > -1 && nParaZone < nHyphZone
+                ? nParaZone
+                : nHyphZone;
+        if ( nMaxZone != -1 && TextFrameIndex(COMPLETE_STRING) != m_nCutPos )
         {
             sal_Int32 nZonePos = sal_Int32(m_nCutPos);
-            // disable hyphenation, if there is a space within the hyphenation zone
+            // disable hyphenation, if there is a space within the hyphenation or end zones
             // Note: for better interoperability, not fitting space character at
             // rInf.GetIdx()[nHyphZone] always disables the hyphenation, don't need to calculate
             // with its fitting part. Moreover, do not check double or more spaces there, they
             // are accepted outside of the hyphenation zone, too.
-            for (; sal_Int32(rInf.GetIdx()) <= nZonePos && nHyphZone <= nZonePos; --nZonePos )
+            for (; sal_Int32(rInf.GetIdx()) <= nZonePos && nMaxZone <= nZonePos; --nZonePos )
             {
                 sal_Unicode cChar = rInf.GetText()[nZonePos];
                 if ( cChar == CH_BLANK || cChar == CH_FULL_BLANK || cChar == CH_SIX_PER_EM )
                 {
-                    bHyph = false;
+                    // no column/page/spread/end zone (!nEndZone),
+                    // but is it good for a paragraph end zone?
+                    if ( nParaZone != -1 && nParaZone <= nZonePos &&
+                        // still end of the paragraph, i.e. still more characters in the original
+                        // last full line, then in the planned last paragraph line
+                        // FIXME: guarantee, that last not full line won't become a full line
+                        // FIXME: handle text portions
+                        rInf.GetText().getLength() - sal_Int32(nZonePos) <
+                        sal_Int32(m_nCutPos) - sal_Int32(rInf.GetIdx() ) )
+                    {
+                        bHyph = false;
+                    }
+                    // otherwise disable hyphenation, if there is a space in the hyphenation zone
+                    else if ( nHyphZone != 1 && nHyphZone <= nZonePos )
+                    {
+                        bHyph = false;
+                    }
+                    // set applied end zone
+                    if ( !bHyph && nEndZone )
+                        rInf.GetTextFrame()->SetNoHyphOffset(TextFrameIndex(COMPLETE_STRING));
                 }
             }
         }
@@ -410,6 +464,10 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                             // with hyphenation, i.e. don't skip hyphenation, if the last paragraph
                             // line is already near full.
                             ( !bDoNotHyphenateLastLine ||
+                                  // FIXME: character count is not fail-safe: remaining characters
+                                  // can exceed the line, resulting two last full paragraph lines
+                                  // with disabled hyphenation.
+                                  // FIXME: handle text portions
                                   rInf.GetText().getLength() - sal_Int32(nLastWord) <
                                   sal_Int32(m_nCutPos) - sal_Int32(rInf.GetIdx() ) ) )
             {

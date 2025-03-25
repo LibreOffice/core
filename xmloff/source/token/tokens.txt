@@ -982,6 +982,10 @@ hyphenation-no-caps
 hyphenation-no-last-word
 hyphenation-word-char-count
 hyphenation-zone
+hyphenation-zone-always
+hyphenation-zone-column
+hyphenation-zone-page
+hyphenation-zone-spread
 hyphenation-compound-remain-char-count
 i
 icon

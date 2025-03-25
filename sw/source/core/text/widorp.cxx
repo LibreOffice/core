@@ -470,6 +470,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
     // hyphenation-keep: truncate a hyphenated line at the end of
     // the column, page or spread (but not more)
     // hyphenation-keep-line: disable hyphenation in the last line instead of truncating it
+    // hyphenation-zone-always/page/column/spread: modify hyphenation in the last line (end zone)
     int nExtraWidLines = 0;
     if( rLine.GetLineNr() >= m_nWidLines && pMaster->HasPara() )
     {
@@ -480,26 +481,58 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
         bool bKeep = rAttr.IsHyphen() && rAttr.IsKeep() && rAttr.GetKeepType();
         bool bKeepLine = bKeep && rAttr.IsKeepLine();
 
+        // last line of a column inside a page
+        auto pMasterPage = pMaster->FindPageFrame();
+        auto pPage = pFrame->FindPageFrame();
+        // across column, but not page or spread, when both parts are there on the same page
+        bool bAcrossColumnNotPage = pMasterPage == pPage;
+        // across page, but not spread, when the parts are there not on the same page
+        bool bAcrossPageNotSpread = !bAcrossColumnNotPage &&
+                   !pMasterPage->OnRightPage() && pPage->OnRightPage() &&
+                   // linked text frames can be on a different spread, so check
+                   // that the master is there on the previous page
+                   pMasterPage == pPage->GetPrev();
+
+        // calculate end zones, based on their inheritance (0 means inheritance)
+        sal_Int16 nEndZoneParagraph = rAttr.GetTextHyphenZoneAlways() > 0
+                ? rAttr.GetTextHyphenZoneAlways()
+                : rAttr.GetTextHyphenZone();
+        sal_Int16 nEndZoneColumn = rAttr.GetTextHyphenZoneColumn() > 0
+                ? rAttr.GetTextHyphenZoneColumn()
+                : nEndZoneParagraph;
+        sal_Int16 nEndZonePage = rAttr.GetTextHyphenZonePage() > 0
+                ? rAttr.GetTextHyphenZonePage()
+                : nEndZoneColumn;
+        sal_Int16 nEndZoneSpread = rAttr.GetTextHyphenZoneSpread() > 0
+                ? rAttr.GetTextHyphenZoneSpread()
+                : nEndZonePage;
+
+        // set end zone
+        sal_Int16 nNoHyphEndZone = bAcrossColumnNotPage
+            ? nEndZoneColumn
+            : bAcrossPageNotSpread
+                ? nEndZonePage
+                : nEndZoneSpread;
+
         // if PAGE or SPREAD, allow hyphenation in the not last column or in the
         // not last linked frame on the same page
-        if( bKeep && (
+        if( bKeep && bAcrossColumnNotPage && (
                 rAttr.GetKeepType() == css::text::ParagraphHyphenationKeepType::SPREAD ||
-                rAttr.GetKeepType() == css::text::ParagraphHyphenationKeepType::PAGE ) &&
-            pMaster->FindPageFrame() == pFrame->FindPageFrame() )
+                rAttr.GetKeepType() == css::text::ParagraphHyphenationKeepType::PAGE ) )
         {
             bKeep = false;
         }
 
         // if SPREAD, allow hyphenation at bottom of left page on the same spread
         if ( bKeep && rAttr.GetKeepType() == css::text::ParagraphHyphenationKeepType::SPREAD &&
-                   pFrame->FindPageFrame()->OnRightPage() &&
-                   pMaster->FindPageFrame() == pFrame->FindPageFrame()->GetPrev() )
+                   bAcrossPageNotSpread )
         {
             bKeep = false;
         }
 
         // remove remaining NoHyphOffset after enabling Hyphenate Across Spread (!bKeep) or
-        // enabling Move Line (!bKeepLine), and invalidate the master to update the last line
+        // enabling Move Line (!bKeepLine), or setting End Zone to no-limit,
+        // and invalidate the master to update the last line
         if ( (!bKeep || !bKeepLine) &&
                     pMaster->GetNoHyphOffset() != TextFrameIndex(COMPLETE_STRING) )
         {
@@ -508,7 +541,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
             pMaster->InvalidateSize_();
         }
 
-        if ( bKeep && pMasterPara && pMasterPara->GetNext() )
+        if ( ( bKeep || nNoHyphEndZone ) && pMasterPara && pMasterPara->GetNext() )
         {
             // calculate the beginning of last hyphenated line
             TextFrameIndex nIdx(pMasterPara->GetLen());
@@ -526,13 +559,14 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
             nIdx -= pNext->GetLen();
             // hyphenated line, but not the last remaining one
             // in the case of shifting full line (bKeepLine = false)
-            if ( pNext->IsEndHyph() && ( bKeepLine || !pNext->IsLastHyph() ) )
+            if ( pNext->IsEndHyph() && ( bKeepLine || !pNext->IsLastHyph() || nNoHyphEndZone ) )
             {
                 nExtraWidLines = rLine.GetLineNr() - m_nWidLines + 1;
                 // shift only a word: disable hyphenation in the line, if needed
-                if ( bKeepLine && nExtraWidLines )
+                if ( ( bKeepLine || nNoHyphEndZone ) && nExtraWidLines )
                 {
                     pMaster->SetNoHyphOffset(nIdx);
+                    pMaster->SetNoHyphEndZone(bKeep ? -1 : nNoHyphEndZone);
                     // update also columns and frames
                     pMaster->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
                     pMaster->InvalidateSize_();
@@ -542,7 +576,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
                 // set remaining line to "last remaining hyphenated line"
                 // to avoid truncating multiple hyphenated lines instead
                 // of a single one
-                else if ( !bKeepLine && pCurr->IsEndHyph() )
+                else if ( bKeep && !bKeepLine && pCurr->IsEndHyph() )
                     pCurr->SetLastHyph( true );
                 // also unset the line before the remaining one
                 // TODO: check also the line after the truncated line?

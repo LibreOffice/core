@@ -246,6 +246,14 @@ private:
     std::unique_ptr<weld::SpinButton> m_xMinWordLength;
     std::unique_ptr<weld::Label> m_xHyphenZoneLabel;
     SvxRelativeField m_aHyphenZone;
+    std::unique_ptr<weld::Label> m_xParagraphEndZoneLabel;
+    SvxRelativeField m_aParagraphEndZone;
+    std::unique_ptr<weld::Label> m_xColumnEndZoneLabel;
+    SvxRelativeField m_aColumnEndZone;
+    std::unique_ptr<weld::Label> m_xPageEndZoneLabel;
+    SvxRelativeField m_aPageEndZone;
+    std::unique_ptr<weld::Label> m_xSpreadEndZoneLabel;
+    SvxRelativeField m_aSpreadEndZone;
 
     // pagebreak
     std::unique_ptr<weld::CheckButton> m_xPageBreakBox;

@@ -1666,6 +1666,10 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
          m_xMaxHyphenEdit->get_value_changed_from_saved() ||
          m_xMinWordLength->get_value_changed_from_saved() ||
          m_aHyphenZone.get_value_changed_from_saved() ||
+         m_aParagraphEndZone.get_value_changed_from_saved() ||
+         m_aColumnEndZone.get_value_changed_from_saved() ||
+         m_aPageEndZone.get_value_changed_from_saved() ||
+         m_aSpreadEndZone.get_value_changed_from_saved() ||
          m_xAcrossParagraphBox->get_state_changed_from_saved() ||
          m_xAcrossColumnBox->get_state_changed_from_saved() ||
          m_xAcrossPageBox->get_state_changed_from_saved() ||
@@ -1691,6 +1695,10 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         DBG_ASSERT( pPool, "Where is the pool?" );
         MapUnit eUnit = pPool->GetMetric( _nWhich );
         aHyphen.GetTextHyphenZone() = static_cast<sal_uInt16>(m_aHyphenZone.GetCoreValue(eUnit));
+        aHyphen.GetTextHyphenZoneAlways() = static_cast<sal_uInt16>(m_aParagraphEndZone.GetCoreValue(eUnit));
+        aHyphen.GetTextHyphenZoneColumn() = static_cast<sal_uInt16>(m_aColumnEndZone.GetCoreValue(eUnit));
+        aHyphen.GetTextHyphenZonePage() = static_cast<sal_uInt16>(m_aPageEndZone.GetCoreValue(eUnit));
+        aHyphen.GetTextHyphenZoneSpread() = static_cast<sal_uInt16>(m_aSpreadEndZone.GetCoreValue(eUnit));
         aHyphen.SetHyphen( eHyphenState == TRISTATE_TRUE );
         aHyphen.SetNoLastWordHyphenation(m_xHyphenNoLastWordBox->get_state() != TRISTATE_TRUE);
         const TriState eAcrossParagraphState = m_xAcrossParagraphBox->get_state();
@@ -1943,6 +1951,26 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
         m_xMinWordLength->set_value(rHyphen.GetMinWordLength());
         m_aHyphenZone.SetFieldUnit(eFUnit);
         m_aHyphenZone.SetMetricValue(rHyphen.GetTextHyphenZone(), MapUnit::MapTwip);
+        m_aParagraphEndZone.SetFieldUnit(eFUnit);
+        m_aParagraphEndZone.SetMetricValue(rHyphen.GetTextHyphenZoneAlways(), MapUnit::MapTwip);
+        // 0 means inheritance, mark this with empty box
+        if ( !rHyphen.GetTextHyphenZoneAlways() )
+            m_aParagraphEndZone.set_text(OUString());
+        m_aColumnEndZone.SetFieldUnit(eFUnit);
+        m_aColumnEndZone.SetMetricValue(rHyphen.GetTextHyphenZoneColumn(), MapUnit::MapTwip);
+        // 0 means inheritance, mark this with empty box
+        if ( !rHyphen.GetTextHyphenZoneColumn() )
+            m_aColumnEndZone.set_text(OUString());
+        m_aPageEndZone.SetFieldUnit(eFUnit);
+        m_aPageEndZone.SetMetricValue(rHyphen.GetTextHyphenZonePage(), MapUnit::MapTwip);
+        // 0 means inheritance, mark this with empty box
+        if ( !rHyphen.GetTextHyphenZonePage() )
+            m_aPageEndZone.set_text(OUString());
+        m_aSpreadEndZone.SetFieldUnit(eFUnit);
+        m_aSpreadEndZone.SetMetricValue(rHyphen.GetTextHyphenZoneSpread(), MapUnit::MapTwip);
+        // 0 means inheritance, mark this with empty box
+        if ( !rHyphen.GetTextHyphenZoneSpread() )
+            m_aSpreadEndZone.set_text(OUString());
         m_xAcrossParagraphBox->set_state(!rHyphen.IsKeep() || rHyphen.GetKeepType() < 4 ? TRISTATE_TRUE : TRISTATE_FALSE);
         m_xAcrossColumnBox->set_state(!rHyphen.IsKeep() || rHyphen.GetKeepType() < 3 ? TRISTATE_TRUE : TRISTATE_FALSE);
         m_xAcrossPageBox->set_state(!rHyphen.IsKeep() || rHyphen.GetKeepType() < 2 ? TRISTATE_TRUE : TRISTATE_FALSE);
@@ -1976,11 +2004,32 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
     m_xMinWordLength->set_sensitive(bEnable);
     m_xHyphenZoneLabel->set_sensitive(bEnable);
     m_aHyphenZone.set_sensitive(bEnable);
+    m_xParagraphEndZoneLabel->set_sensitive(bEnable);
+    m_aParagraphEndZone.set_sensitive(bEnable);
+    m_xColumnEndZoneLabel->set_sensitive(bEnable);
+    m_aColumnEndZone.set_sensitive(bEnable);
+    m_xPageEndZoneLabel->set_sensitive(bEnable);
+    m_aPageEndZone.set_sensitive(bEnable);
+    m_xSpreadEndZoneLabel->set_sensitive(bEnable);
+    m_aSpreadEndZone.set_sensitive(bEnable);
     m_xAcrossText->set_sensitive(bEnable);
     m_xAcrossParagraphBox->set_sensitive(bEnable);
     m_xAcrossColumnBox->set_sensitive(bEnable);
     m_xAcrossPageBox->set_sensitive(bEnable);
     m_xAcrossSpreadBox->set_sensitive(bEnable);
+    // gray out end zones, if hyphenation across is disabled
+    bool bAcross = bEnable && m_xAcrossParagraphBox->get_state() == TRISTATE_TRUE;
+    m_xParagraphEndZoneLabel->set_sensitive(bAcross);
+    m_aParagraphEndZone.set_sensitive(bAcross);
+    bAcross = bEnable && m_xAcrossColumnBox->get_state() == TRISTATE_TRUE;
+    m_xColumnEndZoneLabel->set_sensitive(bAcross);
+    m_aColumnEndZone.set_sensitive(bAcross);
+    bAcross = bEnable && m_xAcrossPageBox->get_state() == TRISTATE_TRUE;
+    m_xPageEndZoneLabel->set_sensitive(bAcross);
+    m_aPageEndZone.set_sensitive(bAcross);
+    bAcross = bEnable && m_xAcrossSpreadBox->get_state() == TRISTATE_TRUE;
+    m_xSpreadEndZoneLabel->set_sensitive(bAcross);
+    m_aSpreadEndZone.set_sensitive(bAcross);
     // always gray out MoveLine, if hyphenation is forbidden across spreads
     bool bAcrossSpread = m_xAcrossSpreadBox->get_state() == TRISTATE_TRUE;
     m_xAcrossMoveLineBox->set_sensitive( bEnable && !bAcrossSpread );
@@ -2247,6 +2296,10 @@ void SvxExtParagraphTabPage::ChangesApplied()
     m_xMaxHyphenEdit->save_value();
     m_xMinWordLength->save_value();
     m_aHyphenZone.save_value();
+    m_aParagraphEndZone.save_value();
+    m_aColumnEndZone.save_value();
+    m_aPageEndZone.save_value();
+    m_aSpreadEndZone.save_value();
     m_xAcrossParagraphBox->save_state();
     m_xAcrossColumnBox->save_state();
     m_xAcrossPageBox->save_state();
@@ -2307,6 +2360,14 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     , m_xMinWordLength(m_xBuilder->weld_spin_button(u"spinMinLen"_ustr))
     , m_xHyphenZoneLabel(m_xBuilder->weld_label(u"labelHyphenZone"_ustr))
     , m_aHyphenZone(m_xBuilder->weld_metric_spin_button(u"spinHyphenZone"_ustr, FieldUnit::CM))
+    , m_xParagraphEndZoneLabel(m_xBuilder->weld_label(u"labelParagraphEndZone"_ustr))
+    , m_aParagraphEndZone(m_xBuilder->weld_metric_spin_button(u"spinParagraphEndZone"_ustr, FieldUnit::CM))
+    , m_xColumnEndZoneLabel(m_xBuilder->weld_label(u"labelColumnEndZone"_ustr))
+    , m_aColumnEndZone(m_xBuilder->weld_metric_spin_button(u"spinColumnEndZone"_ustr, FieldUnit::CM))
+    , m_xPageEndZoneLabel(m_xBuilder->weld_label(u"labelPageEndZone"_ustr))
+    , m_aPageEndZone(m_xBuilder->weld_metric_spin_button(u"spinPageEndZone"_ustr, FieldUnit::CM))
+    , m_xSpreadEndZoneLabel(m_xBuilder->weld_label(u"labelSpreadEndZone"_ustr))
+    , m_aSpreadEndZone(m_xBuilder->weld_metric_spin_button(u"spinSpreadEndZone"_ustr, FieldUnit::CM))
     //Page break
     , m_xPageBreakBox(m_xBuilder->weld_check_button(u"checkInsert"_ustr))
     , m_xBreakTypeFT(m_xBuilder->weld_label(u"labelType"_ustr))
@@ -2392,6 +2453,14 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     m_xMinWordLength->set_sensitive(false);
     m_xHyphenZoneLabel->set_sensitive(false);
     m_aHyphenZone.set_sensitive(false);
+    m_xParagraphEndZoneLabel->set_sensitive(false);
+    m_aParagraphEndZone.set_sensitive(false);
+    m_xColumnEndZoneLabel->set_sensitive(false);
+    m_aColumnEndZone.set_sensitive(false);
+    m_xPageEndZoneLabel->set_sensitive(false);
+    m_aPageEndZone.set_sensitive(false);
+    m_xSpreadEndZoneLabel->set_sensitive(false);
+    m_aSpreadEndZone.set_sensitive(false);
     m_xPageNumBox->set_sensitive(false);
     m_xPagenumEdit->set_sensitive(false);
     m_xAcrossText->set_sensitive(false);
@@ -2538,9 +2607,21 @@ void SvxExtParagraphTabPage::HyphenClickHdl()
     m_aHyphenZone.set_sensitive(bEnable);
     m_xAcrossText->set_sensitive(bEnable);
     m_xAcrossParagraphBox->set_sensitive(bEnable);
+    bool bAcross = bEnable && m_xAcrossParagraphBox->get_state() == TRISTATE_TRUE;
+    m_xParagraphEndZoneLabel->set_sensitive(bAcross);
+    m_aParagraphEndZone.set_sensitive(bAcross);
     m_xAcrossColumnBox->set_sensitive(bEnable);
+    bAcross = bEnable && m_xAcrossColumnBox->get_state() == TRISTATE_TRUE;
+    m_xColumnEndZoneLabel->set_sensitive(bAcross);
+    m_aColumnEndZone.set_sensitive(bAcross);
     m_xAcrossPageBox->set_sensitive(bEnable);
+    bAcross = bEnable && m_xAcrossPageBox->get_state() == TRISTATE_TRUE;
+    m_xPageEndZoneLabel->set_sensitive(bAcross);
+    m_aPageEndZone.set_sensitive(bAcross);
     m_xAcrossSpreadBox->set_sensitive(bEnable);
+    bAcross = bEnable && m_xAcrossSpreadBox->get_state() == TRISTATE_TRUE;
+    m_xSpreadEndZoneLabel->set_sensitive(bAcross);
+    m_aSpreadEndZone.set_sensitive(bAcross);
     // only sensitive, if the hyphenation is disabled across spreads
     m_xAcrossMoveLineBox->set_sensitive( m_xAcrossSpreadBox->get_state() != TRISTATE_TRUE );
     m_xHyphenBox->set_state(bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
@@ -2653,6 +2734,19 @@ IMPL_LINK(SvxExtParagraphTabPage, AcrossParagraphHdl_Impl, weld::Toggleable&, rT
         m_xAcrossPageBox->set_state( TRISTATE_FALSE );
         m_xAcrossSpreadBox->set_state( TRISTATE_FALSE );
         m_xAcrossMoveLineBox->set_sensitive( true );
+        m_xParagraphEndZoneLabel->set_sensitive(false);
+        m_aParagraphEndZone.set_sensitive(false);
+        m_xColumnEndZoneLabel->set_sensitive(false);
+        m_aColumnEndZone.set_sensitive(false);
+        m_xPageEndZoneLabel->set_sensitive(false);
+        m_aPageEndZone.set_sensitive(false);
+        m_xSpreadEndZoneLabel->set_sensitive(false);
+        m_aSpreadEndZone.set_sensitive(false);
+    }
+    else
+    {
+        m_xParagraphEndZoneLabel->set_sensitive(true);
+        m_aParagraphEndZone.set_sensitive(true);
     }
 }
 
@@ -2664,9 +2758,21 @@ IMPL_LINK(SvxExtParagraphTabPage, AcrossColumnHdl_Impl, weld::Toggleable&, rTogg
         m_xAcrossPageBox->set_state( TRISTATE_FALSE );
         m_xAcrossSpreadBox->set_state( TRISTATE_FALSE );
         m_xAcrossMoveLineBox->set_sensitive( true );
+        m_xColumnEndZoneLabel->set_sensitive(false);
+        m_aColumnEndZone.set_sensitive(false);
+        m_xPageEndZoneLabel->set_sensitive(false);
+        m_aPageEndZone.set_sensitive(false);
+        m_xSpreadEndZoneLabel->set_sensitive(false);
+        m_aSpreadEndZone.set_sensitive(false);
     }
     else
+    {
         m_xAcrossParagraphBox->set_state( TRISTATE_TRUE );
+        m_xParagraphEndZoneLabel->set_sensitive(true);
+        m_aParagraphEndZone.set_sensitive(true);
+        m_xColumnEndZoneLabel->set_sensitive(true);
+        m_aColumnEndZone.set_sensitive(true);
+    }
 }
 
 IMPL_LINK(SvxExtParagraphTabPage, AcrossPageHdl_Impl, weld::Toggleable&, rToggle, void)
@@ -2676,11 +2782,23 @@ IMPL_LINK(SvxExtParagraphTabPage, AcrossPageHdl_Impl, weld::Toggleable&, rToggle
     {
         m_xAcrossParagraphBox->set_state( TRISTATE_TRUE );
         m_xAcrossColumnBox->set_state( TRISTATE_TRUE );
+        m_xParagraphEndZoneLabel->set_sensitive(true);
+        m_aParagraphEndZone.set_sensitive(true);
+        m_xColumnEndZoneLabel->set_sensitive(true);
+        m_aColumnEndZone.set_sensitive(true);
+        m_xPageEndZoneLabel->set_sensitive(true);
+        m_aPageEndZone.set_sensitive(true);
+        m_xSpreadEndZoneLabel->set_sensitive(false);
+        m_aSpreadEndZone.set_sensitive(false);
     }
     else
     {
         m_xAcrossSpreadBox->set_state( TRISTATE_FALSE );
         m_xAcrossMoveLineBox->set_sensitive( true );
+        m_xPageEndZoneLabel->set_sensitive(false);
+        m_aPageEndZone.set_sensitive(false);
+        m_xSpreadEndZoneLabel->set_sensitive(false);
+        m_aSpreadEndZone.set_sensitive(false);
     }
 }
 
@@ -2692,12 +2810,24 @@ IMPL_LINK(SvxExtParagraphTabPage, AcrossSpreadHdl_Impl, weld::Toggleable&, rTogg
         m_xAcrossParagraphBox->set_state( TRISTATE_TRUE );
         m_xAcrossColumnBox->set_state( TRISTATE_TRUE );
         m_xAcrossPageBox->set_state( TRISTATE_TRUE );
-    }
-    // only sensitive, if the hyphenation is disabled across spreads
-    bool bAcrossSpread = m_xAcrossSpreadBox->get_state() == TRISTATE_TRUE;
-    m_xAcrossMoveLineBox->set_sensitive( !bAcrossSpread );
-    if ( bAcrossSpread )
+        m_xParagraphEndZoneLabel->set_sensitive(true);
+        m_aParagraphEndZone.set_sensitive(true);
+        m_xColumnEndZoneLabel->set_sensitive(true);
+        m_aColumnEndZone.set_sensitive(true);
+        m_xPageEndZoneLabel->set_sensitive(true);
+        m_aPageEndZone.set_sensitive(true);
+        m_xSpreadEndZoneLabel->set_sensitive(true);
+        m_aSpreadEndZone.set_sensitive(true);
+        m_xAcrossMoveLineBox->set_sensitive( false );
         m_xAcrossMoveLineBox->set_state( TRISTATE_FALSE );
+    }
+    else
+    {
+        m_xSpreadEndZoneLabel->set_sensitive(false);
+        m_aSpreadEndZone.set_sensitive(false);
+        // only sensitive, if the hyphenation is disabled across spreads
+        m_xAcrossMoveLineBox->set_sensitive( true );
+    }
 }
 
 SvxAsianTabPage::SvxAsianTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)

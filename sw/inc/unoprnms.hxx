@@ -78,6 +78,10 @@ inline constexpr OUString UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS = u"ParaHyphenat
 inline constexpr OUString UNO_NAME_PARA_HYPHENATION_MIN_WORD_LENGTH
     = u"ParaHyphenationMinWordLength"_ustr;
 inline constexpr OUString UNO_NAME_PARA_HYPHENATION_ZONE = u"ParaHyphenationZone"_ustr;
+inline constexpr OUString UNO_NAME_PARA_HYPHENATION_ZONE_ALWAYS = u"ParaHyphenationZoneAlways"_ustr;
+inline constexpr OUString UNO_NAME_PARA_HYPHENATION_ZONE_COLUMN = u"ParaHyphenationZoneColumn"_ustr;
+inline constexpr OUString UNO_NAME_PARA_HYPHENATION_ZONE_PAGE = u"ParaHyphenationZonePage"_ustr;
+inline constexpr OUString UNO_NAME_PARA_HYPHENATION_ZONE_SPREAD = u"ParaHyphenationZoneSpread"_ustr;
 inline constexpr OUString UNO_NAME_PARA_HYPHENATION_NO_CAPS = u"ParaHyphenationNoCaps"_ustr;
 inline constexpr OUString UNO_NAME_PARA_HYPHENATION_NO_LAST_WORD
     = u"ParaHyphenationNoLastWord"_ustr;

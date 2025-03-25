@@ -593,6 +593,10 @@ SvxHyphenZoneItem::SvxHyphenZoneItem( const bool bHyph, const sal_uInt16 nId ) :
     nMaxHyphens(255),
     nMinWordLength(0),
     nTextHyphenZone(0),
+    nTextHyphenZoneAlways(0),
+    nTextHyphenZoneColumn(0),
+    nTextHyphenZonePage(0),
+    nTextHyphenZoneSpread(0),
     nKeepType(css::text::ParagraphHyphenationKeepType::COLUMN),
     bKeepLine(false),
     nCompoundMinLead(0)
@@ -631,6 +635,18 @@ bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) con
         break;
         case MID_HYPHEN_ZONE:
             rVal <<= static_cast<sal_Int16>(nTextHyphenZone);
+        break;
+        case MID_HYPHEN_ZONE_ALWAYS:
+            rVal <<= static_cast<sal_Int16>(nTextHyphenZoneAlways);
+        break;
+        case MID_HYPHEN_ZONE_COLUMN:
+            rVal <<= static_cast<sal_Int16>(nTextHyphenZoneColumn);
+        break;
+        case MID_HYPHEN_ZONE_PAGE:
+            rVal <<= static_cast<sal_Int16>(nTextHyphenZonePage);
+        break;
+        case MID_HYPHEN_ZONE_SPREAD:
+            rVal <<= static_cast<sal_Int16>(nTextHyphenZoneSpread);
         break;
         case MID_HYPHEN_KEEP_TYPE:
             rVal <<= static_cast<sal_Int16>(nKeepType);
@@ -687,6 +703,18 @@ bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_HYPHEN_ZONE:
             nTextHyphenZone = nNewVal;
         break;
+        case MID_HYPHEN_ZONE_ALWAYS:
+            nTextHyphenZoneAlways = nNewVal;
+        break;
+        case MID_HYPHEN_ZONE_COLUMN:
+            nTextHyphenZoneColumn = nNewVal;
+        break;
+        case MID_HYPHEN_ZONE_PAGE:
+            nTextHyphenZonePage = nNewVal;
+        break;
+        case MID_HYPHEN_ZONE_SPREAD:
+            nTextHyphenZoneSpread = nNewVal;
+        break;
         case MID_HYPHEN_KEEP_TYPE:
             nKeepType = static_cast<sal_uInt8>(nNewVal);
         break;
@@ -716,6 +744,10 @@ bool SvxHyphenZoneItem::operator==( const SfxPoolItem& rAttr ) const
             && rItem.nMaxHyphens == nMaxHyphens
             && rItem.nMinWordLength == nMinWordLength
             && rItem.nTextHyphenZone == nTextHyphenZone
+            && rItem.nTextHyphenZoneAlways == nTextHyphenZoneAlways
+            && rItem.nTextHyphenZoneColumn == nTextHyphenZoneColumn
+            && rItem.nTextHyphenZonePage == nTextHyphenZonePage
+            && rItem.nTextHyphenZoneSpread == nTextHyphenZoneSpread
             && rItem.bKeepLine == bKeepLine
             && rItem.nKeepType == nKeepType );
 }
@@ -748,6 +780,14 @@ bool SvxHyphenZoneItem::GetPresentation
                     OUString::number( nMaxHyphens ) + cpDelimTmp +
                     OUString::number( nMinWordLength ) + cpDelimTmp +
                     GetMetricText( nTextHyphenZone, eCoreUnit, ePresUnit, &rIntl ) +
+                        " " + EditResId(GetMetricId(ePresUnit)) +
+                    GetMetricText( nTextHyphenZoneAlways, eCoreUnit, ePresUnit, &rIntl ) +
+                        " " + EditResId(GetMetricId(ePresUnit)) +
+                    GetMetricText( nTextHyphenZoneColumn, eCoreUnit, ePresUnit, &rIntl ) +
+                        " " + EditResId(GetMetricId(ePresUnit)) +
+                    GetMetricText( nTextHyphenZonePage, eCoreUnit, ePresUnit, &rIntl ) +
+                        " " + EditResId(GetMetricId(ePresUnit)) +
+                    GetMetricText( nTextHyphenZoneSpread, eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
 
             if ( bNoCapsHyphenation )
@@ -789,10 +829,24 @@ bool SvxHyphenZoneItem::GetPresentation
                     cpDelimTmp +
                     EditResId(RID_SVXITEMS_HYPHEN_MINWORDLEN).replaceAll("%1", OUString::number(nMinWordLength));
 
-            if ( nTextHyphenZone > 0 )
+            if ( nTextHyphenZone > 0 || nTextHyphenZoneAlways > 0 ||
+                 nTextHyphenZoneColumn > 0 || nTextHyphenZonePage > 0 ||
+                 nTextHyphenZoneSpread > 0 )
             {
                 rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_ZONE) +
                         GetMetricText( nTextHyphenZone, eCoreUnit, ePresUnit, &rIntl ) +
+                        " " + EditResId(GetMetricId(ePresUnit));
+                rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_ZONE_ALWAYS) +
+                        GetMetricText( nTextHyphenZoneAlways, eCoreUnit, ePresUnit, &rIntl ) +
+                        " " + EditResId(GetMetricId(ePresUnit));
+                rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_ZONE_COLUMN) +
+                        GetMetricText( nTextHyphenZoneColumn, eCoreUnit, ePresUnit, &rIntl ) +
+                        " " + EditResId(GetMetricId(ePresUnit));
+                rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_ZONE_PAGE) +
+                        GetMetricText( nTextHyphenZonePage, eCoreUnit, ePresUnit, &rIntl ) +
+                        " " + EditResId(GetMetricId(ePresUnit));
+                rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_ZONE_SPREAD) +
+                        GetMetricText( nTextHyphenZoneSpread, eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
 

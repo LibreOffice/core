@@ -60,6 +60,26 @@
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment10">
+    <property name="upper">55.88</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment11">
+    <property name="upper">55.88</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment12">
+    <property name="upper">55.88</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment13">
+    <property name="upper">55.88</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
   <!-- n-columns=2 n-rows=2 -->
   <object class="GtkGrid" id="TextFlowPage">
     <property name="visible">True</property>
@@ -347,39 +367,33 @@
                 <property name="width">2</property>
               </packing>
             </child>
-            <child>
-              <!-- n-columns=2 n-rows=1 -->
-              <object class="GtkGrid" id="gridHyphenAcrossLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-start">12</property>
-                <property name="margin-top">6</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">12</property>
-                <child>
-                  <object class="GtkLabel" id="labelHyphenAcross">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="textflowpage|labelHyphenAcross">Hyphenation across</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">labelHyphenAcross</property>
-                    <property name="xalign">0</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">10</property>
-                <property name="width">2</property>
-              </packing>
-            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="LabelHyphenation">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="textflowpage|LabelHyphenation">Hyphenation</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
+        <property name="height">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFrame" id="FrameHyphenationAcross">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="events">GDK_EXPOSURE_MASK</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
+          <!-- n-columns=2 n-rows=8 -->
             <child>
               <!-- n-columns=2 n-rows=1 -->
               <object class="GtkGrid" id="gridHyphenAcross">
@@ -470,6 +484,114 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkSpinButton" id="spinParagraphEndZone">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment10</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelParagraphEndZone">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="textflowpage|labelParagraphEndZone">Paragraph end _zone:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">spinParagraphEndZone</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="spinColumnEndZone">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment11</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelColumnEndZone">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="textflowpage|labelColumnEndZone">Column end _zone:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">spinColumnEndZone</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="spinPageEndZone">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment12</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelPageEndZone">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="textflowpage|labelPageEndZone">Page end _zone:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">spinPageEndZone</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="spinSpreadEndZone">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment13</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelSpreadEndZone">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="textflowpage|labelSpreadEndZone">Spread end _zone:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">spinSpreadEndZone</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkCheckButton" id="checkMoveLine">
                     <property name="label" translatable="yes" context="textflowpage|checkMoveLine">Move Line</property>
                     <property name="visible">True</property>
@@ -485,24 +607,17 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">1</property>
+                    <property name="left-attach">3</property>
                     <property name="top-attach">3</property>
                   </packing>
                 </child>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">11</property>
-                <property name="width">2</property>
-              </packing>
             </child>
-          </object>
-        </child>
         <child type="label">
-          <object class="GtkLabel" id="LabelHyphenation">
+          <object class="GtkLabel" id="labelHyphenAcross">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="textflowpage|LabelHyphenation">Hyphenation</property>
+            <property name="label" translatable="yes" context="textflowpage|labelHyphenAcross">Hyphenation across</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -511,8 +626,8 @@
       </object>
       <packing>
         <property name="left-attach">0</property>
-        <property name="top-attach">0</property>
-        <property name="height">2</property>
+        <property name="top-attach">2</property>
+        <property name="width">2</property>
       </packing>
     </child>
     <child>

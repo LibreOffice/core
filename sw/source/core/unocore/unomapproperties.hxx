@@ -121,6 +121,10 @@
         { UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS,        RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_MAX_HYPHENS                 }, \
         { UNO_NAME_PARA_HYPHENATION_MIN_WORD_LENGTH,    RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_WORD_LENGTH             }, \
         { UNO_NAME_PARA_HYPHENATION_ZONE,               RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_ZONE}, \
+        { UNO_NAME_PARA_HYPHENATION_ZONE_ALWAYS,        RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_ZONE_ALWAYS}, \
+        { UNO_NAME_PARA_HYPHENATION_ZONE_COLUMN,        RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_ZONE_COLUMN}, \
+        { UNO_NAME_PARA_HYPHENATION_ZONE_PAGE,          RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_ZONE_PAGE}, \
+        { UNO_NAME_PARA_HYPHENATION_ZONE_SPREAD,        RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_ZONE_SPREAD}, \
         { UNO_NAME_PARA_HYPHENATION_KEEP,               RES_PARATR_HYPHENZONE,         cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, MID_HYPHEN_KEEP                        }, \
         { UNO_NAME_PARA_HYPHENATION_KEEP_TYPE,          RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_KEEP_TYPE                   }, \
         { UNO_NAME_PARA_HYPHENATION_KEEP_LINE,          RES_PARATR_HYPHENZONE,         cppu::UnoType<bool>::get(),              PropertyAttribute::MAYBEVOID, MID_HYPHEN_KEEP_LINE            }, \
@@ -492,6 +496,10 @@
                     { UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS, RES_PARATR_HYPHENZONE,       cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MAX_HYPHENS},\
                     { UNO_NAME_PARA_HYPHENATION_MIN_WORD_LENGTH, RES_PARATR_HYPHENZONE,       cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_WORD_LENGTH},\
                     { UNO_NAME_PARA_HYPHENATION_ZONE, RES_PARATR_HYPHENZONE,                      cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_ZONE},\
+                    { UNO_NAME_PARA_HYPHENATION_ZONE_ALWAYS, RES_PARATR_HYPHENZONE,               cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_ZONE_ALWAYS},\
+                    { UNO_NAME_PARA_HYPHENATION_ZONE_COLUMN, RES_PARATR_HYPHENZONE,               cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_ZONE_COLUMN},\
+                    { UNO_NAME_PARA_HYPHENATION_ZONE_PAGE, RES_PARATR_HYPHENZONE,                 cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_ZONE_PAGE},\
+                    { UNO_NAME_PARA_HYPHENATION_ZONE_SPREAD, RES_PARATR_HYPHENZONE,               cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_ZONE_SPREAD},\
                     { UNO_NAME_PARA_HYPHENATION_KEEP, RES_PARATR_HYPHENZONE,                      cppu::UnoType<bool>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_KEEP},\
                     { UNO_NAME_PARA_HYPHENATION_KEEP_TYPE, RES_PARATR_HYPHENZONE,                 cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_KEEP_TYPE},\
                     { UNO_NAME_PARA_HYPHENATION_KEEP_LINE, RES_PARATR_HYPHENZONE,                 cppu::UnoType<bool>::get(),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_KEEP_LINE},\

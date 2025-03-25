@@ -42,6 +42,10 @@ inline constexpr OUString UPN_HYPH_MIN_WORD_LENGTH            = u"HyphMinWordLen
 inline constexpr OUString UPN_HYPH_NO_CAPS                    = u"HyphNoCaps"_ustr;
 inline constexpr OUString UPN_HYPH_NO_LAST_WORD               = u"HyphNoLastWord"_ustr;
 inline constexpr OUString UPN_HYPH_ZONE                       = u"HyphZone"_ustr;
+inline constexpr OUString UPN_HYPH_ZONE_ALWAYS                = u"HyphZoneAlways"_ustr;
+inline constexpr OUString UPN_HYPH_ZONE_COLUMN                = u"HyphZoneColumn"_ustr;
+inline constexpr OUString UPN_HYPH_ZONE_PAGE                  = u"HyphZonePage"_ustr;
+inline constexpr OUString UPN_HYPH_ZONE_SPREAD                = u"HyphZoneSpread"_ustr;
 inline constexpr OUString UPN_HYPH_KEEP                       = u"HyphKeep"_ustr;
 inline constexpr OUString UPN_HYPH_KEEP_TYPE                  = u"HyphKeepType"_ustr;
 inline constexpr OUString UPN_HYPH_KEEP_LINE                  = u"HyphKeepLine"_ustr;
@@ -111,10 +115,14 @@ inline constexpr OUString UPN_IS_GRAMMAR_INTERACTIVE          = u"IsInteractiveG
 #define UPH_HYPH_NO_CAPS                    31
 #define UPH_HYPH_NO_LAST_WORD               32
 #define UPH_HYPH_ZONE                       33
-#define UPH_HYPH_KEEP                       34
-#define UPH_HYPH_KEEP_TYPE                  35
-#define UPH_HYPH_COMPOUND_MIN_LEADING       36
-#define UPH_HYPH_KEEP_LINE                  37
+#define UPH_HYPH_ZONE_ALWAYS                34
+#define UPH_HYPH_ZONE_COLUMN                35
+#define UPH_HYPH_ZONE_PAGE                  36
+#define UPH_HYPH_ZONE_SPREAD                37
+#define UPH_HYPH_KEEP                       38
+#define UPH_HYPH_KEEP_TYPE                  39
+#define UPH_HYPH_COMPOUND_MIN_LEADING       40
+#define UPH_HYPH_KEEP_LINE                  41
 
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
