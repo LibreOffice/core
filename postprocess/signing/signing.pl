@@ -218,7 +218,7 @@ sub execute     #11.07.2007 10:02
         print LOG "$result" if ($opt_log);
         $errorlines .= $result if ($result =~ /SignTool Error\:/);
     } # while
-    close PIPE;
+    close PIPE or print_error("Exit status $? from signtool!\n");
     print_error( "$errorlines\n" ) if ($errorlines);
 }   ##execute
 
