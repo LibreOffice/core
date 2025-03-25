@@ -186,7 +186,7 @@
 //  RES_UNKNOWNATR_CONTAINER ok
 //  RES_TXTATR_UNKNOWN_CONTAINER ok
 
-ItemInfoUser::ItemInfoUser(const ItemInfo& rItemInfo, SfxItemPool& rItemPool, const SfxPoolItem& rItem, bool bPassingOwnership)
+ItemInfoUser::ItemInfoUser(const ItemInfo& rItemInfo, const SfxItemPool& rItemPool, const SfxPoolItem& rItem, bool bPassingOwnership)
 : ItemInfo(rItemInfo)
 , m_pItem(implCreateItemEntry(rItemPool, &rItem, bPassingOwnership))
 {

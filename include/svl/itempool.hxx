@@ -101,7 +101,7 @@ class UNLESS_MERGELIBS(SVL_DLLPUBLIC) ItemInfoUser : public ItemInfo
     const SfxPoolItem* m_pItem;
 
 public:
-    ItemInfoUser(const ItemInfo& rItemInfo, SfxItemPool& rItemPool, const SfxPoolItem& rItem, bool bPassingOwnership = false);
+    ItemInfoUser(const ItemInfo& rItemInfo, const SfxItemPool& rItemPool, const SfxPoolItem& rItem, bool bPassingOwnership = false);
     virtual ~ItemInfoUser();
 
     virtual const SfxPoolItem* getItem() const override { return m_pItem; }
