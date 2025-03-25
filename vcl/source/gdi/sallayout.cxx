@@ -1025,6 +1025,14 @@ void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
         {
             if (maFallbackRuns[i].GetRun(&nRunStart, &nRunEnd, &bRtl))
             {
+                // tdf#165510: Need to use the direction of the current character,
+                // not the direction of the fallback run.
+                nActiveCharIndex = nActiveCharPos - mnMinCharPos;
+                if (nActiveCharIndex >= 0)
+                {
+                    bRtl = vRtl[nActiveCharIndex];
+                }
+
                 if (bRtl)
                 {
                     if (nRunStart > nActiveCharPos)
