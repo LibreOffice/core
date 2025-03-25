@@ -1111,7 +1111,9 @@ boost::property_tree::ptree getHyperlinkPropTree(const OUString& sText, const OU
 
 } // End of anon namespace
 
-tools::Rectangle ImpEditView::ImplGetEditCursor(EditPaM& aPaM, CursorFlags aShowCursorFlags, sal_Int32& nTextPortionStart, ParaPortion const& rParaPortion) const
+tools::Rectangle ImpEditView::ImplGetEditCursor(EditPaM const& aPaM,
+    CursorFlags const aShowCursorFlags, sal_Int32& nTextPortionStart,
+    ParaPortion const& rParaPortion) const
 {
     tools::Rectangle aEditCursor = getImpEditEngine().PaMtoEditCursor(aPaM, aShowCursorFlags);
     if (!IsInsertMode() && !maEditSelection.HasRange())
@@ -1174,37 +1176,11 @@ tools::Rectangle ImpEditView::GetEditCursor() const
     return ImplGetEditCursor(aPaM, aShowCursorFlags, nTextPortionStart, rParaPortion);
 }
 
-void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
+::std::optional<::std::tuple<tools::Rectangle, tools::Rectangle, CursorFlags, sal_Int32>>
+ImpEditView::ImplGetCursorRectAndMaybeScroll(EditPaM const& rPos,
+    ParaPortion const& rParaPortion, bool const bGotoCursor)
 {
-    // No ShowCursor in an empty View ...
-    if (maOutputArea.IsEmpty())
-        return;
-    if ( (maOutputArea.Left() >= maOutputArea.Right() ) && ( maOutputArea.Top() >= maOutputArea.Bottom() ) )
-        return;
-
-    getEditEngine().CheckIdleFormatter();
-
-    // For some reasons I end up here during the formatting, if the Outliner
-    // is initialized in Paint, because no SetPool();
-    if (getImpEditEngine().IsFormatting())
-        return;
-    if (!getImpEditEngine().IsUpdateLayout())
-        return;
-    if (getImpEditEngine().IsInUndo())
-        return;
-
-    if (mpOutputWindow && mpOutputWindow->GetCursor() != GetCursor())
-        mpOutputWindow->SetCursor(GetCursor());
-
-    EditPaM aPaM(maEditSelection.Max());
-
     sal_Int32 nTextPortionStart = 0;
-    sal_Int32 nPara = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
-    if (nPara == EE_PARA_MAX) // #i94322
-        return;
-
-    ParaPortion const& rParaPortion = getEditEngine().GetParaPortions().getRef(nPara);
-
     CursorFlags aShowCursorFlags = maExtraCursorFlags;
     aShowCursorFlags.bTextOnly = true;
 
@@ -1217,7 +1193,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         aShowCursorFlags.bPreferPortionStart = true;
     }
 
-    tools::Rectangle aEditCursor = ImplGetEditCursor(aPaM, aShowCursorFlags, nTextPortionStart, rParaPortion);
+    tools::Rectangle aEditCursor = ImplGetEditCursor(rPos, aShowCursorFlags, nTextPortionStart, rParaPortion);
 
     if ( bGotoCursor  ) // && (!getImpEditEngine().GetStatus().AutoPageSize() ) )
     {
@@ -1267,7 +1243,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             else
                 nDocDiffX -= aEditCursor.Left();
         }
-        if ( aPaM.GetIndex() == 0 )     // Olli needed for the Outliner
+        if (rPos.GetIndex() == 0) // needed for the Outliner
         {
             // But make sure that the cursor is not leaving visible area
             // because of this!
@@ -1311,7 +1287,6 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
          ( aEditCursor.Right() - nOnePixel <= GetVisDocRight() ) )
     {
         tools::Rectangle aCursorRect = GetWindowPos( aEditCursor );
-        GetCursor()->SetPos( aCursorRect.TopLeft() );
         Size aCursorSz( aCursorRect.GetSize() );
         // Rectangle is inclusive
         aCursorSz.AdjustWidth( -1 );
@@ -1331,6 +1306,54 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             Size aOldSz( aCursorSz );
             aCursorSz.setWidth( aOldSz.Height() );
             aCursorSz.setHeight( aOldSz.Width() );
+        }
+        aCursorRect.SetSize(aCursorSz);
+        return {{aCursorRect, aEditCursor, aShowCursorFlags, nTextPortionStart}};
+    }
+
+    return {};
+}
+
+void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
+{
+    // No ShowCursor in an empty View ...
+    if (maOutputArea.IsEmpty())
+        return;
+    if ( (maOutputArea.Left() >= maOutputArea.Right() ) && ( maOutputArea.Top() >= maOutputArea.Bottom() ) )
+        return;
+
+    getEditEngine().CheckIdleFormatter();
+
+    // For some reasons I end up here during the formatting, if the Outliner
+    // is initialized in Paint, because no SetPool();
+    if (getImpEditEngine().IsFormatting())
+        return;
+    if (!getImpEditEngine().IsUpdateLayout())
+        return;
+    if (getImpEditEngine().IsInUndo())
+        return;
+
+    if (mpOutputWindow && mpOutputWindow->GetCursor() != GetCursor())
+        mpOutputWindow->SetCursor(GetCursor());
+
+    EditPaM aPaM(maEditSelection.Max());
+
+    sal_Int32 nPara = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
+    if (nPara == EE_PARA_MAX) // #i94322
+        return;
+
+    ParaPortion const& rParaPortion = getEditEngine().GetParaPortions().getRef(nPara);
+
+    auto const oCursor{ImplGetCursorRectAndMaybeScroll(aPaM, rParaPortion, bGotoCursor)};
+    if (oCursor)
+    {
+        auto const [aCursorRect, aEditCursor, aShowCursorFlags, nTmp]{*oCursor};
+        auto nTextPortionStart{nTmp}; // this one can't be const
+        GetCursor()->SetPos( aCursorRect.TopLeft() );
+        Size aCursorSz( aCursorRect.GetSize() );
+        // #111036# Let VCL do orientation for cursor, otherwise problem when cursor has direction flag
+        if ( IsVertical() )
+        {
             GetCursor()->SetPos( aCursorRect.TopRight() );
             GetCursor()->SetOrientation( Degree10(IsTopToBottom() ? 2700 : 900) );
         }
@@ -1344,6 +1367,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         {
             Point aPos = GetCursor()->GetPos();
             boost::property_tree::ptree aMessageParams;
+            const OutputDevice& rOutDev = GetOutputDevice();
             if (mpLOKSpecialPositioning)
             {
                 // Sending the absolute (pure) logical coordinates of the cursor to the client is not

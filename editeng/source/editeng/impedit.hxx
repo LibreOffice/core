@@ -340,7 +340,7 @@ protected:
     void HideDDCursor();
 
     void ImplDrawHighlightRect(OutputDevice& rTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon* pPolyPoly, bool bLOKCalcRTL);
-    tools::Rectangle ImplGetEditCursor(EditPaM& aPaM, CursorFlags aShowCursorFlags, sal_Int32& nTextPortionStart, ParaPortion const& rParaPortion) const;
+    tools::Rectangle ImplGetEditCursor(EditPaM const& rPaM, CursorFlags aShowCursorFlags, sal_Int32& nTextPortionStart, ParaPortion const& rParaPortion) const;
 
 public:
     ImpEditView(EditView* pView, EditEngine* pEditEngine, vcl::Window* pWindow);
@@ -459,6 +459,10 @@ public:
     void            RecalcOutputArea();
 
     tools::Rectangle GetEditCursor() const;
+
+    ::std::optional<::std::tuple<tools::Rectangle, tools::Rectangle, CursorFlags, sal_Int32>>
+    ImplGetCursorRectAndMaybeScroll(EditPaM const& rPos,
+        ParaPortion const& rParaPortion, bool bGotoCursor);
 
     void            ShowCursor( bool bGotoCursor, bool bForceVisCursor );
     Pair            Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );
