@@ -985,7 +985,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf165821)
 {
     createScDoc();
 
-    insertStringToCell(u"A1"_ustr, u"=COUNTA(K:K)");
+    insertStringToCell(u"A1"_ustr, u"=COUNTA(XFD:XFD)");
 
     ScDocument* pDoc = getScDoc();
     // Without the fix in place, this test would have failed with
