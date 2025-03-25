@@ -363,14 +363,14 @@ void getJavaPropsFromJavaSettings(
                 xAgentAccess->getByName(sAgent) >>= xAgent;
                 if (!xAgent->hasByName(u"URL"_ustr))
                 {
-                    SAL_WARN("stoc.java", "Cant retrieve URL property from InstrumentationAgent: " << sAgent);
+                    SAL_WARN("stoc.java", "Can't retrieve URL property from InstrumentationAgent: " << sAgent);
                     continue;
                 }
                 OUString sUrl;
                 xAgent->getByName(u"URL"_ustr) >>= sUrl;
                 if (sUrl.isEmpty())
                 {
-                    SAL_WARN("stoc.java", "Cant use empty URL property from InstrumentationAgent: " << sAgent);
+                    SAL_WARN("stoc.java", "Can't use empty URL property from InstrumentationAgent: " << sAgent);
                     continue;
                 }
                 if (sUrl.startsWithIgnoreAsciiCase(sScheme))
@@ -386,7 +386,7 @@ void getJavaPropsFromJavaSettings(
                 osl::FileBase::RC nError = osl::FileBase::getSystemPathFromFileURL(sUrl, sPath);
                 if (nError != osl::FileBase::E_None)
                 {
-                    SAL_WARN("stoc.java", "Cant convert url to system path: " << sUrl);
+                    SAL_WARN("stoc.java", "Can't convert url to system path: " << sUrl);
                     continue;
                 }
                 pjvm->pushProp("-javaagent:" + sPath);
