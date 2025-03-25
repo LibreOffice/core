@@ -42,6 +42,9 @@
 
 #if HAVE_FEATURE_SKIA
 #include <vcl/skia/SkiaHelper.hxx>
+#include <premac.h>
+#include <QuartzCore/QuartzCore.h>
+#include <postmac.h>
 #endif
 
 #define WHEEL_EVENT_FACTOR 1.5
@@ -566,25 +569,6 @@ static void updateWindowCollectionBehavior( const AquaSalFrame *pFrame )
         updateWinDataInLiveResize( [self inLiveResize] );
         if ( ImplGetSVData()->mpWinData->mbIsLiveResize )
         {
-#if HAVE_FEATURE_SKIA
-            // Related: tdf#152703 Eliminate empty window with Skia/Metal while resizing
-            // The window will clear its background so when Skia/Metal is
-            // enabled, explicitly flush the Skia graphics to the window
-            // during live resizing or else nothing will be drawn until after
-            // live resizing has ended.
-            // Also, flushing during [self windowDidResize:] eliminates flicker
-            // by forcing this window's SkSurface to recreate its underlying
-            // CAMetalLayer with the new size. Flushing in
-            // [self displayIfNeeded] does not eliminate flicker so apparently
-            // [self windowDidResize:] is called earlier.
-            if ( SkiaHelper::isVCLSkiaEnabled() )
-            {
-                AquaSalGraphics* pGraphics = mpFrame->mpGraphics;
-                if ( pGraphics )
-                    pGraphics->Flush();
-            }
-#endif
-
             // tdf#152703 Force relayout during live resizing of window
             // During a live resize, macOS floods the application with
             // windowDidResize: notifications so sending a paint event does
@@ -629,6 +613,26 @@ static void updateWindowCollectionBehavior( const AquaSalFrame *pFrame )
         // When using Skia/Metal, the window content will flicker while
         // live resizing a window if we don't send a paint event.
         mpFrame->SendPaintEvent();
+
+#if HAVE_FEATURE_SKIA
+        // Related: tdf#152703 Eliminate empty window with Skia/Metal while resizing
+        // The window will clear its background so when Skia/Metal is
+        // enabled, explicitly flush the Skia graphics to the window
+        // during live resizing or else nothing will be drawn until after
+        // live resizing has ended.
+        // Also, flushing during [self windowDidResize:] eliminates flicker
+        // by forcing this window's SkSurface to recreate its underlying
+        // CAMetalLayer with the new size. Flushing in
+        // [self displayIfNeeded] does not eliminate flicker so apparently
+        // [self windowDidResize:] is called earlier.
+        // Lastly, flush after calling AquaSalFrame::SendPaintEvent().
+        if ( SkiaHelper::isVCLSkiaEnabled() )
+        {
+            AquaSalGraphics* pGraphics = mpFrame->mpGraphics;
+            if ( pGraphics )
+                pGraphics->Flush();
+        }
+#endif
     }
 
     mbInWindowDidResize = NO;
@@ -700,11 +704,31 @@ static void updateWindowCollectionBehavior( const AquaSalFrame *pFrame )
         {
             // Related: tdf#128186 restore rectangles are in VCL coordinates
             NSRect aFrame = [mpFrame->getNSWindow() frame];
-            mpFrame->CocoaToVCL( aFrame );
-            mpFrame->maNativeFullScreenRestoreRect = aFrame;
+            NSRect aContentRect = [mpFrame->getNSWindow() contentRectForFrameRect: aFrame];
+            mpFrame->CocoaToVCL( aContentRect );
+            mpFrame->maNativeFullScreenRestoreRect = aContentRect;
         }
 
         updateMenuBarVisibility( mpFrame );
+
+#if HAVE_FEATURE_SKIA
+        // Related: tdf#128186 Let vcl use the CAMetalLayer's hidden property
+        // to skip the fix for tdf#152703 in external/skia/macosmetal.patch.1
+        // and create a new CAMetalLayer when the window resizes. When using
+        // Skia/Metal, flushing to an NSWindow during transitions into or out
+        // of native full screen mode causes the Skia/Metal surface to be
+        // drawn at the wrong window position which results in a noticeable
+        // flicker.
+        if( SkiaHelper::isVCLSkiaEnabled() && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster )
+        {
+            if( [mpFrame->getNSView() wantsLayer] )
+            {
+                CALayer *pLayer = [mpFrame->getNSView() layer];
+                if( pLayer && [pLayer isKindOfClass:[CAMetalLayer class]] )
+                    [pLayer setHidden: YES];
+            }
+        }
+#endif
     }
 }
 
@@ -723,23 +747,55 @@ static void updateWindowCollectionBehavior( const AquaSalFrame *pFrame )
     }
 }
 
+-(void)windowWillExitFullScreen: (NSNotification*)pNotification
+{
+    (void)pNotification;
+    SolarMutexGuard aGuard;
+
+#if HAVE_FEATURE_SKIA
+    // Related: tdf#128186 Let vcl use the CAMetalLayer's hidden property
+    // to skip the fix for tdf#152703 in external/skia/macosmetal.patch.1
+    // and create a new CAMetalLayer when the window resizes. When using
+    // Skia/Metal, flushing to an NSWindow during transitions into or out
+    // of native full screen mode causes the Skia/Metal surface to be
+    // drawn at the wrong window position which results in a noticeable
+    // flicker.
+    if( AquaSalFrame::isAlive( mpFrame ) && SkiaHelper::isVCLSkiaEnabled() && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster )
+    {
+        if( [mpFrame->getNSView() wantsLayer] )
+        {
+            CALayer *pLayer = [mpFrame->getNSView() layer];
+            if( pLayer && [pLayer isKindOfClass:[CAMetalLayer class]] )
+                [pLayer setHidden: YES];
+        }
+    }
+#endif
+}
+
 -(void)windowDidExitFullScreen: (NSNotification*)pNotification
 {
     (void)pNotification;
     SolarMutexGuard aGuard;
 
-    if( AquaSalFrame::isAlive( mpFrame) )
+    if( AquaSalFrame::isAlive( mpFrame) && mpFrame->mbNativeFullScreen )
     {
         mpFrame->mbNativeFullScreen = false;
 
         if( !NSIsEmptyRect( mpFrame->maNativeFullScreenRestoreRect ) )
         {
-            if ( !mpFrame->mbInternalFullScreen || NSIsEmptyRect( mpFrame->maInternalFullScreenRestoreRect ) )
-            {
-                NSRect aFrame = mpFrame->maNativeFullScreenRestoreRect;
-                mpFrame->VCLToCocoa( aFrame );
-                [mpFrame->getNSWindow() setFrame: aFrame display: mpFrame->mbShown ? YES : NO];
-            }
+            // Related: tdf#128186 set window frame before exiting native full screen mode
+            // Setting the window frame just before exiting native full
+            // screen mode appears to set the desired non-full screen
+            // window frame without causing a noticeable flicker during
+            // the macOS default "exit full screen" animation.
+            NSRect aContentRect;
+            if( mpFrame->mbInternalFullScreen && !NSIsEmptyRect( mpFrame->maInternalFullScreenRestoreRect ) )
+                aContentRect = mpFrame->maInternalFullScreenRestoreRect;
+            else
+                aContentRect = mpFrame->maNativeFullScreenRestoreRect;
+            mpFrame->VCLToCocoa( aContentRect );
+            NSRect aFrame = [NSWindow frameRectForContentRect: aContentRect styleMask: [mpFrame->getNSWindow() styleMask] & ~NSWindowStyleMaskFullScreen];
+            [mpFrame->getNSWindow() setFrame: aFrame display: mpFrame->mbShown ? YES : NO];
 
             mpFrame->maNativeFullScreenRestoreRect = NSZeroRect;
         }
@@ -942,10 +998,16 @@ static void updateWindowCollectionBehavior( const AquaSalFrame *pFrame )
 
 - (NSArray<NSWindow *> *)customWindowsToExitFullScreenForWindow: (NSWindow *)pWindow
 {
-    // Related: tdf#161623 our code will reset the frame immediately after
-    // native full screen mode has exited so suppress animation when exiting
-    // native full screen mode.
-    return [NSArray arrayWithObject: self];
+    SolarMutexGuard aGuard;
+
+    // Related: tdf#161623 suppress animation when in internal full screen mode
+    // LibreOffice's internal full screen mode fills the screen with a
+    // regular window so suppress animation when exiting native full
+    // screen mode.
+    if( AquaSalFrame::isAlive( mpFrame) && mpFrame->mbInternalFullScreen && !NSIsEmptyRect( mpFrame->maInternalFullScreenExpectedRect ) )
+        return [NSArray arrayWithObject: self];
+
+    return nil;
 }
 
 @end

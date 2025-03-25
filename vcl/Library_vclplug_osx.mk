@@ -154,6 +154,9 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,vclplug_osx,\
     Cocoa \
     Carbon \
     CoreFoundation \
+    $(if $(filter SKIA,$(BUILD_TYPE)), \
+        QuartzCore \
+    ) \
 ))
 
 ifneq ($(ENABLE_MACOSX_SANDBOX),TRUE)

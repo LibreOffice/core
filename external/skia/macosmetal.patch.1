@@ -70,7 +70,7 @@ diff -ur skia.org/tools/window/mac/GaneshMetalWindowContext_mac.mm skia/tools/wi
  #import <Cocoa/Cocoa.h>
  #import <QuartzCore/CAConstraintLayoutManager.h>
  
-@@ -52,7 +54,23 @@
+@@ -52,7 +54,29 @@
  
      SkASSERT(nil != fMainView);
  
@@ -80,11 +80,17 @@ diff -ur skia.org/tools/window/mac/GaneshMetalWindowContext_mac.mm skia/tools/wi
 +    // resize event repaints the window's background which causes a
 +    // noticeable flicker. So reuse any existing CAMetalLayer already
 +    // assigned to the native view.
++    // Related: tdf#128186 Let vcl use the CAMetalLayer's hidden property
++    // to skip the fix for tdf#152703 and create a new CAMetalLayer when
++    // the window resizes. When using Skia/Metal, flushing to an NSWindow
++    // during transitions into or out of native full screen mode causes
++    // the Skia/Metal surface to be drawn at the wrong window position
++    // which results in a noticeable flicker.
 +    BOOL reuseMetalLayer = NO;
 +    if (fMainView.wantsLayer)
 +    {
 +        CALayer *pLayer = fMainView.layer;
-+        if (pLayer && [pLayer isKindOfClass:[CAMetalLayer class]])
++        if (pLayer && [pLayer isKindOfClass:[CAMetalLayer class]] && ![pLayer isHidden])
 +        {
 +            fMetalLayer = (__bridge CAMetalLayer*)pLayer;
 +            reuseMetalLayer = YES;
@@ -95,7 +101,7 @@ diff -ur skia.org/tools/window/mac/GaneshMetalWindowContext_mac.mm skia/tools/wi
      fMetalLayer.device = fShared->fDevice.get();
      fMetalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
  
-@@ -65,10 +83,10 @@
+@@ -65,10 +89,10 @@
      fMetalLayer.autoresizingMask = kCALayerHeightSizable | kCALayerWidthSizable;
      fMetalLayer.contentsGravity = kCAGravityTopLeft;
      fMetalLayer.magnificationFilter = kCAFilterNearest;
@@ -109,7 +115,7 @@ diff -ur skia.org/tools/window/mac/GaneshMetalWindowContext_mac.mm skia/tools/wi
      fMainView.wantsLayer = YES;
  
      return true;
-@@ -85,6 +103,18 @@
+@@ -85,6 +109,18 @@
      fMetalLayer.drawableSize = backingSize;
      fMetalLayer.contentsScale = backingScaleFactor;
  

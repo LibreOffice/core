@@ -919,16 +919,9 @@ void AquaSalFrame::doShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
             aNewFrameRect = [pScreen frame];
         }
 
-        // Show the menubar if application is in native full screen mode
-        // since hiding the menubar in that mode will cause the window's
-        // titlebar to fail to display or hide as expected.
-        if( [NSApp presentationOptions] & NSApplicationPresentationFullScreen )
-        {
-            [NSMenu setMenuBarVisible: YES];
-        }
         // Hide the dock and the menubar if this or one of its child
         // windows are the key window
-        else if( AquaSalFrame::isAlive( this ) )
+        if( AquaSalFrame::isAlive( this ) )
         {
             bool bNativeFullScreen = false;
             const AquaSalFrame *pParentFrame = this;
@@ -951,13 +944,19 @@ void AquaSalFrame::doShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
         if( mbNativeFullScreen && !NSIsEmptyRect( maNativeFullScreenRestoreRect ) )
         {
             maInternalFullScreenRestoreRect = maNativeFullScreenRestoreRect;
+
+            // Show the menubar if application is in native full screen mode
+            // since hiding the menubar in that mode will cause the window's
+            // titlebar to fail to display or hide as expected.
+            [NSMenu setMenuBarVisible: YES];
         }
         else
         {
             // Related: tdf#128186 restore rectangles are in VCL coordinates
             NSRect aFrame = [mpNSWindow frame];
-            CocoaToVCL( aFrame );
-            maInternalFullScreenRestoreRect = aFrame;
+            NSRect aContentRect = [NSWindow contentRectForFrameRect: aFrame styleMask: [mpNSWindow styleMask] & ~NSWindowStyleMaskFullScreen];
+            CocoaToVCL( aContentRect );
+            maInternalFullScreenRestoreRect = aContentRect;
         }
 
         // Related: tdf#161623 do not add the window's titlebar height
@@ -992,10 +991,19 @@ void AquaSalFrame::doShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
 
         if( !NSIsEmptyRect( maInternalFullScreenRestoreRect ) )
         {
-            if( !mbNativeFullScreen || NSIsEmptyRect( maNativeFullScreenRestoreRect ) )
+            if( mbNativeFullScreen && !NSIsEmptyRect( maNativeFullScreenRestoreRect ) )
             {
-                NSRect aFrame = maInternalFullScreenRestoreRect;
-                VCLToCocoa( aFrame );
+                // Related: tdf#128186 force window to unzoom
+                // If we exit LibreOffice's internal full screen mode while
+                // the window is in native full screen mode, the window will
+                // be zoomed after exiting native full screen mode.
+                [mpNSWindow setIsZoomed: NO];
+            }
+            else
+            {
+                NSRect aContentRect = maInternalFullScreenRestoreRect;
+                VCLToCocoa( aContentRect );
+                NSRect aFrame = [NSWindow frameRectForContentRect: aContentRect styleMask: [mpNSWindow styleMask] & ~NSWindowStyleMaskFullScreen];
                 [mpNSWindow setFrame: aFrame display: mbShown ? YES : NO];
             }
 
