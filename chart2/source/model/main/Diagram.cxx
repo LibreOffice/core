@@ -1015,7 +1015,7 @@ bool Diagram::isSupportingFloorAndWall()
  *
  */
 static bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
-    Diagram& rDiagram,
+    const Diagram& rDiagram,
     const rtl::Reference< DataSeries >& xGivenDataSeries,
     bool bForward,
     bool bDoMove )
@@ -1210,7 +1210,7 @@ bool Diagram::isSupportingDateAxis()
 }
 
 static std::vector< rtl::Reference< Axis > > lcl_getAxisHoldingCategoriesFromDiagram(
-    Diagram& rDiagram )
+    const Diagram& rDiagram )
 {
     std::vector< rtl::Reference< Axis > > aRet;
 

@@ -1181,7 +1181,7 @@ static sal_Int32 propIndex(
         sal_Int32 nPointIndex,
         enum SubPieType eType,
         const PieDataSrcBase *pDataSrc,
-        VDataSeries* pSeries)
+        const VDataSeries* pSeries)
 {
 
     switch (eType) {

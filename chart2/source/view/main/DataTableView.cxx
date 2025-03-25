@@ -40,7 +40,7 @@ namespace chart
 {
 namespace
 {
-void setTopCell(uno::Reference<beans::XPropertySet>& xPropertySet)
+void setTopCell(const uno::Reference<beans::XPropertySet>& xPropertySet)
 {
     xPropertySet->setPropertyValue(u"FillColor"_ustr, uno::Any(Color(0xFFFFFF)));
     xPropertySet->setPropertyValue(u"TextVerticalAdjust"_ustr,
@@ -55,8 +55,8 @@ void setTopCell(uno::Reference<beans::XPropertySet>& xPropertySet)
     xPropertySet->setPropertyValue(u"LeftBorder"_ustr, uno::Any(aBorderLine));
 }
 
-void copyProperty(uno::Reference<beans::XPropertySet>& xOut,
-                  uno::Reference<beans::XPropertySet>& xIn, OUString const& sPropertyName)
+void copyProperty(const uno::Reference<beans::XPropertySet>& xOut,
+                  const uno::Reference<beans::XPropertySet>& xIn, OUString const& sPropertyName)
 {
     xOut->setPropertyValue(sPropertyName, xIn->getPropertyValue(sPropertyName));
 }
@@ -99,7 +99,7 @@ DataTableView::DataTableView(
 }
 
 void DataTableView::setCellCharAndParagraphProperties(
-    uno::Reference<beans::XPropertySet>& xPropertySet)
+    const uno::Reference<beans::XPropertySet>& xPropertySet)
 {
     uno::Reference<beans::XPropertySet> xDataTableProperties(m_xDataTableModel);
 
@@ -156,7 +156,7 @@ void DataTableView::setCellCharAndParagraphProperties(
     xPropertySet->setPropertyValue(u"ParaAdjust"_ustr, uno::Any(style::ParagraphAdjust_CENTER));
 }
 
-void DataTableView::setCellProperties(css::uno::Reference<beans::XPropertySet>& xPropertySet,
+void DataTableView::setCellProperties(const css::uno::Reference<beans::XPropertySet>& xPropertySet,
                                       bool bLeft, bool bTop, bool bRight, bool bBottom)
 {
     xPropertySet->setPropertyValue(u"FillColor"_ustr, uno::Any(Color(0xFFFFFF)));

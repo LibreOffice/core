@@ -54,14 +54,14 @@ private:
     bool m_bAlignAxisValuesWithColumns;
 
     /** Set the char and paragraph properties for the input (value) cell */
-    void
-    setCellCharAndParagraphProperties(css::uno::Reference<css::beans::XPropertySet>& xPropertySet);
+    void setCellCharAndParagraphProperties(
+        const css::uno::Reference<css::beans::XPropertySet>& xPropertySet);
 
     /** Set the common cell properties (for all cells in the data table,
      *  including headers)
      */
-    void setCellProperties(css::uno::Reference<css::beans::XPropertySet>& xPropertySet, bool bLeft,
-                           bool bTop, bool bRight, bool bBottom);
+    void setCellProperties(const css::uno::Reference<css::beans::XPropertySet>& xPropertySet,
+                           bool bLeft, bool bTop, bool bRight, bool bBottom);
 
 public:
     DataTableView(rtl::Reference<::chart::ChartModel> const& xChartDoc,
