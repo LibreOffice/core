@@ -374,7 +374,7 @@ TextLayouterDevice::getSalLayout(const OUString& rText, sal_uInt32 nIndex, sal_u
 }
 
 void TextLayouterDevice::createEmphasisMarks(
-    SalLayout& rSalLayout, TextEmphasisMark aTextEmphasisMark, bool bAbove,
+    const SalLayout& rSalLayout, TextEmphasisMark aTextEmphasisMark, bool bAbove,
     const std::function<void(const basegfx::B2DPoint&, const basegfx::B2DPolyPolygon&, bool,
                              const tools::Rectangle&, const tools::Rectangle&)>& rCallback) const
 {

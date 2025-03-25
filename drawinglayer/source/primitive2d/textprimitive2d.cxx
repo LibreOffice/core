@@ -351,7 +351,7 @@ void TextSimplePortionPrimitive2D::createTextLayouter(TextLayouterDevice& rTextL
 }
 
 std::unique_ptr<SalLayout>
-TextSimplePortionPrimitive2D::createSalLayout(TextLayouterDevice& rTextLayouter) const
+TextSimplePortionPrimitive2D::createSalLayout(const TextLayouterDevice& rTextLayouter) const
 {
     // As mentioned above we can act in the
     // Text's local coordinate system without transformation at all

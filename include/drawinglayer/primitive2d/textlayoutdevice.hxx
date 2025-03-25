@@ -122,7 +122,7 @@ public:
                                             const KernArray& rDXArray,
                                             std::span<const sal_Bool> pKashidaAry) const;
     void createEmphasisMarks(
-        SalLayout& rSalLayout, TextEmphasisMark aTextEmphasisMark, bool bAbove,
+        const SalLayout& rSalLayout, TextEmphasisMark aTextEmphasisMark, bool bAbove,
         const std::function<void(const basegfx::B2DPoint&, const basegfx::B2DPolyPolygon&, bool,
                                  const tools::Rectangle&, const tools::Rectangle&)>& rCallback)
         const;

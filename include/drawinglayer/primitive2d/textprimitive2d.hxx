@@ -146,7 +146,7 @@ public:
     // and decompose. NOTE: the TextLayouterDevice is filled, but should always only
     // be used temporary (do not try to buffer)
     void createTextLayouter(TextLayouterDevice& rTextLayouter) const;
-    std::unique_ptr<SalLayout> createSalLayout(TextLayouterDevice& rTextLayouter) const;
+    std::unique_ptr<SalLayout> createSalLayout(const TextLayouterDevice& rTextLayouter) const;
 
     /// constructor
     TextSimplePortionPrimitive2D(basegfx::B2DHomMatrix aNewTransform, OUString aText,
