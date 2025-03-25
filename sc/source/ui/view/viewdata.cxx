@@ -2471,7 +2471,6 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         const_cast<ScViewData*>(this)->aScrSize.setHeight( pView->GetGridHeight(eWhichY) );
     }
 
-    sal_uInt16 nTSize;
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
 
     SCCOL nPosX = GetPosX(eWhichX, nForTab);
@@ -2496,7 +2495,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                     nScrPosX = 0x7FFFFFFF;
                 else
                 {
-                    nTSize = mrDoc.GetColWidth(nX, nForTab);
+                    sal_uInt16 nTSize = mrDoc.GetColWidth(nX, nForTab);
                     if (nTSize)
                     {
                         tools::Long nSizeXPix = ToPixel( nTSize, nPPTX );
@@ -2516,7 +2515,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
             for (SCCOL nX = nStartPosX; nX > nWhereX;)
             {
                 --nX;
-                nTSize = mrDoc.GetColWidth(nX, nForTab);
+                sal_uInt16 nTSize = mrDoc.GetColWidth(nX, nForTab);
                 if (nTSize)
                 {
                     tools::Long nSizeXPix = ToPixel( nTSize, nPPTX );
@@ -2550,26 +2549,37 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
 
         if (nWhereY >= nStartPosY)
         {
-            for (SCROW nY = nStartPosY; nY < nWhereY && (bAllowNeg || bIsTiledRendering || nScrPosY <= aScrSize.Height()); nY++)
+            if (bAllowNeg && !bIsTiledRendering)
             {
-                if ( nY > mrDoc.MaxRow() )
+                // tdf#150623 If possible, use the faster range-based calculation functions.
+                if ( nStartPosY > mrDoc.MaxRow() )
                     nScrPosY = 0x7FFFFFFF;
                 else
+                    nScrPosY = mrDoc.GetScaledRowHeight(nStartPosY, nWhereY - 1, nTabNo, nPPTY);
+            }
+            else
+            {
+                for (SCROW nY = nStartPosY; nY < nWhereY && (bAllowNeg || bIsTiledRendering || nScrPosY <= aScrSize.Height()); nY++)
                 {
-                    nTSize = mrDoc.GetRowHeight( nY, nTabNo );
-                    if (nTSize)
+                    if ( nY > mrDoc.MaxRow() )
+                        nScrPosY = 0x7FFFFFFF;
+                    else
                     {
-                        tools::Long nSizeYPix = ToPixel( nTSize, nPPTY );
-                        nScrPosY += nSizeYPix;
-                    }
-                    else if ( nY < mrDoc.MaxRow() )
-                    {
-                        // skip multiple hidden rows (forward only for now)
-                        SCROW nNext = mrDoc.FirstVisibleRow(nY + 1, mrDoc.MaxRow(), nTabNo);
-                        if ( nNext > mrDoc.MaxRow() )
-                            nY = mrDoc.MaxRow();
-                        else
-                            nY = nNext - 1;     // +=nDir advances to next visible row
+                        sal_uInt16 nTSize = mrDoc.GetRowHeight( nY, nTabNo );
+                        if (nTSize)
+                        {
+                            tools::Long nSizeYPix = ToPixel( nTSize, nPPTY );
+                            nScrPosY += nSizeYPix;
+                        }
+                        else if ( nY < mrDoc.MaxRow() )
+                        {
+                            // skip multiple hidden rows (forward only for now)
+                            SCROW nNext = mrDoc.FirstVisibleRow(nY + 1, mrDoc.MaxRow(), nTabNo);
+                            if ( nNext > mrDoc.MaxRow() )
+                                nY = mrDoc.MaxRow();
+                            else
+                                nY = nNext - 1;     // +=nDir advances to next visible row
+                        }
                     }
                 }
             }
@@ -2579,7 +2589,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
             for (SCROW nY = nStartPosY; nY > nWhereY;)
             {
                 --nY;
-                nTSize = mrDoc.GetRowHeight(nY, nForTab);
+                sal_uInt16 nTSize = mrDoc.GetRowHeight(nY, nForTab);
                 if (nTSize)
                 {
                     tools::Long nSizeYPix = ToPixel( nTSize, nPPTY );
