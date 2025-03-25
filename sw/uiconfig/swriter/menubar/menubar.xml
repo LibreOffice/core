@@ -338,7 +338,6 @@
           <menu:menuitem menu:id=".uno:InsertRLM"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Horizontal Line&amp;FamilyName:string=ParagraphStyles"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:InsertFootnotesMenu">
         <menu:menupopup>
@@ -590,6 +589,7 @@
       <menu:menuitem menu:id=".uno:Heading3ParaStyle" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:QuoteParaStyle" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:PreformattedParaStyle" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:HorizontalLine" menu:style="radio"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:DefaultCharStyle" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:EmphasisCharStyle" menu:style="radio"/>
