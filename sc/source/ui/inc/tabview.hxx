@@ -370,7 +370,7 @@ public:
      */
     void            TabChanged( bool bSameTabButMoved = false );
     void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAll );
-    SC_DLLPUBLIC void            RefreshZoom();
+    SC_DLLPUBLIC void RefreshZoom(bool bRecalcScale = true);
     void            SetPagebreakMode( bool bSet );
 
     void            UpdateLayerLocks();

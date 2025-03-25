@@ -441,10 +441,10 @@ void ScTabView::SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAll
     ZoomChanged();
 }
 
-void ScTabView::RefreshZoom()
+void ScTabView::RefreshZoom(bool bRecalcScale)
 {
     aViewData.RefreshZoom();
-    if (pDrawView)
+    if (bRecalcScale && pDrawView)
         pDrawView->RecalcScale();
     ZoomChanged();
 }

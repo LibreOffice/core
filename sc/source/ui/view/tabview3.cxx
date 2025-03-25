@@ -2014,7 +2014,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
     bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;
 
     // recalc zoom-dependent values (before TabChanged, before UpdateEditViewPos)
-    RefreshZoom();
+    RefreshZoom(/*bRecalcScale*/false); // no need to call RecalcScale() here, because we will do it in TabChanged()
     UpdateVarZoom();
 
     if ( bRefMode )     // hide EditView if necessary (after aViewData.SetTabNo !)
