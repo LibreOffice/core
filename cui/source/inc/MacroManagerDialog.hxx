@@ -215,7 +215,7 @@ class MacroManagerDialog : public weld::GenericDialogController, public SfxListe
     void BasicScriptsLibraryPassword(const basctl::ScriptDocument& rDocument);
     void BasicScriptsMacroEdit(const basctl::ScriptDocument& rDocument);
     bool IsLibraryReadOnlyOrFailedPasswordQuery(const basctl::ScriptDocument& rDocument,
-                                                weld::TreeIter* pIter);
+                                                const weld::TreeIter* pIter);
 
     void ScriptingFrameworkScriptsCreateEntry(InputDialogMode eInputDialogMode);
     void ScriptingFrameworkScriptsRenameEntry(weld::TreeView& rTreeView,

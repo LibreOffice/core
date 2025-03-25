@@ -1198,7 +1198,7 @@ void OfaTreeOptionsDialog::InitItemSets(OptionsGroupInfo& rGroupInfo)
 }
 
 void OfaTreeOptionsDialog::initializeCurrentDialog(OptionsPageInfo*& pPageInfo,
-                                                   std::unique_ptr<weld::TreeIter>& xEntry)
+                                                   const std::unique_ptr<weld::TreeIter>& xEntry)
 {
     std::unique_ptr<weld::TreeIter> xParent(xTreeLB->make_iterator(xEntry.get()));
     bool bParent = xTreeLB->iter_parent(*xParent);

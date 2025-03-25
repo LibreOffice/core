@@ -1680,7 +1680,7 @@ IMPL_LINK(MacroManagerDialog, ClickHdl, weld::Button&, rButton, void)
 }
 
 bool MacroManagerDialog::IsLibraryReadOnlyOrFailedPasswordQuery(
-    const basctl::ScriptDocument& rDocument, weld::TreeIter* pIter)
+    const basctl::ScriptDocument& rDocument, const weld::TreeIter* pIter)
 {
     css::uno::Reference<css::script::XLibraryContainer2> xModLibContainer(
         rDocument.getLibraryContainer(basctl::E_SCRIPTS));

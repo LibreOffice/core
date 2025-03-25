@@ -102,7 +102,7 @@ enum LineSpaceList
     LLINESPACE_FIX  = 7
 };
 
-SvxIndentValue lcl_GetFontRelativeValue(SvxRelativeField& rField, MapUnit eUnit)
+SvxIndentValue lcl_GetFontRelativeValue(const SvxRelativeField& rField, MapUnit eUnit)
 {
     switch (rField.GetCurrentUnit())
     {

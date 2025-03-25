@@ -199,7 +199,7 @@ private:
     void ResetCurrentPageFromConfig();
     void SelectHdl_Impl();
     void initializeCurrentDialog(OptionsPageInfo*& pPageInfo,
-                                 std::unique_ptr<weld::TreeIter>& xEntry);
+                                 const std::unique_ptr<weld::TreeIter>& xEntry);
 
     void InitItemSets(OptionsGroupInfo& rGroupInfo);
 
