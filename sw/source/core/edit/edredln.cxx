@@ -218,9 +218,18 @@ void SwEditShell::ReinstateRedlinesInSelection()
     SwPosition aCursorStart(*GetCursor()->Start());
     SwPosition aCursorEnd(*GetCursor()->End());
     SwRedlineTable& rTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+
+    // Work on a copy, since reinstate will modify the table, and reinstate of just inserted
+    // redlines is not wanted.
+    std::vector<SwRangeRedline*> aRedlines(rTable.size());
     for (size_t nIndex = 0; nIndex < rTable.size(); ++nIndex)
     {
-        const SwRangeRedline& rRedline = *rTable[nIndex];
+        aRedlines[nIndex] = rTable[nIndex];
+    }
+
+    for (size_t nIndex = 0; nIndex < aRedlines.size(); ++nIndex)
+    {
+        const SwRangeRedline& rRedline = *aRedlines[nIndex];
         if (!rRedline.HasMark() || !rRedline.IsVisible())
         {
             continue;
