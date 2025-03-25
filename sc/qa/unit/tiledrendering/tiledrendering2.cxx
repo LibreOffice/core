@@ -13,6 +13,7 @@
 
 #include <vcl/scheduler.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/propertysequence.hxx>
 
 using namespace com::sun::star;
 
@@ -76,6 +77,33 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCopyMultiSelection)
     CPPUNIT_ASSERT(xTransferable2.is());
     // Without the fix, the text selection was complex.
     CPPUNIT_ASSERT(!xTransferable2->isComplex());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCursorJumpOnFailedSearch)
+{
+    createDoc("empty.ods");
+    ViewCallback aView;
+
+    // Go to lower cell
+    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue(u"ToPoint"_ustr, u"$C$3"_ustr),
+    };
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aPropertyValues);
+
+    tools::Rectangle aInitialCursor = aView.m_aCellCursorBounds;
+
+    // Search for a non-existing string using the start point parameters
+    aPropertyValues = comphelper::InitPropertySequence(
+        { { "SearchItem.SearchString", uno::Any(u"No-existing"_ustr) },
+          { "SearchItem.Backward", uno::Any(false) },
+          { "SearchItem.SearchStartPointX", uno::Any(static_cast<sal_Int32>(100)) },
+          { "SearchItem.SearchStartPointY", uno::Any(static_cast<sal_Int32>(100)) } });
+    dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aPropertyValues);
+
+    tools::Rectangle aFinalCursor = aView.m_aCellCursorBounds;
+
+    // Without the fix, the cursor jumps even when no match is found
+    CPPUNIT_ASSERT_EQUAL(aInitialCursor, aFinalCursor);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
