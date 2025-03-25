@@ -1970,6 +1970,9 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     if (bAddUndo && !rDoc.IsUndoEnabled())
         bAddUndo = false;
 
+    bool bCursorMoved = false;
+    SCCOL nOrigPosX = GetViewData().GetCurX();
+    SCROW nOrigPosY = GetViewData().GetCurY();
     if ( !rMark.IsMarked() && !rMark.IsMultiMarked() && (pSearchItem->HasStartPoint()) )
     {
         // No selection -> but we have a start point (top left corner of the
@@ -1985,6 +1988,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
         AlignToCursor( nPosX, nPosY, SC_FOLLOW_JUMP );
         SetCursor( nPosX, nPosY, true );
+        bCursorMoved = true;
     }
 
     SCCOL nCol, nOldCol;
@@ -2259,6 +2263,10 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         else if ( nCommand == SvxSearchCmd::FIND_ALL )
             pDocSh->PostPaintGridAll();                             // mark
         GetFrameWin()->LeaveWait();
+    }
+    else if (bCursorMoved)
+    {
+        SetCursor(nOrigPosX, nOrigPosY, true);
     }
     return bFound;
 }
