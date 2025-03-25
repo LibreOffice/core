@@ -416,7 +416,7 @@ void vcl::Region::Move( tools::Long nHorzMove, tools::Long nVertMove )
     {
         basegfx::B2DPolyPolygon aPoly(*getB2DPolyPolygon());
 
-        aPoly.transform(basegfx::utils::createTranslateB2DHomMatrix(nHorzMove, nVertMove));
+        aPoly.translate(nHorzMove, nVertMove);
         if (aPoly.count())
             mpB2DPolyPolygon = aPoly;
         else

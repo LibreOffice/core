@@ -496,7 +496,7 @@ void FuMorph::ImpMorphPolygons(
         const ::basegfx::B2DPoint aRealS(aStartCenter + (aDelta * fValue));
         const ::basegfx::B2DPoint aDiff(aRealS - aNewS);
 
-        aNewPolyPoly2D.transform(basegfx::utils::createTranslateB2DHomMatrix(aDiff));
+        aNewPolyPoly2D.translate(aDiff);
         rPolyPolyList3D.push_back( std::move(aNewPolyPoly2D) );
     }
 }

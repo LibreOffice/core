@@ -879,9 +879,7 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
         aPos = mxOrigin->getPosition();
     if( (aPos.X != maOriginPos.X) || (aPos.Y != maOriginPos.Y) )
     {
-        const basegfx::B2DHomMatrix aTransform(basegfx::utils::createTranslateB2DHomMatrix(
-            aPos.X - maOriginPos.X, aPos.Y - maOriginPos.Y));
-        mxPolyPoly.transform( aTransform );
+        mxPolyPoly.translate(aPos.X - maOriginPos.X, aPos.Y - maOriginPos.Y);
         mpPathObj->SetPathPoly( mxPolyPoly );
         maOriginPos = aPos;
     }

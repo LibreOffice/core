@@ -307,9 +307,8 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                         if (y > aSVGRect.getCenterY())
                             y = y + fDeltaY;
 
-                        aGradient.maPoint1 = basegfx::B2DPoint(x, y);
-                        aGradient.maPoint1 *= basegfx::utils::createTranslateB2DHomMatrix(
-                            aTargetSurface.getMinX() - 0.5, aTargetSurface.getMinY() - 0.5);
+                        aGradient.maPoint1 = basegfx::B2DPoint(x + aTargetSurface.getMinX() - 0.5,
+                                                               y + aTargetSurface.getMinY() - 0.5);
 
                         x = pLinearGradient->x2;
                         y = pLinearGradient->y2;
@@ -319,9 +318,8 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                         if (y > aSVGRect.getCenterY())
                             y = y + fDeltaY;
 
-                        aGradient.maPoint2 = basegfx::B2DPoint(x, y);
-                        aGradient.maPoint2 *= basegfx::utils::createTranslateB2DHomMatrix(
-                            aTargetSurface.getMinX() - 0.5, aTargetSurface.getMinY() - 0.5);
+                        aGradient.maPoint2 = basegfx::B2DPoint(x + aTargetSurface.getMinX() - 0.5,
+                                                               y + aTargetSurface.getMinY() - 0.5);
 
                         for (gfx::GradientStop const& rStop : pLinearGradient->maGradientStops)
                         {
@@ -369,8 +367,8 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                         rPolygon.setB2DPoint(i, basegfx::B2DPoint(x, y));
                     }
                 }
-                aPolyPolygon.transform(basegfx::utils::createTranslateB2DHomMatrix(
-                    aTargetSurface.getMinX() - 0.5, aTargetSurface.getMinY() - 0.5));
+                aPolyPolygon.translate(aTargetSurface.getMinX() - 0.5,
+                                       aTargetSurface.getMinY() - 0.5);
 
                 if (rPath.mpFillColor)
                 {

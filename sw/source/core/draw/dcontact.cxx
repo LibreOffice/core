@@ -2508,7 +2508,7 @@ void SwDrawVirtObj::RecalcBoundRect()
 basegfx::B2DPolyPolygon SwDrawVirtObj::TakeXorPoly() const
 {
     basegfx::B2DPolyPolygon aRetval(mxRefObj->TakeXorPoly());
-    aRetval.transform(basegfx::utils::createTranslateB2DHomMatrix(GetOffset().X(), GetOffset().Y()));
+    aRetval.translate(GetOffset().X(), GetOffset().Y());
 
     return aRetval;
 }
@@ -2516,7 +2516,7 @@ basegfx::B2DPolyPolygon SwDrawVirtObj::TakeXorPoly() const
 basegfx::B2DPolyPolygon SwDrawVirtObj::TakeContour() const
 {
     basegfx::B2DPolyPolygon aRetval(mxRefObj->TakeContour());
-    aRetval.transform(basegfx::utils::createTranslateB2DHomMatrix(GetOffset().X(), GetOffset().Y()));
+    aRetval.translate(GetOffset().X(), GetOffset().Y());
 
     return aRetval;
 }

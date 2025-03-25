@@ -1590,7 +1590,7 @@ void CustomAnimationEffect::updateSdrPathObjFromPath( SdrPathObj& rPathObj )
 
             const ::tools::Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
             const Point aCenter( aBoundRect.Center() );
-            aPolyPoly.transform(basegfx::utils::createTranslateB2DHomMatrix(aCenter.X(), aCenter.Y()));
+            aPolyPoly.translate(aCenter.X(), aCenter.Y());
         }
     }
 
@@ -1620,7 +1620,7 @@ void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj
 
         const Point aCenter( aBoundRect.Center() );
 
-        aPolyPoly.transform(basegfx::utils::createTranslateB2DHomMatrix(-aCenter.X(), -aCenter.Y()));
+        aPolyPoly.translate(-aCenter.X(), -aCenter.Y());
 
         SdrPage* pPage = pObj->getSdrPageFromSdrObject();
         if( pPage )

@@ -914,7 +914,7 @@ namespace drawinglayer::primitive2d
             {
                 basegfx::B2DPolygon aNew(aPolygon);
 
-                aNew.transform(basegfx::utils::createTranslateB2DHomMatrix(fDelta * fUnitScale, 0.0));
+                aNew.translate(fDelta * fUnitScale, 0.0);
                 aContainer[a] = new PolyPolygonColorPrimitive2D(
                     basegfx::B2DPolyPolygon(aNew),
                     basegfx::interpolate(getColorA(), getColorB(), fUnitScale));

@@ -2694,15 +2694,11 @@ css::drawing::PolyPolygonBezierCoords SwXShape::ConvertPolyPolygonBezierToLayout
             // apply translation difference to PolyPolygonBezier.
             if ( aTranslateDiff.X != 0 || aTranslateDiff.Y != 0 )
             {
-                const basegfx::B2DHomMatrix aMatrix(basegfx::utils::createTranslateB2DHomMatrix(
-                    aTranslateDiff.X, aTranslateDiff.Y));
-
                 for(drawing::PointSequence& rInnerSequence : asNonConstRange(aConvertedPath.Coordinates))
                 {
                     for(awt::Point& rPoint : asNonConstRange(rInnerSequence))
                     {
-                        basegfx::B2DPoint aNewCoordinatePair(rPoint.X, rPoint.Y);
-                        aNewCoordinatePair *= aMatrix;
+                        basegfx::B2DPoint aNewCoordinatePair(rPoint.X + aTranslateDiff.X, rPoint.Y + aTranslateDiff.Y);
                         rPoint.X = basegfx::fround(aNewCoordinatePair.getX());
                         rPoint.Y = basegfx::fround(aNewCoordinatePair.getY());
                     }

@@ -332,9 +332,8 @@ tools::Polygon lcl_CreateContourPolygon(SdrObject* pSdrObj)
 
             // Make relative to range 0..21600, 0..21600
             Point aCenter(pSdrObj->GetSnapRect().Center());
-            basegfx::B2DHomMatrix aTranslateToOrigin(
-                basegfx::utils::createTranslateB2DHomMatrix(-aCenter.X(), -aCenter.Y()));
-            aPolyPolygon.transform(aTranslateToOrigin);
+            // translate to origin
+            aPolyPolygon.translate(-aCenter.X(), -aCenter.Y());
             const double fWidth(pSdrObj->GetLogicRect().getOpenWidth());
             double fScaleX = fWidth == 0.0 ? 1.0 : 21600.0 / fWidth;
             const double fHeight(pSdrObj->GetLogicRect().getOpenHeight());
@@ -342,9 +341,8 @@ tools::Polygon lcl_CreateContourPolygon(SdrObject* pSdrObj)
             basegfx::B2DHomMatrix aScale(basegfx::utils::createScaleB2DHomMatrix(fScaleX, fScaleY));
             aPolyPolygon.transform(aScale);
 
-            basegfx::B2DHomMatrix aTranslateToCenter(
-                basegfx::utils::createTranslateB2DHomMatrix(10800.0, 10800.0));
-            aPolyPolygon.transform(aTranslateToCenter);
+            // translate to center
+            aPolyPolygon.translate(10800.0, 10800.0);
             break;
         } // end case OBJ_CUSTOMSHAPE
         case SdrObjKind::Line:
@@ -383,9 +381,8 @@ tools::Polygon lcl_CreateContourPolygon(SdrObject* pSdrObj)
 
                 // Make relative to range 0..21600, 0..21600
                 Point aCenter(pSdrObj->GetSnapRect().Center());
-                basegfx::B2DHomMatrix aTranslateToOrigin(
-                    basegfx::utils::createTranslateB2DHomMatrix(-aCenter.X(), -aCenter.Y()));
-                aPolyPolygon.transform(aTranslateToOrigin);
+                // translate to origin
+                aPolyPolygon.translate(-aCenter.X(), -aCenter.Y());
 
                 const double fWidth(pSdrObj->GetLogicRect().getOpenWidth());
                 double fScaleX = fWidth == 0.0 ? 1.0 : 21600.0 / fWidth;
@@ -395,9 +392,7 @@ tools::Polygon lcl_CreateContourPolygon(SdrObject* pSdrObj)
                     basegfx::utils::createScaleB2DHomMatrix(fScaleX, fScaleY));
                 aPolyPolygon.transform(aScale);
 
-                basegfx::B2DHomMatrix aTranslateToCenter(
-                    basegfx::utils::createTranslateB2DHomMatrix(10800.0, 10800.0));
-                aPolyPolygon.transform(aTranslateToCenter);
+                aPolyPolygon.translate(10800.0, 10800.0);
                 break;
             }
         case SdrObjKind::NONE:

@@ -2337,14 +2337,12 @@ namespace wmfemfhelper
                                 // prepare translation, add current transformation
                                 basegfx::B2DVector aVector(pA->GetHorzMove(), pA->GetVertMove());
                                 aVector *= rPropertyHolders.Current().getTransformation();
-                                basegfx::B2DHomMatrix aTransform(
-                                    basegfx::utils::createTranslateB2DHomMatrix(aVector));
 
                                 // transform existing region
                                 basegfx::B2DPolyPolygon aClipPolyPolygon(
                                     rPropertyHolders.Current().getClipPolyPolygon());
 
-                                aClipPolyPolygon.transform(aTransform);
+                                aClipPolyPolygon.translate(aVector);
                                 HandleNewClipRegion(aClipPolyPolygon, rTargetHolders, rPropertyHolders);
                             }
                         }

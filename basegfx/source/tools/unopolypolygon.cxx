@@ -113,8 +113,7 @@ namespace basegfx::unotools
 
         if( !aOffset.equalZero() )
         {
-            const B2DHomMatrix aTranslate(utils::createTranslateB2DHomMatrix(aOffset));
-            aSrcPoly.transform( aTranslate );
+            aSrcPoly.translate( aOffset );
         }
 
         maPolyPoly.append( aSrcPoly );

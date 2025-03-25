@@ -40,8 +40,7 @@ namespace slideshow::internal {
 
     if (m_center)
     {
-        aTransform = basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.0);
-        poly.transform( aTransform );
+        poly.translate( 0.5, 0.0 );
     }
     ::basegfx::B2DPolyPolygon res(poly);
 

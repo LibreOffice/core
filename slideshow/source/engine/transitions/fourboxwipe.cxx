@@ -64,8 +64,7 @@ namespace slideshow::internal {
     square4.flip(); // flip direction
     res.append( square4 );
 
-    aTransform = basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5);
-    res.transform( aTransform );
+    res.translate( 0.5, 0.5 );
     return res;
 }
 

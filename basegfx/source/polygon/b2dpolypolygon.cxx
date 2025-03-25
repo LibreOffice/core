@@ -177,6 +177,12 @@ public:
             aPolygon.transform(rMatrix);
     }
 
+    void translate(double fTranslateX, double fTranslateY)
+    {
+        for (auto& aPolygon : maPolygons)
+            aPolygon.translate(fTranslateX, fTranslateY);
+    }
+
     void makeUnique()
     {
         for (auto& aPolygon : maPolygons)
@@ -394,6 +400,14 @@ public:
         if(count() && !rMatrix.isIdentity())
         {
             mpPolyPolygon->transform(rMatrix);
+        }
+    }
+
+    void B2DPolyPolygon::translate(double fTranslateX, double fTranslateY)
+    {
+        if(count())
+        {
+            mpPolyPolygon->translate(fTranslateX, fTranslateY);
         }
     }
 

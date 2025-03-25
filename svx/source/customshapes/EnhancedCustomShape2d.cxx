@@ -2471,8 +2471,7 @@ void EnhancedCustomShape2d::CreateSubPath(
                             basegfx::B2DPoint aCurrentPointB2D( aNewB2DPolygon.getB2DPoint(aNewB2DPolygon.count() - 1 ) );
                             const double fDx(aCurrentPointB2D.getX() - aTempB2DPolygon.getB2DPoint(0).getX());
                             const double fDy(aCurrentPointB2D.getY() - aTempB2DPolygon.getB2DPoint(0).getY());
-                            aMatrix = basegfx::utils::createTranslateB2DHomMatrix(fDx, fDy);
-                            aTempB2DPolygon.transform(aMatrix);
+                            aTempB2DPolygon.translate(fDx, fDy);
                             aNewB2DPolygon.append(aTempB2DPolygon);
                         }
 

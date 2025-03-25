@@ -2207,7 +2207,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
                         if( pSdrObject->getSdrModelFromSdrObject().IsWriter() )
                         {
                             Point aPoint( pSdrObject->GetAnchorPos() );
-                            aNewPolyPolygon.transform(basegfx::utils::createTranslateB2DHomMatrix(aPoint.X(), aPoint.Y()));
+                            aNewPolyPolygon.translate(aPoint.X(), aPoint.Y());
                         }
                         pEdgeObj->SetEdgeTrackPath( aNewPolyPolygon );
                         return true;
@@ -2744,7 +2744,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
                     if( GetSdrObject()->getSdrModelFromSdrObject().IsWriter() )
                     {
                         Point aPoint( GetSdrObject()->GetAnchorPos() );
-                        aPolyPoly.transform(basegfx::utils::createTranslateB2DHomMatrix(-aPoint.X(), -aPoint.Y()));
+                        aPolyPoly.translate(-aPoint.X(), -aPoint.Y());
                     }
                     // Reintroduction of fix for issue #i59051# (#i108851#)
                     ForceMetricTo100th_mm( aPolyPoly );

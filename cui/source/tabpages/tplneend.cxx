@@ -368,7 +368,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
         basegfx::B2DRange aNewRange(basegfx::utils::getRange(aNewPolyPolygon));
 
         // normalize
-        aNewPolyPolygon.transform(basegfx::utils::createTranslateB2DHomMatrix( -aNewRange.getMinX(), -aNewRange.getMinY()));
+        aNewPolyPolygon.translate( -aNewRange.getMinX(), -aNewRange.getMinY() );
 
         pConvPolyObj.clear();
 

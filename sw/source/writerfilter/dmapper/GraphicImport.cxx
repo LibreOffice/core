@@ -1234,9 +1234,7 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                                     o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100));
                                 aShapePolygon.transform(aMatrix);
                                 // Wrap polygon treats left/top of shape as origin, shift shape polygon accordingly
-                                aMatrix = basegfx::utils::createTranslateB2DHomMatrix(
-                                    -aImportPosition.X, -aImportPosition.Y);
-                                aShapePolygon.transform(aMatrix);
+                                aShapePolygon.translate(-aImportPosition.X, -aImportPosition.Y);
                                 aShapeRange = aShapePolygon.getB2DRange();
                             }
                             else // can this happen?

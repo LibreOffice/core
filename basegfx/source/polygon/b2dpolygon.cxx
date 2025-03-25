@@ -176,6 +176,14 @@ public:
             point *= rMatrix;
         }
     }
+
+    void translate(double fTranslateX, double fTranslateY)
+    {
+        for (auto& point : maVector)
+        {
+            point += basegfx::B2DPoint(fTranslateX, fTranslateY);
+        }
+    }
 };
 
 class ControlVectorPair2D
@@ -1092,6 +1100,28 @@ public:
         }
     }
 
+    void translate(double fTranslateX, double fTranslateY)
+    {
+        mpBufferedData.reset();
+
+        if(moControlVector)
+        {
+            for(sal_uInt32 a(0); a < maPoints.count(); a++)
+            {
+                basegfx::B2DPoint aCandidate = maPoints.getCoordinate(a);
+                aCandidate += basegfx::B2DPoint(fTranslateX, fTranslateY);
+                maPoints.setCoordinate(a, aCandidate);
+            }
+
+            if(!moControlVector->isUsed())
+                moControlVector.reset();
+        }
+        else
+        {
+            maPoints.translate(fTranslateX, fTranslateY);
+        }
+    }
+
     void addOrReplaceSystemDependentData(basegfx::SystemDependentData_SharedPtr& rData) const
     {
         if(!mpBufferedData)
@@ -1477,6 +1507,14 @@ namespace basegfx
         if(count() && !rMatrix.isIdentity())
         {
             mpPolygon->transform(rMatrix);
+        }
+    }
+
+    void B2DPolygon::translate(double fTranslateX, double fTranslateY)
+    {
+        if(count())
+        {
+            mpPolygon->translate(fTranslateX, fTranslateY);
         }
     }
 

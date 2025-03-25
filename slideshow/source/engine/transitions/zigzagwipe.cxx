@@ -44,7 +44,7 @@ ZigZagWipe::ZigZagWipe( sal_Int32 nZigs ) : m_zigEdge( 1.0 / nZigs )
 ::basegfx::B2DPolyPolygon ZigZagWipe::operator () ( double t )
 {
     ::basegfx::B2DPolyPolygon res(m_stdZigZag);
-    res.transform(basegfx::utils::createTranslateB2DHomMatrix((1.0 + m_zigEdge) * t, 0.0));
+    res.translate((1.0 + m_zigEdge) * t, 0.0);
     return res;
 }
 

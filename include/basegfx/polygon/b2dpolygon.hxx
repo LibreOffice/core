@@ -226,6 +226,10 @@ namespace basegfx
         /// apply transformation given in matrix form
         void transform(const basegfx::B2DHomMatrix& rMatrix);
 
+        /** Translate (ie. move).
+            Much faster equivalent of transform(createTranslateB2DHomMatrix(xx)). */
+        void translate(double fTranslateX, double fTranslateY);
+
         // exclusive management op's for SystemDependentData at B2DPolygon
         template<class T>
         std::shared_ptr<T> getSystemDependentData(basegfx::SDD_Type aType) const

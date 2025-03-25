@@ -357,10 +357,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                 if((aHorMove || aVerMove) && !aClips.empty() && aClips.back().count())
                 {
-                    aClips.back().transform(
-                        basegfx::utils::createTranslateB2DHomMatrix(
-                            aHorMove,
-                            aVerMove));
+                    aClips.back().translate(aHorMove, aVerMove);
                 }
                 break;
             }

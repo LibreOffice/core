@@ -2262,7 +2262,7 @@ PointerStyle SdrPathObj::GetCreatePointer() const
 
 void SdrPathObj::NbcMove(const Size& rSiz)
 {
-    maPathPolygon.transform(basegfx::utils::createTranslateB2DHomMatrix(rSiz.Width(), rSiz.Height()));
+    maPathPolygon.translate(rSiz.Width(), rSiz.Height());
 
     // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
     SdrTextObj::NbcMove(rSiz);

@@ -154,8 +154,7 @@ namespace sdr::contact
 
                         // create shadow outline
                         basegfx::B2DPolygon aShadowOutline(aObjectOutline);
-                        aShadowOutline.transform(
-                            basegfx::utils::createTranslateB2DHomMatrix(nXDist, nYDist));
+                        aShadowOutline.translate(nXDist, nYDist);
 
                         // clip shadow outline against object outline
                         const basegfx::B2DPolyPolygon aClippedShadow(

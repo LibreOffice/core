@@ -113,6 +113,15 @@ namespace basegfx
         // apply transformation given in matrix form to the polygon
         void transform(const basegfx::B2DHomMatrix& rMatrix);
 
+        /** Translate (ie. move).
+            Much faster equivalent of transform(createTranslateB2DHomMatrix(xx)). */
+        void translate(double fTranslateX, double fTranslateY);
+
+        inline void translate(const B2DTuple& rTranslate)
+        {
+            translate(rTranslate.getX(), rTranslate.getY());
+        }
+
         // polygon iterators (same iterator validity conditions as for vector)
         const B2DPolygon* begin() const;
         const B2DPolygon* end() const;

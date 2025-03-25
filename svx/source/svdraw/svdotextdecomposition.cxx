@@ -858,8 +858,7 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
         aPolyPolygon.transform(aRemoveRotShear);
         // Move Top/Left to origin
         basegfx::B2DRange aBoundRange = aPolyPolygon.getB2DRange();
-        aPolyPolygon.transform(
-            basegfx::utils::createTranslateB2DHomMatrix(-aBoundRange.getMinimum()));
+        aPolyPolygon.translate(-aBoundRange.getMinimum());
 
         // Calculate the translation needed to bring the text to the original position of
         // aPolyPolygon.
