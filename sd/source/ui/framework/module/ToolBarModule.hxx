@@ -93,7 +93,7 @@ private:
 
         @param pViewShell may be nullptr
     */
-    void UpdateToolbars(ViewShell* pViewShell);
+    void UpdateToolbars(const ViewShell* pViewShell);
 
     void HandleUpdateStart();
     void HandleUpdateEnd();

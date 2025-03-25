@@ -126,7 +126,7 @@ void TextObjectBar::GetCharState( SfxItemSet& rSet )
     GetCharStateImpl(mpViewShell, mpView, rSet);
 }
 
-void TextObjectBar::GetCharStateImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxItemSet& rSet)
+void TextObjectBar::GetCharStateImpl(const ViewShell* mpViewShell, const ::sd::View* mpView, SfxItemSet& rSet)
 {
     SfxItemSet  aCharAttrSet( mpView->GetDoc().GetPool() );
     mpView->GetAttributes( aCharAttrSet );
@@ -155,7 +155,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 /**
  * Status of attribute items.
  */
-void TextObjectBar::GetAttrStateImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxItemSet& rSet, SfxShell* pTextObjectBar)
+void TextObjectBar::GetAttrStateImpl(const ViewShell* mpViewShell, ::sd::View* mpView, SfxItemSet& rSet, SfxShell* pTextObjectBar)
 {
     SfxWhichIter        aIter( rSet );
     sal_uInt16              nWhich = aIter.FirstWhich();
@@ -259,7 +259,7 @@ void TextObjectBar::GetAttrStateImpl(ViewShell* mpViewShell, ::sd::View* mpView,
                 bool bDisableDown     = true;
 
                 //fdo#78151 it doesn't make sense to promote or demote outline levels in master view.
-                const DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
+                const DrawViewShell* pDrawViewShell = dynamic_cast< const DrawViewShell* >(mpViewShell);
                 const bool bInMasterView = pDrawViewShell && pDrawViewShell->GetEditMode() == EditMode::MasterPage;
 
                 if (!bInMasterView)
@@ -449,7 +449,7 @@ void TextObjectBar::GetAttrStateImpl(ViewShell* mpViewShell, ::sd::View* mpView,
             case FN_NUM_NUMBERING_ON:
             {
                 bool bEnable = false;
-                const DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
+                const DrawViewShell* pDrawViewShell = dynamic_cast< const DrawViewShell* >(mpViewShell);
                 if (pDrawViewShell)
                 {
                     SdrView* pDrawView = pDrawViewShell->GetDrawView();

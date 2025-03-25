@@ -212,7 +212,7 @@ void ToolBarModule::HandleUpdateEnd()
     mpToolBarManagerLock.reset();
 }
 
-void ToolBarModule::UpdateToolbars(ViewShell* pViewShell)
+void ToolBarModule::UpdateToolbars(const ViewShell* pViewShell)
 {
     // Update the set of visible tool bars and deactivate those that are
     // no longer visible.  This is done before the old view shell is

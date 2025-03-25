@@ -1529,7 +1529,7 @@ void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
     }
 }
 
-void GetDocStructureSlides(::tools::JsonWriter& rJsonWriter, SdXImpressDocument* pDoc,
+void GetDocStructureSlides(::tools::JsonWriter& rJsonWriter, const SdXImpressDocument* pDoc,
                            const std::map<OUString, OUString>& rArguments)
 {
     auto it = rArguments.find(u"filter"_ustr);

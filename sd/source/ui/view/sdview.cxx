@@ -452,7 +452,7 @@ void ViewRedirector::createRedirectedPrimitive2DSequence(
 
 namespace
 {
-    void setOutlinerBgFromPage(::Outliner& rOutl, SdrPageView& rPgView, bool bScreenDisplay)
+    void setOutlinerBgFromPage(::Outliner& rOutl, const SdrPageView& rPgView, bool bScreenDisplay)
     {
         SdrPage* pPage = rPgView.GetPage();
         if (pPage)

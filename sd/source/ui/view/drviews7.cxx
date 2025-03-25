@@ -97,7 +97,7 @@ using namespace ::com::sun::star::linguistic2;
     The list is stored in a new instance of SvxClipboardFormatItem.
 */
 static ::std::unique_ptr<SvxClipboardFormatItem> GetSupportedClipboardFormats (
-    TransferableDataHelper& rDataHelper)
+    const TransferableDataHelper& rDataHelper)
 {
     ::std::unique_ptr<SvxClipboardFormatItem> pResult (
         new SvxClipboardFormatItem(SID_CLIPBOARD_FORMAT_ITEMS));

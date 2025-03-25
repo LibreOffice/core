@@ -61,8 +61,8 @@ private:
 public:
     ScopedVclPtrInstance<VirtualDevice> maVirtualDevice;
 
-    RenderContext(unsigned char* pBuffer, SdrModel& rModel, SdrPage& rPage, Size const& rSlideSize,
-                  const Fraction& rScale)
+    RenderContext(unsigned char* pBuffer, SdrModel& rModel, const SdrPage& rPage,
+                  Size const& rSlideSize, const Fraction& rScale)
         : mrModel(rModel)
         , maVirtualDevice(DeviceFormat::WITHOUT_ALPHA)
     {
@@ -230,7 +230,7 @@ findTextBlock(drawinglayer::primitive2d::Primitive2DContainer const& rContainer,
 }
 
 /// show/hide paragraphs in the container
-void modifyParagraphs(drawinglayer::primitive2d::Primitive2DContainer& rContainer,
+void modifyParagraphs(const drawinglayer::primitive2d::Primitive2DContainer& rContainer,
                       drawinglayer::geometry::ViewInformation2D const& rViewInformation2D,
                       std::deque<sal_Int32> const& rPreserveIndices, bool bRenderObject)
 {
@@ -668,7 +668,7 @@ Size SlideshowLayerRenderer::calculateAndSetSizePixel(Size const& rDesiredSizePi
 }
 
 void SlideshowLayerRenderer::createViewAndDraw(
-    RenderContext& rRenderContext, sdr::contact::ViewObjectContactRedirector* pRedirector)
+    const RenderContext& rRenderContext, sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
     SdrView aView(mrModel, rRenderContext.maVirtualDevice);
     aView.SetPageVisible(false);
@@ -697,7 +697,7 @@ void writeContentNode(::tools::JsonWriter& aJsonWriter)
     aJsonWriter.put("checksum", "%IMAGECHECKSUM%");
 }
 
-void writeBoundingBox(::tools::JsonWriter& aJsonWriter, SdrObject* pObject)
+void writeBoundingBox(::tools::JsonWriter& aJsonWriter, const SdrObject* pObject)
 {
     auto aContentNode = aJsonWriter.startNode("bounds");
     ::tools::Rectangle aRectmm100 = pObject->GetCurrentBoundRect();

@@ -1454,7 +1454,7 @@ void PowerPointExport::AddLayoutIdAndRelation(const FSHelperPtr& pFS, sal_Int32 
                          FSNS(XML_r, XML_id), sRelId);
 }
 
-static bool lcl_ContainsEquivalentObject(SdrPage* pPage, SdrObject* pObj)
+static bool lcl_ContainsEquivalentObject(const SdrPage* pPage, const SdrObject* pObj)
 {
     bool bFound = false;
 
@@ -1474,7 +1474,7 @@ static bool lcl_ContainsEquivalentObject(SdrPage* pPage, SdrObject* pObj)
     return bFound;
 }
 
-static bool lcl_ComparePageObjects(SdrPage* pMasterPage, SdrPage* pMasterNext)
+static bool lcl_ComparePageObjects(const SdrPage* pMasterPage, SdrPage* pMasterNext)
 {
     if (!pMasterPage || !pMasterNext)
         return false;
@@ -2268,7 +2268,7 @@ void PowerPointExport::WriteDefaultColorSchemes(const FSHelperPtr& pFS)
     }
 }
 
-void PowerPointExport::WriteTheme(sal_Int32 nThemeNum, model::Theme* pTheme)
+void PowerPointExport::WriteTheme(sal_Int32 nThemeNum, const model::Theme* pTheme)
 {
     if (!pTheme)
         return;

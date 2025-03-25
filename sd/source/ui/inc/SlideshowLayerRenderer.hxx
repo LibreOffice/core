@@ -131,7 +131,7 @@ private:
     Size maSlideSize;
     RenderState maRenderState;
 
-    void createViewAndDraw(RenderContext& rRenderContext,
+    void createViewAndDraw(const RenderContext& rRenderContext,
                            sdr::contact::ViewObjectContactRedirector* pRedirector);
     void writeBackgroundJSON(OString& rJsonMsg);
     void writeJSON(OString& rJsonMsg, RenderPass const& rRenderPass);

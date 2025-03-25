@@ -94,7 +94,7 @@ private:
         sal_Int32 nOffset, sal_uInt32 nMasterNum, const OUString& aSlideName,
         css::uno::Reference<css::beans::XPropertySet> const& aXBackgroundPropSet);
     static void WriteDefaultColorSchemes(const FSHelperPtr& pFS);
-    void WriteTheme( sal_Int32 nThemeNum, model::Theme* pTheme );
+    void WriteTheme( sal_Int32 nThemeNum, const model::Theme* pTheme );
 
     virtual bool ImplCreateDocument() override;
     virtual bool ImplCreateMainNotes() override;

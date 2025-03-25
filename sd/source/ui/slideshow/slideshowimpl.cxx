@@ -3296,7 +3296,7 @@ namespace
 
         static ImplSVEvent* AsyncUpdateSlideshow(
             SlideshowImpl* pSlideshowImpl,
-            uno::Reference< css::drawing::XDrawPage >& rXCurrentSlide,
+            const uno::Reference< css::drawing::XDrawPage >& rXCurrentSlide,
             SdrHintKind eHintKind)
         {
             AsyncUpdateSlideshowData* pNew(new AsyncUpdateSlideshowData);

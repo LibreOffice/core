@@ -45,9 +45,9 @@ public:
     virtual ~TextObjectBar() override;
 
     void GetAttrState( SfxItemSet& rSet );
-    static void GetAttrStateImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxItemSet& rSet, SfxShell* pTextObjectBar);
+    static void GetAttrStateImpl(const ViewShell* mpViewShell, ::sd::View* mpView, SfxItemSet& rSet, SfxShell* pTextObjectBar);
     void GetCharState( SfxItemSet& rSet );
-    static void GetCharStateImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxItemSet& rSet);
+    static void GetCharStateImpl(const ViewShell* mpViewShell, const ::sd::View* mpView, SfxItemSet& rSet);
     void Execute( SfxRequest &rReq );
     static void ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxRequest& rReq, SfxShell* pTextObjectBar);
 

@@ -51,7 +51,7 @@ namespace
 class UndoInsertOrRemoveAnnotation : public SdrUndoAction
 {
 public:
-    UndoInsertOrRemoveAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation, bool bInsert);
+    UndoInsertOrRemoveAnnotation(const rtl::Reference<sdr::annotation::Annotation>& xAnnotation, bool bInsert);
 
     virtual void Undo() override;
     virtual void Redo() override;
@@ -266,7 +266,7 @@ std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation(rtl::Reference
     }
 }
 
-UndoInsertOrRemoveAnnotation::UndoInsertOrRemoveAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation, bool bInsert)
+UndoInsertOrRemoveAnnotation::UndoInsertOrRemoveAnnotation(const rtl::Reference<sdr::annotation::Annotation>& xAnnotation, bool bInsert)
     : SdrUndoAction(*xAnnotation->GetModel())
     , mxAnnotation(xAnnotation)
     , mbInsert(bInsert)
