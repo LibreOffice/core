@@ -223,11 +223,7 @@ void SwEditShell::ReinstateRedlinesInSelection()
 
     // Work on a copy, since reinstate will modify the table, and reinstate of just inserted
     // redlines is not wanted.
-    std::vector<SwRangeRedline*> aRedlines(rTable.size());
-    for (size_t nIndex = 0; nIndex < rTable.size(); ++nIndex)
-    {
-        aRedlines[nIndex] = rTable[nIndex];
-    }
+    std::vector<SwRangeRedline*> aRedlines(rTable.begin(), rTable.end());
 
     for (size_t nIndex = 0; nIndex < aRedlines.size(); ++nIndex)
     {
