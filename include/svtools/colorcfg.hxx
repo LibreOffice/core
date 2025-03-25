@@ -291,11 +291,6 @@ public:
     //  1 gets the default color on dark mod.
     static Color            GetDefaultColor(ColorConfigEntry eEntry, int nMod = -1);
     static const OUString& GetCurrentSchemeName();
-
-    void                    LoadThemeColorsFromRegistry();
-    void                    SetupTheme();
-
-    DECL_LINK(DataChangedHdl, VclSimpleEvent&, void);
 };
 
 class SVT_DLLPUBLIC EditableColorConfig

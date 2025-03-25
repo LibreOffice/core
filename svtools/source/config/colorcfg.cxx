@@ -98,6 +98,12 @@ public:
     using ConfigItem::SetModified;
     using ConfigItem::ClearModified;
     void                            SettingsChanged();
+    void                    SetupTheme();
+    const OUString& GetCurrentSchemeName();
+    void                    LoadThemeColorsFromRegistry();
+    // get the configured value - if bSmart is set the default color setting is provided
+    // instead of the automatic color
+    ColorConfigValue        GetColorValue(ColorConfigEntry eEntry, bool bSmart = true) const;
 
     DECL_LINK( DataChangedEventListener, VclSimpleEvent&, void );
 };
@@ -149,8 +155,9 @@ ColorConfig_Impl::ColorConfig_Impl() :
     if (!comphelper::IsFuzzing())
         Load(OUString());
 
-    ::Application::AddEventListener( LINK(this, ColorConfig_Impl, DataChangedEventListener) );
+    SetupTheme();
 
+    ::Application::AddEventListener( LINK(this, ColorConfig_Impl, DataChangedEventListener) );
 }
 
 ColorConfig_Impl::~ColorConfig_Impl()
@@ -419,6 +426,8 @@ IMPL_LINK( ColorConfig_Impl, DataChangedEventListener, VclSimpleEvent&, rEvent, 
              (pData->GetFlags() & AllSettingsFlags::STYLE) )
         {
             SettingsChanged();
+            ThemeColors::SetThemeCached(false);
+            SetupTheme();
         }
     }
 }
@@ -426,7 +435,7 @@ IMPL_LINK( ColorConfig_Impl, DataChangedEventListener, VclSimpleEvent&, rEvent, 
 // caches registry colors into the static ThemeColors::m_aThemeColors object. if the color
 // value is set to COL_AUTO, the ColorConfig::GetColorValue function calls ColorConfig::GetDefaultColor()
 // which returns some hard coded colors for the document, and StyleSettings colors for the UI (lcl_GetDefaultUIColor).
-void ColorConfig::LoadThemeColorsFromRegistry()
+void ColorConfig_Impl::LoadThemeColorsFromRegistry()
 {
     ThemeColors& rThemeColors = ThemeColors::GetThemeColors();
 
@@ -463,16 +472,16 @@ void ColorConfig::LoadThemeColorsFromRegistry()
     // as more controls support it, we might want to have ColorConfigValue entries in ThemeColors
     // instead of just colors. for now that seems overkill for just one control.
     rThemeColors.SetAppBackBitmapFileName(
-        m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).sBitmapFileName);
+        GetColorConfigValue(svtools::APPBACKGROUND).sBitmapFileName);
     rThemeColors.SetAppBackUseBitmap(
-        m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).bUseBitmapBackground);
+        GetColorConfigValue(svtools::APPBACKGROUND).bUseBitmapBackground);
     rThemeColors.SetAppBackBitmapStretched(
-        m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).bIsBitmapStretched);
+        GetColorConfigValue(svtools::APPBACKGROUND).bIsBitmapStretched);
 
     ThemeColors::SetThemeCached(true);
 }
 
-void ColorConfig::SetupTheme()
+void ColorConfig_Impl::SetupTheme()
 {
     if (ThemeColors::IsThemeDisabled())
     {
@@ -496,8 +505,8 @@ void ColorConfig::SetupTheme()
     if (!ThemeColors::IsThemeCached())
     {
         // registry to ColorConfig::m_pImpl
-        m_pImpl->Load(GetCurrentSchemeName());
-        m_pImpl->CommitCurrentSchemeName();
+        Load(GetCurrentSchemeName());
+        CommitCurrentSchemeName();
 
         // ColorConfig::m_pImpl to static ThemeColors::m_aThemeColors
         LoadThemeColorsFromRegistry();
@@ -517,15 +526,10 @@ ColorConfig::ColorConfig()
     }
     ++nColorRefCount_Impl;
     m_pImpl->AddListener(this);
-    SetupTheme();
-
-    ::Application::AddEventListener( LINK(this, ColorConfig, DataChangedHdl) );
 }
 
 ColorConfig::~ColorConfig()
 {
-    ::Application::RemoveEventListener( LINK(this, ColorConfig, DataChangedHdl) );
-
     if (comphelper::IsFuzzing())
         return;
     std::unique_lock aGuard( ColorMutex_Impl() );
@@ -738,10 +742,14 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
 
 ColorConfigValue ColorConfig::GetColorValue(ColorConfigEntry eEntry, bool bSmart) const
 {
-    ColorConfigValue aRet;
-
     if (m_pImpl)
-        aRet = m_pImpl->GetColorConfigValue(eEntry);
+        return m_pImpl->GetColorValue(eEntry, bSmart);
+    return ColorConfigValue();
+}
+
+ColorConfigValue ColorConfig_Impl::GetColorValue(ColorConfigEntry eEntry, bool bSmart) const
+{
+    ColorConfigValue aRet = GetColorConfigValue(eEntry);
 
     if (bSmart && aRet.nColor == COL_AUTO)
         aRet.nColor = ColorConfig::GetDefaultColor(eEntry);
@@ -751,34 +759,25 @@ ColorConfigValue ColorConfig::GetColorValue(ColorConfigEntry eEntry, bool bSmart
 
 const OUString& ColorConfig::GetCurrentSchemeName()
 {
-    uno::Sequence<OUString> aNames = m_pImpl->GetSchemeNames();
+    return m_pImpl->GetCurrentSchemeName();
+}
+
+const OUString& ColorConfig_Impl::GetCurrentSchemeName()
+{
+    uno::Sequence<OUString> aNames = GetSchemeNames();
     OUString aCurrentSchemeName = officecfg::Office::UI::ColorScheme::CurrentColorScheme::get().value();
 
     for (const OUString& rSchemeName : aNames)
         if (rSchemeName == aCurrentSchemeName)
-            return m_pImpl->GetLoadedScheme();
+            return GetLoadedScheme();
 
     // Use "Automatic" as fallback
     auto pChange(comphelper::ConfigurationChanges::create());
     officecfg::Office::UI::ColorScheme::CurrentColorScheme::set(AUTOMATIC_COLOR_SCHEME, pChange);
     pChange->commit();
 
-    m_pImpl->SetCurrentSchemeName(AUTOMATIC_COLOR_SCHEME);
-    return m_pImpl->GetLoadedScheme();
-}
-
-IMPL_LINK( ColorConfig, DataChangedHdl, VclSimpleEvent&, rEvent, void )
-{
-    if (rEvent.GetId() == VclEventId::ApplicationDataChanged)
-    {
-        DataChangedEvent* pData = static_cast<DataChangedEvent*>(static_cast<VclWindowEvent&>(rEvent).GetData());
-        if (pData->GetType() == DataChangedEventType::SETTINGS &&
-            pData->GetFlags() & AllSettingsFlags::STYLE)
-        {
-            ThemeColors::SetThemeCached(false);
-            SetupTheme();
-        }
-    }
+    SetCurrentSchemeName(AUTOMATIC_COLOR_SCHEME);
+    return GetLoadedScheme();
 }
 
 EditableColorConfig::EditableColorConfig() :
