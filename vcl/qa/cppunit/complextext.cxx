@@ -758,4 +758,43 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf163215)
     CPPUNIT_ASSERT(aFoundPositions2.at(4));
 }
 
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf165510)
+{
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+
+    vcl::Font aBaseFont{ u"Liberation Sans"_ustr, u"Regular"_ustr, Size{ 0, 72 } };
+    pOutDev->SetFont(aBaseFont);
+
+    vcl::Font aFallbackFont{ u"Noto Sans"_ustr, u"Regular"_ustr, Size{ 0, 72 } };
+    pOutDev->ForceFallbackFont(aFallbackFont);
+
+    auto aText = u"ab(ح)cd(د)ef"_ustr;
+    auto pLayout = pOutDev->ImplLayout(aText, /*nIndex*/ 0, /*nLen*/ aText.getLength());
+
+    // Fallback must have happened for this test to be meaningful
+    auto pMultiLayout = dynamic_cast<MultiSalLayout*>(pLayout.get());
+    CPPUNIT_ASSERT(pMultiLayout);
+
+    std::vector<int> aCharIndices;
+
+    const GlyphItem* pGlyph = nullptr;
+    basegfx::B2DPoint stPos;
+    int nCurrPos = 0;
+    while (pLayout->GetNextGlyph(&pGlyph, stPos, nCurrPos))
+    {
+        aCharIndices.push_back(pGlyph->charPos());
+    }
+
+    // tdf#165510 caused failure to remove dropped glyphs from the base layout.
+    // Without the fix, the base layout will contain an errant copy of char 8.
+    //                              { 0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 3, 8 };
+    std::vector<int> aRefCharIndices{ 0, 1, 2, 4, 5, 6, 7, 9, 10, 11, 3, 8 };
+
+    CPPUNIT_ASSERT_EQUAL(aRefCharIndices.size(), aCharIndices.size());
+    for (size_t i = 0; i < aRefCharIndices.size(); ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(aRefCharIndices.at(i), aCharIndices.at(i));
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
