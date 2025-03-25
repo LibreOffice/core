@@ -787,7 +787,6 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
                 rOutliner.SetTextObj( this );
             }
 
-            rOutliner.SetUpdateLayout(true);
             rOutliner.SetText(*pPara);
         }
     }
