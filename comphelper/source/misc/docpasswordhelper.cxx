@@ -443,7 +443,7 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
         sal_uInt16 pPassData[16] = {};
 
         sal_Int32 nPassLen = std::min< sal_Int32 >( aPassword.size(), 15 );
-        memcpy( pPassData, aPassword.data(), nPassLen * sizeof(pPassData[0]) );
+        std::copy( aPassword.data(), aPassword.data() + nPassLen, pPassData );
 
         aResultKey = GenerateStd97Key( pPassData, aDocId );
     }
