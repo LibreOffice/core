@@ -32,6 +32,7 @@
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 /// Covers sw/source/uibase/uiview/ fixes.
 class SwUibaseUiviewTest : public SwModelTestBase
@@ -354,6 +355,42 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testEditInReadonly)
     //status default in editable section
     CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, eState);
 }
+
+CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testReinstateTrackedChangeState)
+{
+    // Given a document with a deletion:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert("abcd");
+    RedlineFlags nMode = pWrtShell->GetRedlineFlags();
+    pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    pWrtShell->DelRight();
+
+    // When the cursor is inside a redline:
+    pWrtShell->SttPara(/*bSelect=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+
+    // Then make sure that reinstate is enabled:
+    SwView* pView = getSwDocShell()->GetView();
+    std::unique_ptr<SfxPoolItem> pItem;
+    SfxItemState eState
+        = pView->GetViewFrame().GetBindings().QueryState(FN_REDLINE_REINSTATE_DIRECT, pItem);
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, eState);
+
+    // When the cursor is outside a redline:
+    pWrtShell->SttPara(/*bSelect=*/false);
+
+    // Then make sure that reinstate is disabled:
+    eState = pView->GetViewFrame().GetBindings().QueryState(FN_REDLINE_REINSTATE_DIRECT, pItem);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1 (DISABLED)
+    // - Actual  : 32 (DEFAULT)
+    // i.e. reinstate was always enabled.
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, eState);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

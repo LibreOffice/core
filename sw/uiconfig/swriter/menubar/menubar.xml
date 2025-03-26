@@ -138,6 +138,7 @@
           <menu:menuitem menu:id=".uno:RejectTrackedChange"/>
           <menu:menuitem menu:id=".uno:RejectTrackedChangeToNext"/>
           <menu:menuitem menu:id=".uno:RejectAllTrackedChanges"/>
+          <menu:menuitem menu:id=".uno:ReinstateTrackedChange"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:CommentChangeTracking"/>
           <menu:menuitem menu:id=".uno:ProtectTraceChangeMode"/>
