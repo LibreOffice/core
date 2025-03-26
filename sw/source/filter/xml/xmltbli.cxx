@@ -587,7 +587,7 @@ void SwXMLTableCellContext_Impl::endFastElement(sal_Int32 )
     {
         if( m_bHasTextContent )
         {
-            GetImport().GetTextImport()->DeleteParagraph();
+            GetImport().GetTextImport()->DeleteParagraph(true);
             if( m_nColRepeat > 1 && m_nColSpan == 1 )
             {
                 // The original text is invalid after deleting the last

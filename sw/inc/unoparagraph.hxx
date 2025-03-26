@@ -200,6 +200,9 @@ public:
 
     /// tries to return less data, but may return more than just text fields
     rtl::Reference<SwXTextPortionEnumeration> createTextFieldsEnumeration();
+
+private:
+    bool m_bDeleteWithoutCorrection = false;
 };
 
 

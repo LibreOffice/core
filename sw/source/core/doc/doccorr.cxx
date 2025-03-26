@@ -179,7 +179,8 @@ void SwDoc::CorrAbs(const SwNode& rOldNode,
     SwPosition aNewPos(rNewPos);
     aNewPos.AdjustContent(nOffset);
 
-    getIDocumentMarkAccess()->correctMarksAbsolute(rOldNode, rNewPos, nOffset);
+    if (!mbDontCorrectBookmarks)
+        getIDocumentMarkAccess()->correctMarksAbsolute(rOldNode, rNewPos, nOffset);
     // fix redlines
     {
         SwRedlineTable& rTable = getIDocumentRedlineAccess().GetRedlineTable();

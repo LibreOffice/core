@@ -766,7 +766,7 @@ void XMLTextImportHelper::InsertTextContent(
     }
 }
 
-void XMLTextImportHelper::DeleteParagraph()
+void XMLTextImportHelper::DeleteParagraph(bool dontCorrectBookmarks)
 {
     assert(m_xImpl->m_xText.is());
     assert(m_xImpl->m_xCursor.is());
@@ -786,6 +786,18 @@ void XMLTextImportHelper::DeleteParagraph()
             assert(xComp.is());
             if( xComp.is() )
             {
+                if (dontCorrectBookmarks)
+                {
+                    try
+                    {
+                        // See SwXParagraph::setPropertyValue
+                        if (auto xProps = xComp.query<beans::XPropertySet>())
+                            xProps->setPropertyValue(u"DeleteWithoutCorrection"_ustr, {});
+                    }
+                    catch (const beans::UnknownPropertyException&)
+                    {
+                    }
+                }
                 xComp->dispose();
                 bDelete = false;
             }
