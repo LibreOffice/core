@@ -457,7 +457,7 @@ static unsigned __stdcall SystrayThread(void* /*lpParam*/)
         }
         if (-1 == bRet)
         {
-            SAL_WARN("sfx.appl", "GetMessageW failed: " << WindowsErrorString(GetLastError()));
+            SAL_WARN("sfx.appl", "GetMessageW failed: " << comphelper::WindowsErrorString(GetLastError()));
             return 1;
         }
         TranslateMessage( &msg );

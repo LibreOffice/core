@@ -412,7 +412,7 @@ OleComponent::OleComponent( const uno::Reference< uno::XComponentContext >& xCon
     {
         SAL_WARN("embeddedobj.ole", "OleComponent ctor: OleInitialize() failed with 0x"
                                         << OUString::number(static_cast<sal_uInt32>(hr), 16) << ": "
-                                        << WindowsErrorStringFromHRESULT(hr));
+                                        << comphelper::WindowsErrorStringFromHRESULT(hr));
     }
 
     m_pOleWrapClientSite = new OleWrapperClientSite( this );
@@ -945,7 +945,7 @@ void OleComponent::RunObject()
 
         if ( FAILED( hr ) )
         {
-            OUString error = WindowsErrorStringFromHRESULT(hr);
+            OUString error = comphelper::WindowsErrorStringFromHRESULT(hr);
             if ( hr == REGDB_E_CLASSNOTREG )
             {
                 if (auto pOleObj

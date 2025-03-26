@@ -2311,7 +2311,7 @@ Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
     HRESULT nResult = mpUnkSink->QueryInterface(IID_IDispatch, reinterpret_cast<void **>(&pDispatch));
     if (!SUCCEEDED(nResult))
     {
-        SAL_WARN("extensions.olebridge", "Sink::Call: Not IDispatch: " << WindowsErrorStringFromHRESULT(nResult));
+        SAL_WARN("extensions.olebridge", "Sink::Call: Not IDispatch: " << comphelper::WindowsErrorStringFromHRESULT(nResult));
         return;
     }
 
@@ -2404,7 +2404,7 @@ Sink::Call( const OUString& Method, Sequence< Any >& Arguments )
             nResult = pDispatch->Invoke(nMemId, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &aDispParams, &aVarResult, nullptr, &uArgErr);
             SAL_INFO("extensions.olebridge", "Sink::Call(" << Method << "): Invoke() returned");
 
-            SAL_WARN_IF(!SUCCEEDED(nResult), "extensions.olebridge", "Call to " << Method << " failed: " << WindowsErrorStringFromHRESULT(nResult));
+            SAL_WARN_IF(!SUCCEEDED(nResult), "extensions.olebridge", "Call to " << Method << " failed: " << comphelper::WindowsErrorStringFromHRESULT(nResult));
 
             // Undo VT_BYREF magic done above. Copy out parameters back to the Anys in Arguments
             for (unsigned j = 0; j < aDispParams.cArgs; j++)
@@ -2708,7 +2708,7 @@ public:
         nResult = CComObject<CXEnumConnections>::CreateInstance(&pEnumConnections);
         if (FAILED(nResult))
         {
-            SAL_INFO("extensions.olebridge", "..." << this << "@CXConnectionPoint::EnumConnections: " << WindowsErrorStringFromHRESULT(nResult));
+            SAL_INFO("extensions.olebridge", "..." << this << "@CXConnectionPoint::EnumConnections: " << comphelper::WindowsErrorStringFromHRESULT(nResult));
             return nResult;
         }
 

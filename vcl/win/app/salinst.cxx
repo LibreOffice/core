@@ -499,7 +499,7 @@ bool ImplSalYield(const bool bWait, const bool bHandleAllCurrentEvents)
         switch (GetMessageW(&aMsg, nullptr, 0, 0))
         {
             case -1:
-                SAL_WARN("vcl.schedule", "GetMessageW failed: " << WindowsErrorString(GetLastError()));
+                SAL_WARN("vcl.schedule", "GetMessageW failed: " << comphelper::WindowsErrorString(GetLastError()));
                 // should we std::abort() / SalAbort here?
                 break;
             case 0:

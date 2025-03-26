@@ -127,7 +127,7 @@ void WinOpenGLContext::makeCurrent()
         g_bAnyCurrent = false;
         DWORD nLastError = GetLastError();
         if (nLastError != ERROR_SUCCESS)
-            SAL_WARN("vcl.opengl", "wglMakeCurrent failed: " << WindowsErrorString(nLastError));
+            SAL_WARN("vcl.opengl", "wglMakeCurrent failed: " << comphelper::WindowsErrorString(nLastError));
         return;
     }
 
@@ -530,21 +530,21 @@ bool WinOpenGLContext::ImplInit()
 
     if (!SetPixelFormat(m_aGLWin.hDC, WindowPix, &PixelFormatFront))
     {
-        SAL_WARN("vcl.opengl", "SetPixelFormat failed: " << WindowsErrorString(GetLastError()));
+        SAL_WARN("vcl.opengl", "SetPixelFormat failed: " << comphelper::WindowsErrorString(GetLastError()));
         return false;
     }
 
     HGLRC hTempRC = wglCreateContext(m_aGLWin.hDC);
     if (hTempRC == nullptr)
     {
-        SAL_WARN("vcl.opengl", "wglCreateContext failed: "<< WindowsErrorString(GetLastError()));
+        SAL_WARN("vcl.opengl", "wglCreateContext failed: "<< comphelper::WindowsErrorString(GetLastError()));
         return false;
     }
 
     if (!wglMakeCurrent(m_aGLWin.hDC, hTempRC))
     {
         g_bAnyCurrent = false;
-        SAL_WARN("vcl.opengl", "wglMakeCurrent failed: "<< WindowsErrorString(GetLastError()));
+        SAL_WARN("vcl.opengl", "wglMakeCurrent failed: "<< comphelper::WindowsErrorString(GetLastError()));
         return false;
     }
 
@@ -582,7 +582,7 @@ bool WinOpenGLContext::ImplInit()
     m_aGLWin.hRC = wglCreateContextAttribsARB(m_aGLWin.hDC, hSharedCtx, attribs);
     if (m_aGLWin.hRC == nullptr)
     {
-        SAL_WARN("vcl.opengl", "wglCreateContextAttribsARB failed: "<< WindowsErrorString(GetLastError()));
+        SAL_WARN("vcl.opengl", "wglCreateContextAttribsARB failed: "<< comphelper::WindowsErrorString(GetLastError()));
         wglMakeCurrent(nullptr, nullptr);
         g_bAnyCurrent = false;
         wglDeleteContext(hTempRC);
@@ -604,7 +604,7 @@ bool WinOpenGLContext::ImplInit()
     if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
     {
         g_bAnyCurrent = false;
-        SAL_WARN("vcl.opengl", "wglMakeCurrent failed: " << WindowsErrorString(GetLastError()));
+        SAL_WARN("vcl.opengl", "wglMakeCurrent failed: " << comphelper::WindowsErrorString(GetLastError()));
         return false;
     }
 

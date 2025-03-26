@@ -99,7 +99,7 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
 
     if(pThreadImpl->m_hThread == nullptr)
     {
-        SAL_WARN("sal.osl", "CreateThread failed:" << WindowsErrorString(GetLastError()));
+        SAL_WARN("sal.osl", "CreateThread failed:" << comphelper::WindowsErrorString(GetLastError()));
 
         /* create failed */
         free(pThreadImpl);

@@ -465,7 +465,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
     hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
                             CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
                             hWndParent, nullptr, pInst->mhInst, pFrame );
-    SAL_WARN_IF(!hWnd, "vcl", "CreateWindowExW failed: " << WindowsErrorString(GetLastError()));
+    SAL_WARN_IF(!hWnd, "vcl", "CreateWindowExW failed: " << comphelper::WindowsErrorString(GetLastError()));
 
 #if OSL_DEBUG_LEVEL > 1
     // set transparency value
@@ -4546,7 +4546,7 @@ static WinSalMenuItem* ImplGetSalMenuItem( HMENU hMenu, UINT nPos, bool bByPosit
     mi.cbSize = sizeof( mi );
     mi.fMask = MIIM_DATA;
     if( !GetMenuItemInfoW( hMenu, nPos, bByPosition, &mi) )
-        SAL_WARN("vcl", "GetMenuItemInfoW failed: " << WindowsErrorString(GetLastError()));
+        SAL_WARN("vcl", "GetMenuItemInfoW failed: " << comphelper::WindowsErrorString(GetLastError()));
 
     return reinterpret_cast<WinSalMenuItem *>(mi.dwItemData);
 }
@@ -4563,7 +4563,7 @@ static int ImplGetSelectedIndex( HMENU hMenu )
         for(int i=0; i<n; i++ )
         {
             if( !GetMenuItemInfoW( hMenu, i, TRUE, &mi) )
-                SAL_WARN( "vcl", "GetMenuItemInfoW failed: " << WindowsErrorString( GetLastError() ) );
+                SAL_WARN( "vcl", "GetMenuItemInfoW failed: " << comphelper::WindowsErrorString( GetLastError() ) );
             else
             {
                 if( mi.fState & MFS_HILITE )
@@ -4703,7 +4703,7 @@ static LRESULT ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
 
         // Fill background
         if(!PatBlt( pDI->hDC, aRect.left, aRect.top, aRect.right-aRect.left, aRect.bottom-aRect.top, PATCOPY ))
-            SAL_WARN("vcl", "PatBlt failed: " << WindowsErrorString(GetLastError()));
+            SAL_WARN("vcl", "PatBlt failed: " << comphelper::WindowsErrorString(GetLastError()));
 
         int lineHeight = aRect.bottom-aRect.top;
 
@@ -4787,7 +4787,7 @@ static LRESULT ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
             reinterpret_cast<LPARAM>(aStr.getStr()),
             WPARAM(0), aRect.left, aRect.top + (lineHeight - strSize.cy)/2, 0, 0,
             DST_PREFIXTEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) ) )
-            SAL_WARN("vcl", "DrawStateW failed: " << WindowsErrorString(GetLastError()));
+            SAL_WARN("vcl", "DrawStateW failed: " << comphelper::WindowsErrorString(GetLastError()));
 
         if( pSalMenuItem->mAccelText.getLength() )
         {
@@ -4804,7 +4804,7 @@ static LRESULT ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
                 reinterpret_cast<LPARAM>(aStr.getStr()),
                 WPARAM(0), aRect.right-strSizeA.cx-tm.tmMaxCharWidth, aRect.top + (lineHeight - strSizeA.cy)/2, 0, 0,
                 DST_TEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) ) )
-                SAL_WARN("vcl", "DrawStateW failed: " << WindowsErrorString(GetLastError()));
+                SAL_WARN("vcl", "DrawStateW failed: " << comphelper::WindowsErrorString(GetLastError()));
         }
 
         // Restore the original font and colors.
@@ -5778,7 +5778,7 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
             UINT uiGcs = 3;
             if (!SetGestureConfig(hWnd, 0, uiGcs, gc, sizeof(GESTURECONFIG)))
             {
-                SAL_WARN("vcl", "SetGestureConfig failed: " << WindowsErrorString(GetLastError()));
+                SAL_WARN("vcl", "SetGestureConfig failed: " << comphelper::WindowsErrorString(GetLastError()));
             }
         }
         return 0;

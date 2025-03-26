@@ -283,7 +283,7 @@ static BOOL WINAPI cert_enum_system_store_callback(const void *pvSystemStore,
         if (!(ERROR_FILE_NOT_FOUND == dwErr ||
               ERROR_NOT_SUPPORTED == dwErr))
         {
-            SAL_WARN("xmlsecurity.xmlsec", "CertEnumPhysicalStore failed:" << WindowsErrorString(GetLastError()));
+            SAL_WARN("xmlsecurity.xmlsec", "CertEnumPhysicalStore failed:" << comphelper::WindowsErrorString(GetLastError()));
         }
     }
     return TRUE;

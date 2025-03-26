@@ -1355,7 +1355,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
     PCCERT_CONTEXT pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, reinterpret_cast<const BYTE*>(aDerEncoded.getArray()), aDerEncoded.getLength());
     if (pCertContext == nullptr)
     {
-        SAL_WARN("svl.crypto", "CertCreateCertificateContext failed: " << WindowsErrorString(GetLastError()));
+        SAL_WARN("svl.crypto", "CertCreateCertificateContext failed: " << comphelper::WindowsErrorString(GetLastError()));
         return false;
     }
 
@@ -1381,7 +1381,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
                                            &nKeySpec,
                                            &bFreeNeeded))
     {
-        SAL_WARN("svl.crypto", "CryptAcquireCertificatePrivateKey failed: " << WindowsErrorString(GetLastError()));
+        SAL_WARN("svl.crypto", "CryptAcquireCertificatePrivateKey failed: " << comphelper::WindowsErrorString(GetLastError()));
         CertFreeCertificateContext(pCertContext);
         return false;
     }
@@ -1438,7 +1438,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
                                           nullptr);
     if (!hMsg)
     {
-        SAL_WARN("svl.crypto", "CryptMsgOpenToEncode failed: " << WindowsErrorString(GetLastError()));
+        SAL_WARN("svl.crypto", "CryptMsgOpenToEncode failed: " << comphelper::WindowsErrorString(GetLastError()));
         CertFreeCertificateContext(pCertContext);
         return false;
     }
@@ -1448,7 +1448,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         const bool last = (i == m_dataBlocks.size() - 1);
         if (!CryptMsgUpdate(hMsg, static_cast<const BYTE *>(m_dataBlocks[i].first), m_dataBlocks[i].second, last))
         {
-            SAL_WARN("svl.crypto", "CryptMsgUpdate failed: " << WindowsErrorString(GetLastError()));
+            SAL_WARN("svl.crypto", "CryptMsgUpdate failed: " << comphelper::WindowsErrorString(GetLastError()));
             CryptMsgClose(hMsg);
             CertFreeCertificateContext(pCertContext);
             return false;
@@ -1467,7 +1467,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
                                                      nullptr);
         if (!hDecodedMsg)
         {
-            SAL_WARN("svl.crypto", "CryptMsgOpenToDecode failed: " << WindowsErrorString(GetLastError()));
+            SAL_WARN("svl.crypto", "CryptMsgOpenToDecode failed: " << comphelper::WindowsErrorString(GetLastError()));
             CryptMsgClose(hMsg);
             CertFreeCertificateContext(pCertContext);
             return false;
@@ -1477,7 +1477,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 
         if (!CryptMsgGetParam(hMsg, CMSG_BARE_CONTENT_PARAM, 0, nullptr, &nTsSigLen))
         {
-            SAL_WARN("svl.crypto", "CryptMsgGetParam(CMSG_BARE_CONTENT_PARAM) failed: " << WindowsErrorString(GetLastError()));
+            SAL_WARN("svl.crypto", "CryptMsgGetParam(CMSG_BARE_CONTENT_PARAM) failed: " << comphelper::WindowsErrorString(GetLastError()));
             CryptMsgClose(hDecodedMsg);
             CryptMsgClose(hMsg);
             CertFreeCertificateContext(pCertContext);
@@ -1490,7 +1490,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 
         if (!CryptMsgGetParam(hMsg, CMSG_BARE_CONTENT_PARAM, 0, pTsSig.get(), &nTsSigLen))
         {
-            SAL_WARN("svl.crypto", "CryptMsgGetParam(CMSG_BARE_CONTENT_PARAM) failed: " << WindowsErrorString(GetLastError()));
+            SAL_WARN("svl.crypto", "CryptMsgGetParam(CMSG_BARE_CONTENT_PARAM) failed: " << comphelper::WindowsErrorString(GetLastError()));
             CryptMsgClose(hDecodedMsg);
             CryptMsgClose(hMsg);
             CertFreeCertificateContext(pCertContext);
@@ -1499,7 +1499,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 
         if (!CryptMsgUpdate(hDecodedMsg, pTsSig.get(), nTsSigLen, TRUE))
         {
-            SAL_WARN("svl.crypto", "CryptMsgUpdate failed: " << WindowsErrorString(GetLastError()));
+            SAL_WARN("svl.crypto", "CryptMsgUpdate failed: " << comphelper::WindowsErrorString(GetLastError()));
             CryptMsgClose(hDecodedMsg);
             CryptMsgClose(hMsg);
             CertFreeCertificateContext(pCertContext);
@@ -1509,7 +1509,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         DWORD nDecodedSignerInfoLen = 0;
         if (!CryptMsgGetParam(hDecodedMsg, CMSG_SIGNER_INFO_PARAM, 0, nullptr, &nDecodedSignerInfoLen))
         {
-            SAL_WARN("svl.crypto", "CryptMsgGetParam(CMSG_SIGNER_INFO_PARAM) failed: " << WindowsErrorString(GetLastError()));
+            SAL_WARN("svl.crypto", "CryptMsgGetParam(CMSG_SIGNER_INFO_PARAM) failed: " << comphelper::WindowsErrorString(GetLastError()));
             CryptMsgClose(hDecodedMsg);
             CryptMsgClose(hMsg);
             CertFreeCertificateContext(pCertContext);
@@ -1520,7 +1520,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 
         if (!CryptMsgGetParam(hDecodedMsg, CMSG_SIGNER_INFO_PARAM, 0, pDecodedSignerInfoBuf.get(), &nDecodedSignerInfoLen))
         {
-            SAL_WARN("svl.crypto", "CryptMsgGetParam(CMSG_SIGNER_INFO_PARAM) failed: " << WindowsErrorString(GetLastError()));
+            SAL_WARN("svl.crypto", "CryptMsgGetParam(CMSG_SIGNER_INFO_PARAM) failed: " << comphelper::WindowsErrorString(GetLastError()));
             CryptMsgClose(hDecodedMsg);
             CryptMsgClose(hMsg);
             CertFreeCertificateContext(pCertContext);
@@ -1550,7 +1550,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
                      nullptr,
                      nullptr))
         {
-            SAL_WARN("svl.crypto", "CryptRetrieveTimeStamp failed: " << WindowsErrorString(GetLastError()));
+            SAL_WARN("svl.crypto", "CryptRetrieveTimeStamp failed: " << comphelper::WindowsErrorString(GetLastError()));
             CryptMsgClose(hDecodedMsg);
             CryptMsgClose(hMsg);
             CertFreeCertificateContext(pCertContext);
@@ -1593,7 +1593,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
             if (!hMsg ||
                 !CryptMsgUpdate(hMsg, static_cast<const BYTE *>(m_dataBlocks[i].first), m_dataBlocks[i].second, last))
             {
-                SAL_WARN("svl.crypto", "Re-creating the message failed: " << WindowsErrorString(GetLastError()));
+                SAL_WARN("svl.crypto", "Re-creating the message failed: " << comphelper::WindowsErrorString(GetLastError()));
                 CryptMemFree(pTsContext);
                 CryptMsgClose(hDecodedMsg);
                 CryptMsgClose(hMsg);
@@ -1609,7 +1609,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 
     if (!CryptMsgGetParam(hMsg, CMSG_CONTENT_PARAM, 0, nullptr, &nSigLen))
     {
-        SAL_WARN("svl.crypto", "CryptMsgGetParam(CMSG_CONTENT_PARAM) failed: " << WindowsErrorString(GetLastError()));
+        SAL_WARN("svl.crypto", "CryptMsgGetParam(CMSG_CONTENT_PARAM) failed: " << comphelper::WindowsErrorString(GetLastError()));
         if (pTsContext)
             CryptMemFree(pTsContext);
         CryptMsgClose(hMsg);
@@ -1632,7 +1632,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 
     if (!CryptMsgGetParam(hMsg, CMSG_CONTENT_PARAM, 0, pSig.get(), &nSigLen))
     {
-        SAL_WARN("svl.crypto", "CryptMsgGetParam(CMSG_CONTENT_PARAM) failed: " << WindowsErrorString(GetLastError()));
+        SAL_WARN("svl.crypto", "CryptMsgGetParam(CMSG_CONTENT_PARAM) failed: " << comphelper::WindowsErrorString(GetLastError()));
         if (pTsContext)
             CryptMemFree(pTsContext);
         CryptMsgClose(hMsg);
@@ -2148,7 +2148,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     // Update the message with the encoded header blob.
     if (!CryptMsgUpdate(hMsg, aSignature.data(), aSignature.size(), TRUE))
     {
-        SAL_WARN("svl.crypto", "ValidateSignature, CryptMsgUpdate() for the header failed: " << WindowsErrorString(GetLastError()));
+        SAL_WARN("svl.crypto", "ValidateSignature, CryptMsgUpdate() for the header failed: " << comphelper::WindowsErrorString(GetLastError()));
         return false;
     }
 
@@ -2157,13 +2157,13 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
         // Update the message with the content blob.
         if (!CryptMsgUpdate(hMsg, aData.data(), aData.size(), FALSE))
         {
-            SAL_WARN("svl.crypto", "ValidateSignature, CryptMsgUpdate() for the content failed: " << WindowsErrorString(GetLastError()));
+            SAL_WARN("svl.crypto", "ValidateSignature, CryptMsgUpdate() for the content failed: " << comphelper::WindowsErrorString(GetLastError()));
             return false;
         }
 
         if (!CryptMsgUpdate(hMsg, nullptr, 0, TRUE))
         {
-            SAL_WARN("svl.crypto", "ValidateSignature, CryptMsgUpdate() for the last content failed: " << WindowsErrorString(GetLastError()));
+            SAL_WARN("svl.crypto", "ValidateSignature, CryptMsgUpdate() for the last content failed: " << comphelper::WindowsErrorString(GetLastError()));
             return false;
         }
     }
@@ -2171,13 +2171,13 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     DWORD nDigestID = 0;
     if (!CryptMsgGetParam(hMsg, CMSG_SIGNER_HASH_ALGORITHM_PARAM, 0, nullptr, &nDigestID))
     {
-        SAL_WARN("svl.crypto", "ValidateSignature: CryptMsgGetParam() failed: " << WindowsErrorString(GetLastError()));
+        SAL_WARN("svl.crypto", "ValidateSignature: CryptMsgGetParam() failed: " << comphelper::WindowsErrorString(GetLastError()));
         return false;
     }
     std::unique_ptr<BYTE[]> pDigestBytes(new BYTE[nDigestID]);
     if (!CryptMsgGetParam(hMsg, CMSG_SIGNER_HASH_ALGORITHM_PARAM, 0, pDigestBytes.get(), &nDigestID))
     {
-        SAL_WARN("svl.crypto", "ValidateSignature: CryptMsgGetParam() failed: " << WindowsErrorString(GetLastError()));
+        SAL_WARN("svl.crypto", "ValidateSignature: CryptMsgGetParam() failed: " << comphelper::WindowsErrorString(GetLastError()));
         return false;
     }
     auto pDigestID = reinterpret_cast<CRYPT_ALGORITHM_IDENTIFIER*>(pDigestBytes.get());
@@ -2316,7 +2316,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
                 PCRYPT_TIMESTAMP_CONTEXT pTsContext;
                 if (!CryptVerifyTimeStampSignature(rAttr.rgValue->pbData, rAttr.rgValue->cbData, nullptr, 0, nullptr, &pTsContext, nullptr, nullptr))
                 {
-                    SAL_WARN("svl.crypto", "CryptMsgUpdate failed: " << WindowsErrorString(GetLastError()));
+                    SAL_WARN("svl.crypto", "CryptMsgUpdate failed: " << comphelper::WindowsErrorString(GetLastError()));
                     break;
                 }
 

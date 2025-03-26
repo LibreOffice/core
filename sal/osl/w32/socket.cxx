@@ -788,7 +788,7 @@ oslSocket SAL_CALL osl_createSocket(
     if(pSocket->m_Socket == OSL_INVALID_SOCKET)
     {
         int nErrno = WSAGetLastError();
-        SAL_WARN("sal.osl", "socket creation failed: (" << nErrno << "): " << WindowsErrorString(nErrno));
+        SAL_WARN("sal.osl", "socket creation failed: (" << nErrno << "): " << comphelper::WindowsErrorString(nErrno));
 
         destroySocketImpl(pSocket);
         pSocket = nullptr;

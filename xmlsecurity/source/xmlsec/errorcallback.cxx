@@ -48,7 +48,7 @@ static void errorCallback(const char* file,
     OUString systemErrorString;
 
 #ifdef _WIN32
-    systemErrorString = " " + WindowsErrorString(GetLastError());
+    systemErrorString = " " + comphelper::WindowsErrorString(GetLastError());
 #endif
 
     SAL_WARN("xmlsecurity.xmlsec", file << ":" << line << ": " << func << "() '" << pErrorObject << "' '" << pErrorSubject << "' " << reason << " '" << pMsg << "'" << systemErrorString);

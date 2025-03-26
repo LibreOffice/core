@@ -217,7 +217,7 @@ unsigned __stdcall DndTargetOleSTAFunc(void* pParams)
             }
             if (-1 == bRet)
             {
-                SAL_WARN("vcl.win.dtrans", "GetMessageW failed: " << WindowsErrorString(GetLastError()));
+                SAL_WARN("vcl.win.dtrans", "GetMessageW failed: " << comphelper::WindowsErrorString(GetLastError()));
                 break;
             }
             if( msg.message == WM_REGISTERDRAGDROP)

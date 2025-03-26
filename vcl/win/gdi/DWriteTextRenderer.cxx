@@ -71,7 +71,7 @@ HRESULT checkResult(HRESULT hr, const char* location)
 {
     SAL_DETAIL_LOG_STREAM(SAL_DETAIL_ENABLE_LOG_WARN && FAILED(hr), ::SAL_DETAIL_LOG_LEVEL_WARN,
                           "vcl.gdi", location,
-                          "HRESULT failed with: 0x" << OUString::number(hr, 16) << ": " << WindowsErrorStringFromHRESULT(hr));
+                          "HRESULT failed with: 0x" << OUString::number(hr, 16) << ": " << comphelper::WindowsErrorStringFromHRESULT(hr));
     return hr;
 }
 

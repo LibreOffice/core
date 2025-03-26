@@ -36,10 +36,10 @@ void o2u_attachCurrentThread()
             // Let's find out explicitly what apartment mode we are in.
             if (hr == RPC_E_CHANGED_MODE)
                 SAL_INFO("extensions.olebridge", "CoInitializeEx failed (expectedly): "
-                                                     << WindowsErrorStringFromHRESULT(hr));
+                                                     << comphelper::WindowsErrorStringFromHRESULT(hr));
             else
                 SAL_WARN("extensions.olebridge",
-                         "CoInitializeEx failed: " << WindowsErrorStringFromHRESULT(hr));
+                         "CoInitializeEx failed: " << comphelper::WindowsErrorStringFromHRESULT(hr));
             APTTYPE nAptType;
             APTTYPEQUALIFIER nAptTypeQualifier;
             if (SUCCEEDED(CoGetApartmentType(&nAptType, &nAptTypeQualifier)))

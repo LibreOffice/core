@@ -92,7 +92,7 @@ bool OneInstanceOleWrapper::registerClass(GUID const * pGuid)
             REGCLS_MULTIPLEUSE,
             &m_factoryHandle);
 
-    SAL_INFO("extensions.olebridge", "CoRegisterClassObject(" << *pGuid << "): " << WindowsErrorStringFromHRESULT(hresult));
+    SAL_INFO("extensions.olebridge", "CoRegisterClassObject(" << *pGuid << "): " << comphelper::WindowsErrorStringFromHRESULT(hresult));
 
     return (hresult == NOERROR);
 }

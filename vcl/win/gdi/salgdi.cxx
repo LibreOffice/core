@@ -416,7 +416,7 @@ IDWriteFactory* WinSalGraphics::getDWriteFactory()
             if (FAILED(hr))
             {
                 SAL_WARN("vcl.fonts", "HRESULT 0x" << OUString::number(hr, 16) << ": "
-                                                   << WindowsErrorStringFromHRESULT(hr));
+                                                   << comphelper::WindowsErrorStringFromHRESULT(hr));
                 abort();
             }
             return pResult;
@@ -435,7 +435,7 @@ IDWriteGdiInterop* WinSalGraphics::getDWriteGdiInterop()
             if (FAILED(hr))
             {
                 SAL_WARN("vcl.fonts", "HRESULT 0x" << OUString::number(hr, 16) << ": "
-                                                   << WindowsErrorStringFromHRESULT(hr));
+                                                   << comphelper::WindowsErrorStringFromHRESULT(hr));
                 abort();
             }
             return pResult;

@@ -27,7 +27,6 @@
 #include <osl/file.h>
 #include <sal/log.hxx>
 
-#include <comphelper/windowserrorstring.hxx>
 #include <comphelper/scopeguard.hxx>
 
 #include <win/salgdi.h>

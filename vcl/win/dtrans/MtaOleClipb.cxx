@@ -593,7 +593,7 @@ unsigned int CMtaOleClipboard::run( )
             }
             if (-1 == bRet)
             {
-                SAL_WARN("vcl.win.dtrans", "GetMessageW failed: " << WindowsErrorString(GetLastError()));
+                SAL_WARN("vcl.win.dtrans", "GetMessageW failed: " << comphelper::WindowsErrorString(GetLastError()));
                 nRet = ~0U;
                 break;
             }

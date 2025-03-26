@@ -1327,7 +1327,7 @@ IDWriteFontFace* WinFontInstance::GetDWFontFace() const
         if (FAILED(hr))
         {
             SAL_WARN("vcl.fonts", "HRESULT 0x" << OUString::number(hr, 16) << ": "
-                                               << WindowsErrorStringFromHRESULT(hr));
+                                               << comphelper::WindowsErrorStringFromHRESULT(hr));
             mxDWFontFace = nullptr;
         }
     }

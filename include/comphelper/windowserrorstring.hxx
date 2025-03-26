@@ -15,8 +15,8 @@
 #include <rtl/ustring.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
-namespace {
-
+namespace comphelper
+{
 inline OUString WindowsErrorString(DWORD nErrorCode)
 {
     LPWSTR pMsgBuf;
@@ -61,7 +61,7 @@ inline OUString WindowsErrorStringFromHRESULT(HRESULT hr)
     return WindowsErrorString(nErrorCode);
 }
 
-} // anonymous namespace
+} // namespace comphelper
 
 #endif
 

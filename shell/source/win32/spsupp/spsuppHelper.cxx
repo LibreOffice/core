@@ -133,7 +133,7 @@ DWORD LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath)
         DWORD dwError = GetLastError();
         const OUString sErrorMsg = "Could not start LibreOffice. Error is 0x"
                                    + OUString::number(dwError, 16) + ":\n\n"
-                                   + WindowsErrorString(dwError);
+                                   + comphelper::WindowsErrorString(dwError);
 
         // Report the error to user and return error
         MessageBoxW(nullptr, o3tl::toW(sErrorMsg.getStr()), nullptr, MB_ICONERROR);

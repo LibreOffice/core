@@ -224,10 +224,10 @@ WinSkiaSalGraphicsImpl::createDirectWriteTypeface(const WinFontInstance* pWinFon
 }
 catch (const sal::systools::ComError& e)
 {
-    SAL_DETAIL_LOG_STREAM(SAL_DETAIL_ENABLE_LOG_INFO, ::SAL_DETAIL_LOG_LEVEL_INFO, "vcl.skia",
-                          e.what(),
-                          "HRESULT 0x" << OUString::number(e.GetHresult(), 16) << ": "
-                                       << WindowsErrorStringFromHRESULT(e.GetHresult()));
+    SAL_DETAIL_LOG_STREAM(
+        SAL_DETAIL_ENABLE_LOG_INFO, ::SAL_DETAIL_LOG_LEVEL_INFO, "vcl.skia", e.what(),
+        "HRESULT 0x" << OUString::number(e.GetHresult(), 16) << ": "
+                     << comphelper::WindowsErrorStringFromHRESULT(e.GetHresult()));
     return nullptr;
 }
 

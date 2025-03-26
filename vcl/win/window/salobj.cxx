@@ -477,7 +477,7 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
 
         if ( !hWndChild )
         {
-            SAL_WARN("vcl", "CreateWindowExW failed: " << WindowsErrorString(GetLastError()));
+            SAL_WARN("vcl", "CreateWindowExW failed: " << comphelper::WindowsErrorString(GetLastError()));
 
             delete pObject;
             return nullptr;

@@ -38,7 +38,7 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, tools::Long nDX, to
     if ( nBitCount == 1 )
     {
         hBitmap = CreateBitmap( static_cast<int>(nDX), static_cast<int>(nDY), 1, 1, nullptr );
-        SAL_WARN_IF( !hBitmap, "vcl", "CreateBitmap failed: " << WindowsErrorString( GetLastError() ) );
+        SAL_WARN_IF( !hBitmap, "vcl", "CreateBitmap failed: " << comphelper::WindowsErrorString( GetLastError() ) );
         ppData = nullptr;
     }
     else
@@ -65,7 +65,7 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, tools::Long nDX, to
         hBitmap = CreateDIBSection( hDC, &aBitmapInfo,
                                     DIB_RGB_COLORS, ppData, nullptr,
                                     0 );
-        SAL_WARN_IF( !hBitmap, "vcl", "CreateDIBSection failed: " << WindowsErrorString( GetLastError() ) );
+        SAL_WARN_IF( !hBitmap, "vcl", "CreateDIBSection failed: " << comphelper::WindowsErrorString( GetLastError() ) );
     }
 
     return hBitmap;
@@ -78,7 +78,7 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
     WinSalGraphics& rGraphics = static_cast<WinSalGraphics&>(rSGraphics);
 
     HDC hDC = CreateCompatibleDC( rGraphics.getHDC() );
-    SAL_WARN_IF( !hDC, "vcl", "CreateCompatibleDC failed: " << WindowsErrorString( GetLastError() ) );
+    SAL_WARN_IF( !hDC, "vcl", "CreateCompatibleDC failed: " << comphelper::WindowsErrorString( GetLastError() ) );
 
     if (!hDC)
         return nullptr;
