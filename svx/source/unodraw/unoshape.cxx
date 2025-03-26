@@ -1513,7 +1513,17 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
     }
 
     if (!pMap)
+    {
+        // The oox layer sets these properties willy-nilly on objects, even if the objects do not support them.
+        // And then it ignores the resulting exceptions, but exception throwing and catching becomes expensive
+        // with complex spreadsheets. So just ignore it here, in absense of a better fix.
+        if (rPropertyName == "FromWordArt" || rPropertyName == "GraphicColorMode" || rPropertyName == "Representation")
+        {
+            SAL_WARN("svx", "Ignoring property " << rPropertyName);
+            return;
+        }
         throw beans::UnknownPropertyException( rPropertyName, getXWeak());
+    }
 
     if ((pMap->nFlags & beans::PropertyAttribute::READONLY) != 0)
         throw beans::PropertyVetoException(
