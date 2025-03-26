@@ -3548,45 +3548,52 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         if ((!g_bValidCursorPos || rSh.IsFrameSelected()) && !comphelper::LibreOfficeKit::isActive())
                             return;
 
-                        SwField *pField;
+                        SwField *pField = rSh.GetCurField(true);
                         bool bFootnote = false;
 
-                        if( !bIsViewReadOnly &&
-                            (nullptr != (pField = rSh.GetCurField(true)) ||
-                              ( bFootnote = rSh.GetCurFootnote() )        ) )
+                        if( nullptr != pField ||
+                              ( bFootnote = rSh.GetCurFootnote() ))
                         {
-                            ResetMouseButtonDownFlags();
-                            if( bFootnote )
-                                GetView().GetViewFrame().GetBindings().Execute( FN_EDIT_FOOTNOTE );
-                            else
+                            if (!bIsViewReadOnly)
                             {
-                                SwFieldTypesEnum nTypeId = pField->GetTypeId();
-                                SfxViewFrame& rVFrame = GetView().GetViewFrame();
-                                switch( nTypeId )
+                                ResetMouseButtonDownFlags();
+                                if( bFootnote )
+                                    GetView().GetViewFrame().GetBindings().Execute( FN_EDIT_FOOTNOTE );
+                                else
                                 {
-                                case SwFieldTypesEnum::Postit:
-                                case SwFieldTypesEnum::Script:
-                                {
-                                    // if it's a Readonly region, status has to be enabled
-                                    sal_uInt16 nSlot = SwFieldTypesEnum::Postit == nTypeId ? FN_POSTIT : FN_JAVAEDIT;
-                                    SfxBoolItem aItem(nSlot, true);
-                                    rVFrame.GetBindings().SetState(aItem);
-                                    rVFrame.GetBindings().Execute(nSlot);
+                                    SwFieldTypesEnum nTypeId = pField->GetTypeId();
+                                    SfxViewFrame& rVFrame = GetView().GetViewFrame();
+                                    switch( nTypeId )
+                                    {
+                                    case SwFieldTypesEnum::Postit:
+                                    case SwFieldTypesEnum::Script:
+                                    {
+                                        // if it's a Readonly region, status has to be enabled
+                                        sal_uInt16 nSlot = SwFieldTypesEnum::Postit == nTypeId ? FN_POSTIT : FN_JAVAEDIT;
+                                        SfxBoolItem aItem(nSlot, true);
+                                        rVFrame.GetBindings().SetState(aItem);
+                                        rVFrame.GetBindings().Execute(nSlot);
+                                        break;
+                                    }
+                                    case SwFieldTypesEnum::Authority :
+                                        rVFrame.GetBindings().Execute(FN_EDIT_AUTH_ENTRY_DLG);
                                     break;
+                                    case SwFieldTypesEnum::Input:
+                                    case SwFieldTypesEnum::Dropdown:
+                                    case SwFieldTypesEnum::SetInput:
+                                        rVFrame.GetBindings().Execute(FN_UPDATE_INPUTFIELDS);
+                                        break;
+                                    default:
+                                        rVFrame.GetBindings().Execute(FN_EDIT_FIELD);
+                                    }
                                 }
-                                case SwFieldTypesEnum::Authority :
-                                    rVFrame.GetBindings().Execute(FN_EDIT_AUTH_ENTRY_DLG);
-                                break;
-                                case SwFieldTypesEnum::Input:
-                                case SwFieldTypesEnum::Dropdown:
-                                case SwFieldTypesEnum::SetInput:
-                                    rVFrame.GetBindings().Execute(FN_UPDATE_INPUTFIELDS);
-                                    break;
-                                default:
-                                    rVFrame.GetBindings().Execute(FN_EDIT_FIELD);
-                                }
+                                return;
                             }
-                            return;
+                            else if (pField && pField->ExpandField(true, nullptr).getLength())
+                            {
+                                ResetMouseButtonDownFlags();
+                                GetView().GetViewFrame().GetBindings().Execute(FN_COPY_FIELD);
+                            }
                         }
                         // in extended mode double and triple
                         // click has no effect.

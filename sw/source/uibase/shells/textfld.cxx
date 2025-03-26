@@ -182,7 +182,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         {
             //call copy field dialog with field string - if there is any!
             SwField* pField = rSh.GetCurField(true);
-            if( pField && pField->GetFieldName().getLength())
+            if( pField && pField->ExpandField(true, nullptr).getLength())
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 VclPtr<VclAbstractDialog> pDlg(pFact->CreateCopyFieldDlg(
