@@ -2071,12 +2071,16 @@ void SwFlyFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
 
         // The fly frame may be partially outside the page, check for this case.
         SwPageFrame* pPageFrame = FindPageFrame();
-        SwFrameFormat* pFormat = GetFormat();
-        if (pPageFrame && pFormat)
+        SwFrameFormat* pFlyFormat = GetFormat();
+        SwFrameFormat* pDrawFormat = SwTextBoxHelper::getOtherTextBoxFormat(pFlyFormat, RES_FLYFRMFMT);
+        const SwFrameFormat* pFormat = pDrawFormat ? pDrawFormat : pFlyFormat;
+        // Don't increase the left padding if the wrap mode is through.
+        bool bIsWrapThrough = pFormat && pFormat->GetSurround().GetSurround() == text::WrapTextMode::WrapTextMode_THROUGH;
+        if (pPageFrame && pFlyFormat && !bIsWrapThrough)
         {
-            const IDocumentSettingAccess& rIDSA = pFormat->getIDocumentSettingAccess();
+            const IDocumentSettingAccess& rIDSA = pFlyFormat->getIDocumentSettingAccess();
             bool bDoNotCaptureDrawObjsOnPage = rIDSA.get(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE);
-            bool bLRTB = pFormat->GetFrameDir().GetValue() == SvxFrameDirection::Horizontal_LR_TB;
+            bool bLRTB = pFlyFormat->GetFrameDir().GetValue() == SvxFrameDirection::Horizontal_LR_TB;
             SwTwips nFlyLeft = getFrameArea().Left();
             SwTwips nPageLeft = pPageFrame->getFrameArea().Left();
             if (bDoNotCaptureDrawObjsOnPage && bLRTB && nFlyLeft < nPageLeft)
