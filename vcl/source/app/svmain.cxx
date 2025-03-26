@@ -30,6 +30,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/asyncnotification.hxx>
+#include <drawinglayer/primitive2d/BufferedDecompositionFlusher.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
@@ -469,6 +470,12 @@ void DeInitVCL()
 
     // Some events may need to access objects destroyed in ImplDeleteOnDeInit, so process them first
     Scheduler::ProcessEventsToIdle();
+
+    {
+        // unblock we will wait for things that want to take the SolarMutex on another thread
+        SolarMutexReleaser aReleaser;
+        drawinglayer::primitive2d::BufferedDecompositionFlusher::shutdown();
+    }
 
     tools::DeleteOnDeinitBase::ImplDeleteOnDeInit();
 

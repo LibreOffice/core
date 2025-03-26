@@ -21,12 +21,12 @@
 
 #include <drawinglayer/primitive2d/BufferedDecompositionGroupPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
-#include <salhelper/timer.hxx>
+#include <osl/thread.hxx>
 #include <unordered_set>
 
 namespace drawinglayer::primitive2d
 {
-class BufferedDecompositionFlusher : public salhelper::Timer
+class BufferedDecompositionFlusher : public osl::Thread
 {
 public:
     static void update(const BufferedDecompositionPrimitive2D*);
@@ -34,17 +34,20 @@ public:
 
     BufferedDecompositionFlusher();
 
+    static DRAWINGLAYERCORE_DLLPUBLIC void shutdown();
+
     /// Only called by FlusherDeinit
     void onTeardown();
 
 private:
-    virtual void SAL_CALL onShot() override;
+    virtual void SAL_CALL run() override;
     void updateImpl(const BufferedDecompositionPrimitive2D*);
     void updateImpl(const BufferedDecompositionGroupPrimitive2D*);
 
-    std::mutex maMutex;
     std::unordered_set<rtl::Reference<BufferedDecompositionPrimitive2D>> maRegistered1;
     std::unordered_set<rtl::Reference<BufferedDecompositionGroupPrimitive2D>> maRegistered2;
+    std::mutex maMutex;
+    bool mbShutdown{ false };
 };
 
 } // end of namespace drawinglayer::primitive2d
