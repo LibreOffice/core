@@ -306,11 +306,11 @@ struct QuickHelpData
     void SortAndFilter(const OUString &rOrigWord);
 };
 
-/**
- * Avoid minimal movement shiver
- */
-#define HIT_PIX  2 /* hit tolerance in pixel  */
-#define MIN_MOVE 4
+
+// Minimise jitter
+
+constexpr auto HIT_PIX = 2;  // Hit tolerance in pixels
+constexpr auto MIN_MOVE = 4;
 
 static bool IsMinMove(const Point &rStartPos, const Point &rLPt)
 {
