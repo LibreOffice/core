@@ -54,6 +54,7 @@
 
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <editeng/unoipset.hxx>
@@ -359,6 +360,12 @@ SwXParagraph::setPropertyValue(const OUString& rPropertyName,
         const uno::Any& rValue)
 {
     SolarMutexGuard aGuard;
+    // See XMLTextImportHelper::DeleteParagraph
+    if (rPropertyName == "DeleteWithoutCorrection")
+    {
+        m_bDeleteWithoutCorrection = true;
+        return;
+    }
     m_pImpl->SetPropertyValues_Impl( { rPropertyName }, { rValue } );
 }
 
@@ -1254,7 +1261,13 @@ void SAL_CALL SwXParagraph::dispose()
     if (pTextNode)
     {
         SwCursor aCursor( SwPosition( *pTextNode ), nullptr );
-        pTextNode->GetDoc().getIDocumentContentOperations().DelFullPara(aCursor);
+        {
+            auto& rDoc = pTextNode->GetDoc();
+            comphelper::ScopeGuard aGuard2(
+                [&rDoc, restore = rDoc.SetDontCorrectBookmarks(m_bDeleteWithoutCorrection)]()
+                { rDoc.SetDontCorrectBookmarks(restore); });
+            rDoc.getIDocumentContentOperations().DelFullPara(aCursor);
+        }
         lang::EventObject const ev(getXWeak());
         std::unique_lock aGuard2(m_pImpl->m_Mutex);
         m_pImpl->m_EventListeners.disposeAndClear(aGuard2, ev);
