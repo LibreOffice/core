@@ -106,6 +106,70 @@ class ImplSchedulerContextPrinter(object):
                     res = res + key.replace('TaskPriority::', '') + ", " + str(first.dereference())
         return res + "}"
 
+class ImplRegionBandPrinter(object):
+
+    class iterator(six.Iterator):
+        '''RegionBand iterator'''
+
+        def __init__(self, first):
+            self.pimplband = first
+            if self.pimplband:
+                self.sep = self.pimplband.dereference()['mpFirstSep']
+            else:
+                self.sep = None
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            if not(self.pimplband):
+                raise StopIteration
+            implband = self.pimplband.dereference()
+            top = implband['mnYTop']
+            bot = implband['mnYBottom']
+            touched = implband['mbTouched']
+            if self.sep:
+                sep = self.sep.dereference()
+                left = sep['mnXLeft']
+                right = sep['mnXRight']
+                removed = sep['mbRemoved']
+                self.sep = self.sep.dereference()['mpNextSep']
+                return ('Y [%d,%d] %s' % (top,bot,touched), 'X (%d,%d) %s' % (left,right,removed))
+            else:
+                self.pimplband = self.pimplband.dereference()['mpNextBand']
+                if self.pimplband:
+                    self.sep = self.pimplband.dereference()['mpFirstSep']
+                return ('Y [%d,%d] %s' % (top,bot,touched), 'END')
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+
+    def children(self):
+        first = self.value['mpFirstBand']
+        return self.iterator(first)
+
+class ImplRegionPrinter(object):
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+
+    def children(self):
+        b2dpp = self.value['mpB2DPolyPolygon']
+        polypoly = self.value['mpPolyPolygon']
+        regionband = self.value['mpRegionBand']
+        children = [('mbIsNull', self.value['mbIsNull'])]
+        if b2dpp:
+            # TODO: dereference() doesn't work on std::optional
+            children.append(('mpB2DPolyPolygon', b2dpp))
+        if polypoly:
+            children.append(('mpPolyPolygon', polypoly))
+        if regionband['_M_ptr']:
+            children.append(('mpRegionBand', regionband['_M_ptr'].dereference()))
+        return children.__iter__()
+
+
 printer = None
 
 def build_pretty_printers():
@@ -114,6 +178,8 @@ def build_pretty_printers():
     printer = printing.Printer("libreoffice/vcl")
     printer.add('ImplSchedulerData', ImplSchedulerDataPrinter)
     printer.add('ImplSchedulerContext', ImplSchedulerContextPrinter)
+    printer.add('RegionBand', ImplRegionBandPrinter)
+    printer.add('vcl::Region', ImplRegionPrinter)
 
 def register_pretty_printers(obj):
     printing.register_pretty_printer(printer, obj)
