@@ -1695,6 +1695,7 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/registry/draw.xcd \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/registry/impress.xcd \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/registry/math.xcd \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/registry/static.xcd \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/registry/xsltfilter.xcd \
     $(INSTROOT)/$(LIBO_SHARE_PRESETS_FOLDER)/autotext/mytexts.bau \
     $(INSTROOT)/$(LIBO_SHARE_PRESETS_FOLDER)/basic/dialog.xlc \
