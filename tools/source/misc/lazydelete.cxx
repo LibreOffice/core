@@ -24,7 +24,7 @@
 namespace tools
 {
 static std::vector<tools::DeleteOnDeinitBase*> gDeinitDeleteList;
-static bool gShutdown = false;
+static volatile bool gShutdown = false;
 
 DeleteOnDeinitBase::~DeleteOnDeinitBase() { std::erase(gDeinitDeleteList, this); }
 
