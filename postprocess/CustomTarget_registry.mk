@@ -31,6 +31,9 @@ postprocess_XCDS := \
 	main.xcd \
 	math.xcd \
 	writer.xcd \
+	$(if $(filter EMSCRIPTEN,$(OS)), \
+	    static.xcd \
+	) \
 	xsltfilter.xcd
 
 postprocess_DEPS_base := main
@@ -386,6 +389,12 @@ postprocess_FILES_writer := \
 	$(postprocess_MOD)/org/openoffice/Office/Common-writer.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Embedding-writer.xcu \
 	$(postprocess_MOD)/org/openoffice/Setup-writer.xcu
+
+ifeq (EMSCRIPTEN,$(OS))
+postprocess_DEPS_static := main
+postprocess_FILES_static := \
+	$(SRCDIR)/static/config/wasm-accelerators.xcu
+endif
 
 postprocess_DEPS_xsltfilter := main
 postprocess_OPTDEPS_xsltfilter := calc writer
