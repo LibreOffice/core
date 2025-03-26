@@ -234,6 +234,7 @@ private:
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
     SfxItemPropertySet const& m_rPropSet;
     bool m_bIsDescriptor;
+    bool m_bDeleteWithoutCorrection = false;
     sal_Int32 m_nSelectionStartPos;
     sal_Int32 m_nSelectionEndPos;
     OUString m_sText;

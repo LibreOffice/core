@@ -46,6 +46,7 @@
 #include <set>
 #include <tuple>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace editeng { class SvxBorderLine; }
@@ -330,6 +331,7 @@ private:
     bool mbClipBoard             : 1;    //< TRUE: this document represents the clipboard
     bool mbColumnSelection       : 1;    //< TRUE: this content has been created by a column selection (clipboard docs only)
     bool mbIsPrepareSelAll       : 1;
+    bool mbDontCorrectBookmarks = false;
 
     enum MissingDictionary { False = -1, Undefined = 0, True = 1 };
     MissingDictionary meDictionaryMissing;
@@ -1754,6 +1756,8 @@ public:
     void SetLanguage(const LanguageType eLang, const sal_uInt16 nId);
 
     static bool HasParagraphDirectFormatting(const SwPosition& rPos);
+
+    bool SetDontCorrectBookmarks(bool val) { return std::exchange(mbDontCorrectBookmarks, val); }
 
 private:
     // Copies master header to left / first one, if necessary - used by ChgPageDesc().

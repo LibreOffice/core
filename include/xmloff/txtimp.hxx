@@ -160,7 +160,7 @@ public:
     void InsertString( std::u16string_view rChars,
                        bool& rIgnoreLeadingSpace );
     // Delete current paragraph
-    void DeleteParagraph();
+    void DeleteParagraph(bool dontCorrectBookmarks = false);
 
     void InsertControlCharacter( sal_Int16 nControl );
     void InsertTextContent( css::uno::Reference< css::text::XTextContent > const & xContent);
