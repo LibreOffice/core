@@ -4083,7 +4083,7 @@ void DomainMapper_Impl::prepareHeaderFooterContent(rtl::Reference<SwXPageStyle> 
 
 bool DomainMapper_Impl::SeenHeaderFooter(PagePartType const partType, PageType const pageType) const
 {
-    return m_HeaderFooterSeen.find({partType, pageType}) != m_HeaderFooterSeen.end();
+    return m_HeaderFooterSeen.contains({ partType, pageType });
 }
 
 /** Checks if the header and footer content on the text appended stack is empty.
