@@ -250,8 +250,6 @@ private:
     LOKSpecialFlags meFlags;
 };
 
-
-
 class ImpEditView : public vcl::unohelper::DragAndDropClient
 {
     friend class EditView;
@@ -657,8 +655,8 @@ private:
 
     void                ParaAttribsChanged( ContentNode const * pNode, bool bIgnoreUndoCheck = false );
     void                TextModified();
-    void                CalcHeight(ParaPortion& rParaPortion);
-    bool isInEmptyClusterAtTheEnd(ParaPortion& rParaPortion);
+    void                CalcHeight(ParaPortion& rParaPortion, bool bIsScaling = false);
+    bool isInEmptyClusterAtTheEnd(ParaPortion& rParaPortion, bool bIsScaling);
 
     void                InsertUndo( std::unique_ptr<EditUndo> pUndo, bool bTryMerge = false );
     void                ResetUndoManager();
@@ -689,12 +687,12 @@ private:
     void                Clear();
     EditPaM             RemoveText();
 
-    bool createLinesForEmptyParagraph(ParaPortion& rParaPortion);
-    tools::Long calculateMaxLineWidth(tools::Long nStartX, SvxLRSpaceItem const& rLRItem);
-    bool CreateLines(sal_Int32 nPara, sal_uInt32 nStartPosY);
+    bool createLinesForEmptyParagraph(ParaPortion& rParaPortion, bool bIsScaling = false);
+    tools::Long calculateMaxLineWidth(tools::Long nStartX, SvxLRSpaceItem const& rLRItem );
+    bool CreateLines(sal_Int32 nPara, sal_uInt32 nStartPosY, bool bIsScaling = false);
 
     void                CreateAndInsertEmptyLine(ParaPortion& rParaPortion);
-    bool                FinishCreateLines(ParaPortion& rParaPortion);
+    bool                FinishCreateLines(ParaPortion& rParaPortion, bool bIsScaling = false);
     void                CreateTextPortions(ParaPortion& rParaPortion, sal_Int32& rStartPos);
     void                RecalcTextPortion(ParaPortion& rParaPortion, sal_Int32 nStartPos, sal_Int32 nNewChars);
     sal_Int32           SplitTextPortion(ParaPortion& rParaPortion, sal_Int32 nPos,  EditLine* pCurLine = nullptr);
@@ -980,7 +978,7 @@ public:
 
     void SetMinColumnWrapHeight(tools::Long nVal) { mnMinColumnWrapHeight = nVal; }
 
-    tools::Long FormatParagraphs(o3tl::sorted_vector<sal_Int32>& rRepaintParagraphs);
+    tools::Long FormatParagraphs(o3tl::sorted_vector<sal_Int32>& rRepaintParagraphs, bool bIsScaling);
     void ScaleContentToFitWindow(o3tl::sorted_vector<sal_Int32>& rRepaintParagraphs);
     void FormatDoc();
     void FormatFullDoc();
