@@ -141,6 +141,34 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeLeftPaddingOffPage)
     // i.e. the shape text had ~4cm left padding (visually) instead of 5cm.
     CPPUNIT_ASSERT_GREATEREQUAL(nBodyLeft - MINFLY, nFlyLeft);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testShapeLeftPaddingWrapThroughOffPage)
+{
+    // Given a document with a shape that is off the page (partially clipped on the left):
+    createSwDoc("shape-left-padding-wrap-through-off-page.docx");
+
+    // When laying out that document:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+
+    // Then make sure that the text is also clipped on the left, left margin is only the
+    // lIns="91440" (in EMUs) from the file:
+    auto pPage = pLayout->GetLower()->DynCastPageFrame();
+    SwSortedObjs& rPageObjs = *pPage->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPageObjs.size());
+    auto it = std::find_if(rPageObjs.begin(), rPageObjs.end(), [](SwAnchoredObject* pObj) -> bool {
+        return pObj->DynCastFlyFrame() != nullptr;
+    });
+    CPPUNIT_ASSERT(it != rPageObjs.end());
+    auto pFly = (*it)->DynCastFlyFrame();
+    CPPUNIT_ASSERT(pFly);
+    SwTwips nFlyLeftMargin = pFly->getFramePrintArea().Left();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 144
+    // - Actual  : 3031
+    // i.e. there was a large left margin, the text was clipped on the right.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(144), nFlyLeftMargin);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
