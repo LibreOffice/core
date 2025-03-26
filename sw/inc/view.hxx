@@ -284,8 +284,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     // methods for searching
     // set search context
     SAL_DLLPRIVATE bool          SearchAndWrap(bool bApi);
-    SAL_DLLPRIVATE sal_uInt16 SearchAll();
-    SAL_DLLPRIVATE sal_uLong     FUNC_Search( const SwSearchOptions& rOptions );
+    SAL_DLLPRIVATE sal_Int32 SearchAll();
+    SAL_DLLPRIVATE sal_Int32     FUNC_Search( const SwSearchOptions& rOptions );
     SAL_DLLPRIVATE void          Replace();
 
     bool                        IsDocumentBorder();

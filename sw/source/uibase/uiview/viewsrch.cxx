@@ -350,7 +350,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                 {
                     SwSearchOptions aOpts( m_pWrtShell.get(), s_pSrchItem->GetBackward() );
                     s_bExtra = false;
-                    sal_uLong nFound;
+                    sal_Int32 nFound;
 
                     {   //Scope for SwWait-Object
                         SwWait aWait( *GetDocShell(), true );
@@ -381,7 +381,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                         m_pWrtShell->EndAllAction();
                     }
 
-                    rReq.SetReturnValue(SfxBoolItem(nSlot, nFound != 0 && ULONG_MAX != nFound));
+                    rReq.SetReturnValue(SfxBoolItem(nSlot, nFound != 0 && SAL_MAX_INT32 != nFound));
                     if( !nFound )
                     {
 #if HAVE_FEATURE_DESKTOP
@@ -396,7 +396,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                         return;
                     }
 
-                    if( !bQuiet && ULONG_MAX != nFound)
+                    if (!bQuiet && SAL_MAX_INT32 != nFound)
                     {
                         OUString sText( SwResId( STR_NB_REPLACED ) );
                         sText = sText.replaceFirst("XX", OUString::number( nFound ));
@@ -618,7 +618,7 @@ bool SwView::SearchAndWrap(bool bApi)
     return s_bFound;
 }
 
-sal_uInt16 SwView::SearchAll()
+sal_Int32 SwView::SearchAll()
 {
     SwWait aWait( *GetDocShell(), true );
     m_pWrtShell->StartAllAction();
@@ -636,7 +636,7 @@ sal_uInt16 SwView::SearchAll()
             m_pWrtShell->StartOfSection();
     }
     s_bExtra = false;
-    sal_uInt16 nFound = o3tl::narrowing<sal_uInt16>(FUNC_Search( aOpts ));
+    auto nFound = FUNC_Search(aOpts);
     s_bFound = 0 != nFound;
 
     m_pWrtShell->EndAllAction();
@@ -752,7 +752,7 @@ SwSearchOptions::SwSearchOptions( SwWrtShell const * pSh, bool bBackward )
     }
 }
 
-sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
+sal_Int32 SwView::FUNC_Search(const SwSearchOptions& rOptions)
 {
 #if HAVE_FEATURE_DESKTOP
     SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::Empty);
