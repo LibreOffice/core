@@ -142,6 +142,16 @@ interface ViewShellBaseView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+    SID_PROTECTPOS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState;
+    ]
+    SID_PROTECTSIZE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState;
+    ]
     SID_INSERT_DRAW
     []
 }

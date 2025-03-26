@@ -624,4 +624,15 @@ interface BaseTextSelection
         StateMethod = GetState;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+
+    SID_PROTECTPOS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PROTECTSIZE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
 }

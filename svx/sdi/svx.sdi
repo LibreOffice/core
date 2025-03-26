@@ -12857,3 +12857,35 @@ SfxBoolItem ClickChangeRotation SID_CLICK_CHANGE_ROTATION
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Options;
 ]
+
+SfxBoolItem ProtectSize SID_PROTECTSIZE
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Modify;
+]
+
+SfxBoolItem ProtectPos SID_PROTECTPOS
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Modify;
+]

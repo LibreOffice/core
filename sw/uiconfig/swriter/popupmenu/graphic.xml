@@ -16,6 +16,12 @@
   <menu:menuitem menu:id=".uno:ExternalEdit"/>
   <menu:menuitem menu:id=".uno:ChangePicture"/>
   <menu:menuitem menu:id=".uno:CompressGraphic"/>
+  <menu:menu menu:id=".uno:ProtectGraphicMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:ProtectPos"/>
+      <menu:menuitem menu:id=".uno:ProtectSize"/>
+    </menu:menupopup>
+  </menu:menu>
   <menu:menuitem menu:id=".uno:SaveGraphic"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:AnchorMenu"/>

@@ -36,6 +36,7 @@
 #include <basic/sberrors.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svx/ofaitem.hxx>
+#include <svx/svdograf.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/stdtext.hxx>
@@ -1362,6 +1363,23 @@ void ScDocShell::Execute( SfxRequest& rReq )
             PostPaintGridAll();
         }
         break;
+        case SID_PROTECTPOS:
+        case SID_PROTECTSIZE:
+        {
+            ScDrawView* pScDrawView = GetBestViewShell()->GetViewData().GetScDrawView();
+            if (!pScDrawView)
+                return;
+
+            const SdrMarkList& rMarkList = pScDrawView->GetMarkedObjectList();
+            assert ( rMarkList.GetMarkCount() == 1 );
+
+            SdrObject* pGraphicObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+            if (nSlot == SID_PROTECTSIZE)
+                pGraphicObj->SetResizeProtect(!pGraphicObj->IsResizeProtect());
+            else
+                pGraphicObj->SetMoveProtect(!pGraphicObj->IsMoveProtect());
+        }
+        break;
         default:
         {
             // small (?) hack -> forwarding of the slots to TabViewShell
@@ -2345,7 +2363,37 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                     rSet.Put(SfxStringItem(nWhich, sLanguage));
                 }
                 break;
+                case SID_PROTECTPOS:
+                case SID_PROTECTSIZE:
+                {
+                    ScViewData* pViewData = GetViewData();
+                    if (pViewData)
+                    {
+                        const ScDrawView* pDrView = pViewData->GetScDrawView();
+                        const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
+                        if ( rMarkList.GetMarkCount() == 1 )
+                        {
+                            const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                            const SdrObjKind nSdrObjKind = pObj->GetObjIdentifier();
 
+                            if ( nSdrObjKind == SdrObjKind::Graphic )
+                            {
+                                if (nWhich == SID_PROTECTSIZE)
+                                {
+                                    rSet.Put(SfxBoolItem(nWhich, pObj->IsResizeProtect()));
+                                    if (pObj->IsMoveProtect())
+                                        rSet.DisableItem( nWhich );
+                                }
+                                else
+                                    rSet.Put(SfxBoolItem(nWhich, pObj->IsMoveProtect()));
+
+                                break;
+                            }
+                        }
+                    }
+                    rSet.DisableItem( nWhich );
+                }
+                break;
             default:
                 {
                 }

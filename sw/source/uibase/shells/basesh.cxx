@@ -50,6 +50,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/sizeitem.hxx>
+#include <editeng/protitem.hxx>
 #include <svx/flagsdef.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <sfx2/objface.hxx>
@@ -1531,6 +1532,27 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 }
             }
             break;
+        case SID_PROTECTSIZE:
+        case SID_PROTECTPOS:
+            {
+                const bool bIsProtected
+                    = rSh.IsSelObjProtected(nSlot == SID_PROTECTSIZE ? FlyProtectFlags::Size
+                                                                     : FlyProtectFlags::Pos)
+                      != FlyProtectFlags::NONE;
+
+                SfxItemSet aSet( GetPool(), aFrameFormatSetRange );
+                rSh.GetFlyFrameAttr( aSet );
+
+                SvxProtectItem rProt = aSet.Get( RES_PROTECT );
+                if (nSlot == SID_PROTECTSIZE)
+                    rProt.SetSizeProtect(!bIsProtected);
+                else
+                    rProt.SetPosProtect(!bIsProtected);
+                aSet.Put( rProt );
+
+                rSh.SetFlyFrameAttr( aSet );
+            }
+            break;
 
         default:
             bMore = true;
@@ -2190,6 +2212,22 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 rSet.Put(SfxBoolItem(nWhich, bInsInMargin));
             }
             break;
+            case SID_PROTECTSIZE:
+            case SID_PROTECTPOS:
+            {
+                if( rSh.GetGraphicType() == GraphicType::NONE )
+                    rSet.DisableItem(nWhich);
+                else
+                {
+                    const bool bIsProtected
+                        = rSh.IsSelObjProtected(nWhich == SID_PROTECTSIZE ? FlyProtectFlags::Size
+                                                                          : FlyProtectFlags::Pos)
+                          != FlyProtectFlags::NONE;
+                    rSet.Put(SfxBoolItem(nWhich, bIsProtected));
+                }
+            }
+            break;
+
         }
         nWhich = aIter.NextWhich();
     }

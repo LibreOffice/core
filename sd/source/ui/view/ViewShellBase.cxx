@@ -681,6 +681,26 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
             mpImpl->ProcessRestoreEditingViewSlot();
             break;
 
+        case SID_PROTECTPOS:
+        case SID_PROTECTSIZE:
+        {
+            ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
+            if (!pDocSh)
+                break;
+            ::sd::View* pView = pDocSh->GetViewShell()->GetView();
+
+            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+            assert ( rMarkList.GetMarkCount() == 1 );
+
+            SdrObject* pGraphicObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+            if (nSlotId == SID_PROTECTSIZE)
+                pGraphicObj->SetResizeProtect(!pGraphicObj->IsResizeProtect());
+            else
+                pGraphicObj->SetMoveProtect(!pGraphicObj->IsMoveProtect());
+
+        }
+        break;
+
         default:
             // Ignore any other slot.
             rRequest.Ignore ();
@@ -1376,9 +1396,11 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
         while (nItemId > 0)
         {
             bool bState (false);
+            bool bEnabled;
             Reference<XResourceId> xResourceId;
             try
             {
+                bEnabled = true;
                 // Check if the right view is active
                 switch (nItemId)
                 {
@@ -1444,6 +1466,37 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                     case SID_TOGGLE_TABBAR_VISIBILITY:
                         bState = GetUserWantsTabBar();
                         break;
+                    case SID_PROTECTPOS:
+                    case SID_PROTECTSIZE:
+                    {
+                        ::sd::DrawDocShell* pDocSh = dynamic_cast<::sd::DrawDocShell*>(SfxObjectShell::Current());
+                        if (pDocSh)
+                        {
+                            ::sd::View* pView = pDocSh->GetViewShell()->GetView();
+                            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+                            if ( rMarkList.GetMarkCount() == 1 ) // graphic menu only effective on single item
+                            {
+                                const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                                const SdrObjKind nSdrObjKind = pObj->GetObjIdentifier();
+
+                                if ( nSdrObjKind == SdrObjKind::Graphic )
+                                {
+                                    if ( nItemId == SID_PROTECTSIZE )
+                                    {
+                                        bState = pObj->IsResizeProtect();
+                                        if ( pObj->IsMoveProtect() )
+                                            bEnabled = false;
+                                    }
+                                    else
+                                        bState = pObj->IsMoveProtect();
+
+                                    break;
+                                }
+                            }
+                        }
+                        bEnabled = false;
+                    }
+                    break;
 
                     default:
                         // Ignore all other items.  They are not meant to be
@@ -1456,7 +1509,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
             }
 
             // Check if edit mode fits too
-            if (bState)
+            if (bState && bEnabled)
             {
                 ViewShell* const pCenterViewShell = FrameworkHelper::Instance(mrBase)->GetViewShell(
                     FrameworkHelper::msCenterPaneURL).get();
@@ -1480,6 +1533,8 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
 
             // And finally set the state.
             rSet.Put(SfxBoolItem(nItemId, bState));
+            if (!bEnabled)
+                rSet.DisableItem( nItemId );
 
             nItemId = aSetIterator.NextWhich();
         }

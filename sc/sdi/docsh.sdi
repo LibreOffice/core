@@ -81,6 +81,8 @@ interface TableDocument
     SID_SPELLCHECK_APPLY_SUGGESTION     [ ExecMethod = Execute; StateMethod = GetState; ]
 
     SID_REFRESH_VIEW        [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_PROTECTPOS          [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_PROTECTSIZE         [ ExecMethod = Execute; StateMethod = GetState; ];
 }
 
 
