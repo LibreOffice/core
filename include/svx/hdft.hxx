@@ -78,6 +78,7 @@ protected:
     std::unique_ptr<weld::MetricSpinButton> m_xHeightEdit;
     std::unique_ptr<weld::CheckButton> m_xHeightDynBtn;
     std::unique_ptr<weld::Button> m_xBackgroundBtn;
+    std::unique_ptr<weld::Frame>  m_xFrame;
     std::unique_ptr<weld::CustomWeld> m_xBspWin;
 
     void            InitHandler();

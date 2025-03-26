@@ -138,12 +138,14 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
     , m_xHeightEdit(m_xBuilder->weld_metric_spin_button(u"spinHeight"_ustr, FieldUnit::CM))
     , m_xHeightDynBtn(m_xBuilder->weld_check_button(u"checkAutofit"_ustr))
     , m_xBackgroundBtn(m_xBuilder->weld_button(u"buttonMore"_ustr))
+    , m_xFrame(m_xBuilder->weld_frame(u"frame1"_ustr))
     , m_xBspWin(new weld::CustomWeld(*m_xBuilder, u"drawingareaPageHF"_ustr, m_aBspWin))
 {
     //swap header <-> footer in UI
     if (nId == SID_ATTR_PAGE_FOOTERSET)
     {
         m_xContainer->set_help_id(u"svx/ui/headfootformatpage/FFormatPage"_ustr);
+        m_xFrame->set_help_id(u"svx/ui/headfootformatpage/FFormatPage"_ustr);
         m_xPageLbl = m_xBuilder->weld_label(u"labelFooterFormat"_ustr);
         m_xTurnOnBox = m_xBuilder->weld_check_button(u"checkFooterOn"_ustr);
 
@@ -163,6 +165,7 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
     else //Header
     {
         m_xContainer->set_help_id(u"svx/ui/headfootformatpage/HFormatPage"_ustr);
+        m_xFrame->set_help_id(u"svx/ui/headfootformatpage/HFormatPage"_ustr);
         m_xPageLbl = m_xBuilder->weld_label(u"labelHeaderFormat"_ustr);
         m_xTurnOnBox = m_xBuilder->weld_check_button(u"checkHeaderOn"_ustr);
     }
