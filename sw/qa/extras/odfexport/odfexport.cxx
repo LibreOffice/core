@@ -38,6 +38,8 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/fileformat.h>
@@ -1379,6 +1381,52 @@ DECLARE_ODFEXPORT_TEST(testTextFrameVertAdjust, "textframe-vertadjust.odt")
     // 3rd frame's context is adjusted to the bottom
     xFrame.set(getTextFrameByName(u"Rectangle 3"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, getProperty<drawing::TextVerticalAdjust>(xFrame, u"TextVerticalAdjust"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf69500)
+{
+    createSwDoc();
+
+    static constexpr OUString sToolBarName = u"private:resource/toolbar/custom_toolbar_1"_ustr;
+
+    auto getUIConfigManager = [this]() {
+        css::uno::Reference<css::uno::XComponentContext> xContext
+            = comphelper::getProcessComponentContext();
+        uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xModel.is());
+        uno::Reference<ui::XUIConfigurationManagerSupplier> xConfigSupplier(xModel, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xConfigSupplier.is());
+        uno::Reference<ui::XUIConfigurationManager> xConfigManager
+            = xConfigSupplier->getUIConfigurationManager();
+        return xConfigManager;
+    };
+
+    // Create and persist a custom toolbar to the document
+    {
+        uno::Reference<ui::XUIConfigurationManager> xConfigManager = getUIConfigManager();
+
+        uno::Reference<container::XIndexContainer> xIndexContainer(xConfigManager->createSettings(),
+                                                                   uno::UNO_SET_THROW);
+        uno::Reference<container::XIndexAccess> xIndexAccess(xIndexContainer, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xProps(xIndexContainer, uno::UNO_QUERY_THROW);
+
+        xProps->setPropertyValue(u"UIName"_ustr, uno::Any(u"Custom Toolbar 1"_ustr));
+
+        xConfigManager->insertSettings(sToolBarName, xIndexAccess);
+
+        uno::Reference<ui::XUIConfigurationPersistence> xPersistence(xConfigManager,
+                                                                     uno::UNO_QUERY_THROW);
+        xPersistence->store();
+    }
+
+    saveAndReload(mpFilter);
+
+    // Without the fix, the toolbar will be gone after save-and-reload
+    {
+        uno::Reference<ui::XUIConfigurationManager> xConfigManager = getUIConfigManager();
+
+        CPPUNIT_ASSERT(xConfigManager->hasSettings(sToolBarName));
+    }
 }
 
 } // end of anonymous namespace
