@@ -176,6 +176,7 @@ class SaveBox
     SwNodeOffset m_nStartNode;
     sal_Int32 m_nRowSpan;
     sal_uInt16 m_nItemSet;
+    bool m_bHasDirectFormatting : 1;
     union
     {
         SfxItemSets* pContentAttrs;
@@ -1221,6 +1222,8 @@ SaveBox::SaveBox(SaveBox* pPrev, const SwTableBox& rBox, SaveTable& rSTable)
         for( size_t n = 1; n < rBox.GetTabLines().size(); ++n )
             pLn = new SaveLine( pLn, *rBox.GetTabLines()[ n ], rSTable );
     }
+    m_bHasDirectFormatting = rBox.HasDirectFormatting();
+
 }
 
 SaveBox::~SaveBox()
@@ -1286,6 +1289,7 @@ void SaveBox::RestoreAttr( SwTableBox& rBox, SaveTable& rSTable )
     {
         OSL_ENSURE( false, "Box not anymore at the same node" );
     }
+    rBox.SetDirectFormatting(m_bHasDirectFormatting);
 }
 
 void SaveBox::SaveContentAttrs( SwDoc* pDoc )
