@@ -2198,15 +2198,15 @@ rtl::Reference<SvxShapeText>
 
         //fill some more shape properties into the ValueMap
         {
-            aValueMap.insert( { "TextHorizontalAdjust", uno::Any(drawing::TextHorizontalAdjust_CENTER) } ); // drawing::TextHorizontalAdjust
-            aValueMap.insert( { "TextVerticalAdjust", uno::Any(drawing::TextVerticalAdjust_CENTER) } ); //drawing::TextVerticalAdjust
-            aValueMap.insert( { "TextAutoGrowHeight", uno::Any(true) } ); // sal_Bool
-            aValueMap.insert( { "TextAutoGrowWidth", uno::Any(true) } ); // sal_Bool
-            aValueMap.insert( { "TextMaximumFrameWidth", uno::Any(nTextMaxWidth) } ); // sal_Int32
+            aValueMap.insert( { u"TextHorizontalAdjust"_ustr, uno::Any(drawing::TextHorizontalAdjust_CENTER) } ); // drawing::TextHorizontalAdjust
+            aValueMap.insert( { u"TextVerticalAdjust"_ustr, uno::Any(drawing::TextVerticalAdjust_CENTER) } ); //drawing::TextVerticalAdjust
+            aValueMap.insert( { u"TextAutoGrowHeight"_ustr, uno::Any(true) } ); // sal_Bool
+            aValueMap.insert( { u"TextAutoGrowWidth"_ustr, uno::Any(true) } ); // sal_Bool
+            aValueMap.insert( { u"TextMaximumFrameWidth"_ustr, uno::Any(nTextMaxWidth) } ); // sal_Int32
 
             //set name/classified ObjectID (CID)
             if( !aName.isEmpty() )
-                aValueMap.emplace( "Name", uno::Any( aName ) ); //CID OUString
+                aValueMap.emplace( u"Name"_ustr, uno::Any( aName ) ); //CID OUString
         }
 
         //set global title properties
