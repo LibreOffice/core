@@ -1394,10 +1394,25 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
          vcl::text::TextLayoutCache const*const pLayoutCache,
          const SalLayoutGlyphs* pGlyphs) const
 {
-    rHyphenPos = -1;
+    return GetTextBreakArray(rStr, nTextWidth, nHyphenChar, &rHyphenPos, nIndex, nLen, nCharExtra,
+                             {}, pLayoutCache, pGlyphs);
+}
 
-    std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rStr, nIndex, nLen,
-            Point(0,0), 0, {}, {}, eDefaultLayout, pLayoutCache, pGlyphs);
+sal_Int32 OutputDevice::GetTextBreakArray(const OUString& rStr, tools::Long nTextWidth,
+                                          std::optional<sal_Unicode> nHyphenChar,
+                                          std::optional<sal_Int32*> pHyphenPos, sal_Int32 nIndex,
+                                          sal_Int32 nLen, tools::Long nCharExtra,
+                                          KernArraySpan aKernArray,
+                                          vcl::text::TextLayoutCache const* const pLayoutCache,
+                                          const SalLayoutGlyphs* pGlyphs) const
+{
+    if (pHyphenPos.has_value())
+    {
+        **pHyphenPos = -1;
+    }
+
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(
+        rStr, nIndex, nLen, Point(0, 0), 0, aKernArray, {}, eDefaultLayout, pLayoutCache, pGlyphs);
     sal_Int32 nRetVal = -1;
     if( pSalLayout )
     {
@@ -1418,22 +1433,31 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
         nRetVal = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
 
         // calculate hyphenated break position
-        OUString aHyphenStr(nHyphenChar);
-        std::unique_ptr<SalLayout> pHyphenLayout = ImplLayout( aHyphenStr, 0, 1 );
-        if( pHyphenLayout )
+        if (nHyphenChar.has_value())
         {
-            // calculate subpixel width of hyphenation character
-            double nHyphenPixelWidth = pHyphenLayout->GetTextWidth() * nSubPixelFactor;
+            OUString aHyphenStr(*nHyphenChar);
+            std::unique_ptr<SalLayout> pHyphenLayout = ImplLayout(aHyphenStr, 0, 1);
+            if (pHyphenLayout)
+            {
+                // calculate subpixel width of hyphenation character
+                double nHyphenPixelWidth = pHyphenLayout->GetTextWidth() * nSubPixelFactor;
 
-            // calculate hyphenated break position
-            nTextPixelWidth -= nHyphenPixelWidth;
-            if( nExtraPixelWidth > 0 )
-                nTextPixelWidth -= nExtraPixelWidth;
+                // calculate hyphenated break position
+                nTextPixelWidth -= nHyphenPixelWidth;
+                if (nExtraPixelWidth > 0)
+                    nTextPixelWidth -= nExtraPixelWidth;
 
-            rHyphenPos = pSalLayout->GetTextBreak(nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor);
+                if (pHyphenPos.has_value())
+                {
+                    **pHyphenPos = pSalLayout->GetTextBreak(nTextPixelWidth, nExtraPixelWidth,
+                                                            nSubPixelFactor);
 
-            if( rHyphenPos > nRetVal )
-                rHyphenPos = nRetVal;
+                    if (**pHyphenPos > nRetVal)
+                    {
+                        **pHyphenPos = nRetVal;
+                    }
+                }
+            }
         }
     }
 

@@ -84,6 +84,7 @@ private:
 
     TextFrameIndex m_nInvalidityPos;
     sal_uInt8 m_nDefaultDir;
+    bool m_bAdjustBlock = false;
     bool m_bParagraphContainsKashidaScript = false;
 
     // examines the range [ nStart, nStart + nEnd ] if there are kanas
@@ -140,6 +141,7 @@ public:
         return m_DirectionChanges[ nCnt ].type;
     }
 
+    bool ParagraphIsJustified() const { return m_bAdjustBlock; }
     bool ParagraphContainsKashidaScript() const { return m_bParagraphContainsKashidaScript; }
 
     size_t CountCompChg() const { return m_CompressionChanges.size(); };

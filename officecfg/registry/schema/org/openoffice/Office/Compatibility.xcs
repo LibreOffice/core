@@ -182,6 +182,12 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="BalanceSpacesAndIdeographicSpaces" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Adjust spaces to half the width of ideographic spaces, using Word-compatible rules</desc>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
   </templates>
   <component>

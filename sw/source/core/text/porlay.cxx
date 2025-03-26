@@ -1322,7 +1322,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
 
     auto const& rParaItems((pMerged ? *pMerged->pParaPropsNode : rNode).GetSwAttrSet());
     // justification type
-    const bool bAdjustBlock = SvxAdjust::Block == rParaItems.GetAdjust().GetAdjust();
+    m_bAdjustBlock = (SvxAdjust::Block == rParaItems.GetAdjust().GetAdjust());
 
     // FIND INVALID RANGES IN SCRIPT INFO ARRAYS:
 
@@ -1494,7 +1494,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                 }
             }
         }
-        else if (bAdjustBlock && i18n::ScriptType::COMPLEX == nScript)
+        else if (m_bAdjustBlock && i18n::ScriptType::COMPLEX == nScript)
         {
             if (SwScriptInfo::IsKashidaScriptText(
                     rText, TextFrameIndex{ stChange.m_nStartIndex },

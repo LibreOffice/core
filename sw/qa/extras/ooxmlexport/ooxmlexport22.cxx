@@ -18,6 +18,7 @@
 #include <pam.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 namespace
 {
@@ -85,6 +86,35 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf83844Hanging)
     fnVerify();
     saveAndReload(mpFilter);
     fnVerify();
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf88908)
+{
+    createSwDoc();
+
+    {
+        SwDoc* pDoc = getSwDoc();
+        IDocumentSettingAccess& rIDSA = pDoc->getIDocumentSettingAccess();
+        CPPUNIT_ASSERT(!rIDSA.get(DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES));
+    }
+
+    saveAndReload(mpFilter);
+
+    {
+        SwDoc* pDoc = getSwDoc();
+        IDocumentSettingAccess& rIDSA = pDoc->getIDocumentSettingAccess();
+        CPPUNIT_ASSERT(!rIDSA.get(DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES));
+
+        rIDSA.set(DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES, true);
+    }
+
+    saveAndReload(mpFilter);
+
+    {
+        SwDoc* pDoc = getSwDoc();
+        IDocumentSettingAccess& rIDSA = pDoc->getIDocumentSettingAccess();
+        CPPUNIT_ASSERT(rIDSA.get(DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES));
+    }
 }
 
 } // end of anonymous namespace

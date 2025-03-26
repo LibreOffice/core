@@ -1568,6 +1568,17 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf165089)
     CPPUNIT_ASSERT_LESS(sal_Int32(1450), nTop);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf88908)
+{
+    createSwDoc("tdf88908.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[1]", "portion",
+                u"                                  Without  the  fix,  ");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]", "portion",
+                u"this  will  use  one  line");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

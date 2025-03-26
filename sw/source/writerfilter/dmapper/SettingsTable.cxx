@@ -105,6 +105,7 @@ struct SettingsTable_Impl
     bool                m_bSplitPgBreakAndParaMark;
     bool                m_bMirrorMargin;
     bool                m_bDoNotExpandShiftReturn;
+    bool                m_bBalanceSingleByteDoubleByteWidth = false;
     bool                m_bDisplayBackgroundShape;
     bool                m_bNoLeading = false;
     OUString            m_sDecimalSymbol;
@@ -439,6 +440,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Compat_doNotExpandShiftReturn:
         m_pImpl->m_bDoNotExpandShiftReturn = true;
         break;
+    case NS_ooxml::LN_CT_Compat_balanceSingleByteDoubleByteWidth:
+        m_pImpl->m_bBalanceSingleByteDoubleByteWidth = true;
+        break;
     case NS_ooxml::LN_CT_Settings_displayBackgroundShape:
         m_pImpl->m_bDisplayBackgroundShape = nIntValue;
         break;
@@ -545,6 +549,11 @@ bool SettingsTable::GetDisplayBackgroundShape() const
 bool SettingsTable::GetDoNotExpandShiftReturn() const
 {
     return m_pImpl->m_bDoNotExpandShiftReturn;
+}
+
+bool SettingsTable::GetBalanceSingleByteDoubleByteWidth() const
+{
+    return m_pImpl->m_bBalanceSingleByteDoubleByteWidth;
 }
 
 bool SettingsTable::GetProtectForm() const

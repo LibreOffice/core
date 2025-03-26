@@ -72,6 +72,7 @@ public:
     bool GetMirrorMarginSettings() const;
     bool GetDisplayBackgroundShape() const;
     bool GetDoNotExpandShiftReturn() const;
+    bool GetBalanceSingleByteDoubleByteWidth() const;
     bool GetNoColumnBalance() const;
     bool GetProtectForm() const;
     bool GetReadOnly() const;

@@ -1934,6 +1934,8 @@ void SwWW8ImplReader::ImportDop()
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING, false); // #i47448#
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::NO_GAP_AFTER_NOTE_NUMBER, true); // tdf#159382
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK, !m_xWDop->fExpShRtn); // #i49277#, #i56856#
+    m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES,
+                                           !m_xWDop->fDntBlnSbDbWid); // tdf#88908
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT, false);  // #i53199#
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::OLD_LINE_SPACING, false);
 

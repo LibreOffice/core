@@ -473,6 +473,8 @@ public:
 
     SW_DLLPUBLIC void SetMsWordUlTrailSpace(bool val);
 
+    SW_DLLPUBLIC void SetBalanceSpacesAndIdeographicSpaces(bool bValue);
+
     // DOCUMENT COMPATIBILITY FLAGS END
 
     // Calls Idle-formatter of Layout.

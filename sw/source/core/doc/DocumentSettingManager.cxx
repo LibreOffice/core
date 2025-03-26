@@ -111,7 +111,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbPaintHellOverHeaderFooter(false),
     mbMinRowHeightInclBorder(false),
     mbMsWordCompGridMetrics(false), // tdf#129808
-    mbNoClippingWithWrapPolygon(false)
+    mbNoClippingWithWrapPolygon(false),
+    mbBalanceSpacesAndIdeographicSpaces(false)
 
     // COMPATIBILITY FLAGS END
 {
@@ -147,6 +148,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbContinuousEndnotes                = aOptions.get(u"ContinuousEndnotes"_ustr);
         mbMsWordCompGridMetrics             = aOptions.get(u"MsWordCompGridMetrics"_ustr);
         mbIgnoreTabsAndBlanksForLineCalculation = aOptions.get(u"IgnoreTabsAndBlanksForLineCalculation"_ustr);
+        mbBalanceSpacesAndIdeographicSpaces = aOptions.get(u"BalanceSpacesAndIdeographicSpaces"_ustr);
     }
     else
     {
@@ -280,6 +282,8 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::MS_WORD_COMP_GRID_METRICS: return mbMsWordCompGridMetrics;
         case DocumentSettingId::NO_CLIPPING_WITH_WRAP_POLYGON: return mbNoClippingWithWrapPolygon;
         case DocumentSettingId::MS_WORD_UL_TRAIL_SPACE: return mbMsWordUlTrailSpace;
+        case DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES:
+            return mbBalanceSpacesAndIdeographicSpaces;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -614,6 +618,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::MS_WORD_UL_TRAIL_SPACE:
             mbMsWordUlTrailSpace = value;
             break;
+        case DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES:
+            mbBalanceSpacesAndIdeographicSpaces = value;
+            break;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -796,6 +803,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbMsWordCompGridMetrics = rSource.mbMsWordCompGridMetrics;
     mbNoClippingWithWrapPolygon = rSource.mbNoClippingWithWrapPolygon;
     mbMsWordUlTrailSpace = rSource.mbMsWordUlTrailSpace;
+    mbBalanceSpacesAndIdeographicSpaces = rSource.mbBalanceSpacesAndIdeographicSpaces;
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const
@@ -1195,6 +1203,12 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbMsWordUlTrailSpace"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbMsWordUlTrailSpace).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbBalanceSpacesAndIdeographicSpaces"));
+    (void)xmlTextWriterWriteAttribute(
+        pWriter, BAD_CAST("value"),
+        BAD_CAST(OString::boolean(mbBalanceSpacesAndIdeographicSpaces).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);

@@ -67,6 +67,7 @@ constexpr std::pair<OUString, TranslateId> options_list[]{
     { u"MsWordCompGridMetrics"_ustr, STR_COMPAT_OPT_MSWORDCOMPGRIDMETRICS },
     { u"IgnoreTabsAndBlanksForLineCalculation"_ustr, STR_COMPAT_OPT_IGNORETABSANDBLANKSFORLINECALCULATION },
     { u"MsWordUlTrailSpace"_ustr, STR_COMPAT_OPT_UNDERLINETRAILINGSPACE },
+    { u"BalanceSpacesAndIdeographicSpaces"_ustr, STR_COMPAT_OPT_BALANCESPACESANDIDEOGRAPHICSPACES },
 };
 
 // DocumentSettingId, negate?
@@ -97,6 +98,7 @@ std::pair<DocumentSettingId, bool> DocumentSettingForOption(const OUString& opti
         { u"MsWordCompGridMetrics"_ustr, { DocumentSettingId::MS_WORD_COMP_GRID_METRICS, false } },
         { u"IgnoreTabsAndBlanksForLineCalculation"_ustr, { DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION, false } },
         { u"MsWordUlTrailSpace"_ustr, { DocumentSettingId::MS_WORD_UL_TRAIL_SPACE, false } },
+        { u"BalanceSpacesAndIdeographicSpaces"_ustr, { DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES, false } },
     };
     return map.at(option);
 }
@@ -346,6 +348,10 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
 
                     case DocumentSettingId::MS_WORD_UL_TRAIL_SPACE:
                         m_pWrtShell->SetMsWordUlTrailSpace(bChecked);
+                        break;
+
+                    case DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES:
+                        m_pWrtShell->SetBalanceSpacesAndIdeographicSpaces(bChecked);
                         break;
 
                     default:

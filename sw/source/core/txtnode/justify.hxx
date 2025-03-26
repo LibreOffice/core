@@ -75,6 +75,16 @@ SW_DLLPUBLIC void SnapToGridEdge(KernArray& rKernArray, sal_Int32 nLen, tools::L
 SW_DLLPUBLIC bool KashidaJustify(std::span<TextFrameIndex const> aKashPositions,
                                  KernArray& rKernArray, sal_Bool* pKashidaArray, sal_Int32 nStt,
                                  sal_Int32 nLen, tools::Long nSpaceAdd);
+
+/// tdf#88908: Perform a CJK space balancing on the kerning array
+/// @param[in,out] rKernArray text positions from OutDev::GetTextArray().
+/// @param aText string used to determine where space and kern are inserted.
+/// @param nStt starting index of rText.
+/// @param nLen number of elements to process in rKernArray and rText.
+/// @param nSpaceWidth new size of qualifying spaces.
+/// @param bInsideCjkScript the containing script is CJK
+SW_DLLPUBLIC void BalanceCjkSpaces(KernArray& rKernArray, std::u16string_view aText, sal_Int32 nStt,
+                                   sal_Int32 nLen, double dSpaceWidth, bool bInsideCjkScript);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -332,6 +332,52 @@ bool KashidaJustify(std::span<TextFrameIndex const> aKashPositions, KernArray& r
 
     return bHasAnyKashida;
 }
+
+void BalanceCjkSpaces(KernArray& rKernArray, std::u16string_view aText, sal_Int32 nStt,
+                      sal_Int32 nLen, double dSpaceWidth, bool bInsideCjkScript)
+{
+    assert(nStt + nLen <= sal_Int32(aText.size()));
+    assert(nLen <= sal_Int32(rKernArray.size()));
+
+    // Convert kerning array into raw advances
+    for (sal_Int32 i = nLen - 1; i > 0; --i)
+    {
+        rKernArray[i] -= rKernArray[i - 1];
+    }
+
+    // Reset the widths of spaces
+    for (sal_Int32 i = 0; i < nLen; ++i)
+    {
+        sal_Unicode nCh = aText[nStt + i];
+        if (nCh == CH_BLANK)
+        {
+            bool bPrevMatches = true;
+            if (i > 0)
+            {
+                sal_Unicode nPrevCh = aText[nStt + i - 1];
+                bPrevMatches = bInsideCjkScript || (nPrevCh == CH_BLANK);
+            }
+
+            bool bNextMatches = true;
+            if (i < (nLen - 1))
+            {
+                sal_Unicode nNextCh = aText[nStt + i + 1];
+                bNextMatches = bInsideCjkScript || (nNextCh == CH_BLANK);
+            }
+
+            if (bPrevMatches || bNextMatches)
+            {
+                rKernArray[i] = dSpaceWidth;
+            }
+        }
+    }
+
+    // Convert the kerning array back into total advance
+    for (sal_Int32 i = 1; i < nLen; ++i)
+    {
+        rKernArray[i] += rKernArray[i - 1];
+    }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

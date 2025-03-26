@@ -1666,6 +1666,7 @@ public:
      bool       copts_fShowBreaksInFrames : 1 /*= false*/;   //    when 1, show hard page or column breaks in frames
      bool       copts_fSwapBordersFacingPgs : 1 /*= false*/; //    when 1, swap left and right pages on odd facing pages
      bool       copts_fExpShRtn : 1 /*= false*/;             //    when 1, expand character spaces on the line ending SHIFT+RETURN  // #i56856#
+     bool       copts_fDntBlnSbDbWid : 1 = false;            //    when 0, expand spaces in CJK context to half-width // tdf#88908
 
     sal_Int16  dxaTab = 0;              //      720 twips - default tab width
     sal_uInt16 wSpare = 0;
@@ -1723,7 +1724,7 @@ public:
      bool       fCompatibilityOptions_Unknown1_13 : 1 /*= false*/; // #i78591#
      bool       fExpShRtn : 1 /*= false*/;                         // #i78591# and #i56856#
      bool       fCompatibilityOptions_Unknown1_15 : 1 /*= false*/; // #i78591#
-     bool       fCompatibilityOptions_Unknown1_16 : 1 /*= false*/; // #i78591#
+     bool       fDntBlnSbDbWid : 1 /*= false*/;                    // tdf#88908
      bool       fSuppressTopSpacingMac5 : 1 /*= false*/;           // Suppress extra line spacing at top
                                                       // of page like MacWord 5.x
      bool       fTruncDxaExpand : 1 /*= false*/;                    // Expand/Condense by whole number of points

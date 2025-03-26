@@ -7602,7 +7602,7 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize):
     fNoColumnBalance(false), fConvMailMergeEsc(false), fSuppressTopSpacing(false),
     fOrigWordTableRules(false), fTransparentMetafiles(false), fShowBreaksInFrames(false),
     fSwapBordersFacingPgs(false), fCompatibilityOptions_Unknown1_13(false), fExpShRtn(false),
-    fCompatibilityOptions_Unknown1_15(false), fCompatibilityOptions_Unknown1_16(false),
+    fCompatibilityOptions_Unknown1_15(false), fDntBlnSbDbWid(false),
     fSuppressTopSpacingMac5(false), fTruncDxaExpand(false), fPrintBodyBeforeHdr(false),
     fNoLeading(false), fCompatibilityOptions_Unknown1_21(false), fMWSmallCaps(false),
     fCompatibilityOptions_Unknown1_23(false), fCompatibilityOptions_Unknown1_24(false),
@@ -7716,6 +7716,7 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize):
         copts_fShowBreaksInFrames    = 0 != ( a8Bit  &  0x04   );
         copts_fSwapBordersFacingPgs  = 0 != ( a8Bit  &  0x08   );
         copts_fExpShRtn              = 0 != ( a8Bit  &  0x20   );  // #i56856#
+        copts_fDntBlnSbDbWid         = 0 != ( a8Bit  &  0x80   );  // tdf#88908
 
         dxaTab = Get_Short( pData );         // 10 0x0a
         wSpare = Get_UShort( pData );        // 12 0x0c
@@ -7872,7 +7873,7 @@ WW8Dop::WW8Dop():
     fNoColumnBalance(false), fConvMailMergeEsc(false), fSuppressTopSpacing(false),
     fOrigWordTableRules(false), fTransparentMetafiles(false), fShowBreaksInFrames(false),
     fSwapBordersFacingPgs(false), fCompatibilityOptions_Unknown1_13(false), fExpShRtn(false),
-    fCompatibilityOptions_Unknown1_15(false), fCompatibilityOptions_Unknown1_16(false),
+    fCompatibilityOptions_Unknown1_15(false), fDntBlnSbDbWid(false),
     fSuppressTopSpacingMac5(false), fTruncDxaExpand(false), fPrintBodyBeforeHdr(false),
     fNoLeading(true), fCompatibilityOptions_Unknown1_21(false), fMWSmallCaps(false),
     fCompatibilityOptions_Unknown1_23(false), fCompatibilityOptions_Unknown1_24(false),
@@ -7934,7 +7935,7 @@ void WW8Dop::SetCompatibilityOptions(sal_uInt32 a32Bit)
     fCompatibilityOptions_Unknown1_13       = ( a32Bit &  0x00001000 ) >> 12 ;
     fExpShRtn                   = ( a32Bit &  0x00002000 ) >> 13 ; // #i56856#
     fCompatibilityOptions_Unknown1_15       = ( a32Bit &  0x00004000 ) >> 14 ;
-    fCompatibilityOptions_Unknown1_16       = ( a32Bit &  0x00008000 ) >> 15 ;
+    fDntBlnSbDbWid              = ( a32Bit &  0x00008000 ) >> 15 ; // tdf#88908
     fSuppressTopSpacingMac5     = ( a32Bit &  0x00010000 ) >> 16 ;
     fTruncDxaExpand             = ( a32Bit &  0x00020000 ) >> 17 ;
     fPrintBodyBeforeHdr         = ( a32Bit &  0x00040000 ) >> 18 ;
@@ -7972,7 +7973,7 @@ sal_uInt32 WW8Dop::GetCompatibilityOptions() const
     if (fCompatibilityOptions_Unknown1_13)          a32Bit |= 0x00001000;
     if (fExpShRtn)                      a32Bit |= 0x00002000; // #i56856#
     if (fCompatibilityOptions_Unknown1_15)          a32Bit |= 0x00004000;
-    if (fCompatibilityOptions_Unknown1_16)          a32Bit |= 0x00008000;
+    if (fDntBlnSbDbWid)                 a32Bit |= 0x00008000; // tdf#88908
     if (fSuppressTopSpacingMac5)        a32Bit |= 0x00010000;
     if (fTruncDxaExpand)                a32Bit |= 0x00020000;
     if (fPrintBodyBeforeHdr)            a32Bit |= 0x00040000;

@@ -1019,6 +1019,11 @@ WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS) -> voi
     {
         rpFS->singleElementNS(XML_w, XML_doNotExpandShiftReturn);
     }
+    // tdf#88908 adjust CJK-context normal spaces to half of an ideographic space
+    if (rIDSA.get(DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES))
+    {
+        rpFS->singleElementNS(XML_w, XML_balanceSingleByteDoubleByteWidth);
+    }
     // tdf#146515 export "Use printer metrics for document formatting"
     if (!rIDSA.get(DocumentSettingId::USE_VIRTUAL_DEVICE))
         rpFS->singleElementNS(XML_w, XML_usePrinterMetrics);

@@ -191,6 +191,7 @@ class DocumentSettingManager final :
     bool mbMsWordCompGridMetrics : 1; // tdf#129808
     bool mbNoClippingWithWrapPolygon : 1; // tdf#161233
     bool mbMsWordUlTrailSpace : 1 = false;
+    bool mbBalanceSpacesAndIdeographicSpaces : 1 = false; // tdf#88908
 
 public:
 
