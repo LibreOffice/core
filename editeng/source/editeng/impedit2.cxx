@@ -4407,7 +4407,7 @@ tools::Long ImpEditEngine::GetXPos(ParaPortion const& rParaPortion, EditLine con
 }
 
 /** Is true if paragraph is in the empty cluster of paragraphs at the end */
-bool ImpEditEngine::isInEmptyClusterAtTheEnd(ParaPortion& rPortion)
+bool ImpEditEngine::isInEmptyClusterAtTheEnd(ParaPortion& rPortion, bool bIsScaling)
 {
     sal_Int32 nPortion = GetParaPortions().GetPos(&rPortion);
 
@@ -4422,7 +4422,7 @@ bool ImpEditEngine::isInEmptyClusterAtTheEnd(ParaPortion& rPortion)
         if (nCurrent == nPortion)
         {
             OutlinerEditEng* pOutlEditEng{ dynamic_cast<OutlinerEditEng*>(mpEditEngine)};
-            if (pOutlEditEng)
+            if (!bIsScaling && pOutlEditEng)
                 return pOutlEditEng->GetDepth(nCurrent) < 0;
             else
                 return true;
@@ -4432,12 +4432,12 @@ bool ImpEditEngine::isInEmptyClusterAtTheEnd(ParaPortion& rPortion)
     return false;
 }
 
-void ImpEditEngine::CalcHeight(ParaPortion& rPortion)
+void ImpEditEngine::CalcHeight(ParaPortion& rPortion, bool bIsScaling)
 {
     rPortion.mnHeight = 0;
     rPortion.mnFirstLineOffset = 0;
 
-    if (!rPortion.IsVisible() || isInEmptyClusterAtTheEnd(rPortion))
+    if (!rPortion.IsVisible() || isInEmptyClusterAtTheEnd(rPortion, bIsScaling))
         return;
 
     OSL_ENSURE(rPortion.GetLines().Count(), "Paragraph with no lines in ParaPortion::CalcHeight");
