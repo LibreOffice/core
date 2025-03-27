@@ -621,32 +621,32 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
     TranslateId pResId;
     if (RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END)
     {
-        static_assert(SAL_N_ELEMENTS(STR_POOLCOLL_TEXT_ARY) == RES_POOLCOLL_TEXT_END - RES_POOLCOLL_TEXT_BEGIN, "### unexpected size!");
+        static_assert(std::ssize(STR_POOLCOLL_TEXT_ARY) == RES_POOLCOLL_TEXT_END - RES_POOLCOLL_TEXT_BEGIN, "### unexpected size!");
         pResId = STR_POOLCOLL_TEXT_ARY[nId - RES_POOLCOLL_TEXT_BEGIN];
     }
     else if (RES_POOLCOLL_LISTS_BEGIN <= nId && nId < RES_POOLCOLL_LISTS_END)
     {
-        static_assert(SAL_N_ELEMENTS(STR_POOLCOLL_LISTS_ARY) == RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN, "### unexpected size!");
+        static_assert(std::ssize(STR_POOLCOLL_LISTS_ARY) == RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN, "### unexpected size!");
         pResId = STR_POOLCOLL_LISTS_ARY[nId - RES_POOLCOLL_LISTS_BEGIN];
     }
     else if (RES_POOLCOLL_EXTRA_BEGIN <= nId && nId < RES_POOLCOLL_EXTRA_END)
     {
-        static_assert(SAL_N_ELEMENTS(STR_POOLCOLL_EXTRA_ARY) == RES_POOLCOLL_EXTRA_END - RES_POOLCOLL_EXTRA_BEGIN, "### unexpected size!");
+        static_assert(std::ssize(STR_POOLCOLL_EXTRA_ARY) == RES_POOLCOLL_EXTRA_END - RES_POOLCOLL_EXTRA_BEGIN, "### unexpected size!");
         pResId = STR_POOLCOLL_EXTRA_ARY[nId - RES_POOLCOLL_EXTRA_BEGIN];
     }
     else if (RES_POOLCOLL_REGISTER_BEGIN <= nId && nId < RES_POOLCOLL_REGISTER_END)
     {
-        static_assert(SAL_N_ELEMENTS(STR_POOLCOLL_REGISTER_ARY) == RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN, "### unexpected size!");
+        static_assert(std::ssize(STR_POOLCOLL_REGISTER_ARY) == RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN, "### unexpected size!");
         pResId = STR_POOLCOLL_REGISTER_ARY[nId - RES_POOLCOLL_REGISTER_BEGIN];
     }
     else if (RES_POOLCOLL_DOC_BEGIN <= nId && nId < RES_POOLCOLL_DOC_END)
     {
-        static_assert(SAL_N_ELEMENTS(STR_POOLCOLL_DOC_ARY) == RES_POOLCOLL_DOC_END - RES_POOLCOLL_DOC_BEGIN, "### unexpected size!");
+        static_assert(std::ssize(STR_POOLCOLL_DOC_ARY) == RES_POOLCOLL_DOC_END - RES_POOLCOLL_DOC_BEGIN, "### unexpected size!");
         pResId = STR_POOLCOLL_DOC_ARY[nId - RES_POOLCOLL_DOC_BEGIN];
     }
     else if (RES_POOLCOLL_HTML_BEGIN <= nId && nId < RES_POOLCOLL_HTML_END)
     {
-        static_assert(SAL_N_ELEMENTS(STR_POOLCOLL_HTML_ARY) == RES_POOLCOLL_HTML_END - RES_POOLCOLL_HTML_BEGIN, "### unexpected size!");
+        static_assert(std::ssize(STR_POOLCOLL_HTML_ARY) == RES_POOLCOLL_HTML_END - RES_POOLCOLL_HTML_BEGIN, "### unexpected size!");
         pResId = STR_POOLCOLL_HTML_ARY[nId - RES_POOLCOLL_HTML_BEGIN];
     }
 
@@ -1810,7 +1810,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
 
     SwPageDesc* pNewPgDsc = nullptr;
     {
-        static_assert(SAL_N_ELEMENTS(STR_POOLPAGE_ARY) == RES_POOLPAGE_END - RES_POOLPAGE_BEGIN, "### unexpected size!");
+        static_assert(std::ssize(STR_POOLPAGE_ARY) == RES_POOLPAGE_END - RES_POOLPAGE_BEGIN, "### unexpected size!");
         const OUString aNm(SwResId(STR_POOLPAGE_ARY[nId - RES_POOLPAGE_BEGIN]));
         const bool bIsModified = m_rDoc.getIDocumentState().IsModified();
 
@@ -1986,7 +1986,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
         nId = RES_POOLNUMRULE_BEGIN;
     }
 
-    static_assert(SAL_N_ELEMENTS(STR_POOLNUMRULE_NUM_ARY) == RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN, "### unexpected size!");
+    static_assert(std::ssize(STR_POOLNUMRULE_NUM_ARY) == RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN, "### unexpected size!");
     OUString aNm(SwResId(STR_POOLNUMRULE_NUM_ARY[nId - RES_POOLNUMRULE_BEGIN]));
 
     SwCharFormat *pNumCFormat = nullptr, *pBullCFormat = nullptr;
@@ -2672,7 +2672,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetTextUINameArray()
     auto it = s_aTextUINameArray.find(rCurrentLanguage);
     if (it == s_aTextUINameArray.end())
         it = s_aTextUINameArray.emplace(rCurrentLanguage,
-                lcl_NewUINameArray(STR_POOLCOLL_TEXT_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_TEXT_ARY))).first;
+                lcl_NewUINameArray(STR_POOLCOLL_TEXT_ARY, std::ssize(STR_POOLCOLL_TEXT_ARY))).first;
 
     return it->second;
 }
@@ -2686,7 +2686,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetListsUINameArray()
     auto it = s_aListsUINameArray.find(rCurrentLanguage);
     if (it == s_aListsUINameArray.end())
         it = s_aListsUINameArray.emplace(rCurrentLanguage,
-            lcl_NewUINameArray(STR_POOLCOLL_LISTS_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_LISTS_ARY))).first;
+            lcl_NewUINameArray(STR_POOLCOLL_LISTS_ARY, std::ssize(STR_POOLCOLL_LISTS_ARY))).first;
 
     return it->second;
 }
@@ -2700,7 +2700,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetExtraUINameArray()
     auto it = s_aExtraUINameArray.find(rCurrentLanguage);
     if (it == s_aExtraUINameArray.end())
         it = s_aExtraUINameArray.emplace(rCurrentLanguage,
-            lcl_NewUINameArray(STR_POOLCOLL_EXTRA_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_EXTRA_ARY))).first;
+            lcl_NewUINameArray(STR_POOLCOLL_EXTRA_ARY, std::ssize(STR_POOLCOLL_EXTRA_ARY))).first;
 
     return it->second;
 }
@@ -2714,7 +2714,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetRegisterUINameArray()
     auto it = s_aRegisterUINameArray.find(rCurrentLanguage);
     if (it == s_aRegisterUINameArray.end())
         it = s_aRegisterUINameArray.emplace(rCurrentLanguage,
-            lcl_NewUINameArray(STR_POOLCOLL_REGISTER_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_REGISTER_ARY))).first;
+            lcl_NewUINameArray(STR_POOLCOLL_REGISTER_ARY, std::ssize(STR_POOLCOLL_REGISTER_ARY))).first;
 
     return it->second;
 }
@@ -2728,7 +2728,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetDocUINameArray()
     auto it = s_aDocUINameArray.find(rCurrentLanguage);
     if (it == s_aDocUINameArray.end())
         it = s_aDocUINameArray.emplace(rCurrentLanguage,
-            lcl_NewUINameArray(STR_POOLCOLL_DOC_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_DOC_ARY))).first;
+            lcl_NewUINameArray(STR_POOLCOLL_DOC_ARY, std::ssize(STR_POOLCOLL_DOC_ARY))).first;
 
     return it->second;
 }
@@ -2742,7 +2742,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetHTMLUINameArray()
     auto it = s_aHTMLUINameArray.find(rCurrentLanguage);
     if (it == s_aHTMLUINameArray.end())
         it = s_aHTMLUINameArray.emplace(rCurrentLanguage,
-            lcl_NewUINameArray(STR_POOLCOLL_HTML_ARY, SAL_N_ELEMENTS(STR_POOLCOLL_HTML_ARY))).first;
+            lcl_NewUINameArray(STR_POOLCOLL_HTML_ARY, std::ssize(STR_POOLCOLL_HTML_ARY))).first;
 
     return it->second;
 }
@@ -2756,7 +2756,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetFrameFormatUINameArray()
     auto it = s_aFrameFormatUINameArray.find(rCurrentLanguage);
     if (it == s_aFrameFormatUINameArray.end())
         it = s_aFrameFormatUINameArray.emplace(rCurrentLanguage,
-            lcl_NewUINameArray(STR_POOLFRM_ARY, SAL_N_ELEMENTS(STR_POOLFRM_ARY))).first;
+            lcl_NewUINameArray(STR_POOLFRM_ARY, std::ssize(STR_POOLFRM_ARY))).first;
 
     return it->second;
 }
@@ -2770,7 +2770,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetChrFormatUINameArray()
     auto it = s_aChrFormatUINameArray.find(rCurrentLanguage);
     if (it == s_aChrFormatUINameArray.end())
         it = s_aChrFormatUINameArray.emplace(rCurrentLanguage,
-            lcl_NewUINameArray(STR_POOLCHR_ARY, SAL_N_ELEMENTS(STR_POOLCHR_ARY))).first;
+            lcl_NewUINameArray(STR_POOLCHR_ARY, std::ssize(STR_POOLCHR_ARY))).first;
 
     return it->second;
 }
@@ -2784,7 +2784,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetHTMLChrFormatUINameArray()
     auto it = s_aHTMLChrFormatUINameArray.find(rCurrentLanguage);
     if (it == s_aHTMLChrFormatUINameArray.end())
         it = s_aHTMLChrFormatUINameArray.emplace(rCurrentLanguage,
-            lcl_NewUINameArray(STR_POOLCHR_HTML_ARY, SAL_N_ELEMENTS(STR_POOLCHR_HTML_ARY))).first;
+            lcl_NewUINameArray(STR_POOLCHR_HTML_ARY, std::ssize(STR_POOLCHR_HTML_ARY))).first;
 
     return it->second;
 }
@@ -2798,7 +2798,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetPageDescUINameArray()
     auto it = s_aPageDescUINameArray.find(rCurrentLanguage);
     if (it == s_aPageDescUINameArray.end())
         it = s_aPageDescUINameArray.emplace(rCurrentLanguage,
-            lcl_NewUINameArray(STR_POOLPAGE_ARY, SAL_N_ELEMENTS(STR_POOLPAGE_ARY))).first;
+            lcl_NewUINameArray(STR_POOLPAGE_ARY, std::ssize(STR_POOLPAGE_ARY))).first;
 
     return it->second;
 }
@@ -2812,7 +2812,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetNumRuleUINameArray()
     auto it = s_aNumRuleUINameArray.find(rCurrentLanguage);
     if (it == s_aNumRuleUINameArray.end())
         it = s_aNumRuleUINameArray.emplace(rCurrentLanguage,
-            lcl_NewUINameArray(STR_POOLNUMRULE_NUM_ARY, SAL_N_ELEMENTS(STR_POOLNUMRULE_NUM_ARY))).first;
+            lcl_NewUINameArray(STR_POOLNUMRULE_NUM_ARY, std::ssize(STR_POOLNUMRULE_NUM_ARY))).first;
 
     return it->second;
 }
@@ -2827,8 +2827,8 @@ const std::vector<OUString>& SwStyleNameMapper::GetTableStyleUINameArray()
     if (it == s_aTableStyleUINameArray.end())
         it = s_aTableStyleUINameArray.emplace(rCurrentLanguage,
             // 1 Writer resource string (XXX if this ever changes rather use offset math)
-            lcl_NewUINameArray(STR_TABSTYLE_ARY, SAL_N_ELEMENTS(STR_TABSTYLE_ARY),
-                    static_cast<size_t>(SAL_N_ELEMENTS(STR_TABSTYLE_ARY) - 1))).first;
+            lcl_NewUINameArray(STR_TABSTYLE_ARY, std::ssize(STR_TABSTYLE_ARY),
+                    static_cast<size_t>(std::ssize(STR_TABSTYLE_ARY) - 1))).first;
 
     return it->second;
 }
