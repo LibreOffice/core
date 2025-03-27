@@ -540,7 +540,7 @@ void CommentsPanel::deleteComment(sal_uInt32 nId)
 
     sal_uInt32 nRootId = getPostItId(pRootNote);
 
-    if (mpThreadsMap.find(nRootId) == mpThreadsMap.end())
+    if (!mpThreadsMap.contains(nRootId))
     {
         SAL_WARN("sw",
                  "Comments Panel is unable to delete comment: Referenced thread does not exist!");
@@ -571,7 +571,7 @@ void CommentsPanel::deleteComment(sal_uInt32 nId)
 void CommentsPanel::setResolvedStatus(const sw::annotation::SwAnnotationWin* pAnnotationWin)
 {
     sal_uInt32 nId = getPostItId(pAnnotationWin);
-    if (mpCommentsMap.find(nId) == mpCommentsMap.end())
+    if (!mpCommentsMap.contains(nId))
         return;
     auto& pComment = mpCommentsMap[nId];
     if (!pComment)
