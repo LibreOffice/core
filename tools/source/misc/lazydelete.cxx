@@ -19,12 +19,13 @@
 
 #include <tools/lazydelete.hxx>
 #include <sal/log.hxx>
+#include <atomic>
 #include <vector>
 
 namespace tools
 {
 static std::vector<tools::DeleteOnDeinitBase*> gDeinitDeleteList;
-static volatile bool gShutdown = false;
+static std::atomic<bool> gShutdown = false;
 
 DeleteOnDeinitBase::~DeleteOnDeinitBase() { std::erase(gDeinitDeleteList, this); }
 
