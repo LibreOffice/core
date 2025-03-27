@@ -273,11 +273,20 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
     Reference< text::XTextCursor > xAt = xText->createTextCursor();
 
     applyTableCellProperties( rxCell, *this );
+
+    Reference<XPropertySet> xPropSet(rxCell, UNO_QUERY_THROW);
+
+    PropertyMap& rTextBodyPropertyMap = getTextBody()->getTextProperties().maPropertyMap;
+    if (rTextBodyPropertyMap.hasProperty(PROP_FontIndependentLineSpacing))
+    {
+        if (rTextBodyPropertyMap.getProperty(PROP_FontIndependentLineSpacing).get<bool>())
+            xPropSet->setPropertyValue(u"FontIndependentLineSpacing"_ustr, Any(true));
+    }
+
     TextCharacterProperties aTextStyleProps;
     xAt->gotoStart( true );
     xAt->gotoEnd( true );
 
-    Reference< XPropertySet > xPropSet( rxCell, UNO_QUERY_THROW );
     oox::drawingml::FillProperties aFillProperties;
     oox::drawingml::LineProperties aLinePropertiesLeft;
     oox::drawingml::LineProperties aLinePropertiesRight;

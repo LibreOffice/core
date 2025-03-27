@@ -39,6 +39,7 @@
 #include <sdr/properties/cellproperties.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/writingmodeitem.hxx>
+#include <svx/sdtfchim.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/unoshtxt.hxx>
@@ -82,6 +83,7 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
         FILL_PROPERTIES
 //      { "HasLevels",                    OWN_ATTR_HASLEVELS,             cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY,      0},
         { u"Style"_ustr,                        OWN_ATTR_STYLE,                 cppu::UnoType< css::style::XStyle >::get(),                                    css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { UNO_NAME_TEXT_FONTINDEPENDENTLINESPACING, SDRATTR_TEXT_USEFIXEDCELLHEIGHT, cppu::UnoType<bool>::get(), 0, 0},
         { UNO_NAME_TEXT_WRITINGMODE,      SDRATTR_TEXTDIRECTION,          cppu::UnoType<css::text::WritingMode>::get(),                         0,      0},
         { UNO_NAME_TEXT_HORZADJUST,       SDRATTR_TEXT_HORZADJUST,        cppu::UnoType<css::drawing::TextHorizontalAdjust>::get(),  0,      0},
         { UNO_NAME_TEXT_LEFTDIST,         SDRATTR_TEXT_LEFTDIST,          cppu::UnoType<sal_Int32>::get(),        0,      0, PropertyMoreFlags::METRIC_ITEM},
@@ -704,15 +706,21 @@ sal_Int32 Cell::getMinimumHeight()
     {
         Outliner& rOutliner=rTableObj.ImpGetDrawOutliner();
         rOutliner.SetPaperSize(aSize);
-        rOutliner.SetUpdateLayout(true);
         ForceOutlinerParaObject( OutlinerMode::TextObject );
 
         if( GetOutlinerParaObject() )
         {
+            rOutliner.SetFixedCellHeight(
+                GetItemSet().Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
             rOutliner.SetText(*GetOutlinerParaObject());
         }
+
+        rOutliner.SetUpdateLayout(true);
         nMinimumHeight=rOutliner.GetTextHeight()+1;
+
+        // cleanup outliner
         rOutliner.Clear();
+        rOutliner.SetFixedCellHeight(false);
     }
 
     nMinimumHeight += GetTextUpperDistance() + GetTextLowerDistance();

@@ -24,6 +24,7 @@
 #include <drawingml/misccontexts.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 
 using namespace ::oox::core;
@@ -56,6 +57,8 @@ TableCellContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeLis
     case A_TOKEN( txBody ):     // CT_TextBody
         {
             oox::drawingml::TextBodyPtr xTextBody = std::make_shared<oox::drawingml::TextBody>();
+            xTextBody->getTextProperties().maPropertyMap.setProperty(
+                PROP_FontIndependentLineSpacing, true);
             mrTableCell.setTextBody( xTextBody );
             return new oox::drawingml::TextBodyContext( *this, *xTextBody );
         }
