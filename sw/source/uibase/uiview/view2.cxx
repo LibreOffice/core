@@ -888,6 +888,7 @@ void SwView::Execute(SfxRequest &rReq)
         case FN_REDLINE_ACCEPT_TONEXT:
         case FN_REDLINE_REJECT_TONEXT:
         case FN_REDLINE_REINSTATE_DIRECT:
+        case FN_REDLINE_REINSTATE_TONEXT:
         {
             SwDoc *pDoc = m_pWrtShell->GetDoc();
             SwPaM *pCursor = m_pWrtShell->GetCursor();
@@ -906,7 +907,7 @@ void SwView::Execute(SfxRequest &rReq)
             if( pCursor->HasMark() && nRedline == SwRedlineTable::npos)
             {
                 bool bAccept = FN_REDLINE_ACCEPT_DIRECT == nSlot || FN_REDLINE_ACCEPT_TONEXT == nSlot;
-                bool bReinstate = nSlot == FN_REDLINE_REINSTATE_DIRECT;
+                bool bReinstate = nSlot == FN_REDLINE_REINSTATE_DIRECT || nSlot == FN_REDLINE_REINSTATE_TONEXT;
                 SwUndoId eUndoId = bAccept ? SwUndoId::ACCEPT_REDLINE : SwUndoId::REJECT_REDLINE;
                 SwWrtShell& rSh = GetWrtShell();
                 SwRewriter aRewriter;
@@ -1072,7 +1073,7 @@ void SwView::Execute(SfxRequest &rReq)
                 {
                     if (FN_REDLINE_ACCEPT_DIRECT == nSlot || FN_REDLINE_ACCEPT_TONEXT == nSlot)
                         m_pWrtShell->AcceptRedline(nRedline);
-                    else if (nSlot == FN_REDLINE_REINSTATE_DIRECT)
+                    else if (nSlot == FN_REDLINE_REINSTATE_DIRECT || nSlot == FN_REDLINE_REINSTATE_TONEXT)
                     {
                         m_pWrtShell->ReinstateRedline(nRedline);
                     }
@@ -1080,8 +1081,11 @@ void SwView::Execute(SfxRequest &rReq)
                         m_pWrtShell->RejectRedline(nRedline);
                 }
             }
-            if (FN_REDLINE_ACCEPT_TONEXT == nSlot || FN_REDLINE_REJECT_TONEXT == nSlot)
+            switch (nSlot)
             {
+            case FN_REDLINE_ACCEPT_TONEXT:
+            case FN_REDLINE_REJECT_TONEXT:
+            case FN_REDLINE_REINSTATE_TONEXT:
                 // Go to next change after accepting or rejecting one (tdf#101977)
                 GetViewFrame().GetDispatcher()->Execute(FN_REDLINE_NEXT_CHANGE, SfxCallMode::ASYNCHRON);
             }
