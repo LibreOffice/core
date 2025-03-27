@@ -1627,12 +1627,6 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
     m_states.emplace(LOK_CALLBACK_RULER_UPDATE, "NIL"_ostr);
     m_states.emplace(LOK_CALLBACK_VERTICAL_RULER_UPDATE, "NIL"_ostr);
     m_states.emplace(LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE, "NIL"_ostr);
-
-    if (char* pViewRenderState = pDocument->pClass->getCommandValues(pDocument, ".uno:ViewRenderState"))
-    {
-        m_aViewRenderState = pViewRenderState;
-        free(pViewRenderState);
-    }
 }
 
 void CallbackFlushHandler::stop()
@@ -1721,34 +1715,7 @@ void CallbackFlushHandler::libreOfficeKitViewCallbackWithViewId(int nType, const
 
 void CallbackFlushHandler::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode)
 {
-    tools::Rectangle& rPaintedTiles = m_aPaintedTiles[nPart][nMode];
-    if (rPaintedTiles.IsEmpty())
-    {
-        // We have not sent any tiles: don't send invalidations.
-        return;
-    }
-
-    tools::Rectangle aRect;
-    if (pRect)
-    {
-        // We got an invalidate: crop it against the bbox.
-        aRect = *pRect;
-        aRect.Intersection(rPaintedTiles);
-        if (aRect.IsEmpty())
-        {
-            return;
-        }
-    }
-    else
-    {
-        // EMPTY invalidation: reset the bbox.
-        rPaintedTiles = tools::Rectangle();
-        // nullptr pRect means: invalidate everything.
-        aRect = RectangleAndPart::emptyAllRectangle;
-    }
-
-    // RectangleAndPart ctor doesn't store &aRect, so this is OK.
-    CallbackData callbackData(&aRect, nPart, nMode);
+    CallbackData callbackData(pRect, nPart, nMode);
     queue(LOK_CALLBACK_INVALIDATE_TILES, callbackData);
 }
 
@@ -1836,10 +1803,6 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
     else if (type == LOK_CALLBACK_COMMENT)
     {
         bIsComment = true;
-    }
-    else if (type == LOK_CALLBACK_VIEW_RENDER_STATE)
-    {
-        m_aViewRenderState = aCallbackData.getPayload();
     }
 
     if (callbacksDisabled() && !bIsChartActive && !bIsComment)
@@ -2655,13 +2618,6 @@ void CallbackFlushHandler::addViewStates(int viewId)
 void CallbackFlushHandler::removeViewStates(int viewId)
 {
     m_viewStates.erase(viewId);
-}
-
-void CallbackFlushHandler::tilePainted(int nPart, int nMode, const tools::Rectangle& rRectangle)
-{
-    // Painted a new tile: grow the bbox.
-    tools::Rectangle& rPaintedTiles = m_aPaintedTiles[nPart][nMode];
-    rPaintedTiles.Union(rRectangle);
 }
 
 
@@ -4512,30 +4468,6 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
     }
 
     enableViewCallbacks(pDocument, nOrigViewId);
-
-    // Inform all views with the same view render state about the paint, so they know if makes sense
-    // to invalidate those areas later.
-    tools::Rectangle aRectangle{Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight)};
-    pDocument->updateViewsForPaintedTile(nOrigViewId, nPart, nMode, aRectangle);
-}
-
-void LibLODocument_Impl::updateViewsForPaintedTile(int nOrigViewId, int nPart, int nMode, const tools::Rectangle& rRectangle)
-{
-    auto it = mpCallbackFlushHandlers.find(nOrigViewId);
-    if (it == mpCallbackFlushHandlers.end())
-    {
-        return;
-    }
-
-    const OString& rViewRenderState = it->second->getViewRenderState();
-    for (const auto& rHandler : mpCallbackFlushHandlers)
-    {
-        if (rHandler.second->getViewRenderState() != rViewRenderState)
-        {
-            continue;
-        }
-        rHandler.second->tilePainted(nPart, nMode, rRectangle);
-    }
 }
 
 static int doc_getTileMode(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
