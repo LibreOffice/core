@@ -67,8 +67,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::document;
 
-const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
-
 // increase size of the text in the buttons on the left fMultiplier-times
 float const fMultiplier = 1.4f;
 
