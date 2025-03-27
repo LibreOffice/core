@@ -137,15 +137,10 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
         if (!cur)
         {
             static std::string fsroot('\'' + src.toUTF8() + '\'');
-#if defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable:4996)
-#endif
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
             xmlSubstituteEntitiesDefault(1);
             xmlLoadExtDtdDefaultValue = 1;
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
+SAL_WNODEPRECATED_DECLARATIONS_POP
             cur = xsltParseStylesheetFile(reinterpret_cast<const xmlChar *>(resEmbStylesheet.native_file_string().c_str()));
 
             int nbparams = 0;
