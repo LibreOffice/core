@@ -305,10 +305,8 @@ private:
         state is checked.
 
         This variable is monitored by the solar mutex!
-
-        Note: declared volatile to enable double-check-locking
      */
-    volatile bool          m_bStateSetInitialized;
+    bool          m_bStateSetInitialized;
 };
 
 }  // namespace chart
