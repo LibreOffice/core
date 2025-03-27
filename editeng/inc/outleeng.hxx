@@ -35,23 +35,13 @@ public:
                         OutlinerEditEng( Outliner* pOwner, SfxItemPool* pPool );
                         virtual ~OutlinerEditEng() override;
 
-    virtual void        PaintingFirstLine(sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin, Degree10 nOrientation, OutputDevice& rOutDev) override;
+    virtual void        PaintingFirstLine(sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin, Degree10 nOrientation, OutputDevice& rOutDev,
+        const std::function<void(const DrawPortionInfo&)>& rDrawPortion,
+        const std::function<void(const DrawBulletInfo&)>& rDrawBullet) override;
 
     virtual void        ParagraphInserted( sal_Int32 nNewParagraph ) override;
     virtual void        ParagraphDeleted( sal_Int32 nDeletedParagraph ) override;
     virtual void        ParagraphConnected( sal_Int32 nLeftParagraph, sal_Int32 nRightParagraph ) override;
-
-    virtual void DrawingText( const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart,
-                              sal_Int32 nTextLen, KernArraySpan pDXArray,
-                              std::span<const sal_Bool> pKashidaArray, const SvxFont& rFont,
-                              sal_Int32 nPara, sal_uInt8 nRightToLeft,
-                              const EEngineData::WrongSpellVector* pWrongSpellVector,
-                              const SvxFieldData* pFieldData,
-                              bool bEndOfLine,
-                              bool bEndOfParagraph,
-                              const css::lang::Locale* pLocale,
-                              const Color& rOverlineColor,
-                              const Color& rTextLineColor) override;
 
     virtual void        StyleSheetChanged( SfxStyleSheet* pStyle ) override;
     virtual void        ParaAttribsChanged( sal_Int32 nPara ) override;

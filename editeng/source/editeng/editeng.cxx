@@ -1071,8 +1071,13 @@ SvxFont EditEngine::GetStandardSvxFont( sal_Int32 nPara )
     return pNode->GetCharAttribs().GetDefFont();
 }
 
-void EditEngine::StripPortions()
+void EditEngine::StripPortions(
+    const std::function<void(const DrawPortionInfo&)>& rDrawPortion,
+    const std::function<void(const DrawBulletInfo&)>& rDrawBullet)
 {
+    if (!rDrawPortion && !rDrawBullet)
+        return;
+
     ScopedVclPtrInstance< VirtualDevice > aTmpDev;
     tools::Rectangle aBigRect( Point( 0, 0 ), Size( 0x7FFFFFFF, 0x7FFFFFFF ) );
     if ( IsEffectivelyVertical() )
@@ -1088,7 +1093,8 @@ void EditEngine::StripPortions()
             aBigRect.SetBottom( 0 );
         }
     }
-    getImpl().Paint(*aTmpDev, aBigRect, Point(), true);
+
+    getImpl().Paint(*aTmpDev, aBigRect, Point(), 0_deg10, rDrawPortion, rDrawBullet);
 }
 
 void EditEngine::GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList )
@@ -1578,16 +1584,9 @@ EditEngine::CreateTransferable(const ESelection& rSelection)
 
 // ======================    Virtual Methods    ========================
 
-void EditEngine::DrawingText( const Point&, const OUString&, sal_Int32, sal_Int32,
-                              KernArraySpan, std::span<const sal_Bool>,
-                              const SvxFont&, sal_Int32 /*nPara*/, sal_uInt8 /*nRightToLeft*/,
-                              const EEngineData::WrongSpellVector*, const SvxFieldData*, bool, bool,
-                              const css::lang::Locale*, const Color&, const Color&)
-
-{
-}
-
-void EditEngine::PaintingFirstLine(sal_Int32, const Point&, const Point&, Degree10, OutputDevice&)
+void EditEngine::PaintingFirstLine(sal_Int32, const Point&, const Point&, Degree10, OutputDevice&,
+    const std::function<void(const DrawPortionInfo&)>&,
+    const std::function<void(const DrawBulletInfo&)>&)
 {
 }
 

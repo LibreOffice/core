@@ -67,107 +67,76 @@
 using namespace com::sun::star;
 
 // helpers
-
 namespace
 {
     rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> buildTextPortionPrimitive(const DrawPortionInfo& rInfo, const OUString& rText,
-                                                                                         const drawinglayer::attribute::FontAttribute& rFontAttribute,
-                                                                                         const std::vector<double>& rDXArray,
-                                                                                         const basegfx::B2DHomMatrix& rNewTransform);
+        const drawinglayer::attribute::FontAttribute& rFontAttribute,
+        const std::vector<double>& rDXArray,
+        const basegfx::B2DHomMatrix& rNewTransform);
 
-    class impTextBreakupHandler
+    // static rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> impCheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive, const DrawPortionInfo& rInfo);
+    rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> CheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive, const DrawPortionInfo& rInfo)
     {
-    private:
-        drawinglayer::primitive2d::Primitive2DContainer             maTextPortionPrimitives;
-        drawinglayer::primitive2d::Primitive2DContainer             maLinePrimitives;
-        drawinglayer::primitive2d::Primitive2DContainer             maParagraphPrimitives;
-
-        SdrOutliner&                                                mrOutliner;
-        basegfx::B2DHomMatrix                                       maNewTransformA;
-        basegfx::B2DHomMatrix                                       maNewTransformB;
-
-        // the visible area for contour text decomposition
-        basegfx::B2DVector                                          maScale;
-
-        // ClipRange for BlockText decomposition; only text portions completely
-        // inside are to be accepted, so this is different from geometric clipping
-        // (which would allow e.g. upper parts of portions to remain). Only used for
-        // BlockText (see there)
-        basegfx::B2DRange                                           maClipRange;
-
-        DECL_LINK(decomposeContourTextPrimitive, DrawPortionInfo*, void);
-        DECL_LINK(decomposeBlockTextPrimitive, DrawPortionInfo*, void);
-        DECL_LINK(decomposeStretchTextPrimitive, DrawPortionInfo*, void);
-
-        DECL_LINK(decomposeContourBulletPrimitive, DrawBulletInfo*, void);
-        DECL_LINK(decomposeBlockBulletPrimitive, DrawBulletInfo*, void);
-        DECL_LINK(decomposeStretchBulletPrimitive, DrawBulletInfo*, void);
-
-        static rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> impCheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive, const DrawPortionInfo& rInfo);
-        void impFlushTextPortionPrimitivesToLinePrimitives();
-        void impFlushLinePrimitivesToParagraphPrimitives(sal_Int32 nPara);
-        void impHandleDrawPortionInfo(const DrawPortionInfo& rInfo);
-        void impHandleDrawBulletInfo(const DrawBulletInfo& rInfo);
-
-    public:
-        explicit impTextBreakupHandler(SdrOutliner& rOutliner)
-        :   mrOutliner(rOutliner)
+        rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> xRet = pPrimitive;
+        if(rInfo.mpFieldData)
         {
+            // Support for FIELD_SEQ_BEGIN, FIELD_SEQ_END. If used, create a TextHierarchyFieldPrimitive2D
+            // which holds the field type and, if applicable, the URL
+            const SvxURLField* pURLField = dynamic_cast< const SvxURLField* >(rInfo.mpFieldData);
+            const SvxPageField* pPageField = dynamic_cast< const SvxPageField* >(rInfo.mpFieldData);
+
+            // embed current primitive to a sequence
+            drawinglayer::primitive2d::Primitive2DContainer aSequence;
+
+            if(pPrimitive)
+            {
+                aSequence.resize(1);
+                aSequence[0] = drawinglayer::primitive2d::Primitive2DReference(pPrimitive);
+            }
+
+            if(pURLField)
+            {
+                // extended this to hold more of the contents of the original
+                // SvxURLField since that stuff is still used in HitTest and e.g. Calc
+                std::vector< std::pair< OUString, OUString>> meValues;
+                meValues.emplace_back("URL", pURLField->GetURL());
+                meValues.emplace_back("Representation", pURLField->GetRepresentation());
+                meValues.emplace_back("TargetFrame", pURLField->GetTargetFrame());
+                meValues.emplace_back("AltText", pURLField->GetName());
+                meValues.emplace_back("SvxURLFormat", OUString::number(static_cast<sal_uInt16>(pURLField->GetFormat())));
+                xRet = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(std::move(aSequence), drawinglayer::primitive2d::FIELD_TYPE_URL, &meValues);
+            }
+            else if(pPageField)
+            {
+                xRet = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(std::move(aSequence), drawinglayer::primitive2d::FIELD_TYPE_PAGE);
+            }
+            else
+            {
+                xRet = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(std::move(aSequence), drawinglayer::primitive2d::FIELD_TYPE_COMMON);
+            }
         }
 
-        void decomposeContourTextPrimitive(const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB, const basegfx::B2DVector& rScale)
-        {
-            maScale = rScale;
-            maNewTransformA = rNewTransformA;
-            maNewTransformB = rNewTransformB;
-            mrOutliner.SetDrawPortionHdl(LINK(this, impTextBreakupHandler, decomposeContourTextPrimitive));
-            mrOutliner.SetDrawBulletHdl(LINK(this, impTextBreakupHandler, decomposeContourBulletPrimitive));
-            mrOutliner.StripPortions();
-            mrOutliner.SetDrawPortionHdl(Link<DrawPortionInfo*,void>());
-            mrOutliner.SetDrawBulletHdl(Link<DrawBulletInfo*,void>());
-        }
-
-        void decomposeBlockTextPrimitive(
-            const basegfx::B2DHomMatrix& rNewTransformA,
-            const basegfx::B2DHomMatrix& rNewTransformB,
-            const basegfx::B2DRange& rClipRange)
-        {
-            maNewTransformA = rNewTransformA;
-            maNewTransformB = rNewTransformB;
-            maClipRange = rClipRange;
-            mrOutliner.SetDrawPortionHdl(LINK(this, impTextBreakupHandler, decomposeBlockTextPrimitive));
-            mrOutliner.SetDrawBulletHdl(LINK(this, impTextBreakupHandler, decomposeBlockBulletPrimitive));
-            mrOutliner.StripPortions();
-            mrOutliner.SetDrawPortionHdl(Link<DrawPortionInfo*,void>());
-            mrOutliner.SetDrawBulletHdl(Link<DrawBulletInfo*,void>());
-        }
-
-        void decomposeStretchTextPrimitive(const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB)
-        {
-            maNewTransformA = rNewTransformA;
-            maNewTransformB = rNewTransformB;
-            mrOutliner.SetDrawPortionHdl(LINK(this, impTextBreakupHandler, decomposeStretchTextPrimitive));
-            mrOutliner.SetDrawBulletHdl(LINK(this, impTextBreakupHandler, decomposeStretchBulletPrimitive));
-            mrOutliner.StripPortions();
-            mrOutliner.SetDrawPortionHdl(Link<DrawPortionInfo*,void>());
-            mrOutliner.SetDrawBulletHdl(Link<DrawBulletInfo*,void>());
-        }
-
-        drawinglayer::primitive2d::Primitive2DContainer extractPrimitive2DSequence();
-
-        void impCreateTextPortionPrimitive(const DrawPortionInfo& rInfo);
-    };
+        return xRet;
+    }
 
     class DoCapitalsDrawPortionInfo : public SvxDoCapitals
     {
     private:
-        impTextBreakupHandler& m_rHandler;
+        drawinglayer::primitive2d::Primitive2DContainer& mrTarget;
+        const basegfx::B2DHomMatrix& mrNewTransformA;
+        const basegfx::B2DHomMatrix& mrNewTransformB;
         const DrawPortionInfo& m_rInfo;
         SvxFont m_aFont;
     public:
-        DoCapitalsDrawPortionInfo(impTextBreakupHandler& rHandler, const DrawPortionInfo& rInfo)
-            : SvxDoCapitals(rInfo.maText, rInfo.mnTextStart, rInfo.mnTextLen)
-            , m_rHandler(rHandler)
+        DoCapitalsDrawPortionInfo(
+            drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+            const basegfx::B2DHomMatrix& rNewTransformA,
+            const basegfx::B2DHomMatrix& rNewTransformB,
+            const DrawPortionInfo& rInfo)
+        : SvxDoCapitals(rInfo.maText, rInfo.mnTextStart, rInfo.mnTextLen)
+            , mrTarget(rTarget)
+            , mrNewTransformA(rNewTransformA)
+            , mrNewTransformB(rNewTransformB)
             , m_rInfo(rInfo)
             , m_aFont(rInfo.mrFont)
         {
@@ -182,7 +151,7 @@ namespace
             m_aFont.SetCaseMap(SvxCaseMap::NotMapped); /* otherwise this would call itself */
         }
         virtual void Do( const OUString &rSpanTxt, const sal_Int32 nSpanIdx,
-                         const sal_Int32 nSpanLen, const bool bUpper ) override
+                        const sal_Int32 nSpanLen, const bool bUpper ) override
         {
             sal_uInt8 nProp(0);
             if (!bUpper)
@@ -206,258 +175,425 @@ namespace
                 std::span<const sal_Bool>();
 
             DrawPortionInfo aInfo(aStartPos, rSpanTxt,
-                                  nSpanIdx, nSpanLen,
-                                  m_aFont, m_rInfo.mnPara,
-                                  aDXArray, aKashidaArray,
-                                  nullptr, /* no spelling in subportion, handled outside */
-                                  nullptr, /* no field in subportion, handled outside */
-                                  m_rInfo.mpLocale, m_rInfo.maOverlineColor, m_rInfo.maTextLineColor,
-                                  m_rInfo.mnBiDiLevel,
-                                  false, false, false);
+                                nSpanIdx, nSpanLen,
+                                aDXArray, aKashidaArray,
+                                m_aFont, m_rInfo.mnPara,
+                                m_rInfo.mnBiDiLevel,
+                                nullptr, /* no spelling in subportion, handled outside */
+                                nullptr, /* no field in subportion, handled outside */
+                                false, false, false,
+                                m_rInfo.mpLocale, m_rInfo.maOverlineColor, m_rInfo.maTextLineColor);
 
-            m_rHandler.impCreateTextPortionPrimitive(aInfo);
+            CreateTextPortionPrimitivesFromDrawPortionInfo(
+                mrTarget,
+                mrNewTransformA,
+                mrNewTransformB,
+                aInfo);
 
             if (!bUpper)
                 m_aFont.SetPropr(nProp);
         }
     };
+} // end of anonymous namespace
 
-    void impTextBreakupHandler::impCreateTextPortionPrimitive(const DrawPortionInfo& rInfo)
+void CreateTextPortionPrimitivesFromDrawPortionInfo(
+    drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+    const basegfx::B2DHomMatrix& rNewTransformA,
+    const basegfx::B2DHomMatrix& rNewTransformB,
+    const DrawPortionInfo& rInfo)
+{
+    if(rInfo.maText.isEmpty() || !rInfo.mnTextLen)
+        return;
+
+    basegfx::B2DVector aFontScaling;
+    drawinglayer::attribute::FontAttribute aFontAttribute(
+        drawinglayer::primitive2d::getFontAttributeFromVclFont(
+            aFontScaling,
+            rInfo.mrFont,
+            rInfo.IsRTL(),
+            false));
+    basegfx::B2DHomMatrix aNewTransform;
+
+    // add font scale to new transform
+    aNewTransform.scale(aFontScaling.getX(), aFontScaling.getY());
+
+    // look for proportional font scaling, if necessary, scale accordingly
+    sal_Int8 nPropr(rInfo.mrFont.GetPropr());
+    const double fPropFontFactor(nPropr / 100.0);
+    if (100 != nPropr)
+        aNewTransform.scale(fPropFontFactor, fPropFontFactor);
+
+    // apply font rotate
+    if(rInfo.mrFont.GetOrientation())
     {
-        if(rInfo.maText.isEmpty() || !rInfo.mnTextLen)
-            return;
+        aNewTransform.rotate(-toRadians(rInfo.mrFont.GetOrientation()));
+    }
 
-        basegfx::B2DVector aFontScaling;
-        drawinglayer::attribute::FontAttribute aFontAttribute(
-            drawinglayer::primitive2d::getFontAttributeFromVclFont(
-                aFontScaling,
-                rInfo.mrFont,
-                rInfo.IsRTL(),
-                false));
-        basegfx::B2DHomMatrix aNewTransform;
+    // look for escapement, if necessary, translate accordingly
+    if(rInfo.mrFont.GetEscapement())
+    {
+        sal_Int16 nEsc(rInfo.mrFont.GetEscapement());
 
-        // add font scale to new transform
-        aNewTransform.scale(aFontScaling.getX(), aFontScaling.getY());
-
-        // look for proportional font scaling, if necessary, scale accordingly
-        sal_Int8 nPropr(rInfo.mrFont.GetPropr());
-        const double fPropFontFactor(nPropr / 100.0);
-        if (100 != nPropr)
-            aNewTransform.scale(fPropFontFactor, fPropFontFactor);
-
-        // apply font rotate
-        if(rInfo.mrFont.GetOrientation())
+        if(DFLT_ESC_AUTO_SUPER == nEsc)
         {
-            aNewTransform.rotate(-toRadians(rInfo.mrFont.GetOrientation()));
+            nEsc = .8 * (100 - nPropr);
+            assert (nEsc == DFLT_ESC_SUPER && "I'm sure this formula needs to be changed, but how to confirm that???");
+            nEsc = DFLT_ESC_SUPER;
+        }
+        else if(DFLT_ESC_AUTO_SUB == nEsc)
+        {
+            nEsc = .2 * -(100 - nPropr);
+            assert (nEsc == -20 && "I'm sure this formula needs to be changed, but how to confirm that???");
+            nEsc = -20;
         }
 
-        // look for escapement, if necessary, translate accordingly
-        if(rInfo.mrFont.GetEscapement())
+        if(nEsc > MAX_ESC_POS)
         {
-            sal_Int16 nEsc(rInfo.mrFont.GetEscapement());
-
-            if(DFLT_ESC_AUTO_SUPER == nEsc)
-            {
-                nEsc = .8 * (100 - nPropr);
-                assert (nEsc == DFLT_ESC_SUPER && "I'm sure this formula needs to be changed, but how to confirm that???");
-                nEsc = DFLT_ESC_SUPER;
-            }
-            else if(DFLT_ESC_AUTO_SUB == nEsc)
-            {
-                nEsc = .2 * -(100 - nPropr);
-                assert (nEsc == -20 && "I'm sure this formula needs to be changed, but how to confirm that???");
-                nEsc = -20;
-            }
-
-            if(nEsc > MAX_ESC_POS)
-            {
-                nEsc = MAX_ESC_POS;
-            }
-            else if(nEsc < -MAX_ESC_POS)
-            {
-                nEsc = -MAX_ESC_POS;
-            }
-
-            const double fEscapement(nEsc / -100.0);
-            aNewTransform.translate(0.0, fEscapement * aFontScaling.getY());
+            nEsc = MAX_ESC_POS;
+        }
+        else if(nEsc < -MAX_ESC_POS)
+        {
+            nEsc = -MAX_ESC_POS;
         }
 
-        // apply transformA
-        aNewTransform *= maNewTransformA;
+        const double fEscapement(nEsc / -100.0);
+        aNewTransform.translate(0.0, fEscapement * aFontScaling.getY());
+    }
 
-        // apply local offset
-        aNewTransform.translate(rInfo.mrStartPos.X(), rInfo.mrStartPos.Y());
+    // apply transformA
+    aNewTransform *= rNewTransformA;
 
-        // also apply embedding object's transform
-        aNewTransform *= maNewTransformB;
+    // apply local offset
+    aNewTransform.translate(rInfo.mrStartPos.X(), rInfo.mrStartPos.Y());
 
-        // prepare DXArray content. To make it independent from font size (and such from
-        // the text transformation), scale it to unit coordinates
-        ::std::vector< double > aDXArray;
+    // also apply embedding object's transform
+    aNewTransform *= rNewTransformB;
 
-        if (!rInfo.mpDXArray.empty())
+    // prepare DXArray content. To make it independent from font size (and such from
+    // the text transformation), scale it to unit coordinates
+    ::std::vector< double > aDXArray;
+
+    if (!rInfo.mpDXArray.empty())
+    {
+        aDXArray.reserve(rInfo.mnTextLen);
+        for(sal_Int32 a=0; a < rInfo.mnTextLen; a++)
         {
-            aDXArray.reserve(rInfo.mnTextLen);
-            for(sal_Int32 a=0; a < rInfo.mnTextLen; a++)
-            {
-                aDXArray.push_back(rInfo.mpDXArray[a]);
-            }
+            aDXArray.push_back(rInfo.mpDXArray[a]);
         }
+    }
 
-        OUString caseMappedText = rInfo.mrFont.CalcCaseMap(rInfo.maText);
-        rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pNewPrimitive(buildTextPortionPrimitive(rInfo, caseMappedText,
-                                                                                                           aFontAttribute,
-                                                                                                           aDXArray, aNewTransform));
+    OUString caseMappedText = rInfo.mrFont.CalcCaseMap(rInfo.maText);
+    rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pNewPrimitive(buildTextPortionPrimitive(rInfo, caseMappedText,
+                                                                                                        aFontAttribute,
+                                                                                                        aDXArray, aNewTransform));
 
-        bool bSmallCaps = rInfo.mrFont.IsCapital();
-        if (bSmallCaps && rInfo.mpDXArray.empty())
+    bool bSmallCaps = rInfo.mrFont.IsCapital();
+    if (bSmallCaps && rInfo.mpDXArray.empty())
+    {
+        SAL_WARN("svx", "SmallCaps requested with DXArray, abandoning");
+        bSmallCaps = false;
+    }
+    if (bSmallCaps)
+    {
+        // rerun with each sub-portion
+        DoCapitalsDrawPortionInfo aDoDrawPortionInfo(
+            rTarget,
+            rNewTransformA,
+            rNewTransformB,
+            rInfo);
+        rInfo.mrFont.DoOnCapitals(aDoDrawPortionInfo);
+
+        // transfer collected primitives from rTarget to a new container
+        drawinglayer::primitive2d::Primitive2DContainer aContainer = std::move(rTarget);
+
+        // Take any decoration for the whole formatted portion and keep it to get continuous over/under/strike-through
+        if (pNewPrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D)
         {
-            SAL_WARN("svx", "SmallCaps requested with DXArray, abandoning");
-            bSmallCaps = false;
-        }
-        if (bSmallCaps)
-        {
-            // rerun with each sub-portion
-            DoCapitalsDrawPortionInfo aDoDrawPortionInfo(*this, rInfo);
-            rInfo.mrFont.DoOnCapitals(aDoDrawPortionInfo);
+            const drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D* pTCPP =
+                static_cast<const drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D*>(pNewPrimitive.get());
 
-            // transfer collected primitives from maTextPortionPrimitives to a new container
-            drawinglayer::primitive2d::Primitive2DContainer aContainer = std::move(maTextPortionPrimitives);
-
-            // Take any decoration for the whole formatted portion and keep it to get continuous over/under/strike-through
-            if (pNewPrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D)
+            if (pTCPP->getWordLineMode()) // single word mode: 'Individual words' in UI
             {
-                const drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D* pTCPP =
-                    static_cast<const drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D*>(pNewPrimitive.get());
-
-                if (pTCPP->getWordLineMode()) // single word mode: 'Individual words' in UI
+                // Split to single word primitives using TextBreakupHelper
+                drawinglayer::primitive2d::TextBreakupHelper aTextBreakupHelper(*pTCPP);
+                drawinglayer::primitive2d::Primitive2DContainer aBroken(aTextBreakupHelper.extractResult(drawinglayer::primitive2d::BreakupUnit::Word));
+                for (auto& rPortion : aBroken)
                 {
-                    // Split to single word primitives using TextBreakupHelper
-                    drawinglayer::primitive2d::TextBreakupHelper aTextBreakupHelper(*pTCPP);
-                    drawinglayer::primitive2d::Primitive2DContainer aBroken(aTextBreakupHelper.extractResult(drawinglayer::primitive2d::BreakupUnit::Word));
-                    for (auto& rPortion : aBroken)
-                    {
-                        assert(rPortion->getPrimitive2DID() == PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D &&
-                               "TextBreakupHelper generates same output primitive type as input");
+                    assert(rPortion->getPrimitive2DID() == PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D &&
+                            "TextBreakupHelper generates same output primitive type as input");
 
-                        const drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D* pPortion =
-                            static_cast<const drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D*>(rPortion.get());
+                    const drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D* pPortion =
+                        static_cast<const drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D*>(rPortion.get());
 
-                        // create and add decoration
-                        const drawinglayer::primitive2d::Primitive2DContainer& rDecorationGeometryContent(
-                            pPortion->getOrCreateDecorationGeometryContent(
-                                pPortion->getTextTransform(),
-                                caseMappedText,
-                                pPortion->getTextPosition(),
-                                pPortion->getTextLength(),
-                                pPortion->getDXArray()));
-
-                        aContainer.insert(aContainer.end(), rDecorationGeometryContent.begin(), rDecorationGeometryContent.end());
-                    }
-                }
-                else
-                {
                     // create and add decoration
                     const drawinglayer::primitive2d::Primitive2DContainer& rDecorationGeometryContent(
-                        pTCPP->getOrCreateDecorationGeometryContent(
-                            pTCPP->getTextTransform(),
+                        pPortion->getOrCreateDecorationGeometryContent(
+                            pPortion->getTextTransform(),
                             caseMappedText,
-                            rInfo.mnTextStart,
-                            rInfo.mnTextLen,
-                            aDXArray));
+                            pPortion->getTextPosition(),
+                            pPortion->getTextLength(),
+                            pPortion->getDXArray()));
 
                     aContainer.insert(aContainer.end(), rDecorationGeometryContent.begin(), rDecorationGeometryContent.end());
                 }
             }
-
-            pNewPrimitive = new drawinglayer::primitive2d::GroupPrimitive2D(std::move(aContainer));
-        }
-
-        const Color aFontColor(rInfo.mrFont.GetColor());
-        if (aFontColor.IsTransparent())
-        {
-            // Handle semi-transparent text for both the decorated and simple case here.
-            pNewPrimitive = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                drawinglayer::primitive2d::Primitive2DContainer{ pNewPrimitive },
-                (255 - aFontColor.GetAlpha()) / 255.0);
-        }
-
-        if(rInfo.mbEndOfBullet)
-        {
-            // embed in TextHierarchyBulletPrimitive2D
-            drawinglayer::primitive2d::Primitive2DContainer aNewSequence { pNewPrimitive };
-            pNewPrimitive = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(std::move(aNewSequence));
-        }
-
-        if(rInfo.mpFieldData)
-        {
-            pNewPrimitive = impCheckFieldPrimitive(pNewPrimitive.get(), rInfo);
-        }
-
-        maTextPortionPrimitives.push_back(pNewPrimitive);
-
-        // support for WrongSpellVector. Create WrongSpellPrimitives as needed
-        if(!rInfo.mpWrongSpellVector || aDXArray.empty())
-            return;
-
-        const sal_Int32 nSize(rInfo.mpWrongSpellVector->size());
-        const sal_Int32 nDXCount(aDXArray.size());
-        const basegfx::BColor aSpellColor(1.0, 0.0, 0.0); // red, hard coded
-
-        for(sal_Int32 a(0); a < nSize; a++)
-        {
-            const EEngineData::WrongSpellClass& rCandidate = (*rInfo.mpWrongSpellVector)[a];
-
-            if(rCandidate.nStart >= rInfo.mnTextStart && rCandidate.nEnd >= rInfo.mnTextStart && rCandidate.nEnd > rCandidate.nStart)
+            else
             {
-                const sal_Int32 nStart(rCandidate.nStart - rInfo.mnTextStart);
-                const sal_Int32 nEnd(rCandidate.nEnd - rInfo.mnTextStart);
-                double fStart(0.0);
-                double fEnd(0.0);
+                // create and add decoration
+                const drawinglayer::primitive2d::Primitive2DContainer& rDecorationGeometryContent(
+                    pTCPP->getOrCreateDecorationGeometryContent(
+                        pTCPP->getTextTransform(),
+                        caseMappedText,
+                        rInfo.mnTextStart,
+                        rInfo.mnTextLen,
+                        aDXArray));
 
-                if(nStart > 0 && nStart - 1 < nDXCount)
+                aContainer.insert(aContainer.end(), rDecorationGeometryContent.begin(), rDecorationGeometryContent.end());
+            }
+        }
+
+        pNewPrimitive = new drawinglayer::primitive2d::GroupPrimitive2D(std::move(aContainer));
+    }
+
+    const Color aFontColor(rInfo.mrFont.GetColor());
+    if (aFontColor.IsTransparent())
+    {
+        // Handle semi-transparent text for both the decorated and simple case here.
+        pNewPrimitive = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+            drawinglayer::primitive2d::Primitive2DContainer{ pNewPrimitive },
+            (255 - aFontColor.GetAlpha()) / 255.0);
+    }
+
+    if(rInfo.mbEndOfBullet)
+    {
+        // embed in TextHierarchyBulletPrimitive2D
+        drawinglayer::primitive2d::Primitive2DContainer aNewSequence { pNewPrimitive };
+        pNewPrimitive = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(std::move(aNewSequence));
+    }
+
+    if(rInfo.mpFieldData)
+    {
+        pNewPrimitive = CheckFieldPrimitive(pNewPrimitive.get(), rInfo);
+    }
+
+    rTarget.push_back(pNewPrimitive);
+
+    // support for WrongSpellVector. Create WrongSpellPrimitives as needed
+    if(!rInfo.mpWrongSpellVector || aDXArray.empty())
+        return;
+
+    const sal_Int32 nSize(rInfo.mpWrongSpellVector->size());
+    const sal_Int32 nDXCount(aDXArray.size());
+    const basegfx::BColor aSpellColor(1.0, 0.0, 0.0); // red, hard coded
+
+    for(sal_Int32 a(0); a < nSize; a++)
+    {
+        const EEngineData::WrongSpellClass& rCandidate = (*rInfo.mpWrongSpellVector)[a];
+
+        if(rCandidate.nStart >= rInfo.mnTextStart && rCandidate.nEnd >= rInfo.mnTextStart && rCandidate.nEnd > rCandidate.nStart)
+        {
+            const sal_Int32 nStart(rCandidate.nStart - rInfo.mnTextStart);
+            const sal_Int32 nEnd(rCandidate.nEnd - rInfo.mnTextStart);
+            double fStart(0.0);
+            double fEnd(0.0);
+
+            if(nStart > 0 && nStart - 1 < nDXCount)
+            {
+                fStart = aDXArray[nStart - 1];
+            }
+
+            if(nEnd > 0 && nEnd - 1 < nDXCount)
+            {
+                fEnd = aDXArray[nEnd - 1];
+            }
+
+            if(!basegfx::fTools::equal(fStart, fEnd))
+            {
+                if(rInfo.IsRTL())
                 {
-                    fStart = aDXArray[nStart - 1];
+                    // #i98523#
+                    // When the portion is RTL, mirror the redlining using the
+                    // full portion width
+                    const double fTextWidth(aDXArray[aDXArray.size() - 1]);
+
+                    fStart = fTextWidth - fStart;
+                    fEnd = fTextWidth - fEnd;
                 }
 
-                if(nEnd > 0 && nEnd - 1 < nDXCount)
+                // need to take FontScaling out of values; it's already part of
+                // aNewTransform and would be double applied
+                const double fFontScaleX(aFontScaling.getX() * fPropFontFactor);
+
+                if(!basegfx::fTools::equal(fFontScaleX, 1.0)
+                    && !basegfx::fTools::equalZero(fFontScaleX))
                 {
-                    fEnd = aDXArray[nEnd - 1];
+                    fStart /= fFontScaleX;
+                    fEnd /= fFontScaleX;
                 }
 
-                if(!basegfx::fTools::equal(fStart, fEnd))
-                {
-                    if(rInfo.IsRTL())
-                    {
-                        // #i98523#
-                        // When the portion is RTL, mirror the redlining using the
-                        // full portion width
-                        const double fTextWidth(aDXArray[aDXArray.size() - 1]);
-
-                        fStart = fTextWidth - fStart;
-                        fEnd = fTextWidth - fEnd;
-                    }
-
-                    // need to take FontScaling out of values; it's already part of
-                    // aNewTransform and would be double applied
-                    const double fFontScaleX(aFontScaling.getX() * fPropFontFactor);
-
-                    if(!basegfx::fTools::equal(fFontScaleX, 1.0)
-                        && !basegfx::fTools::equalZero(fFontScaleX))
-                    {
-                        fStart /= fFontScaleX;
-                        fEnd /= fFontScaleX;
-                    }
-
-                    maTextPortionPrimitives.push_back(new drawinglayer::primitive2d::WrongSpellPrimitive2D(
-                        aNewTransform,
-                        fStart,
-                        fEnd,
-                        aSpellColor));
-                }
+                rTarget.push_back(new drawinglayer::primitive2d::WrongSpellPrimitive2D(
+                    aNewTransform,
+                    fStart,
+                    fEnd,
+                    aSpellColor));
             }
         }
     }
+}
+
+void CreateDrawBulletPrimitivesFromDrawBulletInfo(
+    drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+    const basegfx::B2DHomMatrix& rNewTransformA,
+    const basegfx::B2DHomMatrix& rNewTransformB,
+    const DrawBulletInfo& rInfo)
+{
+    basegfx::B2DHomMatrix aNewTransform;
+
+    // add size to new transform
+    aNewTransform.scale(rInfo.maBulletSize.getWidth(), rInfo.maBulletSize.getHeight());
+
+    // apply transformA
+    aNewTransform *= rNewTransformA;
+
+    // apply local offset
+    aNewTransform.translate(rInfo.maBulletPosition.X(), rInfo.maBulletPosition.Y());
+
+    // also apply embedding object's transform
+    aNewTransform *= rNewTransformB;
+
+    // prepare empty GraphicAttr
+    const GraphicAttr aGraphicAttr;
+
+    // create GraphicPrimitive2D
+    const drawinglayer::primitive2d::Primitive2DReference aNewReference(new drawinglayer::primitive2d::GraphicPrimitive2D(
+        aNewTransform,
+        rInfo.maBulletGraphicObject,
+        aGraphicAttr));
+
+    // embed in TextHierarchyBulletPrimitive2D
+    drawinglayer::primitive2d::Primitive2DContainer aNewSequence { aNewReference };
+    rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pNewPrimitive = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(std::move(aNewSequence));
+
+    // add to output
+    rTarget.push_back(pNewPrimitive);
+}
+
+namespace
+{
+    class impTextBreakupHandler
+    {
+    private:
+        drawinglayer::primitive2d::Primitive2DContainer             maTextPortionPrimitives;
+        drawinglayer::primitive2d::Primitive2DContainer             maLinePrimitives;
+        drawinglayer::primitive2d::Primitive2DContainer             maParagraphPrimitives;
+
+        SdrOutliner&                                                mrOutliner;
+        basegfx::B2DHomMatrix                                       maNewTransformA;
+        basegfx::B2DHomMatrix                                       maNewTransformB;
+
+        // the visible area for contour text decomposition
+        basegfx::B2DVector                                          maScale;
+
+        // ClipRange for BlockText decomposition; only text portions completely
+        // inside are to be accepted, so this is different from geometric clipping
+        // (which would allow e.g. upper parts of portions to remain). Only used for
+        // BlockText (see there)
+        basegfx::B2DRange                                           maClipRange;
+
+        void impFlushTextPortionPrimitivesToLinePrimitives();
+        void impFlushLinePrimitivesToParagraphPrimitives(sal_Int32 nPara);
+        void impHandleDrawPortionInfo(const DrawPortionInfo& rInfo);
+        void impHandleDrawBulletInfo(const DrawBulletInfo& rInfo);
+
+    public:
+        explicit impTextBreakupHandler(SdrOutliner& rOutliner)
+        :   mrOutliner(rOutliner)
+        {
+        }
+
+        void decomposeContourTextPrimitive(const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB, const basegfx::B2DVector& rScale)
+        {
+            maScale = rScale;
+            maNewTransformA = rNewTransformA;
+            maNewTransformB = rNewTransformB;
+
+            mrOutliner.StripPortions(
+                [this](const DrawPortionInfo& rInfo){
+                    // for contour text, ignore (clip away) all portions which are below
+                    // the visible area given by maScale
+                    if(static_cast<double>(rInfo.mrStartPos.Y()) < maScale.getY())
+                    {
+                        impHandleDrawPortionInfo(rInfo);
+                    }
+                },
+                [this](const DrawBulletInfo& rInfo){ impHandleDrawBulletInfo(rInfo); });
+        }
+
+        void decomposeBlockTextPrimitive(
+            const basegfx::B2DHomMatrix& rNewTransformA,
+            const basegfx::B2DHomMatrix& rNewTransformB,
+            const basegfx::B2DRange& rClipRange)
+        {
+            maNewTransformA = rNewTransformA;
+            maNewTransformB = rNewTransformB;
+            maClipRange = rClipRange;
+
+            mrOutliner.StripPortions(
+                [this](const DrawPortionInfo& rInfo){
+                    // Is clipping wanted? This is text clipping; only accept a portion
+                    // if it's completely in the range
+                    if(!maClipRange.isEmpty())
+                    {
+                        // Test start position first; this allows to not get the text range at
+                        // all if text is far outside
+                        const basegfx::B2DPoint aStartPosition(rInfo.mrStartPos.X(), rInfo.mrStartPos.Y());
+
+                        if(!maClipRange.isInside(aStartPosition))
+                        {
+                            return;
+                        }
+
+                        // Start position is inside. Get TextBoundRect and TopLeft next
+                        drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
+                        aTextLayouterDevice.setFont(rInfo.mrFont);
+
+                        const basegfx::B2DRange aTextBoundRect(
+                            aTextLayouterDevice.getTextBoundRect(
+                                rInfo.maText, rInfo.mnTextStart, rInfo.mnTextLen));
+                        const basegfx::B2DPoint aTopLeft(aTextBoundRect.getMinimum() + aStartPosition);
+
+                        if(!maClipRange.isInside(aTopLeft))
+                        {
+                            return;
+                        }
+
+                        // TopLeft is inside. Get BottomRight and check
+                        const basegfx::B2DPoint aBottomRight(aTextBoundRect.getMaximum() + aStartPosition);
+
+                        if(!maClipRange.isInside(aBottomRight))
+                        {
+                            return;
+                        }
+
+                        // all inside, clip was successful
+                    }
+                    impHandleDrawPortionInfo(rInfo);
+                },
+                [this](const DrawBulletInfo& rInfo){ impHandleDrawBulletInfo(rInfo); });
+        }
+
+        void decomposeStretchTextPrimitive(const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB)
+        {
+            maNewTransformA = rNewTransformA;
+            maNewTransformB = rNewTransformB;
+
+            mrOutliner.StripPortions(
+                [this](const DrawPortionInfo& rInfo){ impHandleDrawPortionInfo(rInfo); },
+                [this](const DrawBulletInfo& rInfo){ impHandleDrawBulletInfo(rInfo); });
+        }
+
+        drawinglayer::primitive2d::Primitive2DContainer extractPrimitive2DSequence();
+    };
 
     rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> buildTextPortionPrimitive(
             const DrawPortionInfo& rInfo, const OUString& rText,
@@ -598,50 +734,6 @@ namespace
         return pNewPrimitive;
     }
 
-    rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> impTextBreakupHandler::impCheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive, const DrawPortionInfo& rInfo)
-    {
-        rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> xRet = pPrimitive;
-        if(rInfo.mpFieldData)
-        {
-            // Support for FIELD_SEQ_BEGIN, FIELD_SEQ_END. If used, create a TextHierarchyFieldPrimitive2D
-            // which holds the field type and, if applicable, the URL
-            const SvxURLField* pURLField = dynamic_cast< const SvxURLField* >(rInfo.mpFieldData);
-            const SvxPageField* pPageField = dynamic_cast< const SvxPageField* >(rInfo.mpFieldData);
-
-            // embed current primitive to a sequence
-            drawinglayer::primitive2d::Primitive2DContainer aSequence;
-
-            if(pPrimitive)
-            {
-                aSequence.resize(1);
-                aSequence[0] = drawinglayer::primitive2d::Primitive2DReference(pPrimitive);
-            }
-
-            if(pURLField)
-            {
-                // extended this to hold more of the contents of the original
-                // SvxURLField since that stuff is still used in HitTest and e.g. Calc
-                std::vector< std::pair< OUString, OUString>> meValues;
-                meValues.emplace_back("URL", pURLField->GetURL());
-                meValues.emplace_back("Representation", pURLField->GetRepresentation());
-                meValues.emplace_back("TargetFrame", pURLField->GetTargetFrame());
-                meValues.emplace_back("AltText", pURLField->GetName());
-                meValues.emplace_back("SvxURLFormat", OUString::number(static_cast<sal_uInt16>(pURLField->GetFormat())));
-                xRet = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(std::move(aSequence), drawinglayer::primitive2d::FIELD_TYPE_URL, &meValues);
-            }
-            else if(pPageField)
-            {
-                xRet = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(std::move(aSequence), drawinglayer::primitive2d::FIELD_TYPE_PAGE);
-            }
-            else
-            {
-                xRet = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(std::move(aSequence), drawinglayer::primitive2d::FIELD_TYPE_COMMON);
-            }
-        }
-
-        return xRet;
-    }
-
     void impTextBreakupHandler::impFlushTextPortionPrimitivesToLinePrimitives()
     {
         // only create a line primitive when we had content; there is no need for
@@ -671,7 +763,11 @@ namespace
 
     void impTextBreakupHandler::impHandleDrawPortionInfo(const DrawPortionInfo& rInfo)
     {
-        impCreateTextPortionPrimitive(rInfo);
+        CreateTextPortionPrimitivesFromDrawPortionInfo(
+            maTextPortionPrimitives,
+            maNewTransformA,
+            maNewTransformB,
+            rInfo);
 
         if(rInfo.mbEndOfLine || rInfo.mbEndOfParagraph)
         {
@@ -686,6 +782,11 @@ namespace
 
     void impTextBreakupHandler::impHandleDrawBulletInfo(const DrawBulletInfo& rInfo)
     {
+        CreateDrawBulletPrimitivesFromDrawBulletInfo(
+            maTextPortionPrimitives,
+            maNewTransformA,
+            maNewTransformB,
+            rInfo);
         basegfx::B2DHomMatrix aNewTransform;
 
         // add size to new transform
@@ -717,93 +818,6 @@ namespace
         maTextPortionPrimitives.push_back(pNewPrimitive);
     }
 
-    IMPL_LINK(impTextBreakupHandler, decomposeContourTextPrimitive, DrawPortionInfo*, pInfo, void)
-    {
-        // for contour text, ignore (clip away) all portions which are below
-        // the visible area given by maScale
-        if(pInfo && static_cast<double>(pInfo->mrStartPos.Y()) < maScale.getY())
-        {
-            impHandleDrawPortionInfo(*pInfo);
-        }
-    }
-
-    IMPL_LINK(impTextBreakupHandler, decomposeBlockTextPrimitive, DrawPortionInfo*, pInfo, void)
-    {
-        if(!pInfo)
-            return;
-
-        // Is clipping wanted? This is text clipping; only accept a portion
-        // if it's completely in the range
-        if(!maClipRange.isEmpty())
-        {
-            // Test start position first; this allows to not get the text range at
-            // all if text is far outside
-            const basegfx::B2DPoint aStartPosition(pInfo->mrStartPos.X(), pInfo->mrStartPos.Y());
-
-            if(!maClipRange.isInside(aStartPosition))
-            {
-                return;
-            }
-
-            // Start position is inside. Get TextBoundRect and TopLeft next
-            drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
-            aTextLayouterDevice.setFont(pInfo->mrFont);
-
-            const basegfx::B2DRange aTextBoundRect(
-                aTextLayouterDevice.getTextBoundRect(
-                    pInfo->maText, pInfo->mnTextStart, pInfo->mnTextLen));
-            const basegfx::B2DPoint aTopLeft(aTextBoundRect.getMinimum() + aStartPosition);
-
-            if(!maClipRange.isInside(aTopLeft))
-            {
-                return;
-            }
-
-            // TopLeft is inside. Get BottomRight and check
-            const basegfx::B2DPoint aBottomRight(aTextBoundRect.getMaximum() + aStartPosition);
-
-            if(!maClipRange.isInside(aBottomRight))
-            {
-                return;
-            }
-
-            // all inside, clip was successful
-        }
-        impHandleDrawPortionInfo(*pInfo);
-    }
-
-    IMPL_LINK(impTextBreakupHandler, decomposeStretchTextPrimitive, DrawPortionInfo*, pInfo, void)
-    {
-        if(pInfo)
-        {
-            impHandleDrawPortionInfo(*pInfo);
-        }
-    }
-
-    IMPL_LINK(impTextBreakupHandler, decomposeContourBulletPrimitive, DrawBulletInfo*, pInfo, void)
-    {
-        if(pInfo)
-        {
-            impHandleDrawBulletInfo(*pInfo);
-        }
-    }
-
-    IMPL_LINK(impTextBreakupHandler, decomposeBlockBulletPrimitive, DrawBulletInfo*, pInfo, void)
-    {
-        if(pInfo)
-        {
-            impHandleDrawBulletInfo(*pInfo);
-        }
-    }
-
-    IMPL_LINK(impTextBreakupHandler, decomposeStretchBulletPrimitive, DrawBulletInfo*, pInfo, void)
-    {
-        if(pInfo)
-        {
-            impHandleDrawBulletInfo(*pInfo);
-        }
-    }
-
     drawinglayer::primitive2d::Primitive2DContainer impTextBreakupHandler::extractPrimitive2DSequence()
     {
         if(!maTextPortionPrimitives.empty())
@@ -822,9 +836,7 @@ namespace
     }
 } // end of anonymous namespace
 
-
 // primitive decompositions
-
 void SdrTextObj::impDecomposeContourTextPrimitive(
     drawinglayer::primitive2d::Primitive2DContainer& rTarget,
     const drawinglayer::primitive2d::SdrContourTextPrimitive2D& rSdrContourTextPrimitive,

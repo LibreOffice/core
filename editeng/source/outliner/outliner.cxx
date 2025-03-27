@@ -869,8 +869,11 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     return aBulletFont;
 }
 
-void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin,
-                           Degree10 nOrientation, OutputDevice& rOutDev)
+void Outliner::PaintBullet(
+    sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin,
+    Degree10 nOrientation, OutputDevice& rOutDev,
+    const std::function<void(const DrawPortionInfo&)>& rDrawPortion,
+    const std::function<void(const DrawBulletInfo&)>& rDrawBullet)
 {
 
     bool bDrawBullet = false;
@@ -954,9 +957,9 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
                 nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::TextOriginLeft | vcl::text::ComplexTextLayoutFlags::BiDiStrong;
             rOutDev.SetLayoutMode( nLayoutMode );
 
-            if(bStrippingPortions)
+            if(rDrawPortion)
             {
-                const vcl::Font& aSvxFont(rOutDev.GetFont());
+                const SvxFont aSvxFont(rOutDev.GetFont());
                 KernArray aBuf;
                 rOutDev.GetTextArray( pPara->GetText(), &aBuf );
 
@@ -967,8 +970,10 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
                     aTextPos.AdjustY( -(aMetric.GetDescent()) );
                 }
 
-                DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), aBuf, {},
+                const DrawPortionInfo aInfo(
+                    aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), aBuf, {},
                     aSvxFont, nPara, bRightToLeftPara ? 1 : 0, nullptr, nullptr, false, false, true, nullptr, Color(), Color());
+                rDrawPortion(aInfo);
             }
             else
             {
@@ -1004,21 +1009,17 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
                     }
                 }
 
-                if(bStrippingPortions)
+                if(rDrawBullet)
                 {
-                    if(aDrawBulletHdl.IsSet())
-                    {
-                        // call something analog to aDrawPortionHdl (if set) and feed it something
-                        // analog to DrawPortionInfo...
-                        // created aDrawBulletHdl, Set/GetDrawBulletHdl.
-                        // created DrawBulletInfo and added handling to sdrtextdecomposition.cxx
-                        DrawBulletInfo aDrawBulletInfo(
-                            *pFmt->GetBrush()->GetGraphicObject(),
-                            aBulletPos,
-                            pPara->aBulSize);
-
-                        aDrawBulletHdl.Call(&aDrawBulletInfo);
-                    }
+                    // call something analog to aDrawPortionHdl (if set) and feed it something
+                    // analog to DrawPortionInfo...
+                    // created aDrawBulletHdl, Set/GetDrawBulletHdl.
+                    // created DrawBulletInfo and added handling to sdrtextdecomposition.cxx
+                    DrawBulletInfo aDrawBulletInfo(
+                        *pFmt->GetBrush()->GetGraphicObject(),
+                        aBulletPos,
+                        pPara->aBulSize);
+                    rDrawBullet(aDrawBulletInfo);
                 }
                 else
                 {
@@ -1029,8 +1030,7 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
     }
 
     // In case of collapsed subparagraphs paint a line before the text.
-    if( !pParaList->HasChildren(pPara) || pParaList->HasVisibleChildren(pPara) ||
-            bStrippingPortions || nOrientation )
+    if( !pParaList->HasChildren(pPara) || pParaList->HasVisibleChildren(pPara) || rDrawPortion || nOrientation )
         return;
 
     tools::Long nWidth = rOutDev.PixelToLogic( Size( 10, 0 ) ).Width();
@@ -1231,7 +1231,6 @@ Outliner::Outliner(SfxItemPool* pPool, OutlinerMode nMode)
     , nMaxDepth(9)
     , bFirstParaIsEmpty(true)
     , nBlockInsCallback(0)
-    , bStrippingPortions(false)
     , bPasting(false)
 {
 
@@ -1637,34 +1636,11 @@ void Outliner::Remove( Paragraph const * pPara, sal_Int32 nParaCount )
     }
 }
 
-void Outliner::StripPortions()
+void Outliner::StripPortions(
+    const std::function<void(const DrawPortionInfo&)>& rDrawPortion,
+    const std::function<void(const DrawBulletInfo&)>& rDrawBullet)
 {
-    bStrippingPortions = true;
-    pEditEngine->StripPortions();
-    bStrippingPortions = false;
-}
-
-void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart,
-                            sal_Int32 nTextLen, std::span<const double> pDXArray,
-                            std::span<const sal_Bool> pKashidaArray, const SvxFont& rFont,
-                            sal_Int32 nPara, sal_uInt8 nRightToLeft,
-                            const EEngineData::WrongSpellVector* pWrongSpellVector,
-                            const SvxFieldData* pFieldData,
-                            bool bEndOfLine,
-                            bool bEndOfParagraph,
-                            bool bEndOfBullet,
-                            const css::lang::Locale* pLocale,
-                            const Color& rOverlineColor,
-                            const Color& rTextLineColor)
-{
-    if(aDrawPortionHdl.IsSet())
-    {
-        DrawPortionInfo aInfo( rStartPos, rText, nTextStart, nTextLen, rFont, nPara, pDXArray, pKashidaArray, pWrongSpellVector,
-            pFieldData, pLocale, rOverlineColor, rTextLineColor, nRightToLeft,
-            bEndOfLine, bEndOfParagraph, bEndOfBullet);
-
-        aDrawPortionHdl.Call( &aInfo );
-    }
+    pEditEngine->StripPortions(rDrawPortion, rDrawBullet);
 }
 
 bool Outliner::RemovingPagesHdl( OutlinerView* pView )

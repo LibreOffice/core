@@ -114,6 +114,8 @@ class ParaPortionList;
 enum class CharCompressType;
 enum class TransliterationFlags;
 class LinkParamNone;
+class DrawPortionInfo;
+class DrawBulletInfo;
 
 /** values for:
        SfxItemSet GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs::All );
@@ -367,7 +369,9 @@ public:
 
     bool            IsInSelectionMode() const;
 
-    SAL_DLLPRIVATE void            StripPortions();
+    void            StripPortions(
+        const std::function<void(const DrawPortionInfo&)>& rDrawPortion,
+        const std::function<void(const DrawBulletInfo&)>& rDrawBullet);
     void            GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList );
 
     SAL_DLLPRIVATE tools::Long            GetFirstLineStartX( sal_Int32 nParagraph );
@@ -488,27 +492,16 @@ public:
     SAL_DLLPRIVATE void            SetBeginPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink );
     SAL_DLLPRIVATE void            SetEndPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink );
 
-    virtual void    PaintingFirstLine(sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin, Degree10 nOrientation, OutputDevice& rOutDev);
+    virtual void    PaintingFirstLine(sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin, Degree10 nOrientation, OutputDevice& rOutDev,
+        const std::function<void(const DrawPortionInfo&)>& rDrawPortion,
+        const std::function<void(const DrawBulletInfo&)>& rDrawBullet);
+
     virtual void    ParagraphInserted( sal_Int32 nNewParagraph );
     virtual void    ParagraphDeleted( sal_Int32 nDeletedParagraph );
     virtual void    ParagraphConnected( sal_Int32 nLeftParagraph, sal_Int32 nRightParagraph );
     virtual void    ParaAttribsChanged( sal_Int32 nParagraph );
     virtual void    StyleSheetChanged( SfxStyleSheet* pStyle );
     SAL_DLLPRIVATE void            ParagraphHeightChanged( sal_Int32 nPara );
-
-    virtual void DrawingText( const Point& rStartPos, const OUString& rText,
-                              sal_Int32 nTextStart, sal_Int32 nTextLen,
-                              KernArraySpan pDXArray,
-                              std::span<const sal_Bool> pKashidaArray,
-                              const SvxFont& rFont,
-                              sal_Int32 nPara, sal_uInt8 nRightToLeft,
-                              const EEngineData::WrongSpellVector* pWrongSpellVector,
-                              const SvxFieldData* pFieldData,
-                              bool bEndOfLine,
-                              bool bEndOfParagraph,
-                              const css::lang::Locale* pLocale,
-                              const Color& rOverlineColor,
-                              const Color& rTextLineColor);
 
     virtual OUString  GetUndoComment( sal_uInt16 nUndoId ) const;
     virtual bool    SpellNextDocument();

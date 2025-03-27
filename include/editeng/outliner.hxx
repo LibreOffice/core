@@ -406,22 +406,19 @@ public:
     const OUString      maText;
     sal_Int32           mnTextStart;
     sal_Int32           mnTextLen;
-    sal_Int32           mnPara;
-    const SvxFont&      mrFont;
-    KernArraySpan mpDXArray;
+    KernArraySpan       mpDXArray;
     std::span<const sal_Bool> mpKashidaArray;
-
+    const SvxFont&      mrFont;
+    sal_Int32           mnPara;
+    sal_uInt8           mnBiDiLevel;
     const EEngineData::WrongSpellVector*  mpWrongSpellVector;
     const SvxFieldData* mpFieldData;
-    const css::lang::Locale* mpLocale;
-    const Color         maOverlineColor;
-    const Color         maTextLineColor;
-
-    sal_uInt8           mnBiDiLevel;
-
     bool                mbEndOfLine : 1;
     bool                mbEndOfParagraph : 1;
     bool                mbEndOfBullet : 1;
+    const css::lang::Locale* mpLocale;
+    const Color         maOverlineColor;
+    const Color         maTextLineColor;
 
     bool IsRTL() const { return mnBiDiLevel % 2 == 1; }
 
@@ -430,36 +427,36 @@ public:
         OUString aTxt,
         sal_Int32 nTxtStart,
         sal_Int32 nTxtLen,
-        const SvxFont& rFnt,
-        sal_Int32 nPar,
         KernArraySpan pDXArr,
         std::span<const sal_Bool> pKashidaArr,
+        const SvxFont& rFnt,
+        sal_Int32 nPar,
+        sal_uInt8 nBiDiLevel,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
-        const css::lang::Locale* pLocale,
-        const Color& rOverlineColor,
-        const Color& rTextLineColor,
-        sal_uInt8 nBiDiLevel,
         bool bEndOfLine,
         bool bEndOfParagraph,
-        bool bEndOfBullet)
+        bool bEndOfBullet,
+        const css::lang::Locale* pLocale,
+        const Color& rOverlineColor,
+        const Color& rTextLineColor)
     :   mrStartPos(rPos),
         maText(std::move(aTxt)),
         mnTextStart(nTxtStart),
         mnTextLen(nTxtLen),
-        mnPara(nPar),
-        mrFont(rFnt),
         mpDXArray(pDXArr),
         mpKashidaArray(pKashidaArr),
+        mrFont(rFnt),
+        mnPara(nPar),
+        mnBiDiLevel(nBiDiLevel),
         mpWrongSpellVector(pWrongSpellVector),
         mpFieldData(pFieldData),
-        mpLocale(pLocale),
-        maOverlineColor(rOverlineColor),
-        maTextLineColor(rTextLineColor),
-        mnBiDiLevel(nBiDiLevel),
         mbEndOfLine(bEndOfLine),
         mbEndOfParagraph(bEndOfParagraph),
-        mbEndOfBullet(bEndOfBullet)
+        mbEndOfBullet(bEndOfBullet),
+        mpLocale(pLocale),
+        maOverlineColor(rOverlineColor),
+        maTextLineColor(rTextLineColor)
     {}
 };
 
@@ -591,8 +588,6 @@ private:
     ViewList            aViewList;
 
     sal_Int32           mnFirstSelPage;
-    Link<DrawPortionInfo*,void> aDrawPortionHdl;
-    Link<DrawBulletInfo*,void>     aDrawBulletHdl;
     Link<ParagraphHdlParam,void>   aParaInsertedHdl;
     Link<ParagraphHdlParam,void>   aParaRemovingHdl;
     Link<DepthChangeHdlParam,void> aDepthChangedHdl;
@@ -613,7 +608,6 @@ private:
 
     bool                bFirstParaIsEmpty;
     sal_uInt8           nBlockInsCallback;
-    bool                bStrippingPortions;
     bool                bPasting;
 
     Link<EENotify&,void> aOutlinerNotifyHdl;
@@ -657,9 +651,12 @@ protected:
     SAL_DLLPRIVATE void            StyleSheetChanged( SfxStyleSheet const * pStyle );
 
     SAL_DLLPRIVATE void            InvalidateBullet(sal_Int32 nPara);
-    SAL_DLLPRIVATE void            PaintBullet(sal_Int32 nPara, const Point& rStartPos,
-                                const Point& rOrigin, Degree10 nOrientation,
-                                OutputDevice& rOutDev);
+    SAL_DLLPRIVATE void            PaintBullet(
+        sal_Int32 nPara, const Point& rStartPos,
+        const Point& rOrigin, Degree10 nOrientation,
+        OutputDevice& rOutDev,
+        const std::function<void(const DrawPortionInfo&)>& rDrawPortion,
+        const std::function<void(const DrawBulletInfo&)>& rDrawBullet);
 
     // used by OutlinerEditEng. Allows Outliner objects to provide
     // bullet access to the EditEngine.
@@ -781,10 +778,6 @@ public:
     SAL_DLLPRIVATE void            SetCalcFieldValueHdl(const Link<EditFieldInfo*,void>& rLink ) { aCalcFieldValueHdl= rLink; }
     SAL_DLLPRIVATE const Link<EditFieldInfo*,void>& GetCalcFieldValueHdl() const { return aCalcFieldValueHdl; }
 
-    SAL_DLLPRIVATE void            SetDrawPortionHdl(const Link<DrawPortionInfo*,void>& rLink){aDrawPortionHdl=rLink;}
-
-    SAL_DLLPRIVATE void            SetDrawBulletHdl(const Link<DrawBulletInfo*,void>& rLink){aDrawBulletHdl=rLink;}
-
     SAL_DLLPRIVATE void            SetPaintFirstLineHdl(const Link<PaintFirstLineInfo*,void>& rLink) { maPaintFirstLineHdl = rLink; }
 
     void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink );
@@ -828,22 +821,9 @@ public:
     OUString const & GetWordDelimiters() const;
     OUString        GetWord( const EPaM& rPos );
 
-    void            StripPortions();
-
-    SAL_DLLPRIVATE void DrawingText( const Point& rStartPos, const OUString& rText,
-                              sal_Int32 nTextStart, sal_Int32 nTextLen,
-                              KernArraySpan pDXArray,
-                              std::span<const sal_Bool> pKashidaArray,
-                              const SvxFont& rFont,
-                              sal_Int32 nPara, sal_uInt8 nRightToLeft,
-                              const EEngineData::WrongSpellVector* pWrongSpellVector,
-                              const SvxFieldData* pFieldData,
-                              bool bEndOfLine,
-                              bool bEndOfParagraph,
-                              bool bEndOfBullet,
-                              const css::lang::Locale* pLocale,
-                              const Color& rOverlineColor,
-                              const Color& rTextLineColor);
+    void            StripPortions(
+        const std::function<void(const DrawPortionInfo&)>& rDrawPortion,
+        const std::function<void(const DrawBulletInfo&)>& rDrawBullet);
 
     Size            CalcTextSize();
 
