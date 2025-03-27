@@ -41,6 +41,7 @@ class SingleSelectQueryComposerTest : public DBTestBase
 
 public:
     virtual void setUp() override;
+    virtual void tearDown() override;
     void testSetCommand();
     void testAttributes();
     void testSubQueries();
@@ -81,6 +82,17 @@ void SingleSelectQueryComposerTest::setUp()
         xFactory->createInstance(u"com.sun.star.sdb.SingleSelectQueryComposer"_ustr),
         UNO_QUERY_THROW);
     m_xComposer = xComposer;
+}
+
+void SingleSelectQueryComposerTest::tearDown()
+{
+    m_xComposer.clear();
+    if (m_xConnection)
+    {
+        m_xConnection->close();
+        m_xConnection.clear();
+    }
+    DBTestBase::tearDown();
 }
 
 // tests setCommand of the composer
