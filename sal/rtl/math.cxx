@@ -702,7 +702,7 @@ double SAL_CALL rtl_math_asinh(double fX) noexcept
  */
 double SAL_CALL rtl_math_acosh(double fX) noexcept
 {
-    volatile double fZ = fX - 1.0;
+    double fZ = fX - 1.0;
     if (fX < 1.0)
         return std::numeric_limits<double>::quiet_NaN();
     if (fX == 1.0)
