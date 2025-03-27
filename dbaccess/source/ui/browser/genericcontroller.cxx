@@ -64,7 +64,7 @@ using namespace ::com::sun::star::ui;
 using namespace ::dbtools;
 using namespace ::comphelper;
 
-#define ALL_FEATURES                -1
+constexpr auto ALL_FEATURES = -1;
 
 typedef std::unordered_map< sal_Int16, sal_Int16 > CommandHashMap;
 
