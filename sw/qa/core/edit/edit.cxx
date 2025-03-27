@@ -330,6 +330,43 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateDeletesInSelection)
     CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlineData4.GetType());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateAndNext)
+{
+    // Given a document with two deletions:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert("abbcdde");
+    SwModule* pModule = SwModule::get();
+    pModule->SetRedlineAuthor("Alice");
+    RedlineFlags nMode = pWrtShell->GetRedlineFlags();
+    pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    pWrtShell->DelRight();
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 3, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    pWrtShell->DelRight();
+    pWrtShell->SetRedlineFlags(nMode);
+
+    // When a 2nd user moves into the first deletion and does reinstate-and-next twice:
+    pModule->SetRedlineAuthor("Bob");
+    pWrtShell->SttPara(/*bSelect=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:ReinstateTrackedChangeToNext", {});
+    // Again, without an explicit cursor move:
+    dispatchCommand(mxComponent, ".uno:ReinstateTrackedChangeToNext", {});
+
+    // Then make sure we have insertions for both deletions:
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4
+    // - Actual  : 2
+    // i.e. reinstate-and-next didn't create a redline & didn't move to the next one.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rRedlines.size());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

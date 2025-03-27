@@ -251,6 +251,17 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:ReinstateTrackedChangeToNext" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Reinstate and Move to Next</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Reinstate Track Change and select the next one</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:RejectAllTrackedChanges" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Reject All</value>
