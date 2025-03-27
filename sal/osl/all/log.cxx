@@ -19,6 +19,9 @@
 
 #include <stdio.h>
 #include <string.h>
+#if defined __clang__
+#pragma clang diagnostic ignored "-Wunused-macros"
+#endif
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
 #include <fstream>
