@@ -75,12 +75,12 @@ class CloseableLifeTimeManager final : public LifeTimeManager
     css::util::XCloseable*         m_pCloseable;
 
     ::osl::Condition    m_aEndTryClosingCondition;
-    bool volatile       m_bClosed;
-    bool volatile       m_bInTryClose;
+    bool                m_bClosed;
+    bool                m_bInTryClose;
     //the ownership between model and controller is not clear at first
     //each controller might consider him as owner of the model first
     //at start the model is not considered as owner of itself
-    bool volatile       m_bOwnership;
+    bool                m_bOwnership;
 
 public:
     CloseableLifeTimeManager( css::util::XCloseable* pCloseable
