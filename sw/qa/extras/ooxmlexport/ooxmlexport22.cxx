@@ -80,6 +80,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165047_contextualSpacingTopMargin)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(0), nParaTopMargin);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf165933_noDelTextOnMove)
+{
+    loadAndSave("tdf165933.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Wihtout the fix it fails with
+    // - Expected: 0
+    // - Actual  : 1
+    // a w:delText is created inside a w:moveFrom, which is invalid
+    assertXPath(pXmlDoc, "//w:moveFrom/w:r/w:delText", 0);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -3865,6 +3865,15 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
             break;
         }
     }
+    // Check also the bookmarks that will be opened just now
+    for (const OUString& bookmarkName : m_rBookmarksStart)
+    {
+        if (bookmarkName.startsWith(u"__RefMove"))
+        {
+            isInMoveBookmark = true;
+            break;
+        }
+    }
     bool bMoved = isInMoveBookmark && m_pRedlineData && m_pRedlineData->IsMoved() &&
                   // tdf#150166 save tracked moving around TOC as w:ins, w:del
                   SwDoc::GetCurTOX(*m_rExport.m_pCurPam->GetPoint()) == nullptr;
