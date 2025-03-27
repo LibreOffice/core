@@ -27,6 +27,7 @@
 
 #include <stdarg.h>
 #include <string_view>
+#include <atomic>
 #include <vector>
 #include <unordered_map>
 
@@ -45,7 +46,7 @@
 #include <opengl/win/WinDeviceInfo.hxx>
 #endif
 
-static bool volatile gbInShaderCompile = false;
+static std::atomic<bool> gbInShaderCompile = false;
 
 namespace {
 
