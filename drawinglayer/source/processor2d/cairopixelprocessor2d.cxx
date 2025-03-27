@@ -2014,6 +2014,10 @@ void CairoPixelProcessor2D::processUnifiedTransparencePrimitive2D(
     cairo_surface_t* pContent(cairo_surface_create_similar(
         pTarget, cairo_surface_get_content(pTarget), fContainedWidth, fContainedHeight));
     CairoPixelProcessor2D aContent(aViewInformation2D, pContent);
+
+    // take over evtl. used ColorModifierStack for content
+    aContent.setBColorModifierStack(getBColorModifierStack());
+
     aContent.process(rTransCandidate.getChildren());
 
     // paint temporary surface to target with fixed transparence
