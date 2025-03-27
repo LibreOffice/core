@@ -378,16 +378,11 @@ namespace
         return rMarks.end();
     };
 
-    template<class MarkT>
-    typename std::vector<MarkT*>::const_iterator lcl_FindMarkByName(
-        const OUString& rName,
-        const typename std::vector<MarkT*>::const_iterator& ppMarksBegin,
-        const typename std::vector<MarkT*>::const_iterator& ppMarksEnd)
+    template <class container_t>
+    auto lcl_FindMarkByName(const OUString& rName, const container_t& container)
     {
-        return find_if(
-            ppMarksBegin,
-            ppMarksEnd,
-            [&rName] (MarkT const*const pMark) { return pMark->GetName() == rName; } );
+        return find_if(begin(container), end(container),
+                       [&rName](const auto* item) { return item->GetName() == rName; });
     }
 
     template<class MarkT>
@@ -822,7 +817,7 @@ namespace sw::mark
             " - Mark is not in my doc.");
         if ( io_pMark->GetName() == rNewName )
             return true;
-        if (lcl_FindMarkByName<MarkBase>(rNewName, m_vAllMarks.begin(), m_vAllMarks.end()) != m_vAllMarks.end())
+        if (lcl_FindMarkByName(rNewName, m_vAllMarks) != m_vAllMarks.end())
             return false;
         const OUString sOldName(io_pMark->GetName());
         io_pMark->SetName(rNewName);
@@ -1337,12 +1332,17 @@ namespace sw::mark
 
     IDocumentMarkAccess::const_iterator MarkManager::findMark(const OUString& rName) const
     {
-        return lcl_FindMarkByName<MarkBase>(rName, m_vAllMarks.begin(), m_vAllMarks.end());
+        return lcl_FindMarkByName(rName, m_vAllMarks);
     }
 
     std::vector<sw::mark::Bookmark*>::const_iterator MarkManager::findBookmark(const OUString& rName) const
     {
-        return lcl_FindMarkByName<sw::mark::Bookmark>(rName, m_vBookmarks.begin(), m_vBookmarks.end());
+        return lcl_FindMarkByName(rName, m_vBookmarks);
+    }
+
+    std::vector<sw::mark::AnnotationMark*>::const_iterator MarkManager::findAnnotationMark( const OUString& rName ) const
+    {
+        return lcl_FindMarkByName(rName, m_vAnnotationMarks);
     }
 
     // find the first Bookmark that does not start before
@@ -1679,11 +1679,6 @@ namespace sw::mark
         return m_vAnnotationMarks.size();
     }
 
-    std::vector<sw::mark::AnnotationMark*>::const_iterator MarkManager::findAnnotationMark( const OUString& rName ) const
-    {
-        return lcl_FindMarkByName<AnnotationMark>( rName, m_vAnnotationMarks.begin(), m_vAnnotationMarks.end() );
-    }
-
     AnnotationMark* MarkManager::getAnnotationMarkFor(const SwPosition& rPos) const
     {
         auto const pAnnotationMark = find_if(
@@ -1777,7 +1772,7 @@ namespace sw::mark
             return newName;
         }
 
-        if (lcl_FindMarkByName<MarkBase>(rName, m_vAllMarks.begin(), m_vAllMarks.end()) == m_vAllMarks.end())
+        if (lcl_FindMarkByName(rName, m_vAllMarks) == m_vAllMarks.end())
         {
             return rName;
         }
@@ -1795,7 +1790,7 @@ namespace sw::mark
         {
             sTmp = aPrefix + OUString::number(nCnt);
             nCnt++;
-            if (lcl_FindMarkByName<MarkBase>(sTmp, m_vAllMarks.begin(), m_vAllMarks.end()) == m_vAllMarks.end())
+            if (lcl_FindMarkByName(sTmp, m_vAllMarks) == m_vAllMarks.end())
             {
                 break;
             }
