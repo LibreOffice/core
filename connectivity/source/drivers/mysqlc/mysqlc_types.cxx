@@ -543,7 +543,15 @@ TypeInfoDef const mysqlc_types[] = {
     {
         "VARCHAR", // Typename
         css::sdbc::DataType::VARCHAR, // sdbc-type
-        255, // Precision
+        // tdf#165928: a VARCHAR should be more than 255 characters
+        // Mysql/MariaDB accepts 65535 bytes
+        // see https://mariadb.com/docs/skysql-dbaas/ref/xpand/data-types/VARCHAR/
+        // but precision corresponds to the number of characters and not the number of bytes:
+        // see https://docs.oracle.com/javase/8/docs/api/java/sql/DatabaseMetaData.html
+        // Knowing that Unicode can use until 4 bytes, it means a varchar field can contain:
+        // 65535 / 4, so 16383 characters
+        // TODO if there's a way to retrieve the encoding, we could be more precise
+        16383, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "(M)", // Create params
