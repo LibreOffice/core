@@ -115,9 +115,6 @@ namespace desktop {
 
         void setViewId( int viewId ) { m_viewId = viewId; }
 
-        void tilePainted(int nPart, int nMode, const tools::Rectangle& rRectangle);
-        const OString& getViewRenderState() const { return m_aViewRenderState; }
-
         // SfxLockCallbackInterface
         virtual void libreOfficeKitViewCallback(int nType, const OString& pPayload) override;
         virtual void libreOfficeKitViewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) override;
@@ -213,9 +210,6 @@ namespace desktop {
         std::unordered_map<OString, OString> m_lastStateChange;
         std::unordered_map<int, std::unordered_map<int, OString>> m_viewStates;
 
-        /// BBox of already painted tiles: part number -> part mode -> rectangle.
-        std::map<int, std::map<int, tools::Rectangle>> m_aPaintedTiles;
-
         // For some types only the last message matters (see isUpdatedType()) or only the last message
         // per each viewId value matters (see isUpdatedTypePerViewId()), so instead of using push model
         // where we'd get flooded by repeated messages (which might be costly to generate and process),
@@ -236,7 +230,6 @@ namespace desktop {
         boost::container::flat_map<int, std::vector<PerViewIdData>> m_updatedTypesPerViewId; // key is view, index is type
 
         LibreOfficeKitDocument* m_pDocument;
-        OString m_aViewRenderState;
         int m_viewId = -1; // view id of the associated SfxViewShell
         LibreOfficeKitCallback m_pCallback;
         ImplSVEvent* m_pFlushEvent;
@@ -258,8 +251,6 @@ namespace desktop {
         explicit LibLODocument_Impl(css::uno::Reference<css::lang::XComponent> xComponent,
                                     int nDocumentId);
         ~LibLODocument_Impl();
-
-        void updateViewsForPaintedTile(int nOrigViewId, int nPart, int nMode, const tools::Rectangle& rRectangle);
     };
 
     struct DESKTOP_DLLPUBLIC LibLibreOffice_Impl : public _LibreOfficeKit
