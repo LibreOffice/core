@@ -672,8 +672,20 @@ IMPL_LINK_NOARG(SwEditWin, TimerHandler, Timer *, void)
             rSh.Drag(&aModPt, false);
             bDone = true;
         }
-        if ( !bDone )
-            aModPt = rSh.GetContentPos( aModPt,aModPt.Y() > rSh.VisArea().Bottom() );
+        if (!bDone)
+        {
+            bool bForward = aModPt.Y() > rSh.VisArea().Bottom();
+            if (m_xRowColumnSelectionStart)
+                aModPt = rSh.GetContentPos( aModPt, bForward );
+            else
+            {
+                sal_Int32 nMove = (aOldVis.Bottom() - aOldVis.Top()) / 20;
+                if (bForward)
+                    aModPt.setY(aOldVis.Bottom() + nMove);
+                else
+                    aModPt.setY(aOldVis.Top() - nMove);
+            }
+        }
     }
     if ( !bDone && !(g_bFrameDrag || m_bInsDraw) )
     {

@@ -355,8 +355,9 @@ void SwView::CalcPt( Point *pPt, const tools::Rectangle &rRect, sal_uInt16 nRang
         nYScroll = m_aVisArea.Top() > rRect.Top() ?
             m_aVisArea.Top() - rRect.Top() :
             rRect.Bottom() - m_aVisArea.Bottom();
+
         if (eScrollSizeMode == ScrollSizeMode::ScrollSizeTimer)
-             nYScroll = std::min(nDefaultYScroll, nYScroll * 5);
+             nYScroll = std::min(nDefaultYScroll, nYScroll);
         else if (eScrollSizeMode == ScrollSizeMode::ScrollSizeTimer2)
              nYScroll = 2 * nDefaultYScroll;
     }
