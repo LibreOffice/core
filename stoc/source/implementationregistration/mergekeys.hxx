@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STOC_SOURCE_IMPLEMENTATIONREGISTRATION_MERGEKEYS_HXX
-#define INCLUDED_STOC_SOURCE_IMPLEMENTATIONREGISTRATION_MERGEKEYS_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -40,7 +39,5 @@ void mergeKeys(
         const & xSource);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
