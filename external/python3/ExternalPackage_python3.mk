@@ -58,7 +58,12 @@ $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/libpython$(
 # Obviously this list should not contain stuff with external dependencies
 # that may not be available on baseline systems.
 
-python3_EXTENSION_MODULE_SUFFIX=cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(ENABLE_DBGUTIL),d)-x86_64-linux-gnu
+ifeq ($(CPUNAME),AARCH64)
+SOABI=-aarch64-linux-gnu
+else
+SOABI=-x86_64-linux-gnu
+endif
+python3_EXTENSION_MODULE_SUFFIX=cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(ENABLE_DBGUTIL),d)$(SOABI)
 python3_EXTENSION_MODULES= \
 	LO_lib/array.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_asyncio.$(python3_EXTENSION_MODULE_SUFFIX).so \
