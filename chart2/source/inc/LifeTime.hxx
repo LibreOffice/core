@@ -92,7 +92,7 @@ public:
     bool    g_close_startTryClose(bool bDeliverOwnership);
 /// @throws css::util::CloseVetoException
     void    g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, css::util::CloseVetoException const & ex );
-    void    g_close_endTryClose(bool bDeliverOwnership );
+    void    g_close_endTryClose();
     void    g_close_endTryClose_doClose();
 /// @throws css::uno::RuntimeException
     void    g_addCloseListener( const css::uno::Reference< css::util::XCloseListener > & xListener );
@@ -101,7 +101,6 @@ private:
     virtual bool    impl_canStartApiCall() override;
     virtual void impl_apiCallCountReachedNull(std::unique_lock<std::mutex>& rGuard) override;
 
-    void        impl_setOwnership( bool bDeliverOwnership, bool bMyVeto );
     void        impl_doClose(std::unique_lock<std::mutex>& rGuard);
 };
 

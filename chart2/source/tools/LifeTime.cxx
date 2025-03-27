@@ -231,18 +231,18 @@ bool CloseableLifeTimeManager::g_close_startTryClose(bool bDeliverOwnership)
     catch( const uno::Exception& )
     {
         //no mutex is acquired
-        g_close_endTryClose(bDeliverOwnership);
+        g_close_endTryClose();
         throw;
     }
     return true;
 }
 
-void CloseableLifeTimeManager::g_close_endTryClose(bool bDeliverOwnership )
+void CloseableLifeTimeManager::g_close_endTryClose()
 {
     //this method is called, if the try to close was not successful
     std::unique_lock aGuard( m_aAccessMutex );
-    impl_setOwnership( bDeliverOwnership, false );
 
+    m_bOwnership = false;
     m_bInTryClose = false;
     m_aEndTryClosingCondition.set();
 
@@ -263,8 +263,7 @@ void CloseableLifeTimeManager::g_close_isNeedToCancelLongLastingCalls( bool bDel
     if( !m_nLongLastingCallCount )
         return;
 
-    impl_setOwnership( bDeliverOwnership, true );
-
+    m_bOwnership = bDeliverOwnership;
     m_bInTryClose = false;
     m_aEndTryClosingCondition.set();
 
@@ -287,11 +286,6 @@ void CloseableLifeTimeManager::g_close_endTryClose_doClose()
     //mutex may be released inbetween in special case of impl_apiCallCountReachedNull()
     impl_unregisterApiCall(aGuard, false);
     impl_doClose(aGuard);
-}
-
-void CloseableLifeTimeManager::impl_setOwnership( bool bDeliverOwnership, bool bMyVeto )
-{
-    m_bOwnership            = bDeliverOwnership && bMyVeto;
 }
 
 void CloseableLifeTimeManager::impl_apiCallCountReachedNull(std::unique_lock<std::mutex>& rGuard)
