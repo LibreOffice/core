@@ -4252,6 +4252,7 @@ void DomainMapper::ResetStyleProperties()
                                 pContext->Insert(ePropertyId, uno::Any(0l));
                             }
                             break;
+                        case PROP_PARA_TOP_MARGIN:
                         case PROP_PARA_BOTTOM_MARGIN:
                         case PROP_PARA_RIGHT_MARGIN:
                             pContext->Insert(ePropertyId, uno::Any(sal_Int32(0)));
