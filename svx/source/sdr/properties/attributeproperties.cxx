@@ -354,7 +354,7 @@ namespace sdr::properties
                 bool /*bBroadcast*/, bool /*bAdjustTextFrameWidthAndHeight*/)
         {
             // Make sure we have a SfxItemSet. We are deliberately bypassing our
-            // own AttributeProperties::GetObjectItemSet here, because we dont want to set a default stylesheet,
+            // own AttributeProperties::GetObjectItemSet here, because we don't want to set a default stylesheet,
             // and then immediately remove it, which is costly.
             DefaultProperties::GetObjectItemSet();
 
