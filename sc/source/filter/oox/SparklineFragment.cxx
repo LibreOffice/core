@@ -69,7 +69,7 @@ model::ComplexColor fillComplexColor(const AttributeList& rAttribs, ThemeBuffer 
 }
 
 void addColorsToSparklineAttributes(sc::SparklineAttributes& rAttributes, sal_Int32 nElement,
-                                    const AttributeList& rAttribs, ThemeBuffer& rThemeBuffer,
+                                    const AttributeList& rAttribs, const ThemeBuffer& rThemeBuffer,
                                     const GraphicHelper& rHelper)
 {
     switch (nElement)

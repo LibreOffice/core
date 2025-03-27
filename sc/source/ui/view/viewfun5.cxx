@@ -459,7 +459,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
 
 bool ScViewFunc::PasteDataFormatSource( SotClipboardFormatId nFormatId,
                     SCCOL nPosX, SCROW nPosY, bool bAllowDialogs,
-                    TransferableDataHelper& rDataHelper, Point& rPos )
+                    const TransferableDataHelper& rDataHelper, const Point& rPos )
 {
     bool bRet = false;
     uno::Reference < io::XInputStream > xStm;
@@ -658,7 +658,7 @@ bool ScViewFunc::PasteDataFormatSource( SotClipboardFormatId nFormatId,
 bool ScViewFunc::PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
                     const uno::Reference<datatransfer::XTransferable>& rxTransferable,
                     SCCOL nPosX, SCROW nPosY, bool bAllowDialogs,
-                    TransferableDataHelper& rDataHelper )
+                    const TransferableDataHelper& rDataHelper )
 {
     if ( nFormatId == SotClipboardFormatId::RTF && rDataHelper.HasFormat( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT ) )
     {

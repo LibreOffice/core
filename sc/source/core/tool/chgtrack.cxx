@@ -1667,7 +1667,7 @@ void ScChangeActionContent::SetValue(
         rCell.clear();
 }
 
-void ScChangeActionContent::SetCell( OUString& rStr, ScCellValue& rCell, sal_uLong nFormat, const ScDocument* pDoc )
+void ScChangeActionContent::SetCell( OUString& rStr, const ScCellValue& rCell, sal_uLong nFormat, const ScDocument* pDoc )
 {
     rStr.clear();
     if (rCell.isEmpty())

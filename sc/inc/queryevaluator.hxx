@@ -103,7 +103,7 @@ class ScQueryEvaluator
                                                       const ScQueryEntry& rEntry,
                                                       const ScQueryEntry::Item& rItem);
 
-    std::pair<bool, bool> processEntry(SCROW nRow, SCCOL nCol, ScRefCellValue& aCell,
+    std::pair<bool, bool> processEntry(SCROW nRow, SCCOL nCol, const ScRefCellValue& aCell,
                                        const ScQueryEntry& rEntry, size_t nEntryIndex);
 
     bool equalCellSharedString(const ScRefCellValue& rCell, SCROW nRow, SCCOLROW nField,

@@ -123,7 +123,7 @@ bool ScInterpreter::IsTableOpInRange( const ScRange& rRange )
     return false;
 }
 
-sal_uInt32 ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, ScRefCellValue& rCell )
+sal_uInt32 ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, const ScRefCellValue& rCell )
 {
     sal_uInt32 nFormat;
     FormulaError nErr;
@@ -176,7 +176,7 @@ double ScInterpreter::ConvertStringToValue( const OUString& rStr, FormulaError& 
     return ScGlobal::ConvertStringToValue( rStr, maCalcConfig, rError, mnStringNoValueError, mrContext, rCurFmtType);
 }
 
-double ScInterpreter::GetCellValue( const ScAddress& rPos, ScRefCellValue& rCell )
+double ScInterpreter::GetCellValue( const ScAddress& rPos, const ScRefCellValue& rCell )
 {
     FormulaError nErr = nGlobalError;
     nGlobalError = FormulaError::NONE;
@@ -188,7 +188,7 @@ double ScInterpreter::GetCellValue( const ScAddress& rPos, ScRefCellValue& rCell
     return nVal;
 }
 
-double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue& rCell )
+double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScRefCellValue& rCell )
 {
     double fValue = 0.0;
 
@@ -245,7 +245,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
     return fValue;
 }
 
-void ScInterpreter::GetCellString( svl::SharedString& rStr, ScRefCellValue& rCell )
+void ScInterpreter::GetCellString( svl::SharedString& rStr, const ScRefCellValue& rCell )
 {
     FormulaError nErr = FormulaError::NONE;
 

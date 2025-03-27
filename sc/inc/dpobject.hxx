@@ -193,7 +193,7 @@ public:
                                        tools::Rectangle& rPosRect, css::sheet::DataPilotFieldOrientation& rOrient, tools::Long& rDimPos );
     bool                IsFilterButton( const ScAddress& rPos );
 
-    static OUString GetFormattedString(ScDPTableData* pTableData, tools::Long nDimension, const double fValue);
+    static OUString GetFormattedString(const ScDPTableData* pTableData, tools::Long nDimension, const double fValue);
     SC_DLLPUBLIC OUString GetFormattedString( std::u16string_view rDimName, const double fValue );
 
     double GetPivotData(

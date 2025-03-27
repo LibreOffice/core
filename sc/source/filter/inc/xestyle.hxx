@@ -776,7 +776,7 @@ private:
     DxfContainer maDxf;
     std::unique_ptr<NfKeywordTable>   mpKeywordTable; /// Replacement table.
 
-    void fillDxfFrom(SfxItemSet& rItemSet, SvNumberFormatterPtr& xFormatter);
+    void fillDxfFrom(const SfxItemSet& rItemSet, const SvNumberFormatterPtr& xFormatter);
 
 };
 

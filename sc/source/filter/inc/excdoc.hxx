@@ -96,7 +96,7 @@ public:
     void                WriteXml( XclExpXmlStream& );
 
     // add an element attributes and values to FastAttributeList
-    static void addElemensToAttrList(rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList,
+    static void addElemensToAttrList(const rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList,
                                      css::uno::Sequence<css::uno::Any>& aSeqs);
 };
 

@@ -872,7 +872,7 @@ double ScOutputData::GetStretch() const
 
 //  output strings
 
-static void lcl_DoHyperlinkResult( const OutputDevice* pDev, const tools::Rectangle& rRect, ScRefCellValue& rCell )
+static void lcl_DoHyperlinkResult( const OutputDevice* pDev, const tools::Rectangle& rRect, const ScRefCellValue& rCell )
 {
     vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >( pDev->GetExtOutDevData() );
 
@@ -2302,7 +2302,7 @@ static void lcl_ClearEdit( EditEngine& rEngine )       // text and attributes
     rEngine.EnableSkipOutsideFormat(false);
 }
 
-static bool lcl_SafeIsValue( ScRefCellValue& rCell )
+static bool lcl_SafeIsValue( const ScRefCellValue& rCell )
 {
     switch (rCell.getType())
     {

@@ -368,7 +368,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
     }
 }
 
-void ScColumn::duplicateSparkline(sc::CopyFromClipContext& rContext, sc::ColumnBlockPosition* pBlockPos,
+void ScColumn::duplicateSparkline(const sc::CopyFromClipContext& rContext, sc::ColumnBlockPosition* pBlockPos,
                                   size_t nColOffset, size_t nDestSize, ScAddress aDestPosition)
 {
     if ((rContext.getInsertFlag() & InsertDeleteFlags::SPARKLINES) == InsertDeleteFlags::NONE)
@@ -1130,7 +1130,7 @@ class ScriptTypeUpdater
     bool mbUpdated;
 
 private:
-    void updateScriptType( size_t nRow, ScRefCellValue& rCell )
+    void updateScriptType( size_t nRow, const ScRefCellValue& rCell )
     {
         sc::CellTextAttrStoreType::position_type aAttrPos = mrTextAttrs.position(miPosAttr, nRow);
         miPosAttr = aAttrPos.first;

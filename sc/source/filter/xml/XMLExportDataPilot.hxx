@@ -46,7 +46,7 @@ class ScXMLExportDataPilot
     static OUString getDPOperatorXML(const ScQueryOp aFilterOperator, const utl::SearchParam::SearchType eSearchType);
     void WriteDPCondition(const ScQueryEntry& aQueryEntry, bool bIsCaseSensitive,
             utl::SearchParam::SearchType eSearchType);
-    void WriteDPFilter(ScDocument& rDoc, const ScQueryParam& aQueryParam);
+    void WriteDPFilter(const ScDocument& rDoc, const ScQueryParam& aQueryParam);
 
     void WriteFieldReference(const ScDPSaveDimension* pDim);
     void WriteSortInfo(const ScDPSaveDimension* pDim);

@@ -755,7 +755,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     bFirstRun = false;
 }
 
-static bool lcl_GetCellContent( ScRefCellValue& rCell, bool bIsStr1, double& rArg, OUString& rArgStr,
+static bool lcl_GetCellContent( const ScRefCellValue& rCell, bool bIsStr1, double& rArg, OUString& rArgStr,
         const ScDocument* pDoc )
 {
 
@@ -1261,7 +1261,7 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
     return bValid;
 }
 
-bool ScConditionEntry::IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos ) const
+bool ScConditionEntry::IsCellValid( const ScRefCellValue& rCell, const ScAddress& rPos ) const
 {
     const_cast<ScConditionEntry*>(this)->Interpret(rPos); // Evaluate formula
 
@@ -1862,7 +1862,7 @@ const ScFormatEntry* ScConditionalFormat::GetEntry( sal_uInt16 nPos ) const
         return nullptr;
 }
 
-OUString ScConditionalFormat::GetCellStyle( ScRefCellValue& rCell, const ScAddress& rPos ) const
+OUString ScConditionalFormat::GetCellStyle( const ScRefCellValue& rCell, const ScAddress& rPos ) const
 {
     for (const auto& rxEntry : maEntries)
     {
@@ -1884,7 +1884,7 @@ OUString ScConditionalFormat::GetCellStyle( ScRefCellValue& rCell, const ScAddre
     return OUString();
 }
 
-ScCondFormatData ScConditionalFormat::GetData( ScRefCellValue& rCell, const ScAddress& rPos ) const
+ScCondFormatData ScConditionalFormat::GetData( const ScRefCellValue& rCell, const ScAddress& rPos ) const
 {
     ScCondFormatData aData;
     for(const auto& rxEntry : maEntries)

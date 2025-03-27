@@ -136,7 +136,7 @@ void ScXMLExportDataPilot::WriteDPCondition(const ScQueryEntry& aQueryEntry, boo
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
 }
 
-void ScXMLExportDataPilot::WriteDPFilter(ScDocument& rDoc, const ScQueryParam& aQueryParam)
+void ScXMLExportDataPilot::WriteDPFilter(const ScDocument& rDoc, const ScQueryParam& aQueryParam)
 {
     SCSIZE nQueryEntryCount = aQueryParam.GetEntryCount();
     if (nQueryEntryCount <= 0)

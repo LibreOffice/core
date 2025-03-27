@@ -236,7 +236,7 @@ friend class sc::CellStoreEvent;
         SCROW nRow, SCTAB nTab, const OUString& rString, formula::FormulaGrammar::AddressConvention eConv,
         const ScSetStringParam* pParam );
 
-    void duplicateSparkline(sc::CopyFromClipContext& rContext, sc::ColumnBlockPosition* pBlockPos,
+    void duplicateSparkline(const sc::CopyFromClipContext& rContext, sc::ColumnBlockPosition* pBlockPos,
                             size_t nColOffset, size_t nDestSize, ScAddress aDestPosition);
 
 public:

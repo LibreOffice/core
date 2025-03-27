@@ -503,7 +503,7 @@ void ScModelObj::RepaintRange( const ScRangeList& rRange )
         pDocShell->PostPaint(rRange, PaintPartFlags::Grid, SC_PF_TESTMERGE);
 }
 
-static OString getTabViewRenderState(ScTabViewShell& rTabViewShell)
+static OString getTabViewRenderState(const ScTabViewShell& rTabViewShell)
 {
     OStringBuffer aState;
     const ScViewRenderingOptions& rViewRenderingOptions = rTabViewShell.GetViewRenderingData();
@@ -2374,7 +2374,7 @@ static void lcl_PDFExportBookmarkHelper(OutputDevice* pDev, ScDocument& rDoc,
 }
 
 static void lcl_SetMediaScreen(const uno::Reference<drawing::XShape>& xMediaShape,
-                               const OutputDevice* pDev, tools::Rectangle& aRect,
+                               const OutputDevice* pDev, const tools::Rectangle& aRect,
                                sal_Int32 nPageNumb)
 {
     OUString sMediaURL;

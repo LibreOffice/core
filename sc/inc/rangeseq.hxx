@@ -43,7 +43,7 @@ public:
     static bool FillStringArray( css::uno::Any& rAny,
                                 ScDocument& rDoc, const ScRange& rRange );
     static bool FillStringArray( css::uno::Any& rAny,
-                                const ScMatrix* pMatrix, ScInterpreterContext& rContext );
+                                const ScMatrix* pMatrix, const ScInterpreterContext& rContext );
     static bool FillMixedArray( css::uno::Any& rAny,
                                 ScDocument& rDoc, const ScRange& rRange,
                                 bool bAllowNV = false );

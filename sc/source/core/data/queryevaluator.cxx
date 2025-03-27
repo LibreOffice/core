@@ -665,7 +665,8 @@ std::pair<bool, bool> ScQueryEvaluator::compareByRangeLookup(const ScRefCellValu
     return std::pair<bool, bool>(!rCell.hasNumeric(), bTestEqual);
 }
 
-std::pair<bool, bool> ScQueryEvaluator::processEntry(SCROW nRow, SCCOL nCol, ScRefCellValue& aCell,
+std::pair<bool, bool> ScQueryEvaluator::processEntry(SCROW nRow, SCCOL nCol,
+                                                     const ScRefCellValue& aCell,
                                                      const ScQueryEntry& rEntry, size_t nEntryIndex)
 {
     std::pair<bool, bool> aRes(false, false);

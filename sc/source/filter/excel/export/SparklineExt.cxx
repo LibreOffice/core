@@ -54,8 +54,8 @@ void SparklineExt::SaveXml(XclExpXmlStream& rStream)
 }
 
 void SparklineExt::addSparklineGroupAttributes(
-    rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList,
-    sc::SparklineAttributes& rAttributes)
+    const rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList,
+    const sc::SparklineAttributes& rAttributes)
 {
     if (rAttributes.getLineWeight() != 0.75)
         pAttrList->add(XML_lineWeight, OString::number(rAttributes.getLineWeight()));
@@ -123,7 +123,7 @@ void SparklineExt::addSparklineGroupAttributes(
 }
 
 void SparklineExt::addSparklineGroupColors(XclExpXmlStream& rStream,
-                                           sc::SparklineAttributes& rAttributes)
+                                           const sc::SparklineAttributes& rAttributes)
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStream.GetCurrentStream();
 

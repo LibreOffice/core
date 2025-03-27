@@ -799,7 +799,7 @@ const SfxItemSet* ScDocument::GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab,
 }
 
 const SfxItemSet* ScDocument::GetCondResult(
-    ScRefCellValue& rCell, const ScAddress& rPos, const ScConditionalFormatList& rList,
+    const ScRefCellValue& rCell, const ScAddress& rPos, const ScConditionalFormatList& rList,
     const ScCondFormatIndexes& rIndex ) const
 {
     for (const auto& rItem : rIndex)

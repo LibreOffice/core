@@ -508,7 +508,7 @@ static OUString lcl_GetAreaName( ScDocument* pDoc, const ScArea* pArea )
     return aName;
 }
 
-static ScDBData* getUndoData(ScDBData* pDestData)
+static ScDBData* getUndoData(const ScDBData* pDestData)
 {
     if (!pDestData)
         return nullptr;

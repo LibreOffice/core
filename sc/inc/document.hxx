@@ -631,7 +631,7 @@ public:
     void setHasConnectionXml(bool bUse) { mbConnectionXml = bUse; }
     bool hasConnectionXml() { return mbConnectionXml; }
 
-    void setHasCustomXml(bool bUse, OUString& sCustomXmlPath)
+    void setHasCustomXml(bool bUse, const OUString& sCustomXmlPath)
     {
         mbCustomXml = bUse;
         aCustomXmlFragmentPath = sCustomXmlPath;
@@ -1903,7 +1903,7 @@ public:
     // pCell is an optimization, must point to rPos
     SC_DLLPUBLIC const SfxItemSet*          GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                                            ScRefCellValue* pCell = nullptr ) const;
-    const SfxItemSet*                       GetCondResult( ScRefCellValue& rCell, const ScAddress& rPos,
+    const SfxItemSet*                       GetCondResult( const ScRefCellValue& rCell, const ScAddress& rPos,
                                                            const ScConditionalFormatList& rList,
                                                            const ScCondFormatIndexes& rIndex ) const;
     const SfxPoolItem*                      GetEffItem( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const;

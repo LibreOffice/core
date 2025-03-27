@@ -368,7 +368,7 @@ public:
     /** Create a new caption object and inserts it into the document. */
     explicit            ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScNoteData& rNoteData );
     /** Manipulate an existing caption. */
-    explicit            ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, rtl::Reference<SdrCaptionObj>& xCaption, bool bShown );
+    explicit            ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, const rtl::Reference<SdrCaptionObj>& xCaption, bool bShown );
 };
 
 ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScNoteData& rNoteData ) :
@@ -392,7 +392,7 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
     }
 }
 
-ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, rtl::Reference<SdrCaptionObj>& xCaption, bool bShown ) :
+ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, const rtl::Reference<SdrCaptionObj>& xCaption, bool bShown ) :
     ScCaptionCreator( rDoc, rPos, xCaption )
 {
     SdrPage* pDrawPage = GetDrawPage();
@@ -931,7 +931,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
     return pNote;
 }
 
-ScNoteData ScNoteUtil::CreateNoteData(ScDocument& rDoc, const ScAddress& rPos,
+ScNoteData ScNoteUtil::CreateNoteData(const ScDocument& rDoc, const ScAddress& rPos,
                                       const tools::Rectangle& rCaptionRect, bool bShown)
 {
     ScNoteData aNoteData( bShown );

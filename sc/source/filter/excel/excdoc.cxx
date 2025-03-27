@@ -1281,7 +1281,7 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
     rWorkbook.reset();
 }
 
-void ExcDocument::addElemensToAttrList(rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList,
+void ExcDocument::addElemensToAttrList(const rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList,
                                        css::uno::Sequence<css::uno::Any>& aSeqs)
 {
     css::uno::Sequence<css::xml::FastAttribute> aFastSeq;

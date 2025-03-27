@@ -1160,7 +1160,7 @@ SCROW ScDPCache::GetIdByItemData(tools::Long nDim, const ScDPItemData& rItem) co
 }
 
 // static
-sal_uInt32 ScDPCache::GetLocaleIndependentFormat(ScInterpreterContext& rContext, sal_uInt32 nNumFormat)
+sal_uInt32 ScDPCache::GetLocaleIndependentFormat(const ScInterpreterContext& rContext, sal_uInt32 nNumFormat)
 {
     // For a date or date+time format use ISO format so it works across locales
     // and can be matched against string based item queries. For time use 24h
@@ -1187,7 +1187,7 @@ OUString ScDPCache::GetLocaleIndependentFormattedNumberString( double fValue )
 
 // static
 OUString ScDPCache::GetLocaleIndependentFormattedString( double fValue,
-        ScInterpreterContext& rContext, sal_uInt32 nNumFormat )
+        const ScInterpreterContext& rContext, sal_uInt32 nNumFormat )
 {
     nNumFormat = GetLocaleIndependentFormat( rContext, nNumFormat);
     if ((nNumFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)

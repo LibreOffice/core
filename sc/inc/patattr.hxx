@@ -91,9 +91,9 @@ public:
     SfxItemPool& GetPool() const { return mrSfxItemPool; }
 
     void CellStyleDeleted(const ScStyleSheet& rStyle);
-    void CellStyleCreated(ScDocument& rDoc, const OUString& rName);
+    void CellStyleCreated(const ScDocument& rDoc, const OUString& rName);
     void RenameCellStyle(ScStyleSheet& rStyle, const OUString& rNewName);
-    void UpdateAllStyleSheets(ScDocument& rDoc);
+    void UpdateAllStyleSheets(const ScDocument& rDoc);
     void AllStylesToNames();
     void ReIndexRegistered();
 };

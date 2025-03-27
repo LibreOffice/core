@@ -644,7 +644,7 @@ class SAL_DLLPUBLIC_RTTI ScChangeActionContent final : public ScChangeAction
                           const ScCellValue& rOrgCell, const ScDocument* pFromDoc,
                           ScDocument* pToDoc );
 
-    static void SetCell( OUString& rStr, ScCellValue& rCell, sal_uLong nFormat, const ScDocument* pDoc );
+    static void SetCell( OUString& rStr, const ScCellValue& rCell, sal_uLong nFormat, const ScDocument* pDoc );
 
     static bool NeedsNumberFormat( const ScCellValue& rVal );
 

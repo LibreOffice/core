@@ -14,9 +14,9 @@
 
 namespace oox::xls
 {
-void writeComplexColor(sax_fastparser::FSHelperPtr& pFS, sal_Int32 nElement,
+void writeComplexColor(const sax_fastparser::FSHelperPtr& pFS, sal_Int32 nElement,
                        model::ComplexColor const& rComplexColor, Color const& rColor);
-void writeComplexColor(sax_fastparser::FSHelperPtr& pFS, sal_Int32 nElement,
+void writeComplexColor(const sax_fastparser::FSHelperPtr& pFS, sal_Int32 nElement,
                        model::ComplexColor const& rComplexColor);
 }
 

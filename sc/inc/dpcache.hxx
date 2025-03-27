@@ -139,9 +139,9 @@ public:
 
     SCROW GetIdByItemData(tools::Long nDim, const ScDPItemData& rItem) const;
 
-    static sal_uInt32 GetLocaleIndependentFormat( ScInterpreterContext& rContext, sal_uInt32 nNumFormat );
+    static sal_uInt32 GetLocaleIndependentFormat( const ScInterpreterContext& rContext, sal_uInt32 nNumFormat );
     static OUString GetLocaleIndependentFormattedNumberString( double fValue );
-    static OUString GetLocaleIndependentFormattedString( double fValue, ScInterpreterContext& rContext, sal_uInt32 nNumFormat );
+    static OUString GetLocaleIndependentFormattedString( double fValue, const ScInterpreterContext& rContext, sal_uInt32 nNumFormat );
     SC_DLLPUBLIC OUString GetFormattedString(tools::Long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const;
     ScInterpreterContext& GetInterpreterContext() const;
 

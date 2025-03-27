@@ -68,12 +68,12 @@ public:
                            ~ScMyValidationsContainer();
     void                   AddValidation(const css::uno::Any& aAny,
                                     sal_Int32& nValidationIndex);
-    static OUString        GetCondition(ScDocument& rDoc, ScXMLExport& rExport, const ScMyValidation& aValidation);
+    static OUString        GetCondition(const ScDocument& rDoc, const ScXMLExport& rExport, const ScMyValidation& aValidation);
     static OUString        GetBaseCellAddress(const ScDocument* pDoc, const ScAddress& aCell);
     static void            WriteMessage(ScXMLExport& rExport,
                                     const OUString& sTitle, const OUString& sMessage,
                                     const bool bShowMessage, const bool bIsHelpMessage);
-    void                   WriteValidations(ScDocument& rDoc, ScXMLExport& rExport);
+    void                   WriteValidations(const ScDocument& rDoc, ScXMLExport& rExport);
     const OUString&        GetValidationName(const sal_Int32 nIndex);
 };
 

@@ -1823,7 +1823,7 @@ void ScInputHandler::LOKPasteFunctionData(const OUString& rFunctionName)
     }
 }
 
-void ScTabViewShell::LOKSendFormulabarUpdate(EditView* pActiveView,
+void ScTabViewShell::LOKSendFormulabarUpdate(const EditView* pActiveView,
                                              const OUString& rText,
                                              const ESelection& rSelection)
 {

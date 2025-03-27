@@ -156,7 +156,7 @@ namespace
         std::shared_ptr<RichString> mxText;
         OUString msAuthorName;
 
-        OOXGenerateNoteCaption(std::shared_ptr<RichString>& rText, const OUString& rAuthorName = "")
+        OOXGenerateNoteCaption(const std::shared_ptr<RichString>& rText, const OUString& rAuthorName = "")
             : mxText(rText)
             , msAuthorName(rAuthorName)
         {

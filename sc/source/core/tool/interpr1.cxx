@@ -12334,7 +12334,7 @@ utl::SearchParam::SearchType ScInterpreter::DetectSearchType( std::u16string_vie
     return utl::SearchParam::SearchType::Normal;
 }
 
-bool ScInterpreter::SearchMatrixForValue( VectorSearchArguments& vsa, ScQueryParam& rParam, ScQueryEntry& rEntry, ScQueryEntry::Item& rItem )
+bool ScInterpreter::SearchMatrixForValue( VectorSearchArguments& vsa, const ScQueryParam& rParam, const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem )
 {
     SCSIZE nC, nR;
     vsa.pMatSrc->GetDimensions( nC, nR);
@@ -12554,7 +12554,7 @@ bool ScInterpreter::SearchMatrixForValue( VectorSearchArguments& vsa, ScQueryPar
     return true;
 }
 
-bool ScInterpreter::SearchRangeForValue( VectorSearchArguments& vsa, ScQueryParam& rParam, ScQueryEntry& rEntry )
+bool ScInterpreter::SearchRangeForValue( VectorSearchArguments& vsa, ScQueryParam& rParam, const ScQueryEntry& rEntry )
 {
     vsa.bVLookup = ( vsa.nCol1 == vsa.nCol2 );
     switch ( vsa.eSearchMode )

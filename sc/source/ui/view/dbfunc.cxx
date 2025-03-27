@@ -375,7 +375,7 @@ IMPL_STATIC_LINK_NOARG(ScDBFunc, InstallLOKNotifierHdl, void*, vcl::ILibreOffice
     return GetpApp();
 }
 
-void ScDBFunc::ApplyAutoFilter(ScDocShell* pDocSh, ScViewData* pViewData, ScDBData* pDBData,
+void ScDBFunc::ApplyAutoFilter(ScDocShell* pDocSh, const ScViewData* pViewData, ScDBData* pDBData,
                                SCROW nRow, SCTAB nTab, const ScQueryParam& aParam)
 {
     ScDocument& rDoc = pViewData->GetDocument();

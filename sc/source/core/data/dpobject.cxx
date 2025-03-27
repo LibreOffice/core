@@ -1447,7 +1447,7 @@ void ScDPObject::GetMemberResultNames(ScDPUniqueStringSet& rNames, tools::Long n
     mpOutput->GetMemberResultNames(rNames, nDimension);    // used only with table data -> level not needed
 }
 
-OUString ScDPObject::GetFormattedString(ScDPTableData* pTableData, tools::Long nDimension, const double fValue)
+OUString ScDPObject::GetFormattedString(const ScDPTableData* pTableData, tools::Long nDimension, const double fValue)
 {
     ScDPItemData aItemData;
     aItemData.SetValue(fValue);

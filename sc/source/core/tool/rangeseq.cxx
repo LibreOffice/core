@@ -197,7 +197,7 @@ bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument& rDoc, const
     return !bHasErrors;
 }
 
-bool ScRangeToSequence::FillStringArray(uno::Any& rAny, const ScMatrix* pMatrix, ScInterpreterContext& rContext)
+bool ScRangeToSequence::FillStringArray(uno::Any& rAny, const ScMatrix* pMatrix, const ScInterpreterContext& rContext)
 {
     if (!pMatrix)
         return false;

@@ -307,7 +307,7 @@ void ScViewFunc::DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
 //      additional routines
 
-void ScViewData::setupSizeDeviceProviderForColWidth(ScSizeDeviceProvider& rProv, Fraction& rZoomX, Fraction& rZoomY, double& rPPTX, double &rPPTY)
+void ScViewData::setupSizeDeviceProviderForColWidth(const ScSizeDeviceProvider& rProv, Fraction& rZoomX, Fraction& rZoomY, double& rPPTX, double &rPPTY)
 {
     if (rProv.IsPrinter())
     {
@@ -1019,7 +1019,7 @@ SvtScriptType ScViewFunc::GetSelectionScriptType()
     return nScript;
 }
 
-static void ShrinkToDataArea(ScMarkData& rFuncMark, ScDocument& rDoc);
+static void ShrinkToDataArea(ScMarkData& rFuncMark, const ScDocument& rDoc);
 
 const ScPatternAttr* ScViewFunc::GetSelectionPattern()
 {
@@ -1308,7 +1308,7 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
 // tdf#147842 if the marked area is the entire sheet, then shrink it to the data area.
 // Otherwise ctrl-A, perform-action, will take a very long time as it tries to modify
 // cells that we are not using.
-static void ShrinkToDataArea(ScMarkData& rFuncMark, ScDocument& rDoc)
+static void ShrinkToDataArea(ScMarkData& rFuncMark, const ScDocument& rDoc)
 {
     // do not make it marked if it is not already marked
     if (!rFuncMark.IsMarked())

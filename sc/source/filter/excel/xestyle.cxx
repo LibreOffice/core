@@ -3180,7 +3180,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     }
 }
 
-void XclExpDxfs::fillDxfFrom(SfxItemSet& rItemSet, SvNumberFormatterPtr& xFormatter)
+void XclExpDxfs::fillDxfFrom(const SfxItemSet& rItemSet, const SvNumberFormatterPtr& xFormatter)
 {
     std::unique_ptr<XclExpCellBorder> pBorder(new XclExpCellBorder);
     if (!pBorder->FillFromItemSet(rItemSet, GetPalette(), GetBiff()))

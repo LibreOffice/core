@@ -1779,7 +1779,7 @@ ScViewOptiChangesListener::ScViewOptiChangesListener(ScTabViewShell& rViewShell)
         m_xColorSchemeChangesNotifier->addChangesListener(this);
 }
 
-static void lcl_RemoveCells(uno::Reference<sheet::XSpreadsheet>& rSheet, sal_uInt16 nSheet,
+static void lcl_RemoveCells(const uno::Reference<sheet::XSpreadsheet>& rSheet, sal_uInt16 nSheet,
                      sal_uInt32 nStartColumn, sal_uInt32 nStartRow, sal_uInt32 nEndColumn,
                      sal_uInt32 nEndRow, bool bRows)
 {
@@ -1887,7 +1887,7 @@ void ScTabViewShell::ExtendSingleSelection(css::table::CellRangeAddress& rRangeD
 }
 
 /* bool bRemove == false ==> highlight duplicate rows */
-void ScTabViewShell::HandleDuplicateRecords(css::uno::Reference<css::sheet::XSpreadsheet> ActiveSheet,
+void ScTabViewShell::HandleDuplicateRecords(const css::uno::Reference<css::sheet::XSpreadsheet>& ActiveSheet,
                                 const css::table::CellRangeAddress& aRange, bool bRemove,
                                 bool bIncludesHeaders, bool bDuplicateRows,
                                 const std::vector<int>& rSelectedEntries)

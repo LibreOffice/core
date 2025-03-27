@@ -295,11 +295,11 @@ private:
 
     void ReplaceCell( ScAddress& );     // for TableOp
     bool IsTableOpInRange( const ScRange& );
-    sal_uInt32 GetCellNumberFormat( const ScAddress& rPos, ScRefCellValue& rCell );
+    sal_uInt32 GetCellNumberFormat( const ScAddress& rPos, const ScRefCellValue& rCell );
     double ConvertStringToValue( const OUString& );
     bool SearchVectorForValue( VectorSearchArguments& );
-    bool SearchMatrixForValue( VectorSearchArguments&, ScQueryParam&, ScQueryEntry&, ScQueryEntry::Item& );
-    bool SearchRangeForValue( VectorSearchArguments&, ScQueryParam&, ScQueryEntry& );
+    bool SearchMatrixForValue( VectorSearchArguments&, const ScQueryParam&, const ScQueryEntry&, const ScQueryEntry::Item& );
+    bool SearchRangeForValue( VectorSearchArguments&, ScQueryParam&, const ScQueryEntry& );
 
 public:
     static double ScGetGCD(double fx, double fy);
@@ -307,10 +307,10 @@ public:
         Uses rError instead of nGlobalError and rCurFmtType instead of nCurFmtType. */
     double ConvertStringToValue( const OUString&, FormulaError& rError, SvNumFormatType& rCurFmtType );
 private:
-    double GetCellValue( const ScAddress&, ScRefCellValue& rCell );
-    double GetCellValueOrZero( const ScAddress&, ScRefCellValue& rCell );
+    double GetCellValue( const ScAddress&, const ScRefCellValue& rCell );
+    double GetCellValueOrZero( const ScAddress&, const ScRefCellValue& rCell );
     double GetValueCellValue( const ScAddress&, double fOrig );
-    void GetCellString( svl::SharedString& rStr, ScRefCellValue& rCell );
+    void GetCellString( svl::SharedString& rStr, const ScRefCellValue& rCell );
     static FormulaError GetCellErrCode( const ScRefCellValue& rCell );
 
     bool CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,

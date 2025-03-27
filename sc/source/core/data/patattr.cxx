@@ -224,7 +224,7 @@ void CellAttributeHelper::RenameCellStyle(ScStyleSheet& rStyle, const OUString& 
         maRegisteredCellAttributes.insert(p);
 }
 
-void CellAttributeHelper::CellStyleCreated(ScDocument& rDoc, const OUString& rName)
+void CellAttributeHelper::CellStyleCreated(const ScDocument& rDoc, const OUString& rName)
 {
     // If a style was created, don't keep any pattern with its name string in the pool,
     // because it would compare equal to a pattern with a pointer to the new style.
@@ -255,7 +255,7 @@ void CellAttributeHelper::CellStyleCreated(ScDocument& rDoc, const OUString& rNa
         maRegisteredCellAttributes.insert(p);
 }
 
-void CellAttributeHelper::UpdateAllStyleSheets(ScDocument& rDoc)
+void CellAttributeHelper::UpdateAllStyleSheets(const ScDocument& rDoc)
 {
     bool bNameChanged = false;
     for (const ScPatternAttr* pCheck : maRegisteredCellAttributes)

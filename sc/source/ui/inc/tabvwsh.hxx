@@ -270,7 +270,7 @@ public:
     SC_DLLPUBLIC bool IsRefInputMode() const;
     void            ExecuteInputDirect();
 
-    void HandleDuplicateRecords(css::uno::Reference<css::sheet::XSpreadsheet> ActiveSheet,
+    void HandleDuplicateRecords(const css::uno::Reference<css::sheet::XSpreadsheet>& ActiveSheet,
                                 const css::table::CellRangeAddress& aRange, bool bRemove,
                                 bool bIncludesHeaders, bool bDuplicateRows,
                                 const std::vector<int>& rSelectedEntries);
@@ -452,7 +452,7 @@ public:
     /// is equal to nCurrentTabIndex
     static void notifyAllViewsSheetGeomInvalidation(const SfxViewShell* pForViewShell, bool bColumns, bool bRows, bool bSizes,
                                                     bool bHidden, bool bFiltered, bool bGroups, SCTAB nCurrentTabIndex);
-    void LOKSendFormulabarUpdate(EditView* pEditView, const OUString& rText, const ESelection& rSelection);
+    void LOKSendFormulabarUpdate(const EditView* pEditView, const OUString& rText, const ESelection& rSelection);
     css::uno::Reference<css::drawing::XShapes> getSelectedXShapes();
     SC_DLLPUBLIC static css::uno::Reference<css::datatransfer::XTransferable2> GetClipData(vcl::Window* pWin);
 

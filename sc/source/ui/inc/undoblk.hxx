@@ -633,7 +633,7 @@ public:
 
 private:
     ScDocumentUniquePtr createUndoRedoData();
-    void DoChange(ScDocument* pDoc);
+    void DoChange(const ScDocument* pDoc);
     SCTAB mnTab;
     ScDocumentUniquePtr mpUndoDoc;
     ScDocumentUniquePtr mpRedoDoc;

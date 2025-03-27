@@ -15,7 +15,7 @@
 
 namespace oox::xls
 {
-void writeComplexColor(sax_fastparser::FSHelperPtr& pFS, sal_Int32 nElement,
+void writeComplexColor(const sax_fastparser::FSHelperPtr& pFS, sal_Int32 nElement,
                        model::ComplexColor const& rComplexColor, Color const& rColor)
 {
     if (rComplexColor.isValidThemeType())
@@ -32,7 +32,7 @@ void writeComplexColor(sax_fastparser::FSHelperPtr& pFS, sal_Int32 nElement,
     }
 }
 
-void writeComplexColor(sax_fastparser::FSHelperPtr& pFS, sal_Int32 nElement,
+void writeComplexColor(const sax_fastparser::FSHelperPtr& pFS, sal_Int32 nElement,
                        model::ComplexColor const& rComplexColor)
 {
     if (rComplexColor.isValidThemeType() || rComplexColor.getType() == model::ColorType::RGB)

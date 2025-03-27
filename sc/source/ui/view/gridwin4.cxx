@@ -94,7 +94,7 @@ static void lcl_LimitRect( tools::Rectangle& rRect, const tools::Rectangle& rVis
 static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& rInnerPixel,
                         const OUString& rTitle, const Color& rColor, bool bTextBelow,
                         double nPPTX, double nPPTY, const Fraction& rZoomY,
-                        ScDocument& rDoc, ScViewData& rButtonViewData, bool bLayoutRTL )
+                        const ScDocument& rDoc, ScViewData& rButtonViewData, bool bLayoutRTL )
 {
     // rButtonViewData is only used to set the button size,
 

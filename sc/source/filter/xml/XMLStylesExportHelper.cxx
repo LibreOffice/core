@@ -146,7 +146,7 @@ void ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
     }
 }
 
-OUString ScMyValidationsContainer::GetCondition(ScDocument& rDoc, ScXMLExport& rExport, const ScMyValidation& aValidation)
+OUString ScMyValidationsContainer::GetCondition(const ScDocument& rDoc, const ScXMLExport& rExport, const ScMyValidation& aValidation)
 {
     /* ATTENTION! Should the condition to not write sheet::ValidationType_ANY
      * ever be changed, adapt the conditional call of
@@ -308,7 +308,7 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
     }
 }
 
-void ScMyValidationsContainer::WriteValidations(ScDocument& rDoc, ScXMLExport& rExport)
+void ScMyValidationsContainer::WriteValidations(const ScDocument& rDoc, ScXMLExport& rExport)
 {
     if (aValidationVec.empty())
         return;

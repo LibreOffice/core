@@ -189,7 +189,7 @@ class SC_DLLPUBLIC ScNoteUtil
                                 bool bAlwaysCreateCaption, sal_uInt32 nPostItId,
                                 bool bShouldAutoStamp = true);
 
-    static ScNoteData CreateNoteData(ScDocument& rDoc, const ScAddress& rPos,
+    static ScNoteData CreateNoteData(const ScDocument& rDoc, const ScAddress& rPos,
                                      const tools::Rectangle& rCaptionRect, bool bShown);
 public:
 

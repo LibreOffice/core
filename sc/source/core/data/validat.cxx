@@ -597,7 +597,7 @@ bool ScValidationData::IsDataValid(
     return bRet;
 }
 
-bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos ) const
+bool ScValidationData::IsDataValid( const ScRefCellValue& rCell, const ScAddress& rPos ) const
 {
     if( eDataMode == SC_VALID_LIST )
         return IsListValid(rCell, rPos);
@@ -804,7 +804,7 @@ bool ScValidationData::HasSelectionList() const
 }
 
 bool ScValidationData::GetSelectionFromFormula(
-    std::vector<ScTypedStrData>* pStrings, ScRefCellValue& rCell, const ScAddress& rPos,
+    std::vector<ScTypedStrData>* pStrings, const ScRefCellValue& rCell, const ScAddress& rPos,
     const ScTokenArray& rTokArr, int& rMatch) const
 {
     bool bOk = true;
@@ -1032,7 +1032,7 @@ bool ScValidationData::FillSelectionList(std::vector<ScTypedStrData>& rStrColl, 
     return bOk;
 }
 
-bool ScValidationData::IsEqualToTokenArray( ScRefCellValue& rCell, const ScAddress& rPos, const ScTokenArray& rTokArr ) const
+bool ScValidationData::IsEqualToTokenArray( const ScRefCellValue& rCell, const ScAddress& rPos, const ScTokenArray& rTokArr ) const
 {
     // create a condition entry that tests on equality and set the passed token array
     ScConditionEntry aCondEntry( ScConditionMode::Equal, &rTokArr, nullptr, *GetDocument(), rPos );
@@ -1041,7 +1041,7 @@ bool ScValidationData::IsEqualToTokenArray( ScRefCellValue& rCell, const ScAddre
     return aCondEntry.IsCellValid(rCell, rPos);
 }
 
-bool ScValidationData::IsListValid( ScRefCellValue& rCell, const ScAddress& rPos ) const
+bool ScValidationData::IsListValid( const ScRefCellValue& rCell, const ScAddress& rPos ) const
 {
     bool bIsValid = false;
 

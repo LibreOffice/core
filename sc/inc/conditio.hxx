@@ -366,7 +366,7 @@ public:
 
     virtual void SetParent( ScConditionalFormat* pNew ) override;
 
-    bool IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
+    bool IsCellValid( const ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
     ScConditionMode GetOperation() const        { return eOp; }
     void SetOperation(ScConditionMode eMode);
@@ -605,9 +605,9 @@ public:
 
     SC_DLLPUBLIC const ScFormatEntry* GetEntry( sal_uInt16 nPos ) const;
 
-    SC_DLLPUBLIC OUString GetCellStyle( ScRefCellValue& rCell, const ScAddress& rPos ) const;
+    SC_DLLPUBLIC OUString GetCellStyle( const ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
-    SC_DLLPUBLIC ScCondFormatData GetData( ScRefCellValue& rCell, const ScAddress& rPos ) const;
+    SC_DLLPUBLIC ScCondFormatData GetData( const ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
     bool            EqualEntries( const ScConditionalFormat& r, bool bIgnoreSrcPos = false ) const;
 

@@ -377,11 +377,11 @@ private:
     bool            PasteDataFormatSource( SotClipboardFormatId nFormatId,
                                         SCCOL nPosX, SCROW nPosY,
                                         bool bAllowDialogs,
-                                        TransferableDataHelper& rDataHelper, Point& rPos);
+                                        const TransferableDataHelper& rDataHelper, const Point& rPos);
     bool            PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
                                         const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
                                         SCCOL nPosX, SCROW nPosY,
-                                        bool bAllowDialogs, TransferableDataHelper& rDataHelper );
+                                        bool bAllowDialogs, const TransferableDataHelper& rDataHelper );
 
     sal_uInt16      GetOptimalColWidth( SCCOL nCol, SCTAB nTab, bool bFormula );
 

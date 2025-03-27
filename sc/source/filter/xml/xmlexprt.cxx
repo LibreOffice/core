@@ -706,7 +706,7 @@ ScMyAreaLinksContainer ScXMLExport::GetAreaLinks(ScDocument& rDoc)
 }
 
 // core implementation
-ScMyDetectiveOpContainer ScXMLExport::GetDetectiveOpList(ScDocument& rDoc)
+ScMyDetectiveOpContainer ScXMLExport::GetDetectiveOpList(const ScDocument& rDoc)
 {
     ScDetOpList* pOpList(rDoc.GetDetOpList());
     if( !pOpList )
@@ -877,7 +877,7 @@ void ScXMLExport::ExportColumns(const sal_Int32 nTable, const ScRange& aColumnHe
         pGroupColumns->CloseGroups(nColumn - 1);
 }
 
-void ScXMLExport::ExportExternalRefCacheStyles(ScDocument& rDoc)
+void ScXMLExport::ExportExternalRefCacheStyles(const ScDocument& rDoc)
 {
     sal_Int32 nEntryIndex = GetCellStylesPropertySetMapper()->FindEntryIndex(
         "NumberFormat", XML_NAMESPACE_STYLE, u"data-style-name");
@@ -1251,7 +1251,7 @@ const SvxFieldData* toXMLPropertyStates(
 
 }
 
-void ScXMLExport::ExportCellTextAutoStyles(ScDocument& rDoc, sal_Int32 nTable)
+void ScXMLExport::ExportCellTextAutoStyles(const ScDocument& rDoc, sal_Int32 nTable)
 {
     if (!ValidTab(nTable))
         return;
@@ -1616,7 +1616,7 @@ void ScXMLExport::ExportFormatRanges(ScDocument& rDoc, const sal_Int32 nStartCol
     }
 }
 
-void ScXMLExport::GetColumnRowHeader(ScDocument& rDoc, bool& rHasColumnHeader, ScRange& rColumnHeaderRange,
+void ScXMLExport::GetColumnRowHeader(const ScDocument& rDoc, bool& rHasColumnHeader, ScRange& rColumnHeaderRange,
                                      bool& rHasRowHeader, ScRange& rRowHeaderRange,
                                      OUString& rPrintRanges) const
 {
@@ -3047,7 +3047,7 @@ void ScXMLExport::WriteTable(ScDocument& rDoc, sal_Int32 nTable, const uno::Refe
 
 namespace {
 
-void writeContent(ScDocument& rDoc, ScXMLExport& rExport, const OUString& rStyleName,
+void writeContent(const ScDocument& rDoc, ScXMLExport& rExport, const OUString& rStyleName,
                   const OUString& rContent, const SvxFieldData* pField)
 {
     std::unique_ptr<SvXMLElementExport> pElem;
@@ -3138,7 +3138,7 @@ void writeContent(ScDocument& rDoc, ScXMLExport& rExport, const OUString& rStyle
 }
 
 void flushParagraph(
-    ScDocument& rDoc,
+    const ScDocument& rDoc,
     ScXMLExport& rExport, std::u16string_view rParaText,
     rtl::Reference<XMLPropertySetMapper> const & xMapper, rtl::Reference<SvXMLAutoStylePoolP> const & xStylePool,
     const ScXMLEditAttributeMap& rAttrMap,
@@ -3180,7 +3180,7 @@ void flushParagraph(
 
 }
 
-void ScXMLExport::WriteCell(ScDocument& rDoc, ScMyCell& aCell, sal_Int32 nEqualCellCount)
+void ScXMLExport::WriteCell(ScDocument& rDoc, const ScMyCell& aCell, sal_Int32 nEqualCellCount)
 {
     // nEqualCellCount is the number of additional cells
     SetRepeatAttribute(nEqualCellCount, (aCell.nType != table::CellContentType_EMPTY));
@@ -3341,7 +3341,7 @@ void ScXMLExport::WriteCell(ScDocument& rDoc, ScMyCell& aCell, sal_Int32 nEqualC
         IncrementProgressBar(false);
 }
 
-void ScXMLExport::WriteEditCell(ScDocument& rDoc, const EditTextObject* pText)
+void ScXMLExport::WriteEditCell(const ScDocument& rDoc, const EditTextObject* pText)
 {
     rtl::Reference<XMLPropertySetMapper> xMapper = GetTextParagraphExport()->GetTextPropMapper()->getPropertySetMapper();
     rtl::Reference<SvXMLAutoStylePoolP> xStylePool = GetAutoStylePool();
@@ -3412,7 +3412,7 @@ void ScXMLExport::WriteMultiLineFormulaResult(const ScFormulaCell* pCell)
     Characters(aContent);
 }
 
-void ScXMLExport::ExportShape(ScDocument& rDoc, const uno::Reference < drawing::XShape >& xShape, awt::Point* pPoint)
+void ScXMLExport::ExportShape(const ScDocument& rDoc, const uno::Reference < drawing::XShape >& xShape, awt::Point* pPoint)
 {
     uno::Reference < beans::XPropertySet > xShapeProps ( xShape, uno::UNO_QUERY );
     bool bIsChart( false );
@@ -3506,7 +3506,7 @@ void ScXMLExport::ExportShape(ScDocument& rDoc, const uno::Reference < drawing::
     IncrementProgressBar(false);
 }
 
-void ScXMLExport::WriteShapes(ScDocument& rDoc, const ScMyCell& rMyCell)
+void ScXMLExport::WriteShapes(const ScDocument& rDoc, const ScMyCell& rMyCell)
 {
     if( !(rMyCell.bHasShape && !rMyCell.aShapeList.empty()) )
         return;
@@ -3674,7 +3674,7 @@ void ScXMLExport::WriteShapes(ScDocument& rDoc, const ScMyCell& rMyCell)
     }
 }
 
-void ScXMLExport::WriteTableShapes(ScDocument& rDoc)
+void ScXMLExport::WriteTableShapes(const ScDocument& rDoc)
 {
     ScMyTableShapes* pTableShapes(pSharedData->GetTableShapes());
     if (!pTableShapes || (*pTableShapes)[nCurrentTable].empty())
@@ -3832,7 +3832,7 @@ void ScXMLExport::WriteAnnotation(ScDocument& rDoc, const ScMyCell& rMyCell)
     pCurrentCell = nullptr;
 }
 
-void ScXMLExport::WriteDetective(ScDocument& rDoc, const ScMyCell& rMyCell)
+void ScXMLExport::WriteDetective(const ScDocument& rDoc, const ScMyCell& rMyCell)
 {
     if( !(rMyCell.bHasDetectiveObj || rMyCell.bHasDetectiveOp) )
         return;
@@ -3893,7 +3893,7 @@ bool ScXMLExport::IsEditCell(const ScMyCell& rCell)
 }
 
 //static
-bool ScXMLExport::IsCellEqual(ScDocument& rDoc, const ScMyCell& aCell1, const ScMyCell& aCell2)
+bool ScXMLExport::IsCellEqual(const ScDocument& rDoc, const ScMyCell& aCell1, const ScMyCell& aCell2)
 {
     bool bIsEqual = false;
     if( !aCell1.bIsMergedBase && !aCell2.bIsMergedBase &&
@@ -3961,7 +3961,7 @@ bool ScXMLExport::IsCellEqual(ScDocument& rDoc, const ScMyCell& aCell1, const Sc
     return bIsEqual;
 }
 
-void ScXMLExport::WriteCalculationSettings(ScDocument& rDoc, const uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc)
+void ScXMLExport::WriteCalculationSettings(const ScDocument& rDoc, const uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc)
 {
     uno::Reference<beans::XPropertySet> xPropertySet(xSpreadDoc, uno::UNO_QUERY);
     if (!xPropertySet.is())
@@ -4103,7 +4103,7 @@ void ScXMLExport::WriteTableSource()
 }
 
 // core implementation
-void ScXMLExport::WriteScenario(ScDocument& rDoc)
+void ScXMLExport::WriteScenario(const ScDocument& rDoc)
 {
     if (!rDoc.IsScenario(static_cast<SCTAB>(nCurrentTable)))
         return;
@@ -4137,7 +4137,7 @@ void ScXMLExport::WriteScenario(ScDocument& rDoc)
     SvXMLElementExport aElem(*this, XML_NAMESPACE_TABLE, XML_SCENARIO, true, true);
 }
 
-void ScXMLExport::WriteTheLabelRanges(ScDocument& rDoc, const uno::Reference< sheet::XSpreadsheetDocument >& xSpreadDoc)
+void ScXMLExport::WriteTheLabelRanges(const ScDocument& rDoc, const uno::Reference< sheet::XSpreadsheetDocument >& xSpreadDoc)
 {
     uno::Reference< beans::XPropertySet > xDocProp( xSpreadDoc, uno::UNO_QUERY );
     if( !xDocProp.is() ) return;
@@ -4159,7 +4159,7 @@ void ScXMLExport::WriteTheLabelRanges(ScDocument& rDoc, const uno::Reference< sh
     }
 }
 
-void ScXMLExport::WriteLabelRanges(ScDocument& rDoc, const uno::Reference< container::XIndexAccess >& xRangesIAccess, bool bColumn)
+void ScXMLExport::WriteLabelRanges(const ScDocument& rDoc, const uno::Reference< container::XIndexAccess >& xRangesIAccess, bool bColumn)
 {
     if( !xRangesIAccess.is() ) return;
 
@@ -4182,7 +4182,7 @@ void ScXMLExport::WriteLabelRanges(ScDocument& rDoc, const uno::Reference< conta
     }
 }
 
-void ScXMLExport::WriteNamedExpressions(ScDocument& rDoc)
+void ScXMLExport::WriteNamedExpressions(const ScDocument& rDoc)
 {
     ScRangeName* pNamedRanges = rDoc.GetRangeName();
     WriteNamedRange(rDoc, pNamedRanges);
@@ -4552,7 +4552,7 @@ void ScXMLExport::WriteDataStream(ScDocument& rDoc)
     SvXMLElementExport aElem(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_STREAM_SOURCE, true, true);
 }
 
-void ScXMLExport::WriteNamedRange(ScDocument& rDoc, ScRangeName* pRangeName)
+void ScXMLExport::WriteNamedRange(const ScDocument& rDoc, ScRangeName* pRangeName)
 {
     //write a global or local ScRangeName
     SvXMLElementExport aElemNEs(*this, XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSIONS, true, true);
@@ -4692,7 +4692,7 @@ OUString getDateStringForType(condformat::ScCondFormatDateType eType)
 
 }
 
-void ScXMLExport::ExportConditionalFormat(ScDocument& rDoc, SCTAB nTab)
+void ScXMLExport::ExportConditionalFormat(const ScDocument& rDoc, SCTAB nTab)
 {
     ScConditionalFormatList* pCondFormatList = rDoc.GetCondFormList(nTab);
     if(!pCondFormatList)
@@ -4985,7 +4985,7 @@ void ScXMLExport::ExportConditionalFormat(ScDocument& rDoc, SCTAB nTab)
     }
 }
 
-void ScXMLExport::WriteExternalRefCaches(ScDocument& rDoc)
+void ScXMLExport::WriteExternalRefCaches(const ScDocument& rDoc)
 {
     ScExternalRefManager* pRefMgr = rDoc.GetExternalRefManager();
     pRefMgr->resetSrcFileData(GetOrigFileName());
@@ -5173,7 +5173,7 @@ void ScXMLExport::WriteExternalRefCaches(ScDocument& rDoc)
 }
 
 // core implementation
-void ScXMLExport::WriteConsolidation(ScDocument& rDoc)
+void ScXMLExport::WriteConsolidation(const ScDocument& rDoc)
 {
     const ScConsolidateParam* pCons(rDoc.GetConsolidateDlgData());
     if( !pCons )
@@ -5214,7 +5214,7 @@ XMLPageExport* ScXMLExport::CreatePageExport()
 }
 
 //static
-void ScXMLExport::GetChangeTrackViewSettings(ScDocument& rDoc, uno::Sequence<beans::PropertyValue>& rProps)
+void ScXMLExport::GetChangeTrackViewSettings(const ScDocument& rDoc, uno::Sequence<beans::PropertyValue>& rProps)
 {
     ScChangeViewSettings* pViewSettings(rDoc.GetChangeViewSettings());
     if (!pViewSettings)

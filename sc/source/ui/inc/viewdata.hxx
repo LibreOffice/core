@@ -704,7 +704,7 @@ public:
                                     SCROW & rPosY, SCROW nStartRow, double nPPTY,
                                     const ScDocument * pDoc, SCTAB nTabNo );
 
-    void setupSizeDeviceProviderForColWidth(ScSizeDeviceProvider& rProv, Fraction& rZoomX, Fraction& rZoomY, double& rPPTX, double &rPPTY);
+    void setupSizeDeviceProviderForColWidth(const ScSizeDeviceProvider& rProv, Fraction& rZoomX, Fraction& rZoomY, double& rPPTX, double &rPPTY);
 };
 
 inline tools::Long ScViewData::ToPixel( sal_uInt16 nTwips, double nFactor )

@@ -505,7 +505,7 @@ namespace HelperNotifyChanges
         return false;
     }
 
-    inline bool getMustPropagateChangesModel(ScModelObj* pModelObj)
+    inline bool getMustPropagateChangesModel(const ScModelObj* pModelObj)
     {
         return pModelObj && pModelObj->HasChangesListeners();
     }

@@ -2572,7 +2572,7 @@ class FilterEntriesHandler
     bool mbFiltering;
     bool mbFilteredRow;
 
-    void processCell(const ScColumn& rColumn, SCROW nRow, ScRefCellValue& rCell, bool bIsEmptyCell=false)
+    void processCell(const ScColumn& rColumn, SCROW nRow, const ScRefCellValue& rCell, bool bIsEmptyCell=false)
     {
         ScInterpreterContext& rContext = mrColumn.GetDoc().GetNonThreadedContext();
         sal_uInt32 nFormat = mrColumn.GetNumberFormat(rContext, nRow);

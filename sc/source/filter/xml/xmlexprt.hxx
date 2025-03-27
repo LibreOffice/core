@@ -141,7 +141,7 @@ class ScXMLExport : public SvXMLExport
 
     static css::table::CellRangeAddress GetEndAddress(const css::uno::Reference<css::sheet::XSpreadsheet>& xTable);
     static ScMyAreaLinksContainer GetAreaLinks(ScDocument& rDoc);
-    ScMyDetectiveOpContainer GetDetectiveOpList(ScDocument& rDoc);
+    ScMyDetectiveOpContainer GetDetectiveOpList(const ScDocument& rDoc);
     void WriteSingleColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex,
         const sal_Int32 nIndex, const bool bIsAutoStyle, const bool bIsVisible);
     void WriteColumn(const sal_Int32 nColumn, const sal_Int32 nRepeatColumns,
@@ -149,8 +149,8 @@ class ScXMLExport : public SvXMLExport
     void OpenHeaderColumn();
     void CloseHeaderColumn();
     void ExportColumns(const sal_Int32 nTable, const ScRange& aColumnHeaderRange, const bool bHasColumnHeader);
-    void ExportExternalRefCacheStyles(ScDocument& rDoc);
-    void ExportCellTextAutoStyles(ScDocument& rDoc, sal_Int32 nTable);
+    void ExportExternalRefCacheStyles(const ScDocument& rDoc);
+    void ExportCellTextAutoStyles(const ScDocument& rDoc, sal_Int32 nTable);
     void ExportFormatRanges(ScDocument& rDoc, const sal_Int32 nStartCol, const sal_Int32 nStartRow,
         const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_Int32 nSheet);
     void WriteRowContent();
@@ -163,7 +163,7 @@ class ScXMLExport : public SvXMLExport
                          bool bHidden, bool bFiltered);
     void OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow, ScXMLCachedRowAttrAccess& rRowAttr);
     void CloseRow(const sal_Int32 nRow);
-    void GetColumnRowHeader(ScDocument& rDoc, bool& bHasColumnHeader, ScRange& aColumnHeaderRange,
+    void GetColumnRowHeader(const ScDocument& rDoc, bool& bHasColumnHeader, ScRange& aColumnHeaderRange,
         bool& bHasRowHeader, ScRange& aRowHeaderRange, OUString& rPrintRanges) const;
     static void FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup* pGroups);
     void FillColumnRowGroups(ScDocument& rDoc);
@@ -172,34 +172,34 @@ class ScXMLExport : public SvXMLExport
         const css::uno::Reference <css::sheet::XSpreadsheet>& xTable);
 
     void WriteTable(ScDocument& rDoc, sal_Int32 nTable, const css::uno::Reference< css::sheet::XSpreadsheet>& xTable);
-    void WriteCell(ScDocument& rDoc, ScMyCell& aCell, sal_Int32 nEqualCellCount);
-    void WriteEditCell(ScDocument& rDoc, const EditTextObject* pText);
+    void WriteCell(ScDocument& rDoc, const ScMyCell& aCell, sal_Int32 nEqualCellCount);
+    void WriteEditCell(const ScDocument& rDoc, const EditTextObject* pText);
     void WriteMultiLineFormulaResult(const ScFormulaCell* pCell);
     void WriteAreaLink(const ScMyCell& rMyCell);
     void WriteAnnotation(ScDocument& rDoc, const ScMyCell& rMyCell);
-    void WriteDetective(ScDocument& rDoc, const ScMyCell& rMyCell);
-    void ExportShape(ScDocument& rDoc, const css::uno::Reference < css::drawing::XShape >& xShape, css::awt::Point* pPoint);
-    void WriteShapes(ScDocument& rDoc, const ScMyCell& rMyCell);
-    void WriteTableShapes(ScDocument& rDoc);
+    void WriteDetective(const ScDocument& rDoc, const ScMyCell& rMyCell);
+    void ExportShape(const ScDocument& rDoc, const css::uno::Reference < css::drawing::XShape >& xShape, css::awt::Point* pPoint);
+    void WriteShapes(const ScDocument& rDoc, const ScMyCell& rMyCell);
+    void WriteTableShapes(const ScDocument& rDoc);
     void SetRepeatAttribute(sal_Int32 nEqualCellCount, bool bIncProgress);
 
     static bool IsEditCell(const ScMyCell& rCell);
-    static bool IsCellEqual(ScDocument& rDoc, const ScMyCell& aCell1, const ScMyCell& aCell2);
+    static bool IsCellEqual(const ScDocument& rDoc, const ScMyCell& aCell1, const ScMyCell& aCell2);
 
-    void WriteCalculationSettings(ScDocument& rDoc, const css::uno::Reference <css::sheet::XSpreadsheetDocument>& xSpreadDoc);
+    void WriteCalculationSettings(const ScDocument& rDoc, const css::uno::Reference <css::sheet::XSpreadsheetDocument>& xSpreadDoc);
     void WriteTableSource();
-    void WriteScenario(ScDocument& rDoc);   // core implementation
-    void WriteTheLabelRanges(ScDocument& rDoc, const css::uno::Reference< css::sheet::XSpreadsheetDocument >& xSpreadDoc);
-    void WriteLabelRanges(ScDocument& rDoc, const css::uno::Reference< css::container::XIndexAccess >& xRangesIAccess, bool bColumn);
-    void WriteNamedExpressions(ScDocument& rDoc);
+    void WriteScenario(const ScDocument& rDoc);   // core implementation
+    void WriteTheLabelRanges(const ScDocument& rDoc, const css::uno::Reference< css::sheet::XSpreadsheetDocument >& xSpreadDoc);
+    void WriteLabelRanges(const ScDocument& rDoc, const css::uno::Reference< css::container::XIndexAccess >& xRangesIAccess, bool bColumn);
+    void WriteNamedExpressions(const ScDocument& rDoc);
     void WriteExternalDataMapping(ScDocument& rDoc);
     void WriteExternalDataTransformations(ScDocument& rDoc, const std::vector<std::shared_ptr<sc::DataTransformation>>& rDataTransformations);
     void WriteDataStream(ScDocument& rDoc);
-    void WriteNamedRange(ScDocument& rDoc, ScRangeName* pRangeName);
+    void WriteNamedRange(const ScDocument& rDoc, ScRangeName* pRangeName);
     void exportSparklineGroups(ScDocument& rDoc, SCTAB nTab);
-    void ExportConditionalFormat(ScDocument& rDoc, SCTAB nTab);
-    void WriteExternalRefCaches(ScDocument& rDoc);
-    void WriteConsolidation(ScDocument& rDoc);  // core implementation
+    void ExportConditionalFormat(const ScDocument& rDoc, SCTAB nTab);
+    void WriteExternalRefCaches(const ScDocument& rDoc);
+    void WriteConsolidation(const ScDocument& rDoc);  // core implementation
 
     void CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uInt16 nAttrib);
 
@@ -246,7 +246,7 @@ public:
 
     void SetSourceStream( const css::uno::Reference<css::io::XInputStream>& xNewStream );
 
-    static void GetChangeTrackViewSettings(ScDocument& rDoc, css::uno::Sequence<css::beans::PropertyValue>& rProps);
+    static void GetChangeTrackViewSettings(const ScDocument& rDoc, css::uno::Sequence<css::beans::PropertyValue>& rProps);
     virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& rProps) override;
     virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& rProps) override;
 
