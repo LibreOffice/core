@@ -167,6 +167,7 @@ void ParaPropertyPanel::set_hyphenation_base_visible( bool bVisible )
     // TODO: add automatic hyphenation for these, too
     mxHyphenationLabel->set_visible(bVisible);
     mxTBxHyphenation->set_item_visible("Hyphenate", bVisible);
+    ReSize();
 }
 
 void ParaPropertyPanel::set_hyphenation_other_visible( bool bVisible )
@@ -189,6 +190,7 @@ void ParaPropertyPanel::set_hyphenation_other_visible( bool bVisible )
     mxCompound->get_widget().set_visible(bVisible);
     mxWordLength->get_widget().set_visible(bVisible);
     mxZone->get_widget().set_visible(bVisible);
+    ReSize();
 }
 
 void ParaPropertyPanel::InitToolBoxHyphenation()
