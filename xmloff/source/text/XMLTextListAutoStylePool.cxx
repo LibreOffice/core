@@ -174,7 +174,14 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
     for (sal_Int32 i = 0; i < nStyles; i++)
     {
         Reference<XStyle> xStyle;
-        xStyles->getByIndex(i) >>= xStyle;
+        try
+        {
+            xStyles->getByIndex(i) >>= xStyle;
+        }
+        catch (const container::NoSuchElementException&)
+        {
+            SAL_WARN("xmloff", "XMLTextListAutoStylePool_Impl ctor: can't export numbering style #" << i);
+        }
         RegisterName(xStyle->getName());
     }
 }
