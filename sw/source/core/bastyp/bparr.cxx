@@ -21,6 +21,7 @@
 #include <tools/long.hxx>
 #include <limits.h>
 #include <string.h>
+#include <algorithm>
 
 /** Resize block management by this constant.
     As a result there are approx. 20 * MAXENTRY == 20000 entries available */
@@ -160,14 +161,14 @@ BlockInfo* BigPtrArray::InsBlock( sal_uInt16 pos )
     {
         // than extend the array first
         BlockInfo** ppNew = new BlockInfo* [ m_nMaxBlock + nBlockGrowSize ];
-        memcpy( ppNew, m_ppInf.get(), m_nMaxBlock * sizeof( BlockInfo* ));
+        std::copy(m_ppInf.get(), m_ppInf.get() + m_nMaxBlock, ppNew);
         m_nMaxBlock += nBlockGrowSize;
         m_ppInf.reset( ppNew );
     }
     if( pos != m_nBlock )
     {
-        memmove( m_ppInf.get() + pos+1, m_ppInf.get() + pos,
-                 ( m_nBlock - pos ) * sizeof( BlockInfo* ));
+        std::copy_backward(m_ppInf.get() + pos, m_ppInf.get() + m_nBlock,
+                       m_ppInf.get() + m_nBlock + 1);
     }
     ++m_nBlock;
     BlockInfo* p = new BlockInfo;
@@ -192,7 +193,7 @@ void BigPtrArray::BlockDel( sal_uInt16 nDel )
         // than shrink array
         nDel = (( m_nBlock / nBlockGrowSize ) + 1 ) * nBlockGrowSize;
         BlockInfo** ppNew = new BlockInfo* [ nDel ];
-        memcpy( ppNew, m_ppInf.get(), m_nBlock * sizeof( BlockInfo* ));
+        std::copy(m_ppInf.get(), m_ppInf.get() + m_nBlock, ppNew);
         m_ppInf.reset( ppNew );
         m_nMaxBlock = nDel;
     }
@@ -369,8 +370,8 @@ void BigPtrArray::ImplRemove( sal_Int32 pos, sal_Int32 n, bool bClearElement )
 
         if( ( nBlk1del + nBlkdel ) < m_nBlock )
         {
-            memmove( m_ppInf.get() + nBlk1del, m_ppInf.get() + nBlk1del + nBlkdel,
-                     ( m_nBlock - nBlkdel - nBlk1del ) * sizeof( BlockInfo* ) );
+            std::copy(m_ppInf.get() + nBlk1del + nBlkdel, m_ppInf.get() + m_nBlock,
+          m_ppInf.get() + nBlk1del);
 
             // UpdateIdx updates the successor thus start before first elem
             if( !nBlk1 )
