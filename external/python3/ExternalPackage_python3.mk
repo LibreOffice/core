@@ -137,14 +137,6 @@ endif
 # headers are not delivered, but used from unpacked dir Include/
 # (+ toplevel for pyconfig.h)
 
-ifeq ($(OS),LINUX)
-python3_MACHDEP=linux
-else
-ifeq ($(OS),MACOSX)
-python3_MACHDEP=darwin
-endif
-endif
-
 # that one is generated...
 ifeq ($(HOST_PLATFORM),powerpc64le-unknown-linux-gnu)
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
@@ -161,11 +153,11 @@ else
 ifneq ($(OS),WNT)
 ifeq ($(CPUNAME),ARM)
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
-	LO_lib/_sysconfigdata_$(if $(ENABLE_DBGUTIL),d)_$(python3_MACHDEP)_$(subst i686,i386,$(subst v7l-unknown,,$(HOST_PLATFORM))).py \
+	LO_lib/_sysconfigdata_$(if $(ENABLE_DBGUTIL),d)_linux_$(subst i686,i386,$(subst v7l-unknown,,$(HOST_PLATFORM))).py \
 ))
 else
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
-	LO_lib/_sysconfigdata_$(if $(ENABLE_DBGUTIL),d)_$(python3_MACHDEP)_$(subst i686,i386,$(subst -pc,,$(HOST_PLATFORM))).py \
+	LO_lib/_sysconfigdata_$(if $(ENABLE_DBGUTIL),d)_linux_$(subst i686,i386,$(subst -pc,,$(HOST_PLATFORM))).py \
 ))
 endif
 endif
