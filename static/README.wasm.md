@@ -132,8 +132,10 @@ Recommended configure setup is thusly:
     `QT5DIR=/dir/of/qt5/install/prefix`
 
 * if you want to use ccache on both sides of the build
-    `--with-build-platform-configure-options=--enable-ccache`
-    `--enable-ccache`
+```
+--with-build-platform-configure-options=--enable-ccache
+--enable-ccache
+```
 
 FWIW: it's also possible to build an almost static Linux LibreOffice by just using
 --disable-dynloading --enable-customtarget-components. System externals are still
@@ -141,8 +143,10 @@ linked dynamically, but everything else is static.
 
 ### "Deploying" soffice.wasm
 
-    tar -chf wasm.tar --xform 's/.*program/lo-wasm/' instdir/program/soffice.* \
-        instdir/program/qt*
+```
+tar -chf wasm.tar --xform 's/.*program/lo-wasm/' instdir/program/soffice.* \
+    instdir/program/qt*
+```
 
 Your HTTP server needs to provide additional headers:
 * add_header Cross-Origin-Opener-Policy same-origin
@@ -176,12 +180,16 @@ Config/setup file see
 
 Run
 
-    docker-compose build
+```
+docker-compose build
+```
 
 in the lode/docker dir to get the container prepared. Run
 
-    PARALLELISM=4 BUILD_OPTIONS= BUILD_TARGET=build docker-compose run --rm \
-        -e PARALLELISM -e BUILD_TARGET -e BUILD_OPTIONS builder
+```
+PARALLELISM=4 BUILD_OPTIONS= BUILD_TARGET=build docker-compose run --rm \
+    -e PARALLELISM -e BUILD_TARGET -e BUILD_OPTIONS builder
+```
 
 to perform an actual `srcdir != builddir` build; the container mounts
 checked-out git repo and output dir via `docker-compose.yml` (so make
@@ -312,10 +320,10 @@ The output file must have the prefix .o, otherwise the WASM files will get a
 `node.js` shebang (!) and ranlib won't be able to index the library (link errors).
 
 Qt with threads has further memory limit. From Qt configure:
-````
+```
 Project MESSAGE: Setting PTHREAD_POOL_SIZE to 4
 Project MESSAGE: Setting TOTAL_MEMORY to 1GB
-````
+```
 
 You can actually allocate 4GB:
 
@@ -428,13 +436,15 @@ downloaded and compiled when building LibreOffice.
 
 For instance, this autogen.input works for me:
 
-`--disable-debug`
-`--enable-sal-log`
-`--disable-crashdump`
-`--host=wasm32-local-emscripten`
-`--disable-gui`
-`--with-wasm-module=writer`
-`--with-package-format=emscripten`
+```
+--disable-debug
+--enable-sal-log
+--disable-crashdump
+--host=wasm32-local-emscripten
+--disable-gui
+--with-wasm-module=writer
+--with-package-format=emscripten
+```
 
 For building LO core for use in COWASM, it is known to work to use
 Emscripten 3.1.30 (and not just 2.0.31 which is what the LO+Qt5 work
