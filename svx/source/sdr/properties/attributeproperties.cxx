@@ -353,8 +353,10 @@ namespace sdr::properties
         void AttributeProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
                 bool /*bBroadcast*/, bool /*bAdjustTextFrameWidthAndHeight*/)
         {
-            // guarantee SfxItemSet existence
-            GetObjectItemSet();
+            // Make sure we have a SfxItemSet. We are deliberately bypassing our
+            // own AttributeProperties::GetObjectItemSet here, because we dont want to set a default stylesheet,
+            // and then immediately remove it, which is costly.
+            DefaultProperties::GetObjectItemSet();
 
             ImpRemoveStyleSheet();
             ImpAddStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);

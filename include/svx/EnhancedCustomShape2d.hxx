@@ -191,6 +191,7 @@ class SVXCORE_DLLPUBLIC EnhancedCustomShape2d final : public SfxItemSet
 
         rtl::Reference<SdrObject>      CreateLineGeometry();
         rtl::Reference<SdrObject>      CreateObject( bool bLineGeometryNeededOnly );
+        rtl::Reference<SdrObject>      CreateObject( bool bLineGeometryNeededOnly, SfxStyleSheet* pNewStyleSheet );
         void                    ApplyGluePoints( SdrObject* pObj );
         tools::Rectangle        GetTextRect() const;
         const tools::Rectangle& GetLogicRect() const { return m_aLogicRect; }

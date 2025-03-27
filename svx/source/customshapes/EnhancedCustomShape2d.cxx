@@ -3041,6 +3041,27 @@ rtl::Reference<SdrObject> EnhancedCustomShape2d::CreateObject( bool bLineGeometr
     return pRet;
 }
 
+/** Set the stylesheet immediately after creation, to avoid unnecessary stylesheet adding and removing. */
+rtl::Reference<SdrObject> EnhancedCustomShape2d::CreateObject( bool bLineGeometryNeededOnly, SfxStyleSheet* pNewStyleSheet )
+{
+    rtl::Reference<SdrObject> pRet;
+
+    if ( m_eSpType == mso_sptRectangle )
+    {
+        pRet = new SdrRectObj(mrSdrObjCustomShape.getSdrModelFromSdrObject(), m_aLogicRect);
+        pRet->NbcSetStyleSheet(pNewStyleSheet, true);
+        pRet->SetMergedItemSet( *this );
+    }
+    else
+    {
+        pRet = CreatePathObj( bLineGeometryNeededOnly );
+        if (pRet)
+            pRet->NbcSetStyleSheet(pNewStyleSheet, true);
+    }
+
+    return pRet;
+}
+
 static SdrEscapeDirection lcl_GetEscapeDirection(sal_Int32 nDirection)
 {
     switch (nDirection)

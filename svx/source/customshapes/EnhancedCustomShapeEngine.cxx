@@ -271,7 +271,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
     bool bFlipH = aCustomShape2d.IsFlipHorz();
     bool bLineGeometryNeededOnly = bTextPathOn;
 
-    rtl::Reference<SdrObject> xRenderedShape(aCustomShape2d.CreateObject(bLineGeometryNeededOnly));
+    rtl::Reference<SdrObject> xRenderedShape(aCustomShape2d.CreateObject(bLineGeometryNeededOnly, pSdrObjCustomShape->GetStyleSheet()));
     if (xRenderedShape)
     {
         if ( bTextPathOn )
@@ -324,7 +324,6 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
             xRenderedShape->NbcMirror( aTop, aBottom );
         }
 
-        xRenderedShape->NbcSetStyleSheet(pSdrObjCustomShape->GetStyleSheet(), true);
         xRenderedShape->RecalcSnapRect();
     }
 

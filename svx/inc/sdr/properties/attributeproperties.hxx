@@ -63,7 +63,7 @@ namespace sdr::properties
 
             // Get the local ItemSet. This directly returns the local ItemSet of the object. No
             // merging of ItemSets is done for e.g. Group objects.
-            virtual const SfxItemSet& GetObjectItemSet() const override;
+            virtual const SfxItemSet& GetObjectItemSet() const override final;
 
             // destructor
             virtual ~AttributeProperties() override;
