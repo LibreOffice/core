@@ -694,7 +694,7 @@ void RtfAttributeOutput::TableInfoRow(
     /* noop */
 }
 
-void RtfAttributeOutput::TablePositioning(SwFrameFormat* pFlyFormat)
+void RtfAttributeOutput::TablePositioning(const SwFrameFormat* pFlyFormat)
 {
     if (!pFlyFormat || !pFlyFormat->GetFlySplit().GetValue())
     {

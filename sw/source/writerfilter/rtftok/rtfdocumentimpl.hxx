@@ -524,9 +524,9 @@ public:
     RTFInternalState getInternalState() const { return m_nInternalState; }
     RTFDocumentImpl* getDocumentImpl() { return m_pDocumentImpl; }
     const OUString& getDocVar() { return m_aDocVar; }
-    void appendDocVar(OUString& aDocVar) { m_aDocVar += aDocVar; };
+    void appendDocVar(std::u16string_view aDocVar) { m_aDocVar += aDocVar; };
     const OUString& getDocVarName() { return m_aDocVarName; }
-    void setDocVarName(OUString& aDocVarName) { m_aDocVarName = aDocVarName; }
+    void setDocVarName(const OUString& aDocVarName) { m_aDocVarName = aDocVarName; }
     void clearDocVarName() { m_aDocVarName = ""; }
 
 private:

@@ -76,7 +76,7 @@ OString ExportPaMToHTML(SwPaM* pCursor)
     return {};
 }
 
-void PasteHTMLToPaM(SwWrtShell& rWrtSh, SwPaM* pCursor, const OString& rData)
+void PasteHTMLToPaM(SwWrtShell& rWrtSh, const SwPaM* pCursor, const OString& rData)
 {
     SolarMutexGuard gMutex;
     rtl::Reference<vcl::unohelper::HtmlTransferable> pHtmlTransferable
@@ -102,7 +102,7 @@ void TranslateDocument(SwWrtShell& rWrtSh, const TranslateAPIConfig& rConfig)
 }
 
 void TranslateDocumentCancellable(SwWrtShell& rWrtSh, const TranslateAPIConfig& rConfig,
-                                  bool& rCancelTranslation)
+                                  const bool& rCancelTranslation)
 {
     auto m_pCurrentPam = rWrtSh.GetCursor();
     bool bHasSelection = rWrtSh.HasSelection();

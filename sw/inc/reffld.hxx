@@ -98,7 +98,7 @@ public:
                                         sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags,
                                         sal_Int32* pStart, sal_Int32* pEnd = nullptr,
                                         SwRootFrame const* pLayout = nullptr,
-                                        SwTextNode* pSelf = nullptr, SwFrame* pFrame = nullptr);
+                                        const SwTextNode* pSelf = nullptr, SwFrame* pFrame = nullptr);
     void UpdateGetReferences();
     void UpdateStyleReferences();
 
@@ -107,15 +107,15 @@ private:
                                         sal_uInt16 nFlags,
                                         sal_Int32* pStart, sal_Int32* pEnd,
                                         SwRootFrame const* pLayout,
-                                        SwTextNode* pSelf, SwFrame* pFrame);
+                                        const SwTextNode* pSelf, SwFrame* pFrame);
     static SwTextNode* FindAnchorRefStyleMarginal( SwDoc* pDoc,
                                         sal_uInt16 nFlags,
                                         sal_Int32* pStart, sal_Int32* pEnd,
-                                        SwTextNode* pSelf, SwFrame* pFrame,
+                                        const SwTextNode* pSelf, SwFrame* pFrame,
                                         const SwTextNode* pReference, std::u16string_view styleName);
     static SwTextNode* FindAnchorRefStyleOther( SwDoc* pDoc,
                                         sal_Int32* pStart, sal_Int32* pEnd,
-                                        SwTextNode* pSelf,
+                                        const SwTextNode* pSelf,
                                         const SwTextNode* pReference, std::u16string_view styleName);
 };
 
@@ -163,7 +163,7 @@ public:
     // --> #i81002#
     SW_DLLPUBLIC bool IsRefToHeadingCrossRefBookmark() const;
     SW_DLLPUBLIC bool IsRefToNumItemCrossRefBookmark() const;
-    SW_DLLPUBLIC const SwTextNode* GetReferencedTextNode(SwTextNode* pTextNode, SwFrame* pFrame) const;
+    SW_DLLPUBLIC const SwTextNode* GetReferencedTextNode(const SwTextNode* pTextNode, SwFrame* pFrame) const;
     // #i85090#
     SW_DLLPUBLIC OUString GetExpandedTextOfReferencedTextNode(SwRootFrame const& rLayout) const;
 

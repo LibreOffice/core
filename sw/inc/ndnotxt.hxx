@@ -46,7 +46,7 @@ class SAL_DLLPUBLIC_RTTI SwNoTextNode : public SwContentNode
     SwNoTextNode &operator=( const SwNoTextNode& ) = delete;
 
 protected:
-    SwNoTextNode( SwNode& rWhere, const SwNodeType nNdType,
+    SwNoTextNode( const SwNode& rWhere, const SwNodeType nNdType,
                 SwGrfFormatColl *pGrColl, SwAttrSet const * pAutoAttr );
 
 public:

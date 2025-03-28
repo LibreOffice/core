@@ -1936,7 +1936,7 @@ void SwNodes::DelDummyNodes( const SwNodeRange& rRg )
     }
 }
 
-SwStartNode* SwNodes::MakeEmptySection( SwNode& rWhere,
+SwStartNode* SwNodes::MakeEmptySection( const SwNode& rWhere,
                                         SwStartNodeType eSttNdTyp )
 {
     SwStartNode* pSttNd = new SwStartNode( rWhere, SwNodeType::Start, eSttNdTyp );
@@ -2310,7 +2310,7 @@ void SwNodes::ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
     ForEach( rStart.GetIndex(), rEnd.GetIndex(), fnForEach, pArgs );
 }
 
-void SwNodes::ForEach( SwNode& rStart, SwNode& rEnd,
+void SwNodes::ForEach( const SwNode& rStart, const SwNode& rEnd,
                     FnForEach_SwNodes fnForEach, void* pArgs )
 {
     ForEach( rStart.GetIndex(), rEnd.GetIndex(), fnForEach, pArgs );

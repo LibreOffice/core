@@ -36,7 +36,7 @@ enum class SvtScriptType : sal_uInt8;
 namespace SwLangHelper
 {
     extern void GetLanguageStatus( OutlinerView* pOLV, SfxItemSet& rSet );
-    extern bool SetLanguageStatus( OutlinerView* pOLV, SfxRequest &rReq, SwView const &rView, SwWrtShell &rSh );
+    extern bool SetLanguageStatus( const OutlinerView* pOLV, SfxRequest &rReq, SwView const &rView, SwWrtShell &rSh );
 
     extern void SetLanguage( SwWrtShell &rWrtSh, std::u16string_view rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
     extern void SetLanguage( SwWrtShell &rWrtSh, OutlinerView const * pOLV, const ESelection& rSelection, std::u16string_view rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );

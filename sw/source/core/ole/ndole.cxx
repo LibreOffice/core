@@ -254,7 +254,7 @@ public:
 
 }
 
-SwOLENode::SwOLENode( SwNode& rWhere,
+SwOLENode::SwOLENode( const SwNode& rWhere,
                     const svt::EmbeddedObjectRef& xObj,
                     SwGrfFormatColl *pGrfColl,
                     SwAttrSet const * pAutoAttr ) :
@@ -266,7 +266,7 @@ SwOLENode::SwOLENode( SwNode& rWhere,
     maOLEObj.SetNode( this );
 }
 
-SwOLENode::SwOLENode( SwNode& rWhere,
+SwOLENode::SwOLENode( const SwNode& rWhere,
                     const OUString &rString,
                     sal_Int64 nAspect,
                     SwGrfFormatColl *pGrfColl,
@@ -420,7 +420,7 @@ bool SwOLENode::SavePersistentData()
     return true;
 }
 
-SwOLENode * SwNodes::MakeOLENode( SwNode& rWhere,
+SwOLENode * SwNodes::MakeOLENode( const SwNode& rWhere,
                     const svt::EmbeddedObjectRef& xObj,
                                     SwGrfFormatColl* pGrfColl )
 {
@@ -442,7 +442,7 @@ SwOLENode * SwNodes::MakeOLENode( SwNode& rWhere,
     return pNode;
 }
 
-SwOLENode * SwNodes::MakeOLENode( SwNode& rWhere,
+SwOLENode * SwNodes::MakeOLENode( const SwNode& rWhere,
     const OUString &rName, sal_Int64 nAspect, SwGrfFormatColl* pGrfColl, SwAttrSet const * pAutoAttr )
 {
     OSL_ENSURE( pGrfColl,"SwNodes::MakeOLENode: Formatpointer is 0." );

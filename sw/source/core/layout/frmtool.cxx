@@ -2058,7 +2058,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         pLayout->SetCallbackActionEnabled( bOldCallbackActionEnabled );
 }
 
-void MakeFrames( SwDoc *pDoc, SwNode &rSttIdx, SwNode &rEndIdx )
+void MakeFrames( SwDoc *pDoc, const SwNode &rSttIdx, const SwNode &rEndIdx )
 {
     bObjsDirect = false;
 

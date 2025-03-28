@@ -1586,7 +1586,7 @@ void SwPostItMgr::RemoveSidebarWin()
     PreparePageContainer();
 }
 
-static bool ConfirmDeleteAll(SwView& pView, const OUString& sText)
+static bool ConfirmDeleteAll(const SwView& pView, const OUString& sText)
 {
     const bool bAsk = officecfg::Office::Common::Misc::QueryDeleteAllComments::get();
     bool bConfirm = true;

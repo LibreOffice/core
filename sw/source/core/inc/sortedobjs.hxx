@@ -79,7 +79,7 @@ class SW_DLLPUBLIC SwSortedObjs
 
             @return boolean, indicating success of the update.
         */
-        void Update(SwAnchoredObject& _rAnchoredObj);
+        void Update(const SwAnchoredObject& _rAnchoredObj);
         void UpdateAll();
 
         /** Position of object <_rAnchoredObj> in sorted list

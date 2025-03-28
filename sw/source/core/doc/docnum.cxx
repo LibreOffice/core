@@ -447,7 +447,7 @@ bool SwDoc::OutlineUpDown(const SwPaM& rPam, short nOffset,
 
 // Move up/down
 bool SwDoc::MoveOutlinePara( const SwPaM& rPam,
-                SwOutlineNodes::difference_type nOffset, SwOutlineNodesInline* pOutlineNodesInline )
+                SwOutlineNodes::difference_type nOffset, const SwOutlineNodesInline* pOutlineNodesInline )
 {
     // Do not move to special sections in the nodes array
     const SwPosition& rStt = *rPam.Start(),

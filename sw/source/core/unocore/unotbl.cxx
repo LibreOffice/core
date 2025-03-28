@@ -118,13 +118,13 @@ namespace
 {
     struct FindUnoCellInstanceHint final : SfxHint
     {
-        FindUnoCellInstanceHint(SwTableBox* pCore) : SfxHint(SfxHintId::SwFindUnoCellInstance), m_pCore(pCore) {};
+        FindUnoCellInstanceHint(const SwTableBox* pCore) : SfxHint(SfxHintId::SwFindUnoCellInstance), m_pCore(pCore) {};
         const SwTableBox* const m_pCore;
         mutable rtl::Reference<SwXCell> m_pResult;
     };
     struct FindUnoTextTableRowInstanceHint final : SfxHint
     {
-        FindUnoTextTableRowInstanceHint(SwTableLine* pCore) : SfxHint(SfxHintId::SwFindUnoTextTableRowInstance), m_pCore(pCore) {};
+        FindUnoTextTableRowInstanceHint(const SwTableLine* pCore) : SfxHint(SfxHintId::SwFindUnoTextTableRowInstance), m_pCore(pCore) {};
         const SwTableLine* const m_pCore;
         mutable rtl::Reference<SwXTextTableRow> m_pResult;
     };
@@ -156,7 +156,7 @@ namespace
 
     void lcl_SendChartEvent(std::unique_lock<std::mutex>& rGuard,
             uno::Reference<uno::XInterface> const& xSource,
-            ::comphelper::OInterfaceContainerHelper4<chart::XChartDataChangeEventListener> & rListeners)
+            const ::comphelper::OInterfaceContainerHelper4<chart::XChartDataChangeEventListener> & rListeners)
     {
         if (rListeners.getLength(rGuard))
             rListeners.notifyEach(rGuard,
@@ -166,7 +166,7 @@ namespace
 
     void lcl_SendChartEvent(std::mutex& rMutex,
             uno::Reference<uno::XInterface> const& xSource,
-            ::comphelper::OInterfaceContainerHelper4<chart::XChartDataChangeEventListener> & rListeners)
+            const ::comphelper::OInterfaceContainerHelper4<chart::XChartDataChangeEventListener> & rListeners)
     {
         std::unique_lock aGuard(rMutex);
         lcl_SendChartEvent(aGuard, xSource, rListeners);

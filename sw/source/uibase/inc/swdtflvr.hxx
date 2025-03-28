@@ -192,7 +192,7 @@ public:
 
     // paste - methods and helper methods for the paste
     static bool IsPaste( const SwWrtShell&, const TransferableDataHelper& );
-    SW_DLLPUBLIC static bool Paste( SwWrtShell&, TransferableDataHelper&, RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA,
+    SW_DLLPUBLIC static bool Paste( SwWrtShell&, const TransferableDataHelper&, RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA,
                           bool bIgnoreComments = false, PasteTableType ePasteTable = PasteTableType::PASTE_DEFAULT );
     static bool PasteData( const TransferableDataHelper& rData,
                           SwWrtShell& rSh, sal_uInt8 nAction, SotExchangeActionFlags nActionFlags,
@@ -208,7 +208,7 @@ public:
     static bool IsPasteSpecial( const SwWrtShell& rWrtShell,
                                 const TransferableDataHelper& );
     static bool IsPasteOwnFormat( const TransferableDataHelper& );
-    static bool PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& );
+    static bool PasteUnformatted( SwWrtShell& rSh, const TransferableDataHelper& );
     /**
      * @brief PrePasteSpecial Prepares the given dialog without actually running it
      * @param rSh
@@ -242,7 +242,7 @@ public:
     // the related SwView is being closed and the SwTransferable is invalid now
     void    Invalidate() {m_pWrtShell = nullptr;}
 
-    SW_DLLPUBLIC static void SelectPasteFormat(TransferableDataHelper& rData, sal_uInt8& nAction,
+    SW_DLLPUBLIC static void SelectPasteFormat(const TransferableDataHelper& rData, sal_uInt8& nAction,
                                   SotClipboardFormatId& nFormat);
 };
 

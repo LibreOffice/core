@@ -394,7 +394,7 @@ bool SwGetRefField::IsRefToNumItemCrossRefBookmark() const
         ::sw::mark::CrossRefNumItemBookmark::IsLegalName(m_sSetRefName);
 }
 
-const SwTextNode* SwGetRefField::GetReferencedTextNode(SwTextNode* pTextNode, SwFrame* pFrame) const
+const SwTextNode* SwGetRefField::GetReferencedTextNode(const SwTextNode* pTextNode, SwFrame* pFrame) const
 {
     SwGetRefFieldType *pTyp = dynamic_cast<SwGetRefFieldType*>(GetTyp());
     if (!pTyp)
@@ -1249,7 +1249,7 @@ namespace
         Marginal, /* headers, footers */
     };
 
-    SwTextNode* SearchForStyleAnchor(SwTextNode* pSelf, SwNode* pCurrent,
+    SwTextNode* SearchForStyleAnchor(const SwTextNode* pSelf, SwNode* pCurrent,
                                     std::u16string_view rStyleName,
                                     sal_Int32 *const pStart, sal_Int32 *const pEnd,
                                     bool bCaseSensitive = true)
@@ -1299,7 +1299,7 @@ namespace
         return nullptr;
     }
     /// Picks the first text node with a matching style from the specified node range
-    SwTextNode* SearchForStyleAnchor(SwTextNode* pSelf, const SwNodes& rNodes, SwNodeOffset nNodeStart, SwNodeOffset nNodeEnd, bool bSearchBackward,
+    SwTextNode* SearchForStyleAnchor(const SwTextNode* pSelf, const SwNodes& rNodes, SwNodeOffset nNodeStart, SwNodeOffset nNodeEnd, bool bSearchBackward,
                                     std::u16string_view rStyleName,
                                     sal_Int32 *const pStart, sal_Int32 *const pEnd,
                                     bool bCaseSensitive = true)
@@ -1331,7 +1331,7 @@ namespace
 SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                                           sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags,
                                           sal_Int32* pStart, sal_Int32* pEnd, SwRootFrame const* const pLayout,
-                                          SwTextNode* pSelf, SwFrame* pContentFrame)
+                                          const SwTextNode* pSelf, SwFrame* pContentFrame)
 {
     assert( pStart && "Why did no one check the StartPos?" );
 
@@ -1458,7 +1458,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
 SwTextNode* SwGetRefFieldType::FindAnchorRefStyle(SwDoc* pDoc, const OUString& rRefMark,
                                           sal_uInt16 nFlags,
                                           sal_Int32* pStart, sal_Int32* pEnd, SwRootFrame const* const pLayout,
-                                          SwTextNode* pSelf, SwFrame* pContentFrame)
+                                          const SwTextNode* pSelf, SwFrame* pContentFrame)
 {
     if (!pSelf)
         return nullptr;
@@ -1529,7 +1529,7 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyle(SwDoc* pDoc, const OUString& r
 SwTextNode* SwGetRefFieldType::FindAnchorRefStyleMarginal(SwDoc* pDoc,
                                           sal_uInt16 nFlags,
                                           sal_Int32* pStart, sal_Int32* pEnd,
-                                          SwTextNode* pSelf, SwFrame* pContentFrame,
+                                          const SwTextNode* pSelf, SwFrame* pContentFrame,
                                           const SwTextNode* pReference, std::u16string_view styleName)
 {
     // For marginals, styleref tries to act on the current page first
@@ -1628,7 +1628,7 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyleMarginal(SwDoc* pDoc,
 
 SwTextNode* SwGetRefFieldType::FindAnchorRefStyleOther(SwDoc* pDoc,
                                           sal_Int32* pStart, sal_Int32* pEnd,
-                                          SwTextNode* pSelf,
+                                          const SwTextNode* pSelf,
                                           const SwTextNode* pReference, std::u16string_view styleName)
 {
     // Normally, styleref does searches around the field position

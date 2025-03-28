@@ -76,7 +76,7 @@ public:
     static SfxItemPool* GetAnnotationPool(SwView const & rV);
 
 private:
-    void        ExecPost(SfxRequest& rReq, sal_uInt16 nEEWhich, SfxItemSet& rNewAttr, OutlinerView* pOLV );
+    void        ExecPost(const SfxRequest& rReq, sal_uInt16 nEEWhich, SfxItemSet& rNewAttr, OutlinerView* pOLV );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -997,7 +997,7 @@ namespace
         return bRet;
     }
 
-    bool lcl_AcceptInnerInsertRedline(SwRedlineTable& rArr, SwRedlineTable::size_type& rPos,
+    bool lcl_AcceptInnerInsertRedline(const SwRedlineTable& rArr, const SwRedlineTable::size_type& rPos,
                                       int nDepth)
     {
         SwRangeRedline* pRedl = rArr[rPos];
@@ -3133,8 +3133,8 @@ const SwRangeRedline* DocumentRedlineManager::GetRedline( const SwPosition& rPos
 }
 
 bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOrigin,
-                                                SwRedlineTable::size_type& nPosStart,
-                                                SwRedlineTable::size_type& nPosEnd,
+                                                const SwRedlineTable::size_type& nPosStart,
+                                                const SwRedlineTable::size_type& nPosEnd,
                                                 bool bCallDelete)
 {
     bool bRet = false;
@@ -3409,8 +3409,8 @@ void DocumentRedlineManager::AcceptRedlineParagraphFormatting( const SwPaM &rPam
 }
 
 bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOrigin,
-                                                SwRedlineTable::size_type& nPosStart,
-                                                SwRedlineTable::size_type& nPosEnd,
+                                                const SwRedlineTable::size_type& nPosStart,
+                                                const SwRedlineTable::size_type& nPosEnd,
                                                 bool bCallDelete)
 {
     bool bRet = false;

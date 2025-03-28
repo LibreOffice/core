@@ -1185,7 +1185,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
 void SwNoTextFrame::ImplPaintPictureGraphic( vcl::RenderContext* pOut,
     SwGrfNode* pGrfNd, bool bPrn,
     const SwRect& rAlignedGrfArea, SwViewShell* pShell,
-    SwNoTextNode& rNoTNd ) const
+    const SwNoTextNode& rNoTNd ) const
 {
     bool bContinue = true;
     const GraphicObject& rGrfObj = pGrfNd->GetGrfObj(bPrn);
@@ -1322,7 +1322,7 @@ void SwNoTextFrame::ImplPaintPictureGraphic( vcl::RenderContext* pOut,
     }
 }
 
-void SwNoTextFrame::ImplPaintPictureAnimate(vcl::RenderContext* pOut, SwViewShell* pShell,
+void SwNoTextFrame::ImplPaintPictureAnimate(vcl::RenderContext* pOut, const SwViewShell* pShell,
         SwGrfNode* pGrfNd, const SwRect& rAlignedGrfArea) const
 {
     OutputDevice* pVout;
@@ -1348,8 +1348,8 @@ void SwNoTextFrame::ImplPaintPictureAnimate(vcl::RenderContext* pOut, SwViewShel
                         pVout );
 }
 
-void SwNoTextFrame::ImplPaintPictureReplacement(const GraphicObject& rGrfObj, SwGrfNode* pGrfNd,
-        const SwRect& rAlignedGrfArea, SwViewShell* pShell) const
+void SwNoTextFrame::ImplPaintPictureReplacement(const GraphicObject& rGrfObj, const SwGrfNode* pGrfNd,
+        const SwRect& rAlignedGrfArea, const SwViewShell* pShell) const
 {
     TranslateId pResId;
 

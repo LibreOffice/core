@@ -561,7 +561,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     return &rNdTable;
 }
 
-SwTableNode* SwNodes::InsertTable( SwNode& rNd,
+SwTableNode* SwNodes::InsertTable( const SwNode& rNd,
                                    sal_uInt16 nBoxes,
                                    SwTextFormatColl* pContentTextColl,
                                    sal_uInt16 nLines,

@@ -1918,7 +1918,7 @@ void SwUndoTableMerge::UndoImpl(::sw::UndoRedoContext & rContext)
 
             if( !m_pSaveTable->IsNewModel() )
                 rDoc.GetNodes().MakeTextNode(
-                    const_cast<SwEndNode&>(*pBox->GetSttNd()->EndOfSectionNode()), pColl );
+                    *pBox->GetSttNd()->EndOfSectionNode(), pColl );
 
             // this was the separator -> restore moved ones
             for (size_t i = m_vMoves.size(); i; )

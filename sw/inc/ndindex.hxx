@@ -58,8 +58,8 @@ class SAL_WARN_UNUSED SW_DLLPUBLIC SwNodeIndex final : public sw::Ring<SwNodeInd
     SwNodeIndex(SwNode* pNode) : m_pNode(pNode) { RegisterIndex(); }
 
 public:
-    SwNodeIndex( SwNodes& rNds, sal_Int32 nIdx ) : SwNodeIndex(rNds, SwNodeOffset(nIdx)) {}
-    explicit SwNodeIndex( SwNodes& rNds, SwNodeOffset nIdx = SwNodeOffset(0) )
+    SwNodeIndex( const SwNodes& rNds, sal_Int32 nIdx ) : SwNodeIndex(rNds, SwNodeOffset(nIdx)) {}
+    explicit SwNodeIndex( const SwNodes& rNds, SwNodeOffset nIdx = SwNodeOffset(0) )
         : SwNodeIndex( rNds[ nIdx ] ) {}
 
     SwNodeIndex( const SwNodeIndex& rIdx, sal_Int32 nDiff ) : SwNodeIndex(rIdx, SwNodeOffset(nDiff)) {}
@@ -139,7 +139,7 @@ public:
         : aStart( rS ), aEnd( rE ) {}
     SwNodeRange( const SwNodeRange &rRange ) = default;
 
-    SwNodeRange( SwNodes& rNds, SwNodeOffset nSttIdx, SwNodeOffset nEndIdx = SwNodeOffset(0) )
+    SwNodeRange( const SwNodes& rNds, SwNodeOffset nSttIdx, SwNodeOffset nEndIdx = SwNodeOffset(0) )
         : aStart( rNds, nSttIdx ), aEnd( rNds, nEndIdx ) {}
 
     SwNodeRange( const SwNodeIndex& rS, SwNodeOffset nSttDiff, const SwNodeIndex& rE, SwNodeOffset nEndDiff = SwNodeOffset(0) )

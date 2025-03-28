@@ -66,7 +66,7 @@ OString lcl_padStartToLength(OString const& aString, sal_Int32 nLen, char cFill)
 
 void CollectFloatingTableAttributes(DocxExport& rExport, const ww8::Frame& rFrame,
                                     ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner,
-                                    rtl::Reference<FastAttributeList>& pAttributes)
+                                    const rtl::Reference<FastAttributeList>& pAttributes)
 {
     // we export the values of the surrounding Frame
     OString sOrientation;

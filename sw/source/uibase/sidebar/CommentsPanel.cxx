@@ -113,7 +113,8 @@ IMPL_LINK(Comment, ContextMenuHdl, const MouseEvent&, rMEvt, bool)
     return false;
 }
 
-OUString CommentsPanel::getReferenceText(SwTextNode* pTextNode, sw::mark::AnnotationMark* pMark)
+OUString CommentsPanel::getReferenceText(const SwTextNode* pTextNode,
+                                         const sw::mark::AnnotationMark* pMark)
 {
     if (!pMark)
         return OUString();
@@ -273,7 +274,7 @@ void CommentsPanel::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     }
 }
 
-OUString CommentsPanel::FormatDate(Date& rDate)
+OUString CommentsPanel::FormatDate(const Date& rDate)
 {
     const SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
@@ -289,7 +290,7 @@ OUString CommentsPanel::FormatDate(Date& rDate)
     return sMeta;
 }
 
-OUString CommentsPanel::FormatTime(tools::Time& rTime)
+OUString CommentsPanel::FormatTime(const tools::Time& rTime)
 {
     const SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
@@ -313,13 +314,13 @@ sw::annotation::SwAnnotationWin* CommentsPanel::getRootCommentWin(const SwFormat
     return pRootNote;
 }
 
-sal_uInt32 CommentsPanel::getPostItId(sw::annotation::SwAnnotationWin* pAnnotationWin)
+sal_uInt32 CommentsPanel::getPostItId(const sw::annotation::SwAnnotationWin* pAnnotationWin)
 {
     const SwPostItField* pField = pAnnotationWin->GetPostItField();
     return pField->GetPostItId();
 }
 
-sw::annotation::SwAnnotationWin* CommentsPanel::getAnnotationWin(Comment* pComment)
+sw::annotation::SwAnnotationWin* CommentsPanel::getAnnotationWin(const Comment* pComment)
 {
     sal_uInt32 nPostItId = 0;
     for (auto & [ rId, rComment ] : mpCommentsMap)
@@ -567,7 +568,7 @@ void CommentsPanel::deleteComment(sal_uInt32 nId)
     }
 }
 
-void CommentsPanel::setResolvedStatus(sw::annotation::SwAnnotationWin* pAnnotationWin)
+void CommentsPanel::setResolvedStatus(const sw::annotation::SwAnnotationWin* pAnnotationWin)
 {
     sal_uInt32 nId = getPostItId(pAnnotationWin);
     if (mpCommentsMap.find(nId) == mpCommentsMap.end())
@@ -585,7 +586,7 @@ void CommentsPanel::setResolvedStatus(sw::annotation::SwAnnotationWin* pAnnotati
     pComment->mxResolve->set_active(pComment->mbResolved);
 }
 
-void CommentsPanel::editComment(SwPostItField* pPostItField, Comment* pComment)
+void CommentsPanel::editComment(const SwPostItField* pPostItField, Comment* pComment)
 {
     const OUString& sText = pPostItField->GetText();
     pComment->SetCommentText(sText);
@@ -607,7 +608,7 @@ void CommentsPanel::setReferenceText(sal_uInt32 nRootId)
     pThread->getExpander()->set_label(sText);
 }
 
-void CommentsPanel::EditComment(Comment* pComment)
+void CommentsPanel::EditComment(const Comment* pComment)
 {
     if (!pComment)
         return;
@@ -622,7 +623,7 @@ void CommentsPanel::EditComment(Comment* pComment)
     pComment->mxTextView->set_editable(false);
 }
 
-void CommentsPanel::ToggleResolved(Comment* pComment)
+void CommentsPanel::ToggleResolved(const Comment* pComment)
 {
     if (!pComment)
         return;
@@ -630,7 +631,7 @@ void CommentsPanel::ToggleResolved(Comment* pComment)
     pWin->ToggleResolved();
 }
 
-void CommentsPanel::ReplyComment(Comment* pComment)
+void CommentsPanel::ReplyComment(const Comment* pComment)
 {
     if (!pComment)
         return;
@@ -638,7 +639,7 @@ void CommentsPanel::ReplyComment(Comment* pComment)
     pWin->ExecuteCommand(FN_REPLY);
 }
 
-void CommentsPanel::DeleteComment(Comment* pComment)
+void CommentsPanel::DeleteComment(const Comment* pComment)
 {
     if (!pComment)
         return;
@@ -646,7 +647,7 @@ void CommentsPanel::DeleteComment(Comment* pComment)
     pWin->ExecuteCommand(FN_DELETE_COMMENT);
 }
 
-void CommentsPanel::DeleteThread(Comment* pComment)
+void CommentsPanel::DeleteThread(const Comment* pComment)
 {
     if (!pComment)
         return;
@@ -654,7 +655,7 @@ void CommentsPanel::DeleteThread(Comment* pComment)
     pWin->ExecuteCommand(FN_DELETE_COMMENT_THREAD);
 }
 
-void CommentsPanel::ResolveThread(Comment* pComment)
+void CommentsPanel::ResolveThread(const Comment* pComment)
 {
     if (!pComment)
         return;

@@ -126,7 +126,7 @@ public:
     void                     SetAttrSet(const SfxItemSet& rSet);
     void SetFrameSizeFromTable();
     /// Checks if we have a table selection and that covers exactly 1 full table.
-    SW_DLLPUBLIC static const SwTableFormat* SingleTableSelected(SwWrtShell& rWrtShell);
+    SW_DLLPUBLIC static const SwTableFormat* SingleTableSelected(const SwWrtShell& rWrtShell);
 
     inline const SwFormatVertOrient &GetVertOrient() const;
     inline const SwFormatHoriOrient &GetHoriOrient() const;

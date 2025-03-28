@@ -41,7 +41,7 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
 
     SwPosition( const SwNodeIndex &rNode, const SwContentIndex &rContent );
     SwPosition( const SwNode &rNode, const SwContentIndex &rContent );
-    explicit SwPosition( SwNodes& rNodes, SwNodeOffset nIndex = SwNodeOffset(0) );
+    explicit SwPosition( const SwNodes& rNodes, SwNodeOffset nIndex = SwNodeOffset(0) );
     explicit SwPosition( const SwNodeIndex &rNode, SwNodeOffset nDiff = SwNodeOffset(0) );
     explicit SwPosition( const SwNode& rNode, SwNodeOffset nDiff = SwNodeOffset(0) );
     explicit SwPosition( const SwContentNode& rNode, sal_Int32 nContentOffset = 0 );
@@ -209,7 +209,7 @@ public:
     SwPaM( const SwNode& rNd, SwNodeOffset nNdOffset, sal_Int32 nContent = 0, SwPaM* pRing = nullptr );
     explicit SwPaM( const SwNode& rNd, sal_Int32 nContent = 0, SwPaM* pRing = nullptr );
     explicit SwPaM( const SwNodeIndex& rNd, sal_Int32 nContent = 0, SwPaM* pRing = nullptr );
-    explicit SwPaM( SwNodes& rNds, SwNodeOffset nMkOffset = SwNodeOffset(0), SwPaM* pRing = nullptr );
+    explicit SwPaM( const SwNodes& rNds, SwNodeOffset nMkOffset = SwNodeOffset(0), SwPaM* pRing = nullptr );
     virtual ~SwPaM() override;
 
     /// this takes a second parameter, which indicates the Ring that

@@ -179,7 +179,7 @@ void GetTextFormField(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 /// Parameters:
 ///
 /// - namePrefix: field name prefix to not return all user-defined properties
-void GetDocumentProperties(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
+void GetDocumentProperties(tools::JsonWriter& rJsonWriter, const SwDocShell* pDocShell,
                            const std::map<OUString, OUString>& rArguments)
 {
     OUString aNamePrefix;
@@ -422,7 +422,7 @@ void GetField(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 ///   now, only contentcontrol is supported.
 void GetDocStructure(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShell*/,
                      const std::map<OUString, OUString>& rArguments,
-                     uno::Reference<container::XIndexAccess>& xContentControls)
+                     const uno::Reference<container::XIndexAccess>& xContentControls)
 {
     auto it = rArguments.find(u"filter"_ustr);
     if (it != rArguments.end())
@@ -532,7 +532,7 @@ void GetDocStructure(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShell*/,
 
 void GetDocStructureCharts(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShell*/,
                            const std::map<OUString, OUString>& rArguments,
-                           uno::Reference<container::XIndexAccess>& xEmbeddeds)
+                           const uno::Reference<container::XIndexAccess>& xEmbeddeds)
 {
     auto it = rArguments.find(u"filter"_ustr);
     if (it != rArguments.end())
@@ -648,7 +648,7 @@ void GetDocStructureCharts(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShe
     }
 }
 
-void GetDocStructureDocProps(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
+void GetDocStructureDocProps(tools::JsonWriter& rJsonWriter, const SwDocShell* pDocShell,
                              const std::map<OUString, OUString>& rArguments)
 {
     auto it = rArguments.find(u"filter"_ustr);

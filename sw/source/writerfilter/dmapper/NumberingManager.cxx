@@ -423,7 +423,7 @@ ListDef::~ListDef( )
 
 const OUString & ListDef::GetStyleName(sal_Int32 const nId,
     uno::Reference<container::XNameContainer> const& xStyles,
-    DomainMapper& rDMapper)
+    const DomainMapper& rDMapper)
 {
     if (xStyles.is())
     {

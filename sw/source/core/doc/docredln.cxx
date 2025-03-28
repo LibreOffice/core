@@ -818,7 +818,7 @@ const SwRangeRedline* SwRedlineTable::FindAtPosition( const SwPosition& rSttPos,
 
 namespace
 {
-bool lcl_CanCombineWithRange(SwRangeRedline* pOrigin, SwRangeRedline* pActual,
+bool lcl_CanCombineWithRange(const SwRangeRedline* pOrigin, SwRangeRedline* pActual,
                              SwRangeRedline* pOther, bool bReverseDir, bool bCheckChilds)
 {
     if (pOrigin->IsVisible() != pOther->IsVisible())

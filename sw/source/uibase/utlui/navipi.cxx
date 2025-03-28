@@ -616,7 +616,7 @@ void SwNavigationPI::InitContentFunctionsToolbar()
 
 namespace
 {
-bool lcl_ToolbarHasItemWithIdent(weld::Toolbar& rToolbar, std::u16string_view rIdent)
+bool lcl_ToolbarHasItemWithIdent(const weld::Toolbar& rToolbar, std::u16string_view rIdent)
 {
     for (auto i = 0; i < rToolbar.get_n_items(); i++)
     {

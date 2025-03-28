@@ -1414,7 +1414,7 @@ IMPL_LINK(SwPagePreview, VertScrollHdl, weld::Scrollbar&, rScrollbar, void)
     ScrollHdl(rScrollbar, false);
 }
 
-void SwPagePreview::ScrollHdl(weld::Scrollbar& rScrollbar, bool bHori)
+void SwPagePreview::ScrollHdl(const weld::Scrollbar& rScrollbar, bool bHori)
 {
     if(!GetViewShell())
         return;
@@ -1447,7 +1447,7 @@ void SwPagePreview::ScrollHdl(weld::Scrollbar& rScrollbar, bool bHori)
     }
 }
 
-void SwPagePreview::EndScrollHdl(weld::Scrollbar& rScrollbar, bool bHori)
+void SwPagePreview::EndScrollHdl(const weld::Scrollbar& rScrollbar, bool bHori)
 {
     if(!GetViewShell())
         return;

@@ -1476,7 +1476,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
     return rWrt;
 }
 
-static void OutHTMLGraphic(SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat, SwOLENode* pOLENd,
+static void OutHTMLGraphic(SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat, const SwOLENode* pOLENd,
                            const Graphic& rGraphic, bool bObjectOpened, bool bInCntnr)
 {
     OUString aGraphicURL;
@@ -1550,7 +1550,7 @@ static void OutHTMLEndObject(SwHTMLWriter& rWrt)
 }
 
 static bool TrySaveFormulaAsPDF(SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat,
-                                SwOLENode* pOLENd, bool bWriteReplacementGraphic, bool bInCntnr)
+                                const SwOLENode* pOLENd, bool bWriteReplacementGraphic, bool bInCntnr)
 {
     if (!rWrt.mbReqIF)
         return false;

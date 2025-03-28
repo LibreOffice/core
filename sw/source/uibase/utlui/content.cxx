@@ -4858,7 +4858,7 @@ void SwContentTree::UpdateTracking()
 }
 
 static bool lcl_IsSelectedCompareByContentTypeAndAddress(const weld::TreeIter& rEntry,
-                                                         weld::TreeView& rContentTree,
+                                                         const weld::TreeView& rContentTree,
                                                          ContentTypeId eContentType,
                                                          const void* ptr)
 {
@@ -4935,7 +4935,7 @@ static bool lcl_IsSelectedCompareByContentTypeAndAddress(const weld::TreeIter& r
 }
 
 static bool lcl_IsSelectedCompareByContentTypeAndName(const weld::TreeIter& rEntry,
-                                                      weld::TreeView& rContentTree,
+                                                      const weld::TreeView& rContentTree,
                                                       ContentTypeId eContentType,
                                                       std::u16string_view rName)
 {

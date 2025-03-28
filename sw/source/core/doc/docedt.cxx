@@ -719,7 +719,7 @@ public:
     SwHyphArgs( const SwPaM *pPam, const Point &rPoint,
                 sal_uInt16* pPageCount, sal_uInt16* pPageStart );
     void SetPam( SwPaM *pPam ) const;
-    void SetNode( SwNode& rNew ) { m_aNodeIdx.Assign(rNew); }
+    void SetNode( const SwNode& rNew ) { m_aNodeIdx.Assign(rNew); }
     inline void SetRange( const SwNode *pNew );
     void NextNode() { ++m_aNodeIdx; }
     sal_uInt16 *GetPageCnt() { return m_pPageCnt; }

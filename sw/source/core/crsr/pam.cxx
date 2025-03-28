@@ -104,7 +104,7 @@ SwPosition::SwPosition( const SwNode& rNode, SwNodeOffset nDiff )
 {
 }
 
-SwPosition::SwPosition( SwNodes& rNodes, SwNodeOffset nIndex )
+SwPosition::SwPosition( const SwNodes& rNodes, SwNodeOffset nIndex )
     : nNode( rNodes, nIndex ), nContent( GetNode().GetContentNode() )
 {
 }
@@ -585,7 +585,7 @@ SwPaM::SwPaM( const SwNodeIndex& rNodeIdx, sal_Int32 nContent, SwPaM* pRing )
     m_pPoint->nContent.Assign( rNodeIdx.GetNode().GetContentNode(), nContent );
 }
 
-SwPaM::SwPaM( SwNodes& rNodes, SwNodeOffset nNdOffset, SwPaM* pRing )
+SwPaM::SwPaM( const SwNodes& rNodes, SwNodeOffset nNdOffset, SwPaM* pRing )
     : Ring( pRing )
     , m_Bound1( rNodes, nNdOffset )
     , m_Bound2( rNodes ) // default initialize

@@ -124,7 +124,7 @@ SwGrammarMarkUp* GrammarContact::getGrammarCheck( SwTextNode& rTextNode, bool bC
     return pRet;
 }
 
-void GrammarContact::finishGrammarCheck( SwTextNode& rTextNode )
+void GrammarContact::finishGrammarCheck( const SwTextNode& rTextNode )
 {
     CheckBroadcaster();
     if( &rTextNode != m_pTextNode ) // not my paragraph
@@ -152,7 +152,7 @@ sw::GrammarContact* getGrammarContactFor(const SwTextNode& rTextNode)
     return rDoc.getGrammarContact().get();
 }
 
-void finishGrammarCheckFor(SwTextNode& rTextNode)
+void finishGrammarCheckFor(const SwTextNode& rTextNode)
 {
     sw::GrammarContact* pGrammarContact = getGrammarContactFor(rTextNode);
     if (pGrammarContact)

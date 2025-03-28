@@ -1933,9 +1933,9 @@ enum class BidiTruncationType
     Underflow
 };
 
-BidiTruncationType lcl_BidiPortionNeedsTruncation(SwMultiPortion& rMulti,
-                                                  SwTextFormatInfo& rExternalInf,
-                                                  SwTextFormatInfo& rLocalInf,
+BidiTruncationType lcl_BidiPortionNeedsTruncation(const SwMultiPortion& rMulti,
+                                                  const SwTextFormatInfo& rExternalInf,
+                                                  const SwTextFormatInfo& rLocalInf,
                                                   TextFrameIndex const nStartIdx)
 {
     if (!rLocalInf.IsUnderflow())

@@ -1681,7 +1681,7 @@ void SwTable::Split(const OUString& sNewTableName, sal_uInt16 nSplitLine, SwHist
     }
 }
 
-void SwTable::Merge(SwTable& rTable, SwHistory* pHistory)
+void SwTable::Merge(const SwTable& rTable, SwHistory* pHistory)
 {
     SwTableFormulaUpdate aHint(this);
     aHint.m_eFlags = TBL_MERGETBL;

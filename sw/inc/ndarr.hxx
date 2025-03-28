@@ -159,7 +159,7 @@ public:
         ForEach( SwNodeOffset(0), Count(), fnForEach, pArgs );
     }
     void ForEach( SwNodeOffset nStt, SwNodeOffset nEnd, FnForEach_SwNodes fnForEach, void* pArgs );
-    void ForEach( SwNode& rStart, SwNode& rEnd,
+    void ForEach( const SwNode& rStart, const SwNode& rEnd,
                     FnForEach_SwNodes fnForEach, void* pArgs );
     void ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
                     FnForEach_SwNodes fnForEach, void* pArgs );
@@ -219,28 +219,28 @@ public:
     /** Create an empty section of Start- and EndNote. It may be called
        only if a new section with content is to be created,
        e.g. at filters/Undo/... */
-    static SwStartNode* MakeEmptySection( SwNode& rWhere,
+    static SwStartNode* MakeEmptySection( const SwNode& rWhere,
                                     SwStartNodeType = SwNormalStartNode );
 
     /// Implementations of "Make...Node" are in the given .cxx-files.
-    SW_DLLPUBLIC SwTextNode *MakeTextNode( SwNode& rWhere,
+    SW_DLLPUBLIC SwTextNode *MakeTextNode( const SwNode& rWhere,
                             SwTextFormatColl *pColl,
                             bool bNewFrames = true); ///< in ndtxt.cxx
     SW_DLLPUBLIC SwStartNode* MakeTextSection( const SwNode & rWhere,
                             SwStartNodeType eSttNdTyp,
                             SwTextFormatColl *pColl );
 
-    static SwGrfNode *MakeGrfNode( SwNode& rWhere,
+    static SwGrfNode *MakeGrfNode( const SwNode& rWhere,
                             const OUString& rGrfName,
                             const OUString& rFltName,
                             const Graphic* pGraphic,
                             SwGrfFormatColl *pColl,
                             SwAttrSet const * pAutoAttr = nullptr );    ///< in ndgrf.cxx
 
-    SwOLENode *MakeOLENode( SwNode& rWhere,
+    SwOLENode *MakeOLENode( const SwNode& rWhere,
                             const svt::EmbeddedObjectRef&,
                             SwGrfFormatColl *pColl ); ///< in ndole.cxx
-    SwOLENode *MakeOLENode( SwNode& rWhere,
+    SwOLENode *MakeOLENode( const SwNode& rWhere,
                             const OUString &rName,
                             sal_Int64 nAspect,
                             SwGrfFormatColl *pColl,
@@ -260,7 +260,7 @@ public:
        adjust in pContentTextColl or pHeadlineTextColl this adjust item
        overrides the item in pAttrSet. */
 
-    static SwTableNode* InsertTable( SwNode& rNd,
+    static SwTableNode* InsertTable( const SwNode& rNd,
                         sal_uInt16 nBoxes, SwTextFormatColl* pContentTextColl,
                         sal_uInt16 nLines, sal_uInt16 nRepeat,
                         SwTextFormatColl* pHeadlineTextColl,

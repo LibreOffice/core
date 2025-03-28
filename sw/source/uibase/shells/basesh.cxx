@@ -785,7 +785,7 @@ namespace
 {
 /// Searches for the specified field type and field name prefix and update the matching fields to
 /// have the provided new name and content.
-bool UpdateFieldContents(SfxRequest& rReq, SwWrtShell& rWrtSh)
+bool UpdateFieldContents(const SfxRequest& rReq, SwWrtShell& rWrtSh)
 {
     const SfxStringItem* pTypeName = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
     if (!pTypeName || pTypeName->GetValue() != "SetRef")
@@ -852,7 +852,7 @@ bool UpdateFieldContents(SfxRequest& rReq, SwWrtShell& rWrtSh)
 
 /// Searches for the specified field type and field name prefix under cursor and update the matching
 /// field to have the provided new name and content.
-void UpdateFieldContent(SfxRequest& rReq, SwWrtShell& rWrtSh)
+void UpdateFieldContent(const SfxRequest& rReq, SwWrtShell& rWrtSh)
 {
     const SfxStringItem* pTypeName = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
     if (!pTypeName || pTypeName->GetValue() != "SetRef")

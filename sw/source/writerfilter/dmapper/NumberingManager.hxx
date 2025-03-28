@@ -189,7 +189,7 @@ public:
 
     // Mapping functions
     const OUString & GetStyleName() const { return m_StyleName; };
-    const OUString & GetStyleName(sal_Int32 nId, css::uno::Reference<css::container::XNameContainer> const& xStyles, DomainMapper& rDMapper);
+    const OUString & GetStyleName(sal_Int32 nId, css::uno::Reference<css::container::XNameContainer> const& xStyles, const DomainMapper& rDMapper);
 
     css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > GetMergedPropertyValues();
 

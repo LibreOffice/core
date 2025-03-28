@@ -408,7 +408,7 @@ public:
     bool InsertField(SwField const &, const bool bForceExpandHints);
 
     SW_DLLPUBLIC void UpdateOneField(SwField &);   ///< One single field.
-    SW_DLLPUBLIC void ConvertOneFieldToText(SwField& rField);
+    SW_DLLPUBLIC void ConvertOneFieldToText(const SwField& rField);
 
     SW_DLLPUBLIC size_t GetFieldTypeCount(SwFieldIds nResId = SwFieldIds::Unknown) const;
     SW_DLLPUBLIC SwFieldType* GetFieldType(size_t nField, SwFieldIds nResId = SwFieldIds::Unknown) const;
@@ -502,7 +502,7 @@ public:
     bool OutlineUpDown( short nOffset = 1 );
 
     bool MoveOutlinePara( SwOutlineNodes::difference_type nOffset,
-                        SwOutlineNodesInline* pOutlineNodesInline = nullptr );
+                        const SwOutlineNodesInline* pOutlineNodesInline = nullptr );
 
     bool IsProtectedOutlinePara() const;
 

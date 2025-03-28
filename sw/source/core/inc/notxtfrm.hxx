@@ -62,14 +62,14 @@ private:
 
     void ImplPaintPictureGraphic( vcl::RenderContext* pOut,
             SwGrfNode* pGrfNd, bool bPrn,
-            const SwRect& rAlignedGrfArea, SwViewShell* pShell, SwNoTextNode& rNoTNd ) const;
+            const SwRect& rAlignedGrfArea, SwViewShell* pShell, const SwNoTextNode& rNoTNd ) const;
     void ImplPaintPictureBitmap( vcl::RenderContext* pOut,
             SwOLENode* pOLENd, bool bIsChart, bool bPrn,
             const SwRect& rAlignedGrfArea, SwViewShell* pShell ) const;
-    void ImplPaintPictureAnimate(vcl::RenderContext* pOut, SwViewShell* pShell,
+    void ImplPaintPictureAnimate(vcl::RenderContext* pOut, const SwViewShell* pShell,
             SwGrfNode* pGrfNd, const SwRect& rAlignedGrfArea) const;
-    void ImplPaintPictureReplacement(const GraphicObject& rGrfObj, SwGrfNode* pGrfNd,
-            const SwRect& rAlignedGrfArea, SwViewShell* pShell) const;
+    void ImplPaintPictureReplacement(const GraphicObject& rGrfObj, const SwGrfNode* pGrfNd,
+            const SwRect& rAlignedGrfArea, const SwViewShell* pShell) const;
 
 public:
     SwNoTextFrame( SwNoTextNode * const, SwFrame* );

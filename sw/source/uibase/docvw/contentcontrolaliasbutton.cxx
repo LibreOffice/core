@@ -31,7 +31,7 @@
 #define BUTTON_WIDTH 12
 
 SwContentControlAliasButton::SwContentControlAliasButton(SwEditWin* pEditWin,
-                                                         SwContentControl* pContentControl)
+                                                         const SwContentControl* pContentControl)
     : SwFrameMenuButtonBase(pEditWin, nullptr,
                             u"modules/swriter/ui/contentcontrolaliasbutton.ui"_ustr,
                             u"ContentControlAliasButton"_ustr)
@@ -143,7 +143,7 @@ bool SwContentControlAliasButton::Contains(const Point& rDocPt) const
 
 void SwContentControlAliasButton::SetReadonly(bool bReadonly) { m_bReadOnly = bReadonly; }
 
-void SwContentControlAliasButton::SetContentControl(SwContentControl* pContentControl)
+void SwContentControlAliasButton::SetContentControl(const SwContentControl* pContentControl)
 {
     m_sLabel = pContentControl->GetAlias();
 }

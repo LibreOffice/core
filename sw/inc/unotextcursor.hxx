@@ -260,7 +260,7 @@ public:
 
 private:
     void gotoRangeImpl(
-            SwXTextRange* pRange,
+            const SwXTextRange* pRange,
             OTextCursorHelper* pCursor,
             bool bExpand);
 };

@@ -126,7 +126,7 @@ namespace sw {
 #define CHECK_SWPHINTS_IF_FRM(pNd)
 #endif
 
-SwTextNode *SwNodes::MakeTextNode( SwNode& rWhere,
+SwTextNode *SwNodes::MakeTextNode( const SwNode& rWhere,
                                  SwTextFormatColl *pColl, bool const bNewFrames)
 {
     OSL_ENSURE( pColl, "Collection pointer is 0." );
@@ -208,7 +208,7 @@ SwTextNode *SwNodes::MakeTextNode( SwNode& rWhere,
     } while( true );
 }
 
-SwTextNode::SwTextNode( SwNode& rWhere, SwTextFormatColl *pTextColl, const SfxItemSet* pAutoAttr )
+SwTextNode::SwTextNode( const SwNode& rWhere, SwTextFormatColl *pTextColl, const SfxItemSet* pAutoAttr )
 :   SwContentNode( rWhere, SwNodeType::Text, pTextColl ),
     m_bContainsHiddenChars(false),
     m_bHiddenCharsHidePara(false),
@@ -3073,7 +3073,7 @@ bool SwTextNode::HasMarkedLabel() const
 namespace
 {
 /// Decides if a list level direct formatting on a paragraph needs copying to a next, new paragraph.
-bool CopyDirectListLevel(SwTextNode* pTextNode)
+bool CopyDirectListLevel(const SwTextNode* pTextNode)
 {
     SwTextFormatColl* pColl = pTextNode->GetTextColl();
     if (!pColl)
@@ -3100,7 +3100,7 @@ bool CopyDirectListLevel(SwTextNode* pTextNode)
 }
 }
 
-SwTextNode* SwTextNode::MakeNewTextNode( SwNode& rPosNd, bool bNext,
+SwTextNode* SwTextNode::MakeNewTextNode( const SwNode& rPosNd, bool bNext,
                                        bool bChgFollow )
 {
     // ignore hard PageBreak/PageDesc/ColumnBreak from Auto-Set
@@ -3989,7 +3989,7 @@ void SwTextNode::ReplaceText( const SwContentIndex& rStart, const sal_Int32 nDel
     }
 }
 
-void SwTextNode::ReplaceText( SwPosition& rStart, const sal_Int32 nDelLen,
+void SwTextNode::ReplaceText( const SwPosition& rStart, const sal_Int32 nDelLen,
                              const OUString & rStr)
 {
     ReplaceText(rStart.nContent, nDelLen, rStr);

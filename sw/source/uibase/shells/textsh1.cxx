@@ -446,7 +446,7 @@ OUString GetLocalURL(const SwWrtShell& rSh)
     return rLocalURL;
 }
 
-void UpdateSections(SfxRequest& rReq, SwWrtShell& rWrtSh)
+void UpdateSections(const SfxRequest& rReq, SwWrtShell& rWrtSh)
 {
     OUString aSectionNamePrefix;
     const SfxStringItem* pSectionNamePrefix = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
@@ -513,7 +513,7 @@ void UpdateSections(SfxRequest& rReq, SwWrtShell& rWrtSh)
     rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::UPDATE_SECTIONS, nullptr);
 }
 
-void DeleteSections(SfxRequest& rReq, SwWrtShell& rWrtSh)
+void DeleteSections(const SfxRequest& rReq, SwWrtShell& rWrtSh)
 {
     OUString aSectionNamePrefix;
     const SfxStringItem* pSectionNamePrefix = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
@@ -544,7 +544,7 @@ void DeleteSections(SfxRequest& rReq, SwWrtShell& rWrtSh)
     }
 }
 
-void DeleteContentControl( SwWrtShell& rWrtSh )
+void DeleteContentControl( const SwWrtShell& rWrtSh )
 {
     SwTextContentControl* pTextContentControl = rWrtSh.CursorInsideContentControl();
     if (pTextContentControl) {
@@ -556,7 +556,7 @@ void DeleteContentControl( SwWrtShell& rWrtSh )
 }
 
 
-void UpdateBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
+void UpdateBookmarks(const SfxRequest& rReq, SwWrtShell& rWrtSh)
 {
     if (rWrtSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS))
     {
@@ -643,7 +643,7 @@ void UpdateBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
     rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::UPDATE_BOOKMARKS, nullptr);
 }
 
-void UpdateBookmark(SfxRequest& rReq, SwWrtShell& rWrtSh)
+void UpdateBookmark(const SfxRequest& rReq, SwWrtShell& rWrtSh)
 {
     if (rWrtSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS))
     {
@@ -723,7 +723,7 @@ void UpdateBookmark(SfxRequest& rReq, SwWrtShell& rWrtSh)
     rIDMA.assureSortedMarkContainers();
 }
 
-void DeleteBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
+void DeleteBookmarks(const SfxRequest& rReq, SwWrtShell& rWrtSh)
 {
     if (rWrtSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS))
     {
@@ -770,7 +770,7 @@ void DeleteBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
     }
 }
 
-void DeleteFields(SfxRequest& rReq, SwWrtShell& rWrtSh)
+void DeleteFields(const SfxRequest& rReq, SwWrtShell& rWrtSh)
 {
     const SfxStringItem* pTypeName = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
     if (!pTypeName || pTypeName->GetValue() != "SetRef")

@@ -320,7 +320,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SAL_DLLPRIVATE void           CreateScrollbar( bool bHori );
     DECL_DLLPRIVATE_LINK(HoriScrollHdl, weld::Scrollbar&, void);
     DECL_DLLPRIVATE_LINK(VertScrollHdl, weld::Scrollbar&, void);
-    SAL_DLLPRIVATE void EndScrollHdl(weld::Scrollbar& rScrollbar, bool bHorizontal);
+    SAL_DLLPRIVATE void EndScrollHdl(const weld::Scrollbar& rScrollbar, bool bHorizontal);
     SAL_DLLPRIVATE bool          UpdateScrollbars();
     DECL_DLLPRIVATE_LINK( WindowChildEventListener, VclWindowEvent&, void );
     SAL_DLLPRIVATE void          CalcVisArea( const Size &rPixelSz );

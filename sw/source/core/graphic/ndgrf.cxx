@@ -58,7 +58,7 @@
 using namespace com::sun::star;
 
 SwGrfNode::SwGrfNode(
-        SwNode & rWhere,
+        const SwNode & rWhere,
         const OUString& rGrfName,
         const OUString& rFltName,
         const Graphic* pGraphic,
@@ -82,7 +82,7 @@ SwGrfNode::SwGrfNode(
  *
  * @note Does not read/open the image itself!
  */
-SwGrfNode::SwGrfNode( SwNode& rWhere,
+SwGrfNode::SwGrfNode( const SwNode& rWhere,
                       std::u16string_view rGrfName,
                       const OUString& rFltName,
                       SwGrfFormatColl *pGrfColl,
@@ -387,7 +387,7 @@ const GraphicObject* SwGrfNode::GetReplacementGrfObj() const
     return mpReplacementGraphic.get();
 }
 
-SwGrfNode * SwNodes::MakeGrfNode( SwNode & rWhere,
+SwGrfNode * SwNodes::MakeGrfNode( const SwNode & rWhere,
                                 const OUString& rGrfName,
                                 const OUString& rFltName,
                                 const Graphic* pGraphic,

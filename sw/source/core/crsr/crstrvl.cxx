@@ -1364,7 +1364,7 @@ SwOutlineNodes::size_type SwCursorShell::GetOutlinePos(sal_uInt8 nLevel, SwPaM* 
 }
 
 void SwCursorShell::MakeOutlineSel(SwOutlineNodes::size_type nSttPos, SwOutlineNodes::size_type nEndPos,
-                                  bool bWithChildren , bool bKillPams, SwOutlineNodesInline* pOutlNdsInline)
+                                  bool bWithChildren , bool bKillPams, const SwOutlineNodesInline* pOutlNdsInline)
 {
     const SwNodes& rNds = GetDoc()->GetNodes();
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();

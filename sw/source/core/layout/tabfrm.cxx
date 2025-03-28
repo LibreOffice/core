@@ -1507,7 +1507,7 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
 
 namespace
 {
-    bool CanDeleteFollow(SwTabFrame *pFoll)
+    bool CanDeleteFollow(const SwTabFrame *pFoll)
     {
         if (pFoll->IsJoinLocked())
             return false;

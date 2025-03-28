@@ -194,8 +194,8 @@ class SW_DLLPUBLIC SwPagePreview final : public SfxViewShell
     SAL_DLLPRIVATE void CreateScrollbar( bool bHori);
     DECL_DLLPRIVATE_LINK(HoriScrollHdl, weld::Scrollbar&, void);
     DECL_DLLPRIVATE_LINK(VertScrollHdl, weld::Scrollbar&, void);
-    SAL_DLLPRIVATE void ScrollHdl(weld::Scrollbar&, bool bHorizontal);
-    SAL_DLLPRIVATE void EndScrollHdl(weld::Scrollbar&, bool bHorizontal);
+    SAL_DLLPRIVATE void ScrollHdl(const weld::Scrollbar&, bool bHorizontal);
+    SAL_DLLPRIVATE void EndScrollHdl(const weld::Scrollbar&, bool bHorizontal);
     SAL_DLLPRIVATE bool ChgPage( int eMvMode, bool bUpdateScrollbar = true );
 
     SAL_DLLPRIVATE virtual SfxPrinter*     GetPrinter( bool bCreate = false ) override;

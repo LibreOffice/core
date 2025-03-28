@@ -100,12 +100,12 @@ class SW_DLLPUBLIC SwOLENode final: public SwNoTextNode
     sfx2::SvBaseLink*  mpObjectLink;
     OUString maLinkURL;
 
-    SwOLENode(  SwNode& rWhere,
+    SwOLENode(  const SwNode& rWhere,
                 const svt::EmbeddedObjectRef&,
                 SwGrfFormatColl *pGrfColl,
                 SwAttrSet const * pAutoAttr );
 
-    SwOLENode(  SwNode& rWhere,
+    SwOLENode(  const SwNode& rWhere,
                 const OUString &rName,
                 sal_Int64 nAspect,
                 SwGrfFormatColl *pGrfColl,

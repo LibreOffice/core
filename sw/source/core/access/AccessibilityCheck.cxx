@@ -79,7 +79,7 @@ SwTextNode* lclSearchNextTextNode(SwNode* pCurrent)
     return pTextNode;
 }
 
-void lcl_SetHiddenIssues(std::shared_ptr<sw::AccessibilityIssue>& pIssue)
+void lcl_SetHiddenIssues(const std::shared_ptr<sw::AccessibilityIssue>& pIssue)
 {
     switch (pIssue->m_eIssueID)
     {

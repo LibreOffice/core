@@ -52,13 +52,13 @@ class SAL_DLLPUBLIC_RTTI SwGrfNode final: public SwNoTextNode
     css::uno::Reference<css::io::XInputStream> mxInputStream;
     bool mbIsStreamReadOnly;
 
-    SwGrfNode( SwNode& rWhere,
+    SwGrfNode( const SwNode& rWhere,
                const OUString& rGrfName, const OUString& rFltName,
                const Graphic* pGraphic,
                SwGrfFormatColl* pGrfColl,
                SwAttrSet const * pAutoAttr );
     ///< Ctor for reading (SW/G) without graphics.
-    SwGrfNode( SwNode& rWhere,
+    SwGrfNode( const SwNode& rWhere,
                std::u16string_view rGrfName, const OUString& rFltName,
                SwGrfFormatColl* pGrfColl,
                SwAttrSet const * pAutoAttr );

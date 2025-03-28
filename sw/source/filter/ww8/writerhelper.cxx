@@ -128,7 +128,7 @@ namespace
             {
                 // the anchor position will be invalidated by SetRedlineFlags
                 // so set a dummy position and fix it in UpdateFramePositions
-                SwPosition const dummy(const_cast<SwNodes&>(pAnchor->GetNodes()));
+                SwPosition const dummy(pAnchor->GetNodes());
                 aRet.emplace_back(rEntry, dummy);
             }
             else

@@ -448,7 +448,7 @@ static void lcl_TabGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLi
     rBorderLine.SetColor(pBorderLine->GetColor());
 }
 
-static bool lcl_BoxesInTrackedRows(SwWrtShell &rSh, const SwSelBoxes& rBoxes)
+static bool lcl_BoxesInTrackedRows(const SwWrtShell &rSh, const SwSelBoxes& rBoxes)
 {
     // cursor and selection are there only in tracked rows
     bool bRet = true;
@@ -471,7 +471,7 @@ static bool lcl_BoxesInTrackedRows(SwWrtShell &rSh, const SwSelBoxes& rBoxes)
     return bRet;
 }
 
-static bool lcl_CursorInDeletedTable(SwWrtShell &rSh)
+static bool lcl_CursorInDeletedTable(const SwWrtShell &rSh)
 {
     // cursor and selection are there only in deleted table in Show Changes mode
     if ( rSh.GetLayout()->IsHideRedlines() )

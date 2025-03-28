@@ -84,7 +84,7 @@ public:
     SwPosition const* GetStartPos() const { return m_pStartPos; }
     SwPosition const* GetEndPos() const { return m_pEndPos; }
 
-    HideIterator(SwTextNode & rTextNode,
+    HideIterator(const SwTextNode & rTextNode,
             bool const isHideRedlines, sw::FieldmarkMode const eMode,
             sw::ParagraphBreakMode const ePBMode)
         : m_rIDRA(rTextNode.getIDocumentRedlineAccess())

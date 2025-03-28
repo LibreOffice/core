@@ -122,7 +122,7 @@ static bool lcl_IsDelim( const sal_Unicode c )
 
 // allow to check normal text with hyperlink by recognizing (parts of) URLs
 static bool lcl_IsURL(std::u16string_view rWord,
-    SwTextNode &rNode, sal_Int32 nBegin, sal_Int32 nLen)
+    const SwTextNode &rNode, sal_Int32 nBegin, sal_Int32 nLen)
 {
     // not a text with hyperlink
     if ( !rNode.GetTextAttrAt(nBegin, RES_TXTATR_INETFMT) )
@@ -801,7 +801,7 @@ namespace
 sal_Int32
 forceEachCJCodePointToWord(const OUString& rText, sal_Int32 nBegin, sal_Int32 nLen,
                            const ModelToViewHelper* pModelToView,
-                           std::function<LanguageType(sal_Int32, sal_Int32, bool)>& fnGetLangOfChar)
+                           const std::function<LanguageType(sal_Int32, sal_Int32, bool)>& fnGetLangOfChar)
 {
     if (nLen > 1)
     {

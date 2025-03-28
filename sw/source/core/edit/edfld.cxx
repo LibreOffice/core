@@ -161,7 +161,7 @@ bool SwEditShell::InsertField(SwField const & rField, const bool bForceExpandHin
 }
 
 /// Are the PaMs positioned on fields?
-static SwTextField* lcl_FindInputField( SwDoc* pDoc, const SwField& rField )
+static SwTextField* lcl_FindInputField( const SwDoc* pDoc, const SwField& rField )
 {
     // Search field via its address. For input fields this needs to be done in protected fields.
     SwTextField* pTField = nullptr;
@@ -291,7 +291,7 @@ void SwEditShell::UpdateOneField(SwField &rField)
     EndAllAction();
 }
 
-void SwEditShell::ConvertOneFieldToText(SwField& rField)
+void SwEditShell::ConvertOneFieldToText(const SwField& rField)
 {
     CurrShell aCurr( this );
     StartAllAction();

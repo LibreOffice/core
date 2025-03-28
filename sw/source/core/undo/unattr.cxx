@@ -856,7 +856,7 @@ void SwUndoAttr::RepeatImpl(::sw::RepeatContext & rContext)
     }
 }
 
-void SwUndoAttr::redoAttribute(SwPaM& rPam, sw::UndoRedoContext & rContext)
+void SwUndoAttr::redoAttribute(SwPaM& rPam, const sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 

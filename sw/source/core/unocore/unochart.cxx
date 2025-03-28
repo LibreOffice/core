@@ -160,7 +160,7 @@ static std::mutex &    GetChartMutex()
 }
 
 static void LaunchModifiedEvent(
-        ::comphelper::OInterfaceContainerHelper4<util::XModifyListener> &rICH,
+        const ::comphelper::OInterfaceContainerHelper4<util::XModifyListener> &rICH,
         const uno::Reference< uno::XInterface > &rxI )
 {
     lang::EventObject aEvtObj( rxI );

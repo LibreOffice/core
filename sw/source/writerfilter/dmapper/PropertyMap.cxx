@@ -1449,7 +1449,7 @@ void BeforeConvertToTextFrame(const std::deque<StoredRedline>& rFramedRedlines, 
     }
 }
 
-void AfterConvertToTextFrame(DomainMapper_Impl& rDM_Impl, const std::deque<StoredRedline>& rFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable)
+void AfterConvertToTextFrame(const DomainMapper_Impl& rDM_Impl, const std::deque<StoredRedline>& rFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable)
 {
     const rtl::Reference<SwXTextDocument>& xTextDocument(rDM_Impl.GetTextDocument());
     rtl::Reference<SwXTextTables> xTables = xTextDocument->getSwTextTables();

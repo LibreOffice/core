@@ -121,7 +121,7 @@ SwFlyFrame *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh )
     return nullptr;
 }
 
-static void lcl_GrabCursor( SwFEShell* pSh, SwFlyFrame* pOldSelFly, SwFrameFormat* pNewDrawFormat = nullptr)
+static void lcl_GrabCursor( SwFEShell* pSh, SwFlyFrame* pOldSelFly, const SwFrameFormat* pNewDrawFormat = nullptr)
 {
     const SwFrameFormat *pFlyFormat = pSh->SelFlyGrabCursor();
     if( pFlyFormat && !pSh->ActionPend() &&

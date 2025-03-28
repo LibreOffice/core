@@ -974,7 +974,7 @@ rtl::Reference<SwXBaseStyle> SwXStyleFamily::getStyleByName(const OUString& rPro
     return getStyle(pBase, sStyleName);
 }
 
-rtl::Reference<SwXBaseStyle> SwXStyleFamily::getStyle(SfxStyleSheetBase* pBase, const OUString& sStyleName)
+rtl::Reference<SwXBaseStyle> SwXStyleFamily::getStyle(const SfxStyleSheetBase* pBase, const OUString& sStyleName)
 {
     rtl::Reference<SwXBaseStyle> xStyle = FindStyle(sStyleName);
     if(!xStyle.is())

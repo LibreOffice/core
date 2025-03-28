@@ -41,8 +41,8 @@ class SwRenameXNamedDlg final : public weld::GenericDialogController
 
 public:
     SwRenameXNamedDlg(weld::Widget* pParent,
-                      css::uno::Reference< css::container::XNamed > & xNamed,
-                      css::uno::Reference< css::container::XNameAccess > & xNameAccess );
+                      const css::uno::Reference< css::container::XNamed > & xNamed,
+                      const css::uno::Reference< css::container::XNameAccess > & xNameAccess );
 
     void SetForbiddenChars(const OUString& rSet)
     {

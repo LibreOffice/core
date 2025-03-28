@@ -1151,7 +1151,7 @@ void SwSectionNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
 
 // Create a new SectionFrame for every occurrence in the Layout and insert before
 // the corresponding ContentFrame
-void SwSectionNode::MakeOwnFrames(SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx)
+void SwSectionNode::MakeOwnFrames(SwNodeIndex* pIdxBehind, const SwNodeIndex* pEndIdx)
 {
     assert(pIdxBehind && "no Index");
     SwNodes& rNds = GetNodes();

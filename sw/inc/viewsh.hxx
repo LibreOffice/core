@@ -625,7 +625,7 @@ public:
     bool isOutputToWindow() const;
     void OnGraphicArrived(const SwRect&);
 
-    void GetFirstLastVisPageNumbers(SwVisiblePageNumbers& rVisiblePageNumbers, SwView& rView);
+    void GetFirstLastVisPageNumbers(SwVisiblePageNumbers& rVisiblePageNumbers, const SwView& rView);
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 

@@ -70,7 +70,7 @@ class SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") SwFlowFrame
     // TableSel is allowed to reset the follow-bit
     friend inline void UnsetFollow( SwFlowFrame *pFlow );
 
-    friend void MakeFrames( SwDoc *, SwNode &, SwNode & );
+    friend void MakeFrames( SwDoc *, const SwNode &, const SwNode & );
 
     friend class SwNode2LayImpl;
 

@@ -365,7 +365,7 @@ public:
         { UpdateFields(TBL_RELBOXNAME); };
     void SwitchFormulasToInternalRepresentation()
         { UpdateFields(TBL_BOXPTR); }
-    void Merge(SwTable& rTable, SwHistory* pHistory);
+    void Merge(const SwTable& rTable, SwHistory* pHistory);
     void Split(const OUString& sNewTableName, sal_uInt16 nSplitLine, SwHistory* pHistory);
 
     static void GatherFormulas(SwDoc& rDoc, std::vector<SwTableBoxFormula*>& rvFormulas);

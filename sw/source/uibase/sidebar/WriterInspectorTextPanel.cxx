@@ -50,7 +50,7 @@
 
 namespace sw::sidebar
 {
-static void UpdateTree(SwDocShell& rDocSh, SwEditShell& rEditSh,
+static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
                        std::vector<svx::sidebar::TreeNode>& aStore, sal_Int32& rParIdx);
 
 std::unique_ptr<PanelLayout> WriterInspectorTextPanel::Create(weld::Widget* pParent)
@@ -530,7 +530,7 @@ static void InsertValues(const css::uno::Reference<css::uno::XInterface>& rSourc
         });
 }
 
-static void UpdateTree(SwDocShell& rDocSh, SwEditShell& rEditSh,
+static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
                        std::vector<svx::sidebar::TreeNode>& aStore, sal_Int32& rParIdx)
 {
     SwDoc* pDoc = rDocSh.GetDoc();

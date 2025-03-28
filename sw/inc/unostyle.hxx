@@ -416,7 +416,7 @@ class SW_DLLPUBLIC SwXStyleFamily final : public cppu::WeakImplHelper
 
     SwXStyle* FindStyle(std::u16string_view rStyleName) const;
     sal_Int32 GetCountOrName(OUString* pString, sal_Int32 nIndex = SAL_MAX_INT32);
-    rtl::Reference<SwXBaseStyle> getStyle(SfxStyleSheetBase* pBase, const OUString& rStyleName);
+    rtl::Reference<SwXBaseStyle> getStyle(const SfxStyleSheetBase* pBase, const OUString& rStyleName);
     static const StyleFamilyEntry& InitEntry(SfxStyleFamily eFamily);
 public:
     SwXStyleFamily(SwDocShell* pDocShell, const SfxStyleFamily eFamily);

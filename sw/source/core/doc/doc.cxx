@@ -1998,7 +1998,7 @@ static bool IsMailMergeField(SwFieldIds fieldId)
     }
 }
 
-bool SwDoc::ConvertFieldToText(SwField& rField, SwRootFrame const& rLayout)
+bool SwDoc::ConvertFieldToText(const SwField& rField, SwRootFrame const& rLayout)
 {
     bool bRet = false;
     getIDocumentFieldsAccess().LockExpFields();

@@ -653,8 +653,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
     ExecutePost(rReq, nEEWhich, aNewAttr, pOLV, bRestoreSelection, aOldSelection);
 }
 
-void SwDrawTextShell::ExecutePost( SfxRequest& rReq, sal_uInt16 nEEWhich, SfxItemSet& rNewAttr,
-        OutlinerView* pOLV, bool bRestoreSelection, const ESelection& rOldSelection )
+void SwDrawTextShell::ExecutePost( const SfxRequest& rReq, sal_uInt16 nEEWhich, SfxItemSet& rNewAttr,
+        const OutlinerView* pOLV, bool bRestoreSelection, const ESelection& rOldSelection )
 {
     SwWrtShell &rSh = GetShell();
     const SfxItemSet *pNewAttrs = rReq.GetArgs();

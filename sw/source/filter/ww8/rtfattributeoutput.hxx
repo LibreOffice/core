@@ -130,7 +130,7 @@ public:
     TableInfoRow(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner) override;
     void
     TableDefinition(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner) override;
-    void TablePositioning(SwFrameFormat* pFlyFormat);
+    void TablePositioning(const SwFrameFormat* pFlyFormat);
     void TableDefaultBorders(
         const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner) override;
     void

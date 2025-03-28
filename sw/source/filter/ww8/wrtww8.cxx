@@ -2325,7 +2325,7 @@ void WW8AttributeOutput::TableSpacing(const ww8::WW8TableNodeInfoInner::Pointer_
     }
 }
 
-void WW8AttributeOutput::TablePositioning(SwFrameFormat* pFlyFormat)
+void WW8AttributeOutput::TablePositioning(const SwFrameFormat* pFlyFormat)
 {
     if (!pFlyFormat || !pFlyFormat->GetFlySplit().GetValue())
     {

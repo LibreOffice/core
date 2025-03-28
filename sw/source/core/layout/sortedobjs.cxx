@@ -260,7 +260,7 @@ bool SwSortedObjs::Contains( const SwAnchoredObject& _rAnchoredObj ) const
     return aIter != maSortedObjLst.end();
 }
 
-void SwSortedObjs::Update( SwAnchoredObject& _rAnchoredObj )
+void SwSortedObjs::Update( const SwAnchoredObject& _rAnchoredObj )
 {
     if ( !Contains( _rAnchoredObj ) )
     {

@@ -1152,7 +1152,7 @@ void SwXTextRange::GetStartPaM(std::optional<SwPaM>& roPaM)
 namespace sw {
 
 static bool XTextRangeToSwPaMImpl( SwUnoInternalPaM & rToFill,
-        SwDoc* pDoc,
+        const SwDoc* pDoc,
         const SwPaM* pUnoCursor);
 
 bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
@@ -1213,7 +1213,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
 }
 
 static bool XTextRangeToSwPaMImpl( SwUnoInternalPaM & rToFill,
-        SwDoc* pDoc,
+        const SwDoc* pDoc,
         const SwPaM* pUnoCursor)
 {
     bool bRet = false;

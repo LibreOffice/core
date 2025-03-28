@@ -443,7 +443,7 @@ public:
 
 void BeforeConvertToTextFrame(const std::deque<StoredRedline>& rFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable);
 
-void AfterConvertToTextFrame(DomainMapper_Impl& rDM_Impl, const std::deque<StoredRedline>& aFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable);
+void AfterConvertToTextFrame(const DomainMapper_Impl& rDM_Impl, const std::deque<StoredRedline>& aFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable);
 
 class ParagraphProperties : public SvRefBase
 {

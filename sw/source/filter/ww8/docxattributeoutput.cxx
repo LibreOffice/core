@@ -4547,7 +4547,7 @@ static void impl_borders( FSHelperPtr const & pSerializer,
                           const OutputBorderOptions& rOptions,
                           std::map<SvxBoxItemLine,
                           css::table::BorderLine2> &rTableStyleConf,
-                          ww8::Frame* pFramePr = nullptr)
+                          const ww8::Frame* pFramePr = nullptr)
 {
     static const SvxBoxItemLine aBorders[] =
     {

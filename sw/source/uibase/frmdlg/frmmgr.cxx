@@ -625,7 +625,7 @@ void SwFlyFrameAttrMgr::SetAttrSet(const SfxItemSet& rSet)
     m_aSet.Put( rSet );
 }
 
-const SwTableFormat* SwFlyFrameAttrMgr::SingleTableSelected(SwWrtShell& rWrtShell)
+const SwTableFormat* SwFlyFrameAttrMgr::SingleTableSelected(const SwWrtShell& rWrtShell)
 {
     if (!rWrtShell.IsTableMode())
     {

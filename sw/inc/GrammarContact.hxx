@@ -72,7 +72,7 @@ public:
         repaint will be triggered by a timer
     @returns void
     */
-    void finishGrammarCheck(SwTextNode& rTextNode);
+    void finishGrammarCheck(const SwTextNode& rTextNode);
 
     void CheckBroadcaster();
 };
@@ -87,7 +87,7 @@ GrammarContact* getGrammarContactFor(const SwTextNode&);
 /** finishGrammarCheck() calls the same function of the grammar contact of the document (for a given textnode)
 @returns void
 */
-void finishGrammarCheckFor(SwTextNode&);
+void finishGrammarCheckFor(const SwTextNode&);
 
 } // end sw
 

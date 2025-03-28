@@ -1054,7 +1054,7 @@ public:
     /// Outline - move up / move down.
     bool MoveOutlinePara( const SwPaM& rPam,
                     SwOutlineNodes::difference_type nOffset,
-                    SwOutlineNodesInline* pOutlNdsInline = nullptr);
+                    const SwOutlineNodesInline* pOutlNdsInline = nullptr);
 
     SW_DLLPUBLIC bool GotoOutline(SwPosition& rPos, const OUString& rName, SwRootFrame const* = nullptr) const;
 
@@ -1510,7 +1510,7 @@ public:
 
     // Replace fields by text - mailmerge support
     bool ConvertFieldsToText(SwRootFrame const& rLayout);
-    bool ConvertFieldToText(SwField& rField, SwRootFrame const& rLayout);
+    bool ConvertFieldToText(const SwField& rField, SwRootFrame const& rLayout);
 
     // Create sub-documents according to given collection.
     // If no collection is given, use chapter styles for 1st level.

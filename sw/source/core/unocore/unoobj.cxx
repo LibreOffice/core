@@ -1170,7 +1170,7 @@ SwXTextCursor::gotoRange(
 
 void
 SwXTextCursor::gotoRangeImpl(
-    SwXTextRange* pRange,
+    const SwXTextRange* pRange,
     OTextCursorHelper* pCursor,
     bool bExpand)
 {

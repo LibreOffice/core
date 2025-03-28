@@ -45,7 +45,7 @@ class SwUndoAttr final : public SwUndo, private SwUndRng
     OUString m_aChrFormatName;
 
     void RemoveIdx( SwDoc& rDoc );
-    void redoAttribute(SwPaM& rPam, sw::UndoRedoContext& rContext);
+    void redoAttribute(SwPaM& rPam, const sw::UndoRedoContext& rContext);
 public:
     SwUndoAttr( const SwPaM&, SfxItemSet, const SetAttrMode nFlags );
     SwUndoAttr( const SwPaM&, const SfxPoolItem&, const SetAttrMode nFlags );

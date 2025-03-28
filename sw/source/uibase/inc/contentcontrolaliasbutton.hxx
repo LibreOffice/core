@@ -23,7 +23,7 @@ class SwContentControlAliasButton final : public SwFrameMenuButtonBase
     bool m_bReadOnly = false;
 
 public:
-    SwContentControlAliasButton(SwEditWin* pEditWin, SwContentControl* pContentControl);
+    SwContentControlAliasButton(SwEditWin* pEditWin, const SwContentControl* pContentControl);
     ~SwContentControlAliasButton() override;
 
     bool Contains(const Point& rDocPt) const override;
@@ -31,7 +31,7 @@ public:
     void ShowAll(bool bShow) override;
     void dispose() override;
 
-    void SetContentControl(SwContentControl* pContentControl);
+    void SetContentControl(const SwContentControl* pContentControl);
     void SetOffset(Point aTopLeftPixel);
 
 private:

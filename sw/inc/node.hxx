@@ -600,7 +600,7 @@ public:
        On default the frames are created until the end of the range.
        When another NodeIndex pEnd is passed a MakeFrames is called up to it.
        Used by TableToText. */
-    void MakeOwnFrames(SwNodeIndex* pIdxBehind, SwNodeIndex* pEnd = nullptr);
+    void MakeOwnFrames(SwNodeIndex* pIdxBehind, const SwNodeIndex* pEnd = nullptr);
 
     /** Method deletes all views of document for the node. The
      content frames are removed from the respective layout. */

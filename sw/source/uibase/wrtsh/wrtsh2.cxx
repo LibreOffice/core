@@ -558,7 +558,7 @@ bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, LoadUrlFlags nFilter )
     return bRet;
 }
 
-static bool LoadURL(SfxViewShell& rView, const OUString& rURL, LoadUrlFlags nFilter,
+static bool LoadURL(const SfxViewShell& rView, const OUString& rURL, LoadUrlFlags nFilter,
                     const OUString& rTargetFrameName)
 {
     SfxViewFrame& rViewFrame = rView.GetViewFrame();

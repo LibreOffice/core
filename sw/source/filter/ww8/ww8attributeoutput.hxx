@@ -102,7 +102,7 @@ public:
     virtual void TableInfoCell( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfo ) override;
     virtual void TableInfoRow( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfo ) override;
     virtual void TableDefinition( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfo ) override;
-    void TablePositioning(SwFrameFormat* pFlyFormat);
+    void TablePositioning(const SwFrameFormat* pFlyFormat);
     virtual void TableDefaultBorders( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfo ) override;
     virtual void TableBackgrounds( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfo ) override;
     virtual void TableRowRedline( const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfo ) override;

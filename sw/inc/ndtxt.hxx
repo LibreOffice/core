@@ -164,13 +164,13 @@ class SW_DLLPUBLIC SwTextNode final
     // DrawingLayer FillAttributes in a preprocessed form for primitive usage
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFillAttributes;
 
-    SAL_DLLPRIVATE SwTextNode( SwNode& rWhere, SwTextFormatColl *pTextColl,
+    SAL_DLLPRIVATE SwTextNode( const SwNode& rWhere, SwTextFormatColl *pTextColl,
                              const SfxItemSet* pAutoAttr = nullptr );
     virtual void SwClientNotify( const SwModify&, const SfxHint& ) override;
     /// Copies the attributes at nStart to pDest.
     SAL_DLLPRIVATE void CopyAttr( SwTextNode *pDest, const sal_Int32 nStart, const sal_Int32 nOldPos);
 
-    SAL_DLLPRIVATE SwTextNode* MakeNewTextNode( SwNode&, bool bNext = true,
+    SAL_DLLPRIVATE SwTextNode* MakeNewTextNode( const SwNode&, bool bNext = true,
                                 bool bChgFollow = true );
 
     SAL_DLLPRIVATE void CutImpl(
@@ -405,7 +405,7 @@ public:
     /// the capacity of the node
     void ReplaceText( const SwContentIndex& rStart, const sal_Int32 nDelLen,
             const OUString & rText );
-    void ReplaceText( SwPosition& rStart, const sal_Int32 nDelLen,
+    void ReplaceText( const SwPosition& rStart, const sal_Int32 nDelLen,
             const OUString & rText );
     void ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
             std::u16string_view aText,

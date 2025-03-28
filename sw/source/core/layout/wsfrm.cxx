@@ -4537,7 +4537,7 @@ void AddRemoveFlysAnchoredToFrameStartingAtNode(
 } // namespace sw
 
 static void UnHideRedlines(SwRootFrame & rLayout,
-        SwNodes & rNodes, SwNode const& rEndOfSectionNode,
+        const SwNodes & rNodes, SwNode const& rEndOfSectionNode,
         std::set<SwNodeOffset> *const pSkipped)
 {
     assert(rEndOfSectionNode.IsEndNode());
@@ -4736,7 +4736,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
 }
 
 static void UnHideRedlinesExtras(SwRootFrame & rLayout,
-        SwNodes & rNodes, SwNode const& rEndOfExtraSectionNode,
+        const SwNodes & rNodes, SwNode const& rEndOfExtraSectionNode,
         std::set<SwNodeOffset> *const pSkipped)
 {
     assert(rEndOfExtraSectionNode.IsEndNode());

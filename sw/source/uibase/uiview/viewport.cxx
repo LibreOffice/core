@@ -756,7 +756,7 @@ IMPL_LINK(SwView, VertScrollHdl, weld::Scrollbar&, rScrollbar, void)
 }
 
 // Handler of the scrollbars
-void SwView::EndScrollHdl(weld::Scrollbar& rScrollbar, bool bHorizontal)
+void SwView::EndScrollHdl(const weld::Scrollbar& rScrollbar, bool bHorizontal)
 {
     if ( GetWrtShell().ActionPend() )
         return;

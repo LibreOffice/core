@@ -1417,7 +1417,7 @@ bool SwTransferable::IsPaste( const SwWrtShell& rSh,
     return bIsPaste;
 }
 
-void SwTransferable::SelectPasteFormat(TransferableDataHelper& rData, sal_uInt8& nAction,
+void SwTransferable::SelectPasteFormat(const TransferableDataHelper& rData, sal_uInt8& nAction,
                                        SotClipboardFormatId& nFormat)
 {
     if (nFormat != SotClipboardFormatId::RICHTEXT)
@@ -1454,7 +1454,7 @@ void SwTransferable::SelectPasteFormat(TransferableDataHelper& rData, sal_uInt8&
 
 // get HTML indentation level by counting tabulator characters before the index
 // (also index value -1 returns with 0)
-static sal_Int32 lcl_getLevel(OUString& sText, sal_Int32 nIdx)
+static sal_Int32 lcl_getLevel(std::u16string_view sText, sal_Int32 nIdx)
 {
     sal_Int32 nRet = 0;
     while ( nIdx-- > 0 && sText[nIdx] == '\t' )
@@ -1464,7 +1464,7 @@ static sal_Int32 lcl_getLevel(OUString& sText, sal_Int32 nIdx)
     return nRet;
 }
 
-bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndStdIds nAnchorType, bool bIgnoreComments, PasteTableType ePasteTable)
+bool SwTransferable::Paste(SwWrtShell& rSh, const TransferableDataHelper& rData, RndStdIds nAnchorType, bool bIgnoreComments, PasteTableType ePasteTable)
 {
     SwPasteContext aPasteContext(rSh);
 
@@ -3506,7 +3506,7 @@ static SotClipboardFormatId aPasteSpecialIds[] =
     SotClipboardFormatId::NONE
 };
 
-bool SwTransferable::PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& rData )
+bool SwTransferable::PasteUnformatted( SwWrtShell& rSh, const TransferableDataHelper& rData )
 {
     // Plain text == unformatted
     return SwTransferable::PasteFormat( rSh, rData, SotClipboardFormatId::STRING );

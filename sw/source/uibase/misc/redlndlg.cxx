@@ -146,7 +146,7 @@ SwModelessRedlineAcceptDlg::~SwModelessRedlineAcceptDlg()
 
 namespace
 {
-const SwRedlineData* lcl_get_selected_redlinedata(weld::TreeView& rTreeView)
+const SwRedlineData* lcl_get_selected_redlinedata(const weld::TreeView& rTreeView)
 {
     std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
     if (rTreeView.get_selected(xEntry.get()))

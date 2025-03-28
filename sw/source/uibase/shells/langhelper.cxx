@@ -90,7 +90,7 @@ namespace SwLangHelper
         rSet.Put( aItem );
     }
 
-    bool SetLanguageStatus( OutlinerView* pOLV, SfxRequest &rReq, SwView const &rView, SwWrtShell &rSh )
+    bool SetLanguageStatus( const OutlinerView* pOLV, SfxRequest &rReq, SwView const &rView, SwWrtShell &rSh )
     {
         bool bRestoreSelection = false;
         ESelection   aSelection  = pOLV->GetSelection();

@@ -624,7 +624,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
     ExecPost(rReq, nEEWhich, aNewAttr, pOLV );
 }
 
-void SwAnnotationShell::ExecPost( SfxRequest& rReq, sal_uInt16 nEEWhich, SfxItemSet& rNewAttr, OutlinerView* pOLV )
+void SwAnnotationShell::ExecPost( const SfxRequest& rReq, sal_uInt16 nEEWhich, SfxItemSet& rNewAttr, OutlinerView* pOLV )
 {
     const SfxItemSet *pNewAttrs = rReq.GetArgs();
     const sal_uInt16 nSlot = rReq.GetSlot();

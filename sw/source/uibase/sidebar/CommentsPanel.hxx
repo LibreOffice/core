@@ -130,12 +130,12 @@ public:
 
     void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
-    void EditComment(Comment* pComment);
-    void ToggleResolved(Comment* pComment);
-    void ReplyComment(Comment* pComment);
-    void DeleteComment(Comment* pComment);
-    void DeleteThread(Comment* pComment);
-    void ResolveThread(Comment* pComment);
+    void EditComment(const Comment* pComment);
+    void ToggleResolved(const Comment* pComment);
+    void ReplyComment(const Comment* pComment);
+    void DeleteComment(const Comment* pComment);
+    void DeleteThread(const Comment* pComment);
+    void ResolveThread(const Comment* pComment);
 
     DECL_LINK(FilterByAuthor, weld::ComboBox&, void);
     DECL_LINK(FilterByDate, SvtCalendarBox&, void);
@@ -145,8 +145,8 @@ public:
     DECL_LINK(SortHdl, weld::Toggleable&, void);
 
     // utility functions
-    static OUString FormatDate(Date& rDate);
-    static OUString FormatTime(tools::Time& rTime);
+    static OUString FormatDate(const Date& rDate);
+    static OUString FormatTime(const tools::Time& rTime);
 
     weld::Toggleable& getShowResolved() { return *mxShowResolved; }
 
@@ -173,8 +173,8 @@ private:
 
     // utility functions
     sw::annotation::SwAnnotationWin* getRootCommentWin(const SwFormatField* pField);
-    static sal_uInt32 getPostItId(sw::annotation::SwAnnotationWin* pAnnotationWin);
-    sw::annotation::SwAnnotationWin* getAnnotationWin(Comment* pComment);
+    static sal_uInt32 getPostItId(const sw::annotation::SwAnnotationWin* pAnnotationWin);
+    sw::annotation::SwAnnotationWin* getAnnotationWin(const Comment* pComment);
     static bool comp_dateTime(SwFormatField* a, SwFormatField* b);
     static SwPosition getAnchorPosition(SwFormatField* pField);
     static bool comp_position(SwFormatField* a, SwFormatField* b);
@@ -183,9 +183,10 @@ private:
     void populateComments();
     void addComment(const SwFormatField* pField);
     void deleteComment(sal_uInt32 nId);
-    void setResolvedStatus(sw::annotation::SwAnnotationWin* pAnnotationWin);
-    static void editComment(SwPostItField* pPostItField, Comment* pComment);
-    static OUString getReferenceText(SwTextNode* pTextNode, sw::mark::AnnotationMark* pMark);
+    void setResolvedStatus(const sw::annotation::SwAnnotationWin* pAnnotationWin);
+    static void editComment(const SwPostItField* pPostItField, Comment* pComment);
+    static OUString getReferenceText(const SwTextNode* pTextNode,
+                                     const sw::mark::AnnotationMark* pMark);
     void setReferenceText(sal_uInt32 nRootId);
 
     void populateAuthorComboBox();

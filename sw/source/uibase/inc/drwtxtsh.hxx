@@ -80,8 +80,8 @@ public:
     void        Init();
 
 private:
-    void        ExecutePost(SfxRequest& rReq, sal_uInt16 nEEWhich, SfxItemSet& rNewAttr,
-                    OutlinerView* pOLV, bool bRestoreSelection, const ESelection& rOldSelection);
+    void        ExecutePost(const SfxRequest& rReq, sal_uInt16 nEEWhich, SfxItemSet& rNewAttr,
+                    const OutlinerView* pOLV, bool bRestoreSelection, const ESelection& rOldSelection);
 };
 
 #endif
