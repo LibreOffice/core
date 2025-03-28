@@ -1935,6 +1935,10 @@ void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType
     pFS->startElementNS(XML_p, XML_spTree);
     pFS->write(MAIN_GROUP);
 
+    // MS Office complains if a shape ID is duplicated, and MAIN_GROUP specified p:cNvPr id="1"
+    if (GetMaxDocId() < 2)
+        SetMaxDocId(2); // this will be the next GetUniqueId()
+
     ResetGroupTable(mXShapes->getCount());
 
     while (GetNextGroupEntry())
