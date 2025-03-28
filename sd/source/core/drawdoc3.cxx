@@ -953,7 +953,7 @@ void SdDrawDocument::updateInsertedPages(PageInsertionParams& rParams,
         if (rParams.bScaleObjects)
         {
             ::tools::Rectangle aBorderRect(rParams.notesProps.left, rParams.notesProps.upper, rParams.notesProps.right, rParams.notesProps.lower);
-            rParams.mainProps.pPage->ScaleObjects(rParams.notesProps.size, aBorderRect, true);
+            rParams.notesProps.pPage->ScaleObjects(rParams.notesProps.size, aBorderRect, true);
         }
 
         rParams.notesProps.pPage->SetSize(rParams.notesProps.size);
