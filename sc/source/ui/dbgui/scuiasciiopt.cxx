@@ -458,8 +458,6 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
         mxRbSeparated->set_active(true);
     else
         mxRbDetectSep->set_active(true);
-    if (nFromRow != 1)
-        mxNfRow->set_value(nFromRow);
 
     // Clipboard is always Unicode, else rely on default/config.
     rtl_TextEncoding ePreselectUnicode = (meCall == SC_IMPORTFILE ?
@@ -486,8 +484,6 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
 
     // Get Separators from the dialog (empty are set from default)
     maFieldSeparators = GetActiveSeparators();
-
-    mxNfRow->connect_value_changed( LINK( this, ScImportAsciiDlg, FirstRowHdl ) );
 
     // *** Separator characters ***
     lcl_FillCombo( *mxCbTextSep, SCSTR_TEXTSEP, mcTextSep );
@@ -561,6 +557,14 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     UpdateVertical();
 
     mxTableBox->GetGrid().Execute( CSVCMD_NEWCELLTEXTS );
+
+    if (nFromRow != 1)
+    {
+        mxNfRow->set_value(nFromRow);
+        // tdf#163638 - show visual indicator for from rows
+        mxTableBox->GetGrid().Execute(CSVCMD_SETFIRSTIMPORTLINE, nFromRow - 1);
+    }
+    mxNfRow->connect_value_changed(LINK(this, ScImportAsciiDlg, FirstRowHdl));
 
     if (meCall == SC_TEXTTOCOLUMNS)
     {
