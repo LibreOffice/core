@@ -763,7 +763,10 @@ void SdDrawDocument::insertSelectedPages(const PageNameList& rBookmarkList,
                         SdPage* pNewNotesPage = static_cast<SdPage*>( GetPage(nActualInsertPos+1));
 
                         if (pNewNotesPage)
+                        {
+                            assert(pStandardPage);
                             pNewNotesPage->SetName(pStandardPage->GetRealName());
+                        }
                     }
 
                     if( rParams.bUndo )
