@@ -313,7 +313,7 @@ int QtInstanceIconView::position(const weld::TreeIter& rIter)
     return aModelIndex.row();
 }
 
-bool QtInstanceIconView::handleToolTipEvent(QHelpEvent* pHelpEvent)
+bool QtInstanceIconView::handleToolTipEvent(const QHelpEvent* pHelpEvent)
 {
     QModelIndex aIndex = m_pListView->indexAt(pHelpEvent->pos());
     if (!aIndex.isValid())

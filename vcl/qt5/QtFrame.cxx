@@ -1556,7 +1556,7 @@ void QtFrame::handleDragLeave()
 
 void QtFrame::handleMoveEvent(QMoveEvent*) { CallCallback(SalEvent::Move, nullptr); }
 
-void QtFrame::handlePaintEvent(QPaintEvent* pEvent, QWidget* pWidget)
+void QtFrame::handlePaintEvent(const QPaintEvent* pEvent, QWidget* pWidget)
 {
     QPainter p(pWidget);
     if (!m_bNullRegion)
@@ -1581,7 +1581,7 @@ void QtFrame::handlePaintEvent(QPaintEvent* pEvent, QWidget* pWidget)
     p.drawImage(pEvent->rect(), aImage, source);
 }
 
-void QtFrame::handleResizeEvent(QResizeEvent* pEvent)
+void QtFrame::handleResizeEvent(const QResizeEvent* pEvent)
 {
     const qreal fRatio = devicePixelRatioF();
     const int nWidth = ceil(pEvent->size().width() * fRatio);

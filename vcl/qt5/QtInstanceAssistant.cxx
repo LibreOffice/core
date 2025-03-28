@@ -247,7 +247,7 @@ QWizardPage* QtInstanceAssistant::page(int nPageIndex) const
     return nullptr;
 }
 
-int QtInstanceAssistant::pageIndex(QWizardPage& rPage)
+int QtInstanceAssistant::pageIndex(const QWizardPage& rPage)
 {
     const QVariant aPageProperty = rPage.property(PROPERTY_PAGE_INDEX);
     assert(aPageProperty.isValid() && aPageProperty.canConvert<int>());

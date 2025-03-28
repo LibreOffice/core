@@ -170,8 +170,8 @@ public:
     void handleDragMove(QDragMoveEvent* pEvent);
     void handleDrop(QDropEvent* pEvent);
     void handleMoveEvent(QMoveEvent* pEvent);
-    void handlePaintEvent(QPaintEvent* pEvent, QWidget* pWidget);
-    void handleResizeEvent(QResizeEvent* pEvent);
+    void handlePaintEvent(const QPaintEvent* pEvent, QWidget* pWidget);
+    void handleResizeEvent(const QResizeEvent* pEvent);
 
     virtual void SetExtendedFrameStyle(SalExtStyle nExtStyle) override;
     virtual void Show(bool bVisible, bool bNoActivate = false) override;

@@ -34,7 +34,7 @@ public:
     // whether a custom click handler is set for the given button
     // (s.a. weld::Button::is_custom_handler_set which would give the
     // same result if called on the corresponding QtInstanceButton)
-    static bool hasCustomClickHandler(QAbstractButton& rButton);
+    static bool hasCustomClickHandler(const QAbstractButton& rButton);
 
 protected:
     QAbstractButton& getButton() const;

@@ -217,7 +217,7 @@ void QtInstanceDialog::dialogFinished(int nResult)
     xRunAsyncDialog.reset();
 }
 
-QDialogButtonBox* QtInstanceDialog::findButtonBox(QDialog* pDialog)
+QDialogButtonBox* QtInstanceDialog::findButtonBox(const QDialog* pDialog)
 {
     assert(pDialog);
     QLayout* pLayout = pDialog->layout();

@@ -44,9 +44,9 @@ class QtWidget : public QWidget
     int m_nDeltaY;
 
     static void commitText(QtFrame&, const QString& aText);
-    static void deleteReplacementText(QtFrame& rFrame, int nReplacementStart,
+    static void deleteReplacementText(const QtFrame& rFrame, int nReplacementStart,
                                       int nReplacementLength);
-    static bool handleGestureEvent(QtFrame& rFrame, QGestureEvent* pGestureEvent);
+    static bool handleGestureEvent(const QtFrame& rFrame, QGestureEvent* pGestureEvent);
     static bool handleKeyEvent(QtFrame&, const QWidget&, QKeyEvent*);
     static void handleMouseEnterLeaveEvents(const QtFrame&, QEvent*);
     static void fillSalAbstractMouseEvent(const QtFrame& rFrame, const QInputEvent* pQEvent,

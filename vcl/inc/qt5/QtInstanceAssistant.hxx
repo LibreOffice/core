@@ -61,7 +61,7 @@ private:
     QWizardPage* page(int nPageIndex) const;
 
     // get/set the page index as used in the weld::Assistant API
-    static int pageIndex(QWizardPage& rPage);
+    static int pageIndex(const QWizardPage& rPage);
     static void setPageIndex(QWizardPage& rPage, int nIndex);
 };
 

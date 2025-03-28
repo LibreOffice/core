@@ -429,7 +429,8 @@ void QtWidget::commitText(QtFrame& rFrame, const QString& aText)
         rFrame.CallCallback(SalEvent::EndExtTextInput, nullptr);
 }
 
-void QtWidget::deleteReplacementText(QtFrame& rFrame, int nReplacementStart, int nReplacementLength)
+void QtWidget::deleteReplacementText(const QtFrame& rFrame, int nReplacementStart,
+                                     int nReplacementLength)
 {
     // get the surrounding text
     SolarMutexGuard aGuard;
@@ -456,7 +457,7 @@ void QtWidget::deleteReplacementText(QtFrame& rFrame, int nReplacementStart, int
     rFrame.CallCallback(SalEvent::DeleteSurroundingTextRequest, &aEvt);
 }
 
-bool QtWidget::handleGestureEvent(QtFrame& rFrame, QGestureEvent* pGestureEvent)
+bool QtWidget::handleGestureEvent(const QtFrame& rFrame, QGestureEvent* pGestureEvent)
 {
     if (QGesture* pGesture = pGestureEvent->gesture(Qt::PinchGesture))
     {

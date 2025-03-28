@@ -79,7 +79,7 @@ private:
     QModelIndex modelIndex(const weld::TreeIter& rIter) const;
     static int position(const weld::TreeIter& rIter);
 
-    bool handleToolTipEvent(QHelpEvent* pEvent);
+    bool handleToolTipEvent(const QHelpEvent* pEvent);
 
 private Q_SLOTS:
     void handleActivated();

@@ -87,7 +87,7 @@ void QtInstanceButton::connect_clicked(const Link<Button&, void>& rLink)
     m_pButton->setProperty(PROPERTY_CLICK_HANDLER_SET, QVariant::fromValue(rLink.IsSet()));
 }
 
-bool QtInstanceButton::hasCustomClickHandler(QAbstractButton& rButton)
+bool QtInstanceButton::hasCustomClickHandler(const QAbstractButton& rButton)
 {
     QVariant aProp = rButton.property(PROPERTY_CLICK_HANDLER_SET);
     if (!aProp.isValid())

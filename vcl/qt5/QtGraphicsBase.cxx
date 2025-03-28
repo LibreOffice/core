@@ -14,7 +14,7 @@
 
 #include <o3tl/string_view.hxx>
 
-void QtGraphicsBase::ImplGetResolution(QtFrame* pFrame, sal_Int32& rDPIX, sal_Int32& rDPIY)
+void QtGraphicsBase::ImplGetResolution(const QtFrame* pFrame, sal_Int32& rDPIX, sal_Int32& rDPIY)
 {
     char* pForceDpi;
     if ((pForceDpi = getenv("SAL_FORCEDPI")))
