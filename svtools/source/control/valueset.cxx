@@ -495,6 +495,15 @@ bool ValueSet::MouseButtonUp( const MouseEvent& rMouseEvent )
 {
     if (rMouseEvent.IsLeft() && !rMouseEvent.IsMod2())
     {
+        // tdf#165881 MouseUp may be seen without previous MouseDown.  Select
+        // what's under the mouse on mouse release when in menu-alike modes.
+        const bool bMenuAlike = GetStyle() & WB_MENUSTYLEVALUESET || GetStyle() & WB_FLATVALUESET;
+        if (bMenuAlike)
+        {
+            if (ValueSetItem* pItem = ImplGetItem(ImplGetItem(rMouseEvent.GetPosPixel())))
+                SelectItem(pItem->mnId);
+        }
+
         // tdf#142150 MouseUp seen without previous MouseDown
         if (mnSelItemId)
             Select();
