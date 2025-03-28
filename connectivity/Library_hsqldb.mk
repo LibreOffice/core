@@ -32,6 +32,7 @@ $(eval $(call gb_Library_use_libraries,hsqldb,\
 	salhelper \
 	tl \
 	utl \
+	vcl \
 	i18nlangtag \
 ))
 

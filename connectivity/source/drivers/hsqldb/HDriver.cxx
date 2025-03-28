@@ -52,6 +52,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <o3tl/string_view.hxx>
+#include <vcl/svapp.hxx>
 
 #include <memory>
 
@@ -534,7 +535,14 @@ namespace connectivity
                     if ( xRow.is() && xRes->next() )
                         bLastOne = xRow->getInt(1) == 1;
                     if ( bLastOne )
+                    {
+                        // during shutdown, we are running on the main thread, and if we call this,
+                        // it might trigger dbaccess::DocumentEventNotifier_Impl::impl_notifyEvent_nothrow
+                        // which is running on a different thread, and that will call other code that tries
+                        // to take the solar mutex.
+                        SolarMutexReleaser aReleaser;
                         xStmt->execute(u"SHUTDOWN"_ustr);
+                    }
                 }
             }
         }
