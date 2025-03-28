@@ -1316,7 +1316,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf106867)
                 "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/"
                 "p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:cmd/"
                 "p:cBhvr/p:tgtEl/p:spTgt",
-                "spid", u"59");
+                "spid", u"61");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf112280)
