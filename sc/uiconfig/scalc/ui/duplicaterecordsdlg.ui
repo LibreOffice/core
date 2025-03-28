@@ -33,8 +33,8 @@
             <property name="hexpand">True</property>
             <property name="layout-style">end</property>
             <child>
-              <object class="GtkButton" id="helpbutton">
-                <property name="label" translatable="yes" context="duplicaterecordsdialog|helpbutton">_Help</property>
+              <object class="GtkButton" id="help">
+                <property name="label" translatable="yes" context="stock">_Help</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
@@ -48,8 +48,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="okbtn">
-                <property name="label" translatable="yes" context="duplicaterecordsdialog|okbtn">_OK</property>
+              <object class="GtkButton" id="ok">
+                <property name="label" translatable="yes" context="stock">_OK</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
@@ -62,8 +62,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="cancelbtn">
-                <property name="label" translatable="yes" context="duplicaterecordsdialog|cancelbtn">Ca_ncel</property>
+              <object class="GtkButton" id="cancel">
+                <property name="label" translatable="yes" context="stock">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
@@ -214,7 +214,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="column">
-                    <property name="label" translatable="yes" context="duplicaterecordsdialog|column">_Columns</property>
+                    <property name="label" translatable="yes" context="duplicaterecordsdialog|column">Colu_mns</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -338,9 +338,9 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-11">helpbutton</action-widget>
-      <action-widget response="-5">okbtn</action-widget>
-      <action-widget response="-6">cancelbtn</action-widget>
+      <action-widget response="-11">help</action-widget>
+      <action-widget response="-5">ok</action-widget>
+      <action-widget response="-6">cancel</action-widget>
     </action-widgets>
   </object>
 </interface>
