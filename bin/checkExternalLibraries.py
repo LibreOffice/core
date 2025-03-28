@@ -19,6 +19,7 @@ python_branch = ""
 openssl_branch = ""
 postgres_branch = ""
 mariadb_branch = ""
+libxml2_branch = ""
 
 def get_current_version(libName):
     libraryName = libName.replace("_", ".")
@@ -62,6 +63,10 @@ def get_library_list(fileName):
             global mariadb_branch
             mariadb_branch = ''.join(re.findall("\d{1,2}\.\d{1,2}", libraryName)[0])
             print("MariaDB is on branch: " + str(mariadb_branch))
+        elif libraryName.startswith("libxml2"):
+            global libxml2_branch
+            libxml2_branch = ''.join(re.findall("\d{1,2}\.\d{1,2}", libraryName)[0])
+            print("Libxml2 is on branch: " + str(libxml2_branch))
         libraryList.append(libraryName.lower())
     return libraryList
 
@@ -164,6 +169,12 @@ def get_latest_version(libName):
     elif libName == "mariadb-connector-c":
         for idx, ver in enumerate(json['items'][item]['stable_versions']):
             if ver.startswith(mariadb_branch):
+                latest_version = idx
+                break
+
+    elif libName == "libxml2":
+        for idx, ver in enumerate(json['items'][item]['stable_versions']):
+            if ver.startswith(libxml2_branch):
                 latest_version = idx
                 break
 
