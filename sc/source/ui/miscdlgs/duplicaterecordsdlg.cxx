@@ -40,7 +40,7 @@ ScDuplicateRecordsDlg::ScDuplicateRecordsDlg(weld::Window* pParent,
     , m_xRadioRemove(m_xBuilder->weld_radio_button("remove"))
     , m_xCheckList(m_xBuilder->weld_tree_view("checklist"))
     , m_xAllChkBtn(m_xBuilder->weld_check_button("allcheckbtn"))
-    , m_xOkBtn(m_xBuilder->weld_button("okbtn"))
+    , m_xOkBtn(m_xBuilder->weld_button("ok"))
     , mrCellData(rData)
     , mrRange(rRange)
     , mrViewData(rViewData)
