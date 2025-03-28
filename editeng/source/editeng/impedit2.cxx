@@ -4108,7 +4108,7 @@ sal_Int32 ImpEditEngine::GetChar(ParaPortion const& rParaPortion, EditLine const
                             // they belong to the same character, we can not use this position as an index.
                             // Skip all 0-positions, cheaper than using XBreakIterator:
                             tools::Long nX = rLine.GetCharPosArray()[nTmpCurIndex + x];
-                            while(x < nMax && rLine.GetCharPosArray()[nTmpCurIndex + x] == nX)
+                            while(x < nMax && static_cast<tools::Long>(rLine.GetCharPosArray()[nTmpCurIndex + x]) == nX)
                                 ++x;
                         }
                         nOffset = x;
