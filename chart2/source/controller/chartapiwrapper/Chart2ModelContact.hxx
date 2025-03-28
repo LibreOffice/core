@@ -124,7 +124,6 @@ public:
     css::awt::Point GetAxisPosition( const css::uno::Reference< css::chart2::XAxis > & xAxis ) const;
 
 private: //methods
-    ExplicitValueProvider* getExplicitValueProvider() const;
     rtl::Reference< ChartView > const & getChartView() const;
 
 public: //member

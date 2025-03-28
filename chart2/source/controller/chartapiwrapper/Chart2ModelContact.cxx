@@ -114,21 +114,13 @@ rtl::Reference< ::chart::ChartView > const & Chart2ModelContact::getChartView() 
     return m_xChartView;
 }
 
-ExplicitValueProvider* Chart2ModelContact::getExplicitValueProvider() const
-{
-    getChartView();
-
-    //obtain the ExplicitValueProvider from the chart view
-    return m_xChartView.get();
-}
-
 rtl::Reference<SvxDrawPage> Chart2ModelContact::getDrawPage() const
 {
     rtl::Reference<SvxDrawPage> xResult;
-    ExplicitValueProvider* pProvider( getExplicitValueProvider() );
-    if( pProvider )
+    rtl::Reference< ChartView > const & rxChartView = getChartView();
+    if( rxChartView )
     {
-        xResult = pProvider->getDrawModelWrapper()->getMainDrawPage();
+        xResult = rxChartView->getDrawModelWrapper()->getMainDrawPage();
     }
     return xResult;
 }
@@ -138,10 +130,10 @@ void Chart2ModelContact::getExplicitValuesForAxis(
     ExplicitScaleData &  rOutExplicitScale,
     ExplicitIncrementData & rOutExplicitIncrement )
 {
-    ExplicitValueProvider* pProvider( getExplicitValueProvider() );
-    if( pProvider )
+    rtl::Reference< ChartView > const & rxChartView = getChartView();
+    if( rxChartView )
     {
-        pProvider->getExplicitValuesForAxis(
+        rxChartView->getExplicitValuesForAxis(
             xAxis, rOutExplicitScale, rOutExplicitIncrement );
     }
 }
@@ -196,9 +188,9 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingAxes() const
         aRect = DiagramHelper::getDiagramRectangleFromModel(m_xChartModel.get());
     else
     {
-        ExplicitValueProvider* pProvider( getExplicitValueProvider() );
-        if( pProvider )
-            aRect = pProvider->getRectangleOfObject(u"PlotAreaIncludingAxes"_ustr);
+        rtl::Reference< ChartView > const & rxChartView = getChartView();
+        if( rxChartView )
+            aRect = rxChartView->getRectangleOfObject(u"PlotAreaIncludingAxes"_ustr);
     }
     return aRect;
 }
@@ -212,9 +204,9 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleExcludingAxes() const
         aRect = DiagramHelper::getDiagramRectangleFromModel(m_xChartModel.get());
     else
     {
-        ExplicitValueProvider* pProvider( getExplicitValueProvider() );
-        if( pProvider )
-            aRect = pProvider->getDiagramRectangleExcludingAxes();
+        rtl::Reference< ChartView > const & rxChartView = getChartView();
+        if( rxChartView )
+            aRect = rxChartView->getDiagramRectangleExcludingAxes();
     }
     return aRect;
 }
@@ -222,12 +214,12 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleExcludingAxes() const
 awt::Size Chart2ModelContact::GetLegendSize() const
 {
     awt::Size aSize;
-    ExplicitValueProvider* pProvider( getExplicitValueProvider() );
-    if( pProvider )
+    rtl::Reference< ChartView > const & rxChartView = getChartView();
+    if( rxChartView )
     {
         rtl::Reference< Legend > xLegend = LegendHelper::getLegend( *m_xChartModel.get() );
         OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, m_xChartModel ) );
-        aSize = ToSize( pProvider->getRectangleOfObject( aCID ) );
+        aSize = ToSize( rxChartView->getRectangleOfObject( aCID ) );
     }
     return aSize;
 }
@@ -235,12 +227,12 @@ awt::Size Chart2ModelContact::GetLegendSize() const
 awt::Point Chart2ModelContact::GetLegendPosition() const
 {
     awt::Point aPoint;
-    ExplicitValueProvider* pProvider( getExplicitValueProvider() );
-    if( pProvider )
+    rtl::Reference< ChartView > const & rxChartView = getChartView();
+    if( rxChartView )
     {
         rtl::Reference< Legend > xLegend = LegendHelper::getLegend( *m_xChartModel.get() );
         OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, m_xChartModel ) );
-        aPoint = ToPoint( pProvider->getRectangleOfObject( aCID ) );
+        aPoint = ToPoint( rxChartView->getRectangleOfObject( aCID ) );
     }
     return aPoint;
 }
@@ -248,11 +240,11 @@ awt::Point Chart2ModelContact::GetLegendPosition() const
 awt::Size Chart2ModelContact::GetTitleSize( const uno::Reference< css::chart2::XTitle > & xTitle ) const
 {
     awt::Size aSize;
-    ExplicitValueProvider* pProvider( getExplicitValueProvider() );
-    if( pProvider && xTitle.is() )
+    rtl::Reference< ChartView > const & rxChartView = getChartView();
+    if( rxChartView && xTitle.is() )
     {
         OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, m_xChartModel ) );
-        aSize = ToSize( pProvider->getRectangleOfObject( aCID ) );
+        aSize = ToSize( rxChartView->getRectangleOfObject( aCID ) );
     }
     return aSize;
 }
@@ -260,11 +252,11 @@ awt::Size Chart2ModelContact::GetTitleSize( const uno::Reference< css::chart2::X
 awt::Point Chart2ModelContact::GetTitlePosition( const uno::Reference< css::chart2::XTitle > & xTitle ) const
 {
     awt::Point aPoint;
-    ExplicitValueProvider* pProvider( getExplicitValueProvider() );
-    if( pProvider && xTitle.is() )
+    rtl::Reference< ChartView > const & rxChartView = getChartView();
+    if( rxChartView && xTitle.is() )
     {
         OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, m_xChartModel.get() ) );
-        aPoint = ToPoint( pProvider->getRectangleOfObject( aCID ) );
+        aPoint = ToPoint( rxChartView->getRectangleOfObject( aCID ) );
     }
     return aPoint;
 }
@@ -272,11 +264,11 @@ awt::Point Chart2ModelContact::GetTitlePosition( const uno::Reference< css::char
 awt::Size Chart2ModelContact::GetAxisSize( const uno::Reference< css::chart2::XAxis > & xAxis ) const
 {
     awt::Size aSize;
-    ExplicitValueProvider* pProvider( getExplicitValueProvider() );
-    if( pProvider && xAxis.is() )
+    rtl::Reference< ChartView > const & rxChartView = getChartView();
+    if( rxChartView && xAxis.is() )
     {
         OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xAxis, m_xChartModel.get() ) );
-        aSize = ToSize( pProvider->getRectangleOfObject( aCID ) );
+        aSize = ToSize( rxChartView->getRectangleOfObject( aCID ) );
     }
     return aSize;
 }
@@ -284,11 +276,11 @@ awt::Size Chart2ModelContact::GetAxisSize( const uno::Reference< css::chart2::XA
 awt::Point Chart2ModelContact::GetAxisPosition( const uno::Reference< css::chart2::XAxis > & xAxis ) const
 {
     awt::Point aPoint;
-    ExplicitValueProvider* pProvider( getExplicitValueProvider() );
-    if( pProvider && xAxis.is() )
+    rtl::Reference< ChartView > const & rxChartView = getChartView();
+    if( rxChartView && xAxis.is() )
     {
         OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xAxis, m_xChartModel.get() ) );
-        aPoint = ToPoint( pProvider->getRectangleOfObject( aCID ) );
+        aPoint = ToPoint( rxChartView->getRectangleOfObject( aCID ) );
     }
     return aPoint;
 }
