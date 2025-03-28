@@ -382,7 +382,6 @@ class XFillGradientItem;
 #define SID_SPELLCHECK_IGNORE_ALL                       ( SID_SVX_START + 247 )
 #define SID_SPELLCHECK_APPLY_SUGGESTION                 ( SID_SVX_START + 248 )
 #define SID_REGENERATE_DIAGRAM                          ( SID_SVX_START + 249 )
-#define SID_EDIT_DIAGRAM                                ( SID_SVX_START + 450 )
 
 // CAUTION! Range <250 .. 250> used by EditEngine (!)
 
@@ -539,6 +538,7 @@ class XFillGradientItem;
 #define SID_SPELLCHECKER_CHANGED                        ( SID_SVX_START + 446 )
 #define SID_SD_GRAPHIC_OPTIONS                          ( SID_SVX_START + 447 )
 #define SID_SM_TP_PRINTOPTIONS                          ( SID_SVX_START + 448 )
+#define SID_EDIT_DIAGRAM                                ( SID_SVX_START + 449 )
 #define SID_SB_STARBASEOPTIONS                          ( SID_SVX_START + 450 )
 #define SID_SWREGISTER_COLLECTION                       TypedWhichId<SfxStringItem>( SID_SVX_START + 451 )
 #define SID_FILTER_DLG                                  ( SID_SVX_START + 452 )
