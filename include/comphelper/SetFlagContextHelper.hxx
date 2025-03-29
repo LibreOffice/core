@@ -7,47 +7,43 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_SETFLAGCONTEXTHELPER_HXX
-#define INCLUDED_COMPHELPER_SETFLAGCONTEXTHELPER_HXX
+#pragma once
 
-#include <com/sun/star/uno/XCurrentContext.hpp>
+#include <sal/config.h>
+
 #include <cppuhelper/implbase.hxx>
 #include <uno/current_context.hxx>
-#include <utility>
 
 namespace comphelper
 {
-// Used to flag some named value to be true for all code running in this context
-class SetFlagContext final : public cppu::WeakImplHelper<css::uno::XCurrentContext>
+// Returns a new context layer that assigns the given boolean value to the name
+inline css::uno::Reference<css::uno::XCurrentContext> NewFlagContext(const OUString& sName,
+                                                                     bool bValue = true)
 {
-public:
-    explicit SetFlagContext(OUString sName, css::uno::Reference<css::uno::XCurrentContext> xContext)
-        : m_sName(std::move(sName))
-        , mxNextContext(std::move(xContext))
+    class SetFlagContext : public cppu::WeakImplHelper<css::uno::XCurrentContext>
     {
-    }
-    SetFlagContext(const SetFlagContext&) = delete;
-    SetFlagContext& operator=(const SetFlagContext&) = delete;
+    public:
+        SetFlagContext(const OUString& sName, bool bValue)
+            : msName(sName)
+            , mbValue(bValue)
+        {
+        }
 
-    virtual css::uno::Any SAL_CALL getValueByName(OUString const& Name) override
-    {
-        if (Name == m_sName)
-            return css::uno::Any(true);
-        else if (mxNextContext.is())
-            return mxNextContext->getValueByName(Name);
-        else
+        virtual css::uno::Any SAL_CALL getValueByName(const OUString& Name) override
+        {
+            if (Name == msName)
+                return css::uno::Any(mbValue);
+            if (mxNext)
+                return mxNext->getValueByName(Name);
             return css::uno::Any();
-    }
+        }
 
-private:
-    OUString m_sName;
-    css::uno::Reference<css::uno::XCurrentContext> mxNextContext;
-};
-
-// Returns a new context that reports the named value to be true
-inline css::uno::Reference<css::uno::XCurrentContext> NewFlagContext(const OUString& sName)
-{
-    return new SetFlagContext(sName, css::uno::getCurrentContext());
+    private:
+        OUString msName;
+        bool mbValue;
+        css::uno::Reference<css::uno::XCurrentContext> mxNext = css::uno::getCurrentContext();
+    };
+    return new SetFlagContext(sName, bValue);
 }
 
 // A specialization for preventing "Java must be enabled" interaction
@@ -65,7 +61,5 @@ inline bool IsContextFlagActive(const OUString& sName)
 }
 
 } // namespace comphelper
-
-#endif // INCLUDED_COMPHELPER_SETFLAGCONTEXTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
