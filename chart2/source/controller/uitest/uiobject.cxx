@@ -15,7 +15,6 @@
 #include <ChartController.hxx>
 #include <ChartModel.hxx>
 #include <ObjectHierarchy.hxx>
-#include <chartview/ExplicitValueProvider.hxx>
 
 #include <utility>
 #include <vcl/svapp.hxx>
@@ -182,7 +181,7 @@ std::set<OUString> ChartWindowUIObject::get_children() const
 
     rtl::Reference<::chart::ChartModel> xChartDoc = pController->getChartModel();
     rtl::Reference<::chart::ChartView> xChartView = pController->getChartView();
-    chart::ExplicitValueProvider* pValueProvider = xChartView.get();
+    chart::ChartView* pValueProvider = xChartView.get();
     chart::ObjectHierarchy aHierarchy(xChartDoc, pValueProvider);
     chart::ObjectIdentifier aIdentifier = chart::ObjectHierarchy::getRootNodeOID();
     aChildren.insert(aIdentifier.getObjectCID());

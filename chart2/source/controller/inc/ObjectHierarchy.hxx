@@ -28,7 +28,7 @@ namespace com::sun::star::awt { struct KeyEvent; }
 namespace chart
 {
 
-class ExplicitValueProvider;
+class ChartView;
 
 class ObjectHierarchy
 {
@@ -42,7 +42,7 @@ public:
      */
     explicit ObjectHierarchy(
         const rtl::Reference<::chart::ChartModel> & xChartDocument,
-        ExplicitValueProvider * pExplicitValueProvider,
+        ChartView * pExplicitValueProvider,
         bool bFlattenDiagram = false,
         bool bOrderingForElementSelector = false );
     ~ObjectHierarchy();
@@ -88,7 +88,7 @@ private:
 
     typedef std::map<ObjectIdentifier, tChildContainer> tChildMap;
     tChildMap m_aChildMap;
-    ExplicitValueProvider* m_pExplicitValueProvider;
+    ChartView* m_pExplicitValueProvider;
     bool m_bFlattenDiagram;
     bool m_bOrderingForElementSelector;
 };
@@ -98,7 +98,7 @@ class ObjectKeyNavigation
 public:
     explicit ObjectKeyNavigation( ObjectIdentifier aCurrentOID,
                                   rtl::Reference<::chart::ChartModel> xChartDocument,
-                                  ExplicitValueProvider * pExplicitValueProvider );
+                                  ChartView * pExplicitValueProvider );
 
     bool handleKeyEvent( const css::awt::KeyEvent & rEvent );
     const ObjectIdentifier& getCurrentSelection() const { return m_aCurrentOID;}
@@ -116,7 +116,7 @@ private:
 
     ObjectIdentifier m_aCurrentOID;
     rtl::Reference<::chart::ChartModel> m_xChartDocument;
-    ExplicitValueProvider * m_pExplicitValueProvider;
+    ChartView * m_pExplicitValueProvider;
 };
 
 } //  namespace chart

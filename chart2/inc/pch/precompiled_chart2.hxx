@@ -204,7 +204,6 @@
 #include <basegfx/vector/b3dvector.hxx>
 #include <chartview/ChartSfxItemIds.hxx>
 #include <chartview/DrawModelWrapper.hxx>
-#include <chartview/ExplicitValueProvider.hxx>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>

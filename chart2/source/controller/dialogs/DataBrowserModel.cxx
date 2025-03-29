@@ -22,13 +22,13 @@
 #include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
 #include <ChartTypeManager.hxx>
+#include <ChartView.hxx>
 #include <Diagram.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <StatisticsHelper.hxx>
 #include <ChartTypeHelper.hxx>
-#include <chartview/ExplicitValueProvider.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <BaseCoordinateSystem.hxx>
 #include <ChartModel.hxx>
@@ -836,7 +836,7 @@ void DataBrowserModel::updateFromModel()
 
                         if( aRole == aRoleForDataLabelNumberFormat )
                         {
-                            nSequenceNumberFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
+                            nSequenceNumberFormatKey = ChartView::getExplicitNumberFormatKeyForDataLabel(
                                 xSeries);
                         }
                         else if( aRole == "values-x" )

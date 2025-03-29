@@ -260,7 +260,6 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/view/main/DataPointSymbolSupplier \
     chart2/source/view/main/DataTableView \
     chart2/source/view/main/DrawModelWrapper \
-    chart2/source/view/main/ExplicitValueProvider \
     chart2/source/view/main/LabelPositionHelper \
     chart2/source/view/main/Linear3DTransformation \
     chart2/source/view/main/PlotterBase \

@@ -20,7 +20,6 @@
 #include <dlg_InsertErrorBars.hxx>
 #include <res_ErrorBar.hxx>
 #include <chartview/ExplicitScaleValues.hxx>
-#include <chartview/ExplicitValueProvider.hxx>
 #include <ChartModel.hxx>
 #include <ChartView.hxx>
 #include <ObjectIdentifier.hxx>
@@ -69,7 +68,7 @@ double InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals(
 {
     double fStepWidth = 0.001;
 
-    ExplicitValueProvider* pExplicitValueProvider( xChartView.get() );
+    ChartView* pExplicitValueProvider( xChartView.get() );
     if( pExplicitValueProvider )
     {
         rtl::Reference< Diagram > xDiagram( xChartModel->getFirstChartDiagram() );

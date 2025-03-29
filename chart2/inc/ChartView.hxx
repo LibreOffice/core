@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <chartview/ExplicitValueProvider.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 
@@ -49,15 +48,21 @@ namespace com::sun::star::drawing { class XShapes; }
 namespace com::sun::star::io { class XOutputStream; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XUpdatable2; }
+namespace com::sun::star::util { class XNumberFormatsSupplier; }
 
 class SdrPage;
 
 namespace chart {
 
-class VCoordinateSystem;
-class DrawModelWrapper;
-class VDataSeries;
+class Axis;
+class BaseCoordinateSystem;
+class ChartModel;
 struct CreateShapeParam2D;
+class DrawModelWrapper;
+struct ExplicitIncrementData;
+struct ExplicitScaleData;
+class VCoordinateSystem;
+class VDataSeries;
 
 struct TimeBasedInfo
 {
@@ -93,7 +98,6 @@ class ChartView final : public ::cppu::WeakImplHelper<
         ,css::lang::XMultiServiceFactory
         ,css::qa::XDumper
         >
-        , public ExplicitValueProvider
         , private SfxListener
 {
 private:
@@ -113,19 +117,25 @@ public:
     // ___lang::XInitialization___
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
-    // ___ExplicitValueProvider___
-    virtual bool getExplicitValuesForAxis(
-        rtl::Reference< Axis > xAxis
+    /** Gives calculated scale and increment values for a given xAxis in the current view.
+        In contrast to the model data these explicit values are always complete as missing auto properties are calculated.
+        If the given Axis could not be found or for another reason no correct output can be given false is returned.
+     */
+    bool getExplicitValuesForAxis(
+        const rtl::Reference< Axis > & xAxis
         , ExplicitScaleData&  rExplicitScale
-        , ExplicitIncrementData& rExplicitIncrement ) override;
-    virtual rtl::Reference< SvxShape >
-        getShapeForCID( const OUString& rObjectCID ) override;
+        , ExplicitIncrementData& rExplicitIncrement );
+    rtl::Reference< SvxShape >
+        getShapeForCID( const OUString& rObjectCID );
 
-    virtual css::awt::Rectangle getRectangleOfObject( const OUString& rObjectCID, bool bSnapRect=false ) override;
+    /** for rotated objects the shape size and position differs from the visible rectangle
+        if bSnapRect is set to true you get the resulting visible position (left-top) and size
+    */
+    css::awt::Rectangle getRectangleOfObject( const OUString& rObjectCID, bool bSnapRect=false );
 
-    virtual css::awt::Rectangle getDiagramRectangleExcludingAxes() override;
+    css::awt::Rectangle getDiagramRectangleExcludingAxes();
 
-    std::shared_ptr< DrawModelWrapper > getDrawModelWrapper() override;
+    std::shared_ptr< DrawModelWrapper > getDrawModelWrapper();
 
     // ___XTransferable___
     virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
@@ -180,6 +190,24 @@ public:
     css::uno::Reference<css::uno::XComponentContext> const& getComponentContext() { return m_xCC;}
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
+
+    static css::awt::Rectangle
+        AddSubtractAxisTitleSizes(
+                ChartModel& rModel
+            , ChartView* pChartView
+            , const css::awt::Rectangle& rPositionAndSize, bool bSubtract );
+
+    static sal_Int32 getExplicitNumberFormatKeyForAxis(
+              const rtl::Reference< ::chart::Axis >& xAxis
+            , const rtl::Reference< ::chart::BaseCoordinateSystem > & xCorrespondingCoordinateSystem
+            , const rtl::Reference<::chart::ChartModel>& xChartDoc);
+
+    static sal_Int32 getExplicitNumberFormatKeyForDataLabel(
+            const css::uno::Reference< css::beans::XPropertySet >& xSeriesOrPointProp );
+
+    static sal_Int32 getExplicitPercentageNumberFormatKeyForDataLabel(
+            const css::uno::Reference< css::beans::XPropertySet >& xSeriesOrPointProp
+            , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 
 private: //methods
     void createShapes();

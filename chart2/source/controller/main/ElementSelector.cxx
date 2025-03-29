@@ -119,7 +119,7 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
         rtl::Reference< ChartModel > xFact = xChartController->getChartModel();
         if( xFact.is() )
             xChartView = xFact->createInstance( CHART_VIEW_SERVICE_NAME );
-        ExplicitValueProvider* pExplicitValueProvider = nullptr; //ExplicitValueProvider::getExplicitValueProvider(xChartView); this creates all visible data points, that's too much
+        ChartView* pExplicitValueProvider = nullptr; //ExplicitValueProvider::getExplicitValueProvider(xChartView); this creates all visible data points, that's too much
         ObjectHierarchy aHierarchy( xChartDoc, pExplicitValueProvider, true /*bFlattenDiagram*/, true /*bOrderingForElementSelector*/ );
         lcl_addObjectsToList( aHierarchy, ::chart::ObjectHierarchy::getRootNodeOID(), m_aEntries, 0, xChartDoc );
 

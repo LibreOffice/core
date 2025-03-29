@@ -778,7 +778,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
 }
 
 bool ChartView::getExplicitValuesForAxis(
-                     rtl::Reference< Axis > xAxis
+                     const rtl::Reference< Axis >& xAxis
                      , ExplicitScaleData&  rExplicitScale
                      , ExplicitIncrementData& rExplicitIncrement )
 {
@@ -2074,6 +2074,153 @@ bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::
         return false;
 
     return true;
+}
+
+namespace
+{
+constexpr sal_Int32 constDiagramTitleSpace = 200; //=0,2 cm spacing
+
+bool lcl_getPropertySwapXAndYAxis(const rtl::Reference<Diagram>& xDiagram)
+{
+    bool bSwapXAndY = false;
+
+    if (xDiagram.is())
+    {
+        const std::vector<rtl::Reference<BaseCoordinateSystem>> aCooSysList(
+            xDiagram->getBaseCoordinateSystems());
+        if (!aCooSysList.empty())
+        {
+            try
+            {
+                aCooSysList[0]->getPropertyValue(u"SwapXAndYAxis"_ustr) >>= bSwapXAndY;
+            }
+            catch (const uno::Exception&)
+            {
+                TOOLS_WARN_EXCEPTION("chart2", "");
+            }
+        }
+    }
+    return bSwapXAndY;
+}
+
+} // end anonymous namespace
+
+sal_Int32 ChartView::getExplicitNumberFormatKeyForAxis(
+    const rtl::Reference<::chart::Axis>& xAxis,
+    const rtl::Reference<::chart::BaseCoordinateSystem>& xCorrespondingCoordinateSystem,
+    const rtl::Reference<::chart::ChartModel>& xChartDoc)
+{
+    return AxisHelper::getExplicitNumberFormatKeyForAxis(
+        xAxis, xCorrespondingCoordinateSystem, xChartDoc,
+        true /*bSearchForParallelAxisIfNothingIsFound*/);
+}
+
+sal_Int32 ChartView::getExplicitNumberFormatKeyForDataLabel(
+    const uno::Reference<beans::XPropertySet>& xSeriesOrPointProp)
+{
+    return DataSeriesHelper::getExplicitNumberFormatKeyForDataLabel(xSeriesOrPointProp);
+}
+
+sal_Int32 ChartView::getExplicitPercentageNumberFormatKeyForDataLabel(
+    const uno::Reference<beans::XPropertySet>& xSeriesOrPointProp,
+    const uno::Reference<util::XNumberFormatsSupplier>& xNumberFormatsSupplier)
+{
+    sal_Int32 nFormat = 0;
+    if (!xSeriesOrPointProp.is())
+        return nFormat;
+    if (!(xSeriesOrPointProp->getPropertyValue(u"PercentageNumberFormat"_ustr) >>= nFormat))
+    {
+        nFormat = DiagramHelper::getPercentNumberFormat(xNumberFormatsSupplier);
+    }
+    if (nFormat < 0)
+        nFormat = 0;
+    return nFormat;
+}
+
+awt::Rectangle ChartView::AddSubtractAxisTitleSizes(
+    ChartModel& rModel, ChartView* pChartView, const awt::Rectangle& rPositionAndSize,
+    bool bSubtract)
+{
+    awt::Rectangle aRet(rPositionAndSize);
+
+    //add axis title sizes to the diagram size
+    rtl::Reference<::chart::Title> xTitle_Height(
+        TitleHelper::getTitle(TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, rModel));
+    rtl::Reference<::chart::Title> xTitle_Width(
+        TitleHelper::getTitle(TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, rModel));
+    rtl::Reference<::chart::Title> xSecondTitle_Height(
+        TitleHelper::getTitle(TitleHelper::SECONDARY_X_AXIS_TITLE, rModel));
+    rtl::Reference<::chart::Title> xSecondTitle_Width(
+        TitleHelper::getTitle(TitleHelper::SECONDARY_Y_AXIS_TITLE, rModel));
+    if (xTitle_Height.is() || xTitle_Width.is() || xSecondTitle_Height.is()
+        || xSecondTitle_Width.is())
+    {
+        if (pChartView)
+        {
+            //detect whether x axis points into x direction or not
+            if (lcl_getPropertySwapXAndYAxis(rModel.getFirstChartDiagram()))
+            {
+                std::swap(xTitle_Height, xTitle_Width);
+                std::swap(xSecondTitle_Height, xSecondTitle_Width);
+            }
+
+            sal_Int32 nTitleSpaceWidth = 0;
+            sal_Int32 nTitleSpaceHeight = 0;
+            sal_Int32 nSecondTitleSpaceWidth = 0;
+            sal_Int32 nSecondTitleSpaceHeight = 0;
+
+            if (xTitle_Height.is())
+            {
+                OUString aCID_X(
+                    ObjectIdentifier::createClassifiedIdentifierForObject(xTitle_Height, &rModel));
+                nTitleSpaceHeight
+                    = pChartView->getRectangleOfObject(aCID_X, true).Height;
+                if (nTitleSpaceHeight)
+                    nTitleSpaceHeight += constDiagramTitleSpace;
+            }
+            if (xTitle_Width.is())
+            {
+                OUString aCID_Y(
+                    ObjectIdentifier::createClassifiedIdentifierForObject(xTitle_Width, &rModel));
+                nTitleSpaceWidth = pChartView->getRectangleOfObject(aCID_Y, true).Width;
+                if (nTitleSpaceWidth)
+                    nTitleSpaceWidth += constDiagramTitleSpace;
+            }
+            if (xSecondTitle_Height.is())
+            {
+                OUString aCID_X(ObjectIdentifier::createClassifiedIdentifierForObject(
+                    xSecondTitle_Height, &rModel));
+                nSecondTitleSpaceHeight
+                    = pChartView->getRectangleOfObject(aCID_X, true).Height;
+                if (nSecondTitleSpaceHeight)
+                    nSecondTitleSpaceHeight += constDiagramTitleSpace;
+            }
+            if (xSecondTitle_Width.is())
+            {
+                OUString aCID_Y(ObjectIdentifier::createClassifiedIdentifierForObject(
+                    xSecondTitle_Width, &rModel));
+                nSecondTitleSpaceWidth
+                    += pChartView->getRectangleOfObject(aCID_Y, true).Width;
+                if (nSecondTitleSpaceWidth)
+                    nSecondTitleSpaceWidth += constDiagramTitleSpace;
+            }
+            if (bSubtract)
+            {
+                aRet.X += nTitleSpaceWidth;
+                aRet.Y += nSecondTitleSpaceHeight;
+                aRet.Width -= (nTitleSpaceWidth + nSecondTitleSpaceWidth);
+                aRet.Height -= (nTitleSpaceHeight + nSecondTitleSpaceHeight);
+            }
+            else
+            {
+                aRet.X -= nTitleSpaceWidth;
+                aRet.Y -= nSecondTitleSpaceHeight;
+                aRet.Width += nTitleSpaceWidth + nSecondTitleSpaceWidth;
+                aRet.Height += nTitleSpaceHeight + nSecondTitleSpaceHeight;
+            }
+        }
+    }
+    return aRet;
 }
 
 } //namespace chart

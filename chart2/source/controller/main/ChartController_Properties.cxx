@@ -23,7 +23,6 @@
 #include <chartview/ChartSfxItemIds.hxx>
 #include <ObjectIdentifier.hxx>
 #include <chartview/ExplicitScaleValues.hxx>
-#include <chartview/ExplicitValueProvider.hxx>
 #include <dlg_ObjectProperties.hxx>
 #include <dlg_View3D.hxx>
 #include <dlg_InsertErrorBars.hxx>
@@ -79,7 +78,7 @@ namespace
 wrapper::ItemConverter* createItemConverter(
     std::u16string_view aObjectCID, const rtl::Reference<::chart::ChartModel>& xChartModel,
     const uno::Reference<uno::XComponentContext>& xContext, SdrModel& rDrawModel,
-    ExplicitValueProvider* pExplicitValueProvider, ReferenceSizeProvider const * pRefSizeProvider )
+    ChartView* pExplicitValueProvider, ReferenceSizeProvider const * pRefSizeProvider )
 {
     wrapper::ItemConverter* pItemConverter=nullptr;
 
@@ -178,8 +177,8 @@ wrapper::ItemConverter* createItemConverter(
 
                 bool bDataSeries = eObjectType == OBJECTTYPE_DATA_LABELS;
 
-                sal_Int32 nNumberFormat = ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel( xObjectProperties );
-                sal_Int32 nPercentNumberFormat = ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(
+                sal_Int32 nNumberFormat = ChartView::getExplicitNumberFormatKeyForDataLabel( xObjectProperties );
+                sal_Int32 nPercentNumberFormat = ChartView::getExplicitPercentageNumberFormatKeyForDataLabel(
                     xObjectProperties, xChartModel);
 
                 pItemConverter = new wrapper::TextLabelItemConverter(
@@ -231,8 +230,8 @@ wrapper::ItemConverter* createItemConverter(
                         }
                     }
                 }
-                sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel( xObjectProperties );
-                sal_Int32 nPercentNumberFormat=ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(
+                sal_Int32 nNumberFormat=ChartView::getExplicitNumberFormatKeyForDataLabel( xObjectProperties );
+                sal_Int32 nPercentNumberFormat=ChartView::getExplicitPercentageNumberFormatKeyForDataLabel(
                         xObjectProperties, xChartModel);
 
                 pItemConverter =  new wrapper::DataPointItemConverter( xChartModel, xContext,

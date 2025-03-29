@@ -33,7 +33,7 @@
 #include <TitleItemConverter.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
-#include <chartview/ExplicitValueProvider.hxx>
+#include <ChartView.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -111,8 +111,8 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
     {
         uno::Reference< uno::XComponentContext> xContext;//do not need Context for label properties
 
-        sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel( series );
-        sal_Int32 nPercentNumberFormat=ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(
+        sal_Int32 nNumberFormat=ChartView::getExplicitNumberFormatKeyForDataLabel( series );
+        sal_Int32 nPercentNumberFormat=ChartView::getExplicitPercentageNumberFormatKeyForDataLabel(
                 series,xChartModel);
 
         m_aConverters.emplace_back(

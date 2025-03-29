@@ -18,6 +18,7 @@
  */
 
 #include <BaseGFXHelper.hxx>
+#include <ChartView.hxx>
 #include <DateHelper.hxx>
 #include <VCoordinateSystem.hxx>
 #include "VCartesianCoordinateSystem.hxx"
@@ -33,7 +34,6 @@
 #include <Axis.hxx>
 #include "VAxisBase.hxx"
 #include <defines.hxx>
-#include <chartview/ExplicitValueProvider.hxx>
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <rtl/math.hxx>
@@ -569,7 +569,7 @@ sal_Int32 VCoordinateSystem::getNumberFormatKeyForAxis(
         const rtl::Reference< Axis >& xAxis
         , const rtl::Reference<::chart::ChartModel>& xChartDoc)
 {
-    return ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
+    return ChartView::getExplicitNumberFormatKeyForAxis(
                 xAxis, m_xCooSysModel, xChartDoc);
 }
 

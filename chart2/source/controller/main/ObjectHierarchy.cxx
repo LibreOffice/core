@@ -19,12 +19,12 @@
 
 #include <ObjectHierarchy.hxx>
 #include <ObjectIdentifier.hxx>
+#include <ChartView.hxx>
 #include <Diagram.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <RegressionCurveModel.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
-#include <chartview/ExplicitValueProvider.hxx>
 #include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartModel.hxx>
@@ -513,7 +513,7 @@ ObjectIdentifier ObjectHierarchy::getParent(
 
 ObjectHierarchy::ObjectHierarchy(
     const rtl::Reference<::chart::ChartModel> & xChartDocument,
-    ExplicitValueProvider * pExplicitValueProvider /* = 0 */,
+    ChartView * pExplicitValueProvider /* = 0 */,
     bool bFlattenDiagram /* = false */,
     bool bOrderingForElementSelector /* = false */) :
         m_pExplicitValueProvider( pExplicitValueProvider ),
@@ -561,7 +561,7 @@ sal_Int32 ObjectHierarchy::getIndexInParent(
 ObjectKeyNavigation::ObjectKeyNavigation(
     ObjectIdentifier aCurrentOID,
     rtl::Reference<::chart::ChartModel> xChartDocument,
-    ExplicitValueProvider * pExplicitValueProvider /* = 0 */ ) :
+    ChartView * pExplicitValueProvider /* = 0 */ ) :
         m_aCurrentOID(std::move( aCurrentOID )),
         m_xChartDocument(std::move( xChartDocument )),
         m_pExplicitValueProvider( pExplicitValueProvider )

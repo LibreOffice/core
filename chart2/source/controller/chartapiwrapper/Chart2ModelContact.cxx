@@ -24,7 +24,6 @@
 #include <CommonConverters.hxx>
 #include <servicenames.hxx>
 #include <ObjectIdentifier.hxx>
-#include <chartview/ExplicitValueProvider.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
@@ -145,14 +144,14 @@ sal_Int32 Chart2ModelContact::getExplicitNumberFormatKeyForAxis(
         AxisHelper::getCoordinateSystemOfAxis(
               xAxis, m_xChartModel.get()->getFirstChartDiagram() ) );
 
-    return ExplicitValueProvider::getExplicitNumberFormatKeyForAxis( xAxis, xCooSys
+    return ChartView::getExplicitNumberFormatKeyForAxis( xAxis, xCooSys
               , m_xChartModel.get() );
 }
 
 sal_Int32 Chart2ModelContact::getExplicitNumberFormatKeyForSeries(
             const Reference< chart2::XDataSeries >& xSeries )
 {
-    return ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
+    return ChartView::getExplicitNumberFormatKeyForDataLabel(
         uno::Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY ));
 }
 
@@ -163,7 +162,7 @@ awt::Size Chart2ModelContact::GetPageSize() const
 
 awt::Rectangle Chart2ModelContact::SubstractAxisTitleSizes( const awt::Rectangle& rPositionRect )
 {
-    awt::Rectangle aRect = ExplicitValueProvider::AddSubtractAxisTitleSizes(
+    awt::Rectangle aRect = ChartView::AddSubtractAxisTitleSizes(
         *m_xChartModel.get(), getChartView().get(), rPositionRect, true );
     return aRect;
 }
@@ -173,7 +172,7 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingTitle() const
     awt::Rectangle aRect( GetDiagramRectangleIncludingAxes() );
 
     //add axis title sizes to the diagram size
-    aRect = ExplicitValueProvider::AddSubtractAxisTitleSizes(
+    aRect = ChartView::AddSubtractAxisTitleSizes(
         *m_xChartModel.get(), getChartView().get(), aRect, false );
 
     return aRect;

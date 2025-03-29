@@ -23,7 +23,6 @@
 #include <GraphicPropertyItemConverter.hxx>
 #include <chartview/ChartSfxItemIds.hxx>
 #include <chartview/ExplicitScaleValues.hxx>
-#include <chartview/ExplicitValueProvider.hxx>
 #include "SchWhichPairs.hxx"
 #include <ChartModel.hxx>
 #include <Axis.hxx>
@@ -34,6 +33,7 @@
 #include <Diagram.hxx>
 #include <unonames.hxx>
 #include <BaseCoordinateSystem.hxx>
+#include <ChartView.hxx>
 #include <memory>
 
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
@@ -358,7 +358,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
             rtl::Reference< Axis > xCrossingMainAxis = AxisHelper::getCrossingMainAxis( m_xAxis, xCooSys );
 
-            sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
+            sal_Int32 nFormatKey = ChartView::getExplicitNumberFormatKeyForAxis(
                 xCrossingMainAxis, xCooSys, m_xChartDoc);
 
             rOutItemSet.Put( SfxUInt32Item( nWhichId, nFormatKey ));
@@ -406,7 +406,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
                         AxisHelper::getCoordinateSystemOfAxis(
                               m_xAxis, m_xChartDoc->getFirstChartDiagram() ) );
 
-                sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
+                sal_Int32 nFormatKey = ChartView::getExplicitNumberFormatKeyForAxis(
                     m_xAxis, xCooSys, m_xChartDoc);
 
                 rOutItemSet.Put( SfxUInt32Item( nWhichId, nFormatKey ));
@@ -944,7 +944,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                             AxisHelper::getCoordinateSystemOfAxis(
                                 m_xAxis, m_xChartDoc->getFirstChartDiagram() );
 
-                        sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
+                        sal_Int32 nFormatKey = ChartView::getExplicitNumberFormatKeyForAxis(
                             m_xAxis, xCooSys, m_xChartDoc);
 
                         aValue <<= nFormatKey;

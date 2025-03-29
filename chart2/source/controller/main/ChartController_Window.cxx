@@ -40,7 +40,6 @@
 #include "DragMethod_PieSegment.hxx"
 #include "DragMethod_RotateDiagram.hxx"
 #include <ObjectHierarchy.hxx>
-#include <chartview/ExplicitValueProvider.hxx>
 #include <RelativePositionHelper.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <RegressionCurveHelper.hxx>
@@ -1778,7 +1777,7 @@ bool ChartController::impl_moveOrResizeObject(
         if( ( bDeterminePos || bDetermineSize ) &&
             ( aRefSize.Width > 0 && aRefSize.Height > 0 ) )
         {
-            ExplicitValueProvider * pValueProvider( m_xChartView.get() );
+            ChartView * pValueProvider( m_xChartView.get() );
             if( pValueProvider )
             {
                 awt::Rectangle aRect( pValueProvider->getRectangleOfObject( rCID ));
