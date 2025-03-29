@@ -397,8 +397,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	) \
 	basegfx \
 	bib \
-	chartcore \
-	chartcontroller \
+	chart2 \
 	$(call gb_Helper_optional,OPENCL,clew) \
 	$(if $(filter $(OS),WNT),,cmdmail) \
 	configmgr \

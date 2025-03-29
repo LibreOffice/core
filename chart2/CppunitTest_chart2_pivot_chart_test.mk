@@ -71,8 +71,7 @@ $(eval $(call gb_CppunitTest_use_vcl,chart2_pivot_chart_test))
 $(eval $(call gb_CppunitTest_use_components,chart2_pivot_chart_test,\
     basic/util/sb \
     animations/source/animcore/animcore \
-    chart2/source/controller/chartcontroller \
-    chart2/source/chartcore \
+    chart2/source/chart2 \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \

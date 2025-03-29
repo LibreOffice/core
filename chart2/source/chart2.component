@@ -268,4 +268,35 @@
     constructor="com_sun_star_comp_chart2_ChartView_get_implementation">
     <service name="com.sun.star.chart2.ChartView"/>
   </implementation>
+  <implementation name="com.sun.star.comp.chart.ElementSelectorToolbarController"
+      constructor="com_sun_star_comp_chart_ElementSelectorToolbarController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart2.ChartDocumentWrapper"
+      constructor="com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation">
+    <service name="com.sun.star.beans.PropertySet"/>
+    <service name="com.sun.star.chart.ChartDocument"/>
+    <service name="com.sun.star.chart2.ChartDocumentWrapper"/>
+    <service name="com.sun.star.xml.UserDefinedAttributesSupplier"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart2.ChartFrameLoader"
+      constructor="com_sun_star_comp_chart2_ChartFrameLoader_get_implementation">
+    <service name="com.sun.star.frame.SynchronousFrameLoader"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart2.ChartTypeDialog"
+      constructor="com_sun_star_comp_chart2_ChartTypeDialog_get_implementation">
+    <service name="com.sun.star.chart2.ChartTypeDialog"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart2.WizardDialog"
+      constructor="com_sun_star_comp_chart2_WizardDialog_get_implementation">
+    <service name="com.sun.star.chart2.WizardDialog"/>
+  </implementation>
+  <implementation name="org.libreoffice.comp.chart2.sidebar.ChartPanelFactory"
+      constructor="org_libreoffice_comp_chart2_sidebar_ChartPanelFactory">
+    <service name="com.sun.star.ui.UIElementFactory"/>
+  </implementation>
+  <implementation name="org.libreoffice.chart2.Chart2ToolboxController"
+      constructor="org_libreoffice_chart2_Chart2ToolboxController">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
 </component>

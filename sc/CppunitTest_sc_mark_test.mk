@@ -78,8 +78,7 @@ $(eval $(call gb_CppunitTest_use_vcl,sc_mark_test))
 
 $(eval $(call gb_CppunitTest_use_components,sc_mark_test,\
     basic/util/sb \
-    chart2/source/chartcore \
-    chart2/source/controller/chartcontroller \
+    chart2/source/chart2 \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \

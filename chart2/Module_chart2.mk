@@ -13,8 +13,7 @@ include $(SRCDIR)/chart2/export_setup.mk
 $(eval $(call gb_Module_Module,chart2))
 
 $(eval $(call gb_Module_add_targets,chart2,\
-    Library_chartcontroller \
-    Library_chartcore \
+    Library_chart2 \
 	UIConfig_chart2 \
 ))
 

@@ -233,7 +233,7 @@ $(eval $(call repositorymodule_serialize,\
 		$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
 		cui) \
 	$(if $(MERGELIBS), merged, \
-		chartcontroller chartcore oox svx svxcore xo sfx fwk svt vcl) \
+		chart2 oox svx svxcore xo sfx fwk svt vcl) \
 ))
 endif
 endif # !$(DISABLE_DYNLOADING)

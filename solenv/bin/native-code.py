@@ -40,7 +40,7 @@ core_constructor_list = [
 # canvas/source/vcl/vclcanvas.component
     "com_sun_star_comp_rendering_Canvas_VCL_get_implementation",
     "com_sun_star_comp_rendering_SpriteCanvas_VCL_get_implementation",
-# chart2/source/chartcore.component
+# chart2/source/chart2.component
     "com_sun_star_chart2_ExponentialScaling_get_implementation",
     "com_sun_star_chart2_LinearScaling_get_implementation",
     "com_sun_star_chart2_LogarithmicScaling_get_implementation",
@@ -86,7 +86,6 @@ core_constructor_list = [
     "com_sun_star_comp_chart2_RegressionEquation_get_implementation",
     "com_sun_star_comp_chart2_Title_get_implementation",
     "com_sun_star_comp_chart2_XMLFilter_get_implementation",
-# chart2/source/controller/chartcontroller.component
     "com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation",
     "com_sun_star_comp_chart2_ChartFrameLoader_get_implementation",
     "com_sun_star_comp_chart2_WizardDialog_get_implementation",

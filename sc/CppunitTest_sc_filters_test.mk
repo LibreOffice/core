@@ -78,8 +78,7 @@ $(eval $(call gb_CppunitTest_use_vcl,sc_filters_test))
 
 $(eval $(call gb_CppunitTest_use_components,sc_filters_test,\
     basic/util/sb \
-    chart2/source/chartcore \
-    chart2/source/controller/chartcontroller \
+    chart2/source/chart2 \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     connectivity/source/manager/sdbc2 \

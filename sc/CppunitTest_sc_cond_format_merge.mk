@@ -74,8 +74,7 @@ $(eval $(call gb_CppunitTest_use_vcl,sc_cond_format_merge))
 
 $(eval $(call gb_CppunitTest_use_components,sc_cond_format_merge,\
     basic/util/sb \
-    chart2/source/chartcore \
-    chart2/source/controller/chartcontroller \
+    chart2/source/chart2 \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \

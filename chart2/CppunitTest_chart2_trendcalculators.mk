@@ -72,8 +72,7 @@ $(eval $(call gb_CppunitTest_use_vcl,chart2_trendcalculators))
 $(eval $(call gb_CppunitTest_use_components,chart2_trendcalculators,\
     basic/util/sb \
     animations/source/animcore/animcore \
-    chart2/source/controller/chartcontroller \
-    chart2/source/chartcore \
+    chart2/source/chart2 \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     embeddedobj/util/embobj \

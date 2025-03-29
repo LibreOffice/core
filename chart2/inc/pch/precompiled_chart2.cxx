@@ -7,6 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "precompiled_chartcore.hxx"
+#include "precompiled_chart2.hxx"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

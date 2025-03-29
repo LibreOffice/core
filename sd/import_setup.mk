@@ -73,8 +73,7 @@ $(eval $(call gb_CppunitTest_use_vcl,sd_import_tests$(1)))
 $(eval $(call gb_CppunitTest_use_components,sd_import_tests$(1),\
     animations/source/animcore/animcore \
     basic/util/sb \
-    chart2/source/chartcore \
-    chart2/source/controller/chartcontroller \
+    chart2/source/chart2 \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \

@@ -18,8 +18,7 @@ gb_MERGE_LIBRARY_LIST := \
 	basegfx \
 	canvasfactory \
 	canvastools \
-	chartcontroller \
-	chartcore \
+	chart2 \
 	comphelper \
 	configmgr \
 	cppcanvas \

@@ -171,7 +171,7 @@ local file="$1"
         */oosplash|*/gengal.bin)
             allowlist="${allowlist} ${x11allowlist}"
         ;;
-        */libvclplug_genlo.so|*/libchartcorelo.so|*/libavmediaogl.so|*/libOGLTranslo.so|*/liboglcanvaslo.so)
+        */libvclplug_genlo.so|*/libchart2lo.so|*/libavmediaogl.so|*/libOGLTranslo.so|*/liboglcanvaslo.so)
             allowlist="${allowlist} ${x11allowlist} ${openglallowlist}"
         ;;
         */libvcllo.so)

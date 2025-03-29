@@ -113,8 +113,7 @@ fuzzer_core_libraries = \
     xmlscript \
     xo \
     xstor \
-    chartcontroller \
-    chartcore \
+    chart2 \
     sm \
     oox \
     proxyfac \
