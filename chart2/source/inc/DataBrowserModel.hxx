@@ -38,7 +38,7 @@ namespace chart
 class DialogModel;
 class ChartModel;
 
-class OOO_DLLPUBLIC_CHARTTOOLS DataBrowserModel final
+class DataBrowserModel final
 {
 public:
     explicit DataBrowserModel(

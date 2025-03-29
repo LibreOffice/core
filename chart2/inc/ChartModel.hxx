@@ -115,7 +115,7 @@ typedef cppu::WeakImplHelper<
 class UndoManager;
 class ChartView;
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) SAL_LOPLUGIN_ANNOTATE("crosscast") ChartModel final :
+class SAL_LOPLUGIN_ANNOTATE("crosscast") ChartModel final :
     public impl::ChartModel_Base
 {
 

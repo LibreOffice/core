@@ -55,7 +55,7 @@ struct DialogModelTimeBasedInfo
     sal_Int32 nEnd;
 };
 
-class OOO_DLLPUBLIC_CHARTTOOLS DialogModel
+class DialogModel
 {
 public:
     explicit DialogModel( rtl::Reference<::chart::ChartModel> xChartDocument );

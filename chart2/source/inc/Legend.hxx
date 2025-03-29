@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include "ModifyListenerHelper.hxx"
-#include "charttoolsdllapi.hxx"
 #include "PropertyHelper.hxx"
 
 namespace chart
@@ -42,7 +41,7 @@ typedef ::cppu::WeakImplHelper<
     Legend_Base;
 }
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) Legend final :
+class Legend final :
     public impl::Legend_Base,
     public ::property::OPropertySet
 {
@@ -99,7 +98,7 @@ private:
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };
 
-OOO_DLLPUBLIC_CHARTTOOLS const ::chart::tPropertyValueMap& StaticLegendDefaults();
+const ::chart::tPropertyValueMap& StaticLegendDefaults();
 
 } //  namespace chart
 

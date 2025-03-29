@@ -10,7 +10,6 @@
 #pragma once
 
 #include <config_options.h>
-#include "charttoolsdllapi.hxx"
 
 #include <comphelper/compbase.hxx>
 #include <com/sun/star/awt/XRequestCallback.hpp>
@@ -22,7 +21,7 @@ namespace impl
 typedef comphelper::WeakComponentImplHelper<css::awt::XRequestCallback> PopupRequest_Base;
 }
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) PopupRequest final : public impl::PopupRequest_Base
+class PopupRequest final : public impl::PopupRequest_Base
 {
 public:
     explicit PopupRequest();

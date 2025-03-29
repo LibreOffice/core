@@ -19,7 +19,6 @@
 #pragma once
 
 #include <config_options.h>
-#include <chartview/chartviewdllapi.hxx>
 #include <com/sun/star/chart/TimeInterval.hpp>
 #include <com/sun/star/chart2/AxisOrientation.hpp>
 #include <com/sun/star/chart2/XScaling.hpp>
@@ -36,7 +35,7 @@ namespace chart
 /** This structure contains the explicit values for a scale like Minimum and Maximum.
     See also css::chart2::ScaleData.
 */
-struct UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTVIEW) ExplicitScaleData
+struct ExplicitScaleData
 {
     ExplicitScaleData();
 
@@ -74,7 +73,7 @@ struct ExplicitSubIncrement
 
 /** describes how tickmarks are positioned on the scale of an axis.
 */
-struct UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTVIEW) ExplicitIncrementData
+struct ExplicitIncrementData
 {
     ExplicitIncrementData();
 

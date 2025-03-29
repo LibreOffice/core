@@ -23,7 +23,6 @@
 #include <string_view>
 
 #include "TitleHelper.hxx"
-#include "charttoolsdllapi.hxx"
 
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
@@ -74,7 +73,7 @@ enum ObjectType
     OBJECTTYPE_UNKNOWN
 };
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ObjectIdentifier
+class ObjectIdentifier
 {
     //CID == ClassifiedIdentifier <--> name of shape
     //semicolon, colon, equal sign and slash have special meanings in a CID
@@ -129,7 +128,7 @@ public:
         , const rtl::Reference<::chart::ChartModel>& xChartModel
         , sal_Int32 nSubIndex = -1 );//-1: main grid, 0: first subgrid etc
 
-    SAL_DLLPRIVATE static OUString createParticleForDiagram();
+    static OUString createParticleForDiagram();
 
     static OUString createParticleForCoordinateSystem(
           const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys
@@ -190,7 +189,7 @@ public:
     static OUString createDataCurveCID( std::u16string_view rSeriesParticle, sal_Int32 nCurveIndex, bool bAverageLine );
     static OUString createDataCurveEquationCID( std::u16string_view rSeriesParticle, sal_Int32 nCurveIndex );
 
-    SAL_DLLPRIVATE static OUString getObjectID( std::u16string_view rCID );
+    static OUString getObjectID( std::u16string_view rCID );
     static std::u16string_view getParticleID( std::u16string_view rCID );
     static std::u16string_view getFullParentParticle( std::u16string_view rCID );
 

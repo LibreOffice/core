@@ -30,7 +30,6 @@
 #include <rtl/ref.hxx>
 
 #include <vector>
-#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
@@ -60,7 +59,7 @@ typedef ::cppu::WeakImplHelper<
     ChartType_Base;
 }
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ChartType :
+class ChartType :
     public impl::ChartType_Base,
     public ::property::OPropertySet
 {

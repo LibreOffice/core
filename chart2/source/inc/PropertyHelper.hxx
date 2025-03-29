@@ -21,7 +21,6 @@
 #include <config_options.h>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include "charttoolsdllapi.hxx"
 
 #include <unordered_map>
 
@@ -42,7 +41,7 @@ namespace PropertyHelper
 
     @return The name used for storing this element in the table
 */
-UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) OUString addLineDashUniqueNameToTable(
+OUString addLineDashUniqueNameToTable(
     const css::uno::Any & rValue,
     const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
@@ -52,7 +51,7 @@ UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) OUString addLineDashUniqueNameToTable
 
     @return The name used for storing this element in the table
 */
-UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) OUString addGradientUniqueNameToTable(
+OUString addGradientUniqueNameToTable(
     const css::uno::Any & rValue,
     const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
@@ -62,7 +61,6 @@ UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) OUString addGradientUniqueNameToTable
 
     @return The name used for storing this element in the table
 */
-UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS)
 OUString addTransparencyGradientUniqueNameToTable(
     const css::uno::Any & rValue,
     const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
@@ -73,7 +71,7 @@ OUString addTransparencyGradientUniqueNameToTable(
 
     @return The name used for storing this element in the table
 */
-UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) OUString addHatchUniqueNameToTable(
+OUString addHatchUniqueNameToTable(
     const css::uno::Any & rValue,
     const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
@@ -83,7 +81,7 @@ UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) OUString addHatchUniqueNameToTable(
 
     @return The name used for storing this element in the table
 */
-UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) OUString addBitmapUniqueNameToTable(
+OUString addBitmapUniqueNameToTable(
     const css::uno::Any & rValue,
     const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
@@ -93,7 +91,6 @@ UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) OUString addBitmapUniqueNameToTable(
 
     @param any is the value encapsulated in the variant type Any
  */
-UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS)
 void setPropertyValueAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key,
                           const css::uno::Any & rAny );
 
@@ -112,7 +109,7 @@ template< typename Value >
 template<>
     void setPropertyValue< css::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const css::uno::Any & rAny );
 
-UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void setPropertyValueDefaultAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const css::uno::Any & rAny );
+void setPropertyValueDefaultAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const css::uno::Any & rAny );
 
 /** Calls setPropertyValue() but asserts that the given property hasn't been set
     before.
@@ -131,11 +128,11 @@ template<>
 
 /** Calls setPropertyValueDefault() with an empty Any as value
  */
-UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void setEmptyPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMapKey key );
+void setEmptyPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMapKey key );
 
 } // namespace PropertyHelper
 
-struct OOO_DLLPUBLIC_CHARTTOOLS PropertyNameLess
+struct PropertyNameLess
 {
     bool operator() ( const css::beans::Property & first,
                              const css::beans::Property & second )

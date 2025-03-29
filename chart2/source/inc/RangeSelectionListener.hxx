@@ -32,7 +32,7 @@ namespace chart
 {
 class ChartModel;
 
-class OOO_DLLPUBLIC_CHARTTOOLS RangeSelectionListenerParent
+class RangeSelectionListenerParent
 {
 public:
     virtual void listeningFinished(const OUString& rNewRange) = 0;

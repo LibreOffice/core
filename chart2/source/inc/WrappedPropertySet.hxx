@@ -20,7 +20,6 @@
 
 #include <config_options.h>
 #include "WrappedProperty.hxx"
-#include "charttoolsdllapi.hxx"
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -37,7 +36,7 @@ namespace cppu { class OPropertyArrayHelper; }
 namespace chart
 {
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) WrappedPropertySet :
+class WrappedPropertySet :
                          public ::cppu::WeakImplHelper
                          < css::beans::XPropertySet
                          , css::beans::XMultiPropertySet
@@ -95,10 +94,10 @@ protected: //methods
     virtual std::vector< std::unique_ptr<WrappedProperty> > createWrappedProperties()=0;
 
     virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() = 0;
-    SAL_DLLPRIVATE css::uno::Reference< css::beans::XPropertyState > getInnerPropertyState();
+    css::uno::Reference< css::beans::XPropertyState > getInnerPropertyState();
 
     ::cppu::IPropertyArrayHelper&   getInfoHelper();
-    SAL_DLLPRIVATE tWrappedPropertyMap&            getWrappedPropertyMap();
+    tWrappedPropertyMap&            getWrappedPropertyMap();
 
     const WrappedProperty*          getWrappedProperty( const OUString& rOuterName );
     const WrappedProperty*          getWrappedProperty( sal_Int32 nHandle );

@@ -24,7 +24,6 @@
 #include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "ModifyListenerHelper.hxx"
-#include "charttoolsdllapi.hxx"
 
 namespace com::sun::star::chart2::data { class XDataSequence; }
 namespace com::sun::star::util { class XCloneable; }
@@ -41,7 +40,7 @@ typedef cppu::WeakImplHelper<
     LabeledDataSequence_Base;
 }
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) LabeledDataSequence final :
+class LabeledDataSequence final :
         public impl::LabeledDataSequence_Base
 {
 public:

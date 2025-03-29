@@ -82,7 +82,7 @@ struct TimeBasedInfo
  * The View is not responsible to handle single user events (that is instead
  * done by the ChartWindow).
  */
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTVIEW) ChartView final : public ::cppu::WeakImplHelper<
+class ChartView final : public ::cppu::WeakImplHelper<
     css::lang::XInitialization
         ,css::lang::XServiceInfo
         ,css::datatransfer::XTransferable

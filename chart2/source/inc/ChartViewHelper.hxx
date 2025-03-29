@@ -19,7 +19,6 @@
 #pragma once
 
 #include <config_options.h>
-#include "charttoolsdllapi.hxx"
 #include <rtl/ref.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -35,10 +34,8 @@ class ChartModel;
 
 namespace ChartViewHelper
 {
-UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS)
 void setViewToDirtyState(const rtl::Reference<ChartModel>& xChartModel);
 
-UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS)
 void setViewToDirtyState_UNO(const css::uno::Reference<css::chart2::XChartDocument>& xChartModel);
 };
 

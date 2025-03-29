@@ -29,14 +29,13 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/style/XStyleSupplier.hpp>
-#include "charttoolsdllapi.hxx"
 
 #include <unordered_map>
 
 namespace property
 {
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) OPropertySet :
+class SAL_DLLPUBLIC_RTTI OPropertySet :
     protected cppu::BaseMutex,
     public ::cppu::OBroadcastHelper,
     // includes beans::XPropertySet, XMultiPropertySet and XFastPropertySet

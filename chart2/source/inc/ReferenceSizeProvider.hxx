@@ -20,7 +20,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/awt/Size.hpp>
-#include "charttoolsdllapi.hxx"
 #include <rtl/ref.hxx>
 #include <ChartModel.hxx>
 
@@ -37,7 +36,7 @@ namespace com::sun::star {
 namespace chart
 {
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ReferenceSizeProvider
+class ReferenceSizeProvider
 {
 public:
 
@@ -77,7 +76,7 @@ public:
         class at the XPropertySet, and the adapted font sizes if bAdaptFontSizes
         is </sal_True>.
      */
-    SAL_DLLPRIVATE void setValuesAtPropertySet(
+    void setValuesAtPropertySet(
         const css::uno::Reference< css::beans::XPropertySet > & xProp,
         bool bAdaptFontSizes = true );
 
@@ -85,7 +84,7 @@ public:
         class at the XTitle, and the adapted font sizes at the contained
         XFormattedStrings
      */
-    SAL_DLLPRIVATE void setValuesAtTitle(
+    void setValuesAtTitle(
         const css::uno::Reference< css::chart2::XTitle > & xTitle );
 
     /** Sets the internal value at all data series in the currently set model.
@@ -95,12 +94,12 @@ public:
     void setValuesAtAllDataSeries();
 
 private:
-    SAL_DLLPRIVATE bool useAutoScale() const { return m_bUseAutoScale;}
+    bool useAutoScale() const { return m_bUseAutoScale;}
 
     /** sets the auto-resize at all objects that support this feature for text.
         eNewState must be either AUTO_RESIZE_YES or AUTO_RESIZE_NO
     */
-    SAL_DLLPRIVATE void setAutoResizeState( AutoResizeState eNewState );
+    void setAutoResizeState( AutoResizeState eNewState );
 
     /** Retrieves the auto-resize state from the given propertyset.  The result
         will be put into eInOutState.  If you initialize eInOutState with
@@ -109,13 +108,13 @@ private:
         esp. AUTO_RESIZE_AMBIGUOUS, if the value was NO before, and is YES for
         the current property set, or the other way round.
      */
-    SAL_DLLPRIVATE static void getAutoResizeFromPropSet(
+    static void getAutoResizeFromPropSet(
         const css::uno::Reference< css::beans::XPropertySet > & xProp,
         AutoResizeState & rInOutState );
 
-    SAL_DLLPRIVATE void impl_setValuesAtTitled(
+    void impl_setValuesAtTitled(
         const css::uno::Reference< css::chart2::XTitled > & xTitled );
-    SAL_DLLPRIVATE static void impl_getAutoResizeFromTitled(
+    static void impl_getAutoResizeFromTitled(
         const css::uno::Reference< css::chart2::XTitled > & xTitled,
         AutoResizeState & rInOutState );
 

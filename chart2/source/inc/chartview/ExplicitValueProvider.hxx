@@ -20,7 +20,6 @@
 
 #include <config_options.h>
 #include <sal/types.h>
-#include <chartview/chartviewdllapi.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
@@ -41,7 +40,7 @@ class ChartModel;
 struct ExplicitIncrementData;
 struct ExplicitScaleData;
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTVIEW) SAL_LOPLUGIN_ANNOTATE("crosscast") ExplicitValueProvider
+class SAL_LOPLUGIN_ANNOTATE("crosscast") ExplicitValueProvider
 {
 public:
     /** Gives calculated scale and increment values for a given xAxis in the current view.

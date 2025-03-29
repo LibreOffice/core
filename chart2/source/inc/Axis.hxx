@@ -27,7 +27,6 @@
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include "ModifyListenerHelper.hxx"
-#include "charttoolsdllapi.hxx"
 #include "PropertyHelper.hxx"
 
 namespace chart
@@ -47,7 +46,7 @@ typedef ::cppu::WeakImplHelper<
     Axis_Base;
 }
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) Axis final :
+class Axis final :
     public impl::Axis_Base,
     public ::property::OPropertySet
 {
@@ -138,7 +137,7 @@ private:
     rtl::Reference< ::chart::Title >          m_xTitle;
 };
 
-OOO_DLLPUBLIC_CHARTTOOLS const ::chart::tPropertyValueMap &  StaticAxisDefaults();
+const ::chart::tPropertyValueMap &  StaticAxisDefaults();
 
 } //  namespace chart
 

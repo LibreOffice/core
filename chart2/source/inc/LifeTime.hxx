@@ -22,7 +22,6 @@
 #include <mutex>
 #include <osl/conditn.hxx>
 #include <comphelper/interfacecontainer4.hxx>
-#include "charttoolsdllapi.hxx"
 
 namespace com::sun::star::document { class XStorageChangeListener; }
 namespace com::sun::star::lang { class XComponent; }
@@ -36,7 +35,7 @@ namespace com::sun::star::view { class XSelectionChangeListener; }
 namespace apphelper
 {
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) LifeTimeManager
+class LifeTimeManager
 {
 friend class LifeTimeGuard;
 public:
@@ -55,11 +54,11 @@ public:
     ::comphelper::OInterfaceContainerHelper4<css::view::XSelectionChangeListener> m_aSelectionChangeListeners;
 
 protected:
-    SAL_DLLPRIVATE virtual bool impl_canStartApiCall();
-    SAL_DLLPRIVATE virtual void impl_apiCallCountReachedNull(std::unique_lock<std::mutex>& /*rGuard*/){}
+    virtual bool impl_canStartApiCall();
+    virtual void impl_apiCallCountReachedNull(std::unique_lock<std::mutex>& /*rGuard*/){}
 
-    SAL_DLLPRIVATE void        impl_registerApiCall(bool bLongLastingCall);
-    SAL_DLLPRIVATE void        impl_unregisterApiCall(std::unique_lock<std::mutex>& rGuard, bool bLongLastingCall);
+    void        impl_registerApiCall(bool bLongLastingCall);
+    void        impl_unregisterApiCall(std::unique_lock<std::mutex>& rGuard, bool bLongLastingCall);
 
     css::lang::XComponent*     m_pComponent;
     ::osl::Condition        m_aNoAccessCountCondition;

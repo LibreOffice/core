@@ -20,7 +20,6 @@
 
 #include "PropertyHelper.hxx"
 #include "FastPropertyIdRanges.hxx"
-#include "charttoolsdllapi.hxx"
 #include <com/sun/star/awt/FontDescriptor.hpp>
 
 #include <vector>
@@ -120,12 +119,12 @@ namespace CharacterProperties
         FAST_PROPERTY_ID_END_CHAR_PROP
     };
 
-    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void AddPropertiesToVector(
+    void AddPropertiesToVector(
         std::vector< css::beans::Property > & rOutProperties );
 
-    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
+    void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 
-    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) bool IsCharacterPropertyHandle( sal_Int32 nHandle );
+    bool IsCharacterPropertyHandle( sal_Int32 nHandle );
 }
 
 } //  namespace chart

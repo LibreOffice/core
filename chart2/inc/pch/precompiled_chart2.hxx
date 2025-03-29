@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2025-03-29 13:43:14 using:
+ Generated on 2025-03-30 09:01:07 using:
  ./bin/update_pch chart2 chart2 --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -600,7 +600,6 @@
 #include <VLineProperties.hxx>
 #include <ViewElementListProvider.hxx>
 #include <WrappedProperty.hxx>
-#include <charttoolsdllapi.hxx>
 #include <defines.hxx>
 #include <servicenames.hxx>
 #include <servicenames_charttypes.hxx>

@@ -19,11 +19,10 @@
 #pragma once
 
 #include "WrappedProperty.hxx"
-#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) WrappedDirectStateProperty : public WrappedProperty
+class WrappedDirectStateProperty : public WrappedProperty
 {
 public:
     explicit WrappedDirectStateProperty(const OUString& rOuterName, const OUString& rInnerName);

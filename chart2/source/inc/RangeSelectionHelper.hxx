@@ -23,8 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 
-#include "charttoolsdllapi.hxx"
-
 namespace com::sun::star::beans { struct PropertyValue; }
 
 namespace com::sun::star {
@@ -39,7 +37,7 @@ namespace chart
 class ChartModel;
 class RangeSelectionListenerParent;
 
-class OOO_DLLPUBLIC_CHARTTOOLS RangeSelectionHelper
+class RangeSelectionHelper
 {
 public:
     explicit RangeSelectionHelper(

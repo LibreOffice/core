@@ -21,7 +21,6 @@
 #include <svx/svdmodel.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
-#include <chartview/chartviewdllapi.hxx>
 
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::frame { class XModel; }
@@ -32,7 +31,7 @@ class SdrObject;
 namespace chart
 {
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTVIEW) DrawModelWrapper final : private SdrModel
+class DrawModelWrapper final : private SdrModel
 {
 private:
     rtl::Reference<SvxDrawPage> m_xMainDrawPage;
@@ -41,14 +40,14 @@ private:
     VclPtr<OutputDevice> m_pRefDevice;
 
 public:
-    SAL_DLLPRIVATE DrawModelWrapper();
-    SAL_DLLPRIVATE virtual ~DrawModelWrapper() override;
+    DrawModelWrapper();
+    virtual ~DrawModelWrapper() override;
 
     css::uno::Reference< css::lang::XMultiServiceFactory > getShapeFactory();
 
     // the main page will contain the normal view objects
     const rtl::Reference<SvxDrawPage> & getMainDrawPage();
-    SAL_DLLPRIVATE void clearMainDrawPage();
+    void clearMainDrawPage();
 
     // the extra page is not visible, but contains some extras like the symbols for data points
     const rtl::Reference<SvxDrawPage> & getHiddenDrawPage();
@@ -56,16 +55,16 @@ public:
     static rtl::Reference<SvxShapeGroupAnyD>
          getChartRootShape( const rtl::Reference<SvxDrawPage>& xPage );
 
-    SAL_DLLPRIVATE void lockControllers();
-    SAL_DLLPRIVATE void unlockControllers();
+    void lockControllers();
+    void unlockControllers();
 
     OutputDevice* getReferenceDevice() const;
 
     SfxItemPool&            GetItemPool();
 
-    SAL_DLLPRIVATE virtual css::uno::Reference< css::frame::XModel >
+    virtual css::uno::Reference< css::frame::XModel >
         createUnoModel() override;
-    SAL_DLLPRIVATE const css::uno::Reference< css::frame::XModel > &
+    const css::uno::Reference< css::frame::XModel > &
         getUnoModel();
     SdrModel& getSdrModel();
 

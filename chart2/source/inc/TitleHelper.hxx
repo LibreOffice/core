@@ -21,7 +21,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include "charttoolsdllapi.hxx"
 #include "Title.hxx"
 
 namespace chart { class ChartModel; }
@@ -31,7 +30,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace chart
 {
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) TitleHelper
+class TitleHelper
 {
 public:
     enum eTitleType

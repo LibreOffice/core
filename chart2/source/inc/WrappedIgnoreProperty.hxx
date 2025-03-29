@@ -19,14 +19,13 @@
 #pragma once
 
 #include "WrappedProperty.hxx"
-#include "charttoolsdllapi.hxx"
 
 #include <vector>
 
 namespace chart
 {
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) WrappedIgnoreProperty final : public WrappedProperty
+class WrappedIgnoreProperty final : public WrappedProperty
 {
 public:
     WrappedIgnoreProperty( const OUString& rOuterName, const css::uno::Any& rDefaultValue );
@@ -36,25 +35,25 @@ public:
 
     virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-SAL_DLLPRIVATE virtual void setPropertyToDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+virtual void setPropertyToDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
-SAL_DLLPRIVATE virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
-SAL_DLLPRIVATE virtual css::beans::PropertyState getPropertyState( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+virtual css::beans::PropertyState getPropertyState( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private:
     css::uno::Any          m_aDefaultValue;
     mutable css::uno::Any  m_aCurrentValue;
 };
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) WrappedIgnoreProperties
+class WrappedIgnoreProperties
 {
 public:
     static void addIgnoreLineProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList );
 
     static void addIgnoreFillProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList );
-    SAL_DLLPRIVATE static void addIgnoreFillProperties_without_BitmapProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList );
-    SAL_DLLPRIVATE static void addIgnoreFillProperties_only_BitmapProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList );
+    static void addIgnoreFillProperties_without_BitmapProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList );
+    static void addIgnoreFillProperties_only_BitmapProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList );
 };
 
 } //namespace chart

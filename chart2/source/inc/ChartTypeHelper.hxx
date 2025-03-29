@@ -21,7 +21,6 @@
 
 #include <config_options.h>
 #include <com/sun/star/drawing/Direction3D.hpp>
-#include "charttoolsdllapi.hxx"
 #include "ChartType.hxx"
 #include <rtl/ref.hxx>
 
@@ -30,7 +29,7 @@ namespace chart
 class ChartType;
 class DataSeries;
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ChartTypeHelper
+class ChartTypeHelper
 {
 public:
     static bool isSupportingGeometryProperties(  const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
@@ -62,12 +61,12 @@ public:
     static css::uno::Sequence < sal_Int32 > getSupportedMissingValueTreatments(
         const rtl::Reference< ::chart::ChartType >& xChartType );
 
-    SAL_DLLPRIVATE static css::drawing::Direction3D getDefaultSimpleLightDirection( const rtl::Reference< ::chart::ChartType >& xChartType );
-    SAL_DLLPRIVATE static css::drawing::Direction3D getDefaultRealisticLightDirection( const rtl::Reference< ::chart::ChartType >& xChartType );
-    SAL_DLLPRIVATE static sal_Int32 getDefaultDirectLightColor( bool bSimple, const rtl::Reference< ::chart::ChartType >& xChartType );
-    SAL_DLLPRIVATE static sal_Int32 getDefaultAmbientLightColor( bool bSimple, const rtl::Reference< ::chart::ChartType >& xChartType );
+    static css::drawing::Direction3D getDefaultSimpleLightDirection( const rtl::Reference< ::chart::ChartType >& xChartType );
+    static css::drawing::Direction3D getDefaultRealisticLightDirection( const rtl::Reference< ::chart::ChartType >& xChartType );
+    static sal_Int32 getDefaultDirectLightColor( bool bSimple, const rtl::Reference< ::chart::ChartType >& xChartType );
+    static sal_Int32 getDefaultAmbientLightColor( bool bSimple, const rtl::Reference< ::chart::ChartType >& xChartType );
     static sal_Int32 getNumberOfDisplayedSeries( const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nNumberOfSeries );
-    SAL_DLLPRIVATE static bool noBordersForSimpleScheme( const rtl::Reference< ::chart::ChartType >& xChartType );
+    static bool noBordersForSimpleScheme( const rtl::Reference< ::chart::ChartType >& xChartType );
 
     static bool isSeriesInFrontOfAxisLine( const rtl::Reference< ::chart::ChartType >& xChartType );
 

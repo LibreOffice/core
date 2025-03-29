@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include "charttoolsdllapi.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/chart2/XColorScheme.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -30,7 +29,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace chart
 {
 
-OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::chart2::XColorScheme > createConfigColorScheme(
+css::uno::Reference< css::chart2::XColorScheme > createConfigColorScheme(
     const css::uno::Reference< css::uno::XComponentContext > & xContext );
 
 namespace impl

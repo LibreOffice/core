@@ -24,8 +24,6 @@
 
 #include <memory>
 
-#include "charttoolsdllapi.hxx"
-
 namespace chart
 {
 class ControllerLockGuardUNO;
@@ -35,7 +33,7 @@ namespace chart
 {
 class ChartModel;
 
-class OOO_DLLPUBLIC_CHARTTOOLS TimerTriggeredControllerLock final
+class TimerTriggeredControllerLock final
 {
 public:
     TimerTriggeredControllerLock(rtl::Reference<::chart::ChartModel> xModel);

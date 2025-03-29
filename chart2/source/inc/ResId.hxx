@@ -19,12 +19,11 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
-#include "charttoolsdllapi.hxx"
 #include <unotools/resmgr.hxx>
 
 namespace chart
 {
-OUString OOO_DLLPUBLIC_CHARTTOOLS SchResId(TranslateId aId);
+OUString SchResId(TranslateId aId);
 
 } //  namespace chart
 

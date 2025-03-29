@@ -18,12 +18,6 @@ $(eval $(call gb_Library_set_include,chart2,\
     -I$(SRCDIR)/chart2/inc \
 ))
 
-# not ideal - we should use a single core define ideally
-$(eval $(call gb_Library_add_defs,chart2,\
-    -DOOO_DLLIMPLEMENTATION_CHARTTOOLS \
-    -DOOO_DLLIMPLEMENTATION_CHARTVIEW \
-))
-
 $(eval $(call gb_Library_set_precompiled_header,chart2,chart2/inc/pch/precompiled_chart2))
 
 $(eval $(call gb_Library_use_externals,chart2,\

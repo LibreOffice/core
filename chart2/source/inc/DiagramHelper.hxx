@@ -19,7 +19,6 @@
 #pragma once
 
 #include "StackMode.hxx"
-#include "charttoolsdllapi.hxx"
 #include "ChartTypeTemplate.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <rtl/ref.hxx>
@@ -34,7 +33,7 @@ class BaseCoordinateSystem;
 class ChartType;
 class DataSeries;
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) DiagramHelper
+class DiagramHelper
 {
 public:
 
@@ -59,7 +58,7 @@ public:
     static css::uno::Sequence< OUString >
         getExplicitSimpleCategories( ChartModel& rModel );
 
-    SAL_DLLPRIVATE static css::uno::Sequence< OUString >
+    static css::uno::Sequence< OUString >
         generateAutomaticCategoriesFromCooSys(
             const rtl::Reference< ::chart::BaseCoordinateSystem > & xCooSys );
 
@@ -76,7 +75,7 @@ public:
     static sal_Int32 getPercentNumberFormat( const css::uno::Reference<
                 css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 
-    SAL_DLLPRIVATE static bool areChartTypesCompatible(
+    static bool areChartTypesCompatible(
                 const rtl::Reference< ::chart::ChartType >& xFirstType,
                 const rtl::Reference< ::chart::ChartType >& xSecondType );
 

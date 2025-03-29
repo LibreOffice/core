@@ -19,7 +19,6 @@
 #pragma once
 
 #include <config_options.h>
-#include "charttoolsdllapi.hxx"
 #include <unotools/weakref.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
@@ -36,7 +35,7 @@ namespace chart
 {
 class BaseCoordinateSystem;
 
-struct OOO_DLLPUBLIC_CHARTTOOLS ComplexCategory
+struct ComplexCategory
 {
     OUString Text;
     sal_Int32 Count;
@@ -54,7 +53,7 @@ public:
     virtual css::uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const = 0;
 };
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ExplicitCategoriesProvider final
+class ExplicitCategoriesProvider final
 {
 public:
     ExplicitCategoriesProvider( const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSysModel

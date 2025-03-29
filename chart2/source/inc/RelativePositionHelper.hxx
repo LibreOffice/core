@@ -23,7 +23,6 @@
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/drawing/Alignment.hpp>
 #include <com/sun/star/awt/Point.hpp>
-#include "charttoolsdllapi.hxx"
 
 namespace com::sun::star::awt { struct Size; }
 namespace com::sun::star::chart2 { struct RelativeSize; }
@@ -31,7 +30,7 @@ namespace com::sun::star::chart2 { struct RelativeSize; }
 namespace chart
 {
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) RelativePositionHelper
+class RelativePositionHelper
 {
 public:
     /** returns the upper left corner of an object that has size aObjectSize and
@@ -61,7 +60,7 @@ public:
         been changed to the given one.  The passed object size is taken into
         account for shifting the position.
      */
-    SAL_DLLPRIVATE static css::chart2::RelativePosition
+    static css::chart2::RelativePosition
         getReanchoredPosition(
             const css::chart2::RelativePosition & rPosition,
             const css::chart2::RelativeSize & rObjectSize,

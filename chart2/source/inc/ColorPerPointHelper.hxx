@@ -20,7 +20,6 @@
 #pragma once
 
 #include <config_options.h>
-#include "charttoolsdllapi.hxx"
 #include <rtl/ref.hxx>
 
 namespace com::sun::star::beans { class XPropertySet; }
@@ -30,7 +29,7 @@ namespace chart
 {
 class DataSeries;
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ColorPerPointHelper
+class ColorPerPointHelper
 {
 public:
     static bool hasPointOwnColor(
@@ -41,7 +40,7 @@ public:
 
     // returns true if AttributedDataPoints contains nPointIndex and the
     // property Color is DEFAULT
-    SAL_DLLPRIVATE static bool hasPointOwnProperties(
+    static bool hasPointOwnProperties(
         const rtl::Reference< ::chart::DataSeries >& xDataSeries
         , sal_Int32 nPointIndex );
 };

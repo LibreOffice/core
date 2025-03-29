@@ -19,7 +19,6 @@
 #pragma once
 
 #include <config_options.h>
-#include "charttoolsdllapi.hxx"
 #include <com/sun/star/chart2/ScaleData.hpp>
 #include <rtl/ref.hxx>
 #include "GridProperties.hxx"
@@ -39,7 +38,7 @@ class BaseCoordinateSystem;
 class ChartType;
 class Diagram;
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) AxisHelper
+class AxisHelper
 {
 public:
     static css::uno::Reference< css::chart2::XScaling > createLinearScaling();
@@ -101,7 +100,7 @@ public:
     static void hideAxisIfNoDataIsAttached( const rtl::Reference< ::chart::Axis >& xAxis
                                           , const rtl::Reference< ::chart::Diagram >& xDiagram);
 
-    SAL_DLLPRIVATE static bool areAxisLabelsVisible( const rtl::Reference< ::chart::Axis >& xAxisProperties );
+    static bool areAxisLabelsVisible( const rtl::Reference< ::chart::Axis >& xAxisProperties );
     static bool isAxisVisible( const rtl::Reference< ::chart::Axis >& xAxis );
     static bool isGridVisible( const rtl::Reference< ::chart::GridProperties >& xGridProperties );
 
@@ -161,7 +160,7 @@ public:
     /** @param bOnlyVisible if </TRUE>, only axes with property "Show" set to
                </sal_True> are returned
      */
-    SAL_DLLPRIVATE static std::vector< rtl::Reference< ::chart::Axis > >
+    static std::vector< rtl::Reference< ::chart::Axis > >
             getAllAxesOfCoordinateSystem( const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys
             , bool bOnlyVisible = false );
 

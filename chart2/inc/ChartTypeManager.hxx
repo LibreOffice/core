@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart2/XChartTypeManager.hpp>
-#include <charttoolsdllapi.hxx>
 #include <rtl/ref.hxx>
 #include <ChartTypeTemplate.hxx>
 
@@ -31,7 +30,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ChartTypeManager final :
+class ChartTypeManager final :
         public ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         css::lang::XMultiServiceFactory,

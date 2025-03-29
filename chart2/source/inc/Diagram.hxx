@@ -28,7 +28,6 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "ModifyListenerHelper.hxx"
-#include "charttoolsdllapi.hxx"
 
 #include <vector>
 
@@ -72,7 +71,7 @@ typedef ::cppu::WeakImplHelper<
     Diagram_Base;
 }
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) Diagram
+class Diagram
     final
     : public impl::Diagram_Base
     , public ::property::OPropertySet
@@ -263,7 +262,7 @@ public:
     /** Replaces all occurrences of xCooSysToReplace in the tree with
         xReplacement in the diagram's tree
      */
-    SAL_DLLPRIVATE void replaceCoordinateSystem(
+    void replaceCoordinateSystem(
         const rtl::Reference< ::chart::BaseCoordinateSystem > & xCooSysToReplace,
         const rtl::Reference< ::chart::BaseCoordinateSystem > & xReplacement );
 

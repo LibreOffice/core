@@ -23,7 +23,6 @@
 #include "StackMode.hxx"
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
-#include "charttoolsdllapi.hxx"
 #include <rtl/ref.hxx>
 #include <vector>
 
@@ -76,7 +75,7 @@ class Diagram;
 
     * create an XLegend via the global service factory, set it at the diagram.
  */
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ChartTypeTemplate : public ::cppu::WeakImplHelper<
+class ChartTypeTemplate : public ::cppu::WeakImplHelper<
         css::chart2::XChartTypeTemplate,
         css::lang::XServiceName >
 {

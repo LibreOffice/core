@@ -20,7 +20,6 @@
 
 #include "PropertyHelper.hxx"
 #include "FastPropertyIdRanges.hxx"
-#include "charttoolsdllapi.hxx"
 
 #include <vector>
 
@@ -63,10 +62,10 @@ namespace FillProperties
         , PROP_FILL_BACKGROUND
     };
 
-    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void AddPropertiesToVector(
+    void AddPropertiesToVector(
         std::vector< css::beans::Property > & rOutProperties );
 
-    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
+    void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 }
 
 } //  namespace chart

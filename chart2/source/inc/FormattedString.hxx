@@ -135,7 +135,7 @@ private:
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };
 
-OOO_DLLPUBLIC_CHARTTOOLS const ::chart::tPropertyValueMap & StaticFormattedStringDefaults();
+const ::chart::tPropertyValueMap & StaticFormattedStringDefaults();
 
 } //  namespace chart
 

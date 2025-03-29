@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <chartview/chartviewdllapi.hxx>
 #include <rtl/ref.hxx>
 #include <svx/unoshape.hxx>
 
@@ -28,7 +27,7 @@ namespace com::sun::star::drawing { struct Direction3D; }
 namespace chart
 {
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTVIEW) DataPointSymbolSupplier
+class DataPointSymbolSupplier
 {
 public:
     static rtl::Reference< SvxShapeGroup >

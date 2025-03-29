@@ -23,7 +23,6 @@
 #include <tools/link.hxx>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
-#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
@@ -33,7 +32,7 @@ without becoming a XModifyListener yourself
 
 class ModifyListenerCallBack_impl;
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ModifyListenerCallBack final
+class ModifyListenerCallBack final
 {
 public:
     explicit ModifyListenerCallBack(const Link<void*, void>& rCallBack);
@@ -41,7 +40,7 @@ public:
     ~ModifyListenerCallBack();
 
     void startListening(const css::uno::Reference<css::util::XModifyBroadcaster>& xBroadcaster);
-    SAL_DLLPRIVATE void stopListening();
+    void stopListening();
 
 private: //methods
     ModifyListenerCallBack(const ModifyListenerCallBack&) = delete;

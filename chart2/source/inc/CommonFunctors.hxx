@@ -23,7 +23,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
-#include "charttoolsdllapi.hxx"
 
 #include <algorithm>
 #include <limits>
@@ -50,7 +49,7 @@ struct makeAny
     <p>For conversion of OUString, rtl::math::StringToDouble is used.</p>
     <p>In case no number can be generated from the Any, NaN is returned.</p>
  */
-struct OOO_DLLPUBLIC_CHARTTOOLS ToDouble
+struct ToDouble
 {
     double operator() ( const css::uno::Any & rAny )
     {
@@ -75,7 +74,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS ToDouble
 
     <p>For conversion of doubles, rtl::math::DoubleToOUString is used.</p>
  */
-struct OOO_DLLPUBLIC_CHARTTOOLS ToString
+struct ToString
 {
     OUString operator() ( const css::uno::Any & rAny )
     {

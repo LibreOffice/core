@@ -39,7 +39,7 @@ typedef ::cppu::WeakImplHelper<
     GridProperties_Base;
 }
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) GridProperties final :
+class GridProperties final :
         public impl::GridProperties_Base,
         public ::property::OPropertySet
 {

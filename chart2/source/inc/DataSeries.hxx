@@ -37,7 +37,6 @@
 #include <map>
 
 #include "OPropertySet.hxx"
-#include "charttoolsdllapi.hxx"
 
 namespace com::sun::star::beans { class XPropertySet; }
 
@@ -60,7 +59,7 @@ typedef ::cppu::WeakImplHelper<
     DataSeries_Base;
 }
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) DataSeries
+class DataSeries
     final
     : public impl::DataSeries_Base
     , public ::property::OPropertySet
@@ -184,7 +183,7 @@ private:
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };
 
-OOO_DLLPUBLIC_CHARTTOOLS const tPropertyValueMap & StaticDataSeriesDefaults();
+const tPropertyValueMap & StaticDataSeriesDefaults();
 
 }  // namespace chart
 

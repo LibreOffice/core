@@ -20,7 +20,6 @@
 
 #include <config_options.h>
 #include <com/sun/star/awt/Size.hpp>
-#include "charttoolsdllapi.hxx"
 #include <rtl/ref.hxx>
 
 #include <vector>
@@ -34,7 +33,7 @@ class ChartType;
 class DataSeries;
 class InternalDataProvider;
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ChartModelHelper
+class ChartModelHelper
 {
 public:
     static rtl::Reference< InternalDataProvider > createInternalDataProvider(

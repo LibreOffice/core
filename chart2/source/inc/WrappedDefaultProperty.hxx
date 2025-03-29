@@ -19,12 +19,11 @@
 #pragma once
 
 #include "WrappedProperty.hxx"
-#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 
-class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) WrappedDefaultProperty : public WrappedProperty
+class WrappedDefaultProperty : public WrappedProperty
 {
 public:
     explicit WrappedDefaultProperty(

@@ -20,12 +20,11 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include "charttoolsdllapi.hxx"
 
 namespace chart::XMLRangeHelper
 {
 
-struct OOO_DLLPUBLIC_CHARTTOOLS Cell
+struct Cell
 {
     sal_Int32 nColumn;
     sal_Int32 nRow;
@@ -44,7 +43,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS Cell
     bool empty() const { return bIsEmpty; }
 };
 
-struct OOO_DLLPUBLIC_CHARTTOOLS CellRange
+struct CellRange
 {
     Cell aUpperLeft;
     Cell aLowerRight;
