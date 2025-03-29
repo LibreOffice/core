@@ -1527,28 +1527,20 @@ void SbRtl_Val(StarBASIC *, SbxArray & rPar, bool)
         return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
     }
     double nResult = 0.0;
-    char* pEndPtr;
 
     OUString aStr(rPar.Get(1)->GetOUString());
 
     FilterWhiteSpace( aStr );
     if ( aStr.getLength() > 1 && aStr[0] == '&' )
     {
-        int nRadix = 10;
-        char aChar = static_cast<char>(aStr[1]);
+        sal_Unicode aChar = aStr[1];
         if ( aChar == 'h' || aChar == 'H' )
         {
-            nRadix = 16;
+            nResult = static_cast<sal_Int16>(o3tl::toInt64(aStr.subView(2), 16));
         }
         else if ( aChar == 'o' || aChar == 'O' )
         {
-            nRadix = 8;
-        }
-        if ( nRadix != 10 )
-        {
-            OString aByteStr(OUStringToOString(aStr, osl_getThreadTextEncoding()));
-            sal_Int16 nlResult = static_cast<sal_Int16>(strtol( aByteStr.getStr()+2, &pEndPtr, nRadix));
-            nResult = static_cast<double>(nlResult);
+            nResult = static_cast<sal_Int16>(o3tl::toInt64(aStr.subView(2), 8));
         }
     }
     else
