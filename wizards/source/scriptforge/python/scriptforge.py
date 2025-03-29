@@ -1074,7 +1074,10 @@ class SFScriptForge:
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.Exception'
         servicesynonyms = ('exception', 'scriptforge.exception')
-        serviceproperties = dict()
+        serviceproperties = dict(ReportScriptErrors = 3, ReturnCode = 1, ReturnCodeDescription = 1, StopWhenError = 3)
+
+        def Clear(self):
+            return self.ExecMethod(self.vbMethod, 'Clear')
 
         def Console(self, modal = True):
             # From Python, the current XComponentContext must be added as last argument
@@ -1170,7 +1173,7 @@ class SFScriptForge:
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.FileSystem'
         servicesynonyms = ('filesystem', 'scriptforge.filesystem')
-        serviceproperties = dict(FileNaming = 3, ConfigFolder = 1, ExtensionsFolder = 1, HomeFolder = 1,
+        serviceproperties = dict(ConfigFolder = 1, ExtensionsFolder = 1, FileNaming = 3, HomeFolder = 1,
                                  InstallFolder = 1, TemplatesFolder = 1, TemporaryFolder = 1,
                                  UserTemplatesFolder = 1) # 1 because FileNaming determines every time the folder format
         # Open TextStream constants

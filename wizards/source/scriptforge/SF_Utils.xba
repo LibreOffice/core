@@ -153,7 +153,10 @@ Finally:
 End Function	&apos;	ScriptForge.SF_Utils._CStrToDate
 
 REM -----------------------------------------------------------------------------
-Public Function _EnterFunction(ByVal psSub As String, Optional ByVal psArgs As String) As Boolean
+Public Function _EnterFunction(ByVal psSub As String _
+								, Optional ByVal psArgs As String _
+								, Optional ByVal pbReinitRC As Variant _
+								) As Boolean
 &apos;&apos;&apos;	Called on top of each public function
 &apos;&apos;&apos;	Used to trace routine in/outs (debug mode)
 &apos;&apos;&apos;		and to allow the explicit mention of the user call which caused an error
@@ -164,11 +167,17 @@ Public Function _EnterFunction(ByVal psSub As String, Optional ByVal psArgs As S
 
 		If IsEmpty(_SF_) Or IsNull(_SF_) Then SF_Utils._InitializeRoot()	&apos;	First use of ScriptForge during current LibO session
 		If IsMissing(psArgs) Then psArgs = &quot;&quot;
+		If IsMissing(pbReinitRC) Then pbReinitRC = True
 		With _SF_
 			If .StackLevel = 0 Then
 				.MainFunction = psSub
 				.MainFunctionArgs = psArgs
 				_EnterFunction = True
+				If pbReinitRC Then
+					&apos;	Reinitialize return code status
+					.ReturnCode = &quot;&quot;
+					.ReturnCodeDescription = &quot;&quot;
+				End If
 			Else
 				_EnterFunction = False
 			End If

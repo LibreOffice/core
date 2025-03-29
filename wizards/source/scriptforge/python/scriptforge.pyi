@@ -780,7 +780,26 @@ class SFScriptForge:
             Console entries can be dumped to a text file or visualized in a dialogue.
             """
 
-        def Console(self, modal: bool = ...):
+        ReportScriptErrors: bool
+        """ When set to ``False``, an error occur silently. Useful f.i. in Calc user-defined functions.
+        The set value is preserved until it is explicitly set again. """
+        ReturnCode: str
+        """ Returns the code returned by  the last call to the ScriptForge API from a user script.
+        It is the zero-length string if everything ran without error.   """
+        ReturnCodeDescription: str
+        """ Returns the localized description of the code returned by  the last call to the ScriptForge API 
+        from a user script. It is the zero-length string if everything ran without error.   """
+        StopWhenError: bool
+        """ When set to ``False``, the process continues when ScriptForge detects a user script error.
+        Default = ``True``. The set value is preserved until it is explicitly set again. """
+
+        def Clear(self):
+            """
+                Reset the current error status and return code.
+                """
+            ...
+
+        def Console(self, modal: bool = ...) -> None:
             """
                 Displays the console messages in a modal or non-modal dialog. In both modes, all the past messages
                 issued by a ``DebugPrint()`` method or resulting from an exception are displayed. In non-modal mode,
@@ -796,7 +815,7 @@ class SFScriptForge:
                 """
             ...
 
-        def ConsoleClear(self, keep: int = ...):
+        def ConsoleClear(self, keep: int = ...) -> None:
             """
                 Clears the console keeping an optional number of recent messages. If the console is activated in non-modal mode,
                 it is refreshed.

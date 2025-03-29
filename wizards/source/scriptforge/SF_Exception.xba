@@ -33,10 +33,17 @@ Option Explicit
 &apos;&apos;&apos;		or during control events processing
 &apos;&apos;&apos;												=&gt;	DebugPrint()
 &apos;&apos;&apos;
-&apos;&apos;&apos;		The usual behaviour of the application when an error occurs is:
-&apos;&apos;&apos;			1.	Log the error in the console
-&apos;&apos;&apos;			2,	Inform the user about the error with either a standard or a customized message
-&apos;&apos;&apos;			3.	Optionally, stop the execution of the current macro
+&apos;&apos;&apos;		The behaviour of the application when an error occurs is:
+&apos;&apos;&apos;			1.	Log the error in the console. This is always done
+&apos;&apos;&apos;			2.	Inform the user about the error with either a standard or a localized message
+&apos;&apos;&apos;				To force a silent mode, set :
+&apos;&apos;&apos;					exception.ReportScriptErrors = False	&apos;	Default = True
+&apos;&apos;&apos;			3.	To not stop the execution of the current macro when ScriptForge detects
+&apos;&apos;&apos;				a user script error, set :
+&apos;&apos;&apos;					exception.StopWhenError = False			&apos;	Default = True
+&apos;&apos;&apos;				It then makes sense before further processing to explore the values of
+&apos;&apos;&apos;					exception.ReturnCode					&apos;	Short error description
+&apos;&apos;&apos;					exception.ReturnCodeDescription			&apos;	Long error description
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Detailed user documentation:
 &apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_exception.html?DbPAR=BASIC
@@ -206,6 +213,41 @@ Property Let Number(ByVal pvNumber As Variant)
 End Property	&apos;	ScriptForge.SF_Exception.Number (let)
 
 REM -----------------------------------------------------------------------------
+Property Get ReportScriptErrors() As Variant
+&apos;&apos;&apos;	Indicates whether script errors are displayed in a message box when they occur
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		myException.ReportScriptErrors
+	ReportScriptErrors = _PropertyGet(&quot;ReportScriptErrors&quot;)
+End Property	&apos;	ScriptForge.SF_Exception.ReportScriptErrors (get)
+
+REM -----------------------------------------------------------------------------
+Property Let ReportScriptErrors(ByVal pvReportScriptErrors As Variant)
+&apos;&apos;&apos;	When set to False, an error occur silently. Useful f.i. in Calc user-defined functions.
+&apos;&apos;&apos;	The set value is preserved until it is explicitly set again.
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		myException.ReportScriptErrors = False
+	_PropertySet &quot;ReportScriptErrors&quot;, pvReportScriptErrors
+End Property	&apos;	ScriptForge.SF_Exception.ReportScriptErrors (let)
+
+REM -----------------------------------------------------------------------------
+Property Get ReturnCode() As String
+&apos;&apos;&apos;	Returns the code returned by  the last call to the ScriptForge API from a user script.
+&apos;&apos;&apos;	It is the zero-length string if everything ran without error
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		myException.ReturnCode
+	ReturnCode = _PropertyGet(&quot;ReturnCode&quot;)
+End Property	&apos;	ScriptForge.SF_Exception.ReturnCode (get)
+
+REM -----------------------------------------------------------------------------
+Property Get ReturnCodeDescription() As String
+&apos;&apos;&apos;	Returns the localized description of the code returned by  the last call to the ScriptForge API from a user script.
+&apos;&apos;&apos;	It is the zero-length string if everything ran without error
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		myException.ReturnCodeDescription
+	ReturnCodeDescription = _PropertyGet(&quot;ReturnCodeDescription&quot;)
+End Property	&apos;	ScriptForge.SF_Exception.ReturnCodeDescription (get)
+
+REM -----------------------------------------------------------------------------
 Property Get Source() As Variant
 &apos;&apos;&apos;	Returns the location of the last error that has occurred
 &apos;&apos;&apos;	Example:
@@ -220,6 +262,23 @@ Property Let Source(ByVal pvSource As Variant)
 &apos;&apos;&apos;		myException.Source = 123	&apos; Line # 123. Source may also be a string
 	_PropertySet &quot;Source&quot;, pvSource
 End Property	&apos;	ScriptForge.SF_Exception.Source (let)
+
+REM -----------------------------------------------------------------------------
+Property Get StopWhenError() As Variant
+&apos;&apos;&apos;	Indicates whether the Basic process is stopped when ScriptForge detects a user script error
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		myException.StopWhenError
+	StopWhenError = _PropertyGet(&quot;StopWhenError&quot;)
+End Property	&apos;	ScriptForge.SF_Exception.StopWhenError (get)
+
+REM -----------------------------------------------------------------------------
+Property Let StopWhenError(ByVal pvStopWhenError As Variant)
+&apos;&apos;&apos;	When set to False, the Basic process continues when ScriptForge detects a user script error. Default = True.
+&apos;&apos;&apos;	The set value is preserved until it is explicitly set again.
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		myException.StopWhenError = False
+	_PropertySet &quot;StopWhenError&quot;, pvStopWhenError
+End Property	&apos;	ScriptForge.SF_Exception.StopWhenError (let)
 
 REM -----------------------------------------------------------------------------
 Property Get ObjectType As String
@@ -237,7 +296,7 @@ REM ===================================================================== METHOD
 
 REM -----------------------------------------------------------------------------
 Public Sub Clear()
-&apos;&apos;&apos; Reset the current error status and clear the SF_Exception object
+&apos;&apos;&apos; Reset the current error status, clear the SF_Exception object and reinitialize the return code.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		On Local Error GoTo Catch
@@ -258,6 +317,11 @@ Try:
 		._SysNumber = 0
 		._SysSource = 0
 		._SysDescription = &quot;&quot;
+	End With
+
+	With _SF_
+		.ReturnCode = &quot;&quot;
+		.ReturnCodeDescription = &quot;&quot;
 	End With
 
 Finally:
@@ -320,7 +384,7 @@ Try:
 			&apos;	Terminate the modal dialog
 			If Modal Then
 				Set .ConsoleControl = .ConsoleControl.Dispose()
-				Set .ConsoleDialog = .ConsoleDialog.Dispose()
+				.ConsoleDialog.Terminate()
 			End If
 		End If
 	End With
@@ -527,7 +591,7 @@ Const cstSubArgs = &quot;&quot;
 	GetProperty = Null
 
 Check:
-	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs, pbReinitRC := False) Then		&apos;	Keep return codes untouched
 		If Not SF_Utils._Validate(PropertyName, &quot;PropertyName&quot;, V_STRING, Properties()) Then GoTo Catch
 	End If
 
@@ -566,7 +630,11 @@ Public Function Properties() As Variant
 	Properties = Array( _
 					&quot;Description&quot; _
 					, &quot;Number&quot; _
+					, &quot;ReportScriptErrors&quot; _
+					, &quot;ReturnCode&quot; _
+					, &quot;ReturnCodeDescription&quot; _
 					, &quot;Source&quot; _
+					, &quot;StopWhenError&quot; _
 					)
 
 End Function	&apos;	ScriptForge.SF_Exception.Properties
@@ -620,6 +688,7 @@ REM ----------------------------------------------------------------------------
 Public Sub Raise(Optional ByVal Number As Variant _
 								, Optional ByVal Source As Variant _
 								, Optional ByVal Description As Variant _
+								, Optional ByVal _Warning As Variant _
 								)
 &apos;&apos;&apos; Generate a run-time error. An error message is displayed to the user and logged
 &apos;&apos;&apos;	in the console. The execution is STOPPED
@@ -628,6 +697,7 @@ Public Sub Raise(Optional ByVal Number As Variant _
 &apos;&apos;&apos;			If numeric and &lt;= 2000, it is considered a LibreOffice Basic run-time error (default = Err)
 &apos;&apos;&apos;		Source: the line where the error occurred (default = Erl) or any string describing the location of the error
 &apos;&apos;&apos;		Description: the error message to log in the console and to display to the user
+&apos;&apos;&apos;		_Warning: When True, do not stop the process. FOR INTERNAL USE ONLY
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		On Local Error GoTo Catch
 &apos;&apos;&apos;		&apos;	...
@@ -650,6 +720,7 @@ Check:
 	If IsMissing(Number) Or IsEmpty(Number) Then Number = -1
 	If IsMissing(Source) Or IsEmpty(Source) Then Source = -1
 	If IsMissing(Description) Or IsEmpty(Description) Then Description = &quot;&quot;
+	If IsMissing(_Warning) Or IsEmpty(_Warning) Then _Warning = False
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not SF_Utils._Validate(Number, &quot;Number&quot;, Array(V_STRING, V_NUMERIC)) Then GoTo Finally
 		If Not SF_Utils._Validate(Source, &quot;Source&quot;, Array(V_STRING, V_NUMERIC)) Then GoTo Finally
@@ -670,7 +741,7 @@ Try:
 		Set L10N = _SF_._GetLocalizedInterface()
 		sMessage = L10N.GetText(&quot;LONGERRORDESC&quot;, .Number, .Source, .Description)
 		.DebugPrint(sMessage)
-		If _SF_.DisplayEnabled Then MsgBox L10N.GetText(&quot;ERRORNUMBER&quot;, .Number) _
+		If _SF_.ReportScriptErrors Then MsgBox L10N.GetText(&quot;ERRORNUMBER&quot;, .Number) _
 												&amp; SF_String.sfNewLine &amp; L10N.GetText(&quot;ERRORLOCATION&quot;, .Source) _
 												&amp; SF_String.sfNewLine &amp; .Description _
 											, MB_OK + MB_ICONSTOP _
@@ -679,7 +750,7 @@ Try:
 
 Finally:
 	SF_Utils._ExitFunction(cstThisSub)
-	If _SF_.StopWhenError Then
+	If Not _Warning Then
 		SF_Exception.Clear()
 		_SF_._StackReset()
 		Stop
@@ -729,7 +800,7 @@ Try:
 		&apos;	Log and display
 		sMessage = L10N.GetText(&quot;LONGERRORDESC&quot;, .Number, .Source, .Description)
 		.DebugPrint(sMessage)
-		If _SF_.DisplayEnabled Then
+		If _SF_.ReportScriptErrors Then
 			sMessage = sLocation _
 							&amp; L10N.GetText(&quot;INTERNALERROR&quot;) _
 							&amp; L10N.GetText(&quot;ERRORLOCATION&quot;, Source &amp; &quot;/&quot; &amp; .Source) &amp; SF_String.sfNewLine &amp; .Description _
@@ -744,7 +815,7 @@ Try:
 
 Finally:
 	_SF_._StackReset()
-	If _SF_.StopWhenError Then Stop
+	Stop		&apos;	Unconditional stop whatever the value of the StopWhenError flag
 	Exit Sub
 Catch:
 	GoTo Finally
@@ -1096,7 +1167,7 @@ Try:
 	_SF_._AddToConsole(sMessage)
 
 	&apos;	Display fatal event, if relevant (default)
-	If _SF_.DisplayEnabled Then
+	If _SF_.ReportScriptErrors Then
 		If _SF_.StopWhenError Then sMessage = sMessage &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; L10N.GetText(&quot;STOPEXECUTION&quot;)
 		&apos;	Do you need more help ?
 		If Len(sMethod) &gt; 0 Then
@@ -1115,8 +1186,12 @@ Try:
 	
 Finally:
 	SF_Utils._ExitFunction(cstThisSub)
-	_SF_._StackReset()
-	If _SF_.StopWhenError Then Stop
+	With _SF_
+		._StackReset()
+		If .StopWhenError Then Stop
+		.ReturnCode = ErrorCode
+		.ReturnCodeDescription = sMessage			
+	End With
 	Exit Sub
 Catch:
 	GoTo Finally
@@ -1145,7 +1220,6 @@ Public Sub RaiseWarning(Optional ByVal Number As Variant _
 &apos;&apos;&apos;			SF_Exception.RaiseWarning(&quot;MYAPPERROR&quot;, &quot;myFunction&quot;, &quot;Application error&quot;)
 &apos;&apos;&apos;			SF_Exception.RaiseWarning(,, &quot;To divide by zero is not a good idea !&quot;)
 
-Dim bStop As Boolean			&apos;	Alias for stop switch
 Const cstThisSub = &quot;Exception.RaiseWarning&quot;
 Const cstSubArgs = &quot;[Number=Err], [Source=Erl], [Description]&quot;
 
@@ -1164,13 +1238,10 @@ Check:
 	End If
 
 Try:
-	bStop = _SF_.StopWhenError		&apos;	Store current value to reset it before leaving the Sub
-	_SF_.StopWhenError = False
-	SF_Exception.Raise(Number, Source, Description)
+	SF_Exception.Raise(Number, Source, Description, _Warning := True)
 
 Finally:
 	SF_Utils._ExitFunction(cstThisSub)
-	_SF_.StopWhenError = bStop
 	Exit Sub
 Catch:
 	GoTo Finally
@@ -1248,7 +1319,7 @@ End Sub		&apos;	ScriptForge.SF_Exception._CloseConsole
 REM -----------------------------------------------------------------------------
 Private Sub _ConsoleRefresh()
 &apos;&apos;&apos;	Reload the content of the console in the dialog
-&apos;&apos;&apos;	Needed when console first loaded or when totally or partially cleared
+&apos;&apos;&apos;	Needed when console loaded for the first time or when totally or partially cleared
 
 	With _SF_
 		&apos;	Do nothing if console inactive
@@ -1302,8 +1373,16 @@ Const cstSubArgs = &quot;&quot;
 			If _Description = &quot;&quot; Then _PropertyGet = _SysDescription Else _PropertyGet = _Description
 		Case &quot;Number&quot;
 			If IsEmpty(_Number) Then _PropertyGet = _SysNumber Else _PropertyGet = _Number
+		Case &quot;ReportScriptErrors&quot;
+			_PropertyGet = _SF_.ReportScriptErrors
+		Case &quot;ReturnCode&quot;
+			_PropertyGet = _SF_.ReturnCode
+		Case &quot;ReturnCodeDescription&quot;
+			_PropertyGet = _SF_.ReturnCodeDescription
 		Case &quot;Source&quot;
 			If IsEmpty(_Source) Then _PropertyGet = _SysSource Else _PropertyGet = _Source
+		Case &quot;StopWhenError&quot;
+			_PropertyGet = _SF_.StopWhenError
 		Case Else
 			_PropertyGet = Null
 	End Select
@@ -1346,6 +1425,8 @@ Const cstSubArgs = &quot;&quot;
 					_Number = Empty
 				Case Else
 			End Select
+		Case &quot;ReportScriptErrors&quot;
+			If VarType(pvValue) = V_BOOLEAN Then _SF_.ReportScriptErrors = pvValue
 		Case &quot;Source&quot;
 			Select Case SF_Utils._VarTypeExt(pvValue)
 				Case V_STRING
@@ -1354,6 +1435,8 @@ Const cstSubArgs = &quot;&quot;
 					_Source = CLng(pvValue)
 				Case Else
 			End Select
+		Case &quot;StopWhenError&quot;
+			If VarType(pvValue) = V_BOOLEAN Then _SF_.StopWhenError = pvValue
 		Case Else
 	End Select
 	
