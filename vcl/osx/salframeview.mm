@@ -286,10 +286,19 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
             const NSWindow *pParentWindow = [NSApp keyWindow];
             while( pParentWindow && pParentWindow != pFrame->getNSWindow() )
                 pParentWindow = [pParentWindow parentWindow];
-            if( pParentWindow == pFrame->getNSWindow() )
-                [NSMenu setMenuBarVisible: NO];
-            else
+
+            // Related: tdf#161623 disable menubar visibility if no key window
+            // If a window is in LibreOffice's internal full screen mode
+            // and not in native full screen mode and then the user switches
+            // to a different application and back using the Command-Tab keys.
+            // the menubar and Dock would unexpectedly appear.
+            // It appears that the key window will still be nil in this
+            // case, so only enable menubar visibility if the key window
+            // is not nil.
+            if( pParentWindow && pParentWindow != pFrame->getNSWindow() )
                 [NSMenu setMenuBarVisible: YES];
+            else
+                [NSMenu setMenuBarVisible: NO];
         }
         else
         {
