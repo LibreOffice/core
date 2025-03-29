@@ -1603,7 +1603,7 @@
       </group>
       <set oor:name="ShowFilterDialog" oor:node-type="FilterDialogSettings">
         <info>
-          <desc>Contains the flags controlling if a filter fialog should be shown for a given filter. The default is true.</desc>
+          <desc>Contains the flags controlling if a filter dialog should be shown for a given filter. The default is true.</desc>
           <label>Should the settings dialog be shown for this filter</label>
         </info>
       </set>
