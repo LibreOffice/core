@@ -46,7 +46,7 @@ void SbiParser::If()
         // At the end of each block a jump to ENDIF must be inserted,
         // so that the condition is not evaluated again at ELSEIF.
         // The table collects all jump points.
-#define JMP_TABLE_SIZE 100
+        constexpr sal_uInt16 JMP_TABLE_SIZE = 100;
         sal_uInt32 pnJmpToEndLbl[JMP_TABLE_SIZE];   // 100 ELSEIFs allowed
         sal_uInt16 iJmp = 0;                        // current table index
 
