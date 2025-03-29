@@ -134,16 +134,12 @@ bool IsOEMCP( sal_uInt32 codepage )
 {
     OSL_ASSERT( IsValidCodePage( codepage ) );
 
-    sal_uInt32 arrOEMCP[] = { 437, 708, 709, 710, 720, 737,
+    static constexpr sal_uInt32 arrOEMCP[] = { 437, 708, 709, 710, 720, 737,
                               775, 850, 852, 855, 857, 860,
                               861, 862, 863, 864, 865, 866,
                               869, 874, 932, 936, 949, 950, 1361 };
 
-    for ( size_t i = 0; i < SAL_N_ELEMENTS( arrOEMCP ); ++i )
-        if ( arrOEMCP[i] == codepage )
-            return true;
-
-    return false;
+    return std::find(std::begin(arrOEMCP), std::end(arrOEMCP), codepage) != std::end(arrOEMCP);
 }
 
 // converts a codepage into its string representation
