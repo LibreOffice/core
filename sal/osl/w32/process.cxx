@@ -426,20 +426,13 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
     }
 }
 
-/* TODO because of an issue with GetEnvironmentVariableW we have to
-   allocate a buffer large enough to hold the requested environment
-   variable instead of testing for the required size. This wastes
-   some stack space, maybe we should revoke this work around if
-   this is no longer a problem */
-#define ENV_BUFFER_SIZE (32*1024-1)
-
 oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **ustrValue)
 {
-    WCHAR buff[ENV_BUFFER_SIZE];
-
-    if (GetEnvironmentVariableW(o3tl::toW(ustrVar->buffer), buff, ENV_BUFFER_SIZE) > 0)
+    WCHAR buff[32 * 1024];
+    DWORD len = GetEnvironmentVariableW(o3tl::toW(ustrVar->buffer), buff, std::size(buff));
+    if (len > 0 && len < std::size(buff))
     {
-        rtl_uString_newFromStr(ustrValue, o3tl::toU(buff));
+        rtl_uString_newFromStr_WithLength(ustrValue, o3tl::toU(buff), len);
         return osl_Process_E_None;
     }
     return osl_Process_E_Unknown;
