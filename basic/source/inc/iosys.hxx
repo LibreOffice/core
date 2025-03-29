@@ -60,7 +60,7 @@ class SbiStream
 public:
     SbiStream();
    ~SbiStream();
-    ErrCode const & Open( std::string_view, StreamMode, SbiStreamFlags, short );
+    ErrCode const & Open( const OUString&, StreamMode, SbiStreamFlags, short );
     ErrCode const & Close();
     ErrCode Read(OString&, sal_uInt16 = 0, bool bForceReadingPerByte=false);
     ErrCode const & Read( char& );
@@ -82,7 +82,7 @@ public:
 class SbiIoSystem
 {
     SbiStream* pChan[ CHANNELS ];
-    OString aPrompt;
+    OUString aPrompt;
     OString aIn;
     OUString aOut;
     short     nChan;
@@ -94,11 +94,11 @@ public:
    ~SbiIoSystem() COVERITY_NOEXCEPT_FALSE;
     ErrCode GetError();
     void  Shutdown();
-    void  SetPrompt(const OString& r) { aPrompt = r; }
+    void  SetPrompt(const OUString& r) { aPrompt = r; }
     void  SetChannel( short n  )       { nChan = n;   }
     short GetChannel() const           { return nChan;}
     void  ResetChannel()               { nChan = 0;   }
-    void  Open( short, std::string_view, StreamMode, SbiStreamFlags, short );
+    void  Open( short, const OUString&, StreamMode, SbiStreamFlags, short );
     void  Close();
     void  Read(OString&);
     char  Read();

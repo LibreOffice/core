@@ -415,7 +415,7 @@ void    UCBStream::SetSize( sal_uInt64 )
 
 
 ErrCode const & SbiStream::Open
-( std::string_view rName, StreamMode nStrmMode, SbiStreamFlags nFlags, short nL )
+( const OUString& rName, StreamMode nStrmMode, SbiStreamFlags nFlags, short nL )
 {
     nMode   = nFlags;
     nLen    = nL;
@@ -425,8 +425,7 @@ ErrCode const & SbiStream::Open
     {
         nStrmMode |= StreamMode::NOCREATE;
     }
-    OUString aStr(OStringToOUString(rName, osl_getThreadTextEncoding()));
-    OUString aNameStr = getFullPath( aStr );
+    OUString aNameStr = getFullPath(rName);
 
     if( hasUno() )
     {
@@ -625,7 +624,7 @@ ErrCode SbiIoSystem::GetError()
     return n;
 }
 
-void SbiIoSystem::Open(short nCh, std::string_view rName, StreamMode nMode, SbiStreamFlags nFlags, short nLen)
+void SbiIoSystem::Open(short nCh, const OUString& rName, StreamMode nMode, SbiStreamFlags nFlags, short nLen)
 {
     nError = ERRCODE_NONE;
     if( nCh >= CHANNELS || !nCh )
@@ -784,8 +783,7 @@ void SbiIoSystem::CloseAll()
 
 void SbiIoSystem::ReadCon(OString& rIn)
 {
-    OUString aPromptStr(OStringToOUString(aPrompt, osl_getThreadTextEncoding()));
-    SbiInputDialog aDlg(nullptr, aPromptStr);
+    SbiInputDialog aDlg(nullptr, aPrompt);
     if (aDlg.run() == RET_OK)
     {
         rIn = OUStringToOString(aDlg.GetInput(), osl_getThreadTextEncoding());

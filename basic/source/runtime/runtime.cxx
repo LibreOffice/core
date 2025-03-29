@@ -2773,8 +2773,7 @@ void SbiRuntime::StepRENAME()       // Rename Tos+1 to Tos
 void SbiRuntime::StepPROMPT()
 {
     SbxVariableRef p = PopVar();
-    OString aStr(OUStringToOString(p->GetOUString(), osl_getThreadTextEncoding()));
-    pIosys->SetPrompt( aStr );
+    pIosys->SetPrompt(p->GetOUString());
 }
 
 // Set Restart point
@@ -4441,7 +4440,7 @@ void SbiRuntime::StepOPEN( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     SbxVariableRef pLen  = PopVar();
     short nBlkLen = pLen->GetInteger();
     short nChan   = pChan->GetInteger();
-    OString aName(OUStringToOString(pName->GetOUString(), osl_getThreadTextEncoding()));
+    OUString aName = pName->GetOUString();
     pIosys->Open( nChan, aName, static_cast<StreamMode>( nOp1 ),
                   static_cast<SbiStreamFlags>( nOp2 ), nBlkLen );
     Error( pIosys->GetError() );
