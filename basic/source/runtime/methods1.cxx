@@ -37,6 +37,7 @@
 #include <tools/fract.hxx>
 #include <o3tl/temporary.hxx>
 #include <osl/file.hxx>
+#include <osl/process.h>
 #include <sbobjmod.hxx>
 #include <basic/sbuno.hxx>
 
@@ -1132,14 +1133,7 @@ void SbRtl_Environ(StarBASIC *, SbxArray & rPar, bool)
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
     OUString aResult;
-    // should be ANSI but that's not possible under Win16 in the DLL
-    OString aByteStr(OUStringToOString(rPar.Get(1)->GetOUString(),
-                                                 osl_getThreadTextEncoding()));
-    const char* pEnvStr = getenv(aByteStr.getStr());
-    if ( pEnvStr )
-    {
-        aResult = OUString(pEnvStr, strlen(pEnvStr), osl_getThreadTextEncoding());
-    }
+    osl_getEnvironment(rPar.Get(1)->GetOUString().pData, &aResult.pData);
     rPar.Get(0)->PutString(aResult);
 }
 
