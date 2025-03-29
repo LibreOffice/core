@@ -1639,7 +1639,7 @@ void SbRtl_WeekdayName(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_Weekday(StarBASIC *, SbxArray & rPar, bool)
 {
     sal_uInt32 nParCount = rPar.Count();
-    if ( nParCount < 2 )
+    if ( nParCount < 2 || nParCount > 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
