@@ -110,6 +110,7 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
         , m_xPersistentWindowStateSupplier( ui::theWindowStateConfiguration::get( xContext ) )
         , m_aAsyncLayoutTimer( "framework::LayoutManager m_aAsyncLayoutTimer" )
         , m_aListenerContainer( m_aMutex )
+        , m_bInSetCurrentUIVisibility( false )
 {
     // Initialize statusbar member
     m_aStatusBarElement.m_aType = "statusbar";
@@ -783,6 +784,32 @@ void LayoutManager::implts_updateUIElementsVisibleState( bool bSetVisible )
             {
                 pSysWindow->SetMenuBar(pMenuBar);
             }
+#ifdef MACOSX
+            // Related: tdf#161623 don't set the menubar to null on macOS
+            // When a window enters LibreOffice's internal full screen mode,
+            // the vcl code will hide the macOS menubar. However, if the
+            // window is also in native full screen mode, macOS will force
+            // the menubar to be visible.
+            // While the vcl code already partially handles this case by
+            // disabling all menu items when in LibreOffice's internal full
+            // screen mode, the problem is that any submenus that were not
+            // displayed before setting the menubar to null will show all
+            // menu items with no title.
+            // A simple way to reproduce this bug is to open a new Writer
+            // or Calc document and do the following:
+            // - Switch the window to LibreOffice's internal full screen
+            //   mode by manually selecting the View > Full Screen menu
+            //   item (the bug does not occur if its key shortcut is
+            //   pressed)
+            // - Switch the window to native full screen mode
+            // - Click on the menubar and note that many of the submenus
+            //   are displayed with menu items, but none of the menu items
+            //   have a title
+            // So, we need to keep the menubar visible and rely on the vcl
+            // code to disable all menu items.
+            else if ( m_bInSetCurrentUIVisibility )
+                pSysWindow->SetMenuBar(pMenuBar);
+#endif
             else
                 pSysWindow->SetMenuBar( nullptr );
         }
@@ -819,7 +846,10 @@ void LayoutManager::implts_setCurrentUIVisibility( bool bShow )
             m_aStatusBarElement.m_bMasterHide = false;
     }
 
+    bool bOldInSetCurrentUIVisibility = m_bInSetCurrentUIVisibility;
+    m_bInSetCurrentUIVisibility = true;
     implts_updateUIElementsVisibleState( bShow );
+    m_bInSetCurrentUIVisibility = bOldInSetCurrentUIVisibility;
 }
 
 void LayoutManager::implts_destroyStatusBar()
