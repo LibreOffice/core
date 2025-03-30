@@ -443,8 +443,7 @@ oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *ustrVar, rtl_uString *u
     // set Windows environment variable
     if (SetEnvironmentVariableW(o3tl::toW(ustrVar->buffer), o3tl::toW(ustrValue->buffer)))
     {
-        OUString sAssign = OUString::unacquired(&ustrVar) + "=" + OUString::unacquired(&ustrValue);
-        _wputenv(o3tl::toW(sAssign.getStr()));
+        _wputenv_s(o3tl::toW(ustrVar->buffer), o3tl::toW(ustrValue->buffer));
         return osl_Process_E_None;
     }
     return osl_Process_E_Unknown;
@@ -456,8 +455,7 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *ustrVar)
     // by setting SetEnvironmentVariable's second parameter to NULL
     if (SetEnvironmentVariableW(o3tl::toW(ustrVar->buffer), nullptr))
     {
-        OUString sAssign = OUString::unacquired(&ustrVar) + "=";
-        _wputenv(o3tl::toW(sAssign.getStr()));
+        _wputenv_s(o3tl::toW(ustrVar->buffer), L"");
         return osl_Process_E_None;
     }
     return osl_Process_E_Unknown;

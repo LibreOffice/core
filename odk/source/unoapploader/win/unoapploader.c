@@ -204,22 +204,16 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
          * note that this only affects the environment variable of the current
          * process, the command processor's environment is not changed
          */
-        size_t size = wcslen( ENVVARNAME ) + wcslen( L"=" ) + wcslen( path ) + 1;
-        if ( value != NULL )
-            size += wcslen( PATHSEPARATOR ) + wcslen( value );
-        wchar_t* envstr = (wchar_t*) malloc( size*sizeof(wchar_t) );
-        assert(envstr);
-        wcscpy( envstr, ENVVARNAME );
-        wcscat( envstr, L"=" );
-        wcscat( envstr, path );
         if ( value != NULL )
         {
-            wcscat( envstr, PATHSEPARATOR );
-            wcscat( envstr, value );
+            size_t size = wcslen(path) + wcslen(PATHSEPARATOR) + wcslen(value) + 1;
+            path = (wchar_t*)realloc(path, size * sizeof(wchar_t));
+            assert(path);
+            wcscat(path, PATHSEPARATOR);
+            wcscat(path, value);
         }
         /* coverity[tainted_data : FALSE] */
-        _wputenv( envstr );
-        free( envstr );
+        _wputenv_s(ENVVARNAME, path);
         free( path );
     }
     else
