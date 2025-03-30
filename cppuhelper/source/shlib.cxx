@@ -36,6 +36,7 @@
 #include <cppuhelper/shlib.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/module.hxx>
+#include <osl/process.h>
 #include <sal/log.hxx>
 #include <uno/environment.hxx>
 #include <uno/mapping.hxx>
@@ -51,13 +52,12 @@ css::uno::Environment cppuhelper::detail::getEnvironment(
 {
     OUString n(name);
     if (!implementation.empty()) {
-        static char const * log = std::getenv("UNO_ENV_LOG");
-        if (log != nullptr && *log != 0) {
-            OString imps(log);
+        OUString imps;
+        if (osl_getEnvironment(u"UNO_ENV_LOG"_ustr.pData, &imps.pData) == osl_Process_E_None
+            && !imps.isEmpty()) {
             for (sal_Int32 i = 0; i != -1;) {
-                std::string_view imp(o3tl::getToken(imps, 0, ';', i));
-                //TODO: this assumes UNO_ENV_LOG only contains ASCII characters:
-                if (o3tl::equalsAscii(implementation, imp))
+                std::u16string_view imp(o3tl::getToken(imps, 0, ';', i));
+                if (implementation == imp)
                 {
                     n += ":log";
                     break;
