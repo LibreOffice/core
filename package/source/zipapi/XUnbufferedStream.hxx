@@ -29,6 +29,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <package/Inflater.hxx>
+#include <memory>
 #include <ZipEntry.hxx>
 #include <CRC32.hxx>
 
@@ -54,7 +55,7 @@ class XUnbufferedStream final : public cppu::WeakImplHelper
     ZipEntry maEntry;
     sal_Int32 mnBlockSize;
     css::uno::Reference< css::xml::crypto::XCipherContext > m_xCipherContext;
-    ZipUtils::Inflater maInflater;
+    std::unique_ptr<ZipUtils::Inflater> maInflater;
     bool mbRawStream, mbWrappedRaw;
     sal_Int16 mnHeaderToRead;
     sal_Int64 mnZipCurrent, mnZipEnd, mnZipSize, mnMyCurrent;

@@ -24,6 +24,7 @@
 
 #include <comphelper/refcountedmutex.hxx>
 #include <package/Inflater.hxx>
+#include <memory>
 #include <rtl/ref.hxx>
 #include "ByteGrabber.hxx"
 #include "HashMaps.hxx"
@@ -61,7 +62,7 @@ private:
 
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
-    ZipUtils::Inflater aInflater;
+    std::unique_ptr<ZipUtils::Inflater> aInflater;
     css::uno::Reference < css::io::XInputStream > xStream;
     const css::uno::Reference < css::uno::XComponentContext > m_xContext;
 

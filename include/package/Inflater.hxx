@@ -25,52 +25,35 @@
 #include <package/packagedllapi.hxx>
 #include <memory>
 
-struct z_stream_s;
-
 namespace ZipUtils {
 
-class UNLESS_MERGELIBS(DLLPUBLIC_PACKAGE) Inflater final
+class UNLESS_MERGELIBS(DLLPUBLIC_PACKAGE) Inflater
 {
-    typedef struct z_stream_s z_stream;
-
-    bool                    bFinished, bNeedDict;
-    sal_Int32               nOffset, nLength, nLastInflateError;
-    std::unique_ptr<z_stream>  pStream;
-    css::uno::Sequence < sal_Int8 >  sInBuffer;
-    sal_Int32   doInflateBytes (css::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
-
 public:
-    Inflater(bool bNoWrap);
-    ~Inflater();
-    void setInput( const css::uno::Sequence< sal_Int8 >& rBuffer );
-    bool needsDictionary() const { return bNeedDict; }
-    bool finished() const { return bFinished; }
-    sal_Int32 doInflateSegment( css::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
-    void end(  );
+    Inflater() = default;
+    virtual ~Inflater() = default;
 
-    sal_Int32 getLastInflateError() const { return nLastInflateError; }
+    virtual void setInput(const css::uno::Sequence<sal_Int8>& rBuffer) = 0;
+    virtual bool needsDictionary() const = 0;
+    virtual bool finished() const = 0;
+    virtual sal_Int32 doInflateSegment(css::uno::Sequence<sal_Int8>& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength) = 0;
+    virtual void end() = 0;
+    virtual sal_Int32 getLastInflateError() const = 0;
 };
 
-class UNLESS_MERGELIBS(DLLPUBLIC_PACKAGE) InflaterBytes final
+class UNLESS_MERGELIBS(DLLPUBLIC_PACKAGE) InflaterBytes
 {
-    typedef struct z_stream_s z_stream;
-
-    bool                    bFinished;
-    sal_Int32               nOffset, nLength;
-    std::unique_ptr<z_stream>  pStream;
-    const sal_Int8*  sInBuffer;
-    sal_Int32   doInflateBytes (sal_Int8* pOutBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
-
 public:
-    InflaterBytes();
-    ~InflaterBytes();
-    void setInput( const sal_Int8* pBuffer, sal_Int32 nLen );
-    bool finished() const { return bFinished; }
-    sal_Int32 doInflateSegment( sal_Int8* pOutBuffer, sal_Int32 nBufLen, sal_Int32 nNewOffset, sal_Int32 nNewLength );
-    void end(  );
+    InflaterBytes() = default;
+    virtual ~InflaterBytes() = default;
+
+    virtual void setInput(const sal_Int8* pBuffer, sal_Int32 nLen) = 0;
+    virtual bool finished() const = 0;
+    virtual sal_Int32 doInflateSegment(sal_Int8* pOutBuffer, sal_Int32 nBufLen, sal_Int32 nNewOffset, sal_Int32 nNewLength) = 0;
+    virtual void end() = 0;
 };
 
-}
+} // namespace ZipUtils
 
 #endif
 

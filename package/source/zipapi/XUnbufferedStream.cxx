@@ -23,16 +23,16 @@
 
 #include "XUnbufferedStream.hxx"
 #include <EncryptionData.hxx>
-#include <ZipFile.hxx>
+#include <package/InflateZlib.hxx>
 #include <EncryptedDataHeader.hxx>
 #include <algorithm>
 #include <string.h>
-
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <utility>
 #include <comphelper/diagnose_ex.hxx>
+#include <ZipFile.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::packages::zip::ZipConstants;
@@ -55,7 +55,7 @@ XUnbufferedStream::XUnbufferedStream(
 , mxZipSeek ( xNewZipStream, UNO_QUERY )
 , maEntry ( rEntry )
 , mnBlockSize( 1 )
-, maInflater ( true )
+, maInflater( std::make_unique<ZipUtils::InflateZlib>(true) )
 , mbRawStream ( nStreamMode == UNBUFF_STREAM_RAW || nStreamMode == UNBUFF_STREAM_WRAPPEDRAW )
 , mbWrappedRaw ( nStreamMode == UNBUFF_STREAM_WRAPPEDRAW )
 , mnHeaderToRead ( 0 )
@@ -126,7 +126,7 @@ XUnbufferedStream::XUnbufferedStream(
 , mxZipStream ( xRawStream )
 , mxZipSeek ( xRawStream, UNO_QUERY )
 , mnBlockSize( 1 )
-, maInflater ( true )
+, maInflater( std::make_unique<ZipUtils::InflateZlib>(true) )
 , mbRawStream ( false )
 , mbWrappedRaw ( false )
 , mnHeaderToRead ( 0 )
@@ -231,7 +231,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
         {
             for (;;)
             {
-                nLastRead = maInflater.doInflateSegment( aData, nRead, aData.getLength() - nRead );
+                nLastRead = maInflater->doInflateSegment( aData, nRead, aData.getLength() - nRead );
                 if ( 0 != nLastRead && ( nRead + nLastRead == nRequestedBytes || mnZipCurrent >= mnZipEnd ) )
                     break;
                 nRead += nLastRead;
@@ -239,10 +239,10 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                     throw RuntimeException(
                         u"Should not be possible to read more than requested!"_ustr );
 
-                if ( maInflater.finished() || maInflater.getLastInflateError() )
+                if ( maInflater->finished() || maInflater->getLastInflateError() )
                     throw ZipIOException(u"The stream seems to be broken!"_ustr );
 
-                if ( maInflater.needsDictionary() )
+                if ( maInflater->needsDictionary() )
                     throw ZipIOException(u"Dictionaries are not supported!"_ustr );
 
                 sal_Int32 nDiff = static_cast< sal_Int32 >( mnZipEnd - mnZipCurrent );
@@ -283,7 +283,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                         }
                     }
                 }
-                maInflater.setInput ( maCompBuffer );
+                maInflater->setInput ( maCompBuffer );
 
             }
         }

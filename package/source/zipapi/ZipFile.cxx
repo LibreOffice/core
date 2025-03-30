@@ -61,6 +61,8 @@
 #include "MemoryByteGrabber.hxx"
 
 #include <CRC32.hxx>
+#include <package/InflateZlib.hxx>
+#include <InflaterBytesZlib.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::io;
@@ -88,7 +90,7 @@ ZipFile::ZipFile( rtl::Reference< comphelper::RefCountedMutex > aMutexHolder,
 : m_aMutexHolder(std::move( aMutexHolder ))
 , m_Checks(checks)
 , aGrabber( xInput )
-, aInflater( true )
+, aInflater( std::make_unique<ZipUtils::InflateZlib>(true) )
 , xStream(xInput)
 , m_xContext (std::move( xContext ))
 , bRecoveryMode( bForceRecovery )
@@ -1959,7 +1961,7 @@ void ZipFile::getSizeAndCRC( sal_Int64 nOffset, sal_Int64 nCompressedSize, sal_I
 
     CRC32 aCRC;
     sal_Int64 nRealSize = 0;
-    ZipUtils::InflaterBytes aInflaterLocal;
+    ZipUtils::InflaterBytesZlib aInflaterLocal;
     sal_Int32 nBlockSize = static_cast< sal_Int32 > (::std::min( nCompressedSize, static_cast< sal_Int64 >( 32000 ) ) );
     std::vector < sal_Int8 > aBuffer(nBlockSize);
     std::vector< sal_Int8 > aData( nBlockSize );
@@ -1981,7 +1983,7 @@ void ZipFile::getSizeAndCRC( sal_Int64 nOffset, sal_Int64 nCompressedSize, sal_I
             nLastInflated = aInflaterLocal.doInflateSegment( aData.data(), nBlockSize, 0, nBlockSize );
             aCRC.updateSegment( aData.data(), nLastInflated );
             nInBlock += nLastInflated;
-        } while( !aInflater.finished() && nLastInflated );
+        } while( !aInflaterLocal.finished() && nLastInflated );
 
         nRealSize += nInBlock;
     }

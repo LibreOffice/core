@@ -5330,6 +5330,7 @@ include/osl/thread.hxx
 include/osl/time.h
 include/package/Deflater.hxx
 include/package/Inflater.hxx
+include/package/InflateZlib.hxx
 include/registry/reader.hxx
 include/registry/registry.hxx
 include/registry/typereg_reader.hxx
@@ -7065,6 +7066,7 @@ package/inc/ByteGrabber.hxx
 package/inc/CRC32.hxx
 package/inc/EncryptionData.hxx
 package/inc/HashMaps.hxx
+package/inc/InflaterBytesZlib.hxx
 package/inc/ZipFile.hxx
 package/inc/ZipOutputEntry.hxx
 package/inc/ZipOutputStream.hxx
@@ -7112,6 +7114,8 @@ package/source/zipapi/XBufferedThreadedStream.hxx
 package/source/zipapi/XUnbufferedStream.cxx
 package/source/zipapi/XUnbufferedStream.hxx
 package/source/zipapi/ZipFile.cxx
+package/source/zipapi/InflateZlib.cxx
+package/source/zipapi/InflaterBytesZlib.cxx
 package/source/zipapi/ZipOutputEntry.cxx
 package/source/zipapi/ZipOutputStream.cxx
 package/source/zipapi/blowfishcontext.cxx

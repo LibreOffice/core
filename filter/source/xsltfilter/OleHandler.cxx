@@ -28,6 +28,7 @@
 
 #include "OleHandler.hxx"
 #include <optional>
+#include <package/InflateZlib.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -116,7 +117,7 @@ namespace XSLT
         }
 
         // Decompress the bytes
-        std::optional< ::ZipUtils::Inflater> decompresser(std::in_place, false);
+        std::unique_ptr< ::ZipUtils::Inflater> decompresser = std::make_unique< ::ZipUtils::InflateZlib>(false);
         decompresser->setInput(content);
         Sequence<sal_Int8> result(oleLength);
         decompresser->doInflateSegment(result, 0, oleLength);
