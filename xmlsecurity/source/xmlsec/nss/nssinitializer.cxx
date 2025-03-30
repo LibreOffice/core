@@ -29,6 +29,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/string.hxx>
 #include <osl/file.hxx>
+#include <osl/process.h>
 #include <osl/thread.h>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -176,13 +177,13 @@ const OUString & ONSSInitializer::getMozillaCurrentProfile(const css::uno::Refer
         m_bIsNSSinitialized = true;
 
     // first, try to get the profile from "MOZILLA_CERTIFICATE_FOLDER"
-    const char* pEnv = getenv("MOZILLA_CERTIFICATE_FOLDER");
-    if (pEnv)
+    if (OUString pEnv; osl_getEnvironment(u"MOZILLA_CERTIFICATE_FOLDER"_ustr.pData, &pEnv.pData) == osl_Process_E_None
+                       && !pEnv.isEmpty())
     {
         SAL_INFO(
             "xmlsecurity.xmlsec",
             "Using Mozilla profile from MOZILLA_CERTIFICATE_FOLDER=" << pEnv);
-        m_sNSSPath = OStringToOUString(pEnv, osl_getThreadTextEncoding());
+        m_sNSSPath = pEnv;
     }
 
     // second, try to get saved user-preference
@@ -284,9 +285,10 @@ css::uno::Sequence<css::xml::crypto::NSSProfile> SAL_CALL ONSSInitializer::getNS
     }
     aProfileList.push_back({u"MANUAL"_ustr, sUserSelect, mozilla::MozillaProductType_Default});
 
-    const char* pEnv = getenv("MOZILLA_CERTIFICATE_FOLDER");
+    OUString pEnv;
+    osl_getEnvironment(u"MOZILLA_CERTIFICATE_FOLDER"_ustr.pData, &pEnv.pData);
     aProfileList.push_back({u"MOZILLA_CERTIFICATE_FOLDER"_ustr,
-                            pEnv ? OStringToOUString(pEnv, osl_getThreadTextEncoding()) : OUString(),
+                            pEnv,
                             mozilla::MozillaProductType_Default});
 
     return comphelper::containerToSequence(aProfileList);
