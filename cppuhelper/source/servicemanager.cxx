@@ -42,6 +42,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
+#include <osl/process.h>
 #include <rtl/ref.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
@@ -1826,10 +1827,10 @@ void cppuhelper::ServiceManager::preloadImplementations() {
     OUStringBuffer aMissingMsg;
 
     /// Allow external callers & testers to disable certain components
-    const char *pDisable = getenv("UNODISABLELIBRARY");
-    if (pDisable)
+    if (OUString aDisable;
+        osl_getEnvironment(u"UNODISABLELIBRARY"_ustr.pData, &aDisable.pData) == osl_Process_E_None
+        && !aDisable.isEmpty())
     {
-        OUString aDisable(pDisable, strlen(pDisable), RTL_TEXTENCODING_UTF8);
         for (sal_Int32 i = 0; i >= 0; )
         {
             OUString tok( aDisable.getToken(0, ' ', i) );

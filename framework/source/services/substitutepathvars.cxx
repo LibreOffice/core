@@ -26,6 +26,7 @@
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
 #include <osl/file.hxx>
+#include <osl/process.h>
 #include <osl/security.hxx>
 #include <osl/thread.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -299,13 +300,13 @@ OUString SubstitutePathVariables::GetHomeVariableValue()
 OUString SubstitutePathVariables::GetPathVariableValue()
 {
     OUString aRetStr;
-    const char* pEnv = getenv( "PATH" );
+    OUString aPathList;
 
-    if ( pEnv )
+    if (osl_getEnvironment(u"PATH"_ustr.pData, &aPathList.pData) == osl_Process_E_None
+        && !aPathList.isEmpty())
     {
         const int PATH_EXTEND_FACTOR = 200;
         OUString       aTmp;
-        OUString       aPathList( pEnv, strlen( pEnv ), osl_getThreadTextEncoding() );
         OUStringBuffer aPathStrBuffer( aPathList.getLength() * PATH_EXTEND_FACTOR / 100 );
 
         bool      bAppendSep = false;
