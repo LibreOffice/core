@@ -1038,11 +1038,11 @@ void addJavaInfosFromPath(
 {
 #if !defined JVM_ONE_PATH_CHECK
 // Get Java from PATH environment variable
-    char *szPath= getenv("PATH");
-    if(!szPath)
+    OUString usAllPath;
+    if (osl_getEnvironment(u"PATH"_ustr.pData, &usAllPath.pData) != osl_Process_E_None
+        || usAllPath.isEmpty())
         return;
 
-    OUString usAllPath(szPath, strlen(szPath), osl_getThreadTextEncoding());
     sal_Int32 nIndex = 0;
     do
     {
@@ -1092,10 +1092,10 @@ void addJavaInfoFromJavaHome(
     // variable. We set it in our build environment for build-time programs, though,
     // so it is set when running unit tests that involve Java functionality. (Which affects
     // at least CppunitTest_dbaccess_dialog_save, too, and not only the JunitTest ones.)
-    char *szJavaHome= getenv("JAVA_HOME");
-    if(szJavaHome)
+    OUString sHome;
+    if (osl_getEnvironment(u"JAVA_HOME"_ustr.pData, &sHome.pData) == osl_Process_E_None
+        && !sHome.isEmpty())
     {
-        OUString sHome(szJavaHome, strlen(szJavaHome), osl_getThreadTextEncoding());
         OUString sHomeUrl;
         if(File::getFileURLFromSystemPath(sHome, sHomeUrl) == File::E_None)
         {
