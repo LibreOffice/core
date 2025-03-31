@@ -2458,6 +2458,8 @@ void ShapeExport::WriteTable( const Reference< XShape >& rXShape  )
 void ShapeExport::WriteTableCellProperties(const Reference< XPropertySet>& xCellPropSet)
 {
     sal_Int32 nLeftMargin(0), nRightMargin(0);
+    sal_Int32 nTopMargin(0);
+    sal_Int32 nBottomMargin(0);
     TextVerticalAdjust eVerticalAlignment;
     const char* sVerticalAlignment;
 
@@ -2466,6 +2468,12 @@ void ShapeExport::WriteTableCellProperties(const Reference< XPropertySet>& xCell
 
     Any aRightMargin = xCellPropSet->getPropertyValue(u"TextRightDistance"_ustr);
     aRightMargin >>= nRightMargin;
+
+    Any aTopMargin = xCellPropSet->getPropertyValue(u"TextUpperDistance"_ustr);
+    aTopMargin >>= nTopMargin;
+
+    Any aBottomMargin = xCellPropSet->getPropertyValue(u"TextLowerDistance"_ustr);
+    aBottomMargin >>= nBottomMargin;
 
     Any aVerticalAlignment = xCellPropSet->getPropertyValue(u"TextVerticalAdjust"_ustr);
     aVerticalAlignment >>= eVerticalAlignment;
@@ -2492,8 +2500,10 @@ void ShapeExport::WriteTableCellProperties(const Reference< XPropertySet>& xCell
 
     mpFS->startElementNS(XML_a, XML_tcPr, XML_anchor, sVerticalAlignment,
     XML_vert, aTextVerticalValue,
-    XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)), nLeftMargin > 0),
-    XML_marR, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRightMargin)), nRightMargin > 0));
+    XML_marL, OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)),
+    XML_marR, OString::number(oox::drawingml::convertHmmToEmu(nRightMargin)),
+    XML_marT, OString::number(oox::drawingml::convertHmmToEmu(nTopMargin)),
+    XML_marB, OString::number(oox::drawingml::convertHmmToEmu(nBottomMargin)));
 
     // Write background fill for table cell.
     // TODO
