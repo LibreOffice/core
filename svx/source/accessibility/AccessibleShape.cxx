@@ -463,12 +463,8 @@ uno::Reference<XAccessible > SAL_CALL
 }
 
 
-awt::Rectangle SAL_CALL AccessibleShape::getBounds()
+awt::Rectangle AccessibleShape::implGetBounds()
 {
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard (m_aMutex);
-
-    ThrowIfDisposed ();
     awt::Rectangle aBoundingBox;
     if ( mxShape.is() )
     {
@@ -574,45 +570,6 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds()
     return aBoundingBox;
 }
 
-
-awt::Point SAL_CALL AccessibleShape::getLocation()
-{
-    ThrowIfDisposed ();
-    awt::Rectangle aBoundingBox (getBounds());
-    return awt::Point (aBoundingBox.X, aBoundingBox.Y);
-}
-
-
-awt::Point SAL_CALL AccessibleShape::getLocationOnScreen()
-{
-    ThrowIfDisposed ();
-
-    // Get relative position...
-    awt::Point aLocation (getLocation ());
-
-    // ... and add absolute position of the parent.
-    uno::Reference<XAccessibleComponent> xParentComponent (
-        getAccessibleParent(), uno::UNO_QUERY);
-    if (xParentComponent.is())
-    {
-        awt::Point aParentLocation (xParentComponent->getLocationOnScreen());
-        aLocation.X += aParentLocation.X;
-        aLocation.Y += aParentLocation.Y;
-    }
-    else
-        SAL_WARN("svx", "parent does not support XAccessibleComponent");
-    return aLocation;
-}
-
-
-awt::Size SAL_CALL AccessibleShape::getSize()
-{
-    ThrowIfDisposed ();
-    awt::Rectangle aBoundingBox (getBounds());
-    return awt::Size (aBoundingBox.Width, aBoundingBox.Height);
-}
-
-
 sal_Int32 SAL_CALL AccessibleShape::getForeground()
 {
     ThrowIfDisposed ();
@@ -676,15 +633,11 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground()
 void SAL_CALL AccessibleShape::addAccessibleEventListener (
     const Reference<XAccessibleEventListener >& rxListener)
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    AccessibleContextBase::addAccessibleEventListener(rxListener);
+
+    if (isAlive())
     {
-        uno::Reference<uno::XInterface> xThis (
-            static_cast<lang::XComponent *>(this), uno::UNO_QUERY);
-        rxListener->disposing (lang::EventObject (xThis));
-    }
-    else
-    {
-        AccessibleContextBase::addAccessibleEventListener (rxListener);
+
         if (mpText != nullptr)
             mpText->AddEventListener (rxListener);
     }

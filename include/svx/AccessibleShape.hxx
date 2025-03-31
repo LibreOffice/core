@@ -226,19 +226,14 @@ public:
     virtual sal_Int64 SAL_CALL
         getAccessibleIndexInParent() override;
 
+    // OCommonAccessibleComponent
+    virtual css::awt::Rectangle implGetBounds() override;
+
     //=====  XAccessibleComponent  ============================================
 
     virtual css::uno::Reference<
         css::accessibility::XAccessible > SAL_CALL
         getAccessibleAtPoint (const css::awt::Point& aPoint) override;
-
-    virtual css::awt::Rectangle SAL_CALL getBounds() override;
-
-    virtual css::awt::Point SAL_CALL getLocation() override;
-
-    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
-
-    virtual css::awt::Size SAL_CALL getSize() override;
 
     virtual sal_Int32 SAL_CALL getForeground() override;
 

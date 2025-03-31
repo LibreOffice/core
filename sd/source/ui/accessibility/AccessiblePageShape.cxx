@@ -71,12 +71,10 @@ uno::Reference<XAccessible> SAL_CALL
         static_cast<uno::XWeak*>(this));
 }
 
-//=====  XAccessibleComponent  ================================================
+// OCommonAccessibleComponent
 
-awt::Rectangle SAL_CALL AccessiblePageShape::getBounds()
+awt::Rectangle AccessiblePageShape::implGetBounds()
 {
-    ThrowIfDisposed ();
-
     awt::Rectangle aBoundingBox;
 
     if (maShapeTreeInfo.GetViewForwarder() != nullptr)
@@ -133,6 +131,8 @@ awt::Rectangle SAL_CALL AccessiblePageShape::getBounds()
 
     return aBoundingBox;
 }
+
+//=====  XAccessibleComponent  ================================================
 
 sal_Int32 SAL_CALL AccessiblePageShape::getForeground()
 {

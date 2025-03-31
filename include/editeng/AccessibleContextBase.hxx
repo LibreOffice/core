@@ -20,11 +20,9 @@
 #pragma once
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <editeng/editengdllapi.h>
@@ -35,22 +33,9 @@ namespace utl { class AccessibleRelationSetHelper; }
 
 namespace accessibility {
 
-/** @descr
-        This base class provides an implementation of the
-        AccessibleContext service. Apart from the
-        <type>XAccessible<type>, XAccessibleContext, XAccessibleComponent
-        and XAccessibleExtendedComponent
-        interfaces it supports the XServiceInfo interface.
-*/
 class EDITENG_DLLPUBLIC AccessibleContextBase
-    :   public cppu::BaseMutex,
-        public cppu::WeakComponentImplHelper<
-        css::accessibility::XAccessible,
-        css::accessibility::XAccessibleContext,
-        css::accessibility::XAccessibleEventBroadcaster,
-        css::accessibility::XAccessibleExtendedComponent,
-        css::lang::XServiceInfo
-        >
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleExtendedComponentHelper,
+                                         css::lang::XServiceInfo, css::accessibility::XAccessible>
 {
 public:
 
@@ -213,38 +198,12 @@ public:
     virtual css::lang::Locale SAL_CALL
         getLocale() override;
 
-    //=====  XAccessibleEventBroadcaster  ========================================
-
-    virtual void SAL_CALL
-        addAccessibleEventListener (
-            const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener) override;
-
-    virtual void SAL_CALL
-        removeAccessibleEventListener (
-            const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener) override;
-
     //=====  XAccessibleComponent  ================================================
-
-    /** The default implementation uses the result of
-        <member>getBounds</member> to determine whether the given point lies
-        inside this object.
-    */
-    virtual sal_Bool SAL_CALL containsPoint(const css::awt::Point& aPoint) override;
 
     /** The default implementation returns an empty reference.
     */
     virtual css::uno::Reference<css::accessibility::XAccessible>
         SAL_CALL getAccessibleAtPoint(const css::awt::Point& aPoint) override;
-
-    /** The default implementation uses the result of
-        <member>getBounds</member> to determine the location.
-    */
-    virtual css::awt::Point SAL_CALL getLocation() override;
-
-    /** The default implementation uses the result of
-        <member>getBounds</member> to determine the size.
-    */
-    virtual css::awt::Size SAL_CALL getSize() override;
 
     /** The default implementation does nothing.
     */
@@ -362,10 +321,6 @@ private:
         whether that replaces the old value in msName.
     */
     StringOrigin meNameOrigin;
-
-    /** client id in the AccessibleEventNotifier queue
-    */
-    sal_uInt32 mnClientId;
 
     /** This is the role of this object.
     */

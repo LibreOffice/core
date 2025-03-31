@@ -292,11 +292,8 @@ uno::Reference<XAccessible > SAL_CALL
     return xChildAtPosition;
 }
 
-awt::Rectangle SAL_CALL
-    AccessibleDocumentViewBase::getBounds()
+awt::Rectangle AccessibleDocumentViewBase::implGetBounds()
 {
-    ThrowIfDisposed ();
-
     // Transform visible area into screen coordinates.
     ::tools::Rectangle aVisibleArea (
         maShapeTreeInfo.GetViewForwarder()->GetVisibleArea());
@@ -325,42 +322,6 @@ awt::Rectangle SAL_CALL
         aPixelTopLeft.Y() - aParentPosition.Y,
         aPixelSize.X(),
         aPixelSize.Y());
-}
-
-awt::Point SAL_CALL
-    AccessibleDocumentViewBase::getLocation()
-{
-    ThrowIfDisposed ();
-    awt::Rectangle aBoundingBox (getBounds());
-    return awt::Point (aBoundingBox.X, aBoundingBox.Y);
-}
-
-awt::Point SAL_CALL
-    AccessibleDocumentViewBase::getLocationOnScreen()
-{
-    ThrowIfDisposed ();
-    ::Point aLogicalPoint (maShapeTreeInfo.GetViewForwarder()->GetVisibleArea().TopLeft());
-    ::Point aPixelPoint (maShapeTreeInfo.GetViewForwarder()->LogicToPixel (aLogicalPoint));
-    return awt::Point (aPixelPoint.X(), aPixelPoint.Y());
-}
-
-awt::Size SAL_CALL
-    AccessibleDocumentViewBase::getSize()
-{
-    ThrowIfDisposed ();
-
-    // Transform visible area into screen coordinates.
-    ::tools::Rectangle aVisibleArea (
-        maShapeTreeInfo.GetViewForwarder()->GetVisibleArea());
-    ::Point aPixelTopLeft (
-        maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
-            aVisibleArea.TopLeft()));
-    ::Point aPixelSize (
-        maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
-            aVisibleArea.BottomRight())
-        - aPixelTopLeft);
-
-    return awt::Size (aPixelSize.X(), aPixelSize.Y());
 }
 
 //=====  XInterface  ==========================================================

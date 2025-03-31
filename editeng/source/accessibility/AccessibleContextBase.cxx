@@ -46,11 +46,9 @@ namespace accessibility {
 AccessibleContextBase::AccessibleContextBase (
         uno::Reference<XAccessible> xParent,
         const sal_Int16 aRole)
-    :   WeakComponentImplHelper(m_aMutex),
-        mxParent(std::move(xParent)),
+    :   mxParent(std::move(xParent)),
         meDescriptionOrigin(NotSet),
         meNameOrigin(NotSet),
-        mnClientId(0),
         maRole(aRole)
 {
     // Create the state set.
@@ -319,61 +317,7 @@ lang::Locale SAL_CALL
     throw IllegalAccessibleComponentStateException ();
 }
 
-
-// XAccessibleEventListener
-
-void SAL_CALL AccessibleContextBase::addAccessibleEventListener (
-        const uno::Reference<XAccessibleEventListener >& rxListener)
-{
-    if (!rxListener.is())
-        return;
-
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        uno::Reference<uno::XInterface> x (static_cast<lang::XComponent *>(this), uno::UNO_QUERY);
-        rxListener->disposing (lang::EventObject (x));
-    }
-    else
-    {
-        if (!mnClientId)
-            mnClientId = comphelper::AccessibleEventNotifier::registerClient( );
-        comphelper::AccessibleEventNotifier::addEventListener( mnClientId, rxListener );
-    }
-}
-
-
-void SAL_CALL AccessibleContextBase::removeAccessibleEventListener (
-        const uno::Reference<XAccessibleEventListener >& rxListener )
-{
-    ThrowIfDisposed ();
-    if (!(rxListener.is() && mnClientId))
-        return;
-
-    sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, rxListener );
-    if ( !nListenerCount )
-    {
-        // no listeners anymore
-        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-        // and at least to us not firing any events anymore, in case somebody calls
-        // NotifyAccessibleEvent, again
-        comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
-        mnClientId = 0;
-    }
-}
-
-
 // XAccessibleComponent
-
-sal_Bool SAL_CALL AccessibleContextBase::containsPoint (
-    const css::awt::Point& aPoint)
-{
-    awt::Size aSize (getSize());
-    return (aPoint.X >= 0)
-           && (aPoint.X < aSize.Width)
-           && (aPoint.Y >= 0)
-           && (aPoint.Y < aSize.Height);
-}
-
 
 uno::Reference<XAccessible > SAL_CALL
 AccessibleContextBase::getAccessibleAtPoint (
@@ -381,19 +325,6 @@ AccessibleContextBase::getAccessibleAtPoint (
 {
     return uno::Reference<XAccessible>();
 }
-
-awt::Point SAL_CALL AccessibleContextBase::getLocation()
-{
-    awt::Rectangle aBBox (getBounds());
-    return awt::Point (aBBox.X, aBBox.Y);
-}
-
-css::awt::Size SAL_CALL AccessibleContextBase::getSize()
-{
-    awt::Rectangle aBBox (getBounds());
-    return awt::Size (aBBox.Width, aBBox.Height);
-}
-
 
 void SAL_CALL AccessibleContextBase::grabFocus()
 {
@@ -469,12 +400,8 @@ void SAL_CALL AccessibleContextBase::disposing()
 
     ::osl::MutexGuard aGuard (m_aMutex);
 
-    // Send a disposing to all listeners.
-    if ( mnClientId )
-    {
-        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
-        mnClientId =  0;
-    }
+    comphelper::OAccessibleExtendedComponentHelper::disposing();
+
     mxParent.clear();
     mxRelationSet.clear();
 }
@@ -536,27 +463,13 @@ void AccessibleContextBase::CommitChange (
     const uno::Any& rOldValue,
     sal_Int32 nValueIndex)
 {
-    // Do not call FireEvent and do not even create the event object when no
-    // listener has been registered yet.  Creating the event object can
-    // otherwise lead to a crash.  See issue 93419 for details.
-    if (mnClientId != 0)
-    {
-        AccessibleEventObject aEvent (
-            static_cast<XAccessibleContext*>(this),
-            nEventId,
-            rNewValue,
-            rOldValue,
-            nValueIndex);
-
-        FireEvent (aEvent);
-    }
+    NotifyAccessibleEvent(nEventId, rOldValue, rNewValue, nValueIndex);
 }
 
 
 void AccessibleContextBase::FireEvent (const AccessibleEventObject& aEvent)
 {
-    if (mnClientId)
-        comphelper::AccessibleEventNotifier::addEvent( mnClientId, aEvent );
+    NotifyAccessibleEvent(aEvent.EventId, aEvent.OldValue, aEvent.NewValue, aEvent.IndexHint);
 }
 
 
