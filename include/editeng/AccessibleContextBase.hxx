@@ -236,19 +236,10 @@ public:
     virtual css::uno::Reference<css::accessibility::XAccessible>
         SAL_CALL getAccessibleAtPoint(const css::awt::Point& aPoint) override;
 
-    /** The default implementation returns an empty rectangle.
-    */
-    virtual css::awt::Rectangle SAL_CALL getBounds() override;
-
     /** The default implementation uses the result of
         <member>getBounds</member> to determine the location.
     */
     virtual css::awt::Point SAL_CALL getLocation() override;
-
-    /** The default implementation returns an empty position, i.e. the
-    * result of the default constructor of css::awt::Point.
-    */
-    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
 
     /** The default implementation uses the result of
         <member>getBounds</member> to determine the size.

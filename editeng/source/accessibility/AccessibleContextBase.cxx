@@ -382,25 +382,11 @@ AccessibleContextBase::getAccessibleAtPoint (
     return uno::Reference<XAccessible>();
 }
 
-
-awt::Rectangle SAL_CALL AccessibleContextBase::getBounds()
-{
-    return awt::Rectangle();
-}
-
-
 awt::Point SAL_CALL AccessibleContextBase::getLocation()
 {
     awt::Rectangle aBBox (getBounds());
     return awt::Point (aBBox.X, aBBox.Y);
 }
-
-
-awt::Point SAL_CALL AccessibleContextBase::getLocationOnScreen()
-{
-    return awt::Point();
-}
-
 
 css::awt::Size SAL_CALL AccessibleContextBase::getSize()
 {
