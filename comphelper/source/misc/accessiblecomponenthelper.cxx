@@ -70,20 +70,20 @@ namespace comphelper
             // don't use the OContextEntryGuard - it will throw an exception if we're not alive
             // anymore, while the most recent specification for XComponent states that we should
             // silently ignore the call in such a situation
+
+        if (!_rxListener.is())
+            return;
+
         if ( !isAlive() )
         {
-            if ( _rxListener.is() )
-                _rxListener->disposing( EventObject( *this ) );
+            _rxListener->disposing( EventObject( *this ) );
             return;
         }
 
-        if ( _rxListener.is() )
-        {
-            if ( !m_nClientId )
-                m_nClientId = AccessibleEventNotifier::registerClient( );
+        if (!m_nClientId)
+            m_nClientId = AccessibleEventNotifier::registerClient();
 
-            AccessibleEventNotifier::addEventListener( m_nClientId, _rxListener );
-        }
+        AccessibleEventNotifier::addEventListener(m_nClientId, _rxListener);
     }
 
 
