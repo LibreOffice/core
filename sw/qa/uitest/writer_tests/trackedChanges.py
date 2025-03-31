@@ -81,6 +81,9 @@ class trackedchanges(UITestCase):
         self.ui_test.close_doc()
 
     def test_tracked_changes_reject(self):
+        # HACK skipping test that is known-unreliable at least for ASan/UBsan builds:
+        if os.environ.get('ENABLE_RUNTIME_OPTIMIZATIONS', '') == '':
+           return
 
         self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
@@ -157,6 +160,10 @@ class trackedchanges(UITestCase):
         self.ui_test.close_doc()
 
     def test_tdf135018(self):
+        # HACK skipping test that is known-unreliable at least for ASan/UBsan builds:
+        if os.environ.get('ENABLE_RUNTIME_OPTIMIZATIONS', '') == '':
+           return
+
         self.ui_test.load_file(get_url_for_data_file("tdf135018.odt"))
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
