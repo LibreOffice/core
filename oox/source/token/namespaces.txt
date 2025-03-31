@@ -48,6 +48,7 @@ ppt                     http://schemas.openxmlformats.org/presentationml/2006/ma
 dml                     http://schemas.openxmlformats.org/drawingml/2006/main
 dsp                     http://schemas.microsoft.com/office/drawing/2008/diagram
 dmlChart                http://schemas.openxmlformats.org/drawingml/2006/chart
+dmlChartex              http://schemas.microsoft.com/office/drawing/2014/chartex
 dmlChartDr              http://schemas.openxmlformats.org/drawingml/2006/chartDrawing
 dmlDiagram              http://schemas.openxmlformats.org/drawingml/2006/diagram
 dmlLockedCanvas         http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas
@@ -95,6 +96,7 @@ xr16                    http://schemas.microsoft.com/office/spreadsheetml/2017/r
 # MSO 2014 extensions ---------------------------------------------------------
 
 cx                      http://schemas.microsoft.com/office/drawing/2014/chartex
+a16                     http://schemas.microsoft.com/office/drawing/2014/main
 
 # extlst namespaces
 
