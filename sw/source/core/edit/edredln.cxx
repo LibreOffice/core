@@ -100,6 +100,9 @@ void SwEditShell::ReinstatePaM(const SwRangeRedline& rRedline, SwPaM& rPaM)
             return;
         }
 
+        // Get rid of table selection or multi-selection if there is one.
+        KillPams();
+
         SwShellCursor* pCursor = getShellCursor(/*bBlock=*/true);
         *pCursor->GetPoint() = *rPaM.End();
         SetMark();
