@@ -115,9 +115,9 @@ public class SdUnoSlideView extends TestCase {
 
         XInterface oObj = aModel.getCurrentController();
 
-        //Change to Slide view
+        //Change to Slide Sorter view
         try {
-            String aSlotID = "slot:27011";
+            String aSlotID = ".uno:DiaMode";
             XDispatchProvider xDispProv = UnoRuntime.queryInterface( XDispatchProvider.class, oObj );
             XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
                     Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
@@ -164,7 +164,7 @@ public class SdUnoSlideView extends TestCase {
         XController secondController = aModel2.getCurrentController();
         tEnv.addObjRelation("SecondController", secondController);
         tEnv.addObjRelation("XDispatchProvider.URL",
-                                    "slot:27069");
+                                    ".uno:NotesMode");
 
         tEnv.addObjRelation("XUserInputInterception.XModel", aModel);
 

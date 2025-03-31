@@ -229,7 +229,7 @@ public class SdUnoPresView extends TestCase {
         XController secondController = aModel.getCurrentController();
         tEnv.addObjRelation("SecondController", secondController);
         tEnv.addObjRelation("XDispatchProvider.URL",
-                                    "slot:27010");
+                                    ".uno:OutlineMode");
 
         log.println("Implementation Name: "+utils.getImplName(oObj));
 

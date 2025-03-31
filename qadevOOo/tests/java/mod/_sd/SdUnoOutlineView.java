@@ -145,7 +145,7 @@ public class SdUnoOutlineView extends TestCase {
 
         //Change to Outline view
         try {
-            String aSlotID = "slot:27010";
+            String aSlotID = ".uno:OutlineMode";
             XDispatchProvider xDispProv = UnoRuntime.queryInterface( XDispatchProvider.class, oObj );
             XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
                     Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
@@ -196,7 +196,7 @@ public class SdUnoOutlineView extends TestCase {
         XController secondController = aModel.getCurrentController();
         tEnv.addObjRelation("SecondController", secondController);
         tEnv.addObjRelation("XDispatchProvider.URL",
-                                    "slot:27069");
+                                    ".uno:NotesMode");
 
         log.println("Implementation Name: " + utils.getImplName(oObj));
 

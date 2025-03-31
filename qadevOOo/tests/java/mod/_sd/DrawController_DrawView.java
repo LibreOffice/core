@@ -225,7 +225,7 @@ public class DrawController_DrawView extends TestCase {
 
         tEnv.addObjRelation("SecondController", aController2);
         tEnv.addObjRelation("XDispatchProvider.URL",
-                                    "slot:27009");
+                                    ".uno:DrawingMode");
 
         //Adding relations for DrawingDocumentDrawView
         XDrawPage new_page = the_pages.insertNewByIndex(1);

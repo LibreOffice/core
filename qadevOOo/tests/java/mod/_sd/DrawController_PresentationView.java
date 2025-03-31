@@ -249,7 +249,7 @@ public class DrawController_PresentationView extends TestCase {
         XController secondController = aModel.getCurrentController();
         tEnv.addObjRelation("SecondController", secondController);
         tEnv.addObjRelation("XDispatchProvider.URL",
-                                    "slot:27009");
+                                    ".uno:DrawingMode");
 
         //Adding relations for DrawingDocumentDrawView
         XDrawPage new_page = the_pages.insertNewByIndex(1);

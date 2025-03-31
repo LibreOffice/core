@@ -133,9 +133,9 @@ public class AccessibleSlideView extends TestCase {
 
         aModel = UnoRuntime.queryInterface(XModel.class, xImpressDoc);
 
-        //Change to Outline view
+        //Change to Slide Sorter view
         try {
-            String aSlotID = "slot:27011";
+            String aSlotID = ".uno:DiaMode";
             XDispatchProvider xDispProv = UnoRuntime.queryInterface( XDispatchProvider.class,
                                     aModel.getCurrentController() );
             XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,

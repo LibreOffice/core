@@ -129,7 +129,7 @@ public class AccessibleOutlineView extends TestCase {
 
         //Change to Outline view
         try {
-            String aSlotID = "slot:27010";
+            String aSlotID = ".uno:OutlineMode";
             XDispatchProvider xDispProv = UnoRuntime.queryInterface( XDispatchProvider.class, oObj );
             XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
             Param.getMSF().
