@@ -240,10 +240,9 @@ void SAL_CALL ChartController::setPosSize(
     sal_Int16 Flags )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
     auto pChartWindow(GetChartWindow());
 
-    if(!(xWindow.is() && pChartWindow))
+    if(!(m_xViewWindow.is() && pChartWindow))
         return;
 
     Size aLogicSize = pChartWindow->PixelToLogic( Size( Width, Height ), MapMode( MapUnit::Map100thMM )  );
@@ -286,161 +285,114 @@ void SAL_CALL ChartController::setPosSize(
 
 awt::Rectangle SAL_CALL ChartController::getPosSize()
 {
-    //@todo
     awt::Rectangle aRet(0, 0, 0, 0);
 
-    uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
-    if(xWindow.is())
-        aRet = xWindow->getPosSize();
+    if (m_xViewWindow.is())
+        aRet = m_xViewWindow->getPosSize();
 
     return aRet;
 }
 
 void SAL_CALL ChartController::setVisible( sal_Bool Visible )
 {
-    //@todo
-    uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
-
-    if(xWindow.is())
-        xWindow->setVisible( Visible );
+    if (m_xViewWindow.is())
+        m_xViewWindow->setVisible(Visible);
 }
 
 void SAL_CALL ChartController::setEnable( sal_Bool Enable )
 {
-    //@todo
-    uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
-
-    if(xWindow.is())
-        xWindow->setEnable( Enable );
+    if (m_xViewWindow.is())
+        m_xViewWindow->setEnable(Enable);
 }
 
 void SAL_CALL ChartController::setFocus()
 {
-    //@todo
-    uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
-
-    if(xWindow.is())
-        xWindow->setFocus();
+    if (m_xViewWindow.is())
+        m_xViewWindow->setFocus();
 }
 
 void SAL_CALL ChartController::addWindowListener(
     const uno::Reference< awt::XWindowListener >& xListener )
 {
-    //@todo
-    uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
-
-    if(xWindow.is())
-        xWindow->addWindowListener( xListener );
+    if (m_xViewWindow.is())
+        m_xViewWindow->addWindowListener(xListener);
 }
 
 void SAL_CALL ChartController::removeWindowListener(
     const uno::Reference< awt::XWindowListener >& xListener )
 {
-    //@todo
-    uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
-
-    if(xWindow.is())
-        xWindow->removeWindowListener( xListener );
+    if (m_xViewWindow.is())
+        m_xViewWindow->removeWindowListener(xListener);
 }
 
 void SAL_CALL ChartController::addFocusListener(
     const uno::Reference< awt::XFocusListener >& xListener )
 {
-    //@todo
-    uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
-
-    if(xWindow.is())
-        xWindow->addFocusListener( xListener );
+    if (m_xViewWindow.is())
+        m_xViewWindow->addFocusListener(xListener);
 }
 
 void SAL_CALL ChartController::removeFocusListener(
     const uno::Reference< awt::XFocusListener >& xListener )
 {
-    //@todo
-    uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
-
-    if(xWindow.is())
-        xWindow->removeFocusListener( xListener );
+    if (m_xViewWindow.is())
+        m_xViewWindow->removeFocusListener(xListener);
 }
 
 void SAL_CALL ChartController::addKeyListener(
     const uno::Reference< awt::XKeyListener >& xListener )
 {
-    //@todo
-    uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
-
-    if(xWindow.is())
-        xWindow->addKeyListener( xListener );
+    if (m_xViewWindow.is())
+        m_xViewWindow->addKeyListener(xListener);
 }
 
 void SAL_CALL ChartController::removeKeyListener(
     const uno::Reference< awt::XKeyListener >& xListener )
 {
-    //@todo
-    uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
-
-    if(xWindow.is())
-        xWindow->removeKeyListener( xListener );
+    if (m_xViewWindow.is())
+        m_xViewWindow->removeKeyListener(xListener);
 }
 
 void SAL_CALL ChartController::addMouseListener(
     const uno::Reference< awt::XMouseListener >& xListener )
 {
-    //@todo
-    uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
-
-    if(xWindow.is())
-        xWindow->addMouseListener( xListener );
+    if (m_xViewWindow.is())
+        m_xViewWindow->addMouseListener(xListener);
 }
 
 void SAL_CALL ChartController::removeMouseListener(
     const uno::Reference< awt::XMouseListener >& xListener )
 {
-    //@todo
-    uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
-
-    if(xWindow.is())
-        xWindow->removeMouseListener( xListener );
+    if (m_xViewWindow.is())
+        m_xViewWindow->removeMouseListener(xListener);
 }
 
 void SAL_CALL ChartController::addMouseMotionListener(
     const uno::Reference< awt::XMouseMotionListener >& xListener )
 {
-    //@todo
-    uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
-
-    if(xWindow.is())
-        xWindow->addMouseMotionListener( xListener );
+    if (m_xViewWindow.is())
+        m_xViewWindow->addMouseMotionListener(xListener);
 }
 
 void SAL_CALL ChartController::removeMouseMotionListener(
     const uno::Reference< awt::XMouseMotionListener >& xListener )
 {
-    //@todo
-    uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
-
-    if(xWindow.is())
-        xWindow->removeMouseMotionListener( xListener );
+    if (m_xViewWindow.is())
+        m_xViewWindow->removeMouseMotionListener(xListener);
 }
 
 void SAL_CALL ChartController::addPaintListener(
     const uno::Reference< awt::XPaintListener >& xListener )
 {
-    //@todo
-    uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
-
-    if(xWindow.is())
-        xWindow->addPaintListener( xListener );
+    if (m_xViewWindow.is())
+        m_xViewWindow->addPaintListener(xListener);
 }
 
 void SAL_CALL ChartController::removePaintListener(
     const uno::Reference< awt::XPaintListener >& xListener )
 {
-    //@todo
-    uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
-
-    if(xWindow.is())
-        xWindow->removePaintListener( xListener );
+    if (m_xViewWindow.is())
+        m_xViewWindow->removePaintListener(xListener);
 }
 
 // impl vcl window controller methods
