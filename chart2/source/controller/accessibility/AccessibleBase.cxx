@@ -112,11 +112,11 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
             case EventType::GOT_SELECTION:
                 {
                     AddState( AccessibleStateType::SELECTED );
-                    BroadcastAccEvent( AccessibleEventId::STATE_CHANGED, aSelected, aEmpty );
+                    NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aEmpty, aSelected);
 
                     AddState( AccessibleStateType::FOCUSED );
                     aSelected <<= AccessibleStateType::FOCUSED;
-                    BroadcastAccEvent( AccessibleEventId::STATE_CHANGED, aSelected, aEmpty );
+                    NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aEmpty, aSelected);
 
                     SAL_INFO("chart2.accessibility", "Selection acquired by: " << getAccessibleName());
                 }
@@ -125,11 +125,11 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
             case EventType::LOST_SELECTION:
                 {
                     RemoveState( AccessibleStateType::SELECTED );
-                    BroadcastAccEvent( AccessibleEventId::STATE_CHANGED, aEmpty, aSelected );
+                    NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aSelected, aEmpty);
 
                     AddState( AccessibleStateType::FOCUSED );
                     aSelected <<= AccessibleStateType::FOCUSED;
-                    BroadcastAccEvent( AccessibleEventId::STATE_CHANGED, aEmpty, aSelected );
+                    NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aSelected, aEmpty);
                     SAL_INFO("chart2.accessibility", "Selection lost by: " << getAccessibleName());
                 }
                 break;
@@ -259,7 +259,7 @@ void AccessibleBase::AddChild( AccessibleBase * pChild  )
         aNew <<= uno::Reference<XAccessible>(xChild);
 
         aGuard.clear();
-        BroadcastAccEvent( AccessibleEventId::CHILD, aNew, aEmpty );
+        NotifyAccessibleEvent(AccessibleEventId::CHILD, aEmpty, aNew);
     }
 }
 
@@ -295,7 +295,7 @@ void AccessibleBase::RemoveChildByOId( const ObjectIdentifier& rOId )
         Any aEmpty, aOld;
         aOld <<= uno::Reference<XAccessible>(xChild);
 
-        BroadcastAccEvent( AccessibleEventId::CHILD, aEmpty, aOld );
+        NotifyAccessibleEvent(AccessibleEventId::CHILD, aOld, aEmpty);
     }
 
     // dispose the child
@@ -323,11 +323,6 @@ awt::Point AccessibleBase::GetUpperLeftOnScreen() const
     return aResult;
 }
 
-void AccessibleBase::BroadcastAccEvent(sal_Int16 nId, const Any& rNew, const Any& rOld)
-{
-    NotifyAccessibleEvent(nId, rOld, rNew);
-}
-
 void AccessibleBase::KillAllChildren()
 {
     ClearableMutexGuard aGuard( m_aMutex );
@@ -345,7 +340,7 @@ void AccessibleBase::KillAllChildren()
     for (auto const& localChild : aLocalChildList)
     {
         aOld <<= uno::Reference<XAccessible>(localChild);
-        BroadcastAccEvent( AccessibleEventId::CHILD, aEmpty, aOld );
+        NotifyAccessibleEvent(AccessibleEventId::CHILD, aOld, aEmpty);
 
         if (localChild.is())
             localChild->dispose();
@@ -360,7 +355,7 @@ void AccessibleBase::SetInfo( const AccessibleElementInfo & rNewInfo )
     {
         KillAllChildren();
     }
-    BroadcastAccEvent( AccessibleEventId::INVALIDATE_ALL_CHILDREN, uno::Any(), uno::Any());
+    NotifyAccessibleEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN, uno::Any(), uno::Any());
 }
 
 // ________ (XComponent::dispose) ________

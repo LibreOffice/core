@@ -168,13 +168,6 @@ protected:
      */
     virtual css::awt::Point   GetUpperLeftOnScreen() const;
 
-    /** This method creates an AccessibleEventObject and sends it to all
-        listeners that are currently listening to this object
-     */
-    void         BroadcastAccEvent( sal_Int16 nId,
-                                    const css::uno::Any & rNew,
-                                    const css::uno::Any & rOld );
-
     /** Removes all children from the internal lists and broadcasts child remove
         events.
 
