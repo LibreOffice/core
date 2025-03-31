@@ -91,7 +91,7 @@ private:
     // select the specified child => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
     virtual void implSelect(sal_Int64 nAccessibleChildIndex, bool bSelect) override;
 
-    // OCommonAccessibleComponent
+    // OAccessibleComponentHelper
     virtual css::awt::Rectangle implGetBounds() override;
 
     virtual void SAL_CALL disposing() override;
@@ -191,7 +191,7 @@ private:
 
     virtual void SAL_CALL disposing() override;
 
-    // OCommonAccessibleComponent
+    // OAccessibleComponentHelper
     /// implements the calculation of the bounding rectangle
     virtual css::awt::Rectangle implGetBounds(  ) override;
 

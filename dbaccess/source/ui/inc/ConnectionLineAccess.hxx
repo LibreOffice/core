@@ -61,7 +61,7 @@ namespace dbaui
         virtual OUString SAL_CALL getAccessibleDescription(  ) override;
         virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
 
-        // OCommonAccessibleComponent
+        // OAccessibleComponentHelper
         virtual css::awt::Rectangle implGetBounds() override;
 
         // XAccessibleComponent

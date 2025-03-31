@@ -34,28 +34,31 @@
 namespace comphelper
 {
 
+    //= OAccessibleComponentHelper
 
-    //= OCommonAccessibleComponent
-
-    typedef ::cppu::WeakComponentImplHelper <   css::accessibility::XAccessibleContext2,
-                                                css::accessibility::XAccessibleEventBroadcaster
-                                            >   OCommonAccessibleComponent_Base;
-
-    /** base class encapsulating common functionality for the helper classes implementing
-        the XAccessibleComponent respectively XAccessibleExtendendComponent
+    /** a helper class for implementing an AccessibleContext which at the same time
+        supports an XAccessibleExtendedComponent interface.
     */
-    class COMPHELPER_DLLPUBLIC OCommonAccessibleComponent
-                :public ::cppu::BaseMutex
-                ,public OCommonAccessibleComponent_Base
+    class COMPHELPER_DLLPUBLIC OAccessibleComponentHelper
+        : public cppu::BaseMutex,
+          public cppu::WeakComponentImplHelper<css::accessibility::XAccessibleContext2,
+                                               css::accessibility::XAccessibleEventBroadcaster,
+                                               css::accessibility::XAccessibleExtendedComponent>
     {
         friend class OContextEntryGuard;
     private:
         AccessibleEventNotifier::TClientId m_nClientId;
 
     protected:
-        virtual ~OCommonAccessibleComponent( ) override;
+        virtual ~OAccessibleComponentHelper( ) override;
 
-        OCommonAccessibleComponent( );
+        OAccessibleComponentHelper( );
+
+    private:
+        OAccessibleComponentHelper(OAccessibleComponentHelper const &) = delete;
+        OAccessibleComponentHelper(OAccessibleComponentHelper &&) = delete;
+        void operator =(OAccessibleComponentHelper const &) = delete;
+        void operator =(OAccessibleComponentHelper &&) = delete;
 
     public:
         // XAccessibleEventBroadcaster
@@ -79,7 +82,7 @@ namespace comphelper
         /** default implementation for retrieving the index of this object within the parent
             <p>This basic implementation here returns the index <code>i</code> of the child for which
                 <code>&lt;parent&gt;.getAccessibleChild(i).getAccessibleContext()</code> returns
-                a reference to this OCommonAccessibleComponent object.</p>
+                a reference to this OAccessibleComponentHelper object.</p>
         */
         virtual sal_Int64 SAL_CALL getAccessibleIndexInParent(  ) override;
         /** default implementation for retrieving the locale
@@ -140,48 +143,16 @@ namespace comphelper
         /// @throws css::uno::RuntimeException
         virtual css::awt::Rectangle implGetBounds(  ) = 0;
 
-    protected:
-        /** non-virtual versions of the methods which can be implemented using <method>implGetBounds</method>
-            note: getLocationOnScreen relies on a valid parent (XAccessibleContext::getParent()->getAccessibleContext()),
-                 which itself implements XAccessibleComponent
+
+    public:
+        // XAccessibleComponent - default implementations which can be implemented using <method>implGetBounds</method>
+        virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override final;
+        virtual css::awt::Point SAL_CALL getLocation(  ) override final;
+        /* note: getLocationOnScreen relies on a valid parent (XAccessibleContext::getParent()->getAccessibleContext()),
+           which itself implements XAccessibleComponent
 
             @throws css::uno::RuntimeException
         */
-        bool containsPoint( const css::awt::Point& aPoint );
-        /// @throws css::uno::RuntimeException
-        css::awt::Point getLocation(  );
-        /// @throws css::uno::RuntimeException
-        css::awt::Point getLocationOnScreen(  );
-        /// @throws css::uno::RuntimeException
-        css::awt::Size getSize(  );
-        /// @throws css::uno::RuntimeException
-        css::awt::Rectangle getBounds(  );
-    };
-
-
-    //= OAccessibleComponentHelper
-
-
-    /** a helper class for implementing an AccessibleContext which at the same time
-        supports an XAccessibleExtendedComponent interface.
-    */
-    class COMPHELPER_DLLPUBLIC OAccessibleComponentHelper
-            :public cppu::ImplInheritanceHelper<
-                 OCommonAccessibleComponent, css::accessibility::XAccessibleExtendedComponent>
-    {
-    private:
-        OAccessibleComponentHelper(OAccessibleComponentHelper const &) = delete;
-        OAccessibleComponentHelper(OAccessibleComponentHelper &&) = delete;
-        void operator =(OAccessibleComponentHelper const &) = delete;
-        void operator =(OAccessibleComponentHelper &&) = delete;
-
-    protected:
-        OAccessibleComponentHelper();
-
-    public:
-        // XAccessibleComponent - default implementations
-        virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override final;
-        virtual css::awt::Point SAL_CALL getLocation(  ) override final;
         virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
         virtual css::awt::Size SAL_CALL getSize(  ) override final;
         virtual css::awt::Rectangle SAL_CALL getBounds(  ) override final;

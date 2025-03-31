@@ -36,7 +36,7 @@ protected:
 
     virtual void            FillAccessibleStateSet( sal_Int64& rStateSet ) override;
 
-    // OCommonAccessibleComponent
+    // OAccessibleComponentHelper
     virtual css::awt::Rectangle implGetBounds(  ) override;
 
 public:

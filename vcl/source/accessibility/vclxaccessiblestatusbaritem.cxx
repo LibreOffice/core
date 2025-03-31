@@ -140,7 +140,7 @@ void VCLXAccessibleStatusBarItem::FillAccessibleStateSet( sal_Int64& rStateSet )
 }
 
 
-// OCommonAccessibleComponent
+// OAccessibleComponentHelper
 
 
 awt::Rectangle VCLXAccessibleStatusBarItem::implGetBounds()

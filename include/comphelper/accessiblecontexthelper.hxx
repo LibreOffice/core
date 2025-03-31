@@ -29,11 +29,11 @@ namespace comphelper
 
     //= OContextEntryGuard
 
-    /** helper class for guarding the entry into OCommonAccessibleComponent methods.
+    /** helper class for guarding the entry into OAccessibleComponentHelper methods.
 
         <p>The class has two responsibilities:
-        <ul><li>it locks the mutex of an OCommonAccessibleComponent instance, as long as the guard lives</li>
-            <li>it checks if a given OCommonAccessibleComponent instance is alive, else an exception is thrown
+        <ul><li>it locks the mutex of an OAccessibleComponentHelper instance, as long as the guard lives</li>
+            <li>it checks if a given OAccessibleComponentHelper instance is alive, else an exception is thrown
                 our of the constructor of the guard</li>
         </ul>
         <br/>
@@ -53,11 +53,11 @@ namespace comphelper
             the context which shall be guarded
         @precond <arg>_pContext</arg> != NULL
         */
-        inline OContextEntryGuard( OCommonAccessibleComponent* _pContext );
+        inline OContextEntryGuard(OAccessibleComponentHelper* _pContext);
     };
 
 
-    inline OContextEntryGuard::OContextEntryGuard( OCommonAccessibleComponent* _pContext  )
+    inline OContextEntryGuard::OContextEntryGuard(OAccessibleComponentHelper* _pContext)
         : ::osl::ClearableMutexGuard( _pContext->GetMutex() )
     {
         _pContext->ensureAlive();
@@ -71,16 +71,16 @@ namespace comphelper
             ,public OContextEntryGuard
     {
     public:
-        inline OExternalLockGuard( OCommonAccessibleComponent* _pContext );
+        inline OExternalLockGuard(OAccessibleComponentHelper* _pContext);
     };
 
 
-    inline OExternalLockGuard::OExternalLockGuard( OCommonAccessibleComponent* _pContext )
+    inline OExternalLockGuard::OExternalLockGuard(OAccessibleComponentHelper* _pContext)
         :osl::Guard<SolarMutex>( SolarMutex::get() )
         ,OContextEntryGuard( _pContext )
     {
         // Only lock the external mutex,
-        // release the ::osl::Mutex of the OCommonAccessibleComponent instance.
+        // release the ::osl::Mutex of the OAccessibleComponentHelper instance.
         // If you call into another UNO object with locked ::osl::Mutex,
         // this may lead to dead locks.
         clear();

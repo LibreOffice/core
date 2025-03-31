@@ -45,7 +45,7 @@ private:
 
     void            FillAccessibleStateSet( sal_Int64& rStateSet );
 
-    // OCommonAccessibleComponent
+    // OAccessibleComponentHelper
     virtual css::awt::Rectangle implGetBounds(  ) override;
 
 public:

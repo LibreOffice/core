@@ -458,7 +458,6 @@ maybe merge comphelper::OAccessibleSelectionHelper with cppu::ImplInheritanceHel
 maybe merge comphelper::OAccessibleTextHelper with cppu::ImplInheritanceHelper, in modules comphelper and cppuhelper
 merge comphelper::OAccessibleWrapper_Base with comphelper::OAccessibleWrapper
 merge comphelper::OAnyEnumeration_BASE with comphelper::OAnyEnumeration
-maybe merge comphelper::OCommonAccessibleComponent with cppu::ImplInheritanceHelper, in modules comphelper and cppuhelper
 merge comphelper::OComponentProxyAggregation with comphelper::OAccessibleWrapper
 merge comphelper::OContainerListenerAdapter_Base with comphelper::OContainerListenerAdapter
 maybe merge comphelper::OPropertyChangeListener2 with FmFieldWin, in modules comphelper and svx

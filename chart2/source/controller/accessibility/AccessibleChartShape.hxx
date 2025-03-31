@@ -48,7 +48,7 @@ public:
     virtual OUString SAL_CALL getAccessibleDescription() override;
     virtual OUString SAL_CALL getAccessibleName() override;
 
-    // OCommonAccessibleComponent
+    // OAccessibleComponentHelper
     virtual css::awt::Rectangle implGetBounds() override;
 
     // ________ XAccessibleComponent ________

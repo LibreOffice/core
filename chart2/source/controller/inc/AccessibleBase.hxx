@@ -214,7 +214,7 @@ protected:
 //     virtual OUString SAL_CALL getAccessibleDescription()
 //         throw (css::uno::RuntimeException);
 
-    // OCommonAccessibleComponent
+    // OAccessibleComponentHelper
     virtual css::awt::Rectangle implGetBounds() override;
 
     // ________ XAccessibleComponent ________

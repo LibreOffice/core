@@ -34,14 +34,14 @@ namespace comphelper
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::accessibility;
 
-    OCommonAccessibleComponent::OCommonAccessibleComponent( )
-        :OCommonAccessibleComponent_Base( GetMutex() )
+    OAccessibleComponentHelper::OAccessibleComponentHelper()
+        :WeakComponentImplHelper( GetMutex() )
         ,m_nClientId( 0 )
     {
     }
 
 
-    OCommonAccessibleComponent::~OCommonAccessibleComponent( )
+    OAccessibleComponentHelper::~OAccessibleComponentHelper()
     {
             // this ensures that the lock, which may be already destroyed as part of the derivee,
             // is not used anymore
@@ -50,7 +50,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OCommonAccessibleComponent::disposing()
+    void SAL_CALL OAccessibleComponentHelper::disposing()
     {
         // rhbz#1001768: de facto this class is locked by SolarMutex;
         // do not lock m_Mutex because it may cause deadlock
@@ -64,7 +64,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OCommonAccessibleComponent::addAccessibleEventListener( const Reference< XAccessibleEventListener >& _rxListener )
+    void SAL_CALL OAccessibleComponentHelper::addAccessibleEventListener(const Reference< XAccessibleEventListener >& _rxListener)
     {
         osl::Guard<SolarMutex> aGuard(SolarMutex::get());
             // don't use the OContextEntryGuard - it will throw an exception if we're not alive
@@ -87,7 +87,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OCommonAccessibleComponent::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& _rxListener )
+    void SAL_CALL OAccessibleComponentHelper::removeAccessibleEventListener(const Reference< XAccessibleEventListener >& _rxListener)
     {
         osl::Guard<SolarMutex> aGuard(SolarMutex::get());
             // don't use the OContextEntryGuard - it will throw an exception if we're not alive
@@ -112,7 +112,7 @@ namespace comphelper
     }
 
 
-    void OCommonAccessibleComponent::NotifyAccessibleEvent( const sal_Int16 _nEventId,
+    void OAccessibleComponentHelper::NotifyAccessibleEvent( const sal_Int16 _nEventId,
         const Any& _rOldValue, const Any& _rNewValue, sal_Int32 nIndexHint )
     {
         if ( !m_nClientId )
@@ -127,41 +127,41 @@ namespace comphelper
         AccessibleEventNotifier::addEvent( m_nClientId, aEvent );
     }
 
-    bool OCommonAccessibleComponent::hasAccessibleListeners() const
+    bool OAccessibleComponentHelper::hasAccessibleListeners() const
     {
         return m_nClientId != 0;
     }
 
-    bool OCommonAccessibleComponent::isAlive() const
+    bool OAccessibleComponentHelper::isAlive() const
     {
         return !rBHelper.bDisposed && !rBHelper.bInDispose;
     }
 
 
-    void OCommonAccessibleComponent::ensureAlive() const
+    void OAccessibleComponentHelper::ensureAlive() const
     {
         if( !isAlive() )
             throw DisposedException();
     }
 
 
-    void OCommonAccessibleComponent::ensureDisposed( )
+    void OAccessibleComponentHelper::ensureDisposed( )
     {
         if ( !rBHelper.bDisposed )
         {
-            OSL_ENSURE( 0 == m_refCount, "OCommonAccessibleComponent::ensureDisposed: this method _has_ to be called from without your dtor only!" );
+            OSL_ENSURE( 0 == m_refCount, "OAccessibleComponentHelper::ensureDisposed: this method _has_ to be called from without your dtor only!" );
             acquire();
             dispose();
         }
     }
 
-    OUString SAL_CALL OCommonAccessibleComponent::getAccessibleId(  )
+    OUString SAL_CALL OAccessibleComponentHelper::getAccessibleId()
     {
         return OUString();
     }
 
 
-    sal_Int64 SAL_CALL OCommonAccessibleComponent::getAccessibleIndexInParent(  )
+    sal_Int64 SAL_CALL OAccessibleComponentHelper::getAccessibleIndexInParent()
     {
         OExternalLockGuard aGuard( this );
 
@@ -182,14 +182,14 @@ namespace comphelper
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OCommonAccessibleComponent::getAccessibleIndexInParent: caught an exception!" );
+            OSL_FAIL("OAccessibleComponentHelper::getAccessibleIndexInParent: caught an exception!");
         }
 
         return -1;
     }
 
 
-    Locale SAL_CALL OCommonAccessibleComponent::getLocale(  )
+    Locale SAL_CALL OAccessibleComponentHelper::getLocale()
     {
         // simply ask the parent
         Reference< XAccessible > xParent = getAccessibleParent();
@@ -204,7 +204,7 @@ namespace comphelper
     }
 
 
-    Reference< XAccessibleContext > OCommonAccessibleComponent::implGetParentContext()
+    Reference< XAccessibleContext > OAccessibleComponentHelper::implGetParentContext()
     {
         Reference< XAccessible > xParent = getAccessibleParent();
         Reference< XAccessibleContext > xParentContext;
@@ -214,7 +214,7 @@ namespace comphelper
     }
 
 
-    bool OCommonAccessibleComponent::containsPoint( const awt::Point& _rPoint )
+    sal_Bool SAL_CALL OAccessibleComponentHelper::containsPoint(const awt::Point& _rPoint)
     {
         OExternalLockGuard aGuard( this );
         awt::Rectangle aBounds( implGetBounds() );
@@ -225,7 +225,7 @@ namespace comphelper
     }
 
 
-    awt::Point OCommonAccessibleComponent::getLocation(  )
+    awt::Point SAL_CALL OAccessibleComponentHelper::getLocation()
     {
         OExternalLockGuard aGuard( this );
         awt::Rectangle aBounds( implGetBounds() );
@@ -233,14 +233,14 @@ namespace comphelper
     }
 
 
-    awt::Point OCommonAccessibleComponent::getLocationOnScreen(  )
+    awt::Point SAL_CALL OAccessibleComponentHelper::getLocationOnScreen()
     {
         OExternalLockGuard aGuard( this );
 
         awt::Point aScreenLoc( 0, 0 );
 
         Reference< XAccessibleComponent > xParentComponent( implGetParentContext(), UNO_QUERY );
-        OSL_ENSURE( xParentComponent.is(), "OCommonAccessibleComponent::getLocationOnScreen: no parent component!" );
+        OSL_ENSURE(xParentComponent.is(), "OAccessibleComponentHelper::getLocationOnScreen: no parent component!");
         if ( xParentComponent.is() )
         {
             awt::Point aParentScreenLoc( xParentComponent->getLocationOnScreen() );
@@ -253,7 +253,7 @@ namespace comphelper
     }
 
 
-    awt::Size OCommonAccessibleComponent::getSize(  )
+    awt::Size SAL_CALL OAccessibleComponentHelper::getSize()
     {
         OExternalLockGuard aGuard( this );
         awt::Rectangle aBounds( implGetBounds() );
@@ -261,44 +261,10 @@ namespace comphelper
     }
 
 
-    awt::Rectangle OCommonAccessibleComponent::getBounds(  )
+    awt::Rectangle SAL_CALL OAccessibleComponentHelper::getBounds()
     {
         OExternalLockGuard aGuard( this );
         return implGetBounds();
-    }
-
-    OAccessibleComponentHelper::OAccessibleComponentHelper( )
-    {
-    }
-
-
-    sal_Bool SAL_CALL OAccessibleComponentHelper::containsPoint( const awt::Point& _rPoint )
-    {
-        return OCommonAccessibleComponent::containsPoint( _rPoint );
-    }
-
-
-    awt::Point SAL_CALL OAccessibleComponentHelper::getLocation(  )
-    {
-        return OCommonAccessibleComponent::getLocation( );
-    }
-
-
-    awt::Point SAL_CALL OAccessibleComponentHelper::getLocationOnScreen(  )
-    {
-        return OCommonAccessibleComponent::getLocationOnScreen( );
-    }
-
-
-    awt::Size SAL_CALL OAccessibleComponentHelper::getSize(  )
-    {
-        return OCommonAccessibleComponent::getSize( );
-    }
-
-
-    awt::Rectangle SAL_CALL OAccessibleComponentHelper::getBounds(  )
-    {
-        return OCommonAccessibleComponent::getBounds( );
     }
 
     OUString SAL_CALL OAccessibleComponentHelper::getTitledBorderText()

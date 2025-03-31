@@ -51,7 +51,7 @@ private:
     virtual css::lang::Locale               implGetLocale() override;
     virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override;
 
-    // OCommonAccessibleComponent
+    // OAccessibleComponentHelper
     virtual css::awt::Rectangle implGetBounds() override;
 
     OUString getTextRangeImpl(sal_Int32 nStartIndex, sal_Int32 nEndIndex);

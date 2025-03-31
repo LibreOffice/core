@@ -222,7 +222,7 @@ void AccessibleDialogControlShape::FillAccessibleStateSet( sal_Int64& rStateSet 
     rStateSet |= AccessibleStateType::RESIZABLE;
 }
 
-// OCommonAccessibleComponent
+// OAccessibleComponentHelper
 awt::Rectangle AccessibleDialogControlShape::implGetBounds()
 {
     return GetBounds();

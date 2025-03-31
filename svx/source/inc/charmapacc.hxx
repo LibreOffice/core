@@ -76,7 +76,7 @@ namespace svx
         virtual void SAL_CALL grabFocus(  ) override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
 
-        //OCommonAccessibleComponent
+        //OAccessibleComponentHelper
         // XAccessibleContext - still waiting to be overwritten
         virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
@@ -136,7 +136,7 @@ namespace svx
         virtual void
             implSelect( sal_Int64 nAccessibleChildIndex, bool bSelect ) override;
 
-        // OCommonAccessibleComponent
+        // OAccessibleComponentHelper
         /// implements the calculation of the bounding rectangle - still waiting to be overwritten
         virtual css::awt::Rectangle implGetBounds(  ) override;
     };
@@ -156,7 +156,7 @@ namespace svx
 
         virtual ~SvxShowCharSetItemAcc() override;
 
-        // OCommonAccessibleComponent
+        // OAccessibleComponentHelper
         /// implements the calculation of the bounding rectangle - still waiting to be overwritten
         virtual css::awt::Rectangle implGetBounds(  ) override;
     public:
@@ -169,7 +169,7 @@ namespace svx
         virtual void SAL_CALL grabFocus(  ) override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
 
-        //OCommonAccessibleComponent
+        //OAccessibleComponentHelper
         // XAccessibleContext - still waiting to be overwritten
         virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;

@@ -300,7 +300,7 @@ namespace accessibility
     }
 
 
-    // OCommonAccessibleComponent
+    // OAccessibleComponentHelper
 
 
     awt::Rectangle AccessibleTabBarPageList::implGetBounds()

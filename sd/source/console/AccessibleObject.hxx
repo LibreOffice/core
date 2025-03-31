@@ -129,7 +129,7 @@ protected:
     css::uno::Reference<css::accessibility::XAccessible> mxParentAccessible;
     ::std::vector<rtl::Reference<AccessibleObject> > maChildren;
 
-    // OCommonAccessibleComponent
+    // OAccessibleComponentHelper
     virtual css::awt::Rectangle implGetBounds() override;
 
     virtual awt::Point GetRelativeLocation();

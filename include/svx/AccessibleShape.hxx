@@ -226,7 +226,7 @@ public:
     virtual sal_Int64 SAL_CALL
         getAccessibleIndexInParent() override;
 
-    // OCommonAccessibleComponent
+    // OAccessibleComponentHelper
     virtual css::awt::Rectangle implGetBounds() override;
 
     //=====  XAccessibleComponent  ============================================

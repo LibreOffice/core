@@ -64,7 +64,7 @@ public:
     void    Invalidate();
 
 private:
-    // OCommonAccessibleComponent
+    // OAccessibleComponentHelper
     /// implements the calculation of the bounding rectangle
     virtual css::awt::Rectangle implGetBounds(  ) override;
 
@@ -111,7 +111,7 @@ public:
     void    Invalidate();
 
 private:
-    // OCommonAccessibleComponent
+    // OAccessibleComponentHelper
     /// implements the calculation of the bounding rectangle
     virtual css::awt::Rectangle implGetBounds(  ) override;
 

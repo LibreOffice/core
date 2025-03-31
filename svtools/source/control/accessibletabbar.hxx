@@ -43,7 +43,7 @@ namespace accessibility
         virtual void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
         void            FillAccessibleStateSet( sal_Int64& rStateSet );
 
-        // OCommonAccessibleComponent
+        // OAccessibleComponentHelper
         virtual css::awt::Rectangle implGetBounds(  ) override;
 
         // XComponent

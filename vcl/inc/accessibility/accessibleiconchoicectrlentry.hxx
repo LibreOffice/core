@@ -70,7 +70,7 @@ class AccessibleIconChoiceCtrlEntry final : public AccessibleIconChoiceCtrlEntry
     */
     virtual void SAL_CALL                   disposing() override;
 
-    // OCommonAccessibleComponent
+    // OAccessibleComponentHelper
     virtual css::awt::Rectangle implGetBounds() override;
 
     // OCommonAccessibleText

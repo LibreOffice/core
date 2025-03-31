@@ -63,7 +63,7 @@ public:
     void UpdateChildren();
     static OUString getCellName( sal_Int32 nCol, sal_Int32 nRow );
 
-    // OCommonAccessibleComponent
+    // OAccessibleComponentHelper
     virtual css::awt::Rectangle implGetBounds() override;
 
     // XAccessibleComponent

@@ -73,7 +73,7 @@ public:
     virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int64 nIndex) override;
 
-    // OCommonAccessibleComponent
+    // OAccessibleComponentHelper
     virtual css::awt::Rectangle implGetBounds() override;
 
     //=====  XAccessibleComponent  ============================================
