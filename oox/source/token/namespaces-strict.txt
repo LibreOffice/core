@@ -48,6 +48,7 @@ ppt                     http://purl.oclc.org/ooxml/presentationml/main
 dml                     http://purl.oclc.org/ooxml/drawingml/main
 dsp                     http://schemas.microsoft.com/office/drawing/2008/diagram
 dmlChart                http://purl.oclc.org/ooxml/drawingml/chart
+dmlChartex              http://purl.oclc.org/ooxml/drawingml/chartex
 dmlChartDr              http://purl.oclc.org/ooxml/drawingml/chartDrawing
 dmlDiagram              http://purl.oclc.org/ooxml/drawingml/diagram
 dmlLockedCanvas         http://purl.oclc.org/ooxml/drawingml/lockedCanvas
@@ -96,6 +97,7 @@ xr16                    http://schemas.microsoft.com/office/spreadsheetml/2017/r
 # MSO 2014 extensions ---------------------------------------------------------
 
 cx                      http://schemas.microsoft.com/office/drawing/2014/chartex
+a16                     http://schemas.microsoft.com/office/drawing/2014/main
 
 # extlst namespaces
 
