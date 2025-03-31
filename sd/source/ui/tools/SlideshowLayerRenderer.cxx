@@ -764,7 +764,7 @@ void SlideshowLayerRenderer::createViewAndDraw(
     // in edit mode. TextEditDrawing was causing to have artifacts displayed while playing the slideshow such as
     // a tiny rectangle around the edited text shape.
     SdrPaintWindow* pPaintWindow = aView.BeginCompleteRedraw(rRenderContext.maVirtualDevice);
-    OSL_ENSURE(pPaintWindow, "SlideshowLayerRenderer::createViewAndDraw: No OutDev (!)");
+    assert(pPaintWindow && "SlideshowLayerRenderer::createViewAndDraw: No OutDev (!)");
     aView.DoCompleteRedraw(*pPaintWindow, aRegion, pRedirector);
     comphelper::LibreOfficeKit::setSlideshowRendering(false);
 }
