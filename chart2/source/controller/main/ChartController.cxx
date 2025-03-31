@@ -1531,11 +1531,11 @@ void ChartController::impl_invalidateAccessible()
     auto pChartWindow(GetChartWindow());
     if( pChartWindow )
     {
-        Reference< XInterface > xInit( pChartWindow->GetAccessible(false) );
-        if(xInit.is())
+        Reference<XAccessible> xAccessible = pChartWindow->GetAccessible(false);
+        if (xAccessible.is())
         {
             //empty arguments -> invalid accessible
-            dynamic_cast<AccessibleChartView&>(*xInit).initialize();
+            dynamic_cast<AccessibleChartView&>(*xAccessible).initialize();
         }
     }
 #endif
