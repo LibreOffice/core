@@ -1054,6 +1054,14 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testCellLeftAndRightMargin)
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(45720), nLeftMargin);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(45720), nRightMargin);
+
+    // tdf#165995: also export top/bottom margins, including zero margins (since default is not 0)
+    xCell.set(xTable->getCellByPosition(1, 0), uno::UNO_QUERY_THROW); // B1 - the synerzip cell
+    xCellPropSet.set(xCell, uno::UNO_QUERY_THROW);
+    sal_Int32 nBottomMargin(-1);
+    xCellPropSet->getPropertyValue(u"TextLowerDistance"_ustr) >>= nBottomMargin;
+    // Without the accompanying patch, this was 127 (0.127 cm), not zero
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nBottomMargin);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testMergedCells)
