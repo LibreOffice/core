@@ -63,7 +63,7 @@ AccessibleChartShape::AccessibleChartShape(
 
 AccessibleChartShape::~AccessibleChartShape()
 {
-    OSL_ASSERT( CheckDisposeState( false /* don't throw exceptions */ ) );
+    OSL_ASSERT(!isAlive());
 
     if ( m_pAccShape.is() )
     {

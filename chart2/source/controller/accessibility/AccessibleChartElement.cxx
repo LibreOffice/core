@@ -50,7 +50,7 @@ AccessibleChartElement::AccessibleChartElement(
 
 AccessibleChartElement::~AccessibleChartElement()
 {
-    OSL_ASSERT( CheckDisposeState( false /* don't throw exceptions */ ) );
+    OSL_ASSERT(!isAlive());
 }
 
 // ________ protected ________
@@ -141,7 +141,7 @@ OUString SAL_CALL AccessibleChartElement::getAccessibleDescription()
 
 OUString SAL_CALL AccessibleChartElement::getToolTipText()
 {
-    CheckDisposeState();
+    ensureAlive();
 
     return ObjectNameProvider::getHelpText(
         GetInfo().m_aOID.getObjectCID(), GetInfo().m_xChartDocument );

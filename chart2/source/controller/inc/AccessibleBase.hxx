@@ -93,14 +93,6 @@ protected:
     // for all calls to protected methods it is assumed that the mutex is locked
     // unless calls outside via UNO, e.g. event notification, are done
 
-    /** @param bThrowException if true, a DisposedException is thrown if the
-               object is already disposed
-        @return true, if the component is already disposed and bThrowException is false,
-                false otherwise
-        @throws css::lang::DisposedException
-     */
-    bool             CheckDisposeState( bool bThrowException = true ) const;
-
     /** Events coming from the core have to be processed in this methods.  The
         default implementation returns false, which indicates that the object is
         not interested in the event.  To react on events you have to implement
@@ -256,7 +248,6 @@ private:
      */
     typedef std::map<ObjectIdentifier, rtl::Reference<AccessibleBase>> ChildOIDMap;
 
-    bool                                  m_bIsDisposed;
     const bool                            m_bMayHaveChildren;
     bool                                  m_bChildrenInitialized;
     std::vector<rtl::Reference<AccessibleBase>> m_aChildList;

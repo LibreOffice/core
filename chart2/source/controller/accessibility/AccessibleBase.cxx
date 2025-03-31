@@ -66,7 +66,6 @@ AccessibleBase::AccessibleBase(
     AccessibleElementInfo aAccInfo,
     bool bMayHaveChildren,
     bool bAlwaysTransparent /* default: false */ ) :
-        m_bIsDisposed( false ),
         m_bMayHaveChildren( bMayHaveChildren ),
         m_bChildrenInitialized( false ),
         m_nStateSet( 0 ),
@@ -84,18 +83,7 @@ AccessibleBase::AccessibleBase(
 
 AccessibleBase::~AccessibleBase()
 {
-    OSL_ASSERT( m_bIsDisposed );
-}
-
-bool AccessibleBase::CheckDisposeState( bool bThrowException /* default: true */ ) const
-{
-    if( bThrowException &&
-        m_bIsDisposed )
-    {
-        throw lang::DisposedException(u"component has state DEFUNC"_ustr,
-            static_cast< uno::XWeak * >( const_cast< AccessibleBase * >( this )));
-    }
-    return m_bIsDisposed;
+    OSL_ASSERT(!isAlive());
 }
 
 bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId & rId )
@@ -159,13 +147,13 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
 
 void AccessibleBase::AddState( sal_Int64 aState )
 {
-    CheckDisposeState();
+    ensureAlive();
     m_nStateSet |= aState;
 }
 
 void AccessibleBase::RemoveState( sal_Int64 aState )
 {
-    CheckDisposeState();
+    ensureAlive();
     m_nStateSet &= ~aState;
 }
 
@@ -174,8 +162,7 @@ bool AccessibleBase::UpdateChildren()
     bool bMustUpdateChildren = false;
     {
         MutexGuard aGuard( m_aMutex );
-        if( ! m_bMayHaveChildren ||
-            m_bIsDisposed )
+        if (!m_bMayHaveChildren || !isAlive())
             return false;
 
         bMustUpdateChildren = ( m_bMayHaveChildren &&
@@ -363,7 +350,7 @@ void SAL_CALL AccessibleBase::disposing()
 {
     {
         MutexGuard aGuard(m_aMutex);
-        OSL_ENSURE(!m_bIsDisposed, "dispose() called twice");
+        OSL_ENSURE(isAlive(), "dispose() called twice");
 
         OAccessibleExtendedComponentHelper::disposing();
 
@@ -372,8 +359,6 @@ void SAL_CALL AccessibleBase::disposing()
         m_aAccInfo.m_pParent = nullptr;
 
         m_nStateSet = AccessibleStateType::DEFUNC;
-
-        m_bIsDisposed = true;
 
     }
     // call listeners unguarded
@@ -396,8 +381,7 @@ Reference< XAccessibleContext > SAL_CALL AccessibleBase::getAccessibleContext()
 sal_Int64 SAL_CALL AccessibleBase::getAccessibleChildCount()
 {
     ClearableMutexGuard aGuard( m_aMutex );
-    if( ! m_bMayHaveChildren ||
-        m_bIsDisposed )
+    if (!m_bMayHaveChildren || !isAlive())
         return 0;
 
     bool bMustUpdateChildren = ( m_bMayHaveChildren &&
@@ -419,7 +403,7 @@ sal_Int64 AccessibleBase::ImplGetAccessibleChildCount() const
 
 Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleChild( sal_Int64 i )
 {
-    CheckDisposeState();
+    ensureAlive();
     Reference< XAccessible > xResult;
 
     ClearableMutexGuard aGuard( m_aMutex );
@@ -461,7 +445,7 @@ Reference< XAccessible > AccessibleBase::ImplGetAccessibleChildById( sal_Int64 i
 
 Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleParent()
 {
-    CheckDisposeState();
+    ensureAlive();
     Reference< XAccessible > aResult;
     if( m_aAccInfo.m_pParent )
         aResult.set( m_aAccInfo.m_pParent );
@@ -471,7 +455,7 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleParent()
 
 sal_Int64 SAL_CALL AccessibleBase::getAccessibleIndexInParent()
 {
-    CheckDisposeState();
+    ensureAlive();
 
     if( m_aAccInfo.m_spObjectHierarchy )
         return m_aAccInfo.m_spObjectHierarchy->getIndexInParent( GetId() );
@@ -511,7 +495,7 @@ sal_Int64 SAL_CALL AccessibleBase::getAccessibleStateSet()
 
 lang::Locale SAL_CALL AccessibleBase::getLocale()
 {
-    CheckDisposeState();
+    ensureAlive();
 
     return Application::GetSettings().GetLanguageTag().getLocale();
 }
@@ -520,7 +504,7 @@ lang::Locale SAL_CALL AccessibleBase::getLocale()
 
 Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleAtPoint( const awt::Point& aPoint )
 {
-    CheckDisposeState();
+    ensureAlive();
     rtl::Reference< AccessibleBase > aResult;
     awt::Rectangle aRect( implGetBounds());
 
@@ -590,7 +574,7 @@ css::awt::Rectangle AccessibleBase::implGetBounds()
 
 void SAL_CALL AccessibleBase::grabFocus()
 {
-    CheckDisposeState();
+    ensureAlive();
 
     rtl::Reference< ::chart::ChartController > xSelSupp( GetInfo().m_xChartController );
     if ( xSelSupp.is() )
