@@ -41,6 +41,7 @@ $(eval $(call gb_JunitTest_add_sourcefiles,dbaccess_complex,\
     dbaccess/qa/complex/dbaccess/QueryInQuery \
     dbaccess/qa/complex/dbaccess/RowSet \
     dbaccess/qa/complex/dbaccess/RowSetEventListener \
+    dbaccess/qa/complex/dbaccess/SingleSelectQueryComposer \
     dbaccess/qa/complex/dbaccess/TestCase \
     dbaccess/qa/complex/dbaccess/UISettings \
 ))

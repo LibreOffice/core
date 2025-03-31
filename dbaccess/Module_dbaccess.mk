@@ -59,7 +59,6 @@ $(eval $(call gb_Module_add_check_targets,dbaccess,\
     CppunitTest_dbaccess_hsqldb_test \
     CppunitTest_dbaccess_RowSetClones \
     CppunitTest_dbaccess_CRMDatabase_test \
-    CppunitTest_dbaccess_SingleSelectQueryComposer_test \
 ))
 endif
 
