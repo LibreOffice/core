@@ -293,15 +293,11 @@ void AccessibleChartView::initialize()
     rtl::Reference< ::chart::ChartController > xChartController;
     rtl::Reference<::chart::ChartModel> xChartModel;
     rtl::Reference<::chart::ChartView> xChartView;
-    Reference< XAccessible > xParent;
-    Reference< awt::XWindow > xWindow;
     {
         MutexGuard aGuard( m_aMutex);
         xChartController = m_xChartController;
         xChartModel = m_xChartModel;
         xChartView = m_xChartView;
-        xParent.set( m_xParent );
-        xWindow.set( m_xWindow );
     }
 
     if( !xChartController.is() || !xChartModel.is() || !xChartView.is() )
@@ -328,16 +324,13 @@ void AccessibleChartView::initialize()
         xChartController = nullptr;
     }
 
-    xParent.clear();
-    xWindow.clear();
-
     {
         MutexGuard aGuard( m_aMutex);
         m_xChartController = xChartController.get();
         m_xChartModel = xChartModel.get();
         m_xChartView = xChartView.get();
-        m_xParent = WeakReference< XAccessible >(xParent);
-        m_xWindow = WeakReference< awt::XWindow >(xWindow);
+        m_xParent.clear();
+        m_xWindow.clear();
     }
 
     if( bOldInvalid )
