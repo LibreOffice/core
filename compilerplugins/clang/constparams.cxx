@@ -63,6 +63,27 @@ public:
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/registry/source/regkey.cxx")
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/cppu/source/uno/lbenv.cxx")
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/cppuhelper/source/implbase_ex.cxx")
+            // legacy code, don't care
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/registry/")
+            // false+
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/cppuhelper/source/compbase.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/comphelper/source/misc/compbase.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/unotools/source/misc/fontcvt.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/gdi/pdfwriter_impl2.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/treelist/treelist.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/unx/gtk3/gloactiongroup.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/unx/gtk3/customcellrenderer.cxx")
+            // the constructor should not take a const& because it indicates that we are going to modify this Bitmap
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/bitmap/BitmapWriteAccess.cxx")
+            // false+ because of #if
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/image/ImplImage.cxx")
+            // false+
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/ucb/source/ucp/gio/gio_mount.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/ucb/source/ucp/webdav-curl/CurlUri.cxx")
+            // false+ macro
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/unx/gtk3/glomenu.cxx")
+            // false+, called via function pointer
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/sd/source/ui/slidesorter/shell/SlideSorterViewShell.cxx")
             )
             return;
 
@@ -91,6 +112,7 @@ public:
                     pOther->getBeginLoc())
                     << pOther->getSourceRange();
             }
+            //pParmVarDecl->getType().getDesugaredType(compiler.getASTContext()).dump();
             //functionDecl->dump();
         }
     }
@@ -172,14 +194,16 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
         || compiler.getSourceManager().isMacroArgExpansion(canonicalDecl->getBeginLoc())) {
         StringRef name { Lexer::getImmediateMacroName(
                 canonicalDecl->getBeginLoc(), compiler.getSourceManager(), compiler.getLangOpts()) };
-        if (name.startswith("DECL_LINK") || name.startswith("DECL_STATIC_LINK"))
+        if (compat::starts_with(name, "DECL_LINK") || compat::starts_with(name, "DECL_STATIC_LINK")
+            || compat::starts_with(name, "DECL_DLLPRIVATE_STATIC_LINK") )
             return false;
         auto loc2 = compat::getImmediateExpansionRange(compiler.getSourceManager(), canonicalDecl->getBeginLoc()).first;
         if (compiler.getSourceManager().isMacroBodyExpansion(loc2))
         {
             StringRef name2 { Lexer::getImmediateMacroName(
                     loc2, compiler.getSourceManager(), compiler.getLangOpts()) };
-            if (name2.startswith("DECL_DLLPRIVATE_LINK"))
+            if (compat::starts_with(name2, "DECL_DLLPRIVATE_LINK")
+                || compat::starts_with(name2, "DECL_DLLPRIVATE_STATIC_LINK") )
                 return false;
         }
     }
@@ -189,13 +213,13 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
         StringRef name = functionDecl->getName();
         if (   name == "file_write"
             || name == "SalMainPipeExchangeSignal_impl"
-            || name.startswith("SbRtl_")
+            || compat::starts_with(name, "SbRtl_")
             || name == "GoNext"
             || name == "GoPrevious"
-            || name.startswith("Read_F_")
+            || compat::starts_with(name, "Read_F_")
                 // UNO component entry points
-            || name.endswith("component_getFactory")
-            || name.endswith("_get_implementation")
+            || compat::ends_with(name, "component_getFactory")
+            || compat::ends_with(name, "_get_implementation")
             // callback for some external code?
             || name == "ScAddInAsyncCallBack"
             // used as function pointers
@@ -216,7 +240,10 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
     std::string fqn = functionDecl->getQualifiedNameAsString();
     if ( fqn == "connectivity::jdbc::GlobalRef::set"
       || fqn == "(anonymous namespace)::ReorderNotifier::operator()"
-      || fqn == "static_txtattr_cast")
+      || fqn == "static_txtattr_cast"
+      || fqn == "ScFormatShell::ExecuteStyle"
+      || fqn == "SwContentIndexReg::MoveTo"
+      || fqn == "svt::OGenericUnoAsyncDialog::UnoAsyncDialogEntryGuard::UnoAsyncDialogEntryGuard")
         return false;
 
     // calculate the ones we want to check
@@ -227,8 +254,7 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
             || pParmVarDecl->hasAttr<UnusedAttr>())
             continue;
         auto const type = loplugin::TypeCheck(pParmVarDecl->getType());
-        if (!( type.Pointer().NonConst()
-             || type.LvalueReference().NonConst()))
+        if (!isPointerOrReferenceToNonConst(pParmVarDecl->getType()))
             continue;
         // since we normally can't change typedefs, just ignore them
         if (isa<TypedefType>(pParmVarDecl->getType()))
@@ -602,6 +628,9 @@ bool ConstParams::isOkForParameter(const QualType& qt) {
 }
 
 bool ConstParams::isPointerOrReferenceToNonConst(const QualType& qt) {
+    // cannot do anything useful with typedefs
+    if (qt->isTypedefNameType())
+        return false;
     auto const type = loplugin::TypeCheck(qt);
     if (type.Pointer()) {
         return !bool(type.Pointer().Const());
