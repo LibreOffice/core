@@ -665,19 +665,19 @@ SfxPoolItem* XLineDashItem::CreateDefault() {return new XLineDashItem;}
 
 XLineDashItem::XLineDashItem(const OUString& rName, const XDash& rTheDash) :
     NameOrIndex(XATTR_LINEDASH, rName),
-    aDash(rTheDash)
+    m_aDash(rTheDash)
 {
 }
 
 XLineDashItem::XLineDashItem(const XLineDashItem& rItem) :
     NameOrIndex(rItem),
-    aDash(rItem.aDash)
+    m_aDash(rItem.m_aDash)
 {
 }
 
 XLineDashItem::XLineDashItem(const XDash& rTheDash)
 :   NameOrIndex( XATTR_LINEDASH, -1 ),
-    aDash(rTheDash)
+    m_aDash(rTheDash)
 {
 }
 
@@ -689,7 +689,7 @@ XLineDashItem* XLineDashItem::Clone(SfxItemPool* /*pPool*/) const
 bool XLineDashItem::operator==(const SfxPoolItem& rItem) const
 {
     return ( NameOrIndex::operator==(rItem) &&
-             aDash == static_cast<const XLineDashItem&>(rItem).aDash );
+             m_aDash == static_cast<const XLineDashItem&>(rItem).m_aDash );
 }
 
 bool XLineDashItem::GetPresentation
@@ -711,9 +711,9 @@ bool XLineDashItem::HasMetrics() const
 
 void XLineDashItem::ScaleMetrics(tools::Long nMul, tools::Long nDiv)
 {
-    aDash.SetDotLen( BigInt::Scale( aDash.GetDotLen(), nMul, nDiv ) );
-    aDash.SetDashLen( BigInt::Scale( aDash.GetDashLen(), nMul, nDiv ) );
-    aDash.SetDistance( BigInt::Scale( aDash.GetDistance(), nMul, nDiv ) );
+    m_aDash.SetDotLen( BigInt::Scale( m_aDash.GetDotLen(), nMul, nDiv ) );
+    m_aDash.SetDashLen( BigInt::Scale( m_aDash.GetDashLen(), nMul, nDiv ) );
+    m_aDash.SetDistance( BigInt::Scale( m_aDash.GetDistance(), nMul, nDiv ) );
 }
 
 bool XLineDashItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -972,7 +972,7 @@ std::unique_ptr<XLineDashItem> XLineDashItem::checkForUniqueItem( SdrModel& rMod
 
     // if the given name is not valid, replace it!
     if( aUniqueName != GetName() )
-        return std::make_unique<XLineDashItem>( aUniqueName, aDash );
+        return std::make_unique<XLineDashItem>( aUniqueName, m_aDash );
 
     return nullptr;
 }
