@@ -24,7 +24,6 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -79,8 +78,7 @@ typedef ::cppu::WeakComponentImplHelper<
         css::accessibility::XAccessibleContext,
         css::accessibility::XAccessibleComponent,
         css::accessibility::XAccessibleEventBroadcaster,
-        css::lang::XServiceInfo,
-        css::lang::XEventListener
+        css::lang::XServiceInfo
         > AccessibleBase_Base;
 }
 
@@ -261,10 +259,6 @@ protected:
     virtual sal_Bool SAL_CALL supportsService(
         const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    // ________ XEventListener ________
-    virtual void SAL_CALL disposing(
-        const css::lang::EventObject& Source ) override;
 
     // ________ XAccessibleEventBroadcaster ________
     virtual void SAL_CALL addAccessibleEventListener(

@@ -787,11 +787,6 @@ uno::Sequence< OUString > SAL_CALL AccessibleBase::getSupportedServiceNames()
     };
 }
 
-// ________ AccessibleBase::XEventListener ________
-void SAL_CALL AccessibleBase::disposing( const lang::EventObject& /*Source*/ )
-{
-}
-
 // ________ XAccessibleEventBroadcasters ________
 void SAL_CALL AccessibleBase::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
 {
