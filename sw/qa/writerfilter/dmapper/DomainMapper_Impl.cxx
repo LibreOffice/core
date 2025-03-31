@@ -144,6 +144,22 @@ CPPUNIT_TEST_FIXTURE(Test, testAltChunk)
     CPPUNIT_ASSERT_EQUAL(u"inner doc, first para"_ustr, xPara->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testAltChunkHtml)
+{
+    loadFromFile(u"alt-chunk-html.docx");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xPara;
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"outer para 1"_ustr, xPara->getString());
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"HTML AltChunk"_ustr, xPara->getString());
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"outer para 2"_ustr, xPara->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFieldIfInsideIf)
 {
     // Load a document with a field in a table cell: it contains an IF field with various nested

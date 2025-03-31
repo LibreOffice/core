@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/i18n/NumberFormatMapper.hpp>
@@ -103,6 +104,7 @@
 #include <tools/UnitConversion.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/string.hxx>
 
@@ -5302,17 +5304,6 @@ void DomainMapper_Impl::HandleAltChunk(const OUString& rStreamName)
 {
     try
     {
-        // Create the import filter.
-        uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(
-            comphelper::getProcessServiceFactory());
-        uno::Reference<uno::XInterface> xDocxFilter
-            = xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.WriterFilter"_ustr);
-
-        // Set the target document.
-        uno::Reference<document::XImporter> xImporter(xDocxFilter, uno::UNO_QUERY);
-        xImporter->setTargetDocument(static_cast<SfxBaseModel*>(m_xTextDocument.get()));
-
-        // Set the import parameters.
         uno::Reference<embed::XHierarchicalStorageAccess> xStorageAccess(m_xDocumentStorage,
                                                                          uno::UNO_QUERY);
         if (!xStorageAccess.is())
@@ -5342,9 +5333,32 @@ void DomainMapper_Impl::HandleAltChunk(const OUString& rStreamName)
             { "AltChunkStartingRange", uno::Any(xSectionStartingRange) },
         }));
 
+        uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(
+            comphelper::getProcessServiceFactory());
+        // Detecting AltChunk type to handle with the appropriate filter
+        uno::Reference<document::XTypeDetection> xTypeDetection(
+            xMultiServiceFactory->createInstance(u"com.sun.star.document.TypeDetection"_ustr), uno::UNO_QUERY);
+        xTypeDetection->queryTypeByDescriptor(aDescriptor, /*bAllowDeepDetection*/true);
+        OUString sFilterName = comphelper::SequenceAsHashMap(aDescriptor).getUnpackedValueOrDefault(u"FilterName"_ustr, OUString());
+
+        uno::Reference<lang::XMultiServiceFactory> xFilters(xMultiServiceFactory->createInstance(u"com.sun.star.document.FilterFactory"_ustr), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XFilter> xFilter(xFilters->createInstance(sFilterName), uno::UNO_QUERY);
+
         // Do the actual import.
-        uno::Reference<document::XFilter> xFilter(xDocxFilter, uno::UNO_QUERY);
-        xFilter->filter(aDescriptor);
+        if (xFilter)
+        {
+            // Set the target document
+            uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY);
+            xImporter->setTargetDocument(static_cast<SfxBaseModel*>(m_xTextDocument.get()));
+            xFilter->filter(aDescriptor);
+        }
+        else
+        {
+            // In case no xFilter found, will try insertDocumentFromURL (this is needed for HTML altchunks)
+            uno::Reference<text::XTextCursor> xCursor(GetCurrentXText()->createTextCursorByRange(xInsertTextRange));
+            uno::Reference<document::XDocumentInsertable> xDocInsert(xCursor, uno::UNO_QUERY);
+            xDocInsert->insertDocumentFromURL(u"private:stream"_ustr, aDescriptor);
+        }
     }
     catch (const uno::Exception& rException)
     {
