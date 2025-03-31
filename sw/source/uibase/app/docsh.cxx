@@ -1122,6 +1122,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         break;
         case FN_REDLINE_ACCEPT_ALL:
         case FN_REDLINE_REJECT_ALL:
+        case FN_REDLINE_REINSTATE_ALL:
         {
             if (GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().empty() ||
                 HasChangeRecordProtection()) // tdf#128229 Disable Accept / Reject all if redlines are password protected

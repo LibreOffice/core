@@ -1297,6 +1297,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
         break;
         case FN_REDLINE_ACCEPT_ALL:
         case FN_REDLINE_REJECT_ALL:
+        case FN_REDLINE_REINSTATE_ALL:
         {
             IDocumentRedlineAccess& rRedlineAccess = GetDoc()->getIDocumentRedlineAccess();
             SwWrtShell *pWrtShell = dynamic_cast<SwWrtShell*>(GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell());
@@ -1344,7 +1345,15 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 pWrtShell->StartAllAction();
             }
 
-            rRedlineAccess.AcceptAllRedline(nWhich == FN_REDLINE_ACCEPT_ALL);
+            if (nWhich == FN_REDLINE_REINSTATE_ALL)
+            {
+                pWrtShell->SelAll();
+                pWrtShell->ReinstateRedlinesInSelection();
+            }
+            else
+            {
+                rRedlineAccess.AcceptAllRedline(nWhich == FN_REDLINE_ACCEPT_ALL);
+            }
 
             if (pWrtShell)
             {

@@ -71,6 +71,11 @@ interface TextDocument : BaseTextDocument
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
+    FN_REDLINE_REINSTATE_ALL
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
 }
 
 shell SwDocShell
