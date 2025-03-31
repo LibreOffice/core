@@ -8064,6 +8064,24 @@ SfxVoidItem RejectAllTrackedChanges FN_REDLINE_REJECT_ALL
     GroupId = SfxGroupId::Edit;
 ]
 
+SfxVoidItem ReinstateAllTrackedChanges FN_REDLINE_REINSTATE_ALL
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Edit;
+]
+
 SfxVoidItem NextTrackedChange FN_REDLINE_NEXT_CHANGE
 ( SfxUInt32Item NextTrackedChange FN_REDLINE_NEXT_CHANGE )
 [
