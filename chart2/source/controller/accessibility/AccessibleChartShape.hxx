@@ -20,7 +20,6 @@
 
 #include <AccessibleBase.hxx>
 
-#include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <svx/AccessibleShapeTreeInfo.hxx>
 
@@ -32,15 +31,7 @@ class AccessibleShape;
 namespace chart
 {
 
-namespace impl
-{
-typedef ::cppu::ImplInheritanceHelper<
-    AccessibleBase,
-    css::accessibility::XAccessibleExtendedComponent > AccessibleChartShape_Base;
-}
-
-class AccessibleChartShape :
-    public impl::AccessibleChartShape_Base
+class AccessibleChartShape : public AccessibleBase
 {
 public:
     explicit AccessibleChartShape( const AccessibleElementInfo& rAccInfo );
@@ -64,7 +55,6 @@ public:
     virtual css::awt::Point SAL_CALL getLocation() override;
     virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
     virtual css::awt::Size SAL_CALL getSize() override;
-    virtual void SAL_CALL grabFocus() override;
     virtual sal_Int32 SAL_CALL getForeground() override;
     virtual sal_Int32 SAL_CALL getBackground() override;
 

@@ -42,7 +42,7 @@ namespace chart
 AccessibleChartElement::AccessibleChartElement(
     const AccessibleElementInfo & rAccInfo,
     bool bMayHaveChildren ) :
-        impl::AccessibleChartElement_Base( rAccInfo, bMayHaveChildren, false/*bAlwaysTransparent*/ ),
+        AccessibleBase(rAccInfo, bMayHaveChildren, false/*bAlwaysTransparent*/),
         m_bHasText( false )
 {
     AddState( AccessibleStateType::TRANSIENT );
@@ -139,63 +139,12 @@ OUString SAL_CALL AccessibleChartElement::getAccessibleDescription()
 
 // ________ AccessibleChartElement::XAccessibleExtendedComponent ________
 
-OUString SAL_CALL AccessibleChartElement::getTitledBorderText()
-{
-    return OUString();
-}
-
 OUString SAL_CALL AccessibleChartElement::getToolTipText()
 {
     CheckDisposeState();
 
     return ObjectNameProvider::getHelpText(
         GetInfo().m_aOID.getObjectCID(), GetInfo().m_xChartDocument );
-}
-
-// ________ XAccessibleComponent ________
-sal_Bool SAL_CALL AccessibleChartElement::containsPoint( const awt::Point& aPoint )
-{
-    return AccessibleBase::containsPoint( aPoint );
-}
-
-Reference< XAccessible > SAL_CALL AccessibleChartElement::getAccessibleAtPoint( const awt::Point& aPoint )
-{
-    return AccessibleBase::getAccessibleAtPoint( aPoint );
-}
-
-awt::Rectangle SAL_CALL AccessibleChartElement::getBounds()
-{
-    return AccessibleBase::getBounds();
-}
-
-awt::Point SAL_CALL AccessibleChartElement::getLocation()
-{
-    return AccessibleBase::getLocation();
-}
-
-awt::Point SAL_CALL AccessibleChartElement::getLocationOnScreen()
-{
-    return AccessibleBase::getLocationOnScreen();
-}
-
-awt::Size SAL_CALL AccessibleChartElement::getSize()
-{
-    return AccessibleBase::getSize();
-}
-
-void SAL_CALL AccessibleChartElement::grabFocus()
-{
-    return AccessibleBase::grabFocus();
-}
-
-sal_Int32 SAL_CALL AccessibleChartElement::getForeground()
-{
-    return AccessibleBase::getForeground();
-}
-
-sal_Int32 SAL_CALL AccessibleChartElement::getBackground()
-{
-    return AccessibleBase::getBackground();
 }
 
 } // namespace chart

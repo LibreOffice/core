@@ -19,7 +19,6 @@
 #pragma once
 
 #include <AccessibleBase.hxx>
-#include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 
 namespace com::sun::star::accessibility { class XAccessible; }
 
@@ -41,16 +40,7 @@ class AccessibleTextHelper;
     </ul>
  */
 
-namespace impl
-{
-typedef ::cppu::ImplInheritanceHelper<
-        AccessibleBase,
-        css::accessibility::XAccessibleExtendedComponent
-        > AccessibleChartElement_Base;
-}
-
-class AccessibleChartElement :
-    public impl::AccessibleChartElement_Base
+class AccessibleChartElement : public AccessibleBase
 {
 public:
     AccessibleChartElement( const AccessibleElementInfo & rAccInfo,
@@ -68,23 +58,7 @@ public:
     virtual OUString SAL_CALL getAccessibleDescription() override;
 
     // ________ XAccessibleExtendedComponent ________
-    virtual OUString SAL_CALL getTitledBorderText() override;
     virtual OUString SAL_CALL getToolTipText() override;
-
-    // the following interface is implemented in AccessibleBase, however it is
-    // also a (non-virtual) base class of XAccessibleExtendedComponent Thus
-    // these methods have to be overridden and forward to AccessibleBase
-
-    // ________ XAccessibleComponent ________
-    virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-    virtual css::awt::Rectangle SAL_CALL getBounds() override;
-    virtual css::awt::Point SAL_CALL getLocation() override;
-    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
-    virtual css::awt::Size SAL_CALL getSize() override;
-    virtual void SAL_CALL grabFocus() override;
-    virtual sal_Int32 SAL_CALL getForeground() override;
-    virtual sal_Int32 SAL_CALL getBackground() override;
 
     // ________ XServiceInfo ________
     virtual OUString SAL_CALL getImplementationName() override;

@@ -35,7 +35,7 @@ namespace chart
 
 AccessibleChartShape::AccessibleChartShape(
         const AccessibleElementInfo& rAccInfo )
-    :impl::AccessibleChartShape_Base( rAccInfo, true/*bMayHaveChildren*/, false/*bAlwaysTransparent*/ )
+    :AccessibleBase(rAccInfo, true/*bMayHaveChildren*/, false/*bAlwaysTransparent*/)
 {
     if ( !rAccInfo.m_aOID.isAdditionalShape() )
         return;
@@ -187,11 +187,6 @@ awt::Size AccessibleChartShape::getSize()
         aSize = m_pAccShape->getSize();
     }
     return aSize;
-}
-
-void AccessibleChartShape::grabFocus()
-{
-    return AccessibleBase::grabFocus();
 }
 
 sal_Int32 AccessibleChartShape::getForeground()

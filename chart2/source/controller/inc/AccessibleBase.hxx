@@ -25,6 +25,7 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -77,8 +78,8 @@ namespace impl
 typedef ::cppu::WeakComponentImplHelper<
         css::accessibility::XAccessible,
         css::accessibility::XAccessibleContext,
-        css::accessibility::XAccessibleComponent,
         css::accessibility::XAccessibleEventBroadcaster,
+        css::accessibility::XAccessibleExtendedComponent,
         css::lang::XServiceInfo
         > AccessibleBase_Base;
 }
@@ -246,7 +247,6 @@ protected:
         const css::awt::Point& aPoint ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
         getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-    // has to be defined in derived classes
     virtual css::awt::Rectangle SAL_CALL getBounds() override;
     virtual css::awt::Point SAL_CALL getLocation() override;
     virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
@@ -254,6 +254,10 @@ protected:
     virtual void SAL_CALL grabFocus() override;
     virtual sal_Int32 SAL_CALL getForeground() override;
     virtual sal_Int32 SAL_CALL getBackground() override;
+
+    // XAccessibleExtendedComponent
+    virtual OUString SAL_CALL getTitledBorderText() override;
+    virtual OUString SAL_CALL getToolTipText() override;
 
     // ________ XServiceInfo ________
     virtual OUString SAL_CALL getImplementationName() override;
