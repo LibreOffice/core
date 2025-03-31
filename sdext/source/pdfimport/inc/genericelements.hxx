@@ -317,7 +317,7 @@ namespace pdfi
         { return std::make_shared<DocumentElement>(); }
     };
 
-    bool isComplex(const css::uno::Reference<css::i18n::XBreakIterator>& rBreakIterator, TextElement* const pTextElem);
+    bool isComplex(const css::uno::Reference<css::i18n::XBreakIterator>& rBreakIterator, const TextElement* pTextElem);
 }
 
 #endif

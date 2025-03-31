@@ -490,7 +490,7 @@ public:
      */
     void updateInsertedPages(PageInsertionParams& rParams,
         const InsertBookmarkOptions& rOptions,
-        DocumentPageCounts& rPageCounts,
+        const DocumentPageCounts& rPageCounts,
         StyleTransferContext& rStyleContext);
 
     /**

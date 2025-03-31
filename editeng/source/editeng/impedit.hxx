@@ -652,7 +652,7 @@ private:
     void                ParaAttribsChanged( ContentNode const * pNode, bool bIgnoreUndoCheck = false );
     void                TextModified();
     void                CalcHeight(ParaPortion& rParaPortion, bool bIsScaling = false);
-    bool isInEmptyClusterAtTheEnd(ParaPortion& rParaPortion, bool bIsScaling);
+    bool isInEmptyClusterAtTheEnd(const ParaPortion& rParaPortion, bool bIsScaling);
 
     void                InsertUndo( std::unique_ptr<EditUndo> pUndo, bool bTryMerge = false );
     void                ResetUndoManager();
@@ -769,9 +769,9 @@ private:
     void                WriteXML(SvStream& rOutput, const EditSelection& rSel);
 
     void                WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput, sal_Int32 nPara, sal_Int32 nPos,
-                            std::vector<std::unique_ptr<SvxFontItem>>& rFontTable, SvxColorList& rColorList );
+                            const std::vector<std::unique_ptr<SvxFontItem>>& rFontTable, SvxColorList& rColorList );
     bool                WriteItemListAsRTF( ItemList& rLst, SvStream& rOutput, sal_Int32 nPara, sal_Int32 nPos,
-                            std::vector<std::unique_ptr<SvxFontItem>>& rFontTable, SvxColorList& rColorList );
+                            const std::vector<std::unique_ptr<SvxFontItem>>& rFontTable, SvxColorList& rColorList );
     sal_Int32           LogicToTwips( sal_Int32 n );
 
     double scaleXSpacingValue(tools::Long nXValue) const

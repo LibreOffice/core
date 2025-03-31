@@ -817,7 +817,7 @@ void SdDrawDocument::removeDuplicateMasterPages(PageInsertionParams& rParams,
 
 void SdDrawDocument::updateInsertedPages(PageInsertionParams& rParams,
                                          const InsertBookmarkOptions& rOptions,
-                                         DocumentPageCounts& rPageCounts,
+                                         const DocumentPageCounts& rPageCounts,
                                          StyleTransferContext& rStyleContext)
 {
     // Update page names (from pExchangeList), layouts, scaling, etc.

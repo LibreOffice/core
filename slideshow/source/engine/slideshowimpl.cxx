@@ -1430,7 +1430,7 @@ lcl_createPointSequenceSequenceFromB2DPolygon(const basegfx::B2DPolygon& rPoly)
 
 void lcl_setPropertiesToShape(const drawing::PointSequenceSequence& rPoints,
                               const cppcanvas::PolyPolygonSharedPtr pCanvasPolyPoly,
-                              uno::Reference< drawing::XShape >& rPolyShape)
+                              const uno::Reference< drawing::XShape >& rPolyShape)
 {
     uno::Reference< beans::XPropertySet > aXPropSet(rPolyShape, uno::UNO_QUERY);
     //Give the built PointSequenceSequence.

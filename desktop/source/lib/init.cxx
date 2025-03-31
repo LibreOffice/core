@@ -4343,7 +4343,7 @@ inline static void enableViewCallbacks(LibLODocument_Impl* pDocument, const int 
         handlerIt->second->enableCallbacks();
 }
 
-inline static int getAlternativeViewForPaint(LibreOfficeKitDocument* pThis, ITiledRenderable* pDoc, SfxViewShell* pCurrentViewShell,
+inline static int getAlternativeViewForPaint(LibreOfficeKitDocument* pThis, ITiledRenderable* pDoc, const SfxViewShell* pCurrentViewShell,
     const std::string_view &sCurrentViewRenderState, const int nPart, const int nMode)
 {
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
@@ -5291,7 +5291,7 @@ void LibLibreOffice_Impl::dumpState(rtl::OStringBuffer &rState)
 }
 
 // We have special handling for some uno commands and it seems we need to check for readonly state.
-static bool isCommandAllowed(OUString& command) {
+static bool isCommandAllowed(std::u16string_view command) {
     static constexpr OUString nonAllowedList[] = { u".uno:Save"_ustr, u".uno:TransformDialog"_ustr, u".uno:SidebarShow"_ustr, u".uno:SidebarHide"_ustr };
 
     if (!SfxViewShell::IsCurrentLokViewReadOnly())
@@ -5299,7 +5299,7 @@ static bool isCommandAllowed(OUString& command) {
     else
     {
         SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (command == u".uno:Save"_ustr && pViewShell && pViewShell->IsAllowChangeComments())
+        if (command == u".uno:Save" && pViewShell && pViewShell->IsAllowChangeComments())
             return true;
 
         for (size_t i = 0; i < std::size(nonAllowedList); i++)
@@ -5307,7 +5307,7 @@ static bool isCommandAllowed(OUString& command) {
             if (nonAllowedList[i] == command)
             {
                 bool bRet = false;
-                if (pViewShell && command == u".uno:TransformDialog"_ustr)
+                if (pViewShell && command == u".uno:TransformDialog")
                 {
                     // If the just added signature line shape is selected, allow moving it.
                     bRet = pViewShell->GetSignPDFCertificate().Is();

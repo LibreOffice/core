@@ -463,7 +463,8 @@ bool test::AccessibleTestBase::tabTo(
  * or interact with them.
  */
 
-test::AccessibleTestBase::Dialog::Dialog(uno::Reference<awt::XDialog2>& xDialog2, bool bAutoClose)
+test::AccessibleTestBase::Dialog::Dialog(const uno::Reference<awt::XDialog2>& xDialog2,
+                                         bool bAutoClose)
     : mbAutoClose(bAutoClose)
     , mxDialog2(xDialog2)
 {

@@ -207,7 +207,7 @@ protected:
         css::uno::Reference<css::accessibility::XAccessible> mxAccessible;
 
     public:
-        Dialog(css::uno::Reference<css::awt::XDialog2>& xDialog2, bool bAutoClose = true);
+        Dialog(const css::uno::Reference<css::awt::XDialog2>& xDialog2, bool bAutoClose = true);
         virtual ~Dialog();
 
         void setAutoClose(bool bAutoClose) { mbAutoClose = bAutoClose; }

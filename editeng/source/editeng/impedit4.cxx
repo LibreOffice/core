@@ -258,7 +258,7 @@ ErrCode ImpEditEngine::WriteText( SvStream& rOutput, EditSelection aSel )
 }
 
 bool ImpEditEngine::WriteItemListAsRTF( ItemList& rLst, SvStream& rOutput, sal_Int32 nPara, sal_Int32 nPos,
-                        std::vector<std::unique_ptr<SvxFontItem>>& rFontTable, SvxColorList& rColorList )
+                        const std::vector<std::unique_ptr<SvxFontItem>>& rFontTable, SvxColorList& rColorList )
 {
     const SfxPoolItem* pAttrItem = rLst.First();
     while ( pAttrItem )
@@ -761,7 +761,7 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bCl
 
 
 void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput, sal_Int32 nPara, sal_Int32 nPos,
-                            std::vector<std::unique_ptr<SvxFontItem>>& rFontTable, SvxColorList& rColorList )
+                            const std::vector<std::unique_ptr<SvxFontItem>>& rFontTable, SvxColorList& rColorList )
 {
     sal_uInt16 nWhich = rItem.Which();
     switch ( nWhich )

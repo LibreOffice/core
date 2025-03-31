@@ -211,7 +211,7 @@ namespace toolkit {
                 throw IndexOutOfBoundsException( OUString(), i_context );
         }
 
-        void lcl_notify( std::unique_lock<std::mutex>& i_guard, comphelper::OInterfaceContainerHelper4<XContainerListener>& rContainer,
+        void lcl_notify( std::unique_lock<std::mutex>& i_guard, const comphelper::OInterfaceContainerHelper4<XContainerListener>& rContainer,
             void ( SAL_CALL XContainerListener::*i_notificationMethod )( const ContainerEvent& ),
             const sal_Int32 i_accessor, const Sequence< OUString >& i_imageURLs, const Reference< XInterface >& i_context )
         {

@@ -3910,7 +3910,7 @@ static std::vector<sal_uInt8> byteArray2Vec(SbxArray* pArr)
 
 // Makes sure to get the byte array if passed, or the string converted to the bytes using
 // StringToByteArray in basic/source/sbx/sbxstr.cxx
-static std::vector<sal_uInt8> getByteArray(SbxValue& val)
+static std::vector<sal_uInt8> getByteArray(const SbxValue& val)
 {
     if (val.GetFullType() == SbxOBJECT)
         if (auto pObj = val.GetObject())

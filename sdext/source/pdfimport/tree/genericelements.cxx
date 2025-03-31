@@ -437,7 +437,7 @@ void DocumentElement::visitedBy( ElementTreeVisitor&                          rV
     rVisitor.visit(*this, rParentIt);
 }
 
-bool isComplex(const css::uno::Reference<css::i18n::XBreakIterator>& rBreakIterator, TextElement* const pTextElem) {
+bool isComplex(const css::uno::Reference<css::i18n::XBreakIterator>& rBreakIterator, const TextElement* pTextElem) {
     OUString str(pTextElem->Text.toString());
     for(int i=0; i< str.getLength(); i++)
     {

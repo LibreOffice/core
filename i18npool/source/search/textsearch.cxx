@@ -94,19 +94,19 @@ bool isSimpleRegexTrans( TransliterationFlags n )
     return bool(maskSimpleRegexTrans(n));
 }
 
-bool isReplacePunctuation( OUString &rStr )
+bool isReplacePunctuation( std::u16string_view rStr )
 {
-    return rStr.indexOf(u'\u2018') > -1 ||
-           rStr.indexOf(u'\u2019') > -1 ||
-           rStr.indexOf(u'\u201A') > -1 ||
-           rStr.indexOf(u'\u201B') > -1 ||
-           rStr.indexOf(u'\u201C') > -1 ||
-           rStr.indexOf(u'\u201D') > -1 ||
-           rStr.indexOf(u'\u201E') > -1 ||
-           rStr.indexOf(u'\u201F') > -1;
+    return rStr.find(u'\u2018') != std::u16string_view::npos ||
+           rStr.find(u'\u2019') != std::u16string_view::npos ||
+           rStr.find(u'\u201A') != std::u16string_view::npos ||
+           rStr.find(u'\u201B') != std::u16string_view::npos ||
+           rStr.find(u'\u201C') != std::u16string_view::npos ||
+           rStr.find(u'\u201D') != std::u16string_view::npos ||
+           rStr.find(u'\u201E') != std::u16string_view::npos ||
+           rStr.find(u'\u201F') != std::u16string_view::npos;
 }
 
-OUString replacePunctuation( OUString &rStr )
+OUString replacePunctuation( const OUString &rStr )
 {
     return rStr.replace(u'\u2018', '\'')
                .replace(u'\u2019', '\'')

@@ -249,8 +249,8 @@ sal_Int32 getNextActionOffset( MetaAction * pCurrAct )
 bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                               sal_uInt32&                   o_rLoopCount,
                               std::shared_ptr<Graphic>      pGraphic,
-                              ScopedVclPtrInstance<VirtualDevice>& pVDev,
-                              ScopedVclPtrInstance<VirtualDevice>& pVDevMask,
+                              const ScopedVclPtrInstance<VirtualDevice>& pVDev,
+                              const ScopedVclPtrInstance<VirtualDevice>& pVDevMask,
                               sal_uInt16&                   mnLoadedFrames,
                               sal_uInt16                    nFramesToLoad )
 {

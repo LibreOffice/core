@@ -42,7 +42,7 @@ private:
     bool m_bHasElements;
 
 public:
-    explicit SelectionEnumeration(OUString& sSelectedText)
+    explicit SelectionEnumeration(const OUString& sSelectedText)
         : m_sText(sSelectedText)
         , m_bHasElements(true) {}
 

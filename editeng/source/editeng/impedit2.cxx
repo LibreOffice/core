@@ -4407,7 +4407,7 @@ tools::Long ImpEditEngine::GetXPos(ParaPortion const& rParaPortion, EditLine con
 }
 
 /** Is true if paragraph is in the empty cluster of paragraphs at the end */
-bool ImpEditEngine::isInEmptyClusterAtTheEnd(ParaPortion& rPortion, bool bIsScaling)
+bool ImpEditEngine::isInEmptyClusterAtTheEnd(const ParaPortion& rPortion, bool bIsScaling)
 {
     sal_Int32 nPortion = GetParaPortions().GetPos(&rPortion);
 
