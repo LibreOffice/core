@@ -38,7 +38,7 @@ namespace accessibility {
 /** @descr
         This base class provides an implementation of the
         AccessibleContext service. Apart from the
-        <type>XXAccessible<type> and XAccessibleContextContext
+        <type>XAccessible<type> and XAccessibleContext
         interfaces it supports the XServiceInfo interface.
 */
 class EDITENG_DLLPUBLIC AccessibleContextBase
