@@ -383,7 +383,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         pPrintFunc->SetManualZoom(nZoom);
         pPrintFunc->SetDateTime(aDateTime);
         pPrintFunc->SetClearFlag(true);
-        pPrintFunc->SetUseStyleColor( officecfg::Office::Common::Accessibility::IsForPagePreviews::get() );
+        pPrintFunc->SetUseStyleColor(false); // tdf#101142 print preview should use a white background
 
         pPrintFunc->SetDrawView( pDrawView.get() );
 
