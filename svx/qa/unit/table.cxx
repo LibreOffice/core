@@ -142,7 +142,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165521_fixedCellHeight)
     const sal_Int32 nTableFontLineHeight = getXPath(pDocument, sTablePath7, "y").toInt32()
                                            - getXPath(pDocument, sTablePath6, "y").toInt32();
     // Expected: 593.
-    // Actual (without the acompanying patch) 553
+    // Actual (without the accompanying patch) 553
     CPPUNIT_ASSERT_EQUAL(nTextBoxFontLineHeight, nTableFontLineHeight);
 
     // All of the text must fit inside the table,
