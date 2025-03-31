@@ -1109,6 +1109,10 @@ void SwPagePreview::Init()
     bool bIsModified = pESh != nullptr && pESh->IsModified();
 
     SwViewOption aOpt( *pPrefs );
+    // tdf#101142 print preview should use a white background
+    SwViewColors aColors( aOpt.GetColorConfig() );
+    aColors.m_aDocColor = COL_WHITE;
+    aOpt.SetColorConfig( aColors );
     aOpt.SetPagePreview(true);
     aOpt.SetTab( false );
     aOpt.SetBlank( false );
