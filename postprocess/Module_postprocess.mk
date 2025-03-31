@@ -41,7 +41,7 @@ $(eval $(call gb_Module_add_l10n_targets,postprocess,\
 # contain content from at least one of external/more_fonts/fc_local.snippet
 # (conditional on MORE_FONTS in BUILD_TYPE) and
 # extras/source/truetype/symbol/fc_local.snippet (unconditional):
-ifneq ($(USING_X11)$(DISABLE_GUI)$(filter ANDROID EMSCRIPTEN,$(OS)),)
+ifneq ($(USE_HEADLESS_CODE)$(USING_X11)$(DISABLE_GUI)$(filter ANDROID EMSCRIPTEN,$(OS)),)
 $(eval $(call gb_Module_add_targets,postprocess, \
     CustomTarget_fontconfig \
     Package_fontconfig \
