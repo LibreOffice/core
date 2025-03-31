@@ -66,11 +66,9 @@ AccessibleBase::AccessibleBase(
     AccessibleElementInfo aAccInfo,
     bool bMayHaveChildren,
     bool bAlwaysTransparent /* default: false */ ) :
-        impl::AccessibleBase_Base( m_aMutex ),
         m_bIsDisposed( false ),
         m_bMayHaveChildren( bMayHaveChildren ),
         m_bChildrenInitialized( false ),
-        m_nEventNotifierId(0),
         m_nStateSet( 0 ),
         m_aAccInfo(std::move( aAccInfo )),
         m_bAlwaysTransparent( bAlwaysTransparent ),
@@ -327,19 +325,7 @@ awt::Point AccessibleBase::GetUpperLeftOnScreen() const
 
 void AccessibleBase::BroadcastAccEvent(sal_Int16 nId, const Any& rNew, const Any& rOld)
 {
-    ClearableMutexGuard aGuard( m_aMutex );
-
-    if ( !m_nEventNotifierId )
-        return;
-        // if we don't have a client id for the notifier, then we don't have listeners, then
-        // we don't need to notify anything
-
-    const AccessibleEventObject aEvent(static_cast<uno::XWeak*>(this), nId, rNew, rOld, -1);
-
-    // let the notifier handle this event
-    ::comphelper::AccessibleEventNotifier::addEvent( m_nEventNotifierId, aEvent );
-
-    aGuard.clear();
+    NotifyAccessibleEvent(nId, rOld, rNew);
 }
 
 void AccessibleBase::KillAllChildren()
@@ -384,13 +370,7 @@ void SAL_CALL AccessibleBase::disposing()
         MutexGuard aGuard(m_aMutex);
         OSL_ENSURE(!m_bIsDisposed, "dispose() called twice");
 
-        // notify disposing to all AccessibleEvent listeners asynchronous
-        if (m_nEventNotifierId)
-        {
-            ::comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing(m_nEventNotifierId,
-                                                                               *this);
-            m_nEventNotifierId = 0;
-        }
+        OAccessibleExtendedComponentHelper::disposing();
 
         // reset pointers
         m_aAccInfo.m_pWindow.clear();
@@ -542,25 +522,12 @@ lang::Locale SAL_CALL AccessibleBase::getLocale()
 }
 
 // ________ AccessibleBase::XAccessibleComponent ________
-sal_Bool SAL_CALL AccessibleBase::containsPoint( const awt::Point& aPoint )
-{
-    awt::Rectangle aRect( getBounds() );
-
-    // contains() works with relative coordinates
-    aRect.X = 0;
-    aRect.Y = 0;
-
-    return ( aPoint.X >= aRect.X &&
-             aPoint.Y >= aRect.Y &&
-             aPoint.X < (aRect.X + aRect.Width) &&
-             aPoint.Y < (aRect.Y + aRect.Height) );
-}
 
 Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleAtPoint( const awt::Point& aPoint )
 {
     CheckDisposeState();
     rtl::Reference< AccessibleBase > aResult;
-    awt::Rectangle aRect( getBounds());
+    awt::Rectangle aRect( implGetBounds());
 
     // children are positioned relative to this object, so translate bound rect
     aRect.X = 0;
@@ -578,7 +545,7 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleAtPoint( const aw
         {
             if (xLocalChild.is())
             {
-                aRect = xLocalChild->getBounds();
+                aRect = xLocalChild->implGetBounds();
                 if( ( aRect.X <= aPoint.X && aPoint.X <= (aRect.X + aRect.Width) ) &&
                     ( aRect.Y <= aPoint.Y && aPoint.Y <= (aRect.Y + aRect.Height)))
                 {
@@ -592,7 +559,7 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleAtPoint( const aw
     return aResult;
 }
 
-awt::Rectangle SAL_CALL AccessibleBase::getBounds()
+css::awt::Rectangle AccessibleBase::implGetBounds()
 {
     rtl::Reference<ChartView> pChartView = m_aAccInfo.m_xView.get();
     if( pChartView )
@@ -624,36 +591,6 @@ awt::Rectangle SAL_CALL AccessibleBase::getBounds()
     }
 
     return awt::Rectangle();
-}
-
-awt::Point SAL_CALL AccessibleBase::getLocation()
-{
-    CheckDisposeState();
-    awt::Rectangle aBBox( getBounds() );
-    return awt::Point( aBBox.X, aBBox.Y );
-}
-
-awt::Point SAL_CALL AccessibleBase::getLocationOnScreen()
-{
-    CheckDisposeState();
-
-    if (AccessibleBase* pParent = m_aAccInfo.m_pParent)
-    {
-        awt::Point aLocThisRel( getLocation());
-        awt::Point aUpperLeft(pParent->getLocationOnScreen());
-
-        return  awt::Point( aUpperLeft.X + aLocThisRel.X,
-                            aUpperLeft.Y + aLocThisRel.Y );
-    }
-    else
-        return getLocation();
-}
-
-awt::Size SAL_CALL AccessibleBase::getSize()
-{
-    CheckDisposeState();
-    awt::Rectangle aBBox( getBounds() );
-    return awt::Size( aBBox.Width, aBBox.Height );
 }
 
 void SAL_CALL AccessibleBase::grabFocus()
@@ -796,36 +733,6 @@ uno::Sequence< OUString > SAL_CALL AccessibleBase::getSupportedServiceNames()
         u"com.sun.star.accessibility.Accessible"_ustr,
         u"com.sun.star.accessibility.AccessibleContext"_ustr
     };
-}
-
-// ________ XAccessibleEventBroadcasters ________
-void SAL_CALL AccessibleBase::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
-{
-    MutexGuard aGuard( m_aMutex );
-
-    if ( xListener.is() )
-    {
-        if ( !m_nEventNotifierId )
-            m_nEventNotifierId = ::comphelper::AccessibleEventNotifier::registerClient();
-
-        ::comphelper::AccessibleEventNotifier::addEventListener( m_nEventNotifierId, xListener );
-    }
-}
-
-void SAL_CALL AccessibleBase::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
-{
-    MutexGuard aGuard( m_aMutex );
-
-    if ( xListener.is() && m_nEventNotifierId)
-    {
-        sal_Int32 nListenerCount = ::comphelper::AccessibleEventNotifier::removeEventListener( m_nEventNotifierId, xListener );
-        if ( !nListenerCount )
-        {
-            // no listeners anymore
-            ::comphelper::AccessibleEventNotifier::revokeClient( m_nEventNotifierId );
-            m_nEventNotifierId = 0;
-        }
-    }
 }
 
 } // namespace chart

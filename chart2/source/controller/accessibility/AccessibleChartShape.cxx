@@ -129,15 +129,6 @@ OUString AccessibleChartShape::getAccessibleName()
 }
 
 // ________ XAccessibleComponent ________
-sal_Bool AccessibleChartShape::containsPoint( const awt::Point& aPoint )
-{
-    bool bReturn = false;
-    if ( m_pAccShape.is() )
-    {
-        bReturn = m_pAccShape->containsPoint( aPoint );
-    }
-    return bReturn;
-}
 
 Reference< XAccessible > AccessibleChartShape::getAccessibleAtPoint( const awt::Point& aPoint )
 {
@@ -149,7 +140,7 @@ Reference< XAccessible > AccessibleChartShape::getAccessibleAtPoint( const awt::
     return xResult;
 }
 
-awt::Rectangle AccessibleChartShape::getBounds()
+awt::Rectangle AccessibleChartShape::implGetBounds()
 {
     awt::Rectangle aBounds;
     if ( m_pAccShape.is() )
@@ -157,36 +148,6 @@ awt::Rectangle AccessibleChartShape::getBounds()
         aBounds = m_pAccShape->getBounds();
     }
     return aBounds;
-}
-
-awt::Point AccessibleChartShape::getLocation()
-{
-    awt::Point aLocation;
-    if ( m_pAccShape.is() )
-    {
-        aLocation = m_pAccShape->getLocation();
-    }
-    return aLocation;
-}
-
-awt::Point AccessibleChartShape::getLocationOnScreen()
-{
-    awt::Point aLocation;
-    if ( m_pAccShape.is() )
-    {
-        aLocation = m_pAccShape->getLocationOnScreen();
-    }
-    return aLocation;
-}
-
-awt::Size AccessibleChartShape::getSize()
-{
-    awt::Size aSize;
-    if ( m_pAccShape.is() )
-    {
-        aSize = m_pAccShape->getSize();
-    }
-    return aSize;
 }
 
 sal_Int32 AccessibleChartShape::getForeground()

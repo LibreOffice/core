@@ -119,8 +119,7 @@ sal_Int16 SAL_CALL AccessibleChartView::getAccessibleRole()
     return AccessibleRole::DOCUMENT;
 }
 
-// ________ XAccessibleComponent ________
-awt::Rectangle SAL_CALL AccessibleChartView::getBounds()
+awt::Rectangle AccessibleChartView::implGetBounds()
 {
     awt::Rectangle aResult( GetWindowPosSize());
     Reference< XAccessible > xParent( m_xParent );
@@ -137,21 +136,6 @@ awt::Rectangle SAL_CALL AccessibleChartView::getBounds()
     return aResult;
 }
 
-awt::Point SAL_CALL AccessibleChartView::getLocationOnScreen()
-{
-    awt::Rectangle aBounds( getBounds());
-    awt::Point aResult;
-    Reference< XAccessible > xParent( m_xParent );
-    if( xParent.is())
-    {
-        Reference< XAccessibleComponent > xAccComp(
-            xParent->getAccessibleContext(), uno::UNO_QUERY );
-        aResult = xAccComp->getLocationOnScreen();
-        aResult.X += aBounds.X;
-        aResult.Y += aBounds.Y;
-    }
-    return aResult;
-}
 
 void SAL_CALL AccessibleChartView::disposing()
 {

@@ -24,9 +24,7 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
-#include <comphelper/accessibleeventnotifier.hxx>
+#include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <tools/color.hxx>
@@ -73,22 +71,11 @@ struct AccessibleElementInfo
     ::accessibility::IAccessibleViewForwarder* m_pViewForwarder;
 };
 
-namespace impl
-{
-typedef ::cppu::WeakComponentImplHelper<
-        css::accessibility::XAccessible,
-        css::accessibility::XAccessibleContext,
-        css::accessibility::XAccessibleEventBroadcaster,
-        css::accessibility::XAccessibleExtendedComponent,
-        css::lang::XServiceInfo
-        > AccessibleBase_Base;
-}
-
 /** Base class for all Chart Accessibility objects
  */
-class AccessibleBase :
-    public cppu::BaseMutex,
-    public impl::AccessibleBase_Base
+class AccessibleBase
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleExtendedComponentHelper,
+                                         css::accessibility::XAccessible, css::lang::XServiceInfo>
 {
 public:
     enum class EventType
@@ -242,15 +229,12 @@ protected:
 //     virtual OUString SAL_CALL getAccessibleDescription()
 //         throw (css::uno::RuntimeException);
 
+    // OCommonAccessibleComponent
+    virtual css::awt::Rectangle implGetBounds() override;
+
     // ________ XAccessibleComponent ________
-    virtual sal_Bool SAL_CALL containsPoint(
-        const css::awt::Point& aPoint ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
         getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-    virtual css::awt::Rectangle SAL_CALL getBounds() override;
-    virtual css::awt::Point SAL_CALL getLocation() override;
-    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
-    virtual css::awt::Size SAL_CALL getSize() override;
     virtual void SAL_CALL grabFocus() override;
     virtual sal_Int32 SAL_CALL getForeground() override;
     virtual sal_Int32 SAL_CALL getBackground() override;
@@ -264,12 +248,6 @@ protected:
     virtual sal_Bool SAL_CALL supportsService(
         const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-    // ________ XAccessibleEventBroadcaster ________
-    virtual void SAL_CALL addAccessibleEventListener(
-        const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-    virtual void SAL_CALL removeAccessibleEventListener(
-        const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
 
 private:
     enum eColorType
@@ -291,8 +269,6 @@ private:
     std::vector<rtl::Reference<AccessibleBase>> m_aChildList;
 
     ChildOIDMap                           m_aChildOIDMap;
-
-    ::comphelper::AccessibleEventNotifier::TClientId      m_nEventNotifierId;
 
     /** for getAccessibleStateSet()
      */

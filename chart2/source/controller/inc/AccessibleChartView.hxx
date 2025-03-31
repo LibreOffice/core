@@ -84,9 +84,9 @@ public:
     virtual OUString SAL_CALL getAccessibleName() override;
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
 
-    // ________ XAccessibleComponent ________
-    virtual css::awt::Rectangle SAL_CALL getBounds() override;
-    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
+
+    // OCommonAccessibleComponent
+    virtual css::awt::Rectangle implGetBounds() override;
 
 protected:
     // ________ AccessibleChartElement ________
