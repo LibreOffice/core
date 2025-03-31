@@ -37,7 +37,6 @@ $(eval $(call gb_Library_use_sdk_api,editeng))
 
 ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
 $(eval $(call gb_Library_add_exception_objects,editeng,\
-    editeng/source/accessibility/AccessibleComponentBase \
     editeng/source/accessibility/AccessibleContextBase \
     editeng/source/accessibility/AccessibleEditableTextPara \
     editeng/source/accessibility/AccessibleHyperlink \

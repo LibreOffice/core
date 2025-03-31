@@ -20,6 +20,7 @@
 #include <editeng/AccessibleContextBase.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -31,6 +32,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
+#include <tools/color.hxx>
 
 #include <utility>
 
@@ -357,6 +359,92 @@ void SAL_CALL AccessibleContextBase::removeAccessibleEventListener (
         comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
         mnClientId = 0;
     }
+}
+
+
+// XAccessibleComponent
+
+sal_Bool SAL_CALL AccessibleContextBase::containsPoint (
+    const css::awt::Point& aPoint)
+{
+    awt::Size aSize (getSize());
+    return (aPoint.X >= 0)
+           && (aPoint.X < aSize.Width)
+           && (aPoint.Y >= 0)
+           && (aPoint.Y < aSize.Height);
+}
+
+
+uno::Reference<XAccessible > SAL_CALL
+AccessibleContextBase::getAccessibleAtPoint (
+    const awt::Point& /*aPoint*/)
+{
+    return uno::Reference<XAccessible>();
+}
+
+
+awt::Rectangle SAL_CALL AccessibleContextBase::getBounds()
+{
+    return awt::Rectangle();
+}
+
+
+awt::Point SAL_CALL AccessibleContextBase::getLocation()
+{
+    awt::Rectangle aBBox (getBounds());
+    return awt::Point (aBBox.X, aBBox.Y);
+}
+
+
+awt::Point SAL_CALL AccessibleContextBase::getLocationOnScreen()
+{
+    return awt::Point();
+}
+
+
+css::awt::Size SAL_CALL AccessibleContextBase::getSize()
+{
+    awt::Rectangle aBBox (getBounds());
+    return awt::Size (aBBox.Width, aBBox.Height);
+}
+
+
+void SAL_CALL AccessibleContextBase::grabFocus()
+{
+    uno::Reference<XAccessibleSelection> xSelection(getAccessibleParent(), uno::UNO_QUERY);
+    if (xSelection.is())
+    {
+        // Do a single selection on this object.
+        xSelection->clearAccessibleSelection();
+        xSelection->selectAccessibleChild (getAccessibleIndexInParent());
+    }
+}
+
+
+sal_Int32 SAL_CALL AccessibleContextBase::getForeground()
+{
+    return sal_Int32(COL_BLACK);
+}
+
+
+sal_Int32 SAL_CALL AccessibleContextBase::getBackground()
+{
+    return sal_Int32(COL_WHITE);
+}
+
+
+// XAccessibleExtendedComponent
+
+
+OUString SAL_CALL AccessibleContextBase::getTitledBorderText()
+{
+    return OUString();
+}
+
+
+OUString SAL_CALL AccessibleContextBase::getToolTipText()
+{
+    return OUString();
 }
 
 // XServiceInfo

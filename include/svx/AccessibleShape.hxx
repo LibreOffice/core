@@ -39,7 +39,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <editeng/AccessibleContextBase.hxx>
-#include <editeng/AccessibleComponentBase.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <svx/AccessibleShapeTreeInfo.hxx>
@@ -86,7 +85,6 @@ class IAccessibleParent;
 */
 class SVX_DLLPUBLIC AccessibleShape
     :   public AccessibleContextBase,
-        public AccessibleComponentBase,
         public css::accessibility::XAccessibleSelection,
         public css::accessibility::XAccessibleExtendedAttributes,
         public css::accessibility::XAccessibleGroupPosition,

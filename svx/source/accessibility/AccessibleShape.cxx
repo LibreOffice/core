@@ -851,8 +851,6 @@ uno::Sequence<uno::Type> SAL_CALL
     ThrowIfDisposed ();
     // Get list of types from the context base implementation, ...
     uno::Sequence<uno::Type> aTypeList (AccessibleContextBase::getTypes());
-    // ... get list of types from component base implementation, ...
-    uno::Sequence<uno::Type> aComponentTypeList (AccessibleComponentBase::getTypes());
     // ... define local types
     uno::Sequence<uno::Type> localTypesList = {
         cppu::UnoType<lang::XEventListener>::get(),
@@ -860,7 +858,7 @@ uno::Sequence<uno::Type> SAL_CALL
         cppu::UnoType<lang::XUnoTunnel>::get()
     };
 
-    return comphelper::concatSequences(aTypeList, aComponentTypeList, localTypesList);
+    return comphelper::concatSequences(aTypeList, localTypesList);
 }
 
 // lang::XEventListener

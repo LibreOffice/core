@@ -3256,7 +3256,6 @@ editeng/inc/unomodel.hxx
 editeng/qa/items/borderline_test.cxx
 editeng/qa/lookuptree/lookuptree_test.cxx
 editeng/qa/unit/core-test.cxx
-editeng/source/accessibility/AccessibleComponentBase.cxx
 editeng/source/accessibility/AccessibleContextBase.cxx
 editeng/source/accessibility/AccessibleEditableTextPara.cxx
 editeng/source/accessibility/AccessibleHyperlink.cxx

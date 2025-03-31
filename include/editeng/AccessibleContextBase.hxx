@@ -22,6 +22,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/compbase.hxx>
@@ -37,7 +38,8 @@ namespace accessibility {
 /** @descr
         This base class provides an implementation of the
         AccessibleContext service. Apart from the
-        <type>XAccessible<type> and XAccessibleContext
+        <type>XAccessible<type>, XAccessibleContext, XAccessibleComponent
+        and XAccessibleExtendedComponent
         interfaces it supports the XServiceInfo interface.
 */
 class EDITENG_DLLPUBLIC AccessibleContextBase
@@ -46,6 +48,7 @@ class EDITENG_DLLPUBLIC AccessibleContextBase
         css::accessibility::XAccessible,
         css::accessibility::XAccessibleContext,
         css::accessibility::XAccessibleEventBroadcaster,
+        css::accessibility::XAccessibleExtendedComponent,
         css::lang::XServiceInfo
         >
 {
@@ -220,6 +223,53 @@ public:
         removeAccessibleEventListener (
             const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener) override;
 
+    //=====  XAccessibleComponent  ================================================
+
+    /** The default implementation uses the result of
+        <member>getBounds</member> to determine whether the given point lies
+        inside this object.
+    */
+    virtual sal_Bool SAL_CALL containsPoint(const css::awt::Point& aPoint) override;
+
+    /** The default implementation returns an empty reference.
+    */
+    virtual css::uno::Reference<css::accessibility::XAccessible>
+        SAL_CALL getAccessibleAtPoint(const css::awt::Point& aPoint) override;
+
+    /** The default implementation returns an empty rectangle.
+    */
+    virtual css::awt::Rectangle SAL_CALL getBounds() override;
+
+    /** The default implementation uses the result of
+        <member>getBounds</member> to determine the location.
+    */
+    virtual css::awt::Point SAL_CALL getLocation() override;
+
+    /** The default implementation returns an empty position, i.e. the
+    * result of the default constructor of css::awt::Point.
+    */
+    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
+
+    /** The default implementation uses the result of
+        <member>getBounds</member> to determine the size.
+    */
+    virtual css::awt::Size SAL_CALL getSize() override;
+
+    /** The default implementation does nothing.
+    */
+    virtual void SAL_CALL grabFocus() override;
+
+    /** Returns black as the default foreground color.
+    */
+    virtual sal_Int32 SAL_CALL getForeground() override;
+
+    /** Returns white as the default background color.
+    */
+    virtual sal_Int32 SAL_CALL getBackground() override;
+
+    //=====  XAccessibleExtendedComponent  ====================================
+    virtual OUString SAL_CALL getTitledBorderText() override;
+    virtual OUString SAL_CALL getToolTipText() override;
 
     //=====  XServiceInfo  ====================================================
 

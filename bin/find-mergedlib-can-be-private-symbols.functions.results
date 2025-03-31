@@ -10804,13 +10804,6 @@ _TIFFsetShortArray
 _TIFFsetShortArrayExt
 __cnd_FormatDebug(char const*, int, int, char const*, int)
 _lucene_shutdown()
-accessibility::AccessibleComponentBase::getAccessibleAtPoint(com::sun::star::awt::Point const&)
-accessibility::AccessibleComponentBase::getBackground()
-accessibility::AccessibleComponentBase::getBounds()
-accessibility::AccessibleComponentBase::getForeground()
-accessibility::AccessibleComponentBase::getLocation()
-accessibility::AccessibleComponentBase::getLocationOnScreen()
-accessibility::AccessibleComponentBase::getSize()
 accessibility::AccessibleContextBase::CreateAccessibleName()
 accessibility::AccessibleContextBase::FireEvent(com::sun::star::accessibility::AccessibleEventObject const&)
 accessibility::AccessibleContextBase::GetState(long)

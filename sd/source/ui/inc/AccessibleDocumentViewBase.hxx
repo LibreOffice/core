@@ -21,7 +21,6 @@
 #define INCLUDED_SD_SOURCE_UI_INC_ACCESSIBLEDOCUMENTVIEWBASE_HXX
 
 #include <editeng/AccessibleContextBase.hxx>
-#include <editeng/AccessibleComponentBase.hxx>
 #include <editeng/AccessibleSelectionBase.hxx>
 #include "AccessibleViewForwarder.hxx"
 #include <svx/AccessibleShapeTreeInfo.hxx>
@@ -80,7 +79,6 @@ namespace accessibility {
 */
 class AccessibleDocumentViewBase
     :   public AccessibleContextBase,
-        public AccessibleComponentBase,
         public AccessibleSelectionBase,
         public IAccessibleViewForwarderListener,
         public css::beans::XPropertyChangeListener,

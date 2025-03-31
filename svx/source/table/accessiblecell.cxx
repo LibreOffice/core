@@ -50,7 +50,7 @@ using namespace ::com::sun::star::lang;
 namespace accessibility {
 
 AccessibleCell::AccessibleCell( const rtl::Reference< AccessibleTableShape>& rxParent, sdr::table::CellRef xCell, sal_Int32 nIndex, const AccessibleShapeTreeInfo& rShapeTreeInfo )
-: AccessibleCellBase( rxParent, AccessibleRole::TABLE_CELL )
+: AccessibleContextBase(rxParent, AccessibleRole::TABLE_CELL)
 , maShapeTreeInfo( rShapeTreeInfo )
 , mnIndexInParent( nIndex )
 , mxCell(std::move( xCell ))
@@ -122,28 +122,6 @@ bool AccessibleCell::ResetState (sal_Int64 aState)
 
     return bStateHasChanged;
 }
-
-
-// XInterface
-
-
-Any SAL_CALL AccessibleCell::queryInterface( const Type& aType )
-{
-    return AccessibleCellBase::queryInterface( aType );
-}
-
-
-void SAL_CALL AccessibleCell::acquire(  ) noexcept
-{
-    AccessibleCellBase::acquire();
-}
-
-
-void SAL_CALL AccessibleCell::release(  ) noexcept
-{
-    AccessibleCellBase::release();
-}
-
 
 // XAccessibleContext
 
@@ -228,12 +206,6 @@ sal_Int64 SAL_CALL AccessibleCell::getAccessibleStateSet()
 
 
 // XAccessibleComponent
-
-
-sal_Bool SAL_CALL AccessibleCell::containsPoint( const css::awt::Point& aPoint)
-{
-    return AccessibleComponentBase::containsPoint( aPoint );
-}
 
 /** The implementation below is at the moment straightforward.  It iterates
     over all children (and thereby instances all children which have not
@@ -359,12 +331,6 @@ awt::Size SAL_CALL AccessibleCell::getSize()
 }
 
 
-void SAL_CALL AccessibleCell::grabFocus()
-{
-    AccessibleComponentBase::grabFocus();
-}
-
-
 sal_Int32 SAL_CALL AccessibleCell::getForeground()
 {
     ThrowIfDisposed ();
@@ -381,21 +347,6 @@ sal_Int32 SAL_CALL AccessibleCell::getBackground()
     // todo
     return 0;
 }
-
-
-// XAccessibleExtendedComponent
-
-OUString SAL_CALL AccessibleCell::getTitledBorderText()
-{
-    return AccessibleComponentBase::getTitledBorderText();
-}
-
-
-OUString SAL_CALL AccessibleCell::getToolTipText()
-{
-    return AccessibleComponentBase::getToolTipText();
-}
-
 
 // XAccessibleEventBroadcaster
 
@@ -549,7 +500,7 @@ OUString SAL_CALL AccessibleCell::getAccessibleName()
         }
     }
 
-    return AccessibleCellBase::getAccessibleName();
+    return AccessibleContextBase::getAccessibleName();
 }
 
 void AccessibleCell::UpdateChildren()
@@ -570,7 +521,7 @@ OUString SAL_CALL AccessibleCell::getAccessibleName() throw (css::uno::RuntimeEx
     if( mxCell.is() )
         return mxCell->getName();
 
-    return AccessibleCellBase::getAccessibleName();
+    return AccessibleContextBase::getAccessibleName();
 }
 */
 
