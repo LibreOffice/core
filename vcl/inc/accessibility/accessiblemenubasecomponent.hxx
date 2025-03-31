@@ -36,7 +36,7 @@ class VclMenuEvent;
 class OAccessibleMenuItemComponent;
 
 class OAccessibleMenuBaseComponent : public cppu::ImplInheritanceHelper<
-                                         comphelper::OAccessibleExtendedComponentHelper,
+                                         comphelper::OAccessibleComponentHelper,
                                          css::accessibility::XAccessible,
                                          css::lang::XServiceInfo>
 {

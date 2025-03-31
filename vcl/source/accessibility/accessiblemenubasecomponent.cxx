@@ -605,7 +605,7 @@ void OAccessibleMenuBaseComponent::ProcessMenuEvent( const VclMenuEvent& rVclMen
 
 void OAccessibleMenuBaseComponent::disposing()
 {
-    OAccessibleExtendedComponentHelper::disposing();
+    OAccessibleComponentHelper::disposing();
 
     if ( !m_pMenu )
         return;

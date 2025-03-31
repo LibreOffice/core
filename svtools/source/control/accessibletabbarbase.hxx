@@ -31,7 +31,7 @@ class VclWindowEvent;
 namespace accessibility
 {
 
-class AccessibleTabBarBase : public comphelper::OAccessibleExtendedComponentHelper
+class AccessibleTabBarBase : public comphelper::OAccessibleComponentHelper
 {
 public:
     explicit            AccessibleTabBarBase( TabBar* pTabBar );

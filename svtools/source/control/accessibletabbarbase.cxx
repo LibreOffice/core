@@ -65,7 +65,7 @@ void AccessibleTabBarBase::ProcessWindowEvent( const VclWindowEvent& rVclWindowE
 
 void AccessibleTabBarBase::disposing()
 {
-    OAccessibleExtendedComponentHelper::disposing();
+    OAccessibleComponentHelper::disposing();
     ClearTabBarPointer();
 }
 

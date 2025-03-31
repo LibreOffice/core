@@ -41,7 +41,7 @@ class AccessibleDialogControlShape;
 
 
 class AccessibleDialogWindow final : public cppu::ImplInheritanceHelper<
-                                         comphelper::OAccessibleExtendedComponentHelper,
+                                         comphelper::OAccessibleComponentHelper,
                                          css::accessibility::XAccessible,
                                          css::accessibility::XAccessibleSelection,
                                          css::lang::XServiceInfo>,

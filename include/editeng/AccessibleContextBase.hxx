@@ -34,7 +34,7 @@ namespace utl { class AccessibleRelationSetHelper; }
 namespace accessibility {
 
 class EDITENG_DLLPUBLIC AccessibleContextBase
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleExtendedComponentHelper,
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
                                          css::lang::XServiceInfo, css::accessibility::XAccessible>
 {
 public:

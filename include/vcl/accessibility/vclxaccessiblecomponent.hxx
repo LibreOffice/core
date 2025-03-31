@@ -41,7 +41,7 @@ class AccessibleRelationSetHelper;
 
 class VCL_DLLPUBLIC VCLXAccessibleComponent
         :public cppu::ImplInheritanceHelper<
-             comphelper::OAccessibleExtendedComponentHelper, css::lang::XServiceInfo>
+             comphelper::OAccessibleComponentHelper, css::lang::XServiceInfo>
 {
 private:
     VclPtr<vcl::Window> m_xWindow;

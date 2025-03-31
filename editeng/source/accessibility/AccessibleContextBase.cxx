@@ -400,7 +400,7 @@ void SAL_CALL AccessibleContextBase::disposing()
 
     ::osl::MutexGuard aGuard (m_aMutex);
 
-    comphelper::OAccessibleExtendedComponentHelper::disposing();
+    comphelper::OAccessibleComponentHelper::disposing();
 
     mxParent.clear();
     mxRelationSet.clear();

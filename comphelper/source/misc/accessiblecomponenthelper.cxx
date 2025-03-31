@@ -301,40 +301,17 @@ namespace comphelper
         return OCommonAccessibleComponent::getBounds( );
     }
 
-    OAccessibleExtendedComponentHelper::OAccessibleExtendedComponentHelper( )
+    OUString SAL_CALL OAccessibleComponentHelper::getTitledBorderText()
     {
+        OExternalLockGuard aGuard(this);
+        return OUString();
     }
 
-
-    sal_Bool SAL_CALL OAccessibleExtendedComponentHelper::containsPoint( const awt::Point& _rPoint )
+    OUString SAL_CALL OAccessibleComponentHelper::getToolTipText()
     {
-        return OCommonAccessibleComponent::containsPoint( _rPoint );
+        OExternalLockGuard aGuard(this);
+        return OUString();
     }
-
-
-    awt::Point SAL_CALL OAccessibleExtendedComponentHelper::getLocation(  )
-    {
-        return OCommonAccessibleComponent::getLocation( );
-    }
-
-
-    awt::Point SAL_CALL OAccessibleExtendedComponentHelper::getLocationOnScreen(  )
-    {
-        return OCommonAccessibleComponent::getLocationOnScreen( );
-    }
-
-
-    awt::Size SAL_CALL OAccessibleExtendedComponentHelper::getSize(  )
-    {
-        return OCommonAccessibleComponent::getSize( );
-    }
-
-
-    awt::Rectangle SAL_CALL OAccessibleExtendedComponentHelper::getBounds(  )
-    {
-        return OCommonAccessibleComponent::getBounds( );
-    }
-
 
 }   // namespace comphelper
 

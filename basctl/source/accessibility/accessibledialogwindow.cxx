@@ -483,7 +483,7 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 void AccessibleDialogWindow::disposing()
 {
-    OAccessibleExtendedComponentHelper::disposing();
+    OAccessibleComponentHelper::disposing();
 
     if ( !m_pDialogWindow )
         return;

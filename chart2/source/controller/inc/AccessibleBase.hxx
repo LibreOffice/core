@@ -74,7 +74,7 @@ struct AccessibleElementInfo
 /** Base class for all Chart Accessibility objects
  */
 class AccessibleBase
-    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleExtendedComponentHelper,
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
                                          css::accessibility::XAccessible, css::lang::XServiceInfo>
 {
 public:

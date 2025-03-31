@@ -163,11 +163,11 @@ namespace comphelper
 
 
     /** a helper class for implementing an AccessibleContext which at the same time
-        supports an XAccessibleComponent interface.
+        supports an XAccessibleExtendedComponent interface.
     */
     class COMPHELPER_DLLPUBLIC OAccessibleComponentHelper
             :public cppu::ImplInheritanceHelper<
-                 OCommonAccessibleComponent, css::accessibility::XAccessibleComponent>
+                 OCommonAccessibleComponent, css::accessibility::XAccessibleExtendedComponent>
     {
     private:
         OAccessibleComponentHelper(OAccessibleComponentHelper const &) = delete;
@@ -185,37 +185,11 @@ namespace comphelper
         virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
         virtual css::awt::Size SAL_CALL getSize(  ) override final;
         virtual css::awt::Rectangle SAL_CALL getBounds(  ) override final;
+
+        // XAccessibleExtendedComponent - default implementations returning empty strings
+        virtual OUString SAL_CALL getTitledBorderText() override;
+        virtual OUString SAL_CALL getToolTipText() override;
     };
-
-
-    //= OAccessibleExtendedComponentHelper
-
-
-    /** a helper class for implementing an AccessibleContext which at the same time
-        supports an XAccessibleExtendedComponent interface.
-    */
-    class COMPHELPER_DLLPUBLIC OAccessibleExtendedComponentHelper
-            :public cppu::ImplInheritanceHelper<
-                 OCommonAccessibleComponent, css::accessibility::XAccessibleExtendedComponent>
-    {
-    private:
-        OAccessibleExtendedComponentHelper(OAccessibleExtendedComponentHelper const &) = delete;
-        OAccessibleExtendedComponentHelper(OAccessibleExtendedComponentHelper &&) = delete;
-        void operator =(OAccessibleExtendedComponentHelper const &) = delete;
-        void operator =(OAccessibleExtendedComponentHelper &&) = delete;
-
-    protected:
-        OAccessibleExtendedComponentHelper( );
-
-    public:
-        // XAccessibleComponent - default implementations
-        virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override final;
-        virtual css::awt::Point SAL_CALL getLocation(  ) override final;
-        virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
-        virtual css::awt::Size SAL_CALL getSize(  ) override final;
-        virtual css::awt::Rectangle SAL_CALL getBounds(  ) override final;
-    };
-
 
 }   // namespace comphelper
 

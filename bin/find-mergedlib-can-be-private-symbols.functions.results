@@ -11531,8 +11531,6 @@ comphelper::NamedValueCollection::impl_assign(com::sun::star::uno::Sequence<com:
 comphelper::NamedValueCollection::impl_remove(rtl::OUString const&)
 comphelper::NamedValueCollection::merge(comphelper::NamedValueCollection const&, bool)
 comphelper::NamedValueCollection::size() const
-comphelper::OAccessibleExtendedComponentHelper::OAccessibleExtendedComponentHelper()
-comphelper::OAccessibleExtendedComponentHelper::getLocationOnScreen()
 comphelper::OAccessibleKeyBindingHelper::AddKeyBinding(com::sun::star::uno::Sequence<com::sun::star::awt::KeyStroke> const&)
 comphelper::OAccessibleKeyBindingHelper::OAccessibleKeyBindingHelper(comphelper::OAccessibleKeyBindingHelper const&)
 comphelper::OAccessibleKeyBindingHelper::getAccessibleKeyBinding(int)

@@ -231,7 +231,7 @@ awt::Rectangle AccessibleDialogControlShape::implGetBounds()
 // XComponent
 void AccessibleDialogControlShape::disposing()
 {
-    OAccessibleExtendedComponentHelper::disposing();
+    OAccessibleComponentHelper::disposing();
 
     m_pDialogWindow = nullptr;
     m_pDlgEdObj = nullptr;
