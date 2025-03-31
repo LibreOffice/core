@@ -94,7 +94,6 @@ namespace accessibility
 
         // XAccessibleExtendedComponent
         virtual OUString SAL_CALL getTitledBorderText(  ) override;
-        virtual OUString SAL_CALL getToolTipText(  ) override;
     };
 
 

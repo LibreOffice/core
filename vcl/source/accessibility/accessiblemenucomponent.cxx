@@ -268,25 +268,6 @@ sal_Int32 OAccessibleMenuComponent::getBackground(  )
     return 0;
 }
 
-
-// XAccessibleExtendedComponent
-
-OUString OAccessibleMenuComponent::getTitledBorderText(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    return OUString();
-}
-
-
-OUString OAccessibleMenuComponent::getToolTipText(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    return OUString();
-}
-
-
 // XAccessibleSelection
 
 

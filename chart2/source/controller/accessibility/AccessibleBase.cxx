@@ -685,16 +685,6 @@ Color AccessibleBase::getColor( eColorType eColType )
     return nResult;
 }
 
-OUString SAL_CALL AccessibleBase::getTitledBorderText()
-{
-    return OUString();
-}
-
-OUString SAL_CALL AccessibleBase::getToolTipText()
-{
-    return OUString();
-}
-
 // ________ AccessibleBase::XServiceInfo ________
 OUString SAL_CALL AccessibleBase::getImplementationName()
 {

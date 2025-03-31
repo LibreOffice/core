@@ -380,12 +380,6 @@ namespace accessibility
     }
 
 
-    OUString AccessibleTabBarPage::getToolTipText(  )
-    {
-        return OUString();
-    }
-
-
 }   // namespace accessibility
 
 

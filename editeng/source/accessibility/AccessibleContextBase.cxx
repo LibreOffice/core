@@ -349,21 +349,6 @@ sal_Int32 SAL_CALL AccessibleContextBase::getBackground()
     return sal_Int32(COL_WHITE);
 }
 
-
-// XAccessibleExtendedComponent
-
-
-OUString SAL_CALL AccessibleContextBase::getTitledBorderText()
-{
-    return OUString();
-}
-
-
-OUString SAL_CALL AccessibleContextBase::getToolTipText()
-{
-    return OUString();
-}
-
 // XServiceInfo
 OUString SAL_CALL AccessibleContextBase::getImplementationName()
 {

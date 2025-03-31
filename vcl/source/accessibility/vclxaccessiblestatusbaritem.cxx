@@ -385,15 +385,6 @@ OUString VCLXAccessibleStatusBarItem::getTitledBorderText(  )
     return GetItemText();
 }
 
-
-OUString VCLXAccessibleStatusBarItem::getToolTipText(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    return OUString();
-}
-
-
 // XAccessibleText
 
 OUString VCLXAccessibleStatusBarItem::getText()

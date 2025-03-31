@@ -227,12 +227,6 @@ sal_Int32 VCLXAccessibleHeaderBarItem::getBackground()
 
 // XAccessibleExtendedComponent
 
-OUString VCLXAccessibleHeaderBarItem::getTitledBorderText()
-{
-    return OUString();
-}
-
-
 OUString VCLXAccessibleHeaderBarItem::getToolTipText()
 {
     OExternalLockGuard aGuard( this );

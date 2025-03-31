@@ -542,21 +542,6 @@ namespace accessibility
         return nColor;
     }
 
-
-    // XAccessibleExtendedComponent
-
-    OUString AccessibleTabBarPageList::getTitledBorderText(  )
-    {
-        return OUString();
-    }
-
-
-    OUString AccessibleTabBarPageList::getToolTipText(  )
-    {
-        return OUString();
-    }
-
-
     // XAccessibleSelection
 
 

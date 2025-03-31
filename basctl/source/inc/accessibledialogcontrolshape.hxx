@@ -110,7 +110,6 @@ public:
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
 
     // XAccessibleExtendedComponent
-    virtual OUString SAL_CALL getTitledBorderText(  ) override;
     virtual OUString SAL_CALL getToolTipText(  ) override;
 };
 

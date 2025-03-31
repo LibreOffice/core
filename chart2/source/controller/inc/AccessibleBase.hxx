@@ -224,10 +224,6 @@ protected:
     virtual sal_Int32 SAL_CALL getForeground() override;
     virtual sal_Int32 SAL_CALL getBackground() override;
 
-    // XAccessibleExtendedComponent
-    virtual OUString SAL_CALL getTitledBorderText() override;
-    virtual OUString SAL_CALL getToolTipText() override;
-
     // ________ XServiceInfo ________
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(

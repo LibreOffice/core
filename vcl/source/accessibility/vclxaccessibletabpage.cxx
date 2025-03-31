@@ -466,25 +466,6 @@ sal_Int32 VCLXAccessibleTabPage::getBackground(  )
     return nColor;
 }
 
-
-// XAccessibleExtendedComponent
-
-OUString VCLXAccessibleTabPage::getTitledBorderText(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    return OUString();
-}
-
-
-OUString VCLXAccessibleTabPage::getToolTipText(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    return OUString();
-}
-
-
 // XAccessibleText
 
 OUString VCLXAccessibleTabPage::getText()

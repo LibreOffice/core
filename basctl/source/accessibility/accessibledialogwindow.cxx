@@ -744,14 +744,6 @@ sal_Int32 AccessibleDialogWindow::getBackground(  )
 
 // XAccessibleExtendedComponent
 
-OUString AccessibleDialogWindow::getTitledBorderText(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    return OUString();
-}
-
-
 OUString AccessibleDialogWindow::getToolTipText(  )
 {
     OExternalLockGuard aGuard( this );

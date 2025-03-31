@@ -60,10 +60,6 @@ public:
     virtual sal_Int32 SAL_CALL getForeground(  ) override;
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
 
-    // XAccessibleExtendedComponent
-    virtual OUString SAL_CALL getTitledBorderText(  ) override;
-    virtual OUString SAL_CALL getToolTipText(  ) override;
-
     // XAccessibleSelection
     virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
     virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
