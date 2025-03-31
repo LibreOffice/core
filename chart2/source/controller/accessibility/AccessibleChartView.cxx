@@ -356,12 +356,11 @@ void AccessibleChartView::initialize()
         aAccInfo.m_xChartDocument = m_xChartModel;
         aAccInfo.m_xChartController = m_xChartController;
         aAccInfo.m_xView = m_xChartView;
-        aAccInfo.m_xWindow = m_xWindow;
+        aAccInfo.m_xWindow = css::uno::WeakReference<css::awt::XWindow>(nullptr);
         aAccInfo.m_pParent = nullptr;
         aAccInfo.m_spObjectHierarchy = m_spObjectHierarchy;
         aAccInfo.m_pSdrView = m_pSdrView;
-        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( m_xWindow );
-        m_pViewForwarder.reset( new AccessibleViewForwarder( this, pWindow ) );
+        m_pViewForwarder.reset(new AccessibleViewForwarder(this, nullptr));
         aAccInfo.m_pViewForwarder = m_pViewForwarder.get();
         // broadcasts an INVALIDATE_ALL_CHILDREN event globally
         SetInfo( aAccInfo );
