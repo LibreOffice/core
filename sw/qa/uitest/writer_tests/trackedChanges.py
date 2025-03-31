@@ -8,6 +8,7 @@
 from uitest.framework import UITestCase
 from uitest.debug import sleep
 from uitest.path import get_srcdir_url
+import os
 import time
 from uitest.uihelper.common import get_state_as_dict, type_text
 
