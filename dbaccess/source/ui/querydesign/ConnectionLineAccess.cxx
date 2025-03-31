@@ -98,30 +98,13 @@ namespace dbaui
     {
         return Reference< XAccessible >();
     }
-    awt::Rectangle SAL_CALL OConnectionLineAccess::getBounds(  )
+
+    awt::Rectangle OConnectionLineAccess::implGetBounds()
     {
-        ::osl::MutexGuard aGuard( m_aMutex  );
         tools::Rectangle aRect(m_pLine ? m_pLine->GetBoundingRect() : tools::Rectangle());
         return awt::Rectangle(aRect.Left(),aRect.Top(),aRect.getOpenWidth(),aRect.getOpenHeight());
     }
-    awt::Point SAL_CALL OConnectionLineAccess::getLocation(  )
-    {
-        ::osl::MutexGuard aGuard( m_aMutex  );
-        Point aPoint(m_pLine ? m_pLine->GetBoundingRect().TopLeft() : Point());
-        return awt::Point(aPoint.X(),aPoint.Y());
-    }
-    awt::Point SAL_CALL OConnectionLineAccess::getLocationOnScreen(  )
-    {
-        ::osl::MutexGuard aGuard( m_aMutex  );
-        Point aPoint(m_pLine ? m_pLine->GetParent()->ScreenToOutputPixel(m_pLine->GetBoundingRect().TopLeft()) : Point());
-        return awt::Point(aPoint.X(),aPoint.Y());
-    }
-    awt::Size SAL_CALL OConnectionLineAccess::getSize(  )
-    {
-        ::osl::MutexGuard aGuard( m_aMutex  );
-        Size aSize(m_pLine ? m_pLine->GetBoundingRect().GetSize() : Size());
-        return awt::Size(aSize.Width(),aSize.Height());
-    }
+
     // XAccessibleRelationSet
     sal_Int32 SAL_CALL OConnectionLineAccess::getRelationCount(  )
     {

@@ -210,10 +210,10 @@ namespace comphelper
     public:
         // XAccessibleComponent - default implementations
         virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override final;
-        virtual css::awt::Point SAL_CALL getLocation(  ) override;
+        virtual css::awt::Point SAL_CALL getLocation(  ) override final;
         virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
-        virtual css::awt::Size SAL_CALL getSize(  ) override;
-        virtual css::awt::Rectangle SAL_CALL getBounds(  ) override;
+        virtual css::awt::Size SAL_CALL getSize(  ) override final;
+        virtual css::awt::Rectangle SAL_CALL getBounds(  ) override final;
     };
 
 
