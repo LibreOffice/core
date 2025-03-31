@@ -88,7 +88,7 @@ void AccessibleChartElement::InitTextEdit()
     if( !m_xTextHelper.is())
         return;
 
-    m_xTextHelper->initialize( GetInfo().m_aOID.getObjectCID(), this, GetInfo().m_xWindow );
+    m_xTextHelper->initialize(GetInfo().m_aOID.getObjectCID(), this, GetInfo().m_pWindow);
 }
 
 //             Interfaces

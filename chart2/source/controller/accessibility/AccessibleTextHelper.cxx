@@ -54,11 +54,10 @@ AccessibleTextHelper::~AccessibleTextHelper()
 
 void AccessibleTextHelper::initialize( const OUString& aCID,
                                 const Reference< XAccessible >& xEventSource,
-                                const Reference< awt::XWindow >& xWindow )
+                                vcl::Window* pWindow)
 {
     OSL_ENSURE( !aCID.isEmpty(), "Empty CID" );
     OSL_ENSURE( xEventSource.is(), "Empty Event Source" );
-    OSL_ENSURE( xWindow.is(), "Empty Window" );
     if( !xEventSource.is() || aCID.isEmpty() )
         return;
 
@@ -66,7 +65,6 @@ void AccessibleTextHelper::initialize( const OUString& aCID,
 
     m_oTextHelper.reset();
 
-    VclPtr<vcl::Window> pWindow( VCLUnoHelper::GetWindow( xWindow ));
     if( pWindow )
     {
         SdrView * pView = m_pDrawViewWrapper;

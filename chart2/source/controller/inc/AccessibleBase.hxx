@@ -30,6 +30,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <tools/color.hxx>
 #include <unotools/weakref.hxx>
+#include <vcl/window.hxx>
 
 #include <map>
 #include <vector>
@@ -62,7 +63,7 @@ struct AccessibleElementInfo
     unotools::WeakReference< ::chart::ChartModel > m_xChartDocument;
     unotools::WeakReference< ::chart::ChartController > m_xChartController;
     unotools::WeakReference< ::chart::ChartView >   m_xView;
-    css::uno::WeakReference< css::awt::XWindow >      m_xWindow;
+    VclPtr<vcl::Window> m_pWindow;
 
     std::shared_ptr< ObjectHierarchy > m_spObjectHierarchy;
 

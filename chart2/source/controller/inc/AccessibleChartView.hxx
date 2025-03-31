@@ -19,6 +19,7 @@
 #pragma once
 
 #include "AccessibleBase.hxx"
+#include "ChartWindow.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -27,7 +28,6 @@
 #include <memory>
 
 namespace com::sun::star::accessibility { class XAccessible; }
-namespace com::sun::star::awt { class XWindow; }
 
 namespace accessibility
 {
@@ -55,20 +55,19 @@ public:
 
     AccessibleChartView() = delete;
 
-    // ____ WeakComponentHelper (called from XComponent::dispose()) ____
-    using AccessibleBase::disposing;
+    virtual void SAL_CALL disposing() override;
 
     // 0: view::XSelectionSupplier offers notifications for selection changes and access to the selection itself
     // 1: frame::XModel representing the chart model - offers access to object data
     // 2: lang::XInterface representing the normal chart view - offers access to some extra object data
     // 3: accessibility::XAccessible representing the parent accessible
-    // 4: awt::XWindow representing the view's window (is a vcl Window)
+    // 4: ChartWindow representing the view's window
     // all arguments are only valid until next initialization - don't keep them longer
     void initialize( ChartController& rChartController,
                      const rtl::Reference<::chart::ChartModel>& xChartModel,
                      const rtl::Reference<::chart::ChartView>& xChartView,
                      const css::uno::Reference< css::accessibility::XAccessible >& xParent,
-                     const css::uno::Reference<css::awt::XWindow>& xViewWindow );
+                     ChartWindow* pNewChartWindow);
     // used to disconnect from view
     void initialize();
 
@@ -106,7 +105,7 @@ private: // members
     unotools::WeakReference< ::chart::ChartController >             m_xChartController;
     unotools::WeakReference< ::chart::ChartModel >                  m_xChartModel;
     unotools::WeakReference< ChartView >                            m_xChartView;
-    css::uno::WeakReference< css::awt::XWindow >                    m_xWindow;
+    VclPtr<ChartWindow>                                             m_pChartWindow;
     css::uno::WeakReference< css::accessibility::XAccessible >      m_xParent;
 
     std::shared_ptr< ObjectHierarchy >                              m_spObjectHierarchy;

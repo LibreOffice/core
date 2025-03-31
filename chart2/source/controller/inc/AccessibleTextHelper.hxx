@@ -20,6 +20,7 @@
 
 #include <comphelper/compbase.hxx>
 #include <svx/AccessibleTextHelper.hxx>
+#include <vcl/window.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 
@@ -52,12 +53,12 @@ public:
         mandatory parameter 1: type XAccessible.  Is used as EventSource for the
             ::accessibility::AccessibleTextHelper (svx)
 
-        mandatory parameter 2: type awt::XWindow.  The Window that shows the
+        mandatory parameter 2: type vcl::Window.  The Window that shows the
             text currently.
      */
     void initialize(const OUString& aCID,
                     const css::uno::Reference< css::accessibility::XAccessible >& xEventSource,
-                    const css::uno::Reference< css::awt::XWindow >& xWindow );
+                    vcl::Window* pWindow);
 
     // ____ XAccessibleContext ____
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;

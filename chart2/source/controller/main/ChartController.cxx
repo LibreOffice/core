@@ -1555,15 +1555,15 @@ void ChartController::impl_initializeAccessible()
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
 void ChartController::impl_initializeAccessible( AccessibleChartView& rAccChartView )
 {
-    uno::Reference< XAccessible > xParent;
-    {
-        SolarMutexGuard aGuard;
-        auto pChartWindow(GetChartWindow());
-        if( pChartWindow )
-            xParent.set(pChartWindow->GetAccessibleParent());
-    }
+    SolarMutexGuard aGuard;
 
-    rAccChartView.initialize(*this, getChartModel(), m_xChartView, xParent, m_xViewWindow);
+    uno::Reference< XAccessible > xParent;
+
+    ChartWindow* pChartWindow = GetChartWindow();
+    if( pChartWindow )
+        xParent.set(pChartWindow->GetAccessibleParent());
+
+    rAccChartView.initialize(*this, getChartModel(), m_xChartView, xParent, pChartWindow);
 }
 #else
 void ChartController::impl_initializeAccessible( AccessibleChartView& /* rAccChartView */) {}

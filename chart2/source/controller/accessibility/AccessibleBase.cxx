@@ -393,6 +393,7 @@ void SAL_CALL AccessibleBase::disposing()
         }
 
         // reset pointers
+        m_aAccInfo.m_pWindow.clear();
         m_aAccInfo.m_pParent = nullptr;
 
         m_nStateSet = AccessibleStateType::DEFUNC;
@@ -596,7 +597,7 @@ awt::Rectangle SAL_CALL AccessibleBase::getBounds()
     rtl::Reference<ChartView> pChartView = m_aAccInfo.m_xView.get();
     if( pChartView )
     {
-        VclPtr<vcl::Window> pWindow( VCLUnoHelper::GetWindow( m_aAccInfo.m_xWindow ));
+        VclPtr<vcl::Window> pWindow = m_aAccInfo.m_pWindow;
         awt::Rectangle aLogicRect( pChartView->getRectangleOfObject( m_aAccInfo.m_aOID.getObjectCID() ));
         if( pWindow )
         {
