@@ -306,11 +306,6 @@ static void UpdatePageRelativeURLs(SdrObject& rObj, const std::function<void(con
     if (!pOutlinerParagraphObject)
         return;
     EditTextObject& aEdit = const_cast<EditTextObject&>(pOutlinerParagraphObject->GetTextObject());
-    if (!aEdit.IsFieldObject())
-        return;
-    const SvxFieldItem* pFieldItem = aEdit.GetField();
-    if (!pFieldItem)
-        return;
     aEdit.GetFieldUpdater().UpdatePageRelativeURLs(rItemCallback);
 };
 
