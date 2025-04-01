@@ -476,6 +476,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam,
     {
         if( !nCurrentPos )
             return false; // Promoting or demoting before the first outline => no.
+        assert(nCurrentPos > 0 && "coverity#1645558");
         if( --nCurrentPos )
             aSttRg = *GetNodes().GetOutLineNds()[ nCurrentPos ];
         else if( 0 > nOffset )
@@ -489,6 +490,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam,
         {
             if( !nCurrentPosInline )
                 return false; // Promoting or demoting before the first outline => no.
+            assert(nCurrentPosInline > 0 && "coverity#1645558");
             if( --nCurrentPosInline )
             {
                 aSttRg = *SwOutlineNodes::GetRootNode((*pOutlineNodesInline)[ nCurrentPosInline ]);
