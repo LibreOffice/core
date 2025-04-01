@@ -1366,7 +1366,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
         case SID_PROTECTPOS:
         case SID_PROTECTSIZE:
         {
-            ScDrawView* pScDrawView = GetBestViewShell()->GetViewData().GetScDrawView();
+            ScTabViewShell* pViewShell = GetBestViewShell();
+            if (!pViewShell)
+                return;
+            ScDrawView* pScDrawView = pViewShell->GetViewData().GetScDrawView();
             if (!pScDrawView)
                 return;
 
