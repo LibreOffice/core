@@ -18,6 +18,8 @@
  */
 
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentUndoRedo.hxx>
+#include <SwRewriter.hxx>
 #include <docary.hxx>
 #include <redline.hxx>
 #include <doc.hxx>
@@ -57,6 +59,11 @@ SwRedlineTable::size_type SwEditShell::GetRedlineCount() const
 const SwRangeRedline& SwEditShell::GetRedline( SwRedlineTable::size_type nPos ) const
 {
     return *GetDoc()->getIDocumentRedlineAccess().GetRedlineTable()[ nPos ];
+}
+
+SwRangeRedline& SwEditShell::GetRedline(SwRedlineTable::size_type nPos)
+{
+    return const_cast<SwRangeRedline&>(const_cast<const SwEditShell*>(this)->GetRedline(nPos));
 }
 
 static void lcl_InvalidateAll( SwViewShell* pSh )
@@ -128,11 +135,23 @@ void SwEditShell::ReinstateRedline(SwRedlineTable::size_type nPos)
         SetRedlineFlags(nMode | RedlineFlags::On, /*bRecordAllViews=*/false);
     }
 
-    const SwRangeRedline& rRedline = GetRedline(nPos);
+    SwRangeRedline& rRedline = GetRedline(nPos);
     SwPaM aPaM(*rRedline.GetPoint());
     aPaM.SetMark();
     *aPaM.GetMark() = *rRedline.GetMark();
+
+    IDocumentUndoRedo& rIDUR = GetDoc()->GetIDocumentUndoRedo();
+    if (rIDUR.DoesUndo())
+    {
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, rRedline.GetDescr());
+        rIDUR.StartUndo(SwUndoId::REINSTATE_REDLINE, &aRewriter);
+    }
     ReinstatePaM(rRedline, aPaM);
+    if (rIDUR.DoesUndo())
+    {
+        rIDUR.EndUndo(SwUndoId::END, nullptr);
+    }
 
     EndAllAction();
 }

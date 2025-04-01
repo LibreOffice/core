@@ -691,6 +691,9 @@ OUString GetUndoComment(SwUndoId eId)
         case SwUndoId::MAKE_ENDNOTES_FOOTNOTES:
             pId = STR_UNDO_MAKE_ENDNOTES_FOOTNOTES;
             break;
+        case SwUndoId::REINSTATE_REDLINE:
+            pId = STR_REINSTATE_REDLINE;
+            break;
     }
 
     assert(pId);

@@ -182,6 +182,7 @@ enum class SwUndoId
     FLYFRMFMT_DECORATIVE = 150,
     MAKE_FOOTNOTES_ENDNOTES = 151,
     MAKE_ENDNOTES_FOOTNOTES = 152,
+    REINSTATE_REDLINE = 153,
 };
 
 OUString GetUndoComment(SwUndoId eId);
