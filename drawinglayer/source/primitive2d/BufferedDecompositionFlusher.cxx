@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 #include <sal/log.hxx>
-
+#include <comphelper/solarmutex.hxx>
 #include <drawinglayer/primitive2d/BufferedDecompositionFlusher.hxx>
 
 namespace drawinglayer::primitive2d
@@ -128,10 +128,15 @@ void SAL_CALL BufferedDecompositionFlusher::run()
             }
         }
 
-        for (const auto& r : aRemoved1)
-            r->setBuffered2DDecomposition(nullptr);
-        for (const auto& r : aRemoved2)
-            r->setBuffered2DDecomposition(Primitive2DContainer{});
+        {
+            // some parts of skia do not take kindly to being accessed from multiple threads
+            osl::Guard<comphelper::SolarMutex> aGuard(comphelper::SolarMutex::get());
+
+            for (const auto& r : aRemoved1)
+                r->setBuffered2DDecomposition(nullptr);
+            for (const auto& r : aRemoved2)
+                r->setBuffered2DDecomposition(Primitive2DContainer{});
+        }
 
         wait(TimeValue(2, 0));
     }
