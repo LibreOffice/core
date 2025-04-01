@@ -941,6 +941,12 @@ sal_Int8 CheckExtendedNamespace(std::u16string_view sXMLAttributeName, std::u16s
              && (IsXMLToken(sValue, XML_PAGE_CONTENT_BOTTOM)
                  || IsXMLToken(sValue, XML_PAGE_CONTENT_TOP)))
         return nODFVersion & SvtSaveOptions::ODFSVER_EXTENDED ? 1 : -1;
+    // don't export end zones when they have the default no-limit value
+    else if (IsXMLToken(sXMLAttributeName, XML_HYPHENATION_ZONE_ALWAYS)
+        || IsXMLToken(sXMLAttributeName, XML_HYPHENATION_ZONE_COLUMN)
+        || IsXMLToken(sXMLAttributeName, XML_HYPHENATION_ZONE_PAGE)
+        || IsXMLToken(sXMLAttributeName, XML_HYPHENATION_ZONE_SPREAD))
+        return IsXMLToken(sValue, XML_NO_LIMIT) ? -1 : 1;
     return 0;
 }
 }
