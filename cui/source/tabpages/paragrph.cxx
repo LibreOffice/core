@@ -2623,7 +2623,7 @@ void SvxExtParagraphTabPage::HyphenClickHdl()
     m_xSpreadEndZoneLabel->set_sensitive(bAcross);
     m_aSpreadEndZone.set_sensitive(bAcross);
     // only sensitive, if the hyphenation is disabled across spreads
-    m_xAcrossMoveLineBox->set_sensitive( m_xAcrossSpreadBox->get_state() != TRISTATE_TRUE );
+    m_xAcrossMoveLineBox->set_sensitive( bEnable && m_xAcrossSpreadBox->get_state() != TRISTATE_TRUE );
     m_xHyphenBox->set_state(bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
 }
 
