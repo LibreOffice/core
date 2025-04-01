@@ -325,7 +325,28 @@ void QtInstanceTreeView::set_text_align(int, double, int)
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceTreeView::swap(int, int) { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::swap(int nPos1, int nPos2)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        const bool bPos1Selected = m_pSelectionModel->isRowSelected(nPos1);
+        const bool bPos2Selected = m_pSelectionModel->isRowSelected(nPos2);
+
+        const int nMin = std::min(nPos1, nPos2);
+        const int nMax = std::max(nPos2, nPos2);
+        QList<QStandardItem*> aMaxRow = m_pModel->takeRow(nMax);
+        QList<QStandardItem*> aMinRow = m_pModel->takeRow(nMin);
+        m_pModel->insertRow(nMin, aMaxRow);
+        m_pModel->insertRow(nMax, aMinRow);
+
+        // restore selection
+        if (bPos1Selected)
+            select(nPos2);
+        if (bPos2Selected)
+            select(nPos1);
+    });
+}
 
 std::vector<int> QtInstanceTreeView::get_selected_rows() const
 {

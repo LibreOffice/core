@@ -59,7 +59,7 @@ public:
     virtual void set_text_emphasis(int row, bool bOn, int col) override;
     virtual bool get_text_emphasis(int row, int col) const override;
     virtual void set_text_align(int row, double fAlign, int col) override;
-    virtual void swap(int pos1, int pos2) override;
+    virtual void swap(int nPos1, int nPos2) override;
     virtual std::vector<int> get_selected_rows() const override;
     virtual void set_font_color(int pos, const Color& rColor) override;
     virtual void scroll_to_row(int nRow) override;
