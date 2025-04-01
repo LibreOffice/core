@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HELPCOMPILER_DLLAPI_H
-#define INCLUDED_HELPCOMPILER_DLLAPI_H
+#pragma once
+
 
 #include <sal/config.h>
 #include <sal/types.h>
 
 #if defined L10N_DLLIMPLEMENTATION
-#define L10N_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+ SAL_DLLPUBLIC_EXPORT
 #else
-#define L10N_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+ SAL_DLLPUBLIC_IMPORT
 #endif
 
 #endif

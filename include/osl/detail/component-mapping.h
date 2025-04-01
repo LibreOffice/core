@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OSL_DETAIL_COMPONENT_MAPPING_H
-#define INCLUDED_OSL_DETAIL_COMPONENT_MAPPING_H
+#pragma once
+
 
 #ifdef DISABLE_DYNLOADING
 
@@ -41,8 +41,8 @@ const lib_to_constructor_mapping *lo_get_constructor_map(void);
 }
 #endif
 
-#endif /* DISABLE_DYNLOADING */
 
-#endif // INCLUDED_OSL_DETAIL_COMPONENT_MAPPING_H
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -12,9 +12,9 @@
 #include <sal/types.h>
 
 #if defined(EMBOBJ_DLLIMPLEMENTATION)
-#define EMBOBJ_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+ SAL_DLLPUBLIC_EXPORT
 #else
-#define EMBOBJ_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+ SAL_DLLPUBLIC_IMPORT
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

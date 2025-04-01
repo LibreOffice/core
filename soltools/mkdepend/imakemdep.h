@@ -44,38 +44,38 @@ in this Software without prior written authorization from the X Consortium.
  *     make variable BOOTSTRAPCFLAGS.
  */
 #if defined(macII) || defined(_AUX_SOURCE)
-#define imake_ccflags "-DmacII -DSYSV"
+ "-DmacII -DSYSV"
 #endif
 
 #ifdef stellar
-#define imake_ccflags "-DSYSV"
+ "-DSYSV"
 #endif
 
 #if defined(USL) || defined(Oki) || defined(NCR)
-#define imake_ccflags "-Xc -DSVR4"
+ "-Xc -DSVR4"
 #endif
 
 #ifdef sony
 #if defined(SYSTYPE_SYSV) || defined(_SYSTYPE_SYSV)
-#define imake_ccflags "-DSVR4"
+ "-DSVR4"
 #else
 #include <sys/param.h>
 #if NEWSOS < 41
-#define imake_ccflags "-Dbsd43 -DNOSTDHDRS"
+ "-Dbsd43 -DNOSTDHDRS"
 #else
 #if NEWSOS < 42
-#define imake_ccflags "-Dbsd43"
+ "-Dbsd43"
 #endif
 #endif
 #endif
 #endif
 
 #ifdef _CRAY
-#define imake_ccflags "-DSYSV -DUSG"
+ "-DSYSV -DUSG"
 #endif
 
 #if defined(_IBMR2) || defined(aix)
-#define imake_ccflags "-Daix -DSYSV"
+ "-Daix -DSYSV"
 #endif
 
 #ifdef Mips
@@ -87,7 +87,7 @@ in this Software without prior written authorization from the X Consortium.
 #endif
 
 #ifdef is68k
-#define imake_ccflags "-Dluna -Duniosb"
+ "-Dluna -Duniosb"
 #endif
 
 #ifdef SYSV386
@@ -111,48 +111,48 @@ in this Software without prior written authorization from the X Consortium.
 #endif
 
 #ifdef __convex__
-#define imake_ccflags "-fn -tm c1"
+ "-fn -tm c1"
 #endif
 
 #ifdef apollo
-#define imake_ccflags "-DX_NOT_POSIX"
+ "-DX_NOT_POSIX"
 #endif
 
 #ifdef _WIN32
-#define imake_ccflags "-nologo -batch -D__STDC__"
+ "-nologo -batch -D__STDC__"
 #endif
 
 #ifdef __uxp__
-#define imake_ccflags "-DSVR4 -DANSICPP"
+ "-DSVR4 -DANSICPP"
 #endif
 
 #ifdef __sxg__
-#define imake_ccflags "-DSYSV -DUSG -DNOSTDHDRS"
+ "-DSYSV -DUSG -DNOSTDHDRS"
 #endif
 
 #if defined(SX) || defined(PC_UX)
-#define imake_ccflags "-DSYSV"
+ "-DSYSV"
 #endif
 
 #ifdef nec_ews_svr2
-#define imake_ccflags "-DUSG"
+ "-DUSG"
 #endif
 
 #if defined(nec_ews_svr4) || defined(_nec_ews_svr4) || defined(_nec_up) || defined(_nec_ft)
-#define imake_ccflags "-DSVR4"
+ "-DSVR4"
 #endif
 
 #ifdef  MACH
-#define imake_ccflags "-DNOSTDHDRS"
+ "-DNOSTDHDRS"
 #endif
 
 /* this is for OS/2 under EMX. This won't work with DOS */
 #if defined(__EMX__)
-#define imake_ccflags "-DBSD43"
+ "-DBSD43"
 #endif
 
 #else /* not CCIMAKE */
-#ifndef MAKEDEPEND
+#pragma once
 /*
  * Step 2:  dup2
  *     If your OS doesn't have a dup2() system call to duplicate one file
@@ -160,7 +160,7 @@ in this Software without prior written authorization from the X Consortium.
  *     already fall under the existing category(ies).
  */
 #if defined(SYSV) && !defined(_CRAY) && !defined(Mips)
-#define dup2(fd1,fd2)   ((fd1 == fd2) ? fd1 : (close(fd2), \
+(fd1,fd2)   ((fd1 == fd2) ? fd1 : (close(fd2), \
                            fcntl(fd1, F_DUPFD, fd2)))
 #endif
 
@@ -175,10 +175,10 @@ in this Software without prior written authorization from the X Consortium.
  *     your Makefiles have no tabs in them and lots of @@ strings.
  */
 #if defined(sun) || defined(SYSV) || defined(SVR4) || defined(hcx) || defined(_WIN32) || (defined(AMOEBA) && defined(CROSS_COMPILE))
-#define FIXUP_CPP_WHITESPACE
+
 #endif
 #ifdef __minix_vmd
-#define FIXUP_CPP_WHITESPACE
+
 #endif
 
 /*
@@ -188,42 +188,42 @@ in this Software without prior written authorization from the X Consortium.
  *     If the cpp you need is not in /lib/cpp, define DEFAULT_CPP.
  */
 #ifdef _WIN32
-#define USE_CC_E
-#define DEFAULT_CC "cl"
+
+ "cl"
 #endif
 #ifdef apollo
-#define DEFAULT_CPP "/usr/lib/cpp"
+ "/usr/lib/cpp"
 #endif
 #if defined(_IBMR2) && !defined(DEFAULT_CPP)
-#define DEFAULT_CPP "/usr/lpp/X11/Xamples/util/cpp/cpp"
+ "/usr/lpp/X11/Xamples/util/cpp/cpp"
 #endif
 #if defined(sun) && defined(SVR4)
-#define DEFAULT_CPP "/usr/ccs/lib/cpp"
+ "/usr/ccs/lib/cpp"
 #endif
 #ifdef __bsdi__
-#define DEFAULT_CPP "/usr/bin/cpp"
+ "/usr/bin/cpp"
 #endif
 #ifdef __uxp__
-#define DEFAULT_CPP "/usr/ccs/lib/cpp"
+ "/usr/ccs/lib/cpp"
 #endif
 #ifdef __sxg__
-#define DEFAULT_CPP "/usr/lib/cpp"
+ "/usr/lib/cpp"
 #endif
 #ifdef _CRAY
-#define DEFAULT_CPP "/lib/pcpp"
+ "/lib/pcpp"
 #endif
 #if defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
-#define DEFAULT_CPP "/usr/libexec/cpp"
+ "/usr/libexec/cpp"
 #endif
 #ifdef  MACH
-#define USE_CC_E
+
 #endif
 #ifdef __minix_vmd
-#define DEFAULT_CPP "/usr/lib/cpp"
+ "/usr/lib/cpp"
 #endif
 #if defined(__EMX__)
 /* expects cpp in PATH */
-#define DEFAULT_CPP "cpp"
+ "cpp"
 #endif
 
 /*
@@ -243,7 +243,7 @@ in this Software without prior written authorization from the X Consortium.
  *     that support multiple operating systems).
  */
 
-#define ARGUMENTS 50    /* number of arguments in various arrays */
+ 50    /* number of arguments in various arrays */
 char *cpp_argv[ARGUMENTS] = {
     "cc",       /* replaced by the actual program to exec */
     "-I.",      /* add current directory to include path */
@@ -280,16 +280,16 @@ char *cpp_argv[ARGUMENTS] = {
 #endif
 #ifdef _IBMR2
     "-D_IBMR2", /* IBM RS-6000 (we ensured that aix is defined above */
-#ifndef aix
-#define aix     /* allow BOOTSTRAPCFLAGS="-D_IBMR2" */
+#pragma once
+     /* allow BOOTSTRAPCFLAGS="-D_IBMR2" */
 #endif
-#endif /* _IBMR2 */
+
 #ifdef aix
     "-Daix",    /* AIX instead of AOS */
-#ifndef ibm
-#define ibm     /* allow BOOTSTRAPCFLAGS="-Daix" */
+#pragma once
+     /* allow BOOTSTRAPCFLAGS="-Daix" */
 #endif
-#endif /* aix */
+
 #ifdef ibm
     "-Dibm",    /* IBM PS/2 and RT under both AOS and AIX */
 #endif
@@ -300,14 +300,14 @@ char *cpp_argv[ARGUMENTS] = {
 #endif
 #ifdef luna88k      /* need not on UniOS-Mach Vers. 1.13 */
     "-traditional", /* for some older version            */
-#endif          /* instead of "-DXCOMM=\\#"          */
+
 #ifdef uniosb
     "-Duniosb",
 #endif
 #ifdef uniosu
     "-Duniosu",
 #endif
-#endif /* luna */
+
 #ifdef _CRAY        /* Cray */
     "-Ucray",
 #endif
@@ -318,7 +318,7 @@ char *cpp_argv[ARGUMENTS] = {
 # else
     "-DSYSV",   /* System V environment is the default */
 # endif
-#endif /* Mips */
+
 #ifdef MOTOROLA
     "-DMOTOROLA",    /* Motorola Delta Systems */
 # ifdef SYSV
@@ -327,7 +327,7 @@ char *cpp_argv[ARGUMENTS] = {
 # ifdef SVR4
     "-DSVR4",
 # endif
-#endif /* MOTOROLA */
+
 #ifdef i386
     "-Di386",
 # ifdef SVR4
@@ -691,7 +691,7 @@ struct pair predefs[] = {
     {NULL, NULL, NULL}
 };
 
-#endif /* MAKEDEPEND */
-#endif /* CCIMAKE */
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

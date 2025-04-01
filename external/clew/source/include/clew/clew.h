@@ -1,5 +1,5 @@
-#ifndef CLEW_CLEW_H_INCLUDED
-#define CLEW_CLEW_H_INCLUDED
+#pragma once
+
 
 //////////////////////////////////////////////////////////////////////////
 //  Copyright (c) 2009-2011 Organic Vectory B.V.
@@ -28,12 +28,12 @@
 #error cl_platform.h included before clew.h
 #endif
 
-#ifndef CLCC_GENERATE_DOCUMENTATION
+#pragma once
 //  Prevent cl.h inclusion
-#define __OPENCL_CL_H
+
 //  Prevent cl_platform.h inclusion
-#define __CL_PLATFORM_H
-#endif  //  CLCC_GENERATE_DOCUMENTATION
+
+
 
 /*******************************************************************************
 * Copyright (c) 2008-2009 The Khronos Group Inc.
@@ -66,22 +66,22 @@
 extern "C" {
 #endif
 
-#ifndef CLCC_GENERATE_DOCUMENTATION
+#pragma once
 
 #if defined(_WIN32)
-#define CL_API_ENTRY
-#define CL_API_CALL __stdcall
+
+ __stdcall
 #else
-#define CL_API_ENTRY
-#define CL_API_CALL
+
+
 #endif
 
 #if defined(__APPLE__)
-#define CL_API_SUFFIX__VERSION_1_0   AVAILABLE_MAC_OS_X_VERSION_10_6_AND_LATER
-#define CL_EXTENSION_WEAK_LINK       __attribute__((weak_import))
+   AVAILABLE_MAC_OS_X_VERSION_10_6_AND_LATER
+       __attribute__((weak_import))
 #else
-#define CL_API_SUFFIX__VERSION_1_0
-#define CL_EXTENSION_WEAK_LINK
+
+
 #endif
 
 #include <stdint.h>
@@ -250,42 +250,42 @@ typedef double          cl_double16[16] __attribute__((aligned(128)));
 
 // Macro names and corresponding values defined by OpenCL
 
-#define CL_SCHAR_MAX        127
-#define CL_SCHAR_MIN        (-127-1)
-#define CL_SHRT_MIN         (-32767-1)
-#define CL_INT_MIN          (-2147483647-1)
-#define CL_LONG_MAX         ((cl_long) 0x7FFFFFFFFFFFFFFFLL)
-#define CL_LONG_MIN         ((cl_long) -0x7FFFFFFFFFFFFFFFLL - 1LL)
-#define CL_ULONG_MAX        ((cl_ulong) 0xFFFFFFFFFFFFFFFFULL)
+        127
+        (-127-1)
+         (-32767-1)
+          (-2147483647-1)
+         ((cl_long) 0x7FFFFFFFFFFFFFFFLL)
+         ((cl_long) -0x7FFFFFFFFFFFFFFFLL - 1LL)
+        ((cl_ulong) 0xFFFFFFFFFFFFFFFFULL)
 
-#define CL_FLT_MAX_10_EXP   +38
-#define CL_FLT_MAX_EXP      +128
-#define CL_FLT_MIN_10_EXP   -37
-#define CL_FLT_MIN_EXP      -125
+   +38
+      +128
+   -37
+      -125
 #if defined(_MSC_VER)
 // MSVC doesn't understand hex floats
-#define CL_FLT_MAX          3.402823466e+38F
-#define CL_FLT_MIN          1.175494351e-38F
-#define CL_FLT_EPSILON      1.192092896e-07F
+          3.402823466e+38F
+          1.175494351e-38F
+      1.192092896e-07F
 #else
-#define CL_FLT_MAX          0x1.fffffep127f
-#define CL_FLT_MIN          0x1.0p-126f
-#define CL_FLT_EPSILON      0x1.0p-23f
+          0x1.fffffep127f
+          0x1.0p-126f
+      0x1.0p-23f
 #endif
 
-#define CL_DBL_MAX_10_EXP   +308
-#define CL_DBL_MAX_EXP      +1024
-#define CL_DBL_MIN_10_EXP   -307
-#define CL_DBL_MIN_EXP      -1021
+   +308
+      +1024
+   -307
+      -1021
 #if defined(_MSC_VER)
 // MSVC doesn't understand hex floats
-#define CL_DBL_MAX          1.7976931348623158e+308
-#define CL_DBL_MIN          2.2250738585072014e-308
-#define CL_DBL_EPSILON      2.2204460492503131e-016
+          1.7976931348623158e+308
+          2.2250738585072014e-308
+      2.2204460492503131e-016
 #else
-#define CL_DBL_MAX          0x1.fffffffffffffp1023
-#define CL_DBL_MIN          0x1.0p-1022
-#define CL_DBL_EPSILON      0x1.0p-52
+          0x1.fffffffffffffp1023
+          0x1.0p-1022
+      0x1.0p-52
 #endif
 
 #include <stddef.h>
@@ -348,199 +348,199 @@ typedef struct {
 /******************************************************************************/
 
 // Error Codes
-#define CL_SUCCESS                                  0
-#define CL_DEVICE_NOT_FOUND                         -1
-#define CL_DEVICE_NOT_AVAILABLE                     -2
-#define CL_COMPILER_NOT_AVAILABLE                   -3
-#define CL_MEM_OBJECT_ALLOCATION_FAILURE            -4
-#define CL_OUT_OF_RESOURCES                         -5
-#define CL_OUT_OF_HOST_MEMORY                       -6
-#define CL_PROFILING_INFO_NOT_AVAILABLE             -7
-#define CL_MEM_COPY_OVERLAP                         -8
-#define CL_IMAGE_FORMAT_MISMATCH                    -9
-#define CL_IMAGE_FORMAT_NOT_SUPPORTED               -10
-#define CL_BUILD_PROGRAM_FAILURE                    -11
-#define CL_MAP_FAILURE                              -12
+                                  0
+                         -1
+                     -2
+                   -3
+            -4
+                         -5
+                       -6
+             -7
+                         -8
+                    -9
+               -10
+                    -11
+                              -12
 
-#define CL_INVALID_VALUE                            -30
-#define CL_INVALID_DEVICE_TYPE                      -31
-#define CL_INVALID_PLATFORM                         -32
-#define CL_INVALID_DEVICE                           -33
-#define CL_INVALID_CONTEXT                          -34
-#define CL_INVALID_QUEUE_PROPERTIES                 -35
-#define CL_INVALID_COMMAND_QUEUE                    -36
-#define CL_INVALID_HOST_PTR                         -37
-#define CL_INVALID_MEM_OBJECT                       -38
-#define CL_INVALID_IMAGE_FORMAT_DESCRIPTOR          -39
-#define CL_INVALID_IMAGE_SIZE                       -40
-#define CL_INVALID_SAMPLER                          -41
-#define CL_INVALID_BINARY                           -42
-#define CL_INVALID_BUILD_OPTIONS                    -43
-#define CL_INVALID_PROGRAM                          -44
-#define CL_INVALID_PROGRAM_EXECUTABLE               -45
-#define CL_INVALID_KERNEL_NAME                      -46
-#define CL_INVALID_KERNEL_DEFINITION                -47
-#define CL_INVALID_KERNEL                           -48
-#define CL_INVALID_ARG_INDEX                        -49
-#define CL_INVALID_ARG_VALUE                        -50
-#define CL_INVALID_ARG_SIZE                         -51
-#define CL_INVALID_KERNEL_ARGS                      -52
-#define CL_INVALID_WORK_DIMENSION                   -53
-#define CL_INVALID_WORK_GROUP_SIZE                  -54
-#define CL_INVALID_WORK_ITEM_SIZE                   -55
-#define CL_INVALID_GLOBAL_OFFSET                    -56
-#define CL_INVALID_EVENT_WAIT_LIST                  -57
-#define CL_INVALID_EVENT                            -58
-#define CL_INVALID_OPERATION                        -59
-#define CL_INVALID_GL_OBJECT                        -60
-#define CL_INVALID_BUFFER_SIZE                      -61
-#define CL_INVALID_MIP_LEVEL                        -62
-#define CL_INVALID_GLOBAL_WORK_SIZE                 -63
+                            -30
+                      -31
+                         -32
+                           -33
+                          -34
+                 -35
+                    -36
+                         -37
+                       -38
+          -39
+                       -40
+                          -41
+                           -42
+                    -43
+                          -44
+               -45
+                      -46
+                -47
+                           -48
+                        -49
+                        -50
+                         -51
+                      -52
+                   -53
+                  -54
+                   -55
+                    -56
+                  -57
+                            -58
+                        -59
+                        -60
+                      -61
+                        -62
+                 -63
 
 // cl_bool
-#define CL_TRUE                                     1
+                                     1
 
 // cl_platform_info
-#define CL_PLATFORM_PROFILE                         0x0900
-#define CL_PLATFORM_VERSION                         0x0901
-#define CL_PLATFORM_NAME                            0x0902
-#define CL_PLATFORM_VENDOR                          0x0903
-#define CL_PLATFORM_EXTENSIONS                      0x0904
+                         0x0900
+                         0x0901
+                            0x0902
+                          0x0903
+                      0x0904
 
 // cl_device_type - bitfield
-#define CL_DEVICE_TYPE_DEFAULT                      (1 << 0)
-#define CL_DEVICE_TYPE_CPU                          (1 << 1)
-#define CL_DEVICE_TYPE_GPU                          (1 << 2)
-#define CL_DEVICE_TYPE_ACCELERATOR                  (1 << 3)
-#define CL_DEVICE_TYPE_CUSTOM                       (1 << 4)
-#define CL_DEVICE_TYPE_ALL                          0xFFFFFFFF
+                      (1 << 0)
+                          (1 << 1)
+                          (1 << 2)
+                  (1 << 3)
+                       (1 << 4)
+                          0xFFFFFFFF
 
 // cl_device_info
-#define CL_DEVICE_TYPE                              0x1000
-#define CL_DEVICE_VENDOR_ID                         0x1001
-#define CL_DEVICE_MAX_COMPUTE_UNITS                 0x1002
-#define CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS          0x1003
-#define CL_DEVICE_MAX_WORK_GROUP_SIZE               0x1004
-#define CL_DEVICE_MAX_WORK_ITEM_SIZES               0x1005
-#define CL_DEVICE_PREFERRED_VECTOR_WIDTH_CHAR       0x1006
-#define CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT      0x1007
-#define CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT        0x1008
-#define CL_DEVICE_PREFERRED_VECTOR_WIDTH_LONG       0x1009
-#define CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT      0x100A
-#define CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE     0x100B
-#define CL_DEVICE_MAX_CLOCK_FREQUENCY               0x100C
-#define CL_DEVICE_ADDRESS_BITS                      0x100D
-#define CL_DEVICE_MAX_READ_IMAGE_ARGS               0x100E
-#define CL_DEVICE_MAX_WRITE_IMAGE_ARGS              0x100F
-#define CL_DEVICE_MAX_MEM_ALLOC_SIZE                0x1010
-#define CL_DEVICE_IMAGE2D_MAX_WIDTH                 0x1011
-#define CL_DEVICE_IMAGE2D_MAX_HEIGHT                0x1012
-#define CL_DEVICE_IMAGE3D_MAX_WIDTH                 0x1013
-#define CL_DEVICE_IMAGE3D_MAX_HEIGHT                0x1014
-#define CL_DEVICE_IMAGE3D_MAX_DEPTH                 0x1015
-#define CL_DEVICE_IMAGE_SUPPORT                     0x1016
-#define CL_DEVICE_MAX_PARAMETER_SIZE                0x1017
-#define CL_DEVICE_MAX_SAMPLERS                      0x1018
-#define CL_DEVICE_MEM_BASE_ADDR_ALIGN               0x1019
-#define CL_DEVICE_MIN_DATA_TYPE_ALIGN_SIZE          0x101A
-#define CL_DEVICE_SINGLE_FP_CONFIG                  0x101B
-#define CL_DEVICE_GLOBAL_MEM_CACHE_TYPE             0x101C
-#define CL_DEVICE_GLOBAL_MEM_CACHELINE_SIZE         0x101D
-#define CL_DEVICE_GLOBAL_MEM_CACHE_SIZE             0x101E
-#define CL_DEVICE_GLOBAL_MEM_SIZE                   0x101F
-#define CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE          0x1020
-#define CL_DEVICE_MAX_CONSTANT_ARGS                 0x1021
-#define CL_DEVICE_LOCAL_MEM_TYPE                    0x1022
-#define CL_DEVICE_LOCAL_MEM_SIZE                    0x1023
-#define CL_DEVICE_ERROR_CORRECTION_SUPPORT          0x1024
-#define CL_DEVICE_PROFILING_TIMER_RESOLUTION        0x1025
-#define CL_DEVICE_ENDIAN_LITTLE                     0x1026
-#define CL_DEVICE_AVAILABLE                         0x1027
-#define CL_DEVICE_COMPILER_AVAILABLE                0x1028
-#define CL_DEVICE_EXECUTION_CAPABILITIES            0x1029
-#define CL_DEVICE_QUEUE_PROPERTIES                  0x102A
-#define CL_DEVICE_NAME                              0x102B
-#define CL_DEVICE_VENDOR                            0x102C
-#define CL_DRIVER_VERSION                           0x102D
-#define CL_DEVICE_PROFILE                           0x102E
-#define CL_DEVICE_VERSION                           0x102F
-#define CL_DEVICE_EXTENSIONS                        0x1030
-#define CL_DEVICE_PLATFORM                          0x1031
-#define CL_DEVICE_DOUBLE_FP_CONFIG                  0x1032
+                              0x1000
+                         0x1001
+                 0x1002
+          0x1003
+               0x1004
+               0x1005
+       0x1006
+      0x1007
+        0x1008
+       0x1009
+      0x100A
+     0x100B
+               0x100C
+                      0x100D
+               0x100E
+              0x100F
+                0x1010
+                 0x1011
+                0x1012
+                 0x1013
+                0x1014
+                 0x1015
+                     0x1016
+                0x1017
+                      0x1018
+               0x1019
+          0x101A
+                  0x101B
+             0x101C
+         0x101D
+             0x101E
+                   0x101F
+          0x1020
+                 0x1021
+                    0x1022
+                    0x1023
+          0x1024
+        0x1025
+                     0x1026
+                         0x1027
+                0x1028
+            0x1029
+                  0x102A
+                              0x102B
+                            0x102C
+                           0x102D
+                           0x102E
+                           0x102F
+                        0x1030
+                          0x1031
+                  0x1032
 /* 0x1033 reserved for CL_DEVICE_HALF_FP_CONFIG */
-#define CL_DEVICE_PREFERRED_VECTOR_WIDTH_HALF       0x1034
-#define CL_DEVICE_HOST_UNIFIED_MEMORY               0x1035
-#define CL_DEVICE_NATIVE_VECTOR_WIDTH_CHAR          0x1036
-#define CL_DEVICE_NATIVE_VECTOR_WIDTH_SHORT         0x1037
-#define CL_DEVICE_NATIVE_VECTOR_WIDTH_INT           0x1038
-#define CL_DEVICE_NATIVE_VECTOR_WIDTH_LONG          0x1039
-#define CL_DEVICE_NATIVE_VECTOR_WIDTH_FLOAT         0x103A
-#define CL_DEVICE_NATIVE_VECTOR_WIDTH_DOUBLE        0x103B
-#define CL_DEVICE_NATIVE_VECTOR_WIDTH_HALF          0x103C
-#define CL_DEVICE_OPENCL_C_VERSION                  0x103D
-#define CL_DEVICE_LINKER_AVAILABLE                  0x103E
-#define CL_DEVICE_BUILT_IN_KERNELS                  0x103F
-#define CL_DEVICE_IMAGE_MAX_BUFFER_SIZE             0x1040
-#define CL_DEVICE_IMAGE_MAX_ARRAY_SIZE              0x1041
-#define CL_DEVICE_PARENT_DEVICE                     0x1042
-#define CL_DEVICE_PARTITION_MAX_SUB_DEVICES         0x1043
-#define CL_DEVICE_PARTITION_PROPERTIES              0x1044
-#define CL_DEVICE_PARTITION_AFFINITY_DOMAIN         0x1045
-#define CL_DEVICE_PARTITION_TYPE                    0x1046
-#define CL_DEVICE_REFERENCE_COUNT                   0x1047
-#define CL_DEVICE_PREFERRED_INTEROP_USER_SYNC       0x1048
-#define CL_DEVICE_PRINTF_BUFFER_SIZE                0x1049
-#define CL_DEVICE_IMAGE_PITCH_ALIGNMENT             0x104A
-#define CL_DEVICE_IMAGE_BASE_ADDRESS_ALIGNMENT      0x104B
+       0x1034
+               0x1035
+          0x1036
+         0x1037
+           0x1038
+          0x1039
+         0x103A
+        0x103B
+          0x103C
+                  0x103D
+                  0x103E
+                  0x103F
+             0x1040
+              0x1041
+                     0x1042
+         0x1043
+              0x1044
+         0x1045
+                    0x1046
+                   0x1047
+       0x1048
+                0x1049
+             0x104A
+      0x104B
 
 // cl_device_fp_config - bitfield
-#define CL_FP_DENORM                                (1 << 0)
-#define CL_FP_INF_NAN                               (1 << 1)
-#define CL_FP_ROUND_TO_NEAREST                      (1 << 2)
-#define CL_FP_ROUND_TO_ZERO                         (1 << 3)
-#define CL_FP_ROUND_TO_INF                          (1 << 4)
-#define CL_FP_FMA                                   (1 << 5)
+                                (1 << 0)
+                               (1 << 1)
+                      (1 << 2)
+                         (1 << 3)
+                          (1 << 4)
+                                   (1 << 5)
 
 // cl_device_exec_capabilities - bitfield
-#define CL_EXEC_KERNEL                              (1 << 0)
-#define CL_EXEC_NATIVE_KERNEL                       (1 << 1)
+                              (1 << 0)
+                       (1 << 1)
 
 // cl_command_queue_properties - bitfield
-#define CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE      (1 << 0)
-#define CL_QUEUE_PROFILING_ENABLE                   (1 << 1)
+      (1 << 0)
+                   (1 << 1)
 
 // cl_context_info
-#define CL_CONTEXT_DEVICES                          0x1081
+                          0x1081
 
 // cl_context_properties
-#define CL_CONTEXT_PLATFORM                         0x1084
+                         0x1084
 
 // cl_mem_flags - bitfield
-#define CL_MEM_READ_WRITE                           (1 << 0)
-#define CL_MEM_WRITE_ONLY                           (1 << 1)
-#define CL_MEM_READ_ONLY                            (1 << 2)
-#define CL_MEM_USE_HOST_PTR                         (1 << 3)
-#define CL_MEM_ALLOC_HOST_PTR                       (1 << 4)
-#define CL_MEM_COPY_HOST_PTR                        (1 << 5)
+                           (1 << 0)
+                           (1 << 1)
+                            (1 << 2)
+                         (1 << 3)
+                       (1 << 4)
+                        (1 << 5)
 
 // cl_map_flags - bitfield
-#define CL_MAP_READ                                 (1 << 0)
-#define CL_MAP_WRITE                                (1 << 1)
+                                 (1 << 0)
+                                (1 << 1)
 
 // cl_program_info
-#define CL_PROGRAM_NUM_DEVICES                      0x1162
-#define CL_PROGRAM_DEVICES                          0x1163
-#define CL_PROGRAM_BINARY_SIZES                     0x1165
-#define CL_PROGRAM_BINARIES                         0x1166
+                      0x1162
+                          0x1163
+                     0x1165
+                         0x1166
 
 // cl_program_build_info
-#define CL_PROGRAM_BUILD_STATUS                     0x1181
-#define CL_PROGRAM_BUILD_LOG                        0x1183
+                     0x1181
+                        0x1183
 
 // cl_build_status
-#define CL_BUILD_NONE                               -1
-#define CL_BUILD_ERROR                              -2
-#define CL_BUILD_IN_PROGRESS                        -3
+                               -1
+                              -2
+                        -3
 
 /********************************************************************************************************/
 
@@ -1027,9 +1027,9 @@ typedef CL_API_ENTRY void * (CL_API_CALL * PFNCLGETEXTENSIONFUNCTIONADDRESS)(con
 #  endif
 #endif
 
-#define CLEW_FUN_EXPORT CLEWAPI
+ CLEWAPI
 
-#define CLEW_GET_FUN(x) x
+(x) x
 
 
 //  Variables holding function entry points
@@ -1101,79 +1101,79 @@ CLEW_FUN_EXPORT     PFNCLENQUEUEBARRIER                 __clewEnqueueBarrier    
 CLEW_FUN_EXPORT     PFNCLGETEXTENSIONFUNCTIONADDRESS    __clewGetExtensionFunctionAddress   ;
 
 
-#define clGetPlatformIDs                CLEW_GET_FUN(__clewGetPlatformIDs                )
-#define clGetPlatformInfo               CLEW_GET_FUN(__clewGetPlatformInfo               )
-#define clGetDeviceIDs                  CLEW_GET_FUN(__clewGetDeviceIDs                  )
-#define clGetDeviceInfo                 CLEW_GET_FUN(__clewGetDeviceInfo                 )
-#define clCreateContext                 CLEW_GET_FUN(__clewCreateContext                 )
-#define clCreateContextFromType         CLEW_GET_FUN(__clewCreateContextFromType         )
-#define clRetainContext                 CLEW_GET_FUN(__clewRetainContext                 )
-#define clReleaseContext                CLEW_GET_FUN(__clewReleaseContext                )
-#define clGetContextInfo                CLEW_GET_FUN(__clewGetContextInfo                )
-#define clCreateCommandQueue            CLEW_GET_FUN(__clewCreateCommandQueue            )
-#define clRetainCommandQueue            CLEW_GET_FUN(__clewRetainCommandQueue            )
-#define clReleaseCommandQueue           CLEW_GET_FUN(__clewReleaseCommandQueue           )
-#define clGetCommandQueueInfo           CLEW_GET_FUN(__clewGetCommandQueueInfo           )
-#define clSetCommandQueueProperty       CLEW_GET_FUN(__clewSetCommandQueueProperty       )
-#define clCreateBuffer                  CLEW_GET_FUN(__clewCreateBuffer                  )
-#define clCreateImage2D                 CLEW_GET_FUN(__clewCreateImage2D                 )
-#define clCreateImage3D                 CLEW_GET_FUN(__clewCreateImage3D                 )
-#define clRetainMemObject               CLEW_GET_FUN(__clewRetainMemObject               )
-#define clReleaseMemObject              CLEW_GET_FUN(__clewReleaseMemObject              )
-#define clGetSupportedImageFormats      CLEW_GET_FUN(__clewGetSupportedImageFormats      )
-#define clGetMemObjectInfo              CLEW_GET_FUN(__clewGetMemObjectInfo              )
-#define clGetImageInfo                  CLEW_GET_FUN(__clewGetImageInfo                  )
-#define clCreateSampler                 CLEW_GET_FUN(__clewCreateSampler                 )
-#define clRetainSampler                 CLEW_GET_FUN(__clewRetainSampler                 )
-#define clReleaseSampler                CLEW_GET_FUN(__clewReleaseSampler                )
-#define clGetSamplerInfo                CLEW_GET_FUN(__clewGetSamplerInfo                )
-#define clCreateProgramWithSource       CLEW_GET_FUN(__clewCreateProgramWithSource       )
-#define clCreateProgramWithBinary       CLEW_GET_FUN(__clewCreateProgramWithBinary       )
-#define clRetainProgram                 CLEW_GET_FUN(__clewRetainProgram                 )
-#define clReleaseProgram                CLEW_GET_FUN(__clewReleaseProgram                )
-#define clBuildProgram                  CLEW_GET_FUN(__clewBuildProgram                  )
-#define clUnloadCompiler                CLEW_GET_FUN(__clewUnloadCompiler                )
-#define clGetProgramInfo                CLEW_GET_FUN(__clewGetProgramInfo                )
-#define clGetProgramBuildInfo           CLEW_GET_FUN(__clewGetProgramBuildInfo           )
-#define clCreateKernel                  CLEW_GET_FUN(__clewCreateKernel                  )
-#define clCreateKernelsInProgram        CLEW_GET_FUN(__clewCreateKernelsInProgram        )
-#define clRetainKernel                  CLEW_GET_FUN(__clewRetainKernel                  )
-#define clReleaseKernel                 CLEW_GET_FUN(__clewReleaseKernel                 )
-#define clSetKernelArg                  CLEW_GET_FUN(__clewSetKernelArg                  )
-#define clGetKernelInfo                 CLEW_GET_FUN(__clewGetKernelInfo                 )
-#define clGetKernelWorkGroupInfo        CLEW_GET_FUN(__clewGetKernelWorkGroupInfo        )
-#define clWaitForEvents                 CLEW_GET_FUN(__clewWaitForEvents                 )
-#define clGetEventInfo                  CLEW_GET_FUN(__clewGetEventInfo                  )
-#define clRetainEvent                   CLEW_GET_FUN(__clewRetainEvent                   )
-#define clReleaseEvent                  CLEW_GET_FUN(__clewReleaseEvent                  )
-#define clGetEventProfilingInfo         CLEW_GET_FUN(__clewGetEventProfilingInfo         )
-#define clFlush                         CLEW_GET_FUN(__clewFlush                         )
-#define clFinish                        CLEW_GET_FUN(__clewFinish                        )
-#define clEnqueueReadBuffer             CLEW_GET_FUN(__clewEnqueueReadBuffer             )
-#define clEnqueueWriteBuffer            CLEW_GET_FUN(__clewEnqueueWriteBuffer            )
-#define clEnqueueCopyBuffer             CLEW_GET_FUN(__clewEnqueueCopyBuffer             )
-#define clEnqueueReadImage              CLEW_GET_FUN(__clewEnqueueReadImage              )
-#define clEnqueueWriteImage             CLEW_GET_FUN(__clewEnqueueWriteImage             )
-#define clEnqueueCopyImage              CLEW_GET_FUN(__clewEnqueueCopyImage              )
-#define clEnqueueCopyImageToBuffer      CLEW_GET_FUN(__clewEnqueueCopyImageToBuffer      )
-#define clEnqueueCopyBufferToImage      CLEW_GET_FUN(__clewEnqueueCopyBufferToImage      )
-#define clEnqueueMapBuffer              CLEW_GET_FUN(__clewEnqueueMapBuffer              )
-#define clEnqueueMapImage               CLEW_GET_FUN(__clewEnqueueMapImage               )
-#define clEnqueueUnmapMemObject         CLEW_GET_FUN(__clewEnqueueUnmapMemObject         )
-#define clEnqueueNDRangeKernel          CLEW_GET_FUN(__clewEnqueueNDRangeKernel          )
-#define clEnqueueTask                   CLEW_GET_FUN(__clewEnqueueTask                   )
-#define clEnqueueNativeKernel           CLEW_GET_FUN(__clewEnqueueNativeKernel           )
-#define clEnqueueMarker                 CLEW_GET_FUN(__clewEnqueueMarker                 )
-#define clEnqueueWaitForEvents          CLEW_GET_FUN(__clewEnqueueWaitForEvents          )
-#define clEnqueueBarrier                CLEW_GET_FUN(__clewEnqueueBarrier                )
-#define clGetExtensionFunctionAddress   CLEW_GET_FUN(__clewGetExtensionFunctionAddress   )
+                CLEW_GET_FUN(__clewGetPlatformIDs                )
+               CLEW_GET_FUN(__clewGetPlatformInfo               )
+                  CLEW_GET_FUN(__clewGetDeviceIDs                  )
+                 CLEW_GET_FUN(__clewGetDeviceInfo                 )
+                 CLEW_GET_FUN(__clewCreateContext                 )
+         CLEW_GET_FUN(__clewCreateContextFromType         )
+                 CLEW_GET_FUN(__clewRetainContext                 )
+                CLEW_GET_FUN(__clewReleaseContext                )
+                CLEW_GET_FUN(__clewGetContextInfo                )
+            CLEW_GET_FUN(__clewCreateCommandQueue            )
+            CLEW_GET_FUN(__clewRetainCommandQueue            )
+           CLEW_GET_FUN(__clewReleaseCommandQueue           )
+           CLEW_GET_FUN(__clewGetCommandQueueInfo           )
+       CLEW_GET_FUN(__clewSetCommandQueueProperty       )
+                  CLEW_GET_FUN(__clewCreateBuffer                  )
+                 CLEW_GET_FUN(__clewCreateImage2D                 )
+                 CLEW_GET_FUN(__clewCreateImage3D                 )
+               CLEW_GET_FUN(__clewRetainMemObject               )
+              CLEW_GET_FUN(__clewReleaseMemObject              )
+      CLEW_GET_FUN(__clewGetSupportedImageFormats      )
+              CLEW_GET_FUN(__clewGetMemObjectInfo              )
+                  CLEW_GET_FUN(__clewGetImageInfo                  )
+                 CLEW_GET_FUN(__clewCreateSampler                 )
+                 CLEW_GET_FUN(__clewRetainSampler                 )
+                CLEW_GET_FUN(__clewReleaseSampler                )
+                CLEW_GET_FUN(__clewGetSamplerInfo                )
+       CLEW_GET_FUN(__clewCreateProgramWithSource       )
+       CLEW_GET_FUN(__clewCreateProgramWithBinary       )
+                 CLEW_GET_FUN(__clewRetainProgram                 )
+                CLEW_GET_FUN(__clewReleaseProgram                )
+                  CLEW_GET_FUN(__clewBuildProgram                  )
+                CLEW_GET_FUN(__clewUnloadCompiler                )
+                CLEW_GET_FUN(__clewGetProgramInfo                )
+           CLEW_GET_FUN(__clewGetProgramBuildInfo           )
+                  CLEW_GET_FUN(__clewCreateKernel                  )
+        CLEW_GET_FUN(__clewCreateKernelsInProgram        )
+                  CLEW_GET_FUN(__clewRetainKernel                  )
+                 CLEW_GET_FUN(__clewReleaseKernel                 )
+                  CLEW_GET_FUN(__clewSetKernelArg                  )
+                 CLEW_GET_FUN(__clewGetKernelInfo                 )
+        CLEW_GET_FUN(__clewGetKernelWorkGroupInfo        )
+                 CLEW_GET_FUN(__clewWaitForEvents                 )
+                  CLEW_GET_FUN(__clewGetEventInfo                  )
+                   CLEW_GET_FUN(__clewRetainEvent                   )
+                  CLEW_GET_FUN(__clewReleaseEvent                  )
+         CLEW_GET_FUN(__clewGetEventProfilingInfo         )
+                         CLEW_GET_FUN(__clewFlush                         )
+                        CLEW_GET_FUN(__clewFinish                        )
+             CLEW_GET_FUN(__clewEnqueueReadBuffer             )
+            CLEW_GET_FUN(__clewEnqueueWriteBuffer            )
+             CLEW_GET_FUN(__clewEnqueueCopyBuffer             )
+              CLEW_GET_FUN(__clewEnqueueReadImage              )
+             CLEW_GET_FUN(__clewEnqueueWriteImage             )
+              CLEW_GET_FUN(__clewEnqueueCopyImage              )
+      CLEW_GET_FUN(__clewEnqueueCopyImageToBuffer      )
+      CLEW_GET_FUN(__clewEnqueueCopyBufferToImage      )
+              CLEW_GET_FUN(__clewEnqueueMapBuffer              )
+               CLEW_GET_FUN(__clewEnqueueMapImage               )
+         CLEW_GET_FUN(__clewEnqueueUnmapMemObject         )
+          CLEW_GET_FUN(__clewEnqueueNDRangeKernel          )
+                   CLEW_GET_FUN(__clewEnqueueTask                   )
+           CLEW_GET_FUN(__clewEnqueueNativeKernel           )
+                 CLEW_GET_FUN(__clewEnqueueMarker                 )
+          CLEW_GET_FUN(__clewEnqueueWaitForEvents          )
+                CLEW_GET_FUN(__clewEnqueueBarrier                )
+   CLEW_GET_FUN(__clewGetExtensionFunctionAddress   )
 
-#endif  //  CLCC_GENERATE_DOCUMENTATION
 
-#define CLEW_SUCCESS                0       //!<    Success error code
-#define CLEW_ERROR_OPEN_FAILED      -1      //!<    Error code for failing to open the dynamic library
-#define CLEW_ERROR_ATEXIT_FAILED    -2      //!<    Error code for failing to queue the closing of the dynamic library to atexit()
-#define CLEW_ERROR_IMPORT_FAILED    -3      //!<    Error code for failing to import a named function from the dll
+
+                0       //!<    Success error code
+      -1      //!<    Error code for failing to open the dynamic library
+    -2      //!<    Error code for failing to queue the closing of the dynamic library to atexit()
+    -3      //!<    Error code for failing to import a named function from the dll
 
 //! \brief Load OpenCL dynamic library and set function entry points
 CLEW_FUN_EXPORT int         clewInit        (const char*);
@@ -1184,4 +1184,4 @@ CLEW_FUN_EXPORT const char* clewErrorString (cl_int error);
 }
 #endif
 
-#endif  //  CLEW_CLEW_H_INCLUDED
+

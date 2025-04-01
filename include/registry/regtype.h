@@ -126,6 +126,6 @@ enum class SAL_DLLPUBLIC_RTTI RegError
 };
 
 /// specify the calling convention for the registry API
-#define REGISTRY_CALLTYPE SAL_CALL
+ SAL_CALL
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

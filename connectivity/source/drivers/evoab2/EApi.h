@@ -35,15 +35,15 @@ G_BEGIN_DECLS
 
 // e-contact.h
 #ifdef DECLARE_FN_POINTERS
-#define EAPI_EXTERN
+
 #else
-#define EAPI_EXTERN extern
+ extern
 #endif
 
 
 typedef void EContact;
-#define E_CONTACT(a) ((EContact *)(a))
-#define E_TYPE_CONTACT (e_contact_get_type())
+(a) ((EContact *)(a))
+ (e_contact_get_type())
 typedef int EContactField;
 
 EAPI_EXTERN const char      *(*e_contact_field_name)   ( EContactField field_id);
@@ -51,7 +51,7 @@ EAPI_EXTERN gpointer        (*e_contact_get)   (EContact *contact, EContactField
 EAPI_EXTERN gconstpointer  (*e_contact_get_const)   (EContact *contact, EContactField field_id);
 // e-source.h
 typedef void ESource;
-#define E_SOURCE(a) ((ESource *)(a))
+(a) ((ESource *)(a))
 EAPI_EXTERN const char  *(*e_source_peek_name)    (ESource *source);
 EAPI_EXTERN const gchar *(*e_source_get_property) (ESource *source,
                        const gchar *property);
@@ -65,7 +65,7 @@ EAPI_EXTERN GSList *(*e_source_list_peek_groups) (ESourceList *list);
 
 // e-source-group.h
 typedef void ESourceGroup;
-#define E_SOURCE_GROUP(a) ((ESourceGroup *)(a))
+(a) ((ESourceGroup *)(a))
 
 EAPI_EXTERN GSList  *(*e_source_group_peek_sources) (ESourceGroup *group);
 EAPI_EXTERN const char *(*e_source_group_peek_base_uri)  (ESourceGroup *group);
@@ -130,7 +130,7 @@ typedef struct {
         char *country;
 } EContactAddress;
 
-#define E_SOURCE_EXTENSION_ADDRESS_BOOK "Address Book"
+ "Address Book"
 typedef void ESourceRegistry;
 typedef void GCancellable;
 typedef void ESourceBackend;

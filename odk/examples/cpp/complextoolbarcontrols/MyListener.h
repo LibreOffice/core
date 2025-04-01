@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXAMPLES_COMPLEXTOOLBARCONTROLS_MYLISTENER_H
-#define INCLUDED_EXAMPLES_COMPLEXTOOLBARCONTROLS_MYLISTENER_H
+#pragma once
+
 
 #include <sal/config.h>
 
@@ -30,8 +30,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#define MYLISTENER_IMPLEMENTATIONNAME  "vnd.My.impl.NewDocListener"
-#define MYLISTENER_SERVICENAME         "vnd.My.NewDocListener"
+  "vnd.My.impl.NewDocListener"
+         "vnd.My.NewDocListener"
 
 /**
  * Register in the Office configuration as job.

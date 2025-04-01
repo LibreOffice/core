@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_TYPES_H
-#define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_TYPES_H
+#pragma once
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,6 +32,6 @@ typedef bool (*LibreOfficeKitAnyInputCallback)(void* pData, int nMostUrgentPrior
 }
 #endif
 
-#endif // INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_TYPES_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

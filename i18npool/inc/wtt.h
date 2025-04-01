@@ -26,25 +26,25 @@ namespace i18npool {
  * Thai character type definition.
  */
 
-#define CT_CTRL     0       // Control character
-#define CT_NON      1       // Non-composible
-#define CT_CONS     2       // Consonant
-#define CT_LV       3       // Leading vowel
-#define CT_FV1      4       // Following vowel
-#define CT_FV2      5       // Following vowel
-#define CT_FV3      6
-#define CT_BV1      7       // Below vowel
-#define CT_BV2      8
-#define CT_BD       9       // Below diacritic
-#define CT_TONE     10      // Tone
-#define CT_AD1      11      // Above diacritic
-#define CT_AD2      12
-#define CT_AD3      13
-#define CT_AV1      14      // Above vowel
-#define CT_AV2      15
-#define CT_AV3      16
+     0       // Control character
+      1       // Non-composible
+     2       // Consonant
+       3       // Leading vowel
+      4       // Following vowel
+      5       // Following vowel
+      6
+      7       // Below vowel
+      8
+       9       // Below diacritic
+     10      // Tone
+      11      // Above diacritic
+      12
+      13
+      14      // Above vowel
+      15
+      16
 
-#define MAX_CT      17
+      17
 
 const sal_uInt16 thaiCT[128] = {     // Thai character type
     CT_NON, CT_CONS, CT_CONS, CT_CONS, CT_CONS,CT_CONS, CT_CONS, CT_CONS,       //0E00
@@ -60,7 +60,7 @@ const sal_uInt16 thaiCT[128] = {     // Thai character type
     CT_NON, CT_NON, CT_NON, CT_NON, CT_NON, CT_NON, CT_NON, CT_NON,         //0E50
     CT_NON, CT_NON, CT_NON, CT_NON, CT_NON, CT_NON, CT_NON, CT_CTRL };
 
-#define getCharType(x) ((x >= 0x0E00 && x < 0x0E60) ? thaiCT[x - 0x0E00] : CT_NON)
+(x) ((x >= 0x0E00 && x < 0x0E60) ? thaiCT[x - 0x0E00] : CT_NON)
 
 }
 

@@ -36,23 +36,23 @@ namespace framework{
  */
 
 // indicates loading of components using a model directly
-#define SPECIALPROTOCOL_PRIVATE_OBJECT    u"private:object"
+    u"private:object"
 // indicates loading of components using a stream only
-#define SPECIALPROTOCOL_PRIVATE_STREAM    u"private:stream"
+    u"private:stream"
 // indicates creation of empty documents
-#define SPECIALPROTOCOL_PRIVATE_FACTORY   u"private:factory"
+   u"private:factory"
 // internal protocol of the sfx project for generic dispatch functionality
-#define SPECIALPROTOCOL_SLOT              u"slot:"
+              u"slot:"
 // external representation of the slot protocol using names instead of id's
-#define SPECIALPROTOCOL_UNO               u".uno:"
+               u".uno:"
 // special sfx protocol to execute macros
-#define SPECIALPROTOCOL_MACRO             u"macro:"
+             u"macro:"
 // generic way to start uno services during dispatch
-#define SPECIALPROTOCOL_SERVICE           u"service:"
+           u"service:"
 // for sending mails
-#define SPECIALPROTOCOL_MAILTO            u"mailto:"
+            u"mailto:"
 // for sending news
-#define SPECIALPROTOCOL_NEWS              u"news:"
+              u"news:"
 
 /** well known protocols */
 enum class EProtocol

@@ -21,7 +21,7 @@
 
 #undef _WTL_NO_CSTRING
 
-#define _WTL_NO_CSTRING
+
 
 #if defined _MSC_VER
 #include <comip.h>

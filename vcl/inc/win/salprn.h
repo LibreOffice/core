@@ -23,7 +23,7 @@
 
 
 // WNT3
-#define SAL_DRIVERDATA_SYSSIGN              ((sal_uIntPtr)0x574E5433)
+              ((sal_uIntPtr)0x574E5433)
 
 #pragma pack( 1 )
 

@@ -23,9 +23,9 @@
 
 #pragma once
 
-#define STRICT
-#define _ATL_APARTMENT_THREADED
-#define _ATL_STATIC_REGISTRY
+
+
+
 
 #pragma warning(push)
 // local variable is initialized but not referenced - in atlctl.h
@@ -47,7 +47,7 @@
 #pragma clang diagnostic ignored "-Wtypename-missing"
 #endif
 
-#define min(a, b) (((a) < (b)) ? (a) : (b))
+(a, b) (((a) < (b)) ? (a) : (b))
 #include <atlbase.h>
 
 //You may derive a class from CComModule and use it if you want to override

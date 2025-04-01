@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SVLIBRARY
-#define SVLIBRARY(Base) SAL_MODULENAME(Base "lo")
+#pragma once
+(Base) SAL_MODULENAME(Base "lo")
 #include <osl/module.h>
 #endif
 

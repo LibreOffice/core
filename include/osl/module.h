@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_OSL_MODULE_H
-#define INCLUDED_OSL_MODULE_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -34,27 +34,27 @@ extern "C" {
 #endif
 
 #ifdef SAL_DLLPREFIX
-#define SAL_MODULENAME(name) SAL_DLLPREFIX name SAL_DLLEXTENSION
+(name) SAL_DLLPREFIX name SAL_DLLEXTENSION
 #else
-#define SAL_MODULENAME(name) name SAL_DLLEXTENSION
+(name) name SAL_DLLEXTENSION
 #endif
 
 #if defined(_WIN32)
-#define SAL_MODULENAME_WITH_VERSION(name, version) name version SAL_DLLEXTENSION
+(name, version) name version SAL_DLLEXTENSION
 
 #elif defined(SAL_UNX)
 #if defined(MACOSX)
-#define SAL_MODULENAME_WITH_VERSION(name, version) SAL_DLLPREFIX name ".dylib." version
+(name, version) SAL_DLLPREFIX name ".dylib." version
 #else
-#define SAL_MODULENAME_WITH_VERSION(name, version) SAL_DLLPREFIX name SAL_DLLEXTENSION "." version
+(name, version) SAL_DLLPREFIX name SAL_DLLEXTENSION "." version
 #endif
 
 #endif
 
-#define SAL_LOADMODULE_DEFAULT    0x00000
-#define SAL_LOADMODULE_LAZY       0x00001
-#define SAL_LOADMODULE_NOW        0x00002
-#define SAL_LOADMODULE_GLOBAL     0x00100
+    0x00000
+       0x00001
+        0x00002
+     0x00100
 
 typedef void* oslModule;
 
@@ -65,7 +65,7 @@ typedef void* oslModule;
 */
 typedef void ( SAL_CALL *oslGenericFunction )( void );
 
-#ifndef DISABLE_DYNLOADING
+#pragma once
 
 /** Load a shared library or module.
 
@@ -140,7 +140,7 @@ SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModuleRelativeAscii(
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult);
 
-#ifndef DISABLE_DYNLOADING
+#pragma once
 
 /** Release the module
 */
@@ -225,6 +225,6 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress(
 }
 #endif
 
-#endif // INCLUDED_OSL_MODULE_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

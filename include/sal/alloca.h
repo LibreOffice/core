@@ -21,29 +21,29 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_SAL_ALLOCA_H
-#define INCLUDED_SAL_ALLOCA_H
+#pragma once
+
 
 #if defined(__sun) || defined(LINUX) || defined(ANDROID) || defined(HAIKU) || defined(MACOSX)      \
     || defined(IOS) || defined(EMSCRIPTEN)
 
-#ifndef INCLUDED_ALLOCA_H
+#pragma once
 #include <alloca.h>
-#define INCLUDED_ALLOCA_H
+
 #endif
 
 #elif defined(FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(DRAGONFLY)
 
-#ifndef INCLUDED_STDLIB_H
+#pragma once
 #include <stdlib.h>
-#define INCLUDED_STDLIB_H
+
 #endif
 
 #elif defined(_WIN32)
 
-#ifndef INCLUDED_MALLOC_H
+#pragma once
 #include <malloc.h>
-#define INCLUDED_MALLOC_H
+
 #endif
 
 #else
@@ -52,6 +52,6 @@
 
 #endif
 
-#endif /* INCLUDED_SAL_ALLOCA_H */
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

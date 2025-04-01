@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_DATECODE_H
-#define INCLUDED_HWPFILTER_SOURCE_DATECODE_H
+#pragma once
+
 
 const hchar defaultform[] = { '1', 0x9165, 32, '2', 0xB6A9, 32, '3', 0xB7A9, 0 };
 

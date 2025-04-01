@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_RTL_CIPHER_H
-#define INCLUDED_RTL_CIPHER_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -279,6 +279,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cipher_destroyARCFOUR (
 }
 #endif
 
-#endif /* ! INCLUDED_RTL_CIPHER_H */
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

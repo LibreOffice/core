@@ -17,28 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_DLLAPI_H
-#define INCLUDED_VCL_DLLAPI_H
+#pragma once
+
 
 #include <sal/config.h>
 #include <sal/types.h>
 
 #if defined VCL_DLLIMPLEMENTATION
-#define VCL_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+ SAL_DLLPUBLIC_EXPORT
 #else
-#define VCL_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+ SAL_DLLPUBLIC_IMPORT
 #endif
 
 #if defined DLLIMPLEMENTATION_UITEST
-#define UITEST_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+ SAL_DLLPUBLIC_EXPORT
 #else
-#define UITEST_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+ SAL_DLLPUBLIC_IMPORT
 #endif
 
 #if (defined UNX && !defined MACOS) || defined _WIN32
-#define VCL_PLUGIN_PUBLIC VCL_DLLPUBLIC
+ VCL_DLLPUBLIC
 #else
-#define VCL_PLUGIN_PUBLIC SAL_DLLPRIVATE
+ SAL_DLLPRIVATE
 #endif
 
 #endif

@@ -4,25 +4,25 @@
  * These should be consistent with the MS version.
  *
  **************************************************/
-#ifndef __SQLUCODE_H
-#define __SQLUCODE_H
+#pragma once
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define SQL_WCHAR           (-8)
-#define SQL_WVARCHAR        (-9)
-#define SQL_WLONGVARCHAR    (-10)
-#define SQL_C_WCHAR         SQL_WCHAR
+           (-8)
+        (-9)
+    (-10)
+         SQL_WCHAR
 
 #ifdef UNICODE
-#define SQL_C_TCHAR     SQL_C_WCHAR
+     SQL_C_WCHAR
 #else
-#define SQL_C_TCHAR     SQL_C_CHAR
+     SQL_C_CHAR
 #endif
 
-#define SQL_SQLSTATE_SIZEW  10  /* size of SQLSTATE for unicode */
+  10  /* size of SQLSTATE for unicode */
 
 /* UNICODE versions */
 
@@ -732,55 +732,55 @@ SQLRETURN SQL_API SQLDriversA(
 /* Mapping macros for Unicode                  */
 /*---------------------------------------------*/
 
-#ifndef SQL_NOUNICODEMAP    /* define this to disable the mapping */
+#pragma once    /* define this to disable the mapping */
 #ifdef  UNICODE
 
-#define SQLColAttribute     SQLColAttributeW
-#define SQLColAttributes    SQLColAttributesW
-#define SQLConnect          SQLConnectW
-#define SQLDescribeCol      SQLDescribeColW
-#define SQLError            SQLErrorW
-#define SQLExecDirect       SQLExecDirectW
-#define SQLGetConnectAttr   SQLGetConnectAttrW
-#define SQLGetCursorName    SQLGetCursorNameW
-#define SQLGetDescField     SQLGetDescFieldW
-#define SQLGetDescRec       SQLGetDescRecW
-#define SQLGetDiagField     SQLGetDiagFieldW
-#define SQLGetDiagRec       SQLGetDiagRecW
-#define SQLPrepare          SQLPrepareW
-#define SQLSetConnectAttr   SQLSetConnectAttrW
-#define SQLSetCursorName    SQLSetCursorNameW
-#define SQLSetDescField     SQLSetDescFieldW
-#define SQLSetStmtAttr      SQLSetStmtAttrW
-#define SQLGetStmtAttr      SQLGetStmtAttrW
-#define SQLColumns          SQLColumnsW
-#define SQLGetConnectOption SQLGetConnectOptionW
-#define SQLGetInfo          SQLGetInfoW
-#define SQLGetTypeInfo      SQLGetTypeInfoW
-#define SQLSetConnectOption SQLSetConnectOptionW
-#define SQLSpecialColumns   SQLSpecialColumnsW
-#define SQLStatistics       SQLStatisticsW
-#define SQLTables           SQLTablesW
-#define SQLDataSources      SQLDataSourcesW
-#define SQLDriverConnect    SQLDriverConnectW
-#define SQLBrowseConnect    SQLBrowseConnectW
-#define SQLColumnPrivileges SQLColumnPrivilegesW
-#define SQLForeignKeys      SQLForeignKeysW
-#define SQLNativeSql        SQLNativeSqlW
-#define SQLPrimaryKeys      SQLPrimaryKeysW
-#define SQLProcedureColumns SQLProcedureColumnsW
-#define SQLProcedures       SQLProceduresW
-#define SQLTablePrivileges  SQLTablePrivilegesW
-#define SQLDrivers          SQLDriversW
+     SQLColAttributeW
+    SQLColAttributesW
+          SQLConnectW
+      SQLDescribeColW
+            SQLErrorW
+       SQLExecDirectW
+   SQLGetConnectAttrW
+    SQLGetCursorNameW
+     SQLGetDescFieldW
+       SQLGetDescRecW
+     SQLGetDiagFieldW
+       SQLGetDiagRecW
+          SQLPrepareW
+   SQLSetConnectAttrW
+    SQLSetCursorNameW
+     SQLSetDescFieldW
+      SQLSetStmtAttrW
+      SQLGetStmtAttrW
+          SQLColumnsW
+ SQLGetConnectOptionW
+          SQLGetInfoW
+      SQLGetTypeInfoW
+ SQLSetConnectOptionW
+   SQLSpecialColumnsW
+       SQLStatisticsW
+           SQLTablesW
+      SQLDataSourcesW
+    SQLDriverConnectW
+    SQLBrowseConnectW
+ SQLColumnPrivilegesW
+      SQLForeignKeysW
+        SQLNativeSqlW
+      SQLPrimaryKeysW
+ SQLProcedureColumnsW
+       SQLProceduresW
+  SQLTablePrivilegesW
+          SQLDriversW
 
-#endif  /* UNICODE */
-#endif  /* SQL_NOUNICODEMAP */
+
+
 
 #ifdef __cplusplus
 }
 #endif
 
-#ifndef __SQLEXT_H
+#pragma once
 #include <odbx/sqlext.h>
 
 #endif

@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_OSL_DIAGNOSE_H
-#define INCLUDED_OSL_DIAGNOSE_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -58,19 +58,19 @@
  */
 
 #if !defined OSL_DEBUG_LEVEL
-#define OSL_DEBUG_LEVEL 0
+ 0
 #endif
 
 /** @internal The macro OSL_LOG_PREFIX is intended to be an office internal macro for now
     @deprecated superseded by (C++ only) SAL_WHERE
 */
-#define OSL_LOG_PREFIX SAL_DETAIL_WHERE
+ SAL_DETAIL_WHERE
 
 /** Prints trace message.
 
     The arguments have the same meaning as the arguments of printf.
 */
-#define OSL_TRACE(...) \
+(...) \
     SAL_DETAIL_INFO_IF_FORMAT(OSL_DEBUG_LEVEL > 0, "legacy.osl", __VA_ARGS__)
 
 /** @defgroup assert Assertions
@@ -81,12 +81,12 @@
  */
 
 /** If cond is false, reports an error. */
-#define OSL_ASSERT(c) \
+(c) \
     SAL_DETAIL_WARN_IF_FORMAT(!(c), "legacy.osl", "OSL_ASSERT: %s", #c)
 /** If cond is false, reports an error with message msg. */
-#define OSL_ENSURE(c, m) SAL_DETAIL_WARN_IF_FORMAT(!(c), "legacy.osl", "%s", m)
+(c, m) SAL_DETAIL_WARN_IF_FORMAT(!(c), "legacy.osl", "%s", m)
 /** Reports an error with message msg unconditionally. */
-#define OSL_FAIL(m) SAL_DETAIL_WARN_IF_FORMAT(sal_True, "legacy.osl", "%s", m)
+(m) SAL_DETAIL_WARN_IF_FORMAT(sal_True, "legacy.osl", "%s", m)
 
 /** Evaluates the expression and if it is false, reports an error. The
     expression is evaluated once without regard of the value of
@@ -103,22 +103,22 @@
 
     @endcode
 */
-#define OSL_VERIFY(c) do { if (!(c)) OSL_ASSERT(0); } while (0)
+(c) do { if (!(c)) OSL_ASSERT(0); } while (0)
 
 /** Check the precondition of functions.
 
     Functionally equivalent to OSL_ENSURE(cond, msg).
 */
-#define OSL_PRECOND(c, m)   OSL_ENSURE(c, m)
+(c, m)   OSL_ENSURE(c, m)
 
 /** Check the postcondition of functions.
 
     Functionally equivalent to OSL_ENSURE(cond, msg).
 */
-#define OSL_POSTCOND(c, m)  OSL_ENSURE(c, m)
+(c, m)  OSL_ENSURE(c, m)
 
 /** @} */
 
-#endif // INCLUDED_OSL_DIAGNOSE_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

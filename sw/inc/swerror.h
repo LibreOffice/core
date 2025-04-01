@@ -17,29 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_SWERROR_H
-#define INCLUDED_SW_INC_SWERROR_H
+#pragma once
+
 
 // Import & Export
-#define ERR_SWG_FILE_FORMAT_ERROR       ErrCode(ErrCodeArea::Sw, ErrCodeClass::Read, 1 )
-#define ERR_SWG_READ_ERROR              ErrCode(ErrCodeArea::Sw, ErrCodeClass::Read, 2 )
-#define ERR_WW6_NO_WW6_FILE_ERR         ErrCode(ErrCodeArea::Sw, ErrCodeClass::Read, 8 )
-#define ERR_FORMAT_ROWCOL               ErrCode(ErrCodeArea::Sw, ErrCodeClass::Read, 12)
-#define ERR_WW8_NO_WW8_FILE_ERR         ErrCode(ErrCodeArea::Sw, ErrCodeClass::Read, 14)
-#define ERR_FORMAT_FILE_ROWCOL          ErrCode(ErrCodeArea::Sw, ErrCodeClass::Read, 15)
-#define ERR_SWG_WRITE_ERROR             ErrCode(ErrCodeArea::Sw, ErrCodeClass::Write, 30 )
-#define ERR_WRITE_ERROR_FILE            ErrCode(ErrCodeArea::Sw, ErrCodeClass::Write, 35 )
-#define ERR_SWG_INTERNAL_ERROR          ErrCode(ErrCodeArea::Sw, 50 )
-#define ERR_TXTBLOCK_NEWFILE_ERROR      ErrCode(ErrCodeArea::Sw, ErrCodeClass::Locking, 55 )
-#define ERR_AUTOPATH_ERROR              ErrCode(ErrCodeArea::Sw, ErrCodeClass::Path, 55 )
-#define ERR_TBLSPLIT_ERROR              ErrCode(ErrCodeArea::Sw, ErrCodeClass::NONE, 56 )
-#define ERR_TBLINSCOL_ERROR             ErrCode(ErrCodeArea::Sw, ErrCodeClass::NONE, 57 )
-#define ERR_TBLDDECHG_ERROR             ErrCode(ErrCodeArea::Sw, ErrCodeClass::NONE, 58 )
-#define WARN_SWG_FEATURES_LOST          ErrCode(WarningFlag::Yes, ErrCodeArea::Sw, ErrCodeClass::NONE, 72 )
-#define WARN_SWG_POOR_LOAD              ErrCode(WarningFlag::Yes, ErrCodeArea::Sw, ErrCodeClass::Write, 74 )
-#define WARN_SWG_HTML_NO_MACROS         ErrCode(WarningFlag::Yes, ErrCodeArea::Sw, ErrCodeClass::Write, 75)
-#define WARN_WRITE_ERROR_FILE           ErrCode(WarningFlag::Yes, ErrCodeArea::Sw, ErrCodeClass::Write, 76)
-#define WARN_FORMAT_FILE_ROWCOL         ErrCode(WarningFlag::Yes, ErrCodeArea::Sw, ErrCodeClass::Read, 77)
+       ErrCode(ErrCodeArea::Sw, ErrCodeClass::Read, 1 )
+              ErrCode(ErrCodeArea::Sw, ErrCodeClass::Read, 2 )
+         ErrCode(ErrCodeArea::Sw, ErrCodeClass::Read, 8 )
+               ErrCode(ErrCodeArea::Sw, ErrCodeClass::Read, 12)
+         ErrCode(ErrCodeArea::Sw, ErrCodeClass::Read, 14)
+          ErrCode(ErrCodeArea::Sw, ErrCodeClass::Read, 15)
+             ErrCode(ErrCodeArea::Sw, ErrCodeClass::Write, 30 )
+            ErrCode(ErrCodeArea::Sw, ErrCodeClass::Write, 35 )
+          ErrCode(ErrCodeArea::Sw, 50 )
+      ErrCode(ErrCodeArea::Sw, ErrCodeClass::Locking, 55 )
+              ErrCode(ErrCodeArea::Sw, ErrCodeClass::Path, 55 )
+              ErrCode(ErrCodeArea::Sw, ErrCodeClass::NONE, 56 )
+             ErrCode(ErrCodeArea::Sw, ErrCodeClass::NONE, 57 )
+             ErrCode(ErrCodeArea::Sw, ErrCodeClass::NONE, 58 )
+          ErrCode(WarningFlag::Yes, ErrCodeArea::Sw, ErrCodeClass::NONE, 72 )
+              ErrCode(WarningFlag::Yes, ErrCodeArea::Sw, ErrCodeClass::Write, 74 )
+         ErrCode(WarningFlag::Yes, ErrCodeArea::Sw, ErrCodeClass::Write, 75)
+           ErrCode(WarningFlag::Yes, ErrCodeArea::Sw, ErrCodeClass::Write, 76)
+         ErrCode(WarningFlag::Yes, ErrCodeArea::Sw, ErrCodeClass::Read, 77)
 
 #endif
 

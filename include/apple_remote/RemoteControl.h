@@ -47,7 +47,7 @@ extern NSString* kApplicationIdentifier;
 extern NSString* kTargetApplicationIdentifier;
 
 // we have a 6 bit offset to make a hold event out of a normal event
-#define EVENT_TO_HOLD_EVENT_OFFSET 6
+ 6
 
 @class RemoteControl;
 

@@ -22,8 +22,8 @@
 // (C) 1998 Mizi Research, All rights are reserved
 
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
-#define INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
+#pragma once
+
 
 #include <algorithm>
 #include <memory>
@@ -37,14 +37,14 @@
 #include "hstyle.h"
 #include "hpara.h"
 
-#define HWPIDLen    30
-#define V20SIGNATURE    "HWP Document File V2.00 \032\1\2\3\4\5"
-#define V21SIGNATURE    "HWP Document File V2.10 \032\1\2\3\4\5"
-#define V30SIGNATURE    "HWP Document File V3.00 \032\1\2\3\4\5"
+    30
+    "HWP Document File V2.00 \032\1\2\3\4\5"
+    "HWP Document File V2.10 \032\1\2\3\4\5"
+    "HWP Document File V3.00 \032\1\2\3\4\5"
 
-#define HWP_V20 20
-#define HWP_V21 21
-#define HWP_V30 30
+ 20
+ 21
+ 30
 
 int detect_hwp_version(const char *str);
 
@@ -328,6 +328,6 @@ public:
 
 HWPFile *GetCurrentDoc(void);
 HWPFile *SetCurrentDoc(HWPFile *hwpfp);
-#endif // INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,8 +20,8 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#ifndef INCLUDED_UNO_DATA_H
-#define INCLUDED_UNO_DATA_H
+#pragma once
+
 
 #include "cppu/cppudllapi.h"
 

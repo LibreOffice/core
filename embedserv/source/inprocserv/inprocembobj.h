@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDSERV_SOURCE_INPROCSERV_INPROCEMBOBJ_H
-#define INCLUDED_EMBEDSERV_SOURCE_INPROCSERV_INPROCEMBOBJ_H
+#pragma once
+
 
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
@@ -29,7 +29,7 @@
 #include <systools/win32/comtools.hxx>
 #include "advisesink.hxx"
 
-#define DEFAULT_ARRAY_LEN 256
+ 256
 
 namespace inprocserv {
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_QA_OSL_SECURITY_OSL_SECURITY_CONST_H
-#define INCLUDED_SAL_QA_OSL_SECURITY_OSL_SECURITY_CONST_H
+#pragma once
+
 
 #if defined(_WIN32) // Windows
 #include <io.h>
@@ -42,9 +42,9 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/plugin/TestPlugInDefaultImpl.h>
 
-#define t_print printf
+ printf
 
-#define BUFSIZE 1024
+ 1024
 const char pTestString[17] = "Sun Microsystems";
 
 OUString aLogonUser, aLogonPasswd, aFileServer, aStringForward;
@@ -53,6 +53,6 @@ OUString strConfigDirectory, strUserID;
 
 bool isAdmin = false;
 
-#endif // INCLUDED_SAL_QA_OSL_SECURITY_OSL_SECURITY_CONST_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

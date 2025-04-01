@@ -33,7 +33,7 @@ struct FormulaEntry{
 };
 
 // empty square
-#define DEFAULT_VALUE   0x25a1
+   0x25a1
 constexpr struct FormulaEntry FormulaMapTab[] = {
 /* Capital Greek */
 {"Alpha", 0x0391},

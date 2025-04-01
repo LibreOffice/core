@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_OSL_PROCESS_H
-#define INCLUDED_OSL_PROCESS_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -39,22 +39,22 @@ extern "C" {
 
 
 typedef sal_Int32 oslProcessOption;
-#define     osl_Process_WAIT       0x0001    /* wait for completion */
-#define     osl_Process_SEARCHPATH 0x0002    /* search path for executable */
-#define     osl_Process_DETACHED   0x0004    /* run detached */
-#define     osl_Process_NORMAL     0x0000    /* run in normal window */
-#define     osl_Process_HIDDEN     0x0010    /* run hidden */
-#define     osl_Process_MINIMIZED  0x0020    /* run in minimized window */
-#define     osl_Process_MAXIMIZED  0x0040    /* run in maximized window */
-#define     osl_Process_FULLSCREEN 0x0080    /* run in fullscreen window */
+       0x0001    /* wait for completion */
+ 0x0002    /* search path for executable */
+   0x0004    /* run detached */
+     0x0000    /* run in normal window */
+     0x0010    /* run hidden */
+  0x0020    /* run in minimized window */
+  0x0040    /* run in maximized window */
+ 0x0080    /* run in fullscreen window */
 
 typedef sal_Int32 oslProcessData;
 
 /* defines for osl_getProcessInfo , can be OR'ed */
-#define     osl_Process_IDENTIFIER  0x0001   /* retrieves the process identifier   */
-#define     osl_Process_EXITCODE    0x0002   /* retrieves exit code of the process */
-#define     osl_Process_CPUTIMES    0x0004   /* retrieves used cpu time            */
-#define     osl_Process_HEAPUSAGE   0x0008   /* retrieves the used size of heap    */
+  0x0001   /* retrieves the process identifier   */
+    0x0002   /* retrieves exit code of the process */
+    0x0004   /* retrieves used cpu time            */
+   0x0008   /* retrieves the used size of heap    */
 
 typedef sal_uInt32 oslProcessIdentifier;
 typedef sal_uInt32 oslProcessExitCode;
@@ -420,6 +420,6 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_setProcessLocale(
 }
 #endif
 
-#endif // INCLUDED_OSL_PROCESS_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

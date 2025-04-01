@@ -20,8 +20,8 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#ifndef INCLUDED_RTL_BOOTSTRAP_H
-#define INCLUDED_RTL_BOOTSTRAP_H
+#pragma once
+
 
 #include "sal/config.h"
 

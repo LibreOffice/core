@@ -20,7 +20,7 @@
 
 // define ----------------------------------------------------------------
 
-#define CHRDLG_POSITION_OVER                0
-#define CHRDLG_POSITION_UNDER               1
+                0
+               1
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,9 +22,9 @@
 #include <sal/types.h>
 
 #if defined(REG_DLLIMPLEMENTATION)
-#define REG_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+ SAL_DLLPUBLIC_EXPORT
 #else
-#define REG_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+ SAL_DLLPUBLIC_IMPORT
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_QA_RTL_PROCESS_RTL_PROCESS_CONST_H
-#define INCLUDED_SAL_QA_RTL_PROCESS_RTL_PROCESS_CONST_H
+#pragma once
+
 
 #include <rtl/ustring.hxx>
 
@@ -35,6 +35,6 @@ OUString suParam3(u"-process"_ustr);
 }
 #endif
 
-#endif /* RTL_PROCESS_CONST_H*/
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

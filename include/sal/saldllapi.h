@@ -21,19 +21,19 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_SAL_SALDLLAPI_H
-#define INCLUDED_SAL_SALDLLAPI_H
+#pragma once
+
 
 #include "sal/config.h"
 
 #include "sal/types.h"
 
 #if defined(SAL_DLLIMPLEMENTATION)
-#define SAL_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+ SAL_DLLPUBLIC_EXPORT
 #else
-#define SAL_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+ SAL_DLLPUBLIC_IMPORT
 #endif
 
-#endif // INCLUDED_SAL_SALDLLAPI_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

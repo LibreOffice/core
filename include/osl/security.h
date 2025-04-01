@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_OSL_SECURITY_H
-#define INCLUDED_OSL_SECURITY_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -171,6 +171,6 @@ SAL_DLLPUBLIC void SAL_CALL osl_unloadUserProfile(
 }
 #endif
 
-#endif // INCLUDED_OSL_SECURITY_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define movefiles_mask_width 32
-#define movefiles_mask_height 32
-#define movefiles_mask_x_hot 8
-#define movefiles_mask_y_hot 9
+ 32
+ 32
+ 8
+ 9
 static unsigned char movefiles_mask_bits[] = {
    0xf0, 0x1f, 0x00, 0x00, 0xf0, 0x7f, 0x00, 0x00, 0xfc, 0x7f, 0x00, 0x00,
    0xfc, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00,

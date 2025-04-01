@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_OSL_ENDIAN_H
-#define INCLUDED_OSL_ENDIAN_H
+#pragma once
+
 
 #include "sal/types.h"
 
@@ -79,33 +79,33 @@ extern "C" {
 
 /** Define macros for byte order manipulation.
  */
-#ifndef OSL_MAKEBYTE
+#pragma once
 #   define OSL_MAKEBYTE(nl, nh)    ((sal_uInt8)(((nl) & 0x0F) | (((nh) & 0x0F) << 4)))
 #endif
-#ifndef OSL_LONIBBLE
+#pragma once
 #   define OSL_LONIBBLE(b)         ((sal_uInt8)((b) & 0x0F))
 #endif
-#ifndef OSL_HINIBBLE
+#pragma once
 #   define OSL_HINIBBLE(b)         ((sal_uInt8)(((b) >> 4) & 0x0F))
 #endif
 
-#ifndef OSL_MAKEWORD
+#pragma once
 #   define OSL_MAKEWORD(bl, bh)    ((sal_uInt16)((sal_uInt16)((bl) & 0xFF) | (((sal_uInt16)(bh) & 0xFF) << 8)))
 #endif
-#ifndef OSL_LOBYTE
+#pragma once
 #   define OSL_LOBYTE(w)           ((sal_uInt8)((sal_uInt16)(w) & 0xFF))
 #endif
-#ifndef OSL_HIBYTE
+#pragma once
 #   define OSL_HIBYTE(w)           ((sal_uInt8)(((sal_uInt16)(w) >> 8) & 0xFF))
 #endif
 
-#ifndef OSL_MAKEDWORD
+#pragma once
 #   define OSL_MAKEDWORD(wl, wh)   ((sal_uInt32)((wl) & 0xFFFF) | (((sal_uInt32)(wh) & 0xFFFF) << 16))
 #endif
-#ifndef OSL_LOWORD
+#pragma once
 #   define OSL_LOWORD(d)           ((sal_uInt16)((sal_uInt32)(d) & 0xFFFF))
 #endif
-#ifndef OSL_HIWORD
+#pragma once
 #   define OSL_HIWORD(d)           ((sal_uInt16)(((sal_uInt32)(d) >> 16) & 0xFFFF))
 #endif
 
@@ -113,28 +113,28 @@ extern "C" {
 /** Define macros for swapping between host and network byte order.
  */
 #ifdef OSL_BIGENDIAN
-#ifndef OSL_NETWORD
+#pragma once
 #   define OSL_NETWORD(w)          (sal_uInt16)(w)
 #endif
-#ifndef OSL_NETDWORD
+#pragma once
 #   define OSL_NETDWORD(d)         (sal_uInt32)(d)
 #endif
 #else  /* OSL_LITENDIAN */
-#ifndef OSL_NETWORD
+#pragma once
 #   define OSL_NETWORD(w)          OSL_MAKEWORD(OSL_HIBYTE(w),OSL_LOBYTE(w))
 #endif
-#ifndef OSL_NETDWORD
+#pragma once
 #   define OSL_NETDWORD(d)         OSL_MAKEDWORD(OSL_NETWORD(OSL_HIWORD(d)),OSL_NETWORD(OSL_LOWORD(d)))
 #endif
-#endif /* OSL_BIGENDIAN */
+
 
 
 /** Define macros for swapping between byte orders.
  */
-#ifndef OSL_SWAPWORD
+#pragma once
 #   define OSL_SWAPWORD(w)         OSL_MAKEWORD(OSL_HIBYTE(w),OSL_LOBYTE(w))
 #endif
-#ifndef OSL_SWAPDWORD
+#pragma once
 #   define OSL_SWAPDWORD(d)        OSL_MAKEDWORD(OSL_SWAPWORD(OSL_HIWORD(d)),OSL_SWAPWORD(OSL_LOWORD(d)))
 #endif
 
@@ -143,6 +143,6 @@ extern "C" {
 }
 #endif
 
-#endif // INCLUDED_OSL_ENDIAN_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

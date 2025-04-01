@@ -14,15 +14,15 @@
 
 #if JPEG_LIB_VERSION >= 80
 
-#define JVERSION        "8d  15-Jan-2012"
+        "8d  15-Jan-2012"
 
 #elif JPEG_LIB_VERSION >= 70
 
-#define JVERSION        "7  27-Jun-2009"
+        "7  27-Jun-2009"
 
 #else
 
-#define JVERSION        "6b  27-Mar-1998"
+        "6b  27-Mar-1998"
 
 #endif
 
@@ -36,7 +36,7 @@
  *   their code
  */
 
-#define JCOPYRIGHT \
+ \
   "Copyright (C) 2009-2023 D. R. Commander\n" \
   "Copyright (C) 2015, 2020 Google, Inc.\n" \
   "Copyright (C) 2019-2020 Arm Limited\n" \
@@ -50,5 +50,5 @@
   "Copyright (C) 1999-2006 MIYASAKA Masaru\n" \
   "Copyright (C) 1991-2020 Thomas G. Lane, Guido Vollbeding"
 
-#define JCOPYRIGHT_SHORT \
+ \
   "Copyright (C) 1991-2023 The libjpeg-turbo Project and many others"

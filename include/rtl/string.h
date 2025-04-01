@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_RTL_STRING_H
-#define INCLUDED_RTL_STRING_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -586,7 +586,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_trim_WithLength(
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfBoolean(
         char * str, sal_Bool b ) SAL_THROW_EXTERN_C();
-#define RTL_STR_MAX_VALUEOFBOOLEAN 6
+ 6
 
 /** Create the string representation of a character.
 
@@ -603,7 +603,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfBoolean(
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfChar(
         char * str, char ch ) SAL_THROW_EXTERN_C();
-#define RTL_STR_MAX_VALUEOFCHAR 2
+ 2
 
 /** Create the string representation of an integer.
 
@@ -626,9 +626,9 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfChar(
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfInt32(
         char * str, sal_Int32 i, sal_Int16 radix ) SAL_THROW_EXTERN_C();
-#define RTL_STR_MIN_RADIX           2
-#define RTL_STR_MAX_RADIX           36
-#define RTL_STR_MAX_VALUEOFINT32    33
+           2
+           36
+    33
 
 /** Create the string representation of a long integer.
 
@@ -651,7 +651,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfInt32(
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfInt64(
         char * str, sal_Int64 l, sal_Int16 radix ) SAL_THROW_EXTERN_C();
-#define RTL_STR_MAX_VALUEOFINT64 65
+ 65
 
 /** Create the string representation of an unsigned long integer.
 
@@ -674,7 +674,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfInt64(
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfUInt64(
         char * str, sal_uInt64 l, sal_Int16 radix ) SAL_THROW_EXTERN_C();
-#define RTL_STR_MAX_VALUEOFUINT64 65
+ 65
 
 /** Create the string representation of a float.
 
@@ -693,7 +693,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfUInt64(
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfFloat(
         char * str, float f ) SAL_THROW_EXTERN_C();
-#define RTL_STR_MAX_VALUEOFFLOAT 15
+ 15
 
 /** Create the string representation of a double.
 
@@ -712,7 +712,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfFloat(
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfDouble(
         char * str, double d ) SAL_THROW_EXTERN_C();
-#define RTL_STR_MAX_VALUEOFDOUBLE 25
+ 25
 
 /** Interpret a string as a boolean.
 
@@ -1326,7 +1326,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_string_getToken(
 // This is to avoid mistaken use with functions that accept string literals
 // (i.e. const char (&)[N]) where usage of this macro otherwise could match
 // the argument and a following int argument with a default value (e.g. OString::match()).
-#define RTL_CONSTASCII_STRINGPARAM( constAsciiStr ) (&(constAsciiStr)[0]), \
+( constAsciiStr ) (&(constAsciiStr)[0]), \
     ((sal_Int32)SAL_N_ELEMENTS(constAsciiStr)-1)
 
 /** Supply the length of an ASCII string literal.
@@ -1342,12 +1342,12 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_string_getToken(
     its value should be 0x00.  Depending on where this macro is used, the nature
     of the supplied expression might be further restricted.
 */
-#define RTL_CONSTASCII_LENGTH( constAsciiStr ) ((sal_Int32)(SAL_N_ELEMENTS(constAsciiStr)-1))
+( constAsciiStr ) ((sal_Int32)(SAL_N_ELEMENTS(constAsciiStr)-1))
 
 /* ======================================================================= */
 
 /* predefined constants for String-Conversion */
-#define OUSTRING_TO_OSTRING_CVTFLAGS    (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |\
+    (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |\
                                          RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT |\
                                          RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE |\
                                          RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0)
@@ -1449,6 +1449,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_ensureCapacity( rtl_String ** str, sal_In
 }
 #endif
 
-#endif // INCLUDED_RTL_STRING_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

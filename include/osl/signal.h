@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_OSL_SIGNAL_H
-#define INCLUDED_OSL_SIGNAL_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -33,9 +33,9 @@
 extern "C" {
 #endif
 
-#define OSL_SIGNAL_USER_RESERVED    0
+    0
 
-#define OSL_SIGNAL_USER_X11SUBSYSTEMERROR   (OSL_SIGNAL_USER_RESERVED - 2)
+   (OSL_SIGNAL_USER_RESERVED - 2)
 
 typedef void* oslSignalHandler;
 
@@ -106,7 +106,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setErrorReporting(
 }
 #endif
 
-#endif // INCLUDED_OSL_SIGNAL_H
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

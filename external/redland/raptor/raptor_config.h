@@ -16,7 +16,7 @@
 #undef HAVE_DLFCN_H
 
 /* Define to 1 if you have the <errno.h> header file. */
-#define HAVE_ERRNO_H 1
+ 1
 
 /* Define to 1 if you have the <fcntl.h> header file. */
 #undef HAVE_FCNTL_H
@@ -46,25 +46,25 @@
 #undef HAVE_ISASCII
 
 /* Define to 1 if you have the <libxml/hash.h> header file. */
-#define HAVE_LIBXML_HASH_H 1
+ 1
 
 /* Define to 1 if you have the <libxml/HTMLparser.h> header file. */
-#define HAVE_LIBXML_HTMLPARSER_H 1
+ 1
 
 /* Define to 1 if you have the <libxml/nanohttp.h> header file. */
-#define HAVE_LIBXML_NANOHTTP_H 1
+ 1
 
 /* Define to 1 if you have the <libxml/parser.h> header file. */
-#define HAVE_LIBXML_PARSER_H 1
+ 1
 
 /* Define to 1 if you have the <libxml/SAX2.h> header file. */
-#define HAVE_LIBXML_SAX2_H 1
+ 1
 
 /* Define to 1 if you have the <libxslt/xslt.h> header file. */
-#define HAVE_LIBXSLT_XSLT_H 1
+ 1
 
 /* Define to 1 if you have the <limits.h> header file. */
-#define HAVE_LIMITS_H 1
+ 1
 
 /* Define to 1 if you have the `qsort_r' function. */
 #undef HAVE_QSORT_R
@@ -88,28 +88,28 @@
 #undef HAVE_STAT
 
 /* Define to 1 if you have the <stddef.h> header file. */
-#define HAVE_STDDEF_H 1
+ 1
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
 
 /* Define to 1 if you have the <stdio.h> header file. */
-#define HAVE_STDIO_H 1
+ 1
 
 /* Define to 1 if you have the <stdlib.h> header file. */
-#define HAVE_STDLIB_H 1
+ 1
 
 /* Define to 1 if you have the `strcasecmp' function. */
 #undef HAVE_STRCASECMP
 
 /* Define to 1 if you have the `stricmp' function. */
-#define HAVE_STRICMP 1
+ 1
 
 /* Define to 1 if you have the <strings.h> header file. */
 #undef HAVE_STRINGS_H
 
 /* Define to 1 if you have the <string.h> header file. */
-#define HAVE_STRING_H 1
+ 1
 
 /* have the strtok_r function */
 #undef HAVE_STRTOK_R
@@ -127,7 +127,7 @@
 #undef HAVE_SYS_TYPES_H
 
 /* Define to 1 if you have the <time.h> header file. */
-#define HAVE_TIME_H 1
+ 1
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
@@ -136,16 +136,16 @@
 #undef HAVE_VASPRINTF
 
 /* Define to 1 if you have the `vsnprintf' function. */
-#define HAVE_VSNPRINTF 1
+ 1
 
 /* Flex version as a decimal */
-#define FLEX_VERSION_DECIMAL 20539
+ 20539
 
 /* Define to 1 if you have the `xmlCtxtUseOptions' function. */
-#define HAVE_XMLCTXTUSEOPTIONS 1
+ 1
 
 /* Define to 1 if you have the `xmlSAX2InternalSubset' function. */
-#define HAVE_XMLSAX2INTERNALSUBSET 1
+ 1
 
 /* YAJL has API version 2 */
 #undef HAVE_YAJL2
@@ -154,10 +154,10 @@
 #undef HAVE_YAJL_YAJL_PARSE_H
 
 /* Is __FUNCTION__ available */
-#define HAVE___FUNCTION__ 1
+ 1
 
 /* ICU UC major version */
-#define ICU_UC_MAJOR_VERSION ICU_MAJOR
+ ICU_MAJOR
 
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #undef LT_OBJDIR
@@ -193,28 +193,28 @@
 #undef RAPTOR_DEBUG
 
 /* Use ICU for Unicode NFC check */
-#define RAPTOR_ICU_NFC 1
+ 1
 
 /* does libxml struct xmlEntity have a field etype */
-#define RAPTOR_LIBXML_ENTITY_ETYPE 1
+ 1
 
 /* does libxml struct xmlEntity have a field name_length */
 #undef RAPTOR_LIBXML_ENTITY_NAME_LENGTH
 
 /* does libxml have HTML_PARSE_NONET */
-#define RAPTOR_LIBXML_HTML_PARSE_NONET 1
+ 1
 
 /* does libxml xmlSAXHandler have externalSubset field */
-#define RAPTOR_LIBXML_XMLSAXHANDLER_EXTERNALSUBSET 1
+ 1
 
 /* does libxml xmlSAXHandler have initialized field */
-#define RAPTOR_LIBXML_XMLSAXHANDLER_INITIALIZED 1
+ 1
 
 /* does libxml have XML_PARSE_NONET */
-#define RAPTOR_LIBXML_XML_PARSE_NONET 1
+ 1
 
 /* Minimum supported package version */
-#define RAPTOR_MIN_VERSION_DECIMAL 20000
+ 20000
 
 /* Building GRDDL parser */
 #undef RAPTOR_PARSER_GRDDL
@@ -229,13 +229,13 @@
 #undef RAPTOR_PARSER_NQUADS
 
 /* Building N-Triples parser */
-#define RAPTOR_PARSER_NTRIPLES 1
+ 1
 
 /* Building RDFA parser */
 #undef RAPTOR_PARSER_RDFA
 
 /* Building RDF/XML parser */
-#define RAPTOR_PARSER_RDFXML 1
+ 1
 
 /* Building RSS Tag Soup parser */
 #undef RAPTOR_PARSER_RSS
@@ -265,13 +265,13 @@
 #undef RAPTOR_SERIALIZER_NQUADS
 
 /* Building N-Triples serializer */
-#define RAPTOR_SERIALIZER_NTRIPLES 1
+ 1
 
 /* Building RDF/XML serializer */
-#define RAPTOR_SERIALIZER_RDFXML 1
+ 1
 
 /* Building RDF/XML-abbreviated serializer */
-#define RAPTOR_SERIALIZER_RDFXML_ABBREV 1
+ 1
 
 /* Building RSS 1.0 serializer */
 #undef RAPTOR_SERIALIZER_RSS_1_0
@@ -280,16 +280,16 @@
 #undef RAPTOR_SERIALIZER_TURTLE
 
 /* Release version as a decimal */
-#define RAPTOR_VERSION_DECIMAL 20016
+ 20016
 
 /* Major version number */
-#define RAPTOR_VERSION_MAJOR 2
+ 2
 
 /* Minor version number */
-#define RAPTOR_VERSION_MINOR 0
+ 0
 
 /* Release version number */
-#define RAPTOR_VERSION_RELEASE 16
+ 16
 
 /* Have libcurl WWW library */
 #undef RAPTOR_WWW_LIBCURL
@@ -301,13 +301,13 @@
 #undef RAPTOR_WWW_LIBXML
 
 /* No WWW library */
-#define RAPTOR_WWW_NONE
+
 
 /* Check XML 1.1 Names */
 #undef RAPTOR_XML_1_1
 
 /* Use libxml XML parser */
-#define RAPTOR_XML_LIBXML 1
+ 1
 
 /* Define to 1 if all of the C90 standard headers exist (not just the ones
    required in a freestanding environment). This macro is provided for
@@ -315,7 +315,7 @@
 #undef STDC_HEADERS
 
 /* Version number of package */
-#define VERSION "2.0.16"
+ "2.0.16"
 
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */
@@ -344,7 +344,7 @@
 
 /* Define to `__inline__' or `__inline' if that's what the C compiler
    calls it, or to nothing if 'inline' is not supported under any name.  */
-#ifndef __cplusplus
+#pragma once
 #undef inline
 #endif
 

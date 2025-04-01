@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_RTL_USTRING_H
-#define INCLUDED_RTL_USTRING_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -916,7 +916,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_trim_WithLength(
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_valueOfBoolean(
         sal_Unicode * str, sal_Bool b ) SAL_THROW_EXTERN_C();
-#define RTL_USTR_MAX_VALUEOFBOOLEAN RTL_STR_MAX_VALUEOFBOOLEAN
+ RTL_STR_MAX_VALUEOFBOOLEAN
 
 /** Create the string representation of a character.
 
@@ -933,7 +933,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_valueOfBoolean(
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_valueOfChar(
         sal_Unicode * str, sal_Unicode ch ) SAL_THROW_EXTERN_C();
-#define RTL_USTR_MAX_VALUEOFCHAR RTL_STR_MAX_VALUEOFCHAR
+ RTL_STR_MAX_VALUEOFCHAR
 
 /** Create the string representation of an integer.
 
@@ -956,9 +956,9 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_valueOfChar(
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_valueOfInt32(
         sal_Unicode * str, sal_Int32 i, sal_Int16 radix ) SAL_THROW_EXTERN_C();
-#define RTL_USTR_MIN_RADIX          RTL_STR_MIN_RADIX
-#define RTL_USTR_MAX_RADIX          RTL_STR_MAX_RADIX
-#define RTL_USTR_MAX_VALUEOFINT32   RTL_STR_MAX_VALUEOFINT32
+          RTL_STR_MIN_RADIX
+          RTL_STR_MAX_RADIX
+   RTL_STR_MAX_VALUEOFINT32
 
 /** Create the string representation of a long integer.
 
@@ -981,7 +981,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_valueOfInt32(
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_valueOfInt64(
         sal_Unicode * str, sal_Int64 l, sal_Int16 radix ) SAL_THROW_EXTERN_C();
-#define RTL_USTR_MAX_VALUEOFINT64 RTL_STR_MAX_VALUEOFINT64
+ RTL_STR_MAX_VALUEOFINT64
 
 /** Create the string representation of an unsigned long integer.
 
@@ -1004,7 +1004,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_valueOfInt64(
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_valueOfUInt64(
         sal_Unicode * str, sal_uInt64 l, sal_Int16 radix ) SAL_THROW_EXTERN_C();
-#define RTL_USTR_MAX_VALUEOFUINT64 RTL_STR_MAX_VALUEOFUINT64
+ RTL_STR_MAX_VALUEOFUINT64
 
 /** Create the string representation of a float.
 
@@ -1023,7 +1023,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_valueOfUInt64(
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_valueOfFloat(
         sal_Unicode * str, float f ) SAL_THROW_EXTERN_C();
-#define RTL_USTR_MAX_VALUEOFFLOAT RTL_STR_MAX_VALUEOFFLOAT
+ RTL_STR_MAX_VALUEOFFLOAT
 
 /** Create the string representation of a double.
 
@@ -1042,7 +1042,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_valueOfFloat(
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_valueOfDouble(
         sal_Unicode * str, double d ) SAL_THROW_EXTERN_C();
-#define RTL_USTR_MAX_VALUEOFDOUBLE RTL_STR_MAX_VALUEOFDOUBLE
+ RTL_STR_MAX_VALUEOFDOUBLE
 
 /** Interpret a string as a boolean.
 
@@ -2171,13 +2171,13 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_uString_getToken(
 // This is to avoid mistaken use with functions that accept string literals
 // (i.e. const char (&)[N]) where usage of this macro otherwise could match
 // the argument and a following int argument with a default value (e.g. OUString::match()).
-#define RTL_CONSTASCII_USTRINGPARAM( constAsciiStr ) (&(constAsciiStr)[0]), \
+( constAsciiStr ) (&(constAsciiStr)[0]), \
     ((sal_Int32)(SAL_N_ELEMENTS(constAsciiStr)-1)), RTL_TEXTENCODING_ASCII_US
 
 /* ======================================================================= */
 
 /* predefined constants for String-Conversion */
-#define OSTRING_TO_OUSTRING_CVTFLAGS    (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE |\
+    (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE |\
                                          RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |\
                                          RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT)
 
@@ -2401,6 +2401,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_ensureCapacity( rtl_uString ** str, sal_
 }
 #endif
 
-#endif // INCLUDED_RTL_USTRING_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

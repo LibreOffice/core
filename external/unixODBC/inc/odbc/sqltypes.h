@@ -16,14 +16,14 @@
  * !!!DO NOT CONTAMINATE THIS FILE WITH NON-Linux CODE!!!
  *
  *************************************************************/
-#ifndef __SQLTYPES_H
-#define __SQLTYPES_H
+#pragma once
+
 
 /****************************
  * default to the 3.51 definitions. should define ODBCVER before here if you want an older set of defines
  ***************************/
-#ifndef ODBCVER
-#define ODBCVER 0x0351
+#pragma once
+ 0x0351
 #endif
 
 /*
@@ -45,13 +45,13 @@
 extern "C" {
 #endif
 
-#ifndef SIZEOF_LONG_INT
+#pragma once
 # define SIZEOF_LONG_INT SAL_TYPES_SIZEOFLONG
 #endif
-#ifndef ODBCINT64
+#pragma once
 # define ODBCINT64 sal_Int64
 #endif
-#ifndef UODBCINT64
+#pragma once
 # define UODBCINT64 sal_uInt64
 #endif
 
@@ -60,22 +60,22 @@ extern "C" {
  * the install creates a unixodbc_conf.h file that contains the current build settings
  */
 
-#ifndef SIZEOF_LONG_INT
+#pragma once
 #include <unixodbc_conf.h>
 #endif
 
-#ifndef SIZEOF_LONG_INT
+#pragma once
 #error "Needs to know how big a long int is to continue!!!"
 #endif
 
 /****************************
  * These make up for having no windows.h
  ***************************/
-#ifndef ALLREADY_HAVE_WINDOWS_TYPE
+#pragma once
 
-#define CALLBACK
-#define SQL_API
-#define BOOL                int
+
+
+                int
 typedef void*               HWND;
 typedef char                CHAR;
 #ifdef UNICODE
@@ -96,7 +96,7 @@ typedef signed short        TCHAR;
 typedef char                TCHAR;
 #endif
 
-#ifndef DONT_TD_VOID
+#pragma once
 typedef void                VOID;
 #endif
 
@@ -152,9 +152,9 @@ typedef double          SQLFLOAT;
 #ifdef BUILD_LEGACY_64_BIT_MODE
 typedef int             SQLINTEGER;
 typedef unsigned int    SQLUINTEGER;
-#define SQLLEN          SQLINTEGER
-#define SQLULEN         SQLUINTEGER
-#define SQLSETPOSIROW   SQLUSMALLINT
+          SQLINTEGER
+         SQLUINTEGER
+   SQLUSMALLINT
 /*
  * These are not supported on 64bit ODBC according to MS, removed, so use at your peril
  *
@@ -185,9 +185,9 @@ typedef SQLLEN          SQLROWOFFSET;
 #else
 typedef long            SQLINTEGER;
 typedef unsigned long   SQLUINTEGER;
-#define SQLLEN          SQLINTEGER
-#define SQLULEN         SQLUINTEGER
-#define SQLSETPOSIROW   SQLUSMALLINT
+          SQLINTEGER
+         SQLUINTEGER
+   SQLUSMALLINT
 typedef SQLULEN         SQLROWCOUNT;
 typedef SQLULEN         SQLROWSETSIZE;
 typedef SQLULEN         SQLTRANSID;
@@ -252,7 +252,7 @@ typedef void *                  HSTMT;
 /****************************
  * more basic data types to augment what windows.h provides
  ***************************/
-#ifndef ALLREADY_HAVE_WINDOWS_TYPE
+#pragma once
 
 typedef unsigned char           UCHAR;
 typedef signed char             SCHAR;
@@ -283,8 +283,8 @@ typedef void*                   SQLHWND;
 /****************************
  * standard structs for working with date/times
  ***************************/
-#ifndef __SQLDATE
-#define __SQLDATE
+#pragma once
+
 typedef struct tagDATE_STRUCT
 {
         SQLSMALLINT    year;
@@ -374,7 +374,7 @@ typedef struct tagSQL_INTERVAL_STRUCT
 
 #endif
 
-#ifndef ODBCINT64
+#pragma once
 # if (ODBCVER >= 0x0300)
 # if (SIZEOF_LONG_INT == 8)
 #   define ODBCINT64        long
@@ -416,7 +416,7 @@ typedef UODBCINT64  SQLUBIGINT;
  * cursor and bookmark
  ***************************/
 #if (ODBCVER >= 0x0300)
-#define SQL_MAX_NUMERIC_LEN     16
+     16
 typedef struct tagSQL_NUMERIC_STRUCT
 {
     SQLCHAR     precision;
@@ -428,7 +428,7 @@ typedef struct tagSQL_NUMERIC_STRUCT
 
 #if (ODBCVER >= 0x0350)
 #ifdef GUID_DEFINED
-#ifndef ALLREADY_HAVE_WINDOWS_TYPE
+#pragma once
 typedef GUID    SQLGUID;
 #else
 typedef struct  tagSQLGUID

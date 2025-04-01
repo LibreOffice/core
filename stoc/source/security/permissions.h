@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_STOC_SOURCE_SECURITY_PERMISSIONS_H
-#define INCLUDED_STOC_SOURCE_SECURITY_PERMISSIONS_H
+#pragma once
+
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>

@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define pivotrow_curs_width 32
-#define pivotrow_curs_height 32
-#define pivotrow_curs_x_hot 8
-#define pivotrow_curs_y_hot 7
+ 32
+ 32
+ 8
+ 7
 static unsigned char pivotrow_curs_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x07, 0x00,
    0x01, 0x00, 0x04, 0x00, 0x55, 0x55, 0x07, 0x00, 0xa9, 0xaa, 0x06, 0x00,

@@ -20,8 +20,8 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#ifndef INCLUDED_UNO_MAPPING_H
-#define INCLUDED_UNO_MAPPING_H
+#pragma once
+
 
 #include "cppu/cppudllapi.h"
 #include "rtl/ustring.h"
@@ -176,7 +176,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_getMappingByName(
     SAL_THROW_EXTERN_C();
 
 /* symbol exported by each language binding library */
-#define UNO_EXT_GETMAPPING "uno_ext_getMapping"
+ "uno_ext_getMapping"
 
 /** Function pointer declaration to get a mapping from a loaded bridge. Bridges export a function
     called uno_ext_getMapping() of this signature.

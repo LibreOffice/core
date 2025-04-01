@@ -20,8 +20,8 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#ifndef INCLUDED_COM_SUN_STAR_UNO_SEQUENCE_H
-#define INCLUDED_COM_SUN_STAR_UNO_SEQUENCE_H
+#pragma once
+
 
 #include "typelib/typedescription.h"
 #include "uno/sequence2.h"

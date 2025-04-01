@@ -20,8 +20,8 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#ifndef INCLUDED_RTL_UUID_H
-#define INCLUDED_RTL_UUID_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -137,7 +137,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_createNamedUuid(
     (Use them the following way : sal_uInt8 aNsDNS[16])  = RTL_UUID_NAMESPACE_DNS;
     <p>
    6ba7b810-9dad-11d1-80b4-00c04fd430c8 */
-#define RTL_UUID_NAMESPACE_DNS {\
+ {\
       0x6b,0xa7,0xb8,0x10,\
       0x9d,0xad,\
       0x11,0xd1,\
@@ -148,7 +148,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_createNamedUuid(
 
    <p>
    6ba7b811-9dad-11d1-80b4-00c04fd430c8 */
-#define RTL_UUID_NAMESPACE_URL { \
+ { \
       0x6b, 0xa7, 0xb8, 0x11,\
       0x9d, 0xad,\
       0x11, 0xd1,\
@@ -159,7 +159,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_createNamedUuid(
 
     <p>
     6ba7b812-9dad-11d1-80b4-00c04fd430c8 */
-#define RTL_UUID_NAMESPACE_OID {\
+ {\
       0x6b, 0xa7, 0xb8, 0x12,\
       0x9d, 0xad,\
       0x11, 0xd1,\
@@ -170,7 +170,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_createNamedUuid(
 
     <p>
     6ba7b814-9dad-11d1-80b4-00c04fd430c8 */
-#define RTL_UUID_NAMESPACE_X500 {\
+ {\
       0x6b, 0xa7, 0xb8, 0x14,\
       0x9d, 0xad,\
       0x11, 0xd1,\

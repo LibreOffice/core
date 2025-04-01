@@ -25,10 +25,10 @@
 #include <optional>
 #include <vector>
 
-#define TB_DROPDOWNARROWWIDTH   11
+   11
 
-#define TB_MENUBUTTON_SIZE      12
-#define TB_MENUBUTTON_OFFSET    2
+      12
+    2
 
 namespace vcl { class Window; }
 

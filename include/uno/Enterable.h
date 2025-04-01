@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_UNO_ENTERABLE_H
-#define INCLUDED_UNO_ENTERABLE_H
+#pragma once
+
 
 #include "uno/environment.h"
 

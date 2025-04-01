@@ -35,7 +35,7 @@
 
 #include <sal/types.h>
 
-#define AppleRemoteControlEvent 15
+ 15
 
 @class RemoteControl;
 @class MultiClickRemoteBehavior;

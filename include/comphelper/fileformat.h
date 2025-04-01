@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_FILEFORMAT_H
-#define INCLUDED_COMPHELPER_FILEFORMAT_H
+#pragma once
+
 
 /* file format versions *************************************************/
 
-#define SOFFICE_FILEFORMAT_31 3450
-#define SOFFICE_FILEFORMAT_40 3580
-#define SOFFICE_FILEFORMAT_50 5050
-#define SOFFICE_FILEFORMAT_60 6200
-#define SOFFICE_FILEFORMAT_8 6800
-#define SOFFICE_FILEFORMAT_CURRENT SOFFICE_FILEFORMAT_8
+ 3450
+ 3580
+ 5050
+ 6200
+ 6800
+ SOFFICE_FILEFORMAT_8
 
 #endif
 

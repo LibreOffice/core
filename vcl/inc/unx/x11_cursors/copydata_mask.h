@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define copydata_mask_width 32
-#define copydata_mask_height 32
-#define copydata_mask_x_hot 1
-#define copydata_mask_y_hot 1
+ 32
+ 32
+ 1
+ 1
 static unsigned char copydata_mask_bits[] = {
    0x07, 0x00, 0x00, 0x00, 0x0f, 0x00, 0x00, 0x00, 0x1f, 0x00, 0x00, 0x00,
    0x3f, 0x00, 0x00, 0x00, 0x7f, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,

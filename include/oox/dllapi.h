@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DLLAPI_H
-#define INCLUDED_OOX_DLLAPI_H
+#pragma once
+
 
 #include <sal/types.h>
 
 #if defined OOX_DLLIMPLEMENTATION
-#define OOX_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+ SAL_DLLPUBLIC_EXPORT
 #else
-#define OOX_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+ SAL_DLLPUBLIC_IMPORT
 #endif
 
 #endif

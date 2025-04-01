@@ -3,28 +3,28 @@
  * Include file constants (processed in LibmysqlIncludeFiles.txt 1
  */
 /* #undef HAVE_OPENSSL_APPLINK_C */
-#define HAVE_ALLOCA_H 1
+ 1
 /* #undef HAVE_BIGENDIAN */
-#define HAVE_SETLOCALE 1
-#define HAVE_NL_LANGINFO 1
-#define HAVE_DLFCN_H 1
-#define HAVE_FCNTL_H 1
-#define HAVE_FLOAT_H 1
-#define HAVE_LIMITS_H 1
-#define HAVE_PWD_H 1
+ 1
+ 1
+ 1
+ 1
+ 1
+ 1
+ 1
 /* #undef HAVE_SELECT_H */
-#define HAVE_STDDEF_H 1
-#define HAVE_STDINT_H 1
-#define HAVE_STDLIB_H 1
-#define HAVE_STRING_H 1
-#define HAVE_SYS_IOCTL_H 1
-#define HAVE_SYS_SELECT_H 1
-#define HAVE_SYS_SOCKET_H 1
+ 1
+ 1
+ 1
+ 1
+ 1
+ 1
+ 1
 /* #undef HAVE_SYS_STREAM_H */
-#define HAVE_SYS_TYPES_H 1
-#define HAVE_SYS_UN_H 1
-#define HAVE_UNISTD_H 1
-#define HAVE_UCONTEXT_H 1
+ 1
+ 1
+ 1
+ 1
 
 /*
  * function definitions - processed in LibmysqlFunctions.txt 
@@ -32,9 +32,9 @@
 
 /* #undef HAVE_DLERROR */
 /* #undef HAVE_DLOPEN */
-#define HAVE_GETPWUID 1
-#define HAVE_MEMCPY 1
-#define HAVE_POLL 1
+ 1
+ 1
+ 1
 /* #undef HAVE_STRTOK_R */
 /* #undef HAVE_STRTOL */
 /* #undef HAVE_STRTOLL */
@@ -45,47 +45,47 @@
 /* #undef HAVE_THR_YIELD */
 /* #undef HAVE_VASPRINTF */
 /* #undef HAVE_VSNPRINTF */
-#define HAVE_CUSERID 1
+ 1
 
 /*
  * types and sizes
  */
 
 
-#define SIZEOF_CHARP 8
+ 8
 #if defined(SIZEOF_CHARP)
 # define HAVE_CHARP 1
 #endif
 
 
-#define SIZEOF_INT 4
+ 4
 #if defined(SIZEOF_INT)
 # define HAVE_INT 1
 #endif
 
-#define SIZEOF_LONG 8
+ 8
 #if defined(SIZEOF_LONG)
 # define HAVE_LONG 1
 #endif
 
-#define SIZEOF_LONG_LONG 8
+ 8
 #if defined(SIZEOF_LONG_LONG)
 # define HAVE_LONG_LONG 1
 #endif
 
 
-#define SIZEOF_SIZE_T 8
+ 8
 #if defined(SIZEOF_SIZE_T)
 # define HAVE_SIZE_T 1
 #endif
 
 
-#define SIZEOF_UINT 4
+ 4
 #if defined(SIZEOF_UINT)
 # define HAVE_UINT 1
 #endif
 
-#define SIZEOF_ULONG 8
+ 8
 #if defined(SIZEOF_ULONG)
 # define HAVE_ULONG 1
 #endif
@@ -131,12 +131,12 @@
 # define HAVE_SOCKLEN_T 1
 #endif
 
-#define SOCKET_SIZE_TYPE socklen_t
+ socklen_t
 
-#define LOCAL_INFILE_MODE_OFF  0
-#define LOCAL_INFILE_MODE_ON   1
-#define LOCAL_INFILE_MODE_AUTO 2
-#define ENABLED_LOCAL_INFILE LOCAL_INFILE_MODE_AUTO
+  0
+   1
+ 2
+ LOCAL_INFILE_MODE_AUTO
 
-#define MARIADB_DEFAULT_CHARSET "latin1"
+ "latin1"
 

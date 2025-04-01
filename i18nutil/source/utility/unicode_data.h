@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NUTIL_SOURCE_UTILITY_UNICODE_DATA_H
-#define INCLUDED_I18NUTIL_SOURCE_UTILITY_UNICODE_DATA_H
+#pragma once
+
 
 #include <sal/types.h>
 
 
-#define UnicodeDirectionNumberBlock  3
+  3
 
 const sal_Int8 UnicodeDirectionIndex[] = {
     0x03, 0x00, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, // 0000 - 07ff
@@ -665,8 +665,8 @@ const sal_Int8 UnicodeDirectionValue[] = {
 };
 
 
-#define UnicodeScriptTypeFrom    0
-#define UnicodeScriptTypeTo      1
+    0
+      1
 
 const sal_Unicode UnicodeScriptType[][2] = {
     {0x0000, 0x007f}, //  0. Basic Latin

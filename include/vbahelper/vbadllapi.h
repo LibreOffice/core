@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VBAHELPER_VBADLLAPI_H
-#define INCLUDED_VBAHELPER_VBADLLAPI_H
+#pragma once
+
 
 #include <sal/types.h>
 
 #if defined(VBAHELPER_DLLIMPLEMENTATION)
-#define VBAHELPER_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+ SAL_DLLPUBLIC_EXPORT
 #else
-#define VBAHELPER_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+ SAL_DLLPUBLIC_IMPORT
 #endif
-#define VBAHELPER_DLLPRIVATE SAL_DLLPRIVATE
+ SAL_DLLPRIVATE
 
-#endif // INCLUDED_VBAHELPER_VBADLLAPI_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,1 +1,1 @@
-#define MAILDIR "/very/likely/doesnt/exists"
+ "/very/likely/doesnt/exists"

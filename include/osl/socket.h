@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_OSL_SOCKET_H
-#define INCLUDED_OSL_SOCKET_H
+#pragma once
+
 
 #include "rtl/ustring.h"
 #include "osl/time.h"
@@ -32,8 +32,8 @@ extern "C" {
 #endif
 
 /* error returns */
-#define OSL_INADDR_NONE             0xffffffff
-#define OSL_INVALID_PORT (-1)
+             0xffffffff
+ (-1)
 
 /**@{ begin section types
 */
@@ -858,6 +858,6 @@ SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **strLoc
 }
 #endif
 
-#endif // INCLUDED_OSL_SOCKET_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

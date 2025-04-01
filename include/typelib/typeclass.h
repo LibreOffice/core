@@ -20,8 +20,8 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#ifndef INCLUDED_TYPELIB_TYPECLASS_H
-#define INCLUDED_TYPELIB_TYPECLASS_H
+#pragma once
+
 
 #include "sal/types.h"
 

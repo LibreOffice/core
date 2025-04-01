@@ -26,7 +26,7 @@ namespace framework{
 //  Values for special frame search ... sTargetFrameName of findFrame() or queryDispatch() or loadComponentFromURL()
 
 inline constexpr OUString SPECIALTARGET_SELF = u"_self"_ustr;                   // The frame himself is searched.
-#define SPECIALTARGET_PARENT          u"_parent"                           // The direct parent frame is searched.
+          u"_parent"                           // The direct parent frame is searched.
 inline constexpr OUString SPECIALTARGET_TOP = u"_top"_ustr;                     // Search at our parents for the first task (if any exist) or a frame without a parent.
 inline constexpr OUString SPECIALTARGET_BLANK = u"_blank"_ustr;                 // Create a new task.
 inline constexpr OUString SPECIALTARGET_DEFAULT = u"_default"_ustr;             // Create a new task or recycle an existing one

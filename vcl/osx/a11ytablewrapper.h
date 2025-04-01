@@ -21,7 +21,7 @@
 
 #include <osx/a11ywrapper.h>
 
-#define MAXIMUM_ACCESSIBLE_TABLE_CELLS 1000
+ 1000
 
 @interface AquaA11yTableWrapper : AquaA11yWrapper
 {

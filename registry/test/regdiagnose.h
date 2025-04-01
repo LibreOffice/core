@@ -18,14 +18,14 @@
  */
 
 
-#ifndef INCLUDED_REGISTRY_TEST_REGDIAGNOSE_H
-#define INCLUDED_REGISTRY_TEST_REGDIAGNOSE_H
+#pragma once
+
 
 #include <osl/diagnose.h>
 
-#define REG_ENSURE(c, m)   _REG_ENSURE(c, __FILE__, __LINE__, m)
+(c, m)   _REG_ENSURE(c, __FILE__, __LINE__, m)
 
-#define _REG_ENSURE(c, f, l, m) \
+(c, f, l, m) \
     do \
     {  \
         if (!(c) && ::osl_assertFailedLine(f, l, m)) \
@@ -33,6 +33,6 @@
     } while (0)
 
 
-#endif // INCLUDED_REGISTRY_TEST_REGDIAGNOSE_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

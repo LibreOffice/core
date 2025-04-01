@@ -20,17 +20,17 @@
 // Microsoft Developer Studio generated include file.
 // Used by EventListener.rc
 
-#define IDS_PROJNAME                    100
-#define IDR_EVTLISTENER                 101
+                    100
+                 101
 
 // Next default values for new objects
 
 #ifdef APSTUDIO_INVOKED
-#ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        201
-#define _APS_NEXT_COMMAND_VALUE         32768
-#define _APS_NEXT_CONTROL_VALUE         201
-#define _APS_NEXT_SYMED_VALUE           102
+#pragma once
+        201
+         32768
+         201
+           102
 #endif
 #endif
 

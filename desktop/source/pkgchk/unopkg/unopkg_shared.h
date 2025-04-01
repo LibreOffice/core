@@ -26,7 +26,7 @@
 #include <utility>
 #include <vector>
 
-#define APP_NAME "unopkg"
+ "unopkg"
 
 namespace unopkg {
 

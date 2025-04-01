@@ -103,7 +103,7 @@ enum
     BM_END
 };
 
-#define BMK_COMMENT_LEN 15
+ 15
 
 /**
  * @short Class for BOOKMARK
@@ -375,9 +375,9 @@ struct TxtBox: public FBox
     virtual bool Read(HWPFile &hwpf) override;
 };
 
-#define ALLOWED_GAP 5
-#define INIT_SIZE 20
-#define ADD_AMOUNT 10
+ 5
+ 20
+ 10
 
 struct Columns
 {
@@ -883,7 +883,7 @@ struct IndexMark: public HBox
 };
 
 // outline(28)
-#define MAX_OUTLINE_LEVEL   7
+   7
 
 enum
 {

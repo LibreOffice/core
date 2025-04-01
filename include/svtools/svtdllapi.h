@@ -22,10 +22,10 @@
 #include <sal/types.h>
 
 #if defined(SVT_DLLIMPLEMENTATION)
-#define SVT_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+ SAL_DLLPUBLIC_EXPORT
 #else
-#define SVT_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+ SAL_DLLPUBLIC_IMPORT
 #endif
-#define SVT_DLLPRIVATE SAL_DLLPRIVATE
+ SAL_DLLPRIVATE
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

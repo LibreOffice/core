@@ -12,16 +12,16 @@
 
 #include <gio/gio.h>
 
-#define G_LO_MENU_ATTRIBUTE_ACCELERATOR     "accel"
-#define G_LO_MENU_ATTRIBUTE_COMMAND         "command"
-#define G_LO_MENU_ATTRIBUTE_SUBMENU_ACTION  "submenu-action"
+     "accel"
+         "command"
+  "submenu-action"
 
 G_BEGIN_DECLS
 
-#define G_TYPE_LO_MENU          (g_lo_menu_get_type ())
-#define G_LO_MENU(inst)         (G_TYPE_CHECK_INSTANCE_CAST ((inst), \
+          (g_lo_menu_get_type ())
+(inst)         (G_TYPE_CHECK_INSTANCE_CAST ((inst), \
                                  G_TYPE_LO_MENU, GLOMenu))
-#define G_IS_LO_MENU(inst)      (G_TYPE_CHECK_INSTANCE_TYPE ((inst), \
+(inst)      (G_TYPE_CHECK_INSTANCE_TYPE ((inst), \
                                  G_TYPE_LO_MENU))
 
 struct GLOMenu;

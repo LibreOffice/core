@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NPOOL_SOURCE_NATIVENUMBER_DATA_NUMBERCHAR_H
-#define INCLUDED_I18NPOOL_SOURCE_NATIVENUMBER_DATA_NUMBERCHAR_H
+#pragma once
+
 
 #include <sal/types.h>
 
@@ -199,13 +199,13 @@ static sal_uInt16 SeparatorChar[] = {
     0x0000, // Church Slavic
 };
 
-#define NUMBER_ZERO     NumberChar[NumberChar_HalfWidth][0] // 0x0030
-#define NUMBER_ONE      NumberChar[NumberChar_HalfWidth][1]     // 0x0031
-#define NUMBER_NINE     NumberChar[NumberChar_HalfWidth][9]     // 0x0039
-#define isNumber(n)     ( NUMBER_ZERO <= n && n <= NUMBER_NINE )
-#define isDecimal(n)    ( n == DecimalChar[NumberChar_HalfWidth] )
-#define isMinus(n)      ( n == MinusChar[NumberChar_HalfWidth] )
-#define isSeparator(n)  ( n == SeparatorChar[NumberChar_HalfWidth] )
+     NumberChar[NumberChar_HalfWidth][0] // 0x0030
+      NumberChar[NumberChar_HalfWidth][1]     // 0x0031
+     NumberChar[NumberChar_HalfWidth][9]     // 0x0039
+(n)     ( NUMBER_ZERO <= n && n <= NUMBER_NINE )
+(n)    ( n == DecimalChar[NumberChar_HalfWidth] )
+(n)      ( n == MinusChar[NumberChar_HalfWidth] )
+(n)  ( n == SeparatorChar[NumberChar_HalfWidth] )
 
 const sal_Int16 Multiplier_Lower_zh     = 0;
 const sal_Int16 Multiplier_Upper_zh     = 1;
@@ -272,6 +272,6 @@ const sal_Unicode MultiplierChar_7_CJK[][ExponentCount_7_CJK] = {
 
 }
 
-#endif // INCLUDED_I18NPOOL_SOURCE_NATIVENUMBER_DATA_NUMBERCHAR_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

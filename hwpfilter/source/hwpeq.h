@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_HWPEQ_H
-#define INCLUDED_HWPFILTER_SOURCE_HWPEQ_H
+#pragma once
+
 
 #include <sal/config.h>
 
@@ -26,6 +26,6 @@
 
 void eq2latex(OString& outs, char const* s);
 
-#endif // INCLUDED_HWPFILTER_SOURCE_HWPEQ_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

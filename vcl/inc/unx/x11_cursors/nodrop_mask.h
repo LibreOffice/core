@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define nodrop_mask_width 32
-#define nodrop_mask_height 32
-#define nodrop_mask_x_hot 9
-#define nodrop_mask_y_hot 9
+ 32
+ 32
+ 9
+ 9
 static unsigned char nodrop_mask_bits[] = {
    0xc0, 0x0f, 0x00, 0x00, 0xf0, 0x3f, 0x00, 0x00, 0xf8, 0x7f, 0x00, 0x00,
    0xfc, 0xff, 0x00, 0x00, 0xfe, 0xff, 0x01, 0x00, 0x7e, 0xfe, 0x01, 0x00,

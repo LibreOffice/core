@@ -37,17 +37,17 @@
 //      or project specific include files that are used frequently,
 //      but are changed infrequently
 
-#ifndef INCLUDED_EXAMPLES_ACTIVEX_STDAFX2_H
-#define INCLUDED_EXAMPLES_ACTIVEX_STDAFX2_H
+#pragma once
 
-#define STRICT
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0502
+
+
+#pragma once
+ 0x0502
 #endif
-#define _ATL_APARTMENT_THREADED
-#define _ATL_STATIC_REGISTRY
 
-#define min(a, b) (((a) < (b)) ? (a) : (b))
+
+
+(a, b) (((a) < (b)) ? (a) : (b))
 
 #include <atlbase.h>
 //You may derive a class from CComModule and use it if you want to override
@@ -59,6 +59,6 @@ extern CComModule _Module;
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
-#endif // INCLUDED_EXAMPLES_ACTIVEX_STDAFX2_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

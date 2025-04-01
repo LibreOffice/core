@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_DIAGNOSTICS_H
-#define INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_DIAGNOSTICS_H
+#pragma once
+
 
 #include <sal/config.h>
 
 #include <sal/log.hxx>
 
-#define JFW_ENSURE(c, m) SAL_WARN_IF(!(c), "jfw", m)
+(c, m) SAL_WARN_IF(!(c), "jfw", m)
 
-#define JFW_TRACE0(m) SAL_INFO("jfw.level1", m)
+(m) SAL_INFO("jfw.level1", m)
 
-#define JFW_TRACE2(m) SAL_INFO("jfw.level2", m)
+(m) SAL_INFO("jfw.level2", m)
 
 #endif
 

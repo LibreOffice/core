@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_OSL_MUTEX_H
-#define INCLUDED_OSL_MUTEX_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -79,6 +79,6 @@ SAL_DLLPUBLIC oslMutex * SAL_CALL osl_getGlobalMutex(void);
 }
 #endif
 
-#endif // INCLUDED_OSL_MUTEX_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_FORMULA_H
-#define INCLUDED_HWPFILTER_SOURCE_FORMULA_H
+#pragma once
+
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include "attributes.hxx"

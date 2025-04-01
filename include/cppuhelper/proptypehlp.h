@@ -20,8 +20,8 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#ifndef INCLUDED_CPPUHELPER_PROPTYPEHLP_H
-#define INCLUDED_CPPUHELPER_PROPTYPEHLP_H
+#pragma once
+
 
 #include "sal/types.h"
 

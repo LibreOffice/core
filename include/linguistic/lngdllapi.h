@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LINGUISTIC_LNGDLLAPI_H
-#define INCLUDED_LINGUISTIC_LNGDLLAPI_H
+#pragma once
+
 
 #include <sal/config.h>
 #include <sal/types.h>
 
 #if defined(LNG_DLLIMPLEMENTATION)
-#define LNG_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+ SAL_DLLPUBLIC_EXPORT
 #else
-#define LNG_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+ SAL_DLLPUBLIC_IMPORT
 #endif
-#define LNG_DLLPRIVATE SAL_DLLPRIVATE
+ SAL_DLLPRIVATE
 
 #endif
 

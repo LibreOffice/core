@@ -20,8 +20,8 @@
 #pragma once
 
 #ifdef _WIN32
-#ifndef INCLUDED_PRE_POST_WIN_H
-#define INCLUDED_PRE_POST_WIN_H
+#pragma once
+
 #include <prewin.h>
 #include <postwin.h>
 #endif

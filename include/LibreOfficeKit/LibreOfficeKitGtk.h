@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITGTK_H
-#define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITGTK_H
+#pragma once
+
 
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
@@ -18,19 +18,19 @@
  // Avoid "error C2375: 'foo': redefinition; different linkage" on MSVC
 #if defined LOK_DOC_VIEW_IMPLEMENTATION
 #include <sal/types.h>
-#define LOK_DOC_VIEW_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+ SAL_DLLPUBLIC_EXPORT
 #else
-#define LOK_DOC_VIEW_DLLPUBLIC
+
 #endif
 
 G_BEGIN_DECLS
 
-#define LOK_TYPE_DOC_VIEW            (lok_doc_view_get_type())
-#define LOK_DOC_VIEW(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), LOK_TYPE_DOC_VIEW, LOKDocView))
-#define LOK_IS_DOC_VIEW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), LOK_TYPE_DOC_VIEW))
-#define LOK_DOC_VIEW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass),  LOK_TYPE_DOC_VIEW, LOKDocViewClass))
-#define LOK_IS_DOC_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass),  LOK_TYPE_DOC_VIEW))
-#define LOK_DOC_VIEW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj),  LOK_TYPE_DOC_VIEW, LOKDocViewClass))
+            (lok_doc_view_get_type())
+(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), LOK_TYPE_DOC_VIEW, LOKDocView))
+(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), LOK_TYPE_DOC_VIEW))
+(klass)    (G_TYPE_CHECK_CLASS_CAST((klass),  LOK_TYPE_DOC_VIEW, LOKDocViewClass))
+(klass) (G_TYPE_CHECK_CLASS_TYPE((klass),  LOK_TYPE_DOC_VIEW))
+(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj),  LOK_TYPE_DOC_VIEW, LOKDocViewClass))
 
 typedef struct _LOKDocView        LOKDocView;
 typedef struct _LOKDocViewClass   LOKDocViewClass;
@@ -384,6 +384,6 @@ LOK_DOC_VIEW_DLLPUBLIC void lok_doc_view_send_content_control_event(LOKDocView* 
 
 G_END_DECLS
 
-#endif // INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITGTK_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,7 +42,7 @@ double      Snum32ToDouble( sal_uInt32 nValue );
 
 typedef sal_uInt16 StampTyp;
 
-#define MAKE_STAMP(nF,nS) ((nS&0x0F)+((nF&0x7F)*16))
+(nF,nS) ((nS&0x0F)+((nF&0x7F)*16))
             // Bit 0...3  = Bit 0...3 of number of digits
             // Bit 4...10 = Bit 0...6 of Formatbyte
 
@@ -81,7 +81,7 @@ public:
 };
 
 
-#define nSize_ 2048
+ 2048
 
 
 class FormCache

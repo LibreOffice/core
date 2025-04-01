@@ -21,8 +21,8 @@
 #include <jni.h>
 /* Header for class org_openoffice_OpenOffice */
 
-#ifndef _Included_NativeView
-#define _Included_NativeView
+#pragma once
+
 #ifdef __cplusplus
 extern "C" {
 #endif

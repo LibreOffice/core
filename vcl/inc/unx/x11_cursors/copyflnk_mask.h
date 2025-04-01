@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define copyflnk_mask_width 32
-#define copyflnk_mask_height 32
-#define copyflnk_mask_x_hot 9
-#define copyflnk_mask_y_hot 9
+ 32
+ 32
+ 9
+ 9
 static unsigned char copyflnk_mask_bits[] = {
    0xff, 0x01, 0x00, 0x00, 0xff, 0x07, 0x00, 0x00, 0xff, 0x07, 0x00, 0x00,
    0xff, 0x0f, 0x00, 0x00, 0xff, 0x0f, 0x00, 0x00, 0xff, 0x0f, 0x00, 0x00,

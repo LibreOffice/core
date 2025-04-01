@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_RTL_CRC_H
-#define INCLUDED_RTL_CRC_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -51,6 +51,6 @@ SAL_DLLPUBLIC sal_uInt32 SAL_CALL rtl_crc32 (
 }
 #endif
 
-#endif // INCLUDED_RTL_CRC_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

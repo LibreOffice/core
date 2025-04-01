@@ -19,36 +19,36 @@
 
 #pragma once
 
-#define kAppFourCharCode 'LibO'
-#define kControlPropertyTracking 'Trck'
-#define kControlPropertyLastPartCode 'LsPc'
-#define kControlPropertySubType 'SuTy'
-#define kPopupControlPropertyTitleWidth 'PoTW'
+ 'LibO'
+ 'Trck'
+ 'LsPc'
+ 'SuTy'
+ 'PoTW'
 
-#define kAquaSpaceBetweenControls (8)
-#define kAquaSpaceBetweenPopupMenus (10)
+ (8)
+ (10)
 
-#define kAquaSpaceInsideGroupH (16)
-#define kAquaSpaceInsideGroupV (11)
+ (16)
+ (11)
 
-#define kAquaSpaceBoxFrameViewDiffTop (7)
-#define kAquaSpaceBoxFrameViewDiffLeft (7)
-#define kAquaSpaceBoxFrameViewDiffBottom (9)
-#define kAquaSpaceBoxFrameViewDiffRight (7)
+ (7)
+ (7)
+ (9)
+ (7)
 
-#define kAquaSpaceButtonFrameBoundsDiff (6)
-#define kAquaSpaceSwitchButtonFrameBoundsDiff (2)
+ (6)
+ (2)
 
-#define kAquaSpacePopupMenuFrameBoundsDiffTop (2)
-#define kAquaSpacePopupMenuFrameBoundsDiffBottom (4)
-#define kAquaSpacePopupMenuFrameBoundsDiffV                                                        \
+ (2)
+ (4)
+                                                        \
     (kAquaSpacePopupMenuFrameBoundsDiffTop + kAquaSpacePopupMenuFrameBoundsDiffBottom)
-#define kAquaSpacePopupMenuFrameBoundsDiffLeft (3)
+ (3)
 
-#define kAquaSpaceLabelFrameBoundsDiffH (3)
-#define kAquaSpaceLabelPopupDiffV (6)
-#define kAquaSpaceAfterPopupButtonsV (20)
+ (3)
+ (6)
+ (20)
 
-#define kAquaPopupButtonDefaultHeight (26)
+ (26)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_H
-#define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_H
+#pragma once
+
 
 #include <stddef.h>
 
@@ -39,10 +39,10 @@ typedef struct _LibreOfficeKitDocument LibreOfficeKitDocument;
 typedef struct _LibreOfficeKitDocumentClass LibreOfficeKitDocumentClass;
 
 // Do we have an extended member in this struct ?
-#define LIBREOFFICEKIT_HAS_MEMBER(strct,member,nSize) \
+(strct,member,nSize) \
     (offsetof(strct, member) < (nSize))
 
-#define LIBREOFFICEKIT_HAS(pKit,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitClass,member,(pKit)->pClass->nSize)
+(pKit,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitClass,member,(pKit)->pClass->nSize)
 
 struct _LibreOfficeKit
 {
@@ -164,7 +164,7 @@ struct _LibreOfficeKitClass
                                      LibreOfficeKitAnyInputCallback pCallback, void* pData);
 };
 
-#define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
+(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
 
 struct _LibreOfficeKitDocument
 {
@@ -559,13 +559,13 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::setViewOption
     void (*setViewOption)(LibreOfficeKitDocument* pThis, const char* pOption, const char* pValue);
 
-#endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
+
 };
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

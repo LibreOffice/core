@@ -5,23 +5,23 @@
 /* #undef HAVE_OPENSSL_APPLINK_C */
 /* #undef HAVE_ALLOCA_H */
 /* #undef HAVE_BIGENDIAN */
-#define HAVE_SETLOCALE 1
+ 1
 /* #undef HAVE_NL_LANGINFO */
 /* #undef HAVE_DLFCN_H */
-#define HAVE_FCNTL_H 1
-#define HAVE_FLOAT_H 1
-#define HAVE_LIMITS_H 1
+ 1
+ 1
+ 1
 /* #undef HAVE_PWD_H */
 /* #undef HAVE_SELECT_H */
-#define HAVE_STDDEF_H 1
+ 1
 /* #undef HAVE_STDINT_H */
-#define HAVE_STDLIB_H 1
-#define HAVE_STRING_H 1
+ 1
+ 1
 /* #undef HAVE_SYS_IOCTL_H */
 /* #undef HAVE_SYS_SELECT_H */
 /* #undef HAVE_SYS_SOCKET_H */
 /* #undef HAVE_SYS_STREAM_H */
-#define HAVE_SYS_TYPES_H 1
+ 1
 /* #undef HAVE_SYS_UN_H */
 /* #undef HAVE_UNISTD_H */
 /* #undef HAVE_UCONTEXT_H */
@@ -33,18 +33,18 @@
 /* #undef HAVE_DLERROR */
 /* #undef HAVE_DLOPEN */
 /* #undef HAVE_GETPWUID */
-#define HAVE_MEMCPY 1
+ 1
 /* #undef HAVE_POLL */
 /* #undef HAVE_STRTOK_R */
-#define HAVE_STRTOL 1
+ 1
 /* #undef HAVE_STRTOLL */
-#define HAVE_STRTOUL 1
+ 1
 /* #undef HAVE_STRTOULL */
-#define HAVE_TELL 1
+ 1
 /* #undef HAVE_THR_SETCONCURRENCY */
 /* #undef HAVE_THR_YIELD */
 /* #undef HAVE_VASPRINTF */
-#define HAVE_VSNPRINTF 1
+ 1
 /* #undef HAVE_CUSERID */
 
 /*
@@ -53,35 +53,35 @@
 
 
 #ifdef _M_X64
-#define SIZEOF_CHARP 8
+ 8
 #else
-#define SIZEOF_CHARP 4
+ 4
 #endif
 #if defined(SIZEOF_CHARP)
 # define HAVE_CHARP 1
 #endif
 
 
-#define SIZEOF_INT 4
+ 4
 #if defined(SIZEOF_INT)
 # define HAVE_INT 1
 #endif
 
-#define SIZEOF_LONG 4
+ 4
 #if defined(SIZEOF_LONG)
 # define HAVE_LONG 1
 #endif
 
-#define SIZEOF_LONG_LONG 8
+ 8
 #if defined(SIZEOF_LONG_LONG)
 # define HAVE_LONG_LONG 1
 #endif
 
 
 #ifdef _M_X64
-#define SIZEOF_SIZE_T 8
+ 8
 #else
-#define SIZEOF_SIZE_T 4
+ 4
 #endif
 #if defined(SIZEOF_SIZE_T)
 # define HAVE_SIZE_T 1
@@ -139,12 +139,12 @@
 # define HAVE_SOCKLEN_T 1
 #endif
 
-#define SOCKET_SIZE_TYPE int
+ int
 
-#define LOCAL_INFILE_MODE_OFF  0
-#define LOCAL_INFILE_MODE_ON   1
-#define LOCAL_INFILE_MODE_AUTO 2
-#define ENABLED_LOCAL_INFILE LOCAL_INFILE_MODE_AUTO
+  0
+   1
+ 2
+ LOCAL_INFILE_MODE_AUTO
 
-#define MARIADB_DEFAULT_CHARSET "latin1"
+ "latin1"
 

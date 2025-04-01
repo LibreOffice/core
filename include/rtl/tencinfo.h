@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_RTL_TENCINFO_H
-#define INCLUDED_RTL_TENCINFO_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -35,14 +35,14 @@ extern "C" {
 #endif
 
 // See rtl_TextEncodingInfo.Flags below for documentation on these values:
-#define RTL_TEXTENCODING_INFO_CONTEXT   ((sal_uInt32)0x00000001)
-#define RTL_TEXTENCODING_INFO_ASCII     ((sal_uInt32)0x00000002)
-#define RTL_TEXTENCODING_INFO_UNICODE   ((sal_uInt32)0x00000004)
-#define RTL_TEXTENCODING_INFO_MULTIBYTE ((sal_uInt32)0x00000008)
-#define RTL_TEXTENCODING_INFO_R2L       ((sal_uInt32)0x00000010)
-#define RTL_TEXTENCODING_INFO_7BIT      ((sal_uInt32)0x00000020)
-#define RTL_TEXTENCODING_INFO_SYMBOL    ((sal_uInt32)0x00000040)
-#define RTL_TEXTENCODING_INFO_MIME      ((sal_uInt32)0x00000080)
+   ((sal_uInt32)0x00000001)
+     ((sal_uInt32)0x00000002)
+   ((sal_uInt32)0x00000004)
+ ((sal_uInt32)0x00000008)
+       ((sal_uInt32)0x00000010)
+      ((sal_uInt32)0x00000020)
+    ((sal_uInt32)0x00000040)
+      ((sal_uInt32)0x00000080)
 
 /** Information about a text encoding.
  */
@@ -279,6 +279,6 @@ rtl_getWindowsCodePageFromTextEncoding(rtl_TextEncoding nEncoding);
 }
 #endif
 
-#endif // INCLUDED_RTL_TENCINFO_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

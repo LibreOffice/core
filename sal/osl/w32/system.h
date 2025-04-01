@@ -18,7 +18,7 @@
  */
 
 #if OSL_DEBUG_LEVEL <= 3
-#define NO_DEBUG_CRT
+
 #endif
 
 #include <stdio.h>
@@ -40,14 +40,14 @@
     also includes mswsock.h which needs a forward typedef
     of SOCKET ...
 */
-#define WIN32_LEAN_AND_MEAN
+
 
 // winsock2.h includes windows.h
 #include <winsock2.h>
 #include <wsipx.h>
 #include <ws2tcpip.h>
 #include <shlobj.h>
-#ifndef NO_DEBUG_CRT
+#pragma once
 #include <crtdbg.h>
 #endif
 

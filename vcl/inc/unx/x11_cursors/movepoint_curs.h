@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define movepoint_curs_width 32
-#define movepoint_curs_height 32
-#define movepoint_curs_x_hot 0
-#define movepoint_curs_y_hot 0
+ 32
+ 32
+ 0
+ 0
 static unsigned char movepoint_curs_bits[] = {
    0xff, 0xff, 0xff, 0xff, 0xfd, 0xff, 0xff, 0xff, 0xf9, 0xff, 0xff, 0xff,
    0xf1, 0xff, 0xff, 0xff, 0xe1, 0xff, 0xff, 0xff, 0xc1, 0xff, 0xff, 0xff,

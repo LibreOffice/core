@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_OSL_PIPE_H
-#define INCLUDED_OSL_PIPE_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -54,8 +54,8 @@ typedef enum {
     A pipe can either be opened, or a new pipe can be created and opened.
 */
 typedef sal_uInt32 oslPipeOptions;
-#define osl_Pipe_OPEN        0x0000     /*< open existing pipe */
-#define osl_Pipe_CREATE      0x0001     /*< create pipe and open it, fails if already exists */
+        0x0000     /*< open existing pipe */
+      0x0001     /*< create pipe and open it, fails if already exists */
 
 typedef struct oslPipeImpl * oslPipe;
 
@@ -122,6 +122,6 @@ SAL_DLLPUBLIC oslPipeError SAL_CALL osl_getLastPipeError(oslPipe Pipe);
 }
 #endif
 
-#endif // INCLUDED_OSL_PIPE_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

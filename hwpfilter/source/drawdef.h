@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_DRAWDEF_H
-#define INCLUDED_HWPFILTER_SOURCE_DRAWDEF_H
+#pragma once
+
 
 #include "hwplib.h"
 #include <memory>
@@ -44,20 +44,20 @@ enum objtype
     HWPDO_NITEMS
 };
 
-#define HWPDO_PAT_TYPE_BITS 0xFF000000
+ 0xFF000000
 
-#define HWPDO_PAT_SOLID     0x00000000
+     0x00000000
 
-#define HWPDO_COLOR_NONE    0x10000000
+    0x10000000
 
-#define HWPDO_FLAG_DRAW_PIE 0x00000002
+ 0x00000002
 
 
-#define HWPDO_FLAG_GRADATION    0x00010000
-#define HWPDO_FLAG_ROTATION 0x00020000
-#define HWPDO_FLAG_BITMAP   0x00040000
-#define HWPDO_FLAG_AS_TEXTBOX   0x00080000
-#define HWPDO_FLAG_WATERMARK   0x00100000
+    0x00010000
+ 0x00020000
+   0x00040000
+   0x00080000
+   0x00100000
 
 /**
  * @short Basic properties for drawing objects
@@ -238,6 +238,6 @@ struct HWPDrawingObject
     HWPDrawingObject();
     ~HWPDrawingObject();
 };
-#endif // INCLUDED_HWPFILTER_SOURCE_DRAWDEF_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

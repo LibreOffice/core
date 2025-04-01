@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SOT_SOTDLLAPI_H
-#define INCLUDED_SOT_SOTDLLAPI_H
+#pragma once
+
 
 #include <sal/types.h>
 
 #if defined(SOT_DLLIMPLEMENTATION)
-#define SOT_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+ SAL_DLLPUBLIC_EXPORT
 #else
-#define SOT_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+ SAL_DLLPUBLIC_IMPORT
 #endif
-#define SOT_DLLPRIVATE SAL_DLLPRIVATE
+ SAL_DLLPRIVATE
 
-#endif // INCLUDED_SOT_SOTDLLAPI_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

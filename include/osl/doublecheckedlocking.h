@@ -21,12 +21,12 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_OSL_DOUBLECHECKEDLOCKING_H
-#define INCLUDED_OSL_DOUBLECHECKEDLOCKING_H
+#pragma once
+
 
 #if defined __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+
 
 /** A platform specific macro needed to make double-checked locking work.
 
@@ -70,12 +70,12 @@ extern "C" {
     One extra advantage of this macro is that it makes it easier to find all
     places where double-checked locking is used.
  */
-#define OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER() /* empty */
+() /* empty */
 
 #if defined __cplusplus
 }
-#endif /* __cplusplus */
 
-#endif /* INCLUDED_OSL_DOUBLECHECKEDLOCKING_H */
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,8 +22,8 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef INCLUDED_SAL_ANDROID_UTHASH_H
-#define INCLUDED_SAL_ANDROID_UTHASH_H
+#pragma once
+
 
 #include <string.h>   /* memcmp,strlen */
 #include <stddef.h>   /* ptrdiff_t */
@@ -34,23 +34,23 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    or, for VS2008 where neither is available, uses casting workarounds. */
 #ifdef _MSC_VER         /* MS compiler */
 #if _MSC_VER >= 1600 && defined(__cplusplus)  /* VS2010 or newer in C++ mode */
-#define DECLTYPE(x) (decltype(x))
+(x) (decltype(x))
 #else                   /* VS2008 or older (or VS2010 in C mode) */
-#define NO_DECLTYPE
-#define DECLTYPE(x)
+
+(x)
 #endif
 #else                   /* GNU, Sun and other compilers */
-#define DECLTYPE(x) (__typeof(x))
+(x) (__typeof(x))
 #endif
 
 #ifdef NO_DECLTYPE
-#define DECLTYPE_ASSIGN(dst,src)                                                 \
+(dst,src)                                                 \
 do {                                                                             \
   char **_da_dst = (char**)(&(dst));                                             \
   *_da_dst = (char*)(src);                                                       \
 } while(0)
 #else
-#define DECLTYPE_ASSIGN(dst,src)                                                 \
+(dst,src)                                                 \
 do {                                                                             \
   (dst) = DECLTYPE(dst)(src);                                                    \
 } while(0)
@@ -64,22 +64,22 @@ typedef unsigned int uint32_t;
 #endif
 
 
-#define uthash_fatal(msg) exit(-1)        /* fatal error (out of memory,etc) */
-#define uthash_malloc(sz) malloc(sz)      /* malloc fcn                      */
-#define uthash_free(ptr,sz) free(ptr)     /* free fcn                        */
+(msg) exit(-1)        /* fatal error (out of memory,etc) */
+(sz) malloc(sz)      /* malloc fcn                      */
+(ptr,sz) free(ptr)     /* free fcn                        */
 
-#define uthash_noexpand_fyi(tbl)          /* can be defined to log noexpand  */
-#define uthash_expand_fyi(tbl)            /* can be defined to log expands   */
+(tbl)          /* can be defined to log noexpand  */
+(tbl)            /* can be defined to log expands   */
 
 /* initial number of buckets */
-#define HASH_INITIAL_NUM_BUCKETS 32      /* initial number of buckets        */
-#define HASH_INITIAL_NUM_BUCKETS_LOG2 5  /* lg2 of initial number of buckets */
-#define HASH_BKT_CAPACITY_THRESH 10      /* expand when bucket count reaches */
+ 32      /* initial number of buckets        */
+ 5  /* lg2 of initial number of buckets */
+ 10      /* expand when bucket count reaches */
 
 /* calculate the element whose hash handle address is the */
-#define ELMT_FROM_HH(tbl,hhp) ((void*)(((char*)(hhp)) - ((tbl)->hho)))
+(tbl,hhp) ((void*)(((char*)(hhp)) - ((tbl)->hho)))
 
-#define HASH_FIND(hh,head,keyptr,keylen,out)                                     \
+(hh,head,keyptr,keylen,out)                                     \
 do {                                                                             \
   out=NULL;                                                                      \
   if (head) {                                                                    \
@@ -93,9 +93,9 @@ do {                                                                            
 } while (0)
 
 #ifdef HASH_BLOOM
-#define HASH_BLOOM_BITLEN (1ULL << HASH_BLOOM)
-#define HASH_BLOOM_BYTELEN (HASH_BLOOM_BITLEN/8) + ((HASH_BLOOM_BITLEN%8) ? 1:0)
-#define HASH_BLOOM_MAKE(tbl)                                                     \
+ (1ULL << HASH_BLOOM)
+ (HASH_BLOOM_BITLEN/8) + ((HASH_BLOOM_BITLEN%8) ? 1:0)
+(tbl)                                                     \
 do {                                                                             \
   (tbl)->bloom_nbits = HASH_BLOOM;                                               \
   (tbl)->bloom_bv = (uint8_t*)uthash_malloc(HASH_BLOOM_BYTELEN);                 \
@@ -104,28 +104,28 @@ do {                                                                            
   (tbl)->bloom_sig = HASH_BLOOM_SIGNATURE;                                       \
 } while (0);
 
-#define HASH_BLOOM_FREE(tbl)                                                     \
+(tbl)                                                     \
 do {                                                                             \
   uthash_free((tbl)->bloom_bv, HASH_BLOOM_BYTELEN);                              \
 } while (0);
 
-#define HASH_BLOOM_BITSET(bv,idx) (bv[(idx)/8] |= (1U << ((idx)%8)))
-#define HASH_BLOOM_BITTEST(bv,idx) (bv[(idx)/8] & (1U << ((idx)%8)))
+(bv,idx) (bv[(idx)/8] |= (1U << ((idx)%8)))
+(bv,idx) (bv[(idx)/8] & (1U << ((idx)%8)))
 
-#define HASH_BLOOM_ADD(tbl,hashv)                                                \
+(tbl,hashv)                                                \
   HASH_BLOOM_BITSET((tbl)->bloom_bv, (hashv & (uint32_t)((1ULL << (tbl)->bloom_nbits) - 1)))
 
-#define HASH_BLOOM_TEST(tbl,hashv)                                               \
+(tbl,hashv)                                               \
   HASH_BLOOM_BITTEST((tbl)->bloom_bv, (hashv & (uint32_t)((1ULL << (tbl)->bloom_nbits) - 1)))
 
 #else
-#define HASH_BLOOM_MAKE(tbl)
-#define HASH_BLOOM_FREE(tbl)
-#define HASH_BLOOM_ADD(tbl,hashv)
-#define HASH_BLOOM_TEST(tbl,hashv) (1)
+(tbl)
+(tbl)
+(tbl,hashv)
+(tbl,hashv) (1)
 #endif
 
-#define HASH_MAKE_TABLE(hh,head)                                                 \
+(hh,head)                                                 \
 do {                                                                             \
   (head)->hh.tbl = (UT_hash_table*)uthash_malloc(                                \
                   sizeof(UT_hash_table));                                        \
@@ -144,10 +144,10 @@ do {                                                                            
   (head)->hh.tbl->signature = HASH_SIGNATURE;                                    \
 } while(0)
 
-#define HASH_ADD(hh,head,fieldname,keylen_in,add)                                \
+(hh,head,fieldname,keylen_in,add)                                \
         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
 
-#define HASH_ADD_KEYPTR(hh,head,keyptr,keylen_in,add)                            \
+(hh,head,keyptr,keylen_in,add)                            \
 do {                                                                             \
  unsigned _ha_bkt;                                                               \
  (add)->hh.next = NULL;                                                          \
@@ -172,7 +172,7 @@ do {                                                                            
  HASH_FSCK(hh,head);                                                             \
 } while(0)
 
-#define HASH_TO_BKT( hashv, num_bkts, bkt )                                      \
+( hashv, num_bkts, bkt )                                      \
 do {                                                                             \
   bkt = ((hashv) & ((num_bkts) - 1));                                            \
 } while(0)
@@ -189,7 +189,7 @@ do {                                                                            
  * copy the deletee pointer, then the latter references are via that
  * scratch pointer rather than through the repointed (users) symbol.
  */
-#define HASH_DELETE(hh,head,delptr)                                              \
+(hh,head,delptr)                                              \
 do {                                                                             \
     unsigned _hd_bkt;                                                            \
     struct UT_hash_handle *_hd_hh_del;                                           \
@@ -225,27 +225,27 @@ do {                                                                            
 } while (0)
 
 /* convenience forms of HASH_FIND/HASH_ADD/HASH_DEL */
-#define HASH_FIND_STR(head,findstr,out)                                          \
+(head,findstr,out)                                          \
     HASH_FIND(hh,head,findstr,strlen(findstr),out)
-#define HASH_ADD_STR(head,strfield,add)                                          \
+(head,strfield,add)                                          \
     HASH_ADD(hh,head,strfield,strlen(add->strfield),add)
-#define HASH_FIND_INT(head,findint,out)                                          \
+(head,findint,out)                                          \
     HASH_FIND(hh,head,findint,sizeof(int),out)
-#define HASH_ADD_INT(head,intfield,add)                                          \
+(head,intfield,add)                                          \
     HASH_ADD(hh,head,intfield,sizeof(int),add)
-#define HASH_FIND_PTR(head,findptr,out)                                          \
+(head,findptr,out)                                          \
     HASH_FIND(hh,head,findptr,sizeof(void *),out)
-#define HASH_ADD_PTR(head,ptrfield,add)                                          \
+(head,ptrfield,add)                                          \
     HASH_ADD(hh,head,ptrfield,sizeof(void *),add)
-#define HASH_DEL(head,delptr)                                                    \
+(head,delptr)                                                    \
     HASH_DELETE(hh,head,delptr)
 
 /* HASH_FSCK checks hash integrity on every add/delete when HASH_DEBUG is defined.
  * This is for uthash developer only; it compiles away if HASH_DEBUG isn't defined.
  */
 #ifdef HASH_DEBUG
-#define HASH_OOPS(...) do { fprintf(stderr,__VA_ARGS__); exit(-1); } while (0)
-#define HASH_FSCK(hh,head)                                                       \
+(...) do { fprintf(stderr,__VA_ARGS__); exit(-1); } while (0)
+(hh,head)                                                       \
 do {                                                                             \
     if (head) {                                                                  \
         unsigned _bkt_i;                                                         \
@@ -297,32 +297,32 @@ do {                                                                            
     }                                                                            \
 } while (0)
 #else
-#define HASH_FSCK(hh,head)
+(hh,head)
 #endif
 
 /* When compiled with -DHASH_EMIT_KEYS, length-prefixed keys are emitted to
  * the descriptor to which this macro is defined for tuning the hash function.
  * The app can #include <unistd.h> to get the prototype for write(2). */
 #ifdef HASH_EMIT_KEYS
-#define HASH_EMIT_KEY(hh,head,keyptr,fieldlen)                                   \
+(hh,head,keyptr,fieldlen)                                   \
 do {                                                                             \
     unsigned _klen = fieldlen;                                                   \
     write(HASH_EMIT_KEYS, &_klen, sizeof(_klen));                                \
     write(HASH_EMIT_KEYS, keyptr, fieldlen);                                     \
 } while (0)
 #else
-#define HASH_EMIT_KEY(hh,head,keyptr,fieldlen)
+(hh,head,keyptr,fieldlen)
 #endif
 
 /* default to Jenkin's hash unless overridden e.g. DHASH_FUNCTION=HASH_SAX */
 #ifdef HASH_FUNCTION
-#define HASH_FCN HASH_FUNCTION
+ HASH_FUNCTION
 #else
-#define HASH_FCN HASH_JEN
+ HASH_JEN
 #endif
 
 /* The Bernstein hash function, used in Perl prior to v5.6 */
-#define HASH_BER(key,keylen,num_bkts,hashv,bkt)                                  \
+(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
   unsigned _hb_keylen=keylen;                                                    \
   char *_hb_key=(char*)(key);                                                    \
@@ -333,7 +333,7 @@ do {                                                                            
 
 /* SAX/FNV/OAT/JEN hash functions are macro variants of those listed at
  * http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx */
-#define HASH_SAX(key,keylen,num_bkts,hashv,bkt)                                  \
+(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
   unsigned _sx_i;                                                                \
   char *_hs_key=(char*)(key);                                                    \
@@ -343,7 +343,7 @@ do {                                                                            
   bkt = hashv & (num_bkts-1);                                                    \
 } while (0)
 
-#define HASH_FNV(key,keylen,num_bkts,hashv,bkt)                                  \
+(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
   unsigned _fn_i;                                                                \
   char *_hf_key=(char*)(key);                                                    \
@@ -353,7 +353,7 @@ do {                                                                            
   bkt = hashv & (num_bkts-1);                                                    \
 } while(0);
 
-#define HASH_OAT(key,keylen,num_bkts,hashv,bkt)                                  \
+(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
   unsigned _ho_i;                                                                \
   char *_ho_key=(char*)(key);                                                    \
@@ -369,7 +369,7 @@ do {                                                                            
   bkt = hashv & (num_bkts-1);                                                    \
 } while(0)
 
-#define HASH_JEN_MIX(a,b,c)                                                      \
+(a,b,c)                                                      \
 do {                                                                             \
   a -= b; a -= c; a ^= ( c >> 13 );                                              \
   b -= c; b -= a; b ^= ( a << 8 );                                               \
@@ -382,7 +382,7 @@ do {                                                                            
   c -= a; c -= b; c ^= ( b >> 15 );                                              \
 } while (0)
 
-#define HASH_JEN(key,keylen,num_bkts,hashv,bkt)                                  \
+(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
   unsigned _hj_i,_hj_j,_hj_k;                                                    \
   char *_hj_key=(char*)(key);                                                    \
@@ -427,14 +427,14 @@ do {                                                                            
 #undef get16bits
 #if (defined(__GNUC__) && defined(__i386__)) || defined(__WATCOMC__)             \
   || defined(_MSC_VER) || defined (__BORLANDC__) || defined (__TURBOC__)
-#define get16bits(d) (*((const uint16_t *) (d)))
+(d) (*((const uint16_t *) (d)))
 #endif
 
 #if !defined (get16bits)
-#define get16bits(d) ((((uint32_t)(((const uint8_t *)(d))[1])) << 8)             \
+(d) ((((uint32_t)(((const uint8_t *)(d))[1])) << 8)             \
                        +(uint32_t)(((const uint8_t *)(d))[0]) )
 #endif
-#define HASH_SFH(key,keylen,num_bkts,hashv,bkt)                                  \
+(key,keylen,num_bkts,hashv,bkt)                                  \
 do {                                                                             \
   char *_sfh_key=(char*)(key);                                                   \
   uint32_t _sfh_tmp, _sfh_len = keylen;                                          \
@@ -490,13 +490,13 @@ do {                                                                            
  *   cc -## a.c (where a.c is a simple test file)   (Sun Studio)
  */
 #if (defined(__i386__) || defined(__x86_64__))
-#define HASH_MUR HASH_MUR_UNALIGNED
+ HASH_MUR_UNALIGNED
 #else
-#define HASH_MUR HASH_MUR_ALIGNED
+ HASH_MUR_ALIGNED
 #endif
 
 /* Appleby's MurmurHash fast version for unaligned-tolerant archs like i386 */
-#define HASH_MUR_UNALIGNED(key,keylen,num_bkts,hashv,bkt)                        \
+(key,keylen,num_bkts,hashv,bkt)                        \
 do {                                                                             \
   const unsigned int _mur_m = 0x5bd1e995;                                        \
   const int _mur_r = 24;                                                         \
@@ -530,7 +530,7 @@ do {                                                                            
 } while(0)
 
 /* Appleby's MurmurHash version for alignment-sensitive archs like Sparc */
-#define HASH_MUR_ALIGNED(key,keylen,num_bkts,hashv,bkt)                          \
+(key,keylen,num_bkts,hashv,bkt)                          \
 do {                                                                             \
   const unsigned int _mur_m = 0x5bd1e995;                                        \
   const int _mur_r = 24;                                                         \
@@ -625,13 +625,13 @@ do {                                                                            
   }                                                                              \
   bkt = hashv & (num_bkts-1);                                                    \
 } while(0)
-#endif  /* HASH_USING_NO_STRICT_ALIASING */
+
 
 /* key comparison function; return 0 if keys equal */
-#define HASH_KEYCMP(a,b,len) memcmp(a,b,len)
+(a,b,len) memcmp(a,b,len)
 
 /* iterate over items in a known bucket to find desired item */
-#define HASH_FIND_IN_BKT(tbl,hh,head,keyptr,keylen_in,out)                       \
+(tbl,hh,head,keyptr,keylen_in,out)                       \
 do {                                                                             \
  if (head.hh_head) DECLTYPE_ASSIGN(out,ELMT_FROM_HH(tbl,head.hh_head));          \
  else out=NULL;                                                                  \
@@ -645,7 +645,7 @@ do {                                                                            
 } while(0)
 
 /* add an item to a bucket  */
-#define HASH_ADD_TO_BKT(head,addhh)                                              \
+(head,addhh)                                              \
 do {                                                                             \
  head.count++;                                                                   \
  (addhh)->hh_next = head.hh_head;                                                \
@@ -659,7 +659,7 @@ do {                                                                            
 } while(0)
 
 /* remove an item from a given bucket */
-#define HASH_DEL_IN_BKT(hh,head,hh_del)                                          \
+(hh,head,hh_del)                                          \
     (head).count--;                                                              \
     if ((head).hh_head == hh_del) {                                              \
       (head).hh_head = hh_del->hh_next;                                          \
@@ -700,7 +700,7 @@ do {                                                                            
  *      ceil(n/b) = (n>>lb) + ( (n & (b-1)) ? 1:0)
  *
  */
-#define HASH_EXPAND_BUCKETS(tbl)                                                 \
+(tbl)                                                 \
 do {                                                                             \
     unsigned _he_bkt;                                                            \
     unsigned _he_bkt_i;                                                          \
@@ -751,8 +751,8 @@ do {                                                                            
 /* This is an adaptation of Simon Tatham's O(n log(n)) mergesort */
 /* Note that HASH_SORT assumes the hash handle name to be hh.
  * HASH_SRT was added to allow the hash handle name to be passed in. */
-#define HASH_SORT(head,cmpfcn) HASH_SRT(hh,head,cmpfcn)
-#define HASH_SRT(hh,head,cmpfcn)                                                 \
+(head,cmpfcn) HASH_SRT(hh,head,cmpfcn)
+(hh,head,cmpfcn)                                                 \
 do {                                                                             \
   unsigned _hs_i;                                                                \
   unsigned _hs_looping,_hs_nmerges,_hs_insize,_hs_psize,_hs_qsize;               \
@@ -836,7 +836,7 @@ do {                                                                            
  * in both hashes. There is no copy of the items made; rather
  * they are added into the new hash through a secondary hash
  * hash handle that must be present in the structure. */
-#define HASH_SELECT(hh_dst, dst, hh_src, src, cond)                              \
+(hh_dst, dst, hh_src, src, cond)                              \
 do {                                                                             \
   unsigned _src_bkt, _dst_bkt;                                                   \
   void *_last_elt=NULL, *_elt;                                                   \
@@ -874,7 +874,7 @@ do {                                                                            
   HASH_FSCK(hh_dst,dst);                                                         \
 } while (0)
 
-#define HASH_CLEAR(hh,head)                                                      \
+(hh,head)                                                      \
 do {                                                                             \
   if (head) {                                                                    \
     uthash_free((head)->hh.tbl->buckets,                                         \
@@ -885,18 +885,18 @@ do {                                                                            
 } while(0)
 
 #ifdef NO_DECLTYPE
-#define HASH_ITER(hh,head,el,tmp)                                                \
+(hh,head,el,tmp)                                                \
 for((el)=(head), (*(char**)(&(tmp)))=(char*)((head)?(head)->hh.next:NULL);       \
   el; (el)=(tmp),(*(char**)(&(tmp)))=(char*)((tmp)?(tmp)->hh.next:NULL))
 #else
-#define HASH_ITER(hh,head,el,tmp)                                                \
+(hh,head,el,tmp)                                                \
 for((el)=(head),(tmp)=DECLTYPE(el)((head)?(head)->hh.next:NULL);                 \
   el; (el)=(tmp),(tmp)=DECLTYPE(el)((tmp)?(tmp)->hh.next:NULL))
 #endif
 
 /* obtain a count of items in the hash */
-#define HASH_COUNT(head) HASH_CNT(hh,head)
-#define HASH_CNT(hh,head) ((head)?((head)->hh.tbl->num_items):0)
+(head) HASH_CNT(hh,head)
+(hh,head) ((head)?((head)->hh.tbl->num_items):0)
 
 typedef struct UT_hash_bucket {
    struct UT_hash_handle *hh_head;
@@ -919,8 +919,8 @@ typedef struct UT_hash_bucket {
 } UT_hash_bucket;
 
 /* random signature used only to find hash tables in external analysis */
-#define HASH_SIGNATURE 0xa0111fe1
-#define HASH_BLOOM_SIGNATURE 0xb12220f2
+ 0xa0111fe1
+ 0xb12220f2
 
 typedef struct UT_hash_table {
    UT_hash_bucket *buckets;
@@ -966,6 +966,6 @@ typedef struct UT_hash_handle {
    unsigned hashv;                   /* result of hash-fcn(key)        */
 } UT_hash_handle;
 
-#endif // INCLUDED_SAL_ANDROID_UTHASH_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

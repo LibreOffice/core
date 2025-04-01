@@ -27,22 +27,22 @@ struct LotusContext;
 
 typedef void (*OPCODE_FKT)(LotusContext& rContext, SvStream& rStream, sal_uInt16 nLength);
 
-#define FKT_LIMIT 101
+ 101
 
-#define FKT_LIMIT123 101
+ 101
 
-#define LOTUS_EOF 0x01
+ 0x01
 
-#define LOTUS_FILEPASSWD 0x4b
+ 0x4b
 
-#define LOTUS_PATTERN 0x284
+ 0x284
 
-#define LOTUS_FORMAT_INDEX 0x800
+ 0x800
 
-#define LOTUS_FORMAT_INFO 0x801
+ 0x801
 
-#define ROW_FORMAT_MARKER 0x106
+ 0x106
 
-#define COL_FORMAT_MARKER 0x107
+ 0x107
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

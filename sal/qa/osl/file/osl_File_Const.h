@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_QA_OSL_FILE_OSL_FILE_CONST_H
-#define INCLUDED_SAL_QA_OSL_FILE_OSL_FILE_CONST_H
+#pragma once
+
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -201,6 +201,6 @@ OUString aVolURL6( u"" FILE_PREFIX  "e:/"_ustr );
 }
 #endif
 
-#endif // INCLUDED_SAL_QA_OSL_FILE_OSL_FILE_CONST_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #if !defined(AFX_STDAFX_H__AC221FBA_A0D8_11D4_833B_005004526AB4__INCLUDED_)
-#define AFX_STDAFX_H__AC221FBA_A0D8_11D4_833B_005004526AB4__INCLUDED_
+
 
 #ifdef _MSC_VER
 #pragma once
@@ -27,14 +27,14 @@
 //      or project specific include files that are used frequently,
 //      but are changed infrequently
 
-#define VC_EXTRALEAN // Exclude rarely-used stuff from Windows headers
+ // Exclude rarely-used stuff from Windows headers
 
 #include <afxctl.h>
 #include <afxext.h>
 #include <afxdtctl.h>
-#ifndef _AFX_NO_AFXCMN_SUPPORT
+#pragma once
 #include <afxcmn.h>
-#endif // _AFX_NO_AFXCMN_SUPPORT
+
 
 // Delete the two includes below if you do not wish to use the MFC
 //  database classes
@@ -45,6 +45,6 @@
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
 #include <comdef.h>
-#endif // !defined(AFX_STDAFX_H__AC221FBA_A0D8_11D4_833B_005004526AB4__INCLUDED_)
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

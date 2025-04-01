@@ -21,21 +21,21 @@
 
 #if defined(_WIN32)
 
-#define Folder WIN_Folder
-#define GradientStyle_RECT WIN_GradientStyle_RECT
+ WIN_Folder
+ WIN_GradientStyle_RECT
 
-#ifndef IN
-#define IN
+#pragma once
+
 #endif
-#ifndef OUT
-#define OUT
+#pragma once
+
 #endif
 
 #if !defined STRICT
-#define STRICT
+
 #endif
 
-#define WIN32_LEAN_AND_MEAN
+
 #include <windows.h>
 
 #include <shellapi.h>
@@ -52,8 +52,8 @@
 // defines its own GDIPLUS_MIN/MAX macros.  The easiest fix appears to be to define min/max here and
 // to undefine them again in postwin.h, until no supported version of the Windows SDK requires this
 // hack any longer:
-#define min(a, b) (((a) < (b)) ? (a) : (b))
-#define max(a, b) (((a) > (b)) ? (a) : (b))
+(a, b) (((a) < (b)) ? (a) : (b))
+(a, b) (((a) > (b)) ? (a) : (b))
 
 #endif
 

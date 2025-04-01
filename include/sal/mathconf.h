@@ -21,14 +21,14 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_SAL_MATHCONF_H
-#define INCLUDED_SAL_MATHCONF_H
+#pragma once
+
 
 #include "osl/endian.h"
 
 #if defined __sun
 #include <ieeefp.h>
-#endif /* __sun */
+
 
 #if defined(__cplusplus) && ( defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L )
 #include <cmath>
@@ -44,7 +44,7 @@
 
 #if defined __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+
 
 
 /* Generally, the C standard guarantees that at program startup, "trapping or
@@ -57,10 +57,10 @@ extern "C" {
    switch off exceptions (on Windows).
  */
 #if defined(_WIN32)
-#define SAL_MATH_FPEXCEPTIONS_OFF() _control87( _MCW_EM, _MCW_EM )
+() _control87( _MCW_EM, _MCW_EM )
 #else /* WNT */
-#define SAL_MATH_FPEXCEPTIONS_OFF()
-#endif /* WNT */
+()
+
 
 
 /* SAL_MATH_FINITE(d): test double d on INFINITY, NaN et al. */
@@ -69,16 +69,16 @@ extern "C" {
                      && ( defined(__GXX_EXPERIMENTAL_CXX0X__) \
                           || __cplusplus >= 201103L \
                           || defined(IOS) )
-#define SAL_MATH_FINITE(d) std::isfinite(d)
+(d) std::isfinite(d)
 #elif defined __APPLE__ && !(defined __i386__ || defined __x86_64__)
-#define SAL_MATH_FINITE(d) isfinite(d)
+(d) isfinite(d)
 #elif defined(_WIN32)
-#define SAL_MATH_FINITE(d) _finite(d)
+(d) _finite(d)
 #elif defined(ANDROID) || defined LINUX || defined UNX
-#define SAL_MATH_FINITE(d) finite(d)
+(d) finite(d)
 #else /* WNT, LINUX, UNX */
 #error "SAL_MATH_FINITE not defined"
-#endif /* WNT, LINUX, UNX */
+
 
 
 /* This needs to be fixed for non--IEEE-754 platforms: */
@@ -155,18 +155,18 @@ union sal_math_Double
 
 #error "neither OSL_BIGENDIAN nor OSL_LITENDIAN"
 
-#endif /* OSL_BIGENDIAN, OSL_LITENDIAN */
+
 #else /* IEEE 754 supported */
 
 #error "don't know how to handle IEEE 754"
 
-#endif /* IEEE 754 supported */
+
 
 
 #if defined __cplusplus
 }
-#endif /* __cplusplus */
 
-#endif /* INCLUDED_SAL_MATHCONF_H */
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

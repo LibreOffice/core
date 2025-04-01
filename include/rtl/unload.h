@@ -20,8 +20,8 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#ifndef INCLUDED_RTL_UNLOAD_H
-#define INCLUDED_RTL_UNLOAD_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -53,7 +53,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _rtl_ModuleCount
 
     @deprecated Do not use.
 */
-#define MODULE_COUNT_INIT \
+ \
 { {rtl_moduleCount_acquire,rtl_moduleCount_release}, rtl_moduleCount_canUnload, 0, {0, 0}}
 
 /** Backwards-compatibility remainder of a removed library unloading feature.

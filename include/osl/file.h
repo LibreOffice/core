@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_OSL_FILE_H
-#define INCLUDED_OSL_FILE_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -342,18 +342,18 @@ typedef enum {
 
    @{
  */
-#define osl_File_Attribute_ReadOnly             0x00000001
-#define osl_File_Attribute_Hidden               0x00000002
-#define osl_File_Attribute_Executable           0x00000010
-#define osl_File_Attribute_GrpWrite             0x00000020
-#define osl_File_Attribute_GrpRead              0x00000040
-#define osl_File_Attribute_GrpExe               0x00000080
-#define osl_File_Attribute_OwnWrite             0x00000100
-#define osl_File_Attribute_OwnRead              0x00000200
-#define osl_File_Attribute_OwnExe               0x00000400
-#define osl_File_Attribute_OthWrite             0x00000800
-#define osl_File_Attribute_OthRead              0x00001000
-#define osl_File_Attribute_OthExe               0x00002000
+             0x00000001
+               0x00000002
+           0x00000010
+             0x00000020
+              0x00000040
+               0x00000080
+             0x00000100
+              0x00000200
+               0x00000400
+             0x00000800
+              0x00001000
+               0x00002000
 /** @} */
 
 /**
@@ -361,17 +361,17 @@ typedef enum {
 
    @{
  */
-#define osl_FileStatus_Mask_Type                0x00000001
-#define osl_FileStatus_Mask_Attributes          0x00000002
-#define osl_FileStatus_Mask_CreationTime        0x00000010
-#define osl_FileStatus_Mask_AccessTime          0x00000020
-#define osl_FileStatus_Mask_ModifyTime          0x00000040
-#define osl_FileStatus_Mask_FileSize            0x00000080
-#define osl_FileStatus_Mask_FileName            0x00000100
-#define osl_FileStatus_Mask_FileURL             0x00000200
-#define osl_FileStatus_Mask_LinkTargetURL       0x00000400
-#define osl_FileStatus_Mask_All                 0x7FFFFFFF
-#define osl_FileStatus_Mask_Validate            0x80000000
+                0x00000001
+          0x00000002
+        0x00000010
+          0x00000020
+          0x00000040
+            0x00000080
+            0x00000100
+             0x00000200
+       0x00000400
+                 0x7FFFFFFF
+            0x80000000
 /** @} */
 
 /** Structure containing information about files and directories
@@ -525,15 +525,15 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getVolumeDeviceMountPath(
 
    @{
  */
-#define osl_Volume_Attribute_Removeable            0x00000001
-#define osl_Volume_Attribute_Remote                0x00000002
-#define osl_Volume_Attribute_CompactDisc           0x00000004
-#define osl_Volume_Attribute_FixedDisk             0x00000008
-#define osl_Volume_Attribute_RAMDisk               0x00000010
-#define osl_Volume_Attribute_FloppyDisk            0x00000020
+            0x00000001
+                0x00000002
+           0x00000004
+             0x00000008
+               0x00000010
+            0x00000020
 
-#define osl_Volume_Attribute_Case_Is_Preserved     0x00000040
-#define osl_Volume_Attribute_Case_Sensitive        0x00000080
+     0x00000040
+        0x00000080
 
 /** @} */
 
@@ -543,15 +543,15 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getVolumeDeviceMountPath(
     @{
  */
 
-#define osl_VolumeInfo_Mask_Attributes             0x00000001
-#define osl_VolumeInfo_Mask_TotalSpace             0x00000002
-#define osl_VolumeInfo_Mask_UsedSpace              0x00000004
-#define osl_VolumeInfo_Mask_FreeSpace              0x00000008
-#define osl_VolumeInfo_Mask_MaxNameLength          0x00000010
-#define osl_VolumeInfo_Mask_MaxPathLength          0x00000020
-#define osl_VolumeInfo_Mask_FileSystemName         0x00000040
-#define osl_VolumeInfo_Mask_DeviceHandle           0x00000080
-#define osl_VolumeInfo_Mask_FileSystemCaseHandling 0x00000100
+             0x00000001
+             0x00000002
+              0x00000004
+              0x00000008
+          0x00000010
+          0x00000020
+         0x00000040
+           0x00000080
+ 0x00000100
 
 /** @} */
 
@@ -631,10 +631,10 @@ typedef void *oslFileHandle;
 
 /* Open flags */
 
-#define osl_File_OpenFlag_Read      0x00000001
-#define osl_File_OpenFlag_Write     0x00000002
-#define osl_File_OpenFlag_Create    0x00000004
-#define osl_File_OpenFlag_NoLock    0x00000008
+      0x00000001
+     0x00000002
+    0x00000004
+    0x00000008
 /* larger bit-fields reserved for internal use cf. detail/file.h */
 
 /** Open a regular file.
@@ -693,9 +693,9 @@ typedef void *oslFileHandle;
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_openFile(
         rtl_uString *pustrFileURL, oslFileHandle *pHandle, sal_uInt32 uFlags );
 
-#define osl_Pos_Absolut 1
-#define osl_Pos_Current 2
-#define osl_Pos_End     3
+ 1
+ 2
+     3
 
 /** Set the internal position pointer of an open file.
 
@@ -798,7 +798,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
 
     @since UDK 3.2.10
  */
-#define osl_File_MapFlag_RandomAccess ((sal_uInt32)(0x1))
+ ((sal_uInt32)(0x1))
 
 /** Map flag denoting that the mapped address space will be accessed by the
     process soon (and it is advantageous for the operating system to already
@@ -810,7 +810,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
 
     @since UDK 3.2.12
 */
-#define osl_File_MapFlag_WillNeed ((sal_uInt32)(0x2))
+ ((sal_uInt32)(0x2))
 
 /** Map a shared file into memory.
 
@@ -861,7 +861,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_mapFile (
 );
 
 
-#ifndef ANDROID
+#pragma once
 
 /** Unmap a shared file from memory.
 
@@ -1672,6 +1672,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_replaceFile(rtl_uString* pustrSourceFile
 }
 #endif
 
-#endif // INCLUDED_OSL_FILE_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

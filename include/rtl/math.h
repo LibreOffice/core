@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_RTL_MATH_H
-#define INCLUDED_RTL_MATH_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -32,7 +32,7 @@
 
 #if defined __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+
 
 /** Formatting modes for rtl_math_doubleToString and rtl_math_doubleToUString
     and rtl_math_doubleToUStringBuffer.
@@ -502,8 +502,8 @@ SAL_DLLPUBLIC double SAL_CALL rtl_math_acosh(double fValue) SAL_THROW_EXTERN_C()
 
 #if defined __cplusplus
 }
-#endif /* __cplusplus */
 
-#endif /* INCLUDED_RTL_MATH_H */
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

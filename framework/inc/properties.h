@@ -34,12 +34,12 @@ inline constexpr OUString FRAME_PROPNAME_ASCII_URL = u"URL"_ustr;
 
 // Please add new entries alphabetical sorted and correct all other handles!
 // Start counting with 0, so it can be used as direct index into an array too.
-#define FRAME_PROPHANDLE_DISPATCHRECORDERSUPPLIER       0
-#define FRAME_PROPHANDLE_ISHIDDEN                       1
-#define FRAME_PROPHANDLE_LAYOUTMANAGER                  2
-#define FRAME_PROPHANDLE_TITLE                          3
-#define FRAME_PROPHANDLE_INDICATORINTERCEPTION          4
-#define FRAME_PROPHANDLE_URL 5
+       0
+                       1
+                  2
+                          3
+          4
+ 5
 
 /** properties for "LayoutManager" class */
 
@@ -51,15 +51,15 @@ inline constexpr OUString LAYOUTMANAGER_PROPNAME_ASCII_LOCKCOUNT = u"LockCount"_
 inline constexpr OUString LAYOUTMANAGER_PROPNAME_ASCII_PRESERVE_CONTENT_SIZE = u"PreserveContentSize"_ustr;
 inline constexpr OUString LAYOUTMANAGER_PROPNAME_ASCII_REFRESHTOOLTIP = u"RefreshContextToolbarToolTip"_ustr;
 
-#define LAYOUTMANAGER_PROPNAME_MENUBARCLOSER            LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER
+            LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER
 
-#define LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER          0
-#define LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS      1
-#define LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY      2
-#define LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI          3
-#define LAYOUTMANAGER_PROPHANDLE_LOCKCOUNT              4
-#define LAYOUTMANAGER_PROPHANDLE_PRESERVE_CONTENT_SIZE  5
-#define LAYOUTMANAGER_PROPHANDLE_REFRESHTOOLTIP         6
+          0
+      1
+      2
+          3
+              4
+  5
+         6
 
 /** properties for "UICommandDescription" class */
 inline constexpr OUString UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST = u"private:resource/image/commandimagelist"_ustr;
@@ -67,7 +67,7 @@ inline constexpr OUString UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST
 inline constexpr OUString UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST = u"private:resource/image/commandmirrorimagelist"_ustr;
 
 
-#define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON            8
+            8
 
 /** properties for "AutoRecovery" class */
 
@@ -75,13 +75,13 @@ inline constexpr OUString AUTORECOVERY_PROPNAME_ASCII_EXISTS_RECOVERYDATA = u"Ex
 inline constexpr OUString AUTORECOVERY_PROPNAME_ASCII_EXISTS_SESSIONDATA = u"ExistsSessionData"_ustr;
 inline constexpr OUString AUTORECOVERY_PROPNAME_ASCII_CRASHED = u"Crashed"_ustr;
 
-#define AUTORECOVERY_PROPNAME_EXISTS_RECOVERYDATA       AUTORECOVERY_PROPNAME_ASCII_EXISTS_RECOVERYDATA
-#define AUTORECOVERY_PROPNAME_EXISTS_SESSIONDATA        AUTORECOVERY_PROPNAME_ASCII_EXISTS_SESSIONDATA
-#define AUTORECOVERY_PROPNAME_CRASHED                   AUTORECOVERY_PROPNAME_ASCII_CRASHED
+       AUTORECOVERY_PROPNAME_ASCII_EXISTS_RECOVERYDATA
+        AUTORECOVERY_PROPNAME_ASCII_EXISTS_SESSIONDATA
+                   AUTORECOVERY_PROPNAME_ASCII_CRASHED
 
-#define AUTORECOVERY_PROPHANDLE_EXISTS_RECOVERYDATA     0
-#define AUTORECOVERY_PROPHANDLE_EXISTS_SESSIONDATA      1
-#define AUTORECOVERY_PROPHANDLE_CRASHED                 2
+     0
+      1
+                 2
 
 /** properties for Filter config */
 

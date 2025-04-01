@@ -18,8 +18,8 @@
  */
 
 /* If you happen not to want the image transform support, disable it here */
-#ifndef TRANSFORMS_SUPPORTED
-#define TRANSFORMS_SUPPORTED 1      /* 0 disables transform code */
+#pragma once
+ 1      /* 0 disables transform code */
 #endif
 
 /*
@@ -79,14 +79,14 @@
 /* Short forms of external names for systems with brain-damaged linkers. */
 
 #ifdef NEED_SHORT_EXTERNAL_NAMES
-#define jtransform_parse_crop_spec  jTrParCrop
-#define jtransform_request_workspace    jTrRequest
-#define jtransform_adjust_parameters    jTrAdjust
-#define jtransform_execute_transform    jTrExec
-#define jtransform_perfect_transform    jTrPerfect
-#define jcopy_markers_setup     jCMrkSetup
-#define jcopy_markers_execute       jCMrkExec
-#endif /* NEED_SHORT_EXTERNAL_NAMES */
+  jTrParCrop
+    jTrRequest
+    jTrAdjust
+    jTrExec
+    jTrPerfect
+     jCMrkSetup
+       jCMrkExec
+
 
 /*
  * Codes for supported types of image transformations.
@@ -188,9 +188,9 @@ EXTERN(boolean) jtransform_perfect_transform
  * routine names that long.  This macro is here to avoid breaking any
  * old source code that uses the original name...
  */
-#define jtransform_execute_transformation   jtransform_execute_transform
+   jtransform_execute_transform
 
-#endif /* TRANSFORMS_SUPPORTED */
+
 
 /*
  * Support for copying optional markers from source to destination file.

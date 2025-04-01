@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #if !defined(AFX_MFCCONTROLPPG_H__AC221FC5_A0D8_11D4_833B_005004526AB4__INCLUDED_)
-#define AFX_MFCCONTROLPPG_H__AC221FC5_A0D8_11D4_833B_005004526AB4__INCLUDED_
+
 
 #ifdef _MSC_VER
 #pragma once
@@ -61,6 +61,6 @@ protected:
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
-#endif // !defined(AFX_MFCCONTROLPPG_H__AC221FC5_A0D8_11D4_833B_005004526AB4__INCLUDED)
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

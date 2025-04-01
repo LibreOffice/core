@@ -34,7 +34,7 @@
 
 #pragma once
 
-#define CERT_NewTempCertificate __CERT_NewTempCertificate
-#define CERT_DecodeDERCertificate __CERT_DecodeDERCertificate
+ __CERT_NewTempCertificate
+ __CERT_DecodeDERCertificate
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

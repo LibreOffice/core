@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define nodrop_curs_width 32
-#define nodrop_curs_height 32
-#define nodrop_curs_x_hot 9
-#define nodrop_curs_y_hot 9
+ 32
+ 32
+ 9
+ 9
 static unsigned char nodrop_curs_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0xc0, 0x0f, 0x00, 0x00, 0xf0, 0x3f, 0x00, 0x00,
    0xf8, 0x7f, 0x00, 0x00, 0x7c, 0xf8, 0x00, 0x00, 0x1c, 0xfc, 0x00, 0x00,

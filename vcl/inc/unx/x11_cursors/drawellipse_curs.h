@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define drawellipse_curs_width 32
-#define drawellipse_curs_height 32
-#define drawellipse_curs_x_hot 7
-#define drawellipse_curs_y_hot 7
+ 32
+ 32
+ 7
+ 7
 static unsigned char drawellipse_curs_bits[] = {
    0x80, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00,
    0x80, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00,

@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_RTL_DIGEST_H
-#define INCLUDED_RTL_DIGEST_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -159,7 +159,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_get (
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
 
-#define RTL_DIGEST_LENGTH_MD2 16
+ 16
 
 /** Create a MD2 digest handle.
 
@@ -215,7 +215,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_MD2 (
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
 
-#define RTL_DIGEST_LENGTH_MD5 16
+ 16
 
 /** Create a MD5 digest handle.
 
@@ -283,7 +283,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_MD5 (
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
 
-#define RTL_DIGEST_LENGTH_SHA 20
+ 20
 
 /** Create a SHA digest handle.
 
@@ -362,7 +362,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA (
  * rtl_digest_SHA1 interface.
  *
  *======================================================================*/
-#define RTL_DIGEST_LENGTH_SHA1 20
+ 20
 
 /** Create a SHA1 digest handle.
 
@@ -435,7 +435,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA1 (
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
 
-#define RTL_DIGEST_LENGTH_HMAC_MD5 RTL_DIGEST_LENGTH_MD5
+ RTL_DIGEST_LENGTH_MD5
 
 /** Create a HMAC_MD5 digest handle.
 
@@ -509,7 +509,7 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_HMAC_MD5 (
     sal_uInt8       *pBuffer,  sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
 
-#define RTL_DIGEST_LENGTH_HMAC_SHA1 RTL_DIGEST_LENGTH_SHA1
+ RTL_DIGEST_LENGTH_SHA1
 
 /** Create a HMAC_SHA1 digest handle.
 
@@ -638,6 +638,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_PBKDF2 (
 }
 #endif
 
-#endif // INCLUDED_RTL_DIGEST_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

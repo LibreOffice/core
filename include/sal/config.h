@@ -21,77 +21,77 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_SAL_CONFIG_H
-#define INCLUDED_SAL_CONFIG_H
+#pragma once
+
 
 #if defined LIBO_INTERNAL_ONLY && defined ANDROID && defined __cplusplus
 #include <android/compatibility.hxx>
 #endif
 
 #ifdef _WIN32
-#define SAL_W32
-#define SAL_DLLEXTENSION ".dll"
-#define SAL_EXEEXTENSION ".exe"
-#define SAL_PATHSEPARATOR ';'
-#define SAL_PATHDELIMITER '\\'
-#define SAL_NEWLINE_STRING "\r\n"
-#define SAL_CONFIGFILE(name) name ".ini"
+
+ ".dll"
+ ".exe"
+ ';'
+ '\\'
+ "\r\n"
+(name) name ".ini"
 
 #ifdef _MSC_VER
 
-#ifndef _USE_MATH_DEFINES
-#define _USE_MATH_DEFINES // needed by Visual C++ for math constants
+#pragma once
+ // needed by Visual C++ for math constants
 #endif
 
-#endif /* defined _MSC_VER */
 
-#endif /* defined _WIN32 */
+
+
 
 #if defined(__sun) || defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD)    \
     || defined(DRAGONFLY) || defined(ANDROID) || defined(HAIKU)
-#define SAL_UNX
-#define SAL_DLLEXTENSION ".so"
-#define SAL_EXEEXTENSION ""
-#define SAL_DLLPREFIX "lib"
-#define SAL_PATHSEPARATOR ':'
-#define SAL_PATHDELIMITER '/'
-#define SAL_NEWLINE_STRING "\n"
-#define SAL_CONFIGFILE(name) name "rc"
+
+ ".so"
+ ""
+ "lib"
+ ':'
+ '/'
+ "\n"
+(name) name "rc"
 #endif
 
 #ifdef MACOSX
-#define SAL_UNX
-#define SAL_DLLEXTENSION ".dylib"
-#define SAL_EXEEXTENSION ""
-#define SAL_DLLPREFIX "lib"
-#define SAL_PATHSEPARATOR ':'
-#define SAL_PATHDELIMITER '/'
-#define SAL_NEWLINE_STRING "\n"
-#define SAL_CONFIGFILE(name) name "rc"
+
+ ".dylib"
+ ""
+ "lib"
+ ':'
+ '/'
+ "\n"
+(name) name "rc"
 #endif
 
 #ifdef IOS
-#define SAL_UNX
+
 /* SAL_DLLEXTENSION should not really be used on iOS, as iOS apps are
  * not allowed to load own dynamic libraries.
  */
-#define SAL_DLLEXTENSION ".dylib"
-#define SAL_DLLPREFIX "lib"
-#define SAL_PATHSEPARATOR ':'
-#define SAL_PATHDELIMITER '/'
-#define SAL_NEWLINE_STRING "\n"
-#define SAL_CONFIGFILE(name) name "rc"
+ ".dylib"
+ "lib"
+ ':'
+ '/'
+ "\n"
+(name) name "rc"
 #endif
 
 #ifdef EMSCRIPTEN
-#define SAL_UNX
-#define SAL_DLLEXTENSION ".bc"
-#define SAL_EXEEXTENSION ""
-#define SAL_DLLPREFIX "lib"
-#define SAL_PATHSEPARATOR ':'
-#define SAL_PATHDELIMITER '/'
-#define SAL_NEWLINE_STRING "\n"
-#define SAL_CONFIGFILE(name) name "rc"
+
+ ".bc"
+ ""
+ "lib"
+ ':'
+ '/'
+ "\n"
+(name) name "rc"
 #endif
 
 /* The following spell is for Solaris and its descendants.
@@ -101,7 +101,7 @@
  */
 #ifdef sun
 #undef sun
-#define sun sun
+ sun
 #endif
 
 #if defined __clang__
@@ -117,6 +117,6 @@
 #endif
 #endif
 
-#endif // INCLUDED_SAL_CONFIG_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

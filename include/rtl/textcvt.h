@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_RTL_TEXTCVT_H
-#define INCLUDED_RTL_TEXTCVT_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -65,35 +65,35 @@ SAL_DLLPUBLIC void SAL_CALL rtl_destroyTextToUnicodeContext( rtl_TextToUnicodeCo
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_resetTextToUnicodeContext( rtl_TextToUnicodeConverter hConverter, rtl_TextToUnicodeContext hContext );
 
-#define RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR             ((sal_uInt32)0x0001)
-#define RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE            ((sal_uInt32)0x0002)
-#define RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE      ((sal_uInt32)0x0003)
-#define RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT           ((sal_uInt32)0x0004)
-#define RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR           ((sal_uInt32)0x0010)
-#define RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_IGNORE          ((sal_uInt32)0x0020)
-#define RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT         ((sal_uInt32)0x0030)
-#define RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR               ((sal_uInt32)0x0100)
-#define RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE              ((sal_uInt32)0x0200)
-#define RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT             ((sal_uInt32)0x0300)
-#define RTL_TEXTTOUNICODE_FLAGS_FLUSH                       ((sal_uInt32)0x8000)
-#define RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE 0x10000
+             ((sal_uInt32)0x0001)
+            ((sal_uInt32)0x0002)
+      ((sal_uInt32)0x0003)
+           ((sal_uInt32)0x0004)
+           ((sal_uInt32)0x0010)
+          ((sal_uInt32)0x0020)
+         ((sal_uInt32)0x0030)
+               ((sal_uInt32)0x0100)
+              ((sal_uInt32)0x0200)
+             ((sal_uInt32)0x0300)
+                       ((sal_uInt32)0x8000)
+ 0x10000
     /* Accept any global document signatures (for example, in UTF-8, a leading
        EF BB BF encoding the Byte Order Mark U+FEFF) */
 
-#define RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MASK              ((sal_uInt32)0x000F)
-#define RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_MASK            ((sal_uInt32)0x00F0)
-#define RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK                ((sal_uInt32)0x0F00)
+              ((sal_uInt32)0x000F)
+            ((sal_uInt32)0x00F0)
+                ((sal_uInt32)0x0F00)
 
-#define RTL_TEXTTOUNICODE_INFO_ERROR                        ((sal_uInt32)0x0001)
+                        ((sal_uInt32)0x0001)
 // Misspelled constant, kept for backwards compatibility:
-#define RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL             ((sal_uInt32)0x0002)
-#define RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL            ((sal_uInt32)0x0002)
+             ((sal_uInt32)0x0002)
+            ((sal_uInt32)0x0002)
 // Misspelled constant, kept for backwards compatibility:
-#define RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL            ((sal_uInt32)0x0004)
-#define RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL           ((sal_uInt32)0x0004)
-#define RTL_TEXTTOUNICODE_INFO_UNDEFINED                    ((sal_uInt32)0x0008)
-#define RTL_TEXTTOUNICODE_INFO_MBUNDEFINED                  ((sal_uInt32)0x0010)
-#define RTL_TEXTTOUNICODE_INFO_INVALID                      ((sal_uInt32)0x0020)
+            ((sal_uInt32)0x0004)
+           ((sal_uInt32)0x0004)
+                    ((sal_uInt32)0x0008)
+                  ((sal_uInt32)0x0010)
+                      ((sal_uInt32)0x0020)
 
 /** see http://udk.openoffice.org/cpp/man/spec/textconversion.html
 
@@ -142,38 +142,38 @@ SAL_DLLPUBLIC void SAL_CALL rtl_destroyUnicodeToTextContext( rtl_UnicodeToTextCo
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_resetUnicodeToTextContext( rtl_UnicodeToTextConverter hConverter, rtl_UnicodeToTextContext hContext );
 
-#define RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR             ((sal_uInt32)0x0001)
-#define RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE            ((sal_uInt32)0x0002)
-#define RTL_UNICODETOTEXT_FLAGS_UNDEFINED_0                 ((sal_uInt32)0x0003)
-#define RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK      ((sal_uInt32)0x0004)
-#define RTL_UNICODETOTEXT_FLAGS_UNDEFINED_UNDERLINE         ((sal_uInt32)0x0005)
-#define RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT           ((sal_uInt32)0x0006)
-#define RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR               ((sal_uInt32)0x0010)
-#define RTL_UNICODETOTEXT_FLAGS_INVALID_IGNORE              ((sal_uInt32)0x0020)
-#define RTL_UNICODETOTEXT_FLAGS_INVALID_0                   ((sal_uInt32)0x0030)
-#define RTL_UNICODETOTEXT_FLAGS_INVALID_QUESTIONMARK        ((sal_uInt32)0x0040)
-#define RTL_UNICODETOTEXT_FLAGS_INVALID_UNDERLINE           ((sal_uInt32)0x0050)
-#define RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT             ((sal_uInt32)0x0060)
-#define RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE           ((sal_uInt32)0x0100)
-#define RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR        ((sal_uInt32)0x0200)
-#define RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0              ((sal_uInt32)0x0400)
-#define RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE           ((sal_uInt32)0x0800)
-#define RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE              ((sal_uInt32)0x1000)
-#define RTL_UNICODETOTEXT_FLAGS_PRIVATE_IGNORE              ((sal_uInt32)0x2000)
-#define RTL_UNICODETOTEXT_FLAGS_NOCOMPOSITE                 ((sal_uInt32)0x4000) ///< has no effect @deprecated
-#define RTL_UNICODETOTEXT_FLAGS_FLUSH                       ((sal_uInt32)0x8000)
-#define RTL_UNICODETOTEXT_FLAGS_GLOBAL_SIGNATURE 0x10000
+             ((sal_uInt32)0x0001)
+            ((sal_uInt32)0x0002)
+                 ((sal_uInt32)0x0003)
+      ((sal_uInt32)0x0004)
+         ((sal_uInt32)0x0005)
+           ((sal_uInt32)0x0006)
+               ((sal_uInt32)0x0010)
+              ((sal_uInt32)0x0020)
+                   ((sal_uInt32)0x0030)
+        ((sal_uInt32)0x0040)
+           ((sal_uInt32)0x0050)
+             ((sal_uInt32)0x0060)
+           ((sal_uInt32)0x0100)
+        ((sal_uInt32)0x0200)
+              ((sal_uInt32)0x0400)
+           ((sal_uInt32)0x0800)
+              ((sal_uInt32)0x1000)
+              ((sal_uInt32)0x2000)
+                 ((sal_uInt32)0x4000) ///< has no effect @deprecated
+                       ((sal_uInt32)0x8000)
+ 0x10000
     /* Write any global document signatures (for example, in UTF-8, a leading
        EF BB BF encoding the Byte Order Mark U+FEFF) */
 
-#define RTL_UNICODETOTEXT_FLAGS_UNDEFINED_MASK              ((sal_uInt32)0x000F)
-#define RTL_UNICODETOTEXT_FLAGS_INVALID_MASK                ((sal_uInt32)0x00F0)
+              ((sal_uInt32)0x000F)
+                ((sal_uInt32)0x00F0)
 
-#define RTL_UNICODETOTEXT_INFO_ERROR                        ((sal_uInt32)0x0001)
-#define RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL             ((sal_uInt32)0x0002)
-#define RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL            ((sal_uInt32)0x0004)
-#define RTL_UNICODETOTEXT_INFO_UNDEFINED                    ((sal_uInt32)0x0008)
-#define RTL_UNICODETOTEXT_INFO_INVALID                      ((sal_uInt32)0x0010)
+                        ((sal_uInt32)0x0001)
+             ((sal_uInt32)0x0002)
+            ((sal_uInt32)0x0004)
+                    ((sal_uInt32)0x0008)
+                      ((sal_uInt32)0x0010)
 
 /** see http://udk.openoffice.org/cpp/man/spec/textconversion.html
  */
@@ -189,6 +189,6 @@ SAL_DLLPUBLIC sal_Size SAL_CALL rtl_convertUnicodeToText(
 }
 #endif
 
-#endif // INCLUDED_RTL_TEXTCVT_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

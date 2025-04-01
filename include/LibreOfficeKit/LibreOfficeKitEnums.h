@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITENUMS_H
-#define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITENUMS_H
+#pragma once
+
 
 #include <assert.h>
 
@@ -1298,12 +1298,12 @@ typedef enum
 }
 LibreOfficeKitSetGraphicSelectionType;
 
-#endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
+
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITENUMS_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

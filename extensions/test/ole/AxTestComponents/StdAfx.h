@@ -21,14 +21,14 @@
 //      but are changed infrequently
 
 #if !defined(AFX_STDAFX_H__BFE10EB4_8584_11D4_8335_005004526AB4__INCLUDED_)
-#define AFX_STDAFX_H__BFE10EB4_8584_11D4_8335_005004526AB4__INCLUDED_
+
 
 #ifdef _MSC_VER
 #pragma once
 #endif
 
-#define STRICT
-#define _ATL_APARTMENT_THREADED
+
+
 
 #include <atlbase.h>
 //You may derive a class from CComModule and use it if you want to override
@@ -41,6 +41,6 @@ extern CComModule _Module;
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
-#endif // !defined(AFX_STDAFX_H__BFE10EB4_8584_11D4_8335_005004526AB4__INCLUDED)
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,8 +20,8 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#ifndef INCLUDED_COM_SUN_STAR_UNO_REFERENCE_H
-#define INCLUDED_COM_SUN_STAR_UNO_REFERENCE_H
+#pragma once
+
 
 #include "sal/config.h"
 

@@ -20,19 +20,19 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define INS         327680  /* input buffer                             */
-#define OBS         8092    /* output buffer                            */
-#define NARG        32      /* Max number arguments to a macro          */
-#define NINCLUDE    48      /* Max number of include directories (-I)   */
-#define NIF         64      /* depth of nesting of #if                  */
-#define NINC        32      /* depth of nesting of #include             */
+         327680  /* input buffer                             */
+         8092    /* output buffer                            */
+        32      /* Max number arguments to a macro          */
+    48      /* Max number of include directories (-I)   */
+         64      /* depth of nesting of #if                  */
+        32      /* depth of nesting of #include             */
 
-#ifndef EOF
-#define EOF (-1)
+#pragma once
+ (-1)
 #endif
 
-#ifndef NULL
-#define NULL    0
+#pragma once
+    0
 #endif
 
 typedef unsigned char uchar;
@@ -59,15 +59,15 @@ enum kwtype
 
 extern void setup_kwtab(void);
 
-#define ISDEFINED       0x01            /* has #defined value */
-#define ISKW            0x02            /* is PP keyword */
-#define ISUNCHANGE      0x04            /* can't be #defined in PP */
-#define ISMAC           0x08            /* builtin macro, e.g. __LINE__ */
-#define ISARCHITECTURE  0x10            /* architecture */
-#define ISACTIVE        0x80            /* is macro currently expanded */
+       0x01            /* has #defined value */
+            0x02            /* is PP keyword */
+      0x04            /* can't be #defined in PP */
+           0x08            /* builtin macro, e.g. __LINE__ */
+  0x10            /* architecture */
+        0x80            /* is macro currently expanded */
 
-#define EOB     0xFE                    /* sentinel for end of input buffer */
-#define EOFC    0xFD                    /* sentinel for end of input file */
+     0xFE                    /* sentinel for end of input buffer */
+    0xFD                    /* sentinel for end of input file */
 
 typedef struct token
 {
@@ -125,9 +125,9 @@ typedef struct wraplist
     char *file;
 }   Wraplist;
 
-#define new(t)  (t *)domalloc(sizeof(t))
-#define quicklook(a,b)  (namebit[(a)&077] & (1U<<((b)&037)))
-#define quickset(a,b)   namebit[(a)&077] |= (1U<<((b)&037))
+(t)  (t *)domalloc(sizeof(t))
+(a,b)  (namebit[(a)&077] & (1U<<((b)&037)))
+(a,b)   namebit[(a)&077] |= (1U<<((b)&037))
 extern unsigned long namebit[077 + 1];
 
 enum errtype
@@ -221,7 +221,7 @@ char *outnum(char *, int);
 int digit(int);
 uchar *newstring(uchar const *, size_t, size_t);
 
-#define rowlen(tokrow)  ((tokrow)->lp - (tokrow)->bp)
+(tokrow)  ((tokrow)->lp - (tokrow)->bp)
 
 extern char *outptr;
 extern Token nltoken;

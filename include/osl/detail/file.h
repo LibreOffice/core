@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OSL_DETAIL_FILE_H
-#define INCLUDED_OSL_DETAIL_FILE_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -21,12 +21,12 @@
 /* More flags needed for semantics that match the open() call that
    used to be in SvFileStream::Open(), and for temp files:
 */
-#define osl_File_OpenFlag_Trunc 0x00000010L
-#define osl_File_OpenFlag_NoExcl 0x00000020L
-#define osl_File_OpenFlag_Private 0x00000040L
+ 0x00000010L
+ 0x00000020L
+ 0x00000040L
 
 /** @endcond */
 
-#endif /* INCLUDED_OSL_DETAIL_FILE_H */
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

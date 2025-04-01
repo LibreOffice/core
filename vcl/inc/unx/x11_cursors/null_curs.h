@@ -16,9 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define nullcurs_width 4
-#define nullcurs_height 4
-#define nullcurs_x_hot 2
-#define nullcurs_y_hot 2
+ 4
+ 4
+ 2
+ 2
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

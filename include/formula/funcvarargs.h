@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_FORMULA_FUNCVARARGS_H
-#define INCLUDED_FORMULA_FUNCVARARGS_H
+#pragma once
+
 
 /** Used to indicate a variable number of parameters for the Function Wizard.
 
@@ -32,7 +32,7 @@
     functionDescription.isInfiniteParameterCount() which though looks like it
     could be easily adapted.
  */
-#define VAR_ARGS 255
+ 255
 
 /** Used to indicate a variable number of paired parameters for the Function Wizard.
 
@@ -42,7 +42,7 @@
 
     @see VAR_ARGS
  */
-#define PAIRED_VAR_ARGS (VAR_ARGS + VAR_ARGS)
+ (VAR_ARGS + VAR_ARGS)
 
 #endif
 

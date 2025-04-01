@@ -24,8 +24,8 @@
 
 
 
-#ifndef RAPTOR_H
-#define RAPTOR_H
+#pragma once
+
 
 
 #ifdef __cplusplus
@@ -43,7 +43,7 @@ extern "C" {
  *
  * Flag for marking raptor2 API availability.
  */
-#define RAPTOR_V2_AVAILABLE 1
+ 1
 
 
 /**
@@ -53,35 +53,35 @@ extern "C" {
  *
  * Format: major * 10000 + minor * 100 + release
  */
-#define RAPTOR_VERSION 20016
+ 20016
 
 /**
  * RAPTOR_VERSION_STRING:
  *
  * Raptor library version string
  */
-#define RAPTOR_VERSION_STRING "2.0.16"
+ "2.0.16"
 
 /**
  * RAPTOR_VERSION_MAJOR:
  *
  * Raptor library major version
  */
-#define RAPTOR_VERSION_MAJOR 2
+ 2
 
 /**
  * RAPTOR_VERSION_MINOR:
  *
  * Raptor library minor version
  */
-#define RAPTOR_VERSION_MINOR 0
+ 0
 
 /**
  * RAPTOR_VERSION_RELEASE:
  *
  * Raptor library release
  */
-#define RAPTOR_VERSION_RELEASE 16
+ 16
 
 /**
  * RAPTOR_API:
@@ -89,7 +89,7 @@ extern "C" {
  * Macro for wrapping API function call declarations.
  *
  */
-#ifndef RAPTOR_API
+#pragma once
 #  ifdef _WIN32
 #    ifdef __GNUC__
 #      undef _declspec
@@ -113,11 +113,11 @@ extern "C" {
  * This gives a warning during compiling.
  */
 #if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1))
-#define RAPTOR_DEPRECATED __attribute__((deprecated))
-#define RAPTOR_NORETURN __attribute__((__noreturn__))
+ __attribute__((deprecated))
+ __attribute__((__noreturn__))
 #else
-#define RAPTOR_DEPRECATED
-#define RAPTOR_NORETURN
+
+
 #endif
 
 /**
@@ -128,10 +128,10 @@ extern "C" {
  * Internal macro
  */
 #if defined(__GNUC__) && (__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 5))
-#define RAPTOR_PRINTF_FORMAT(string_index, first_to_check_index) \
+(string_index, first_to_check_index) \
   __attribute__((__format__(__printf__, string_index, first_to_check_index)))
 #else
-#define RAPTOR_PRINTF_FORMAT(string_index, first_to_check_index)
+(string_index, first_to_check_index)
 #endif
 
 /**
@@ -1041,7 +1041,7 @@ typedef struct raptor_stringbuffer_s raptor_stringbuffer;
 
 /* Public functions */
 
-#define raptor_new_world() raptor_new_world_internal(RAPTOR_VERSION)
+() raptor_new_world_internal(RAPTOR_VERSION)
 /* The real target of the raptor_new_world() macro */
 RAPTOR_API
 raptor_world *raptor_new_world_internal(unsigned int version_decimal);
@@ -1399,7 +1399,7 @@ int raptor_uri_uri_string_is_absolute(const unsigned char* uri_string);
  *
  * Copy with raptor_uri_copy() to use.
  */
-#define RAPTOR_RDF_MS_URI raptor_rdf_namespace_uri
+ raptor_rdf_namespace_uri
 
 /**
  * RAPTOR_RDF_SCHEMA_URI:
@@ -1408,7 +1408,7 @@ int raptor_uri_uri_string_is_absolute(const unsigned char* uri_string);
  *
  * Copy with raptor_uri_copy() to use.
  */
-#define RAPTOR_RDF_SCHEMA_URI raptor_rdf_schema_namespace_uri
+ raptor_rdf_schema_namespace_uri
 
 /**
  * RAPTOR_XMLSCHEMA_DATATYPES_URI:
@@ -1417,7 +1417,7 @@ int raptor_uri_uri_string_is_absolute(const unsigned char* uri_string);
  *
  * Copy with raptor_uri_copy() to use.
  */
-#define RAPTOR_XMLSCHEMA_DATATYPES_URI raptor_xmlschema_datatypes_namespace_uri
+ raptor_xmlschema_datatypes_namespace_uri
 
 /**
  * RAPTOR_OWL_URI:
@@ -1426,7 +1426,7 @@ int raptor_uri_uri_string_is_absolute(const unsigned char* uri_string);
  *
  * Copy with raptor_uri_copy() to use.
  */
-#define RAPTOR_OWL_URI raptor_owl_namespace_uri
+ raptor_owl_namespace_uri
 
 
 /* raptor_www */

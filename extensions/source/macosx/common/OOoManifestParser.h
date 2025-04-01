@@ -19,8 +19,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-#define MEDIA_TYPE_PDF @"application/pdf"
-#define MEDIA_TYPE_PNG @"image/png"
+ @"application/pdf"
+ @"image/png"
 
 @interface OOoManifestParser : NSObject <NSXMLParserDelegate>
 {

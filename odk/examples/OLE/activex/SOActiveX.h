@@ -35,8 +35,8 @@
 
 // SOActiveX.h : Declaration of the CSOActiveX
 
-#ifndef INCLUDED_EXAMPLES_ACTIVEX_SOACTIVEX_H
-#define INCLUDED_EXAMPLES_ACTIVEX_SOACTIVEX_H
+#pragma once
+
 
 #include "resource.h"
 #include <ExDispID.h>
@@ -163,6 +163,6 @@ public:
     HRESULT Cleanup();
 };
 
-#endif // INCLUDED_EXAMPLES_ACTIVEX_SOACTIVEX_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

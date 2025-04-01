@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_PROPCTRLR_H
-#define EXTENSIONS_PROPCTRLR_H
+#pragma once
+
 
 #include <rtl/ustring.hxx>
 
@@ -81,6 +81,6 @@ inline constexpr OString UID_BRWEVT_APPROVEPARAMETER = "EXTENSIONS_UID_BRWEVT_AP
 inline constexpr OString UID_BRWEVT_ERROROCCURRED = "EXTENSIONS_UID_BRWEVT_ERROROCCURRED"_ostr;
 inline constexpr OString UID_BRWEVT_ADJUSTMENTVALUECHANGED = "EXTENSIONS_UID_BRWEVT_ADJUSTMENTVALUECHANGED"_ostr;
 
-#endif // EXTENSIONS_PROPCTRLR_HRC
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

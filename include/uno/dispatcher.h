@@ -20,8 +20,8 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#ifndef INCLUDED_UNO_DISPATCHER_H
-#define INCLUDED_UNO_DISPATCHER_H
+#pragma once
+
 
 #include "sal/types.h"
 #include "uno/any2.h"

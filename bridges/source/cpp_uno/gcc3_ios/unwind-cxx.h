@@ -30,8 +30,8 @@
 // This is derived from the C++ ABI for IA-64.  Where we diverge
 // for cross-architecture compatibility are noted with "@@@".
 
-#ifndef _UNWIND_CXX_H
-#define _UNWIND_CXX_H 1
+#pragma once
+ 1
 
 // Level 2: C++ ABI
 
@@ -258,7 +258,7 @@ __is_gxx_exception_class(_Unwind_Exception_Class c)
   return (c & ((_Unwind_Exception_Class)~0 << 8)) == __gxx_exception_class;
 }
 
-#define __GXX_INIT_EXCEPTION_CLASS(c) c = __gxx_exception_class
+(c) c = __gxx_exception_class
 
 // GNU C++ personality routine, Version 0.
 extern "C" _Unwind_Reason_Code __gxx_personality_v0
@@ -276,10 +276,10 @@ __gxx_caught_object(_Unwind_Exception* eo)
   __cxa_exception* header = __get_exception_header_from_ue (eo);
   return header->adjustedPtr;
 }
-#endif // !__ARM_EABI_UNWINDER__
+
 
 } /* namespace __cxxabiv1 */
 
 #pragma GCC visibility pop
 
-#endif // _UNWIND_CXX_H
+

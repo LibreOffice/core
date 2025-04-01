@@ -20,8 +20,8 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#ifndef INCLUDED_TYPELIB_TYPEDESCRIPTION_H
-#define INCLUDED_TYPELIB_TYPEDESCRIPTION_H
+#pragma once
+
 
 #include "cppu/cppudllapi.h"
 #include "typelib/uik.h"

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITINIT_H
-#define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITINIT_H
+#pragma once
+
 
 #include "LibreOfficeKit.h"
 
@@ -27,13 +27,13 @@
 #include <string.h>
 #include <sys/stat.h>
 
-#ifndef _WIN32
+#pragma once
 
     #include <dlfcn.h>
 
     #ifdef __APPLE__
-        #define TARGET_LIB        "lib" "sofficeapp" ".dylib"
-        #define TARGET_MERGED_LIB "lib" "mergedlo" ".dylib"
+                "lib" "sofficeapp" ".dylib"
+         "lib" "mergedlo" ".dylib"
 
         #if !defined TARGET_OS_IPHONE || TARGET_OS_IPHONE == 0
             #if defined TARGET_OS_OSX && TARGET_OS_OSX == 1
@@ -43,21 +43,21 @@
             #endif
         #endif
     #else
-        #define TARGET_LIB        "lib" "sofficeapp" ".so"
-        #define TARGET_MERGED_LIB "lib" "mergedlo" ".so"
+                "lib" "sofficeapp" ".so"
+         "lib" "mergedlo" ".so"
     #endif
-    #define SEPARATOR         '/'
+             '/'
 
 #else
 
     #if !defined WIN32_LEAN_AND_MEAN
-        #define WIN32_LEAN_AND_MEAN
+        
     #endif
     #include  <windows.h>
-    #define TARGET_LIB        "sofficeapp" ".dll"
-    #define TARGET_MERGED_LIB "mergedlo" ".dll"
-    #define SEPARATOR         '\\'
-    #define UNOPATH           "\\..\\URE\\bin"
+            "sofficeapp" ".dll"
+     "mergedlo" ".dll"
+             '\\'
+               "\\..\\URE\\bin"
 
     #undef DELETE
 
@@ -68,7 +68,7 @@ extern "C"
 {
 #endif
 
-#ifndef _WIN32
+#pragma once
 
 #if !defined(IOS)
         static void *lok_loadlib(const char *pFN)
@@ -106,7 +106,7 @@ extern "C"
     {
         return dlclose(Hnd);
     }
-#endif // IOS
+
 
 
 #else
@@ -365,8 +365,8 @@ int lok_preinit( const char *install_path,  const char *user_profile_url )
 }
 #endif
 
-#endif // defined(__linux__) || defined (__FreeBSD__) || defined(_WIN32) || defined(__APPLE__)
 
-#endif // INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITINIT_H
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define pivotcol_mask_width 32
-#define pivotcol_mask_height 32
-#define pivotcol_mask_x_hot 7
-#define pivotcol_mask_y_hot 5
+ 32
+ 32
+ 7
+ 5
 static unsigned char pivotcol_mask_bits[] = {
    0xff, 0x01, 0x00, 0x00, 0xff, 0x01, 0x00, 0x00, 0xff, 0x01, 0x00, 0x00,
    0xff, 0x01, 0x00, 0x00, 0xff, 0x01, 0x00, 0x00, 0xff, 0x01, 0x00, 0x00,

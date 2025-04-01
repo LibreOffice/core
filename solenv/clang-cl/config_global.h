@@ -13,8 +13,8 @@
    actually filled in by configure.
 */
 
-#ifndef CONFIG_GLOBAL_H
-#define CONFIG_GLOBAL_H
+#pragma once
+
 
 #endif
 

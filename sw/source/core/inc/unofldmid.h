@@ -20,37 +20,37 @@
 #pragma once
 
 // mapping of the properties on the descriptor
-#define FIELD_PROP_PAR1             10
-#define FIELD_PROP_PAR2             11
-#define FIELD_PROP_PAR3             12
-#define FIELD_PROP_FORMAT           13
-#define FIELD_PROP_SUBTYPE          14
-#define FIELD_PROP_BOOL1            15
-#define FIELD_PROP_BOOL2            16
-#define FIELD_PROP_DATE             17
-#define FIELD_PROP_USHORT1          18
-#define FIELD_PROP_USHORT2          19
-#define FIELD_PROP_BYTE1            20
-#define FIELD_PROP_DOUBLE           21
-#define FIELD_PROP_BOOL3            22
-#define FIELD_PROP_PAR4             23
-#define FIELD_PROP_SHORT1           24
-#define FIELD_PROP_DATE_TIME        25
-#define FIELD_PROP_PROP_SEQ         26
-#define FIELD_PROP_LOCALE           27
-#define FIELD_PROP_BOOL4            28
-#define FIELD_PROP_STRINGS          29
-#define FIELD_PROP_PAR5             30
-#define FIELD_PROP_GRABBAG          31
+             10
+             11
+             12
+           13
+          14
+            15
+            16
+             17
+          18
+          19
+            20
+           21
+            22
+             23
+           24
+        25
+         26
+           27
+            28
+          29
+             30
+          31
 
-#define FIELD_PROP_IS_FIELD_USED        32
-#define FIELD_PROP_IS_FIELD_DISPLAYED   33
+        32
+   33
 
-#define FIELD_PROP_TEXT             34
-#define FIELD_PROP_TITLE 35
-#define FIELD_PROP_PAR6             36
-#define FIELD_PROP_PAR7             37
+             34
+ 35
+             36
+             37
 
-#define FIELD_PROP_USHORT3          38
+          38
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

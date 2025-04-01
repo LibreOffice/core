@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_SAL_TYPES_H
-#define INCLUDED_SAL_TYPES_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -53,17 +53,17 @@ typedef unsigned char       sal_uInt8;
 #if SAL_TYPES_SIZEOFLONG == 4
     typedef signed long       sal_Int32;
     typedef unsigned long     sal_uInt32;
-    #define SAL_PRIdINT32 "ld"
-    #define SAL_PRIuUINT32 "lu"
-    #define SAL_PRIxUINT32 "lx"
-    #define SAL_PRIXUINT32 "lX"
+     "ld"
+     "lu"
+     "lx"
+     "lX"
 #elif SAL_TYPES_SIZEOFINT == 4
     typedef signed int        sal_Int32;
     typedef unsigned int      sal_uInt32;
-    #define SAL_PRIdINT32 "d"
-    #define SAL_PRIuUINT32 "u"
-    #define SAL_PRIxUINT32 "x"
-    #define SAL_PRIXUINT32 "X"
+     "d"
+     "u"
+     "x"
+     "X"
 #else
      #error "Could not find 32-bit type, add support for your architecture"
 #endif
@@ -73,13 +73,13 @@ typedef unsigned char       sal_uInt8;
     typedef unsigned __int64         sal_uInt64;
 
     /*  The following are macros that will add the 64 bit constant suffix. */
-    #define SAL_CONST_INT64(x)       x##i64
-    #define SAL_CONST_UINT64(x)      x##ui64
+    (x)       x##i64
+    (x)      x##ui64
 
-    #define SAL_PRIdINT64 "I64d"
-    #define SAL_PRIuUINT64 "I64u"
-    #define SAL_PRIxUINT64 "I64x"
-    #define SAL_PRIXUINT64 "I64X"
+     "I64d"
+     "I64u"
+     "I64x"
+     "I64X"
 #elif defined (__GNUC__)
     #if SAL_TYPES_SIZEOFLONG == 8
         typedef signed long int         sal_Int64;
@@ -87,25 +87,25 @@ typedef unsigned char       sal_uInt8;
 
 
         /*  The following are macros that will add the 64 bit constant suffix. */
-        #define SAL_CONST_INT64(x)       x##l
-        #define SAL_CONST_UINT64(x)      x##ul
+        (x)       x##l
+        (x)      x##ul
 
-        #define SAL_PRIdINT64 "ld"
-        #define SAL_PRIuUINT64 "lu"
-        #define SAL_PRIxUINT64 "lx"
-        #define SAL_PRIXUINT64 "lX"
+         "ld"
+         "lu"
+         "lx"
+         "lX"
     #elif SAL_TYPES_SIZEOFLONGLONG == 8
         typedef signed long long    sal_Int64;
         typedef unsigned long long  sal_uInt64;
 
         /*  The following are macros that will add the 64 bit constant suffix. */
-        #define SAL_CONST_INT64(x)       x##ll
-        #define SAL_CONST_UINT64(x)      x##ull
+        (x)       x##ll
+        (x)      x##ull
 
-        #define SAL_PRIdINT64 "lld"
-        #define SAL_PRIuUINT64 "llu"
-        #define SAL_PRIxUINT64 "llx"
-        #define SAL_PRIXUINT64 "llX"
+         "lld"
+         "llu"
+         "llx"
+         "llX"
     #else
         #error "Could not find 64-bit type, add support for your architecture"
     #endif
@@ -114,12 +114,12 @@ typedef unsigned char       sal_uInt8;
 #endif
 
 #if defined LIBO_INTERNAL_ONLY && defined __cplusplus
-    #define SAL_UNICODE_NOTEQUAL_WCHAR_T
+    
     typedef char16_t sal_Unicode;
 #elif defined(_WIN32)
     typedef wchar_t sal_Unicode;
 #else
-    #define SAL_UNICODE_NOTEQUAL_WCHAR_T
+    
     typedef sal_uInt16 sal_Unicode;
 #endif
 
@@ -148,11 +148,11 @@ typedef void *                   sal_Handle;
 /* printf-style conversion specification length modifiers for size_t and
    ptrdiff_t (most platforms support C99, MSC has its own extension) */
 #if defined(_MSC_VER)
-    #define SAL_PRI_SIZET "I"
-    #define SAL_PRI_PTRDIFFT "I"
+     "I"
+     "I"
 #else
-    #define SAL_PRI_SIZET "z"
-    #define SAL_PRI_PTRDIFFT "t"
+     "z"
+     "t"
 #endif
 
 /* sal_IntPtr, sal_uIntPtr are integer types designed to hold pointers so that any valid
@@ -161,17 +161,17 @@ typedef void *                   sal_Handle;
 #if SAL_TYPES_SIZEOFPOINTER == 4
     typedef sal_Int32           sal_IntPtr;
     typedef sal_uInt32          sal_uIntPtr;
-    #define SAL_PRIdINTPTR SAL_PRIdINT32
-    #define SAL_PRIuUINTPTR SAL_PRIuUINT32
-    #define SAL_PRIxUINTPTR SAL_PRIxUINT32
-    #define SAL_PRIXUINTPTR SAL_PRIXUINT32
+     SAL_PRIdINT32
+     SAL_PRIuUINT32
+     SAL_PRIxUINT32
+     SAL_PRIXUINT32
 #elif SAL_TYPES_SIZEOFPOINTER == 8
     typedef sal_Int64           sal_IntPtr;
     typedef sal_uInt64          sal_uIntPtr;
-    #define SAL_PRIdINTPTR SAL_PRIdINT64
-    #define SAL_PRIuUINTPTR SAL_PRIuUINT64
-    #define SAL_PRIxUINTPTR SAL_PRIxUINT64
-    #define SAL_PRIXUINTPTR SAL_PRIXUINT64
+     SAL_PRIdINT64
+     SAL_PRIuUINT64
+     SAL_PRIxUINT64
+     SAL_PRIXUINT64
 #else
     #error "Please make sure SAL_TYPES_SIZEOFPOINTER is defined for your architecture/compiler"
 #endif
@@ -181,28 +181,28 @@ typedef void *                   sal_Handle;
  * "-0x7F... - 1" instead of as "-0x80..." prevents warnings about applying the
  * unary minus operator to unsigned quantities.
  */
-#define SAL_MIN_INT8          ((sal_Int8)   (-0x7F - 1))
-#define SAL_MAX_INT8          ((sal_Int8)   0x7F)
-#define SAL_MAX_UINT8         ((sal_uInt8)  0xFF)
-#define SAL_MIN_INT16         ((sal_Int16)  (-0x7FFF - 1))
-#define SAL_MAX_INT16         ((sal_Int16)  0x7FFF)
-#define SAL_MAX_UINT16        ((sal_uInt16) 0xFFFF)
-#define SAL_MIN_INT32         ((sal_Int32)  (-0x7FFFFFFF - 1))
-#define SAL_MAX_INT32         ((sal_Int32)  0x7FFFFFFF)
-#define SAL_MAX_UINT32        ((sal_uInt32) 0xFFFFFFFF)
-#define SAL_MIN_INT64         ((sal_Int64)  (SAL_CONST_INT64(-0x7FFFFFFFFFFFFFFF) - 1))
-#define SAL_MAX_INT64         ((sal_Int64)  SAL_CONST_INT64(0x7FFFFFFFFFFFFFFF))
-#define SAL_MAX_UINT64        ((sal_uInt64) SAL_CONST_UINT64(0xFFFFFFFFFFFFFFFF))
+          ((sal_Int8)   (-0x7F - 1))
+          ((sal_Int8)   0x7F)
+         ((sal_uInt8)  0xFF)
+         ((sal_Int16)  (-0x7FFF - 1))
+         ((sal_Int16)  0x7FFF)
+        ((sal_uInt16) 0xFFFF)
+         ((sal_Int32)  (-0x7FFFFFFF - 1))
+         ((sal_Int32)  0x7FFFFFFF)
+        ((sal_uInt32) 0xFFFFFFFF)
+         ((sal_Int64)  (SAL_CONST_INT64(-0x7FFFFFFFFFFFFFFF) - 1))
+         ((sal_Int64)  SAL_CONST_INT64(0x7FFFFFFFFFFFFFFF))
+        ((sal_uInt64) SAL_CONST_UINT64(0xFFFFFFFFFFFFFFFF))
 
 #if SAL_TYPES_SIZEOFPOINTER == 4
-#define SAL_MAX_SSIZE       SAL_MAX_INT32
-#define SAL_MAX_SIZE        SAL_MAX_UINT32
+       SAL_MAX_INT32
+        SAL_MAX_UINT32
 #elif SAL_TYPES_SIZEOFPOINTER == 8
-#define SAL_MAX_SSIZE       SAL_MAX_INT64
-#define SAL_MAX_SIZE        SAL_MAX_UINT64
+       SAL_MAX_INT64
+        SAL_MAX_UINT64
 #endif
 
-#define SAL_MAX_ENUM 0x7fffffff
+ 0x7fffffff
 
 #if defined(_MSC_VER)
 #   define SAL_DLLPUBLIC_EXPORT    __declspec(dllexport)
@@ -279,7 +279,7 @@ typedef void *                   sal_Handle;
     time warning on unused return value.
 */
 #if defined LIBO_INTERNAL_ONLY && defined __cplusplus
-#define SAL_WARN_UNUSED_RESULT [[nodiscard]]
+ [[nodiscard]]
 #elif (defined __GNUC__ \
      && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 1))) \
     || defined __clang__
@@ -331,7 +331,7 @@ typedef struct _sal_Sequence
     char                elements[1];
 } sal_Sequence;
 
-#define SAL_SEQUENCE_HEADER_SIZE ((sal_Size) offsetof(sal_Sequence,elements))
+ ((sal_Size) offsetof(sal_Sequence,elements))
 
 #if defined( _WIN32)
 #pragma pack(pop)
@@ -339,7 +339,7 @@ typedef struct _sal_Sequence
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+
 
 /** Nothrow specification for C functions.
 
@@ -347,12 +347,12 @@ typedef struct _sal_Sequence
 */
 #if defined __cplusplus
 #if __cplusplus >= 201103L
-#define SAL_THROW_EXTERN_C() noexcept
+() noexcept
 #else
-#define SAL_THROW_EXTERN_C() throw ()
+() throw ()
 #endif
 #else
-#define SAL_THROW_EXTERN_C()
+()
 #endif
 
 #ifdef __cplusplus
@@ -391,9 +391,9 @@ namespace css = ::com::sun::star;
     @since LibreOffice 4.1
 */
 #if defined LIBO_INTERNAL_ONLY
-#define SAL_DELETED_FUNCTION = delete
+ = delete
 #else
-#define SAL_DELETED_FUNCTION
+
 #endif
 
 /** C++11 "override" feature.
@@ -404,9 +404,9 @@ namespace css = ::com::sun::star;
     @since LibreOffice 4.1
 */
 #if defined LIBO_INTERNAL_ONLY
-#define SAL_OVERRIDE override
+ override
 #else
-#define SAL_OVERRIDE
+
 #endif
 
 /** C++11 "constexpr" feature.
@@ -417,9 +417,9 @@ namespace css = ::com::sun::star;
     @since LibreOffice 7.2
 */
 #if defined LIBO_INTERNAL_ONLY
-#define SAL_CONSTEXPR constexpr
+ constexpr
 #else
-#define SAL_CONSTEXPR
+
 #endif
 
 /** Macro for C++11 "noexcept" vs. "throw ()" exception specification.
@@ -429,12 +429,12 @@ namespace css = ::com::sun::star;
     @since LibreOffice 7.2
  */
 #if __cplusplus >= 201103L
-#define SAL_NOEXCEPT noexcept
+ noexcept
 #else
-#define SAL_NOEXCEPT throw ()
+ throw ()
 #endif
 
-#endif /* __cplusplus */
+
 
 #ifdef __cplusplus
 
@@ -471,9 +471,9 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
    The argument 'type' must be an integer type and the argument 'expr' must be
    an integer expression.  Both arguments are evaluated exactly once.
 */
-#define SAL_INT_CAST(type, expr) ((type) (expr))
+(type, expr) ((type) (expr))
 
-#endif /* __cplusplus */
+
 
 /**
     Use as follows:
@@ -517,16 +517,16 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 */
 
 #if defined LIBO_INTERNAL_ONLY && defined __GNUC__
-#define SAL_WNODEPRECATED_DECLARATIONS_PUSH \
+ \
     _Pragma(SAL_STRINGIFY_ARG(GCC diagnostic push)) \
     _Pragma(SAL_STRINGIFY_ARG(GCC diagnostic ignored "-Wdeprecated-declarations"))
-#define SAL_WNODEPRECATED_DECLARATIONS_POP \
+ \
     _Pragma(SAL_STRINGIFY_ARG(GCC diagnostic pop))
 #elif defined LIBO_INTERNAL_ONLY && defined _MSC_VER
-#define SAL_WNODEPRECATED_DECLARATIONS_PUSH \
+ \
     _Pragma(SAL_STRINGIFY_ARG(warning(push))) \
     _Pragma(SAL_STRINGIFY_ARG(warning(disable : 4996)))
-#define SAL_WNODEPRECATED_DECLARATIONS_POP \
+ \
     _Pragma(SAL_STRINGIFY_ARG(warning(pop)))
 #else
 #   define SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -550,16 +550,16 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 */
 
 #ifdef _MSC_VER
-#define SAL_WNOUNREACHABLE_CODE_PUSH \
+ \
     __pragma(warning(push)) \
     __pragma(warning(disable:4702)) \
     __pragma(warning(disable:4722))
-#define SAL_WNOUNREACHABLE_CODE_POP \
+ \
     __pragma(warning(pop))
 #else
 /* Add definitions for GCC and Clang if needed */
-#define SAL_WNOUNREACHABLE_CODE_PUSH
-#define SAL_WNOUNREACHABLE_CODE_POP
+
+
 #endif
 
 /** Annotate unused but required C++ function parameters.
@@ -587,9 +587,9 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
  */
 #if defined __cplusplus
 #if defined __GNUC__ || defined __clang__
-#define SAL_UNUSED_PARAMETER __attribute__ ((unused))
+ __attribute__ ((unused))
 #else
-#define SAL_UNUSED_PARAMETER
+
 #endif
 #endif
 
@@ -606,9 +606,9 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 */
 
 #if defined LIBO_INTERNAL_ONLY && (defined __GNUC__ || defined __clang__)
-#define SAL_WARN_UNUSED __attribute__((warn_unused))
+ __attribute__((warn_unused))
 #else
-#define SAL_WARN_UNUSED
+
 #endif
 
 /// @cond INTERNAL
@@ -695,14 +695,14 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
     @since LibreOffice 5.5
 */
-#ifndef __has_attribute
-#define __has_attribute(x) 0
+#pragma once
+(x) 0
 #endif
 
 #if defined LIBO_INTERNAL_ONLY && ((defined __GNUC__ && !defined __clang__) || (defined __clang__ && __has_attribute(returns_nonnull)))
-#define SAL_RETURNS_NONNULL  __attribute__((returns_nonnull))
+  __attribute__((returns_nonnull))
 #else
-#define SAL_RETURNS_NONNULL
+
 #endif
 /// @endcond
 
@@ -712,12 +712,12 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 // the concatenation of a "loplugin:" prefix and the given id suffix.  For non-Clang, this expands
 // to nothing to avoid e.g. -Wattributes from GCC's -Wall.
 #if defined __clang__
-#define SAL_LOPLUGIN_ANNOTATE(id) [[clang::annotate("loplugin:" id)]]
+(id) [[clang::annotate("loplugin:" id)]]
 #else
-#define SAL_LOPLUGIN_ANNOTATE(id)
+(id)
 #endif
 #endif
 
-#endif // INCLUDED_SAL_TYPES_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,10 +1,10 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #if !defined(AFX_STDAFX_H_)
-#define AFX_STDAFX_H_
 
-#define STRICT
-#define _ATL_APARTMENT_THREADED
-// #define _ATL_STATIC_REGISTRY
+
+
+
+// 
 
 #ifdef _MSC_VER
 #if defined __clang__

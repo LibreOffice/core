@@ -20,8 +20,8 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#ifndef INCLUDED_UNO_ENVIRONMENT_H
-#define INCLUDED_UNO_ENVIRONMENT_H
+#pragma once
+
 
 #include "cppu/cppudllapi.h"
 #include "rtl/ustring.h"
@@ -259,7 +259,7 @@ typedef struct SAL_DLLPUBLIC_RTTI _uno_ExtEnvironment
     @param pEnv environment to be initialized
 */
 typedef void (SAL_CALL * uno_initEnvironmentFunc)( uno_Environment * pEnv );
-#define UNO_INIT_ENVIRONMENT "uno_initEnvironment"
+ "uno_initEnvironment"
 
 #ifdef DISABLE_DYNLOADING
 /* We link statically and have just the C++ environment */

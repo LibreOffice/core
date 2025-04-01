@@ -21,12 +21,12 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_SAL_MACROS_H
-#define INCLUDED_SAL_MACROS_H
+#pragma once
+
 
 #include <stddef.h>
 
-#ifndef SAL_N_ELEMENTS
+#pragma once
 #    if defined(__cplusplus) && ( defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L )
         /*
          * Magic template to calculate at compile time the number of elements
@@ -52,7 +52,7 @@
 #    endif
 #endif
 
-#ifndef SAL_STRINGIFY
+#pragma once
 #   define SAL_STRINGIFY_ARG(x) #x
 #   define SAL_STRINGIFY(x) SAL_STRINGIFY_ARG(x)
 #endif

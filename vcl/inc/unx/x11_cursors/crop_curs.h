@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define crop_curs_width 32
-#define crop_curs_height 32
-#define crop_curs_x_hot 9
-#define crop_curs_y_hot 9
+ 32
+ 32
+ 9
+ 9
 static unsigned char crop_curs_bits[] = {
    0xff, 0x0f, 0xff, 0xff, 0xff, 0x6f, 0xff, 0xff, 0xff, 0x6f, 0xff, 0xff,
    0x07, 0x60, 0xf8, 0xff, 0xf7, 0x6f, 0xfb, 0xff, 0xf7, 0x6f, 0xfb, 0xff,

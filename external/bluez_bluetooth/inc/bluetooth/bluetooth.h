@@ -9,8 +9,8 @@
  ***
  ****************************************************************************
  ****************************************************************************/
-#ifndef __BLUETOOTH_H
-#define __BLUETOOTH_H
+#pragma once
+
 
 #ifdef __cplusplus
 #endif
@@ -19,43 +19,43 @@
 #include <string.h>
 #include <endian.h>
 #include <byteswap.h>
-#ifndef AF_BLUETOOTH
-#define AF_BLUETOOTH 31
-#define PF_BLUETOOTH AF_BLUETOOTH
+#pragma once
+ 31
+ AF_BLUETOOTH
 #endif
-#ifndef SOL_BLUETOOTH
-#define SOL_BLUETOOTH 274
+#pragma once
+ 274
 #endif
-#define BTPROTO_L2CAP 0
-#define BTPROTO_HCI 1
-#define BTPROTO_SCO 2
-#define BTPROTO_RFCOMM 3
-#define BTPROTO_BNEP 4
-#define BTPROTO_CMTP 5
-#define BTPROTO_HIDP 6
-#define BTPROTO_AVDTP 7
-#define SOL_HCI 0
-#define SOL_L2CAP 6
-#define SOL_SCO 17
-#define SOL_RFCOMM 18
+ 0
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 0
+ 6
+ 17
+ 18
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-#define htobs(d) (d)
-#define htobl(d) (d)
-#define btohs(d) (d)
-#define btohl(d) (d)
+(d) (d)
+(d) (d)
+(d) (d)
+(d) (d)
 #elif __BYTE_ORDER == __BIG_ENDIAN
-#define htobs(d) bswap_16(d)
-#define htobl(d) bswap_32(d)
-#define btohs(d) bswap_16(d)
-#define btohl(d) bswap_32(d)
+(d) bswap_16(d)
+(d) bswap_32(d)
+(d) bswap_16(d)
+(d) bswap_32(d)
 #else
 #error "Unknown byte order"
 #endif
-#define bt_get_unaligned(ptr)  ({   struct __attribute__((packed)) {   typeof(*(ptr)) __v;   } *__p = (void *) (ptr);   __p->__v;  })
-#define bt_put_unaligned(val, ptr)  do {   struct __attribute__((packed)) {   typeof(*(ptr)) __v;   } *__p = (void *) (ptr);   __p->__v = (val);  } while(0)
-#define BDADDR_ANY (&(bdaddr_t) {{0, 0, 0, 0, 0, 0}})
-#define BDADDR_ALL (&(bdaddr_t) {{0xff, 0xff, 0xff, 0xff, 0xff, 0xff}})
-#define BDADDR_LOCAL (&(bdaddr_t) {{0, 0, 0, 0xff, 0xff, 0xff}})
+(ptr)  ({   struct __attribute__((packed)) {   typeof(*(ptr)) __v;   } *__p = (void *) (ptr);   __p->__v;  })
+(val, ptr)  do {   struct __attribute__((packed)) {   typeof(*(ptr)) __v;   } *__p = (void *) (ptr);   __p->__v = (val);  } while(0)
+ (&(bdaddr_t) {{0, 0, 0, 0, 0, 0}})
+ (&(bdaddr_t) {{0xff, 0xff, 0xff, 0xff, 0xff, 0xff}})
+ (&(bdaddr_t) {{0, 0, 0, 0xff, 0xff, 0xff}})
 #ifdef __cplusplus
 #endif
 typedef struct

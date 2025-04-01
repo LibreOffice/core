@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_OSL_NLSUPPORT_H
-#define INCLUDED_OSL_NLSUPPORT_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -54,7 +54,7 @@ SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale(
 }
 #endif
 
-#endif // INCLUDED_OSL_NLSUPPORT_H
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

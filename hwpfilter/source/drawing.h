@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_DRAWING_H
-#define INCLUDED_HWPFILTER_SOURCE_DRAWING_H
+#pragma once
+
 
 #include "precompile.h"
 
@@ -48,14 +48,14 @@ enum
     END_GRADATION, BITMAP_PATTERN
 };
 
-#define OBJRET_FILE_OK           0
-#define OBJRET_FILE_ERROR       (-1)
-#define OBJRET_FILE_NO_PRIVATE_BLOCK    (-2)
-#define OBJRET_FILE_NO_PRIVATE_BLOCK_2  (-3)
+           0
+       (-1)
+    (-2)
+  (-3)
 
 typedef int (*HWPDOFuncType) (int, HWPDrawingObject *, int, void *, int);
 
-#define HWPDOFunc(hdo, cmd, argp, argv) \
+(hdo, cmd, argp, argv) \
     (HWPDOFuncTbl[(hdo)->type]((hdo)->type, (hdo), (cmd), (argp), (argv)))
 
 static int HWPDOLineFunc(int, HWPDrawingObject *, int, void *, int);
@@ -136,11 +136,11 @@ static bool SkipUnusedField(void)
 }
 
 
-#define HDOFILE_HEADER_SIZE (2*4+16)              // 16=sizeof(ZZRect)
-#define HDOFILE_COMMON_SIZE (7*4+16+44)
+ (2*4+16)              // 16=sizeof(ZZRect)
+ (7*4+16+44)
 
-#define HDOFILE_HAS_NEXT    0x01
-#define HDOFILE_HAS_CHILD   0x02
+    0x01
+   0x02
 
 static bool LoadCommonHeader(HWPDrawingObject * hdo, unsigned short * link_info)
 {

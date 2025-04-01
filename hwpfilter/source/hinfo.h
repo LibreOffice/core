@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_HINFO_H
-#define INCLUDED_HWPFILTER_SOURCE_HINFO_H
+#pragma once
+
 
 #include "hwplib.h"
 #include <string.h>
@@ -26,8 +26,8 @@
 #include <vector>
 #include <memory>
 
-#define CHAIN_MAX_PATH  40
-#define ANNOTATION_LEN  24
+  40
+  24
 
 class HWPFile;
 class CTextOut;
@@ -233,7 +233,7 @@ struct CharShape
 
 /* 탭 설정에 대한 구조체 */
 
-#define MAXTABS 40
+ 40
 /**
  * @short Tab properties
  */
@@ -299,6 +299,6 @@ struct ParaShape
 
     ParaShape();
 };
-#endif // INCLUDED_HWPFILTER_SOURCE_HINFO_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

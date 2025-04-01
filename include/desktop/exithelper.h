@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_EXITHELPER_H
-#define INCLUDED_DESKTOP_EXITHELPER_H
+#pragma once
+
 
 enum EExitCodes
 {
@@ -32,6 +32,6 @@ enum EExitCodes
     EXITHELPER_NORMAL_RESTART = 81
 };
 
-#endif // INCLUDED_DESKTOP_EXITHELPER_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

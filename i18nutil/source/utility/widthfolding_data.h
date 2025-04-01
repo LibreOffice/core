@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_I18NUTIL_SOURCE_UTILITY_WIDTHFOLDING_DATA_H
-#define INCLUDED_I18NUTIL_SOURCE_UTILITY_WIDTHFOLDING_DATA_H
+#pragma once
+
 
 #include <i18nutil/oneToOneMapping.hxx>
 
@@ -244,9 +244,9 @@ const decomposition_table_entry_t decomposition_table[] = {
   http://charts.unicode.org/Web/UFF00.html
 */
 
-#define FULL2HALF_NORMAL              0x01
-#define FULL2HALF_ASC_FUNCTION        0x02
-#define FULL2HALF_KATAKANA_ONLY       0x04
+              0x01
+        0x02
+       0x04
 
 UnicodePairWithFlag const full2half[] = {
     { 0x2015, 0xFF70, FULL2HALF_ASC_FUNCTION },  // HORIZONTAL BAR --> KATAKANA-HIRAGANA PROLONGED SOUND MARK
@@ -694,9 +694,9 @@ const sal_Unicode composition_table[][2] = {
   http://charts.unicode.org/Web/UFF00.html
 */
 
-#define HALF2FULL_NORMAL        0x01
-#define HALF2FULL_JIS_FUNCTION  0x02
-#define HALF2FULL_KATAKANA_ONLY 0x04
+        0x01
+  0x02
+ 0x04
 
 UnicodePairWithFlag const half2full[] = {
     { 0x0020, 0x3000, HALF2FULL_NORMAL },  // SPACE --> IDEOGRAPHIC SPACE

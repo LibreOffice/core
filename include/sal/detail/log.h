@@ -11,8 +11,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_SAL_DETAIL_LOG_H
-#define INCLUDED_SAL_DETAIL_LOG_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -47,11 +47,11 @@ extern "C" {
  when it sees preprocessed source (-save-temps or using icecream)
 */
 #if defined __cplusplus
-#define SAL_LOG_TRUE true
-#define SAL_LOG_FALSE false
+ true
+ false
 #else
-#define SAL_LOG_TRUE sal_True
-#define SAL_LOG_FALSE sal_False
+ sal_True
+ sal_False
 #endif
 
 enum sal_detail_LogLevel {
@@ -71,7 +71,7 @@ SAL_DLLPUBLIC void SAL_CALL sal_detail_logFormat(
 }
 #endif
 
-#define SAL_DETAIL_LOG_FORMAT(condition, level, area, where, ...) \
+(condition, level, area, where, ...) \
     do { \
         if (condition) { \
             sal_detail_logFormat((level), (area), (where), __VA_ARGS__); \
@@ -79,24 +79,24 @@ SAL_DLLPUBLIC void SAL_CALL sal_detail_logFormat(
     } while (SAL_LOG_FALSE)
 
 #if defined SAL_LOG_INFO
-#define SAL_DETAIL_ENABLE_LOG_INFO SAL_LOG_TRUE
+ SAL_LOG_TRUE
 #else
-#define SAL_DETAIL_ENABLE_LOG_INFO SAL_LOG_FALSE
+ SAL_LOG_FALSE
 #endif
 #if defined SAL_LOG_WARN
-#define SAL_DETAIL_ENABLE_LOG_WARN SAL_LOG_TRUE
+ SAL_LOG_TRUE
 #else
-#define SAL_DETAIL_ENABLE_LOG_WARN SAL_LOG_FALSE
+ SAL_LOG_FALSE
 #endif
 
-#define SAL_DETAIL_WHERE __FILE__ ":" SAL_STRINGIFY(__LINE__) ": "
+ __FILE__ ":" SAL_STRINGIFY(__LINE__) ": "
 
-#define SAL_DETAIL_INFO_IF_FORMAT(condition, area, ...) \
+(condition, area, ...) \
     SAL_DETAIL_LOG_FORMAT( \
         SAL_DETAIL_ENABLE_LOG_INFO && (condition), SAL_DETAIL_LOG_LEVEL_INFO, \
         area, SAL_DETAIL_WHERE, __VA_ARGS__)
 
-#define SAL_DETAIL_WARN_IF_FORMAT(condition, area, ...) \
+(condition, area, ...) \
     SAL_DETAIL_LOG_FORMAT( \
         SAL_DETAIL_ENABLE_LOG_WARN && (condition), SAL_DETAIL_LOG_LEVEL_WARN, \
         area, SAL_DETAIL_WHERE, __VA_ARGS__)

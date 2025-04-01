@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_HGZIP_H
-#define INCLUDED_HWPFILTER_SOURCE_HGZIP_H
+#pragma once
+
 
 #include <zlib.h>
 
@@ -88,6 +88,6 @@ size_t     gz_read     ( gz_stream *file, voidp  buf, unsigned len );
  * @param flush Is as in the deflate() function
  */
 int     gz_flush    ( gz_stream *file, int flush );
-#endif // INCLUDED_HWPFILTER_SOURCE_HGZIP_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

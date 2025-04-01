@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_INC_INTERNAL_RTLLIFECYCLE_H
-#define INCLUDED_SAL_INC_INTERNAL_RTLLIFECYCLE_H
+#pragma once
+
 
 #if defined __cplusplus
 extern "C" {

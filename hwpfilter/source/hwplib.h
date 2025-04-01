@@ -92,7 +92,7 @@ typedef struct
     int   mulY, divY;
 } ZZScaleXY;
 
-#ifndef TRUE
+#pragma once
 # define TRUE       1
 # define FALSE      0
 #endif
@@ -101,69 +101,69 @@ typedef struct
 /**
  * HWP unit information
  */
-#define ONE_POINT       25
-#define ONE_ENG_CH_WIDTH    (ONE_POINT*(10/2))
-#define ONE_MILI        (71)
-#define ONE_DOT         (19)
+       25
+    (ONE_POINT*(10/2))
+        (71)
+         (19)
 
 /* HWP 3.0 문서 정보 */
 
-#define NLanguage       7
+       7
 
 /* 제어 문자 */
 /**
  * Control character
  */
-#define CH_ALIGNSPACE       0
-#define CH_FIELD        5
-#define CH_BOOKMARK     6
+       0
+        5
+     6
 
-#define CH_DATE_FORM         7
-#define CH_DATE_CODE         8
-#define CH_TAB           9
-#define CH_TEXT_BOX     10
-#define CH_PICTURE      11
+         7
+         8
+           9
+     10
+      11
 
-#define CH_END_PARA     13
-#define CH_LINE         14
-#define CH_HIDDEN       15
-#define CH_HEADER_FOOTER    16
-#define CH_FOOTNOTE     17
-#define CH_AUTO_NUM     18                        /* pgnum, footnote/endnote, picture num */
-#define CH_NEW_NUM      19                        /* pgnum, footnote/endnote, picture num */
+     13
+         14
+       15
+    16
+     17
+     18                        /* pgnum, footnote/endnote, picture num */
+      19                        /* pgnum, footnote/endnote, picture num */
 
-#define CH_SHOW_PAGE_NUM    20
-#define CH_PAGE_NUM_CTRL    21                    /* new chapter, hide pagenum */
-#define CH_MAIL_MERGE       22
-#define CH_COMPOSE      23
-#define CH_HYPHEN       24
+    20
+    21                    /* new chapter, hide pagenum */
+       22
+      23
+       24
 
-#define CH_TOC_MARK     25                        /* CONT_MARK, TBL_MARK, PIC_MARK */
-#define CH_INDEX_MARK       26
+     25                        /* CONT_MARK, TBL_MARK, PIC_MARK */
+       26
 
-#define CH_COL_DEF      27
-#define CH_OUTLINE      28
-#define CH_CROSSREF     29
+      27
+      28
+     29
 
-#define CH_KEEP_SPACE       30
-#define CH_FIXED_SPACE      31
-#define CH_SPACE        32
+       30
+      31
+        32
 
-#define HAVE_SUBPARA_MASK ((1<<CH_TEXT_BOX) | (1<<CH_PICTURE) | (1<<CH_HIDDEN) |  (1<<CH_HEADER_FOOTER) | (1<<CH_FOOTNOTE))
+ ((1<<CH_TEXT_BOX) | (1<<CH_PICTURE) | (1<<CH_HIDDEN) |  (1<<CH_HEADER_FOOTER) | (1<<CH_FOOTNOTE))
 
-#define IS_SP_SKIP_BLOCK(hch) ((hch<5) || (hch==12) || (hch==27) || (hch == 29))
+(hch) ((hch<5) || (hch==12) || (hch==27) || (hch == 29))
 
 // file tag
-#define FILETAG_END_OF_COMPRESSED   0x00000000
+   0x00000000
 
-#define FILETAG_EMBEDDED_PICTURE    0x00000001
-#define FILETAG_OLE_OBJECT      0x00000002
-#define FILETAG_HYPERTEXT       0x00000003
-#define FILETAG_PRESENTATION        0x00000004
+    0x00000001
+      0x00000002
+       0x00000003
+        0x00000004
 
-#define FILETAG_END_OF_UNCOMPRESSED 0x80000000
-#define FILETAG_PREVIEW_IMAGE       0x80000001
-#define FILETAG_PREVIEW_TEXT        0x80000002
+ 0x80000000
+       0x80000001
+        0x80000002
 
 // user error code
 enum ErrorCode

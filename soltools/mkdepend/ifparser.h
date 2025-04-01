@@ -59,8 +59,8 @@
 #include <stdio.h>
 
 typedef int Bool;
-#define False 0
-#define True 1
+ 0
+ 1
 
 typedef struct if_parser {
     struct {                /* functions */

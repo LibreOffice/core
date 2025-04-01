@@ -7,11 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OPENCL_INC_OPENCL_DEVICE_SELECTION_H
-#define INCLUDED_OPENCL_INC_OPENCL_DEVICE_SELECTION_H
+#pragma once
+
 
 #ifdef _MSC_VER
-//#define _CRT_SECURE_NO_WARNINGS
+//
 #endif
 
 #include <memory>

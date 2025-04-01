@@ -21,18 +21,18 @@
 #include <rtl/ustring.hxx>
 
 inline constexpr OUString XMLNS_DIALOGS_URI = u"http://openoffice.org/2000/dialog"_ustr;
-#define XMLNS_DIALOGS_PREFIX "dlg"
+ "dlg"
 
 inline constexpr OUString XMLNS_SCRIPT_URI = u"http://openoffice.org/2000/script"_ustr;
-#define XMLNS_SCRIPT_PREFIX "script"
+ "script"
 
 inline constexpr OUString XMLNS_OOO_URI = u"http://openoffice.org/2004/office"_ustr;
 inline constexpr OUString XMLNS_OOO_PREFIX = u"ooo"_ustr;
 
 inline constexpr OUString XMLNS_LIBRARY_URI = u"http://openoffice.org/2000/library"_ustr;
-#define XMLNS_LIBRARY_PREFIX "library"
+ "library"
 
 inline constexpr OUString XMLNS_XLINK_URI = u"http://www.w3.org/1999/xlink"_ustr;
-#define XMLNS_XLINK_PREFIX "xlink"
+ "xlink"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

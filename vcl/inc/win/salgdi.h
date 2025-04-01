@@ -35,8 +35,8 @@
 #include <memory>
 #include <unordered_set>
 
-#ifndef INCLUDED_PRE_POST_WIN_H
-#define INCLUDED_PRE_POST_WIN_H
+#pragma once
+
 #  include <prewin.h>
 #  include <postwin.h>
 #endif
@@ -55,8 +55,8 @@ class SalGraphicsImpl;
 class WinSalGraphicsImplBase;
 class FontMetricData;
 
-#define RGB_TO_PALRGB(nRGB)         ((nRGB)|0x02000000)
-#define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)
+(nRGB)         ((nRGB)|0x02000000)
+(nPalRGB)      ((nPalRGB)&0x00ffffff)
 
 // win32 specific physically available font face
 class WinFontFace final : public vcl::font::PhysicalFontFace

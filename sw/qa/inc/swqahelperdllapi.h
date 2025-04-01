@@ -12,9 +12,9 @@
 #include <sal/types.h>
 
 #if defined(SWQAHELPER_DLLIMPLEMENTATION)
-#define SWQAHELPER_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+ SAL_DLLPUBLIC_EXPORT
 #else
-#define SWQAHELPER_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+ SAL_DLLPUBLIC_IMPORT
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

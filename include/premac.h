@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define Point MacOSPoint
-#define Size MacOSSize
-#define TimeValue MacOSTimeValue
-#define TimeRecord MacOSTimeRecord
+ MacOSPoint
+ MacOSSize
+ MacOSTimeValue
+ MacOSTimeRecord
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

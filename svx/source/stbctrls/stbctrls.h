@@ -16,19 +16,19 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SOURCE_STBCTRLS_STBCTRLS_H
-#define INCLUDED_SVX_SOURCE_STBCTRLS_STBCTRLS_H
+#pragma once
+
 
 // IDs as in SUBTOTAL_FUNC of Calc
 
-#define PSZ_FUNC_AVG                1
-#define PSZ_FUNC_COUNT2             3
-#define PSZ_FUNC_COUNT              2
-#define PSZ_FUNC_MAX                4
-#define PSZ_FUNC_MIN                5
-#define PSZ_FUNC_SUM                9
-#define PSZ_FUNC_SELECTION_COUNT    13
-#define PSZ_FUNC_NONE               16
+                1
+             3
+              2
+                4
+                5
+                9
+    13
+               16
 
 #endif
 

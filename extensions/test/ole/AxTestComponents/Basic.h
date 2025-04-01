@@ -18,8 +18,8 @@
  */
 // Basic.h : Declaration of the CBasic
 
-#ifndef __BASIC_H_
-#define __BASIC_H_
+#pragma once
+
 
 #include "resource.h"
 #import  "AxTestComponents.tlb" no_namespace no_implementation raw_interfaces_only named_guids
@@ -254,6 +254,6 @@ public:
     STDMETHOD(put_prpUnknown)(IUnknown* newVal);
 };
 
-#endif //__BASIC_H_
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,8 +20,8 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#ifndef INCLUDED_UNO_CURRENT_CONTEXT_H
-#define INCLUDED_UNO_CURRENT_CONTEXT_H
+#pragma once
+
 
 #include "cppu/cppudllapi.h"
 #include "rtl/ustring.h"

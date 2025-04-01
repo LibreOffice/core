@@ -13,22 +13,22 @@
 
    This file declares SANE application interface.  See the SANE
    standard for a detailed explanation of the interface.  */
-#ifndef sane_h
-#define sane_h
+#pragma once
 
-#define SANE_CURRENT_MAJOR  0
 
-#define SANE_VERSION_CODE(major, minor, build)  \
+  0
+
+(major, minor, build)  \
   (  (((SANE_Word) (major) &   0xff) << 24) \
    | (((SANE_Word) (minor) &   0xff) << 16) \
    | (((SANE_Word) (build) & 0xffff) <<  0))
 
-#define SANE_VERSION_MAJOR(code)    ((((SANE_Word)(code)) >> 24) &   0xff)
-#define SANE_VERSION_MINOR(code)    ((((SANE_Word)(code)) >> 16) &   0xff)
-#define SANE_VERSION_BUILD(code)    ((((SANE_Word)(code)) >>  0) & 0xffff)
+(code)    ((((SANE_Word)(code)) >> 24) &   0xff)
+(code)    ((((SANE_Word)(code)) >> 16) &   0xff)
+(code)    ((((SANE_Word)(code)) >>  0) & 0xffff)
 
-#define SANE_FALSE  0
-#define SANE_TRUE   1
+  0
+   1
 
 typedef unsigned char SANE_Byte;
 typedef int SANE_Word;
@@ -40,9 +40,9 @@ typedef const SANE_Char *SANE_String_Const;
 typedef void *SANE_Handle;
 typedef SANE_Word SANE_Fixed;
 
-#define SANE_FIXED_SCALE_SHIFT  16
-#define SANE_FIX(v) ((SANE_Word) ((v) * (1 << SANE_FIXED_SCALE_SHIFT)))
-#define SANE_UNFIX(v)   ((double)(v) / (1 << SANE_FIXED_SCALE_SHIFT))
+  16
+(v) ((SANE_Word) ((v) * (1 << SANE_FIXED_SCALE_SHIFT)))
+(v)   ((double)(v) / (1 << SANE_FIXED_SCALE_SHIFT))
 
 typedef enum
   {
@@ -93,21 +93,21 @@ typedef struct
   }
 SANE_Device;
 
-#define SANE_CAP_SOFT_SELECT        (1 << 0)
-#define SANE_CAP_HARD_SELECT        (1 << 1)
-#define SANE_CAP_SOFT_DETECT        (1 << 2)
-#define SANE_CAP_EMULATED       (1 << 3)
-#define SANE_CAP_AUTOMATIC      (1 << 4)
-#define SANE_CAP_INACTIVE       (1 << 5)
-#define SANE_CAP_ADVANCED       (1 << 6)
-#define SANE_CAP_ALWAYS_SETTABLE    (1 << 7)
+        (1 << 0)
+        (1 << 1)
+        (1 << 2)
+       (1 << 3)
+      (1 << 4)
+       (1 << 5)
+       (1 << 6)
+    (1 << 7)
 
-#define SANE_OPTION_IS_ACTIVE(cap)  (((cap) & SANE_CAP_INACTIVE) == 0)
-#define SANE_OPTION_IS_SETTABLE(cap)    (((cap) & SANE_CAP_SOFT_SELECT) != 0)
+(cap)  (((cap) & SANE_CAP_INACTIVE) == 0)
+(cap)    (((cap) & SANE_CAP_SOFT_SELECT) != 0)
 
-#define SANE_INFO_INEXACT       (1 << 0)
-#define SANE_INFO_RELOAD_OPTIONS    (1 << 1)
-#define SANE_INFO_RELOAD_PARAMS     (1 << 2)
+       (1 << 0)
+    (1 << 1)
+     (1 << 2)
 
 typedef enum
   {
@@ -178,8 +178,8 @@ SANE_Parameters;
 
 struct SANE_Auth_Data;
 
-#define SANE_MAX_USERNAME_LEN   256
-#define SANE_MAX_PASSWORD_LEN   256
+   256
+   256
 
 typedef void (*SANE_Auth_Callback) (SANE_String_Const resource,
                     SANE_Char username[SANE_MAX_USERNAME_LEN],
@@ -210,4 +210,4 @@ extern SANE_Status sane_get_select_fd (SANE_Handle handle,
                        SANE_Int * fd);
 extern SANE_String_Const sane_strstatus (SANE_Status status);
 
-#endif /* sane_h */
+

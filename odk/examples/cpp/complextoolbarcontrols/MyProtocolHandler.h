@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXAMPLES_COMPLEXTOOLBARCONTROLS_MYPROTOCOLHANDLER_H
-#define INCLUDED_EXAMPLES_COMPLEXTOOLBARCONTROLS_MYPROTOCOLHANDLER_H
+#pragma once
+
 
 #include <com/sun/star/awt/XToolkit2.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -29,8 +29,8 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 
-#define MYPROTOCOLHANDLER_IMPLEMENTATIONNAME   "vnd.demo.Impl.ProtocolHandler"
-#define MYPROTOCOLHANDLER_SERVICENAME          "vnd.demo.ProtocolHandler"
+   "vnd.demo.Impl.ProtocolHandler"
+          "vnd.demo.ProtocolHandler"
 
 namespace com
 {

@@ -20,8 +20,8 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#ifndef INCLUDED_UNO_LBNAMES_H
-#define INCLUDED_UNO_LBNAMES_H
+#pragma once
+
 
 /* I assume "LB" means "Language Binding" */
 
@@ -34,25 +34,25 @@
 #ifdef CPPU_ENV
 
 /** Name for C++ compiler/ platform, e.g. "gcc3", "msci" */
-#define CPPU_CURRENT_LANGUAGE_BINDING_NAME SAL_STRINGIFY(CPPU_ENV)
+ SAL_STRINGIFY(CPPU_ENV)
 
 #else
 
 #error "No supported C++ compiler environment."
 provoking error here, because PP ignores #error
 
-#endif /* CPPU_ENV */
 
-#endif /* __cplusplus */
+
+
 
 /** Environment type name for binary C UNO. */
-#define UNO_LB_UNO "uno"
+ "uno"
 /** Environment type name for Java 1.3.1 compatible virtual machine. */
-#define UNO_LB_JAVA "java"
+ "java"
 /** Environment type name for CLI (Common Language Infrastructure). */
-#define UNO_LB_CLI "cli"
+ "cli"
 /** Environment type name for new .NET Bindings. */
-#define UNO_LB_NET "net"
+ "net"
 
 #endif
 

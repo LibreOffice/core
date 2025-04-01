@@ -23,8 +23,8 @@
 
 
 
-#ifndef RASQAL_H
-#define RASQAL_H
+#pragma once
+
 
 
 #ifdef __cplusplus
@@ -39,35 +39,35 @@ extern "C" {
  *
  * Format: major * 10000 + minor * 100 + release
  */
-#define RASQAL_VERSION 933
+ 933
 
 /**
  * RASQAL_VERSION_STRING:
  *
  * Rasqal library version string
  */
-#define RASQAL_VERSION_STRING "0.9.33"
+ "0.9.33"
 
 /**
  * RASQAL_VERSION_MAJOR:
  *
  * Rasqal library major version
  */
-#define RASQAL_VERSION_MAJOR 0
+ 0
 
 /**
  * RASQAL_VERSION_MINOR:
  *
  * Rasqal library minor version
  */
-#define RASQAL_VERSION_MINOR 9
+ 9
 
 /**
  * RASQAL_VERSION_RELEASE:
  *
  * Rasqal library release
  */
-#define RASQAL_VERSION_RELEASE 33
+ 33
 
 
 /**
@@ -76,7 +76,7 @@ extern "C" {
  * Macro for wrapping API function call declarations.
  *
  */
-#ifndef RASQAL_API
+#pragma once
 #  ifdef _WIN32
 #    ifdef __GNUC__
 #      undef _declspec
@@ -100,13 +100,13 @@ extern "C" {
  * This gives a warning during compiling.
  */
 #if ( __GNUC__ == 3 && __GNUC_MINOR__ > 0 ) || __GNUC__ > 3
-#define RASQAL_DEPRECATED __attribute__((deprecated))
+ __attribute__((deprecated))
 #else
-#define RASQAL_DEPRECATED
+
 #endif
 
 
-#ifndef LIBRDF_OBJC_FRAMEWORK
+#pragma once
 #include <raptor.h>
 #else
 #include <Redland/raptor.h>
@@ -202,13 +202,13 @@ extern const char * const rasqal_home_url_string;
  *
  * Version of Raptor that Rasqal was configured against.
  */
-#define RASQAL_RAPTOR_VERSION 20015
+ 20015
 
 
 /* Public structures */
 
-#ifndef RASQAL_WORLD_DECLARED
-#define RASQAL_WORLD_DECLARED 1
+#pragma once
+ 1
 /**
  * rasqal_world:
  *
@@ -232,8 +232,8 @@ typedef struct rasqal_query_s rasqal_query;
 typedef struct rasqal_query_results_s rasqal_query_results;
 
 
-#ifndef RASQAL_QUERY_RESULTS_FORMATTER_DECLARED
-#define RASQAL_QUERY_RESULTS_FORMATTER_DECLARED 1
+#pragma once
+ 1
 /**
  * rasqal_query_results_formatter:
  *
@@ -473,7 +473,7 @@ typedef enum {
   RASQAL_LITERAL_LAST = RASQAL_LITERAL_DATE
 } rasqal_literal_type;
 
-#define RASQAL_LITERAL_UDT_DEFINED 1
+ 1
 
 
 /**
@@ -497,7 +497,7 @@ typedef struct rasqal_xsd_decimal_s rasqal_xsd_decimal;
  *
  * Sentinel XSD Decimal timezone value indicating no timezone is present.
  */
-#define RASQAL_XSD_DATETIME_NO_TZ (9999)
+ (9999)
 
 /**
  * rasqal_xsd_date:
@@ -1982,14 +1982,14 @@ typedef struct {
  *
  * Lowest accepted @rasqal_triples_source API version
  */
-#define RASQAL_TRIPLES_SOURCE_MIN_VERSION 1
+ 1
 
 /**
  * RASQAL_TRIPLES_SOURCE_MAX_VERSION:
  *
  * Highest accepted @rasqal_triples_source API version
  */
-#define RASQAL_TRIPLES_SOURCE_MAX_VERSION 2
+ 2
 
 
 /**
@@ -2042,14 +2042,14 @@ typedef struct rasqal_triples_source_s rasqal_triples_source;
  *
  * Lowest accepted @rasqal_triples_source_factory API version
  */
-#define RASQAL_TRIPLES_SOURCE_FACTORY_MIN_VERSION 1
+ 1
 
 /**
  * RASQAL_TRIPLES_SOURCE_FACTORY_MAX_VERSION:
  *
  * Highest accepted @rasqal_triples_source_factory API version
  */
-#define RASQAL_TRIPLES_SOURCE_FACTORY_MAX_VERSION 3
+ 3
 
 
 /**

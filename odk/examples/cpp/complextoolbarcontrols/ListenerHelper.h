@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXAMPLES_COMPLEXTOOLBARCONTROLS_LISTENERHELPER_H
-#define INCLUDED_EXAMPLES_COMPLEXTOOLBARCONTROLS_LISTENERHELPER_H
+#pragma once
+
 
 #include <map>
 #include <vector>

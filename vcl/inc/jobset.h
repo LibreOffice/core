@@ -27,9 +27,9 @@
 #include <memory>
 
 // see com.sun.star.portal.client.JobSetupSystem.idl:
-#define JOBSETUP_SYSTEM_WINDOWS     1
-#define JOBSETUP_SYSTEM_UNIX        3
-#define JOBSETUP_SYSTEM_MAC         4
+     1
+        3
+         4
 
 class VCL_DLLPUBLIC ImplJobSetup
 {

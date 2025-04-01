@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define pivotdel_curs_width 32
-#define pivotdel_curs_height 32
-#define pivotdel_curs_x_hot 9
-#define pivotdel_curs_y_hot 8
+ 32
+ 32
+ 9
+ 8
 static unsigned char pivotdel_curs_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1c, 0x80, 0x01, 0x00,
    0x3c, 0xc0, 0x00, 0x00, 0x73, 0x6f, 0x07, 0x00, 0xe1, 0x30, 0x04, 0x00,

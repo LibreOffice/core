@@ -20,8 +20,8 @@
 /*
  * This file is part of LibreOffice published API.
  */
-#ifndef INCLUDED_COM_SUN_STAR_UNO_TYPE_H
-#define INCLUDED_COM_SUN_STAR_UNO_TYPE_H
+#pragma once
+
 
 #include "typelib/typedescription.h"
 #include "com/sun/star/uno/TypeClass.hdl"

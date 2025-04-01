@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_INC_HELPIDS_H
-#define INCLUDED_DBACCESS_INC_HELPIDS_H
+#pragma once
+
 
 #include <rtl/ustring.hxx>
 

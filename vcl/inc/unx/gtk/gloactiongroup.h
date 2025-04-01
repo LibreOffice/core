@@ -15,10 +15,10 @@
 
 G_BEGIN_DECLS
 
-#define G_TYPE_LO_ACTION_GROUP                          (g_lo_action_group_get_type ())
-#define G_LO_ACTION_GROUP(inst)                         (G_TYPE_CHECK_INSTANCE_CAST ((inst),                     \
+                          (g_lo_action_group_get_type ())
+(inst)                         (G_TYPE_CHECK_INSTANCE_CAST ((inst),                     \
                                                          G_TYPE_LO_ACTION_GROUP, GLOActionGroup))
-#define G_IS_LO_ACTION_GROUP(inst)                      (G_TYPE_CHECK_INSTANCE_TYPE ((inst),                     \
+(inst)                      (G_TYPE_CHECK_INSTANCE_TYPE ((inst),                     \
                                                          G_TYPE_LO_ACTION_GROUP))
 
 struct GLOActionGroupPrivate;

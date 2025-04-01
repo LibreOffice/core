@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define copyfiles_curs_width 32
-#define copyfiles_curs_height 32
-#define copyfiles_curs_x_hot 8
-#define copyfiles_curs_y_hot 9
+ 32
+ 32
+ 8
+ 9
 static unsigned char copyfiles_curs_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0xe0, 0x0f, 0x00, 0x00, 0xe0, 0x2f, 0x00, 0x00,
    0xe8, 0x0f, 0x00, 0x00, 0xe8, 0x7f, 0x00, 0x00, 0xea, 0x7f, 0x00, 0x00,

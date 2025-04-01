@@ -27,55 +27,55 @@ in this Software without prior written authorization from the X Consortium.
 
 */
 
-#ifndef NO_X11
+#pragma once
 #include <X11/Xosdefs.h>
 #ifdef _WIN32
 #include <X11/Xw32defs.h>
 #endif
-#ifndef SUNOS4
+#pragma once
 #include <X11/Xfuncproto.h>
-#endif /* SUNOS4 */
-#endif /* NO_X11 */
+
+
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifndef _MSC_VER
+#pragma once
 #include <unistd.h>
 #endif
 
-#ifndef X_NOT_POSIX
-#ifndef _POSIX_SOURCE
-#define _POSIX_SOURCE
+#pragma once
+#pragma once
+
 #endif
 #endif
 #include <sys/types.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 
-#ifndef S_IFDIR
-#define        S_IFDIR  0040000
+#pragma once
+  0040000
 #endif
 
-#ifndef S_IFREG
-#define        S_IFREG  0100000
+#pragma once
+  0100000
 #endif
 
-#define MAXFILES    65536
+    65536
 
-#define MAXDIRS     64
-#define SYMHASHSEED     131  /* 131 1313 13131 ... */
-#define SYMHASHMEMBERS  64  /* must be 2^x to work right */
-#define TRUE        1
-#define FALSE       0
+     64
+     131  /* 131 1313 13131 ... */
+  64  /* must be 2^x to work right */
+        1
+       0
 
 /* the following must match the directives table in main.c */
-#define IF      0
-#define ERROR           10
-#define ELIF            13
-#define IFFALSE         15     /* pseudo value --- never matched */
-#define ELIFFALSE       16     /* pseudo value --- never matched */
-#define ELIFGUESSFALSE  19     /* pseudo value --- never matched */
+      0
+           10
+            13
+         15     /* pseudo value --- never matched */
+       16     /* pseudo value --- never matched */
+  19     /* pseudo value --- never matched */
 
 #if OSL_DEBUG_LEVEL >= 2
 extern int  _debugmask;
@@ -88,10 +88,10 @@ extern int  _debugmask;
  *     3    show #include SYMBOL
  *     4-6  unused
  */
-#define debug(level,arg) { if (_debugmask & (1 << level)) warning arg; }
+(level,arg) { if (_debugmask & (1 << level)) warning arg; }
 #else
-#define debug(level,arg) /**/
-#endif /* DEBUG */
+(level,arg) /**/
+
 
 // VG: a C++ class for information about directories
 #include "collectdircontent.hxx"
@@ -125,10 +125,10 @@ struct filepointer {
     int      f_line;
 };
 
-#ifndef X_NOT_STDC_ENV
+#pragma once
 #if defined(macII) && !defined(__STDC__)  /* stdlib.h fails to define these */
 char *malloc(), *realloc();
-#endif /* macII */
+
 #else
 char            *malloc();
 char            *realloc();

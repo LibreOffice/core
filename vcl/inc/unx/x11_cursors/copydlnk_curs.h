@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define copydlnk_curs_width 32
-#define copydlnk_curs_height 32
-#define copydlnk_curs_x_hot 1
-#define copydlnk_curs_y_hot 1
+ 32
+ 32
+ 1
+ 1
 static unsigned char copydlnk_curs_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00,
    0x0e, 0x00, 0x00, 0x00, 0x1e, 0x00, 0x00, 0x00, 0x3e, 0x00, 0x00, 0x00,

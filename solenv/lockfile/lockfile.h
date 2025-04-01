@@ -28,21 +28,21 @@ int	lockfile_check(const char *lockfile, int flags);
 /*
  *	Return values for lockfile_create()
  */
-#define	L_SUCCESS	0	/* Lockfile created			*/
-#define L_NAMELEN	1	/* Recipient name too long 		*/
-#define L_TMPLOCK	2	/* Error creating temp lockfile		*/
-#define L_TMPWRITE	3	/* Can't write pid into temp lockfile	*/
-#define L_MAXTRYS	4	/* Failed after max. number of attempts	*/
-#define L_ERROR		5	/* Unknown error; check errno		*/
-#define L_MANLOCK	6	/* Cannot set mandatory lock on tempfile */
-#define L_ORPHANED	7	/* Called with L_PPID but parent is gone */
-#define L_RMSTALE	8	/* Failed to remove stale lockfile	*/
+	0	/* Lockfile created			*/
+	1	/* Recipient name too long 		*/
+	2	/* Error creating temp lockfile		*/
+	3	/* Can't write pid into temp lockfile	*/
+	4	/* Failed after max. number of attempts	*/
+		5	/* Unknown error; check errno		*/
+	6	/* Cannot set mandatory lock on tempfile */
+	7	/* Called with L_PPID but parent is gone */
+	8	/* Failed to remove stale lockfile	*/
 
 /*
  *	Flag values for lockfile_create()
  */
-#define L_PID		16	/* Put PID in lockfile			*/
-#define L_PPID		32	/* Put PPID in lockfile			*/
+		16	/* Put PID in lockfile			*/
+		32	/* Put PPID in lockfile			*/
 
 /*
  * Experimental.
@@ -50,15 +50,15 @@ int	lockfile_check(const char *lockfile, int flags);
 struct lockargs_s_ {
 	int interval;		/* Static interval between retries	*/
 };
-#define L_INTERVAL_D_	64	/* Specify consistent retry interval	*/
+	64	/* Specify consistent retry interval	*/
 #ifdef LOCKFILE_EXPERIMENTAL
-#define lockargs	lockargs_s_
-#define L_INTERVAL	L_INTERVAL_D_
+	lockargs_s_
+	L_INTERVAL_D_
 int	lockfile_create2(const char *lockfile, int retries,
 		int flags, struct lockargs *args, int args_sz);
 #endif
 
-#ifndef LIB
+#pragma once
 int check_sleep(int, int);
 #endif
 int is_maillock(const char *lockfile);

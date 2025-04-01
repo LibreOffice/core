@@ -21,6 +21,6 @@ const char *lo_get_app_data_dir(void);
 }
 #endif
 
-#endif // EMSCRIPTEN
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

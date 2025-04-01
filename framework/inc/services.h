@@ -34,7 +34,7 @@ inline constexpr OUString SERVICENAME_POPUPMENUCONTROLLER = u"com.sun.star.frame
 
 //  used implementationnames by framework
 
-#define IMPLEMENTATIONNAME_QUICKLAUNCHER                        "com.sun.star.comp.desktop.QuickstartWrapper"
+                        "com.sun.star.comp.desktop.QuickstartWrapper"
 inline constexpr OUString IMPLEMENTATIONNAME_FWK_TASKCREATOR = u"com.sun.star.comp.framework.TaskCreator"_ustr;
 
 }       //  namespace framework

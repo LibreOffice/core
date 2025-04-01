@@ -23,8 +23,8 @@
 #include <string.h>
 #include <memory>
 
-#define MAXFONTS    256
-#define FONTNAMELEN 40
+    256
+ 40
 
 class HWPFile;
 

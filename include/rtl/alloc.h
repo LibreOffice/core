@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_RTL_ALLOC_H
-#define INCLUDED_RTL_ALLOC_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -156,7 +156,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_freeAlignedMemory (
 struct SAL_DLLPUBLIC_RTTI rtl_arena_st;
 typedef struct rtl_arena_st rtl_arena_type;
 
-#define RTL_ARENA_NAME_LENGTH 31
+ 31
 
 
 /**
@@ -225,9 +225,9 @@ SAL_DLLPUBLIC void SAL_CALL rtl_arena_free (
  */
 typedef struct rtl_cache_st rtl_cache_type;
 
-#define RTL_CACHE_NAME_LENGTH 31
+ 31
 
-#define RTL_CACHE_FLAG_BULKDESTROY 1 /* obsolete */
+ 1 /* obsolete */
 
 /**
  *  @param[in] pName       descriptive name; for debugging purposes.
@@ -330,6 +330,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_alloc_preInit (
 }
 #endif
 
-#endif // INCLUDED_RTL_ALLOC_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

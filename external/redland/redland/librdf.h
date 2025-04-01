@@ -23,10 +23,10 @@
  */
 
 
-#ifndef LIBRDF_H
-#define LIBRDF_H
+#pragma once
 
-#ifndef LIBRDF_OBJC_FRAMEWORK
+
+#pragma once
 /* raptor */
 #include <raptor2.h>
 /* rasqal: uses raptor */
@@ -43,7 +43,7 @@ extern "C" {
 
 #include <stdio.h>
 
-#ifndef REDLAND_API
+#pragma once
 #  ifdef _WIN32
 #    ifdef __GNUC__
 #      undef _declspec
@@ -63,7 +63,7 @@ extern "C" {
 #  endif
 #endif
 
-#ifndef REDLAND_CALLBACK_STDCALL
+#pragma once
 #  if defined(_WIN32) && defined(USE_STDCALL_CALLBACKS)
 #    define REDLAND_CALLBACK_STDCALL _stdcall
 #  else
@@ -75,19 +75,19 @@ extern "C" {
  * This gives a warning during compiling.
  */
 #if ( __GNUC__ == 3 && __GNUC_MINOR__ > 0 ) || __GNUC__ > 3
-#define REDLAND_DEPRECATED __attribute__((deprecated))
-#define REDLAND_NORETURN __attribute__((__noreturn__))
+ __attribute__((deprecated))
+ __attribute__((__noreturn__))
 #else
-#define REDLAND_DEPRECATED
-#define REDLAND_NORETURN
+
+
 #endif
 
 
 #if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
-#define REDLAND_PRINTF_FORMAT(string_index, first_to_check_index) \
+(string_index, first_to_check_index) \
   __attribute__((__format__(__printf__, string_index, first_to_check_index)))
 #else
-#define REDLAND_PRINTF_FORMAT(string_index, first_to_check_index)
+(string_index, first_to_check_index)
 #endif
 
 
@@ -100,35 +100,35 @@ extern "C" {
  *
  * Format: major * 10000 + minor * 100 + release
  */
-#define LIBRDF_VERSION 10017
+ 10017
 
 /**
  * LIBRDF_VERSION_STRING:
  *
  * Redland librdf library version string
  */
-#define LIBRDF_VERSION_STRING "1.0.17"
+ "1.0.17"
 
 /**
  * LIBRDF_VERSION_MAJOR:
  *
  * Redland librdf library major version
  */
-#define LIBRDF_VERSION_MAJOR 1
+ 1
 
 /**
  * LIBRDF_VERSION_MINOR:
  *
  * Redland librdf library minor version
  */
-#define LIBRDF_VERSION_MINOR 0
+ 0
 
 /**
  * LIBRDF_VERSION_RELEASE:
  *
  * Redland librdf library release
  */
-#define LIBRDF_VERSION_RELEASE 17
+ 17
 
 
 
@@ -389,7 +389,7 @@ extern const char * const librdf_home_url_string;
  * definitions from the listed rdf_*.h header files.
  */
 
-#ifndef LIBRDF_OBJC_FRAMEWORK
+#pragma once
 #include <rdf_log.h>
 #include <rdf_digest.h>
 #include <rdf_hash.h>

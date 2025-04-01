@@ -12,9 +12,9 @@
 #include <sal/types.h>
 
 #if defined(SLIDESHOW_DLLIMPLEMENTATION)
-#define SLIDESHOW_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+ SAL_DLLPUBLIC_EXPORT
 #else
-#define SLIDESHOW_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+ SAL_DLLPUBLIC_IMPORT
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

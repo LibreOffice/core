@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define mirror_curs_width 32
-#define mirror_curs_height 32
-#define mirror_curs_x_hot 14
-#define mirror_curs_y_hot 12
+ 32
+ 32
+ 14
+ 12
 static unsigned char mirror_curs_bits[] = {
    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfb, 0xff, 0x03, 0xf8, 0xf5, 0xff,
    0xfb, 0xfb, 0xee, 0xff, 0x0b, 0xfa, 0xf5, 0xff, 0xeb, 0xfa, 0xfa, 0xff,

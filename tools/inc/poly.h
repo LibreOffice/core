@@ -52,7 +52,7 @@ public:
     bool            ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon const * pInitPoly = nullptr );
 };
 
-#define MAX_POLYGONS        SAL_MAX_UINT16
+        SAL_MAX_UINT16
 
 struct ImplPolyPolygon
 {

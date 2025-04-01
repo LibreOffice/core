@@ -21,8 +21,8 @@
  * This file is part of LibreOffice published API.
  */
 
-#ifndef INCLUDED_RTL_URI_H
-#define INCLUDED_RTL_URI_H
+#pragma once
+
 
 #include "sal/config.h"
 
@@ -33,7 +33,7 @@
 
 #if defined __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+
 
 /**  Various predefined URI 'char classes.'
 
@@ -355,8 +355,8 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_uriConvertRelToAbs(
 
 #if defined __cplusplus
 }
-#endif /* __cplusplus */
 
-#endif // INCLUDED_RTL_URI_H
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

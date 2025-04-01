@@ -11,10 +11,10 @@
 #include <sal/types.h>
 
 #if defined(BASIC_DLLIMPLEMENTATION)
-#define BASIC_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+ SAL_DLLPUBLIC_EXPORT
 #else
-#define BASIC_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+ SAL_DLLPUBLIC_IMPORT
 #endif
-#define BASIC_DLLPRIVATE SAL_DLLPRIVATE
+ SAL_DLLPRIVATE
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
