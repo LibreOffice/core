@@ -607,8 +607,6 @@ public:
     // date acceptance patterns change.
     void InvalidateDateAcceptancePatterns();
 
-    const css::uno::Reference<css::uno::XComponentContext>& GetComponentContext() const;
-
     //! The following methods are not to be used from outside but must be
     //! public for the InputScanner and FormatScanner.
 

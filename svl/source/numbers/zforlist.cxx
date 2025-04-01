@@ -620,11 +620,6 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
     ImpGenerateAdditionalFormats( nCLOffset, xNFC );
 }
 
-const css::uno::Reference<css::uno::XComponentContext>& SvNumberFormatter::GetComponentContext() const
-{
-    return m_xContext;
-}
-
 const NativeNumberWrapper& SvNumberFormatter::GetNatNum() const { return m_xNatNum.get(); }
 
 bool SvNFFormatData::IsTextFormat(sal_uInt32 F_Index) const

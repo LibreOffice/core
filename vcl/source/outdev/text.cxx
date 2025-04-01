@@ -1387,17 +1387,6 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
     return nRetVal;
 }
 
-sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWidth,
-                                       sal_Unicode nHyphenChar, sal_Int32& rHyphenPos,
-                                       sal_Int32 nIndex, sal_Int32 nLen,
-                                       tools::Long nCharExtra,
-         vcl::text::TextLayoutCache const*const pLayoutCache,
-         const SalLayoutGlyphs* pGlyphs) const
-{
-    return GetTextBreakArray(rStr, nTextWidth, nHyphenChar, &rHyphenPos, nIndex, nLen, nCharExtra,
-                             {}, pLayoutCache, pGlyphs);
-}
-
 sal_Int32 OutputDevice::GetTextBreakArray(const OUString& rStr, tools::Long nTextWidth,
                                           std::optional<sal_Unicode> nHyphenChar,
                                           std::optional<sal_Int32*> pHyphenPos, sal_Int32 nIndex,

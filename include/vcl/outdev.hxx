@@ -1080,12 +1080,6 @@ public:
                                               tools::Long nCharExtra = 0,
                                               vcl::text::TextLayoutCache const* = nullptr,
                                               const SalLayoutGlyphs* pGlyphs = nullptr) const;
-    sal_Int32                   GetTextBreak( const OUString& rStr, tools::Long nTextWidth,
-                                              sal_Unicode nExtraChar, sal_Int32& rExtraCharPos,
-                                              sal_Int32 nIndex, sal_Int32 nLen,
-                                              tools::Long nCharExtra,
-                                              vcl::text::TextLayoutCache const* = nullptr,
-                                              const SalLayoutGlyphs* pGlyphs = nullptr) const;
     sal_Int32 GetTextBreakArray(const OUString& rStr, tools::Long nTextWidth,
                                 std::optional<sal_Unicode> nExtraChar,
                                 std::optional<sal_Int32*> pExtraCharPos, sal_Int32 nIndex,

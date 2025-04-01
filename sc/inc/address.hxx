@@ -958,13 +958,6 @@ bool ConvertDoubleRef( const ScDocument& rDocument, const OUString& rRefString,
 /// append alpha representation of column to buffer
 SC_DLLPUBLIC void ScColToAlpha( OUStringBuffer& rBuffer, SCCOL nCol);
 
-inline void ScColToAlpha( OUString& rStr, SCCOL nCol)
-{
-    OUStringBuffer aBuf(4);
-    ScColToAlpha( aBuf, nCol);
-    rStr += aBuf;
-}
-
 inline OUString ScColToAlpha( SCCOL nCol )
 {
     OUStringBuffer aBuf(4);

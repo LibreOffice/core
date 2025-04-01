@@ -86,11 +86,6 @@ PaletteManager::PaletteManager(const PaletteManager* pClone)
         m_Palettes.emplace_back(a->Clone());
 }
 
-PaletteManager* PaletteManager::Clone() const
-{
-    return new PaletteManager(this);
-}
-
 PaletteManager::~PaletteManager()
 {
 }

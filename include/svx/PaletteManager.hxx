@@ -80,8 +80,6 @@ public:
 
     bool IsThemePaletteSelected() const;
 
-    PaletteManager* Clone() const;
-
     static bool GetThemeAndEffectIndex(sal_uInt16 nItemId, sal_uInt16& rThemeIndex, sal_uInt16& rEffectIndex);
     bool GetLumModOff(sal_uInt16 nThemeIndex, sal_uInt16 nEffect, sal_Int16& rLumMod, sal_Int16& rLumOff);
 
