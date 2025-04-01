@@ -148,8 +148,10 @@ int QtInstanceTreeView::get_selected_index() const
 void QtInstanceTreeView::select(int nPos)
 {
     SolarMutexGuard g;
-    GetQtInstance().RunInMainThread(
-        [&] { m_pSelectionModel->select(modelIndex(nPos), QItemSelectionModel::Select); });
+    GetQtInstance().RunInMainThread([&] {
+        m_pSelectionModel->select(modelIndex(nPos),
+                                  QItemSelectionModel::Select | QItemSelectionModel::Rows);
+    });
 }
 
 void QtInstanceTreeView::unselect(int nPos)
