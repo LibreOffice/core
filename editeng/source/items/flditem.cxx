@@ -31,6 +31,7 @@
 #include <editeng/unonames.hxx>
 
 #include <tools/debug.hxx>
+#include <libxml/xmlwriter.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
@@ -275,6 +276,13 @@ MetaAction* SvxFieldData::createEndComment()
     return new MetaCommentAction( "FIELD_SEQ_END"_ostr );
 }
 
+void SvxFieldData::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxFieldData"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("classId"), BAD_CAST(OString::number(GetClassId()).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 
 SvxFieldItem::SvxFieldItem( std::unique_ptr<SvxFieldData> pField, const sal_uInt16 nId ) :
     SfxPoolItem( nId )
@@ -317,6 +325,14 @@ bool SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
             && ( *mpField == *pOtherFld );
 }
 
+void SvxFieldItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxFieldItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    if (mpField)
+        mpField->dumpAsXml(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
+}
 
 // The following are the derivatives of SvxFieldData ...
 
@@ -472,6 +488,18 @@ MetaAction* SvxURLField::createBeginComment() const
                                   reinterpret_cast<const sal_uInt8*>(aURL.getStr()),
                                   2*aURL.getLength() );
 }
+
+void SvxURLField::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxURLField"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("classId"), BAD_CAST(OString::number(GetClassId()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("format"), BAD_CAST(OString::number(static_cast<int>(eFormat)).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("url"), BAD_CAST(aURL.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("representation"), BAD_CAST(aRepresentation.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("targetFrame"), BAD_CAST(aTargetFrame.toUtf8().getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 
 //
 // SvxPageTitleField methods

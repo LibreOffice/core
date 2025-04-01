@@ -56,6 +56,7 @@ public:
 
     virtual std::unique_ptr<SvxFieldData> Clone() const;
     virtual bool            operator==( const SvxFieldData& ) const;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     virtual MetaAction*     createBeginComment() const;
     static MetaAction*      createEndComment();
@@ -78,6 +79,7 @@ public:
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SvxFieldItem*   Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
     const SvxFieldData*     GetField() const    { return mpField.get(); }
 };
@@ -175,6 +177,7 @@ public:
 
     virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
     virtual MetaAction* createBeginComment() const override;
 };
