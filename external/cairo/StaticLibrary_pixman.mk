@@ -9,6 +9,8 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,pixman))
 
+$(eval $(call gb_StaticLibrary_use_unpacked,pixman,cairo))
+
 $(eval $(call gb_StaticLibrary_set_include,pixman,\
 	-I$(gb_UnpackedTarball_workdir)/pixman \
 	-I$(gb_UnpackedTarball_workdir)/pixman/pixman \
