@@ -11,7 +11,6 @@
 
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
 
-#include <vcl/scheduler.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
 
@@ -104,6 +103,20 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCursorJumpOnFailedSearch)
 
     // Without the fix, the cursor jumps even when no match is found
     CPPUNIT_ASSERT_EQUAL(aInitialCursor, aFinalCursor);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLocaleFormulaSeparator)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    ScAddress addr(2, 0, 0);
+    lcl_typeCharsInCell("=subtotal(9,A1:A8", addr.Col(), addr.Row(), pView, pModelObj, false, true);
+    // Without the fix it would fail with
+    // - Expected: 0
+    // - Actual  : Err:508
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, pDoc->GetString(addr));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
