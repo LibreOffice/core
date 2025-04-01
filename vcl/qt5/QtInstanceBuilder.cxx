@@ -102,6 +102,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"modules/smath/ui/fontsizedialog.ui"_ustr,
         u"modules/smath/ui/savedefaultsdialog.ui"_ustr,
         u"modules/smath/ui/smathsettings.ui"_ustr,
+        u"modules/spropctrlr/ui/taborder.ui"_ustr,
         u"modules/swriter/ui/authenticationsettingsdialog.ui"_ustr,
         u"modules/swriter/ui/columnwidth.ui"_ustr,
         u"modules/swriter/ui/endnotepage.ui"_ustr,
