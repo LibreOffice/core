@@ -434,7 +434,10 @@ void ScDocShell::SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoadi
      * once, for the very first document, empty or loaded. */
     static bool bInitOnce = true;
 
-    if (!bForLoading || bInitOnce)
+    // LOKit may need to jugle different symbols lists for differents users so a
+    // single load is not enough, otherwise the wrong separators may be expected
+    // for the users locale
+    if (!bForLoading || bInitOnce || comphelper::LibreOfficeKit::isActive())
     {
         bool bForceInit = bInitOnce;
         bInitOnce = false;

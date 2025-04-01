@@ -28,7 +28,6 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <svx/svdpage.hxx>
-#include <vcl/scheduler.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/virdev.hxx>
 #include <sc.hrc>
@@ -1405,30 +1404,6 @@ static Bitmap getTile(ScModelObj* pModelObj, int nTilePosX, int nTilePosY, tools
     xDevice->EnableMapMode(false);
     return xDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
 }
-
-namespace
-{
-void lcl_typeCharsInCell(const std::string& aStr, SCCOL nCol, SCROW nRow, ScTabViewShell* pView,
-    ScModelObj* pModelObj, bool bInEdit = false, bool bCommit = true)
-{
-    if (!bInEdit)
-        pView->SetCursor(nCol, nRow);
-
-    for (const char& cChar : aStr)
-    {
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, cChar, 0);
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, cChar, 0);
-        Scheduler::ProcessEventsToIdle();
-    }
-
-    if (bCommit)
-    {
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
-        Scheduler::ProcessEventsToIdle();
-    }
-}
-} //namespace
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetChangeNoInvalidation)
 {

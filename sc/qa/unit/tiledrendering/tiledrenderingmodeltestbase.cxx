@@ -17,6 +17,7 @@
 #include <tabvwsh.hxx>
 #include <test/lokcallback.hxx>
 #include <docuno.hxx>
+#include <vcl/scheduler.hxx>
 
 using namespace css;
 
@@ -461,5 +462,29 @@ public:
         m_aInvalidationsMode.clear();
     }
 };
+
+namespace
+{
+void lcl_typeCharsInCell(const std::string& aStr, SCCOL nCol, SCROW nRow, ScTabViewShell* pView,
+                         ScModelObj* pModelObj, bool bInEdit = false, bool bCommit = true)
+{
+    if (!bInEdit)
+        pView->SetCursor(nCol, nRow);
+
+    for (const char& cChar : aStr)
+    {
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, cChar, 0);
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, cChar, 0);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    if (bCommit)
+    {
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+        Scheduler::ProcessEventsToIdle();
+    }
+}
+} //namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
