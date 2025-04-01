@@ -694,6 +694,9 @@ OUString GetUndoComment(SwUndoId eId)
         case SwUndoId::CONVERT_FIELD_TO_TEXT:
             pId = STR_UNDO_CONVERT_FIELD_TO_TEXT;
             break;
+        case SwUndoId::REINSTATE_REDLINE:
+            pId = STR_REINSTATE_REDLINE;
+            break;
     }
 
     assert(pId);

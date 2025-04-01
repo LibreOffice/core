@@ -183,6 +183,7 @@ enum class SwUndoId
     MAKE_FOOTNOTES_ENDNOTES = 151,
     MAKE_ENDNOTES_FOOTNOTES = 152,
     CONVERT_FIELD_TO_TEXT = 153,
+    REINSTATE_REDLINE = 154,
 };
 
 OUString GetUndoComment(SwUndoId eId);

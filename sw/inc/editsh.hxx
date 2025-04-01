@@ -957,6 +957,7 @@ public:
     bool IsRedlineOn() const;
     SW_DLLPUBLIC SwRedlineTable::size_type GetRedlineCount() const;
     const SwRangeRedline& GetRedline( SwRedlineTable::size_type nPos ) const;
+    SwRangeRedline& GetRedline( SwRedlineTable::size_type nPos );
     SW_DLLPUBLIC bool AcceptRedline( SwRedlineTable::size_type nPos );
     SW_DLLPUBLIC bool RejectRedline( SwRedlineTable::size_type nPos );
     bool AcceptRedlinesInSelection();
