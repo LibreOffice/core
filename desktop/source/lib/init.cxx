@@ -4221,7 +4221,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 #if defined(IOS)
     double fDPIScale = 1.0;
 
-    // Onine uses the LOK_TILEMODE_RGBA by default so flip the normal flags
+    // Online uses the LOK_TILEMODE_RGBA by default so flip the normal flags
     // to kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big
     CGContextRef pCGContext = CGBitmapContextCreate(pBuffer, nCanvasWidth, nCanvasHeight, 8,
                                                     nCanvasWidth * 4, CGColorSpaceCreateDeviceRGB(),
@@ -7157,7 +7157,7 @@ static void doc_paintWindowForView(LibreOfficeKitDocument* pThis, unsigned nLOKW
     comphelper::LibreOfficeKit::setDPIScale(fDPIScale);
 
 #if defined(IOS)
-    // Onine uses the LOK_TILEMODE_RGBA by default so flip the normal flags
+    // Online uses the LOK_TILEMODE_RGBA by default so flip the normal flags
     // to kCGImageAlphaNoneSkipLast | kCGImageByteOrder32Big
     CGContextRef cgc = CGBitmapContextCreate(pBuffer, nWidth, nHeight, 8, nWidth*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipLast | kCGImageByteOrder32Big);
 
