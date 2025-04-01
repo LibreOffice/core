@@ -54,7 +54,6 @@ static BufferedDecompositionFlusher* getInstance()
 // static
 void BufferedDecompositionFlusher::shutdown()
 {
-    SAL_WARN("drawinglayer", "tearing down BufferedDecompositionFlusher");
     BufferedDecompositionFlusher* pFlusher = getInstance();
     pFlusher->onTeardown();
     // We have to wait for the thread to exit, otherwise we might end up with the background thread
