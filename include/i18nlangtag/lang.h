@@ -94,7 +94,7 @@ namespace o3tl
 // when compiling LO on macOS, debug builds will display a linking error where, see
 // <https://lists.freedesktop.org/archives/libreoffice/2024-February/091564.html>, "Our Clang
 // --enable-pch setup is known broken":
-#if !(defined MACOSX && defined __clang__ && __clang_major__ == 16 && ENABLE_PCH)
+#if !(defined MACOSX && defined __clang__ && (__clang_major__ == 16 || __clang_major__ == 17) && ENABLE_PCH)
     // delete "sal_Int16" constructor via specialization: values > 0x7FFF are
     // actually used, and unfortunately passed around in the API as signed
     // "short", so use this to find all places where casts must be inserted
