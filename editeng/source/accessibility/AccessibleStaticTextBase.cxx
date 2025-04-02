@@ -28,6 +28,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -817,17 +818,11 @@ uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getRunA
 
 tools::Rectangle AccessibleStaticTextBase::GetParagraphBoundingBox() const
 {
-    tools::Rectangle aRect;
-    if (mxTextParagraph.is())
-    {
-        awt::Rectangle aAwtRect = mxTextParagraph->getBounds();
-        aRect = tools::Rectangle(Point(aAwtRect.X, aAwtRect.Y), Size(aAwtRect.Width, aAwtRect.Height));
-    }
-    else
-    {
-        aRect.SetEmpty();
-    }
-    return aRect;
+    if (!mxTextParagraph.is())
+        return tools::Rectangle();
+
+    awt::Rectangle aAwtRect = mxTextParagraph->getBounds();
+    return vcl::unohelper::ConvertToVCLRect(aAwtRect);
 }
 
 }  // end of namespace accessibility
