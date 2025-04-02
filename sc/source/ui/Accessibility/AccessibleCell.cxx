@@ -92,13 +92,6 @@ ScAccessibleCell::~ScAccessibleCell()
     }
 }
 
-void ScAccessibleCell::Init()
-{
-    ScAccessibleCellBase::Init();
-
-    SetEventSource(this);
-}
-
 void SAL_CALL ScAccessibleCell::disposing()
 {
     SolarMutexGuard aGuard;

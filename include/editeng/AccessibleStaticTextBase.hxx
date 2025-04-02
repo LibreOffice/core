@@ -140,18 +140,6 @@ public:
     */
     void SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource );
 
-    /** Set the event source
-
-        @attention When setting a reference here, you should call
-        Dispose() when you as the owner are disposing, since until
-        then this object will hold that reference
-
-        @param rInterface
-        The interface that should be set as the source for
-        accessibility events sent by this object.
-     */
-    void SetEventSource( const css::uno::Reference< css::accessibility::XAccessible >& rInterface );
-
     /** Set offset of EditEngine from parent
 
         @attention You are required to have the solar mutex
@@ -249,11 +237,6 @@ private:
                   sal_Int32 nEndPara, sal_Int32 nEndIndex);
 
     bool RemoveLineBreakCount(sal_Int32& rIndex);
-
-    // our frontend class (the one implementing the actual
-    // interface). That's not necessarily the one containing the impl
-    // pointer. Note that this is not an uno::Reference to prevent ref-counting cycles and leaks.
-    css::accessibility::XAccessible* mpThis;
 
     // implements our functionality, we're just an adapter (guarded by solar mutex)
     mutable rtl::Reference<AccessibleEditableTextPara> mxTextParagraph;

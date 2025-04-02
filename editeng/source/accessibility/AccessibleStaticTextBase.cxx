@@ -101,7 +101,7 @@ AccessibleEditableTextPara& AccessibleStaticTextBase::GetParagraph( sal_Int32 nP
 {
 
     if( !mxTextParagraph.is() )
-        throw lang::DisposedException (u"object has been already disposed"_ustr, mpThis );
+        throw lang::DisposedException (u"object has been already disposed"_ustr);
 
     // TODO: Have a different method on AccessibleEditableTextPara
     // that does not care about state changes
@@ -158,8 +158,7 @@ EPaM AccessibleStaticTextBase::ImpCalcInternal(sal_Int32 nFlatIndex, bool bExclu
 {
 
     if( nFlatIndex < 0 )
-        throw lang::IndexOutOfBoundsException(u"AccessibleStaticTextBase_Impl::Index2Internal: character index out of bounds"_ustr,
-                                              mpThis);
+        throw lang::IndexOutOfBoundsException(u"AccessibleStaticTextBase_Impl::Index2Internal: character index out of bounds"_ustr);
     // gratuitously accepting larger indices here, AccessibleEditableTextPara will throw eventually
 
     sal_Int32 nCurrPara, nCurrIndex, nParas, nCurrCount;
@@ -190,8 +189,7 @@ EPaM AccessibleStaticTextBase::ImpCalcInternal(sal_Int32 nFlatIndex, bool bExclu
     }
 
     // not found? Out of bounds
-    throw lang::IndexOutOfBoundsException(u"AccessibleStaticTextBase::Index2Internal: character index out of bounds"_ustr,
-                                          mpThis);
+    throw lang::IndexOutOfBoundsException(u"AccessibleStaticTextBase::Index2Internal: character index out of bounds"_ustr);
 }
 
 bool AccessibleStaticTextBase::SetSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
@@ -293,11 +291,10 @@ bool AccessibleStaticTextBase::RemoveLineBreakCount( sal_Int32& rIndex )
     return false;
 }
 
-AccessibleStaticTextBase::AccessibleStaticTextBase( std::unique_ptr< SvxEditSource > && pEditSource ) :
-    mpThis(nullptr)
+AccessibleStaticTextBase::AccessibleStaticTextBase(std::unique_ptr<SvxEditSource>&& pEditSource)
     // TODO: this is still somewhat of a hack, all the more since
     // now the maTextParagraph has an empty parent reference set
-    , mxTextParagraph(new AccessibleEditableTextPara(nullptr))
+    : mxTextParagraph(new AccessibleEditableTextPara(nullptr))
 {
     SolarMutexGuard aGuard;
 
@@ -318,11 +315,6 @@ void AccessibleStaticTextBase::SetEditSource( std::unique_ptr< SvxEditSource > &
         mxTextParagraph->SetEditSource(&maEditSource);
 }
 
-void AccessibleStaticTextBase::SetEventSource( const uno::Reference< XAccessible >& rInterface )
-{
-    mpThis = rInterface.get();
-}
-
 void AccessibleStaticTextBase::SetOffset( const Point& rPoint )
 {
     // precondition: solar mutex locked
@@ -338,8 +330,7 @@ void AccessibleStaticTextBase::Dispose()
     if (mxTextParagraph.is())
         mxTextParagraph->Dispose();
 
-    // drop references
-    mpThis = nullptr;
+    // drop reference
     mxTextParagraph.clear();
 }
 

@@ -66,8 +66,6 @@ private:
         ScSplitPos eSplitPos,
         ScAccessibleDocument* pAccDoc);
 
-    virtual void Init() override;
-
     using ScAccessibleCellBase::disposing;
     virtual void SAL_CALL disposing() override;
 
