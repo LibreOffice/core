@@ -51,23 +51,23 @@ cat <<\EOF >"${1?}"de.allotropia.ZetaOffice.appdata.xml
  <screenshots>
   <screenshot type="default">
    <image>https://hub.libreoffice.org/screenshots/writer-01.png</image>
-   <caption><!-- Describe this screenshot in less than ~10 words --></caption>
+   <caption>Sample Writer document</caption>
   </screenshot>
   <screenshot>
    <image>https://hub.libreoffice.org/screenshots/calc-02.png</image>
-   <caption><!-- Describe this screenshot in less than ~10 words --></caption>
+   <caption>Sample Calc document</caption>
   </screenshot>
   <screenshot>
    <image>https://hub.libreoffice.org/screenshots/impress-01.png</image>
-   <caption><!-- Describe this screenshot in less than ~10 words --></caption>
+   <caption>Sample Impress document</caption>
   </screenshot>
   <screenshot>
    <image>https://hub.libreoffice.org/screenshots/draw-02.png</image>
-   <caption><!-- Describe this screenshot in less than ~10 words --></caption>
+   <caption>Sample Draw document</caption>
   </screenshot>
   <screenshot>
    <image>https://hub.libreoffice.org/screenshots/base-02.png</image>
-   <caption><!-- Describe this screenshot in less than ~10 words --></caption>
+   <caption>Sample Base document</caption>
   </screenshot>
  </screenshots>
  <developer_name>The Document Foundation</developer_name>
