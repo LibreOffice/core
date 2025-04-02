@@ -1502,13 +1502,14 @@ const SwFrame* SwFlowFrame::GetPrevFrameForUpperSpaceCalc_( const SwFrame* _pPro
 
 // This should be renamed to something like lcl_UseULSpacing
 /// Compare styles attached to these text frames.
-static bool lcl_IdenticalStyles(const SwFrame* pPrevFrame, const SwFrame* pFrame)
+static bool lcl_IdenticalStyles(const SwFrame* pPrevFrame, const SwFrame* pFrame,
+                                bool bAllowAcrossSections = false)
 {
     if (!pFrame || !pFrame->IsTextFrame())
         return false;
 
     // Identical styles only applies if "the paragraphs belong to the same content area".
-    if (pPrevFrame && pPrevFrame->FindSctFrame() != pFrame->FindSctFrame())
+    if (!bAllowAcrossSections && pPrevFrame && pPrevFrame->FindSctFrame() != pFrame->FindSctFrame())
         return false;
 
     SwTextFormatColl *pPrevFormatColl = nullptr;
@@ -1558,6 +1559,14 @@ static void lcl_PartiallyCollapseUpper(const SwFrame& rFrame, SwTwips& rUpper)
     if (!pPrevPara || pPrevPara->IsInTab())
         return;
 
+    // MSO skips space between same-style paragraphs even at a sectionPageBreak.
+    const bool bContextualSpacing = pTextFrame->GetAttrSet()->GetULSpace().GetContext();
+    const bool bIdenticalStyles
+        = bContextualSpacing
+            && lcl_IdenticalStyles(pPrevPara, pTextFrame, /*AllowAcrossSections*/ true);
+    if (bIdenticalStyles)
+        rUpper = 0;
+    else
     {
         // MSO is also hyper-consistent about consolidating
         // the lower-space from the previous paragraph
