@@ -213,8 +213,6 @@ bool OutputDevice::DrawTransformBitmapExDirect(
 {
     assert(!is_double_buffered_window());
 
-    bool bDone = false;
-
     // try to paint directly
     const basegfx::B2DPoint aNull(aFullTransform * basegfx::B2DPoint(0.0, 0.0));
     const basegfx::B2DPoint aTopX(aFullTransform * basegfx::B2DPoint(1.0, 0.0));
@@ -234,14 +232,15 @@ bool OutputDevice::DrawTransformBitmapExDirect(
 
     SalBitmap* pSalAlphaBmp = aAlphaBitmap.GetBitmap().ImplGetSalBitmap().get();
 
-    bDone = mpGraphics->DrawTransformedBitmap(
+    if (!mpGraphics->DrawTransformedBitmap(
         aNull,
         aTopX,
         aTopY,
         *pSalSrcBmp,
         pSalAlphaBmp,
         fAlpha,
-        *this);
+        *this))
+            return false;
 
     if (mpAlphaVDev)
     {
@@ -251,7 +250,7 @@ bool OutputDevice::DrawTransformBitmapExDirect(
         mpAlphaVDev->DrawTransformBitmapExDirect(aFullTransform, BitmapEx(aAlpha.GetBitmap(), aAlphaBitmap));
     }
 
-    return bDone;
+    return true;
 };
 
 bool OutputDevice::TransformAndReduceBitmapExToTargetRange(
