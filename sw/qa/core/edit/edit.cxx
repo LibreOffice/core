@@ -180,6 +180,17 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateInsertsInSelection)
     CPPUNIT_ASSERT(rRedlineData2.Next());
     const SwRedlineData& rInnerRedlineData2 = *rRedlineData2.Next();
     CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rInnerRedlineData2.GetType());
+
+    // And when checking the undo stack:
+    SwUndoId nUndoId = SwUndoId::EMPTY;
+    pDoc->GetIDocumentUndoRedo().GetLastUndoInfo(nullptr, &nUndoId);
+
+    // Then make sure we get the relevant undo ID:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 153 (REINSTATE_REDLINE)
+    // - Actual  : 1 (DELETE)
+    // i.e. the undo ID was wrong.
+    CPPUNIT_ASSERT_EQUAL(SwUndoId::REINSTATE_REDLINE, nUndoId);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateSinglePlainDelete)
