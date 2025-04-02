@@ -651,7 +651,7 @@ uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessible
         aChild->SetParagraphIndex( GetParagraphIndex() );
         aChild->SetIndexInParent( i );
 
-        maImageBullet = aChild;
+        maImageBullet = aChild.get();
     }
 
     return aChild;

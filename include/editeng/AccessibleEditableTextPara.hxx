@@ -41,6 +41,7 @@
 #include <editeng/AccessibleParaManager.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
+#include <unotools/weakref.hxx>
 
 class SvxViewForwarder;
 class MapMode;
@@ -354,8 +355,7 @@ private:
     SvxEditSourceAdapter* mpEditSource;
 
     // the possible child (for image bullets, guarded by solar mutex)
-    typedef WeakCppRef < css::accessibility::XAccessible, AccessibleImageBullet > WeakBullet;
-    WeakBullet maImageBullet;
+    unotools::WeakReference<AccessibleImageBullet> maImageBullet;
 
     // the last string used for an Accessibility::TEXT_CHANGED event (guarded by solar mutex)
     OUString maLastTextString;
