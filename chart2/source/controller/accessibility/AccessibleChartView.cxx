@@ -232,7 +232,7 @@ void AccessibleChartView::initialize( ChartController& rNewChartController,
         m_xChartModel = xChartModel.get();
         m_xChartView = xChartView.get();
         m_xParent = xParent;
-        m_pChartWindow = pChartWindow;
+        m_pChartWindow = std::move(pChartWindow);
     }
 
     if( bOldInvalid && bNewInvalid )
