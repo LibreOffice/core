@@ -27,6 +27,7 @@
 #include <frmtool.hxx>
 #include <docsh.hxx>
 #include <swdtflvr.hxx>
+#include <strings.hrc>
 
 RedlineFlags SwEditShell::GetRedlineFlags() const
 {
@@ -247,6 +248,12 @@ void SwEditShell::ReinstateRedlinesInSelection()
     // redlines is not wanted.
     std::vector<SwRangeRedline*> aRedlines(rTable.begin(), rTable.end());
 
+    IDocumentUndoRedo& rIDUR = GetDoc()->GetIDocumentUndoRedo();
+    if (rIDUR.DoesUndo())
+    {
+        rIDUR.StartUndo(SwUndoId::REINSTATE_REDLINE, nullptr);
+    }
+    int nRedlines = 0;
     for (size_t nIndex = 0; nIndex < aRedlines.size(); ++nIndex)
     {
         const SwRangeRedline& rRedline = *aRedlines[nIndex];
@@ -284,6 +291,19 @@ void SwEditShell::ReinstateRedlinesInSelection()
         aPaM.SetMark();
         *aPaM.GetMark() = *pStart;
         ReinstatePaM(rRedline, aPaM);
+        ++nRedlines;
+    }
+    if (rIDUR.DoesUndo())
+    {
+        OUString aWith;
+        {
+            SwRewriter aRewriter;
+            aRewriter.AddRule(UndoArg1, OUString::number(nRedlines));
+            aWith = aRewriter.Apply(SwResId(STR_N_REDLINES));
+        }
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, aWith);
+        rIDUR.EndUndo(SwUndoId::REINSTATE_REDLINE, &aRewriter);
     }
 
     EndAllAction();
