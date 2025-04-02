@@ -218,7 +218,14 @@ class SvxNumOptionsTabPage : public SfxTabPage
     std::vector<OUString> aGrfNames;
     vcl::Font             aActBulletFont;
 
-    sal_uInt8           nBullet;
+    enum class NumberType {
+        SHOW_NUMBERING =             0,
+        SHOW_BULLET    =             1,
+        SHOW_BITMAP    =             2,
+        NONE = 0xff
+    };
+    NumberType           nBullet;
+
     sal_uInt16          nActNumLvl;
     TypedWhichId<SvxNumBulletItem> nNumItemId;
     MapUnit             eCoreUnit;
@@ -265,11 +272,8 @@ class SvxNumOptionsTabPage : public SfxTabPage
     std::unique_ptr<weld::CustomWeld> m_xPreviewWIN;
 
     void                InitControls();
-    /** To switch between the numbering type
-        0 - Number;
-        1 - Bullet;
-        2 - Bitmap; */
-    void                SwitchNumberType( sal_uInt8 nType );
+
+    void                SwitchNumberType( NumberType nType );
     void                CheckForStartValue_Impl(sal_uInt16 nNumberingType);
 
     DECL_LINK(NumberTypeSelectHdl_Impl, weld::ComboBox&, void);

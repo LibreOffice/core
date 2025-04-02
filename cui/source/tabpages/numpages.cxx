@@ -85,10 +85,6 @@ using namespace css::lang;
 using namespace css::text;
 using namespace css::container;
 
-#define SHOW_NUMBERING              0
-#define SHOW_BULLET                 1
-#define SHOW_BITMAP                 2
-
 #define MAX_BMP_WIDTH               16
 #define MAX_BMP_HEIGHT              16
 #define SEARCHPATH_DELIMITER        u';'
@@ -1104,7 +1100,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(weld::Container* pPage, weld::DialogC
     , bPreset(false)
     , bAutomaticCharStyles(true)
     , bHTMLMode(false)
-    , nBullet(0xff)
+    , nBullet(NumberType::NONE)
     , nActNumLvl(1)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , m_aRatioTop(ConnectorType::Top)
@@ -1495,7 +1491,7 @@ void SvxNumOptionsTabPage::InitControls()
 
         nMask <<= 1 ;
     }
-    SwitchNumberType(bShowBullet ? 1 : bShowBitmap ? 2 : 0);
+    SwitchNumberType(bShowBullet ? NumberType::SHOW_BULLET : bShowBitmap ? NumberType::SHOW_BITMAP : NumberType::SHOW_NUMBERING);
 
     sal_uInt16 nNumberingType;
     if (nLvl != SAL_MAX_UINT16)
@@ -1573,7 +1569,7 @@ void SvxNumOptionsTabPage::InitControls()
     m_xStartED->set_value(1); // If this isn't set then changing the bullet type to a numbered type doesn't reset the start level
     switch(nBullet)
     {
-        case SHOW_NUMBERING:
+        case NumberType::SHOW_NUMBERING:
             if(bSameStart)
             {
                 m_xStartED->set_value(aNumFmtArr[nLvl]->GetStart());
@@ -1581,9 +1577,11 @@ void SvxNumOptionsTabPage::InitControls()
             else
                 m_xStartED->set_text(u""_ustr);
         break;
-        case SHOW_BULLET:
+        case NumberType::SHOW_BULLET:
         break;
-        case SHOW_BITMAP:
+        case NumberType::SHOW_BITMAP:
+        break;
+        case NumberType::NONE:
         break;
     }
 
@@ -1611,14 +1609,14 @@ void SvxNumOptionsTabPage::InitControls()
 }
 
 // 0 - Number; 1 - Bullet; 2 - Bitmap
-void SvxNumOptionsTabPage::SwitchNumberType( sal_uInt8 nType )
+void SvxNumOptionsTabPage::SwitchNumberType( NumberType nType )
 {
     if(nBullet == nType)
         return;
     nBullet = nType;
-    bool bBullet = (nType == SHOW_BULLET);
-    bool bBitmap = (nType == SHOW_BITMAP);
-    bool bEnableBitmap = (nType == SHOW_BITMAP);
+    bool bBullet = (nType == NumberType::SHOW_BULLET);
+    bool bBitmap = (nType == NumberType::SHOW_BITMAP);
+    bool bEnableBitmap = (nType == NumberType::SHOW_BITMAP);
     bool bNumeric = !(bBitmap||bBullet);
     m_xSeparatorFT->set_visible(bNumeric);
     m_xPrefixFT->set_visible(bNumeric);
@@ -1787,7 +1785,7 @@ IMPL_LINK(SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, weld::ComboBox&, rBox,
                 if(!bBmp)
                     aNumFmt.SetGraphic(u""_ustr);
                 pActNum->SetLevel(i, aNumFmt);
-                SwitchNumberType(SHOW_BITMAP);
+                SwitchNumberType(NumberType::SHOW_BITMAP);
                 bShowOrient = true;
             }
             else if( SVX_NUM_CHAR_SPECIAL == nNumberingType )
@@ -1799,7 +1797,7 @@ IMPL_LINK(SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, weld::ComboBox&, rBox,
                 if( !aNumFmt.GetBulletChar() )
                     aNumFmt.SetBulletChar( SVX_DEF_BULLET );
                 pActNum->SetLevel(i, aNumFmt);
-                SwitchNumberType(SHOW_BULLET);
+                SwitchNumberType(NumberType::SHOW_BULLET);
                 // allocation of the drawing pattern is automatic
                 if(bAutomaticCharStyles)
                 {
@@ -1810,7 +1808,7 @@ IMPL_LINK(SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, weld::ComboBox&, rBox,
             {
                 aNumFmt.SetListFormat(m_xPrefixED->get_text(), m_xSuffixED->get_text(), i);
 
-                SwitchNumberType(SHOW_NUMBERING);
+                SwitchNumberType(NumberType::SHOW_NUMBERING);
                 pActNum->SetLevel(i, aNumFmt);
                 CheckForStartValue_Impl(nNumberingType);
 
