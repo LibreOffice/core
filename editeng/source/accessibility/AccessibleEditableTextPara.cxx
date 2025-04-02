@@ -675,46 +675,7 @@ namespace accessibility
 
     OUString SAL_CALL AccessibleEditableTextPara::getAccessibleDescription()
     {
-        SolarMutexGuard aGuard;
-
-        // append first 40 characters from text, or first line, if shorter
-        // (writer takes first sentence here, but that's not supported
-        // from EditEngine)
-        // throws if defunc
-        OUString aLine;
-
-        if( getCharacterCount() )
-            aLine = getTextAtIndex(0, AccessibleTextType::LINE).SegmentText;
-
-        // Get the string from the resource for the specified id.
-        OUString sStr(EditResId(RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION));
-        OUString sParaIndex = OUString::number(GetParagraphIndex());
-        sStr = sStr.replaceFirst("$(ARG)", sParaIndex);
-
-        if( aLine.getLength() > MaxDescriptionLen )
-        {
-            OUString aCurrWord;
-            sal_Int32 i;
-
-            // search backward from MaxDescriptionLen for previous word start
-            for( aCurrWord=getTextAtIndex(MaxDescriptionLen, AccessibleTextType::WORD).SegmentText,
-                     i=MaxDescriptionLen,
-                     aLine=OUString();
-                 i>=0;
-                 --i )
-            {
-                if( getTextAtIndex(i, AccessibleTextType::WORD).SegmentText != aCurrWord )
-                {
-                    if( i == 0 )
-                        // prevent completely empty string
-                        aLine = getTextAtIndex(0, AccessibleTextType::WORD).SegmentText;
-                    else
-                        aLine = getTextRange(0, i);
-                }
-            }
-        }
-
-        return sStr + aLine;
+        return OUString();
     }
 
     OUString SAL_CALL AccessibleEditableTextPara::getAccessibleName()

@@ -173,9 +173,9 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestFontworkDialog)
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Fontwork..."));
     CPPUNIT_ASSERT(dialogWaiter->waitEndDialog());
 
-    CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH/><SHAPE name=\"Fontwork 1\" description=\" \"><PARAGRAPH "
-                         "description=\"Paragraph: 0 Simple\">Simple</PARAGRAPH></SHAPE>"_ustr,
-                         collectText());
+    CPPUNIT_ASSERT_EQUAL(
+        u"<PARAGRAPH/><SHAPE name=\"Fontwork 1\" description=\" \"><PARAGRAPH>Simple</PARAGRAPH></SHAPE>"_ustr,
+        collectText());
 }
 
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestFrameDialog)
