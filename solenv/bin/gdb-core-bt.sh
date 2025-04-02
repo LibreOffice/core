@@ -48,7 +48,6 @@ then
             # or multiple matching core dumps have identical PIDs):
             for i in $($COREDUMPCTL --json=short list COREDUMP_USER_UNIT="$LIBO_TEST_UNIT".scope | \
                            $JQ -r 'map(select(.corefile=="present"))|map(.pid)|join(" ")')
-            for i in $($COREDUMPCTL -q -r -1 list | cut -f 2)
             do
                 GDBCOMMANDFILE=$(mktemp)
                 printf 'info registers\nthread apply all backtrace full\n' >"$GDBCOMMANDFILE"
