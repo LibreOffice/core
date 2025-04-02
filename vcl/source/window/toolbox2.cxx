@@ -1729,6 +1729,8 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
             rJsonWriter.put("type", "toolitem");
             rJsonWriter.put("text", GetItemText(nId));
             rJsonWriter.put("command", sCommand);
+            if (const OUString tooltip = GetQuickHelpText(nId); !tooltip.isEmpty())
+                rJsonWriter.put("tooltip", tooltip);
             if (IsItemChecked(nId))
                 rJsonWriter.put("selected", true);
             if (!IsItemVisible(nId))
