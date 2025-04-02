@@ -64,7 +64,6 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <svtools/langtab.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/configmgr.hxx>
@@ -1238,12 +1237,6 @@ ErrCode SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell const *
 
                                 Sequence< PropertyValue > rProperties;
                                 TransformItems( SID_OPENDOC, rSet, rProperties );
-                                if (pMedium->ShowFilterDialog())
-                                {
-                                    const auto i = rProperties.getLength();
-                                    rProperties.realloc(i + 1);
-                                    rProperties.getArray()[i] = comphelper::makePropertyValue(u"ShowFilterDialog"_ustr, true);
-                                }
                                 rtl::Reference<RequestFilterOptions> pFORequest = new RequestFilterOptions( pDoc->GetModel(), rProperties );
 
                                 rHandler->handle( pFORequest );

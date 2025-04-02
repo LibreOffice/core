@@ -2699,6 +2699,11 @@ OUString FileDialogHelper::GetRealFilter() const
     return sFilter;
 }
 
+bool FileDialogHelper::CheckCurrentFilterOptionsCapability() const
+{
+    return mpImpl->CheckFilterOptionsCapability(mpImpl->getCurrentSfxFilter());
+}
+
 void FileDialogHelper::SetTitle( const OUString& rNewTitle )
 {
     if ( mpImpl->mxFileDlg.is() )
@@ -2919,7 +2924,7 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              sal_Int16 nDialog,
                              const OUString& rStandardDir,
                              const css::uno::Sequence< OUString >& rDenyList,
-                             bool& rShowFilterDialog )
+                             std::optional<bool>& rShowFilterDialog )
 {
     ErrCode nRet;
     std::unique_ptr<FileDialogHelper> pDialog;
@@ -2943,7 +2948,8 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
 
     uno::Reference< ui::dialogs::XFilePickerControlAccess > xExtFileDlg( pDialog->GetFilePicker(), uno::UNO_QUERY );
     uno::Any aVal = xExtFileDlg->getValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0 );
-    aVal >>= rShowFilterDialog;
+    if (aVal.has<bool>() && pDialog->CheckCurrentFilterOptionsCapability())
+        rShowFilterDialog = aVal.get<bool>();
 
     return nRet;
 }

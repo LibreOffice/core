@@ -210,13 +210,6 @@ handleFilterOptionsRequest_(
             {
                 pProperty->Value >>= aFilterName;
             }
-            bool bShowFilterDialog = false;
-            pProperty = std::find_if(rRequest.rProperties.begin(), rRequest.rProperties.end(),
-                [](const beans::PropertyValue& rProp) { return rProp.Name == "ShowFilterDialog"; });
-            if (pProperty != rRequest.rProperties.end())
-            {
-                pProperty->Value >>= bShowFilterDialog;
-            }
 
             uno::Sequence < beans::PropertyValue > aProps;
             if ( xFilterCFG->getByName( aFilterName ) >>= aProps )
@@ -232,7 +225,6 @@ handleFilterOptionsRequest_(
                         uno::Sequence<uno::Any> aDialogArgs(comphelper::InitAnyPropertySequence(
                         {
                             {"ParentWindow", uno::Any(rWindow)},
-                            {"ShowFilterDialog", uno::Any(bShowFilterDialog)},
                         }));
 
                         uno::Reference<

@@ -20,6 +20,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
+#include <uno/current_context.hxx>
 #include <unotools/filteroptions_settings.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <connectivity/dbtools.hxx>
@@ -190,15 +191,17 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
         ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(Application::GetFrameWeld(xDialogParent), aPrivDatName,
                                                                                   pInStream.get(), SC_IMPORTFILE));
 
-        const bool bShow = mbForceShow || utl::isShowFilterOptionsDialog(aFilterString);
+        bool bShow;
+        // The "ShowFilterDialog" flag is passed from SfxApplication::OpenDocExec_Impl
+        if (!(css::uno::getCurrentContext()->getValueByName(u"ShowFilterDialog"_ustr) >>= bShow))
+            bShow = utl::isShowFilterOptionsDialog(aFilterString);
         const bool bOk = !bShow || pDlg->Execute() == RET_OK;
 
         if (bOk)
         {
             ScAsciiOptions aOptions;
             pDlg->GetOptions( aOptions );
-            if (bShow)
-                pDlg->SaveParameters();
+            pDlg->SaveParameters();
             aFilterOptions = aOptions.WriteToString();
             nRet = ui::dialogs::ExecutableDialogResults::OK;
         }
@@ -372,8 +375,6 @@ void SAL_CALL ScFilterOptionsObj::initialize(const uno::Sequence<uno::Any>& rArg
     ::comphelper::NamedValueCollection aProperties(rArguments);
     if (aProperties.has(u"ParentWindow"_ustr))
         aProperties.get(u"ParentWindow"_ustr) >>= xDialogParent;
-    if (aProperties.has(u"ShowFilterDialog"_ustr))
-        aProperties.get(u"ShowFilterDialog"_ustr) >>= mbForceShow;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -186,6 +186,7 @@ public:
     sal_Int16               GetDialogType() const;
     bool                    IsPasswordEnabled() const;
     OUString                GetRealFilter() const;
+    bool                    CheckCurrentFilterOptionsCapability() const;
 
     void                    SetTitle( const OUString&  rNewTitle );
     OUString                GetPath() const;
@@ -300,7 +301,7 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              sal_Int16 nDialog,
                              const OUString& rStandardDir,
                              const css::uno::Sequence< OUString >& rDenyList,
-                             bool& rShowFilterDialog );
+                             std::optional<bool>& rShowFilterDialog );
 
 css::uno::Reference<css::ui::dialogs::XFolderPicker2> SFX2_DLLPUBLIC createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Window* pPreferredParent);
 

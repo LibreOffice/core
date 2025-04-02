@@ -44,7 +44,6 @@
 #include <rtl/ustring.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -657,7 +656,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if ( pDenyListItem )
             pDenyListItem->GetStringList( aDenyList );
 
-        bool bShowFilterDialog = true;
+        std::optional<bool> bShowFilterDialog;
         weld::Window* pTopWindow = GetTopWindow();
         ErrCode nErr = sfx2::FileOpenDialog_Impl(pTopWindow,
                 nDialogType,
@@ -712,10 +711,16 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 rReq.AppendItem(SfxStringItem(SID_DOC_SERVICE, aDocService));
             }
 
-            // The actual use of bShowFilterDialog will be in the recursive call to OpenDocExec_Impl
+            // Passes the checkbox state of "Edit Filter Settings" to filter dialogs through multiple layers of code.
+            // Since some layers use a published API and cannot be modified directly, we use a context layer instead.
+            // This is a one-time flag and is not stored in any configuration.
+            // For an example of how it's used, see ScFilterOptionsObj::execute.
             std::optional<css::uno::ContextLayer> oLayer;
-            if (bShowFilterDialog)
-                oLayer.emplace(comphelper::NewFlagContext(u"ShowFilterDialog"_ustr));
+            if (bShowFilterDialog.has_value())
+            {
+                oLayer.emplace(comphelper::NewFlagContext(u"ShowFilterDialog"_ustr,
+                                                          bShowFilterDialog.value()));
+            }
 
             for (auto const& url : aURLList)
             {
@@ -1082,12 +1087,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     {
         auto nIndex = static_cast<sal_Int32>(std::distance(std::cbegin(aArgs), pArg));
         comphelper::removeElementAt(aArgs, nIndex);
-    }
-    if (comphelper::IsContextFlagActive(u"ShowFilterDialog"_ustr))
-    {
-        const auto i = aArgs.getLength();
-        aArgs.realloc(i + 1);
-        aArgs.getArray()[i] = comphelper::makePropertyValue(u"ShowFilterDialog"_ustr, true);
     }
 
     // TODO/LATER: either remove LinkItem or create an asynchronous process for it

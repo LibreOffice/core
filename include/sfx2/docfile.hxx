@@ -204,8 +204,6 @@ public:
 
     [[nodiscard]] bool IsRepairPackage() const;
 
-    [[nodiscard]] bool ShowFilterDialog() const;
-
     css::uno::Reference< css::io::XInputStream > const &  GetInputStream();
 
     void                CreateTempFile( bool bReplace = true );

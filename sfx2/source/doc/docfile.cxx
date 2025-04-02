@@ -412,8 +412,6 @@ public:
     /// if true, xStorage is an inner package and not directly from xStream
     bool m_bODFWholesomeEncryption = false;
 
-    bool m_bShowFilterDialog = false;
-
     OUString m_aName;
     OUString m_aLogicName;
     OUString m_aLongName;
@@ -3687,16 +3685,8 @@ void SfxMedium::SetArgs(const uno::Sequence<beans::PropertyValue>& rArgs)
     aArgsMap.erase(u"Stream"_ustr);
     aArgsMap.erase(u"InputStream"_ustr);
 
-    if (auto it = aArgsMap.find(u"ShowFilterDialog"_ustr); it != aArgsMap.end())
-    {
-        it->second >>= pImpl->m_bShowFilterDialog;
-        aArgsMap.erase(it);
-    }
-
     pImpl->m_aArgs = aArgsMap.getAsConstPropertyValueList();
 }
-
-bool SfxMedium::ShowFilterDialog() const { return pImpl->m_bShowFilterDialog; }
 
 const uno::Sequence<beans::PropertyValue> & SfxMedium::GetArgs() const { return pImpl->m_aArgs; }
 
