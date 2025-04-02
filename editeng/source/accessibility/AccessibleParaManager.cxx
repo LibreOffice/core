@@ -354,22 +354,6 @@ void AccessibleParaManager::FireEvent( sal_Int32 nStartPara,
     }
 }
 
-namespace {
-
-class ReleaseChild
-{
-public:
-    AccessibleParaManager::WeakChild operator()( const AccessibleParaManager::WeakChild& rPara )
-    {
-        AccessibleParaManager::ShutdownPara( rPara );
-
-        // clear reference
-        return AccessibleParaManager::WeakChild();
-    }
-};
-
-}
-
 void AccessibleParaManager::Release( sal_Int32 nStartPara, sal_Int32 nEndPara )
 {
     DBG_ASSERT( 0 <= nStartPara && 0 <= nEndPara &&
@@ -387,7 +371,14 @@ void AccessibleParaManager::Release( sal_Int32 nStartPara, sal_Int32 nEndPara )
         std::advance( front, nStartPara );
         std::advance( back, nEndPara );
 
-        std::transform( front, back, front, ReleaseChild() );
+        std::transform(front, back, front,
+                       [](const AccessibleParaManager::WeakChild& rPara)
+                       {
+                           AccessibleParaManager::ShutdownPara(rPara);
+
+                           // clear reference
+                           return AccessibleParaManager::WeakChild();
+                       });
     }
 }
 
