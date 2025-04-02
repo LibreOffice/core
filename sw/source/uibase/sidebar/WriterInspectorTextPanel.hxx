@@ -29,9 +29,9 @@ namespace sw::sidebar
 class WriterInspectorTextPanel final : public svx::sidebar::InspectorTextPanel
 {
 public:
-    static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent);
+    static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent, SfxBindings* pBindings);
 
-    WriterInspectorTextPanel(weld::Widget* pParent);
+    WriterInspectorTextPanel(weld::Widget* pParent, SfxBindings* pBindings);
 
     virtual ~WriterInspectorTextPanel() override;
 

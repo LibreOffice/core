@@ -49,9 +49,9 @@ class SVX_DLLPUBLIC InspectorTextPanel
 public:
     virtual ~InspectorTextPanel() override;
 
-    static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent);
+    static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent, SfxBindings* pBindings);
 
-    InspectorTextPanel(weld::Widget* pParent);
+    InspectorTextPanel(weld::Widget* pParent, SfxBindings* pBindings);
 
     void updateEntries(const std::vector<TreeNode>& rStore, const sal_Int32 nParIdx);
 

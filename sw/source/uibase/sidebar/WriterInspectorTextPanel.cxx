@@ -53,12 +53,13 @@ namespace sw::sidebar
 static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
                        std::vector<svx::sidebar::TreeNode>& aStore, sal_Int32& rParIdx);
 
-std::unique_ptr<PanelLayout> WriterInspectorTextPanel::Create(weld::Widget* pParent)
+std::unique_ptr<PanelLayout> WriterInspectorTextPanel::Create(weld::Widget* pParent,
+                                                              SfxBindings* pBindings)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException(
             u"no parent Window given to WriterInspectorTextPanel::Create"_ustr, nullptr, 0);
-    return std::make_unique<WriterInspectorTextPanel>(pParent);
+    return std::make_unique<WriterInspectorTextPanel>(pParent, pBindings);
 }
 
 namespace
@@ -69,8 +70,8 @@ SwWrtShell* GetWrtShell()
     return pDocSh ? pDocSh->GetWrtShell() : nullptr;
 }
 }
-WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent)
-    : InspectorTextPanel(pParent)
+WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent, SfxBindings* pBindings)
+    : InspectorTextPanel(pParent, pBindings)
     , m_pShell(GetWrtShell())
     , m_nParIdx(0)
 {

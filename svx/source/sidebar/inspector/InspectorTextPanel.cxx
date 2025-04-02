@@ -41,22 +41,22 @@ const int MinimumPanelWidth = 250;
 
 namespace svx::sidebar
 {
-std::unique_ptr<PanelLayout> InspectorTextPanel::Create(weld::Widget* pParent)
+std::unique_ptr<PanelLayout> InspectorTextPanel::Create(weld::Widget* pParent,
+                                                        SfxBindings* pBindings)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException(
             u"no parent Window given to InspectorTextPanel::Create"_ustr, nullptr, 0);
-    return std::make_unique<InspectorTextPanel>(pParent);
+    return std::make_unique<InspectorTextPanel>(pParent, pBindings);
 }
 
-InspectorTextPanel::InspectorTextPanel(weld::Widget* pParent)
+InspectorTextPanel::InspectorTextPanel(weld::Widget* pParent, SfxBindings* pBindings)
     : PanelLayout(pParent, u"InspectorTextPanel"_ustr, u"svx/ui/inspectortextpanel.ui"_ustr)
     , mpListBoxStyles(m_xBuilder->weld_tree_view(u"listbox_fonts"_ustr))
-    , nSlotDFStyles(
-          SfxViewFrame::Current()->GetDispatcher()->GetSlot(".uno:HighlightCharDF")->GetSlotId())
-    , mParaController(SID_SPOTLIGHT_PARASTYLES, SfxViewFrame::Current()->GetBindings(), *this)
-    , mCharController(SID_SPOTLIGHT_CHARSTYLES, SfxViewFrame::Current()->GetBindings(), *this)
-    , mDFController(nSlotDFStyles, SfxViewFrame::Current()->GetBindings(), *this)
+    , nSlotDFStyles(pBindings->GetDispatcher()->GetSlot(".uno:HighlightCharDF")->GetSlotId())
+    , mParaController(SID_SPOTLIGHT_PARASTYLES, *pBindings, *this)
+    , mCharController(SID_SPOTLIGHT_CHARSTYLES, *pBindings, *this)
+    , mDFController(nSlotDFStyles, *pBindings, *this)
 {
     mpListBoxStyles->set_size_request(MinimumPanelWidth, -1);
     float fWidth = mpListBoxStyles->get_approximate_digit_width();
@@ -71,10 +71,9 @@ InspectorTextPanel::InspectorTextPanel(weld::Widget* pParent)
     mpToolbar->set_item_icon_name("directformatting", "sw/res/sr20012.png");
 
     // Setup listening and set initial state
-    SfxBindings& pBindings = SfxViewFrame::Current()->GetBindings();
-    pBindings.Update(SID_SPOTLIGHT_PARASTYLES);
-    pBindings.Update(SID_SPOTLIGHT_CHARSTYLES);
-    pBindings.Update(nSlotDFStyles);
+    pBindings->Update(SID_SPOTLIGHT_PARASTYLES);
+    pBindings->Update(SID_SPOTLIGHT_CHARSTYLES);
+    pBindings->Update(nSlotDFStyles);
 }
 
 static bool GetPropertyValues(std::u16string_view rPropName, const uno::Any& rAny,
