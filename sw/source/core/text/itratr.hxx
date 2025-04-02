@@ -61,6 +61,7 @@ private:
     const SwTextNode* m_pTextNode;
     sw::MergedPara const* m_pMergedPara;
 
+    std::pair<SwTextNode const*, sal_Int32> SeekNewPos(TextFrameIndex nNewPos, bool * o_pIsToEnd);
     void SeekFwd(sal_Int32 nOldPos, sal_Int32 nNewPos);
     void SeekToEnd();
     void SetFnt( SwFont* pNew ) { m_pFont = pNew; }

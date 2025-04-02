@@ -157,9 +157,7 @@ SwTextAttr *SwAttrIter::GetAttr(TextFrameIndex const nPosition) const
 
 bool SwAttrIter::SeekAndChgAttrIter(TextFrameIndex const nNewPos, OutputDevice* pOut)
 {
-    std::pair<SwTextNode const*, sal_Int32> const pos( m_pMergedPara
-        ? sw::MapViewToModel(*m_pMergedPara, nNewPos)
-        : std::make_pair(m_pTextNode, sal_Int32(nNewPos)));
+    std::pair<SwTextNode const*, sal_Int32> const pos{SeekNewPos(nNewPos, nullptr)};
     bool bChg = m_nStartIndex && pos.first == m_pTextNode && pos.second == m_nPosition
         ? m_pFont->IsFntChg()
         : Seek( nNewPos );
@@ -332,12 +330,61 @@ void SwAttrIter::SeekToEnd()
     }
 }
 
+std::pair<SwTextNode const*, sal_Int32>
+SwAttrIter::SeekNewPos(TextFrameIndex const nNewPos, bool *const o_pIsToEnd)
+{
+    std::pair<SwTextNode const*, sal_Int32> newPos{ m_pMergedPara
+        ? sw::MapViewToModel(*m_pMergedPara, nNewPos)
+        : std::make_pair(m_pTextNode, sal_Int32(nNewPos))};
+
+    bool isToEnd{false};
+    if (m_pMergedPara)
+    {
+        if (m_pMergedPara->extents.empty())
+        {
+            isToEnd = true;
+            assert(m_pMergedPara->pLastNode == newPos.first);
+        }
+        else
+        {
+            auto const& rLast{m_pMergedPara->extents.back()};
+            isToEnd = rLast.pNode == newPos.first && rLast.nEnd == newPos.second;
+            // for text formatting: use *last* node if all text is hidden
+            if (isToEnd
+                && m_pMergedPara->pLastNode != newPos.first // implies there is hidden text
+                && m_pViewShell->GetLayout()->GetParagraphBreakMode() == sw::ParagraphBreakMode::Hidden
+                && m_pTextNode->GetDoc().getIDocumentSettingAccess().get(
+                    DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH))
+            {
+                TextFrameIndex nHiddenStart(COMPLETE_STRING);
+                TextFrameIndex nHiddenEnd(0);
+                m_pScriptInfo->GetBoundsOfHiddenRange(TextFrameIndex(0), nHiddenStart, nHiddenEnd);
+                if (TextFrameIndex(0) == nHiddenStart
+                    && TextFrameIndex(m_pMergedPara->mergedText.getLength()) <= nHiddenEnd)
+                {
+                    newPos.first = m_pMergedPara->pLastNode;
+                    newPos.second = m_pMergedPara->pLastNode->Len();
+                }
+            }
+        }
+    }
+    else
+    {
+        isToEnd = newPos.second == m_pTextNode->Len();
+    }
+    if (o_pIsToEnd)
+    {
+        *o_pIsToEnd = isToEnd;
+    }
+
+    return newPos;
+}
+
 bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
 {
     // note: nNewPos isn't necessarily an index returned from GetNextAttr
-    std::pair<SwTextNode const*, sal_Int32> const newPos( m_pMergedPara
-        ? sw::MapViewToModel(*m_pMergedPara, nNewPos)
-        : std::make_pair(m_pTextNode, sal_Int32(nNewPos)));
+    bool isToEnd{false};
+    std::pair<SwTextNode const*, sal_Int32> const newPos{SeekNewPos(nNewPos, &isToEnd)};
 
     if ( m_pRedline && m_pRedline->ExtOn() )
         m_pRedline->LeaveExtend(*m_pFont, newPos.first->GetIndex(), newPos.second);
@@ -424,24 +471,6 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
                 ++m_nChgCnt;
             }
         }
-    }
-
-    bool isToEnd{false};
-    if (m_pMergedPara)
-    {
-        if (!m_pMergedPara->extents.empty())
-        {
-            auto const& rLast{m_pMergedPara->extents.back()};
-            isToEnd = rLast.pNode == newPos.first && rLast.nEnd == newPos.second;
-        }
-        else
-        {
-            isToEnd = true;
-        }
-    }
-    else
-    {
-        isToEnd = newPos.second == m_pTextNode->Len();
     }
 
     if (m_pTextNode->GetpSwpHints())
