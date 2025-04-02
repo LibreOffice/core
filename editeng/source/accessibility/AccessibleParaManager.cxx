@@ -374,20 +374,14 @@ void AccessibleParaManager::Release( sal_Int32 nStartPara, sal_Int32 nEndPara )
         std::transform(front, back, front,
                        [](const AccessibleParaManager::WeakChild& rPara)
                        {
-                           AccessibleParaManager::ShutdownPara(rPara);
+                           auto aChild(rPara.first.get());
+                           if (IsReferencable(aChild))
+                               aChild->SetEditSource(nullptr);
 
                            // clear reference
                            return AccessibleParaManager::WeakChild();
                        });
     }
-}
-
-void AccessibleParaManager::ShutdownPara( const WeakChild& rChild )
-{
-    auto aChild( rChild.first.get() );
-
-    if( IsReferencable( aChild ) )
-        aChild->SetEditSource( nullptr );
 }
 
 }

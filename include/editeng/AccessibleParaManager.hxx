@@ -130,7 +130,6 @@ public:
 
     static bool IsReferencable(rtl::Reference<AccessibleEditableTextPara> const & aChild);
     bool IsReferencable( sal_Int32 nChild ) const;
-    static void ShutdownPara( const WeakChild& rChild );
 
     Child CreateChild( sal_Int32                                                                                        nChild,
                        const css::uno::Reference< css::accessibility::XAccessible >& xFrontEnd,
