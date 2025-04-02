@@ -430,7 +430,7 @@ else
 
 define gb_LinkTarget__use_libjpeg
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(gb_UnpackedTarball_workdir)/libjpeg-turbo \
+	-I$(gb_UnpackedTarball_workdir)/libjpeg-turbo/src \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),libjpeg-turbo)

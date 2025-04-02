@@ -22,8 +22,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,libjpeg-turbo, \
 # cmake -DENABLE_STATIC:BOOL=ON -DENABLE_SHARED:BOOL=NO -DWITH_JAVA:BOOL=OFF -DWITH_TURBOJPEG:BOOL=OFF -DWITH_SIMD:BOOL=ON
 # and then tweaking
 
-$(eval $(call gb_UnpackedTarball_add_file,libjpeg-turbo,jconfigint.h,external/libjpeg-turbo/jconfigint.h))
-$(eval $(call gb_UnpackedTarball_add_file,libjpeg-turbo,jconfig.h,external/libjpeg-turbo/jconfig.h))
-$(eval $(call gb_UnpackedTarball_add_file,libjpeg-turbo,jversion.h,external/libjpeg-turbo/jversion.h))
+$(eval $(call gb_UnpackedTarball_add_file,libjpeg-turbo,src/jconfigint.h,external/libjpeg-turbo/jconfigint.h))
+$(eval $(call gb_UnpackedTarball_add_file,libjpeg-turbo,src/jconfig.h,external/libjpeg-turbo/jconfig.h))
+$(eval $(call gb_UnpackedTarball_add_file,libjpeg-turbo,src/jversion.h,external/libjpeg-turbo/jversion.h))
 
 # vim: set noet sw=4 ts=4:

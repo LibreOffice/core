@@ -1,12 +1,11 @@
---- jpeglib.h
-+++ jpeglib.h
-@@ -31,6 +31,9 @@
+--- src/jpeglib.h
++++ src/jpeglib.h
+@@ -43,6 +43,7 @@
+ #endif
  #include "jmorecfg.h"           /* seldom changed options */
  
- 
 +#include <stdio.h>
-+
-+
+ 
  #ifdef __cplusplus
  #ifndef DONT_USE_EXTERN_C
- extern "C" {
+

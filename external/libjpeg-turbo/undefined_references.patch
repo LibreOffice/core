@@ -1,140 +1,17 @@
---- jdtrans.c	2025-04-01 12:27:27.138349027 +0200
-+++ jdtrans.c	2025-04-01 12:27:31.470329353 +0200
-@@ -131,7 +131,7 @@
- 
-   /* Always get a full-image coefficient buffer. */
-   if (cinfo->data_precision == 12)
--    j12init_d_coef_controller(cinfo, TRUE);
-+    jinit_d_coef_controller(cinfo, TRUE);
-   else
-     jinit_d_coef_controller(cinfo, TRUE);
- 
---- jdmaster.c	2025-04-01 12:22:54.075591612 +0200
-+++ jdmaster.c	2025-04-01 12:23:23.739456350 +0200
-@@ -573,7 +573,7 @@
-       if (cinfo->data_precision == 16)
-         ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
-       else if (cinfo->data_precision == 12)
--        j12init_1pass_quantizer(cinfo);
-+        jinit_1pass_quantizer(cinfo);
-       else
-         jinit_1pass_quantizer(cinfo);
-       master->quantizer_1pass = cinfo->cquantize;
-@@ -588,7 +588,7 @@
-       if (cinfo->data_precision == 16)
-         ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
-       else if (cinfo->data_precision == 12)
--        j12init_2pass_quantizer(cinfo);
-+        jinit_2pass_quantizer(cinfo);
-       else
-         jinit_2pass_quantizer(cinfo);
-       master->quantizer_2pass = cinfo->cquantize;
-@@ -608,7 +608,7 @@
-       if (cinfo->data_precision == 16)
-         ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
-       else if (cinfo->data_precision == 12)
--        j12init_merged_upsampler(cinfo); /* does color conversion too */
-+        jinit_merged_upsampler(cinfo); /* does color conversion too */
-       else
-         jinit_merged_upsampler(cinfo); /* does color conversion too */
- #else
-@@ -617,14 +617,14 @@
+--- src/jcinit.c	2025-04-01 11:05:08.743205764 +0200
++++ src/jcinit.c	2025-04-01 11:05:43.475045983 +0200
+@@ -45,15 +45,15 @@
+       jinit_downsampler(cinfo);
+       jinit_c_prep_controller(cinfo, FALSE /* never need full buffer here */);
+     } else if (cinfo->data_precision <= 12) {
+-      j12init_color_converter(cinfo);
+-      j12init_downsampler(cinfo);
+-      j12init_c_prep_controller(cinfo,
++      jinit_color_converter(cinfo);
++      jinit_downsampler(cinfo);
++      jinit_c_prep_controller(cinfo,
+                                 FALSE /* never need full buffer here */);
      } else {
-       if (cinfo->data_precision == 16) {
- #ifdef D_LOSSLESS_SUPPORTED
--        j16init_color_deconverter(cinfo);
--        j16init_upsampler(cinfo);
-+        jinit_color_deconverter(cinfo);
-+        jinit_upsampler(cinfo);
- #else
-         ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
- #endif
-       } else if (cinfo->data_precision == 12) {
--        j12init_color_deconverter(cinfo);
--        j12init_upsampler(cinfo);
-+        jinit_color_deconverter(cinfo);
-+        jinit_upsampler(cinfo);
-       } else {
-         jinit_color_deconverter(cinfo);
-         jinit_upsampler(cinfo);
-@@ -632,12 +632,12 @@
-     }
-     if (cinfo->data_precision == 16)
- #ifdef D_LOSSLESS_SUPPORTED
--      j16init_d_post_controller(cinfo, cinfo->enable_2pass_quant);
-+      jinit_d_post_controller(cinfo, cinfo->enable_2pass_quant);
- #else
-       ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
- #endif
-     else if (cinfo->data_precision == 12)
--      j12init_d_post_controller(cinfo, cinfo->enable_2pass_quant);
-+      jinit_d_post_controller(cinfo, cinfo->enable_2pass_quant);
-     else
-       jinit_d_post_controller(cinfo, cinfo->enable_2pass_quant);
-   }
-@@ -648,9 +648,9 @@
-      * scaling
-      */
-     if (cinfo->data_precision == 16)
--      j16init_lossless_decompressor(cinfo);
-+      jinit_lossless_decompressor(cinfo);
-     else if (cinfo->data_precision == 12)
--      j12init_lossless_decompressor(cinfo);
-+      jinit_lossless_decompressor(cinfo);
-     else
-       jinit_lossless_decompressor(cinfo);
-     /* Entropy decoding: either Huffman or arithmetic coding. */
-@@ -664,9 +664,9 @@
-     use_c_buffer = cinfo->inputctl->has_multiple_scans ||
-                    cinfo->buffered_image;
-     if (cinfo->data_precision == 16)
--      j16init_d_diff_controller(cinfo, use_c_buffer);
-+      jinit_d_diff_controller(cinfo, use_c_buffer);
-     else if (cinfo->data_precision == 12)
--      j12init_d_diff_controller(cinfo, use_c_buffer);
-+      jinit_d_diff_controller(cinfo, use_c_buffer);
-     else
-       jinit_d_diff_controller(cinfo, use_c_buffer);
- #else
-@@ -677,7 +677,7 @@
-       ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
-     /* Inverse DCT */
-     if (cinfo->data_precision == 12)
--      j12init_inverse_dct(cinfo);
-+      jinit_inverse_dct(cinfo);
-     else
-       jinit_inverse_dct(cinfo);
-     /* Entropy decoding: either Huffman or arithmetic coding. */
-@@ -702,7 +702,7 @@
-     use_c_buffer = cinfo->inputctl->has_multiple_scans ||
-                    cinfo->buffered_image;
-     if (cinfo->data_precision == 12)
--      j12init_d_coef_controller(cinfo, use_c_buffer);
-+      jinit_d_coef_controller(cinfo, use_c_buffer);
-     else
-       jinit_d_coef_controller(cinfo, use_c_buffer);
-   }
-@@ -710,13 +710,13 @@
-   if (!cinfo->raw_data_out) {
-     if (cinfo->data_precision == 16)
- #ifdef D_LOSSLESS_SUPPORTED
--      j16init_d_main_controller(cinfo,
-+      jinit_d_main_controller(cinfo,
-                                 FALSE /* never need full buffer here */);
- #else
-       ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
- #endif
-     else if (cinfo->data_precision == 12)
--      j12init_d_main_controller(cinfo,
-+      jinit_d_main_controller(cinfo,
-                                 FALSE /* never need full buffer here */);
-     else
-       jinit_d_main_controller(cinfo, FALSE /* never need full buffer here */);
---- jcinit.c	2025-04-01 12:25:09.482974771 +0200
-+++ jcinit.c	2025-04-01 12:25:17.158939845 +0200
-@@ -42,17 +42,17 @@
-   if (!cinfo->raw_data_in) {
-     if (cinfo->data_precision == 16) {
  #ifdef C_LOSSLESS_SUPPORTED
 -      j16init_color_converter(cinfo);
 -      j16init_downsampler(cinfo);
@@ -145,53 +22,42 @@
                                  FALSE /* never need full buffer here */);
  #else
        ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
- #endif
-     } else if (cinfo->data_precision == 12) {
--      j12init_color_converter(cinfo);
--      j12init_downsampler(cinfo);
--      j12init_c_prep_controller(cinfo,
-+      jinit_color_converter(cinfo);
-+      jinit_downsampler(cinfo);
-+      jinit_c_prep_controller(cinfo,
-                                 FALSE /* never need full buffer here */);
-     } else {
-       jinit_color_converter(cinfo);
-@@ -65,9 +65,9 @@
- #ifdef C_LOSSLESS_SUPPORTED
-     /* Prediction, sample differencing, and point transform */
-     if (cinfo->data_precision == 16)
--      j16init_lossless_compressor(cinfo);
-+      jinit_lossless_compressor(cinfo);
-     else if (cinfo->data_precision == 12)
+@@ -67,9 +67,9 @@
+     if (cinfo->data_precision <= 8)
+       jinit_lossless_compressor(cinfo);
+     else if (cinfo->data_precision <= 12)
 -      j12init_lossless_compressor(cinfo);
 +      jinit_lossless_compressor(cinfo);
      else
-       jinit_lossless_compressor(cinfo);
+-      j16init_lossless_compressor(cinfo);
++      jinit_lossless_compressor(cinfo);
      /* Entropy encoding: either Huffman or arithmetic coding. */
-@@ -79,10 +79,10 @@
- 
-     /* Need a full-image difference buffer in any multi-pass mode. */
-     if (cinfo->data_precision == 16)
--      j16init_c_diff_controller(cinfo, (boolean)(cinfo->num_scans > 1 ||
-+      jinit_c_diff_controller(cinfo, (boolean)(cinfo->num_scans > 1 ||
-                                                  cinfo->optimize_coding));
-     else if (cinfo->data_precision == 12)
+     if (cinfo->arith_code) {
+       ERREXIT(cinfo, JERR_ARITH_NOTIMPL);
+@@ -82,10 +82,10 @@
+       jinit_c_diff_controller(cinfo, (boolean)(cinfo->num_scans > 1 ||
+                                                cinfo->optimize_coding));
+     else if (cinfo->data_precision <= 12)
 -      j12init_c_diff_controller(cinfo, (boolean)(cinfo->num_scans > 1 ||
 +      jinit_c_diff_controller(cinfo, (boolean)(cinfo->num_scans > 1 ||
                                                   cinfo->optimize_coding));
      else
-       jinit_c_diff_controller(cinfo, (boolean)(cinfo->num_scans > 1 ||
+-      j16init_c_diff_controller(cinfo, (boolean)(cinfo->num_scans > 1 ||
++      jinit_c_diff_controller(cinfo, (boolean)(cinfo->num_scans > 1 ||
+                                                  cinfo->optimize_coding));
+ #else
+     ERREXIT(cinfo, JERR_NOT_COMPILED);
 @@ -95,7 +95,7 @@
-       ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
-     /* Forward DCT */
-     if (cinfo->data_precision == 12)
+     if (cinfo->data_precision == 8)
+       jinit_forward_dct(cinfo);
+     else if (cinfo->data_precision == 12)
 -      j12init_forward_dct(cinfo);
 +      jinit_forward_dct(cinfo);
      else
-       jinit_forward_dct(cinfo);
+       ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
      /* Entropy encoding: either Huffman or arithmetic coding. */
 @@ -118,7 +118,7 @@
- 
+
      /* Need a full-image coefficient buffer in any multi-pass mode. */
      if (cinfo->data_precision == 12)
 -      j12init_c_coef_controller(cinfo, (boolean)(cinfo->num_scans > 1 ||
@@ -199,17 +65,141 @@
                                                   cinfo->optimize_coding));
      else
        jinit_c_coef_controller(cinfo, (boolean)(cinfo->num_scans > 1 ||
-@@ -127,12 +127,12 @@
- 
-   if (cinfo->data_precision == 16)
+@@ -128,10 +128,10 @@
+   if (cinfo->data_precision <= 8)
+     jinit_c_main_controller(cinfo, FALSE /* never need full buffer here */);
+   else if (cinfo->data_precision <= 12)
+-    j12init_c_main_controller(cinfo, FALSE /* never need full buffer here */);
++    jinit_c_main_controller(cinfo, FALSE /* never need full buffer here */);
+   else
  #ifdef C_LOSSLESS_SUPPORTED
 -    j16init_c_main_controller(cinfo, FALSE /* never need full buffer here */);
 +    jinit_c_main_controller(cinfo, FALSE /* never need full buffer here */);
  #else
      ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
  #endif
-   else if (cinfo->data_precision == 12)
--    j12init_c_main_controller(cinfo, FALSE /* never need full buffer here */);
-+    jinit_c_main_controller(cinfo, FALSE /* never need full buffer here */);
+--- src/jdmaster.c	2025-04-01 11:05:15.259175858 +0200
++++ src/jdmaster.c	2025-04-01 11:09:56.525858262 +0200
+@@ -575,7 +575,7 @@
+       if (cinfo->data_precision == 8)
+         jinit_1pass_quantizer(cinfo);
+       else if (cinfo->data_precision == 12)
+-        j12init_1pass_quantizer(cinfo);
++        jinit_1pass_quantizer(cinfo);
+       else
+         ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
+       master->quantizer_1pass = cinfo->cquantize;
+@@ -590,7 +590,7 @@
+       if (cinfo->data_precision == 8)
+         jinit_2pass_quantizer(cinfo);
+       else if (cinfo->data_precision == 12)
+-        j12init_2pass_quantizer(cinfo);
++        jinit_2pass_quantizer(cinfo);
+       else
+         ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
+       master->quantizer_2pass = cinfo->cquantize;
+@@ -610,7 +610,7 @@
+       if (cinfo->data_precision == 8)
+         jinit_merged_upsampler(cinfo); /* does color conversion too */
+       else if (cinfo->data_precision == 12)
+-        j12init_merged_upsampler(cinfo); /* does color conversion too */
++        jinit_merged_upsampler(cinfo); /* does color conversion too */
+       else
+         ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
+ #else
+@@ -621,12 +621,12 @@
+         jinit_color_deconverter(cinfo);
+         jinit_upsampler(cinfo);
+       } else if (cinfo->data_precision <= 12) {
+-        j12init_color_deconverter(cinfo);
+-        j12init_upsampler(cinfo);
++        jinit_color_deconverter(cinfo);
++        jinit_upsampler(cinfo);
+       } else {
+ #ifdef D_LOSSLESS_SUPPORTED
+-        j16init_color_deconverter(cinfo);
+-        j16init_upsampler(cinfo);
++        jinit_color_deconverter(cinfo);
++        jinit_upsampler(cinfo);
+ #else
+         ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
+ #endif
+@@ -635,10 +635,10 @@
+     if (cinfo->data_precision <= 8)
+       jinit_d_post_controller(cinfo, cinfo->enable_2pass_quant);
+     else if (cinfo->data_precision <= 12)
+-      j12init_d_post_controller(cinfo, cinfo->enable_2pass_quant);
++      jinit_d_post_controller(cinfo, cinfo->enable_2pass_quant);
+     else
+ #ifdef D_LOSSLESS_SUPPORTED
+-      j16init_d_post_controller(cinfo, cinfo->enable_2pass_quant);
++      jinit_d_post_controller(cinfo, cinfo->enable_2pass_quant);
+ #else
+       ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
+ #endif
+@@ -652,9 +652,9 @@
+     if (cinfo->data_precision <= 8)
+       jinit_lossless_decompressor(cinfo);
+     else if (cinfo->data_precision <= 12)
+-      j12init_lossless_decompressor(cinfo);
++      jinit_lossless_decompressor(cinfo);
+     else
+-      j16init_lossless_decompressor(cinfo);
++      jinit_lossless_decompressor(cinfo);
+     /* Entropy decoding: either Huffman or arithmetic coding. */
+     if (cinfo->arith_code) {
+       ERREXIT(cinfo, JERR_ARITH_NOTIMPL);
+@@ -668,9 +668,9 @@
+     if (cinfo->data_precision <= 8)
+       jinit_d_diff_controller(cinfo, use_c_buffer);
+     else if (cinfo->data_precision <= 12)
+-      j12init_d_diff_controller(cinfo, use_c_buffer);
++      jinit_d_diff_controller(cinfo, use_c_buffer);
+     else
+-      j16init_d_diff_controller(cinfo, use_c_buffer);
++      jinit_d_diff_controller(cinfo, use_c_buffer);
+ #else
+     ERREXIT(cinfo, JERR_NOT_COMPILED);
+ #endif
+@@ -679,7 +679,7 @@
+     if (cinfo->data_precision == 8)
+       jinit_inverse_dct(cinfo);
+     else if (cinfo->data_precision == 12)
+-      j12init_inverse_dct(cinfo);
++      jinit_inverse_dct(cinfo);
+     else
+       ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
+     /* Entropy decoding: either Huffman or arithmetic coding. */
+@@ -704,7 +704,7 @@
+     use_c_buffer = cinfo->inputctl->has_multiple_scans ||
+                    cinfo->buffered_image;
+     if (cinfo->data_precision == 12)
+-      j12init_d_coef_controller(cinfo, use_c_buffer);
++      jinit_d_coef_controller(cinfo, use_c_buffer);
+     else
+       jinit_d_coef_controller(cinfo, use_c_buffer);
+   }
+@@ -713,11 +713,11 @@
+     if (cinfo->data_precision <= 8)
+       jinit_d_main_controller(cinfo, FALSE /* never need full buffer here */);
+     else if (cinfo->data_precision <= 12)
+-      j12init_d_main_controller(cinfo,
++      jinit_d_main_controller(cinfo,
+                                 FALSE /* never need full buffer here */);
+     else
+ #ifdef D_LOSSLESS_SUPPORTED
+-      j16init_d_main_controller(cinfo,
++      jinit_d_main_controller(cinfo,
+                                 FALSE /* never need full buffer here */);
+ #else
+       ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
+--- src/jdtrans.c	2025-04-01 11:20:45.390703693 +0200
++++ src/jdtrans.c	2025-04-01 11:21:02.302620340 +0200
+@@ -131,7 +131,7 @@
+ 
+   /* Always get a full-image coefficient buffer. */
+   if (cinfo->data_precision == 12)
+-    j12init_d_coef_controller(cinfo, TRUE);
++    jinit_d_coef_controller(cinfo, TRUE);
    else
-     jinit_c_main_controller(cinfo, FALSE /* never need full buffer here */);
+     jinit_d_coef_controller(cinfo, TRUE);

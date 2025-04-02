@@ -54,7 +54,7 @@ $(call gb_ExternalProject_get_state_target,libtiff,build) :
 			CFLAGS="$(CFLAGS) $(call gb_ExternalProject_get_build_flags,libtiff) $(gb_EMSCRIPTEN_CFLAGS)" \
 			$(if $(SYSTEM_ZLIB),,--with-zlib-include-dir="$(gb_UnpackedTarball_workdir)/zlib") \
 			$(if $(SYSTEM_ZLIB),,--with-zlib-lib-dir="$(gb_StaticLibrary_WORKDIR)") \
-			$(if $(SYSTEM_LIBJPEG),,--with-jpeg-include-dir="$(gb_UnpackedTarball_workdir)/libjpeg-turbo") \
+			$(if $(SYSTEM_LIBJPEG),,--with-jpeg-include-dir="$(gb_UnpackedTarball_workdir)/libjpeg-turbo/src") \
 			$(if $(SYSTEM_LIBJPEG),,--with-jpeg-lib-dir="$(gb_StaticLibrary_WORKDIR)") \
 			$(if $(SYSTEM_LIBWEBP),,--with-webp-include-dir="$(gb_UnpackedTarball_workdir)/libwebp/src") \
 			$(if $(SYSTEM_LIBWEBP),,$(if $(filter WNT,$(OS_FOR_BUILD)),\
