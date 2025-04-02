@@ -112,6 +112,10 @@ class PresetHandler
         OUString m_sRelPathShare;
         OUString m_sRelPathUser;
 
+        /** @short  in document mode, we open the storage as readonly at first,
+                    then reopen it as readwrite the first time we store. */
+        bool m_bShouldReopenRWOnStore;
+
     // native interface
 
     public:
@@ -280,9 +284,32 @@ class PresetHandler
         void addStorageListener(XMLBasedAcceleratorConfiguration* pListener);
         void removeStorageListener(XMLBasedAcceleratorConfiguration* pListener);
 
+
+        /** @short  check if the connected working user storage is readonly
+
+            @descr  In document mode, we check whether the document root is readonly.
+                    The document root is the parent of the working user storage.
+                    We always initially open the working user storage as readonly in
+                    document mode, but we may re-open it as readwrite later if we
+                    need to. In other modes, we just directly check whether the working
+                    user storage is readonly.
+
+            @return true if the connected working user storage is readonly, false if not
+         */
+        bool isReadOnly();
+
     // helper
 
     private:
+
+        /** @short  maybe reopen the working user storage as readwrite in document mode
+
+            @descr  In document mode, we always initially open the working user storage
+                    as readonly, and we remember whether we want to reopen it as readwrite
+                    on the first store. This reopens the working user storage as readwrite
+                    if we are in document mode, we want to, and we haven't yet.
+         */
+        void maybeReopenStorageAsReadWrite();
 
         /** @short  open a config path ignoring errors (catching exceptions).
 

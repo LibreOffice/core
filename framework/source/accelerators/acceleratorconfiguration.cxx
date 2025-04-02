@@ -310,17 +310,7 @@ sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isModified()
 
 sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isReadOnly()
 {
-    css::uno::Reference< css::io::XStream > xStream;
-    {
-        SolarMutexGuard g;
-        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT,
-                css::embed::ElementModes::READWRITE); // open or create!
-    }
-
-    css::uno::Reference< css::io::XOutputStream > xOut;
-    if (xStream.is())
-        xOut = xStream->getOutputStream();
-    return !(xOut.is());
+    return m_aPresetHandler.isReadOnly();
 }
 
 void SAL_CALL XMLBasedAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& /*xStorage*/)

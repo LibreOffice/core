@@ -76,19 +76,21 @@ TSharedStorages& SharedStorages()
 PresetHandler::PresetHandler(css::uno::Reference< css::uno::XComponentContext > xContext)
     : m_xContext(std::move(xContext))
     , m_eConfigType(E_GLOBAL)
+    , m_bShouldReopenRWOnStore(false)
 {
 }
 
 PresetHandler::PresetHandler(const PresetHandler& rCopy)
 {
-    m_xContext              = rCopy.m_xContext;
-    m_eConfigType           = rCopy.m_eConfigType;
-    m_xWorkingStorageShare  = rCopy.m_xWorkingStorageShare;
-    m_xWorkingStorageNoLang = rCopy.m_xWorkingStorageNoLang;
-    m_xWorkingStorageUser   = rCopy.m_xWorkingStorageUser;
-    m_lDocumentStorages     = rCopy.m_lDocumentStorages;
-    m_sRelPathShare         = rCopy.m_sRelPathShare;
-    m_sRelPathUser          = rCopy.m_sRelPathUser;
+    m_xContext               = rCopy.m_xContext;
+    m_eConfigType            = rCopy.m_eConfigType;
+    m_xWorkingStorageShare   = rCopy.m_xWorkingStorageShare;
+    m_xWorkingStorageNoLang  = rCopy.m_xWorkingStorageNoLang;
+    m_xWorkingStorageUser    = rCopy.m_xWorkingStorageUser;
+    m_lDocumentStorages      = rCopy.m_lDocumentStorages;
+    m_sRelPathShare          = rCopy.m_sRelPathShare;
+    m_sRelPathUser           = rCopy.m_sRelPathUser;
+    m_bShouldReopenRWOnStore = rCopy.m_bShouldReopenRWOnStore;
 }
 
 PresetHandler::~PresetHandler()
@@ -347,8 +349,11 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     //    existing ones only!
     // b) inside user layer we can (SOFT mode!) but sometimes we should not (HARD mode!)
     //    create new empty structures. We should prefer using of any existing structure.
-    sal_Int32 eShareMode = (css::embed::ElementModes::READ      | css::embed::ElementModes::NOCREATE);
+    // c) in document mode we first open the storage as readonly and later reopen it as
+    //    readwrite if we need to store to it
+    sal_Int32 eShareMode = css::embed::ElementModes::READ;
     sal_Int32 eUserMode  = css::embed::ElementModes::READWRITE;
+    sal_Int32 eDocMode = css::embed::ElementModes::READ;
 
     OUStringBuffer sRelPathBuf(1024);
     OUString       sRelPathShare;
@@ -381,14 +386,30 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
             // It has one layer only, and this one should be opened READ_WRITE.
             // So we open the user layer here only and set the share layer equals to it .-)
 
+            // We initially open the layer as readonly to avoid creating the subdirectory
+            // for files that don't need it. We will reopen it as readwrite if needed.
+
             sRelPathBuf.append(sResource);
             sRelPathUser  = sRelPathBuf.makeStringAndClear();
             sRelPathShare = sRelPathUser;
 
+            {
+                SolarMutexGuard g;
+
+                css::uno::Reference< css::beans::XPropertySet > xPropSet( xDocumentRoot, css::uno::UNO_QUERY );
+                if ( xPropSet.is() )
+                {
+                    tools::Long nOpenMode = 0;
+                    if ( xPropSet->getPropertyValue(u"OpenMode"_ustr) >>= nOpenMode )
+                        m_bShouldReopenRWOnStore = nOpenMode & css::embed::ElementModes::WRITE;
+                }
+            }
+
             try
             {
-                xUser  = m_lDocumentStorages.openPath(sRelPathUser , eUserMode );
+                xUser  = m_lDocumentStorages.openPath(sRelPathUser , eDocMode );
                 xShare = xUser;
+
             }
             catch(const css::uno::RuntimeException&)
                 { throw; }
@@ -449,9 +470,12 @@ void PresetHandler::copyPresetToTarget(std::u16string_view sPreset,
     // don't check our preset list, if element exists
     // We try to open it and forward all errors to the user!
 
+    maybeReopenStorageAsReadWrite();
+
     css::uno::Reference< css::embed::XStorage > xWorkingShare;
     css::uno::Reference< css::embed::XStorage > xWorkingNoLang;
     css::uno::Reference< css::embed::XStorage > xWorkingUser;
+
     {
         SolarMutexGuard g;
         xWorkingShare = m_xWorkingStorageShare;
@@ -506,6 +530,10 @@ css::uno::Reference< css::io::XStream > PresetHandler::openPreset(std::u16string
 css::uno::Reference< css::io::XStream > PresetHandler::openTarget(
         std::u16string_view sTarget, sal_Int32 const nMode)
 {
+    if (nMode & css::embed::ElementModes::WRITE) {
+        maybeReopenStorageAsReadWrite();
+    }
+
     css::uno::Reference< css::embed::XStorage > xFolder;
     {
         SolarMutexGuard g;
@@ -618,6 +646,63 @@ void PresetHandler::removeStorageListener(XMLBasedAcceleratorConfiguration* pLis
         break;
     }
 }
+
+bool PresetHandler::isReadOnly() {
+    SolarMutexGuard g;
+
+    if (m_eConfigType == E_DOCUMENT)
+    {
+        if ( css::uno::Reference<css::embed::XStorage> xDocumentRoot = m_lDocumentStorages.getRootStorage(); xDocumentRoot.is() )
+        {
+            css::uno::Reference< css::beans::XPropertySet > xPropSet( xDocumentRoot, css::uno::UNO_QUERY );
+            if ( xPropSet.is() )
+            {
+                tools::Long nOpenMode = 0;
+                if ( xPropSet->getPropertyValue(u"OpenMode"_ustr) >>= nOpenMode )
+                    return !( nOpenMode & css::embed::ElementModes::WRITE );
+            }
+        }
+    }
+    else
+    {
+        if ( m_xWorkingStorageUser.is() )
+        {
+            css::uno::Reference< css::beans::XPropertySet > xPropSet( m_xWorkingStorageUser, css::uno::UNO_QUERY );
+            if ( xPropSet.is() )
+            {
+                tools::Long nOpenMode = 0;
+                if ( xPropSet->getPropertyValue(u"OpenMode"_ustr) >>= nOpenMode )
+                    return !( nOpenMode & css::embed::ElementModes::WRITE );
+            }
+        }
+    }
+
+    return true;
+}
+
+void PresetHandler::maybeReopenStorageAsReadWrite() {
+    SolarMutexGuard g;
+
+    if ((m_eConfigType == E_DOCUMENT) && m_bShouldReopenRWOnStore)
+    {
+        m_bShouldReopenRWOnStore = false;
+        try
+        {
+            forgetCachedStorages();
+
+            sal_Int32 eUserMode = css::embed::ElementModes::READWRITE;
+            m_xWorkingStorageUser = m_lDocumentStorages.openPath( m_sRelPathUser, eUserMode );
+            m_xWorkingStorageShare = m_xWorkingStorageUser;
+            m_xWorkingStorageNoLang = m_xWorkingStorageUser;
+
+        }
+        catch(const css::uno::RuntimeException&)
+            { throw; }
+        catch(const css::uno::Exception&)
+            { forgetCachedStorages(); }
+    }
+}
+
 
 // static
 css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoringErrors(const OUString& sPath ,
