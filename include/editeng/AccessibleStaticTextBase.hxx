@@ -28,7 +28,10 @@
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
+#include <editeng/AccessibleEditableTextPara.hxx>
+#include <editeng/EPaM.hxx>
 #include <editeng/editengdllapi.h>
+#include <editeng/unoedprx.hxx>
 
 namespace com::sun::star::accessibility { class XAccessible; }
 
@@ -36,8 +39,6 @@ class SvxEditSource;
 
 namespace accessibility
 {
-
-class AccessibleStaticTextBase_Impl;
 
 typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessibleText,
@@ -221,8 +222,44 @@ protected:
 
 private:
 
-    /// @dyn
-    const std::unique_ptr< AccessibleStaticTextBase_Impl > mpImpl;
+    EPaM ImpCalcInternal(sal_Int32 nFlatIndex, bool bExclusive) const;
+
+    EPaM Index2Internal(sal_Int32 nFlatIndex) const
+    {
+
+        return ImpCalcInternal(nFlatIndex, false);
+    }
+
+    EPaM Range2Internal(sal_Int32 nFlatIndex) const
+    {
+
+        return ImpCalcInternal(nFlatIndex, true);
+    }
+
+    AccessibleEditableTextPara& GetParagraph(sal_Int32 nPara) const;
+    sal_Int32 GetParagraphCount() const;
+
+    sal_Int32 Internal2Index(EPaM nEEIndex) const;
+
+    void CorrectTextSegment(css::accessibility::TextSegment& aTextSegment, int nPara) const;
+
+    bool SetSelection(sal_Int32 nStartPara, sal_Int32 nStartIndex,
+                      sal_Int32 nEndPara, sal_Int32 nEndIndex);
+    bool CopyText(sal_Int32 nStartPara, sal_Int32 nStartIndex,
+                  sal_Int32 nEndPara, sal_Int32 nEndIndex);
+
+    bool RemoveLineBreakCount(sal_Int32& rIndex);
+
+    // our frontend class (the one implementing the actual
+    // interface). That's not necessarily the one containing the impl
+    // pointer. Note that this is not an uno::Reference to prevent ref-counting cycles and leaks.
+    css::accessibility::XAccessible* mpThis;
+
+    // implements our functionality, we're just an adapter (guarded by solar mutex)
+    mutable rtl::Reference<AccessibleEditableTextPara> mxTextParagraph;
+
+    // a wrapper for the text forwarders (guarded by solar mutex)
+    mutable SvxEditSourceAdapter maEditSource;
 
 };
 

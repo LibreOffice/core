@@ -40,9 +40,7 @@
 
 
 #include <editeng/editdata.hxx>
-#include <editeng/unoedprx.hxx>
 #include <editeng/AccessibleStaticTextBase.hxx>
-#include <editeng/AccessibleEditableTextPara.hxx>
 
 
 using namespace ::com::sun::star;
@@ -99,120 +97,7 @@ static ESelection MakeSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
 }
 
 
-// AccessibleStaticTextBase_Impl declaration
-
-
-/** AccessibleStaticTextBase_Impl
-
-    This class implements the AccessibleStaticTextBase
-    functionality, mainly by forwarding the calls to an aggregated
-    AccessibleEditableTextPara. As this is a therefore non-trivial
-    adapter, factoring out the common functionality from
-    AccessibleEditableTextPara might be a profitable future task.
- */
-class AccessibleStaticTextBase_Impl
-{
-    friend class AccessibleStaticTextBase;
-public:
-
-    // receive pointer to our frontend class and view window
-    AccessibleStaticTextBase_Impl();
-
-    void SetEditSource( std::unique_ptr< SvxEditSource > && pEditSource );
-
-    void SetEventSource( const uno::Reference< XAccessible >& rInterface )
-    {
-        mpThis = rInterface.get();
-    }
-
-    void SetOffset( const Point& );
-
-    void Dispose();
-
-    AccessibleEditableTextPara& GetParagraph( sal_Int32 nPara ) const;
-    sal_Int32                   GetParagraphCount() const;
-
-    EPaM                        Index2Internal( sal_Int32 nFlatIndex ) const
-    {
-
-        return ImpCalcInternal( nFlatIndex, false );
-    }
-
-    EPaM                        Range2Internal( sal_Int32 nFlatIndex ) const
-    {
-
-        return ImpCalcInternal( nFlatIndex, true );
-    }
-
-    sal_Int32                   Internal2Index( EPaM nEEIndex ) const;
-
-    void                        CorrectTextSegment( TextSegment&    aTextSegment,
-                                                    int             nPara   ) const;
-
-    bool                    SetSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
-                                              sal_Int32 nEndPara, sal_Int32 nEndIndex );
-    bool                    CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
-                                          sal_Int32 nEndPara, sal_Int32 nEndIndex );
-
-    tools::Rectangle                   GetParagraphBoundingBox() const;
-    bool                    RemoveLineBreakCount( sal_Int32& rIndex );
-
-private:
-
-    EPaM                        ImpCalcInternal( sal_Int32 nFlatIndex, bool bExclusive ) const;
-
-    // our frontend class (the one implementing the actual
-    // interface). That's not necessarily the one containing the impl
-    // pointer. Note that this is not an uno::Reference to prevent ref-counting cycles and leaks.
-    XAccessible* mpThis;
-
-    // implements our functionality, we're just an adapter (guarded by solar mutex)
-    mutable rtl::Reference<AccessibleEditableTextPara> mxTextParagraph;
-
-    // a wrapper for the text forwarders (guarded by solar mutex)
-    mutable SvxEditSourceAdapter maEditSource;
-};
-
-
-// AccessibleStaticTextBase_Impl implementation
-
-
-AccessibleStaticTextBase_Impl::AccessibleStaticTextBase_Impl()
-    : mpThis(nullptr)
-    , mxTextParagraph(new AccessibleEditableTextPara(nullptr))
-{
-
-    // TODO: this is still somewhat of a hack, all the more since
-    // now the maTextParagraph has an empty parent reference set
-}
-
-void AccessibleStaticTextBase_Impl::SetEditSource( std::unique_ptr< SvxEditSource > && pEditSource )
-{
-
-    maEditSource.SetEditSource( std::move(pEditSource) );
-    if( mxTextParagraph.is() )
-        mxTextParagraph->SetEditSource( &maEditSource );
-}
-
-void AccessibleStaticTextBase_Impl::SetOffset( const Point& rPoint )
-{
-    if( mxTextParagraph.is() )
-        mxTextParagraph->SetEEOffset( rPoint );
-}
-
-void AccessibleStaticTextBase_Impl::Dispose()
-{
-
-    // we're the owner of the paragraph, so destroy it, too
-    if( mxTextParagraph.is() )
-        mxTextParagraph->Dispose();
-
-    // drop references
-    mpThis = nullptr;
-    mxTextParagraph.clear();
-}
-
-AccessibleEditableTextPara& AccessibleStaticTextBase_Impl::GetParagraph( sal_Int32 nPara ) const
+AccessibleEditableTextPara& AccessibleStaticTextBase::GetParagraph( sal_Int32 nPara ) const
 {
 
     if( !mxTextParagraph.is() )
@@ -225,7 +110,7 @@ AccessibleEditableTextPara& AccessibleStaticTextBase_Impl::GetParagraph( sal_Int
     return *mxTextParagraph;
 }
 
-sal_Int32 AccessibleStaticTextBase_Impl::GetParagraphCount() const
+sal_Int32 AccessibleStaticTextBase::GetParagraphCount() const
 {
 
     if( !mxTextParagraph.is() )
@@ -234,7 +119,7 @@ sal_Int32 AccessibleStaticTextBase_Impl::GetParagraphCount() const
         return mxTextParagraph->GetTextForwarder().GetParagraphCount();
 }
 
-sal_Int32 AccessibleStaticTextBase_Impl::Internal2Index(EPaM nEEIndex) const
+sal_Int32 AccessibleStaticTextBase::Internal2Index(EPaM nEEIndex) const
 {
     // XXX checks for overflow and returns maximum if so
     sal_Int32 aRes(0);
@@ -251,8 +136,8 @@ sal_Int32 AccessibleStaticTextBase_Impl::Internal2Index(EPaM nEEIndex) const
     return aRes + nEEIndex.nIndex;
 }
 
-void AccessibleStaticTextBase_Impl::CorrectTextSegment( TextSegment&    aTextSegment,
-                                                        int             nPara   ) const
+void AccessibleStaticTextBase::CorrectTextSegment(TextSegment& aTextSegment,
+                                                  int nPara) const
 {
     // Keep 'invalid' values at the TextSegment
     if( aTextSegment.SegmentStart != -1 &&
@@ -269,7 +154,7 @@ void AccessibleStaticTextBase_Impl::CorrectTextSegment( TextSegment&    aTextSeg
     }
 }
 
-EPaM AccessibleStaticTextBase_Impl::ImpCalcInternal(sal_Int32 nFlatIndex, bool bExclusive) const
+EPaM AccessibleStaticTextBase::ImpCalcInternal(sal_Int32 nFlatIndex, bool bExclusive) const
 {
 
     if( nFlatIndex < 0 )
@@ -287,7 +172,7 @@ EPaM AccessibleStaticTextBase_Impl::ImpCalcInternal(sal_Int32 nFlatIndex, bool b
             // check overflow
             DBG_ASSERT(nCurrPara >= 0 &&
                        nFlatIndex - nCurrIndex + nCurrCount >= 0,
-                       "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
+                       "AccessibleStaticTextBase::Index2Internal: index value overflow");
 
             return EPaM(nCurrPara, nFlatIndex - nCurrIndex + nCurrCount);
         }
@@ -299,17 +184,17 @@ EPaM AccessibleStaticTextBase_Impl::ImpCalcInternal(sal_Int32 nFlatIndex, bool b
         // check overflow
         DBG_ASSERT(nCurrPara > 0 &&
                    nFlatIndex - nCurrIndex + nCurrCount >= 0,
-                   "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
+                   "AccessibleStaticTextBase::Index2Internal: index value overflow");
 
         return EPaM(nCurrPara - 1, nFlatIndex - nCurrIndex + nCurrCount);
     }
 
     // not found? Out of bounds
-    throw lang::IndexOutOfBoundsException(u"AccessibleStaticTextBase_Impl::Index2Internal: character index out of bounds"_ustr,
+    throw lang::IndexOutOfBoundsException(u"AccessibleStaticTextBase::Index2Internal: character index out of bounds"_ustr,
                                           mpThis);
 }
 
-bool AccessibleStaticTextBase_Impl::SetSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
+bool AccessibleStaticTextBase::SetSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                                       sal_Int32 nEndPara, sal_Int32 nEndIndex )
 {
 
@@ -327,7 +212,7 @@ bool AccessibleStaticTextBase_Impl::SetSelection( sal_Int32 nStartPara, sal_Int3
     }
 }
 
-bool AccessibleStaticTextBase_Impl::CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
+bool AccessibleStaticTextBase::CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                                   sal_Int32 nEndPara, sal_Int32 nEndIndex )
 {
 
@@ -356,24 +241,10 @@ bool AccessibleStaticTextBase_Impl::CopyText( sal_Int32 nStartPara, sal_Int32 nS
     }
 }
 
-tools::Rectangle AccessibleStaticTextBase_Impl::GetParagraphBoundingBox() const
-{
-    tools::Rectangle aRect;
-    if( mxTextParagraph.is() )
-    {
-        awt::Rectangle aAwtRect = mxTextParagraph->getBounds();
-        aRect = tools::Rectangle( Point( aAwtRect.X, aAwtRect.Y ), Size( aAwtRect.Width, aAwtRect.Height ) );
-    }
-    else
-    {
-        aRect.SetEmpty();
-    }
-    return aRect;
-}
 //the input argument is the index(including "\n" ) in the string.
 //the function will calculate the actual index(not including "\n") in the string.
 //and return true if the index is just at a "\n"
-bool AccessibleStaticTextBase_Impl::RemoveLineBreakCount( sal_Int32& rIndex )
+bool AccessibleStaticTextBase::RemoveLineBreakCount( sal_Int32& rIndex )
 {
     // get the total char number inside the cell.
     sal_Int32 i, nCount, nParas;
@@ -422,11 +293,11 @@ bool AccessibleStaticTextBase_Impl::RemoveLineBreakCount( sal_Int32& rIndex )
     return false;
 }
 
-
-// AccessibleStaticTextBase implementation
-
 AccessibleStaticTextBase::AccessibleStaticTextBase( std::unique_ptr< SvxEditSource > && pEditSource ) :
-    mpImpl( new AccessibleStaticTextBase_Impl() )
+    mpThis(nullptr)
+    // TODO: this is still somewhat of a hack, all the more since
+    // now the maTextParagraph has an empty parent reference set
+    , mxTextParagraph(new AccessibleEditableTextPara(nullptr))
 {
     SolarMutexGuard aGuard;
 
@@ -442,13 +313,14 @@ void AccessibleStaticTextBase::SetEditSource( std::unique_ptr< SvxEditSource > &
     // precondition: solar mutex locked
     DBG_TESTSOLARMUTEX();
 
-    mpImpl->SetEditSource( std::move(pEditSource) );
+    maEditSource.SetEditSource(std::move(pEditSource));
+    if (mxTextParagraph.is())
+        mxTextParagraph->SetEditSource(&maEditSource);
 }
 
 void AccessibleStaticTextBase::SetEventSource( const uno::Reference< XAccessible >& rInterface )
 {
-    mpImpl->SetEventSource( rInterface );
-
+    mpThis = rInterface.get();
 }
 
 void AccessibleStaticTextBase::SetOffset( const Point& rPoint )
@@ -456,13 +328,19 @@ void AccessibleStaticTextBase::SetOffset( const Point& rPoint )
     // precondition: solar mutex locked
     DBG_TESTSOLARMUTEX();
 
-    mpImpl->SetOffset( rPoint );
+    if (mxTextParagraph.is())
+        mxTextParagraph->SetEEOffset(rPoint);
 }
 
 void AccessibleStaticTextBase::Dispose()
 {
-    mpImpl->Dispose();
+    // we're the owner of the paragraph, so destroy it, too
+    if (mxTextParagraph.is())
+        mxTextParagraph->Dispose();
 
+    // drop references
+    mpThis = nullptr;
+    mxTextParagraph.clear();
 }
 
 // XAccessibleContext
@@ -490,9 +368,9 @@ sal_Int32 SAL_CALL AccessibleStaticTextBase::getCaretPosition()
     SolarMutexGuard aGuard;
 
     sal_Int32 i, nPos, nParas;
-    for( i=0, nPos=-1, nParas=mpImpl->GetParagraphCount(); i<nParas; ++i )
+    for (i = 0, nPos = -1, nParas = GetParagraphCount(); i<nParas; ++i )
     {
-        if( (nPos=mpImpl->GetParagraph(i).getCaretPosition()) != -1 )
+        if ((nPos = GetParagraph(i).getCaretPosition()) != -1)
             return nPos;
     }
 
@@ -508,9 +386,9 @@ sal_Unicode SAL_CALL AccessibleStaticTextBase::getCharacter( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
-    EPaM aPos(mpImpl->Index2Internal(nIndex));
+    EPaM aPos(Index2Internal(nIndex));
 
-    return mpImpl->GetParagraph( aPos.nPara ).getCharacter( aPos.nIndex );
+    return GetParagraph(aPos.nPara).getCharacter(aPos.nIndex);
 }
 
 uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes )
@@ -518,11 +396,11 @@ uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getChar
     SolarMutexGuard aGuard;
 
     //get the actual index without "\n"
-    mpImpl->RemoveLineBreakCount( nIndex );
+    RemoveLineBreakCount(nIndex);
 
-    EPaM aPos(mpImpl->Index2Internal(nIndex));
+    EPaM aPos(Index2Internal(nIndex));
 
-    return mpImpl->GetParagraph( aPos.nPara ).getCharacterAttributes( aPos.nIndex, aRequestedAttributes );
+    return GetParagraph( aPos.nPara ).getCharacterAttributes( aPos.nIndex, aRequestedAttributes );
 }
 
 awt::Rectangle SAL_CALL AccessibleStaticTextBase::getCharacterBounds( sal_Int32 nIndex )
@@ -531,10 +409,10 @@ awt::Rectangle SAL_CALL AccessibleStaticTextBase::getCharacterBounds( sal_Int32 
 
     // #108900# Allow ranges for nIndex, as one-past-the-end
     // values are now legal, too.
-    EPaM aPos(mpImpl->Range2Internal(nIndex));
+    EPaM aPos(Range2Internal(nIndex));
 
     // #i70916# Text in spread sheet cells return the wrong extents
-    AccessibleEditableTextPara& rPara = mpImpl->GetParagraph( aPos.nPara );
+    AccessibleEditableTextPara& rPara = GetParagraph( aPos.nPara );
     awt::Rectangle aParaBounds( rPara.getBounds() );
     awt::Rectangle aBounds( rPara.getCharacterBounds( aPos.nIndex ) );
     aBounds.X += aParaBounds.X;
@@ -548,8 +426,8 @@ sal_Int32 SAL_CALL AccessibleStaticTextBase::getCharacterCount()
     SolarMutexGuard aGuard;
 
     sal_Int32 i, nCount, nParas;
-    for( i=0, nCount=0, nParas=mpImpl->GetParagraphCount(); i<nParas; ++i )
-        nCount += mpImpl->GetParagraph(i).getCharacterCount();
+    for (i = 0, nCount = 0, nParas = GetParagraphCount(); i < nParas; ++i)
+        nCount += GetParagraph(i).getCharacterCount();
     //count on the number of "\n" which equals number of paragraphs decrease 1.
     nCount = nCount + (nParas-1);
     return nCount;
@@ -559,7 +437,7 @@ sal_Int32 SAL_CALL AccessibleStaticTextBase::getIndexAtPoint( const awt::Point& 
 {
     SolarMutexGuard aGuard;
 
-    const sal_Int32 nParas( mpImpl->GetParagraphCount() );
+    const sal_Int32 nParas(GetParagraphCount());
     sal_Int32 nIndex;
     int i;
     for( i=0; i<nParas; ++i )
@@ -568,7 +446,7 @@ sal_Int32 SAL_CALL AccessibleStaticTextBase::getIndexAtPoint( const awt::Point& 
         // ordered vertically for early exit
 
         // #i70916# Text in spread sheet cells return the wrong extents
-        AccessibleEditableTextPara& rPara = mpImpl->GetParagraph( i );
+        AccessibleEditableTextPara& rPara = GetParagraph(i);
         awt::Rectangle aParaBounds( rPara.getBounds() );
         awt::Point aPoint( rPoint );
         aPoint.X -= aParaBounds.X;
@@ -576,7 +454,7 @@ sal_Int32 SAL_CALL AccessibleStaticTextBase::getIndexAtPoint( const awt::Point& 
 
         // #112814# Use correct index offset
         if ( ( nIndex = rPara.getIndexAtPoint( aPoint ) ) != -1 )
-            return mpImpl->Internal2Index(EPaM(i, nIndex));
+            return Internal2Index(EPaM(i, nIndex));
     }
 
     return -1;
@@ -601,9 +479,9 @@ sal_Int32 SAL_CALL AccessibleStaticTextBase::getSelectionStart()
     SolarMutexGuard aGuard;
 
     sal_Int32 i, nPos, nParas;
-    for( i=0, nPos=-1, nParas=mpImpl->GetParagraphCount(); i<nParas; ++i )
+    for (i = 0, nPos = -1, nParas = GetParagraphCount(); i < nParas; ++i)
     {
-        if( (nPos=mpImpl->GetParagraph(i).getSelectionStart()) != -1 )
+        if ((nPos=GetParagraph(i).getSelectionStart()) != -1)
             return nPos;
     }
 
@@ -615,9 +493,9 @@ sal_Int32 SAL_CALL AccessibleStaticTextBase::getSelectionEnd()
     SolarMutexGuard aGuard;
 
     sal_Int32 i, nPos, nParas;
-    for( i=0, nPos=-1, nParas=mpImpl->GetParagraphCount(); i<nParas; ++i )
+    for (i = 0, nPos = -1, nParas = GetParagraphCount(); i < nParas; ++i)
     {
-        if( (nPos=mpImpl->GetParagraph(i).getSelectionEnd()) != -1 )
+        if ((nPos = GetParagraph(i).getSelectionEnd()) != -1)
             return nPos;
     }
 
@@ -628,11 +506,11 @@ sal_Bool SAL_CALL AccessibleStaticTextBase::setSelection( sal_Int32 nStartIndex,
 {
     SolarMutexGuard aGuard;
 
-    EPaM aStartIndex(mpImpl->Range2Internal(nStartIndex));
-    EPaM aEndIndex(mpImpl->Range2Internal(nEndIndex));
+    EPaM aStartIndex(Range2Internal(nStartIndex));
+    EPaM aEndIndex(Range2Internal(nEndIndex));
 
-    return mpImpl->SetSelection( aStartIndex.nPara, aStartIndex.nIndex,
-                                 aEndIndex.nPara, aEndIndex.nIndex );
+    return SetSelection(aStartIndex.nPara, aStartIndex.nIndex,
+                        aEndIndex.nPara, aEndIndex.nIndex);
 }
 
 OUString SAL_CALL AccessibleStaticTextBase::getText()
@@ -641,8 +519,8 @@ OUString SAL_CALL AccessibleStaticTextBase::getText()
 
     sal_Int32 i, nParas;
     OUStringBuffer aRes;
-    for( i=0, nParas=mpImpl->GetParagraphCount(); i<nParas; ++i )
-        aRes.append(mpImpl->GetParagraph(i).getText());
+    for (i = 0, nParas = GetParagraphCount(); i < nParas; ++i)
+        aRes.append(GetParagraph(i).getText());
 
     return aRes.makeStringAndClear();
 }
@@ -658,7 +536,7 @@ OUString SAL_CALL AccessibleStaticTextBase::getTextRange( sal_Int32 nStartIndex,
     {
         return OUString();
     }
-    bool bStart = mpImpl->RemoveLineBreakCount( nStartIndex );
+    bool bStart = RemoveLineBreakCount(nStartIndex);
     //if the start index is just at a "\n", we need to begin from the next char
     if ( bStart )
     {
@@ -667,8 +545,8 @@ OUString SAL_CALL AccessibleStaticTextBase::getTextRange( sal_Int32 nStartIndex,
     //we need to find out whether the previous position of the current endindex is at "\n" or not
     //if yes we need to mark it and add "\n" at the end of the result
     sal_Int32 nTemp = nEndIndex - 1;
-    bool bEnd = mpImpl->RemoveLineBreakCount( nTemp );
-    bool bTemp = mpImpl->RemoveLineBreakCount( nEndIndex );
+    bool bEnd = RemoveLineBreakCount(nTemp);
+    bool bTemp = RemoveLineBreakCount(nEndIndex);
     //if the below condition is true it indicates an empty paragraph with just a "\n"
     //so we need to set one "\n" flag to avoid duplication.
     if ( bStart && bEnd && ( nStartIndex == nEndIndex) )
@@ -683,26 +561,26 @@ OUString SAL_CALL AccessibleStaticTextBase::getTextRange( sal_Int32 nStartIndex,
         nEndIndex++;
     }
     OUStringBuffer aRes;
-    EPaM aStartIndex(mpImpl->Range2Internal(nStartIndex));
-    EPaM aEndIndex(mpImpl->Range2Internal(nEndIndex));
+    EPaM aStartIndex(Range2Internal(nStartIndex));
+    EPaM aEndIndex(Range2Internal(nEndIndex));
 
     // #102170# Special case: start and end paragraph are identical
     if( aStartIndex.nPara == aEndIndex.nPara )
     {
         //we don't return the string directly now for that we have to do some further process for "\n"
-        aRes = mpImpl->GetParagraph( aStartIndex.nPara ).getTextRange( aStartIndex.nIndex, aEndIndex.nIndex );
+        aRes = GetParagraph( aStartIndex.nPara ).getTextRange( aStartIndex.nIndex, aEndIndex.nIndex );
     }
     else
     {
         sal_Int32 i( aStartIndex.nPara );
-        aRes = mpImpl->GetParagraph(i).getTextRange( aStartIndex.nIndex,
-                                                     mpImpl->GetParagraph(i).getCharacterCount()/*-1*/);
+        aRes = GetParagraph(i).getTextRange(aStartIndex.nIndex,
+                                            GetParagraph(i).getCharacterCount()/*-1*/);
         ++i;
 
         // paragraphs inbetween are fully included
         for( ; i<aEndIndex.nPara; ++i )
         {
-            aRes.append(OUStringChar(cNewLine) + mpImpl->GetParagraph(i).getText());
+            aRes.append(OUStringChar(cNewLine) + GetParagraph(i).getText());
         }
 
         if( i<=aEndIndex.nPara )
@@ -713,7 +591,7 @@ OUString SAL_CALL AccessibleStaticTextBase::getTextRange( sal_Int32 nStartIndex,
             {
                 aRes.append(cNewLine);
             }
-            aRes.append(mpImpl->GetParagraph(i).getTextRange( 0, aEndIndex.nIndex ));
+            aRes.append(GetParagraph(i).getTextRange( 0, aEndIndex.nIndex ));
         }
     }
     //According to the flag we marked before, we have to add "\n" at the beginning
@@ -733,8 +611,8 @@ css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextAtInde
 {
     SolarMutexGuard aGuard;
 
-    bool bLineBreak = mpImpl->RemoveLineBreakCount( nIndex );
-    EPaM aPos(mpImpl->Range2Internal(nIndex));
+    bool bLineBreak = RemoveLineBreakCount(nIndex);
+    EPaM aPos(Range2Internal(nIndex));
 
     css::accessibility::TextSegment aResult;
 
@@ -747,15 +625,15 @@ css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextAtInde
         // in aPos.nPara.
 
         // retrieve full text of the paragraph
-        aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara ).getText();
+        aResult.SegmentText = GetParagraph( aPos.nPara ).getText();
 
         // #112814# Adapt the start index with the paragraph offset
-        aResult.SegmentStart = mpImpl->Internal2Index(EPaM(aPos.nPara, 0));
+        aResult.SegmentStart = Internal2Index(EPaM(aPos.nPara, 0));
         aResult.SegmentEnd = aResult.SegmentStart + aResult.SegmentText.getLength();
     }
     else if ( AccessibleTextType::ATTRIBUTE_RUN == aTextType )
     {
-          SvxAccessibleTextAdapter& rTextForwarder = mpImpl->GetParagraph( aPos.nIndex ).GetTextForwarder();
+          SvxAccessibleTextAdapter& rTextForwarder = GetParagraph( aPos.nIndex ).GetTextForwarder();
           sal_Int32 nStartIndex, nEndIndex;
           if ( rTextForwarder.GetAttributeRun( nStartIndex, nEndIndex, aPos.nPara, aPos.nIndex, true ) )
           {
@@ -767,10 +645,10 @@ css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextAtInde
     else
     {
         // No special handling required, forward to wrapped class
-        aResult = mpImpl->GetParagraph( aPos.nPara ).getTextAtIndex( aPos.nIndex, aTextType );
+        aResult = GetParagraph( aPos.nPara ).getTextAtIndex( aPos.nIndex, aTextType );
 
         // #112814# Adapt the start index with the paragraph offset
-        mpImpl->CorrectTextSegment( aResult, aPos.nPara );
+        CorrectTextSegment( aResult, aPos.nPara );
         if ( bLineBreak )
         {
             aResult.SegmentText = OUString(cNewLine);
@@ -785,27 +663,27 @@ css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextBefore
     SolarMutexGuard aGuard;
 
     sal_Int32 nOldIdx = nIndex;
-    bool bLineBreak =  mpImpl->RemoveLineBreakCount( nIndex );
-    EPaM aPos(mpImpl->Range2Internal(nIndex));
+    bool bLineBreak =  RemoveLineBreakCount(nIndex);
+    EPaM aPos(Range2Internal(nIndex));
 
     css::accessibility::TextSegment aResult;
 
     if( AccessibleTextType::PARAGRAPH == aTextType )
     {
-        if( aPos.nIndex == mpImpl->GetParagraph( aPos.nPara ).getCharacterCount() )
+        if( aPos.nIndex == GetParagraph( aPos.nPara ).getCharacterCount() )
         {
             // #103589# Special casing one behind the last paragraph
-            aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara ).getText();
+            aResult.SegmentText = GetParagraph( aPos.nPara ).getText();
 
             // #112814# Adapt the start index with the paragraph offset
-            aResult.SegmentStart = mpImpl->Internal2Index(EPaM(aPos.nPara, 0));
+            aResult.SegmentStart = Internal2Index(EPaM(aPos.nPara, 0));
         }
         else if( aPos.nPara > 0 )
         {
-            aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara - 1 ).getText();
+            aResult.SegmentText = GetParagraph( aPos.nPara - 1 ).getText();
 
             // #112814# Adapt the start index with the paragraph offset
-            aResult.SegmentStart = mpImpl->Internal2Index(EPaM(aPos.nPara - 1, 0));
+            aResult.SegmentStart = Internal2Index(EPaM(aPos.nPara - 1, 0));
         }
 
         aResult.SegmentEnd = aResult.SegmentStart + aResult.SegmentText.getLength();
@@ -813,10 +691,10 @@ css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextBefore
     else
     {
         // No special handling required, forward to wrapped class
-        aResult = mpImpl->GetParagraph( aPos.nPara ).getTextBeforeIndex( aPos.nIndex, aTextType );
+        aResult = GetParagraph( aPos.nPara ).getTextBeforeIndex( aPos.nIndex, aTextType );
 
         // #112814# Adapt the start index with the paragraph offset
-        mpImpl->CorrectTextSegment( aResult, aPos.nPara );
+        CorrectTextSegment( aResult, aPos.nPara );
         if ( bLineBreak && (nOldIdx-1) >= 0)
         {
             aResult = getTextAtIndex( nOldIdx-1, aTextType );
@@ -831,9 +709,9 @@ css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextBehind
     SolarMutexGuard aGuard;
 
     sal_Int32 nTemp = nIndex+1;
-    bool bLineBreak = mpImpl->RemoveLineBreakCount( nTemp );
-    mpImpl->RemoveLineBreakCount( nIndex );
-    EPaM aPos(mpImpl->Range2Internal(nIndex));
+    bool bLineBreak = RemoveLineBreakCount(nTemp);
+    RemoveLineBreakCount(nIndex);
+    EPaM aPos(Range2Internal(nIndex));
 
     css::accessibility::TextSegment aResult;
 
@@ -842,22 +720,22 @@ css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextBehind
         // Special casing one behind the last paragraph is not
         // necessary, this case is invalid here for
         // getTextBehindIndex
-        if( aPos.nPara + 1 < mpImpl->GetParagraphCount() )
+        if (aPos.nPara + 1 < GetParagraphCount())
         {
-            aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara + 1 ).getText();
+            aResult.SegmentText = GetParagraph( aPos.nPara + 1 ).getText();
 
             // #112814# Adapt the start index with the paragraph offset
-            aResult.SegmentStart = mpImpl->Internal2Index(EPaM(aPos.nPara + 1, 0));
+            aResult.SegmentStart = Internal2Index(EPaM(aPos.nPara + 1, 0));
             aResult.SegmentEnd = aResult.SegmentStart + aResult.SegmentText.getLength();
         }
     }
     else
     {
         // No special handling required, forward to wrapped class
-        aResult = mpImpl->GetParagraph( aPos.nPara ).getTextBehindIndex( aPos.nIndex, aTextType );
+        aResult = GetParagraph( aPos.nPara ).getTextBehindIndex( aPos.nIndex, aTextType );
 
         // #112814# Adapt the start index with the paragraph offset
-        mpImpl->CorrectTextSegment( aResult, aPos.nPara );
+        CorrectTextSegment( aResult, aPos.nPara );
         if ( bLineBreak )
         {
             aResult.SegmentText = OUStringChar(cNewLine) + aResult.SegmentText;
@@ -874,11 +752,10 @@ sal_Bool SAL_CALL AccessibleStaticTextBase::copyText( sal_Int32 nStartIndex, sal
     if( nStartIndex > nEndIndex )
         std::swap(nStartIndex, nEndIndex);
 
-    EPaM aStartIndex(mpImpl->Range2Internal(nStartIndex));
-    EPaM aEndIndex(mpImpl->Range2Internal(nEndIndex));
+    EPaM aStartIndex(Range2Internal(nStartIndex));
+    EPaM aEndIndex(Range2Internal(nEndIndex));
 
-    return mpImpl->CopyText( aStartIndex.nPara, aStartIndex.nIndex,
-                             aEndIndex.nPara, aEndIndex.nIndex );
+    return CopyText(aStartIndex.nPara, aStartIndex.nIndex, aEndIndex.nPara, aEndIndex.nIndex);
 }
 
 sal_Bool SAL_CALL AccessibleStaticTextBase::scrollSubstringTo( sal_Int32, sal_Int32, AccessibleScrollType )
@@ -894,12 +771,12 @@ uno::Sequence< beans::PropertyValue > AccessibleStaticTextBase::getDefaultAttrib
     SolarMutexGuard aGuard;
 
     PropertyValueVector aDefAttrVec(
-            comphelper::sequenceToContainer<PropertyValueVector>(mpImpl->GetParagraph( 0 ).getDefaultAttributes( RequestedAttributes )) );
+            comphelper::sequenceToContainer<PropertyValueVector>(GetParagraph( 0 ).getDefaultAttributes( RequestedAttributes )) );
 
-    const sal_Int32 nParaCount = mpImpl->GetParagraphCount();
+    const sal_Int32 nParaCount = GetParagraphCount();
     for ( sal_Int32 nPara = 1; nPara < nParaCount; ++nPara )
     {
-        uno::Sequence< beans::PropertyValue > aSeq = mpImpl->GetParagraph( nPara ).getDefaultAttributes( RequestedAttributes );
+        uno::Sequence< beans::PropertyValue > aSeq = GetParagraph( nPara ).getDefaultAttributes( RequestedAttributes );
         PropertyValueVector aIntersectionVec;
 
         for ( const auto& rDefAttr : aDefAttrVec )
@@ -927,8 +804,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getRunA
 
     SolarMutexGuard aGuard;
 
-    EPaM aPos(mpImpl->Index2Internal(nIndex));
-    AccessibleEditableTextPara& rPara = mpImpl->GetParagraph( aPos.nPara );
+    EPaM aPos(Index2Internal(nIndex));
+    AccessibleEditableTextPara& rPara = GetParagraph( aPos.nPara );
     uno::Sequence< beans::PropertyValue > aDefAttrSeq = rPara.getDefaultAttributes( RequestedAttributes );
     uno::Sequence< beans::PropertyValue > aRunAttrSeq = rPara.getRunAttributes( aPos.nIndex, RequestedAttributes );
     uno::Sequence< beans::PropertyValue > aIntersectionSeq = getDefaultAttributes( RequestedAttributes );
@@ -949,7 +826,17 @@ uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getRunA
 
 tools::Rectangle AccessibleStaticTextBase::GetParagraphBoundingBox() const
 {
-    return mpImpl->GetParagraphBoundingBox();
+    tools::Rectangle aRect;
+    if (mxTextParagraph.is())
+    {
+        awt::Rectangle aAwtRect = mxTextParagraph->getBounds();
+        aRect = tools::Rectangle(Point(aAwtRect.X, aAwtRect.Y), Size(aAwtRect.Width, aAwtRect.Height));
+    }
+    else
+    {
+        aRect.SetEmpty();
+    }
+    return aRect;
 }
 
 }  // end of namespace accessibility
