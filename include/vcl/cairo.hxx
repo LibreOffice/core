@@ -38,8 +38,8 @@
 #if ENABLE_CAIRO_RGBA
 #define SVP_24BIT_FORMAT (ScanlineFormat::N24BitTcRgb)
 #define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcRgbx)
-#define SVP_CAIRO_BLUE 1
-#define SVP_CAIRO_GREEN 2
+#define SVP_CAIRO_BLUE 2
+#define SVP_CAIRO_GREEN 1
 #define SVP_CAIRO_RED 0
 #define SVP_CAIRO_ALPHA 3
 #elif defined OSL_BIGENDIAN
