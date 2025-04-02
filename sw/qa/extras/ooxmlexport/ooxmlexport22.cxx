@@ -44,6 +44,24 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165642_glossaryFootnote)
     parseExport(u"word/glossary/footnotes.xml"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf165047_consolidatedTopMargin)
+{
+    // Given a two page document with a section page break
+    // which is preceded by a paragraph with a lot of lower spacing
+    // and followed by a paragraph with even more upper spacing...
+    loadAndSave("tdf165047_consolidatedTopMargin.docx");
+
+    // the upper spacing is mostly "absorbed" by the preceding lower spacing, and is barely noticed
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    // When laying out that document:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // the effective top margin should be 60pt - 50pt = 10pt (0.36cm) after the page break
+    SwTwips nParaTopMargin
+        = getXPath(pXmlDoc, "/root/page[2]/body/section/infos/prtBounds", "top").toInt32();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(200), nParaTopMargin);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf83844)
 {
     createSwDoc("tdf83844.fodt");
