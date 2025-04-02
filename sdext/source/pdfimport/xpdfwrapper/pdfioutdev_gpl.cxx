@@ -231,7 +231,8 @@ static void writeJpeg_( OutputBuffer& o_rOutputBuf, Stream* str )
 #else
     str = ((DCTStream *)str)->getRawStream();
 #endif
-    str->reset();
+    if (!str->reset())
+        return;
 
     o_rOutputBuf.clear();
     ExtractJpegData(str, o_rOutputBuf);
@@ -267,7 +268,8 @@ static void writePbm_(OutputBuffer& o_rOutputBuf, Stream* str, int width, int he
     o_rOutputBuf.resize(header_size);
 
     // initialize stream
-    str->reset();
+    if (!str->reset())
+        return;
 
     // copy the raw stream
     if( bInvert )
@@ -324,7 +326,8 @@ static void writePpm_( OutputBuffer&     o_rOutputBuf,
                         width,
                         colorMap->getNumPixelComps(),
                         colorMap->getBits()));
-    imgStr->reset();
+    if (!imgStr->reset())
+        return;
 
     for( int y=0; y<height; ++y)
     {
