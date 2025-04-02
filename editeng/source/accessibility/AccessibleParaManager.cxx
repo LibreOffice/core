@@ -164,20 +164,20 @@ AccessibleParaManager::Child AccessibleParaManager::CreateChild( sal_Int32      
     if( 0 <= nParagraphIndex && maChildren.size() > o3tl::make_unsigned(nParagraphIndex) )
     {
         // retrieve hard reference from weak one
-        auto aChild( GetChild( nParagraphIndex ).first.get() );
+        rtl::Reference<AccessibleEditableTextPara> xChild(GetChild(nParagraphIndex).first.get());
 
         if( !IsReferencable( nParagraphIndex ) )
         {
             // there is no hard reference available, create object then
             // #i27138#
-            aChild = new AccessibleEditableTextPara(xFrontEnd, this);
+            xChild = new AccessibleEditableTextPara(xFrontEnd, this);
 
-            InitChild( *aChild, rEditSource, nChild, nParagraphIndex );
+            InitChild(*xChild, rEditSource, nChild, nParagraphIndex);
 
-            maChildren[ nParagraphIndex ] = WeakChild( aChild, aChild->getBounds() );
+            maChildren[nParagraphIndex] = WeakChild(xChild, xChild->getBounds());
         }
 
-        return Child( aChild.get(), GetChild( nParagraphIndex ).second );
+        return Child(xChild.get(), GetChild(nParagraphIndex).second);
     }
     else
     {
