@@ -32,32 +32,32 @@ class SvxAccessibleTextAdapter;
 namespace accessibility
 {
 
-    class AccessibleHyperlink : public ::cppu::WeakImplHelper< css::accessibility::XAccessibleHyperlink >
-    {
-    private:
+class AccessibleHyperlink : public ::cppu::WeakImplHelper< css::accessibility::XAccessibleHyperlink >
+{
+private:
 
-        SvxAccessibleTextAdapter& rTA;
-        std::unique_ptr<SvxFieldItem> pFld;
-        sal_Int32 nStartIdx, nEndIdx;   // translated values
-        OUString aDescription;
+    SvxAccessibleTextAdapter& rTA;
+    std::unique_ptr<SvxFieldItem> pFld;
+    sal_Int32 nStartIdx, nEndIdx;   // translated values
+    OUString aDescription;
 
-    public:
-        AccessibleHyperlink( SvxAccessibleTextAdapter& r, SvxFieldItem* p, sal_Int32 nStt, sal_Int32 nEnd, const OUString& rD );
-        virtual ~AccessibleHyperlink() override;
+public:
+    AccessibleHyperlink( SvxAccessibleTextAdapter& r, SvxFieldItem* p, sal_Int32 nStt, sal_Int32 nEnd, const OUString& rD );
+    virtual ~AccessibleHyperlink() override;
 
-        // XAccessibleAction
-        virtual sal_Int32 SAL_CALL getAccessibleActionCount() override;
-        virtual sal_Bool SAL_CALL doAccessibleAction( sal_Int32 nIndex ) override;
-        virtual OUString SAL_CALL getAccessibleActionDescription( sal_Int32 nIndex ) override;
-        virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
+    // XAccessibleAction
+    virtual sal_Int32 SAL_CALL getAccessibleActionCount() override;
+    virtual sal_Bool SAL_CALL doAccessibleAction( sal_Int32 nIndex ) override;
+    virtual OUString SAL_CALL getAccessibleActionDescription( sal_Int32 nIndex ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
 
-        // XAccessibleHyperlink
-        virtual css::uno::Any SAL_CALL getAccessibleActionAnchor( sal_Int32 nIndex ) override;
-        virtual css::uno::Any SAL_CALL getAccessibleActionObject( sal_Int32 nIndex ) override;
-        virtual sal_Int32 SAL_CALL getStartIndex() override;
-        virtual sal_Int32 SAL_CALL getEndIndex() override;
-        virtual sal_Bool SAL_CALL isValid() override;
-    };
+    // XAccessibleHyperlink
+    virtual css::uno::Any SAL_CALL getAccessibleActionAnchor( sal_Int32 nIndex ) override;
+    virtual css::uno::Any SAL_CALL getAccessibleActionObject( sal_Int32 nIndex ) override;
+    virtual sal_Int32 SAL_CALL getStartIndex() override;
+    virtual sal_Int32 SAL_CALL getEndIndex() override;
+    virtual sal_Bool SAL_CALL isValid() override;
+};
 
 } // end of namespace accessibility
 

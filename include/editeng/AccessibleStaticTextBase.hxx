@@ -37,194 +37,194 @@ class SvxEditSource;
 namespace accessibility
 {
 
-    class AccessibleStaticTextBase_Impl;
+class AccessibleStaticTextBase_Impl;
 
-    typedef ::cppu::ImplHelper2<
-        css::accessibility::XAccessibleText,
-        css::accessibility::XAccessibleTextAttributes > AccessibleStaticTextBase_BASE;
+typedef ::cppu::ImplHelper2<
+    css::accessibility::XAccessibleText,
+    css::accessibility::XAccessibleTextAttributes > AccessibleStaticTextBase_BASE;
 
-    /** Helper class for objects containing EditEngine/Outliner text
+/** Helper class for objects containing EditEngine/Outliner text
 
-        This class implements the XAccessibleText interface for static
-        text, somewhat similar to the children of the
-        AccessibleTextHelper class. Currently, there are no children,
-        i.e. the whole text is presented in one big chunk. This might
-        change in the future, if a need for image bullets should
-        arise. These, by convention, would be represented as children
-        of the text.
+    This class implements the XAccessibleText interface for static
+    text, somewhat similar to the children of the
+    AccessibleTextHelper class. Currently, there are no children,
+    i.e. the whole text is presented in one big chunk. This might
+    change in the future, if a need for image bullets should
+    arise. These, by convention, would be represented as children
+    of the text.
 
-        You have to implement the SvxEditSource, SvxTextForwarder,
-        SvxViewForwarder and SvxEditViewForwarder interfaces in order
-        to enable your object to cooperate with this
-        class. SvxTextForwarder encapsulates the fact that text
-        objects do not necessarily have an EditEngine at their
-        disposal, SvxViewForwarder and SvxEditViewForwarder do the
-        same for the document and the edit view. The three mentioned
-        forwarder objects are not stored by the AccessibleTextHelper,
-        but fetched every time from the SvxEditSource. So you are best
-        off making your SvxEditSource::Get*Forwarder methods cache the
-        current forwarder.
+    You have to implement the SvxEditSource, SvxTextForwarder,
+    SvxViewForwarder and SvxEditViewForwarder interfaces in order
+    to enable your object to cooperate with this
+    class. SvxTextForwarder encapsulates the fact that text
+    objects do not necessarily have an EditEngine at their
+    disposal, SvxViewForwarder and SvxEditViewForwarder do the
+    same for the document and the edit view. The three mentioned
+    forwarder objects are not stored by the AccessibleTextHelper,
+    but fetched every time from the SvxEditSource. So you are best
+    off making your SvxEditSource::Get*Forwarder methods cache the
+    current forwarder.
 
-        As this class is intended for static (i.e. non-changing) text
-        only, no event broadcasting is necessary. You must handle
-        visibility by yourself, the bounding boxes returned by
-        getCharacterBounds() are relative to your accessibility
-        object.
+    As this class is intended for static (i.e. non-changing) text
+    only, no event broadcasting is necessary. You must handle
+    visibility by yourself, the bounding boxes returned by
+    getCharacterBounds() are relative to your accessibility
+    object.
 
-        @attention All public non-UNO methods (those are the uppercase
-        ones) must not be called with any mutex hold, except when
-        calling from the main thread (with holds the solar mutex),
-        unless stated otherwise. This is because they themselves might
-        need the solar mutex in addition to the object mutex, and the
-        ordering of the locking must be: first solar mutex, then
-        object mutex. Furthermore, state change events might be fired
-        internally.
+    @attention All public non-UNO methods (those are the uppercase
+    ones) must not be called with any mutex hold, except when
+    calling from the main thread (with holds the solar mutex),
+    unless stated otherwise. This is because they themselves might
+    need the solar mutex in addition to the object mutex, and the
+    ordering of the locking must be: first solar mutex, then
+    object mutex. Furthermore, state change events might be fired
+    internally.
 
-        @derive Use this class as a base for objects containing static
-        edit engine text. To avoid overwriting every interface method
-        to intercept derived object defunc state, just set NULL as the
-        edit source. Every interface method will then properly throw
-        an exception.
+    @derive Use this class as a base for objects containing static
+    edit engine text. To avoid overwriting every interface method
+    to intercept derived object defunc state, just set NULL as the
+    edit source. Every interface method will then properly throw
+    an exception.
+*/
+class EDITENG_DLLPUBLIC AccessibleStaticTextBase : public AccessibleStaticTextBase_BASE
+{
+
+public:
+    /** Create accessible text object for given edit source
+
+        @param pEditSource
+        The edit source to use. Object ownership is transferred
+        from the caller to the callee. The object listens on the
+        SvxEditSource for object disposal, so no provisions have
+        to be taken if the caller destroys the data (e.g. the
+        model) contained in the given SvxEditSource.
+
     */
-    class EDITENG_DLLPUBLIC AccessibleStaticTextBase : public AccessibleStaticTextBase_BASE
-    {
+    explicit AccessibleStaticTextBase( ::std::unique_ptr< SvxEditSource > && pEditSource );
 
-    public:
-        /** Create accessible text object for given edit source
+    virtual ~AccessibleStaticTextBase();
 
-            @param pEditSource
-            The edit source to use. Object ownership is transferred
-            from the caller to the callee. The object listens on the
-            SvxEditSource for object disposal, so no provisions have
-            to be taken if the caller destroys the data (e.g. the
-            model) contained in the given SvxEditSource.
+private:
+    AccessibleStaticTextBase( const AccessibleStaticTextBase& ) = delete;
+    AccessibleStaticTextBase& operator= ( const AccessibleStaticTextBase& ) = delete;
 
-        */
-        explicit AccessibleStaticTextBase( ::std::unique_ptr< SvxEditSource > && pEditSource );
+public:
 
-        virtual ~AccessibleStaticTextBase();
+    /** Set the current edit source
 
-    private:
-        AccessibleStaticTextBase( const AccessibleStaticTextBase& ) = delete;
-        AccessibleStaticTextBase& operator= ( const AccessibleStaticTextBase& ) = delete;
+        @attention You are required to have the solar mutex
+        locked, when calling this method. Thus, the method should
+        only be called from the main office thread.
 
-    public:
+        The EditSource set here is required to broadcast out the
+        following hints: SfxHintId::EditSourceParasMoved,
+        SfxHintId::EditSourceSelectionChanged, SfxHintId::TextModified,
+        SfxHintId::TextParaInserted, SfxHintId::TextParaRemoved,
+        SfxHintId::TextHeightChanged,
+        SfxHintId::TextViewScrolled. Otherwise, not all state changes
+        will get noticed by the accessibility object. Further
+        more, when the corresponding core object or the model is
+        dying, either the edit source must be set to NULL or it
+        has to broadcast a SfxHintId::Dying hint.
 
-        /** Set the current edit source
+        This class does not have a dispose method, since it is not
+        a UNO component. Nevertheless, it holds C++ references to
+        several core objects, so you should issue a
+        SetEditSource(::std::unique_ptr<SvxEditSource>()) in
+        your dispose() method.
 
-            @attention You are required to have the solar mutex
-            locked, when calling this method. Thus, the method should
-            only be called from the main office thread.
+        @param pEditSource
+        The new edit source to set. Object ownership is transferred
+        from the caller to the callee.
+    */
+    void SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource );
 
-            The EditSource set here is required to broadcast out the
-            following hints: SfxHintId::EditSourceParasMoved,
-            SfxHintId::EditSourceSelectionChanged, SfxHintId::TextModified,
-            SfxHintId::TextParaInserted, SfxHintId::TextParaRemoved,
-            SfxHintId::TextHeightChanged,
-            SfxHintId::TextViewScrolled. Otherwise, not all state changes
-            will get noticed by the accessibility object. Further
-            more, when the corresponding core object or the model is
-            dying, either the edit source must be set to NULL or it
-            has to broadcast a SfxHintId::Dying hint.
+    /** Set the event source
 
-            This class does not have a dispose method, since it is not
-            a UNO component. Nevertheless, it holds C++ references to
-            several core objects, so you should issue a
-            SetEditSource(::std::unique_ptr<SvxEditSource>()) in
-            your dispose() method.
+        @attention When setting a reference here, you should call
+        Dispose() when you as the owner are disposing, since until
+        then this object will hold that reference
 
-            @param pEditSource
-            The new edit source to set. Object ownership is transferred
-            from the caller to the callee.
-        */
-        void SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource );
+        @param rInterface
+        The interface that should be set as the source for
+        accessibility events sent by this object.
+     */
+    void SetEventSource( const css::uno::Reference< css::accessibility::XAccessible >& rInterface );
 
-        /** Set the event source
+    /** Set offset of EditEngine from parent
 
-            @attention When setting a reference here, you should call
-            Dispose() when you as the owner are disposing, since until
-            then this object will hold that reference
+        @attention You are required to have the solar mutex
+        locked, when calling this method. Thus, the method should
+        only be called from the main office thread.
 
-            @param rInterface
-            The interface that should be set as the source for
-            accessibility events sent by this object.
-         */
-        void SetEventSource( const css::uno::Reference< css::accessibility::XAccessible >& rInterface );
+        If the origin of the underlying EditEngine does
+        not correspond to the upper left corner of the object
+        using this class, you have to specify the offset.
 
-        /** Set offset of EditEngine from parent
+        @param rPoint
+        The offset in screen coordinates (i.e. pixel)
+    */
+    void SetOffset( const Point& rPoint );
 
-            @attention You are required to have the solar mutex
-            locked, when calling this method. Thus, the method should
-            only be called from the main office thread.
+    /** Drop all references and enter disposed state
 
-            If the origin of the underlying EditEngine does
-            not correspond to the upper left corner of the object
-            using this class, you have to specify the offset.
+        This method drops all references to external objects (also
+        the event source reference set via SetEventSource()) and
+        sets the object into the disposed state (i.e. the methods
+        return default values or throw a uno::DisposedException
+        exception).
+     */
+    void Dispose();
 
-            @param rPoint
-            The offset in screen coordinates (i.e. pixel)
-        */
-        void SetOffset( const Point& rPoint );
+    // XAccessibleText interface implementation
+    virtual sal_Int32 SAL_CALL getCaretPosition() override final;
+    virtual sal_Bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override final;
+    virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) override final;
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
+    virtual css::awt::Rectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex ) override final;
+    virtual sal_Int32 SAL_CALL getCharacterCount() override final;
+    virtual sal_Int32 SAL_CALL getIndexAtPoint( const css::awt::Point& aPoint ) override final;
+    virtual OUString SAL_CALL getSelectedText() override final;
+    virtual sal_Int32 SAL_CALL getSelectionStart() override final;
+    virtual sal_Int32 SAL_CALL getSelectionEnd() override final;
+    /// This will only work with a functional SvxEditViewForwarder, i.e. an EditEngine/Outliner in edit mode
+    virtual sal_Bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override final;
+    virtual OUString SAL_CALL getText() override final;
+    virtual OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override final;
+    /// Does not support AccessibleTextType::SENTENCE (missing feature in EditEngine)
+    virtual css::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override final;
+    /// Does not support AccessibleTextType::SENTENCE (missing feature in EditEngine)
+    virtual css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override final;
+    /// Does not support AccessibleTextType::SENTENCE (missing feature in EditEngine)
+    virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override final;
+    /// This will only work with a functional SvxEditViewForwarder, i.e. an EditEngine/Outliner in edit mode
+    virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override final;
+    virtual sal_Bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override final;
 
-        /** Drop all references and enter disposed state
+    // XAccessibleTextAttributes
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getDefaultAttributes( const css::uno::Sequence< OUString >& RequestedAttributes ) override final;
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRunAttributes( sal_Int32 Index, const css::uno::Sequence< OUString >& RequestedAttributes ) override final;
 
-            This method drops all references to external objects (also
-            the event source reference set via SetEventSource()) and
-            sets the object into the disposed state (i.e. the methods
-            return default values or throw a uno::DisposedException
-            exception).
-         */
-        void Dispose();
+    // child-related methods from XAccessibleContext
+    /// @throws css::uno::RuntimeException
+    virtual sal_Int64 SAL_CALL getAccessibleChildCount();
+    /// @throws css::lang::IndexOutOfBoundsException
+    /// @throws css::uno::RuntimeException
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i );
 
-        // XAccessibleText interface implementation
-        virtual sal_Int32 SAL_CALL getCaretPosition() override final;
-        virtual sal_Bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override final;
-        virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) override final;
-        virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
-        virtual css::awt::Rectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex ) override final;
-        virtual sal_Int32 SAL_CALL getCharacterCount() override final;
-        virtual sal_Int32 SAL_CALL getIndexAtPoint( const css::awt::Point& aPoint ) override final;
-        virtual OUString SAL_CALL getSelectedText() override final;
-        virtual sal_Int32 SAL_CALL getSelectionStart() override final;
-        virtual sal_Int32 SAL_CALL getSelectionEnd() override final;
-        /// This will only work with a functional SvxEditViewForwarder, i.e. an EditEngine/Outliner in edit mode
-        virtual sal_Bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override final;
-        virtual OUString SAL_CALL getText() override final;
-        virtual OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override final;
-        /// Does not support AccessibleTextType::SENTENCE (missing feature in EditEngine)
-        virtual css::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override final;
-        /// Does not support AccessibleTextType::SENTENCE (missing feature in EditEngine)
-        virtual css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override final;
-        /// Does not support AccessibleTextType::SENTENCE (missing feature in EditEngine)
-        virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override final;
-        /// This will only work with a functional SvxEditViewForwarder, i.e. an EditEngine/Outliner in edit mode
-        virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override final;
-        virtual sal_Bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override final;
+    // child-related methods from XAccessibleComponent
+    /// @throws css::uno::RuntimeException
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint );
 
-        // XAccessibleTextAttributes
-        virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getDefaultAttributes( const css::uno::Sequence< OUString >& RequestedAttributes ) override final;
-        virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRunAttributes( sal_Int32 Index, const css::uno::Sequence< OUString >& RequestedAttributes ) override final;
+protected:
+    tools::Rectangle GetParagraphBoundingBox() const;
 
-        // child-related methods from XAccessibleContext
-        /// @throws css::uno::RuntimeException
-        virtual sal_Int64 SAL_CALL getAccessibleChildCount();
-        /// @throws css::lang::IndexOutOfBoundsException
-        /// @throws css::uno::RuntimeException
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i );
+private:
 
-        // child-related methods from XAccessibleComponent
-        /// @throws css::uno::RuntimeException
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint );
+    /// @dyn
+    const std::unique_ptr< AccessibleStaticTextBase_Impl > mpImpl;
 
-    protected:
-        tools::Rectangle GetParagraphBoundingBox() const;
-
-    private:
-
-        /// @dyn
-        const std::unique_ptr< AccessibleStaticTextBase_Impl > mpImpl;
-
-    };
+};
 
 } // end of namespace accessibility
 

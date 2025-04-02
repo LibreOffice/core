@@ -26,66 +26,67 @@ using namespace ::com::sun::star::accessibility;
 namespace accessibility
 {
 
-    // - AccessibleSelectionBase -
+// - AccessibleSelectionBase -
 
 
-    AccessibleSelectionBase::AccessibleSelectionBase()
-    {
-    }
+AccessibleSelectionBase::AccessibleSelectionBase()
+{
+}
 
 
-    AccessibleSelectionBase::~AccessibleSelectionBase()
-    {
-    }
+AccessibleSelectionBase::~AccessibleSelectionBase()
+{
+}
 
 
-    void SAL_CALL AccessibleSelectionBase::selectAccessibleChild( sal_Int64 nChildIndex )
-    {
-        ::osl::MutexGuard aGuard( implGetMutex() );
-        OCommonAccessibleSelection::selectAccessibleChild( nChildIndex );
-    }
+void SAL_CALL AccessibleSelectionBase::selectAccessibleChild( sal_Int64 nChildIndex )
+{
+    ::osl::MutexGuard aGuard( implGetMutex() );
+    OCommonAccessibleSelection::selectAccessibleChild( nChildIndex );
+}
 
 
-    sal_Bool SAL_CALL AccessibleSelectionBase::isAccessibleChildSelected( sal_Int64 nChildIndex )
-    {
-        ::osl::MutexGuard aGuard( implGetMutex() );
-        return OCommonAccessibleSelection::isAccessibleChildSelected( nChildIndex );
-    }
+sal_Bool SAL_CALL AccessibleSelectionBase::isAccessibleChildSelected( sal_Int64 nChildIndex )
+{
+    ::osl::MutexGuard aGuard( implGetMutex() );
+    return OCommonAccessibleSelection::isAccessibleChildSelected( nChildIndex );
+}
 
 
-    void SAL_CALL AccessibleSelectionBase::clearAccessibleSelection(  )
-    {
-        ::osl::MutexGuard aGuard( implGetMutex() );
-        OCommonAccessibleSelection::clearAccessibleSelection();
-    }
+void SAL_CALL AccessibleSelectionBase::clearAccessibleSelection(  )
+{
+    ::osl::MutexGuard aGuard( implGetMutex() );
+    OCommonAccessibleSelection::clearAccessibleSelection();
+}
 
 
-    void SAL_CALL AccessibleSelectionBase::selectAllAccessibleChildren(  )
-    {
-        ::osl::MutexGuard aGuard( implGetMutex() );
-        OCommonAccessibleSelection::selectAllAccessibleChildren();
-    }
+void SAL_CALL AccessibleSelectionBase::selectAllAccessibleChildren(  )
+{
+    ::osl::MutexGuard aGuard( implGetMutex() );
+    OCommonAccessibleSelection::selectAllAccessibleChildren();
+}
 
 
-    sal_Int64 SAL_CALL AccessibleSelectionBase::getSelectedAccessibleChildCount(  )
-    {
-        ::osl::MutexGuard aGuard( implGetMutex() );
-        return OCommonAccessibleSelection::getSelectedAccessibleChildCount();
-    }
+sal_Int64 SAL_CALL AccessibleSelectionBase::getSelectedAccessibleChildCount(  )
+{
+    ::osl::MutexGuard aGuard( implGetMutex() );
+    return OCommonAccessibleSelection::getSelectedAccessibleChildCount();
+}
 
 
-    uno::Reference< XAccessible > SAL_CALL AccessibleSelectionBase::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
-    {
-        ::osl::MutexGuard aGuard( implGetMutex() );
-        return OCommonAccessibleSelection::getSelectedAccessibleChild( nSelectedChildIndex );
-    }
+uno::Reference< XAccessible > SAL_CALL AccessibleSelectionBase::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
+{
+    ::osl::MutexGuard aGuard( implGetMutex() );
+    return OCommonAccessibleSelection::getSelectedAccessibleChild( nSelectedChildIndex );
+}
 
 
-    void SAL_CALL AccessibleSelectionBase::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
-    {
-        ::osl::MutexGuard aGuard( implGetMutex() );
-        OCommonAccessibleSelection::deselectAccessibleChild( nSelectedChildIndex );
-    }
+void SAL_CALL AccessibleSelectionBase::deselectAccessibleChild( sal_Int64 nSelectedChildIndex )
+{
+    ::osl::MutexGuard aGuard( implGetMutex() );
+    OCommonAccessibleSelection::deselectAccessibleChild( nSelectedChildIndex );
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -36,88 +36,88 @@ using namespace ::com::sun::star;
 namespace accessibility
 {
 
-    AccessibleHyperlink::AccessibleHyperlink( SvxAccessibleTextAdapter& r, SvxFieldItem* p, sal_Int32 nStt, sal_Int32 nEnd, const OUString& rD )
-    : rTA( r )
+AccessibleHyperlink::AccessibleHyperlink( SvxAccessibleTextAdapter& r, SvxFieldItem* p, sal_Int32 nStt, sal_Int32 nEnd, const OUString& rD )
+: rTA( r )
+{
+    pFld.reset( p );
+    nStartIdx = nStt;
+    nEndIdx = nEnd;
+    aDescription = rD;
+}
+
+AccessibleHyperlink::~AccessibleHyperlink()
+{
+}
+
+// XAccessibleAction
+sal_Int32 SAL_CALL AccessibleHyperlink::getAccessibleActionCount()
+{
+     return isValid() ? 1 : 0;
+}
+
+sal_Bool SAL_CALL AccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex  )
+{
+    bool bRet = false;
+    if ( isValid() && ( nIndex == 0 ) )
     {
-        pFld.reset( p );
-        nStartIdx = nStt;
-        nEndIdx = nEnd;
-        aDescription = rD;
+        rTA.FieldClicked( *pFld );
+        bRet = true;
     }
+    return bRet;
+}
 
-    AccessibleHyperlink::~AccessibleHyperlink()
-    {
-    }
+OUString  SAL_CALL AccessibleHyperlink::getAccessibleActionDescription( sal_Int32 nIndex )
+{
+    OUString aDesc;
 
-    // XAccessibleAction
-    sal_Int32 SAL_CALL AccessibleHyperlink::getAccessibleActionCount()
-    {
-         return isValid() ? 1 : 0;
-    }
+    if ( isValid() && ( nIndex == 0 ) )
+        aDesc = aDescription;
 
-    sal_Bool SAL_CALL AccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex  )
-    {
-        bool bRet = false;
-        if ( isValid() && ( nIndex == 0 ) )
-        {
-            rTA.FieldClicked( *pFld );
-            bRet = true;
-        }
-        return bRet;
-    }
+    return aDesc;
+}
 
-    OUString  SAL_CALL AccessibleHyperlink::getAccessibleActionDescription( sal_Int32 nIndex )
-    {
-        OUString aDesc;
+uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL AccessibleHyperlink::getAccessibleActionKeyBinding( sal_Int32 nIndex )
+{
+    if( !isValid() || ( nIndex != 0 ) )
+        return nullptr;
 
-        if ( isValid() && ( nIndex == 0 ) )
-            aDesc = aDescription;
+    rtl::Reference<::comphelper::OAccessibleKeyBindingHelper> pKeyBindingHelper = new ::comphelper::OAccessibleKeyBindingHelper();
 
-        return aDesc;
-    }
+    awt::KeyStroke aKeyStroke;
+    aKeyStroke.Modifiers = 0;
+    aKeyStroke.KeyCode = KEY_RETURN;
+    aKeyStroke.KeyChar = 0;
+    aKeyStroke.KeyFunc = 0;
+    pKeyBindingHelper->AddKeyBinding( aKeyStroke );
 
-    uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL AccessibleHyperlink::getAccessibleActionKeyBinding( sal_Int32 nIndex )
-    {
-        if( !isValid() || ( nIndex != 0 ) )
-            return nullptr;
+    return pKeyBindingHelper;
+}
 
-        rtl::Reference<::comphelper::OAccessibleKeyBindingHelper> pKeyBindingHelper = new ::comphelper::OAccessibleKeyBindingHelper();
+// XAccessibleHyperlink
+uno::Any SAL_CALL AccessibleHyperlink::getAccessibleActionAnchor( sal_Int32 /*nIndex*/ )
+{
+    return uno::Any();
+}
 
-        awt::KeyStroke aKeyStroke;
-        aKeyStroke.Modifiers = 0;
-        aKeyStroke.KeyCode = KEY_RETURN;
-        aKeyStroke.KeyChar = 0;
-        aKeyStroke.KeyFunc = 0;
-        pKeyBindingHelper->AddKeyBinding( aKeyStroke );
+uno::Any SAL_CALL AccessibleHyperlink::getAccessibleActionObject( sal_Int32 /*nIndex*/ )
+{
+    return uno::Any();
+}
 
-        return pKeyBindingHelper;
-    }
+sal_Int32 SAL_CALL AccessibleHyperlink::getStartIndex()
+{
+    return nStartIdx;
+}
 
-    // XAccessibleHyperlink
-    uno::Any SAL_CALL AccessibleHyperlink::getAccessibleActionAnchor( sal_Int32 /*nIndex*/ )
-    {
-        return uno::Any();
-    }
+sal_Int32 SAL_CALL AccessibleHyperlink::getEndIndex()
+{
+    return nEndIdx;
+}
 
-    uno::Any SAL_CALL AccessibleHyperlink::getAccessibleActionObject( sal_Int32 /*nIndex*/ )
-    {
-        return uno::Any();
-    }
-
-    sal_Int32 SAL_CALL AccessibleHyperlink::getStartIndex()
-    {
-        return nStartIdx;
-    }
-
-    sal_Int32 SAL_CALL AccessibleHyperlink::getEndIndex()
-    {
-        return nEndIdx;
-    }
-
-    sal_Bool SAL_CALL AccessibleHyperlink::isValid(  )
-    {
-        return rTA.IsValid();
-    }
+sal_Bool SAL_CALL AccessibleHyperlink::isValid(  )
+{
+    return rTA.IsValid();
+}
 
 }  // end of namespace accessibility
 

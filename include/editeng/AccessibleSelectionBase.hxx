@@ -25,6 +25,7 @@
 
 namespace accessibility
 {
+
 /** @descr
         This base class provides a base implementation of the
         XAccessibleSelection interface.
@@ -36,29 +37,29 @@ namespace accessibility
         <method>implIsSelected</method>,
         <method>implSelect</method>,
 */
-    class EDITENG_DLLPUBLIC AccessibleSelectionBase : public ::comphelper::OCommonAccessibleSelection,
-                                    public css::accessibility::XAccessibleSelection
-    {
-    protected:
+class EDITENG_DLLPUBLIC AccessibleSelectionBase : public ::comphelper::OCommonAccessibleSelection,
+                                public css::accessibility::XAccessibleSelection
+{
+protected:
 
-        virtual ::osl::Mutex&   implGetMutex() = 0;
+    virtual ::osl::Mutex&   implGetMutex() = 0;
 
-    public:
+public:
 
-        // XAccessibleSelection - default implementations
-        virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override final;
-        virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override final;
-        virtual void SAL_CALL clearAccessibleSelection(  ) override final;
-        virtual void SAL_CALL selectAllAccessibleChildren(  ) override final;
-        virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override final;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override final;
-        virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override final;
+    // XAccessibleSelection - default implementations
+    virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override final;
+    virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override final;
+    virtual void SAL_CALL clearAccessibleSelection(  ) override final;
+    virtual void SAL_CALL selectAllAccessibleChildren(  ) override final;
+    virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override final;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override final;
+    virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override final;
 
-    public:
+public:
 
-                                AccessibleSelectionBase();
-        virtual                 ~AccessibleSelectionBase();
-    };
+                            AccessibleSelectionBase();
+    virtual                 ~AccessibleSelectionBase();
+};
 
 }
 
