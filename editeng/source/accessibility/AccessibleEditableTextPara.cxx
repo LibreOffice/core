@@ -1039,33 +1039,18 @@ namespace accessibility
         uno::Reference< XAccessible > xParent = getAccessibleParent();
         if( xParent.is() )
         {
-            uno::Reference< XAccessibleComponent > xParentComponent( xParent, uno::UNO_QUERY );
-            if( xParentComponent.is() )
+            uno::Reference< XAccessibleContext > xParentContext = xParent->getAccessibleContext();
+            if ( xParentContext.is() )
             {
-                awt::Point aRefPoint = xParentComponent->getLocationOnScreen();
-                awt::Point aPoint = getLocation();
-                aPoint.X += aRefPoint.X;
-                aPoint.Y += aRefPoint.Y;
-
-                return aPoint;
-            }
-            // #i88070#
-            // fallback to parent's <XAccessibleContext> instance
-            else
-            {
-                uno::Reference< XAccessibleContext > xParentContext = xParent->getAccessibleContext();
-                if ( xParentContext.is() )
+                uno::Reference< XAccessibleComponent > xParentContextComponent( xParentContext, uno::UNO_QUERY );
+                if( xParentContextComponent.is() )
                 {
-                    uno::Reference< XAccessibleComponent > xParentContextComponent( xParentContext, uno::UNO_QUERY );
-                    if( xParentContextComponent.is() )
-                    {
-                        awt::Point aRefPoint = xParentContextComponent->getLocationOnScreen();
-                        awt::Point aPoint = getLocation();
-                        aPoint.X += aRefPoint.X;
-                        aPoint.Y += aRefPoint.Y;
+                    awt::Point aRefPoint = xParentContextComponent->getLocationOnScreen();
+                    awt::Point aPoint = getLocation();
+                    aPoint.X += aRefPoint.X;
+                    aPoint.Y += aRefPoint.Y;
 
-                        return aPoint;
-                    }
+                    return aPoint;
                 }
             }
         }
