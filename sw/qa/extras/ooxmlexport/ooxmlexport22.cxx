@@ -62,6 +62,25 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165047_consolidatedTopMargin)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(200), nParaTopMargin);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf165047_contextualSpacingTopMargin)
+{
+    // Given a two page document with a section page break
+    // which is preceded by a paragraph with a lot of lower spacing
+    // and followed by a paragraph with a lot of upper spacing,
+    // but that paragraph says "don't add space between identical paragraph styles...
+    loadAndSave("tdf165047_contextualSpacingTopMargin.docx");
+
+    // the upper spacing is ignored since the paragraph styles are the same
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    // When laying out that document:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // The effective top margin (after the page break) must be 0
+    SwTwips nParaTopMargin
+        = getXPath(pXmlDoc, "/root/page[2]/body/section/infos/prtBounds", "top").toInt32();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(0), nParaTopMargin);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf83844)
 {
     createSwDoc("tdf83844.fodt");
