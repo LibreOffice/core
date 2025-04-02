@@ -1536,6 +1536,37 @@ static bool lcl_getContextualSpacing(const SwFrame* pPrevFrame)
     return bRet;
 }
 
+/// Implement top-of-the-page layout anomalies needed to match MS Word
+static void lcl_PartiallyCollapseUpper(const SwFrame& rFrame, SwTwips& rUpper)
+{
+    const SwTextFrame* pTextFrame = rFrame.DynCastTextFrame();
+    if (!pTextFrame || !rFrame.IsInDocBody() || rFrame.IsInTab() || rFrame.IsInFly())
+        return;
+
+    // re-used existing compat values to identify whether MSO-compatible layout is needed
+    const IDocumentSettingAccess& rIDSA = pTextFrame->GetDoc().getIDocumentSettingAccess();
+    const bool bCompat15 = rIDSA.get(DocumentSettingId::TAB_OVER_SPACING); // MSO 2013+
+    const bool bCompat14 = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN); // <= MSO 2010
+    if (!bCompat15 && !bCompat14)
+        return;
+
+    const SwContentFrame* pPrevPara = pTextFrame->FindPrevCnt();
+    while (pPrevPara && pPrevPara->IsHiddenNow())
+        pPrevPara = pPrevPara->FindPrevCnt();
+
+    // Anything related to tables is skipped simply to avoid potential disaster
+    if (!pPrevPara || pPrevPara->IsInTab())
+        return;
+
+    {
+        // MSO is also hyper-consistent about consolidating
+        // the lower-space from the previous paragraph
+        // with the upper spacing of this paragraph
+        const SwTwips nPrevLowerSpace
+            = pPrevPara->GetAttrSet()->GetULSpace().GetLower();
+        rUpper = std::max<SwTwips>(rUpper - nPrevLowerSpace, 0);
+    }
+}
 
 SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                                    const SwFrame* pPr,
@@ -1709,6 +1740,8 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             {
                 nUpper = 0;
             }
+            else
+                lcl_PartiallyCollapseUpper(*pOwn, nUpper); // possibly modifies nUpper
         }
     }
 
