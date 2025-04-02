@@ -38,9 +38,9 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 
 #include <comphelper/accessibletexthelper.hxx>
-#include <editeng/AccessibleParaManager.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
+#include <editeng/unoedprx.hxx>
 #include <unotools/weakref.hxx>
 
 class SvxViewForwarder;
@@ -51,6 +51,8 @@ namespace accessibility { class AccessibleImageBullet; }
 
 namespace accessibility
 {
+
+class AccessibleParaManager;
 
 typedef ::comphelper::WeakComponentImplHelper< css::accessibility::XAccessible,
                                  css::accessibility::XAccessibleContext,

@@ -48,6 +48,7 @@
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
+#include <editeng/AccessibleParaManager.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/unoipset.hxx>

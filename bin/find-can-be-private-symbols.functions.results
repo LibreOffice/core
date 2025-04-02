@@ -10349,7 +10349,6 @@ accessibility::AccessibleParaManager::IsReferencable(int) const
 accessibility::AccessibleParaManager::IsReferencable(rtl::Reference<accessibility::AccessibleEditableTextPara> const&)
 accessibility::AccessibleParaManager::SetState(int, long)
 accessibility::AccessibleParaManager::SetState(long)
-accessibility::AccessibleParaManager::ShutdownPara(std::pair<accessibility::WeakCppRef<com::sun::star::accessibility::XAccessible, accessibility::AccessibleEditableTextPara>, com::sun::star::awt::Rectangle> const&)
 accessibility::AccessibleParaManager::UnSetState(int, long)
 accessibility::AccessibleParaManager::UnSetState(long)
 accessibility::AccessibleShape::CreateAccessibleBaseName()

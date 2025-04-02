@@ -28,6 +28,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ref.hxx>
+#include <unotools/weakref.hxx>
+#include <editeng/AccessibleEditableTextPara.hxx>
 #include <editeng/editengdllapi.h>
 
 namespace com::sun::star::accessibility { class XAccessible; }
@@ -37,60 +39,15 @@ class SvxEditSourceAdapter;
 namespace accessibility
 {
 
-class AccessibleEditableTextPara;
-
-/** Helper class for weak object references plus implementation
-
-    This class combines a weak reference (to facilitate automatic
-    object disposal if user drops last reference) and hard
-    reference to the c++ class (for fast access and bypassing of
-    the UNO interface)
-*/
-template < class UnoType, class CppType > class WeakCppRef
-{
-public:
-
-    typedef UnoType UnoInterfaceType;
-    typedef CppType InterfaceType;
-
-    WeakCppRef() : maWeakRef(), maUnsafeRef( nullptr ) {}
-
-    WeakCppRef(rtl::Reference<InterfaceType> const & rImpl):
-        maWeakRef(rImpl.get()),
-        maUnsafeRef(rImpl.get())
-    {
-    }
-
-    // get object with c++ object and hard reference (which
-    // prevents the c++ object from destruction during use)
-    rtl::Reference<InterfaceType> get() const {
-        css::uno::Reference<UnoInterfaceType> ref(maWeakRef);
-        return ref.is() ? maUnsafeRef : rtl::Reference<InterfaceType>();
-    }
-
-    // default copy constructor and assignment will do
-    // WeakCppRef( const WeakCppRef& );
-    // WeakCppRef& operator= ( const WeakCppRef& );
-
-private:
-
-    // the interface, hold weakly
-    css::uno::WeakReference< UnoInterfaceType >    maWeakRef;
-
-    // hard ref to c++ class, _only_ valid if maWeakRef.is() is true
-    InterfaceType*                                 maUnsafeRef;
-};
-
-
 /** This class manages the paragraphs of an AccessibleTextHelper
 
     To facilitate automatic deletion of paragraphs no longer used,
-    this class uses the WeakCppRef helper to hold the objects weakly.
+    this class uses unotools::WeakReference to hold the objects weakly.
  */
 class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) AccessibleParaManager
 {
 public:
-    typedef WeakCppRef < css::accessibility::XAccessible, AccessibleEditableTextPara > WeakPara;
+    typedef unotools::WeakReference<AccessibleEditableTextPara> WeakPara;
     typedef ::std::pair< WeakPara, css::awt::Rectangle > WeakChild;
     typedef ::std::vector< WeakChild > VectorOfChildren;
 
