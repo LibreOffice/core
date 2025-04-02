@@ -124,7 +124,10 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, tdf150064)
                              "<TABLE_CELL name=\"E2\">"
                              "<PARAGRAPH>10</PARAGRAPH>"
                              "</TABLE_CELL>"
-                             "</TABLE>"_ustr,
+                             "</TABLE>"
+                             "<SHAPE name=\"MyRectangle\" description=\"Some Rectangle\">"
+                             "<PARAGRAPH>Text inside Shape</PARAGRAPH>"
+                             "</SHAPE>"_ustr,
                              collectText());
 
         CPPUNIT_ASSERT(xDrawPages->getByIndex(1) >>= xDrawPage);
