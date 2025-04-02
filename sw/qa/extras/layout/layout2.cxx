@@ -979,6 +979,79 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaBreaks)
     discardDumpedLayout();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaLineHeight)
+{
+    createSwDoc("merge_hidden_redline_lineheight.rtf");
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetShowHiddenChar(true);
+    aViewOptions.SetViewMetaChars(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/infos/bounds", "height", "269");
+        // this was 764 in master?
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/bounds", "height", "764");
+        // this was 470 in master?
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/infos/bounds", "height", "470");
+        // this was 450 in master?
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/infos/bounds", "height", "447");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/infos/bounds", "height", "447");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/infos/bounds", "height", "764");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/infos/bounds", "height", "470");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/infos/bounds", "height", "764");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/bounds", "height", "470");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/infos/bounds", "height", "447");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/infos/bounds", "height", "764");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/infos/bounds", "height", "470");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/infos/bounds", "height", "447");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[14]/infos/bounds", "height", "447");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/infos/bounds", "height", "764");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/infos/bounds", "height", "470");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/infos/bounds", "height", "447");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[18]/infos/bounds", "height", "764");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[19]/infos/bounds", "height", "470");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[20]/infos/bounds", "height", "764");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[21]/infos/bounds", "height", "470");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[22]/infos/bounds", "height", "447");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[23]/infos/bounds", "height", "447");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[24]/infos/bounds", "height", "764");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[25]/infos/bounds", "height", "470");
+        discardDumpedLayout();
+    }
+
+    aViewOptions.SetShowHiddenChar(false);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+    dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/infos/bounds", "height", "269");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/bounds", "height", "447");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/infos/bounds", "height", "447");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/infos/bounds", "height", "764");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/infos/bounds", "height", "470");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/infos/bounds", "height", "447");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/infos/bounds", "height", "470");
+        // 4: this was using wrong node's character properties (height 764)
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/infos/bounds", "height", "447");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/bounds", "height", "470");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/infos/bounds", "height", "764");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/infos/bounds", "height", "470");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/infos/bounds", "height", "447");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/infos/bounds", "height", "470");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[14]/infos/bounds", "height", "447");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/infos/bounds", "height", "447");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/infos/bounds", "height", "764");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/infos/bounds", "height", "470");
+        discardDumpedLayout();
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaProps)
 {
     createSwDoc("merge_hidden_redline.docx");
