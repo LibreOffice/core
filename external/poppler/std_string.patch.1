@@ -28,14 +28,14 @@ remove C++20 starts_with
 +++ poppler/poppler/UTF.h	2025-01-09 11:25:30.852367770 +0100
 @@ -54,13 +54,13 @@
  // check whether string starts with Big-Endian byte order mark
- inline bool hasUnicodeByteOrderMark(const std::string &s)
+ inline bool hasUnicodeByteOrderMark(std::string_view s)
  {
 -    return s.starts_with(unicodeByteOrderMark);
 +    return s.size() >= unicodeByteOrderMark.size() && 0 == s.compare(0, unicodeByteOrderMark.size(), unicodeByteOrderMark);
  }
  
  // check whether string starts with Little-Endian byte order mark
- inline bool hasUnicodeByteOrderMarkLE(const std::string &s)
+ inline bool hasUnicodeByteOrderMarkLE(std::string_view s)
  {
 -    return s.starts_with(unicodeByteOrderMarkLE);
 +    return s.size() >= unicodeByteOrderMarkLE.size() && 0 == s.compare(0, unicodeByteOrderMarkLE.size(), unicodeByteOrderMarkLE);
@@ -90,7 +90,7 @@ remove C++20 starts_with
 +++ poppler/poppler/UTF.h	2025-01-09 15:47:32.502434901 +0100
 @@ -74,7 +74,7 @@
  // check whether string starts with Big-Endian byte order mark and string length is even
- inline bool hasUnicodeByteOrderMarkAndLengthIsEven(const std::string &s)
+ inline bool hasUnicodeByteOrderMarkAndLengthIsEven(std::string_view s)
  {
 -    return s.starts_with(unicodeByteOrderMark) && s.length() % 2 == 0;
 +    return hasUnicodeByteOrderMark(s) && s.length() % 2 == 0;

@@ -214,7 +214,8 @@ void PngHelper::createPng( OutputBuffer&     o_rOutputBuf,
     int nLineSize = (width + 7)/8;
     aScanlines.reserve( nLineSize * height + height );
 
-    str->reset();
+    if (!str->reset())
+        return;
     for( int y = 0; y < height; y++ )
     {
         // determine filter type (none) for this scanline
@@ -252,7 +253,8 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
                         width,
                         colorMap->getNumPixelComps(),
                         colorMap->getBits()));
-    imgStr->reset();
+    if (!imgStr->reset())
+        return;
 
     // create scan line data buffer
     OutputBuffer aScanlines;
@@ -289,7 +291,9 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
                         maskColorMap->getNumPixelComps(),
                         maskColorMap->getBits()));
 
-    imgStrMask->reset();
+    if (!imgStrMask->reset())
+        return;
+
     for( int y = 0; y < maskHeight; ++y )
     {
         pm = imgStrMask->getLine();
@@ -337,7 +341,8 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
                         width,
                         colorMap->getNumPixelComps(),
                         colorMap->getBits()));
-    imgStr->reset();
+    if (!imgStr->reset())
+        return;
 
     // create scan line data buffer
     OutputBuffer aScanlines;
@@ -371,7 +376,9 @@ void PngHelper::createPng( OutputBuffer& o_rOutputBuf,
     std::unique_ptr<ImageStream> imgStrMask(
         new ImageStream(maskStr, maskWidth, 1, 1));
 
-    imgStrMask->reset();
+    if (!imgStrMask->reset())
+        return;
+
     for( int y = 0; y < maskHeight; ++y )
     {
         for( int x = 0; x < maskWidth; ++x )
