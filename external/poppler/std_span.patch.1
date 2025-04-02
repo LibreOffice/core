@@ -9,9 +9,9 @@ replace C++20 std::span with o3tl::span
 -#include <span>
 +#include <o3tl/span.hxx>
 +namespace std { using o3tl::span; }
+ #include <optional>
  
  #include "poppler-config.h"
- #include "poppler_private_export.h"
 --- poppler/poppler/UTF.h.orig2	2025-01-09 11:48:18.197644776 +0100
 +++ poppler/poppler/UTF.h	2025-01-09 11:53:11.688558686 +0100
 @@ -23,7 +23,8 @@
