@@ -92,8 +92,6 @@ class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) AccessibleParaManager
 public:
     typedef WeakCppRef < css::accessibility::XAccessible, AccessibleEditableTextPara > WeakPara;
     typedef ::std::pair< WeakPara, css::awt::Rectangle > WeakChild;
-    typedef ::std::pair< css::uno::Reference<
-        css::accessibility::XAccessible > , css::awt::Rectangle > Child;
     typedef ::std::vector< WeakChild > VectorOfChildren;
 
     AccessibleParaManager();
@@ -131,10 +129,10 @@ public:
     static bool IsReferencable(rtl::Reference<AccessibleEditableTextPara> const & aChild);
     bool IsReferencable( sal_Int32 nChild ) const;
 
-    Child CreateChild( sal_Int32                                                                                        nChild,
-                       const css::uno::Reference< css::accessibility::XAccessible >& xFrontEnd,
-                       SvxEditSourceAdapter&                                                                            rEditSource,
-                       sal_Int32                                                                                       nParagraphIndex );
+    css::uno::Reference<css::accessibility::XAccessible>
+    CreateChild(sal_Int32 nChild,
+                const css::uno::Reference<css::accessibility::XAccessible>& xFrontEnd,
+                SvxEditSourceAdapter& rEditSource, sal_Int32 nParagraphIndex);
 
     WeakChild GetChild( sal_Int32 nParagraphIndex ) const;
     bool HasCreatedChild( sal_Int32 nParagraphIndex ) const;

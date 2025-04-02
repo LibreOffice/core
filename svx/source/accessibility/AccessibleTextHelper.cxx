@@ -770,7 +770,7 @@ namespace accessibility
                     if (!maParaManager.HasCreatedChild(nCurrPara))
                     {
                         FireEvent(AccessibleEventId::CHILD, uno::Any(maParaManager.CreateChild(nCurrPara - mnFirstVisibleChild,
-                                                                                               mxFrontEnd, GetEditSource(), nCurrPara).first));
+                                                                                               mxFrontEnd, GetEditSource(), nCurrPara)));
                     }
                 }
             }
@@ -1444,7 +1444,7 @@ namespace accessibility
         DBG_ASSERT(mxFrontEnd.is(), "AccessibleTextHelper_Impl::UpdateVisibleChildren: no frontend set");
 
         if( mxFrontEnd.is() )
-            return maParaManager.CreateChild( i, mxFrontEnd, GetEditSource(), mnFirstVisibleChild + i ).first;
+            return maParaManager.CreateChild(i, mxFrontEnd, GetEditSource(), mnFirstVisibleChild + i);
         else
             return nullptr;
     }

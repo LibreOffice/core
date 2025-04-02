@@ -153,10 +153,9 @@ bool AccessibleParaManager::HasCreatedChild( sal_Int32 nParagraphIndex ) const
         return false;
 }
 
-AccessibleParaManager::Child AccessibleParaManager::CreateChild( sal_Int32                              nChild,
-                                                                 const uno::Reference< XAccessible >&   xFrontEnd,
-                                                                 SvxEditSourceAdapter&                  rEditSource,
-                                                                 sal_Int32                              nParagraphIndex )
+css::uno::Reference<css::accessibility::XAccessible>
+AccessibleParaManager::CreateChild(sal_Int32 nChild, const uno::Reference<XAccessible>& xFrontEnd,
+                                   SvxEditSourceAdapter& rEditSource, sal_Int32 nParagraphIndex)
 {
     DBG_ASSERT( 0 <= nParagraphIndex && maChildren.size() > o3tl::make_unsigned(nParagraphIndex),
             "AccessibleParaManager::CreateChild: invalid index" );
@@ -177,11 +176,11 @@ AccessibleParaManager::Child AccessibleParaManager::CreateChild( sal_Int32      
             maChildren[nParagraphIndex] = WeakChild(xChild, xChild->getBounds());
         }
 
-        return Child(xChild.get(), GetChild(nParagraphIndex).second);
+        return xChild;
     }
     else
     {
-        return Child();
+        return nullptr;
     }
 }
 
