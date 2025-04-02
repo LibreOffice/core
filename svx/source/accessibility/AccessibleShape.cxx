@@ -289,8 +289,8 @@ OUString SAL_CALL AccessibleShape::getAccessibleDescription()
     ThrowIfDisposed ();
     if( m_pShape && !m_pShape->GetDescription().isEmpty())
         return m_pShape->GetDescription() ;
-    else
-        return u" "_ustr;
+
+    return OUString();
 }
 
 // XAccessibleContext

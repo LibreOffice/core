@@ -22,13 +22,13 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestImpressDefaultStructure)
     load(u"private:factory/simpress"_ustr);
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(u"<SHAPE name=\"PageShape: Slide 1\" description=\" \"/>"
-                         "<SHAPE name=\"PresentationTitle \" description=\" \">"
+    CPPUNIT_ASSERT_EQUAL(u"<SHAPE name=\"PageShape: Slide 1\"/>"
+                         "<SHAPE name=\"PresentationTitle \">"
                          "<PARAGRAPH>"
                          "Click to add Title"
                          "</PARAGRAPH>"
                          "</SHAPE>"
-                         "<SHAPE name=\"PresentationSubtitle \" description=\" \">"
+                         "<SHAPE name=\"PresentationSubtitle \">"
                          "<PARAGRAPH>"
                          "Click to add Text"
                          "</PARAGRAPH>"
@@ -86,14 +86,14 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, tdf150064)
         xDrawView->setCurrentPage(xDrawPage);
         Scheduler::ProcessEventsToIdle();
 
-        CPPUNIT_ASSERT_EQUAL(u"<SHAPE name=\"PageShape: Slide 1\" description=\" \"/>"
-                             "<SHAPE name=\"PresentationTitle \" description=\" \">"
+        CPPUNIT_ASSERT_EQUAL(u"<SHAPE name=\"PageShape: Slide 1\"/>"
+                             "<SHAPE name=\"PresentationTitle \">"
                              "<PARAGRAPH>P1 title</PARAGRAPH>"
                              "</SHAPE>"
-                             "<SHAPE name=\"PresentationSubtitle \" description=\" \">"
+                             "<SHAPE name=\"PresentationSubtitle \">"
                              "<PARAGRAPH>Some text</PARAGRAPH>"
                              "</SHAPE>"
-                             "<TABLE name=\"TableShape \" description=\" \">"
+                             "<TABLE name=\"TableShape \">"
                              "<TABLE_CELL name=\"A1\">"
                              "<PARAGRAPH>1</PARAGRAPH>"
                              "</TABLE_CELL>"
@@ -134,17 +134,17 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, tdf150064)
         xDrawView->setCurrentPage(xDrawPage);
         Scheduler::ProcessEventsToIdle();
 
-        CPPUNIT_ASSERT_EQUAL(u"<SHAPE name=\"PageShape: Slide 2\" description=\" \"/>"
-                             "<SHAPE name=\"PresentationTitle \" description=\" \">"
+        CPPUNIT_ASSERT_EQUAL(u"<SHAPE name=\"PageShape: Slide 2\"/>"
+                             "<SHAPE name=\"PresentationTitle \">"
                              "<PARAGRAPH>P2 title</PARAGRAPH>"
                              "</SHAPE>"
-                             "<SHAPE name=\"PresentationOutliner \" description=\" \">"
+                             "<SHAPE name=\"PresentationOutliner \">"
                              "<PARAGRAPH>1</PARAGRAPH>"
                              "</SHAPE>"
-                             "<SHAPE name=\"PresentationOutliner \" description=\" \">"
+                             "<SHAPE name=\"PresentationOutliner \">"
                              "<PARAGRAPH>2</PARAGRAPH>"
                              "</SHAPE>"
-                             "<SHAPE name=\"PresentationOutliner \" description=\" \">"
+                             "<SHAPE name=\"PresentationOutliner \">"
                              "<PARAGRAPH>3</PARAGRAPH>"
                              "</SHAPE>"_ustr,
                              collectText());
