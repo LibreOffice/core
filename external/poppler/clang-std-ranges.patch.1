@@ -311,8 +311,8 @@ In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linu
          }
  
          lines.push_back(std::move(words));
-@@ -5456,7 +5460,11 @@
-         for (word = rawWords; word; word = word->next) {
+@@ -5385,7 +5385,11 @@
+         for (TextWord *word = rawWords; word; word = word->next) {
              s.clear();
              uText.resize(word->len());
 +#ifndef __clang__
