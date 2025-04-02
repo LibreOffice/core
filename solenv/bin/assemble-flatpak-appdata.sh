@@ -25,7 +25,7 @@ set -e
 cat <<\EOF >"${1?}"org.libreoffice.LibreOffice.appdata.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
- <id>org.libreoffice.LibreOffice.desktop</id>
+ <id>org.libreoffice.LibreOffice</id>
  <metadata_license>CC0-1.0</metadata_license>
  <project_license>MPL-2.0</project_license>
  <name>LibreOffice</name>
