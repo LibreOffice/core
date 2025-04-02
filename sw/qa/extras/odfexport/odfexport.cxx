@@ -1554,8 +1554,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf60700_directories)
         }
     }
 
-    // There should be two elements ("accelerator", "images") within Configurations2/ on a fresh document.
-    CPPUNIT_ASSERT_EQUAL(2, nMatches);
+    // There should be one element ("accelerator") within Configurations2/ on a fresh document.
+    CPPUNIT_ASSERT_EQUAL(1, nMatches);
 }
 
 

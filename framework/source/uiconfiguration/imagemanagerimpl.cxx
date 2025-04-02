@@ -289,16 +289,14 @@ void ImageManagerImpl::implts_initialize()
     if ( !m_xUserConfigStorage.is() )
         return;
 
-    tools::Long nModes = m_bReadOnly ? ElementModes::READ : ElementModes::READWRITE;
-
     try
     {
         m_xUserImageStorage = m_xUserConfigStorage->openStorageElement( IMAGE_FOLDER,
-                                                                        nModes );
+                                                                        ElementModes::READ );
         if ( m_xUserImageStorage.is() )
         {
             m_xUserBitmapsStorage = m_xUserImageStorage->openStorageElement( BITMAPS_FOLDER,
-                                                                             nModes );
+                                                                             ElementModes::READ );
         }
     }
     catch ( const css::container::NoSuchElementException& )
@@ -516,6 +514,7 @@ ImageManagerImpl::ImageManagerImpl( uno::Reference< uno::XComponentContext > xCo
     , m_bInitialized( false )
     , m_bModified( false )
     , m_bDisposed( false )
+    , m_bShouldReloadRWOnStore( false )
 {
     for ( vcl::ImageType n : o3tl::enumrange<vcl::ImageType>() )
     {
@@ -614,8 +613,10 @@ void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
         if ( xPropSet.is() )
         {
             tools::Long nOpenMode = 0;
-            if ( xPropSet->getPropertyValue(u"OpenMode"_ustr) >>= nOpenMode )
+            if ( xPropSet->getPropertyValue(u"OpenMode"_ustr) >>= nOpenMode ) {
                 m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
+                m_bShouldReloadRWOnStore = !m_bReadOnly;
+            }
         }
     }
 
@@ -1127,6 +1128,50 @@ void ImageManagerImpl::store()
 
     if ( !m_bModified )
         return;
+
+    if ( m_bShouldReloadRWOnStore ) {
+        m_bShouldReloadRWOnStore = false;
+
+        m_xUserBitmapsStorage.clear();
+        m_xUserImageStorage.clear();
+
+        try
+        {
+            uno::Reference< XStorage > xUserImageStorage =
+                m_xUserConfigStorage->openStorageElement( IMAGE_FOLDER, ElementModes::READWRITE );
+            if ( !xUserImageStorage.is() )
+                throw css::uno::Exception();
+
+            uno::Reference< XStorage > xUserBitmapsStorage =
+                xUserImageStorage->openStorageElement( BITMAPS_FOLDER, ElementModes::READWRITE );
+            if ( !xUserBitmapsStorage.is() )
+                throw css::uno::Exception();
+
+            m_xUserImageStorage = std::move( xUserImageStorage );
+            m_xUserBitmapsStorage = std::move( xUserBitmapsStorage );
+        } catch ( const css::uno::Exception& )
+        {
+            try
+            {
+                uno::Reference< XStorage > xUserImageStorage =
+                    m_xUserConfigStorage->openStorageElement( IMAGE_FOLDER, ElementModes::READ );
+                if ( !xUserImageStorage.is() )
+                    return;
+
+                uno::Reference< XStorage > xUserBitmapsStorage =
+                    xUserImageStorage->openStorageElement( BITMAPS_FOLDER, ElementModes::READ );
+                if ( !xUserBitmapsStorage.is() )
+                    return;
+
+                m_xUserImageStorage = std::move( xUserImageStorage );
+                m_xUserBitmapsStorage = std::move( xUserBitmapsStorage );
+            } catch ( const css::uno::Exception& )
+            {
+            }
+
+            return;
+        }
+    }
 
     bool bWritten( false );
     for ( vcl::ImageType i : o3tl::enumrange<vcl::ImageType>() )

@@ -183,6 +183,7 @@ namespace framework
             bool                                                                            m_bInitialized;
             bool                                                                            m_bModified;
             bool                                                                            m_bDisposed;
+            bool                                                                            m_bShouldReloadRWOnStore;
    };
 }
 
