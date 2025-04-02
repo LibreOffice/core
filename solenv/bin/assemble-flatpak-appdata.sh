@@ -25,7 +25,7 @@ set -e
 cat <<\EOF >"${1?}"de.allotropia.ZetaOffice.appdata.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
- <id>de.allotropia.ZetaOffice.desktop</id>
+ <id>de.allotropia.ZetaOffice</id>
  <metadata_license>CC0-1.0</metadata_license>
  <project_license>MPL-2.0</project_license>
  <name>ZetaOffice</name>
