@@ -96,10 +96,10 @@ CPPUNIT_TEST_FIXTURE(Test, testIgnoreTopMarginPageStyleChange)
     sal_Int32 nParaTopMargin
         = getXPath(pXmlDoc, "/root/page[3]/body/txt/infos/prtBounds", "top").toInt32();
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 2000
+    // - Expected: 1840
     // - Actual  : 0
-    // i.e. the top margin was ignored, which is incorrect.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2000), nParaTopMargin);
+    // i.e. the top margin (minus the previous bottom margin) was ignored, which is incorrect.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1840), nParaTopMargin);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testHideWhitespaceGrowingLastPage)
