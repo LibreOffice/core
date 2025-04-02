@@ -117,7 +117,7 @@
               <object class="GtkToggleToolButton" id="paragraphstyles">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="yes" context="paragraph_style_toggle_btn|tooltip_text">Pragraph Styles</property>
+                <property name="tooltip-text" translatable="yes" context="paragraph_style_toggle_btn|tooltip_text">Paragraph Styles</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
