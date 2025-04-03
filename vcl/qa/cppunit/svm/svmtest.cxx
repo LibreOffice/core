@@ -1061,13 +1061,13 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile, bool bIsSvmFile)
 #if !ENABLE_CAIRO_RGBA
         u"ac936607", // typical BGRA little-endian config
 #else
-        "ecd75a28", // atypical RGBA little-endian config
+        u"ecd75a28", // atypical RGBA little-endian config
 #endif
         u"4937e32d",
 #if !ENABLE_CAIRO_RGBA
         u"3789377b", // typical BGRA little-endian config
 #else
-        "469f0820", // atypical RGBA little-endian config
+        u"469f0820", // atypical RGBA little-endian config
 #endif
         u"839e8cce",
         u"236aaf55", // 1-bit
