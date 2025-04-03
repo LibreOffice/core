@@ -231,6 +231,27 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         }
         break;
 
+        case SID_SAVEDOC:
+        case SID_SAVEASDOC:
+        {
+            const SfxPoolItem* pItem;
+            bool bCommitChanges = false;
+            const SfxItemSet* pReqArgs = rReq.GetArgs();
+            bool bHasDontTerminateEdit = pReqArgs && pReqArgs->HasItem(FN_PARAM_1, &pItem);
+            if (bHasDontTerminateEdit)
+                bCommitChanges = !static_cast<const SfxBoolItem*>(pItem)->GetValue();
+
+            if (mpViewShell && bCommitChanges)
+            {
+                SdrView* pView = mpViewShell->GetView();
+                if (pView)
+                    pView->SdrEndTextEdit();
+            }
+
+            ExecuteSlot( rReq, SfxObjectShell::GetStaticInterface() );
+        }
+        break;
+
         case SID_CLOSEDOC:
         {
             ExecuteSlot(rReq, SfxObjectShell::GetStaticInterface());
