@@ -420,6 +420,7 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
         m_pDeletionWatcher->signal();
     mxPreviewCheckbox.reset();
     mxFilterLb.reset();
+    mxSpotlightCheckbox.reset();
 }
 
 /**
@@ -618,9 +619,11 @@ void SfxCommonTemplateDialog_Impl::FamilySelect(sal_uInt16 nEntry, StyleList&, b
         m_aStyleList.FamilySelect(nEntry, bRefresh);
 
         SfxStyleFamily eFam = SfxTemplate::NIdToSfxFamilyId(nActFamily);
-        mxSpotlightCheckbox->set_visible(m_aStyleList.HasStylesSpotlightFeature()
-                                && (eFam == SfxStyleFamily::Para || eFam == SfxStyleFamily::Char));
-        if (mxSpotlightCheckbox->is_visible())
+        bool bShowSpotlightCheckbox
+            = m_aStyleList.HasStylesSpotlightFeature()
+              && (eFam == SfxStyleFamily::Para || eFam == SfxStyleFamily::Char);
+        mxSpotlightCheckbox->set_visible(bShowSpotlightCheckbox);
+        if (bShowSpotlightCheckbox)
         {
             bool bActive = false;
             if (eFam == SfxStyleFamily::Para)

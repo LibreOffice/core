@@ -206,18 +206,13 @@ void InspectorTextPanel::NotifyItemUpdate(const sal_uInt16 nSId, const SfxItemSt
 IMPL_LINK(InspectorTextPanel, ToolbarHdl, const OUString&, rEntry, void)
 {
     SfxDispatcher* pDispatcher = SfxViewFrame::Current()->GetDispatcher();
-    SfxFlagItem aParam(FN_PARAM_1);
     if (rEntry == "paragraphstyles")
     {
-        SfxBoolItem aItem(SID_SPOTLIGHT_PARASTYLES, mpToolbar->get_item_active(rEntry));
-        pDispatcher->ExecuteList(SID_SPOTLIGHT_PARASTYLES, SfxCallMode::SYNCHRON,
-                                 { &aItem, &aParam });
+        pDispatcher->Execute(SID_SPOTLIGHT_PARASTYLES, SfxCallMode::SYNCHRON);
     }
     else if (rEntry == "characterstyles")
     {
-        SfxBoolItem aItem(SID_SPOTLIGHT_CHARSTYLES, mpToolbar->get_item_active(rEntry));
-        pDispatcher->ExecuteList(SID_SPOTLIGHT_CHARSTYLES, SfxCallMode::SYNCHRON,
-                                 { &aItem, &aParam });
+        pDispatcher->Execute(SID_SPOTLIGHT_CHARSTYLES, SfxCallMode::SYNCHRON);
     }
     else
     {

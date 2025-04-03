@@ -71,6 +71,8 @@
 #include <memory>
 #include <swabstdlg.hxx>
 
+#include <sfx2/sidebar/SidebarController.hxx>
+
 using namespace ::com::sun::star;
 
 SFX_IMPL_NAMED_VIEWFACTORY(SwView, "Default")
@@ -576,32 +578,64 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         break;
 
     case SID_SPOTLIGHT_PARASTYLES:
-        if (!comphelper::LibreOfficeKit::isActive())
-        {
-            if (!pArgs || !pArgs->HasItem(FN_PARAM_1))
-            {
-                const SfxStringItem sDeckName(SID_SIDEBAR_DECK, u"StyleListDeck"_ustr);
-                GetDispatcher().ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::SYNCHRON, { &sDeckName });
-            }
-        }
+    {
         if (STATE_TOGGLE == eState)
             bFlag = !m_bIsSpotlightParaStyles;
         m_bIsSpotlightParaStyles = bFlag;
-        break;
 
-    case SID_SPOTLIGHT_CHARSTYLES:
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::LibreOfficeKit::isActive() && m_bIsSpotlightParaStyles)
         {
             if (!pArgs || !pArgs->HasItem(FN_PARAM_1))
             {
-                const SfxStringItem sDeckName(SID_SIDEBAR_DECK, u"StyleListDeck"_ustr);
-                GetDispatcher().ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::SYNCHRON, { &sDeckName });
+                // If the sidebar isn't open, open it to the styles deck.
+                sfx2::sidebar::SidebarController* pController
+                    = sfx2::sidebar::SidebarController::GetSidebarControllerForFrame(
+                        GetViewFrame().GetFrame().GetFrameInterface());
+                if (!pController)
+                {
+                    const SfxStringItem sDeckName(SID_SIDEBAR_DECK, u"StyleListDeck"_ustr);
+                    GetDispatcher().ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::SYNCHRON,
+                                                { &sDeckName });
+                }
+                else
+                {
+                    // assure the styles panel is filled
+                    pController->CreateDeck(u"StyleListDeck");
+                }
             }
         }
+    }
+    break;
+
+    case SID_SPOTLIGHT_CHARSTYLES:
+    {
         if (STATE_TOGGLE == eState)
             bFlag = !m_bIsSpotlightCharStyles;
         m_bIsSpotlightCharStyles = bFlag;
-        break;
+
+        if (!comphelper::LibreOfficeKit::isActive() && m_bIsSpotlightCharStyles)
+        {
+            if (!pArgs || !pArgs->HasItem(FN_PARAM_1))
+            {
+                // If the sidebar isn't open, open it to the styles deck.
+                sfx2::sidebar::SidebarController* pController
+                    = sfx2::sidebar::SidebarController::GetSidebarControllerForFrame(
+                        GetViewFrame().GetFrame().GetFrameInterface());
+                if (!pController)
+                {
+                    const SfxStringItem sDeckName(SID_SIDEBAR_DECK, u"StyleListDeck"_ustr);
+                    GetDispatcher().ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::SYNCHRON,
+                                                { &sDeckName });
+                }
+                else
+                {
+                    // assure the styles panel is filled
+                    pController->CreateDeck(u"StyleListDeck");
+                }
+            }
+        }
+    }
+    break;
 
     case FN_VIEW_META_CHARS:
         if( STATE_TOGGLE == eState )
