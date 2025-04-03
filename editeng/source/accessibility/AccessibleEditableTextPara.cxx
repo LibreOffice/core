@@ -512,6 +512,15 @@ bool AccessibleEditableTextPara::HaveChildren()
     return GetTextForwarder().HaveImageBullet( GetParagraphIndex() );
 }
 
+sal_Int32 AccessibleEditableTextPara::GetBulletTextLength() const
+{
+    sal_Int32 nBulletLen = 0;
+    EBulletInfo aBulletInfo = GetTextForwarder().GetBulletInfo(GetParagraphIndex());
+    if (aBulletInfo.nParagraph != EE_PARA_MAX && aBulletInfo.bVisible)
+        nBulletLen = aBulletInfo.aText.getLength();
+    return nBulletLen;
+}
+
 tools::Rectangle AccessibleEditableTextPara::LogicToPixel( const tools::Rectangle& rRect, const MapMode& rMapMode, SvxViewForwarder const & rForwarder )
 {
     // convert to screen coordinates
@@ -1996,10 +2005,7 @@ sal_Bool SAL_CALL AccessibleEditableTextPara::copyText( sal_Int32 nStartIndex, s
         CheckRange(nStartIndex, nEndIndex);
 
         //Because bullet may occupy one or more characters, the TextAdapter will include bullet to calculate the selection. Add offset to handle bullet
-        sal_Int32 nBulletLen = 0;
-        EBulletInfo aBulletInfo = GetTextForwarder().GetBulletInfo(GetParagraphIndex());
-        if( aBulletInfo.nParagraph != EE_PARA_MAX && aBulletInfo.bVisible )
-                    nBulletLen = aBulletInfo.aText.getLength();
+        const sal_Int32 nBulletLen = GetBulletTextLength();
         // save current selection
         ESelection aOldSelection;
 
@@ -2039,10 +2045,7 @@ sal_Bool SAL_CALL AccessibleEditableTextPara::cutText( sal_Int32 nStartIndex, sa
         CheckRange(nStartIndex, nEndIndex);
 
         // Because bullet may occupy one or more characters, the TextAdapter will include bullet to calculate the selection. Add offset to handle bullet
-        sal_Int32 nBulletLen = 0;
-        EBulletInfo aBulletInfo = GetTextForwarder().GetBulletInfo(GetParagraphIndex());
-        if( aBulletInfo.nParagraph != EE_PARA_MAX && aBulletInfo.bVisible )
-                    nBulletLen = aBulletInfo.aText.getLength();
+        const sal_Int32 nBulletLen = GetBulletTextLength();
         ESelection aSelection = MakeSelection (nStartIndex + nBulletLen, nEndIndex + nBulletLen);
         //if( !rCacheTF.IsEditable( MakeSelection(nStartIndex, nEndIndex) ) )
         if( !rCacheTF.IsEditable( aSelection ) )
@@ -2076,10 +2079,7 @@ sal_Bool SAL_CALL AccessibleEditableTextPara::pasteText( sal_Int32 nIndex )
         CheckPosition(nIndex);
 
         // Because bullet may occupy one or more characters, the TextAdapter will include bullet to calculate the selection. Add offset to handle bullet
-        sal_Int32 nBulletLen = 0;
-        EBulletInfo aBulletInfo = GetTextForwarder().GetBulletInfo(GetParagraphIndex());
-        if( aBulletInfo.nParagraph != EE_PARA_MAX && aBulletInfo.bVisible )
-                    nBulletLen = aBulletInfo.aText.getLength();
+        const sal_Int32 nBulletLen = GetBulletTextLength();
         if( !rCacheTF.IsEditable( MakeSelection(nIndex + nBulletLen) ) )
             return false; // non-editable area selected
 
@@ -2113,10 +2113,7 @@ sal_Bool SAL_CALL AccessibleEditableTextPara::deleteText( sal_Int32 nStartIndex,
         CheckRange(nStartIndex, nEndIndex);
 
         // Because bullet may occupy one or more characters, the TextAdapter will include bullet to calculate the selection. Add offset to handle bullet
-        sal_Int32 nBulletLen = 0;
-        EBulletInfo aBulletInfo = GetTextForwarder().GetBulletInfo(GetParagraphIndex());
-        if( aBulletInfo.nParagraph != EE_PARA_MAX && aBulletInfo.bVisible )
-            nBulletLen = aBulletInfo.aText.getLength();
+        const sal_Int32 nBulletLen = GetBulletTextLength();
         ESelection aSelection = MakeSelection (nStartIndex + nBulletLen, nEndIndex + nBulletLen);
 
         //if( !rCacheTF.IsEditable( MakeSelection(nStartIndex, nEndIndex) ) )
@@ -2154,11 +2151,7 @@ sal_Bool SAL_CALL AccessibleEditableTextPara::insertText( const OUString& sText,
         CheckPosition(nIndex);
 
         // Because bullet may occupy one or more characters, the TextAdapter will include bullet to calculate the selection. Add offset to handle bullet
-        sal_Int32 nBulletLen = 0;
-        EBulletInfo aBulletInfo = GetTextForwarder().GetBulletInfo(GetParagraphIndex());
-        if( aBulletInfo.nParagraph != EE_PARA_MAX && aBulletInfo.bVisible )
-                    nBulletLen = aBulletInfo.aText.getLength();
-
+        const sal_Int32 nBulletLen = GetBulletTextLength();
         if( !rCacheTF.IsEditable( MakeSelection(nIndex + nBulletLen) ) )
             return false; // non-editable area selected
 
@@ -2194,10 +2187,7 @@ sal_Bool SAL_CALL AccessibleEditableTextPara::replaceText( sal_Int32 nStartIndex
         CheckRange(nStartIndex, nEndIndex);
 
         // Because bullet may occupy one or more characters, the TextAdapter will include bullet to calculate the selection. Add offset to handle bullet
-        sal_Int32 nBulletLen = 0;
-        EBulletInfo aBulletInfo = GetTextForwarder().GetBulletInfo(GetParagraphIndex());
-        if( aBulletInfo.nParagraph != EE_PARA_MAX && aBulletInfo.bVisible )
-                    nBulletLen = aBulletInfo.aText.getLength();
+        const sal_Int32 nBulletLen = GetBulletTextLength();
         ESelection aSelection = MakeSelection (nStartIndex + nBulletLen, nEndIndex + nBulletLen);
 
         //if( !rCacheTF.IsEditable( MakeSelection(nStartIndex, nEndIndex) ) )

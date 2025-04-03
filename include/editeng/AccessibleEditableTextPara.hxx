@@ -314,6 +314,9 @@ private:
     /// Do we have children? This is the case for image bullets
     bool HaveChildren();
 
+    /// If there is a bullet, return it's text length, otherwise return 0
+    sal_Int32 GetBulletTextLength() const;
+
     const Point& GetEEOffset() const { return maEEOffset; }
 
     // Get text from forwarder
