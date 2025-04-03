@@ -64,6 +64,8 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 
+#include <svx/postattr.hxx>
+
 #include <edtwin.hxx>
 #include <view.hxx>
 #include <docsh.hxx>
@@ -1068,20 +1070,26 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
             SwitchToFieldPos();
 
             SwDocShell* pShell = mrView.GetDocShell();
-            if (bReply)
-                pShell->GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
-
-            // synchronous dispatch
-            mrView.GetViewFrame().GetDispatcher()->Execute(FN_POSTIT);
-
-            if (bReply)
+            if (!bReply)
             {
-                // Get newly created SwPostItField and set its paraIdParent
-                auto pPostItField = mrMgr.GetLatestPostItField();
-                pPostItField->SetParentId(GetParaId());
-                pPostItField->SetParentPostItId(GetPostItField()->GetPostItId());
+                // synchronous dispatch
+                mrView.GetViewFrame().GetDispatcher()->Execute(FN_POSTIT);
+            }
+            else
+            {
+                pShell->GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
+                SvxPostItIdItem parentParaId{SID_ATTR_POSTIT_PARENTPARAID};
+                parentParaId.SetValue(OUString::number(GetParaId()));
+                SvxPostItIdItem parentPostitId{SID_ATTR_POSTIT_PARENTPOSTITID};
+                parentPostitId.SetValue(OUString::number(GetPostItField()->GetPostItId()));
                 this->GeneratePostItName();
-                pPostItField->SetParentName(GetPostItField()->GetName());
+                SfxStringItem const parentName{SID_ATTR_POSTIT_PARENTNAME,
+                    GetPostItField()->GetName()};
+                // transport parent ids to SwWrtShell::InsertPostIt()
+                SfxPoolItem const* items[]{ &parentParaId, &parentPostitId, &parentName, nullptr };
+                mrView.GetViewFrame().GetDispatcher()->Execute(FN_POSTIT, SfxCallMode::SLOT, items);
+
+                auto pPostItField = mrMgr.GetLatestPostItField();
 
                 // In this case, force generating the associated window
                 // synchronously so we can bundle its use of the registered

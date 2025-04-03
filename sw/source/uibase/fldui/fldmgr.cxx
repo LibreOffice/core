@@ -902,7 +902,7 @@ bool SwFieldMgr::InsertField(
         {
             SvtUserOptions aUserOpt;
             SwPostItFieldType* pType = static_cast<SwPostItFieldType*>(pCurShell->GetFieldType(0, SwFieldIds::Postit));
-            pField.reset(
+            auto const pPostItField(
                 new SwPostItField(
                     pType,
                     rData.m_sPar1, // author
@@ -910,6 +910,13 @@ bool SwFieldMgr::InsertField(
                     aUserOpt.GetID(), // author's initials
                     OUString(), // name
                     DateTime(DateTime::SYSTEM) ));
+            if (rData.m_oParentId)
+            {
+                pPostItField->SetParentId(std::get<0>(*rData.m_oParentId));
+                pPostItField->SetParentPostItId(std::get<1>(*rData.m_oParentId));
+                pPostItField->SetParentName(std::get<2>(*rData.m_oParentId));
+            }
+            pField.reset(pPostItField);
         }
         break;
         case SwFieldTypesEnum::Script:

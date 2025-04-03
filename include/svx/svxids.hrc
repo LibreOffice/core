@@ -1076,9 +1076,12 @@ class XFillGradientItem;
 #define SID_PROTECTSIZE                                 TypedWhichId<SfxBoolItem>( SID_SVX_START + 1216 )
 #define SID_PROTECTPOS                                  TypedWhichId<SfxBoolItem>( SID_SVX_START + 1217 )
 
-// IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1217 + 1 )
+#define SID_ATTR_POSTIT_PARENTPARAID                    TypedWhichId<SvxPostItIdItem>(SID_SVX_START + 1218)
+#define SID_ATTR_POSTIT_PARENTPOSTITID                  TypedWhichId<SvxPostItIdItem>(SID_SVX_START + 1219)
+#define SID_ATTR_POSTIT_PARENTNAME                      TypedWhichId<SfxStringItem>(SID_SVX_START + 1220)
 
+// IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
+#define SID_SVX_FIRSTFREE                               (SID_SVX_START + 1220 + 1)
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END

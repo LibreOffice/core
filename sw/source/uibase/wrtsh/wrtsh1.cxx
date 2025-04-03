@@ -2325,6 +2325,18 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
 
         SwInsertField_Data aData(SwFieldTypesEnum::Postit, 0, sAuthor, sText, 0);
 
+        {
+            SvxPostItIdItem const*const pParentParaIdItem{rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_PARENTPARAID)};
+            SvxPostItIdItem const*const pParentPostItIdItem{rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_PARENTPOSTITID)};
+            SfxStringItem const*const pParentNameItem{rReq.GetArg<SfxStringItem>(SID_ATTR_POSTIT_PARENTNAME)};
+            if (pParentParaIdItem && pParentPostItIdItem && pParentNameItem)
+            {
+                aData.m_oParentId.emplace(pParentParaIdItem->GetValue().toUInt32(),
+                    pParentPostItIdItem->GetValue().toUInt32(),
+                    pParentNameItem->GetValue());
+            }
+        }
+
         if (IsSelFrameMode())
         {
             SwFlyFrame* pFly = GetSelectedFlyFrame();
