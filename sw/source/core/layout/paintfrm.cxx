@@ -4561,8 +4561,8 @@ void SwTextFrame::PaintParagraphStylesHighlighting() const
     }
     else
     {
-        StylesHighlighterColorMap& rParaStylesColorMap
-                = pWrtSh->GetView().GetStylesHighlighterParaColorMap();
+        StylesSpotlightColorMap& rParaStylesColorMap
+                = pWrtSh->GetView().GetStylesSpotlightParaColorMap();
         bSpotlightStyle = rParaStylesColorMap.contains(sStyleName);
         if (bSpotlightStyle)
         {

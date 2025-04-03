@@ -131,11 +131,11 @@ public:
     DECL_LINK(NewMenuExecuteAction, void*, void);
     DECL_LINK(OnPopupEnd, const OUString&, void);
 
-    bool HasStylesHighlighterFeature() { return m_bModuleHasStylesHighlighterFeature; }
-    void SetHighlightParaStyles(bool bSet) { m_bHighlightParaStyles = bSet; }
-    bool IsHighlightParaStyles() { return m_bHighlightParaStyles; }
-    void SetHighlightCharStyles(bool bSet) { m_bHighlightCharStyles = bSet; }
-    bool IsHighlightCharStyles() { return m_bHighlightCharStyles; }
+    bool HasStylesSpotlightFeature() { return m_bModuleHasStylesSpotlightFeature; }
+    void SetSpotlightParaStyles(bool bSet) { m_bSpotlightParaStyles = bSet; }
+    bool IsSpotlightParaStyles() { return m_bSpotlightParaStyles; }
+    void SetSpotlightCharStyles(bool bSet) { m_bSpotlightCharStyles = bSet; }
+    bool IsSpotlightCharStyles() { return m_bSpotlightCharStyles; }
 
 private:
     void FillTreeBox(SfxStyleFamily eFam);
@@ -243,7 +243,7 @@ private:
     sal_uInt16 m_nModifier;
     weld::Container* m_pContainer;
 
-    bool m_bModuleHasStylesHighlighterFeature = false;
-    bool m_bHighlightParaStyles = false;
-    bool m_bHighlightCharStyles = false;
+    bool m_bModuleHasStylesSpotlightFeature = false;
+    bool m_bSpotlightParaStyles = false;
+    bool m_bSpotlightCharStyles = false;
 };

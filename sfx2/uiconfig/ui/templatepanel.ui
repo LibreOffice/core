@@ -238,15 +238,15 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="highlightstyles">
-            <property name="label" translatable="yes" context="commontemplate|STR_HIGHLIGHT_CHECKBOX">Spotlight</property>
+          <object class="GtkCheckButton" id="spotlightstyles">
+            <property name="label" translatable="yes" context="commontemplate|STR_SPOTLIGHT_CHECKBOX">Spotlight</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
             <property name="use-underline">True</property>
             <property name="draw-indicator">True</property>
             <child internal-child="accessible">
-              <object class="AtkObject" id="highlightstyles-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="templatepanel|extended_tip|highlightstyles">Displays a color and a unique number code for each applied paragraph or character style in the document. </property>
+              <object class="AtkObject" id="spotlightstyles-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="templatepanel|extended_tip|spotlightstyles">Displays a color and a unique number code for each applied paragraph or character style in the document. </property>
               </object>
             </child>
           </object>

@@ -153,7 +153,7 @@ template<class T> bool checkSfxViewShell(const SfxViewShell& pShell)
     return dynamic_cast<const T*>(&pShell) != nullptr;
 }
 
-typedef std::unordered_map<OUString, std::pair<Color, int>> StylesHighlighterColorMap;
+typedef std::unordered_map<OUString, std::pair<Color, int>> StylesSpotlightColorMap;
 
 /**
  * One SfxViewShell more or less represents one edit window for a document, there can be multiple
@@ -185,8 +185,8 @@ friend class SfxPrinterController;
     /// Used for async export
     std::shared_ptr<SfxStoringHelper> m_xHelper;
 
-    StylesHighlighterColorMap ParaStylesColorMap;
-    StylesHighlighterColorMap CharStylesColorMap;
+    StylesSpotlightColorMap ParaStylesSpotlightColorMap;
+    StylesSpotlightColorMap CharStylesSpotlightColorMap;
 
 protected:
     virtual void                Activate(bool IsMDIActivate) override;
@@ -488,8 +488,8 @@ public:
 
     void SetStoringHelper(const std::shared_ptr<SfxStoringHelper>& xHelper) { m_xHelper = xHelper; }
 
-    StylesHighlighterColorMap& GetStylesHighlighterParaColorMap() { return ParaStylesColorMap; }
-    StylesHighlighterColorMap& GetStylesHighlighterCharColorMap() { return CharStylesColorMap; }
+    StylesSpotlightColorMap& GetStylesSpotlightParaColorMap() { return ParaStylesSpotlightColorMap; }
+    StylesSpotlightColorMap& GetStylesSpotlightCharColorMap() { return CharStylesSpotlightColorMap; }
 
     OUString getA11yFocusedParagraph() const;
     int getA11yCaretPosition() const;

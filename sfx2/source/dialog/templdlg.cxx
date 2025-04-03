@@ -175,9 +175,9 @@ void SfxTemplatePanelControl::NotifyItemUpdate(const sal_uInt16 nSId, const SfxI
                 if (pItem)
                 {
                     bool bValue = pItem->GetValue();
-                    if (bValue || (!bValue && pImpl->m_aStyleList.IsHighlightParaStyles()))
+                    if (bValue || (!bValue && pImpl->m_aStyleList.IsSpotlightParaStyles()))
                     {
-                        pImpl->m_aStyleList.SetHighlightParaStyles(bValue);
+                        pImpl->m_aStyleList.SetSpotlightParaStyles(bValue);
                         pImpl->FamilySelect(SfxTemplate::SfxFamilyIdToNId(SfxStyleFamily::Para),
                                             pImpl->m_aStyleList, true);
                     }
@@ -191,9 +191,9 @@ void SfxTemplatePanelControl::NotifyItemUpdate(const sal_uInt16 nSId, const SfxI
                 if (pItem)
                 {
                     bool bValue = pItem->GetValue();
-                    if (bValue || (!bValue && pImpl->m_aStyleList.IsHighlightCharStyles()))
+                    if (bValue || (!bValue && pImpl->m_aStyleList.IsSpotlightCharStyles()))
                     {
-                        pImpl->m_aStyleList.SetHighlightCharStyles(bValue);
+                        pImpl->m_aStyleList.SetSpotlightCharStyles(bValue);
                         pImpl->FamilySelect(SfxTemplate::SfxFamilyIdToNId(SfxStyleFamily::Char),
                                             pImpl->m_aStyleList, true);
                     }
@@ -243,7 +243,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld
     , m_pDeletionWatcher(nullptr)
     , m_aStyleList(pBuilder, pB, this, pC, u"treeview"_ustr, u"flatview"_ustr)
     , mxPreviewCheckbox(pBuilder->weld_check_button(u"showpreview"_ustr))
-    , mxHighlightCheckbox(pBuilder->weld_check_button(u"highlightstyles"_ustr))
+    , mxSpotlightCheckbox(pBuilder->weld_check_button(u"spotlightstyles"_ustr))
     , mxFilterLb(pBuilder->weld_combo_box(u"filter"_ustr))
     , nActFamily(0xffff)
     , nActFilter(0)
@@ -333,12 +333,12 @@ void SfxCommonTemplateDialog_Impl::Initialize()
 
     mxFilterLb->connect_changed(LINK(this, SfxCommonTemplateDialog_Impl, FilterSelectHdl));
     mxPreviewCheckbox->connect_toggled(LINK(this, SfxCommonTemplateDialog_Impl, PreviewHdl));
-    mxHighlightCheckbox->connect_toggled(LINK(this, SfxCommonTemplateDialog_Impl, HighlightHdl));
+    mxSpotlightCheckbox->connect_toggled(LINK(this, SfxCommonTemplateDialog_Impl, SpotlightHdl));
 
     m_aStyleList.Initialize();
 
     SfxStyleFamily eFam = SfxTemplate::NIdToSfxFamilyId(nActFamily);
-    mxHighlightCheckbox->set_visible(m_aStyleList.HasStylesHighlighterFeature()
+    mxSpotlightCheckbox->set_visible(m_aStyleList.HasStylesSpotlightFeature()
                                 && (eFam == SfxStyleFamily::Para || eFam == SfxStyleFamily::Char));
 }
 
@@ -399,13 +399,13 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
 {
     // Set the UNO's in an 'off' state. FN_PARAM_1 is used to prevent the sidebar from trying to
     // reopen while it is being closed here.
-    if (m_aStyleList.IsHighlightParaStyles())
+    if (m_aStyleList.IsSpotlightParaStyles())
     {
         SfxDispatcher &rDispatcher = *SfxGetpApp()->GetDispatcher_Impl();
         SfxFlagItem aParam(FN_PARAM_1);
         rDispatcher.ExecuteList(SID_SPOTLIGHT_PARASTYLES, SfxCallMode::SYNCHRON, { &aParam });
     }
-    if (m_aStyleList.IsHighlightCharStyles())
+    if (m_aStyleList.IsSpotlightCharStyles())
     {
         SfxDispatcher &rDispatcher = *SfxGetpApp()->GetDispatcher_Impl();
         SfxFlagItem aParam(FN_PARAM_1);
@@ -618,16 +618,16 @@ void SfxCommonTemplateDialog_Impl::FamilySelect(sal_uInt16 nEntry, StyleList&, b
         m_aStyleList.FamilySelect(nEntry, bRefresh);
 
         SfxStyleFamily eFam = SfxTemplate::NIdToSfxFamilyId(nActFamily);
-        mxHighlightCheckbox->set_visible(m_aStyleList.HasStylesHighlighterFeature()
+        mxSpotlightCheckbox->set_visible(m_aStyleList.HasStylesSpotlightFeature()
                                 && (eFam == SfxStyleFamily::Para || eFam == SfxStyleFamily::Char));
-        if (mxHighlightCheckbox->is_visible())
+        if (mxSpotlightCheckbox->is_visible())
         {
             bool bActive = false;
             if (eFam == SfxStyleFamily::Para)
-                bActive = m_aStyleList.IsHighlightParaStyles();
+                bActive = m_aStyleList.IsSpotlightParaStyles();
             else if (eFam == SfxStyleFamily::Char)
-                bActive = m_aStyleList.IsHighlightCharStyles();
-            mxHighlightCheckbox->set_active(bActive);
+                bActive = m_aStyleList.IsSpotlightCharStyles();
+            mxSpotlightCheckbox->set_active(bActive);
         }
     }
 }
@@ -743,7 +743,7 @@ IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, PreviewHdl, weld::Toggleable&, voi
     FamilySelect(nActFamily, m_aStyleList, true);
 }
 
-IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, HighlightHdl, weld::Toggleable&, void)
+IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, SpotlightHdl, weld::Toggleable&, void)
 {
     SfxDispatcher &rDispatcher = *SfxGetpApp()->GetDispatcher_Impl();
     SfxStyleFamily eFam = SfxTemplate::NIdToSfxFamilyId(nActFamily);

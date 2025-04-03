@@ -155,7 +155,7 @@ enum class SfxHintId {
     StyleSheetChanged,  // erased and re-created (replaced)
     StyleSheetErased,  // erased
     StyleSheetInDestruction,  // in the process of being destructed
-    StylesHighlighterModified,  // what styles to highlight in a document changed
+    StylesSpotlightModified,  // what styles to spotlight in a document changed
 
 // STARMATH
     MathFormatChanged,

@@ -69,7 +69,7 @@ protected:
 
     StyleList m_aStyleList;
     std::unique_ptr<weld::CheckButton> mxPreviewCheckbox;
-    std::unique_ptr<weld::CheckButton> mxHighlightCheckbox;
+    std::unique_ptr<weld::CheckButton> mxSpotlightCheckbox;
     std::unique_ptr<weld::ComboBox> mxFilterLb;
 
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
@@ -98,7 +98,7 @@ protected:
 
     DECL_LINK(FilterSelectHdl, weld::ComboBox&, void );
     DECL_LINK(PreviewHdl, weld::Toggleable&, void);
-    DECL_LINK(HighlightHdl, weld::Toggleable&, void);
+    DECL_LINK(SpotlightHdl, weld::Toggleable&, void);
 
     virtual void InsertFamilyItem(sal_uInt16 nId, const SfxStyleFamilyItem& rItem) = 0;
     virtual void EnableFamilyItem(sal_uInt16 nId, bool bEnabled) = 0;

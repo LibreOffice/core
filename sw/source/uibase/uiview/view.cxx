@@ -1868,10 +1868,10 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 GetViewFrame().GetBindings().Invalidate(aSlotRedLine);
             }
             break;
-        case SfxHintId::StylesHighlighterModified:
+        case SfxHintId::StylesSpotlightModified:
             {
                 // we need to Invalidate to render with the new set of
-                // highlighted styles
+                // spotlighted styles
                 if (vcl::Window *pMyWin = GetWrtShell().GetWin())
                     pMyWin->Invalidate();
             }

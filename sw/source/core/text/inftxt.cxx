@@ -1374,7 +1374,7 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
         {
             if (!sCharStyleDisplayName.isEmpty())
             {
-                StylesHighlighterColorMap& rCharStylesColorMap = pView->GetStylesHighlighterCharColorMap();
+                StylesSpotlightColorMap& rCharStylesColorMap = pView->GetStylesSpotlightCharColorMap();
                 auto it = rCharStylesColorMap.find(sCharStyleDisplayName);
                 if (it != rCharStylesColorMap.end())
                 {

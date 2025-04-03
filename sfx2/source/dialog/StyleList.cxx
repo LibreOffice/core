@@ -130,7 +130,7 @@ Color ColorHash(std::u16string_view rString)
 
 namespace
 {
-// used to disallow the default character style in the styles highlighter character styles color map
+// used to disallow the default character style in the styles spotlight character styles color map
 std::optional<OUString> sDefaultCharStyleUIName;
 }
 
@@ -168,7 +168,7 @@ StyleList::StyleList(weld::Builder* pBuilder, SfxBindings* pBindings,
 
     uno::Reference<frame::XFrame> xFrame
         = m_pBindings->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface();
-    m_bModuleHasStylesHighlighterFeature
+    m_bModuleHasStylesSpotlightFeature
         = vcl::CommandInfoProvider::GetModuleIdentifier(xFrame) == "com.sun.star.text.TextDocument";
 }
 
@@ -246,7 +246,7 @@ IMPL_LINK_NOARG(StyleList, ReadResource, void*, size_t)
         {
             m_nActFilter = m_pCurObjShell->GetAutoStyleFilterIndex();
         }
-        if (m_bModuleHasStylesHighlighterFeature)
+        if (m_bModuleHasStylesSpotlightFeature)
             sDefaultCharStyleUIName = getDefaultStyleName(SfxStyleFamily::Char);
     }
     size_t nCount = m_aStyleFamilies.size();
@@ -724,9 +724,9 @@ static void lcl_Update(weld::TreeView& rTreeView, const weld::TreeIter& rIter,
         nSpotlightId = rEntry.getSpotlightId();
     else
     {
-        StylesHighlighterColorMap& rColorMap = (eFam == SfxStyleFamily::Para)
-                                                   ? pViewSh->GetStylesHighlighterParaColorMap()
-                                                   : pViewSh->GetStylesHighlighterCharColorMap();
+        StylesSpotlightColorMap& rColorMap = (eFam == SfxStyleFamily::Para)
+                                                 ? pViewSh->GetStylesSpotlightParaColorMap()
+                                                 : pViewSh->GetStylesSpotlightCharColorMap();
         nSpotlightId = rColorMap.size();
         rColorMap[rName] = std::pair(aColor, nSpotlightId);
     }
@@ -1101,25 +1101,25 @@ void StyleList::FillTreeBox(SfxStyleFamily eFam)
     const sal_uInt16 nCount = aArr.size();
 
     SfxViewShell* pViewShell = m_pCurObjShell->GetViewShell();
-    StylesHighlighterColorMap* pHighlighterColorMap = nullptr;
+    StylesSpotlightColorMap* pSpotlightColorMap = nullptr;
     bool bOrigMapHasEntries = false;
-    if (pViewShell && m_bModuleHasStylesHighlighterFeature)
+    if (pViewShell && m_bModuleHasStylesSpotlightFeature)
     {
         if (eFam == SfxStyleFamily::Para)
-            pHighlighterColorMap = &pViewShell->GetStylesHighlighterParaColorMap();
+            pSpotlightColorMap = &pViewShell->GetStylesSpotlightParaColorMap();
         else if (eFam == SfxStyleFamily::Char)
-            pHighlighterColorMap = &pViewShell->GetStylesHighlighterCharColorMap();
+            pSpotlightColorMap = &pViewShell->GetStylesSpotlightCharColorMap();
     }
 
-    if (pHighlighterColorMap && !pHighlighterColorMap->empty())
+    if (pSpotlightColorMap && !pSpotlightColorMap->empty())
     {
         bOrigMapHasEntries = true;
-        pHighlighterColorMap->clear();
+        pSpotlightColorMap->clear();
     }
 
-    bool blcl_insert = pViewShell && m_bModuleHasStylesHighlighterFeature
-                       && ((eFam == SfxStyleFamily::Para && m_bHighlightParaStyles)
-                           || (eFam == SfxStyleFamily::Char && m_bHighlightCharStyles));
+    bool blcl_insert = pViewShell && m_bModuleHasStylesSpotlightFeature
+                       && ((eFam == SfxStyleFamily::Para && m_bSpotlightParaStyles)
+                           || (eFam == SfxStyleFamily::Char && m_bSpotlightCharStyles));
 
     FillBox_Impl(*m_xTreeBox, aArr, eFam, nullptr, blcl_insert, pViewShell, m_pStyleSheetPool);
     for (sal_uInt16 i = 0; i < nCount; ++i)
@@ -1134,10 +1134,9 @@ void StyleList::FillTreeBox(SfxStyleFamily eFam)
     m_xTreeBox->thaw();
 
     // make view update
-    if (pViewShell && pHighlighterColorMap
-        && (!pHighlighterColorMap->empty() || bOrigMapHasEntries))
+    if (pViewShell && pSpotlightColorMap && (!pSpotlightColorMap->empty() || bOrigMapHasEntries))
         static_cast<SfxListener*>(pViewShell)
-            ->Notify(*m_pStyleSheetPool, SfxHint(SfxHintId::StylesHighlighterModified));
+            ->Notify(*m_pStyleSheetPool, SfxHint(SfxHintId::StylesSpotlightModified));
 
     std::unique_ptr<weld::TreeIter> xEntry = m_xTreeBox->make_iterator();
     bool bEntry = m_xTreeBox->get_iter_first(*xEntry);
@@ -1304,27 +1303,27 @@ void StyleList::UpdateStyles(StyleFlags nFlags)
     m_xFmtLb->clear();
 
     SfxViewShell* pViewShell = m_pCurObjShell->GetViewShell();
-    StylesHighlighterColorMap* pHighlighterColorMap = nullptr;
+    StylesSpotlightColorMap* pSpotlightColorMap = nullptr;
     bool bOrigMapHasEntries = false;
-    if (pViewShell && m_bModuleHasStylesHighlighterFeature)
+    if (pViewShell && m_bModuleHasStylesSpotlightFeature)
     {
         if (eFam == SfxStyleFamily::Para)
-            pHighlighterColorMap = &pViewShell->GetStylesHighlighterParaColorMap();
+            pSpotlightColorMap = &pViewShell->GetStylesSpotlightParaColorMap();
         else if (eFam == SfxStyleFamily::Char)
-            pHighlighterColorMap = &pViewShell->GetStylesHighlighterCharColorMap();
+            pSpotlightColorMap = &pViewShell->GetStylesSpotlightCharColorMap();
     }
 
-    if (pHighlighterColorMap && !pHighlighterColorMap->empty())
+    if (pSpotlightColorMap && !pSpotlightColorMap->empty())
     {
         bOrigMapHasEntries = true;
-        pHighlighterColorMap->clear();
+        pSpotlightColorMap->clear();
     }
 
     size_t nCount = aStyles.size();
 
-    if (pViewShell && m_bModuleHasStylesHighlighterFeature
-        && ((eFam == SfxStyleFamily::Para && m_bHighlightParaStyles)
-            || (eFam == SfxStyleFamily::Char && m_bHighlightCharStyles)))
+    if (pViewShell && m_bModuleHasStylesSpotlightFeature
+        && ((eFam == SfxStyleFamily::Para && m_bSpotlightParaStyles)
+            || (eFam == SfxStyleFamily::Char && m_bSpotlightCharStyles)))
     {
         m_xFmtLb->bulk_insert_for_each(
             nCount,
@@ -1357,10 +1356,9 @@ void StyleList::UpdateStyles(StyleFlags nFlags)
     m_xFmtLb->thaw();
 
     // make view update
-    if (pViewShell && pHighlighterColorMap
-        && (!pHighlighterColorMap->empty() || bOrigMapHasEntries))
+    if (pViewShell && pSpotlightColorMap && (!pSpotlightColorMap->empty() || bOrigMapHasEntries))
         static_cast<SfxListener*>(pViewShell)
-            ->Notify(*m_pStyleSheetPool, SfxHint(SfxHintId::StylesHighlighterModified));
+            ->Notify(*m_pStyleSheetPool, SfxHint(SfxHintId::StylesSpotlightModified));
 
     // Selects the current style if any
     SfxTemplateItem* pState = m_pFamilyState[m_nActFamily - 1].get();
@@ -1557,13 +1555,13 @@ IMPL_LINK_NOARG(StyleList, EnableDelete, void*, void)
 
 IMPL_LINK_NOARG(StyleList, Clear, void*, void)
 {
-    if (m_pCurObjShell && m_bModuleHasStylesHighlighterFeature)
+    if (m_pCurObjShell && m_bModuleHasStylesSpotlightFeature)
     {
         SfxViewShell* pViewShell = m_pCurObjShell->GetViewShell();
         if (pViewShell)
         {
-            pViewShell->GetStylesHighlighterParaColorMap().clear();
-            pViewShell->GetStylesHighlighterCharColorMap().clear();
+            pViewShell->GetStylesSpotlightParaColorMap().clear();
+            pViewShell->GetStylesSpotlightCharColorMap().clear();
         }
     }
     m_aStyleFamilies.clear();
