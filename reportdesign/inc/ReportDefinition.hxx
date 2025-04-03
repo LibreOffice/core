@@ -44,6 +44,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
+#include <rtl/ref.hxx>
 #include <svx/unomod.hxx>
 
 #include <memory>
@@ -59,6 +60,7 @@ namespace utl
 }
 namespace reportdesign
 {
+    class OSection;
     class OReportComponentProperties;
     typedef cppu::PartialWeakComponentImplHelper<   css::report::XReportDefinition
                                                     ,   css::document::XEventBroadcaster
@@ -97,7 +99,7 @@ namespace reportdesign
         void setSection(     const OUString& _sProperty
                             ,bool _bOn
                             ,const OUString& _sName
-                            ,css::uno::Reference< css::report::XSection>& _member);
+                            ,rtl::Reference< OSection>& _member);
 
         template <typename T> void set(  const OUString& _sProperty
                                         ,const T& Value

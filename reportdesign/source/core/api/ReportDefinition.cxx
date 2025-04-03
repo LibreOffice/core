@@ -464,11 +464,11 @@ struct OReportDefinitionImpl
     uno::Sequence< beans::PropertyValue >                   m_aArgs;
 
     rtl::Reference< OGroups >                               m_xGroups;
-    uno::Reference< report::XSection>                       m_xReportHeader;
-    uno::Reference< report::XSection>                       m_xReportFooter;
-    uno::Reference< report::XSection>                       m_xPageHeader;
-    uno::Reference< report::XSection>                       m_xPageFooter;
-    uno::Reference< report::XSection>                       m_xDetail;
+    rtl::Reference< OSection >                              m_xReportHeader;
+    rtl::Reference< OSection >                              m_xReportFooter;
+    rtl::Reference< OSection >                              m_xPageHeader;
+    rtl::Reference< OSection >                              m_xPageFooter;
+    rtl::Reference< OSection >                              m_xDetail;
     uno::Reference< embed::XStorage >                       m_xStorage;
     uno::Reference< frame::XController >                    m_xCurrentController;
     uno::Reference< container::XIndexAccess >               m_xViewData;
@@ -1025,12 +1025,12 @@ uno::Reference< util::XCloneable > SAL_CALL OReportDefinition::createClone(  )
 void OReportDefinition::setSection(  const OUString& _sProperty
                             ,bool _bOn
                             ,const OUString& _sName
-                            ,uno::Reference< report::XSection>& _member)
+                            ,rtl::Reference< OSection>& _member)
 {
     BoundListeners l;
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        prepareSet(_sProperty, uno::Any(_member), uno::Any(_bOn), &l);
+        prepareSet(_sProperty, uno::Any(uno::Reference<report::XSection>(_member)), uno::Any(_bOn), &l);
 
         // create section if needed
         if ( _bOn && !_member.is() )
