@@ -536,9 +536,9 @@ void AccessibleEditableTextPara::SetEEOffset( const Point& rOffset )
     maEEOffset = rOffset;
 }
 
-void AccessibleEditableTextPara::FireEvent(const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue) const
+void AccessibleEditableTextPara::FireEvent(const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue)
 {
-    uno::Reference < XAccessibleContext > xThis( const_cast< AccessibleEditableTextPara* > (this)->getAccessibleContext() );
+    uno::Reference <XAccessibleContext> xThis(this);
 
     AccessibleEventObject aEvent(xThis, nEventId, rNewValue, rOldValue, -1);
 

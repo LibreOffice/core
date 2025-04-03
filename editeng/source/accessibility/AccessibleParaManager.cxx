@@ -311,7 +311,7 @@ public:
         mnEventId( nEventId ),
         mrNewValue( rNewValue ),
         mrOldValue( rOldValue ) {}
-    void operator()( ::accessibility::AccessibleEditableTextPara const & rPara )
+    void operator()(::accessibility::AccessibleEditableTextPara& rPara)
     {
         rPara.FireEvent( mnEventId, mrNewValue, mrOldValue );
     }
