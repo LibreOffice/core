@@ -375,7 +375,10 @@ void AccessibleParaManager::Release( sal_Int32 nStartPara, sal_Int32 nEndPara )
                        {
                            auto aChild(rPara.first.get());
                            if (IsReferencable(aChild))
+                           {
                                aChild->SetEditSource(nullptr);
+                               aChild->Dispose();
+                           }
 
                            // clear reference
                            return AccessibleParaManager::WeakChild();

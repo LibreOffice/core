@@ -313,8 +313,6 @@ void AccessibleEditableTextPara::SetEditSource( SvxEditSourceAdapter* pEditSourc
         UnSetState( AccessibleStateType::VISIBLE );
         SetState( AccessibleStateType::INVALID );
         SetState( AccessibleStateType::DEFUNC );
-
-        Dispose();
     }
     mpEditSource = pEditSource;
     // #108900# Init last text content
