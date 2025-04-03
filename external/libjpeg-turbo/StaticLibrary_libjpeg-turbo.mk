@@ -91,6 +91,7 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,libjpeg-turbo,\
     UnpackedTarball/libjpeg-turbo/jidctred \
     UnpackedTarball/libjpeg-turbo/jmemmgr \
     UnpackedTarball/libjpeg-turbo/jmemnobs \
+    UnpackedTarball/libjpeg-turbo/jpeg_nbits \
     UnpackedTarball/libjpeg-turbo/jquant1 \
     UnpackedTarball/libjpeg-turbo/jquant2 \
     UnpackedTarball/libjpeg-turbo/jutils \

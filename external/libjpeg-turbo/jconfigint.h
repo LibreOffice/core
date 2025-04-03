@@ -3,6 +3,11 @@
 /* libjpeg-turbo build number */
 #define BUILD  "20230315"
 
+/* How to hide global symbols. */
+#if defined __GNUC__
+#define HIDDEN  __attribute__((visibility("hidden")))
+#endif
+
 /* Compiler's inline keyword */
 #undef inline
 
