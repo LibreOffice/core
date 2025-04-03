@@ -4962,6 +4962,9 @@ bool INetURLObject::IsExoticProtocol() const
         isSchemeEqualTo(u"vnd.sun.star.script") ||
         isSchemeEqualTo(u"service"))
     {
+        SAL_INFO_IF(
+            m_eScheme == INetProtocol::VndSunStarExpand, "tools.urlobj",
+            "<" << m_aAbsURIRef.toString() << "> considered exotic");
         return true;
     }
     if (m_eScheme == INetProtocol::VndSunStarPkg) {
