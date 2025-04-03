@@ -75,70 +75,78 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const rtl::Reference< Ba
 
         if( m_xOriginalCategories.is() )
         {
-            uno::Reference< data::XDataProvider > xDataProvider( mrModel.getDataProvider() );
-
-            OUString aCategoriesRange( DataSourceHelper::getRangeFromValues( m_xOriginalCategories ) );
-            if( xDataProvider.is() && !aCategoriesRange.isEmpty() )
-            {
-                const bool bFirstCellAsLabel = false;
-                const bool bHasCategories = false;
-                const uno::Sequence< sal_Int32 > aSequenceMapping;
-
-                uno::Reference< data::XDataSource > xColumnCategoriesSource( xDataProvider->createDataSource(
-                            DataSourceHelper::createArguments( aCategoriesRange, aSequenceMapping, true /*bUseColumns*/
-                                , bFirstCellAsLabel, bHasCategories ) ) );
-
-                uno::Reference< data::XDataSource > xRowCategoriesSource( xDataProvider->createDataSource(
-                            DataSourceHelper::createArguments( aCategoriesRange, aSequenceMapping, false /*bUseColumns*/
-                                , bFirstCellAsLabel, bHasCategories ) ) );
-
-                if( xColumnCategoriesSource.is() &&  xRowCategoriesSource.is() )
-                {
-                    Sequence< Reference< data::XLabeledDataSequence> > aColumns = xColumnCategoriesSource->getDataSequences();
-                    Sequence< Reference< data::XLabeledDataSequence> > aRows = xRowCategoriesSource->getDataSequences();
-
-                    sal_Int32 nColumnCount = aColumns.getLength();
-                    sal_Int32 nRowCount = aRows.getLength();
-                    if( nColumnCount>1 && nRowCount>1 )
-                    {
-                        //we have complex categories
-                        //->split them in the direction of the first series
-                        //detect whether the first series is a row or a column
-                        bool bSeriesUsesColumns = true;
-                        std::vector< rtl::Reference< DataSeries > > aSeries = ChartModelHelper::getDataSeries( &mrModel );
-                        if( !aSeries.empty() )
-                        {
-                            const rtl::Reference< DataSeries >& xSeriesSource = aSeries.front();
-                            for(const auto& rArgument : xDataProvider->detectArguments( xSeriesSource))
-                            {
-                                if ( rArgument.Name == "DataRowSource" )
-                                {
-                                    css::chart::ChartDataRowSource eRowSource;
-                                    if( rArgument.Value >>= eRowSource )
-                                    {
-                                        bSeriesUsesColumns = (eRowSource == css::chart::ChartDataRowSource_COLUMNS);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        if( bSeriesUsesColumns )
-                            m_aSplitCategoriesList = comphelper::sequenceToContainer<std::vector<Reference<data::XLabeledDataSequence>>>(aColumns);
-                        else
-                            m_aSplitCategoriesList = comphelper::sequenceToContainer<std::vector<Reference<data::XLabeledDataSequence>>>(aRows);
-                    }
-                }
-            }
+            implInitSplit();
             if( m_aSplitCategoriesList.empty() )
-            {
                 m_aSplitCategoriesList = { m_xOriginalCategories };
-            }
         }
     }
     catch( const uno::Exception & )
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
+}
+
+void ExplicitCategoriesProvider::implInitSplit()
+{
+    uno::Reference< data::XDataProvider > xDataProvider( mrModel.getDataProvider() );
+    if( !xDataProvider.is() )
+        return;
+
+    OUString aCategoriesRange( DataSourceHelper::getRangeFromValues( m_xOriginalCategories ) );
+    if( aCategoriesRange.isEmpty() )
+        return;
+
+    const bool bFirstCellAsLabel = false;
+    const bool bHasCategories = false;
+    const uno::Sequence< sal_Int32 > aSequenceMapping;
+
+    uno::Reference< data::XDataSource > xRowCategoriesSource( xDataProvider->createDataSource(
+                DataSourceHelper::createArguments( aCategoriesRange, aSequenceMapping, false /*bUseColumns*/
+                    , bFirstCellAsLabel, bHasCategories ) ) );
+    if( !xRowCategoriesSource )
+        return;
+
+    Sequence< Reference< data::XLabeledDataSequence> > aRows = xRowCategoriesSource->getDataSequences();
+    sal_Int32 nRowCount = aRows.getLength();
+    if( nRowCount<=1 )
+        return;
+
+    uno::Reference< data::XDataSource > xColumnCategoriesSource( xDataProvider->createDataSource(
+                DataSourceHelper::createArguments( aCategoriesRange, aSequenceMapping, true /*bUseColumns*/
+                    , bFirstCellAsLabel, bHasCategories ) ) );
+    if( !xColumnCategoriesSource )
+        return;
+
+    Sequence< Reference< data::XLabeledDataSequence> > aColumns = xColumnCategoriesSource->getDataSequences();
+    sal_Int32 nColumnCount = aColumns.getLength();
+    if( nColumnCount<=1 )
+        return;
+
+    //we have complex categories
+    //->split them in the direction of the first series
+    //detect whether the first series is a row or a column
+    bool bSeriesUsesColumns = true;
+    std::vector< rtl::Reference< DataSeries > > aSeries = ChartModelHelper::getDataSeries( &mrModel );
+    if( !aSeries.empty() )
+    {
+        const rtl::Reference< DataSeries >& xSeriesSource = aSeries.front();
+        for(const auto& rArgument : xDataProvider->detectArguments( xSeriesSource))
+        {
+            if ( rArgument.Name == "DataRowSource" )
+            {
+                css::chart::ChartDataRowSource eRowSource;
+                if( rArgument.Value >>= eRowSource )
+                {
+                    bSeriesUsesColumns = (eRowSource == css::chart::ChartDataRowSource_COLUMNS);
+                    break;
+                }
+            }
+        }
+    }
+    if( bSeriesUsesColumns )
+        m_aSplitCategoriesList = comphelper::sequenceToContainer<std::vector<Reference<data::XLabeledDataSequence>>>(aColumns);
+    else
+        m_aSplitCategoriesList = comphelper::sequenceToContainer<std::vector<Reference<data::XLabeledDataSequence>>>(aRows);
 }
 
 ExplicitCategoriesProvider::~ExplicitCategoriesProvider()

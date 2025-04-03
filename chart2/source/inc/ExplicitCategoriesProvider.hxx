@@ -27,6 +27,7 @@
 #include <vector>
 
 namespace chart { class ChartModel; }
+namespace com::sun::star::chart2::data { class XDataProvider; }
 namespace com::sun::star::chart2::data { class XDataSequence; }
 namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
 namespace com::sun::star::uno { class Any; }
@@ -92,6 +93,8 @@ public:
 private:
     ExplicitCategoriesProvider(ExplicitCategoriesProvider const &) = delete;
     ExplicitCategoriesProvider& operator =(ExplicitCategoriesProvider const &) = delete;
+
+    void implInitSplit();
 
     bool volatile m_bDirty;
     unotools::WeakReference< ::chart::BaseCoordinateSystem >   m_xCooSysModel;
