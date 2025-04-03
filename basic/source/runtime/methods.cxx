@@ -648,47 +648,43 @@ static void implRemoveDirRecursive( const OUString& aDirPath )
 void SbRtl_RmDir(StarBASIC *, SbxArray & rPar, bool)
 {
     rPar.Get(0)->PutEmpty();
-    if (rPar.Count() == 2)
-    {
-        OUString aPath = rPar.Get(1)->GetOUString();
-        if( hasUno() )
-        {
-            const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
-            if( xSFI.is() )
-            {
-                try
-                {
-                    if( !xSFI->isFolder( aPath ) )
-                    {
-                        return StarBASIC::Error( ERRCODE_BASIC_PATH_NOT_FOUND );
-                    }
-                    SbiInstance* pInst = GetSbData()->pInst;
-                    bool bCompatibility = ( pInst && pInst->IsCompatibility() );
-                    if( bCompatibility )
-                    {
-                        Sequence< OUString > aContent = xSFI->getFolderContents( aPath, true );
-                        if( aContent.hasElements() )
-                        {
-                            return StarBASIC::Error( ERRCODE_BASIC_ACCESS_ERROR );
-                        }
-                    }
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
-                    xSFI->kill( getFullPath( aPath ) );
-                }
-                catch(const Exception & )
-                {
-                    StarBASIC::Error( ERRCODE_IO_GENERAL );
-                }
-            }
-        }
-        else
+    OUString aPath = rPar.Get(1)->GetOUString();
+    if( hasUno() )
+    {
+        const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
+        if( xSFI.is() )
         {
-            implRemoveDirRecursive( getFullPath( aPath ) );
+            try
+            {
+                if( !xSFI->isFolder( aPath ) )
+                {
+                    return StarBASIC::Error( ERRCODE_BASIC_PATH_NOT_FOUND );
+                }
+                SbiInstance* pInst = GetSbData()->pInst;
+                bool bCompatibility = ( pInst && pInst->IsCompatibility() );
+                if( bCompatibility )
+                {
+                    Sequence< OUString > aContent = xSFI->getFolderContents( aPath, true );
+                    if( aContent.hasElements() )
+                    {
+                        return StarBASIC::Error( ERRCODE_BASIC_ACCESS_ERROR );
+                    }
+                }
+
+                xSFI->kill( getFullPath( aPath ) );
+            }
+            catch(const Exception & )
+            {
+                StarBASIC::Error( ERRCODE_IO_GENERAL );
+            }
         }
     }
     else
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        implRemoveDirRecursive( getFullPath( aPath ) );
     }
 }
 
@@ -764,21 +760,16 @@ void SbRtl_Hex(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_FuncCaller(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( SbiRuntime::isVBAEnabled() &&  GetSbData()->pInst && GetSbData()->pInst->pRun )
-    {
-        if ( GetSbData()->pInst->pRun->GetExternalCaller() )
-            *rPar.Get(0) = *GetSbData()->pInst->pRun->GetExternalCaller();
-        else
-        {
-            SbxVariableRef pVar = new SbxVariable(SbxVARIANT);
-            *rPar.Get(0) = *pVar;
-        }
-    }
+    if (!SbiRuntime::isVBAEnabled() || GetSbData()->pInst == nullptr || GetSbData()->pInst->pRun == nullptr)
+        return StarBASIC::Error(ERRCODE_BASIC_NOT_IMPLEMENTED);
+
+    if ( GetSbData()->pInst->pRun->GetExternalCaller() )
+        *rPar.Get(0) = *GetSbData()->pInst->pRun->GetExternalCaller();
     else
     {
-        StarBASIC::Error( ERRCODE_BASIC_NOT_IMPLEMENTED );
+        SbxVariableRef pVar = new SbxVariable(SbxVARIANT);
+        *rPar.Get(0) = *pVar;
     }
-
 }
 // InStr( [start],string,string,[compare] )
 
