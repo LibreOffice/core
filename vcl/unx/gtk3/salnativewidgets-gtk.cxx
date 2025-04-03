@@ -19,6 +19,7 @@
 #include <unx/gtk/gtkgdi.hxx>
 #include <unx/gtk/gtkbackend.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/CairoFormats.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
 #include <unx/fontmanager.hxx>
