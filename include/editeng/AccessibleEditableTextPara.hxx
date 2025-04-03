@@ -23,21 +23,18 @@
 #include <config_options.h>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#include <comphelper/compbase.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 
 #include <comphelper/accessibletexthelper.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/unoedprx.hxx>
@@ -54,19 +51,15 @@ namespace accessibility
 
 class AccessibleParaManager;
 
-typedef ::comphelper::WeakComponentImplHelper< css::accessibility::XAccessible,
-                                 css::accessibility::XAccessibleContext,
-                                 css::accessibility::XAccessibleComponent,
-                                 css::accessibility::XAccessibleEditableText,
-                                 css::accessibility::XAccessibleEventBroadcaster,
-                                 css::accessibility::XAccessibleTextAttributes,
-                                 css::accessibility::XAccessibleHypertext,
-                                 css::accessibility::XAccessibleMultiLineText,
-                                 css::lang::XServiceInfo >  AccessibleTextParaInterfaceBase;
-
 /** This class implements the actual text paragraphs for the EditEngine/Outliner UAA
  */
-class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) AccessibleEditableTextPara final : public AccessibleTextParaInterfaceBase, private ::comphelper::OCommonAccessibleText
+class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) AccessibleEditableTextPara final
+    : public cppu::ImplInheritanceHelper<
+          comphelper::OAccessibleComponentHelper, css::accessibility::XAccessible,
+          css::accessibility::XAccessibleEditableText,
+          css::accessibility::XAccessibleTextAttributes, css::accessibility::XAccessibleHypertext,
+          css::accessibility::XAccessibleMultiLineText, css::lang::XServiceInfo>,
+      private ::comphelper::OCommonAccessibleText
 {
 
     // override OCommonAccessibleText methods
@@ -85,11 +78,6 @@ public:
     AccessibleEditableTextPara ( css::uno::Reference< css::accessibility::XAccessible > xParent,
                                  const AccessibleParaManager* _pParaManager = nullptr );
 
-    virtual ~AccessibleEditableTextPara () override;
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface (const css::uno::Type & rType) override;
-
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
@@ -107,17 +95,11 @@ public:
     virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
     virtual css::lang::Locale SAL_CALL getLocale() override;
 
-    // XAccessibleEventBroadcaster
-    virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-    virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
+    // OAccessibleComponentHelper
+    virtual css::awt::Rectangle implGetBounds() override;
 
     // XAccessibleComponent
-    virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-    virtual css::awt::Rectangle SAL_CALL getBounds(  ) override;
-    virtual css::awt::Point SAL_CALL getLocation(  ) override;
-    virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
-    virtual css::awt::Size SAL_CALL getSize(  ) override;
     virtual void SAL_CALL grabFocus(  ) override;
     virtual sal_Int32 SAL_CALL getForeground(  ) override;
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
@@ -228,11 +210,7 @@ public:
      */
     void SetEditSource( SvxEditSourceAdapter* pEditSource );
 
-    /** Dispose this object
-
-        Notifies and deregisters the listeners, drops all references.
-     */
-    void Dispose();
+    void SAL_CALL dispose() override;
 
     /// Calls all Listener objects to tell them the change. Don't hold locks when calling this!
     void FireEvent(const sal_Int16 nEventId, const css::uno::Any& rNewValue = css::uno::Any(), const css::uno::Any& rOldValue = css::uno::Any());
@@ -309,8 +287,6 @@ private:
      */
     bool GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nIndex );
 
-    int getNotifierClientId() const { return mnNotifierClientId; }
-
     /// Do we have children? This is the case for image bullets
     bool HaveChildren();
 
@@ -374,8 +350,6 @@ private:
     /// The shape we're the accessible for (unguarded)
     css::uno::Reference< css::accessibility::XAccessible > mxParent;
 
-    /// Our listeners (guarded by maMutex)
-    int mnNotifierClientId;
 private:
     // Text paragraphs should provide FLOWS_TO and FLOWS_FROM relations (#i27138#)
     // the paragraph manager, which created this instance - is NULL, if

@@ -329,7 +329,7 @@ void AccessibleStaticTextBase::Dispose()
 {
     // we're the owner of the paragraph, so destroy it, too
     if (mxTextParagraph.is())
-        mxTextParagraph->Dispose();
+        mxTextParagraph->dispose();
 
     // drop reference
     mxTextParagraph.clear();

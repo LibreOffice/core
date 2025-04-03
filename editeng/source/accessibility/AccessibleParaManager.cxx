@@ -285,7 +285,7 @@ public:
     AccessibleParaManager_DisposeChildren() {}
     void operator()( ::accessibility::AccessibleEditableTextPara& rPara )
     {
-        rPara.Dispose();
+        rPara.dispose();
     }
 };
 
@@ -377,7 +377,7 @@ void AccessibleParaManager::Release( sal_Int32 nStartPara, sal_Int32 nEndPara )
                            if (IsReferencable(aChild))
                            {
                                aChild->SetEditSource(nullptr);
-                               aChild->Dispose();
+                               aChild->dispose();
                            }
 
                            // clear reference

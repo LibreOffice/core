@@ -110,13 +110,6 @@ AccessibleEditableTextPara::AccessibleEditableTextPara(
       mpEditSource( nullptr ),
       maEEOffset( 0, 0 ),
       mxParent(std::move( xParent )),
-      // well, that's strictly (UNO) exception safe, though not
-      // really robust. We rely on the fact that this member is
-      // constructed last, and that the constructor body catches
-      // exceptions, thus no chance for exceptions once the Id is
-      // fetched. Nevertheless, normally should employ RAII here...
-      mnNotifierClientId(::comphelper::AccessibleEventNotifier::registerClient()),
-      // #i27138#
       mpParaManager( _pParaManager )
 {
 
@@ -130,21 +123,6 @@ AccessibleEditableTextPara::AccessibleEditableTextPara(
     mnStateSet |= AccessibleStateType::SHOWING;
     mnStateSet |= AccessibleStateType::ENABLED;
     mnStateSet |= AccessibleStateType::SENSITIVE;
-}
-
-AccessibleEditableTextPara::~AccessibleEditableTextPara()
-{
-    // sign off from event notifier
-    if( getNotifierClientId() != -1 )
-    {
-        try
-        {
-            ::comphelper::AccessibleEventNotifier::revokeClient( getNotifierClientId() );
-        }
-        catch (const uno::Exception&)
-        {
-        }
-    }
 }
 
 OUString AccessibleEditableTextPara::implGetText()
@@ -275,29 +253,12 @@ void AccessibleEditableTextPara::SetParagraphIndex( sal_Int32 nIndex )
 }
 
 
-void AccessibleEditableTextPara::Dispose()
+void SAL_CALL AccessibleEditableTextPara::dispose()
 {
-    int nClientId( getNotifierClientId() );
-
-    // #108212# drop all references before notifying dispose
     mxParent = nullptr;
-    mnNotifierClientId = -1;
     mpEditSource = nullptr;
 
-    // notify listeners
-    if( nClientId == -1 )
-        return;
-
-    try
-    {
-        uno::Reference < XAccessibleContext > xThis = getAccessibleContext();
-
-        // #106234# Delegate to EventNotifier
-        ::comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nClientId, xThis );
-    }
-    catch (const uno::Exception&)
-    {
-    }
+    comphelper::OAccessibleComponentHelper::dispose();
 }
 
 void AccessibleEditableTextPara::SetEditSource( SvxEditSourceAdapter* pEditSource )
@@ -538,14 +499,7 @@ void AccessibleEditableTextPara::SetEEOffset( const Point& rOffset )
 
 void AccessibleEditableTextPara::FireEvent(const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue)
 {
-    uno::Reference <XAccessibleContext> xThis(this);
-
-    AccessibleEventObject aEvent(xThis, nEventId, rNewValue, rOldValue, -1);
-
-    // #106234# Delegate to EventNotifier
-    if( getNotifierClientId() != -1 )
-        ::comphelper::AccessibleEventNotifier::addEvent( getNotifierClientId(),
-                                                         aEvent );
+    NotifyAccessibleEvent(nEventId, rOldValue, rNewValue);
 }
 
 void AccessibleEditableTextPara::SetState( const sal_Int64 nStateId )
@@ -591,34 +545,6 @@ bool AccessibleEditableTextPara::GetAttributeRun( sal_Int32& nStartIndex, sal_In
                                                nEndIndex,
                                                GetParagraphIndex(),
                                                nIndex );
-}
-
-uno::Any SAL_CALL AccessibleEditableTextPara::queryInterface (const uno::Type & rType)
-{
-    uno::Any aRet;
-
-    // must provide XAccessibleText by hand, since it comes publicly inherited by XAccessibleEditableText
-    if ( rType == cppu::UnoType<XAccessibleText>::get())
-    {
-        uno::Reference< XAccessibleText > aAccText = static_cast< XAccessibleEditableText * >(this);
-        aRet <<= aAccText;
-    }
-    else if ( rType == cppu::UnoType<XAccessibleEditableText>::get())
-    {
-        uno::Reference< XAccessibleEditableText > aAccEditText = this;
-        aRet <<= aAccEditText;
-    }
-    else if ( rType == cppu::UnoType<XAccessibleHypertext>::get())
-    {
-        uno::Reference< XAccessibleHypertext > aAccHyperText = this;
-        aRet <<= aAccHyperText;
-    }
-    else
-    {
-        aRet = AccessibleTextParaInterfaceBase::queryInterface(rType);
-    }
-
-    return aRet;
 }
 
 // XAccessible
@@ -896,44 +822,7 @@ lang::Locale SAL_CALL AccessibleEditableTextPara::getLocale()
     return implGetLocale();
 }
 
-void SAL_CALL AccessibleEditableTextPara::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
-{
-    if( getNotifierClientId() != -1 )
-        ::comphelper::AccessibleEventNotifier::addEventListener( getNotifierClientId(), xListener );
-}
-
-void SAL_CALL AccessibleEditableTextPara::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
-{
-    if( getNotifierClientId() == -1 )
-        return;
-
-    const sal_Int32 nListenerCount = ::comphelper::AccessibleEventNotifier::removeEventListener( getNotifierClientId(), xListener );
-    if ( !nListenerCount )
-    {
-        // no listeners anymore
-        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-        // and at least to us not firing any events anymore, in case somebody calls
-        // NotifyAccessibleEvent, again
-        ::comphelper::AccessibleEventNotifier::TClientId nId( getNotifierClientId() );
-        mnNotifierClientId = -1;
-        ::comphelper::AccessibleEventNotifier::revokeClient( nId );
-    }
-}
-
 // XAccessibleComponent
-sal_Bool SAL_CALL AccessibleEditableTextPara::containsPoint( const awt::Point& aTmpPoint )
-{
-    SolarMutexGuard aGuard;
-
-    DBG_ASSERT(GetParagraphIndex() >= 0,
-               "AccessibleEditableTextPara::contains: index value overflow");
-
-    awt::Rectangle aTmpRect = getBounds();
-    tools::Rectangle aRect( Point(aTmpRect.X, aTmpRect.Y), Size(aTmpRect.Width, aTmpRect.Height) );
-    Point aPoint( aTmpPoint.X, aTmpPoint.Y );
-
-    return aRect.Contains( aPoint );
-}
 
 uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessibleAtPoint( const awt::Point& _aPoint )
 {
@@ -968,12 +857,10 @@ uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessible
     return uno::Reference< XAccessible >();
 }
 
-awt::Rectangle SAL_CALL AccessibleEditableTextPara::getBounds()
+awt::Rectangle AccessibleEditableTextPara::implGetBounds()
 {
-    SolarMutexGuard aGuard;
-
     DBG_ASSERT(GetParagraphIndex() >= 0,
-               "AccessibleEditableTextPara::getBounds: index value overflow");
+               "AccessibleEditableTextPara::implGetBounds: index value overflow");
 
     SvxTextForwarder& rCacheTF = GetTextForwarder();
     tools::Rectangle aRect = rCacheTF.GetParaBounds( GetParagraphIndex() );
@@ -990,53 +877,6 @@ awt::Rectangle SAL_CALL AccessibleEditableTextPara::getBounds()
                            aScreenRect.Top() + aOffset.Y(),
                            aScreenRect.GetSize().Width(),
                            aScreenRect.GetSize().Height() );
-}
-
-awt::Point SAL_CALL AccessibleEditableTextPara::getLocation(  )
-{
-    SolarMutexGuard aGuard;
-
-    awt::Rectangle aRect = getBounds();
-
-    return awt::Point( aRect.X, aRect.Y );
-}
-
-awt::Point SAL_CALL AccessibleEditableTextPara::getLocationOnScreen(  )
-{
-    SolarMutexGuard aGuard;
-
-    // relate us to parent
-    uno::Reference< XAccessible > xParent = getAccessibleParent();
-    if( xParent.is() )
-    {
-        uno::Reference< XAccessibleContext > xParentContext = xParent->getAccessibleContext();
-        if ( xParentContext.is() )
-        {
-            uno::Reference< XAccessibleComponent > xParentContextComponent( xParentContext, uno::UNO_QUERY );
-            if( xParentContextComponent.is() )
-            {
-                awt::Point aRefPoint = xParentContextComponent->getLocationOnScreen();
-                awt::Point aPoint = getLocation();
-                aPoint.X += aRefPoint.X;
-                aPoint.Y += aRefPoint.Y;
-
-                return aPoint;
-            }
-        }
-    }
-
-    throw uno::RuntimeException(u"Cannot access parent"_ustr,
-                                uno::Reference< uno::XInterface >
-                                ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
-}
-
-awt::Size SAL_CALL AccessibleEditableTextPara::getSize(  )
-{
-    SolarMutexGuard aGuard;
-
-    awt::Rectangle aRect = getBounds();
-
-    return awt::Size( aRect.Width, aRect.Height );
 }
 
 void SAL_CALL AccessibleEditableTextPara::grabFocus(  )
