@@ -16,6 +16,7 @@
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/cairo.hxx>
+#include <vcl/CairoFormats.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>

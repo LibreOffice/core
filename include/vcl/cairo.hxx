@@ -19,44 +19,8 @@
 
 #pragma once
 
-#include <sal/config.h>
-#include <osl/endian.h>
 #include <vcl/vclptr.hxx>
-#include <config_cairo_rgba.h>
 #include <memory>
-
-// Using formats that match cairo's formats.
-// SVP_24BIT_FORMAT is used to store 24-bit images in 3-byte pixels to conserve memory.
-
-/*
- For internal cairo we have the option --enable-cairo-rgba which is potentially
- useful for Android or Online to switch the rgb components. For Android cairo then
- matches the OpenGL GL_RGBA format so we can use it there where we don't have
- GL_BGRA support. Similarly for Online we can then use cairo's pixel data
- without needing to swizzle it for use as a canvas ImageData.
-*/
-#if ENABLE_CAIRO_RGBA
-#define SVP_24BIT_FORMAT (ScanlineFormat::N24BitTcRgb)
-#define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcRgbx)
-#define SVP_CAIRO_BLUE 2
-#define SVP_CAIRO_GREEN 1
-#define SVP_CAIRO_RED 0
-#define SVP_CAIRO_ALPHA 3
-#elif defined OSL_BIGENDIAN
-#define SVP_24BIT_FORMAT (ScanlineFormat::N24BitTcRgb)
-#define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcXrgb)
-#define SVP_CAIRO_BLUE 3
-#define SVP_CAIRO_GREEN 2
-#define SVP_CAIRO_RED 1
-#define SVP_CAIRO_ALPHA 0
-#else
-#define SVP_24BIT_FORMAT (ScanlineFormat::N24BitTcBgr)
-#define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcBgrx)
-#define SVP_CAIRO_BLUE 0
-#define SVP_CAIRO_GREEN 1
-#define SVP_CAIRO_RED 2
-#define SVP_CAIRO_ALPHA 3
-#endif
 
 typedef struct _cairo_surface cairo_surface_t;
 typedef struct _cairo cairo_t;

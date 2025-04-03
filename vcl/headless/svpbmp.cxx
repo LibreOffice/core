@@ -21,11 +21,11 @@
 #include <sal/log.hxx>
 
 #include <cstring>
-#include <vcl/cairo.hxx>
 #include <headless/svpbmp.hxx>
 #include <o3tl/safeint.hxx>
 #include <tools/helpers.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/CairoFormats.hxx>
 
 using namespace basegfx;
 

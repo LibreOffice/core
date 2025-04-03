@@ -19,6 +19,7 @@
 
 #include <headless/BitmapHelper.hxx>
 #include <vcl/cairo.hxx>
+#include <vcl/CairoFormats.hxx>
 #include <vcl/svapp.hxx>
 #include <utility>
 

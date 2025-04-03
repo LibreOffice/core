@@ -22,6 +22,7 @@
 #include <headless/BitmapHelper.hxx>
 #include <headless/CairoCommon.hxx>
 #include <vcl/cairo.hxx>
+#include <vcl/CairoFormats.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <SalGradient.hxx>
 #include <tools/helpers.hxx>
