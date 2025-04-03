@@ -541,7 +541,11 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
             pMaster->InvalidateSize_();
         }
 
-        if ( ( bKeep || nNoHyphEndZone ) && pMasterPara && pMasterPara->GetNext() )
+        // applied end zone, i.e. hyphenation is not disabled completely,
+        // end zone is not zero and different from the hyphenation zone
+        bool bApplyEndZone = !bKeep && nNoHyphEndZone > 0 &&
+                nNoHyphEndZone != rAttr.GetTextHyphenZone();
+        if ( ( bKeep || bApplyEndZone ) && pMasterPara && pMasterPara->GetNext() )
         {
             // calculate the beginning of last hyphenated line
             TextFrameIndex nIdx(pMasterPara->GetLen());
@@ -559,14 +563,14 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
             nIdx -= pNext->GetLen();
             // hyphenated line, but not the last remaining one
             // in the case of shifting full line (bKeepLine = false)
-            if ( pNext->IsEndHyph() && ( bKeepLine || !pNext->IsLastHyph() || nNoHyphEndZone ) )
+            if ( pNext->IsEndHyph() && ( bKeepLine || !pNext->IsLastHyph() || bApplyEndZone ) )
             {
                 nExtraWidLines = rLine.GetLineNr() - m_nWidLines + 1;
                 // shift only a word: disable hyphenation in the line, if needed
-                if ( ( bKeepLine || nNoHyphEndZone ) && nExtraWidLines )
+                if ( ( bKeepLine || bApplyEndZone ) && nExtraWidLines )
                 {
                     pMaster->SetNoHyphOffset(nIdx);
-                    pMaster->SetNoHyphEndZone(bKeep ? -1 : nNoHyphEndZone);
+                    pMaster->SetNoHyphEndZone(bApplyEndZone ? nNoHyphEndZone : -1);
                     // update also columns and frames
                     pMaster->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
                     pMaster->InvalidateSize_();
