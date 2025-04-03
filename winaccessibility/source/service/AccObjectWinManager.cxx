@@ -651,15 +651,13 @@ bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentX
     }
     //end of file name
 
-    ::rtl::Reference<AccEventListener> const pListener =
-        CreateAccEventListener(pXAcc);
-    if (!pListener.is())
-        return false;
+    rtl::Reference<AccEventListener> const xListener = CreateAccEventListener(pXAcc);
+    assert(xListener.is());
+
     Reference<XAccessibleComponent> xComponent(xContext, UNO_QUERY);
     Reference<XAccessibleEventBroadcaster> broadcaster(xComponent,UNO_QUERY);
     if (broadcaster.is())
     {
-        Reference<XAccessibleEventListener> const xListener(pListener);
         broadcaster->addAccessibleEventListener(xListener);
     }
     else
@@ -676,7 +674,7 @@ bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentX
     AccObject* pCurObj = GetAccObjByXAcc(pXAcc);
     if( pCurObj )
     {
-        pCurObj->SetListener(pListener);
+        pCurObj->SetListener(xListener);
     }
 
     AccObject* pParentObj = GetAccObjByXAcc(pParentXAcc);
