@@ -808,9 +808,10 @@ void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
     // only SID_SAVEDOC / SID_SAVEASDOC
     bool bCommitChanges = true;
     const SfxItemSet* pReqArgs = rReq.GetArgs();
-    const SfxPoolItem* pItem;
+    const SfxPoolItem* pItem = nullptr;
 
-    if (pReqArgs && pReqArgs->HasItem(FN_PARAM_1, &pItem))
+    bool bHasDontTerminateEdit = pReqArgs && pReqArgs->HasItem(FN_PARAM_1, &pItem);
+    if (bHasDontTerminateEdit && pItem)
         bCommitChanges = !static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
     // Finish entering unless 'DontTerminateEdit' is specified, even if a formula is being processed
