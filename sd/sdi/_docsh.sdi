@@ -21,6 +21,10 @@ interface DrawDocument
     [
         StateMethod = GetState ;
     ]
+    SID_SAVEDOC
+    [
+        ExecMethod = Execute ;
+    ]
     SID_CLOSEDOC // ole : ?, status : ?
     [
         ExecMethod = Execute ;
