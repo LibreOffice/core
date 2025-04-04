@@ -423,6 +423,7 @@ constexpr auto SidebarList
         { u"sfx/ui/panel.ui" },
         { u"sfx/ui/templatepanel.ui" },
         // svx
+        { u"svx/ui/accessibilitychecklevel.ui" },
         { u"svx/ui/defaultshapespanel.ui" },
         { u"svx/ui/inspectortextpanel.ui" },
         { u"svx/ui/mediaplayback.ui" },
