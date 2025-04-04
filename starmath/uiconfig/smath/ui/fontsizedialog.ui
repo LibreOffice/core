@@ -202,6 +202,86 @@
                     <property name="row-spacing">6</property>
                     <property name="column-spacing">12</property>
                     <child>
+                      <object class="GtkLabel" id="label5">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="fontsizedialog|label5">_Text:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">spinB_text</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="spinB_text">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="activates-default">True</property>
+                        <property name="truncate-multiline">True</property>
+                        <property name="adjustment">adjustmentRelativeSizes4</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="spinB_text-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fontsizedialog|extended_tip|spinB_text">Select the size for text in a formula relative to the base size.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label6">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="fontsizedialog|label6">_Indexes:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">spinB_index</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="spinB_index">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="activates-default">True</property>
+                        <property name="truncate-multiline">True</property>
+                        <property name="adjustment">adjustmentRelativeSizes5</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="spinB_index-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fontsizedialog|extended_tip|spinB_index">Select the relative size for the indexes in a formula in proportion to the base size.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label7">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="fontsizedialog|label7">_Functions:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">spinB_function</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkSpinButton" id="spinB_function">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
@@ -235,20 +315,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label3">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="fontsizedialog|label3">_Limits:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">spinB_limit</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkSpinButton" id="spinB_operator">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
@@ -268,6 +334,20 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkLabel" id="label3">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="fontsizedialog|label3">_Limits:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">spinB_limit</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkSpinButton" id="spinB_limit">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
@@ -284,86 +364,6 @@
                       <packing>
                         <property name="left-attach">1</property>
                         <property name="top-attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label5">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="fontsizedialog|label5">_Text:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">spinB_text</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label7">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="fontsizedialog|label7">_Functions:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">spinB_function</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label6">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="fontsizedialog|label6">_Indexes:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">spinB_index</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="spinB_text">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="activates-default">True</property>
-                        <property name="truncate-multiline">True</property>
-                        <property name="adjustment">adjustmentRelativeSizes4</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="spinB_text-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="fontsizedialog|extended_tip|spinB_text">Select the size for text in a formula relative to the base size.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="spinB_index">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="activates-default">True</property>
-                        <property name="truncate-multiline">True</property>
-                        <property name="adjustment">adjustmentRelativeSizes5</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="spinB_index-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="fontsizedialog|extended_tip|spinB_index">Select the relative size for the indexes in a formula in proportion to the base size.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                   </object>
