@@ -46,6 +46,7 @@
 #include <svl/numformat.hxx>
 #include <svl/numuno.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <comphelper/sequence.hxx>
@@ -244,30 +245,20 @@ void lcl_switchToDateCategories( const rtl::Reference< ChartModel >& xChartDoc, 
             sal_Int32 nNumberFormat = -1;
             xAxisProps->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
 
-            Reference< util::XNumberFormats > xNumberFormats( xChartDoc->getNumberFormats() );
-            if( xNumberFormats.is() )
+            SvNumberFormatter* pNumberFormatter = xChartDoc->getNumberFormatsSupplier()->GetNumberFormatter();
+            const SvNumberformat* pNumberFormat = pNumberFormatter->GetEntry( nNumberFormat );
+            sal_Int32 nType = util::NumberFormat::UNDEFINED;
+            if( pNumberFormat )
+                nType = static_cast<sal_Int16>(pNumberFormat->GetType());
+            if( !( nType & util::NumberFormat::DATE ) )
             {
-                Reference< beans::XPropertySet > xKeyProps;
-                try
+                //set a date format to the axis
+                LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
+                sal_uInt32 nIndex = 0;
+                SvNumberFormatTable& rTable = pNumberFormatter->ChangeCL( static_cast<SvNumFormatType>(util::NumberFormat::DATE), nIndex, eLang );
+                if (!rTable.empty())
                 {
-                    xKeyProps = xNumberFormats->getByKey( nNumberFormat );
-                }
-                catch( const uno::Exception & )
-                {
-                    DBG_UNHANDLED_EXCEPTION("chart2");
-                }
-                sal_Int32 nType = util::NumberFormat::UNDEFINED;
-                if( xKeyProps.is() )
-                    xKeyProps->getPropertyValue( u"Type"_ustr ) >>= nType;
-                if( !( nType & util::NumberFormat::DATE ) )
-                {
-                    //set a date format to the axis
-                    const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
-                    Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,  rLocaleDataWrapper.getLanguageTag().getLocale(), true/*bCreate*/ );
-                    if( aKeySeq.hasElements() )
-                    {
-                        xAxisProps->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any(aKeySeq[0]));
-                    }
+                    xAxisProps->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any(rTable.begin()->first));
                 }
             }
         }
@@ -325,17 +316,14 @@ void DiagramHelper::switchToTextCategories( const rtl::Reference<::chart::ChartM
     }
 }
 
-bool DiagramHelper::isDateNumberFormat( sal_Int32 nNumberFormat, const Reference< util::XNumberFormats >& xNumberFormats )
+bool DiagramHelper::isDateNumberFormat( sal_Int32 nNumberFormat, const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormats )
 {
     bool bIsDate = false;
-    if( !xNumberFormats.is() )
-        return bIsDate;
-
-    Reference< beans::XPropertySet > xKeyProps = xNumberFormats->getByKey( nNumberFormat );
-    if( xKeyProps.is() )
+    const SvNumberformat* pFormat = xNumberFormats->GetNumberFormatter()->GetEntry(nNumberFormat);
+    if( pFormat )
     {
         sal_Int32 nType = util::NumberFormat::UNDEFINED;
-        xKeyProps->getPropertyValue( u"Type"_ustr ) >>= nType;
+        nType = static_cast<sal_Int16>(pFormat->GetType());
         bIsDate = nType & util::NumberFormat::DATE;
     }
     return bIsDate;
@@ -343,30 +331,12 @@ bool DiagramHelper::isDateNumberFormat( sal_Int32 nNumberFormat, const Reference
 
 sal_Int32 DiagramHelper::getDateNumberFormat( const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier )
 {
-    sal_Int32 nRet=-1;
-
     //try to get a date format with full year display
     const LanguageTag& rLanguageTag = Application::GetSettings().GetLanguageTag();
-    NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
-    SvNumberFormatter* pNumFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
-    if( pNumFormatter )
-    {
-        nRet = pNumFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, rLanguageTag.getLanguageType() );
-    }
-    else
-    {
-        Reference< util::XNumberFormats > xNumberFormats( xNumberFormatsSupplier->getNumberFormats() );
-        if( xNumberFormats.is() )
-        {
-            Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,
-                    rLanguageTag.getLocale(), true/*bCreate */);
-            if( aKeySeq.hasElements() )
-            {
-                nRet = aKeySeq[0];
-            }
-        }
-    }
-    return nRet;
+    SvNumberFormatter* pNumFormatter = xNumberFormatsSupplier->GetNumberFormatter();
+    if (!pNumFormatter)
+        return -1;
+    return pNumFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, rLanguageTag.getLanguageType() );
 }
 
 sal_Int32 DiagramHelper::getDateTimeInputNumberFormat( const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier, double fNumber )
@@ -374,49 +344,20 @@ sal_Int32 DiagramHelper::getDateTimeInputNumberFormat( const rtl::Reference< SvN
     sal_Int32 nRet = 0;
 
     // Get the most detailed date/time format according to fNumber.
-    NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
-    SvNumberFormatter* pNumFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
-    if (!pNumFormatter)
-        SAL_WARN("chart2", "DiagramHelper::getDateTimeInputNumberFormat - no SvNumberFormatter");
-    else
-    {
-        SvNumFormatType nType;
-        // Obtain best matching date, time or datetime format.
-        nRet = pNumFormatter->GuessDateTimeFormat( nType, fNumber, LANGUAGE_SYSTEM);
-        // Obtain the corresponding edit format.
-        nRet = pNumFormatter->GetEditFormat( fNumber, nRet, nType, nullptr);
-    }
+    SvNumberFormatter* pNumFormatter = xNumberFormatsSupplier->GetNumberFormatter();
+    SvNumFormatType nType;
+    // Obtain best matching date, time or datetime format.
+    nRet = pNumFormatter->GuessDateTimeFormat( nType, fNumber, LANGUAGE_SYSTEM);
+    // Obtain the corresponding edit format.
+    nRet = pNumFormatter->GetEditFormat( fNumber, nRet, nType, nullptr);
     return nRet;
 }
 
 sal_Int32 DiagramHelper::getPercentNumberFormat( const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier )
 {
-    sal_Int32 nRet=-1;
     const LanguageTag& rLanguageTag = Application::GetSettings().GetLanguageTag();
-    NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
-    SvNumberFormatter* pNumFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
-    if( pNumFormatter )
-    {
-        nRet = pNumFormatter->GetFormatIndex( NF_PERCENT_INT, rLanguageTag.getLanguageType() );
-    }
-    else
-    {
-        Reference< util::XNumberFormats > xNumberFormats( xNumberFormatsSupplier->getNumberFormats() );
-        if( xNumberFormats.is() )
-        {
-            Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::PERCENT,
-                    rLanguageTag.getLocale(), true/*bCreate*/ );
-            if( aKeySeq.hasElements() )
-            {
-                // This *assumes* the sequence is sorted as in
-                // NfIndexTableOffset and the first format is the integer 0%
-                // format by chance... which usually is the case, but... anyway,
-                // we usually also have a number formatter so don't reach here.
-                nRet = aKeySeq[0];
-            }
-        }
-    }
-    return nRet;
+    SvNumberFormatter* pNumFormatter = xNumberFormatsSupplier->GetNumberFormatter();
+    return pNumFormatter->GetFormatIndex( NF_PERCENT_INT, rLanguageTag.getLanguageType() );
 }
 
 bool DiagramHelper::areChartTypesCompatible( const rtl::Reference< ChartType >& xFirstType,

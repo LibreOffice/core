@@ -37,6 +37,7 @@
 #include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <svl/numuno.hxx>
 
 #include <limits>
 
@@ -418,7 +419,7 @@ static bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >&
         uno::Sequence< uno::Any > aValues = xDataSequence->getData();
         sal_Int32 nCount = aValues.getLength();
         rDateCategories.reserve(nCount);
-        Reference< util::XNumberFormats > xNumberFormats( rModel.getNumberFormats() );
+        rtl::Reference< SvNumberFormatsSupplierObj > xNumberFormatsSupplier( rModel.getNumberFormatsSupplier() );
 
         bool bOwnData = false;
         bool bOwnDataAnddAxisHasAnyFormat = false;
@@ -434,7 +435,7 @@ static bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >&
                 if (xAxisProps.is() && (xAxisProps->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nAxisNumberFormat))
                 {
                     bOwnDataAnddAxisHasAnyFormat = true;
-                    bOwnDataAnddAxisHasDateFormat = DiagramHelper::isDateNumberFormat( nAxisNumberFormat, xNumberFormats );
+                    bOwnDataAnddAxisHasDateFormat = DiagramHelper::isDateNumberFormat( nAxisNumberFormat, xNumberFormatsSupplier );
                 }
             }
         }
@@ -447,7 +448,7 @@ static bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >&
                 if( bOwnData )
                     bIsDate = !bOwnDataAnddAxisHasAnyFormat || bOwnDataAnddAxisHasDateFormat;
                 else
-                    bIsDate = DiagramHelper::isDateNumberFormat( xDataSequence->getNumberFormatKeyByIndex( nN ), xNumberFormats );
+                    bIsDate = DiagramHelper::isDateNumberFormat( xDataSequence->getNumberFormatKeyByIndex( nN ), xNumberFormatsSupplier );
             }
             else
                 bIsDate = true;

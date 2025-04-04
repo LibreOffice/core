@@ -69,7 +69,7 @@ public:
     static void switchToTextCategories(
         const rtl::Reference<::chart::ChartModel> & xChartDoc );
 
-    static bool isDateNumberFormat( sal_Int32 nNumberFormat, const css::uno::Reference< css::util::XNumberFormats >& xNumberFormats );
+    static bool isDateNumberFormat( sal_Int32 nNumberFormat, const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormats );
     static sal_Int32 getDateNumberFormat( const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier );
     static sal_Int32 getDateTimeInputNumberFormat( const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier, double fNumber );
 
