@@ -55,6 +55,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165933_noDelTextOnMove)
     assertXPath(pXmlDoc, "//w:moveFrom/w:r/w:delText", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf165492_atLeastWithBottomSpacing)
+{
+    // Given a document with "minimum row height" of 2cm
+    // and table bottom border padding of 1.5cm...
+
+    loadAndSave("tdf165492_atLeastWithBottomSpacing.docx");
+
+    // When laying out that document:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // the actual row heights should be at least 3.5cm each (rounded up = 1985 twips)
+    // giving a total table height of 5955 instead of 3402.
+    SwTwips nTableHeight
+        = getXPath(pXmlDoc, "//column[1]/body/tab/infos/prtBounds", "height").toInt32();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(5955), nTableHeight);
+
+    // the table in the right column has no bottom border padding, so its height is 3402.
+    nTableHeight = getXPath(pXmlDoc, "//column[2]/body/tab/infos/prtBounds", "height").toInt32();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(3402), nTableHeight);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf165047_consolidatedTopMargin)
 {
     // Given a two page document with a section page break
