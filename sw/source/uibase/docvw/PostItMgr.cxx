@@ -1620,6 +1620,10 @@ void SwPostItMgr::Delete(const OUString& rAuthor)
     if (!ConfirmDeleteAll(mpWrtShell->GetView(), sQuestion))
         return;
 
+    // tdf#136540 - prevent scrolling to cursor during deletion of annotations
+    const bool bUnLockView = !mpWrtShell->IsViewLocked();
+    mpWrtShell->LockView(true);
+
     mpWrtShell->StartAllAction();
     if (HasActiveSidebarWin() && (GetActiveSidebarWin()->GetAuthor() == rAuthor))
     {
@@ -1644,6 +1648,10 @@ void SwPostItMgr::Delete(const OUString& rAuthor)
     mbLayout = true;
     CalcRects();
     LayoutPostIts();
+
+    // tdf#136540 - prevent scrolling to cursor during deletion of annotations
+    if (bUnLockView)
+        mpWrtShell->LockView(false);
 }
 
 void SwPostItMgr::Delete(sal_uInt32 nPostItId)
