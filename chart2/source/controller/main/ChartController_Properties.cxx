@@ -179,7 +179,7 @@ wrapper::ItemConverter* createItemConverter(
 
                 sal_Int32 nNumberFormat = ChartView::getExplicitNumberFormatKeyForDataLabel( xObjectProperties );
                 sal_Int32 nPercentNumberFormat = ChartView::getExplicitPercentageNumberFormatKeyForDataLabel(
-                    xObjectProperties, xChartModel);
+                    xObjectProperties, xChartModel->getNumberFormatsSupplier());
 
                 pItemConverter = new wrapper::TextLabelItemConverter(
                     xChartModel, xObjectProperties, xSeries,
@@ -232,7 +232,7 @@ wrapper::ItemConverter* createItemConverter(
                 }
                 sal_Int32 nNumberFormat=ChartView::getExplicitNumberFormatKeyForDataLabel( xObjectProperties );
                 sal_Int32 nPercentNumberFormat=ChartView::getExplicitPercentageNumberFormatKeyForDataLabel(
-                        xObjectProperties, xChartModel);
+                        xObjectProperties, xChartModel->getNumberFormatsSupplier());
 
                 pItemConverter =  new wrapper::DataPointItemConverter( xChartModel, xContext,
                                         xObjectProperties, xSeries, rDrawModel.GetItemPool(), rDrawModel,
@@ -752,7 +752,7 @@ void ChartController::executeDlg_ObjectProperties_withUndoGuard(
         std::shared_ptr<SchAttribTabDlg> aDlgPtr = std::make_shared<SchAttribTabDlg>(
             GetChartFrame(), &aItemSet, &aDialogParameter,
             &aViewElementListProvider,
-            xChartDoc);
+            xChartDoc->getNumberFormatsSupplier());
 
         if(aDialogParameter.HasSymbolProperties())
         {

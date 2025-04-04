@@ -28,7 +28,7 @@ class VCartesianAxis : public VAxisBase
     // public methods
 public:
     VCartesianAxis( const AxisProperties& rAxisProperties
-           , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+           , const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier
            , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
            , PlottingPositionHelper* pPosHelper = nullptr //takes ownership
            );
@@ -99,7 +99,7 @@ public:
     };
 
     void createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
-                             css::uno::Reference<css::util::XNumberFormatsSupplier> const& xNumberFormatsSupplier,
+                             rtl::Reference<SvNumberFormatsSupplierObj> const& xNumberFormatsSupplier,
                              rtl::Reference<::chart::ChartModel> const& xChartDoc,
                              css::uno::Reference<css::uno::XComponentContext> const& rComponentContext) override;
 private: //methods

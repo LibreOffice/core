@@ -26,6 +26,7 @@
 namespace chart { class ChartModel; }
 namespace com::sun::star::util { class XNumberFormats; }
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
+class SvNumberFormatsSupplierObj;
 
 namespace chart
 {
@@ -69,11 +70,11 @@ public:
         const rtl::Reference<::chart::ChartModel> & xChartDoc );
 
     static bool isDateNumberFormat( sal_Int32 nNumberFormat, const css::uno::Reference< css::util::XNumberFormats >& xNumberFormats );
-    static sal_Int32 getDateNumberFormat( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
-    static sal_Int32 getDateTimeInputNumberFormat( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier, double fNumber );
+    static sal_Int32 getDateNumberFormat( const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier );
+    static sal_Int32 getDateTimeInputNumberFormat( const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier, double fNumber );
 
-    static sal_Int32 getPercentNumberFormat( const css::uno::Reference<
-                css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+    static sal_Int32 getPercentNumberFormat( const rtl::Reference<
+                SvNumberFormatsSupplierObj >& xNumberFormatsSupplier );
 
     static bool areChartTypesCompatible(
                 const rtl::Reference< ::chart::ChartType >& xFirstType,

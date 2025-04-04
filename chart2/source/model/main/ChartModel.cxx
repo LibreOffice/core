@@ -820,16 +820,23 @@ void SAL_CALL ChartModel::attachNumberFormatsSupplier( const uno::Reference< uti
 {
     {
         MutexGuard aGuard( m_aModelMutex );
-        if( xNewSupplier == m_xNumberFormatsSupplier )
-            return;
-        if( xNewSupplier == uno::Reference<XNumberFormatsSupplier>(m_xOwnNumberFormatsSupplier) )
-            return;
-        if( m_xOwnNumberFormatsSupplier.is() && xNewSupplier.is() )
+        if (xNewSupplier)
         {
-            //@todo
-            //merge missing numberformats from own to new formatter
+            SvNumberFormatsSupplierObj* pNew = dynamic_cast<SvNumberFormatsSupplierObj*>(xNewSupplier.get());
+            assert(pNew);
+            if( pNew == m_xNumberFormatsSupplier.get() )
+                return;
+            if( pNew == m_xOwnNumberFormatsSupplier.get() )
+                return;
+            if( m_xOwnNumberFormatsSupplier.is() && xNewSupplier.is() )
+            {
+                //@todo
+                //merge missing numberformats from own to new formatter
+            }
+            m_xNumberFormatsSupplier = pNew;
+            m_xOwnNumberFormatsSupplier.clear();
         }
-        else if( !xNewSupplier.is() )
+        else
         {
             if( m_xNumberFormatsSupplier.is() )
             {
@@ -837,10 +844,9 @@ void SAL_CALL ChartModel::attachNumberFormatsSupplier( const uno::Reference< uti
                 //merge missing numberformats from old numberformatter to own numberformatter
                 //create own numberformatter if necessary
             }
+            m_xNumberFormatsSupplier.clear();
+            m_xOwnNumberFormatsSupplier.clear();
         }
-
-        m_xNumberFormatsSupplier.set( xNewSupplier );
-        m_xOwnNumberFormatsSupplier.clear();
     }
     setModified( true );
 }
@@ -1223,7 +1229,7 @@ Sequence< OUString > SAL_CALL ChartModel::getAvailableServiceNames()
     return aResult;
 }
 
-Reference< util::XNumberFormatsSupplier > const & ChartModel::getNumberFormatsSupplier()
+rtl::Reference< SvNumberFormatsSupplierObj > const & ChartModel::getNumberFormatsSupplier()
 {
     if( !m_xNumberFormatsSupplier.is() )
     {
@@ -1243,7 +1249,7 @@ Reference< util::XNumberFormatsSupplier > const & ChartModel::getNumberFormatsSu
 {
     if( comphelper::isUnoTunnelId<SvNumberFormatsSupplierObj>(aIdentifier) )
     {
-        Reference< lang::XUnoTunnel > xTunnel( getNumberFormatsSupplier(), uno::UNO_QUERY );
+        Reference< lang::XUnoTunnel > xTunnel( getNumberFormatsSupplier() );
         if( xTunnel.is() )
             return xTunnel->getSomething( aIdentifier );
     }

@@ -28,6 +28,7 @@
 #include <DataTable.hxx>
 #include <ChartModel.hxx>
 #include <GridProperties.hxx>
+#include <svl/numuno.hxx>
 
 namespace chart
 {
@@ -77,7 +78,7 @@ void VPolarCoordinateSystem::createVAxisList(
 {
     // note: using xChartDoc itself as XNumberFormatsSupplier would cause
     // a leak from VPolarAxis due to cyclic reference
-    uno::Reference<util::XNumberFormatsSupplier> const xNumberFormatsSupplier(
+    rtl::Reference<SvNumberFormatsSupplierObj> const xNumberFormatsSupplier(
         xChartDoc->getNumberFormatsSupplier());
 
     m_aAxisMap.clear();

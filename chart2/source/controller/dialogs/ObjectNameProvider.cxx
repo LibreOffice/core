@@ -98,7 +98,7 @@ void lcl_addText( OUString& rOut, std::u16string_view rSeparator, std::u16string
 
 OUString lcl_getDataPointValueText( const rtl::Reference< DataSeries >& xSeries, sal_Int32 nPointIndex,
                                     const rtl::Reference< BaseCoordinateSystem >& xCooSys,
-                                    const Reference< frame::XModel >& xChartModel )
+                                    const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
 
     OUString aRet;
@@ -111,8 +111,7 @@ OUString lcl_getDataPointValueText( const rtl::Reference< DataSeries >& xSeries,
     OUString aX, aY, aY_Min, aY_Max, aY_First, aY_Last, a_Size;
     double fValue = 0;
 
-    uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( xChartModel, uno::UNO_QUERY );
-    NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
+    NumberFormatterWrapper aNumberFormatterWrapper( xChartModel->getNumberFormatsSupplier() );
     Color nLabelColor;//dummy
     bool bColorChanged;//dummy
 
@@ -191,8 +190,7 @@ OUString lcl_getDataPointValueText( const rtl::Reference< DataSeries >& xSeries,
 
     if( aX.isEmpty() )
     {
-        ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartModel);
-        aRet = ExplicitCategoriesProvider::getCategoryByIndex( xCooSys, rModel, nPointIndex );
+        aRet = ExplicitCategoriesProvider::getCategoryByIndex( xCooSys, *xChartModel, nPointIndex );
     }
     else
     {

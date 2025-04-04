@@ -23,7 +23,7 @@
 #include <vcl/graph.hxx>
 
 class SvNumberFormatter;
-
+class SvNumberFormatsSupplierObj;
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
 
 namespace chart
@@ -130,7 +130,7 @@ public:
     SchAttribTabDlg(weld::Window* pParent, const SfxItemSet* pAttr,
                     const ObjectPropertiesDialogParameter* pDialogParameter,
                     const ViewElementListProvider* pViewElementListProvider,
-                    const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+                    const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier );
     virtual ~SchAttribTabDlg() override;
 
     //pSymbolShapeProperties: Properties to be set on the symbollist shapes

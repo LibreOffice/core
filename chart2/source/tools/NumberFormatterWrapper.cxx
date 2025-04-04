@@ -30,7 +30,7 @@ namespace chart
 using namespace ::com::sun::star;
 
 FixedNumberFormatter::FixedNumberFormatter(
-                const uno::Reference< util::XNumberFormatsSupplier >& xSupplier
+                const rtl::Reference< SvNumberFormatsSupplierObj >& xSupplier
                 , sal_Int32 nNumberFormatKey )
             : m_aNumberFormatterWrapper(xSupplier)
             , m_nNumberFormatKey( nNumberFormatKey )
@@ -47,18 +47,15 @@ OUString FixedNumberFormatter::getFormattedString( double fValue, Color& rLabelC
         m_nNumberFormatKey, fValue, rLabelColor, rbColorChanged );
 }
 
-NumberFormatterWrapper::NumberFormatterWrapper( const uno::Reference< util::XNumberFormatsSupplier >& xSupplier )
+NumberFormatterWrapper::NumberFormatterWrapper( const rtl::Reference< SvNumberFormatsSupplierObj >& xSupplier )
                     : m_xNumberFormatsSupplier(xSupplier)
                     , m_pNumberFormatter(nullptr)
 
 {
-    uno::Reference<beans::XPropertySet> xProp(m_xNumberFormatsSupplier,uno::UNO_QUERY);
-    OUString sNullDate( u"NullDate"_ustr );
-    if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(sNullDate) )
-        m_aNullDate = xProp->getPropertyValue(sNullDate);
-    SvNumberFormatsSupplierObj* pSupplierObj = comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>( xSupplier );
-    if( pSupplierObj )
-        m_pNumberFormatter = pSupplierObj->GetNumberFormatter();
+    if( m_xNumberFormatsSupplier )
+        m_pNumberFormatter = m_xNumberFormatsSupplier->GetNumberFormatter();
+    if( m_pNumberFormatter )
+        m_aNullDate = m_pNumberFormatter->GetNullDate();
     SAL_WARN_IF(!m_pNumberFormatter,"chart2.tools","need a numberformatter");
 }
 
@@ -66,33 +63,13 @@ NumberFormatterWrapper::~NumberFormatterWrapper()
 {
 }
 
-namespace
-{
-    bool getDate(const css::uno::Any& rAny, util::Date& rDate)
-    {
-        if (rAny >>= rDate)
-            return true;
-        util::DateTime aUtilDateTime;
-        if (rAny >>= aUtilDateTime)
-        {
-            rDate.Day = aUtilDateTime.Day;
-            rDate.Month = aUtilDateTime.Month;
-            rDate.Year = aUtilDateTime.Year;
-            return true;
-        }
-        SAL_WARN("chart2.tools", "neither a util::Date nor a util::DateTime");
-        return false;
-    }
-}
-
 Date NumberFormatterWrapper::getNullDate() const
 {
     Date aRet(30,12,1899);
 
-    util::Date aUtilDate;
-    if (m_aNullDate.hasValue() && getDate(m_aNullDate, aUtilDate))
+    if (m_aNullDate)
     {
-        aRet = Date(aUtilDate.Day,aUtilDate.Month,aUtilDate.Year);
+        return *m_aNullDate;
     }
     else if( m_pNumberFormatter )
     {
@@ -114,21 +91,20 @@ OUString NumberFormatterWrapper::getFormattedString( sal_Int32 nNumberFormatKey,
     // i99104 handle null date correctly
     sal_Int16 nYear = 1899;
     sal_uInt16 nDay = 30,nMonth = 12;
-    if ( m_aNullDate.hasValue() )
+    if ( m_aNullDate )
     {
         const Date& rDate = m_pNumberFormatter->GetNullDate();
         nYear = rDate.GetYear();
         nMonth = rDate.GetMonth();
         nDay = rDate.GetDay();
-        util::Date aNewNullDate;
-        if (getDate(m_aNullDate, aNewNullDate))
-            m_pNumberFormatter->ChangeNullDate(aNewNullDate.Day,aNewNullDate.Month,aNewNullDate.Year);
+        util::Date aNewNullDate = m_aNullDate->GetUNODate();
+        m_pNumberFormatter->ChangeNullDate(aNewNullDate.Day,aNewNullDate.Month,aNewNullDate.Year);
     }
     // tdf#130969: use UNLIMITED_PRECISION in case of GENERAL Number Format
     if( m_pNumberFormatter->GetStandardPrec() != SvNumberFormatter::UNLIMITED_PRECISION )
         m_pNumberFormatter->ChangeStandardPrec(SvNumberFormatter::UNLIMITED_PRECISION);
     m_pNumberFormatter->GetOutputString(fValue, nNumberFormatKey, aText, &pTextColor);
-    if ( m_aNullDate.hasValue() )
+    if ( m_aNullDate )
     {
         m_pNumberFormatter->ChangeNullDate(nDay,nMonth,nYear);
     }

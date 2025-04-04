@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 VPolarRadiusAxis::VPolarRadiusAxis( const AxisProperties& rAxisProperties
-            , const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+            , const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier
             , sal_Int32 nDimensionCount )
             : VPolarAxis( rAxisProperties, xNumberFormatsSupplier, 1/*nDimensionIndex*/, nDimensionCount )
 {

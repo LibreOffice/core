@@ -44,6 +44,7 @@
 
 #include <unotools/saveopt.hxx>
 #include <svl/numformat.hxx>
+#include <svl/numuno.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -340,7 +341,7 @@ bool DiagramHelper::isDateNumberFormat( sal_Int32 nNumberFormat, const Reference
     return bIsDate;
 }
 
-sal_Int32 DiagramHelper::getDateNumberFormat( const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
+sal_Int32 DiagramHelper::getDateNumberFormat( const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier )
 {
     sal_Int32 nRet=-1;
 
@@ -368,7 +369,7 @@ sal_Int32 DiagramHelper::getDateNumberFormat( const Reference< util::XNumberForm
     return nRet;
 }
 
-sal_Int32 DiagramHelper::getDateTimeInputNumberFormat( const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier, double fNumber )
+sal_Int32 DiagramHelper::getDateTimeInputNumberFormat( const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier, double fNumber )
 {
     sal_Int32 nRet = 0;
 
@@ -388,7 +389,7 @@ sal_Int32 DiagramHelper::getDateTimeInputNumberFormat( const Reference< util::XN
     return nRet;
 }
 
-sal_Int32 DiagramHelper::getPercentNumberFormat( const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
+sal_Int32 DiagramHelper::getPercentNumberFormat( const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier )
 {
     sal_Int32 nRet=-1;
     const LanguageTag& rLanguageTag = Application::GetSettings().GetLanguageTag();

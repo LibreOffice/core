@@ -391,7 +391,7 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
         SolarMutexGuard aGuard;
 
         //get number formatter
-        NumberFormatterWrapper aNumberFormatterWrapper( getChartModel() );
+        NumberFormatterWrapper aNumberFormatterWrapper( getChartModel()->getNumberFormatsSupplier() );
         SvNumberFormatter* pNumberFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
 
         DataLabelsDialog aDlg(GetChartFrame(), aItemSet, pNumberFormatter);
@@ -499,7 +499,7 @@ void ChartController::executeDispatch_InsertTrendline()
     ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
     SolarMutexGuard aGuard;
     auto aDialog = std::make_shared<SchAttribTabDlg>(GetChartFrame(), &aItemSet, &aDialogParameter,
-                                                     &aViewElementListProvider, getChartModel());
+                                                     &aViewElementListProvider, getChartModel()->getNumberFormatsSupplier());
 
     // note: when a user pressed "OK" but didn't change any settings in the
     // dialog, the SfxTabDialog returns "Cancel"
@@ -559,7 +559,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
         auto aDlg = std::make_shared<SchAttribTabDlg>(
                 GetChartFrame(), &aItemSet, &aDialogParameter,
                 &aViewElementListProvider,
-                getChartModel() );
+                getChartModel()->getNumberFormatsSupplier() );
         aDlg->SetAxisMinorStepWidthForErrorBarDecimals(
             InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getChartModel(),
                                                                              m_xChartView, m_aSelection.getSelectedCID()));

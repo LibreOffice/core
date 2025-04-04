@@ -33,6 +33,7 @@
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/color.hxx>
+#include <svl/numuno.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unoshtxt.hxx>
 #include <VSeriesPlotter.hxx>
@@ -61,7 +62,7 @@ using ::basegfx::B2DPolyPolygon;
 namespace chart {
 
 VCartesianAxis::VCartesianAxis( const AxisProperties& rAxisProperties
-            , const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+            , const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier
             , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
             , PlottingPositionHelper* pPosHelper )//takes ownership
             : VAxisBase( nDimensionIndex, nDimensionCount, rAxisProperties, xNumberFormatsSupplier )
@@ -2017,7 +2018,7 @@ void VCartesianAxis::createShapes()
 }
 
 void VCartesianAxis::createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
-                                         Reference<util::XNumberFormatsSupplier> const& xNumberFormatsSupplier,
+                                         rtl::Reference<SvNumberFormatsSupplierObj> const& xNumberFormatsSupplier,
                                          rtl::Reference<::chart::ChartModel> const& xChartDoc,
                                          css::uno::Reference<css::uno::XComponentContext> const& rComponentContext)
 {

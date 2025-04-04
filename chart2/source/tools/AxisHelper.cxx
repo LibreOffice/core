@@ -159,7 +159,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
             ScaleData aData = AxisHelper::getDateCheckedScale( xAxis, *xChartDoc );
             if( aData.AxisType==AxisType::PERCENT )
             {
-                sal_Int32 nPercentFormat = DiagramHelper::getPercentNumberFormat( xChartDoc );
+                sal_Int32 nPercentFormat = DiagramHelper::getPercentNumberFormat( xChartDoc->getNumberFormatsSupplier() );
                 if( nPercentFormat != -1 )
                 {
                     nNumberFormatKey = nPercentFormat;
@@ -174,7 +174,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                     if( xSeq.is() && !( xChartDoc.is() && xChartDoc->hasInternalDataProvider()) )
                         nNumberFormatKey = xSeq->getNumberFormatKeyByIndex( -1 );
                     else
-                        nNumberFormatKey = DiagramHelper::getDateNumberFormat( xChartDoc );
+                        nNumberFormatKey = DiagramHelper::getDateNumberFormat( xChartDoc->getNumberFormatsSupplier() );
                     bFormatSet = true;
                 }
             }
@@ -183,7 +183,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                 rtl::Reference< Diagram > xDiagram( xChartDoc->getFirstChartDiagram() );
                 if( xDiagram->isSupportingDateAxis() )
                 {
-                    nNumberFormatKey = DiagramHelper::getDateNumberFormat( xChartDoc );
+                    nNumberFormatKey = DiagramHelper::getDateNumberFormat( xChartDoc->getNumberFormatsSupplier() );
                 }
                 else
                 {
@@ -213,7 +213,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                                         }
                                     }
                                     if( bHasValidDoubles )
-                                        nNumberFormatKey = DiagramHelper::getDateNumberFormat( xChartDoc );
+                                        nNumberFormatKey = DiagramHelper::getDateNumberFormat( xChartDoc->getNumberFormatsSupplier() );
                                 }
                             }
                         }

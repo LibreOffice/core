@@ -27,7 +27,7 @@ namespace chart
 using namespace ::com::sun::star;
 
 std::shared_ptr<VPolarAxis> VPolarAxis::createAxis( const AxisProperties& rAxisProperties
-           , const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+           , const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier
            , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount )
 {
     if( nDimensionIndex==0 )
@@ -36,7 +36,7 @@ std::shared_ptr<VPolarAxis> VPolarAxis::createAxis( const AxisProperties& rAxisP
 }
 
 VPolarAxis::VPolarAxis( const AxisProperties& rAxisProperties
-            , const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+            , const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier
             , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount )
             : VAxisBase( nDimensionIndex, nDimensionCount, rAxisProperties, xNumberFormatsSupplier )
 {

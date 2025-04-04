@@ -20,10 +20,13 @@
 
 #include <config_options.h>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <rtl/ref.hxx>
 #include <tools/date.hxx>
+#include <optional>
 
 class SvNumberFormatter;
 class Color;
+class SvNumberFormatsSupplierObj;
 
 namespace chart
 {
@@ -31,28 +34,26 @@ namespace chart
 class NumberFormatterWrapper final
 {
 public:
-    NumberFormatterWrapper( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xSupplier );
+    NumberFormatterWrapper( const rtl::Reference< SvNumberFormatsSupplierObj >& xSupplier );
     ~NumberFormatterWrapper();
 
     SvNumberFormatter* getSvNumberFormatter() const { return m_pNumberFormatter;}
-    const css::uno::Reference< css::util::XNumberFormatsSupplier >&
+    const rtl::Reference< SvNumberFormatsSupplierObj >&
                 getNumberFormatsSupplier() const { return m_xNumberFormatsSupplier; };
 
     OUString getFormattedString( sal_Int32 nNumberFormatKey, double fValue, Color& rLabelColor, bool& rbColorChanged ) const;
     Date    getNullDate() const;
 
-private: //private member
-    css::uno::Reference< css::util::XNumberFormatsSupplier >
-                        m_xNumberFormatsSupplier;
-
+private:
+    rtl::Reference< SvNumberFormatsSupplierObj > m_xNumberFormatsSupplier;
     SvNumberFormatter* m_pNumberFormatter;
-    css::uno::Any m_aNullDate;
+    std::optional<Date> m_aNullDate;
 };
 
 class FixedNumberFormatter final
 {
 public:
-    FixedNumberFormatter( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xSupplier
+    FixedNumberFormatter( const rtl::Reference< SvNumberFormatsSupplierObj >& xSupplier
         , sal_Int32 nNumberFormatKey );
     ~FixedNumberFormatter();
 

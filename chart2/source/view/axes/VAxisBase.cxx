@@ -27,6 +27,7 @@
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 
 #include <osl/diagnose.h>
+#include <svl/numuno.hxx>
 
 #include <memory>
 
@@ -38,7 +39,7 @@ using ::com::sun::star::uno::Reference;
 
 VAxisBase::VAxisBase( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
                      , const AxisProperties& rAxisProperties
-                     , const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
+                     , const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier )
             : VAxisOrGridBase( nDimensionIndex, nDimensionCount )
             , m_xNumberFormatsSupplier( xNumberFormatsSupplier )
             , m_aAxisProperties( rAxisProperties )
@@ -243,7 +244,7 @@ void VAxisBase::updateUnscaledValuesAtTicks( TickIter& rIter )
 }
 
 void VAxisBase::createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& /*rSeriesPlotterList*/,
-                                    uno::Reference<util::XNumberFormatsSupplier> const& /*xNumberFormatsSupplier*/,
+                                    rtl::Reference<SvNumberFormatsSupplierObj> const& /*xNumberFormatsSupplier*/,
                                     rtl::Reference<::chart::ChartModel> const& /*xChartDoc*/,
                                     css::uno::Reference<css::uno::XComponentContext> const& /*rComponentContext*/)
 {
