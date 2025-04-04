@@ -29,7 +29,6 @@ class SvNumFmtSuppl_Impl
 public:
     SvNumberFormatter*                  pFormatter;
     mutable ::comphelper::SharedMutex   aMutex;
-    rtl::Reference<SvNumberFormatsObj>  mxNumberFormatsObj;
 
     explicit SvNumFmtSuppl_Impl(SvNumberFormatter* p) :
         pFormatter(p) {}
@@ -65,7 +64,6 @@ void SvNumberFormatsSupplierObj::SetNumberFormatter(SvNumberFormatter* pNew)
 {
     // The old Numberformatter has been retired, do not access it anymore!
     pImpl->pFormatter = pNew;
-    pImpl->mxNumberFormatsObj.clear();
 }
 
 // XNumberFormatsSupplier
@@ -81,10 +79,7 @@ uno::Reference<util::XNumberFormats> SAL_CALL SvNumberFormatsSupplierObj::getNum
 {
     ::osl::MutexGuard aGuard( pImpl->aMutex );
 
-    if (!pImpl->mxNumberFormatsObj)
-        pImpl->mxNumberFormatsObj = new SvNumberFormatsObj( *this, pImpl->aMutex );
-
-    return pImpl->mxNumberFormatsObj;
+    return new SvNumberFormatsObj( *this, pImpl->aMutex );
 }
 
 // XUnoTunnel
