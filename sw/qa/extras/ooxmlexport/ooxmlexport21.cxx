@@ -581,6 +581,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellB, "tdf160077_layoutInCellB.d
                          getProperty<sal_Int16>(xShape, u"VertOrientRelation"_ustr));
 
     CPPUNIT_ASSERT(getProperty<bool>(xShape, u"IsFollowingTextFlow"_ustr));
+
+    // tdf#165492: the "column" headings should be across from each other
+    sal_Int32 nObjectiveBottom
+        = getXPath(pDump, "//body/tab[1]/row[1]/cell[1]/txt[2]/infos/bounds", "bottom").toInt32();
+    sal_Int32 nExperienceBottom
+        = getXPath(pDump, "//body/tab[1]/row[1]/cell[2]/txt[1]/infos/bounds", "bottom").toInt32();
+    // Headers: "Objective"'s vertical position (4905) is nearly identical to "Experience" (4891)
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nObjectiveBottom, nExperienceBottom, 20);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellC, "tdf160077_layoutInCellC.docx")
