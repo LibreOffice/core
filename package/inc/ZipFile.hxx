@@ -97,7 +97,10 @@ private:
     sal_uInt64 readLOC_Impl(ZipEntry &rEntry, std::vector<sal_Int8>& rNameBuffer, std::vector<sal_Int8>& rExtraBuffer);
     sal_Int32 readCEN();
     std::tuple<sal_Int64, sal_Int64, sal_Int64> findCentralDirectory();
-    void HandlePK34(std::span<const sal_Int8> data, sal_Int64 dataOffset, sal_Int64 totalSize);
+    bool TryDDImpl(sal_Int64 dataOffset, sal_Int32 nCRC32,
+        sal_Int64 nCompressedSize, sal_Int64 nSize);
+    bool TryDDEndAt(std::span<const sal_Int8> data, sal_Int64 dataOffset);
+    bool HandlePK34(std::span<const sal_Int8> data, sal_Int64 dataOffset, sal_Int64 totalSize);
     void HandlePK78(std::span<const sal_Int8> data, sal_Int64 dataOffset);
     void recover();
     static bool readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLen,
