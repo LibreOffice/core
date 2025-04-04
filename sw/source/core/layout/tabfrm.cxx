@@ -4978,6 +4978,13 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
         // this frame's minimal height, because the rest will go to follow frame.
         else if ( !_pRow->IsInSplit() && rSz.GetHeightSizeType() == SwFrameSize::Minimum )
         {
+            nHeight = rSz.GetHeight();
+            if (bMinRowHeightInclBorder) // handle MS Word 'atLeast' oddities
+            {
+                // add (only) top horizontal border
+                nHeight += lcl_GetLineWidth(*_pRow, SvxBoxItemLine::TOP);
+            }
+
             bool bSplitFly = false;
             if (_pRow->IsInFly())
             {
@@ -4989,7 +4996,7 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
                     SwFrame* pAnchor = const_cast<SwFlyFrame*>(pFly)->FindAnchorCharFrame();
                     if (pAnchor)
                     {
-                        if (pAnchor->FindPageFrame()->getFramePrintArea().Height() > rSz.GetHeight())
+                        if (pAnchor->FindPageFrame()->getFramePrintArea().Height() > nHeight)
                         {
                             bSplitFly = true;
                         }
@@ -5000,16 +5007,10 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
             if (bSplitFly)
             {
                 // Split fly: enforce minimum row height for the master and follows.
-                nHeight = rSz.GetHeight();
             }
             else
             {
-                nHeight = rSz.GetHeight() - lcl_calcHeightOfRowBeforeThisFrame(*_pRow);
-            }
-            if (bMinRowHeightInclBorder)
-            {
-                //get horizontal border(s)
-                nHeight += lcl_GetLineWidth(*_pRow, SvxBoxItemLine::TOP);
+                nHeight -= lcl_calcHeightOfRowBeforeThisFrame(*_pRow);
             }
         }
     }
