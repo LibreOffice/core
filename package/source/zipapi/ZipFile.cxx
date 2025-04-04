@@ -1613,7 +1613,7 @@ bool ZipFile::readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLe
 }
 
 // PK34: Local file header
-void ZipFile::HandlePK34(std::span<const sal_Int8> data, sal_Int64 dataOffset, sal_Int64 totalSize)
+bool ZipFile::HandlePK34(std::span<const sal_Int8> data, sal_Int64 dataOffset, sal_Int64 totalSize)
 {
     ZipEntry aEntry;
     Sequence<sal_Int8> aTmpBuffer(data.data() + 4, 26);
@@ -1622,11 +1622,11 @@ void ZipFile::HandlePK34(std::span<const sal_Int8> data, sal_Int64 dataOffset, s
     aEntry.nVersion = aMemGrabber.ReadInt16();
     aEntry.nFlag = aMemGrabber.ReadInt16();
     if ((aEntry.nFlag & 1) == 1)
-        return;
+        return false;
 
     aEntry.nMethod = aMemGrabber.ReadInt16();
     if (aEntry.nMethod != STORED && aEntry.nMethod != DEFLATED)
-        return;
+        return false;
 
     aEntry.nTime = aMemGrabber.ReadInt32();
     aEntry.nCrc = aMemGrabber.ReadInt32();
@@ -1638,7 +1638,7 @@ void ZipFile::HandlePK34(std::span<const sal_Int8> data, sal_Int64 dataOffset, s
     const sal_Int32 nDescrLength = (aEntry.nMethod == DEFLATED && (aEntry.nFlag & 8)) ? 16 : 0;
     const sal_Int64 nBlockHeaderLength = aEntry.nPathLen + aEntry.nExtraLen + 30 + nDescrLength;
     if (aEntry.nPathLen < 0 || aEntry.nExtraLen < 0 || dataOffset + nBlockHeaderLength > totalSize)
-        return;
+        return false;
 
     // read always in UTF8, some tools seem not to set UTF8 bit
     if (o3tl::make_unsigned(30 + aEntry.nPathLen) <= data.size())
@@ -1680,7 +1680,7 @@ void ZipFile::HandlePK34(std::span<const sal_Int8> data, sal_Int64 dataOffset, s
     sal_Int64 nBlockLength = nDataSize + nBlockHeaderLength;
 
     if (dataOffset + nBlockLength > totalSize)
-        return;
+        return false;
 
     aEntry.nCompressedSize = nCompressedSize;
     aEntry.nSize = nSize;
@@ -1700,12 +1700,12 @@ void ZipFile::HandlePK34(std::span<const sal_Int8> data, sal_Int64 dataOffset, s
                         [path = OUString(aEntry.sPath + "/")](const auto& r)
                         { return r.first.startsWith(path); })
                != aEntries.end())
-        return;
+        return false;
 
     auto const lowerPath(aEntry.sPath.toAsciiLowerCase());
     if (m_EntriesInsensitive.find(lowerPath) != m_EntriesInsensitive.end())
     {   // this is required for OOXML, but not for ODF
-        return;
+        return false;
     }
     m_EntriesInsensitive.insert(lowerPath);
     aEntries.emplace(aEntry.sPath, aEntry);
@@ -1723,6 +1723,7 @@ void ZipFile::HandlePK34(std::span<const sal_Int8> data, sal_Int64 dataOffset, s
                 aEntries.erase(it);
         }
     }
+    return (aEntry.nFlag & 8) && (aEntry.nCompressedSize == 0);
 }
 
 // PK78: Data descriptor
@@ -1754,7 +1755,12 @@ void ZipFile::HandlePK78(std::span<const sal_Int8> data, sal_Int64 dataOffset)
         nCompressedSize = aMemGrabber.ReadUInt64();
         nSize = aMemGrabber.ReadUInt64();
     }
+    TryDDImpl(dataOffset, nCRC32, nCompressedSize, nSize);
+}
 
+bool ZipFile::TryDDImpl(sal_Int64 const dataOffset, sal_Int32 const nCRC32,
+        sal_Int64 const nCompressedSize, sal_Int64 const nSize)
+{
     for (auto& rEntry : aEntries)
     {
         // this is a broken package, accept this block not only for DEFLATED streams
@@ -1780,6 +1786,7 @@ void ZipFile::HandlePK78(std::span<const sal_Int8> data, sal_Int64 dataOffset)
                 rEntry.second.nCrc = nCRC32;
                 rEntry.second.nCompressedSize = nCompressedSize;
                 rEntry.second.nSize = nSize;
+                return true;
             }
         }
 #if 0
@@ -1793,6 +1800,32 @@ void ZipFile::HandlePK78(std::span<const sal_Int8> data, sal_Int64 dataOffset)
         }
 #endif
     }
+    return false;
+}
+
+bool ZipFile::TryDDEndAt(std::span<const sal_Int8> const data, sal_Int64 const dataOffset)
+{
+    assert(!aEntries.empty()); // HandlePK34 must ensure this
+
+    Sequence<sal_Int8> const buf32{data.data() + 8, 12};
+    MemoryByteGrabber mbg32{buf32};
+    sal_uInt32 const nCrc32{mbg32.ReadUInt32()};
+    sal_uInt32 const nCompressedSize32{mbg32.ReadUInt32()};
+    sal_uInt32 const nSize32{mbg32.ReadUInt32()};
+
+    if (TryDDImpl(dataOffset + 8, nCrc32, nCompressedSize32, nSize32))
+    {
+        return true;
+    }
+
+    // then try if Zip64 crc/sizes are plausible
+    Sequence<sal_Int8> const buf64{data.data(), 20};
+    MemoryByteGrabber mbg64{buf64};
+    sal_uInt32 const nCrc64{mbg64.ReadUInt32()};
+    sal_uInt64 const nCompressedSize64{mbg64.ReadUInt64()};
+    sal_uInt64 const nSize64{mbg64.ReadUInt64()};
+
+    return TryDDImpl(dataOffset, nCrc64, nCompressedSize64, nSize64);
 }
 
 void ZipFile::recover()
@@ -1810,6 +1843,7 @@ void ZipFile::recover()
 
         aGrabber.seek( 0 );
 
+        bool findDD{false};
         sal_Int32 nRead;
         for( sal_Int64 nGenPos = 0; (nRead = aGrabber.readBytes( aBuffer.data(), nToRead )) && nRead > 16; )
         {
@@ -1823,15 +1857,32 @@ void ZipFile::recover()
                 || ( nBufSize < nToRead && nPos < nBufSize - 16 ) )
 
             {
-                if ( nPos < nBufSize - 30 && pBuffer[nPos] == 'P' && pBuffer[nPos+1] == 'K' && pBuffer[nPos+2] == 3 && pBuffer[nPos+3] == 4 )
+                if (pBuffer[nPos] == 'P' && pBuffer[nPos+1] == 'K')
                 {
-                    HandlePK34(std::span(pBuffer + nPos, nBufSize - nPos), nGenPos + nPos, nLength);
-                    nPos += 4;
-                }
-                else if (pBuffer[nPos] == 'P' && pBuffer[nPos+1] == 'K' && pBuffer[nPos+2] == 7 && pBuffer[nPos+3] == 8 )
-                {
-                    HandlePK78(std::span(pBuffer + nPos, nBufSize - nPos), nGenPos + nPos);
-                    nPos += 4;
+                    if (pBuffer[nPos+2] == 7 && pBuffer[nPos+3] == 8)
+                    {
+                        findDD = false;
+                        HandlePK78(std::span(pBuffer + nPos, nBufSize - nPos), nGenPos + nPos);
+                        nPos += 4;
+                    }
+                    else
+                    {
+                        if (findDD && 30 < nGenPos+nPos
+                            && TryDDEndAt(std::span(pBuffer + nPos - 20, 20), nGenPos + nPos - 20))
+                        {
+                            findDD = false;
+                        }
+                        if (nPos < nBufSize - 30
+                            && pBuffer[nPos+2] == 3 && pBuffer[nPos+3] == 4)
+                        {
+                            findDD = HandlePK34(std::span(pBuffer + nPos, nBufSize - nPos), nGenPos + nPos, nLength);
+                            nPos += 4;
+                        }
+                        else
+                        {
+                            ++nPos;
+                        }
+                    }
                 }
                 else
                     nPos++;
