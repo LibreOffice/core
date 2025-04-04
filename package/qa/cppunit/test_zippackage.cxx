@@ -10,6 +10,8 @@
 #include <unotest/bootstrapfixturebase.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 
@@ -445,6 +447,40 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf163818)
     };
     m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
                                                                            m_xContext);
+}
+
+CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDataDescriptorDirectory)
+{
+    auto const url(m_directories.getURLFromSrc(
+        u"/package/qa/cppunit/data/vaidator-fine-libreoffice-no-open.odt"));
+    uno::Sequence<uno::Any> const args{
+        uno::Any(url),
+        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::PACKAGE)))
+    };
+
+    // don't load zip file with DD on directory
+    CPPUNIT_ASSERT_THROW(m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                             ZipPackage, args, m_xContext),
+                         css::packages::zip::ZipIOException);
+
+    // recovery should work
+    uno::Sequence<uno::Any> const args2{
+        uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage"_ustr, uno::Any(true))),
+        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::PACKAGE)))
+    };
+
+    uno::Reference<container::XHierarchicalNameAccess> xZip{
+        m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
+                                                                               m_xContext),
+        uno::UNO_QUERY
+    };
+
+    CPPUNIT_ASSERT(xZip.is());
+    uno::Reference<beans::XPropertySet> xStream{ xZip->getByHierarchicalName(u"manifest.rdf"_ustr),
+                                                 uno::UNO_QUERY };
+    CPPUNIT_ASSERT(xStream.is());
+    // check that the size was recovered from data descriptor
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(899), xStream->getPropertyValue(u"Size"_ustr).get<sal_Int64>());
 }
 
 //CPPUNIT_TEST_SUITE_REGISTRATION(...);
