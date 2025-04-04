@@ -126,6 +126,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"svt/ui/printersetupdialog.ui"_ustr,
         u"svt/ui/restartdialog.ui"_ustr,
         u"svx/ui/compressgraphicdialog.ui"_ustr,
+        u"svx/ui/docrecoverysavedialog.ui"_ustr,
         u"svx/ui/fontworkgallerydialog.ui"_ustr,
         u"svx/ui/deletefooterdialog.ui"_ustr,
         u"svx/ui/deleteheaderdialog.ui"_ustr,
