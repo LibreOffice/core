@@ -77,9 +77,6 @@ public:
     ExplicitScaleData getExplicitScale( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
     ExplicitIncrementData getExplicitIncrement( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
 
-    void setExplicitCategoriesProvider( ExplicitCategoriesProvider* /*takes ownership*/ );
-    ExplicitCategoriesProvider* getExplicitCategoriesProvider();
-
     // returns a complete scale set for a given dimension and index; for example if nDimensionIndex==1 and nAxisIndex==2 you get returned the secondary x axis, main y axis and main z axis
     std::vector< ExplicitScaleData > getExplicitScales( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
     // returns a complete increment set for a given dimension and index; for example if nDimensionIndex==1 and nAxisIndex==2 you get returned the secondary x axis, main y axis and main z axis
@@ -200,8 +197,6 @@ private:
 
     tFullExplicitScaleMap       m_aSecondaryExplicitScales;
     tFullExplicitIncrementMap   m_aSecondaryExplicitIncrements;
-
-    std::unique_ptr< ExplicitCategoriesProvider > m_apExplicitCategoriesProvider;
 };
 
 } //namespace chart

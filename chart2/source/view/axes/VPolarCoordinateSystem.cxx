@@ -96,7 +96,7 @@ void VPolarCoordinateSystem::createVAxisList(
                 continue;
 
             rtl::Reference<Diagram> xDiagram(xChartDoc->getFirstChartDiagram());
-            AxisProperties aAxisProperties(xAxis,getExplicitCategoriesProvider(), xDiagram->getDataTableRef());
+            AxisProperties aAxisProperties(xAxis, &m_xCooSysModel->getExplicitCategoriesProvider(*xChartDoc), xDiagram->getDataTableRef());
             aAxisProperties.init();
             if(aAxisProperties.m_bDisplayLabels)
                 aAxisProperties.m_nNumberFormatKey = getNumberFormatKeyForAxis(xAxis, xChartDoc);

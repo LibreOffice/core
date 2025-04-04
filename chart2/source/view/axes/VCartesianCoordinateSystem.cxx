@@ -136,7 +136,7 @@ void VCartesianCoordinateSystem::createVAxisList(
                 continue;
 
             rtl::Reference<Diagram> xDiagram(xChartDoc->getFirstChartDiagram());
-            AxisProperties aAxisProperties(xAxis, getExplicitCategoriesProvider(), xDiagram->getDataTableRef());
+            AxisProperties aAxisProperties(xAxis, &m_xCooSysModel->getExplicitCategoriesProvider(*xChartDoc), xDiagram->getDataTableRef());
             aAxisProperties.m_nDimensionIndex = nDimensionIndex;
             aAxisProperties.m_bSwapXAndY = bSwapXAndY;
             aAxisProperties.m_bIsMainAxis = (nAxisIndex==0);

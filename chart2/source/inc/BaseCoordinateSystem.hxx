@@ -33,6 +33,8 @@ namespace chart
 {
 class Axis;
 class ChartType;
+class ExplicitCategoriesProvider;
+class ChartModel;
 
 namespace impl
 {
@@ -100,6 +102,8 @@ public:
     void setChartTypes( const std::vector< rtl::Reference< ::chart::ChartType > >& aChartTypes );
     const std::vector< rtl::Reference<::chart::ChartType > > & getChartTypes2() const { return m_aChartTypes; }
 
+    ExplicitCategoriesProvider& getExplicitCategoriesProvider(ChartModel& rModel);
+
 protected:
 
     // ____ XModifyListener ____
@@ -122,6 +126,8 @@ private:
     typedef std::vector< std::vector< rtl::Reference< ::chart::Axis > > > tAxisVecVecType;
     tAxisVecVecType m_aAllAxis; //outer sequence is the dimension; inner sequence is the axis index that indicates main or secondary axis
     std::vector< rtl::Reference<::chart::ChartType > >          m_aChartTypes;
+    // cache this here so we can share it across different parts of the code, it is expensive to create
+    std::unique_ptr<ExplicitCategoriesProvider> mxExplicitCategoriesProvider;
 };
 
 } //  namespace chart
