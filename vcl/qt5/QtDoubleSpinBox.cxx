@@ -35,9 +35,10 @@ double QtDoubleSpinBox::valueFromText(const QString& rText) const
 {
     if (m_aParseTextFunction)
     {
-        std::optional<double> aValue = m_aParseTextFunction(rText);
-        if (aValue.has_value())
-            return aValue.value();
+        double fValue = 0;
+        const TriState eState = m_aParseTextFunction(rText, &fValue);
+        if (eState == TRISTATE_TRUE)
+            return fValue;
     }
 
     return QDoubleSpinBox::valueFromText(rText);
@@ -47,9 +48,18 @@ QValidator::State QtDoubleSpinBox::validate(QString& rInput, int& rPos) const
 {
     if (m_aParseTextFunction)
     {
-        if (m_aParseTextFunction(rInput).has_value())
-            return QValidator::Acceptable;
-        return QValidator::Intermediate;
+        double fValue = 0;
+        const TriState eState = m_aParseTextFunction(rInput, &fValue);
+        switch (eState)
+        {
+            case TRISTATE_TRUE:
+                return QValidator::Acceptable;
+            case TRISTATE_FALSE:
+                return QValidator::Intermediate;
+            case TRISTATE_INDET:
+                // no parser function set, use default QDoubleSpinBox logic
+                break;
+        }
     }
 
     return QDoubleSpinBox::validate(rInput, rPos);

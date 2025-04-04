@@ -37,8 +37,16 @@ QtInstanceFormattedSpinButton::QtInstanceFormattedSpinButton(QtDoubleSpinBox* pS
 
     // set functions to convert between value and formatted text
     m_pSpinBox->setFormatValueFunction([this](double fValue) { return formatValue(fValue); });
-    m_pSpinBox->setParseTextFunction(
-        [this](const QString& rText) { return GetFormatter().ParseText(toOUString(rText)); });
+    m_pSpinBox->setParseTextFunction([this](const QString& rText, double* pResult) {
+        std::optional<double> aRet = GetFormatter().ParseText(toOUString(rText));
+        if (aRet.has_value())
+        {
+            *pResult = aRet.value();
+            return TRISTATE_TRUE;
+        }
+
+        return TRISTATE_FALSE;
+    });
 }
 
 QWidget* QtInstanceFormattedSpinButton::getQWidget() const { return m_pSpinBox; }

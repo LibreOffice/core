@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <tools/gen.hxx>
+
 #include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QWidget>
@@ -20,7 +22,8 @@ class QtDoubleSpinBox : public QDoubleSpinBox
     Q_OBJECT
 
     std::function<std::optional<QString>(double)> m_aFormatValueFunction;
-    std::function<std::optional<double>(const QString&)> m_aParseTextFunction;
+    // see weld::SpinButton::parse_text for semantics
+    std::function<TriState(const QString&, double*)> m_aParseTextFunction;
 
 public:
     QtDoubleSpinBox(QWidget* pParent);
@@ -37,7 +40,7 @@ public:
         m_aFormatValueFunction = aFunction;
     }
 
-    void setParseTextFunction(std::function<std::optional<double>(const QString&)> aFunction)
+    void setParseTextFunction(std::function<TriState(const QString&, double*)> aFunction)
     {
         m_aParseTextFunction = aFunction;
     }

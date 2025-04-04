@@ -38,7 +38,6 @@ public:
     virtual unsigned int get_digits() const override;
 
 private:
-    std::optional<double> convertTextToDouble(const QString& rText);
     std::optional<QString> formatValue(double fValue);
 
 private Q_SLOTS:
