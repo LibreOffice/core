@@ -999,6 +999,11 @@ librdf_Repository::importGraph(::sal_Int16 i_Format,
     // exceptions are propagated
     i_xInStream->readBytes( buf, static_cast<sal_Int32>( sz ) );
 
+    if (buf.getLength() == 0) {
+        throw rdf::ParseException(
+            u"librdf_Repository::importGraph: stream is empty"_ustr, *this);
+    }
+
     std::scoped_lock g(m_aMutex); // don't call i_x* with mutex locked
 
     if (m_NamedGraphs.find(contextU) != m_NamedGraphs.end()) {
