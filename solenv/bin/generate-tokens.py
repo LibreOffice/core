@@ -23,9 +23,10 @@ idfile_out_name = sys.argv[2]
 namefile_out_name = sys.argv[3]
 gperffile_out_name = sys.argv[4]
 
-idfile = open(idfile_out_name, 'w')
-namefile = open(namefile_out_name, 'w')
-gperffile = open(gperffile_out_name, 'w')
+# Gperf requires LF newlines, not CRLF, even on Windows.
+idfile = open(idfile_out_name, 'w', newline = '\n')
+namefile = open(namefile_out_name, 'w', newline = '\n')
+gperffile = open(gperffile_out_name, 'w', newline = '\n')
 
 gperffile.write("""%language=C++
 %global-table
@@ -64,18 +65,3 @@ gperffile.write("%%\n")
 idfile.close()
 namefile.close()
 gperffile.close()
-
-def fix_linefeeds(fname):
-    # Gperf requires LF newlines, not CRLF, even on Windows.
-    # Making this work on both Python 2 and 3 is difficult.
-    # When Python 2 is dropped, delete this and add
-    # newline = '\n' to the open() calls above.
-    with open(fname, 'rb') as ifile:
-        d = ifile.read()
-    d = d.replace(b'\r', b'')
-    with open(fname, 'wb') as ofile:
-        ofile.write(d)
-
-fix_linefeeds(idfile_out_name)
-fix_linefeeds(namefile_out_name)
-fix_linefeeds(gperffile_out_name)
