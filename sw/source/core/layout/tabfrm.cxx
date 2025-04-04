@@ -217,6 +217,7 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame *pRow,
                                      const bool _bConsiderObjs );
 static sal_uInt16 lcl_GetLineWidth(const SwRowFrame& rRow, const SvxBoxItemLine& rLine);
 static sal_uInt16 lcl_GetTopSpace( const SwRowFrame& rRow );
+static sal_uInt16 lcl_GetBottomLineDist(const SwRowFrame& rRow);
 
 static SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrame&, const SwBorderAttrs& );
 
@@ -4983,6 +4984,8 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
             {
                 // add (only) top horizontal border
                 nHeight += lcl_GetLineWidth(*_pRow, SvxBoxItemLine::TOP);
+                // MS Word also adds the bottom border padding in addition to the minHeight + line
+                nHeight += lcl_GetBottomLineDist(*_pRow);
             }
 
             bool bSplitFly = false;
