@@ -228,11 +228,13 @@ A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* p
 
     // If LOKit is enabled, then enable the update button and don't run the accessibility check.
     // In desktop don't show the update button and schedule to run the accessibility check async
+    // If LOKit is enabled, hide the Options button and its label.
     if (comphelper::LibreOfficeKit::isActive())
     {
         m_xLevelExpanders[0]->hide();
         m_xLevelExpanders[1]->hide();
         mxUpdateBox->show();
+        m_xBuilder->weld_widget(u"gridOptions"_ustr)->hide();
     }
     else
     {
