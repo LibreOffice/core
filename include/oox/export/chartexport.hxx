@@ -174,6 +174,9 @@ private:
     void exportChart( const css::uno::Reference<
                           css::chart::XChartDocument >& rChartDoc,
                           bool bIsChartex);
+    void exportData( const css::uno::Reference<
+                              css::chart::XChartDocument >& rChartDoc,
+                              bool bIsChartex);
     void exportExternalData( const css::uno::Reference<
                               css::chart::XChartDocument >& rChartDoc,
                               bool bIsChartex);

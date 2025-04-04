@@ -20,7 +20,8 @@ namespace oox
 namespace
 {
 
-constexpr frozen::unordered_map<Relationship, std::u16string_view, 49> constRelationshipMap
+constexpr frozen::unordered_map<Relationship, std::u16string_view,
+          static_cast<sal_Int32>(Relationship::NUM_ENTRIES)> constRelationshipMap
 {
 #include "relationship.inc"
 };

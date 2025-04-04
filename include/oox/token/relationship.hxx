@@ -20,6 +20,7 @@ enum class Relationship
 {
     ACTIVEXCONTROLBINARY,
     CHART,
+    CHARTEX,
     CHARTUSERSHAPES,
     COMMENTS,
     COMMENTAUTHORS,
@@ -66,7 +67,8 @@ enum class Relationship
     AUDIO,
     VMLDRAWING,
     WORDVBADATA,
-    WORKSHEET
+    WORKSHEET,
+    NUM_ENTRIES // last, unused
 };
 
 OUString OOX_DLLPUBLIC getRelationship(Relationship eRelationship);
