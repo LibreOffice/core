@@ -766,40 +766,27 @@ bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
 bool DrawViewShell::SelectPage(sal_uInt16 nPage, sal_uInt16 nSelect)
 {
     SdPage* pPage = GetDoc()->GetSdPage(nPage, PageKind::Standard);
+    if (!pPage)
+        return false;
 
-    //page selector marks pages to selected in view
-    auto &pageSelector = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase())->GetSlideSorter().GetController().GetPageSelector();
+    //page selector marks pages as selected in view
+    sd::slidesorter::SlideSorterViewShell* pSlideSorterVS
+        = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
 
-    if (pPage)
+    if (nSelect == 1 || (/*Toggle*/ nSelect > 1 && !pPage->IsSelected()))
     {
-        if (nSelect == 0)
-        {
-            GetDoc()->SetSelected(pPage, false);  // Deselect.
-            pageSelector.DeselectPage(nPage);
-        }
-        else if (nSelect == 1)
-        {
-            GetDoc()->SetSelected(pPage, true);    // Select.
-            pageSelector.SelectPage(nPage);
-        }
-        else
-        {
-            // Toggle.
-            if (pPage->IsSelected())
-            {
-                GetDoc()->SetSelected(pPage, false);
-                pageSelector.DeselectPage(nPage);
-            }
-            else
-            {
-                GetDoc()->SetSelected(pPage, true);
-                pageSelector.SelectPage(nPage);
-            }
-        }
-        return true;
+        GetDoc()->SetSelected(pPage, true); // Select.
+        if (pSlideSorterVS)
+            pSlideSorterVS->GetSlideSorter().GetController().GetPageSelector().SelectPage(nPage);
+    }
+    else
+    {
+        GetDoc()->SetSelected(pPage, false); // Deselect.
+        if (pSlideSorterVS)
+            pSlideSorterVS->GetSlideSorter().GetController().GetPageSelector().DeselectPage(nPage);
     }
 
-    return false;
+    return true;
 }
 
 bool DrawViewShell::IsSelected(sal_uInt16 nPage)
