@@ -366,13 +366,13 @@ void sal_detail_log(
         syslog(prio, "%s", s.str().c_str());
 #endif
     } else {
+        s << '\n';
         // avoid calling getLogFile() more than once
         static std::ofstream * logFile = getLogFile();
         if (logFile) {
-            *logFile << s.str() << std::endl;
+            *logFile << s.str();
         }
         else {
-            s << '\n';
 #ifdef _WIN32
             // write to Windows debugger console, too
             OutputDebugStringA(s.str().c_str());
