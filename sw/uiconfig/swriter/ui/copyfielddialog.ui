@@ -50,7 +50,7 @@
             </child>
             <child>
               <object class="GtkButton" id="copy">
-                <property name="label" translatable="yes" context="stock">_Copy</property>
+                <property name="label" translatable="yes" context="copyfielddialog|copy">_Copy</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
