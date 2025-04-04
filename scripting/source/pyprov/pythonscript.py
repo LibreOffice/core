@@ -475,18 +475,6 @@ class ProviderContext:
                             g_exportedScripts.append(value.id)
                         return g_exportedScripts
 
-        # Python 2 only
-        # for node in code.node.nodes:
-        #     if node.__class__.__name__ == 'Function':
-        #         allFuncs.append(node.name)
-        #     elif node.__class__.__name__ == 'Assign':
-        #         for assignee in node.nodes:
-        #             if assignee.name == 'g_exportedScripts':
-        #                 for item in node.expr.nodes:
-        #                     if item.__class__.__name__ == 'Name':
-        #                         g_exportedScripts.append(item.name)
-        #                 return g_exportedScripts
-
         return allFuncs
 
     def getModuleByUrl(self, url):
