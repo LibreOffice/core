@@ -185,21 +185,8 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     }
     else if (sName == u"GtkButton")
     {
-        QPushButton* pButton = nullptr;
-        if (QDialogButtonBox* pButtonBox = qobject_cast<QDialogButtonBox*>(pParentWidget))
-        {
-            pButton = pButtonBox->addButton("", QDialogButtonBox::NoRole);
-
-            // for message boxes, avoid implicit standard buttons in addition to those explicitly added
-            if (QMessageBox* pMessageBox = qobject_cast<QMessageBox*>(pParentWidget->window()))
-                pMessageBox->setStandardButtons(QMessageBox::NoButton);
-        }
-        else
-        {
-            pButton = new QPushButton(pParentWidget);
-        }
-
-        setButtonProperties(*pButton, rMap);
+        QPushButton* pButton = new QPushButton(pParentWidget);
+        setButtonProperties(*pButton, rMap, pParentWidget);
         pObject = pButton;
     }
     else if (sName == u"GtkCheckButton")
@@ -288,7 +275,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     else if (sName == u"GtkMenuButton")
     {
         QToolButton* pMenuButton = new QToolButton(pParentWidget);
-        setMenuButtonProperties(*pMenuButton, rMap);
+        setMenuButtonProperties(*pMenuButton, rMap, pParentWidget);
         pObject = pMenuButton;
     }
     else if (sName == u"GtkNotebook")
@@ -349,7 +336,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     else if (sName == u"GtkToggleButton")
     {
         QToolButton* pButton = new QToolButton(pParentWidget);
-        setButtonProperties(*pButton, rMap);
+        setButtonProperties(*pButton, rMap, pParentWidget);
         pObject = pButton;
     }
     else if (sName == u"GtkToolbar")
@@ -750,7 +737,8 @@ void QtBuilder::replaceWidget(QWidget* pOldWidget, QWidget* pNewWidget)
     deleteObject(pOldWidget);
 }
 
-void QtBuilder::setButtonProperties(QAbstractButton& rButton, stringmap& rProps)
+void QtBuilder::setButtonProperties(QAbstractButton& rButton, stringmap& rProps,
+                                    QWidget* pParentWidget)
 {
     for (auto const & [ rKey, rValue ] : rProps)
     {
@@ -770,6 +758,15 @@ void QtBuilder::setButtonProperties(QAbstractButton& rButton, stringmap& rProps)
         {
             rButton.setText(convertAccelerator(rValue));
         }
+    }
+
+    if (QDialogButtonBox* pButtonBox = qobject_cast<QDialogButtonBox*>(pParentWidget))
+    {
+        pButtonBox->addButton(&rButton, QDialogButtonBox::NoRole);
+
+        // for message boxes, avoid implicit standard buttons in addition to those explicitly added
+        if (QMessageBox* pMessageBox = qobject_cast<QMessageBox*>(pParentWidget->window()))
+            pMessageBox->setStandardButtons(QMessageBox::NoButton);
     }
 }
 
@@ -817,7 +814,8 @@ void QtBuilder::setLabelProperties(QLabel& rLabel, stringmap& rProps)
     }
 }
 
-void QtBuilder::setMenuButtonProperties(QToolButton& rButton, stringmap& rProps)
+void QtBuilder::setMenuButtonProperties(QToolButton& rButton, stringmap& rProps,
+                                        QWidget* pParentWidget)
 {
     const OUString sMenu = extractPopupMenu(rProps);
     if (!sMenu.isEmpty())
@@ -827,7 +825,7 @@ void QtBuilder::setMenuButtonProperties(QToolButton& rButton, stringmap& rProps)
         rButton.setMenu(pMenu);
     }
 
-    setButtonProperties(rButton, rProps);
+    setButtonProperties(rButton, rProps, pParentWidget);
 }
 
 void QtBuilder::setMessageDialogProperties(QMessageBox& rMessageBox, stringmap& rProps)

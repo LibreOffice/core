@@ -86,13 +86,13 @@ private:
     static void deleteObject(QObject* pObject);
     // remove pOldWidget from the widget hierarchy and set (child widget) pNewWidget in its place
     static void replaceWidget(QWidget* pOldWidget, QWidget* pNewWidget);
-    void setButtonProperties(QAbstractButton& rButton, stringmap& rProps);
+    void setButtonProperties(QAbstractButton& rButton, stringmap& rProps, QWidget* pParentWidget);
     static void setCheckButtonProperties(QAbstractButton& rButton, stringmap& rProps);
     static void setDialogProperties(QDialog& rDialog, stringmap& rProps);
     static void setEntryProperties(QLineEdit& rLineEdit, stringmap& rProps);
     static void setLabelProperties(QLabel& rLabel, stringmap& rProps);
     static void setMessageDialogProperties(QMessageBox& rMessageBox, stringmap& rProps);
-    void setMenuButtonProperties(QToolButton& rButton, stringmap& rProps);
+    void setMenuButtonProperties(QToolButton& rButton, stringmap& rProps, QWidget* pParentWidget);
     void setScaleProperties(QSlider& rSlider, stringmap& rProps);
     void setSpinButtonProperties(QDoubleSpinBox& rSpinBox, stringmap& rProps);
     static void setTextViewProperties(QPlainTextEdit& rTextEdit, stringmap& rProps);
