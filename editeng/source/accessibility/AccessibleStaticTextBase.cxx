@@ -625,14 +625,14 @@ css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextAtInde
     }
     else if ( AccessibleTextType::ATTRIBUTE_RUN == aTextType )
     {
-          SvxAccessibleTextAdapter& rTextForwarder = GetParagraph( aPos.nIndex ).GetTextForwarder();
-          sal_Int32 nStartIndex, nEndIndex;
-          if ( rTextForwarder.GetAttributeRun( nStartIndex, nEndIndex, aPos.nPara, aPos.nIndex, true ) )
-          {
-                 aResult.SegmentText = getTextRange( nStartIndex, nEndIndex );
-                 aResult.SegmentStart = nStartIndex;
-                 aResult.SegmentEnd = nEndIndex;
-          }
+        SvxAccessibleTextAdapter& rTextForwarder = GetParagraph( aPos.nIndex ).GetTextForwarder();
+        sal_Int32 nStartIndex, nEndIndex;
+        if ( rTextForwarder.GetAttributeRun( nStartIndex, nEndIndex, aPos.nPara, aPos.nIndex, true ) )
+        {
+            aResult.SegmentText = getTextRange( nStartIndex, nEndIndex );
+            aResult.SegmentStart = nStartIndex;
+            aResult.SegmentEnd = nEndIndex;
+        }
     }
     else
     {
