@@ -4944,6 +4944,16 @@ static SwTwips lcl_CalcMinCellHeight( const SwLayoutFrame *_pCell,
     return nHeight;
 }
 
+static SwTwips lcl_GetFixedRowHeight(const SwRowFrame& rRow, SwTwips nHeight)
+{
+    auto& rIDSA = rRow.GetFormat()->GetDoc()->GetDocumentSettingManager();
+    if (rIDSA.get(DocumentSettingId::MIN_ROW_HEIGHT_INCL_BORDER)) // MS Word 'exact' oddities
+    {
+        nHeight += lcl_GetBottomLineDist(rRow);
+    }
+
+    return nHeight;
+}
 // #i26945# - add parameter <_bConsiderObjs> in order to control,
 // if floating screen objects have to be considered for the minimal cell height
 static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
@@ -5335,7 +5345,7 @@ void SwRowFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
 #endif
         const SwTwips nDiff = aRectFnSet.GetHeight(getFrameArea()) -
                               ( HasFixSize() && !IsRowSpanLine()
-                                ? pAttrs->GetSize().Height()
+                                ? lcl_GetFixedRowHeight(*this, pAttrs->GetSize().Height())
                                 // #i26945#
                                 : ::lcl_CalcMinRowHeight( this,
                                     FindTabFrame()->IsConsiderObjsForMinCellHeight() ) );
