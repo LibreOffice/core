@@ -42,12 +42,7 @@ cat <<\EOF >"${1?}"de.allotropia.ZetaOffice.appdata.xml
   without worrying about compatibility.</p>
  </description>
  <launchable type="desktop-id">de.allotropia.ZetaOffice.desktop</launchable>
- <url type="homepage">http://www.libreoffice.org/discover/libreoffice/</url>
- <url type="bugtracker">https://bugs.documentfoundation.org/</url>
- <url type="donation">https://donate.libreoffice.org/</url>
- <url type="faq">https://wiki.documentfoundation.org/Faq</url>
- <url type="help">http://www.libreoffice.org/get-help/documentation/</url>
- <url type="translate">https://wiki.documentfoundation.org/Translating_LibreOffice</url>
+ <url type="homepage">http://zetaoffice.net</url>
  <screenshots>
   <screenshot type="default">
    <image>https://hub.libreoffice.org/screenshots/writer-01.png</image>
@@ -70,8 +65,7 @@ cat <<\EOF >"${1?}"de.allotropia.ZetaOffice.appdata.xml
    <caption>Sample Base document</caption>
   </screenshot>
  </screenshots>
- <developer_name>The Document Foundation</developer_name>
- <update_contact>libreoffice_at_lists.freedesktop.org</update_contact>
+ <developer_name>allotropia Software GmbH</developer_name>
  <kudos>
   <kudo>HiDpiIcon</kudo>
   <kudo>HighContrast</kudo>

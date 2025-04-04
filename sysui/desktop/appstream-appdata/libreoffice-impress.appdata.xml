@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
-  <id>libreoffice-impress.desktop</id>
+  <id>zetaoffice-impress.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MPL-2.0</project_license>
-  <name>LibreOffice Impress</name>
-  <summary>Presentation program of the LibreOffice productivity suite</summary>
+  <name>ZetaOffice Impress</name>
+  <summary>Presentation program of the ZetaOffice productivity suite</summary>
   <description>
     <p>
-Impress is a presentation program and part of the LibreOffice productivity suite.
+Impress is a presentation program and part of the ZetaOffice productivity suite.
 Impress is the fastest and easiest way to create effective multimedia presentations.
 Stunning animation and sensational special effects help you convince your audience.
 Create presentations that look even more professional than the standard
@@ -15,17 +15,12 @@ presentations you commonly see at work. Get your colleagues’ and bosses’ att
 by creating something a little bit different.
 </p>
     <p>
-LibreOffice supports opening and saving into a wide variety of formats, so you
+ZetaOffice supports opening and saving into a wide variety of formats, so you
 can easily share presentations with users of other popular office suites without
 worrying about compatibility.
 </p>
   </description>
-  <url type="homepage">http://www.libreoffice.org/discover/impress/</url>
-  <url type="bugtracker">https://bugs.documentfoundation.org/</url>
-  <url type="donation">https://donate.libreoffice.org/</url>
-  <url type="faq">https://hub.libreoffice.org/faq</url>
-  <url type="help">http://www.libreoffice.org/get-help/documentation/</url>
-  <url type="translate">https://hub.libreoffice.org/translate</url>
+  <url type="homepage">http://zetaoffice.net</url>
   <screenshots>
     <screenshot type="default">
       <image>https://hub.libreoffice.org/screenshots/impress-01.png</image>
@@ -36,8 +31,7 @@ worrying about compatibility.
       <caption><!-- Describe this screenshot in less than ~10 words --></caption>
     </screenshot>
   </screenshots>
-  <developer_name>The Document Foundation</developer_name>
-  <update_contact>libreoffice_at_lists.freedesktop.org</update_contact>
+  <developer_name>allotropia Software GmbH</developer_name>
   <kudos>
     <kudo>HiDpiIcon</kudo>
     <kudo>HighContrast</kudo>

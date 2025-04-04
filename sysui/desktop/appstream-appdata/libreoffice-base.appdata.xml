@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
-  <id>libreoffice-base.desktop</id>
+  <id>zetaoffice-base.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MPL-2.0</project_license>
-  <name>LibreOffice Base</name>
-  <summary>Database manager part of the LibreOffice productivity suite</summary>
+  <name>ZetaOffice Base</name>
+  <summary>Database manager part of the ZetaOffice productivity suite</summary>
   <description>
     <p>
-Base is a powerful database manager, part of the LibreOffice productivity suite.
+Base is a powerful database manager, part of the ZetaOffice productivity suite.
 It allows you to store, manage and maintain different collections of data.
 Base makes it easy to keep track of your finances, customers, invoices, or even
 just the contacts in your address book!
@@ -25,12 +25,7 @@ In addition, the built-in support for JDBC- and ODBC-standard drivers allows you
 to connect to virtually any other existing database engine as well.
 </p>
   </description>
-  <url type="homepage">http://www.libreoffice.org/discover/base/</url>
-  <url type="bugtracker">https://bugs.documentfoundation.org/</url>
-  <url type="donation">https://donate.libreoffice.org/</url>
-  <url type="faq">https://hub.libreoffice.org/faq</url>
-  <url type="help">http://www.libreoffice.org/get-help/documentation/</url>
-  <url type="translate">https://hub.libreoffice.org/translate</url>
+  <url type="homepage">http://zetaoffice.net</url>
   <screenshots>
     <screenshot type="default">
       <image>https://hub.libreoffice.org/screenshots/base-01.png</image>
@@ -41,8 +36,7 @@ to connect to virtually any other existing database engine as well.
       <caption><!-- Describe this screenshot in less than ~10 words --></caption>
     </screenshot>
   </screenshots>
-  <developer_name>The Document Foundation</developer_name>
-  <update_contact>libreoffice_at_lists.freedesktop.org</update_contact>
+  <developer_name>allotropia Software GmbH</developer_name>
   <kudos>
     <kudo>HiDpiIcon</kudo>
     <kudo>HighContrast</kudo>
