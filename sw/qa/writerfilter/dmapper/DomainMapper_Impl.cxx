@@ -471,6 +471,13 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleLostNumbering)
     xStyle->getPropertyValue("NumberingStyleName") >>= aNumberingStyleName;
     CPPUNIT_ASSERT(!aNumberingStyleName.isEmpty());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testIfField)
+{
+    // Without the accompanying fix in place, this test would have failed, the document failed to
+    // load.
+    loadFromFile(u"if-field.docx");
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
