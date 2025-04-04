@@ -669,7 +669,15 @@ void DomainMapper_Impl::RemoveDummyParaForTableInSection()
     if (!xTextAppend.is())
         return;
 
-    uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursorByRange(pSectionContext->GetStartingRange());
+    uno::Reference< text::XTextCursor > xCursor;
+    try
+    {
+        xCursor = xTextAppend->createTextCursorByRange(pSectionContext->GetStartingRange());
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "failed to create text cursor by range");
+    }
 
     // Remove the extra NumPicBullets from the document,
     // which get attached to the first paragraph in the
