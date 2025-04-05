@@ -22,15 +22,6 @@ define gb_Helper_make_url
 file:///$(strip $(1))
 endef
 
-# YaccTarget class
-
-define gb_YaccTarget__command
-$(call gb_Output_announce,$(2),$(true),YAC,3)
-	mkdir -p $(dir $(3)) && \
-	$(call gb_Helper_wsl_path,$(WSL) $(BISON) $(T_YACCFLAGS) --defines=$(4) -o $(5) $(1)) && touch $(3)
-
-endef
-
 # CObject class
 
 # $(call gb_CObject__compiler,flags,source,compiler)

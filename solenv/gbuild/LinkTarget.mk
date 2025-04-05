@@ -34,7 +34,6 @@
 #  gb_LinkTarget_CXXFLAGS
 #  gb_LinkTarget_LDFLAGS
 #  gb_LinkTarget_INCLUDE
-#  gb_YaccTarget__command(grammar-file, stem-for-message, source-target, include-target)
 
 # Same happens for the gb_LinkTarget_add_libs calls from RepositoryExternal.mk. But we have no real
 # way to separate for gbuild internal and external gb_LinkTarget_add_libs calls.
@@ -467,7 +466,13 @@ $(call gb_YaccTarget_get_clean_target,%) :
 	    rm -f $(call gb_YaccTarget_get_grammar_target,$*) $(call gb_YaccTarget_get_header_target,$*) $(call gb_YaccTarget_get_target,$*))
 
 $(call gb_YaccTarget_get_target,%) : $(call gb_YaccTarget_get_source,$(SRCDIR),%)
-	$(call gb_YaccTarget__command,$<,$*,$@,$(call gb_YaccTarget_get_header_target,$*),$(call gb_YaccTarget_get_grammar_target,$*))
+	$(call gb_Output_announce,$*,$(true),YAC,3)
+	$(call gb_Trace_StartRange,$*,YAC)
+	mkdir -p $(@D) && \
+	$(call gb_Helper_wsl_path,$(WSL) $(BISON) -v $(T_YACCFLAGS) \
+	    --defines=$(call gb_YaccTarget_get_header_target,$*) \
+	    -o $(call gb_YaccTarget_get_grammar_target,$*) $<) && touch $@
+	$(call gb_Trace_EndRange,$*,YAC)
 
 # call gb_YaccTarget_YaccTarget,yacctarget
 define gb_YaccTarget_YaccTarget
@@ -491,7 +496,8 @@ $(call gb_LexTarget_get_clean_target,%) :
 $(call gb_LexTarget_get_target,%) : $(call gb_LexTarget_get_source,$(SRCDIR),%)
 	$(call gb_Output_announce,$*,$(true),LEX,3)
 	$(call gb_Trace_StartRange,$*,LEX)
-	$(call gb_LexTarget__command,$<,$*,$@,$(call gb_LexTarget_get_scanner_target,$*))
+	mkdir -p $(@D) && \
+	$(call gb_Helper_wsl_path,$(FLEX) $(T_LEXFLAGS) -o$(call gb_LexTarget_get_scanner_target,$*) $<) && touch $@
 	$(call gb_Trace_EndRange,$*,LEX)
 
 # gb_LexTarget_LexTarget(scanner-file)
@@ -499,12 +505,6 @@ define gb_LexTarget_LexTarget
 $(call gb_LexTarget_get_scanner_target,$(1)) : $(call gb_LexTarget_get_target,$(1))
 	touch $$@
 
-endef
-
-#  gb_LexTarget__command(scanner-file, stem-for-message, done-pseudo-target, source-target)
-define gb_LexTarget__command
-	mkdir -p $(dir $(3)) && \
-	$(call gb_Helper_wsl_path,$(FLEX) $(T_LEXFLAGS) -o$(4) $(1)) && touch $(3)
 endef
 
 

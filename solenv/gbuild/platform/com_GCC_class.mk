@@ -188,16 +188,6 @@ endif
 gb_PrecompiledHeader__create_reuse_files =
 gb_PrecompiledHeader__copy_reuse_files =
 
-# YaccTarget class
-
-define gb_YaccTarget__command
-$(call gb_Output_announce,$(2),$(true),YAC,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(3)) && \
-	$(BISON) $(T_YACCFLAGS) -v --defines=$(4) -o $(5) $(1) && touch $(3) )
-
-endef
-
 # CppunitTest class
 
 ifeq ($(strip $(DEBUGCPPUNIT)),TRUE)
