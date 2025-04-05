@@ -165,13 +165,13 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextStyleContext::c
             nFamily = XML_TYPE_PROP_TABLE_ROW;
         if( nFamily )
         {
-            rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
+            SvXMLImportPropertyMapper* pImpPrMap =
                 GetStyles()->GetImportPropertyMapper( GetFamily() );
-            if( xImpPrMap.is() )
+            if( pImpPrMap )
                 return new XMLTextPropertySetContext( GetImport(), nElement, xAttrList,
                                                         nFamily,
                                                         GetProperties(),
-                                                        xImpPrMap,
+                                                        pImpPrMap,
                                                         m_sDropCapTextStyleName);
         }
     }
@@ -380,10 +380,10 @@ void XMLTextStyleContext::FillPropertySet(
 
     // imitate XMLPropStyleContext::FillPropertySet(...)
     SvXMLStylesContext* pSvXMLStylesContext = GetStyles();
-    rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap = pSvXMLStylesContext->GetImportPropertyMapper(GetFamily());
-    DBG_ASSERT(xImpPrMap.is(),"Where is the import prop mapper?");
+    SvXMLImportPropertyMapper* pImpPrMap = pSvXMLStylesContext->GetImportPropertyMapper(GetFamily());
+    DBG_ASSERT(pImpPrMap,"Where is the import prop mapper?");
 
-    if(!xImpPrMap.is())
+    if(!pImpPrMap)
         return;
 
     // imitate SvXMLImportPropertyMapper::FillPropertySet(...)
@@ -464,11 +464,11 @@ void XMLTextStyleContext::FillPropertySet(
 
     if( bAutomatic )
     {
-        xImpPrMap->CheckSpecialContext( GetProperties(), rPropSet, aContextIDs );
+        pImpPrMap->CheckSpecialContext( GetProperties(), rPropSet, aContextIDs );
     }
     else
     {
-        xImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
+        pImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
     }
 
     sal_Int32 nIndex = aContextIDs[0].nIndex;
@@ -558,7 +558,7 @@ void XMLTextStyleContext::FillPropertySet(
                     {
                         if(!rPropMapper.is())
                         {
-                            rPropMapper = xImpPrMap->getPropertySetMapper();
+                            rPropMapper = pImpPrMap->getPropertySetMapper();
                         }
 
                         // set property
@@ -604,7 +604,7 @@ void XMLTextStyleContext::FillPropertySet(
 
                             if(!rPropMapper.is())
                             {
-                                rPropMapper = xImpPrMap->getPropertySetMapper();
+                                rPropMapper = pImpPrMap->getPropertySetMapper();
                             }
 
                             // set property

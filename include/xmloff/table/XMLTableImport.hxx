@@ -53,9 +53,9 @@ public:
 
     SvXMLStyleContext* CreateTableTemplateContext( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
-    const rtl::Reference< SvXMLImportPropertyMapper >& GetCellImportPropertySetMapper() const { return mxCellImportPropertySetMapper; }
-    const rtl::Reference< SvXMLImportPropertyMapper >& GetRowImportPropertySetMapper() const { return mxRowImportPropertySetMapper; }
-    const rtl::Reference< SvXMLImportPropertyMapper >& GetColumnImportPropertySetMapper() const { return mxColumnImportPropertySetMapper; }
+    SvXMLImportPropertyMapper* GetCellImportPropertySetMapper() const { return mxCellImportPropertySetMapper.get(); }
+    SvXMLImportPropertyMapper* GetRowImportPropertySetMapper() const { return mxRowImportPropertySetMapper.get(); }
+    SvXMLImportPropertyMapper* GetColumnImportPropertySetMapper() const { return mxColumnImportPropertySetMapper.get(); }
 
     void addTableTemplate( const OUString& rsStyleName, XMLTableTemplate& xTableTemplate );
     /// Inserts all table templates.
@@ -64,9 +64,9 @@ public:
 private:
     SvXMLImport&                                 mrImport;
     bool                                        mbWriter;
-    rtl::Reference< SvXMLImportPropertyMapper > mxCellImportPropertySetMapper;
-    rtl::Reference< SvXMLImportPropertyMapper > mxRowImportPropertySetMapper;
-    rtl::Reference< SvXMLImportPropertyMapper > mxColumnImportPropertySetMapper;
+    std::unique_ptr< SvXMLImportPropertyMapper > mxCellImportPropertySetMapper;
+    std::unique_ptr< SvXMLImportPropertyMapper > mxRowImportPropertySetMapper;
+    std::unique_ptr< SvXMLImportPropertyMapper > mxColumnImportPropertySetMapper;
 
     XMLTableTemplateMap                         maTableTemplates;
 };

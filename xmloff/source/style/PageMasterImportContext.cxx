@@ -80,11 +80,11 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > PageStyleContext::crea
         nElement == XML_ELEMENT(STYLE, XML_FOOTER_STYLE) )
     {
         bool bHeader = nElement == XML_ELEMENT(STYLE, XML_HEADER_STYLE);
-        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
+        SvXMLImportPropertyMapper* pImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
-        if( xImpPrMap.is() )
+        if( pImpPrMap )
         {
-            const rtl::Reference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
+            const rtl::Reference< XMLPropertySetMapper >& rMapper = pImpPrMap->getPropertySetMapper();
             sal_Int32 nFlag;
             if (bHeader)
                 nFlag = CTF_PM_HEADERFLAG;
@@ -115,17 +115,17 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > PageStyleContext::crea
             if (!bEnd)
                 nEndIndex = nIndex;
             return new PageHeaderFooterContext(GetImport(),
-                            GetProperties(), xImpPrMap, nStartIndex, nEndIndex, bHeader);
+                            GetProperties(), pImpPrMap, nStartIndex, nEndIndex, bHeader);
         }
     }
 
     if( nElement == XML_ELEMENT(STYLE, XML_PAGE_LAYOUT_PROPERTIES) )
     {
-        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
+        SvXMLImportPropertyMapper* pImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
-        if( xImpPrMap.is() )
+        if( pImpPrMap )
         {
-            const rtl::Reference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
+            const rtl::Reference< XMLPropertySetMapper >& rMapper = pImpPrMap->getPropertySetMapper();
             sal_Int32 nEndIndex (-1);
             bool bEnd(false);
             sal_Int32 nIndex = 0;
@@ -146,7 +146,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > PageStyleContext::crea
                                                     xAttrList,
                                                     XML_TYPE_PROP_PAGE_LAYOUT,
                                                     GetProperties(),
-                                                    xImpPrMap, 0, nEndIndex, Page);
+                                                    pImpPrMap, 0, nEndIndex, Page);
         }
     }
 
@@ -193,9 +193,9 @@ void PageStyleContext::FillPropertySet_PageStyle(
     // do not use XMLPropStyleContext::FillPropertySet, we need to handle this ourselves since
     // we have properties which use the MID_FLAG_NO_PROPERTY_IMPORT flag since they need some special
     // handling
-    rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap = GetStyles()->GetImportPropertyMapper(GetFamily());
+    SvXMLImportPropertyMapper* pImpPrMap = GetStyles()->GetImportPropertyMapper(GetFamily());
 
-    if(xImpPrMap.is())
+    if(pImpPrMap)
     {
         // properties that need special handling because they need the used name to be translated first
         struct ContextID_Index_Pair aContextIDs[] =
@@ -230,10 +230,10 @@ void PageStyleContext::FillPropertySet_PageStyle(
         };
 
         // Fill PropertySet, but let it handle special properties not itself
-        xImpPrMap->FillPropertySet(GetProperties(), xPropSet, aContextIDs);
+        pImpPrMap->FillPropertySet(GetProperties(), xPropSet, aContextIDs);
 
         // get property set mapper
-        const rtl::Reference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
+        const rtl::Reference< XMLPropertySetMapper >& rMapper = pImpPrMap->getPropertySetMapper();
         Reference<XPropertySetInfo> const xInfo(xPropSet->getPropertySetInfo());
 
         // don't look at the attributes, look at the property, could
@@ -314,7 +314,7 @@ void PageStyleContext::FillPropertySet_PageStyle(
     }
     else
     {
-        OSL_ENSURE(xImpPrMap.is(), "Got no SvXMLImportPropertyMapper (!)");
+        OSL_ENSURE(pImpPrMap, "Got no SvXMLImportPropertyMapper (!)");
     }
 
     // pDrawingPageStyle overrides this

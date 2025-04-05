@@ -576,87 +576,70 @@ XmlStyleFamily SvXMLStylesContext::GetFamily( std::u16string_view rValue )
     return nFamily;
 }
 
-rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportPropertyMapper(
+SvXMLImportPropertyMapper* SvXMLStylesContext::GetImportPropertyMapper(
                         XmlStyleFamily nFamily ) const
 {
-    rtl::Reference < SvXMLImportPropertyMapper > xMapper;
+    SvXMLImportPropertyMapper* pMapper = nullptr;
 
+    SvXMLStylesContext * pThis = const_cast<SvXMLStylesContext *>(this);
     switch( nFamily )
     {
     case XmlStyleFamily::TEXT_PARAGRAPH:
-        if( !mxParaImpPropMapper.is() )
-        {
-            SvXMLStylesContext * pThis = const_cast<SvXMLStylesContext *>(this);
-            pThis->mxParaImpPropMapper =
-                pThis->GetImport().GetTextImport()
-                     ->GetParaImportPropertySetMapper();
-        }
-        xMapper = mxParaImpPropMapper;
+        pMapper =
+            pThis->GetImport().GetTextImport()
+                 ->GetParaImportPropertySetMapper();
         break;
     case XmlStyleFamily::TEXT_TEXT:
-        if( !mxTextImpPropMapper.is() )
-        {
-            SvXMLStylesContext * pThis = const_cast<SvXMLStylesContext *>(this);
-            pThis->mxTextImpPropMapper =
-                pThis->GetImport().GetTextImport()
-                     ->GetTextImportPropertySetMapper();
-        }
-        xMapper = mxTextImpPropMapper;
+        pMapper =
+            pThis->GetImport().GetTextImport()
+                 ->GetTextImportPropertySetMapper();
         break;
 
     case XmlStyleFamily::TEXT_SECTION:
-        // don't cache section mapper, as it's rarely used
         // *sigh*, cast to non-const, because this is a const method,
         // but SvXMLImport::GetTextImport() isn't.
-        xMapper = const_cast<SvXMLStylesContext*>(this)->GetImport().GetTextImport()->
-            GetSectionImportPropertySetMapper();
+        pMapper = pThis->GetImport().GetTextImport()->
+                GetSectionImportPropertySetMapper();
         break;
 
     case XmlStyleFamily::TEXT_RUBY:
-        // don't cache section mapper, as it's rarely used
         // *sigh*, cast to non-const, because this is a const method,
         // but SvXMLImport::GetTextImport() isn't.
-        xMapper = const_cast<SvXMLStylesContext*>(this)->GetImport().GetTextImport()->
+        pMapper = pThis->GetImport().GetTextImport()->
             GetRubyImportPropertySetMapper();
         break;
 
     case XmlStyleFamily::SD_GRAPHICS_ID:
     case XmlStyleFamily::SD_PRESENTATION_ID:
     case XmlStyleFamily::SD_POOL_ID:
-        if(!mxShapeImpPropMapper.is())
-        {
-            rtl::Reference< XMLShapeImportHelper > aImpHelper = const_cast<SvXMLImport&>(GetImport()).GetShapeImport();
-            const_cast<SvXMLStylesContext*>(this)->mxShapeImpPropMapper =
-                aImpHelper->GetPropertySetMapper();
-        }
-        xMapper = mxShapeImpPropMapper;
+        pMapper = const_cast<SvXMLImport&>(GetImport()).GetShapeImport()->GetPropertySetMapper();
         break;
 #if !ENABLE_WASM_STRIP_CHART
     // WASM_CHART change
     case XmlStyleFamily::SCH_CHART_ID:
-        if( ! mxChartImpPropMapper.is() )
+        if( ! mxChartImpPropMapper )
         {
             XMLPropertySetMapper *const pPropMapper = new XMLChartPropertySetMapper(nullptr);
-            mxChartImpPropMapper = new XMLChartImportPropertyMapper( pPropMapper, GetImport() );
+            mxChartImpPropMapper = std::make_unique<XMLChartImportPropertyMapper>( pPropMapper, GetImport() );
         }
-        xMapper = mxChartImpPropMapper;
+        pMapper = mxChartImpPropMapper.get();
         break;
 #endif
     case XmlStyleFamily::PAGE_MASTER:
-        if( ! mxPageImpPropMapper.is() )
+        if( ! mxPageImpPropMapper )
         {
             XMLPropertySetMapper *pPropMapper =
                 new XMLPageMasterPropSetMapper();
             mxPageImpPropMapper =
-                new PageMasterImportPropertyMapper( pPropMapper,
+                std::make_unique<PageMasterImportPropertyMapper>( pPropMapper,
                                     const_cast<SvXMLStylesContext*>(this)->GetImport() );
         }
-        xMapper = mxPageImpPropMapper;
+        pMapper = mxPageImpPropMapper.get();
         break;
     default: break;
     }
 
-    return xMapper;
+    return pMapper;
 }
 
 Reference < XAutoStyleFamily > SvXMLStylesContext::GetAutoStyles( XmlStyleFamily nFamily ) const

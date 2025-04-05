@@ -35,11 +35,11 @@ PagePropertySetContext::PagePropertySetContext(
                  const Reference< xml::sax::XFastAttributeList > & xAttrList,
                  sal_uInt32 nFam,
                  ::std::vector< XMLPropertyState > &rProps,
-                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
+                 SvXMLImportPropertyMapper* pMap,
                  sal_Int32 nStartIndex, sal_Int32 nEndIndex,
                  const PageContextType aTempType ) :
     SvXMLPropertySetContext( rImport, nElement, xAttrList, nFam,
-                             rProps, rMap, nStartIndex, nEndIndex )
+                             rProps, pMap, nStartIndex, nEndIndex )
 {
     aType = aTempType;
 }
@@ -74,16 +74,16 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > PagePropertySetContext
             break;
     }
 
-    switch( mxMapper->getPropertySetMapper()
+    switch( mpMapper->getPropertySetMapper()
                     ->GetEntryContextId( rProp.mnIndex ) )
     {
     case CTF_PM_GRAPHICURL:
     case CTF_PM_HEADERGRAPHICURL:
     case CTF_PM_FOOTERGRAPHICURL:
         DBG_ASSERT( rProp.mnIndex >= 2 &&
-                    nPos  == mxMapper->getPropertySetMapper()
+                    nPos  == mpMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-2 ) &&
-                    nFil  == mxMapper->getPropertySetMapper()
+                    nFil  == mpMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-1 ),
                     "invalid property map!");
         return
@@ -93,7 +93,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > PagePropertySetContext
                                            rProp.mnIndex-2,
                                            rProp.mnIndex-1,
                                            -1,
-                                           mxMapper->getPropertySetMapper()->FindEntryIndex(CTF_PM_FILLBITMAPMODE),
+                                           mpMapper->getPropertySetMapper()->FindEntryIndex(CTF_PM_FILLBITMAPMODE),
                                            rProperties );
         break;
 
@@ -104,7 +104,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > PagePropertySetContext
     case CTF_PM_FTN_LINE_WEIGHT:
         return new XMLFootnoteSeparatorImport(
             GetImport(), nElement, rProperties,
-            mxMapper->getPropertySetMapper(), rProp.mnIndex);
+            mpMapper->getPropertySetMapper(), rProp.mnIndex);
         break;
     }
 

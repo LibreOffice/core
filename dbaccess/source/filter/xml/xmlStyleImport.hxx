@@ -65,9 +65,9 @@ namespace dbaxml
         sal_Int32 m_nMasterPageNameIndex;
         bool bAutoStyles : 1;
 
-        mutable rtl::Reference < SvXMLImportPropertyMapper > m_xTableImpPropMapper;
-        mutable rtl::Reference < SvXMLImportPropertyMapper > m_xColumnImpPropMapper;
-        mutable rtl::Reference < SvXMLImportPropertyMapper > m_xCellImpPropMapper;
+        mutable std::unique_ptr < SvXMLImportPropertyMapper > m_xTableImpPropMapper;
+        mutable std::unique_ptr < SvXMLImportPropertyMapper > m_xColumnImpPropMapper;
+        mutable std::unique_ptr < SvXMLImportPropertyMapper > m_xCellImpPropMapper;
 
         ODBFilter& GetOwnImport();
 
@@ -88,7 +88,7 @@ namespace dbaxml
 
         virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-        virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
+        virtual SvXMLImportPropertyMapper* GetImportPropertyMapper(
                             XmlStyleFamily nFamily ) const override;
         virtual OUString GetServiceName( XmlStyleFamily nFamily ) const override;
 

@@ -169,7 +169,6 @@ public:
 
 class SdXMLStylesContext : public SvXMLStylesContext
 {
-    rtl::Reference< SvXMLImportPropertyMapper > xPresImpPropMapper;
     bool                    mbIsAutoStyle;
     std::unique_ptr<SvXMLNumFmtHelper> mpNumFmtHelper;
     std::unique_ptr<SvNumberFormatter> mpNumFormatter;
@@ -206,7 +205,7 @@ public:
         bool bIsAutoStyle);
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
-    virtual rtl::Reference< SvXMLImportPropertyMapper > GetImportPropertyMapper(XmlStyleFamily nFamily) const override;
+    virtual SvXMLImportPropertyMapper* GetImportPropertyMapper(XmlStyleFamily nFamily) const override;
 
     void SetMasterPageStyles(SdXMLMasterPageContext const & rMaster) const;
 

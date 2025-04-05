@@ -125,10 +125,10 @@ class XMLTableStylesContext : public SvXMLStylesContext
     sal_Int32 nMasterPageNameIndex;
     bool bAutoStyles;
 
-    rtl::Reference < SvXMLImportPropertyMapper > xCellImpPropMapper;
-    rtl::Reference < SvXMLImportPropertyMapper > xColumnImpPropMapper;
-    rtl::Reference < SvXMLImportPropertyMapper > xRowImpPropMapper;
-    rtl::Reference < SvXMLImportPropertyMapper > xTableImpPropMapper;
+    std::unique_ptr < SvXMLImportPropertyMapper > xCellImpPropMapper;
+    std::unique_ptr < SvXMLImportPropertyMapper > xColumnImpPropMapper;
+    std::unique_ptr < SvXMLImportPropertyMapper > xRowImpPropMapper;
+    std::unique_ptr < SvXMLImportPropertyMapper > xTableImpPropMapper;
 
     const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
     ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
@@ -154,7 +154,7 @@ public:
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
+    virtual SvXMLImportPropertyMapper* GetImportPropertyMapper(
                         XmlStyleFamily nFamily ) const override;
     virtual css::uno::Reference< css::container::XNameContainer >
         GetStylesContainer( XmlStyleFamily nFamily ) const override;

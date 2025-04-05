@@ -68,7 +68,7 @@ public:
     SdXMLDrawingPagePropertySetContext( SvXMLImport& rImport, sal_Int32 nElement,
                  const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
                  ::std::vector< XMLPropertyState > &rProps,
-                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
+                 SvXMLImportPropertyMapper* pMap );
 
     using SvXMLPropertySetContext::createFastChildContext;
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
@@ -83,9 +83,9 @@ SdXMLDrawingPagePropertySetContext::SdXMLDrawingPagePropertySetContext(
                  SvXMLImport& rImport, sal_Int32 nElement,
                  const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
                  ::std::vector< XMLPropertyState > &rProps,
-                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap ) :
+                 SvXMLImportPropertyMapper* pMap ) :
     SvXMLPropertySetContext( rImport, nElement, xAttrList,
-                             XML_TYPE_PROP_DRAWING_PAGE, rProps, rMap )
+                             XML_TYPE_PROP_DRAWING_PAGE, rProps, pMap )
 {
 }
 
@@ -95,7 +95,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLDrawingPageProper
     ::std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProp )
 {
-    switch( mxMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
+    switch( mpMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
     {
     case CTF_PAGE_SOUND_URL:
     {
@@ -188,13 +188,13 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLDrawingPageStyleC
 {
     if( nElement == XML_ELEMENT(STYLE, XML_DRAWING_PAGE_PROPERTIES) )
     {
-        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
+        SvXMLImportPropertyMapper* pImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
-        if( xImpPrMap.is() )
+        if( pImpPrMap )
             return new SdXMLDrawingPagePropertySetContext( GetImport(), nElement,
                                                     xAttrList,
                                                     GetProperties(),
-                                                    xImpPrMap );
+                                                    pImpPrMap );
     }
 
     return XMLPropStyleContext::createFastChildContext( nElement, xAttrList );
@@ -243,11 +243,11 @@ void SdXMLDrawingPageStyleContext::Finish( bool bOverwrite )
 void XMLDrawingPageStyleContext::FillPropertySet(
     const Reference< beans::XPropertySet > & rPropSet )
 {
-    rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
+    SvXMLImportPropertyMapper* pImpPrMap =
         GetStyles()->GetImportPropertyMapper( GetFamily() );
-    SAL_WARN_IF( !xImpPrMap.is(), "xmloff", "There is the import prop mapper" );
-    if( xImpPrMap.is() )
-        xImpPrMap->FillPropertySet(GetProperties(), rPropSet, m_pContextIDs.get());
+    SAL_WARN_IF( !pImpPrMap, "xmloff", "There is the import prop mapper" );
+    if( pImpPrMap )
+        pImpPrMap->FillPropertySet(GetProperties(), rPropSet, m_pContextIDs.get());
 
     Reference< beans::XPropertySetInfo > xInfo;
     for (size_t i=0; m_pContextIDs[i].nContextID != -1; ++i)
@@ -269,7 +269,7 @@ void XMLDrawingPageStyleContext::FillPropertySet(
                                                           sStyleName );
             // get property set mapper
             rtl::Reference<XMLPropertySetMapper> rPropMapper =
-                                        xImpPrMap->getPropertySetMapper();
+                                        pImpPrMap->getPropertySetMapper();
 
             // set property
             const OUString& rPropertyName =
@@ -1037,22 +1037,16 @@ SvXMLStyleContext* SdXMLStylesContext::CreateDefaultStyleStyleChildContext(
     return SvXMLStylesContext::CreateDefaultStyleStyleChildContext(nFamily, nElement, xAttrList);
 }
 
-rtl::Reference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropertyMapper(
+SvXMLImportPropertyMapper* SdXMLStylesContext::GetImportPropertyMapper(
     XmlStyleFamily nFamily) const
 {
-    rtl::Reference < SvXMLImportPropertyMapper > xMapper;
+    SvXMLImportPropertyMapper* pMapper = nullptr;
 
     switch( nFamily )
     {
     case XmlStyleFamily::SD_DRAWINGPAGE_ID:
     {
-        if(!xPresImpPropMapper.is())
-        {
-            rtl::Reference< XMLShapeImportHelper > aImpHelper = const_cast<SvXMLImport&>(GetImport()).GetShapeImport();
-            const_cast<SdXMLStylesContext*>(this)->xPresImpPropMapper =
-                aImpHelper->GetPresPagePropsMapper();
-        }
-        xMapper = xPresImpPropMapper;
+        pMapper = const_cast<SvXMLImport&>(GetImport()).GetShapeImport()->GetPresPagePropsMapper();
         break;
     }
 
@@ -1064,9 +1058,9 @@ rtl::Reference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropert
 
         switch( nFamily )
         {
-        case XmlStyleFamily::TABLE_COLUMN: xMapper = xTableImport->GetColumnImportPropertySetMapper().get(); break;
-        case XmlStyleFamily::TABLE_ROW: xMapper = xTableImport->GetRowImportPropertySetMapper().get(); break;
-        case XmlStyleFamily::TABLE_CELL: xMapper = xTableImport->GetCellImportPropertySetMapper().get(); break;
+        case XmlStyleFamily::TABLE_COLUMN: pMapper = xTableImport->GetColumnImportPropertySetMapper(); break;
+        case XmlStyleFamily::TABLE_ROW: pMapper = xTableImport->GetRowImportPropertySetMapper(); break;
+        case XmlStyleFamily::TABLE_CELL: pMapper = xTableImport->GetCellImportPropertySetMapper(); break;
         default: break;
         }
         break;
@@ -1075,9 +1069,9 @@ rtl::Reference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropert
     }
 
     // call base class
-    if( !xMapper.is() )
-        xMapper = SvXMLStylesContext::GetImportPropertyMapper(nFamily);
-    return xMapper;
+    if( !pMapper )
+        pMapper = SvXMLStylesContext::GetImportPropertyMapper(nFamily);
+    return pMapper;
 }
 
 // Process all style and object info
@@ -1276,10 +1270,10 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
                     if( xPropState.is() )
                     {
                         rtl::Reference < XMLPropertySetMapper > xPrMap;
-                        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap = GetImportPropertyMapper( nFamily );
-                        SAL_WARN_IF( !xImpPrMap.is(), "xmloff", "There is the import prop mapper" );
-                        if( xImpPrMap.is() )
-                            xPrMap = xImpPrMap->getPropertySetMapper();
+                        SvXMLImportPropertyMapper* pImpPrMap = GetImportPropertyMapper( nFamily );
+                        SAL_WARN_IF( !pImpPrMap, "xmloff", "There is the import prop mapper" );
+                        if( pImpPrMap )
+                            xPrMap = pImpPrMap->getPropertySetMapper();
                         if( xPrMap.is() )
                         {
                             const sal_Int32 nCount = xPrMap->GetEntryCount();

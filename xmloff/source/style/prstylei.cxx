@@ -206,11 +206,11 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLPropStyleContext::c
     }
     if( nFamily )
     {
-        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
+        SvXMLImportPropertyMapper* pImpPrMap =
             mxStyles->GetImportPropertyMapper( GetFamily() );
-        if (xImpPrMap.is())
+        if (pImpPrMap)
         {
-            return new StylePropertiesContext(GetImport(), nElement, xAttrList, nFamily, maProperties, xImpPrMap);
+            return new StylePropertiesContext(GetImport(), nElement, xAttrList, nFamily, maProperties, pImpPrMap);
         }
     }
     XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
@@ -220,11 +220,11 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLPropStyleContext::c
 void XMLPropStyleContext::FillPropertySet(
             const Reference< XPropertySet > & rPropSet )
 {
-    rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
+    SvXMLImportPropertyMapper* pImpPrMap =
         mxStyles->GetImportPropertyMapper( GetFamily() );
-    SAL_WARN_IF( !xImpPrMap.is(), "xmloff", "There is the import prop mapper" );
-    if( xImpPrMap.is() )
-        xImpPrMap->FillPropertySet( maProperties, rPropSet );
+    SAL_WARN_IF( !pImpPrMap, "xmloff", "There is the import prop mapper" );
+    if( pImpPrMap )
+        pImpPrMap->FillPropertySet( maProperties, rPropSet );
 }
 
 void XMLPropStyleContext::SetDefaults()
@@ -255,12 +255,12 @@ Reference < XStyle > XMLPropStyleContext::Create()
 void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
 {
     SvXMLStylesContext* pSvXMLStylesContext = mxStyles.get();
-    rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap = pSvXMLStylesContext->GetImportPropertyMapper(GetFamily());
-    OSL_ENSURE(xImpPrMap.is(), "There is no import prop mapper");
+    SvXMLImportPropertyMapper* pImpPrMap = pSvXMLStylesContext->GetImportPropertyMapper(GetFamily());
+    OSL_ENSURE(pImpPrMap, "There is no import prop mapper");
 
     // need to filter out old fill definitions when the new ones are used. The new
     // ones are used when a FillStyle is defined
-    const bool bTakeCareOfDrawingLayerFillStyle(xImpPrMap.is() && GetFamily() == XmlStyleFamily::TEXT_PARAGRAPH);
+    const bool bTakeCareOfDrawingLayerFillStyle(pImpPrMap && GetFamily() == XmlStyleFamily::TEXT_PARAGRAPH);
     bool bDrawingLayerFillStylesUsed(false);
 
     if(bTakeCareOfDrawingLayerFillStyle)
@@ -293,10 +293,10 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
         Reference < XAutoStyleFamily > xAutoFamily = pSvXMLStylesContext->GetAutoStyles( GetFamily() );
         if( !xAutoFamily.is() )
             return;
-        if( xImpPrMap.is() )
+        if( pImpPrMap )
         {
             Sequence< PropertyValue > aValues;
-            xImpPrMap->FillPropertySequence( maProperties, aValues );
+            pImpPrMap->FillPropertySequence( maProperties, aValues );
 
             sal_Int32 nLen = aValues.getLength();
             if( nLen )
@@ -390,8 +390,8 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
         if( bOverwrite || bNew )
         {
             rtl::Reference < XMLPropertySetMapper > xPrMap;
-            if( xImpPrMap.is() )
-                xPrMap = xImpPrMap->getPropertySetMapper();
+            if( pImpPrMap )
+                xPrMap = pImpPrMap->getPropertySetMapper();
             if( xPrMap.is() )
             {
                 Reference < XMultiPropertyStates > xMultiStates( xPropSet,

@@ -251,16 +251,16 @@ XMLTableImport::XMLTableImport( SvXMLImport& rImport, const rtl::Reference< XMLP
     }
     else
     {
-        mxCellImportPropertySetMapper = new SvXMLImportPropertyMapper( xCellPropertySetMapper, rImport );
+        mxCellImportPropertySetMapper = std::make_unique<SvXMLImportPropertyMapper>( xCellPropertySetMapper, rImport );
         mxCellImportPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(rImport));
-        mxCellImportPropertySetMapper->ChainImportMapper(new XMLCellImportPropertyMapper(new XMLPropertySetMapper(getCellPropertiesMap(), xFactoryRef, true), rImport));
+        mxCellImportPropertySetMapper->ChainImportMapper(std::make_unique<XMLCellImportPropertyMapper>(new XMLPropertySetMapper(getCellPropertiesMap(), xFactoryRef, true), rImport));
     }
 
     rtl::Reference < XMLPropertySetMapper > xRowMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef, false ) );
-    mxRowImportPropertySetMapper = new SvXMLImportPropertyMapper( xRowMapper, rImport );
+    mxRowImportPropertySetMapper = std::make_unique<SvXMLImportPropertyMapper>( xRowMapper, rImport );
 
     rtl::Reference < XMLPropertySetMapper > xColMapper( new XMLPropertySetMapper( getColumnPropertiesMap(), xFactoryRef, false ) );
-    mxColumnImportPropertySetMapper = new SvXMLImportPropertyMapper( xColMapper, rImport );
+    mxColumnImportPropertySetMapper = std::make_unique<SvXMLImportPropertyMapper>( xColMapper, rImport );
 }
 
 XMLTableImport::~XMLTableImport()

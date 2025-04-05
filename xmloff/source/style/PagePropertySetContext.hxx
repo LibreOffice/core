@@ -37,7 +37,7 @@ public:
                  const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
                  sal_uInt32 nFam,
                  ::std::vector< XMLPropertyState > &rProps,
-                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
+                 SvXMLImportPropertyMapper* pMap,
                  sal_Int32 nStartIndex, sal_Int32 nEndIndex,
                  const PageContextType aType );
 

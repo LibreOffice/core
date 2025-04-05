@@ -101,7 +101,7 @@ struct XMLShapeImportHelperImpl
 XMLShapeImportHelper::XMLShapeImportHelper(
         SvXMLImport& rImporter,
         const uno::Reference< frame::XModel>& rModel,
-        SvXMLImportPropertyMapper *pExtMapper )
+        std::unique_ptr<SvXMLImportPropertyMapper> pExtMapper )
 :   mpImpl( new XMLShapeImportHelperImpl ),
     mrImporter( rImporter )
 {
@@ -114,12 +114,11 @@ XMLShapeImportHelper::XMLShapeImportHelper(
 
     // construct PropertySetMapper
     rtl::Reference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper(mpSdPropHdlFactory, false);
-    mpPropertySetMapper = new SvXMLImportPropertyMapper( xMapper, rImporter );
+    mpPropertySetMapper = std::make_unique<SvXMLImportPropertyMapper>( xMapper, rImporter );
 
     if( pExtMapper )
     {
-        rtl::Reference < SvXMLImportPropertyMapper > xExtMapper( pExtMapper );
-        mpPropertySetMapper->ChainImportMapper( xExtMapper );
+        mpPropertySetMapper->ChainImportMapper( std::move(pExtMapper) );
     }
 
     // chain text attributes
@@ -128,7 +127,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
 
     // construct PresPagePropsMapper
     xMapper = new XMLPropertySetMapper(aXMLSDPresPageProps, mpSdPropHdlFactory, false);
-    mpPresPagePropsMapper = new SvXMLImportPropertyMapper( xMapper, rImporter );
+    mpPresPagePropsMapper = std::make_unique<SvXMLImportPropertyMapper>( xMapper, rImporter );
 
     uno::Reference< lang::XServiceInfo > xInfo( rImporter.GetModel(), uno::UNO_QUERY );
     mpImpl->mbIsPresentationShapesSupported = xInfo.is() && xInfo->supportsService( u"com.sun.star.presentation.PresentationDocument"_ustr );
@@ -141,11 +140,11 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
     // cleanup factory, decrease refcount. Should lead to destruction.
     mpSdPropHdlFactory.clear();
 
-    // cleanup mapper, decrease refcount. Should lead to destruction.
-    mpPropertySetMapper.clear();
+    // cleanup mapper
+    mpPropertySetMapper.reset();
 
-    // cleanup presPage mapper, decrease refcount. Should lead to destruction.
-    mpPresPagePropsMapper.clear();
+    // cleanup presPage mapper
+    mpPresPagePropsMapper.reset();
 
     // Styles or AutoStyles context?
     if(mxStylesContext.is())
@@ -829,11 +828,11 @@ void XMLShapeImportHelper::restoreConnections()
     mpImpl->maConnections.clear();
 }
 
-SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateShapePropMapper( const uno::Reference< frame::XModel>& rModel, SvXMLImport& rImport )
+std::unique_ptr<SvXMLImportPropertyMapper> XMLShapeImportHelper::CreateShapePropMapper( const uno::Reference< frame::XModel>& rModel, SvXMLImport& rImport )
 {
     rtl::Reference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rModel, rImport );
     rtl::Reference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory, false );
-    SvXMLImportPropertyMapper* pResult = new SvXMLImportPropertyMapper( xMapper, rImport );
+    std::unique_ptr<SvXMLImportPropertyMapper> pResult = std::make_unique<SvXMLImportPropertyMapper>( xMapper, rImport );
 
     // chain text attributes
     pResult->ChainImportMapper( XMLTextImportHelper::CreateParaExtPropMapper( rImport ) );

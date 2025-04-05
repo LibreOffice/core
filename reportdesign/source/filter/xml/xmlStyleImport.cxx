@@ -169,53 +169,53 @@ void OReportStylesContext::endFastElement(sal_Int32 )
 }
 
 
-rtl::Reference < SvXMLImportPropertyMapper >
+SvXMLImportPropertyMapper*
     OReportStylesContext::GetImportPropertyMapper(
                     XmlStyleFamily nFamily ) const
 {
-    rtl::Reference < SvXMLImportPropertyMapper > xMapper(SvXMLStylesContext::GetImportPropertyMapper(nFamily));
+    SvXMLImportPropertyMapper* pMapper(SvXMLStylesContext::GetImportPropertyMapper(nFamily));
 
-    if (!xMapper.is())
+    if (!pMapper)
     {
         ORptFilter& rImport = GetOwnImport();
         switch( nFamily )
         {
             case XmlStyleFamily::TABLE_CELL:
             {
-                if( !m_xCellImpPropMapper.is() )
+                if( !m_xCellImpPropMapper )
                 {
                     m_xCellImpPropMapper =
-                        new XMLTextImportPropertyMapper/*OSpecialHandleXMLImportPropertyMapper*/( rImport.GetCellStylesPropertySetMapper(), m_rImport );
+                        std::make_unique<XMLTextImportPropertyMapper>/*OSpecialHandleXMLImportPropertyMapper*/( rImport.GetCellStylesPropertySetMapper(), m_rImport );
 
                     m_xCellImpPropMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(m_rImport));
                 }
-                xMapper = m_xCellImpPropMapper;
+                pMapper = m_xCellImpPropMapper.get();
             }
             break;
             case XmlStyleFamily::TABLE_COLUMN:
             {
-                if( !m_xColumnImpPropMapper.is() )
+                if( !m_xColumnImpPropMapper )
                     m_xColumnImpPropMapper =
-                        new SvXMLImportPropertyMapper( rImport.GetColumnStylesPropertySetMapper(), m_rImport );
+                        std::make_unique<SvXMLImportPropertyMapper>( rImport.GetColumnStylesPropertySetMapper(), m_rImport );
 
-                xMapper = m_xColumnImpPropMapper;
+                pMapper = m_xColumnImpPropMapper.get();
             }
              break;
             case XmlStyleFamily::TABLE_ROW:
             {
-                if( !m_xRowImpPropMapper.is() )
-                    m_xRowImpPropMapper =new OSpecialHandleXMLImportPropertyMapper( rImport.GetRowStylesPropertySetMapper(), m_rImport );
-                xMapper = m_xRowImpPropMapper;
+                if( !m_xRowImpPropMapper )
+                    m_xRowImpPropMapper = std::make_unique<OSpecialHandleXMLImportPropertyMapper>( rImport.GetRowStylesPropertySetMapper(), m_rImport );
+                pMapper = m_xRowImpPropMapper.get();
             }
              break;
             case XmlStyleFamily::TABLE_TABLE:
             {
-                if( !m_xTableImpPropMapper.is() )
+                if( !m_xTableImpPropMapper )
                 {
                     rtl::Reference < XMLPropertyHandlerFactory> xFac = new ::xmloff::OControlPropertyHandlerFactory();
-                    m_xTableImpPropMapper = new SvXMLImportPropertyMapper( new XMLPropertySetMapper(OXMLHelper::GetTableStyleProps(), xFac, false), m_rImport );
+                    m_xTableImpPropMapper = std::make_unique<SvXMLImportPropertyMapper>( new XMLPropertySetMapper(OXMLHelper::GetTableStyleProps(), xFac, false), m_rImport );
                 }
-                xMapper = m_xTableImpPropMapper;
+                pMapper = m_xTableImpPropMapper.get();
             }
              break;
             default:
@@ -223,7 +223,7 @@ rtl::Reference < SvXMLImportPropertyMapper >
         }
     }
 
-    return xMapper;
+    return pMapper;
 }
 
 SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(

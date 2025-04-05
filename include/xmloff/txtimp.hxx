@@ -251,22 +251,22 @@ public:
         const OUString& rNextFrmName,
         const css::uno::Reference< css::beans::XPropertySet >& rFrmPropSet );
 
-    rtl::Reference< SvXMLImportPropertyMapper > const&
+    SvXMLImportPropertyMapper*
         GetParaImportPropertySetMapper() const;
-    rtl::Reference< SvXMLImportPropertyMapper > const&
+    SvXMLImportPropertyMapper*
         GetTextImportPropertySetMapper() const;
-    rtl::Reference< SvXMLImportPropertyMapper > const&
+    SvXMLImportPropertyMapper*
         GetSectionImportPropertySetMapper() const;
-    rtl::Reference< SvXMLImportPropertyMapper > const&
+    SvXMLImportPropertyMapper*
         GetRubyImportPropertySetMapper() const;
 
-    static SvXMLImportPropertyMapper *CreateShapeExtPropMapper(SvXMLImport&);
-    static SvXMLImportPropertyMapper *CreateParaExtPropMapper(SvXMLImport&);
-    static SvXMLImportPropertyMapper* CreateParaDefaultExtPropMapper(SvXMLImport&);
-    static SvXMLImportPropertyMapper* CreateTableDefaultExtPropMapper(SvXMLImport&);
-    static SvXMLImportPropertyMapper* CreateTableRowDefaultExtPropMapper(SvXMLImport&);
-    static SvXMLImportPropertyMapper* CreateTableCellExtPropMapper(SvXMLImport&);
-    static SvXMLImportPropertyMapper* CreateDrawingPageExtPropMapper(SvXMLImport&);
+    static std::unique_ptr<SvXMLImportPropertyMapper> CreateShapeExtPropMapper(SvXMLImport&);
+    static std::unique_ptr<SvXMLImportPropertyMapper> CreateParaExtPropMapper(SvXMLImport&);
+    static std::unique_ptr<SvXMLImportPropertyMapper> CreateParaDefaultExtPropMapper(SvXMLImport&);
+    static std::unique_ptr<SvXMLImportPropertyMapper> CreateTableDefaultExtPropMapper(SvXMLImport&);
+    static std::unique_ptr<SvXMLImportPropertyMapper> CreateTableRowDefaultExtPropMapper(SvXMLImport&);
+    static std::unique_ptr<SvXMLImportPropertyMapper> CreateTableCellExtPropMapper(SvXMLImport&);
+    static std::unique_ptr<SvXMLImportPropertyMapper> CreateDrawingPageExtPropMapper(SvXMLImport&);
 
     SvI18NMap& GetRenameMap();
 

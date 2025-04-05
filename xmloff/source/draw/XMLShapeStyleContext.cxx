@@ -101,13 +101,13 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLShapeStyleContext::
             nFamily = XML_TYPE_PROP_GRAPHIC;
         if( nFamily )
         {
-            rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
+            SvXMLImportPropertyMapper* pImpPrMap =
                 GetStyles()->GetImportPropertyMapper( GetFamily() );
-            if( xImpPrMap.is() )
+            if( pImpPrMap )
                 return new XMLShapePropertySetContext( GetImport(), nElement, xAttrList,
                                                         nFamily,
                                                         GetProperties(),
-                                                        xImpPrMap );
+                                                        pImpPrMap );
         }
     }
 
@@ -198,15 +198,15 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
         XmlStyleFamily::SD_FILL_IMAGE_ID
     };
 
-    rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
+    SvXMLImportPropertyMapper* pImpPrMap =
         GetStyles()->GetImportPropertyMapper( GetFamily() );
-    SAL_WARN_IF( !xImpPrMap.is(), "xmloff", "There is the import prop mapper" );
-    if( xImpPrMap.is() )
-        xImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
+    SAL_WARN_IF( !pImpPrMap, "xmloff", "There is the import prop mapper" );
+    if( pImpPrMap )
+        pImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
 
     Reference< XPropertySetInfo > xInfo;
     // get property set mapper
-    rtl::Reference<XMLPropertySetMapper> xPropMapper( xImpPrMap->getPropertySetMapper() );
+    rtl::Reference<XMLPropertySetMapper> xPropMapper( pImpPrMap->getPropertySetMapper() );
 
     for( sal_uInt16 i=0; aContextIDs[i].nContextID != -1; i++ )
     {

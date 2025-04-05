@@ -34,7 +34,7 @@ public:
                 const css::uno::Reference<css::xml::sax::XFastAttributeList >& xAttrList,
                 sal_uInt32 nFamily,
                 ::std::vector< XMLPropertyState > &rProps,
-                const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
+                SvXMLImportPropertyMapper* pMap,
                 OUString& rDopCapTextStyleName );
 
     virtual ~XMLTextPropertySetContext() override;

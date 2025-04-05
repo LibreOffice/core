@@ -74,9 +74,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLGraphicsDefaultStyl
             nFamily = XML_TYPE_PROP_GRAPHIC;
         if( nFamily )
         {
-            rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap = GetStyles()->GetImportPropertyMapper( GetFamily() );
-            if( xImpPrMap.is() )
-                return new XMLShapePropertySetContext( GetImport(), nElement, xAttrList, nFamily, GetProperties(), xImpPrMap );
+            SvXMLImportPropertyMapper* pImpPrMap = GetStyles()->GetImportPropertyMapper( GetFamily() );
+            if( pImpPrMap )
+                return new XMLShapePropertySetContext( GetImport(), nElement, xAttrList, nFamily, GetProperties(), pImpPrMap );
         }
     }
 

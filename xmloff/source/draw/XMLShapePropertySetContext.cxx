@@ -38,9 +38,9 @@ XMLShapePropertySetContext::XMLShapePropertySetContext(
                  const Reference< xml::sax::XFastAttributeList > & xAttrList,
                  sal_uInt32 nFam,
                  ::std::vector< XMLPropertyState > &rProps,
-                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap ) :
+                 SvXMLImportPropertyMapper* pMap ) :
     SvXMLPropertySetContext( rImport, nElement, xAttrList, nFam,
-                             rProps, rMap ),
+                             rProps, pMap ),
     mnBulletIndex(-1)
 {
 }
@@ -69,7 +69,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLShapePropertySetCon
     ::std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProp )
 {
-    switch( mxMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
+    switch( mpMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
     {
     case CTF_NUMBERINGRULES:
         mnBulletIndex = rProp.mnIndex;

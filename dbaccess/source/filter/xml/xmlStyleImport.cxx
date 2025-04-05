@@ -152,42 +152,42 @@ void OTableStylesContext::endFastElement(sal_Int32 )
         GetImport().GetStyles()->CopyStylesToDoc(true);
 }
 
-rtl::Reference < SvXMLImportPropertyMapper >
+SvXMLImportPropertyMapper*
     OTableStylesContext::GetImportPropertyMapper(
                     XmlStyleFamily nFamily ) const
 {
-    rtl::Reference < SvXMLImportPropertyMapper > xMapper = SvXMLStylesContext::GetImportPropertyMapper(nFamily);
+    SvXMLImportPropertyMapper* pMapper = SvXMLStylesContext::GetImportPropertyMapper(nFamily);
 
-    if (!xMapper.is())
+    if (!pMapper)
     {
         switch( nFamily )
         {
             case XmlStyleFamily::TABLE_TABLE:
             {
-                if ( !m_xTableImpPropMapper.is() )
-                    m_xTableImpPropMapper = new SvXMLImportPropertyMapper( const_cast<OTableStylesContext*>(this)->GetOwnImport().GetTableStylesPropertySetMapper(), const_cast<SvXMLImport&>(GetImport()) );
-                xMapper = m_xTableImpPropMapper;
+                if ( !m_xTableImpPropMapper )
+                    m_xTableImpPropMapper = std::make_unique<SvXMLImportPropertyMapper>( const_cast<OTableStylesContext*>(this)->GetOwnImport().GetTableStylesPropertySetMapper(), const_cast<SvXMLImport&>(GetImport()) );
+                pMapper = m_xTableImpPropMapper.get();
             }
              break;
             case XmlStyleFamily::TABLE_COLUMN:
             {
-                if ( !m_xColumnImpPropMapper.is() )
-                    m_xColumnImpPropMapper = new SvXMLImportPropertyMapper( const_cast<OTableStylesContext*>(this)->GetOwnImport().GetColumnStylesPropertySetMapper(), const_cast<SvXMLImport&>(GetImport()) );
-                xMapper = m_xColumnImpPropMapper;
+                if ( !m_xColumnImpPropMapper )
+                    m_xColumnImpPropMapper = std::make_unique<SvXMLImportPropertyMapper>( const_cast<OTableStylesContext*>(this)->GetOwnImport().GetColumnStylesPropertySetMapper(), const_cast<SvXMLImport&>(GetImport()) );
+                pMapper = m_xColumnImpPropMapper.get();
             }
              break;
             case XmlStyleFamily::TABLE_CELL:
             {
-                if ( !m_xCellImpPropMapper.is() )
-                    m_xCellImpPropMapper = new SvXMLImportPropertyMapper( const_cast<OTableStylesContext*>(this)->GetOwnImport().GetCellStylesPropertySetMapper(), const_cast<SvXMLImport&>(GetImport()) );
-                xMapper = m_xCellImpPropMapper;
+                if ( !m_xCellImpPropMapper )
+                    m_xCellImpPropMapper = std::make_unique<SvXMLImportPropertyMapper>( const_cast<OTableStylesContext*>(this)->GetOwnImport().GetCellStylesPropertySetMapper(), const_cast<SvXMLImport&>(GetImport()) );
+                pMapper = m_xCellImpPropMapper.get();
             }
              break;
             default: break;
         }
     }
 
-    return xMapper;
+    return pMapper;
 }
 
 SvXMLStyleContext *OTableStylesContext::CreateStyleStyleChildContext(

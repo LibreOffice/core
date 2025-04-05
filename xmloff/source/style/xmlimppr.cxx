@@ -71,32 +71,33 @@ SvXMLImportPropertyMapper::~SvXMLImportPropertyMapper()
 }
 
 void SvXMLImportPropertyMapper::ChainImportMapper(
-        const rtl::Reference< SvXMLImportPropertyMapper>& rMapper )
+        std::unique_ptr< SvXMLImportPropertyMapper> rMapper )
 {
     // add map entries from rMapper to current map
     maPropMapper->AddMapperEntry( rMapper->getPropertySetMapper() );
     // rMapper uses the same map as 'this'
     rMapper->maPropMapper = maPropMapper;
 
+    auto pNewMapper = rMapper.get();
     // set rMapper as last mapper in current chain
-    rtl::Reference< SvXMLImportPropertyMapper > xNext = mxNextMapper;
-    if( xNext.is())
+    SvXMLImportPropertyMapper* pNext = mxNextMapper.get();
+    if( pNext )
     {
-        while( xNext->mxNextMapper.is())
-            xNext = xNext->mxNextMapper;
-        xNext->mxNextMapper = rMapper;
+        while( pNext->mxNextMapper)
+            pNext = pNext->mxNextMapper.get();
+        pNext->mxNextMapper = std::move(rMapper);
     }
     else
-        mxNextMapper = rMapper;
+        mxNextMapper = std::move(rMapper);
 
     // if rMapper was already chained, correct
     // map pointer of successors
-    xNext = rMapper;
+    pNext = pNewMapper;
 
-    while( xNext->mxNextMapper.is())
+    while( pNext->mxNextMapper )
     {
-        xNext = xNext->mxNextMapper;
-        xNext->maPropMapper = maPropMapper;
+        pNext = pNext->mxNextMapper.get();
+        pNext->maPropMapper = maPropMapper;
     }
 }
 
@@ -347,8 +348,8 @@ bool SvXMLImportPropertyMapper::handleSpecialItem(
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap ) const
 {
-    OSL_ENSURE( mxNextMapper.is(), "unsupported special item in xml import" );
-    if( mxNextMapper.is() )
+    OSL_ENSURE( mxNextMapper, "unsupported special item in xml import" );
+    if( mxNextMapper )
         return mxNextMapper->handleSpecialItem( rProperty, rProperties, rValue,
                                                rUnitConverter, rNamespaceMap );
     else
@@ -751,7 +752,7 @@ void SvXMLImportPropertyMapper::finished(
         sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
     // nothing to do here
-    if( mxNextMapper.is() )
+    if( mxNextMapper )
         mxNextMapper->finished( rProperties, nStartIndex, nEndIndex );
 }
 

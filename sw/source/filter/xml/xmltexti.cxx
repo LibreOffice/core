@@ -421,14 +421,14 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         pStyle = FindAutoFrameStyle( rStyleName );
         if( pStyle )
         {
-            rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
+            SvXMLImportPropertyMapper* pImpPrMap =
                 pStyle->GetStyles()
                       ->GetImportPropertyMapper(pStyle->GetFamily());
-            OSL_ENSURE( xImpPrMap.is(), "Where is the import prop mapper?" );
-            if( xImpPrMap.is() )
+            OSL_ENSURE( pImpPrMap, "Where is the import prop mapper?" );
+            if( pImpPrMap )
             {
                 rtl::Reference<XMLPropertySetMapper> rPropMapper =
-                xImpPrMap->getPropertySetMapper();
+                    pImpPrMap->getPropertySetMapper();
 
                 sal_Int32 nCount = pStyle->GetProperties().size();
                 for( sal_Int32 i=0; i < nCount; i++ )
@@ -735,14 +735,14 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
         pStyle = FindAutoFrameStyle( rStyleName );
         if( pStyle )
         {
-            rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
+            SvXMLImportPropertyMapper* pImpPrMap =
                 pStyle->GetStyles()
                       ->GetImportPropertyMapper(pStyle->GetFamily());
-            OSL_ENSURE( xImpPrMap.is(), "Where is the import prop mapper?" );
-            if( xImpPrMap.is() )
+            OSL_ENSURE( pImpPrMap, "Where is the import prop mapper?" );
+            if( pImpPrMap )
             {
                 rtl::Reference<XMLPropertySetMapper> rPropMapper =
-                xImpPrMap->getPropertySetMapper();
+                    pImpPrMap->getPropertySetMapper();
 
                 sal_Int32 nCount = pStyle->GetProperties().size();
                 for( sal_Int32 i=0; i < nCount; i++ )

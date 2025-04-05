@@ -133,11 +133,8 @@ class XMLOFF_DLLPUBLIC SvXMLStylesContext : public SvXMLImportContext
 
     css::uno::Reference< css::style::XAutoStyleFamily > mxTextAutoStyles;
 
-    rtl::Reference < SvXMLImportPropertyMapper > mxParaImpPropMapper;
-    rtl::Reference < SvXMLImportPropertyMapper > mxTextImpPropMapper;
-    rtl::Reference < SvXMLImportPropertyMapper > mxShapeImpPropMapper;
-    mutable rtl::Reference < SvXMLImportPropertyMapper > mxChartImpPropMapper;
-    mutable rtl::Reference < SvXMLImportPropertyMapper > mxPageImpPropMapper;
+    mutable std::unique_ptr < SvXMLImportPropertyMapper > mxChartImpPropMapper;
+    mutable std::unique_ptr < SvXMLImportPropertyMapper > mxPageImpPropMapper;
 
     SvXMLStylesContext(SvXMLStylesContext const &) = delete;
     SvXMLStylesContext& operator =(SvXMLStylesContext const &) = delete;
@@ -187,7 +184,7 @@ public:
                                       XmlStyleFamily nFamily,
                                       const OUString& rNamePrefix) const;
     static XmlStyleFamily GetFamily( std::u16string_view rFamily );
-    virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
+    virtual SvXMLImportPropertyMapper* GetImportPropertyMapper(
                         XmlStyleFamily nFamily ) const;
 
     virtual css::uno::Reference< css::container::XNameContainer >

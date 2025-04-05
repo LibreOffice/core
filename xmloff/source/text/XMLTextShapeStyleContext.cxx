@@ -52,7 +52,7 @@ public:
         const Reference< XFastAttributeList >& xAttrList,
         sal_uInt32 nFamily,
         ::std::vector< XMLPropertyState > &rProps,
-        const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
+        SvXMLImportPropertyMapper* pMap );
 
     using SvXMLPropertySetContext::createFastChildContext;
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
@@ -69,9 +69,9 @@ XMLTextShapePropertySetContext_Impl::XMLTextShapePropertySetContext_Impl(
                  const Reference< XFastAttributeList > & xAttrList,
                  sal_uInt32 nFamily,
                  ::std::vector< XMLPropertyState > &rProps,
-                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap ) :
+                 SvXMLImportPropertyMapper* pMap ) :
     XMLShapePropertySetContext( rImport, nElement, xAttrList, nFamily,
-                                rProps, rMap )
+                                rProps, pMap )
 {
 }
 
@@ -81,7 +81,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextShapePropertySe
     ::std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProp )
 {
-    switch( mxMapper->getPropertySetMapper()
+    switch( mpMapper->getPropertySetMapper()
                     ->GetEntryContextId( rProp.mnIndex ) )
     {
     case CTF_TEXTCOLUMNS:
@@ -96,11 +96,11 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextShapePropertySe
     case CTF_BACKGROUND_URL:
         DBG_ASSERT( rProp.mnIndex >= 3 &&
                     CTF_BACKGROUND_TRANSPARENCY ==
-                        mxMapper->getPropertySetMapper()
+                        mpMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-3 ) &&
-                    CTF_BACKGROUND_POS  == mxMapper->getPropertySetMapper()
+                    CTF_BACKGROUND_POS  == mpMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-2 ) &&
-                    CTF_BACKGROUND_FILTER  == mxMapper->getPropertySetMapper()
+                    CTF_BACKGROUND_FILTER  == mpMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-1 ),
                     "invalid property map!");
         return
@@ -164,13 +164,13 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextShapeStyleConte
             nFamily = XML_TYPE_PROP_GRAPHIC;
         if( nFamily )
         {
-            rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
+            SvXMLImportPropertyMapper* pImpPrMap =
                 GetStyles()->GetImportPropertyMapper( GetFamily() );
-            if( xImpPrMap.is() )
+            if( pImpPrMap )
             {
                 return new XMLTextShapePropertySetContext_Impl(
                         GetImport(), nElement, xAttrList, nFamily,
-                        GetProperties(), xImpPrMap );
+                        GetProperties(), pImpPrMap );
             }
         }
     }

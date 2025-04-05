@@ -33,8 +33,8 @@ XMLChartPropertyContext::XMLChartPropertyContext(
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
     sal_uInt32 nFamily,
     ::std::vector< XMLPropertyState >& rProps,
-    const rtl::Reference< SvXMLImportPropertyMapper >& rMapper ) :
-        SvXMLPropertySetContext( rImport, nElement, xAttrList, nFamily, rProps, rMapper )
+    SvXMLImportPropertyMapper* pMapper ) :
+        SvXMLPropertySetContext( rImport, nElement, xAttrList, nFamily, rProps, pMapper )
 {
 }
 
@@ -47,7 +47,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChartPropertyContex
     ::std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProp )
 {
-    switch( mxMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
+    switch( mpMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
     {
         case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE:
             return new XMLSymbolImageContext( GetImport(), nElement, rProp, rProperties );

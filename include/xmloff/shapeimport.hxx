@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
+#include <xmloff/xmlimppr.hxx>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
@@ -41,7 +42,6 @@ namespace com::sun::star::frame { class XModel; }
 class SvXMLImport;
 class SvXMLStylesContext;
 class XMLSdPropHdlFactory;
-class SvXMLImportPropertyMapper;
 class XMLTableImport;
 
 // dr3d:3dlight context
@@ -135,8 +135,8 @@ class XMLOFF_DLLPUBLIC XMLShapeImportHelper : public salhelper::SimpleReferenceO
 
     // PropertySetMappers and factory
     rtl::Reference<XMLSdPropHdlFactory>       mpSdPropHdlFactory;
-    rtl::Reference<SvXMLImportPropertyMapper> mpPropertySetMapper;
-    rtl::Reference<SvXMLImportPropertyMapper> mpPresPagePropsMapper;
+    std::unique_ptr<SvXMLImportPropertyMapper> mpPropertySetMapper;
+    std::unique_ptr<SvXMLImportPropertyMapper> mpPresPagePropsMapper;
 
     // contexts for Style and AutoStyle import
     rtl::Reference<SvXMLStylesContext> mxStylesContext;
@@ -150,7 +150,7 @@ protected:
 public:
     XMLShapeImportHelper( SvXMLImport& rImporter,
         const css::uno::Reference< css::frame::XModel>& rModel,
-    SvXMLImportPropertyMapper *pExtMapper=nullptr );
+        std::unique_ptr<SvXMLImportPropertyMapper> pExtMapper={} );
 
     virtual ~XMLShapeImportHelper() override;
 
@@ -241,7 +241,7 @@ public:
     void restoreConnections();
 
     /** creates a property mapper for external chaining */
-    static SvXMLImportPropertyMapper* CreateShapePropMapper(
+    static std::unique_ptr<SvXMLImportPropertyMapper> CreateShapePropMapper(
         const css::uno::Reference< css::frame::XModel>& rModel, SvXMLImport& rImport );
 
     /** defines if the import should increment the progress bar or not */

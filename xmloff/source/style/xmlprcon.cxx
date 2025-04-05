@@ -33,16 +33,16 @@ SvXMLPropertySetContext::SvXMLPropertySetContext(
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     sal_uInt32 nFam,
     std::vector< XMLPropertyState > &rProps,
-    rtl::Reference < SvXMLImportPropertyMapper > xMap,
+    SvXMLImportPropertyMapper* pMap,
     sal_Int32 nSIdx, sal_Int32 nEIdx )
 :   SvXMLImportContext( rImp )
 ,   mnStartIdx( nSIdx )
 ,   mnEndIdx( nEIdx )
 ,   mnFamily( nFam )
 ,   mrProperties( rProps )
-,   mxMapper(std::move( xMap ))
+,   mpMapper( pMap )
 {
-    mxMapper->importXML( mrProperties, xAttrList,
+    mpMapper->importXML( mrProperties, xAttrList,
                         GetImport().GetMM100UnitConverter(),
                         GetImport().GetNamespaceMap(), mnFamily,
                         mnStartIdx, mnEndIdx );
@@ -57,7 +57,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLPropertySetContex
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     rtl::Reference< XMLPropertySetMapper > aSetMapper(
-            mxMapper->getPropertySetMapper() );
+            mpMapper->getPropertySetMapper() );
     sal_Int32 nEntryIndex = aSetMapper->GetEntryIndex( nElement, mnFamily, mnStartIdx );
 
     if( ( nEntryIndex != -1 ) && (-1 == mnEndIdx || nEntryIndex < mnEndIdx ) &&

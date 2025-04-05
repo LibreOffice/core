@@ -31,14 +31,14 @@ using ::xmloff::token::XML_HEADER_FOOTER_PROPERTIES;
 
 PageHeaderFooterContext::PageHeaderFooterContext( SvXMLImport& rImport,
                                       ::std::vector< XMLPropertyState > & rTempProperties,
-                                      rtl::Reference < SvXMLImportPropertyMapper > xTempMap,
+                                      SvXMLImportPropertyMapper* pTempMap,
                                       sal_Int32 nStart, sal_Int32 nEnd,
                                       const bool bTempHeader ) :
     SvXMLImportContext( rImport ),
     rProperties(rTempProperties),
     nStartIndex(nStart),
     nEndIndex(nEnd),
-    rMap(std::move(xTempMap))
+    rMap(pTempMap)
 {
     bHeader = bTempHeader;
 }

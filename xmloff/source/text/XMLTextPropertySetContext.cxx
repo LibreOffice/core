@@ -37,10 +37,10 @@ XMLTextPropertySetContext::XMLTextPropertySetContext(
                  const Reference< xml::sax::XFastAttributeList > & xAttrList,
                  sal_uInt32 nFamily,
                  ::std::vector< XMLPropertyState > &rProps,
-                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
+                 SvXMLImportPropertyMapper* pMap,
                  OUString& rDCTextStyleName ) :
     SvXMLPropertySetContext( rImport, nElement, xAttrList, nFamily,
-                             rProps, rMap ),
+                             rProps, pMap ),
     rDropCapTextStyleName( rDCTextStyleName )
 {
 }
@@ -55,7 +55,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextPropertySetCont
     ::std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProp )
 {
-    switch( mxMapper->getPropertySetMapper()
+    switch( mpMapper->getPropertySetMapper()
                     ->GetEntryContextId( rProp.mnIndex ) )
     {
     case CTF_TABSTOP:
@@ -76,7 +76,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextPropertySetCont
     case CTF_DROPCAPFORMAT:
         {
             DBG_ASSERT( rProp.mnIndex >= 2 &&
-                        CTF_DROPCAPWHOLEWORD  == mxMapper->getPropertySetMapper()
+                        CTF_DROPCAPWHOLEWORD  == mpMapper->getPropertySetMapper()
                             ->GetEntryContextId( rProp.mnIndex-2 ),
                         "invalid property map!");
             XMLTextDropCapImportContext *pDCContext =
@@ -93,9 +93,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextPropertySetCont
     case CTF_BACKGROUND_URL:
     {
         DBG_ASSERT( rProp.mnIndex >= 2 &&
-                    CTF_BACKGROUND_POS  == mxMapper->getPropertySetMapper()
+                    CTF_BACKGROUND_POS  == mpMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-2 ) &&
-                    CTF_BACKGROUND_FILTER  == mxMapper->getPropertySetMapper()
+                    CTF_BACKGROUND_FILTER  == mpMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-1 ),
                     "invalid property map!");
 
@@ -104,7 +104,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextPropertySetCont
         sal_Int32 nTranspIndex = -1;
         if( (rProp.mnIndex >= 3) &&
             ( CTF_BACKGROUND_TRANSPARENCY ==
-              mxMapper->getPropertySetMapper()->GetEntryContextId(
+              mpMapper->getPropertySetMapper()->GetEntryContextId(
                   rProp.mnIndex-3 ) ) )
             nTranspIndex = rProp.mnIndex-3;
 
@@ -123,7 +123,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextPropertySetCont
     case CTF_SECTION_ENDNOTE_END:
         return new XMLSectionFootnoteConfigImport(
             GetImport(), nElement, rProperties,
-            mxMapper->getPropertySetMapper());
+            mpMapper->getPropertySetMapper());
         break;
     }
 

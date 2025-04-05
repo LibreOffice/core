@@ -97,11 +97,11 @@ struct XMLTextImportHelper::Impl
 
     rtl::Reference<SvXMLStylesContext> m_xAutoStyles;
 
-    rtl::Reference< SvXMLImportPropertyMapper > m_xParaImpPrMap;
-    rtl::Reference< SvXMLImportPropertyMapper > m_xTextImpPrMap;
-    rtl::Reference< SvXMLImportPropertyMapper > m_xFrameImpPrMap;
-    rtl::Reference< SvXMLImportPropertyMapper > m_xSectionImpPrMap;
-    rtl::Reference< SvXMLImportPropertyMapper > m_xRubyImpPrMap;
+    std::unique_ptr< SvXMLImportPropertyMapper > m_xParaImpPrMap;
+    std::unique_ptr< SvXMLImportPropertyMapper > m_xTextImpPrMap;
+    std::unique_ptr< SvXMLImportPropertyMapper > m_xFrameImpPrMap;
+    std::unique_ptr< SvXMLImportPropertyMapper > m_xSectionImpPrMap;
+    std::unique_ptr< SvXMLImportPropertyMapper > m_xRubyImpPrMap;
 
     std::unique_ptr<SvI18NMap> m_xRenameMap;
 
@@ -288,28 +288,28 @@ XMLTextImportHelper::GetChapterNumbering() const
     return m_xImpl->m_xChapterNumbering;
 }
 
-rtl::Reference< SvXMLImportPropertyMapper > const&
+SvXMLImportPropertyMapper*
 XMLTextImportHelper::GetParaImportPropertySetMapper() const
 {
-    return m_xImpl->m_xParaImpPrMap;
+    return m_xImpl->m_xParaImpPrMap.get();
 }
 
-rtl::Reference< SvXMLImportPropertyMapper > const&
+SvXMLImportPropertyMapper*
 XMLTextImportHelper::GetTextImportPropertySetMapper() const
 {
-    return m_xImpl->m_xTextImpPrMap;
+    return m_xImpl->m_xTextImpPrMap.get();
 }
 
-rtl::Reference< SvXMLImportPropertyMapper > const&
+SvXMLImportPropertyMapper*
 XMLTextImportHelper::GetSectionImportPropertySetMapper() const
 {
-    return m_xImpl->m_xSectionImpPrMap;
+    return m_xImpl->m_xSectionImpPrMap.get();
 }
 
-rtl::Reference< SvXMLImportPropertyMapper > const&
+SvXMLImportPropertyMapper*
 XMLTextImportHelper::GetRubyImportPropertySetMapper() const
 {
-    return m_xImpl->m_xRubyImpPrMap;
+    return m_xImpl->m_xRubyImpPrMap.get();
 }
 
 void XMLTextImportHelper::SetInsideDeleteContext(bool const bNew)
@@ -518,23 +518,23 @@ XMLTextImportHelper::XMLTextImportHelper(
     XMLPropertySetMapper *pPropMapper =
             new XMLTextPropertySetMapper( TextPropMap::PARA, false );
     m_xImpl->m_xParaImpPrMap =
-        new XMLTextImportPropertyMapper( pPropMapper, rImport );
+        std::make_unique<XMLTextImportPropertyMapper>( pPropMapper, rImport );
 
     pPropMapper = new XMLTextPropertySetMapper( TextPropMap::TEXT, false );
     m_xImpl->m_xTextImpPrMap =
-        new XMLTextImportPropertyMapper( pPropMapper, rImport );
+        std::make_unique<XMLTextImportPropertyMapper>( pPropMapper, rImport );
 
     pPropMapper = new XMLTextPropertySetMapper( TextPropMap::FRAME, false );
     m_xImpl->m_xFrameImpPrMap =
-        new XMLTextImportPropertyMapper( pPropMapper, rImport );
+        std::make_unique<XMLTextImportPropertyMapper>( pPropMapper, rImport );
 
     pPropMapper = new XMLTextPropertySetMapper( TextPropMap::SECTION, false );
     m_xImpl->m_xSectionImpPrMap =
-        new XMLTextImportPropertyMapper( pPropMapper, rImport );
+        std::make_unique<XMLTextImportPropertyMapper>( pPropMapper, rImport );
 
     pPropMapper = new XMLTextPropertySetMapper( TextPropMap::RUBY, false );
     m_xImpl->m_xRubyImpPrMap =
-        new SvXMLImportPropertyMapper( pPropMapper, rImport );
+        std::make_unique<SvXMLImportPropertyMapper>( pPropMapper, rImport );
 }
 
 XMLTextImportHelper::~XMLTextImportHelper()
@@ -547,67 +547,67 @@ void XMLTextImportHelper::dispose()
         m_xImpl->m_xAutoStyles->dispose();
 }
 
-SvXMLImportPropertyMapper *XMLTextImportHelper::CreateShapeExtPropMapper(SvXMLImport& rImport)
+std::unique_ptr<SvXMLImportPropertyMapper> XMLTextImportHelper::CreateShapeExtPropMapper(SvXMLImport& rImport)
 {
     XMLPropertySetMapper *pPropMapper =
         new XMLTextPropertySetMapper( TextPropMap::FRAME, false );
-    return new XMLTextImportPropertyMapper( pPropMapper, rImport );
+    return std::make_unique<XMLTextImportPropertyMapper>( pPropMapper, rImport );
 }
 
-SvXMLImportPropertyMapper *XMLTextImportHelper::CreateParaExtPropMapper(SvXMLImport& rImport)
+std::unique_ptr<SvXMLImportPropertyMapper> XMLTextImportHelper::CreateParaExtPropMapper(SvXMLImport& rImport)
 {
     XMLPropertySetMapper *pPropMapper =
         new XMLTextPropertySetMapper( TextPropMap::SHAPE_PARA, false );
-    return new XMLTextImportPropertyMapper( pPropMapper, rImport );
+    return std::make_unique<XMLTextImportPropertyMapper>( pPropMapper, rImport );
 }
 
-SvXMLImportPropertyMapper *XMLTextImportHelper::CreateParaDefaultExtPropMapper(SvXMLImport& rImport)
+std::unique_ptr<SvXMLImportPropertyMapper> XMLTextImportHelper::CreateParaDefaultExtPropMapper(SvXMLImport& rImport)
 {
     XMLPropertySetMapper* pPropMapper =
         new XMLTextPropertySetMapper( TextPropMap::SHAPE_PARA, false );
-    SvXMLImportPropertyMapper* pImportMapper = new XMLTextImportPropertyMapper( pPropMapper, rImport );
+    std::unique_ptr<SvXMLImportPropertyMapper> pImportMapper(new XMLTextImportPropertyMapper( pPropMapper, rImport ));
 
     pPropMapper =
         new XMLTextPropertySetMapper( TextPropMap::TEXT_ADDITIONAL_DEFAULTS, false );
-    pImportMapper->ChainImportMapper( new XMLTextImportPropertyMapper( pPropMapper, rImport ) );
+    pImportMapper->ChainImportMapper( std::make_unique<XMLTextImportPropertyMapper>( pPropMapper, rImport ) );
 
     return pImportMapper;
 }
 
-SvXMLImportPropertyMapper*
+std::unique_ptr<SvXMLImportPropertyMapper>
     XMLTextImportHelper::CreateTableDefaultExtPropMapper(
         SvXMLImport& rImport )
 {
     XMLPropertySetMapper *pPropMapper =
         new XMLTextPropertySetMapper( TextPropMap::TABLE_DEFAULTS, false );
-    return new SvXMLImportPropertyMapper( pPropMapper, rImport );
+    return std::make_unique<SvXMLImportPropertyMapper>( pPropMapper, rImport );
 }
 
-SvXMLImportPropertyMapper*
+std::unique_ptr<SvXMLImportPropertyMapper>
     XMLTextImportHelper::CreateTableRowDefaultExtPropMapper(
         SvXMLImport& rImport )
 {
     XMLPropertySetMapper *pPropMapper =
         new XMLTextPropertySetMapper( TextPropMap::TABLE_ROW_DEFAULTS, false );
-    return new SvXMLImportPropertyMapper( pPropMapper, rImport );
+    return std::make_unique<SvXMLImportPropertyMapper>( pPropMapper, rImport );
 }
 
-SvXMLImportPropertyMapper*
+std::unique_ptr<SvXMLImportPropertyMapper>
     XMLTextImportHelper::CreateTableCellExtPropMapper(
         SvXMLImport& rImport )
 {
     XMLPropertySetMapper *pPropMapper =
         new XMLTextPropertySetMapper( TextPropMap::CELL, false );
-    return new XMLTextImportPropertyMapper( pPropMapper, rImport );
+    return std::make_unique<XMLTextImportPropertyMapper>( pPropMapper, rImport );
 }
 
-SvXMLImportPropertyMapper*
+std::unique_ptr<SvXMLImportPropertyMapper>
 XMLTextImportHelper::CreateDrawingPageExtPropMapper(SvXMLImport& rImport)
 {
     rtl::Reference<XMLPropertyHandlerFactory> const pFactory(new XMLPageMasterPropHdlFactory);
     XMLPropertySetMapper *const pPropMapper(
         new XMLPropertySetMapper(g_XMLPageMasterDrawingPageStyleMap, pFactory, false));
-    return new SvXMLImportPropertyMapper(pPropMapper, rImport);
+    return std::make_unique<SvXMLImportPropertyMapper>(pPropMapper, rImport);
 }
 
 void XMLTextImportHelper::SetCursor( const Reference < XTextCursor > & rCursor )
@@ -843,12 +843,12 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
                     sal_Int32 nCount = pStyle->GetProperties_().size();
                     if( nCount )
                     {
-                        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
+                        SvXMLImportPropertyMapper* pImpPrMap =
                             m_xImpl->m_xAutoStyles->GetImportPropertyMapper(nFamily);
-                        if( xImpPrMap.is() )
+                        if( pImpPrMap )
                         {
                             rtl::Reference<XMLPropertySetMapper> rPropMapper =
-                                xImpPrMap->getPropertySetMapper();
+                                pImpPrMap->getPropertySetMapper();
                             for( sal_Int32 i=0; i < nCount; i++ )
                             {
                                 const XMLPropertyState& rProp = pStyle->GetProperties_()[i];

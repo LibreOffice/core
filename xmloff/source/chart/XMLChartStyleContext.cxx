@@ -122,12 +122,12 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChartStyleContext::
             nFamily = XML_TYPE_PROP_CHART;
         if( nFamily )
         {
-            rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
+            SvXMLImportPropertyMapper* pImpPrMap =
                 GetStyles()->GetImportPropertyMapper( GetFamily() );
-            if( xImpPrMap.is() )
+            if( pImpPrMap )
                 return new XMLChartPropertyContext(
                     GetImport(), nElement, xAttrList, nFamily,
-                    GetProperties(), xImpPrMap );
+                    GetProperties(), pImpPrMap );
         }
     }
 

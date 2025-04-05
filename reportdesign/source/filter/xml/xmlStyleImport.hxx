@@ -66,11 +66,11 @@ namespace rptxml
         sal_Int32 m_nNumberFormatIndex;
         bool bAutoStyles : 1;
 
-        //mutable rtl::Reference < SvXMLImportPropertyMapper > m_xControlImpPropMapper;
-        mutable rtl::Reference < SvXMLImportPropertyMapper > m_xCellImpPropMapper;
-        mutable rtl::Reference < SvXMLImportPropertyMapper > m_xColumnImpPropMapper;
-        mutable rtl::Reference < SvXMLImportPropertyMapper > m_xRowImpPropMapper;
-        mutable rtl::Reference < SvXMLImportPropertyMapper > m_xTableImpPropMapper;
+        //mutable std::unique_ptr < SvXMLImportPropertyMapper > m_xControlImpPropMapper;
+        mutable std::unique_ptr < SvXMLImportPropertyMapper > m_xCellImpPropMapper;
+        mutable std::unique_ptr < SvXMLImportPropertyMapper > m_xColumnImpPropMapper;
+        mutable std::unique_ptr < SvXMLImportPropertyMapper > m_xRowImpPropMapper;
+        mutable std::unique_ptr < SvXMLImportPropertyMapper > m_xTableImpPropMapper;
 
         mutable css::uno::Reference< css::container::XNameContainer > m_xCellStyles;
         mutable css::uno::Reference< css::container::XNameContainer > m_xColumnStyles;
@@ -104,7 +104,7 @@ namespace rptxml
 
         virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-        virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
+        virtual SvXMLImportPropertyMapper* GetImportPropertyMapper(
                             XmlStyleFamily nFamily ) const override;
         virtual css::uno::Reference< css::container::XNameContainer >
             GetStylesContainer( XmlStyleFamily nFamily ) const override;
