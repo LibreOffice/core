@@ -1944,117 +1944,65 @@ namespace {
 class PerXMinMaxCalculator
 {
     typedef std::pair<double, double> MinMaxType;
-    typedef std::map<size_t, MinMaxType> SeriesMinMaxType;
+    typedef std::vector<MinMaxType> SeriesMinMaxType;
     typedef std::map<double, SeriesMinMaxType> GroupMinMaxType;
-    typedef std::unordered_map<double, MinMaxType> TotalStoreType;
     GroupMinMaxType m_SeriesGroup;
+    size_t mnNumSeries;
     size_t mnCurSeries;
 
 public:
-    PerXMinMaxCalculator() : mnCurSeries(0) {}
+    PerXMinMaxCalculator(size_t numSeries) : mnNumSeries(numSeries), mnCurSeries(0) {}
 
     void nextSeries() { ++mnCurSeries; }
 
     void setValue(double fX, double fY)
     {
-        SeriesMinMaxType* pStore = getByXValue(fX); // get storage for given X value.
-        if (!pStore)
-            // This shouldn't happen!
-            return;
+        SeriesMinMaxType& rStore = m_SeriesGroup[fX]; // get storage for given X value.
+        if (rStore.empty())
+            rStore.resize(mnNumSeries, { std::numeric_limits<double>::max(), std::numeric_limits<double>::min() });
 
-        SeriesMinMaxType::iterator it = pStore->lower_bound(mnCurSeries);
-        if (it != pStore->end() && !pStore->key_comp()(mnCurSeries, it->first))
-        {
-            MinMaxType& r = it->second;
-            // A min-max pair already exists for this series.  Update it.
-            if (fY < r.first)
-                r.first = fY;
-            if (r.second < fY)
-                r.second = fY;
-        }
-        else
-        {
-            // No existing pair. Insert a new one.
-            pStore->insert(
-                it, SeriesMinMaxType::value_type(
-                    mnCurSeries, MinMaxType(fY,fY)));
-        }
+        MinMaxType& r = rStore[mnCurSeries];
+        if (fY < r.first)
+            r.first = fY;
+        if (r.second < fY)
+            r.second = fY;
     }
 
     void getTotalRange(double& rfMin, double& rfMax) const
     {
-        TotalStoreType aStore;
-        getTotalStore(aStore);
-
-        if (aStore.empty())
+        if (m_SeriesGroup.empty())
         {
             rfMin = std::numeric_limits<double>::quiet_NaN();
             rfMax = std::numeric_limits<double>::quiet_NaN();
             return;
         }
 
-        TotalStoreType::const_iterator it = aStore.begin(), itEnd = aStore.end();
-        rfMin = it->second.first;
-        rfMax = it->second.second;
-        for (++it; it != itEnd; ++it)
-        {
-            if (rfMin > it->second.first)
-                rfMin = it->second.first;
-            if (rfMax < it->second.second)
-                rfMax = it->second.second;
-        }
-    }
+        rfMin = std::numeric_limits<double>::max();
+        rfMax = std::numeric_limits<double>::min();
 
-private:
-    /**
-     * Parse all data and reduce them into a set of global Y value ranges per
-     * X value.
-     */
-    void getTotalStore(TotalStoreType& rStore) const
-    {
-        TotalStoreType aStore;
+        /**
+         * For each, X value, calculate Y value range
+         */
         for (auto const& it : m_SeriesGroup)
         {
-            double fX = it.first;
-
             const SeriesMinMaxType& rSeries = it.second;
-            for (auto const& series : rSeries)
+            MinMaxType aPerXMinMax { std::numeric_limits<double>::max(), 0.0 };
+            for (MinMaxType const& series : rSeries)
             {
-                double fYMin = series.second.first, fYMax = series.second.second;
-                TotalStoreType::iterator itr = aStore.find(fX);
-                if (itr == aStore.end())
-                    // New min-max pair for give X value.
-                    aStore.emplace(fX, std::pair<double,double>(fYMin,fYMax));
-                else
-                {
-                    MinMaxType& r = itr->second;
-                    if (fYMin < r.first)
-                        r.first = fYMin; // min y-value
+                double fYMin = series.first, fYMax = series.second;
+                if (fYMin < aPerXMinMax.first)
+                    aPerXMinMax.first = fYMin; // min y-value
 
-                    r.second += fYMax; // accumulative max y-value.
-                }
+                aPerXMinMax.second += fYMax; // accumulative max y-value.
             }
+
+            if (rfMin > aPerXMinMax.first)
+                rfMin = aPerXMinMax.first;
+            if (rfMax < aPerXMinMax.second)
+                rfMax = aPerXMinMax.second;
         }
-        rStore.swap(aStore);
     }
 
-    SeriesMinMaxType* getByXValue(double fX)
-    {
-        GroupMinMaxType::iterator it = m_SeriesGroup.find(fX);
-        if (it == m_SeriesGroup.end())
-        {
-            std::pair<GroupMinMaxType::iterator,bool> r =
-                m_SeriesGroup.insert(std::make_pair(fX, SeriesMinMaxType{}));
-
-            if (!r.second)
-                // insertion failed.
-                return nullptr;
-
-            it = r.first;
-        }
-
-        return &it->second;
-    }
 };
 
 }
@@ -2069,7 +2017,17 @@ void VDataSeriesGroup::getMinimumAndMaximumYInContinuousXRange(
         // No data series.  Bail out.
         return;
 
-    PerXMinMaxCalculator aRangeCalc;
+    size_t nNumSeries = 0;
+    for (const std::unique_ptr<VDataSeries> & pSeries : m_aSeriesVector)
+    {
+        if (!pSeries)
+            continue;
+        if (nAxisIndex != pSeries->getAttachedAxisIndex())
+            continue;
+        nNumSeries++;
+    }
+
+    PerXMinMaxCalculator aRangeCalc(nNumSeries);
     for (const std::unique_ptr<VDataSeries> & pSeries : m_aSeriesVector)
     {
         if (!pSeries)
