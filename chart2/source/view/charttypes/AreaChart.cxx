@@ -618,10 +618,10 @@ void AreaChart::createShapes()
                 if (bDateCategory)
                     pSeries->doSortByXValues();
 
+                sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
                 for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
                 {
                     std::map< sal_Int32, double >& rLogicYSumMap = aLogicYSumMapByX[nIndex];
-                    sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
                     rLogicYSumMap.insert({nAttachedAxisIndex, 0.0});
 
                     m_pPosHelper = &getPlottingPositionHelper(nAttachedAxisIndex);

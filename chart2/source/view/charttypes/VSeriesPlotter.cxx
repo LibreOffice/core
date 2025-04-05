@@ -2074,12 +2074,11 @@ void VDataSeriesGroup::getMinimumAndMaximumYInContinuousXRange(
     {
         if (!pSeries)
             continue;
+        if (nAxisIndex != pSeries->getAttachedAxisIndex())
+            continue;
 
         for (sal_Int32 i = 0, n = pSeries->getTotalPointCount(); i < n; ++i)
         {
-            if (nAxisIndex != pSeries->getAttachedAxisIndex())
-                continue;
-
             double fX = pSeries->getXValue(i);
             if (std::isnan(fX))
                 continue;
