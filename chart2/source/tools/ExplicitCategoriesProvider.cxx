@@ -101,17 +101,6 @@ void ExplicitCategoriesProvider::implInitSplit()
     const bool bHasCategories = false;
     const uno::Sequence< sal_Int32 > aSequenceMapping;
 
-    uno::Reference< data::XDataSource > xRowCategoriesSource( xDataProvider->createDataSource(
-                DataSourceHelper::createArguments( aCategoriesRange, aSequenceMapping, false /*bUseColumns*/
-                    , bFirstCellAsLabel, bHasCategories ) ) );
-    if( !xRowCategoriesSource )
-        return;
-
-    Sequence< Reference< data::XLabeledDataSequence> > aRows = xRowCategoriesSource->getDataSequences();
-    sal_Int32 nRowCount = aRows.getLength();
-    if( nRowCount<=1 )
-        return;
-
     uno::Reference< data::XDataSource > xColumnCategoriesSource( xDataProvider->createDataSource(
                 DataSourceHelper::createArguments( aCategoriesRange, aSequenceMapping, true /*bUseColumns*/
                     , bFirstCellAsLabel, bHasCategories ) ) );
@@ -121,6 +110,17 @@ void ExplicitCategoriesProvider::implInitSplit()
     Sequence< Reference< data::XLabeledDataSequence> > aColumns = xColumnCategoriesSource->getDataSequences();
     sal_Int32 nColumnCount = aColumns.getLength();
     if( nColumnCount<=1 )
+        return;
+
+    uno::Reference< data::XDataSource > xRowCategoriesSource( xDataProvider->createDataSource(
+                DataSourceHelper::createArguments( aCategoriesRange, aSequenceMapping, false /*bUseColumns*/
+                    , bFirstCellAsLabel, bHasCategories ) ) );
+    if( !xRowCategoriesSource )
+        return;
+
+    Sequence< Reference< data::XLabeledDataSequence> > aRows = xRowCategoriesSource->getDataSequences();
+    sal_Int32 nRowCount = aRows.getLength();
+    if( nRowCount<=1 )
         return;
 
     //we have complex categories
