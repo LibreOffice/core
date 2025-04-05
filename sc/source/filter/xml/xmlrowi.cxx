@@ -23,6 +23,7 @@
 #include "xmlstyli.hxx"
 #include "xmlstyle.hxx"
 #include <document.hxx>
+#include <cellsuno.hxx>
 #include <docuno.hxx>
 #include <olinetab.hxx>
 #include <sheetdata.hxx>
@@ -153,7 +154,7 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
     }
     SCTAB nSheet = rXMLImport.GetTables().GetCurrentSheet();
     sal_Int32 nCurrentRow(rXMLImport.GetTables().GetCurrentRow());
-    uno::Reference<sheet::XSpreadsheet> xSheet(rXMLImport.GetTables().GetCurrentXSheet());
+    rtl::Reference<ScTableSheetObj> xSheet(rXMLImport.GetTables().GetCurrentXSheet());
     if(!xSheet.is())
         return;
 
@@ -324,7 +325,7 @@ void SAL_CALL ScXMLTableRowsContext::endFastElement(sal_Int32 /*nElement*/)
         SCROW nHeaderEndRow = rXMLImport.GetTables().GetCurrentRow();
         if (nHeaderStartRow <= nHeaderEndRow)
         {
-            uno::Reference <sheet::XPrintAreas> xPrintAreas (rXMLImport.GetTables().GetCurrentXSheet(), uno::UNO_QUERY);
+            rtl::Reference<ScTableSheetObj> xPrintAreas (rXMLImport.GetTables().GetCurrentXSheet());
             if (xPrintAreas.is())
             {
                 if (!xPrintAreas->getPrintTitleRows())

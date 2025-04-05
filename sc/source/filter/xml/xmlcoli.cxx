@@ -21,6 +21,7 @@
 #include "xmlimprt.hxx"
 #include "xmlstyli.hxx"
 #include <document.hxx>
+#include <cellsuno.hxx>
 #include <docuno.hxx>
 #include <olinetab.hxx>
 #include <sheetdata.hxx>
@@ -88,7 +89,7 @@ void SAL_CALL ScXMLTableColContext::endFastElement( sal_Int32 /*nElement*/ )
     ScDocument* pDoc = rXMLImport.GetDocument();
     SCTAB nSheet = rXMLImport.GetTables().GetCurrentSheet();
     sal_Int32 nCurrentColumn = rXMLImport.GetTables().GetCurrentColCount();
-    uno::Reference<sheet::XSpreadsheet> xSheet(rXMLImport.GetTables().GetCurrentXSheet());
+    rtl::Reference<ScTableSheetObj> xSheet(rXMLImport.GetTables().GetCurrentXSheet());
     if(pDoc && xSheet.is())
     {
         sal_Int32 nLastColumn(nCurrentColumn + nColCount - 1);
@@ -207,7 +208,7 @@ void SAL_CALL ScXMLTableColsContext::endFastElement( sal_Int32 /*nElement*/ )
         nHeaderEndCol--;
         if (nHeaderStartCol <= nHeaderEndCol)
         {
-            uno::Reference <sheet::XPrintAreas> xPrintAreas (rXMLImport.GetTables().GetCurrentXSheet(), uno::UNO_QUERY);
+            rtl::Reference<ScTableSheetObj> xPrintAreas (rXMLImport.GetTables().GetCurrentXSheet());
             if (xPrintAreas.is())
             {
                 if (!xPrintAreas->getPrintTitleColumns())
