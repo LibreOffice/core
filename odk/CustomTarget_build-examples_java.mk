@@ -54,7 +54,6 @@ my_example_dirs_java = \
     java/ToDo \
 
 #    java/ConverterServlet \
-#    java/EmbedDocument/Container1 \
 #    java/EmbedDocument/EmbeddedObject \
 #    java/NotesAccess \
 #    java/Storage \
