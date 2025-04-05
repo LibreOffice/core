@@ -1675,13 +1675,13 @@ double VSeriesPlotter::getMaximumX()
     return fMaximum;
 }
 
-double VSeriesPlotter::getMinimumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex )
+std::pair<double, double> VSeriesPlotter::getMinimumAndMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex )
 {
     if( !m_bCategoryXAxis || ( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() ) )
     {
         double fMinY, fMaxY;
         getMinimumAndMaximumYInContinuousXRange( fMinY, fMaxY, fMinimumX, fMaximumX, nAxisIndex );
-        return fMinY;
+        return { fMinY, fMaxY };
     }
 
     double fMinimum = std::numeric_limits<double>::infinity();
@@ -1703,40 +1703,10 @@ double VSeriesPlotter::getMinimumYInRange( double fMinimumX, double fMaximumX, s
         }
     }
     if(std::isinf(fMinimum))
-        return std::numeric_limits<double>::quiet_NaN();
-    return fMinimum;
-}
-
-double VSeriesPlotter::getMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex )
-{
-    if( !m_bCategoryXAxis || ( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() ) )
-    {
-        double fMinY, fMaxY;
-        getMinimumAndMaximumYInContinuousXRange( fMinY, fMaxY, fMinimumX, fMaximumX, nAxisIndex );
-        return fMaxY;
-    }
-
-    double fMinimum = std::numeric_limits<double>::infinity();
-    double fMaximum = -std::numeric_limits<double>::infinity();
-    for( std::vector< VDataSeriesGroup > & rXSlots : m_aZSlots)
-    {
-        for(VDataSeriesGroup & rXSlot : rXSlots)
-        {
-            double fLocalMinimum, fLocalMaximum;
-            rXSlot.calculateYMinAndMaxForCategoryRange(
-                                static_cast<sal_Int32>(fMinimumX-1.0) //first category (index 0) matches with real number 1.0
-                                , static_cast<sal_Int32>(fMaximumX-1.0) //first category (index 0) matches with real number 1.0
-                                , isSeparateStackingForDifferentSigns( 1 )
-                                , fLocalMinimum, fLocalMaximum, nAxisIndex );
-            if(fMaximum<fLocalMaximum)
-                fMaximum=fLocalMaximum;
-            if(fMinimum>fLocalMinimum)
-                fMinimum=fLocalMinimum;
-        }
-    }
+        fMinimum = std::numeric_limits<double>::quiet_NaN();
     if(std::isinf(fMaximum))
-        return std::numeric_limits<double>::quiet_NaN();
-    return fMaximum;
+        fMaximum = std::numeric_limits<double>::quiet_NaN();
+    return { fMinimum, fMaximum };
 }
 
 double VSeriesPlotter::getMinimumZ()

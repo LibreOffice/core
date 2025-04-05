@@ -74,32 +74,23 @@ double MergedMinimumAndMaximumSupplier::getMaximumX()
     return fGlobalExtremum;
 }
 
-double MergedMinimumAndMaximumSupplier::getMinimumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex )
+std::pair<double, double> MergedMinimumAndMaximumSupplier::getMinimumAndMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex )
 {
-    double fGlobalExtremum = std::numeric_limits<double>::infinity();
+    double fGlobalExtremumMin = std::numeric_limits<double>::infinity();
+    double fGlobalExtremumMax = -std::numeric_limits<double>::infinity();
     for (auto const& elem : m_aMinimumAndMaximumSupplierList)
     {
-        double fLocalExtremum = elem->getMinimumYInRange( fMinimumX, fMaximumX, nAxisIndex );
-        if(fLocalExtremum<fGlobalExtremum)
-            fGlobalExtremum=fLocalExtremum;
+        std::pair<double, double> fLocalExtremum = elem->getMinimumAndMaximumYInRange( fMinimumX, fMaximumX, nAxisIndex );
+        if(fLocalExtremum.first<fGlobalExtremumMin)
+            fGlobalExtremumMin=fLocalExtremum.first;
+        if(fLocalExtremum.second>fGlobalExtremumMax)
+            fGlobalExtremumMax=fLocalExtremum.second;
     }
-    if(std::isinf(fGlobalExtremum))
-        return std::numeric_limits<double>::quiet_NaN();
-    return fGlobalExtremum;
-}
-
-double MergedMinimumAndMaximumSupplier::getMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex )
-{
-    double fGlobalExtremum = -std::numeric_limits<double>::infinity();
-    for (auto const& elem : m_aMinimumAndMaximumSupplierList)
-    {
-        double fLocalExtremum = elem->getMaximumYInRange( fMinimumX, fMaximumX, nAxisIndex );
-        if(fLocalExtremum>fGlobalExtremum)
-            fGlobalExtremum=fLocalExtremum;
-    }
-    if(std::isinf(fGlobalExtremum))
-        return std::numeric_limits<double>::quiet_NaN();
-    return fGlobalExtremum;
+    if(std::isinf(fGlobalExtremumMin))
+        fGlobalExtremumMin = std::numeric_limits<double>::quiet_NaN();
+    if(std::isinf(fGlobalExtremumMax))
+        fGlobalExtremumMax = std::numeric_limits<double>::quiet_NaN();
+    return { fGlobalExtremumMin, fGlobalExtremumMax };
 }
 
 double MergedMinimumAndMaximumSupplier::getMinimumZ()

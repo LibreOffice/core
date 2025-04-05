@@ -867,14 +867,10 @@ double PieChart::getMaximumX()
         return m_aZSlots.front().size()+0.5+fMaxOffset;
     return 1.5+fMaxOffset;
 }
-double PieChart::getMinimumYInRange( double /* fMinimumX */, double /* fMaximumX */, sal_Int32 /* nAxisIndex */ )
-{
-    return 0.0;
-}
 
-double PieChart::getMaximumYInRange( double /* fMinimumX */, double /* fMaximumX */, sal_Int32 /* nAxisIndex */ )
+std::pair<double, double> PieChart::getMinimumAndMaximumYInRange( double /* fMinimumX */, double /* fMaximumX */, sal_Int32 /* nAxisIndex */ )
 {
-    return 1.0;
+    return { 0.0, 1.0 };
 }
 
 bool PieChart::isExpandBorderToIncrementRhythm( sal_Int32 /* nDimensionIndex */ )

@@ -164,8 +164,7 @@ public:
     virtual double getMinimumX() override;
     virtual double getMaximumX() override;
 
-    virtual double getMinimumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex ) override;
-    virtual double getMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex ) override;
+    virtual std::pair<double, double> getMinimumAndMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex ) override;
 
     virtual double getMinimumZ() override;
     virtual double getMaximumZ() override;

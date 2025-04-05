@@ -356,9 +356,9 @@ void VCoordinateSystem::prepareAutomaticAxisScaling( ScaleAutomatism& rScaleAuto
     {
         // y dimension
         ExplicitScaleData aScale = getExplicitScale( 0, 0 );
-        double fMaximum = aScale.Maximum;
         if (!aScale.m_bShiftedCategoryPosition && aScale.AxisType == AxisType::DATE)
         {
+            double fMaximum = aScale.Maximum;
             // tdf#146066 Increase maximum date value by one month/year,
             //            because the automatic scaling of the Y axis was incorrect when the last Y value was the highest value.
             Date aMaxDate(aScale.NullDate);
@@ -373,9 +373,15 @@ void VCoordinateSystem::prepareAutomaticAxisScaling( ScaleAutomatism& rScaleAuto
                     break;
             }
             fMaximum = aMaxDate - aScale.NullDate;
+            fMin = m_aMergedMinMaxSupplier.getMinimumAndMaximumYInRange(aScale.Minimum, aScale.Maximum, nAxisIndex).first;
+            fMax = m_aMergedMinMaxSupplier.getMinimumAndMaximumYInRange(aScale.Minimum, fMaximum, nAxisIndex).second;
         }
-        fMin = m_aMergedMinMaxSupplier.getMinimumYInRange(aScale.Minimum,aScale.Maximum, nAxisIndex);
-        fMax = m_aMergedMinMaxSupplier.getMaximumYInRange(aScale.Minimum, fMaximum, nAxisIndex);
+        else
+        {
+            auto fTmp = m_aMergedMinMaxSupplier.getMinimumAndMaximumYInRange(aScale.Minimum, aScale.Maximum, nAxisIndex);
+            fMin = fTmp.first;
+            fMax = fTmp.second;
+        }
     }
     else if( nDimIndex == 2 )
     {

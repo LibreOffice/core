@@ -149,8 +149,7 @@ public:
     //MinimumAndMaximumSupplier
     virtual double getMinimumX() override;
     virtual double getMaximumX() override;
-    virtual double getMinimumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex ) override;
-    virtual double getMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex ) override;
+    virtual std::pair<double, double> getMinimumAndMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex ) override;
 
     virtual bool isExpandBorderToIncrementRhythm( sal_Int32 nDimensionIndex ) override;
     virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex ) override;
