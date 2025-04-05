@@ -71,6 +71,7 @@ class ScRangeList;
 class ScPrintUIOptions;
 class ScSheetSaveData;
 struct ScFormatSaveData;
+class ScTableSheetsObj;
 
 class SAL_DLLPUBLIC_RTTI ScModelObj : public SfxBaseModel,
                     public vcl::ITiledRenderable,
@@ -163,8 +164,9 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             /// XSpreadsheetDocument
-    virtual css::uno::Reference< css::sheet::XSpreadsheets > SAL_CALL
-                            getSheets() override;
+    SC_DLLPUBLIC virtual css::uno::Reference< css::sheet::XSpreadsheets > SAL_CALL
+                            getSheets() override final;
+    SC_DLLPUBLIC rtl::Reference< ScTableSheetsObj > getScSheets();
 
                             /// XDataProviderAccess
     virtual ::css::uno::Reference< css::chart2::data::XDataProvider > SAL_CALL
@@ -449,7 +451,6 @@ class ScTableSheetsObj final : public cppu::WeakImplHelper<
 private:
     ScDocShell*             pDocShell;
 
-    rtl::Reference<ScTableSheetObj> GetObjectByIndex_Impl(sal_Int32 nIndex) const;
     rtl::Reference<ScTableSheetObj> GetObjectByName_Impl(const OUString& aName) const;
 
 public:
@@ -511,6 +512,8 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    rtl::Reference<ScTableSheetObj> GetSheetByIndex(sal_Int32 nIndex) const;
 };
 
 class ScTableColumnsObj final : public cppu::WeakImplHelper<

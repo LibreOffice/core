@@ -23,6 +23,7 @@
 #include <docsh.hxx>
 #include "xmlsubti.hxx"
 #include <tablink.hxx>
+#include <cellsuno.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <sax/tools/converter.hxx>
@@ -79,7 +80,7 @@ void SAL_CALL ScXMLTableSourceContext::endFastElement( sal_Int32 /*nElement*/ )
     if (sLink.isEmpty())
         return;
 
-    uno::Reference <sheet::XSheetLinkable> xLinkable (GetScImport().GetTables().GetCurrentXSheet(), uno::UNO_QUERY);
+    rtl::Reference<ScTableSheetObj> xLinkable (GetScImport().GetTables().GetCurrentXSheet());
     ScDocument* pDoc(GetScImport().GetDocument());
     if (!(xLinkable.is() && pDoc))
         return;

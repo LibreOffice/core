@@ -22,6 +22,7 @@
 #include "xmlimprt.hxx"
 #include <document.hxx>
 #include "XMLConverter.hxx"
+#include <cellsuno.hxx>
 #include <docuno.hxx>
 #include "XMLStylesImportHelper.hxx"
 #include <sheetdata.hxx>
@@ -71,23 +72,18 @@ ScMyTables::~ScMyTables()
 
 namespace {
 
-uno::Reference<sheet::XSpreadsheet> getCurrentSheet(const uno::Reference<frame::XModel>& xModel, SCTAB nSheet)
+rtl::Reference<ScTableSheetObj> getCurrentSheet(const uno::Reference<frame::XModel>& xModel, SCTAB nSheet)
 {
-    uno::Reference<sheet::XSpreadsheet> xSheet;
-    uno::Reference<sheet::XSpreadsheetDocument> xSpreadDoc(xModel, uno::UNO_QUERY);
-    if (!xSpreadDoc.is())
+    rtl::Reference<ScTableSheetObj> xSheet;
+    ScModelObj* pSpreadDoc = dynamic_cast<ScModelObj*>(xModel.get());
+    if (!pSpreadDoc)
         return xSheet;
 
-    uno::Reference <sheet::XSpreadsheets> xSheets(xSpreadDoc->getSheets());
+    rtl::Reference<ScTableSheetsObj> xSheets(pSpreadDoc->getScSheets());
     if (!xSheets.is())
         return xSheet;
 
-    uno::Reference <container::XIndexAccess> xIndex(xSheets, uno::UNO_QUERY);
-    if (!xIndex.is())
-        return xSheet;
-
-    xSheet.set(xIndex->getByIndex(nSheet), uno::UNO_QUERY);
-    return xSheet;
+    return xSheets->GetSheetByIndex(nSheet);
 }
 
 }
@@ -142,10 +138,6 @@ void ScMyTables::SetTableStyle(const OUString& sStyleName)
     if ( !xCurrentSheet.is() )
         return;
 
-    uno::Reference <beans::XPropertySet> xProperties(xCurrentSheet, uno::UNO_QUERY);
-    if ( !xProperties.is() )
-        return;
-
     XMLTableStylesContext *pStyles = static_cast<XMLTableStylesContext *>(rImport.GetAutoStyles());
     if ( pStyles )
     {
@@ -153,7 +145,7 @@ void ScMyTables::SetTableStyle(const OUString& sStyleName)
                 XmlStyleFamily::TABLE_TABLE, sStyleName, true)));
         if ( pStyle )
         {
-            pStyle->FillPropertySet(xProperties);
+            pStyle->FillPropertySet(xCurrentSheet);
 
             ScSheetSaveData* pSheetData = rImport.GetScModel()->GetSheetSaveData();
             pSheetData->AddTableStyle( sStyleName, ScAddress( 0, 0, maCurrentCellPos.Tab() ) );
@@ -231,9 +223,8 @@ uno::Reference< drawing::XDrawPage > const & ScMyTables::GetCurrentXDrawPage()
 {
     if( (maCurrentCellPos.Tab() != nCurrentDrawPage) || !xDrawPage.is() )
     {
-        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier( xCurrentSheet, uno::UNO_QUERY );
-        if( xDrawPageSupplier.is() )
-            xDrawPage.set(xDrawPageSupplier->getDrawPage());
+        if( xCurrentSheet.is() )
+            xDrawPage.set(xCurrentSheet->getDrawPage());
         nCurrentDrawPage = sal::static_int_cast<sal_Int16>(maCurrentCellPos.Tab());
     }
     return xDrawPage;

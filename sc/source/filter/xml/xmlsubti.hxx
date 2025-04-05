@@ -29,6 +29,7 @@ namespace com::sun::star::table { class XCellRange; }
 namespace com::sun::star::drawing { class XShapes; }
 
 class ScXMLImport;
+class ScTableSheetObj;
 
 struct ScXMLTabProtectionData
 {
@@ -55,7 +56,7 @@ private:
 
     ScMyOLEFixer                        aFixupOLEs;
 
-    css::uno::Reference< css::sheet::XSpreadsheet > xCurrentSheet;
+    rtl::Reference< ScTableSheetObj >   xCurrentSheet;
     css::uno::Reference< css::drawing::XDrawPage > xDrawPage;
     css::uno::Reference < css::drawing::XShapes > xShapes;
     OUString                       sCurrentSheetName;
@@ -87,7 +88,7 @@ public:
     SCTAB                               GetCurrentSheet() const { return (maCurrentCellPos.Tab() >= 0) ? maCurrentCellPos.Tab() : 0; }
     SCCOL                               GetCurrentColCount() const;
     SCROW                               GetCurrentRow() const { return (maCurrentCellPos.Row() >= 0) ? maCurrentCellPos.Row() : 0; }
-    const css::uno::Reference< css::sheet::XSpreadsheet >&
+    const rtl::Reference< ScTableSheetObj >&
                                         GetCurrentXSheet() const { return xCurrentSheet; }
     css::uno::Reference< css::drawing::XDrawPage > const &
                                         GetCurrentXDrawPage();

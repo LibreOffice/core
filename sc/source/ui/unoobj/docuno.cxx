@@ -1530,6 +1530,11 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 uno::Reference<sheet::XSpreadsheets> SAL_CALL ScModelObj::getSheets()
 {
+    return getScSheets();
+}
+
+rtl::Reference<ScTableSheetsObj> ScModelObj::getScSheets()
+{
     SolarMutexGuard aGuard;
     if (pDocShell)
         return new ScTableSheetsObj(pDocShell);
@@ -4176,7 +4181,7 @@ void ScTableSheetsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XSpreadsheets
 
-rtl::Reference<ScTableSheetObj> ScTableSheetsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
+rtl::Reference<ScTableSheetObj> ScTableSheetsObj::GetSheetByIndex(sal_Int32 nIndex) const
 {
     if ( pDocShell && nIndex >= 0 && nIndex < pDocShell->GetDocument().GetTableCount() )
         return new ScTableSheetObj( pDocShell, static_cast<SCTAB>(nIndex) );
@@ -4395,7 +4400,7 @@ sal_Int32 ScTableSheetsObj::importSheet(
 uno::Reference< table::XCell > SAL_CALL ScTableSheetsObj::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow, sal_Int32 nSheet )
 {
     SolarMutexGuard aGuard;
-    rtl::Reference<ScTableSheetObj> xSheet = GetObjectByIndex_Impl(static_cast<sal_uInt16>(nSheet));
+    rtl::Reference<ScTableSheetObj> xSheet = GetSheetByIndex(static_cast<sal_uInt16>(nSheet));
     if (! xSheet.is())
         throw lang::IndexOutOfBoundsException();
 
@@ -4405,7 +4410,7 @@ uno::Reference< table::XCell > SAL_CALL ScTableSheetsObj::getCellByPosition( sal
 uno::Reference< table::XCellRange > SAL_CALL ScTableSheetsObj::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom, sal_Int32 nSheet )
 {
     SolarMutexGuard aGuard;
-    rtl::Reference<ScTableSheetObj> xSheet = GetObjectByIndex_Impl(static_cast<sal_uInt16>(nSheet));
+    rtl::Reference<ScTableSheetObj> xSheet = GetSheetByIndex(static_cast<sal_uInt16>(nSheet));
     if (! xSheet.is())
         throw lang::IndexOutOfBoundsException();
 
@@ -4458,7 +4463,7 @@ sal_Int32 SAL_CALL ScTableSheetsObj::getCount()
 uno::Any SAL_CALL ScTableSheetsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    rtl::Reference<ScTableSheetObj> xSheet(GetObjectByIndex_Impl(nIndex));
+    rtl::Reference<ScTableSheetObj> xSheet(GetSheetByIndex(nIndex));
     if (!xSheet.is())
         throw lang::IndexOutOfBoundsException();
 

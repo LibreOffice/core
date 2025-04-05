@@ -25,6 +25,7 @@
 #include "xmlexternaltabi.hxx"
 #include "xmlnexpi.hxx"
 #include <document.hxx>
+#include <cellsuno.hxx>
 #include <docuno.hxx>
 #include <olinetab.hxx>
 #include "XMLTableShapesContext.hxx"
@@ -305,7 +306,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     case XML_ELEMENT(OFFICE_EXT, XML_EVENT_LISTENERS):
         {
             // use XEventsSupplier interface of the sheet
-            uno::Reference<document::XEventsSupplier> xSupplier( GetScImport().GetTables().GetCurrentXSheet(), uno::UNO_QUERY );
+            uno::Reference<document::XEventsSupplier> xSupplier( GetScImport().GetTables().GetCurrentXSheet() );
             pContext = new XMLEventsImportContext( GetImport(), xSupplier );
         }
         break;
