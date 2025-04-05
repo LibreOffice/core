@@ -4504,8 +4504,15 @@ static std::map< OString, std::vector<OString> > lcl_getAdjNames()
         sal_Int32 nIndex = 0;
         // Each line is in a "key\tvalue" format: read the key, the rest is the value.
         OString aKey( o3tl::getToken(aLine, 0, '\t', nIndex) );
-        OString aValue( std::string_view(aLine).substr(nIndex) );
-        aRet[aKey].push_back(aValue);
+        if (nIndex >= 0)
+        {
+            OString aValue( std::string_view(aLine).substr(nIndex) );
+            aRet[aKey].push_back(aValue);
+        }
+        else
+        {
+            SAL_WARN("oox.shape", "skipping invalid line: " << std::string_view(aLine));
+        }
         bNotDone = aStream.ReadLine(aLine);
     }
     return aRet;
