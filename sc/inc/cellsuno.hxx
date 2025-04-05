@@ -113,6 +113,7 @@ class SfxHint;
 class SfxItemPropertyMap;
 class SfxItemPropertySet;
 struct SfxItemPropertyMapEntry;
+class ScTableRowsObj;
 
 namespace editeng { class SvxBorderLine; }
 
@@ -607,6 +608,14 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    rtl::Reference< ScCellRangeObj >
+                            getScCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop,
+                                sal_Int32 nRight, sal_Int32 nBottom );
+    rtl::Reference< ScTableRowsObj >
+                            getScRowsByPosition( sal_Int32 nLeft, sal_Int32 nTop,
+                                sal_Int32 nRight, sal_Int32 nBottom );
+    rtl::Reference< ScTableRowsObj > getScRows();
 };
 
 //! really derive cell from range?

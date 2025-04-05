@@ -163,15 +163,7 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
         nFirstRow = pDoc->MaxRow();
     if (nCurrentRow > pDoc->MaxRow())
         nCurrentRow = pDoc->MaxRow();
-    uno::Reference <table::XCellRange> xCellRange(xSheet->getCellRangeByPosition(0, nFirstRow, 0, nCurrentRow));
-    if (!xCellRange.is())
-        return;
-
-    uno::Reference<table::XColumnRowRange> xColumnRowRange (xCellRange, uno::UNO_QUERY);
-    if (!xColumnRowRange.is())
-        return;
-
-    uno::Reference <beans::XPropertySet> xRowProperties(xColumnRowRange->getRows(), uno::UNO_QUERY);
+    rtl::Reference<ScTableRowsObj> xRowProperties(xSheet->getScRowsByPosition(0, nFirstRow, 0, nCurrentRow));
     if (!xRowProperties.is())
         return;
 

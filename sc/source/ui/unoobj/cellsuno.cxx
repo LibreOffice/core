@@ -4508,6 +4508,12 @@ uno::Reference<table::XCell> SAL_CALL ScCellRangeObj::getCellByPosition(
 uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByPosition(
                 sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
 {
+    return getScCellRangeByPosition(nLeft, nTop, nRight, nBottom);
+}
+
+rtl::Reference<ScCellRangeObj> ScCellRangeObj::getScCellRangeByPosition(
+                sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
+{
     SolarMutexGuard aGuard;
 
     ScDocShell* pDocSh = GetDocShell();
@@ -4527,6 +4533,35 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByPositio
             ScRange aNew( static_cast<SCCOL>(nStartX), static_cast<SCROW>(nStartY), aRange.aStart.Tab(),
                           static_cast<SCCOL>(nEndX), static_cast<SCROW>(nEndY), aRange.aEnd.Tab() );
             return new ScCellRangeObj( pDocSh, aNew );
+        }
+    }
+
+    throw lang::IndexOutOfBoundsException();
+}
+
+rtl::Reference<ScTableRowsObj> ScCellRangeObj::getScRowsByPosition(
+                sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
+{
+    SolarMutexGuard aGuard;
+
+    ScDocShell* pDocSh = GetDocShell();
+    if (!pDocSh)
+        throw uno::RuntimeException();
+
+    if ( nLeft >= 0 && nTop >= 0 && nRight >= 0 && nBottom >= 0 )
+    {
+        sal_Int32 nStartX = aRange.aStart.Col() + nLeft;
+        sal_Int32 nStartY = aRange.aStart.Row() + nTop;
+        sal_Int32 nEndX = aRange.aStart.Col() + nRight;
+        sal_Int32 nEndY = aRange.aStart.Row() + nBottom;
+
+        if ( nStartX <= nEndX && nEndX <= aRange.aEnd.Col() &&
+             nStartY <= nEndY && nEndY <= aRange.aEnd.Row() )
+        {
+            ScRange aNew( static_cast<SCCOL>(nStartX), static_cast<SCROW>(nStartY), aRange.aStart.Tab(),
+                          static_cast<SCCOL>(nEndX), static_cast<SCROW>(nEndY), aRange.aEnd.Tab() );
+            return new ScTableRowsObj( pDocSh, aNew.aStart.Tab(),
+                                        aNew.aStart.Row(), aNew.aEnd.Row() );
         }
     }
 
@@ -4604,6 +4639,11 @@ uno::Reference<table::XTableColumns> SAL_CALL ScCellRangeObj::getColumns()
 }
 
 uno::Reference<table::XTableRows> SAL_CALL ScCellRangeObj::getRows()
+{
+    return getScRows();
+}
+
+rtl::Reference<ScTableRowsObj> ScCellRangeObj::getScRows()
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
