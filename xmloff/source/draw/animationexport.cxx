@@ -441,7 +441,7 @@ public:
     static Reference< XInterface > getParagraphTarget( const ParagraphTarget& pTarget );
 
     static void convertPath( OUStringBuffer& sTmp, const Any& rPath );
-    void convertValue( XMLTokenEnum eAttributeName, OUStringBuffer& sTmp, const Any& rValue ) const;
+    bool convertValue( XMLTokenEnum eAttributeName, OUStringBuffer& sTmp, const Any& rValue ) const;
     void convertTiming( OUStringBuffer& sTmp, const Any& rTiming ) const;
     void convertTarget( OUStringBuffer& sTmp, const Any& rTarget ) const;
 
@@ -1123,12 +1123,15 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
             }
         }
 
+        bool bExportedValues = false;
         Sequence< Any > aValues( xAnimate->getValues() );
         if( aValues.hasElements() )
         {
             aTemp <<= aValues;
-            convertValue( eAttributeName, sTmp, aTemp );
-            mxExport->AddAttribute( XML_NAMESPACE_SMIL, XML_VALUES, sTmp.makeStringAndClear() );
+            bExportedValues = convertValue(eAttributeName, sTmp, aTemp);
+            SAL_WARN_IF(!bExportedValues, "xmloff", "exportAnimate(), unable to export smil:values");
+            if (bExportedValues)
+                mxExport->AddAttribute(XML_NAMESPACE_SMIL, XML_VALUES, sTmp.makeStringAndClear());
         }
         else
         {
@@ -1157,7 +1160,8 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         if(nNodeType != AnimationNodeType::SET)
         {
             const Sequence< double > aKeyTimes( xAnimate->getKeyTimes() );
-            if( aKeyTimes.hasElements() )
+            SAL_WARN_IF(aKeyTimes.hasElements() && !bExportedValues, "xmloff", "exportAnimate() no smil:values exported so skipping smil:keyTimes");
+            if (aKeyTimes.hasElements() && bExportedValues)
             {
                 for( const auto& rKeyTime : aKeyTimes )
                 {
@@ -1457,17 +1461,18 @@ void AnimationsExporterImpl::convertPath( OUStringBuffer& sTmp, const Any& rPath
     sTmp = aStr;
 }
 
-void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUStringBuffer& sTmp, const Any& rValue ) const
+bool AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUStringBuffer& sTmp, const Any& rValue ) const
 {
     if( !rValue.hasValue() )
-        return;
+        return false;
 
+    bool bSuccess = true;
     if( auto pValuePair = o3tl::tryAccess<ValuePair>(rValue) )
     {
         OUStringBuffer sTmp2;
-        convertValue( eAttributeName, sTmp, pValuePair->First );
+        bSuccess &= convertValue( eAttributeName, sTmp, pValuePair->First );
         sTmp.append( ',' );
-        convertValue( eAttributeName, sTmp2, pValuePair->Second );
+        bSuccess &= convertValue( eAttributeName, sTmp2, pValuePair->Second );
         sTmp.append( sTmp2 );
     }
     else if( auto pSequence = o3tl::tryAccess<Sequence<Any>>(rValue) )
@@ -1482,7 +1487,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
         {
             if( !sTmp.isEmpty() )
                 sTmp.append( ';' );
-            convertValue( eAttributeName, sTmp2, *pAny );
+            bSuccess &= convertValue( eAttributeName, sTmp2, *pAny );
             sTmp.append( sTmp2 );
             sTmp2.setLength(0);
         }
@@ -1512,8 +1517,9 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
             else
             {
                 OSL_FAIL( "xmloff::AnimationsExporterImpl::convertValue(), invalid value type!" );
+                bSuccess = false;
             }
-            return;
+            return bSuccess;
         }
 
         case XML_SKEWX:
@@ -1539,13 +1545,17 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
 
         //const XMLPropertyHandler* pHandler = static_cast<SdXMLExport*>(&mrExport)->GetSdPropHdlFactory()->GetPropertyHandler( nType );
         const XMLPropertyHandler* pHandler = mxSdPropHdlFactory->GetPropertyHandler( nType );
-        if( pHandler )
+        if (!pHandler)
+            bSuccess = false;
+        else
         {
             OUString aString;
-            pHandler->exportXML( aString, rValue, mxExport->GetMM100UnitConverter() );
+            bSuccess = pHandler->exportXML( aString, rValue, mxExport->GetMM100UnitConverter() );
             sTmp.append( aString );
         }
     }
+
+    return bSuccess;
 }
 
 void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rValue ) const
