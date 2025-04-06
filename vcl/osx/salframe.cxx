@@ -554,7 +554,13 @@ void AquaSalFrame::Show(bool bVisible, bool bNoActivate)
         // Ordering out a native full screen window would leave the
         // application in a state where there is no Desktop and both
         // the menubar and the Dock are hidden.
-        [mpNSWindow close];
+        // Related: tdf#165448 delay closing the window
+        // When a floating window such as the dropdown list in the
+        // font combobox is open when selecting any of the menu items
+        // inserted by macOS in the windows menu, the parent window
+        // will be hidden. So delay closing the window until the next
+        // pass through the native event loop.
+        [mpNSWindow performSelector: @selector(close) withObject: nil afterDelay: 0.01f];
     }
 }
 

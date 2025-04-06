@@ -95,6 +95,44 @@
 
     if( mpMenu )
     {
+        // Related: tdf#165448 hide menu items inserted by macOS if child window
+        // For some unkown reason, none of the menu items that macOS inserts
+        // into the windows menu work if the key window is a native child
+        // window of another window. Unfortunately, LibreOffice depends on
+        // a dialog window being a native child window of its parent window
+        // to mimic native modal dialogs so hide all the those menu items.
+        if( pMenu && pMenu == [NSApp windowsMenu] )
+        {
+            NSWindow *pKeyWin = [NSApp keyWindow];
+            bool bHidden = pKeyWin && [pKeyWin parentWindow];
+
+            int nItems = [pMenu numberOfItems];
+            bool bLastItemIsNative = false;
+            for( int n = mpMenu->mbMenuBar ? 1 : 0; n < nItems; n++ )
+            {
+                NSMenuItem* pItem = [pMenu itemAtIndex: n];
+                if( [pItem isKindOfClass: [SalNSMenuItem class]] )
+                {
+                    bLastItemIsNative = false;
+                }
+                else if( [pItem isSeparatorItem] )
+                {
+                    if ( bLastItemIsNative )
+                    {
+                        // Assume that macOS does not insert more than one
+                        // separater item in a row
+                        bLastItemIsNative = false;
+                        [pItem setHidden: bHidden];
+                    }
+                }
+                else
+                {
+                    bLastItemIsNative = true;
+                    [pItem setHidden: bHidden];
+                }
+            }
+        }
+
         const AquaSalFrame* pFrame = mpMenu->getFrame();
         if( pFrame && AquaSalFrame::isAlive( pFrame ) )
         {

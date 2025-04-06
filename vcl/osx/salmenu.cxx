@@ -336,9 +336,49 @@ int AquaSalMenu::getItemIndexByPos( sal_uInt16 nPos ) const
 {
     int nIndex = 0;
     if( nPos == MENU_APPEND )
+    {
         nIndex = [mpMenu numberOfItems];
+    }
     else
+    {
         nIndex = sal::static_int_cast<int>( mbMenuBar ? nPos+1 : nPos );
+
+        // Related: tdf#165448 adjust index for menu items inserted by macOS
+        if( mpMenu == [NSApp windowsMenu] )
+        {
+            int nItems = [mpMenu numberOfItems];
+            bool bLastItemIsNative = false;
+            for( int n = mbMenuBar ? 1 : 0; n < nItems; n++ )
+            {
+                NSMenuItem* pItem = [mpMenu itemAtIndex: n];
+                if( [pItem isKindOfClass: [SalNSMenuItem class]] )
+                {
+                    bLastItemIsNative = false;
+                    if( n == nIndex )
+                        break;
+                }
+                else if( [pItem isSeparatorItem] )
+                {
+                    if ( bLastItemIsNative )
+                    {
+                        // Assume that macOS does not insert more than one
+                        // separater item in a row
+                        bLastItemIsNative = false;
+                        nIndex++;
+                    }
+                    else if( n == nIndex )
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    bLastItemIsNative = true;
+                    nIndex++;
+                }
+            }
+        }
+    }
     return nIndex;
 }
 
@@ -373,6 +413,18 @@ void AquaSalMenu::setMainMenu()
             {
                 NSMenuItem* pItem = maItems[i]->mpMenuItem;
                 [mpMenu insertItem: pItem atIndex: i+1];
+
+                // tdf#165448 Allow macOS to add menu items in LibreOffice windows menu
+                // macOS will automatically insert menu items in NSApp's
+                // windows menu so set that menu to LibreOffice's windows menu.
+                if( maItems[i]->mpVCLMenu && maItems[i]->mpVCLMenu->GetItemCommand( maItems[i]->mnId ) == u".uno:WindowList"_ustr )
+                {
+                    // Avoid macOS inserting duplicate menu items in the
+                    // windows menu
+                    NSMenu *pWindowsMenu = [pItem submenu];
+                    if( [NSApp windowsMenu] != pWindowsMenu )
+                        [NSApp setWindowsMenu: pWindowsMenu];
+                }
             }
             pCurrentMenuBar = this;
 

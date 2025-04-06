@@ -496,6 +496,38 @@
     return nil;
 }
 
+-(void)addWindowsItem: (NSWindow *)pWindow title: (NSString *)pString filename: (BOOL)bFilename
+{
+    // Related: tdf#165448 stop macOS from creating its own file list in the
+    // windows menu
+    (void)pWindow;
+    (void)pString;
+    (void)bFilename;
+}
+
+-(void)changeWindowsItem: (NSWindow *)pWindow title: (NSString *)pString filename: (BOOL)bFilename
+{
+    // Related: tdf#165448 stop macOS from creating its own file list in the
+    // windows menu
+    (void)pWindow;
+    (void)pString;
+    (void)bFilename;
+}
+
+-(void)removeWindowsItem: (NSWindow *)pWindow
+{
+    // Related: tdf#165448 stop macOS from creating its own file list in the
+    // windows menu
+    (void)pWindow;
+}
+
+-(void)updateWindowsItem: (NSWindow *)pWindow
+{
+    // Related: tdf#165448 stop macOS from creating its own file list in the
+    // windows menu
+    (void)pWindow;
+}
+
 @end
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -346,6 +346,7 @@ static void updateWindowCollectionBehavior( const AquaSalFrame *pFrame )
     mbInWindowDidResize = NO;
     mpLiveResizeTimer = nil;
     mpResetParentWindowTimer = nil;
+    mbInSetFrame = false;
     mpFrame = pFrame;
     const SalFrameGeometry rFrameGeometry = pFrame->GetUnmirroredGeometry();
     NSRect aRect = { { static_cast<CGFloat>(rFrameGeometry.x()), static_cast<CGFloat>(rFrameGeometry.y()) },
@@ -999,7 +1000,15 @@ static void updateWindowCollectionBehavior( const AquaSalFrame *pFrame )
     // -[super constrainFrameRect:toScreen:] shrinks the window frame to
     // allow room for the menubar if the window is on the main screen. So,
     // force the return value to match the frame that LibreOffice expects.
-    if( AquaSalFrame::isAlive( mpFrame) && mpFrame->mbInternalFullScreen && !NSIsEmptyRect( mpFrame->maInternalFullScreenExpectedRect ) )
+    // Related: tdf#165448 skip fix for menu items inserted by macOS
+    // If the window is in LibreOffice's internal full screen mode and
+    // any of the menu items that macOS inserts into the windows menu
+    // is selected, the frame size will be changed without calling
+    // -[SalFrameWindow setFrame:display:]. So only use the fix for
+    // tdf#161623 when the LibreOffice code explicitly resizes the frame.
+    // Otherwise, selecting any of the menu items inserted by macOS will
+    // cause the window to snap back to full screen size.
+    if( mbInSetFrame && AquaSalFrame::isAlive( mpFrame ) && mpFrame->mbInternalFullScreen && !NSIsEmptyRect( mpFrame->maInternalFullScreenExpectedRect ) )
         aRet = mpFrame->maInternalFullScreenExpectedRect;
 
     return aRet;
@@ -1017,6 +1026,13 @@ static void updateWindowCollectionBehavior( const AquaSalFrame *pFrame )
         return [NSArray arrayWithObject: self];
 
     return nil;
+}
+
+-(void)setFrame: (NSRect)aFrameRect display: (BOOL)bFlag
+{
+    mbInSetFrame = true;
+    [super setFrame: aFrameRect display: bFlag];
+    mbInSetFrame = false;
 }
 
 @end

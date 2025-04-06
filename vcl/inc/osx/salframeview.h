@@ -30,6 +30,7 @@ enum class SalEvent;
     BOOL                mbInWindowDidResize;
     NSTimer*            mpLiveResizeTimer;
     NSTimer*            mpResetParentWindowTimer;
+    BOOL                mbInSetFrame;
 }
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
 -(void)clearLiveResizeTimer;
