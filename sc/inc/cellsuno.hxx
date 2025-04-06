@@ -114,6 +114,7 @@ class SfxItemPropertyMap;
 class SfxItemPropertySet;
 struct SfxItemPropertyMapEntry;
 class ScTableRowsObj;
+class SolarMutexGuard;
 
 namespace editeng { class SvxBorderLine; }
 
@@ -613,7 +614,7 @@ public:
                             getScCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop,
                                 sal_Int32 nRight, sal_Int32 nBottom );
     rtl::Reference< ScTableRowsObj >
-                            getScRowsByPosition( sal_Int32 nLeft, sal_Int32 nTop,
+                            getScRowsByPosition( SolarMutexGuard& rGuard, sal_Int32 nLeft, sal_Int32 nTop,
                                 sal_Int32 nRight, sal_Int32 nBottom );
     rtl::Reference< ScTableRowsObj > getScRows();
 };

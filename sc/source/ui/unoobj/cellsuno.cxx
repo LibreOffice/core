@@ -4539,11 +4539,9 @@ rtl::Reference<ScCellRangeObj> ScCellRangeObj::getScCellRangeByPosition(
     throw lang::IndexOutOfBoundsException();
 }
 
-rtl::Reference<ScTableRowsObj> ScCellRangeObj::getScRowsByPosition(
+rtl::Reference<ScTableRowsObj> ScCellRangeObj::getScRowsByPosition(SolarMutexGuard& /*rGuard*/,
                 sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
 {
-    SolarMutexGuard aGuard;
-
     ScDocShell* pDocSh = GetDocShell();
     if (!pDocSh)
         throw uno::RuntimeException();

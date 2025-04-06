@@ -4999,6 +4999,13 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
     }
 }
 
+void ScTableRowsObj::setPropertyValueIsFiltered(SolarMutexGuard& /*rGuard*/, bool b )
+{
+    ScDocument& rDoc = pDocShell->GetDocument();
+    //! undo etc.
+    rDoc.SetRowFiltered(nStartRow, nEndRow, nTab, b);
+}
+
 uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const OUString& aPropertyName )
 {
     SolarMutexGuard aGuard;
@@ -5053,6 +5060,12 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const OUString& aPropertyNam
     }
 
     return aAny;
+}
+
+bool ScTableRowsObj::getPropertyValueOHeight( SolarMutexGuard& /*rGuard*/ )
+{
+    ScDocument& rDoc = pDocShell->GetDocument();
+    return !(rDoc.GetRowFlags( nStartRow, nTab ) & CRFlags::ManualSize);
 }
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScTableRowsObj )

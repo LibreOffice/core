@@ -42,8 +42,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <osl/diagnose.h>
 
-constexpr OUStringLiteral SC_ISFILTERED = u"IsFiltered";
-
 using namespace com::sun::star;
 using namespace xmloff::token;
 
@@ -163,7 +161,11 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
         nFirstRow = pDoc->MaxRow();
     if (nCurrentRow > pDoc->MaxRow())
         nCurrentRow = pDoc->MaxRow();
-    rtl::Reference<ScTableRowsObj> xRowProperties(xSheet->getScRowsByPosition(0, nFirstRow, 0, nCurrentRow));
+
+    // Take the solarmutex here and pass references to places that need the lock - avoids
+    // the cost of taking and releasing it several times.
+    SolarMutexGuard aGuard;
+    rtl::Reference<ScTableRowsObj> xRowProperties(xSheet->getScRowsByPosition(aGuard, 0, nFirstRow, 0, nCurrentRow));
     if (!xRowProperties.is())
         return;
 
@@ -208,11 +210,9 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
         rXMLImport.GetDoc().setRowsVisible(nSheet, nFirstRow, nCurrentRow, false);
     }
     if (bFiltered)
-        xRowProperties->setPropertyValue(SC_ISFILTERED, uno::Any(bFiltered));
+        xRowProperties->setPropertyValueIsFiltered(aGuard, bFiltered);
 
-    uno::Any any = xRowProperties->getPropertyValue(SC_UNONAME_OHEIGHT);
-    bool bOptionalHeight = false;
-    any >>= bOptionalHeight;
+    bool bOptionalHeight = xRowProperties->getPropertyValueOHeight(aGuard);
     if (bOptionalHeight)
     {
         // Save this row for later height update, only if we have no already optimal row heights
