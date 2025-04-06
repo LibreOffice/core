@@ -621,12 +621,9 @@ void AreaChart::createShapes()
                 sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
                 for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
                 {
-                    std::map< sal_Int32, double >& rLogicYSumMap = aLogicYSumMapByX[nIndex];
-                    rLogicYSumMap.insert({nAttachedAxisIndex, 0.0});
-
                     double fAdd = pSeries->getYValue( nIndex );
                     if( !std::isnan(fAdd) && !std::isinf(fAdd) )
-                        rLogicYSumMap[nAttachedAxisIndex] += fabs( fAdd );
+                        aLogicYSumMapByX[nIndex][nAttachedAxisIndex] += fabs( fAdd );
                 }
             }
         }
