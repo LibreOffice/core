@@ -4724,7 +4724,7 @@ void prepareGluePoints(std::vector<Guide>& rGuideList,
                 Guide aGuideX;
                 aGuideX.sName = "GluePoint"_ostr + OString::number(nIndex) + "X";
                 aGuideX.sFormula
-                    = (bIsOOXML && aEquations.hasElements())
+                    = (bIsOOXML && nIdx1 < aEquations.getLength())
                           ? GetFormula(aEquations[nIdx1], "*logwidth/", " w ").toUtf8()
                           : "*/ " + OString::number(nIdx1) + " w " + OString::number(nWidth);
                 rGuideList.push_back(aGuideX);
@@ -4732,7 +4732,7 @@ void prepareGluePoints(std::vector<Guide>& rGuideList,
                 Guide aGuideY;
                 aGuideY.sName = "GluePoint"_ostr + OString::number(nIndex) + "Y";
                 aGuideY.sFormula
-                    = (bIsOOXML && aEquations.hasElements())
+                    = (bIsOOXML && nIdx2 < aEquations.getLength())
                           ? GetFormula(aEquations[nIdx2], "*logheight/", " h ").toUtf8()
                           : "*/ " + OString::number(nIdx2) + " h " + OString::number(nHeight);
                 rGuideList.push_back(aGuideY);
