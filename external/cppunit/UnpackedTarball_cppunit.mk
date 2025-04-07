@@ -13,6 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,cppunit,$(CPPUNIT_TARBALL),,cppunit
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,cppunit))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,cppunit,2))
+
 # * external/cppunit/order.patch.0 upstreamed at <https://gerrit.libreoffice.org/c/cppunit/+/123963>
 #   "Run tests in deterministic order";
 # * external/cppunit/propagate-exceptions.patch.0 upstreamed at

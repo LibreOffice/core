@@ -14,6 +14,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,jfreereport_librepository))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,jfreereport_librepository,$(JFREEREPORT_LIBREPOSITORY_TARBALL),0))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,jfreereport_librepository,2))
+
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,jfreereport_librepository,\
 	common_build.xml \
 ))

@@ -11,6 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,jfreereport_flute))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,jfreereport_flute,$(JFREEREPORT_FLUTE_TARBALL),0))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,jfreereport_flute,2))
+
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,jfreereport_flute,\
 	common_build.xml \
 ))

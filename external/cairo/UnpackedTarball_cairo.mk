@@ -11,6 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,cairo))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,cairo,$(CAIRO_TARBALL),,cairo))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,cairo,2))
+
 # cairo >= 1.17.6 was probably created in Fedora where
 # https://salsa.debian.org/mckinstry/libtool/-/commit/26c23f951d049241128e5e04a7bbc263e5b145f1
 # isn't applied, so add that in to avoid: /usr/bin/ld: unrecognized option '--gdb-index'

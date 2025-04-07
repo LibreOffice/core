@@ -11,6 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,zxcvbn-c))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,zxcvbn-c,$(ZXCVBN_C_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,zxcvbn-c,2))
+
 # * external/zxcvbn-c/0001-There-is-no-std-basic_string-int.patch.1 sent upstream as
 #   <https://github.com/tsyrogit/zxcvbn-c/pull/31> "There is no std::basic_string<int>":
 $(eval $(call gb_UnpackedTarball_add_patches,zxcvbn-c,\

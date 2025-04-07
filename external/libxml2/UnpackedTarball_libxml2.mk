@@ -13,6 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libxml2,$(LIBXML_TARBALL),,libxml2)
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libxml2))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libxml2,2))
+
 $(eval $(call gb_UnpackedTarball_add_patches,libxml2,\
 	$(if $(filter SOLARIS,$(OS)),external/libxml2/libxml2-global-symbols.patch) \
 	external/libxml2/libxml2-vc10.patch \

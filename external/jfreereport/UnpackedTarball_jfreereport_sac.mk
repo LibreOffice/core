@@ -11,6 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,jfreereport_sac))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,jfreereport_sac,$(JFREEREPORT_SAC_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,jfreereport_sac,2))
+
 $(eval $(call gb_UnpackedTarball_add_file,jfreereport_sac,build.xml,external/jfreereport/java/sac/build.xml))
 
 # vim: set noet sw=4 ts=4:

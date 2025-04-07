@@ -13,6 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,nss,$(NSS_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,nss,nspr/build/autoconf))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,nss,2))
+
 $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     external/nss/nss.patch \
     external/nss/nss_macosx.patch \

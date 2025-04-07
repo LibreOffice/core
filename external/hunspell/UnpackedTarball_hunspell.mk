@@ -19,8 +19,6 @@ $(eval $(call gb_UnpackedTarball_set_post_action,hunspell,\
 ))
 endif
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,hunspell,1))
-
 $(eval $(call gb_UnpackedTarball_add_patches,hunspell, \
 	external/hunspell/0001-fix-LibreOffice-build-problem-with-basic_string-appe.patch \
 	external/hunspell/0001-Resolves-rhbz-2158548-allow-longer-words-for-hunspel.patch \

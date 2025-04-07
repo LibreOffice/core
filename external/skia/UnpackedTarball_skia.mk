@@ -44,8 +44,6 @@ skia_patches := \
 	0003-loong64-Fix-missing-rounding-in-loong64-scaled_mult-.patch \
 	0004-loong64-Fix-the-remaining-implicit-vector-casts.patch \
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
-
 ifneq ($(MSYSTEM),)
 # use binary flag so patch from git-bash won't choke on mixed line-endings in patches
 $(eval $(call gb_UnpackedTarball_set_patchflags,skia,--binary))

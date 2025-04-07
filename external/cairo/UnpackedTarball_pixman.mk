@@ -11,6 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,pixman))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,pixman,$(PIXMAN_TARBALL),,cairo))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,pixman,2))
+
 $(eval $(call gb_UnpackedTarball_add_patches,pixman,\
 	external/cairo/pixman/pixman-0.24.4.patch \
 	external/cairo/pixman/pixman-ubsan.patch \

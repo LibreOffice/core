@@ -13,8 +13,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,curl,$(CURL_TARBALL),,curl))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,curl))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,curl,1))
-
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,curl,\
 	winbuild/MakefileBuild.vc \
 ))

@@ -17,6 +17,8 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,hsqldb,\
 	src/org/hsqldb/persist/HsqlDatabaseProperties.java \
 ))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,hsqldb,2))
+
 $(eval $(call gb_UnpackedTarball_add_patches,hsqldb,\
 	external/hsqldb/patches/i96823.patch \
 	external/hsqldb/patches/i97032.patch \

@@ -11,8 +11,6 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,dtoa))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,dtoa,$(DTOA_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,dtoa,1))
-
 $(eval $(call gb_UnpackedTarball_add_patches,dtoa, \
     external/dtoa/include_header.patch \
     external/dtoa/coverity.patch \

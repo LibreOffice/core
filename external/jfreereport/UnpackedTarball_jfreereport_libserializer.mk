@@ -9,6 +9,8 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,jfreereport_libserializer))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,jfreereport_libserializer,2))
+
 $(eval $(call gb_UnpackedTarball_set_tarball,jfreereport_libserializer,$(JFREEREPORT_LIBSERIALIZER_TARBALL),0))
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,jfreereport_libserializer,\

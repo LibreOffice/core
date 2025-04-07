@@ -11,8 +11,6 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,liborcus))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,liborcus,$(ORCUS_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,liborcus,1))
-
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,liborcus))
 
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\

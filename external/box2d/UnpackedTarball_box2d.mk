@@ -11,6 +11,4 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,box2d))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,box2d,$(BOX2D_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,box2d,1))
-
 # vim: set noet sw=4 ts=4:

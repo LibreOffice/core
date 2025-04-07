@@ -11,6 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,jfreereport_libxml))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,jfreereport_libxml,$(JFREEREPORT_LIBXML_TARBALL),0))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,jfreereport_libxml,2))
+
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,jfreereport_libxml,\
 	common_build.xml \
 ))

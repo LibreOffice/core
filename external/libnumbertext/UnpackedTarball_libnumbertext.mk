@@ -13,14 +13,12 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libnumbertext,$(LIBNUMBERTEXT_TARBA
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libnumbertext))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,libnumbertext,1))
-
 # EmptyString.patch1 submitted as
 # https://github.com/Numbertext/libnumbertext/pull/95
 
 $(eval $(call gb_UnpackedTarball_add_patches,libnumbertext, \
-    external/libnumbertext/MSVCNonBMPBug.patch1 \
-    external/libnumbertext/WinUnicodePath.patch1 \
+    external/libnumbertext/MSVCNonBMPBug.patch \
+    external/libnumbertext/WinUnicodePath.patch \
     external/libnumbertext/deprecated.patch.0 \
 ))
 

@@ -13,6 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,mythes,$(MYTHES_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,mythes))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,mythes,2))
+
 $(eval $(call gb_UnpackedTarball_add_patches,mythes,\
 	external/mythes/mythes-1.2.0-vanilla-th-gen-idx.patch \
 	external/mythes/mythes-fdo48017-wfopen.patch \

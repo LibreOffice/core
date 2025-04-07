@@ -14,6 +14,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,jfreereport_libfonts))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,jfreereport_libfonts,$(JFREEREPORT_LIBFONTS_TARBALL),0))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,jfreereport_libfonts,2))
+
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,jfreereport_libfonts,\
 	common_build.xml \
 ))

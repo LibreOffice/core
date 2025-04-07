@@ -11,8 +11,6 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,java_websocket))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,java_websocket,$(JAVA_WEBSOCKET_TARBALL),,java_websocket))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,java_websocket,1))
-
 $(eval $(call gb_UnpackedTarball_add_patches,java_websocket,\
 	external/java_websocket/patches/ant-build.patch \
 	external/java_websocket/patches/no-slf4j.patch \

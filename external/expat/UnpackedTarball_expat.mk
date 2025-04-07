@@ -13,6 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,expat,$(EXPAT_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,expat,conftools))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,expat,2))
+
 $(eval $(call gb_UnpackedTarball_add_patches,expat,\
 	external/expat/expat-winapi.patch \
 ))
