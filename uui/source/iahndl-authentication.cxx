@@ -531,6 +531,19 @@ executePasswordDialog(
     }
     else // enter password or reenter password
     {
+        if (nMode == task::PasswordRequestMode_PASSWORD_REENTER)
+        {
+            TranslateId pOpenToModifyErrStrId = bIsPasswordToModify
+                                                    ? STR_ERROR_PASSWORD_TO_MODIFY_WRONG
+                                                    : STR_ERROR_PASSWORD_TO_OPEN_WRONG;
+            TranslateId pErrStrId = bIsSimplePasswordRequest ? STR_ERROR_SIMPLE_PASSWORD_WRONG
+                                                             : pOpenToModifyErrStrId;
+            OUString aErrorMsg(Translate::get(pErrStrId, aResLocale));
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                pParent, VclMessageType::Warning, VclButtonsType::Ok, aErrorMsg));
+            xBox->run();
+        }
+
         std::unique_ptr<PasswordDialog> xDialog(new PasswordDialog(pParent, nMode,
             aResLocale, aDocName, bIsPasswordToModify, bIsSimplePasswordRequest));
         xDialog->SetMinLen(0);

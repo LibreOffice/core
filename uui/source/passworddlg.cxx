@@ -45,16 +45,6 @@ PasswordDialog::PasswordDialog(weld::Window* pParent,
     // tdf#115964 we can be launched before the parent has resized to its final size
     m_xDialog->set_centered_on_parent(true);
 
-    if( nDialogMode == task::PasswordRequestMode_PASSWORD_REENTER )
-    {
-        TranslateId pOpenToModifyErrStrId = bOpenToModify ? STR_ERROR_PASSWORD_TO_MODIFY_WRONG : STR_ERROR_PASSWORD_TO_OPEN_WRONG;
-        TranslateId pErrStrId = bIsSimplePasswordRequest ? STR_ERROR_SIMPLE_PASSWORD_WRONG : pOpenToModifyErrStrId;
-        OUString aErrorMsg(Translate::get(pErrStrId, rResLocale));
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
-                                                  VclMessageType::Warning, VclButtonsType::Ok, aErrorMsg));
-        xBox->run();
-    }
-
     m_xPass[0] = m_xBuilder->weld_toggle_button(u"togglebt1"_ustr);
     m_xPass[1] = m_xBuilder->weld_toggle_button(u"togglebt2"_ustr);
 
