@@ -257,7 +257,7 @@ void SAL_CALL AccessibleEditableTextPara::dispose()
 {
     rtl::Reference<AccessibleImageBullet> xBullet = maImageBullet.get();
     if (xBullet.is())
-        xBullet->Dispose();
+        xBullet->dispose();
     maImageBullet.clear();
 
     mxParent = nullptr;

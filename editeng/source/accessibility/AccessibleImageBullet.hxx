@@ -21,14 +21,12 @@
 
 #include <rtl/ref.hxx>
 #include <tools/gen.hxx>
+#include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 
 class SvxEditSource;
 class SvxTextForwarder;
@@ -37,22 +35,16 @@ class SvxViewForwarder;
 namespace accessibility
 {
 
-typedef ::cppu::WeakImplHelper< css::accessibility::XAccessible,
-                                 css::accessibility::XAccessibleContext,
-                                 css::accessibility::XAccessibleComponent,
-                                 css::accessibility::XAccessibleEventBroadcaster,
-                                 css::lang::XServiceInfo >  AccessibleImageBulletInterfaceBase;
-
 /** This class implements the image bullets for the EditEngine/Outliner UAA
  */
-class AccessibleImageBullet final : public AccessibleImageBulletInterfaceBase
+class AccessibleImageBullet final
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
+                                         css::accessibility::XAccessible, css::lang::XServiceInfo>
 {
 
 public:
     /// Create accessible object for given parent
     AccessibleImageBullet ( css::uno::Reference< css::accessibility::XAccessible > xParent );
-
-    virtual ~AccessibleImageBullet  () override;
 
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
@@ -69,17 +61,8 @@ public:
     virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
     virtual css::lang::Locale SAL_CALL getLocale() override;
 
-    // XAccessibleEventBroadcaster
-    virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-    virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-
     // XAccessibleComponent
-    virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-    virtual css::awt::Rectangle SAL_CALL getBounds(  ) override;
-    virtual css::awt::Point SAL_CALL getLocation(  ) override;
-    virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
-    virtual css::awt::Size SAL_CALL getSize(  ) override;
     virtual void SAL_CALL grabFocus(  ) override;
     virtual sal_Int32 SAL_CALL getForeground(  ) override;
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
@@ -116,11 +99,7 @@ public:
      */
     void SetEditSource( SvxEditSource* pEditSource );
 
-    /** Dispose this object
-
-        Notifies and deregisters the listeners, drops all references.
-     */
-    void Dispose();
+    void SAL_CALL dispose() override;
 
     /** Set the current paragraph number
 
@@ -153,8 +132,6 @@ private:
 
     SvxEditSource& GetEditSource() const;
 
-    int getNotifierClientId() const { return mnNotifierClientId; }
-
     /** Query the SvxTextForwarder for EditEngine access.
 
         @attention This method does not lock the SolarMutex,
@@ -173,7 +150,7 @@ private:
      */
     SvxViewForwarder&   GetViewForwarder() const;
 
-    css::awt::Rectangle implGetBounds();
+    css::awt::Rectangle implGetBounds() override;
 
     // the paragraph index in the edit engine (guarded by solar mutex)
     sal_Int32   mnParagraphIndex;
@@ -192,9 +169,6 @@ private:
 
     /// The shape we're the accessible for (unguarded)
     css::uno::Reference< css::accessibility::XAccessible > mxParent;
-
-    /// Our listeners (guarded by maMutex)
-    int mnNotifierClientId;
 };
 
 } // end of namespace accessibility

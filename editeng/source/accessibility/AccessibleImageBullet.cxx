@@ -54,32 +54,13 @@ AccessibleImageBullet::AccessibleImageBullet ( uno::Reference< XAccessible > xPa
     mnIndexInParent( 0 ),
     mpEditSource( nullptr ),
     maEEOffset( 0, 0 ),
-    mxParent(std::move( xParent )),
-    // well, that's strictly (UNO) exception safe, though not
-    // really robust. We rely on the fact that this member is
-    // constructed last, and that the constructor body catches
-    // exceptions, thus no chance for exceptions once the Id is
-    // fetched. Nevertheless, normally should employ RAII here...
-    mnNotifierClientId(::comphelper::AccessibleEventNotifier::registerClient())
+    mxParent(std::move( xParent ))
 {
     // these are always on
     mnStateSet = AccessibleStateType::VISIBLE;
     mnStateSet |= AccessibleStateType::SHOWING;
     mnStateSet |= AccessibleStateType::ENABLED;
     mnStateSet |= AccessibleStateType::SENSITIVE;
-}
-
-AccessibleImageBullet::~AccessibleImageBullet()
-{
-    // sign off from event notifier
-    if( getNotifierClientId() != -1 )
-    {
-        try
-        {
-            ::comphelper::AccessibleEventNotifier::revokeClient( getNotifierClientId() );
-        }
-        catch( const uno::Exception& ) {}
-    }
 }
 
 uno::Reference< XAccessibleContext > SAL_CALL AccessibleImageBullet::getAccessibleContext(  )
@@ -152,56 +133,12 @@ lang::Locale SAL_CALL AccessibleImageBullet::getLocale()
     return LanguageTag(GetTextForwarder().GetLanguage( GetParagraphIndex(), 0 )).getLocale();
 }
 
-void SAL_CALL AccessibleImageBullet::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
-{
-    if( getNotifierClientId() != -1 )
-        ::comphelper::AccessibleEventNotifier::addEventListener( getNotifierClientId(), xListener );
-}
-
-void SAL_CALL AccessibleImageBullet::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
-{
-    if( getNotifierClientId() == -1 )
-        return;
-
-    const sal_Int32 nListenerCount = ::comphelper::AccessibleEventNotifier::removeEventListener( getNotifierClientId(), xListener );
-    if ( !nListenerCount )
-    {
-        // no listeners anymore
-        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-        // and at least to us not firing any events anymore, in case somebody calls
-        // NotifyAccessibleEvent, again
-        ::comphelper::AccessibleEventNotifier::TClientId nId( getNotifierClientId() );
-        mnNotifierClientId = -1;
-        ::comphelper::AccessibleEventNotifier::revokeClient( nId );
-    }
-}
-
-sal_Bool SAL_CALL AccessibleImageBullet::containsPoint( const awt::Point& rPoint )
-{
-    SolarMutexGuard aGuard;
-
-    DBG_ASSERT(GetParagraphIndex() >= 0,
-               "AccessibleEditableTextPara::contains: index value overflow");
-
-    awt::Rectangle aTmpRect = implGetBounds();
-    tools::Rectangle aRect( Point(aTmpRect.X, aTmpRect.Y), Size(aTmpRect.Width, aTmpRect.Height) );
-    Point aPoint( rPoint.X, rPoint.Y );
-
-    return aRect.Contains( aPoint );
-}
-
 uno::Reference< XAccessible > SAL_CALL AccessibleImageBullet::getAccessibleAtPoint( const awt::Point& /*aPoint*/ )
 {
     // as we have no children, empty reference
     return uno::Reference< XAccessible >();
 }
 
-awt::Rectangle SAL_CALL AccessibleImageBullet::getBounds(  )
-{
-    SolarMutexGuard aGuard;
-
-    return implGetBounds();
-}
 awt::Rectangle AccessibleImageBullet::implGetBounds(  )
 {
     DBG_ASSERT(GetParagraphIndex() >= 0,
@@ -235,49 +172,6 @@ awt::Rectangle AccessibleImageBullet::implGetBounds(  )
     }
 
     return awt::Rectangle();
-}
-
-awt::Point SAL_CALL AccessibleImageBullet::getLocation(  )
-{
-    SolarMutexGuard aGuard;
-
-    awt::Rectangle aRect = implGetBounds();
-
-    return awt::Point( aRect.X, aRect.Y );
-}
-
-awt::Point SAL_CALL AccessibleImageBullet::getLocationOnScreen(  )
-{
-    SolarMutexGuard aGuard;
-
-    // relate us to parent
-    uno::Reference< XAccessible > xParent = getAccessibleParent();
-    if( xParent.is() )
-    {
-        uno::Reference< XAccessibleComponent > xParentComponent( xParent, uno::UNO_QUERY );
-        if( xParentComponent.is() )
-        {
-            awt::Point aRefPoint = xParentComponent->getLocationOnScreen();
-            awt::Point aPoint = getLocation();
-            aPoint.X += aRefPoint.X;
-            aPoint.Y += aRefPoint.Y;
-
-            return aPoint;
-        }
-    }
-
-    throw uno::RuntimeException(u"Cannot access parent"_ustr,
-                                uno::Reference< uno::XInterface >
-                                ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
-}
-
-awt::Size SAL_CALL AccessibleImageBullet::getSize(  )
-{
-    SolarMutexGuard aGuard;
-
-    awt::Rectangle aRect = implGetBounds();
-
-    return awt::Size( aRect.Width, aRect.Height );
 }
 
 void SAL_CALL AccessibleImageBullet::grabFocus(  )
@@ -332,27 +226,12 @@ void AccessibleImageBullet::SetEEOffset( const Point& rOffset )
     maEEOffset = rOffset;
 }
 
-void AccessibleImageBullet::Dispose()
+void SAL_CALL AccessibleImageBullet::dispose()
 {
-    int nClientId( getNotifierClientId() );
-
-    // #108212# drop all references before notifying dispose
     mxParent = nullptr;
-    mnNotifierClientId = -1;
     mpEditSource = nullptr;
 
-    // notify listeners
-    if( nClientId != -1 )
-    {
-        try
-        {
-            uno::Reference < XAccessibleContext > xThis = getAccessibleContext();
-
-            // #106234# Delegate to EventNotifier
-            ::comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nClientId, xThis );
-        }
-        catch( const uno::Exception& ) {}
-    }
+    OAccessibleComponentHelper::dispose();
 }
 
 void AccessibleImageBullet::SetEditSource( SvxEditSource* pEditSource )
@@ -371,13 +250,7 @@ void AccessibleImageBullet::SetEditSource( SvxEditSource* pEditSource )
 
 void AccessibleImageBullet::FireEvent(const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue)
 {
-    uno::Reference <XAccessibleContext> xThis(this);
-
-    AccessibleEventObject aEvent(xThis, nEventId, rNewValue, rOldValue, -1);
-
-    // #106234# Delegate to EventNotifier
-    ::comphelper::AccessibleEventNotifier::addEvent( getNotifierClientId(),
-                                                     aEvent );
+    NotifyAccessibleEvent(nEventId, rOldValue, rNewValue);
 }
 
 void AccessibleImageBullet::SetState( const sal_Int64 nStateId )
