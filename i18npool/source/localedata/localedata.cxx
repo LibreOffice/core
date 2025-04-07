@@ -221,6 +221,7 @@ constexpr struct {
     { "vec_IT", DataLocaleLibrary::EURO },
     { "szl_PL", DataLocaleLibrary::EURO },
     { "lij_IT", DataLocaleLibrary::EURO },
+    { "gos_NL", DataLocaleLibrary::EURO },
 
     { "ja_JP",  DataLocaleLibrary::OTHERS },
     { "ko_KR",  DataLocaleLibrary::OTHERS },
