@@ -569,7 +569,7 @@ JSInstanceBuilder::weld_scrolled_window(const OUString& id, bool bUserManagedScr
 std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OUString& id)
 {
     Control* pLabel = m_xBuilder->get<Control>(id);
-    auto pWeldWidget = std::make_unique<JSLabel>(this, pLabel, this, false);
+    auto pWeldWidget = pLabel ? std::make_unique<JSLabel>(this, pLabel, this, false) : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
