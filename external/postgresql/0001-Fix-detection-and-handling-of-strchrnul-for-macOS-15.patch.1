@@ -1,0 +1,190 @@
+From 0de9560ba9b8fc4f0de8c5784303db82156279a6 Mon Sep 17 00:00:00 2001
+From: Tom Lane <tgl@sss.pgh.pa.us>
+Date: Tue, 1 Apr 2025 16:49:51 -0400
+Subject: [PATCH] Fix detection and handling of strchrnul() for macOS 15.4.
+
+As of 15.4, macOS has strchrnul(), but access to it is blocked behind
+a check for MACOSX_DEPLOYMENT_TARGET >= 15.4.  But our does-it-link
+configure check finds it, so we try to use it, and fail with the
+present default deployment target (namely 15.0).  This accounts for
+today's buildfarm failures on indri and sifaka.
+
+This is the identical problem that we faced some years ago when Apple
+introduced preadv and pwritev in the same way.  We solved that in
+commit f014b1b9b by using AC_CHECK_DECLS instead of AC_CHECK_FUNCS
+to check the functions' availability.  So do the same now for
+strchrnul().  Interestingly, we already had a workaround for
+"the link check doesn't agree with <string.h>" cases with glibc,
+which we no longer need since only the header declaration is being
+checked.
+
+Testing this revealed that the meson version of this check has never
+worked, because it failed to use "-Werror=unguarded-availability-new".
+(Apparently nobody's tried to build with meson on macOS versions that
+lack preadv/pwritev as standard.)  Adjust that while at it.  Also,
+we had never put support for "-Werror=unguarded-availability-new"
+into v13, but we need that now.
+
+Co-authored-by: Tom Lane <tgl@sss.pgh.pa.us>
+Co-authored-by: Peter Eisentraut <peter@eisentraut.org>
+Discussion: https://postgr.es/m/385134.1743523038@sss.pgh.pa.us
+Backpatch-through: 13
+---
+ configure                  | 14 +++++++++++++-
+ configure.ac               |  2 +-
+ src/include/pg_config.h.in |  7 ++++---
+ src/port/snprintf.c        | 29 +++++++++++++----------------
+ src/tools/msvc/Solution.pm |  2 +-
+ 5 files changed, 32 insertions(+), 22 deletions(-)
+
+diff --git a/configure b/configure
+index 1df55250ed6..a52cef20f39 100755
+--- a/configure
++++ b/configure
+@@ -16308,7 +16308,7 @@ fi
+ LIBS_including_readline="$LIBS"
+ LIBS=`echo "$LIBS" | sed -e 's/-ledit//g' -e 's/-lreadline//g'`
+ 
+-for ac_func in backtrace_symbols clock_gettime copyfile fdatasync getifaddrs getpeerucred getrlimit inet_pton kqueue mbstowcs_l memset_s poll posix_fallocate ppoll pstat pthread_is_threaded_np readlink readv setproctitle setproctitle_fast setsid shm_open strchrnul strsignal symlink syncfs sync_file_range uselocale wcstombs_l writev
++for ac_func in backtrace_symbols clock_gettime copyfile fdatasync getifaddrs getpeerucred getrlimit inet_pton kqueue mbstowcs_l memset_s poll posix_fallocate ppoll pstat pthread_is_threaded_np readlink readv setproctitle setproctitle_fast setsid shm_open strsignal symlink syncfs sync_file_range uselocale wcstombs_l writev
+ do :
+   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
+@@ -16930,6 +16930,18 @@ esac
+ 
+ fi
+ 
++ac_fn_c_check_decl "$LINENO" "strchrnul" "ac_cv_have_decl_strchrnul" "#include <string.h>
++"
++if test "x$ac_cv_have_decl_strchrnul" = xyes; then :
++  ac_have_decl=1
++else
++  ac_have_decl=0
++fi
++
++cat >>confdefs.h <<_ACEOF
++#define HAVE_DECL_STRCHRNUL $ac_have_decl
++_ACEOF
++
+ 
+ # This is probably only present on macOS, but may as well check always
+ ac_fn_c_check_decl "$LINENO" "F_FULLFSYNC" "ac_cv_have_decl_F_FULLFSYNC" "#include <fcntl.h>
+diff --git a/configure.ac b/configure.ac
+index 0488b4bdd80..93dd05ddeba 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1854,7 +1854,6 @@ AC_CHECK_FUNCS(m4_normalize([
+ 	setproctitle_fast
+ 	setsid
+ 	shm_open
+-	strchrnul
+ 	strsignal
+ 	symlink
+ 	syncfs
+@@ -1923,6 +1922,7 @@ AC_CHECK_DECLS([strlcat, strlcpy, strnlen])
+ # won't handle deployment target restrictions on macOS
+ AC_CHECK_DECLS([preadv], [], [AC_LIBOBJ(preadv)], [#include <sys/uio.h>])
+ AC_CHECK_DECLS([pwritev], [], [AC_LIBOBJ(pwritev)], [#include <sys/uio.h>])
++AC_CHECK_DECLS([strchrnul], [], [], [#include <string.h>])
+ 
+ # This is probably only present on macOS, but may as well check always
+ AC_CHECK_DECLS(F_FULLFSYNC, [], [], [#include <fcntl.h>])
+diff --git a/src/include/pg_config.h.in b/src/include/pg_config.h.in
+index 1a0d9eee4f7..5ec240d59a5 100644
+--- a/src/include/pg_config.h.in
++++ b/src/include/pg_config.h.in
+@@ -150,6 +150,10 @@
+    don't. */
+ #undef HAVE_DECL_SIGWAIT
+ 
++/* Define to 1 if you have the declaration of `strchrnul', and to 0 if you
++   don't. */
++#undef HAVE_DECL_STRCHRNUL
++
+ /* Define to 1 if you have the declaration of `strlcat', and to 0 if you
+    don't. */
+ #undef HAVE_DECL_STRLCAT
+@@ -520,9 +524,6 @@
+ /* Define to 1 if you have the <stdlib.h> header file. */
+ #undef HAVE_STDLIB_H
+ 
+-/* Define to 1 if you have the `strchrnul' function. */
+-#undef HAVE_STRCHRNUL
+-
+ /* Define to 1 if you have the `strerror_r' function. */
+ #undef HAVE_STRERROR_R
+ 
+diff --git a/src/port/snprintf.c b/src/port/snprintf.c
+index b8e2b0e7f86..a821a297f48 100644
+--- a/src/port/snprintf.c
++++ b/src/port/snprintf.c
+@@ -348,13 +348,22 @@ static void leading_pad(int zpad, int signvalue, int *padlen,
+ static void trailing_pad(int padlen, PrintfTarget *target);
+ 
+ /*
+- * If strchrnul exists (it's a glibc-ism), it's a good bit faster than the
+- * equivalent manual loop.  If it doesn't exist, provide a replacement.
++ * If strchrnul exists (it's a glibc-ism, but since adopted by some other
++ * platforms), it's a good bit faster than the equivalent manual loop.
++ * Use it if possible, and if it doesn't exist, use this replacement.
+  *
+  * Note: glibc declares this as returning "char *", but that would require
+  * casting away const internally, so we don't follow that detail.
++ *
++ * Note: macOS has this too as of Sequoia 15.4, but it's hidden behind
++ * a deployment-target check that causes compile errors if the deployment
++ * target isn't high enough.  So !HAVE_DECL_STRCHRNUL may mean "yes it's
++ * declared, but it doesn't compile".  To avoid failing in that scenario,
++ * use a macro to avoid matching <string.h>'s name.
+  */
+-#ifndef HAVE_STRCHRNUL
++#if !HAVE_DECL_STRCHRNUL
++
++#define strchrnul pg_strchrnul
+ 
+ static inline const char *
+ strchrnul(const char *s, int c)
+@@ -364,19 +373,7 @@ strchrnul(const char *s, int c)
+ 	return s;
+ }
+ 
+-#else
+-
+-/*
+- * glibc's <string.h> declares strchrnul only if _GNU_SOURCE is defined.
+- * While we typically use that on glibc platforms, configure will set
+- * HAVE_STRCHRNUL whether it's used or not.  Fill in the missing declaration
+- * so that this file will compile cleanly with or without _GNU_SOURCE.
+- */
+-#ifndef _GNU_SOURCE
+-extern char *strchrnul(const char *s, int c);
+-#endif
+-
+-#endif							/* HAVE_STRCHRNUL */
++#endif							/* !HAVE_DECL_STRCHRNUL */
+ 
+ 
+ /*
+diff --git a/src/tools/msvc/Solution.pm b/src/tools/msvc/Solution.pm
+index 8c8dd4996fe..d92bbbaf7db 100644
+--- a/src/tools/msvc/Solution.pm
++++ b/src/tools/msvc/Solution.pm
+@@ -246,6 +246,7 @@ sub GenerateFiles
+ 		HAVE_DECL_RTLD_GLOBAL                       => 0,
+ 		HAVE_DECL_RTLD_NOW                          => 0,
+ 		HAVE_DECL_SIGWAIT                           => 0,
++		HAVE_DECL_STRCHRNUL                         => 0,
+ 		HAVE_DECL_STRLCAT                           => 0,
+ 		HAVE_DECL_STRLCPY                           => 0,
+ 		HAVE_DECL_STRNLEN                           => 1,
+@@ -366,7 +367,6 @@ sub GenerateFiles
+ 		HAVE_SSL_CTX_SET_NUM_TICKETS             => undef,
+ 		HAVE_STDINT_H                            => 1,
+ 		HAVE_STDLIB_H                            => 1,
+-		HAVE_STRCHRNUL                           => undef,
+ 		HAVE_STRERROR_R                          => undef,
+ 		HAVE_STRINGS_H                           => undef,
+ 		HAVE_STRING_H                            => 1,
+-- 
+2.39.5
+
