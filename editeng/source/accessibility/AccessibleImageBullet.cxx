@@ -78,7 +78,6 @@ AccessibleImageBullet::AccessibleImageBullet ( uno::Reference< XAccessible > xPa
 
 AccessibleImageBullet::~AccessibleImageBullet()
 {
-
     // sign off from event notifier
     if( getNotifierClientId() != -1 )
     {
@@ -92,14 +91,12 @@ AccessibleImageBullet::~AccessibleImageBullet()
 
 uno::Reference< XAccessibleContext > SAL_CALL AccessibleImageBullet::getAccessibleContext(  )
 {
-
     // We implement the XAccessibleContext interface in the same object
     return uno::Reference< XAccessibleContext > ( this );
 }
 
 sal_Int64 SAL_CALL  AccessibleImageBullet::getAccessibleChildCount()
 {
-
     return 0;
 }
 
@@ -111,19 +108,16 @@ uno::Reference< XAccessible > SAL_CALL  AccessibleImageBullet::getAccessibleChil
 
 uno::Reference< XAccessible > SAL_CALL  AccessibleImageBullet::getAccessibleParent()
 {
-
     return mxParent;
 }
 
 sal_Int64 SAL_CALL  AccessibleImageBullet::getAccessibleIndexInParent()
 {
-
     return mnIndexInParent;
 }
 
 sal_Int16 SAL_CALL  AccessibleImageBullet::getAccessibleRole()
 {
-
     return AccessibleRole::GRAPHIC;
 }
 
@@ -141,7 +135,6 @@ OUString SAL_CALL  AccessibleImageBullet::getAccessibleName()
 
 uno::Reference< XAccessibleRelationSet > SAL_CALL AccessibleImageBullet::getAccessibleRelationSet()
 {
-
     // no relations, therefore empty
     return uno::Reference< XAccessibleRelationSet >();
 }
@@ -157,7 +150,6 @@ sal_Int64 SAL_CALL AccessibleImageBullet::getAccessibleStateSet()
 
 lang::Locale SAL_CALL AccessibleImageBullet::getLocale()
 {
-
     SolarMutexGuard aGuard;
 
     DBG_ASSERT(GetParagraphIndex() >= 0,
@@ -169,14 +161,12 @@ lang::Locale SAL_CALL AccessibleImageBullet::getLocale()
 
 void SAL_CALL AccessibleImageBullet::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
 {
-
     if( getNotifierClientId() != -1 )
         ::comphelper::AccessibleEventNotifier::addEventListener( getNotifierClientId(), xListener );
 }
 
 void SAL_CALL AccessibleImageBullet::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
 {
-
     if( getNotifierClientId() == -1 )
         return;
 
@@ -195,7 +185,6 @@ void SAL_CALL AccessibleImageBullet::removeAccessibleEventListener( const uno::R
 
 sal_Bool SAL_CALL AccessibleImageBullet::containsPoint( const awt::Point& rPoint )
 {
-
     SolarMutexGuard aGuard;
 
     DBG_ASSERT(GetParagraphIndex() >= 0,
@@ -210,7 +199,6 @@ sal_Bool SAL_CALL AccessibleImageBullet::containsPoint( const awt::Point& rPoint
 
 uno::Reference< XAccessible > SAL_CALL AccessibleImageBullet::getAccessibleAtPoint( const awt::Point& /*aPoint*/ )
 {
-
     // as we have no children, empty reference
     return uno::Reference< XAccessible >();
 }
@@ -223,7 +211,6 @@ awt::Rectangle SAL_CALL AccessibleImageBullet::getBounds(  )
 }
 awt::Rectangle AccessibleImageBullet::implGetBounds(  )
 {
-
     DBG_ASSERT(GetParagraphIndex() >= 0,
                "AccessibleEditableTextPara::implGetBounds: index value overflow");
 
@@ -259,7 +246,6 @@ awt::Rectangle AccessibleImageBullet::implGetBounds(  )
 
 awt::Point SAL_CALL AccessibleImageBullet::getLocation(  )
 {
-
     SolarMutexGuard aGuard;
 
     awt::Rectangle aRect = implGetBounds();
@@ -269,7 +255,6 @@ awt::Point SAL_CALL AccessibleImageBullet::getLocation(  )
 
 awt::Point SAL_CALL AccessibleImageBullet::getLocationOnScreen(  )
 {
-
     SolarMutexGuard aGuard;
 
     // relate us to parent
@@ -295,7 +280,6 @@ awt::Point SAL_CALL AccessibleImageBullet::getLocationOnScreen(  )
 
 awt::Size SAL_CALL AccessibleImageBullet::getSize(  )
 {
-
     SolarMutexGuard aGuard;
 
     awt::Rectangle aRect = implGetBounds();
@@ -305,7 +289,6 @@ awt::Size SAL_CALL AccessibleImageBullet::getSize(  )
 
 void SAL_CALL AccessibleImageBullet::grabFocus(  )
 {
-
     throw uno::RuntimeException(u"Not focusable"_ustr,
                                 uno::Reference< uno::XInterface >
                                 ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
@@ -313,7 +296,6 @@ void SAL_CALL AccessibleImageBullet::grabFocus(  )
 
 sal_Int32 SAL_CALL AccessibleImageBullet::getForeground(  )
 {
-
     // #104444# Added to XAccessibleComponent interface
     svtools::ColorConfig aColorConfig;
     Color nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
@@ -322,7 +304,6 @@ sal_Int32 SAL_CALL AccessibleImageBullet::getForeground(  )
 
 sal_Int32 SAL_CALL AccessibleImageBullet::getBackground(  )
 {
-
     // #104444# Added to XAccessibleComponent interface
     Color aColor( Application::GetSettings().GetStyleSettings().GetWindowColor() );
 
@@ -334,7 +315,6 @@ sal_Int32 SAL_CALL AccessibleImageBullet::getBackground(  )
 
 OUString SAL_CALL AccessibleImageBullet::getImplementationName()
 {
-
     return u"AccessibleImageBullet"_ustr;
 }
 
@@ -351,19 +331,16 @@ uno::Sequence< OUString > SAL_CALL AccessibleImageBullet::getSupportedServiceNam
 
 void AccessibleImageBullet::SetIndexInParent( sal_Int32 nIndex )
 {
-
     mnIndexInParent = nIndex;
 }
 
 void AccessibleImageBullet::SetEEOffset( const Point& rOffset )
 {
-
     maEEOffset = rOffset;
 }
 
 void AccessibleImageBullet::Dispose()
 {
-
     int nClientId( getNotifierClientId() );
 
     // #108212# drop all references before notifying dispose
@@ -387,7 +364,6 @@ void AccessibleImageBullet::Dispose()
 
 void AccessibleImageBullet::SetEditSource( SvxEditSource* pEditSource )
 {
-
     mpEditSource = pEditSource;
 
     if( !mpEditSource )
@@ -404,7 +380,6 @@ void AccessibleImageBullet::SetEditSource( SvxEditSource* pEditSource )
 
 void AccessibleImageBullet::FireEvent(const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue ) const
 {
-
     uno::Reference < XAccessibleContext > xThis( const_cast< AccessibleImageBullet* > (this)->getAccessibleContext() );
 
     AccessibleEventObject aEvent(xThis, nEventId, rNewValue, rOldValue, -1);
@@ -435,7 +410,6 @@ void AccessibleImageBullet::UnSetState( const sal_Int64 nStateId )
 
 void AccessibleImageBullet::SetParagraphIndex( sal_Int32 nIndex )
 {
-
     uno::Any aOldDesc;
     uno::Any aOldName;
 
@@ -465,7 +439,6 @@ void AccessibleImageBullet::SetParagraphIndex( sal_Int32 nIndex )
 
 SvxEditSource& AccessibleImageBullet::GetEditSource() const
 {
-
     if( !mpEditSource )
         throw uno::RuntimeException(u"No edit source, object is defunct"_ustr,
                                     cppu::getXWeak
@@ -475,7 +448,6 @@ SvxEditSource& AccessibleImageBullet::GetEditSource() const
 
 SvxTextForwarder& AccessibleImageBullet::GetTextForwarder() const
 {
-
     SvxEditSource& rEditSource = GetEditSource();
     SvxTextForwarder* pTextForwarder = rEditSource.GetTextForwarder();
 
@@ -493,7 +465,6 @@ SvxTextForwarder& AccessibleImageBullet::GetTextForwarder() const
 
 SvxViewForwarder& AccessibleImageBullet::GetViewForwarder() const
 {
-
     SvxEditSource& rEditSource = GetEditSource();
     SvxViewForwarder* pViewForwarder = rEditSource.GetViewForwarder();
 
