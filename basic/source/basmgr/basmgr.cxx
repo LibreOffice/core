@@ -45,7 +45,6 @@
 
 #include <memory>
 #include <vector>
-#include <algorithm>
 
 #define LIB_SEP         0x01
 #define LIBINFO_SEP     0x02
@@ -1757,7 +1756,7 @@ static uno::Sequence< sal_Int8 > implGetDialogData( SbxObject* pDialog )
     uno::Sequence< sal_Int8 > aData( nLen );
     sal_Int8* pDestData = aData.getArray();
     const sal_Int8* pSrcData = static_cast<const sal_Int8*>(aMemStream.GetData());
-    std::copy(pSrcData, pSrcData + nLen, pDestData);
+    memcpy( pDestData, pSrcData, nLen );
     return aData;
 }
 
