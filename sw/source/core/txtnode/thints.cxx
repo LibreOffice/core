@@ -652,11 +652,11 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
 
     if ( !bNoLengthAttribute ) // nothing to do for no length attributes
     {
-        for ( size_t i = 0; i < Count(); ++i )
+        for ( size_t i = 0, nCnt = m_HintsByStart.size(); i < nCnt; ++i )
         {
             // we're modifying stuff here which affects the sorting, and we
             // don't want it changing underneath us
-            SwTextAttr* pOther = GetWithoutResorting(i);
+            SwTextAttr* pOther = m_HintsByStart[i];
 
             if ( RES_TXTATR_CHARFMT != pOther->Which() &&
                  RES_TXTATR_AUTOFMT != pOther->Which() )
@@ -725,9 +725,9 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
 
     if ( !bNoLengthAttribute ) // nothing to do for no length attributes
     {
-        for ( size_t i = 0; i < Count(); ++i )
+        for ( size_t i = 0, nCnt = m_HintsByStart.size(); i < nCnt; ++i )
         {
-            const SwTextAttr* pOther = Get(i);
+            const SwTextAttr* pOther = m_HintsByStart[i];
 
             if ( RES_TXTATR_CHARFMT != pOther->Which() &&
                  RES_TXTATR_AUTOFMT != pOther->Which() )
@@ -759,10 +759,10 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
         aInsDelHints.clear();
 
         // Get all hints that are in [nPorStart, nPorEnd[:
-        for ( size_t i = 0; i < Count(); ++i )
+        for ( size_t i = 0, nCnt = m_HintsByStart.size(); i < nCnt; ++i )
         {
             // we get called from TryInsertHint, which changes ordering
-            SwTextAttr *pOther = GetWithoutResorting(i);
+            SwTextAttr *pOther = m_HintsByStart[i];
 
             if ( RES_TXTATR_CHARFMT != pOther->Which() &&
                  RES_TXTATR_AUTOFMT != pOther->Which() )
