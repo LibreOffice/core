@@ -198,15 +198,6 @@ private:
     virtual css::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId() override;
 
-    ///=====  XAccessibleEventBroadcaster  =====================================
-
-    /** Add listener that is informed of future changes of name,
-          description and so on events.
-    */
-    virtual void SAL_CALL
-        addAccessibleEventListener(
-            const css::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener) override;
-
     //=====  XAccessibleTableSelection  ============================================
 
     virtual sal_Bool SAL_CALL selectRow( sal_Int32 row ) override;

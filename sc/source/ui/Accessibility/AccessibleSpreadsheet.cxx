@@ -1364,16 +1364,6 @@ uno::Sequence<sal_Int8> SAL_CALL
     return css::uno::Sequence<sal_Int8>();
 }
 
-///=====  XAccessibleEventBroadcaster  =====================================
-
-void SAL_CALL ScAccessibleSpreadsheet::addAccessibleEventListener(const uno::Reference<XAccessibleEventListener>& xListener)
-{
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    ScAccessibleTableBase::addAccessibleEventListener(xListener);
-
-}
-
 //====  internal  =========================================================
 
 AbsoluteScreenPixelRectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen() const
