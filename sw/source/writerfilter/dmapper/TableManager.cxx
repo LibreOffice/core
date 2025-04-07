@@ -206,7 +206,11 @@ void TableManager::tableExceptionProps(const TablePropertyMapPtr& pProps)
 #endif
 
     if (getTableExceptionProps())
+    {
         getTableExceptionProps()->InsertProps(pProps.get());
+        assert(getCellProps() && "setTableExceptionProps creates cellProps");
+        getCellProps()->InsertProps(pProps.get());
+    }
     else
         mState.setTableExceptionProps(pProps);
 

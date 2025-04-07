@@ -1614,8 +1614,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf164907_rowHeightAtLeast)
 {
     createSwDoc("tdf164907_rowHeightAtLeast.docx");
 
-    // TODO: import row top/bottom height of 0 overrides
-    // CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf157829LTR)
