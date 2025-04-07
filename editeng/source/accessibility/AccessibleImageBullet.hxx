@@ -141,7 +141,7 @@ public:
     sal_Int32 GetParagraphIndex() const { return mnParagraphIndex; }
 
     /// Calls all Listener objects to tell them the change. Don't hold locks when calling this!
-    void FireEvent(const sal_Int16 nEventId, const css::uno::Any& rNewValue, const css::uno::Any& rOldValue = css::uno::Any() ) const;
+    void FireEvent(const sal_Int16 nEventId, const css::uno::Any& rNewValue, const css::uno::Any& rOldValue = css::uno::Any());
 
 private:
     AccessibleImageBullet( const AccessibleImageBullet& ) = delete;

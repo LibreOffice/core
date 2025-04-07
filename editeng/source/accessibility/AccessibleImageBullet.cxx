@@ -376,9 +376,9 @@ void AccessibleImageBullet::SetEditSource( SvxEditSource* pEditSource )
     }
 }
 
-void AccessibleImageBullet::FireEvent(const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue ) const
+void AccessibleImageBullet::FireEvent(const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue)
 {
-    uno::Reference < XAccessibleContext > xThis( const_cast< AccessibleImageBullet* > (this)->getAccessibleContext() );
+    uno::Reference <XAccessibleContext> xThis(this);
 
     AccessibleEventObject aEvent(xThis, nEventId, rNewValue, rOldValue, -1);
 
