@@ -50,8 +50,8 @@ private:
     SAL_DLLPRIVATE virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
     SdrCircKind                 meCircleKind;
-    Degree100                   nStartAngle;
-    Degree100                   nEndAngle;
+    Degree100                   m_nStartAngle;
+    Degree100                   m_nEndAngle;
 
     SVX_DLLPRIVATE basegfx::B2DPolygon ImpCalcXPolyCirc(const SdrCircKind eKind, const tools::Rectangle& rRect1, Degree100 nStart, Degree100 nEnd) const;
     SVX_DLLPRIVATE static void ImpSetCreateParams(SdrDragStat& rStat);
@@ -135,8 +135,8 @@ private:
     SAL_DLLPRIVATE virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
     SAL_DLLPRIVATE virtual void RestoreGeoData(const SdrObjGeoData& rGeo) override;
 public:
-    Degree100 GetStartAngle() const { return nStartAngle; }
-    Degree100 GetEndAngle() const { return nEndAngle; }
+    Degree100 GetStartAngle() const { return m_nStartAngle; }
+    Degree100 GetEndAngle() const { return m_nEndAngle; }
 
 };
 
