@@ -23,6 +23,8 @@ properties:
               "jom_1_1_4.zip",
               "junit-4.10.jar",
               "make-4.2.1-msvc.exe",
+              "meson-1.7.2.zip",
+              "pkgconf-2.4.3.exe",
               "strawberry-perl-5.40.0.1-64bit-portable.zip",
           "")
           !(($files | foreach {Test-Path "$env:PUBLIC/Downloads/$_"}) -contains $false)
@@ -72,6 +74,16 @@ properties:
         GetScript:  Test-Path -Path "$env:USERPROFILE/bin/clang-format.exe"
         SetScript: Copy-Item -LiteralPath "$env:PUBLIC/Downloads/clang-format-5.0.0-win.exe" -Destination "$env:USERPROFILE/bin/clang-format.exe"
     - resource: xPSDesiredStateConfiguration/xScript
+      id: pkgconf
+      dependsOn:
+        - bindir
+      directives:
+        description: copy pkgconf-2.4.3.exe to the ~/bin directory
+      settings:
+        TestScript: Test-Path -Path "$env:USERPROFILE/bin/pkgconf-2.4.3.exe"
+        GetScript:  Test-Path -Path "$env:USERPROFILE/bin/pkgconf-2.4.3.exe"
+        SetScript: Copy-Item -LiteralPath "$env:PUBLIC/Downloads/pkgconf-2.4.3.exe" -Destination "$env:USERPROFILE/bin/pkgconf-2.4.3.exe"
+    - resource: xPSDesiredStateConfiguration/xScript
       id: junit
       dependsOn:
         - lodir
@@ -92,6 +104,16 @@ properties:
         TestScript: Test-Path -Path "$env:USERPROFILE/lo/apache-ant-1.10.15/bin/ant"
         GetScript:  Test-Path -Path "$env:USERPROFILE/lo/apache-ant-1.10.15/bin/ant"
         SetScript: Expand-Archive -LiteralPath "$env:PUBLIC/Downloads/apache-ant-1.10.15-bin.zip" -Destination "$env:USERPROFILE/lo/"
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: meson-extract
+      dependsOn:
+        - lodir
+      directives:
+        description: extract meson to the ~/lo directory
+      settings:
+        TestScript: Test-Path -Path "$env:USERPROFILE/lo/meson-1.7.2/meson.py"
+        GetScript:  Test-Path -Path "$env:USERPROFILE/lo/meson-1.7.2/meson.py"
+        SetScript: Expand-Archive -LiteralPath "$env:PUBLIC/Downloads/meson-1.7.2.zip" -Destination "$env:USERPROFILE/lo/"
     - resource: xPSDesiredStateConfiguration/xScript
       id: spp-extract
       dependsOn:
@@ -165,6 +187,8 @@ properties:
           #--disable-dependency-tracking
           #--enable-dbgutil
           #--with-lang=fr ja
+          MESON=$env:USERPROFILE\lo\meson-1.7.2\meson.py
+          PKG_CONFIG=pkgconf-2.4.3.exe
           "
     - resource: xPSDesiredStateConfiguration/xScript
       id: cloud-init-dir

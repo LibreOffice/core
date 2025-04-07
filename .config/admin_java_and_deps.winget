@@ -3,7 +3,9 @@
 # download additional dependencies used for the build to C:/Users/Public/Downloads (unfortunately
 # xRemoteFile doesn't accept $env:PUBLIC or similar, so using hardcoded paths for now),
 # install the 32bit and 64bit JDKs & make sure wsl is installed
-# (this configuration needs to be applied with administrator privileges)
+# (this configuration needs to be applied with administrator privileges, as otherwise even
+# downloading files e.g. would fail with:
+# Access to the path 'C:\ProgramData\Microsoft\Windows\PowerShell\Configuration\BuiltinProvCache\DSC_xRemoteFile' is denied.
 
 properties:
   resources:
@@ -11,6 +13,7 @@ properties:
       id: jom
       directives:
         description: download jom (parallel nmake)
+        securityContext: elevated
       settings:
         DestinationPath: C:/Users/Public/Downloads
         Uri: http://download.qt.io/official_releases/jom/jom_1_1_4.zip
@@ -20,6 +23,7 @@ properties:
       id: make
       directives:
         description: download make
+        securityContext: elevated
       settings:
         DestinationPath: C:/Users/Public/Downloads
         Uri: https://dev-www.libreoffice.org/bin/cygwin/make-4.2.1-msvc.exe
@@ -29,15 +33,27 @@ properties:
       id: clang-format
       directives:
         description: download clang-format
+        securityContext: elevated
       settings:
         DestinationPath: C:/Users/Public/Downloads
         Uri: https://dev-www.libreoffice.org/bin/clang-format-5.0.0-win.exe
         ChecksumType: SHA256
         Checksum: a25d5c4b451ec4fba466807e9239d0bcbafcfeb7f35834f2db87448968a73ccb
     - resource: xPSDesiredStateConfiguration/xRemoteFile
+      id: pkgconf
+      directives:
+        description: download pkgconf
+        securityContext: elevated
+      settings:
+        DestinationPath: C:/Users/Public/Downloads
+        Uri: https://dev-www.libreoffice.org/extern/pkgconf-2.4.3.exe
+        ChecksumType: SHA256
+        Checksum: 791cd6dbc56f7268fbf9c4652d6634b0f5c59687ab4e504565e58245952edd41
+    - resource: xPSDesiredStateConfiguration/xRemoteFile
       id: spp
       directives:
         description: download strawberry perl portable
+        securityContext: elevated
       settings:
         DestinationPath: C:/Users/Public/Downloads
         Uri: https://github.com/StrawberryPerl/Perl-Dist-Strawberry/releases/download/SP_54001_64bit_UCRT/strawberry-perl-5.40.0.1-64bit-portable.zip
@@ -47,6 +63,7 @@ properties:
       id: ant
       directives:
         description: download ant
+        securityContext: elevated
       settings:
         DestinationPath: C:/Users/Public/Downloads
         Uri: https://dlcdn.apache.org/ant/binaries/apache-ant-1.10.15-bin.zip
@@ -56,15 +73,27 @@ properties:
       id: junit
       directives:
         description: download junit
+        securityContext: elevated
       settings:
         DestinationPath: C:/Users/Public/Downloads
         Uri: https://repo1.maven.org/maven2/junit/junit/4.10/junit-4.10.jar
         ChecksumType: SHA256
         Checksum: 36a747ca1e0b86f6ea88055b8723bb87030d627766da6288bf077afdeeb0f75a
+    - resource: xPSDesiredStateConfiguration/xRemoteFile
+      id: meson
+      directives:
+        description: download meson
+        securityContext: elevated
+      settings:
+        DestinationPath: C:/Users/Public/Downloads/meson-1.7.2.zip
+        Uri: https://github.com/mesonbuild/meson/archive/refs/tags/1.7.2.zip
+        ChecksumType: SHA256
+        Checksum: c6395019029f19945f61f5b9b551c7c10d9d1b2970f89be86da25a4cf2a6119c
     - resource: xPSDesiredStateConfiguration/xMsiPackage
       id: JDK_x64
       directives:
         description: install the 64bit JDK
+        securityContext: elevated
       settings:
         Path: https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.12%2B7/OpenJDK17U-jdk_x64_windows_hotspot_17.0.12_7.msi
         ProductId: '{20108BEF-FA49-47AE-9551-495BED430689}'
@@ -74,6 +103,7 @@ properties:
       id: JDK_x86
       directives:
         description: install the 32bit JDK
+        securityContext: elevated
       settings:
         Path: https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.12%2B7/OpenJDK17U-jdk_x86-32_windows_hotspot_17.0.12_7.msi
         ProductId: '{E0CAD1B6-6CF5-4E33-9F85-18AAE8CDD8EE}'
@@ -83,6 +113,7 @@ properties:
       id: wsl
       directives:
         description: make sure that wsl utility is available/working - i.e. that wsl is installed
+        securityContext: elevated
       settings:
         # no idea why the whole test fails when not redirecting stderr
         TestScript: wsl.exe --status 2>$null; return ![bool]$LASTEXITCODE

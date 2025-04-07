@@ -6,6 +6,7 @@
     "Microsoft.Net.Component.4.8.SDK",
     "Microsoft.VisualStudio.Component.Git",
     "Microsoft.VisualStudio.Component.VC.ATL",
+    "Microsoft.VisualStudio.Component.VC.CMake.Project",
     "Microsoft.VisualStudio.Component.VC.Llvm.Clang",
     "Microsoft.VisualStudio.Component.VC.Redist.MSM",
     "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
