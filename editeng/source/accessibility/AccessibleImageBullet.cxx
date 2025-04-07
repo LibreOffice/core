@@ -62,18 +62,11 @@ AccessibleImageBullet::AccessibleImageBullet ( uno::Reference< XAccessible > xPa
     // fetched. Nevertheless, normally should employ RAII here...
     mnNotifierClientId(::comphelper::AccessibleEventNotifier::registerClient())
 {
-    try
-    {
-        // Create the state set.
-        mnStateSet = 0;
-
-        // these are always on
-        mnStateSet |= AccessibleStateType::VISIBLE;
-        mnStateSet |= AccessibleStateType::SHOWING;
-        mnStateSet |= AccessibleStateType::ENABLED;
-        mnStateSet |= AccessibleStateType::SENSITIVE;
-    }
-    catch( const uno::Exception& ) {}
+    // these are always on
+    mnStateSet = AccessibleStateType::VISIBLE;
+    mnStateSet |= AccessibleStateType::SHOWING;
+    mnStateSet |= AccessibleStateType::ENABLED;
+    mnStateSet |= AccessibleStateType::SENSITIVE;
 }
 
 AccessibleImageBullet::~AccessibleImageBullet()
