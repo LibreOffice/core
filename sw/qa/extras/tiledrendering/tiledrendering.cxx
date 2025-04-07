@@ -5123,6 +5123,33 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesStates)
     CPPUNIT_ASSERT(dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesInsertUndo)
+{
+    // Given a document with 2 views, first view enables redline record for that view only:
+    SwXTextDocument* pXTextDocument = createDoc();
+    CPPUNIT_ASSERT(pXTextDocument);
+    ViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    SwView* pView1 = pXTextDocument->GetDocShell()->GetView();
+    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    SfxLokHelper::setView(nView1);
+    comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
+
+    // When typing and undoing:
+    pWrtShell1->Insert(u"A"_ustr);
+    pWrtShell1->Undo();
+
+    // Then make sure the record mode doesn't change:
+    std::unique_ptr<SfxPoolItem> pItem;
+    pView1->GetViewFrame().GetBindings().QueryState(FN_TRACK_CHANGES_IN_THIS_VIEW, pItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(FN_TRACK_CHANGES_IN_THIS_VIEW), pItem->Which());
+    // Without the accompanying fix in place, this test would have failed, undo changed "this view"
+    // record mode to "all views", which is unexpected.
+    CPPUNIT_ASSERT(dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
