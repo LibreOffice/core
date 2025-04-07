@@ -39,7 +39,6 @@ skia_patches := \
     fix-SkDebugf-link-error.patch.1 \
     ubsan-missing-typeinfo.patch.1 \
     help-msvc-analyzer.patch \
-    always_inline_and_multiversioning_conflict.patch.1 \
     windows-define-conflict.patch.1 \
     modified-skcms-0001-Change-use-of-removed-intrinsic.patch \
 	0002-loong64-Honor-existing-LASX-LSX-settings.patch \
