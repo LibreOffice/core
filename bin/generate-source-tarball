@@ -1,0 +1,183 @@
+#!/bin/env bash
+
+if [ -n "$debug" ] ; then
+set -x
+fi
+
+BIN_DIR=$(dirname "$0")
+CORE_DIR=$(realpath "$BIN_DIR/..")
+GEN_BZ2=false
+GEN_MD5=false
+GEN_XZ=false
+OUT_DIR="${CORE_DIR?}"
+VERSION=
+
+usage()
+{
+cat <<EOF
+Usage: $0 [ --xz ] [ --bz2 ] [ --md5 ] [ --output-dir=<output location> ]
+          [--version=<package_version] label
+
+    --xz         generate a package compressed with xz (default)
+    --bz2        generate a package compressed with bz2. Note if you specify
+                 both --cz and --bz2, both are created. If you specify neither
+                 --xz is implied.
+    --md5        generate a md5 signature for the generated package(s)
+    --output-dir where to put the generated packages
+    --version    version string used to generate the name of the package
+                 the source package name is libreoffice-<version>.tar.[bz2|xz]
+
+EOF
+}
+while [ "${1}" != "" ]; do
+    parm=${1%%=*}
+    arg=${1#*=}
+    has_arg=
+    if [ "${1}" != "${parm?}" ] ; then
+	has_arg=1
+    else
+	arg=""
+    fi
+    case "${parm}" in
+        -2|--bz2)
+	    GEN_BZ2=true
+	    ;;
+	-x|--xz)
+	    GEN_XZ=true
+	    ;;
+	-5|--md5)
+	    GEN_MD5=true
+	    ;;
+	-o|--output-dir)
+	    if [ -z "${has_arg}" ] ; then
+		shift;
+		arg="$1"
+	    fi
+	    if [ -z "${arg}" ] ; then
+		echo "Missing argument for option $parm" 1>&2
+		exit -1
+	    else
+		OUT_DIR="$arg"
+	    fi
+	    ;;
+	-v|--version)
+	    if [ -z "${has_arg}" ] ; then
+		shift;
+		arg="$1"
+	    fi
+	    if [ -z "${arg}" ] ; then
+		echo "Missing argument for option $parm" 1>&2
+		exit -1
+	    else
+		VERSION="$arg"
+	    fi
+	    ;;
+	-h|--help)
+	    usage
+	    exit 0
+	    ;;
+        -*)
+	    echo "Invalid option $1" 1>&2
+	    exit -1
+	    ;;
+	*)
+	    if [ -z "${LABEL}" ] ; then
+		LABEL="$parm"
+	    else
+		echo "Too many arguments..  $@" 1>&2
+		exit -1
+	    fi
+	    ;;
+    esac
+    shift
+done
+
+# we need a label
+if [ -z "${LABEL}" ] ; then
+    echo "Missing argument. We need a git label as source" 1>&2
+    exit 1
+fi
+
+# default to xz compression
+if ! ${GEN_BZ2?} && ! ${GEN_XZ?} ; then
+    GEN_XZ=true
+fi
+
+# --version= is mandatory
+if [ -z "${VERSION}" ] ; then
+    VERSION="${LABEL?}"
+fi
+
+base_name="collaboraoffice-${VERSION}"
+
+# --output-dir default to core-dir
+if [ -z "${OUT_DIR}" ] ; then
+    OUT_DIR="$CORE_DIR?}"
+fi
+
+if [ ! -d "${CORE_DIR?}" ] ; then
+    echo "Core repo directory $CORE_DIR does not exist or is not a directory" 1>&2
+    exit 1
+fi
+
+if [ ! -d "${CORE_DIR?}/.git" ] ; then
+    echo "Core repo $CORE_DIR is not a git repo" 1>&2
+    exit 1
+fi
+
+if [ ! -d "${OUT_DIR?}" ] ; then
+    echo "Output directory $OUT_DIR does not exist or is not a directory" 1>&2
+    exit 1
+fi
+
+
+pushd "${CORE_DIR}" > /dev/null
+
+
+echo "archiving core..."
+git archive --format=tar -o "${OUT_DIR}/${base_name}.tar" ${LABEL?}
+
+
+concatenate_list=
+for module in dictionaries helpcontent2 translations ; do
+    if [ ! -e ${module?}/.git ] ; then
+	echo "Warning: module $module is not present" 1>&2
+    else
+	echo "archiving ${module?}..."
+        cd ${module?}
+	git archive --format=tar --prefix="${module?}/" -o "${OUT_DIR}/${base_name}-${module?}.tar" ${LABEL?}
+        cd ..
+    fi
+done
+
+if ${GEN_BZ2?} ; then
+    echo "bzip2 compression..."
+    for i in ${OUT_DIR}/${base_name}*tar; do
+        bzip2 -fkz "$i"
+    done
+    if ${GEN_MD5?} ; then
+	echo "md5sum..."
+        for i in ${OUT_DIR}/${base_name}*tar.bz2; do
+	    md5sum "$i" > "$i.md5"
+        done
+    fi
+fi
+
+if ${GEN_XZ?} ; then
+    echo "xz compression..."
+    for i in ${OUT_DIR}/${base_name}*tar; do
+        xz -T 0 -fz "$i"
+    done
+    if ${GEN_MD5?} ; then
+	echo "md5sum..."
+        for i in ${OUT_DIR}/${base_name}*tar.xz; do
+	    md5sum "$i" > "$i.md5"
+        done
+    fi
+else
+    for i in ${OUT_DIR}/${base_name}*tar; do
+        rm "$i"
+    done
+fi
+
+echo "Done."
