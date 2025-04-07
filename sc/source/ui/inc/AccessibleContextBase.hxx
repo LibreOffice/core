@@ -195,7 +195,7 @@ protected:
 public:
     /// Calls all Listener to tell they the change.
     void
-        CommitChange(const css::accessibility::AccessibleEventObject& rEvent) const;
+        CommitChange(const css::accessibility::AccessibleEventObject& rEvent);
 
     /// Use this method to set initial Name without notification
     void SetName(const OUString& rName) { msName = rName; }
@@ -207,10 +207,10 @@ public:
 
 protected:
     /// Calls all FocusListener to tell they that the focus is gained.
-    void CommitFocusGained() const;
+    void CommitFocusGained();
 
     /// Calls all FocusListener to tell they that the focus is lost.
-    void CommitFocusLost() const;
+    void CommitFocusLost();
 
     bool IsDefunc() const { return rBHelper.bDisposed; }
 

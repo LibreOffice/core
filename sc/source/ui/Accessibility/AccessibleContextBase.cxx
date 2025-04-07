@@ -428,27 +428,27 @@ OUString ScAccessibleContextBase::createAccessibleName()
     return OUString();
 }
 
-void ScAccessibleContextBase::CommitChange(const AccessibleEventObject& rEvent) const
+void ScAccessibleContextBase::CommitChange(const AccessibleEventObject& rEvent)
 {
     if (mnClientId)
         comphelper::AccessibleEventNotifier::addEvent( mnClientId, rEvent );
 }
 
-void ScAccessibleContextBase::CommitFocusGained() const
+void ScAccessibleContextBase::CommitFocusGained()
 {
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::STATE_CHANGED;
-    aEvent.Source = uno::Reference< XAccessibleContext >(const_cast<ScAccessibleContextBase*>(this));
+    aEvent.Source = uno::Reference<XAccessibleContext>(this);
     aEvent.NewValue <<= AccessibleStateType::FOCUSED;
 
     CommitChange(aEvent);
 }
 
-void ScAccessibleContextBase::CommitFocusLost() const
+void ScAccessibleContextBase::CommitFocusLost()
 {
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::STATE_CHANGED;
-    aEvent.Source = uno::Reference< XAccessibleContext >(const_cast<ScAccessibleContextBase*>(this));
+    aEvent.Source = uno::Reference<XAccessibleContext>(this);
     aEvent.OldValue <<= AccessibleStateType::FOCUSED;
 
     CommitChange(aEvent);
