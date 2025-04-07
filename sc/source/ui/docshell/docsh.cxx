@@ -3383,7 +3383,7 @@ bool ScDocShell::HasChangeRecordProtection() const
     return bRes;
 }
 
-void ScDocShell::SetChangeRecording( bool bActivate, bool /*bLockAllViews*/, bool /*bRecordAllViews*/ )
+void ScDocShell::SetChangeRecording( bool bActivate, bool /*bLockAllViews*/, SfxRedlineRecordingMode /*eRedlineRecordingMode*/)
 {
     bool bOldChangeRecording = IsChangeRecording();
 

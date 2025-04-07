@@ -1174,7 +1174,7 @@ RedlineFlags DocumentRedlineManager::GetRedlineFlags(const SwViewShell* pViewShe
     return eRedlineFlags;
 }
 
-void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode, bool bRecordAllViews, bool bRecordModeChange )
+void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode, SfxRedlineRecordingMode eRedlineRecordingMode, bool bRecordModeChange )
 {
     if( GetRedlineFlags() == eMode && !bRecordModeChange )
         return;
@@ -1249,7 +1249,7 @@ void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode, bool bRecordAl
 
         m_rDoc.SetInXMLImport( bSaveInXMLImportFlag );
     }
-    SetRedlineFlags_intern(eMode, bRecordAllViews, bRecordModeChange);
+    SetRedlineFlags_intern(eMode, eRedlineRecordingMode, bRecordModeChange);
     m_rDoc.getIDocumentState().SetModified();
 
     // #TODO - add 'SwExtraRedlineTable' also ?
@@ -1265,12 +1265,25 @@ bool DocumentRedlineManager::IsIgnoreRedline() const
     return bool(RedlineFlags::Ignore & GetRedlineFlags());
 }
 
-void DocumentRedlineManager::SetRedlineFlags_intern(RedlineFlags eMode, bool bRecordAllViews, bool bRecordModeChange)
+void DocumentRedlineManager::SetRedlineFlags_intern(RedlineFlags eMode, SfxRedlineRecordingMode eRedlineRecordingMode, bool bRecordModeChange)
 {
     SwDocShell* pDocShell = m_rDoc.GetDocShell();
     SwViewShell* pViewShell = pDocShell ? pDocShell->GetWrtShell() : nullptr;
-    if (pViewShell)
+    if (pViewShell && eRedlineRecordingMode == SfxRedlineRecordingMode::ViewAgnostic)
     {
+        // Just set the requested flags on the model and on the current view, so setting flags &
+        // restoring them result in the same state (no matter if that was this-view or all-views).
+        auto bRedlineRecordingOn = bool(eMode & RedlineFlags::On);
+        SwViewOption aOpt(*pViewShell->GetViewOptions());
+        if (aOpt.IsRedlineRecordingOn() != bRedlineRecordingOn)
+        {
+            aOpt.SetRedlineRecordingOn(bRedlineRecordingOn);
+            pViewShell->ApplyViewOptions(aOpt);
+        }
+    }
+    else if (pViewShell)
+    {
+        bool bRecordAllViews = eRedlineRecordingMode == SfxRedlineRecordingMode::AllViews;
         // Recording may be per-view, the rest is per-document.
         for(SwViewShell& rSh : pViewShell->GetRingContainer())
         {

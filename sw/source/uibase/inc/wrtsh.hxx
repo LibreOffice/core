@@ -29,6 +29,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <svx/swframetypes.hxx>
 #include <vcl/weld.hxx>
+#include <sfx2/redlinerecordingmode.hxx>
 
 #include <doc.hxx>
 #include <docsh.hxx>
@@ -172,7 +173,7 @@ public:
     void    SetInsMode( bool bOn = true );
     void    ToggleInsMode() { SetInsMode( !m_bIns ); }
     bool    IsInsMode() const { return m_bIns; }
-    void    SetRedlineFlagsAndCheckInsMode( RedlineFlags eMode, bool bRecordAllViews = true );
+    void    SetRedlineFlagsAndCheckInsMode( RedlineFlags eMode, SfxRedlineRecordingMode eRedlineRecordingMode = SfxRedlineRecordingMode::ViewAgnostic );
 
     void    EnterSelFrameMode(const Point *pStartDrag = nullptr);
     void    LeaveSelFrameMode();
