@@ -54,12 +54,9 @@ public:
 
     bool NotifyChildEvent(UnoMSAAEvent eWinEvent, const css::uno::Any& Value);
 
-    virtual void HandleSelectionChangedAddEvent(
-            const css::uno::Any &oldValue, const css::uno::Any &newValue);
-    virtual void HandleSelectionChangedRemoveEvent(
-            const css::uno::Any &oldValue, const css::uno::Any &newValue);
-    virtual void HandleSelectionChangedWithinEvent(
-            const css::uno::Any &oldValue, const css::uno::Any &newValue);
+    void HandleSelectionChangedAddEvent(const css::uno::Any& newValue);
+    void HandleSelectionChangedRemoveEvent(const css::uno::Any& newValue);
+    void HandleSelectionChangedWithinEvent(const css::uno::Any& newValue);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
