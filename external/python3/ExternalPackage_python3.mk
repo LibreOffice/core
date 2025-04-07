@@ -60,6 +60,8 @@ $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/libpython$(
 
 ifeq ($(CPUNAME),AARCH64)
 SOABI=-aarch64-linux-gnu
+else ifeq ($(CPUNAME),POWERPC64)
+SOABI=-powerpc64le-linux-gnu
 else
 SOABI=-x86_64-linux-gnu
 endif
