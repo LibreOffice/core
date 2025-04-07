@@ -795,6 +795,7 @@ namespace o3tl
 #define LANGUAGE_USER_FRENCH_GUINEA         LanguageType(0x940C)  /* makeLangID( 0x25, getPrimaryLanguage( LANGUAGE_FRENCH)) */
 #define LANGUAGE_USER_ABKHAZ                LanguageType(0x06B4)
 #define LANGUAGE_USER_ENGLISH_GUYANA        LanguageType(0xBC09)  /* makeLangID( 0x2F, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
+#define LANGUAGE_USER_GRONINGS              LanguageType(0x06B5)
 
 
 /* XXX Add new user defined LCIDs ^^^ there.
