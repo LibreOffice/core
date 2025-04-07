@@ -373,25 +373,6 @@ css::uno::Sequence< OUString> SAL_CALL
     return AccessibleContextBase::getSupportedServiceNames ();
 }
 
-//=====  XTypeProvider  =======================================================
-
-css::uno::Sequence< css::uno::Type> SAL_CALL
-    AccessibleDocumentViewBase::getTypes()
-{
-    ThrowIfDisposed ();
-
-    return comphelper::concatSequences(
-        // Get list of types from the context base implementation, ...
-        AccessibleContextBase::getTypes(),
-        // ...and add the additional type for the component, ...
-        css::uno::Sequence {
-         cppu::UnoType<lang::XEventListener>::get(),
-         cppu::UnoType<beans::XPropertyChangeListener>::get(),
-         cppu::UnoType<awt::XWindowListener>::get(),
-         cppu::UnoType<awt::XFocusListener>::get(),
-         cppu::UnoType<XAccessibleEventBroadcaster>::get() });
-}
-
 void AccessibleDocumentViewBase::impl_dispose()
 {
     // Unregister from VCL Window.

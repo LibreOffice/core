@@ -177,11 +177,6 @@ public:
     virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
 
-    //=====  XTypeProvider  ===================================================
-
-    virtual css::uno::Sequence< css::uno::Type> SAL_CALL
-        getTypes() override;
-
     //=====  lang::XEventListener  ============================================
 
     virtual void SAL_CALL
