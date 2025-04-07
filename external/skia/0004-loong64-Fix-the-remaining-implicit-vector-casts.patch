@@ -310,42 +310,42 @@ index 42e9cd8aa229..97dfe7213d42 100644
      } else
  #elif defined(SKRP_CPU_LASX)
      if (c->stopCount <= 8) {
--        fr = (__m256)__lasx_xvperm_w(__lasx_xvld(c->fs[0], 0), idx);
--        br = (__m256)__lasx_xvperm_w(__lasx_xvld(c->bs[0], 0), idx);
--        fg = (__m256)__lasx_xvperm_w(__lasx_xvld(c->fs[1], 0), idx);
--        bg = (__m256)__lasx_xvperm_w(__lasx_xvld(c->bs[1], 0), idx);
--        fb = (__m256)__lasx_xvperm_w(__lasx_xvld(c->fs[2], 0), idx);
--        bb = (__m256)__lasx_xvperm_w(__lasx_xvld(c->bs[2], 0), idx);
--        fa = (__m256)__lasx_xvperm_w(__lasx_xvld(c->fs[3], 0), idx);
--        ba = (__m256)__lasx_xvperm_w(__lasx_xvld(c->bs[3], 0), idx);
-+        fr = (F)__lasx_xvperm_w(__lasx_xvld(c->fs[0], 0), (__m256i)idx);
-+        br = (F)__lasx_xvperm_w(__lasx_xvld(c->bs[0], 0), (__m256i)idx);
-+        fg = (F)__lasx_xvperm_w(__lasx_xvld(c->fs[1], 0), (__m256i)idx);
-+        bg = (F)__lasx_xvperm_w(__lasx_xvld(c->bs[1], 0), (__m256i)idx);
-+        fb = (F)__lasx_xvperm_w(__lasx_xvld(c->fs[2], 0), (__m256i)idx);
-+        bb = (F)__lasx_xvperm_w(__lasx_xvld(c->bs[2], 0), (__m256i)idx);
-+        fa = (F)__lasx_xvperm_w(__lasx_xvld(c->fs[3], 0), (__m256i)idx);
-+        ba = (F)__lasx_xvperm_w(__lasx_xvld(c->bs[3], 0), (__m256i)idx);
+-        fr = (__m256)__lasx_xvperm_w(__lasx_xvld(c->factors[0], 0), idx);
+-        br = (__m256)__lasx_xvperm_w(__lasx_xvld(c->biases[0], 0), idx);
+-        fg = (__m256)__lasx_xvperm_w(__lasx_xvld(c->factors[1], 0), idx);
+-        bg = (__m256)__lasx_xvperm_w(__lasx_xvld(c->biases[1], 0), idx);
+-        fb = (__m256)__lasx_xvperm_w(__lasx_xvld(c->factors[2], 0), idx);
+-        bb = (__m256)__lasx_xvperm_w(__lasx_xvld(c->biases[2], 0), idx);
+-        fa = (__m256)__lasx_xvperm_w(__lasx_xvld(c->factors[3], 0), idx);
+-        ba = (__m256)__lasx_xvperm_w(__lasx_xvld(c->biases[3], 0), idx);
++        fr = (F)__lasx_xvperm_w(__lasx_xvld(c->factors[0], 0), (__m256i)idx);
++        br = (F)__lasx_xvperm_w(__lasx_xvld(c->biases[0], 0), (__m256i)idx);
++        fg = (F)__lasx_xvperm_w(__lasx_xvld(c->factors[1], 0), (__m256i)idx);
++        bg = (F)__lasx_xvperm_w(__lasx_xvld(c->biases[1], 0), (__m256i)idx);
++        fb = (F)__lasx_xvperm_w(__lasx_xvld(c->factors[2], 0), (__m256i)idx);
++        bb = (F)__lasx_xvperm_w(__lasx_xvld(c->biases[2], 0), (__m256i)idx);
++        fa = (F)__lasx_xvperm_w(__lasx_xvld(c->factors[3], 0), (__m256i)idx);
++        ba = (F)__lasx_xvperm_w(__lasx_xvld(c->biases[3], 0), (__m256i)idx);
      } else
  #elif defined(SKRP_CPU_LSX)
      if (c->stopCount <= 4) {
          __m128i zero = __lsx_vldi(0);
--        fr = (__m128)__lsx_vshuf_w(idx, zero, __lsx_vld(c->fs[0], 0));
--        br = (__m128)__lsx_vshuf_w(idx, zero, __lsx_vld(c->bs[0], 0));
--        fg = (__m128)__lsx_vshuf_w(idx, zero, __lsx_vld(c->fs[1], 0));
--        bg = (__m128)__lsx_vshuf_w(idx, zero, __lsx_vld(c->bs[1], 0));
--        fb = (__m128)__lsx_vshuf_w(idx, zero, __lsx_vld(c->fs[2], 0));
--        bb = (__m128)__lsx_vshuf_w(idx, zero, __lsx_vld(c->bs[2], 0));
--        fa = (__m128)__lsx_vshuf_w(idx, zero, __lsx_vld(c->fs[3], 0));
--        ba = (__m128)__lsx_vshuf_w(idx, zero, __lsx_vld(c->bs[3], 0));
-+        fr = (F)__lsx_vshuf_w((__m128i)idx, zero, __lsx_vld(c->fs[0], 0));
-+        br = (F)__lsx_vshuf_w((__m128i)idx, zero, __lsx_vld(c->bs[0], 0));
-+        fg = (F)__lsx_vshuf_w((__m128i)idx, zero, __lsx_vld(c->fs[1], 0));
-+        bg = (F)__lsx_vshuf_w((__m128i)idx, zero, __lsx_vld(c->bs[1], 0));
-+        fb = (F)__lsx_vshuf_w((__m128i)idx, zero, __lsx_vld(c->fs[2], 0));
-+        bb = (F)__lsx_vshuf_w((__m128i)idx, zero, __lsx_vld(c->bs[2], 0));
-+        fa = (F)__lsx_vshuf_w((__m128i)idx, zero, __lsx_vld(c->fs[3], 0));
-+        ba = (F)__lsx_vshuf_w((__m128i)idx, zero, __lsx_vld(c->bs[3], 0));
+-        fr = (__m128)__lsx_vshuf_w(idx, zero, __lsx_vld(c->factors[0], 0));
+-        br = (__m128)__lsx_vshuf_w(idx, zero, __lsx_vld(c->biases[0], 0));
+-        fg = (__m128)__lsx_vshuf_w(idx, zero, __lsx_vld(c->factors[1], 0));
+-        bg = (__m128)__lsx_vshuf_w(idx, zero, __lsx_vld(c->biases[1], 0));
+-        fb = (__m128)__lsx_vshuf_w(idx, zero, __lsx_vld(c->factors[2], 0));
+-        bb = (__m128)__lsx_vshuf_w(idx, zero, __lsx_vld(c->biases[2], 0));
+-        fa = (__m128)__lsx_vshuf_w(idx, zero, __lsx_vld(c->factors[3], 0));
+-        ba = (__m128)__lsx_vshuf_w(idx, zero, __lsx_vld(c->biases[3], 0));
++        fr = (F)__lsx_vshuf_w((__m128i)idx, zero, __lsx_vld(c->factors[0], 0));
++        br = (F)__lsx_vshuf_w((__m128i)idx, zero, __lsx_vld(c->biases[0], 0));
++        fg = (F)__lsx_vshuf_w((__m128i)idx, zero, __lsx_vld(c->factors[1], 0));
++        bg = (F)__lsx_vshuf_w((__m128i)idx, zero, __lsx_vld(c->biases[1], 0));
++        fb = (F)__lsx_vshuf_w((__m128i)idx, zero, __lsx_vld(c->factors[2], 0));
++        bb = (F)__lsx_vshuf_w((__m128i)idx, zero, __lsx_vld(c->biases[2], 0));
++        fa = (F)__lsx_vshuf_w((__m128i)idx, zero, __lsx_vld(c->factors[3], 0));
++        ba = (F)__lsx_vshuf_w((__m128i)idx, zero, __lsx_vld(c->biases[3], 0));
      } else
  #endif
      {
@@ -359,9 +359,9 @@ index 42e9cd8aa229..97dfe7213d42 100644
 +        int i1 = __lsx_vpickve2gr_w((__m128i)idx, 1);
 +        int i2 = __lsx_vpickve2gr_w((__m128i)idx, 2);
 +        int i3 = __lsx_vpickve2gr_w((__m128i)idx, 3);
-         fr = gather((int *)c->fs[0], i0, i1, i2, i3);
-         br = gather((int *)c->bs[0], i0, i1, i2, i3);
-         fg = gather((int *)c->fs[1], i0, i1, i2, i3);
+         fr = gather((int *)c->factors[0], i0, i1, i2, i3);
+         br = gather((int *)c->biases[0], i0, i1, i2, i3);
+         fg = gather((int *)c->factors[1], i0, i1, i2, i3);
 @@ -5942,7 +5940,7 @@ SI void from_8888(U32 rgba, U16* r, U16* g, U16* b, U16* a) {
          split(v, &_02,&_13);
          __m256i tmp0 = __lasx_xvsat_wu(_02, 15);
