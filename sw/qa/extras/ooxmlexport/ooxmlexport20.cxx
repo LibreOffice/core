@@ -185,6 +185,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138612)
     // Row 6 Col 2 - split cell
     // This was w:vMerge="continue" (merged with cell in Row 5 Col 2)
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[6]/w:tc[2]/w:tcPr/w:vMerge", 0);
+
+    // tdf#165424 - imported row tblCellMar should show up as exported cell tcMar entries
+    assertXPath(pXmlDocument, "//w:body/w:tbl[1]/w:tr[5]/w:tc[1]/w:tcPr/w:tcMar/w:end", "w", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf140597)

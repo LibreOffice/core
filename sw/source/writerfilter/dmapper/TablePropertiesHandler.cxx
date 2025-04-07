@@ -252,7 +252,7 @@ namespace writerfilter::dmapper {
             }
             break;
             case NS_ooxml::LN_CT_TcPrBase_tcMar:
-
+            case NS_ooxml::LN_CT_TblPrEx_tblCellMar:
                 {
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                     if (pProperties)
@@ -272,7 +272,14 @@ namespace writerfilter::dmapper {
                             pCellProperties->Insert(PROP_BOTTOM_BORDER_DISTANCE, uno::Any(pCellMarginHandler->m_nBottomMargin));
                         if (pCellMarginHandler->m_bRightMarginValid)
                             pCellProperties->Insert(PROP_RIGHT_BORDER_DISTANCE, uno::Any(pCellMarginHandler->m_nRightMargin));
-                        cellProps(pCellProperties);
+
+                        if (nSprmId == NS_ooxml::LN_CT_TcPrBase_tcMar)
+                            cellProps(pCellProperties);
+                        else
+                        {
+                            // non-UNO row props which are applied to each cell via resetCellProps.
+                            tableExceptionProps(pCellProperties); // i.e. tableRowExceptionProps
+                        }
                     }
                 }
             break;

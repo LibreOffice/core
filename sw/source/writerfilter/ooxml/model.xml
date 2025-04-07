@@ -18740,6 +18740,7 @@
     <resource name="CT_TblPrEx" resource="Properties">
         <element name="tblPrExChange" tokenid="ooxml:CT_TblPrEx_tblPrExChange"/>
         <element name="tblBorders" tokenid="ooxml:CT_TblPrEx_tblBorders"/>
+        <element name="tblCellMar" tokenid="ooxml:CT_TblPrEx_tblCellMar"/>
     </resource>
     <resource name="CT_Tbl" resource="TextTable"/>
     <!-- tdf#111550 : allow <w:tbl> at paragraph level (despite this is illegal according to ECMA-376-1:2016) - bug-to-bug compatibility with Word -->
