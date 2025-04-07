@@ -248,17 +248,12 @@ void AccessibleImageBullet::SetEditSource( SvxEditSource* pEditSource )
     }
 }
 
-void AccessibleImageBullet::FireEvent(const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue)
-{
-    NotifyAccessibleEvent(nEventId, rOldValue, rNewValue);
-}
-
 void AccessibleImageBullet::SetState( const sal_Int64 nStateId )
 {
     if( !(mnStateSet & nStateId) )
     {
         mnStateSet |= nStateId;
-        FireEvent( AccessibleEventId::STATE_CHANGED, uno::Any( nStateId ) );
+        NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, uno::Any(), uno::Any(nStateId));
     }
 }
 
@@ -267,7 +262,7 @@ void AccessibleImageBullet::UnSetState( const sal_Int64 nStateId )
     if( mnStateSet & nStateId )
     {
         mnStateSet &= ~nStateId;
-        FireEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), uno::Any( nStateId ) );
+        NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, uno::Any(nStateId), uno::Any());
     }
 }
 
@@ -293,8 +288,8 @@ void AccessibleImageBullet::SetParagraphIndex( sal_Int32 nIndex )
         if( nOldIndex != nIndex )
         {
             // index and therefore description changed
-            FireEvent( AccessibleEventId::DESCRIPTION_CHANGED, uno::Any( getAccessibleDescription() ), aOldDesc );
-            FireEvent( AccessibleEventId::NAME_CHANGED, uno::Any( getAccessibleName() ), aOldName );
+            NotifyAccessibleEvent(AccessibleEventId::DESCRIPTION_CHANGED, aOldDesc, uno::Any(getAccessibleDescription()));
+            NotifyAccessibleEvent(AccessibleEventId::NAME_CHANGED, aOldName, uno::Any(getAccessibleName()));
         }
     }
     catch( const uno::Exception& ) {} // optional behaviour
