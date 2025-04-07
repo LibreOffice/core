@@ -44,7 +44,8 @@ class AccessibleImageBullet final
 
 public:
     /// Create accessible object for given parent
-    AccessibleImageBullet ( css::uno::Reference< css::accessibility::XAccessible > xParent );
+    AccessibleImageBullet(css::uno::Reference<css::accessibility::XAccessible> xParent,
+                          sal_Int64 nIndexInParent);
 
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
@@ -71,15 +72,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService (const OUString& sServiceName) override;
     virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
-
-    /** Set the current index in the accessibility parent
-
-        @attention This method does not lock the SolarMutex,
-        leaving that to the calling code. This is because only
-        there potential deadlock situations can be resolved. Thus,
-        make sure SolarMutex is locked when calling this.
-     */
-    void SetIndexInParent( sal_Int32 nIndex );
 
     /** Set the edit engine offset
 

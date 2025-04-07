@@ -584,11 +584,10 @@ uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessible
     if( !aChild.is() )
     {
         // there is no hard reference available, create object then
-        aChild = new AccessibleImageBullet(this);
+        aChild = new AccessibleImageBullet(this, i);
 
         aChild->SetEditSource( &GetEditSource() );
         aChild->SetParagraphIndex( GetParagraphIndex() );
-        aChild->SetIndexInParent( i );
 
         maImageBullet = aChild.get();
     }

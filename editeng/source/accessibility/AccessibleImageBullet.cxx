@@ -49,9 +49,10 @@ using namespace ::com::sun::star::accessibility;
 namespace accessibility
 {
 
-AccessibleImageBullet::AccessibleImageBullet ( uno::Reference< XAccessible > xParent ) :
+AccessibleImageBullet::AccessibleImageBullet(uno::Reference<XAccessible> xParent,
+                                             sal_Int64 nIndexInParent) :
     mnParagraphIndex( 0 ),
-    mnIndexInParent( 0 ),
+    mnIndexInParent(nIndexInParent),
     mpEditSource( nullptr ),
     maEEOffset( 0, 0 ),
     mxParent(std::move( xParent ))
@@ -214,11 +215,6 @@ sal_Bool SAL_CALL AccessibleImageBullet::supportsService (const OUString& sServi
 uno::Sequence< OUString > SAL_CALL AccessibleImageBullet::getSupportedServiceNames()
 {
     return { u"com.sun.star.accessibility.AccessibleContext"_ustr };
-}
-
-void AccessibleImageBullet::SetIndexInParent( sal_Int32 nIndex )
-{
-    mnIndexInParent = nIndex;
 }
 
 void AccessibleImageBullet::SetEEOffset( const Point& rOffset )
