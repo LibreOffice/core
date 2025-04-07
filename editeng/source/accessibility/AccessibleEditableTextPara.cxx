@@ -255,6 +255,11 @@ void AccessibleEditableTextPara::SetParagraphIndex( sal_Int32 nIndex )
 
 void SAL_CALL AccessibleEditableTextPara::dispose()
 {
+    rtl::Reference<AccessibleImageBullet> xBullet = maImageBullet.get();
+    if (xBullet.is())
+        xBullet->Dispose();
+    maImageBullet.clear();
+
     mxParent = nullptr;
     mpEditSource = nullptr;
 

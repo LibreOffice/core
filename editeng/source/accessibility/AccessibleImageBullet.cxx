@@ -373,8 +373,6 @@ void AccessibleImageBullet::SetEditSource( SvxEditSource* pEditSource )
         UnSetState( AccessibleStateType::VISIBLE );
         SetState( AccessibleStateType::INVALID );
         SetState( AccessibleStateType::DEFUNC );
-
-        Dispose();
     }
 }
 
