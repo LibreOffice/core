@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SW_INC_EDITSH_HXX
 #define INCLUDED_SW_INC_EDITSH_HXX
 
+#include <sfx2/redlinerecordingmode.hxx>
+
 #include "crsrsh.hxx"
 
 #include "charfmt.hxx"
@@ -953,7 +955,7 @@ public:
 
     /// For Redlining.
     SW_DLLPUBLIC RedlineFlags GetRedlineFlags() const;
-    SW_DLLPUBLIC void SetRedlineFlags( RedlineFlags eMode, bool bRecordAllViews = true );
+    SW_DLLPUBLIC void SetRedlineFlags( RedlineFlags eMode, SfxRedlineRecordingMode eRedlineRecordingMode = SfxRedlineRecordingMode::ViewAgnostic );
     bool IsRedlineOn() const;
     SW_DLLPUBLIC SwRedlineTable::size_type GetRedlineCount() const;
     const SwRangeRedline& GetRedline( SwRedlineTable::size_type nPos ) const;

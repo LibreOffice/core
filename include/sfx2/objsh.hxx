@@ -44,6 +44,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <functional>
 #include <sfx2/AccessibilityIssue.hxx>
+#include <sfx2/redlinerecordingmode.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -696,7 +697,7 @@ public:
     // slots used for Calc:         FID_CHG_RECORD, SID_CHG_PROTECT
     virtual bool    IsChangeRecording(SfxViewShell* pViewShell = nullptr, bool bRecordAllViews = true) const;
     virtual bool    HasChangeRecordProtection() const;
-    virtual void    SetChangeRecording( bool bActivate, bool bLockAllViews = false, bool bRecordAllViews = true );
+    virtual void    SetChangeRecording( bool bActivate, bool bLockAllViews = false, SfxRedlineRecordingMode eRedlineRecordingMode = SfxRedlineRecordingMode::ViewAgnostic );
     virtual void    SetProtectionPassword( const OUString &rPassword );
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash );
 

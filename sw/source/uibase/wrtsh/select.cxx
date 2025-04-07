@@ -749,9 +749,9 @@ void SwWrtShell::SetInsMode( bool bOn )
 }
 
 //Overwrite mode is incompatible with red-lining
-void SwWrtShell::SetRedlineFlagsAndCheckInsMode( RedlineFlags eMode, bool bRecordAllViews )
+void SwWrtShell::SetRedlineFlagsAndCheckInsMode( RedlineFlags eMode, SfxRedlineRecordingMode eRedlineRecordingMode )
 {
-   SetRedlineFlags( eMode, bRecordAllViews );
+   SetRedlineFlags( eMode, eRedlineRecordingMode );
    if (IsRedlineOn())
        SetInsMode();
 }

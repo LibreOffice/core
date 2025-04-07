@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <svx/ctredlin.hxx>
+#include <sfx2/redlinerecordingmode.hxx>
 
 #include "docary.hxx"
 
@@ -107,14 +108,14 @@ public:
         @param eMode
         [in] the new redline mode.
     */
-    virtual void SetRedlineFlags_intern(/*[in]*/RedlineFlags eMode, bool bRecordAllViews = true, bool bRecordModeChange = false) = 0;
+    virtual void SetRedlineFlags_intern(/*[in]*/RedlineFlags eMode, SfxRedlineRecordingMode eRedlineRecordingMode = SfxRedlineRecordingMode::ViewAgnostic, bool bRecordModeChange = false) = 0;
 
     /** Set a new redline mode.
 
         @param eMode
         [in] the new redline mode.
     */
-    virtual void SetRedlineFlags(/*[in]*/RedlineFlags eMode, bool bRecordAllViews = true, bool bRecordModeChange = false) = 0;
+    virtual void SetRedlineFlags(/*[in]*/RedlineFlags eMode, SfxRedlineRecordingMode eRedlineRecordingMode = SfxRedlineRecordingMode::ViewAgnostic, bool bRecordModeChange = false) = 0;
 
     /** Query if redlining is on.
 
