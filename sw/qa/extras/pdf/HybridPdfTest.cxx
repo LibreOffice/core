@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
+#include <config_poppler.h>
 
 namespace
 {
@@ -34,15 +35,18 @@ public:
 
 void HybridPdfTest::testNoHybridDataInPDF()
 {
+#if ENABLE_PDFIMPORT
     // Load PDF document without attached ODT document
     loadFromFile(u"PDFOnly.pdf");
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
     // Draw document is expected in this case - default when importing PDF
     CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.drawing.DrawingDocument"_ustr));
+#endif
 }
 
 void HybridPdfTest::testHybridWithAdditionalStreams()
 {
+#if ENABLE_PDFIMPORT
     // Load PDF document with an embedded ODT document
     // The ODT document is embedded in "/AdditionalStreams" structure that is in the PDF trailer
     createSwDoc("Hybrid_AdditionalStreamsOnly.pdf");
@@ -51,10 +55,12 @@ void HybridPdfTest::testHybridWithAdditionalStreams()
     // This wouldn't be possible with a PDF, so the opened document has to be ODT
     CPPUNIT_ASSERT_EQUAL(u"He heard quiet steps behind him. \nThat didn't bode well."_ustr,
                          getParagraph(1)->getString());
+#endif
 }
 
 void HybridPdfTest::testHybridWithAdditionalStreamsAndAttachedFile()
 {
+#if ENABLE_PDFIMPORT
     // Load PDF document with an embedded ODT document
     // The ODT document is embedded in "/AdditionalStreams" structure that is in the PDF trailer
     // and is included as an attached file conforming to the PDF specs
@@ -64,6 +70,7 @@ void HybridPdfTest::testHybridWithAdditionalStreamsAndAttachedFile()
     // This wouldn't be possible with a PDF, so the opened document has to be ODT
     CPPUNIT_ASSERT_EQUAL(u"He heard quiet steps behind him. \nThat didn't bode well."_ustr,
                          getParagraph(1)->getString());
+#endif
 }
 
 } // end of anonymous namespace

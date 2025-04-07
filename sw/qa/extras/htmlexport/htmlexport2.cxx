@@ -8,7 +8,7 @@
  */
 
 #include "htmlmodeltestbase.hxx"
-
+#include <config_poppler.h>
 #include <memory>
 
 #include <com/sun/star/document/XTypeDetection.hpp>
@@ -1160,6 +1160,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_NoPreserveSpaces)
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_ExportFormulasAsPDF)
 {
+#if ENABLE_PDFIMPORT
     // Given a document with a formula:
     createSwDoc("embedded_formula.fodt");
 
@@ -1188,6 +1189,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_ExportFormulasAsPDF)
 
     CPPUNIT_ASSERT_EQUAL(u"pdf_Portable_Document_Format"_ustr,
                          xTypeDetection->queryTypeByDescriptor(descr, true));
+#endif
 }
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_NoBrClearForImageWrap)
