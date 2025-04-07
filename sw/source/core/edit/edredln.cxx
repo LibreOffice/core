@@ -34,15 +34,20 @@ RedlineFlags SwEditShell::GetRedlineFlags() const
     return GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags(this);
 }
 
-void SwEditShell::SetRedlineFlags( RedlineFlags eMode, bool bRecordAllViews )
+void SwEditShell::SetRedlineFlags( RedlineFlags eMode, SfxRedlineRecordingMode eRedlineRecordingMode)
 {
     SwDocShell* pDocSh = GetDoc()->GetDocShell();
-    bool bRecordModeChange = bRecordAllViews != pDocSh->IsChangeRecording(nullptr, bRecordAllViews);
+    bool bRecordModeChange = false;
+    if (eRedlineRecordingMode != SfxRedlineRecordingMode::ViewAgnostic)
+    {
+        bool bRecordAllViews = eRedlineRecordingMode == SfxRedlineRecordingMode::AllViews;
+        bRecordModeChange = bRecordAllViews != pDocSh->IsChangeRecording(nullptr, bRecordAllViews);
+    }
     if( eMode != GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags() || bRecordModeChange )
     {
         CurrShell aCurr( this );
         StartAllAction();
-        GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eMode, bRecordAllViews, bRecordModeChange );
+        GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eMode, eRedlineRecordingMode, bRecordModeChange );
         EndAllAction();
     }
 }
@@ -133,7 +138,7 @@ void SwEditShell::ReinstateRedline(SwRedlineTable::size_type nPos)
     if (!IsRedlineOn())
     {
         RedlineFlags nMode = GetRedlineFlags();
-        SetRedlineFlags(nMode | RedlineFlags::On, /*bRecordAllViews=*/false);
+        SetRedlineFlags(nMode | RedlineFlags::On, SfxRedlineRecordingMode::ThisView);
     }
 
     SwRangeRedline& rRedline = GetRedline(nPos);
@@ -235,7 +240,7 @@ void SwEditShell::ReinstateRedlinesInSelection()
     if (!IsRedlineOn())
     {
         RedlineFlags nMode = GetRedlineFlags();
-        SetRedlineFlags(nMode | RedlineFlags::On, /*bRecordAllViews=*/false);
+        SetRedlineFlags(nMode | RedlineFlags::On, SfxRedlineRecordingMode::ThisView);
     }
 
     SwPosition aCursorStart(*GetCursor()->Start());

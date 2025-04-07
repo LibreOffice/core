@@ -804,8 +804,12 @@ void SwView::Execute(SfxRequest &rReq)
                 }
 
                 SwDocShell* pDocShell = GetDocShell();
-                bool bRecordAllViews = nSlot != FN_TRACK_CHANGES_IN_THIS_VIEW;
-                pDocShell->SetChangeRecording( oOn.value(), /*bLockAllViews=*/true, bRecordAllViews );
+                SfxRedlineRecordingMode eRedlineRecordingMode = SfxRedlineRecordingMode::AllViews;
+                if (nSlot == FN_TRACK_CHANGES_IN_THIS_VIEW)
+                {
+                    eRedlineRecordingMode = SfxRedlineRecordingMode::ThisView;
+                }
+                pDocShell->SetChangeRecording( oOn.value(), /*bLockAllViews=*/true, eRedlineRecordingMode );
 
                 // Notify all view shells of this document, as the track changes mode is document-global.
                 for (SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst(pDocShell); pViewFrame; pViewFrame = SfxViewFrame::GetNext(*pViewFrame, pDocShell))
