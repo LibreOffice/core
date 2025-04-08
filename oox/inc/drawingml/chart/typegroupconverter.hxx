@@ -108,7 +108,6 @@ public:
 };
 
 struct TypeGroupModel;
-struct View3DModel;
 
 class TypeGroupConverter final : public ConverterBase< TypeGroupModel >
 {

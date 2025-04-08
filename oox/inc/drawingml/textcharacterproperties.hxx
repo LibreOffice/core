@@ -34,8 +34,6 @@ namespace oox { class PropertySet; }
 
 namespace oox::drawingml {
 
-struct EffectProperties;
-
 struct TextCharacterProperties
 {
     PropertyMap         maHyperlinkPropertyMap;

@@ -29,8 +29,6 @@ namespace com::sun::star {
     namespace chart2::data { class XDataSequence; }
 }
 
-namespace oox::drawingml { struct TextCharacterProperties; }
-
 namespace oox::drawingml::chart {
 
 

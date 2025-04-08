@@ -29,7 +29,6 @@
 
 namespace oox::drawingml::table {
 
-class TableCellContext;
 class TableProperties;
 class TableStyle;
 

@@ -30,7 +30,6 @@
 
 namespace oox::drawingml {
 
-class DiagramLayout;
 typedef std::shared_ptr< DiagramLayout > DiagramLayoutPtr;
 
 // AG_IteratorAttributes

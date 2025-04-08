@@ -28,8 +28,6 @@ enum class SvxDateFormat;
 
 namespace oox::drawingml {
 
-struct TextCharacterProperties;
-
 class TextField final
     : public TextRun
 {

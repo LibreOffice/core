@@ -24,7 +24,6 @@
 
 namespace com::sun::star {
     namespace awt { struct Rectangle; }
-    namespace awt { struct Size; }
     namespace chart2 { class XChartDocument; }
     namespace chart2 { class XTitle; }
     namespace drawing { class XShape; }

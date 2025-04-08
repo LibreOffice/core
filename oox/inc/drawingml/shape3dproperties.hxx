@@ -23,10 +23,6 @@
 #include <oox/drawingml/color.hxx>
 #include <oox/helper/helper.hxx>
 
-namespace oox { class PropertyMap; }
-namespace oox { class PropertySet; }
-namespace oox::core { class ModelObjectContainer; }
-
 namespace oox::drawingml {
 
 

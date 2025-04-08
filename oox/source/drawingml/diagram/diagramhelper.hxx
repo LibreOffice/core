@@ -26,10 +26,6 @@
 #include <svx/svdogrp.hxx>
 #include <svx/diagram/IDiagramHelper.hxx>
 
-namespace svx { namespace diagram {
-    class DiagramDataState;
-}}
-
 namespace oox::drawingml {
 
 class Diagram;
