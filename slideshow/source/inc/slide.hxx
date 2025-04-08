@@ -39,13 +39,6 @@ namespace com::sun::star {
     }
 }
 
-namespace basegfx
-{
-    class B2IVector;
-}
-
-class Size;
-
 /* Definition of Slide interface */
 
 namespace slideshow::internal
@@ -155,7 +148,6 @@ namespace slideshow::internal
         class EventMultiplexer;
         class ActivitiesQueue;
         class UserEventQueue;
-        class RGBColor;
 
         /** Construct from XDrawPage
 

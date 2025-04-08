@@ -30,10 +30,6 @@
 #include <unordered_map>
 #include <vector>
 
-namespace basegfx {
-    class B2DRange;
-}
-
 namespace slideshow::internal
     {
         /** A hash map which maps the XShape to the corresponding Shape object.

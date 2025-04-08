@@ -33,7 +33,6 @@
 
 namespace cppcanvas
 {
-    class Canvas;
     class CustomSprite;
 }
 

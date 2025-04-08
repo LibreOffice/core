@@ -31,7 +31,6 @@ namespace box2d::utils { class box2DWorld;
 
 namespace slideshow::internal
     {
-        class ShapeManager;
         class EventQueue;
         class ActivitiesQueue;
         class UserEventQueue;

@@ -47,7 +47,6 @@ namespace basegfx
     class B2DHomMatrix;
     class B2ISize;
 }
-namespace cppcanvas{ class Canvas; }
 
 class GDIMetaFile;
 
@@ -57,8 +56,6 @@ namespace slideshow
     namespace internal
     {
         class UnoView;
-        class Shape;
-        class ShapeAttributeLayer;
         typedef std::shared_ptr< UnoView > UnoViewSharedPtr;
         typedef std::shared_ptr< GDIMetaFile > GDIMetaFileSharedPtr;
 

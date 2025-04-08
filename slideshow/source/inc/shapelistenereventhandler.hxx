@@ -27,9 +27,6 @@ namespace com::sun::star {
     namespace drawing {
         class XShape;
     }
-    namespace presentation {
-        class XShapeEventListener;
-    }
 }
 
 /* Definition of ShapeListenerEventHandler interface */

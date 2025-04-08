@@ -34,7 +34,6 @@ namespace slideshow::internal
     {
         class HyperlinkArea;
         class AnimatableShape;
-        class Shape;
         typedef std::unordered_map<
               css::uno::Reference< css::drawing::XShape >,
               ShapeSharedPtr,

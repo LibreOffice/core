@@ -34,7 +34,6 @@ class ShapeClickEventHandler;
 class ClickEventHandler;
 class CursorManager;
 class SkipEffectEventHandler;
-class RewindEffectEventHandler;
 class MouseEnterHandler;
 class MouseLeaveHandler;
 

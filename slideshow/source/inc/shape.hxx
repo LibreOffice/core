@@ -30,10 +30,6 @@
 #include <memory>
 #include <set>
 
-namespace basegfx {
-    class B2DRange;
-}
-
 namespace slideshow::internal
     {
         // forward declaration necessary, because methods use ShapeSharedPtr

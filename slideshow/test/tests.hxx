@@ -24,7 +24,7 @@
 #include <unoview.hxx>
 #include <memory>
 
-namespace basegfx{ class B1DRange; class B2DRange; class B2DVector; }
+namespace basegfx{ class B2DRange; }
 
 class TestView : public slideshow::internal::UnoView
 {

@@ -41,7 +41,6 @@ namespace slideshow::internal
     {
         class  Activity;
         struct SlideShowContext;
-        class  DrawShapeSubsetting;
         class  DrawShape;
         typedef ::std::shared_ptr< DrawShape > DrawShapeSharedPtr;
 

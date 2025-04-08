@@ -39,7 +39,6 @@ namespace slideshow::internal {
 
 class EventQueue;
 class UnoViewContainer;
-class AnimationNode;
 
 struct EventMultiplexerImpl;
 

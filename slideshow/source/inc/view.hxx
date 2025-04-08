@@ -26,9 +26,6 @@
 #include <vector>
 
 
-namespace basegfx { class B2DRange; class B2DVector; }
-
-
 /* Definition of View interface */
 
 namespace slideshow::internal

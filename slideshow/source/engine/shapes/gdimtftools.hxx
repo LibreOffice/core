@@ -35,7 +35,6 @@
 #include <vector>
 
 class MetaAction;
-class GDIMetaFile;
 class Graphic;
 
 

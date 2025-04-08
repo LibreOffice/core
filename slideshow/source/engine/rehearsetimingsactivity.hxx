@@ -32,14 +32,7 @@
 #include <utility>
 #include <memory>
 
-namespace vcl { class Font; }
-namespace canvas::tools{ class ElapsedTime; }
 namespace cppcanvas{ class CustomSprite; }
-namespace basegfx
-{
-    class B2IVector;
-    class B2DRange;
-}
 
 namespace slideshow::internal {
 
