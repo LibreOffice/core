@@ -32,7 +32,6 @@
 #include <vector>
 
 class ZipOutputStream;
-struct ZipEntry;
 class ZipPackageFolder;
 class ZipPackageStream;
 

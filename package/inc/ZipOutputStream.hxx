@@ -30,9 +30,7 @@
 #include <vector>
 
 struct ZipEntry;
-class ZipOutputEntry;
 class ZipOutputEntryInThread;
-class ZipPackageStream;
 
 class ZipOutputStream
 {

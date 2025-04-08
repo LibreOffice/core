@@ -23,7 +23,6 @@
 #include <unordered_map>
 
 class ZipPackageFolder;
-struct ZipContentInfo;
 
 typedef std::unordered_map < OUString,
                         ZipPackageFolder * > FolderHash;

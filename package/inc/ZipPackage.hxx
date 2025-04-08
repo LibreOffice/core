@@ -41,13 +41,9 @@
 class SvStream;
 class ZipOutputStream;
 class ZipPackageFolder;
-class ZipFile;
 namespace com::sun::star {
-    namespace container { class XNameContainer; }
-    namespace io { class XStream; class XOutputStream; class XInputStream; class XSeekable; class XActiveDataStreamer; }
-    namespace lang { class XMultiServiceFactory; }
+    namespace io { class XStream; class XInputStream; class XSeekable; class XActiveDataStreamer; }
     namespace uno { class XComponentContext; }
-    namespace task { class XInteractionHandler; }
 }
 
 enum InitialisationMode

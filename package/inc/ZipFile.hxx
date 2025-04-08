@@ -36,11 +36,6 @@
 class MemoryByteGrabber;
 namespace com::sun::star {
     namespace uno { class XComponentContext; }
-    namespace ucb  { class XProgressHandler; }
-}
-namespace rtl
-{
-    template < class T > class Reference;
 }
 
 /*

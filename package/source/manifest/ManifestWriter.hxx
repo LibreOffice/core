@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace com::sun::star {
-    namespace lang { class XSingleServiceFactory; }
     namespace uno { class XComponentContext;  }
 }
 

@@ -31,8 +31,6 @@
 #include <rtl/ref.hxx>
 #include <optional>
 
-struct OWriteStream_Impl;
-
 class OSelfTerminateFileStream final : public cppu::WeakImplHelper< css::io::XInputStream,
                                                                css::io::XSeekable >,
                                         public comphelper::ByteReader
