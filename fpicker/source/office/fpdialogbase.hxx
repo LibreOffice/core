@@ -25,7 +25,6 @@
 #include "pickercallbacks.hxx"
 
 class SvtFileView;
-class SvtFileDialogFilter_Impl;
 
 
 enum class PickerFlags {

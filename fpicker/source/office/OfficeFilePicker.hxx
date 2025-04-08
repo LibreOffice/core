@@ -33,7 +33,6 @@
 
 #include <vector>
 
-class Dialog;
 struct FilterEntry;
 struct ElementEntry_Impl;
 enum class PickerFlags;

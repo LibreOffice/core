@@ -24,8 +24,6 @@
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
 
-namespace com :: sun :: star :: ucb { class XContent; }
-
 // class SvtFileView -----------------------------------------------------
 
 class SvtFileView_Impl;

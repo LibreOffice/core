@@ -18,8 +18,6 @@
 
 typedef std::shared_ptr<Place> PlacePtr;
 
-class PlacesListBox;
-
 /** ListBox to handle Places.
   */
 class PlacesListBox

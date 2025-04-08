@@ -24,8 +24,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "commonpicker.hxx"
 
-class Dialog;
-
 typedef
     cppu::ImplInheritanceHelper<
         svt::OCommonPicker, css::ui::dialogs::XFolderPicker2,

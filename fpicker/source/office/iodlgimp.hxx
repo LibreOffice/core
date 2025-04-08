@@ -26,7 +26,6 @@
 #include <memory>
 #include <vector>
 
-class CheckBox;
 class SvtFileDialog;
 
 #define FILEDIALOG_DEF_EXTSEP       ';'
