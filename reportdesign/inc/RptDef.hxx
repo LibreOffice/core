@@ -32,7 +32,6 @@
 
 namespace com::sun::star {
     namespace report {
-        class XReportComponent;
         class XReportDefinition;
     }
 }

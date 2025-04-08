@@ -39,8 +39,6 @@
 namespace rptui
 {
 
-class OAddFieldWindow;
-
 class  OAddFieldWindow : public weld::GenericDialogController
                        , public ::cppu::BaseMutex
                        , public ::comphelper::OPropertyChangeListener

@@ -36,7 +36,6 @@ class VclSimpleEvent;
 namespace rptui
 {
     class OReportController;
-    class OXReportControllerObserverImpl;
 
 
     class OXReportControllerObserver

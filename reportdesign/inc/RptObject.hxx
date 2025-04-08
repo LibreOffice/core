@@ -43,7 +43,6 @@ typedef ::std::multimap< sal_Int16, OUString > IndexToNameMap;
         RPTUI_HINT_SELECTIONCHANGED
     };
 
-    class OUnoObject;
     class UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) DlgEdHint final : public SfxHint
     {
     private:
@@ -59,7 +58,6 @@ typedef ::std::multimap< sal_Int16, OUString > IndexToNameMap;
     };
 
 
-class OReportPage;
 class OPropertyMediator;
 
 class UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) SAL_LOPLUGIN_ANNOTATE("crosscast") OObjectBase

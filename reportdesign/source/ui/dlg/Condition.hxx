@@ -34,7 +34,6 @@
 
 namespace rptui
 {
-    class OColorPopup;
     class OReportController;
     class IConditionalFormatAction;
     class Condition;

@@ -52,7 +52,6 @@
 #include <memory>
 
 class TransferableClipboardListener;
-class VclWindowEvent;
 class SfxUndoManager;
 namespace rptui
 {

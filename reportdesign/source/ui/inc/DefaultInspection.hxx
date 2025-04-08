@@ -30,8 +30,6 @@
 namespace rptui
 {
 
-    class OPropertyInfoService;
-
     //= DefaultComponentInspectorModel
 
     typedef ::cppu::WeakAggImplHelper3  <   css::inspection::XObjectInspectorModel

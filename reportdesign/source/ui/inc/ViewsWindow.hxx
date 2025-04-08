@@ -35,8 +35,6 @@ class SdrHdl;
 namespace rptui
 {
     class OReportWindow;
-    class OReportSection;
-    class OSectionView;
     enum class ControlModification;
 
     struct RectangleLess

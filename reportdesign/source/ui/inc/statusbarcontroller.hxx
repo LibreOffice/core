@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-class SfxStatusBarControl;
 namespace rptui
 {
     typedef ::cppu::ImplHelper1 <   css::lang::XServiceInfo> OStatusbarController_BASE;

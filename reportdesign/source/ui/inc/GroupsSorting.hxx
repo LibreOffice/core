@@ -28,10 +28,6 @@
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>
 
-namespace comphelper
-{
-    class OPropertyChangeMultiplexer;
-}
 namespace rptui
 {
 class OFieldExpressionControl;

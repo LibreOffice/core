@@ -30,10 +30,6 @@
 #include "EndMarker.hxx"
 #include "ReportSection.hxx"
 
-namespace comphelper
-{
-    class OPropertyChangeMultiplexer;
-}
 namespace rptui
 {
     class OViewsWindow;

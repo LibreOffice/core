@@ -57,7 +57,6 @@ namespace rptui
         const OUString& getName() const { return m_sName; }
     } ;
 
-    class OPropertyInfoService;
     typedef ::std::pair< css::uno::Reference< css::report::XFunction>, css::uno::Reference< css::report::XFunctionsSupplier> > TFunctionPair;
     typedef ::std::multimap< OUString,TFunctionPair, ::comphelper::UStringMixLess > TFunctions;
     typedef ::comphelper::OInterfaceContainerHelper3< css::beans::XPropertyChangeListener >   PropertyChangeListeners;

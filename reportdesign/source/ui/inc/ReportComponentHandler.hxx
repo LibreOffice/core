@@ -32,8 +32,6 @@ namespace rptui
 {
 
 
-    class OPropertyInfoService;
-
     typedef ::cppu::WeakComponentImplHelper<   css::inspection::XPropertyHandler
                                             ,   css::lang::XServiceInfo> ReportComponentHandler_Base;
 

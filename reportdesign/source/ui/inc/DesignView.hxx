@@ -33,9 +33,7 @@
 #include "ScrollHelper.hxx"
 
 class KeyEvent;
-class MouseEvent;
 class Timer;
-namespace vcl { class Window; }
 
 namespace rptui
 {

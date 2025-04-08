@@ -24,10 +24,7 @@
 #include <vcl/timer.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 
-class Timer;
 class MouseEvent;
-class Point;
-class SdrTextObj;
 class SdrObject;
 namespace rptui
 {
