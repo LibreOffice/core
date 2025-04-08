@@ -27,9 +27,7 @@ class SmViewShell;
 class EditView;
 class EditEngine;
 class EditStatus;
-class DataChangedEvent;
 class SmCmdBoxWindow;
-class CommandEvent;
 class Timer;
 
 void SmGetLeftSelectionPart(const ESelection& rSelection, sal_Int32& nPara, sal_uInt16& nPos);

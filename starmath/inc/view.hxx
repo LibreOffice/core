@@ -33,7 +33,6 @@
 #include "edit.hxx"
 
 class SmViewShell;
-class SmPrintUIOptions;
 class SmGraphicAccessible;
 class SmGraphicWidget;
 

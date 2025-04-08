@@ -43,7 +43,6 @@ class SmMathConfig;
 |*
 \************************************************************************/
 
-class SvtSysLocale;
 class VirtualDevice;
 
 

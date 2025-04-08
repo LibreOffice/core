@@ -28,11 +28,6 @@
 
 #include "types.hxx"
 
-namespace com::sun::star::uno
-{
-template <class E> class Sequence;
-}
-
 class SmSym;
 class SmSymbolManager;
 class SmFormat;
