@@ -27,7 +27,6 @@
 #include <memory>
 
 class SfxWorkWindow;
-class SfxDockingWindow;
 class SfxEmptySplitWin_Impl;
 
 struct SfxDock_Impl

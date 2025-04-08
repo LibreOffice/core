@@ -18,7 +18,6 @@
 #include <sfx2/sidebar/ResourceManager.hxx>
 
 namespace com::sun::star::frame { class XFrame; }
-namespace com::sun::star::ui { class XPanels; }
 namespace sfx2::sidebar { class SidebarController; }
 
 /** get the decks

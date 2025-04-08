@@ -33,12 +33,6 @@
 
 #include "appbaslib.hxx"
 
-namespace svtools { class AsynchronLink; }
-
-class SfxViewFrame;
-
-class SfxBasicManagerHolder;
-
 class AutoReloadTimer_Impl final : public Timer
 {
     OUString          aUrl;

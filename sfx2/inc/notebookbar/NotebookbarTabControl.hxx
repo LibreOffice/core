@@ -13,7 +13,6 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 
-namespace com::sun::star::ui { class XUIConfigurationListener; }
 namespace com::sun::star::uno { class XComponentContext; }
 class ChangedUIEventListener;
 

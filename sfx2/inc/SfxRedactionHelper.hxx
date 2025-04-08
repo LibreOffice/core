@@ -27,7 +27,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
 class SfxRequest;
-class SfxStringItem;
 class GDIMetaFile;
 class DocumentToGraphicRenderer;
 class SfxViewFrame;

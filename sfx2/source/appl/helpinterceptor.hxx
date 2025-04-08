@@ -31,7 +31,6 @@
 #include "newhelp.hxx"
 #include <vector>
 
-class SfxHelpWindow_Impl;
 class HelpInterceptor_Impl : public ::cppu::WeakImplHelper<
         css::frame::XDispatchProviderInterceptor,
         css::frame::XInterceptorInfo,

@@ -23,7 +23,6 @@
 
 namespace sfx2::sidebar
 {
-class Deck;
 class GripWidget;
 
 class DeckTitleBar final : public TitleBar

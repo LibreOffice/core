@@ -35,15 +35,9 @@
 
 #include "StyleList.hxx"
 
-class SfxTemplateControllerItem;
 class SfxStyleFamilyItem;
 class SfxTemplateItem;
 class SfxBindings;
-class SfxStyleSheetBase;
-class SfxStyleSheetBasePool;
-class StyleTreeListBox_Impl;
-class SfxTemplateDialog_Impl;
-class SfxCommonTemplateDialog_Impl;
 namespace com::sun::star::frame {
     class XModuleManager2;
 }

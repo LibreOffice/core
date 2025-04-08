@@ -331,7 +331,6 @@ public:
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
 
-class SvtMiscOptions;
 class SfxHelpWindow_Impl;
 
 class SfxHelpTextWindow_Impl : public vcl::Window

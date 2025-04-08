@@ -19,7 +19,6 @@
 #include <sfx2/sidebar/Deck.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
 
-namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::frame { class XFrame; }
 namespace sfx2::sidebar { class SidebarController; }
 

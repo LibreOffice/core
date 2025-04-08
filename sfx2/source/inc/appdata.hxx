@@ -38,18 +38,13 @@
 #include <memory>
 #include <vector>
 
-class SfxApplication;
 class SfxProgress;
 class SfxDdeDocTopic_Impl;
-class DdeService;
 class SfxItemPool;
-class SfxFilterMatcher;
-class ISfxTemplateCommon;
 class SfxStatusDispatcher;
 class SfxDdeTriggerTopic_Impl;
 class SfxFrame;
 class SfxViewFrame;
-class SfxInterface;
 class BasicManager;
 class SfxBasicManagerHolder;
 class SfxBasicManagerCreationListener;

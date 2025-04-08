@@ -15,27 +15,6 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/objsh.hxx>
 
-namespace weld
-{
-class Button;
-}
-namespace weld
-{
-class ComboBox;
-}
-namespace weld
-{
-class Label;
-}
-namespace weld
-{
-class Window;
-}
-namespace weld
-{
-class TreeView;
-}
-
 enum RedactionTargetType
 {
     REDACTION_TARGET_TEXT,

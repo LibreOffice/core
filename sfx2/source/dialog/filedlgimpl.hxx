@@ -33,8 +33,6 @@
 
 class SfxFilterMatcher;
 class GraphicFilter;
-class FileDialogHelper;
-struct ImplSVEvent;
 
 namespace sfx2
 {

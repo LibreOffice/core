@@ -26,8 +26,6 @@
 
 class CharmapPopup;
 
-namespace com::sun::star::frame { class XFrame; }
-
 class SfxCharmapCtrl final : public WeldToolbarPopup
 {
 public:

@@ -23,8 +23,6 @@
 #include <sfx2/dockwin.hxx>
 
 
-namespace com::sun::star::frame { class XFrame; }
-
 // forward ---------------------------------------------------------------
 
 // class SfxPartChildWnd_Impl -----------------------------------

@@ -23,7 +23,6 @@
 #include <sal/config.h>
 #include <comphelper/errcode.hxx>
 
-class SfxItemPool;
 class SfxMedium;
 class SfxObjectShell;
 

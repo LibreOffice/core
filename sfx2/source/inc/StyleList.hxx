@@ -31,7 +31,6 @@
 #include <vcl/weld.hxx>
 
 class SfxObjectShell;
-class SfxStyleFamilyItem;
 class SfxTemplateItem;
 class SfxCommonTemplateDialog_Impl;
 class SfxTemplateControllerItem;

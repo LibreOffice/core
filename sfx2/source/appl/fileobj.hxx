@@ -23,7 +23,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/linkmgr.hxx>
 
-class Graphic;
 struct ImplSVEvent;
 namespace sfx2 { class FileDialogHelper; }
 
