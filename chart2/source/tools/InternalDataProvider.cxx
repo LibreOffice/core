@@ -626,7 +626,7 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, st
             }
             std::vector<uno::Any> aLabels(1,
                 bStoreNumeric ? uno::Any(fValue) : uno::Any(aRawElems[i]));
-            m_aInternalData.setComplexRowLabel(i, std::move(aLabels));
+            m_aInternalData.setComplexCategoryLabel(i, std::move(aLabels));
         }
 
         xSeq.set(new UncachedDataSequence(this, lcl_aCategoriesRangeName));
