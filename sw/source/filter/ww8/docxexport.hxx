@@ -205,7 +205,8 @@ public:
     /// Writes the shape using drawingML syntax.
     void OutputDML( css::uno::Reference< css::drawing::XShape > const & xShape );
 
-    sal_Int32 WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp, bool bNeedsLastParaId);
+    sal_Int32 WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp,
+                            bool bNeedsLastParaId, bool bWriteAnnotRef = false);
 
     virtual ExportFormat GetExportFormat() const override { return ExportFormat::DOCX; }
 
