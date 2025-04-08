@@ -200,7 +200,6 @@ void CurrentSlideManager::SetCurrentSlideAtViewShellBase (const SharedPageDescri
             pDrawViewShell->SwitchPage(nPageNumber);
             TabControl& rPageTabControl = pDrawViewShell->GetPageTabControl();
             rPageTabControl.SetCurPageId(rPageTabControl.GetPageId(nPageNumber));
-            pDrawViewShell->UpdateScrollBars();
         }
     }
 }

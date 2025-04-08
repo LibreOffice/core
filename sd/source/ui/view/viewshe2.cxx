@@ -269,7 +269,7 @@ void ViewShell::VirtVScrollHdl(ScrollAdaptor* pVScroll)
                        static_cast<double>(nTotalPages - 1));
 
         if (nCurPage != nNewPage)
-            static_cast<DrawViewShell*>(this)->SwitchPage(nNewPage);
+            static_cast<DrawViewShell*>(this)->SwitchPage(nNewPage, true, false);
 
         double fNewPageStart = nNewPage * fScrollableDistancePerPage;
         double fY = (pVScroll->GetThumbPos() / fMappingFactor) - fNewPageStart;

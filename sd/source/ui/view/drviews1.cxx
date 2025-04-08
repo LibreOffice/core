@@ -805,8 +805,12 @@ bool DrawViewShell::IsSelected(sal_uInt16 nPage)
  * bAllowChangeFocus set to false when slide is inserted before current page
  *                   and we need to only update the current page number,
  *                   do not disturb editing in that case
+ * bUpdateScrollbars set to false when the scrollbars are going to be updated by
+ *                   some other mechanism. (e.g. if the page switch happened as
+ *                   a result of a scroll)
  */
-bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus)
+bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
+                               bool bUpdateScrollbars)
 {
     /** Under some circumstances there are nested calls to SwitchPage() and
         may crash the application (activation of form controls when the
@@ -1162,6 +1166,9 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus)
         UpdatePreview( mpActualPage );
 
         mpDrawView->AdjustMarkHdl();
+
+        if(bUpdateScrollbars)
+            UpdateScrollBars();
     }
 
     return bOK;
