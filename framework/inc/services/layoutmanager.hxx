@@ -41,8 +41,6 @@
 #include <comphelper/uno3.hxx>
 #include <vcl/timer.hxx>
 
-class MenuBar;
-
 namespace framework
 {
     class MenuBarWrapper;

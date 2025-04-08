@@ -27,8 +27,6 @@ class StatusBar;
 namespace framework
 {
 
-struct AddonStatusbarItemData;
-
 typedef comphelper::WeakComponentImplHelper< css::ui::XStatusbarItem > StatusbarItem_Base;
 
 class StatusbarItem final : public StatusbarItem_Base

@@ -34,7 +34,6 @@
 namespace framework
 {
 
-class RootItemContainer;
 class ItemContainer;
 class ConstItemContainer final : public ::cppu::WeakImplHelper<
                                                     css::container::XIndexAccess,

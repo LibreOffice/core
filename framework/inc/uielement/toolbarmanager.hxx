@@ -48,8 +48,6 @@
 #include <mutex>
 #include <unordered_map>
 
-class PopupMenu;
-class ToolBox;
 class Menu;
 
 namespace framework

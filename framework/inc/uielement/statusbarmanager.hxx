@@ -35,7 +35,6 @@
 namespace framework
 {
 
-class FrameworkStatusBar;
 class StatusBarManager final: public ::cppu::WeakImplHelper<
                                    css::frame::XFrameActionListener,
                                    css::lang::XComponent,
