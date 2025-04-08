@@ -3325,8 +3325,9 @@ endif
 endef
 
 # this is only used by python currently
+# libffi library delivered to instdir is necessary to use internal python with meson (wants to import _ctypes)
 define gb_ExternalProject__use_libffi
-$(call gb_ExternalProject_use_external_project,$(1),libffi)
+$(call gb_ExternalProject_use_package,$(1),libffi)
 
 endef
 
