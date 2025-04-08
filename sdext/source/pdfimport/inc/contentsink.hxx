@@ -36,7 +36,6 @@ namespace com::sun::star {
         struct Matrix2D;
         struct AffineMatrix2D;
         struct RealRectangle2D;
-        struct RealPoint2D;
         struct RealSize2D;
     }
     namespace beans

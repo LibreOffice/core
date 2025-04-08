@@ -101,7 +101,6 @@ namespace pdfi
             sal_Int32 RefCount = 0;
         };
 
-        struct StyleHash;
         friend struct StyleHash;
         struct StyleHash
         {
@@ -111,7 +110,6 @@ namespace pdfi
             }
         };
 
-        struct StyleIdNameSort;
         friend struct StyleIdNameSort;
         struct StyleIdNameSort
         {

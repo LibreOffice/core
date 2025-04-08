@@ -42,11 +42,9 @@
 namespace pdfi
 {
 
-    class  PDFIProcessor;
     struct Element;
     struct DocumentElement;
     struct PageElement;
-    class  ElementFactory;
     class  XmlEmitter;
     class  CharGlyph;
 

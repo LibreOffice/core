@@ -38,7 +38,6 @@ namespace pdfi
     class StyleContainer;
     class ImageContainer;
     class PDFIProcessor;
-    class ElementFactory;
 
 
     struct EmitContext
