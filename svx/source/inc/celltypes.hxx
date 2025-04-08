@@ -28,8 +28,6 @@ class Cell;
 class TableModel;
 class TableRow;
 class TableColumn;
-class TableRows;
-class TableColumns;
 typedef rtl::Reference<Cell> CellRef;
 typedef rtl::Reference<TableModel> TableModelRef;
 typedef rtl::Reference<TableRow> TableRowRef;

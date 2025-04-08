@@ -49,8 +49,6 @@
 #include <string_view>
 #include <vector>
 
-class FmFormShell;
-
 
 namespace svxform
 {
@@ -74,9 +72,7 @@ namespace svxform
     };
 
     struct ItemNode;
-    class XFormsPage;
     class DataNavigatorWindow;
-    class AddInstanceDialog;
 
     class ReplaceString
     {

@@ -34,10 +34,6 @@
 class SdrUnoObj;
 namespace tools { class Rectangle; }
 
-namespace comphelper {
-    class ComponentContext;
-}
-
 
 namespace svxform
 {

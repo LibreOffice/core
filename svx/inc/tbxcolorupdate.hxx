@@ -31,7 +31,6 @@
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
-class ToolBox;
 class VirtualDevice;
 
 namespace weld

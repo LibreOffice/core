@@ -37,8 +37,6 @@
 namespace accessibility
 {
 
-class AccessibleShapeTreeInfo;
-
 class AccessibleCell : public AccessibleContextBase
                      , public IAccessibleViewForwarderListener
 {

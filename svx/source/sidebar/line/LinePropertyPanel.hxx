@@ -24,15 +24,6 @@
 #include <svx/sidebar/LinePropertyPanelBase.hxx>
 #include <vcl/EnumContext.hxx>
 
-class XLineStyleItem;
-class XLineDashItem;
-class XLineStartItem;
-class XLineEndItem;
-class XLineEndList;
-class XDashList;
-class ListBox;
-class ToolBox;
-
 namespace svx::sidebar
 {
 

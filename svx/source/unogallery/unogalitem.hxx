@@ -28,7 +28,6 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/compbase.hxx>
 
-class GalleryTheme;
 struct GalleryObject;
 namespace unogallery { class GalleryTheme; }
 

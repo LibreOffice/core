@@ -22,8 +22,6 @@
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 
-class SdrOle2Obj;
-
 namespace sdr::contact
 {
 class ViewObjectContactOfSdrOle2Obj final : public ViewObjectContactOfSdrObj

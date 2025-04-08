@@ -35,7 +35,6 @@
 
 
 class SfxItemSet;
-class OutlinerParaObject;
 class SdrObject;
 namespace sdr::properties { class CellProperties; }
 

@@ -34,6 +34,8 @@ typedef struct _xmlTextWriter* xmlTextWriterPtr;
 namespace sdr::table {
 
 class SdrTableObj;
+class TableRows;
+class TableColumns;
 
 /** base class for each object implementing an XCellRange */
 class SAL_LOPLUGIN_ANNOTATE("crosscast") ICellRange

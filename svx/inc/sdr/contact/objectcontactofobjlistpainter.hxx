@@ -25,7 +25,6 @@
 #include <svx/svdpage.hxx>
 #include <unotools/weakref.hxx>
 
-class SdrPage;
 class SdrObject;
 
 namespace sdr::contact {

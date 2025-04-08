@@ -30,7 +30,6 @@
 namespace svx {
 
 namespace a11y {
-    class AccFrameSelector;
     class AccFrameSelectorChild;
 }
 

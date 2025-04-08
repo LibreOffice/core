@@ -30,7 +30,6 @@
 namespace basegfx {
     class B2DPolygon;
     class B2DPolyPolygon;
-    class B2DHomMatrix;
 }
 
 namespace drawinglayer::attribute {

@@ -24,7 +24,6 @@
 #include <svx/svdograf.hxx>
 
 namespace drawinglayer::attribute { class SdrLineFillEffectsTextAttribute; }
-class GraphicAttr;
 
 namespace sdr::contact
     {

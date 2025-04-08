@@ -31,12 +31,6 @@
 
 #include <celltypes.hxx>
 
-namespace sdr::properties {
-    class TextProperties;
-}
-
-class OutlinerParaObject;
-
 
 namespace sdr::table {
 

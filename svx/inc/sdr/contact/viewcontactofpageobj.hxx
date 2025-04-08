@@ -22,8 +22,6 @@
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <svx/svdopage.hxx>
 
-class SdrPage;
-
 namespace sdr::contact
 {
 class ViewContactOfPageObj final : public ViewContactOfSdrObj

@@ -22,8 +22,6 @@
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 
-class SdrGrafObj;
-
 namespace sdr::contact
     {
         class ViewObjectContactOfGraphic final : public ViewObjectContactOfSdrObj

@@ -84,7 +84,6 @@ typedef ::std::vector< FmFilterRow > FmFilterRows;
 namespace svxform
 {
     typedef ::std::vector< css::uno::Reference< css::awt::XTextComponent > >    FilterComponents;
-    class ControlBorderManager;
     struct FmFieldInfo;
 
     typedef cppu::WeakComponentImplHelper           <   css::form::runtime::XFormController

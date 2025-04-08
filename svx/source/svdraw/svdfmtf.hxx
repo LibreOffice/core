@@ -34,11 +34,8 @@
 // Forward Declarations
 
 
-class SfxItemSet;
 class SdrObjList;
 class SdrModel;
-class SdrPage;
-class SdrObject;
 class SvdProgressInfo;
 
 

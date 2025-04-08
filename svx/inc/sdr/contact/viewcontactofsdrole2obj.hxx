@@ -24,8 +24,6 @@
 #include <svx/svdoole2.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-class Graphic;
-
 namespace sdr::contact
 {
 class ViewContactOfSdrOle2Obj final : public ViewContactOfSdrRectObj

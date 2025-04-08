@@ -4,6 +4,12 @@ excludelist:
     svx/inc/getallcharpropids.hxx:
     # Actually used
     - o3tl/span.hxx
+    svx/inc/lboxctrl.hxx:
+    # Needed for --fwdecl mode to avoid "externally available entity "SvxPopupWindowListBox" is not previously declared in an included file"
+    - class SvxPopupWindowListBox
+    svx/source/inc/tablemodel.hxx:
+    # Needed for --fwdecl mode
+    - struct _xmlTextWriter
     svx/source/accessibility/AccessibleTextEventQueue.hxx:
     # Needed for std::for_each
     - algorithm

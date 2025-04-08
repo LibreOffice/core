@@ -43,7 +43,6 @@
 #include <set>
 #include <cppuhelper/implbase.hxx>
 
-class SdrObjListIter;
 class FmFormShell;
 class SdrObject;
 class FmFormModel;

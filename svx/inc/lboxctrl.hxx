@@ -23,7 +23,6 @@
 #include <vector>
 #include <svtools/popupwindowcontroller.hxx>
 
-class ToolBox;
 class SvxPopupWindowListBox;
 
 class SvxUndoRedoControl final : public svt::PopupWindowController

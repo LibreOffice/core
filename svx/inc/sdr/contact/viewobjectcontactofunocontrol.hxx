@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 
-class OutputDevice;
 namespace vcl { class Window; }
 class SdrUnoObj;
 namespace com::sun::star {

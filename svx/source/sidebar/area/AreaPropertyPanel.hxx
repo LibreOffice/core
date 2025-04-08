@@ -28,18 +28,7 @@
 
 #include <svx/sidebar/AreaPropertyPanelBase.hxx>
 
-class XFillFloatTransparenceItem;
-class XFillTransparenceItem;
-class XFillUseSlideBackgroundItem;
-class XFillStyleItem;
-class XFillGradientItem;
-class XFillColorItem;
-class XFillHatchItem;
-class XFillBitmapItem;
-
 namespace svx::sidebar {
-
-class AreaTransparencyGradientControl;
 
 class AreaPropertyPanel : public AreaPropertyPanelBase
 {

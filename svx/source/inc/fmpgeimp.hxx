@@ -33,7 +33,6 @@
 
 class FmFormObj;
 class FmFormPage;
-class SdrObject;
 
 
 // FmFormPageImpl

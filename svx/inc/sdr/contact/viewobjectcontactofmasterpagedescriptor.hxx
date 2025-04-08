@@ -22,10 +22,6 @@
 
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 
-namespace sdr {
-    class MasterPageDescriptor;
-}
-
 namespace sdr::contact
     {
         class ViewObjectContactOfMasterPageDescriptor final : public ViewObjectContact

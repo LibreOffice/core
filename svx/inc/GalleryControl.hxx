@@ -23,13 +23,8 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <svx/svxdllapi.h>
 
-class SfxBindings;
-
 class Gallery;
 class GalleryBrowser1;
-//class GalleryBrowser2;
-class FmFormModel;
-class Splitter;
 
 namespace svx::sidebar
 {

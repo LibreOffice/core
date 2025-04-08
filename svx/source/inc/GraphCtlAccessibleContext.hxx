@@ -39,13 +39,6 @@
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/AccessibleShape.hxx>
 
-namespace com::sun::star::awt {
-    struct Point;
-    struct Rectangle;
-    struct Size;
-    class XFocusListener;
-}
-namespace tools { class Rectangle; }
 class GraphCtrl;
 class SdrObject;
 class SdrModel;

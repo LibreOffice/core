@@ -32,17 +32,13 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-class GalleryBrowser1;
-
 class Gallery;
 class GalleryThemeEntry;
 class GalleryTheme;
-class VclAbstractDialog;
 struct ExchangeData;
 class SfxItemSet;
 class GalleryDragDrop;
 class GalleryIconView;
-class GalleryListView;
 class GalleryPreview;
 class SgaObject;
 

@@ -23,20 +23,8 @@
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 
-namespace drawinglayer::attribute
-{
-class SdrLineAttribute;
-}
-namespace basegfx
-{
-class BColor;
-class B3DHomMatrix;
-}
-
 namespace sdr::contact
 {
-class ViewContactOfE3dScene;
-
 class ViewContactOfE3d : public ViewContactOfSdrObj
 {
 protected:

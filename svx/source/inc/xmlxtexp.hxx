@@ -23,9 +23,7 @@
 #include <xmloff/xmlexp.hxx>
 
 namespace com::sun::star {
-    namespace frame { class XModel; }
     namespace uno { template<class X> class Reference; }
-    namespace uno { class XInterface; }
     namespace container { class XNameContainer; }
     namespace document { class XGraphicStorageHandler; }
     namespace xml::sax { class XDocumentHandler; }

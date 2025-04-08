@@ -22,14 +22,7 @@
 #include <editeng/editdata.hxx>
 #include <map>
 
-class ImpChainLinkProperties;
 class SdrTextObj;
-class SdrModel;
-
-namespace rtl
-{
-class OUString;
-}
 
 typedef OUString ChainLinkId;
 

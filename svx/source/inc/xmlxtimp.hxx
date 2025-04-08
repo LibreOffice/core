@@ -24,7 +24,6 @@
 
 namespace com::sun::star {
     namespace uno { template<class X> class Reference; }
-    namespace uno { class XInterface; }
     namespace document { class XGraphicStorageHandler; }
     namespace container { class XNameContainer; }
 }

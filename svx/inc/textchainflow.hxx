@@ -24,10 +24,7 @@
 
 class SdrTextObj;
 class SdrOutliner;
-class NonOverflowingText;
-class OverflowingText;
 class TextChain;
-class OutlinerParaObject;
 class OFlowChainedText;
 class UFlowChainedText;
 

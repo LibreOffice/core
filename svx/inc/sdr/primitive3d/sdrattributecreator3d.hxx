@@ -23,9 +23,6 @@
 
 // predefines
 class SfxItemSet;
-namespace basegfx {
-    class B2DRange;
-}
 
 
 namespace drawinglayer::primitive2d

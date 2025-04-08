@@ -49,12 +49,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-class DbCellControl;
-class Edit;
 class FmXGridCell;
-namespace dbtools {
-    class FormattedColumnValue;
-}
 
 // DbGridColumn, column description
 

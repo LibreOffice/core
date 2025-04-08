@@ -22,8 +22,6 @@
 #include <sal/types.h>
 #include <svl/poolitem.hxx>
 
-class SfxItemPool;
-
 class AffineMatrixItem final : public SfxPoolItem
 {
 private:

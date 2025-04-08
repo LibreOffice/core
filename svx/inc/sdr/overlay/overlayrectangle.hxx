@@ -21,8 +21,6 @@
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 
-namespace tools { class PolyPolygon; }
-
 namespace sdr::overlay
     {
         class OverlayRectangle final : public OverlayObjectWithBasePosition

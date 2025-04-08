@@ -30,12 +30,6 @@
 #include <tools/gen.hxx>
 
 
-namespace com::sun::star::awt {
-    struct Point;
-    struct Rectangle;
-    struct Size;
-    class XFocusListener;
-}
 class SvxPixelCtl;
 class SvxPixelCtlAccessible;
 

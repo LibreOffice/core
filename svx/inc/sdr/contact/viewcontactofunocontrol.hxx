@@ -24,7 +24,6 @@
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <svx/svdouno.hxx>
 
-class OutputDevice;
 namespace vcl { class Window; }
 namespace com::sun::star {
     namespace awt {

@@ -23,10 +23,6 @@
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 
-namespace sdr::contact {
-    class ViewObjectContactOfE3dScene;
-}
-
 namespace sdr::contact
     {
         class ViewObjectContactOfE3d final : public ViewObjectContactOfSdrObj

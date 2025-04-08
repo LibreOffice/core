@@ -42,7 +42,6 @@ namespace svxform
 {
 
 class FmFilterItem;
-class FmFilterItems;
 class FmParentData;
 class FmFilterAdapter;
 

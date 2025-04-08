@@ -12,8 +12,6 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 
-class ColorListBox;
-
 namespace svx::sidebar
 {
 class TextColumnsPropertyPanel : public PanelLayout,

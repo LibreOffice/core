@@ -22,8 +22,6 @@
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #include <memory>
 
-class SdrPage;
-
 namespace sdr::contact
 {
 class PagePrimitiveExtractor;

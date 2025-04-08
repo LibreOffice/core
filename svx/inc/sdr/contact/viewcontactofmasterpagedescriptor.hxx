@@ -24,10 +24,6 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdrmasterpagedescriptor.hxx>
 
-class SfxItemSet;
-class Bitmap;
-class MapMode;
-
 namespace sdr::contact
     {
         class ViewContactOfMasterPageDescriptor final : public ViewContact
