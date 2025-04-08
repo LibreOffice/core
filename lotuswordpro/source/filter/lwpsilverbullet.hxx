@@ -82,7 +82,6 @@ const sal_uInt16 NUMCHAR_Chinese2 = 0x08; //index for numberchar "Ò»"
 const sal_uInt16 NUMCHAR_Chinese3 = 0x0A; //index for numberchar "¼×"
 const sal_uInt16 NUMCHAR_Chinese4 = 0x13; //index for numberchar "01" in chinese version
 
-class LwpAtomHolder;
 class LwpPara;
 class LwpFribParaNumber;
 

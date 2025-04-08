@@ -65,8 +65,6 @@
 #include "lwpborderstuff.hxx"
 #include "lwppara.hxx"
 
-class LwpKinsokuOptsOverride;
-class LwpBulletOverride;
 class XFParaStyle;
 class XFBorders;
 

@@ -59,8 +59,6 @@
 
 #include <xfilter/xfcontent.hxx>
 
-class IXFStream;
-
 /**
  * @brief
  * Adapter for text to content.

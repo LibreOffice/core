@@ -65,12 +65,6 @@
 #include <lwpoverride.hxx>
 #include "lwpcharborderoverride.hxx"
 
-class LwpAtomHolder;
-class LwpTextLanguageOverride;
-class LwpTextAttributeOverride;
-class LwpCharacterBorderOverride;
-class LwpAmikakeOverride;
-
 class LwpTextStyle : public LwpDLNFPVList
 {
 public:

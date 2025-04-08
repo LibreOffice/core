@@ -65,10 +65,6 @@
 #include <lwpobjstrm.hxx>
 #include <lwpatomholder.hxx>
 
-class LwpNamedProperties;
-class LwpAutoRunMacroOptions;
-class LwpMergeOptions;
-
 /**
  * @brief       Properties in UIDocument structure
  *          not parsed yet

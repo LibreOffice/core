@@ -62,8 +62,6 @@
 
 #include <xfilter/xfcontentcontainer.hxx>
 
-class IXFStream;
-
 /**
  * @brief
  * Paragraph object for SODC.

@@ -74,8 +74,6 @@
 
 class XFBorders;
 class XFFont;
-class XFBorders;
-class XFMargins;
 class XFBGImage;
 
 /**

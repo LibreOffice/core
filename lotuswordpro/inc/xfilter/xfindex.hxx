@@ -66,10 +66,6 @@
 #include <xfilter/xfcontentcontainer.hxx>
 #include <rtl/ref.hxx>
 
-class XFIndex;
-class XFIndexTemplate;
-class XFParagraph;
-
 /**
  * @brief
  * Index template.

@@ -66,10 +66,6 @@
 
 #include <xfilter/xfcell.hxx>
 
-// temporarily added for compile
-class LwpObject;
-
-class LwpContent;
 class LwpTableLayout;
 /**
  * @brief

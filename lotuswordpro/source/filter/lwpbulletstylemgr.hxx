@@ -69,7 +69,6 @@
 #include <utility>
 #include <xfilter/xfcontentcontainer.hxx>
 
-class XFList;
 class LwpPara;
 class LwpIndentOverride;
 class LwpBulletOverride;

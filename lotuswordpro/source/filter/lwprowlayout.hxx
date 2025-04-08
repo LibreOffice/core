@@ -67,7 +67,6 @@
 
 class XFRow;
 class XFTable;
-class LwpTableLayout;
 /**
  * @brief
  * VO_ROWLAYOUT obj

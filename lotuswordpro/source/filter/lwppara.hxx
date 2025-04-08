@@ -80,7 +80,6 @@
 #include <xfilter/xfsection.hxx>
 
 class LwpParaProperty;
-class LwpPara;
 class LwpBreaksOverride;
 class LwpBulletStyleMgr;
 

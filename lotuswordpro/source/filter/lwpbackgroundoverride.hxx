@@ -59,7 +59,6 @@
 #include <lwpoverride.hxx>
 #include "lwpbackgroundstuff.hxx"
 
-class LwpObjectStream;
 class LwpBackgroundOverride : public LwpOverride
 {
 public:

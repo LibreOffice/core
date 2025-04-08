@@ -73,16 +73,12 @@
 #include <memory>
 
 class XFTableStyle;
-class XFTable;
-class XFCell;
 class LwpTable;
 class LwpFrame;
 class LwpSuperTableLayout;
 class LwpRowLayout;
 class LwpCellLayout;
 class LwpTableHeadingLayout;
-class LwpRowHeadingLayout;
-class LwpConnectedCellLayout;
 class LwpColumnLayout;
 
 struct TableConvertAttempt

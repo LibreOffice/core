@@ -62,8 +62,6 @@
 
 #include <xfilter/xfcontentcontainer.hxx>
 
-class XFListItem;
-
 /**
  * @brief
  * list object for order-list and unordered-list.

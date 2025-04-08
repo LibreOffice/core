@@ -67,7 +67,6 @@
 
 #include <xfilter/xfstyle.hxx>
 
-class IXFStream;
 class XFFont;
 
 class XFTextStyle : public XFStyle

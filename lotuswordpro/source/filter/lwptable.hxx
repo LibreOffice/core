@@ -67,7 +67,6 @@
 #include <lwptools.hxx>
 #include "lwptablelayout.hxx"
 
-class LwpTableLayout;
 /**
  * @brief
  * VO_SUPERTABLE object

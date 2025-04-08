@@ -119,7 +119,6 @@ private:
 class LwpEnSuperTableLayout;
 class LwpCellLayout;
 class LwpDocument;
-class LwpTable;
 class LwpFootnote : public LwpOrderedObject
 {
 public:

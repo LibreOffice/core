@@ -64,7 +64,6 @@
 #include <xfilter/xfstyle.hxx>
 #include <xfilter/xfcolor.hxx>
 
-class XFBGImage;
 class XFRowStyle : public XFStyle
 {
 public:

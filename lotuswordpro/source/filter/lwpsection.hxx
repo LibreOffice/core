@@ -66,7 +66,6 @@
  * @brief       COrderedObject class in .lwp file
  *
  */
-class LwpDLNFVList;
 class LwpOrderedObject : public LwpDLNFVList
 {
 public:
@@ -84,8 +83,6 @@ private:
  * @brief       VO_SECTION object in .lwp file
  *
  */
-class LwpColor;
-class LwpAtomHolder;
 class LwpSection : public LwpOrderedObject
 {
 public:

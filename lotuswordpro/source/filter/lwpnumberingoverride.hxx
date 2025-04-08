@@ -62,7 +62,6 @@
 
 #include <lwpoverride.hxx>
 
-class LwpObjectStream;
 class LwpNumberingOverride final : public LwpOverride
 {
 public:

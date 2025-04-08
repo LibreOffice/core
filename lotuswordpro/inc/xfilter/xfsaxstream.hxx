@@ -66,7 +66,6 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 class XFSaxAttrList;
-class IXFAttrList;
 
 /**
  * @brief

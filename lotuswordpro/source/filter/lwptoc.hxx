@@ -62,7 +62,6 @@
 class XFIndex;
 class LwpFoundry;
 class LwpTocLevelData;
-class XFIndex;
 /**
  * @brief
  * VO_TOCSUPERTABLELAYOUT object

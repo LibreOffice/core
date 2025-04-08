@@ -70,9 +70,6 @@
 #include "lwpbackgroundoverride.hxx"
 #include "lwptaboverride.hxx"
 
-class LwpOverride;
-class LwpDLVList;
-
 class LwpVirtualPiece : public LwpDLVList
 {
 public:

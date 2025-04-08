@@ -68,8 +68,6 @@
 
 #include <xfilter/xfcontent.hxx>
 
-class IXFStream;
-
 class XFTextSpan : public XFContent
 {
 public:

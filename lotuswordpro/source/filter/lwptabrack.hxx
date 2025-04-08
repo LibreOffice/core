@@ -63,8 +63,6 @@
 #include <lwpobj.hxx>
 
 class   LwpObjectStream;
-class   LwpTab;
-class   LwpTabRack;
 
 class LwpTab
 {

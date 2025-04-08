@@ -64,8 +64,6 @@
 #include <xfilter/xfheader.hxx>
 #include <xfilter/xffooter.hxx>
 
-class XFFooter;
-class XFHeader;
 class XFMasterPage : public XFStyle
 {
 public:

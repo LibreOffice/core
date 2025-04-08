@@ -63,7 +63,6 @@
 #include <memory>
 #include <lwpoverride.hxx>
 
-class LwpObjectStream;
 class LwpAtomHolder;
 class LwpBreaksOverride final : public LwpOverride
 {
