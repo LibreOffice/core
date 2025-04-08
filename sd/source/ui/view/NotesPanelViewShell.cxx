@@ -336,8 +336,8 @@ void NotesPanelViewShell::FuPermanent(SfxRequest& rReq)
             rOutl.GetUndoManager().Clear();
             rOutl.UpdateFields();
 
-            SetCurrentFunction(FuSimpleOutlinerText::Create(
-                this, GetActiveWindow(), mpNotesPanelView.get(), GetDoc(), rReq));
+            SetCurrentFunction(FuNotesPane::Create(this, GetActiveWindow(), mpNotesPanelView.get(),
+                                                   GetDoc(), rReq));
 
             rReq.Done();
         }
@@ -1468,6 +1468,41 @@ bool NotesPanelViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     Invalidate(SID_STYLE_FAMILY5);
 
     return bReturn;
+}
+
+// FuNotesPane
+rtl::Reference<FuPoor> FuNotesPane::Create(ViewShell* pViewSh, ::sd::Window* pWin,
+                                           ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc,
+                                           SfxRequest& rReq)
+{
+    rtl::Reference<FuPoor> xFunc(new FuNotesPane(pViewSh, pWin, pView, pDoc, rReq));
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+bool FuNotesPane::KeyInput(const KeyEvent& rKEvt)
+{
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
+    switch (nCode)
+    {
+        case KEY_PAGEUP:
+        case KEY_PAGEDOWN:
+        {
+            // do not consume the input and let Accelerators handle Ctrl+PgUp/PgDown
+            if (rKEvt.GetKeyCode().IsMod1())
+                return false;
+            break;
+        }
+        default:
+            break;
+    }
+    return FuSimpleOutlinerText::KeyInput(rKEvt);
+}
+
+FuNotesPane::FuNotesPane(ViewShell* pViewShell, ::sd::Window* pWin, ::sd::SimpleOutlinerView* pView,
+                         SdDrawDocument* pDoc, SfxRequest& rReq)
+    : sd::FuSimpleOutlinerText(pViewShell, pWin, pView, pDoc, rReq)
+{
 }
 
 } // end of namespace sd

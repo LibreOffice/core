@@ -10,6 +10,7 @@
 #pragma once
 
 #include "ViewShell.hxx"
+#include "fuoltext.hxx"
 #include <glob.hxx>
 
 class SdPage;
@@ -96,6 +97,20 @@ private:
     /** Initiates the shell with it's NotesPanelView instance
     */
     void Construct();
+};
+
+class FuNotesPane : public FuSimpleOutlinerText
+{
+public:
+    static rtl::Reference<FuPoor> Create(ViewShell* pViewSh, ::sd::Window* pWin,
+                                         ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc,
+                                         SfxRequest& rReq);
+
+    virtual bool KeyInput(const KeyEvent& rKEvt) override;
+
+protected:
+    FuNotesPane(ViewShell* pViewShell, ::sd::Window* pWin, ::sd::SimpleOutlinerView* pView,
+                SdDrawDocument* pDoc, SfxRequest& rReq);
 };
 
 } // end of namespace sd
