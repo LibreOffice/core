@@ -44,6 +44,7 @@ public:
 
     void setComplexColumnLabel( sal_Int32 nColumnIndex, std::vector< css::uno::Any >&& rComplexLabel );
     void setComplexRowLabel( sal_Int32 nRowIndex, std::vector< css::uno::Any >&& rComplexLabel );
+    void setComplexCategoryLabel( sal_Int32 nRowIndex, std::vector< css::uno::Any >&& rComplexLabel );
 
     std::vector< css::uno::Any > getComplexColumnLabel( sal_Int32 nColumnIndex ) const;
     std::vector< css::uno::Any > getComplexRowLabel( sal_Int32 nRowIndex ) const;
