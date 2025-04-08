@@ -55,6 +55,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165933_noDelTextOnMove)
     assertXPath(pXmlDoc, "//w:moveFrom/w:r/w:delText"_ostr, 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testAnnotationRef)
+{
+    loadAndSave("comment-annotationref.docx");
+
+    // Check that the exported comment also has annotationRef
+    xmlDocUniquePtr pXmlComments = parseExport(u"word/comments.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlComments);
+    // Wihtout the fix it fails with
+    // - Expected: 1
+    // - Actual  : 0
+    assertXPath(pXmlComments, "//w:comments/w:comment[1]/w:p[1]/w:r[1]/w:annotationRef"_ostr);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

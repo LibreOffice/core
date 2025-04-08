@@ -8488,7 +8488,8 @@ DocxAttributeOutput::hasProperties DocxAttributeOutput::WritePostitFields()
         if (f->GetTextObject() != nullptr)
         {
             // richtext
-            data.lastParaId = GetExport().WriteOutliner(*f->GetTextObject(), TXT_ATN, bNeedParaId);
+            data.lastParaId
+                = GetExport().WriteOutliner(*f->GetTextObject(), TXT_ATN, bNeedParaId, true);
         }
         else
         {
@@ -8501,6 +8502,9 @@ DocxAttributeOutput::hasProperties DocxAttributeOutput::WritePostitFields()
                 aParaId = NumberToHexBinary(data.lastParaId);
             }
             m_pSerializer->startElementNS(XML_w, XML_p, FSNS(XML_w14, XML_paraId), aParaId);
+            m_pSerializer->startElementNS(XML_w, XML_r);
+            m_pSerializer->singleElementNS(XML_w, XML_annotationRef);
+            m_pSerializer->endElementNS(XML_w, XML_r);
             m_pSerializer->startElementNS(XML_w, XML_r);
             RunText(f->GetText());
             m_pSerializer->endElementNS(XML_w, XML_r);
