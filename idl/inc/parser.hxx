@@ -25,9 +25,7 @@
 class SvTokenStream;
 class SvIdlDataBase;
 class SvMetaModule;
-class SvMetaTypeEnum;
 class SvStringHashEntry;
-class SvMetaType;
 class SvMetaClass;
 class SvBOOL;
 

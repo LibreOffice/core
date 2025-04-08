@@ -23,6 +23,7 @@
 #include "bastype.hxx"
 #include <vector>
 
+class SvStream;
 class SvTokenStream;
 class SvIdlDataBase;
 

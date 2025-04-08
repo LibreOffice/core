@@ -23,8 +23,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace com::sun::star::lang { struct Locale; }
-
 namespace i18npool {
 
 class OrdinalSuffixService final : public cppu::WeakImplHelper

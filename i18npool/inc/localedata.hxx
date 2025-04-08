@@ -39,12 +39,6 @@
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::container { class XIndexAccess; }
-namespace com::sun::star::i18n { struct Currency; }
-namespace com::sun::star::i18n { struct Currency2; }
-namespace com::sun::star::i18n { struct FormatElement; }
-namespace com::sun::star::lang { struct Locale; }
-
-struct LocaleDataLookupTableItem;
 
 namespace i18npool {
 

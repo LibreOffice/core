@@ -24,7 +24,6 @@
 
 class SvStringHashEntry;
 class SvIdlDataBase;
-class SvStream;
 class SvTokenStream;
 
 class SvBOOL
