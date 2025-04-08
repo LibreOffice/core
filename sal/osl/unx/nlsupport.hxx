@@ -25,11 +25,6 @@
 #include <rtl/locale.h>
 #include <rtl/ustring.hxx>
 
-namespace rtl
-{
-class OUString;
-}
-
 void imp_getProcessLocale(rtl_Locale**);
 
 #if defined IOS || defined MACOSX
