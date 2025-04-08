@@ -36,8 +36,6 @@
 
 #define NO_TRANSLATE_ISO        "x-no-translate"
 
-class MergeEntrys;
-
 typedef std::unordered_map<OString, OString>
     OStringHashMap;
 
@@ -65,10 +63,6 @@ public:
     OStringHashMap sText;
 };
 
-
-
-
-class ParserQueue;
 
 
 

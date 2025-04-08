@@ -45,10 +45,6 @@ struct SvcInfo;
 
 namespace com::sun::star::linguistic2 {
     class XLinguServiceEventBroadcaster;
-    class XSpellChecker;
-    class XProofreadingIterator;
-    class XHyphenator;
-    class XThesaurus;
 }
 
 

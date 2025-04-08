@@ -105,8 +105,6 @@ public:
 
 typedef std::vector< XMLChildNode* > XMLChildNodeList;
 
-class XMLData;
-
 /** Virtual base to handle different kinds of parent nodes
  */
 

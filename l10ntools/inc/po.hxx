@@ -16,8 +16,6 @@
 
 #include <rtl/string.hxx>
 
-class PoOfstream;
-class PoIfstream;
 class GenPoEntry;
 
 
