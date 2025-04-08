@@ -54,6 +54,26 @@ CPPUNIT_TEST_FIXTURE(Test, testCoveredCellBackground)
     // i.e. part of the merged cell had a bad white background.
     CPPUNIT_ASSERT_EQUAL(Color(0xe8f2a1), rBackground.GetColor());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testRedlineRecordFlatExport)
+{
+    // Given a document with track changes enabled:
+    createSwDoc();
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+
+    // When saving that to FODT:
+    save(u"OpenDocument Text Flat XML"_ustr);
+
+    // Then make sure this is written in the export result:
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '/office:document/office:body/office:text/text:tracked-changes' number of nodes is incorrect
+    // i.e. the entire XML element was missing.
+    OUString aValue = getXPath(
+        pDoc, "/office:document/office:body/office:text/text:tracked-changes", "track-changes");
+    CPPUNIT_ASSERT_EQUAL(u"true"_ustr, aValue);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
