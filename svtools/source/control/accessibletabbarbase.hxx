@@ -24,7 +24,6 @@
 #include <vcl/vclptr.hxx>
 
 class TabBar;
-class VclSimpleEvent;
 class VclWindowEvent;
 
 

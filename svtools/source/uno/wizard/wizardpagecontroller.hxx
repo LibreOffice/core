@@ -26,9 +26,6 @@ namespace svt::uno
 {
 
 
-    class WizardShell;
-
-
     //= WizardPageController
 
     class WizardPageController : public vcl::IWizardPageController

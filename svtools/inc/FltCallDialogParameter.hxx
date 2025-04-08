@@ -23,9 +23,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <tools/fldunit.hxx>
 
-class FilterConfigItem;
-class SvStream;
-class Graphic;
 namespace weld
 {
 class Window;

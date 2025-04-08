@@ -32,7 +32,6 @@
 // predefines
 namespace svgio::svgreader
 {
-    class SvgNode;
     class SvgDocument;
     class SvgStyleAttributes;
 }

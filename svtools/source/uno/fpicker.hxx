@@ -27,7 +27,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace com::sun::star {
-    namespace lang { class XMultiServiceFactory; }
     namespace uno { class XInterface; }
 }
 

@@ -24,7 +24,6 @@
 #include <cppuhelper/implbase.hxx>
 
 class SvStream;
-namespace svgio::svgreader { class SvgCharacterNode; }
 
 namespace svgio::svgreader
     {

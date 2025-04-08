@@ -31,7 +31,6 @@
 namespace store
 {
 
-class ILockBytes;
 struct OStoreDirectoryPageData;
 class  OStoreDirectoryPageObject;
 

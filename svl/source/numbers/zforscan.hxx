@@ -29,7 +29,6 @@
 #include <tools/date.hxx>
 #include <unotools/localedatawrapper.hxx>
 
-class SvNFLanguageData;
 struct ImpSvNumberformatInfo;
 
 

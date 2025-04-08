@@ -17,7 +17,6 @@
 #include <tools/urlobj.hxx>
 #include <vcl/weld.hxx>
 
-namespace com :: sun :: star :: ucb { class XCommandEnvironment; }
 namespace com :: sun :: star :: awt { class XWindow; }
 
 namespace weld {
@@ -25,7 +24,6 @@ namespace weld {
     class ComboBox;
     class Entry;
     class SpinButton;
-    class ToggleButton;
 }
 
 class PlaceEditDialog;

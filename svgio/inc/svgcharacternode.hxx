@@ -28,8 +28,6 @@
 #include "svgtextnode.hxx"
 #include "svgtextposition.hxx"
 
-namespace drawinglayer::primitive2d { class TextSimplePortionPrimitive2D; }
-
 namespace svgio::svgreader
     {
         class SvgCharacterNode final : public SvgNode
