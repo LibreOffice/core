@@ -25,7 +25,9 @@
 #include <utility>
 
 #define BOX2D_SLIDE_SIZE_IN_METERS 100.00f
-constexpr double fDefaultStaticBodyBounciness(0.1);
+constexpr float fDefaultStaticBodyBounciness(0.1f);
+constexpr float fDefaultStaticDensity(1.0f);
+constexpr float fDefaultStaticFriction(0.3f);
 
 namespace box2d::utils
 {
@@ -80,8 +82,7 @@ b2Vec2 convertB2DPointToBox2DVec2(const basegfx::B2DPoint& aPoint, const double 
 
 // expects rTriangleVector to have coordinates relative to the shape's bounding box center
 void addTriangleVectorToBody(const basegfx::triangulator::B2DTriangleVector& rTriangleVector,
-                             b2Body* aBody, const float fDensity, const float fFriction,
-                             const float fRestitution, const double fScaleFactor)
+                             b2Body* aBody, const double fScaleFactor)
 {
     for (const basegfx::triangulator::B2DTriangle& aTriangle : rTriangleVector)
     {
@@ -102,17 +103,17 @@ void addTriangleVectorToBody(const basegfx::triangulator::B2DTriangleVector& rTr
             // create a fixture that represents the triangle
             aPolygonShape.Set(aTriangleVertices, 3);
             aFixture.shape = &aPolygonShape;
-            aFixture.density = fDensity;
-            aFixture.friction = fFriction;
-            aFixture.restitution = fRestitution;
+            aFixture.density = fDefaultStaticDensity;
+            aFixture.friction = fDefaultStaticFriction;
+            aFixture.restitution = fDefaultStaticBodyBounciness;
             aBody->CreateFixture(&aFixture);
         }
     }
 }
 
 // expects rPolygon to have coordinates relative to it's center
-void addEdgeShapeToBody(const basegfx::B2DPolygon& rPolygon, b2Body* aBody, const float fDensity,
-                        const float fFriction, const float fRestitution, const double fScaleFactor)
+void addEdgeShapeToBody(const basegfx::B2DPolygon& rPolygon, b2Body* aBody,
+                        const double fScaleFactor)
 {
     // make sure there's no bezier curves on the polygon
     assert(!rPolygon.areControlPointsUsed());
@@ -184,9 +185,9 @@ void addEdgeShapeToBody(const basegfx::B2DPolygon& rPolygon, b2Body* aBody, cons
             // create a quadrilateral shaped fixture to represent the edge
             aPolygonShape.Set(aQuadrilateralVertices, 4);
             aFixture.shape = &aPolygonShape;
-            aFixture.density = fDensity;
-            aFixture.friction = fFriction;
-            aFixture.restitution = fRestitution;
+            aFixture.density = fDefaultStaticDensity;
+            aFixture.friction = fDefaultStaticFriction;
+            aFixture.restitution = fDefaultStaticBodyBounciness;
             aBody->CreateFixture(&aFixture);
 
             // prepare the quadrilateral edge for next connection
@@ -197,12 +198,11 @@ void addEdgeShapeToBody(const basegfx::B2DPolygon& rPolygon, b2Body* aBody, cons
 }
 
 void addEdgeShapeToBody(const basegfx::B2DPolyPolygon& rPolyPolygon, b2Body* aBody,
-                        const float fDensity, const float fFriction, const float fRestitution,
                         const double fScaleFactor)
 {
     for (const basegfx::B2DPolygon& rPolygon : rPolyPolygon)
     {
-        addEdgeShapeToBody(rPolygon, aBody, fDensity, fFriction, fRestitution, fScaleFactor);
+        addEdgeShapeToBody(rPolygon, aBody, fScaleFactor);
     }
 }
 }
@@ -648,8 +648,6 @@ Box2DBodySharedPtr makeBodyStatic(const Box2DBodySharedPtr& pBox2DBody)
 
 Box2DBodySharedPtr box2DWorld::createStaticBody(const slideshow::internal::ShapeSharedPtr& rShape)
 {
-    const float fDensity = 1.0f;
-    const float fFriction = 0.3f;
     ::basegfx::B2DRectangle aShapeBounds = rShape->getBounds();
 
     b2BodyDef aBodyDef;
@@ -719,17 +717,14 @@ Box2DBodySharedPtr box2DWorld::createStaticBody(const slideshow::internal::Shape
             }
             else // otherwise it will be an edge representation (example: smile line of the smiley shape)
             {
-                addEdgeShapeToBody(rPolygon, pBody.get(), fDensity, fFriction,
-                                   static_cast<float>(fDefaultStaticBodyBounciness), mfScaleFactor);
+                addEdgeShapeToBody(rPolygon, pBody.get(), mfScaleFactor);
             }
         }
-        addTriangleVectorToBody(aTriangleVector, pBody.get(), fDensity, fFriction,
-                                static_cast<float>(fDefaultStaticBodyBounciness), mfScaleFactor);
+        addTriangleVectorToBody(aTriangleVector, pBody.get(), mfScaleFactor);
     }
     else
     {
-        addEdgeShapeToBody(aPolyPolygon, pBody.get(), fDensity, fFriction,
-                           static_cast<float>(fDefaultStaticBodyBounciness), mfScaleFactor);
+        addEdgeShapeToBody(aPolyPolygon, pBody.get(), mfScaleFactor);
     }
 
     return std::make_shared<box2DBody>(pBody, mfScaleFactor);
