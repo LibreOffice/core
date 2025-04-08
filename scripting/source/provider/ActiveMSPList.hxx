@@ -42,8 +42,6 @@ typedef std::map  <   css::uno::Reference< css::uno::XInterface >
 typedef std::unordered_map< OUString,
     css::uno::Reference< css::script::provider::XScriptProvider > > Msp_hash;
 
-class NonDocMSPCreator;
-
 class ActiveMSPList : public ::cppu::WeakImplHelper< css::lang::XEventListener  >
 {
 

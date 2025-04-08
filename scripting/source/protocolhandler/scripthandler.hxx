@@ -33,25 +33,11 @@ namespace com::sun::star {
         class XScriptInvocationContext;
     }
     namespace uno {
-        class Any;
         class XComponentContext;
-    }
-    namespace lang {
-        class XMultiServiceFactory;
-        class XSingleServiceFactory;
     }
     namespace frame {
         class XFrame;
-        class XDispatch;
         class XNotifyingDispatch;
-        class XDispatchResultListener;
-        struct DispatchDescriptor;
-    }
-    namespace beans {
-        struct PropertyValue;
-    }
-    namespace util {
-        struct URL;
     }
 }
 
