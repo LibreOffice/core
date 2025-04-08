@@ -15,6 +15,8 @@ $(eval $(call gb_ExternalProject_register_targets,icu,\
 
 icu_CPPFLAGS:="-DHAVE_GCC_ATOMICS=$(if $(filter TRUE,$(GCC_HAVE_BUILTIN_ATOMIC)),1,0)"
 
+$(call gb_ExternalProject_get_state_target,icu,build) : $(gb_UnpackedTarball_workdir)/icu/icu-uc-uninstalled.pc
+
 ifeq ($(OS),WNT)
 
 $(call gb_ExternalProject_get_state_target,icu,build) :

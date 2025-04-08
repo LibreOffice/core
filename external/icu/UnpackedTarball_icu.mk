@@ -44,4 +44,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 
 $(eval $(call gb_UnpackedTarball_add_file,icu,source/data/brkitr/khmerdict.dict,external/icu/khmerdict.dict))
 
+# cannot use post_action since $(file ..) would be run when the recipe is parsed, i.e. would always
+# happen before the tarball is unpacked
+$(gb_UnpackedTarball_workdir)/icu/icu-uc-uninstalled.pc: $(call gb_UnpackedTarball_get_target,icu)
+	$(file >$@,$(call gb_pkgconfig_file,icu-uc,$(ICU_MAJOR).$(ICU_MINOR),$(ICU_CFLAGS),$(ICU_LIBS)))
+
 # vim: set noet sw=4 ts=4:

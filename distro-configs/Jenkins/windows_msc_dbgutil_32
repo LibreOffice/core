@@ -3,3 +3,4 @@
 --disable-dependency-tracking
 --enable-odk
 --disable-online-update
+PKG_CONFIG=pkgconf-2.4.3.exe

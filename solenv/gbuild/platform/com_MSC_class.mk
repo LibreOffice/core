@@ -739,7 +739,7 @@ gb_UIMenubarTarget_UIMenubarTarget_platform :=
 
 # Python
 gb_Python_HOME := $(INSTDIR_FOR_BUILD)/program/python-core-$(PYTHON_VERSION)
-gb_Python_PRECOMMAND := PATH="$(shell cygpath -w $(INSTDIR_FOR_BUILD)/program)" PYTHONHOME="$(gb_Python_HOME)" PYTHONPATH="$${PYPATH:+$$PYPATH;}$(gb_Python_HOME)/lib;$(gb_Python_HOME)/lib/lib-dynload:$(INSTDIR_FOR_BUILD)/program"
+gb_Python_PRECOMMAND := PATH="$(shell cygpath -u $(INSTDIR_FOR_BUILD)/program):$(shell cygpath.exe -uS)" PYTHONHOME="$(gb_Python_HOME)" PYTHONPATH="$${PYPATH:+$$PYPATH;}$(gb_Python_HOME)/lib;$(gb_Python_HOME)/lib/lib-dynload:$(INSTDIR_FOR_BUILD)/program"
 gb_Python_INSTALLED_EXECUTABLE := $(INSTROOT_FOR_BUILD)/$(LIBO_BIN_FOLDER)/python.exe
 
 gb_ICU_PRECOMMAND := PATH="$(shell cygpath -w $(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source/lib)"

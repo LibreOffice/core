@@ -999,6 +999,8 @@ cygwin*|wsl*)
 
     DLLPOST=".dll"
     LINKFLAGSNOUNDEFS=
+    # bypass check for ninja, it is not in default path, but it can be used nevertheless by default
+    NINJA="assumed to be available from Visual Studio"
 
     if test "$host_cpu" = "aarch64"; then
         build_skia=yes
@@ -4102,7 +4104,7 @@ cygwin*|wsl*)
     COM=MSC
     OS=WNT
     RTL_OS=Windows
-    if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
+    if test "$GNUMAKE_WIN_NATIVE" = "TRUE" -o -n "$WSL_ONLY_AS_HELPER" ; then
         P_SEP=";"
     else
         P_SEP=:
@@ -6935,9 +6937,10 @@ fi
 dnl ===================================================================
 dnl Check for pkg-config
 dnl ===================================================================
-if test "$_os" != "WINNT"; then
-    PKG_PROG_PKG_CONFIG
-fi
+# pkgconf/pkg-config detection is already triggered by the configure switches way above
+# (more specifically PKG_CHECK_MODULES), so only do some cleanup of the vars here
+PathFormat "$(command -v $PKG_CONFIG)"
+PKG_CONFIG="$formatted_path"
 AC_SUBST(PKG_CONFIG)
 AC_SUBST(PKG_CONFIG_PATH)
 AC_SUBST(PKG_CONFIG_LIBDIR)
@@ -6979,7 +6982,11 @@ if test $_os = Darwin; then
             if test "$enable_bogus_pkg_config" = "yes"; then
                 AC_MSG_RESULT([yes, user-approved from unknown origin.])
             else
-                AC_MSG_ERROR([yes, from unknown origin. This *will* break the build. Please modify your PATH variable so that $PKG_CONFIG is no longer found by configure scripts.])
+                if test -z "$($PKG_CONFIG --list-all |grep -v '^libpkgconf')" ; then
+                    AC_MSG_RESULT([yes, accepted since no packages available in default searchpath])
+                else
+                    AC_MSG_ERROR([yes, from unknown origin. This *will* break the build. Please modify your PATH variable so that $PKG_CONFIG is no longer found by configure scripts.])
+                fi
             fi
         fi
     else
@@ -11417,11 +11424,11 @@ HARFBUZZ_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/harfbuzz/src"
 case "$_os" in
     Linux)
         GRAPHITE_LIBS_internal='$(gb_StaticLibrary_WORKDIR)/libgraphite.a'
-        HARFBUZZ_LIBS_internal="${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz.a"
+        HARFBUZZ_LIBS_internal="${WORKDIR}/UnpackedTarball/harfbuzz/builddir/src/libharfbuzz.a"
         ;;
     *)
         GRAPHITE_LIBS_internal='-L$(gb_StaticLibrary_WORKDIR) -lgraphite'
-        HARFBUZZ_LIBS_internal="-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz"
+        HARFBUZZ_LIBS_internal="-L${WORKDIR}/UnpackedTarball/harfbuzz/builddir/src/ -lharfbuzz"
         ;;
 esac
 libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3])
@@ -11429,7 +11436,7 @@ libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= $harfbuzz_requir
 
 if test "$COM" = "MSC"; then # override the above
     GRAPHITE_LIBS='$(gb_StaticLibrary_WORKDIR)/graphite.lib'
-    HARFBUZZ_LIBS="${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz.lib"
+    HARFBUZZ_LIBS='$(gb_UnpackedTarball_workdir)/harfbuzz/builddir/src/libharfbuzz.a $(GRAPHITE_LIBS)'
 fi
 
 if test "$with_system_harfbuzz" = "yes"; then
@@ -11447,6 +11454,14 @@ if test "$with_system_harfbuzz" = "yes"; then
 else
     if test "$with_system_graphite" = "yes"; then
         AC_MSG_ERROR([--without-system-graphite must be used when --without-system-harfbuzz is used])
+    fi
+    # harfbuzz is now built using meson
+    AC_PATH_PROGS(MESON,[meson.py meson],,[$LODE_HOME/packages/meson-1.7.2:$PATH])
+    PathFormat "$MESON"
+    MESON="$formatted_path"
+    AC_CHECK_PROG(NINJA,ninja,ninja)
+    if test -z "$MESON" -o -z "$NINJA"; then
+        AC_MSG_ERROR([you need to have meson and ninja in order to build harfbuzz])
     fi
 fi
 

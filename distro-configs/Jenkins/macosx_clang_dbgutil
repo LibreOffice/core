@@ -4,3 +4,4 @@
 --enable-optimized
 --enable-odk
 --disable-online-update
+PKG_CONFIG=pkgconf

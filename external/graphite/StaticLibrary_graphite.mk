@@ -76,4 +76,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,graphite,\
 	UnpackedTarball/graphite/src/UtfCodec \
 ))
 
+$(call gb_StaticLibrary_get_target,graphite): $(gb_UnpackedTarball_workdir)/graphite/graphite2-uninstalled.pc
+
 # vim: set noet sw=4 ts=4:

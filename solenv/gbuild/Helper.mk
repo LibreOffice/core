@@ -387,4 +387,14 @@ $(if $(gb_QUIET_EXTERNAL), \
     ( $(1) ))
 endef
 
+# call gb_pkgconfig_file,name,version,cflags,libs[,additional-lines]
+define gb_pkgconfig_file
+Name: $(1)
+Description: dummy pkg-config file for $(1)
+Version: $(2)
+Cflags: $(3)
+Libs: $(4)
+$(5)
+endef
+
 # vim: set noet sw=4 ts=4:
