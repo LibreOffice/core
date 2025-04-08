@@ -34,9 +34,6 @@
 
 #include <memory>
 
-namespace com::sun::star::lang { class XMultiServiceFactory; }
-namespace com::sun::star::sheet { struct LocalizedName; }
-
 typedef cppu::WeakComponentImplHelper<
                             css::sheet::XAddIn,
                             css::sheet::XCompatibilityNames,

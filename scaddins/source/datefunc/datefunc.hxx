@@ -32,8 +32,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <unotools/resmgr.hxx>
 
-namespace com::sun::star::lang { class XMultiServiceFactory; }
-
 enum class ScaCategory
 {
     DateTime,
