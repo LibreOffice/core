@@ -1732,6 +1732,12 @@ AC_ARG_ENABLE(avahi,
         [Determines whether to use Avahi to advertise Impress to remote controls.])
 )
 
+AC_ARG_ENABLE(msvc-debug-runtime,
+    AS_HELP_STRING([--enable-msvc-debug-runtime],
+        [Determines whether to use the Microsoft Visual Studio debugging runtime.
+         Automatically turned on by --enable-dbgutil but not by --enable-debug])
+)
+
 AC_ARG_ENABLE(msvc-analyze,
     AS_HELP_STRING([--enable-msvc-analyze],
         [Determines whether to enable the Microsoft Visual Studio /analyze flag to provide additional warnings.])
@@ -5013,7 +5019,11 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
     fi
 else
     ENABLE_DBGUTIL=""
-    MSVC_USE_DEBUG_RUNTIME=""
+    if test "$enable_msvc_debug_runtime" = "yes"; then
+        MSVC_USE_DEBUG_RUNTIME="TRUE"
+    else
+        MSVC_USE_DEBUG_RUNTIME=""
+    fi
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_DBGUTIL)
