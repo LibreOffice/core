@@ -221,10 +221,24 @@ void InternalData::setComplexRowLabel( sal_Int32 nRowIndex, std::vector< uno::An
         m_aRowLabels.resize(nRowIndex+1);
         enlargeData( 0, nRowIndex+1 );
     }
-    sal_Int32 nSize = static_cast<sal_Int32>( m_aRowLabels[nRowIndex].size() );
-    if( nSize >= 1 && !rComplexLabel.empty() )
+    m_aRowLabels[nRowIndex] = std::move(rComplexLabel);
+
+    dump();
+}
+
+void InternalData::setComplexCategoryLabel(sal_Int32 nRowIndex, std::vector< uno::Any >&& rComplexLabel)
+{
+    if (nRowIndex < 0)
+        return;
+    if (o3tl::make_unsigned(nRowIndex) >= m_aRowLabels.size())
     {
-        m_aRowLabels[nRowIndex].resize(nSize+1);
+        m_aRowLabels.resize(nRowIndex + 1);
+        enlargeData(0, nRowIndex + 1);
+    }
+    sal_Int32 nSize = static_cast<sal_Int32>(m_aRowLabels[nRowIndex].size());
+    if (nSize >= 1 && !rComplexLabel.empty())
+    {
+        m_aRowLabels[nRowIndex].resize(nSize + 1);
         m_aRowLabels[nRowIndex][nSize] = rComplexLabel[0];
     }
     else
