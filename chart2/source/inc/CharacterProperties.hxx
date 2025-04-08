@@ -125,6 +125,9 @@ namespace CharacterProperties
     void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 
     bool IsCharacterPropertyHandle( sal_Int32 nHandle );
+
+    css::awt::FontDescriptor createFontDescriptorFromPropertySet(
+        const css::uno::Reference< css::beans::XMultiPropertySet > & xMultiPropSet );
 }
 
 } //  namespace chart
