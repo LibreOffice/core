@@ -200,9 +200,8 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
 
     SvXMLImportPropertyMapper* pImpPrMap =
         GetStyles()->GetImportPropertyMapper( GetFamily() );
-    SAL_WARN_IF( !pImpPrMap, "xmloff", "There is the import prop mapper" );
-    if( pImpPrMap )
-        pImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
+    assert( pImpPrMap );
+    pImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
 
     Reference< XPropertySetInfo > xInfo;
     // get property set mapper
