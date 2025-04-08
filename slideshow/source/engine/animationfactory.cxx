@@ -293,7 +293,7 @@ namespace slideshow::internal
                     // if there is a physics animation going on report the animation ending
                     // and zero out the velocity of the shape
                     if( mpBox2DWorld->isInitialized() )
-                        mpBox2DWorld->queueLinearVelocityUpdate( mpShape->getXShape(), {0,0});
+                        mpBox2DWorld->queueLinearVelocityUpdate( mpShape->getXShape(), {0,0}, 0);
                 }
 
                 // NumberAnimation interface

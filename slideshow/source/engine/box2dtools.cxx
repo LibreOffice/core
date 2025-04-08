@@ -221,23 +221,9 @@ box2DWorld::box2DWorld(const ::basegfx::B2DVector& rSlideSize)
 
 box2DWorld::~box2DWorld() = default;
 
-bool box2DWorld::initiateWorld(const ::basegfx::B2DVector& rSlideSize)
-{
-    if (!mpBox2DWorld)
-    {
-        mpBox2DWorld = std::make_unique<b2World>(b2Vec2(0.0f, -30.0f));
-        createStaticFrameAroundSlide(rSlideSize);
-        return false;
-    }
-    else
-    {
-        return true;
-    }
-}
-
 void box2DWorld::createStaticFrameAroundSlide(const ::basegfx::B2DVector& rSlideSize)
 {
-    assert(mpBox2DWorld);
+    mpBox2DWorld = std::make_unique<b2World>(b2Vec2(0.0f, -30.0f));
 
     float fWidth = static_cast<float>(rSlideSize.getX() * mfScaleFactor);
     float fHeight = static_cast<float>(rSlideSize.getY() * mfScaleFactor);
@@ -280,7 +266,6 @@ void box2DWorld::setShapePositionByLinearVelocity(
     const css::uno::Reference<css::drawing::XShape>& xShape, const basegfx::B2DPoint& rOutPos,
     const double fPassedTime)
 {
-    assert(mpBox2DWorld);
     if (fPassedTime > 0) // this only makes sense if there was an advance in time
     {
         const auto iter = mpXShapeToBodyMap.find(xShape);
@@ -293,7 +278,6 @@ void box2DWorld::setShapePositionByLinearVelocity(
 void box2DWorld::setShapeLinearVelocity(const css::uno::Reference<css::drawing::XShape>& xShape,
                                         const basegfx::B2DVector& rVelocity)
 {
-    assert(mpBox2DWorld);
     const auto iter = mpXShapeToBodyMap.find(xShape);
     assert(iter != mpXShapeToBodyMap.end());
     Box2DBodySharedPtr pBox2DBody = iter->second;
@@ -313,7 +297,6 @@ void box2DWorld::setShapeAngleByAngularVelocity(
     const css::uno::Reference<css::drawing::XShape>& xShape, const double fAngle,
     const double fPassedTime)
 {
-    assert(mpBox2DWorld);
     if (fPassedTime > 0) // this only makes sense if there was an advance in time
     {
         const auto iter = mpXShapeToBodyMap.find(xShape);
@@ -326,7 +309,6 @@ void box2DWorld::setShapeAngleByAngularVelocity(
 void box2DWorld::setShapeAngularVelocity(const css::uno::Reference<css::drawing::XShape>& xShape,
                                          const double fAngularVelocity)
 {
-    assert(mpBox2DWorld);
     const auto iter = mpXShapeToBodyMap.find(xShape);
     assert(iter != mpXShapeToBodyMap.end());
     Box2DBodySharedPtr pBox2DBody = iter->second;
@@ -336,7 +318,6 @@ void box2DWorld::setShapeAngularVelocity(const css::uno::Reference<css::drawing:
 void box2DWorld::setShapeCollision(const css::uno::Reference<css::drawing::XShape>& xShape,
                                    bool bCanCollide)
 {
-    assert(mpBox2DWorld);
     const auto iter = mpXShapeToBodyMap.find(xShape);
     assert(iter != mpXShapeToBodyMap.end());
     Box2DBodySharedPtr pBox2DBody = iter->second;
@@ -389,8 +370,6 @@ void box2DWorld::processUpdateQueue(const double fPassedTime)
 void box2DWorld::initiateAllShapesAsStaticBodies(
     const slideshow::internal::ShapeManagerSharedPtr& pShapeManager)
 {
-    assert(mpBox2DWorld);
-
     mbShapesInitialized = true;
     auto aXShapeToShapeMap = pShapeManager->getXShapeToShapeMap();
 
@@ -585,7 +564,7 @@ void box2DWorld::alertPhysicsAnimationStart(
     const slideshow::internal::ShapeManagerSharedPtr& pShapeManager)
 {
     if (!mpBox2DWorld)
-        initiateWorld(rSlideSize);
+        createStaticFrameAroundSlide(rSlideSize);
 
     if (!mbShapesInitialized)
         initiateAllShapesAsStaticBodies(pShapeManager);
@@ -593,17 +572,14 @@ void box2DWorld::alertPhysicsAnimationStart(
     mnPhysicsAnimationCounter++;
 }
 
-void box2DWorld::step(const float fTimeStep, const int nVelocityIterations,
-                      const int nPositionIterations)
+double box2DWorld::stepAmount(const double fPassedTime)
 {
     assert(mpBox2DWorld);
-    mpBox2DWorld->Step(fTimeStep, nVelocityIterations, nPositionIterations);
-}
 
-double box2DWorld::stepAmount(const double fPassedTime, const float fTimeStep,
-                              const int nVelocityIterations, const int nPositionIterations)
-{
-    assert(mpBox2DWorld);
+    // attention fTimeStep should not vary.
+    const float fTimeStep = 1.0f / 100.0f;
+    const int nVelocityIterations = 6;
+    const int nPositionIterations = 2;
 
     unsigned int nStepAmount = static_cast<unsigned int>(std::round(fPassedTime / fTimeStep));
     // find the actual time that will be stepped through so
@@ -617,7 +593,7 @@ double box2DWorld::stepAmount(const double fPassedTime, const float fTimeStep,
     {
         for (unsigned int nStepCounter = 0; nStepCounter < nStepAmount; nStepCounter++)
         {
-            step(fTimeStep, nVelocityIterations, nPositionIterations);
+            mpBox2DWorld->Step(fTimeStep, nVelocityIterations, nPositionIterations);
         }
     }
     else
@@ -661,16 +637,6 @@ Box2DBodySharedPtr makeBodyDynamic(const Box2DBodySharedPtr& pBox2DBody)
     return pBox2DBody;
 }
 
-Box2DBodySharedPtr box2DWorld::makeShapeStatic(const slideshow::internal::ShapeSharedPtr& pShape)
-{
-    assert(mpBox2DWorld);
-    assert(pShape && pShape->getXShape());
-    const auto iter = mpXShapeToBodyMap.find(pShape->getXShape());
-    assert(iter != mpXShapeToBodyMap.end());
-    Box2DBodySharedPtr pBox2DBody = iter->second;
-    return makeBodyStatic(pBox2DBody);
-}
-
 Box2DBodySharedPtr makeBodyStatic(const Box2DBodySharedPtr& pBox2DBody)
 {
     if (pBox2DBody->getType() != BOX2D_STATIC_BODY)
@@ -680,11 +646,10 @@ Box2DBodySharedPtr makeBodyStatic(const Box2DBodySharedPtr& pBox2DBody)
     return pBox2DBody;
 }
 
-Box2DBodySharedPtr box2DWorld::createStaticBody(const slideshow::internal::ShapeSharedPtr& rShape,
-                                                const float fDensity, const float fFriction)
+Box2DBodySharedPtr box2DWorld::createStaticBody(const slideshow::internal::ShapeSharedPtr& rShape)
 {
-    assert(mpBox2DWorld);
-
+    const float fDensity = 1.0f;
+    const float fFriction = 0.3f;
     ::basegfx::B2DRectangle aShapeBounds = rShape->getBounds();
 
     b2BodyDef aBodyDef;
