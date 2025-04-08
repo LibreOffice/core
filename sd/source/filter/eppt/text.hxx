@@ -28,7 +28,6 @@
 #include <memory>
 
 namespace com::sun::star {
-    namespace awt { struct FontDescriptor; }
     namespace beans { class XPropertyState; }
     namespace text { class XTextRange; class XTextContent; class XSimpleText; }
     namespace style { struct TabStop; }

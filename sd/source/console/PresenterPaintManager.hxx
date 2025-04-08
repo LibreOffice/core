@@ -32,8 +32,6 @@
 
 namespace sdext::presenter {
 
-class PresenterPaneContainer;
-
 /** Synchronize painting of windows and canvases.  At the moment there is
     just some processing of invalidate calls.
     This could be extended to process incoming windowPaint() calls.

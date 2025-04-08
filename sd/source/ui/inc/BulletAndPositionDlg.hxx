@@ -32,11 +32,7 @@
 #define MN_GALLERY_ENTRY 100
 
 class ColorListBox;
-class SvxNumValueSet;
 class SvxNumRule;
-class SvxBmpNumValueSet;
-class SvxBrushItem;
-class SdDrawDocument;
 
 namespace sd
 {

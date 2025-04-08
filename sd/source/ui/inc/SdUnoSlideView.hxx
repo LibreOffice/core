@@ -22,7 +22,6 @@
 #include "DrawSubController.hxx"
 
 namespace sd::slidesorter { class SlideSorter; }
-namespace com::sun::star::drawing { class XDrawPage; }
 
 namespace sd {
 

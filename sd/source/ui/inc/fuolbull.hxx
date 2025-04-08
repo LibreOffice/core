@@ -24,7 +24,6 @@
 class SdDrawDocument;
 class SfxRequest;
 class SfxItemSet;
-class SfxPoolItem;
 class SvxNumBulletItem;
 
 namespace sd {

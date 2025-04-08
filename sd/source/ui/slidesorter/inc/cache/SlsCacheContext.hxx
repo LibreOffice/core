@@ -24,11 +24,6 @@
 #include <memory>
 #include <vector>
 
-namespace com::sun::star::uno
-{
-class XInterface;
-}
-
 class SdrPage;
 class SdXImpressDocument;
 

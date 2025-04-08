@@ -35,7 +35,6 @@ namespace sdr::annotation { class TextApiObject; }
 namespace sd
 {
 
-class AnnotationManagerImpl;
 class DrawDocShell;
 class AnnotationWindow;
 

@@ -32,16 +32,9 @@
 
 namespace sd { class DrawDocShell; }
 
-class OutlinerParaObject;
-class SfxItemSet;
 class SfxProgress;
-class SdrOutliner;
 class SdPage;
 class HtmlState;
-class SdrTextObj;
-class SdrObjGroup;
-namespace sdr::table { class SdrTableObj; }
-class SdrPage;
 class SdDrawDocument;
 
 /// this class exports an Impress Document as a HTML Presentation.

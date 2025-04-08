@@ -36,8 +36,6 @@
 #include <vector>
 
 namespace com::sun::star::drawing { class XDrawSubController; }
-namespace com::sun::star::drawing::framework { class XConfigurationController; }
-namespace com::sun::star::drawing::framework { class XModuleController; }
 namespace com::sun::star::drawing { class XLayer; }
 namespace osl { class Mutex; }
 namespace sd::framework { class ConfigurationController; }

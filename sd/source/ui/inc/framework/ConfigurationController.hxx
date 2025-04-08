@@ -29,12 +29,6 @@
 
 #include <memory>
 
-
-namespace com::sun::star::drawing::framework { class XConfiguration; }
-namespace com::sun::star::drawing::framework { class XConfigurationChangeRequest; }
-namespace com::sun::star::drawing::framework { class XResourceId; }
-namespace com::sun::star::drawing::framework { struct ConfigurationChangeEvent; }
-namespace com::sun::star::frame { class XController; }
 namespace sd { class DrawController; }
 
 namespace sd::framework {

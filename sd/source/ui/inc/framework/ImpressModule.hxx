@@ -22,14 +22,6 @@
 #include <sal/types.h>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::frame
-{
-class XController;
-}
-namespace com::sun::star::uno
-{
-template <class interface_type> class Reference;
-}
 namespace sd
 {
 class DrawController;

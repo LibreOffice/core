@@ -19,10 +19,6 @@ namespace com::sun::star::drawing::framework
 class XConfigurationController;
 class XView;
 }
-namespace com::sun::star::frame
-{
-class XController;
-}
 namespace sd
 {
 class DrawController;

@@ -26,8 +26,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 
-namespace com::sun::star::beans { struct PropertyValue; }
-
 class SdFilterDetect : public ::cppu::WeakImplHelper< css::document::XExtendedFilterDetection, css::lang::XServiceInfo >
 {
 public:

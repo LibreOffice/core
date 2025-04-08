@@ -28,7 +28,6 @@
 #include <vector>
 
 namespace com::sun::star::drawing { class XDrawPage; }
-namespace com::sun::star::drawing { class XDrawView; }
 namespace weld { class ComboBox; }
 namespace com::sun::star::animations { class XAnimationNode; }
 namespace sd::tools { class EventMultiplexerEvent; }

@@ -24,8 +24,6 @@
 #include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::frame { class XController; }
-namespace com::sun::star::drawing::framework { class XResourceId; }
 namespace com::sun::star::drawing::framework { class XConfigurationController; }
 namespace sd { class DrawController; }
 

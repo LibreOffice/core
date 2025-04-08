@@ -27,8 +27,6 @@
 
 class SdDrawDocument;
 class SdPage;
-class SfxItemSet;
-class SfxPoolItem;
 
 class SdBackgroundObjUndoAction final : public SdUndoAction
 {

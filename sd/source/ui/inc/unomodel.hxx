@@ -47,9 +47,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <sddllapi.h>
 
-namespace com::sun::star::container { class XNameContainer; }
 namespace com::sun::star::i18n { class XForbiddenCharacters; }
-namespace com::sun::star::presentation { class XPresentation; }
 
 class SdDrawDocument;
 class SdPage;

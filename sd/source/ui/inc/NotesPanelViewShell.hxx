@@ -13,8 +13,6 @@
 #include "fuoltext.hxx"
 #include <glob.hxx>
 
-class SdPage;
-
 namespace sd
 {
 class NotesPanelView;

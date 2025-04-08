@@ -27,7 +27,6 @@
 namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::frame { class XDispatchProvider; }
 namespace com::sun::star::frame { class XStatusListener; }
-namespace com::sun::star::frame { struct FeatureStateEvent; }
 
 namespace sd::tools {
 

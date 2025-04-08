@@ -38,7 +38,6 @@
 #include "stlpool.hxx"
 
 namespace com::sun::star::xml::dom { class XNode; }
-namespace com::sun::star::uno { class XInterface; }
 namespace editeng { class SvxFieldItemUpdater; }
 namespace vcl { class Font; }
 namespace com::sun::star::presentation { class XPresentation2; }
@@ -58,9 +57,7 @@ class SdCustomShowList;
 class SdUndoGroup;
 class SdrObject;
 class Idle;
-class ImageMap;
 class Outliner;
-class SdrModel;
 class SdrOutliner;
 class SdrPage;
 class SdrTextObj;

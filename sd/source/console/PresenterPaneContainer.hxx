@@ -36,9 +36,6 @@
 
 namespace sdext::presenter {
 
-class PresenterPaneBase;
-class PresenterSprite;
-
 typedef ::cppu::WeakComponentImplHelper <
     css::lang::XEventListener
 > PresenterPaneContainerInterfaceBase;

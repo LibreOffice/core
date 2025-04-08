@@ -25,7 +25,6 @@
 
 namespace com::sun::star::drawing::framework { class XConfigurationController; }
 namespace com::sun::star::drawing::framework { class XTabBar; }
-namespace com::sun::star::frame { class XController; }
 namespace sd { class DrawController; }
 
 namespace sd::framework {

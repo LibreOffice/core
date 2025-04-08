@@ -30,7 +30,6 @@ class SdPage;
 class SdrPage;
 class SdrTextObj;
 class SfxProgress;
-struct PasteOrDropInfos;
 class EditView;
 
 namespace sd::tools {

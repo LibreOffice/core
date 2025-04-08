@@ -30,7 +30,6 @@
 namespace com::sun::star::drawing { class XDrawPage; }
 namespace com::sun::star::drawing { class XShape; }
 namespace com::sun::star::text { class XTextRange; }
-namespace com::sun::star::util { class XSearchDescriptor; }
 
 class SvxItemPropertySet;
 class SdUnoSearchReplaceDescriptor;

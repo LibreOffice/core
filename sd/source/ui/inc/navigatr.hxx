@@ -33,9 +33,7 @@ namespace vcl { class Window; }
 
 namespace sd {
 class DrawDocShell;
-class SdNavigatorFloat;
 }
-class Menu;
 class SdNavigatorControllerItem;
 class SdPageNameControllerItem;
 

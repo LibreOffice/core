@@ -21,8 +21,6 @@
 
 #include "fudraw.hxx"
 
-namespace com::sun::star::media { class XPlayer; }
-
 class SdrHdl;
 class SdrObject;
 

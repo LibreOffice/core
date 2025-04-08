@@ -26,10 +26,6 @@
 #include <sfx2/request.hxx>
 #include <xmloff/autolayout.hxx>
 
-namespace com::sun::star::frame
-{
-class XStatusListener;
-}
 namespace com::sun::star::ui
 {
 class XSidebar;

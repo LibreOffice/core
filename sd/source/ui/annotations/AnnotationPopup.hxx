@@ -12,10 +12,6 @@
 #include <svx/annotation/IAnnotationPopup.hxx>
 #include <vcl/weld.hxx>
 
-namespace com::sun::star::office
-{
-class XAnnotation;
-}
 namespace sdr::annotation
 {
 class Annotation;
@@ -23,7 +19,6 @@ class Annotation;
 
 namespace sd
 {
-class View;
 class AnnotationWindow;
 
 class AnnotationPopup final : public sdr::annotation::IAnnotationPopup

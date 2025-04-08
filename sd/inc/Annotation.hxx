@@ -36,11 +36,7 @@
 
 class SdrUndoAction;
 
-namespace com::sun::star::office { class XAnnotation; }
-
 namespace com::sun::star::uno { template <typename > class Reference; }
-
-class SfxViewShell;
 
 namespace sd
 {

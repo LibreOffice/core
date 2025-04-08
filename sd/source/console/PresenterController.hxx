@@ -48,11 +48,9 @@ namespace sdext::presenter {
 
 class PresenterCanvasHelper;
 class PresenterPaintManager;
-class PresenterPaneAnimator;
 class PresenterPaneContainer;
 class PresenterPaneBorderPainter;
 class PresenterScreen;
-class PresenterTheme;
 class PresenterWindowManager;
 
 typedef ::cppu::WeakComponentImplHelper <

@@ -32,7 +32,6 @@
 
 class SdDrawDocument;
 class SdPage;
-class SdrOle2Obj;
 class SdrGrafObj;
 class SdrMediaObj;
 class OutputDevice;

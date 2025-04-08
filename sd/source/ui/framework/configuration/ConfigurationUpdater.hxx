@@ -31,10 +31,6 @@ class XConfiguration;
 }
 namespace com::sun::star::drawing::framework
 {
-class XControllerManager;
-}
-namespace com::sun::star::drawing::framework
-{
 class XResourceId;
 }
 namespace sd

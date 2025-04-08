@@ -33,12 +33,6 @@
 class SdrPage;
 class SdrModel;
 class SdrObject;
-class Size;
-
-namespace com::sun::star::animations
-{
-class XAnimate;
-}
 
 namespace sdr::contact
 {

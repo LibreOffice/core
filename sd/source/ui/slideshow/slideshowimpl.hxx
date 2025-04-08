@@ -35,7 +35,6 @@
 
 #include <slideshow.hxx>
 
-namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::media { class XPlayer; }
 namespace sd { class DrawDocShell; }
 namespace sd { class ViewShell; }

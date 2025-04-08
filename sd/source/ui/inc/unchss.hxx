@@ -25,7 +25,6 @@
 
 #include <sdundo.hxx>
 
-class SfxItemSet;
 class SfxStyleSheet;
 class SdDrawDocument;
 

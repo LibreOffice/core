@@ -25,11 +25,6 @@
 #include <memory>
 #include <set>
 
-namespace osl
-{
-class Mutex;
-}
-
 class SdDrawDocument;
 
 namespace sd

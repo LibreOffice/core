@@ -23,7 +23,6 @@
 #include <svx/xtable.hxx>
 
 class SfxObjectShell;
-enum class ChangeType;
 
 /**
  * Page configuration-tab-dialog

@@ -56,7 +56,6 @@ class Graphic;
 namespace sd
 {
     class MainSequence;
-    class Annotation;
 }
 
 namespace sd {

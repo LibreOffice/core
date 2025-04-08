@@ -36,7 +36,6 @@
 
 namespace com::sun::star::awt { class XControlModel; }
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::drawing { class XShape; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::task { class XStatusIndicator; }

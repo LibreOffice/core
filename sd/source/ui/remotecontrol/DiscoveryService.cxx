@@ -18,6 +18,8 @@
 #include "DiscoveryService.hxx"
 #include "ZeroconfService.hxx"
 
+struct sockaddr_in;
+
 #ifdef _WIN32
   // LO vs WinAPI conflict
   #undef WB_LEFT

@@ -31,7 +31,6 @@
 class SdDrawDocument;
 class SdXImpressDocument;
 namespace com::sun::star::drawing { class XDrawView; }
-namespace com::sun::star::frame { class XModel; }
 namespace sd::tools { class EventMultiplexerEvent; }
 
 namespace sd

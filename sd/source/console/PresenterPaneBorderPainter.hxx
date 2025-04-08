@@ -30,7 +30,6 @@
 
 namespace sdext::presenter {
 
-class PresenterPane;
 class PresenterTheme;
 
 typedef ::cppu::WeakComponentImplHelper<

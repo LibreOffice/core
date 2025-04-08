@@ -72,9 +72,6 @@ excludelist:
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/style/XStyle.hpp
     - com/sun/star/util/XModifyBroadcaster.hpp
-    sd/inc/textapi.hxx:
-    # base class has to be a complete type
-    - editeng/outliner.hxx
     sd/inc/TransitionPreset.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XMultiServiceFactory.hpp
@@ -91,6 +88,9 @@ excludelist:
     sd/source/filter/eppt/eppt.hxx:
     # base class has to be a complete type
     - escherex.hxx
+    sd/source/filter/html/htmlex.hxx:
+    # Needed in --fwdecl mode, to silence "externally available entity 'HtmlState' is not previously declared in an included file"
+    - class HtmlState
     sd/source/ui/annotations/annotationmanagerimpl.hxx:
     # base class has to be a complete type
     - annotationtag.hxx
@@ -122,16 +122,16 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/container/XNamed.hpp
     - com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp
-    sd/source/ui/framework/factories/BasicToolBarFactory.hxx:
+    sd/source/ui/inc/framework/factories/BasicToolBarFactory.hxx:
     # base class has to be a complete type
     - com/sun/star/drawing/framework/XResourceFactory.hpp
     - com/sun/star/lang/XInitialization.hpp
-    sd/source/ui/framework/factories/BasicPaneFactory.hxx:
+    sd/source/ui/inc/framework/factories/BasicPaneFactory.hxx:
     # base class has to be a complete type
     - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
     - com/sun/star/drawing/framework/XResourceFactory.hpp
     - com/sun/star/lang/XInitialization.hpp
-    sd/source/ui/framework/factories/BasicViewFactory.hxx:
+    sd/source/ui/inc/framework/factories/BasicViewFactory.hxx:
     # base class has to be a complete type
     - com/sun/star/drawing/framework/XResourceFactory.hpp
     - com/sun/star/lang/XInitialization.hpp
@@ -259,9 +259,6 @@ excludelist:
     - com/sun/star/drawing/framework/XView.hpp
     - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/view/XSelectionSupplier.hpp
-    sd/source/ui/inc/tools/PropertySet.hxx:
-    # base class has to be a complete type
-    - com/sun/star/beans/XPropertySet.hpp
     sd/source/ui/inc/tools/SlotStateListener.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XStatusListener.hpp
@@ -308,11 +305,6 @@ excludelist:
     - com/sun/star/beans/XPropertyChangeListener.hpp
     - com/sun/star/accessibility/XAccessibleEventListener.hpp
     - com/sun/star/frame/XFrameActionListener.hpp
-    sd/source/ui/slidesorter/shell/SlideSorterService.hxx:
-    # base class has to be a complete type
-    - com/sun/star/awt/XWindowListener.hpp
-    - com/sun/star/drawing/XSlideSorterBase.hpp
-    - com/sun/star/lang/XInitialization.hpp
     sd/source/ui/unoidl/sddetect.hxx:
     # base class has to be a complete type
     - com/sun/star/document/XExtendedFilterDetection.hpp
@@ -332,9 +324,6 @@ excludelist:
     - com/sun/star/beans/XPropertyState.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/lang/XUnoTunnel.hpp
-    sd/source/core/annotations/AnnotationEnumeration.cxx:
-    # Avoid loplugin:unreffun error
-    - AnnotationEnumeration.hxx
     sd/source/core/CustomAnimationCloner.cxx:
     # Avoid loplugin:unreffun error
     - CustomAnimationCloner.hxx
@@ -423,9 +412,6 @@ excludelist:
     sd/source/core/drawdoc.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
-    sd/source/core/text/textapi.cxx:
-    # Needed for macro defines
-    - editeng/unoprnms.hxx
     sd/source/filter/eppt/epptso.cxx:
     # Needed for direct member access
     - com/sun/star/table/XTable.hpp
@@ -457,9 +443,6 @@ excludelist:
     sd/source/filter/xml/sdtransform.cxx:
     # Needed for implicit dtor
     - editeng/outlobj.hxx
-    sd/source/ui/annotations/annotationtag.cxx:
-    # Needed for template
-    - com/sun/star/office/XAnnotation.hpp
     sd/source/ui/animations/CustomAnimationList.cxx:
     # Actually used
     - comphelper/scopeguard.hxx

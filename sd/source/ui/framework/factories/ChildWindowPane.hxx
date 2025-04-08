@@ -29,7 +29,6 @@
 class SfxShell;
 
 namespace sd { class ViewShellBase; }
-namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::drawing::framework { class XResourceId; }
 
 namespace sd::framework {

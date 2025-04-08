@@ -35,7 +35,6 @@
 class SdDrawDocument;
 class SdrModel;
 class SfxItemSet;
-class SvxItemPropertySet;
 struct SfxItemPropertyMapEntry;
 
 const SvxItemPropertySet* ImplGetPageBackgroundPropertySet();

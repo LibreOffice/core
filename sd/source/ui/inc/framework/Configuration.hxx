@@ -26,7 +26,6 @@
 
 #include <memory>
 
-namespace com::sun::star::util { class XCloneable; }
 namespace com::sun::star::drawing::framework { class XConfigurationControllerBroadcaster; }
 
 namespace sd::framework {

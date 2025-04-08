@@ -26,9 +26,7 @@
 #include <functional>
 
 namespace com::sun::star::container { class XHierarchicalNameAccess; }
-namespace com::sun::star::container { class XNameAccess; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
-namespace com::sun::star::uno { class XComponentContext; }
 
 namespace sd::tools {
 

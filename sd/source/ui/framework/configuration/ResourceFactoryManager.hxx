@@ -30,7 +30,6 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
-namespace com::sun::star::drawing::framework { class XControllerManager; }
 namespace com::sun::star::drawing::framework { class XResourceFactory; }
 namespace com::sun::star::util { class XURLTransformer; }
 namespace sd { class DrawController; }

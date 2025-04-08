@@ -23,7 +23,6 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <comphelper/compbase.hxx>
 
-namespace com::sun::star::drawing::framework { class XConfiguration; }
 namespace com::sun::star::drawing::framework { class XResourceId; }
 
 namespace sd::framework {

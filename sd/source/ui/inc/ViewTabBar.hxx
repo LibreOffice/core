@@ -30,8 +30,6 @@
 
 namespace com::sun::star::drawing::framework { class XConfigurationController; }
 namespace com::sun::star::drawing::framework { class XResourceId; }
-namespace com::sun::star::drawing::framework { struct ConfigurationChangeEvent; }
-namespace com::sun::star::frame { class XController; }
 namespace vcl { class Window; }
 
 namespace sd {

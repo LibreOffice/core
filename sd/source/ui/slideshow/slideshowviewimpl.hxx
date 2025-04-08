@@ -33,8 +33,6 @@
 namespace com::sun::star::awt { class XPointer; }
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::awt { class XWindowPeer; }
-namespace com::sun::star::awt { struct WindowEvent; }
-namespace com::sun::star::rendering { class XSpriteCanvas; }
 class SdDrawDocument;
 
 namespace sd

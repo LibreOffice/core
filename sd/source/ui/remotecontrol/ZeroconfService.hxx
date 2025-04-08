@@ -20,8 +20,6 @@
 
 #define kREG_TYPE "_impressremote._tcp"
 
-struct sockaddr_in;
-
 typedef unsigned int uint;
 
 namespace sd{

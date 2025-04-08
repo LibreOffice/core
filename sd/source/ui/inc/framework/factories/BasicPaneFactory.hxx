@@ -28,7 +28,6 @@
 
 #include <memory>
 
-namespace com::sun::star::drawing::framework { class XConfigurationController; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace sd {

@@ -26,7 +26,6 @@
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::container { class XIndexAccess; class XNameContainer; }
-namespace com::sun::star::drawing { class XDrawView; }
 
 namespace sd
 {

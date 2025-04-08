@@ -27,8 +27,6 @@
 
 #include <unordered_map>
 
-namespace com::sun::star::frame { class XController; }
-namespace com::sun::star::uno { class XComponentContext; }
 namespace sd { class DrawController; }
 
 namespace sd::framework {
