@@ -41,10 +41,6 @@
 #include <mutex>
 #include <utility>
 
-class CSubmissionPut;
-class CSubmissionPost;
-class CSubmissionGet;
-
 class CCommandEnvironmentHelper final : public cppu::WeakImplHelper< css::ucb::XCommandEnvironment >
 {
     friend class CSubmissionPut;

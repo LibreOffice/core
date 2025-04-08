@@ -31,8 +31,6 @@ namespace frm
 {
 
 
-    class UrlTransformer;
-
     //= ControlFeatureInterception
 
     /** helper class for controls which allow some of their features to be intercepted

@@ -104,7 +104,6 @@ public:
 };
 
 
-class OGroupComp;
 class OGroupCompAcc
 {
     css::uno::Reference< css::beans::XPropertySet>    m_xComponent;

@@ -22,7 +22,6 @@
 
 namespace com::sun::star {
     namespace uno {
-        class XInterface;
         template<class T> class Reference;
     }
     namespace beans {

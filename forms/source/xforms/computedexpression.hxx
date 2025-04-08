@@ -27,12 +27,9 @@ namespace com::sun::star
 {
     namespace xml
     {
-        namespace dom { class XNode; }
-        namespace dom { class XNodeset; }
         namespace xpath { class XXPathAPI; }
         namespace xpath { class XXPathObject; }
     }
-    namespace container { class XNameContainer; }
 }
 namespace xforms { class EvaluationContext; }
 

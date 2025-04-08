@@ -36,13 +36,8 @@ namespace com::sun::star
 {
     namespace xml::dom { class XDocument; }
     namespace xml::dom { class XNode; }
-    namespace uno { template<typename T> class Sequence; }
-    namespace lang { class IndexOutOfBoundsException; }
-    namespace lang { class IllegalArgumentException; }
     namespace beans { class XPropertySet; }
-    namespace container { class XSet; }
     namespace container { class XNameContainer; }
-    namespace frame { class XModel; }
 }
 namespace xforms
 {

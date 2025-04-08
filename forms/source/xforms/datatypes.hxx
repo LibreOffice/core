@@ -367,7 +367,6 @@ namespace xforms
 
 
 
-    class ODateTimeType;
     typedef ODerivedDataType< OTimeType, OValueLimitedType< css::util::DateTime > > ODateTimeType_Base;
     class ODateTimeType : public ODateTimeType_Base
     {

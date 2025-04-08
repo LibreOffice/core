@@ -25,7 +25,6 @@
 namespace com::sun::star::uno
 {
     class Any;
-    class Type;
 }
 
 namespace xforms

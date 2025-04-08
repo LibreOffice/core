@@ -36,8 +36,6 @@
 namespace frm
 {
 
-class OGridColumn;
-
 // OGridControlModel
 
 typedef ::cppu::ImplHelper7 <   css::awt::XControlModel

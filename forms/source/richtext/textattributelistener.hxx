@@ -20,8 +20,6 @@
 
 #include "rtattributes.hxx"
 
-struct ESelection;
-
 namespace frm
 {
 

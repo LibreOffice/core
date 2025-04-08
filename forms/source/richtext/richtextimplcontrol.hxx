@@ -27,7 +27,6 @@
 #include <map>
 
 class EditView;
-class EditStatus;
 namespace vcl { class Window; }
 class SvxScriptSetItem;
 
@@ -37,7 +36,6 @@ namespace frm
 
     class ITextAttributeListener;
     class ITextSelectionListener;
-    class RichTextViewPort;
 
     class RichTextControlImpl : public IEngineStatusListener
     {

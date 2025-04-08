@@ -30,8 +30,6 @@
 #include <tools/link.hxx>
 #include <memory>
 
-class EditEngine;
-
 namespace frm
 {
 

@@ -26,11 +26,11 @@
 // forward declarations
 namespace com::sun::star::xml::dom
 {
-class XNodeList;
-namespace events
-{
-class XEventListener;
+class XNode;
 }
+namespace com::sun::star::xml::dom
+{
+class XNodeList;
 }
 
 namespace xforms

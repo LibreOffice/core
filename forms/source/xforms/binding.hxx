@@ -46,7 +46,6 @@ namespace xforms
 }
 namespace com::sun::star {
     namespace xml {
-        namespace xpath { class XXPathAPI; }
         namespace dom
         {
             class XNode;

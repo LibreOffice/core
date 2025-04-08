@@ -26,7 +26,6 @@ namespace frm
 {
     class IFeatureDispatcher;
     class DocumentCommandImageProvider;
-    class ICommandDescriptionProvider;
     class ImplNavToolBar;
     typedef std::shared_ptr< const DocumentCommandImageProvider >  PCommandImageProvider;
 
