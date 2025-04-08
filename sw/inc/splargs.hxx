@@ -31,7 +31,6 @@
 struct SwPosition;
 class SwTextFrame;
 class SwTextNode;
-class SwContentIndex;
 namespace vcl { class Font; }
 namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
 

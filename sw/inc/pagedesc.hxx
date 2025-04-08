@@ -38,10 +38,8 @@
 using namespace ::com::sun::star;
 
 
-class SfxPoolItem;
 class SwTextFormatColl;
 class SwNode;
-class SwNodes;
 class SwPageDescs;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
 

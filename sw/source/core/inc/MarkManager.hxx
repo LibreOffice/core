@@ -25,14 +25,12 @@
 #include <unordered_map>
 #include <memory>
 
-class SwCursorShell;
 class SfxViewShell;
 
 namespace sw::mark {
     typedef std::unordered_map<SwMarkName, sal_Int32> MarkBasenameMapUniqueOffset_t;
 
     class AnnotationMark;
-    class FieldmarkWithDropDownButton;
 
     class MarkManager final
         : virtual public IDocumentMarkAccess

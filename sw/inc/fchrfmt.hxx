@@ -25,7 +25,6 @@
 #include "charfmt.hxx"
 
 class SwTextCharFormat;
-class IntlWrapper;
 
 /// This pool item subclass can appear in the hint array of a text node. It refers to a character
 /// style. It's owned by SwTextCharFormat.

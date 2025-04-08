@@ -46,7 +46,6 @@ class SfxItemSet;
 struct SfxItemPropertyMapEntry;
 class SwPaM;
 class SwUnoCursor;
-class SwStartNode;
 class SwTextNode;
 class SwTableBox;
 class SwXText;

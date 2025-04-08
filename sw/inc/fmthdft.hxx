@@ -29,8 +29,6 @@ namespace sw {
     typedef ClientBase<::SwFrameFormat> FrameFormatClient;
 }
 
-class IntlWrapper;
-
  /** Header, for PageFormats
  Client of FrameFormat describing the header. */
 

@@ -54,7 +54,6 @@ class SwTextFormatColl;
 class SwTextINetFormat;
 class SwFormatINetFormat;
 class SwTextAttr;
-class SwTableBox;
 class SwTOXMark;
 class SwRangeRedline;
 class SwBlockCursor;

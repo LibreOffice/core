@@ -47,7 +47,6 @@
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::text { class XTextField; }
-namespace com::sun::star::text { class XFootnote; }
 
 class SwFrameFormat;
 class SwRangeRedline;

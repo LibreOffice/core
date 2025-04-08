@@ -32,8 +32,6 @@
 #include <vector>
 #include <memory>
 
-class InsCaptionOpt;
-
 // text format for the sending of messages ------------------------------
 enum class MailTextFormats
 {

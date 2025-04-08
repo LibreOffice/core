@@ -27,7 +27,6 @@ class SwViewShellImp;
 class SwFrame;
 class SwFlyFrame;
 class SwAnchoredObject;
-class SdrUndoManager;
 
 class SwDrawView final : public FmFormView
 {

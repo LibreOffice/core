@@ -53,7 +53,6 @@ class SwTransferable;
 class SwToolbarConfigItem;
 class SwAttrPool;
 namespace svtools{ class ColorConfig;}
-class SvtCTLOptions;
 class SvtUserOptions;
 enum class SwCompareMode;
 struct SwDBData;
@@ -68,7 +67,6 @@ enum class SvViewOpt {
 
 namespace com::sun::star::scanner { class XScannerManager2; }
 namespace com::sun::star::linguistic2 { class XLanguageGuessing; }
-namespace com::sun::star::linguistic2 { class XLinguServiceEventListener; }
 namespace ooo::vba { class XSinkCaller; }
 class SwLinguServiceEventListener;
 

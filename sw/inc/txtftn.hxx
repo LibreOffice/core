@@ -23,8 +23,6 @@
 #include "txatbase.hxx"
 #include "ndindex.hxx"
 
-class SwNodeIndex;
-class SwNodes;
 class SwDoc;
 class SwRootFrame;
 

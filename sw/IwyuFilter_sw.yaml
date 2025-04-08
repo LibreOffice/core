@@ -10,6 +10,16 @@ excludelist:
     - globals.hrc
     - cmdid.h
     - unomid.h
+    sw/inc/calbck.hxx:
+    # Needed in --fwdecl mode
+    - 'template <typename TElementType, typename TSource, sw::IteratorMode eMode> class SwIterator'
+    sw/inc/cmdid.h:
+    # Needed in --fwdecl mode
+    - class SvxFrameDirectionItem
+    - class SwAddPrinterItem
+    - class SwPageFootnoteInfoItem
+    - class SwPtrItem
+    - class SwUINumRuleItem
     sw/inc/extinput.hxx:
     - vector
     sw/inc/fmtmeta.hxx:

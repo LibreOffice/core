@@ -29,7 +29,6 @@
 
 #include <vcl/svapp.hxx>
 
-class SfxPoolItem;
 class SwDoc;
 class SwUnoTableCursor;
 

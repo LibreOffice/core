@@ -29,9 +29,6 @@
 #include <memory>
 #include <optional>
 
-struct SwPosition;
-class IntlWrapper;
-
 /// FlyAnchors
 class SW_DLLPUBLIC SwFormatAnchor final : public SfxPoolItem
 {

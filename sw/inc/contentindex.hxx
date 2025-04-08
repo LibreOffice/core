@@ -26,11 +26,6 @@
 #include <iostream>
 
 class SwContentNode;
-class SwContentIndexReg;
-struct SwPosition;
-class SwRangeRedline;
-
-namespace sw::mark { class MarkBase; }
 
 /// enum to allow us to cast without dynamic_cast (for performance)
 enum class SwContentIndexOwnerType { Redline, Mark };

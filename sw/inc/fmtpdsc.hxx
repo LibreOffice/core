@@ -27,8 +27,6 @@
 #include <optional>
 #include "pagedesc.hxx"
 
-class IntlWrapper;
-
 /**
     SwFormatPageDesc ("use this page style with xyz parameters") is the wrapper
     around SwPageDesc ("page style"),

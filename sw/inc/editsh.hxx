@@ -83,7 +83,6 @@ class SwLineNumberInfo;
 class SwAuthEntry;
 class SwRewriter;
 class SwView;
-class SwWrtShell;
 struct SwConversionArgs;
 struct SvxSwAutoFormatFlags;
 struct SwInsertTableOptions;

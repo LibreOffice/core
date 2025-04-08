@@ -23,9 +23,6 @@
 class SwTextNode;
 class SwXTextDocument;
 namespace com::sun::star {
-    namespace frame {
-        class XModel;
-    }
     namespace rdf {
         class XDocumentMetadataAccess;
         class XResource;

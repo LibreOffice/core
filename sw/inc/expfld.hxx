@@ -30,7 +30,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-class SfxPoolItem;
 class SwTextNode;
 class SwFrame;
 class SwRootFrame;

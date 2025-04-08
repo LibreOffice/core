@@ -30,7 +30,6 @@
 
 class SwLayoutFrame;
 class SwFont;
-class SwTextFrame;
 class SwFormatAnchor;
 class SwViewShell;
 class SwPageFrame;
@@ -41,13 +40,11 @@ class SwDoc;
 class SdrObject;
 class SvxBrushItem;
 class SdrMarkList;
-class SwNodeIndex;
 class GraphicObject;
 class GraphicAttr;
 class SwPageDesc;
 class SwRegionRects;
 class SwTextNode;
-namespace sw { struct Extent; }
 namespace basegfx::utils { class B2DClipState; }
 
 #define FAR_AWAY (SAL_MAX_INT32 - 20000)  // initial position of a Fly

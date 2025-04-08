@@ -165,7 +165,6 @@ namespace sw {
     class DocumentLayoutManager;
     class DocumentStylePoolManager;
     class DocumentExternalDataManager;
-    template<class T> class FrameFormats;
     class GrammarContact;
     class OnlineAccessibilityCheck;
 }

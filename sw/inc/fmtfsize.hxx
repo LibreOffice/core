@@ -28,8 +28,6 @@
 #include "swtypes.hxx"
 #include "format.hxx"
 
-class IntlWrapper;
-
 //Frame size.
 
 enum class SwFrameSize

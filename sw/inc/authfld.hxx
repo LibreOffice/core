@@ -31,7 +31,6 @@
 #include <vector>
 
 class SwTOXInternational;
-class SwTextAttr;
 class SwForm;
 
 class SwAuthEntry final : public salhelper::SimpleReferenceObject

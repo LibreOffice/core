@@ -28,10 +28,6 @@
 #include "swdllapi.h"
 #include "calbck.hxx"
 
-namespace com::sun::star::text {
-    class XTextRange;
-}
-
 class SwDoc;
 class SwTextFootnote;
 class SwRootFrame;

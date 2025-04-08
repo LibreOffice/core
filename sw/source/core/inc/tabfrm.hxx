@@ -25,7 +25,6 @@
 #include "flowfrm.hxx"
 
 class SwTable;
-class SwBorderAttrs;
 class SwAttrSetChg;
 
 enum class SwTabFrameInvFlags : sal_uInt8

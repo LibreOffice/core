@@ -28,8 +28,6 @@
 #include "format.hxx"
 #include <svl/poolitem.hxx>
 
-class IntlWrapper;
-
 /// Defines the vertical position of a fly frame.
 ///
 /// For example: from top (orientation), by 1cm (relative position), to the entire page (relation).

@@ -30,12 +30,10 @@ class SwNodeRange;
 class Graphic;
 class SfxItemSet;
 class SfxPoolItem;
-class GraphicObject;
 class SdrObject;
 class SwFrameFormat;
 class SwDrawFrameFormat;
 class SwFlyFrameFormat;
-class SwNodeIndex;
 class SwRootFrame;
 class SwTextAttr;
 

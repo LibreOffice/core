@@ -26,7 +26,6 @@
 #include "format.hxx"
 
 class ImageMap;
-class IntlWrapper;
 
 /// SfxPoolItem subclass that wraps a URL. This can appear in the item set of e.g. a
 /// sw::SpzFrameFormat (Writer image).

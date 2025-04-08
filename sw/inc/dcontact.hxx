@@ -36,7 +36,6 @@ class SwVirtFlyDrawObj;
 class SwFlyDrawObj;
 class SwRect;
 class SwDrawContact;
-struct SwPosition;
 class SdrTextObj;
 class SwContact;
 

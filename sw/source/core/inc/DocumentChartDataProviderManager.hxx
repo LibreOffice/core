@@ -24,7 +24,6 @@
 #include <rtl/ref.hxx>
 #include <memory>
 
-class SwTable;
 class SwChartDataProvider;
 class SwChartLockController_Helper;
 class SwDoc;

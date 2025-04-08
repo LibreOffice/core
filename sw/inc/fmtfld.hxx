@@ -32,10 +32,8 @@
 #include "reffld.hxx"
 #include "nodeoffset.hxx"
 
-class SwField;
 class SwTextField;
 class SwView;
-class SwFieldType;
 class SwDDETable;
 class SwFormatField;
 class SwXTextField;

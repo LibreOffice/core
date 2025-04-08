@@ -31,13 +31,6 @@
 
 #include "unobaseclass.hxx"
 
-namespace com::sun::star {
-    namespace text {
-        class XTextContent;
-        class XText;
-    }
-}
-
 class SfxItemPropertySet;
 class SwDoc;
 class SwStartNode;

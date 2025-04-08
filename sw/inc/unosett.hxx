@@ -34,7 +34,6 @@
 #include "names.hxx"
 
 class SwDoc;
-class SwFormatCol;
 class SwDocShell;
 class SwNumRule;
 class SwNumFormat;

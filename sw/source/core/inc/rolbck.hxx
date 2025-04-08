@@ -40,7 +40,6 @@ namespace sw {
 class SwDoc;
 class SwFormatColl;
 class SwTextAttr;
-class SfxPoolItem;
 class SwUndoSaveSection;
 class SwTextFootnote;
 class SwUndoDelLayFormat;

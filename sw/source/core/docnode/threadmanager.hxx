@@ -30,7 +30,6 @@
 #include "cancellablejob.hxx"
 #include <memory>
 
-namespace com::sun::star::util { class XCancellable; }
 namespace com::sun::star::util { class XJobManager; }
 
 class IFinishedThreadListener;

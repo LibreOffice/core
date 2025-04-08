@@ -31,9 +31,6 @@
 #include <libxml/xmlstring.h>
 #include <libxml/xmlwriter.h>
 
-class SwFrameFormat;
-class SwTableFormat;
-
 // Like o3tl::find_partialorder_ptrequals
 // We don't allow duplicated object entries!
 namespace sw

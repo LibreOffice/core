@@ -38,11 +38,9 @@ class SwTextFormatColl;
 class IDocumentListsAccess;
 class SwNodeNum;
 namespace vcl { class Font; }
-class SvxBrushItem;
 class SfxGrabBagItem;
 class SwDoc;
 class SwTextNode;
-class Size;
 class SwWrtShell;
 
 const sal_Unicode cBulletChar = 0x2022; ///< Character for lists.

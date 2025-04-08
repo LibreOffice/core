@@ -40,8 +40,9 @@ class SwDoc;
 class SwUnoCursor;
 class SwFrameFormat;
 class SwXText;
-class SwXTextCursor;
 class SfxItemPropertySet;
+
+namespace sw::mark { class MarkBase; }
 
 class SW_DLLPUBLIC SwUnoInternalPaM final
     : public SwPaM

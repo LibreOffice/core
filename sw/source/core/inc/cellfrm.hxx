@@ -23,8 +23,6 @@
 #include "layfrm.hxx"
 
 class SwTableBox;
-struct SwCursorMoveState;
-class SwBorderAttrs;
 
 /// SwCellFrame is one table cell in the document layout.
 class SW_DLLPUBLIC SwCellFrame final : public SwLayoutFrame

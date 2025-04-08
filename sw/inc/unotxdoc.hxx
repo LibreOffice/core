@@ -71,7 +71,6 @@
 
 class SwDoc;
 class SwDocShell;
-class UnoActionContext;
 class SwXBodyText;
 class SwFmDrawPage;
 class SwUnoCursor;
@@ -122,12 +121,7 @@ class SwXFieldmark;
 class SwXSection;
 class SwXFieldMaster;
 class SvNumberFormatsSupplierObj;
-namespace com::sun::star::container { class XNameContainer; }
 namespace com::sun::star::frame { class XController; }
-namespace com::sun::star::lang { struct Locale; }
-namespace com::sun::star::uno { class XAggregation; }
-
-namespace com::sun::star::util { class XReplaceDescriptor; }
 
 typedef cppu::ImplInheritanceHelper
 <

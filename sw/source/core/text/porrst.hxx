@@ -31,15 +31,11 @@
 #include "portxt.hxx"
 #include "possiz.hxx"
 
-class SwPortionHandler;
 class SwTextPaintInfo;
-class SwTextSizeInfo;
 class SwFont;
 
 #define LINE_BREAK_WIDTH        150
 #define SPECIAL_FONT_HEIGHT     200
-
-class SwTextFormatInfo;
 
 class SwTmpEndPortion : public SwLinePortion
 {

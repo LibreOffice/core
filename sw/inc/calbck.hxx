@@ -32,9 +32,7 @@
 #include <optional>
 
 class SwModify;
-class SwFormat;
 class SwFormatChangeHint;
-class SfxPoolItem;
 class SwAttrSet;
 class SwCellFrame;
 class SwTabFrame;

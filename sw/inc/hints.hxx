@@ -26,13 +26,11 @@
 #include <vcl/vclptr.hxx>
 
 class SwFormat;
-class OutputDevice;
 class SwTable;
 class SwNode;
 class SwNodes;
 class SwPageFrame;
 class SwFrame;
-class SwHistory;
 class SwTextNode;
 class SwTextFormatColl;
 class SwFrameFormat;
@@ -40,7 +38,6 @@ class SwTableBox;
 class SwTableBoxFormat;
 class SwTableLine;
 class SwTableLineFormat;
-class SwTableBox;
 class SwAttrSetChg;
 class SwUpdateAttr;
 

@@ -24,8 +24,6 @@
 #include "format.hxx"
 #include "swdllapi.h"
 
-class IntlWrapper;
-
 /// This can appear in the item set of a fly frame. It's called "keep inside text boundaries" on the
 /// UI. It's off by default and it keeps the fly frame within the boundaries of the upper (e.g.
 /// table cell).

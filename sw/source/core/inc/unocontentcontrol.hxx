@@ -35,9 +35,7 @@
 #include <unobaseclass.hxx>
 #include <unocoll.hxx>
 
-class SwPaM;
 class SwTextNode;
-class SwFormatContentControl;
 class SwContentControl;
 class SwXText;
 class SwXTextPortion;

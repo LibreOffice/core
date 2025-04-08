@@ -44,7 +44,6 @@ class SvxLanguageItem;
 class SvxEscapementItem;
 class SvxCaseMapItem;
 class SvxNoHyphenItem;
-class SvxBlinkItem;
 class SvxEmphasisMarkItem;
 class SvxTwoLinesItem;
 class SvxCharScaleWidthItem;

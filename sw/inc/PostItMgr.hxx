@@ -40,8 +40,6 @@ class SwWrtShell;
 class SwView;
 class SwPostItField;
 class SwFormatField;
-class SfxBroadcaster;
-class SfxHint;
 class SwEditWin;
 class Color;
 class SfxItemSet;
@@ -52,7 +50,6 @@ class SwAnnotationItem;
 class SwFrame;
 namespace vcl { class Window; }
 struct ImplSVEvent;
-class OutlinerParaObject;
 namespace i18nutil { struct SearchOptions2; }
 
 #define COL_NOTES_SIDEPANE_ARROW_ENABLED    Color(0,0,0)

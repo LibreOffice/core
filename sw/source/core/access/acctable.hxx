@@ -34,10 +34,6 @@ class SwAccessibleTableData_Impl;
 class SwTableBox;
 class SwSelBoxes;
 
-namespace sw::access {
-    class SwAccessibleChild;
-}
-
 using SwAccessibleTable_BASE = cppu::ImplInheritanceHelper<SwAccessibleContext,
                                                            css::accessibility::XAccessibleTable,
                                                            css::accessibility::XAccessibleSelection,

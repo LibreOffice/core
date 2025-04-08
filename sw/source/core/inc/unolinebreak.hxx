@@ -27,7 +27,6 @@
 
 #include <unobaseclass.hxx>
 
-class SwDoc;
 class SwFormatLineBreak;
 
 /// UNO API wrapper around an SwFormatLineBreak, exposed as the com.sun.star.text.LineBreak service.

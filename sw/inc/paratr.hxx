@@ -40,8 +40,6 @@
 #include <editeng/pgrditem.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-class SwTextNode;
-class IntlWrapper;
 class SwFormatDrop;
 
 namespace sw {

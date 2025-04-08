@@ -24,10 +24,9 @@
 // MM02
 #include <svx/sdr/contact/viewcontact.hxx>
 
+class GraphicObject;
 class SwNoTextNode;
 class OutputDevice;
-class SwBorderAttrs;
-struct SwCursorMoveState;
 
 class SwNoTextFrame final : public SwContentFrame
 {

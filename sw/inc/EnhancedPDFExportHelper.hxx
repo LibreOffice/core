@@ -41,8 +41,6 @@ class SwEditShell;
 class StringRangeEnumerator;
 class SwTextAttr;
 class SwTextNode;
-class SwTable;
-class SwNumberTreeNode;
 class SwTextPaintInfo;
 class SwTextFrame;
 

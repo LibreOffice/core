@@ -25,7 +25,6 @@
 #include <svl/solar.hrc>
 
 class SvxFrameDirectionItem;
-class SvxSizeItem;
 class SwAddPrinterItem;
 class SwPageFootnoteInfoItem;
 class SwPtrItem;

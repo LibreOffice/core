@@ -31,20 +31,14 @@
 #include "SidebarWindowsTypes.hxx"
 #include <annotationmark.hxx>
 
-class EditView;
-class PopupMenu;
 class OutlinerParaObject;
 class SwPostItMgr;
 class SwPostItField;
 class OutlinerView;
 class Outliner;
-class ScrollBar;
 class SwEditWin;
 class SwView;
-class FixedText;
-class MenuButton;
 class SwFrame;
-class SvxLanguageItem;
 namespace sw::overlay { class OverlayRanges; }
 namespace sw::sidebarwindows {
     class SidebarTextControl;

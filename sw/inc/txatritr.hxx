@@ -26,7 +26,6 @@
 
 class SwTextNode;
 class SwTextAttr;
-class SfxPoolItem;
 
 class SwScriptIterator
 {

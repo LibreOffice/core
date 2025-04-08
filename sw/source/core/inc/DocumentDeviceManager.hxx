@@ -26,8 +26,6 @@
 class SwDoc;
 class SfxPrinter;
 class VirtualDevice;
-class OutputDevice;
-class JobSetup;
 class SwPrintData;
 
 namespace sw

@@ -32,8 +32,6 @@ class SwCursorShell;
 namespace sw::mark {
     class AnnotationMark;
     class SaveBookmark; // FIXME: Ugly: SaveBookmark is a core-internal class, and should not be used in the interface
-    class MarkBase;
-    class Fieldmark;
 }
 
 /** Provides access to the marks of a document.

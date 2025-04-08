@@ -37,9 +37,6 @@ class SwShellCursor;
 class SwTableCursor;
 class SwLayVout;
 class SwViewOption;
-class SwSelectionList;
-struct SwPosition;
-struct SwCursorMoveState;
 
 namespace sw {
     enum class RedlineMode

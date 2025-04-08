@@ -21,7 +21,6 @@
 #include "txatbase.hxx"
 
 class SwContentControlManager;
-class SwFormatContentControl;
 
 /// SwTextAttr subclass that tracks the location of the wrapped SwFormatContentControl.
 class SW_DLLPUBLIC SwTextContentControl final : public SwTextAttrNesting

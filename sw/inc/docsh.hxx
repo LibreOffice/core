@@ -32,7 +32,6 @@
 #include <o3tl/deleter.hxx>
 
 class SwDoc;
-class SfxDocumentInfoDialog;
 class SfxInPlaceClient;
 class FontList;
 class SwEditShell;

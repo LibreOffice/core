@@ -25,8 +25,6 @@
 #include "hintids.hxx"
 #include "format.hxx"
 
-class IntlWrapper;
-
 enum class SwTextGrid { NONE, LinesOnly, LinesAndChars };
 
 class SW_DLLPUBLIC SwTextGridItem final : public SfxPoolItem

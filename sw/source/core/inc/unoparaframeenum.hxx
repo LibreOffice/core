@@ -26,7 +26,6 @@
 
 
 class SwNode;
-class SwNodeIndex;
 class SwPaM;
 class SwFrameFormat;
 

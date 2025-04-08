@@ -31,7 +31,6 @@ class SwRect;
 class SwBorderAttrs;
 class SwDoc;
 class SwNode;
-class SwNodeIndex;
 
 /** Base class that provides the general functionalities for frames that are
     allowed at page breaks (flow) and shall continue on the next page (can be

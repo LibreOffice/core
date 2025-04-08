@@ -18,7 +18,6 @@
 #include <map>
 
 struct SwPosition;
-class SwTextNode;
 
 namespace sw
 {

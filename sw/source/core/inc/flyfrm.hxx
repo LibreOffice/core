@@ -29,7 +29,6 @@
 class SwFormatAnchor;
 class SwPageFrame;
 class SwFormatFrameSize;
-struct SwCursorMoveState;
 class SwBorderAttrs;
 class SwVirtFlyDrawObj;
 class SwAttrSetChg;

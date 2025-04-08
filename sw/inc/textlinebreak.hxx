@@ -21,8 +21,6 @@
 
 #include "txatbase.hxx"
 
-class SwFormatLineBreak;
-
 /**
  * SwTextAttr subclass that tracks the location of the wrapped SwFormatLineBreak.
  *

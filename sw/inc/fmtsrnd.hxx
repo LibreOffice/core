@@ -25,8 +25,6 @@
 #include "format.hxx"
 #include <svl/eitem.hxx>
 
-class IntlWrapper;
-
 /// Defines the way you want text to wrap around an object. This pool item can appear in a frame
 /// styles and in the item set of an sw::SpzFrameFormat. It's Format -> Image -> Properties -> Wrap
 /// on the UI.

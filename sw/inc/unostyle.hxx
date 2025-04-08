@@ -40,8 +40,6 @@
 #include <memory>
 #include <map>
 
-namespace com::sun::star::document { class XEventsSupplier; }
-
 class SwDocShell;
 class SwAutoStylesEnumImpl;
 class SfxItemSet;

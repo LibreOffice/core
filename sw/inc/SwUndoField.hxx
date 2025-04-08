@@ -24,7 +24,6 @@
 
 class SwDoc;
 class SwField;
-class SwMsgPoolItem;
 
 class SwUndoField : public SwUndo
 {

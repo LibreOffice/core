@@ -24,7 +24,6 @@
 #include <txatbase.hxx>
 
 namespace sw { struct MergedPara; }
-class SwTextAttr;
 class SwTextNode;
 class SwRedlineItr;
 class SwViewShell;

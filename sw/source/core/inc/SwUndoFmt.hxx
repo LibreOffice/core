@@ -28,7 +28,6 @@
 class SwDoc;
 class SwTextFormatColl;
 class SwConditionTextFormatColl;
-class SwRewriter;
 
 class SwUndoFormatCreate : public SwUndo
 {

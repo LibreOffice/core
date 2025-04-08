@@ -23,7 +23,6 @@
 #include <svx/svdobj.hxx>
 #include <libxml/xmlwriter.h>
 
-struct SwPosition;
 class SwFrame;
 class SwLayoutFrame;
 class SwTextFrame;

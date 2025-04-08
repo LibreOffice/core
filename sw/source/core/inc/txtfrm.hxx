@@ -44,7 +44,6 @@ class WidowsAndOrphans;
 class SwTextFootnote;
 class SwInterHyphInfo;      // Hyphenate()
 class SwCache;
-class SwBorderAttrs;
 class SwFrameFormat;
 struct SwCursorMoveState;
 struct SwFillData;
@@ -54,6 +53,7 @@ enum class ExpandMode;
 class SwTextAttr;
 class SwWrtShell;
 class SwNode;
+class SwNodeIndex;
 class SwFlyAtContentFrame;
 
 /// a clone of SwInterHyphInfo, but with TextFrameIndex instead of node index

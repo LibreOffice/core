@@ -30,13 +30,11 @@
 
 class SwFieldTypes;
 class SwFieldType;
-class SfxPoolItem;
 struct SwPosition;
 class SwDocUpdateField;
 class SwCalc;
 class SwTextField;
 class SwField;
-class SwMsgPoolItem;
 class DateTime;
 class SetGetExpField;
 class SwNode;

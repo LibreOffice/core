@@ -24,7 +24,6 @@
 
 class SwDoc;
 class SwNoTextNode;
-class SwFormatColl;
 class SwHistory;
 
 namespace sw

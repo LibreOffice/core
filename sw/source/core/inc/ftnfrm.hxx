@@ -26,7 +26,6 @@ class SwContentFrame;
 class SwRootFrame;
 class SwTextNode;
 class SwTextFootnote;
-class SwBorderAttrs;
 class SwFootnoteFrame;
 
 void sw_RemoveFootnotes( SwFootnoteBossFrame* pBoss, bool bPageOnly, bool bEndNotes );

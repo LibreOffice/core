@@ -138,8 +138,6 @@ class SwTableBoxNumFormat;
 class SwTextGridItem;
 class SwTransparencyGrf;
 class SwFormatRuby;
-class SwTableFormulaUpdate;
-class VirtPageNumHint;
 class SwFltAnchor;
 class SwFltTOX;
 class SwFltRedline;

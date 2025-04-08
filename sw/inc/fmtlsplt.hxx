@@ -24,8 +24,6 @@
 #include "format.hxx"
 #include "swdllapi.h"
 
-class IntlWrapper;
-
 /// This appears in a table's item set, and controls if the table is allowed to split across pages
 /// and columns.
 class SW_DLLPUBLIC SwFormatLayoutSplit final : public SfxBoolItem

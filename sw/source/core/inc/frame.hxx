@@ -61,7 +61,6 @@ class SwSelectionList;
 struct SwPosition;
 struct SwCursorMoveState;
 class SwFormat;
-class SwPrintData;
 class SwSortedObjs;
 class SwAnchoredObject;
 enum class SvxFrameDirection;

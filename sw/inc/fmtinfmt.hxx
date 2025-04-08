@@ -28,7 +28,6 @@
 class SvxMacro;
 class SvxMacroTableDtor;
 class SwTextINetFormat;
-class IntlWrapper;
 enum class SvMacroItemId : sal_uInt16;
 
 /// SfxPoolItem subclass that contains data about an inserted hyperlink / URL in Writer text. Its

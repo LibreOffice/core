@@ -38,7 +38,6 @@ class SwTextFormatColl;
 class SwFrameFormat;
 class SwFormatAnchor;
 class SwNode;
-class SwNodeRange;
 class SwRedlineData;
 class SwRedlineSaveDatas;
 enum class RedlineFlags;

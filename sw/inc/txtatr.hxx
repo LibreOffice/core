@@ -24,7 +24,6 @@
 
 class SwTextNode;
 class SwCharFormat;
-class SwFormatMeta;
 
 namespace sw {
     class MetaFieldManager;

@@ -25,7 +25,6 @@
 #include <memory>
 #include <drawdoc.hxx>
 
-class SdrPageView;
 class SwDoc;
 
 namespace sw

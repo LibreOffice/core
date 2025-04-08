@@ -30,7 +30,6 @@
 
 class SwDoc;
 class SwDocShell;
-class SvxMacroTableDtor;
 
 enum class SwXmlFlags {
     NONE         = 0x0000,

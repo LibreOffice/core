@@ -29,7 +29,6 @@
 #include <map>
 
 namespace com::sun::star::container { class XStringKeyMap; }
-namespace com::sun::star::text { class XTextRange; }
 class SwTextNode;
 class ModelToViewHelper;
 

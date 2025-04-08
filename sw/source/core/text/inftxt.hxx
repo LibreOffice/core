@@ -37,8 +37,6 @@ namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
 
 class SvxBrushItem;
 class SvxLineSpacingItem;
-class SvxTabStop;
-class SvxTabStopItem;
 class SwFlyPortion;
 class SwFormatDrop;
 class SwLinePortion;

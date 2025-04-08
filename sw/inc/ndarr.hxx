@@ -34,7 +34,6 @@
 #include "nodeoffset.hxx"
 
 class Graphic;
-class GraphicObject;
 class SwAttrSet;
 class SfxItemSet;
 class SwContentNode;

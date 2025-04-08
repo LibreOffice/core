@@ -35,7 +35,6 @@
 class SetGetExpFields;
 class SwTextField;
 class SwFrame;
-class OutlinerParaObject;
 class SwTextAPIObject;
 class SwCharFormat;
 

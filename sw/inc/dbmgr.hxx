@@ -75,7 +75,6 @@ namespace weld {
 
 class SwView;
 class SwWrtShell;
-class ListBox;
 class SvNumberFormatter;
 class SwXMailMerge;
 class SwMailMergeConfigItem;

@@ -21,7 +21,6 @@
 
 #include <svtools/unoevent.hxx>
 
-class SvxMacroItem;
 class SwXFrame;
 class SwXTextFrame;
 class SwXTextGraphicObject;

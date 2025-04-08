@@ -25,8 +25,6 @@
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <sax/fastattribs.hxx>
 
-namespace com::sun::star::xml::sax { class XFastTokenHandler; }
-
 using namespace css::xml::sax;
 using namespace xmloff::token;
 

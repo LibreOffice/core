@@ -21,7 +21,6 @@
 #include "swdllapi.h"
 #include "fldbas.hxx"
 
-class SfxPoolItem;
 class SwCalc;
 class SwDoc;
 

@@ -60,8 +60,6 @@ namespace sw
             : SfxHint(SfxHintId::SwFindSdrObject), m_rpObject(rpObject) {};
         virtual ~FindSdrObjectHint() override;
     };
-    template<class T> class FrameFormats;
-    class SpzFrameFormat;
 }
 class SwFormatsBase;
 class SwTableFormat;

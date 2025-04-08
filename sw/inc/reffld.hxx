@@ -24,10 +24,8 @@
 #include "fldbas.hxx"
 #include "names.hxx"
 
-class SfxPoolItem;
 class SwDoc;
 class SwTextNode;
-class SwContentFrame;
 class SwTextField;
 class SwRootFrame;
 class SwFrame;

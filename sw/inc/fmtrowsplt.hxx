@@ -24,8 +24,6 @@
 #include "hintids.hxx"
 #include "format.hxx"
 
-class IntlWrapper;
-
 /// Controls if a table row is allowed to split or not. This is used in the item set of an
 /// SwTableLine's format.
 class SW_DLLPUBLIC SwFormatRowSplit final : public SfxBoolItem

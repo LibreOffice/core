@@ -29,7 +29,6 @@
 #include <memory>
 #include <vector>
 
-class SfxItemSet;
 class SwFormatColl;
 class SwFormatAnchor;
 class SdrMarkList;

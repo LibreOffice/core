@@ -25,8 +25,6 @@
 #include "calbck.hxx"
 #include "frmfmt.hxx"
 
-class IntlWrapper;
-
 /// Connection (text flow) between two FlyFrames.
 class SW_DLLPUBLIC SwFormatChain final : public SfxPoolItem
 {

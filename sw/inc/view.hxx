@@ -51,7 +51,6 @@ class Ruler;
 class SvxSearchItem;
 class SearchAttrItemList;
 class SvxSearchDialog;
-class SdrView;
 class SdrPageView;
 class SwEditWin;
 class SwWrtShell;
@@ -68,7 +67,6 @@ struct SwConversionArgs;
 class GraphicFilter;
 class SwPostItMgr;
 enum class SotExchangeDest;
-class SwCursorShell;
 enum class SvxSearchCmd;
 enum class SelectionType : sal_Int32;
 class SwNode;
@@ -76,7 +74,6 @@ class SwMarkName;
 
 namespace com::sun::star::view { class XSelectionSupplier; }
 namespace sfx2 { class FileDialogHelper; }
-namespace sw::mark { class Fieldmark; }
 namespace weld { class Scrollbar; }
 
 const tools::Long nLeftOfst = -370;

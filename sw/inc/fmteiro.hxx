@@ -24,8 +24,6 @@
 #include "format.hxx"
 #include "swdllapi.h"
 
-class IntlWrapper;
-
 /// Allows you to edit the contents of a TextFrame in a document that is read-only.
 ///
 /// Appears in the item set of an sw::SpzFrameFormat.

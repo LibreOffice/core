@@ -29,8 +29,6 @@
 #include <optional>
 
 class SwTextField;
-class SwContentIndex;
-class SwNodeIndex;
 class SwContentFrame;
 class SwSectionNode;
 class SwSection;

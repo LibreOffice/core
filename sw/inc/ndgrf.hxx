@@ -29,7 +29,6 @@
 class SwAsyncRetrieveInputStreamThreadConsumer;
 
 class SwGrfFormatColl;
-class SwDoc;
 
 // SwGrfNode
 class SAL_DLLPUBLIC_RTTI SwGrfNode final: public SwNoTextNode

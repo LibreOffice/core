@@ -31,7 +31,6 @@
 
 class SfxItemSet;
 class SwAttrPool;
-class SwFormatAutoFormat;
 class SwChapterField;
 class SwChapterFieldType;
 class SwContentFrame;

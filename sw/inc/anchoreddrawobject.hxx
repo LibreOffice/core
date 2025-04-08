@@ -21,8 +21,6 @@
 #include "anchoredobject.hxx"
 #include <optional>
 
-namespace tools { class Rectangle; }
-
 /** class for the positioning of drawing objects */
 class SwAnchoredDrawObject final : public SwAnchoredObject
 {

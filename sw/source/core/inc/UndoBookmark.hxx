@@ -24,13 +24,8 @@
 #include <undobj.hxx>
 #include "rolbck.hxx"
 
-class SwHistoryBookmark;
-class SwHistoryNoTextFieldmark;
-class SwHistoryTextFieldmark;
-
 namespace sw::mark
 {
-class IMark;
 class Fieldmark;
 }
 

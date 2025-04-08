@@ -43,9 +43,7 @@ namespace utl{
 }
 
 class Size;
-class SwPathFinder;
 class Graphic;
-class OutputDevice;
 class CharClass;
 class CollatorWrapper;
 class LanguageTag;

@@ -23,8 +23,6 @@
 #include "hintids.hxx"
 #include "format.hxx"
 
-class IntlWrapper;
-
 class SW_DLLPUBLIC SwHeaderAndFooterEatSpacingItem final : public SfxBoolItem
 {
 public:

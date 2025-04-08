@@ -25,7 +25,6 @@
 
 class IDocumentRedlineAccess;
 class SwTextFootnote;
-class SwNodeIndex;
 class SwSectionNode;
 class SwNode;
 

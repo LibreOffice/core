@@ -45,7 +45,6 @@
 
 class SwDoc;
 struct SwPosition;
-class SwUnoCursor;
 class SwXTextRange;
 class SfxItemPropertySet;
 

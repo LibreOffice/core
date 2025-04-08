@@ -36,7 +36,6 @@ class SwViewShell;
 class SwRootFrame;
 class SwPageFrame;
 class Fraction;
-struct PreviewPage;
 
 /** page preview functionality in the writer */
 class SwPagePreviewLayout

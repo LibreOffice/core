@@ -31,7 +31,6 @@ class SwFlyFrameFormat;
 class SwPageDesc;
 class SwContentFrame;
 struct SwPosition;
-struct SwCursorMoveState;
 class SwAttrSetChg;
 namespace vcl { class Font; }
 class SwSortedObjs;

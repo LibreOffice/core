@@ -21,8 +21,6 @@
 
 #include "layfrm.hxx"
 
-class SwBorderAttrs;
-
 /// Container of body content (i.e. not header or footer). Typical parent is an
 /// SwPageFrame, typical lower is an SwTextFrame.
 class SAL_DLLPUBLIC_RTTI SwBodyFrame final : public SwLayoutFrame

@@ -24,7 +24,6 @@
 #include <rtl/ustring.hxx>
 #include "TextFrameIndex.hxx"
 
-class SwFont;
 enum class PortionType;
 
 /** The SwPortionHandler interface implements a visitor for the layout

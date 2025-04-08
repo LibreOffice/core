@@ -30,8 +30,6 @@
 
 #include <set>
 
-namespace com::sun::star::container { class XStringKeyMap; }
-namespace com::sun::star::text { class XTextRange; }
 class SwTextNode;
 class SwDoc;
 class ModelToViewHelper;

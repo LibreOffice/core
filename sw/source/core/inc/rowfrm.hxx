@@ -22,7 +22,6 @@
 #include "layfrm.hxx"
 
 class SwTableLine;
-class SwBorderAttrs;
 
 /// SwRowFrame is one table row in the document layout.
 class SwRowFrame final : public SwLayoutFrame

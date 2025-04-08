@@ -36,7 +36,6 @@
 
 class SwStartNode;
 class SwFormat;
-class Color;
 class SwHTMLTableLayout;
 class SwTableLine;
 class SwTableBox;
@@ -48,7 +47,6 @@ class SwTableCalcPara;
 struct SwPosition;
 class SwNodeIndex;
 class SwNode;
-class SfxPoolItem;
 class SwUndoTableMerge;
 class SwUndo;
 class SwPaM;
@@ -57,6 +55,7 @@ class SwBoxSelection;
 struct SwSaveRowSpan;
 struct Parm;
 class SwServerObject;
+class SwHistory;
 
 void sw_GetTableBoxColStr( sal_uInt16 nCol, OUString& rNm );
 
