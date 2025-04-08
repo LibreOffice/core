@@ -47,46 +47,91 @@ bool isHangul( sal_Unicode cCh )
 }
 
 LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
-        const OUString& Text, sal_Int32 nStartPos,
-        const css::lang::Locale& /*rLocale*/, sal_Int32 /*nMinBreakPos*/,
-        const LineBreakHyphenationOptions& /*hOptions*/,
-        const LineBreakUserOptions& bOptions )
+    const OUString& Text, sal_Int32 nStartPos, const css::lang::Locale& rLocale,
+    sal_Int32 nMinBreakPos, const LineBreakHyphenationOptions& hOptions,
+    const LineBreakUserOptions& bOptions)
 {
-    LineBreakResults lbr;
-
-    const sal_Int32 nOldStartPos = nStartPos;
-
-    if (bOptions.allowPunctuationOutsideMargin &&
-            nStartPos != Text.getLength() &&
-            hangingCharacters.indexOf(Text[nStartPos]) != -1 &&
-            (Text.iterateCodePoints( &nStartPos ), nStartPos == Text.getLength())) {
-        ; // do nothing
-    } else if (bOptions.applyForbiddenRules && 0 < nStartPos && nStartPos < Text.getLength()) {
-
-        while (nStartPos > 0 &&
-                (bOptions.forbiddenBeginCharacters.indexOf(Text[nStartPos]) != -1 ||
-                 bOptions.forbiddenEndCharacters.indexOf(Text[nStartPos-1]) != -1))
-            Text.iterateCodePoints( &nStartPos, -1);
-    }
-
-    // Prevent cutting Korean words in the middle.
-    if (nOldStartPos == nStartPos && nStartPos < Text.getLength()
-        && isHangul(Text[nStartPos]))
+    auto fnIsForbiddenBreak = [&](sal_Int32 nBreakPos)
     {
-        while ( nStartPos >= 0 && isHangul( Text[nStartPos] ) )
-            --nStartPos;
+        return nBreakPos > 0
+               && (bOptions.forbiddenBeginCharacters.indexOf(Text[nBreakPos]) != -1
+                   || bOptions.forbiddenEndCharacters.indexOf(Text[nBreakPos - 1]) != -1);
+    };
 
-        // beginning of the last Korean word.
-        if ( nStartPos < nOldStartPos )
-            ++nStartPos;
+    while (nStartPos > 0 && nStartPos < Text.getLength())
+    {
+        // Apply hanging punctuation
+        if (bOptions.allowPunctuationOutsideMargin
+            && hangingCharacters.indexOf(Text[nStartPos]) != -1)
+        {
+            // The current character is allowed to overhang the margin.
+            sal_Int32 nNextPos = nStartPos;
+            Text.iterateCodePoints(&nNextPos);
 
-        if ( nStartPos == 0 )
-            nStartPos = nOldStartPos;
+            // tdf#130592: The original code always allowed a line break after hanging
+            // punctuation, even if it's not a valid ICU break. This refactor preserves the
+            // original behavior in order to avoid regressing tdf#58604.
+            if (nNextPos >= Text.getLength() || !fnIsForbiddenBreak(nNextPos))
+            {
+                LineBreakResults stBreak;
+                stBreak.breakIndex = nNextPos;
+                stBreak.breakType = BreakType::HANGINGPUNCTUATION;
+                return stBreak;
+            }
+        }
+
+        const sal_Int32 nOldStartPos = nStartPos;
+
+        // Apply forbidden rules
+        if (bOptions.applyForbiddenRules)
+        {
+            while (fnIsForbiddenBreak(nStartPos))
+            {
+                Text.iterateCodePoints(&nStartPos, -1);
+            }
+        }
+
+        // Prevent cutting Korean words in the middle
+        if (nOldStartPos == nStartPos && isHangul(Text[nStartPos]))
+        {
+            while (nStartPos >= 0 && isHangul(Text[nStartPos]))
+                --nStartPos;
+
+            // beginning of the last Korean word.
+            if (nStartPos < nOldStartPos)
+                ++nStartPos;
+
+            if (nStartPos == 0)
+                nStartPos = nOldStartPos;
+        }
+
+        // tdf#130592: Fall back to the ICU breakiterator after applying CJK-specific rules
+        auto stBreak = BreakIterator_Unicode::getLineBreak(Text, nStartPos, rLocale, nMinBreakPos,
+                                                           hOptions, bOptions);
+        if (stBreak.breakIndex == nStartPos)
+        {
+            // Located break is valid under both iterators
+            return stBreak;
+        }
+
+        // CJK break is not valid; restart search from the next candidate
+        sal_Int32 nNextCandidate = stBreak.breakIndex;
+        while (bOptions.allowPunctuationOutsideMargin && nStartPos > stBreak.breakIndex)
+        {
+            if (hangingCharacters.indexOf(Text[nStartPos]) != -1)
+            {
+                nNextCandidate = nStartPos;
+                break;
+            }
+
+            Text.iterateCodePoints(&nStartPos, -1);
+        }
+
+        nStartPos = nNextCandidate;
     }
 
-    lbr.breakIndex = nStartPos;
-    lbr.breakType = BreakType::WORDBOUNDARY;
-    return lbr;
+    return BreakIterator_Unicode::getLineBreak(Text, nStartPos, rLocale, nMinBreakPos, hOptions,
+                                               bOptions);
 }
 
 #define LOCALE(language, country) css::lang::Locale(language, country, OUString())

@@ -43,6 +43,7 @@ public:
 #endif
     void testJapanese();
     void testChinese();
+    void testKorean();
 
     void testDictWordAbbreviation();
     void testDictWordPrepostDash();
@@ -66,6 +67,7 @@ public:
 #endif
     CPPUNIT_TEST(testJapanese);
     CPPUNIT_TEST(testChinese);
+    CPPUNIT_TEST(testKorean);
     CPPUNIT_TEST(testDictWordAbbreviation);
     CPPUNIT_TEST(testDictWordPrepostDash);
     CPPUNIT_TEST(testHebrewGereshGershaim);
@@ -390,17 +392,16 @@ void TestBreakIterator::testLineBreaking()
     }
 
     // i#72868: Writer/Impress line does not break after Chinese punctuation and Latin letters
+    // tdf#130592: Fixed the regression. If this case fails, UI text will be laid out incorrectly.
     {
         aLocale.Language = "zh";
         aLocale.Country = "HK";
 
         {
-            // Per the bug, this should break at the ideographic comma. However, this change has
-            // been reverted at some point. This test only verifies current behavior.
             const OUString str = u"word word、word word"_ustr;
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
                 str, strlen("word wordXwor"), aLocale, 0, aHyphOptions, aUserOptions);
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(13), aResult.breakIndex);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10), aResult.breakIndex);
         }
     }
 
@@ -1648,17 +1649,102 @@ void TestBreakIterator::testJapanese()
 
 void TestBreakIterator::testChinese()
 {
-    lang::Locale aLocale;
-    aLocale.Language = "zh";
-    aLocale.Country = "CN";
+    lang::Locale stLocale;
+    stLocale.Language = "zh";
+    stLocale.Country = "CN";
 
+    // Verify dictionary-based word breakiterator
     {
         static constexpr OUStringLiteral aTest = u"\u6A35\u6A30\u69FE\u8919\U00029EDB";
 
-        i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 4, aLocale,
-            i18n::WordType::DICTIONARY_WORD, true);
+        i18n::Boundary aBounds
+            = m_xBreak->getWordBoundary(aTest, 4, stLocale, i18n::WordType::DICTIONARY_WORD, true);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aBounds.startPos);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aBounds.endPos);
+    }
+
+    // Chinese allows line breaking inside a word
+    {
+        i18n::LineBreakHyphenationOptions stHyphOptions;
+        i18n::LineBreakUserOptions stUserOptions;
+
+        auto aTest = u"手机"_ustr;
+        auto stBreak = m_xBreak->getLineBreak(aTest, 1, stLocale, 0, stHyphOptions, stUserOptions);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), stBreak.breakIndex);
+    }
+
+    // Characteristic test including built-in forbidden rules
+    {
+        i18n::LineBreakHyphenationOptions stHyphOptions;
+        i18n::LineBreakUserOptions stUserOptions;
+
+        // Comma normally not allowed at start of line, quote normally not allowed at end
+        auto aTest = u"水水水、水水水「水水水水水水水水水"_ustr;
+        auto stBreak1 = m_xBreak->getLineBreak(aTest, 3, stLocale, 0, stHyphOptions, stUserOptions);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), stBreak1.breakIndex);
+        auto stBreak2 = m_xBreak->getLineBreak(aTest, 8, stLocale, 0, stHyphOptions, stUserOptions);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), stBreak2.breakIndex);
+    }
+
+    // tdf#117554 Do not break at ZWNBSP
+    {
+        i18n::LineBreakHyphenationOptions stHyphOptions;
+        i18n::LineBreakUserOptions stUserOptions;
+
+        auto aTest = u"手\uFEFF机"_ustr;
+        auto stBreak = m_xBreak->getLineBreak(aTest, 2, stLocale, 0, stHyphOptions, stUserOptions);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), stBreak.breakIndex);
+    }
+
+    // Characteristic test for hanging punctuation
+    {
+        i18n::LineBreakHyphenationOptions stHyphOptions;
+        i18n::LineBreakUserOptions stUserOptions;
+        stUserOptions.allowPunctuationOutsideMargin = true;
+
+        auto aTest = u"水水水、水水水。"_ustr;
+
+        // Comma normally not allowed at start of line. Usually this should wrap the preceding
+        // character to the next line, but with hanging punctuation it can overflow the line.
+        auto stBreak1 = m_xBreak->getLineBreak(aTest, 3, stLocale, 0, stHyphOptions, stUserOptions);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), stBreak1.breakIndex);
+
+        // With hanging punctuation, the period should be allowed to carry over to the margin.
+        auto stBreak2 = m_xBreak->getLineBreak(aTest, 7, stLocale, 0, stHyphOptions, stUserOptions);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), stBreak2.breakIndex);
+    }
+
+    // tdf#58604: Test for interaction between line breaks and hanging punctuation
+    {
+        i18n::LineBreakHyphenationOptions stHyphOptions;
+        i18n::LineBreakUserOptions stUserOptions;
+        stUserOptions.allowPunctuationOutsideMargin = true;
+
+        auto aTest = u"水水水、\n水水水。"_ustr;
+
+        // Lines should always break after any hanging punctuation
+        auto stBreak3 = m_xBreak->getLineBreak(aTest, 3, stLocale, 0, stHyphOptions, stUserOptions);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), stBreak3.breakIndex);
+
+        // Lines should also break after the first-seen hanging punctuation
+        auto stBreak4 = m_xBreak->getLineBreak(aTest, 4, stLocale, 0, stHyphOptions, stUserOptions);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), stBreak4.breakIndex);
+    }
+}
+
+void TestBreakIterator::testKorean()
+{
+    lang::Locale stLocale;
+    stLocale.Language = "ko";
+    stLocale.Country = "KR";
+
+    {
+        i18n::LineBreakHyphenationOptions stHyphOptions;
+        i18n::LineBreakUserOptions stUserOptions;
+
+        auto aTest = u"저는 한국에서 살고 있어요"_ustr;
+        auto stBreak = m_xBreak->getLineBreak(aTest, 5, stLocale, 0, stHyphOptions, stUserOptions);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), stBreak.breakIndex);
     }
 }
 
