@@ -29,8 +29,6 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <optional>
 
-class SfxItemSet;
-class SvxBrushItem;
 class SvxBoxItem;
 class SvxLineItem;
 class SvxShadowItem;

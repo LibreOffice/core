@@ -17,7 +17,6 @@
 namespace sc
 {
 class SparklineGroup;
-struct SparklineData;
 
 /** Undo action for deleting a Sparkline */
 class UndoDeleteSparkline : public ScSimpleUndo

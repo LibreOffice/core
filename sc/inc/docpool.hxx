@@ -23,9 +23,6 @@
 #include <svl/itempool.hxx>
 #include "scdllapi.h"
 
-class ScStyleSheet;
-class ScDocument;
-
 class SC_DLLPUBLIC ScDocumentPool final : public SfxItemPool
 {
 public:

@@ -22,10 +22,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLTextMasterPageExport.hxx>
 
-namespace com::sun::star {
-    namespace text { class XText; }
-}
-
 namespace com::sun::star::sheet { class XHeaderFooterContent; }
 
 class ScXMLExport;

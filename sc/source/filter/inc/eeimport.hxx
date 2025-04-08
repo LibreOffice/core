@@ -26,7 +26,6 @@
 class ScDocument;
 class ScEEParser;
 class ScTabEditEngine;
-class SvStream;
 
 struct ScEEParseEntry;
 

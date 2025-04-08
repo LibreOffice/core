@@ -28,7 +28,6 @@
 #include <vcl/idle.hxx>
 
 class ScDocShell;
-class ScRange;
 
 struct ScAutoStyleData
 {

@@ -24,7 +24,6 @@
 #include <sfx2/lnkbase.hxx>
 #include "scdllapi.h"
 
-class SfxObjectShell;
 class ScDocShell;
 
 class SAL_DLLPUBLIC_RTTI ScAreaLink final : public ::sfx2::SvBaseLink, public ScRefreshTimer

@@ -32,17 +32,13 @@
 #include <formula/opcode.hxx>
 #include <svx/weldeditview.hxx>
 
-namespace com::sun::star::accessibility { class XAccessible; }
-
 class EditView;
 class ScAccessibleEditLineTextData;
 class ScAccessibleEditObject;
-class ScEditEngineDefaulter;
 class ScTextWndGroup;
 class ScInputBarGroup;
 class ScInputHandler;
 class ScTabViewShell;
-struct EENotify;
 
 class ScTextWndBase
 {

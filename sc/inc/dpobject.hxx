@@ -63,7 +63,6 @@ class ScSheetSourceDesc;
 class ScDPTableData;
 class ScDPDimensionSaveData;
 class ScRangeList;
-class ScDPCache;
 class ScDocument;
 
 struct ScDPServiceDesc

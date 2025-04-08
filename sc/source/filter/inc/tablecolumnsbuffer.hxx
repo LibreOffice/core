@@ -25,7 +25,6 @@
 
 namespace oox { class AttributeList; }
 namespace oox { class SequenceInputStream; }
-class ScDBData;
 
 namespace oox::xls {
 

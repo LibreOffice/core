@@ -36,8 +36,6 @@ namespace com::sun::star {
     namespace container { class XNameContainer; }
     namespace sheet { class XDatabaseRange; }
     namespace sheet { class XSpreadsheet; }
-    namespace sheet { class XSpreadsheetDocument; }
-    namespace sheet { struct FormulaToken; }
     namespace style { class XStyle; }
     namespace table { class XCellRange; }
 }

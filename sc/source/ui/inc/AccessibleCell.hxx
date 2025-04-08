@@ -28,7 +28,6 @@
 #include <editeng/AccessibleStaticTextBase.hxx>
 #include <comphelper/uno3.hxx>
 
-namespace com::sun::star::accessibility { class XAccessibleRelationSet; }
 namespace utl { class AccessibleRelationSetHelper; }
 
 class ScTabViewShell;

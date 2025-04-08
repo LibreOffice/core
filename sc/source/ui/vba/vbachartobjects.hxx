@@ -22,7 +22,6 @@
 #include <ooo/vba/excel/XChartObjects.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
 
-namespace com::sun::star::container { class XEnumeration; }
 namespace com::sun::star::drawing { class XDrawPageSupplier; }
 namespace com::sun::star::table { class XTableCharts; }
 namespace com::sun::star::uno { class XComponentContext; }

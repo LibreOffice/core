@@ -12,7 +12,6 @@
 #include <vbahelper/vbacollectionimpl.hxx>
 
 namespace ooo::vba { class XCommandBarControls; }
-namespace ooo::vba::excel { class XMenu; }
 
 typedef CollTestImplHelper< ov::excel::XMenus > Menus_BASE;
 

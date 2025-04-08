@@ -33,7 +33,6 @@ namespace com::sun::star {
     namespace beans { class XPropertySet; }
 }
 
-namespace com::sun::star::table { class XCellRange; }
 namespace com::sun::star::sheet { class XSpreadsheet; }
 namespace com::sun::star::sheet { class XSpreadsheetDocument; }
 

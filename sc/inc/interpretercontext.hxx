@@ -37,8 +37,6 @@ struct DelayedSetNumberFormat
     sal_uInt32 mnNumberFormat;
 };
 
-class ScInterpreterContextPool;
-
 struct ScInterpreterContext
 {
     const ScDocument* mpDoc;
@@ -165,9 +163,6 @@ private:
     // Formatter used when non-nthreaded calculation
     SvNumberFormatter* mpFormatter;
 };
-
-class ScThreadedInterpreterContextGetterGuard;
-class ScInterpreterContextGetterGuard;
 
 class ScInterpreterContextPool
 {

@@ -70,7 +70,6 @@ class ColumnSpanSet;
 class RangeColumnSpanSet;
 class ColumnSet;
 struct ColumnBlockPosition;
-class TableColumnBlockPositionSet;
 struct RefUpdateContext;
 struct RefUpdateInsertTabContext;
 struct RefUpdateDeleteTabContext;
@@ -83,7 +82,6 @@ class RowHeightContext;
 class CompileFormulaContext;
 struct SetFormulaDirtyContext;
 class ColumnIterator;
-class ScDrawObjData;
 }
 
 class SfxItemSet;
@@ -100,7 +98,6 @@ class ScPrintSaverTab;
 class ScProgress;
 class ScRangeList;
 class ScSheetEvents;
-class ScSortInfoArray;
 class ScConditionalFormat;
 class ScConditionalFormatList;
 class ScStyleSheet;
@@ -116,7 +113,6 @@ struct ScSetStringParam;
 struct ScColWidthParam;
 class ScRangeName;
 class ScDBData;
-class ScHint;
 class ScPostIt;
 struct ScInterpreterContext;
 

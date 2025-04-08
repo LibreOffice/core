@@ -30,6 +30,7 @@
 #include "xmlimprt.hxx"
 
 class ScConditionalFormat;
+namespace com::sun::star::table { struct CellRangeAddress; }
 
 class ScXMLCellImportPropertyMapper : public SvXMLImportPropertyMapper
 {

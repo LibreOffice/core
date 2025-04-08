@@ -33,7 +33,6 @@
 #include <cppuhelper/implbase.hxx>
 
 namespace com::sun::star::container { class XIndexReplace; }
-namespace com::sun::star::lang { class XComponent; }
 
 class ScDocShell;
 class SfxItemPropertySet;

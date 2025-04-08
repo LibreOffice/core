@@ -24,7 +24,6 @@
 
 #include <vcl/virdev.hxx>
 
-class ScAccessibleCsvControl;
 class ScCsvTableBox;
 
 /** A ruler control for the CSV import dialog. Supports setting and moving

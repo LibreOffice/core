@@ -21,8 +21,6 @@
 
 #include "anyrefdg.hxx"
 
-class ScDocument;
-
 class ScSimpleRefDlg: public ScAnyRefDlgController
 {
 private:

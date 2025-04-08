@@ -26,7 +26,6 @@ class SfxItemSet;
 class SfxBindings;
 class SvxFontItem;
 class SfxViewShell;
-class SfxViewFrame;
 class ScChangeAction;
 class ScChangeViewSettings;
 class ScDocument;

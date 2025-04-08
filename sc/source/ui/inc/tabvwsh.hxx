@@ -48,7 +48,6 @@ class AbstractScMoveTableDlg;
 class AbstractScTabBgColorDlg;
 class AbstractScStringInputDlg;
 class ScStyleSaveData;
-class ScArea;
 class ScAuditingShell;
 class ScDrawShell;
 class ScDrawTextObjectBar;
@@ -64,7 +63,6 @@ class ScChartShell;
 class ScPageBreakShell;
 class ScDPObject;
 class ScNavigatorSettings;
-class ScRangeName;
 class ScDrawTransferObj;
 class ScCondFormatDlgData;
 class ScDispatchProviderInterceptor;
@@ -74,8 +72,6 @@ namespace sc { class SparklineShell; }
 struct ScHeaderFieldData;
 
 namespace editeng { class SvxBorderLine; }
-
-namespace com::sun::star::frame { class XDispatchProviderInterceptor; }
 
 namespace svx {
     class ExtrusionBar;

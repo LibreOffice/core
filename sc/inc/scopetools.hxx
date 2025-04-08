@@ -13,10 +13,6 @@
 
 class ScDocument;
 class ScColumn;
-namespace vcl
-{
-class Window;
-}
 
 namespace sc
 {

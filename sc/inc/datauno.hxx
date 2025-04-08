@@ -48,10 +48,6 @@
 
 #include <vector>
 
-namespace com::sun::star::sheet { struct TableFilterField2; }
-namespace com::sun::star::sheet { struct TableFilterField3; }
-namespace com::sun::star::sheet { struct TableFilterField; }
-
 class ScDBData;
 class ScDocShell;
 

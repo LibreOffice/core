@@ -28,12 +28,6 @@
 #include <memory>
 #include <vector>
 
-class ScColorScaleFormat;
-class ScDataBarFormat;
-struct ScDataBarFormatData;
-class ScIconSetFormat;
-struct ScIconSetFormatData;
-
 namespace oox { class AttributeList; }
 
 namespace oox::xls {
@@ -208,10 +202,6 @@ struct CondFormatModel
 
     explicit            CondFormatModel();
 };
-
-class CondFormatBuffer;
-struct CondFormatHash;
-struct CondFormatEquals;
 
 /** Represents a conditional formatting object with a list of affected cell ranges. */
 class CondFormat final : public WorksheetHelper

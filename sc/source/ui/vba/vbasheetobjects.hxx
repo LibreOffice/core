@@ -25,7 +25,6 @@
 #include <rtl/ref.hxx>
 
 namespace com::sun::star {
-    namespace container { class XEnumeration; }
     namespace frame { class XModel; }
     namespace sheet { class XSpreadsheet; }
 }

@@ -27,8 +27,6 @@
 #include <vcl/customweld.hxx>
 #include "AccessibleCsvControl.hxx"
 
-namespace com::sun::star::accessibility { class XAccessible; }
-
 /** Minimum character count for a column in separators mode. */
 const sal_Int32 CSV_MINCOLWIDTH         = 8;
 /** Maximum length of a cell string. */

@@ -98,7 +98,6 @@ namespace o3tl {
 }
 
 class ScDocFunc;
-class ScDocument;
 class ScDBFunc;
 class ScTabViewShell;
 class ScDrawView;
@@ -113,7 +112,6 @@ class SfxDispatcher;
 class ScPatternAttr;
 class ScExtDocOptions;
 class ScViewData;
-class ScMarkData;
 class ScGridWindow;
 class ScSizeDeviceProvider;
 

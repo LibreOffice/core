@@ -31,10 +31,6 @@
 #include "gridwin.hxx"
 #include "drawview.hxx"
 
-namespace editeng {
-    struct MisspellRanges;
-}
-
 class ScEditEngineDefaulter;
 class ScOutlineWindow;
 class ScRowBar;
@@ -46,7 +42,6 @@ class SvBorder;
 class FuPoor;
 class Splitter;
 class ScTabSplitter;
-class SdrView;
 class SdrObject;
 class ScPageBreakData;
 class SdrHdlList;

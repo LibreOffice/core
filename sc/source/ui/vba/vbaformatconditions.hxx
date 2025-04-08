@@ -27,7 +27,6 @@ namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::sheet { class XSheetConditionalEntries; }
 namespace ooo::vba::excel { class XRange; }
 namespace ooo::vba::excel { class XStyle; }
-namespace ooo::vba::excel { class XStyles; }
 class ScVbaStyles;
 class ScVbaFormatCondition;
 

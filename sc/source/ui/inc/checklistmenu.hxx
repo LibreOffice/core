@@ -18,9 +18,7 @@
 #include <map>
 #include <set>
 
-class ScCheckListMenuControl;
 class ScViewData;
-struct ScCheckListMember;
 struct ImplSVEvent;
 
 struct ScCheckListMember
@@ -49,7 +47,6 @@ struct ScCheckListMember
     std::unique_ptr<weld::TreeIter> mxParent;
 };
 
-class ScCheckListMenuWindow;
 class ScListSubMenuControl;
 
 /**

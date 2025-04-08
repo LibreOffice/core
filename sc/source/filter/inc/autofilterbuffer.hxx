@@ -27,7 +27,6 @@
 
 namespace com::sun::star {
     namespace sheet { class XDatabaseRange; }
-    namespace sheet { class XSheetFilterDescriptor3; }
 }
 
 namespace oox { class AttributeList; }

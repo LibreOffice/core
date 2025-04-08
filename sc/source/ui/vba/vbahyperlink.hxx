@@ -24,7 +24,6 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <tools/long.hxx>
 
-namespace ooo::vba::excel { class XRange; }
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::table { class XCell; }
 

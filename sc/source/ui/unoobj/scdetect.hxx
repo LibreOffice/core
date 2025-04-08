@@ -26,10 +26,6 @@
 
 #include <rtl/ustring.hxx>
 
-namespace com::sun::star {
-    namespace beans { struct PropertyValue; }
-}
-
 class ScFilterDetect : public ::cppu::WeakImplHelper< css::document::XExtendedFilterDetection, css::lang::XServiceInfo >
 {
 public:

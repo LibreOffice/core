@@ -37,16 +37,8 @@
 
 class ScDocument;
 class ScPatternAttr;
-class ScAttrArray;
-class ScAttrIterator;
-class ScFlatBoolRowSegments;
 class ScMatrix;
-struct ScDBQueryParamBase;
-struct ScQueryParam;
-struct ScDBQueryParamInternal;
-struct ScDBQueryParamMatrix;
 class ScFormulaCell;
-class OutputDevice;
 struct ScInterpreterContext;
 enum class SvNumFormatType : sal_Int16;
 

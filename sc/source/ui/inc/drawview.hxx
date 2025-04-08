@@ -28,7 +28,6 @@ namespace com::sun::star::datatransfer { class XTransferable; }
 class ScDocument;
 class ScViewData;
 class ScDrawObjData;
-class SdrUndoManager;
 
 class ScDrawView final : public FmFormView
 {

@@ -23,7 +23,6 @@
 #include <tools/long.hxx>
 #include <vector>
 
-class ScRangeList;
 struct ScSheetLimits;
 
 struct ScMarkEntry

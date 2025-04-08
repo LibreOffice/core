@@ -24,7 +24,6 @@
 #include <vector>
 #include <unordered_map>
 
-namespace com::sun::star::chart2::data { class XDataSequence; }
 namespace com::sun::star::chart2::data { class XDataSource; }
 namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
 namespace com::sun::star::uno { class XComponentContext; }

@@ -108,7 +108,6 @@ class SvxBoxInfoItem;
 class SvxItemPropertySet;
 class SvxUnoText;
 class ScDocument;
-class SfxBroadcaster;
 class SfxHint;
 class SfxItemPropertyMap;
 class SfxItemPropertySet;

@@ -27,10 +27,7 @@
 
 #include <functional>
 
-namespace com::sun::star::accessibility { class XAccessible; }
-
 class ScPatternAttr;
-class EditView;
 class EditTextObject;
 class SvxFieldItem;
 class ScAccessibleEditObject;

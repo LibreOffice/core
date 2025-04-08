@@ -429,9 +429,6 @@ public:
         int nCurWindowSize );
 };
 
-class OpAverage;
-class OpCount;
-
 /// Handling a Double Vector that is used as a sliding window input
 /// to either a sliding window average or sum-of-products
 /// Generate a sequential loop for reductions

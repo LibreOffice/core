@@ -33,10 +33,6 @@
 #include <vector>
 
 
-namespace editeng {
-    struct MisspellRanges;
-}
-
 namespace sc {
     struct MisspellRangeResult;
     class SpellCheckContext;

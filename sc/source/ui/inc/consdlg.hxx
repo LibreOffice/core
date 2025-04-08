@@ -24,7 +24,6 @@
 
 class ScViewData;
 class ScDocument;
-class ScRangeUtil;
 class ScAreaData;
 
 class ScConsolidateDlg : public ScAnyRefDlgController

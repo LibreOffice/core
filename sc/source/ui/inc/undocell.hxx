@@ -29,7 +29,6 @@
 #include <memory>
 
 class ScDocShell;
-class ScPatternAttr;
 class ScRangeName;
 class ScFormulaCell;
 

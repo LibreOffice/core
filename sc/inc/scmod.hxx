@@ -70,7 +70,6 @@ class ScAddInCfg;
 class ScTransferObj;
 class ScDrawTransferObj;
 class ScSelectionTransferObj;
-class ScFormEditData;
 class ScMarkData;
 struct ScDragData;
 class SfxDialogController;

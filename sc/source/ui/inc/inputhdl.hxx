@@ -50,7 +50,6 @@ class CommandEvent;
 class VclWindowEvent;
 namespace vcl { class Window; }
 struct ReferenceMark;
-struct ESelection;
 
 //  ScInputHandler
 

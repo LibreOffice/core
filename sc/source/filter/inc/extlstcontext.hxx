@@ -19,7 +19,6 @@
 extern sal_Int32 gnStyleIdx; // Holds index of the <extlst> <cfRule> style (Will be reset by finalize import)
 
 struct ScDataBarFormatData;
-namespace oox { class AttributeList; }
 namespace oox::xls { class WorkbookFragment; }
 namespace oox::xls { class WorksheetFragment; }
 

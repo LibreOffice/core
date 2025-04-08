@@ -32,7 +32,7 @@ namespace com::sun::star {
     namespace uno { template <class E> class Sequence; }
     namespace embed { class XStorage; }
     namespace xml {
-        namespace sax { struct InputSource; class XParser; class XWriter; }
+        namespace sax { struct InputSource; class XWriter; }
     }
 }
 

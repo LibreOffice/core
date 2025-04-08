@@ -24,8 +24,6 @@
 #include <rangelst.hxx>
 
 namespace com::sun::star::drawing { class XDrawPage; }
-namespace com::sun::star::sheet { class XSpreadsheet; }
-namespace com::sun::star::table { class XCellRange; }
 namespace com::sun::star::drawing { class XShapes; }
 
 class ScXMLImport;

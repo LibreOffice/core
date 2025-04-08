@@ -16,11 +16,6 @@
 #include <rangelst.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 
-namespace sax_fastparser
-{
-class FastAttributeList;
-}
-
 namespace sc
 {
 class SparklineGroup;

@@ -40,7 +40,6 @@
 
 class ScRefreshTimerProtector;
 class ScEditEngineDefaulter;
-class SfxStyleSheetBasePool;
 class SfxStyleSheetHint;
 class INetURLObject;
 

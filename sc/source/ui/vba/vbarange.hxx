@@ -33,13 +33,9 @@ namespace com::sun::star::sheet { class XSheetCellRangeContainer; }
 namespace com::sun::star::table { class XCell; }
 namespace com::sun::star::table { class XCellRange; }
 namespace com::sun::star::table { struct CellRangeAddress; }
-namespace com::sun::star::lang { class XServiceInfo; }
 namespace ooo::vba { class XCollection; }
-namespace ooo::vba::excel { class XComment; }
-namespace ooo::vba::excel { class XFont; }
 
 class SfxItemSet;
-class ScCellRangesBase;
 class ScCellRangeObj;
 class ScDocShell;
 class ScDocument;

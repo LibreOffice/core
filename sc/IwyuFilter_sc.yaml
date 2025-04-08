@@ -286,9 +286,13 @@ excludelist:
     sc/inc/scitems.hxx:
     # needed for defines
     - svl/typedwhich.hxx
+    # needed in --fwdecl mode
+    - class ScConsolidateItem
     sc/inc/scmatrix.hxx:
     # base class has to be a complete type
     - svl/sharedstringpool.hxx
+    # needed in --fwdecl mode, quotation needed for handling the colon
+    - 'enum class FormulaError : sal_uInt16'
     sc/inc/scmod.hxx:
     # Needed for macro define
     - sfx2/app.hxx

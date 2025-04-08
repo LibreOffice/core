@@ -40,9 +40,7 @@
 class ScOrcusSheet;
 class ScOrcusStyles;
 class ScOrcusFactory;
-class ScOrcusImportFontStyle;
-class ScOrcusSharedStrings;
-class SfxItemSet;
+
 namespace com::sun::star::task
 {
 class XStatusIndicator;

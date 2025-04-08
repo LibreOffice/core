@@ -24,7 +24,6 @@
 namespace formula
 {
     class RefButton;
-    class RefButton;
     class RefEdit;
 }
 struct ScQueryParam;

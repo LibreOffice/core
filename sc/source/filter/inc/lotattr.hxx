@@ -24,7 +24,6 @@
 
 #include <address.hxx>
 
-class ScDocumentPool;
 class ScPatternAttr;
 class SvxColorItem;
 class Color;

@@ -21,8 +21,6 @@
 #include "patattr.hxx"
 #include <vector>
 
-class CellAttributeHelper;
-class SfxItemSet;
 class SfxPoolItem;
 
 class ScItemPoolCache

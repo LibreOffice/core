@@ -36,8 +36,6 @@
 #include <list>
 
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::sheet { class XSheetCellRangeContainer; }
-namespace com::sun::star::table { struct CellRangeAddress; }
 namespace com::sun::star::util { class XNumberFormatTypes; }
 namespace com::sun::star::util { class XNumberFormats; }
 namespace sax_fastparser { class FastAttributeList; }
@@ -49,18 +47,14 @@ class XMLNumberFormatAttributesExportHelper;
 class ScEditEngineDefaulter;
 class ScDocumentImport;
 class ScMyImpDetectiveOpArray;
-class SdrPage;
 class ScModelObj;
 
 namespace sc {
 struct ImportPostProcessData;
 struct PivotTableSources;
-class ScDrawObjData;
 }
 
 
-class SvXMLTokenMap;
-class XMLShapeImportHelper;
 class ScXMLChangeTrackingImportHelper;
 
 struct ScMyNamedExpression

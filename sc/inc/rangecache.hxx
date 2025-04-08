@@ -30,7 +30,6 @@
 class ScDocument;
 struct ScInterpreterContext;
 struct ScQueryParam;
-struct ScSortedRangeCacheMap;
 
 /** Sorted cache for one range used with interpreter functions such as VLOOKUP
     and MATCH. Caches sorted order for cells in the given range, which must

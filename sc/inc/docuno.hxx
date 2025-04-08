@@ -55,9 +55,6 @@
 #include <svl/itemprop.hxx>
 #include <vcl/ITiledRenderable.hxx>
 
-namespace com::sun::star::chart2::data { class XDataProvider; }
-namespace com::sun::star::sheet::opencl { struct OpenCLPlatform; }
-
 class ScDocShell;
 class ScAnnotationObj;
 class ScMarkData;

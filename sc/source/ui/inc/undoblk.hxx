@@ -29,7 +29,6 @@
 
 class ScDocShell;
 class ScOutlineTable;
-class ScPatternAttr;
 class SvxSearchItem;
 class SdrUndoAction;
 class ScEditDataArray;

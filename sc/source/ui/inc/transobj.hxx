@@ -31,12 +31,6 @@ class ScMarkData;
 enum class ScDragSrc;
 class ScCellRangesBase;
 
-namespace com::sun::star {
-    namespace sheet {
-        class XSheetCellRanges;
-    }
-}
-
 class SAL_DLLPUBLIC_RTTI ScTransferObj : public TransferDataContainer
 {
 private:

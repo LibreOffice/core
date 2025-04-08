@@ -29,8 +29,6 @@ public:
     static bool SafeDiv( double& fVal1, double fVal2);
 };
 
-class ScFunctionData;
-
 /** Implements the Welford Online one-pass algorithm.
     See https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_Online_algorithm
     and Donald E. Knuth, TAoCP vol.2, 3rd edn., p. 232

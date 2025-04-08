@@ -26,10 +26,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace com::sun::star::beans { class XPropertyChangeListener; }
-namespace com::sun::star::beans { class XPropertySetInfo; }
-namespace com::sun::star::beans { class XVetoableChangeListener; }
-
 class ScDocShell;
 
 #define SC_LINKTARGETTYPE_SHEET     0

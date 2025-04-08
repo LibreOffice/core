@@ -14,7 +14,6 @@
 
 namespace sc {
 
-struct RefUpdateContext;
 class ColRowReorderMapType;
 
 class RefHint : public SfxHint

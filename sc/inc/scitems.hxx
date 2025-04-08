@@ -68,7 +68,6 @@ class ScMergeAttr;
 class ScMergeFlagAttr;
 class ScProtectionAttr;
 class SvxBoxInfoItem;
-class ScPatternAttr;
 class SvxPageItem;
 class ScViewObjectModeItem;
 class SfxUInt16Item;

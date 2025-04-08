@@ -116,7 +116,6 @@ struct XclRootData
     virtual             ~XclRootData();
 };
 
-class SfxObjectShell;
 class ScModelObj;
 class OutputDevice;
 class SvNumberFormatter;

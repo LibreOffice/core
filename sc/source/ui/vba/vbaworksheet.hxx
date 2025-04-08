@@ -27,12 +27,9 @@
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::sheet { class XSpreadsheet; }
 namespace com::sun::star::uno { class XComponentContext; }
-namespace ooo::vba::excel { class XOutline; }
-namespace ooo::vba::excel { class XPageSetup; }
 namespace ooo::vba::excel { class XRange; }
 
 namespace ooo::vba::excel {
-    class XChartObjects;
     class XHyperlinks;
 }
 

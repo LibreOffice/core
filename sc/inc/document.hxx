@@ -66,7 +66,6 @@ namespace oox
     namespace xls
     {
         class Connection;
-        struct ConnectionModel;
     }
 }
 
@@ -96,23 +95,18 @@ class StartListeningContext;
 class EndListeningContext;
 class CopyFromClipContext;
 class ColumnSpanSet;
-class RangeColumnSpanSet;
 struct ColumnBlockPosition;
 struct RefUpdateContext;
 class EditTextIterator;
 struct NoteEntry;
-class DocumentStreamAccess;
 class DocumentLinkManager;
 class CellValues;
 class TableValues;
 class RowHeightContext;
 struct SetFormulaDirtyContext;
-class RefMovedHint;
 struct ReorderParam;
-class FormulaGroupAreaListener;
 class ColumnSet;
 class UpdatedRangeNames;
-class TableColumnBlockPositionSet;
 class ColumnIterator;
 class ExternalDataMapper;
 class Sparkline;
@@ -128,7 +122,6 @@ class SdrObject;
 class SfxBroadcaster;
 class SfxListener;
 class SfxItemSet;
-class SfxObjectShell;
 class SfxBindings;
 class SfxPoolItem;
 class SfxItemPool;
@@ -159,7 +152,6 @@ class ScDetOpList;
 class ScDocOptions;
 class ScDocProtection;
 class ScDocumentPool;
-class ScDrawLayer;
 class ScExtDocOptions;
 class ScExternalRefManager;
 class ScFormulaCell;
@@ -187,7 +179,6 @@ struct ScSortParam;
 class ScRefreshTimerControl;
 class ScUnoListenerCalls;
 class ScUnoRefList;
-class ScRecursionHelper;
 struct RowInfo;
 struct ScTableInfo;
 struct ScTabOpParam;
@@ -195,7 +186,6 @@ class VirtualDevice;
 class ScAutoNameCache;
 class ScTemporaryChartLock;
 class ScLookupCache;
-struct ScLookupCacheMap;
 class ScSortedRangeCache;
 struct ScSortedRangeCacheMap;
 class ScUndoManager;
@@ -221,7 +211,6 @@ class BitmapEx;
 class ScColumnsRange;
 struct ScFilterEntries;
 typedef o3tl::sorted_vector<sal_uInt32> ScCondFormatIndexes;
-struct ScSheetLimits;
 struct ScDataAreaExtras;
 enum class ScConditionMode;
 

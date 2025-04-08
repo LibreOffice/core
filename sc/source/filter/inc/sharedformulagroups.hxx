@@ -13,7 +13,6 @@
 #include <tokenarray.hxx>
 #include <memory>
 #include <map>
-class ScTokenArray;
 
 namespace sc
 {

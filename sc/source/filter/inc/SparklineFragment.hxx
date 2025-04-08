@@ -16,11 +16,6 @@
 #include <vector>
 #include <memory>
 
-namespace oox
-{
-class AttributeList;
-}
-
 namespace oox::xls
 {
 /** Transitional sparkline data */

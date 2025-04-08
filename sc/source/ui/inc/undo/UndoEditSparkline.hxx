@@ -18,7 +18,6 @@
 namespace sc
 {
 class Sparkline;
-struct SparklineData;
 
 /** Undo action for editing a Sparkline */
 class UndoEditSparkline : public ScSimpleUndo

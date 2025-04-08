@@ -33,8 +33,6 @@
 #include <unordered_map>
 #include <o3tl/sorted_vector.hxx>
 
-class XclExtLst;
-
 /* ============================================================================
 Export of cell tables including row and column description.
 - Managing all used and formatted cells in a sheet.
@@ -955,9 +953,6 @@ private:
 // Cell Table
 
 class XclExpNote;
-class XclExpMergedcells;
-class XclExpHyperlink;
-class XclExpDval;
 
 /** This class contains the cell contents and more of an entire sheet.
 

@@ -16,7 +16,6 @@
 #include <memory>
 
 class ScDocument;
-class ScRange;
 class ScOrcusXMLContext;
 
 struct CustomCompare

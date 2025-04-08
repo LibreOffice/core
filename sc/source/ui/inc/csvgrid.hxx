@@ -32,7 +32,6 @@
 namespace svtools { class ColorConfig; }
 class EditEngine;
 class ScAsciiOptions;
-class ScAccessibleCsvControl;
 class ScCsvTableBox;
 
 const sal_uInt32 CSV_COLUMN_INVALID = CSV_VEC_NOTFOUND;

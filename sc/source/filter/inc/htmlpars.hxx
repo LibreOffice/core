@@ -144,7 +144,6 @@ struct ScHTMLAdjustStackEntry
 
 class EditEngine;
 class ScDocument;
-class HTMLOption;
 
 // TODO these need better names
 typedef ::std::map<SCROW, SCROW> InnerMap;

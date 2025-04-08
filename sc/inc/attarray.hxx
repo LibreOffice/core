@@ -29,7 +29,6 @@
 
 #include <svl/itemset.hxx>
 
-class ScDocument;
 class ScEditDataArray;
 class ScMarkArray;
 class ScStyleSheet;

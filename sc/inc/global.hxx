@@ -491,7 +491,6 @@ class LocaleDataWrapper;
 class SvtSysLocale;
 class CalendarWrapper;
 class CollatorWrapper;
-class IntlWrapper;
 class ScFieldEditEngine;
 
 namespace com::sun::star {

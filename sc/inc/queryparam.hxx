@@ -30,7 +30,6 @@
 struct ScInterpreterContext;
 
 struct ScDBQueryParamInternal;
-struct ScQueryEntry;
 
 namespace svl {
 

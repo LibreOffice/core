@@ -33,8 +33,6 @@ struct ColRowSpan;
 
 }
 
-class ScMarkArray;
-
 //!     todo:
 //!     It should be possible to have MarkArrays for each table, in order to
 //!     enable "search all" across more than one table again!

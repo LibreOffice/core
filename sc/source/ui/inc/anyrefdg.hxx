@@ -26,7 +26,6 @@
 
 #include <memory>
 
-class SfxObjectShell;
 class ScDocument;
 class ScRangeList;
 class ScCompiler;

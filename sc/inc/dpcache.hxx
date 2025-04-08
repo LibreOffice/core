@@ -36,7 +36,6 @@
 struct ScQueryParam;
 class ScDPObject;
 class ScDocument;
-class SvNumberFormatter;
 struct ScInterpreterContext;
 
 enum class SvNumFormatType : sal_Int16;

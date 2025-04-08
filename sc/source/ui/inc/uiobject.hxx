@@ -11,7 +11,6 @@
 #include <memory>
 #include <vcl/uitest/uiobject.hxx>
 
-class ScGridWindow;
 class ScDBFunc;
 class ScDrawView;
 class ScTabViewShell;

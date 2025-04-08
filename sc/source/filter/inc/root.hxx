@@ -22,9 +22,6 @@
 #include "flttypes.hxx"
 #include <memory>
 
-class ScRangeName;
-
-class RangeNameBufferWK3;
 class SharedFormulaBuffer;
 class ExtNameBuff;
 class ExtSheetBuffer;

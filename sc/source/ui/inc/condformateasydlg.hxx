@@ -14,8 +14,6 @@
 #include <conditio.hxx>
 
 class ScViewData;
-class ScConditionalFormat;
-class ScTabViewShell;
 
 namespace sc
 {

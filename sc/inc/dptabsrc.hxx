@@ -51,7 +51,6 @@
 
 namespace com::sun::star {
     namespace sheet {
-        struct DataPilotFieldFilter;
         struct MemberResult;
     }
 }

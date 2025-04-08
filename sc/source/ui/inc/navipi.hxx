@@ -31,9 +31,7 @@
 class SfxPoolItem;
 class ScTabViewShell;
 class ScViewData;
-class ScScenarioWindow;
 class ScNavigatorControllerItem;
-class ScNavigatorDlg;
 class ScNavigatorSettings;
 
 #define SC_DROPMODE_URL         0

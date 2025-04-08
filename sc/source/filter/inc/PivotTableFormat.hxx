@@ -19,7 +19,6 @@
 namespace oox::xls
 {
 class PivotTable;
-class PivotTableFormat;
 class PivotTableReference;
 
 enum class PivotAreaType

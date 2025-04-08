@@ -23,8 +23,6 @@
 #include <svl/broadcast.hxx>
 #include <types.hxx>
 
-namespace com::sun::star::uno { class Any; }
-
 class ScDocument;
 class ScMultipleReadHeader;
 class ScMultipleWriteHeader;

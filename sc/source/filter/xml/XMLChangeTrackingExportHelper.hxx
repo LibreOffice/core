@@ -22,11 +22,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::text
-{
-class XText;
-}
-
 class ScChangeAction;
 class ScChangeTrack;
 class ScDocument;
