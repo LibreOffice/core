@@ -35,6 +35,7 @@
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
@@ -355,6 +356,15 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf154363)
         nGlueId = xConnector2->getPropertyValue(u"EndGluePointIndex"_ustr).get<sal_Int32>();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nGlueId);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf154858)
+{
+    createSdImpressDoc("pptx/tdf154858.pptx");
+    uno::Reference<beans::XPropertySet> xShapeProp(getShapeFromPage(0, 0), uno::UNO_SET_THROW);
+    awt::Gradient2 aGradient;
+    CPPUNIT_ASSERT(xShapeProp->getPropertyValue(u"FillGradient"_ustr) >>= aGradient);
+    CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RADIAL, aGradient.Style);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf153466)

@@ -141,9 +141,13 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testRadialColorGradientDOCX)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     // Test the gradient style (if there is no 'a:path' attribute, it is a linear gradient)
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path", 0);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:path", "path", u"circle");
     // Test the linear gradient angle
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:lin", "ang", u"13500000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:gsLst/a:gs[1]", "pos", u"0");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr", "val", u"ffffff");
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:gsLst/a:gs[2]", "pos", u"100000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill/a:gsLst/a:gs[2]/a:srgbClr", "val", u"5b9bd5");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testBarChartDataPointPropDOCX)

@@ -525,8 +525,8 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                             aGradient.SetAngle( Degree10(1350) );
                         else if( 0 == aGradient.GetXOffset() && 0 == aGradient.GetYOffset() )
                             aGradient.SetAngle( Degree10(2250) );
-                        else
-                            aGradient.SetGradientStyle(awt::GradientStyle_RADIAL);
+
+                        aGradient.SetGradientStyle(awt::GradientStyle_RADIAL);
                     }
                     else
                     {
