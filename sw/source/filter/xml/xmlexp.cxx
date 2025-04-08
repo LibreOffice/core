@@ -66,6 +66,7 @@
 
 
 #include <pausethreadstarting.hxx>
+#include <editsh.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -293,6 +294,11 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     RedlineFlags nRedlineFlags = RedlineFlags::NONE;
     SwRootFrame const*const pLayout(m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     m_bSavedShowChanges = pLayout == nullptr || !pLayout->IsHideRedlines();
+    SwEditShell* pESh = m_pDoc->GetEditShell();
+    if (pESh)
+    {
+        pESh->StartAllAction();
+    }
     if( bSaveRedline )
     {
         // tdf#133487 call this once in flat-ODF case
@@ -303,7 +309,7 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         // now save and switch redline mode
         nRedlineFlags = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
         pDoc->getIDocumentRedlineAccess().SetRedlineFlags(
-                 ( nRedlineFlags & RedlineFlags::ShowMask ) | RedlineFlags::ShowInsert );
+                 ( nRedlineFlags & ~RedlineFlags::ShowMask ) | RedlineFlags::ShowInsert );
     }
 
     ErrCode nRet = SvXMLExport::exportDoc( eClass );
@@ -312,6 +318,10 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     if( bSaveRedline )
     {
       pDoc->getIDocumentRedlineAccess().SetRedlineFlags( nRedlineFlags );
+    }
+    if (pESh)
+    {
+        pESh->EndAllAction();
     }
 
     if (xGraphicStorageHandler)
