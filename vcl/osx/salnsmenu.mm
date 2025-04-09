@@ -120,7 +120,7 @@
                     if ( bLastItemIsNative )
                     {
                         // Assume that macOS does not insert more than one
-                        // separater item in a row
+                        // separator item in a row
                         bLastItemIsNative = false;
                         [pItem setHidden: bHidden];
                     }
