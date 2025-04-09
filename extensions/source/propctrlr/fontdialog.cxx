@@ -538,7 +538,7 @@ namespace pcr
 
                 // SvxFontListItem has to be DynamicDefault. It is pool-dependent in the sense
                 // that it cannot/should not exist. Additionally SvxFontListItem has NO destructor
-                // and does not delete the contained/set FontList - this is done 'handish' in
+                // and does not delete the contained/set FontList - this is done 'by hand' in
                 // ControlCharacterDialog::destroyItemSet, see below...
                 { FontItemIds::CFID_FONTLIST, nullptr, SID_ATTR_CHAR_FONTLIST, SFX_ITEMINFOFLAG_NONE }
             }};

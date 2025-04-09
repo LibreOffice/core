@@ -400,7 +400,7 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const Win
     if(pExtraA)
     {
         // #i123478# shockingly, BitmapBuffer does not free the memory it is controlling
-        // in its destructor, this *has to be done handish*. Doing it here now
+        // in its destructor, this *has to be done by hand*. Doing it here now
         delete[] pExtraA->mpBits;
         pExtraA.reset();
     }

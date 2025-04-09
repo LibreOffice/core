@@ -372,7 +372,7 @@ tools::Rectangle OutputDevice::ImplLogicToDevicePixel( const tools::Rectangle& r
     // The Rectangle constructor used with the four tools::Long values does not
     // check for IsEmpty(), so to keep that state correct there are two possibilities:
     // (1) Add a test to the Rectangle constructor in question
-    // (2) Do it handish here
+    // (2) Do it by hand here
     // I have tried (1) first, but test Test::test_rectangle() claims that for
     //  tools::Rectangle aRect(1, 1, 1, 1);
     //    tools::Long(1) == aRect.GetWidth()
