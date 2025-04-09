@@ -119,6 +119,28 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLocaleFormulaSeparator)
     CPPUNIT_ASSERT_EQUAL(u"0"_ustr, pDoc->GetString(addr));
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDecimalSeparatorInfo)
+{
+    createDoc("decimal-separator.ods");
+
+    ViewCallback aView1;
+
+    // Go to cell A1.
+    uno::Sequence<beans::PropertyValue> aPropertyValues
+        = { comphelper::makePropertyValue("ToPoint", OUString("$A$1")) };
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+
+    // Cell A1 has language set to English. Decimal separator should be ".".
+    CPPUNIT_ASSERT_EQUAL(std::string("."), aView1.decimalSeparator);
+
+    // Go to cell B1.
+    aPropertyValues = { comphelper::makePropertyValue("ToPoint", OUString("B$1")) };
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+
+    // Cell B1 has language set to Turkish. Decimal separator should be ",".
+    CPPUNIT_ASSERT_EQUAL(std::string(","), aView1.decimalSeparator);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

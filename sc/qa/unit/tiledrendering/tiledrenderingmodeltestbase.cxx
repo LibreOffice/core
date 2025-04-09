@@ -271,6 +271,7 @@ public:
     OString m_aHyperlinkClicked;
     OString m_ShapeSelection;
     std::map<std::string, boost::property_tree::ptree> m_aStateChanges;
+    std::string decimalSeparator;
     TestLokCallbackWrapper m_callbackWrapper;
 
     ViewCallback(bool bDeleteListenerOnDestruct = true)
@@ -449,6 +450,26 @@ public:
                 }
 
                 m_aStateChanges[aCommandName] = aTree;
+            }
+            break;
+            case LOK_CALLBACK_JSDIALOG:
+            {
+                std::stringstream aStream(pPayload);
+                boost::property_tree::ptree aTree;
+                boost::property_tree::read_json(aStream, aTree);
+                if (aTree.get_child("jsontype").get_value<std::string>() == "formulabar")
+                {
+                    if (aTree.find("data") != aTree.not_found())
+                    {
+                        if (aTree.get_child("data").find("separator")
+                            != aTree.get_child("data").not_found())
+                        {
+                            decimalSeparator = aTree.get_child("data")
+                                                   .get_child("separator")
+                                                   .get_value<std::string>();
+                        }
+                    }
+                }
             }
             break;
         }
