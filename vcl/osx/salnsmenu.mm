@@ -96,7 +96,7 @@
     if( mpMenu )
     {
         // Related: tdf#165448 hide menu items inserted by macOS if child window
-        // For some unkown reason, none of the menu items that macOS inserts
+        // For some unknown reason, none of the menu items that macOS inserts
         // into the windows menu work if the key window is a native child
         // window of another window. Unfortunately, LibreOffice depends on
         // a dialog window being a native child window of its parent window
