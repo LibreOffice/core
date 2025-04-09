@@ -284,15 +284,11 @@ OUString SAL_CALL
 
         if (msDescription != sDescription)
         {
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
-            aEvent.Source = uno::Reference< XAccessibleContext >(this);
-            aEvent.OldValue <<= msDescription;
-            aEvent.NewValue <<= sDescription;
-
+            const OUString sOldDescription = msDescription;
             msDescription = sDescription;
 
-            CommitChange(aEvent);
+            CommitChange(AccessibleEventId::DESCRIPTION_CHANGED, uno::Any(sOldDescription),
+                         uno::Any(sDescription));
         }
     }
     return msDescription;
@@ -310,15 +306,10 @@ OUString SAL_CALL
 
         if (msName != sName)
         {
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::NAME_CHANGED;
-            aEvent.Source = uno::Reference< XAccessibleContext >(this);
-            aEvent.OldValue <<= msName;
-            aEvent.NewValue <<= sName;
-
+            const OUString sOldName = msName;
             msName = sName;
 
-            CommitChange(aEvent);
+            CommitChange(AccessibleEventId::NAME_CHANGED, uno::Any(sOldName), uno::Any(sName));
         }
     }
     return msName;
@@ -428,30 +419,32 @@ OUString ScAccessibleContextBase::createAccessibleName()
     return OUString();
 }
 
-void ScAccessibleContextBase::CommitChange(const AccessibleEventObject& rEvent)
+void ScAccessibleContextBase::CommitChange(const sal_Int16 nEventId, const css::uno::Any& rOldValue,
+                                           const css::uno::Any& rNewValue, sal_Int32 nIndexHint)
 {
-    if (mnClientId)
-        comphelper::AccessibleEventNotifier::addEvent( mnClientId, rEvent );
+    if (!mnClientId)
+        return;
+
+    AccessibleEventObject aEvent;
+    aEvent.Source = uno::Reference<XAccessibleContext>(this);
+    aEvent.EventId = nEventId;
+    aEvent.OldValue = rOldValue;
+    aEvent.NewValue = rNewValue;
+    aEvent.IndexHint = nIndexHint;
+
+    comphelper::AccessibleEventNotifier::addEvent(mnClientId, aEvent);
 }
 
 void ScAccessibleContextBase::CommitFocusGained()
 {
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::STATE_CHANGED;
-    aEvent.Source = uno::Reference<XAccessibleContext>(this);
-    aEvent.NewValue <<= AccessibleStateType::FOCUSED;
-
-    CommitChange(aEvent);
+    CommitChange(AccessibleEventId::STATE_CHANGED, uno::Any(),
+                 uno::Any(AccessibleStateType::FOCUSED));
 }
 
 void ScAccessibleContextBase::CommitFocusLost()
 {
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::STATE_CHANGED;
-    aEvent.Source = uno::Reference<XAccessibleContext>(this);
-    aEvent.OldValue <<= AccessibleStateType::FOCUSED;
-
-    CommitChange(aEvent);
+    CommitChange(AccessibleEventId::STATE_CHANGED, uno::Any(AccessibleStateType::FOCUSED),
+                 uno::Any());
 }
 
 void ScAccessibleContextBase::IsObjectValid() const

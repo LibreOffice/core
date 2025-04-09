@@ -437,13 +437,8 @@ struct ScChildGone
     {
         if (mpAccDoc)
         {
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::CHILD;
-            aEvent.Source = uno::Reference< XAccessibleContext >(mpAccDoc);
-            aEvent.OldValue <<= xAccessible;
-            aEvent.IndexHint = -1;
-
-            mpAccDoc->CommitChange(aEvent); // gone child - event
+            // gone child - event
+            mpAccDoc->CommitChange(AccessibleEventId::CHILD, uno::Any(xAccessible), uno::Any());
         }
     }
 };
@@ -456,13 +451,8 @@ struct ScChildNew
     {
         if (mpAccDoc)
         {
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::CHILD;
-            aEvent.Source = uno::Reference< XAccessibleContext >(mpAccDoc);
-            aEvent.NewValue <<= xAccessible;
-            aEvent.IndexHint = -1;
-
-            mpAccDoc->CommitChange(aEvent); // new child - event
+            // new child - event
+            mpAccDoc->CommitChange(AccessibleEventId::CHILD, uno::Any(), uno::Any(xAccessible));
         }
     }
 };
@@ -721,46 +711,26 @@ void ScShapeChildren::FindChanged(ScShapeChildVec& rOld, ScShapeChildVec& rNew) 
         else if (aNewItr->mxShape.get() < aOldItr->mxShape.get())
         {
             xAcc = GetAccShape(*aNewItr);
-            AccessibleEventObject aEvent;
-            aEvent.Source = uno::Reference<XAccessibleContext> (mpAccDoc);
-            aEvent.EventId = AccessibleEventId::CHILD;
-            aEvent.NewValue <<= xAcc;
-            aEvent.IndexHint = -1;
-            mpAccDoc->CommitChange(aEvent);
+            mpAccDoc->CommitChange(AccessibleEventId::CHILD, uno::Any(), uno::Any(xAcc));
             ++aNewItr;
         }
         else
         {
             xAcc = GetAccShape(*aOldItr);
-            AccessibleEventObject aEvent;
-            aEvent.Source = uno::Reference<XAccessibleContext> (mpAccDoc);
-            aEvent.EventId = AccessibleEventId::CHILD;
-            aEvent.OldValue <<= xAcc;
-            aEvent.IndexHint = -1;
-            mpAccDoc->CommitChange(aEvent);
+            mpAccDoc->CommitChange(AccessibleEventId::CHILD, uno::Any(xAcc), uno::Any());
             ++aOldItr;
         }
     }
     while (aOldItr != aOldEnd)
     {
         xAcc = GetAccShape(*aOldItr);
-        AccessibleEventObject aEvent;
-        aEvent.Source = uno::Reference<XAccessibleContext> (mpAccDoc);
-        aEvent.EventId = AccessibleEventId::CHILD;
-        aEvent.OldValue <<= xAcc;
-        aEvent.IndexHint = -1;
-        mpAccDoc->CommitChange(aEvent);
+        mpAccDoc->CommitChange(AccessibleEventId::CHILD, uno::Any(xAcc), uno::Any());
         ++aOldItr;
     }
     while (aNewItr != aNewEnd)
     {
         xAcc = GetAccShape(*aNewItr);
-        AccessibleEventObject aEvent;
-        aEvent.Source = uno::Reference<XAccessibleContext> (mpAccDoc);
-        aEvent.EventId = AccessibleEventId::CHILD;
-        aEvent.NewValue <<= xAcc;
-        aEvent.IndexHint = -1;
-        mpAccDoc->CommitChange(aEvent);
+        mpAccDoc->CommitChange(AccessibleEventId::CHILD, uno::Any(), uno::Any(xAcc));
         ++aNewItr;
     }
 }
@@ -1215,14 +1185,8 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
         // only notify if child exist, otherwise it is not necessary
         if (mpTable.is()) // if there is no table there is nothing to notify, because no one recognizes the change
         {
-            {
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::CHILD;
-                aEvent.Source = uno::Reference< XAccessibleContext >(this);
-                aEvent.OldValue <<= uno::Reference<XAccessible>(mpTable);
-                aEvent.IndexHint = -1;
-                CommitChange(aEvent);
-            }
+            CommitChange(AccessibleEventId::CHILD, uno::Any(uno::Reference<XAccessible>(mpTable)),
+                         uno::Any());
 
             mpTable->dispose();
             mpTable.clear();
@@ -1248,14 +1212,8 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
             mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
             mpTable->Init();
 
-            {
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::CHILD;
-                aEvent.Source = uno::Reference< XAccessibleContext >(this);
-                aEvent.NewValue <<= uno::Reference<XAccessible>(mpTable);
-                aEvent.IndexHint = -1;
-                CommitChange(aEvent);
-            }
+            CommitChange(AccessibleEventId::CHILD, uno::Any(),
+                         uno::Any(uno::Reference<XAccessible>(mpTable)));
         }
     }
     else if (rHint.GetId() == SfxHintId::ScAccVisAreaChanged)
@@ -1269,10 +1227,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
 
         GetShapeChildren()->VisAreaChanged();
 
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
-        aEvent.Source = uno::Reference< XAccessibleContext >(this);
-        CommitChange(aEvent);
+        CommitChange(AccessibleEventId::VISIBLE_DATA_CHANGED, uno::Any(), uno::Any());
     }
     ScAccessibleDocumentBase::Notify(rBC, rHint);
 }

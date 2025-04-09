@@ -107,34 +107,23 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             {
                 if (aOldAreas[i].is() && aOldAreas[i]->GetEditTextObject())
                 {
-                    AccessibleEventObject aEvent;
-                    aEvent.EventId = AccessibleEventId::CHILD;
-                    aEvent.Source = uno::Reference< XAccessibleContext >(this);
-                    aEvent.OldValue <<= uno::Reference<XAccessible>(aOldAreas[i]);
-                    aEvent.IndexHint = -1;
-
-                    CommitChange(aEvent); // child gone - event
+                    // child gone - event
+                    CommitChange(AccessibleEventId::CHILD,
+                                 uno::Any(uno::Reference<XAccessible>(aOldAreas[i])), uno::Any());
                     aOldAreas[i]->dispose();
                 }
                 if (maAreas[i].is() && maAreas[i]->GetEditTextObject())
                 {
-                    AccessibleEventObject aEvent;
-                    aEvent.EventId = AccessibleEventId::CHILD;
-                    aEvent.Source = uno::Reference< XAccessibleContext >(this);
-                    aEvent.NewValue <<= uno::Reference<XAccessible>(maAreas[i]);
-                    aEvent.IndexHint = -1;
-
-                    CommitChange(aEvent); // new child - event
+                    // new child - event
+                    CommitChange(AccessibleEventId::CHILD, uno::Any(),
+                                 uno::Any(uno::Reference<XAccessible>(maAreas[i])));
                 }
             }
         }
     }
     else if (rHint.GetId() == SfxHintId::ScAccVisAreaChanged)
     {
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
-        aEvent.Source = uno::Reference< XAccessibleContext >(this);
-        CommitChange(aEvent);
+        CommitChange(AccessibleEventId::VISIBLE_DATA_CHANGED, uno::Any(), uno::Any());
     }
 
     ScAccessibleContextBase::Notify(rBC, rHint);

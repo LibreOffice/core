@@ -429,13 +429,10 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
         if (it != maShapesMap.end() && it->second->pAccShape.is())
         {
             OSL_ENSURE(it->second->pAccShape == pCurrentChild, "wrong child found");
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::CHILD;
-            aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
-            aEvent.OldValue <<= uno::Reference<XAccessible>(pCurrentChild);
-            aEvent.IndexHint = -1;
-
-            mpAccessibleDocument->CommitChange(aEvent); // child is gone - event
+            // child is gone - event
+            mpAccessibleDocument->CommitChange(AccessibleEventId::CHILD,
+                                               uno::Any(uno::Reference<XAccessible>(pCurrentChild)),
+                                               uno::Any());
 
             pCurrentChild->dispose();
         }
@@ -447,13 +444,9 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
         if (it != maShapesMap.end())
         {
             it->second->pAccShape = pReplacement;
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::CHILD;
-            aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
-            aEvent.NewValue <<= uno::Reference<XAccessible>(pReplacement);
-            aEvent.IndexHint = -1;
-
-            mpAccessibleDocument->CommitChange(aEvent); // child is new - event
+            // child is new - event
+            mpAccessibleDocument->CommitChange(AccessibleEventId::CHILD, uno::Any(),
+                                               uno::Any(uno::Reference<XAccessible>(pReplacement)));
             bResult = true;
         }
     }
@@ -1070,36 +1063,27 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
     }
     if (vecSelectedShapeAdd.size() >= 10 )
     {
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
-        aEvent.Source = uno::Reference< XAccessible >(mpAccessibleDocument);
-        mpAccessibleDocument->CommitChange(aEvent);
+        mpAccessibleDocument->CommitChange(AccessibleEventId::SELECTION_CHANGED_WITHIN, uno::Any(),
+                                           uno::Any());
     }
     else
     {
         for (const auto& rpShape : vecSelectedShapeAdd)
         {
-            AccessibleEventObject aEvent;
+            sal_Int16 nEventId;
             if (bHasSelect)
-            {
-                aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_ADD;
-            }
+                nEventId = AccessibleEventId::SELECTION_CHANGED_ADD;
             else
-            {
-                aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
-            }
-            aEvent.Source = uno::Reference< XAccessible >(mpAccessibleDocument);
-            aEvent.NewValue <<= uno::Reference< XAccessible >( rpShape->pAccShape );
-            mpAccessibleDocument->CommitChange(aEvent);
+                nEventId = AccessibleEventId::SELECTION_CHANGED;
+            mpAccessibleDocument->CommitChange(
+                nEventId, uno::Any(), uno::Any(uno::Reference<XAccessible>(rpShape->pAccShape)));
         }
     }
     for (const auto& rpShape : vecSelectedShapeRemove)
     {
-        AccessibleEventObject aEvent;
-        aEvent.EventId =  AccessibleEventId::SELECTION_CHANGED_REMOVE;
-        aEvent.Source = uno::Reference< XAccessible >(mpAccessibleDocument);
-        aEvent.NewValue <<= uno::Reference< XAccessible >( rpShape->pAccShape );
-        mpAccessibleDocument->CommitChange(aEvent);
+        mpAccessibleDocument->CommitChange(
+            AccessibleEventId::SELECTION_CHANGED_REMOVE, uno::Any(),
+            uno::Any(uno::Reference<XAccessible>(rpShape->pAccShape)));
     }
     for(ScAccessibleShapeData*& pShapeData : aShapesList)
     {
@@ -1217,13 +1201,9 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, b
     }
     if (mpAccessibleDocument && bCommitChange)
     {
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::CHILD;
-        aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
-        aEvent.NewValue <<= Get(pShape);
-        aEvent.IndexHint = -1;
-
-        mpAccessibleDocument->CommitChange(aEvent); // new child - event
+        // new child - event
+        mpAccessibleDocument->CommitChange(AccessibleEventId::CHILD, uno::Any(),
+                                           uno::Any(Get(pShape)));
     }
 }
 
@@ -1245,13 +1225,9 @@ void ScChildrenShapes::RemoveShape(const uno::Reference<drawing::XShape>& xShape
             maShapesMap.erase((*aItr)->xShape);
             maZOrderedShapes.erase(aItr);
 
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::CHILD;
-            aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
-            aEvent.OldValue <<= xOldAccessible;
-            aEvent.IndexHint = -1;
-
-            mpAccessibleDocument->CommitChange(aEvent); // child is gone - event
+            // child is gone - event
+            mpAccessibleDocument->CommitChange(AccessibleEventId::CHILD, uno::Any(xOldAccessible),
+                                               uno::Any());
         }
         else
         {
@@ -1478,10 +1454,8 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             // mpChildrenShapes variable.
             mpChildrenShapes.reset( new ScChildrenShapes( this, mpViewShell, meSplitPos ) );
 
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::INVALIDATE_ALL_CHILDREN;
-            aEvent.Source = uno::Reference< XAccessibleContext >(this);
-            CommitChange(aEvent); // all children changed
+            // all children changed
+            CommitChange(AccessibleEventId::INVALIDATE_ALL_CHILDREN, uno::Any(), uno::Any());
 
             if (mpAccessibleSpreadsheet.is())
                 mpAccessibleSpreadsheet->GotFocus();
@@ -1548,11 +1522,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             if (maVisArea.GetSize() != aOldVisArea.GetSize())
             {
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::BOUNDRECT_CHANGED;
-                aEvent.Source = uno::Reference< XAccessibleContext >(this);
-
-                CommitChange(aEvent);
+                CommitChange(AccessibleEventId::BOUNDRECT_CHANGED, uno::Any(), uno::Any());
 
                 if (mpAccessibleSpreadsheet.is())
                     mpAccessibleSpreadsheet->BoundingBoxChanged();
@@ -1589,13 +1559,7 @@ void SAL_CALL ScAccessibleDocument::selectionChanged( const lang::EventObject& /
         bSelectionChanged = true;
 
     if (bSelectionChanged)
-    {
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
-        aEvent.Source = uno::Reference< XAccessibleContext >(this);
-
-        CommitChange(aEvent);
-    }
+        CommitChange(AccessibleEventId::SELECTION_CHANGED, uno::Any(), uno::Any());
 }
 
     //=====  XInterface  =====================================================
@@ -2132,12 +2096,8 @@ void ScAccessibleDocument::AddChild(const uno::Reference<XAccessible>& xAcc, boo
         mxTempAcc = xAcc;
         if( bFireEvent )
         {
-            AccessibleEventObject aEvent;
-            aEvent.Source = uno::Reference<XAccessibleContext>(this);
-            aEvent.EventId = AccessibleEventId::CHILD;
-            aEvent.NewValue <<= mxTempAcc;
-            aEvent.IndexHint = getAccessibleChildCount() - 1;
-            CommitChange( aEvent );
+            CommitChange(AccessibleEventId::CHILD, uno::Any(), uno::Any(mxTempAcc),
+                         getAccessibleChildCount() - 1);
         }
     }
 }
@@ -2150,14 +2110,7 @@ void ScAccessibleDocument::RemoveChild(const uno::Reference<XAccessible>& xAcc, 
 
     OSL_ENSURE(xAcc.get() == mxTempAcc.get(), "only the same object should be removed");
     if( bFireEvent )
-    {
-        AccessibleEventObject aEvent;
-        aEvent.Source = uno::Reference<XAccessibleContext>(this);
-        aEvent.EventId = AccessibleEventId::CHILD;
-        aEvent.OldValue <<= mxTempAcc;
-        aEvent.IndexHint = -1;
-        CommitChange( aEvent );
-    }
+        CommitChange(AccessibleEventId::CHILD, uno::Any(mxTempAcc), uno::Any());
     mxTempAcc = nullptr;
 }
 

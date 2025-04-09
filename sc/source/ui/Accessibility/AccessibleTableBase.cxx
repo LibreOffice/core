@@ -435,12 +435,7 @@ void ScAccessibleTableBase::CommitTableModelChange(sal_Int32 nStartRow, sal_Int3
     aModelChange.LastColumn = nEndCol;
     aModelChange.Type = nId;
 
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::TABLE_MODEL_CHANGED;
-    aEvent.Source = uno::Reference< XAccessibleContext >(this);
-    aEvent.NewValue <<= aModelChange;
-
-    CommitChange(aEvent);
+    CommitChange(AccessibleEventId::TABLE_MODEL_CHANGED, uno::Any(), uno::Any(aModelChange));
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::selectRow( sal_Int32 )

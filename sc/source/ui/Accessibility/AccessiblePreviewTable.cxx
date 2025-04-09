@@ -91,10 +91,7 @@ void ScAccessiblePreviewTable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
     }
     else if (nId == SfxHintId::ScAccVisAreaChanged)
     {
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
-        aEvent.Source = uno::Reference< XAccessibleContext >(this);
-        CommitChange(aEvent);
+        CommitChange(AccessibleEventId::VISIBLE_DATA_CHANGED, uno::Any(), uno::Any());
     }
 
     ScAccessibleContextBase::Notify(rBC, rHint);

@@ -329,35 +329,26 @@ void ScAccessibleSpreadsheet::CompleteSelectionChanged(bool bNewState)
     }
     mpMarkedRanges.reset();
 
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::STATE_CHANGED;
+    uno::Any aOldValue;
+    uno::Any aNewValue;
     if (bNewState)
-        aEvent.NewValue <<= AccessibleStateType::SELECTED;
+        aNewValue <<= AccessibleStateType::SELECTED;
     else
-        aEvent.OldValue <<= AccessibleStateType::SELECTED;
-    aEvent.Source = uno::Reference< XAccessibleContext >(this);
-
-    CommitChange(aEvent);
+        aOldValue <<= AccessibleStateType::SELECTED;
+    CommitChange(AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue);
 }
 
 void ScAccessibleSpreadsheet::LostFocus()
 {
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
-    aEvent.Source = uno::Reference< XAccessibleContext >(this);
-    aEvent.OldValue <<= uno::Reference<XAccessible>(mpAccCell);
-
-    CommitChange(aEvent);
-
+    CommitChange(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                 uno::Any(uno::Reference<XAccessible>(mpAccCell)), uno::Any());
     CommitFocusLost();
 }
 
 void ScAccessibleSpreadsheet::GotFocus()
 {
     CommitFocusGained();
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
-    aEvent.Source = uno::Reference< XAccessibleContext >(this);
+
     uno::Reference< XAccessible > xNew;
     if (IsFormulaMode())
     {
@@ -384,27 +375,18 @@ void ScAccessibleSpreadsheet::GotFocus()
             return ;
         }
     }
-    aEvent.NewValue <<= xNew;
 
-    CommitChange(aEvent);
+    CommitChange(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, uno::Any(), uno::Any(xNew));
 }
 
 void ScAccessibleSpreadsheet::BoundingBoxChanged()
 {
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::BOUNDRECT_CHANGED;
-    aEvent.Source = uno::Reference< XAccessibleContext >(this);
-
-    CommitChange(aEvent);
+    CommitChange(AccessibleEventId::BOUNDRECT_CHANGED, uno::Any(), uno::Any());
 }
 
 void ScAccessibleSpreadsheet::VisAreaChanged()
 {
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
-    aEvent.Source = uno::Reference< XAccessibleContext >(this);
-
-    CommitChange(aEvent);
+    CommitChange(AccessibleEventId::VISIBLE_DATA_CHANGED, uno::Any(), uno::Any());
 }
 
     //=====  SfxListener  =====================================================
@@ -477,13 +459,8 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 }
 
                 CommitTableModelChange(nFirstRow, nFirstCol, nLastRow, nLastCol, nId);
-
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
-                aEvent.Source = uno::Reference< XAccessibleContext >(this);
-                aEvent.NewValue <<= uno::Reference<XAccessible>(mpAccCell);
-
-                CommitChange(aEvent);
+                CommitChange(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, uno::Any(),
+                             uno::Any(uno::Reference<XAccessible>(mpAccCell)));
             }
         }
     }
@@ -511,18 +488,16 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 }
                 m_bFormulaLastMode = m_bFormulaMode;
 
-                AccessibleEventObject aEvent;
-                aEvent.Source = uno::Reference< XAccessible >(this);
                 ScAddress aNewCell = rViewData.GetCurPos();
                 if(aNewCell.Tab() != maActiveCell.Tab())
                 {
-                    aEvent.EventId = AccessibleEventId::PAGE_CHANGED;
                     auto pAccParent = getAccessibleParent();
                     ScAccessibleDocument *pAccDoc =
                         static_cast<ScAccessibleDocument*>(pAccParent.get());
                     if(pAccDoc)
                     {
-                        pAccDoc->CommitChange(aEvent);
+                        pAccDoc->CommitChange(AccessibleEventId::PAGE_CHANGED, uno::Any(),
+                                              uno::Any());
                     }
                 }
                 bool bNewPosCell = (aNewCell != maActiveCell) || mpViewShell->GetForceFocusOnCurCell(); // #i123629#
@@ -540,16 +515,14 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 //              sal_Bool bNewCellSelected = isAccessibleSelected(aNewCell.Row(), aNewCell.Col());
                 sal_uInt16 nTab = rViewData.GetTabNo();
                 const ScRange& aMarkRange = refScMarkData.GetMarkArea();
-                aEvent.OldValue.clear();
                 ScDocument* pDoc= GetDocument(mpViewShell);
                 //Mark All
                 if ( !bNewPosCellFocus &&
                     (bNewMarked || bIsMark || bIsMultMark ) &&
                     aMarkRange == ScRange( 0,0,nTab, pDoc->MaxCol(),pDoc->MaxRow(),nTab ) )
                 {
-                    aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
-                    aEvent.NewValue.clear();
-                    CommitChange(aEvent);
+                    CommitChange(AccessibleEventId::SELECTION_CHANGED_WITHIN, uno::Any(),
+                                 uno::Any());
                     return ;
                 }
                 if (!mpMarkedRanges)
@@ -578,11 +551,8 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                             !aMarkRange.Contains(m_aLastWithInMarkRange) &&
                             aMarkRange.Intersects(m_aLastWithInMarkRange);
                         if( !bSelSmaller )
-                        {
-                            aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
-                            aEvent.NewValue.clear();
-                            CommitChange(aEvent);
-                        }
+                            CommitChange(AccessibleEventId::SELECTION_CHANGED_WITHIN, uno::Any(),
+                                         uno::Any());
                         m_aLastWithInMarkRange = aMarkRange;
                     }
                     return ;
@@ -608,14 +578,11 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                         xChild = mpAccCell;
 
                         maActiveCell = aNewCell;
-                        aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS;
-                        aEvent.NewValue <<= uno::Reference< XAccessible >(xChild);
-                        aEvent.OldValue <<= uno::Reference< XAccessible >();
-                        CommitChange(aEvent);
+                        CommitChange(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS,
+                                     uno::Any(), uno::Any(uno::Reference<XAccessible>(xChild)));
                     }
-                    aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
-                    aEvent.NewValue <<= uno::Reference< XAccessible >(xChild);
-                    CommitChange(aEvent);
+                    CommitChange(AccessibleEventId::SELECTION_CHANGED, uno::Any(),
+                                 uno::Any(uno::Reference<XAccessible>(xChild)));
                     OSL_ASSERT(m_mapSelectionSend.count(aNewCell) == 0 );
                     m_mapSelectionSend.emplace(aNewCell,xChild);
 
@@ -637,9 +604,8 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                         std::vector<ScMyAddress> vecNew;
                         if(CalcScRangeListDifferenceMax(mpMarkedRanges.get(), &m_LastMarkedRanges,10,vecNew))
                         {
-                            aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
-                            aEvent.NewValue.clear();
-                            CommitChange(aEvent);
+                            CommitChange(AccessibleEventId::SELECTION_CHANGED_WITHIN, uno::Any(),
+                                         uno::Any());
                         }
                         else
                         {
@@ -648,13 +614,12 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                                 rtl::Reference< ScAccessibleCell > xChild = GetAccessibleCellAt(rAddr.Row(),rAddr.Col());
                                 if (!(bNewPosCellFocus && rAddr == aNewCell) )
                                 {
-                                    aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS;
-                                    aEvent.NewValue <<= uno::Reference< XAccessible >(xChild);
-                                    CommitChange(aEvent);
+                                    CommitChange(
+                                        AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS,
+                                        uno::Any(), uno::Any(uno::Reference<XAccessible>(xChild)));
                                 }
-                                aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_ADD;
-                                aEvent.NewValue <<= uno::Reference< XAccessible >(xChild);
-                                CommitChange(aEvent);
+                                CommitChange(AccessibleEventId::SELECTION_CHANGED_ADD, uno::Any(),
+                                             uno::Any(uno::Reference<XAccessible>(xChild)));
                                 m_mapSelectionSend.emplace(rAddr,xChild);
                             }
                         }
@@ -685,18 +650,17 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                         OUString valStr(pScDoc->GetString(aNewCell.Col(),aNewCell.Row(),aNewCell.Tab()));
                         if(mpAccCell.is() && m_strCurCellValue != valStr)
                         {
-                            AccessibleEventObject aTextChangedEvent;
-                            (void)comphelper::OCommonAccessibleText::implInitTextChangedEvent(m_strCurCellValue, valStr,
-                                                                                              aTextChangedEvent.OldValue,
-                                                                                              aTextChangedEvent.NewValue);
-                            aTextChangedEvent.EventId = AccessibleEventId::TEXT_CHANGED;
-                            mpAccCell->CommitChange(aTextChangedEvent);
+                            uno::Any aOldValue;
+                            uno::Any aNewValue;
+                            (void)comphelper::OCommonAccessibleText::implInitTextChangedEvent(
+                                m_strCurCellValue, valStr, aOldValue, aNewValue);
+                            mpAccCell->CommitChange(AccessibleEventId::TEXT_CHANGED, aOldValue,
+                                                    aNewValue);
 
                             if (pScDoc->HasValueData(maActiveCell))
                             {
-                                AccessibleEventObject aEvent;
-                                aEvent.EventId = AccessibleEventId::VALUE_CHANGED;
-                                mpAccCell->CommitChange(aEvent);
+                                mpAccCell->CommitChange(AccessibleEventId::VALUE_CHANGED,
+                                                        uno::Any(), uno::Any());
                             }
 
                             m_strCurCellValue = valStr;
@@ -705,15 +669,12 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                         pScDoc->GetName( maActiveCell.Tab(), tabName );
                         if( m_strOldTabName != tabName )
                         {
-                            AccessibleEventObject aEvent;
-                            aEvent.EventId = AccessibleEventId::NAME_CHANGED;
                             OUString sOldName(ScResId(STR_ACC_TABLE_NAME));
                             sOldName = sOldName.replaceFirst("%1", m_strOldTabName);
-                            aEvent.OldValue <<= sOldName;
                             OUString sNewName(ScResId(STR_ACC_TABLE_NAME));
                             sNewName = sNewName.replaceFirst("%1", tabName);
-                            aEvent.NewValue <<= sNewName;
-                            CommitChange( aEvent );
+                            CommitChange(AccessibleEventId::NAME_CHANGED, uno::Any(sOldName),
+                                         uno::Any(sNewName));
                             m_strOldTabName = tabName;
                         }
                     }
@@ -745,8 +706,6 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 
 void ScAccessibleSpreadsheet::RemoveSelection(const ScMarkData &refScMarkData)
 {
-    AccessibleEventObject aEvent;
-    aEvent.Source = uno::Reference< XAccessible >(this);
     MAP_ADDR_XACC::iterator miRemove = m_mapSelectionSend.begin();
     while (miRemove != m_mapSelectionSend.end())
     {
@@ -756,9 +715,8 @@ void ScAccessibleSpreadsheet::RemoveSelection(const ScMarkData &refScMarkData)
             ++miRemove;
             continue;
         }
-        aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_REMOVE;
-        aEvent.NewValue <<= uno::Reference< XAccessible >(miRemove->second);
-        CommitChange(aEvent);
+        CommitChange(AccessibleEventId::SELECTION_CHANGED_REMOVE, uno::Any(),
+                     uno::Any(uno::Reference<XAccessible>(miRemove->second)));
         miRemove = m_mapSelectionSend.erase(miRemove);
     }
 }
@@ -786,37 +744,31 @@ void ScAccessibleSpreadsheet::CommitFocusCell(const ScAddress &aNewCell)
         OUString valStr(pScDoc->GetString(aOldActiveCell.Col(),aOldActiveCell.Row(),aOldActiveCell.Tab()));
         if(m_strCurCellValue != valStr)
         {
-            AccessibleEventObject aTextChangedEvent;
-            (void)comphelper::OCommonAccessibleText::implInitTextChangedEvent(m_strCurCellValue, valStr,
-                                                                              aTextChangedEvent.OldValue,
-                                                                              aTextChangedEvent.NewValue);
-            aTextChangedEvent.EventId = AccessibleEventId::TEXT_CHANGED;
-            mpAccCell->CommitChange(aTextChangedEvent);
+            uno::Any aOldValue;
+            uno::Any aNewValue;
+            (void)comphelper::OCommonAccessibleText::implInitTextChangedEvent(
+                m_strCurCellValue, valStr, aOldValue, aNewValue);
+            mpAccCell->CommitChange(AccessibleEventId::TEXT_CHANGED, aOldValue, aNewValue);
 
             if (pScDoc->HasValueData(maActiveCell))
             {
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::VALUE_CHANGED;
-                mpAccCell->CommitChange(aEvent);
+                mpAccCell->CommitChange(AccessibleEventId::VALUE_CHANGED, uno::Any(), uno::Any());
             }
 
             m_strCurCellValue = valStr;
         }
     }
 
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
-    aEvent.Source = uno::Reference< XAccessible >(this);
-    aEvent.OldValue <<= uno::Reference<XAccessible>(mpAccCell);
+    uno::Reference<XAccessible> xOldCell = mpAccCell;
     mpAccCell.clear();
     mpAccCell = GetAccessibleCellAt(aNewCell.Row(), aNewCell.Col());
-    aEvent.NewValue <<= uno::Reference<XAccessible>(mpAccCell);
     maActiveCell = aNewCell;
     if (pScDoc)
     {
         m_strCurCellValue = pScDoc->GetString(maActiveCell.Col(),maActiveCell.Row(),maActiveCell.Tab());
     }
-    CommitChange(aEvent);
+    CommitChange(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, uno::Any(xOldCell),
+                 uno::Any(uno::Reference<XAccessible>(mpAccCell)));
 }
 
 //=====  XAccessibleTable  ================================================
@@ -1531,11 +1483,8 @@ void ScAccessibleSpreadsheet::FireFirstCellFocus()
         return ;
     }
     mbIsFocusSend = true;
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
-    aEvent.Source = uno::Reference< XAccessible >(this);
-    aEvent.NewValue <<= getAccessibleCellAt(maActiveCell.Row(), maActiveCell.Col());
-    CommitChange(aEvent);
+    CommitChange(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, uno::Any(),
+                 uno::Any(getAccessibleCellAt(maActiveCell.Row(), maActiveCell.Col())));
 }
 
 void ScAccessibleSpreadsheet::NotifyRefMode()
@@ -1561,19 +1510,16 @@ void ScAccessibleSpreadsheet::NotifyRefMode()
         m_nMinY = std::min(nRefStartY,nRefEndY);
         m_nMaxY = std::max(nRefStartY,nRefEndY);
         RemoveFormulaSelection();
-        AccessibleEventObject aEvent;
-        aEvent.Source = uno::Reference< XAccessible >(this);
-        aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
-        aEvent.OldValue <<= uno::Reference<XAccessible>(m_pAccFormulaCell);
+        uno::Reference<XAccessible> xOldFormulaCell = m_pAccFormulaCell;
         m_pAccFormulaCell = GetAccessibleCellAt(aFormulaAddr.Row(), aFormulaAddr.Col());
         rtl::Reference< ScAccessibleCell > xNew = m_pAccFormulaCell;
-        aEvent.NewValue <<= uno::Reference< XAccessible >(xNew);
-        CommitChange(aEvent);
+        CommitChange(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, uno::Any(xOldFormulaCell),
+                     uno::Any(uno::Reference<XAccessible>(xNew)));
+
         if (nRefStartX == nRefEndX && nRefStartY == nRefEndY)
         {//Selection Single
-            aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
-            aEvent.NewValue <<= uno::Reference< XAccessible >(xNew);
-            CommitChange(aEvent);
+            CommitChange(AccessibleEventId::SELECTION_CHANGED, uno::Any(xOldFormulaCell),
+                         uno::Any(uno::Reference<XAccessible>(xNew)));
             m_mapFormulaSelectionSend.emplace(aFormulaAddr,xNew);
             m_vecFormulaLastMyAddr.clear();
             m_vecFormulaLastMyAddr.emplace_back(aFormulaAddr);
@@ -1599,9 +1545,7 @@ void ScAccessibleSpreadsheet::NotifyRefMode()
             int nNewSize = vecNew.size();
             if ( nNewSize > 10 )
             {
-                aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
-                aEvent.NewValue.clear();
-                CommitChange(aEvent);
+                CommitChange(AccessibleEventId::SELECTION_CHANGED_WITHIN, uno::Any(), uno::Any());
             }
             else
             {
@@ -1615,13 +1559,12 @@ void ScAccessibleSpreadsheet::NotifyRefMode()
                     else
                     {
                         xChild = GetAccessibleCellAt(rAddr.Row(),rAddr.Col());
-                        aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS;
-                        aEvent.NewValue <<= uno::Reference< XAccessible >(xChild);
-                        CommitChange(aEvent);
+                        CommitChange(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS,
+                                     uno::Any(xOldFormulaCell),
+                                     uno::Any(uno::Reference<XAccessible>(xChild)));
                     }
-                    aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_ADD;
-                    aEvent.NewValue <<= uno::Reference< XAccessible >(xChild);
-                    CommitChange(aEvent);
+                    CommitChange(AccessibleEventId::SELECTION_CHANGED_ADD, uno::Any(),
+                                 uno::Any(uno::Reference<XAccessible>(xChild)));
                     m_mapFormulaSelectionSend.emplace(rAddr,xChild);
                 }
             }
@@ -1633,8 +1576,6 @@ void ScAccessibleSpreadsheet::NotifyRefMode()
 
 void ScAccessibleSpreadsheet::RemoveFormulaSelection(bool bRemoveAll )
 {
-    AccessibleEventObject aEvent;
-    aEvent.Source = uno::Reference< XAccessible >(this);
     auto miRemove = m_mapFormulaSelectionSend.begin();
     while (miRemove != m_mapFormulaSelectionSend.end())
     {
@@ -1643,9 +1584,8 @@ void ScAccessibleSpreadsheet::RemoveFormulaSelection(bool bRemoveAll )
             ++miRemove;
             continue;
         }
-        aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_REMOVE;
-        aEvent.NewValue <<= uno::Reference< XAccessible >(miRemove->second);
-        CommitChange(aEvent);
+        CommitChange(AccessibleEventId::SELECTION_CHANGED_REMOVE, uno::Any(),
+                     uno::Any(uno::Reference<XAccessible>(miRemove->second)));
         miRemove = m_mapFormulaSelectionSend.erase(miRemove);
     }
 }

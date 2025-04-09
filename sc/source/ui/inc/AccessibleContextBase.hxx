@@ -193,9 +193,9 @@ protected:
     virtual tools::Rectangle GetBoundingBox() const = 0;
 
 public:
-    /// Calls all Listener to tell they the change.
-    void
-        CommitChange(const css::accessibility::AccessibleEventObject& rEvent);
+    /// Calls all listeners to notify them about the change.
+    void CommitChange(const sal_Int16 nEventId, const css::uno::Any& rOldValue,
+                      const css::uno::Any& rNewValue, sal_Int32 nIndexHint = -1);
 
     /// Use this method to set initial Name without notification
     void SetName(const OUString& rName) { msName = rName; }
