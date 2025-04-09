@@ -26,8 +26,6 @@
 #include <utility>
 #include <officecfg/Office/Chart.hxx>
 
-#define ROW_COLOR_COUNT 12
-
 using namespace com::sun::star;
 
 // accessors
@@ -90,6 +88,8 @@ void SvxChartColorTable::replace( size_t _nIndex, const XColorEntry & _rEntry )
 
 void SvxChartColorTable::useDefault()
 {
+    constexpr sal_Int32 ROW_COLOR_COUNT = 12;
+
     static const Color aColors[] = {
         Color( 0x00, 0x45, 0x86 ),
         Color( 0xff, 0x42, 0x0e ),

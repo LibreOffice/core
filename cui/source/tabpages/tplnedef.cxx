@@ -45,8 +45,6 @@
 #include <svtools/unitconv.hxx>
 #include <osl/diagnose.h>
 
-#define XOUT_WIDTH    150
-
 using namespace com::sun::star;
 
 

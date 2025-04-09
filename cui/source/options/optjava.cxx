@@ -55,10 +55,6 @@
 #include <jvmfwk/framework.hxx>
 #endif
 
-// define ----------------------------------------------------------------
-
-#define CLASSPATH_DELIMITER SAL_PATHSEPARATOR
-
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
@@ -960,6 +956,8 @@ bool SvxJavaClassPathDlg::IsPathDuplicate( std::u16string_view _rPath )
 
 OUString SvxJavaClassPathDlg::GetClassPath() const
 {
+    constexpr char CLASSPATH_DELIMITER = SAL_PATHSEPARATOR;
+
     OUStringBuffer sPath;
     int nCount = m_xPathList->n_children();
     for (int i = 0; i < nCount; ++i)

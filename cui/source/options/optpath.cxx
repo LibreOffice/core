@@ -131,7 +131,7 @@ static OUString getCfgName_Impl( SvtPathOptions::Paths _nHandle )
     return sCfgName;
 }
 
-#define MULTIPATH_DELIMITER     ';'
+constexpr char MULTIPATH_DELIMITER = ';';
 
 static OUString Convert_Impl( std::u16string_view rValue )
 {

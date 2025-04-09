@@ -47,8 +47,6 @@
 #include <svx/strings.hrc>
 #include <osl/diagnose.h>
 
-#define XOUT_WIDTH    150
-
 SvxLineEndDefTabPage::SvxLineEndDefTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, u"cui/ui/lineendstabpage.ui"_ustr, u"LineEndPage"_ustr, &rInAttrs)
     , rOutAttrs(rInAttrs)

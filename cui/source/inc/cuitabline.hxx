@@ -234,6 +234,8 @@ public:
 
 /*************************************************************************/
 
+constexpr tools::Long XOUT_WIDTH = 150;
+
 class SvxLineDefTabPage : public SfxTabPage
 {
 private:

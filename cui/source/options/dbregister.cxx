@@ -39,7 +39,7 @@
 #include <svx/databaseregistrationui.hxx>
 #include <o3tl/string_view.hxx>
 
-#define COL_TYPE       0
+constexpr int COL_TYPE = 0;
 
 namespace svx
 {
