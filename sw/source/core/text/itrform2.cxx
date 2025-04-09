@@ -445,10 +445,12 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
     // tdf#149089: For compatibility with MSO grid layout, do not insert kern portions to
     // align successive portions to the char grid when MS_WORD_COMP_GRID_METRICS is set.
     // See also tdf#161145.
+    // tdf#139418: However, in testing, this only seems to apply to horizontal text.
+    const bool bUseGridKernPors = GetTextFrame()->IsVertical()
+                                  || !GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                                      DocumentSettingId::MS_WORD_COMP_GRID_METRICS);
     const bool bHasGrid = pGrid && rInf.SnapToGrid()
-                          && GRID_LINES_CHARS == pGrid->GetGridType()
-                          && !GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
-                              DocumentSettingId::MS_WORD_COMP_GRID_METRICS);
+                          && GRID_LINES_CHARS == pGrid->GetGridType() && bUseGridKernPors;
 
     const SwDoc & rDoc = rInf.GetTextFrame()->GetDoc();
     const sal_uInt16 nGridWidth = bHasGrid ? GetGridWidth(*pGrid, rDoc) : 0;

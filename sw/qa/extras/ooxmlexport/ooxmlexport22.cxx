@@ -92,6 +92,32 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165933_noDelTextOnMove)
     assertXPath(pXmlDoc, "//w:moveFrom/w:r/w:delText", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf139418, "tdf139418.docx")
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+
+    sal_Int32 nBaseWidth;
+    xPropertySet->getPropertyValue(u"GridBaseWidth"_ustr) >>= nBaseWidth;
+    // Without the fix, this will fail with
+    // - Expected: ~795
+    // - Actual  : 848
+    CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(794), nBaseWidth);
+    CPPUNIT_ASSERT_LESSEQUAL(sal_Int32(796), nBaseWidth);
+
+    auto pXmlDoc = parseLayoutDump();
+
+    // Vertical DOCX should insert kern portions to align text to the grid
+    sal_Int32 nPorLen1 = getXPath(pXmlDoc, "(//SwLinePortion)[1]", "length").toInt32();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nPorLen1);
+
+    sal_Int32 nPorLen2 = getXPath(pXmlDoc, "(//SwLinePortion)[2]", "length").toInt32();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(42), nPorLen2);
+
+    sal_Int32 nPorLen3 = getXPath(pXmlDoc, "(//SwLinePortion)[3]", "length").toInt32();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nPorLen3);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
