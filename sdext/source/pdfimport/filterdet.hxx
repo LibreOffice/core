@@ -56,7 +56,7 @@ public:
 };
 
 
-/** Retrieve embedded substream from PDF file
+/** Retrieve embedded substream from PDF file using the old trailer system
 
     Useful e.g. for hybrid PDF
 
@@ -90,6 +90,41 @@ css::uno::Reference< css::io::XStream >
                         const css::uno::Reference< css::uno::XComponentContext >& xContext,
                         const css::uno::Sequence< css::beans::PropertyValue >&    rFilterData,
                         bool                                                                            bMayUseUI );
+
+/** Retrieve embedded substream from PDF file using the standard EmbeddedFile
+
+    Useful e.g. for hybrid PDF
+
+    @param rPDFFile
+    URI of the pdf file
+
+    @param o_rOutMimetype
+    Output parameter. Receives the mime type of the
+    substream. Used to distinguish between
+    draw/impress/writer/calc during import
+
+    @param o_rOutPwd
+    In/Out parameter. If given password is wrong, user is queried
+    for another (if bMayUseUI is true)
+
+    @param xContext
+    Component context
+
+    @param rFilterData
+    Basically used to pass on XFilter::filter properties (function
+    uses it to retrieve interaction handler)
+
+    @param bMayUseUI
+    When false, no dialog is opened to query user for alternate
+    password
+ */
+css::uno::Reference< css::io::XStream >
+   getEmbeddedFile( const OUString&                                                            rPDFFile,
+                    OUString&                                                                  o_rOutMimetype,
+                    OUString&                                                                  io_rOutPwd,
+                    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                    const css::uno::Sequence< css::beans::PropertyValue >&    rFilterData,
+                    bool                                                                            bMayUseUI );
 
 
 bool checkDocChecksum( const OUString& rInPDFFileURL,

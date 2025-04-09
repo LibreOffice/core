@@ -37,6 +37,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/stream.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
 #include <memory>
 #include <utility>
 #include <string.h>
@@ -284,6 +285,55 @@ bool copyToTemp(uno::Reference<io::XInputStream> const& xInput, oslFileHandle& r
 
 } // end anonymous namespace
 
+// Check for a hybrid that is stored using the newer method, the standard PDF embedded file
+// with a name of Original.o** and the matching MIME type.  For this to match there must
+// be exactly one embedded file.
+// This uses PDFium to do the legwork.
+uno::Reference<io::XStream> getEmbeddedFile(const OUString& rInPDFFileURL,
+                                            OUString& /*rOutMimetype*/,
+                                            OUString& /*io_rPwd*/,
+                                            const uno::Reference<uno::XComponentContext>& /*xContext*/,
+                                            const uno::Sequence<beans::PropertyValue>& /*rFilterData*/,
+                                            bool /*bMayUseUI*/)
+{
+    uno::Reference<io::XStream> xEmbed;
+    OUString aSysUPath;
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (pPdfium)
+    {
+        // Needs rewriting more C++ with autocleanup
+        // Start by mmaping the file because our pdfium wrapper only wraps the LoadMemDocument
+        oslFileHandle fileHandle = nullptr;
+        SAL_INFO("sdext.pdfimport", "getEmbeddedFile prior to openFile" << aSysUPath);
+        if (osl_openFile(rInPDFFileURL.pData, &fileHandle, osl_File_OpenFlag_Read)
+            != osl_File_E_None)
+        {
+            return xEmbed;
+        }
+
+        sal_uInt64 nFileSize;
+        if (osl_getFileSize(fileHandle, &nFileSize) != osl_File_E_None)
+        {
+            osl_closeFile(fileHandle);
+            return xEmbed;
+        }
+
+        void* pMemRawPdf;
+        if (osl_mapFile(fileHandle, &pMemRawPdf, nFileSize, 0, osl_File_MapFlag_RandomAccess)
+            != osl_File_E_None)
+        {
+            osl_closeFile(fileHandle);
+            return xEmbed;
+        }
+
+        auto pPdfiumDoc = pPdfium->openDocument(pMemRawPdf, nFileSize, OString(/*TODO Pass*/));
+
+        osl_unmapMappedFile(fileHandle, pMemRawPdf, nFileSize);
+        osl_closeFile(fileHandle);
+    }
+
+    return xEmbed;
+}
 // XExtendedFilterDetection
 OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rFilterData )
 {
@@ -338,7 +388,16 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
     }
 
     OUString aEmbedMimetype;
-    xEmbedStream = getAdditionalStream(aURL, aEmbedMimetype, aPassword, m_xContext, rFilterData, false);
+
+    // Try testing for the newer embedded file format
+    xEmbedStream = getEmbeddedFile(aURL, aEmbedMimetype, aPassword, m_xContext, rFilterData, false);
+
+    if (aEmbedMimetype.isEmpty())
+    {
+        // No success with embedd file, try the older trailer based AdditionalStream
+        xEmbedStream =
+            getAdditionalStream(aURL, aEmbedMimetype, aPassword, m_xContext, rFilterData, false);
+    }
 
     if (aFileHandle)
         osl_removeFile(aURL.pData);

@@ -116,7 +116,13 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                     {
                         OUString aEmbedMimetype;
                         OUString aOrgPwd( aPwd );
-                        xSubStream = getAdditionalStream( aURL, aEmbedMimetype, aPwd, m_xContext, rFilterData, true );
+
+                        xSubStream = getEmbeddedFile(aURL, aEmbedMimetype, aPwd, m_xContext,
+                                                     rFilterData, true);
+                        if (aEmbedMimetype.isEmpty()) {
+                            xSubStream = getAdditionalStream(aURL, aEmbedMimetype, aPwd, m_xContext,
+                                                             rFilterData, true);
+                        }
                         if( aOrgPwd != aPwd )
                             bAddPwdProp = true;
                     }
