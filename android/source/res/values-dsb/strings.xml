@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="calc_hide">Schowaś</string>
-    <string name="compress_photo_title">Cośo foto kompriměrowaś\?</string>
+    <string name="compress_photo_title">Cośo foto kompriměrowaś?</string>
     <string name="app_name_settings">Nastajenja LibreOffice Viewer</string>
     <string name="app_description">LibreOffice Viewer jo dokumentowy wobglědowak, kótaryž na LibreOffice bazěrujo.</string>
     <string name="app_credits">https://www.libreoffice.org</string>
@@ -114,6 +114,6 @@
     <string name="search_find_next">Dalej pytaś</string>
     <string name="title_browser">Wšykne dataje</string>
     <string name="pref_developer_mode_summary">Wuwijaŕski modus zmóžniś, źož móžośo pśikaze UNO w nałoženju pósłaś. Wužywanje na swójske riziko.</string>
-    <string name="save_alert_dialog_title">Dokument do zacynjanja składowaś\?</string>
+    <string name="save_alert_dialog_title">Dokument do zacynjanja składowaś?</string>
     <string name="calc_alert_double_click_optimal_length">Pokaz: Pótusniśo dwójcy nadpismo, aby optimalnu šyrokosć/wusokosć nastajił.</string>
 </resources>

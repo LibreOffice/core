@@ -36,7 +36,7 @@
     <string name="password">Hasło</string>
     <string name="action_undo">Cofnij</string>
     <string name="action_redo">Ponów</string>
-    <string name="save_alert_dialog_title">Zapisać dokument przed zamknięciem\?</string>
+    <string name="save_alert_dialog_title">Zapisać dokument przed zamknięciem?</string>
     <string name="save_document">ZAPISZ</string>
     <string name="action_cancel">Anuluj</string>
     <string name="no_save_document">NIE</string>
@@ -60,7 +60,7 @@
     <string name="compress_photo_medium_size">Średni rozmiar</string>
     <string name="compress_photo_max_quality">Maksymalna jakość</string>
     <string name="compress_photo_no_compress">Nie kompresuj</string>
-    <string name="compress_photo_title">Czy chcesz skompresować zdjęcie\?</string>
+    <string name="compress_photo_title">Czy chcesz skompresować zdjęcie?</string>
     <string name="action_copy">Kopiuj</string>
     <string name="calc_optimal_length_default_text">Wpisz dodatkową długość w setnych/mm</string>
     <string name="action_pwd_dialog_title">Wpisz hasło</string>

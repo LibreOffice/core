@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name_settings">Setări pentru LibreOffice Viewer</string>
     <string name="app_name">LibreOffice Viewer</string>
+    <string name="app_version">Versiunea: %1$s&lt;br&gt;ID-ul subversiunii: &lt;a href=https://hub.libreoffice.org/git-core/%2$s&gt;%2$s&lt;/a&gt;</string>
 </resources>

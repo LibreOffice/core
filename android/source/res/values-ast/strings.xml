@@ -35,7 +35,7 @@
     <string name="action_save_as">Guardar como…</string>
     <string name="message_saving">Guardando’l documentu…</string>
     <string name="message_saving_failed">Nun se pudo guardar el documentu.</string>
-    <string name="save_alert_dialog_title">¿Quies guardar el documentu enantes de zarralu\?</string>
+    <string name="save_alert_dialog_title">¿Quies guardar el documentu enantes de zarralu?</string>
     <string name="save_document">GUARDAR</string>
     <string name="action_cancel">Encaboxar</string>
     <string name="about_notice">Amosar l\'avisu</string>
@@ -70,12 +70,12 @@
     <string name="calc_adjust_height">Axustar l\'altor</string>
     <string name="calc_alert_double_click_optimal_length">Conseyu: Tocar dos vegaes na testera define l\'anchor/altor óptimu.</string>
     <string name="select_photo_title">Esbillar una imaxe</string>
-    <string name="no_camera_found">Nun s\'atopó denguna cámara</string>
+    <string name="no_camera_found">Nun s\'atopó nenguna cámara</string>
     <string name="compress_photo_smallest_size">Tamañu menor</string>
     <string name="compress_photo_medium_size">Tamañu mediu</string>
     <string name="compress_photo_max_quality">Calidá máxima</string>
     <string name="compress_photo_no_compress">Nun comprimir</string>
-    <string name="compress_photo_title">¿Quies comprimir la foto\?</string>
+    <string name="compress_photo_title">¿Quies comprimir la foto?</string>
     <string name="action_copy">Copia</string>
     <string name="action_paste">Apegar</string>
     <string name="action_cut">Cortar</string>
@@ -96,7 +96,7 @@
     <string name="UNO_commands_string_parent_value_hint">Valor cimeru</string>
     <string name="action_exportToPDF">Esportar a PDF</string>
     <string name="action_print">Imprentar</string>
-    <string name="tabhost_character">Carácter</string>
+    <string name="tabhost_character">Caráuter</string>
     <string name="tabhost_paragraph">Párrafu</string>
     <string name="tabhost_insert">Inxertar</string>
     <string name="tabhost_style">Estilu</string>

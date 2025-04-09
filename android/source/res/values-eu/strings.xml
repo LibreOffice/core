@@ -67,7 +67,7 @@
     <string name="compress_photo_medium_size">Tamaina ertaina</string>
     <string name="compress_photo_max_quality">Gehieneko kalitatea</string>
     <string name="compress_photo_no_compress">Ez konprimatu</string>
-    <string name="compress_photo_title">Argazkia konprimatu nahi duzu\?</string>
+    <string name="compress_photo_title">Argazkia konprimatu nahi duzu?</string>
     <string name="action_copy">Kopiatu</string>
     <string name="action_paste">Itsatsi</string>
     <string name="action_cut">Moztu</string>
@@ -106,7 +106,7 @@
     <string name="readonly_file">Fitxategi hau irakurtzeko soilik da.</string>
     <string name="pref_experimental_editing_summary">Gaitu edizio modu esperimentala. Erabili zure arriskupean.</string>
     <string name="action_about">Honi buruz</string>
-    <string name="save_alert_dialog_title">Dokumentua gorde nahi duzu itxi aurretik\?</string>
+    <string name="save_alert_dialog_title">Dokumentua gorde nahi duzu itxi aurretik?</string>
     <string name="calc_optimal_length">Luzera egokia</string>
     <string name="calc_optimal_length_default_text">Sartu luzera gehigarria 100th/mm neurrian</string>
     <string name="UNO_commands_string_type_hint">Mota</string>

@@ -49,7 +49,7 @@
     <string name="password">Lykilorð</string>
     <string name="action_undo">Afturkalla</string>
     <string name="action_redo">Endurgera</string>
-    <string name="save_alert_dialog_title">Vista skjalið áður en því er lokað\?</string>
+    <string name="save_alert_dialog_title">Vista skjalið áður en því er lokað?</string>
     <string name="save_document">VISTA</string>
     <string name="action_cancel">Hætta við</string>
     <string name="no_save_document">NEI</string>
@@ -81,7 +81,7 @@
     <string name="compress_photo_medium_size">Miðlungsstærð</string>
     <string name="compress_photo_max_quality">Hámarksgæði</string>
     <string name="compress_photo_no_compress">Ekki þjappa</string>
-    <string name="compress_photo_title">Viltu þjappa ljósmyndinni\?</string>
+    <string name="compress_photo_title">Viltu þjappa ljósmyndinni?</string>
     <string name="action_copy">Afrita</string>
     <string name="action_paste">Líma</string>
     <string name="action_cut">Klippa</string>
