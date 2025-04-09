@@ -271,8 +271,6 @@ endef
 
 # Set patch level to be used for all patches
 #
-# The default value is 3 to be able to work with current dmake patches.
-#
 # gb_UnpackedTarball_set_patchlevel unpacked level
 define gb_UnpackedTarball_set_patchlevel
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_PATCHLEVEL := $(2)
