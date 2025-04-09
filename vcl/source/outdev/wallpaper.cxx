@@ -117,8 +117,8 @@ void OutputDevice::Erase()
         if ( eRasterOp != RasterOp::OverPaint )
             SetRasterOp( eRasterOp );
     }
-
-    if( mpAlphaVDev )
+    // If we went into the "if ( mbBackground )" section, then we have already erased the mpAlphaDev.
+    else if( mpAlphaVDev )
         mpAlphaVDev->Erase();
 }
 
