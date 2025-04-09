@@ -14,7 +14,6 @@
 
 #include "edtwin.hxx"
 
-class SwEditWin;
 class SwPageFrame;
 class SwFrame;
 class Point;

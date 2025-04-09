@@ -25,8 +25,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 class Menu;
-class PopupMenu;
-class SwView;
 
 using namespace ::com::sun::star;
 
@@ -97,8 +95,6 @@ public:
 
     virtual VclPtr<InterimItemWindow> CreateItemWindow( vcl::Window *pParent ) override;
 };
-
-class NavElementToolBoxControl;
 
 class NavElementBox_Base
 {

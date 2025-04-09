@@ -25,7 +25,6 @@
 class SwView;
 class SwWrtShell;
 class SwEditWin;
-class KeyEvent;
 class MouseEvent;
 
 // base class for all functions

@@ -35,8 +35,6 @@ inline void setfieldval(weld::MetricSpinButton& rField, int lValue)
 }
 
 class SwEnvDlg;
-class SwEnvPage;
-class SwEnvFormatPage;
 class SwWrtShell;
 class Printer;
 

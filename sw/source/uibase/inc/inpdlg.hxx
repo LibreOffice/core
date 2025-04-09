@@ -26,7 +26,6 @@ class SwSetExpField;
 class SwUserFieldType;
 class SwField;
 class SwWrtShell;
-class SwFieldMgr;
 
 // insert fields
 class SwFieldInputDlg final : public weld::GenericDialogController

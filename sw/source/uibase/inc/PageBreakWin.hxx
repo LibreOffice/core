@@ -15,9 +15,6 @@
 #include <vcl/timer.hxx>
 #include <optional>
 
-class Menu;
-class SwPageFrame;
-
 class SwPageBreakWin;
 
 /** Class for the page break control window.

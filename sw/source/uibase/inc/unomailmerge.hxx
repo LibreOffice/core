@@ -44,11 +44,7 @@ namespace com::sun::star {
     namespace frame {
         class XModel;
     }
-    namespace lang {
-        class XMultiServiceFactory;
-    }
     namespace text {
-        class XMailMergeListener;
         struct MailMergeEvent;
     }
     namespace beans{
@@ -61,7 +57,6 @@ typedef comphelper::OMultiTypeInterfaceContainerHelperVar3<css::beans::XProperty
     OPropertyListenerContainerHelper;
 
 class SwDBManager;
-class MailMergeExecuteFinalizer;
 
 /**
  * Gives UNO access to the global mail merge functionality, via the com.sun.star.text.MailMerge

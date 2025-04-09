@@ -32,13 +32,9 @@
 
 class   SwWrtShell;
 class   SwView;
-class   SwRect;
-class   SwViewShell;
 class   SwAnchorMarker;
 class   SdrObject;
 class   SwShadowCursor;
-class   DataChangedEvent;
-class   SvxAutoCorrCfg;
 class   SvxAutoCorrect;
 class   SwPaM;
 struct  SwApplyTemplate;

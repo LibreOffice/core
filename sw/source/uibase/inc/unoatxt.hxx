@@ -34,9 +34,7 @@
 #include <rtl/ref.hxx>
 #include <svtools/unoevent.hxx>
 
-class SwTextBlocks;
 class SwGlossaries;
-class SwDoc;
 class SwDocShell;
 class SwXBodyText;
 

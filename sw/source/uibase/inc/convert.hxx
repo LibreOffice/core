@@ -29,10 +29,8 @@
 #include "autoformatpreview.hxx"
 #include <tblafmt.hxx>
 
-class VclContainer;
 class SwTableAutoFormat;
 class SwView;
-class SwWrtShell;
 struct SwInsertTableOptions;
 
 class SwConvertTableDlg final : public SfxDialogController

@@ -35,7 +35,6 @@ class SwFrameFormat;
 class SwTabCols;
 class DateTime;
 class SfxViewFrame;
-class SwEditShell;
 
 // fill BoxInfo attribute
 SW_DLLPUBLIC void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh);

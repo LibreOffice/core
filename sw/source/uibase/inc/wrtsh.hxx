@@ -44,7 +44,6 @@ class SwView;
 class SvGlobalName;
 class SwInputFieldList;
 class SwSectionData;
-class Timer;
 class SvxMacro;
 class SwFormatINetFormat;
 class SvxAutoCorrect;
@@ -55,7 +54,6 @@ enum class SvMacroItemId : sal_uInt16;
 class SwFieldMgr;
 class SfxRequest;
 enum class SwLineBreakClear;
-class SwContentControl;
 enum class SwContentControlType;
 
 namespace i18nutil {

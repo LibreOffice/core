@@ -26,7 +26,6 @@
 #include <sfx2/tabdlg.hxx>
 
 class SfxBindings;
-class SfxTabPage;
 class SwChildWinWrapper;
 struct SfxChildWinInfo;
 

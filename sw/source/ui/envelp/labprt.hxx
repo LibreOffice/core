@@ -22,7 +22,6 @@
 
 #include <label.hxx>
 
-class SwLabDlg;
 class SwLabItem;
 
 class SwLabPrtPage : public SfxTabPage

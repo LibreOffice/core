@@ -26,8 +26,6 @@
 #include <vcl/customweld.hxx>
 #include <vcl/print.hxx>
 
-class SwWrtShell;
-
 /// Dedicated drop caps dialog, opened by the .uno:FormatDropcap UNO command, which is not in the
 /// default menus.
 class SwDropCapsDlg final : public SfxSingleTabDialogController

@@ -23,7 +23,6 @@
 #include <sfx2/basedlgs.hxx>
 #include <svx/swframetypes.hxx>
 
-class SfxItemSet;
 class SwWrtShell;
 
 struct SwWrapDlgBase

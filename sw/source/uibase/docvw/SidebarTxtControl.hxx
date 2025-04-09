@@ -21,7 +21,6 @@
 
 #include <svx/weldeditview.hxx>
 
-class OutlinerView;
 class SwView;
 class SwPostItMgr;
 struct SpellCallbackInfo;

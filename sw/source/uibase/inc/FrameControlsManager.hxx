@@ -17,9 +17,7 @@
 #include <memory>
 
 class SwPageFrame;
-class SwEditWin;
 class SwContentFrame;
-class SwTextNode;
 class SwContentControl;
 
 typedef std::shared_ptr< SwFrameControl > SwFrameControlPtr;

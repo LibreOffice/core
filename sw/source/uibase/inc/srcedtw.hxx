@@ -32,10 +32,8 @@ namespace com::sun::star::beans { class XMultiPropertySet; }
 namespace weld { class Scrollbar; }
 class ScrollAdaptor;
 class SwSrcView;
-class SwSrcEditWindow;
 class TextEngine;
 class TextView;
-class DataChangedEvent;
 
 class TextViewOutWin final : public vcl::Window
 {

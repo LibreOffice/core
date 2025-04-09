@@ -26,7 +26,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <rtl/ref.hxx>
 
-class SwDocShell;
 class SwView;
 class SwXTextDocument;
 class SwXBaseStyle;

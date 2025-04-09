@@ -38,7 +38,6 @@ class SwTextFormatColl;
 class SwCharFormat;
 class SdrObject;
 class SdrOle2Obj;
-class OutlinerParaObject;
 class SwNumFormat;
 class SwTextNode;
 class SwNoTextNode;

@@ -22,7 +22,6 @@
 #include <sfx2/styledlg.hxx>
 #include <svl/style.hxx>
 
-class SfxItemSet;
 class SwWrtShell;
 
 // the tab dialog carrier of TabPages

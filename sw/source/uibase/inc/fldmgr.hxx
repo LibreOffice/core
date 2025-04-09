@@ -31,9 +31,6 @@
 #include <vector>
 
 namespace com::sun::star{
-    namespace container{
-        class XNameAccess;
-    }
     namespace text{
         class XNumberingTypeInfo;
     }
@@ -42,9 +39,6 @@ namespace com::sun::star{
 class SwWrtShell;
 class SwField;
 class SwFieldType;
-class SwPaM;
-class SbModule;
-class SvxMacroItem;
 class SvNumberFormatter;
 namespace weld { class Widget; class Window; }
 enum class SwFieldIds : sal_uInt16;

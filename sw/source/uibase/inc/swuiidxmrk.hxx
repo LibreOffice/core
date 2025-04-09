@@ -31,14 +31,11 @@ class SwWrtShell;
 class SwTOXMgr;
 class SwTOXMark;
 
-// insert mark for index entry
-class SwIndexMarkFloatDlg;
-class SwIndexMarkModalDlg;
-
 class SwIndexMarkPane
 {
     std::shared_ptr<weld::Dialog> m_xDialog;
 
+    // insert mark for index entry
     friend class SwIndexMarkFloatDlg;
     friend class SwIndexMarkModalDlg;
 
@@ -156,8 +153,6 @@ public:
     virtual ~SwIndexMarkModalDlg() override;
     virtual short int run() override;
 };
-
-class SwAuthMarkModalDlg;
 
 class SwAuthorMarkPane
 {

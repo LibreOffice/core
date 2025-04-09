@@ -25,15 +25,11 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <shellio.hxx>
 
-class SwPaM;
-class SfxMedium;
-
 namespace com::sun::star {
     namespace uno { template<class A> class Reference; }
     namespace uno { template<class A> class Sequence; }
     namespace uno { class Any; }
     namespace lang { class XComponent; }
-    namespace lang { class XMultiServiceFactory; }
     namespace beans { struct PropertyValue; }
 }
 

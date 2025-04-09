@@ -28,7 +28,6 @@
 
 #include <map>
 
-class SvXMLImport;
 class RedlineInfo;
 class SwRedlineData;
 class SwDoc;
@@ -36,7 +35,6 @@ class SwXMLImport;
 namespace com::sun::star {
     namespace text { class XTextCursor; }
     namespace text { class XTextRange; }
-    namespace frame { class XModel; }
 }
 
 typedef std::map< OUString, RedlineInfo* > RedlineMapType;

@@ -25,12 +25,6 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace com::sun::star::beans { struct PropertyValue; }
-
-class SfxMedium;
-class SfxFilter;
-class SfxMedium;
-
 class SwFilterDetect : public ::cppu::WeakImplHelper< css::document::XExtendedFilterDetection, css::lang::XServiceInfo >
 {
 public:

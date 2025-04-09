@@ -17,7 +17,6 @@
 #include <SidebarWindowsTypes.hxx>
 
 class SwViewShell;
-class View;
 namespace vcl { class Window; }
 class SwEditWin;
 

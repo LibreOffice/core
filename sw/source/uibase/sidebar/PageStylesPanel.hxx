@@ -32,7 +32,6 @@
 #include <svx/pageitem.hxx>
 #include <svx/pagenumberlistbox.hxx>
 
-class List;
 class ColorListBox;
 namespace sw::sidebar {
 

@@ -26,8 +26,6 @@
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 
-class SwLabFormatPage;
-
 class SwLabPreview : public weld::CustomWidgetController
 {
     Color m_aGrayColor;

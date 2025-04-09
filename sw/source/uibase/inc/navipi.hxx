@@ -37,7 +37,6 @@ class SwWrtShell;
 class SfxBindings;
 class SwNavigationConfig;
 class SwView;
-class SpinField;
 
 class SwNavigationPI final : public PanelLayout
                      , public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface

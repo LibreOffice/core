@@ -35,8 +35,6 @@
 class SwDoc;
 class SwPaM;
 class SwTableNode;
-class SwNodeIndex;
-class SwNoTextNode;
 class SwTextNode;
 class WW8TabDesc;
 

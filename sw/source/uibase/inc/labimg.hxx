@@ -24,8 +24,6 @@
 #include <unotools/configitem.hxx>
 #include <swdllapi.h>
 
-class SwLabCfgItem;
-
 class SW_DLLPUBLIC SwLabItem final : public SfxPoolItem
 {
 

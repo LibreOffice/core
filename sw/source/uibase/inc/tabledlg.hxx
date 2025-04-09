@@ -22,7 +22,6 @@
 #include <sfx2/tabdlg.hxx>
 
 class SwWrtShell;
-struct TColumn;
 
 // table dialog
 class SwTableTabDlg final : public SfxTabDialogController

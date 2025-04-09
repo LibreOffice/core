@@ -56,8 +56,8 @@
 #include <unordered_map>
 
 
-class SvxBrushItem;
 class EditTextObject;
+class OutlinerParaObject;
 
 // some forward declarations
 class SwWW8AttrIter;
@@ -71,15 +71,11 @@ namespace editeng { class SvxBorderLine; }
 class AttributeOutputBase;
 class DocxAttributeOutput;
 class RtfAttributeOutput;
-class BitmapPalette;
 class SwEscherEx;
-class DateTime;
-namespace vcl { class Font; }
 class MSWordExportBase;
 class SdrObject;
 class SdrTextObj;
 class SfxItemSet;
-class SvStream;
 class SvxFontItem;
 class SvxBoxItem;
 class SwAttrSet;
@@ -93,7 +89,6 @@ class SwFrameFormat;
 class SwGrfNode;
 class SwNumFormat;
 class SwNumRule;
-class SwNumRuleTable;
 class SwPageDesc;
 class SwFormatPageDesc;
 class SwOLENode;
@@ -101,30 +96,24 @@ class SwPostItField;
 class SwRedlineData;
 class SwSectionFormat;
 class SwSectionNode;
-class SwTableNode;
 class SwTOXType;
 class SwTextFormatColl;
 class SwTextNode;
 class SwWW8WrGrf;
-class SwWW8Writer;
 class MSWordStyles;
 class WW8AttributeOutput;
 class WW8Export;
 class MSWordAttrIter;
 class WW8_WrFkp;
 class WW8_WrPlc0;
-class WW8_WrPlc1;
 class WW8_WrPlcField;
 class WW8_WrMagicTable;
 class WW8_WrPlcFootnoteEdn;
 class WW8_WrPlcPn;
 class WW8_WrPlcAnnotations;
 class WW8_WrtFactoids;
-class MSWordSections;
 class WW8_WrPlcTextBoxes;
-class WW8_WrPct;            // administration
 class WW8_WrtBookmarks;
-class WW8_WrtRedlineAuthor;
 class SwMSConvertControls;
 class WW8_WrPc;
 struct WW8_PdAttrDesc;

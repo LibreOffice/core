@@ -31,17 +31,8 @@
 class SwXTextView;
 class SfxRequest;
 class SwTransferable;
-class SfxRequest;
 
 namespace sfx2 { class DocumentInserter; }
-namespace com::sun::star {
-    namespace frame {
-        class XDispatchProviderInterceptor;
-    }
-    namespace lang {
-        class XUnoTunnel;
-    }
-}
 
 class SwScannerEventListener final : public ::cppu::WeakImplHelper<
     css::lang::XEventListener >

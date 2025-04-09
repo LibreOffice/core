@@ -40,9 +40,6 @@ class SwWrtShell;
 class SwContentType;
 class SwNavigationPI;
 class SwNavigationConfig;
-class Menu;
-class ToolBox;
-class SwGlblDocContents;
 class SfxObjectShell;
 class SdrObject;
 

@@ -14,11 +14,6 @@
 
 #include <fmtpdsc.hxx>
 
-namespace vcl
-{
-class Window;
-}
-class SwWrtShell;
 class SwPageDesc;
 
 class SwTitlePageDlg final : public SfxDialogController

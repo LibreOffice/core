@@ -24,8 +24,6 @@
 #include <svl/macitem.hxx>
 #include <optional>
 
-class SwWrtShell;
-
 enum DlgEventType
 {
     MACASSGN_AUTOTEXT,

@@ -28,8 +28,6 @@
 #include "ww8scan.hxx"
 #include "ww8par.hxx"
 
-class WW8RStyle;
-
 class WW8DupProperties
 {
 public:

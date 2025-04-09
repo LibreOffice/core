@@ -24,7 +24,6 @@
 #include "condedit.hxx"
 
 class SwWrtShell;
-class SfxRequest;
 
 class BookmarkTable
 {

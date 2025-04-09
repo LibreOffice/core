@@ -27,7 +27,6 @@
 #include <optional>
 
 class SwWrtShell;
-class SwForm;
 
 // manager for directory functionality
 //one single method will be sufficient to insert AND update indexes

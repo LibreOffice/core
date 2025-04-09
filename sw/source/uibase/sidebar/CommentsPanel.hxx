@@ -38,14 +38,9 @@
 #include <tools/datetime.hxx>
 #include <tools/time.hxx>
 
-class SwWrtShell;
-class SwView;
 class SwPostItField;
 class SwFormatField;
-class SwAnnotationWin;
-class SfxBroadcaster;
 class SwPostItMgr;
-class SwAnnotationItem;
 
 namespace sw::sidebar
 {

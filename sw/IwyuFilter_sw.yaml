@@ -641,6 +641,9 @@ excludelist:
     sw/source/filter/xml/xmlimp.cxx:
     # Actually used
     - com/sun/star/text/XTextRange.hpp
+    sw/source/uibase/inc/basesh.hxx:
+    # Needed in --fwdecl mode to avoid "externally available entity "DBTextStruct_Impl" is not previously declared in an included file" error
+    - struct DBTextStruct_Impl
     sw/source/uibase/app/docsh2.cxx:
     # Needed for direct member access
     - ooo/vba/word/XDocument.hpp

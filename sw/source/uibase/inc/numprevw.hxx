@@ -23,7 +23,6 @@
 #include <vcl/customweld.hxx>
 
 class SwNumRule;
-namespace rtl { class OUString; }
 
 class NumberingPreview final : public weld::CustomWidgetController
 {

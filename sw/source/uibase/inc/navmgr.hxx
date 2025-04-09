@@ -15,7 +15,6 @@
 
 class   SwWrtShell;
 struct  SwPosition;
-class SwUnoCursor;
 
 class SwNavigationMgr final : public SfxListener
 {

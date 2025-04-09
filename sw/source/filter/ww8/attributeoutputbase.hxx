@@ -33,7 +33,6 @@
 #include <fldbas.hxx>
 #include <utility>
 
-class Point;
 class SvxCaseMapItem;
 class SvxColorItem;
 class SvxContourItem;
@@ -52,16 +51,6 @@ class SvxBlinkItem;
 class SvxBrushItem;
 class XFillStyleItem;
 class XFillGradientItem;
-class SvxFontItem;
-class SvxFontHeightItem;
-class SvxLanguageItem;
-class SvxPostureItem;
-class SvxWeightItem;
-class SvxFontItem;
-class SvxFontHeightItem;
-class SvxLanguageItem;
-class SvxPostureItem;
-class SvxWeightItem;
 class SvxCharRotateItem;
 class SvxEmphasisMarkItem;
 class SvxTwoLinesItem;
@@ -96,8 +85,6 @@ class SwFormatSurround;
 class SwFormatVertOrient;
 class SwFormatHoriOrient;
 class SwFormatAnchor;
-class SvxBrushItem;
-class SvxBoxItem;
 class SwFormatCol;
 class SvxFormatKeepItem;
 class SwTextGridItem;
@@ -112,18 +99,10 @@ class SwRedlineData;
 class SwSection;
 class SwFormatDrop;
 class SwFrameFormat;
-class SwNumFormat;
-class SwFormat;
-struct WW8_SepInfo;
 class SwLineNumberInfo;
 class SwNumRule;
-class wwFont;
 
 namespace editeng { class SvxBorderLine; }
-
-namespace rtl { class OUString; }
-
-class MSWordExportBase;
 
 namespace ww8 { class Frame; }
 

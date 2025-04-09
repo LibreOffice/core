@@ -30,7 +30,6 @@
 
 class   SwWrtShell;
 struct  SvxSwFrameValidation;
-struct  SwPosition;
 
 class   SwFormatCol;
 class SvGlobalName;

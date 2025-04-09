@@ -31,7 +31,6 @@ class SwContentType;
 class SwFormatField;
 class SwTextINetFormat;
 class SwTOXBase;
-class SwRangeRedline;
 class SwTextFootnote;
 
 //  helper classes

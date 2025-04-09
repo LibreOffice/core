@@ -21,12 +21,6 @@
 
 #include <shellio.hxx>
 
-class SwNumRuleTable;
-class SwDoc;
-class SwTextNode;
-class SwNumRule;
-class SwNodeIndex;
-
 // the special readers
 
 class HTMLReader final : public Reader

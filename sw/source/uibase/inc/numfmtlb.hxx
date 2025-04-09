@@ -23,8 +23,6 @@
 #include <svl/zforlist.hxx>
 #include <swdllapi.h>
 
-class SwView;
-
 class SW_DLLPUBLIC SwNumFormatBase
 {
     sal_Int32           m_nStdEntry;

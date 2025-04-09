@@ -32,12 +32,6 @@
 
 class DocxAttributeOutput;
 class DocxExportFilter;
-class SwNode;
-class SwEndNode;
-class SwTableNode;
-class SwTextNode;
-class SwGrfNode;
-class SwOLENode;
 class DocxSdrExport;
 
 namespace oox {

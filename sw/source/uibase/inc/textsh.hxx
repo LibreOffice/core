@@ -25,10 +25,8 @@
 #include <com/sun/star/ui/dialogs/DialogClosedEvent.hpp>
 
 class AbstractSvxPostItDialog;
-class SwFieldMgr;
 class SwFlyFrameAttrMgr;
 class SvxHyperlinkItem;
-class SwInsertChart;
 
 class SW_DLLPUBLIC SwTextShell: public SwBaseShell
 {

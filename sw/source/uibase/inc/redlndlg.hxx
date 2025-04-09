@@ -31,8 +31,6 @@
 #include <memory>
 #include <vector>
 
-class SwChildWinWrapper;
-
 struct SwRedlineDataChild
 {
     const SwRedlineData*        pChild;     // link to original stacked data

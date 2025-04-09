@@ -36,10 +36,8 @@
 
 class SwDoc;
 class SvXMLUnitConverter;
-class SvXMLTokenMap;
 class SvXMLImportItemMapper;
 class SfxItemSet;
-class XMLTextImportHelper;
 class SvXMLGraphicHelper;
 class SvXMLEmbeddedObjectHelper;
 enum class SfxStyleFamily;

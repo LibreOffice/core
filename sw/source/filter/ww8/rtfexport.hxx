@@ -29,10 +29,6 @@ class RtfAttributeOutput;
 class RtfExportFilter;
 class RtfSdrExport;
 using RtfColorTable = std::map<sal_uInt16, Color>;
-class SwNode;
-class SwTextNode;
-class SwGrfNode;
-class SwOLENode;
 
 /// The class that does all the actual RTF export-related work.
 class RtfExport : public MSWordExportBase

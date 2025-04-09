@@ -25,7 +25,6 @@
 #include <pagedesc.hxx>
 
 class SwNumRule;
-class IntlWrapper;
 class SwPaM;
 
 // container for FootNote

@@ -33,7 +33,6 @@ class SwFormat;
 class SwFrameFormat;
 class SvXMLUnitConverter;
 class SvXMLExportItemMapper;
-class SvXMLAutoStylePoolP;
 class SwTableLine;
 class SwTableLines;
 class SwTableBox;
@@ -43,8 +42,6 @@ class SwXMLTableColumnsSortByWidth_Impl;
 class SwXMLTableFrameFormatsSort_Impl;
 class SwXMLTableInfo_Impl;
 class SwTableNode;
-class XMLPropertySetMapper;
-class SwXMLTableLines_Impl;
 
 typedef std::vector< SwXMLTableLines_Impl* > SwXMLTableLinesCache_Impl;
 

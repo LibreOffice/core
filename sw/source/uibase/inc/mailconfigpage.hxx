@@ -22,7 +22,6 @@
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
 
-class SwTestAccountSettingsDialog;
 class SwMailMergeConfigItem;
 
 class SwMailConfigPage final : public SfxTabPage

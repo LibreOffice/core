@@ -27,8 +27,6 @@
 
 class SwView;
 class SfxDispatcher;
-class ImageMap;
-class INetImage;
 
 class SwReadOnlyPopup
 {

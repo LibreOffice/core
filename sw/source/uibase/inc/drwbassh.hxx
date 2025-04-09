@@ -24,7 +24,6 @@
 
 class SwView;
 class SfxItemSet;
-class SwDrawBase;
 class AbstractSvxObjectNameDialog;
 struct SvxSwFrameValidation;
 

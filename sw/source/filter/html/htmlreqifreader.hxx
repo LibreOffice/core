@@ -10,7 +10,6 @@
 #define INCLUDED_SW_SOURCE_FILTER_HTML_HTMLREQIFREADER_HXX
 
 class Graphic;
-class Size;
 class SvStream;
 class SwOLENode;
 class SwFrameFormat;

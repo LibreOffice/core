@@ -27,7 +27,6 @@
 #include "ww8scan.hxx"
 
 class SwTextBlocks;
-class SwNodeIndex;
 
 /*
  * GlossaryFib takes the document fib and finds the glossary fib which may

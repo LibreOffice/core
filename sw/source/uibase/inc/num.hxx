@@ -24,7 +24,6 @@
 #include <numrule.hxx>
 
 class SwWrtShell;
-class SvxBrushItem;
 class SwOutlineTabDialog;
 
 class SwNumPositionTabPage final : public SfxTabPage

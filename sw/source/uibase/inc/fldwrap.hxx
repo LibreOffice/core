@@ -24,7 +24,6 @@
 #include <swabstdlg.hxx>
 
 #include "chldwrap.hxx"
-class AbstractSwFieldDlg;
 
 class SwFieldDlgWrapper final : public SwChildWinWrapper
 {

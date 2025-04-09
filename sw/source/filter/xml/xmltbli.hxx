@@ -28,7 +28,6 @@
 #include <unordered_map>
 #include <vector>
 
-class SwXMLImport;
 class SwTableNode;
 class SwTableBox;
 class SwTableLine;

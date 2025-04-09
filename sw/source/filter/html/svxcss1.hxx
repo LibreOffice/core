@@ -89,8 +89,6 @@ struct CSS1PropertyEnum
     sal_uInt16 nEnum;       // and the corresponding value of enum
 };
 
-namespace editeng { class SvxBorderLine; }
-
 #define SVX_CSS1_BORDERINFO_WIDTH 1
 #define SVX_CSS1_BORDERINFO_COLOR 2
 #define SVX_CSS1_BORDERINFO_STYLE 4

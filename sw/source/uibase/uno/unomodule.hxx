@@ -28,24 +28,6 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace com
-{
-    namespace sun
-    {
-        namespace star
-        {
-            namespace lang
-            {
-                class XMultiServiceFactory;
-            }
-            namespace beans
-            {
-                struct PropertyValue;
-            }
-        }
-    }
-}
-
 class SwUnoModule : public ::cppu::WeakImplHelper< css::frame::XDispatchProvider, css::frame::XNotifyingDispatch, css::lang::XServiceInfo >
 {
 public:

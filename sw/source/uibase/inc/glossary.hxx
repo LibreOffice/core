@@ -30,11 +30,8 @@
 
 struct GroupUserData;
 class SwGlossaryHdl;
-class SwNewGlosNameDlg;
 class SwWrtShell;
 class SfxViewFrame;
-class PopupMenu;
-class Menu;
 class SwOneExampleFrame;
 
 const short RET_EDIT = 100;

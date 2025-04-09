@@ -131,8 +131,6 @@ namespace o3tl {
     template<> struct typed_flags<MoveItemFlags> : is_typed_flags<MoveItemFlags, 0x0f> {};
 }
 
-class AddressMultiLineEdit;
-
 class AddressMultiLineEdit : public WeldEditView
                            , public SfxListener
 {

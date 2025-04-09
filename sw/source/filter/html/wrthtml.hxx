@@ -41,12 +41,9 @@
 #include "htmlfly.hxx"
 
 // some forward declarations
-class Color;
 class SwFrameFormat;
-class SwFlyFrameFormat;
 class SwDrawFrameFormat;
 class SwFormatINetFormat;
-class SwFormatVertOrient;
 class SwFormatFootnote;
 class SwStartNode;
 class SwTableNode;
@@ -59,9 +56,7 @@ class SdrUnoObj;
 class SvxBrushItem;
 class SvxFontItem;
 class SwHTMLNumRuleInfo;
-class SwHTMLPosFlyFrames;
 class SwTextFootnote;
-enum class HtmlPosition;
 enum class HtmlTokenId : sal_Int16;
 namespace utl { class TempFileNamed; }
 

@@ -24,7 +24,6 @@
 
 namespace com::sun::star{
     namespace beans{  struct PropertyValue; }
-    namespace frame{ class XFrame2;     }
 }
 
 class DBTablePreviewFrame;

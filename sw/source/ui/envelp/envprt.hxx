@@ -26,8 +26,6 @@
 #include <envimg.hxx>
 #include <envlop.hxx>
 
-class SwEnvDlg;
-
 class SwEnvPrtPage : public SfxTabPage
 {
     std::unique_ptr<weld::Widget> m_xUpper;

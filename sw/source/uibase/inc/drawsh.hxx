@@ -23,8 +23,6 @@
 
 #include <svx/svdobj.hxx>
 
-class SwDrawBaseShell;
-
 class SwDrawShell final : public SwDrawBaseShell
 {
 public:

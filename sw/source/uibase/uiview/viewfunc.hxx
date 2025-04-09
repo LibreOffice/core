@@ -23,16 +23,12 @@
 
 #include <IDocumentDeviceAccess.hxx>
 
-class ImageButton;
 class Point;
-class SfxItemSet;
 class SfxPrinter;
-class SfxTabPage;
 class Size;
 class SvxRuler;
 class SwScrollbar;
 class SwViewShell;
-namespace vcl { class Window; }
 
 // The following functions are available in viewprt.cxx
 void SetPrinter( IDocumentDeviceAccess*, SfxPrinter const *, bool bWeb );

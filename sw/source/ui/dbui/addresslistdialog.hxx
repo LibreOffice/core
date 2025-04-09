@@ -23,9 +23,6 @@
 #include <sharedconnection.hxx>
 
 namespace com::sun::star{
-    namespace container{
-        class XNameAccess;
-    }
     namespace sdb{
         class XDatabaseContext;
     }

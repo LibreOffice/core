@@ -22,7 +22,6 @@
 #include <sfx2/basedlgs.hxx>
 #include "dbtree.hxx"
 
-class SwFieldMgr;
 class SwView;
 class SwWrtShell;
 struct SwDBData;

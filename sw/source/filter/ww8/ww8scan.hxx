@@ -37,8 +37,6 @@
 #include "ww8struc.hxx"
 #include "types.hxx"
 
-class SvStream;
-
 //Commonly used string literals for stream and storage names in word docs
 namespace SL
 {
@@ -173,7 +171,6 @@ OUString read_uInt16_BeltAndBracesString(SvStream& rStrm);
 //--Line above which the code has meaningful comments
 
 class  WW8ScannerBase;
-class  WW8PLCFspecial;
 struct WW8PLCFxDesc;
 class  WW8PLCFx_PCD;
 

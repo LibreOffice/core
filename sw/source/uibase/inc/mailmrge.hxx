@@ -29,7 +29,6 @@
 
 class SwWrtShell;
 class SwModuleOptions;
-class SwXSelChgLstnr_Impl;
 struct SwMailMergeDlg_Impl;
 namespace com::sun::star{
     namespace frame{

@@ -32,12 +32,7 @@
 #include <memory>
 
 class SwTOXBase;
-class SwField;
-class SwFieldType;
-class Graphic;
-class SwTableBox;
 class SwDoc;
-class SwPaM;
 
 inline bool SwFltGetFlag(sal_uLong nFieldFlags, int no)
     { return (nFieldFlags & (sal_uLong(1) << no)) != 0; }

@@ -28,15 +28,11 @@
 #include <swdllapi.h>
 #include <shellid.hxx>
 
-class SwViewOption;
 class SwDocShell;
 class SwScrollbar;
 class SwViewShell;
 class SwPagePreview;
-class ImageButton;
-class Button;
 class SwRect;
-class DataChangedEvent;
 class CommandEvent;
 class SwPagePreviewLayout;
 

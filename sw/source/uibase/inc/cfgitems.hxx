@@ -26,16 +26,7 @@
 #include <cmdid.h>
 #include <sfx2/zoomitem.hxx>
 
-class SwModule;
-#ifdef DBG_UTIL
-class SwTestTabPage;
-#endif
-class SwAddPrinterTabPage;
-class SfxPrinter;
-class SwViewShell;
 class SwViewOption;
-class SwContentOptPage;
-class SwShdwCursorOptionsTabPage;
 enum class SwFillMode;
 
 /// Item for settings dialog - document view

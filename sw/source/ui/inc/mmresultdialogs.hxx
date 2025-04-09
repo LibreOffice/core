@@ -24,9 +24,6 @@
 #include <sfx2/basedlgs.hxx>
 #include <mailmergehelper.hxx>
 
-class SwMailMergeWizard;
-class SfxPrinter;
-class SwSendMailDialog;
 class Timer;
 namespace com::sun::star::mail { class XMailMessage; }
 

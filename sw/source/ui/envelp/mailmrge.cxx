@@ -67,6 +67,8 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::ui::dialogs;
 
+class SwXSelChgLstnr_Impl;
+
 struct SwMailMergeDlg_Impl {
     uno::Reference<runtime::XFormController> xFController;
     rtl::Reference<SwXSelChgLstnr_Impl> xChgLstnr;

@@ -27,8 +27,6 @@
 
 class SwWrtShell;
 class SwPaM;
-class SwNode;
-class SwTextNode;
 
 namespace SwTranslateHelper
 {

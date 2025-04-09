@@ -26,7 +26,6 @@ class SvXMLUnitConverter;
 class SfxPoolItem;
 class SfxItemSet;
 class SvXMLNamespaceMap;
-struct SvXMLItemMapEntry;
 class SvXMLAttrContainerItem;
 
 class SvXMLImportItemMapper
