@@ -56,8 +56,8 @@ void SwAccessibleContext::InitStates()
     m_isShowingState = GetMap() && IsShowing( *(GetMap()) );
 
     SwViewShell *pVSh = GetMap()->GetShell();
-    m_isEditableState = pVSh && IsEditable( pVSh );
-    m_isOpaqueState = pVSh && IsOpaque( pVSh );
+    m_isEditableState = pVSh && IsEditable(*pVSh);
+    m_isOpaqueState = pVSh && IsOpaque(*pVSh);
     m_isDefuncState = false;
 }
 
@@ -1321,7 +1321,7 @@ void SwAccessibleContext::InvalidateStates( AccessibleStates _nStates )
         if( _nStates & AccessibleStates::EDITABLE )
         {
             bool bIsOldEditableState;
-            bool bIsNewEditableState = IsEditable( pVSh );
+            bool bIsNewEditableState = IsEditable(*pVSh);
             {
                 std::scoped_lock aGuard( m_Mutex );
                 bIsOldEditableState = m_isEditableState;
@@ -1335,7 +1335,7 @@ void SwAccessibleContext::InvalidateStates( AccessibleStates _nStates )
         if( _nStates & AccessibleStates::OPAQUE )
         {
             bool bIsOldOpaqueState;
-            bool bIsNewOpaqueState = IsOpaque( pVSh );
+            bool bIsNewOpaqueState = IsOpaque(*pVSh);
             {
                 std::scoped_lock aGuard( m_Mutex );
                 bIsOldOpaqueState = m_isOpaqueState;

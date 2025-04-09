@@ -336,15 +336,13 @@ SwRect SwAccessibleFrame::GetBounds( const SwAccessibleMap& rAccMap,
     return aBounds;
 }
 
-bool SwAccessibleFrame::IsEditable( SwViewShell const *pVSh ) const
+bool SwAccessibleFrame::IsEditable(const SwViewShell& rViewShell) const
 {
     const SwFrame *pFrame = GetFrame();
     if( !pFrame )
         return false;
 
-    OSL_ENSURE( pVSh, "no view shell" );
-    if( pVSh && (pVSh->GetViewOptions()->IsReadonly() ||
-                 pVSh->IsPreview()) )
+    if (rViewShell.GetViewOptions()->IsReadonly() || rViewShell.IsPreview())
         return false;
 
     if( !pFrame->IsRootFrame() && pFrame->IsProtected() )
@@ -353,17 +351,13 @@ bool SwAccessibleFrame::IsEditable( SwViewShell const *pVSh ) const
     return true;
 }
 
-bool SwAccessibleFrame::IsOpaque( SwViewShell const *pVSh ) const
+bool SwAccessibleFrame::IsOpaque(const SwViewShell& rViewShell) const
 {
     SwAccessibleChild aFrame( GetFrame() );
     if( !aFrame.GetSwFrame() )
         return false;
 
-    OSL_ENSURE( pVSh, "no view shell" );
-    if( !pVSh )
-        return false;
-
-    const SwViewOption *pVOpt = pVSh->GetViewOptions();
+    const SwViewOption* pVOpt = rViewShell.GetViewOptions();
     do
     {
         const SwFrame *pFrame = aFrame.GetSwFrame();
