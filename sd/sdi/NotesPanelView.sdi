@@ -28,6 +28,11 @@ interface NotesPanelView
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
+    SID_PASTE_SPECIAL // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_DELETE // ole : no, status : ?
     [
         ExecMethod = FuSupport ;

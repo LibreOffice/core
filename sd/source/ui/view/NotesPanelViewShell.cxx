@@ -30,6 +30,7 @@
 #include <editeng/unolingu.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <fubullet.hxx>
+#include <fuinsert.hxx>
 #include <fuchar.hxx>
 #include <fucushow.hxx>
 #include <fuexpand.hxx>
@@ -808,6 +809,15 @@ void NotesPanelViewShell::FuTemporary(SfxRequest& rReq)
 
             pDlg->Execute();
 
+            Cancel();
+            rReq.Ignore();
+        }
+        break;
+
+        case SID_PASTE_SPECIAL:
+        {
+            SetCurrentFunction(FuInsertClipboard::Create(this, GetActiveWindow(),
+                                                         mpNotesPanelView.get(), GetDoc(), rReq));
             Cancel();
             rReq.Ignore();
         }

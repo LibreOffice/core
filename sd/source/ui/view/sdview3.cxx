@@ -59,6 +59,7 @@
 #include <sdmod.hxx>
 #include <sdresid.hxx>
 #include <strings.hrc>
+#include <NotesPanelViewShell.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <unomodel.hxx>
 #include <ViewClipboard.hxx>
@@ -1437,7 +1438,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     ::tools::Rectangle aRect(pOLV->GetOutputArea());
                     Point aPos(pOLV->GetWindow()->PixelToLogic(maDropPos));
 
-                    if (aRect.Contains(aPos) || (!bDrag && IsTextEdit()))
+                    if (aRect.Contains(aPos) || (!bDrag && IsTextEdit())
+                        || dynamic_cast<sd::NotesPanelViewShell*>(mpViewSh))
                     {
                         pOLV->Read(*xStm, EETextFormat::Html, mpDocSh->GetHeaderAttributes());
                         bReturn = true;
@@ -1465,7 +1467,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 ::tools::Rectangle   aRect( pOLV->GetOutputArea() );
                 Point       aPos( pOLV->GetWindow()->PixelToLogic( maDropPos ) );
 
-                if( aRect.Contains( aPos ) || ( !bDrag && IsTextEdit() ) )
+                if (aRect.Contains(aPos) || (!bDrag && IsTextEdit())
+                    || dynamic_cast<sd::NotesPanelViewShell*>(mpViewSh))
                 {
                     // mba: clipboard always must contain absolute URLs (could be from alien source)
                     pOLV->Read( *xStm, EETextFormat::Xml, mpDocSh->GetHeaderAttributes() );
@@ -1497,7 +1500,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     ::tools::Rectangle   aRect(pOLV->GetOutputArea());
                     Point aPos(pOLV->GetWindow()->PixelToLogic(maDropPos));
 
-                    if (aRect.Contains(aPos) || (!bDrag && IsTextEdit()))
+                    if (aRect.Contains(aPos) || (!bDrag && IsTextEdit())
+                        || dynamic_cast<sd::NotesPanelViewShell*>(mpViewSh))
                     {
                         // mba: clipboard always must contain absolute URLs (could be from alien source)
                         pOLV->Read(*pHtmlStream, EETextFormat::Html, mpDocSh->GetHeaderAttributes());
@@ -1532,7 +1536,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         ::tools::Rectangle   aRect( pOLV->GetOutputArea() );
                         Point       aPos( pOLV->GetWindow()->PixelToLogic( maDropPos ) );
 
-                        if( aRect.Contains( aPos ) || ( !bDrag && IsTextEdit() ) )
+                        if (aRect.Contains(aPos) || (!bDrag && IsTextEdit())
+                            || dynamic_cast<sd::NotesPanelViewShell*>(mpViewSh))
                         {
                             // mba: clipboard always must contain absolute URLs (could be from alien source)
                             pOLV->Read( *xStm, EETextFormat::Rtf, mpDocSh->GetHeaderAttributes() );
