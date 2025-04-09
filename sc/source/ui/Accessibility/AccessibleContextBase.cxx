@@ -160,36 +160,6 @@ uno::Reference<XAccessible> SAL_CALL
     return mxParent;
 }
 
-sal_Int64 SAL_CALL
-       ScAccessibleContextBase::getAccessibleIndexInParent()
-{
-    SolarMutexGuard aGuard;
-    ensureAlive();
-    //  Use a simple but slow solution for now.  Optimize later.
-   //   Return -1 to indicate that this object's parent does not know about the
-   //   object.
-    sal_Int64 nIndex(-1);
-
-    //  Iterate over all the parent's children and search for this object.
-    if (mxParent.is())
-    {
-        uno::Reference<XAccessibleContext> xParentContext (
-            mxParent->getAccessibleContext());
-        if (xParentContext.is())
-        {
-            sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
-            for (sal_Int64 i=0; i<nChildCount; ++i)
-            {
-                uno::Reference<XAccessible> xChild (xParentContext->getAccessibleChild (i));
-                if (xChild.is() && xChild.get() == this)
-                    nIndex = i;
-            }
-        }
-    }
-
-    return nIndex;
-}
-
 sal_Int16 SAL_CALL
     ScAccessibleContextBase::getAccessibleRole()
 {
