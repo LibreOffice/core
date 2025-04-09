@@ -25,33 +25,20 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <comphelper/accessiblecomponenthelper.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include <svl/lstner.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
 
 namespace tools { class Rectangle; }
 class AbsoluteScreenPixelRectangle;
 
-/** @descr
-        This base class provides an implementation of the
-        <code>AccessibleContext</code> service.
-*/
-typedef cppu::WeakComponentImplHelper<
-                css::accessibility::XAccessible,
-                css::accessibility::XAccessibleComponent,
-                css::accessibility::XAccessibleContext,
-                css::accessibility::XAccessibleEventBroadcaster,
-                css::lang::XServiceInfo
-                > ScAccessibleContextBaseWeakImpl;
-
 class ScAccessibleContextBase
-    :   public cppu::BaseMutex,
-        public ScAccessibleContextBaseWeakImpl,
-        public SfxListener
+    : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper,
+                                         css::accessibility::XAccessible, css::lang::XServiceInfo>,
+      public SfxListener
 {
 
 public:
@@ -82,18 +69,12 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL
         getAccessibleContext() override;
 
+    // OAccessibleComponentHelper
+    virtual css::awt::Rectangle implGetBounds() override;
+
     ///=====  XAccessibleComponent  ============================================
 
-    virtual sal_Bool SAL_CALL containsPoint(
-        const css::awt::Point& rPoint ) override;
-
-    virtual css::awt::Rectangle SAL_CALL getBounds(  ) override;
-
-    virtual css::awt::Point SAL_CALL getLocation(  ) override;
-
     virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
-
-    virtual css::awt::Size SAL_CALL getSize(  ) override;
 
     virtual void SAL_CALL grabFocus(  ) override;
 
@@ -135,20 +116,6 @@ public:
     */
     virtual css::lang::Locale SAL_CALL
         getLocale() override;
-
-    ///=====  XAccessibleEventBroadcaster  =====================================
-
-    /** Add listener that is informed of future changes of name,
-          description and so on events.
-    */
-    virtual void SAL_CALL
-        addAccessibleEventListener(
-            const css::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener) override;
-
-    //  Remove an existing event listener.
-    virtual void SAL_CALL
-        removeAccessibleEventListener(
-            const css::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener) override;
 
     ///=====  XServiceInfo  ====================================================
 
@@ -230,9 +197,6 @@ private:
         display mode.
     */
     OUString msName;
-
-    /// client id in the AccessibleEventNotifier queue
-    sal_uInt32 mnClientId;
 
     /** This is the role of this object.
     */

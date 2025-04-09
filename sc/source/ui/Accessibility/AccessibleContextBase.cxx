@@ -40,9 +40,7 @@ ScAccessibleContextBase::ScAccessibleContextBase(
                                                  uno::Reference<XAccessible> xParent,
                                                  const sal_Int16 aRole)
                                                  :
-    ScAccessibleContextBaseWeakImpl(m_aMutex),
     mxParent(std::move(xParent)),
-    mnClientId(0),
     maRole(aRole)
 {
 }
@@ -75,12 +73,7 @@ void SAL_CALL ScAccessibleContextBase::disposing()
     // hold reference to make sure that the destructor is not called
     uno::Reference< XAccessibleContext > xKeepAlive(this);
 
-    if ( mnClientId )
-    {
-        sal_Int32 nTemClientId(mnClientId);
-        mnClientId =  0;
-        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nTemClientId, *this );
-    }
+    OAccessibleComponentHelper::disposing();
 
     mxParent.clear();
 }
@@ -105,42 +98,20 @@ uno::Reference< XAccessibleContext> SAL_CALL
     return this;
 }
 
-//=====  XAccessibleComponent  ================================================
+// OAccessibleComponentHelper
 
-sal_Bool SAL_CALL ScAccessibleContextBase::containsPoint(const awt::Point& rPoint )
+awt::Rectangle ScAccessibleContextBase::implGetBounds(  )
 {
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    return tools::Rectangle(Point(), GetBoundingBox().GetSize())
-        .Contains(vcl::unohelper::ConvertToVCLPoint(rPoint));
-}
-
-awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
-{
-    SolarMutexGuard aGuard;
-    IsObjectValid();
     return vcl::unohelper::ConvertToAWTRect(GetBoundingBox());
 }
 
-awt::Point SAL_CALL ScAccessibleContextBase::getLocation(  )
-{
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    return vcl::unohelper::ConvertToAWTPoint(GetBoundingBox().TopLeft());
-}
+//=====  XAccessibleComponent  ================================================
 
 awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
     return vcl::unohelper::ConvertToAWTPoint(GetBoundingBoxOnScreen().TopLeft());
-}
-
-awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
-{
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    return vcl::unohelper::ConvertToAWTSize(GetBoundingBox().GetSize());
 }
 
 bool ScAccessibleContextBase::isShowing(  )
@@ -297,48 +268,6 @@ lang::Locale SAL_CALL
     throw IllegalAccessibleComponentStateException ();
 }
 
-    //=====  XAccessibleEventBroadcaster  =====================================
-
-void SAL_CALL
-       ScAccessibleContextBase::addAccessibleEventListener(
-           const uno::Reference<XAccessibleEventListener>& xListener)
-{
-    if (xListener.is())
-    {
-        SolarMutexGuard aGuard;
-        IsObjectValid();
-        if (!IsDefunc())
-        {
-            if (!mnClientId)
-                mnClientId = comphelper::AccessibleEventNotifier::registerClient( );
-            comphelper::AccessibleEventNotifier::addEventListener( mnClientId, xListener );
-        }
-    }
-}
-
-void SAL_CALL
-       ScAccessibleContextBase::removeAccessibleEventListener(
-        const uno::Reference<XAccessibleEventListener>& xListener)
-{
-    if (!xListener.is())
-        return;
-
-    SolarMutexGuard aGuard;
-    if (IsDefunc() || !mnClientId)
-        return;
-
-    sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
-    if ( !nListenerCount )
-    {
-        // no listeners anymore
-        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-        // and at least to us not firing any events anymore, in case somebody calls
-        // NotifyAccessibleEvent, again
-        comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
-        mnClientId = 0;
-    }
-}
-
 // XServiceInfo
 OUString SAL_CALL ScAccessibleContextBase::getImplementationName()
 {
@@ -375,17 +304,7 @@ OUString ScAccessibleContextBase::createAccessibleName()
 void ScAccessibleContextBase::CommitChange(const sal_Int16 nEventId, const css::uno::Any& rOldValue,
                                            const css::uno::Any& rNewValue, sal_Int32 nIndexHint)
 {
-    if (!mnClientId)
-        return;
-
-    AccessibleEventObject aEvent;
-    aEvent.Source = uno::Reference<XAccessibleContext>(this);
-    aEvent.EventId = nEventId;
-    aEvent.OldValue = rOldValue;
-    aEvent.NewValue = rNewValue;
-    aEvent.IndexHint = nIndexHint;
-
-    comphelper::AccessibleEventNotifier::addEvent(mnClientId, aEvent);
+    NotifyAccessibleEvent(nEventId, rOldValue, rNewValue, nIndexHint);
 }
 
 void ScAccessibleContextBase::CommitFocusGained()
