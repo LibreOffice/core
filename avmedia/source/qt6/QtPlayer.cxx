@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <QtCore/QCoreApplication>
 #include <QtCore/QUrl>
 #include <QtMultimedia/QAudioOutput>
 #include <QtMultimedia/QMediaMetaData>
@@ -40,7 +41,6 @@ namespace avmedia::qt
 {
 QtPlayer::QtPlayer()
     : QtPlayer_BASE(m_aMutex)
-    , m_lListener(m_aMutex)
     , m_pMediaWidgetParent(nullptr)
 {
 }
@@ -178,6 +178,19 @@ awt::Size SAL_CALL QtPlayer::getPreferredPlayerWindowSize()
     osl::MutexGuard aGuard(m_aMutex);
 
     assert(m_xMediaPlayer);
+
+    // if media hasn't been loaded yet, ensure this happens, since
+    // retrieving resolution doesn't work reliably otherwise
+    if (m_xMediaPlayer->mediaStatus() == QMediaPlayer::LoadingMedia)
+    {
+        m_xMediaPlayer->play();
+
+        while (m_xMediaPlayer->mediaStatus() == QMediaPlayer::LoadingMedia)
+            QCoreApplication::processEvents();
+
+        m_xMediaPlayer->stop();
+    }
+
     const QMediaMetaData aMetaData = m_xMediaPlayer->metaData();
     const QVariant aResolutionVariant = aMetaData.value(QMediaMetaData::Resolution);
     if (aResolutionVariant.canConvert<QSize>())
@@ -240,28 +253,6 @@ uno::Reference<media::XFrameGrabber> SAL_CALL QtPlayer::createFrameGrabber()
     return xFrameGrabber;
 }
 
-void SAL_CALL
-QtPlayer::addPlayerListener(const css::uno::Reference<css::media::XPlayerListener>& rListener)
-{
-    m_lListener.addInterface(cppu::UnoType<css::media::XPlayerListener>::get(), rListener);
-    if (isReadyToPlay())
-    {
-        css::lang::EventObject aEvent;
-        aEvent.Source = getXWeak();
-        rListener->preferredPlayerWindowSizeAvailable(aEvent);
-    }
-    else
-    {
-        installNotify();
-    }
-}
-
-void SAL_CALL
-QtPlayer::removePlayerListener(const css::uno::Reference<css::media::XPlayerListener>& rListener)
-{
-    m_lListener.removeInterface(cppu::UnoType<css::media::XPlayerListener>::get(), rListener);
-}
-
 OUString SAL_CALL QtPlayer::getImplementationName()
 {
     return u"com.sun.star.comp.avmedia.Player_Qt"_ustr;
@@ -294,36 +285,6 @@ QtPlayer::~QtPlayer()
     }
 
     m_xMediaPlayer.reset();
-}
-
-bool QtPlayer::isReadyToPlay()
-{
-    assert(m_xMediaPlayer);
-    QMediaPlayer::MediaStatus eStatus = m_xMediaPlayer->mediaStatus();
-    return eStatus == QMediaPlayer::BufferingMedia || eStatus == QMediaPlayer::BufferedMedia
-           || eStatus == QMediaPlayer::LoadedMedia || eStatus == QMediaPlayer::EndOfMedia;
-}
-
-void QtPlayer::installNotify()
-{
-    connect(m_xMediaPlayer.get(), &QMediaPlayer::mediaStatusChanged, this,
-            &QtPlayer::notifyIfReady);
-}
-
-void QtPlayer::uninstallNotify()
-{
-    disconnect(m_xMediaPlayer.get(), &QMediaPlayer::mediaStatusChanged, this,
-               &QtPlayer::notifyIfReady);
-}
-
-void QtPlayer::notifyIfReady(QMediaPlayer::MediaStatus)
-{
-    if (isReadyToPlay())
-    {
-        rtl::Reference<QtPlayer> xThis(this);
-        xThis->notifyListeners();
-        xThis->uninstallNotify();
-    }
 }
 
 void QtPlayer::createMediaPlayerWidget()
@@ -366,25 +327,6 @@ void QtPlayer::createMediaPlayerWidget()
     assert(pLayout);
     assert(pLayout->count() == 0 && "Layout already has a widget set");
     pLayout->addWidget(pWidget);
-}
-
-void QtPlayer::notifyListeners()
-{
-    comphelper::OInterfaceContainerHelper2* pContainer
-        = m_lListener.getContainer(cppu::UnoType<css::media::XPlayerListener>::get());
-    if (!pContainer)
-        return;
-
-    css::lang::EventObject aEvent;
-    aEvent.Source = getXWeak();
-
-    comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
-    while (pIterator.hasMoreElements())
-    {
-        css::uno::Reference<css::media::XPlayerListener> xListener(
-            static_cast<css::media::XPlayerListener*>(pIterator.next()));
-        xListener->preferredPlayerWindowSizeAvailable(aEvent);
-    }
 }
 
 } // namespace
