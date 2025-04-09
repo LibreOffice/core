@@ -252,6 +252,7 @@ class ViewCallback final
 public:
     bool m_bOwnCursorInvalidated;
     bool m_bViewCursorInvalidated;
+    bool m_textCursorVisible;
     bool m_bTextViewSelectionInvalidated;
     bool m_bGraphicSelection;
     bool m_bGraphicViewSelection;
@@ -276,6 +277,7 @@ public:
     ViewCallback(bool bDeleteListenerOnDestruct = true)
         : m_bOwnCursorInvalidated(false)
         , m_bViewCursorInvalidated(false)
+        , m_textCursorVisible(false)
         , m_bTextViewSelectionInvalidated(false)
         , m_bGraphicSelection(false)
         , m_bGraphicViewSelection(false)
@@ -310,6 +312,14 @@ public:
     {
         switch (nType)
         {
+            case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
+            {
+                boost::property_tree::ptree aTree;
+                std::stringstream aStream(pPayload);
+                boost::property_tree::read_json(aStream, aTree);
+                m_textCursorVisible = aTree.get_child("visible").get_value<std::string>() == "true";
+            }
+            break;
             case LOK_CALLBACK_CELL_CURSOR:
             {
                 m_bOwnCursorInvalidated = true;

@@ -3569,6 +3569,50 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFreezeRowOrColumn)
     CPPUNIT_ASSERT_EQUAL(std::string("8"), index);
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCursorVisibilityAfterPaste)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ViewCallback aView;
+    SfxLokHelper::createView();
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+
+    // copy text view 1
+    pView->SetCursor(0, 0); // Go to A1.
+
+    Scheduler::ProcessEventsToIdle();
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'B', 0); // Type B.
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'B', 0);
+    Scheduler::ProcessEventsToIdle();
+
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    Scheduler::ProcessEventsToIdle();
+
+    pView->SetCursor(0, 0); // Go to A1.
+    Scheduler::ProcessEventsToIdle();
+
+    pView->GetViewFrame().GetBindings().Execute(SID_COPY); // Copy B.
+    Scheduler::ProcessEventsToIdle();
+
+    pView->SetCursor(0, 1); // Go to A2.
+    Scheduler::ProcessEventsToIdle();
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'B', 0); // Type B.
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'B', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Sequence<beans::PropertyValue> aArgs;
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, aArgs); // Paste B.
+    Scheduler::ProcessEventsToIdle();
+
+    // Text cursor should still be visible.
+    CPPUNIT_ASSERT_EQUAL(true, aView.m_textCursorVisible);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
