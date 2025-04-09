@@ -23,9 +23,7 @@
 
 namespace avmedia::qt
 {
-typedef cppu::WeakComponentImplHelper<css::media::XPlayer, css::media::XPlayerNotifier,
-                                      css::lang::XServiceInfo>
-    QtPlayer_BASE;
+typedef cppu::WeakComponentImplHelper<css::media::XPlayer, css::lang::XServiceInfo> QtPlayer_BASE;
 
 class QtPlayer final : public QObject, public cppu::BaseMutex, public QtPlayer_BASE
 {
@@ -55,12 +53,6 @@ public:
         SAL_CALL createPlayerWindow(const css::uno::Sequence<css::uno::Any>& rArgs) override;
     virtual css::uno::Reference<css::media::XFrameGrabber> SAL_CALL createFrameGrabber() override;
 
-    // XPlayerNotifier
-    virtual void SAL_CALL
-    addPlayerListener(const css::uno::Reference<css::media::XPlayerListener>& rListener) override;
-    virtual void SAL_CALL removePlayerListener(
-        const css::uno::Reference<css::media::XPlayerListener>& rListener) override;
-
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
@@ -70,7 +62,6 @@ public:
 
 private:
     std::unique_ptr<QMediaPlayer> m_xMediaPlayer;
-    comphelper::OMultiTypeInterfaceContainerHelper2 m_lListener;
 
     // area to use for the player widget
     css::awt::Rectangle m_aPlayerWidgetRect;
@@ -78,12 +69,6 @@ private:
     QWidget* m_pMediaWidgetParent;
 
     void createMediaPlayerWidget();
-    bool isReadyToPlay();
-
-    void installNotify();
-    void uninstallNotify();
-    void notifyListeners();
-    void notifyIfReady(QMediaPlayer::MediaStatus eStatus);
 };
 
 } // namespace avmedia::qt
