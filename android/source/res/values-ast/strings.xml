@@ -70,7 +70,7 @@
     <string name="calc_adjust_height">Axustar l\'altor</string>
     <string name="calc_alert_double_click_optimal_length">Conseyu: Tocar dos vegaes na testera define l\'anchor/altor óptimu.</string>
     <string name="select_photo_title">Esbillar una imaxe</string>
-    <string name="no_camera_found">Nun s\'atopó denguna cámara</string>
+    <string name="no_camera_found">Nun s\'atopó nenguna cámara</string>
     <string name="compress_photo_smallest_size">Tamañu menor</string>
     <string name="compress_photo_medium_size">Tamañu mediu</string>
     <string name="compress_photo_max_quality">Calidá máxima</string>
