@@ -328,6 +328,34 @@ uno::Reference<io::XStream> getEmbeddedFile(const OUString& rInPDFFileURL,
 
         auto pPdfiumDoc = pPdfium->openDocument(pMemRawPdf, nFileSize, OString(/*TODO Pass*/));
 
+        do {
+            auto nPdfiumErr = pPdfium->getLastErrorCode();
+            if (nPdfiumErr != vcl::pdf::PDFErrorType::Success
+                && nPdfiumErr != vcl::pdf::PDFErrorType::Password)
+            {
+                SAL_WARN("sdext.pdfimport",
+                         "getEmbeddedFile pdfium err: " << pPdfium->getLastError());
+                break;
+            }
+            if (nPdfiumErr == vcl::pdf::PDFErrorType::Password)
+            {
+                SAL_WARN("sdext.pdfimport", "getEmbeddedFile pdfium Pass todo");
+                break;
+            }
+            // The new style hybrids have exactly one embedded file
+            if (pPdfiumDoc->getAttachmentCount() != 1)
+            {
+                SAL_INFO("sdext.pdfimport", "getEmbeddedFile incorrect attachment count");
+                break;
+            }
+            auto pAttachment = pPdfiumDoc->getAttachment(0);
+            auto aName = pAttachment->getName();
+            // pdfium currently has no way to read the MIME type (aka Subtype field)
+            // see https://issues.chromium.org/issues/408241034
+            // When it does we can check the filename matches the expected mimetype
+            SAL_INFO("sdext.pdfimport", "getEmbeddedFile attachment name: " << aName);
+        } while(false);
+
         osl_unmapMappedFile(fileHandle, pMemRawPdf, nFileSize);
         osl_closeFile(fileHandle);
     }
