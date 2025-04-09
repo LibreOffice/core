@@ -1430,8 +1430,24 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
             else
             {
-                // mba: clipboard always must contain absolute URLs (could be from alien source)
-                bReturn = SdrView::Paste( *xStm, EETextFormat::Html, maDropPos, pPage, nPasteOptions );
+                OutlinerView* pOLV = GetTextEditOutlinerView();
+
+                if (pOLV)
+                {
+                    ::tools::Rectangle aRect(pOLV->GetOutputArea());
+                    Point aPos(pOLV->GetWindow()->PixelToLogic(maDropPos));
+
+                    if (aRect.Contains(aPos) || (!bDrag && IsTextEdit()))
+                    {
+                        pOLV->Read(*xStm, EETextFormat::Html, mpDocSh->GetHeaderAttributes());
+                        bReturn = true;
+                    }
+                }
+
+                if( !bReturn )
+                    // mba: clipboard always must contain absolute URLs (could be from alien source)
+                    bReturn = SdrView::Paste(*xStm, EETextFormat::Html, maDropPos, pPage,
+                                             nPasteOptions);
             }
         }
     }
