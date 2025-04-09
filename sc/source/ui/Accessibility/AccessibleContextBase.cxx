@@ -68,7 +68,6 @@ void ScAccessibleContextBase::Init()
 void SAL_CALL ScAccessibleContextBase::disposing()
 {
     SolarMutexGuard aGuard;
-//  CommitDefunc(); not necessary and should not be send, because it cost a lot of time
 
     // hold reference to make sure that the destructor is not called
     uno::Reference< XAccessibleContext > xKeepAlive(this);
