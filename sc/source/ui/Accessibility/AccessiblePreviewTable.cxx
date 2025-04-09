@@ -389,50 +389,49 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumn( sal_Int64 nChi
 
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleAtPoint( const awt::Point& aPoint )
 {
-    uno::Reference<XAccessible> xRet;
-    if (containsPoint(aPoint))
+    if (!containsPoint(aPoint))
+        return nullptr;
+
+    SolarMutexGuard aGuard;
+    ensureAlive();
+
+    FillTableInfo();
+
+    if (!mpTableInfo)
+        return nullptr;
+
+    SCCOL nCols = mpTableInfo->GetCols();
+    SCROW nRows = mpTableInfo->GetRows();
+    const ScPreviewColRowInfo* pColInfo = mpTableInfo->GetColInfo();
+    const ScPreviewColRowInfo* pRowInfo = mpTableInfo->GetRowInfo();
+
+    tools::Rectangle aScreenRect(GetBoundingBox());
+
+    awt::Point aMovedPoint = aPoint;
+    aMovedPoint.X += aScreenRect.Left();
+    aMovedPoint.Y += aScreenRect.Top();
+
+    if ( nCols > 0 && nRows > 0 && aMovedPoint.X >= pColInfo[0].nPixelStart && aMovedPoint.Y >= pRowInfo[0].nPixelStart )
     {
-        SolarMutexGuard aGuard;
-        ensureAlive();
-
-        FillTableInfo();
-
-        if ( mpTableInfo )
+        SCCOL nColIndex = 0;
+        while ( nColIndex < nCols && aMovedPoint.X > pColInfo[nColIndex].nPixelEnd )
+            ++nColIndex;
+        SCROW nRowIndex = 0;
+        while ( nRowIndex < nRows && aMovedPoint.Y > pRowInfo[nRowIndex].nPixelEnd )
+            ++nRowIndex;
+        if ( nColIndex < nCols && nRowIndex < nRows )
         {
-            SCCOL nCols = mpTableInfo->GetCols();
-            SCROW nRows = mpTableInfo->GetRows();
-            const ScPreviewColRowInfo* pColInfo = mpTableInfo->GetColInfo();
-            const ScPreviewColRowInfo* pRowInfo = mpTableInfo->GetRowInfo();
-
-            tools::Rectangle aScreenRect(GetBoundingBox());
-
-            awt::Point aMovedPoint = aPoint;
-            aMovedPoint.X += aScreenRect.Left();
-            aMovedPoint.Y += aScreenRect.Top();
-
-            if ( nCols > 0 && nRows > 0 && aMovedPoint.X >= pColInfo[0].nPixelStart && aMovedPoint.Y >= pRowInfo[0].nPixelStart )
+            try
             {
-                SCCOL nColIndex = 0;
-                while ( nColIndex < nCols && aMovedPoint.X > pColInfo[nColIndex].nPixelEnd )
-                    ++nColIndex;
-                SCROW nRowIndex = 0;
-                while ( nRowIndex < nRows && aMovedPoint.Y > pRowInfo[nRowIndex].nPixelEnd )
-                    ++nRowIndex;
-                if ( nColIndex < nCols && nRowIndex < nRows )
-                {
-                    try
-                    {
-                        xRet = getAccessibleCellAt( nRowIndex, nColIndex );
-                    }
-                    catch (uno::Exception&)
-                    {
-                    }
-                }
+                return getAccessibleCellAt( nRowIndex, nColIndex );
+            }
+            catch (uno::Exception&)
+            {
             }
         }
     }
 
-    return xRet;
+    return nullptr;
 }
 
 void SAL_CALL ScAccessiblePreviewTable::grabFocus()
