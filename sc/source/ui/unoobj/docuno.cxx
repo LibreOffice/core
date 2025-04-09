@@ -1839,7 +1839,6 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
         return 0;
 
     Size aPrintPageSize;
-    bool bPrintAreaReset = false;
     bool bPrintPageLandscape = false;
     bool bUsePrintDialogSetting = false;
     Printer* pPrinter = lcl_GetPrinter(rOptions);
@@ -1851,16 +1850,13 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
             bPrintPageLandscape = (pPrinter->GetOrientation() == Orientation::Landscape);
             aPrintPageSize = lcl_GetPrintPageSize(pPrinter->GetPrintPageSize());
         }
-        else // reset the print area created by the Print Dialog to the page style's print area.
-            bPrintAreaReset = pPrinter->IsPrintAreaReset();
     }
 
     //  The same ScPrintFuncCache object in pPrintFuncCache is used as long as
     //  the same selection is used (aStatus) and the document isn't changed
     //  (pPrintFuncCache is cleared in Notify handler)
 
-    if (!pPrintFuncCache || !pPrintFuncCache->IsSameSelection(aStatus) || bUsePrintDialogSetting
-        || bPrintAreaReset)
+    if (!pPrintFuncCache || !pPrintFuncCache->IsSameSelection(aStatus) || bUsePrintDialogSetting)
     {
         pPrintFuncCache.reset(new ScPrintFuncCache(pDocShell, aMark, aStatus, aPrintPageSize,
                                                    bPrintPageLandscape, bUsePrintDialogSetting));
@@ -2759,6 +2755,19 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     }
 
     (void)pPrintFunc->DoPrint( aPage, nTabStart, nDisplayStart, true, nullptr );
+
+    if (pPrinter)
+    {
+        // reset the print area created by the Print Dialog to the page style's print area
+        if (pPrinter->IsUsePrintDialogSetting())
+        {
+            bUsePrintDialogSetting = false;
+            if (m_pPrintState && m_pPrintState->nPrintTab == nTab && !pSelRange)
+                pPrintFunc.reset(new ScPrintFunc(pDev, pDocShell, *m_pPrintState,
+                                                 &aStatus.GetOptions(), aPrintPageSize,
+                                                 bPrintPageLandscape, bUsePrintDialogSetting));
+        }
+    }
 
     vcl::PDFExtOutDevData* pPDFData = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
     if (pPDFData && pPDFData->GetIsExportTaggedPDF() && bIsLastPage)
