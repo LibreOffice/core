@@ -2872,8 +2872,12 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
     if (bUpdateKit)
     {
         UpdateActiveView();
+
         if (pActiveView)
+        {
+            pActiveView->ShowCursor(); // Send show cursor command after registering the view.
             aSel = pActiveView->GetSelection();
+        }
 
         OUString aText = ScEditUtil::GetMultilineString(*mpEditEngine);
         pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aText.toUtf8());
