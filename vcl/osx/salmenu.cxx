@@ -362,7 +362,7 @@ int AquaSalMenu::getItemIndexByPos( sal_uInt16 nPos ) const
                     if ( bLastItemIsNative )
                     {
                         // Assume that macOS does not insert more than one
-                        // separater item in a row
+                        // separator item in a row
                         bLastItemIsNative = false;
                         nIndex++;
                     }
