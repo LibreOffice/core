@@ -390,10 +390,10 @@ void SAL_CALL EventMultiplexerListener::mousePressed(
     // might not be the main thread!
     if( mpEventQueue )
         mpEventQueue->addEvent(
-            makeEvent( std::bind( &EventMultiplexerImpl::mousePressed,
-                                    mpEventMultiplexer,
-                                    e ),
-                       u"EventMultiplexerImpl::mousePressed"_ustr) );
+            makeEvent( ([mpEventMux = this->mpEventMultiplexer, e] {
+                                    return mpEventMux->mousePressed(e);
+                                    }),
+                        u"EventMultiplexerImpl::mousePressed"_ustr ));
 }
 
 void SAL_CALL EventMultiplexerListener::mouseReleased(
@@ -405,9 +405,9 @@ void SAL_CALL EventMultiplexerListener::mouseReleased(
     // this might not be the main thread!
     if( mpEventQueue )
         mpEventQueue->addEvent(
-            makeEvent( std::bind( &EventMultiplexerImpl::mouseReleased,
-                                    mpEventMultiplexer,
-                                    e ),
+            makeEvent( ([mpEventMux = this->mpEventMultiplexer, e] {
+                                    return mpEventMux->mouseReleased(e);
+                                    }),
                        u"EventMultiplexerImpl::mouseReleased"_ustr) );
 }
 
@@ -433,9 +433,9 @@ void SAL_CALL EventMultiplexerListener::mouseDragged(
     // might not be the main thread!
     if( mpEventQueue )
         mpEventQueue->addEvent(
-            makeEvent( std::bind( &EventMultiplexerImpl::mouseDragged,
-                                    mpEventMultiplexer,
-                                    e ),
+            makeEvent( ([mpEventMux = this->mpEventMultiplexer, e] {
+                                    return mpEventMux->mouseDragged(e);
+                                    }),
                        u"EventMultiplexerImpl::mouseDragged"_ustr) );
 }
 
@@ -448,9 +448,9 @@ void SAL_CALL EventMultiplexerListener::mouseMoved(
     // might not be the main thread!
     if( mpEventQueue )
         mpEventQueue->addEvent(
-            makeEvent( std::bind( &EventMultiplexerImpl::mouseMoved,
-                                    mpEventMultiplexer,
-                                    e ),
+            makeEvent( ([mpEventMux = this->mpEventMultiplexer, e] {
+                                    return mpEventMux->mouseMoved(e);
+                                    }),
                        u"EventMultiplexerImpl::mouseMoved"_ustr) );
 }
 
