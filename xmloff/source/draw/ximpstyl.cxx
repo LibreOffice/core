@@ -245,9 +245,8 @@ void XMLDrawingPageStyleContext::FillPropertySet(
 {
     SvXMLImportPropertyMapper* pImpPrMap =
         GetStyles()->GetImportPropertyMapper( GetFamily() );
-    SAL_WARN_IF( !pImpPrMap, "xmloff", "There is the import prop mapper" );
-    if( pImpPrMap )
-        pImpPrMap->FillPropertySet(GetProperties(), rPropSet, m_pContextIDs.get());
+    assert( pImpPrMap );
+    pImpPrMap->FillPropertySet(GetProperties(), rPropSet, m_pContextIDs.get());
 
     Reference< beans::XPropertySetInfo > xInfo;
     for (size_t i=0; m_pContextIDs[i].nContextID != -1; ++i)
