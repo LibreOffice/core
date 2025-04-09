@@ -9,6 +9,8 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,epm))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,epm,3))
+
 $(eval $(call gb_UnpackedTarball_set_tarball,epm,$(EPM_TARBALL),,epm))
 
 $(eval $(call gb_UnpackedTarball_add_patches,epm,\
