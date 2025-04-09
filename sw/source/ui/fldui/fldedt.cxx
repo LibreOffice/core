@@ -157,6 +157,16 @@ void SwFieldEditDlg::Init()
         if( bMove )
             rMgr.GoNext();
         m_xPrevBT->set_sensitive( bMove );
+        {
+            using namespace nsSwDocInfoSubType;
+
+            const SwFieldTypesEnum aId(pCurField->GetTypeId());
+            if ( (aId == SwFieldTypesEnum::Author) ||
+                 ((aId == SwFieldTypesEnum::DocumentInfo) && (pCurField->GetSubType() != (DI_CREATE|DI_SUB_AUTHOR)))) // except DocumentInfo > Author
+                m_xAddressBT->set_visible(true);
+            else
+                m_xAddressBT->set_visible(false);
+        }
 
         m_pSh->DestroyCursor();
         m_pSh->EndAction();
