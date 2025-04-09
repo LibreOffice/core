@@ -340,6 +340,20 @@ void BitmapContainer::createSwapInfo(ImpSwapInfo& rSwapInfo)
     rSwapInfo.mnPageIndex = -1;
 }
 
+void AnimationContainer::createSwapInfo(ImpSwapInfo& rSwapInfo)
+{
+    rSwapInfo.maSizePixel = maAnimation.GetBitmapEx().GetSizePixel();
+
+    rSwapInfo.maPrefMapMode = getPrefMapMode();
+    rSwapInfo.maPrefSize = getPrefSize();
+    rSwapInfo.mbIsAnimated = true;
+    rSwapInfo.mbIsEPS = false;
+    rSwapInfo.mbIsTransparent = isTransparent();
+    rSwapInfo.mbIsAlpha = false;
+    rSwapInfo.mnAnimationLoopCount = getLoopCount();
+    rSwapInfo.mnPageIndex = -1;
+}
+
 void ImpGraphic::createSwapInfo()
 {
     if (isSwappedOut())
@@ -347,9 +361,13 @@ void ImpGraphic::createSwapInfo()
 
     if (mpBitmapContainer)
     {
-        mpBitmapContainer->createSwapInfo(maSwapInfo);
-        return;
+        return mpBitmapContainer->createSwapInfo(maSwapInfo);
     }
+    else if (mpAnimationContainer)
+    {
+        return mpAnimationContainer->createSwapInfo(maSwapInfo);
+    }
+
     else if (!maCachedBitmap.IsEmpty())
         maSwapInfo.maSizePixel = maCachedBitmap.GetSizePixel();
     else
@@ -804,7 +822,7 @@ Size ImpGraphic::getPrefSize() const
                         aSize = maExPrefSize;
                     }
                 }
-                else if (mpAnimationContainer || maVectorGraphicData)
+                else if (maVectorGraphicData)
                 {
                     aSize = maCachedBitmap.GetPrefSize();
 
@@ -814,6 +832,10 @@ Size ImpGraphic::getPrefSize() const
                 else if (mpBitmapContainer)
                 {
                     aSize = mpBitmapContainer->getPrefSize();
+                }
+                else if (mpAnimationContainer)
+                {
+                    aSize = mpAnimationContainer->getPrefSize();
                 }
             }
             break;
@@ -901,6 +923,10 @@ MapMode ImpGraphic::getPrefMapMode() const
                 else if (mpBitmapContainer)
                 {
                     aMapMode = mpBitmapContainer->getPrefMapMode();
+                }
+                else if (mpAnimationContainer)
+                {
+                    aMapMode = mpAnimationContainer->getPrefMapMode();
                 }
                 else
                 {
@@ -1106,7 +1132,7 @@ sal_uInt32 ImpGraphic::getAnimationLoopCount() const
     if (mbSwapOut)
         return maSwapInfo.mnAnimationLoopCount;
 
-    return mpAnimationContainer ? mpAnimationContainer->maAnimation.GetLoopCount() : 0;
+    return mpAnimationContainer ? mpAnimationContainer->getLoopCount() : 0;
 }
 
 bool ImpGraphic::swapInContent(SvStream& rStream)

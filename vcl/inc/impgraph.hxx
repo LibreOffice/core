@@ -26,6 +26,8 @@
 #include "graphic/Manager.hxx"
 #include "graphic/MemoryManaged.hxx"
 #include "graphic/GraphicID.hxx"
+#include "graphic/BitmapContainer.hxx"
+#include "graphic/AnimationContainer.hxx"
 #include <optional>
 
 struct ImpSwapInfo
@@ -55,83 +57,6 @@ enum class GraphicContentType : sal_Int32
     Bitmap,
     Animation,
     Vector
-};
-
-class SAL_DLLPUBLIC_RTTI BitmapContainer final
-{
-public:
-    BitmapEx maBitmapEx;
-
-    BitmapContainer() = default;
-
-    BitmapContainer(BitmapEx const& rBitmapEx)
-        : maBitmapEx(rBitmapEx)
-    {}
-
-    bool operator==(const BitmapContainer& rOther) const
-    {
-        return maBitmapEx == rOther.maBitmapEx;
-    }
-
-    void createSwapInfo(ImpSwapInfo& rSwapInfo);
-
-    bool isAlpha()
-    {
-        return maBitmapEx.IsAlpha();
-    }
-
-    const BitmapEx& getBitmapExRef() const
-    {
-        return maBitmapEx;
-    }
-
-    Size getPrefSize() const
-    {
-        Size aSize = maBitmapEx.GetPrefSize();
-        if (!aSize.Width() || !aSize.Height())
-            aSize = maBitmapEx.GetSizePixel();
-        return aSize;
-    }
-
-    MapMode getPrefMapMode() const
-    {
-        const Size aSize = maBitmapEx.GetPrefSize();
-        if (aSize.Width() && aSize.Height())
-            return maBitmapEx.GetPrefMapMode();
-        return {};
-    }
-
-    sal_uInt64 getSizeBytes()
-    {
-        return maBitmapEx.GetSizeBytes();
-    }
-};
-
-class SAL_DLLPUBLIC_RTTI AnimationContainer final
-{
-public:
-    Animation maAnimation;
-
-    AnimationContainer() = default;
-
-    AnimationContainer(Animation const& rAnimation)
-        : maAnimation(rAnimation)
-    {}
-
-    bool operator==(const AnimationContainer& rOther) const
-    {
-        return maAnimation == rOther.maAnimation;
-    }
-
-    bool isTransparent() const
-    {
-        return maAnimation.IsTransparent();
-    }
-
-    sal_uInt64 getSizeBytes()
-    {
-        return maAnimation.GetSizeBytes();
-    }
 };
 
 class SAL_DLLPUBLIC_RTTI ImpGraphic final : public vcl::graphic::MemoryManaged
