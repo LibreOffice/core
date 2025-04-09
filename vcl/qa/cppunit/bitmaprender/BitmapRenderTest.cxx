@@ -58,6 +58,9 @@ public:
 
 void BitmapRenderTest::testTdf104141()
 {
+    // Noting, for people who may debug this test, that it is not particularly useful.
+    // The GIF we load is 100% transparent, so we are only actually testing that
+    // drawing 100% transparent image with DrawBitmapEx() does not change the output.
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     pVDev->SetOutputSizePixel(Size(400, 400));
     pVDev->SetBackground(Wallpaper(COL_GREEN));
