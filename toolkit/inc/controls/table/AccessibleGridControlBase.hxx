@@ -38,9 +38,6 @@
 #include <comphelper/uno3.hxx>
 
 
-namespace vcl { class Window; }
-
-
 namespace accessibility {
 
 /** The GridControl accessible objects inherit from this base class. It

@@ -25,7 +25,6 @@
 #include <memory>
 #include <vector>
 
-class KeyEvent;
 class MouseEvent;
 
 namespace svt::table

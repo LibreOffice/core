@@ -25,7 +25,6 @@
 namespace svt::table
 {
     class TableControl_Impl;
-    class TableFunctionSet;
 
     /** the window containing the content area (including headers) of
         a table control

@@ -34,7 +34,6 @@
 class OutputDevice;
 class VCLXDevice;
 namespace vcl { class Region; }
-namespace com::sun::star::graphic { class XGraphic; }
 
 
 enum class InitOutDevFlags

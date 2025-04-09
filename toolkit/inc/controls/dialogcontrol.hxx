@@ -25,8 +25,6 @@
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-namespace com::sun::star::awt { class XTopWindowListener; }
-
 typedef ::cppu::AggImplInheritanceHelper2   <   ControlContainerBase
                                             ,   css::awt::XUnoControlDialog
                                             ,   css::awt::XWindowListener

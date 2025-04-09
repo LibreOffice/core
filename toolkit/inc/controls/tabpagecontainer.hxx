@@ -28,8 +28,6 @@
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 
-namespace com::sun::star::awt::tab { class XTabPage; }
-namespace com::sun::star::awt::tab { class XTabPageContainerListener; }
 namespace com::sun::star::awt::tab { class XTabPageModel; }
 
 

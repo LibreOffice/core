@@ -35,7 +35,6 @@
 namespace com::sun::star::awt::tree { class XTreeNode; }
 
 class UnoTreeListEntry;
-class TreeControlPeer;
 class UnoTreeListBoxImpl;
 
 class TreeControlPeer final : public ::cppu::ImplInheritanceHelper< VCLXWindow, css::awt::tree::XTreeControl, css::awt::tree::XTreeDataModelListener >

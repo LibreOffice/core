@@ -35,7 +35,6 @@ namespace toolkit
 
     //= AnimatedImagesPeer
 
-    struct AnimatedImagesPeer_Data;
     typedef cppu::ImplInheritanceHelper< VCLXWindow,
                                          css::awt::XAnimation,
                                          css::container::XContainerListener,

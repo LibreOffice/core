@@ -27,8 +27,6 @@
 
 #include <awt/vclxcontainer.hxx>
 
-namespace com::sun::star::awt { class XMenuBar; }
-
 
 class VCLXTopWindow: public cppu::ImplInheritanceHelper<
                         VCLXContainer, css::awt::XTopWindow3, css::awt::XSystemDependentWindowPeer >
