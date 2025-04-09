@@ -40,8 +40,6 @@
 namespace http_dav_ucp
 {
 
-class DAVSessionFactory;
-
 class DAVResourceAccess
 {
     osl::Mutex    m_aMutex;

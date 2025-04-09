@@ -56,8 +56,6 @@ inline constexpr OUString TDOC_STREAM_CONTENT_TYPE =
                 u"application/" TDOC_URL_SCHEME "-stream"_ustr;
 
 
-class StorageElementFactory;
-
 typedef cppu::ImplInheritanceHelper<
     ::ucbhelper::ContentProviderImplHelper,
     css::frame::XTransientDocumentsDocumentContentIdentifierFactory,

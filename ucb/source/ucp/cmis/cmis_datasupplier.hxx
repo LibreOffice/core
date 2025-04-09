@@ -18,8 +18,6 @@
 namespace cmis
 {
 
-    class Content;
-
     struct ResultListEntry
     {
         css::uno::Reference< css::ucb::XContent > xContent;

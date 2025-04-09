@@ -30,10 +30,6 @@
 #include <ucbhelper/providerhelper.hxx>
 #include "PropertyMap.hxx"
 
-namespace com::sun::star::lang {
-class XSingleServiceFactory;
-}
-
 namespace http_dav_ucp {
 
 

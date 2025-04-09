@@ -29,8 +29,6 @@ enum class TaskHandlerErr;
 
 namespace fileaccess {
 
-    class TaskManager;
-
     class XInputStream_impl final
         : public cppu::WeakImplHelper<css::io::XInputStream, css::io::XSeekable>,
           public comphelper::ByteReader

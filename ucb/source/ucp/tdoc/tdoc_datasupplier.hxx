@@ -29,7 +29,6 @@
 
 namespace tdoc_ucp {
 
-struct DataSupplier_Impl;
 class Content;
 
 class ResultSetDataSupplier final : public ::ucbhelper::ResultSetDataSupplier

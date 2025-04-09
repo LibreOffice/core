@@ -24,8 +24,6 @@
 
 namespace fileaccess {
 
-    class TaskManager;
-
     class FileContentIdentifier :
         public cppu::WeakImplHelper<css::ucb::XContentIdentifier>
     {

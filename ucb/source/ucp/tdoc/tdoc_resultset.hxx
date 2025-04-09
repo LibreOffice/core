@@ -25,8 +25,6 @@
 
 namespace tdoc_ucp {
 
-class Content;
-
 class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
 {
     rtl::Reference< Content > m_xContent;

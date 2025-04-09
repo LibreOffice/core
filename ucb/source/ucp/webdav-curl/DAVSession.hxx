@@ -41,8 +41,6 @@ namespace com::sun::star::ucb {
 namespace http_dav_ucp
 {
 
-class DAVAuthListener;
-
 class DAVSession
 {
 public:

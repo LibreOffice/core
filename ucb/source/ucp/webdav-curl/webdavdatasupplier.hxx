@@ -29,9 +29,7 @@
 
 namespace http_dav_ucp {
 
-struct DataSupplier_Impl;
 class Content;
-struct DAVResource;
 
 class DataSupplier : public ucbhelper::ResultSetDataSupplier
 {

@@ -27,10 +27,6 @@ namespace com::sun::star::util {
     struct DateTime;
 }
 
-namespace rtl {
-    class OUString;
-}
-
 namespace http_dav_ucp
 {
 

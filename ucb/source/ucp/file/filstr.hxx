@@ -36,9 +36,6 @@ enum class TaskHandlerErr;
 
 namespace fileaccess {
 
-    // forward:
-    class TaskManager;
-
 class XStream_impl :  public cppu::WeakImplHelper<
     css::io::XStream,
     css::io::XSeekable,

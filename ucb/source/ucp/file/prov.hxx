@@ -38,7 +38,6 @@ namespace fileaccess {
 
     // Forward declaration
 
-    class BaseContent;
     class TaskManager;
     class XPropertySetInfoImpl2;
 

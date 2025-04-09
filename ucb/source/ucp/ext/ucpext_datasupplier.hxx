@@ -32,9 +32,6 @@ namespace ucb::ucp::ext
 {
 
 
-    class Content;
-
-
     //= DataSupplier
 
     class DataSupplier : public ::ucbhelper::ResultSetDataSupplier

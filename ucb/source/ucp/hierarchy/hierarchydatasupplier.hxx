@@ -28,7 +28,6 @@
 
 namespace hierarchy_ucp {
 
-class HierarchyEntryData;
 class HierarchyContent;
 
 class HierarchyResultSetDataSupplier :

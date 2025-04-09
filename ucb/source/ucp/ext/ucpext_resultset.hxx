@@ -30,9 +30,6 @@ namespace ucb::ucp::ext
 {
 
 
-    class Content;
-
-
     //= ResultSet
 
     class ResultSet : public ::ucbhelper::ResultSetImplHelper

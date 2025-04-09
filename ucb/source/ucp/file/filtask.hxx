@@ -55,9 +55,6 @@ namespace fileaccess
 {
     class BaseContent;
     class FileProvider;
-    class XPropertySetInfo_impl;
-    class XCommandInfo_impl;
-    class XResultSet_impl;
 
     /*
      * The relevant methods in this class all have as first argument the CommandId,

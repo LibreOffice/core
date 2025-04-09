@@ -90,8 +90,6 @@ private:
 };
 
 
-class HierarchyContentProvider;
-
 class HierarchyContent : public ::ucbhelper::ContentImplHelper,
                          public css::ucb::XContentCreator
 {
