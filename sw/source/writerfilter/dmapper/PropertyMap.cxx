@@ -1866,15 +1866,36 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         Insert( PROP_GRID_MODE, uno::Any( nGridType ) );
 
         sal_Int32 nCharWidth = 423; //240 twip/ 12 pt
-        const StyleSheetEntryPtr pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( u"Standard" );
-        if ( pEntry )
+
+        // tdf#139418: Fetch the default Asian text height for grid pitch calculation
+        if (const auto pEntry = rDM_Impl.GetStyleSheetTable()->GetDefaultCharProps(); pEntry)
         {
-            std::optional< PropertyMap::Property > pPropHeight = pEntry->m_pProperties->getProperty( PROP_CHAR_HEIGHT_ASIAN );
-            if ( pPropHeight )
+            const auto pPropHeight = pEntry->getProperty(PROP_CHAR_HEIGHT_ASIAN);
+            if (pPropHeight.has_value())
             {
                 double fHeight = 0;
-                if ( pPropHeight->second >>= fHeight )
-                    nCharWidth = ConversionHelper::convertTwipToMm100_Limited( static_cast<sal_Int32>(fHeight * 20.0 + 0.5) );
+                if (pPropHeight->second >>= fHeight)
+                {
+                    nCharWidth = ConversionHelper::convertTwipToMm100_Limited(
+                        static_cast<sal_Int32>(fHeight * 20.0 + 0.5));
+                }
+            }
+        }
+
+        // tdf#107359: Override the default Asian height from the Standard style, if present.
+        if (const auto pEntry
+            = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(u"Standard");
+            pEntry)
+        {
+            const auto pPropHeight = pEntry->m_pProperties->getProperty(PROP_CHAR_HEIGHT_ASIAN);
+            if (pPropHeight.has_value())
+            {
+                double fHeight = 0;
+                if (pPropHeight->second >>= fHeight)
+                {
+                    nCharWidth = ConversionHelper::convertTwipToMm100_Limited(
+                        static_cast<sal_Int32>(fHeight * 20.0 + 0.5));
+                }
             }
         }
 
