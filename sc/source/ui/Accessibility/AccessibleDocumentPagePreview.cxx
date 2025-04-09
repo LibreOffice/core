@@ -1252,7 +1252,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
     if (containsPoint(rPoint))
     {
         SolarMutexGuard aGuard;
-        IsObjectValid();
+        ensureAlive();
 
         if ( mpViewShell )
         {
@@ -1312,7 +1312,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
 void SAL_CALL ScAccessibleDocumentPagePreview::grabFocus()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (getAccessibleParent().is())
     {
         uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
@@ -1329,7 +1329,7 @@ void SAL_CALL ScAccessibleDocumentPagePreview::grabFocus()
 sal_Int64 SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     sal_Int64 nRet = 0;
     if ( mpViewShell )
@@ -1344,7 +1344,7 @@ sal_Int64 SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChildCount()
 uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChild(sal_Int64 nIndex)
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     uno::Reference<XAccessible> xAccessible;
 
     if ( mpViewShell )

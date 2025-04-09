@@ -173,7 +173,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleEditObject::getAccessibleAtPo
     if (containsPoint(rPoint))
     {
         SolarMutexGuard aGuard;
-        IsObjectValid();
+        ensureAlive();
 
         CreateTextHelper();
 
@@ -248,7 +248,7 @@ sal_Int64 SAL_CALL
     ScAccessibleEditObject::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     CreateTextHelper();
     return mpTextHelper->GetChildCount();
 }
@@ -257,7 +257,7 @@ uno::Reference< XAccessible > SAL_CALL
     ScAccessibleEditObject::getAccessibleChild(sal_Int64 nIndex)
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     CreateTextHelper();
     return mpTextHelper->GetChild(nIndex);
 }

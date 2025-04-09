@@ -135,7 +135,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleCell::getAccessibleAtPoint(
 void SAL_CALL ScAccessibleCell::grabFocus(  )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (getAccessibleParent().is() && mpViewShell)
     {
         uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
@@ -278,7 +278,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
        ScAccessibleCell::getAccessibleRelationSet()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSet;
     if (mpAccDoc)
         pRelationSet = mpAccDoc->GetRelationSet(&maCellAddress);

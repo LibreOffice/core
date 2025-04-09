@@ -102,7 +102,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeaderArea::getAccessible
     if (containsPoint(rPoint))
     {
         SolarMutexGuard aGuard;
-        IsObjectValid();
+        ensureAlive();
 
         if(!mpTextHelper)
             CreateTextHelper();
@@ -119,7 +119,7 @@ sal_Int64 SAL_CALL
     ScAccessiblePageHeaderArea::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (!mpTextHelper)
         CreateTextHelper();
     return mpTextHelper->GetChildCount();
@@ -129,7 +129,7 @@ uno::Reference< XAccessible > SAL_CALL
     ScAccessiblePageHeaderArea::getAccessibleChild(sal_Int64 nIndex)
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (!mpTextHelper)
         CreateTextHelper();
     return mpTextHelper->GetChild(nIndex);

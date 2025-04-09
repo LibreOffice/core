@@ -68,7 +68,7 @@ ScAccessibleCellBase::~ScAccessibleCellBase()
 bool ScAccessibleCellBase::isVisible()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     // test whether the cell is hidden (column/row - hidden/filtered)
     bool bVisible(true);
     if (mpDoc)
@@ -87,7 +87,7 @@ bool ScAccessibleCellBase::isVisible()
 sal_Int32 SAL_CALL ScAccessibleCellBase::getForeground()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     sal_Int32 nColor(0);
     if (mpDoc)
     {
@@ -126,7 +126,7 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getForeground()
 sal_Int32 SAL_CALL ScAccessibleCellBase::getBackground()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     sal_Int32 nColor(0);
 
     if (mpDoc)
@@ -190,7 +190,7 @@ sal_Int64
     ScAccessibleCellBase::getAccessibleIndexInParent()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     return mnIndex;
 }
 
@@ -214,7 +214,7 @@ uno::Any SAL_CALL
     ScAccessibleCellBase::getCurrentValue()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     uno::Any aAny;
     if (mpDoc)
     {
@@ -227,7 +227,7 @@ sal_Bool SAL_CALL
     ScAccessibleCellBase::setCurrentValue( const uno::Any& aNumber )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     double fValue = 0;
     bool bResult = false;
     if((aNumber >>= fValue) && mpDoc && mpDoc->GetDocumentShell())
@@ -294,7 +294,7 @@ bool ScAccessibleCellBase::IsEditable(sal_Int64 nParentStates)
 OUString ScAccessibleCellBase::GetNote() const
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     OUString sNote;
     if (mpDoc)
     {
@@ -340,7 +340,7 @@ OUString ScAccessibleCellBase::GetNote() const
 OUString ScAccessibleCellBase::getShadowAttrs() const
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     table::ShadowFormat aShadowFmt;
     if (mpDoc)
     {
@@ -420,7 +420,7 @@ OUString ScAccessibleCellBase::getShadowAttrs() const
 OUString ScAccessibleCellBase::getBorderAttrs()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     table::BorderLine aTopBorder;
     table::BorderLine aBottomBorder;
     table::BorderLine aLeftBorder;

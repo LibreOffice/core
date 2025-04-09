@@ -138,7 +138,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAtPo
     if (containsPoint(aPoint))
     {
         SolarMutexGuard aGuard;
-        IsObjectValid();
+        ensureAlive();
 
         sal_Int64 nCount(getAccessibleChildCount()); // fill the areas
 
@@ -162,7 +162,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAtPo
 void SAL_CALL ScAccessiblePageHeader::grabFocus()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (getAccessibleParent().is())
     {
         uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
@@ -176,7 +176,7 @@ void SAL_CALL ScAccessiblePageHeader::grabFocus()
 sal_Int64 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     if((mnChildCount < 0) && mpViewShell)
     {
@@ -206,7 +206,7 @@ sal_Int64 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount()
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleChild( sal_Int64 nIndex )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     uno::Reference<XAccessible> xRet;
 

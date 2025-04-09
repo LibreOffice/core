@@ -95,7 +95,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleAtP
     if (containsPoint(rPoint))
     {
         SolarMutexGuard aGuard;
-        IsObjectValid();
+        ensureAlive();
 
         if(!mpTextHelper)
             CreateTextHelper();
@@ -109,7 +109,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleAtP
 void SAL_CALL ScAccessiblePreviewCell::grabFocus()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (getAccessibleParent().is())
     {
         uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
@@ -123,7 +123,7 @@ void SAL_CALL ScAccessiblePreviewCell::grabFocus()
 sal_Int64 SAL_CALL ScAccessiblePreviewCell::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (!mpTextHelper)
         CreateTextHelper();
     return mpTextHelper->GetChildCount();
@@ -132,7 +132,7 @@ sal_Int64 SAL_CALL ScAccessiblePreviewCell::getAccessibleChildCount()
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleChild(sal_Int64 nIndex)
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (!mpTextHelper)
         CreateTextHelper();
     return mpTextHelper->GetChild(nIndex);

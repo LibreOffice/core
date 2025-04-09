@@ -1591,7 +1591,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAtPoin
     if (containsPoint(rPoint))
     {
         SolarMutexGuard aGuard;
-        IsObjectValid();
+        ensureAlive();
         if (mpChildrenShapes)
             xAccessible = mpChildrenShapes->GetAt(rPoint);
         if(!xAccessible.is())
@@ -1617,7 +1617,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAtPoin
 void SAL_CALL ScAccessibleDocument::grabFocus(  )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (!getAccessibleParent().is())
         return;
 
@@ -1642,7 +1642,7 @@ sal_Int64 SAL_CALL
     ScAccessibleDocument::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     sal_Int64 nCount(1);
     if (mpChildrenShapes)
         nCount = mpChildrenShapes->GetCount(); // returns the count of the shapes inclusive the table
@@ -1658,7 +1658,7 @@ uno::Reference<XAccessible> SAL_CALL
     ScAccessibleDocument::getAccessibleChild(sal_Int64 nIndex)
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     uno::Reference<XAccessible> xAccessible;
     if (nIndex >= 0)
     {
@@ -1749,7 +1749,7 @@ void SAL_CALL
     ScAccessibleDocument::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     if (!(mpChildrenShapes && mpViewShell))
         return;
@@ -1778,7 +1778,7 @@ sal_Bool SAL_CALL
     ScAccessibleDocument::isAccessibleChildSelected( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     bool bResult(false);
 
     if (mpChildrenShapes)
@@ -1810,7 +1810,7 @@ void SAL_CALL
     ScAccessibleDocument::clearAccessibleSelection(  )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     if (mpChildrenShapes)
         mpChildrenShapes->DeselectAll(); //deselects all (also the table)
@@ -1820,7 +1820,7 @@ void SAL_CALL
     ScAccessibleDocument::selectAllAccessibleChildren(  )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     if (mpChildrenShapes)
         mpChildrenShapes->SelectAll();
@@ -1836,7 +1836,7 @@ sal_Int64 SAL_CALL
     ScAccessibleDocument::getSelectedAccessibleChildCount(  )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     sal_Int64 nCount(0);
 
     if (mpChildrenShapes)
@@ -1855,7 +1855,7 @@ uno::Reference<XAccessible > SAL_CALL
     ScAccessibleDocument::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     uno::Reference<XAccessible> xAccessible;
     if (mpChildrenShapes)
     {
@@ -1882,7 +1882,7 @@ void SAL_CALL
     ScAccessibleDocument::deselectAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     if (!(mpChildrenShapes && mpViewShell))
         return;
@@ -1958,14 +1958,14 @@ tools::Rectangle ScAccessibleDocument::GetVisibleArea_Impl() const
 tools::Rectangle ScAccessibleDocument::GetVisibleArea() const
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     return maVisArea;
 }
 
 Point ScAccessibleDocument::LogicToPixel (const Point& rPoint) const
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     Point aPoint;
     ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
     if (pWin)
@@ -1979,7 +1979,7 @@ Point ScAccessibleDocument::LogicToPixel (const Point& rPoint) const
 Size ScAccessibleDocument::LogicToPixel (const Size& rSize) const
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     Size aSize;
     ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
     if (pWin)
@@ -2007,7 +2007,7 @@ OUString
     ScAccessibleDocument::createAccessibleName()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     OUString sName = ScResId(STR_ACC_DOC_NAME);
     sal_Int32 nNumber(sal_Int32(meSplitPos) + 1);
     sName += OUString::number(nNumber);
@@ -2168,7 +2168,7 @@ sal_Int32 SAL_CALL ScAccessibleDocument::getForeground(  )
 sal_Int32 SAL_CALL ScAccessibleDocument::getBackground(  )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     return sal_Int32(ScModule::get()->GetColorConfig().GetColorValue(::svtools::DOCCOLOR).nColor);
 }
 

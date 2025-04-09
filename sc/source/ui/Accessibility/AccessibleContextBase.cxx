@@ -109,14 +109,14 @@ awt::Rectangle ScAccessibleContextBase::implGetBounds(  )
 awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     return vcl::unohelper::ConvertToAWTPoint(GetBoundingBoxOnScreen().TopLeft());
 }
 
 bool ScAccessibleContextBase::isShowing(  )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     bool bShowing(false);
     if (mxParent.is())
     {
@@ -164,7 +164,7 @@ sal_Int64 SAL_CALL
        ScAccessibleContextBase::getAccessibleIndexInParent()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     //  Use a simple but slow solution for now.  Optimize later.
    //   Return -1 to indicate that this object's parent does not know about the
    //   object.
@@ -200,7 +200,7 @@ OUString SAL_CALL
        ScAccessibleContextBase::getAccessibleDescription()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (msDescription.isEmpty())
     {
         OUString sDescription(createAccessibleDescription());
@@ -221,7 +221,7 @@ OUString SAL_CALL
        ScAccessibleContextBase::getAccessibleName()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (msName.isEmpty())
     {
         OUString sName(createAccessibleName());
@@ -253,7 +253,7 @@ lang::Locale SAL_CALL
        ScAccessibleContextBase::getLocale()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (mxParent.is())
     {
         uno::Reference<XAccessibleContext> xParentContext (
@@ -316,12 +316,6 @@ void ScAccessibleContextBase::CommitFocusLost()
 {
     CommitChange(AccessibleEventId::STATE_CHANGED, uno::Any(AccessibleStateType::FOCUSED),
                  uno::Any());
-}
-
-void ScAccessibleContextBase::IsObjectValid() const
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-        throw lang::DisposedException();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

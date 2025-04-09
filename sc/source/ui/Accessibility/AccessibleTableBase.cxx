@@ -91,14 +91,14 @@ void SAL_CALL ScAccessibleTableBase::release()
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowCount(  )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     return maRange.aEnd.Row() - maRange.aStart.Row() + 1;
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     return maRange.aEnd.Col() - maRange.aStart.Col() + 1;
 }
 
@@ -127,7 +127,7 @@ OUString SAL_CALL ScAccessibleTableBase::getAccessibleColumnDescription( sal_Int
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     if ((nColumn > (maRange.aEnd.Col() - maRange.aStart.Col())) || (nColumn < 0) ||
         (nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
@@ -160,7 +160,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nR
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     if ((nColumn > (maRange.aEnd.Col() - maRange.aStart.Col())) || (nColumn < 0) ||
         (nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
@@ -266,7 +266,7 @@ sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 /* nRow
 sal_Int64 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     if (nRow > (maRange.aEnd.Row() - maRange.aStart.Row()) ||
         nRow < 0 ||
@@ -282,7 +282,7 @@ sal_Int64 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sa
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     if (nChildIndex >= getAccessibleChildCount() || nChildIndex < 0)
         throw lang::IndexOutOfBoundsException();
@@ -293,7 +293,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int64 nChildInde
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     if (nChildIndex >= getAccessibleChildCount() || nChildIndex < 0)
         throw lang::IndexOutOfBoundsException();
@@ -306,7 +306,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int64 nChildI
 sal_Int64 SAL_CALL ScAccessibleTableBase::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     // FIXME: representing rows & columns this way is a plain and simple madness.
     // this needs a radical re-think.
@@ -321,7 +321,7 @@ uno::Reference< XAccessible > SAL_CALL
     ScAccessibleTableBase::getAccessibleChild(sal_Int64 nIndex)
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     if (nIndex >= getAccessibleChildCount() || nIndex < 0)
         throw lang::IndexOutOfBoundsException();

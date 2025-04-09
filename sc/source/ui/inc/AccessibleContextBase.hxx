@@ -180,9 +180,6 @@ protected:
 
     bool IsDefunc() const { return rBHelper.bDisposed; }
 
-    /// @throws css::lang::DisposedException
-    void IsObjectValid() const;
-
     /// Reference to the parent object.
     css::uno::Reference<css::accessibility::XAccessible> mxParent;
 

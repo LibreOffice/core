@@ -122,7 +122,7 @@ void SAL_CALL ScAccessiblePreviewTable::release()
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowCount()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     FillTableInfo();
 
@@ -135,7 +135,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowCount()
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnCount()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     FillTableInfo();
 
@@ -168,7 +168,7 @@ OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnDescription( sal_
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     FillTableInfo();
 
@@ -199,7 +199,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowExtentAt( sal_Int32
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     FillTableInfo();
 
@@ -278,7 +278,7 @@ sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleColumnSelected( sal_Int3
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     FillTableInfo();
 
@@ -331,7 +331,7 @@ sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleSelected( sal_Int32 nRow
 {
     //  in the page preview, there is no selection
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     FillTableInfo();
 
@@ -345,7 +345,7 @@ sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleSelected( sal_Int32 nRow
 sal_Int64 SAL_CALL ScAccessiblePreviewTable::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     FillTableInfo();
 
@@ -360,7 +360,7 @@ sal_Int64 SAL_CALL ScAccessiblePreviewTable::getAccessibleIndex( sal_Int32 nRow,
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRow( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     FillTableInfo();
 
@@ -374,7 +374,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRow( sal_Int64 nChildI
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumn( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     FillTableInfo();
 
@@ -393,7 +393,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleAt
     if (containsPoint(aPoint))
     {
         SolarMutexGuard aGuard;
-        IsObjectValid();
+        ensureAlive();
 
         FillTableInfo();
 
@@ -438,7 +438,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleAt
 void SAL_CALL ScAccessiblePreviewTable::grabFocus()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (getAccessibleParent().is())
     {
         uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
@@ -452,7 +452,7 @@ void SAL_CALL ScAccessiblePreviewTable::grabFocus()
 sal_Int64 SAL_CALL ScAccessiblePreviewTable::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     FillTableInfo();
 
@@ -465,7 +465,7 @@ sal_Int64 SAL_CALL ScAccessiblePreviewTable::getAccessibleChildCount()
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleChild( sal_Int64 nIndex )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     FillTableInfo();
 

@@ -776,7 +776,7 @@ void ScAccessibleSpreadsheet::CommitFocusCell(const ScAddress &aNewCell)
 uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessibleRowHeaders(  )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     uno::Reference< XAccessibleTable > xAccessibleTable;
     if( mpDoc && mbIsSpreadsheet )
     {
@@ -795,7 +795,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessib
 uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessibleColumnHeaders(  )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     uno::Reference< XAccessibleTable > xAccessibleTable;
     if( mpDoc && mbIsSpreadsheet )
     {
@@ -814,7 +814,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessib
 uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessibleRows(  )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     uno::Sequence<sal_Int32> aSequence;
     if (IsFormulaMode())
     {
@@ -844,7 +844,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
 uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessibleColumns(  )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     uno::Sequence<sal_Int32> aSequence;
     if (IsFormulaMode() || !mpViewShell)
         return aSequence;
@@ -868,7 +868,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nRow )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (IsFormulaMode())
     {
         return false;
@@ -889,7 +889,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nR
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     if (IsFormulaMode())
     {
@@ -955,7 +955,7 @@ rtl::Reference<ScAccessibleCell> ScAccessibleSpreadsheet::GetAccessibleCellAt(sa
 uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (!IsFormulaMode())
     {
         if (nRow > (maRange.aEnd.Row() - maRange.aStart.Row()) ||
@@ -971,7 +971,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCel
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     if (IsFormulaMode())
     {
@@ -999,7 +999,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAtP
     if (containsPoint(rPoint))
     {
         SolarMutexGuard aGuard;
-        IsObjectValid();
+        ensureAlive();
         if (mpViewShell)
         {
             SCCOL nX;
@@ -1035,7 +1035,7 @@ sal_Int32 SAL_CALL ScAccessibleSpreadsheet::getForeground(  )
 sal_Int32 SAL_CALL ScAccessibleSpreadsheet::getBackground(  )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     return sal_Int32(ScModule::get()->GetColorConfig().GetColorValue(::svtools::DOCCOLOR).nColor);
 }
 
@@ -1090,7 +1090,7 @@ sal_Int64 SAL_CALL ScAccessibleSpreadsheet::getAccessibleStateSet()
 void SAL_CALL ScAccessibleSpreadsheet::selectAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
         throw lang::IndexOutOfBoundsException();
 
@@ -1107,7 +1107,7 @@ void SAL_CALL
         ScAccessibleSpreadsheet::clearAccessibleSelection(  )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (mpViewShell && !IsFormulaMode())
         mpViewShell->Unmark();
 }
@@ -1115,7 +1115,7 @@ void SAL_CALL
 void SAL_CALL ScAccessibleSpreadsheet::selectAllAccessibleChildren(  )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (!mpViewShell)
         return;
 
@@ -1136,7 +1136,7 @@ sal_Int64 SAL_CALL
         ScAccessibleSpreadsheet::getSelectedAccessibleChildCount(  )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     sal_Int64 nResult(0);
     if (mpViewShell)
     {
@@ -1163,7 +1163,7 @@ uno::Reference<XAccessible > SAL_CALL
         ScAccessibleSpreadsheet::getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     uno::Reference < XAccessible > xAccessible;
     if (IsFormulaMode())
     {
@@ -1199,7 +1199,7 @@ uno::Reference<XAccessible > SAL_CALL
 void SAL_CALL ScAccessibleSpreadsheet::deselectAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
         throw lang::IndexOutOfBoundsException();

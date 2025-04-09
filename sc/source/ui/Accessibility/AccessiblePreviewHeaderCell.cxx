@@ -131,7 +131,7 @@ void SAL_CALL ScAccessiblePreviewHeaderCell::release()
 uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getCurrentValue()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     double fValue(0.0);
     if (mbColumnHeader)
@@ -151,7 +151,7 @@ sal_Bool SAL_CALL ScAccessiblePreviewHeaderCell::setCurrentValue( const uno::Any
 uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMaximumValue()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
 
     double fValue(0.0);
     ScDocument& rDoc = mpViewShell->GetDocument();
@@ -181,7 +181,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessi
     if (containsPoint(rPoint))
     {
         SolarMutexGuard aGuard;
-        IsObjectValid();
+        ensureAlive();
 
         if(!mxTextHelper)
             CreateTextHelper();
@@ -195,7 +195,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessi
 void SAL_CALL ScAccessiblePreviewHeaderCell::grabFocus()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (getAccessibleParent().is())
     {
         uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
@@ -209,7 +209,7 @@ void SAL_CALL ScAccessiblePreviewHeaderCell::grabFocus()
 sal_Int64 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (!mxTextHelper)
         CreateTextHelper();
     return mxTextHelper->GetChildCount();
@@ -218,7 +218,7 @@ sal_Int64 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleChildCount()
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleChild(sal_Int64 nIndex)
 {
     SolarMutexGuard aGuard;
-    IsObjectValid();
+    ensureAlive();
     if (!mxTextHelper)
         CreateTextHelper();
     return mxTextHelper->GetChild(nIndex);
