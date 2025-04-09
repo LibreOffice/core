@@ -1414,7 +1414,7 @@ void ScInterpreter::ScOr()
                         double fVal;
                         FormulaError nErr = FormulaError::NONE;
                         ScValueIterator aValIter( mrContext, aRange );
-                        if ( aValIter.GetFirst( fVal, nErr ) )
+                        if ( aValIter.GetFirst( fVal, nErr ) && nErr == FormulaError::NONE )
                         {
                             bHaveValue = true;
                             do
