@@ -159,6 +159,16 @@ interface NotesPanelView
     [
         ExecMethod = FuTemporaryModify ;
     ]
+    FN_NUM_BULLET_ON
+    [
+        ExecMethod = FuTemporaryModify;
+        StateMethod = GetAttrState;
+    ]
+    FN_NUM_NUMBERING_ON
+    [
+        ExecMethod = FuTemporaryModify;
+        StateMethod = GetAttrState;
+    ]
     SID_OUTLINE_BULLET // ole : no, status : ?
     [
         ExecMethod = FuTemporaryModify ;

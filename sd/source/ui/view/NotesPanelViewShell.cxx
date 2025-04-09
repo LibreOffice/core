@@ -549,6 +549,20 @@ void NotesPanelViewShell::GetAttrState(SfxItemSet& rSet)
                 rSet.DisableItem(nWhich);
             }
             break;
+            case FN_NUM_BULLET_ON:
+            case FN_NUM_NUMBERING_ON:
+            {
+                bool bIsBullet = false;
+                bool bIsNumbering = false;
+                OutlinerView* pOlView = mpNotesPanelView->GetTextEditOutlinerView();
+                if (pOlView)
+                {
+                    pOlView->IsBulletOrNumbering(bIsBullet, bIsNumbering);
+                }
+                rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, bIsBullet));
+                rSet.Put(SfxBoolItem(FN_NUM_NUMBERING_ON, bIsNumbering));
+            }
+            break;
 
             default:
                 break;
@@ -883,6 +897,24 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
         }
         break;
 
+        case FN_NUM_BULLET_ON:
+        {
+            // The value (sal_uInt16)0xFFFF means set bullet on/off.
+            SfxUInt16Item aItem(FN_SVX_SET_BULLET, sal_uInt16(0xFFFF));
+            GetViewFrame()->GetDispatcher()->ExecuteList(FN_SVX_SET_BULLET, SfxCallMode::RECORD,
+                                                         { &aItem });
+        }
+        break;
+
+        case FN_NUM_NUMBERING_ON:
+        {
+            // The value (sal_uInt16)0xFFFF means set bullet on/off.
+            SfxUInt16Item aItem(FN_SVX_SET_NUMBER, sal_uInt16(0xFFFF));
+            GetViewFrame()->GetDispatcher()->ExecuteList(FN_SVX_SET_NUMBER, SfxCallMode::RECORD,
+                                                         { &aItem });
+        }
+        break;
+
         case SID_OUTLINE_BULLET:
         case FN_SVX_SET_BULLET:
         case FN_SVX_SET_NUMBER:
@@ -890,6 +922,9 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
             SetCurrentFunction(FuBulletAndPosition::Create(this, GetActiveWindow(),
                                                            mpNotesPanelView.get(), GetDoc(), rReq));
             Cancel();
+            SfxBindings& rBindings = GetViewFrame()->GetBindings();
+            rBindings.Invalidate(FN_NUM_BULLET_ON);
+            rBindings.Invalidate(FN_NUM_NUMBERING_ON);
         }
         break;
 
