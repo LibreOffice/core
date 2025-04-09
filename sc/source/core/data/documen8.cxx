@@ -1245,19 +1245,19 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
 
                     // defaults from cell attributes must be set so right language is used
                     const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
-                    auto pDefaults = std::make_unique<SfxItemSet>( pEngine->GetEmptyItemSet() );
+                    SfxItemSet aDefaults( pEngine->GetEmptyItemSet() );
                     if ( ScStyleSheet* pPreviewStyle = GetPreviewCellStyle( nCol, nRow, nTab ) )
                     {
                         ScPatternAttr aPreviewPattern( *pPattern );
                         aPreviewPattern.SetStyleSheet(pPreviewStyle);
-                        aPreviewPattern.FillEditItemSet(pDefaults.get());
+                        aPreviewPattern.FillEditItemSet(&aDefaults);
                     }
                     else
                     {
                         SfxItemSet* pFontSet = GetPreviewFont( nCol, nRow, nTab );
-                        pPattern->FillEditItemSet(pDefaults.get(), pFontSet);
+                        pPattern->FillEditItemSet(&aDefaults, pFontSet);
                     }
-                    pEngine->SetDefaults(std::move(pDefaults));
+                    pEngine->SetDefaults(std::move(aDefaults));
                     if (aCell.getType() == CELLTYPE_STRING)
                         pEngine->SetTextCurrentDefaults(aCell.getSharedString()->getString());
                     else if (aCell.getEditText())

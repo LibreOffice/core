@@ -190,14 +190,14 @@ SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
             pCellAttributeDefault = &pTmp->getDefaultCellAttribute();
         }
 
-        auto pDefaults = std::make_unique<SfxItemSet>(pHdrEngine->GetEmptyItemSet());
-        pCellAttributeDefault->FillEditItemSet(pDefaults.get());
+        SfxItemSet aDefaults(pHdrEngine->GetEmptyItemSet());
+        pCellAttributeDefault->FillEditItemSet(&aDefaults);
         //  FillEditItemSet adjusts font height to 1/100th mm,
         //  but for header/footer twips is needed, as in the PatternAttr:
-        pDefaults->Put( pCellAttributeDefault->GetItem(ATTR_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT) );
-        pDefaults->Put( pCellAttributeDefault->GetItem(ATTR_CJK_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK) ) ;
-        pDefaults->Put( pCellAttributeDefault->GetItem(ATTR_CTL_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL) );
-        pHdrEngine->SetDefaults(std::move(pDefaults));
+        aDefaults.Put( pCellAttributeDefault->GetItem(ATTR_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT) );
+        aDefaults.Put( pCellAttributeDefault->GetItem(ATTR_CJK_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK) ) ;
+        aDefaults.Put( pCellAttributeDefault->GetItem(ATTR_CTL_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL) );
+        pHdrEngine->SetDefaults(std::move(aDefaults));
 
         ScHeaderFieldData aData;
         ScHeaderFooterTextObj::FillDummyFieldData( aData );
@@ -792,19 +792,19 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
     {
         ScDocument& rDoc = pDocShell->GetDocument();
 
-        auto pDefaults = std::make_unique<SfxItemSet>(pEditEngine->GetEmptyItemSet());
+        SfxItemSet aDefaults(pEditEngine->GetEmptyItemSet());
         if( const ScPatternAttr* pPattern =
                 rDoc.GetPattern( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab() ) )
         {
-            pPattern->FillEditItemSet(pDefaults.get());
-            pPattern->FillEditParaItems(pDefaults.get()); // including alignment etc. (for reading)
+            pPattern->FillEditItemSet(&aDefaults);
+            pPattern->FillEditParaItems(&aDefaults); // including alignment etc. (for reading)
         }
 
         ScRefCellValue aCell(rDoc, aCellPos);
         if (aCell.getType() == CELLTYPE_EDIT)
         {
             const EditTextObject* pObj = aCell.getEditText();
-            pEditEngine->SetTextNewDefaults(*pObj, std::move(pDefaults));
+            pEditEngine->SetTextNewDefaults(*pObj, std::move(aDefaults));
         }
         else
         {
@@ -819,9 +819,9 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
             // pEditEngine->SetTextNewDefaults() is passed an empty string
             // and pEditEngine->GetText() is empty string.
             if (!aText.isEmpty() || pEditEngine->HasText())
-                pEditEngine->SetTextNewDefaults(aText, std::move(pDefaults));
+                pEditEngine->SetTextNewDefaults(aText, std::move(aDefaults));
             else
-                pEditEngine->SetDefaults(std::move(pDefaults));
+                pEditEngine->SetDefaults(std::move(aDefaults));
         }
     }
 

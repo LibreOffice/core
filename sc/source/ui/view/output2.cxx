@@ -2558,28 +2558,28 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
     bool bCellContrast = bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
-    auto pSet = std::make_unique<SfxItemSet>( mpEngine->GetEmptyItemSet() );
-    mpPattern->FillEditItemSet( pSet.get(), mpCondSet );
+    SfxItemSet aSet( mpEngine->GetEmptyItemSet() );
+    mpPattern->FillEditItemSet( &aSet, mpCondSet );
     if ( mpPreviewFontSet )
     {
         if ( const SvxFontItem* pItem = mpPreviewFontSet->GetItemIfSet( ATTR_FONT ) )
         {
             // tdf#125054 adapt WhichID
-            pSet->PutAsTargetWhich(*pItem, EE_CHAR_FONTINFO);
+            aSet.PutAsTargetWhich(*pItem, EE_CHAR_FONTINFO);
         }
         if ( const SvxFontItem* pItem = mpPreviewFontSet->GetItemIfSet( ATTR_CJK_FONT ) )
         {
             // tdf#125054 adapt WhichID
-            pSet->PutAsTargetWhich(*pItem, EE_CHAR_FONTINFO_CJK);
+            aSet.PutAsTargetWhich(*pItem, EE_CHAR_FONTINFO_CJK);
         }
         if ( const SvxFontItem* pItem = mpPreviewFontSet->GetItemIfSet( ATTR_CTL_FONT ) )
         {
             // tdf#125054 adapt WhichID
-            pSet->PutAsTargetWhich(*pItem, EE_CHAR_FONTINFO_CTL);
+            aSet.PutAsTargetWhich(*pItem, EE_CHAR_FONTINFO_CTL);
         }
     }
-    bool bParaHyphenate = pSet->Get(EE_PARA_HYPHENATE).GetValue();
-    mpEngine->SetDefaults( std::move(pSet) );
+    bool bParaHyphenate = aSet.Get(EE_PARA_HYPHENATE).GetValue();
+    mpEngine->SetDefaults( std::move(aSet) );
     mpOldPattern = mpPattern;
     mpOldCondSet = mpCondSet;
     mpOldPreviewFontSet = mpPreviewFontSet;
@@ -4777,18 +4777,18 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             // StringDiffer doesn't look at hyphenate, language items
                             if ( !ScPatternAttr::areSame(pPattern, pOldPattern) || pCondSet != pOldCondSet )
                             {
-                                auto pSet = std::make_unique<SfxItemSet>( mxOutputEditEngine->GetEmptyItemSet() );
-                                pPattern->FillEditItemSet( pSet.get(), pCondSet );
+                                SfxItemSet aSet( mxOutputEditEngine->GetEmptyItemSet() );
+                                pPattern->FillEditItemSet( &aSet, pCondSet );
 
                                                                     // adjustment for EditEngine
                                 SvxAdjust eSvxAdjust = SvxAdjust::Left;
                                 if (eOrient==SvxCellOrientation::Stacked)
                                     eSvxAdjust = SvxAdjust::Center;
                                 // adjustment for bBreak is omitted here
-                                pSet->Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
+                                aSet.Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
 
-                                bool bParaHyphenate = pSet->Get(EE_PARA_HYPHENATE).GetValue();
-                                mxOutputEditEngine->SetDefaults( std::move(pSet) );
+                                bool bParaHyphenate = aSet.Get(EE_PARA_HYPHENATE).GetValue();
+                                mxOutputEditEngine->SetDefaults( std::move(aSet) );
                                 pOldPattern = pPattern;
                                 pOldCondSet = pCondSet;
 

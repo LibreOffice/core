@@ -1914,10 +1914,10 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
         //  use EditEngine to draw mixed-script string
         pEditEng.reset(new ScEditEngineDefaulter( EditEngine::CreatePool().get(), true ));
         pEditEng->SetRefMapMode(rRenderContext.GetMapMode());
-        auto pEditDefaults = std::make_unique<SfxItemSet>( pEditEng->GetEmptyItemSet() );
-        rDefPattern.FillEditItemSet( pEditDefaults.get() );
-        pEditDefaults->Put( SvxColorItem( COL_LIGHTGRAY, EE_CHAR_COLOR ) );
-        pEditEng->SetDefaults( std::move(pEditDefaults) );
+        SfxItemSet aEditDefaults( pEditEng->GetEmptyItemSet() );
+        rDefPattern.FillEditItemSet( &aEditDefaults );
+        aEditDefaults.Put( SvxColorItem( COL_LIGHTGRAY, EE_CHAR_COLOR ) );
+        pEditEng->SetDefaults( std::move(aEditDefaults) );
     }
 
     sal_uInt16 nCount = sal::static_int_cast<sal_uInt16>( pPageData->GetCount() );

@@ -144,23 +144,23 @@ std::unique_ptr<EditTextObject> ScEditWindow::CreateTextObject()
 
 void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
 {
-    auto pSet = std::make_unique<SfxItemSet>( m_xEditEngine->GetEmptyItemSet() );
-    rPattern.FillEditItemSet( pSet.get() );
+    SfxItemSet aSet( m_xEditEngine->GetEmptyItemSet() );
+    rPattern.FillEditItemSet( &aSet );
     //  FillEditItemSet adjusts font height to 1/100th mm,
     //  but for header/footer twips is needed, as in the PatternAttr:
-    pSet->Put( rPattern.GetItem(ATTR_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT) );
-    pSet->Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK) );
-    pSet->Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL) );
+    aSet.Put( rPattern.GetItem(ATTR_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT) );
+    aSet.Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK) );
+    aSet.Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL) );
     // font color used, suitable header/footer background color set in ScEditWindow::SetDrawingArea
     Color aFgColor = svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR, false).nColor;
     if (aFgColor == COL_AUTO) {
         Color aBgColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
         aFgColor = aBgColor.IsDark() ? COL_WHITE : COL_BLACK;
     }
-    pSet->Put(SvxColorItem(aFgColor, EE_CHAR_COLOR));
+    aSet.Put(SvxColorItem(aFgColor, EE_CHAR_COLOR));
     if (mbRTL)
-        pSet->Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
-    GetEditEngine()->SetDefaults( std::move(pSet) );
+        aSet.Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
+    GetEditEngine()->SetDefaults( std::move(aSet) );
 }
 
 void ScEditWindow::SetText( const EditTextObject& rTextObject )

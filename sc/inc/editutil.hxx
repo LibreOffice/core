@@ -109,7 +109,7 @@ class ScEnginePoolHelper
 {
 protected:
     rtl::Reference<SfxItemPool> m_pEnginePool;
-    std::unique_ptr<SfxItemSet> m_pDefaults;
+    std::optional<SfxItemSet> m_oDefaults;
     bool            m_bDeleteEnginePool;
 
                     ScEnginePoolHelper( SfxItemPool* pEnginePool, bool bDeleteEnginePool );
@@ -134,7 +134,7 @@ public:
     void            SetDefaults( const SfxItemSet& rDefaults );
 
                     /// Becomes the owner of the SfxItemSet
-    void            SetDefaults( std::unique_ptr<SfxItemSet> pDefaults );
+    void            SetDefaults( SfxItemSet&& aDefaults );
 
                     /// Set the item in the default ItemSet which is created
                     /// if it doesn't exist yet.
@@ -148,7 +148,7 @@ public:
     void            SetTextCurrentDefaults( const EditTextObject& rTextObject );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const EditTextObject& rTextObject,
-                        std::unique_ptr<SfxItemSet> pDefaults );
+                        SfxItemSet&& aDefaults );
                     /// New defaults are applied, but not stored
     void            SetTextTempDefaults( const EditTextObject& rTextObject,
                         const SfxItemSet& rDefaults );
@@ -156,7 +156,7 @@ public:
                     /// SetText and apply defaults already set
     void            SetTextCurrentDefaults( const OUString& rText );
                     /// Current defaults are not applied, new defaults are applied
-    void            SetTextNewDefaults( const OUString& rText, std::unique_ptr<SfxItemSet> pDefaults );
+    void            SetTextNewDefaults( const OUString& rText, SfxItemSet&& aDefaults );
 
                     /// Paragraph attributes that are not defaults are copied to
                     /// character attributes and all paragraph attributes reset

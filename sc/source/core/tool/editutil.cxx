@@ -579,51 +579,51 @@ void ScEditEngineDefaulter::ApplyDefaults(const SfxItemSet& rNewSet)
 
 void ScEditEngineDefaulter::SetDefaults(const SfxItemSet& rSet)
 {
-    SetDefaults(std::make_unique<SfxItemSet>(rSet));
+    m_oDefaults.emplace(rSet);
+    ApplyDefaults(*m_oDefaults);
 }
 
-void ScEditEngineDefaulter::SetDefaults( std::unique_ptr<SfxItemSet> pSet )
+void ScEditEngineDefaulter::SetDefaults( SfxItemSet&& aSet )
 {
-    m_pDefaults = std::move(pSet);
-    if ( m_pDefaults )
-        ApplyDefaults(*m_pDefaults);
+    m_oDefaults.emplace(std::move(aSet));
+    ApplyDefaults(*m_oDefaults);
 }
 
 void ScEditEngineDefaulter::SetDefaultItem( const SfxPoolItem& rItem )
 {
-    if ( !m_pDefaults )
+    if ( !m_oDefaults )
     {
-        m_pDefaults = std::make_unique<SfxItemSet>( GetEmptyItemSet() );
+        m_oDefaults.emplace( GetEmptyItemSet() );
     }
-    m_pDefaults->Put( rItem );
-    ApplyDefaults(*m_pDefaults);
+    m_oDefaults->Put( rItem );
+    ApplyDefaults(*m_oDefaults);
 }
 
 const SfxItemSet& ScEditEngineDefaulter::GetDefaults()
 {
-    if ( !m_pDefaults )
+    if ( !m_oDefaults )
     {
-        m_pDefaults = std::make_unique<SfxItemSet>( GetEmptyItemSet() );
+        m_oDefaults.emplace( GetEmptyItemSet() );
     }
-    return *m_pDefaults;
+    return *m_oDefaults;
 }
 
 void ScEditEngineDefaulter::SetTextCurrentDefaults( const EditTextObject& rTextObject )
 {
     bool bUpdateMode = SetUpdateLayout( false );
     SetText( rTextObject );
-    if ( m_pDefaults )
-        ApplyDefaults(*m_pDefaults);
+    if ( m_oDefaults )
+        ApplyDefaults(*m_oDefaults);
     if ( bUpdateMode )
         SetUpdateLayout( true );
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults(const EditTextObject& rTextObject,
-                                               std::unique_ptr<SfxItemSet> pDefaults)
+                                               SfxItemSet&& aDefaults)
 {
     bool bUpdateMode = SetUpdateLayout( false );
     SetText( rTextObject );
-    SetDefaults(std::move(pDefaults));
+    SetDefaults(std::move(aDefaults));
     if ( bUpdateMode )
         SetUpdateLayout( true );
 }
@@ -642,29 +642,29 @@ void ScEditEngineDefaulter::SetTextCurrentDefaults( const OUString& rText )
 {
     bool bUpdateMode = SetUpdateLayout( false );
     SetText( rText );
-    if ( m_pDefaults )
-        ApplyDefaults(*m_pDefaults);
+    if ( m_oDefaults )
+        ApplyDefaults(*m_oDefaults);
     if ( bUpdateMode )
         SetUpdateLayout( true );
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
-                                                std::unique_ptr<SfxItemSet> pDefaults )
+                                                SfxItemSet&& aDefaults )
 {
     bool bUpdateMode = SetUpdateLayout( false );
     SetText( rText );
-    SetDefaults(std::move(pDefaults));
+    SetDefaults(std::move(aDefaults));
     if ( bUpdateMode )
         SetUpdateLayout( true );
 }
 
 void ScEditEngineDefaulter::RepeatDefaults()
 {
-    if ( m_pDefaults )
+    if ( m_oDefaults )
     {
         sal_Int32 nPara = GetParagraphCount();
         for ( sal_Int32 j=0; j<nPara; j++ )
-            SetParaAttribs( j, *m_pDefaults );
+            SetParaAttribs( j, *m_oDefaults );
     }
 }
 
@@ -683,7 +683,7 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
             if ( rParaAttribs.GetItemState( nWhich, false, &pParaItem ) == SfxItemState::SET )
             {
                 //  if defaults are set, use only items that are different from default
-                if ( !m_pDefaults || *pParaItem != m_pDefaults->Get(nWhich) )
+                if ( !m_oDefaults || *pParaItem != m_oDefaults->Get(nWhich) )
                 {
                     if (!pCharItems)
                         pCharItems.emplace( GetEmptyItemSet() );
@@ -758,9 +758,9 @@ ScTabEditEngine::ScTabEditEngine( const ScPatternAttr& rPattern,
 void ScTabEditEngine::Init( const ScPatternAttr& rPattern )
 {
     SetRefMapMode(MapMode(MapUnit::Map100thMM));
-    auto pEditDefaults = std::make_unique<SfxItemSet>( GetEmptyItemSet() );
-    rPattern.FillEditItemSet( pEditDefaults.get() );
-    SetDefaults( std::move(pEditDefaults) );
+    SfxItemSet aEditDefaults( GetEmptyItemSet() );
+    rPattern.FillEditItemSet( &aEditDefaults );
+    SetDefaults( std::move(aEditDefaults) );
     // we have no StyleSheets for text
     SetControlWord( GetControlWord() & ~EEControlBits::RTFSTYLESHEETS );
 }

@@ -1143,15 +1143,15 @@ SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
             pCellAttributeDefault = &pTmp->getDefaultCellAttribute();
         }
 
-        auto pDefaults = std::make_unique<SfxItemSet>(pHdrEngine->GetEmptyItemSet());
-        pCellAttributeDefault->FillEditItemSet(pDefaults.get());
+        SfxItemSet aDefaults(pHdrEngine->GetEmptyItemSet());
+        pCellAttributeDefault->FillEditItemSet(&aDefaults);
         //  FillEditItemSet adjusts font height to 1/100th mm,
         //  but for header/footer twips is needed, as in the PatternAttr:
-        pDefaults->Put( pCellAttributeDefault->GetItem(ATTR_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT) );
-        pDefaults->Put( pCellAttributeDefault->GetItem(ATTR_CJK_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK) );
-        pDefaults->Put( pCellAttributeDefault->GetItem(ATTR_CTL_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL) );
-        pDefaults->Put( SvxAdjustItem( meAdjust, EE_PARA_JUST ) );
-        pHdrEngine->SetDefaults(std::move(pDefaults));
+        aDefaults.Put( pCellAttributeDefault->GetItem(ATTR_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT) );
+        aDefaults.Put( pCellAttributeDefault->GetItem(ATTR_CJK_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK) );
+        aDefaults.Put( pCellAttributeDefault->GetItem(ATTR_CTL_FONT_HEIGHT).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL) );
+        aDefaults.Put( SvxAdjustItem( meAdjust, EE_PARA_JUST ) );
+        pHdrEngine->SetDefaults(std::move(aDefaults));
 
         ScHeaderFieldData aData;
         if (mpViewShell)

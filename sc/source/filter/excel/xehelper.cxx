@@ -597,9 +597,9 @@ XclExpStringRef XclExpStringHelper::CreateCellString(
     const SfxItemSet& rItemSet = pCellAttr ?
         pCellAttr->GetItemSet() :
         rRoot.GetDoc().getCellAttributeHelper().getDefaultCellAttribute().GetItemSet();
-    auto pEEItemSet = std::make_unique<SfxItemSet>( rEE.GetEmptyItemSet() );
-    ScPatternAttr::FillToEditItemSet( *pEEItemSet, rItemSet );
-    rEE.SetDefaults( std::move(pEEItemSet) );      // edit engine takes ownership
+    SfxItemSet aEEItemSet( rEE.GetEmptyItemSet() );
+    ScPatternAttr::FillToEditItemSet( aEEItemSet, rItemSet );
+    rEE.SetDefaults( std::move(aEEItemSet) );      // edit engine takes ownership
 
     // create the string
     rEE.SetTextCurrentDefaults(rEditText);

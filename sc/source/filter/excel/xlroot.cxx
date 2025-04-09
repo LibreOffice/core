@@ -388,14 +388,14 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
         rEE.SetControlWord( rEE.GetControlWord() & ~EEControlBits::ALLOWBIGOBJS );
 
         // set Calc header/footer defaults
-        auto pEditSet = std::make_unique<SfxItemSet>( rEE.GetEmptyItemSet() );
+        SfxItemSet aEditSet( rEE.GetEmptyItemSet() );
         SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aItemSet( *GetDoc().GetPool() );
-        ScPatternAttr::FillToEditItemSet( *pEditSet, aItemSet );
+        ScPatternAttr::FillToEditItemSet( aEditSet, aItemSet );
         // FillToEditItemSet() adjusts font height to 1/100th mm, we need twips
-        pEditSet->Put( aItemSet.Get( ATTR_FONT_HEIGHT ).CloneSetWhich(EE_CHAR_FONTHEIGHT) );
-        pEditSet->Put( aItemSet.Get( ATTR_CJK_FONT_HEIGHT ).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK) );
-        pEditSet->Put( aItemSet.Get( ATTR_CTL_FONT_HEIGHT ).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL) );
-        rEE.SetDefaults( std::move(pEditSet) );    // takes ownership
+        aEditSet.Put( aItemSet.Get( ATTR_FONT_HEIGHT ).CloneSetWhich(EE_CHAR_FONTHEIGHT) );
+        aEditSet.Put( aItemSet.Get( ATTR_CJK_FONT_HEIGHT ).CloneSetWhich(EE_CHAR_FONTHEIGHT_CJK) );
+        aEditSet.Put( aItemSet.Get( ATTR_CTL_FONT_HEIGHT ).CloneSetWhich(EE_CHAR_FONTHEIGHT_CTL) );
+        rEE.SetDefaults( std::move(aEditSet) );    // takes ownership
     }
     return *mrData.mxHFEditEngine;
 }

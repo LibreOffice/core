@@ -365,9 +365,9 @@ void ScViewFunc::DoThesaurus()
     const ScPatternAttr* pPattern = rDoc.GetPattern(nCol, nRow, nTab);
     if (pPattern)
     {
-        auto pEditDefaults = std::make_unique<SfxItemSet>(pThesaurusEngine->GetEmptyItemSet());
-        pPattern->FillEditItemSet(pEditDefaults.get());
-        pThesaurusEngine->SetDefaults(std::move(pEditDefaults));
+        SfxItemSet aEditDefaults(pThesaurusEngine->GetEmptyItemSet());
+        pPattern->FillEditItemSet(&aEditDefaults);
+        pThesaurusEngine->SetDefaults(std::move(aEditDefaults));
     }
 
     if (aOldText.getType() == CELLTYPE_EDIT)

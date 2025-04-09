@@ -519,9 +519,9 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
         mpNoteEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
         ApplyAsianEditSettings( *mpNoteEngine );
         const SfxItemSet& rItemSet(getCellAttributeHelper().getDefaultCellAttribute().GetItemSet());
-        auto pEEItemSet = std::make_unique<SfxItemSet>(mpNoteEngine->GetEmptyItemSet());
-        ScPatternAttr::FillToEditItemSet(*pEEItemSet, rItemSet);
-        mpNoteEngine->SetDefaults(std::move(pEEItemSet)); // edit engine takes ownership
+        SfxItemSet aEEItemSet(mpNoteEngine->GetEmptyItemSet());
+        ScPatternAttr::FillToEditItemSet(aEEItemSet, rItemSet);
+        mpNoteEngine->SetDefaults(std::move(aEEItemSet)); // edit engine takes ownership
     }
     return *mpNoteEngine;
 }

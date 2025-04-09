@@ -285,37 +285,37 @@ void ScCsvGrid::InitFonts()
     ::GetDefaultFonts( aLatinItem, aAsianItem, aComplexItem );
 
     // create item set for defaults
-    auto pDefSet = std::make_unique<SfxItemSet>(mpEditEngine->GetEmptyItemSet());
-    EditEngine::SetFontInfoInItemSet(*pDefSet, maMonoFont);
-    pDefSet->Put(aAsianItem);
-    pDefSet->Put(aComplexItem);
+    SfxItemSet aDefSet(mpEditEngine->GetEmptyItemSet());
+    EditEngine::SetFontInfoInItemSet(aDefSet, maMonoFont);
+    aDefSet.Put(aAsianItem);
+    aDefSet.Put(aComplexItem);
 
     // set Asian/Complex font size to height of character in Latin font
     sal_uLong nFontHt = static_cast< sal_uLong >( maMonoFont.GetFontSize().Height() );
-    pDefSet->Put(SvxFontHeightItem(nFontHt, 100, EE_CHAR_FONTHEIGHT_CJK));
-    pDefSet->Put(SvxFontHeightItem(nFontHt, 100, EE_CHAR_FONTHEIGHT_CTL));
+    aDefSet.Put(SvxFontHeightItem(nFontHt, 100, EE_CHAR_FONTHEIGHT_CJK));
+    aDefSet.Put(SvxFontHeightItem(nFontHt, 100, EE_CHAR_FONTHEIGHT_CTL));
 
     // copy other items from default font
-    const SfxPoolItem& rWeightItem = pDefSet->Get(EE_CHAR_WEIGHT);
+    const SfxPoolItem& rWeightItem = aDefSet.Get(EE_CHAR_WEIGHT);
     std::unique_ptr<SfxPoolItem> pNewItem(rWeightItem.Clone());
     pNewItem->SetWhich(EE_CHAR_WEIGHT_CJK);
-    pDefSet->Put(*pNewItem);
+    aDefSet.Put(*pNewItem);
     pNewItem->SetWhich(EE_CHAR_WEIGHT_CTL);
-    pDefSet->Put(*pNewItem);
-    const SfxPoolItem& rItalicItem = pDefSet->Get(EE_CHAR_ITALIC);
+    aDefSet.Put(*pNewItem);
+    const SfxPoolItem& rItalicItem = aDefSet.Get(EE_CHAR_ITALIC);
     pNewItem.reset(rItalicItem.Clone());
     pNewItem->SetWhich(EE_CHAR_ITALIC_CJK);
-    pDefSet->Put(*pNewItem);
+    aDefSet.Put(*pNewItem);
     pNewItem->SetWhich(EE_CHAR_ITALIC_CTL);
-    pDefSet->Put(*pNewItem);
-    const SfxPoolItem& rLangItem = pDefSet->Get(EE_CHAR_LANGUAGE);
+    aDefSet.Put(*pNewItem);
+    const SfxPoolItem& rLangItem = aDefSet.Get(EE_CHAR_LANGUAGE);
     pNewItem.reset(rLangItem.Clone());
     pNewItem->SetWhich(EE_CHAR_LANGUAGE_CJK);
-    pDefSet->Put(*pNewItem);
+    aDefSet.Put(*pNewItem);
     pNewItem->SetWhich(EE_CHAR_LANGUAGE_CTL);
-    pDefSet->Put(*pNewItem);
+    aDefSet.Put(*pNewItem);
 
-    mpEditEngine->SetDefaults(std::move(pDefSet));
+    mpEditEngine->SetDefaults(std::move(aDefSet));
     InvalidateGfx();
 }
 

@@ -1553,14 +1553,14 @@ void ScTextWnd::InitEditEngine()
     UpdateAutoCorrFlag();
 
     {
-        auto pSet = std::make_unique<SfxItemSet>( m_xEditEngine->GetEmptyItemSet() );
-        EditEngine::SetFontInfoInItemSet( *pSet, aTextFont );
-        lcl_ExtendEditFontAttribs( *pSet );
+        SfxItemSet aSet( m_xEditEngine->GetEmptyItemSet() );
+        EditEngine::SetFontInfoInItemSet( aSet, aTextFont );
+        lcl_ExtendEditFontAttribs( aSet );
         // turn off script spacing to match DrawText output
-        pSet->Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
+        aSet.Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
         if ( bIsRTL )
-            lcl_ModifyRTLDefaults( *pSet );
-        static_cast<ScEditEngineDefaulter*>(m_xEditEngine.get())->SetDefaults( std::move(pSet) );
+            lcl_ModifyRTLDefaults( aSet );
+        static_cast<ScEditEngineDefaulter*>(m_xEditEngine.get())->SetDefaults( std::move(aSet) );
     }
 
     // If the Cell contains URLFields, they need to be taken over into the entry row,
@@ -2117,12 +2117,12 @@ void ScTextWnd::MakeDialogEditView()
     m_xEditEngine->SetWordDelimiters( m_xEditEngine->GetWordDelimiters() + "=" );
     m_xEditEngine->SetPaperSize( Size( bIsRTL ? USHRT_MAX : THESIZE, 300 ) );
 
-    auto pSet = std::make_unique<SfxItemSet>( m_xEditEngine->GetEmptyItemSet() );
-    EditEngine::SetFontInfoInItemSet( *pSet, aTextFont );
-    lcl_ExtendEditFontAttribs( *pSet );
+    SfxItemSet aSet( m_xEditEngine->GetEmptyItemSet() );
+    EditEngine::SetFontInfoInItemSet( aSet, aTextFont );
+    lcl_ExtendEditFontAttribs( aSet );
     if ( bIsRTL )
-        lcl_ModifyRTLDefaults( *pSet );
-    static_cast<ScEditEngineDefaulter*>(m_xEditEngine.get())->SetDefaults( std::move(pSet) );
+        lcl_ModifyRTLDefaults( aSet );
+    static_cast<ScEditEngineDefaulter*>(m_xEditEngine.get())->SetDefaults( std::move(aSet) );
     m_xEditEngine->SetUpdateLayout( bPrevUpdateLayout );
 
     m_xEditView = std::make_unique<EditView>(m_xEditEngine.get(), nullptr);

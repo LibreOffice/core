@@ -498,10 +498,10 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             new ScEditEngineDefaulter(EditEngine::CreatePool().get(), true));
 
         pEditEng->SetRefMapMode(aMMMode);
-        auto pEditDefaults = std::make_unique<SfxItemSet>( pEditEng->GetEmptyItemSet() );
-        rDefPattern.FillEditItemSet(pEditDefaults.get());
-        pEditDefaults->Put(SvxColorItem(COL_LIGHTGRAY, EE_CHAR_COLOR));
-        pEditEng->SetDefaults(std::move(pEditDefaults));
+        SfxItemSet aEditDefaults( pEditEng->GetEmptyItemSet() );
+        rDefPattern.FillEditItemSet(&aEditDefaults);
+        aEditDefaults.Put(SvxColorItem(COL_LIGHTGRAY, EE_CHAR_COLOR));
+        pEditEng->SetDefaults(std::move(aEditDefaults));
 
         OUString aEmptyMsg;
         if (mbHasEmptyRangeTable)
