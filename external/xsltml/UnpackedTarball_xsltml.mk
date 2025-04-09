@@ -9,6 +9,8 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xsltml))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,xsltml,3))
+
 $(eval $(call gb_UnpackedTarball_set_tarball,xsltml,$(XSLTML_TARBALL),0))
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,xsltml,\
