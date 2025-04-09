@@ -384,7 +384,14 @@ sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, const OutputDevice&
                                pSh->GetViewOptions()->getBrowseMode() &&
                               !pSh->GetViewOptions()->IsPrtFormat() );
 
-        if ( !bBrowse && rIDSA.get(DocumentSettingId::ADD_EXT_LEADING) )
+        const bool bAddExtLeading = rIDSA.get(DocumentSettingId::ADD_EXT_LEADING);
+
+        // tdf#139418: MSO never applies ext leading to vertical text, even if the
+        // NoLeading compatibility flag is unset.
+        const bool bDisableExtLeading
+            = rIDSA.get(DocumentSettingId::MS_WORD_COMP_GRID_METRICS) && GetFont().IsVertical();
+
+        if (!bBrowse && bAddExtLeading && !bDisableExtLeading)
             nRet = m_nExtLeading;
         else
             nRet = m_nGuessedLeading;
