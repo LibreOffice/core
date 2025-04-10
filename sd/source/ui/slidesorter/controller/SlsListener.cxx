@@ -46,7 +46,6 @@
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
@@ -479,13 +478,6 @@ void SAL_CALL Listener::frameAction (const frame::FrameActionEvent& rEvent)
         default:
             break;
     }
-}
-
-//===== accessibility::XAccessibleEventListener  ==============================
-
-void SAL_CALL Listener::notifyEvent (
-    const AccessibleEventObject& )
-{
 }
 
 void Listener::disposing(std::unique_lock<std::mutex>&)

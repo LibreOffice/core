@@ -22,8 +22,8 @@
 #include <controller/SlideSorterController.hxx>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
@@ -45,7 +45,6 @@ namespace sd::slidesorter::controller {
 typedef comphelper::WeakComponentImplHelper<
     css::document::XEventListener,
     css::beans::XPropertyChangeListener,
-    css::accessibility::XAccessibleEventListener,
     css::frame::XFrameActionListener
     > ListenerInterfaceBase;
 
@@ -98,12 +97,6 @@ public:
     virtual void SAL_CALL
         propertyChange (
             const css::beans::PropertyChangeEvent& rEvent) override;
-
-    //===== accessibility::XAccessibleEventListener  ==========================
-    virtual void SAL_CALL
-        notifyEvent (
-            const css::accessibility::AccessibleEventObject&
-            rEvent) override;
 
     //===== frame::XFrameActionListener  ======================================
     /** For certain actions the listener connects to a new controller of the
