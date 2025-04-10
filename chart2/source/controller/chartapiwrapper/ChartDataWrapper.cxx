@@ -605,9 +605,9 @@ void ChartDataWrapper::initDataAccess()
     else
     {
         //create a separate "internal data provider" that is not connected to the model
-        auto xInternal = ChartModelHelper::createInternalDataProvider(
-            xChartDoc, false /*bConnectToModel*/ );
-        m_xDataAccess.set( static_cast<cppu::OWeakObject*>(xInternal.get()), uno::UNO_QUERY_THROW );
+        rtl::Reference<InternalDataProvider> xInternal
+            = new InternalDataProvider( xChartDoc, /*bConnectToModel*/false, /*bDefaultDataInColumns*/ true );
+        m_xDataAccess = xInternal;
     }
 }
 

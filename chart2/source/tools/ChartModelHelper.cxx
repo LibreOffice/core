@@ -39,41 +39,6 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-rtl::Reference< InternalDataProvider > ChartModelHelper::createInternalDataProvider(
-    const rtl::Reference<::chart::ChartModel>& xChartDoc, bool bConnectToModel )
-{
-    bool bDefaultDataInColumns(true);
-
-    // #i120559# Try to access the current state of "DataRowSource" for the
-    // chart data and use it as default for creating a new InternalDataProvider
-    if(xChartDoc.is())
-    {
-        // old XChartDocument interface
-        css::uno::Reference< css::chart::XChartDocument > xDoc(static_cast<cppu::OWeakObject*>(xChartDoc.get()), uno::UNO_QUERY);
-
-        if(xDoc.is())
-        {
-            css::uno::Reference< css::chart::XDiagram > aDiagram = xDoc->getDiagram();
-
-            if(aDiagram.is())
-            {
-                css::uno::Reference< css::beans::XPropertySet > xProp(aDiagram, uno::UNO_QUERY);
-
-                if(xProp.is())
-                {
-                    css::chart::ChartDataRowSource aDataRowSource(css::chart::ChartDataRowSource_COLUMNS);
-
-                    xProp->getPropertyValue( u"DataRowSource"_ustr ) >>= aDataRowSource;
-
-                    bDefaultDataInColumns = (aDataRowSource == css::chart::ChartDataRowSource_COLUMNS);
-                }
-            }
-        }
-    }
-
-    return new InternalDataProvider( xChartDoc, bConnectToModel, bDefaultDataInColumns );
-}
-
 rtl::Reference< BaseCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( const rtl::Reference<::chart::ChartModel>& xModel )
 {
     rtl::Reference< Diagram > xDiagram = xModel->getFirstChartDiagram();

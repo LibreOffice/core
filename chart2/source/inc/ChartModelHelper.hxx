@@ -36,9 +36,6 @@ class InternalDataProvider;
 class ChartModelHelper
 {
 public:
-    static rtl::Reference< InternalDataProvider > createInternalDataProvider(
-            const rtl::Reference<::chart::ChartModel>& xChartDoc, bool bConnectToModel );
-
     static rtl::Reference< ::chart::BaseCoordinateSystem >
         getFirstCoordinateSystem( const rtl::Reference<::chart::ChartModel>& xModel );
 
