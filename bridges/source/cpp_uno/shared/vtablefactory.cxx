@@ -282,18 +282,25 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
         }
         unlink(tmpfname.get());
         tmpfname.reset();
+
+        int err;
 #if defined(HAVE_POSIX_FALLOCATE)
-        int err = posix_fallocate(block.fd, 0, block.size);
-#else
-        int err = ftruncate(block.fd, block.size);
+        /*
+         * configure may have detected posix_fallocate() is available,
+         * while the underlying filesystem does not implement it. In
+         * this case, posix_fallocate() will fail with EOPNOTSUPP
+         * (at least on NetBSD), and we must fallback to ftruncate().
+         */
+        err = posix_fallocate(block.fd, 0, block.size);
+        if (err == EOPNOTSUPP)
 #endif
+        {
+            err = ftruncate(block.fd, block.size);
+        }
+
         if (err != 0)
         {
-#if defined(HAVE_POSIX_FALLOCATE)
-            SAL_WARN("bridges", "posix_fallocate failed with code " << err);
-#else
             SAL_WARN("bridges", "truncation of executable memory area failed with code " << err);
-#endif
             close(block.fd);
             block.fd = -1;
             break;
