@@ -36,37 +36,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-/**
- The listener is an internal class to prevent reference-counting cycles and therefore memory leaks.
-*/
-typedef cppu::WeakComponentImplHelper<
-                css::accessibility::XAccessibleEventListener
-                > ScAccessibleContextBaseEventListenerWeakImpl;
-class ScAccessibleContextBase::ScAccessibleContextBaseEventListener : public cppu::BaseMutex, public ScAccessibleContextBaseEventListenerWeakImpl
-{
-public:
-    ScAccessibleContextBaseEventListener(ScAccessibleContextBase& rBase)
-        : ScAccessibleContextBaseEventListenerWeakImpl(m_aMutex), mrBase(rBase) {}
-
-    using WeakComponentImplHelperBase::disposing;
-
-    ///=====  XAccessibleEventListener  ========================================
-
-    virtual void SAL_CALL disposing( const lang::EventObject& rSource ) override
-    {
-        SolarMutexGuard aGuard;
-        if (rSource.Source == mrBase.mxParent)
-            dispose();
-    }
-
-    virtual void SAL_CALL
-        notifyEvent(
-        const css::accessibility::AccessibleEventObject& /*aEvent*/ ) override {}
-private:
-    ScAccessibleContextBase& mrBase;
-};
-
-
 ScAccessibleContextBase::ScAccessibleContextBase(
                                                  uno::Reference<XAccessible> xParent,
                                                  const sal_Int16 aRole)
@@ -94,16 +63,6 @@ void ScAccessibleContextBase::Init()
     // hold reference to make sure that the destructor is not called
     uno::Reference< XAccessibleContext > xKeepAlive(this);
 
-    if (mxParent.is())
-    {
-        uno::Reference< XAccessibleEventBroadcaster > xBroadcaster (mxParent->getAccessibleContext(), uno::UNO_QUERY);
-        if (xBroadcaster.is())
-        {
-            if (!mxEventListener)
-                mxEventListener = new ScAccessibleContextBaseEventListener(*this);
-            xBroadcaster->addAccessibleEventListener(mxEventListener);
-        }
-    }
     msName = createAccessibleName();
     msDescription = createAccessibleDescription();
 }
@@ -123,13 +82,7 @@ void SAL_CALL ScAccessibleContextBase::disposing()
         comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nTemClientId, *this );
     }
 
-    if (mxParent.is())
-    {
-        uno::Reference< XAccessibleEventBroadcaster > xBroadcaster (mxParent->getAccessibleContext(), uno::UNO_QUERY);
-        if (xBroadcaster && mxEventListener)
-            xBroadcaster->removeAccessibleEventListener(mxEventListener);
-        mxParent = nullptr;
-    }
+    mxParent.clear();
 }
 
 

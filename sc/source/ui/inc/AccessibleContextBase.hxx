@@ -53,7 +53,6 @@ class ScAccessibleContextBase
         public ScAccessibleContextBaseWeakImpl,
         public SfxListener
 {
-class ScAccessibleContextBaseEventListener;
 
 public:
     //=====  internal  ========================================================
@@ -238,8 +237,6 @@ private:
     /** This is the role of this object.
     */
     sal_Int16 maRole;
-
-    rtl::Reference<ScAccessibleContextBaseEventListener> mxEventListener;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
