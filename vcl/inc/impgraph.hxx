@@ -145,7 +145,6 @@ private:
     bool isAvailable() const;
     bool makeAvailable();
 
-    Bitmap              getBitmap(const GraphicConversionParameters& rParameters) const;
     BitmapEx            getBitmapEx(const GraphicConversionParameters& rParameters) const;
     /// Gives direct access to the contained BitmapEx.
     const BitmapEx&     getBitmapExRef() const;
@@ -189,6 +188,8 @@ private:
     bool swapOutContent(SvStream& rStream);
     bool swapOutGraphic(SvStream& rStream);
     // end swapping
+
+    Bitmap getBitmap(const GraphicConversionParameters& rParameters) const;
 
     void                setDummyContext( bool value ) { mbDummyContext = value; }
     bool                isDummyContext() const { return mbDummyContext; }
