@@ -3073,12 +3073,18 @@ void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos
             {
                 UErrorCode nErr(U_ZERO_ERROR);
                 icu::UnicodeString sInput(sToken.getStr());
-                // remove < and > around cell references, e.g. <A1> to A1, <A1:B2> to A1:B2
+                // replace < and > around cell references with parentheses
+                // e.g. "<A1>" to "(A1)", "<A1:B2>" to "(A1:B2)"
                 icu::RegexMatcher aMatcher("<([A-Z]{1,3}[0-9]+(:[A-Z]{1,3}[0-9]+)?)>", sInput, 0, nErr);
-                sInput = aMatcher.replaceAll(icu::UnicodeString("$1"), nErr);
+                sInput = aMatcher.replaceAll(icu::UnicodeString("($1)"), nErr);
+
+                // In case the parenthesis has been doubled in the previous replaceAll, remove one of them
+                icu::RegexMatcher aMatcher2("[(]([(][A-Z]{1,3}[0-9]+(:[A-Z]{1,3}[0-9]+)?[)])[)]", sInput, 0, nErr);
+                sInput = aMatcher2.replaceAll(icu::UnicodeString("$1"), nErr);
+
                 // convert MEAN to AVERAGE
-                icu::RegexMatcher aMatcher2("\\bMEAN\\b", sInput, UREGEX_CASE_INSENSITIVE, nErr);
-                sToken = aMatcher2.replaceAll(icu::UnicodeString("AVERAGE"), nErr).getTerminatedBuffer();
+                icu::RegexMatcher aMatcher3("\\bMEAN\\b", sInput, UREGEX_CASE_INSENSITIVE, nErr);
+                sToken = aMatcher3.replaceAll(icu::UnicodeString("AVERAGE"), nErr).getTerminatedBuffer();
             }
         }
 
