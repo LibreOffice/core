@@ -273,8 +273,6 @@ protected:
     */
     virtual OUString CreateAccessibleName();
 
-    void FireEvent (const css::accessibility::AccessibleEventObject& aEvent);
-
     /** Check whether or not the object has been disposed (or is in the
         state of being disposed).  If that is the case then
         DisposedException is thrown to inform the (indirect) caller of the

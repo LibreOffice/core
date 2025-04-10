@@ -451,13 +451,6 @@ void AccessibleContextBase::CommitChange (
     NotifyAccessibleEvent(nEventId, rOldValue, rNewValue, nValueIndex);
 }
 
-
-void AccessibleContextBase::FireEvent (const AccessibleEventObject& aEvent)
-{
-    NotifyAccessibleEvent(aEvent.EventId, aEvent.OldValue, aEvent.NewValue, aEvent.IndexHint);
-}
-
-
 void AccessibleContextBase::ThrowIfDisposed()
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)

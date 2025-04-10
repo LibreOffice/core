@@ -423,7 +423,8 @@ void SAL_CALL AccessibleControlShape::notifyEvent( const AccessibleEventObject& 
             m_pChildManager->handleChildNotification( _rEvent );
         }
 
-        FireEvent( aTranslatedEvent );
+        NotifyAccessibleEvent(_rEvent.EventId, _rEvent.OldValue, _rEvent.NewValue,
+                              _rEvent.IndexHint);
     }
 }
 
