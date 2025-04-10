@@ -52,6 +52,8 @@ public:
     }
 
     sal_uInt32 getLoopCount() { return maAnimation.GetLoopCount(); }
+
+    BitmapChecksum getChecksum() const { return maAnimation.GetChecksum(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

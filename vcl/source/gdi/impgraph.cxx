@@ -797,37 +797,40 @@ Size ImpGraphic::getPrefSize() const
         {
             case GraphicType::Bitmap:
             {
-                if (maVectorGraphicData && maCachedBitmap.IsEmpty())
+                if (maVectorGraphicData)
                 {
-                    if (!maExPrefSize.getWidth() || !maExPrefSize.getHeight())
+                    if (maCachedBitmap.IsEmpty())
                     {
-                        // svg not yet buffered in maBitmapEx, return size derived from range
-                        const basegfx::B2DRange& rRange = maVectorGraphicData->getRange();
+                        if (!maExPrefSize.getWidth() || !maExPrefSize.getHeight())
+                        {
+                            // svg not yet buffered in maBitmapEx, return size derived from range
+                            const basegfx::B2DRange& rRange = maVectorGraphicData->getRange();
 
-#ifdef MACOSX
-                        // tdf#157680 scale down estimated size of embedded PDF
-                        // For some unknown reason, the embedded PDF sizes
-                        // are 20x larger than expected. This only occurs on
-                        // macOS so possibly there is some special conversion
-                        // from MapUnit::MapPoint to MapUnit::MapTwip elsewhere
-                        // in the code.
-                        if (maVectorGraphicData->getType() == VectorGraphicDataType::Pdf)
-                            aSize = Size(basegfx::fround(rRange.getWidth() / 20.0f), basegfx::fround(rRange.getHeight() / 20.0f));
+    #ifdef MACOSX
+                            // tdf#157680 scale down estimated size of embedded PDF
+                            // For some unknown reason, the embedded PDF sizes
+                            // are 20x larger than expected. This only occurs on
+                            // macOS so possibly there is some special conversion
+                            // from MapUnit::MapPoint to MapUnit::MapTwip elsewhere
+                            // in the code.
+                            if (maVectorGraphicData->getType() == VectorGraphicDataType::Pdf)
+                                aSize = Size(basegfx::fround(rRange.getWidth() / 20.0f), basegfx::fround(rRange.getHeight() / 20.0f));
+                            else
+    #endif
+                                aSize = Size(basegfx::fround<tools::Long>(rRange.getWidth()), basegfx::fround<tools::Long>(rRange.getHeight()));
+                        }
                         else
-#endif
-                            aSize = Size(basegfx::fround<tools::Long>(rRange.getWidth()), basegfx::fround<tools::Long>(rRange.getHeight()));
+                        {
+                            aSize = maExPrefSize;
+                        }
                     }
                     else
                     {
-                        aSize = maExPrefSize;
-                    }
-                }
-                else if (maVectorGraphicData)
-                {
-                    aSize = maCachedBitmap.GetPrefSize();
+                        aSize = maCachedBitmap.GetPrefSize();
 
-                    if (!aSize.Width() || !aSize.Height())
-                        aSize = maCachedBitmap.GetSizePixel();
+                        if (!aSize.Width() || !aSize.Height())
+                            aSize = maCachedBitmap.GetSizePixel();
+                    }
                 }
                 else if (mpBitmapContainer)
                 {
@@ -915,10 +918,19 @@ MapMode ImpGraphic::getPrefMapMode() const
         {
             case GraphicType::Bitmap:
             {
-                if (maVectorGraphicData && maCachedBitmap.IsEmpty())
+                if (maVectorGraphicData)
                 {
-                    // svg not yet buffered in maBitmapEx, return default PrefMapMode
-                    aMapMode = MapMode(MapUnit::Map100thMM);
+                    if (maCachedBitmap.IsEmpty())
+                    {
+                        // svg not yet buffered in maBitmapEx, return default PrefMapMode
+                        aMapMode = MapMode(MapUnit::Map100thMM);
+                    }
+                    else
+                    {
+                        const Size aSize = maCachedBitmap.GetPrefSize();
+                        if (aSize.Width() && aSize.Height())
+                            aMapMode = maCachedBitmap.GetPrefMapMode();
+                    }
                 }
                 else if (mpBitmapContainer)
                 {
@@ -927,12 +939,6 @@ MapMode ImpGraphic::getPrefMapMode() const
                 else if (mpAnimationContainer)
                 {
                     aMapMode = mpAnimationContainer->getPrefMapMode();
-                }
-                else
-                {
-                    const Size aSize = maCachedBitmap.GetPrefSize();
-                    if (aSize.Width() && aSize.Height())
-                        aMapMode = maCachedBitmap.GetPrefMapMode();
                 }
             }
             break;
@@ -1065,11 +1071,13 @@ void ImpGraphic::draw(OutputDevice& rOutDev,
             {
                 mpAnimationContainer->maAnimation.Draw(rOutDev, rDestPt, rDestSize);
             }
-            else
+            else if (mpBitmapContainer)
             {
-                if (maVectorGraphicData)
-                    updateBitmapFromVectorGraphic(rOutDev.LogicToPixel(rDestSize));
-
+                mpBitmapContainer->getBitmapExRef().Draw(&rOutDev, rDestPt, rDestSize);
+            }
+            else if (maVectorGraphicData)
+            {
+                updateBitmapFromVectorGraphic(rOutDev.LogicToPixel(rDestSize));
                 getBitmapExRef().Draw(&rOutDev, rDestPt, rDestSize);
             }
         }
@@ -1746,9 +1754,9 @@ BitmapChecksum ImpGraphic::getChecksum() const
             if (maVectorGraphicData)
                 mnChecksum = maVectorGraphicData->GetChecksum();
             else if (mpAnimationContainer)
-                mnChecksum = mpAnimationContainer->maAnimation.GetChecksum();
+                mnChecksum = mpAnimationContainer->getChecksum();
             else if (mpBitmapContainer)
-                mnChecksum = mpBitmapContainer->maBitmapEx.GetChecksum();
+                mnChecksum = mpBitmapContainer->getChecksum();
         }
         break;
 

@@ -51,6 +51,8 @@ public:
     }
 
     sal_uInt64 getSizeBytes() { return maBitmapEx.GetSizeBytes(); }
+
+    BitmapChecksum getChecksum() const { return maBitmapEx.GetChecksum(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
