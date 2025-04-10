@@ -220,7 +220,7 @@ void AccessibleDocumentViewBase::ViewForwarderChanged()
 Reference<XAccessible> SAL_CALL
        AccessibleDocumentViewBase::getAccessibleParent()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
 
     return AccessibleContextBase::getAccessibleParent();
 }
@@ -228,7 +228,7 @@ Reference<XAccessible> SAL_CALL
 sal_Int64 SAL_CALL
     AccessibleDocumentViewBase::getAccessibleChildCount()
 {
-    ThrowIfDisposed ();
+    ensureAlive ();
 
     if (mxAccessibleOLEObject.is())
         return 1;
@@ -239,7 +239,7 @@ sal_Int64 SAL_CALL
 Reference<XAccessible> SAL_CALL
     AccessibleDocumentViewBase::getAccessibleChild (sal_Int64 nIndex)
 {
-    ThrowIfDisposed ();
+    ensureAlive();
 
     ::osl::MutexGuard aGuard (m_aMutex);
     if (mxAccessibleOLEObject.is())
@@ -259,7 +259,7 @@ uno::Reference<XAccessible > SAL_CALL
     AccessibleDocumentViewBase::getAccessibleAtPoint (
         const awt::Point& aPoint)
 {
-    ThrowIfDisposed ();
+    ensureAlive();
 
     ::osl::MutexGuard aGuard (m_aMutex);
     uno::Reference<XAccessible> xChildAtPosition;
@@ -369,7 +369,7 @@ OUString SAL_CALL
 css::uno::Sequence< OUString> SAL_CALL
     AccessibleDocumentViewBase::getSupportedServiceNames()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     return AccessibleContextBase::getSupportedServiceNames ();
 }
 
@@ -430,7 +430,7 @@ void AccessibleDocumentViewBase::impl_dispose()
 void SAL_CALL
     AccessibleDocumentViewBase::disposing (const lang::EventObject& rEventObject)
 {
-    ThrowIfDisposed ();
+    ensureAlive();
 
     // Register this object as dispose event and document::XEventListener
     // listener at the model.
@@ -494,14 +494,14 @@ void SAL_CALL
 
 void AccessibleDocumentViewBase::focusGained (const css::awt::FocusEvent& e)
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     if (e.Source == mxWindow)
         Activated ();
 }
 
 void AccessibleDocumentViewBase::focusLost (const css::awt::FocusEvent& e)
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     if (e.Source == mxWindow)
         Deactivated ();
 }
@@ -708,7 +708,7 @@ sal_Int32 SAL_CALL AccessibleDocumentViewBase::getForeground(  )
 
 sal_Int32 SAL_CALL AccessibleDocumentViewBase::getBackground(  )
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     ::osl::MutexGuard aGuard (m_aMutex);
     return sal_Int32(mpViewShell->GetView()->getColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor);
 }

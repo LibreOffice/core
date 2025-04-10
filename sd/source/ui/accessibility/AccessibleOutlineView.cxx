@@ -96,7 +96,7 @@ void AccessibleOutlineView::ViewForwarderChanged()
 sal_Int64 SAL_CALL
     AccessibleOutlineView::getAccessibleChildCount()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
 
     // forward
     return maTextHelper.GetChildCount();
@@ -105,7 +105,7 @@ sal_Int64 SAL_CALL
 uno::Reference<XAccessible> SAL_CALL
     AccessibleOutlineView::getAccessibleChild (sal_Int64 nIndex)
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     // Forward request to children manager.
     return maTextHelper.GetChild(nIndex);
 }
@@ -196,7 +196,7 @@ void SAL_CALL AccessibleOutlineView::disposing()
 void SAL_CALL
     AccessibleOutlineView::propertyChange (const beans::PropertyChangeEvent& rEventObject)
 {
-    ThrowIfDisposed ();
+    ensureAlive();
 
     AccessibleDocumentViewBase::propertyChange (rEventObject);
 

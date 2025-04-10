@@ -186,7 +186,7 @@ rtl::Reference<AccessiblePageShape> AccessibleDrawDocumentView::CreateDrawPageSh
 sal_Int64 SAL_CALL
     AccessibleDrawDocumentView::getAccessibleChildCount()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
 
     sal_Int64 nChildCount = AccessibleDocumentViewBase::getAccessibleChildCount();
 
@@ -200,7 +200,7 @@ sal_Int64 SAL_CALL
 uno::Reference<XAccessible> SAL_CALL
     AccessibleDrawDocumentView::getAccessibleChild (sal_Int64 nIndex)
 {
-    ThrowIfDisposed ();
+    ensureAlive();
 
     ::osl::ClearableMutexGuard aGuard (m_aMutex);
 
@@ -268,7 +268,7 @@ OUString SAL_CALL
 void SAL_CALL
     AccessibleDrawDocumentView::disposing (const lang::EventObject& rEventObject)
 {
-    ThrowIfDisposed ();
+    ensureAlive();
 
     AccessibleDocumentViewBase::disposing (rEventObject);
     if (rEventObject.Source == mxModel)
@@ -285,7 +285,7 @@ void SAL_CALL
 void SAL_CALL
     AccessibleDrawDocumentView::propertyChange (const beans::PropertyChangeEvent& rEventObject)
 {
-    ThrowIfDisposed ();
+    ensureAlive();
 
     AccessibleDocumentViewBase::propertyChange (rEventObject);
 
@@ -381,7 +381,7 @@ OUString SAL_CALL
 css::uno::Sequence< OUString> SAL_CALL
     AccessibleDrawDocumentView::getSupportedServiceNames()
 {
-    ThrowIfDisposed();
+    ensureAlive();
     const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleDrawDocumentView"_ustr };
     uno::Sequence<OUString> aServiceNames =
         AccessibleDocumentViewBase::getSupportedServiceNames();

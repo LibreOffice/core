@@ -110,7 +110,7 @@ OUString SAL_CALL
 css::uno::Sequence< OUString> SAL_CALL
     AccessibleOLEShape::getSupportedServiceNames()
 {
-    ThrowIfDisposed();
+    ensureAlive();
     const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleOLEShape"_ustr };
     return comphelper::concatSequences(AccessibleShape::getSupportedServiceNames(), vals);
 }

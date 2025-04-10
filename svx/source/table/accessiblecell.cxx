@@ -131,7 +131,7 @@ bool AccessibleCell::ResetState (sal_Int64 aState)
 sal_Int64 SAL_CALL AccessibleCell::getAccessibleChildCount()
 {
     SolarMutexGuard aSolarGuard;
-    ThrowIfDisposed ();
+    ensureAlive();
     return mpText != nullptr ? mpText->GetChildCount () : 0;
 }
 
@@ -142,7 +142,7 @@ sal_Int64 SAL_CALL AccessibleCell::getAccessibleChildCount()
 Reference<XAccessible> SAL_CALL AccessibleCell::getAccessibleChild (sal_Int64 nIndex)
 {
     SolarMutexGuard aSolarGuard;
-    ThrowIfDisposed ();
+    ensureAlive();
 
     return mpText->GetChild (nIndex);
 }
@@ -288,7 +288,7 @@ css::awt::Rectangle AccessibleCell::implGetBounds()
 
 sal_Int32 SAL_CALL AccessibleCell::getForeground()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
 
     // todo
     return sal_Int32(0x0ffffffL);
@@ -297,7 +297,7 @@ sal_Int32 SAL_CALL AccessibleCell::getForeground()
 
 sal_Int32 SAL_CALL AccessibleCell::getBackground()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
 
     // todo
     return 0;
@@ -335,7 +335,7 @@ OUString SAL_CALL AccessibleCell::getImplementationName()
 
 Sequence<OUString> SAL_CALL AccessibleCell::getSupportedServiceNames()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleCell"_ustr };
     return comphelper::concatSequences(AccessibleContextBase::getSupportedServiceNames(), vals);
 }
@@ -385,7 +385,7 @@ void AccessibleCell::disposing()
 
 sal_Int64 SAL_CALL AccessibleCell::getAccessibleIndexInParent()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     return mnIndexInParent;
 }
 
@@ -429,7 +429,7 @@ OUString AccessibleCell::getCellName( sal_Int32 nCol, sal_Int32 nRow )
 
 OUString SAL_CALL AccessibleCell::getAccessibleName()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     SolarMutexGuard aSolarGuard;
 
     if( pAccTable )

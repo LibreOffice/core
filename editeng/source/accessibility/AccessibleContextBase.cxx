@@ -176,7 +176,7 @@ sal_Int64 SAL_CALL
 uno::Reference<XAccessible> SAL_CALL
     AccessibleContextBase::getAccessibleChild (sal_Int64 nIndex)
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     throw lang::IndexOutOfBoundsException (
         "no child with index " + OUString::number(nIndex),
         nullptr);
@@ -186,7 +186,7 @@ uno::Reference<XAccessible> SAL_CALL
 uno::Reference<XAccessible> SAL_CALL
        AccessibleContextBase::getAccessibleParent()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     return mxParent;
 }
 
@@ -194,7 +194,7 @@ uno::Reference<XAccessible> SAL_CALL
 sal_Int64 SAL_CALL
        AccessibleContextBase::getAccessibleIndexInParent()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     //  Use a simple but slow solution for now.  Optimize later.
 
     //  Iterate over all the parent's children and search for this object.
@@ -229,7 +229,7 @@ sal_Int64 SAL_CALL
 sal_Int16 SAL_CALL
     AccessibleContextBase::getAccessibleRole()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     return maRole;
 }
 
@@ -237,7 +237,7 @@ sal_Int16 SAL_CALL
 OUString SAL_CALL
        AccessibleContextBase::getAccessibleDescription()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
 
     return msDescription;
 }
@@ -246,7 +246,7 @@ OUString SAL_CALL
 OUString SAL_CALL
        AccessibleContextBase::getAccessibleName()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
 
     if (meNameOrigin == NotSet)
     {
@@ -265,7 +265,7 @@ OUString SAL_CALL
 uno::Reference<XAccessibleRelationSet> SAL_CALL
        AccessibleContextBase::getAccessibleRelationSet()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
 
     // Create a copy of the relation set and return it.
     if (mxRelationSet)
@@ -302,7 +302,7 @@ sal_Int64 SAL_CALL
 lang::Locale SAL_CALL
        AccessibleContextBase::getLocale()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     // Delegate request to parent.
     if (mxParent.is())
     {
@@ -450,16 +450,6 @@ void AccessibleContextBase::CommitChange (
 {
     NotifyAccessibleEvent(nEventId, rOldValue, rNewValue, nValueIndex);
 }
-
-void AccessibleContextBase::ThrowIfDisposed()
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        throw lang::DisposedException (u"object has been already disposed"_ustr,
-            getXWeak());
-    }
-}
-
 
 bool AccessibleContextBase::IsDisposed() const
 {

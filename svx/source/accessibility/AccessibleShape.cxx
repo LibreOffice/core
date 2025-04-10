@@ -277,7 +277,7 @@ bool AccessibleShape::GetState (sal_Int64 aState)
 // OverWrite the parent's getAccessibleName method
 OUString SAL_CALL AccessibleShape::getAccessibleName()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     if (m_pShape && !m_pShape->GetTitle().isEmpty())
         return CreateAccessibleName() + " " + m_pShape->GetTitle();
     else
@@ -286,7 +286,7 @@ OUString SAL_CALL AccessibleShape::getAccessibleName()
 
 OUString SAL_CALL AccessibleShape::getAccessibleDescription()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     if( m_pShape && !m_pShape->GetDescription().isEmpty())
         return m_pShape->GetDescription() ;
 
@@ -324,7 +324,7 @@ sal_Int64 SAL_CALL
 uno::Reference<XAccessible> SAL_CALL
     AccessibleShape::getAccessibleChild (sal_Int64 nIndex)
 {
-    ThrowIfDisposed ();
+    ensureAlive();
 
     uno::Reference<XAccessible> xChild;
 
@@ -572,7 +572,7 @@ awt::Rectangle AccessibleShape::implGetBounds()
 
 sal_Int32 SAL_CALL AccessibleShape::getForeground()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     sal_Int32 nColor (0x0ffffffL);
 
     try
@@ -595,7 +595,7 @@ sal_Int32 SAL_CALL AccessibleShape::getForeground()
 
 sal_Int32 SAL_CALL AccessibleShape::getBackground()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     Color nColor;
 
     try
@@ -792,7 +792,7 @@ OUString SAL_CALL
 uno::Sequence<OUString> SAL_CALL
     AccessibleShape::getSupportedServiceNames()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleShape"_ustr };
     return comphelper::concatSequences(AccessibleContextBase::getSupportedServiceNames(), vals);
 }
@@ -801,7 +801,7 @@ uno::Sequence<OUString> SAL_CALL
 uno::Sequence<uno::Type> SAL_CALL
     AccessibleShape::getTypes()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     // Get list of types from the context base implementation, ...
     uno::Sequence<uno::Type> aTypeList (AccessibleContextBase::getTypes());
     // ... define local types
@@ -975,7 +975,7 @@ void AccessibleShape::disposing()
 sal_Int64 SAL_CALL
        AccessibleShape::getAccessibleIndexInParent()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     //  Use a simple but slow solution for now.  Optimize later.
 
     sal_Int64 nIndex = m_nIndexInParent;

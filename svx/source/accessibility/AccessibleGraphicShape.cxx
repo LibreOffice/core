@@ -103,7 +103,7 @@ OUString SAL_CALL
 css::uno::Sequence< OUString> SAL_CALL
     AccessibleGraphicShape::getSupportedServiceNames()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleGraphicShape"_ustr };
     return comphelper::concatSequences(AccessibleShape::getSupportedServiceNames(), vals);
 }

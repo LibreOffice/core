@@ -273,14 +273,6 @@ protected:
     */
     virtual OUString CreateAccessibleName();
 
-    /** Check whether or not the object has been disposed (or is in the
-        state of being disposed).  If that is the case then
-        DisposedException is thrown to inform the (indirect) caller of the
-        foul deed.
-        @throws css::lang::DisposedException
-    */
-    void ThrowIfDisposed();
-
     /** sets the role as returned by XaccessibleContext::getAccessibleRole
 
         <p>Caution: This is only to be used in the construction phase (means within

@@ -136,7 +136,7 @@ awt::Rectangle AccessiblePageShape::implGetBounds()
 
 sal_Int32 SAL_CALL AccessiblePageShape::getForeground()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     sal_Int32 nColor (0x0ffffffL);
 
     try
@@ -160,7 +160,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getForeground()
 */
 sal_Int32 SAL_CALL AccessiblePageShape::getBackground()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     sal_Int32 nColor (0x01020ffL);
 
     try
@@ -206,14 +206,14 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground()
 OUString SAL_CALL
     AccessiblePageShape::getImplementationName()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     return u"AccessiblePageShape"_ustr;
 }
 
 css::uno::Sequence< OUString> SAL_CALL
     AccessiblePageShape::getSupportedServiceNames()
 {
-    ThrowIfDisposed ();
+    ensureAlive();
     return AccessibleShape::getSupportedServiceNames();
 }
 

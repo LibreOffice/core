@@ -401,7 +401,7 @@ sal_Int64 SAL_CALL AccessibleTableShape::getAccessibleChildCount( )
 Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleChild( sal_Int64 i )
 {
     SolarMutexGuard aSolarGuard;
-    ThrowIfDisposed();
+    ensureAlive();
 
     return mxImpl->getAccessibleChild( i );
 }
