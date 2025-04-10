@@ -29,7 +29,6 @@
 #include <basecontainercontrol.hxx>
 
 namespace com::sun::star::awt { class XFixedText; }
-namespace com::sun::star::awt { class XControlModel; }
 
 namespace unocontrols {
 

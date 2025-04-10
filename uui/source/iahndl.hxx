@@ -41,9 +41,6 @@ namespace com::sun::star {
     namespace embed {
         class XStorage;
     }
-    namespace lang {
-        class XMultiServiceFactory;
-    }
     namespace security {
         struct DocumentSignatureInformation;
     }

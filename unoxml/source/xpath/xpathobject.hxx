@@ -34,10 +34,6 @@
 
 #include "../dom/document.hxx"
 
-namespace DOM {
-    class CDocument;
-}
-
 namespace XPath
 {
     class CXPathObject : public cppu::WeakImplHelper< css::xml::xpath::XXPathObject >

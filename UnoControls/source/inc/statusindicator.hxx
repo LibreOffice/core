@@ -25,11 +25,7 @@
 #include <tools/color.hxx>
 #include <basecontainercontrol.hxx>
 
-namespace com::sun::star::awt { class XControlModel; }
 namespace com::sun::star::awt { class XFixedText; }
-namespace com::sun::star::awt { class XGraphics; }
-namespace com::sun::star::awt { class XToolkit; }
-namespace com::sun::star::awt { class XWindowPeer; }
 
 namespace unocontrols {
 

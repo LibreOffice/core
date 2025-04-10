@@ -22,11 +22,6 @@
 
 namespace vcl
 {
-class OpenLockedQueryBox;
-}
-
-namespace vcl
-{
 class OpenLockedQueryBox final : public weld::GenericDialogController
 {
 public:

@@ -32,8 +32,6 @@
 
 namespace DOM
 {
-    class CElement;
-
     class CAttributesMap
         : public cppu::WeakImplHelper< css::xml::dom::XNamedNodeMap >
     {

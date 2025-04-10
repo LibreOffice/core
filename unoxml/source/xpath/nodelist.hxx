@@ -34,10 +34,6 @@
 
 #include <memory>
 
-namespace DOM {
-    class CDocument;
-}
-
 namespace XPath
 {
 

@@ -29,8 +29,6 @@
 
 namespace DOM
 {
-    class CDocumentType;
-
     class CEntitiesMap
         : public cppu::WeakImplHelper< css::xml::dom::XNamedNodeMap >
     {

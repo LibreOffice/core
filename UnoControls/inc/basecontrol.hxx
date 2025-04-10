@@ -30,10 +30,6 @@
 #include <rtl/ref.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
-namespace com::sun::star::awt { class XFocusListener; }
-namespace com::sun::star::awt { class XMouseListener; }
-namespace com::sun::star::awt { class XMouseMotionListener; }
-namespace com::sun::star::awt { struct PaintEvent; }
 namespace com::sun::star::awt { struct WindowEvent; }
 namespace unocontrols { class OMRCListenerMultiplexerHelper; }
 

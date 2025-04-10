@@ -32,8 +32,6 @@
 
 namespace DOM
 {
-    class CNode;
-
     class CChildList
         : public cppu::WeakImplHelper< css::xml::dom::XNodeList >
     {

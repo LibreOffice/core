@@ -23,8 +23,6 @@
 #include <cppuhelper/weak.hxx>
 #include <comphelper/multicontainer2.hxx>
 
-namespace com::sun::star::lang { class XConnectionPoint; }
-
 namespace unocontrols {
 
 class OConnectionPointContainerHelper final :   public  css::lang::XConnectionPointContainer

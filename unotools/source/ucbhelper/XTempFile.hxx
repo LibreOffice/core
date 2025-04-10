@@ -34,7 +34,6 @@
 namespace com::sun::star::uno { class XComponentContext; }
 
 class SvStream;
-namespace utl { class TempFile; }
 
 
 typedef ::cppu::WeakImplHelper< css::io::XTempFile
