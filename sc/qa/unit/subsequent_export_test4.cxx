@@ -2176,6 +2176,38 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf165655)
     CPPUNIT_ASSERT_EQUAL(3, aNodes);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf165886)
+{
+    createScDoc("xlsx/tdf165886.xlsx");
+
+    save(u"Calc Office Open XML"_ustr);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[1]/x:f", u"“");
+    // Without the accompanying fix in place, this test would have failed with
+    // - Expected: OR(D1=0,D1<>““)
+    // - Actual  : OR(D1=0,D1<>““))
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[2]/x:f", u"OR(D1=0,D1<>““)");
+    // Similarly
+    // - Expected: OR(E1=0,E1<>“)
+    // - Actual  : OR(E1=0,E1<>“))
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[3]/x:f", u"OR(E1=0,E1<>“)");
+    // Similarly
+    // - Expected: OR(D2=0,D2<>””)
+    // - Actual  : OR(D2=0,D2<>””))
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[2]/x:c[2]/x:f", u"OR(D2=0,D2<>””)");
+    // Similarly
+    // - Expected: OR(D3=0,D3<>‘‘)
+    // - Actual  : OR(D3=0,D3<>‘‘))
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[2]/x:f", u"OR(D3=0,D3<>‘‘)");
+    // Similarly
+    // - Expected: OR(D4=0,D4<>’’)
+    // - Actual  : OR(D4=0,D4<>’’))
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[4]/x:c[2]/x:f", u"OR(D4=0,D4<>’’)");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
