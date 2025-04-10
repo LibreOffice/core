@@ -1099,7 +1099,7 @@ bool xpdf_ImportFromFile(const OUString& rURL,
         {
             OStringBuffer aBuf(256);
             // Password lines are Pmypassword\n followed by "O\n" to try to open
-            aBuf = "P" + OUStringToOString(aPwd, RTL_TEXTENCODING_UTF8) + "\nO\n";
+            aBuf = "P" + OUStringToOString(aPwd, RTL_TEXTENCODING_ISO_8859_1) + "\nO\n";
 
             osl_writeFile(pIn, aBuf.getStr(), sal_uInt64(aBuf.getLength()), &nWritten);
 
