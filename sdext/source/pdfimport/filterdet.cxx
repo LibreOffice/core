@@ -770,7 +770,7 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
                                                                                    RTL_TEXTENCODING_ISO_8859_1 );
                                     bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd );
                                 }
-                                if( ! bAuthenticated )
+                                else
                                 {
                                     uno::Reference< task::XInteractionHandler > xIntHdl;
                                     for( const beans::PropertyValue& rAttrib : rFilterData )

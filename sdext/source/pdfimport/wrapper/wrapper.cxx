@@ -1027,6 +1027,7 @@ bool xpdf_ImportFromFile(const OUString& rURL,
                          const uno::Reference<uno::XComponentContext>& xContext,
                          const OUString& rFilterOptions)
 {
+    bool bPasswordOnEntry = !rPwd.isEmpty();
     OSL_ASSERT(rSink);
 
     OUString aSysUPath;
@@ -1133,14 +1134,18 @@ bool xpdf_ImportFromFile(const OUString& rURL,
                     break;
                 }
 
-                // Must be a failure to decrypt, prompt for a password
-                bEntered = getPassword(xIHdl, aPwd, !bEntered, aDocName);
-                if (!bEntered)
+                // Must be a failure to decrypt, prompt for a password unless we've
+                // already got one (e.g. if the hybrid detect prompted for one)
+                if (!bPasswordOnEntry)
                 {
-                    // User cancelled password input
-                    SAL_INFO("sdext.pdfimport", "User cancelled password input");
-                    bRet = false;
-                    break;
+                    bEntered = getPassword(xIHdl, aPwd, !bEntered, aDocName);
+                    if (!bEntered)
+                    {
+                        // User cancelled password input
+                        SAL_INFO("sdext.pdfimport", "User cancelled password input");
+                        bRet = false;
+                        break;
+                    }
                 }
 
                 // user entered a password, just loop around again
