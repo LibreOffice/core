@@ -24,13 +24,6 @@
 
 namespace com::sun::star {
     namespace container { class XNameAccess; }
-    namespace frame { class XModel; }
-    namespace lang { class XMultiServiceFactory; }
-    namespace uno { template<class X> class Reference; }
-    namespace uno { template<class X> class Sequence; }
-    namespace uno { class XInterface; }
-    namespace uno { class Exception; }
-    namespace xml::sax { class XDocumentHandler; }
 }
 
 

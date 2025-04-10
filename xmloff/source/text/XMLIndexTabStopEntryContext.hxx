@@ -26,9 +26,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 
-namespace com::sun::star {
-    namespace xml::sax { class XAttributeList; }
-}
 class XMLIndexTemplateContext;
 
 /**

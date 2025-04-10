@@ -30,9 +30,7 @@
 namespace com::sun::star {
     namespace xml::sax { class XFastAttributeList; }
 }
-class XMLEventContextFactory;
 class XMLEventsImportContext;
-struct XMLEventNameTranslation;
 
 typedef ::std::map< OUString, std::unique_ptr<XMLEventContextFactory> > FactoryMap;
 typedef ::std::map< XMLEventName, OUString > NameMap;

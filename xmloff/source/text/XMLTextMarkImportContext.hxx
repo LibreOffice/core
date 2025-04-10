@@ -29,9 +29,6 @@ namespace com::sun::star {
         class XTextRange;
         class XTextContent;
     }
-    namespace xml::sax {
-        class XAttributeList;
-    }
 }
 class XMLTextImportHelper;
 

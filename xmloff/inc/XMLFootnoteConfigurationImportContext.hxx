@@ -23,7 +23,6 @@
 
 namespace com::sun::star {
     namespace uno { template<class X> class Reference; }
-    namespace xml::sax { class XAttributeList; }
     namespace beans { class XPropertySet; }
 }
 class SvXMLImport;

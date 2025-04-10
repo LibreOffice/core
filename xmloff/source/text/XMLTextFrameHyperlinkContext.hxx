@@ -24,11 +24,6 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <xmloff/xmlictxt.hxx>
 
-namespace com::sun::star {
-    namespace text { class XTextCursor; class XTextFrame; }
-    namespace beans { class XPropertySet; }
-}
-
 /// Used for hyperlinks attached to objects (drawing objects, text boxes, Writer frames)
 class XMLTextFrameHyperlinkContext : public SvXMLImportContext
 {

@@ -25,7 +25,6 @@
 namespace com::sun::star {
     namespace container { class XIndexContainer; }
     namespace beans { class XPropertySet; }
-    namespace xml::sax { class XAttributeList; }
 }
 
 

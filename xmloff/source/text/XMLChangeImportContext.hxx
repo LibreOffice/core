@@ -24,13 +24,6 @@
 #include <com/sun/star/uno/Reference.h>
 
 
-namespace com::sun::star {
-    namespace xml::sax {
-        class XAttributeList;
-    }
-}
-
-
 /**
  * import change tracking/redlining markers
  * <text:change>, <text:change-start>, <text:change-end>

@@ -23,13 +23,10 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 namespace com::sun::star {
-    namespace xml::sax { class XAttributeList; }
-    namespace beans { class XPropertySet; }
     namespace xforms { class XDataTypeRepository; }
 }
 
 class SvXMLImport;
-class SvXMLImportContext;
 
 /** import the data type declarations from an xsd:schema element */
 class SchemaContext : public TokenContext

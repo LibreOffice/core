@@ -22,10 +22,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-namespace com::sun::star::xml::sax {
-        class XAttributeList;
-}
-
 class SchXMLParagraphContext : public SvXMLImportContext
 {
 private:

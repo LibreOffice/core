@@ -39,9 +39,6 @@ namespace com::sun::star {
     namespace chart2 {
         class XChartDocument;
     }
-    namespace xml::sax {
-        class XAttributeList;
-    }
 }
 
 class SchXML3DSceneAttributesHelper : public SdXML3DSceneAttributesHelper

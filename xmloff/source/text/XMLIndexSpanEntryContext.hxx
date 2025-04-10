@@ -24,10 +24,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <rtl/ustrbuf.hxx>
 
-namespace com::sun::star {
-    namespace xml::sax { class XAttributeList; }
-}
-
 /**
  * Import index entry templates
  */

@@ -24,7 +24,6 @@
 
 namespace com::sun::star {
     namespace beans { class XPropertySet; }
-    namespace xml::sax { class XAttributeList; }
 }
 
 class XMLSectionSourceImportContext final : public SvXMLImportContext

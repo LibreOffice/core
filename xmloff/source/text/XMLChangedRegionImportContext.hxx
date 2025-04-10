@@ -28,9 +28,6 @@ namespace com::sun::star {
     namespace text {
         class XTextCursor;
     }
-    namespace xml::sax {
-        class XAttributeList;
-    }
 }
 
 /**

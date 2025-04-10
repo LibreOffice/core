@@ -32,7 +32,6 @@
 #include "controlelement.hxx"
 #include "valueproperties.hxx"
 
-class SvXMLElementExport;
 namespace xmloff
 {
 

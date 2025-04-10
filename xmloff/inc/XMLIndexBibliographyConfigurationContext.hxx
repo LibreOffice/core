@@ -29,11 +29,6 @@
 
 #include <vector>
 
-namespace com::sun::star {
-    namespace xml::sax { class XAttributeList; }
-}
-
-
 /**
  * Import bibliography configuration.
  *

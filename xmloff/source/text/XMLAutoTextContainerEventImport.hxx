@@ -25,7 +25,6 @@
 
 namespace com::sun::star {
     namespace container { class XNameReplace; }
-    namespace xml::sax { class XAttributeList; }
 }
 
 

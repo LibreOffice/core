@@ -32,13 +32,6 @@
 class SchXMLImportHelper;
 
 namespace com::sun::star {
-    namespace chart {
-        class XChartDocument;
-        struct ChartSeriesAddress;
-    }
-    namespace xml::sax {
-        class XAttributeList;
-    }
     namespace drawing {
         class XShapes;
     }

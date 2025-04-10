@@ -23,13 +23,11 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 namespace com::sun::star {
-    namespace xml::sax { class XAttributeList; }
     namespace beans { class XPropertySet; }
     namespace xforms { class XModel2; }
 }
 
 class SvXMLImport;
-class SvXMLImportContext;
 
 /** import the xforms:submission element */
 class XFormsSubmissionContext : public TokenContext

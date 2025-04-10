@@ -26,7 +26,6 @@
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star {
-    namespace uno { class XComponentContext; }
     namespace rdf { class XMetadatable; }
     namespace rdf { class XRepositorySupplier; }
 }

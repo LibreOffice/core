@@ -28,8 +28,6 @@
 struct ImpSdXMLExpTransObj2DBase;
 struct ImpSdXMLExpTransObj3DBase;
 class SvXMLUnitConverter;
-class SvXMLImport;
-class SvXMLExport;
 
 namespace basegfx
 {

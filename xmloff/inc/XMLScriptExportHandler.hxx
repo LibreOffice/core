@@ -23,11 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <xmloff/xmlevent.hxx>
 
-class SvXMLExport;
-namespace com::sun::star {
-    namespace beans { struct PropertyValue; }
-}
-
 class XMLScriptExportHandler final : public XMLEventExportHandler
 {
 public:

@@ -23,10 +23,6 @@
 
 #include <xmloff/xmlmetai.hxx>
 
-namespace com::sun::star::xml::sax {
-        class XAttributeList;
-}
-
 /*
    These contexts are only needed by
    SchXMLImport not by the SchXMLImportHelper

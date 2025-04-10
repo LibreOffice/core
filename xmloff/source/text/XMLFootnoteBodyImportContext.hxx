@@ -23,13 +23,6 @@
 #include <com/sun/star/uno/Reference.h>
 
 
-namespace com::sun::star {
-    namespace xml::sax {
-        class XAttributeList;
-    }
-}
-
-
 /// import foot- and endnote body elements (<text:footnote-body>)
 class XMLFootnoteBodyImportContext : public SvXMLImportContext
 {

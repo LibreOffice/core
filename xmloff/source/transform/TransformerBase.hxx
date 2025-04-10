@@ -44,11 +44,8 @@ namespace com::sun::star {
     namespace i18n { class XCharacterClassification; }
 }
 
-class SvXMLNamespaceMap;
 class XMLTransformerContext;
-class XMLTransformerActions;
 struct XMLTransformerActionInit;
-struct TransformerAction_Impl;
 class XMLMutableAttributeList;
 
 const sal_uInt16 INVALID_ACTIONS = 0xffff;

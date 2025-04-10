@@ -41,9 +41,6 @@ class SvXMLStylesContext;
 
 namespace xmloff
 {
-
-    class OAttribute2Property;
-
     //= OFormLayerXMLImport_Impl
     class OFormLayerXMLImport_Impl
                 : public ODefaultEventAttacherManager

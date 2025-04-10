@@ -24,9 +24,7 @@
 #include <com/sun/star/uno/Sequence.h>
 
 namespace com::sun::star {
-    namespace text { class XTextRange;  }
     namespace beans { class XPropertySet; }
-    namespace xml::sax { class XAttributeList; }
 }
 
 

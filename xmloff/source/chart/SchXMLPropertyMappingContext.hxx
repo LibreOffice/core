@@ -14,7 +14,6 @@
 
 namespace com::sun::star {
     namespace chart2 {
-        class XChartDocument;
         class XDataSeries;
     }
 }

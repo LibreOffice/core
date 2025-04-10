@@ -27,7 +27,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <memory>
 
-class SvXMLNamespaceMap;
 class XMLTransformerBase;
 
 class XMLTransformerContext : public ::salhelper::SimpleReferenceObject

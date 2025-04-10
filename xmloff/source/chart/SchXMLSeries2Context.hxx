@@ -31,9 +31,6 @@ namespace com::sun::star {
         class XChartDocument;
         class XDataSeries;
     }
-    namespace awt {
-        struct Size;
-    }
 }
 
 // class for child contexts: series, data point and statistics objects

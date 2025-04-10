@@ -28,7 +28,6 @@
 namespace com::sun::star {
     namespace chart2 {
         class XChartDocument;
-        class XRegressionCurve;
         namespace data {
             class XDataProvider;
         }

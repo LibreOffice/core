@@ -28,9 +28,6 @@ namespace com::sun::star {
         class XTextCursor;
         class XFootnote;
     }
-    namespace xml::sax {
-        class XAttributeList;
-    }
 }
 class XMLTextImportHelper;
 

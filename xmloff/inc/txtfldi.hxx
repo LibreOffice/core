@@ -36,14 +36,11 @@
 #include <vector>
 
 namespace com::sun::star {
-    namespace xml::sax { class XAttributeList; }
-    namespace text { class XTextField; }
-    namespace beans { class XPropertySet; struct PropertyValue; }
+    namespace beans { class XPropertySet; }
 }
 
 class SvXMLImport;
 class XMLTextImportHelper;
-class SvXMLTokenMap;
 
 /// abstract class for text field import
 class XMLTextFieldImportContext : public SvXMLImportContext

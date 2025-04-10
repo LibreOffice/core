@@ -30,12 +30,8 @@ namespace com::sun::star {
         class XNode;
         class XDocument;
     }
-    namespace xml::sax {
-        class XAttributeList;
-    }
 }
 class SvXMLImport;
-class SvXMLImportContext;
 
 /**
  * DomBuilderContext creates a DOM tree suitable for in-memory processing of

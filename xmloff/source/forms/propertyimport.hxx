@@ -29,11 +29,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include "layerimport.hxx"
 
-namespace com::sun::star::util {
-    struct Time;
-    struct Date;
-}
-
 namespace xmloff
 {
 

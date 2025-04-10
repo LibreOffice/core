@@ -22,13 +22,6 @@
 #include <xmloff/xmlictxt.hxx>
 
 
-namespace com::sun::star {
-    namespace uno { template<class X> class Reference; }
-    namespace beans { class XPropertySet; }
-    namespace xml::sax { class XAttributeList; }
-}
-
-
 class XMLAutoMarkFileContext : public SvXMLImportContext
 {
 public:

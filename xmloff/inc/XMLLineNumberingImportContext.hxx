@@ -23,11 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
 
-namespace com::sun::star {
-    namespace xml::sax { class XAttributeList; }
-}
-
-
 /** import <text:linenumbering-configuration> elements */
 class XMLLineNumberingImportContext final : public SvXMLStyleContext
 {

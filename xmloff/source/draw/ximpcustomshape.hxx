@@ -28,12 +28,6 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 
-namespace com::sun::star {
-    namespace container { class XIndexContainer; }
-    namespace beans { class XPropertySet; }
-    namespace xml::sax { class XAttributeList; }
-}
-
 class XMLEnhancedCustomShapeContext : public SvXMLImportContext
 {
     SvXMLUnitConverter& mrUnitConverter;

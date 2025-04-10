@@ -23,11 +23,6 @@
 #include <com/sun/star/uno/Reference.h>
 
 
-namespace com::sun::star {
-    namespace xml::sax { class XAttributeList; }
-    namespace beans { class XPropertySet; }
-}
-
 /**
  * Import index body.
  *

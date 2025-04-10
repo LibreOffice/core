@@ -23,12 +23,6 @@
 #include <xmloff/xmlevent.hxx>
 
 
-namespace com::sun::star {
-    namespace xml::sax { class XAttributeList; }
-}
-class SvXMLImport;
-class XMLEventsImportContext;
-
 class XMLScriptContextFactory final : public XMLEventContextFactory
 {
 public:

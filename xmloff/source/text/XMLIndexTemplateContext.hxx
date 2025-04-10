@@ -29,7 +29,6 @@
 
 
 namespace com::sun::star {
-    namespace xml::sax { class XAttributeList; }
     namespace beans { class XPropertySet; }
 }
 template<typename EnumT> struct SvXMLEnumMapEntry;
