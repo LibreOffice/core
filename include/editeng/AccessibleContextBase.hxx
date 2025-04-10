@@ -28,7 +28,6 @@
 #include <editeng/editengdllapi.h>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::accessibility { struct AccessibleEventObject; }
 namespace utl { class AccessibleRelationSetHelper; }
 
 namespace accessibility {
