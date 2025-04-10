@@ -41,6 +41,10 @@
 
 class ConvertChar;
 class ImplFontCache;
+namespace vcl::font
+{
+class PhysicalFontFace;
+}
 
 constexpr float ARTIFICIAL_ITALIC_MATRIX_XX = 1 << 16;
 constexpr float ARTIFICIAL_ITALIC_MATRIX_XY = (1 << 16) / 3.f;

@@ -21,8 +21,6 @@
 
 #include <unx/genprn.h>
 
-class SalFrame;
-
 class QtPrinter final : public PspSalPrinter
 {
 public:

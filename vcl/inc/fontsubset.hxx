@@ -27,7 +27,6 @@
 
 #include "glyphid.hxx"
 
-namespace vcl { class TrueTypeFont; } ///< SFT's idea of a TTF font
 class SvStream;
 
 enum class FontType {

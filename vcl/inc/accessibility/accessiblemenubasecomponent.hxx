@@ -30,7 +30,6 @@
 #include <vector>
 
 class Menu;
-class VclSimpleEvent;
 class VclMenuEvent;
 
 class OAccessibleMenuItemComponent;

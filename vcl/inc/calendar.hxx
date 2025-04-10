@@ -25,12 +25,6 @@
 #include <memory>
 #include <set>
 
-class MouseEvent;
-class TrackingEvent;
-class KeyEvent;
-class HelpEvent;
-class DataChangedEvent;
-
 /*************************************************************************
 
 Description

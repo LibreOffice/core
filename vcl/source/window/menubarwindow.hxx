@@ -28,8 +28,6 @@
 
 #include <map>
 
-class Button;
-
 /** Toolbox that holds the close button (right hand side of the menubar).
 
 This is also used by the online update check; when an update is available, it

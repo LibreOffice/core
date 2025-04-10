@@ -65,9 +65,6 @@
 class FontSubsetInfo;
 class ZCodec;
 struct BitStreamState;
-namespace vcl::font { class PhysicalFontFace; }
-class SvStream;
-class SvMemoryStream;
 
 namespace vcl::pdf
 {
@@ -94,8 +91,6 @@ namespace vcl
 {
 
 using namespace vcl::pdf;
-
-class PDFStreamIf;
 
 namespace filter
 {

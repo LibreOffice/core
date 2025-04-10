@@ -33,6 +33,8 @@
 
 #include <font/FontSelectPattern.hxx>
 
+class LogicalFontInstance;
+
 namespace vcl::font
 {
 class FontSelectPattern;

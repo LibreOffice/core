@@ -43,8 +43,6 @@ struct WMFWriterAttrStackMember
     vcl::PushFlags nFlags;
 };
 
-class StarSymbolToMSMultiFont;
-class LineInfo;
 namespace basegfx { class B2DPolygon; }
 
 class WMFWriter

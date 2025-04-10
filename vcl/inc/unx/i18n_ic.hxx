@@ -23,8 +23,6 @@
 
 #include <unx/salframe.h>
 
-enum class EndExtTextInputFlags;
-
 class SalI18N_InputContext
 {
 

@@ -27,10 +27,6 @@
 #include <vcl/weld.hxx>
 #include <map>
 
-namespace vcl {
-    class PrintDialog;
-}
-
 namespace vcl
 {
     class PrintDialog final : public weld::GenericDialogController

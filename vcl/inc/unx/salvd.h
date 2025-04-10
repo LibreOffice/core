@@ -29,7 +29,6 @@
 
 #include <memory>
 
-class SalDisplay;
 class X11SalGraphics;
 typedef struct _cairo_surface cairo_surface_t;
 

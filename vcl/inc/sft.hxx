@@ -55,8 +55,6 @@
 
 #include "font/TTFStructure.hxx"
 
-class SvStream;
-
 namespace vcl
 {
 

@@ -31,7 +31,6 @@
 #include <optional>
 
 class SalGraphics;
-class SalFrame;
 class ImplJobSetup;
 namespace vcl { class PrinterController; }
 namespace weld { class Window; }

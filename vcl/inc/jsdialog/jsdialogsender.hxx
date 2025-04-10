@@ -31,11 +31,6 @@
 #define CLOSE_ID "close_id"
 #define MENU_PTR "menu_ptr"
 
-namespace vcl
-{
-class ILibreOfficeKitNotifier;
-}
-
 class JSDialogSender
 {
     std::unique_ptr<JSDialogNotifyIdle> mpIdleNotify;

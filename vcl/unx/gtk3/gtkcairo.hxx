@@ -14,7 +14,6 @@
 #include <vcl/cairo.hxx>
 
 class GtkSalGraphics;
-class OutputDevice;
 
 namespace cairo {
 

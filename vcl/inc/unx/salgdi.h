@@ -37,24 +37,12 @@
 /* From <X11/Intrinsic.h> */
 typedef unsigned long Pixel;
 
-class SalBitmap;
-class SalColormap;
-class SalDisplay;
 class SalFrame;
 class X11SalFrame;
 class X11SalVirtualDevice;
 class X11SkiaSalVirtualDevice;
-namespace vcl::font
-{
-class PhysicalFontCollection;
-class PhysicalFontFace;
-}
 class SalGraphicsImpl;
 class TextRenderImpl;
-
-namespace basegfx {
-    class B2DTrapezoid;
-}
 
 class X11Common
 {

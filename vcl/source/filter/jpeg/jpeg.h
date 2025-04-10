@@ -32,7 +32,6 @@ namespace com::sun::star::task {
 }
 class JPEGReader;
 class JPEGWriter;
-class Size;
 class SvStream;
 enum class GraphicFilterImportFlags;
 

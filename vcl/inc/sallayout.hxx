@@ -43,16 +43,6 @@
 #define MAX_FALLBACK 16
 
 class GenericSalLayout;
-class SalGraphics;
-enum class SalLayoutFlags;
-
-namespace vcl::font {
-    class PhysicalFontFace;
-}
-
-namespace vcl::text {
-    class TextLayoutCache;
-}
 
 class VCL_DLLPUBLIC MultiSalLayout final : public SalLayout
 {

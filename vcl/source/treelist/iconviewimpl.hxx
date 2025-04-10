@@ -22,7 +22,6 @@
 #include <svimpbox.hxx>
 
 class SvTreeListBox;
-class Point;
 
 class IconViewImpl : public SvImpLBox
 {

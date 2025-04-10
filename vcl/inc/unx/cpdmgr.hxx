@@ -38,8 +38,6 @@ typedef struct _GDBusConnection GDBusConnection;
 
 namespace psp
 {
-class PPDParser;
-
 struct CPDPrinter
 {
     const char* id;

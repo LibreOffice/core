@@ -34,7 +34,6 @@ class ComboBox;
 class VclMultiLineEdit;
 class SvTabListBox;
 class IconView;
-class VclScrolledWindow;
 
 typedef jsdialog::WidgetRegister<weld::Widget*> WidgetMap;
 

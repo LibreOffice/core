@@ -24,8 +24,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/vclptr.hxx>
 
-class VirtualDevice;
-
 namespace vcl
 {
 struct ControlLayoutData;

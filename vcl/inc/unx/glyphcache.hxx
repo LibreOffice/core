@@ -44,11 +44,8 @@ namespace vcl::font
 {
 class PhysicalFontCollection;
 }
-class FreetypeFont;
-class SvpGcpHelper;
 
 namespace basegfx { class B2DPolyPolygon; }
-namespace vcl { struct FontCapabilities; }
 
  /**
   * The FreetypeManager caches various aspects of Freetype fonts

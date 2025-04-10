@@ -25,8 +25,6 @@
 #include <unx/gendata.hxx>
 
 class SalXLib;
-class SalDisplay;
-class SalPrinter;
 
 class X11SalData final : public GenericUnixSalData
 {

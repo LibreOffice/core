@@ -23,7 +23,6 @@
 #include <vcl/accessibility/AccessibleBrowseBox.hxx>
 #include <vcl/accessibletableprovider.hxx>
 
-class AccessibleBrowseBoxTable;
 class SvHeaderTabListBox;
 
 class AccessibleTabListBox final : public AccessibleBrowseBox

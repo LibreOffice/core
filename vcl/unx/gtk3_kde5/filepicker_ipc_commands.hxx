@@ -28,10 +28,6 @@
 
 // #define DEBUG_FILEPICKER_IPC
 
-namespace rtl
-{
-class OUString;
-}
 class QString;
 
 enum class Commands : uint16_t

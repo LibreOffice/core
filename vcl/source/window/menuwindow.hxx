@@ -23,9 +23,7 @@
 #include <vcl/event.hxx>
 
 class HelpEvent;
-class Image;
 class Menu;
-class MenuBar;
 namespace tools { class Rectangle; }
 namespace vcl { class Window; }
 

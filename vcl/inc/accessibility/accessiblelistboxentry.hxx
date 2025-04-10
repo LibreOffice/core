@@ -37,15 +37,7 @@
 
 // forward ---------------------------------------------------------------
 
-namespace com::sun::star::awt {
-    struct Point;
-    struct Rectangle;
-    struct Size;
-    class XFocusListener;
-}
-
 class AccessibleListBox;
-class SvTreeListBox;
 class SvTreeListEntry;
 
 // class AccessibleListBoxEntry ------------------------------------------

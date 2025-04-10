@@ -26,7 +26,6 @@
 
 
 class VCLXAccessibleToolBoxItem;
-class ToolBox;
 
 typedef std::map< sal_Int32, rtl::Reference< VCLXAccessibleToolBoxItem > > ToolBoxItemsMap;
 

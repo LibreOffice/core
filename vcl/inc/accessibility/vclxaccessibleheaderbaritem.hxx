@@ -26,8 +26,6 @@
 #include <vcl/vclptr.hxx>
 
 class HeaderBar;
-class VclSimpleEvent;
-class VclWindowEvent;
 
 
 //    ----------------------------------------------------

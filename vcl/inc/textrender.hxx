@@ -23,10 +23,6 @@
 
 #include "salgdi.hxx"
 
-class FontMetricData;
-class PhysicalFontCollection;
-namespace vcl::font { class PhysicalFontFace; }
-
 class TextRenderImpl
 {
 public:

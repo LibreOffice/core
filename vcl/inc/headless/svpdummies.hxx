@@ -23,8 +23,6 @@
 #include <unx/gensys.h>
 #include <salobj.hxx>
 
-class SalGraphics;
-
 class SvpSalObject final : public SalObject
 {
     SystemEnvData m_aSystemChildData;

@@ -23,10 +23,6 @@
 
 #include <rtl/ustring.hxx>
 
-
-// forwards
-namespace osl { class File; }
-
 namespace psp
 {
 

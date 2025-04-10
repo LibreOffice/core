@@ -31,18 +31,7 @@
 #include <headless/SvpGraphicsBackend.hxx>
 #include <headless/CairoCommon.hxx>
 
-namespace vcl::font
-{
-class PhysicalFontFace;
-class PhysicalFontCollection;
-}
-
 namespace psp { struct JobData; }
-
-class FreetypeFontInstance;
-class FontAttributes;
-class SalInfoPrinter;
-class FontMetricData;
 
 class VCL_DLLPUBLIC GenPspGraphics final : public SalGraphicsAutoDelegateToImpl
 {

@@ -22,7 +22,6 @@
 #include <unx/freetypetextrender.hxx>
 
 class GenericSalLayout;
-class SalGraphics;
 struct CairoCommon;
 typedef struct _cairo cairo_t;
 typedef struct _cairo_font_options cairo_font_options_t;

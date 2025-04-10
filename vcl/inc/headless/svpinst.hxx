@@ -50,9 +50,6 @@ public:
     virtual void Stop() override;
 };
 
-class SvpSalFrame;
-class GenPspGraphics;
-
 enum class SvpRequest
 {
     NONE,

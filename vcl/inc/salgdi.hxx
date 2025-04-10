@@ -36,27 +36,19 @@
 #include <vector>
 
 class SalBitmap;
-class FontAttributes;
 namespace vcl::font {
-    class FontSelectPattern;
-    class PhysicalFontFace;
     class PhysicalFontCollection;
 }
-class SalLayout;
 namespace tools { class Rectangle; }
-class OutputDevice;
-class FreetypeFont;
 struct SystemGraphicsData;
 
 namespace basegfx {
-    class B2DVector;
     class B2DPolygon;
     class B2DPolyPolygon;
 }
 
 namespace vcl
 {
-class AbstractTrueTypeFont;
 class FileDefinitionWidgetDraw;
 typedef struct TTGlobalFontInfo_ TTGlobalFontInfo;
 }

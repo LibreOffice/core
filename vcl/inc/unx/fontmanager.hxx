@@ -41,13 +41,11 @@
  *  friends are PostScript afm style, that is they are 1/1000 font height
  */
 
-class FontAttributes;
 class FontConfigFontOptions;
 namespace vcl::font
 {
 class FontSelectPattern;
 }
-namespace vcl { struct NameRecord; }
 class GenericUnixSalData;
 
 namespace psp {
@@ -57,7 +55,6 @@ typedef int fontID;
 
 class VCL_PLUGIN_PUBLIC PrintFontManager
 {
-    struct PrintFont;
     friend struct PrintFont;
 
     struct SAL_DLLPRIVATE PrintFont

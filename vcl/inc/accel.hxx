@@ -26,8 +26,6 @@
 #include <map>
 #include <vector>
 
-class CommandEvent;
-
 class Accelerator;
 
 class ImplAccelEntry

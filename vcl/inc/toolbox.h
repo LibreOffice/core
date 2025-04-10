@@ -30,8 +30,6 @@
 #define TB_MENUBUTTON_SIZE      12
 #define TB_MENUBUTTON_OFFSET    2
 
-namespace vcl { class Window; }
-
 struct ImplToolItem
 {
     VclPtr<vcl::Window> mpWindow; //don't dispose mpWindow - we get copied around

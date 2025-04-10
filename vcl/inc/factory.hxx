@@ -28,7 +28,6 @@
 namespace com::sun::star {
     namespace lang {
         class XMultiServiceFactory;
-        class XSingleServiceFactory;
     }
     namespace uno { class XInterface; }
 }

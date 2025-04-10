@@ -37,9 +37,6 @@
 #include <headless/SvpGraphicsBackend.hxx>
 #include <headless/CairoCommon.hxx>
 
-struct BitmapBuffer;
-class FreetypeFont;
-
 class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphicsAutoDelegateToImpl
 {
     CairoCommon m_aCairoCommon;

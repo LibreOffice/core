@@ -24,8 +24,6 @@
 
 #include <unordered_map>
 
-namespace com::sun::star::uno { template <typename > class Sequence; }
-
 namespace vcl
 {
     typedef std::unordered_map< OUString, OUString > OUStrMap;

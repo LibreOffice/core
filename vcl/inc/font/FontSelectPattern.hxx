@@ -30,12 +30,13 @@
 
 namespace vcl { class Font; }
 
-class LogicalFontInstance;
 class Size;
 
 namespace vcl::font
 {
+#ifdef _WIN32
 class PhysicalFontFace;
+#endif
 
 class VCL_DLLPUBLIC FontSelectPattern : public FontAttributes
 {

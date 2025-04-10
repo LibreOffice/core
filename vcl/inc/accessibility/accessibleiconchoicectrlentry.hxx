@@ -34,7 +34,6 @@
 
 // forward
 
-class SvxIconChoiceCtrlEntry;
 class SvtIconChoiceCtrl;
 
 typedef ::cppu::ImplInheritanceHelper< comphelper::OAccessibleComponentHelper

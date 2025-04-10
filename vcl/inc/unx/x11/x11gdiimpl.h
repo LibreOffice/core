@@ -11,8 +11,6 @@
 
 #include <sal/types.h>
 
-class ControlCacheKey;
-
 class SAL_LOPLUGIN_ANNOTATE("crosscast") X11GraphicsImpl
 {
 public:

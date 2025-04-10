@@ -29,9 +29,6 @@
 
 class JobSetup;
 
-namespace vcl
-{ class PrinterListener; }
-
 struct ImplPrnQueueData
 {
     std::unique_ptr<QueueInfo>           mpQueueInfo;

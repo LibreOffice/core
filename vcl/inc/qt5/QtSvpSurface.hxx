@@ -14,7 +14,6 @@
 #include <vcl/cairo.hxx>
 
 class QtSvpGraphics;
-class OutputDevice;
 
 namespace cairo
 {

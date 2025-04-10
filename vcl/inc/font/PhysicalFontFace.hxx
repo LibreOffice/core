@@ -36,21 +36,13 @@
 #include <hb-ot.h>
 
 class LogicalFontInstance;
-struct FontMatchStatus;
 namespace vcl::font
 {
 class FontSelectPattern;
 }
 
-namespace vcl
-{
-class PhysicalFontFamily;
-}
-
 namespace vcl::font
 {
-class FontSelectPattern;
-
 struct FontMatchStatus
 {
 public:

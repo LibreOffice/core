@@ -40,15 +40,11 @@
 #include <vclpluginapi.h>
 
 class   SalDisplay;
-class   SalColormap;
-class   SalVisual;
-class   SalXLib;
 
 
 /* From <X11/Intrinsic.h> */
 typedef unsigned long Pixel;
 
-class   BitmapPalette;
 class   SalFrame;
 
 namespace vcl_sal { class WMAdaptor; }
@@ -175,7 +171,6 @@ public:
 };
 
 class SalI18N_KeyboardExtension;
-class AttributeProvider;
 
 extern "C" {
     typedef Bool(*X_if_predicate)(Display*,XEvent*,XPointer);

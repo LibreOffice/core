@@ -25,12 +25,8 @@
 #include <osl/thread.h>
 #include <osl/mutex.hxx>
 
-class cups_dest_s;
-
 namespace psp
 {
-
-class PPDParser;
 
 struct FPtrHash
 {

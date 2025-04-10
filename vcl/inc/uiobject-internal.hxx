@@ -11,8 +11,6 @@
 #include <vcl/uitest/uiobject.hxx>
 #include "wizdlg.hxx"
 
-class RoadmapWizard;
-
 class RoadmapWizardUIObject final : public WindowUIObject
 {
     VclPtr<vcl::RoadmapWizard> mxRoadmapWizard;

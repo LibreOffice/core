@@ -37,8 +37,6 @@
 #include <map>
 
 class IcnCursor_Impl;
-class SvtIconChoiceCtrl;
-class SvxIconChoiceCtrlEntry;
 class IcnGridMap_Impl;
 
 

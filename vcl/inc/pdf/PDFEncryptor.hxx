@@ -15,11 +15,6 @@
 #include <vector>
 #include <pdf/IPDFEncryptor.hxx>
 
-namespace com::sun::star::uno
-{
-template <typename> class Reference;
-}
-
 namespace vcl::pdf
 {
 class EncryptionHashTransporter;

@@ -28,10 +28,8 @@ namespace com::sun::star::datatransfer::clipboard {
     class XClipboard;
 }
 
-class AbsoluteScreenPixelRectangle;
 class Point;
 namespace tools { class Rectangle; }
-namespace vcl { class Window; }
 
 class IComboListBoxHelper
 {

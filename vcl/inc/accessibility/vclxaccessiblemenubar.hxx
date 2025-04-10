@@ -22,7 +22,6 @@
 #include <accessibility/accessiblemenucomponent.hxx>
 #include <vcl/vclptr.hxx>
 
-class VclSimpleEvent;
 class VclWindowEvent;
 namespace vcl { class Window; }
 

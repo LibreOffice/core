@@ -34,9 +34,6 @@
 class OutputDevice;
 class GfxLink;
 class ImpSwapFile;
-class GraphicConversionParameters;
-class ImpGraphic;
-namespace rtl { class OStringBuffer; }
 
 enum class GraphicContentType : sal_Int32
 {

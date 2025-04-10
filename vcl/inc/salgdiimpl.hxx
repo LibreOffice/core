@@ -32,9 +32,7 @@
 
 class SalGraphics;
 class SalBitmap;
-class SalFrame;
 class Gradient;
-class SalVirtualDevice;
 struct SalGradient;
 
 /**
