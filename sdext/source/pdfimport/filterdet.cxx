@@ -496,6 +496,19 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
             aOutFilterName = "calc_pdf_addstream_import";
     }
 
+    // Stash the password so that the importer can use it, even if we came to the
+    // conclusion that it's not a hybrid, the PDF import side can use it.
+    if (!aPassword.isEmpty())
+    {
+        if (nPasswordPos == -1)
+        {
+            nPasswordPos = nAttribs;
+            rFilterData.realloc(++nAttribs);
+            rFilterData.getArray()[nPasswordPos].Name = "Password";
+        }
+        rFilterData.getArray()[nPasswordPos].Value <<= aPassword;
+    }
+
     if (!aOutFilterName.isEmpty())
     {
         if( nFilterNamePos == -1 )
@@ -514,17 +527,6 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
             pFilterData = rFilterData.getArray();
             pFilterData[nAttribs-1].Name = "EmbeddedSubstream";
             pFilterData[nAttribs-1].Value <<= xEmbedStream;
-        }
-        if (!aPassword.isEmpty())
-        {
-            if (nPasswordPos == -1)
-            {
-                nPasswordPos = nAttribs;
-                rFilterData.realloc(++nAttribs);
-                pFilterData = rFilterData.getArray();
-                pFilterData[nPasswordPos].Name = "Password";
-            }
-            pFilterData[nPasswordPos].Value <<= aPassword;
         }
     }
     else
