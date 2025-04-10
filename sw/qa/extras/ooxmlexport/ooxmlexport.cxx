@@ -20,6 +20,7 @@
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
@@ -895,7 +896,20 @@ DECLARE_OOXMLEXPORT_TEST(testTdf44986, "tdf44986.docx")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf118682)
 {
-    loadAndSave("tdf118682.fodt");
+    loadAndReload("tdf118682.fodt");
+
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"(<A1>)+(<A2>)"_ustr, xEnumerationAccess1->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, xEnumerationAccess1->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"SUM(<A1:A3>)"_ustr, xEnumerationAccess2->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(u"6"_ustr, xEnumerationAccess2->getPresentation(false).trim());
+
     // Support cell references in table formulas
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
@@ -904,13 +918,26 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118682)
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r/w:fldChar", 3);
 
     // Cell references were parenthesized: <A1>+<A2> and SUM(<A1:A3>)
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:instrText", u" =A1+A2");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:instrText", u" =(A1)+(A2)");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:instrText", u" =SUM(A1:A3)");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133163)
 {
-    loadAndSave("tdf133163.fodt");
+    loadAndReload("tdf133163.fodt");
+
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"(<A1>)+(<A2>)"_ustr, xEnumerationAccess1->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, xEnumerationAccess1->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"SUM(<A1:A3>)"_ustr, xEnumerationAccess2->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(u"6"_ustr, xEnumerationAccess2->getPresentation(false).trim());
+
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Formula cells were completely missing.
@@ -918,8 +945,30 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133163)
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r/w:fldChar", 3);
 
     // Cell references were parenthesized: <A1>+<A2> and SUM(<A1:A3>)
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:instrText", u" =A1+A2");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:instrText", u" =(A1)+(A2)");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:instrText", u" =SUM(A1:A3)");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf166102)
+{
+    loadAndReload("tdf166102.fodt");
+
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"sum(<A1:A3>)"_ustr, xEnumerationAccess1->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(u"6"_ustr, xEnumerationAccess1->getPresentation(false).trim());
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r/w:fldChar", 3);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected:  =sum(A1:A3)
+    // - Actual  :  =sumA1:A3
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:instrText", u" =sum(A1:A3)");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133647)

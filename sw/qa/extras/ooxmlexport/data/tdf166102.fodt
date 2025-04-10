@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:ooow="http://openoffice.org/2004/writer" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <table:table>
+    <table:table-column/>
+    <table:table-row>
+     <table:table-cell>
+      <text:p>1</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell>
+      <text:p>2</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell>
+      <text:p>3</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:formula="ooow:sum&lt;A1:A3&gt;" office:value-type="float" office:value="6">
+      <text:p>6</text:p>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:text>
+ </office:body>
+</office:document>
