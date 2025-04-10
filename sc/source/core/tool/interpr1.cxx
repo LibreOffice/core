@@ -8230,8 +8230,21 @@ void ScInterpreter::ScXLookup()
         }
         else
         {
-            // result is a single ref
-            PushSingleRef(nSearchCol1 + nX, nSearchRow1 + nY, nSearchTab1);
+            if (prMat)
+            {
+                // result is matrix with one value
+                if (prMat->IsEmptyCell(nX, nY))
+                    PushNA();
+                else if (prMat->IsStringOrEmpty(nX, nY))
+                    PushString(prMat->GetString(nX, nY));
+                else
+                    PushDouble(prMat->GetDouble(nX, nY));
+            }
+            else
+            {
+                // result is a single ref
+                PushSingleRef(nSearchCol1 + nX, nSearchRow1 + nY, nSearchTab1);
+            }
         }
     }
     else
