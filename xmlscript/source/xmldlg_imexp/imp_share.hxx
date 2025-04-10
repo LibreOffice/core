@@ -105,8 +105,6 @@ inline bool getLongAttr(
     return false;
 }
 
-class ImportContext;
-
 struct DialogImport
     : public ::cppu::WeakImplHelper< css::xml::input::XRoot >
 {

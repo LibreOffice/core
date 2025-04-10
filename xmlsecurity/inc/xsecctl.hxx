@@ -63,7 +63,6 @@ inline constexpr OUString ALGO_RELATIONSHIP = u"http://schemas.openxmlformats.or
 class XMLDocumentWrapper_XmlSecImpl;
 class SAXEventKeeperImpl;
 class XMLSignatureHelper;
-namespace svl::crypto { enum class SignatureMethodAlgorithm; }
 
 class InternalSignatureInformation
 {

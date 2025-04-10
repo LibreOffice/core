@@ -25,14 +25,11 @@
 #include "documentsignaturemanager.hxx"
 
 namespace com::sun::star {
-    namespace lang { class XMultiServiceFactory; }
     namespace io { class XStream; }
     namespace embed { class XStorage; }
-    namespace xml::dom { class XDocumentBuilder; }
 }
 
 
-class HeaderBar;
 class CertificateViewer;
 class SfxViewShell;
 

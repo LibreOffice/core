@@ -17,8 +17,6 @@
 #include <xsecxmlsecdllapi.h>
 #include <cppuhelper/implbase.hxx>
 
-namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
-
 class XSECXMLSEC_DLLPUBLIC SEInitializerGpg final : public cppu::WeakImplHelper
 <
     css::xml::crypto::XSEInitializer,

@@ -26,10 +26,6 @@ class XInputStream;
 }
 namespace security
 {
-class XCertificate;
-}
-namespace security
-{
 struct DocumentSignatureInformation;
 }
 namespace xml::crypto

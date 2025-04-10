@@ -25,7 +25,6 @@
 
 namespace com::sun::star::beans {
     struct Property;
-    struct PropertyValue;
 }
 namespace com::sun::star::sdbc {
     class XRow;

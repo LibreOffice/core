@@ -50,7 +50,6 @@ namespace helpdatafileproxy {
 namespace chelp {
 
     class Databases;
-    class URLParameter;
 
     class StaticModuleInformation
     {

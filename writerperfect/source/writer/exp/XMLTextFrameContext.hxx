@@ -15,8 +15,6 @@
 
 namespace writerperfect::exp
 {
-class XMLBase64ImportContext;
-
 /// Handler for <draw:frame>.
 class XMLTextFrameContext : public XMLImportContext
 {

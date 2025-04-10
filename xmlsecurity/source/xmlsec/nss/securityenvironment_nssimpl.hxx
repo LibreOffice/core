@@ -40,7 +40,6 @@
 
 #include <xmlsec/xmlsec.h>
 
-namespace com::sun::star::security { class XCertificate; }
 class X509Certificate_NssImpl;
 
 class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper<

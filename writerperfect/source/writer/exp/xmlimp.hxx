@@ -41,8 +41,6 @@ class XUriReferenceFactory;
 
 namespace writerperfect::exp
 {
-class XMLImportContext;
-
 /// Contains info about a fixed-layout page.
 struct FixedLayoutPage
 {

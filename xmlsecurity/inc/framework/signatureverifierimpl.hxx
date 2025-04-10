@@ -26,7 +26,6 @@
 
 #include <framework/signatureengine.hxx>
 
-namespace com::sun::star::xml::crypto::sax { class XSignatureVerifyResultListener; }
 namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
 
 typedef cppu::ImplInheritanceHelper

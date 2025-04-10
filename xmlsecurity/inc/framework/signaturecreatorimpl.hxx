@@ -28,7 +28,6 @@
 #include <framework/signatureengine.hxx>
 
 namespace com::sun::star::xml::crypto { class XSecurityEnvironment; }
-namespace com::sun::star::xml::crypto::sax { class XSignatureCreationResultListener;}
 
 typedef cppu::ImplInheritanceHelper
 <

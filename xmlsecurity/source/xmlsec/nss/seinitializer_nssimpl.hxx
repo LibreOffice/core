@@ -25,8 +25,6 @@
 
 #include "nssinitializer.hxx"
 
-namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
-
 class SEInitializer_NssImpl : public cppu::ImplInheritanceHelper
 <
     ONSSInitializer,

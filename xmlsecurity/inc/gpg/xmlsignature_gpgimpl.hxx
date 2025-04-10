@@ -30,8 +30,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 
-namespace com::sun::star::xml::crypto { class XXMLSignatureTemplate; }
-namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 
