@@ -141,8 +141,6 @@ private:
     /// @throws css::lang::IndexOutOfBoundsException
     SdrObject* getSdrObject( sal_Int64 nIndex );
 
-    void CommitChange (sal_Int16 aEventId, const css::uno::Any& rNewValue, const css::uno::Any& rOldValue);
-
     css::uno::Reference< css::accessibility::XAccessible > getAccessible( const SdrObject* pObj );
 
     /** Description of this object.  This is not a constant because it can

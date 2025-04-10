@@ -120,7 +120,7 @@ Reference< XAccessible > SvxGraphCtrlAccessibleContext::getAccessible( const Sdr
             mxShapes[pObj] = std::move(pAcc);
 
             // Create event and inform listeners of the object creation.
-            CommitChange( AccessibleEventId::CHILD, Any( xAccessibleShape ), Any( Reference<XAccessible>() ) );
+            NotifyAccessibleEvent(AccessibleEventId::CHILD, Any(), Any(xAccessibleShape));
         }
     }
 
@@ -198,16 +198,6 @@ SdrObject* SvxGraphCtrlAccessibleContext::getSdrObject( sal_Int64 nIndex )
         throw lang::IndexOutOfBoundsException();
 
     return mpPage->GetObj( nIndex );
-}
-
-
-/** sends an AccessibleEventObject to all added XAccessibleEventListeners */
-void SvxGraphCtrlAccessibleContext::CommitChange (
-    sal_Int16 nEventId,
-    const uno::Any& rNewValue,
-    const uno::Any& rOldValue)
-{
-    NotifyAccessibleEvent(nEventId, rOldValue, rNewValue);
 }
 
 Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleChild( sal_Int64 nIndex )
@@ -570,10 +560,12 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
                 break;
 
             case SdrHintKind::ObjectInserted:
-                CommitChange( AccessibleEventId::CHILD, Any( getAccessible( pSdrHint->GetObject() ) ) , uno::Any());
+                NotifyAccessibleEvent(AccessibleEventId::CHILD, uno::Any(),
+                                      Any(getAccessible(pSdrHint->GetObject())));
                 break;
             case SdrHintKind::ObjectRemoved:
-                CommitChange( AccessibleEventId::CHILD, uno::Any(), Any( getAccessible( pSdrHint->GetObject() ) )  );
+                NotifyAccessibleEvent(AccessibleEventId::CHILD,
+                                      Any(getAccessible(pSdrHint->GetObject())), uno::Any());
                 break;
             case SdrHintKind::ModelCleared:
                 dispose();
