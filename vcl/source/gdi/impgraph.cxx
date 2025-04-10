@@ -1004,7 +1004,7 @@ void ImpGraphic::ensureCurrentSizeInBytes()
         changeExisting(0);
 }
 
-sal_uLong ImpGraphic::getSizeBytes() const
+sal_Int64 ImpGraphic::getSizeBytes() const
 {
     if (mnSizeBytes > 0)
         return mnSizeBytes;
@@ -1439,7 +1439,7 @@ void ImpGraphic::dumpState(rtl::OStringBuffer &rState)
 
     rState.append(static_cast<sal_Int32>(meType));
     rState.append("\tsize:\t");
-    rState.append(static_cast<sal_Int64>(mnSizeBytes));
+    rState.append(mnSizeBytes);
     rState.append("\tgfxl:\t");
     rState.append(static_cast<sal_Int64>(mpGfxLink ? mpGfxLink->getSizeBytes() : -1));
     rState.append("\t");

@@ -78,7 +78,7 @@ private:
     std::shared_ptr<VectorGraphicData> maVectorGraphicData;
 
     GraphicType                  meType = GraphicType::NONE;
-    mutable sal_uLong            mnSizeBytes = 0;
+    mutable sal_Int64 mnSizeBytes = 0;
     bool                         mbSwapOut = false;
     bool                         mbDummyContext = false;
     // cache checksum computation
@@ -160,7 +160,7 @@ private:
     MapMode             getPrefMapMode() const;
     void                setPrefMapMode( const MapMode& rPrefMapMode );
 
-    sal_uLong           getSizeBytes() const;
+    sal_Int64 getSizeBytes() const;
 
     void ensureCurrentSizeInBytes();
 
