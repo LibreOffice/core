@@ -1141,9 +1141,21 @@ ScAccessibleDocumentPagePreview::~ScAccessibleDocumentPagePreview()
 void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
 {
     SolarMutexGuard aGuard;
-    mpTable.clear();
-    mpHeader.clear();
-    mpFooter.clear();
+    if (mpTable.is())
+    {
+        mpTable->dispose();
+        mpTable.clear();
+    }
+    if (mpHeader)
+    {
+        mpHeader->dispose();
+        mpHeader.clear();
+    }
+    if (mpFooter)
+    {
+        mpFooter->dispose();
+        mpFooter.clear();
+    }
 
     if (mpViewShell)
     {
