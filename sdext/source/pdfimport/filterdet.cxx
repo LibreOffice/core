@@ -283,6 +283,18 @@ bool copyToTemp(uno::Reference<io::XInputStream> const& xInput, oslFileHandle& r
     return false;
 }
 
+struct FilenameMime {
+    OUString aFilename;
+    OUString aMimetype;
+};
+
+constexpr FilenameMime aFilenameMimeMap[] = {
+    { u"Original.odt"_ustr, u"application/vnd.oasis.opendocument.text"_ustr },
+    { u"Original.odp"_ustr, u"application/vnd.oasis.opendocument.presentation"_ustr },
+    { u"Original.ods"_ustr, u"application/vnd.oasis.opendocument.spreadsheet"_ustr },
+    { u"Original.odg"_ustr, u"application/vnd.oasis.opendocument.graphics"_ustr },
+};
+
 } // end anonymous namespace
 
 // Check for a hybrid that is stored using the newer method, the standard PDF embedded file
@@ -354,6 +366,26 @@ uno::Reference<io::XStream> getEmbeddedFile(const OUString& rInPDFFileURL,
             // see https://issues.chromium.org/issues/408241034
             // When it does we can check the filename matches the expected mimetype
             SAL_INFO("sdext.pdfimport", "getEmbeddedFile attachment name: " << aName);
+
+            // Find the mimetype for the filename
+            OUString aMimetype;
+
+            for (auto& rFM : aFilenameMimeMap)
+            {
+                if (rFM.aFilename == aName)
+                {
+                    aMimetype = rFM.aMimetype;
+                    break;
+                }
+            }
+            SAL_INFO("sdext.pdfimport", "getEmbeddedFile mimetype: " << aMimetype);
+            // If we don't match, then this is a non-hybrid file with a normal attachment
+            if (aMimetype.isEmpty())
+            {
+                break;
+            }
+
+            SAL_INFO("sdext.pdfimport", "getEmbeddedFile pdfium open");
         } while(false);
 
         osl_unmapMappedFile(fileHandle, pMemRawPdf, nFileSize);
