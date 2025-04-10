@@ -667,6 +667,26 @@ ParserFlags cclass_Unicode::getFlagsExtended(sal_uInt32 const c, const cclass_Un
                     ParserFlags::WORD : ParserFlags::ILLEGAL;
             }
             break;
+        case U_START_PUNCTUATION:
+            // left angle, double angle and corner brackets
+            if (c != 0x3008 && c != 0x300a && c != 0x300c && c != 0x300e)
+                return ParserFlags::ILLEGAL;
+            return bStart ? ParserFlags::CHAR_WORD : ParserFlags::WORD;
+        case U_END_PUNCTUATION:
+            // right angle, double angle and corner brackets
+            if (c != 0x3009 && c != 0x300b && c != 0x300d && c != 0x300f)
+                return ParserFlags::ILLEGAL;
+            return bStart ? ParserFlags::CHAR_WORD : ParserFlags::WORD;
+        case U_INITIAL_PUNCTUATION:
+            // left single / double quotation marks
+            if (c != 0x2018 && c != 0x201c)
+                return ParserFlags::ILLEGAL;
+            return bStart ? ParserFlags::CHAR_WORD : ParserFlags::WORD;
+        case U_FINAL_PUNCTUATION:
+            // right single / double quotation marks
+            if (c != 0x2019 && c != 0x201d)
+                return ParserFlags::ILLEGAL;
+            return bStart ? ParserFlags::CHAR_WORD : ParserFlags::WORD;
     }
 
     return ParserFlags::ILLEGAL;
