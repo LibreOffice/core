@@ -29,7 +29,6 @@
 #include <Diagram.hxx>
 #include <DiagramHelper.hxx>
 #include <DataSourceHelper.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
 #include <DataSeries.hxx>
 #include <WrappedIgnoreProperty.hxx>
@@ -1830,12 +1829,12 @@ void WrappedIncludeHiddenCellsProperty::setPropertyValue( const Any& rOuterValue
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException( u"Property IncludeHiddenCells requires boolean value"_ustr, nullptr, 0 );
 
-    ChartModelHelper::setIncludeHiddenCells( bNewValue, *m_spChart2ModelContact->getDocumentModel() );
+    m_spChart2ModelContact->getDocumentModel()->setIncludeHiddenCells(bNewValue);
 }
 
 Any WrappedIncludeHiddenCellsProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
-    bool bValue = ChartModelHelper::isIncludeHiddenCells( m_spChart2ModelContact->getDocumentModel() );
+    bool bValue = m_spChart2ModelContact->getDocumentModel()->isIncludeHiddenCells();
     return uno::Any(bValue);
 }
 

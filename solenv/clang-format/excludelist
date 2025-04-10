@@ -875,7 +875,6 @@ chart2/source/inc/BaseGFXHelper.hxx
 chart2/source/inc/BaseCoordinateSystem.hxx
 chart2/source/inc/CachedDataSequence.hxx
 chart2/source/inc/CharacterProperties.hxx
-chart2/source/inc/ChartModelHelper.hxx
 chart2/source/inc/ChartType.hxx
 chart2/source/inc/ChartTypeHelper.hxx
 chart2/source/inc/ChartTypeTemplate.hxx
@@ -1028,7 +1027,6 @@ chart2/source/tools/AxisHelper.cxx
 chart2/source/tools/BaseGFXHelper.cxx
 chart2/source/tools/CachedDataSequence.cxx
 chart2/source/tools/CharacterProperties.cxx
-chart2/source/tools/ChartModelHelper.cxx
 chart2/source/tools/ChartTypeHelper.cxx
 chart2/source/tools/ColorPerPointHelper.cxx
 chart2/source/tools/CommonConverters.cxx

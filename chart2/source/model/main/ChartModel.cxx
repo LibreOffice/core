@@ -23,11 +23,12 @@
 #include <servicenames.hxx>
 #include <DataSource.hxx>
 #include <DataSourceHelper.hxx>
-#include <ChartModelHelper.hxx>
+#include <ChartType.hxx>
 #include <DisposeHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <InternalDataProvider.hxx>
 #include <ObjectIdentifier.hxx>
+#include <BaseCoordinateSystem.hxx>
 #include "PageBackground.hxx"
 #include <CloneHelper.hxx>
 #include <NameContainer.hxx>
@@ -96,7 +97,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > xContext)
     , m_aControllers( m_aModelMutex )
     , m_nControllerLockCount(0)
     , m_xContext(std::move( xContext ))
-    , m_aVisualAreaSize( ChartModelHelper::getDefaultPageSize() )
+    , m_aVisualAreaSize( ChartModel::getDefaultPageSize() )
     , m_xPageBackground( new PageBackground )
     , m_xXMLNamespaceMap( new NameContainer() )
     , mnStart(0)
@@ -794,7 +795,7 @@ void SAL_CALL ChartModel::attachDataProvider( const uno::Reference< chart2::data
         {
             try
             {
-                bool bIncludeHiddenCells = ChartModelHelper::isIncludeHiddenCells( this );
+                bool bIncludeHiddenCells = isIncludeHiddenCells();
                 xProp->setPropertyValue(u"IncludeHiddenCells"_ustr, uno::Any(bIncludeHiddenCells));
             }
             catch (const beans::UnknownPropertyException&)
@@ -1338,6 +1339,132 @@ bool ChartModel::isDataFromPivotTable() const
     uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(m_xDataProvider, uno::UNO_QUERY);
     return xPivotTableDataProvider.is();
 }
+
+rtl::Reference< BaseCoordinateSystem > ChartModel::getFirstCoordinateSystem()
+{
+    if( m_xDiagram )
+    {
+        auto aCooSysSeq( m_xDiagram->getBaseCoordinateSystems() );
+        if( !aCooSysSeq.empty() )
+            return aCooSysSeq[0];
+    }
+    return nullptr;
+}
+
+std::vector< rtl::Reference< DataSeries > > ChartModel::getDataSeries()
+{
+    if( m_xDiagram)
+        return m_xDiagram->getDataSeries();
+
+    return {};
+}
+
+rtl::Reference< ChartType > ChartModel::getChartTypeOfSeries( const rtl::Reference< DataSeries >& xGivenDataSeries )
+{
+    return m_xDiagram ? m_xDiagram->getChartTypeOfSeries( xGivenDataSeries ) : nullptr;
+}
+
+// static
+awt::Size ChartModel::getDefaultPageSize()
+{
+    return awt::Size( 16000, 9000 );
+}
+
+awt::Size ChartModel::getPageSize()
+{
+    return getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+}
+
+void ChartModel::triggerRangeHighlighting()
+{
+    getRangeHighlighter();
+    uno::Reference< view::XSelectionChangeListener > xSelectionChangeListener( m_xRangeHighlighter );
+    //trigger selection of cell range
+    lang::EventObject aEvent( xSelectionChangeListener );
+    xSelectionChangeListener->selectionChanged( aEvent );
+}
+
+bool ChartModel::isIncludeHiddenCells()
+{
+    bool bIncluded = true;  // hidden cells are included by default.
+
+    if (!m_xDiagram)
+        return bIncluded;
+
+    try
+    {
+        m_xDiagram->getPropertyValue(u"IncludeHiddenCells"_ustr) >>= bIncluded;
+    }
+    catch( const beans::UnknownPropertyException& )
+    {
+    }
+
+    return bIncluded;
+}
+
+bool ChartModel::setIncludeHiddenCells( bool bIncludeHiddenCells )
+{
+    bool bChanged = false;
+    try
+    {
+        ControllerLockGuard aLockedControllers( *this );
+
+        uno::Reference< beans::XPropertySet > xDiagramProperties( getFirstDiagram(), uno::UNO_QUERY );
+        if (!xDiagramProperties)
+            return false;
+
+        bool bOldValue = bIncludeHiddenCells;
+        xDiagramProperties->getPropertyValue( u"IncludeHiddenCells"_ustr ) >>= bOldValue;
+        if( bOldValue == bIncludeHiddenCells )
+            bChanged = true;
+
+        //set the property on all instances in all cases to get the different objects in sync!
+
+        uno::Any aNewValue(bIncludeHiddenCells);
+
+        try
+        {
+            uno::Reference< beans::XPropertySet > xDataProviderProperties( getDataProvider(), uno::UNO_QUERY );
+            if( xDataProviderProperties.is() )
+                xDataProviderProperties->setPropertyValue(u"IncludeHiddenCells"_ustr, aNewValue );
+        }
+        catch( const beans::UnknownPropertyException& )
+        {
+            //the property is optional!
+        }
+
+        try
+        {
+            rtl::Reference< DataSource > xUsedData = DataSourceHelper::getUsedData( *this );
+            if( xUsedData.is() )
+            {
+                uno::Reference< beans::XPropertySet > xProp;
+                const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aData( xUsedData->getDataSequences());
+                for( uno::Reference< chart2::data::XLabeledDataSequence > const & labeledData : aData )
+                {
+                    xProp.set( uno::Reference< beans::XPropertySet >( labeledData->getValues(), uno::UNO_QUERY ) );
+                    if(xProp.is())
+                        xProp->setPropertyValue(u"IncludeHiddenCells"_ustr, aNewValue );
+                    xProp.set( uno::Reference< beans::XPropertySet >( labeledData->getLabel(), uno::UNO_QUERY ) );
+                    if(xProp.is())
+                        xProp->setPropertyValue(u"IncludeHiddenCells"_ustr, aNewValue );
+                }
+            }
+        }
+        catch( const beans::UnknownPropertyException& )
+        {
+            //the property is optional!
+        }
+
+        xDiagramProperties->setPropertyValue( u"IncludeHiddenCells"_ustr, aNewValue);
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
+    return bChanged;
+}
+
 
 }  // namespace chart
 

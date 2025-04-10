@@ -20,7 +20,6 @@
 #include <ChartController.hxx>
 #include <ChartWindow.hxx>
 #include <ChartModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
 #include <TitleHelper.hxx>
 #include <DataSeries.hxx>
@@ -164,7 +163,7 @@ bool lcl_deleteDataCurve(
 
 ReferenceSizeProvider ChartController::impl_createReferenceSizeProvider()
 {
-    awt::Size aPageSize( ChartModelHelper::getPageSize( getChartModel() ) );
+    awt::Size aPageSize( getChartModel()->getPageSize() );
 
     return ReferenceSizeProvider(aPageSize, getChartModel());
 }

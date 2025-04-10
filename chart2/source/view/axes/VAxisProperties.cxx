@@ -21,7 +21,7 @@
 #include <ViewDefines.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
-#include <ChartModelHelper.hxx>
+#include <ChartModel.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
@@ -346,7 +346,7 @@ void AxisProperties::init( bool bCartesian )
 }
 
 AxisLabelProperties::AxisLabelProperties()
-                        : m_aFontReferenceSize( ChartModelHelper::getDefaultPageSize() )
+                        : m_aFontReferenceSize( ChartModel::getDefaultPageSize() )
                         , m_aMaximumSpaceForLabels( 0 , 0, m_aFontReferenceSize.Width, m_aFontReferenceSize.Height )
                         , m_nNumberFormatKey(0)
                         , m_eStaggering( AxisLabelStaggering::SideBySide )

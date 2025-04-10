@@ -78,6 +78,9 @@ class NameContainer;
 class PageBackground;
 class RangeHighlighter;
 class Title;
+class BaseCoordinateSystem;
+class DataSeries;
+class ChartType;
 
 namespace impl
 {
@@ -477,6 +480,21 @@ public:
 
     rtl::Reference< ::chart::Title > getTitleObject2() const;
     void setTitleObject( const rtl::Reference< ::chart::Title >& Title );
+
+    rtl::Reference< BaseCoordinateSystem > getFirstCoordinateSystem();
+
+    std::vector< rtl::Reference< ::chart::DataSeries > > getDataSeries();
+
+    rtl::Reference< ChartType > getChartTypeOfSeries( const rtl::Reference< ::chart::DataSeries >& xGivenDataSeries );
+
+    static css::awt::Size getDefaultPageSize();
+
+    css::awt::Size getPageSize();
+
+    void triggerRangeHighlighting();
+
+    bool isIncludeHiddenCells();
+    bool setIncludeHiddenCells( bool bIncludeHiddenCells );
 
 private:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;

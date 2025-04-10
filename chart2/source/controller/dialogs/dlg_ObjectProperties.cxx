@@ -38,7 +38,6 @@
 #include "tp_DataTable.hxx"
 #include <ResId.hxx>
 #include <ViewElementListProvider.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ObjectNameProvider.hxx>
@@ -121,7 +120,7 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
     m_xChartDocument = xChartModel;
     rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
     rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aObjectCID, xChartModel );
-    rtl::Reference< ChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
+    rtl::Reference< ChartType > xChartType = xChartModel->getChartTypeOfSeries( xSeries );
     sal_Int32 nDimensionCount = 0;
     if (xDiagram)
         nDimensionCount = xDiagram->getDimension();

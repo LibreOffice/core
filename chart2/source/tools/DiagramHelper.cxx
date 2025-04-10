@@ -25,7 +25,6 @@
 #include <AxisHelper.hxx>
 #include <ChartType.hxx>
 #include <ChartModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <RelativePositionHelper.hxx>
 #include <ControllerLockGuard.hxx>
@@ -197,7 +196,7 @@ Sequence< OUString > DiagramHelper::generateAutomaticCategoriesFromCooSys( const
 Sequence< OUString > DiagramHelper::getExplicitSimpleCategories(
             ChartModel& rModel )
 {
-    rtl::Reference< BaseCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( &rModel ) );
+    rtl::Reference< BaseCoordinateSystem > xCooSys( rModel.getFirstCoordinateSystem() );
     ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, rModel );
     return aExplicitCategoriesProvider.getSimpleCategories();
 }
@@ -292,7 +291,7 @@ void DiagramHelper::switchToDateCategories( const rtl::Reference<::chart::ChartM
     {
         ControllerLockGuardUNO aCtrlLockGuard( xChartDoc );
 
-        rtl::Reference< BaseCoordinateSystem > xCooSys = ChartModelHelper::getFirstCoordinateSystem( xChartDoc );
+        rtl::Reference< BaseCoordinateSystem > xCooSys = xChartDoc->getFirstCoordinateSystem();
         if( xCooSys.is() )
         {
             rtl::Reference< Axis > xAxis = xCooSys->getAxisByDimension2(0,0);
@@ -307,7 +306,7 @@ void DiagramHelper::switchToTextCategories( const rtl::Reference<::chart::ChartM
     {
         ControllerLockGuardUNO aCtrlLockGuard( xChartDoc );
 
-        rtl::Reference< BaseCoordinateSystem > xCooSys = ChartModelHelper::getFirstCoordinateSystem( xChartDoc );
+        rtl::Reference< BaseCoordinateSystem > xCooSys = xChartDoc->getFirstCoordinateSystem();
         if( xCooSys.is() )
         {
             rtl::Reference< Axis > xAxis = xCooSys->getAxisByDimension2(0,0);
@@ -387,7 +386,7 @@ bool DiagramHelper::setDiagramPositioning( const rtl::Reference<::chart::ChartMo
     ControllerLockGuardUNO aCtrlLockGuard( xChartModel );
 
     bool bChanged = false;
-    awt::Size aPageSize( ChartModelHelper::getPageSize(xChartModel) );
+    awt::Size aPageSize( xChartModel->getPageSize() );
     rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
     if( !xDiagram.is() )
         return bChanged;
@@ -434,7 +433,7 @@ awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const rtl::Reference
     if( !xDiagram.is() )
         return aRet;
 
-    awt::Size aPageSize( ChartModelHelper::getPageSize(xChartModel) );
+    awt::Size aPageSize( xChartModel->getPageSize() );
 
     RelativePosition aRelPos;
     RelativeSize aRelSize;

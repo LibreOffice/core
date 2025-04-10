@@ -37,7 +37,6 @@
 #include <RegressionCurveItemConverter.hxx>
 #include <RegressionEquationItemConverter.hxx>
 #include <ErrorBarItemConverter.hxx>
-#include <ChartModelHelper.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <TitleHelper.hxx>
@@ -198,7 +197,7 @@ wrapper::ItemConverter* createItemConverter(
                     wrapper::GraphicObjectType::FilledDataPoint;
 
                 rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( aObjectCID, xChartModel );
-                rtl::Reference< ChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
+                rtl::Reference< ChartType > xChartType = xChartModel->getChartTypeOfSeries( xSeries );
 
                 rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
                 sal_Int32 nDimensionCount = xDiagram->getDimension();

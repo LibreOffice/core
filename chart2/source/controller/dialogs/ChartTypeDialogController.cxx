@@ -23,7 +23,6 @@
 #include <ResId.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
-#include <ChartModelHelper.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <Diagram.hxx>
@@ -790,8 +789,7 @@ void OfPieChartDialogController::fillExtraControls(
     m_xMF_CompositeSize->set_value(nCompositeSize);
 
     // Limit based on number of entries in the series
-    const std::vector< rtl::Reference< DataSeries > > dataSeriesVec =
-        ChartModelHelper::getDataSeries( xChartModel);
+    const std::vector< rtl::Reference< DataSeries > > dataSeriesVec = xChartModel->getDataSeries();
     if (!dataSeriesVec.empty()) {
         const rtl::Reference<DataSeries>& ds = dataSeriesVec[0];
         const DataSeries::tDataSequenceContainer data = ds->getDataSequences2();
@@ -1399,7 +1397,7 @@ void CombiColumnLineChartDialogController::fillExtraControls(
         nNumLines = 0;
     m_xMF_NumberOfLines->set_value(nNumLines);
 
-    sal_Int32 nMaxLines = ChartModelHelper::getDataSeries( xChartModel ).size() - 1;
+    sal_Int32 nMaxLines = xChartModel->getDataSeries().size() - 1;
     if( nMaxLines < 0 )
         nMaxLines = 0;
     m_xMF_NumberOfLines->set_max(nMaxLines);

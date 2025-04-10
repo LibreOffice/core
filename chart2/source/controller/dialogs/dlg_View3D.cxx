@@ -23,7 +23,6 @@
 #include "tp_3D_SceneGeometry.hxx"
 #include "tp_3D_SceneAppearance.hxx"
 #include "tp_3D_SceneIllumination.hxx"
-#include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
 #include <Diagram.hxx>
 

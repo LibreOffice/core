@@ -28,7 +28,6 @@
 #include <UncachedDataSequence.hxx>
 #include <DataSourceHelper.hxx>
 #include <ChartModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <Diagram.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <BaseCoordinateSystem.hxx>
@@ -324,7 +323,7 @@ InternalDataProvider::InternalDataProvider(
             {
                 std::vector< std::vector< uno::Any > > aNewCategories;//inner count is level
                 {
-                    ExplicitCategoriesProvider aExplicitCategoriesProvider(ChartModelHelper::getFirstCoordinateSystem(xModel), *xModel);
+                    ExplicitCategoriesProvider aExplicitCategoriesProvider(xModel->getFirstCoordinateSystem(), *xModel);
 
                     const std::vector< Reference< chart2::data::XLabeledDataSequence> >& rSplitCategoriesList( aExplicitCategoriesProvider.getSplitCategoriesList() );
                     sal_Int32 nLevelCount = rSplitCategoriesList.size();
@@ -370,7 +369,7 @@ InternalDataProvider::InternalDataProvider(
             }
 
             // data series
-            std::vector< rtl::Reference< DataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( xModel ));
+            std::vector< rtl::Reference< DataSeries > > aSeriesVector( xModel->getDataSeries());
             lcl_internalizeSeries ftor( m_aInternalData, *this, bConnectToModel, m_bDataInColumns );
             for( const auto& rxScreen : aSeriesVector )
                 ftor( rxScreen );

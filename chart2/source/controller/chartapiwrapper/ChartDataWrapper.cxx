@@ -20,7 +20,6 @@
 #include "ChartDataWrapper.hxx"
 #include <DiagramHelper.hxx>
 #include <DataSourceHelper.hxx>
-#include <ChartModelHelper.hxx>
 #include <InternalDataProvider.hxx>
 #include <ControllerLockGuard.hxx>
 #include "Chart2ModelContact.hxx"

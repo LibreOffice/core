@@ -25,7 +25,6 @@
 #include <AxisHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <ChartModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <unonames.hxx>
 #include <BaseCoordinateSystem.hxx>
@@ -127,7 +126,7 @@ void ExplicitCategoriesProvider::implInitSplit()
     //->split them in the direction of the first series
     //detect whether the first series is a row or a column
     bool bSeriesUsesColumns = true;
-    std::vector< rtl::Reference< DataSeries > > aSeries = ChartModelHelper::getDataSeries( &mrModel );
+    std::vector< rtl::Reference< DataSeries > > aSeries = mrModel.getDataSeries();
     if( !aSeries.empty() )
     {
         const rtl::Reference< DataSeries >& xSeriesSource = aSeries.front();
@@ -195,7 +194,7 @@ void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUStr
     auto pOutTexts = rOutTexts.getArray();
 
     sal_Int32 nAxisNumberFormat = 0;
-    rtl::Reference< BaseCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( &rModel ) );
+    rtl::Reference< BaseCoordinateSystem > xCooSysModel( rModel.getFirstCoordinateSystem() );
     if( xCooSysModel.is() )
     {
         rtl::Reference< Axis > xAxis = xCooSysModel->getAxisByDimension2(0,0);
@@ -424,7 +423,7 @@ static bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >&
         bool bOwnData = false;
         bool bOwnDataAnddAxisHasAnyFormat = false;
         bool bOwnDataAnddAxisHasDateFormat = false;
-        rtl::Reference< BaseCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( &rModel ) );
+        rtl::Reference< BaseCoordinateSystem > xCooSysModel( rModel.getFirstCoordinateSystem() );
         if( xCooSysModel.is() )
         {
             if( rModel.hasInternalDataProvider() )

@@ -19,7 +19,6 @@
 
 #include "DialogModel.hxx"
 #include <DataBrowserModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
 #include <ChartTypeManager.hxx>
 #include <ChartView.hxx>
@@ -762,7 +761,7 @@ void DataBrowserModel::updateFromModel()
     sal_Int32 nHeaderStart = 0;
     sal_Int32 nHeaderEnd   = 0;
     {
-        ExplicitCategoriesProvider aExplicitCategoriesProvider( ChartModelHelper::getFirstCoordinateSystem(m_xChartDocument), *m_xChartDocument );
+        ExplicitCategoriesProvider aExplicitCategoriesProvider( m_xChartDocument->getFirstCoordinateSystem(), *m_xChartDocument );
 
         const std::vector< Reference< chart2::data::XLabeledDataSequence> >& rSplitCategoriesList = aExplicitCategoriesProvider.getSplitCategoriesList();
         sal_Int32 nLevelCount = rSplitCategoriesList.size();

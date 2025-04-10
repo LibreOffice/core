@@ -543,7 +543,6 @@
 #include <CharacterPropertyItemConverter.hxx>
 #include <ChartController.hxx>
 #include <ChartModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartTypeManager.hxx>

@@ -20,7 +20,6 @@
 #include <RangeHighlighter.hxx>
 #include <WeakListenerAdapter.hxx>
 #include <ChartModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <ObjectIdentifier.hxx>
 #include <DataSeries.hxx>
@@ -97,7 +96,7 @@ void RangeHighlighter::determineRanges()
 
     try
     {
-        m_bIncludeHiddenCells = ChartModelHelper::isIncludeHiddenCells( m_xChartModel );
+        m_bIncludeHiddenCells = m_xChartModel->isIncludeHiddenCells();
 
         uno::Any aSelection( m_xSelectionSupplier->getSelection());
 

@@ -21,7 +21,6 @@
 #include <ChartModel.hxx>
 #include <MediaDescriptorHelper.hxx>
 #include <ChartViewHelper.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartTypeManager.hxx>
 #include <ChartTypeTemplate.hxx>
 #include <DataSourceHelper.hxx>
@@ -437,7 +436,7 @@ void ChartModel::insertDefaultChart()
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
-        ChartModelHelper::setIncludeHiddenCells( false, *this );
+        setIncludeHiddenCells( false );
     }
     catch( const uno::Exception & )
     {

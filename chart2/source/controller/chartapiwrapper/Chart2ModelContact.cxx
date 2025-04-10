@@ -18,7 +18,6 @@
  */
 
 #include "Chart2ModelContact.hxx"
-#include <ChartModelHelper.hxx>
 #include <Legend.hxx>
 #include <LegendHelper.hxx>
 #include <CommonConverters.hxx>
@@ -157,7 +156,7 @@ sal_Int32 Chart2ModelContact::getExplicitNumberFormatKeyForSeries(
 
 awt::Size Chart2ModelContact::GetPageSize() const
 {
-    return ChartModelHelper::getPageSize(m_xChartModel.get());
+    return m_xChartModel.get()->getPageSize();
 }
 
 awt::Rectangle Chart2ModelContact::SubstractAxisTitleSizes( const awt::Rectangle& rPositionRect )

@@ -19,7 +19,6 @@
 
 #include <DataSourceHelper.hxx>
 #include <ChartModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartTypeManager.hxx>
 #include <Diagram.hxx>
 #include <DataSeries.hxx>
@@ -286,7 +285,7 @@ rtl::Reference< DataSource > DataSourceHelper::getUsedData(
     if( xCategories.is() )
         aResult.push_back( xCategories );
 
-    std::vector< rtl::Reference< DataSeries > > aSeriesVector = ChartModelHelper::getDataSeries( &rModel );
+    std::vector< rtl::Reference< DataSeries > > aSeriesVector = rModel.getDataSeries();
     for (auto const& series : aSeriesVector)
     {
         const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > & aDataSequences( series->getDataSequences2() );

@@ -24,7 +24,6 @@
 #include <StatisticsItemConverter.hxx>
 #include <GraphicPropertyItemConverter.hxx>
 #include <DataPointItemConverter.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
 #include <Diagram.hxx>
 #include <DataSeries.hxx>
@@ -105,7 +104,7 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
         : MultipleItemConverter( rItemPool )
 {
     std::vector< rtl::Reference< DataSeries > > aSeriesList =
-        ::chart::ChartModelHelper::getDataSeries( xChartModel );
+        xChartModel->getDataSeries();
 
     for (auto const& series : aSeriesList)
     {
@@ -168,7 +167,7 @@ AllSeriesStatisticsConverter::AllSeriesStatisticsConverter(
         : MultipleItemConverter( rItemPool )
 {
     std::vector< rtl::Reference< DataSeries > > aSeriesList =
-        ::chart::ChartModelHelper::getDataSeries( xChartModel );
+        xChartModel->getDataSeries();
 
     for (auto const& series : aSeriesList)
     {

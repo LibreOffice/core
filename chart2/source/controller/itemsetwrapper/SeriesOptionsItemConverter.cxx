@@ -20,7 +20,6 @@
 #include <SeriesOptionsItemConverter.hxx>
 #include "SchWhichPairs.hxx"
 
-#include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
@@ -332,7 +331,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                 if (bIncludeHiddenCells != m_bIncludeHiddenCells)
                 {
                     if (m_xChartModel)
-                        bChanged = ChartModelHelper::setIncludeHiddenCells( bIncludeHiddenCells, *m_xChartModel );
+                        bChanged = m_xChartModel->setIncludeHiddenCells( bIncludeHiddenCells );
                 }
             }
         }

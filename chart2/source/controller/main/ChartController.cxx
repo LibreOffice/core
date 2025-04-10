@@ -27,7 +27,6 @@
 #include <ResId.hxx>
 #include <dlg_DataSource.hxx>
 #include <ChartModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
 #include "ControllerCommandDispatch.hxx"
 #include <DataSeries.hxx>
@@ -480,7 +479,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
                     if( m_aSelection.hasSelection() )
                         this->impl_selectObjectAndNotiy();
                     else
-                        ChartModelHelper::triggerRangeHighlighting( getChartModel() );
+                        getChartModel()->triggerRangeHighlighting();
 
                     impl_initializeAccessible();
 

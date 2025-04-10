@@ -31,7 +31,6 @@
 #include <DataSeriesHelper.hxx>
 #include <Scaling.hxx>
 #include <ChartModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <ReferenceSizeProvider.hxx>
 #include <ExplicitCategoriesProvider.hxx>
@@ -100,7 +99,7 @@ bool AxisHelper::isLogarithmic( const Reference< XScaling >& xScaling )
 chart2::ScaleData AxisHelper::getDateCheckedScale( const rtl::Reference< Axis >& xAxis, ChartModel& rModel )
 {
     ScaleData aScale = xAxis->getScaleData();
-    rtl::Reference< BaseCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( &rModel ) );
+    rtl::Reference< BaseCoordinateSystem > xCooSys( rModel.getFirstCoordinateSystem() );
     if( aScale.AutoDateAxis && aScale.AxisType == AxisType::CATEGORY )
     {
         sal_Int32 nDimensionIndex=0; sal_Int32 nAxisIndex=0;

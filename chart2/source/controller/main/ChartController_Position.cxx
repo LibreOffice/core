@@ -22,7 +22,6 @@
 #include <DrawViewWrapper.hxx>
 #include <PositionAndSizeHelper.hxx>
 #include <ChartModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartView.hxx>
 #include "UndoGuard.hxx"
 #include <ObjectNameProvider.hxx>
@@ -173,7 +172,7 @@ void ChartController::executeDispatch_PositionAndSize(const ::css::uno::Sequence
 
             awt::Rectangle aNewObjectRect;
             lcl_getPositionAndSizeFromItemSet( aItemSet, aNewObjectRect, ToSize(aOldObjectRect) );
-            awt::Size aPageSize( ChartModelHelper::getPageSize( getChartModel() ) );
+            awt::Size aPageSize( getChartModel()->getPageSize() );
             awt::Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
 
             bool bChanged = false;

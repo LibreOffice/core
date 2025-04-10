@@ -28,7 +28,6 @@
 #include <ChartWindow.hxx>
 #include <ResId.hxx>
 #include <ChartModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
@@ -249,7 +248,7 @@ void SAL_CALL ChartController::setPosSize(
 
     //todo: for standalone chart: detect whether we are standalone
     //change map mode to fit new size
-    awt::Size aModelPageSize = ChartModelHelper::getPageSize( getChartModel() );
+    awt::Size aModelPageSize = getChartModel()->getPageSize();
     sal_Int32 nScaleXNumerator = aLogicSize.Width();
     sal_Int32 nScaleXDenominator = aModelPageSize.Width;
     sal_Int32 nScaleYNumerator = aLogicSize.Height();
@@ -789,7 +788,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                     {
                         tools::Rectangle aObjectRect = pObj->GetSnapRect();
                         tools::Rectangle aOldObjectRect = pObj->GetLastBoundRect();
-                        awt::Size aPageSize( ChartModelHelper::getPageSize( getChartModel() ) );
+                        awt::Size aPageSize( getChartModel()->getPageSize() );
                         tools::Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
 
                         const E3dObject* pE3dObject(DynCastE3dObject(pObj));
@@ -1454,7 +1453,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                             if (pObj)
                             {
                                 tools::Rectangle aRect = pObj->GetSnapRect();
-                                awt::Size aPageSize(ChartModelHelper::getPageSize(getChartModel()));
+                                awt::Size aPageSize(getChartModel()->getPageSize());
                                 if ((fShiftAmountX > 0.0 && (aRect.Right() + fShiftAmountX > aPageSize.Width)) ||
                                     (fShiftAmountX < 0.0 && (aRect.Left() + fShiftAmountX < 0)) ||
                                     (fShiftAmountY > 0.0 && (aRect.Bottom() + fShiftAmountY > aPageSize.Height)) ||
@@ -1480,7 +1479,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                         {
                             awt::Point aPos( xShape->getPosition() );
                             awt::Size aSize( xShape->getSize() );
-                            awt::Size aPageSize( ChartModelHelper::getPageSize( getChartModel() ) );
+                            awt::Size aPageSize( getChartModel()->getPageSize() );
                             aPos.X = static_cast< tools::Long >( static_cast< double >( aPos.X ) + fShiftAmountX );
                             aPos.Y = static_cast< tools::Long >( static_cast< double >( aPos.Y ) + fShiftAmountY );
                             if( aPos.X + aSize.Width > aPageSize.Width )
@@ -1719,7 +1718,7 @@ bool ChartController::impl_moveOrResizeObject(
         ObjectIdentifier::getObjectPropertySet( rCID, xChartModel ));
     if( xObjProp.is())
     {
-        awt::Size aRefSize = ChartModelHelper::getPageSize( xChartModel );
+        awt::Size aRefSize = xChartModel->getPageSize();
 
         chart2::RelativePosition aRelPos;
         chart2::RelativeSize     aRelSize;
