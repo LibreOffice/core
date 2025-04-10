@@ -29,8 +29,6 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
-#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 using namespace ::com::sun::star;
 
