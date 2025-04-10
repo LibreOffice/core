@@ -302,9 +302,9 @@ constexpr FilenameMime aFilenameMimeMap[] = {
 // be exactly one embedded file.
 // This uses PDFium to do the legwork.
 uno::Reference<io::XStream> getEmbeddedFile(const OUString& rInPDFFileURL,
-                                            OUString& /*rOutMimetype*/,
+                                            OUString& rOutMimetype,
                                             OUString& /*io_rPwd*/,
-                                            const uno::Reference<uno::XComponentContext>& /*xContext*/,
+                                            const uno::Reference<uno::XComponentContext>& xContext,
                                             const uno::Sequence<beans::PropertyValue>& /*rFilterData*/,
                                             bool /*bMayUseUI*/)
 {
@@ -386,6 +386,26 @@ uno::Reference<io::XStream> getEmbeddedFile(const OUString& rInPDFFileURL,
             }
 
             SAL_INFO("sdext.pdfimport", "getEmbeddedFile pdfium open");
+            std::vector<sal_uInt8> aExtractedFileBuf;
+            if (!pAttachment->getFile(aExtractedFileBuf))
+            {
+                break;
+            }
+            SAL_INFO("sdext.pdfimport", "getEmbeddedFile file buffer length: " << aExtractedFileBuf.size());
+            // Based on FileEmitContext above, we want to stash the data in a TempFile
+            // but need an XStream
+            uno::Reference<io::XStream> xContextStream;
+            uno::Reference<io::XSeekable> xSeek;
+            xContextStream.set(io::TempFile::create(xContext), uno::UNO_QUERY_THROW);
+            auto xOut = xContextStream->getOutputStream();
+            xSeek.set(xOut, uno::UNO_QUERY_THROW);
+            // writeBytes wants a Uno::Sequence rather than the std::vector above, convert again
+            uno::Sequence<sal_Int8> aExtractedFileSeq(reinterpret_cast<sal_Int8 *>(aExtractedFileBuf.data()), aExtractedFileBuf.size());
+            xOut->writeBytes(aExtractedFileSeq);
+
+            xEmbed = xContextStream;
+            rOutMimetype = aMimetype;
+            SAL_INFO("sdext.pdfimport", "getEmbeddedFile returning stream");
         } while(false);
 
         osl_unmapMappedFile(fileHandle, pMemRawPdf, nFileSize);
