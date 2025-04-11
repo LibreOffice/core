@@ -373,59 +373,6 @@ void deleteSeries(
     }
 }
 
-void setPropertyAlsoToAllAttributedDataPoints( const rtl::Reference< ::chart::DataSeries >& xSeries,
-                                              const OUString& rPropertyName, const uno::Any& rPropertyValue )
-{
-    if( !xSeries.is() )
-        return;
-
-    xSeries->setPropertyValue( rPropertyName, rPropertyValue );
-    uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-    // "AttributedDataPoints"
-    if( xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList )
-    {
-        for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
-        {
-            Reference< beans::XPropertySet > xPointProp( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]) );
-            if(!xPointProp.is())
-                continue;
-            xPointProp->setPropertyValue( rPropertyName, rPropertyValue );
-            if( rPropertyName == "LabelPlacement" )
-            {
-                xPointProp->setPropertyValue(u"CustomLabelPosition"_ustr, uno::Any());
-                xPointProp->setPropertyValue(u"CustomLabelSize"_ustr, uno::Any());
-            }
-        }
-    }
-}
-
-bool hasAttributedDataPointDifferentValue( const rtl::Reference< DataSeries >& xSeries,
-                                              const OUString& rPropertyName, const uno::Any& rPropertyValue )
-{
-    if( !xSeries.is() )
-        return false;
-
-    uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-    // "AttributedDataPoints"
-    if( xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList )
-    {
-        for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
-        {
-            Reference< beans::XPropertySet > xPointProp( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]) );
-            if(!xPointProp.is())
-                continue;
-            uno::Any aPointValue( xPointProp->getPropertyValue( rPropertyName ) );
-            if( rPropertyValue != aPointValue )
-                return true;
-        }
-    }
-    return false;
-}
-
-namespace
-{
-
-}
 
 sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nIndex, const Reference< chart2::data::XDataSequence >& xDataSequence, bool bTranslate )
 {

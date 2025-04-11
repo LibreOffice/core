@@ -906,8 +906,8 @@ void Diagram::setGeometry3D( sal_Int32 nNewGeometry )
 
     for (auto const& series : aSeriesVec)
     {
-        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(
-            series, u"Geometry3D"_ustr, uno::Any( nNewGeometry ));
+        series->setPropertyAlsoToAllAttributedDataPoints(
+            u"Geometry3D"_ustr, uno::Any( nNewGeometry ));
     }
 }
 

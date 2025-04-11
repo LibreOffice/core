@@ -128,9 +128,9 @@ bool numberFormatFromItemToPropertySet(
     {
         rtl::Reference<DataSeries> xSeries( dynamic_cast<DataSeries*>(xPropertySet.get()) );
         if (aValue != aOldValue ||
-            ::chart::DataSeriesHelper::hasAttributedDataPointDifferentValue(xSeries, aPropertyName, aOldValue))
+            xSeries->hasAttributedDataPointDifferentValue(aPropertyName, aOldValue))
         {
-            ::chart::DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(xSeries, aPropertyName, aValue);
+            xSeries->setPropertyAlsoToAllAttributedDataPoints(aPropertyName, aValue);
             bChanged = true;
         }
     }
@@ -178,9 +178,9 @@ bool useSourceFormatFromItemToPropertySet(
     {
         rtl::Reference<DataSeries> xSeries(dynamic_cast<DataSeries*>(xPropertySet.get()));
         if (aNewValue != aOldValue ||
-            ::chart::DataSeriesHelper::hasAttributedDataPointDifferentValue(xSeries, aPropertyName, aOldValue))
+            xSeries->hasAttributedDataPointDifferentValue(aPropertyName, aOldValue))
         {
-            ::chart::DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(xSeries, aPropertyName, aNewValue);
+            xSeries->setPropertyAlsoToAllAttributedDataPoints(aPropertyName, aNewValue);
             bChanged = true;
         }
     }
@@ -290,10 +290,10 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
                 {
                     rtl::Reference<DataSeries> xSeries(dynamic_cast<DataSeries*>(GetPropertySet().get()));
                     if (bOldValue != bool(rValue) ||
-                        DataSeriesHelper::hasAttributedDataPointDifferentValue(xSeries, CHART_UNONAME_LABEL, aOldValue))
+                        xSeries->hasAttributedDataPointDifferentValue(CHART_UNONAME_LABEL, aOldValue))
                     {
-                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(xSeries, CHART_UNONAME_LABEL, uno::Any(aLabel));
-                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(xSeries, CHART_UNONAME_CUSTOM_LABEL_FIELDS, uno::Any());
+                        xSeries->setPropertyAlsoToAllAttributedDataPoints(CHART_UNONAME_LABEL, uno::Any(aLabel));
+                        xSeries->setPropertyAlsoToAllAttributedDataPoints(CHART_UNONAME_CUSTOM_LABEL_FIELDS, uno::Any());
                         bChanged = true;
                     }
                 }
@@ -328,9 +328,9 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
                 {
                     rtl::Reference<DataSeries> xSeries(dynamic_cast<DataSeries*>(GetPropertySet().get()));
                     if (aOldValue != aNewValue ||
-                        DataSeriesHelper::hasAttributedDataPointDifferentValue(xSeries, u"LabelSeparator"_ustr, uno::Any(aOldValue)))
+                        xSeries->hasAttributedDataPointDifferentValue(u"LabelSeparator"_ustr, uno::Any(aOldValue)))
                     {
-                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(xSeries, u"LabelSeparator"_ustr, uno::Any(aNewValue));
+                        xSeries->setPropertyAlsoToAllAttributedDataPoints(u"LabelSeparator"_ustr, uno::Any(aNewValue));
                         bChanged = true;
                     }
                 }
@@ -358,9 +358,9 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
                 {
                     rtl::Reference< DataSeries > xSeries( dynamic_cast<DataSeries*>(GetPropertySet().get()) );
                     if( bOld!=bNew ||
-                        DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, u"TextWordWrap"_ustr, uno::Any( bOld ) ) )
+                        xSeries->hasAttributedDataPointDifferentValue( u"TextWordWrap"_ustr, uno::Any( bOld ) ) )
                     {
-                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, u"TextWordWrap"_ustr, uno::Any( bNew ) );
+                        xSeries->setPropertyAlsoToAllAttributedDataPoints( u"TextWordWrap"_ustr, uno::Any( bNew ) );
                         bChanged = true;
                     }
                 }
@@ -388,9 +388,9 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
                 {
                     rtl::Reference<DataSeries> xSeries(dynamic_cast<DataSeries*>(GetPropertySet().get()));
                     if (nOld != nNew ||
-                        DataSeriesHelper::hasAttributedDataPointDifferentValue(xSeries, u"LabelPlacement"_ustr, uno::Any(nOld)))
+                        xSeries->hasAttributedDataPointDifferentValue(u"LabelPlacement"_ustr, uno::Any(nOld)))
                     {
-                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(xSeries, u"LabelPlacement"_ustr, uno::Any(nNew));
+                        xSeries->setPropertyAlsoToAllAttributedDataPoints(u"LabelPlacement"_ustr, uno::Any(nNew));
                         bChanged = true;
                     }
                 }
@@ -552,8 +552,8 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
 
                 if (mbDataSeries)
                 {
-                    if (DataSeriesHelper::hasAttributedDataPointDifferentValue(
-                            dynamic_cast<DataSeries*>(GetPropertySet().get()), CHART_UNONAME_LABEL, uno::Any(aLabel)))
+                    if (dynamic_cast<DataSeries*>(GetPropertySet().get())->hasAttributedDataPointDifferentValue(
+                            CHART_UNONAME_LABEL, uno::Any(aLabel)))
                     {
                         rOutItemSet.InvalidateItem(nWhichId);
                     }

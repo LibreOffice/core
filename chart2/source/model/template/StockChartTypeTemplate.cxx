@@ -204,7 +204,7 @@ void StockChartTypeTemplate::applyStyle2(
         if( bHasVolume && nChartTypeIndex==0 )
         {
             //switch lines off for volume bars
-            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, u"BorderStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
+            xSeries->setPropertyAlsoToAllAttributedDataPoints( u"BorderStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
         }
         else
         {

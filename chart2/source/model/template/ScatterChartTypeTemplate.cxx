@@ -179,7 +179,7 @@ void ScatterChartTypeTemplate::applyStyle2(
         xSeries->switchLinesOnOrOff( m_bHasLines );
         xSeries->makeLinesThickOrThin( m_nDim==2 );
         if( m_nDim==3 )
-            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, u"BorderStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
+            xSeries->setPropertyAlsoToAllAttributedDataPoints( u"BorderStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
     }
     catch( const uno::Exception & )
     {

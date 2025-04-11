@@ -211,7 +211,7 @@ void ColumnLineChartTypeTemplate::applyStyle2(
 
     if( nChartTypeIndex==0 ) // columns
     {
-        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, u"BorderStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
+        xSeries->setPropertyAlsoToAllAttributedDataPoints( u"BorderStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
     }
     else if( nChartTypeIndex==1 ) // lines
     {

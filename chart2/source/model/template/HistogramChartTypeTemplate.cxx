@@ -124,8 +124,8 @@ void HistogramChartTypeTemplate::applyStyle2(const rtl::Reference<DataSeries>& x
                                              ::sal_Int32 nSeriesCount)
 {
     ChartTypeTemplate::applyStyle2(xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount);
-    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(xSeries, "BorderStyle",
-                                                               uno::Any(drawing::LineStyle_NONE));
+    xSeries->setPropertyAlsoToAllAttributedDataPoints("BorderStyle",
+                                                      uno::Any(drawing::LineStyle_NONE));
 }
 
 void HistogramChartTypeTemplate::resetStyles2(const rtl::Reference<::chart::Diagram>& xDiagram)

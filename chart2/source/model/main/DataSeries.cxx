@@ -813,6 +813,55 @@ void DataSeries::makeLinesThickOrThin( bool bThick )
     }
 }
 
+void DataSeries::setPropertyAlsoToAllAttributedDataPoints( const OUString& rPropertyName, const uno::Any& rPropertyValue )
+{
+    setPropertyValue( rPropertyName, rPropertyValue );
+
+    std::vector<sal_Int32> aAttributedDataPointIndexList;
+    {
+        MutexGuard aGuard( m_aMutex );
+        aAttributedDataPointIndexList.reserve(m_aAttributedDataPoints.size());
+        for (const auto & rPair : m_aAttributedDataPoints)
+            aAttributedDataPointIndexList.push_back(rPair.first);
+    }
+
+    for(sal_Int32 nIdx : aAttributedDataPointIndexList)
+    {
+        Reference< beans::XPropertySet > xPointProp( getDataPointByIndex(nIdx) );
+        if(!xPointProp.is())
+            continue;
+        xPointProp->setPropertyValue( rPropertyName, rPropertyValue );
+        if( rPropertyName == "LabelPlacement" )
+        {
+            xPointProp->setPropertyValue(u"CustomLabelPosition"_ustr, uno::Any());
+            xPointProp->setPropertyValue(u"CustomLabelSize"_ustr, uno::Any());
+        }
+    }
+}
+
+bool DataSeries::hasAttributedDataPointDifferentValue(
+                                              const OUString& rPropertyName, const uno::Any& rPropertyValue )
+{
+    std::vector<sal_Int32> aAttributedDataPointIndexList;
+    {
+        MutexGuard aGuard( m_aMutex );
+        aAttributedDataPointIndexList.reserve(m_aAttributedDataPoints.size());
+        for (const auto & rPair : m_aAttributedDataPoints)
+            aAttributedDataPointIndexList.push_back(rPair.first);
+    }
+
+    for(sal_Int32 nIdx : aAttributedDataPointIndexList)
+    {
+        Reference< beans::XPropertySet > xPointProp( getDataPointByIndex(nIdx) );
+        if(!xPointProp.is())
+            continue;
+        uno::Any aPointValue( xPointProp->getPropertyValue( rPropertyName ) );
+        if( rPropertyValue != aPointValue )
+            return true;
+    }
+
+    return false;
+}
 
 }  // namespace chart
 

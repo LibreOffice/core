@@ -172,6 +172,14 @@ public:
 
     void makeLinesThickOrThin( bool bThick );
 
+    bool hasAttributedDataPointDifferentValue(
+        const OUString& rPropertyName,
+        const css::uno::Any& rPropertyValue );
+
+    void setPropertyAlsoToAllAttributedDataPoints(
+            const OUString& rPropertyName,
+            const css::uno::Any& rPropertyValue );
+
 private:
 
     // late initialization to call after copy-constructing

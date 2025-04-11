@@ -779,8 +779,8 @@ bool ChartController::executeDispatch_Delete()
                     if( aObjectType == OBJECTTYPE_DATA_LABELS )
                     {
                         rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( aCID, getChartModel() );
-                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, CHART_UNONAME_LABEL, uno::Any(aLabel) );
-                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, CHART_UNONAME_CUSTOM_LABEL_FIELDS, uno::Any() );
+                        xSeries->setPropertyAlsoToAllAttributedDataPoints( CHART_UNONAME_LABEL, uno::Any(aLabel) );
+                        xSeries->setPropertyAlsoToAllAttributedDataPoints( CHART_UNONAME_CUSTOM_LABEL_FIELDS, uno::Any() );
                     }
                     else
                     {

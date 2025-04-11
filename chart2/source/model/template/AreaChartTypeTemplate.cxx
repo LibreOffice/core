@@ -148,7 +148,7 @@ void AreaChartTypeTemplate::applyStyle2(
     ::sal_Int32 nSeriesCount )
 {
     ChartTypeTemplate::applyStyle2( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
-    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, u"BorderStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
+    xSeries->setPropertyAlsoToAllAttributedDataPoints( u"BorderStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
 }
 
 void AreaChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram >& xDiagram )

@@ -681,8 +681,8 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
                     xSeries->getPropertyValue( aPercentDiagonalPropertyName ) >>= nPercentDiagonal;
                     rnRoundedEdges = static_cast< sal_Int32 >( nPercentDiagonal );
 
-                    if( DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries
-                        , aPercentDiagonalPropertyName, uno::Any(nPercentDiagonal) ) )
+                    if( xSeries->hasAttributedDataPointDifferentValue(
+                            aPercentDiagonalPropertyName, uno::Any(nPercentDiagonal) ) )
                         bDifferentRoundedEdges = true;
                 }
                 catch( const uno::Exception& )
@@ -694,8 +694,8 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
                 {
                     xSeries->getPropertyValue( aBorderStylePropertyName ) >>= aLineStyle;
 
-                    if( DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries
-                        , aBorderStylePropertyName, uno::Any(aLineStyle) ) )
+                    if( xSeries->hasAttributedDataPointDifferentValue(
+                            aBorderStylePropertyName, uno::Any(aLineStyle) ) )
                         bDifferentObjectLines = true;
                 }
                 catch( const uno::Exception& )
@@ -712,8 +712,8 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
                     xSeries->getPropertyValue( aPercentDiagonalPropertyName ) >>= nPercentDiagonal;
                     sal_Int32 nCurrentRoundedEdges = static_cast< sal_Int32 >( nPercentDiagonal );
                     if(nCurrentRoundedEdges!=rnRoundedEdges
-                        || DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries
-                            , aPercentDiagonalPropertyName, uno::Any( static_cast< sal_Int16 >(rnRoundedEdges) ) ) )
+                        || xSeries->hasAttributedDataPointDifferentValue(
+                                aPercentDiagonalPropertyName, uno::Any( static_cast< sal_Int16 >(rnRoundedEdges) ) ) )
                     {
                         bDifferentRoundedEdges = true;
                     }
@@ -724,8 +724,8 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
                     drawing::LineStyle aCurrentLineStyle;
                     xSeries->getPropertyValue( aBorderStylePropertyName ) >>= aCurrentLineStyle;
                     if(aCurrentLineStyle!=aLineStyle
-                        || DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries
-                            , aBorderStylePropertyName, uno::Any(aLineStyle) ) )
+                        || xSeries->hasAttributedDataPointDifferentValue(
+                              aBorderStylePropertyName, uno::Any(aLineStyle) ) )
                         bDifferentObjectLines = true;
                 }
             }
@@ -765,10 +765,10 @@ void ThreeDHelper::setRoundedEdgesAndObjectLines(
     for( auto const&  xSeries : aSeriesList)
     {
         if( nRoundedEdges>=0 && nRoundedEdges<=100 )
-            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, u"PercentDiagonal"_ustr, aARoundedEdges );
+            xSeries->setPropertyAlsoToAllAttributedDataPoints( u"PercentDiagonal"_ustr, aARoundedEdges );
 
         if( nObjectLines==0 || nObjectLines==1 )
-            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, u"BorderStyle"_ustr, aALineStyle );
+            xSeries->setPropertyAlsoToAllAttributedDataPoints( u"BorderStyle"_ustr, aALineStyle );
     }
 }
 

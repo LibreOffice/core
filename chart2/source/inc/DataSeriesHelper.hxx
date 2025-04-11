@@ -114,17 +114,6 @@ void deleteSeries(
     const rtl::Reference< ::chart::DataSeries > & xSeries,
     const rtl::Reference< ::chart::ChartType > & xChartType );
 
-void setPropertyAlsoToAllAttributedDataPoints(
-        const rtl::Reference< ::chart::DataSeries >& xSeries,
-        const OUString& rPropertyName,
-        const css::uno::Any& rPropertyValue );
-
-
-bool hasAttributedDataPointDifferentValue(
-    const rtl::Reference< ::chart::DataSeries >& xSeries,
-    const OUString& rPropertyName,
-    const css::uno::Any& rPropertyValue );
-
 sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nClippedIndex, const css::uno::Reference<
         css::chart2::data::XDataSequence >& xDataSequence, bool bTranslate );
 
