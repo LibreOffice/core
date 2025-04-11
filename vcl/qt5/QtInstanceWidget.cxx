@@ -12,6 +12,7 @@
 
 #include <QtInstanceContainer.hxx>
 
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/event.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/qt/QtUtils.hxx>
@@ -248,8 +249,20 @@ Size QtInstanceWidget::get_pixel_size(const OUString& rText) const
 
 vcl::Font QtInstanceWidget::get_font()
 {
-    assert(false && "Not implemented yet");
-    return vcl::Font();
+    SolarMutexGuard g;
+
+    vcl::Font aFont;
+    GetQtInstance().RunInMainThread([&] {
+        const QFont& rWidgetFont = getQWidget()->font();
+        const css::lang::Locale& rLocale
+            = Application::GetSettings().GetUILanguageTag().getLocale();
+        if (toVclFont(rWidgetFont, rLocale, aFont))
+            return;
+
+        aFont = Application::GetSettings().GetStyleSettings().GetAppFont();
+    });
+
+    return aFont;
 }
 
 OUString QtInstanceWidget::get_buildable_name() const { return OUString(); }
