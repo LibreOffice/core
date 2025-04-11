@@ -99,7 +99,6 @@ namespace svt
         DECL_DLLPRIVATE_LINK(OnComboLoseFocus, weld::Widget&, void);
         DECL_DLLPRIVATE_LINK(OnComboSelect, weld::ComboBox&, void);
         DECL_DLLPRIVATE_LINK(OnOkClicked, weld::Button&, void);
-        DECL_DLLPRIVATE_LINK(OnDelayedInitialize, void*, void);
 
         // string to display for "no selection"
         const OUString         m_sNoFieldSelection;

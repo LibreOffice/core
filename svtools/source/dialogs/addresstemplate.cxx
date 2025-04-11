@@ -606,10 +606,14 @@ void AssignmentPersistentData::ImplCommit()
         for (sal_Int32 i = 0; i<nAdjustedTokenCount; ++i)
             m_pImpl->aLogicalFieldNames.push_back(sLogicalFieldNames.getToken(0, ';', nIdx));
 
-        Application::PostUserEvent(LINK(this, AddressBookSourceDialog, OnDelayedInitialize), nullptr, false);
+        // load the initial data from the configuration
+        loadConfiguration();
+        resetTables();
+            // will reset the tables/fields implicitly
 
-        // so the dialog will at least show up before we do the loading of the
-        // configuration data and the (maybe time consuming) analysis of the data source/table to select
+        if ( !m_pImpl->bWorkingPersistent )
+            if ( m_pImpl->pFields[0] )
+                m_pImpl->pFields[0]->grab_focus();
 
         if (m_pImpl->bWorkingPersistent)
             return;
@@ -996,18 +1000,6 @@ void AssignmentPersistentData::ImplCommit()
         else
             // no selection for this item
             pBox->set_active(0);
-    }
-
-    IMPL_LINK_NOARG(AddressBookSourceDialog, OnDelayedInitialize, void*, void)
-    {
-        // load the initial data from the configuration
-        loadConfiguration();
-        resetTables();
-            // will reset the tables/fields implicitly
-
-        if ( !m_pImpl->bWorkingPersistent )
-            if ( m_pImpl->pFields[0] )
-                m_pImpl->pFields[0]->grab_focus();
     }
 
     IMPL_LINK(AddressBookSourceDialog, OnComboSelect, weld::ComboBox&, rBox, void)
