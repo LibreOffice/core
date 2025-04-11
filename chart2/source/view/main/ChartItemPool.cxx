@@ -27,6 +27,7 @@
 #include <svx/sdangitm.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svx3ditems.hxx>
+#include <svx/ChartColorPaletteType.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/brushitem.hxx>
@@ -179,7 +180,9 @@ static ItemInfoPackage& getItemInfoPackageChart()
             { SCHATTR_DATA_TABLE_HORIZONTAL_BORDER, new SfxBoolItem(SCHATTR_DATA_TABLE_HORIZONTAL_BORDER, false), 0, SFX_ITEMINFOFLAG_NONE },
             { SCHATTR_DATA_TABLE_VERTICAL_BORDER, new SfxBoolItem(SCHATTR_DATA_TABLE_VERTICAL_BORDER, false), 0, SFX_ITEMINFOFLAG_NONE },
             { SCHATTR_DATA_TABLE_OUTLINE, new SfxBoolItem(SCHATTR_DATA_TABLE_OUTLINE, false), 0, SFX_ITEMINFOFLAG_NONE },
-            { SCHATTR_DATA_TABLE_KEYS, new SfxBoolItem(SCHATTR_DATA_TABLE_KEYS, false), 0, SFX_ITEMINFOFLAG_NONE }
+            { SCHATTR_DATA_TABLE_KEYS, new SfxBoolItem(SCHATTR_DATA_TABLE_KEYS, false), 0, SFX_ITEMINFOFLAG_NONE },
+            { SCHATTR_COLOR_PALETTE, new SvxChartColorPaletteItem(ChartColorPaletteType::Unknown, 0, SCHATTR_COLOR_PALETTE), 0, SFX_ITEMINFOFLAG_NONE }
+
         }};
 
         virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const override { return maItemInfos[nIndex]; }

@@ -48,6 +48,7 @@
 #define STR_PAGE_APPEARANCE                         NC_("STR_PAGE_APPEARANCE", "Appearance")
 #define STR_PAGE_ILLUMINATION                       NC_("STR_PAGE_ILLUMINATION", "Illumination")
 #define STR_PAGE_ASIAN                              NC_("STR_PAGE_ASIAN", "Asian Typography")
+#define STR_PAGE_COLOR_PALETTE                      NC_("STR_PAGE_COLOR_PALETTE", "Color Palette")
 #define STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS     NC_("STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS", "Mean value line with value %AVERAGE_VALUE and standard deviation %STD_DEVIATION")
 #define STR_OBJECT_AXIS                             NC_("STR_OBJECT_AXIS", "Axis")
 #define STR_OBJECT_AXIS_X                           NC_("STR_OBJECT_AXIS_X", "X Axis")

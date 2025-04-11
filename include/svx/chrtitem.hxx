@@ -26,6 +26,7 @@
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
 
+enum class ChartColorPaletteType: sal_Int32;
 class IntlWrapper;
 class SfxItemPool;
 
@@ -151,6 +152,35 @@ public:
     virtual SvxDoubleItem* Clone(SfxItemPool *pPool = nullptr) const override;
 
     double GetValue() const { return fVal; }
+};
+
+class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxChartColorPaletteItem final : public SfxPoolItem
+{
+    ChartColorPaletteType meType;
+    sal_uInt32 mnIndex;
+
+public:
+    static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(SvxChartColorPaletteItem);
+    SvxChartColorPaletteItem(ChartColorPaletteType eType, sal_uInt32 nIndex,
+                             TypedWhichId<SvxChartColorPaletteItem> nId);
+    SvxChartColorPaletteItem(const SvxChartColorPaletteItem& rItem);
+
+    virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
+    virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
+
+    virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric,
+                                 MapUnit ePresMetric, OUString& rText,
+                                 const IntlWrapper&) const override;
+
+    virtual bool operator==(const SfxPoolItem& rItem) const override;
+    virtual SvxChartColorPaletteItem* Clone(SfxItemPool* pPool = nullptr) const override;
+
+    ChartColorPaletteType GetType() const { return meType; }
+    sal_uInt32 GetIndex() const { return mnIndex; }
+
+    void SetType(const ChartColorPaletteType eType) { meType = eType; }
+    void SetIndex(const sal_uInt32 nIndex) { mnIndex = nIndex; }
 };
 
 #endif // INCLUDED_SVX_CHRTITEM_HXX

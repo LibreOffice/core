@@ -59,6 +59,7 @@ const WhichRangesContainer nGridWhichPairs(svl::Items<
 
 const WhichRangesContainer nLegendWhichPairs(svl::Items<
     SCHATTR_LEGEND_START, SCHATTR_LEGEND_END,       //     3 -     3  sch/schattr.hxx
+    SCHATTR_COLOR_PALETTE_START, SCHATTR_COLOR_PALETTE_END, // 107 - 107
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
@@ -121,6 +122,7 @@ const WhichRangesContainer nRowWhichPairs(svl::Items<
     SCHATTR_HIDE_DATA_POINT_LEGEND_ENTRY, SCHATTR_HIDE_DATA_POINT_LEGEND_ENTRY,
     SCHATTR_BAR_OVERLAP,SCHATTR_BAR_CONNECT,         /*    98 - 100 (incl. SCHATTR_GAPWIDTH) */
     SCHATTR_GROUP_BARS_PER_AXIS,SCHATTR_AXIS_FOR_ALL_SERIES,
+    SCHATTR_COLOR_PALETTE_START, SCHATTR_COLOR_PALETTE_END, // 107 - 107
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              /*  1000 -  1016  svx/xdef.hxx   */
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              /*  1018 -  1046  svx/xdef.hxx   */
     SDRATTR_3D_FIRST, SDRATTR_3D_LAST,              /*  1244 -  1334  svx/svddef.hxx */
@@ -152,6 +154,7 @@ const WhichRangesContainer nLinePropertyWhichPairs(svl::Items<
 >);
 
 const WhichRangesContainer nLineAndFillPropertyWhichPairs(svl::Items<
+    SCHATTR_COLOR_PALETTE_START, SCHATTR_COLOR_PALETTE_END, // 107 - 107
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1000 -  1016  svx/xdef.hxx
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST      //  1067 -  1078  svx/svddef.hxx
