@@ -48,6 +48,7 @@ public:
 private:
     void handlePaintEvent();
     void handleResizeEvent();
+    bool handleToolTipEvent(QHelpEvent& rEvent);
 
 private:
     virtual void click(const Point&) override;

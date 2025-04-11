@@ -14,6 +14,9 @@
 
 #include <vcl/qt/QtUtils.hxx>
 
+#include <QtGui/QHelpEvent>
+#include <QtWidgets/QToolTip>
+
 QtInstanceDrawingArea::QtInstanceDrawingArea(QLabel* pLabel)
     : QtInstanceWidget(pLabel)
     , m_pLabel(pLabel)
@@ -102,6 +105,11 @@ bool QtInstanceDrawingArea::eventFilter(QObject* pObject, QEvent* pEvent)
         case QEvent::Resize:
             handleResizeEvent();
             return false;
+        case QEvent::ToolTip:
+        {
+            QHelpEvent* pHelpEvent = static_cast<QHelpEvent*>(pEvent);
+            return handleToolTipEvent(*pHelpEvent);
+        }
         default:
             return QtInstanceWidget::eventFilter(pObject, pEvent);
     }
@@ -129,6 +137,18 @@ void QtInstanceDrawingArea::handleResizeEvent()
     const Size aSize = toSize(m_pLabel->size());
     m_xDevice->SetOutputSizePixel(aSize);
     m_aSizeAllocateHdl.Call(aSize);
+}
+
+bool QtInstanceDrawingArea::handleToolTipEvent(QHelpEvent& rEvent)
+{
+    tools::Rectangle aHelpArea(toPoint(rEvent.pos()), Size(0, 0));
+    const OUString sToolTipText = signal_query_tooltip(aHelpArea);
+    if (sToolTipText.isEmpty())
+        return false;
+
+    const QPoint aPos = getQWidget()->mapToGlobal(toQRect(aHelpArea).topLeft());
+    QToolTip::showText(aPos, toQString(sToolTipText), getQWidget());
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
