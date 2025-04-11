@@ -68,22 +68,17 @@ static SwReaderWriterEntry aReaderWriter[] =
 
 Reader* SwReaderWriterEntry::GetReader()
 {
-    if ( pReader )
-        return pReader;
-    else if ( fnGetReader )
-    {
-        pReader = (*fnGetReader)();
-        return pReader;
-    }
-    return nullptr;
+    if (!pReader && fnGetReader)
+        pReader = fnGetReader();
+    return pReader;
 }
 
 void SwReaderWriterEntry::GetWriter( std::u16string_view rNm, const OUString& rBaseURL, WriterRef& xWrt ) const
 {
     if ( fnGetWriter )
-        (*fnGetWriter)( rNm, rBaseURL, xWrt );
+        fnGetWriter(rNm, rBaseURL, xWrt);
     else
-        xWrt = WriterRef(nullptr);
+        xWrt.clear();
 }
 
 Reader* SwGetReaderXML() // SW_DLLPUBLIC
