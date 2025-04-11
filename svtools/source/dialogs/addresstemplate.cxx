@@ -511,37 +511,39 @@ void AssignmentPersistentData::ImplCommit()
         // should be adjustable with a rather small effort.)
 
         // initialize the strings for the field labels
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_FIRSTNAME ));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_LASTNAME ));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_COMPANY));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_DEPARTMENT ));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_STREET ));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_ZIPCODE ));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_CITY ));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_STATE));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_COUNTRY ));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_HOMETEL ));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_WORKTEL ));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_OFFICETEL));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_MOBILE));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_TELOTHER));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_PAGER));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_FAX ));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_EMAIL ));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_URL ));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_TITLE ));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_POSITION ));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_INITIALS ));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_ADDRFORM ));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_SALUTATION ));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_ID));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_CALENDAR));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_INVITE));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_NOTE));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_USER1));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_USER2));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_USER3));
-        m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_USER4));
+        m_pImpl->aFieldLabels = {
+            SvtResId(STR_FIELD_FIRSTNAME),
+            SvtResId(STR_FIELD_LASTNAME),
+            SvtResId(STR_FIELD_COMPANY),
+            SvtResId(STR_FIELD_DEPARTMENT),
+            SvtResId(STR_FIELD_STREET),
+            SvtResId(STR_FIELD_ZIPCODE),
+            SvtResId(STR_FIELD_CITY),
+            SvtResId(STR_FIELD_STATE),
+            SvtResId(STR_FIELD_COUNTRY),
+            SvtResId(STR_FIELD_HOMETEL),
+            SvtResId(STR_FIELD_WORKTEL),
+            SvtResId(STR_FIELD_OFFICETEL),
+            SvtResId(STR_FIELD_MOBILE),
+            SvtResId(STR_FIELD_TELOTHER),
+            SvtResId(STR_FIELD_PAGER),
+            SvtResId(STR_FIELD_FAX),
+            SvtResId(STR_FIELD_EMAIL),
+            SvtResId(STR_FIELD_URL),
+            SvtResId(STR_FIELD_TITLE ),
+            SvtResId(STR_FIELD_POSITION),
+            SvtResId(STR_FIELD_INITIALS),
+            SvtResId(STR_FIELD_ADDRFORM),
+            SvtResId(STR_FIELD_SALUTATION),
+            SvtResId(STR_FIELD_ID),
+            SvtResId(STR_FIELD_CALENDAR),
+            SvtResId(STR_FIELD_INVITE),
+            SvtResId(STR_FIELD_NOTE),
+            SvtResId(STR_FIELD_USER1),
+            SvtResId(STR_FIELD_USER2),
+            SvtResId(STR_FIELD_USER3),
+            SvtResId(STR_FIELD_USER4)
+        };
 
         tools::Long nLabelWidth = 0;
         tools::Long nListBoxWidth = m_pImpl->pFields[0]->get_approximate_digit_width() * 18;
