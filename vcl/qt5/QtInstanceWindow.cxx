@@ -228,7 +228,7 @@ bool QtInstanceWindow::eventFilter(QObject* pObject, QEvent* pEvent)
             signal_container_focus_changed();
             return false;
         default:
-            return false;
+            return QtInstanceContainer::eventFilter(pObject, pEvent);
     }
 }
 

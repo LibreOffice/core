@@ -103,7 +103,7 @@ bool QtInstanceDrawingArea::eventFilter(QObject* pObject, QEvent* pEvent)
             handleResizeEvent();
             return false;
         default:
-            return false;
+            return QtInstanceWidget::eventFilter(pObject, pEvent);
     }
 }
 
