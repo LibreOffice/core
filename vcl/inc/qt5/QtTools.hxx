@@ -148,8 +148,8 @@ struct CairoDeleter
 
 typedef std::unique_ptr<cairo_surface_t, CairoDeleter> UniqueCairoSurface;
 
-sal_uInt16 GetKeyModCode(Qt::KeyboardModifiers eKeyModifiers);
-sal_uInt16 GetMouseModCode(Qt::MouseButtons eButtons);
+sal_uInt16 toVclKeyboardModifiers(Qt::KeyboardModifiers eKeyModifiers);
+sal_uInt16 toVclMouseButtons(Qt::MouseButtons eButtons);
 
 QImage toQImage(const Image& rImage);
 

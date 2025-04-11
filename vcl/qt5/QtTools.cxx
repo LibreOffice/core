@@ -33,7 +33,7 @@
 
 void CairoDeleter::operator()(cairo_surface_t* pSurface) const { cairo_surface_destroy(pSurface); }
 
-sal_uInt16 GetKeyModCode(Qt::KeyboardModifiers eKeyModifiers)
+sal_uInt16 toVclKeyboardModifiers(Qt::KeyboardModifiers eKeyModifiers)
 {
     sal_uInt16 nCode = 0;
     if (eKeyModifiers & Qt::ShiftModifier)
@@ -47,7 +47,7 @@ sal_uInt16 GetKeyModCode(Qt::KeyboardModifiers eKeyModifiers)
     return nCode;
 }
 
-sal_uInt16 GetMouseModCode(Qt::MouseButtons eButtons)
+sal_uInt16 toVclMouseButtons(Qt::MouseButtons eButtons)
 {
     sal_uInt16 nCode = 0;
     if (eButtons & Qt::LeftButton)

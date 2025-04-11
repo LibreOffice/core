@@ -83,7 +83,7 @@ void QtWidget::fillSalAbstractMouseEvent(const QtFrame& rFrame, const QInputEven
     aSalEvent.mnX = QGuiApplication::isLeftToRight() ? aPos.X() : round(nWidth * fRatio) - aPos.X();
     aSalEvent.mnY = aPos.Y();
     aSalEvent.mnTime = pQEvent->timestamp();
-    aSalEvent.mnCode = GetKeyModCode(pQEvent->modifiers()) | GetMouseModCode(eButtons);
+    aSalEvent.mnCode = toVclKeyboardModifiers(pQEvent->modifiers()) | toVclMouseButtons(eButtons);
 }
 
 #define FILL_SAME(rFrame, nWidth)                                                                  \
@@ -150,8 +150,8 @@ void QtWidget::handleMouseEnterLeaveEvents(const QtFrame& rFrame, QEvent* pQEven
     aEvent.mnY = aPos.Y();
     aEvent.mnTime = 0;
     aEvent.mnButton = 0;
-    aEvent.mnCode = GetKeyModCode(QGuiApplication::keyboardModifiers())
-                    | GetMouseModCode(QGuiApplication::mouseButtons());
+    aEvent.mnCode = toVclKeyboardModifiers(QGuiApplication::keyboardModifiers())
+                    | toVclMouseButtons(QGuiApplication::mouseButtons());
 
     SalEvent nEventType;
     if (pQEvent->type() == QEvent::Enter)
@@ -520,7 +520,7 @@ bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent
 
     if (nCode == 0 && pEvent->text().isEmpty())
     {
-        sal_uInt16 nModCode = GetKeyModCode(pEvent->modifiers());
+        sal_uInt16 nModCode = toVclKeyboardModifiers(pEvent->modifiers());
         SalKeyModEvent aModEvt;
         aModEvt.mbDown = bIsKeyPressed;
         aModEvt.mnModKeyCode = ModKeyFlags::NONE;
@@ -605,7 +605,7 @@ bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent
     aEvent.mnCharCode = (pEvent->text().isEmpty() ? 0 : pEvent->text().at(0).unicode());
     aEvent.mnRepeat = 0;
     aEvent.mnCode = nCode;
-    aEvent.mnCode |= GetKeyModCode(pEvent->modifiers());
+    aEvent.mnCode |= toVclKeyboardModifiers(pEvent->modifiers());
 
     bool bStopProcessingKey;
     if (bIsKeyPressed)

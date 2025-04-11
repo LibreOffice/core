@@ -1261,8 +1261,8 @@ SalFrame::SalPointerState QtFrame::GetPointerState()
     aState.maPos = toPoint(QCursor::pos() * devicePixelRatioF());
     SalFrameGeometry aGeometry = GetUnmirroredGeometry();
     aState.maPos.Move(-aGeometry.x(), -aGeometry.y());
-    aState.mnState = GetMouseModCode(QGuiApplication::mouseButtons())
-                     | GetKeyModCode(QGuiApplication::keyboardModifiers());
+    aState.mnState = toVclMouseButtons(QGuiApplication::mouseButtons())
+                     | toVclKeyboardModifiers(QGuiApplication::keyboardModifiers());
     return aState;
 }
 
