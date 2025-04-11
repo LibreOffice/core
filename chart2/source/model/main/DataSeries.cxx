@@ -27,6 +27,8 @@
 #include <CloneHelper.hxx>
 #include <RegressionCurveModel.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <unonames.hxx>
+#include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
@@ -861,6 +863,144 @@ bool DataSeries::hasAttributedDataPointDifferentValue(
     }
 
     return false;
+}
+
+bool DataSeries::hasDataLabelsAtSeries()
+{
+    bool bRet = false;
+    try
+    {
+        chart2::DataPointLabel aLabel;
+        if( getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel )
+            bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName
+                   || aLabel.ShowSeriesName;
+    }
+    catch(const uno::Exception &)
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
+    return bRet;
+}
+
+bool DataSeries::hasDataLabelsAtPoints()
+{
+    bool bRet = false;
+    try
+    {
+        std::vector<sal_Int32> aAttributedDataPointIndexList;
+        {
+            MutexGuard aGuard( m_aMutex );
+            aAttributedDataPointIndexList.reserve(m_aAttributedDataPoints.size());
+            for (const auto & rPair : m_aAttributedDataPoints)
+                aAttributedDataPointIndexList.push_back(rPair.first);
+        }
+        for(sal_Int32 nIdx : aAttributedDataPointIndexList)
+        {
+            Reference< beans::XPropertySet > xPointProp( getDataPointByIndex(nIdx) );
+            if( xPointProp.is() )
+            {
+                chart2::DataPointLabel aLabel;
+                if( xPointProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel )
+                    bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent
+                           || aLabel.ShowCategoryName || aLabel.ShowCustomLabel
+                           || aLabel.ShowSeriesName;
+                if( bRet )
+                    break;
+            }
+        }
+    }
+    catch(const uno::Exception &)
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
+    return bRet;
+}
+
+bool DataSeries::hasDataLabelAtPoint( sal_Int32 nPointIndex )
+{
+    bool bRet = false;
+    try
+    {
+        Reference< beans::XPropertySet > xProp;
+        bool bFound = false;
+        {
+            MutexGuard aGuard( m_aMutex );
+            bFound = m_aAttributedDataPoints.find(nPointIndex) != m_aAttributedDataPoints.end();
+        }
+        if (bFound)
+            xProp = getDataPointByIndex(nPointIndex);
+        else
+            xProp = this;
+        if( xProp.is() )
+        {
+            chart2::DataPointLabel aLabel;
+            if( xProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel )
+                bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent
+                       || aLabel.ShowCategoryName || aLabel.ShowCustomLabel
+                       || aLabel.ShowSeriesName;
+        }
+    }
+    catch(const uno::Exception &)
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
+    return bRet;
+}
+
+void DataSeries::insertDataLabelsToSeriesAndAllPoints()
+{
+    impl_insertOrDeleteDataLabelsToSeriesAndAllPoints( true /*bInsert*/ );
+}
+
+void DataSeries::deleteDataLabelsFromSeriesAndAllPoints()
+{
+    impl_insertOrDeleteDataLabelsToSeriesAndAllPoints( false /*bInsert*/ );
+}
+
+void DataSeries::impl_insertOrDeleteDataLabelsToSeriesAndAllPoints( bool bInsert )
+{
+    try
+    {
+        chart2::DataPointLabel aLabelAtSeries;
+        getPropertyValue(CHART_UNONAME_LABEL) >>= aLabelAtSeries;
+        aLabelAtSeries.ShowNumber = bInsert;
+        if( !bInsert )
+        {
+            aLabelAtSeries.ShowNumberInPercent = false;
+            aLabelAtSeries.ShowCategoryName = false;
+        }
+        setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabelAtSeries));
+        std::vector<sal_Int32> aAttributedDataPointIndexList;
+        {
+            MutexGuard aGuard( m_aMutex );
+            aAttributedDataPointIndexList.reserve(m_aAttributedDataPoints.size());
+            for (const auto & rPair : m_aAttributedDataPoints)
+                aAttributedDataPointIndexList.push_back(rPair.first);
+        }
+        for(sal_Int32 nIdx : aAttributedDataPointIndexList)
+        {
+            Reference< beans::XPropertySet > xPointProp( getDataPointByIndex(nIdx) );
+            if( xPointProp.is() )
+            {
+                chart2::DataPointLabel aLabel;
+                xPointProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel;
+                aLabel.ShowNumber = bInsert;
+                if( !bInsert )
+                {
+                    aLabel.ShowNumberInPercent = false;
+                    aLabel.ShowCategoryName = false;
+                    aLabel.ShowCustomLabel = false;
+                    aLabel.ShowSeriesName = false;
+                }
+                xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabel));
+                xPointProp->setPropertyValue(CHART_UNONAME_CUSTOM_LABEL_FIELDS, uno::Any());
+            }
+        }
+    }
+    catch(const uno::Exception &)
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
 }
 
 }  // namespace chart

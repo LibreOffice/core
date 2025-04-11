@@ -180,6 +180,16 @@ public:
             const OUString& rPropertyName,
             const css::uno::Any& rPropertyValue );
 
+    bool hasDataLabelsAtSeries();
+
+    bool hasDataLabelsAtPoints();
+
+    bool hasDataLabelAtPoint( sal_Int32 nPointIndex );
+
+    void insertDataLabelsToSeriesAndAllPoints();
+
+    void deleteDataLabelsFromSeriesAndAllPoints();
+
 private:
 
     // late initialization to call after copy-constructing
@@ -198,6 +208,8 @@ private:
     using OPropertySet::disposing;
 
     void fireModifyEvent();
+
+    void impl_insertOrDeleteDataLabelsToSeriesAndAllPoints( bool bInsert );
 
     tDataSequenceContainer        m_aDataSequences;
 

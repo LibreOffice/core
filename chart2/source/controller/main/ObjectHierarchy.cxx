@@ -344,7 +344,7 @@ void ObjectHierarchy::createDataSeriesTree(
                     rtl::Reference< DataSeries > const & xSeries = aSeriesSeq[nSeriesIdx];
 
                     // data labels
-                    if( DataSeriesHelper::hasDataLabelsAtSeries( xSeries ) )
+                    if( xSeries->hasDataLabelsAtSeries() )
                     {
                         OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) + "=" );
                         aSeriesSubContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierForParticles( aSeriesParticle, aChildParticle ) );

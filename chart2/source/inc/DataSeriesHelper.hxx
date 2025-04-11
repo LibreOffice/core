@@ -117,17 +117,7 @@ void deleteSeries(
 sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nClippedIndex, const css::uno::Reference<
         css::chart2::data::XDataSequence >& xDataSequence, bool bTranslate );
 
-bool hasDataLabelsAtSeries( const rtl::Reference< ::chart::DataSeries >& xSeries );
-
-bool hasDataLabelsAtPoints( const rtl::Reference< ::chart::DataSeries >& xSeries );
-
-bool hasDataLabelAtPoint( const rtl::Reference< ::chart::DataSeries >& xSeries, sal_Int32 nPointIndex );
-
-void insertDataLabelsToSeriesAndAllPoints( const rtl::Reference< ::chart::DataSeries >& xSeries );
-
 void insertDataLabelToPoint( const css::uno::Reference< css::beans::XPropertySet >& xPointPropertySet );
-
-void deleteDataLabelsFromSeriesAndAllPoints( const rtl::Reference< ::chart::DataSeries >& xSeries );
 
 void deleteDataLabelsFromPoint( const css::uno::Reference< css::beans::XPropertySet >& xPointPropertySet );
 

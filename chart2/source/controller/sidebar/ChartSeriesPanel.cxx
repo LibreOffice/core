@@ -52,7 +52,7 @@ bool isDataLabelVisible(const rtl::Reference<::chart::ChartModel>& xModel, std::
     if (!xSeries.is())
         return false;
 
-    return DataSeriesHelper::hasDataLabelsAtSeries(xSeries);
+    return xSeries->hasDataLabelsAtSeries();
 }
 
 void setDataLabelVisible(const rtl::Reference<::chart::ChartModel>& xModel, std::u16string_view rCID, bool bVisible)
@@ -64,9 +64,9 @@ void setDataLabelVisible(const rtl::Reference<::chart::ChartModel>& xModel, std:
         return;
 
     if (bVisible)
-        DataSeriesHelper::insertDataLabelsToSeriesAndAllPoints(xSeries);
+        xSeries->insertDataLabelsToSeriesAndAllPoints();
     else
-        DataSeriesHelper::deleteDataLabelsFromSeriesAndAllPoints(xSeries);
+        xSeries->deleteDataLabelsFromSeriesAndAllPoints();
 }
 
 struct LabelPlacementMap

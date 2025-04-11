@@ -368,7 +368,7 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
     if( xSeries.is() )
     {
         // add labels
-        DataSeriesHelper::insertDataLabelsToSeriesAndAllPoints( xSeries );
+        xSeries->insertDataLabelsToSeriesAndAllPoints();
 
         OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) + "=" );
         OUString aObjectCID = ObjectIdentifier::createClassifiedIdentifierForParticles(
@@ -755,7 +755,7 @@ void ChartController::executeDispatch_InsertDataLabels()
         UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::ActionType::Insert,
             SchResId( STR_OBJECT_DATALABELS )),
             m_xUndoManager );
-        DataSeriesHelper::insertDataLabelsToSeriesAndAllPoints( xSeries );
+        xSeries->insertDataLabelsToSeriesAndAllPoints();
         aUndoGuard.commit();
     }
 }
@@ -778,7 +778,7 @@ void ChartController::executeDispatch_DeleteDataLabels()
         UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::ActionType::Delete,
             SchResId( STR_OBJECT_DATALABELS )),
             m_xUndoManager );
-        DataSeriesHelper::deleteDataLabelsFromSeriesAndAllPoints( xSeries );
+        xSeries->deleteDataLabelsFromSeriesAndAllPoints();
         aUndoGuard.commit();
     }
 }

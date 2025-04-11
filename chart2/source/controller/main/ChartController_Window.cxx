@@ -989,14 +989,14 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 rtl::Reference< RegressionCurveModel > xMeanValue = RegressionCurveHelper::getMeanValueLine( xSeries );
                 bool bHasYErrorBars = StatisticsHelper::hasErrorBars( xSeries );
                 bool bHasXErrorBars = StatisticsHelper::hasErrorBars( xSeries, false );
-                bool bHasDataLabelsAtSeries = DataSeriesHelper::hasDataLabelsAtSeries( xSeries );
-                bool bHasDataLabelsAtPoints = DataSeriesHelper::hasDataLabelsAtPoints( xSeries );
+                bool bHasDataLabelsAtSeries = xSeries->hasDataLabelsAtSeries();
+                bool bHasDataLabelsAtPoints = xSeries->hasDataLabelsAtPoints();
                 bool bHasDataLabelAtPoint = false;
                 sal_Int32 nPointIndex = -1;
                 if( bIsPoint )
                 {
                     nPointIndex = ObjectIdentifier::getIndexFromParticleOrCID( m_aSelection.getSelectedCID() );
-                    bHasDataLabelAtPoint = DataSeriesHelper::hasDataLabelAtPoint( xSeries, nPointIndex );
+                    bHasDataLabelAtPoint = xSeries->hasDataLabelAtPoint( nPointIndex );
                 }
                 bool bSelectedPointIsFormatted = false;
                 bool bHasFormattedDataPointsOtherThanSelected = false;
