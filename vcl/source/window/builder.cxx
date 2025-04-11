@@ -1079,16 +1079,11 @@ namespace
 
 void BuilderBase::extractRadioButtonGroup(const OUString &id, stringmap &rMap)
 {
-    VclBuilder::stringmap::iterator aFind = rMap.find(u"group"_ustr);
-    if (aFind != rMap.end())
-    {
-        OUString sID = aFind->second;
-        sal_Int32 nDelim = sID.indexOf(':');
-        if (nDelim != -1)
-            sID = sID.copy(0, nDelim);
-        m_pParserState->m_aRadioButtonGroupMaps.emplace_back(id, sID);
-        rMap.erase(aFind);
-    }
+    const OUString sGroupId = extractGroup(rMap);
+    if (sGroupId.isEmpty())
+        return;
+
+    m_pParserState->m_aRadioButtonGroupMaps.emplace_back(id, sGroupId);
 }
 
 void VclBuilder::connectNumericFormatterAdjustment(const OUString &id, const OUString &rAdjustment)
@@ -3368,6 +3363,16 @@ sal_Int32 BuilderBase::extractActive(VclBuilder::stringmap& rMap)
 bool BuilderBase::extractEntry(VclBuilder::stringmap &rMap)
 {
     return extractBoolEntry(rMap, u"has-entry"_ustr, false);
+}
+
+OUString BuilderBase::extractGroup(stringmap& rMap)
+{
+    OUString sGroup = extractStringEntry(rMap, u"group"_ustr);
+    sal_Int32 nDelim = sGroup.indexOf(':');
+    if (nDelim != -1)
+        sGroup = sGroup.copy(0, nDelim);
+
+    return sGroup;
 }
 
 bool BuilderBase::extractHeadersVisible(VclBuilder::stringmap& rMap)

@@ -87,6 +87,7 @@ protected:
     static void collectAccelerator(xmlreader::XmlReader& reader, accelmap& rMap);
     stringmap collectPackingProperties(xmlreader::XmlReader& reader);
     void collectProperty(xmlreader::XmlReader& rReader, stringmap& rMap) const;
+    static OUString extractGroup(stringmap& rMap);
     static bool extractHeadersVisible(stringmap& rMap);
     static bool extractEntry(stringmap& rMap);
     static OUString extractIconName(stringmap& rMap);
