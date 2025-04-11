@@ -70,7 +70,6 @@ protected:
     OUString            m_aOldDisplayDirectory;
     OUString            m_aOldHideDirectory;
 
-    OUString            m_aStandardDir;
     css::uno::Sequence< OUString >
                         m_aDenyList;
 

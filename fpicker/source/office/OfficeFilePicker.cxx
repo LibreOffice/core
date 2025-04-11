@@ -160,12 +160,6 @@ void SvtFilePicker::prepareExecute()
             m_xDlg->SetHasFilename( true );
         }
     }
-    else
-    {
-        // set the default standard dir
-        INetURLObject aStdDirObj( SvtPathOptions().GetWorkPath() );
-        m_xDlg->SetPath( aStdDirObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-    }
 
     // set the control values and set the control labels, too
     if ( m_pElemList && !m_pElemList->empty() )
@@ -440,14 +434,7 @@ std::shared_ptr<SvtFileDialog_Base> SvtFilePicker::implCreateDialog( weld::Windo
     PickerFlags nBits = getPickerFlags();
 
     auto dialog = o3tl::make_shared<SvtFileDialog>(pParent, nBits);
-
-    // Set StandardDir if present
-    if ( !m_aStandardDir.isEmpty())
-    {
-        OUString sStandardDir = m_aStandardDir;
-        dialog->SetStandardDir( sStandardDir );
-        dialog->SetDenyList( m_aDenyList );
-    }
+    dialog->SetDenyList( m_aDenyList );
 
     return dialog;
 }
@@ -952,19 +939,7 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
             if (aArguments[i] >>= namedValue )
             {
 
-                if ( namedValue.Name == "StandardDir" )
-                {
-                    OUString sStandardDir;
-
-                    namedValue.Value >>= sStandardDir;
-
-                    // Set the directory for the "back to the default dir" button
-                    if ( !sStandardDir.isEmpty() )
-                    {
-                        m_aStandardDir = sStandardDir;
-                    }
-                }
-                else if ( namedValue.Name == "DenyList" )
+                if ( namedValue.Name == "DenyList" )
                 {
                     namedValue.Value >>= m_aDenyList;
                 }
@@ -983,11 +958,6 @@ bool SvtFilePicker::implHandleInitializationArgument( const OUString& _rName, co
     {
         m_nServiceType = TemplateDescription::FILEOPEN_SIMPLE;
         OSL_VERIFY( _rValue >>= m_nServiceType );
-        return true;
-    }
-    if ( _rName == "StandardDir" )
-    {
-        OSL_VERIFY( _rValue >>= m_aStandardDir );
         return true;
     }
 
@@ -1042,14 +1012,7 @@ std::shared_ptr<SvtFileDialog_Base> SvtRemoteFilePicker::implCreateDialog(weld::
     PickerFlags nBits = getPickerFlags();
 
     auto dialog = std::make_shared<RemoteFilesDialog>(pParent, nBits);
-
-    // Set StandardDir if present
-    if ( !m_aStandardDir.isEmpty())
-    {
-        OUString sStandardDir = m_aStandardDir;
-        dialog->SetStandardDir( sStandardDir );
-        dialog->SetDenyList( m_aDenyList );
-    }
+    dialog->SetDenyList( m_aDenyList );
 
     return dialog;
 }

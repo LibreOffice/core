@@ -62,7 +62,7 @@ namespace sfx2
         OUString             maCurFilter;
         OUString             maSelectFilter;
         OUString             maButtonLabel;
-        OUString             msStandardDir;
+        OUString             msPreselectedDir;
 
         Idle                        maPreviewIdle;
         Graphic                     maGraphic;
@@ -175,7 +175,7 @@ namespace sfx2
                                     FileDialogFlags nFlags,
                                     sal_Int16 nDialog,
                                     weld::Window* pFrameWeld,
-                                    const OUString& sStandardDir = OUString(),
+                                    const OUString& sPreselectedDir = OUString(),
                                     const css::uno::Sequence< OUString >&   rDenyList = css::uno::Sequence< OUString >()
                                 );
         virtual                 ~FileDialogHelper_Impl() override;

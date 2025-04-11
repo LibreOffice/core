@@ -3219,7 +3219,6 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
         SfxItemSet& rSet = GetMedium()->GetItemSet();
         rSet.ClearItem( SID_INTERACTIONHANDLER );
         rSet.ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
-        rSet.ClearItem( SID_STANDARD_DIR );
         rSet.ClearItem( SID_PATH );
 
         if ( !bSaveTo )

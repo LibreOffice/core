@@ -164,20 +164,19 @@ void ScXMLSourceDlg::SelectSourceFile()
                                       FileDialogFlags::NONE, m_xDialog.get());
     aDlgHelper.SetContext(sfx2::FileDialogHelper::CalcXMLSource);
 
-    uno::Reference<ui::dialogs::XFilePicker3> xFilePicker = aDlgHelper.GetFilePicker();
-
     // Use the directory of current source file.
     INetURLObject aURL(maSrcPath);
     aURL.removeSegment();
     aURL.removeFinalSlash();
     OUString aPath = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-    xFilePicker->setDisplayDirectory(aPath);
 
-    if (xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK)
+    if (!aPath.isEmpty())
+        aDlgHelper.SetDisplayFolder(aPath);
+    if (aDlgHelper.Execute() != ERRCODE_NONE)
         // File picker dialog cancelled.
         return;
 
-    uno::Sequence<OUString> aFiles = xFilePicker->getSelectedFiles();
+    uno::Sequence<OUString> aFiles = aDlgHelper.GetSelectedFiles();
     if (!aFiles.hasElements())
         return;
 

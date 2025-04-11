@@ -175,7 +175,6 @@ class SvxZoomItem;
 #define SID_REMOTE_DIALOG                   TypedWhichId<SfxBoolItem>(SID_SFX_START + 305)
 #define SID_PATH                            TypedWhichId<SfxStringItem>(SID_SFX_START + 308)
 #define SID_SAVEDOCS                        (SID_SFX_START + 309)
-#define SID_STANDARD_DIR                    TypedWhichId<SfxStringItem>(SID_SFX_START + 450)
 #define SID_DENY_LIST                       TypedWhichId<SfxStringListItem>(SID_SFX_START + 451)
 
 // browse-ids

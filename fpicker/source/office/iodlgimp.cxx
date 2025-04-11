@@ -132,13 +132,6 @@ SvtExpFileDlg_Impl::~SvtExpFileDlg_Impl()
 {
 }
 
-void SvtExpFileDlg_Impl::SetStandardDir( const OUString& _rDir )
-{
-    m_aStdDir = _rDir;
-    if (m_aStdDir.isEmpty())
-        m_aStdDir = "file:///";
-}
-
 namespace {
     OUString lcl_DecoratedFilter( std::u16string_view _rOriginalFilter )
     {

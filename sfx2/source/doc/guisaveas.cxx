@@ -339,7 +339,6 @@ public:
                                 bool bPreselectPassword,
                                 OUString& aSuggestedDir,
                                 sal_Int16 nDialog,
-                                OUString& rStandardDir,
                                 const css::uno::Sequence<OUString>& rDenyList,
                                 SignatureState const nScriptingSignatureState
                                 );
@@ -896,7 +895,6 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
                                             bool bPreselectPassword,
                                             OUString& aSuggestedDir,
                                             sal_Int16 nDialog,
-                                            OUString& rStandardDir,
                                             const css::uno::Sequence<OUString>& rDenyList,
                                             SignatureState const nScriptingSignatureState)
 {
@@ -956,6 +954,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     SfxFilterFlags nMust = getMustFlags( nStoreMode );
     SfxFilterFlags nDont = getDontFlags( nStoreMode );
     weld::Window* pFrameWin = SfxStoringHelper::GetModelWindow(m_xModel);
+    OUString sPreselectedDir;
     if ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
     {
         const OUString aBaseUrl = GetDocProps().getUnpackedValueOrDefault("DocumentBaseURL", OUString());
@@ -964,26 +963,26 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
         aObj.removeSegment();
         aExportDir = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         if (!aExportDir.isEmpty())
-            rStandardDir = aExportDir;
+            sPreselectedDir = aExportDir;
         if ( ( nStoreMode & PDFEXPORT_REQUESTED ) && !aPreselectedFilterPropsHM.empty() )
         {
             // this is a PDF export
             // the filter options has been shown already
             const OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault( u"UIName"_ustr, OUString() );
-            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, u"pdf", rStandardDir, rDenyList, pFrameWin ));
+            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, u"pdf", sPreselectedDir, rDenyList, pFrameWin ));
             pFileDlg->SetCurrentFilter( aFilterUIName );
         }
         else if ((nStoreMode & EPUBEXPORT_REQUESTED) && !aPreselectedFilterPropsHM.empty())
         {
             // This is an EPUB export, the filter options has been shown already.
             const OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault( u"UIName"_ustr, OUString() );
-            pFileDlg.reset(new sfx2::FileDialogHelper(aDialogMode, aDialogFlags, aFilterUIName, u"epub", rStandardDir, rDenyList, pFrameWin));
+            pFileDlg.reset(new sfx2::FileDialogHelper(aDialogMode, aDialogFlags, aFilterUIName, u"epub", sPreselectedDir, rDenyList, pFrameWin));
             pFileDlg->SetCurrentFilter(aFilterUIName);
         }
         else
         {
             // This is the normal dialog
-            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, rStandardDir, rDenyList, pFrameWin ));
+            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, sPreselectedDir, rDenyList, pFrameWin ));
         }
 
         sfx2::FileDialogHelper::Context eCtxt = sfx2::FileDialogHelper::UnknownContext;
@@ -1013,7 +1012,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     {
         // This is the normal save as dialog
         pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog,
-            nMust, nDont, rStandardDir, rDenyList, pFrameWin ));
+            nMust, nDont, sPreselectedDir, rDenyList, pFrameWin ));
         pFileDlg->CreateMatcher( aDocServiceName );
 
         sfx2::FileDialogHelper::Context eCtxt = sfx2::FileDialogHelper::UnknownContext;
@@ -1709,12 +1708,6 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
         if ( aSuggestedName.isEmpty() )
             aSuggestedName = aModelData.GetDocProps().getUnpackedValueOrDefault(u"SuggestedSaveAsName"_ustr, OUString() );
 
-        OUString sStandardDir;
-        ::comphelper::SequenceAsHashMap::const_iterator aStdDirIter =
-            aModelData.GetMediaDescr().find( u"StandardDir"_ustr );
-        if ( aStdDirIter != aModelData.GetMediaDescr().end() )
-            aStdDirIter->second >>= sStandardDir;
-
         css::uno::Sequence< OUString >  aDenyList;
 
         ::comphelper::SequenceAsHashMap::const_iterator aDenyListIter =
@@ -1725,7 +1718,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
         for (;;)
         {
             // in case the dialog is opened a second time the folder should be the same as previously navigated to by the user, not what was handed over by initial parameters
-            bUseFilterOptions = aModelData.OutputFileDialog(nStoreMode, aFilterProps, bSetStandardName, aSuggestedName, bPreselectPassword, aSuggestedDir, nDialog, sStandardDir, aDenyList, nScriptingSignatureState);
+            bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aSuggestedName, bPreselectPassword, aSuggestedDir, nDialog, aDenyList, nScriptingSignatureState );
             if ( nStoreMode == SAVEAS_REQUESTED )
             {
                 // in case of saving check filter for possible alien warning

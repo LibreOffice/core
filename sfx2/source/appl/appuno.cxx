@@ -139,7 +139,6 @@ constexpr OUString sCopyStreamIfPossible = u"CopyStreamIfPossible"_ustr;
 constexpr OUString sNoAutoSave = u"NoAutoSave"_ustr;
 constexpr OUString sFolderName = u"FolderName"_ustr;
 constexpr OUString sUseSystemDialog = u"UseSystemDialog"_ustr;
-constexpr OUString sStandardDir = u"StandardDir"_ustr;
 constexpr OUString sDenyList = u"DenyList"_ustr;
 constexpr OUString sModifyPasswordInfo = u"ModifyPasswordInfo"_ustr;
 constexpr OUString sSuggestedSaveAsDir = u"SuggestedSaveAsDir"_ustr;
@@ -614,14 +613,6 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 if (bOK)
                     rSet.Put( SfxBoolItem( SID_FILE_DIALOG, bVal ) );
             }
-            else if ( aName == sStandardDir )
-            {
-                OUString sVal;
-                bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
-                DBG_ASSERT( bOK, "invalid type or value for StandardDir" );
-                if (bOK)
-                    rSet.Put( SfxStringItem( SID_STANDARD_DIR, sVal ) );
-            }
             else if ( aName == sDenyList )
             {
                 uno::Sequence<OUString> xVal;
@@ -1003,8 +994,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 nAdditional++;
             if ( rSet.GetItemState( SID_FILE_DIALOG ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_STANDARD_DIR ) == SfxItemState::SET )
-                nAdditional++;
             if ( rSet.GetItemState( SID_DENY_LIST ) == SfxItemState::SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_CONTENT ) == SfxItemState::SET )
@@ -1216,8 +1205,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                     if ( nId == SID_PATH )
                         continue;
                     if ( nId == SID_FILE_DIALOG )
-                        continue;
-                    if ( nId == SID_STANDARD_DIR )
                         continue;
                     if ( nId == SID_DENY_LIST )
                         continue;
@@ -1545,11 +1532,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         if ( const SfxBoolItem *pItem = rSet.GetItemIfSet( SID_FILE_DIALOG, false) )
         {
             pValue[nActProp].Name = sUseSystemDialog;
-            pValue[nActProp++].Value <<= pItem->GetValue();
-        }
-        if ( const SfxStringItem *pItem = rSet.GetItemIfSet( SID_STANDARD_DIR, false) )
-        {
-            pValue[nActProp].Name = sStandardDir;
             pValue[nActProp++].Value <<= pItem->GetValue();
         }
         if ( const SfxStringListItem *pItem = rSet.GetItemIfSet( SID_DENY_LIST, false) )

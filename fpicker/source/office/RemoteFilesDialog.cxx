@@ -931,16 +931,6 @@ const css::uno::Sequence< OUString >& RemoteFilesDialog::GetDenyList() const
     return m_aDenyList;
 }
 
-void RemoteFilesDialog::SetStandardDir( const OUString& rStdDir )
-{
-    m_sStdDir = rStdDir;
-}
-
-const OUString& RemoteFilesDialog::GetStandardDir() const
-{
-    return m_sStdDir;
-}
-
 void RemoteFilesDialog::SetPath( const OUString& rNewURL )
 {
     m_sPath = rNewURL;

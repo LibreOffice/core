@@ -644,12 +644,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             nDialogType = ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
         }
 
-        OUString sStandardDir;
-
-        const SfxStringItem* pStandardDirItem = rReq.GetArg<SfxStringItem>(SID_STANDARD_DIR);
-        if ( pStandardDirItem )
-            sStandardDir = pStandardDirItem->GetValue();
-
         css::uno::Sequence< OUString >  aDenyList;
 
         const SfxStringListItem* pDenyListItem = rReq.GetArg<SfxStringListItem>(SID_DENY_LIST);
@@ -661,7 +655,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         ErrCode nErr = sfx2::FileOpenDialog_Impl(pTopWindow,
                 nDialogType,
                 eDialogFlags, aURLList,
-                aFilter, pSet, &aPath, nDialog, sStandardDir, aDenyList, bShowFilterDialog);
+                aFilter, pSet, &aPath, nDialog, "", aDenyList, bShowFilterDialog);
 
         if ( nErr == ERRCODE_ABORT )
         {
