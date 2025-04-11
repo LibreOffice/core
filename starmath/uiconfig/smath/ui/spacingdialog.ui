@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sm">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -266,36 +266,6 @@
                             <property name="row-spacing">6</property>
                             <property name="column-spacing">12</property>
                             <child>
-                              <object class="GtkSpinButton" id="spinbutton2">
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="events">GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
-                                <property name="no-show-all">True</property>
-                                <property name="activates-default">True</property>
-                                <property name="truncate-multiline">True</property>
-                                <property name="adjustment">adjustment2</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSpinButton" id="spinbutton3">
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="events">GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
-                                <property name="no-show-all">True</property>
-                                <property name="activates-default">True</property>
-                                <property name="truncate-multiline">True</property>
-                                <property name="adjustment">adjustment3</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">3</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkLabel" id="label1">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -307,6 +277,21 @@
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
+                                <property name="top-attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="spinbutton1">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="events">GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
+                                <property name="no-show-all">True</property>
+                                <property name="activates-default">True</property>
+                                <property name="truncate-multiline">True</property>
+                                <property name="adjustment">adjustment1</property>
+                              </object>
+                              <packing>
+                                <property name="left-attach">1</property>
                                 <property name="top-attach">0</property>
                               </packing>
                             </child>
@@ -326,48 +311,18 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label3">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="no-show-all">True</property>
-                                <property name="label">String 3</property>
-                                <property name="use-underline">True</property>
-                                <property name="mnemonic-widget">spinbutton3</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">3</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSpinButton" id="spinbutton4">
+                              <object class="GtkSpinButton" id="spinbutton2">
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="events">GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
                                 <property name="no-show-all">True</property>
                                 <property name="activates-default">True</property>
                                 <property name="truncate-multiline">True</property>
-                                <property name="adjustment">adjustment4</property>
+                                <property name="adjustment">adjustment2</property>
                               </object>
                               <packing>
                                 <property name="left-attach">1</property>
-                                <property name="top-attach">4</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label4">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="no-show-all">True</property>
-                                <property name="label">String 4</property>
-                                <property name="use-underline">True</property>
-                                <property name="mnemonic-widget">spinbutton4</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">4</property>
+                                <property name="top-attach">1</property>
                               </packing>
                             </child>
                             <child>
@@ -386,18 +341,63 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="spinbutton1">
+                              <object class="GtkLabel" id="label3">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="no-show-all">True</property>
+                                <property name="label">String 3</property>
+                                <property name="use-underline">True</property>
+                                <property name="mnemonic-widget">spinbutton3</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="spinbutton3">
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="events">GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
                                 <property name="no-show-all">True</property>
                                 <property name="activates-default">True</property>
                                 <property name="truncate-multiline">True</property>
-                                <property name="adjustment">adjustment1</property>
+                                <property name="adjustment">adjustment3</property>
                               </object>
                               <packing>
                                 <property name="left-attach">1</property>
-                                <property name="top-attach">0</property>
+                                <property name="top-attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label4">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="no-show-all">True</property>
+                                <property name="label">String 4</property>
+                                <property name="use-underline">True</property>
+                                <property name="mnemonic-widget">spinbutton4</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="spinbutton4">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="events">GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
+                                <property name="no-show-all">True</property>
+                                <property name="activates-default">True</property>
+                                <property name="truncate-multiline">True</property>
+                                <property name="adjustment">adjustment4</property>
+                              </object>
+                              <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">4</property>
                               </packing>
                             </child>
                           </object>
