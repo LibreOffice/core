@@ -183,6 +183,7 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
         break;
         case LOK_CALLBACK_COMMENT:
         {
+            ++m_nCommentCallbackCount;
             m_aComment.clear();
             std::stringstream aStream(pPayload);
             boost::property_tree::read_json(aStream, m_aComment);

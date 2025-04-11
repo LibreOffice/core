@@ -51,6 +51,7 @@ public:
     boost::property_tree::ptree m_aRedlineTableModified;
     /// Post-it / annotation payload.
     boost::property_tree::ptree m_aComment;
+    int m_nCommentCallbackCount = 0;
     std::vector<OString> m_aStateChanges;
     TestLokCallbackWrapper m_callbackWrapper;
     OString m_aExportFile;

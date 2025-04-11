@@ -9,6 +9,8 @@
 
 #include <swtiledrenderingtest.hxx>
 
+#include <boost/property_tree/json_parser.hpp>
+
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <editeng/editids.hrc>
@@ -24,6 +26,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <sfx2/dispatch.hxx>
+#include <tools/json_writer.hxx>
 #include <unotxdoc.hxx>
 
 #include <view.hxx>
@@ -710,6 +713,44 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesInsertUndo)
     // Without the accompanying fix in place, this test would have failed, undo changed "this view"
     // record mode to "all views", which is unexpected.
     CPPUNIT_ASSERT(dynamic_cast<SfxBoolItem*>(pItem.get())->GetValue());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentsOnLoad)
+{
+    // Given a document of 3 pages, with a small enough visible area that document load doesn't lay
+    // out the entire document:
+    awt::Rectangle aVisibleArea{ 0, 0, 12240, 15840 };
+    comphelper::LibreOfficeKit::setInitialClientVisibleArea(aVisibleArea);
+    comphelper::ScopeGuard g([] { comphelper::LibreOfficeKit::setInitialClientVisibleArea({}); });
+    OUString aURL = createFileURL(u"comments-on-load.docx");
+    loadFromURL(aURL);
+    SwXTextDocument* pXTextDocument = getSwTextDoc();
+    SwTestViewCallback aView;
+    tools::JsonWriter aWriter;
+
+    // When getting the list of comments from the document + listening for notifications from idle
+    // layout:
+    pXTextDocument->getPostIts(aWriter);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then make sure that:
+    // 1) We test the interesting scenario, so getPostIts() reports 0 comments and
+    // 2) A callback is emitted to notify about the comment on the last page once user events are
+    // processed.
+    OString aPostIts = aWriter.finishAndGetAsOString();
+    std::stringstream aStream(aPostIts.getStr());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    size_t nCommentCount = aTree.get_child("comments").size();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), nCommentCount);
+    CPPUNIT_ASSERT_EQUAL(1, aView.m_nCommentCallbackCount);
+    // Without the accompanying fix in place, this test would have failed with:
+    // uncaught exception of type std::exception (or derived).
+    // - No such node (action)
+    // i.e. there was no notification about the comment that was positioned by the user event,
+    // seemingly the comment was load on load (it was there, but not visible).
+    auto aAction = aView.m_aComment.get_child("action").get_value<std::string>();
+    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aAction);
 }
 }
 

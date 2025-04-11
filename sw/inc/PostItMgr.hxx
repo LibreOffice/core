@@ -131,7 +131,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener,
         SwAnnotationItem*  InsertItem( SfxBroadcaster* pItem, bool bCheckExistence, bool bFocus);
         void            RemoveItem( SfxBroadcaster* pBroadcast );
 
-        VclPtr<sw::annotation::SwAnnotationWin> GetOrCreateAnnotationWindow(SwAnnotationItem& rItem);
+        VclPtr<sw::annotation::SwAnnotationWin> GetOrCreateAnnotationWindow(SwAnnotationItem& rItem, bool& rCreated);
 
     public:
         SwPostItMgr(SwView* aDoc);
