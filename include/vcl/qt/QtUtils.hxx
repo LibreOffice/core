@@ -31,6 +31,12 @@ inline QString toQString(const OUString& rStr)
     return QString::fromUtf16(rStr.getStr(), rStr.getLength());
 }
 
+inline OUString toOUString(const QString& s)
+{
+    // QString stores UTF16, just like OUString
+    return OUString(reinterpret_cast<const sal_Unicode*>(s.data()), s.length());
+}
+
 inline QPixmap toQPixmap(const BitmapEx& rBitmapEx)
 {
     SvMemoryStream aMemoryStream;
