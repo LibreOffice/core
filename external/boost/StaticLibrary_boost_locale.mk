@@ -28,36 +28,36 @@ $(eval $(call gb_StaticLibrary_use_external,boost_locale,boost_headers))
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,boost_locale,cpp))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,boost_locale,\
-	UnpackedTarball/boost/libs/locale/src/boost/locale/encoding/codepage \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/shared/date_time \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/shared/format \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/shared/formatting \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/shared/generator \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/shared/ids \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/shared/localization_backend \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/shared/message \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/shared/mo_lambda \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/std/codecvt \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/std/collate \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/std/converter \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/std/numeric \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/std/std_backend \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/util/codecvt_converter \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/util/default_locale \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/util/encoding \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/util/gregorian \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/util/info \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/util/locale_data \
+	UnpackedTarball/boost/libs/locale/src/encoding/codepage \
+	UnpackedTarball/boost/libs/locale/src/shared/date_time \
+	UnpackedTarball/boost/libs/locale/src/shared/format \
+	UnpackedTarball/boost/libs/locale/src/shared/formatting \
+	UnpackedTarball/boost/libs/locale/src/shared/generator \
+	UnpackedTarball/boost/libs/locale/src/shared/ids \
+	UnpackedTarball/boost/libs/locale/src/shared/localization_backend \
+	UnpackedTarball/boost/libs/locale/src/shared/message \
+	UnpackedTarball/boost/libs/locale/src/shared/mo_lambda \
+	UnpackedTarball/boost/libs/locale/src/std/codecvt \
+	UnpackedTarball/boost/libs/locale/src/std/collate \
+	UnpackedTarball/boost/libs/locale/src/std/converter \
+	UnpackedTarball/boost/libs/locale/src/std/numeric \
+	UnpackedTarball/boost/libs/locale/src/std/std_backend \
+	UnpackedTarball/boost/libs/locale/src/util/codecvt_converter \
+	UnpackedTarball/boost/libs/locale/src/util/default_locale \
+	UnpackedTarball/boost/libs/locale/src/util/encoding \
+	UnpackedTarball/boost/libs/locale/src/util/gregorian \
+	UnpackedTarball/boost/libs/locale/src/util/info \
+	UnpackedTarball/boost/libs/locale/src/util/locale_data \
 ))
 
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,boost_locale,\
-	UnpackedTarball/boost/libs/locale/src/boost/locale/win32/collate \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/win32/converter \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/win32/lcid \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/win32/numeric \
-	UnpackedTarball/boost/libs/locale/src/boost/locale/win32/win_backend \
+	UnpackedTarball/boost/libs/locale/src/win32/collate \
+	UnpackedTarball/boost/libs/locale/src/win32/converter \
+	UnpackedTarball/boost/libs/locale/src/win32/lcid \
+	UnpackedTarball/boost/libs/locale/src/win32/numeric \
+	UnpackedTarball/boost/libs/locale/src/win32/win_backend \
 ))
 
 endif

@@ -1,6 +1,6 @@
 --- foo/misc/boost.orig/libs/locale/src/util/locale_data.cpp.new	2022-02-17 22:41:27.730549039 +0000
-+++ foo/misc/boost/libs/locale/src/boost/locale/util/locale_data.cpp
-@@ -50,6 +50,8 @@
++++ foo/misc/boost/libs/locale/src/util/locale_data.cpp
+@@ -72,6 +72,8 @@
      bool locale_data::parse(const std::string& locale_name)
      {
          reset();

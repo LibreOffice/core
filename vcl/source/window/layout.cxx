@@ -900,6 +900,7 @@ typedef boost::multi_array<GridEntry, 2> array_type;
 #if defined _MSC_VER
 #pragma warning(push)
 #pragma warning(disable : 4459)
+#pragma warning(disable : 4996)
 #endif
 static array_type assembleGrid(const VclGrid &rGrid)
 {
@@ -931,6 +932,7 @@ static array_type assembleGrid(const VclGrid &rGrid)
 #if defined _MSC_VER
 #pragma warning(push)
 #pragma warning(disable : 4459)
+#pragma warning(disable : 4996)
 #endif
         GridEntry &rEntry = A[nLeftAttach][nTopAttach];
 #if defined _MSC_VER
@@ -1058,6 +1060,7 @@ static array_type assembleGrid(const VclGrid &rGrid)
 #if defined _MSC_VER
 #pragma warning(push)
 #pragma warning(disable : 4459)
+#pragma warning(disable : 4996)
 #endif
     array_type B(boost::extents[nNonEmptyCols][nNonEmptyRows]);
 #if defined _MSC_VER
@@ -1107,6 +1110,7 @@ static void calcMaxs(const array_type &A, std::vector<VclGrid::Value> &rWidths, 
 #elif defined _MSC_VER
 #pragma warning(push)
 #pragma warning(disable : 4459)
+#pragma warning(disable : 4996)
 #endif
             const GridEntry &rEntry = A[x][y];
 #if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 13 && __GNUC__ <= 15
