@@ -30,6 +30,13 @@ QtInstanceWidget::QtInstanceWidget(QWidget* pWidget)
     pWidget->installEventFilter(this);
 }
 
+void QtInstanceWidget::connect_mouse_move(const Link<const MouseEvent&, bool>& rLink)
+{
+    getQWidget()->setMouseTracking(rLink.IsSet());
+
+    weld::Widget::connect_mouse_move(rLink);
+}
+
 void QtInstanceWidget::set_sensitive(bool bSensitive)
 {
     SolarMutexGuard g;
@@ -269,6 +276,11 @@ bool QtInstanceWidget::eventFilter(QObject* pObject, QEvent* pEvent)
         {
             QMouseEvent* pMouseEvent = static_cast<QMouseEvent*>(pEvent);
             return signal_mouse_release(toVclMouseEvent(*pMouseEvent));
+        }
+        case QEvent::MouseMove:
+        {
+            QMouseEvent* pMouseEvent = static_cast<QMouseEvent*>(pEvent);
+            return signal_mouse_motion(toVclMouseEvent(*pMouseEvent));
         }
         default:
             return QObject::eventFilter(pObject, pEvent);

@@ -32,6 +32,8 @@ public:
 
     virtual QWidget* getQWidget() const { return m_pWidget; }
 
+    virtual void connect_mouse_move(const Link<const MouseEvent&, bool>& rLink) override;
+
     virtual void set_sensitive(bool bSensitive) override;
 
     virtual bool get_sensitive() const override;
