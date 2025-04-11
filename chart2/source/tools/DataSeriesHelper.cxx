@@ -87,15 +87,14 @@ private:
 
 void lcl_getCooSysAndChartTypeOfSeries(
     const rtl::Reference< ::chart::DataSeries > & xSeries,
-    const Reference< chart2::XDiagram > & xDiagram,
+    const rtl::Reference< ::chart::Diagram > & xDiagram,
     rtl::Reference< ::chart::BaseCoordinateSystem > & xOutCooSys,
     rtl::Reference< ::chart::ChartType > & xOutChartType )
 {
     if( !xDiagram.is())
         return;
-    ::chart::Diagram* pDiagram = dynamic_cast<::chart::Diagram*>(xDiagram.get());
 
-    for( rtl::Reference< ::chart::BaseCoordinateSystem > const & coords : pDiagram->getBaseCoordinateSystems() )
+    for( rtl::Reference< ::chart::BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
     {
         for( rtl::Reference< ::chart::ChartType > const & chartType : coords->getChartTypes2() )
         {
