@@ -15763,8 +15763,7 @@ else
         fi
         if test "$WIN_BUILD_ARCH" = "arm64"; then
             # needed for msi packaging - as of 10.0.22621 SDK no arm64 ones yet
-            # the x86 ones probably would work just as well...
-            pathmunge "$WINDOWS_SDK_BINDIR_NO_ARCH/arm" "before"
+            pathmunge "$WINDOWS_SDK_BINDIR_NO_ARCH/x86" "before"
         fi
         # .NET 4.6 and higher don't have bin directory
         if test -f "$DOTNET_FRAMEWORK_HOME/bin"; then
