@@ -85,7 +85,7 @@ ScAccessibleCell::~ScAccessibleCell()
 {
     if (!ScAccessibleContextBase::IsDefunc() && !rBHelper.bInDispose)
     {
-        // increment refcount to prevent double call off dtor
+        // increment refcount to prevent double call of dtor
         osl_atomic_increment( &m_refCount );
         // call dispose to inform object which have a weak reference to this object
         dispose();

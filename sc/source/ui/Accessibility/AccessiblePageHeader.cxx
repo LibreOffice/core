@@ -64,7 +64,7 @@ ScAccessiblePageHeader::~ScAccessiblePageHeader()
 {
     if (!ScAccessibleContextBase::IsDefunc() && !rBHelper.bInDispose)
     {
-        // increment refcount to prevent double call off dtor
+        // increment refcount to prevent double call of dtor
         osl_atomic_increment( &m_refCount );
         dispose();
     }
