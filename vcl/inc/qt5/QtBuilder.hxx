@@ -92,6 +92,7 @@ private:
     static void setEntryProperties(QLineEdit& rLineEdit, stringmap& rProps);
     static void setLabelProperties(QLabel& rLabel, stringmap& rProps);
     static void setMessageDialogProperties(QMessageBox& rMessageBox, stringmap& rProps);
+    static void setMenuActionGroup(QMenu* pMenu, QAction* pAction, const OUString& rRadioGroupId);
     void setMenuButtonProperties(QToolButton& rButton, stringmap& rProps, QWidget* pParentWidget);
     void setScaleProperties(QSlider& rSlider, stringmap& rProps);
     void setSpinButtonProperties(QDoubleSpinBox& rSpinBox, stringmap& rProps);

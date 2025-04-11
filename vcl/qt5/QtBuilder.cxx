@@ -20,7 +20,13 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/qt/QtUtils.hxx>
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QtGui/QActionGroup>
+#endif
 #include <QtGui/QStandardItemModel>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <QtWidgets/QActionGroup>
+#endif
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
@@ -598,20 +604,53 @@ QMenu* QtBuilder::createMenu(const OUString& rId)
     return pMenu;
 }
 
+void QtBuilder::setMenuActionGroup(QMenu* pMenu, QAction* pAction, const OUString& rRadioGroupId)
+{
+    // use QActionGroup owned by and set as property for the QMenu
+    QActionGroup* pActionGroup = nullptr;
+    const OString sPropertyKey = OUString(u"ACTIONGROUP::"_ustr + rRadioGroupId).toUtf8();
+    QVariant aVariant = pMenu->property(sPropertyKey.getStr());
+    if (aVariant.isValid())
+    {
+        assert(aVariant.canConvert<QActionGroup*>());
+        pActionGroup = aVariant.value<QActionGroup*>();
+    }
+    else
+    {
+        pActionGroup = new QActionGroup(pMenu);
+        pMenu->setProperty(sPropertyKey.getStr(), QVariant::fromValue(pActionGroup));
+        // insert the menu item which defines the group (whose ID matches the group's ID)
+        QAction* pIdAction = pMenu->findChild<QAction*>(toQString(rRadioGroupId));
+        assert(pIdAction && "No action with the ID that the group refers to");
+        pActionGroup->addAction(pIdAction);
+    }
+
+    pActionGroup->addAction(pAction);
+}
+
 void QtBuilder::insertMenuObject(QMenu* pParent, QMenu* pSubMenu, const OUString& rClass,
                                  const OUString& rID, stringmap& rProps, stringmap&, accelmap&)
 {
     assert(!pSubMenu && "Handling not implemented yet");
     (void)pSubMenu;
 
-    if (rClass == "GtkMenuItem")
-    {
-        const OUString sLabel = extractLabel(rProps);
-        QAction* pAction = pParent->addAction(toQString(sLabel));
-        pAction->setObjectName(toQString(rID));
+    const OUString sLabel = extractLabel(rProps);
+    QAction* pAction = pParent->addAction(toQString(sLabel));
+    pAction->setObjectName(toQString(rID));
 
-        const OUString sActionName(extractActionName(rProps));
-        QtInstanceMenu::setActionName(*pAction, sActionName);
+    const OUString sActionName(extractActionName(rProps));
+    QtInstanceMenu::setActionName(*pAction, sActionName);
+
+    if (rClass == u"GtkMenuItem")
+    {
+        // nothing else to do
+    }
+    else if (rClass == u"GtkRadioMenuItem")
+    {
+        pAction->setCheckable(true);
+        const OUString sGroup = extractGroup(rProps);
+        if (!sGroup.isEmpty())
+            setMenuActionGroup(pParent, pAction, sGroup);
     }
     else
     {
