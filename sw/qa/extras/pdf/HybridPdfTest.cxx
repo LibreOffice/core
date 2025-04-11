@@ -25,11 +25,13 @@ public:
     void testNoHybridDataInPDF();
     void testHybridWithAdditionalStreams();
     void testHybridWithAdditionalStreamsAndAttachedFile();
+    void testHybridWithAttachedFileAndPass();
 
     CPPUNIT_TEST_SUITE(HybridPdfTest);
     CPPUNIT_TEST(testNoHybridDataInPDF);
     CPPUNIT_TEST(testHybridWithAdditionalStreams);
     CPPUNIT_TEST(testHybridWithAdditionalStreamsAndAttachedFile);
+    CPPUNIT_TEST(testHybridWithAttachedFileAndPass);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -65,6 +67,22 @@ void HybridPdfTest::testHybridWithAdditionalStreamsAndAttachedFile()
     // The ODT document is embedded in "/AdditionalStreams" structure that is in the PDF trailer
     // and is included as an attached file conforming to the PDF specs
     createSwDoc("Hybrid_AdditionalStreamsAndPDFAttachedFile.pdf");
+
+    // We can access the document text in a single paragraph that spans multiple rows
+    // This wouldn't be possible with a PDF, so the opened document has to be ODT
+    CPPUNIT_ASSERT_EQUAL(u"He heard quiet steps behind him. \nThat didn't bode well."_ustr,
+                         getParagraph(1)->getString());
+#endif
+}
+
+void HybridPdfTest::testHybridWithAttachedFileAndPass()
+{
+#if ENABLE_PDFIMPORT
+    // Load PDF document with an embedded ODT document
+    // The ODT document is embedded using an attached file conforming to the PDF specs
+    // it doesn't have the "/AdditionalStreams"
+    // The file is encrypted
+    createSwDoc("Hybrid_EmbeddedFileOnlyPDF20UAPasswordpop.pdf", "pop");
 
     // We can access the document text in a single paragraph that spans multiple rows
     // This wouldn't be possible with a PDF, so the opened document has to be ODT
