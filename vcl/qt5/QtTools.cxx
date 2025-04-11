@@ -59,6 +59,16 @@ sal_uInt16 toVclMouseButtons(Qt::MouseButtons eButtons)
     return nCode;
 }
 
+MouseEvent toVclMouseEvent(QMouseEvent& rEvent)
+{
+    const Point aPos = toPoint(rEvent.pos());
+    const sal_uInt16 nClicks = rEvent.type() == QMouseEvent::MouseButtonDblClick ? 2 : 1;
+    const sal_uInt16 nButtons = toVclMouseButtons(rEvent.buttons());
+    const sal_uInt16 nModifiers = toVclKeyboardModifiers(rEvent.modifiers());
+
+    return MouseEvent(aPos, nClicks, MouseEventModifiers::NONE, nButtons, nModifiers);
+}
+
 Qt::DropActions toQtDropActions(sal_Int8 dragOperation)
 {
     Qt::DropActions eRet = Qt::IgnoreAction;

@@ -26,6 +26,7 @@
 #include <QtCore/QSize>
 #include <QtCore/QString>
 #include <QtGui/QImage>
+#include <QtGui/QMouseEvent>
 #include <QtWidgets/QMessageBox>
 
 #include <rtl/string.hxx>
@@ -33,6 +34,7 @@
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <vcl/bitmap/BitmapTypes.hxx>
+#include <vcl/event.hxx>
 #include <vcl/vclenum.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -150,6 +152,8 @@ typedef std::unique_ptr<cairo_surface_t, CairoDeleter> UniqueCairoSurface;
 
 sal_uInt16 toVclKeyboardModifiers(Qt::KeyboardModifiers eKeyModifiers);
 sal_uInt16 toVclMouseButtons(Qt::MouseButtons eButtons);
+
+MouseEvent toVclMouseEvent(QMouseEvent& rEvent);
 
 QImage toQImage(const Image& rImage);
 

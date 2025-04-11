@@ -12,8 +12,11 @@
 
 #include <QtInstanceContainer.hxx>
 
+#include <vcl/event.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/qt/QtUtils.hxx>
+
+#include <QtGui/QMouseEvent>
 
 /** Name of QObject property used for the help ID. */
 const char* const PROPERTY_HELP_ID = "help-id";
@@ -24,6 +27,7 @@ QtInstanceWidget::QtInstanceWidget(QWidget* pWidget)
     assert(pWidget);
 
     connect(qApp, &QApplication::focusChanged, this, &QtInstanceWidget::applicationFocusChanged);
+    pWidget->installEventFilter(this);
 }
 
 void QtInstanceWidget::set_sensitive(bool bSensitive)
@@ -244,6 +248,32 @@ vcl::Font QtInstanceWidget::get_font()
 OUString QtInstanceWidget::get_buildable_name() const { return OUString(); }
 
 void QtInstanceWidget::set_buildable_name(const OUString&) {}
+
+bool QtInstanceWidget::eventFilter(QObject* pObject, QEvent* pEvent)
+{
+    SolarMutexGuard g;
+    assert(GetQtInstance().IsMainThread());
+
+    if (pObject != getQWidget())
+        return false;
+
+    switch (pEvent->type())
+    {
+        case QEvent::MouseButtonDblClick:
+        case QEvent::MouseButtonPress:
+        {
+            QMouseEvent* pMouseEvent = static_cast<QMouseEvent*>(pEvent);
+            return signal_mouse_press(toVclMouseEvent(*pMouseEvent));
+        }
+        case QEvent::MouseButtonRelease:
+        {
+            QMouseEvent* pMouseEvent = static_cast<QMouseEvent*>(pEvent);
+            return signal_mouse_release(toVclMouseEvent(*pMouseEvent));
+        }
+        default:
+            return QObject::eventFilter(pObject, pEvent);
+    }
+}
 
 void QtInstanceWidget::setHelpId(QWidget& rWidget, const OUString& rHelpId)
 {

@@ -173,6 +173,8 @@ public:
 
     virtual void draw(OutputDevice&, const Point&, const Size&) override;
 
+    virtual bool eventFilter(QObject* pObject, QEvent* pEvent) override;
+
     static void setHelpId(QWidget& rWidget, const OUString& rHelpId);
 
 private Q_SLOTS:
