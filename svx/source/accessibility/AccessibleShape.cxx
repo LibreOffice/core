@@ -972,16 +972,14 @@ void AccessibleShape::disposing()
     AccessibleContextBase::disposing();
 }
 
-sal_Int64 SAL_CALL
-       AccessibleShape::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL AccessibleShape::getAccessibleIndexInParent()
 {
     ensureAlive();
-    //  Use a simple but slow solution for now.  Optimize later.
 
-    sal_Int64 nIndex = m_nIndexInParent;
-    if ( -1 == nIndex )
-        nIndex = AccessibleContextBase::getAccessibleIndexInParent();
-    return nIndex;
+    if (m_nIndexInParent != -1)
+        return m_nIndexInParent;
+
+    return AccessibleContextBase::getAccessibleIndexInParent();
 }
 
 
