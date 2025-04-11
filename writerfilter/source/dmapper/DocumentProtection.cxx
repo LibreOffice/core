@@ -154,11 +154,13 @@ uno::Sequence<beans::PropertyValue> DocumentProtection::toSequence() const
         }
 
         // w:enforcement
-        if (m_bEnforcement)
         {
             beans::PropertyValue aValue;
             aValue.Name = "enforcement";
-            aValue.Value <<= OUString("1");
+            if (m_bEnforcement)
+                aValue.Value <<= OUString("1");
+            else
+                aValue.Value <<= OUString("0");
             documentProtection.push_back(aValue);
         }
 
