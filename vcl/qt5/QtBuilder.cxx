@@ -351,6 +351,17 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     {
         pObject = new QToolBar(pParentWidget);
     }
+    else if (sName == u"GtkToolButton")
+    {
+        QToolButton* pToolButton = new QToolButton(pParentWidget);
+        const OUString sIconName = extractIconName(rMap);
+        if (!sIconName.isEmpty())
+        {
+            const Image aImage = loadThemeImage(sIconName);
+            pToolButton->setIcon(toQPixmap(aImage));
+        }
+        pObject = pToolButton;
+    }
     else if (sName == u"GtkTreeView")
     {
         QTreeView* pTreeView = new QTreeView(pParentWidget);
@@ -404,6 +415,12 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         pWidget->setParent(nullptr);
         // initially, add tab with empty label, QtBuilder::applyTabChildProperties will evaluate actual one
         pParentTabWidget->addTab(pWidget, QStringLiteral());
+        // unset pParentWidget to not create a layout below
+        pParentWidget = nullptr;
+    }
+    else if (QToolBar* pParentToolBar = qobject_cast<QToolBar*>(pParentWidget))
+    {
+        pParentToolBar->addWidget(pWidget);
         // unset pParentWidget to not create a layout below
         pParentWidget = nullptr;
     }
