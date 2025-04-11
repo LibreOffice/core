@@ -190,42 +190,6 @@ uno::Reference<XAccessible> SAL_CALL
     return mxParent;
 }
 
-
-sal_Int64 SAL_CALL
-       AccessibleContextBase::getAccessibleIndexInParent()
-{
-    ensureAlive();
-    //  Use a simple but slow solution for now.  Optimize later.
-
-    //  Iterate over all the parent's children and search for this object.
-    if (!mxParent.is())
-        //   Return -1 to indicate that this object's parent does not know about the
-        //   object.
-        return -1;
-
-    uno::Reference<XAccessibleContext> xParentContext (
-        mxParent->getAccessibleContext());
-    if (xParentContext.is())
-    {
-        sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
-        for (sal_Int64 i=0; i<nChildCount; i++)
-        {
-            uno::Reference<XAccessible> xChild (xParentContext->getAccessibleChild (i));
-            if (xChild.is())
-            {
-                uno::Reference<XAccessibleContext> xChildContext = xChild->getAccessibleContext();
-                if (xChildContext == static_cast<XAccessibleContext*>(this))
-                    return i;
-            }
-        }
-    }
-
-    //   Return -1 to indicate that this object's parent does not know about the
-    //   object.
-    return -1;
-}
-
-
 sal_Int16 SAL_CALL
     AccessibleContextBase::getAccessibleRole()
 {

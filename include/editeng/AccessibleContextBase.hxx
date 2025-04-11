@@ -168,10 +168,6 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleParent() override;
 
-    /// Return this objects index among the parents children.
-    virtual sal_Int64 SAL_CALL
-        getAccessibleIndexInParent() override;
-
     /// Return this object's role.
     virtual sal_Int16 SAL_CALL
         getAccessibleRole() override;
