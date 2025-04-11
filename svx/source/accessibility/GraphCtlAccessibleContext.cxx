@@ -217,38 +217,6 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessiblePa
     return mpControl->GetDrawingArea()->get_accessible_parent();
 }
 
-sal_Int64 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleIndexInParent()
-{
-    ::SolarMutexGuard aGuard;
-    //  Use a simple but slow solution for now.  Optimize later.
-
-    //  Iterate over all the parent's children and search for this object.
-    css::uno::Reference<css::accessibility::XAccessible> xParent(getAccessibleParent());
-    if (xParent.is())
-    {
-        Reference< XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
-        if( xParentContext.is() )
-        {
-            sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
-            for( sal_Int64 i = 0 ; i < nChildCount ; ++i )
-            {
-                Reference< XAccessible > xChild( xParentContext->getAccessibleChild( i ) );
-                if( xChild.is() )
-                {
-                    Reference< XAccessibleContext > xChildContext = xChild->getAccessibleContext();
-                    if( xChildContext == static_cast<XAccessibleContext*>(this) )
-                        return i;
-                }
-            }
-        }
-    }
-
-    //   Return -1 to indicate that this object's parent does not know about the
-    //   object.
-    return -1;
-}
-
-
 sal_Int16 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleRole()
 {
     return AccessibleRole::PANEL;
