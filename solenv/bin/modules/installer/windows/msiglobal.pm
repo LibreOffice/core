@@ -524,6 +524,8 @@ sub get_template_for_sis
 
     if (( $allvariables->{'64BITPRODUCT'} ) && ( $allvariables->{'64BITPRODUCT'} == 1 )) { $architecture = "x64"; }
 
+    $architecture = "Arm64" if($ENV{'RTL_ARCH'} eq "AARCH64");
+
     my $value = "\"" . $architecture . ";" . $windowslanguage;  # adding the Windows language
 
     $value = $value . "\"";                     # adding ending '"'
