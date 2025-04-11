@@ -35,6 +35,7 @@
 #include <tools/gen.hxx>
 #include <vcl/bitmap/BitmapTypes.hxx>
 #include <vcl/event.hxx>
+#include <vcl/qt/QtUtils.hxx>
 #include <vcl/vclenum.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -44,12 +45,6 @@
 
 class Image;
 class QImage;
-
-inline OUString toOUString(const QString& s)
-{
-    // QString stores UTF16, just like OUString
-    return OUString(reinterpret_cast<const sal_Unicode*>(s.data()), s.length());
-}
 
 inline QRect toQRect(const tools::Rectangle& rRect)
 {

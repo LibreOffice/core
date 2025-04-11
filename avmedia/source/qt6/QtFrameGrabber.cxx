@@ -14,6 +14,7 @@
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/image.hxx>
+#include <vcl/qt/QtUtils.hxx>
 #include <vcl/scheduler.hxx>
 
 #include "QtFrameGrabber.hxx"
@@ -23,11 +24,6 @@ using namespace ::com::sun::star;
 
 namespace
 {
-inline OUString toOUString(const QString& s)
-{
-    return OUString(reinterpret_cast<const sal_Unicode*>(s.data()), s.length());
-}
-
 uno::Reference<css::graphic::XGraphic> toXGraphic(const QImage& rImage)
 {
     QByteArray aData;
