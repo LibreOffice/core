@@ -13,6 +13,7 @@
 
 #include <comphelper/configuration.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <officecfg/Office/Common.hxx>
 
 #include <pam.hxx>
@@ -245,6 +246,29 @@ CPPUNIT_TEST_FIXTURE(Test, testAnnotationRef)
     // - Expected: 1
     // - Actual  : 0
     assertXPath(pXmlComments, "//w:comments/w:comment[1]/w:p[1]/w:r[1]/w:annotationRef");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testBadFormulaResult)
+{
+    // Given a loaded by not laid out document:
+    uno::Sequence<beans::PropertyValue> aFilterOptions = {
+        comphelper::makePropertyValue("Hidden", true),
+    };
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/ooxmlexport/data/")
+                                      + "formula-result.fodt",
+                                  "com.sun.star.text.TextDocument", aFilterOptions);
+
+    // When saving to DOCX:
+    save(mpFilter);
+
+    // Then make sure that the field result in the last row's last run is not empty:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 6
+    // - Actual  : 0
+    // i.e. the SUM() field evaluated to an empty result.
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[4]/w:t", u"6");
 }
 
 } // end of anonymous namespace
