@@ -342,7 +342,6 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/tools/CharacterProperties \
     chart2/source/tools/ChartTypeHelper \
     chart2/source/tools/ChartViewHelper \
-    chart2/source/tools/ColorPerPointHelper \
     chart2/source/tools/CommonConverters \
     chart2/source/tools/ConfigColorScheme \
     chart2/source/tools/ControllerLockGuard \

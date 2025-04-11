@@ -153,6 +153,15 @@ public:
 
     bool hasUnhiddenData();
 
+    bool hasPointOwnColor(
+        sal_Int32 nPointIndex
+        , const css::uno::Reference< css::beans::XPropertySet >& xDataPointProperties //may be NULL this is just for performance
+         );
+
+    // returns true if AttributedDataPoints contains nPointIndex and the
+    // property Color is DEFAULT
+    bool hasPointOwnProperties( sal_Int32 nPointIndex );
+
 private:
 
     // late initialization to call after copy-constructing

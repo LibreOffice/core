@@ -879,7 +879,6 @@ chart2/source/inc/ChartType.hxx
 chart2/source/inc/ChartTypeHelper.hxx
 chart2/source/inc/ChartTypeTemplate.hxx
 chart2/source/inc/CloneHelper.hxx
-chart2/source/inc/ColorPerPointHelper.hxx
 chart2/source/inc/CommonConverters.hxx
 chart2/source/inc/CommonFunctors.hxx
 chart2/source/inc/ConfigColorScheme.hxx
@@ -1028,7 +1027,6 @@ chart2/source/tools/BaseGFXHelper.cxx
 chart2/source/tools/CachedDataSequence.cxx
 chart2/source/tools/CharacterProperties.cxx
 chart2/source/tools/ChartTypeHelper.cxx
-chart2/source/tools/ColorPerPointHelper.cxx
 chart2/source/tools/CommonConverters.cxx
 chart2/source/tools/ConfigColorScheme.cxx
 chart2/source/tools/ControllerLockGuard.cxx

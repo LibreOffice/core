@@ -43,7 +43,6 @@
 #include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartModel.hxx>
-#include <ColorPerPointHelper.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesProperties.hxx>
 #include <Diagram.hxx>
@@ -219,7 +218,7 @@ wrapper::ItemConverter* createItemConverter(
                         (xSeries->getFastPropertyValue(PROP_DATASERIES_VARY_COLORS_BY_POINT) >>= bVaryColorsByPoint) &&
                         bVaryColorsByPoint )
                     {
-                        if( !ColorPerPointHelper::hasPointOwnColor( xSeries, nPointIndex, xObjectProperties ) )
+                        if( !xSeries->hasPointOwnColor( nPointIndex, xObjectProperties ) )
                         {
                             bUseSpecialFillColor = true;
                             OSL_ASSERT( xDiagram.is());

@@ -725,6 +725,32 @@ bool DataSeries::hasUnhiddenData()
     return false;
 }
 
+bool DataSeries::hasPointOwnColor(
+        sal_Int32 nPointIndex
+        , const css::uno::Reference< css::beans::XPropertySet >& xDataPointProperties //may be NULL this is just for performance
+         )
+{
+    if( hasPointOwnProperties( nPointIndex ))
+    {
+        uno::Reference< beans::XPropertyState > xPointState( xDataPointProperties, uno::UNO_QUERY );
+        if( !xPointState.is() )
+        {
+            xPointState.set( getDataPointByIndex( nPointIndex ), uno::UNO_QUERY );
+        }
+        if( !xPointState.is() )
+            return false;
+
+        return (xPointState->getPropertyState( u"Color"_ustr) != beans::PropertyState_DEFAULT_VALUE );
+    }
+
+    return false;
+}
+
+bool DataSeries::hasPointOwnProperties( sal_Int32 nPointIndex )
+{
+    MutexGuard aGuard( m_aMutex );
+    return m_aAttributedDataPoints.find(nPointIndex) != m_aAttributedDataPoints.end();
+}
 
 }  // namespace chart
 
