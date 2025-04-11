@@ -941,9 +941,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
         // search for first on PaM created FlyFrame
         // still missing:
 
-        while( m_pCurrentPam->GetPoint()->GetNodeIndex() < m_pCurrentPam->GetMark()->GetNodeIndex() ||
-              (m_pCurrentPam->GetPoint()->GetNodeIndex() == m_pCurrentPam->GetMark()->GetNodeIndex() &&
-               m_pCurrentPam->GetPoint()->GetContentIndex() <= m_pCurrentPam->GetMark()->GetContentIndex()) )
+        while (*m_pCurrentPam->GetPoint() <= *m_pCurrentPam->GetMark())
         {
             SwNode&  rNd = m_pCurrentPam->GetPointNode();
 
