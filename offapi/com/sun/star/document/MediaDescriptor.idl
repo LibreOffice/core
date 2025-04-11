@@ -449,6 +449,11 @@ service MediaDescriptor
      */
     [optional,property] string SuggestedSaveAsName;
 
+    /** Directory to be used when exporting (to PDF, epub, ...).
+        Defaults to the current document directory.
+     */
+    [optional,property] string ExportDirectory;
+
     /** name of the template instead of the URL
 
         <p>

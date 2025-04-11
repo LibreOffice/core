@@ -61,6 +61,7 @@ namespace sfx2
         OUString             maCurFilter;
         OUString             maSelectFilter;
         OUString             maButtonLabel;
+        OUString             msStandardDir;
 
         Idle                        maPreviewIdle;
         Graphic                     maGraphic;
