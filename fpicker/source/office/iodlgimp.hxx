@@ -157,8 +157,6 @@ public:
 
     void             SetDenyList( const css::uno::Sequence< OUString >& rDenyList ) { m_aDenyList = rDenyList; }
     const css::uno::Sequence< OUString >& GetDenyList() const { return m_aDenyList; }
-    void                    SetStandardDir( const OUString& rDir );
-    const OUString&  GetStandardDir() const { return m_aStdDir; }
 
     // access to the filter listbox only as weld::Widget* - we want to maintain the entries/userdata ourself
     weld::Widget* GetFilterListControl() { return m_xLbFilter.get(); }

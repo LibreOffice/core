@@ -62,8 +62,6 @@ public:
     virtual void SetHasFilename( bool ) override;
     virtual void SetDenyList( const css::uno::Sequence< OUString >& rDenyList ) override;
     virtual const css::uno::Sequence< OUString >& GetDenyList() const override;
-    virtual void SetStandardDir( const OUString& rStdDir ) override;
-    virtual const OUString& GetStandardDir() const override;
     virtual void SetPath( const OUString& rNewURL ) override;
     virtual const OUString& GetPath() override;
     virtual std::vector<OUString> GetPathList() const override;

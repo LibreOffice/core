@@ -885,10 +885,10 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     FileDialogFlags nFlags,
     sal_Int16 nDialog,
     weld::Window* pFrameWeld,
-    const OUString& sStandardDir,
+    const OUString& sPreselectedDir,
     const css::uno::Sequence< OUString >& rDenyList
     )
-    :msStandardDir         ( sStandardDir )
+    :msPreselectedDir( sPreselectedDir )
     ,maPreviewIdle("sfx2 FileDialogHelper_Impl maPreviewIdle")
     ,m_nDialogType          ( nDialogType )
     ,meContext              ( FileDialogHelper::UnknownContext )
@@ -1072,7 +1072,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
         auto xWindow = GetFrameInterface();
 
-        Sequence < Any > aInitArguments(!xWindow.is() ? 3 : 4);
+        Sequence < Any > aInitArguments(!xWindow.is() ? 2 : 3);
         auto pInitArguments = aInitArguments.getArray();
 
         // This is a hack. We currently know that the internal file picker implementation
@@ -1094,18 +1094,13 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                                 );
 
             pInitArguments[1] <<= NamedValue(
-                                    u"StandardDir"_ustr,
-                                    Any( sStandardDir )
-                                );
-
-            pInitArguments[2] <<= NamedValue(
                                     u"DenyList"_ustr,
                                     Any( rDenyList )
                                 );
 
 
             if (xWindow.is())
-                pInitArguments[3] <<= NamedValue(u"ParentWindow"_ustr, Any(xWindow));
+                pInitArguments[2] <<= NamedValue(u"ParentWindow"_ustr, Any(xWindow));
         }
 
         try
@@ -2145,7 +2140,7 @@ void FileDialogHelper_Impl::saveConfig()
     }
 
     // Store to config, if explicit context is set (and default directory is not given)
-    if (meContext != FileDialogHelper::UnknownContext && msStandardDir.isEmpty())
+    if (meContext != FileDialogHelper::UnknownContext && msPreselectedDir.isEmpty())
     {
         SaveLastDirectory(FileDialogHelper::contextToString(meContext), getPath());
     }
@@ -2156,10 +2151,10 @@ OUString FileDialogHelper_Impl::getInitPath(std::u16string_view _rFallback,
 {
     OUString sPath;
     // Load from config, if explicit context is set. Otherwise load from (global) runtime var.
-    if (meContext == FileDialogHelper::UnknownContext || !msStandardDir.isEmpty())
+    if (meContext == FileDialogHelper::UnknownContext || !msPreselectedDir.isEmpty())
     {
         // For export, the default directory is passed on
-        sPath = msStandardDir;
+        sPath = msPreselectedDir;
     }
     else
     {
@@ -2404,11 +2399,11 @@ FileDialogHelper::FileDialogHelper(
     sal_Int16 nDialog,
     SfxFilterFlags nMust,
     SfxFilterFlags nDont,
-    const OUString& rStandardDir,
+    const OUString& rPreselectedDir,
     const css::uno::Sequence< OUString >& rDenyList,
     weld::Window* pPreferredParent)
     :   m_nError(0),
-        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, pPreferredParent, rStandardDir, rDenyList ) )
+        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, pPreferredParent, rPreselectedDir, rDenyList ) )
 {
     // create the list of filters
     mpImpl->addFilters(
@@ -2426,11 +2421,11 @@ FileDialogHelper::FileDialogHelper(
     FileDialogFlags nFlags,
     const OUString& aFilterUIName,
     std::u16string_view aExtName,
-    const OUString& rStandardDir,
+    const OUString& rPreselectedDir,
     const css::uno::Sequence< OUString >& rDenyList,
     weld::Window* pPreferredParent )
     :   m_nError(0),
-        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, pPreferredParent, rStandardDir, rDenyList ) )
+        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, pPreferredParent, rPreselectedDir, rDenyList ) )
 {
     // the wildcard here is expected in form "*.extension"
     OUString aWildcard;
@@ -2864,7 +2859,7 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              std::optional<SfxAllItemSet>& rpSet,
                              const OUString* pPath,
                              sal_Int16 nDialog,
-                             const OUString& rStandardDir,
+                             const OUString& rPreselectedDir,
                              const css::uno::Sequence< OUString >& rDenyList )
 {
     ErrCode nRet;
@@ -2873,9 +2868,9 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
     // read-only to discourage editing (which would invalidate existing
     // signatures).
     if (nFlags & FileDialogFlags::SignPDF)
-        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, SfxResId(STR_SFX_FILTERNAME_PDF), u"pdf", rStandardDir, rDenyList, pParent));
+        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, SfxResId(STR_SFX_FILTERNAME_PDF), u"pdf", rPreselectedDir, rDenyList, pParent));
     else
-        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, OUString(), nDialog, SfxFilterFlags::NONE, SfxFilterFlags::NONE, rStandardDir, rDenyList, pParent));
+        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, OUString(), nDialog, SfxFilterFlags::NONE, SfxFilterFlags::NONE, rPreselectedDir, rDenyList, pParent));
 
     OUString aPath;
     if ( pPath )

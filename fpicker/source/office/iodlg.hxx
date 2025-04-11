@@ -159,8 +159,6 @@ public:
 
     void                        SetDenyList( const css::uno::Sequence< OUString >& rDenyList ) override;
     const css::uno::Sequence< OUString >& GetDenyList() const override;
-    void                        SetStandardDir( const OUString& rStdDir ) override;
-    const OUString&             GetStandardDir() const override;
     std::vector<OUString>       GetPathList() const override;        // for MultiSelection
 
             void                AddFilter( const OUString& rFilter,

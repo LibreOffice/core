@@ -258,18 +258,6 @@ namespace
         aWorkPathObj.setFinalSlash();
         return  aWorkPathObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     }
-
-
-    /** retrieves the value of an environment variable
-        @return <TRUE/> if and only if the retrieved string value is not empty
-    */
-    bool getEnvironmentValue( const char* _pAsciiEnvName, OUString& _rValue )
-    {
-        _rValue.clear();
-        OUString sEnvName = OUString::createFromAscii( _pAsciiEnvName );
-        osl_getEnvironment( sEnvName.pData, &_rValue.pData );
-        return !_rValue.isEmpty();
-    }
 }
 
 // SvtFileDialog
@@ -324,10 +312,6 @@ SvtFileDialog::SvtFileDialog(weld::Window* pParent, PickerFlags nStyle)
 
     if (nStyle & PickerFlags::PathDialog)
         m_xImpl->m_eDlgType = FILEDLG_TYPE_PATHDLG;
-
-    // Set the directory for the "back to the default dir" button
-    INetURLObject aStdDirObj( SvtPathOptions().GetWorkPath() );
-    SetStandardDir( aStdDirObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
     // Create control element, the order defines the tab control.
     m_xImpl->m_xEdFileName->connect_changed( LINK( this, SvtFileDialog, EntrySelectHdl_Impl ) );
@@ -1453,37 +1437,6 @@ bool SvtFileDialog::PrepareExecute()
     if (comphelper::LibreOfficeKit::isActive())
         return false;
 
-    OUString aEnvValue;
-    if ( getEnvironmentValue( "WorkDirMustContainRemovableMedia", aEnvValue ) && aEnvValue == "1" )
-    {
-        try
-        {
-            INetURLObject aStdDir( GetStandardDir() );
-            ::ucbhelper::Content aCnt( aStdDir.GetMainURL(
-                                                    INetURLObject::DecodeMechanism::NONE ),
-                                 Reference< XCommandEnvironment >(),
-                                 comphelper::getProcessComponentContext() );
-            Sequence< OUString > aProps { u"IsVolume"_ustr, u"IsRemoveable"_ustr };
-
-            Reference< XResultSet > xResultSet
-                = aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_ONLY );
-            if ( xResultSet.is() && !xResultSet->next() )
-            {
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
-                                                          VclMessageType::Warning, VclButtonsType::Ok,
-                                                          FpsResId(STR_SVT_NOREMOVABLEDEVICE)));
-                xBox->run();
-                return false;
-            }
-        }
-        catch ( ContentCreationException const & )
-        {
-        }
-        catch ( CommandAbortedException const & )
-        {
-        }
-    }
-
     if ( ( m_xImpl->m_nStyle & PickerFlags::SaveAs ) && m_bHasFilename )
         // when doing a save-as, we do not want the handler to handle "this file does not exist" messages
         // - finally we're going to save that file, aren't we?
@@ -1501,20 +1454,16 @@ bool SvtFileDialog::PrepareExecute()
         aFileNameOnly = m_aPath;
         m_aPath.clear();
     }
-
     // no starting path specified?
     if ( m_aPath.isEmpty() )
     {
         // then use the standard directory
-        m_aPath = lcl_ensureFinalSlash( m_xImpl->GetStandardDir() );
-
+        m_aPath = lcl_ensureFinalSlash( SvtPathOptions().GetWorkPath() );
         // attach given filename to path
         if ( !aFileNameOnly.isEmpty() )
             m_aPath += aFileNameOnly;
     }
-
-
-    m_aPath = implGetInitialURL( m_aPath, GetStandardDir() );
+    m_aPath = implGetInitialURL( m_aPath, SvtPathOptions().GetWorkPath() );
 
     if ( m_xImpl->m_nStyle & PickerFlags::SaveAs && !m_bHasFilename )
         // when doing a save-as, we do not want the handler to handle "this file does not exist" messages
@@ -1648,18 +1597,6 @@ void SvtFileDialog::FilterSelect()
 }
 
 
-/*  [Description]
-
-   This method sets the path for the default button.
-*/
-void SvtFileDialog::SetStandardDir( const OUString& rStdDir )
-{
-    INetURLObject aObj( rStdDir );
-    SAL_WARN_IF( aObj.GetProtocol() == INetProtocol::NotValid, "fpicker.office", "Invalid protocol!" );
-    aObj.setFinalSlash();
-    m_xImpl->SetStandardDir( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-}
-
 void SvtFileDialog::SetDenyList( const css::uno::Sequence< OUString >& rDenyList )
 {
     m_xImpl->SetDenyList( rDenyList );
@@ -1670,17 +1607,6 @@ const css::uno::Sequence< OUString >& SvtFileDialog::GetDenyList() const
 {
     return m_xImpl->GetDenyList();
 }
-
-
-/*  [Description]
-
-    This method returns the standard path.
-*/
-const OUString& SvtFileDialog::GetStandardDir() const
-{
-    return m_xImpl->GetStandardDir();
-}
-
 
 void SvtFileDialog::PrevLevel_Impl()
 {
@@ -2279,9 +2205,6 @@ void SvtFileDialog::appendDefaultExtension(OUString& rFileName,
 
 void SvtFileDialog::initDefaultPlaces( )
 {
-    PlacePtr pRootPlace = std::make_shared<Place>( FpsResId(STR_DEFAULT_DIRECTORY), GetStandardDir() );
-    m_xImpl->m_xPlaces->AppendPlace( pRootPlace );
-
     // Load from user settings
     Sequence< OUString > placesUrlsList(officecfg::Office::Common::Misc::FilePickerPlacesUrls::get());
     Sequence< OUString > placesNamesList(officecfg::Office::Common::Misc::FilePickerPlacesNames::get());
