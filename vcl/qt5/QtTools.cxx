@@ -18,6 +18,8 @@
  */
 
 #include <QtTools.hxx>
+#include <QtFontFace.hxx>
+#include <unx/fontmanager.hxx>
 
 #include <cairo.h>
 
@@ -131,6 +133,39 @@ QImage toQImage(const Image& rImage)
     }
 
     return aImage;
+}
+
+bool toVclFont(const QFont& rQFont, const css::lang::Locale& rLocale, vcl::Font& rVclFont)
+{
+    FontAttributes aFA;
+    QtFontFace::fillAttributesFromQFont(rQFont, aFA);
+
+    bool bFound = psp::PrintFontManager::get().matchFont(aFA, rLocale);
+    SAL_INFO("vcl.qt",
+             "font match result for '"
+                 << rQFont.family() << "': "
+                 << (bFound ? OUString::Concat("'") + aFA.GetFamilyName() + "'" : u"failed"_ustr));
+
+    if (!bFound)
+        return false;
+
+    QFontInfo qFontInfo(rQFont);
+    int nPointHeight = qFontInfo.pointSize();
+    if (nPointHeight <= 0)
+        nPointHeight = rQFont.pointSize();
+
+    vcl::Font aFont(aFA.GetFamilyName(), Size(0, nPointHeight));
+    if (aFA.GetWeight() != WEIGHT_DONTKNOW)
+        aFont.SetWeight(aFA.GetWeight());
+    if (aFA.GetWidthType() != WIDTH_DONTKNOW)
+        aFont.SetWidthType(aFA.GetWidthType());
+    if (aFA.GetItalic() != ITALIC_DONTKNOW)
+        aFont.SetItalic(aFA.GetItalic());
+    if (aFA.GetPitch() != PITCH_DONTKNOW)
+        aFont.SetPitch(aFA.GetPitch());
+
+    rVclFont = aFont;
+    return true;
 }
 
 QMessageBox::Icon vclMessageTypeToQtIcon(VclMessageType eType)

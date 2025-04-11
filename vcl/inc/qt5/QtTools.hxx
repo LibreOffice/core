@@ -38,6 +38,7 @@
 #include <vcl/qt/QtUtils.hxx>
 #include <vcl/vclenum.hxx>
 
+#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
@@ -151,6 +152,8 @@ sal_uInt16 toVclMouseButtons(Qt::MouseButtons eButtons);
 MouseEvent toVclMouseEvent(QMouseEvent& rEvent);
 
 QImage toQImage(const Image& rImage);
+
+bool toVclFont(const QFont& rQFont, const css::lang::Locale& rLocale, vcl::Font& rVclFont);
 
 QMessageBox::Icon vclMessageTypeToQtIcon(VclMessageType eType);
 QString vclMessageTypeToQtTitle(VclMessageType eType);
