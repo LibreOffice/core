@@ -33,6 +33,7 @@ class SvxChartKindErrorItem;
 class SvxChartTextOrderItem;
 class SvxChartRegressItem;
 class SdrAngleItem;
+class SvxChartColorPaletteItem;
 
 // SCHATTR
 
@@ -201,7 +202,11 @@ inline constexpr TypedWhichId<SfxBoolItem>         SCHATTR_DATA_TABLE_OUTLINE   
 inline constexpr TypedWhichId<SfxBoolItem>         SCHATTR_DATA_TABLE_KEYS                 (SCHATTR_DATA_TABLE_START + 3);
 inline constexpr sal_uInt16                        SCHATTR_DATA_TABLE_END                  (SCHATTR_DATA_TABLE_KEYS);
 
-inline constexpr sal_uInt16 SCHATTR_END (SCHATTR_DATA_TABLE_END);
+inline constexpr sal_uInt16                             SCHATTR_COLOR_PALETTE_START        (SCHATTR_DATA_TABLE_END + 1);
+inline constexpr TypedWhichId<SvxChartColorPaletteItem> SCHATTR_COLOR_PALETTE              (SCHATTR_COLOR_PALETTE_START);
+inline constexpr sal_uInt16                             SCHATTR_COLOR_PALETTE_END          (SCHATTR_COLOR_PALETTE);
+
+inline constexpr sal_uInt16 SCHATTR_END (SCHATTR_COLOR_PALETTE_END);
 
 // values for Items
 

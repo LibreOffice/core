@@ -285,6 +285,7 @@ constexpr auto SchartDialogList
         { u"modules/schart/ui/inserttitledlg.ui" },
         { u"modules/schart/ui/smoothlinesdlg.ui" },
         { u"modules/schart/ui/steppedlinesdlg.ui" },
+        { u"modules/schart/ui/tp_ChartColorPalette.ui" },
         { u"modules/schart/ui/tp_ChartType.ui" },
         { u"modules/schart/ui/tp_DataLabel.ui" },
         { u"modules/schart/ui/tp_DataSource.ui" },

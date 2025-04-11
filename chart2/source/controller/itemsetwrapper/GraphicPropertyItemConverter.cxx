@@ -19,10 +19,12 @@
 
 #include <GraphicPropertyItemConverter.hxx>
 #include "SchWhichPairs.hxx"
+#include <ChartModel.hxx>
 #include <ItemPropertyMap.hxx>
 #include <PropertyHelper.hxx>
 #include <CommonConverters.hxx>
 #include <editeng/memberids.h>
+#include <svx/chrtitem.hxx>
 #include <svx/unomid.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
@@ -144,7 +146,11 @@ GraphicPropertyItemConverter::GraphicPropertyItemConverter(
         m_GraphicObjectType( eObjectType ),
         m_rDrawModel( rDrawModel ),
         m_xNamedPropertyTableFactory(std::move( xNamedPropertyContainerFactory ))
-{}
+{
+    m_xChartModel = dynamic_cast<ChartModel*>(m_xNamedPropertyTableFactory.get());
+    DBG_ASSERT(m_xChartModel.is(),
+        "GraphicPropertyItemConverter ctor: passed XMultiServiceFactory parameter is not a ChartModel instance.");
+}
 
 GraphicPropertyItemConverter::~GraphicPropertyItemConverter()
 {}
@@ -168,6 +174,11 @@ const WhichRangesContainer& GraphicPropertyItemConverter::GetWhichPairs() const
 
 bool GraphicPropertyItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
 {
+    if (nWhichId == SCHATTR_COLOR_PALETTE)
+    {
+        return false;
+    }
+
     ItemPropertyMapType::const_iterator aEndIt;
     ItemPropertyMapType::const_iterator aIt;
 
@@ -742,6 +753,15 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                 }
             }
             break;
+        case SCHATTR_COLOR_PALETTE:
+        {
+            const auto& rItem = static_cast<const SvxChartColorPaletteItem&>(rItemSet.Get(nWhichId));
+            m_xChartModel->setColorPalette(rItem.GetType(), rItem.GetIndex());
+            const auto oColorPalette = m_xChartModel->getCurrentColorPalette();
+            if (oColorPalette)
+                m_xChartModel->applyColorPaletteToDataSeries(*oColorPalette);
+        }
+        break;
     }
 
     return bChanged;

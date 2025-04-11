@@ -93,6 +93,10 @@
 
 #define MID_LEFT                    3
 
+// SvxChartColorPaletteItem
+#define MID_CHART_COLOR_PALETTE_TYPE 0
+#define MID_CHART_COLOR_PALETTE_INDEX 1
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
