@@ -28,7 +28,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/task/XInteractionPassword.hpp>
-#include <com/sun/star/task/DocumentPasswordRequest.hpp>
+#include <com/sun/star/task/DocumentPasswordRequest2.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
@@ -74,13 +74,13 @@ private:
 PDFPasswordRequest::PDFPasswordRequest( bool bFirstTry, const OUString& rName ) :
     m_aRequest(
         uno::Any(
-            task::DocumentPasswordRequest(
+            task::DocumentPasswordRequest2(
                 OUString(), uno::Reference< uno::XInterface >(),
                 task::InteractionClassification_QUERY,
                 (bFirstTry
                  ? task::PasswordRequestMode_PASSWORD_ENTER
                  : task::PasswordRequestMode_PASSWORD_REENTER),
-                rName))),
+                rName, false))),
     m_bSelected(false)
 {}
 
