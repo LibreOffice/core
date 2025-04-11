@@ -312,7 +312,9 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     }
     else if (sName == u"GtkScrolledWindow")
     {
-        pObject = new QScrollArea(pParentWidget);
+        QScrollArea* pScrollArea = new QScrollArea(pParentWidget);
+        pScrollArea->setWidgetResizable(true);
+        pObject = pScrollArea;
     }
     else if (sName == u"GtkSeparator")
     {
