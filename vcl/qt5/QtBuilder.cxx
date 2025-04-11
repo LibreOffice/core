@@ -817,6 +817,14 @@ void QtBuilder::setCheckButtonProperties(QAbstractButton& rButton, stringmap& rP
     {
         if (rKey == u"active")
             rButton.setChecked(toBool(rValue));
+        else if (rKey == u"inconsistent" && toBool(rValue))
+        {
+            if (QCheckBox* pCheckBox = qobject_cast<QCheckBox*>(&rButton))
+            {
+                pCheckBox->setTristate(true);
+                pCheckBox->setCheckState(Qt::PartiallyChecked);
+            }
+        }
         else if (rKey == u"label")
             rButton.setText(convertAccelerator(rValue));
     }
