@@ -373,61 +373,6 @@ void deleteSeries(
     }
 }
 
-void switchSymbolsOnOrOff( const rtl::Reference< DataSeries > & xSeries,
-                    bool bSymbolsOn, sal_Int32 nSeriesIndex )
-{
-    if( !xSeries )
-        return;
-
-    chart2::Symbol aSymbProp;
-    if( xSeries->getPropertyValue( u"Symbol"_ustr) >>= aSymbProp )
-    {
-        if( !bSymbolsOn )
-            aSymbProp.Style = chart2::SymbolStyle_NONE;
-        else if( aSymbProp.Style == chart2::SymbolStyle_NONE )
-        {
-            aSymbProp.Style = chart2::SymbolStyle_STANDARD;
-            aSymbProp.StandardSymbol = nSeriesIndex;
-        }
-        xSeries->setPropertyValue( u"Symbol"_ustr, uno::Any( aSymbProp ));
-    }
-    //todo: check attributed data points
-}
-
-void switchLinesOnOrOff( const rtl::Reference< DataSeries > & xSeries, bool bLinesOn )
-{
-    if( !xSeries )
-        return;
-
-    if( bLinesOn )
-    {
-        // keep line-styles that are not NONE
-        drawing::LineStyle eLineStyle;
-        if( (xSeries->getPropertyValue( u"LineStyle"_ustr) >>= eLineStyle ) &&
-            eLineStyle == drawing::LineStyle_NONE )
-        {
-            xSeries->setPropertyValue( u"LineStyle"_ustr, uno::Any( drawing::LineStyle_SOLID ) );
-        }
-    }
-    else
-        xSeries->setPropertyValue( u"LineStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
-}
-
-void makeLinesThickOrThin( const rtl::Reference< ::chart::DataSeries > & xSeries, bool bThick )
-{
-    if( !xSeries )
-        return;
-
-    sal_Int32 nNewValue = bThick ? 80 : 0;
-    sal_Int32 nOldValue = 0;
-    if( (xSeries->getPropertyValue( u"LineWidth"_ustr) >>= nOldValue ) &&
-        nOldValue != nNewValue )
-    {
-        if( !(bThick && nOldValue>0))
-            xSeries->setPropertyValue( u"LineWidth"_ustr, uno::Any( nNewValue ) );
-    }
-}
-
 void setPropertyAlsoToAllAttributedDataPoints( const rtl::Reference< ::chart::DataSeries >& xSeries,
                                               const OUString& rPropertyName, const uno::Any& rPropertyValue )
 {

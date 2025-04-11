@@ -308,9 +308,9 @@ void LineChartTypeTemplate::applyStyle2(
 
     try
     {
-        DataSeriesHelper::switchSymbolsOnOrOff( xSeries, m_bHasSymbols, nSeriesIndex );
-        DataSeriesHelper::switchLinesOnOrOff( xSeries, m_bHasLines );
-        DataSeriesHelper::makeLinesThickOrThin( xSeries, m_nDim==2 );
+        xSeries->switchSymbolsOnOrOff( m_bHasSymbols, nSeriesIndex );
+        xSeries->switchLinesOnOrOff( m_bHasLines );
+        xSeries->makeLinesThickOrThin( m_nDim==2 );
     }
     catch( const uno::Exception & )
     {

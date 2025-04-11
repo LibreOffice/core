@@ -114,16 +114,6 @@ void deleteSeries(
     const rtl::Reference< ::chart::DataSeries > & xSeries,
     const rtl::Reference< ::chart::ChartType > & xChartType );
 
-void switchSymbolsOnOrOff(
-    const rtl::Reference< ::chart::DataSeries > & xSeries,
-    bool bSymbolsOn, sal_Int32 nSeriesIndex );
-
-void switchLinesOnOrOff(
-    const rtl::Reference< ::chart::DataSeries > & xSeries,
-    bool bLinesOn );
-
-void makeLinesThickOrThin( const rtl::Reference< ::chart::DataSeries > & xSeries, bool bThick );
-
 void setPropertyAlsoToAllAttributedDataPoints(
         const rtl::Reference< ::chart::DataSeries >& xSeries,
         const OUString& rPropertyName,

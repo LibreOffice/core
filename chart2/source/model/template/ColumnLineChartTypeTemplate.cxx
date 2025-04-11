@@ -215,9 +215,9 @@ void ColumnLineChartTypeTemplate::applyStyle2(
     }
     else if( nChartTypeIndex==1 ) // lines
     {
-        DataSeriesHelper::switchLinesOnOrOff( xSeries, true );
-        DataSeriesHelper::switchSymbolsOnOrOff( xSeries, false, nSeriesIndex );
-        DataSeriesHelper::makeLinesThickOrThin( xSeries, true );
+        xSeries->switchLinesOnOrOff( true );
+        xSeries->switchSymbolsOnOrOff( false, nSeriesIndex );
+        xSeries->makeLinesThickOrThin( true );
     }
 }
 

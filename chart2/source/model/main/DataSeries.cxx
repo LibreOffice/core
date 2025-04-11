@@ -27,8 +27,10 @@
 #include <CloneHelper.hxx>
 #include <RegressionCurveModel.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -765,6 +767,52 @@ sal_Int32 DataSeries::getAttachedAxisIndex()
     }
     return nRet;
 }
+
+void DataSeries::switchSymbolsOnOrOff( bool bSymbolsOn, sal_Int32 nSeriesIndex )
+{
+    css::chart2::Symbol aSymbProp;
+    if( getPropertyValue( u"Symbol"_ustr) >>= aSymbProp )
+    {
+        if( !bSymbolsOn )
+            aSymbProp.Style = chart2::SymbolStyle_NONE;
+        else if( aSymbProp.Style == chart2::SymbolStyle_NONE )
+        {
+            aSymbProp.Style = chart2::SymbolStyle_STANDARD;
+            aSymbProp.StandardSymbol = nSeriesIndex;
+        }
+        setPropertyValue( u"Symbol"_ustr, uno::Any( aSymbProp ));
+    }
+    //todo: check attributed data points
+}
+
+void DataSeries::switchLinesOnOrOff( bool bLinesOn )
+{
+    if( bLinesOn )
+    {
+        // keep line-styles that are not NONE
+        css::drawing::LineStyle eLineStyle;
+        if( (getPropertyValue( u"LineStyle"_ustr) >>= eLineStyle ) &&
+            eLineStyle == drawing::LineStyle_NONE )
+        {
+            setPropertyValue( u"LineStyle"_ustr, uno::Any( drawing::LineStyle_SOLID ) );
+        }
+    }
+    else
+        setPropertyValue( u"LineStyle"_ustr, uno::Any( drawing::LineStyle_NONE ) );
+}
+
+void DataSeries::makeLinesThickOrThin( bool bThick )
+{
+    sal_Int32 nNewValue = bThick ? 80 : 0;
+    sal_Int32 nOldValue = 0;
+    if( (getPropertyValue( u"LineWidth"_ustr) >>= nOldValue ) &&
+        nOldValue != nNewValue )
+    {
+        if( !(bThick && nOldValue>0))
+            setPropertyValue( u"LineWidth"_ustr, uno::Any( nNewValue ) );
+    }
+}
+
 
 }  // namespace chart
 

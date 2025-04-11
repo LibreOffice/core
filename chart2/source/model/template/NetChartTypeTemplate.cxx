@@ -69,9 +69,9 @@ void NetChartTypeTemplate::applyStyle2(
 
     try
     {
-        DataSeriesHelper::switchSymbolsOnOrOff( xSeries, m_bHasSymbols, nSeriesIndex );
-        DataSeriesHelper::switchLinesOnOrOff( xSeries, m_bHasLines );
-        DataSeriesHelper::makeLinesThickOrThin( xSeries, true );
+        xSeries->switchSymbolsOnOrOff( m_bHasSymbols, nSeriesIndex );
+        xSeries->switchLinesOnOrOff( m_bHasLines );
+        xSeries->makeLinesThickOrThin( true );
     }
     catch( const uno::Exception & )
     {

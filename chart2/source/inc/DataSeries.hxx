@@ -166,6 +166,12 @@ public:
 
     bool isAttachedToMainAxis() { return getAttachedAxisIndex() == 0; }
 
+    void switchSymbolsOnOrOff( bool bSymbolsOn, sal_Int32 nSeriesIndex );
+
+    void switchLinesOnOrOff( bool bLinesOn );
+
+    void makeLinesThickOrThin( bool bThick );
+
 private:
 
     // late initialization to call after copy-constructing
