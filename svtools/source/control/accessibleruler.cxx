@@ -88,33 +88,6 @@ uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleParent()
     return mxParent;
 }
 
-sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleIndexInParent()
-{
-    SolarMutexGuard aSolarGuard;
-
-    //  Use a simple but slow solution for now.  Optimize later.
-
-    //  Iterate over all the parent's children and search for this object.
-    if( mxParent.is() )
-    {
-        uno::Reference< XAccessibleContext >        xParentContext( mxParent->getAccessibleContext() );
-        if( xParentContext.is() )
-        {
-            sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
-            for( sal_Int64 i = 0 ; i < nChildCount ; ++i )
-            {
-                uno::Reference< XAccessible >   xChild( xParentContext->getAccessibleChild( i ) );
-                if( xChild.get() == static_cast<XAccessible*>(this) )
-                    return i;
-            }
-        }
-    }
-
-    //   Return -1 to indicate that this object's parent does not know about the
-    //   object.
-    return -1;
-}
-
 sal_Int16 SAL_CALL SvtRulerAccessible::getAccessibleRole()
 {
     SolarMutexGuard aSolarGuard;
