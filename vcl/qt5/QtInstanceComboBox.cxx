@@ -35,6 +35,9 @@ void QtInstanceComboBox::insert(int nPos, const OUString& rStr, const OUString* 
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] {
+        if (nPos == -1)
+            nPos = m_pComboBox->count();
+
         QVariant aUserData;
         if (pId)
             aUserData = QVariant::fromValue(toQString(*pId));
