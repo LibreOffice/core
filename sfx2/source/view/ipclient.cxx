@@ -906,7 +906,7 @@ ErrCodeMsg SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
         {
             svt::EmbeddedObjectRef::TryRunningState( m_xImp->m_xObject );
             // TODO/LATER: this special verb should disappear when outplace activation is completely available
-            uno::Reference< frame::XModel > xEmbModel( m_xImp->m_xObject->getComponent(), uno::UNO_QUERY );
+            uno::Reference< frame::XModel2 > xEmbModel( m_xImp->m_xObject->getComponent(), uno::UNO_QUERY );
             if ( xEmbModel.is() )
             {
                 bSaveCopyAs = true;

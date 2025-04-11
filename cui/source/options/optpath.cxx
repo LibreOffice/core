@@ -464,9 +464,6 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
         // will be used for the next open dialog.
         SvtViewOptions aDlgOpt( EViewType::Dialog, IODLG_CONFIGNAME );
         aDlgOpt.Delete();
-        // Reset also last used dir in the sfx application instance
-        SfxApplication *pSfxApp = SfxGetpApp();
-        pSfxApp->ResetLastDir();
     }
 }
 

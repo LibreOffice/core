@@ -159,7 +159,6 @@ public:
     virtual void                Invalidate(sal_uInt16 nId = 0) override;
     void                        NotifyEvent(const SfxEventHint& rEvent, bool bSynchron = true );
     bool                        IsDowning() const;
-    void                        ResetLastDir();
 
     SAL_DLLPRIVATE SfxDispatcher* GetAppDispatcher_Impl();
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl();
@@ -198,8 +197,6 @@ public:
     SAL_DLLPRIVATE static void  OfaState_Impl(SfxItemSet &);
 
     SAL_DLLPRIVATE void         SetProgress_Impl(SfxProgress *);
-    SAL_DLLPRIVATE const OUString& GetLastDir_Impl() const;
-    SAL_DLLPRIVATE void         SetLastDir_Impl( const OUString & );
 
     SAL_DLLPRIVATE static void  Registrations_Impl();
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl(const SfxViewFrame *pFrame) const;

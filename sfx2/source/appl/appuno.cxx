@@ -144,6 +144,7 @@ constexpr OUString sDenyList = u"DenyList"_ustr;
 constexpr OUString sModifyPasswordInfo = u"ModifyPasswordInfo"_ustr;
 constexpr OUString sSuggestedSaveAsDir = u"SuggestedSaveAsDir"_ustr;
 constexpr OUString sSuggestedSaveAsName = u"SuggestedSaveAsName"_ustr;
+constexpr OUString sExportDirectory = u"ExportDirectory"_ustr;
 constexpr OUString sEncryptionData = u"EncryptionData"_ustr;
 constexpr OUString sFailOnWarning = u"FailOnWarning"_ustr;
 constexpr OUString sDocumentService = u"DocumentService"_ustr;
@@ -812,6 +813,14 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 if (bOK)
                     rSet.Put( SfxStringItem( SID_SUGGESTEDSAVEASNAME, sVal ) );
             }
+            else if ( aName == sExportDirectory )
+            {
+                OUString sVal;
+                bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
+                DBG_ASSERT( bOK, "invalid type or value for ExportDirectoy" );
+                if (bOK)
+                    rSet.Put( SfxStringItem( SID_EXPORTDIRECTORY, sVal ) );
+            }
             else if (aName == sDocumentService)
             {
                 OUString aVal;
@@ -1088,6 +1097,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 nAdditional++;
             if ( rSet.GetItemState( SID_SUGGESTEDSAVEASNAME ) == SfxItemState::SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_EXPORTDIRECTORY ) == SfxItemState::SET )
+                nAdditional++;
             if ( rSet.GetItemState( SID_DOC_SERVICE ) == SfxItemState::SET )
                 nAdditional++;
             if (rSet.HasItem(SID_FILTER_PROVIDER))
@@ -1261,6 +1272,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                     if ( nId == SID_SUGGESTEDSAVEASDIR )
                         continue;
                     if ( nId == SID_SUGGESTEDSAVEASNAME )
+                        continue;
+                    if ( nId == SID_EXPORTDIRECTORY )
                         continue;
                     if ( nId == SID_LOCK_CONTENT_EXTRACTION )
                         continue;
@@ -1648,6 +1661,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         if ( const SfxStringItem *pItem = rSet.GetItemIfSet( SID_SUGGESTEDSAVEASNAME, false) )
         {
             pValue[nActProp].Name = sSuggestedSaveAsName;
+            pValue[nActProp++].Value <<= pItem->GetValue();
+        }
+        if ( const SfxStringItem *pItem = rSet.GetItemIfSet( SID_EXPORTDIRECTORY, false) )
+        {
+            pValue[nActProp].Name = sExportDirectory;
             pValue[nActProp++].Value <<= pItem->GetValue();
         }
         if ( const SfxStringItem *pItem = rSet.GetItemIfSet( SID_DOC_SERVICE, false) )
