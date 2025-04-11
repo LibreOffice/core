@@ -63,13 +63,13 @@ SbiSymDef* SbiParser::VarDecl( SbiExprListPtr* ppDim, bool bStatic, bool bConst 
     if( bWithEvents )
         pDef->SetWithEvents();
     TypeDecl( *pDef );
-    if( !ppDim && pDim )
+    if (ppDim)
+        *ppDim = std::move(pDim);
+    else if (pDim)
     {
         if(pDim->GetDims() )
             Error( ERRCODE_BASIC_EXPECTED, u"()"_ustr );
     }
-    else if( ppDim )
-        *ppDim = std::move(pDim);
     return pDef;
 }
 
