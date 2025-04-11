@@ -1135,6 +1135,14 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
                 ok = true;
             }
         }
+        else if (rArg.Name == "ExportDirectory")
+        {
+            if (rArg.Value >>= sValue)
+            {
+                pMedium->GetItemSet().Put(SfxStringItem(SID_EXPORTDIRECTORY, sValue));
+                ok = true;
+            }
+        }
         else if (rArg.Name == "LockContentExtraction")
         {
             if (rArg.Value >>= bValue)

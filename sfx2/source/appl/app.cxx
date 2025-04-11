@@ -183,49 +183,6 @@ SfxApplication::~SfxApplication()
 }
 
 
-const OUString& SfxApplication::GetLastDir_Impl() const
-
-/*  [Description]
-
-    Internal method by which the last set directory with the method
-    <SfxApplication::SetLastDir_Impl()> in SFX is returned.
-
-    This is usually the most recently addressed by the
-    SfxFileDialog directory.
-
-    [Cross-reference]
-    <SfxApplication::SetLastDir_Impl()>
-*/
-
-{
-    return pImpl->aLastDir;
-}
-
-void SfxApplication::SetLastDir_Impl
-(
-    const OUString&   rNewDir     /* Complete directory path as a string */
-)
-
-/*  [Description]
-
-    Internal Method, by which a directory path is set that was last addressed
-    (eg by the SfxFileDialog).
-
-    [Cross-reference]
-    <SfxApplication::GetLastDir_Impl()>
-*/
-
-{
-    pImpl->aLastDir = rNewDir;
-}
-
-
-void SfxApplication::ResetLastDir()
-{
-    pImpl->aLastDir.clear();
-}
-
-
 SfxDispatcher* SfxApplication::GetDispatcher_Impl()
 {
     return pImpl->pViewFrame ? pImpl->pViewFrame->GetDispatcher() : &*pImpl->pAppDispat;

@@ -3687,7 +3687,6 @@ SfxApplication::Invalidate(unsigned short)
 SfxApplication::MacroOrganizer(weld::Window*, com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&, short)
 SfxApplication::RegisterInterface(SfxModule const*)
 SfxApplication::ReleaseIndex(unsigned short)
-SfxApplication::ResetLastDir()
 SfxApplication::SaveBasicAndDialogContainer() const
 SfxApplication::SfxApplication()
 SfxApplication::loadBrandSvg(char const*, BitmapEx&, int)

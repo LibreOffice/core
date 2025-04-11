@@ -28,7 +28,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
-#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
@@ -82,7 +82,7 @@ public:
     SfxStoringHelper();
 
     bool GUIStoreModel(
-                    const css::uno::Reference< css::frame::XModel >& xModel,
+                    const css::uno::Reference< css::frame::XModel2 >& xModel,
                     std::u16string_view aSlotName,
                     css::uno::Sequence< css::beans::PropertyValue >& aArgsSequence,
                     bool bPreselectPassword,
@@ -95,18 +95,18 @@ public:
 
 
     static void SetDocInfoState(
-        const css::uno::Reference< css::frame::XModel >& xModel,
+        const css::uno::Reference< css::frame::XModel2 >& xModel,
         const css::uno::Reference< css::document::XDocumentProperties>& i_xOldDocInfo );
 
     static bool WarnUnacceptableFormat(
-                                    const css::uno::Reference< css::frame::XModel >& xModel,
+                                    const css::uno::Reference< css::frame::XModel2 >& xModel,
                                     std::u16string_view aOldUIName,
                                     std::u16string_view aExtension,
                                     const OUString& aDefExtension,
                                     bool rDefaultIsAlien );
 
-    static css::uno::Reference<css::awt::XWindow> GetModelXWindow(const css::uno::Reference<css::frame::XModel>& rModel);
-    static weld::Window* GetModelWindow( const css::uno::Reference< css::frame::XModel >& xModel );
+    static css::uno::Reference<css::awt::XWindow> GetModelXWindow(const css::uno::Reference<css::frame::XModel2>& rModel);
+    static weld::Window* GetModelWindow( const css::uno::Reference< css::frame::XModel2 >& xModel );
 
 };
 

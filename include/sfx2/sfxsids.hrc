@@ -301,6 +301,7 @@ class SvxZoomItem;
 #define SID_GPGSIGN                         TypedWhichId<SfxBoolItem>(SID_SFX_START + 1748)
 #define FN_INVERT_BACKGROUND                (SID_SFX_START + 1749)
 #define SID_MACROMANAGER                    (SID_SFX_START + 1750)
+#define SID_EXPORTDIRECTORY                 TypedWhichId<SfxStringItem>(SID_SFX_START + 1751)
 //      SID_SFX_free_END                    (SID_SFX_START + 3999)
 
 #define SID_OPEN_NEW_VIEW                   TypedWhichId<SfxBoolItem>(SID_SFX_START + 520)

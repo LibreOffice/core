@@ -63,6 +63,7 @@
 #include <svl/eitem.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/json_writer.hxx>
 #include <comphelper/processfactory.hxx>
@@ -220,7 +221,7 @@ class DocumentSettingsGuard
 
     bool m_bRestoreSettings;
 public:
-    DocumentSettingsGuard( const uno::Reference< frame::XModel >& xModel, bool bReadOnly, bool bRestore )
+    DocumentSettingsGuard( const uno::Reference< frame::XModel2 >& xModel, bool bReadOnly, bool bRestore )
     : m_bPreserveReadOnly( false )
     , m_bReadOnlySupported( false )
     , m_bRestoreSettings( bRestore )
@@ -272,7 +273,7 @@ public:
 class ModelData_Impl
 {
     SfxStoringHelper* m_pOwner;
-    uno::Reference< frame::XModel > m_xModel;
+    uno::Reference< frame::XModel2 > m_xModel;
     uno::Reference< frame::XStorable > m_xStorable;
     uno::Reference< frame::XStorable2 > m_xStorable2;
 
@@ -292,14 +293,14 @@ class ModelData_Impl
 
 public:
     ModelData_Impl( SfxStoringHelper& aOwner,
-                    uno::Reference< frame::XModel > xModel,
+                    uno::Reference< frame::XModel2 > xModel,
                     const uno::Sequence< beans::PropertyValue >& aMediaDescr );
 
     ~ModelData_Impl();
 
     void FreeDocumentProps();
 
-    uno::Reference< frame::XModel > const & GetModel() const;
+    uno::Reference< frame::XModel2 > const & GetModel() const;
     uno::Reference< frame::XStorable > const & GetStorable();
     uno::Reference< frame::XStorable2 > const & GetStorable2();
 
@@ -338,7 +339,7 @@ public:
                                 bool bPreselectPassword,
                                 OUString& aSuggestedDir,
                                 sal_Int16 nDialog,
-                                const OUString& rStandardDir,
+                                OUString& rStandardDir,
                                 const css::uno::Sequence< OUString >& rDenyList
                                 );
 
@@ -352,7 +353,7 @@ public:
 
 
 ModelData_Impl::ModelData_Impl( SfxStoringHelper& aOwner,
-                                uno::Reference< frame::XModel > xModel,
+                                uno::Reference< frame::XModel2 > xModel,
                                 const uno::Sequence< beans::PropertyValue >& aMediaDescr )
 : m_pOwner( &aOwner )
 , m_xModel(std::move( xModel ))
@@ -380,14 +381,13 @@ void ModelData_Impl::FreeDocumentProps()
 }
 
 
-uno::Reference< frame::XModel > const & ModelData_Impl::GetModel() const
+uno::Reference< frame::XModel2 > const & ModelData_Impl::GetModel() const
 {
     if ( !m_xModel.is() )
         throw uno::RuntimeException();
 
     return m_xModel;
 }
-
 
 uno::Reference< frame::XStorable > const & ModelData_Impl::GetStorable()
 {
@@ -894,7 +894,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
                                             bool bPreselectPassword,
                                             OUString& aSuggestedDir,
                                             sal_Int16 nDialog,
-                                            const OUString& rStandardDir,
+                                            OUString& rStandardDir,
                                             const css::uno::Sequence< OUString >& rDenyList)
 {
     if ( nStoreMode == SAVEASREMOTE_REQUESTED )
@@ -955,6 +955,13 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     weld::Window* pFrameWin = SfxStoringHelper::GetModelWindow(m_xModel);
     if ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
     {
+        const OUString aBaseUrl = GetDocProps().getUnpackedValueOrDefault("DocumentBaseURL", OUString());
+        OUString aExportDir = GetDocProps().getUnpackedValueOrDefault("ExportDirectory", aBaseUrl);
+        INetURLObject aObj( aExportDir );
+        aObj.removeSegment();
+        aExportDir = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+        if (!aExportDir.isEmpty())
+            rStandardDir = aExportDir;
         if ( ( nStoreMode & PDFEXPORT_REQUESTED ) && !aPreselectedFilterPropsHM.empty() )
         {
             // this is a PDF export
@@ -985,7 +992,6 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
             eCtxt = sfx2::FileDialogHelper::WriterExport;
         else if ( aDocServiceName == "com.sun.star.sheet.SpreadsheetDocument" )
             eCtxt = sfx2::FileDialogHelper::CalcExport;
-
         if ( eCtxt != sfx2::FileDialogHelper::UnknownContext )
                pFileDlg->SetContext( eCtxt );
 
@@ -1247,6 +1253,16 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     GetMediaDescr()[u"URL"_ustr] <<= aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     GetMediaDescr()[sFilterNameString] <<= aFilterName;
 
+    // for Export - keep a runtime var for each document where the document was last exported to
+    if (GetStorable()->hasLocation() && (nStoreMode & EXPORT_REQUESTED))
+    {
+        uno::Sequence< beans::PropertyValue > descriptor{
+            beans::PropertyValue(u"ExportDirectory"_ustr,
+                -1, uno::Any(aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE )), beans::PropertyState_DIRECT_VALUE),
+        };
+        GetModel()->setArgs(descriptor);
+    }
+
     return bUseFilterOptions;
 }
 
@@ -1457,7 +1473,7 @@ uno::Reference< css::frame::XModuleManager2 > const & SfxStoringHelper::GetModul
     return m_xModuleManager;
 }
 
-bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xModel,
+bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel2 >& xModel,
                                             std::u16string_view aSlotName,
                                             uno::Sequence< beans::PropertyValue >& aArgsSequence,
                                             bool bPreselectPassword,
@@ -2023,7 +2039,7 @@ bool SfxStoringHelper::CheckFilterOptionsAppearance(
 
 // static
 void SfxStoringHelper::SetDocInfoState(
-        const uno::Reference< frame::XModel >& xModel,
+        const uno::Reference< frame::XModel2 >& xModel,
         const uno::Reference< document::XDocumentProperties>& i_xOldDocProps )
 {
     uno::Reference<document::XDocumentPropertiesSupplier> const
@@ -2098,7 +2114,7 @@ void SfxStoringHelper::SetDocInfoState(
 
 
 // static
-bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XModel >& xModel,
+bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XModel2 >& xModel,
                                                     std::u16string_view aOldUIName,
                                                     std::u16string_view aExtension,
                                                     const OUString& aDefExtension,
@@ -2135,7 +2151,7 @@ bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XMod
     return nResult == RET_YES;
 }
 
-uno::Reference<awt::XWindow> SfxStoringHelper::GetModelXWindow(const uno::Reference<frame::XModel>& xModel)
+uno::Reference<awt::XWindow> SfxStoringHelper::GetModelXWindow(const uno::Reference<frame::XModel2>& xModel)
 {
     try {
         if ( xModel.is() )
@@ -2158,7 +2174,7 @@ uno::Reference<awt::XWindow> SfxStoringHelper::GetModelXWindow(const uno::Refere
     return uno::Reference<awt::XWindow>();
 }
 
-weld::Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XModel >& xModel )
+weld::Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XModel2 >& xModel )
 {
     weld::Window* pWin = nullptr;
 

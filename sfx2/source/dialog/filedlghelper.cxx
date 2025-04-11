@@ -925,7 +925,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     const OUString& sStandardDir,
     const css::uno::Sequence< OUString >& rDenyList
     )
-    :maPreviewIdle("sfx2 FileDialogHelper_Impl maPreviewIdle")
+    :msStandardDir         ( sStandardDir )
+    ,maPreviewIdle("sfx2 FileDialogHelper_Impl maPreviewIdle")
     ,m_nDialogType          ( nDialogType )
     ,meContext              ( FileDialogHelper::UnknownContext )
 {
@@ -2194,15 +2195,10 @@ void FileDialogHelper_Impl::saveConfig()
             aDlgOpt.SetUserItem( USERITEM_NAME, Any( aUserData ) );
     }
 
-    // Store to config, if explicit context is set. Otherwise store in (global) runtime var.
-    if (meContext != FileDialogHelper::UnknownContext)
+    // Store to config, if explicit context is set (and default directory is not given)
+    if (meContext != FileDialogHelper::UnknownContext && msStandardDir.isEmpty())
     {
         SaveLastDirectory(FileDialogHelper::contextToString(meContext), getPath());
-    }
-    else
-    {
-        SfxApplication *pSfxApp = SfxGetpApp();
-        pSfxApp->SetLastDir_Impl( getPath() );
     }
 }
 
@@ -2211,7 +2207,12 @@ OUString FileDialogHelper_Impl::getInitPath(std::u16string_view _rFallback,
 {
     OUString sPath;
     // Load from config, if explicit context is set. Otherwise load from (global) runtime var.
-    if (meContext != FileDialogHelper::UnknownContext)
+    if (meContext == FileDialogHelper::UnknownContext || !msStandardDir.isEmpty())
+    {
+        // For export, the default directory is passed on
+        sPath = msStandardDir;
+    }
+    else
     {
         OUString sContext = FileDialogHelper::contextToString(meContext);
         Reference<XNameAccess> set(officecfg::Office::Common::Misc::FilePickerLastDirectory::get());
@@ -2225,11 +2226,6 @@ OUString FileDialogHelper_Impl::getInitPath(std::u16string_view _rFallback,
         catch (NoSuchElementException&)
         {
         }
-    }
-    else
-    {
-        SfxApplication *pSfxApp = SfxGetpApp();
-        sPath = pSfxApp->GetLastDir_Impl();
     }
 
     if ( sPath.isEmpty() )

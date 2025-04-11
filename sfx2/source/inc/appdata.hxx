@@ -61,7 +61,6 @@ class SfxAppData_Impl
 {
 public:
     IndexBitSet                         aIndexBitSet;           // for counting noname documents
-    OUString                            aLastDir;               // for IO dialog
 
     // DDE stuff
     std::unique_ptr<DdeService>              pDdeService;
