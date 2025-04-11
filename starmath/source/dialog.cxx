@@ -886,6 +886,10 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
     nActiveCategory = nCategory;
 
     m_xMetricField1->grab_focus();
+    // ensure the focus handler gets called
+    // (for qt6 and native widgets, no focus event gets sent when "Category" menu was triggered using
+    // mouse while m_xMetricField1 had keyboard focus)
+    GetFocusHdl(m_xMetricField1->get_widget());
 }
 
 SmDistanceDialog::SmDistanceDialog(weld::Window *pParent)
