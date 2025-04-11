@@ -81,6 +81,7 @@
 #include <annotsh.hxx>
 #include <swabstdlg.hxx>
 #include <memory>
+#include <o3tl/temporary.hxx>
 
 // distance between Anchor Y and initial note position
 #define POSTIT_INITIAL_ANCHOR_DISTANCE      20
@@ -875,7 +876,7 @@ void SwPostItMgr::PreparePageContainer()
     }
 }
 
-VclPtr<SwAnnotationWin> SwPostItMgr::GetOrCreateAnnotationWindow(SwSidebarItem& rItem)
+VclPtr<SwAnnotationWin> SwPostItMgr::GetOrCreateAnnotationWindow(SwSidebarItem& rItem, bool& rCreated)
 {
     VclPtr<SwAnnotationWin> pPostIt = rItem.mpPostIt;
     if (!pPostIt)
@@ -893,6 +894,8 @@ VclPtr<SwAnnotationWin> SwPostItMgr::GetOrCreateAnnotationWindow(SwSidebarItem& 
             }
             mpAnswer.reset();
         }
+
+        rCreated = true;
     }
     return rItem.mpPostIt;
 }
@@ -907,6 +910,7 @@ void SwPostItMgr::LayoutPostIts()
     if (bEnableMapMode)
         mpEditWin->EnableMapMode();
 
+    std::set<VclPtr<SwAnnotationWin>> aCreatedPostIts;
     if ( !mvPostItFields.empty() && !mbWaitingForCalcRects )
     {
         mbLayouting = true;
@@ -928,7 +932,14 @@ void SwPostItMgr::LayoutPostIts()
                 {
                     if (pItem->mbShow)
                     {
-                        VclPtr<SwAnnotationWin> pPostIt = GetOrCreateAnnotationWindow(*pItem);
+                        bool bCreated = false;
+                        VclPtr<SwAnnotationWin> pPostIt = GetOrCreateAnnotationWindow(*pItem, bCreated);
+                        if (bCreated)
+                        {
+                            // The annotation window was created for a previously existing, but not
+                            // laid out comment.
+                            aCreatedPostIts.insert(pPostIt);
+                        }
 
                         pPostIt->SetChangeTracking(
                             pItem->mLayoutStatus,
@@ -1086,7 +1097,10 @@ void SwPostItMgr::LayoutPostIts()
                     if (bLoKitActive && !bTiledAnnotations)
                     {
                         if (visiblePostIt->GetSidebarItem().mbPendingLayout && visiblePostIt->GetSidebarItem().mLayoutStatus != SwPostItHelper::DELETED)
-                            lcl_CommentNotification(mpView, CommentNotificationType::Add, &visiblePostIt->GetSidebarItem(), 0);
+                        {
+                            // Notify about a just inserted comment.
+                            aCreatedPostIts.insert(visiblePostIt);
+                        }
                         else if (visiblePostIt->IsAnchorRectChanged())
                         {
                             lcl_CommentNotification(mpView, CommentNotificationType::Modify, &visiblePostIt->GetSidebarItem(), 0);
@@ -1140,6 +1154,12 @@ void SwPostItMgr::LayoutPostIts()
             mpEditWin->Invalidate(); /*This is a super expensive relayout and render of the entire page*/
 
         mbLayouting = false;
+    }
+
+    // Now that comments are laid out, notify about freshly laid out or just inserted comments.
+    for (const auto& pPostIt : aCreatedPostIts)
+    {
+        lcl_CommentNotification(mpView, CommentNotificationType::Add, &pPostIt->GetSidebarItem(), 0);
     }
 
     if (bEnableMapMode)
@@ -1920,7 +1940,7 @@ SwPostItField* SwPostItMgr::GetLatestPostItField()
 
 sw::annotation::SwAnnotationWin* SwPostItMgr::GetOrCreateAnnotationWindowForLatestPostItField()
 {
-    return GetOrCreateAnnotationWindow(*mvPostItFields.back());
+    return GetOrCreateAnnotationWindow(*mvPostItFields.back(), o3tl::temporary(bool()));
 }
 
 SwAnnotationWin* SwPostItMgr::GetNextPostIt( sal_uInt16 aDirection,
