@@ -206,7 +206,7 @@ bool isPrimaryAxis(const rtl::Reference<::chart::ChartModel>&
     if (!xSeries.is())
         return true;
 
-    return DataSeriesHelper::getAttachedAxisIndex(xSeries) == 0;
+    return xSeries->getAttachedAxisIndex() == 0;
 }
 
 void setAttachedAxisType(const rtl::Reference<::chart::ChartModel>&

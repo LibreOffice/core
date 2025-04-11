@@ -53,9 +53,6 @@ public:
         const rtl::Reference< ::chart::BaseCoordinateSystem > & xCorrespondingCoordinateSystem
         );
 
-    static bool isSeriesAttachedToMainAxis(
-        const rtl::Reference< ::chart::DataSeries >& xDataSeries );
-
     static css::uno::Sequence< OUString >
         getExplicitSimpleCategories( ChartModel& rModel );
 

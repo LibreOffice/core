@@ -752,6 +752,20 @@ bool DataSeries::hasPointOwnProperties( sal_Int32 nPointIndex )
     return m_aAttributedDataPoints.find(nPointIndex) != m_aAttributedDataPoints.end();
 }
 
+sal_Int32 DataSeries::getAttachedAxisIndex()
+{
+    sal_Int32 nRet = 0;
+    try
+    {
+        getFastPropertyValue( ::chart::DataSeriesProperties::PROP_DATASERIES_ATTACHED_AXIS_INDEX ) >>= nRet;
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+    return nRet;
+}
+
 }  // namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

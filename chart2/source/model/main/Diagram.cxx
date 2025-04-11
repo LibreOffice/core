@@ -1423,7 +1423,7 @@ rtl::Reference< ChartType > Diagram::getChartTypeOfSeries(
 rtl::Reference< Axis > Diagram::getAttachedAxis(
         const rtl::Reference< DataSeries >& xSeries )
 {
-    return AxisHelper::getAxis( 1, DiagramHelper::isSeriesAttachedToMainAxis( xSeries ), this );
+    return AxisHelper::getAxis( 1, !xSeries || xSeries->isAttachedToMainAxis(), this );
 }
 
 bool Diagram::attachSeriesToAxis( bool bAttachToMainAxis
@@ -1436,7 +1436,7 @@ bool Diagram::attachSeriesToAxis( bool bAttachToMainAxis
     //set property at axis
 
     sal_Int32 nNewAxisIndex = bAttachToMainAxis ? 0 : 1;
-    sal_Int32 nOldAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
+    sal_Int32 nOldAxisIndex = xDataSeries->getAttachedAxisIndex();
     rtl::Reference< Axis > xOldAxis = getAttachedAxis( xDataSeries );
 
     if( nOldAxisIndex != nNewAxisIndex )

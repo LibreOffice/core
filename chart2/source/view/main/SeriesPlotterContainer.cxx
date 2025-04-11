@@ -594,7 +594,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries(ChartModel& 
                 std::vector<rtl::Reference<DataSeries>> aSeriesVector = xDiagram->getDataSeries();
                 for (auto const& series : aSeriesVector)
                 {
-                    sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex(series);
+                    sal_Int32 nCurrentIndex = series->getAttachedAxisIndex();
                     if (nAxisIndex == nCurrentIndex)
                     {
                         bSeriesAttachedToThisAxis = true;

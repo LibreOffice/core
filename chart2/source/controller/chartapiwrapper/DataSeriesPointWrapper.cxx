@@ -296,7 +296,7 @@ Any WrappedAttachedAxisProperty::getPropertyValue( const Reference< beans::XProp
     Any aRet;
 
     rtl::Reference< ::chart::DataSeries > xDataSeries( dynamic_cast<::chart::DataSeries*>(xInnerPropertySet.get()) );
-    bool bAttachedToMainAxis = ::chart::DiagramHelper::isSeriesAttachedToMainAxis( xDataSeries );
+    bool bAttachedToMainAxis = xDataSeries->isAttachedToMainAxis();
     if( bAttachedToMainAxis )
         aRet <<= css::chart::ChartAxisAssign::PRIMARY_Y;
     else
@@ -313,7 +313,7 @@ void WrappedAttachedAxisProperty::setPropertyValue( const Any& rOuterValue, cons
         throw lang::IllegalArgumentException(u"Property Axis requires value of type sal_Int32"_ustr, nullptr, 0 );
 
     bool bNewAttachedToMainAxis = nChartAxisAssign == css::chart::ChartAxisAssign::PRIMARY_Y;
-    bool bOldAttachedToMainAxis = ::chart::DiagramHelper::isSeriesAttachedToMainAxis( xDataSeries );
+    bool bOldAttachedToMainAxis = xDataSeries->isAttachedToMainAxis();
 
     if( bNewAttachedToMainAxis != bOldAttachedToMainAxis)
     {

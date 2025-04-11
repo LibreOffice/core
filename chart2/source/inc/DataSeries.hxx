@@ -162,6 +162,10 @@ public:
     // property Color is DEFAULT
     bool hasPointOwnProperties( sal_Int32 nPointIndex );
 
+    sal_Int32 getAttachedAxisIndex();
+
+    bool isAttachedToMainAxis() { return getAttachedAxisIndex() == 0; }
+
 private:
 
     // late initialization to call after copy-constructing

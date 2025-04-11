@@ -241,7 +241,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                         if( nDimensionIndex == 1 )
                         {
                             //only take those series into account that are attached to this axis
-                            sal_Int32 nAttachedAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
+                            sal_Int32 nAttachedAxisIndex = xDataSeries->getAttachedAxisIndex();
                             if( nAttachedAxisIndex != nAxisIndex )
                                 continue;
                         }
@@ -1081,7 +1081,7 @@ rtl::Reference< ChartType > AxisHelper::getFirstChartTypeWithSeriesAttachedToAxi
     std::vector< rtl::Reference< DataSeries > > aSeriesVector = xDiagram->getDataSeries();
     for (auto const& series : aSeriesVector)
     {
-        sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex(series);
+        sal_Int32 nCurrentIndex = series->getAttachedAxisIndex();
         if( nAttachedAxisIndex == nCurrentIndex )
         {
             xChartType = xDiagram->getChartTypeOfSeries(series);

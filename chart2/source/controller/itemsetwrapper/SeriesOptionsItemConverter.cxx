@@ -69,7 +69,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
 {
     try
     {
-        m_bAttachToMainAxis = DiagramHelper::isSeriesAttachedToMainAxis( xDataSeries );
+        m_bAttachToMainAxis = xDataSeries->isAttachedToMainAxis();
 
         rtl::Reference< Diagram > xDiagram( xChartModel->getFirstChartDiagram() );
         rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeOfSeries( xDataSeries ) );
@@ -88,7 +88,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         if( m_bSupportingOverlapAndGapWidthProperties )
         {
 
-            sal_Int32 nAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
+            sal_Int32 nAxisIndex = xDataSeries->getAttachedAxisIndex();
 
             uno::Sequence< sal_Int32 > aBarPositionSequence;
             if( xChartType.is() )
@@ -206,7 +206,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                 rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeOfSeries( xDataSeries ) );
                 if( xChartType.is() )
                 {
-                    sal_Int32 nAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
+                    sal_Int32 nAxisIndex = xDataSeries->getAttachedAxisIndex();
                     uno::Sequence< sal_Int32 > aBarPositionSequence;
                     if( xChartType->getPropertyValue( aPropName ) >>= aBarPositionSequence )
                     {

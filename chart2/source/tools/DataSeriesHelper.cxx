@@ -308,23 +308,6 @@ void setStackModeAtSeries(
     }
 }
 
-sal_Int32 getAttachedAxisIndex( const rtl::Reference< DataSeries > & xSeries )
-{
-    sal_Int32 nRet = 0;
-    try
-    {
-        if( xSeries.is() )
-        {
-            xSeries->getFastPropertyValue( PROP_DATASERIES_ATTACHED_AXIS_INDEX ) >>= nRet;
-        }
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-    return nRet;
-}
-
 sal_Int32 getNumberFormatKeyFromAxis(
     const rtl::Reference< DataSeries > & xSeries,
     const rtl::Reference< BaseCoordinateSystem > & xCorrespondingCoordinateSystem,
@@ -333,7 +316,7 @@ sal_Int32 getNumberFormatKeyFromAxis(
 {
     sal_Int32 nResult =  0;
     if( nAxisIndex == -1 )
-        nAxisIndex = getAttachedAxisIndex( xSeries );
+        nAxisIndex = xSeries->getAttachedAxisIndex();
     try
     {
         rtl::Reference< Axis > xAxisProp =

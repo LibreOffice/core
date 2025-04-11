@@ -122,7 +122,7 @@ StackMode DiagramHelper::getStackModeFromChartType(
                     {
                         sal_Int32 nAxisIndex = 0;
                         if( nSeriesCount )
-                            nAxisIndex = DataSeriesHelper::getAttachedAxisIndex(aSeries[0]);
+                            nAxisIndex = aSeries[0]->getAttachedAxisIndex();
 
                         rtl::Reference< Axis > xAxis =
                             xCorrespondingCoordinateSystem->getAxisByDimension2( 1,nAxisIndex );
@@ -143,13 +143,6 @@ StackMode DiagramHelper::getStackModeFromChartType(
     }
 
     return eStackMode;
-}
-
-bool DiagramHelper::isSeriesAttachedToMainAxis(
-                          const rtl::Reference< ::chart::DataSeries >& xDataSeries )
-{
-    sal_Int32 nAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
-    return (nAxisIndex==0);
 }
 
 static void lcl_generateAutomaticCategoriesFromChartType(

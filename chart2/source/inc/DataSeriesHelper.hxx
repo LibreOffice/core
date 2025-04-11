@@ -93,9 +93,6 @@ void setStackModeAtSeries(
     const rtl::Reference< ::chart::BaseCoordinateSystem > & xCorrespondingCoordinateSystem,
     StackMode eStackMode );
 
-sal_Int32 getAttachedAxisIndex(
-    const rtl::Reference< ::chart::DataSeries > & xSeries );
-
 /// @param nAxisIndex, if -1 it is determined by the given data series via getAttachedAxisIndex
 sal_Int32 getNumberFormatKeyFromAxis(
     const rtl::Reference< ::chart::DataSeries > & xSeries,
