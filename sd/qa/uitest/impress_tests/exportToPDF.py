@@ -13,6 +13,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from org.libreoffice.unotest import systemPathToFileUrl
 from tempfile import TemporaryDirectory
 import os.path
+import os
 
 
 class exportToPDF(UITestCase):
@@ -20,7 +21,7 @@ class exportToPDF(UITestCase):
     def test_checkDefaultValues(self):
 
         with TemporaryDirectory() as tempdir:
-            xFilePath = os.path.join(tempdir, 'exportToPDFFromImpress-tmp.pdf')
+            xFilePath = os.path.join(tempdir, 'exportToPDFFromImpress-tmp' + str(os.getpid()) + '.pdf')
 
             with self.ui_test.create_doc_in_start_center("impress"):
 
