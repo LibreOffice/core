@@ -247,7 +247,7 @@ rtl::Reference< DataSource > DataSourceHelper::pressUsedDataIntoRectangularForma
     return new DataSource( aResultVector );
 }
 
-uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges(
+std::vector< OUString > DataSourceHelper::getUsedDataRanges(
     const rtl::Reference< Diagram > & xDiagram )
 {
     std::vector< OUString > aResult;
@@ -266,10 +266,10 @@ uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges(
         }
     }
 
-    return comphelper::containerToSequence( aResult );
+    return aResult;
 }
 
-uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges( const rtl::Reference<::chart::ChartModel> & xChartModel )
+std::vector< OUString > DataSourceHelper::getUsedDataRanges( const rtl::Reference<::chart::ChartModel> & xChartModel )
 {
     rtl::Reference< Diagram > xDiagram( xChartModel->getFirstChartDiagram() );
     return getUsedDataRanges( xDiagram );
@@ -408,10 +408,10 @@ void DataSourceHelper::setRangeSegmentation(
     xDiagram->setDiagramData( xDataSource, aArguments );
 }
 
-Sequence< OUString > DataSourceHelper::getRangesFromLabeledDataSequence(
+std::vector< OUString > DataSourceHelper::getRangesFromLabeledDataSequence(
     const Reference< data::XLabeledDataSequence > & xLSeq )
 {
-    Sequence< OUString > aResult;
+    std::vector< OUString > aResult;
     if( xLSeq.is())
     {
         Reference< data::XDataSequence > xLabel( xLSeq->getLabel());
@@ -450,7 +450,7 @@ OUString DataSourceHelper::getRangeFromValues(
     return aResult;
 }
 
-Sequence< OUString > DataSourceHelper::getRangesFromDataSource( const Reference< data::XDataSource > & xSource )
+std::vector< OUString > DataSourceHelper::getRangesFromDataSource( const Reference< data::XDataSource > & xSource )
 {
     std::vector< OUString > aResult;
     if( xSource.is())
@@ -467,7 +467,7 @@ Sequence< OUString > DataSourceHelper::getRangesFromDataSource( const Reference<
                 aResult.push_back( xValues->getSourceRangeRepresentation());
         }
     }
-    return comphelper::containerToSequence( aResult );
+    return aResult;
 }
 
 } //namespace chart

@@ -48,13 +48,13 @@ const Color defaultPreferredColor = COL_LIGHTBLUE;
 
 void lcl_fillRanges(
     Sequence< chart2::data::HighlightedRange > & rOutRanges,
-    const Sequence< OUString >& aRangeStrings,
+    const std::vector< OUString >& aRangeStrings,
     Color nPreferredColor,
     sal_Int32 nIndex = -1 )
 {
-    rOutRanges.realloc( aRangeStrings.getLength());
+    rOutRanges.realloc( aRangeStrings.size());
     auto pOutRanges = rOutRanges.getArray();
-    for( sal_Int32 i=0; i<aRangeStrings.getLength(); ++i )
+    for( size_t i=0; i<aRangeStrings.size(); ++i )
     {
         pOutRanges[i].RangeRepresentation = aRangeStrings[i];
         pOutRanges[i].PreferredColor = sal_Int32(nPreferredColor);
@@ -190,11 +190,11 @@ void RangeHighlighter::determineRanges()
 
 void RangeHighlighter::fillRangesForDiagram( const rtl::Reference< Diagram > & xDiagram )
 {
-    Sequence< OUString > aSelectedRanges( DataSourceHelper::getUsedDataRanges( xDiagram ));
-    m_aSelectedRanges.realloc( aSelectedRanges.getLength());
+    std::vector< OUString > aSelectedRanges( DataSourceHelper::getUsedDataRanges( xDiagram ));
+    m_aSelectedRanges.realloc( aSelectedRanges.size());
     auto pSelectedRanges = m_aSelectedRanges.getArray();
     // @todo: merge ranges
-    for( sal_Int32 i=0; i<aSelectedRanges.getLength(); ++i )
+    for( size_t i=0; i<aSelectedRanges.size(); ++i )
     {
         pSelectedRanges[i].RangeRepresentation = aSelectedRanges[i];
         pSelectedRanges[i].Index = -1;

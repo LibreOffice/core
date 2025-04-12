@@ -74,10 +74,10 @@ public:
         static rtl::Reference< ::chart::DataSource >
             pressUsedDataIntoRectangularFormat( const rtl::Reference< ::chart::ChartModel >& xChartDoc );
 
-        static css::uno::Sequence< OUString > getUsedDataRanges(
+        static std::vector< OUString > getUsedDataRanges(
             const rtl::Reference< ::chart::Diagram > & xDiagram );
 
-        static css::uno::Sequence< OUString > getUsedDataRanges(
+        static std::vector< OUString > getUsedDataRanges(
             const rtl::Reference<::chart::ChartModel> & xChartModel );
 
         static rtl::Reference< ::chart::DataSource > getUsedData(
@@ -108,13 +108,13 @@ public:
         static bool allArgumentsForRectRangeDetected(
             const rtl::Reference<::chart::ChartModel>& xChartDocument );
 
-        static css::uno::Sequence< OUString > getRangesFromLabeledDataSequence(
+        static std::vector< OUString > getRangesFromLabeledDataSequence(
             const css::uno::Reference< css::chart2::data::XLabeledDataSequence > & xLSeq );
 
         static OUString getRangeFromValues(
             const css::uno::Reference< css::chart2::data::XLabeledDataSequence > & xLSeq );
 
-        static css::uno::Sequence< OUString > getRangesFromDataSource(
+        static std::vector< OUString > getRangesFromDataSource(
             const css::uno::Reference< css::chart2::data::XDataSource > & xSource );
 };
 

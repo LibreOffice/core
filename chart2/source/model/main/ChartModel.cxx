@@ -891,7 +891,7 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
 
 Sequence< OUString > SAL_CALL ChartModel::getUsedRangeRepresentations()
 {
-    return DataSourceHelper::getUsedDataRanges( this );
+    return comphelper::containerToSequence(DataSourceHelper::getUsedDataRanges( this ));
 }
 
 Reference< chart2::data::XDataSource > SAL_CALL ChartModel::getUsedData()
