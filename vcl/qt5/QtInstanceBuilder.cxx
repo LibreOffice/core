@@ -92,6 +92,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"filter/ui/xmlfiltertabpagetransformation.ui"_ustr,
         u"filter/ui/xmlfiltersettings.ui"_ustr,
         u"filter/ui/xsltfilterdialog.ui"_ustr,
+        u"modules/BasicIDE/ui/gotolinedialog.ui"_ustr,
         u"modules/scalc/ui/inputstringdialog.ui"_ustr,
         u"modules/scalc/ui/insertcells.ui"_ustr,
         u"modules/scalc/ui/movecopysheet.ui"_ustr,
