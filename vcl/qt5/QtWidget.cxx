@@ -73,11 +73,11 @@ void QtWidget::fakeResize()
     resizeEvent(&aEvent);
 }
 
-void QtWidget::fillSalAbstractMouseEvent(const QtFrame& rFrame, const QInputEvent* pQEvent,
-                                         const QPoint& rPos, Qt::MouseButtons eButtons, int nWidth,
-                                         SalAbstractMouseEvent& aSalEvent)
+void QtWidget::fillSalAbstractMouseEvent(const QInputEvent* pQEvent, const QPoint& rPos,
+                                         Qt::MouseButtons eButtons, int nWidth,
+                                         SalAbstractMouseEvent& aSalEvent) const
 {
-    const qreal fRatio = rFrame.devicePixelRatioF();
+    const qreal fRatio = m_rFrame.devicePixelRatioF();
     const Point aPos = toPoint(rPos * fRatio);
 
     aSalEvent.mnX = QGuiApplication::isLeftToRight() ? aPos.X() : round(nWidth * fRatio) - aPos.X();
@@ -86,13 +86,13 @@ void QtWidget::fillSalAbstractMouseEvent(const QtFrame& rFrame, const QInputEven
     aSalEvent.mnCode = toVclKeyboardModifiers(pQEvent->modifiers()) | toVclMouseButtons(eButtons);
 }
 
-#define FILL_SAME(rFrame, nWidth)                                                                  \
-    fillSalAbstractMouseEvent(rFrame, pEvent, pEvent->pos(), pEvent->buttons(), nWidth, aEvent)
+#define FILL_SAME(nWidth)                                                                          \
+    fillSalAbstractMouseEvent(pEvent, pEvent->pos(), pEvent->buttons(), nWidth, aEvent)
 
 void QtWidget::handleMouseButtonEvent(const QMouseEvent* pEvent) const
 {
     SalMouseEvent aEvent;
-    FILL_SAME(m_rFrame, m_rFrame.GetQWidget()->width());
+    FILL_SAME(m_rFrame.GetQWidget()->width());
 
     switch (pEvent->button())
     {
@@ -130,7 +130,7 @@ void QtWidget::mouseReleaseEvent(QMouseEvent* pEvent) { handleMouseButtonEvent(p
 void QtWidget::mouseMoveEvent(QMouseEvent* pEvent)
 {
     SalMouseEvent aEvent;
-    FILL_SAME(m_rFrame, width());
+    FILL_SAME(width());
 
     aEvent.mnButton = 0;
 
@@ -176,8 +176,8 @@ void QtWidget::enterEvent(QEvent* pEvent)
 void QtWidget::wheelEvent(QWheelEvent* pEvent)
 {
     SalWheelMouseEvent aEvent;
-    fillSalAbstractMouseEvent(m_rFrame, pEvent, pEvent->position().toPoint(), pEvent->buttons(),
-                              width(), aEvent);
+    fillSalAbstractMouseEvent(pEvent, pEvent->position().toPoint(), pEvent->buttons(), width(),
+                              aEvent);
 
     // mouse wheel ticks are 120, which we map to 3 lines.
     // we have to accumulate for touch scroll to keep track of the absolute delta.
