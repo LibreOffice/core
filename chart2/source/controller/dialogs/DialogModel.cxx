@@ -586,7 +586,7 @@ void DialogModel::deleteSeries(
     m_aTimerTriggeredControllerLock.startTimer();
     ControllerLockGuardUNO aLockedControllers( m_xChartDocument );
 
-    DataSeriesHelper::deleteSeries( xSeries, xChartType );
+    xChartType->deleteSeries( xSeries );
 }
 
 uno::Reference< chart2::data::XLabeledDataSequence > DialogModel::getCategories() const

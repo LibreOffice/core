@@ -322,6 +322,29 @@ using impl::ChartType_Base;
 IMPLEMENT_FORWARD_XINTERFACE2( ChartType, ChartType_Base, ::property::OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( ChartType, ChartType_Base, ::property::OPropertySet )
 
+void ChartType::deleteSeries( const rtl::Reference< ::chart::DataSeries > & xSeries )
+{
+    try
+    {
+        SolarMutexGuard g;
+
+        auto it = std::find( m_aDataSeries.begin(), m_aDataSeries.end(), xSeries );
+        if( it == m_aDataSeries.end())
+            return;
+
+        ModifyListenerHelper::removeListener( *it, m_xModifyEventForwarder );
+        fireModifyEvent();
+
+        createCalculatedDataSeries();
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+}
+
+
+
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

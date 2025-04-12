@@ -307,27 +307,6 @@ rtl::Reference< ::chart::ChartType > getChartTypeOfSeries(
     return xResult;
 }
 
-void deleteSeries(
-    const rtl::Reference< ::chart::DataSeries > & xSeries,
-    const rtl::Reference< ::chart::ChartType > & xChartType )
-{
-    try
-    {
-        std::vector< rtl::Reference< DataSeries > > aSeries = xChartType->getDataSeries2();
-        auto aIt = std::find( aSeries.begin(), aSeries.end(), xSeries );
-        if( aIt != aSeries.end())
-        {
-            aSeries.erase( aIt );
-            xChartType->setDataSeries( aSeries );
-        }
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-}
-
-
 sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nIndex, const Reference< chart2::data::XDataSequence >& xDataSequence, bool bTranslate )
 {
     if( !bTranslate )

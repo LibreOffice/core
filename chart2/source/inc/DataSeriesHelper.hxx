@@ -110,10 +110,6 @@ rtl::Reference< ::chart::ChartType >
         const rtl::Reference< ::chart::DataSeries > & xSeries,
         const rtl::Reference< ::chart::Diagram > & xDiagram );
 
-void deleteSeries(
-    const rtl::Reference< ::chart::DataSeries > & xSeries,
-    const rtl::Reference< ::chart::ChartType > & xChartType );
-
 sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nClippedIndex, const css::uno::Reference<
         css::chart2::data::XDataSequence >& xDataSequence, bool bTranslate );
 

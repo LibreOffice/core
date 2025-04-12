@@ -115,6 +115,9 @@ public:
         createCoordinateSystem2( sal_Int32 DimensionCount );
 
     virtual void createCalculatedDataSeries();
+
+    void deleteSeries( const rtl::Reference< ::chart::DataSeries > & xSeries );
+
 protected:
 
     // ____ XModifyListener ____
