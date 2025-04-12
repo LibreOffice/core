@@ -617,12 +617,12 @@ bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent
     return bStopProcessingKey;
 }
 
-bool QtWidget::handleEvent(QtFrame& rFrame, QWidget& rWidget, QEvent* pEvent)
+bool QtWidget::handleEvent(QEvent* pEvent)
 {
     if (pEvent->type() == QEvent::Gesture)
     {
         QGestureEvent* pGestureEvent = static_cast<QGestureEvent*>(pEvent);
-        return handleGestureEvent(rFrame, pGestureEvent);
+        return handleGestureEvent(m_rFrame, pGestureEvent);
     }
     else if (pEvent->type() == QEvent::ShortcutOverride)
     {
@@ -648,7 +648,7 @@ bool QtWidget::handleEvent(QtFrame& rFrame, QWidget& rWidget, QEvent* pEvent)
         // and if it's handled - disable the shortcut, it should have been activated.
         // Don't process keyPressEvent generated after disabling shortcut since it was handled here.
         // If event is not handled, don't accept it and let Qt activate related shortcut.
-        if (handleKeyEvent(rFrame, rWidget, static_cast<QKeyEvent*>(pEvent)))
+        if (handleKeyEvent(m_rFrame, *this, static_cast<QKeyEvent*>(pEvent)))
             return true;
     }
     else if (pEvent->type() == QEvent::ToolTip)
@@ -656,13 +656,13 @@ bool QtWidget::handleEvent(QtFrame& rFrame, QWidget& rWidget, QEvent* pEvent)
         // Qt's POV on the active popup is wrong due to our fake popup, so check LO's state.
         // Otherwise Qt will continue handling ToolTip events from the "parent" window.
         const QtFrame* pPopupFrame = GetQtInstance().activePopup();
-        if (!rFrame.m_aTooltipText.isEmpty() && (!pPopupFrame || pPopupFrame == &rFrame))
+        if (!m_rFrame.m_aTooltipText.isEmpty() && (!pPopupFrame || pPopupFrame == &m_rFrame))
         {
             // tdf#162297 Use a dummy style to ensure the tooltip is wrapped
             QString sTooltipText("<font font-weight=normal>");
-            sTooltipText += toQString(rFrame.m_aTooltipText);
+            sTooltipText += toQString(m_rFrame.m_aTooltipText);
             sTooltipText += "</font>";
-            QToolTip::showText(QCursor::pos(), sTooltipText, &rWidget, rFrame.m_aTooltipArea);
+            QToolTip::showText(QCursor::pos(), sTooltipText, this, m_rFrame.m_aTooltipArea);
         }
         else
         {
@@ -674,10 +674,7 @@ bool QtWidget::handleEvent(QtFrame& rFrame, QWidget& rWidget, QEvent* pEvent)
     return false;
 }
 
-bool QtWidget::event(QEvent* pEvent)
-{
-    return handleEvent(m_rFrame, *this, pEvent) || QWidget::event(pEvent);
-}
+bool QtWidget::event(QEvent* pEvent) { return handleEvent(pEvent) || QWidget::event(pEvent); }
 
 void QtWidget::keyReleaseEvent(QKeyEvent* pEvent)
 {
