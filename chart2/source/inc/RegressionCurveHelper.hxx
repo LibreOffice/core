@@ -142,7 +142,7 @@ namespace chart::RegressionCurveHelper
         createRegressionCurveCalculatorByServiceName( std::u16string_view aServiceName );
 
     /** recalculates the regression parameters according to the data given in
-        the data source.
+        the data series.
 
         A sequence having the role "values-x" will be used as x-values for the
         calculation if found.  Otherwise a sequence (1, 2, 3, ...) of category
@@ -152,19 +152,6 @@ namespace chart::RegressionCurveHelper
         The first sequence having the role "values-y" will be used as y-values
         for the recalculateRegression() method of the regression curve.
 
-        @param bUseXValuesIfAvailable
-            If false, the sequence (1, 2, 3, ...) will always be used, even if
-            there is a data-sequence with role "values-x"
-     */
-    void initializeCurveCalculator(
-        const rtl::Reference<RegressionCurveCalculator>& xOutCurveCalculator,
-        const css::uno::Reference<css::chart2::data::XDataSource>& xSource,
-        bool bUseXValuesIfAvailable );
-
-    /** Same method as above, but uses the given XModel to determine the
-        parameter bUseXValuesIfAvailable in the above function.  It is also
-        necessary that the data::XDataSource is an XDataSeries, thus this parameter
-        also changed.
      */
     void initializeCurveCalculator(
         const rtl::Reference<RegressionCurveCalculator>& xOutCurveCalculator,
@@ -172,16 +159,16 @@ namespace chart::RegressionCurveHelper
         const rtl::Reference<::chart::ChartModel>& xModel );
 
     OUString getUINameForRegressionCurve(
-        const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
+        const rtl::Reference<RegressionCurveModel>& xCurve );
 
     OUString getRegressionCurveName(
-        const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
+        const rtl::Reference<RegressionCurveModel>& xCurve );
 
     OUString getRegressionCurveGenericName(
-        const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
+        const rtl::Reference<RegressionCurveModel>& xCurve );
 
     OUString getRegressionCurveSpecificName(
-        const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
+        const rtl::Reference<RegressionCurveModel>& xCurve );
 
     void resetEquationPosition(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
@@ -191,8 +178,8 @@ namespace chart::RegressionCurveHelper
         const rtl::Reference<::chart::DataSeries>& xContainer,
         const rtl::Reference<::chart::RegressionCurveModel>& xCurve );
 
-    bool hasEquation(const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
-    bool MayHaveCorrelationCoefficient(const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
+    bool hasEquation(const rtl::Reference<RegressionCurveModel>& xCurve );
+    bool MayHaveCorrelationCoefficient(const rtl::Reference<RegressionCurveModel>& xCurve );
 
 } //  namespace chart
 

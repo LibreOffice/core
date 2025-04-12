@@ -33,6 +33,7 @@
 #include <DataSeriesHelper.hxx>
 #include <StatisticsHelper.hxx>
 #include <ReferenceSizeProvider.hxx>
+#include <RegressionCurveModel.hxx>
 #include "ShapeController.hxx"
 
 #include <vcl/svapp.hxx>
@@ -275,8 +276,8 @@ void ControllerState::update(
     {
         bMayFormatTrendline = true;
         bMayDeleteTrendline = true;
-        uno::Reference< chart2::XRegressionCurve > xRegCurve(
-            ObjectIdentifier::getObjectPropertySet( aSelObjCID, xModel ), uno::UNO_QUERY );
+        rtl::Reference< RegressionCurveModel > xRegCurve(
+            dynamic_cast<RegressionCurveModel*>(ObjectIdentifier::getObjectPropertySet( aSelObjCID, xModel ).get()) );
 
         // Trendline Equation
         bMayFormatTrendlineEquation = bMayDeleteTrendlineEquation = RegressionCurveHelper::hasEquation( xRegCurve );
