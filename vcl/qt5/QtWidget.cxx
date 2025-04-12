@@ -678,7 +678,7 @@ bool QtWidget::event(QEvent* pEvent) { return handleEvent(pEvent) || QWidget::ev
 
 void QtWidget::keyReleaseEvent(QKeyEvent* pEvent)
 {
-    if (!handleKeyReleaseEvent(m_rFrame, *this, pEvent))
+    if (!handleKeyEvent(m_rFrame, *this, pEvent))
         QWidget::keyReleaseEvent(pEvent);
 }
 

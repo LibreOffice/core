@@ -94,14 +94,6 @@ public:
     QtFrame& frame() const { return m_rFrame; }
     void endExtTextInput();
     void fakeResize();
-
-    // key events might be propagated further down => call base on false
-    static inline bool handleKeyReleaseEvent(QtFrame&, const QWidget&, QKeyEvent*);
 };
-
-bool QtWidget::handleKeyReleaseEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent* pEvent)
-{
-    return handleKeyEvent(rFrame, rWidget, pEvent);
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
