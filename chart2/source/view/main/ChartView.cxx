@@ -2116,12 +2116,6 @@ sal_Int32 ChartView::getExplicitNumberFormatKeyForAxis(
         true /*bSearchForParallelAxisIfNothingIsFound*/);
 }
 
-sal_Int32 ChartView::getExplicitNumberFormatKeyForDataLabel(
-    const uno::Reference<beans::XPropertySet>& xSeriesOrPointProp)
-{
-    return DataSeriesHelper::getExplicitNumberFormatKeyForDataLabel(xSeriesOrPointProp);
-}
-
 sal_Int32 ChartView::getExplicitPercentageNumberFormatKeyForDataLabel(
     const uno::Reference<beans::XPropertySet>& xSeriesOrPointProp,
     const rtl::Reference<SvNumberFormatsSupplierObj>& xNumberFormatsSupplier)

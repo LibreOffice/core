@@ -203,9 +203,6 @@ public:
             , const rtl::Reference< ::chart::BaseCoordinateSystem > & xCorrespondingCoordinateSystem
             , const rtl::Reference<::chart::ChartModel>& xChartDoc);
 
-    static sal_Int32 getExplicitNumberFormatKeyForDataLabel(
-            const css::uno::Reference< css::beans::XPropertySet >& xSeriesOrPointProp );
-
     static sal_Int32 getExplicitPercentageNumberFormatKeyForDataLabel(
             const css::uno::Reference< css::beans::XPropertySet >& xSeriesOrPointProp
             , const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier );

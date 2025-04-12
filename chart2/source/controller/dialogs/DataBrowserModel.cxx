@@ -835,8 +835,7 @@ void DataBrowserModel::updateFromModel()
 
                         if( aRole == aRoleForDataLabelNumberFormat )
                         {
-                            nSequenceNumberFormatKey = ChartView::getExplicitNumberFormatKeyForDataLabel(
-                                xSeries);
+                            nSequenceNumberFormatKey = xSeries->getExplicitNumberFormatKeyForDataLabel();
                         }
                         else if( aRole == "values-x" )
                             nSequenceNumberFormatKey = nXAxisNumberFormat;

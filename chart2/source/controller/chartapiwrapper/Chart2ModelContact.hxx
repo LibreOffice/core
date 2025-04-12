@@ -72,9 +72,6 @@ public:
     sal_Int32 getExplicitNumberFormatKeyForAxis(
             const rtl::Reference< ::chart::Axis >& xAxis );
 
-    static sal_Int32 getExplicitNumberFormatKeyForSeries(
-            const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
-
     /** Returns the size of the page in logic coordinates.  This value is used
         for setting an appropriate "ReferencePageSize" for FontHeights.
      */

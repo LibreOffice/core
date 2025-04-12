@@ -110,7 +110,7 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
     {
         uno::Reference< uno::XComponentContext> xContext;//do not need Context for label properties
 
-        sal_Int32 nNumberFormat=ChartView::getExplicitNumberFormatKeyForDataLabel( series );
+        sal_Int32 nNumberFormat = series->getExplicitNumberFormatKeyForDataLabel();
         sal_Int32 nPercentNumberFormat=ChartView::getExplicitPercentageNumberFormatKeyForDataLabel(
                 series, xChartModel->getNumberFormatsSupplier());
 

@@ -175,7 +175,7 @@ wrapper::ItemConverter* createItemConverter(
 
                 bool bDataSeries = eObjectType == OBJECTTYPE_DATA_LABELS;
 
-                sal_Int32 nNumberFormat = ChartView::getExplicitNumberFormatKeyForDataLabel( xObjectProperties );
+                sal_Int32 nNumberFormat = xSeries->getExplicitNumberFormatKeyForDataLabel();
                 sal_Int32 nPercentNumberFormat = ChartView::getExplicitPercentageNumberFormatKeyForDataLabel(
                     xObjectProperties, xChartModel->getNumberFormatsSupplier());
 
@@ -228,7 +228,7 @@ wrapper::ItemConverter* createItemConverter(
                         }
                     }
                 }
-                sal_Int32 nNumberFormat=ChartView::getExplicitNumberFormatKeyForDataLabel( xObjectProperties );
+                sal_Int32 nNumberFormat=xSeries->getExplicitNumberFormatKeyForDataLabel();
                 sal_Int32 nPercentNumberFormat=ChartView::getExplicitPercentageNumberFormatKeyForDataLabel(
                         xObjectProperties, xChartModel->getNumberFormatsSupplier());
 

@@ -147,13 +147,6 @@ sal_Int32 Chart2ModelContact::getExplicitNumberFormatKeyForAxis(
               , m_xChartModel.get() );
 }
 
-sal_Int32 Chart2ModelContact::getExplicitNumberFormatKeyForSeries(
-            const Reference< chart2::XDataSeries >& xSeries )
-{
-    return ChartView::getExplicitNumberFormatKeyForDataLabel(
-        uno::Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY ));
-}
-
 awt::Size Chart2ModelContact::GetPageSize() const
 {
     return m_xChartModel.get()->getPageSize();

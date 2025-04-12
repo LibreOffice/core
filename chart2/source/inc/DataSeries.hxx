@@ -190,6 +190,8 @@ public:
 
     void deleteDataLabelsFromSeriesAndAllPoints();
 
+    sal_Int32 getExplicitNumberFormatKeyForDataLabel();
+
 private:
 
     // late initialization to call after copy-constructing

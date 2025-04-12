@@ -1003,6 +1003,43 @@ void DataSeries::impl_insertOrDeleteDataLabelsToSeriesAndAllPoints( bool bInsert
     }
 }
 
+sal_Int32 DataSeries::getExplicitNumberFormatKeyForDataLabel()
+{
+    sal_Int32 nFormat = 0;
+    try
+    {
+        bool bLinkToSource = true;
+        getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkToSource;
+        getPropertyValue(CHART_UNONAME_NUMFMT) >>= nFormat;
+
+        if (bLinkToSource)
+        {
+            MutexGuard aGuard( m_aMutex );
+
+            if (!m_aDataSequences.empty())
+            {
+                Reference<chart2::data::XLabeledDataSequence> xLabeledSeq(m_aDataSequences[0]);
+                if( xLabeledSeq.is() )
+                {
+                    Reference< chart2::data::XDataSequence > xSeq( xLabeledSeq->getValues());
+                    if( xSeq.is() )
+                    {
+                        nFormat = xSeq->getNumberFormatKeyByIndex( -1 );
+                    }
+                }
+            }
+        }
+    }
+    catch (const beans::UnknownPropertyException&)
+    {
+    }
+
+    if (nFormat < 0)
+        nFormat = 0;
+    return nFormat;
+
+}
+
 }  // namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

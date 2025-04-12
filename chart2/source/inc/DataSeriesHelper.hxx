@@ -117,9 +117,6 @@ void insertDataLabelToPoint( const css::uno::Reference< css::beans::XPropertySet
 
 void deleteDataLabelsFromPoint( const css::uno::Reference< css::beans::XPropertySet >& xPointPropertySet );
 
-sal_Int32 getExplicitNumberFormatKeyForDataLabel(
-    const css::uno::Reference< css::beans::XPropertySet >& xPointPropertySet);
-
 } //  namespace chart::DataSeriesHelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
