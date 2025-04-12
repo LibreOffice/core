@@ -48,6 +48,14 @@
 	<string>1</string>
 	<key>NSPrincipalClass</key>
 	<string>VCL_NSApplication</string>
+	<key>LSArchitecturePriority</key>
+	<array>
+		<string>arm64e</string>
+		<string>arm64</string>
+		<string>x86_64</string>
+	</array>
+	<key>LSRequiresNativeExecution</key>
+	<true/>
 </dict>
 </plist>
 
