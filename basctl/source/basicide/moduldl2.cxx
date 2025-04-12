@@ -180,7 +180,7 @@ GotoLineDialog::~GotoLineDialog()
 
 sal_Int32 GotoLineDialog::GetLineNumber() const
 {
-    return m_xSpinButton->get_text().toInt32();
+    return m_xSpinButton->get_value();
 }
 
 IMPL_LINK_NOARG(GotoLineDialog, OkButtonHandler, weld::Button&, void)
@@ -193,7 +193,7 @@ IMPL_LINK_NOARG(GotoLineDialog, OkButtonHandler, weld::Button&, void)
     }
     else
     {
-        m_xSpinButton->set_text(OUString::number(m_nCurLine));
+        m_xSpinButton->set_value(m_nCurLine);
         m_xSpinButton->select_region(0, -1);
     }
 }
