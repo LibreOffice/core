@@ -51,7 +51,7 @@ class QtWidget : public QWidget
     void handleMouseButtonEvent(const QMouseEvent*) const;
     static bool handleGestureEvent(const QtFrame& rFrame, QGestureEvent* pGestureEvent);
     static bool handleKeyEvent(QtFrame&, const QWidget&, QKeyEvent*);
-    static void handleMouseEnterLeaveEvents(const QtFrame&, QEvent*);
+    void handleMouseEnterLeaveEvent(QEvent*) const;
     void fillSalAbstractMouseEvent(const QInputEvent* pQEvent, const QPoint& rPos,
                                    Qt::MouseButtons eButtons, int nWidth,
                                    SalAbstractMouseEvent& aSalEvent) const;

@@ -138,10 +138,10 @@ void QtWidget::mouseMoveEvent(QMouseEvent* pEvent)
     pEvent->accept();
 }
 
-void QtWidget::handleMouseEnterLeaveEvents(const QtFrame& rFrame, QEvent* pQEvent)
+void QtWidget::handleMouseEnterLeaveEvent(QEvent* pQEvent) const
 {
-    const qreal fRatio = rFrame.devicePixelRatioF();
-    const QWidget* pWidget = rFrame.GetQWidget();
+    const qreal fRatio = m_rFrame.devicePixelRatioF();
+    const QWidget* pWidget = m_rFrame.GetQWidget();
     const Point aPos = toPoint(pWidget->mapFromGlobal(QCursor::pos()) * fRatio);
 
     SalMouseEvent aEvent;
@@ -158,11 +158,11 @@ void QtWidget::handleMouseEnterLeaveEvents(const QtFrame& rFrame, QEvent* pQEven
         nEventType = SalEvent::MouseMove;
     else
         nEventType = SalEvent::MouseLeave;
-    rFrame.CallCallback(nEventType, &aEvent);
+    m_rFrame.CallCallback(nEventType, &aEvent);
     pQEvent->accept();
 }
 
-void QtWidget::leaveEvent(QEvent* pEvent) { handleMouseEnterLeaveEvents(m_rFrame, pEvent); }
+void QtWidget::leaveEvent(QEvent* pEvent) { handleMouseEnterLeaveEvent(pEvent); }
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 void QtWidget::enterEvent(QEnterEvent* pEvent)
@@ -170,7 +170,7 @@ void QtWidget::enterEvent(QEnterEvent* pEvent)
 void QtWidget::enterEvent(QEvent* pEvent)
 #endif
 {
-    handleMouseEnterLeaveEvents(m_rFrame, pEvent);
+    handleMouseEnterLeaveEvent(pEvent);
 }
 
 void QtWidget::wheelEvent(QWheelEvent* pEvent)
