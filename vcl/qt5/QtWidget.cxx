@@ -92,7 +92,7 @@ void QtWidget::fillSalAbstractMouseEvent(const QInputEvent* pQEvent, const QPoin
 void QtWidget::handleMouseButtonEvent(const QMouseEvent* pEvent) const
 {
     SalMouseEvent aEvent;
-    FILL_SAME(m_rFrame.GetQWidget()->width());
+    FILL_SAME(width());
 
     switch (pEvent->button())
     {
@@ -141,12 +141,10 @@ void QtWidget::mouseMoveEvent(QMouseEvent* pEvent)
 void QtWidget::handleMouseEnterLeaveEvent(QEvent* pQEvent) const
 {
     const qreal fRatio = m_rFrame.devicePixelRatioF();
-    const QWidget* pWidget = m_rFrame.GetQWidget();
-    const Point aPos = toPoint(pWidget->mapFromGlobal(QCursor::pos()) * fRatio);
+    const Point aPos = toPoint(mapFromGlobal(QCursor::pos()) * fRatio);
 
     SalMouseEvent aEvent;
-    aEvent.mnX
-        = QGuiApplication::isLeftToRight() ? aPos.X() : round(pWidget->width() * fRatio) - aPos.X();
+    aEvent.mnX = QGuiApplication::isLeftToRight() ? aPos.X() : round(width() * fRatio) - aPos.X();
     aEvent.mnY = aPos.Y();
     aEvent.mnTime = 0;
     aEvent.mnButton = 0;
@@ -235,7 +233,7 @@ void QtWidget::moveEvent(QMoveEvent* pEvent)
 
 void QtWidget::showEvent(QShowEvent*)
 {
-    QSize aSize(m_rFrame.GetQWidget()->size() * m_rFrame.devicePixelRatioF());
+    QSize aSize(size() * m_rFrame.devicePixelRatioF());
     // forcing an immediate update somehow interferes with the hide + show
     // sequence from QtFrame::SetModal, if the frame was already set visible,
     // resulting in a hidden / unmapped window
