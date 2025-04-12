@@ -52,7 +52,7 @@ class QtWidget : public QWidget
     bool handleKeyEvent(QKeyEvent*) const;
     void handleMouseEnterLeaveEvent(QEvent*) const;
     void fillSalAbstractMouseEvent(const QInputEvent* pQEvent, const QPoint& rPos,
-                                   Qt::MouseButtons eButtons, int nWidth,
+                                   Qt::MouseButtons eButtons,
                                    SalAbstractMouseEvent& aSalEvent) const;
 
     virtual bool event(QEvent*) override;

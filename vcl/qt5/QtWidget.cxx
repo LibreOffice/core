@@ -74,25 +74,23 @@ void QtWidget::fakeResize()
 }
 
 void QtWidget::fillSalAbstractMouseEvent(const QInputEvent* pQEvent, const QPoint& rPos,
-                                         Qt::MouseButtons eButtons, int nWidth,
+                                         Qt::MouseButtons eButtons,
                                          SalAbstractMouseEvent& aSalEvent) const
 {
     const qreal fRatio = m_rFrame.devicePixelRatioF();
     const Point aPos = toPoint(rPos * fRatio);
 
-    aSalEvent.mnX = QGuiApplication::isLeftToRight() ? aPos.X() : round(nWidth * fRatio) - aPos.X();
+    aSalEvent.mnX
+        = QGuiApplication::isLeftToRight() ? aPos.X() : round(width() * fRatio) - aPos.X();
     aSalEvent.mnY = aPos.Y();
     aSalEvent.mnTime = pQEvent->timestamp();
     aSalEvent.mnCode = toVclKeyboardModifiers(pQEvent->modifiers()) | toVclMouseButtons(eButtons);
 }
 
-#define FILL_SAME(nWidth)                                                                          \
-    fillSalAbstractMouseEvent(pEvent, pEvent->pos(), pEvent->buttons(), nWidth, aEvent)
-
 void QtWidget::handleMouseButtonEvent(const QMouseEvent* pEvent) const
 {
     SalMouseEvent aEvent;
-    FILL_SAME(width());
+    fillSalAbstractMouseEvent(pEvent, pEvent->pos(), pEvent->buttons(), aEvent);
 
     switch (pEvent->button())
     {
@@ -130,7 +128,7 @@ void QtWidget::mouseReleaseEvent(QMouseEvent* pEvent) { handleMouseButtonEvent(p
 void QtWidget::mouseMoveEvent(QMouseEvent* pEvent)
 {
     SalMouseEvent aEvent;
-    FILL_SAME(width());
+    fillSalAbstractMouseEvent(pEvent, pEvent->pos(), pEvent->buttons(), aEvent);
 
     aEvent.mnButton = 0;
 
@@ -174,8 +172,7 @@ void QtWidget::enterEvent(QEvent* pEvent)
 void QtWidget::wheelEvent(QWheelEvent* pEvent)
 {
     SalWheelMouseEvent aEvent;
-    fillSalAbstractMouseEvent(pEvent, pEvent->position().toPoint(), pEvent->buttons(), width(),
-                              aEvent);
+    fillSalAbstractMouseEvent(pEvent, pEvent->position().toPoint(), pEvent->buttons(), aEvent);
 
     // mouse wheel ticks are 120, which we map to 3 lines.
     // we have to accumulate for touch scroll to keep track of the absolute delta.
