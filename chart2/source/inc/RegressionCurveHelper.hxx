@@ -157,7 +157,7 @@ namespace chart::RegressionCurveHelper
             there is a data-sequence with role "values-x"
      */
     void initializeCurveCalculator(
-        const css::uno::Reference<css::chart2::XRegressionCurveCalculator>& xOutCurveCalculator,
+        const rtl::Reference<RegressionCurveCalculator>& xOutCurveCalculator,
         const css::uno::Reference<css::chart2::data::XDataSource>& xSource,
         bool bUseXValuesIfAvailable );
 
@@ -167,7 +167,7 @@ namespace chart::RegressionCurveHelper
         also changed.
      */
     void initializeCurveCalculator(
-        const css::uno::Reference<css::chart2::XRegressionCurveCalculator>& xOutCurveCalculator,
+        const rtl::Reference<RegressionCurveCalculator>& xOutCurveCalculator,
         const rtl::Reference<::chart::DataSeries>& xSeries,
         const rtl::Reference<::chart::ChartModel>& xModel );
 

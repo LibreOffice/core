@@ -33,6 +33,7 @@
 
 namespace chart
 {
+class RegressionCurveCalculator;
 
 namespace impl
 {
@@ -97,6 +98,8 @@ public:
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+
+    rtl::Reference< RegressionCurveCalculator > getCurveCalculator();
 
 protected:
     // ____ XModifyListener ____

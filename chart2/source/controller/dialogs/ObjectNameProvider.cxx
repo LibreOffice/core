@@ -38,6 +38,7 @@
 #include <RegressionCurveHelper.hxx>
 #include <BaseCoordinateSystem.hxx>
 #include <RegressionCurveModel.hxx>
+#include <RegressionCurveCalculator.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/settings.hxx>
@@ -565,7 +566,7 @@ OUString ObjectNameProvider::getHelpText( std::u16string_view rObjectCID, const 
                 {
                     try
                     {
-                        Reference< chart2::XRegressionCurveCalculator > xCalculator( xCurve->getCalculator(), uno::UNO_SET_THROW );
+                        rtl::Reference< RegressionCurveCalculator > xCalculator( xCurve->getCurveCalculator() );
                         sal_Int32 aDegree = 2;
                         sal_Int32 aPeriod = 2;
                         sal_Int32 aMovingType = css::chart2::MovingAverageType::Prior;
@@ -663,7 +664,7 @@ OUString ObjectNameProvider::getHelpText( std::u16string_view rObjectCID, const 
                 {
                     try
                     {
-                        Reference< chart2::XRegressionCurveCalculator > xCalculator( xCurve->getCalculator(), uno::UNO_SET_THROW );
+                        rtl::Reference< RegressionCurveCalculator > xCalculator( xCurve->getCurveCalculator() );
                         RegressionCurveHelper::initializeCurveCalculator( xCalculator, xSeries, xChartModel );
 
                         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();

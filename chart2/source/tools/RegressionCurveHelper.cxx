@@ -170,7 +170,7 @@ rtl::Reference< RegressionCurveCalculator > RegressionCurveHelper::createRegress
 }
 
 void RegressionCurveHelper::initializeCurveCalculator(
-    const Reference< XRegressionCurveCalculator > & xOutCurveCalculator,
+    const rtl::Reference< RegressionCurveCalculator > & xOutCurveCalculator,
     const Reference< data::XDataSource > & xSource,
     bool bUseXValuesIfAvailable /* = true */ )
 {
@@ -231,7 +231,7 @@ void RegressionCurveHelper::initializeCurveCalculator(
 }
 
 void RegressionCurveHelper::initializeCurveCalculator(
-    const Reference< XRegressionCurveCalculator > & xOutCurveCalculator,
+    const rtl::Reference< RegressionCurveCalculator > & xOutCurveCalculator,
     const rtl::Reference< ::chart::DataSeries > & xSeries,
     const rtl::Reference<::chart::ChartModel> & xModel )
 {

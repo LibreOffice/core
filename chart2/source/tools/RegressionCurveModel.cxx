@@ -170,6 +170,12 @@ uno::Reference< chart2::XRegressionCurveCalculator > SAL_CALL
     return RegressionCurveHelper::createRegressionCurveCalculatorByServiceName( getServiceName());
 }
 
+rtl::Reference< RegressionCurveCalculator >
+    RegressionCurveModel::getCurveCalculator()
+{
+    return RegressionCurveHelper::createRegressionCurveCalculatorByServiceName( getServiceName());
+}
+
 uno::Reference< beans::XPropertySet > SAL_CALL RegressionCurveModel::getEquationProperties()
 {
     return m_xEquationProperties;
