@@ -414,7 +414,7 @@ static sal_uInt16 GetKeyCode(int keyval, Qt::KeyboardModifiers modifiers)
     return nCode;
 }
 
-void QtWidget::commitText(QtFrame& rFrame, const QString& aText)
+void QtWidget::commitText(const QString& aText) const
 {
     SalExtTextInputEvent aInputEvent;
     aInputEvent.mpTextAttr = nullptr;
@@ -423,21 +423,20 @@ void QtWidget::commitText(QtFrame& rFrame, const QString& aText)
     aInputEvent.mnCursorPos = aInputEvent.maText.getLength();
 
     SolarMutexGuard aGuard;
-    vcl::DeletionListener aDel(&rFrame);
-    rFrame.CallCallback(SalEvent::ExtTextInput, &aInputEvent);
+    vcl::DeletionListener aDel(&m_rFrame);
+    m_rFrame.CallCallback(SalEvent::ExtTextInput, &aInputEvent);
     if (!aDel.isDeleted())
-        rFrame.CallCallback(SalEvent::EndExtTextInput, nullptr);
+        m_rFrame.CallCallback(SalEvent::EndExtTextInput, nullptr);
 }
 
-void QtWidget::deleteReplacementText(const QtFrame& rFrame, int nReplacementStart,
-                                     int nReplacementLength)
+void QtWidget::deleteReplacementText(int nReplacementStart, int nReplacementLength) const
 {
     // get the surrounding text
     SolarMutexGuard aGuard;
     SalSurroundingTextRequestEvent aSurroundingTextEvt;
     aSurroundingTextEvt.maText.clear();
     aSurroundingTextEvt.mnStart = aSurroundingTextEvt.mnEnd = 0;
-    rFrame.CallCallback(SalEvent::SurroundingTextRequest, &aSurroundingTextEvt);
+    m_rFrame.CallCallback(SalEvent::SurroundingTextRequest, &aSurroundingTextEvt);
 
     // Turn nReplacementStart, nReplacementLength into a UTF-16 selection
     const Selection aSelection = SalFrame::CalcDeleteSurroundingSelection(
@@ -454,10 +453,10 @@ void QtWidget::deleteReplacementText(const QtFrame& rFrame, int nReplacementStar
     SalSurroundingTextSelectionChangeEvent aEvt;
     aEvt.mnStart = aSelection.Min();
     aEvt.mnEnd = aSelection.Max();
-    rFrame.CallCallback(SalEvent::DeleteSurroundingTextRequest, &aEvt);
+    m_rFrame.CallCallback(SalEvent::DeleteSurroundingTextRequest, &aEvt);
 }
 
-bool QtWidget::handleGestureEvent(const QtFrame& rFrame, QGestureEvent* pGestureEvent)
+bool QtWidget::handleGestureEvent(QGestureEvent* pGestureEvent) const
 {
     if (QGesture* pGesture = pGestureEvent->gesture(Qt::PinchGesture))
     {
@@ -494,7 +493,7 @@ bool QtWidget::handleGestureEvent(const QtFrame& rFrame, QGestureEvent* pGesture
         aEvent.mnX = aHotspot.x();
         aEvent.mnY = aHotspot.y();
         aEvent.mfScaleDelta = 1 + pPinchGesture->totalScaleFactor();
-        rFrame.CallCallback(SalEvent::GestureZoom, &aEvent);
+        m_rFrame.CallCallback(SalEvent::GestureZoom, &aEvent);
         pGestureEvent->accept();
         return true;
     }
@@ -503,15 +502,15 @@ bool QtWidget::handleGestureEvent(const QtFrame& rFrame, QGestureEvent* pGesture
     return false;
 }
 
-bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent* pEvent)
+bool QtWidget::handleKeyEvent(QKeyEvent* pEvent) const
 {
     const bool bIsKeyPressed
         = pEvent->type() == QEvent::KeyPress || pEvent->type() == QEvent::ShortcutOverride;
     sal_uInt16 nCode = GetKeyCode(pEvent->key(), pEvent->modifiers());
     if (bIsKeyPressed && nCode == 0 && pEvent->text().length() > 1
-        && rWidget.testAttribute(Qt::WA_InputMethodEnabled))
+        && testAttribute(Qt::WA_InputMethodEnabled))
     {
-        commitText(rFrame, pEvent->text());
+        commitText(pEvent->text());
         pEvent->accept();
         return true;
     }
@@ -578,27 +577,27 @@ bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent
             {
                 // sending the old mnModKeyCode mask on release is needed to
                 // implement the writing direction switch with Ctrl + L/R-Shift
-                aModEvt.mnModKeyCode = rFrame.m_nKeyModifiers;
+                aModEvt.mnModKeyCode = m_rFrame.m_nKeyModifiers;
                 nModCode &= ~nModMask;
-                rFrame.m_nKeyModifiers &= ~nExtModMask;
+                m_rFrame.m_nKeyModifiers &= ~nExtModMask;
             }
             else
             {
                 nModCode |= nModMask;
-                rFrame.m_nKeyModifiers |= nExtModMask;
-                aModEvt.mnModKeyCode = rFrame.m_nKeyModifiers;
+                m_rFrame.m_nKeyModifiers |= nExtModMask;
+                aModEvt.mnModKeyCode = m_rFrame.m_nKeyModifiers;
             }
         }
 #endif
         aModEvt.mnCode = nModCode;
 
-        rFrame.CallCallback(SalEvent::KeyModChange, &aModEvt);
+        m_rFrame.CallCallback(SalEvent::KeyModChange, &aModEvt);
         return false;
     }
 
 #if CHECK_ANY_QT_USING_X11
     // prevent interference of writing direction switch (Ctrl + L/R-Shift) with "normal" shortcuts
-    rFrame.m_nKeyModifiers = ModKeyFlags::NONE;
+    m_rFrame.m_nKeyModifiers = ModKeyFlags::NONE;
 #endif
 
     SalKeyEvent aEvent;
@@ -609,9 +608,9 @@ bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent
 
     bool bStopProcessingKey;
     if (bIsKeyPressed)
-        bStopProcessingKey = rFrame.CallCallback(SalEvent::KeyInput, &aEvent);
+        bStopProcessingKey = m_rFrame.CallCallback(SalEvent::KeyInput, &aEvent);
     else
-        bStopProcessingKey = rFrame.CallCallback(SalEvent::KeyUp, &aEvent);
+        bStopProcessingKey = m_rFrame.CallCallback(SalEvent::KeyUp, &aEvent);
     if (bStopProcessingKey)
         pEvent->accept();
     return bStopProcessingKey;
@@ -622,7 +621,7 @@ bool QtWidget::handleEvent(QEvent* pEvent)
     if (pEvent->type() == QEvent::Gesture)
     {
         QGestureEvent* pGestureEvent = static_cast<QGestureEvent*>(pEvent);
-        return handleGestureEvent(m_rFrame, pGestureEvent);
+        return handleGestureEvent(pGestureEvent);
     }
     else if (pEvent->type() == QEvent::ShortcutOverride)
     {
@@ -648,7 +647,7 @@ bool QtWidget::handleEvent(QEvent* pEvent)
         // and if it's handled - disable the shortcut, it should have been activated.
         // Don't process keyPressEvent generated after disabling shortcut since it was handled here.
         // If event is not handled, don't accept it and let Qt activate related shortcut.
-        if (handleKeyEvent(m_rFrame, *this, static_cast<QKeyEvent*>(pEvent)))
+        if (handleKeyEvent(static_cast<QKeyEvent*>(pEvent)))
             return true;
     }
     else if (pEvent->type() == QEvent::ToolTip)
@@ -678,7 +677,7 @@ bool QtWidget::event(QEvent* pEvent) { return handleEvent(pEvent) || QWidget::ev
 
 void QtWidget::keyReleaseEvent(QKeyEvent* pEvent)
 {
-    if (!handleKeyEvent(m_rFrame, *this, pEvent))
+    if (!handleKeyEvent(pEvent))
         QWidget::keyReleaseEvent(pEvent);
 }
 
@@ -758,9 +757,9 @@ void QtWidget::inputMethodEvent(QInputMethodEvent* pEvent)
     if (nReplacementLength > 0 || bHasCommitText)
     {
         if (nReplacementLength > 0)
-            deleteReplacementText(m_rFrame, pEvent->replacementStart(), nReplacementLength);
+            deleteReplacementText(pEvent->replacementStart(), nReplacementLength);
         if (bHasCommitText)
-            commitText(m_rFrame, pEvent->commitString());
+            commitText(pEvent->commitString());
     }
     else
     {

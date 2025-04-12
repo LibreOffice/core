@@ -43,14 +43,13 @@ class QtWidget : public QWidget
     int m_nDeltaX;
     int m_nDeltaY;
 
-    static void commitText(QtFrame&, const QString& aText);
-    static void deleteReplacementText(const QtFrame& rFrame, int nReplacementStart,
-                                      int nReplacementLength);
+    void commitText(const QString& aText) const;
+    void deleteReplacementText(int nReplacementStart, int nReplacementLength) const;
     bool handleEvent(QEvent* pEvent);
     // mouse events are always accepted
     void handleMouseButtonEvent(const QMouseEvent*) const;
-    static bool handleGestureEvent(const QtFrame& rFrame, QGestureEvent* pGestureEvent);
-    static bool handleKeyEvent(QtFrame&, const QWidget&, QKeyEvent*);
+    bool handleGestureEvent(QGestureEvent* pGestureEvent) const;
+    bool handleKeyEvent(QKeyEvent*) const;
     void handleMouseEnterLeaveEvent(QEvent*) const;
     void fillSalAbstractMouseEvent(const QInputEvent* pQEvent, const QPoint& rPos,
                                    Qt::MouseButtons eButtons, int nWidth,
