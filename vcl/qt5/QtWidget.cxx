@@ -89,10 +89,10 @@ void QtWidget::fillSalAbstractMouseEvent(const QtFrame& rFrame, const QInputEven
 #define FILL_SAME(rFrame, nWidth)                                                                  \
     fillSalAbstractMouseEvent(rFrame, pEvent, pEvent->pos(), pEvent->buttons(), nWidth, aEvent)
 
-void QtWidget::handleMouseButtonEvent(const QtFrame& rFrame, const QMouseEvent* pEvent)
+void QtWidget::handleMouseButtonEvent(const QMouseEvent* pEvent) const
 {
     SalMouseEvent aEvent;
-    FILL_SAME(rFrame, rFrame.GetQWidget()->width());
+    FILL_SAME(m_rFrame, m_rFrame.GetQWidget()->width());
 
     switch (pEvent->button())
     {
@@ -114,18 +114,18 @@ void QtWidget::handleMouseButtonEvent(const QtFrame& rFrame, const QMouseEvent* 
         nEventType = SalEvent::MouseButtonDown;
     else
         nEventType = SalEvent::MouseButtonUp;
-    rFrame.CallCallback(nEventType, &aEvent);
+    m_rFrame.CallCallback(nEventType, &aEvent);
 }
 
 void QtWidget::mousePressEvent(QMouseEvent* pEvent)
 {
-    handleMouseButtonEvent(m_rFrame, pEvent);
+    handleMouseButtonEvent(pEvent);
     if (m_rFrame.isPopup()
         && !geometry().translated(geometry().topLeft() * -1).contains(pEvent->pos()))
         closePopup();
 }
 
-void QtWidget::mouseReleaseEvent(QMouseEvent* pEvent) { handleMouseButtonEvent(m_rFrame, pEvent); }
+void QtWidget::mouseReleaseEvent(QMouseEvent* pEvent) { handleMouseButtonEvent(pEvent); }
 
 void QtWidget::mouseMoveEvent(QMouseEvent* pEvent)
 {

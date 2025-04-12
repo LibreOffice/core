@@ -46,6 +46,8 @@ class QtWidget : public QWidget
     static void commitText(QtFrame&, const QString& aText);
     static void deleteReplacementText(const QtFrame& rFrame, int nReplacementStart,
                                       int nReplacementLength);
+    // mouse events are always accepted
+    void handleMouseButtonEvent(const QMouseEvent*) const;
     static bool handleGestureEvent(const QtFrame& rFrame, QGestureEvent* pGestureEvent);
     static bool handleKeyEvent(QtFrame&, const QWidget&, QKeyEvent*);
     static void handleMouseEnterLeaveEvents(const QtFrame&, QEvent*);
@@ -95,8 +97,6 @@ public:
     static bool handleEvent(QtFrame&, QWidget&, QEvent*);
     // key events might be propagated further down => call base on false
     static inline bool handleKeyReleaseEvent(QtFrame&, const QWidget&, QKeyEvent*);
-    // mouse events are always accepted
-    static void handleMouseButtonEvent(const QtFrame&, const QMouseEvent*);
 };
 
 bool QtWidget::handleKeyReleaseEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent* pEvent)
