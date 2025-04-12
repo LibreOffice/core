@@ -49,6 +49,164 @@ sal_uInt16 toVclKeyboardModifiers(Qt::KeyboardModifiers eKeyModifiers)
     return nCode;
 }
 
+sal_uInt16 toVclKeyCode(int nKeyval, Qt::KeyboardModifiers eModifiers)
+{
+    sal_uInt16 nCode = 0;
+    if (nKeyval >= Qt::Key_0 && nKeyval <= Qt::Key_9)
+        nCode = KEY_0 + (nKeyval - Qt::Key_0);
+    else if (nKeyval >= Qt::Key_A && nKeyval <= Qt::Key_Z)
+        nCode = KEY_A + (nKeyval - Qt::Key_A);
+    else if (nKeyval >= Qt::Key_F1 && nKeyval <= Qt::Key_F26)
+        nCode = KEY_F1 + (nKeyval - Qt::Key_F1);
+    else if (eModifiers.testFlag(Qt::KeypadModifier)
+             && (nKeyval == Qt::Key_Period || nKeyval == Qt::Key_Comma))
+        // Qt doesn't use a special keyval for decimal separator ("," or ".")
+        // on numerical keypad, but sets Qt::KeypadModifier in addition
+        nCode = KEY_DECIMAL;
+    else
+    {
+        switch (nKeyval)
+        {
+            case Qt::Key_Down:
+                nCode = KEY_DOWN;
+                break;
+            case Qt::Key_Up:
+                nCode = KEY_UP;
+                break;
+            case Qt::Key_Left:
+                nCode = KEY_LEFT;
+                break;
+            case Qt::Key_Right:
+                nCode = KEY_RIGHT;
+                break;
+            case Qt::Key_Home:
+                nCode = KEY_HOME;
+                break;
+            case Qt::Key_End:
+                nCode = KEY_END;
+                break;
+            case Qt::Key_PageUp:
+                nCode = KEY_PAGEUP;
+                break;
+            case Qt::Key_PageDown:
+                nCode = KEY_PAGEDOWN;
+                break;
+            case Qt::Key_Return:
+            case Qt::Key_Enter:
+                nCode = KEY_RETURN;
+                break;
+            case Qt::Key_Escape:
+                nCode = KEY_ESCAPE;
+                break;
+            case Qt::Key_Tab:
+            // oddly enough, Qt doesn't send Shift-Tab event as 'Tab key pressed with Shift
+            // modifier' but as 'Backtab key pressed' (while its modifier bits are still
+            // set to Shift) -- so let's map both Key_Tab and Key_Backtab to VCL's KEY_TAB
+            case Qt::Key_Backtab:
+                nCode = KEY_TAB;
+                break;
+            case Qt::Key_Backspace:
+                nCode = KEY_BACKSPACE;
+                break;
+            case Qt::Key_Space:
+                nCode = KEY_SPACE;
+                break;
+            case Qt::Key_Insert:
+                nCode = KEY_INSERT;
+                break;
+            case Qt::Key_Delete:
+                nCode = KEY_DELETE;
+                break;
+            case Qt::Key_Plus:
+                nCode = KEY_ADD;
+                break;
+            case Qt::Key_Minus:
+                nCode = KEY_SUBTRACT;
+                break;
+            case Qt::Key_Asterisk:
+                nCode = KEY_MULTIPLY;
+                break;
+            case Qt::Key_Slash:
+                nCode = KEY_DIVIDE;
+                break;
+            case Qt::Key_Period:
+                nCode = KEY_POINT;
+                break;
+            case Qt::Key_Comma:
+                nCode = KEY_COMMA;
+                break;
+            case Qt::Key_Less:
+                nCode = KEY_LESS;
+                break;
+            case Qt::Key_Greater:
+                nCode = KEY_GREATER;
+                break;
+            case Qt::Key_Equal:
+                nCode = KEY_EQUAL;
+                break;
+            case Qt::Key_Find:
+                nCode = KEY_FIND;
+                break;
+            case Qt::Key_Menu:
+                nCode = KEY_CONTEXTMENU;
+                break;
+            case Qt::Key_Help:
+                nCode = KEY_HELP;
+                break;
+            case Qt::Key_Undo:
+                nCode = KEY_UNDO;
+                break;
+            case Qt::Key_Redo:
+                nCode = KEY_REPEAT;
+                break;
+            case Qt::Key_Cancel:
+                nCode = KEY_F11;
+                break;
+            case Qt::Key_AsciiTilde:
+                nCode = KEY_TILDE;
+                break;
+            case Qt::Key_QuoteLeft:
+                nCode = KEY_QUOTELEFT;
+                break;
+            case Qt::Key_BracketLeft:
+                nCode = KEY_BRACKETLEFT;
+                break;
+            case Qt::Key_BracketRight:
+                nCode = KEY_BRACKETRIGHT;
+                break;
+            case Qt::Key_NumberSign:
+                nCode = KEY_NUMBERSIGN;
+                break;
+            case Qt::Key_Forward:
+                nCode = KEY_XF86FORWARD;
+                break;
+            case Qt::Key_Back:
+                nCode = KEY_XF86BACK;
+                break;
+            case Qt::Key_Colon:
+                nCode = KEY_COLON;
+                break;
+            case Qt::Key_Semicolon:
+                nCode = KEY_SEMICOLON;
+                break;
+            case Qt::Key_Copy:
+                nCode = KEY_COPY;
+                break;
+            case Qt::Key_Cut:
+                nCode = KEY_CUT;
+                break;
+            case Qt::Key_Open:
+                nCode = KEY_OPEN;
+                break;
+            case Qt::Key_Paste:
+                nCode = KEY_PASTE;
+                break;
+        }
+    }
+
+    return nCode;
+}
+
 sal_uInt16 toVclMouseButtons(Qt::MouseButtons eButtons)
 {
     sal_uInt16 nCode = 0;
