@@ -468,6 +468,9 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
             pParentGridLayout->addLayout(pLayout, pParentGridLayout->rowCount(), 0);
     }
 
+    if (pObject)
+        pObject->setObjectName(toQString(sID));
+
     if (pWidget)
         m_aWidgets[sID] = pWidget;
 

@@ -10,11 +10,23 @@
 #include <QtInstanceToolbar.hxx>
 #include <QtInstanceToolbar.moc>
 
+#include <QtWidgets/QToolButton>
+
 QtInstanceToolbar::QtInstanceToolbar(QToolBar* pToolBar)
     : QtInstanceWidget(pToolBar)
     , m_pToolBar(pToolBar)
 {
     assert(m_pToolBar);
+
+    const QList<QAction*> aActions = m_pToolBar->actions();
+    for (QAction* pAction : aActions)
+    {
+        if (QToolButton* pButton = qobject_cast<QToolButton*>(m_pToolBar->widgetForAction(pAction)))
+        {
+            connect(pButton, &QToolButton::clicked, pButton,
+                    [this, pButton] { toolButtonClicked(pButton->objectName()); });
+        }
+    }
 }
 
 void QtInstanceToolbar::set_item_sensitive(const OUString&, bool)
@@ -187,6 +199,13 @@ int QtInstanceToolbar::get_drop_index(const Point&) const
 {
     assert(false && "Not implemented yet");
     return -1;
+}
+
+void QtInstanceToolbar::toolButtonClicked(const QString& rId)
+{
+    SolarMutexGuard g;
+
+    signal_clicked(toOUString(rId));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

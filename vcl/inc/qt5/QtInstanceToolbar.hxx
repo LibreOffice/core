@@ -62,6 +62,9 @@ public:
     virtual sal_uInt16 get_modifier_state() const override;
 
     virtual int get_drop_index(const Point& rPoint) const override;
+
+private Q_SLOTS:
+    void toolButtonClicked(const QString& rId);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
