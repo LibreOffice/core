@@ -279,6 +279,16 @@ bool QtInstanceWidget::eventFilter(QObject* pObject, QEvent* pEvent)
 
     switch (pEvent->type())
     {
+        case QEvent::KeyPress:
+        {
+            QKeyEvent* pKeyEvent = static_cast<QKeyEvent*>(pEvent);
+            return signal_key_press(toVclKeyEvent(*pKeyEvent));
+        }
+        case QEvent::KeyRelease:
+        {
+            QKeyEvent* pKeyEvent = static_cast<QKeyEvent*>(pEvent);
+            return signal_key_release(toVclKeyEvent(*pKeyEvent));
+        }
         case QEvent::MouseButtonDblClick:
         case QEvent::MouseButtonPress:
         {

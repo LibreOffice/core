@@ -161,6 +161,15 @@ sal_uInt16 toVclKeyCode(int nKeyval, Qt::KeyboardModifiers eModifiers)
     }
 }
 
+KeyEvent toVclKeyEvent(QKeyEvent& rEvent)
+{
+    const sal_uInt16 nKeyCode = toVclKeyCode(rEvent.key(), rEvent.modifiers());
+    const QString sText = rEvent.text();
+    const sal_Unicode nChar = sText.isEmpty() ? 0 : sText.at(0).unicode();
+    vcl::KeyCode aKeyCode(nKeyCode, toVclKeyboardModifiers(rEvent.modifiers()));
+    return KeyEvent(nChar, aKeyCode, 0);
+}
+
 sal_uInt16 toVclMouseButtons(Qt::MouseButtons eButtons)
 {
     sal_uInt16 nCode = 0;
