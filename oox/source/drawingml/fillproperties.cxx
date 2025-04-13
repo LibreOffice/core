@@ -512,24 +512,14 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                     aGradient.SetYOffset(getLimitedValue<sal_Int16, sal_Int32>(
                         nCenterY / PER_PERCENT, 0, 100));
 
+                    // FIXME tdf#166140: Size of gradient is smaller than in MSO
                     if( maGradientProps.moGradientPath.value() == XML_circle )
                     {
-                        // Style should be radial at least when the horizontal center is at 50%.
-                        // Otherwise import as a linear gradient, because it is the most similar to the MSO radial style.
-                        // aGradient.SetGradientStyle(awt::GradientStyle_LINEAR);
-                        if( 100 == aGradient.GetXOffset() && 100 == aGradient.GetYOffset() )
-                            aGradient.SetAngle( Degree10(450) );
-                        else if( 0 == aGradient.GetXOffset() && 100 == aGradient.GetYOffset() )
-                            aGradient.SetAngle( Degree10(3150) );
-                        else if( 100 == aGradient.GetXOffset() && 0 == aGradient.GetYOffset() )
-                            aGradient.SetAngle( Degree10(1350) );
-                        else if( 0 == aGradient.GetXOffset() && 0 == aGradient.GetYOffset() )
-                            aGradient.SetAngle( Degree10(2250) );
-
                         aGradient.SetGradientStyle(awt::GradientStyle_RADIAL);
                     }
                     else
                     {
+                        // XML_rect or XML_shape, but the latter is not implemented.
                         aGradient.SetGradientStyle(awt::GradientStyle_RECT);
                     }
 
