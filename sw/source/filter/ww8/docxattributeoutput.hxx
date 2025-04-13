@@ -250,7 +250,7 @@ public:
     virtual void StartRuby( const SwTextNode& rNode, sal_Int32 nPos, const SwFormatRuby& rRuby ) override;
 
     /// Output ruby end.
-    virtual void EndRuby(const SwTextNode& rNode, sal_Int32 nPos) override;
+    virtual void EndRuby(const SwTextNode& rNode, sal_Int32 nPos, bool bEmptyBaseText) override;
 
     /// Output URL start.
     virtual bool StartURL( const OUString& rUrl, const OUString& rTarget, const OUString& rName = OUString() ) override;

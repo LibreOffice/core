@@ -3994,7 +3994,7 @@ void DocxAttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 nPos, co
     StartRun( nullptr, nPos );
 }
 
-void DocxAttributeOutput::EndRuby(const SwTextNode& rNode, sal_Int32 nPos)
+void DocxAttributeOutput::EndRuby(const SwTextNode& rNode, sal_Int32 nPos, bool /*bEmptyBaseText*/)
 {
     SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::EndRuby()" );
     EndRun( &rNode, nPos, -1 );

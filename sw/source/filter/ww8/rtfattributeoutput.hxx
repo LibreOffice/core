@@ -100,7 +100,7 @@ public:
     void StartRuby(const SwTextNode& rNode, sal_Int32 nPos, const SwFormatRuby& rRuby) override;
 
     /// Output ruby end.
-    void EndRuby(const SwTextNode& rNode, sal_Int32 nPos) override;
+    void EndRuby(const SwTextNode& rNode, sal_Int32 nPos, bool bEmptyBaseText) override;
 
     /// Output URL start.
     bool StartURL(const OUString& rUrl, const OUString& rTarget,
@@ -523,6 +523,8 @@ private:
     void FinishTableRowCell(const ww8::WW8TableNodeInfoInner::Pointer_t& pInner);
 
     void WriteTextFootnoteNumStr(const SwFormatFootnote& rFootnote);
+
+    void EndRubyField();
 
     /*
      * Current style name and its ID.

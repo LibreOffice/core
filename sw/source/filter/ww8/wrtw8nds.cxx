@@ -1031,7 +1031,7 @@ void WW8AttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 /*nPos*/,
             FieldFlags::Start | FieldFlags::CmdStart );
 }
 
-void WW8AttributeOutput::EndRuby(const SwTextNode& /*rNode*/, sal_Int32 /*nPos*/)
+void WW8AttributeOutput::EndRuby(const SwTextNode& /*rNode*/, sal_Int32 /*nPos*/, bool /*bEmptyBaseText*/)
 {
     m_rWW8Export.WriteChar( ')' );
     m_rWW8Export.OutputField( nullptr, ww::eEQ, OUString(), FieldFlags::End | FieldFlags::Close );
@@ -1478,7 +1478,7 @@ int SwWW8AttrIter::OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos)
                     pEnd = pHt->End();
                     if (nPos == *pEnd && nPos != pHt->GetStart())
                     {
-                        m_rExport.AttrOutput().EndRuby(rNode, nPos);
+                        m_rExport.AttrOutput().EndRuby(rNode, nPos, false);
                         --nRet;
                     }
                     break;
@@ -1532,7 +1532,7 @@ int SwWW8AttrIter::OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos)
                     pEnd = pHt->End();
                     if (nPos == *pEnd && nPos == pHt->GetStart())
                     {   // special case: empty must be handled here
-                        m_rExport.AttrOutput().EndRuby( m_rNode, nPos );
+                        m_rExport.AttrOutput().EndRuby(m_rNode, nPos, true);
                         --nRet;
                     }
                     break;

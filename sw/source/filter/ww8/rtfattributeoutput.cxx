@@ -420,6 +420,13 @@ void RtfAttributeOutput::StartRun(const SwRedlineData* pRedlineData, sal_Int32 /
     OSL_ENSURE(m_aRunText.getLength() == 0, "m_aRunText is not empty");
 }
 
+void RtfAttributeOutput::EndRubyField()
+{
+    assert(m_bInRuby);
+    m_aRun->append(")}}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " {}}}");
+    m_bInRuby = false;
+}
+
 void RtfAttributeOutput::EndRun(const SwTextNode* /*pNode*/, sal_Int32 /*nPos*/, sal_Int32 /*nLen*/,
                                 bool /*bLastRun*/)
 {
@@ -427,10 +434,7 @@ void RtfAttributeOutput::EndRun(const SwTextNode* /*pNode*/, sal_Int32 /*nPos*/,
     m_aRun.appendAndClear(m_aRunText);
 
     if (m_bInRuby)
-    {
-        m_aRun->append(")}}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " {}}}");
-        m_bInRuby = false;
-    }
+        EndRubyField();
 
     if (!m_bSingleEmptyRun && m_bInRun)
         m_aRun->append('}');
@@ -533,6 +537,7 @@ void RtfAttributeOutput::RawText(const OUString& rText, rtl_TextEncoding eCharSe
 void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/,
                                    const SwFormatRuby& rRuby)
 {
+    assert(!m_bInRuby);
     WW8Ruby aWW8Ruby(rNode, rRuby, GetExport());
     OUString aStr = FieldString(ww::eEQ) + "\\* jc" + OUString::number(aWW8Ruby.GetJC())
                     + " \\* \"Font:" + aWW8Ruby.GetFontFamily() + "\" \\* hps"
@@ -548,7 +553,14 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/,
     m_bInRuby = true;
 }
 
-void RtfAttributeOutput::EndRuby(const SwTextNode& /*rNode*/, sal_Int32 /*nPos*/) {}
+void RtfAttributeOutput::EndRuby(const SwTextNode& /*rNode*/, sal_Int32 /*nPos*/,
+                                 bool bEmptyBaseText)
+{
+    // If there is no base text that the Ruby spans then just end this now and don't attempt to postpone
+    // until the output of the non-existent run
+    if (bEmptyBaseText)
+        EndRubyField();
+}
 
 bool RtfAttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget,
                                   const OUString& /*rName*/)
