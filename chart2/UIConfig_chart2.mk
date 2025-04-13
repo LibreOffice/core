@@ -37,6 +37,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/schart,\
 $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/3dviewdialog \
 	chart2/uiconfig/ui/attributedialog \
+	chart2/uiconfig/ui/chartcolorpalettepopup \
 	chart2/uiconfig/ui/chardialog \
 	chart2/uiconfig/ui/chartdatadialog \
 	chart2/uiconfig/ui/charttypedialog \
@@ -53,6 +54,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/inserttitledlg \
 	chart2/uiconfig/ui/paradialog \
 	chart2/uiconfig/ui/sidebaraxis \
+	chart2/uiconfig/ui/sidebarcolors \
 	chart2/uiconfig/ui/sidebarelements \
 	chart2/uiconfig/ui/sidebarerrorbar \
 	chart2/uiconfig/ui/sidebarseries \

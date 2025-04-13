@@ -306,6 +306,13 @@ void ChartAreaPanel::Initialize()
     updateData();
 }
 
+bool ChartAreaPanel::selectionIsDataSeries() const
+{
+    OUString aCID = getCID(mxModel);
+    ObjectType eType = ObjectIdentifier::getObjectType(aCID);
+    return eType == ObjectType::OBJECTTYPE_DATA_SERIES || eType == ObjectType::OBJECTTYPE_DATA_POINT;
+}
+
 void ChartAreaPanel::setFillTransparence(const XFillTransparenceItem& rItem)
 {
     PreventUpdate aProtector(mbUpdate);
@@ -357,6 +364,10 @@ void ChartAreaPanel::setFillStyleAndColor(const XFillStyleItem* pStyleItem,
     if (pStyleItem)
         xPropSet->setPropertyValue(u"FillStyle"_ustr, css::uno::Any(pStyleItem->GetValue()));
     xPropSet->setPropertyValue(u"FillColor"_ustr, css::uno::Any(rColorItem.GetValue()));
+    if (selectionIsDataSeries())
+    {
+        mxModel->clearColorPalette();
+    }
 }
 
 void ChartAreaPanel::setFillStyleAndGradient(const XFillStyleItem* pStyleItem,

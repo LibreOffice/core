@@ -204,6 +204,8 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/controller/main/UndoGuard \
     chart2/source/controller/sidebar/Chart2PanelFactory \
     chart2/source/controller/sidebar/ChartAreaPanel \
+    chart2/source/controller/sidebar/ChartColorsPanel \
+    chart2/source/controller/sidebar/ChartColorPaletteControl \
     chart2/source/controller/sidebar/ChartAxisPanel \
     chart2/source/controller/sidebar/ChartColorWrapper \
     chart2/source/controller/sidebar/ChartElementsPanel \
@@ -339,9 +341,13 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
 # tools pieces
 $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/tools/AxisHelper \
+    chart2/source/tools/BaseColorScheme \
     chart2/source/tools/BaseGFXHelper \
     chart2/source/tools/CachedDataSequence \
     chart2/source/tools/CharacterProperties \
+    chart2/source/tools/ChartColorPalettes \
+    chart2/source/tools/ChartColorPaletteHelper \
+    chart2/source/tools/ChartColorScheme \
     chart2/source/tools/ChartTypeHelper \
     chart2/source/tools/ChartViewHelper \
     chart2/source/tools/CommonConverters \

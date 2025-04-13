@@ -304,4 +304,8 @@
       constructor="org_libreoffice_chart2_Chart2ToolboxController">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.chart2.ChartColorPaletteControl"
+    constructor="com_sun_star_comp_chart2_ChartColorPaletteControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
 </component>

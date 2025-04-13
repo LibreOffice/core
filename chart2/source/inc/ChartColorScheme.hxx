@@ -19,47 +19,22 @@
 #pragma once
 
 #include "BaseColorScheme.hxx"
-
-#include <memory>
-
-namespace com::sun::star::uno { class XComponentContext; }
+#include <svx/ChartColorPaletteType.hxx>
 
 namespace chart
 {
-
-css::uno::Reference< css::chart2::XColorScheme > createConfigColorScheme(
-    const css::uno::Reference< css::uno::XComponentContext > & xContext );
-
-namespace impl
-{
-class ChartConfigItem;
-}
-
-class ConfigColorScheme final : public BaseColorScheme
+class ChartColorScheme final : public BaseColorScheme
 {
 public:
-    explicit ConfigColorScheme( const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~ConfigColorScheme() override;
-
-    // ____ ConfigItemListener ____
-    void notify();
+    explicit ChartColorScheme(const ChartColorPalette& rPalette);
 
     /// declare XServiceInfo methods
-    virtual OUString SAL_CALL getImplementationName() override;
+    OUString SAL_CALL getImplementationName() override;
 
 protected:
     // ____ XColorScheme ____
-    virtual ::sal_Int32 SAL_CALL getColorByIndex( ::sal_Int32 nIndex ) override;
-
-private:
-    void retrieveConfigColors();
-
-    // member variables
-    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
-    std::unique_ptr< impl::ChartConfigItem >            m_apChartConfigItem;
-    bool                                                  m_bNeedsUpdate;
+    ::sal_Int32 SAL_CALL getColorByIndex(::sal_Int32 nIndex) override;
 };
-
 } // namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

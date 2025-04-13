@@ -36,6 +36,7 @@ enum class SfxHintId {
     Deinitializing,
     ModeChanged,
     ColorsChanged,
+    ThemeColorsChanged,
     LanguageChanged,
     RedlineChanged,
     DocumentRepair,
@@ -257,6 +258,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     case SfxHintId::Deinitializing: return stream << "Deinitializing";
     case SfxHintId::ModeChanged: return stream << "ModeChanged";
     case SfxHintId::ColorsChanged: return stream << "ColorsChanged";
+    case SfxHintId::ThemeColorsChanged: return stream << "ThemeColorsChanged";
     case SfxHintId::LanguageChanged: return stream << "LanguageChanged";
     case SfxHintId::RedlineChanged: return stream << "RedlineChanged";
     case SfxHintId::DocumentRepair: return stream << "DocumentRepair";

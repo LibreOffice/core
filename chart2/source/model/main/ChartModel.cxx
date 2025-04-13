@@ -33,6 +33,8 @@
 #include <CloneHelper.hxx>
 #include <NameContainer.hxx>
 #include "UndoManager.hxx"
+
+#include <ChartColorPaletteHelper.hxx>
 #include <ChartView.hxx>
 #include <PopupRequest.hxx>
 #include <ModifyListenerHelper.hxx>
@@ -55,8 +57,12 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
@@ -64,6 +70,11 @@
 #include <utility>
 #include <comphelper/diagnose_ex.hxx>
 #include <libxml/xmlwriter.h>
+
+#include <sfx2/objsh.hxx>
+#include <com/sun/star/util/XTheme.hpp>
+#include <docmodel/uno/UnoTheme.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -87,6 +98,19 @@ constexpr OUString lcl_aGDIMetaFileMIMETypeHighContrast(
 namespace chart
 {
 
+namespace
+{
+SfxObjectShell* getParentShell(const uno::Reference<frame::XModel>& xDocModel)
+{
+    uno::Reference<lang::XUnoTunnel> xUnoTunnel(xDocModel, uno::UNO_QUERY);
+    if (xUnoTunnel.is())
+    {
+        return comphelper::getFromUnoTunnel<SfxObjectShell>(xUnoTunnel);
+    }
+    return nullptr;
+}
+}
+
 ChartModel::ChartModel(uno::Reference<uno::XComponentContext > xContext)
     : m_aLifeTimeManager( this, this )
     , m_bReadOnly( false )
@@ -100,6 +124,8 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > xContext)
     , m_aVisualAreaSize( ChartModel::getDefaultPageSize() )
     , m_xPageBackground( new PageBackground )
     , m_xXMLNamespaceMap( new NameContainer() )
+    , m_eColorPaletteType(ChartColorPaletteType::Unknown)
+    , m_nColorPaletteIndex(0)
     , mnStart(0)
     , mnEnd(0)
 {
@@ -121,6 +147,8 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > xContext)
 
 ChartModel::ChartModel( const ChartModel & rOther )
     : impl::ChartModel_Base(rOther)
+    // not copy the listener
+    , SfxListener()
     , m_aLifeTimeManager( this, this )
     , m_bReadOnly( rOther.m_bReadOnly )
     , m_bModified( rOther.m_bModified )
@@ -140,6 +168,8 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , m_aGraphicObjectVector( rOther.m_aGraphicObjectVector )
     , m_xDataProvider( rOther.m_xDataProvider )
     , m_xInternalDataProvider( rOther.m_xInternalDataProvider )
+    , m_eColorPaletteType(ChartColorPaletteType::Unknown)
+    , m_nColorPaletteIndex(0)
     , mnStart(rOther.mnStart)
     , mnEnd(rOther.mnEnd)
 {
@@ -187,6 +217,8 @@ ChartModel::ChartModel( const ChartModel & rOther )
 
 ChartModel::~ChartModel()
 {
+    if (SfxObjectShell* pShell = getParentShell(m_xParent))
+        EndListening(*pShell);
     if( m_xOldModelAgg.is())
         m_xOldModelAgg->setDelegator( nullptr );
 }
@@ -1278,7 +1310,13 @@ Reference< uno::XInterface > SAL_CALL ChartModel::getParent()
 void SAL_CALL ChartModel::setParent( const Reference< uno::XInterface >& Parent )
 {
     if( Parent != m_xParent )
+    {
+        if (SfxObjectShell* pShell = getParentShell(m_xParent))
+            EndListening(*pShell);
         m_xParent.set( Parent, uno::UNO_QUERY );
+        if (SfxObjectShell* pShell = getParentShell(m_xParent))
+            StartListening(*pShell);
+    }
 }
 
 // ____ XDataSource ____
@@ -1460,6 +1498,112 @@ bool ChartModel::setIncludeHiddenCells( bool bIncludeHiddenCells )
     return bChanged;
 }
 
+void ChartModel::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
+{
+    if (rHint.GetId() == SfxHintId::ThemeColorsChanged)
+    {
+        onDocumentThemeChanged();
+    }
+}
+
+std::shared_ptr<model::Theme> ChartModel::getDocumentTheme() const
+{
+    std::shared_ptr<model::Theme> pTheme;
+    uno::Any aThemeValue;
+
+    auto pParent = const_cast<ChartModel*>(this)->getParent();
+    uno::Reference<frame::XModel> xDocModel(pParent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDoc(xDocModel, uno::UNO_QUERY);
+
+    if (!xTextDoc.is()) // Calc, Impress
+    {
+        uno::Reference<beans::XPropertySet> xPropSet(xDocModel, uno::UNO_QUERY);
+        if (xPropSet.is())
+        {
+            aThemeValue = xPropSet->getPropertyValue("Theme");
+        }
+    }
+    else // Writer
+    {
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xDocModel, uno::UNO_QUERY);
+        if (xDrawPageSupplier.is())
+        {
+            uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+            if (xDrawPage.is())
+            {
+                uno::Reference<beans::XPropertySet> xPropSet(xDrawPage, uno::UNO_QUERY);
+                if (xPropSet.is())
+                {
+                    aThemeValue = xPropSet->getPropertyValue("Theme");
+                }
+            }
+        }
+    }
+
+    uno::Reference<util::XTheme> xTheme(aThemeValue, uno::UNO_QUERY);
+    if (xTheme.is())
+    {
+        if (auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get()))
+        {
+            pTheme = pUnoTheme->getTheme();
+        }
+    }
+    else
+    {
+        pTheme = model::Theme::FromAny(aThemeValue);
+    }
+
+    return pTheme;
+}
+
+void ChartModel::setColorPalette(ChartColorPaletteType eType, sal_uInt32 nIndex)
+{
+    m_eColorPaletteType = eType;
+    m_nColorPaletteIndex = nIndex;
+}
+
+void ChartModel::clearColorPalette() { setColorPalette(ChartColorPaletteType::Unknown, 0); }
+
+bool ChartModel::usesColorPalette() const
+{
+    return m_eColorPaletteType != ChartColorPaletteType::Unknown;
+}
+
+std::optional<ChartColorPalette> ChartModel::getCurrentColorPalette() const
+{
+    if (!usesColorPalette())
+    {
+        SAL_WARN("chart2", "ChartModel::getCurrentColorPalette: no palette is in use");
+        return std::nullopt;
+    }
+
+    const std::shared_ptr<model::Theme> pTheme = getDocumentTheme();
+    // when pTheme is null, ChartColorPaletteHelper uses a default theme
+    const ChartColorPaletteHelper aColorPaletteHelper(pTheme);
+    return aColorPaletteHelper.getColorPalette(getColorPaletteType(), getColorPaletteIndex());
+}
+
+void ChartModel::applyColorPaletteToDataSeries(const ChartColorPalette& rColorPalette)
+{
+    const rtl::Reference<Diagram> xDiagram = getFirstChartDiagram();
+    const auto xDataSeriesArray = xDiagram->getDataSeries();
+    for (size_t i = 0; i < xDataSeriesArray.size(); ++i)
+    {
+        const uno::Reference<beans::XPropertySet> xPropSet = xDataSeriesArray[i];
+        const size_t nPaletteIndex = i % rColorPalette.size();
+        xPropSet->setPropertyValue("FillStyle", uno::Any(drawing::FillStyle_SOLID));
+        xPropSet->setPropertyValue("FillColor", uno::Any(rColorPalette[nPaletteIndex]));
+    }
+}
+
+void ChartModel::onDocumentThemeChanged()
+{
+    if (const auto oColorPalette = getCurrentColorPalette())
+    {
+        applyColorPaletteToDataSeries(*oColorPalette);
+        setModified(true);
+    }
+}
 
 }  // namespace chart
 

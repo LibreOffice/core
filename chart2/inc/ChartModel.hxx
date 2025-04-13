@@ -52,6 +52,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <svl/lstner.hxx>
+#include <svx/ChartColorPaletteType.hxx>
 
 #include <memory>
 
@@ -67,6 +69,8 @@ namespace com::sun::star::uno { class XAggregation; }
 
 class SvNumberFormatter;
 class SvNumberFormatsSupplierObj;
+
+namespace model { class Theme; }
 
 namespace chart
 {
@@ -119,7 +123,7 @@ class UndoManager;
 class ChartView;
 
 class SAL_LOPLUGIN_ANNOTATE("crosscast") ChartModel final :
-    public impl::ChartModel_Base
+    public impl::ChartModel_Base, private SfxListener
 {
 
 private:
@@ -177,6 +181,9 @@ private:
     rtl::Reference< ::chart::PageBackground > m_xPageBackground;
 
     rtl::Reference< ::chart::NameContainer > m_xXMLNamespaceMap;
+
+    ChartColorPaletteType m_eColorPaletteType;
+    sal_uInt32 m_nColorPaletteIndex;
 
 private:
     //private methods
@@ -459,6 +466,9 @@ public:
     // XDumper
     virtual OUString SAL_CALL dump(OUString const & kind) override;
 
+    // SfxListener
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+
     // normal methods
     css::uno::Reference< css::util::XNumberFormatsSupplier > const &
         getNumberFormatsSupplier();
@@ -496,6 +506,16 @@ public:
 
     bool isIncludeHiddenCells();
     bool setIncludeHiddenCells( bool bIncludeHiddenCells );
+
+    std::shared_ptr<model::Theme> getDocumentTheme() const;
+    ChartColorPaletteType getColorPaletteType() const { return m_eColorPaletteType; }
+    sal_uInt32 getColorPaletteIndex() const { return m_nColorPaletteIndex; }
+    void setColorPalette(ChartColorPaletteType eType, sal_uInt32 nIndex);
+    void clearColorPalette();
+    bool usesColorPalette() const;
+    std::optional<ChartColorPalette> getCurrentColorPalette() const;
+    void applyColorPaletteToDataSeries(const ChartColorPalette& rColorPalette);
+    void onDocumentThemeChanged();
 
 private:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;

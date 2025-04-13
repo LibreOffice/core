@@ -1938,6 +1938,9 @@ sal_Int64 SAL_CALL SdXImpressDocument::getSomething( const css::uno::Sequence< s
     if (comphelper::isUnoTunnelId<SdrModel>(rIdentifier))
         return comphelper::getSomething_cast(mpDoc);
 
+    if (comphelper::isUnoTunnelId<SfxObjectShell>(rIdentifier))
+        return comphelper::getSomething_cast(mpDocShell);
+
     return comphelper::getSomethingImpl(rIdentifier, this,
                                         comphelper::FallbackToGetSomethingOf<SfxBaseModel>{});
 }

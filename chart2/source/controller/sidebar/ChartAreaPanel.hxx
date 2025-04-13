@@ -74,6 +74,7 @@ private:
 
     void Initialize();
     void doUpdateModel(const rtl::Reference<::chart::ChartModel>& xModel);
+    bool selectionIsDataSeries() const;
 
     bool mbUpdate;
     bool mbModelValid;

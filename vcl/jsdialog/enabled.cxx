@@ -355,6 +355,8 @@ constexpr auto PopupList
         { u"modules/scalc/ui/filtersubdropdown.ui" },
         { u"modules/scalc/ui/floatingborderstyle.ui" },
         { u"modules/scalc/ui/floatinglinestyle.ui" },
+        // schart
+        { u"modules/schart/ui/chartcolorpalettepopup.ui" },
         // svt
         { u"svt/ui/datewindow.ui" },
         { u"svt/ui/linewindow.ui" },
@@ -393,6 +395,7 @@ constexpr auto SidebarList
         { u"modules/scalc/ui/sidebarnumberformat.ui" },
         // schart
         { u"modules/schart/ui/sidebaraxis.ui" },
+        { u"modules/schart/ui/sidebarcolors.ui" },
         { u"modules/schart/ui/sidebarelements.ui" },
         { u"modules/schart/ui/sidebarerrorbar.ui" },
         { u"modules/schart/ui/sidebarseries.ui" },
@@ -558,6 +561,7 @@ bool isBuilderEnabledForMenu(std::u16string_view rUIFile)
 bool isBuilderEnabledForSidebar(std::u16string_view rUIFile)
 {
     return isInMap(SidebarList, rUIFile);
+
 }
 
 bool isInterimBuilderEnabledForNotebookbar(std::u16string_view rUIFile)
