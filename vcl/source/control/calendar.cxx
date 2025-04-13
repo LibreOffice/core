@@ -34,20 +34,22 @@
 #include <strings.hrc>
 #include <memory>
 
-#define DAY_OFFX                        4
-#define DAY_OFFY                        2
-#define MONTH_BORDERX                   4
-#define MONTH_OFFY                      3
-#define WEEKDAY_OFFY                    3
-#define TITLE_OFFY                      3
-#define TITLE_BORDERY                   2
-#define SPIN_OFFX                       4
-#define SPIN_OFFY                       TITLE_BORDERY
-#define CALENDAR_HITTEST_DAY            (sal_uInt16(0x0001))
-#define CALENDAR_HITTEST_MONTHTITLE     (sal_uInt16(0x0004))
-#define CALENDAR_HITTEST_PREV           (sal_uInt16(0x0008))
-#define CALENDAR_HITTEST_NEXT           (sal_uInt16(0x0010))
-#define MENU_YEAR_COUNT                 3
+constexpr tools::Long DAY_OFFX = 4;
+constexpr tools::Long DAY_OFFY = 2;
+constexpr tools::Long MONTH_BORDERX = 4;
+constexpr tools::Long MONTH_OFFY = 3;
+constexpr tools::Long WEEKDAY_OFFY = 3;
+constexpr tools::Long TITLE_OFFY = 3;
+constexpr tools::Long TITLE_BORDERY = 2;
+constexpr tools::Long SPIN_OFFX = 4;
+constexpr tools::Long SPIN_OFFY = TITLE_BORDERY;
+
+constexpr sal_uInt16 CALENDAR_HITTEST_DAY = 0x0001;
+constexpr sal_uInt16 CALENDAR_HITTEST_MONTHTITLE = 0x0004;
+constexpr sal_uInt16 CALENDAR_HITTEST_PREV  = 0x0008;
+constexpr sal_uInt16 CALENDAR_HITTEST_NEXT = 0x0010;
+
+constexpr sal_uInt16 MENU_YEAR_COUNT = 3;
 
 using namespace ::com::sun::star;
 
