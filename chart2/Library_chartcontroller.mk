@@ -198,6 +198,8 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/main/UndoGuard \
     chart2/source/controller/sidebar/Chart2PanelFactory \
     chart2/source/controller/sidebar/ChartAreaPanel \
+    chart2/source/controller/sidebar/ChartColorsPanel \
+    chart2/source/controller/sidebar/ChartColorPaletteControl \
     chart2/source/controller/sidebar/ChartAxisPanel \
     chart2/source/controller/sidebar/ChartColorWrapper \
     chart2/source/controller/sidebar/ChartElementsPanel \

@@ -34,6 +34,7 @@
 #include <undoblk.hxx>
 #include <SparklineGroup.hxx>
 #include <SparklineList.hxx>
+#include <sfx2/app.hxx>
 
 #include <undo/UndoThemeChange.hxx>
 
@@ -342,6 +343,7 @@ void ThemeColorChanger::doApply(std::shared_ptr<model::ColorSet> const& pColorSe
     changeSparklines(m_rDocShell, *pColorSet);
 
     changeThemeColorInTheDocModel(m_rDocShell, pColorSet);
+    m_rDocShell.Broadcast(SfxHint(SfxHintId::ThemeColorsChanged));
 
     if (bUndo)
     {

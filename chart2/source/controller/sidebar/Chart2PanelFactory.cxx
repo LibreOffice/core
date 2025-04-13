@@ -34,6 +34,7 @@
 #include "ChartErrorBarPanel.hxx"
 #include "ChartAreaPanel.hxx"
 #include "ChartLinePanel.hxx"
+#include "ChartColorsPanel.hxx"
 
 using namespace css::uno;
 
@@ -98,6 +99,8 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
             xPanel = ChartAreaPanel::Create(pParent, xFrame, pController);
         else if (rsResourceURL.endsWith("/LinePanel"))
             xPanel = ChartLinePanel::Create(pParent, xFrame, pController);
+        else if (rsResourceURL.endsWith("/ColorsPanel"))
+            xPanel = ChartColorsPanel::Create(pParent, xFrame, pController);
 
         if (xPanel)
             xElement = sfx2::sidebar::SidebarPanelBase::Create(

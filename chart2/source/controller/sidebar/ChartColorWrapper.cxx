@@ -101,6 +101,11 @@ void ChartColorWrapper::operator()([[maybe_unused]] const OUString& , const Name
     }
 
     xPropSet->setPropertyValue(maPropertyName, css::uno::Any(rColor.m_aColor));
+
+    OUString aCID = getCID(mxModel);
+    ObjectType eType = ObjectIdentifier::getObjectType(aCID);
+    if (eType == OBJECTTYPE_DATA_SERIES || eType == OBJECTTYPE_DATA_POINT)
+        mxModel->clearColorPalette();
 }
 
 void ChartColorWrapper::updateModel(const rtl::Reference<::chart::ChartModel>& xModel)

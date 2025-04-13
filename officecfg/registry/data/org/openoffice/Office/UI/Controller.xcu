@@ -2043,6 +2043,17 @@
           <value>distributebar</value>
         </prop>
       </node>
+      <node oor:name="ChartColorPaletteControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ChartColorPalette</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.chart2.ChartColorPaletteControl</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="StatusBar">
       <node oor:name="c5" oor:op="replace">

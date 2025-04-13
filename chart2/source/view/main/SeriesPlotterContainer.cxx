@@ -33,6 +33,8 @@
 #include <DiagramHelper.hxx>
 #include <Axis.hxx>
 #include <AxisIndexDefines.hxx>
+#include <ConfigColorScheme.hxx>
+#include <ChartColorScheme.hxx>
 #include <DataSeriesHelper.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <unonames.hxx>
@@ -185,7 +187,11 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
     // - add plotter to coordinate systems
 
     //iterate through all coordinate systems
-    uno::Reference<XColorScheme> xColorScheme(xDiagram->getDefaultColorScheme());
+    uno::Reference<XColorScheme> xColorScheme;
+    if (!rChartModel.usesColorPalette())
+        xColorScheme = xDiagram->getDefaultColorScheme();
+    else
+        xColorScheme = new ChartColorScheme(*rChartModel.getCurrentColorPalette());
     auto aCooSysList = xDiagram->getBaseCoordinateSystems();
     sal_Int32 nGlobalSeriesIndex = 0; //for automatic symbols
     for (std::size_t nCS = 0; nCS < aCooSysList.size(); ++nCS)

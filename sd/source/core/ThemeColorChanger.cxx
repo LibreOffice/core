@@ -184,6 +184,8 @@ void ThemeColorChanger::doApply(std::shared_ptr<model::ColorSet> const& pColorSe
             changeThemeColors(mpDocShell, pCurrentPage, pColorSet);
     }
 
+    mpDocShell->Broadcast(SfxHint(SfxHintId::ThemeColorsChanged));
+
     pUndoManager->LeaveListAction();
 }
 

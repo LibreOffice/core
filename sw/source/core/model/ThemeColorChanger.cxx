@@ -441,6 +441,8 @@ void ThemeColorChanger::doApply(std::shared_ptr<model::ColorSet> const& pColorSe
     aModelTraverser.addNodeHandler(pHandler);
     aModelTraverser.traverse();
 
+    mpDocSh->Broadcast(SfxHint(SfxHintId::ThemeColorsChanged));
+
     pDocument->GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
 }
 

@@ -177,9 +177,13 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
 # tools pieces
 $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/tools/AxisHelper \
+    chart2/source/tools/BaseColorScheme \
     chart2/source/tools/BaseGFXHelper \
     chart2/source/tools/CachedDataSequence \
     chart2/source/tools/CharacterProperties \
+    chart2/source/tools/ChartColorPalettes \
+    chart2/source/tools/ChartColorPaletteHelper \
+    chart2/source/tools/ChartColorScheme \
     chart2/source/tools/ChartModelHelper \
     chart2/source/tools/ChartTypeHelper \
     chart2/source/tools/ChartViewHelper \

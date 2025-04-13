@@ -93,8 +93,8 @@ uno::Any ChartConfigItem::getProperty( const OUString & aPropertyName )
 // explicit
 ConfigColorScheme::ConfigColorScheme(
     const Reference< uno::XComponentContext > & xContext ) :
+        BaseColorScheme(),
         m_xContext( xContext  ),
-        m_nNumberOfColors( 0 ),
         m_bNeedsUpdate( true )
 {
 }
@@ -152,16 +152,6 @@ void ConfigColorScheme::notify()
 OUString SAL_CALL ConfigColorScheme::getImplementationName()
 {
     return u"com.sun.star.comp.chart2.ConfigDefaultColorScheme"_ustr ;
-}
-
-sal_Bool SAL_CALL ConfigColorScheme::supportsService( const OUString& rServiceName )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-css::uno::Sequence< OUString > SAL_CALL ConfigColorScheme::getSupportedServiceNames()
-{
-    return { u"com.sun.star.chart2.ColorScheme"_ustr };
 }
 
 } //  namespace chart
