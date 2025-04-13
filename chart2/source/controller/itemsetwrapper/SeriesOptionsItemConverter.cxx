@@ -83,7 +83,8 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         }
 
         sal_Int32 nDimensionCount = xDiagram->getDimension();
-        m_bSupportingOverlapAndGapWidthProperties = ChartTypeHelper::isSupportingOverlapAndGapWidthProperties( xChartType, nDimensionCount );
+        m_bSupportingOverlapAndGapWidthProperties = xChartType.is() ?
+            xChartType->isSupportingOverlapAndGapWidthProperties(nDimensionCount) : false;
 
         if( m_bSupportingOverlapAndGapWidthProperties )
         {
@@ -106,19 +107,19 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
             }
         }
 
-        m_bSupportingBarConnectors = ChartTypeHelper::isSupportingBarConnectors( xChartType, nDimensionCount );
+        m_bSupportingBarConnectors = xChartType.is() ? xChartType->isSupportingBarConnectors(nDimensionCount) : false;
         if( m_bSupportingBarConnectors && xDiagram.is() )
         {
             xDiagram->getPropertyValue( u"ConnectBars"_ustr ) >>= m_bConnectBars;
         }
 
-        m_bSupportingAxisSideBySide = ChartTypeHelper::isSupportingAxisSideBySide( xChartType, nDimensionCount );
+        m_bSupportingAxisSideBySide = xChartType.is() ? xChartType->isSupportingAxisSideBySide(nDimensionCount) : false;
         if( m_bSupportingAxisSideBySide && xDiagram.is() )
         {
             xDiagram->getPropertyValue( u"GroupBarsPerAxis"_ustr ) >>= m_bGroupBarsPerAxis;
         }
 
-        m_bSupportingStartingAngle = ChartTypeHelper::isSupportingStartingAngle( xChartType );
+        m_bSupportingStartingAngle = xChartType.is() ? xChartType->isSupportingStartingAngle() : false;
         if( m_bSupportingStartingAngle )
         {
             xDiagram->getPropertyValue( u"StartingAngle"_ustr ) >>= m_nStartingAngle;

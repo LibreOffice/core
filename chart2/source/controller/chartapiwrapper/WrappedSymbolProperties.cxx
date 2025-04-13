@@ -286,7 +286,7 @@ beans::PropertyState WrappedSymbolTypeProperty::getPropertyState( const Referenc
         rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
         rtl::Reference< ::chart::DataSeries > xSeries( dynamic_cast<DataSeries*>(xInnerPropertyState.get()) );
         rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeOfSeries( xSeries ) );
-        if( ChartTypeHelper::isSupportingSymbolProperties( xChartType, 2 ) )
+        if (xChartType.is() && xChartType->isSupportingSymbolProperties(2))
             return beans::PropertyState_DIRECT_VALUE;
     }
     return WrappedProperty::getPropertyState( xInnerPropertyState );

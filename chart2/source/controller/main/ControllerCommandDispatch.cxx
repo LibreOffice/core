@@ -241,7 +241,7 @@ void ControllerState::update(
 
         // trend lines/mean value line
         if( (aObjectType == OBJECTTYPE_DATA_SERIES || aObjectType == OBJECTTYPE_DATA_POINT)
-            && ChartTypeHelper::isSupportingRegressionProperties( xFirstChartType, nDimensionCount ))
+            && xFirstChartType.is() ? xFirstChartType->isSupportingRegressionProperties(nDimensionCount) : true)
         {
             // Trendline
             bMayAddTrendline = true;
@@ -253,7 +253,7 @@ void ControllerState::update(
 
         // error bars
         if( (aObjectType == OBJECTTYPE_DATA_SERIES || aObjectType == OBJECTTYPE_DATA_POINT)
-            && ChartTypeHelper::isSupportingStatisticProperties( xFirstChartType, nDimensionCount ))
+            && xFirstChartType.is() ? xFirstChartType->isSupportingStatisticProperties(nDimensionCount) : true)
         {
             bMayFormatXErrorBars = bMayDeleteXErrorBars = StatisticsHelper::hasErrorBars( xGivenDataSeries, false );
             bMayAddXErrorBars = ! bMayDeleteXErrorBars;
@@ -407,11 +407,11 @@ void ModelState::update( const rtl::Reference<::chart::ChartModel> & xModel )
     if (xDiagram)
         nDimensionCount = xDiagram->getDimension();
 
-    rtl::Reference< ChartType > xFirstChartType;
+    rtl::Reference<ChartType> xFirstChartType;
     if (xDiagram)
         xFirstChartType = xDiagram->getChartTypeByIndex( 0 );
-    bSupportsStatistics = ChartTypeHelper::isSupportingStatisticProperties( xFirstChartType, nDimensionCount );
-    bSupportsAxes = ChartTypeHelper::isSupportingMainAxis( xFirstChartType, nDimensionCount, 0 );
+    bSupportsStatistics = xFirstChartType.is() ?  xFirstChartType->isSupportingStatisticProperties(nDimensionCount) : true;
+    bSupportsAxes = xFirstChartType.is() ?  xFirstChartType->isSupportingMainAxis(nDimensionCount, 0) : true;
 
     bIsThreeD = (nDimensionCount == 3);
     if (xModel.is())

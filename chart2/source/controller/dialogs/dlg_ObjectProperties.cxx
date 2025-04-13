@@ -130,18 +130,18 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
 
     if( bHasSeriesProperties || bHasDataPointproperties )
     {
-        m_bHasGeometryProperties = ChartTypeHelper::isSupportingGeometryProperties( xChartType, nDimensionCount );
-        m_bHasAreaProperties     = ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount );
-        m_bHasSymbolProperties   = ChartTypeHelper::isSupportingSymbolProperties( xChartType, nDimensionCount );
-        m_bIsPieChartDataPoint   = bHasDataPointproperties && ChartTypeHelper::isSupportingStartingAngle( xChartType );
+        m_bHasGeometryProperties = xChartType->isSupportingGeometryProperties(nDimensionCount );
+        m_bHasAreaProperties     = xChartType->isSupportingAreaProperties(nDimensionCount);
+        m_bHasSymbolProperties   = xChartType->isSupportingSymbolProperties(nDimensionCount);
+        m_bIsPieChartDataPoint   = bHasDataPointproperties && xChartType->isSupportingStartingAngle();
 
         if( bHasSeriesProperties )
         {
-            m_bHasStatisticProperties =  ChartTypeHelper::isSupportingStatisticProperties( xChartType, nDimensionCount );
-            m_bProvidesSecondaryYAxis =  ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount );
-            m_bProvidesOverlapAndGapWidth =  ChartTypeHelper::isSupportingOverlapAndGapWidthProperties( xChartType, nDimensionCount );
-            m_bProvidesBarConnectors =  ChartTypeHelper::isSupportingBarConnectors( xChartType, nDimensionCount );
-            m_bProvidesStartingAngle = ChartTypeHelper::isSupportingStartingAngle( xChartType );
+            m_bHasStatisticProperties =  xChartType->isSupportingStatisticProperties(nDimensionCount);
+            m_bProvidesSecondaryYAxis =  xChartType->isSupportingSecondaryAxis(nDimensionCount);
+            m_bProvidesOverlapAndGapWidth =  xChartType->isSupportingOverlapAndGapWidthProperties(nDimensionCount);
+            m_bProvidesBarConnectors =  xChartType->isSupportingBarConnectors(nDimensionCount);
+            m_bProvidesStartingAngle = xChartType->isSupportingStartingAngle();
 
             m_bProvidesMissingValueTreatments = ChartTypeHelper::getSupportedMissingValueTreatments( xChartType )
                                             .hasElements();
@@ -191,10 +191,10 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
                 {
                     xChartType = AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisIndex( xDiagram, nAxisIndex );
                     //show positioning controls only if they make sense
-                    m_bSupportingAxisPositioning = ChartTypeHelper::isSupportingAxisPositioning( xChartType, nDimensionCount, nDimensionIndex );
+                    m_bSupportingAxisPositioning = xChartType->isSupportingAxisPositioning(nDimensionCount, nDimensionIndex);
 
                     //show axis origin only for secondary y axis
-                    if( nDimensionIndex==1 && nAxisIndex==1 && ChartTypeHelper::isSupportingBaseValue( xChartType ) )
+                    if( nDimensionIndex==1 && nAxisIndex==1 && xChartType->isSupportingBaseValue())
                         m_bShowAxisOrigin = true;
 
                     if ( nDimensionIndex == 0 && ( aData.AxisType == chart2::AxisType::CATEGORY || aData.AxisType == chart2::AxisType::DATE ) )
@@ -206,7 +206,7 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
                         }
 
                         if (!m_bComplexCategoriesAxis)
-                            m_bSupportingCategoryPositioning = ChartTypeHelper::isSupportingCategoryPositioning( xChartType, nDimensionCount );
+                            m_bSupportingCategoryPositioning = xChartType->isSupportingCategoryPositioning(nDimensionCount);
                     }
                 }
             }

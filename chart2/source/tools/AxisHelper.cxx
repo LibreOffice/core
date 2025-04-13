@@ -104,7 +104,8 @@ chart2::ScaleData AxisHelper::getDateCheckedScale( const rtl::Reference< Axis >&
     {
         sal_Int32 nDimensionIndex=0; sal_Int32 nAxisIndex=0;
         AxisHelper::getIndicesForAxis(xAxis, xCooSys, nDimensionIndex, nAxisIndex );
-        bool bChartTypeAllowsDateAxis = ChartTypeHelper::isSupportingDateAxis( AxisHelper::getChartTypeByIndex( xCooSys, 0 ), nDimensionIndex );
+        auto xChartType = AxisHelper::getChartTypeByIndex(xCooSys, 0);
+        bool bChartTypeAllowsDateAxis = xChartType.is() ? xChartType->isSupportingDateAxis(nDimensionIndex) : true;
         if( bChartTypeAllowsDateAxis )
             aScale.AxisType = AxisType::DATE;
     }
@@ -853,10 +854,10 @@ void AxisHelper::getAxisOrGridPossibilities( Sequence< sal_Bool >& rPossibilityL
     if (xDiagram)
         xChartType = xDiagram->getChartTypeByIndex( 0 );
     for(nIndex=0;nIndex<3;nIndex++)
-        pPossibilityList[nIndex]=ChartTypeHelper::isSupportingMainAxis(xChartType,nDimensionCount,nIndex);
+        pPossibilityList[nIndex] = xChartType.is() ? xChartType->isSupportingMainAxis(nDimensionCount, nIndex) : true;
     for(nIndex=3;nIndex<6;nIndex++)
         if( bAxis )
-            pPossibilityList[nIndex]=ChartTypeHelper::isSupportingSecondaryAxis(xChartType,nDimensionCount);
+            pPossibilityList[nIndex] = xChartType.is() ? xChartType->isSupportingSecondaryAxis(nDimensionCount) : true;
         else
             pPossibilityList[nIndex] = rPossibilityList[nIndex-3];
 }
@@ -897,9 +898,9 @@ bool AxisHelper::shouldAxisBeDisplayed( const rtl::Reference< Axis >& xAxis
 
             bool bMainAxis = (nAxisIndex==MAIN_AXIS_INDEX);
             if( bMainAxis )
-                bRet = ChartTypeHelper::isSupportingMainAxis(xChartType,nDimensionCount,nDimensionIndex);
+                bRet = xChartType.is() ? xChartType->isSupportingMainAxis(nDimensionCount, nDimensionIndex) : true;
             else
-                bRet = ChartTypeHelper::isSupportingSecondaryAxis(xChartType,nDimensionCount);
+                bRet = xChartType.is() ? xChartType->isSupportingSecondaryAxis(nDimensionCount) : true;
         }
     }
 

@@ -200,7 +200,7 @@ wrapper::ItemConverter* createItemConverter(
 
                 rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
                 sal_Int32 nDimensionCount = xDiagram->getDimension();
-                if( !ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount ) )
+                if (xChartType.is() && !xChartType->isSupportingAreaProperties(nDimensionCount))
                     eMapTo = wrapper::GraphicObjectType::LineDataPoint;
 
                 bool bDataSeries = eObjectType == OBJECTTYPE_DATA_SERIES;

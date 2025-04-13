@@ -299,7 +299,8 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
 
                 //ignore secondary axis for charttypes that do not support them
                 if (pSeries->getAttachedAxisIndex() != MAIN_AXIS_INDEX
-                    && (!ChartTypeHelper::isSupportingSecondaryAxis(xChartType, nDimensionCount)
+                    && (!(xChartType.is() ? xChartType->isSupportingSecondaryAxis(nDimensionCount)
+                                          : true)
                         || !bSecondaryYaxisVisible))
                 {
                     pSeries->setAttachedAxisIndex(MAIN_AXIS_INDEX);
@@ -385,13 +386,14 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate, ChartModel
     {
         rtl::Reference<BaseCoordinateSystem> xCooSys = pVCooSys->getModel();
         sal_Int32 nDimCount = xCooSys->getDimension();
-        bool bComplexCategoryAllowed = ChartTypeHelper::isSupportingComplexCategory(
-            AxisHelper::getChartTypeByIndex(xCooSys, 0));
+        auto xChartType = AxisHelper::getChartTypeByIndex(xCooSys, 0);
+        bool bComplexCategoryAllowed
+            = xChartType.is() ? xChartType->isSupportingComplexCategory() : true;
 
         for (sal_Int32 nDimIndex = 0; nDimIndex < nDimCount; ++nDimIndex)
         {
-            bool bDateAxisAllowed = ChartTypeHelper::isSupportingDateAxis(
-                AxisHelper::getChartTypeByIndex(xCooSys, 0), nDimIndex);
+            bool bDateAxisAllowed
+                = xChartType.is() ? xChartType->isSupportingDateAxis(nDimIndex) : true;
 
             // Each dimension may have primary and secondary axes.
             const sal_Int32 nMaxAxisIndex = xCooSys->getMaximumAxisIndexByDimension(nDimIndex);

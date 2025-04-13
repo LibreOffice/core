@@ -576,7 +576,7 @@ void ChartTypeTemplate::adaptScales(
                                      !m_aServiceName.indexOf("BarOfPie")) ||
                                     m_aServiceName.endsWith("Close");
                             }
-                            bool bSupportsDates = ::chart::ChartTypeHelper::isSupportingDateAxis( xChartType, nDimensionX );
+                            bool bSupportsDates = xChartType.is() ? xChartType->isSupportingDateAxis(nDimensionX) : true;
                             if( aData.AxisType != AxisType::CATEGORY && ( aData.AxisType != AxisType::DATE || !bSupportsDates) )
                             {
                                 aData.AxisType = AxisType::CATEGORY;

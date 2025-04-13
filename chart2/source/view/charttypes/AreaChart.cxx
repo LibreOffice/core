@@ -59,7 +59,7 @@ AreaChart::AreaChart( const rtl::Reference<ChartType>& xChartTypeModel
         : VSeriesPlotter( xChartTypeModel, nDimensionCount, bCategoryXAxis )
         , m_bArea(!bNoArea)
         , m_bLine(bNoArea)
-        , m_bSymbol( ChartTypeHelper::isSupportingSymbolProperties(xChartTypeModel,nDimensionCount) )
+        , m_bSymbol(xChartTypeModel.is() ? xChartTypeModel->isSupportingSymbolProperties(nDimensionCount) : false)
         , m_eCurveStyle(CurveStyle_LINES)
         , m_nCurveResolution(20)
         , m_nSplineOrder(3)

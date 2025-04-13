@@ -2041,19 +2041,19 @@ bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::
         nDimension = xDiagram->getDimension();
     }
 
-    if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 0 ) )
+    if (xChartType.is() ? xChartType->isSupportingMainAxis(nDimension, 0) : true)
         rParam.mpVTitleX = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, mxRootShape, mrChartModel
                 , rParam.maRemainingSpace, rPageSize, TitleAlignment::ALIGN_BOTTOM, rParam.mbAutoPosTitleX );
     if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
         return false;
 
-    if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 1 ) )
+    if (xChartType.is() ? xChartType->isSupportingMainAxis(nDimension, 1) : true)
         rParam.mpVTitleY = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, mxRootShape, mrChartModel
                 , rParam.maRemainingSpace, rPageSize, TitleAlignment::ALIGN_LEFT, rParam.mbAutoPosTitleY );
     if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
         return false;
 
-    if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 2 ) )
+    if (xChartType.is() ? xChartType->isSupportingMainAxis(nDimension, 2) : true)
         rParam.mpVTitleZ = lcl_createTitle( TitleHelper::Z_AXIS_TITLE, mxRootShape, mrChartModel
                 , rParam.maRemainingSpace, rPageSize, TitleAlignment::ALIGN_RIGHT, rParam.mbAutoPosTitleZ );
     if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
@@ -2062,13 +2062,13 @@ bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::
     bool bDummy = false;
     bool bIsVertical = xDiagram && xDiagram->getVertical( bDummy, bDummy );
 
-    if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension ) )
+    if (xChartType.is() ? xChartType->isSupportingSecondaryAxis(nDimension) : true)
         rParam.mpVTitleSecondX = lcl_createTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, mxRootShape, mrChartModel
                 , rParam.maRemainingSpace, rPageSize, bIsVertical? TitleAlignment::ALIGN_RIGHT : TitleAlignment::ALIGN_TOP, rParam.mbAutoPosSecondTitleX );
     if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
         return false;
 
-    if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension ) )
+    if (xChartType.is() ? xChartType->isSupportingSecondaryAxis(nDimension) : true)
         rParam.mpVTitleSecondY = lcl_createTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, mxRootShape, mrChartModel
                 , rParam.maRemainingSpace, rPageSize, bIsVertical? TitleAlignment::ALIGN_TOP : TitleAlignment::ALIGN_RIGHT, rParam.mbAutoPosSecondTitleY );
     if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))

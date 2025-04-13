@@ -217,7 +217,7 @@ TextLabelItemConverter::TextLabelItemConverter(
     bool bSwapXAndY = xDiagram->getVertical(bFound, bAmbiguous);
     maAvailableLabelPlacements = ChartTypeHelper::getSupportedLabelPlacements(xChartType, bSwapXAndY, xSeries);
 
-    mbForbidPercentValue = ChartTypeHelper::getAxisType(xChartType, 0) != AxisType::CATEGORY;
+    mbForbidPercentValue = xChartType.is() ? xChartType->getAxisType(0) != AxisType::CATEGORY : false;
 }
 
 TextLabelItemConverter::~TextLabelItemConverter()

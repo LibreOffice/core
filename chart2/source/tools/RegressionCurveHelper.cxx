@@ -174,8 +174,10 @@ void RegressionCurveHelper::initializeCurveCalculator(
     const rtl::Reference< ::chart::DataSeries > & xSeries,
     const rtl::Reference<::chart::ChartModel> & xModel )
 {
-    sal_Int32 nAxisType = ChartTypeHelper::getAxisType(
-        xModel->getChartTypeOfSeries( xSeries ), 0 ); // x-axis
+    sal_Int32 nAxisType = AxisType::CATEGORY;
+    auto xChartType = xModel->getChartTypeOfSeries(xSeries);
+    if (xChartType.is())
+        nAxisType = xChartType->getAxisType(0); // x-axis
 
     bool bUseXValuesIfAvailable = (nAxisType == AxisType::REALNUMBER);
 

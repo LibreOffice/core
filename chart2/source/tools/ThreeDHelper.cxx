@@ -51,8 +51,8 @@ bool lcl_isRightAngledAxesSetAndSupported( const rtl::Reference< Diagram >& xDia
         xDiagram->getPropertyValue( u"RightAngledAxes"_ustr) >>= bRightAngledAxes;
         if(bRightAngledAxes)
         {
-            if( ChartTypeHelper::isSupportingRightAngledAxes(
-                    xDiagram->getChartTypeByIndex( 0 ) ) )
+            auto xChartType = xDiagram->getChartTypeByIndex(0);
+            if (xChartType.is() ? xChartType->isSupportingRightAngledAxes() : true)
             {
                 return true;
             }

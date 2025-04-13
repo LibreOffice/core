@@ -246,7 +246,7 @@ DataPointItemConverter::DataPointItemConverter(
     bool bSwapXAndY = xDiagram->getVertical( bFound, bAmbiguous );
     m_aAvailableLabelPlacements = ChartTypeHelper::getSupportedLabelPlacements( xChartType, bSwapXAndY, xSeries );
 
-    m_bForbidPercentValue = ChartTypeHelper::getAxisType( xChartType, 0 ) != AxisType::CATEGORY;
+    m_bForbidPercentValue = xChartType.is() ? xChartType->getAxisType(0) != AxisType::CATEGORY : false;
 
     if (bDataSeries)
         return;

@@ -436,7 +436,8 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
                 AxisHelper::getCoordinateSystemOfAxis( m_xAxis, m_xChartDoc->getFirstChartDiagram() ) );
             sal_Int32 nDimensionIndex=0; sal_Int32 nAxisIndex=0;
             AxisHelper::getIndicesForAxis(m_xAxis, xCooSys, nDimensionIndex, nAxisIndex );
-            bool bChartTypeAllowsDateAxis = ChartTypeHelper::isSupportingDateAxis( AxisHelper::getChartTypeByIndex( xCooSys, 0 ), nDimensionIndex );
+            auto xChartType = AxisHelper::getChartTypeByIndex(xCooSys, 0);
+            bool bChartTypeAllowsDateAxis = xChartType.is() ? xChartType->isSupportingDateAxis(nDimensionIndex) : true;
             rOutItemSet.Put( SfxBoolItem( nWhichId, bChartTypeAllowsDateAxis ));
         }
         break;

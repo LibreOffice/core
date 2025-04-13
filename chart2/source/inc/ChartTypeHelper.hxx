@@ -32,24 +32,7 @@ class DataSeries;
 class ChartTypeHelper
 {
 public:
-    static bool isSupportingGeometryProperties(  const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool isSupportingStatisticProperties( const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool isSupportingRegressionProperties(const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool isSupportingMainAxis(            const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex );
-    static bool isSupportingSecondaryAxis(       const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool isSupportingAreaProperties(      const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool isSupportingSymbolProperties(    const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool isSupportingOverlapAndGapWidthProperties( const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool isSupportingBarConnectors(       const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool isSupportingRightAngledAxes(     const rtl::Reference< ::chart::ChartType >& xChartType );
-    static bool isSupportingAxisSideBySide(      const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
-    static bool isSupportingStartingAngle(       const rtl::Reference< ::chart::ChartType >& xChartType );
     //starting value for bars or baseline for areas for example
-    static bool isSupportingBaseValue(           const rtl::Reference< ::chart::ChartType >& xChartType );
-    static bool isSupportingAxisPositioning(     const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex );
-    static bool isSupportingDateAxis( const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionIndex );
-    static bool isSupportingComplexCategory( const rtl::Reference< ::chart::ChartType >& xChartType );
-    static bool isSupportingCategoryPositioning( const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nDimensionCount );
     static bool shiftCategoryPosAtXAxisPerDefault(     const rtl::Reference< ::chart::ChartType >& xChartType );
 
     //returns sequence of css::chart::DataLabelPlacement
@@ -68,19 +51,11 @@ public:
     static sal_Int32 getNumberOfDisplayedSeries( const rtl::Reference< ::chart::ChartType >& xChartType, sal_Int32 nNumberOfSeries );
     static bool noBordersForSimpleScheme( const rtl::Reference< ::chart::ChartType >& xChartType );
 
-    static bool isSeriesInFrontOfAxisLine( const rtl::Reference< ::chart::ChartType >& xChartType );
-
-    static sal_Int32 //one of css::chart2::AxisType
-                    getAxisType( const rtl::Reference< ::chart::ChartType >& xChartType
-                                , sal_Int32 nDimensionIndex );
-
     static OUString getRoleOfSequenceForYAxisNumberFormatDetection( const rtl::Reference<
         ::chart::ChartType >& xChartType );
 
     static OUString getRoleOfSequenceForDataLabelNumberFormatDetection( const rtl::Reference<
         ::chart::ChartType >& xChartType );
-
-    static bool isSupportingOnlyDeepStackingFor3D( const rtl::Reference< ::chart::ChartType >& xChartType );
 };
 
 } //namespace chart

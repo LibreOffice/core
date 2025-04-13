@@ -530,7 +530,7 @@ static void lcl_setLightsForScheme( Diagram& rDiagram, const ThreeDLookScheme& r
         rDiagram.getFastPropertyValue( PROP_DIAGRAM_RIGHT_ANGLED_AXES ) >>= bRightAngledAxes; // "RightAngledAxes"
         if(!bRightAngledAxes)
         {
-            if( ChartTypeHelper::isSupportingRightAngledAxes( xChartType ) )
+            if (xChartType.is() ? xChartType->isSupportingRightAngledAxes() : true)
             {
                 ::basegfx::B3DHomMatrix aRotation( lcl_getCompleteRotationMatrix( rDiagram ) );
                 BaseGFXHelper::ReduceToRotationMatrix( aRotation );
@@ -1206,7 +1206,8 @@ rtl::Reference< ChartType > Diagram::getChartTypeByIndex( sal_Int32 nIndex )
 
 bool Diagram::isSupportingDateAxis()
 {
-    return ::chart::ChartTypeHelper::isSupportingDateAxis( getChartTypeByIndex( 0 ), 0 );
+    auto xChartType = getChartTypeByIndex(0);
+    return xChartType.is() ? xChartType->isSupportingDateAxis(0) : true;
 }
 
 static std::vector< rtl::Reference< Axis > > lcl_getAxisHoldingCategoriesFromDiagram(
@@ -1536,7 +1537,7 @@ void Diagram::setDimension( sal_Int32 nNewDimensionCount )
             const std::vector< rtl::Reference< ChartType > > aChartTypeList( xOldCooSys->getChartTypes2() );
             for( rtl::Reference< ChartType > const & xChartType : aChartTypeList )
             {
-                bIsSupportingOnlyDeepStackingFor3D = ChartTypeHelper::isSupportingOnlyDeepStackingFor3D( xChartType );
+                bIsSupportingOnlyDeepStackingFor3D = xChartType.is() ? xChartType->isSupportingOnlyDeepStackingFor3D() : false;
                 if(!xNewCooSys.is())
                 {
                     xNewCooSys = dynamic_cast<BaseCoordinateSystem*>(xChartType->createCoordinateSystem( nNewDimensionCount ).get());
@@ -1848,11 +1849,9 @@ static bool lcl_isRightAngledAxesSetAndSupported( Diagram& rDiagram )
     rDiagram.getFastPropertyValue( PROP_DIAGRAM_RIGHT_ANGLED_AXES ) >>= bRightAngledAxes; // "RightAngledAxes"
     if(bRightAngledAxes)
     {
-        if( ChartTypeHelper::isSupportingRightAngledAxes(
-                rDiagram.getChartTypeByIndex( 0 ) ) )
-        {
+        auto xChartType = rDiagram.getChartTypeByIndex(0);
+        if (xChartType.is() ? xChartType->isSupportingRightAngledAxes() : true)
             return true;
-        }
     }
     return false;
 }
@@ -2052,8 +2051,8 @@ void Diagram::setRotationAngle(
         //rotate lights if RightAngledAxes are not set or not supported
         bool bRightAngledAxes = false;
         getFastPropertyValue( PROP_DIAGRAM_RIGHT_ANGLED_AXES ) >>= bRightAngledAxes;
-        if(!bRightAngledAxes || !ChartTypeHelper::isSupportingRightAngledAxes(
-                    getChartTypeByIndex( 0 ) ) )
+        auto xChartType = getChartTypeByIndex(0);
+        if (!bRightAngledAxes || !(xChartType.is() ? xChartType->isSupportingRightAngledAxes() : true))
         {
             ::basegfx::B3DHomMatrix aNewRotation;
             aNewRotation.rotate( fXAngleRad, fYAngleRad, fZAngleRad );
@@ -2138,8 +2137,7 @@ static bool lcl_isLightScheme( Diagram& rDiagram, bool bRealistic )
         rDiagram.getFastPropertyValue( PROP_DIAGRAM_RIGHT_ANGLED_AXES ) >>= bRightAngledAxes; // "RightAngledAxes"
         if(!bRightAngledAxes)
         {
-            if( ChartTypeHelper::isSupportingRightAngledAxes(
-                    rDiagram.getChartTypeByIndex( 0 ) ) )
+            if (xChartType.is() ? xChartType->isSupportingRightAngledAxes() : true)
             {
                 ::basegfx::B3DHomMatrix aRotation( lcl_getCompleteRotationMatrix( rDiagram ) );
                 BaseGFXHelper::ReduceToRotationMatrix( aRotation );

@@ -25,10 +25,14 @@
 #include <AxisIndexDefines.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <DataSeries.hxx>
-#include <vcl/svapp.hxx>
+#include <servicenames_charttypes.hxx>
+#include <StackMode.hxx>
+#include <DiagramHelper.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
+#include <com/sun/star/chart2/AxisType.hpp>
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 
@@ -315,6 +319,321 @@ void ChartType::fireModifyEvent()
 
     if (bNotifyChanges)
         m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+}
+
+bool ChartType::isSupportingStatisticProperties(sal_Int32 nDimensionCount)
+{
+    //3D charts, pie, net and stock do not support statistic properties
+
+    if (nDimensionCount == 3)
+        return false;
+
+    OUString aChartTypeName = getChartType();
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE))
+        return false;
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET))
+        return false;
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET))
+        return false;
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK))
+        return false;
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE)) //todo: BubbleChart support error bars and trend lines
+        return false;
+
+    return true;
+}
+
+bool ChartType::isSupportingRegressionProperties(sal_Int32 nDimensionCount)
+{
+    // note: old chart: only scatter chart
+    return isSupportingStatisticProperties(nDimensionCount);
+}
+
+bool ChartType::isSupportingGeometryProperties(sal_Int32 nDimensionCount)
+{
+    //form tab only for 3D-bar and 3D-column charts.
+    if (nDimensionCount == 3)
+    {
+        OUString aChartTypeName = getChartType();
+
+        if (aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_BAR)
+            return true;
+
+        if (aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_COLUMN)
+            return true;
+    }
+    return false;
+}
+
+bool ChartType::isSupportingAreaProperties(sal_Int32 nDimensionCount)
+{
+    //2D line charts, net and stock do not support area properties
+    if (nDimensionCount == 2)
+    {
+        OUString aChartTypeName = getChartType();
+        if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE))
+            return false;
+
+        if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER))
+            return false;
+
+        if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET))
+            return false;
+
+        if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK))
+            return false;
+    }
+    return true;
+}
+
+bool ChartType::isSupportingSymbolProperties(sal_Int32 nDimensionCount)
+{
+    //2D line charts, 2D scatter charts and 2D net charts do support symbols
+    if (nDimensionCount == 3)
+        return false;
+
+    OUString aChartTypeName = getChartType();
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE))
+        return true;
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER))
+        return true;
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET))
+        return true;
+
+    return false;
+}
+
+bool ChartType::isSupportingSecondaryAxis(sal_Int32 nDimensionCount)
+{
+    //3D, pie and net charts do not support a secondary axis at all
+    if (nDimensionCount == 3)
+        return false;
+
+    OUString aChartTypeName = getChartType();
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE))
+        return false;
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET))
+        return false;
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET))
+        return false;
+
+    return true;
+}
+
+bool ChartType::isSupportingRightAngledAxes()
+{
+    OUString aChartTypeName = getChartType();
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE))
+        return false;
+    return true;
+}
+
+bool ChartType::isSupportingOverlapAndGapWidthProperties(sal_Int32 nDimensionCount)
+{
+    //2D bar charts do support a this special properties
+    if (nDimensionCount == 3)
+        return false;
+
+    OUString aChartTypeName = getChartType();
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN))
+        return true;
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR))
+        return true;
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM))
+        return true;
+    return false;
+}
+
+bool ChartType::isSupportingBarConnectors(sal_Int32 nDimensionCount)
+{
+    //2D bar charts with stacked series support this
+
+    if (nDimensionCount == 3)
+        return false;
+
+    bool bFound = false;
+    bool bAmbiguous = false;
+    StackMode eStackMode = DiagramHelper::getStackModeFromChartType(this, bFound, bAmbiguous, nullptr);
+    if (eStackMode != StackMode::YStacked || bAmbiguous)
+        return false;
+
+    OUString aChartTypeName = getChartType();
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN))
+        return true;
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR))
+        return true;  // note: old chart was false here
+
+    return false;
+}
+
+bool ChartType::isSupportingAxisSideBySide(sal_Int32 nDimensionCount)
+{
+    bool bResult = false;
+
+    if (nDimensionCount < 3)
+    {
+        bool bFound = false;
+        bool bAmbiguous = false;
+        StackMode eStackMode = DiagramHelper::getStackModeFromChartType(this, bFound, bAmbiguous, nullptr);
+        if (eStackMode == StackMode::NONE && !bAmbiguous)
+        {
+            OUString aChartTypeName = getChartType();
+
+            bResult = aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) ||
+                       aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR);
+        }
+    }
+
+    return bResult;
+}
+
+bool ChartType::isSupportingBaseValue()
+{
+    OUString aChartTypeName = getChartType();
+
+    return aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA);
+}
+
+bool ChartType::isSupportingAxisPositioning(sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex )
+{
+    OUString aChartTypeName = getChartType();
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET))
+        return false;
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET))
+        return false;
+
+    if (nDimensionCount == 3)
+        return nDimensionIndex < 2;
+
+    return true;
+}
+
+bool ChartType::isSupportingMainAxis(sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex)
+{
+    // pie charts do not support axis at all
+    // no 3rd axis for 2D charts
+
+    OUString aChartTypeName = getChartType();
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE))
+        return false;
+
+    if (nDimensionIndex == 2)
+        return nDimensionCount == 3;
+
+    return true;
+}
+
+bool ChartType::isSupportingStartingAngle()
+{
+    OUString aChartTypeName = getChartType();
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE))
+        return true;
+    return false;
+}
+
+bool ChartType::isSupportingDateAxis(sal_Int32 nDimensionIndex)
+{
+    if (nDimensionIndex != 0)
+        return false;
+
+    sal_Int32 nType = getAxisType(nDimensionIndex);
+
+    if (nType != chart2::AxisType::CATEGORY)
+        return false;
+
+    OUString aChartTypeName = getChartType();
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET))
+    {
+        return false;
+    }
+    return true;
+}
+
+bool ChartType::isSupportingComplexCategory()
+{
+    OUString aChartTypeName = getChartType();
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE))
+        return false;
+    return true;
+}
+
+bool ChartType::isSupportingCategoryPositioning(sal_Int32 nDimensionCount)
+{
+    OUString aChartTypeName = getChartType();
+
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA) ||
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE) ||
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK))
+    {
+        return true;
+    }
+    else if (nDimensionCount == 2 &&
+            (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) ||
+             aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) ||
+             aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM)))
+    {
+        return true;
+    }
+    return false;
+}
+
+bool ChartType::isSupportingOnlyDeepStackingFor3D()
+{
+    OUString aChartTypeName = getChartType();
+    return
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE) ||
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) ||
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA);
+}
+
+bool ChartType::isSeriesInFrontOfAxisLine()
+{
+    OUString aChartTypeName = getChartType();
+    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET))
+        return false;
+    return true;
+}
+
+sal_Int32 ChartType::getAxisType(sal_Int32 nDimensionIndex)
+{
+    //returned is a constant from constant group css::chart2::AxisType
+
+    OUString aChartTypeName = getChartType();
+    if (nDimensionIndex == 2) //z-axis
+        return chart2::AxisType::SERIES;
+
+    if (nDimensionIndex == 1) //y-axis
+        return chart2::AxisType::REALNUMBER;
+
+    if (nDimensionIndex == 0) //x-axis
+    {
+        if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER)
+         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE))
+            return chart2::AxisType::REALNUMBER;
+        return chart2::AxisType::CATEGORY;
+    }
+    return chart2::AxisType::CATEGORY;
 }
 
 using impl::ChartType_Base;

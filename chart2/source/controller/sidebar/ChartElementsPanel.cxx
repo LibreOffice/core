@@ -475,8 +475,8 @@ void ChartElementsPanel::updateData()
     mxCB2ndXAxis->set_active(isAxisVisible(mxModel, AxisType::X_SECOND));
     mxCB2ndYAxis->set_active(isAxisVisible(mxModel, AxisType::Y_SECOND));
 
-    bool bSupportsMainAxis = ChartTypeHelper::isSupportingMainAxis(
-            getChartType(mxModel), 0, 0);
+    auto xChartType = getChartType(mxModel);
+    bool bSupportsMainAxis = xChartType.is() ? xChartType->isSupportingMainAxis(0, 0) : true;
     if (bSupportsMainAxis)
     {
         mxCBXAxis->show();

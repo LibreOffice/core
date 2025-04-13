@@ -948,7 +948,7 @@ void VSeriesPlotter::createErrorBar(
     , const double* pfScaledLogicX
     )
 {
-    if( !ChartTypeHelper::isSupportingStatisticProperties( m_xChartTypeModel, m_nDimension ) )
+    if (!m_xChartTypeModel->isSupportingStatisticProperties(m_nDimension))
         return;
 
     if( ! xErrorBarProperties.is())
@@ -1140,7 +1140,7 @@ void VSeriesPlotter::createErrorRectangle(
     rtl::Reference<SvxShapeGroupAnyD> xErrorBorder_ShapesY =
         getErrorBarsGroupShape( rVDataSeries, rTarget, true );
 
-    if( !ChartTypeHelper::isSupportingStatisticProperties( m_xChartTypeModel, m_nDimension ) )
+    if (!m_xChartTypeModel->isSupportingStatisticProperties(m_nDimension))
         return;
 
     try
@@ -2369,7 +2369,7 @@ void VSeriesPlotter::setCoordinateSystemResolution( const Sequence< sal_Int32 >&
 
 bool VSeriesPlotter::WantToPlotInFrontOfAxisLine()
 {
-    return ChartTypeHelper::isSeriesInFrontOfAxisLine( m_xChartTypeModel );
+    return m_xChartTypeModel->isSeriesInFrontOfAxisLine();
 }
 
 bool VSeriesPlotter::shouldSnapRectToUsedArea()
@@ -2789,7 +2789,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
 
         // don't show legend entry of regression curve & friends if this type of chart
         // doesn't support statistics #i63016#, fdo#37197
-        if (!ChartTypeHelper::isSupportingStatisticProperties( m_xChartTypeModel, m_nDimension ))
+        if (!m_xChartTypeModel->isSupportingStatisticProperties(m_nDimension))
             return aResult;
 
         const rtl::Reference< DataSeries >& xRegrCont = rSeries.getModel();

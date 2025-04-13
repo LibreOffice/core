@@ -212,8 +212,11 @@ void ObjectHierarchy::createAxesTree(
 {
     sal_Int32 nDimensionCount = xDiagram->getDimension();
     rtl::Reference< ChartType > xChartType( xDiagram->getChartTypeByIndex( 0 ) );
-    bool bSupportsAxesGrids = ChartTypeHelper::isSupportingMainAxis( xChartType, nDimensionCount, 0 );
-    if( !bSupportsAxesGrids )
+    bool bSupportsAxesGrids = true;
+    if (xChartType.is())
+        bSupportsAxesGrids = xChartType->isSupportingMainAxis(nDimensionCount, 0);
+
+    if (!bSupportsAxesGrids)
         return;
 
     // Data Table
@@ -243,7 +246,7 @@ void ObjectHierarchy::createAxesTree(
         sal_Int32 nDimensionIndex = 0;
         sal_Int32 nAxisIndex = 0;
         AxisHelper::getIndicesForAxis( xAxis, xDiagram, nCooSysIndex, nDimensionIndex, nAxisIndex );
-        if( nAxisIndex>0 && !ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount ) )
+        if (nAxisIndex > 0 && !(xChartType.is() ? xChartType->isSupportingSecondaryAxis(nDimensionCount) : true))
             continue;
 
         if( m_bOrderingForElementSelector )
@@ -351,7 +354,7 @@ void ObjectHierarchy::createDataSeriesTree(
                     }
 
                     // Statistics
-                    if( ChartTypeHelper::isSupportingStatisticProperties( xChartType, nDimensionCount ) )
+                    if (xChartType.is() ? xChartType->isSupportingStatisticProperties(nDimensionCount) : true)
                     {
                         const std::vector< rtl::Reference< RegressionCurveModel > > & rCurves( xSeries->getRegressionCurves2());
                         for( size_t nCurveIdx=0; nCurveIdx<rCurves.size(); ++nCurveIdx )
