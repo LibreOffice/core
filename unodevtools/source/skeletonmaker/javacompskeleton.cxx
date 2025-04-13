@@ -737,11 +737,6 @@ static void generateClassDefinition(std::ostream& o,
       << classname << ".class.getName();\n";
 
     if (!services.empty()) {
-        // additional member needed for passive registration in LOEclipse
-        if (options.passiveregistration) {
-            o << "    private static final String m_serviceName = \""
-              << services.begin()->replace('/','.') << "\";\n";
-        }
         o << "    private static final String[] m_serviceNames = {\n";
         std::set< OUString >::const_iterator iter = services.begin();
         while (iter != services.end()) {
