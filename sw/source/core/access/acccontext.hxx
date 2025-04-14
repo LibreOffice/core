@@ -66,8 +66,7 @@ protected:
 private:
     OUString m_sName;  // immutable outside constructor
 
-    // The parent if it has been retrieved. This is always an
-    // SwAccessibleContext. (protected by Mutex)
+    // The parent if it has been retrieved. (protected by Mutex)
     unotools::WeakReference< SwAccessibleContext > m_xWeakParent;
 
     SwAccessibleMap *m_pMap; // must be protected by solar mutex
