@@ -1910,7 +1910,6 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
     DBG_TESTSOLARMUTEX();
 
     rtl::Reference < ::accessibility::AccessibleShape > xAcc;
-    uno::Reference < XAccessible > xOldCursorAcc;
 
     if( !mpShapeMap && bCreate )
         mpShapeMap.reset(new SwAccessibleShapeMap_Impl( this ));
@@ -1952,10 +1951,6 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
             AddGroupContext(pObj, xAcc);
         }
     }
-
-    // Invalidate focus for old object when map is not locked
-    if( xOldCursorAcc.is() )
-        InvalidateCursorPosition( xOldCursorAcc );
 
     return xAcc;
 }
