@@ -25,18 +25,24 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XParagraph > SwVbaParagraph_BASE;
 
 class SwVbaParagraph : public SwVbaParagraph_BASE
 {
 private:
-    css::uno::Reference< css::text::XTextDocument > mxTextDocument;
+    rtl::Reference< SwXTextDocument > mxTextDocument;
     css::uno::Reference< css::text::XTextRange > mxTextRange;
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaParagraph( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XTextDocument >  xDocument, css::uno::Reference< css::text::XTextRange >  xTextRange );
+    SwVbaParagraph( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                    const css::uno::Reference< css::uno::XComponentContext >& rContext,
+                    rtl::Reference< SwXTextDocument > xDocument,
+                    css::uno::Reference< css::text::XTextRange > xTextRange );
     virtual ~SwVbaParagraph() override;
 
     // XParagraph
@@ -56,10 +62,12 @@ typedef CollTestImplHelper< ooo::vba::word::XParagraphs > SwVbaParagraphs_BASE;
 class SwVbaParagraphs : public SwVbaParagraphs_BASE
 {
 private:
-    css::uno::Reference< css::text::XTextDocument > mxTextDocument;
+    rtl::Reference< SwXTextDocument > mxTextDocument;
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaParagraphs( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::text::XTextDocument >& xDocument );
+    SwVbaParagraphs( const css::uno::Reference< ov::XHelperInterface >& xParent,
+                    const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                    const rtl::Reference< SwXTextDocument >& xDocument );
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;

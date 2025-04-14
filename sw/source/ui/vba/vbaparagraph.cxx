@@ -26,7 +26,10 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaParagraph::SwVbaParagraph( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< text::XTextDocument >  xDocument, uno::Reference< text::XTextRange >  xTextRange ) :
+SwVbaParagraph::SwVbaParagraph( const uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                                const uno::Reference< uno::XComponentContext >& rContext,
+                                rtl::Reference< SwXTextDocument >  xDocument,
+                                uno::Reference< text::XTextRange >  xTextRange ) :
     SwVbaParagraph_BASE( rParent, rContext ), mxTextDocument(std::move( xDocument )), mxTextRange(std::move( xTextRange ))
 {
 }
@@ -38,7 +41,7 @@ SwVbaParagraph::~SwVbaParagraph()
 uno::Reference< word::XRange > SAL_CALL
 SwVbaParagraph::getRange( )
 {
-    return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, dynamic_cast<SwXTextDocument*>(mxTextDocument.get()), mxTextRange->getStart(), mxTextRange->getEnd(), mxTextRange->getText() ) );
+    return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxTextDocument, mxTextRange->getStart(), mxTextRange->getEnd(), mxTextRange->getText() ) );
 }
 
 uno::Any SAL_CALL
@@ -137,7 +140,10 @@ public:
 
 }
 
-SwVbaParagraphs::SwVbaParagraphs( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext > & xContext, const uno::Reference< text::XTextDocument >& xDocument ) : SwVbaParagraphs_BASE( xParent, xContext, new ParagraphCollectionHelper( xDocument ) ), mxTextDocument( xDocument )
+SwVbaParagraphs::SwVbaParagraphs( const uno::Reference< XHelperInterface >& xParent,
+                                const uno::Reference< css::uno::XComponentContext > & xContext,
+                                const rtl::Reference< SwXTextDocument >& xDocument )
+: SwVbaParagraphs_BASE( xParent, xContext, new ParagraphCollectionHelper( xDocument ) ), mxTextDocument( xDocument )
 {
 }
 
