@@ -1753,8 +1753,8 @@ uno::Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
     return xAcc;
 }
 
-uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrame *pFrame,
-                                                     bool bCreate )
+rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetContextImpl(const SwFrame* pFrame,
+                                                                    bool bCreate)
 {
     DBG_TESTSOLARMUTEX();
 
@@ -1878,22 +1878,14 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrame *pFrame,
     return xAcc;
 }
 
-::rtl::Reference < SwAccessibleContext > SwAccessibleMap::GetContextImpl(
-            const SwFrame *pFrame,
-            bool bCreate )
+uno::Reference<XAccessible> SwAccessibleMap::GetContext(const SwFrame* pFrame, bool bCreate)
 {
-    uno::Reference < XAccessible > xAcc( GetContext( pFrame, bCreate ) );
-
-    ::rtl::Reference < SwAccessibleContext > xAccImpl(
-         static_cast< SwAccessibleContext * >( xAcc.get() ) );
-
-    return xAccImpl;
+    return GetContextImpl(pFrame, bCreate);
 }
 
-uno::Reference< XAccessible> SwAccessibleMap::GetContext(
-        const SdrObject *pObj,
-        SwAccessibleContext *pParentImpl,
-        bool bCreate )
+rtl::Reference<::accessibility::AccessibleShape>
+SwAccessibleMap::GetContextImpl(const SdrObject* pObj, SwAccessibleContext* pParentImpl,
+                                bool bCreate)
 {
     DBG_TESTSOLARMUTEX();
 
@@ -1941,6 +1933,12 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
     }
 
     return xAcc;
+}
+
+uno::Reference<XAccessible>
+SwAccessibleMap::GetContext(const SdrObject* pObj, SwAccessibleContext* pParentImpl, bool bCreate)
+{
+    return GetContextImpl(pObj, pParentImpl, bCreate);
 }
 
 bool SwAccessibleMap::IsInSameLevel(const SdrObject* pObj, const SwFEShell* pFESh)
@@ -2025,19 +2023,6 @@ void SwAccessibleMap::AddGroupContext(const SdrObject *pParentObj, uno::Referenc
             }
         }
     }
-}
-
-::rtl::Reference < ::accessibility::AccessibleShape > SwAccessibleMap::GetContextImpl(
-            const SdrObject *pObj,
-            SwAccessibleContext *pParentImpl,
-            bool bCreate )
-{
-    uno::Reference < XAccessible > xAcc( GetContext( pObj, pParentImpl, bCreate ) );
-
-    ::rtl::Reference < ::accessibility::AccessibleShape > xAccImpl(
-         static_cast< ::accessibility::AccessibleShape* >( xAcc.get() ) );
-
-    return xAccImpl;
 }
 
 void SwAccessibleMap::RemoveContext( const SwFrame *pFrame )
