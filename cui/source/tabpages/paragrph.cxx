@@ -1279,6 +1279,8 @@ SvxParaAlignTabPage::SvxParaAlignTabPage(weld::Container* pPage, weld::DialogCon
     , m_xVertAlign(m_xBuilder->weld_label(u"labelFL_VERTALIGN"_ustr))
     , m_xVertAlignSdr(m_xBuilder->weld_label(u"labelST_VERTALIGN_SDR"_ustr))
     , m_xTextDirectionLB(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box(u"comboLB_TEXTDIRECTION"_ustr)))
+    , m_xLabelWordSpacing(m_xBuilder->weld_label(u"labelWordSpacing"_ustr))
+    , m_xWordSpacing(m_xBuilder->weld_metric_spin_button(u"spin_WORD_SPACING"_ustr, FieldUnit::PERCENT))
 {
     SetExchangeSupport();
 
@@ -1361,7 +1363,8 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
         eAdjust = SvxAdjust::Block;
         bAdj = m_xJustify->get_saved_state() == TRISTATE_FALSE ||
             m_xExpandCB->get_state_changed_from_saved() ||
-            m_xLastLineLB->get_value_changed_from_saved();
+            m_xLastLineLB->get_value_changed_from_saved() ||
+            m_xWordSpacing->get_value_changed_from_saved();
     }
 
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_ADJUST );
@@ -1381,6 +1384,7 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
         aAdj.SetAdjust( eAdjust );
         aAdj.SetOneWord( eOneWord );
         aAdj.SetLastBlock( eLastBlock );
+        aAdj.SetPropWordSpacing( m_xWordSpacing->get_value(FieldUnit::PERCENT) );
         rOutSet->Put( aAdj );
         bModified = true;
     }
@@ -1454,6 +1458,18 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
         }
         m_xExpandCB->set_sensitive(bEnable && nLBSelect == 2);
         m_xExpandCB->set_active(SvxAdjust::Block == rAdj.GetOneWord());
+
+        if (m_xJustify->get_active())
+        {
+            m_xLabelWordSpacing->set_sensitive(true);
+            m_xWordSpacing->set_sensitive(true);
+            m_xWordSpacing->set_value(rAdj.GetPropWordSpacing(), FieldUnit::PERCENT);
+        }
+        else
+        {
+            m_xLabelWordSpacing->set_sensitive(false);
+            m_xWordSpacing->set_sensitive(false);
+        }
     }
     else
     {
@@ -1461,6 +1477,8 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
         m_xRight->set_active(false);
         m_xCenter->set_active(false);
         m_xJustify->set_active(false);
+        m_xLabelWordSpacing->set_sensitive(false);
+        m_xWordSpacing->set_sensitive(false);
     }
     m_xLastLineLB->set_active(nLBSelect);
 
@@ -1518,6 +1536,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
     m_xJustify->save_state();
     m_xLastLineLB->save_value();
     m_xExpandCB->save_state();
+    m_xWordSpacing->save_value();
 
     UpdateExample_Impl();
 }
@@ -1533,6 +1552,7 @@ void SvxParaAlignTabPage::ChangesApplied()
     m_xJustify->save_state();
     m_xLastLineLB->save_value();
     m_xExpandCB->save_state();
+    m_xWordSpacing->save_value();
 }
 
 IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl, weld::Toggleable&, void)
@@ -1540,6 +1560,8 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl, weld::Toggleable&, void)
     bool bJustify = m_xJustify->get_active();
     m_xLastLineFT->set_sensitive(bJustify);
     m_xLastLineLB->set_sensitive(bJustify);
+    m_xLabelWordSpacing->set_sensitive(bJustify);
+    m_xWordSpacing->set_sensitive(bJustify);
     bool bLastLineIsBlock = m_xLastLineLB->get_active() == 2;
     m_xExpandCB->set_sensitive(bJustify && bLastLineIsBlock);
     //set last line listbox to entry position 0 if not enabled

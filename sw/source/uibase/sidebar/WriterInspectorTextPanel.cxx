@@ -309,6 +309,7 @@ static OUString PropertyNametoRID(const OUString& rName)
         { "ParaUserDefinedAttributes", RID_PARA_USER_DEFINED_ATTRIBUTES },
         { "ParaVertAlignment", RID_PARA_VERT_ALIGNMENT },
         { "ParaWidows", RID_PARA_WIDOWS },
+        { "ParaWordSpacing", RID_PARA_WORD_SPACING },
         { "ReferenceMark", RID_REFERENCE_MARK },
         { "RightBorder", RID_RIGHT_BORDER },
         { "RightBorderDistance", RID_RIGHT_BORDER_DISTANCE },

@@ -181,14 +181,18 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     SwTwips nLineWidth = rInf.GetLineWidth();
     TextFrameIndex nMaxLen = TextFrameIndex(rInf.GetText().getLength()) - rInf.GetIdx();
 
-    const SvxAdjust aAdjust = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust().GetAdjust();
+    auto aAdjustItem = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
+    const SvxAdjust aAdjust = aAdjustItem.GetAdjust();
 
     // allow up to 20% shrinking of the spaces
     if ( nSpacesInLine )
     {
         static constexpr OUStringLiteral STR_BLANK = u" ";
         sal_Int16 nSpaceWidth = rInf.GetTextSize(STR_BLANK).Width();
-        SwTwips nExtraSpace = nSpacesInLine * (nSpaceWidth/0.8 - nSpaceWidth);
+        float fWordSpacingOptimum = aAdjustItem.GetPropWordSpacing() == 100
+                ? 0.75 // MSO interoperability value
+                : aAdjustItem.GetPropWordSpacing() / 100.0;
+        SwTwips nExtraSpace = nSpacesInLine * nSpaceWidth * (1.0 - fWordSpacingOptimum);
         nLineWidth += nExtraSpace;
         rInf.SetExtraSpace(nExtraSpace);
     }

@@ -361,7 +361,8 @@ ItemInstanceManager* SvxAdjustItem::getItemInstanceManager() const
 
 SvxAdjustItem::SvxAdjustItem(const SvxAdjust eAdjst, const sal_uInt16 nId )
     : SfxEnumItemInterface( nId ),
-    bOneBlock( false ), bLastCenter( false ), bLastBlock( false )
+    bOneBlock( false ), bLastCenter( false ), bLastBlock( false ),
+    nPropWordSpacing(100)
 {
     SetAdjust( eAdjst );
 }
@@ -374,7 +375,8 @@ bool SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const
     return GetAdjust() == rItem.GetAdjust() &&
            bOneBlock == rItem.bOneBlock &&
            bLastCenter == rItem.bLastCenter &&
-           bLastBlock == rItem.bLastBlock;
+           bLastBlock == rItem.bLastBlock &&
+           nPropWordSpacing == rItem.nPropWordSpacing;
 }
 
 size_t SvxAdjustItem::hashCode() const
@@ -384,6 +386,7 @@ size_t SvxAdjustItem::hashCode() const
     o3tl::hash_combine(seed, bOneBlock);
     o3tl::hash_combine(seed, bLastCenter);
     o3tl::hash_combine(seed, bLastBlock);
+    o3tl::hash_combine(seed, nPropWordSpacing);
     return seed;
 }
 
@@ -394,6 +397,7 @@ bool SvxAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_PARA_ADJUST      : rVal <<= static_cast<sal_Int16>(GetAdjust()); break;
         case MID_LAST_LINE_ADJUST : rVal <<= static_cast<sal_Int16>(GetLastBlock()); break;
+        case MID_WORD_SPACING     : rVal <<= static_cast<sal_Int16>(GetPropWordSpacing()); break;
         case MID_EXPAND_SINGLE    :
         {
             rVal <<= bOneBlock;
@@ -427,6 +431,13 @@ bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             }
         }
         break;
+        case MID_WORD_SPACING :
+        {
+            sal_Int16 nVal = -1;
+            rVal >>= nVal;
+            SetPropWordSpacing(nVal);
+        }
+        break;
         case MID_EXPAND_SINGLE :
             ASSERT_CHANGE_REFCOUNTED_ITEM;
             bOneBlock = Any2Bool(rVal);
@@ -452,6 +463,7 @@ bool SvxAdjustItem::GetPresentation
     {
         case SfxItemPresentation::Nameless:
         case SfxItemPresentation::Complete:
+            // TODO Word spacing
             rText = GetValueTextByPos( static_cast<sal_uInt16>(GetAdjust()) );
             return true;
         default: ;//prevent warning

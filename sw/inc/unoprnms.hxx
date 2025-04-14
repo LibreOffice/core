@@ -202,6 +202,7 @@ inline constexpr OUString UNO_NAME_PARA_ADJUST = u"ParaAdjust"_ustr;
 inline constexpr OUString UNO_NAME_PARA_REGISTER_MODE_ACTIVE = u"ParaRegisterModeActive"_ustr;
 inline constexpr OUString UNO_NAME_PARA_STYLE_NAME = u"ParaStyleName"_ustr;
 inline constexpr OUString UNO_NAME_PARA_LAST_LINE_ADJUST = u"ParaLastLineAdjust"_ustr;
+inline constexpr OUString UNO_NAME_PARA_WORD_SPACING = u"ParaWordSpacing"_ustr;
 inline constexpr OUString UNO_NAME_PARA_LINE_NUMBER_COUNT = u"ParaLineNumberCount"_ustr;
 inline constexpr OUString UNO_NAME_PARA_LINE_NUMBER_START_VALUE = u"ParaLineNumberStartValue"_ustr;
 inline constexpr OUString UNO_NAME_BACK_COLOR = u"BackColor"_ustr;

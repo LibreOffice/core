@@ -363,11 +363,13 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
 
     // tdf#158776 for the last full text portion, call Guess() again to allow more text in the
     // adjusted line by shrinking spaces using the know space count from the first Guess() call
-    const SvxAdjust aAdjust = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust().GetAdjust();
+    auto aAdjustItem = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
+    const SvxAdjust aAdjust = aAdjustItem.GetAdjust();
     if ( bFull && aAdjust == SvxAdjust::Block &&
          pGuess->BreakPos() != TextFrameIndex(COMPLETE_STRING) &&
-         rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
-                    DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING) &&
+         ( rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                    DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING) ||
+           aAdjustItem.GetPropWordSpacing() != 100 ) &&
          // tdf#164499 no shrinking in tabulated line
          ( !rInf.GetLast() || !rInf.GetLast()->InTabGrp() ) &&
          // tdf#158436 avoid shrinking at underflow, e.g. no-break space after a

@@ -523,6 +523,7 @@ inline constexpr OUString PROP_ParaLineNumberCount = u"ParaLineNumberCount"_ustr
 inline constexpr OUString PROP_ParaLineNumberStartValue = u"ParaLineNumberStartValue"_ustr;
 inline constexpr OUString PROP_ParaLineSpacing = u"ParaLineSpacing"_ustr;
 inline constexpr OUString PROP_ParaOrphans = u"ParaOrphans"_ustr;
+inline constexpr OUString PROP_ParaWordSpacing = u"ParaWordSpacing"_ustr;
 inline constexpr OUString PROP_ParaRegisterModeActive = u"ParaRegisterModeActive"_ustr;
 inline constexpr OUString PROP_ParaRightMargin = u"ParaRightMargin"_ustr;
 inline constexpr OUString PROP_ParaRightMarginRelative = u"ParaRightMarginRelative"_ustr;

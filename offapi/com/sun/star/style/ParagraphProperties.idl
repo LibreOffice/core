@@ -510,6 +510,13 @@ published service ParagraphProperties
             @since LibreOffice 25.8
          */
         [optional, property] long ParaHyphenationZoneSpread;
+
+        /** specifies the desired word spacing as percentage value relative
+            to the width of the space character.
+
+            @since LibreOffice 25.8
+         */
+        [optional, property] long ParaWordSpacing;
 };
 
 

@@ -2200,6 +2200,7 @@ namespace xmloff::token {
         XML_WINDOW_FONT_COLOR,
         XML_WORD,
         XML_WORD_COUNT,
+        XML_WORD_SPACING,
         XML_WRAP,
         XML_WRAP_CONTOUR,
         XML_WRAP_CONTOUR_MODE,

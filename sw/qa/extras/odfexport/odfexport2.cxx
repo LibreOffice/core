@@ -555,6 +555,18 @@ CPPUNIT_TEST_FIXTURE(Test, tdf163575)
     loadAndReload("tdf163575.docx");
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf159923, "tdf159923.fodt")
+{
+    // This was 2: missing custom shrinking by word-spacing = "75%"
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+DECLARE_ODFEXPORT_TEST(testTdf159923_stretched, "tdf159923_stretched.fodt")
+{
+    // This was 2: missing custom stretching by word-spacing = "750%"
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, tdf145871)
 {
     loadAndReload("tdf145871.odt");

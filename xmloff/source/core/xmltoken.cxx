@@ -2213,6 +2213,7 @@ namespace xmloff::token {
         TOKEN( "window-font-color",               XML_WINDOW_FONT_COLOR ),
         TOKEN( "word",                            XML_WORD ),
         TOKEN( "word-count",                      XML_WORD_COUNT ),
+        TOKEN( "word-spacing",                    XML_WORD_SPACING ),
         TOKEN( "wrap",                            XML_WRAP ),
         TOKEN( "wrap-contour",                    XML_WRAP_CONTOUR ),
         TOKEN( "wrap-contour-mode",               XML_WRAP_CONTOUR_MODE ),

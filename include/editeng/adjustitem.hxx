@@ -44,6 +44,9 @@ class EDITENG_DLLPUBLIC SvxAdjustItem final : public SfxEnumItemInterface
     bool    bLastCenter : 1;
     bool    bLastBlock : 1;
 
+    // desired word spacing in percent of the width of space character in justified text
+    sal_uInt16 nPropWordSpacing;
+
 protected:
     virtual ItemInstanceManager* getItemInstanceManager() const override;
 
@@ -146,6 +149,17 @@ public:
         bLastCenter = 0 != (nFlags & 0x0002);
         bLastBlock = 0 != (nFlags & 0x0004);
     }
+
+    sal_uInt16 GetPropWordSpacing() const
+    {
+        return nPropWordSpacing;
+    }
+
+    void SetPropWordSpacing( sal_uInt16 nVal )
+    {
+        nPropWordSpacing = nVal;
+    }
+
 };
 
 #endif

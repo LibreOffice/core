@@ -184,6 +184,7 @@
         { UNO_NAME_PARA_ADJUST,                         RES_PARATR_ADJUST,             cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_PARA_ADJUST                        }, \
         { UNO_NAME_PARA_EXPAND_SINGLE_WORD,             RES_PARATR_ADJUST,             cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, MID_EXPAND_SINGLE                      }, \
         { UNO_NAME_PARA_LAST_LINE_ADJUST,               RES_PARATR_ADJUST,             cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_LAST_LINE_ADJUST                   }, \
+        { UNO_NAME_PARA_WORD_SPACING,                   RES_PARATR_ADJUST,             cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_WORD_SPACING                       }, \
         { UNO_NAME_PARA_LINE_NUMBER_COUNT,              RES_LINENUMBER,                cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, MID_LINENUMBER_COUNT                   }, \
         { UNO_NAME_PARA_LINE_NUMBER_START_VALUE,        RES_LINENUMBER,                cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, MID_LINENUMBER_STARTVALUE              }, \
         { UNO_NAME_PARA_LINE_SPACING,                   RES_PARATR_LINESPACING,        cppu::UnoType<css::style::LineSpacing>::get(),     PropertyAttribute::MAYBEVOID, CONVERT_TWIPS                          }, \
@@ -447,6 +448,7 @@
                     { UNO_NAME_PARA_ORPHANS, RES_PARATR_ORPHANS,      cppu::UnoType<sal_Int8>::get(),PropertyAttribute::MAYBEVOID,     0},\
                     { UNO_NAME_PARA_EXPAND_SINGLE_WORD, RES_PARATR_ADJUST,      cppu::UnoType<bool>::get()  ,         PROPERTY_NONE, MID_EXPAND_SINGLE   },\
                     { UNO_NAME_PARA_LAST_LINE_ADJUST, RES_PARATR_ADJUST,      cppu::UnoType<sal_Int16>::get(),       PROPERTY_NONE, MID_LAST_LINE_ADJUST},\
+                    { UNO_NAME_PARA_WORD_SPACING, RES_PARATR_ADJUST,          cppu::UnoType<sal_Int16>::get(),       PROPERTY_NONE, MID_WORD_SPACING    },\
                     { UNO_NAME_PARA_LINE_NUMBER_COUNT, RES_LINENUMBER,        cppu::UnoType<bool>::get(),         PROPERTY_NONE ,MID_LINENUMBER_COUNT     },\
                     { UNO_NAME_PARA_LINE_NUMBER_START_VALUE, RES_LINENUMBER,      cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_LINENUMBER_STARTVALUE},\
                     { UNO_NAME_PARA_LINE_SPACING, RES_PARATR_LINESPACING, cppu::UnoType<css::style::LineSpacing>::get(),PROPERTY_NONE,     CONVERT_TWIPS},\

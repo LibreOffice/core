@@ -2113,6 +2113,7 @@ width
 window-font-color
 word
 word-count
+word-spacing
 wrap
 wrap-contour
 wrap-contour-mode

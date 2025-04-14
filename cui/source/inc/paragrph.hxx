@@ -150,6 +150,10 @@ class SvxParaAlignTabPage : public SfxTabPage
 
     std::unique_ptr<svx::FrameDirectionListBox>  m_xTextDirectionLB;
 
+    /// word spacing
+    std::unique_ptr<weld::Label> m_xLabelWordSpacing;
+    std::unique_ptr<weld::MetricSpinButton> m_xWordSpacing;
+
     DECL_LINK(AlignHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(LastLineHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(TextDirectionHdl_Impl, weld::ComboBox&, void);

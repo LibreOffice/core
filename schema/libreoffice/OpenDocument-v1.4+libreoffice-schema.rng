@@ -3161,6 +3161,18 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   </rng:define>
 
   <!-- TODO no proposal -->
+  <rng:define name="style-paragraph-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:word-spacing">
+        <rng:choice>
+          <rng:ref name="positiveLength"/>
+          <rng:ref name="percent"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
   <rng:define name="style-text-properties-attlist" combine="interleave">
     <rng:optional>
       <rng:attribute name="loext:hyphenation-no-caps">

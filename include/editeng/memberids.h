@@ -69,6 +69,7 @@
 #define MID_PARA_ADJUST         0
 #define MID_LAST_LINE_ADJUST    1
 #define MID_EXPAND_SINGLE       2
+#define MID_WORD_SPACING        3
 
 //SvxFontItem
 // Don't use 0 as it used for the whole struct
