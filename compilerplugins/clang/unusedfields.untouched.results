@@ -374,8 +374,6 @@ sfx2/source/doc/doctempl.cxx:103
     DocTempl::(anonymous namespace)::DocTempl_EntryData_Impl mxObjShell SfxObjectShellLock
 sfx2/source/inc/sfxpicklist.hxx:33
     SfxPickList mxImpl std::unique_ptr<SfxPickListImpl>
-sfx2/source/inc/templdgi.hxx:92
-    SfxCommonTemplateDialog_Impl m_aStyleListUpdateFamily Link<void *, void>
 slideshow/source/engine/opengl/TransitionImpl.cxx:1991
     (anonymous namespace)::ThreeFloats x GLfloat
 slideshow/source/engine/opengl/TransitionImpl.cxx:1991

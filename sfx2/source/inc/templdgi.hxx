@@ -89,7 +89,6 @@ protected:
     Link<void*, void> m_aStyleListNewMenu;
     Link<void*, bool> m_aStyleListWaterCan;
     Link<void*, bool> m_aStyleListHasSelectedStyle;
-    Link<void*, void> m_aStyleListUpdateFamily;
     Link<void*, void> m_aStyleListUpdateStyleDependents;
     Link<bool, void> m_aStyleListEnableTreeDrag;
     Link<void*, void> m_aStyleListEnableDelete;
