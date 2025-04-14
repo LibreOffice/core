@@ -220,7 +220,7 @@ public:
 
     virtual ::accessibility::AccessibleControlShape* GetAccControlShapeFromModel
         (css::beans::XPropertySet* pSet) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible>
+    virtual ::accessibility::AccessibleShape*
         GetAccessibleCaption (const css::uno::Reference<css::drawing::XShape>& xShape) override;
     ///=====  Internal  ========================================================
     void SetDrawBroadcaster();
@@ -473,7 +473,7 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
     return nullptr;
 }
 
-css::uno::Reference < css::accessibility::XAccessible >
+::accessibility::AccessibleShape*
 ScChildrenShapes::GetAccessibleCaption (const css::uno::Reference < css::drawing::XShape>& xShape)
 {
     GetCount(); // populate
@@ -481,10 +481,7 @@ ScChildrenShapes::GetAccessibleCaption (const css::uno::Reference < css::drawing
     if (it == maShapesMap.end())
         return nullptr;
     ScAccessibleShapeData* pShape = it->second;
-    rtl::Reference< ::accessibility::AccessibleShape > xNewChild( pShape->pAccShape );
-    if(xNewChild)
-        return xNewChild;
-    return nullptr;
+    return pShape->pAccShape.get();
 }
 
 sal_Int32 ScChildrenShapes::GetCount() const
@@ -1033,30 +1030,25 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
             if( pMarkedObj == pFocusedObj && pUpObj )
             {
                 uno::Reference< drawing::XShape > xUpGroupXShape (pUpObj->getUnoShape(), uno::UNO_QUERY);
-                uno::Reference < XAccessible > xAccGroupShape =
+                ::accessibility::AccessibleShape* pAccGroupShape =
                     const_cast<ScChildrenShapes*>(this)->GetAccessibleCaption( xUpGroupXShape );
-                if( xAccGroupShape.is() )
+                if( pAccGroupShape )
                 {
-                    ::accessibility::AccessibleShape* pAccGroupShape =
-                        static_cast< ::accessibility::AccessibleShape* >(xAccGroupShape.get());
-                    if( pAccGroupShape )
+                    sal_Int64 nCount =  pAccGroupShape->getAccessibleChildCount();
+                    for( sal_Int64 i = 0; i < nCount; i++ )
                     {
-                        sal_Int64 nCount =  pAccGroupShape->getAccessibleChildCount();
-                        for( sal_Int64 i = 0; i < nCount; i++ )
+                        uno::Reference<XAccessible> xAccShape = pAccGroupShape->getAccessibleChild(i);
+                        if (xAccShape.is())
                         {
-                            uno::Reference<XAccessible> xAccShape = pAccGroupShape->getAccessibleChild(i);
-                            if (xAccShape.is())
+                            ::accessibility::AccessibleShape* pChildAccShape =  static_cast< ::accessibility::AccessibleShape* >(xAccShape.get());
+                            uno::Reference< drawing::XShape > xChildShape = pChildAccShape->GetXShape();
+                            if (xChildShape == xMarkedXShape)
                             {
-                                ::accessibility::AccessibleShape* pChildAccShape =  static_cast< ::accessibility::AccessibleShape* >(xAccShape.get());
-                                uno::Reference< drawing::XShape > xChildShape = pChildAccShape->GetXShape();
-                                if (xChildShape == xMarkedXShape)
-                                {
-                                    pChildAccShape->SetState(AccessibleStateType::FOCUSED);
-                                }
-                                else
-                                {
-                                    pChildAccShape->ResetState(AccessibleStateType::FOCUSED);
-                                }
+                                pChildAccShape->SetState(AccessibleStateType::FOCUSED);
+                            }
+                            else
+                            {
+                                pChildAccShape->ResetState(AccessibleStateType::FOCUSED);
                             }
                         }
                     }

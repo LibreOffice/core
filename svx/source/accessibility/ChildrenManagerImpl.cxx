@@ -820,14 +820,15 @@ AccessibleControlShape * ChildrenManagerImpl::GetAccControlShapeFromModel(css::b
     }
     return nullptr;
 }
-uno::Reference<XAccessible>
+
+AccessibleShape*
     ChildrenManagerImpl::GetAccessibleCaption (const uno::Reference<drawing::XShape>& xShape)
 {
     auto I = std::find_if(maVisibleChildren.begin(), maVisibleChildren.end(),
         [&xShape](const ChildDescriptor& rChild) { return rChild.mxShape.get() == xShape.get(); });
     if (I != maVisibleChildren.end())
-        return I->mxAccessibleShape;
-    return uno::Reference<XAccessible> ();
+        return I->mxAccessibleShape.get();
+    return nullptr;
 }
 
 /** Update the <const>SELECTED</const> and the <const>FOCUSED</const> state

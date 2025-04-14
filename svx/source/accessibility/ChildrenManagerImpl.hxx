@@ -261,7 +261,7 @@ public:
     // Add the impl method for IAccessibleParent interface
     virtual AccessibleControlShape* GetAccControlShapeFromModel
         (css::beans::XPropertySet* pSet) override;
-    virtual css::uno::Reference<css::accessibility::XAccessible>
+    virtual AccessibleShape*
         GetAccessibleCaption (const css::uno::Reference<css::drawing::XShape>& xShape) override;
 
 private:

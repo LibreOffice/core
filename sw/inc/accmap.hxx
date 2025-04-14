@@ -271,7 +271,7 @@ public:
     ) override;
     virtual ::accessibility::AccessibleControlShape* GetAccControlShapeFromModel
         (css::beans::XPropertySet* pSet) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible >   GetAccessibleCaption (
+    virtual css::accessibility::XAccessible*   GetAccessibleCaption (
         const css::uno::Reference< css::drawing::XShape > & xShape) override;
 
     // additional Core/Pixel conversions for internal use; also works

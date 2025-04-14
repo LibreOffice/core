@@ -3010,7 +3010,7 @@ bool SwAccessibleMap::ReplaceChild (
     return nullptr;
 }
 
-css::uno::Reference< XAccessible >
+XAccessible*
     SwAccessibleMap::GetAccessibleCaption (const css::uno::Reference< css::drawing::XShape >&)
 {
     return nullptr;
