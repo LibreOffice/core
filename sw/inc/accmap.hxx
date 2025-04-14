@@ -115,7 +115,7 @@ class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
 
     void AppendEvent( const SwAccessibleEvent_Impl& rEvent );
 
-    void InvalidateCursorPosition( const css::uno::Reference<css::accessibility::XAccessible>& rAcc );
+    void InvalidateCursorPosition(const rtl::Reference<SwAccessibleContext>& rxAcc);
     void DoInvalidateShapeSelection(bool bInvalidateFocusMode = false);
 
     void InvalidateShapeSelection();

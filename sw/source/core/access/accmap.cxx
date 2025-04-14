@@ -1084,19 +1084,15 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
     }
 }
 
-void SwAccessibleMap::InvalidateCursorPosition(
-        const uno::Reference< XAccessible >& rAcc )
+void SwAccessibleMap::InvalidateCursorPosition(const rtl::Reference<SwAccessibleContext>& rxAcc)
 {
-    SwAccessibleContext *pAccImpl =
-        static_cast< SwAccessibleContext *>( rAcc.get() );
-    assert(pAccImpl);
-    assert(pAccImpl->GetFrame());
+    assert(rxAcc.is());
+    assert(rxAcc->GetFrame());
     if( GetShell()->ActionPend() )
     {
-        SwAccessibleEvent_Impl aEvent( SwAccessibleEvent_Impl::CARET_OR_STATES,
-                                       pAccImpl,
-                                       SwAccessibleChild(pAccImpl->GetFrame()),
-                                       AccessibleStates::CARET );
+        SwAccessibleEvent_Impl aEvent(SwAccessibleEvent_Impl::CARET_OR_STATES, rxAcc.get(),
+                                      SwAccessibleChild(rxAcc->GetFrame()),
+                                      AccessibleStates::CARET);
         AppendEvent( aEvent );
     }
     else
@@ -1106,8 +1102,8 @@ void SwAccessibleMap::InvalidateCursorPosition(
         // been disposed because it moved out of the visible area.
         // Setting the cursor for such frames is useless and even
         // causes asserts.
-        if( pAccImpl->GetFrame() )
-            pAccImpl->InvalidateCursorPos();
+        if (rxAcc->GetFrame())
+            rxAcc->InvalidateCursorPos();
     }
 }
 
