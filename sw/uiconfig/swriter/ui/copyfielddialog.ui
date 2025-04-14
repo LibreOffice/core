@@ -117,7 +117,7 @@
                         <property name="vexpand">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="value-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="copyfielddialog|extended_tip|value">Enter the contents to add to a user-defined field.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="copyfielddialog|extended_tip|value">Copy the contents of the field for reuse in other documents.</property>
                           </object>
                         </child>
                       </object>
