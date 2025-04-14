@@ -52,7 +52,6 @@ class SVXCORE_DLLPUBLIC PaletteManager : public std::enable_shared_from_this<Pal
     std::unique_ptr<SvColorDialog> m_pColorDlg;
     std::optional<svx::ThemePaletteCollection> moThemePaletteCollection;
 
-    PaletteManager(const PaletteManager* pClone);
 public:
     PaletteManager();
     ~PaletteManager();

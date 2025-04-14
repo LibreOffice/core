@@ -36,8 +36,6 @@ class SimpleOutlinerView;
 class FuSimpleOutlinerText : public FuPoor
 {
 public:
-    static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
-
     virtual bool Command(const CommandEvent& rCEvt) override;
 
     virtual bool KeyInput(const KeyEvent& rKEvt) override;

@@ -163,22 +163,6 @@ struct StyleTransferContext
         , pDestStyleSheetPool(pDest)
     {}
 
-    // Set style sheet pools
-    void setStyleSheetPools(SdStyleSheetPool* pSource, SdStyleSheetPool* pDest) {
-        pSourceStyleSheetPool = pSource;
-        pDestStyleSheetPool = pDest;
-    }
-
-    // Reset/clear all collections
-    void clear() {
-        aGraphicStyles.clear();
-        aCellStyles.clear();
-        aTableStyles.clear();
-        aRenameString.clear();
-        aSlideLayouts.clear();
-        aThemes.clear();
-        // Don't clear pointers to style sheet pools
-    }
 };
 
 /**

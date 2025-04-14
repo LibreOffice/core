@@ -115,33 +115,6 @@ void PDFPasswordRequest::select()
     m_bSelected = true;
 }
 
-class UnsupportedEncryptionFormatRequest:
-    public cppu::WeakImplHelper< task::XInteractionRequest >
-{
-public:
-    UnsupportedEncryptionFormatRequest() {}
-    UnsupportedEncryptionFormatRequest(const UnsupportedEncryptionFormatRequest&) = delete;
-    UnsupportedEncryptionFormatRequest& operator=(const UnsupportedEncryptionFormatRequest&) = delete;
-
-private:
-    virtual ~UnsupportedEncryptionFormatRequest() override {}
-
-    virtual uno::Any SAL_CALL getRequest() override {
-        return uno::Any(
-            task::ErrorCodeRequest(
-                OUString(), uno::Reference< uno::XInterface >(),
-                sal_uInt32(ERRCODE_IO_WRONGVERSION)));
-            //TODO: should be something more informative than crudely reused
-            // ERRCODE_IO_WRONGVERSION
-    }
-
-    virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > >
-    SAL_CALL getContinuations() override {
-        return
-            uno::Sequence< uno::Reference< task::XInteractionContinuation > >();
-    }
-};
-
 } // namespace
 
 namespace pdfi
@@ -172,13 +145,6 @@ bool getPassword( const uno::Reference< task::XInteractionHandler >& xHandler,
     }
 
     return bSuccess;
-}
-
-void reportUnsupportedEncryptionFormat(
-    uno::Reference< task::XInteractionHandler > const & handler)
-{
-    assert(handler.is());
-    handler->handle(new UnsupportedEncryptionFormatRequest);
 }
 
 }

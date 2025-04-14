@@ -223,10 +223,6 @@ namespace pdfi
                       bool                                                 bFirstTry,
                       const OUString&                                 rDocName
                       );
-
-    void reportUnsupportedEncryptionFormat(
-        css::uno::Reference<
-            css::task::XInteractionHandler > const & handler);
 }
 
 #endif

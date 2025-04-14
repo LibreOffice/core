@@ -149,13 +149,6 @@ bool FuSimpleOutlinerText::Command(const CommandEvent& rCEvt)
 }
 
 
-rtl::Reference<FuPoor> FuSimpleOutlinerText::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::SimpleOutlinerView* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
-{
-    rtl::Reference<FuPoor> xFunc( new FuSimpleOutlinerText( pViewSh, pWin, pView, pDoc, rReq ) );
-    xFunc->DoExecute( rReq );
-    return xFunc;
-}
-
 bool FuSimpleOutlinerText::MouseButtonDown(const MouseEvent& rMEvt)
 {
     mpWindow->GrabFocus();
