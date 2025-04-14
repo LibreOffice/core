@@ -1052,12 +1052,8 @@ void SwAccessibleContext::ScrolledInShape( ::accessibility::AccessibleShape *pAc
     vcl::Window *pWin = GetWindow();
     if( pWin && pWin->HasFocus() )
     {
-        AccessibleEventObject aStateChangedEvent;
-        aStateChangedEvent.EventId = AccessibleEventId::STATE_CHANGED;
-        aStateChangedEvent.NewValue <<= AccessibleStateType::FOCUSED;
-        aStateChangedEvent.Source = xAcc;
-
-        FireAccessibleEvent( aStateChangedEvent );
+        pAccImpl->CommitChange(AccessibleEventId::STATE_CHANGED,
+                               uno::Any(AccessibleStateType::FOCUSED), uno::Any(), -1);
     }
 }
 
