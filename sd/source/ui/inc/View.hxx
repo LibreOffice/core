@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <config_features.h>
+
 #include <memory>
 #include <pres.hxx>
 #include <tools/gen.hxx>
