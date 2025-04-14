@@ -1232,7 +1232,7 @@ bool ImpEditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView
                                 LanguageTag aLanguageTag( eLang);
 
                                 if (!mxLocaleDataWrapper.isInitialized())
-                                    mxLocaleDataWrapper.init( SvtSysLocale().GetLocaleData().getComponentContext(), aLanguageTag);
+                                    mxLocaleDataWrapper.init( aLanguageTag);
                                 else
                                     mxLocaleDataWrapper.changeLocale( aLanguageTag);
 

@@ -51,7 +51,6 @@
 
 class OnDemandLocaleDataWrapper
 {
-    css::uno::Reference<css::uno::XComponentContext> m_xContext;
     SvtSysLocale aSysLocale;
     LanguageType eCurrentLanguage;
     LanguageType eLastAnyLanguage;
@@ -71,10 +70,8 @@ public:
 
     bool isInitialized() const { return bInitialized; }
 
-    void init(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-              const LanguageTag& rLanguageTag)
+    void init(const LanguageTag& rLanguageTag)
     {
-        m_xContext = rxContext;
         changeLocale(rLanguageTag);
         bInitialized = true;
     }

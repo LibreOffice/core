@@ -293,7 +293,7 @@ SvNFLanguageData::SvNFLanguageData(const Reference<XComponentContext>& rxContext
     , eEvalDateFormat(NF_EVALDATEFORMAT_INTL)
 {
     xCharClass.changeLocale(xContext, aLanguageTag);
-    xLocaleData.init(xContext, aLanguageTag);
+    xLocaleData.init(aLanguageTag);
     xCalendar.init(xContext, aLanguageTag.getLocale());
     xTransliteration.init(xContext, ActLnge);
 
@@ -320,7 +320,7 @@ SvNFLanguageData::SvNFLanguageData(const SvNFLanguageData& rOther)
     , eEvalDateFormat(rOther.eEvalDateFormat)
 {
     xCharClass.changeLocale(xContext, aLanguageTag);
-    xLocaleData.init(xContext, aLanguageTag);
+    xLocaleData.init(aLanguageTag);
     xCalendar.init(xContext, aLanguageTag.getLocale());
     xTransliteration.init(xContext, ActLnge);
 
