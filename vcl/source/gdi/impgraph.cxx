@@ -326,7 +326,7 @@ const std::shared_ptr<VectorGraphicData>& ImpGraphic::getVectorGraphicData() con
     return maVectorGraphicData;
 }
 
-void BitmapContainer::createSwapInfo(ImpSwapInfo& rSwapInfo)
+void BitmapContainer::createSwapInfo(SwapInfo& rSwapInfo)
 {
     rSwapInfo.maSizePixel = maBitmapEx.GetSizePixel();
 
@@ -340,7 +340,7 @@ void BitmapContainer::createSwapInfo(ImpSwapInfo& rSwapInfo)
     rSwapInfo.mnPageIndex = -1;
 }
 
-void AnimationContainer::createSwapInfo(ImpSwapInfo& rSwapInfo)
+void AnimationContainer::createSwapInfo(SwapInfo& rSwapInfo)
 {
     rSwapInfo.maSizePixel = maAnimation.GetBitmapEx().GetSizePixel();
 

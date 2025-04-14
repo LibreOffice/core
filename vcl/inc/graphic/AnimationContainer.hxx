@@ -12,6 +12,8 @@
 #include <vcl/dllapi.h>
 #include <vcl/animate/Animation.hxx>
 
+struct SwapInfo;
+
 class SAL_DLLPUBLIC_RTTI AnimationContainer final
 {
 public:
@@ -29,7 +31,7 @@ public:
         return maAnimation == rOther.maAnimation;
     }
 
-    void createSwapInfo(ImpSwapInfo& rSwapInfo);
+    void createSwapInfo(SwapInfo& rSwapInfo);
 
     bool isTransparent() const { return maAnimation.IsTransparent(); }
 

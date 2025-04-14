@@ -28,22 +28,8 @@
 #include "graphic/GraphicID.hxx"
 #include "graphic/BitmapContainer.hxx"
 #include "graphic/AnimationContainer.hxx"
+#include "graphic/SwapInfo.hxx"
 #include <optional>
-
-struct ImpSwapInfo
-{
-    MapMode     maPrefMapMode;
-    Size        maPrefSize;
-    Size        maSizePixel;
-
-    bool mbIsAnimated;
-    bool mbIsEPS;
-    bool mbIsTransparent;
-    bool mbIsAlpha;
-
-    sal_uInt32 mnAnimationLoopCount;
-    sal_Int32 mnPageIndex = -1;
-};
 
 class OutputDevice;
 class GfxLink;
@@ -71,7 +57,7 @@ private:
 
     /// If maBitmapEx is empty, this preferred size will be set on it when it gets initialized.
     Size                         maExPrefSize;
-    ImpSwapInfo                  maSwapInfo;
+    SwapInfo maSwapInfo;
     std::shared_ptr<AnimationContainer> mpAnimationContainer;
     std::shared_ptr<ImpSwapFile> mpSwapFile;
     std::shared_ptr<GfxLink>     mpGfxLink;

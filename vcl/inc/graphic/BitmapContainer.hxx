@@ -12,7 +12,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/bitmapex.hxx>
 
-struct ImpSwapInfo;
+struct SwapInfo;
 
 class SAL_DLLPUBLIC_RTTI BitmapContainer final
 {
@@ -28,7 +28,7 @@ public:
 
     bool operator==(const BitmapContainer& rOther) const { return maBitmapEx == rOther.maBitmapEx; }
 
-    void createSwapInfo(ImpSwapInfo& rSwapInfo);
+    void createSwapInfo(SwapInfo& rSwapInfo);
 
     bool isAlpha() { return maBitmapEx.IsAlpha(); }
 
