@@ -127,11 +127,9 @@ private:
 //===== PresenterAccessible ===================================================
 
 PresenterAccessible::PresenterAccessible (
-    css::uno::Reference<css::uno::XComponentContext> xContext,
     ::rtl::Reference<PresenterController> xPresenterController,
     const Reference<drawing::framework::XPane>& rxMainPane)
     : PresenterAccessibleInterfaceBase(m_aMutex),
-      mxComponentContext(std::move(xContext)),
       mpPresenterController(std::move(xPresenterController)),
       mxMainPane(rxMainPane, UNO_QUERY)
 {

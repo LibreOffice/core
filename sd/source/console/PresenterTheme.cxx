@@ -82,11 +82,9 @@ public:
 class ReadContext
 {
 public:
-    Reference<XComponentContext> mxComponentContext;
     Reference<rendering::XCanvas> mxCanvas;
 
     ReadContext (
-        const Reference<XComponentContext>& rxContext,
         const Reference<rendering::XCanvas>& rxCanvas);
 
     /** Read data describing a font from the node that can be reached from
@@ -255,7 +253,7 @@ PresenterTheme::~PresenterTheme()
 
 std::shared_ptr<PresenterTheme::Theme> PresenterTheme::ReadTheme()
 {
-    ReadContext aReadContext(mxContext, mxCanvas);
+    ReadContext aReadContext(mxCanvas);
 
     PresenterConfigurationAccess aConfiguration (
         mxContext,
@@ -644,11 +642,8 @@ namespace {
 
 //===== ReadContext ===========================================================
 
-ReadContext::ReadContext (
-    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-    const Reference<rendering::XCanvas>& rxCanvas)
-    : mxComponentContext(rxContext),
-      mxCanvas(rxCanvas)
+ReadContext::ReadContext(const Reference<rendering::XCanvas>& rxCanvas)
+    : mxCanvas(rxCanvas)
 {
 }
 

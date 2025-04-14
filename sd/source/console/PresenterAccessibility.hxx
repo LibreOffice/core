@@ -52,7 +52,6 @@ class PresenterAccessible
 {
 public:
     PresenterAccessible (
-        css::uno::Reference<css::uno::XComponentContext> xContext,
         ::rtl::Reference<PresenterController> xPresenterController,
         const css::uno::Reference<css::drawing::framework::XPane>& rxMainPane);
     virtual ~PresenterAccessible() override;
@@ -83,7 +82,6 @@ public:
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
 private:
-    const css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     ::rtl::Reference<PresenterController> mpPresenterController;
     css::uno::Reference<css::drawing::framework::XPane2> mxMainPane;
     css::uno::Reference<css::awt::XWindow> mxMainWindow;

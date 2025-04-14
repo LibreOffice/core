@@ -68,12 +68,8 @@ class SvXMLNumImpData
     const LocaleDataWrapper*  pLocaleData { nullptr };
     std::vector<SvXMLNumFmtEntry> m_NameEntries;
 
-    uno::Reference< uno::XComponentContext > m_xContext;
-
 public:
-    SvXMLNumImpData(
-        SvNumberFormatter* pFmt,
-        const uno::Reference<uno::XComponentContext>& rxContext );
+    SvXMLNumImpData(SvNumberFormatter* pFmt);
 
     SvNumberFormatter*      GetNumberFormatter() const  { return pFormatter; }
     const LocaleDataWrapper&    GetLocaleData( LanguageType nLang );
@@ -289,12 +285,9 @@ const SvXMLDefaultDateFormat aDefaultDateFormats[] =
 
 
 SvXMLNumImpData::SvXMLNumImpData(
-    SvNumberFormatter* pFmt,
-    const uno::Reference<uno::XComponentContext>& rxContext )
-:   pFormatter(pFmt),
-    m_xContext(rxContext)
+    SvNumberFormatter* pFmt )
+:   pFormatter(pFmt)
 {
-    SAL_WARN_IF( !rxContext.is(), "xmloff", "got no service manager" );
 }
 
 sal_uInt32 SvXMLNumImpData::GetKeyForName( std::u16string_view rName )
@@ -2282,27 +2275,20 @@ bool SvXMLNumFormatContext::IsSystemLanguage() const
 
 
 SvXMLNumFmtHelper::SvXMLNumFmtHelper(
-    const uno::Reference<util::XNumberFormatsSupplier>& rSupp,
-    const uno::Reference<uno::XComponentContext>& rxContext )
+    const uno::Reference<util::XNumberFormatsSupplier>& rSupp )
 {
-    SAL_WARN_IF( !rxContext.is(), "xmloff", "got no service manager" );
-
     SvNumberFormatter* pFormatter = nullptr;
     SvNumberFormatsSupplierObj* pObj =
                     comphelper::getFromUnoTunnel<SvNumberFormatsSupplierObj>( rSupp );
     if (pObj)
         pFormatter = pObj->GetNumberFormatter();
 
-    m_pData = std::make_unique<SvXMLNumImpData>( pFormatter, rxContext );
+    m_pData = std::make_unique<SvXMLNumImpData>( pFormatter );
 }
 
-SvXMLNumFmtHelper::SvXMLNumFmtHelper(
-    SvNumberFormatter* pNumberFormatter,
-    const uno::Reference<uno::XComponentContext>& rxContext )
+SvXMLNumFmtHelper::SvXMLNumFmtHelper( SvNumberFormatter* pNumberFormatter )
 {
-    SAL_WARN_IF( !rxContext.is(), "xmloff", "got no service manager" );
-
-    m_pData = std::make_unique<SvXMLNumImpData>( pNumberFormatter, rxContext );
+    m_pData = std::make_unique<SvXMLNumImpData>( pNumberFormatter );
 }
 
 SvXMLNumFmtHelper::~SvXMLNumFmtHelper()

@@ -1039,7 +1039,6 @@ void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
         return;
 
     mpAccessibleObject = new PresenterAccessible(
-        mxComponentContext,
         this,
         rxPane);
 

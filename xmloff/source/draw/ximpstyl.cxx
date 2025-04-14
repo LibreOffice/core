@@ -943,7 +943,7 @@ SdXMLStylesContext::SdXMLStylesContext(
 {
     Reference< uno::XComponentContext > xContext = rImport.GetComponentContext();
     mpNumFormatter = std::make_unique<SvNumberFormatter>( xContext, LANGUAGE_SYSTEM );
-    mpNumFmtHelper = std::make_unique<SvXMLNumFmtHelper>( mpNumFormatter.get(), xContext );
+    mpNumFmtHelper = std::make_unique<SvXMLNumFmtHelper>( mpNumFormatter.get() );
 }
 
 SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(

@@ -72,12 +72,9 @@ class SvXMLNumFmtHelper
 
 public:
     SvXMLNumFmtHelper(
-        const css::uno::Reference< css::util::XNumberFormatsSupplier >& rSupp,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        const css::uno::Reference< css::util::XNumberFormatsSupplier >& rSupp );
 
-    SvXMLNumFmtHelper(
-        SvNumberFormatter* pNumberFormatter,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    SvXMLNumFmtHelper( SvNumberFormatter* pNumberFormatter );
 
     ~SvXMLNumFmtHelper();
 

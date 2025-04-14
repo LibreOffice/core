@@ -427,7 +427,7 @@ void SvXMLImport::InitCtor_()
     }
 
     if (mxNumberFormatsSupplier.is())
-        mpNumImport = std::make_unique<SvXMLNumFmtHelper>(mxNumberFormatsSupplier, GetComponentContext());
+        mpNumImport = std::make_unique<SvXMLNumFmtHelper>(mxNumberFormatsSupplier);
 
     if (mxModel.is() && !mxEventListener.is())
     {
@@ -1739,7 +1739,7 @@ void SvXMLImport::CreateDataStylesImport_()
     uno::Reference<util::XNumberFormatsSupplier> xNum =
         GetNumberFormatsSupplier();
     if ( xNum.is() )
-        mpNumImport = std::make_unique<SvXMLNumFmtHelper>(xNum, GetComponentContext() );
+        mpNumImport = std::make_unique<SvXMLNumFmtHelper>(xNum);
 }
 
 sal_Unicode SvXMLImport::ConvStarBatsCharToStarSymbol( sal_Unicode c )
