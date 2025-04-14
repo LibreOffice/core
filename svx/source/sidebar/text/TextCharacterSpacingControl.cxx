@@ -23,6 +23,7 @@
 #include <editeng/kernitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/tbxctrl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <TextCharacterSpacingPopup.hxx>
 #include <svl/itempool.hxx>
@@ -30,6 +31,8 @@
 #include <helpids.h>
 
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 
 #define SPACING_VERY_TIGHT  -30
 #define SPACING_TIGHT       -15
@@ -155,7 +158,7 @@ void TextCharacterSpacingControl::Initialize()
 
 void TextCharacterSpacingControl::ExecuteCharacterSpacing(tools::Long nValue, bool bClose)
 {
-    MapUnit eUnit = GetCoreMetric();
+    MapUnit eUnit = MapUnit::Map100thMM;
 
     tools::Long nSign = (nValue < 0) ? -1 : 1;
     nValue = nValue * nSign;
@@ -163,13 +166,13 @@ void TextCharacterSpacingControl::ExecuteCharacterSpacing(tools::Long nValue, bo
     tools::Long nVal = OutputDevice::LogicToLogic(nValue, MapUnit::MapPoint, eUnit);
     short nKern = (nValue == 0) ? 0 : static_cast<short>(mxEditKerning->denormalize(nVal));
 
-    SvxKerningItem aKernItem(nSign * nKern, SID_ATTR_CHAR_KERNING);
-
-    if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
-    {
-        pViewFrm->GetBindings().GetDispatcher()->ExecuteList(SID_ATTR_CHAR_KERNING,
-            SfxCallMode::RECORD, { &aKernItem });
-    }
+    css::uno::Sequence<css::beans::PropertyValue> aArgs(1);
+    css::beans::PropertyValue* pArgs = aArgs.getArray();
+    pArgs[0].Name = "Spacing";
+    pArgs[0].Value <<= sal_Int16(nSign * nKern);
+    const css::uno::Reference<com::sun::star::frame::XDispatchProvider> xProvider(
+        m_xFrame, css::uno::UNO_QUERY);
+    SfxToolBoxControl::Dispatch(xProvider, u".uno:Spacing"_ustr, aArgs);
 
     if (bClose)
         mxControl->EndPopupMode();
