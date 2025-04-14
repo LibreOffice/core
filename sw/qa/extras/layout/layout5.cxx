@@ -19,6 +19,7 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <editeng/unolingu.hxx>
 
+#include <scriptinfo.hxx>
 #include <rootfrm.hxx>
 #include <wrtsh.hxx>
 #include <txtfrm.hxx>
@@ -1577,6 +1578,46 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf88908)
                 u"                                  Without  the  fix,  ");
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]", "portion",
                 u"this  will  use  one  line");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf166152)
+{
+    createSwDoc("tdf166152.fodt");
+
+    auto* pWrtShell = getSwDocShell()->GetWrtShell();
+    auto& rTextFrame
+        = dynamic_cast<SwTextFrame&>(*pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower());
+    const SwScriptInfo* pSI = rTextFrame.GetScriptInfo();
+
+    // Sanity check script changes before the edit
+    CPPUNIT_ASSERT_EQUAL(size_t(8), pSI->CountScriptChg());
+
+    std::vector<sal_Int32> aExpectedChgBefore{ 5, 10, 15, 20, 25, 30, 35, 40 };
+    std::vector<sal_uInt8> aExpectedTypeBefore{ 3, 1, 3, 1, 3, 1, 3, 1 };
+    for (size_t i = 0; i < 8; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(aExpectedChgBefore.at(i), pSI->GetScriptChg(i).get());
+        CPPUNIT_ASSERT_EQUAL(aExpectedTypeBefore.at(i), pSI->GetScriptType(i));
+    }
+
+    // Insert text somewhere in the middle of the document.
+    // This causes an incremental update of the script change vector.
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect*/ false, /*nCount*/ 17,
+                     /*bBasicCall*/ false);
+    pWrtShell->Insert(u"A"_ustr);
+
+    // Check script changes after edit
+    //
+    // Without the fix, the count of script changes will be 11
+    CPPUNIT_ASSERT_EQUAL(size_t(8), pSI->CountScriptChg());
+
+    std::vector<sal_Int32> aExpectedChgAfter{ 5, 10, 15, 21, 26, 31, 36, 41 };
+    std::vector<sal_uInt8> aExpectedTypeAfter{ 3, 1, 3, 1, 3, 1, 3, 1 };
+    for (size_t i = 0; i < 8; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(aExpectedChgAfter.at(i), pSI->GetScriptChg(i).get());
+        CPPUNIT_ASSERT_EQUAL(aExpectedTypeAfter.at(i), pSI->GetScriptType(i));
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
