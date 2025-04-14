@@ -16,7 +16,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,fontconfig,0))
 $(eval $(call gb_UnpackedTarball_add_patches,fontconfig,\
 	external/fontconfig/fontconfig-2.12.1.patch.1 \
 	external/fontconfig/nowarnnoconfig.patch.1 \
-	external/fontconfig/windowsfonts.patch \
 ))
 
 ifneq ($(OS),MACOSX)
@@ -26,6 +25,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,fontconfig,\
 endif
 
 ifeq ($(COM),MSC)
+
+$(eval $(call gb_UnpackedTarball_add_patches,fontconfig,\
+	external/fontconfig/windowsfonts.patch \
+))
 
 $(eval $(call gb_UnpackedTarball_add_file,fontconfig,config.h,external/fontconfig/configs/wnt_fontconfig_config.h))
 $(eval $(call gb_UnpackedTarball_add_file,fontconfig,fc-case/fccase.h,external/fontconfig/configs/wnt_fontconfig_fccase.h))
