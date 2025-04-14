@@ -31,6 +31,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_tiledrendering2, \
     sc \
     scfilt \
     scui \
+    scqahelper \
     subsequenttest \
     test \
     unotest \
@@ -49,6 +50,7 @@ $(eval $(call gb_CppunitTest_use_externals,sc_tiledrendering2,\
 $(eval $(call gb_CppunitTest_set_include,sc_tiledrendering2,\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/inc \
+	-I$(SRCDIR)/sc/qa/unit/helper \
     $$(INCLUDE) \
 ))
 

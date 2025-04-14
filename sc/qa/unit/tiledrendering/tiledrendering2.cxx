@@ -7,12 +7,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "tiledrenderingmodeltestbase.cxx"
+#include <sctiledrenderingtest.hxx>
 
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <vcl/scheduler.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
+#include <sctestviewcallback.hxx>
+#include <docuno.hxx>
+#include <tabvwsh.hxx>
 
 using namespace com::sun::star;
 
@@ -20,11 +27,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSidebarLocale)
 {
     ScModelObj* pModelObj = createDoc("chart.ods");
     int nView1 = SfxLokHelper::getView();
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     SfxViewShell* pView1 = SfxViewShell::Current();
     pView1->SetLOKLocale(u"en-US"_ustr);
     SfxLokHelper::createView();
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
     SfxViewShell* pView2 = SfxViewShell::Current();
     pView2->SetLOKLocale(u"de-DE"_ustr);
     TestLokCallbackWrapper::InitializeSidebar();
@@ -48,7 +55,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCopyMultiSelection)
 {
     // Given a document with A1 and A3 as selected cells:
     ScModelObj* pModelObj = createDoc("multi-selection.ods");
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     // Get the center of A3:
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
         comphelper::makePropertyValue(u"ToPoint"_ustr, u"$A$3"_ustr),
@@ -81,7 +88,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCopyMultiSelection)
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCursorJumpOnFailedSearch)
 {
     createDoc("empty.ods");
-    ViewCallback aView;
+    ScTestViewCallback aView;
 
     // Go to lower cell
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
@@ -112,7 +119,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLocaleFormulaSeparator)
     ScDocument* pDoc = pModelObj->GetDocument();
 
     ScAddress addr(2, 0, 0);
-    lcl_typeCharsInCell("=subtotal(9,A1:A8", addr.Col(), addr.Row(), pView, pModelObj, false, true);
+    typeCharsInCell("=subtotal(9,A1:A8", addr.Col(), addr.Row(), pView, pModelObj, false, true);
     // Without the fix it would fail with
     // - Expected: 0
     // - Actual  : Err:508
@@ -123,7 +130,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDecimalSeparatorInfo)
 {
     createDoc("decimal-separator.ods");
 
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
 
     // Go to cell A1.
     uno::Sequence<beans::PropertyValue> aPropertyValues

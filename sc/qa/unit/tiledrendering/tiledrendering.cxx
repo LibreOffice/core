@@ -7,11 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "tiledrenderingmodeltestbase.cxx"
-#include <test/helper/transferable.hxx>
+#include <sctiledrenderingtest.hxx>
+
+#include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/datatransfer/clipboard/LokClipboard.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
+
+#include <test/helper/transferable.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -20,7 +23,8 @@
 #include <svl/stritem.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
-
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <vcl/scheduler.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/dispatchcommand.hxx>
@@ -30,11 +34,11 @@
 #include <svx/svdpage.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/virdev.hxx>
-#include <sc.hrc>
 #include <tools/json_writer.hxx>
-#include <postit.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
+#include <sc.hrc>
+#include <postit.hxx>
 #include <attrib.hxx>
 #include <scitems.hxx>
 #include <document.hxx>
@@ -42,6 +46,11 @@
 #include <drwlayer.hxx>
 #include <editutil.hxx>
 #include <undomanager.hxx>
+#include <docsh.hxx>
+#include <tabvwsh.hxx>
+#include <sctestviewcallback.hxx>
+
+using namespace com::sun::star;
 
 static std::ostream& operator<<(std::ostream& os, ViewShellId const & id)
 {
@@ -207,10 +216,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEmptyColumnSelection)
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testViewCursors)
 {
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     SfxLokHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2(/*bDeleteListenerOnDestruct*/false);
+    ScTestViewCallback aView2(/*bDeleteListenerOnDestruct*/false);
     // This was false, the new view did not get the view (cell) cursor of the old view.
     CPPUNIT_ASSERT(aView2.m_bViewCursorInvalidated);
     CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated);
@@ -243,10 +252,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextViewSelection)
 {
     // Create two views, and leave the second one current.
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     SfxLokHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
 
     // Create a selection on two cells in the second view, that's a text selection in LOK terms.
     aView1.m_bTextViewSelectionInvalidated = false;
@@ -276,10 +285,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testViewLock)
 {
     // Load a document that has a shape and create two views.
     ScModelObj* pModelObj = createDoc("shape.ods");
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     SfxLokHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
 
     // Begin text edit in the second view and assert that the first gets a lock
     // notification.
@@ -325,7 +334,7 @@ void lcl_extractHandleParameters(std::string_view selection, sal_uInt32& id, sal
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMoveShapeHandle)
 {
     ScModelObj* pModelObj = createDoc("shape.ods");
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 1, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     Scheduler::ProcessEventsToIdle();
@@ -423,7 +432,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViews)
     CPPUNIT_ASSERT(pViewData);
 
     // view #1
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
     // text edit a cell in view #1
@@ -435,7 +444,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViews)
     // view #2
     SfxLokHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
 
     // move cell cursor i view #2
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
@@ -455,13 +464,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViewInvalidations)
 
     // view #1
     int nView1 = SfxLokHelper::getView();
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
     // view #2
     SfxLokHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
 
     // text edit a cell in view #1
     SfxLokHelper::setView(nView1);
@@ -492,7 +501,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViewInvalidations)
     // view #3
     SfxLokHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView3;
+    ScTestViewCallback aView3;
 
     // text edit a cell in view #1
     SfxLokHelper::setView(nView1);
@@ -507,7 +516,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCreateViewGraphicSelection)
 {
     // Load a document that has a shape and create two views.
     ScModelObj* pModelObj = createDoc("shape.ods");
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
 
     // Mark the graphic in the first view.
     const ScViewData* pViewData = ScDocShell::GetViewData();
@@ -527,7 +536,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCreateViewGraphicSelection)
     int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
     CPPUNIT_ASSERT(aView2.m_bGraphicViewSelection);
     CPPUNIT_ASSERT(aView1.m_bGraphicViewSelection);
 
@@ -539,7 +548,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGraphicInvalidate)
 {
     // Load a document that has a shape and create two views.
     ScModelObj* pModelObj = createDoc("shape.ods");
-    ViewCallback aView;
+    ScTestViewCallback aView;
 
     // Click to select graphic
     aView.m_bGraphicSelection = false;
@@ -565,7 +574,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoSum)
 {
     createDoc("small.ods");
 
-    ViewCallback aView;
+    ScTestViewCallback aView;
 
     uno::Sequence<beans::PropertyValue> aArgs;
     dispatchCommand(mxComponent, u".uno:AutoSum"_ustr, aArgs);
@@ -635,7 +644,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateOnCopyPasteCells)
     CPPUNIT_ASSERT(pModelObj);
 
     // view
-    ViewCallback aView;
+    ScTestViewCallback aView;
 
     uno::Sequence<beans::PropertyValue> aArgs;
     // select and copy cells
@@ -669,7 +678,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateOnInserRowCol)
     CPPUNIT_ASSERT(pModelObj);
 
     // view
-    ViewCallback aView;
+    ScTestViewCallback aView;
 
     uno::Sequence<beans::PropertyValue> aArgs;
     // move downward
@@ -715,13 +724,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
 
     {
         ScModelObj* pModelObj = createDoc("small.ods");
-        ViewCallback aView1;
+        ScTestViewCallback aView1;
         int nView1 = SfxLokHelper::getView();
 
         // Create a 2nd view
         SfxLokHelper::createView();
         pModelObj->initializeForTiledRendering({});
-        ViewCallback aView2;
+        ScTestViewCallback aView2;
 
         SfxLokHelper::setView(nView1);
 
@@ -825,13 +834,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoLimiting)
 
     // view #1
     int nView1 = SfxLokHelper::getView();
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
 
     // view #2
     SfxLokHelper::createView();
     int nView2 = SfxLokHelper::getView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
 
     // text edit a cell in view #1
     SfxLokHelper::setView(nView1);
@@ -883,13 +892,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoRepairDispatch)
 
     // view #1
     int nView1 = SfxLokHelper::getView();
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
 
     // view #2
     SfxLokHelper::createView();
     int nView2 = SfxLokHelper::getView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
 
     // text edit a cell in view #1
     SfxLokHelper::setView(nView1);
@@ -927,7 +936,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertGraphicInvalidations)
     CPPUNIT_ASSERT(pViewData);
 
     // view
-    ViewCallback aView;
+    ScTestViewCallback aView;
 
     // we need to paint a tile in the view for triggering the tile invalidation solution
     int nCanvasWidth = 256;
@@ -1377,7 +1386,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPageDownInvalidation)
     CPPUNIT_ASSERT(pViewData);
 
     int nView1 = SfxLokHelper::getView();
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
     SfxLokHelper::setView(nView1);
@@ -1422,7 +1431,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetChangeNoInvalidation)
     CPPUNIT_ASSERT(pView);
 
     int nView1 = SfxLokHelper::getView();
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
     SfxLokHelper::setView(nView1);
@@ -1454,7 +1463,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetChangeNoInvalidation)
     // we change B1 there should be an invalidation in the second sheet for the
     // range that depends on it. Because this is a single user document with no
     // active view on the 2nd sheet this will happen on switching back to sheet 2
-    lcl_typeCharsInCell("101", 1, 0, pView, pModelObj); // Type '101' in B1
+    typeCharsInCell("101", 1, 0, pView, pModelObj); // Type '101' in B1
     aView1.ClearAllInvalids();
 
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
@@ -1490,7 +1499,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertDeletePageInvalidation)
     CPPUNIT_ASSERT(pViewData);
 
     int nView1 = SfxLokHelper::getView();
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
     SfxLokHelper::setView(nView1);
@@ -1531,7 +1540,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetRowColumnHeadersInvalidation)
     CPPUNIT_ASSERT(pViewData);
 
     int nView1 = SfxLokHelper::getView();
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
     SfxLokHelper::setView(nView1);
@@ -1575,7 +1584,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testJumpHorizontallyInvalidation)
     CPPUNIT_ASSERT(pViewData);
 
     int nView1 = SfxLokHelper::getView();
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
     SfxLokHelper::setView(nView1);
@@ -1599,7 +1608,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testJumpToLastRowInvalidation)
     CPPUNIT_ASSERT(pViewData);
 
     int nView1 = SfxLokHelper::getView();
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
     SfxLokHelper::setView(nView1);
@@ -1622,14 +1631,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnHeaders)
     CPPUNIT_ASSERT(pViewData);
 
     // view #1
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     int nView1 = SfxLokHelper::getView();
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
     // view #2
     SfxLokHelper::createView();
     int nView2 = SfxLokHelper::getView();
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
 
     // ViewRowColumnHeaders test
@@ -1863,13 +1872,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetGeometryDataInvariance)
     CPPUNIT_ASSERT(pViewData);
 
     // view #1
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     int nView1 = SfxLokHelper::getView();
 
     // view #2
     SfxLokHelper::createView();
     int nView2 = SfxLokHelper::getView();
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
 
     // Try with the default empty document once (nIdx = 0) and then with sheet geometry settings (nIdx = 1)
@@ -1987,7 +1996,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetGeometryDataCorrectness)
     CPPUNIT_ASSERT(pViewData);
 
     // view #1
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
 
     // with the default empty sheet and test the JSON encoding.
     OString aGeomDefaultStr = pModelObj->getSheetGeometryData(/*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
@@ -2013,7 +2022,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDeleteCellMultilineContent)
     CPPUNIT_ASSERT(pDocSh);
 
     // view #1
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
     aView1.m_sInvalidateHeader = ""_ostr;
@@ -2051,7 +2060,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPasteIntoWrapTextCell)
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
 
-    ViewCallback aView;
+    ScTestViewCallback aView;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
@@ -2128,7 +2137,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSortAscendingDescending)
     ScModelObj* pModelObj = createDoc("sort-range.ods");
     ScDocument* pDoc = pModelObj->GetDocument();
 
-    ViewCallback aView;
+    ScTestViewCallback aView;
 
     // select the values in the first column
     pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, 551, 129, 1, MOUSE_LEFT, 0);
@@ -2186,19 +2195,19 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoInputStringBlock)
     pDoc->SetString(ScAddress(0, 7, 0), u"ZZZ"_ustr);  // A8
 
     ScAddress aA1(0, 0, 0);
-    lcl_typeCharsInCell("X", aA1.Col(), aA1.Row(), pView, pModelObj); // Type 'X' in A1
+    typeCharsInCell("X", aA1.Col(), aA1.Row(), pView, pModelObj); // Type 'X' in A1
     CPPUNIT_ASSERT_EQUAL_MESSAGE("A1 should autocomplete", u"XYZ"_ustr, pDoc->GetString(aA1));
 
     ScAddress aA3(0, 2, 0); // Adjacent to the string "superblock" A4:A8
-    lcl_typeCharsInCell("X", aA3.Col(), aA3.Row(), pView, pModelObj); // Type 'X' in A3
+    typeCharsInCell("X", aA3.Col(), aA3.Row(), pView, pModelObj); // Type 'X' in A3
     CPPUNIT_ASSERT_EQUAL_MESSAGE("A3 should autocomplete", u"XYZ"_ustr, pDoc->GetString(aA3));
 
     ScAddress aA9(0, 8, 0); // Adjacent to the string "superblock" A4:A8
-    lcl_typeCharsInCell("X", aA9.Col(), aA9.Row(), pView, pModelObj); // Type 'X' in A9
+    typeCharsInCell("X", aA9.Col(), aA9.Row(), pView, pModelObj); // Type 'X' in A9
     CPPUNIT_ASSERT_EQUAL_MESSAGE("A9 should autocomplete", u"XYZ"_ustr, pDoc->GetString(aA9));
 
     ScAddress aA11(0, 10, 0);
-    lcl_typeCharsInCell("X", aA11.Col(), aA11.Row(), pView, pModelObj); // Type 'X' in A11
+    typeCharsInCell("X", aA11.Col(), aA11.Row(), pView, pModelObj); // Type 'X' in A11
     CPPUNIT_ASSERT_EQUAL_MESSAGE("A11 should autocomplete", u"XYZ"_ustr, pDoc->GetString(aA11));
 }
 
@@ -2220,31 +2229,31 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoInputExactMatch)
     pDoc->SetString(ScAddress(0, 6, 0), u"Castle"_ustr);  // A7
 
     ScAddress aA8(0, 7, 0);
-    lcl_typeCharsInCell("S", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "S" in A8
+    typeCharsInCell("S", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "S" in A8
     // Should show the partial completion "i".
     CPPUNIT_ASSERT_EQUAL_MESSAGE("1: A8 should have partial completion Si", u"Si"_ustr, pDoc->GetString(aA8));
 
-    lcl_typeCharsInCell("Si", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Si" in A8
+    typeCharsInCell("Si", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Si" in A8
     // Should not show any suggestions.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("2: A8 should not show suggestions", u"Si"_ustr, pDoc->GetString(aA8));
 
-    lcl_typeCharsInCell("Sim", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Sim" in A8
+    typeCharsInCell("Sim", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Sim" in A8
     // Should autocomplete to "Simple" which is the only match.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("3: A8 should autocomplete", u"Simple"_ustr, pDoc->GetString(aA8));
 
-    lcl_typeCharsInCell("Sin", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Sin" in A8
+    typeCharsInCell("Sin", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Sin" in A8
     // Should autocomplete to "Sing" which is the only match.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("4: A8 should autocomplete", u"Sing"_ustr, pDoc->GetString(aA8));
 
-    lcl_typeCharsInCell("C", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "C" in A8
+    typeCharsInCell("C", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "C" in A8
     // Should show the partial completion "as".
     CPPUNIT_ASSERT_EQUAL_MESSAGE("5: A8 should have partial completion Cas", u"Cas"_ustr, pDoc->GetString(aA8));
 
-    lcl_typeCharsInCell("Cast", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Cast" in A8
+    typeCharsInCell("Cast", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "Cast" in A8
     // Should autocomplete to "Castle" which is the only match.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("6: A8 should autocomplete", u"Castle"_ustr, pDoc->GetString(aA8));
 
-    lcl_typeCharsInCell("T", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "T" in A8
+    typeCharsInCell("T", aA8.Col(), aA8.Row(), pView, pModelObj); // Type "T" in A8
     // Should autocomplete to "Time" which is the only match.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("7: A8 should autocomplete", u"Time"_ustr, pDoc->GetString(aA8));
 }
@@ -2256,7 +2265,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditCursorBounds)
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScDocument* pDoc = pModelObj->GetDocument();
 
-    ViewCallback aView;
+    ScTestViewCallback aView;
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView);
     comphelper::LibreOfficeKit::setViewIdForVisCursorInvalidation(true);
@@ -2299,7 +2308,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextSelectionBounds)
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScDocument* pDoc = pModelObj->GetDocument();
 
-    ViewCallback aView;
+    ScTestViewCallback aView;
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView);
     comphelper::LibreOfficeKit::setViewIdForVisCursorInvalidation(true);
@@ -2381,7 +2390,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetViewDataCrash)
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextBoxInsert)
 {
     createDoc("empty.ods");
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
 
     // insert textbox
     uno::Sequence<beans::PropertyValue> aArgs(
@@ -2407,7 +2416,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
 
     {
         ScModelObj* pModelObj = createDoc("empty.ods");
-        ViewCallback aView;
+        ScTestViewCallback aView;
         int nView = SfxLokHelper::getView();
 
         SfxLokHelper::setView(nView);
@@ -2415,7 +2424,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
         CPPUNIT_ASSERT(pTabViewShell);
 
-        lcl_typeCharsInCell("ABC", 0, 0, pTabViewShell, pModelObj); // Type "ABC" in A1
+        typeCharsInCell("ABC", 0, 0, pTabViewShell, pModelObj); // Type "ABC" in A1
 
         pTabViewShell->SetCursor(1, 1);
 
@@ -2499,7 +2508,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidEntrySave)
     CPPUNIT_ASSERT(pModelObj);
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     const ScDocument* pDoc = pModelObj->GetDocument();
-    ViewCallback aView;
+    ScTestViewCallback aView;
     int nView = SfxLokHelper::getView();
 
     SfxLokHelper::setView(nView);
@@ -2510,7 +2519,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidEntrySave)
 
     // Type partial date "7/8" of "7/8/2013" that
     // the validation cell at A8 can accept
-    lcl_typeCharsInCell("7/8", 0, 7, pTabViewShell, pModelObj,
+    typeCharsInCell("7/8", 0, 7, pTabViewShell, pModelObj,
         false /* bInEdit */, false /* bCommit */); // Type "7/8" in A8
 
     uno::Sequence<beans::PropertyValue> aArgs;
@@ -2519,7 +2528,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidEntrySave)
     CPPUNIT_ASSERT_MESSAGE("Should not be marked modified after save", !pDocSh->IsModified());
 
     // Complete the date in A8 by appending "/2013" and commit.
-    lcl_typeCharsInCell("/2013", 0, 7, pTabViewShell, pModelObj,
+    typeCharsInCell("/2013", 0, 7, pTabViewShell, pModelObj,
         true /* bInEdit */, true /* bCommit */);
 
     // This would hang if the date entered "7/8/2013" is not acceptable.
@@ -2540,13 +2549,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReordering)
 
     // view #1
     int nView1 = SfxLokHelper::getView();
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
 
     // view #2
     SfxLokHelper::createView();
     int nView2 = SfxLokHelper::getView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
 
     // text edit a cell in view #1
     SfxLokHelper::setView(nView1);
@@ -2601,14 +2610,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingRedo)
     // view #1
     int nView1 = SfxLokHelper::getView();
     SfxViewShell* pView1 = SfxViewShell::Current();
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
 
     // view #2
     SfxLokHelper::createView();
     int nView2 = SfxLokHelper::getView();
     SfxViewShell* pView2 = SfxViewShell::Current();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
 
     // text edit a cell in view #1
     SfxLokHelper::setView(nView1);
@@ -2690,13 +2699,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingMulti)
 
     // view #1
     int nView1 = SfxLokHelper::getView();
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
 
     // view #2
     SfxLokHelper::createView();
     int nView2 = SfxLokHelper::getView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
 
     // text edit a cell in view #1
     SfxLokHelper::setView(nView1);
@@ -2756,12 +2765,12 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
 
     ScModelObj* pModelObj = createDoc("empty.ods");
     int nFirstViewId = SfxLokHelper::getView();
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
 
     CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
     // Create a second view
     SfxLokHelper::createView();
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
     CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
     // Set second view to dark scheme
     {
@@ -2823,7 +2832,7 @@ void testInvalidateOnTextEditWithDifferentZoomLevels::TestBody(const ColRowZoom&
         sZoomUnoCmd = ".uno:ZoomMinus";
     }
     // view #1
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     // set zoom level
     for (int i = 0; i < nZoomLevel; ++i)
         dispatchCommand(mxComponent, sZoomUnoCmd, {});
@@ -2849,7 +2858,7 @@ void testInvalidateOnTextEditWithDifferentZoomLevels::TestBody(const ColRowZoom&
     // view #2
     SfxLokHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
     Scheduler::ProcessEventsToIdle();
     auto* pTabViewShell2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pTabViewShell2);
@@ -2872,9 +2881,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testOpenURL)
     // Given a document that has 2 views:
     createDoc("empty.ods");
     int nView1 = SfxLokHelper::getView();
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     SfxLokHelper::createView();
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
 
     // When clicking on a link in view 2, but switching to view 1 before processing async events:
     ScGlobal::OpenURL(/*aUrl=*/u"http://www.example.com/"_ustr, /*aTarget=*/u""_ustr,
@@ -2900,7 +2909,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateForSplitPanes)
     CPPUNIT_ASSERT(pView);
 
     // view
-    ViewCallback aView;
+    ScTestViewCallback aView;
 
     // move way over to the right where BP:20 exists, enough so that rows A and B
     // would scroll off the page and not be visible, if they were not frozen
@@ -2915,7 +2924,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateForSplitPanes)
     aView.m_bInvalidateTiles = false;
     aView.m_aInvalidations.clear();
 
-    lcl_typeCharsInCell("X", aBP20.Col(), aBP20.Row(), pView, pModelObj); // Type 'X' in A1
+    typeCharsInCell("X", aBP20.Col(), aBP20.Row(), pView, pModelObj); // Type 'X' in A1
 
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
 
@@ -2952,7 +2961,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoInvalidateOnSave)
     Scheduler::ProcessEventsToIdle();
 
     // track invalidations
-    ViewCallback aView;
+    ScTestViewCallback aView;
 
     uno::Sequence<beans::PropertyValue> aArgs;
     dispatchCommand(mxComponent, u".uno:Save"_ustr, aArgs);
@@ -2960,60 +2969,6 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoInvalidateOnSave)
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(!aView.m_bInvalidateTiles);
-}
-
-void ScTiledRenderingTest::checkSampleInvalidation(const ViewCallback& rView, bool bFullRow)
-{
-    // we expect invalidations, but that isn't really important
-    CPPUNIT_ASSERT(rView.m_bInvalidateTiles);
-    tools::Rectangle aInvalidation;
-    for (const auto& rRect : rView.m_aInvalidations)
-        aInvalidation.Union(rRect);
-    if (!bFullRow)
-    {
-        // What matters is that we expect that the invalidation does not extend all the
-        // way to the max right of the sheet.
-        // Here we originally got 32212306 and now ~5056 for a single cell case
-        CPPUNIT_ASSERT_LESSEQUAL(tools::Long(8000), aInvalidation.GetWidth());
-    }
-    else
-    {
-        // We expect RTL to continue to invalidate the entire row
-        // from 0 to end of sheet (see ScDocShell::PostPaint, 'Extend to whole rows'),
-        // which is different to the adjusted LTR case which
-        // invalidated the row from left of edited cell to right of end
-        // of sheet.
-        CPPUNIT_ASSERT_LESSEQUAL(tools::Long(0), aInvalidation.Left());
-        CPPUNIT_ASSERT_EQUAL(tools::Long(32212230), aInvalidation.Right());
-    }
-}
-
-void ScTiledRenderingTest::cellInvalidationHelper(ScModelObj* pModelObj, ScTabViewShell* pView, const ScAddress& rAdr,
-                                                  bool bAddText, bool bFullRow)
-{
-    // view
-    ViewCallback aView;
-
-    if (bAddText)
-    {
-        // Type "Hello World" in D8, process events to idle and don't commit yet
-        lcl_typeCharsInCell("Hello World", rAdr.Col(), rAdr.Row(), pView, pModelObj, false, false);
-
-        aView.m_bInvalidateTiles = false;
-        aView.m_aInvalidations.clear();
-
-        // commit text and process events to idle
-        lcl_typeCharsInCell("", rAdr.Col(), rAdr.Row(), pView, pModelObj, true, true);
-    }
-    else // DeleteText
-    {
-        pView->SetCursor(rAdr.Col(), rAdr.Row());
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
-        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
-        Scheduler::ProcessEventsToIdle();
-    }
-
-    checkSampleInvalidation(aView, bFullRow);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellMinimalInvalidations)
@@ -3045,7 +3000,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellMinimalInvalidations)
         pView->SetCursor(aA8.Col(), aA8.Row());
         Scheduler::ProcessEventsToIdle();
 
-        ViewCallback aView;
+        ScTestViewCallback aView;
         dispatchCommand(mxComponent, u".uno:Paste"_ustr, aArgs);
         Scheduler::ProcessEventsToIdle();
 
@@ -3089,14 +3044,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellInvalidationDocWithExistingZo
 
     int nView1 = SfxLokHelper::getView();
     // register to track View #1 invalidations
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
 
     // Create a View #2
     SfxLokHelper::createView();
     int nView2 = SfxLokHelper::getView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     // register to track View #1 invalidations
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
 
     // Set View #2 to initial 100% and generate a paint
     pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 19845, 6405));
@@ -3224,9 +3179,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testStatusBarLocale)
     // Given 2 views, the second's locale is set to German:
     createDoc("empty.ods");
     int nView1 = SfxLokHelper::getView();
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     SfxLokHelper::createView();
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
     SfxViewShell* pView2 = SfxViewShell::Current();
     pView2->SetLOKLocale(u"de-DE"_ustr);
     {
@@ -3295,7 +3250,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
     int y = 1 / nPPTY;
 
     // Setup view #1
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
     // Set client rect to 2000 x 2000 pixels
     pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 2000 / nPPTX, 2000 / nPPTY));
     Scheduler::ProcessEventsToIdle();
@@ -3323,7 +3278,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
     // Setup view #2
     SfxLokHelper::createView();
     int nView2 = SfxLokHelper::getView();
-    ViewCallback aView2;
+    ScTestViewCallback aView2;
     // Set client rect to 2000 x 2000 pixels
     pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 2000 / nPPTX, 2000 / nPPTY));
 
@@ -3369,7 +3324,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testExtendedAreasDontOverlap)
     Scheduler::ProcessEventsToIdle();
 
     // register to track View #1 invalidations
-    ViewCallback aView1;
+    ScTestViewCallback aView1;
 
     // extend to the right and bottom
     pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 39750, 12780));
@@ -3421,7 +3376,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditShapeText)
     Bitmap aBitmapBefore = getTile(pModelObj, 4096, 3584, 15360, 7680);
 
     // reuse this to type into the active shape edit
-    lcl_typeCharsInCell("MMMMMMM", 0, 0, pView, pModelObj, true, false);
+    typeCharsInCell("MMMMMMM", 0, 0, pView, pModelObj, true, false);
 
     // Grab a new snapshot of the center of the shape
     Bitmap aBitmapAfter = getTile(pModelObj, 4096, 3584, 15360, 7680);
@@ -3449,7 +3404,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNumberFormatLocaleMultiUser)
         ScDocument* pDoc = pModelObj->GetDocument();
 
         int nViewFR = SfxLokHelper::getView();
-        ViewCallback aView1;
+        ScTestViewCallback aView1;
         SfxViewShell* pViewFR = SfxViewShell::Current();
         pViewFR->SetLOKLocale(u"fr-FR"_ustr);
 
@@ -3505,7 +3460,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLeftOverflowEdit)
 {
     comphelper::LibreOfficeKit::setCompatFlag(comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
     ScModelObj* pModelObj = createDoc("right-aligned-with-overflow.ods");
-    ViewCallback aView;
+    ScTestViewCallback aView;
 
     // Go to Cell B5000
     uno::Sequence<beans::PropertyValue> aPropertyValues = {
@@ -3532,7 +3487,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLeftOverflowEdit)
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFreezeRowOrColumn)
 {
     createDoc("empty.ods");
-    ViewCallback aView;
+    ScTestViewCallback aView;
     SfxViewShell* pView = SfxViewShell::Current();
 
     // Freeze panes on a column and receive the proper state back
@@ -3572,7 +3527,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFreezeRowOrColumn)
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCursorVisibilityAfterPaste)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
-    ViewCallback aView;
+    ScTestViewCallback aView;
     SfxLokHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
 
