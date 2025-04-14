@@ -6966,24 +6966,6 @@ public:
         return rEntry.GetPointFont(*rEntry.GetOutDev());
     }
 
-    virtual void cut_entry_clipboard() override
-    {
-        Edit& rEntry = m_pEntry->getEntry();
-        rEntry.Cut();
-    }
-
-    virtual void copy_entry_clipboard() override
-    {
-        Edit& rEntry = m_pEntry->getEntry();
-        rEntry.Copy();
-    }
-
-    virtual void paste_entry_clipboard() override
-    {
-        Edit& rEntry = m_pEntry->getEntry();
-        rEntry.Paste();
-    }
-
     virtual void grab_focus() override { m_xEntry->grab_focus(); }
 
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) override

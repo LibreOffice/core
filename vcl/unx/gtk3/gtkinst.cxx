@@ -23406,21 +23406,6 @@ public:
         m_bAutoCompleteCaseSensitive = bCaseSensitive;
     }
 
-    virtual void cut_entry_clipboard() override
-    {
-        m_xEntry->cut_clipboard();
-    }
-
-    virtual void copy_entry_clipboard() override
-    {
-        m_xEntry->copy_clipboard();
-    }
-
-    virtual void paste_entry_clipboard() override
-    {
-        m_xEntry->paste_clipboard();
-    }
-
     virtual void set_entry_font(const vcl::Font& rFont) override
     {
         m_xEntry->set_font(rFont);

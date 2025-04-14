@@ -2150,6 +2150,12 @@ public:
 
     virtual void set_entry_editable(bool bEditable) override { m_xEntry->set_editable(bEditable); }
 
+    virtual void cut_entry_clipboard() override { m_xEntry->cut_clipboard(); }
+
+    virtual void copy_entry_clipboard() override { m_xEntry->copy_clipboard(); }
+
+    virtual void paste_entry_clipboard() override { m_xEntry->paste_clipboard(); }
+
     void connect_row_activated(const Link<TreeView&, bool>& rLink)
     {
         m_xTreeView->connect_row_activated(rLink);
