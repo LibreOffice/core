@@ -6966,12 +6966,6 @@ public:
         return rEntry.GetPointFont(*rEntry.GetOutDev());
     }
 
-    virtual void set_entry_editable(bool bEditable) override
-    {
-        Edit& rEntry = m_pEntry->getEntry();
-        rEntry.SetReadOnly(!bEditable);
-    }
-
     virtual void cut_entry_clipboard() override
     {
         Edit& rEntry = m_pEntry->getEntry();

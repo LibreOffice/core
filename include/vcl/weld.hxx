@@ -2148,6 +2148,8 @@ public:
         m_xEntry->set_placeholder_text(rText);
     }
 
+    virtual void set_entry_editable(bool bEditable) override { m_xEntry->set_editable(bEditable); }
+
     void connect_row_activated(const Link<TreeView&, bool>& rLink)
     {
         m_xTreeView->connect_row_activated(rLink);

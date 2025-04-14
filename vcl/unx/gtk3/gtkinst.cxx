@@ -23406,11 +23406,6 @@ public:
         m_bAutoCompleteCaseSensitive = bCaseSensitive;
     }
 
-    virtual void set_entry_editable(bool bEditable) override
-    {
-        m_xEntry->set_editable(bEditable);
-    }
-
     virtual void cut_entry_clipboard() override
     {
         m_xEntry->cut_clipboard();
