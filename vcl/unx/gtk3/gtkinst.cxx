@@ -23392,11 +23392,6 @@ public:
         m_nEntryInsertTextSignalId = g_signal_connect(pWidget, "insert-text", G_CALLBACK(signalEntryInsertText), this);
     }
 
-    virtual void insert_separator(int /*pos*/, const OUString& /*rId*/) override
-    {
-        assert(false);
-    }
-
     virtual void make_sorted() override
     {
         GtkWidget* pTreeView = m_pTreeView->getWidget();
@@ -23434,11 +23429,6 @@ public:
     virtual void paste_entry_clipboard() override
     {
         m_xEntry->paste_clipboard();
-    }
-
-    virtual void set_font(const vcl::Font&) override
-    {
-        assert(false && "not implemented");
     }
 
     virtual void set_entry_font(const vcl::Font& rFont) override
@@ -23490,50 +23480,10 @@ public:
         return m_bTreeChange;
     }
 
-    virtual void set_custom_renderer(bool /*bOn*/) override
-    {
-        assert(false && "not implemented");
-    }
-
-    virtual int get_max_mru_count() const override
-    {
-        assert(false && "not implemented");
-        return 0;
-    }
-
-    virtual void set_max_mru_count(int) override
-    {
-        assert(false && "not implemented");
-    }
-
-    virtual OUString get_mru_entries() const override
-    {
-        assert(false && "not implemented");
-        return OUString();
-    }
-
-    virtual void set_mru_entries(const OUString&) override
-    {
-        assert(false && "not implemented");
-    }
-
-    virtual void set_item_menu(const OUString&, weld::Menu*) override
-    {
-        assert(false && "not implemented");
-    }
-
     VclPtr<VirtualDevice> create_render_virtual_device() const override
     {
         return create_virtual_device();
     }
-
-    int get_menu_button_width() const override
-    {
-        assert(false && "not implemented");
-        return 0;
-    }
-
-    virtual void set_max_drop_down_rows(int) override { assert(false && "not implemented"); }
 
     virtual ~GtkInstanceEntryTreeView() override
     {

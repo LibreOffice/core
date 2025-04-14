@@ -2150,6 +2150,51 @@ public:
     virtual bool get_popup_shown() const override { return false; }
 
     void set_height_request_by_rows(int nRows);
+
+    // Methods from weld::ComboBox subclass API that are not actually implemented/used
+    virtual void insert_separator(int /*pos*/, const OUString& /*rId*/) override final
+    {
+        assert(false && "not implemented");
+    }
+
+    virtual void set_font(const vcl::Font&) override final { assert(false && "not implemented"); }
+
+    virtual void set_custom_renderer(bool /*bOn*/) override final
+    {
+        assert(false && "not implemented");
+    }
+
+    virtual int get_max_mru_count() const override final
+    {
+        assert(false && "not implemented");
+        return 0;
+    }
+
+    virtual void set_max_mru_count(int) override final { assert(false && "not implemented"); }
+
+    virtual OUString get_mru_entries() const override final
+    {
+        assert(false && "not implemented");
+        return OUString();
+    }
+
+    virtual void set_mru_entries(const OUString&) override final
+    {
+        assert(false && "not implemented");
+    }
+
+    virtual void set_max_drop_down_rows(int) override final { assert(false && "not implemented"); }
+
+    virtual void set_item_menu(const OUString&, weld::Menu*) override final
+    {
+        assert(false && "not implemented");
+    }
+
+    int get_menu_button_width() const override final
+    {
+        assert(false && "not implemented");
+        return 0;
+    }
 };
 
 class VCL_DLLPUBLIC MetricSpinButton final

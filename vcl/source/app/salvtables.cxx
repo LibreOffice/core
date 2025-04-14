@@ -6944,8 +6944,6 @@ public:
         rEntry.AddEventListener(LINK(this, SalInstanceEntryTreeView, KeyPressListener));
     }
 
-    virtual void insert_separator(int /*pos*/, const OUString& /*rId*/) override { assert(false); }
-
     virtual void make_sorted() override
     {
         vcl::Window* pTreeView = m_pTreeView->getWidget();
@@ -6959,8 +6957,6 @@ public:
         Edit& rEntry = m_pEntry->getEntry();
         rEntry.SetAutocompleteHdl(Link<Edit&, void>());
     }
-
-    virtual void set_font(const vcl::Font&) override { assert(false && "not implemented"); }
 
     virtual void set_entry_font(const vcl::Font& rFont) override { m_pEntry->set_font(rFont); }
 
@@ -7013,37 +7009,6 @@ public:
     }
 
     virtual bool changed_by_direct_pick() const override { return m_bTreeChange; }
-
-    virtual void set_custom_renderer(bool /*bOn*/) override { assert(false && "not implemented"); }
-
-    virtual int get_max_mru_count() const override
-    {
-        assert(false && "not implemented");
-        return 0;
-    }
-
-    virtual void set_max_mru_count(int) override { assert(false && "not implemented"); }
-
-    virtual OUString get_mru_entries() const override
-    {
-        assert(false && "not implemented");
-        return OUString();
-    }
-
-    virtual void set_mru_entries(const OUString&) override { assert(false && "not implemented"); }
-
-    virtual void set_max_drop_down_rows(int) override { assert(false && "not implemented"); }
-
-    virtual void set_item_menu(const OUString&, weld::Menu*) override
-    {
-        assert(false && "not implemented");
-    }
-
-    int get_menu_button_width() const override
-    {
-        assert(false && "not implemented");
-        return 0;
-    }
 
     VclPtr<VirtualDevice> create_render_virtual_device() const override
     {
