@@ -219,7 +219,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         else if ( nSubCount == 0 )
         {
             // for a simple property there can be only one parameter and its name *must* match
-            SAL_WARN("sfx.appl", "Property name does not match: " << rName);
+            SAL_WARN("sfx.appl", "Property name of '" << rName << "' does not match '" << pSlot->aUnoName << "'");
         }
 #endif
         else
