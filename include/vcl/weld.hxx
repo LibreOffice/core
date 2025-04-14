@@ -2156,6 +2156,10 @@ public:
 
     virtual void paste_entry_clipboard() override { m_xEntry->paste_clipboard(); }
 
+    virtual void set_entry_font(const vcl::Font& rFont) override { m_xEntry->set_font(rFont); }
+
+    virtual vcl::Font get_entry_font() override { return m_xEntry->get_font(); }
+
     void connect_row_activated(const Link<TreeView&, bool>& rLink)
     {
         m_xTreeView->connect_row_activated(rLink);

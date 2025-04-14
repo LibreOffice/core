@@ -23406,16 +23406,6 @@ public:
         m_bAutoCompleteCaseSensitive = bCaseSensitive;
     }
 
-    virtual void set_entry_font(const vcl::Font& rFont) override
-    {
-        m_xEntry->set_font(rFont);
-    }
-
-    virtual vcl::Font get_entry_font() override
-    {
-        return m_xEntry->get_font();
-    }
-
     virtual void grab_focus() override { m_xEntry->grab_focus(); }
 
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) override

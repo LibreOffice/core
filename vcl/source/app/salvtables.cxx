@@ -6958,14 +6958,6 @@ public:
         rEntry.SetAutocompleteHdl(Link<Edit&, void>());
     }
 
-    virtual void set_entry_font(const vcl::Font& rFont) override { m_pEntry->set_font(rFont); }
-
-    virtual vcl::Font get_entry_font() override
-    {
-        Edit& rEntry = m_pEntry->getEntry();
-        return rEntry.GetPointFont(*rEntry.GetOutDev());
-    }
-
     virtual void grab_focus() override { m_xEntry->grab_focus(); }
 
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
