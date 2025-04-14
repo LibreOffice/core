@@ -610,7 +610,6 @@ class SwAccessibleEventMap_Impl
 public:
     typedef SwAccessibleChild                                           key_type;
     typedef std::list<SwAccessibleEvent_Impl>::iterator                 mapped_type;
-    typedef std::pair<const key_type,mapped_type>                       value_type;
     typedef SwAccessibleChildFunc                                       key_compare;
     typedef std::map<key_type,mapped_type,key_compare>::iterator        iterator;
     typedef std::map<key_type,mapped_type,key_compare>::const_iterator  const_iterator;
