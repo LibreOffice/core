@@ -6966,12 +6966,6 @@ public:
         return rEntry.GetPointFont(*rEntry.GetOutDev());
     }
 
-    virtual void set_entry_placeholder_text(const OUString& rText) override
-    {
-        Edit& rEntry = m_pEntry->getEntry();
-        rEntry.SetPlaceholderText(rText);
-    }
-
     virtual void set_entry_editable(bool bEditable) override
     {
         Edit& rEntry = m_pEntry->getEntry();

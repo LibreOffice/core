@@ -2142,6 +2142,12 @@ public:
     {
         return m_xEntry->get_selection_bounds(rStartPos, rEndPos);
     }
+
+    virtual void set_entry_placeholder_text(const OUString& rText) override
+    {
+        m_xEntry->set_placeholder_text(rText);
+    }
+
     void connect_row_activated(const Link<TreeView&, bool>& rLink)
     {
         m_xTreeView->connect_row_activated(rLink);

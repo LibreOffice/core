@@ -23406,11 +23406,6 @@ public:
         m_bAutoCompleteCaseSensitive = bCaseSensitive;
     }
 
-    virtual void set_entry_placeholder_text(const OUString& rText) override
-    {
-        m_xEntry->set_placeholder_text(rText);
-    }
-
     virtual void set_entry_editable(bool bEditable) override
     {
         m_xEntry->set_editable(bEditable);
