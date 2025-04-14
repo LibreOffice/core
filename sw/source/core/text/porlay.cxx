@@ -1403,7 +1403,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
         rText, SvtLanguageOptions::GetI18NScriptTypeOfLanguage(GetAppLanguage()), *pDirScanner);
     while (!pScriptScanner->AtEnd())
     {
-        if (pScriptScanner->Peek().m_nStartIndex <= static_cast<sal_Int32>(nChg))
+        if (static_cast<sal_Int32>(nChg) < pScriptScanner->Peek().m_nEndIndex)
         {
             break;
         }
