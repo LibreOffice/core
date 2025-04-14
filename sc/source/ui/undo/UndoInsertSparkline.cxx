@@ -39,10 +39,19 @@ void UndoInsertSparkline::Undo()
     for (auto const& rSparklineData : maSparklineDataVector)
     {
         rDocument.DeleteSparkline(rSparklineData.maPosition);
-        aRanges.push_back(ScRange(rSparklineData.maPosition));
+
+        ScRange aCurrRange(rSparklineData.maPosition);
+
+        if (aCurrRange.aStart == aCurrRange.aEnd
+            && rDocument.HasAttrib(aCurrRange, HasAttrFlags::Merged))
+        {
+            rDocument.ExtendMerge(aCurrRange);
+        }
+
+        aRanges.push_back(aCurrRange);
     }
 
-    pDocShell->PostPaint(aRanges, PaintPartFlags::All);
+    pDocShell->PostPaint(aRanges, PaintPartFlags::All, SC_PF_TESTMERGE);
 
     EndUndo();
 }
@@ -57,10 +66,19 @@ void UndoInsertSparkline::Redo()
     {
         auto* pCreated = rDocument.CreateSparkline(rSparklineData.maPosition, mpSparklineGroup);
         pCreated->setInputRange(rSparklineData.maData);
-        aRanges.push_back(ScRange(rSparklineData.maPosition));
+
+        ScRange aCurrRange(rSparklineData.maPosition);
+
+        if (aCurrRange.aStart == aCurrRange.aEnd
+            && rDocument.HasAttrib(aCurrRange, HasAttrFlags::Merged))
+        {
+            rDocument.ExtendMerge(aCurrRange);
+        }
+
+        aRanges.push_back(aCurrRange);
     }
 
-    pDocShell->PostPaint(aRanges, PaintPartFlags::All);
+    pDocShell->PostPaint(aRanges, PaintPartFlags::All, SC_PF_TESTMERGE);
 
     EndRedo();
 }

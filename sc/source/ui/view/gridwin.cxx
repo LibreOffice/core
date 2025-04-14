@@ -7386,8 +7386,16 @@ void ScGridWindow::UpdateSparklineGroupOverlay()
                     SCCOL nColumn = pCurrentSparkline->getColumn();
                     SCROW nRow = pCurrentSparkline->getRow();
 
-                    Point aStart = mrViewData.GetScrPos(nColumn, nRow, eWhich);
-                    Point aEnd = mrViewData.GetScrPos(nColumn + 1, nRow + 1, eWhich);
+                    SCTAB nTab = mrViewData.GetTabNo();
+                    ScRange aCurrRange(nColumn, nRow, nTab);
+                    bool bMerge = rDocument.IsMerged(aCurrentAddress);
+                    if (bMerge)
+                        rDocument.ExtendMerge(aCurrRange);
+
+                    Point aStart = mrViewData.GetScrPos(aCurrRange.aStart.Col(),
+                                                        aCurrRange.aStart.Row(), eWhich);
+                    Point aEnd = mrViewData.GetScrPos(aCurrRange.aEnd.Col() + 1,
+                                                      aCurrRange.aEnd.Row() + 1, eWhich);
 
                     basegfx::B2DRange aRange(aStart.X(), aStart.Y(), aEnd.X(), aEnd.Y());
 

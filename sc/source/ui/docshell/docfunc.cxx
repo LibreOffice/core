@@ -5857,6 +5857,15 @@ bool ScDocFunc::InsertSparklines(ScRange const& rDataRange, ScRange const& rSpar
     pUndoInsertSparkline->Redo();
     rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoInsertSparkline));
 
+    ScDocument& rDoc = rDocShell.GetDocument();
+    if (rSparklineRange.aStart == rSparklineRange.aEnd
+        && rDoc.HasAttrib(rSparklineRange, HasAttrFlags::Merged))
+    {
+        ScRange aExtendMergeRange(rSparklineRange);
+        rDoc.ExtendMerge(aExtendMergeRange);
+        rDocShell.PostPaint(aExtendMergeRange, PaintPartFlags::Grid);
+    }
+
     return true;
 }
 

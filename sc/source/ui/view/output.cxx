@@ -2402,26 +2402,77 @@ void ScOutputData::DrawSparklines(vcl::RenderContext& rRenderContext)
                 ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
                 bool bIsMerged = false;
 
-                if ( nX==nX1 && pInfo->bHOverlapped && !pInfo->bVOverlapped )
+                SCCOL nOverX = nX;
+                SCROW nOverY = pThisRowInfo->nRowNo;
+                tools::Long nStartPosX = nPosX;
+                tools::Long nStartPosY = nPosY;
+
+                ScAddress aCurrentAddress(nX, pRowInfo[nArrY].nRowNo, nTab);
+                std::shared_ptr<sc::Sparkline> pSparkline = mpDoc->GetSparkline(aCurrentAddress);
+
+                if (pInfo->bHOverlapped || pInfo->bVOverlapped)
                 {
-                    // find start of merged cell
-                    bIsMerged = true;
-                    SCROW nY = pRowInfo[nArrY].nRowNo;
-                    SCCOL nMergeX = nX;
-                    SCROW nMergeY = nY;
-                    mpDoc->ExtendOverlapped( nMergeX, nMergeY, nX, nY, nTab );
+                    while (nOverX > 0 && (mpDoc->GetAttr(
+                           nOverX, nOverY, nTab, ATTR_MERGE_FLAG)->GetValue() & ScMF::Hor))
+                    {
+                        --nOverX;
+                        nStartPosX -= nLayoutSign
+                                      * static_cast<tools::Long>(mpDoc->GetColWidth(nOverX, nTab)
+                                                                 * mnPPTX);
+                    }
+
+                    while (nOverY > 0 && (mpDoc->GetAttr(
+                           nOverX, nOverY, nTab, ATTR_MERGE_FLAG)->GetValue() & ScMF::Ver))
+                    {
+                        --nOverY;
+                        nStartPosY -= nLayoutSign
+                                      * static_cast<tools::Long>(mpDoc->GetRowHeight(nOverY, nTab)
+                                                                 * mnPPTY);
+                    }
+
+                    pSparkline = mpDoc->GetSparkline(ScAddress(nOverX, nOverY, nTab));
+                    bIsMerged = pSparkline ? true : false;
                 }
 
-                std::shared_ptr<sc::Sparkline> pSparkline;
-                ScAddress aCurrentAddress(nX, pRowInfo[nArrY].nRowNo, nTab);
-
-                if (!mpDoc->ColHidden(nX, nTab) && (pSparkline = mpDoc->GetSparkline(aCurrentAddress))
+                if (!mpDoc->ColHidden(nX, nTab) && pSparkline
                     && (bIsMerged || (!pInfo->bHOverlapped && !pInfo->bVOverlapped)))
                 {
-                    const tools::Long nWidth = pRowInfo[0].basicCellInfo(nX).nWidth;
-                    const tools::Long nHeight = pThisRowInfo->nHeight;
+                    tools::Long nWidth = pRowInfo[0].basicCellInfo(nX).nWidth;
+                    tools::Long nHeight = pThisRowInfo->nHeight;
 
-                    Point aPoint(nPosX, nPosY);
+                    if (bIsMerged || pInfo->bMerged)
+                    {
+                        const ScMergeAttr* pMerge = mpDoc->GetAttr(nOverX, nOverY, nTab, ATTR_MERGE);
+                        SCROW nCountX = pMerge->GetColMerge();
+                        if (nCountX > 0)
+                        {
+                            sal_Int32 nIndex = 1;
+                            while (nCountX > nIndex && (mpDoc->GetAttr(
+                                   nOverX + nIndex, nOverY, nTab, ATTR_MERGE_FLAG)->GetValue() & ScMF::Hor))
+                            {
+                                nWidth += nLayoutSign
+                                          * static_cast<tools::Long>(
+                                              mpDoc->GetColWidth(nOverX + nIndex, nTab) * mnPPTX);
+                                nIndex++;
+                            }
+                        }
+
+                        SCROW nCountY = pMerge->GetRowMerge();
+                        if (nCountY > 0)
+                        {
+                            sal_Int32 nIndex = 1;
+                            while (nCountY > nIndex && (mpDoc->GetAttr(
+                                   nOverX, nOverY + nIndex, nTab, ATTR_MERGE_FLAG)->GetValue() & ScMF::Ver))
+                            {
+                                nHeight += nLayoutSign
+                                           * static_cast<tools::Long>(
+                                               mpDoc->GetRowHeight(nOverY + nIndex, nTab) * mnPPTY);
+                                nIndex++;
+                            }
+                        }
+                    }
+
+                    Point aPoint(nStartPosX, nStartPosY);
                     Size aSize(nWidth, nHeight);
 
                     sc::SparklineRenderer renderer(*mpDoc);
