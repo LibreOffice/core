@@ -226,8 +226,8 @@ public:
     void SetDrawBroadcaster();
 
     sal_Int32 GetCount() const;
-    uno::Reference< XAccessible > Get(const ScAccessibleShapeData* pData) const;
-    uno::Reference< XAccessible > Get(sal_Int32 nIndex) const;
+    rtl::Reference<::accessibility::AccessibleShape> Get(const ScAccessibleShapeData* pData) const;
+    rtl::Reference<::accessibility::AccessibleShape> Get(sal_Int32 nIndex) const;
     uno::Reference< XAccessible > GetAt(const awt::Point& rPoint) const;
 
     // gets the index of the shape starting on 0 (without the index of the table)
@@ -241,7 +241,8 @@ public:
     void DeselectAll(); // deselect also the table
     void SelectAll();
     sal_Int32 GetSelectedCount() const;
-    uno::Reference< XAccessible > GetSelected(sal_Int32 nSelectedChildIndex, bool bTabSelected) const;
+    rtl::Reference<::accessibility::AccessibleShape> GetSelected(sal_Int32 nSelectedChildIndex,
+                                                                 bool bTabSelected) const;
     void Deselect(sal_Int32 nChildIndex);
 
     SdrPage* GetDrawPage() const;
@@ -502,7 +503,8 @@ sal_Int32 ScChildrenShapes::GetCount() const
     return maZOrderedShapes.size();
 }
 
-uno::Reference< XAccessible > ScChildrenShapes::Get(const ScAccessibleShapeData* pData) const
+rtl::Reference<::accessibility::AccessibleShape>
+ScChildrenShapes::Get(const ScAccessibleShapeData* pData) const
 {
     if (!pData)
         return nullptr;
@@ -526,7 +528,7 @@ uno::Reference< XAccessible > ScChildrenShapes::Get(const ScAccessibleShapeData*
     return pData->pAccShape;
  }
 
-uno::Reference< XAccessible > ScChildrenShapes::Get(sal_Int32 nIndex) const
+rtl::Reference<::accessibility::AccessibleShape> ScChildrenShapes::Get(sal_Int32 nIndex) const
 {
     if (maZOrderedShapes.size() <= 1)
         GetCount(); // fill list with filtered shapes (no internal shapes)
@@ -786,9 +788,10 @@ sal_Int32 ScChildrenShapes::GetSelectedCount() const
     return aShapes.size();
 }
 
-uno::Reference< XAccessible > ScChildrenShapes::GetSelected(sal_Int32 nSelectedChildIndex, bool bTabSelected) const
+rtl::Reference<::accessibility::AccessibleShape>
+ScChildrenShapes::GetSelected(sal_Int32 nSelectedChildIndex, bool bTabSelected) const
 {
-    uno::Reference< XAccessible > xAccessible;
+    rtl::Reference<::accessibility::AccessibleShape> xAccessible;
 
     if (maZOrderedShapes.size() <= 1)
         GetCount(); // fill list with shapes
@@ -1203,7 +1206,7 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, b
     {
         // new child - event
         mpAccessibleDocument->CommitChange(AccessibleEventId::CHILD, uno::Any(),
-                                           uno::Any(Get(pShape)));
+                                           uno::Any(uno::Reference<XAccessible>(Get(pShape))));
     }
 }
 
@@ -1219,15 +1222,16 @@ void ScChildrenShapes::RemoveShape(const uno::Reference<drawing::XShape>& xShape
     {
         if (mpAccessibleDocument)
         {
-            uno::Reference<XAccessible> xOldAccessible (Get(*aItr));
+            rtl::Reference<::accessibility::AccessibleShape> xOldAccessible(Get(*aItr));
 
             delete *aItr;
             maShapesMap.erase((*aItr)->xShape);
             maZOrderedShapes.erase(aItr);
 
             // child is gone - event
-            mpAccessibleDocument->CommitChange(AccessibleEventId::CHILD, uno::Any(xOldAccessible),
-                                               uno::Any());
+            mpAccessibleDocument->CommitChange(
+                AccessibleEventId::CHILD, uno::Any(uno::Reference<XAccessible>(xOldAccessible)),
+                uno::Any());
         }
         else
         {
@@ -1417,20 +1421,18 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         auto pFocusGotHint = static_cast<const ScAccGridWinFocusGotHint*>(&rHint);
         if (pFocusGotHint->GetNewGridWin() == meSplitPos)
         {
-            uno::Reference<XAccessible> xAccessible;
+            rtl::Reference<::accessibility::AccessibleShape> xAccShape;
             if (mpChildrenShapes)
             {
                 bool bTabMarked(IsTableSelected());
-                xAccessible = mpChildrenShapes->GetSelected(0, bTabMarked);
+                xAccShape = mpChildrenShapes->GetSelected(0, bTabMarked);
             }
-            if( xAccessible.is() )
+            if (xAccShape.is())
             {
                 uno::Any aNewValue;
                 aNewValue<<=AccessibleStateType::FOCUSED;
-                static_cast< ::accessibility::AccessibleShape* >(xAccessible.get())->
-                    CommitChange(AccessibleEventId::STATE_CHANGED,
-                                aNewValue,
-                                uno::Any(), -1 );
+                xAccShape->CommitChange(AccessibleEventId::STATE_CHANGED, aNewValue, uno::Any(),
+                                        -1);
             }
             else
             {
