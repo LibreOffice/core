@@ -165,7 +165,8 @@ protected:
     virtual void InvalidateFocus_();
 
 public:
-    void FireAccessibleEvent( css::accessibility::AccessibleEventObject& rEvent );
+    void FireAccessibleEvent(const sal_Int16 nEventId, const css::uno::Any& rOldValue,
+                             const css::uno::Any& rNewValue, sal_Int32 nIndexHint = -1);
 
 protected:
     // broadcast visual data event

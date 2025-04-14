@@ -194,10 +194,8 @@ void SwAccessibleCell::InvalidateCursorPos_()
             ::rtl::Reference < SwAccessibleContext > xChildImpl( GetMap()->GetContextImpl( aChild.GetSwFrame())  );
             if (xChildImpl.is())
             {
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::STATE_CHANGED;
-                aEvent.NewValue <<= AccessibleStateType::FOCUSED;
-                xChildImpl->FireAccessibleEvent( aEvent );
+                xChildImpl->FireAccessibleEvent(AccessibleEventId::STATE_CHANGED, uno::Any(),
+                                                uno::Any(AccessibleStateType::FOCUSED));
             }
         }
     }

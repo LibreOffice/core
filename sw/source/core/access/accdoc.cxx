@@ -101,11 +101,8 @@ void SwAccessibleDocumentBase::AddChild( vcl::Window *pWin, bool bFireEvent )
 
         if( bFireEvent )
         {
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::CHILD;
-            aEvent.NewValue <<= mpChildWin->GetAccessible();
-            aEvent.IndexHint = -1;
-            FireAccessibleEvent( aEvent );
+            FireAccessibleEvent(AccessibleEventId::CHILD, uno::Any(),
+                                uno::Any(mpChildWin->GetAccessible()));
         }
     }
 }
@@ -117,11 +114,8 @@ void SwAccessibleDocumentBase::RemoveChild( vcl::Window *pWin )
     OSL_ENSURE( !mpChildWin || pWin == mpChildWin, "invalid child window to remove" );
     if( mpChildWin && pWin == mpChildWin )
     {
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::CHILD;
-        aEvent.OldValue <<= mpChildWin->GetAccessible();
-        aEvent.IndexHint = -1;
-        FireAccessibleEvent( aEvent );
+        FireAccessibleEvent(AccessibleEventId::CHILD, uno::Any(mpChildWin->GetAccessible()),
+                            uno::Any());
 
         mpChildWin = nullptr;
     }

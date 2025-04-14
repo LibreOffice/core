@@ -258,15 +258,13 @@ void SwAccessibleParagraph::InvalidateContent_( bool bVisibleDataFired )
     if( sText != sOldText )
     {
         // The text is changed
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::TEXT_CHANGED;
-
         // determine exact changes between sOldText and sText
+        uno::Any aOldValue;
+        uno::Any aNewValue;
         (void)comphelper::OCommonAccessibleText::implInitTextChangedEvent(sOldText, sText,
-                                                                          aEvent.OldValue,
-                                                                          aEvent.NewValue);
+                                                                          aOldValue, aNewValue);
 
-        FireAccessibleEvent( aEvent );
+        FireAccessibleEvent(AccessibleEventId::TEXT_CHANGED, aOldValue, aNewValue);
         uno::Reference< XAccessible > xparent = getAccessibleParent();
         uno::Reference< XAccessibleContext > xAccContext(xparent,uno::UNO_QUERY);
         if (xAccContext.is() && xAccContext->getAccessibleRole() == AccessibleRole::TABLE_CELL)
@@ -274,9 +272,8 @@ void SwAccessibleParagraph::InvalidateContent_( bool bVisibleDataFired )
             SwAccessibleContext* pPara = static_cast< SwAccessibleContext* >(xparent.get());
             if(pPara)
             {
-                AccessibleEventObject aParaEvent;
-                aParaEvent.EventId = AccessibleEventId::VALUE_CHANGED;
-                pPara->FireAccessibleEvent(aParaEvent);
+                pPara->FireAccessibleEvent(AccessibleEventId::VALUE_CHANGED, uno::Any(),
+                                           uno::Any());
             }
         }
     }
@@ -303,10 +300,7 @@ void SwAccessibleParagraph::InvalidateContent_( bool bVisibleDataFired )
     if (bNewIsBlockQuote != bOldIsBlockQuote || bNewIsHeading != bOldIsHeading)
     {
         // The role has changed
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::ROLE_CHANGED;
-
-        FireAccessibleEvent( aEvent );
+        FireAccessibleEvent(AccessibleEventId::ROLE_CHANGED, uno::Any(), uno::Any());
     }
 
     if( sText == sOldText )
@@ -324,12 +318,8 @@ void SwAccessibleParagraph::InvalidateContent_( bool bVisibleDataFired )
     if( sNewDesc != sOldDesc )
     {
         // The text is changed
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
-        aEvent.OldValue <<= sOldDesc;
-        aEvent.NewValue <<= sNewDesc;
-
-        FireAccessibleEvent( aEvent );
+        FireAccessibleEvent(AccessibleEventId::DESCRIPTION_CHANGED, uno::Any(sOldDesc),
+                            uno::Any(sNewDesc));
     }
 }
 
@@ -359,12 +349,7 @@ void SwAccessibleParagraph::InvalidateCursorPos_()
     if( pWin && pWin->HasFocus() && -1 == nOld )
         FireStateChangedEvent( AccessibleStateType::FOCUSED, true );
 
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::CARET_CHANGED;
-    aEvent.OldValue <<= nOld;
-    aEvent.NewValue <<= nNew;
-
-    FireAccessibleEvent( aEvent );
+    FireAccessibleEvent(AccessibleEventId::CARET_CHANGED, uno::Any(nOld), uno::Any(nNew));
 
     if( pWin && pWin->HasFocus() && -1 == nNew )
         FireStateChangedEvent( AccessibleStateType::FOCUSED, false );
@@ -374,10 +359,7 @@ void SwAccessibleParagraph::InvalidateCursorPos_()
     bool bCurSelection = GetSelection(nStart,nEnd);
     if(m_bLastHasSelection || bCurSelection )
     {
-        aEvent.EventId = AccessibleEventId::TEXT_SELECTION_CHANGED;
-        aEvent.OldValue.clear();
-        aEvent.NewValue.clear();
-        FireAccessibleEvent(aEvent);
+        FireAccessibleEvent(AccessibleEventId::TEXT_SELECTION_CHANGED, uno::Any(), uno::Any());
     }
     m_bLastHasSelection =bCurSelection;
 

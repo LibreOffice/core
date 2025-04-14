@@ -1440,20 +1440,18 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
 
     for (SwAccessibleContext* pAccPara : vecAdd)
     {
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
         if (pAccPara)
         {
-            pAccPara->FireAccessibleEvent( aEvent );
+            pAccPara->FireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED, uno::Any(),
+                                          uno::Any());
         }
     }
     for (SwAccessibleContext* pAccPara : vecRemove)
     {
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_REMOVE;
         if (pAccPara)
         {
-            pAccPara->FireAccessibleEvent( aEvent );
+            pAccPara->FireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED_REMOVE, uno::Any(),
+                                          uno::Any());
         }
     }
 }
@@ -1514,10 +1512,8 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
     {
         if (rpShape.is())
         {
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_REMOVE;
-            aEvent.NewValue <<= uno::Reference<XAccessible>(rpShape);
-            xDocView->FireAccessibleEvent(aEvent);
+            xDocView->FireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED_REMOVE, uno::Any(),
+                                          uno::Any(uno::Reference<XAccessible>(rpShape)));
         }
     }
 
@@ -1549,9 +1545,8 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
     const unsigned int SELECTION_WITH_NUM = 10;
     if (vecxShapeAdd.size() > SELECTION_WITH_NUM )
     {
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
-        xDocView->FireAccessibleEvent(aEvent);
+        xDocView->FireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED_WITHIN, uno::Any(),
+                                      uno::Any());
     }
     else
     {
@@ -1559,10 +1554,8 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
         {
             if (rpShape.is())
             {
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_ADD;
-                aEvent.NewValue <<= uno::Reference<XAccessible>(rpShape);
-                xDocView->FireAccessibleEvent(aEvent);
+                xDocView->FireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED_ADD, uno::Any(),
+                                              uno::Any(uno::Reference<XAccessible>(rpShape)));
             }
         }
     }
@@ -2565,11 +2558,9 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
                                         ::rtl::Reference< SwAccessibleContext > xParentAccImplRoot = GetContextImpl(pParentRoot,false);
                                         if(xParentAccImplRoot.is())
                                         {
-                                            AccessibleEventObject aEvent;
-                                            aEvent.EventId = AccessibleEventId::CHILD;
-                                            aEvent.NewValue <<= xAccParentTab;
-                                            aEvent.IndexHint = -1;
-                                            xParentAccImplRoot->FireAccessibleEvent( aEvent );
+                                            xParentAccImplRoot->FireAccessibleEvent(
+                                                AccessibleEventId::CHILD, uno::Any(),
+                                                uno::Any(xAccParentTab));
                                         }
                                     }
 
@@ -2586,11 +2577,9 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
                                     ::rtl::Reference< SwAccessibleContext > xParentAccImplRoot = GetContextImpl(pParentRoot,false);
                                     if(xParentAccImplRoot.is())
                                     {
-                                        AccessibleEventObject aEvent;
-                                        aEvent.EventId = AccessibleEventId::CHILD;
-                                        aEvent.NewValue <<= uno::Reference< XAccessible>(xParentAccImpl);
-                                        aEvent.IndexHint = -1;
-                                        xParentAccImplRoot->FireAccessibleEvent( aEvent );
+                                        xParentAccImplRoot->FireAccessibleEvent(
+                                            AccessibleEventId::CHILD, uno::Any(),
+                                            uno::Any(uno::Reference<XAccessible>(xParentAccImpl)));
                                     }
                                 }
                             }
@@ -2598,12 +2587,8 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
                             {
                                 uno::Reference< XAccessible>  xAccShape =
                                     GetContext(pObj,xParentAccImpl.get());
-
-                                AccessibleEventObject aEvent;
-                                aEvent.EventId = AccessibleEventId::CHILD;
-                                aEvent.NewValue <<= xAccShape;
-                                aEvent.IndexHint = -1;
-                                xParentAccImpl->FireAccessibleEvent( aEvent );
+                                xParentAccImpl->FireAccessibleEvent(
+                                    AccessibleEventId::CHILD, uno::Any(), uno::Any(xAccShape));
                             }
                         }
                     }
@@ -2631,9 +2616,8 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
         {
             if(pAccPara->SetSelectedState(false))
             {
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_REMOVE;
-                pAccPara->FireAccessibleEvent( aEvent );
+                pAccPara->FireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED_REMOVE,
+                                              uno::Any(), uno::Any());
             }
         }
     }
@@ -2641,9 +2625,8 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
     {
         if(pAccPara && pAccPara->SetSelectedState(true))
         {
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
-            pAccPara->FireAccessibleEvent( aEvent );
+            pAccPara->FireAccessibleEvent(AccessibleEventId::SELECTION_CHANGED, uno::Any(),
+                                          uno::Any());
         }
     }
 }

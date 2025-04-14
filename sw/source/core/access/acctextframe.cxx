@@ -77,11 +77,8 @@ void SwAccessibleTextFrame::Notify(const SfxHint& rHint)
         {
             auto rTitleChanged = static_cast<const sw::TitleChanged&>(rHint);
             msTitle = rTitleChanged.m_sNew;
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::NAME_CHANGED;
-            aEvent.OldValue <<= rTitleChanged.m_sOld;
-            aEvent.NewValue <<= msTitle;
-            FireAccessibleEvent( aEvent );
+            FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, uno::Any(rTitleChanged.m_sOld),
+                                uno::Any(msTitle));
             if(!pFlyFrameFormat || !pFlyFrameFormat->GetObjDescription().isEmpty())
                 break;
             [[fallthrough]];
@@ -96,11 +93,8 @@ void SwAccessibleTextFrame::Notify(const SfxHint& rHint)
                 msDesc = msTitle;
             if(msDesc == sOldDesc)
                 return;
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
-            aEvent.OldValue <<= sOldDesc;
-            aEvent.NewValue <<= msDesc;
-            FireAccessibleEvent(aEvent);
+            FireAccessibleEvent(AccessibleEventId::DESCRIPTION_CHANGED, uno::Any(sOldDesc),
+                                uno::Any(msDesc));
             return;
         }
     }

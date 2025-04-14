@@ -296,18 +296,13 @@ void SwAccessibleContext::ScrolledIn()
     const SwFrame* pParent = GetParent();
     ::rtl::Reference< SwAccessibleContext > xParentImpl(
          GetMap()->GetContextImpl( pParent, false ) );
-    uno::Reference < XAccessibleContext > xThis( this );
     if( !xParentImpl.is() )
         return;
 
     SetParent( xParentImpl.get() );
 
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::CHILD;
-    aEvent.NewValue <<= xThis;
-    aEvent.IndexHint = -1;
-
-    xParentImpl->FireAccessibleEvent( aEvent );
+    uno::Reference<XAccessibleContext> xThis(this);
+    xParentImpl->FireAccessibleEvent(AccessibleEventId::CHILD, uno::Any(), uno::Any(xThis));
 
     if( HasCursor() )
     {
@@ -436,7 +431,9 @@ void SwAccessibleContext::InvalidateFocus_()
 {
 }
 
-void SwAccessibleContext::FireAccessibleEvent( AccessibleEventObject& rEvent )
+void SwAccessibleContext::FireAccessibleEvent(const sal_Int16 nEventId,
+                                              const css::uno::Any& rOldValue,
+                                              const css::uno::Any& rNewValue, sal_Int32 nIndexHint)
 {
     if( !GetFrame() )
     {
@@ -444,36 +441,30 @@ void SwAccessibleContext::FireAccessibleEvent( AccessibleEventObject& rEvent )
         return;
     }
 
-    if( !rEvent.Source.is() )
-    {
-        uno::Reference < XAccessibleContext > xThis( this );
-        rEvent.Source = xThis;
-    }
+    uno::Reference<XAccessibleContext> xThis(this);
+    AccessibleEventObject aEvent(xThis, nEventId, rNewValue, rOldValue, nIndexHint);
 
     if (m_nClientId)
-        comphelper::AccessibleEventNotifier::addEvent( m_nClientId, rEvent );
+        comphelper::AccessibleEventNotifier::addEvent(m_nClientId, aEvent);
 }
 
 void SwAccessibleContext::FireVisibleDataEvent()
 {
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
-
-    FireAccessibleEvent( aEvent );
+    FireAccessibleEvent(AccessibleEventId::VISIBLE_DATA_CHANGED, uno::Any(), uno::Any());
 }
 
 void SwAccessibleContext::FireStateChangedEvent( sal_Int64 nState,
                                                  bool bNewState )
 {
-    AccessibleEventObject aEvent;
+    uno::Any aOldValue;
+    uno::Any aNewValue;
 
-    aEvent.EventId = AccessibleEventId::STATE_CHANGED;
     if( bNewState )
-        aEvent.NewValue <<= nState;
+        aNewValue <<= nState;
     else
-        aEvent.OldValue <<= nState;
+        aOldValue <<= nState;
 
-    FireAccessibleEvent( aEvent );
+    FireAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue);
 }
 
 void SwAccessibleContext::GetStates( sal_Int64& rStateSet )
@@ -1023,11 +1014,8 @@ void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
     if( !xAccImpl.is() )
         xAccImpl = GetMap()->GetContextImpl( pObj, this );
 
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::CHILD;
-    aEvent.OldValue <<= uno::Reference< XAccessible >( xAccImpl );
-    aEvent.IndexHint = -1;
-    FireAccessibleEvent( aEvent );
+    FireAccessibleEvent(AccessibleEventId::CHILD, uno::Any(uno::Reference<XAccessible>(xAccImpl)),
+                        uno::Any());
 
     GetMap()->RemoveContext( pObj );
     xAccImpl->dispose();
@@ -1039,12 +1027,8 @@ void SwAccessibleContext::ScrolledInShape( ::accessibility::AccessibleShape *pAc
     {
         return ;
     }
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::CHILD;
     uno::Reference< XAccessible > xAcc( pAccImpl );
-    aEvent.NewValue <<= xAcc;
-    aEvent.IndexHint = -1;
-    FireAccessibleEvent( aEvent );
+    FireAccessibleEvent(AccessibleEventId::CHILD, uno::Any(), uno::Any(xAcc));
 
     if( !pAccImpl->GetState( AccessibleStateType::FOCUSED ) )
         return;
@@ -1078,11 +1062,7 @@ void SwAccessibleContext::Dispose(bool bRecursive, bool bCanSkipInvisible)
     // send child event at parent
     if( xParent.is() )
     {
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::CHILD;
-        aEvent.OldValue <<= xThis;
-        aEvent.IndexHint = -1;
-        xParent->FireAccessibleEvent(aEvent);
+        xParent->FireAccessibleEvent(AccessibleEventId::CHILD, uno::Any(xThis), uno::Any());
     }
 
     // set defunc state (it's not required to broadcast a state changed
@@ -1138,13 +1118,9 @@ void SwAccessibleContext::DisposeChild( const SwAccessibleChild& rChildFrameOrOb
         }
         else if ( rChildFrameOrObj.GetWindow() )
         {
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::CHILD;
             uno::Reference< XAccessible > xAcc =
                                     rChildFrameOrObj.GetWindow()->GetAccessible();
-            aEvent.OldValue <<= xAcc;
-            aEvent.IndexHint = -1;
-            FireAccessibleEvent( aEvent );
+            FireAccessibleEvent(AccessibleEventId::CHILD, uno::Any(xAcc), uno::Any());
         }
     }
     else if( bRecursive && rChildFrameOrObj.GetSwFrame() )
@@ -1245,10 +1221,8 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
             }
             else if ( rChildFrameOrObj.GetWindow() )
             {
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::CHILD;
-                aEvent.NewValue <<= rChildFrameOrObj.GetWindow()->GetAccessible();
-                FireAccessibleEvent( aEvent );
+                FireAccessibleEvent(AccessibleEventId::CHILD, uno::Any(),
+                                    uno::Any(rChildFrameOrObj.GetWindow()->GetAccessible()));
             }
         }
     }
@@ -1349,28 +1323,19 @@ void SwAccessibleContext::InvalidateStates( AccessibleStates _nStates )
 
 void SwAccessibleContext::InvalidateRelation( sal_uInt16 nType )
 {
-    AccessibleEventObject aEvent;
-    aEvent.EventId = nType;
-
-    FireAccessibleEvent( aEvent );
+    FireAccessibleEvent(nType, uno::Any(), uno::Any());
 }
 
 /** #i27301# - text selection has changed */
 void SwAccessibleContext::InvalidateTextSelection()
 {
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::TEXT_SELECTION_CHANGED;
-
-    FireAccessibleEvent( aEvent );
+    FireAccessibleEvent(AccessibleEventId::TEXT_SELECTION_CHANGED, uno::Any(), uno::Any());
 }
 
 /** #i88069# - attributes has changed */
 void SwAccessibleContext::InvalidateAttr()
 {
-    AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::TEXT_ATTRIBUTE_CHANGED;
-
-    FireAccessibleEvent( aEvent );
+    FireAccessibleEvent(AccessibleEventId::TEXT_ATTRIBUTE_CHANGED, uno::Any(), uno::Any());
 }
 
 bool SwAccessibleContext::HasCursor()
