@@ -31,6 +31,7 @@
 #include <output.hxx>
 #include <drawview.hxx>
 #include <fupoor.hxx>
+#include <fusel.hxx>
 #include <scmod.hxx>
 #include <appoptio.hxx>
 
@@ -51,6 +52,12 @@ static bool lcl_HasSelectionChanged(const SdrMarkList & rBeforeList, const SdrMa
     return false;
 }
 
+static bool lcl_PosUnchanged(const tools::Rectangle& rSelectionRect, const Point& rDrawSelectionPos)
+{
+    return rDrawSelectionPos.X() == rSelectionRect.Left() &&
+        rDrawSelectionPos.Y() == rSelectionRect.Top();
+}
+
 bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
 {
     bool bRet = false;
@@ -66,6 +73,15 @@ bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
 
         pDraw->SetWindow( this );
         Point aLogicPos = PixelToLogic(rMEvt.GetPosPixel());
+        SdrMarkList aPreMarkList = pDrView->GetMarkedObjectList();
+        if(!aPreMarkList.GetMarkCount())
+            aDrawSelectionPos = Point(0,0);
+        else
+        {
+            tools::Rectangle aRect = pDrView->GetAllMarkedRect();
+            aDrawSelectionPos = Point(aRect.Left(), aRect.Top());
+        }
+
         if ( pDraw->IsDetectiveHit( aLogicPos ) )
         {
             // nothing on detective arrows (double click is evaluated on ButtonUp)
@@ -73,7 +89,6 @@ bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
         }
         else
         {
-            SdrMarkList aPreMarkList = pDrView->GetMarkedObjectList();
             bRet = pDraw->MouseButtonDown( rMEvt );
             if (bRet)
             {
@@ -129,7 +144,9 @@ bool ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
                  && rMEvt.IsLeft()
                  && rMEvt.GetClicks() == 1
             && SC_MOD()->GetAppOptions().IsClickChangeRotation()
-            && !pDraw->HasSelectionChanged())
+            && !pDraw->HasSelectionChanged()
+            && dynamic_cast<FuSelection*>(pDraw)
+            && lcl_PosUnchanged(pDrView->GetAllMarkedRect(), aDrawSelectionPos))
         {
             mrViewData.GetView()->SwitchRotateMode();
         }
