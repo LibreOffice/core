@@ -189,7 +189,7 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrEmbedObjectLink final : public sfx2::SvBaseLink
 {
-    SdrOle2Obj*         pObj;
+    SdrOle2Obj*         m_pObj;
 
 public:
     SAL_DLLPRIVATE explicit            SdrEmbedObjectLink(SdrOle2Obj* pObj);

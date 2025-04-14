@@ -544,7 +544,7 @@ void SdrLightEmbeddedClient_Impl::setWindow(const uno::Reference< awt::XWindow >
 
 SdrEmbedObjectLink::SdrEmbedObjectLink(SdrOle2Obj* pObject):
     ::sfx2::SvBaseLink( ::SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SVXB ),
-    pObj(pObject)
+    m_pObj(pObject)
 {
     SetSynchron( false );
 }
@@ -556,10 +556,10 @@ SdrEmbedObjectLink::~SdrEmbedObjectLink()
 ::sfx2::SvBaseLink::UpdateResult SdrEmbedObjectLink::DataChanged(
     const OUString& /*rMimeType*/, const css::uno::Any & /*rValue*/ )
 {
-    if ( !pObj->UpdateLinkURL_Impl() )
+    if ( !m_pObj->UpdateLinkURL_Impl() )
     {
         // the link URL was not changed
-        uno::Reference< embed::XEmbeddedObject > xObject = pObj->GetObjRef();
+        uno::Reference< embed::XEmbeddedObject > xObject = m_pObj->GetObjRef();
         OSL_ENSURE( xObject.is(), "The object must exist always!" );
         if ( xObject.is() )
         {
@@ -582,15 +582,15 @@ SdrEmbedObjectLink::~SdrEmbedObjectLink()
         }
     }
 
-    pObj->GetNewReplacement();
-    pObj->SetChanged();
+    m_pObj->GetNewReplacement();
+    m_pObj->SetChanged();
 
     return SUCCESS;
 }
 
 void SdrEmbedObjectLink::Closed()
 {
-    pObj->BreakFileLink_Impl();
+    m_pObj->BreakFileLink_Impl();
     SvBaseLink::Closed();
 }
 
