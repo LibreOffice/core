@@ -2654,20 +2654,18 @@ void SwAccessibleMap::InvalidateEditableStates( const SwFrame* _pFrame )
     if( !aFrameOrObj.GetSwFrame() )
         aFrameOrObj = GetShell()->GetLayout();
 
-    uno::Reference< XAccessible > xAcc( GetContext( aFrameOrObj.GetSwFrame() ) );
-    SwAccessibleContext *pAccImpl = static_cast< SwAccessibleContext *>( xAcc.get() );
+    rtl::Reference<SwAccessibleContext> xAccImpl = GetContextImpl(aFrameOrObj.GetSwFrame());
     if( GetShell()->ActionPend() )
     {
-        SwAccessibleEvent_Impl aEvent( SwAccessibleEvent_Impl::CARET_OR_STATES,
-                                       pAccImpl,
-                                       SwAccessibleChild(pAccImpl->GetFrame()),
-                                       AccessibleStates::EDITABLE );
+        SwAccessibleEvent_Impl aEvent(SwAccessibleEvent_Impl::CARET_OR_STATES, xAccImpl.get(),
+                                      SwAccessibleChild(xAccImpl->GetFrame()),
+                                      AccessibleStates::EDITABLE);
         AppendEvent( aEvent );
     }
     else
     {
         FireEvents();
-        pAccImpl->InvalidateStates( AccessibleStates::EDITABLE );
+        xAccImpl->InvalidateStates(AccessibleStates::EDITABLE);
     }
 }
 
