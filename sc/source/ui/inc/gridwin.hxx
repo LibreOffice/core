@@ -212,6 +212,8 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
     ScAddress               aAutoMarkPos;
     ScAddress               aListValPos;
 
+    Point                   aDrawSelectionPos;
+
     tools::Rectangle               aInvertRect;
 
     RfCorner                aRFSelectedCorned;
