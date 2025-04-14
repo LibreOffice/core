@@ -110,6 +110,7 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
 
   /etc/cups/ppd/*.ppd                   r,
   /etc/xml/catalog                      r, #exporting to .xhtml, for libxml2
+  /etc/paperspecs                       r, # used by paperconf
   /proc/*/status                        r,
 
   owner @{HOME}/.config/libreoffice{,dev}/** rwk,
