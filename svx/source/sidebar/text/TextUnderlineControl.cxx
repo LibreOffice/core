@@ -25,6 +25,8 @@
 #include <editeng/udlnitem.hxx>
 #include <svl/itemset.hxx>
 #include <helpids.h>
+#include <sfx2/tbxctrl.hxx>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 
 namespace svx {
 
@@ -128,11 +130,20 @@ IMPL_LINK(TextUnderlineControl, PBClickHdl, weld::Button&, rButton, void)
         {
             const FontLineStyle eUnderline = getLineStyle(rButton);
 
-            SvxUnderlineItem aLineItem(eUnderline, SID_ATTR_CHAR_UNDERLINE);
-            aLineItem.SetColor(GetUnderlineColor());
+            css::uno::Sequence<css::beans::PropertyValue> aArgs(3);
+            css::beans::PropertyValue* pArgs = aArgs.getArray();
+            pArgs[0].Name = "Underline.LineStyle";
+            pArgs[0].Value <<= sal_Int32(eUnderline);
 
-            pViewFrm->GetBindings().GetDispatcher()->ExecuteList(SID_ATTR_CHAR_UNDERLINE,
-                   SfxCallMode::RECORD, { &aLineItem });
+            Color aColor(GetUnderlineColor());
+            pArgs[1].Name = "Underline.HasColor";
+            pArgs[1].Value <<= (aColor.GetAlpha() == 255);
+
+            pArgs[2].Name = "Underline.Color";
+            pArgs[2].Value <<= aColor;
+            const css::uno::Reference<com::sun::star::frame::XDispatchProvider> xProvider(
+                m_xFrame, css::uno::UNO_QUERY);
+            SfxToolBoxControl::Dispatch(xProvider, u".uno:Underline"_ustr, aArgs);
         }
     }
     mxControl->EndPopupMode();
