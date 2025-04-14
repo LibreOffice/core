@@ -51,8 +51,7 @@ IMPL_LINK_NOARG(CopyFieldDlg, CopyHdl, weld::Button&, void)
         m_xFieldValueED->get_widget().select_region(0, -1);
 
     m_xFieldValueED->get_widget().copy_clipboard();
-    if (nStartPos == nEndPos)
-        m_xFieldValueED->get_widget().select_region(0, 0);
+    m_xDialog->response(RET_OK);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
