@@ -183,7 +183,8 @@ $(if $(filter Library,$(TARGETTYPE)), $(call gb_Helper_abbreviate_dirs,\
 $(if $(and $(filter CppunitTest Executable,$(TARGETTYPE)),$(filter EMSCRIPTEN,$(OS))), \
 $(if $(filter TRUE,$(ENABLE_QT5)), \
     sed -e 's/@APPNAME@/$(subst $(gb_Executable_EXT),,$(notdir $(1)))/' $(QT5_PLATFORMS_SRCDIR)/wasm_shell.html > $(dir $(1))qt_$(basename $(notdir $(1))).html && \
-    cp $(QT5_PLATFORMS_SRCDIR)/qtlogo.svg $(QT5_PLATFORMS_SRCDIR)/qtloader.js $(dir $(1)) && \
+    sed -e 's/var Module = {}/var Module = {script: document.currentScript}/' $(QT5_PLATFORMS_SRCDIR)/qtloader.js > $(dir $(1))qtloader.js && \
+    cp $(QT5_PLATFORMS_SRCDIR)/qtlogo.svg $(dir $(1)) && \
 ,$(if $(filter TRUE,$(ENABLE_QT6)), \
     sed -z -e 's/@APPNAME@/$(basename $(notdir $(1)))/g' -e 's/@APPEXPORTNAME@/$(basename $(notdir $(1)))_entry/g' -e 's/@PRELOAD@\n                    }/}$(COMMA)$(subst ','\'',$(EMSCRIPTEN_EXTRA_QTLOADER_CONFIG))/' -e 's/}$(CLOSE_PAREN);$$/}$(CLOSE_PAREN); window.Module = instance;/' $(QT6_PLATFORMS_SRCDIR)/wasm_shell.html > $(dir $(1))qt_$(basename $(notdir $(1))).html && \
     cp $(QT6_PLATFORMS_SRCDIR)/qtlogo.svg $(QT6_PLATFORMS_SRCDIR)/qtloader.js $(dir $(1)) && \

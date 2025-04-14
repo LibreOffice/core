@@ -80,6 +80,8 @@ $(call gb_Executable_get_linktarget_target,soffice_bin): \
     $(SRCDIR)/static/emscripten/uno.js \
     $(EMSCRIPTEN_EXTRA_SOFFICE_PRE_JS)
 
+$(eval $(call gb_Executable_add_prejs,soffice_bin,$(SRCDIR)/static/emscripten/script.js))
+
 $(eval $(call gb_Executable_add_ldflags,soffice_bin, \
     --post-js $(gb_CustomTarget_workdir)/static/unoembind/bindings_uno.js \
     --post-js $(SRCDIR)/static/emscripten/uno.js \
