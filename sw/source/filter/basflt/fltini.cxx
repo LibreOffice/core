@@ -63,7 +63,8 @@ static SwReaderWriterEntry aReaderWriter[] =
     SwReaderWriterEntry( nullptr,               &::GetXMLWriter,  true  ),
     SwReaderWriterEntry( nullptr,               &::GetASCWriter,  false ),
     SwReaderWriterEntry( nullptr,               &::GetASCWriter,  true  ),
-    SwReaderWriterEntry( &::GetDOCXReader,      nullptr,          true  )
+    SwReaderWriterEntry( &::GetDOCXReader,      nullptr,          true  ),
+    SwReaderWriterEntry(nullptr, &GetMDWriter, false),
 };
 
 Reader* SwReaderWriterEntry::GetReader()

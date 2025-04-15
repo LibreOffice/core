@@ -361,6 +361,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu
 	StarOffice_Writer \
 	writer_EPUB_Document \
 	writer_PocketWord_File \
+	generic_Markdown \
 ))
 
 $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,filter/source/config/fragments/filters,\
@@ -411,6 +412,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters
 	StarOffice_Writer \
 	EPUB \
 	PocketWord_File \
+	Markdown \
 ))
 
 # fcfg_web

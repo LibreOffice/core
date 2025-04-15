@@ -575,6 +575,7 @@ void GetRTFWriter( std::u16string_view, const OUString&, WriterRef& );
 void GetASCWriter( std::u16string_view, const OUString&, WriterRef&);
 void GetHTMLWriter( std::u16string_view, const OUString&, WriterRef& );
 void GetXMLWriter( std::u16string_view, const OUString&, WriterRef& );
+void GetMDWriter(std::u16string_view, const OUString&, WriterRef&);
 
 #endif
 

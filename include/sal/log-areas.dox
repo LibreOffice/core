@@ -557,6 +557,7 @@ certain functionality.
 @li @c sw.layout - Writer core view: document layout
 @li @c sw.layout.debug - Writer layout dbg_lay output
 @li @c sw.mailmerge - Writer mail merge
+@li @c sw.md - Markdown export filter
 @li @c sw.pageframe - debug lifecycle of SwPageFrame
 @li @c sw.qa
 @li @c sw.rtf - .rtf export filter
