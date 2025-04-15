@@ -473,7 +473,7 @@ void ScTabViewShell::afterCallbackRegistered()
     }
 
     SfxObjectShell* pDocShell = GetObjectShell();
-    if (pDocShell)
+    if (pDocShell && !IsTabChangeInProgress())
     {
         std::shared_ptr<model::ColorSet> pThemeColors = pDocShell->GetThemeColors();
         std::set<Color> aDocumentColors = pDocShell->GetDocColors();
