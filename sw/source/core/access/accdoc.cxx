@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <viewsh.hxx>
 #include <doc.hxx>
@@ -225,10 +226,7 @@ awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
         }
 
         tools::Rectangle aPixBounds( pWin->GetWindowExtentsRelative( *pWin->GetAccessibleParentWindow() ) );
-        awt::Rectangle aBox( aPixBounds.Left(), aPixBounds.Top(),
-                             aPixBounds.GetWidth(), aPixBounds.GetHeight() );
-
-        return aBox;
+        return vcl::unohelper::ConvertToAWTRect(aPixBounds);
     }
     catch(const css::lang::IndexOutOfBoundsException &)
     {
