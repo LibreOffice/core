@@ -769,13 +769,13 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
             m_pImpl->m_sAnchorId = aString.makeStringAndClear().toAsciiUpperCase();
         }
         break;
-        case NS_ooxml::LN_CT_Point2D_x: // 90405;
-            m_pImpl->m_nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue);
+        case NS_ooxml::LN_CT_Point2D_x:
+            m_pImpl->m_nLeftPosition = oox::drawingml::convertEmuToHmm(nIntValue);
             m_pImpl->m_nHoriRelation = text::RelOrientation::PAGE_FRAME;
             m_pImpl->m_nHoriOrient = text::HoriOrientation::NONE;
         break;
-        case NS_ooxml::LN_CT_Point2D_y: // 90406;
-            m_pImpl->m_nTopPosition = ConversionHelper::convertTwipToMM100(nIntValue);
+        case NS_ooxml::LN_CT_Point2D_y:
+            m_pImpl->m_nTopPosition = oox::drawingml::convertEmuToHmm(nIntValue);
             m_pImpl->m_nVertRelation = text::RelOrientation::PAGE_FRAME;
             m_pImpl->m_nVertOrient = text::VertOrientation::NONE;
         break;
