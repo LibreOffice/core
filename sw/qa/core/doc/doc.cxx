@@ -689,6 +689,31 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testAtCharImageCopy)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testEditListAutofmt)
+{
+    // Given a document with a number portion in para 2, para marker is formatted to be red:
+    createSwDoc("edit-list-autofmt.docx");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->EndPara();
+
+    // When changing that red to be black:
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("Color.Color", static_cast<sal_Int32>(COL_BLACK)),
+    };
+    dispatchCommand(mxComponent, ".uno:Color", aArgs);
+
+    // Then make sure the layout turns into red:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 00000000
+    // - Actual  : 00ff0000
+    // i.e. clicking on the toolbar button didn't result in a layout update because the doc model
+    // became inconsistent.
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont",
+                "color", u"00000000");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

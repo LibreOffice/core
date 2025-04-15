@@ -75,6 +75,7 @@
 #include <frameformats.hxx>
 #include <annotationmark.hxx>
 #include <formatflysplit.hxx>
+#include <istyleaccess.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
@@ -1801,6 +1802,22 @@ namespace //local functions originally from docfmt.cxx
                 bRet = history.InsertItems( *pCharSet, nMkPos, nPtPos, nFlags, /*ppNewTextAttr*/nullptr )
                     || bRet;
 
+                if (bRet && pTextNd->GetSwAttrSet().HasItem(RES_PARATR_LIST_AUTOFMT)
+                    && nMkPos == nPtPos && nMkPos == pTextNd->Len())
+                {
+                    // The hint is created exactly at the paragraph end and the paragraph has
+                    // paragraph marker character properties, update that autostyle, too.
+                    const SwFormatAutoFormat& rListAutoFormat
+                        = pTextNd->GetAttr(RES_PARATR_LIST_AUTOFMT);
+                    std::unique_ptr<SfxItemSet> pSet = rListAutoFormat.GetStyleHandle()->Clone();
+                    pSet->Put(*pCharSet);
+                    IStyleAccess& rStyleAccess = rDoc.GetIStyleAccess();
+                    std::shared_ptr<SfxItemSet> pAutoStyle
+                        = rStyleAccess.getAutomaticStyle(*pSet, IStyleAccess::AUTO_STYLE_CHAR);
+                    SwFormatAutoFormat aListAutofmt(RES_PARATR_LIST_AUTOFMT);
+                    aListAutofmt.SetStyleHandle(pAutoStyle);
+                    pTextNd->SetAttr(aListAutofmt);
+                }
             }
             if( pOtherSet && pOtherSet->Count() )
             {
