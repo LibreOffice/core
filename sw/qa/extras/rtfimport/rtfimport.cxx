@@ -14,6 +14,7 @@
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -2041,7 +2042,15 @@ CPPUNIT_TEST_FIXTURE(Test, tdf165923Tdf)
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
+}
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf166191)
+{
+    createSwDoc("tdf166191.rtf");
+    //text of second paragraph should be in 12pt and not bold
+    uno::Reference<text::XTextRange> textRun = getRun(getParagraph(2), 1);
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(textRun, u"CharWeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(12.0f, getProperty<float>(textRun, u"CharHeight"_ustr));
 }
 
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT

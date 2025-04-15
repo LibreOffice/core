@@ -784,8 +784,10 @@ private:
     void runBreak();
     void parBreak();
     void tableBreak();
-    writerfilter::Reference<Properties>::Pointer_t
-    getProperties(const RTFSprms& rAttributes, RTFSprms const& rSprms, Id nStyleType);
+    writerfilter::Reference<Properties>::Pointer_t getProperties(const RTFSprms& rAttributes,
+                                                                 RTFSprms const& rSprms,
+                                                                 Id nStyleType,
+                                                                 bool bReplay = false);
     void checkNeedPap();
     void handleFontTableEntry();
     void sectBreak(bool bFinal = false);
