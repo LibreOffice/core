@@ -142,11 +142,9 @@ OString SdrObjList::GetObjectRectangles(const SdrObjList& rSrcList)
             if (item->IsPrintable() && item->IsVisible())
             {
                 tools::Rectangle rectangle = item->GetCurrentBoundRect();
-                OStringBuffer value(OString::number(item->GetOrdNum()));
-                value = rectangle.toString() + ", "_ostr + value;
-
+                OString value = rectangle.toString() + ", "_ostr + OString::number(item->GetOrdNum());
                 auto subArray = jsWriter.startAnonArray();
-                jsWriter.putRaw(value.makeStringAndClear());
+                jsWriter.putRaw(value);
             }
         }
     }
