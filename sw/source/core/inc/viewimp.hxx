@@ -75,7 +75,7 @@ class SwViewShellImp
     // for paint of page preview
     friend class SwPagePreviewLayout;
 
-    SwViewShell *m_pShell;           // If someone passes an Imp, but needs a SwViewShell, we
+    SwViewShell& m_rShell;      // If someone passes an Imp, but needs a SwViewShell, we
                                 // keep a backlink here
 
     std::unique_ptr<SwDrawView> m_pDrawView; // Our DrawView
@@ -151,12 +151,12 @@ private:
     void InvalidateAccessibleParaAttrs_( const SwTextFrame& rTextFrame );
 
 public:
-    SwViewShellImp( SwViewShell * );
+    SwViewShellImp( SwViewShell& );
     ~SwViewShellImp();
     void Init( const SwViewOption * ); /// Only for SwViewShell::Init()
 
-    const SwViewShell *GetShell() const { return m_pShell; }
-          SwViewShell *GetShell()       { return m_pShell; }
+    const SwViewShell& GetShell() const { return m_rShell; }
+    SwViewShell& GetShell() { return m_rShell; }
 
     Color GetRetoucheColor() const;
 

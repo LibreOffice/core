@@ -119,7 +119,7 @@ SwDrawView::SwDrawView(
 
     SetHitTolerancePixel( GetMarkHdlSizePixel()/2 );
 
-    SetPrintPreview( rI.GetShell()->IsPreview() );
+    SetPrintPreview( rI.GetShell().IsPreview() );
 
     // #i73602# Use default from the configuration
     SetBufferedOverlayAllowed(!comphelper::IsFuzzing() && officecfg::Office::Common::Drawinglayer::OverlayBuffer_Writer::get());
@@ -799,7 +799,7 @@ void SwDrawView::ShowDragAnchor()
 
 void SwDrawView::MarkListHasChanged()
 {
-    Imp().GetShell()->DrawSelChanged();
+    Imp().GetShell().DrawSelChanged();
     FmFormView::MarkListHasChanged();
 }
 
@@ -838,8 +838,8 @@ void SwDrawView::ModelHasChanged()
 
 void SwDrawView::MakeVisible( const tools::Rectangle &rRect, vcl::Window & )
 {
-    OSL_ENSURE( m_rImp.GetShell()->GetWin(), "MakeVisible, unknown Window");
-    m_rImp.GetShell()->MakeVisible( SwRect( rRect ) );
+    OSL_ENSURE( m_rImp.GetShell().GetWin(), "MakeVisible, unknown Window");
+    m_rImp.GetShell().MakeVisible( SwRect( rRect ) );
 }
 
 void SwDrawView::CheckPossibilities()
@@ -888,7 +888,7 @@ void SwDrawView::CheckPossibilities()
                             bSzProtect |= ( embed::EmbedMisc::EMBED_NEVERRESIZE & xObj->getStatus( embed::Aspects::MSOLE_CONTENT ) ) != 0;
 
                             // #i972: protect position if it is a Math object anchored 'as char' and baseline alignment is activated
-                            SwDoc* pDoc = Imp().GetShell()->GetDoc();
+                            SwDoc* pDoc = Imp().GetShell().GetDoc();
                             const bool bProtectMathPos = SotExchange::IsMath( xObj->getClassID() )
                                     && RndStdIds::FLY_AS_CHAR == pFly->GetFormat()->GetAnchor().GetAnchorId()
                                     && pDoc->GetDocumentSettingManager().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT );
@@ -980,12 +980,12 @@ void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
 
 SfxViewShell* SwDrawView::GetSfxViewShell() const
 {
-    return m_rImp.GetShell()->GetSfxViewShell();
+    return m_rImp.GetShell().GetSfxViewShell();
 }
 
 void SwDrawView::DeleteMarked()
 {
-    SwDoc* pDoc = Imp().GetShell()->GetDoc();
+    SwDoc* pDoc = Imp().GetShell().GetDoc();
     SwRootFrame *pTmpRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if ( pTmpRoot )
         pTmpRoot->StartAllAction();
@@ -1021,7 +1021,7 @@ void SwDrawView::DeleteMarked()
     if ( pDoc->DeleteSelection( *this ) )
     {
         FmFormView::DeleteMarked();
-        ::FrameNotify( Imp().GetShell(), FLY_DRAG_END );
+        ::FrameNotify( &Imp().GetShell(), FLY_DRAG_END );
     }
 
     // Only delete these now: earlier deletion would clear the mark list as well.

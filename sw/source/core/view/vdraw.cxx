@@ -50,8 +50,8 @@ void SwViewShellImp::StartAction()
 {
     if ( HasDrawView() )
     {
-        CurrShell aCurr( GetShell() );
-        if ( auto pFEShell = dynamic_cast<SwFEShell*>( m_pShell) )
+        CurrShell aCurr( &GetShell() );
+        if ( auto pFEShell = dynamic_cast<SwFEShell*>(&m_rShell) )
             pFEShell->HideChainMarker(); // might have changed
     }
 }
@@ -60,8 +60,8 @@ void SwViewShellImp::EndAction()
 {
     if ( HasDrawView() )
     {
-        CurrShell aCurr( GetShell() );
-        if ( auto pFEShell = dynamic_cast<SwFEShell*>(m_pShell) )
+        CurrShell aCurr( &GetShell() );
+        if ( auto pFEShell = dynamic_cast<SwFEShell*>(&m_rShell) )
             pFEShell->SetChainMarker(); // might have changed
     }
 }
@@ -96,11 +96,11 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
         return;
 
     //change the draw mode in high contrast mode
-    OutputDevice* pOutDev = GetShell()->GetOut();
+    OutputDevice* pOutDev = GetShell().GetOut();
     DrawModeFlags nOldDrawMode = pOutDev->GetDrawMode();
-    if( GetShell()->GetWin() &&
+    if( GetShell().GetWin() &&
         Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
-        (!GetShell()->IsPreview() || officecfg::Office::Common::Accessibility::IsForPagePreviews::get()))
+        (!GetShell().IsPreview() || officecfg::Office::Common::Accessibility::IsForPagePreviews::get()))
     {
         pOutDev->SetDrawMode( nOldDrawMode | DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill |
                             DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient );
@@ -114,7 +114,7 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
     // set default horizontal text direction on painting <hell> or
     // <heaven>.
     EEHorizontalTextDirection aOldEEHoriTextDir = EEHorizontalTextDirection::L2R;
-    const IDocumentDrawModelAccess& rIDDMA = GetShell()->getIDocumentDrawModelAccess();
+    const IDocumentDrawModelAccess& rIDDMA = GetShell().getIDocumentDrawModelAccess();
     if ( (_nLayerID == rIDDMA.GetHellId()) ||
          (_nLayerID == rIDDMA.GetHeavenId()) )
     {
@@ -173,7 +173,7 @@ bool SwViewShellImp::IsDragPossible( const Point &rPoint )
         aRect.Union( aTmp );
     }
     else
-        aRect = GetShell()->GetLayout()->getFrameArea();
+        aRect = GetShell().GetLayout()->getFrameArea();
 
     aRect.AddTop   (- FUZZY_EDGE );
     aRect.AddBottom(  FUZZY_EDGE );
@@ -203,8 +203,8 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
     if ( !bCheckDrawObjs )
         return;
 
-    OSL_ENSURE( m_pShell->getIDocumentDrawModelAccess().GetDrawModel(), "NotifySizeChg without DrawModel" );
-    SdrPage* pPage = m_pShell->getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 );
+    OSL_ENSURE( m_rShell.getIDocumentDrawModelAccess().GetDrawModel(), "NotifySizeChg without DrawModel" );
+    SdrPage* pPage = m_rShell.getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 );
     std::vector<SdrObject*> aCandidatesToMove;
     for (const rtl::Reference<SdrObject>& pObj : *pPage)
     {
