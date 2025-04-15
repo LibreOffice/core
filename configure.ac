@@ -2439,6 +2439,11 @@ AC_ARG_WITH(system-zlib,
         [Use zlib already on system.]),,
     [with_system_zlib=auto])
 
+AC_ARG_WITH(system-zstd,
+    AS_HELP_STRING([--with-system-zstd=@<:@yes|no|auto@:>@],
+        [Use zstd already on system [default=auto].]),,
+    [with_system_zstd=auto])
+
 AC_ARG_WITH(system-jpeg,
     AS_HELP_STRING([--with-system-jpeg],
         [Use jpeg already on system.]),,
@@ -9856,6 +9861,52 @@ fi
 AC_SUBST(ZLIB_CFLAGS)
 AC_SUBST(ZLIB_LIBS)
 AC_SUBST(SYSTEM_ZLIB)
+
+dnl ===================================================================
+dnl Check for system zstd
+dnl ===================================================================
+
+if test "x$with_system_zstd" = "xauto"; then
+  case "$_os" in
+    WINNT) with_system_zstd="$with_system_libs" ;;  # follow system-libs on Windows
+    *)     with_system_zstd="$with_system_libs" ;;  # follow system-libs on Unix
+  esac
+fi
+
+AC_MSG_CHECKING([which zstd to use])
+case "$with_system_zstd" in
+  yes)
+    AC_MSG_RESULT([system])
+    SYSTEM_ZSTD=TRUE
+
+    AC_CHECK_HEADER([zstd.h], [],
+      [AC_MSG_ERROR([zstd.h not found. Install system zstd.])])
+
+    AC_CHECK_LIB([zstd], [ZSTD_createDStream],
+      [ ZSTD_LIBS="-lzstd"
+        ZSTD_CFLAGS="" ],
+      [ AC_MSG_ERROR([system zstd library not found or broken.]) ])
+    ;;
+
+  ""|no)
+    AC_MSG_RESULT([bundled])
+    SYSTEM_ZSTD=
+    ZSTD_LIBS=""
+    ZSTD_CFLAGS="-I\${WORKDIR}/UnpackedTarball/zstd/lib \
+                 -I\${WORKDIR}/UnpackedTarball/zstd/lib/common \
+                 -I\${WORKDIR}/UnpackedTarball/zstd/lib/decompress"
+    BUILD_TYPE="$BUILD_TYPE ZSTD"
+    ;;
+
+  *)
+    AC_MSG_ERROR([Invalid value for --with-system-zstd: $with_system_zstd])
+    ;;
+esac
+
+AC_SUBST(SYSTEM_ZSTD)
+AC_SUBST(ZSTD_LIBS)
+AC_SUBST(ZSTD_CFLAGS)
+AC_SUBST(BUILD_TYPE)
 
 dnl ===================================================================
 dnl Check for system jpeg

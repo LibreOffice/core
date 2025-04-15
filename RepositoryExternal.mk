@@ -409,6 +409,23 @@ endef
 
 endif # SYSTEM_ZLIB
 
+ifneq ($(SYSTEM_ZSTD),)
+  define gb_LinkTarget__use_zstd
+    $(call gb_LinkTarget_add_libs,$(1),-lzstd)
+  endef
+
+  gb_ExternalProject__use_zstd :=
+else
+  define gb_LinkTarget__use_zstd
+    $(call gb_LinkTarget_set_include,$(1),$(ZSTD_CFLAGS) $$(INCLUDE))
+    $(call gb_LinkTarget_use_static_libraries,$(1),zstd)
+  endef
+
+  define gb_ExternalProject__use_zstd
+    $(call gb_ExternalProject_use_static_libraries,$(1),zstd)
+  endef
+endif
+
 
 ifneq ($(SYSTEM_LIBJPEG),)
 

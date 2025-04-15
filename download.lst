@@ -680,6 +680,11 @@ ZLIB_TARBALL := zlib-1.3.1.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+ZSTD_SHA256SUM := eb33e51f49a15e023950cd7825ca74a4a2b43db8354825ac24fc1b7ee09e6fa3
+ZSTD_TARBALL := zstd-1.5.7.tar.gz
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 ZMF_SHA256SUM := 27051a30cb057fdb5d5de65a1f165c7153dc76e27fe62251cbb86639eb2caf22
 ZMF_TARBALL := libzmf-0.0.2.tar.xz
 # three static lines

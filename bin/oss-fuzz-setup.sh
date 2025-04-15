@@ -53,6 +53,7 @@ curl --no-progress-meter -S \
     -C - -O https://dev-www.libreoffice.org/src/$ZMF_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$PIXMAN_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$ZLIB_TARBALL \
+    -C - -O https://dev-www.libreoffice.org/src/$ZSTD_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$MDDS_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$OPENSSL_TARBALL \
     -C - -O https://dev-www.libreoffice.org/src/$LANGTAGREG_TARBALL \

@@ -43,6 +43,7 @@ $(eval $(call gb_Library_use_libraries,package2,\
 $(eval $(call gb_Library_use_externals,package2,\
 	argon2 \
 	zlib \
+	zstd \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,package2,\
@@ -56,7 +57,9 @@ $(eval $(call gb_Library_add_exception_objects,package2,\
 	package/source/zipapi/CRC32 \
 	package/source/zipapi/Deflater \
 	package/source/zipapi/InflaterBytesZlib \
+	package/source/zipapi/InflaterBytesZstd \
 	package/source/zipapi/InflateZlib \
+	package/source/zipapi/InflateZstd \
 	package/source/zipapi/sha1context \
 	package/source/zipapi/ThreadedDeflater \
 	package/source/zipapi/XBufferedThreadedStream \
