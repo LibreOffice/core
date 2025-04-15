@@ -38,8 +38,7 @@
 
 #include <rtl/bootstrap.hxx>
 #include <rtl/character.hxx>
-#include <rtl/string.h>
-#include <rtl/ustring.h>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
 #include <osl/module.h>
@@ -2193,9 +2192,7 @@ void WinSalFrame::EndExtTextInput( EndExtTextInputFlags nFlags )
     SendMessageW( mhWnd, SAL_MSG_ENDEXTTEXTINPUT, static_cast<WPARAM>(nFlags), 0 );
 }
 
-static void ImplGetKeyNameText( UINT lParam, sal_Unicode* pBuf,
-                                UINT& rCount, UINT nMaxSize,
-                                const char* pReplace )
+static void ImplGetKeyNameText(UINT lParam, OUStringBuffer& rBuf, const char* pReplace)
 {
     static_assert( sizeof( WCHAR ) == sizeof( sal_Unicode ), "must be the same size" );
 
@@ -2237,58 +2234,46 @@ static void ImplGetKeyNameText( UINT lParam, sal_Unicode* pBuf,
 
     if ( (nKeyLen > 0) || pReplace )
     {
-        if( (rCount > 0) && (rCount < nMaxSize) )
-        {
-            pBuf[rCount] = '+';
-            rCount++;
-        }
+        if (!rBuf.isEmpty())
+            rBuf.append('+');
 
         if( nKeyLen > 0 )
         {
-            WCHAR *pW = aKeyBuf, *pE = aKeyBuf + nKeyLen;
-            while ((pW < pE) && *pW && (rCount < nMaxSize))
-                pBuf[rCount++] = *pW++;
+            rBuf.append(o3tl::toU(aKeyBuf), nKeyLen);
         }
         else // fall back to provided default name
         {
-            while( *pReplace && (rCount < nMaxSize) )
-            {
-                pBuf[rCount] = *pReplace;
-                rCount++;
-                pReplace++;
-            }
+            rBuf.appendAscii(pReplace);
         }
     }
     else
-        rCount = 0;
+        rBuf.setLength(0);
 }
 
 OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 {
-    static const UINT nMaxKeyLen = 350;
-    sal_Unicode aKeyBuf[ nMaxKeyLen ];
-    UINT        nKeyBufLen = 0;
+    OUStringBuffer aKeyBuf;
     UINT        nSysCode = 0;
 
     if ( nKeyCode & KEY_MOD1 )
     {
         nSysCode = MapVirtualKeyW( VK_CONTROL, 0 );
         nSysCode = (nSysCode << 16) | ((sal_uLong(1)) << 25);
-        ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, "Ctrl" );
+        ImplGetKeyNameText( nSysCode, aKeyBuf, "Ctrl" );
     }
 
     if ( nKeyCode & KEY_MOD2 )
     {
         nSysCode = MapVirtualKeyW( VK_MENU, 0 );
         nSysCode = (nSysCode << 16) | ((sal_uLong(1)) << 25);
-        ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, "Alt" );
+        ImplGetKeyNameText( nSysCode, aKeyBuf, "Alt" );
     }
 
     if ( nKeyCode & KEY_SHIFT )
     {
         nSysCode = MapVirtualKeyW( VK_SHIFT, 0 );
         nSysCode = (nSysCode << 16) | ((sal_uLong(1)) << 25);
-        ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, "Shift" );
+        ImplGetKeyNameText( nSysCode, aKeyBuf, "Shift" );
     }
 
     sal_uInt16      nCode = nKeyCode & 0x0FFF;
@@ -2465,23 +2450,19 @@ OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
         nSysCode = MapVirtualKeyW( nSysCode, 0 );
         if ( nSysCode )
             nSysCode = (nSysCode << 16) | nSysCode2;
-        ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, pReplace );
+        ImplGetKeyNameText( nSysCode, aKeyBuf, pReplace );
     }
     else
     {
         if ( cSVCode )
         {
-            if ( nKeyBufLen > 0 )
-                aKeyBuf[ nKeyBufLen++ ] = '+';
-            if( nKeyBufLen < nMaxKeyLen )
-                aKeyBuf[ nKeyBufLen++ ] = cSVCode;
+            if (!aKeyBuf.isEmpty())
+                aKeyBuf.append('+');
+            aKeyBuf.append(cSVCode);
         }
     }
 
-    if( !nKeyBufLen )
-        return OUString();
-
-    return OUString( aKeyBuf, sal::static_int_cast< sal_uInt16 >(nKeyBufLen) );
+    return aKeyBuf.makeStringAndClear();
 }
 
 static Color ImplWinColorToSal( COLORREF nColor )
