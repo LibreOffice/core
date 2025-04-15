@@ -30,7 +30,7 @@ enum class SwGetPoolIdFromName : sal_uInt16
     FrmFmt = 0x04,
     PageDesc = 0x08,
     NumRule = 0x10,
-    TabStyle = 0x20,
+    TableStyle = 0x20,
     CellStyle = 0x40
 };
 

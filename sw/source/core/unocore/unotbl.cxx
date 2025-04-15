@@ -2707,7 +2707,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     if (!(aValue >>= sProgName))
                         break;
                     OUString sName;
-                    SwStyleNameMapper::FillUIName(ProgName(sProgName), sName, SwGetPoolIdFromName::TabStyle);
+                    SwStyleNameMapper::FillUIName(ProgName(sProgName), sName, SwGetPoolIdFromName::TableStyle);
                     pTable->SetTableStyleName(sName);
                     SwDoc* pDoc = pFormat->GetDoc();
                     if (SwFEShell* pFEShell = pDoc->GetDocShell()->GetFEShell())
@@ -2952,7 +2952,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                 {
                     SwTable* pTable = SwTable::FindTable(pFormat);
                     ProgName sName;
-                    SwStyleNameMapper::FillProgName(pTable->GetTableStyleName(), sName, SwGetPoolIdFromName::TabStyle);
+                    SwStyleNameMapper::FillProgName(pTable->GetTableStyleName(), sName, SwGetPoolIdFromName::TableStyle);
                     aRet <<= sName.toString();
                 }
                 break;

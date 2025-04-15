@@ -1131,7 +1131,7 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
     if (!rTable.GetTableStyleName().isEmpty())
     {
         ProgName sStyleName;
-        SwStyleNameMapper::FillProgName(rTable.GetTableStyleName(), sStyleName, SwGetPoolIdFromName::TabStyle);
+        SwStyleNameMapper::FillProgName(rTable.GetTableStyleName(), sStyleName, SwGetPoolIdFromName::TableStyle);
         AddAttribute(XML_NAMESPACE_TABLE, XML_TEMPLATE_NAME, sStyleName.toString());
     }
 

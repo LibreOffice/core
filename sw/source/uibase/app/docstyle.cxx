@@ -502,7 +502,7 @@ static const SwBoxAutoFormat* lcl_FindCellStyle(SwDoc& rDoc, std::u16string_view
                     const sal_uInt32 nBoxIndex = aTableTemplateMap[nBoxFormat];
                     const SwBoxAutoFormat& rBoxFormat = rTableStyle.GetBoxFormat(nBoxIndex);
                     ProgName sBoxFormatProgName;
-                    SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatProgName, SwGetPoolIdFromName::TabStyle);
+                    SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatProgName, SwGetPoolIdFromName::TableStyle);
                     OUString sBoxFormatName = sBoxFormatProgName.toString() + rTableStyle.GetTableTemplateCellSubName(rBoxFormat);
                     if (rName == sBoxFormatName)
                         pFormat = &rBoxFormat;
@@ -3263,7 +3263,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                     const sal_uInt32 nBoxIndex = aTableTemplateMap[nBoxFormat];
                     const SwBoxAutoFormat& rBoxFormat = rTableStyle.GetBoxFormat(nBoxIndex);
                     ProgName sBoxFormatProgName;
-                    SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatProgName, SwGetPoolIdFromName::TabStyle);
+                    SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatProgName, SwGetPoolIdFromName::TableStyle);
                     OUString sBoxFormatName = sBoxFormatProgName.toString() + rTableStyle.GetTableTemplateCellSubName(rBoxFormat);
                     m_aLst.Append( SfxStyleFamily::Cell, sBoxFormatName );
                 }

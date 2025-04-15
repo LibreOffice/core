@@ -232,7 +232,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             return TablePair<GetPageMap>::getMap(bProgName);
         case SwGetPoolIdFromName::NumRule:
             return TablePair<GetNumRuleMap>::getMap(bProgName);
-        case SwGetPoolIdFromName::TabStyle:
+        case SwGetPoolIdFromName::TableStyle:
             return TablePair<GetTableStyleMap>::getMap(bProgName);
         case SwGetPoolIdFromName::CellStyle:
             return TablePair<GetCellStyleMap>::getMap(bProgName);
@@ -272,7 +272,7 @@ void SwStyleNameMapper::FillProgName(
         rFillName = ProgName(rName);
         if (nId == USHRT_MAX )
         {
-            if (eFlags != SwGetPoolIdFromName::TabStyle)
+            if (eFlags != SwGetPoolIdFromName::TableStyle)
             {
                 // check if it has a " (user)" suffix, if so remove it
                 lcl_CheckSuffixAndDelete(rFillName);
@@ -314,8 +314,8 @@ void SwStyleNameMapper::FillUIName(
     if ( nId == USHRT_MAX )
     {
         rFillName = aName.toString();
-        // TabStyle: unfortunately ODF documents with UIName table styles exist
-        if (eFlags == SwGetPoolIdFromName::TabStyle || // see testTdf129568ui
+        // TableStyle: unfortunately ODF documents with UIName table styles exist
+        if (eFlags == SwGetPoolIdFromName::TableStyle || // see testTdf129568ui
             GetPoolIdFromUIName(aName.toString(), eFlags) == USHRT_MAX)
         {
             // aName isn't in our Prog name table...check if it has a " (user)" suffix, if so remove it
