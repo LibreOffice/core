@@ -59,6 +59,7 @@ public:
     void SaveRedlineData( const SwPaM& rPam, bool bInsContent );
 
     SwHistory& GetHistory() { return *m_pHistory; }
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 class SwUndoResetAttr final : public SwUndo, private SwUndRng

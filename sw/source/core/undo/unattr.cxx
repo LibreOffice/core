@@ -804,6 +804,20 @@ void SwUndoAttr::SaveRedlineData( const SwPaM& rPam, bool bIsContent )
     }
 }
 
+void SwUndoAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoAttr"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    if (m_pHistory)
+    {
+        m_pHistory->dumpAsXml(pWriter);
+    }
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
+
 void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc *const pDoc = & rContext.GetDoc();
