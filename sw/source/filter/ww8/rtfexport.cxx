@@ -136,10 +136,10 @@ void RtfExport::AppendBookmarks(const SwTextNode& rNode, sal_Int32 nCurrentPos, 
             const sal_Int32 nEnd = pMark->GetMarkEnd().GetContentIndex();
 
             if (nStart == nCurrentPos)
-                aStarts.push_back(pMark->GetName());
+                aStarts.push_back(pMark->GetName().toString());
 
             if (nEnd == nCurrentPos)
-                aEnds.push_back(pMark->GetName());
+                aEnds.push_back(pMark->GetName().toString());
         }
     }
 
@@ -157,8 +157,8 @@ void RtfExport::AppendBookmark(const OUString& rName)
 void RtfExport::AppendAnnotationMarks(const SwWW8AttrIter& rAttrs, sal_Int32 nCurrentPos,
                                       sal_Int32 nLen)
 {
-    std::vector<OUString> aStarts;
-    std::vector<OUString> aEnds;
+    std::vector<ReferenceMarkerName> aStarts;
+    std::vector<ReferenceMarkerName> aEnds;
 
     IMarkVector aMarks;
     if (GetAnnotationMarks(rAttrs, nCurrentPos, nCurrentPos + nLen, aMarks))

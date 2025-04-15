@@ -21,6 +21,7 @@
 #include <vector>
 #include <rtl/ustring.hxx>
 #include "swdllapi.h"
+#include "names.hxx"
 
 enum SwUndoArg
 {
@@ -39,6 +40,11 @@ public:
     SwRewriter();
 
     void AddRule(SwUndoArg eWhat, const OUString& rWith);
+    // convenience method
+    void AddRule(SwUndoArg eWhat, const ReferenceMarkerName& rWith)
+    {
+        AddRule(eWhat, rWith.toString());
+    }
 
     OUString Apply(const OUString& rStr) const;
 

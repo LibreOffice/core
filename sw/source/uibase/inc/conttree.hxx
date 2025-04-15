@@ -148,7 +148,7 @@ class SwContentTree final : public SfxListener
 
     void BringEntryToAttention(const weld::TreeIter& rEntry);
     void BringFramesToAttention(const std::vector<const SwFrameFormat*>& rFrameFormats);
-    void BringBookmarksToAttention(const std::vector<OUString>& rNames);
+    void BringBookmarksToAttention(const std::vector<ReferenceMarkerName>& rNames);
     void BringURLFieldsToAttention(const SwGetINetAttrs& rINetAttrsArr);
     void BringReferencesToAttention(std::vector<const SwTextAttr*>& rTextAttrsArr);
     void BringPostItFieldsToAttention(std::vector<const SwTextAttr*>& rTextAttrsArr);

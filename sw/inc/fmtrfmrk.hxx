@@ -26,6 +26,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 
 #include "calbck.hxx"
+#include "names.hxx"
 
 class SwTextRefMark;
 class SwXReferenceMark;
@@ -43,13 +44,13 @@ class SAL_DLLPUBLIC_RTTI SwFormatRefMark final : public SfxPoolItem
     SwTextRefMark* m_pTextAttr;
 
     SwFormatRefMark& operator=(const SwFormatRefMark& rRefMark) = delete;
-    OUString m_aRefName;
+    ReferenceMarkerName m_aRefName;
 
     unotools::WeakReference<SwXReferenceMark> m_wXReferenceMark;
 
 public:
     DECLARE_ITEM_TYPE_FUNCTION(SwFormatRefMark)
-    SwFormatRefMark( OUString aText );
+    SwFormatRefMark( ReferenceMarkerName aText );
     SwFormatRefMark( const SwFormatRefMark& rRefMark );
     virtual ~SwFormatRefMark( ) override;
 
@@ -61,8 +62,8 @@ public:
 
     const SwTextRefMark *GetTextRefMark() const   { return m_pTextAttr; }
 
-    OUString &GetRefName()       { return m_aRefName; }
-    const OUString &GetRefName() const { return m_aRefName; }
+    ReferenceMarkerName &GetRefName()       { return m_aRefName; }
+    const ReferenceMarkerName &GetRefName() const { return m_aRefName; }
 
     unotools::WeakReference<SwXReferenceMark> const& GetXRefMark() const
         { return m_wXReferenceMark; }

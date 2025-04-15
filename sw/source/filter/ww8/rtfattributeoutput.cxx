@@ -1946,16 +1946,14 @@ void RtfAttributeOutput::WriteBookmarks_Impl(std::vector<OUString>& rStarts,
     rEnds.clear();
 }
 
-void RtfAttributeOutput::WriteAnnotationMarks_Impl(std::vector<OUString>& rStarts,
-                                                   std::vector<OUString>& rEnds)
+void RtfAttributeOutput::WriteAnnotationMarks_Impl(std::vector<ReferenceMarkerName>& rStarts,
+                                                   std::vector<ReferenceMarkerName>& rEnds)
 {
     for (const auto& rStart : rStarts)
     {
-        OString rName = OUStringToOString(rStart, RTL_TEXTENCODING_UTF8);
-
         // Output the annotation mark
         const sal_Int32 nId = m_nNextAnnotationMarkId++;
-        m_rOpenedAnnotationMarksIds[rName] = nId;
+        m_rOpenedAnnotationMarksIds[rStart] = nId;
         m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATRFSTART " ");
         m_aRun->append(nId);
         m_aRun->append('}');
@@ -1964,17 +1962,15 @@ void RtfAttributeOutput::WriteAnnotationMarks_Impl(std::vector<OUString>& rStart
 
     for (const auto& rEnd : rEnds)
     {
-        OString rName = OUStringToOString(rEnd, RTL_TEXTENCODING_UTF8);
-
         // Get the id of the annotation mark
-        auto it = m_rOpenedAnnotationMarksIds.find(rName);
+        auto it = m_rOpenedAnnotationMarksIds.find(rEnd);
         if (it != m_rOpenedAnnotationMarksIds.end())
         {
             const sal_Int32 nId = it->second;
             m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATRFEND " ");
             m_aRun->append(nId);
             m_aRun->append('}');
-            m_rOpenedAnnotationMarksIds.erase(rName);
+            m_rOpenedAnnotationMarksIds.erase(rEnd);
 
             if (m_aPostitFields.find(nId) != m_aPostitFields.end())
             {
@@ -4107,7 +4103,7 @@ void RtfAttributeOutput::PostitField(const SwField* pField)
 
     const SwPostItField& rPField = *static_cast<const SwPostItField*>(pField);
 
-    OString aName = OUStringToOString(rPField.GetName(), RTL_TEXTENCODING_UTF8);
+    ReferenceMarkerName aName = rPField.GetName();
     auto it = m_rOpenedAnnotationMarksIds.find(aName);
     if (it != m_rOpenedAnnotationMarksIds.end())
     {

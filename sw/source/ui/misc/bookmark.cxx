@@ -105,11 +105,11 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl, weld::Button&, void)
         // remove from model
         sw::mark::MarkBase* pBookmark
             = weld::fromId<sw::mark::MarkBase*>(m_xBookmarksBox->get_id(rEntry));
-        OUString sRemoved = pBookmark->GetName();
+        ReferenceMarkerName sRemoved = pBookmark->GetName();
         IDocumentMarkAccess* const pMarkAccess = m_rSh.getIDocumentMarkAccess();
         pMarkAccess->deleteMark(pMarkAccess->findMark(sRemoved), false);
         SfxRequest aReq(m_rSh.GetView().GetViewFrame(), FN_DELETE_BOOKMARK);
-        aReq.AppendItem(SfxStringItem(FN_DELETE_BOOKMARK, sRemoved));
+        aReq.AppendItem(SfxStringItem(FN_DELETE_BOOKMARK, sRemoved.toString()));
         aReq.Done();
         std::erase(m_aTableBookmarks, std::make_pair(pBookmark, sRemoved));
 
@@ -161,10 +161,10 @@ void SwInsertBookmarkDlg::SelectionChanged()
         [this, &sEditBoxText, &nSelectedRows](weld::TreeIter& rEntry) {
             sw::mark::MarkBase* pBookmark
                 = weld::fromId<sw::mark::MarkBase*>(m_xBookmarksBox->get_id(rEntry));
-            const OUString& sEntryName = pBookmark->GetName();
+            const ReferenceMarkerName& sEntryName = pBookmark->GetName();
             if (!sEditBoxText.isEmpty())
                 sEditBoxText.append(";");
-            sEditBoxText.append(sEntryName);
+            sEditBoxText.append(sEntryName.toString());
             ++nSelectedRows;
             return false;
         });
@@ -210,7 +210,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, RenameHdl, weld::Button&, void)
         = weld::fromId<sw::mark::MarkBase*>(m_xBookmarksBox->get_id(*xSelected));
     rtl::Reference<SwXTextDocument> xModel = m_rSh.GetView().GetDocShell()->GetBaseModel();
     uno::Reference<container::XNameAccess> xNameAccess = xModel->getBookmarks();
-    uno::Any aObj = xNameAccess->getByName(pBookmark->GetName());
+    uno::Any aObj = xNameAccess->getByName(pBookmark->GetName().toString());
     uno::Reference<uno::XInterface> xTmp;
     aObj >>= xTmp;
     uno::Reference<container::XNamed> xNamed(xTmp, uno::UNO_QUERY);
@@ -238,7 +238,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, RenameHdl, weld::Button&, void)
 IMPL_LINK_NOARG(SwInsertBookmarkDlg, InsertHdl, weld::Button&, void)
 {
     OUString sBookmark = m_xEditBox->get_text();
-    m_rSh.SetBookmark2(vcl::KeyCode(), sBookmark, m_xHideCB->get_active(),
+    m_rSh.SetBookmark2(vcl::KeyCode(), ReferenceMarkerName(sBookmark), m_xHideCB->get_active(),
                        m_xConditionED->get_text());
 
     m_xDialog->response(RET_OK);
@@ -324,8 +324,7 @@ bool SwInsertBookmarkDlg::HaveBookmarksChanged()
     if (pMarkAccess->getBookmarksCount() != m_nLastBookmarksCount)
         return true;
 
-    std::vector<std::pair<sw::mark::MarkBase*, OUString>>::const_iterator aListIter
-        = m_aTableBookmarks.begin();
+    auto aListIter = m_aTableBookmarks.begin();
     for (auto ppBookmark = pMarkAccess->getBookmarksBegin();
          ppBookmark != pMarkAccess->getBookmarksEnd(); ++ppBookmark)
     {
@@ -529,7 +528,7 @@ void BookmarkTable::InsertBookmark(SwWrtShell& rSh, sw::mark::MarkBase* const pM
     }
 
     const OUString& sHideCondition = pBookmark->GetHideCondition();
-    const OUString& sName = pBookmark->GetName();
+    const ReferenceMarkerName& sName = pBookmark->GetName();
     OUString sHidden
         = (pBookmark->IsHidden() || !sHideCondition.isEmpty() ||
            // tdf#150955 add "hidden" status to the imported OOXML _Toc and _Ref bookmarks
@@ -537,14 +536,14 @@ void BookmarkTable::InsertBookmark(SwWrtShell& rSh, sw::mark::MarkBase* const pM
            // Note: this "hidden" means here only that these bookmarks haven't got
            // visible bookmark formatting aids (gray I-shape or brackets), otherwise
            // their anchor are still visible.
-           sName.startsWith("_Toc") || sName.startsWith("_Ref"))
+           sName.toString().startsWith("_Toc") || sName.toString().startsWith("_Ref"))
               ? SwResId(STR_BOOKMARK_YES)
               : SwResId(STR_BOOKMARK_NO);
 
     OUString sPageNum = OUString::number(SwPaM(pMark->GetMarkStart()).GetPageNum());
     int nRow = m_xControl->n_children();
     m_xControl->append(weld::toId(pMark), sPageNum);
-    m_xControl->set_text(nRow, sName, 1);
+    m_xControl->set_text(nRow, sName.toString(), 1);
     m_xControl->set_text(nRow, sBookmarkNodeText, 2);
     m_xControl->set_text(nRow, sHidden, 3);
     m_xControl->set_text(nRow, sHideCondition, 4);
@@ -591,11 +590,12 @@ OUString BookmarkTable::GetNameProposal() const
     for (int i = 0, nCount = m_xControl->n_children(); i < nCount; ++i)
     {
         sw::mark::MarkBase* pBookmark = weld::fromId<sw::mark::MarkBase*>(m_xControl->get_id(i));
-        const OUString& sName = pBookmark->GetName();
+        const ReferenceMarkerName& sName = pBookmark->GetName();
         sal_Int32 nIndex = 0;
-        if (o3tl::getToken(sName, 0, ' ', nIndex) == sDefaultBookmarkName)
+        if (o3tl::getToken(sName.toString(), 0, ' ', nIndex) == sDefaultBookmarkName)
         {
-            sal_Int32 nCurrBookmarkId = o3tl::toInt32(o3tl::getToken(sName, 0, ' ', nIndex));
+            sal_Int32 nCurrBookmarkId
+                = o3tl::toInt32(o3tl::getToken(sName.toString(), 0, ' ', nIndex));
             nHighestBookmarkId = std::max<sal_Int32>(nHighestBookmarkId, nCurrBookmarkId);
         }
     }

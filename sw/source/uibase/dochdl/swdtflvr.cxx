@@ -1640,7 +1640,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, const TransferableDataHelper& rData,
             // store cursor position in row mode
             ::sw::mark::MarkBase* pMark = (!bRowMode || nSelectedRowsOrCols == 0) ? nullptr : rSh.SetBookmark(
                                     vcl::KeyCode(),
-                                    OUString(),
+                                    ReferenceMarkerName(),
                                     IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
 
             // add a new empty row/column before the actual table row/column and go there
@@ -4003,7 +4003,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             ::sw::mark::MarkBase* pMarkMoveFrom = bMove
                     ? rSh.SetBookmark(
                                     vcl::KeyCode(),
-                                    OUString(),
+                                    ReferenceMarkerName(),
                                     IDocumentMarkAccess::MarkType::UNO_BOOKMARK )
                     : nullptr;
 
@@ -4075,7 +4075,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             // store cursor
             ::sw::mark::MarkBase* pMark = rSh.SetBookmark(
                                     vcl::KeyCode(),
-                                    OUString(),
+                                    ReferenceMarkerName(),
                                     IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
 
             // paste rows above/columns before
@@ -4446,11 +4446,11 @@ SwTransferDdeLink::SwTransferDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
 
         ::sw::mark::MarkBase* pMark = rSh.SetBookmark(
             vcl::KeyCode(),
-            OUString(),
+            ReferenceMarkerName(),
             IDocumentMarkAccess::MarkType::DDE_BOOKMARK);
         if(pMark)
         {
-            m_sName = pMark->GetName();
+            m_sName = pMark->GetName().toString();
             m_bDelBookmark = true;
             if( !bIsModified )
                 rSh.ResetModified();
@@ -4505,7 +4505,7 @@ bool SwTransferDdeLink::WriteData( SvStream& rStrm )
                                          m_pDocShell->GetTitle(SFX_TITLE_FULLNAME), m_sName);
 
     IDocumentMarkAccess* const pMarkAccess = m_pDocShell->GetDoc()->getIDocumentMarkAccess();
-    auto ppMark = pMarkAccess->findMark(m_sName);
+    auto ppMark = pMarkAccess->findMark(ReferenceMarkerName(m_sName));
     if(ppMark != pMarkAccess->getAllMarksEnd()
         && IDocumentMarkAccess::GetType(**ppMark) != IDocumentMarkAccess::MarkType::BOOKMARK)
     {
@@ -4523,7 +4523,7 @@ bool SwTransferDdeLink::WriteData( SvStream& rStrm )
             aPaM.SetMark();
             *aPaM.GetMark() = pMark->GetMarkEnd();
         }
-        OUString sMarkName = pMark->GetName();
+        ReferenceMarkerName sMarkName = pMark->GetName();
 
         // remove mark
         rServerObject.SetNoServer(); // this removes the connection between SwServerObject and mark
@@ -4563,7 +4563,7 @@ void SwTransferDdeLink::Disconnect( bool bRemoveDataAdvise )
         bool bIsModified = pDoc->getIDocumentState().IsModified();
 
         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-        pMarkAccess->deleteMark(pMarkAccess->findMark(m_sName), false);
+        pMarkAccess->deleteMark(pMarkAccess->findMark(ReferenceMarkerName(m_sName)), false);
 
         if( !bIsModified )
             pDoc->getIDocumentState().ResetModified();

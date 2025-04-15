@@ -82,21 +82,21 @@ class IDocumentMarkAccess
            a pointer to the new mark (name might have changed).
         */
         virtual ::sw::mark::MarkBase* makeMark(const SwPaM& rPaM,
-            const OUString& rProposedName,
+            const ReferenceMarkerName& rProposedName,
             MarkType eMark, ::sw::mark::InsertMode eMode,
             SwPosition const* pSepPos = nullptr) = 0;
 
         virtual sw::mark::Fieldmark* makeFieldBookmark( const SwPaM& rPaM,
-            const OUString& rName,
+            const ReferenceMarkerName& rName,
             const OUString& rType,
             SwPosition const* pSepPos = nullptr) = 0;
         virtual sw::mark::Fieldmark* makeNoTextFieldBookmark( const SwPaM& rPaM,
-            const OUString& rName,
+            const ReferenceMarkerName& rName,
             const OUString& rType) = 0;
 
         virtual sw::mark::MarkBase* makeAnnotationMark(
             const SwPaM& rPaM,
-            const OUString& rName ) = 0;
+            const ReferenceMarkerName& rName ) = 0;
 
         /** Returns a mark in the document for a paragraph.
             If there is none, a mark will be created.
@@ -134,7 +134,7 @@ class IDocumentMarkAccess
             @returns false, if renaming failed (because the name is already in use)
         */
         virtual bool renameMark(::sw::mark::MarkBase* io_pMark,
-                const OUString& rNewName) =0;
+                const ReferenceMarkerName& rNewName) =0;
 
         /** Corrects marks (absolute)
             This method ignores the previous position of the mark in the paragraph
@@ -236,7 +236,7 @@ class IDocumentMarkAccess
             @returns
             an iterator pointing to the mark, or pointing to getAllMarksEnd() if nothing was found.
         */
-        virtual const_iterator findMark(const OUString& rMark) const =0;
+        virtual const_iterator findMark(const ReferenceMarkerName& rMark) const =0;
 
         /** Find the first Bookmark that does not start before.
 
@@ -270,7 +270,7 @@ class IDocumentMarkAccess
             @returns
             an iterator pointing to the bookmark, or getBookmarksEnd() if nothing was found.
         */
-        virtual std::vector<sw::mark::Bookmark*>::const_iterator findBookmark(const OUString& rMark) const =0;
+        virtual std::vector<sw::mark::Bookmark*>::const_iterator findBookmark(const ReferenceMarkerName& rMark) const =0;
 
         /** Finds the first mark that is starting after.
 
@@ -313,12 +313,12 @@ class IDocumentMarkAccess
         virtual std::vector<sw::mark::AnnotationMark*>::const_iterator getAnnotationMarksBegin() const = 0;
         virtual std::vector<sw::mark::AnnotationMark*>::const_iterator getAnnotationMarksEnd() const = 0;
         virtual sal_Int32 getAnnotationMarksCount() const = 0;
-        virtual std::vector<sw::mark::AnnotationMark*>::const_iterator findAnnotationMark( const OUString& rName ) const = 0;
+        virtual std::vector<sw::mark::AnnotationMark*>::const_iterator findAnnotationMark( const ReferenceMarkerName& rName ) const = 0;
         virtual sw::mark::AnnotationMark* getAnnotationMarkFor(const SwPosition& rPosition) const = 0;
         // handle and restore text ranges of annotations of tracked deletions
         // based on the helper bookmarks (which can survive I/O and hiding redlines)
         virtual ::sw::mark::Bookmark* makeAnnotationBookmark(const SwPaM& rPaM,
-            const OUString& rProposedName,
+            const ReferenceMarkerName& rProposedName,
             ::sw::mark::InsertMode eMode,
             SwPosition const* pSepPos = nullptr) = 0;
         /** Find the first AnnotationMark that does not start before.
@@ -328,7 +328,7 @@ class IDocumentMarkAccess
         */
         virtual std::vector<sw::mark::AnnotationMark*>::const_iterator findFirstAnnotationMarkNotStartsBefore(const SwPosition& rPos) const =0;
         virtual std::vector<sw::mark::AnnotationMark*>::const_iterator findFirstAnnotationMarkNotStartsBefore(const SwNode& rPos) const =0;
-        virtual std::vector<sw::mark::Bookmark*>::const_iterator findAnnotationBookmark( const OUString& rName ) const = 0;
+        virtual std::vector<sw::mark::Bookmark*>::const_iterator findAnnotationBookmark( const ReferenceMarkerName& rName ) const = 0;
         virtual void restoreAnnotationMarks(bool bDelete = true) = 0;
 
         /** Returns the MarkType used to create the mark

@@ -355,7 +355,7 @@ static SwTextNode* getModelToViewTestDocument2(SwDoc *pDoc)
     pDoc->getIDocumentContentOperations().InsertString(aPaM, u"AAAAA"_ustr);
     IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
     sw::mark::Fieldmark *pFieldmark =
-            pMarksAccess->makeNoTextFieldBookmark(aPaM, u"test"_ustr, ODF_FORMDROPDOWN);
+            pMarksAccess->makeNoTextFieldBookmark(aPaM, ReferenceMarkerName(u"test"_ustr), ODF_FORMDROPDOWN);
     CPPUNIT_ASSERT(pFieldmark);
     uno::Sequence< OUString > vListEntries { u"BBBBB"_ustr };
     (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] <<= vListEntries;
@@ -718,7 +718,7 @@ void SwDocTest::testSwScanner()
 
         const sal_Int32 nNextPos = aPaM.GetPoint()->GetContentIndex();
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(nPos+1), nNextPos);
-        SwFormatRefMark aRef(u"refmark"_ustr);
+        SwFormatRefMark aRef(ReferenceMarkerName(u"refmark"_ustr));
         pTA = pTextNode->InsertItem(aRef, nNextPos, nNextPos);
         CPPUNIT_ASSERT(pTA);
 
@@ -734,7 +734,7 @@ void SwDocTest::testSwScanner()
         DateTime aDate(DateTime::SYSTEM);
         SwPostItField aPostIt(
             static_cast<SwPostItFieldType*>(m_pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Postit)), u"An Author"_ustr,
-            u"Some Text"_ustr, u"Initials"_ustr, u"Name"_ustr, aDate );
+            u"Some Text"_ustr, u"Initials"_ustr, ReferenceMarkerName(u"Name"_ustr), aDate );
         m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, SwFormatField(aPostIt));
 
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, u"Apple"_ustr);
@@ -1457,21 +1457,21 @@ void SwDocTest::testMarkMove()
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, u"Paragraph 1"_ustr);
         aPaM.SetMark();
         aPaM.GetMark()->nContent -= aPaM.GetMark()->GetContentIndex();
-        pMarksAccess->makeMark(aPaM, u"Para1"_ustr,
+        pMarksAccess->makeMark(aPaM, ReferenceMarkerName(u"Para1"_ustr),
             IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, u"Paragraph 2"_ustr);
         aPaM.SetMark();
         aPaM.GetMark()->nContent -= aPaM.GetMark()->GetContentIndex();
-        pMarksAccess->makeMark(aPaM, u"Para2"_ustr,
+        pMarksAccess->makeMark(aPaM, ReferenceMarkerName(u"Para2"_ustr),
             IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, u"Paragraph 3"_ustr);
         aPaM.SetMark();
         aPaM.GetMark()->nContent -= aPaM.GetMark()->GetContentIndex();
-        pMarksAccess->makeMark(aPaM, u"Para3"_ustr,
+        pMarksAccess->makeMark(aPaM, ReferenceMarkerName(u"Para3"_ustr),
             IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
     }
 
@@ -1481,9 +1481,9 @@ void SwDocTest::testMarkMove()
         SwTextNode& rParaNode2 = dynamic_cast<SwTextNode&>(aIdx.GetNode());
         rParaNode2.JoinNext();
     }
-    ::sw::mark::MarkBase* pBM1 = *pMarksAccess->findMark(u"Para1"_ustr);
-    ::sw::mark::MarkBase* pBM2 = *pMarksAccess->findMark(u"Para2"_ustr);
-    ::sw::mark::MarkBase* pBM3 = *pMarksAccess->findMark(u"Para3"_ustr);
+    ::sw::mark::MarkBase* pBM1 = *pMarksAccess->findMark(ReferenceMarkerName(u"Para1"_ustr));
+    ::sw::mark::MarkBase* pBM2 = *pMarksAccess->findMark(ReferenceMarkerName(u"Para2"_ustr));
+    ::sw::mark::MarkBase* pBM3 = *pMarksAccess->findMark(ReferenceMarkerName(u"Para3"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0) , pBM1->GetMarkStart().GetContentIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pBM1->GetMarkEnd().GetContentIndex());
@@ -1518,9 +1518,9 @@ void SwDocTest::testMarkMove()
         aPaM.GetMark()->nContent += 6;
         m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPaM);
     }
-    pBM1 = *pMarksAccess->findMark(u"Para1"_ustr);
-    pBM2 = *pMarksAccess->findMark(u"Para2"_ustr);
-    pBM3 = *pMarksAccess->findMark(u"Para3"_ustr);
+    pBM1 = *pMarksAccess->findMark(ReferenceMarkerName(u"Para1"_ustr));
+    pBM2 = *pMarksAccess->findMark(ReferenceMarkerName(u"Para2"_ustr));
+    pBM3 = *pMarksAccess->findMark(ReferenceMarkerName(u"Para3"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pBM1->GetMarkStart().GetContentIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pBM1->GetMarkEnd().GetContentIndex());
@@ -1554,9 +1554,9 @@ void SwDocTest::testMarkMove()
         aPos.nContent += 8;
         m_pDoc->getIDocumentContentOperations().SplitNode(aPos, false);
     }
-    pBM1 = *pMarksAccess->findMark(u"Para1"_ustr);
-    pBM2 = *pMarksAccess->findMark(u"Para2"_ustr);
-    pBM3 = *pMarksAccess->findMark(u"Para3"_ustr);
+    pBM1 = *pMarksAccess->findMark(ReferenceMarkerName(u"Para1"_ustr));
+    pBM2 = *pMarksAccess->findMark(ReferenceMarkerName(u"Para2"_ustr));
+    pBM3 = *pMarksAccess->findMark(ReferenceMarkerName(u"Para3"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pBM1->GetMarkStart().GetContentIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pBM1->GetMarkEnd().GetContentIndex());

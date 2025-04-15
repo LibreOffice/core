@@ -957,7 +957,7 @@ static void InitBookmarks(
     std::vector<sw::Extent>::const_iterator const end,
     TextFrameIndex nOffset,
     std::vector<std::pair<sw::mark::Bookmark const*, SwScriptInfo::MarkKind>> & rBookmarks,
-    std::vector<std::tuple<TextFrameIndex, SwScriptInfo::MarkKind, Color, OUString, OUString>> & o_rBookmarks)
+    std::vector<std::tuple<TextFrameIndex, SwScriptInfo::MarkKind, Color, ReferenceMarkerName, OUString>> & o_rBookmarks)
 {
     SwTextNode const*const pNode(iter->pNode);
     for (auto const& it : rBookmarks)
@@ -1256,7 +1256,7 @@ void SwScriptInfo::InitScriptInfoHidden(const SwTextNode& rNode,
             // don't show __RefHeading__ bookmarks, which are hidden in Navigator, too
             // (They are inserted automatically e.g. with the ToC at the beginning of
             // the headings)
-            if (it.first->GetName().startsWith(
+            if (it.first->GetName().toString().startsWith(
                                     IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()))
             {
                 continue;
@@ -1609,19 +1609,19 @@ TextFrameIndex SwScriptInfo::NextBookmark(TextFrameIndex const nPos) const
     return TextFrameIndex(COMPLETE_STRING);
 }
 
-std::vector<std::tuple<SwScriptInfo::MarkKind, Color, OUString, OUString>>
+std::vector<std::tuple<SwScriptInfo::MarkKind, Color, ReferenceMarkerName, OUString>>
                                     SwScriptInfo::GetBookmarks(TextFrameIndex const nPos)
 {
-    std::vector<std::tuple<SwScriptInfo::MarkKind, Color, OUString, OUString>> aColors;
+    std::vector<std::tuple<SwScriptInfo::MarkKind, Color, ReferenceMarkerName, OUString>> aColors;
     for (auto const& it : m_Bookmarks)
     {
         if (nPos == std::get<0>(it))
         {
-            const OUString& sName = std::get<3>(it);
+            const ReferenceMarkerName& sName = std::get<3>(it);
             // filter hidden bookmarks imported from OOXML
             // TODO import them as hidden bookmarks
-            if ( !( sName.startsWith("_Toc") || sName.startsWith("_Ref") ) )
-                aColors.push_back(std::tuple<MarkKind, Color, OUString,
+            if ( !( sName.toString().startsWith("_Toc") || sName.toString().startsWith("_Ref") ) )
+                aColors.push_back(std::tuple<MarkKind, Color, ReferenceMarkerName,
                                     OUString>(std::get<1>(it), std::get<2>(it), std::get<3>(it), std::get<4>(it)));
         }
         else if (nPos < std::get<0>(it))
@@ -1634,7 +1634,8 @@ std::vector<std::tuple<SwScriptInfo::MarkKind, Color, OUString, OUString>>
     // mark order: ] | [
     // color order: [c1 [c2 [c3 ... c3] c2] c1]
     sort(aColors.begin(), aColors.end(),
-                 [](std::tuple<MarkKind, Color, OUString, OUString> const a, std::tuple<MarkKind, Color, OUString, OUString> const b) {
+                 [](std::tuple<MarkKind, Color, ReferenceMarkerName, OUString> const a,
+                    std::tuple<MarkKind, Color, ReferenceMarkerName, OUString> const b) {
          return (MarkKind::End == std::get<0>(a) && MarkKind::End != std::get<0>(b)) ||
              (MarkKind::Point == std::get<0>(a) && MarkKind::Start == std::get<0>(b)) ||
              // if both are end or start, order by color

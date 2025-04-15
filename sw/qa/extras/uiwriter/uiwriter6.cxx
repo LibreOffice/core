@@ -2479,8 +2479,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testInconsistentBookmark)
         aPaM.SetMark();
         aPaM.MovePara(GoCurrPara, fnParaStart);
         aPaM.MovePara(GoCurrPara, fnParaEnd);
-        rIDMA.makeMark(aPaM, u"Mark"_ustr, IDocumentMarkAccess::MarkType::BOOKMARK,
-                       ::sw::mark::InsertMode::New);
+        rIDMA.makeMark(aPaM, ReferenceMarkerName(u"Mark"_ustr),
+                       IDocumentMarkAccess::MarkType::BOOKMARK, ::sw::mark::InsertMode::New);
         aPaM.Exchange();
         aPaM.DeleteMark();
     }

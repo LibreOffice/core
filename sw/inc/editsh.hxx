@@ -835,7 +835,7 @@ public:
     void SetLinguRange( SwDocPositions eStart, SwDocPositions eEnd );
 
     /// @return reference set in document according to given name.
-    const SwFormatRefMark* GetRefMark( std::u16string_view rName ) const;
+    const SwFormatRefMark* GetRefMark( const ReferenceMarkerName& rName ) const;
 
     /**  @return names of all references set in document.
       If ArrayPointer == 0 then return only whether a RefMark is set in document. */

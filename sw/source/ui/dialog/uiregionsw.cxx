@@ -153,7 +153,7 @@ static void lcl_FillSubRegionList( SwWrtShell& rSh, weld::ComboBox& rSubRegions,
     {
         const ::sw::mark::MarkBase* pBkmk = *ppMark;
         if( pBkmk->IsExpanded() )
-            rSubRegions.append_text( pBkmk->GetName() );
+            rSubRegions.append_text( pBkmk->GetName().toString() );
     }
 }
 

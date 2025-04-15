@@ -40,7 +40,7 @@ SwFormatRefMark::~SwFormatRefMark( )
 {
 }
 
-SwFormatRefMark::SwFormatRefMark( OUString aName )
+SwFormatRefMark::SwFormatRefMark( ReferenceMarkerName aName )
     : SfxPoolItem(RES_TXTATR_REFMARK)
     , m_pTextAttr(nullptr)
     , m_aRefName(std::move(aName))
@@ -85,7 +85,7 @@ void SwFormatRefMark::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_pTextAttr"), "%p", m_pTextAttr);
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("ref-name"),
-                                      BAD_CAST(m_aRefName.toUtf8().getStr()));
+                                      BAD_CAST(m_aRefName.toString().toUtf8().getStr()));
     SfxPoolItem::dumpAsXml(pWriter);
 
 
@@ -133,13 +133,13 @@ SwTextRefMark::~SwTextRefMark()
     if (!pViewShell)
         return;
 
-    OUString fieldCommand = GetRefMark().GetRefName();
+    ReferenceMarkerName fieldCommand = GetRefMark().GetRefName();
     tools::JsonWriter aJson;
     aJson.put("commandName", ".uno:DeleteField");
     aJson.put("success", true);
     {
         auto result = aJson.startNode("result");
-        aJson.put("DeleteField", fieldCommand);
+        aJson.put("DeleteField", fieldCommand.toString());
     }
 
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());

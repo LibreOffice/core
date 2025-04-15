@@ -446,7 +446,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testBookmarkCopy)
     rIDCO.InsertString(aPaM, u"bar"_ustr);
     aPaM.SetMark();
     aPaM.MovePara(GoCurrPara, fnParaStart);
-    rIDMA.makeMark(aPaM, u"Mark"_ustr, IDocumentMarkAccess::MarkType::BOOKMARK,
+    rIDMA.makeMark(aPaM, ReferenceMarkerName(u"Mark"_ustr), IDocumentMarkAccess::MarkType::BOOKMARK,
             ::sw::mark::InsertMode::New);
     aPaM.Exchange();
     aPaM.DeleteMark();
@@ -1513,7 +1513,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testBookmarkUndo)
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     SwPaM aPaM( SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1) );
 
-    pMarkAccess->makeMark(aPaM, u"Mark"_ustr, IDocumentMarkAccess::MarkType::BOOKMARK,
+    pMarkAccess->makeMark(aPaM, ReferenceMarkerName(u"Mark"_ustr), IDocumentMarkAccess::MarkType::BOOKMARK,
             ::sw::mark::InsertMode::New);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     rUndoManager.Undo();
@@ -1521,20 +1521,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testBookmarkUndo)
     rUndoManager.Redo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
 
-    auto ppBkmk = pMarkAccess->findMark(u"Mark"_ustr);
+    auto ppBkmk = pMarkAccess->findMark(ReferenceMarkerName(u"Mark"_ustr));
     CPPUNIT_ASSERT(ppBkmk != pMarkAccess->getAllMarksEnd());
 
-    pMarkAccess->renameMark(*ppBkmk, u"Mark_"_ustr);
-    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(u"Mark"_ustr) == pMarkAccess->getAllMarksEnd()));
-    CPPUNIT_ASSERT(pMarkAccess->findMark(u"Mark_"_ustr) != pMarkAccess->getAllMarksEnd());
+    pMarkAccess->renameMark(*ppBkmk, ReferenceMarkerName(u"Mark_"_ustr));
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(ReferenceMarkerName(u"Mark"_ustr)) == pMarkAccess->getAllMarksEnd()));
+    CPPUNIT_ASSERT(pMarkAccess->findMark(ReferenceMarkerName(u"Mark_"_ustr)) != pMarkAccess->getAllMarksEnd());
     rUndoManager.Undo();
-    CPPUNIT_ASSERT(pMarkAccess->findMark(u"Mark"_ustr) != pMarkAccess->getAllMarksEnd());
-    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(u"Mark_"_ustr) == pMarkAccess->getAllMarksEnd()));
+    CPPUNIT_ASSERT(pMarkAccess->findMark(ReferenceMarkerName(u"Mark"_ustr)) != pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(ReferenceMarkerName(u"Mark_"_ustr)) == pMarkAccess->getAllMarksEnd()));
     rUndoManager.Redo();
-    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(u"Mark"_ustr) == pMarkAccess->getAllMarksEnd()));
-    CPPUNIT_ASSERT(pMarkAccess->findMark(u"Mark_"_ustr) != pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(ReferenceMarkerName(u"Mark"_ustr)) == pMarkAccess->getAllMarksEnd()));
+    CPPUNIT_ASSERT(pMarkAccess->findMark(ReferenceMarkerName(u"Mark_"_ustr)) != pMarkAccess->getAllMarksEnd());
 
-    pMarkAccess->deleteMark(pMarkAccess->findMark(u"Mark_"_ustr), false);
+    pMarkAccess->deleteMark(pMarkAccess->findMark(ReferenceMarkerName(u"Mark_"_ustr)), false);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
     rUndoManager.Undo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
@@ -1553,7 +1553,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf148389_Left)
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
 
-    auto pMark = pMarkAccess->makeMark(*pWrtShell->GetCursor(), u"Mark"_ustr,
+    auto pMark = pMarkAccess->makeMark(*pWrtShell->GetCursor(), ReferenceMarkerName(u"Mark"_ustr),
         IDocumentMarkAccess::MarkType::BOOKMARK, ::sw::mark::InsertMode::New);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
@@ -1616,7 +1616,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf148389_Right)
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
 
-    auto pMark = pMarkAccess->makeMark(*pWrtShell->GetCursor(), u"Mark"_ustr,
+    auto pMark = pMarkAccess->makeMark(*pWrtShell->GetCursor(), ReferenceMarkerName(u"Mark"_ustr),
         IDocumentMarkAccess::MarkType::BOOKMARK, ::sw::mark::InsertMode::New);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
@@ -1918,7 +1918,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf63214)
         aPaM.SetMark();
         aPaM.Move(fnMoveForward, GoInContent);
         //Inserting a crossRefBookmark
-        pMarkAccess->makeMark(aPaM, u"Bookmark"_ustr,
+        pMarkAccess->makeMark(aPaM, ReferenceMarkerName(u"Bookmark"_ustr),
             IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK,
             ::sw::mark::InsertMode::New);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
@@ -1950,7 +1950,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf51741)
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     SwPaM aPaM( SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1) );
     //Modification 1
-    pMarkAccess->makeMark(aPaM, u"Mark"_ustr, IDocumentMarkAccess::MarkType::BOOKMARK,
+    pMarkAccess->makeMark(aPaM, ReferenceMarkerName(u"Mark"_ustr), IDocumentMarkAccess::MarkType::BOOKMARK,
             ::sw::mark::InsertMode::New);
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
@@ -1965,28 +1965,28 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf51741)
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
-    auto ppBkmk = pMarkAccess->findMark(u"Mark"_ustr);
+    auto ppBkmk = pMarkAccess->findMark(ReferenceMarkerName(u"Mark"_ustr));
     CPPUNIT_ASSERT(ppBkmk != pMarkAccess->getAllMarksEnd());
     //Modification 4
-    pMarkAccess->renameMark(*ppBkmk, u"Mark_"_ustr);
+    pMarkAccess->renameMark(*ppBkmk, ReferenceMarkerName(u"Mark_"_ustr));
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
-    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(u"Mark"_ustr) == pMarkAccess->getAllMarksEnd()));
-    CPPUNIT_ASSERT(pMarkAccess->findMark(u"Mark_"_ustr) != pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(ReferenceMarkerName(u"Mark"_ustr)) == pMarkAccess->getAllMarksEnd()));
+    CPPUNIT_ASSERT(pMarkAccess->findMark(ReferenceMarkerName(u"Mark_"_ustr)) != pMarkAccess->getAllMarksEnd());
     //Modification 5
     rUndoManager.Undo();
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
-    CPPUNIT_ASSERT(pMarkAccess->findMark(u"Mark"_ustr) != pMarkAccess->getAllMarksEnd());
-    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(u"Mark_"_ustr) == pMarkAccess->getAllMarksEnd()));
+    CPPUNIT_ASSERT(pMarkAccess->findMark(ReferenceMarkerName(u"Mark"_ustr)) != pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(ReferenceMarkerName(u"Mark_"_ustr)) == pMarkAccess->getAllMarksEnd()));
     //Modification 6
     rUndoManager.Redo();
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
-    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(u"Mark"_ustr) == pMarkAccess->getAllMarksEnd()));
-    CPPUNIT_ASSERT(pMarkAccess->findMark(u"Mark_"_ustr) != pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark(ReferenceMarkerName(u"Mark"_ustr)) == pMarkAccess->getAllMarksEnd()));
+    CPPUNIT_ASSERT(pMarkAccess->findMark(ReferenceMarkerName(u"Mark_"_ustr)) != pMarkAccess->getAllMarksEnd());
     //Modification 7
-    pMarkAccess->deleteMark(pMarkAccess->findMark(u"Mark_"_ustr), false);
+    pMarkAccess->deleteMark(pMarkAccess->findMark(ReferenceMarkerName(u"Mark_"_ustr)), false);
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());

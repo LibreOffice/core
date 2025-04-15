@@ -68,7 +68,7 @@ public:
     bool m_bIsDescriptor;
     SwDoc* m_pDoc;
     const SwFormatRefMark* m_pMarkFormat;
-    OUString m_sMarkName;
+    ReferenceMarkerName m_sMarkName;
 
     Impl(SwDoc* const pDoc, SwFormatRefMark* const pRefMark)
         : m_bIsDescriptor(nullptr == pRefMark)
@@ -356,7 +356,7 @@ OUString SAL_CALL SwXReferenceMark::getName()
     {
         throw uno::RuntimeException();
     }
-    return m_pImpl->m_sMarkName;
+    return m_pImpl->m_sMarkName.toString();
 }
 
 void SAL_CALL SwXReferenceMark::setName(const OUString& rName)
@@ -364,13 +364,13 @@ void SAL_CALL SwXReferenceMark::setName(const OUString& rName)
     SolarMutexGuard aGuard;
     if (m_pImpl->m_bIsDescriptor)
     {
-        m_pImpl->m_sMarkName = rName;
+        m_pImpl->m_sMarkName = ReferenceMarkerName(rName);
     }
     else
     {
         if (!m_pImpl->IsValid()
             || !m_pImpl->m_pDoc->GetRefMark(m_pImpl->m_sMarkName)
-            || m_pImpl->m_pDoc->GetRefMark(rName))
+            || m_pImpl->m_pDoc->GetRefMark(ReferenceMarkerName(rName)))
         {
             throw uno::RuntimeException();
         }
@@ -397,7 +397,7 @@ void SAL_CALL SwXReferenceMark::setName(const OUString& rName)
                 m_pImpl->m_pDoc->getIDocumentContentOperations().DeleteAndJoin( aPam );
                 // The aPam will keep the correct and functional doc though
 
-                m_pImpl->m_sMarkName = rName;
+                m_pImpl->m_sMarkName = ReferenceMarkerName(rName);
                 //create a new one
                 m_pImpl->InsertRefMark( aPam, nullptr );
                 m_pImpl->m_pDoc = &aPam.GetDoc();

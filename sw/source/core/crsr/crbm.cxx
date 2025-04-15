@@ -77,7 +77,7 @@ namespace
 // at CurrentCursor.SPoint
 ::sw::mark::MarkBase* SwCursorShell::SetBookmark(
     const vcl::KeyCode& rCode,
-    const OUString& rName,
+    const ReferenceMarkerName& rName,
     IDocumentMarkAccess::MarkType eMark)
 {
     StartAction();
@@ -99,7 +99,7 @@ namespace
 // at CurrentCursor.SPoint
 ::sw::mark::MarkBase* SwCursorShell::SetBookmark2(
     const vcl::KeyCode& rCode,
-    const OUString& rName,
+    const ReferenceMarkerName& rName,
     bool bHide,
     const OUString& rCondition)
 {

@@ -2261,12 +2261,12 @@ void WW8_WrPlcAnnotations::Append( WW8_CP nCp, const SwPostItField *pPostIt )
 {
     m_aCps.push_back( nCp );
     WW8_Annotation* p;
-    if( m_aRangeStartPositions.find(pPostIt->GetName()) != m_aRangeStartPositions.end() )
+    if( m_aRangeStartPositions.find(pPostIt->GetName().toString()) != m_aRangeStartPositions.end() )
     {
-        auto [nStartCp, bIgnoreEmpty] = m_aRangeStartPositions[pPostIt->GetName()];
+        auto [nStartCp, bIgnoreEmpty] = m_aRangeStartPositions[pPostIt->GetName().toString()];
         p = new WW8_Annotation(pPostIt, nStartCp, nCp);
         p->m_bIgnoreEmpty = bIgnoreEmpty;
-        m_aRangeStartPositions.erase(pPostIt->GetName());
+        m_aRangeStartPositions.erase(pPostIt->GetName().toString());
     }
     else
     {

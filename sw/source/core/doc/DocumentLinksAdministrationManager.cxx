@@ -87,7 +87,7 @@ namespace
             {
                 if (
                     (bCaseSensitive && (pBkmk->GetName() == sNameLc)) ||
-                    (!bCaseSensitive && GetAppCharClass().lowercase(pBkmk->GetName()) == sNameLc)
+                    (!bCaseSensitive && GetAppCharClass().lowercase(pBkmk->GetName().toString()) == sNameLc)
                    )
                 {
                     return pBkmk;

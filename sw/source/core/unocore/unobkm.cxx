@@ -49,7 +49,7 @@ public:
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
     SwDoc* m_pDoc;
     ::sw::mark::MarkBase* m_pRegisteredBookmark;
-    OUString m_sMarkName;
+    ReferenceMarkerName m_sMarkName;
     bool m_bHidden;
     OUString m_HideCondition;
 
@@ -213,7 +213,7 @@ void SwXBookmark::attachToRangeEx(
     UnoActionContext aCont(m_pImpl->m_pDoc);
     if (m_pImpl->m_sMarkName.isEmpty())
     {
-         m_pImpl->m_sMarkName = "Bookmark";
+         m_pImpl->m_sMarkName = ReferenceMarkerName("Bookmark");
     }
     if ((eType == IDocumentMarkAccess::MarkType::BOOKMARK) &&
         ::sw::mark::CrossRefNumItemBookmark::IsLegalName(m_pImpl->m_sMarkName))
@@ -302,8 +302,8 @@ OUString SAL_CALL SwXBookmark::getName()
     SolarMutexGuard aGuard;
 
     return (m_pImpl->m_pRegisteredBookmark)
-        ?   m_pImpl->m_pRegisteredBookmark->GetName()
-        :   m_pImpl->m_sMarkName;
+        ?   m_pImpl->m_pRegisteredBookmark->GetName().toString()
+        :   m_pImpl->m_sMarkName.toString();
 }
 
 void SAL_CALL SwXBookmark::setName(const OUString& rName)
@@ -312,7 +312,7 @@ void SAL_CALL SwXBookmark::setName(const OUString& rName)
 
     if (!m_pImpl->m_pRegisteredBookmark)
     {
-        m_pImpl->m_sMarkName = rName;
+        m_pImpl->m_sMarkName = ReferenceMarkerName(rName);
     }
     if (!m_pImpl->m_pRegisteredBookmark || (getName() == rName))
     {
@@ -320,7 +320,7 @@ void SAL_CALL SwXBookmark::setName(const OUString& rName)
     }
     IDocumentMarkAccess *const pMarkAccess =
         m_pImpl->m_pDoc->getIDocumentMarkAccess();
-    if(pMarkAccess->findMark(rName) != pMarkAccess->getAllMarksEnd())
+    if(pMarkAccess->findMark(ReferenceMarkerName(rName)) != pMarkAccess->getAllMarksEnd())
     {
         throw uno::RuntimeException(
             u"SwXBookmark::setName(): name already in use"_ustr,
@@ -334,7 +334,7 @@ void SAL_CALL SwXBookmark::setName(const OUString& rName)
         *aPam.GetMark() = m_pImpl->m_pRegisteredBookmark->GetOtherMarkPos();
     }
 
-    pMarkAccess->renameMark(m_pImpl->m_pRegisteredBookmark, rName);
+    pMarkAccess->renameMark(m_pImpl->m_pRegisteredBookmark, ReferenceMarkerName(rName));
 }
 
 OUString SAL_CALL

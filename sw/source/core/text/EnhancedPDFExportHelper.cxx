@@ -2456,7 +2456,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     {
                         aURL = aURL.copy( 1 );
                         mrSh.SwCursorShell::ClearMark();
-                        if (! JumpToSwMark( &mrSh, aURL ))
+                        if (! JumpToSwMark( &mrSh, ReferenceMarkerName(aURL) ))
                         {
                             continue; // target deleted
                         }
@@ -2544,7 +2544,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 {
                     aURL = aURL.copy( 1 );
                     mrSh.SwCursorShell::ClearMark();
-                    if (! JumpToSwMark( &mrSh, aURL ))
+                    if (! JumpToSwMark( &mrSh, ReferenceMarkerName(aURL) ))
                     {
                         continue; // target deleted
                     }
@@ -2681,7 +2681,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
 
                 // Destination Rectangle
                 const SwGetRefField* pField = static_cast<SwGetRefField*>(pFormatField->GetField());
-                const OUString& rRefName = pField->GetSetRefName();
+                const ReferenceMarkerName& rRefName = pField->GetSetRefName();
                 mrSh.GotoRefMark( rRefName, pField->GetSubType(), pField->GetSeqNo(), pField->GetFlags() );
                 const SwRect& rDestRect = mrSh.GetCharRect();
 
@@ -2714,7 +2714,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                             // Link Export
                             aRect = SwRectToPDFRect(pCurrPage, rLinkRect.SVRect());
                             const sal_Int32 nLinkId =
-                                pPDFExtOutDevData->CreateLink(aRect, rRefName, aLinkPageNum);
+                                pPDFExtOutDevData->CreateLink(aRect, rRefName.toString(), aLinkPageNum);
 
                             // Store link info for tagged pdf output:
                             const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
@@ -2726,7 +2726,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                             // #i44368# Links in Header/Footer
                             if ( bHeaderFooter )
                             {
-                                MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, u""_ustr, true, rRefName);
+                                MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, u""_ustr, true, rRefName.toString());
                             }
                         }
                     }
@@ -2987,7 +2987,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 //get the name
                 const ::sw::mark::MarkBase* pBkmk = *ppMark;
                 mrSh.SwCursorShell::ClearMark();
-                const OUString& sBkName = pBkmk->GetName();
+                const ReferenceMarkerName& sBkName = pBkmk->GetName();
 
                 //jump to it
                 if (! JumpToSwMark( &mrSh, sBkName ))
@@ -3008,7 +3008,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 if ( -1 != nDestPageNum )
                 {
                     tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rDestRect.SVRect()));
-                    pPDFExtOutDevData->CreateNamedDest(sBkName, aRect, nDestPageNum);
+                    pPDFExtOutDevData->CreateNamedDest(sBkName.toString(), aRect, nDestPageNum);
                 }
             }
             mrSh.SwCursorShell::ClearMark();
@@ -3028,7 +3028,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
             if ( bInternal )
             {
                 aBookmarkName = aBookmarkName.copy( 1 );
-                JumpToSwMark( &mrSh, aBookmarkName );
+                JumpToSwMark( &mrSh, ReferenceMarkerName(aBookmarkName) );
 
                 // Destination Rectangle
                 const SwRect& rDestRect = mrSh.GetCharRect();

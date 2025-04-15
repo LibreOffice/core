@@ -92,7 +92,7 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
     {
         if(IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
         {
-            xPopup->append(OUString::number(nPopupId), (*ppBookmark)->GetName());
+            xPopup->append(OUString::number(nPopupId), (*ppBookmark)->GetName().toString());
             aBookmarkIdx[nPopupId] = o3tl::narrowing<sal_uInt16>(ppBookmark - ppBookmarkStart);
             nPopupId++;
         }

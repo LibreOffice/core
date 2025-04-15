@@ -1320,9 +1320,9 @@ OUString BookmarkToWriter(std::u16string_view rBookmark)
 
 void SwWW8AttrIter::OutSwFormatRefMark(const SwFormatRefMark& rAttr)
 {
-    if(m_rExport.HasRefToAttr(rAttr.GetRefName()))
+    if(m_rExport.HasRefToAttr(rAttr.GetRefName().toString()))
         m_rExport.AppendBookmark( m_rExport.GetBookmarkName( REF_SETREFATTR,
-                                            &rAttr.GetRefName(), 0 ));
+                                            &rAttr.GetRefName().toString(), 0 ));
 }
 
 void SwWW8AttrIter::SplitRun( sal_Int32 nSplitEndPos )
@@ -2616,7 +2616,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                         if (pFieldmark->GetFieldname() == ODF_FORMTEXT
                              && GetExportFormat() != MSWordExportBase::ExportFormat::DOCX )
                         {
-                           AppendBookmark( pFieldmark->GetName() );
+                           AppendBookmark( pFieldmark->GetName().toString() );
                         }
                         ww::eField eFieldId = lcl_getFieldId( pFieldmark );
                         OUString sCode = lcl_getFieldCode( pFieldmark );
@@ -2711,7 +2711,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                             if (pFieldmark->GetFieldname() == ODF_FORMTEXT
                                     && GetExportFormat() != MSWordExportBase::ExportFormat::DOCX )
                             {
-                                AppendBookmark( pFieldmark->GetName() );
+                                AppendBookmark( pFieldmark->GetName().toString() );
                             }
                         }
                     }
@@ -2725,7 +2725,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     bool const isDropdownOrCheckbox(pFieldmark->GetFieldname() == ODF_FORMDROPDOWN ||
                                                     pFieldmark->GetFieldname() == ODF_FORMCHECKBOX);
                     if ( isDropdownOrCheckbox )
-                        AppendBookmark( pFieldmark->GetName() );
+                        AppendBookmark( pFieldmark->GetName().toString() );
                     OutputField( nullptr, lcl_getFieldId( pFieldmark ),
                             lcl_getFieldCode( pFieldmark ),
                             FieldFlags::Start | FieldFlags::CmdStart );
@@ -2735,7 +2735,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     OutputField(nullptr, lcl_getFieldId(pFieldmark), OUString(),
                             FieldFlags::CmdEnd | FieldFlags::Close);
                     if ( isDropdownOrCheckbox )
-                        AppendBookmark( pFieldmark->GetName() );
+                        AppendBookmark( pFieldmark->GetName().toString() );
                 }
                 nLen -= ofs;
 

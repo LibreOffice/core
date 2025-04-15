@@ -270,7 +270,7 @@ class FieldMarkParamsHelper
     const sw::mark::Fieldmark& mrFieldmark;
     public:
     explicit FieldMarkParamsHelper( const sw::mark::Fieldmark& rFieldmark ) : mrFieldmark( rFieldmark ) {}
-    OUString const & getName() const { return mrFieldmark.GetName(); }
+    ReferenceMarkerName const & getName() const { return mrFieldmark.GetName(); }
     template < typename T >
     bool extractParam( const OUString& rKey, T& rResult )
     {
@@ -2490,7 +2490,8 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
     if ( rInfos.eType == ww::eFORMDROPDOWN )
     {
         uno::Sequence< OUString> vListEntries;
-        OUString sName, sSelected;
+        ReferenceMarkerName sName;
+        OUString sSelected;
 
         params.extractParam( ODF_FORMDROPDOWN_LISTENTRY, vListEntries );
         if (vListEntries.getLength() > ODF_FORMDROPDOWN_ENTRY_COUNT_LIMIT)
@@ -2505,11 +2506,11 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
                 sSelected = vListEntries[ nSelectedIndex ];
         }
 
-        GetExport().DoComboBox( sName, OUString(), OUString(), sSelected, vListEntries );
+        GetExport().DoComboBox( sName.toString(), OUString(), OUString(), sSelected, vListEntries );
     }
     else if ( rInfos.eType == ww::eFORMCHECKBOX )
     {
-        const OUString& sName = params.getName();
+        const ReferenceMarkerName& sName = params.getName();
         bool bChecked = false;
 
         const sw::mark::CheckboxFieldmark* pCheckboxFm = dynamic_cast<const sw::mark::CheckboxFieldmark*>(&rFieldmark);
@@ -2517,7 +2518,7 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
             bChecked = true;
 
         FFDataWriterHelper ffdataOut( m_pSerializer );
-        ffdataOut.WriteFormCheckbox( sName, sEntryMacro, sExitMacro, sHelp, sHint, bChecked );
+        ffdataOut.WriteFormCheckbox( sName.toString(), sEntryMacro, sExitMacro, sHelp, sHint, bChecked );
     }
     else if ( rInfos.eType == ww::eFORMTEXT )
     {
@@ -2530,7 +2531,7 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
         OUString sFormat;
         params.extractParam(u"Format"_ustr, sFormat);
         FFDataWriterHelper ffdataOut( m_pSerializer );
-        ffdataOut.WriteFormText( params.getName(), sEntryMacro, sExitMacro, sHelp, sHint,
+        ffdataOut.WriteFormText( params.getName().toString(), sEntryMacro, sExitMacro, sHelp, sHint,
                                  sType, sDefaultText, nMaxLength, sFormat );
     }
 }
@@ -8504,7 +8505,7 @@ void DocxAttributeOutput::WritePostitFieldReference()
 
         // In case this file is inside annotation marks, we want to write the
         // comment reference after the annotation mark is closed, not here.
-        const OUString& idname = m_postitFields[m_postitFieldsMaxId].first->GetName();
+        const ReferenceMarkerName& idname = m_postitFields[m_postitFieldsMaxId].first->GetName();
         auto it = m_rOpenedAnnotationMarksIds.find( idname );
         if ( it == m_rOpenedAnnotationMarksIds.end(  ) )
             m_pSerializer->singleElementNS(XML_w, XML_commentReference, FSNS(XML_w, XML_id), idstr);
@@ -8786,8 +8787,8 @@ void DocxAttributeOutput::WriteFinalBookmarks_Impl( std::vector< OUString >& rSt
     rEnds.clear();
 }
 
-void DocxAttributeOutput::WriteAnnotationMarks_Impl( std::vector< OUString >& rStarts,
-        std::vector< OUString >& rEnds )
+void DocxAttributeOutput::WriteAnnotationMarks_Impl( std::vector< ReferenceMarkerName >& rStarts,
+        std::vector< ReferenceMarkerName >& rEnds )
 {
     m_rAnnotationMarksStart.insert(m_rAnnotationMarksStart.end(), rStarts.begin(), rStarts.end());
     rStarts.clear();

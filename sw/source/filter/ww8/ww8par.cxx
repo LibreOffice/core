@@ -2265,7 +2265,7 @@ tools::Long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     m_xFormatOfJustInsertedApo.reset();
     SwPostItField aPostIt(
         static_cast<SwPostItFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Postit)), sAuthor,
-        sText, sInitials, OUString(), aDate );
+        sText, sInitials, ReferenceMarkerName(), aDate );
     aPostIt.SetTextObject(std::move(pOutliner));
 
     SwPaM aEnd(*m_pPaM->End(), *m_pPaM->End());
@@ -5438,7 +5438,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         IDocumentMarkAccess* const pMarkAccess = m_rDoc.getIDocumentMarkAccess();
         if ( pMarkAccess )
         {
-            auto ppBkmk = pMarkAccess->findBookmark( u"_PictureBullets"_ustr );
+            auto ppBkmk = pMarkAccess->findBookmark( ReferenceMarkerName(u"_PictureBullets"_ustr) );
             if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
                        IDocumentMarkAccess::GetType(**ppBkmk) == IDocumentMarkAccess::MarkType::BOOKMARK )
             {

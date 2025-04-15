@@ -1380,14 +1380,14 @@ void SAL_CALL SwXTextField::attach(
                         m_pImpl->m_pProps->sPar1, // author
                         m_pImpl->m_pProps->sPar2, // content
                         m_pImpl->m_pProps->sPar3, // author's initials
-                        m_pImpl->m_pProps->sPar4, // name
+                        ReferenceMarkerName(m_pImpl->m_pProps->sPar4), // name
                         aDateTime,
                         m_pImpl->m_pProps->bBool1, // resolvedflag
                         0, // id
                         nParentId, // parent id
                         nImportedId, // imported para id
                         0, // PostIt Parent ID.
-                        m_pImpl->m_pProps->sPar7
+                        ReferenceMarkerName(m_pImpl->m_pProps->sPar7)
                     );
                     if ( m_pImpl->m_xTextObject.is() )
                     {
@@ -1514,7 +1514,7 @@ void SAL_CALL SwXTextField::attach(
             {
                 SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef);
                 xField.reset(new SwGetRefField(static_cast<SwGetRefFieldType*>(pFieldType),
-                            m_pImpl->m_pProps->sPar1,
+                            ReferenceMarkerName(m_pImpl->m_pProps->sPar1),
                             m_pImpl->m_pProps->sPar4,
                             0,
                             0,
@@ -2973,7 +2973,7 @@ css::uno::Any SAL_CALL SwXTextFieldTypes::getByUniqueID(const OUString& ID)
     }
 
     IDocumentMarkAccess& rMarksAccess(*rDoc.getIDocumentMarkAccess());
-    auto it = rMarksAccess.findMark(ID);
+    auto it = rMarksAccess.findMark(ReferenceMarkerName(ID));
     if (it != rMarksAccess.getAllMarksEnd())
     {
         aRet <<= uno::Reference<beans::XPropertySet>(SwXFieldmark::CreateXFieldmark(rDoc, *it));

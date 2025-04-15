@@ -379,7 +379,7 @@ namespace
     };
 
     template <class container_t>
-    auto lcl_FindMarkByName(const OUString& rName, const container_t& container)
+    auto lcl_FindMarkByName(const ReferenceMarkerName& rName, const container_t& container)
     {
         return find_if(begin(container), end(container),
                        [&rName](const auto* item) { return item->GetName() == rName; });
@@ -403,7 +403,7 @@ namespace
                 sal_Int32(pEndPos->GetNodeIndex()) << "," <<
                 pEndPos->GetContentIndex() << " " <<
                 typeid(*pMark).name() << " " <<
-                pMark->GetName());
+                pMark->GetName().toString());
         }
 #else
         (void) rMarks;
@@ -501,7 +501,7 @@ namespace sw::mark
     { }
 
     ::sw::mark::MarkBase* MarkManager::makeMark(const SwPaM& rPaM,
-        const OUString& rName,
+        const ReferenceMarkerName& rName,
         const IDocumentMarkAccess::MarkType eType,
         sw::mark::InsertMode const eMode,
         SwPosition const*const pSepPos)
@@ -513,7 +513,7 @@ namespace sw::mark
             if(rPaM.HasMark())
                 pPos2 = rPaM.GetMark();
             SAL_INFO("sw.core",
-                rName << " " <<
+                rName.toString() << " " <<
                 sal_Int32(pPos1->GetNodeIndex() )<< "," <<
                 pPos1->GetContentIndex() << " " <<
                 sal_Int32(pPos2->GetNodeIndex()) << "," <<
@@ -674,7 +674,7 @@ namespace sw::mark
 
     ::sw::mark::Fieldmark* MarkManager::makeFieldBookmark(
         const SwPaM& rPaM,
-        const OUString& rName,
+        const ReferenceMarkerName& rName,
         const OUString& rType,
         SwPosition const*const pSepPos)
     {
@@ -714,7 +714,7 @@ namespace sw::mark
 
     ::sw::mark::Fieldmark* MarkManager::makeNoTextFieldBookmark(
         const SwPaM& rPaM,
-        const OUString& rName,
+        const ReferenceMarkerName& rName,
         const OUString& rType)
     {
         // Disable undo, because we handle it using SwUndoInsNoTextFieldmark
@@ -770,12 +770,12 @@ namespace sw::mark
         if(ppExistingMark != m_vBookmarks.end())
             return *ppExistingMark;
         const SwPaM aPaM(aPos);
-        return makeMark(aPaM, OUString(), eType, sw::mark::InsertMode::New);
+        return makeMark(aPaM, ReferenceMarkerName(), eType, sw::mark::InsertMode::New);
     }
 
     sw::mark::MarkBase* MarkManager::makeAnnotationMark(
         const SwPaM& rPaM,
-        const OUString& rName )
+        const ReferenceMarkerName& rName )
     {
         return makeMark(rPaM, rName, IDocumentMarkAccess::MarkType::ANNOTATIONMARK,
                 sw::mark::InsertMode::New);
@@ -810,7 +810,7 @@ namespace sw::mark
 
     bool MarkManager::renameMark(
         ::sw::mark::MarkBase* io_pMark,
-        const OUString& rNewName )
+        const ReferenceMarkerName& rNewName )
     {
         assert(&io_pMark->GetMarkPos().GetDoc() == &m_rDoc &&
             "<MarkManager::renameMark(..)>"
@@ -819,7 +819,7 @@ namespace sw::mark
             return true;
         if (lcl_FindMarkByName(rNewName, m_vAllMarks) != m_vAllMarks.end())
             return false;
-        const OUString sOldName(io_pMark->GetName());
+        const ReferenceMarkerName sOldName(io_pMark->GetName());
         io_pMark->SetName(rNewName);
 
         if (dynamic_cast< ::sw::mark::Bookmark* >(io_pMark))
@@ -1330,19 +1330,14 @@ namespace sw::mark
         m_vAllMarks.clear();
     }
 
-    IDocumentMarkAccess::const_iterator MarkManager::findMark(const OUString& rName) const
+    IDocumentMarkAccess::const_iterator MarkManager::findMark(const ReferenceMarkerName& rName) const
     {
         return lcl_FindMarkByName(rName, m_vAllMarks);
     }
 
-    std::vector<sw::mark::Bookmark*>::const_iterator MarkManager::findBookmark(const OUString& rName) const
+    std::vector<sw::mark::Bookmark*>::const_iterator MarkManager::findBookmark(const ReferenceMarkerName& rName) const
     {
         return lcl_FindMarkByName(rName, m_vBookmarks);
-    }
-
-    std::vector<sw::mark::AnnotationMark*>::const_iterator MarkManager::findAnnotationMark( const OUString& rName ) const
-    {
-        return lcl_FindMarkByName(rName, m_vAnnotationMarks);
     }
 
     // find the first Bookmark that does not start before
@@ -1519,7 +1514,7 @@ namespace sw::mark
             return nullptr;
 
         // Store attributes needed to create the new fieldmark
-        OUString sName = pFieldmark->GetName();
+        ReferenceMarkerName sName = pFieldmark->GetName();
         SwPaM const aPaM(pFieldmark->GetMarkStart());
 
         // Remove the old fieldmark and create a new one with the new type
@@ -1679,6 +1674,11 @@ namespace sw::mark
         return m_vAnnotationMarks.size();
     }
 
+    std::vector<sw::mark::AnnotationMark*>::const_iterator MarkManager::findAnnotationMark( const ReferenceMarkerName& rName ) const
+    {
+        return lcl_FindMarkByName( rName, m_vAnnotationMarks );
+    }
+
     AnnotationMark* MarkManager::getAnnotationMarkFor(const SwPosition& rPos) const
     {
         auto const pAnnotationMark = find_if(
@@ -1692,11 +1692,11 @@ namespace sw::mark
 
     // create helper bookmark for annotations on tracked deletions
     ::sw::mark::Bookmark* MarkManager::makeAnnotationBookmark(const SwPaM& rPaM,
-        const OUString& rName,
+        const ReferenceMarkerName& rName,
         sw::mark::InsertMode const eMode,
         SwPosition const*const pSepPos)
     {
-        OUString sAnnotationBookmarkName(rName + S_ANNOTATION_BOOKMARK);
+        ReferenceMarkerName sAnnotationBookmarkName(rName.toString() + S_ANNOTATION_BOOKMARK);
         return static_cast<sw::mark::Bookmark*>(makeMark( rPaM, sAnnotationBookmarkName, MarkType::BOOKMARK, eMode, pSepPos));
     }
 
@@ -1721,9 +1721,9 @@ namespace sw::mark
     }
 
     // find helper bookmark of annotations on tracked deletions
-    std::vector<sw::mark::Bookmark*>::const_iterator MarkManager::findAnnotationBookmark(const OUString& rName) const
+    std::vector<sw::mark::Bookmark*>::const_iterator MarkManager::findAnnotationBookmark(const ReferenceMarkerName& rName) const
     {
-        OUString sAnnotationBookmarkName(rName + S_ANNOTATION_BOOKMARK);
+        ReferenceMarkerName sAnnotationBookmarkName(rName.toString() + S_ANNOTATION_BOOKMARK);
         return findBookmark(sAnnotationBookmarkName);
     }
 
@@ -1734,13 +1734,13 @@ namespace sw::mark
         for (auto iter = getBookmarksBegin();
               iter != getBookmarksEnd(); )
         {
-            const OUString & rBookmarkName = (**iter).GetName();
+            const ReferenceMarkerName & rBookmarkName = (**iter).GetName();
             sal_Int32 nPos;
-            if ( rBookmarkName.startsWith("__Annotation__") &&
-                  (nPos = rBookmarkName.indexOf(S_ANNOTATION_BOOKMARK)) > -1 )
+            if ( rBookmarkName.toString().startsWith("__Annotation__") &&
+                  (nPos = rBookmarkName.toString().indexOf(S_ANNOTATION_BOOKMARK)) > -1 )
             {
                 ::sw::UndoGuard const undoGuard(m_rDoc.GetIDocumentUndoRedo());
-                auto pMark = findAnnotationMark(rBookmarkName.copy(0, nPos));
+                auto pMark = findAnnotationMark(ReferenceMarkerName(rBookmarkName.toString().copy(0, nPos)));
                 if ( pMark != getAnnotationMarksEnd() )
                 {
                     const SwPaM aPam((**iter).GetMarkStart(), (**pMark).GetMarkEnd());
@@ -1760,16 +1760,16 @@ namespace sw::mark
         }
     }
 
-    OUString MarkManager::getUniqueMarkName(const OUString& rName) const
+    ReferenceMarkerName MarkManager::getUniqueMarkName(const ReferenceMarkerName& rName) const
     {
-        OSL_ENSURE(rName.getLength(),
+        OSL_ENSURE(rName.toString().getLength(),
             "<MarkManager::getUniqueMarkName(..)> - a name should be proposed");
         if( m_rDoc.IsInMailMerge())
         {
-            OUString newName = rName + "MailMergeMark"
+            OUString newName = rName.toString() + "MailMergeMark"
                     + DateTimeToOUString( DateTime( DateTime::SYSTEM ) )
                     + OUString::number( m_vAllMarks.size() + 1 );
-            return newName;
+            return ReferenceMarkerName(newName);
         }
 
         if (lcl_FindMarkByName(rName, m_vAllMarks) == m_vAllMarks.end())
@@ -1785,19 +1785,19 @@ namespace sw::mark
         sal_Int32 nCnt = 1;
         MarkBasenameMapUniqueOffset_t::const_iterator aIter = m_aMarkBasenameMapUniqueOffset.find(rName);
         if(aIter != m_aMarkBasenameMapUniqueOffset.end()) nCnt = aIter->second;
-        OUString aPrefix = SwResId(STR_MARK_COPY).replaceFirst("%1", rName);
+        OUString aPrefix = SwResId(STR_MARK_COPY).replaceFirst("%1", rName.toString());
         while(nCnt < SAL_MAX_INT32)
         {
             sTmp = aPrefix + OUString::number(nCnt);
             nCnt++;
-            if (lcl_FindMarkByName(sTmp, m_vAllMarks) == m_vAllMarks.end())
+            if (lcl_FindMarkByName(ReferenceMarkerName(sTmp), m_vAllMarks) == m_vAllMarks.end())
             {
                 break;
             }
         }
         m_aMarkBasenameMapUniqueOffset[rName] = nCnt;
 
-        return sTmp;
+        return ReferenceMarkerName(sTmp);
     }
 
     void MarkManager::assureSortedMarkContainers() const

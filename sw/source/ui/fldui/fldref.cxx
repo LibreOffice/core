@@ -374,7 +374,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, weld::TreeView&, void)
                     SwGetRefField const*const pRefField(dynamic_cast<SwGetRefField*>(GetCurField()));
                     if (pRefField)
                     {
-                        sName = pRefField->GetSetRefName();
+                        sName = pRefField->GetSetRefName().toString();
                     }
                     nFlag = REFFLDFLAG;
                     break;
@@ -592,15 +592,15 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                 const ::sw::mark::MarkBase* pBkmk = *ppMark;
                 if(IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(*pBkmk))
                 {
-                    bool isSubstring = MatchSubstring(pBkmk->GetName(), filterString);
+                    bool isSubstring = MatchSubstring(pBkmk->GetName().toString(), filterString);
                     if(isSubstring)
                     {
-                        m_xSelectionLB->append_text( pBkmk->GetName() );
+                        m_xSelectionLB->append_text( pBkmk->GetName().toString() );
                     }
                 }
             }
             if (IsFieldEdit() && pRefField)
-                sOldSel = pRefField->GetSetRefName();
+                sOldSel = pRefField->GetSetRefName().toString();
         }
         else if (nTypeId == REFFLDFLAG_FOOTNOTE)
         {
@@ -779,7 +779,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
         }
 
         if (IsFieldEdit() && pRefField)
-            sOldSel = pRefField->GetSetRefName();
+            sOldSel = pRefField->GetSetRefName().toString();
     }
 
     // #i83479#
@@ -1001,7 +1001,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, ModifyHdl, weld::Entry&, void)
     bool bEnable = true;
     sal_uInt16 nTypeId = m_xTypeLB->get_id(GetTypeSel()).toUInt32();
 
-    if ((nTypeId == static_cast<sal_uInt16>(SwFieldTypesEnum::SetRef) && !GetFieldMgr().CanInsertRefMark(aName)) ||
+    if ((nTypeId == static_cast<sal_uInt16>(SwFieldTypesEnum::SetRef) && !GetFieldMgr().CanInsertRefMark(ReferenceMarkerName(aName))) ||
         (bEmptyName && (nTypeId == static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef) || nTypeId == static_cast<sal_uInt16>(SwFieldTypesEnum::SetRef) ||
                        nTypeId == REFFLDFLAG_BOOKMARK)))
         bEnable = false;
@@ -1114,7 +1114,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
                     ::sw::mark::MarkBase const * const pMark = pSh->getIDocumentMarkAccess()->getMarkForTextNode(
                         *(maOutlineNodes[nOutlIdx]),
                         IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
-                    aName = pMark->GetName();
+                    aName = pMark->GetName().toString();
                     nTypeId = static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef);
                     nSubType = REF_BOOKMARK;
                 }
@@ -1134,7 +1134,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
                     ::sw::mark::MarkBase const * const pMark = pSh->getIDocumentMarkAccess()->getMarkForTextNode(
                         *(maNumItems[nNumItemIdx]->GetTextNode()),
                         IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK);
-                    aName = pMark->GetName();
+                    aName = pMark->GetName().toString();
                     nTypeId = static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef);
                     nSubType = REF_BOOKMARK;
                 }

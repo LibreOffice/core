@@ -1491,7 +1491,7 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case SID_JUMPTOMARK:
             if( pArgs && SfxItemState::SET == pArgs->GetItemState(SID_JUMPTOMARK, false, &pItem))
-                JumpToSwMark( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+                JumpToSwMark( ReferenceMarkerName(static_cast<const SfxStringItem*>(pItem)->GetValue()) );
         break;
         case SID_GALLERY :
             // First make sure that the sidebar is visible
@@ -2600,10 +2600,10 @@ static auto JumpToTOXMark(SwWrtShell & rSh, std::u16string_view aName) -> bool
     }
 }
 
-bool SwView::JumpToSwMark( std::u16string_view rMark )
+bool SwView::JumpToSwMark( const ReferenceMarkerName& rMark )
 {
     bool bRet = false;
-    if( !rMark.empty() )
+    if( !rMark.toString().isEmpty() )
     {
         // place bookmark at top-center
         bool bSaveCC = m_bCenterCursor;
@@ -2617,7 +2617,7 @@ bool SwView::JumpToSwMark( std::u16string_view rMark )
 
         const SwFormatINetFormat* pINet;
         OUString sCmp;
-        OUString  sMark( INetURLObject::decode( rMark,
+        OUString  sMark( INetURLObject::decode( rMark.toString(),
                                            INetURLObject::DecodeMechanism::WithCharset ));
 
         sal_Int32 nLastPos, nPos = sMark.indexOf( cMarkSeparator );
@@ -2667,7 +2667,7 @@ bool SwView::JumpToSwMark( std::u16string_view rMark )
                 {
                     sal_uInt16 nSeqNo = o3tl::toInt32(sName.subView( nNoPos + 1 ));
                     sName = sName.copy( 0, nNoPos );
-                    bRet = m_pWrtShell->GotoRefMark(sName, REF_SEQUENCEFLD, nSeqNo);
+                    bRet = m_pWrtShell->GotoRefMark(ReferenceMarkerName(sName), REF_SEQUENCEFLD, nSeqNo);
                 }
             }
             else if (sCmp == "toxmark")
@@ -2695,7 +2695,7 @@ bool SwView::JumpToSwMark( std::u16string_view rMark )
                     bRet = true;
                 }
             }
-            else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)) )
+            else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(ReferenceMarkerName(sMark))) )
             {
                 bRet = m_pWrtShell->GotoMark( *ppMark, false );
             }
@@ -2721,7 +2721,7 @@ bool SwView::JumpToSwMark( std::u16string_view rMark )
                 }
             }
         }
-        else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)))
+        else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(ReferenceMarkerName(sMark))))
         {
             bRet = m_pWrtShell->GotoMark( *ppMark, false );
         }

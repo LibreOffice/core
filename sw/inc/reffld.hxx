@@ -22,6 +22,7 @@
 #include <tools/solar.h>
 
 #include "fldbas.hxx"
+#include "names.hxx"
 
 class SfxPoolItem;
 class SwDoc;
@@ -94,7 +95,7 @@ public:
 
     void MergeWithOtherDoc( SwDoc& rDestDoc );
 
-    static SwTextNode* FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
+    static SwTextNode* FindAnchor( SwDoc* pDoc, const ReferenceMarkerName& rRefMark,
                                         sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags,
                                         sal_Int32* pStart, sal_Int32* pEnd = nullptr,
                                         SwRootFrame const* pLayout = nullptr,
@@ -103,7 +104,7 @@ public:
     void UpdateStyleReferences();
 
 private:
-    static SwTextNode* FindAnchorRefStyle( SwDoc* pDoc, const OUString& rRefMark,
+    static SwTextNode* FindAnchorRefStyle( SwDoc* pDoc, const ReferenceMarkerName& rRefMark,
                                         sal_uInt16 nFlags,
                                         sal_Int32* pStart, sal_Int32* pEnd,
                                         SwRootFrame const* pLayout,
@@ -122,7 +123,7 @@ private:
 class SAL_DLLPUBLIC_RTTI SwGetRefField final : public SwField
 {
 private:
-    OUString m_sSetRefName;
+    ReferenceMarkerName m_sSetRefName;
     OUString m_sSetReferenceLanguage;
     OUString m_sText;         ///< result
     OUString m_sTextRLHidden; ///< result for layout with redlines hidden
@@ -134,14 +135,14 @@ private:
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 public:
-    SW_DLLPUBLIC SwGetRefField( SwGetRefFieldType*, OUString aSetRef, OUString aReferenceLanguage,
+    SW_DLLPUBLIC SwGetRefField( SwGetRefFieldType*, ReferenceMarkerName aSetRef, OUString aReferenceLanguage,
                     sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags, sal_uLong nFormat );
 
     SW_DLLPUBLIC virtual ~SwGetRefField() override;
 
     virtual OUString GetFieldName() const override;
 
-    const OUString& GetSetRefName() const { return m_sSetRefName; }
+    const ReferenceMarkerName& GetSetRefName() const { return m_sSetRefName; }
 
     // #i81002#
     /** The <SwTextField> instance, which represents the text attribute for the

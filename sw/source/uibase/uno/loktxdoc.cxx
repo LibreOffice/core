@@ -240,13 +240,13 @@ void GetBookmarks(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     for (auto it = rIDMA.getBookmarksBegin(); it != rIDMA.getBookmarksEnd(); ++it)
     {
         sw::mark::MarkBase* pMark = *it;
-        if (!pMark->GetName().startsWith(aNamePrefix))
+        if (!pMark->GetName().toString().startsWith(aNamePrefix))
         {
             continue;
         }
 
         auto aProperty = rJsonWriter.startStruct();
-        rJsonWriter.put("name", pMark->GetName());
+        rJsonWriter.put("name", pMark->GetName().toString());
     }
 }
 
@@ -277,12 +277,12 @@ void GetBookmark(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
         return;
     }
 
-    if (!pBookmark->GetName().startsWith(aNamePrefix))
+    if (!pBookmark->GetName().toString().startsWith(aNamePrefix))
     {
         return;
     }
 
-    rJsonWriter.put("name", pBookmark->GetName());
+    rJsonWriter.put("name", pBookmark->GetName().toString());
 }
 
 /// Implements getCommandValues(".uno:Fields").
@@ -336,13 +336,13 @@ void GetFields(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
 
     for (const auto& pRefMark : aRefMarks)
     {
-        if (!pRefMark->GetRefName().startsWith(aNamePrefix))
+        if (!pRefMark->GetRefName().toString().startsWith(aNamePrefix))
         {
             continue;
         }
 
         auto aProperty = rJsonWriter.startStruct();
-        rJsonWriter.put("name", pRefMark->GetRefName());
+        rJsonWriter.put("name", pRefMark->GetRefName().toString());
     }
 }
 
@@ -406,12 +406,12 @@ void GetField(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     }
 
     const SwFormatRefMark& rRefmark = aAttrs[0]->GetRefMark();
-    if (!rRefmark.GetRefName().startsWith(aNamePrefix))
+    if (!rRefmark.GetRefName().toString().startsWith(aNamePrefix))
     {
         return;
     }
 
-    rJsonWriter.put("name", rRefmark.GetRefName());
+    rJsonWriter.put("name", rRefmark.GetRefName().toString());
 }
 
 /// Implements getCommandValues(".uno:ExtractDocumentStructures").

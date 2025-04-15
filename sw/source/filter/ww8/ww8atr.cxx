@@ -1962,8 +1962,8 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
             if ( nSubType == REF_SETREFATTR ||
                  nSubType == REF_BOOKMARK )
             {
-                const OUString& aRefName(rRField.GetSetRefName());
-                aLinkStr = GetBookmarkName( nSubType, &aRefName, 0 );
+                const ReferenceMarkerName& aRefName(rRField.GetSetRefName());
+                aLinkStr = GetBookmarkName( nSubType, &aRefName.toString(), 0 );
             }
             else if ( nSubType == REF_FOOTNOTE ||
                       nSubType == REF_ENDNOTE )
@@ -2202,7 +2202,7 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                                 // Need to create a separate run for separator character
                                 SwWW8AttrIter aLocalAttrIter( GetExport(), rNode ); // We need a local iterator having the right number of runs
                                 const OUString& aText = rNode.GetText();
-                                const sal_Int32 nCategoryStart = aText.indexOf(pRefField->GetSetRefName());
+                                const sal_Int32 nCategoryStart = aText.indexOf(pRefField->GetSetRefName().toString());
                                 const sal_Int32 nPosBeforeSeparator = std::max(nCategoryStart, pHt->GetStart());
                                 bool bCategoryFirst = nCategoryStart < pHt->GetStart();
                                 sal_Int32 nSeparatorPos = 0;
@@ -2217,7 +2217,7 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                                 }
                                 else
                                 {
-                                    nSeparatorPos = nCategoryStart + pRefField->GetSetRefName().getLength();
+                                    nSeparatorPos = nCategoryStart + pRefField->GetSetRefName().toString().getLength();
                                 }
                                 sal_Int32 nRefTextPos = 0;
                                 if(nSeparatorPos < aText.getLength())
@@ -2247,7 +2247,7 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                                     }
                                 }
                                 // Generate bookmarks on the right position
-                                OUString sName("Ref_" + pRefField->GetSetRefName() + OUString::number(pRefField->GetSeqNo()));
+                                OUString sName("Ref_" + pRefField->GetSetRefName().toString() + OUString::number(pRefField->GetSeqNo()));
                                 switch (pRefField->GetFormat())
                                 {
                                     case REF_PAGE:
@@ -3249,9 +3249,9 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                             break;
                     }
                     {
-                        const OUString& aRefName(rRField.GetSetRefName());
+                        const ReferenceMarkerName& aRefName(rRField.GetSetRefName());
                         sStr = FieldString(eField)
-                               + GetExport().GetBookmarkName(nSubType, &aRefName, 0);
+                               + GetExport().GetBookmarkName(nSubType, &aRefName.toString(), 0);
                     }
                     switch (pField->GetFormat())
                     {
@@ -3284,7 +3284,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                     }
                     // Generate a unique bookmark name
                     {
-                        OUString sName{rRField.GetSetRefName() + OUString::number(rRField.GetSeqNo())};
+                        OUString sName{rRField.GetSetRefName().toString() + OUString::number(rRField.GetSeqNo())};
                         switch (pField->GetFormat())
                         {
                             case REF_PAGE:

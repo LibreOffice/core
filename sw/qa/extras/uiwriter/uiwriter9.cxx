@@ -387,8 +387,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159816)
 
     // Add a bookmark at the very end
     IDocumentMarkAccess& rIDMA(*pDoc->getIDocumentMarkAccess());
-    rIDMA.makeMark(*pWrtShell->GetCursor(), u"Mark"_ustr, IDocumentMarkAccess::MarkType::BOOKMARK,
-                   sw::mark::InsertMode::New);
+    rIDMA.makeMark(*pWrtShell->GetCursor(), ReferenceMarkerName(u"Mark"_ustr),
+                   IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
 
     // Get coordinates of the end point in the document
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();

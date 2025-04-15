@@ -135,7 +135,7 @@ bool SwWrtShell::InsertField2(SwField const& rField, SwPaM* pAnnotationRange)
                     pAnnotationTextRange->Start()->AdjustContent(-1);
             }
             IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess();
-            pMarksAccess->makeAnnotationMark( *pAnnotationTextRange, OUString() );
+            pMarksAccess->makeAnnotationMark( *pAnnotationTextRange, ReferenceMarkerName() );
         }
         pAnnotationTextRange.reset();
     }

@@ -1790,14 +1790,14 @@ SwPostItField::SwPostItField( SwPostItFieldType* pT,
         OUString aAuthor,
         OUString aText,
         OUString aInitials,
-        OUString aName,
+        ReferenceMarkerName aName,
         const DateTime& rDateTime,
         const bool bResolved,
         const sal_uInt32 nPostItId,
         const sal_uInt32 nParentId,
         const sal_uInt32 nParaId,
         const sal_uInt32 nParentPostItId,
-        OUString aParentName
+        ReferenceMarkerName aParentName
 )
     : SwField( pT )
     , m_sText( std::move(aText) )
@@ -1886,12 +1886,12 @@ OUString SwPostItField::GetPar2() const
 }
 
 
-void SwPostItField::SetName(const OUString& rName)
+void SwPostItField::SetName(const ReferenceMarkerName& rName)
 {
     m_sName = rName;
 }
 
-void SwPostItField::SetParentName(const OUString& rName)
+void SwPostItField::SetParentName(const ReferenceMarkerName& rName)
 {
     m_sParentName = rName;
 }
@@ -1948,10 +1948,10 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= m_sInitials;
         break;
     case FIELD_PROP_PAR4:
-        rAny <<= m_sName;
+        rAny <<= m_sName.toString();
         break;
     case FIELD_PROP_PAR7: // PAR5 (Parent Para Id) and PAR6 (Para Id) are skipped - they are not written into xml. Used for file conversion.
-        rAny <<= m_sParentName;
+        rAny <<= m_sParentName.toString();
         break;
     case FIELD_PROP_BOOL1:
         rAny <<= m_bResolved;
@@ -2018,10 +2018,18 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         rAny >>= m_sInitials;
         break;
     case FIELD_PROP_PAR4:
-        rAny >>= m_sName;
+        {
+            OUString tmp;
+            if (rAny >>= tmp)
+                m_sName = ReferenceMarkerName(tmp);
+        }
         break;
     case FIELD_PROP_PAR7: // PAR5 (Parent Para Id) and PAR6 (Para Id) are skipped - they are not written into xml. Used for file conversion.
-        rAny >>= m_sParentName;
+        {
+            OUString tmp;
+            if (rAny >>= tmp)
+                m_sParentName = ReferenceMarkerName(tmp);
+        }
         break;
     case FIELD_PROP_BOOL1:
         rAny >>= m_bResolved;
@@ -2066,7 +2074,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 void SwPostItField::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwPostItField"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toString().toUtf8().getStr()));
 
     SwField::dumpAsXml(pWriter);
 

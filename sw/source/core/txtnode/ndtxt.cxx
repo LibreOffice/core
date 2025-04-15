@@ -2102,7 +2102,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
 void SwTextNode::EstablishParentChildRelationsOfComments(
     const SwTextNode* pDest,
     std::map<sal_Int32, sal_Int32>& idMapForComments,
-    std::map<sal_Int32, OUString>& nameMapForComments
+    std::map<sal_Int32, ReferenceMarkerName>& nameMapForComments
 )
 {
     if (idMapForComments.size() > 0)
@@ -2251,7 +2251,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
         Below map variable is for memorizing the new ids and names of parent postits in the source node, then we will use them in target node.
     */
     std::map<sal_Int32, sal_Int32> idMapForComments;
-    std::map<sal_Int32, OUString> nameMapForComments;
+    std::map<sal_Int32, ReferenceMarkerName> nameMapForComments;
 
     sal_Int32 nDeletedDummyChars(0);
     for (size_t n = 0; n < nSize; ++n)

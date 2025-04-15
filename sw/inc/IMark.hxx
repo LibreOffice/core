@@ -29,6 +29,7 @@
 #include "swrect.hxx"
 #include "calbck.hxx"
 #include "pam.hxx"
+#include "names.hxx"
 #include "swdllapi.h"
 #include <map>
 #include <memory>
@@ -61,7 +62,7 @@ namespace sw::mark
         //getters
         SwPosition& GetMarkPos() const
             { return const_cast<SwPosition&>(*m_oPos1); }
-        const OUString& GetName() const
+        const ReferenceMarkerName& GetName() const
             { return m_aName; }
         // GetOtherMarkPos() is only guaranteed to return a valid
         // reference if IsExpanded() returned true
@@ -108,7 +109,7 @@ namespace sw::mark
         virtual bool IsExpanded() const
             { return m_oPos2.has_value(); }
 
-        void SetName(const OUString& rName)
+        void SetName(const ReferenceMarkerName& rName)
             { m_aName = rName; }
         virtual void SetMarkPos(const SwPosition& rNewPos);
         virtual void SetOtherMarkPos(const SwPosition& rNewPos);
@@ -136,15 +137,15 @@ namespace sw::mark
                 { return m_wXBookmark; }
         void SetXBookmark(rtl::Reference<SwXBookmark> const& xBkmk);
 
-        static OUString GenerateNewName(std::u16string_view rPrefix);
+        static ReferenceMarkerName GenerateNewName(std::u16string_view rPrefix);
     protected:
         // SwClient
         void SwClientNotify(const SwModify&, const SfxHint&) override;
 
-        MarkBase(const SwPaM& rPaM, OUString aName);
+        MarkBase(const SwPaM& rPaM, ReferenceMarkerName aName);
         std::optional<SwPosition> m_oPos1;
         std::optional<SwPosition> m_oPos2;
-        OUString m_aName;
+        ReferenceMarkerName m_aName;
 
         unotools::WeakReference<SwXBookmark> m_wXBookmark;
     };
@@ -190,7 +191,7 @@ namespace sw::mark
     public:
         Bookmark(const SwPaM& rPaM,
             const vcl::KeyCode& rCode,
-            const OUString& rName);
+            const ReferenceMarkerName& rName);
         void InitDoc(SwDoc& io_Doc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
 
         void DeregisterFromDoc(SwDoc& io_rDoc) override;
@@ -271,7 +272,7 @@ namespace sw::mark
         : public Fieldmark
     {
     public:
-        TextFieldmark(const SwPaM& rPaM, const OUString& rName);
+        TextFieldmark(const SwPaM& rPaM, const ReferenceMarkerName& rName);
         ~TextFieldmark();
         void InitDoc(SwDoc& io_rDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
         void ReleaseDoc(SwDoc& rDoc) override;
@@ -300,7 +301,7 @@ namespace sw::mark
         : public NonTextFieldmark
     {
     public:
-        CheckboxFieldmark(const SwPaM& rPaM, const OUString& rName);
+        CheckboxFieldmark(const SwPaM& rPaM, const ReferenceMarkerName& rName);
         bool IsChecked() const;
         void SetChecked(bool checked);
         OUString GetContent() const override;
@@ -328,7 +329,7 @@ namespace sw::mark
         : public FieldmarkWithDropDownButton
     {
     public:
-        DropDownFieldmark(const SwPaM& rPaM, const OUString& rName);
+        DropDownFieldmark(const SwPaM& rPaM, const ReferenceMarkerName& rName);
         ~DropDownFieldmark() override;
 
         void ShowButton(SwEditWin* pEditWin) override;

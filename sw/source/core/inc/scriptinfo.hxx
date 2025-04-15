@@ -68,7 +68,7 @@ private:
     std::vector<DirectionChangeInfo> m_DirectionChanges;
     std::vector<TextFrameIndex> m_Kashida;
     std::vector<TextFrameIndex> m_HiddenChg;
-    std::vector<std::tuple<TextFrameIndex, MarkKind, Color, OUString, OUString>> m_Bookmarks;
+    std::vector<std::tuple<TextFrameIndex, MarkKind, Color, ReferenceMarkerName, OUString>> m_Bookmarks;
     //! Records a single change in compression.
     struct CompressionChangeInfo
     {
@@ -169,7 +169,7 @@ public:
     }
     TextFrameIndex NextHiddenChg(TextFrameIndex nPos) const;
     TextFrameIndex NextBookmark(TextFrameIndex nPos) const;
-    std::vector<std::tuple<MarkKind, Color, OUString, OUString>>
+    std::vector<std::tuple<MarkKind, Color, ReferenceMarkerName, OUString>>
             GetBookmarks(TextFrameIndex const nPos);
     static void CalcHiddenRanges(const SwTextNode& rNode,
             MultiSelection& rHiddenMulti,

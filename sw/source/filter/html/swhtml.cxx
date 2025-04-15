@@ -2714,7 +2714,7 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
             const Point aVisSttPos( DOCUMENTBORDER, DOCUMENTBORDER );
             if( GetMedium() && aVisSttPos == m_pActionViewShell->VisArea().Pos() )
                 ::JumpToSwMark( m_pActionViewShell,
-                                GetMedium()->GetURLObject().GetMark() );
+                                ReferenceMarkerName(GetMedium()->GetURLObject().GetMark()) );
             m_bChkJumpMark = false;
         }
     }
@@ -2926,7 +2926,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                 {
                 case RES_FLTR_BOOKMARK: // insert bookmark
                     {
-                        const OUString sName( static_cast<SfxStringItem*>(pAttr->m_pItem.get())->GetValue() );
+                        const ReferenceMarkerName sName( static_cast<SfxStringItem*>(pAttr->m_pItem.get())->GetValue() );
                         IDocumentMarkAccess* const pMarkAccess = m_xDoc->getIDocumentMarkAccess();
                         auto ppBkmk = pMarkAccess->findMark( sName );
                         if( ppBkmk != pMarkAccess->getAllMarksEnd() &&
@@ -5519,7 +5519,7 @@ void SwHTMLParser::ParseMoreMetaOptions()
 
     SwPostItField aPostItField(
         static_cast<SwPostItFieldType*>(m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Postit )),
-        OUString(), sText.makeStringAndClear(), OUString(), OUString(), DateTime(DateTime::SYSTEM));
+        OUString(), sText.makeStringAndClear(), OUString(), ReferenceMarkerName(), DateTime(DateTime::SYSTEM));
     SwFormatField aFormatField( aPostItField );
     InsertAttr( aFormatField,  false );
 }

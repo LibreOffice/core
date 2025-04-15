@@ -964,7 +964,7 @@ void SwBookmarkPortion::HandlePortion( SwPortionHandler& rPH ) const
     OUStringBuffer aStr;
     for ( const auto& it : m_aColors )
     {
-        aStr.append("#" + std::get<2>(it) + " " + SwResId(STR_BOOKMARK_DEF_NAME));
+        aStr.append("#" + std::get<2>(it).toString() + " " + SwResId(STR_BOOKMARK_DEF_NAME));
         switch (std::get<0>(it))
         {
             case SwScriptInfo::MarkKind::Point:
@@ -992,7 +992,7 @@ void SwBookmarkPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rTex
         OUStringBuffer aStr;
         for (const auto& rColor : m_aColors)
         {
-            aStr.append("#" + std::get<2>(rColor) + " " + SwResId(STR_BOOKMARK_DEF_NAME));
+            aStr.append("#" + std::get<2>(rColor).toString() + " " + SwResId(STR_BOOKMARK_DEF_NAME));
             switch (std::get<0>(rColor))
             {
                 case SwScriptInfo::MarkKind::Point:

@@ -416,7 +416,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 {
                     OUString sTmpSearchStr = sText.copy( 1 );
                     IDocumentMarkAccess* pMarkAccess = rSh.getIDocumentMarkAccess();
-                    auto ppBkmk = pMarkAccess->findBookmark( sTmpSearchStr );
+                    auto ppBkmk = pMarkAccess->findBookmark( ReferenceMarkerName(sTmpSearchStr) );
                     if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
                          IDocumentMarkAccess::GetType(**ppBkmk)
                             == IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK )
@@ -528,7 +528,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 if(aContentAtPos.aFnd.pAttr)
                 {
                     sText = SwResId(STR_CONTENT_TYPE_SINGLE_REFERENCE) + ": " +
-                        static_cast<const SwFormatRefMark*>(aContentAtPos.aFnd.pAttr)->GetRefName();
+                        static_cast<const SwFormatRefMark*>(aContentAtPos.aFnd.pAttr)->GetRefName().toString();
                 }
             break;
 
@@ -610,7 +610,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                 }
                                 else
                                 {
-                                    sText = pRefField->GetSetRefName();
+                                    sText = pRefField->GetSetRefName().toString();
                                 }
                             }
                             break;

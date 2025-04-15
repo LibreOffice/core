@@ -691,7 +691,7 @@ std::pair<OUString, bool> SwTOXPara::GetURL(SwRootFrame const*const) const
             ::sw::mark::MarkBase const * const pMark = rDoc.getIDocumentMarkAccess()->getMarkForTextNode(
                                 *pTextNd,
                                 IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
-            aText = "#" + pMark->GetName();
+            aText = "#" + pMark->GetName().toString();
         }
         break;
 

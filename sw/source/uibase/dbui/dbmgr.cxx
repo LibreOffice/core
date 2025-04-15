@@ -1455,7 +1455,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         SwDocMergeInfo aMergeInfo;
                         // Name of the mark is actually irrelevant, UNO bookmarks have internals names.
                         aMergeInfo.startPageInTarget = pTargetDoc->getIDocumentMarkAccess()->makeMark(
-                            SwPaM(appendedDocStart), u""_ustr, IDocumentMarkAccess::MarkType::UNO_BOOKMARK,
+                            SwPaM(appendedDocStart), ReferenceMarkerName(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK,
                             ::sw::mark::InsertMode::New);
                         aMergeInfo.nDBRow = nStartRow;
                         rMergeDescriptor.pMailMergeConfigItem->AddMergedDocument( aMergeInfo );

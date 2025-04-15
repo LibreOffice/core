@@ -351,7 +351,7 @@ static void lcl_formatReferenceLanguage( OUString& rRefText,
 
 /// get references
 SwGetRefField::SwGetRefField( SwGetRefFieldType* pFieldType,
-                              OUString aSetRef, OUString aSetReferenceLanguage, sal_uInt16 nSubTyp,
+                              ReferenceMarkerName aSetRef, OUString aSetReferenceLanguage, sal_uInt16 nSubTyp,
                               sal_uInt16 nSequenceNo, sal_uInt16 nFlags, sal_uLong nFormat )
     : SwField(pFieldType, nFormat),
       m_sSetRefName(std::move(aSetRef)),
@@ -453,7 +453,7 @@ OUString SwGetRefField::GetFieldName() const
     const OUString aName = GetTyp()->GetName();
     if ( !aName.isEmpty() || !m_sSetRefName.isEmpty() )
     {
-        return aName + " " + m_sSetRefName;
+        return aName + " " + m_sSetRefName.toString();
     }
     return ExpandImpl(nullptr);
 }
@@ -529,9 +529,9 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
 
     // where is the category name (e.g. "Illustration")?
     const OUString aText = pTextNd->GetText();
-    const sal_Int32 nCatStart = aText.indexOf(m_sSetRefName);
+    const sal_Int32 nCatStart = aText.indexOf(m_sSetRefName.toString());
     const bool bHasCat = nCatStart>=0;
-    const sal_Int32 nCatEnd = bHasCat ? nCatStart + m_sSetRefName.getLength() : -1;
+    const sal_Int32 nCatEnd = bHasCat ? nCatStart + m_sSetRefName.toString().getLength() : -1;
 
     // length of the referenced text
     const sal_Int32 nLen = aText.getLength();
@@ -883,13 +883,13 @@ std::unique_ptr<SwField> SwGetRefField::Copy() const
 /// get reference name
 OUString SwGetRefField::GetPar1() const
 {
-    return m_sSetRefName;
+    return m_sSetRefName.toString();
 }
 
 /// set reference name
 void SwGetRefField::SetPar1( const OUString& rName )
 {
-    m_sSetRefName = rName;
+    m_sSetRefName = ReferenceMarkerName(rName);
 }
 
 OUString SwGetRefField::GetPar2() const
@@ -1328,7 +1328,7 @@ namespace
     }
 }
 
-SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
+SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const ReferenceMarkerName& rRefMark,
                                           sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags,
                                           sal_Int32* pStart, sal_Int32* pEnd, SwRootFrame const* const pLayout,
                                           const SwTextNode* pSelf, SwFrame* pContentFrame)
@@ -1455,7 +1455,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
     return pTextNd;
 }
 
-SwTextNode* SwGetRefFieldType::FindAnchorRefStyle(SwDoc* pDoc, const OUString& rRefMark,
+SwTextNode* SwGetRefFieldType::FindAnchorRefStyle(SwDoc* pDoc, const ReferenceMarkerName& rRefMark,
                                           sal_uInt16 nFlags,
                                           sal_Int32* pStart, sal_Int32* pEnd, SwRootFrame const* const pLayout,
                                           const SwTextNode* pSelf, SwFrame* pContentFrame)
@@ -1504,10 +1504,11 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyle(SwDoc* pDoc, const OUString& r
     }
 
     // undocumented Word feature: 1 = "Heading 1" etc.
+    const OUString& sRefMarkStr = rRefMark.toString();
     OUString const styleName(
-        (rRefMark.getLength() == 1 && '1' <= rRefMark[0] && rRefMark[0] <= '9')
-        ? SwStyleNameMapper::GetProgName(RES_POOLCOLL_HEADLINE1 + rRefMark[0] - '1', rRefMark).toString()
-        : rRefMark);
+        (sRefMarkStr.getLength() == 1 && '1' <= sRefMarkStr[0] && sRefMarkStr[0] <= '9')
+        ? SwStyleNameMapper::GetProgName(RES_POOLCOLL_HEADLINE1 + sRefMarkStr[0] - '1', sRefMarkStr).toString()
+        : sRefMarkStr);
 
     switch (elementType)
     {
@@ -1679,7 +1680,7 @@ namespace {
 struct RefIdsMap
 {
 private:
-    OUString aName;
+    ReferenceMarkerName aName;
     std::set<sal_uInt16> aIds;
     std::set<sal_uInt16> aDstIds;
     std::map<sal_uInt16, sal_uInt16> sequencedIds; /// ID numbers sorted by sequence number.
@@ -1692,11 +1693,11 @@ private:
     static sal_uInt16 GetFirstUnusedId( std::set<sal_uInt16> &rIds );
 
 public:
-    explicit RefIdsMap( OUString _aName ) : aName(std::move( _aName )), bInit( false ) {}
+    explicit RefIdsMap( ReferenceMarkerName _aName ) : aName(std::move( _aName )), bInit( false ) {}
 
     void Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rField, bool bField );
 
-    const OUString& GetName() const { return aName; }
+    const ReferenceMarkerName& GetName() const { return aName; }
 };
 
 }
@@ -1843,7 +1844,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
 
     // then there are RefFields in the DescDox - so all RefFields in the SourceDoc
     // need to be converted to have unique IDs for both documents
-    RefIdsMap aFntMap { OUString() };
+    RefIdsMap aFntMap { ReferenceMarkerName() };
     std::vector<std::unique_ptr<RefIdsMap>> aFieldMap;
 
     std::vector<SwFormatField*> vFields;

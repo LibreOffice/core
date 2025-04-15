@@ -582,8 +582,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testCopyCommentsWithReplies)
     }
 
     //                   parents (original-copied), replies (original-copied)
-    CPPUNIT_ASSERT_EQUAL(comments[0]->GetName(), comments[1]->GetParentName());
-    CPPUNIT_ASSERT_EQUAL(comments[2]->GetName(), comments[3]->GetParentName());
+    CPPUNIT_ASSERT_EQUAL(comments[0]->GetName().toString(),
+                         comments[1]->GetParentName().toString());
+    CPPUNIT_ASSERT_EQUAL(comments[2]->GetName().toString(),
+                         comments[3]->GetParentName().toString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testNodeSplitStyleListLevel)

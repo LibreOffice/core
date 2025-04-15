@@ -154,7 +154,7 @@ public:
 
 class SwHistorySetRefMark final : public SwHistoryHint
 {
-    const OUString m_RefName;
+    const ReferenceMarkerName m_RefName;
     const SwNodeOffset m_nNodeIndex;
     const sal_Int32 m_nStart;
     const sal_Int32 m_nEnd;
@@ -162,7 +162,7 @@ class SwHistorySetRefMark final : public SwHistoryHint
 public:
     SwHistorySetRefMark( const SwTextRefMark* pTextHt, SwNodeOffset nNode );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
-    const OUString& GetRefName() {return m_RefName;}
+    const ReferenceMarkerName& GetRefName() {return m_RefName;}
 };
 
 class SwHistorySetTOXMark final : public SwHistoryHint
@@ -251,10 +251,10 @@ class SwHistoryBookmark final : public SwHistoryHint
         virtual void SetInDoc(SwDoc * pDoc, bool) override;
 
         bool IsEqualBookmark(const ::sw::mark::MarkBase& rBkmk);
-        const OUString& GetName() const { return m_aName;}
+        const ReferenceMarkerName& GetName() const { return m_aName;}
 
     private:
-        const OUString m_aName;
+        const ReferenceMarkerName m_aName;
         OUString m_aShortName;
         bool m_bHidden;
         OUString m_aHideCondition;
@@ -295,7 +295,7 @@ class SwHistoryTextFieldmark final : public SwHistoryHint
         void ResetInDoc(SwDoc& rDoc);
 
     private:
-        const OUString m_sName;
+        const ReferenceMarkerName m_sName;
         const OUString m_sType;
         const SwNodeOffset m_nStartNode;
         const sal_Int32 m_nStartContent;

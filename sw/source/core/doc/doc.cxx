@@ -1070,7 +1070,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
 }
 
 /// @return the reference in the doc for the name
-const SwFormatRefMark* SwDoc::GetRefMark( std::u16string_view rName ) const
+const SwFormatRefMark* SwDoc::GetRefMark( const ReferenceMarkerName& rName ) const
 {
     const SwFormatRefMark* pRet = nullptr;
     ForEachRefMark(
@@ -1118,8 +1118,8 @@ sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
         {
             if( pNames )
             {
-                OUString aTmp(rRefMark.GetRefName());
-                pNames->insert(pNames->begin() + nCount, aTmp);
+                ReferenceMarkerName aTmp(rRefMark.GetRefName());
+                pNames->insert(pNames->begin() + nCount, aTmp.toString());
             }
             ++nCount;
             return true;

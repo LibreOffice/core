@@ -35,7 +35,7 @@ namespace sw::mark {
         public:
             CrossRefBookmark(const SwPaM& rPaM,
                 const vcl::KeyCode& rCode,
-                const OUString& rName,
+                const ReferenceMarkerName& rName,
                 std::u16string_view rPrefix);
 
             // getters
@@ -70,8 +70,8 @@ namespace sw::mark {
         public:
             CrossRefHeadingBookmark(const SwPaM& rPaM,
                 const vcl::KeyCode& rCode,
-                const OUString& rName);
-            static bool IsLegalName(std::u16string_view rName);
+                const ReferenceMarkerName& rName);
+            static bool IsLegalName(const ReferenceMarkerName& rName);
         };
 
         class CrossRefNumItemBookmark final
@@ -80,8 +80,8 @@ namespace sw::mark {
         public:
             CrossRefNumItemBookmark(const SwPaM& rPaM,
                 const vcl::KeyCode& rCode,
-                const OUString& rName);
-            static bool IsLegalName(std::u16string_view rName);
+                const ReferenceMarkerName& rName);
+            static bool IsLegalName(const ReferenceMarkerName& rName);
         };
 }
 

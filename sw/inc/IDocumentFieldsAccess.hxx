@@ -25,6 +25,7 @@
 #include <sal/types.h>
 #include "swtypes.hxx"
 #include "nodeoffset.hxx"
+#include "names.hxx"
 #include <unordered_map>
 
 class SwFieldTypes;
@@ -58,6 +59,10 @@ namespace com::sun::star::uno { class Any; }
     virtual SwFieldType *GetSysFieldType( const SwFieldIds eWhich ) const = 0;
 
     virtual SwFieldType* GetFieldType(SwFieldIds nResId, const OUString& rName, bool bDbFieldMatching) const = 0;
+
+    // convenience method
+    SwFieldType* GetFieldType(SwFieldIds nResId, const ReferenceMarkerName& rName, bool bDbFieldMatching) const
+    { return GetFieldType(nResId, rName.toString(), bDbFieldMatching); }
 
     virtual void RemoveFieldType(size_t nField) = 0;
 

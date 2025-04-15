@@ -1469,14 +1469,14 @@ void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, s
             nContent < nCurrentEnd ) )
         {
             sal_uLong nCp = nSttCP + pPos->GetContentIndex() - nCurrentPos;
-            m_pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()));
+            m_pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName().toString()) );
         }
         if( pOPos && nNd == pOPos->GetNodeIndex() &&
             ( nContent = pOPos->GetContentIndex() ) >= nCurrentPos &&
             nContent < nCurrentEnd )
         {
             sal_uLong nCp = nSttCP + pOPos->GetContentIndex() - nCurrentPos;
-            m_pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()));
+            m_pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName().toString()));
         }
     }
 }
@@ -1491,7 +1491,7 @@ void WW8Export::AppendAnnotationMarks(const SwWW8AttrIter& rAttrs, sal_Int32 nCu
             const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();
             if (nStart == nCurrentPos)
             {
-                m_pAtn->AddRangeStartPosition(pMark->GetName(), Fc2Cp(Strm().Tell()),
+                m_pAtn->AddRangeStartPosition(pMark->GetName().toString(), Fc2Cp(Strm().Tell()),
                                               !rAttrs.HasFlysAt(nCurrentPos));
             }
         }
@@ -4197,7 +4197,7 @@ void WW8Export::WriteFormData( const ::sw::mark::Fieldmark& rFieldmark )
     if ( rFieldmark.GetFieldname() == ODF_FORMDROPDOWN )
         type=2;
 
-    OUString ffname = rFieldmark.GetName();
+    OUString ffname = rFieldmark.GetName().toString();
     if (ffname.getLength() > 20)
         ffname = ffname.copy(0, 20);
 

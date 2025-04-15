@@ -35,7 +35,7 @@ namespace sw::mark
 {
     CrossRefBookmark::CrossRefBookmark(const SwPaM& rPaM,
         const vcl::KeyCode& rCode,
-        const OUString& rName,
+        const ReferenceMarkerName& rName,
         std::u16string_view rPrefix)
         : Bookmark(
                 // ensure that m_pPos2 is null by only passing start to super
@@ -70,24 +70,24 @@ namespace sw::mark
 
     CrossRefHeadingBookmark::CrossRefHeadingBookmark(const SwPaM& rPaM,
         const vcl::KeyCode& rCode,
-        const OUString& rName)
+        const ReferenceMarkerName& rName)
         : CrossRefBookmark(rPaM, rCode, rName, Concat2View(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()+"_Toc"))
     { }
 
-    bool CrossRefHeadingBookmark::IsLegalName(std::u16string_view rName)
+    bool CrossRefHeadingBookmark::IsLegalName(const ReferenceMarkerName& rName)
     {
-        return o3tl::starts_with(rName, IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix());
+        return o3tl::starts_with(rName.toString(), IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix());
     }
 
     CrossRefNumItemBookmark::CrossRefNumItemBookmark(const SwPaM& rPaM,
         const vcl::KeyCode& rCode,
-        const OUString& rName)
+        const ReferenceMarkerName& rName)
         : CrossRefBookmark(rPaM, rCode, rName, CrossRefNumItemBookmark_NamePrefix)
     { }
 
-    bool CrossRefNumItemBookmark::IsLegalName(std::u16string_view rName)
+    bool CrossRefNumItemBookmark::IsLegalName(const ReferenceMarkerName& rName)
     {
-        return o3tl::starts_with(rName, CrossRefNumItemBookmark_NamePrefix);
+        return o3tl::starts_with(rName.toString(), CrossRefNumItemBookmark_NamePrefix);
     }
 }
 

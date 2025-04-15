@@ -32,4 +32,35 @@ private:
     OUString m_s;
 };
 
+class ReferenceMarkerName
+{
+public:
+    ReferenceMarkerName() {}
+    explicit ReferenceMarkerName(const OUString& s)
+        : m_s(s)
+    {
+    }
+    const OUString& toString() const { return m_s; }
+    bool isEmpty() const { return m_s.isEmpty(); }
+    bool operator==(const ReferenceMarkerName& s) const = default;
+    bool operator==(const OUString& s) const { return m_s == s; }
+    bool operator==(std::u16string_view s) const { return m_s == s; }
+    bool operator<(const ReferenceMarkerName& s) const { return m_s < s.m_s; }
+    bool operator>(const ReferenceMarkerName& s) const { return m_s > s.m_s; }
+
+private:
+    OUString m_s;
+};
+
+namespace std
+{
+template <> struct hash<ReferenceMarkerName>
+{
+    std::size_t operator()(ReferenceMarkerName const& s) const
+    {
+        return std::hash<OUString>()(s.toString());
+    }
+};
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

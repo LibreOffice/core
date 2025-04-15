@@ -102,18 +102,18 @@ using namespace nsSwDocInfoSubType;
 namespace
 {
     // #120879# - helper method to identify a bookmark name to match the internal TOC bookmark naming convention
-    bool IsTOCBookmarkName(std::u16string_view rName)
+    bool IsTOCBookmarkName(const ReferenceMarkerName& rName)
     {
-        return o3tl::starts_with(rName, u"_Toc") || o3tl::starts_with(rName, Concat2View(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()+"_Toc"));
+        return o3tl::starts_with(rName.toString(), u"_Toc") || o3tl::starts_with(rName.toString(), Concat2View(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()+"_Toc"));
     }
 
-    OUString EnsureTOCBookmarkName(const OUString& rName)
+    ReferenceMarkerName EnsureTOCBookmarkName(const ReferenceMarkerName& rName)
     {
-        OUString sTmp = rName;
+        ReferenceMarkerName sTmp = rName;
         if ( IsTOCBookmarkName ( rName ) )
         {
-            if ( ! rName.startsWith(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()) )
-                sTmp = IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix() + rName;
+            if ( ! rName.toString().startsWith(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()) )
+                sTmp = ReferenceMarkerName(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix() + rName.toString());
         }
         return sTmp;
     }
@@ -229,9 +229,9 @@ tools::Long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
         aStart = rTest.maStartPos;
     }
 
-    const OUString sOrigName = BookmarkToWriter(*pName);
+    const ReferenceMarkerName sOrigName( BookmarkToWriter(*pName) );
     m_xReffedStck->NewAttr( aStart,
-                          SwFltBookmark( EnsureTOCBookmarkName( sOrigName ), aVal, pB->GetHandle(), IsTOCBookmarkName( sOrigName ) ));
+                          SwFltBookmark( EnsureTOCBookmarkName( sOrigName ).toString(), aVal, pB->GetHandle(), IsTOCBookmarkName( sOrigName ) ));
     return 0;
 }
 
@@ -782,7 +782,7 @@ WW8FieldEntry &WW8FieldEntry::operator=(const WW8FieldEntry &rOther) noexcept
 }
 
 
-void WW8FieldEntry::SetBookmarkName(const OUString& bookmarkName)
+void WW8FieldEntry::SetBookmarkName(const ReferenceMarkerName& bookmarkName)
 {
     msBookmarkName=bookmarkName;
 }
@@ -2189,7 +2189,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, OUString& rStr )
         }
     }
 
-    OUString sBkmName(GetMappedBookmark(sOrigBkmName));
+    ReferenceMarkerName sBkmName(GetMappedBookmark(sOrigBkmName));
 
     // #i120879# add cross reference bookmark name prefix, if it
     // matches internal TOC bookmark naming convention
@@ -2197,7 +2197,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, OUString& rStr )
     {
         sBkmName = EnsureTOCBookmarkName(sBkmName);
         // track <sBookmarkName> as referenced TOC bookmark.
-        m_xReffedStck->m_aReferencedTOCBookmarks.insert( sBkmName );
+        m_xReffedStck->m_aReferencedTOCBookmarks.insert( sBkmName.toString() );
     }
 
     SwGetRefField aField(
@@ -2257,14 +2257,14 @@ eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, OUString& rStr )
     // set Sequence No of corresponding Foot-/Endnote to Zero
     // (will be corrected in
     SwGetRefField aField( static_cast<SwGetRefFieldType*>(
-        m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )), aBkmName, u""_ustr, REF_FOOTNOTE, 0, 0,
+        m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )), ReferenceMarkerName(aBkmName), u""_ustr, REF_FOOTNOTE, 0, 0,
         REF_ONLYNUMBER );
     m_xReffingStck->NewAttr(*m_pPaM->GetPoint(), SwFormatField(aField));
     m_xReffingStck->SetAttr(*m_pPaM->GetPoint(), RES_TXTATR_FIELD);
     if (bAboveBelow)
     {
         SwGetRefField aField2( static_cast<SwGetRefFieldType*>(
-            m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )),aBkmName, u""_ustr, REF_FOOTNOTE, 0, 0,
+            m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )), ReferenceMarkerName(aBkmName), u""_ustr, REF_FOOTNOTE, 0, 0,
             REF_UPDOWN );
         m_xReffingStck->NewAttr(*m_pPaM->GetPoint(), SwFormatField(aField2));
         m_xReffingStck->SetAttr(*m_pPaM->GetPoint(), RES_TXTATR_FIELD);
@@ -2300,18 +2300,18 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
         {
             // #i120879# add cross reference bookmark name prefix, if it
             // matches internal TOC bookmark naming convention
-            OUString sBookmarkName;
-            if ( IsTOCBookmarkName( sName ) )
+            ReferenceMarkerName sBookmarkName;
+            if ( IsTOCBookmarkName( ReferenceMarkerName(sName) ) )
             {
-                sBookmarkName = EnsureTOCBookmarkName(sName);
+                sBookmarkName = EnsureTOCBookmarkName(ReferenceMarkerName(sName));
                 // track <sBookmarkName> as referenced TOC bookmark.
-                m_xReffedStck->m_aReferencedTOCBookmarks.insert( sBookmarkName );
+                m_xReffedStck->m_aReferencedTOCBookmarks.insert( sBookmarkName.toString() );
             }
             else
             {
-                sBookmarkName = sName;
+                sBookmarkName = ReferenceMarkerName(sName);
             }
-            OUString sURL = "#" + sBookmarkName;
+            OUString sURL = "#" + sBookmarkName.toString();
             SwFormatINetFormat aURL( sURL, u""_ustr );
             static constexpr OUString sLinkStyle(u"Index Link"_ustr);
             const sal_uInt16 nPoolId =
@@ -2325,16 +2325,16 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
 
     // #i120879# add cross reference bookmark name prefix, if it matches
     // internal TOC bookmark naming convention
-    OUString sPageRefBookmarkName;
-    if ( IsTOCBookmarkName( sName ) )
+    ReferenceMarkerName sPageRefBookmarkName;
+    if ( IsTOCBookmarkName( ReferenceMarkerName(sName) ) )
     {
-        sPageRefBookmarkName = EnsureTOCBookmarkName(sName);
+        sPageRefBookmarkName = EnsureTOCBookmarkName(ReferenceMarkerName(sName));
         // track <sPageRefBookmarkName> as referenced TOC bookmark.
-        m_xReffedStck->m_aReferencedTOCBookmarks.insert( sPageRefBookmarkName );
+        m_xReffedStck->m_aReferencedTOCBookmarks.insert( sPageRefBookmarkName.toString() );
     }
     else
     {
-        sPageRefBookmarkName = sName;
+        sPageRefBookmarkName = ReferenceMarkerName(sName);
     }
     SwGetRefField aField( static_cast<SwGetRefFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )),
                         sPageRefBookmarkName, u""_ustr, REF_BOOKMARK, 0, 0, REF_PAGE );
@@ -3594,9 +3594,9 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
                         sMark = sMark.copy( 0, sMark.getLength() - 1 );
                     }
                     // #120879# add cross reference bookmark name prefix, if it matches internal TOC bookmark naming convention
-                    if ( IsTOCBookmarkName( sMark ) )
+                    if ( IsTOCBookmarkName( ReferenceMarkerName(sMark) ) )
                     {
-                        sMark = EnsureTOCBookmarkName(sMark);
+                        sMark = EnsureTOCBookmarkName(ReferenceMarkerName(sMark)).toString();
                         // track <sMark> as referenced TOC bookmark.
                         m_xReffedStck->m_aReferencedTOCBookmarks.insert( sMark );
                     }

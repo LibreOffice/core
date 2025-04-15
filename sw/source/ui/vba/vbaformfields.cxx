@@ -51,7 +51,8 @@ static sw::mark::Fieldmark* lcl_getFieldmark(std::string_view rName, sal_Int32& 
             case IDocumentMarkAccess::MarkType::TEXT_FIELDMARK:
             {
                 if (rIndex < 0
-                    && (*aIter)->GetName().equalsIgnoreAsciiCase(OUString::fromUtf8(rName)))
+                    && (*aIter)->GetName().toString().equalsIgnoreAsciiCase(
+                           OUString::fromUtf8(rName)))
                 {
                     rIndex = nCounter;
                     return *aIter;
@@ -61,7 +62,7 @@ static sw::mark::Fieldmark* lcl_getFieldmark(std::string_view rName, sal_Int32& 
 
                 ++nCounter;
                 if (pElementNames)
-                    vElementNames.push_back((*aIter)->GetName());
+                    vElementNames.push_back((*aIter)->GetName().toString());
                 break;
             }
             default:;

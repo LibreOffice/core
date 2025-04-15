@@ -297,14 +297,14 @@ namespace sw
                 lcl_SetCpyPos(pMark->GetOtherMarkPos(), rStt, *pCpyStt, *aTmpPam.GetMark(), nDelCount);
             }
 
-            OUString sRequestedName = pMark->GetName();
+            ReferenceMarkerName sRequestedName = pMark->GetName();
             if (flags & SwCopyFlags::IsMoveToFly)
             {
                 assert(&rSrcDoc == &rDestDoc);
                 // Ensure the name can be given to NewMark, since this is ultimately a move
                 auto pSoonToBeDeletedMark = const_cast<sw::mark::MarkBase*>(pMark);
                 rDestDoc.getIDocumentMarkAccess()->renameMark(pSoonToBeDeletedMark,
-                                                              sRequestedName + "COPY_IS_MOVE");
+                                                              ReferenceMarkerName(sRequestedName.toString() + "COPY_IS_MOVE"));
             }
 
             ::sw::mark::MarkBase* const pNewMark = rDestDoc.getIDocumentMarkAccess()->makeMark(
@@ -4742,7 +4742,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 // If any Redline will change (split!) the node
                 const ::sw::mark::MarkBase* pBkmk =
                     m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam,
-                        OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK,
+                        ReferenceMarkerName(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK,
                         ::sw::mark::InsertMode::New);
 
                 m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
@@ -4843,7 +4843,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 // If any Redline will change (split!) the node
                 const ::sw::mark::MarkBase* pBkmk =
                     m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam,
-                        OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK,
+                        ReferenceMarkerName(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK,
                         ::sw::mark::InsertMode::New);
 
                 aDelPam.GetPoint()->Assign( SwNodeOffset(0) );

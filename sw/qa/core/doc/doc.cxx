@@ -327,7 +327,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCopyBookmarks)
     for (auto it = pDoc->getIDocumentMarkAccess()->getBookmarksBegin();
          it != pDoc->getIDocumentMarkAccess()->getBookmarksEnd(); ++it)
     {
-        if ((*it)->GetName().indexOf("Copy") == -1)
+        if ((*it)->GetName().toString().indexOf("Copy") == -1)
         {
             ++nActual;
         }

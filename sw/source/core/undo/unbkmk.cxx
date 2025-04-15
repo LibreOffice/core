@@ -105,7 +105,7 @@ void SwUndoDeleteBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
     ResetInDoc( rContext.GetDoc() );
 }
 
-SwUndoRenameBookmark::SwUndoRenameBookmark( OUString aOldName, OUString aNewName, const SwDoc& rDoc )
+SwUndoRenameBookmark::SwUndoRenameBookmark( ReferenceMarkerName aOldName, ReferenceMarkerName aNewName, const SwDoc& rDoc )
     : SwUndo( SwUndoId::BOOKMARK_RENAME, &rDoc )
     , m_sOldName(std::move( aOldName ))
     , m_sNewName(std::move( aNewName ))
@@ -116,11 +116,11 @@ SwUndoRenameBookmark::~SwUndoRenameBookmark()
 {
 }
 
-static OUString lcl_QuoteName(std::u16string_view rName)
+static OUString lcl_QuoteName(const ReferenceMarkerName& rName)
 {
     static const OUString sStart = SwResId(STR_START_QUOTE);
     static const OUString sEnd = SwResId(STR_END_QUOTE);
-    return sStart + rName + sEnd;
+    return sStart + rName.toString() + sEnd;
 }
 
 SwRewriter SwUndoRenameBookmark::GetRewriter() const
@@ -132,7 +132,7 @@ SwRewriter SwUndoRenameBookmark::GetRewriter() const
     return aRewriter;
 }
 
-void SwUndoRenameBookmark::Rename(::sw::UndoRedoContext const & rContext, const OUString& sFrom, const OUString& sTo)
+void SwUndoRenameBookmark::Rename(::sw::UndoRedoContext const & rContext, const ReferenceMarkerName& sFrom, const ReferenceMarkerName& sTo)
 {
     IDocumentMarkAccess* const pMarkAccess = rContext.GetDoc().getIDocumentMarkAccess();
     auto ppBkmk = pMarkAccess->findMark(sFrom);

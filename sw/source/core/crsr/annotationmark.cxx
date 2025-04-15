@@ -35,10 +35,10 @@ namespace sw::mark
 {
     AnnotationMark::AnnotationMark(
         const SwPaM& rPaM,
-        const OUString& rName )
+        const ReferenceMarkerName& rName )
         : MarkBase( rPaM, rName )
     {
-        if ( rName.getLength() == 0 )
+        if ( rName.toString().getLength() == 0 )
         {
             SetName( MarkBase::GenerateNewName(u"__Annotation__") );
         }

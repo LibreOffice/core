@@ -337,7 +337,7 @@ void SwAnnotationWin::SetAsRoot()
         SwPostItField* pPostIt = static_cast<SwPostItField*>(mpFormatField->GetField());
         pPostIt->SetParentId(0);
         pPostIt->SetParentPostItId(0);
-        pPostIt->SetParentName("");
+        pPostIt->SetParentName(ReferenceMarkerName());
         mrMgr.MoveSubthreadToRoot(this);
         mpFormatField->Broadcast(SwFormatFieldHint(nullptr, SwFormatFieldHintWhich::CHANGED));
     }

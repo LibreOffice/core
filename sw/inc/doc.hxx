@@ -138,6 +138,7 @@ class SwContentControlManager;
 enum class SvMacroItemId : sal_uInt16;
 enum class SvxFrameDirection;
 enum class RndStdIds;
+class ReferenceMarkerName;
 
 namespace sw::mark { class MarkManager; }
 namespace sw {
@@ -1328,7 +1329,7 @@ public:
     void SetTableName( SwFrameFormat& rTableFormat, const OUString &rNewName );
 
     // @return the reference in document that is set for name.
-    const SwFormatRefMark* GetRefMark( std::u16string_view rName ) const;
+    const SwFormatRefMark* GetRefMark( const ReferenceMarkerName& rName ) const;
 
     // @return RefMark via index - for UNO.
     const SwFormatRefMark* GetRefMark( sal_uInt16 nIndex ) const;

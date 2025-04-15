@@ -1084,7 +1084,7 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
                 parentPostitId.SetValue(OUString::number(GetPostItField()->GetPostItId()));
                 this->GeneratePostItName();
                 SfxStringItem const parentName{SID_ATTR_POSTIT_PARENTNAME,
-                    GetPostItField()->GetName()};
+                    GetPostItField()->GetName().toString()};
                 // transport parent ids to SwWrtShell::InsertPostIt()
                 SfxPoolItem const* items[]{ &parentParaId, &parentPostitId, &parentName, nullptr };
                 mrView.GetViewFrame().GetDispatcher()->Execute(FN_POSTIT, SfxCallMode::SLOT, items);

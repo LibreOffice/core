@@ -380,7 +380,7 @@ SwFieldMgr::~SwFieldMgr()
 }
 
 // organise RefMark by names
-bool  SwFieldMgr::CanInsertRefMark( std::u16string_view rStr )
+bool  SwFieldMgr::CanInsertRefMark( const ReferenceMarkerName& rStr )
 {
     bool bRet = false;
     SwWrtShell *pSh = m_pWrtShell ? m_pWrtShell : lcl_GetShell();
@@ -908,7 +908,7 @@ bool SwFieldMgr::InsertField(
                     rData.m_sPar1, // author
                     rData.m_sPar2, // content
                     aUserOpt.GetID(), // author's initials
-                    OUString(), // name
+                    ReferenceMarkerName(), // name
                     DateTime(DateTime::SYSTEM) ));
             if (rData.m_oParentId)
             {
@@ -1063,7 +1063,7 @@ bool SwFieldMgr::InsertField(
 
     case SwFieldTypesEnum::SetRef:
         {
-            if( !rData.m_sPar1.isEmpty() && CanInsertRefMark( rData.m_sPar1 ) )
+            if( !rData.m_sPar1.isEmpty() && CanInsertRefMark( ReferenceMarkerName(rData.m_sPar1) ) )
             {
                 const OUString& rRefmarkText = rData.m_sPar2;
                 SwPaM* pCursorPos = pCurShell->GetCursor();
@@ -1095,7 +1095,7 @@ bool SwFieldMgr::InsertField(
                     }
                 }
 
-                pCurShell->SetAttrItem( SwFormatRefMark( rData.m_sPar1 ) );
+                pCurShell->SetAttrItem( SwFormatRefMark( ReferenceMarkerName(rData.m_sPar1) ) );
 
                 if (!bHadMark && !rRefmarkText.isEmpty())
                 {
@@ -1133,7 +1133,7 @@ bool SwFieldMgr::InsertField(
                 nFormatId %= SAL_N_ELEMENTS(FMT_REF_ARY);
             }
 
-            pField.reset(new SwGetRefField(pTyp, rData.m_sPar1, sReferenceLanguage, nSubType, nSeqNo, nFlags, nFormatId));
+            pField.reset(new SwGetRefField(pTyp, ReferenceMarkerName(rData.m_sPar1), sReferenceLanguage, nSubType, nSeqNo, nFlags, nFormatId));
             bExp = true;
             break;
         }

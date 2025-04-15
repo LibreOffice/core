@@ -84,16 +84,18 @@ public:
 
 class SwUndoRenameBookmark final : public SwUndo
 {
-    const OUString m_sOldName;
-    const OUString m_sNewName;
+    const ReferenceMarkerName m_sOldName;
+    const ReferenceMarkerName m_sNewName;
 
 public:
-    SwUndoRenameBookmark(OUString aOldName, OUString aNewName, const SwDoc& rDoc);
+    SwUndoRenameBookmark(ReferenceMarkerName aOldName, ReferenceMarkerName aNewName,
+                         const SwDoc& rDoc);
     virtual ~SwUndoRenameBookmark() override;
 
 private:
     virtual SwRewriter GetRewriter() const override;
-    static void Rename(::sw::UndoRedoContext const&, const OUString& sFrom, const OUString& sTo);
+    static void Rename(::sw::UndoRedoContext const&, const ReferenceMarkerName& sFrom,
+                       const ReferenceMarkerName& sTo);
     virtual void UndoImpl(::sw::UndoRedoContext&) override;
     virtual void RedoImpl(::sw::UndoRedoContext&) override;
 };

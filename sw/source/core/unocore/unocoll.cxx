@@ -1566,7 +1566,7 @@ uno::Any SwXBookmarks::getByName(const OUString& rName)
 
     auto& rDoc = GetDoc();
     IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
-    auto ppBkmk = pMarkAccess->findBookmark(rName);
+    auto ppBkmk = pMarkAccess->findBookmark(ReferenceMarkerName(rName));
     if(ppBkmk == pMarkAccess->getBookmarksEnd())
         throw NoSuchElementException();
 
@@ -1590,7 +1590,7 @@ uno::Sequence< OUString > SwXBookmarks::getElementNames()
         if (IDocumentMarkAccess::MarkType::BOOKMARK ==
                 IDocumentMarkAccess::GetType(**ppMark))
         {
-            ret.push_back((*ppMark)->GetName()); // only add real bookmarks
+            ret.push_back((*ppMark)->GetName().toString()); // only add real bookmarks
         }
     }
     return comphelper::containerToSequence(ret);
@@ -1601,7 +1601,7 @@ sal_Bool SwXBookmarks::hasByName(const OUString& rName)
     SolarMutexGuard aGuard;
 
     IDocumentMarkAccess* const pMarkAccess = GetDoc().getIDocumentMarkAccess();
-    return pMarkAccess->findBookmark(rName) != pMarkAccess->getBookmarksEnd();
+    return pMarkAccess->findBookmark(ReferenceMarkerName(rName)) != pMarkAccess->getBookmarksEnd();
 }
 
 uno::Type SAL_CALL SwXBookmarks::getElementType()
@@ -1798,7 +1798,7 @@ uno::Any SwXReferenceMarks::getByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
     auto& rDoc = GetDoc();
-    if (auto* const pMark = const_cast<SwFormatRefMark*>(rDoc.GetRefMark(rName)))
+    if (auto* const pMark = const_cast<SwFormatRefMark*>(rDoc.GetRefMark(ReferenceMarkerName(rName))))
         return uno::Any(
             uno::Reference<XTextContent>(SwXReferenceMark::CreateXReferenceMark(rDoc, pMark)));
 
@@ -1818,7 +1818,7 @@ uno::Sequence< OUString > SwXReferenceMarks::getElementNames()
 sal_Bool SwXReferenceMarks::hasByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
-    return nullptr != GetDoc().GetRefMark( rName);
+    return nullptr != GetDoc().GetRefMark( ReferenceMarkerName(rName) );
 }
 
 uno::Type SAL_CALL SwXReferenceMarks::getElementType()

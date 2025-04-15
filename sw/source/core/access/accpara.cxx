@@ -1134,7 +1134,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                         sEntry = "Insert Reference";
                         break;
                     case REF_SEQUENCEFLD:
-                        sEntry = static_cast<const SwGetRefField*>(pField)->GetSetRefName();
+                        sEntry = static_cast<const SwGetRefField*>(pField)->GetSetRefName().toString();
                         break;
                     case REF_STYLE:
                         sEntry = "StyleRef";

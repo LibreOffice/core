@@ -1286,7 +1286,7 @@ void SwHTMLWriter::OutBookmarks()
 
         // first the SWG specific data:
         if ( !pBookmark->GetName().isEmpty() )
-            OutAnchor( pBookmark->GetName() );
+            OutAnchor( pBookmark->GetName().toString() );
 
         if( ++m_nBkmkTabPos >= pMarkAccess->getBookmarksCount() )
             m_nBkmkTabPos = -1;

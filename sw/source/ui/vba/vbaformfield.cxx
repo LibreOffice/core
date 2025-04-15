@@ -203,7 +203,7 @@ void SwVbaFormField::setOwnHelp(sal_Bool /*bSet*/)
     SAL_INFO("sw.vba", "SwVbaFormField::setOwnHelp stub");
 }
 
-OUString SwVbaFormField::getName() { return m_rFormField.GetName(); }
+OUString SwVbaFormField::getName() { return m_rFormField.GetName().toString(); }
 
 void SwVbaFormField::setName(const OUString& rSet)
 {

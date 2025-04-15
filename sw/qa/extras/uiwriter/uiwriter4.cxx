@@ -542,8 +542,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96479)
         SwPaM aPaM(aIdx);
         IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();
         sw::mark::MarkBase* pMark
-            = rIDMA.makeMark(aPaM, u"original"_ustr, IDocumentMarkAccess::MarkType::BOOKMARK,
-                             ::sw::mark::InsertMode::New);
+            = rIDMA.makeMark(aPaM, ReferenceMarkerName(u"original"_ustr),
+                             IDocumentMarkAccess::MarkType::BOOKMARK, ::sw::mark::InsertMode::New);
         CPPUNIT_ASSERT(!pMark->IsExpanded());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
 
@@ -696,9 +696,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkText)
 
             lcl_selectCharacters(aPaM, 0, 3);
             IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();
-            sw::mark::MarkBase* pMark = rIDMA.makeMark(aPaM, u"testBookmark"_ustr,
-                                                       IDocumentMarkAccess::MarkType::BOOKMARK,
-                                                       ::sw::mark::InsertMode::New);
+            sw::mark::MarkBase* pMark = rIDMA.makeMark(
+                aPaM, ReferenceMarkerName(u"testBookmark"_ustr),
+                IDocumentMarkAccess::MarkType::BOOKMARK, ::sw::mark::InsertMode::New);
 
             // verify
             CPPUNIT_ASSERT(pMark->IsExpanded());
@@ -774,9 +774,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNew)
 
             lcl_selectCharacters(aPaM, 0, 3);
             IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();
-            sw::mark::MarkBase* pMark = rIDMA.makeMark(aPaM, u"testBookmark"_ustr,
-                                                       IDocumentMarkAccess::MarkType::BOOKMARK,
-                                                       ::sw::mark::InsertMode::New);
+            sw::mark::MarkBase* pMark = rIDMA.makeMark(
+                aPaM, ReferenceMarkerName(u"testBookmark"_ustr),
+                IDocumentMarkAccess::MarkType::BOOKMARK, ::sw::mark::InsertMode::New);
 
             // verify
             CPPUNIT_ASSERT(pMark->IsExpanded());

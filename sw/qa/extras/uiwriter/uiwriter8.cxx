@@ -2844,8 +2844,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128106)
         return pHintA->GetTextNode().GetIndex() < pHintB->GetTextNode().GetIndex();
     });
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[0]->GetField()->GetSubType());
-    CPPUNIT_ASSERT_EQUAL(u"bookmarkchapter1_text"_ustr,
-                         static_cast<SwGetRefField const*>(fields[0]->GetField())->GetSetRefName());
+    CPPUNIT_ASSERT_EQUAL(
+        u"bookmarkchapter1_text"_ustr,
+        static_cast<SwGetRefField const*>(fields[0]->GetField())->GetSetRefName().toString());
     CPPUNIT_ASSERT_EQUAL(u"Text"_ustr,
                          static_cast<SwGetRefField const*>(fields[0]->GetField())
                              ->GetExpandedTextOfReferencedTextNode(*pWrtShell->GetLayout()));
@@ -2855,13 +2856,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128106)
     CPPUNIT_ASSERT_EQUAL(u"Chapter 2"_ustr,
                          static_cast<SwGetRefField const*>(fields[1]->GetField())->GetPar2());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[2]->GetField()->GetSubType());
-    CPPUNIT_ASSERT_EQUAL(u"Bookmarkchapter1"_ustr,
-                         static_cast<SwGetRefField const*>(fields[2]->GetField())->GetSetRefName());
+    CPPUNIT_ASSERT_EQUAL(
+        u"Bookmarkchapter1"_ustr,
+        static_cast<SwGetRefField const*>(fields[2]->GetField())->GetSetRefName().toString());
     CPPUNIT_ASSERT_EQUAL(u"Chapter 1"_ustr,
                          static_cast<SwGetRefField const*>(fields[2]->GetField())->GetPar2());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[3]->GetField()->GetSubType());
-    CPPUNIT_ASSERT_EQUAL(u"bookmarkchapter1_text"_ustr,
-                         static_cast<SwGetRefField const*>(fields[3]->GetField())->GetSetRefName());
+    CPPUNIT_ASSERT_EQUAL(
+        u"bookmarkchapter1_text"_ustr,
+        static_cast<SwGetRefField const*>(fields[3]->GetField())->GetSetRefName().toString());
     CPPUNIT_ASSERT_EQUAL(u"Text"_ustr,
                          static_cast<SwGetRefField const*>(fields[3]->GetField())->GetPar2());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_BOOKMARK), fields[4]->GetField()->GetSubType());

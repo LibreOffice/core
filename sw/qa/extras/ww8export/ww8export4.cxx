@@ -112,7 +112,7 @@ DECLARE_WW8EXPORT_TEST(testTdf151548_formFieldMacros, "tdf151548_formFieldMacros
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     for(auto aIter = pMarkAccess->getFieldmarksBegin(); aIter != pMarkAccess->getFieldmarksEnd(); ++aIter)
     {
-        const OUString sName = (*aIter)->GetName();
+        const ReferenceMarkerName sName = (*aIter)->GetName();
         CPPUNIT_ASSERT(sName == "Check1" || sName == "Check2" || sName == "Text1" || sName == "Dropdown1");
     }
 }
