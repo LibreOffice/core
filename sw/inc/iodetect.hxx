@@ -39,6 +39,7 @@ inline constexpr OUString FILTER_XML = u"CXML"_ustr;      ///< XML filter
 #define FILTER_XMLV     "CXMLV"     ///< XML filter
 #define FILTER_XMLVW    "CXMLVWEB"  ///< XML filter
 inline constexpr OUString FILTER_DOCX = u"OXML"_ustr;
+inline constexpr OUString FILTER_MD = u"Markdown"_ustr; // markdown filter
 inline constexpr OUString sHTML = u"HTML"_ustr;
 inline constexpr OUString sWW5 = u"WW6"_ustr;
 inline constexpr OUString sWW6 = u"CWW6"_ustr;
@@ -80,6 +81,7 @@ enum ReaderWriterEnum {
     READER_WRITER_TEXT_DLG,
     READER_WRITER_TEXT,
     READER_WRITER_DOCX,
+    READER_WRITER_MD,
     MAXFILTER
 };
 
