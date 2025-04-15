@@ -650,6 +650,15 @@ DECLARE_OOXMLEXPORT_TEST(tdf66398_permissions, "tdf66398_permissions.docx")
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("permission-for-group:267014232:everyone"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, tdf166173_enforcement)
+{
+    loadAndSave("tdf166173_enforcement.docx");
+    xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
+
+    // check if attribute 'enforcement' of 'documentProtection' has still '0' value.
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection"_ostr, "enforcement"_ostr, "0");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, tdf106843)
 {
     loadAndSave("tdf106843.fodt");
