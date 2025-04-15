@@ -2193,7 +2193,7 @@ void WinSalFrame::EndExtTextInput( EndExtTextInputFlags nFlags )
     SendMessageW( mhWnd, SAL_MSG_ENDEXTTEXTINPUT, static_cast<WPARAM>(nFlags), 0 );
 }
 
-static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
+static void ImplGetKeyNameText( UINT lParam, sal_Unicode* pBuf,
                                 UINT& rCount, UINT nMaxSize,
                                 const char* pReplace )
 {

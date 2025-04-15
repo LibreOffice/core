@@ -161,10 +161,9 @@ bool UseDarkMode();
 bool OSSupportsDarkMode();
 
 // get foreign key names
-namespace vcl_sal {
-    OUString getKeysReplacementName(
-        std::u16string_view pLang,
-        LONG nSymbol );
+namespace vcl_sal
+{
+OUString getKeysReplacementName(std::u16string_view pLang, UINT nSymbol);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

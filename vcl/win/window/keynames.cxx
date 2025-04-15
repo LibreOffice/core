@@ -17,38 +17,34 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
-#include <o3tl/string_view.hxx>
+#include <sal/config.h>
+
+#include <span>
+
 #include <rtl/ustring.hxx>
-#include <sal/macros.h>
 
 #include <win/salframe.h>
-
-#if !defined WIN32_LEAN_AND_MEAN
-# define WIN32_LEAN_AND_MEAN
-#endif
-#include <windows.h>
 
 // Use unique ;) names to avoid clashes with the KEY_* (especially
 // KEY_SHIFT) from <vcl/vclenum.hxx>
 
-#define PAPUGA_KEY_ESC         0x10000
-#define PAPUGA_KEY_BACK        0xE0000
-#define PAPUGA_KEY_ENTER       0x1C0000
-#define PAPUGA_KEY_SPACEBAR    0x390000
-#define PAPUGA_KEY_HOME        0x1470000
-#define PAPUGA_KEY_UP          0x1480000
-#define PAPUGA_KEY_PAGEUP      0x1490000
-#define PAPUGA_KEY_LEFT        0x14B0000
-#define PAPUGA_KEY_RIGHT       0x14D0000
-#define PAPUGA_KEY_END         0x14F0000
-#define PAPUGA_KEY_DOWN        0x1500000
-#define PAPUGA_KEY_PAGEDOWN    0x1510000
-#define PAPUGA_KEY_INSERT      0x1520000
-#define PAPUGA_KEY_DELETE      0x1530000
-#define PAPUGA_KEY_CONTROL     0x21D0000
-#define PAPUGA_KEY_SHIFT       0x22A0000
-#define PAPUGA_KEY_ALT         0x2380000
+constexpr UINT PAPUGA_KEY_ESC      = 0x10000;
+constexpr UINT PAPUGA_KEY_BACK     = 0xE0000;
+constexpr UINT PAPUGA_KEY_ENTER    = 0x1C0000;
+constexpr UINT PAPUGA_KEY_SPACEBAR = 0x390000;
+constexpr UINT PAPUGA_KEY_HOME     = 0x1470000;
+constexpr UINT PAPUGA_KEY_UP       = 0x1480000;
+constexpr UINT PAPUGA_KEY_PAGEUP   = 0x1490000;
+constexpr UINT PAPUGA_KEY_LEFT     = 0x14B0000;
+constexpr UINT PAPUGA_KEY_RIGHT    = 0x14D0000;
+constexpr UINT PAPUGA_KEY_END      = 0x14F0000;
+constexpr UINT PAPUGA_KEY_DOWN     = 0x1500000;
+constexpr UINT PAPUGA_KEY_PAGEDOWN = 0x1510000;
+constexpr UINT PAPUGA_KEY_INSERT   = 0x1520000;
+constexpr UINT PAPUGA_KEY_DELETE   = 0x1530000;
+constexpr UINT PAPUGA_KEY_CONTROL  = 0x21D0000;
+constexpr UINT PAPUGA_KEY_SHIFT    = 0x22A0000;
+constexpr UINT PAPUGA_KEY_ALT      = 0x2380000;
 
 namespace vcl_sal {
 
@@ -56,163 +52,157 @@ namespace vcl_sal {
 
     struct KeysNameReplacement
     {
-        LONG            aSymbol;
-        const char*     pName;
+        UINT aSymbol;
+        OUString pName;
     };
 
     struct KeyboardReplacements
     {
-        const char*                     pLangName;
-        const KeysNameReplacement*      pReplacements;
-        int                             nReplacements;
+        std::u16string_view pLangName;
+        std::span<const KeysNameReplacement> pReplacements;
     };
 
     }
 
-    // CAUTION CAUTION CAUTION
-    // Every string value in the replacements tables must be in UTF-8
-    // but with the UTF-8 bytes encoded, not as such! Be careful!
-
-    const struct KeysNameReplacement aImplReplacements_Asturian[] =
+    constexpr KeysNameReplacement aImplReplacements_Asturian[] =
     {
-        { PAPUGA_KEY_BACK, "Retrocesu" },
-        { PAPUGA_KEY_ENTER, "Intro" },
-        { PAPUGA_KEY_SPACEBAR, "Espaciu" },
-        { PAPUGA_KEY_HOME, "Aniciu" },
-        { PAPUGA_KEY_UP, "Arriba" },
-        { PAPUGA_KEY_PAGEUP, "Re P\xc3\xa1" "x" },
-        { PAPUGA_KEY_LEFT, "Izquierda" },
-        { PAPUGA_KEY_RIGHT, "Drecha" },
-        { PAPUGA_KEY_END, "Fin" },
-        { PAPUGA_KEY_DOWN, "Abaxo" },
-        { PAPUGA_KEY_PAGEDOWN, "Av P\xc3\xa1" "x" },
-        { PAPUGA_KEY_INSERT, "Ins" },
-        { PAPUGA_KEY_DELETE, "Supr" },
-        { PAPUGA_KEY_SHIFT, "May\xc3\xba" "s" },
+        { PAPUGA_KEY_BACK, u"Retrocesu"_ustr },
+        { PAPUGA_KEY_ENTER, u"Intro"_ustr },
+        { PAPUGA_KEY_SPACEBAR, u"Espaciu"_ustr },
+        { PAPUGA_KEY_HOME, u"Aniciu"_ustr },
+        { PAPUGA_KEY_UP, u"Arriba"_ustr },
+        { PAPUGA_KEY_PAGEUP, u"Re Páx"_ustr },
+        { PAPUGA_KEY_LEFT, u"Izquierda"_ustr },
+        { PAPUGA_KEY_RIGHT, u"Drecha"_ustr },
+        { PAPUGA_KEY_END, u"Fin"_ustr },
+        { PAPUGA_KEY_DOWN, u"Abaxo"_ustr },
+        { PAPUGA_KEY_PAGEDOWN, u"Av Páx"_ustr },
+        { PAPUGA_KEY_INSERT, u"Ins"_ustr },
+        { PAPUGA_KEY_DELETE, u"Supr"_ustr },
+        { PAPUGA_KEY_SHIFT, u"Mayús"_ustr },
     };
 
-    const struct KeysNameReplacement aImplReplacements_Catalan[] =
+    constexpr KeysNameReplacement aImplReplacements_Catalan[] =
     {
-        { PAPUGA_KEY_BACK, "Retroc\xc3\xa9" "s" },
-        { PAPUGA_KEY_ENTER, "Retorn" },
-        { PAPUGA_KEY_SPACEBAR, "Espai" },
-        { PAPUGA_KEY_HOME, "Inici" },
-        { PAPUGA_KEY_UP, "Amunt" },
-        { PAPUGA_KEY_PAGEUP, "Re P\xc3\xa0" "g" },
-        { PAPUGA_KEY_LEFT, "Esquerra" },
-        { PAPUGA_KEY_RIGHT, "Dreta" },
-        { PAPUGA_KEY_END, "Fi" },
-        { PAPUGA_KEY_DOWN, "Avall" },
-        { PAPUGA_KEY_PAGEDOWN, "Av P\xc3\xa0" "g" },
-        { PAPUGA_KEY_INSERT, "Ins" },
-        { PAPUGA_KEY_DELETE, "Supr" },
-        { PAPUGA_KEY_SHIFT, "Maj" },
+        { PAPUGA_KEY_BACK, u"Retrocés"_ustr },
+        { PAPUGA_KEY_ENTER, u"Retorn"_ustr },
+        { PAPUGA_KEY_SPACEBAR, u"Espai"_ustr },
+        { PAPUGA_KEY_HOME, u"Inici"_ustr },
+        { PAPUGA_KEY_UP, u"Amunt"_ustr },
+        { PAPUGA_KEY_PAGEUP, u"Re Pàg"_ustr },
+        { PAPUGA_KEY_LEFT, u"Esquerra"_ustr },
+        { PAPUGA_KEY_RIGHT, u"Dreta"_ustr },
+        { PAPUGA_KEY_END, u"Fi"_ustr },
+        { PAPUGA_KEY_DOWN, u"Avall"_ustr },
+        { PAPUGA_KEY_PAGEDOWN, u"Av Pàg"_ustr },
+        { PAPUGA_KEY_INSERT, u"Ins"_ustr },
+        { PAPUGA_KEY_DELETE, u"Supr"_ustr },
+        { PAPUGA_KEY_SHIFT, u"Maj"_ustr },
     };
 
-    const struct KeysNameReplacement aImplReplacements_Estonian[] =
+    constexpr KeysNameReplacement aImplReplacements_Estonian[] =
     {
-        { PAPUGA_KEY_RIGHT, "Nool paremale" },
-        { PAPUGA_KEY_LEFT, "Nool vasakule" },
-        { PAPUGA_KEY_UP, "Nool \xc3\xbc" "les" },
-        { PAPUGA_KEY_DOWN, "Nool alla" },
-        { PAPUGA_KEY_BACK, "Tagasil\xc3\xbc" "ke" },
-        { PAPUGA_KEY_ENTER, "Enter" },
-        { PAPUGA_KEY_SPACEBAR, "T\xc3\xbc" "hik" },
+        { PAPUGA_KEY_RIGHT, u"Nool paremale"_ustr },
+        { PAPUGA_KEY_LEFT, u"Nool vasakule"_ustr },
+        { PAPUGA_KEY_UP, u"Nool üles"_ustr },
+        { PAPUGA_KEY_DOWN, u"Nool alla"_ustr },
+        { PAPUGA_KEY_BACK, u"Tagasilüke"_ustr },
+        { PAPUGA_KEY_ENTER, u"Enter"_ustr },
+        { PAPUGA_KEY_SPACEBAR, u"Tühik"_ustr },
     };
 
-    const struct KeysNameReplacement aImplReplacements_Lithuanian[] =
+    constexpr KeysNameReplacement aImplReplacements_Lithuanian[] =
     {
-        { PAPUGA_KEY_ESC, "Gr" },
-        { PAPUGA_KEY_BACK, "Naikinti" },
-        { PAPUGA_KEY_ENTER, "\xc4\xae" "vesti" },
-        { PAPUGA_KEY_SPACEBAR, "Tarpas" },
-        { PAPUGA_KEY_HOME, "Prad" },
-        { PAPUGA_KEY_UP, "Auk\xc5\xa1" "tyn" },
-        { PAPUGA_KEY_PAGEUP, "Psl\xe2\x86\x91" },
-        { PAPUGA_KEY_LEFT, "Kair\xc4\x97" "n" },
-        { PAPUGA_KEY_RIGHT, "De\xc5\xa1" "in\xc4\x97" "n" },
-        { PAPUGA_KEY_END, "Pab" },
-        { PAPUGA_KEY_DOWN, "\xc5\xbd" "emyn" },
-        { PAPUGA_KEY_PAGEDOWN, "Psl\xe2\x86\x93" },
-        { PAPUGA_KEY_INSERT, "\xc4\xae" "terpti" },
-        { PAPUGA_KEY_DELETE, "\xc5\xa0" "al" },
-        { PAPUGA_KEY_CONTROL, "Vald" },
-        { PAPUGA_KEY_SHIFT, "Lyg2" },
-        { PAPUGA_KEY_ALT, "Alt" },
+        { PAPUGA_KEY_ESC, u"Gr"_ustr },
+        { PAPUGA_KEY_BACK, u"Naikinti"_ustr },
+        { PAPUGA_KEY_ENTER, u"Įvesti"_ustr },
+        { PAPUGA_KEY_SPACEBAR, u"Tarpas"_ustr },
+        { PAPUGA_KEY_HOME, u"Prad"_ustr },
+        { PAPUGA_KEY_UP, u"Aukštyn"_ustr },
+        { PAPUGA_KEY_PAGEUP, u"Psl↑"_ustr },
+        { PAPUGA_KEY_LEFT, u"Kairėn"_ustr },
+        { PAPUGA_KEY_RIGHT, u"Dešinėn"_ustr },
+        { PAPUGA_KEY_END, u"Pab"_ustr },
+        { PAPUGA_KEY_DOWN, u"Žemyn"_ustr },
+        { PAPUGA_KEY_PAGEDOWN, u"Psl↓"_ustr },
+        { PAPUGA_KEY_INSERT, u"Įterpti"_ustr },
+        { PAPUGA_KEY_DELETE, u"Šal"_ustr },
+        { PAPUGA_KEY_CONTROL, u"Vald"_ustr },
+        { PAPUGA_KEY_SHIFT, u"Lyg2"_ustr },
+        { PAPUGA_KEY_ALT, u"Alt"_ustr },
     };
 
-    const struct KeysNameReplacement aImplReplacements_Slovenian[] =
+    constexpr KeysNameReplacement aImplReplacements_Slovenian[] =
     {
-        { PAPUGA_KEY_ESC, "Ube\xc5\xbe" "nica" },
-        { PAPUGA_KEY_BACK, "Vra\xc4\x8d" "alka" },
-        { PAPUGA_KEY_ENTER, "Vna\xc5\xa1" "alka" },
-        { PAPUGA_KEY_SPACEBAR, "Preslednica" },
-        { PAPUGA_KEY_HOME, "Za\xc4\x8d" "etek" },
-        { PAPUGA_KEY_UP, "Navzgor" },
-        { PAPUGA_KEY_PAGEUP, "Prej\xc5\xa1" "nja stran" },
-        { PAPUGA_KEY_LEFT, "Levo" },
-        { PAPUGA_KEY_RIGHT, "Desno" },
-        { PAPUGA_KEY_END, "Konec" },
-        { PAPUGA_KEY_DOWN, "Navzdol" },
-        { PAPUGA_KEY_PAGEDOWN, "Naslednja stran" },
-        { PAPUGA_KEY_INSERT, "Vrivalka" },
-        { PAPUGA_KEY_DELETE, "Brisalka" },
-        { PAPUGA_KEY_CONTROL, "Krmilka" },
-        { PAPUGA_KEY_SHIFT, "Dvigalka" },
-        { PAPUGA_KEY_ALT, "Izmenjalka" },
+        { PAPUGA_KEY_ESC, u"Ubežnica"_ustr },
+        { PAPUGA_KEY_BACK, u"Vračalka"_ustr },
+        { PAPUGA_KEY_ENTER, u"Vnašalka"_ustr },
+        { PAPUGA_KEY_SPACEBAR, u"Preslednica"_ustr },
+        { PAPUGA_KEY_HOME, u"Začetek"_ustr },
+        { PAPUGA_KEY_UP, u"Navzgor"_ustr },
+        { PAPUGA_KEY_PAGEUP, u"Prejšnja stran"_ustr },
+        { PAPUGA_KEY_LEFT, u"Levo"_ustr },
+        { PAPUGA_KEY_RIGHT, u"Desno"_ustr },
+        { PAPUGA_KEY_END, u"Konec"_ustr },
+        { PAPUGA_KEY_DOWN, u"Navzdol"_ustr },
+        { PAPUGA_KEY_PAGEDOWN, u"Naslednja stran"_ustr },
+        { PAPUGA_KEY_INSERT, u"Vrivalka"_ustr },
+        { PAPUGA_KEY_DELETE, u"Brisalka"_ustr },
+        { PAPUGA_KEY_CONTROL, u"Krmilka"_ustr },
+        { PAPUGA_KEY_SHIFT, u"Dvigalka"_ustr },
+        { PAPUGA_KEY_ALT, u"Izmenjalka"_ustr },
     };
 
-    const struct KeysNameReplacement aImplReplacements_Spanish[] =
+    constexpr KeysNameReplacement aImplReplacements_Spanish[] =
     {
-        { PAPUGA_KEY_BACK, "Retroceso" },
-        { PAPUGA_KEY_ENTER, "Intro" },
-        { PAPUGA_KEY_SPACEBAR, "Espacio" },
-        { PAPUGA_KEY_HOME, "Inicio" },
-        { PAPUGA_KEY_UP, "Arriba" },
-        { PAPUGA_KEY_PAGEUP, "Re P\xc3\xa1" "g" },
-        { PAPUGA_KEY_LEFT, "Izquierda" },
-        { PAPUGA_KEY_RIGHT, "Derecha" },
-        { PAPUGA_KEY_END, "Fin" },
-        { PAPUGA_KEY_DOWN, "Abajo" },
-        { PAPUGA_KEY_PAGEDOWN, "Av P\xc3\xa1" "g" },
-        { PAPUGA_KEY_INSERT, "Ins" },
-        { PAPUGA_KEY_DELETE, "Supr" },
-        { PAPUGA_KEY_SHIFT, "May\xc3\xba" "s" },
+        { PAPUGA_KEY_BACK, u"Retroceso"_ustr },
+        { PAPUGA_KEY_ENTER, u"Intro"_ustr },
+        { PAPUGA_KEY_SPACEBAR, u"Espacio"_ustr },
+        { PAPUGA_KEY_HOME, u"Inicio"_ustr },
+        { PAPUGA_KEY_UP, u"Arriba"_ustr },
+        { PAPUGA_KEY_PAGEUP, u"Re Pág"_ustr },
+        { PAPUGA_KEY_LEFT, u"Izquierda"_ustr },
+        { PAPUGA_KEY_RIGHT, u"Derecha"_ustr },
+        { PAPUGA_KEY_END, u"Fin"_ustr },
+        { PAPUGA_KEY_DOWN, u"Abajo"_ustr },
+        { PAPUGA_KEY_PAGEDOWN, u"Av Pág"_ustr },
+        { PAPUGA_KEY_INSERT, u"Ins"_ustr },
+        { PAPUGA_KEY_DELETE, u"Supr"_ustr },
+        { PAPUGA_KEY_SHIFT, u"Mayús"_ustr },
     };
 
-    const struct KeysNameReplacement aImplReplacements_Hungarian[] =
+    constexpr KeysNameReplacement aImplReplacements_Hungarian[] =
     {
-        { PAPUGA_KEY_RIGHT, "Jobbra" },
-        { PAPUGA_KEY_LEFT, "Balra" },
-        { PAPUGA_KEY_UP, "Fel" },
-        { PAPUGA_KEY_DOWN, "Le" },
-        { PAPUGA_KEY_ENTER, "Enter" },
-        { PAPUGA_KEY_SPACEBAR, "Sz\xc3\xb3" "k\xc3\xb6" "z" },
+        { PAPUGA_KEY_RIGHT, u"Jobbra"_ustr },
+        { PAPUGA_KEY_LEFT, u"Balra"_ustr },
+        { PAPUGA_KEY_UP, u"Fel"_ustr },
+        { PAPUGA_KEY_DOWN, u"Le"_ustr },
+        { PAPUGA_KEY_ENTER, u"Enter"_ustr },
+        { PAPUGA_KEY_SPACEBAR, u"Szóköz"_ustr },
     };
 
-    const struct KeyboardReplacements aKeyboards[] =
+    constexpr KeyboardReplacements aKeyboards[] =
     {
-        { "ast",aImplReplacements_Asturian, std::size(aImplReplacements_Asturian) },
-        { "ca", aImplReplacements_Catalan, std::size(aImplReplacements_Catalan) },
-        { "et", aImplReplacements_Estonian, std::size(aImplReplacements_Estonian) },
-        { "hu", aImplReplacements_Hungarian, std::size(aImplReplacements_Hungarian) },
-        { "lt", aImplReplacements_Lithuanian, std::size(aImplReplacements_Lithuanian) },
-        { "sl", aImplReplacements_Slovenian, std::size(aImplReplacements_Slovenian) },
-        { "es", aImplReplacements_Spanish, std::size(aImplReplacements_Spanish) },
+        { u"ast", aImplReplacements_Asturian   },
+        { u"ca",  aImplReplacements_Catalan    },
+        { u"et",  aImplReplacements_Estonian   },
+        { u"hu",  aImplReplacements_Hungarian  },
+        { u"lt",  aImplReplacements_Lithuanian },
+        { u"sl",  aImplReplacements_Slovenian  },
+        { u"es",  aImplReplacements_Spanish    },
     };
 
     // translate keycodes, used within the displayed menu shortcuts
-    OUString getKeysReplacementName( std::u16string_view pLang, LONG nSymbol )
+    OUString getKeysReplacementName(std::u16string_view pLang, UINT nSymbol)
     {
         for( const auto& rKeyboard : aKeyboards )
         {
-            if( o3tl::equalsAscii( pLang, rKeyboard.pLangName ) )
+            if (pLang == rKeyboard.pLangName)
             {
-                const struct KeysNameReplacement* pRepl = rKeyboard.pReplacements;
-                for( int m = rKeyboard.nReplacements ; m ; )
+                for (const auto& rRepl : rKeyboard.pReplacements)
                 {
-                    if( nSymbol == pRepl[--m].aSymbol )
-                        return OUString( pRepl[m].pName, strlen(pRepl[m].pName), RTL_TEXTENCODING_UTF8 );
+                    if (nSymbol == rRepl.aSymbol)
+                        return rRepl.pName;
                 }
             }
         }
