@@ -625,11 +625,10 @@ bool LoadURL( SwWrtShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
     return ::LoadURL(rVSh.GetView(), rURL, nFilter, rTargetFrameName);
 }
 
-bool LoadURL( SwViewShell* pVSh, const OUString& rURL, LoadUrlFlags nFilter,
+bool LoadURL( SwViewShell& rVSh, const OUString& rURL, LoadUrlFlags nFilter,
               const OUString& rTargetFrameName )
 {
-    // The shell could be 0 also!!!!!
-    if (auto pSh = dynamic_cast<SwWrtShell*>(pVSh))
+    if (auto pSh = dynamic_cast<SwWrtShell*>(&rVSh))
         return ::LoadURL(*pSh, rURL, nFilter, rTargetFrameName);
     return false;
 }

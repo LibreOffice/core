@@ -49,7 +49,7 @@ SwAccessibleFootnote::SwAccessibleFootnote(
         static_cast< const SwFootnoteFrame *>( GetFrame() )->GetAttr();
     if( pTextFootnote )
     {
-        const SwDoc *pDoc = GetShell()->GetDoc();
+        const SwDoc* pDoc = GetShell().GetDoc();
         sArg = pTextFootnote->GetFootnote().GetViewNumStr(*pDoc, pFootnoteFrame->getRootFrame());
     }
 

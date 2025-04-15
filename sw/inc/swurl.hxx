@@ -35,7 +35,7 @@ namespace o3tl {
 
 bool LoadURL( SwWrtShell& rSh, const OUString& rName,
               LoadUrlFlags nFilter, const OUString& rTargetFrameName );
-bool LoadURL( SwViewShell* rSh, const OUString& rName,
+bool LoadURL( SwViewShell& rSh, const OUString& rName,
               LoadUrlFlags nFilter, const OUString& rTargetFrameName );
 
 #endif

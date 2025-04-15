@@ -123,7 +123,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrame *pFrame,
     {
         const SwAccessibleChild& rLower = *aIter;
         const SwRect aBox( rLower.GetBox( *(GetMap()) ) );
-        if( rLower.IsAccessible( GetShell()->IsPreview() ) )
+        if (rLower.IsAccessible(GetShell().IsPreview()))
         {
             Action eAction = Action::NONE;
             if( aBox.Overlaps( rNewVisArea ) )
@@ -347,7 +347,7 @@ void SwAccessibleContext::InvalidateChildrenStates( const SwFrame* _pFrame,
         if( pLower )
         {
             ::rtl::Reference< SwAccessibleContext > xAccImpl;
-            if( rLower.IsAccessible( GetShell()->IsPreview() ) )
+            if (rLower.IsAccessible(GetShell().IsPreview()))
                 xAccImpl = GetMap()->GetContextImpl( pLower, false );
             if( xAccImpl.is() )
                 xAccImpl->InvalidateStates( _nStates );
@@ -884,8 +884,8 @@ awt::Rectangle SwAccessibleContext::getBoundsImpl(bool bRelative)
     if( GetFrame()->IsPageFrame() &&
         static_cast < const SwPageFrame * >( GetFrame() )->IsEmptyPage() )
     {
-        OSL_ENSURE( GetShell()->IsPreview(), "empty page accessible?" );
-        if( GetShell()->IsPreview() )
+        OSL_ENSURE(GetShell().IsPreview(), "empty page accessible?");
+        if (GetShell().IsPreview())
         {
             // adjust method call <GetMap()->GetPreviewPageSize()>
             sal_uInt16 nPageNum =

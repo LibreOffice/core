@@ -111,13 +111,13 @@ protected:
     const SwAccessibleMap *GetMap() const { return m_pMap; }
 
     /** convenience method to get the SwViewShell through accessibility map */
-    SwViewShell* GetShell()
+    SwViewShell& GetShell()
     {
-        return &GetMap()->GetShell();
+        return GetMap()->GetShell();
     }
-    const SwViewShell* GetShell() const
+    const SwViewShell& GetShell() const
     {
-        return &GetMap()->GetShell();
+        return GetMap()->GetShell();
     }
 
     /** convenience method to get SwCursorShell through accessibility map

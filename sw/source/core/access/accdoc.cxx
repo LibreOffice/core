@@ -191,7 +191,7 @@ OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleName()
     SolarMutexGuard g;
 
     OUString sAccName = GetResource( STR_ACCESS_DOC_WORDPROCESSING );
-    SwDoc *pDoc = GetMap() ? GetShell()->GetDoc() : nullptr;
+    SwDoc* pDoc = GetMap() ? GetShell().GetDoc() : nullptr;
     if ( pDoc )
     {
         OUString sFileName = pDoc->getDocAccTitle();
@@ -471,7 +471,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
     SolarMutexGuard g;
 
     uno::Any anyAttribute;
-    SwDoc *pDoc = GetMap() ? GetShell()->GetDoc() : nullptr;
+    SwDoc* pDoc = GetMap() ? GetShell().GetDoc() : nullptr;
 
     if (!pDoc)
         return anyAttribute;
