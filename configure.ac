@@ -684,6 +684,17 @@ if test -z "$SED"; then
     AC_MSG_ERROR([install sed to run this script])
 fi
 
+if test "$build_os" = "cygwin" -o -n "$WSL_ONLY_AS_HELPER"; then
+    # convenience check for a custom pkgconf used by meson - needs to be a version that uses windows
+    # style paths. Needs to be checked before the configure-switches that use PKG_CHECK_MODULES as
+    # that would already set the PKG_CONFIG var and then bypass/skip this autoselection
+    AC_PATH_PROG(PKG_CONFIG,pkgconf-2.4.3.exe,,[$PATH:$LODE_HOME/opt/bin])
+    if test -z "$PKG_CONFIG"; then
+        AC_MSG_WARN([pkgconf-2.4.3.exe not found - A windows version of pkgconf is required to build harfbuzz])
+        add_warning "please add PKG_CONFIG=/path/to/pkgconf-2.4.3.exe to autogen.input or put it in PATH, a windows version of pkgconf is required to build harfbuzz"
+    fi
+fi
+
 # Set the ENABLE_LTO variable
 # ===================================================================
 AC_MSG_CHECKING([whether to use link-time optimization])
