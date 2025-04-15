@@ -2065,7 +2065,6 @@ class VCL_DLLPUBLIC EntryTreeView : virtual public ComboBox
 private:
     DECL_DLLPRIVATE_LINK(ClickHdl, weld::TreeView&, void);
     DECL_DLLPRIVATE_LINK(ModifyHdl, weld::Entry&, void);
-    void EntryModifyHdl(const weld::Entry& rEntry);
 
 protected:
     std::unique_ptr<Entry> m_xEntry;
