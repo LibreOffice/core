@@ -19,11 +19,11 @@
 
 #pragma once
 
-#include <tools/stream.hxx>
 #include <vcl/dllapi.h>
 
-class Graphic;
+class SvStream;
+class ImportOutput;
 
-VCL_DLLPUBLIC bool ImportXPM(SvStream& rStream, Graphic& rGraphic);
+VCL_DLLPUBLIC bool ImportXPM(SvStream& rStream, ImportOutput& rImportOutput);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

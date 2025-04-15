@@ -19,14 +19,15 @@
 
 #pragma once
 
-#include <vcl/graph.hxx>
+#include <vcl/filter/ImportOutput.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 namespace vcl
 {
-bool ImportPNG(SvStream& rInputStream, Graphic& rGraphic, GraphicFilterImportFlags nImportFlags,
-               BitmapScopedWriteAccess* pAccess, BitmapScopedWriteAccess* pAlphaAccess);
+bool ImportPNG(SvStream& rInputStream, ImportOutput& rImportOutput,
+               GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* pAccess,
+               BitmapScopedWriteAccess* pAlphaAccess);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

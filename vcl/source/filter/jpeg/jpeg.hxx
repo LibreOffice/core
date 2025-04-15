@@ -19,13 +19,13 @@
 
 #pragma once
 
-#include <vcl/graph.hxx>
+#include <vcl/filter/ImportOutput.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 #include <com/sun/star/uno/Sequence.h>
 
-VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* ppAccess );
+VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, ImportOutput& rImportOutput, GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* ppAccess );
 
 bool ExportJPEG(SvStream& rOutputStream,
                     const Graphic& rGraphic,

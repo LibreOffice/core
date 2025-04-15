@@ -21,6 +21,7 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <vcl/graph.hxx>
+#include <vcl/filter/ImportOutput.hxx>
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wmf.hxx>

@@ -23,6 +23,7 @@
 #include <o3tl/string_view.hxx>
 #include <rtl/character.hxx>
 
+#include <vcl/filter/ImportOutput.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 #include "xbmread.hxx"
@@ -345,14 +346,14 @@ ReadState XBMReader::ReadXBM(BitmapEx& rBitmapEx)
     return eReadState;
 }
 
-VCL_DLLPUBLIC bool ImportXBM(SvStream& rStmeam, Graphic& rGraphic)
+VCL_DLLPUBLIC bool ImportXBM(SvStream& rStmeam, ImportOutput& rImportOutput)
 {
     XBMReader aXBMReader(rStmeam);
     BitmapEx aBitmapEx;
     ReadState eReadState = aXBMReader.ReadXBM(aBitmapEx);
     if (eReadState == XBMREAD_ERROR)
         return false;
-    rGraphic = Graphic(aBitmapEx);
+    rImportOutput.moBitmap = aBitmapEx;
     return true;
 }
 

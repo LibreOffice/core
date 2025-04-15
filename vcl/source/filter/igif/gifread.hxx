@@ -20,8 +20,9 @@
 #pragma once
 
 #include <vcl/graph.hxx>
+#include <vcl/filter/ImportOutput.hxx>
 
-VCL_DLLPUBLIC bool ImportGIF(SvStream& rStream, Graphic& rGraphic);
+VCL_DLLPUBLIC bool ImportGIF(SvStream& rStream, ImportOutput& rImportOutput);
 bool IsGIFAnimated(SvStream& rStream, Size& rLogicSize);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

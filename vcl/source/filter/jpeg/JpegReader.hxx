@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/graph.hxx>
+#include <vcl/filter/ImportOutput.hxx>
 #include <vcl/bitmap.hxx>
 
 #include <vcl/BitmapWriteAccess.hxx>
@@ -53,7 +53,7 @@ class JPEGReader
 public:
     JPEGReader( SvStream& rStream, GraphicFilterImportFlags nImportFlags );
 
-    ReadState Read(Graphic& rGraphic, GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* ppAccess);
+    ReadState Read(ImportOutput& rImportOutput, GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* ppAccess);
 
     bool CreateBitmap(JPEGCreateBitmapParam const & param);
 

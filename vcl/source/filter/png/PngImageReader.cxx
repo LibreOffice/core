@@ -326,7 +326,7 @@ bool fcTLbeforeIDAT(SvStream& rStream)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wclobbered"
 #endif
-bool reader(SvStream& rStream, Graphic& rGraphic,
+bool reader(SvStream& rStream, ImportOutput& rImportOutput,
             GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
             BitmapScopedWriteAccess* pAccess = nullptr,
             BitmapScopedWriteAccess* pAlphaAccess = nullptr)
@@ -385,7 +385,7 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
                 aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
                 aBitmapEx.SetPrefSize(prefSize);
             }
-            rGraphic = aBitmapEx;
+            rImportOutput.moBitmap = aBitmapEx;
         }
         return false;
     }
@@ -503,7 +503,7 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
                 aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
                 aBitmapEx.SetPrefSize(prefSize);
             }
-            rGraphic = aBitmapEx;
+            rImportOutput.moBitmap = aBitmapEx;
             return true;
         }
 
@@ -744,12 +744,12 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
             aFrameStream.WriteUInt32(PNG_IEND_SIZE);
             aFrameStream.WriteUInt32(PNG_IEND_SIGNATURE);
             aFrameStream.WriteUInt32(PNG_IEND_CRC);
-            Graphic aFrameGraphic;
+            ImportOutput aFrameImportOutput;
             aFrameStream.Seek(0);
-            bool bSuccess = reader(aFrameStream, aFrameGraphic);
+            bool bSuccess = reader(aFrameStream, aFrameImportOutput);
             if (!bSuccess)
                 return false;
-            BitmapEx aFrameBitmapEx = aFrameGraphic.GetBitmapEx();
+            BitmapEx aFrameBitmapEx = *aFrameImportOutput.moBitmap;
             Point aStartPoint(aFctlChunk->x_offset, aFctlChunk->y_offset);
             Size aSize(aFctlChunk->width, aFctlChunk->height);
             AnimationFrame aAnimationFrame(
@@ -757,12 +757,13 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
                 NumDenToTime(aFctlChunk->delay_num, aFctlChunk->delay_den), aDisposal, aBlend);
             aAnimation.Insert(aAnimationFrame);
         }
-        rGraphic = aAnimation;
+        rImportOutput.mbIsAnimated = true;
+        rImportOutput.moAnimation = aAnimation;
         return true;
     }
     else
     {
-        rGraphic = aBitmapEx;
+        rImportOutput.moBitmap = aBitmapEx;
     }
 
     return true;
@@ -836,19 +837,20 @@ PngImageReader::PngImageReader(SvStream& rStream)
 
 bool PngImageReader::read(BitmapEx& rBitmapEx)
 {
-    Graphic aGraphic;
-    bool bRet = reader(mrStream, aGraphic);
-    rBitmapEx = aGraphic.GetBitmapEx();
+    ImportOutput aImportOutput;
+    bool bRet = reader(mrStream, aImportOutput);
+    if (bRet)
+        rBitmapEx = *aImportOutput.moBitmap;
     return bRet;
 }
 
-bool PngImageReader::read(Graphic& rGraphic) { return reader(mrStream, rGraphic); }
+bool PngImageReader::read(ImportOutput& rImportOutput) { return reader(mrStream, rImportOutput); }
 
 BitmapEx PngImageReader::read()
 {
-    Graphic aGraphic;
-    read(aGraphic);
-    return aGraphic.GetBitmapEx();
+    ImportOutput aImportOutput;
+    read(aImportOutput);
+    return *aImportOutput.moBitmap;
 }
 
 BinaryDataContainer PngImageReader::getMicrosoftGifChunk(SvStream& rStream)
@@ -862,15 +864,16 @@ BinaryDataContainer PngImageReader::getMicrosoftGifChunk(SvStream& rStream)
     return chunk;
 }
 
-bool ImportPNG(SvStream& rInputStream, Graphic& rGraphic, GraphicFilterImportFlags nImportFlags,
-               BitmapScopedWriteAccess* pAccess, BitmapScopedWriteAccess* pAlphaAccess)
+bool ImportPNG(SvStream& rInputStream, ImportOutput& rImportOutput,
+               GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* pAccess,
+               BitmapScopedWriteAccess* pAlphaAccess)
 {
     // Creating empty bitmaps should be practically a no-op, and thus thread-safe.
-    Graphic aGraphic;
-    if (reader(rInputStream, aGraphic, nImportFlags, pAccess, pAlphaAccess))
+    ImportOutput aImportOutput;
+    if (reader(rInputStream, aImportOutput, nImportFlags, pAccess, pAlphaAccess))
     {
         if (!(nImportFlags & GraphicFilterImportFlags::UseExistingBitmap))
-            rGraphic = std::move(aGraphic);
+            rImportOutput = std::move(aImportOutput);
         return true;
     }
     return false;

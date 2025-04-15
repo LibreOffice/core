@@ -22,6 +22,7 @@
 #include <vcl/graph.hxx>
 #include <tools/stream.hxx>
 
+#include <vcl/filter/ImportOutput.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 #include "rgbtable.hxx"
@@ -634,7 +635,7 @@ bool XPMReader::ImplGetString()
 }
 
 
-VCL_DLLPUBLIC bool ImportXPM(SvStream& rStream, Graphic& rGraphic)
+VCL_DLLPUBLIC bool ImportXPM(SvStream& rStream, ImportOutput& rImportOutput)
 {
     XPMReader aXPMReader(rStream);
 
@@ -643,7 +644,7 @@ VCL_DLLPUBLIC bool ImportXPM(SvStream& rStream, Graphic& rGraphic)
 
     if (eReadState == XPMREAD_ERROR)
         return false;
-    rGraphic = Graphic(aBitmapEx);
+    rImportOutput.moBitmap = aBitmapEx;
     return true;
 }
 

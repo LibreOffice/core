@@ -109,7 +109,7 @@ class GIFReader
 
 public:
 
-    ReadState           ReadGIF( Graphic& rGraphic );
+    ReadState           ReadGIF(ImportOutput& rImportOutput);
     bool                ReadIsAnimated();
     void GetLogicSize(Size& rLogicSize);
 
@@ -902,7 +902,7 @@ void GIFReader::GetLogicSize(Size& rLogicSize)
     rLogicSize.setHeight(nLogHeight100);
 }
 
-ReadState GIFReader::ReadGIF(Graphic& rGraphic)
+ReadState GIFReader::ReadGIF(ImportOutput& rImportOutput)
 {
     bStatus = true;
 
@@ -916,18 +916,35 @@ ReadState GIFReader::ReadGIF(Graphic& rGraphic)
     else if (eActAction == END_READING)
         eReadState = GIFREAD_OK;
 
+    Size aPrefSize;
+    if (nLogWidth100 && nLogHeight100)
+    {
+        aPrefSize = Size(nLogWidth100, nLogHeight100);
+    }
+
     if (aAnimation.Count() == 1)
     {
-        rGraphic = aAnimation.Get(0).maBitmapEx;
+        rImportOutput.mbIsAnimated = false;
+        rImportOutput.moBitmap = aAnimation.Get(0).maBitmapEx;
 
-        if( nLogWidth100 && nLogHeight100 )
+        if (aPrefSize.Width() && aPrefSize.Height())
         {
-            rGraphic.SetPrefSize( Size( nLogWidth100, nLogHeight100 ) );
-            rGraphic.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+            rImportOutput.moBitmap->SetPrefSize(aPrefSize);
+            rImportOutput.moBitmap->SetPrefMapMode(MapMode(MapUnit::Map100thMM));
         }
     }
     else
-        rGraphic = aAnimation;
+    {
+        rImportOutput.mbIsAnimated = true;
+        rImportOutput.moAnimation = aAnimation;
+
+        if (aPrefSize.Width() && aPrefSize.Height())
+        {
+            BitmapEx& rBitmap = const_cast<BitmapEx&>(rImportOutput.moAnimation->GetBitmapEx());
+            rBitmap.SetPrefSize(aPrefSize);
+            rBitmap.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+        }
+    }
 
     return eReadState;
 }
@@ -945,7 +962,7 @@ bool IsGIFAnimated(SvStream& rStream, Size& rLogicSize)
     return bResult;
 }
 
-VCL_DLLPUBLIC bool ImportGIF(SvStream & rStream, Graphic& rGraphic)
+VCL_DLLPUBLIC bool ImportGIF(SvStream & rStream, ImportOutput& rInportOutput)
 {
     bool bReturn = false;
     GIFReader aGIFReader(rStream);
@@ -953,13 +970,12 @@ VCL_DLLPUBLIC bool ImportGIF(SvStream & rStream, Graphic& rGraphic)
     SvStreamEndian nOldFormat = rStream.GetEndian();
     rStream.SetEndian(SvStreamEndian::LITTLE);
 
-    ReadState eReadState = aGIFReader.ReadGIF(rGraphic);
+    ReadState eReadState = aGIFReader.ReadGIF(rInportOutput);
 
     if (eReadState == GIFREAD_OK)
         bReturn = true;
 
     rStream.SetEndian(nOldFormat);
-
     return bReturn;
 }
 

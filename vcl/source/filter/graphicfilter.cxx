@@ -473,7 +473,7 @@ struct GraphicImportContext
     /// Pixel data is read from this stream.
     std::unique_ptr<SvStream> m_pStream;
     /// The Graphic the import filter gets.
-    std::shared_ptr<Graphic> m_pGraphic;
+    std::shared_ptr<ImportOutput> m_pImportOutput;
     /// Write pixel data using this access.
     std::unique_ptr<BitmapScopedWriteAccess> m_pAccess;
     std::unique_ptr<BitmapScopedWriteAccess> m_pAlphaAccess;
@@ -517,12 +517,12 @@ void GraphicImportTask::doImport(GraphicImportContext& rContext)
 {
     if(rContext.m_eLinkType == GfxLinkType::NativeJpg)
     {
-        if (!ImportJPEG(*rContext.m_pStream, *rContext.m_pGraphic, rContext.m_nImportFlags | GraphicFilterImportFlags::UseExistingBitmap, rContext.m_pAccess.get()))
+        if (!ImportJPEG(*rContext.m_pStream, *rContext.m_pImportOutput, rContext.m_nImportFlags | GraphicFilterImportFlags::UseExistingBitmap, rContext.m_pAccess.get()))
             rContext.m_nStatus = ERRCODE_GRFILTER_FILTERERROR;
     }
     else if(rContext.m_eLinkType == GfxLinkType::NativePng)
     {
-        if (!vcl::ImportPNG(*rContext.m_pStream, *rContext.m_pGraphic,
+        if (!vcl::ImportPNG(*rContext.m_pStream, *rContext.m_pImportOutput,
             rContext.m_nImportFlags | GraphicFilterImportFlags::UseExistingBitmap,
             rContext.m_pAccess.get(), rContext.m_pAlphaAccess.get()))
         {
@@ -547,7 +547,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
         if (pStream)
         {
             rContext.m_pStream = std::move(pStream);
-            rContext.m_pGraphic = std::make_shared<Graphic>();
+            rContext.m_pImportOutput = std::make_shared<ImportOutput>();
             rContext.m_nStatus = ERRCODE_NONE;
 
             // Detect the format.
@@ -567,9 +567,9 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
                     rContext.m_eLinkType = GfxLinkType::NativeJpg;
                     rContext.m_nImportFlags = GraphicFilterImportFlags::SetLogsizeForJpeg;
 
-                    if (ImportJPEG( *rContext.m_pStream, *rContext.m_pGraphic, rContext.m_nImportFlags | GraphicFilterImportFlags::OnlyCreateBitmap, nullptr))
+                    if (ImportJPEG( *rContext.m_pStream, *rContext.m_pImportOutput, rContext.m_nImportFlags | GraphicFilterImportFlags::OnlyCreateBitmap, nullptr))
                     {
-                        Bitmap& rBitmap = const_cast<Bitmap&>(rContext.m_pGraphic->GetBitmapExRef().GetBitmap());
+                        Bitmap& rBitmap = const_cast<Bitmap&>(rContext.m_pImportOutput->moBitmap->GetBitmap());
                         rContext.m_pAccess = std::make_unique<BitmapScopedWriteAccess>(rBitmap);
                         rContext.m_pStream->Seek(rContext.m_nStreamBegin);
                         if (bThreads)
@@ -583,10 +583,9 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
                 else if (aFilterName.equalsIgnoreAsciiCase(IMP_PNG))
                 {
                     rContext.m_eLinkType = GfxLinkType::NativePng;
-
-                    if (vcl::ImportPNG( *rContext.m_pStream, *rContext.m_pGraphic, rContext.m_nImportFlags | GraphicFilterImportFlags::OnlyCreateBitmap, nullptr, nullptr))
+                    if (vcl::ImportPNG( *rContext.m_pStream, *rContext.m_pImportOutput, rContext.m_nImportFlags | GraphicFilterImportFlags::OnlyCreateBitmap, nullptr, nullptr))
                     {
-                        const BitmapEx& rBitmapEx = rContext.m_pGraphic->GetBitmapExRef();
+                        const BitmapEx& rBitmapEx = *rContext.m_pImportOutput->moBitmap;
                         Bitmap& rBitmap = const_cast<Bitmap&>(rBitmapEx.GetBitmap());
                         rContext.m_pAccess = std::make_unique<BitmapScopedWriteAccess>(rBitmap);
                         if(rBitmapEx.IsAlpha())
@@ -624,7 +623,17 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
         rContext.m_pAccess.reset();
         rContext.m_pAlphaAccess.reset();
         if (!rContext.mAlphaMask.IsEmpty()) // Need to move the AlphaMask back to the BitmapEx.
-            *rContext.m_pGraphic = BitmapEx( rContext.m_pGraphic->GetBitmapExRef().GetBitmap(), rContext.mAlphaMask );
+        {
+            BitmapEx aBitmapEx(rContext.m_pImportOutput->moBitmap->GetBitmap(), rContext.mAlphaMask);
+            rContext.m_pImportOutput->moBitmap = aBitmapEx;
+        }
+
+        std::shared_ptr<Graphic> pGraphic;
+
+        if (rContext.m_nStatus == ERRCODE_NONE && rContext.m_pImportOutput && rContext.m_pImportOutput->moBitmap)
+        {
+            pGraphic = std::make_shared<Graphic>(*rContext.m_pImportOutput->moBitmap);
+        }
 
         if (rContext.m_nStatus == ERRCODE_NONE && rContext.m_eLinkType != GfxLinkType::NONE)
         {
@@ -647,13 +656,11 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
             }
 
             if (rContext.m_nStatus == ERRCODE_NONE)
-                rContext.m_pGraphic->SetGfxLink(std::make_shared<GfxLink>(aGraphicContent, rContext.m_eLinkType));
+                pGraphic->SetGfxLink(std::make_shared<GfxLink>(aGraphicContent, rContext.m_eLinkType));
         }
 
-        if (rContext.m_nStatus != ERRCODE_NONE)
-            rContext.m_pGraphic = nullptr;
-
-        rGraphics.push_back(rContext.m_pGraphic);
+        if (rContext.m_nStatus == ERRCODE_NONE)
+            rGraphics.push_back(pGraphic);
     }
 }
 
@@ -895,10 +902,15 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
     return aGraphic;
 }
 
-ErrCode GraphicFilter::readGIF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType)
+ErrCode GraphicFilter::readGIF(SvStream & rStream, Graphic& rGraphic, GfxLinkType & rLinkType)
 {
-    if (ImportGIF(rStream, rGraphic))
+    ImportOutput aImportOutput;
+    if (ImportGIF(rStream, aImportOutput))
     {
+        if (aImportOutput.mbIsAnimated)
+            rGraphic = *aImportOutput.moAnimation;
+        else
+            rGraphic = *aImportOutput.moBitmap;
         rLinkType = GfxLinkType::NativeGif;
         return ERRCODE_NONE;
     }
@@ -906,28 +918,36 @@ ErrCode GraphicFilter::readGIF(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
         return ERRCODE_GRFILTER_FILTERERROR;
 }
 
-ErrCode GraphicFilter::readPNG(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, BinaryDataContainer& rpGraphicContent)
+ErrCode GraphicFilter::readPNG(SvStream & rStream, Graphic& rGraphic, GfxLinkType & rLinkType, BinaryDataContainer& rpGraphicContent)
 {
     ErrCode aReturnCode = ERRCODE_NONE;
+    ImportOutput aImportOutput;
 
     // check if this PNG contains a GIF chunk!
     if (auto aMSGifChunk = vcl::PngImageReader::getMicrosoftGifChunk(rStream);
         !aMSGifChunk.isEmpty())
     {
         std::shared_ptr<SvStream> pIStrm(aMSGifChunk.getAsStream());
-        ImportGIF(*pIStrm, rGraphic);
+
+        if (ImportGIF(*pIStrm, aImportOutput))
+        {
+            if (aImportOutput.mbIsAnimated)
+                rGraphic = *aImportOutput.moAnimation;
+            else
+                rGraphic = *aImportOutput.moBitmap;
+        }
         rLinkType = GfxLinkType::NativeGif;
         rpGraphicContent = std::move(aMSGifChunk);
         return aReturnCode;
     }
 
     // PNG has no GIF chunk
-    Graphic aGraphic;
     vcl::PngImageReader aPNGReader(rStream);
-    aPNGReader.read(aGraphic);
-    if (!aGraphic.GetBitmapEx().IsEmpty())
+    aPNGReader.read(aImportOutput);
+
+    if (aImportOutput.moBitmap && !aImportOutput.moBitmap->IsEmpty())
     {
-        rGraphic = std::move(aGraphic);
+        rGraphic = Graphic(*aImportOutput.moBitmap);
         rLinkType = GfxLinkType::NativePng;
     }
     else
@@ -948,17 +968,32 @@ ErrCode GraphicFilter::readJPEG(SvStream & rStream, Graphic & rGraphic, GfxLinkT
     }
 
     sal_uInt64 nPosition = rStream.Tell();
-    if (!ImportJPEG(rStream, rGraphic, nImportFlags | GraphicFilterImportFlags::OnlyCreateBitmap, nullptr))
+    ImportOutput aImportOutput;
+    if (!ImportJPEG(rStream, aImportOutput, nImportFlags | GraphicFilterImportFlags::OnlyCreateBitmap, nullptr))
+    {
         aReturnCode = ERRCODE_GRFILTER_FILTERERROR;
+    }
     else
     {
-        Bitmap& rBitmap = const_cast<Bitmap&>(rGraphic.GetBitmapExRef().GetBitmap());
+        Bitmap& rBitmap = const_cast<Bitmap&>(aImportOutput.moBitmap->GetBitmap());
         BitmapScopedWriteAccess pWriteAccess(rBitmap);
         rStream.Seek(nPosition);
-        if (!ImportJPEG(rStream, rGraphic, nImportFlags | GraphicFilterImportFlags::UseExistingBitmap, &pWriteAccess))
+        if (!ImportJPEG(rStream, aImportOutput, nImportFlags | GraphicFilterImportFlags::UseExistingBitmap, &pWriteAccess))
+        {
             aReturnCode = ERRCODE_GRFILTER_FILTERERROR;
+        }
         else
-            rLinkType = GfxLinkType::NativeJpg;
+        {
+            if (aImportOutput.moBitmap)
+            {
+                rGraphic = Graphic(*aImportOutput.moBitmap);
+                rLinkType = GfxLinkType::NativeJpg;
+            }
+            else
+            {
+                aReturnCode = ERRCODE_GRFILTER_FILTERERROR;
+            }
+        }
     }
 
     return aReturnCode;
@@ -1028,18 +1063,26 @@ ErrCode GraphicFilter::readSVG(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
     return aReturnCode;
 }
 
-ErrCode GraphicFilter::readXBM(SvStream & rStream, Graphic & rGraphic)
+ErrCode GraphicFilter::readXBM(SvStream& rStream, Graphic& rGraphic)
 {
-    if (ImportXBM(rStream, rGraphic))
+    ImportOutput aImportOutput;
+    if (ImportXBM(rStream, aImportOutput))
+    {
+        rGraphic = Graphic(*aImportOutput.moBitmap);
         return ERRCODE_NONE;
+    }
     else
         return ERRCODE_GRFILTER_FILTERERROR;
 }
 
-ErrCode GraphicFilter::readXPM(SvStream & rStream, Graphic & rGraphic)
+ErrCode GraphicFilter::readXPM(SvStream& rStream, Graphic& rGraphic)
 {
-    if (ImportXPM(rStream, rGraphic))
+    ImportOutput aImportOutput;
+    if (ImportXPM(rStream, aImportOutput))
+    {
+        rGraphic = Graphic(*aImportOutput.moBitmap);
         return ERRCODE_NONE;
+    }
     else
         return ERRCODE_GRFILTER_FILTERERROR;
 }

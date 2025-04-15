@@ -375,14 +375,16 @@ void PngFilterTest::testApng()
 {
     SvFileStream aFileStream(getFullUrl(u"apng_simple.apng"), StreamMode::READ);
     vcl::PngImageReader aPngReader(aFileStream);
-    Graphic aGraphic;
-    bool bSuccess = aPngReader.read(aGraphic);
+    ImportOutput aImportOutput;
+    bool bSuccess = aPngReader.read(aImportOutput);
     CPPUNIT_ASSERT(bSuccess);
-    CPPUNIT_ASSERT(aGraphic.IsAnimated());
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aGraphic.GetAnimation().GetAnimationFrames().size());
+    CPPUNIT_ASSERT(aImportOutput.mbIsAnimated);
+    CPPUNIT_ASSERT(aImportOutput.moAnimation);
+    Animation& rAnimation = *aImportOutput.moAnimation;
+    CPPUNIT_ASSERT_EQUAL(size_t(2), rAnimation.GetAnimationFrames().size());
 
-    AnimationFrame aFrame1 = *aGraphic.GetAnimation().GetAnimationFrames()[0];
-    AnimationFrame aFrame2 = *aGraphic.GetAnimation().GetAnimationFrames()[1];
+    AnimationFrame aFrame1 = *rAnimation.GetAnimationFrames()[0];
+    AnimationFrame aFrame2 = *rAnimation.GetAnimationFrames()[1];
 
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aFrame1.maBitmapEx.GetPixelColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(Color(0x72d1c8), aFrame1.maBitmapEx.GetPixelColor(2, 2));
@@ -390,20 +392,23 @@ void PngFilterTest::testApng()
 
     // Roundtrip the APNG
     SvMemoryStream aOutStream;
+    Graphic aGraphic(rAnimation);
     vcl::PngImageWriter aPngWriter(aOutStream);
     bSuccess = aPngWriter.write(aGraphic);
     CPPUNIT_ASSERT(bSuccess);
 
     aOutStream.Seek(STREAM_SEEK_TO_BEGIN);
     vcl::PngImageReader aPngReader2(aOutStream);
-    Graphic aGraphic2;
-    bSuccess = aPngReader2.read(aGraphic2);
+    ImportOutput aImportOutput2;
+    bSuccess = aPngReader2.read(aImportOutput2);
     CPPUNIT_ASSERT(bSuccess);
-    CPPUNIT_ASSERT(aGraphic2.IsAnimated());
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aGraphic2.GetAnimation().GetAnimationFrames().size());
+    CPPUNIT_ASSERT(aImportOutput2.mbIsAnimated);
+    CPPUNIT_ASSERT(aImportOutput2.moAnimation);
+    Animation& rAnimation2 = *aImportOutput2.moAnimation;
+    CPPUNIT_ASSERT_EQUAL(size_t(2), rAnimation2.GetAnimationFrames().size());
 
-    AnimationFrame aFrame1Roundtripped = *aGraphic2.GetAnimation().GetAnimationFrames()[0];
-    AnimationFrame aFrame2Roundtripped = *aGraphic2.GetAnimation().GetAnimationFrames()[1];
+    AnimationFrame aFrame1Roundtripped = *rAnimation2.GetAnimationFrames()[0];
+    AnimationFrame aFrame2Roundtripped = *rAnimation2.GetAnimationFrames()[1];
 
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aFrame1Roundtripped.maBitmapEx.GetPixelColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(Color(0x72d1c8), aFrame1Roundtripped.maBitmapEx.GetPixelColor(2, 2));

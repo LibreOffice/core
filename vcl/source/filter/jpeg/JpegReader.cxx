@@ -234,7 +234,7 @@ bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam const & rParam)
     return true;
 }
 
-ReadState JPEGReader::Read(Graphic& rGraphic, GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* ppAccess )
+ReadState JPEGReader::Read(ImportOutput& rImportOutput, GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* ppAccess )
 {
     bool bRet = false;
 
@@ -248,7 +248,7 @@ ReadState JPEGReader::Read(Graphic& rGraphic, GraphicFilterImportFlags nImportFl
     if (bUseExistingBitmap || !mpBitmap->IsEmpty())
     {
         if (!bUseExistingBitmap)
-            rGraphic = BitmapEx(*mpBitmap);
+            rImportOutput.moBitmap = BitmapEx(*mpBitmap);
 
         bRet = true;
     }

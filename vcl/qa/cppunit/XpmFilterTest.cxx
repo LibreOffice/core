@@ -10,6 +10,7 @@
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/bitmapex.hxx>
+#include <vcl/filter/ImportOutput.hxx>
 #include <tools/stream.hxx>
 #include <filter/XpmReader.hxx>
 #include <unotools/tempfile.hxx>
@@ -31,9 +32,10 @@ public:
 CPPUNIT_TEST_FIXTURE(XpmFilterTest, testXPM_8bit)
 {
     SvFileStream aFileStream(getFullUrl(u"XPM_8.xpm"), StreamMode::READ);
-    Graphic aGraphic;
-    CPPUNIT_ASSERT(ImportXPM(aFileStream, aGraphic));
-    auto aBitmap = aGraphic.GetBitmapEx();
+    ImportOutput aImportOutput;
+    CPPUNIT_ASSERT(ImportXPM(aFileStream, aImportOutput));
+    CPPUNIT_ASSERT(aImportOutput.moBitmap);
+    auto& aBitmap = *aImportOutput.moBitmap;
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
@@ -46,9 +48,10 @@ CPPUNIT_TEST_FIXTURE(XpmFilterTest, testXPM_8bit)
 CPPUNIT_TEST_FIXTURE(XpmFilterTest, testXPM_4bit)
 {
     SvFileStream aFileStream(getFullUrl(u"XPM_4.xpm"), StreamMode::READ);
-    Graphic aGraphic;
-    CPPUNIT_ASSERT(ImportXPM(aFileStream, aGraphic));
-    auto aBitmap = aGraphic.GetBitmapEx();
+    ImportOutput aImportOutput;
+    CPPUNIT_ASSERT(ImportXPM(aFileStream, aImportOutput));
+    CPPUNIT_ASSERT(aImportOutput.moBitmap);
+    auto& aBitmap = *aImportOutput.moBitmap;
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
@@ -61,9 +64,10 @@ CPPUNIT_TEST_FIXTURE(XpmFilterTest, testXPM_4bit)
 CPPUNIT_TEST_FIXTURE(XpmFilterTest, testXPM_1bit)
 {
     SvFileStream aFileStream(getFullUrl(u"XPM_1.xpm"), StreamMode::READ);
-    Graphic aGraphic;
-    CPPUNIT_ASSERT(ImportXPM(aFileStream, aGraphic));
-    auto aBitmap = aGraphic.GetBitmapEx();
+    ImportOutput aImportOutput;
+    CPPUNIT_ASSERT(ImportXPM(aFileStream, aImportOutput));
+    CPPUNIT_ASSERT(aImportOutput.moBitmap);
+    auto& aBitmap = *aImportOutput.moBitmap;
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());

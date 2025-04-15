@@ -8,13 +8,13 @@
  *
  */
 
-#ifndef INCLUDED_VCL_FILTER_PNGIMAGEREADER_HXX
-#define INCLUDED_VCL_FILTER_PNGIMAGEREADER_HXX
+#pragma once
 
 #include <sal/config.h>
 
 #include <vcl/dllapi.h>
 #include <vcl/BinaryDataContainer.hxx>
+#include <vcl/filter/ImportOutput.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -40,7 +40,6 @@ namespace com::sun::star::task
 class XStatusIndicator;
 }
 
-class Graphic;
 class BitmapEx;
 class SvStream;
 
@@ -57,7 +56,7 @@ public:
     // Returns true if image was successfully read without errors.
     // A usable bitmap may be returned even if there were errors (e.g. incomplete image).
     bool read(BitmapEx& rBitmap);
-    bool read(Graphic& rGraphic);
+    bool read(ImportOutput& rImportOutput);
     // Returns a bitmap without indicating if there were errors.
     BitmapEx read();
 
@@ -69,7 +68,5 @@ public:
 };
 
 } // namespace vcl
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

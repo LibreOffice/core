@@ -23,11 +23,11 @@
 
 #include <vcl/graphicfilter.hxx>
 
-VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* ppAccess )
+VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, ImportOutput& rImportOutput, GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* ppAccess )
 {
     JPEGReader aJPEGReader(rInputStream, nImportFlags);
 
-    ReadState eReadState = aJPEGReader.Read(rGraphic, nImportFlags, ppAccess);
+    ReadState eReadState = aJPEGReader.Read(rImportOutput, nImportFlags, ppAccess);
 
     if (eReadState == JPEGREAD_ERROR)
         return false;

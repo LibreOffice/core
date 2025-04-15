@@ -148,27 +148,27 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else if (strcmp(argv[2], "jpg") == 0)
         {
-            Graphic aGraphic;
+            ImportOutput aImportOutput;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = static_cast<int>(ImportJPEG(aFileStream, aGraphic, GraphicFilterImportFlags::NONE, nullptr));
+            ret = static_cast<int>(ImportJPEG(aFileStream, aImportOutput, GraphicFilterImportFlags::NONE, nullptr));
         }
         else if (strcmp(argv[2], "gif") == 0)
         {
+            ImportOutput aImportOutput;
             SvFileStream aFileStream(out, StreamMode::READ);
-            Graphic aGraphic;
-            ret = static_cast<int>(ImportGIF(aFileStream, aGraphic));
+            ret = static_cast<int>(ImportGIF(aFileStream, aImportOutput));
         }
         else if (strcmp(argv[2], "xbm") == 0)
         {
-            Graphic aGraphic;
+            ImportOutput aImportOutput;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = static_cast<int>(ImportXBM(aFileStream, aGraphic));
+            ret = static_cast<int>(ImportXBM(aFileStream, aImportOutput));
         }
         else if (strcmp(argv[2], "xpm") == 0)
         {
-            Graphic aGraphic;
+            ImportOutput aImportOutput;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = static_cast<int>(ImportXPM(aFileStream, aGraphic));
+            ret = static_cast<int>(ImportXPM(aFileStream, aImportOutput));
         }
         else if (strcmp(argv[2], "png") == 0)
         {

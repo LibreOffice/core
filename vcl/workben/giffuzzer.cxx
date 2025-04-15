@@ -48,8 +48,8 @@ extern "C" void* lo_get_custom_widget_func(const char*)
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
-    Graphic aGraphic;
-    (void)ImportGIF(aStream, aGraphic);
+    ImportOutput aImportOutput;
+    (void)ImportGIF(aStream, aImportOutput);
     return 0;
 }
 
