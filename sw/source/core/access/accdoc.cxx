@@ -65,8 +65,8 @@ using lang::IndexOutOfBoundsException;
 SwAccessibleDocumentBase::SwAccessibleDocumentBase(
         std::shared_ptr<SwAccessibleMap> const& pMap)
     : SwAccessibleContext(pMap, AccessibleRole::DOCUMENT_TEXT,
-                          pMap->GetShell()->GetLayout())
-    , mxParent(pMap->GetShell()->GetWin()->GetAccessibleParent())
+                          pMap->GetShell().GetLayout())
+    , mxParent(pMap->GetShell().GetWin()->GetAccessibleParent())
     , mpChildWin(nullptr)
 {
 }
@@ -342,7 +342,7 @@ SwAccessibleDocument::SwAccessibleDocument(
     , maSelectionHelper(*this)
 {
     SetName(pInitMap->GetDocName());
-    vcl::Window *pWin = pInitMap->GetShell()->GetWin();
+    vcl::Window* pWin = pInitMap->GetShell().GetWin();
     if( pWin )
     {
         pWin->AddChildEventListener( LINK( this, SwAccessibleDocument, WindowChildEventListener ));
@@ -359,7 +359,7 @@ SwAccessibleDocument::SwAccessibleDocument(
 
 SwAccessibleDocument::~SwAccessibleDocument()
 {
-    vcl::Window *pWin = GetMap() ? GetMap()->GetShell()->GetWin() : nullptr;
+    vcl::Window* pWin = GetMap() ? GetMap()->GetShell().GetWin() : nullptr;
     if( pWin )
         pWin->RemoveChildEventListener( LINK( this, SwAccessibleDocument, WindowChildEventListener ));
 }
@@ -368,7 +368,7 @@ void SwAccessibleDocument::Dispose(bool bRecursive, bool bCanSkipInvisible)
 {
     OSL_ENSURE( GetFrame() && GetMap(), "already disposed" );
 
-    vcl::Window *pWin = GetMap() ? GetMap()->GetShell()->GetWin() : nullptr;
+    vcl::Window *pWin = GetMap() ? GetMap()->GetShell().GetWin() : nullptr;
     if( pWin )
         pWin->RemoveChildEventListener( LINK( this, SwAccessibleDocument, WindowChildEventListener ));
     SwAccessibleContext::Dispose(bRecursive, bCanSkipInvisible);

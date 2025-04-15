@@ -272,12 +272,12 @@ public:
 
     explicit SwAccessibleShapeMap_Impl( SwAccessibleMap const *pMap )
     {
-        maInfo.SetSdrView( pMap->GetShell()->GetDrawView() );
-        maInfo.SetWindow( pMap->GetShell()->GetWin() );
+        maInfo.SetSdrView(pMap->GetShell().GetDrawView());
+        maInfo.SetWindow(pMap->GetShell().GetWin());
         maInfo.SetViewForwarder( pMap );
         uno::Reference < document::XShapeEventBroadcaster > xModelBroadcaster =
             new SwDrawModellListener_Impl(
-                    pMap->GetShell()->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
+                    pMap->GetShell().getIDocumentDrawModelAccess().GetOrCreateDrawModel());
         maInfo.SetModelBroadcaster( xModelBroadcaster );
     }
 
@@ -1087,7 +1087,7 @@ void SwAccessibleMap::InvalidateCursorPosition(const rtl::Reference<SwAccessible
 {
     assert(rxAcc.is());
     assert(rxAcc->GetFrame());
-    if( GetShell()->ActionPend() )
+    if (GetShell().ActionPend())
     {
         SwAccessibleEvent_Impl aEvent(SwAccessibleEvent_Impl::CARET_OR_STATES, rxAcc.get(),
                                       SwAccessibleChild(rxAcc->GetFrame()),
@@ -1108,7 +1108,7 @@ void SwAccessibleMap::InvalidateCursorPosition(const rtl::Reference<SwAccessible
 
 void SwAccessibleMap::InvalidateShapeSelection()
 {
-    if( GetShell()->ActionPend() )
+    if (GetShell().ActionPend())
     {
         SwAccessibleEvent_Impl aEvent(
             SwAccessibleEvent_Impl::SHAPE_SELECTION );
@@ -1133,8 +1133,8 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
     SwAccessibleObjShape_Impl *pSelShape = nullptr;
     size_t nShapes = 0;
 
-    const SwViewShell *pVSh = GetShell();
-    const SwFEShell *pFESh = dynamic_cast<const SwFEShell*>(pVSh);
+    const SwViewShell& rVSh = GetShell();
+    const SwFEShell *pFESh = dynamic_cast<const SwFEShell*>(&rVSh);
     SwPaM* pCursor = pFESh ? pFESh->GetCursor( false /* ??? */ ) : nullptr;
 
     //const size_t nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
@@ -1194,7 +1194,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     if( pCursor != nullptr )
                     {
                         const SwTextNode* pNode = pAnchorNode->GetTextNode();
-                        SwTextFrame const*const pFrame(static_cast<SwTextFrame*>(pNode->getLayoutFrame(pVSh->GetLayout())));
+                        SwTextFrame const*const pFrame(static_cast<SwTextFrame*>(pNode->getLayoutFrame(rVSh.GetLayout())));
                         SwNodeOffset nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
                         SwNodeOffset nLastNode;
                         if (sw::MergedPara const*const pMerged = pFrame->GetMergedPara())
@@ -1464,8 +1464,8 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
     SwAccessibleObjShape_Impl *pSelShape = nullptr;
     size_t nShapes = 0;
 
-    const SwViewShell *pVSh = GetShell();
-    const SwFEShell *pFESh = dynamic_cast<const SwFEShell*>(pVSh);
+    const SwViewShell& rVSh = GetShell();
+    const SwFEShell *pFESh = dynamic_cast<const SwFEShell*>(&rVSh);
     const size_t nSelShapes = pFESh ? pFESh->GetSelectedObjCount() : 0;
 
     //when InvalidateFocus Call this function ,and the current selected shape count is not 1 ,
@@ -1483,7 +1483,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
     std::vector<::rtl::Reference<::accessibility::AccessibleShape>> vecxShapeAdd;
     std::vector<::rtl::Reference<::accessibility::AccessibleShape>> vecxShapeRemove;
 
-    vcl::Window *pWin = GetShell()->GetWin();
+    vcl::Window* pWin = GetShell().GetWin();
     bool bFocused = pWin && pWin->HasFocus();
     SwAccessibleObjShape_Impl *pShape = pShapes.get();
     int nShapeCount = nShapes;
@@ -1609,12 +1609,12 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
     }
 }
 
-SwAccessibleMap::SwAccessibleMap( SwViewShell *pSh ) :
-    mpVSh( pSh ),
+SwAccessibleMap::SwAccessibleMap(SwViewShell& rViewShell) :
+    m_rViewShell(rViewShell),
     mbShapeSelected( false ),
     maDocName(SwAccessibleContext::GetResource(STR_ACCESS_DOC_NAME))
 {
-    pSh->GetLayout()->AddAccessibleShell();
+    rViewShell.GetLayout()->AddAccessibleShell();
 }
 
 SwAccessibleMap::~SwAccessibleMap()
@@ -1624,7 +1624,7 @@ SwAccessibleMap::~SwAccessibleMap()
     rtl::Reference < SwAccessibleContext > xAcc;
     if( mpFrameMap )
     {
-        const SwRootFrame *pRootFrame = GetShell()->GetLayout();
+        const SwRootFrame* pRootFrame = GetShell().GetLayout();
         SwAccessibleContextMap_Impl::iterator aIter = mpFrameMap->find( pRootFrame );
         if( aIter != mpFrameMap->end() )
             xAcc = (*aIter).second;
@@ -1670,7 +1670,7 @@ SwAccessibleMap::~SwAccessibleMap()
         mpEventMap.reset();
         mpEvents.reset();
     }
-    mpVSh->GetLayout()->RemoveAccessibleShell();
+    m_rViewShell.GetLayout()->RemoveAccessibleShell();
 }
 
 rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetDocumentView_(
@@ -1694,7 +1694,7 @@ rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetDocumentView_(
     mpFrameMap->mbLocked = true;
 #endif
 
-    const SwRootFrame *pRootFrame = GetShell()->GetLayout();
+    const SwRootFrame* pRootFrame = GetShell().GetLayout();
     SwAccessibleContextMap_Impl::iterator aIter = mpFrameMap->find( pRootFrame );
     if( aIter != mpFrameMap->end() )
         xAcc = (*aIter).second;
@@ -1825,7 +1825,7 @@ rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetContextImpl(const SwFram
                                 static_cast< const SwTabFrame *>( pFrame ) );
                 break;
             case SwFrameType::Page:
-                OSL_ENSURE( GetShell()->IsPreview(),
+                OSL_ENSURE(GetShell().IsPreview(),
                             "accessible page frames only in PagePreview" );
                 pAcc = new SwAccessiblePage(shared_from_this(), pFrame);
                 break;
@@ -2113,7 +2113,7 @@ void SwAccessibleMap::A11yDispose( const SwFrame *pFrame,
     OSL_ENSURE( !aFrameOrObj.GetSwFrame() || aFrameOrObj.GetSwFrame()->IsAccessibleFrame(),
             "non accessible frame should be disposed" );
 
-    if (!(aFrameOrObj.IsAccessible(GetShell()->IsPreview())
+    if (!(aFrameOrObj.IsAccessible(GetShell().IsPreview())
                // fdo#87199 dispose the darn thing if it ever was accessible
             || Contains(pFrame)))
         return;
@@ -2136,7 +2136,7 @@ void SwAccessibleMap::A11yDispose( const SwFrame *pFrame,
             // If there is none, look if the parent is accessible.
             const SwFrame *pParent =
                     SwAccessibleFrame::GetParent( aFrameOrObj,
-                                                  GetShell()->IsPreview());
+                                                  GetShell().IsPreview());
 
             if( pParent )
             {
@@ -2155,7 +2155,7 @@ void SwAccessibleMap::A11yDispose( const SwFrame *pFrame,
                 xShapeAccImpl = aIter->second;
             }
         }
-        if( pObj && GetShell()->ActionPend() &&
+        if (pObj && GetShell().ActionPend() &&
             (xParentAccImpl.is() || xShapeAccImpl.is()) )
         {
             // Keep a reference to the XShape to avoid that it
@@ -2221,7 +2221,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrame *pFrame,
     DBG_TESTSOLARMUTEX();
 
     SwAccessibleChild aFrameOrObj( pFrame, pObj, pWindow );
-    if( !aFrameOrObj.IsAccessible( GetShell()->IsPreview() ) )
+    if (!aFrameOrObj.IsAccessible(GetShell().IsPreview()))
         return;
 
     ::rtl::Reference< SwAccessibleContext > xAccImpl;
@@ -2246,7 +2246,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrame *pFrame,
             // If not, there is nothing to do.
             pParent =
                 SwAccessibleFrame::GetParent( aFrameOrObj,
-                                              GetShell()->IsPreview());
+                                              GetShell().IsPreview());
 
             if( pParent )
             {
@@ -2260,7 +2260,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrame *pFrame,
 
     if( xAccImpl.is() )
     {
-        if( GetShell()->ActionPend() )
+        if (GetShell().ActionPend())
         {
             SwAccessibleEvent_Impl aEvent(
                 SwAccessibleEvent_Impl::POS_CHANGED, xAccImpl.get(),
@@ -2278,7 +2278,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrame *pFrame,
     }
     else if( xParentAccImpl.is() )
     {
-        if( GetShell()->ActionPend() )
+        if (GetShell().ActionPend())
         {
             assert(pParent);
             // tdf#99722 faster not to buffer events that won't be sent
@@ -2327,7 +2327,7 @@ so run here: save the parent's SwFrame not the accessible object parent,
         }
         if( bIsValidFrame || bIsTextParent )
         {
-            if( GetShell()->ActionPend() )
+            if (GetShell().ActionPend())
             {
                 SwAccessibleEvent_Impl aEvent(
                     SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
@@ -2347,7 +2347,7 @@ void SwAccessibleMap::InvalidateContent( const SwFrame *pFrame )
     DBG_TESTSOLARMUTEX();
 
     SwAccessibleChild aFrameOrObj( pFrame );
-    if( !aFrameOrObj.IsAccessible( GetShell()->IsPreview() ) )
+    if (!aFrameOrObj.IsAccessible(GetShell().IsPreview()))
         return;
 
     if (!mpFrameMap)
@@ -2362,7 +2362,7 @@ void SwAccessibleMap::InvalidateContent( const SwFrame *pFrame )
     if( !xAcc.is() )
         return;
 
-    if( GetShell()->ActionPend() )
+    if (GetShell().ActionPend())
     {
         SwAccessibleEvent_Impl aEvent(
             SwAccessibleEvent_Impl::INVALID_CONTENT, xAcc.get(),
@@ -2381,7 +2381,7 @@ void SwAccessibleMap::InvalidateAttr( const SwTextFrame& rTextFrame )
     DBG_TESTSOLARMUTEX();
 
     SwAccessibleChild aFrameOrObj( &rTextFrame );
-    if( !aFrameOrObj.IsAccessible( GetShell()->IsPreview() ) )
+    if (!aFrameOrObj.IsAccessible(GetShell().IsPreview()))
         return;
 
     if (!mpFrameMap)
@@ -2396,7 +2396,7 @@ void SwAccessibleMap::InvalidateAttr( const SwTextFrame& rTextFrame )
     if( !xAcc.is() )
         return;
 
-    if( GetShell()->ActionPend() )
+    if (GetShell().ActionPend())
     {
         SwAccessibleEvent_Impl aEvent( SwAccessibleEvent_Impl::INVALID_ATTR,
                                        xAcc.get(), std::move(aFrameOrObj) );
@@ -2416,15 +2416,15 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
 
     SwAccessibleChild aFrameOrObj( pFrame );
     bool bShapeSelected = false;
-    const SwViewShell *pVSh = GetShell();
-    if( auto pCSh = dynamic_cast<const SwCursorShell*>(pVSh) )
+    const SwViewShell& rVSh = GetShell();
+    if( auto pCSh = dynamic_cast<const SwCursorShell*>(&rVSh) )
     {
         if( pCSh->IsTableMode() )
         {
             while( aFrameOrObj.GetSwFrame() && !aFrameOrObj.GetSwFrame()->IsCellFrame() )
                 aFrameOrObj = aFrameOrObj.GetSwFrame()->GetUpper();
         }
-        else if( auto pFESh = dynamic_cast<const SwFEShell*>(pVSh) )
+        else if( auto pFESh = dynamic_cast<const SwFEShell*>(&rVSh) )
         {
             const SwFrame *pFlyFrame = pFESh->GetSelectedFlyFrame();
             if( pFlyFrame )
@@ -2441,7 +2441,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
         }
     }
 
-    OSL_ENSURE( bShapeSelected || aFrameOrObj.IsAccessible(GetShell()->IsPreview()),
+    OSL_ENSURE(bShapeSelected || aFrameOrObj.IsAccessible(GetShell().IsPreview()),
             "frame is not accessible" );
 
     rtl::Reference < SwAccessibleContext > xOldAcc;
@@ -2510,7 +2510,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
         }
         else if (bShapeSelected)
         {
-            const SwFEShell *pFESh = static_cast< const SwFEShell * >( pVSh );
+            const SwFEShell* pFESh = static_cast<const SwFEShell*>(&rVSh);
             const SdrMarkList *pMarkList = pFESh->GetMarkList();
             if (pMarkList != nullptr && pMarkList->GetMarkCount() == 1)
             {
@@ -2524,7 +2524,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
                     }
                     if (pObj != nullptr)
                     {
-                        const SwFrame *pParent = SwAccessibleFrame::GetParent( SwAccessibleChild(pObj), GetShell()->IsPreview() );
+                        const SwFrame *pParent = SwAccessibleFrame::GetParent(SwAccessibleChild(pObj), GetShell().IsPreview());
                         if( pParent )
                         {
                             ::rtl::Reference< SwAccessibleContext > xParentAccImpl = GetContextImpl(pParent,false);
@@ -2536,7 +2536,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
                                     //The Table should not add in acc.because the "pParent" is not add to acc .
                                     uno::Reference< XAccessible>  xAccParentTab = GetContext(pTabFrame);//Should Create.
 
-                                    const SwFrame *pParentRoot = SwAccessibleFrame::GetParent( SwAccessibleChild(pTabFrame), GetShell()->IsPreview() );
+                                    const SwFrame *pParentRoot = SwAccessibleFrame::GetParent(SwAccessibleChild(pTabFrame), GetShell().IsPreview());
                                     if (pParentRoot)
                                     {
                                         ::rtl::Reference< SwAccessibleContext > xParentAccImplRoot = GetContextImpl(pParentRoot,false);
@@ -2556,7 +2556,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
                                     //directly create this acc para .
                                     xParentAccImpl = GetContextImpl(pParent);//Should Create.
 
-                                    const SwFrame *pParentRoot = SwAccessibleFrame::GetParent( SwAccessibleChild(pParent), GetShell()->IsPreview() );
+                                    const SwFrame *pParentRoot = SwAccessibleFrame::GetParent(SwAccessibleChild(pParent), GetShell().IsPreview());
 
                                     ::rtl::Reference< SwAccessibleContext > xParentAccImplRoot = GetContextImpl(pParentRoot,false);
                                     if(xParentAccImplRoot.is())
@@ -2619,7 +2619,7 @@ void SwAccessibleMap::InvalidateFocus()
 {
     DBG_TESTSOLARMUTEX();
 
-    if(GetShell()->IsPreview())
+    if (GetShell().IsPreview())
     {
         rtl::Reference<SwAccessibleContext> xDocView = GetDocumentView_(true);
         assert(xDocView.is());
@@ -2649,13 +2649,13 @@ void SwAccessibleMap::InvalidateEditableStates( const SwFrame* _pFrame )
     // Start with the frame or the first upper that is accessible
     SwAccessibleChild aFrameOrObj( _pFrame );
     while( aFrameOrObj.GetSwFrame() &&
-            !aFrameOrObj.IsAccessible( GetShell()->IsPreview() ) )
+            !aFrameOrObj.IsAccessible(GetShell().IsPreview()))
         aFrameOrObj = aFrameOrObj.GetSwFrame()->GetUpper();
     if( !aFrameOrObj.GetSwFrame() )
-        aFrameOrObj = GetShell()->GetLayout();
+        aFrameOrObj = GetShell().GetLayout();
 
     rtl::Reference<SwAccessibleContext> xAccImpl = GetContextImpl(aFrameOrObj.GetSwFrame());
-    if( GetShell()->ActionPend() )
+    if (GetShell().ActionPend())
     {
         SwAccessibleEvent_Impl aEvent(SwAccessibleEvent_Impl::CARET_OR_STATES, xAccImpl.get(),
                                       SwAccessibleChild(xAccImpl->GetFrame()),
@@ -2676,7 +2676,7 @@ void SwAccessibleMap::InvalidateRelationSet_( const SwFrame* pFrame,
 
     // first, see if this frame is accessible, and if so, get the respective
     SwAccessibleChild aFrameOrObj( pFrame );
-    if( !aFrameOrObj.IsAccessible( GetShell()->IsPreview() ) )
+    if (!aFrameOrObj.IsAccessible(GetShell().IsPreview()))
         return;
 
     if (!mpFrameMap)
@@ -2694,7 +2694,7 @@ void SwAccessibleMap::InvalidateRelationSet_( const SwFrame* pFrame,
     if( !xAcc.is() )
         return;
 
-    if( GetShell()->ActionPend() )
+    if (GetShell().ActionPend())
     {
         SwAccessibleEvent_Impl aEvent( SwAccessibleEvent_Impl::CARET_OR_STATES,
                                        xAcc.get(), SwAccessibleChild(pFrame),
@@ -2733,7 +2733,7 @@ void SwAccessibleMap::InvalidateParaTextSelection( const SwTextFrame& _rTextFram
 
     // first, see if this frame is accessible, and if so, get the respective
     SwAccessibleChild aFrameOrObj( &_rTextFrame );
-    if( !aFrameOrObj.IsAccessible( GetShell()->IsPreview() ) )
+    if (!aFrameOrObj.IsAccessible(GetShell().IsPreview()))
         return;
 
     if (!mpFrameMap)
@@ -2751,7 +2751,7 @@ void SwAccessibleMap::InvalidateParaTextSelection( const SwTextFrame& _rTextFram
     if( !xAcc.is() )
         return;
 
-    if( GetShell()->ActionPend() )
+    if (GetShell().ActionPend())
     {
         SwAccessibleEvent_Impl aEvent(
             SwAccessibleEvent_Impl::CARET_OR_STATES,
@@ -2775,7 +2775,7 @@ sal_Int32 SwAccessibleMap::GetChildIndex( const SwFrame& rParentFrame,
     sal_Int32 nIndex( -1 );
 
     SwAccessibleChild aFrameOrObj( &rParentFrame );
-    if( aFrameOrObj.IsAccessible( GetShell()->IsPreview() ) )
+    if (aFrameOrObj.IsAccessible(GetShell().IsPreview()))
     {
         rtl::Reference < SwAccessibleContext > xAcc;
 
@@ -2803,7 +2803,7 @@ void SwAccessibleMap::UpdatePreview( const std::vector<std::unique_ptr<PreviewPa
                                      const Size&      _rPreviewWinSize )
 {
     DBG_TESTSOLARMUTEX();
-    assert(GetShell()->IsPreview() && "no preview?");
+    assert(GetShell().IsPreview() && "no preview?");
     assert(mpPreview != nullptr && "no preview data?");
 
     mpPreview->Update( *this, _rPreviewPages, _rScale, _pSelectedPageFrame, _rPreviewWinSize );
@@ -2812,7 +2812,7 @@ void SwAccessibleMap::UpdatePreview( const std::vector<std::unique_ptr<PreviewPa
     // accessibility tree; this will also send appropriate scroll
     // events
     SwAccessibleContext* pDoc =
-        GetContextImpl( GetShell()->GetLayout() ).get();
+        GetContextImpl(GetShell().GetLayout()).get();
     static_cast<SwAccessibleDocumentBase*>( pDoc )->SetVisArea();
 
     rtl::Reference < SwAccessibleContext > xOldAcc = mxCursorContext;
@@ -2836,10 +2836,10 @@ void SwAccessibleMap::UpdatePreview( const std::vector<std::unique_ptr<PreviewPa
 void SwAccessibleMap::InvalidatePreviewSelection( sal_uInt16 nSelPage )
 {
     DBG_TESTSOLARMUTEX();
-    assert(GetShell()->IsPreview());
+    assert(GetShell().IsPreview());
     assert(mpPreview != nullptr);
 
-    mpPreview->InvalidateSelection( GetShell()->GetLayout()->GetPageByPageNum( nSelPage ) );
+    mpPreview->InvalidateSelection(GetShell().GetLayout()->GetPageByPageNum(nSelPage));
 
     rtl::Reference < SwAccessibleContext > xOldAcc = mxCursorContext;
     rtl::Reference < SwAccessibleContext > xAcc;
@@ -2897,7 +2897,7 @@ tools::Rectangle SwAccessibleMap::GetVisibleArea() const
 Point SwAccessibleMap::LogicToPixel( const Point& rPoint ) const
 {
     Point aPoint = o3tl::toTwips( rPoint, o3tl::Length::mm100 );
-    if (const vcl::Window* pWin = GetShell()->GetWin())
+    if (const vcl::Window* pWin = GetShell().GetWin())
     {
         const MapMode aMapMode = GetMapMode(aPoint);
         aPoint = pWin->LogicToPixel( aPoint, aMapMode );
@@ -2910,7 +2910,7 @@ Point SwAccessibleMap::LogicToPixel( const Point& rPoint ) const
 Size SwAccessibleMap::LogicToPixel( const Size& rSize ) const
 {
     Size aSize( o3tl::toTwips( rSize, o3tl::Length::mm100 ) );
-    if (const OutputDevice* pWin = GetShell()->GetWin()->GetOutDev())
+    if (const OutputDevice* pWin = GetShell().GetWin()->GetOutDev())
     {
         const MapMode aMapMode = GetMapMode(Point(0, 0));
         aSize = pWin->LogicToPixel( aSize, aMapMode );
@@ -3019,7 +3019,7 @@ XAccessible*
 Point SwAccessibleMap::PixelToCore( const Point& rPoint ) const
 {
     Point aPoint;
-    if (const OutputDevice* pWin = GetShell()->GetWin()->GetOutDev())
+    if (const OutputDevice* pWin = GetShell().GetWin()->GetOutDev())
     {
         const MapMode aMapMode = GetMapMode(rPoint);
         aPoint = pWin->PixelToLogic( rPoint, aMapMode );
@@ -3063,7 +3063,7 @@ static void lcl_CorrectRectangle(tools::Rectangle & rRect,
 tools::Rectangle SwAccessibleMap::CoreToPixel( const SwRect& rRect ) const
 {
     tools::Rectangle aRect;
-    if (const OutputDevice* pWin = GetShell()->GetWin()->GetOutDev())
+    if (const OutputDevice* pWin = GetShell().GetWin()->GetOutDev())
     {
         const MapMode aMapMode = GetMapMode(rRect.TopLeft());
         aRect = pWin->LogicToPixel( rRect.SVRect(), aMapMode );
@@ -3085,8 +3085,8 @@ tools::Rectangle SwAccessibleMap::CoreToPixel( const SwRect& rRect ) const
 */
 MapMode SwAccessibleMap::GetMapMode(const Point& _rPoint) const
 {
-    MapMode aMapMode = GetShell()->GetWin()->GetMapMode();
-    if( GetShell()->IsPreview() )
+    MapMode aMapMode = GetShell().GetWin()->GetMapMode();
+    if ( GetShell().IsPreview())
     {
         assert(mpPreview != nullptr);
         mpPreview->AdjustMapMode( aMapMode, _rPoint );
@@ -3096,9 +3096,9 @@ MapMode SwAccessibleMap::GetMapMode(const Point& _rPoint) const
 
 Size SwAccessibleMap::GetPreviewPageSize(sal_uInt16 const nPreviewPageNum) const
 {
-    assert(mpVSh->IsPreview());
+    assert(m_rViewShell.IsPreview());
     assert(mpPreview != nullptr);
-    return mpVSh->PagePreviewLayout()->GetPreviewPageSizeByPageNum(nPreviewPageNum);
+    return m_rViewShell.PagePreviewLayout()->GetPreviewPageSizeByPageNum(nPreviewPageNum);
 }
 
 /** method to build up a new data structure of the accessible paragraphs,
@@ -3116,7 +3116,7 @@ std::unique_ptr<SwAccessibleSelectedParas_Impl> SwAccessibleMap::BuildSelectedPa
     // get cursor as an instance of its base class <SwPaM>
     SwPaM* pCursor( nullptr );
     {
-        SwCursorShell* pCursorShell = dynamic_cast<SwCursorShell*>(GetShell());
+        SwCursorShell* pCursorShell = dynamic_cast<SwCursorShell*>(&GetShell());
         if ( pCursorShell )
         {
             SwFEShell* pFEShell = dynamic_cast<SwFEShell*>(pCursorShell);
@@ -3284,16 +3284,16 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
 
 const SwRect& SwAccessibleMap::GetVisArea() const
 {
-    assert(!GetShell()->IsPreview() || (mpPreview != nullptr));
+    assert(!GetShell().IsPreview() || (mpPreview != nullptr));
 
-    return GetShell()->IsPreview()
+    return GetShell().IsPreview()
            ? mpPreview->GetVisArea()
-           : GetShell()->VisArea();
+           : GetShell().VisArea();
 }
 
 bool SwAccessibleMap::IsDocumentSelAll()
 {
-    return GetShell()->GetDoc()->IsPrepareSelAll();
+    return GetShell().GetDoc()->IsPrepareSelAll();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

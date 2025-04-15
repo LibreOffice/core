@@ -53,9 +53,8 @@ bool SwAccessibleCell::IsSelected()
     bool bRet = false;
 
     assert(GetMap());
-    const SwViewShell *pVSh = GetMap()->GetShell();
-    assert(pVSh);
-    if( auto pCSh = dynamic_cast<const SwCursorShell*>(pVSh) )
+    const SwViewShell& rVSh = GetMap()->GetShell();
+    if( auto pCSh = dynamic_cast<const SwCursorShell*>(&rVSh) )
     {
         if( pCSh->IsTableMode() )
         {
@@ -76,9 +75,8 @@ void SwAccessibleCell::GetStates( sal_Int64& rStateSet )
     SwAccessibleContext::GetStates( rStateSet );
 
     // SELECTABLE
-    const SwViewShell *pVSh = GetMap()->GetShell();
-    assert(pVSh);
-    if( dynamic_cast<const SwCursorShell*>( pVSh) !=  nullptr )
+    const SwViewShell& rVSh = GetMap()->GetShell();
+    if( dynamic_cast<const SwCursorShell*>(&rVSh) !=  nullptr )
         rStateSet |= AccessibleStateType::SELECTABLE;
     //Add resizable state to table cell.
     rStateSet |= AccessibleStateType::RESIZABLE;
@@ -157,7 +155,7 @@ bool SwAccessibleCell::InvalidateChildrenCursorPos( const SwFrame *pFrame )
         const SwFrame *pLower = rLower.GetSwFrame();
         if( pLower )
         {
-            if( rLower.IsAccessible( GetMap()->GetShell()->IsPreview() )  )
+            if (rLower.IsAccessible(GetMap()->GetShell().IsPreview()))
             {
                 ::rtl::Reference< SwAccessibleContext > xAccImpl(
                     GetMap()->GetContextImpl( pLower, false ) );

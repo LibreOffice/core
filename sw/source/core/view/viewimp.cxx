@@ -516,7 +516,7 @@ void SwViewShellImp::InvalidateAccessiblePreviewSelection( sal_uInt16 nSelPage )
 SwAccessibleMap *SwViewShellImp::CreateAccessibleMap()
 {
     assert(!m_pAccessibleMap);
-    m_pAccessibleMap = std::make_shared<SwAccessibleMap>(&GetShell());
+    m_pAccessibleMap = std::make_shared<SwAccessibleMap>(GetShell());
     return m_pAccessibleMap.get();
 }
 

@@ -35,8 +35,8 @@ using namespace sw::access;
 SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
                                             const SwFrame& rFrame,
                                             SwAccessibleMap& rAccMap )
-    : mnHellId( rAccMap.GetShell()->GetDoc()->getIDocumentDrawModelAccess().GetHellId() )
-    , mnControlsId( rAccMap.GetShell()->GetDoc()->getIDocumentDrawModelAccess().GetControlsId() )
+    : mnHellId(rAccMap.GetShell().GetDoc()->getIDocumentDrawModelAccess().GetHellId())
+    , mnControlsId(rAccMap.GetShell().GetDoc()->getIDocumentDrawModelAccess().GetControlsId())
 {
     const bool bVisibleChildrenOnly = SwAccessibleChild( &rFrame ).IsVisibleChildrenOnly();
 

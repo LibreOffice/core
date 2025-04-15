@@ -44,9 +44,8 @@ bool SwAccessibleFrameBase::IsSelected()
     bool bRet = false;
 
     assert(GetMap());
-    const SwViewShell *pVSh = GetMap()->GetShell();
-    assert(pVSh);
-    if( auto pFESh = dynamic_cast<const SwFEShell*>(pVSh) )
+    const SwViewShell& rVSh = GetMap()->GetShell();
+    if (auto pFESh = dynamic_cast<const SwFEShell*>(&rVSh))
     {
         const SwFrame *pFlyFrame = pFESh->GetSelectedFlyFrame();
         if( pFlyFrame == GetFrame() )
@@ -60,10 +59,8 @@ void SwAccessibleFrameBase::GetStates( sal_Int64& rStateSet )
 {
     SwAccessibleContext::GetStates( rStateSet );
 
-    const SwViewShell *pVSh = GetMap()->GetShell();
-    assert(pVSh);
-
-    if (dynamic_cast<const SwFEShell*>(pVSh))
+    const SwViewShell& rVSh = GetMap()->GetShell();
+    if (dynamic_cast<const SwFEShell*>(&rVSh))
     {
         // SELECTABLE
         rStateSet |= AccessibleStateType::SELECTABLE;

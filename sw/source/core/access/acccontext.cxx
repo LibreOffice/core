@@ -55,9 +55,9 @@ void SwAccessibleContext::InitStates()
 {
     m_isShowingState = GetMap() && IsShowing( *(GetMap()) );
 
-    SwViewShell *pVSh = GetMap()->GetShell();
-    m_isEditableState = pVSh && IsEditable(*pVSh);
-    m_isOpaqueState = pVSh && IsOpaque(*pVSh);
+    SwViewShell& rVSh = GetMap()->GetShell();
+    m_isEditableState = IsEditable(rVSh);
+    m_isOpaqueState = IsOpaque(rVSh);
     m_isDefuncState = false;
 }
 
@@ -81,11 +81,7 @@ vcl::Window *SwAccessibleContext::GetWindow()
 
     if( GetMap() )
     {
-        const SwViewShell *pVSh = GetMap()->GetShell();
-        OSL_ENSURE( pVSh, "no view shell" );
-        if( pVSh )
-            pWin = pVSh->GetWin();
-
+        pWin = GetMap()->GetShell().GetWin();
         OSL_ENSURE( pWin, "no window" );
     }
 
@@ -95,7 +91,7 @@ vcl::Window *SwAccessibleContext::GetWindow()
 // get SwViewShell from accessibility map, and cast to cursor shell
 SwCursorShell* SwAccessibleContext::GetCursorShell()
 {
-    SwViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : nullptr;
+    SwViewShell* pViewShell = GetMap() ? &GetMap()->GetShell() : nullptr;
     OSL_ENSURE( pViewShell, "no view shell" );
     return dynamic_cast<SwCursorShell*>( pViewShell);
 }
@@ -103,7 +99,7 @@ SwCursorShell* SwAccessibleContext::GetCursorShell()
 const SwCursorShell* SwAccessibleContext::GetCursorShell() const
 {
     // just like non-const GetCursorShell
-    const SwViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : nullptr;
+    const SwViewShell* pViewShell = GetMap() ? &GetMap()->GetShell() : nullptr;
     OSL_ENSURE( pViewShell, "no view shell" );
     return dynamic_cast<const SwCursorShell*>( pViewShell);
 }
@@ -526,7 +522,7 @@ SwAccessibleContext::SwAccessibleContext(std::shared_ptr<SwAccessibleMap> const&
                                           sal_Int16 const nRole,
                                           const SwFrame *pF )
     : SwAccessibleFrame( pMap->GetVisArea(), pF,
-                         pMap->GetShell()->IsPreview() )
+                         pMap->GetShell().IsPreview() )
     , m_pMap(pMap.get())
     , m_wMap(pMap)
     , m_nClientId(0)
@@ -1285,37 +1281,34 @@ void SwAccessibleContext::InvalidateStates( AccessibleStates _nStates )
     if( !GetMap() )
         return;
 
-    SwViewShell *pVSh = GetMap()->GetShell();
-    if( pVSh )
+    SwViewShell& rVSh = GetMap()->GetShell();
+    if( _nStates & AccessibleStates::EDITABLE )
     {
-        if( _nStates & AccessibleStates::EDITABLE )
+        bool bIsOldEditableState;
+        bool bIsNewEditableState = IsEditable(rVSh);
         {
-            bool bIsOldEditableState;
-            bool bIsNewEditableState = IsEditable(*pVSh);
-            {
-                std::scoped_lock aGuard( m_Mutex );
-                bIsOldEditableState = m_isEditableState;
-                m_isEditableState = bIsNewEditableState;
-            }
-
-            if( bIsOldEditableState != bIsNewEditableState )
-                FireStateChangedEvent( AccessibleStateType::EDITABLE,
-                                       bIsNewEditableState  );
+            std::scoped_lock aGuard( m_Mutex );
+            bIsOldEditableState = m_isEditableState;
+            m_isEditableState = bIsNewEditableState;
         }
-        if( _nStates & AccessibleStates::OPAQUE )
+
+        if( bIsOldEditableState != bIsNewEditableState )
+            FireStateChangedEvent( AccessibleStateType::EDITABLE,
+                                   bIsNewEditableState  );
+    }
+    if( _nStates & AccessibleStates::OPAQUE )
+    {
+        bool bIsOldOpaqueState;
+        bool bIsNewOpaqueState = IsOpaque(rVSh);
         {
-            bool bIsOldOpaqueState;
-            bool bIsNewOpaqueState = IsOpaque(*pVSh);
-            {
-                std::scoped_lock aGuard( m_Mutex );
-                bIsOldOpaqueState = m_isOpaqueState;
-                m_isOpaqueState = bIsNewOpaqueState;
-            }
-
-            if( bIsOldOpaqueState != bIsNewOpaqueState )
-                FireStateChangedEvent( AccessibleStateType::OPAQUE,
-                                       bIsNewOpaqueState  );
+            std::scoped_lock aGuard( m_Mutex );
+            bIsOldOpaqueState = m_isOpaqueState;
+            m_isOpaqueState = bIsNewOpaqueState;
         }
+
+        if( bIsOldOpaqueState != bIsNewOpaqueState )
+            FireStateChangedEvent( AccessibleStateType::OPAQUE,
+                                   bIsNewOpaqueState  );
     }
 
     InvalidateChildrenStates( GetFrame(), _nStates );
@@ -1430,7 +1423,7 @@ bool SwAccessibleContext::HasAdditionalAccessibleChildren()
 
     if ( GetFrame()->IsTextFrame() )
     {
-        SwPostItMgr* pPostItMgr = GetMap()->GetShell()->GetPostItMgr();
+        SwPostItMgr* pPostItMgr = GetMap()->GetShell().GetPostItMgr();
         if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
         {
             bRet = pPostItMgr->HasFrameConnectedSidebarWins( *(GetFrame()) );
@@ -1447,7 +1440,7 @@ vcl::Window* SwAccessibleContext::GetAdditionalAccessibleChild( const sal_Int32 
 
     if ( GetFrame()->IsTextFrame() )
     {
-        SwPostItMgr* pPostItMgr = GetMap()->GetShell()->GetPostItMgr();
+        SwPostItMgr* pPostItMgr = GetMap()->GetShell().GetPostItMgr();
         if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
         {
             pAdditionalAccessibleChild =
@@ -1463,7 +1456,7 @@ void SwAccessibleContext::GetAdditionalAccessibleChildren( std::vector< vcl::Win
 {
     if ( GetFrame()->IsTextFrame() )
     {
-        SwPostItMgr* pPostItMgr = GetMap()->GetShell()->GetPostItMgr();
+        SwPostItMgr* pPostItMgr = GetMap()->GetShell().GetPostItMgr();
         if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
         {
             pPostItMgr->GetAllSidebarWinForFrame( *(GetFrame()), pChildren );

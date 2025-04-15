@@ -431,7 +431,7 @@ void SwAccessibleParagraph::UpdatePortionData()
         OSL_ENSURE( pFrame->IsTextFrame(), "The text frame has mutated!" );
         // build new portion data
         m_pPortionData.reset( new SwAccessiblePortionData(
-            pFrame, GetMap()->GetShell()->GetViewOptions()) );
+            pFrame, GetMap()->GetShell().GetViewOptions()) );
         pFrame->VisitPortions( *m_pPortionData );
     }
     OSL_ENSURE( m_pPortionData != nullptr, "UpdatePortionData() failed" );
@@ -446,10 +446,9 @@ void SwAccessibleParagraph::ClearPortionData()
 void SwAccessibleParagraph::ExecuteAtViewShell( sal_uInt16 nSlot )
 {
     OSL_ENSURE( GetMap() != nullptr, "no map?" );
-    SwViewShell* pViewShell = GetMap()->GetShell();
+    SwViewShell& rViewShell = GetMap()->GetShell();
 
-    assert(pViewShell != nullptr && "View shell expected!");
-    SfxViewShell* pSfxShell = pViewShell->GetSfxViewShell();
+    SfxViewShell* pSfxShell = rViewShell.GetSfxViewShell();
 
     OSL_ENSURE( pSfxShell != nullptr, "SfxViewShell shell expected!" );
     if( !pSfxShell )
@@ -2428,10 +2427,9 @@ sal_Bool SwAccessibleParagraph::scrollSubstringTo( sal_Int32 nStartIndex,
     }
 
     const SwRect aRect(startPoint, endPoint);
-    SwViewShell* pViewShell = GetMap()->GetShell();
-    OSL_ENSURE( pViewShell != nullptr, "View shell expected!" );
+    SwViewShell& rViewShell = GetMap()->GetShell();
 
-    ScrollMDI(pViewShell, aRect, USHRT_MAX, USHRT_MAX);
+    ScrollMDI(&rViewShell, aRect, USHRT_MAX, USHRT_MAX);
 
     return true;
 }

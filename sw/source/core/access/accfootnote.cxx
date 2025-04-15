@@ -75,7 +75,7 @@ OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription()
         static_cast< const SwFootnoteFrame *>( GetFrame() )->GetAttr();
     if( pTextFootnote )
     {
-        const SwDoc *pDoc = GetMap()->GetShell()->GetDoc();
+        const SwDoc* pDoc = GetMap()->GetShell().GetDoc();
         sArg = pTextFootnote->GetFootnote().GetViewNumStr(*pDoc, GetFrame()->getRootFrame());
     }
 

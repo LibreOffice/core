@@ -102,7 +102,7 @@ class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
     // #i27301 data structure to keep information about
     // accessible paragraph, which have a selection.
     std::unique_ptr<SwAccessibleSelectedParas_Impl> mpSelectedParas;
-    SwViewShell *mpVSh;
+    SwViewShell& m_rViewShell;
     /// for page preview: store preview data, VisArea, and mapping of
     /// preview-to-display coordinates
     std::unique_ptr<SwAccPreviewData> mpPreview;
@@ -141,7 +141,7 @@ class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
 
 public:
 
-    SwAccessibleMap( SwViewShell *pSh );
+    SwAccessibleMap(SwViewShell& rViewShell);
     virtual ~SwAccessibleMap() override;
 
     css::uno::Reference<css::accessibility::XAccessible> GetDocumentView();
@@ -168,9 +168,9 @@ public:
                                         SwAccessibleContext *pParentImpl,
                                         bool bCreate = true );
 
-    SwViewShell* GetShell() const
+    SwViewShell& GetShell() const
     {
-        return mpVSh;
+        return m_rViewShell;
     }
     static bool IsInSameLevel(const SdrObject* pObj, const SwFEShell* pFESh);
     void AddShapeContext(const SdrObject *pObj,

@@ -53,11 +53,9 @@ SwAccessibleSelectionHelper::SwAccessibleSelectionHelper(
 SwFEShell* SwAccessibleSelectionHelper::GetFEShell()
 {
     OSL_ENSURE( m_rContext.GetMap() != nullptr, "no map?" );
-    SwViewShell* pViewShell = m_rContext.GetMap()->GetShell();
-    OSL_ENSURE( pViewShell != nullptr,
-                "No view shell? Then what are you looking at?" );
+    SwViewShell& rViewShell = m_rContext.GetMap()->GetShell();
 
-    SwFEShell* pFEShell = dynamic_cast<SwFEShell*>( pViewShell );
+    SwFEShell* pFEShell = dynamic_cast<SwFEShell*>(&rViewShell);
 
     return pFEShell;
 }
