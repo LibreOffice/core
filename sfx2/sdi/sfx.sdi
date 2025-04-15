@@ -5192,6 +5192,21 @@ SfxVoidItem WhatsNew SID_WHATSNEW
     MenuConfig = TRUE,
     GroupId = SfxGroupId::Application;
 ]
+SfxVoidItem Credits SID_CREDITS
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    GroupId = SfxGroupId::Application;
+]
 SfxVoidItem HyphenationMissing SID_HYPHENATIONMISSING
 ()
 [

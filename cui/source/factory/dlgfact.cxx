@@ -99,6 +99,7 @@
 #include <fileextcheckdlg.hxx>
 #include <TextColumnsPage.hxx>
 #include <querydialog.hxx>
+#include <welcomedlg.hxx>
 
 #include <MacroManagerDialog.hxx>
 
@@ -1401,6 +1402,11 @@ public:
         return m_pDlg->GetFormat(aHelper);
     }
 };
+}
+
+VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateWelcomeDialog(weld::Window* pParent)
+{
+    return VclPtr<CuiAbstractTabController_Impl<WelcomeDialog>>::Create(pParent);
 }
 
 VclPtr<SfxAbstractPasteDialog> AbstractDialogFactory_Impl::CreatePasteDialog(weld::Window* pParent)

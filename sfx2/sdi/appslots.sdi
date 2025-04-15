@@ -152,6 +152,10 @@ interface Application
     [
         ExecMethod = MiscExec_Impl ;
     ]
+    SID_CREDITS
+    [
+        ExecMethod = MiscExec_Impl ;
+    ]
     SID_HYPHENATIONMISSING
     [
         ExecMethod = MiscExec_Impl ;

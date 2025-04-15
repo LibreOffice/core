@@ -167,6 +167,8 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateToolbarmodeDialog(weld::Window* _pParent) = 0;
 
     virtual VclPtr<VclAbstractDialog> CreateWidgetTestDialog(weld::Window* _pParent) = 0;
+
+    virtual VclPtr<SfxAbstractTabDialog> CreateWelcomeDialog(weld::Window* pParent) =0;
 };
 
 #endif

@@ -161,7 +161,9 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/srchxtra \
     cui/source/dialogs/thesdlg \
     cui/source/dialogs/toolbarmodedlg \
+    cui/source/dialogs/whatsnewtabpage \
     cui/source/dialogs/uitabpage \
+    cui/source/dialogs/welcomedlg \
     cui/source/dialogs/zoom \
     cui/source/factory/cuiexp \
     cui/source/factory/cuiresmgr \
@@ -201,8 +203,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/options/optpath \
     cui/source/options/optsave \
     cui/source/options/optupdt \
-    $(call gb_Helper_optional,DESKTOP,\
-        cui/source/options/appearance) \
+    cui/source/options/appearance \
     cui/source/options/sdbcdriverenum \
     cui/source/options/securityoptions \
     cui/source/options/treeopt \

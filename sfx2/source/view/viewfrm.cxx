@@ -24,6 +24,7 @@
 #include <osl/file.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/infobar.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/classificationhelper.hxx>
@@ -1644,6 +1645,15 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 #if !ENABLE_WASM_STRIP_PINGUSER
                 if (!SfxApplication::IsHeadlessOrUITest()) //uitest.uicheck fails when the dialog is open
                 {
+                    static const bool bRunningUnitTest = o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest();
+                    if (officecfg::Office::Common::Misc::FirstRun::get() && !IsInModalMode() && !bRunningUnitTest)
+                    {
+                        SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+                        ScopedVclPtr<SfxAbstractTabDialog> pDlg(
+                            pFact->CreateWelcomeDialog(GetWindow().GetFrameWeld()));
+                        pDlg->Execute();
+                    }
+
                     bool bIsWhatsNewShown = false; //suppress tipoftheday if whatsnew was shown
 
                     //what's new dialog

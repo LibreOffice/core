@@ -666,6 +666,13 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
             break;
         }
+        case SID_CREDITS:
+        {
+            OUString sURL(officecfg::Office::Common::Menus::CreditsURL::get());
+            sfx2::openUriExternally(sURL, false, rReq.GetFrameWeld());
+            break;
+        }
+        break;
         case SID_HYPHENATIONMISSING:
         {
             // Open wiki page about hyphenation
