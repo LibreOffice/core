@@ -971,6 +971,9 @@ SwXShape::~SwXShape()
     m_pImpl.reset();
     if(m_pPage)
        const_cast<SwFmDrawPage*>(m_pPage)->RemoveShape(this);
+    // these have to be destructed under the solarmutex
+    m_xShapeAgg.clear();
+    mxShape.clear();
 }
 
 uno::Any SwXShape::queryInterface( const uno::Type& aType )
