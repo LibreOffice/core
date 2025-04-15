@@ -87,22 +87,22 @@
       <FormatCode>0,00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
-      <FormatCode># ##0[$man.-42C];-# ##0[$man.-42C]</FormatCode>
+      <FormatCode>[$₼-42C]# ##0;[$₼-42C]-# ##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode># ##0,00[$man.-42C];-# ##0,00[$man.-42C]</FormatCode>
+      <FormatCode>[$₼-42C]# ##0,00;[$₼-42C]-# ##0,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
-      <FormatCode># ##0[$man.-42C];[RED]-# ##0[$man.-42C]</FormatCode>
+      <FormatCode>[$₼-42C]# ##0;[RED][$₼-42C]-# ##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
-      <FormatCode># ##0,00[$man.-42C];[RED]-# ##0,00[$man.-42C]</FormatCode>
+      <FormatCode>[$₼-42C]# ##0,00;[RED][$₼-42C]-# ##0,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
       <FormatCode># ##0,00 CCC</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode># ##0,--[$man.-42C];[RED]-# ##0,--[$man.-42C]</FormatCode>
+      <FormatCode>[$₼-42C]# ##0,--;[RED][$₼-42C]-# ##0,--</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>D.M.YY</FormatCode>
@@ -323,6 +323,13 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>AZN</CurrencyID>
+      <CurrencySymbol>₼</CurrencySymbol>
+      <BankSymbol>AZN</BankSymbol>
+      <CurrencyName>Manat</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
       <CurrencyID>AZN</CurrencyID>
       <CurrencySymbol>man.</CurrencySymbol>
       <BankSymbol>AZN</BankSymbol>
