@@ -58,6 +58,8 @@
 #include <app.hrc>
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -66,6 +68,10 @@
 #include <tools/urlobj.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/svapp.hxx>
+
+#include <comphelper/storagehelper.hxx>
+
+using namespace ::com::sun::star;
 
 namespace sd::slidesorter::controller {
 
@@ -915,6 +921,45 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
     }
 
     return nResult;
+}
+
+bool Clipboard::PasteSlidesFromSystemClipboard()
+{
+    ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
+    std::shared_ptr<DrawViewShell> pDrawViewShell(
+        std::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
+    TransferableDataHelper aDataHelper(
+        TransferableDataHelper::CreateFromSystemClipboard(pDrawViewShell->GetActiveWindow()));
+
+    SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
+    assert(pDocument);
+    OUString aDocShellID = SfxObjectShell::CreateShellID(pDocument->GetDocSh());
+    auto xStm = aDataHelper.GetInputStream(SotClipboardFormatId::EMBED_SOURCE, aDocShellID);
+
+    if (xStm.is())
+    {
+        uno::Reference<embed::XStorage> xStore(
+            ::comphelper::OStorageHelper::GetStorageFromInputStream(xStm));
+        ::sd::DrawDocShellRef xDocShRef(new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, true,
+                                                               pDocument->GetDocumentType()));
+        SfxMedium* pMedium = new SfxMedium(xStore, OUString());
+        xDocShRef->DoLoad(pMedium);
+        std::vector<OUString> aBookmarkList;
+        std::vector<OUString> aExchangeList;
+
+        auto insertPos = mrSlideSorter.GetModel().GetCoreIndex(
+            mrSlideSorter.GetController().GetClipboard().GetInsertionPosition());
+        pDocument->InsertBookmarkAsPage(aBookmarkList, &aExchangeList, false /*bLink*/,
+                                        false /*bReplace*/, insertPos /*nPos*/, true,
+                                        xDocShRef.get(), true, true, false);
+
+        std::vector<OUString> aObjectBookmarkList;
+        pDocument->InsertBookmarkAsObject(aObjectBookmarkList, aExchangeList, xDocShRef.get(),
+                                          nullptr, false);
+
+        return true;
+    }
+    return false;
 }
 
 } // end of namespace ::sd::slidesorter::controller

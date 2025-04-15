@@ -70,7 +70,10 @@
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/xbtmpit.hxx>
 #include <memory>
-
+#include <SlideSorter.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsClipboard.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -697,6 +700,16 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 bReturn = true;
             }
         }
+    }
+
+    if (!bReturn && CHECK_FORMAT_TRANS(SotClipboardFormatId::EMBED_SOURCE))
+    {
+        sd::slidesorter::SlideSorter& xSlideSorter
+            = ::sd::slidesorter::SlideSorterViewShell::GetSlideSorter(
+                  mrDoc.GetDocSh()->GetViewShell()->GetViewShellBase())
+                  ->GetSlideSorter();
+        if (xSlideSorter.GetController().GetClipboard().PasteSlidesFromSystemClipboard())
+            return true;
     }
 
     if(!bReturn && CHECK_FORMAT_TRANS( SotClipboardFormatId::DRAWING ))

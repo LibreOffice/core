@@ -1244,6 +1244,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
 
         { u"Cut", { PayloadType::EnabledPayload, true } },
         { u"Copy", { PayloadType::EnabledPayload, true } },
+        { u"CopySlide", { PayloadType::EnabledPayload, true } },
         { u"Paste", { PayloadType::EnabledPayload, true } },
         { u"SelectAll", { PayloadType::EnabledPayload, true } },
         { u"InsertAnnotation", { PayloadType::EnabledPayload, true } },
