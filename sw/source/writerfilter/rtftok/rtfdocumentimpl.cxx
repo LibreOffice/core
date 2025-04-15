@@ -512,7 +512,8 @@ static void lcl_copyFlatten(RTFReferenceProperties& rProps, RTFSprms& rStyleAttr
 }
 
 writerfilter::Reference<Properties>::Pointer_t
-RTFDocumentImpl::getProperties(const RTFSprms& rAttributes, RTFSprms const& rSprms, Id nStyleType)
+RTFDocumentImpl::getProperties(const RTFSprms& rAttributes, RTFSprms const& rSprms, Id nStyleType,
+                               bool bReplay)
 {
     RTFSprms aSprms(rSprms);
     RTFValue::Pointer_t pAbstractList;
@@ -538,12 +539,22 @@ RTFDocumentImpl::getProperties(const RTFSprms& rAttributes, RTFSprms const& rSpr
         auto it = m_aInvalidListTableFirstIndents.find(nAbstractListId);
         if (it != m_aInvalidListTableFirstIndents.end())
             aSprms.deduplicateList(it->second);
+        aSprms.duplicateList(pAbstractList);
     }
 
     int nStyle = 0;
     if (!m_aStates.empty())
         nStyle = m_aStates.top().getCurrentStyleIndex();
     auto it = m_pStyleTableEntries->find(nStyle);
+    if (!nStyle && it == m_pStyleTableEntries->end())
+    {
+        RTFSprms aAttributes;
+        writerfilter::Reference<Properties>::Pointer_t pProps(
+            new RTFReferenceProperties(aAttributes));
+        writerfilter::Reference<Properties>::Pointer_t const pProp(pProps);
+        m_pStyleTableEntries->insert(std::make_pair(0, pProp));
+        it = m_pStyleTableEntries->find(nStyle);
+    }
 
     if (it != m_pStyleTableEntries->end())
     {
@@ -552,7 +563,29 @@ RTFDocumentImpl::getProperties(const RTFSprms& rAttributes, RTFSprms const& rSpr
         auto itChar = m_pStyleTableEntries->end();
         if (!m_aStates.empty())
         {
-            int nCharStyle = m_aStates.top().getCurrentCharacterStyleIndex();
+            int nCharStyle = -1;
+            if (bReplay)
+            {
+                auto pCharStyleName = aSprms.find(NS_ooxml::LN_EG_RPrBase_rStyle);
+                if (pCharStyleName)
+                {
+                    for (auto& rCharStyle : *m_pStyleTableEntries)
+                    {
+                        RTFReferenceProperties& rCharStyleProps
+                            = *static_cast<RTFReferenceProperties*>(rCharStyle.second.get());
+                        auto rEntryStyleName
+                            = rCharStyleProps.getSprms().find(NS_ooxml::LN_CT_Style_name);
+                        if (rEntryStyleName
+                            && pCharStyleName->getString() == rEntryStyleName->getString())
+                        {
+                            nCharStyle = rCharStyle.first;
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+                nCharStyle = m_aStates.top().getCurrentCharacterStyleIndex();
             itChar = m_pStyleTableEntries->find(nCharStyle);
         }
 
@@ -580,8 +613,6 @@ RTFDocumentImpl::getProperties(const RTFSprms& rAttributes, RTFSprms const& rSpr
         return new RTFReferenceProperties(std::move(attributes), std::move(sprms));
     }
 
-    if (pAbstractList)
-        aSprms.duplicateList(pAbstractList);
     writerfilter::Reference<Properties>::Pointer_t pRet
         = new RTFReferenceProperties(rAttributes, std::move(aSprms));
     return pRet;
@@ -1772,7 +1803,8 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* const pSprms,
             writerfilter::Reference<Properties>::Pointer_t const pProp(getProperties(
                 std::get<1>(aTuple)->getAttributes(), std::get<1>(aTuple)->getSprms(),
                 std::get<0>(aTuple) == BUFFER_PROPS_CHAR ? NS_ooxml::LN_Value_ST_StyleType_character
-                                                         : 0));
+                                                         : 0,
+                std::get<0>(aTuple) == BUFFER_PROPS_CHAR));
             Mapper().props(pProp);
         }
         else if (std::get<0>(aTuple) == BUFFER_NESTROW)
