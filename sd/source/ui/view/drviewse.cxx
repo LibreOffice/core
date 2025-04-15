@@ -100,6 +100,10 @@
 #include <officecfg/Office/Draw.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <SlideSorter.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsClipboard.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -947,6 +951,18 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             }
 
             rReq.Ignore ();
+        }
+        break;
+
+        case SID_PASTE_SLIDE:
+        case SID_COPY_SLIDE:
+        {
+            sd::slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase())
+                ->GetSlideSorter()
+                .GetController()
+                .FuSupport(rReq);
+            Cancel();
+            rReq.Done();
         }
         break;
 

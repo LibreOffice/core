@@ -121,6 +121,7 @@ private:
         vcl::Window* pWindow,
         bool bDrag);
 
+public:
     /** Determine the position of where to insert the pages in the current
         transferable of the sd module.
         @return
@@ -129,6 +130,11 @@ private:
     */
     sal_Int32 GetInsertionPosition ();
 
+    /** Paste the slides copied from another instance of the LibreOffice
+    */
+    bool PasteSlidesFromSystemClipboard();
+
+private:
     /** Paste the pages of the transferable of the sd module at the given
         position.
         @param nInsertPosition

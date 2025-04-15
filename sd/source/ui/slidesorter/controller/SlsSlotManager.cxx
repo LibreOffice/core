@@ -368,6 +368,11 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
         case SID_PASTE_SLIDE:
         {
             SdTransferable* pTransferClip = SdModule::get()->pTransferClip;
+            if (!pTransferClip)
+            {
+                if (mrSlideSorter.GetController().GetClipboard().PasteSlidesFromSystemClipboard())
+                    return;
+            }
             if( pTransferClip )
             {
                 SfxObjectShell* pTransferDocShell = pTransferClip->GetDocShell().get();
