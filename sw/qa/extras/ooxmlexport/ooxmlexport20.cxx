@@ -707,6 +707,15 @@ CPPUNIT_TEST_FIXTURE(Test, tdf66398_permissions)
                 u"B8k6wb1pkjUs4Nv/8QBk/w==");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, tdf166173_enforcement)
+{
+    loadAndSave("tdf166173_enforcement.docx");
+    xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
+
+    // check if attribute 'enforcement' of 'documentProtection' has still '0' value.
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "enforcement", u"0");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, tdf106843)
 {
     loadAndSave("tdf106843.fodt");
