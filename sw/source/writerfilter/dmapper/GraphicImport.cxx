@@ -795,12 +795,12 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
         }
         break;
         case NS_ooxml::LN_CT_Point2D_x:
-            m_pImpl->m_nLeftPosition = ConversionHelper::convertTwipToMm100_Limited(nIntValue);
+            m_pImpl->m_nLeftPosition = oox::drawingml::convertEmuToHmm(nIntValue);
             m_pImpl->m_nHoriRelation = text::RelOrientation::PAGE_FRAME;
             m_pImpl->m_nHoriOrient = text::HoriOrientation::NONE;
         break;
         case NS_ooxml::LN_CT_Point2D_y:
-            m_pImpl->m_nTopPosition = ConversionHelper::convertTwipToMm100_Limited(nIntValue);
+            m_pImpl->m_nTopPosition = oox::drawingml::convertEmuToHmm(nIntValue);
             m_pImpl->m_nVertRelation = text::RelOrientation::PAGE_FRAME;
             m_pImpl->m_nVertOrient = text::VertOrientation::NONE;
         break;

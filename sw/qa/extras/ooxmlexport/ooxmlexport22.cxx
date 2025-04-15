@@ -55,6 +55,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165933_noDelTextOnMove)
     assertXPath(pXmlDoc, "//w:moveFrom/w:r/w:delText", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf166201_simplePos)
+{
+    // Given a document with an image at the bottom-right placed there by simplePos
+
+    loadAndSave("tdf166201_simplePos.docx");
+
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_FRAME,
+                         getProperty<sal_Int16>(getShape(1), u"HoriOrientRelation"_ustr));
+    // Without the fix, this was 0 - at the top left, instead of 10.5cm - at the bottom right
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10478),
+                         getProperty<sal_Int32>(getShape(1), u"HoriOrientPosition"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf165492_exactWithBottomSpacing)
 {
     // Given a document with "exact row height" of 2cm
