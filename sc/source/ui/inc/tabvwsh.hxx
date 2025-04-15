@@ -189,6 +189,8 @@ private:
 
     sal_uInt16              nCurRefDlgId;
 
+    bool                    bIsTabChangeInProgress;
+
     std::unique_ptr<SfxBroadcaster> pAccessibilityBroadcaster;
 
     // ugly hack for Add button in ScNameDlg
@@ -286,6 +288,9 @@ public:
     bool            SfxKeyInput(const KeyEvent& rKEvt);
 
     void            SetActive();
+
+    void            SetTabChangeInProgress(bool bState) { bIsTabChangeInProgress = bState; }
+    bool            IsTabChangeInProgress() { return bIsTabChangeInProgress; }
 
     ::editeng::SvxBorderLine*   GetDefaultFrameLine() const { return pCurFrameLine.get(); }
     void            SetDefaultFrameLine(const ::editeng::SvxBorderLine* pLine );

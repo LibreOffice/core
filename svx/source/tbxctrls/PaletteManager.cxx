@@ -69,7 +69,6 @@ PaletteManager::PaletteManager() :
         pColorList = XColorList::CreateStdColorList();
     LoadPalettes();
     mnNumOfPalettes += m_Palettes.size();
-
 }
 
 PaletteManager::PaletteManager(const PaletteManager* pClone)
@@ -483,6 +482,43 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
         xDispatch->dispatch(aTargetURL, comphelper::containerToSequence(aArgs));
         if (xFrame->getContainerWindow().is())
             xFrame->getContainerWindow()->setFocus();
+    }
+}
+
+void PaletteManager::generateColorNamesJSON(tools::JsonWriter& aTree)
+{
+    XColorListRef xUserColorList;
+    OUString aPaletteStandard = SvxResId(RID_SVXSTR_COLOR_PALETTE_STANDARD);
+    PaletteManager aPaletteManager;
+    std::vector<OUString> aPaletteNames = aPaletteManager.GetPaletteList();
+    for (size_t i = 0, nLen = aPaletteNames.size(); i < nLen; ++i)
+    {
+        if (aPaletteStandard == aPaletteNames[i])
+        {
+            aPaletteManager.SetPalette(i);
+            xUserColorList
+                = XPropertyList::AsColorList(XPropertyList::CreatePropertyListFromURL(
+                    XPropertyListType::Color, aPaletteManager.GetSelectedPalettePath()));
+            if (!xUserColorList->Load())
+                xUserColorList = nullptr;
+            break;
+        }
+    }
+    if (xUserColorList)
+    {
+        auto colorNames = aTree.startArray("ColorNames");
+        int nCount = xUserColorList->Count();
+
+        for (int i = 0; i < nCount; i++)
+        {
+            XColorEntry* pColorEntry = xUserColorList->GetColor(i);
+            if (pColorEntry)
+            {
+                auto aColorTree = aTree.startStruct();
+                aTree.put("hexCode", pColorEntry->GetColor().AsRGBHEXString());
+                aTree.put("name", pColorEntry->GetName());
+            }
+        }
     }
 }
 

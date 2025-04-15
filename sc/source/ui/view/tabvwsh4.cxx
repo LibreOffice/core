@@ -2038,6 +2038,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,
     bInDispose(false),
     bMoveKeepEdit(false),
     nCurRefDlgId(0),
+    bIsTabChangeInProgress(false),
     mbInSwitch(false),
     m_pDragData(new ScDragData),
     m_pScCondFormatDlgData()

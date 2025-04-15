@@ -37,6 +37,11 @@ namespace tools { class JsonWriter; }
 
 class SVXCORE_DLLPUBLIC PaletteManager : public std::enable_shared_from_this<PaletteManager>
 {
+    struct ColorEntry {
+        OUString hexCode;
+        OUString name;
+    };
+
     const sal_uInt16        mnMaxRecentColors;
 
     sal_uInt16              mnNumOfPalettes;
@@ -91,6 +96,7 @@ public:
 
     /// Appends node for Document Colors into the ptree
     static void generateJSON(tools::JsonWriter& aTree, const std::set<Color>& rColors);
+    static void generateColorNamesJSON(tools::JsonWriter& aTree);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
