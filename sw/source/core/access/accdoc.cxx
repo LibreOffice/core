@@ -234,12 +234,6 @@ awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
     }
 }
 
-awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
-{
-    const awt::Rectangle aBounds = getBounds();
-    return awt::Point(aBounds.X, aBounds.Y);
-}
-
 css::awt::Point SAL_CALL SwAccessibleDocumentBase::getLocationOnScreen()
 {
     SolarMutexGuard aGuard;
@@ -254,22 +248,6 @@ css::awt::Point SAL_CALL SwAccessibleDocumentBase::getLocationOnScreen()
     awt::Point aLoc( aPixPos.getX(), aPixPos.getY() );
 
     return aLoc;
-}
-
-css::awt::Size SAL_CALL SwAccessibleDocumentBase::getSize()
-{
-    const awt::Rectangle aBounds = getBounds();
-    return awt::Size(aBounds.Width, aBounds.Height);
-}
-
-sal_Bool SAL_CALL SwAccessibleDocumentBase::containsPoint(
-            const awt::Point& aPoint )
-{
-    const Size aSize = vcl::unohelper::ConvertToVCLSize(getSize());
-    tools::Rectangle aPixBounds(Point(0, 0), aSize);
-    Point aPixPoint( aPoint.X, aPoint.Y );
-
-    return aPixBounds.Contains( aPixPoint );
 }
 
 uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAtPoint(

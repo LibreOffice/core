@@ -794,7 +794,7 @@ static bool lcl_PointInRectangle(const awt::Point & aPoint,
 sal_Bool SAL_CALL SwAccessibleContext::containsPoint(
             const awt::Point& aPoint )
 {
-    awt::Rectangle aPixBounds = getBoundsImpl(true);
+    awt::Rectangle aPixBounds = getBounds();
     aPixBounds.X = 0;
     aPixBounds.Y = 0;
 
@@ -917,7 +917,7 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBounds()
 
 awt::Point SAL_CALL SwAccessibleContext::getLocation()
 {
-    awt::Rectangle aRect = getBoundsImpl(true);
+    awt::Rectangle aRect = getBounds();
     awt::Point aPoint(aRect.X, aRect.Y);
 
     return aPoint;
@@ -943,7 +943,7 @@ awt::Point SAL_CALL SwAccessibleContext::getLocationOnScreen()
 
 awt::Size SAL_CALL SwAccessibleContext::getSize()
 {
-    awt::Rectangle aRect = getBoundsImpl(false);
+    awt::Rectangle aRect = getBounds();
     awt::Size aSize( aRect.Width, aRect.Height );
 
     return aSize;
