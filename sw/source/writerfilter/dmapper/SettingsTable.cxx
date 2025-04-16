@@ -316,7 +316,7 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     break;
     case NS_ooxml::LN_CT_Settings_trackRevisions:
     {
-        m_pImpl->m_bRecordChanges = bool(rSprm.getValue( )->getInt( ) );
+        m_pImpl->m_bRecordChanges = bool(nIntValue);
     }
     break;
     case NS_ooxml::LN_CT_Settings_revisionView:
