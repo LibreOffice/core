@@ -69,4 +69,6 @@ SD_DLLPUBLIC bool ImportPPT(
 
 SD_DLLPUBLIC bool SaveVBA( SfxObjectShell& rDocShell, SvMemoryStream*& pBas );
 
+SD_DLLPUBLIC bool IsSlideSorterPaste(::sd::DrawDocShell& rDocSh);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

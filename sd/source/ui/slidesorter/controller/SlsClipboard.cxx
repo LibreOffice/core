@@ -53,10 +53,14 @@
 #include <ins_paste.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
+#include <sdfilter.hxx>
 #include <sdpage.hxx>
 #include <sdtreelb.hxx>
 #include <app.hrc>
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/XPropertyContainer.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -440,6 +444,11 @@ void Clipboard::CreateSlideTransferable (
     std::unique_ptr<TransferableObjectDescriptor> pObjDesc(new TransferableObjectDescriptor);
     pTransferable->GetWorkDocument()->GetDocSh()
         ->FillTransferableObjectDescriptor (*pObjDesc);
+
+    // Makes it possible at paste site to determine that the origin is the slide sorter
+    uno::Reference<document::XDocumentProperties> xDestination = pTransferable->GetWorkDocument()->GetDocSh()->getDocProperties();
+    uno::Reference<beans::XPropertyContainer> xDestinationPropertyContainer = xDestination->getUserDefinedProperties();
+    xDestinationPropertyContainer->addProperty("slidesorter", beans::PropertyAttribute::REMOVABLE, uno::Any(true));
 
     if (pDataDocSh != nullptr)
         pObjDesc->maDisplayName = pDataDocSh->GetMedium()->GetURLObject().GetURLNoPass();
@@ -934,6 +943,12 @@ bool Clipboard::PasteSlidesFromSystemClipboard()
                                                                pDocument->GetDocumentType()));
         SfxMedium* pMedium = new SfxMedium(xStore, OUString());
         xDocShRef->DoLoad(pMedium);
+
+        // Only accept pastes that originated in a slide sorter here, so we
+        // don't create a new page for other types of pastes
+        if (!IsSlideSorterPaste(*xDocShRef))
+            return false;
+
         std::vector<OUString> aBookmarkList;
         std::vector<OUString> aExchangeList;
 

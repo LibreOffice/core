@@ -77,6 +77,9 @@
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
+#include <com/sun/star/beans/XPropertyContainer.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -728,6 +731,28 @@ bool SdXMLFilter::Import( ErrCode& nError )
     return nRet == ERRCODE_NONE;
 }
 
+bool IsSlideSorterPaste(::sd::DrawDocShell& rDocSh)
+{
+    uno::Reference<document::XDocumentProperties> xSource = rDocSh.getDocProperties();
+    uno::Reference<beans::XPropertyContainer> xSourcePropertyContainer = xSource->getUserDefinedProperties();
+    uno::Reference<beans::XPropertySet> xSourcePropertySet(xSourcePropertyContainer, uno::UNO_QUERY);
+    if (!xSourcePropertySet)
+        return false;
+
+    const uno::Sequence<beans::Property> lProps = xSourcePropertySet->getPropertySetInfo()->getProperties();
+    for (const beans::Property& rProp : lProps)
+    {
+        if (rProp.Name != "slidesorter")
+            continue;
+        uno::Any aFromSlideSorter = xSourcePropertySet->getPropertyValue("slidesorter");
+        bool bFromSlideSorter(false);
+        aFromSlideSorter >>= bFromSlideSorter;
+        return bFromSlideSorter;
+    }
+
+    return false;
+}
+
 bool SdXMLFilter::Export()
 {
     rtl::Reference<SvXMLEmbeddedObjectHelper> xObjectHelper;
@@ -853,7 +878,14 @@ bool SdXMLFilter::Export()
             aServices[i  ].mpService = pServiceNames->mpSettings;
             aServices[i++].mpStream  = "settings.xml";
 
-            if( mrDocShell.GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
+            bool bExportMeta = mrDocShell.GetCreateMode() != SfxObjectCreateMode::EMBEDDED;
+            if (!bExportMeta)
+            {
+                // Export meta information anyway when this is a copy from the
+                // slide sorter so we can distinguish that at paste time
+                bExportMeta = IsSlideSorterPaste(mrDocShell);
+            }
+            if (bExportMeta)
             {
                 aServices[i  ].mpService = pServiceNames->mpMeta;
                 aServices[i++].mpStream  = "meta.xml";
