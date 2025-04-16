@@ -47,7 +47,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) : | $(call gb_Externa
 	$(call gb_ExternalProject_run,build,\
 		PKG_CONFIG_PATH="${PKG_CONFIG_PATH}$(LIBO_PATH_SEPARATOR)$(gb_UnpackedTarball_workdir)/graphite$(if $(SYSTEM_ICU),,$(LIBO_PATH_SEPARATOR)$(gb_UnpackedTarball_workdir)/icu)" \
 		PYTHONWARNINGS= \
-		$(call gb_ExternalExecutable_get_command,python) $(MESON) setup builddir \
+		$(if $(filter %.py,$(MESON)),$(call gb_ExternalExecutable_get_command,python)) $(MESON) setup builddir \
 			-Ddefault_library=static -Dbuildtype=$(if $(ENABLE_DEBUG),debug,release) \
 			-Dauto_features=disabled \
 			-Dcpp_std=$(subst -std:,,$(subst -std=,,$(filter -std%,$(CXXFLAGS_CXX11)))) \
@@ -57,7 +57,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) : | $(call gb_Externa
 			-Dicu_builtin=true \
 			-Dgraphite2=enabled \
 			$(if $(filter-out $(BUILD_PLATFORM),$(HOST_PLATFORM))$(WSL),--cross-file cross-file.txt) && \
-		$(call gb_ExternalExecutable_get_command,python) $(MESON) compile -C builddir lib \
+		$(if $(filter %.py,$(MESON)),$(call gb_ExternalExecutable_get_command,python)) $(MESON) compile -C builddir lib \
 			$(if $(verbose),--verbose) \
 	)
 	$(call gb_Trace_EndRange,harfbuzz,EXTERNAL)
