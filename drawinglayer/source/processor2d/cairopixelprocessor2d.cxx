@@ -62,6 +62,7 @@
 #include <unordered_map>
 #include <dlfcn.h>
 #include "vclhelperbufferdevice.hxx"
+#include <iostream>
 
 using namespace com::sun::star;
 
@@ -552,6 +553,13 @@ public:
 #endif
     }
 
+    /* constructor for when we are using the cairo data directly from the underlying SvpSalBitmap */
+    CairoSurfaceHelper(cairo_surface_t* pCairoSurface)
+        : mpCairoSurface(pCairoSurface)
+        , maDownscaled()
+    {
+    }
+
     ~CairoSurfaceHelper()
     {
         // cleanup surface
@@ -704,6 +712,14 @@ sal_Int64 SystemDependentData_CairoSurface::estimateUsageInBytes() const
 
 std::shared_ptr<CairoSurfaceHelper> getOrCreateCairoSurfaceHelper(const Bitmap& rBitmap)
 {
+    // When using a cairo-backed Bitmap (i.e. SvpSalBitmap), we can avoid a lot of copying,
+    // which is beneficial for documents with lots of large images.
+    cairo_surface_t* pSurface(static_cast<cairo_surface_t*>(rBitmap.tryToGetCairoSurface()));
+    if (nullptr != pSurface)
+    {
+        return std::make_shared<CairoSurfaceHelper>(pSurface);
+    }
+
     const basegfx::SystemDependentDataHolder* pHolder(rBitmap.accessSystemDependentDataHolder());
     std::shared_ptr<SystemDependentData_CairoSurface> pSystemDependentData_CairoSurface;
 

@@ -64,6 +64,11 @@
 #include <vcl/graphicfilter.hxx>
 #endif
 
+#if USE_HEADLESS_CODE
+#include <headless/svpbmp.hxx>
+#include <headless/CairoCommon.hxx>
+#endif
+
 Bitmap::Bitmap()
 {
 }
@@ -379,6 +384,21 @@ Bitmap& Bitmap::operator=( const Bitmap& rBitmap )
 
     return *this;
 }
+
+#if USE_HEADLESS_CODE
+void* Bitmap::tryToGetCairoSurface() const
+{
+    SvpSalBitmap* pSvpSalBitmap(dynamic_cast<SvpSalBitmap*>(ImplGetSalBitmap().get()));
+    if (nullptr == pSvpSalBitmap)
+        return nullptr;
+
+    const BitmapBuffer* pBitmapBuffer(pSvpSalBitmap->GetBuffer());
+    if (nullptr == pBitmapBuffer)
+        return nullptr;
+
+    return CairoCommon::createCairoSurface(pBitmapBuffer);
+}
+#endif
 
 Bitmap& Bitmap::operator=( Bitmap&& rBitmap ) noexcept
 {
