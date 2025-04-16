@@ -11487,6 +11487,20 @@ else
     if test -z "$MESON" -o -z "$NINJA"; then
         AC_MSG_ERROR([you need to have meson and ninja in order to build harfbuzz])
     fi
+    if test -z "$PYTHON_FOR_BUILD"; then
+        if test "$(basename $MESON)" = "$(basename -s .py $MESON)"; then
+            AC_MSG_WARN([using internal python with a meson launcher might not work, best to use MESON=/path/to/meson.py in autogen.input])
+            add_warning "using internal python with a meson launcher might not work, best to use MESON=/path/to/meson.py in autogen.input"
+        fi
+    else
+        AC_MSG_CHECKING([whether meson can be run with "$PYTHON_FOR_BUILD $MESON"])
+        if ($PYTHON_FOR_BUILD $MESON --version >/dev/null) ; then
+            AC_MSG_RESULT([yes])
+        else
+            AC_MSG_RESULT([no])
+            AC_MSG_ERROR([meson incompatible with the specified python. Try using a different python runtime or a plain release of meson by adding PYTHON=/other/python.version and/or MESON=/path/to/meson.py to autogen.input])
+        fi
+    fi
 fi
 
 if test "$USING_X11" = TRUE; then
