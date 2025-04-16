@@ -265,8 +265,8 @@ bool TableManager::sprm(Sprm& rSprm)
         case NS_ooxml::LN_tblDepth:
         {
             const Value* pValue = rSprm.getValue();
-
-            cellDepth(pValue->getInt());
+            sal_Int32 nIntValue = pValue ? pValue->getInt() : 0;
+            cellDepth(nIntValue);
         }
         break;
         case NS_ooxml::LN_inTbl:

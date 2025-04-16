@@ -258,7 +258,8 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     sal_uInt32 nSprmId = rSprm.getId();
 
     const Value* pValue = rSprm.getValue();
-    sal_Int32 nIntValue = pValue->getInt();
+    sal_Int32 nIntValue = (pValue ? pValue->getInt() : 0);
+    OUString sStringValue = pValue ? pValue->getString() : OUString();
 
     switch(nSprmId)
     {
@@ -296,10 +297,10 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_doNotIncludeSubdocsInStats: //  92554; // Do Not Include Content in Text Boxes, Footnotes, and Endnotes in Document Statistics)
     break;
     case NS_ooxml::LN_CT_Settings_decimalSymbol: //  92562;
-        m_pImpl->m_sDecimalSymbol = pValue->getString();
+        m_pImpl->m_sDecimalSymbol = sStringValue;
     break;
     case NS_ooxml::LN_CT_Settings_listSeparator: //  92563;
-        m_pImpl->m_sListSeparator = pValue->getString();
+        m_pImpl->m_sListSeparator = sStringValue;
     break;
     case NS_ooxml::LN_CT_Settings_rsids: //  92549; revision save Ids - probably not necessary
     break;
@@ -354,7 +355,7 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_MailMerge_query:
     {
         // try to get the "database.table" name from the query saved previously
-        OUString sVal = pValue->getString();
+        OUString sVal = sStringValue;
         if ( sVal.endsWith("$") && sVal.indexOf(".dbo.") > 0 )
         {
             sal_Int32 nSpace = sVal.lastIndexOf(' ');
