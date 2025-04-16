@@ -341,20 +341,19 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
         AttrOutput().OutputItem( *pRuleItem );
 
         // switch off the numbering?
-        const SfxPoolItem* pLRItem;
         if ( pRuleItem->GetValue().isEmpty() &&
-             SfxItemState::SET != rSet.GetItemState(RES_MARGIN_FIRSTLINE, false) &&
-             (pLRItem = rSet.GetItemIfSet(RES_MARGIN_FIRSTLINE)) )
+             SfxItemState::SET != rSet.GetItemState(RES_MARGIN_FIRSTLINE, false))
         {
-            // set the LR-Space of the parentformat!
-            AttrOutput().OutputItem( *pLRItem );
+            if (auto pLRItem = rSet.GetItemIfSet(RES_MARGIN_FIRSTLINE))
+                // set the LR-Space of the parentformat!
+                AttrOutput().OutputItem( *pLRItem );
         }
         if ( pRuleItem->GetValue().isEmpty() &&
-             SfxItemState::SET != rSet.GetItemState(RES_MARGIN_TEXTLEFT, false) &&
-             (pLRItem = rSet.GetItemIfSet(RES_MARGIN_TEXTLEFT)) )
+             SfxItemState::SET != rSet.GetItemState(RES_MARGIN_TEXTLEFT, false))
         {
-            // set the LR-Space of the parentformat!
-            AttrOutput().OutputItem( *pLRItem );
+             if (auto pLRItem = rSet.GetItemIfSet(RES_MARGIN_TEXTLEFT))
+                // set the LR-Space of the parentformat!
+                AttrOutput().OutputItem( *pLRItem );
         }
     }
 
