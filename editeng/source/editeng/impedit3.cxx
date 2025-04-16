@@ -2236,10 +2236,6 @@ void ImpEditEngine::ImpAdjustBlocks(ParaPortion& rParaPortion, EditLine& rLine, 
     // Search blanks or Kashidas...
     std::vector<sal_Int32> aPositions;
 
-    // Kashidas ?
-    ImpFindKashidas(pNode, nFirstChar, nLastChar, aPositions, nRemainingSpace);
-    auto nKashidas = aPositions.size();
-
     sal_uInt16 nLastScript = i18n::ScriptType::LATIN;
     for ( sal_Int32 nChar = nFirstChar; nChar <= nLastChar; nChar++ )
     {
@@ -2268,6 +2264,11 @@ void ImpEditEngine::ImpAdjustBlocks(ParaPortion& rParaPortion, EditLine& rLine, 
 
         nLastScript = nScript;
     }
+
+    // Kashidas ?
+    auto nKashidaStart = aPositions.size();
+    ImpFindKashidas(pNode, nFirstChar, nLastChar, aPositions, nRemainingSpace);
+    auto nKashidas = aPositions.size() - nKashidaStart;
 
     if ( aPositions.empty() )
         return;
@@ -2313,7 +2314,7 @@ void ImpEditEngine::ImpAdjustBlocks(ParaPortion& rParaPortion, EditLine& rLine, 
         rLine.GetKashidaArray().resize(rLine.GetCharPosArray().size(), false);
         for (size_t i = 0; i < nKashidas; i++)
         {
-            auto nChar = aPositions[i];
+            auto nChar = aPositions[nKashidaStart + i];
             if ( nChar < nLastChar )
                 rLine.GetKashidaArray()[nChar-nFirstChar] = 1 /*sal_True*/;
         }
@@ -2371,7 +2372,6 @@ void ImpEditEngine::ImpFindKashidas(ContentNode* pNode, sal_Int32 nStart, sal_In
     std::vector<bool> aValidPositions;
     std::vector<sal_Int32> aKashidaArray;
     std::vector<sal_Int32> aMinKashidaArray;
-    sal_Int32 nTotalMinKashida = 0U;
 
     // the search has to be performed on a per word base
 
@@ -2403,7 +2403,6 @@ void ImpEditEngine::ImpFindKashidas(ContentNode* pNode, sal_Int32 nStart, sal_In
             aTmpFont.SetPhysFont(*GetRefDevice());
 
             auto nMinKashidaWidth = GetRefDevice()->GetMinKashida();
-            nTotalMinKashida += nMinKashidaWidth;
             aMinKashidaArray.push_back(nMinKashidaWidth);
 
             aKashidaArray.push_back(nKashidaPos);
@@ -2413,28 +2412,29 @@ void ImpEditEngine::ImpFindKashidas(ContentNode* pNode, sal_Int32 nStart, sal_In
         aWordSel = SelectWord( aWordSel, css::i18n::WordType::DICTIONARY_WORD );
     }
 
-    // Greedily reject kashida positions from start-to-end until there is enough room.
-    // This will push kashida justification away from the start of the line.
+    // Every kashida and blank in the block will be given the same amount of extra space.
+    // Greedily reject kashida positions from start-to-end until there is enough room
+    // for all of the remaining kashida. This will push kashida justification away from
+    // the start of the line.
     std::reverse(aKashidaArray.begin(), aKashidaArray.end());
     std::reverse(aMinKashidaArray.begin(), aMinKashidaArray.end());
-    while (!aKashidaArray.empty() && nTotalMinKashida > nRemainingSpace)
+
+    auto nGaps = aKashidaArray.size() + rArray.size();
+    auto nGapSize = nGaps ? (nRemainingSpace / nGaps) : 0;
+    for (size_t i = 0; i < aKashidaArray.size(); ++i)
     {
-        nTotalMinKashida -= aMinKashidaArray.back();
-        aMinKashidaArray.pop_back();
-        aKashidaArray.pop_back();
+        auto nEmRequiredSize = aMinKashidaArray[i];
+        while (aKashidaArray.size() > i && std::cmp_less(nGapSize, nEmRequiredSize))
+        {
+            aMinKashidaArray.pop_back();
+            aKashidaArray.pop_back();
+
+            --nGaps;
+            nGapSize = nGaps ? (nRemainingSpace / nGaps) : 0;
+        }
     }
 
-    std::reverse(aKashidaArray.begin(), aKashidaArray.end());
-
-    // Validate
-    std::vector<sal_Int32> aDropped;
-    GetRefDevice()->ValidateKashidas(pNode->GetString(), nStart, nEnd - nStart,
-                                     /*nPartIdx=*/nStart, /*nPartLen=*/nEnd - nStart, aKashidaArray,
-                                     &aDropped);
-
-    for (auto const& pos : aKashidaArray)
-        if (std::find(aDropped.begin(), aDropped.end(), pos) == aDropped.end())
-             rArray.push_back(pos);
+    std::copy(aKashidaArray.rbegin(), aKashidaArray.rend(), std::back_inserter(rArray));
 }
 
 sal_Int32 ImpEditEngine::SplitTextPortion(ParaPortion& rParaPortion, sal_Int32 nPos, EditLine* pCurLine)
