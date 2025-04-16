@@ -56,11 +56,14 @@ bool FFDataHandler::getCheckboxChecked() const
 
 void FFDataHandler::lcl_sprm(Sprm & r_Sprm)
 {
+    const Value* pValue = r_Sprm.getValue();
+    sal_Int32 nIntValue = (pValue ? pValue->getInt() : 0);
+    OUString sStringValue = pValue ? pValue->getString() : OUString();
     switch(r_Sprm.getId())
     {
     case NS_ooxml::LN_CT_FFData_name:
         {
-            m_sName = r_Sprm.getValue()->getString();
+            m_sName = sStringValue;
         }
         break;
     case NS_ooxml::LN_CT_FFData_helpText:
@@ -75,32 +78,32 @@ void FFDataHandler::lcl_sprm(Sprm & r_Sprm)
         break;
     case NS_ooxml::LN_CT_FFData_entryMacro:
         {
-            m_sEntryMacro = r_Sprm.getValue()->getString();
+            m_sEntryMacro = sStringValue;
         }
         break;
     case NS_ooxml::LN_CT_FFData_exitMacro:
         {
-            m_sExitMacro = r_Sprm.getValue()->getString();
+            m_sExitMacro = sStringValue;
         }
         break;
     case NS_ooxml::LN_CT_FFCheckBox_size:
         {
-            m_nCheckboxHeight = r_Sprm.getValue()->getInt();
+            m_nCheckboxHeight = nIntValue;
         }
         break;
     case NS_ooxml::LN_CT_FFCheckBox_sizeAuto:
         {
-            m_bCheckboxAutoHeight = r_Sprm.getValue()->getInt();
+            m_bCheckboxAutoHeight = nIntValue;
         }
         break;
     case NS_ooxml::LN_CT_FFCheckBox_checked:
         {
-            m_nCheckboxChecked = r_Sprm.getValue()->getInt();
+            m_nCheckboxChecked = nIntValue;
         }
         break;
     case NS_ooxml::LN_CT_FFCheckBox_default:
         {
-            m_nCheckboxDefault = r_Sprm.getValue()->getInt();
+            m_nCheckboxDefault = nIntValue;
         }
         break;
     case NS_ooxml::LN_CT_FFData_checkBox:
@@ -110,12 +113,12 @@ void FFDataHandler::lcl_sprm(Sprm & r_Sprm)
         break;
     case NS_ooxml::LN_CT_FFDDList_result:
         {
-            m_sDropDownResult = r_Sprm.getValue()->getString();
+            m_sDropDownResult = sStringValue;
         }
         break;
     case NS_ooxml::LN_CT_FFDDList_listEntry:
         {
-            m_DropDownEntries.push_back(r_Sprm.getValue()->getString());
+            m_DropDownEntries.push_back(sStringValue);
         }
         break;
     case NS_ooxml::LN_CT_FFData_ddList:
@@ -125,22 +128,22 @@ void FFDataHandler::lcl_sprm(Sprm & r_Sprm)
         break;
     case NS_ooxml::LN_CT_FFTextInput_type:
         {
-            m_sTextType = r_Sprm.getValue()->getString();
+            m_sTextType = sStringValue;
         }
         break;
     case NS_ooxml::LN_CT_FFTextInput_default:
         {
-            m_sTextDefault = r_Sprm.getValue()->getString();
+            m_sTextDefault = sStringValue;
         }
         break;
     case NS_ooxml::LN_CT_FFTextInput_maxLength:
         {
-            m_nTextMaxLength = r_Sprm.getValue()->getInt();
+            m_nTextMaxLength = nIntValue;
         }
         break;
     case NS_ooxml::LN_CT_FFTextInput_format:
         {
-            m_sTextFormat = r_Sprm.getValue()->getString();
+            m_sTextFormat = sStringValue;
         }
         break;
     case NS_ooxml::LN_CT_FFData_textInput:
