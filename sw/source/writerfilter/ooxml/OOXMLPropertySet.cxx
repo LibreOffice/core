@@ -469,6 +469,12 @@ OOXMLValue OOXMLValue::createUniversalMeasure(std::string_view pValue, sal_uInt3
 }
 
 // static
+OOXMLValue OOXMLValue::createEmuMeasure(std::string_view pValue)
+{
+    return createUniversalMeasure(pValue, 12700); // 12,700 English Metric Units (EMU) = 1 pt
+}
+
+// static
 OOXMLValue OOXMLValue::createTwipsMeasure(std::string_view pValue)
 {
     return createUniversalMeasure(pValue, 20);

@@ -46,6 +46,7 @@ enum class ResourceType {
     PropertyTable,
     Math,
     Any,
+    EmuMeasure,
     TwipsMeasure_asSigned,
     TwipsMeasure_asZero,
     HpsMeasure,

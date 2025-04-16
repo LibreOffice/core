@@ -73,6 +73,9 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
         case ResourceType::HexColor:
             xValue = OOXMLValue::createHexColor(rAttribs.getAsViewByIndex(nAttrIndex));
             break;
+        case ResourceType::EmuMeasure:
+            xValue = OOXMLValue::createEmuMeasure(rAttribs.getAsViewByIndex(nAttrIndex));
+            break;
         case ResourceType::TwipsMeasure_asSigned:
         case ResourceType::TwipsMeasure_asZero:
             xValue = OOXMLValue::createTwipsMeasure(rAttribs.getAsViewByIndex(nAttrIndex));

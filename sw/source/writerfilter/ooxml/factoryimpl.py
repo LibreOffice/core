@@ -38,6 +38,7 @@ def createFastChildContextFromFactory(model):
             {""")
     resources = [
         "List", "Integer", "Hex", "HexColor", "String",
+        "EmuMeasure",
         "TwipsMeasure_asSigned", "TwipsMeasure_asZero",
         "HpsMeasure", "Boolean", "MeasurementOrPercent",
     ]

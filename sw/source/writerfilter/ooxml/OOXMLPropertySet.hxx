@@ -38,6 +38,8 @@ public:
     static OOXMLValue createBoolean(std::string_view);
     static OOXMLValue createInteger(int);
     static OOXMLValue createUniversalMeasure(std::string_view pValue, sal_uInt32 npPt);
+    /// Handles OOXML's ST_Coordinate value.
+    static OOXMLValue createEmuMeasure(std::string_view);
     /// Handles OOXML's ST_TwipsMeasure value.
     static OOXMLValue createTwipsMeasure(std::string_view);
     /// Handles OOXML's ST_HpsMeasure value.
