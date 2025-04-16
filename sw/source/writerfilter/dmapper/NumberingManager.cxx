@@ -826,6 +826,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
     static bool bIsStartVisited = false;
     const Value* pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue ? pValue->getInt() : 0;
+    OUString sStringValue = pValue ? pValue->getString() : OUString();
     switch( nSprmId )
     {
         case NS_ooxml::LN_CT_Numbering_abstractNum:
@@ -934,13 +935,12 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
         break;
         case NS_ooxml::LN_CT_Num_abstractNumId:
         {
-            sal_Int32 nAbstractNumId = rSprm.getValue()->getInt();
             ListDef* pListDef = dynamic_cast< ListDef* >( m_pCurrentDefinition.get( ) );
             if ( pListDef != nullptr )
             {
                 // The current def should be a ListDef
                 pListDef->SetAbstractDefinition(
-                       GetAbstractList( nAbstractNumId ) );
+                       GetAbstractList( nIntValue ) );
             }
         }
         break;
@@ -990,15 +990,15 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             if (ListLevel::Pointer pCurrentLevel = m_pCurrentDefinition->GetCurrentLevel())
             {
                 SvxNumberFormat::LabelFollowedBy value = SvxNumberFormat::LISTTAB;
-                if( rSprm.getValue()->getString() == "tab" )
+                if( sStringValue == "tab" )
                     value = SvxNumberFormat::LISTTAB;
-                else if( rSprm.getValue()->getString() == "space" )
+                else if( sStringValue == "space" )
                     value = SvxNumberFormat::SPACE;
-                else if( rSprm.getValue()->getString() == "nothing" )
+                else if( sStringValue == "nothing" )
                     value = SvxNumberFormat::NOTHING;
                 else
                     SAL_WARN( "writerfilter", "Unknown ST_LevelSuffix value "
-                        << rSprm.getValue()->getString());
+                        << sStringValue);
                 pCurrentLevel->SetValue( nSprmId, value );
             }
         }
@@ -1066,11 +1066,10 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
         break;
         case NS_ooxml::LN_CT_Lvl_pStyle:
         {
-            OUString sStyleName = rSprm.getValue( )->getString( );
             if (ListLevel::Pointer pLevel = m_pCurrentDefinition->GetCurrentLevel())
             {
                 StyleSheetTablePtr pStylesTable = m_rDMapper.GetStyleSheetTable( );
-                const StyleSheetEntryPtr pStyle = pStylesTable->FindStyleSheetByISTD( sStyleName );
+                const StyleSheetEntryPtr pStyle = pStylesTable->FindStyleSheetByISTD( sStringValue );
                 pLevel->SetParaStyle( pStyle );
             }
         }
@@ -1095,14 +1094,12 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
         break;
         case NS_ooxml::LN_CT_AbstractNum_numStyleLink:
         {
-            OUString sStyleName = rSprm.getValue( )->getString( );
-            m_pCurrentDefinition->SetNumStyleLink(sStyleName);
+            m_pCurrentDefinition->SetNumStyleLink(sStringValue);
         }
         break;
         case NS_ooxml::LN_CT_AbstractNum_styleLink:
         {
-            OUString sStyleName = rSprm.getValue()->getString();
-            m_pCurrentDefinition->SetStyleLink(sStyleName);
+            m_pCurrentDefinition->SetStyleLink(sStringValue);
         }
         break;
         case NS_ooxml::LN_EG_RPrBase_rFonts: //contains font properties
