@@ -236,18 +236,8 @@ awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
 
 awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
 {
-    SolarMutexGuard aGuard;
-
-    vcl::Window *pWin = GetWindow();
-    if (!pWin)
-    {
-        throw uno::RuntimeException(u"no Window"_ustr, getXWeak());
-    }
-
-    Point aPixPos( pWin->GetWindowExtentsRelative( *pWin->GetAccessibleParentWindow() ).TopLeft() );
-    awt::Point aLoc( aPixPos.getX(), aPixPos.getY() );
-
-    return aLoc;
+    const awt::Rectangle aBounds = getBounds();
+    return awt::Point(aBounds.X, aBounds.Y);
 }
 
 css::awt::Point SAL_CALL SwAccessibleDocumentBase::getLocationOnScreen()
@@ -268,18 +258,8 @@ css::awt::Point SAL_CALL SwAccessibleDocumentBase::getLocationOnScreen()
 
 css::awt::Size SAL_CALL SwAccessibleDocumentBase::getSize()
 {
-    SolarMutexGuard aGuard;
-
-    vcl::Window *pWin = GetWindow();
-    if (!pWin)
-    {
-        throw uno::RuntimeException(u"no Window"_ustr, getXWeak());
-    }
-
-    Size aPixSize( pWin->GetWindowExtentsAbsolute().GetSize() );
-    awt::Size aSize( aPixSize.Width(), aPixSize.Height() );
-
-    return aSize;
+    const awt::Rectangle aBounds = getBounds();
+    return awt::Size(aBounds.Width, aBounds.Height);
 }
 
 sal_Bool SAL_CALL SwAccessibleDocumentBase::containsPoint(
