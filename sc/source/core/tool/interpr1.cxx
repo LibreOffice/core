@@ -90,141 +90,144 @@ void ScInterpreter::ScIfJump()
     const short* pJump = pCur->GetJump();
     short nJumpCount = pJump[ 0 ];
     MatrixJumpConditionToMatrix();
-    switch ( GetStackType() )
+    if ( GetStackType() != svMatrix )
     {
-        case svMatrix:
+        ScIfJumpNotMatrix(pJump, nJumpCount);
+        return;
+    }
+
+    ScMatrixRef pMat = PopMatrix();
+    if ( !pMat )
+    {
+        PushIllegalParameter();
+        return;
+    }
+
+    FormulaConstTokenRef xNew;
+    ScTokenMatrixMap::const_iterator aMapIter;
+    // DoubleError handled by JumpMatrix
+    pMat->SetErrorInterpreter( nullptr);
+    SCSIZE nCols, nRows;
+    pMat->GetDimensions( nCols, nRows );
+    if ( nCols == 0 || nRows == 0 )
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    if ((aMapIter = maTokenMatrixMap.find( pCur)) != maTokenMatrixMap.end())
+        xNew = (*aMapIter).second;
+    else
+    {
+        std::shared_ptr<ScJumpMatrix> pJumpMat( std::make_shared<ScJumpMatrix>(
+                    pCur->GetOpCode(), nCols, nRows));
+        for ( SCSIZE nC=0; nC < nCols; ++nC )
         {
-            ScMatrixRef pMat = PopMatrix();
-            if ( !pMat )
-                PushIllegalParameter();
-            else
+            for ( SCSIZE nR=0; nR < nRows; ++nR )
             {
-                FormulaConstTokenRef xNew;
-                ScTokenMatrixMap::const_iterator aMapIter;
-                // DoubleError handled by JumpMatrix
-                pMat->SetErrorInterpreter( nullptr);
-                SCSIZE nCols, nRows;
-                pMat->GetDimensions( nCols, nRows );
-                if ( nCols == 0 || nRows == 0 )
+                double fVal;
+                bool bTrue;
+                bool bIsValue = pMat->IsValue(nC, nR);
+                if (bIsValue)
                 {
-                    PushIllegalArgument();
-                    return;
+                    fVal = pMat->GetDouble(nC, nR);
+                    bIsValue = std::isfinite(fVal);
+                    bTrue = bIsValue && (fVal != 0.0);
+                    if (bTrue)
+                        fVal = 1.0;
                 }
-                else if ((aMapIter = maTokenMatrixMap.find( pCur)) != maTokenMatrixMap.end())
-                    xNew = (*aMapIter).second;
                 else
                 {
-                    std::shared_ptr<ScJumpMatrix> pJumpMat( std::make_shared<ScJumpMatrix>(
-                                pCur->GetOpCode(), nCols, nRows));
-                    for ( SCSIZE nC=0; nC < nCols; ++nC )
-                    {
-                        for ( SCSIZE nR=0; nR < nRows; ++nR )
-                        {
-                            double fVal;
-                            bool bTrue;
-                            bool bIsValue = pMat->IsValue(nC, nR);
-                            if (bIsValue)
-                            {
-                                fVal = pMat->GetDouble(nC, nR);
-                                bIsValue = std::isfinite(fVal);
-                                bTrue = bIsValue && (fVal != 0.0);
-                                if (bTrue)
-                                    fVal = 1.0;
-                            }
-                            else
-                            {
-                                // Treat empty and empty path as 0, but string
-                                // as error. ScMatrix::IsValueOrEmpty() returns
-                                // true for any empty, empty path, empty cell,
-                                // empty result.
-                                bIsValue = pMat->IsValueOrEmpty(nC, nR);
-                                bTrue = false;
-                                fVal = (bIsValue ? 0.0 : CreateDoubleError( FormulaError::NoValue));
-                            }
-                            if ( bTrue )
-                            {   // TRUE
-                                if( nJumpCount >= 2 )
-                                {   // THEN path
-                                    pJumpMat->SetJump( nC, nR, fVal,
-                                            pJump[ 1 ],
-                                            pJump[ nJumpCount ]);
-                                }
-                                else
-                                {   // no parameter given for THEN
-                                    pJumpMat->SetJump( nC, nR, fVal,
-                                            pJump[ nJumpCount ],
-                                            pJump[ nJumpCount ]);
-                                }
-                            }
-                            else
-                            {   // FALSE
-                                if( nJumpCount == 3 && bIsValue )
-                                {   // ELSE path
-                                    pJumpMat->SetJump( nC, nR, fVal,
-                                            pJump[ 2 ],
-                                            pJump[ nJumpCount ]);
-                                }
-                                else
-                                {   // no parameter given for ELSE,
-                                    // or DoubleError
-                                    pJumpMat->SetJump( nC, nR, fVal,
-                                            pJump[ nJumpCount ],
-                                            pJump[ nJumpCount ]);
-                                }
-                            }
-                        }
+                    // Treat empty and empty path as 0, but string
+                    // as error. ScMatrix::IsValueOrEmpty() returns
+                    // true for any empty, empty path, empty cell,
+                    // empty result.
+                    bIsValue = pMat->IsValueOrEmpty(nC, nR);
+                    bTrue = false;
+                    fVal = (bIsValue ? 0.0 : CreateDoubleError( FormulaError::NoValue));
+                }
+                if ( bTrue )
+                {   // TRUE
+                    if( nJumpCount >= 2 )
+                    {   // THEN path
+                        pJumpMat->SetJump( nC, nR, fVal,
+                                pJump[ 1 ],
+                                pJump[ nJumpCount ]);
                     }
-                    xNew = new ScJumpMatrixToken(std::move(pJumpMat));
-                    GetTokenMatrixMap().emplace(pCur, xNew);
+                    else
+                    {   // no parameter given for THEN
+                        pJumpMat->SetJump( nC, nR, fVal,
+                                pJump[ nJumpCount ],
+                                pJump[ nJumpCount ]);
+                    }
                 }
-                if (!xNew)
-                {
-                    PushIllegalArgument();
-                    return;
+                else
+                {   // FALSE
+                    if( nJumpCount == 3 && bIsValue )
+                    {   // ELSE path
+                        pJumpMat->SetJump( nC, nR, fVal,
+                                pJump[ 2 ],
+                                pJump[ nJumpCount ]);
+                    }
+                    else
+                    {   // no parameter given for ELSE,
+                        // or DoubleError
+                        pJumpMat->SetJump( nC, nR, fVal,
+                                pJump[ nJumpCount ],
+                                pJump[ nJumpCount ]);
+                    }
                 }
-                PushTokenRef( xNew);
-                // set endpoint of path for main code line
-                aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
             }
         }
-        break;
-        default:
-        {
-            const bool bCondition = GetBool();
-            if (nGlobalError != FormulaError::NONE)
-            {   // Propagate error, not THEN- or ELSE-path, jump behind.
-                PushError(nGlobalError);
-                aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
-            }
-            else if ( bCondition )
-            {   // TRUE
-                if( nJumpCount >= 2 )
-                {   // THEN path
-                    aCode.Jump( pJump[ 1 ], pJump[ nJumpCount ] );
-                }
-                else
-                {   // no parameter given for THEN
-                    nFuncFmtType = SvNumFormatType::LOGICAL;
-                    PushInt(1);
-                    aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
-                }
-            }
-            else
-            {   // FALSE
-                if( nJumpCount == 3 )
-                {   // ELSE path
-                    aCode.Jump( pJump[ 2 ], pJump[ nJumpCount ] );
-                }
-                else
-                {   // no parameter given for ELSE
-                    nFuncFmtType = SvNumFormatType::LOGICAL;
-                    PushInt(0);
-                    aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
-                }
-            }
+        xNew = new ScJumpMatrixToken(std::move(pJumpMat));
+        GetTokenMatrixMap().emplace(pCur, xNew);
+    }
+    if (!xNew)
+    {
+        PushIllegalArgument();
+        return;
+    }
+    PushTokenRef( xNew);
+    // set endpoint of path for main code line
+    aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
+}
+
+void ScInterpreter::ScIfJumpNotMatrix( const short* pJump, short nJumpCount )
+{
+    const bool bCondition = GetBool();
+    if (nGlobalError != FormulaError::NONE)
+    {   // Propagate error, not THEN- or ELSE-path, jump behind.
+        PushError(nGlobalError);
+        aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
+    }
+    else if ( bCondition )
+    {   // TRUE
+        if( nJumpCount >= 2 )
+        {   // THEN path
+            aCode.Jump( pJump[ 1 ], pJump[ nJumpCount ] );
+        }
+        else
+        {   // no parameter given for THEN
+            nFuncFmtType = SvNumFormatType::LOGICAL;
+            PushInt(1);
+            aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
+        }
+    }
+    else
+    {   // FALSE
+        if( nJumpCount == 3 )
+        {   // ELSE path
+            aCode.Jump( pJump[ 2 ], pJump[ nJumpCount ] );
+        }
+        else
+        {   // no parameter given for ELSE
+            nFuncFmtType = SvNumFormatType::LOGICAL;
+            PushInt(0);
+            aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
         }
     }
 }
+
 
 /** Store a matrix value in another matrix in the context of that other matrix
     is the result matrix of a jump matrix. All arguments must be valid and are

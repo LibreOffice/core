@@ -565,6 +565,7 @@ private:
             const ScComplexRefData* refData, LookupSearchMode nSearchMode, sal_uInt16 nOpCode ) const;
 
     void ScIfJump();
+    void ScIfJumpNotMatrix( const short* pJump, short nJumpCount );
     void ScIfError( bool bNAonly );
     void ScChooseJump();
 
