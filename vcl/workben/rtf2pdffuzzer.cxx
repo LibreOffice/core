@@ -17,8 +17,6 @@
 
 extern "C" bool TestPDFExportRTF(SvStream& rStream);
 
-static void silent_error_func(void*, const char* /*format*/, ...) {}
-
 extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
 {
     if (__lsan_disable)
