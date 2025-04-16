@@ -1375,6 +1375,15 @@ void SwRedlineData::dumpAsXml(xmlTextWriterPtr pWriter) const
         case RedlineType::Format:
             sRedlineType = "REDLINE_FORMAT"_ostr;
             break;
+        case RedlineType::Table:
+            sRedlineType = "REDLINE_TABLE"_ostr;
+            break;
+        case RedlineType::FmtColl:
+            sRedlineType = "REDLINE_FMTCOLL"_ostr;
+            break;
+        case RedlineType::ParagraphFormat:
+            sRedlineType = "REDLINE_PARAGRAPH_FORMAT"_ostr;
+            break;
         default:
             sRedlineType = "UNKNOWN"_ostr;
             break;
