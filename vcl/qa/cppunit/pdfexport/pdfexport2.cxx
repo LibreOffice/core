@@ -5616,29 +5616,29 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf151748KashidaSpace)
     CPPUNIT_ASSERT_EQUAL(17, nTextObjectCount);
 
     // Box 1: Not enough room for kashida
-    CPPUNIT_ASSERT_EQUAL(u"خط تخوردگی و"_ustr, aText.at(0).trim());
-    CPPUNIT_ASSERT_EQUAL(u"توسط"_ustr, aText.at(1).trim());
+    CPPUNIT_ASSERT_EQUAL(u"خط تخوردگی"_ustr, aText.at(0).trim());
+    CPPUNIT_ASSERT_EQUAL(u"وتوسط"_ustr, aText.at(1).trim());
 
     // Box 2: One kashida toward end
-    CPPUNIT_ASSERT_EQUAL(u"وردگی و"_ustr, aText.at(2).trim());
+    CPPUNIT_ASSERT_EQUAL(u"وردگی"_ustr, aText.at(2).trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(3).trim()); // Kashida
     CPPUNIT_ASSERT_EQUAL(u"خط تخ"_ustr, aText.at(4).trim());
-    CPPUNIT_ASSERT_EQUAL(u"توسط"_ustr, aText.at(5).trim());
+    CPPUNIT_ASSERT_EQUAL(u"وتوسط"_ustr, aText.at(5).trim());
 
     // Box 3: Two kashida
-    CPPUNIT_ASSERT_EQUAL(u"وردگی و"_ustr, aText.at(6).trim());
+    CPPUNIT_ASSERT_EQUAL(u"وردگی"_ustr, aText.at(6).trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(7).trim()); // Kashida
     CPPUNIT_ASSERT_EQUAL(u"ط تخ"_ustr, aText.at(8).trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(9).trim()); // Kashida
     CPPUNIT_ASSERT_EQUAL(u"خ"_ustr, aText.at(10).trim());
-    CPPUNIT_ASSERT_EQUAL(u"توسط"_ustr, aText.at(11).trim());
+    CPPUNIT_ASSERT_EQUAL(u"وتوسط"_ustr, aText.at(11).trim());
 
     // Box 4: One kashida (text size change)
     CPPUNIT_ASSERT_EQUAL(u"خط"_ustr, aText.at(12).trim());
-    CPPUNIT_ASSERT_EQUAL(u"وردگی و"_ustr, aText.at(13).trim());
+    CPPUNIT_ASSERT_EQUAL(u"وردگی"_ustr, aText.at(13).trim());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(14).trim()); // Kashida
     CPPUNIT_ASSERT_EQUAL(u"تخ"_ustr, aText.at(15).trim());
-    CPPUNIT_ASSERT_EQUAL(u"توسط"_ustr, aText.at(16).trim());
+    CPPUNIT_ASSERT_EQUAL(u"وتوسط"_ustr, aText.at(16).trim());
 }
 
 // tdf#163105 - Writer kashida justification should expand spaces

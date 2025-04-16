@@ -1163,16 +1163,6 @@ public:
 
     tools::Long                        GetMinKashida() const;
 
-    // i60594
-    // validate kashida positions against the current font
-    // returns count of invalid kashida positions
-    sal_Int32
-    ValidateKashidas(const OUString& rTxt, sal_Int32 nIdx, sal_Int32 nLen, sal_Int32 nPartIdx,
-                     sal_Int32 nPartLen,
-                     std::span<const sal_Int32> pKashidaPos, // suggested kashida positions (in)
-                     std::vector<sal_Int32>* pKashidaPosDropped // invalid kashida positions (out)
-    ) const;
-
     // tdf#163105: Get map of valid kashida positions for a single word
     void GetWordKashidaPositions(const OUString& rText, std::vector<bool>* pOutMap) const;
 
