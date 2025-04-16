@@ -121,64 +121,7 @@ void ScInterpreter::ScIfJump()
     {
         std::shared_ptr<ScJumpMatrix> pJumpMat( std::make_shared<ScJumpMatrix>(
                     pCur->GetOpCode(), nCols, nRows));
-        for ( SCSIZE nC=0; nC < nCols; ++nC )
-        {
-            for ( SCSIZE nR=0; nR < nRows; ++nR )
-            {
-                double fVal;
-                bool bTrue;
-                bool bIsValue = pMat->IsValue(nC, nR);
-                if (bIsValue)
-                {
-                    fVal = pMat->GetDouble(nC, nR);
-                    bIsValue = std::isfinite(fVal);
-                    bTrue = bIsValue && (fVal != 0.0);
-                    if (bTrue)
-                        fVal = 1.0;
-                }
-                else
-                {
-                    // Treat empty and empty path as 0, but string
-                    // as error. ScMatrix::IsValueOrEmpty() returns
-                    // true for any empty, empty path, empty cell,
-                    // empty result.
-                    bIsValue = pMat->IsValueOrEmpty(nC, nR);
-                    bTrue = false;
-                    fVal = (bIsValue ? 0.0 : CreateDoubleError( FormulaError::NoValue));
-                }
-                if ( bTrue )
-                {   // TRUE
-                    if( nJumpCount >= 2 )
-                    {   // THEN path
-                        pJumpMat->SetJump( nC, nR, fVal,
-                                pJump[ 1 ],
-                                pJump[ nJumpCount ]);
-                    }
-                    else
-                    {   // no parameter given for THEN
-                        pJumpMat->SetJump( nC, nR, fVal,
-                                pJump[ nJumpCount ],
-                                pJump[ nJumpCount ]);
-                    }
-                }
-                else
-                {   // FALSE
-                    if( nJumpCount == 3 && bIsValue )
-                    {   // ELSE path
-                        pJumpMat->SetJump( nC, nR, fVal,
-                                pJump[ 2 ],
-                                pJump[ nJumpCount ]);
-                    }
-                    else
-                    {   // no parameter given for ELSE,
-                        // or DoubleError
-                        pJumpMat->SetJump( nC, nR, fVal,
-                                pJump[ nJumpCount ],
-                                pJump[ nJumpCount ]);
-                    }
-                }
-            }
-        }
+        pMat->IfJump(*pJumpMat, pJump, nJumpCount);
         xNew = new ScJumpMatrixToken(std::move(pJumpMat));
         GetTokenMatrixMap().emplace(pCur, xNew);
     }

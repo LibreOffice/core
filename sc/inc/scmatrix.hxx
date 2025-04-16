@@ -37,6 +37,7 @@ class ScInterpreter;
 struct ScInterpreterContext;
 class ScMatrixImpl;
 enum class FormulaError : sal_uInt16;
+class ScJumpMatrix;
 
 namespace sc {
 
@@ -378,6 +379,7 @@ public:
     size_t Count(bool bCountStrings, bool bCountErrors, bool bIgnoreEmptyStrings = false) const ;
     size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const ;
     size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const ;
+    void IfJump( ScJumpMatrix& rJumpMatrix, const short* pJump, short nJumpCount ) const ;
 
     double GetMaxValue( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
     double GetMinValue( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
