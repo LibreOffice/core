@@ -2114,6 +2114,8 @@ window-font-color
 word
 word-count
 word-spacing
+word-spacing-maximum
+word-spacing-minimum
 wrap
 wrap-contour
 wrap-contour-mode

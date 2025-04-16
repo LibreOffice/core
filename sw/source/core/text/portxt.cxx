@@ -365,11 +365,19 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     // adjusted line by shrinking spaces using the know space count from the first Guess() call
     SvxAdjustItem aAdjustItem = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
     const SvxAdjust aAdjust = aAdjustItem.GetAdjust();
-    if ( bFull && aAdjust == SvxAdjust::Block &&
-         pGuess->BreakPos() != TextFrameIndex(COMPLETE_STRING) &&
-         ( rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
-                    DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING) ||
-           aAdjustItem.GetPropWordSpacing() != 100 ) &&
+    bool bFullJustified = bFull && aAdjust == SvxAdjust::Block &&
+         pGuess->BreakPos() != TextFrameIndex(COMPLETE_STRING);
+    bool bInteropSmartJustify = bFullJustified &&
+            rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                    DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING);
+    bool bWordSpacing = bFullJustified && !bInteropSmartJustify &&
+           aAdjustItem.GetPropWordSpacing() != 100;
+    bool bWordSpacingMaximum = bFullJustified && !bInteropSmartJustify &&
+           aAdjustItem.GetPropWordSpacingMaximum() > aAdjustItem.GetPropWordSpacing();
+    bool bWordSpacingMinimum = bFullJustified && !bInteropSmartJustify &&
+           aAdjustItem.GetPropWordSpacingMinimum() < aAdjustItem.GetPropWordSpacing();
+
+    if ( ( bInteropSmartJustify || bWordSpacing || bWordSpacingMaximum || bWordSpacingMinimum ) &&
          // tdf#164499 no shrinking in tabulated line
          ( !rInf.GetLast() || !rInf.GetLast()->InTabGrp() ) &&
          // tdf#158436 avoid shrinking at underflow, e.g. no-break space after a
@@ -401,10 +409,39 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
         if ( nSpacesInLine > 0 )
         {
             SwTwips nOldWidth = pGuess->BreakWidth();
-            pGuess.emplace();
-            bFull = !pGuess->Guess( *this, rInf, Height(), nSpacesInLine );
+            if ( bInteropSmartJustify )
+            {
+                pGuess.emplace();
+                bFull = !pGuess->Guess( *this, rInf, Height(), nSpacesInLine, SAL_MAX_UINT16 );
+            }
+            else
+            {
+                if ( bWordSpacing || bWordSpacingMaximum )
+                {
+                    pGuess.emplace();
+                    bFull = !pGuess->Guess( *this, rInf, Height(), nSpacesInLine, aAdjustItem.GetPropWordSpacing() );
+                }
+                if ( bWordSpacingMinimum )
+                {
+                    std::optional<SwTextGuess> pGuess2(std::in_place);
+                    SwTwips nOldExtraSpace = rInf.GetExtraSpace();
+                    // break the line after the hyphenated word, if it's possible
+                    // (hyphenation is disabled in Guess(), when called with GetPropWordSpacingMinimum())
+                    // FIXME: if there are multiple possible break points allowed by minimum
+                    // word spacing, choose the nearest to the desired word spacing, not the opposite
+                    bool bFull2 = !pGuess2->Guess( *this, rInf, Height(), nSpacesInLine, aAdjustItem.GetPropWordSpacingMinimum() );
+                    if ( pGuess2->BreakWidth() > nOldWidth )
+                    {
+                        pGuess = std::move(pGuess2);
+                        bFull = bFull2;
+                    }
+                    else
+                        // minimum word spacing is not applicable
+                        rInf.SetExtraSpace(nOldExtraSpace);
+                }
+            }
 
-            if ( pGuess->BreakWidth() > nOldWidth )
+            if ( pGuess->BreakWidth() != nOldWidth )
                 ExtraShrunkWidth( pGuess->BreakWidth() );
         }
     }

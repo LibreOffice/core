@@ -947,7 +947,9 @@ sal_Int8 CheckExtendedNamespace(std::u16string_view sXMLAttributeName, std::u16s
         || IsXMLToken(sXMLAttributeName, XML_HYPHENATION_ZONE_PAGE)
         || IsXMLToken(sXMLAttributeName, XML_HYPHENATION_ZONE_SPREAD))
         return IsXMLToken(sValue, XML_NO_LIMIT) ? -1 : 1;
-    else if (IsXMLToken(sXMLAttributeName, XML_WORD_SPACING))
+    else if (IsXMLToken(sXMLAttributeName, XML_WORD_SPACING)
+        || IsXMLToken(sXMLAttributeName, XML_WORD_SPACING_MINIMUM)
+        || IsXMLToken(sXMLAttributeName, XML_WORD_SPACING_MAXIMUM))
     {
         static constexpr OUString s100PercentCompare( u"100%"_ustr );
         size_t nBegin = sValue.find( s100PercentCompare );

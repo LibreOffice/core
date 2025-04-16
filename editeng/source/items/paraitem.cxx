@@ -362,7 +362,9 @@ ItemInstanceManager* SvxAdjustItem::getItemInstanceManager() const
 SvxAdjustItem::SvxAdjustItem(const SvxAdjust eAdjst, const sal_uInt16 nId )
     : SfxEnumItemInterface( nId ),
     bOneBlock( false ), bLastCenter( false ), bLastBlock( false ),
-    nPropWordSpacing(100)
+    nPropWordSpacing(100),
+    nPropWordSpacingMinimum(100),
+    nPropWordSpacingMaximum(100)
 {
     SetAdjust( eAdjst );
 }
@@ -376,6 +378,8 @@ bool SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const
            bOneBlock == rItem.bOneBlock &&
            bLastCenter == rItem.bLastCenter &&
            bLastBlock == rItem.bLastBlock &&
+           nPropWordSpacingMinimum == rItem.nPropWordSpacingMinimum &&
+           nPropWordSpacingMaximum == rItem.nPropWordSpacingMaximum &&
            nPropWordSpacing == rItem.nPropWordSpacing;
 }
 
@@ -387,6 +391,8 @@ size_t SvxAdjustItem::hashCode() const
     o3tl::hash_combine(seed, bLastCenter);
     o3tl::hash_combine(seed, bLastBlock);
     o3tl::hash_combine(seed, nPropWordSpacing);
+    o3tl::hash_combine(seed, nPropWordSpacingMinimum);
+    o3tl::hash_combine(seed, nPropWordSpacingMaximum);
     return seed;
 }
 
@@ -398,6 +404,8 @@ bool SvxAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_PARA_ADJUST      : rVal <<= static_cast<sal_Int16>(GetAdjust()); break;
         case MID_LAST_LINE_ADJUST : rVal <<= static_cast<sal_Int16>(GetLastBlock()); break;
         case MID_WORD_SPACING     : rVal <<= static_cast<sal_Int16>(GetPropWordSpacing()); break;
+        case MID_WORD_SPACING_MIN : rVal <<= static_cast<sal_Int16>(GetPropWordSpacingMinimum()); break;
+        case MID_WORD_SPACING_MAX : rVal <<= static_cast<sal_Int16>(GetPropWordSpacingMaximum()); break;
         case MID_EXPAND_SINGLE    :
         {
             rVal <<= bOneBlock;
@@ -436,6 +444,20 @@ bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nVal = -1;
             rVal >>= nVal;
             SetPropWordSpacing(nVal);
+        }
+        break;
+        case MID_WORD_SPACING_MIN :
+        {
+            sal_Int16 nVal = -1;
+            rVal >>= nVal;
+            SetPropWordSpacingMinimum(nVal);
+        }
+        break;
+        case MID_WORD_SPACING_MAX :
+        {
+            sal_Int16 nVal = -1;
+            rVal >>= nVal;
+            SetPropWordSpacingMaximum(nVal);
         }
         break;
         case MID_EXPAND_SINGLE :

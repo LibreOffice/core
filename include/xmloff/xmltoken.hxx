@@ -2201,6 +2201,8 @@ namespace xmloff::token {
         XML_WORD,
         XML_WORD_COUNT,
         XML_WORD_SPACING,
+        XML_WORD_SPACING_MAXIMUM,
+        XML_WORD_SPACING_MINIMUM,
         XML_WRAP,
         XML_WRAP_CONTOUR,
         XML_WRAP_CONTOUR_MODE,

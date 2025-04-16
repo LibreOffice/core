@@ -58,6 +58,8 @@ struct SvxAdjustStruct
     SvxAdjust   LastLineAdjustment  MID_LAST_LINE_ADJUST;
     BOOL        ExpandSingleWord    MID_EXPAND_SINGLE;
     INT16       WordSpacing         MID_WORD_SPACING;
+    INT16       WordSpacingMinimum  MID_WORD_SPACING_MIN;
+    INT16       WordSpacingMaximum  MID_WORD_SPACING_MAX;
 };
 item SvxAdjustStruct SvxAdjustItem;
 

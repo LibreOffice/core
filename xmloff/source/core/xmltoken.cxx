@@ -2214,6 +2214,8 @@ namespace xmloff::token {
         TOKEN( "word",                            XML_WORD ),
         TOKEN( "word-count",                      XML_WORD_COUNT ),
         TOKEN( "word-spacing",                    XML_WORD_SPACING ),
+        TOKEN( "word-spacing-maximum",            XML_WORD_SPACING_MAXIMUM ),
+        TOKEN( "word-spacing-minimum",            XML_WORD_SPACING_MINIMUM ),
         TOKEN( "wrap",                            XML_WRAP ),
         TOKEN( "wrap-contour",                    XML_WRAP_CONTOUR ),
         TOKEN( "wrap-contour-mode",               XML_WRAP_CONTOUR_MODE ),

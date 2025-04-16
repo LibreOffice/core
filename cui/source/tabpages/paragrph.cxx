@@ -1280,7 +1280,12 @@ SvxParaAlignTabPage::SvxParaAlignTabPage(weld::Container* pPage, weld::DialogCon
     , m_xVertAlignSdr(m_xBuilder->weld_label(u"labelST_VERTALIGN_SDR"_ustr))
     , m_xTextDirectionLB(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box(u"comboLB_TEXTDIRECTION"_ustr)))
     , m_xLabelWordSpacing(m_xBuilder->weld_label(u"labelWordSpacing"_ustr))
+    , m_xLabelMinimum(m_xBuilder->weld_label(u"labelMinimum"_ustr))
+    , m_xLabelDesired(m_xBuilder->weld_label(u"labelDesired"_ustr))
+    , m_xLabelMaximum(m_xBuilder->weld_label(u"labelMaximum"_ustr))
     , m_xWordSpacing(m_xBuilder->weld_metric_spin_button(u"spin_WORD_SPACING"_ustr, FieldUnit::PERCENT))
+    , m_xWordSpacingMinimum(m_xBuilder->weld_metric_spin_button(u"spin_WORD_SPACING_MIN"_ustr, FieldUnit::PERCENT))
+    , m_xWordSpacingMaximum(m_xBuilder->weld_metric_spin_button(u"spin_WORD_SPACING_MAX"_ustr, FieldUnit::PERCENT))
 {
     SetExchangeSupport();
 
@@ -1318,6 +1323,12 @@ SvxParaAlignTabPage::SvxParaAlignTabPage(weld::Container* pPage, weld::DialogCon
     m_xTextDirectionLB->append(SvxFrameDirection::Environment, SvxResId(RID_SVXSTR_FRAMEDIR_SUPER));
     m_xTextDirectionLB->append(SvxFrameDirection::Horizontal_LR_TB, SvxResId(RID_SVXSTR_FRAMEDIR_LTR));
     m_xTextDirectionLB->append(SvxFrameDirection::Horizontal_RL_TB, SvxResId(RID_SVXSTR_FRAMEDIR_RTL));
+
+    // Minimum <= Desired <= Maximum word spacing
+    // apply these modifying the other values, if needed
+    m_xWordSpacing->connect_value_changed(LINK(this, SvxParaAlignTabPage, WordSpacingHdl_Impl));
+    m_xWordSpacingMinimum->connect_value_changed(LINK(this, SvxParaAlignTabPage, WordSpacingMinimumHdl_Impl));
+    m_xWordSpacingMaximum->connect_value_changed(LINK(this, SvxParaAlignTabPage, WordSpacingMaximumHdl_Impl));
 }
 
 SvxParaAlignTabPage::~SvxParaAlignTabPage()
@@ -1364,7 +1375,9 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
         bAdj = m_xJustify->get_saved_state() == TRISTATE_FALSE ||
             m_xExpandCB->get_state_changed_from_saved() ||
             m_xLastLineLB->get_value_changed_from_saved() ||
-            m_xWordSpacing->get_value_changed_from_saved();
+            m_xWordSpacing->get_value_changed_from_saved() ||
+            m_xWordSpacingMinimum->get_value_changed_from_saved() ||
+            m_xWordSpacingMaximum->get_value_changed_from_saved();
     }
 
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_ADJUST );
@@ -1385,6 +1398,8 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
         aAdj.SetOneWord( eOneWord );
         aAdj.SetLastBlock( eLastBlock );
         aAdj.SetPropWordSpacing( m_xWordSpacing->get_value(FieldUnit::PERCENT) );
+        aAdj.SetPropWordSpacingMinimum( m_xWordSpacingMinimum->get_value(FieldUnit::PERCENT) );
+        aAdj.SetPropWordSpacingMaximum( m_xWordSpacingMaximum->get_value(FieldUnit::PERCENT) );
         rOutSet->Put( aAdj );
         bModified = true;
     }
@@ -1462,13 +1477,25 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
         if (m_xJustify->get_active())
         {
             m_xLabelWordSpacing->set_sensitive(true);
+            m_xLabelMinimum->set_sensitive(true);
+            m_xLabelDesired->set_sensitive(true);
+            m_xLabelMaximum->set_sensitive(true);
             m_xWordSpacing->set_sensitive(true);
+            m_xWordSpacingMinimum->set_sensitive(true);
+            m_xWordSpacingMaximum->set_sensitive(true);
             m_xWordSpacing->set_value(rAdj.GetPropWordSpacing(), FieldUnit::PERCENT);
+            m_xWordSpacingMinimum->set_value(rAdj.GetPropWordSpacingMinimum(), FieldUnit::PERCENT);
+            m_xWordSpacingMaximum->set_value(rAdj.GetPropWordSpacingMaximum(), FieldUnit::PERCENT);
         }
         else
         {
             m_xLabelWordSpacing->set_sensitive(false);
+            m_xLabelMinimum->set_sensitive(false);
+            m_xLabelDesired->set_sensitive(false);
+            m_xLabelMaximum->set_sensitive(false);
             m_xWordSpacing->set_sensitive(false);
+            m_xWordSpacingMinimum->set_sensitive(false);
+            m_xWordSpacingMaximum->set_sensitive(false);
         }
     }
     else
@@ -1478,7 +1505,12 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
         m_xCenter->set_active(false);
         m_xJustify->set_active(false);
         m_xLabelWordSpacing->set_sensitive(false);
+        m_xLabelMinimum->set_sensitive(false);
+        m_xLabelDesired->set_sensitive(false);
+        m_xLabelMaximum->set_sensitive(false);
         m_xWordSpacing->set_sensitive(false);
+        m_xWordSpacingMinimum->set_sensitive(false);
+        m_xWordSpacingMaximum->set_sensitive(false);
     }
     m_xLastLineLB->set_active(nLBSelect);
 
@@ -1537,6 +1569,8 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
     m_xLastLineLB->save_value();
     m_xExpandCB->save_state();
     m_xWordSpacing->save_value();
+    m_xWordSpacingMinimum->save_value();
+    m_xWordSpacingMaximum->save_value();
 
     UpdateExample_Impl();
 }
@@ -1553,6 +1587,8 @@ void SvxParaAlignTabPage::ChangesApplied()
     m_xLastLineLB->save_value();
     m_xExpandCB->save_state();
     m_xWordSpacing->save_value();
+    m_xWordSpacingMinimum->save_value();
+    m_xWordSpacingMaximum->save_value();
 }
 
 IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl, weld::Toggleable&, void)
@@ -1561,7 +1597,12 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl, weld::Toggleable&, void)
     m_xLastLineFT->set_sensitive(bJustify);
     m_xLastLineLB->set_sensitive(bJustify);
     m_xLabelWordSpacing->set_sensitive(bJustify);
+    m_xLabelMinimum->set_sensitive(bJustify);
+    m_xLabelDesired->set_sensitive(bJustify);
+    m_xLabelMaximum->set_sensitive(bJustify);
     m_xWordSpacing->set_sensitive(bJustify);
+    m_xWordSpacingMinimum->set_sensitive(bJustify);
+    m_xWordSpacingMaximum->set_sensitive(bJustify);
     bool bLastLineIsBlock = m_xLastLineLB->get_active() == 2;
     m_xExpandCB->set_sensitive(bJustify && bLastLineIsBlock);
     //set last line listbox to entry position 0 if not enabled
@@ -1587,6 +1628,33 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, LastLineHdl_Impl, weld::ComboBox&, void)
 IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl, weld::ComboBox&, void)
 {
     UpdateExample_Impl();
+}
+
+IMPL_LINK_NOARG(SvxParaAlignTabPage, WordSpacingHdl_Impl, weld::MetricSpinButton&, void)
+{
+    sal_Int16 nDesired = m_xWordSpacing->get_value(FieldUnit::PERCENT);
+    if (nDesired < m_xWordSpacingMinimum->get_value(FieldUnit::PERCENT))
+        m_xWordSpacingMinimum->set_value(nDesired, FieldUnit::PERCENT);
+    if (nDesired > m_xWordSpacingMaximum->get_value(FieldUnit::PERCENT))
+        m_xWordSpacingMaximum->set_value(nDesired, FieldUnit::PERCENT);
+}
+
+IMPL_LINK_NOARG(SvxParaAlignTabPage, WordSpacingMinimumHdl_Impl, weld::MetricSpinButton&, void)
+{
+    sal_Int16 nMinimum = m_xWordSpacingMinimum->get_value(FieldUnit::PERCENT);
+    if (nMinimum > m_xWordSpacing->get_value(FieldUnit::PERCENT))
+        m_xWordSpacing->set_value(nMinimum, FieldUnit::PERCENT);
+    if (nMinimum > m_xWordSpacingMaximum->get_value(FieldUnit::PERCENT))
+        m_xWordSpacingMaximum->set_value(nMinimum, FieldUnit::PERCENT);
+}
+
+IMPL_LINK_NOARG(SvxParaAlignTabPage, WordSpacingMaximumHdl_Impl, weld::MetricSpinButton&, void)
+{
+    sal_Int16 nMaximum = m_xWordSpacingMaximum->get_value(FieldUnit::PERCENT);
+    if (nMaximum < m_xWordSpacingMinimum->get_value(FieldUnit::PERCENT))
+        m_xWordSpacingMinimum->set_value(nMaximum, FieldUnit::PERCENT);
+    if (nMaximum < m_xWordSpacing->get_value(FieldUnit::PERCENT))
+        m_xWordSpacing->set_value(nMaximum, FieldUnit::PERCENT);
 }
 
 void SvxParaAlignTabPage::UpdateExample_Impl()

@@ -157,7 +157,8 @@ bool SwTextGuess::maybeAdjustPositionsForBlockAdjust(tools::Long& rMaxSizeDiff,
 // returns true if no line break has to be performed
 // otherwise possible break or hyphenation position is determined
 bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
-                            const sal_uInt16 nPorHeight, sal_Int32 nSpacesInLine )
+                            const sal_uInt16 nPorHeight, sal_Int32 nSpacesInLine,
+                            sal_uInt16 nPropWordSpacing )
 {
     m_nCutPos = rInf.GetIdx();
 
@@ -183,17 +184,28 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
     SvxAdjustItem aAdjustItem = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
     const SvxAdjust aAdjust = aAdjustItem.GetAdjust();
+    // Maximum word spacing allows bigger spaces to limit hyphenation,
+    // implement it based on the hyphenation zone: calculate a hyphenation zone
+    // from maximum word spacing and space count of the line
+    SwTwips nWordSpacingMaximumZone = 0;
 
-    // allow up to 20% shrinking of the spaces
     if ( nSpacesInLine )
     {
         static constexpr OUStringLiteral STR_BLANK = u" ";
         sal_Int16 nSpaceWidth = rInf.GetTextSize(STR_BLANK).Width();
-        float fWordSpacingOptimum = aAdjustItem.GetPropWordSpacing() == 100
+        float fWordSpacing = nPropWordSpacing == SAL_MAX_UINT16
                 ? 0.75 // MSO interoperability value
-                : aAdjustItem.GetPropWordSpacing() / 100.0;
-        SwTwips nExtraSpace = nSpacesInLine * nSpaceWidth * (1.0 - fWordSpacingOptimum);
+                       // allow up to 25% shrinking of the spaces
+                : nPropWordSpacing / 100.0;
+        SwTwips nExtraSpace = nSpacesInLine * nSpaceWidth * (1.0 - fWordSpacing);
         nLineWidth += nExtraSpace;
+        // convert maximum word spacing to hyphenation zone, if defined
+        if ( nPropWordSpacing == aAdjustItem.GetPropWordSpacing() )
+        {
+            SwTwips nMaxDif = aAdjustItem.GetPropWordSpacingMaximum() - nPropWordSpacing;
+            nWordSpacingMaximumZone = nSpacesInLine * nSpaceWidth * nMaxDif / 100.0;
+        }
+
         rInf.SetExtraSpace(nExtraSpace);
     }
 
@@ -284,12 +296,15 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         }
     }
 
-    bool bHyph = rInf.IsHyphenate() && !rInf.IsHyphForbud();
+    bool bHyph = rInf.IsHyphenate() && !rInf.IsHyphForbud() &&
+            // disable hyphenation at minimum word spacing
+            !( nPropWordSpacing < aAdjustItem.GetPropWordSpacing() );
+
     // disable hyphenation according to hyphenation-keep and hyphenation-keep-type,
     // or modify hyphenation according to hyphenation-zone-column/page/spread (see widorp.cxx)
     sal_Int16 nEndZone = 0;
     if ( bHyph &&
-          rInf.GetTextFrame()->GetNoHyphOffset() != TextFrameIndex(COMPLETE_STRING) &&
+          rInf.GetTextFrame()->GetNoHyphOffset() != TextFrameIndex(COMPLETE_STRING) && // ) // &&
           // when there is a portion in the last line, rInf.GetIdx() > GetNoHyphOffset()
           rInf.GetTextFrame()->GetNoHyphOffset() <= rInf.GetIdx() )
     {
@@ -318,6 +333,12 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         sal_Int16 nTextHyphenZone = 0;
         sal_Int16 nTextHyphenZoneAlways = 0;
         rHyphValues[5].Value >>= nTextHyphenZone;
+
+        // maximum word spacing can result bigger hyphenation zone,
+        // if there are enough spaces in the line: apply that
+        if ( nWordSpacingMaximumZone > nTextHyphenZone )
+            nTextHyphenZone = nWordSpacingMaximumZone;
+
         rHyphValues[10].Value >>= nTextHyphenZoneAlways;
         if ( nTextHyphenZone || nTextHyphenZoneAlways || nEndZone )
         {

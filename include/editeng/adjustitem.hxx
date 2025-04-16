@@ -44,8 +44,11 @@ class EDITENG_DLLPUBLIC SvxAdjustItem final : public SfxEnumItemInterface
     bool    bLastCenter : 1;
     bool    bLastBlock : 1;
 
-    // desired word spacing in percent of the width of space character in justified text
+    // desired, minimum and maximum word spacing values in percent of
+    // the width of space character in justified text
     sal_uInt16 nPropWordSpacing;
+    sal_uInt16 nPropWordSpacingMinimum;
+    sal_uInt16 nPropWordSpacingMaximum;
 
 protected:
     virtual ItemInstanceManager* getItemInstanceManager() const override;
@@ -158,6 +161,28 @@ public:
     void SetPropWordSpacing( sal_uInt16 nVal )
     {
         nPropWordSpacing = nVal;
+    }
+
+
+    sal_uInt16 GetPropWordSpacingMinimum() const
+    {
+        return nPropWordSpacingMinimum;
+    }
+
+    void SetPropWordSpacingMinimum( sal_uInt16 nVal )
+    {
+        nPropWordSpacingMinimum = nVal;
+    }
+
+
+    sal_uInt16 GetPropWordSpacingMaximum() const
+    {
+        return nPropWordSpacingMaximum;
+    }
+
+    void SetPropWordSpacingMaximum( sal_uInt16 nVal )
+    {
+        nPropWordSpacingMaximum = nVal;
     }
 
 };
