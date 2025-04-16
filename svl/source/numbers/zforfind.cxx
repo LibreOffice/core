@@ -1960,19 +1960,13 @@ input for the following reasons:
                 {
                 case DateOrder::MDY:
                 case DateOrder::YMD:
-                {
-                    sal_uInt16 nDay = ImplGetDay(0);
-                    sal_uInt16 nYear = ImplGetYear(0);
-                    if (nDay == 0 || nDay > 32)
+                    if (sal_uInt16 day = ImplGetDay(0); day > 0 && day <= 32) // Why 32?
                     {
-                        pCal->setValue( CalendarFieldIndex::YEAR, nYear);
+                        pCal->setValue(CalendarFieldIndex::DAY_OF_MONTH, day);
+                        break;
                     }
-                    else
-                    {
-                        pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
-                    }
-                    break;
-                }
+                    // Parse 'june-2007' as June 1 2007
+                    [[fallthrough]];
                 case DateOrder::DMY:
                     pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                     break;
@@ -2073,16 +2067,19 @@ input for the following reasons:
                     switch (DateFmt)
                     {
                     case DateOrder::MDY:
+                    {
                         // M D
+                        const auto month = ImplGetMonth(0);
                         pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
-                        pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
+                        pCal->setValue( CalendarFieldIndex::MONTH, month );
                         if ( !pCal->isValid() )             // 2nd try
                         {                                   // M Y
                             pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
-                            pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
+                            pCal->setValue( CalendarFieldIndex::MONTH, month );
                             pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
                         }
                         break;
+                    }
                     case DateOrder::DMY:
                         // D M
                         pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
