@@ -35,12 +35,8 @@
         #define TARGET_LIB        "lib" "sofficeapp" ".dylib"
         #define TARGET_MERGED_LIB "lib" "mergedlo" ".dylib"
 
-        #if !defined TARGET_OS_IPHONE || TARGET_OS_IPHONE == 0
-            #if defined TARGET_OS_OSX && TARGET_OS_OSX == 1
-                #error LibreOfficeKit is not supported on macOS
-            #else
-                #error LibreOfficeKit is not supported on tvOS, visionOS or watchOS
-            #endif
+        #if (!defined TARGET_OS_IPHONE || TARGET_OS_IPHONE == 0) && (!defined TARGET_OS_OSX || TARGET_OS_OSX == 0)
+            #error LibreOfficeKit is not supported on tvOS, visionOS or watchOS
         #endif
     #else
         #define TARGET_LIB        "lib" "sofficeapp" ".so"
