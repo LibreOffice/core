@@ -3498,7 +3498,7 @@
     <resource name="adec_decorative_val" resource="Properties">
       <attribute name="val" tokenid="ooxml:OfficeArtExtension_Decorative_val"/>
     </resource>
-    <resource name="ST_Coordinate" resource="Integer"/>
+    <resource name="ST_Coordinate" resource="EmuMeasure"/>
     <resource name="ST_PositiveCoordinate" resource="Integer"/>
     <resource name="ST_Angle" resource="Integer"/>
     <resource name="CT_Angle" resource="Value">
