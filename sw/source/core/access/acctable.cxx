@@ -165,11 +165,8 @@ void SwAccessibleTableData_Impl::CollectData( const SwFrame *pFrame )
 const SwFrame* SwAccessibleTableData_Impl::FindCell(const Point& rPos, const SwFrame* pFrame) const
 {
     const SwAccessibleChildSList aList( *pFrame, mrAccMap );
-    SwAccessibleChildSList::const_iterator aIter( aList.begin() );
-    SwAccessibleChildSList::const_iterator aEndIter( aList.end() );
-    while (aIter != aEndIter)
+    for (const SwAccessibleChild& rLower : aList)
     {
-        const SwAccessibleChild& rLower = *aIter;
         const SwFrame *pLower = rLower.GetSwFrame();
         OSL_ENSURE( pLower, "child should be a frame" );
         if( pLower )
@@ -196,7 +193,6 @@ const SwFrame* SwAccessibleTableData_Impl::FindCell(const Point& rPos, const SwF
                 }
             }
         }
-        ++aIter;
     }
 
     return nullptr;
