@@ -32,6 +32,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/xmltools.hxx>
 #include <sax/fshelper.hxx>
+#include <sax/fastattribs.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/UnitConversion.hxx>
@@ -86,19 +87,7 @@
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #endif
 
-// presentation namespaces
-#define PNMSS         FSNS(XML_xmlns, XML_a),   this->getNamespaceURL(OOX_NS(dml)), \
-                      FSNS(XML_xmlns, XML_p),   this->getNamespaceURL(OOX_NS(ppt)), \
-                      FSNS(XML_xmlns, XML_r),   this->getNamespaceURL(OOX_NS(officeRel)), \
-                      FSNS(XML_xmlns, XML_p14), this->getNamespaceURL(OOX_NS(p14)), \
-                      FSNS(XML_xmlns, XML_p15), this->getNamespaceURL(OOX_NS(p15)), \
-                      FSNS(XML_xmlns, XML_mc),  this->getNamespaceURL(OOX_NS(mce))
-
-// presentationPr namespace
-#define PPRNMSS       FSNS(XML_xmlns, XML_a),   this->getNamespaceURL(OOX_NS(dml)), \
-                      FSNS(XML_xmlns, XML_r),   this->getNamespaceURL(OOX_NS(officeRel)), \
-                      FSNS(XML_xmlns, XML_p),   this->getNamespaceURL(OOX_NS(ppt))
-
+using namespace sax_fastparser;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::beans;
@@ -116,6 +105,31 @@ using ::com::sun::star::beans::XPropertySetInfo;
 using ::sax_fastparser::FSHelperPtr;
 using namespace oox::drawingml;
 using namespace oox::core;
+using namespace oox;
+
+namespace
+{
+rtl::Reference<FastAttributeList> presentationNamespaces(oox::core::XmlFilterBase& rFilter)
+{
+    rtl::Reference<FastAttributeList> pAttributes = FastSerializerHelper::createAttrList();
+    pAttributes->add(FSNS(XML_xmlns, XML_a), OUStringToOString(rFilter.getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8));
+    pAttributes->add(FSNS(XML_xmlns, XML_p), OUStringToOString(rFilter.getNamespaceURL(OOX_NS(ppt)), RTL_TEXTENCODING_UTF8));
+    pAttributes->add(FSNS(XML_xmlns, XML_r), OUStringToOString(rFilter.getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8));
+    pAttributes->add(FSNS(XML_xmlns, XML_p14), OUStringToOString(rFilter.getNamespaceURL(OOX_NS(p14)), RTL_TEXTENCODING_UTF8));
+    pAttributes->add(FSNS(XML_xmlns, XML_p15), OUStringToOString(rFilter.getNamespaceURL(OOX_NS(p15)), RTL_TEXTENCODING_UTF8));
+    pAttributes->add(FSNS(XML_xmlns, XML_mc), OUStringToOString(rFilter.getNamespaceURL(OOX_NS(mce)), RTL_TEXTENCODING_UTF8));
+    return pAttributes;
+}
+
+rtl::Reference<FastAttributeList> presentationPrNamespaces(oox::core::XmlFilterBase& rFilter)
+{
+    rtl::Reference<FastAttributeList> pAttributes = FastSerializerHelper::createAttrList();
+    pAttributes->add(FSNS(XML_xmlns, XML_a), OUStringToOString(rFilter.getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8));
+    pAttributes->add(FSNS(XML_xmlns, XML_p), OUStringToOString(rFilter.getNamespaceURL(OOX_NS(ppt)), RTL_TEXTENCODING_UTF8));
+    pAttributes->add(FSNS(XML_xmlns, XML_r), OUStringToOString(rFilter.getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8));
+    return pAttributes;
+}
+};
 
 #if OSL_DEBUG_LEVEL > 1
 void dump_pset(Reference< XPropertySet > const& rXPropSet);
@@ -440,7 +454,7 @@ bool PowerPointExport::exportDocument()
                 oox::getRelationship(Relationship::THEME),
                 u"theme/theme1.xml");
 
-    mPresentationFS->startElementNS(XML_p, XML_presentation, PNMSS);
+    mPresentationFS->startElementNS(XML_p, XML_presentation, presentationNamespaces(*this));
 
     mXStatusIndicator = getStatusIndicator();
 
@@ -1083,7 +1097,7 @@ void PowerPointExport::WritePresentationProps()
     addRelation(mPresentationFS->getOutputStream(),
                 oox::getRelationship(Relationship::PRESPROPS), u"presProps.xml");
 
-    pFS->startElementNS(XML_p, XML_presentationPr, PPRNMSS);
+    pFS->startElementNS(XML_p, XML_presentationPr, presentationPrNamespaces(*this));
 
     pFS->startElementNS(XML_p, XML_showPr, XML_loop, sax_fastparser::UseIf("1", bEndlessVal),
                         XML_useTimings, sax_fastparser::UseIf("0", bChangeManually),
@@ -1363,7 +1377,13 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
             pShowMasterShape = "0";
     }
 
-    pFS->startElementNS(XML_p, XML_sld, PNMSS, XML_show, pShow, XML_showMasterSp, pShowMasterShape);
+    auto pAttributes = presentationNamespaces(*this);
+    if (pShow)
+        pAttributes->add(XML_show, pShow);
+    if (pShowMasterShape)
+        pAttributes->add(XML_showMasterSp, pShowMasterShape);
+
+    pFS->startElementNS(XML_p, XML_sld, pAttributes);
 
     pFS->startElementNS(XML_p, XML_cSld);
 
@@ -1411,7 +1431,7 @@ void PowerPointExport::ImplWriteNotes(sal_uInt32 nPageNum)
                         ".xml",
                         u"application/vnd.openxmlformats-officedocument.presentationml.notesSlide+xml"_ustr);
 
-    pFS->startElementNS(XML_p, XML_notes, PNMSS);
+    pFS->startElementNS(XML_p, XML_notes, presentationNamespaces(*this));
 
     pFS->startElementNS(XML_p, XML_cSld);
 
@@ -1624,7 +1644,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     addRelation(pFS->getOutputStream(), oox::getRelationship(Relationship::THEME),
                 Concat2View("../theme/theme" + OUString::number(++mnThemeIdMax) + ".xml"));
 
-    pFS->startElementNS(XML_p, XML_sldMaster, PNMSS);
+    pFS->startElementNS(XML_p, XML_sldMaster, presentationNamespaces(*this));
 
     pFS->startElementNS(XML_p, XML_cSld);
 
@@ -1843,10 +1863,11 @@ void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMaster
         pFS->getOutputStream(), oox::getRelationship(Relationship::SLIDEMASTER),
         Concat2View("../slideMasters/slideMaster" + OUString::number(nMasterNum + 1) + ".xml"));
 
-    pFS->startElementNS(XML_p, XML_sldLayout,
-                        PNMSS,
-                        XML_type, aLayoutInfo[ nOffset ].sType,
-                        XML_preserve, "1");
+    auto pAttributes = presentationNamespaces(*this);
+    pAttributes->add(XML_type, aLayoutInfo[nOffset].sType);
+    pAttributes->add(XML_preserve, "1");
+
+    pFS->startElementNS(XML_p, XML_sldLayout, pAttributes);
 
     if (!aSlideName.isEmpty())
     {
@@ -1901,8 +1922,11 @@ void PowerPointExport::ImplWritePPTXLayoutWithContent(
                 Concat2View("../slideMasters/slideMaster"
                             + OUString::number(GetEquivalentMasterPage(nMasterNum) + 1) + ".xml"));
 
-    pFS->startElementNS(XML_p, XML_sldLayout, PNMSS, XML_type, aLayoutInfo[nOffset].sType,
-                        XML_preserve, "1");
+    auto pAttributes = presentationNamespaces(*this);
+    pAttributes->add(XML_type, aLayoutInfo[nOffset].sType);
+    pAttributes->add(XML_preserve, "1");
+
+    pFS->startElementNS(XML_p, XML_sldLayout, pAttributes);
 
     if (!aSlideName.isEmpty())
     {
@@ -2340,7 +2364,7 @@ void PowerPointExport::WriteNotesMaster()
                     Concat2View("../theme/theme" + OUString::number(mnMasterPages + 1) + ".xml"));
     }
 
-    pFS->startElementNS(XML_p, XML_notesMaster, PNMSS);
+    pFS->startElementNS(XML_p, XML_notesMaster, presentationNamespaces(*this));
 
     pFS->startElementNS(XML_p, XML_cSld);
 
