@@ -635,18 +635,17 @@ PPDParser::PPDParser(OUString aFile, const std::vector<PPDKey*>& keys)
             OString o = OUStringToOString( aValueName, aEncoding );
             pwg_media_t *pPWGMedia = pwgMediaForPWG(o.pData->buffer);
             if (pPWGMedia != nullptr) {
-                OUStringBuffer aBuf( 256 );
-                aBuf = "0 0 " +
-                    OUString::number(PWG_TO_POINTS(pPWGMedia -> width)) +
-                    " " +
-                    OUString::number(PWG_TO_POINTS(pPWGMedia -> length));
                 if ( pImageableAreaValue )
-                    pImageableAreaValue->m_aValue = aBuf.makeStringAndClear();
-                aBuf.append( OUString::number(PWG_TO_POINTS(pPWGMedia -> width))
-                    + " "
-                    + OUString::number(PWG_TO_POINTS(pPWGMedia -> length) ));
+                    pImageableAreaValue->m_aValue =
+                        "0 0 " +
+                        OUString::number(PWG_TO_POINTS(pPWGMedia -> width)) +
+                        " " +
+                        OUString::number(PWG_TO_POINTS(pPWGMedia -> length));
                 if ( pPaperDimensionValue )
-                    pPaperDimensionValue->m_aValue = aBuf.makeStringAndClear();
+                    pPaperDimensionValue->m_aValue =
+                        OUString::number(PWG_TO_POINTS(pPWGMedia -> width))
+                        + " "
+                        + OUString::number(PWG_TO_POINTS(pPWGMedia -> length));
                 if (aValueName.equals(pKey -> getDefaultValue() -> m_aOption)) {
                     pImageableAreas -> m_pDefaultValue = pImageableAreaValue;
                     pPaperDimensions -> m_pDefaultValue = pPaperDimensionValue;

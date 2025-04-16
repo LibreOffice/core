@@ -1988,7 +1988,7 @@ void RtfAttributeOutput::WriteAnnotationMarks_Impl(std::vector<ReferenceMarkerNa
 void RtfAttributeOutput::WriteHeaderFooter_Impl(const SwFrameFormat& rFormat, bool bHeader,
                                                 const char* pStr, bool bTitlepg)
 {
-    OStringBuffer aSectionBreaks = m_aSectionBreaks;
+    OString aSectionBreaks = m_aSectionBreaks.toString();
     m_aSectionBreaks.setLength(0);
     RtfStringBuffer aRun = m_aRun;
     m_aRun.clear();

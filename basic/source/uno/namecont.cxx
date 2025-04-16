@@ -1744,7 +1744,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             if ( bInplaceStorage )
             {
                 // create a temporary target storage
-                const OUStringBuffer aTempTargetNameBase = maLibrariesDir + "_temp_";
+                const OUString aTempTargetNameBase = maLibrariesDir + "_temp_";
                 sal_Int32 index = 0;
                 do
                 {

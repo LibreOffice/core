@@ -111,6 +111,12 @@ void f6()
     while (true)
         noel1.append("ffff").append("aaa");
 }
+void f7()
+{
+    // expected-error@+1 {{convert this append sequence into a *String + sequence [loplugin:bufferadd]}}
+    OStringBuffer noelf7("xxx");
+    noelf7 = "xxx" + noelf7 + "xxx";
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

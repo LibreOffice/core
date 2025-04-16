@@ -407,7 +407,7 @@ namespace svgio::svgreader
                         // by error. First try if there are numbers after the 'e',
                         // safe current state
                         nPos++;
-                        const OUStringBuffer aNum2(aNum);
+                        const OUString aNum2(aNum);
                         const sal_Int32 nPosAfterE(nPos);
 
                         aNum.append(aChar);
