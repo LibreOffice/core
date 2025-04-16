@@ -383,7 +383,7 @@ public:
     /**
        Returns value of the SPRM. Returns nullptr if the internal value is nullptr.
      */
-    virtual const Value* getValue() const = 0;
+    SAL_RET_MAYBENULL virtual const Value* getValue() const = 0;
 
     /**
        Returns reference to properties contained in the SPRM.
