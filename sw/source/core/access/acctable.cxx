@@ -82,7 +82,7 @@ class SwAccessibleTableData_Impl
 
     void CollectData( const SwFrame *pFrame );
 
-    bool FindCell(const Point& rPos, const SwFrame* pFrame, const SwFrame*& rFrame) const;
+    const SwFrame* FindCell(const Point& rPos, const SwFrame* pFrame) const;
 
     void GetSelection( const Point& rTabPos, const SwRect& rArea,
                        const SwSelBoxes& rSelBoxes, const SwFrame *pFrame,
@@ -162,15 +162,12 @@ void SwAccessibleTableData_Impl::CollectData( const SwFrame *pFrame )
     }
 }
 
-bool SwAccessibleTableData_Impl::FindCell(const Point& rPos, const SwFrame* pFrame,
-                                          const SwFrame*& rRet) const
+const SwFrame* SwAccessibleTableData_Impl::FindCell(const Point& rPos, const SwFrame* pFrame) const
 {
-    bool bFound = false;
-
     const SwAccessibleChildSList aList( *pFrame, mrAccMap );
     SwAccessibleChildSList::const_iterator aIter( aList.begin() );
     SwAccessibleChildSList::const_iterator aEndIter( aList.end() );
-    while( !bFound && aIter != aEndIter )
+    while (aIter != aEndIter)
     {
         const SwAccessibleChild& rLower = *aIter;
         const SwFrame *pLower = rLower.GetSwFrame();
@@ -186,24 +183,23 @@ bool SwAccessibleTableData_Impl::FindCell(const Point& rPos, const SwFrame* pFra
                     // We have found the cell
                     OSL_ENSURE( rFrame.Left() <= rPos.X() && rFrame.Top() <= rPos.Y(),
                             "find frame moved to far!" );
-                    bFound = true;
-                    rRet = pLower;
+                    return pLower;
                 }
             }
             else
             {
                 // #i77106#
-                if ( !pLower->IsRowFrame() ||
-                     IncludeRow( *pLower ) )
+                if (!pLower->IsRowFrame() || IncludeRow(*pLower))
                 {
-                    bFound = FindCell(rPos, pLower, rRet);
+                    if (const SwFrame* pCell = FindCell(rPos, pLower))
+                        return pCell;
                 }
             }
         }
         ++aIter;
     }
 
-    return bFound;
+    return nullptr;
 }
 
 void SwAccessibleTableData_Impl::GetSelection(
@@ -321,10 +317,8 @@ const SwFrame *SwAccessibleTableData_Impl::GetCellAtPos(
 {
     Point aPos( mpTabFrame->getFrameArea().Pos() );
     aPos.Move( nLeft, nTop );
-    const SwFrame *pRet = nullptr;
-    FindCell(aPos, mpTabFrame, pRet);
 
-    return pRet;
+    return FindCell(aPos, mpTabFrame);
 }
 
 inline sal_Int32 SwAccessibleTableData_Impl::GetRowCount() const
