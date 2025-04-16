@@ -687,7 +687,7 @@ const SwRect& SwViewShell::VisArea() const
 
 void SwViewShell::MakeVisible( const SwRect &rRect, ScrollSizeMode eScrollSizeMode )
 {
-    if ( !(!VisArea().Contains( rRect ) || IsScrollMDI( this, rRect ) || GetCareDialog(*this)) )
+    if ( !(!VisArea().Contains( rRect ) || IsScrollMDI( *this, rRect ) || GetCareDialog(*this)) )
         return;
 
     if ( IsViewLocked() )
@@ -701,7 +701,7 @@ void SwViewShell::MakeVisible( const SwRect &rRect, ScrollSizeMode eScrollSizeMo
         do{
             nOldH = pRoot->getFrameArea().Height();
             SwViewShell::StartAction();
-            ScrollMDI( this, rRect, USHRT_MAX, USHRT_MAX, eScrollSizeMode );
+            ScrollMDI( *this, rRect, USHRT_MAX, USHRT_MAX, eScrollSizeMode );
             SwViewShell::EndAction(); // DO NOT call virtual here!
         } while( nOldH != pRoot->getFrameArea().Height() && nLoopCnt-- );
     }
@@ -1274,7 +1274,7 @@ void SwViewShell::SizeChgNotify()
 
         if ( !Imp()->IsCalcLayoutProgress() && dynamic_cast<const SwCursorShell*>( this ) !=  nullptr )
         {
-            PageNumNotify(this);
+            PageNumNotify(*this);
 
             if (comphelper::LibreOfficeKit::isActive())
             {
@@ -1290,7 +1290,7 @@ void SwViewShell::SizeChgNotify()
     else
     {
         mbDocSizeChgd = false;
-        ::SizeNotify( this, GetDocSize() );
+        ::SizeNotify( *this, GetDocSize() );
     }
 }
 
@@ -2677,7 +2677,7 @@ void SwViewShell::UISizeNotify()
         mbDocSizeChgd = false;
         bool bOld = bInSizeNotify;
         bInSizeNotify = true;
-        ::SizeNotify( this, GetDocSize() );
+        ::SizeNotify( *this, GetDocSize() );
         bInSizeNotify = bOld;
     }
 }

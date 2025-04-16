@@ -32,13 +32,13 @@ class SwViewShell;
 class SwDocShell;
 class ReferenceMarkerName;
 
-extern void ScrollMDI(SwViewShell const * pVwSh, const SwRect &, sal_uInt16 nRangeX, sal_uInt16 nRangeY
+extern void ScrollMDI(SwViewShell const & rVwSh, const SwRect &, sal_uInt16 nRangeX, sal_uInt16 nRangeY
     , ScrollSizeMode eScrollSizeMode = ScrollSizeMode::ScrollSizeDefault);
-extern bool IsScrollMDI(SwViewShell const * pVwSh, const SwRect &);
-extern void SizeNotify(SwViewShell const * pVwSh, const Size &);
+extern bool IsScrollMDI(SwViewShell const & rVwSh, const SwRect &);
+extern void SizeNotify(SwViewShell const & rVwSh, const Size &);
 
 // Update of status bar during an action.
-extern void PageNumNotify(SwViewShell const * pVwSh);
+extern void PageNumNotify(SwViewShell const & rVwSh);
 
 enum FlyMode { FLY_DRAG_START, FLY_DRAG, FLY_DRAG_END };
 extern void FrameNotify( SwViewShell* pVwSh, FlyMode eMode = FLY_DRAG );

@@ -716,11 +716,11 @@ bool SwFEShell::IsSelContainsControl() const
 void SwFEShell::ScrollTo( const Point &rPt )
 {
     const SwRect aRect( rPt, rPt );
-    if ( IsScrollMDI( this, aRect ) &&
+    if ( IsScrollMDI( *this, aRect ) &&
          (!Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() ||
           Imp()->IsDragPossible( rPt )) )
     {
-        ScrollMDI( this, aRect, SCROLLVAL, SCROLLVAL );
+        ScrollMDI( *this, aRect, SCROLLVAL, SCROLLVAL );
     }
 }
 

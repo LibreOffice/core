@@ -3128,7 +3128,7 @@ bool SwCursorShell::SetVisibleCursor( const Point &rPt, ScrollSizeMode eScrollSi
         return true;
 
     m_pVisibleCursor->Hide(); // always hide visible cursor
-    if( IsScrollMDI( this, m_aCharRect ))
+    if( IsScrollMDI( *this, m_aCharRect ))
     {
         MakeVisible( m_aCharRect, eScrollSizeMode );
         m_pCurrentCursor->Show(nullptr);

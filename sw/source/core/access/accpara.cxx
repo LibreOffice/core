@@ -2429,7 +2429,7 @@ sal_Bool SwAccessibleParagraph::scrollSubstringTo( sal_Int32 nStartIndex,
     const SwRect aRect(startPoint, endPoint);
     SwViewShell& rViewShell = GetMap()->GetShell();
 
-    ScrollMDI(&rViewShell, aRect, USHRT_MAX, USHRT_MAX);
+    ScrollMDI(rViewShell, aRect, USHRT_MAX, USHRT_MAX);
 
     return true;
 }

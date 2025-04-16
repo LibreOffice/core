@@ -32,20 +32,20 @@
 #include <uiobject.hxx>
 
 // Core-Notify
-void ScrollMDI( SwViewShell const * pVwSh, const SwRect &rRect,
+void ScrollMDI( SwViewShell const & rVwSh, const SwRect &rRect,
                 sal_uInt16 nRangeX, sal_uInt16 nRangeY,
                 ScrollSizeMode eScrollSizeMode)
 {
-    SfxViewShell *pSfxViewShell = pVwSh->GetSfxViewShell();
+    SfxViewShell *pSfxViewShell = rVwSh.GetSfxViewShell();
 
     if (SwView* pSwView = dynamic_cast<SwView *>(pSfxViewShell))
         pSwView->Scroll(rRect.SVRect(), nRangeX, nRangeY, eScrollSizeMode);
 }
 
 // Docmdi - movable
-bool IsScrollMDI( SwViewShell const * pVwSh, const SwRect &rRect )
+bool IsScrollMDI( SwViewShell const & rVwSh, const SwRect &rRect )
 {
-    SfxViewShell *pSfxViewShell = pVwSh->GetSfxViewShell();
+    SfxViewShell *pSfxViewShell = rVwSh.GetSfxViewShell();
 
     if (SwView* pSwView = dynamic_cast<SwView *>(pSfxViewShell))
         return pSwView->IsScroll(rRect.SVRect());
@@ -54,9 +54,9 @@ bool IsScrollMDI( SwViewShell const * pVwSh, const SwRect &rRect )
 }
 
 // Notify for size change
-void SizeNotify(SwViewShell const * pVwSh, const Size &rSize)
+void SizeNotify(SwViewShell const & rVwSh, const Size &rSize)
 {
-    SfxViewShell *pSfxViewShell = pVwSh->GetSfxViewShell();
+    SfxViewShell *pSfxViewShell = rVwSh.GetSfxViewShell();
 
     if (SwView* pSwView = dynamic_cast<SwView *>(pSfxViewShell))
         pSwView->DocSzChgd(rSize);
@@ -65,9 +65,9 @@ void SizeNotify(SwViewShell const * pVwSh, const Size &rSize)
 }
 
 // Notify for page number update
-void PageNumNotify(SwViewShell const * pVwSh)
+void PageNumNotify(SwViewShell const & rVwSh)
 {
-    SfxViewShell *pSfxViewShell = pVwSh->GetSfxViewShell();
+    SfxViewShell *pSfxViewShell = rVwSh.GetSfxViewShell();
 
     if (SwView* pSwView = dynamic_cast<SwView *>(pSfxViewShell))
     {
