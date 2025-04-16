@@ -1582,8 +1582,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     //needed for page properties
     SectionPropertyMap * pSectionContext = m_pImpl->GetSectionContext();
     const Value* pValue = rSprm.getValue();
-    sal_Int32 nIntValue = pValue->getInt();
-    const OUString sStringValue = pValue->getString();
+    sal_Int32 nIntValue = (pValue ? pValue->getInt() : 0);
+    OUString sStringValue = pValue ? pValue->getString() : OUString();
 
     switch(nSprmId)
     {
