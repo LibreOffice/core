@@ -82,8 +82,7 @@ class SwAccessibleTableData_Impl
 
     void CollectData( const SwFrame *pFrame );
 
-    bool FindCell( const Point& rPos, const SwFrame *pFrame ,
-                           bool bExact, const SwFrame *& rFrame ) const;
+    bool FindCell(const Point& rPos, const SwFrame* pFrame, const SwFrame*& rFrame) const;
 
     void GetSelection( const Point& rTabPos, const SwRect& rArea,
                        const SwSelBoxes& rSelBoxes, const SwFrame *pFrame,
@@ -163,9 +162,8 @@ void SwAccessibleTableData_Impl::CollectData( const SwFrame *pFrame )
     }
 }
 
-bool SwAccessibleTableData_Impl::FindCell(
-        const Point& rPos, const SwFrame *pFrame, bool bExact,
-        const SwFrame *& rRet ) const
+bool SwAccessibleTableData_Impl::FindCell(const Point& rPos, const SwFrame* pFrame,
+                                          const SwFrame*& rRet) const
 {
     bool bFound = false;
 
@@ -189,11 +187,7 @@ bool SwAccessibleTableData_Impl::FindCell(
                     OSL_ENSURE( rFrame.Left() <= rPos.X() && rFrame.Top() <= rPos.Y(),
                             "find frame moved to far!" );
                     bFound = true;
-                    if( !bExact ||
-                        (rFrame.Top() == rPos.Y() && rFrame.Left() == rPos.Y() ) )
-                    {
-                        rRet = pLower;
-                    }
+                    rRet = pLower;
                 }
             }
             else
@@ -202,7 +196,7 @@ bool SwAccessibleTableData_Impl::FindCell(
                 if ( !pLower->IsRowFrame() ||
                      IncludeRow( *pLower ) )
                 {
-                    bFound = FindCell( rPos, pLower, bExact, rRet );
+                    bFound = FindCell(rPos, pLower, rRet);
                 }
             }
         }
@@ -328,7 +322,7 @@ const SwFrame *SwAccessibleTableData_Impl::GetCellAtPos(
     Point aPos( mpTabFrame->getFrameArea().Pos() );
     aPos.Move( nLeft, nTop );
     const SwFrame *pRet = nullptr;
-    FindCell( aPos, mpTabFrame, false/*bExact*/, pRet );
+    FindCell(aPos, mpTabFrame, pRet);
 
     return pRet;
 }
