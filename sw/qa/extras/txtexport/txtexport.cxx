@@ -70,7 +70,12 @@ CPPUNIT_TEST_FIXTURE(TxtExportTest, testBullets)
         "    2. Second" SAL_NEWLINE_STRING "        1. Second-first" SAL_NEWLINE_STRING
         "       Third, but deleted" SAL_NEWLINE_STRING "    3. Actual third" SAL_NEWLINE_STRING
         "" SAL_NEWLINE_STRING "Paragraph after numbering" SAL_NEWLINE_STRING
-        "Next paragraph" SAL_NEWLINE_STRING "Final paragraph" SAL_NEWLINE_STRING,
+        "Next paragraph" SAL_NEWLINE_STRING "Final paragraph" SAL_NEWLINE_STRING
+        "Some Heading Outline Tests" SAL_NEWLINE_STRING " 1  Heading Level 1" SAL_NEWLINE_STRING
+        " 1.1  Heading Level 2" SAL_NEWLINE_STRING " 1.1.1  Heading Level 3" SAL_NEWLINE_STRING
+        " 1.1.1.1  Heading Level 4" SAL_NEWLINE_STRING
+        "                     1.1.1.1.1  Heading Level 5" SAL_NEWLINE_STRING
+        " 1.1.1.1.1.1  Heading Level 6" SAL_NEWLINE_STRING,
         RTL_TEXTENCODING_UTF8);
 
     // To get the stuff back in the system's encoding
