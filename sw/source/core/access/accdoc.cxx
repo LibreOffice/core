@@ -285,18 +285,10 @@ css::awt::Size SAL_CALL SwAccessibleDocumentBase::getSize()
 sal_Bool SAL_CALL SwAccessibleDocumentBase::containsPoint(
             const awt::Point& aPoint )
 {
-    SolarMutexGuard aGuard;
-
-    vcl::Window *pWin = GetWindow();
-    if (!pWin)
-    {
-        throw uno::RuntimeException(u"no Window"_ustr, getXWeak());
-    }
-
-    tools::Rectangle aPixBounds( pWin->GetWindowExtentsAbsolute() );
-    aPixBounds.Move(-aPixBounds.Left(), -aPixBounds.Top());
-
+    const Size aSize = vcl::unohelper::ConvertToVCLSize(getSize());
+    tools::Rectangle aPixBounds(Point(0, 0), aSize);
     Point aPixPoint( aPoint.X, aPoint.Y );
+
     return aPixBounds.Contains( aPixPoint );
 }
 
