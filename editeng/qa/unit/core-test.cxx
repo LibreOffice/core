@@ -2251,9 +2251,9 @@ void Test::testTdf151748StaleKashidaArray()
 
     EditEngine aEditEngine(mpItemPool.get());
     aEditEngine.SetRefDevice(pVirtualDevice.get());
-    aEditEngine.SetPaperSize(Size(1500, 500));
+    aEditEngine.SetPaperSize(Size(1600, 500));
     aEditEngine.SetDefaultHorizontalTextDirection(EEHorizontalTextDirection::R2L);
-    aEditEngine.SetText(u"خط تخوردگی و توسط"_ustr);
+    aEditEngine.SetText(u"خط تخوردگی وتوسسسسط"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(true, aEditEngine.IsFormatted());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetParagraphCount());
@@ -2280,7 +2280,7 @@ void Test::testTdf151748StaleKashidaArray()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(11), rLine.GetEnd());
 
         std::vector<sal_Bool> const& rArray = rLine.GetKashidaArray();
-        CPPUNIT_ASSERT_EQUAL(size_t(17), rArray.size());
+        CPPUNIT_ASSERT_EQUAL(size_t(19), rArray.size());
     }
 
     // Resize the paper so there is no longer room for kashida
@@ -2313,9 +2313,9 @@ void Test::testTdf162803StaleKashidaArray()
 
     EditEngine aEditEngine(mpItemPool.get());
     aEditEngine.SetRefDevice(pVirtualDevice.get());
-    aEditEngine.SetPaperSize(Size(1500, 500));
+    aEditEngine.SetPaperSize(Size(1600, 500));
     aEditEngine.SetDefaultHorizontalTextDirection(EEHorizontalTextDirection::R2L);
-    aEditEngine.SetText(u"خط تخوردگی و توسط"_ustr);
+    aEditEngine.SetText(u"خط تخوردگی وتوسسسسط"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(true, aEditEngine.IsFormatted());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetParagraphCount());
@@ -2342,7 +2342,7 @@ void Test::testTdf162803StaleKashidaArray()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(11), rLine.GetEnd());
 
         std::vector<sal_Bool> const& rArray = rLine.GetKashidaArray();
-        CPPUNIT_ASSERT_EQUAL(size_t(17), rArray.size());
+        CPPUNIT_ASSERT_EQUAL(size_t(19), rArray.size());
     }
 
     // Resize the paper so the entire text fits on a single line
@@ -2358,7 +2358,7 @@ void Test::testTdf162803StaleKashidaArray()
         EditLine const& rLine = rLines[0];
 
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rLine.GetStart());
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(17), rLine.GetEnd());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(19), rLine.GetEnd());
 
         std::vector<sal_Bool> const& rArray = rLine.GetKashidaArray();
 
