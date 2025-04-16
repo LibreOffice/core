@@ -111,7 +111,7 @@ public:
 
     /// @throws lang::IndexOutOfBoundsException
     /// @throws  uno::RuntimeException
-    const SwFrame *GetCell( sal_Int32 nRow, sal_Int32 nColumn, SwAccessibleTable *pThis ) const;
+    const SwFrame* GetCell(sal_Int32 nRow, sal_Int32 nColumn) const;
     const SwFrame *GetCellAtPos( sal_Int32 nLeft, sal_Int32 nTop ) const;
     inline sal_Int32 GetRowCount() const;
     inline sal_Int32 GetColumnCount() const;
@@ -123,8 +123,7 @@ public:
                        bool bColumns ) const;
 
     /// @throws lang::IndexOutOfBoundsException
-    void CheckRowAndCol( sal_Int32 nRow, sal_Int32 nCol,
-                         SwAccessibleTable *pThis ) const;
+    void CheckRowAndCol(sal_Int32 nRow, sal_Int32 nCol) const;
 
     const Point& GetTablePos() const { return maTabFramePos; }
     void SetTablePos( const Point& rPos ) { maTabFramePos = rPos; }
@@ -278,11 +277,9 @@ void SwAccessibleTableData_Impl::GetSelection(
     }
 }
 
-const SwFrame *SwAccessibleTableData_Impl::GetCell(
-        sal_Int32 nRow, sal_Int32 nColumn,
-        SwAccessibleTable *pThis ) const
+const SwFrame* SwAccessibleTableData_Impl::GetCell(sal_Int32 nRow, sal_Int32 nColumn) const
 {
-    CheckRowAndCol( nRow, nColumn, pThis );
+    CheckRowAndCol(nRow, nColumn);
 
     Int32Set_Impl::const_iterator aSttCol( GetColumnIter( nColumn ) );
     Int32Set_Impl::const_iterator aSttRow( GetRowIter( nRow ) );
@@ -392,17 +389,12 @@ inline Int32Set_Impl::const_iterator SwAccessibleTableData_Impl::GetColumnIter(
     return aCol;
 }
 
-void SwAccessibleTableData_Impl::CheckRowAndCol(
-        sal_Int32 nRow, sal_Int32 nCol, SwAccessibleTable *pThis ) const
+void SwAccessibleTableData_Impl::CheckRowAndCol(sal_Int32 nRow, sal_Int32 nCol) const
 {
     if( ( nRow < 0 || o3tl::make_unsigned(nRow) >= maRows.size() ) ||
         ( nCol < 0 || o3tl::make_unsigned(nCol) >= maColumns.size() ) )
     {
-        uno::Reference < XAccessibleTable > xThis( pThis );
-        lang::IndexOutOfBoundsException aExcept(
-               u"row or column index out of range"_ustr,
-               xThis );
-        throw aExcept;
+        throw lang::IndexOutOfBoundsException(u"row or column index out of range"_ustr);
     }
 }
 
@@ -709,7 +701,7 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleRowDescription(
     // in first column of row header table and return its text content.
     OUString sRowDesc;
 
-    GetTableData().CheckRowAndCol(nRow, 0, this);
+    GetTableData().CheckRowAndCol(nRow, 0);
 
     uno::Reference< XAccessibleTable > xTableRowHeader = getAccessibleRowHeaders();
     if ( xTableRowHeader.is() )
@@ -742,7 +734,7 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleColumnDescription(
     // in <nColumn>th column of column header table and return its text content.
     OUString sColumnDesc;
 
-    GetTableData().CheckRowAndCol(0, nColumn, this);
+    GetTableData().CheckRowAndCol(0, nColumn);
 
     uno::Reference< XAccessibleTable > xTableColumnHeader = getAccessibleColumnHeaders();
     if ( xTableColumnHeader.is() )
@@ -778,7 +770,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowExtentAt(
     ThrowIfDisposed();
 
     UpdateTableData();
-    GetTableData().CheckRowAndCol( nRow, nColumn, this );
+    GetTableData().CheckRowAndCol(nRow, nColumn);
 
     Int32Set_Impl::const_iterator aSttCol(
                                     GetTableData().GetColumnIter( nColumn ) );
@@ -808,7 +800,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumnExtentAt(
     ThrowIfDisposed();
     UpdateTableData();
 
-    GetTableData().CheckRowAndCol( nRow, nColumn, this );
+    GetTableData().CheckRowAndCol(nRow, nColumn);
 
     Int32Set_Impl::const_iterator aSttCol(
                                     GetTableData().GetColumnIter( nColumn ) );
@@ -904,7 +896,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleRowSelected( sal_Int32 nRow )
 
     ThrowIfDisposed();
 
-    GetTableData().CheckRowAndCol( nRow, 0, this );
+    GetTableData().CheckRowAndCol(nRow, 0);
 
     bool bRet;
     const SwSelBoxes *pSelBoxes = GetSelBoxes();
@@ -930,7 +922,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleColumnSelected(
 
     ThrowIfDisposed();
 
-    GetTableData().CheckRowAndCol( 0, nColumn, this );
+    GetTableData().CheckRowAndCol(0, nColumn);
 
     bool bRet;
     const SwSelBoxes *pSelBoxes = GetSelBoxes();
@@ -959,8 +951,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleTable::getAccessibleCellAt(
 
     ThrowIfDisposed();
 
-    const SwFrame *pCellFrame =
-                    GetTableData().GetCell( nRow, nColumn, this );
+    const SwFrame* pCellFrame = GetTableData().GetCell(nRow, nColumn);
     if( pCellFrame )
         xRet = GetMap()->GetContext( pCellFrame );
 
@@ -988,8 +979,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleSelected(
 
     ThrowIfDisposed();
 
-    const SwFrame *pFrame =
-                    GetTableData().GetCell( nRow, nColumn, this );
+    const SwFrame* pFrame = GetTableData().GetCell(nRow, nColumn);
     if( pFrame && pFrame->IsCellFrame() )
     {
         const SwSelBoxes *pSelBoxes = GetSelBoxes();
@@ -1014,7 +1004,7 @@ sal_Int64 SAL_CALL SwAccessibleTable::getAccessibleIndex(
 
     ThrowIfDisposed();
 
-    SwAccessibleChild aCell( GetTableData().GetCell( nRow, nColumn, this ));
+    SwAccessibleChild aCell(GetTableData().GetCell(nRow, nColumn));
     if ( aCell.IsValid() )
     {
         nRet = GetChildIndex( *(GetMap()), aCell );
