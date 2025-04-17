@@ -88,7 +88,6 @@ class SwAccessibleContextMap_Impl
 public:
     typedef const SwFrame *                                             key_type;
     typedef unotools::WeakReference < SwAccessibleContext >                  mapped_type;
-    typedef std::pair<const key_type,mapped_type>                       value_type;
     typedef std::unordered_map<key_type, mapped_type>::iterator iterator;
     typedef std::unordered_map<key_type, mapped_type>::const_iterator const_iterator;
 private:
@@ -259,7 +258,6 @@ public:
 
     typedef const SdrObject *                                           key_type;
     typedef unotools::WeakReference<::accessibility::AccessibleShape>   mapped_type;
-    typedef std::pair<const key_type,mapped_type>                       value_type;
     typedef std::map<key_type, mapped_type>::iterator iterator;
     typedef std::map<key_type, mapped_type>::const_iterator const_iterator;
 
@@ -652,7 +650,6 @@ class SwAccessibleSelectedParas_Impl
 public:
     typedef unotools::WeakReference < SwAccessibleContext >             key_type;
     typedef SwAccessibleParaSelection                                   mapped_type;
-    typedef std::pair<const key_type,mapped_type>                       value_type;
     typedef SwXAccWeakRefComp                                           key_compare;
     typedef std::map<key_type,mapped_type,key_compare>::iterator        iterator;
     typedef std::map<key_type,mapped_type,key_compare>::const_iterator  const_iterator;
