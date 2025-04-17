@@ -2022,7 +2022,7 @@ void ImpEditEngine::ImpBreakLine(ParaPortion& rParaPortion, EditLine& rLine, Tex
                 nBreakPos = aLBR.breakIndex;
 
                 // show soft hyphen
-                if ( nBreakPos && CH_SOFTHYPHEN == pNode->GetString()[ sal_Int32(nBreakPos) - 1 ] )
+                if ( nBreakPos > 0 && CH_SOFTHYPHEN == pNode->GetString()[nBreakPos - 1] )
                     bHyphenated = true;
             }
             else
