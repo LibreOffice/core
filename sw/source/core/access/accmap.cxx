@@ -2394,16 +2394,13 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
     OSL_ENSURE(bShapeSelected || aFrameOrObj.IsAccessible(GetShell().IsPreview()),
             "frame is not accessible" );
 
-    rtl::Reference < SwAccessibleContext > xOldAcc;
-    rtl::Reference < SwAccessibleContext > xAcc;
-    bool bOldShapeSelected = false;
-
-    xOldAcc = mxCursorContext;
+    rtl::Reference <SwAccessibleContext> xOldAcc = mxCursorContext;
     mxCursorContext.clear();
 
-    bOldShapeSelected = mbShapeSelected;
+    const bool bOldShapeSelected = mbShapeSelected;
     mbShapeSelected = bShapeSelected;
 
+    rtl::Reference <SwAccessibleContext> xAcc;
     if( aFrameOrObj.GetSwFrame() && mpFrameMap )
     {
         SwAccessibleContextMap_Impl::iterator aIter =
