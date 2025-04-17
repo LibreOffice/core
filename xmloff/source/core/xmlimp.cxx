@@ -532,7 +532,7 @@ void SAL_CALL SvXMLImport::setNamespaceHandler( const uno::Reference< xml::sax::
 
 void SAL_CALL SvXMLImport::startDocument()
 {
-    SAL_INFO( "xmloff.core", "{ SvXMLImport::startDocument" );
+    SAL_INFO( "xmloff.core", "{ SvXMLImport::startDocument <" << GetDocumentBase() << "> <" << GetBaseURL() << ">" );
     if (!mxGraphicStorageHandler.is() || !mxEmbeddedResolver.is())
     {
         Reference< lang::XMultiServiceFactory > xFactory( mxModel,  UNO_QUERY );
