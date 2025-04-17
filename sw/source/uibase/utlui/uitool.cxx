@@ -670,6 +670,7 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
     SwFormatPageDesc aPgDesc;
 
     bool bChanged = false;
+    bool bRemoveNumOffset = false;
     // Page number
     switch (rSet.GetItemState(SID_ATTR_PARA_PAGENUM, false, &pItem))
     {
@@ -686,6 +687,7 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
         }
         case SfxItemState::UNKNOWN:
         case SfxItemState::DEFAULT:
+            bRemoveNumOffset = true;
             break;
         default:
             assert(false); // unexpected
@@ -713,13 +715,14 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
         if(const SwFormatPageDesc* pPageDescItem = aCoreSet.GetItemIfSet( RES_PAGEDESC ) )
         {
             const SwPageDesc* pPageDesc = pPageDescItem->GetPageDesc();
+            if (bRemoveNumOffset && pPageDescItem->GetNumOffset())
+                bChanged = true;
             if( pPageDesc )
             {
                 aPgDesc.RegisterToPageDesc( *const_cast<SwPageDesc*>(pPageDesc) );
             }
         }
     }
-
     if(bChanged)
         rSet.Put( aPgDesc );
 }
