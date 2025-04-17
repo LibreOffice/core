@@ -2072,52 +2072,51 @@ void SwAccessibleMap::A11yDispose( const SwFrame *pFrame,
     ::rtl::Reference< SwAccessibleContext > xAccImpl;
     ::rtl::Reference< SwAccessibleContext > xParentAccImpl;
     ::rtl::Reference< ::accessibility::AccessibleShape > xShapeAccImpl;
+
     // get accessible context for frame
+    // First of all look for an accessible context for a frame
+    if( aFrameOrObj.GetSwFrame() && mpFrameMap )
     {
-        // First of all look for an accessible context for a frame
-        if( aFrameOrObj.GetSwFrame() && mpFrameMap )
+        SwAccessibleContextMap_Impl::iterator aIter =
+            mpFrameMap->find( aFrameOrObj.GetSwFrame() );
+        if( aIter != mpFrameMap->end() )
+            xAccImpl = (*aIter).second;
+    }
+    if( !xAccImpl.is() && mpFrameMap )
+    {
+        // If there is none, look if the parent is accessible.
+        const SwFrame *pParent =
+                SwAccessibleFrame::GetParent( aFrameOrObj,
+                                              GetShell().IsPreview());
+
+        if( pParent )
         {
             SwAccessibleContextMap_Impl::iterator aIter =
-                mpFrameMap->find( aFrameOrObj.GetSwFrame() );
+                mpFrameMap->find( pParent );
             if( aIter != mpFrameMap->end() )
-                xAccImpl = (*aIter).second;
+                xParentAccImpl = (*aIter).second;
         }
-        if( !xAccImpl.is() && mpFrameMap )
+    }
+    if( !xParentAccImpl.is() && !aFrameOrObj.GetSwFrame() && mpShapeMap )
+    {
+        SwAccessibleShapeMap_Impl::iterator aIter =
+            mpShapeMap->find( aFrameOrObj.GetDrawObject() );
+        if( aIter != mpShapeMap->end() )
         {
-            // If there is none, look if the parent is accessible.
-            const SwFrame *pParent =
-                    SwAccessibleFrame::GetParent( aFrameOrObj,
-                                                  GetShell().IsPreview());
-
-            if( pParent )
-            {
-                SwAccessibleContextMap_Impl::iterator aIter =
-                    mpFrameMap->find( pParent );
-                if( aIter != mpFrameMap->end() )
-                    xParentAccImpl = (*aIter).second;
-            }
+            xShapeAccImpl = aIter->second;
         }
-        if( !xParentAccImpl.is() && !aFrameOrObj.GetSwFrame() && mpShapeMap )
+    }
+    if (pObj && GetShell().ActionPend() &&
+        (xParentAccImpl.is() || xShapeAccImpl.is()) )
+    {
+        // Keep a reference to the XShape to avoid that it
+        // is deleted with a SwFrameFormat::SwClientNotify.
+        uno::Reference < drawing::XShape > xShape(
+            const_cast< SdrObject * >( pObj )->getUnoShape(),
+            uno::UNO_QUERY );
+        if( xShape.is() )
         {
-            SwAccessibleShapeMap_Impl::iterator aIter =
-                mpShapeMap->find( aFrameOrObj.GetDrawObject() );
-            if( aIter != mpShapeMap->end() )
-            {
-                xShapeAccImpl = aIter->second;
-            }
-        }
-        if (pObj && GetShell().ActionPend() &&
-            (xParentAccImpl.is() || xShapeAccImpl.is()) )
-        {
-            // Keep a reference to the XShape to avoid that it
-            // is deleted with a SwFrameFormat::SwClientNotify.
-            uno::Reference < drawing::XShape > xShape(
-                const_cast< SdrObject * >( pObj )->getUnoShape(),
-                uno::UNO_QUERY );
-            if( xShape.is() )
-            {
-                mvShapes.push_back( xShape );
-            }
+            mvShapes.push_back( xShape );
         }
     }
 
@@ -2399,132 +2398,130 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
     rtl::Reference < SwAccessibleContext > xAcc;
     bool bOldShapeSelected = false;
 
+    xOldAcc = mxCursorContext;
+    mxCursorContext = xAcc.get(); // clear reference
+
+    bOldShapeSelected = mbShapeSelected;
+    mbShapeSelected = bShapeSelected;
+
+    if( aFrameOrObj.GetSwFrame() && mpFrameMap )
     {
-        xOldAcc = mxCursorContext;
-        mxCursorContext = xAcc.get(); // clear reference
-
-        bOldShapeSelected = mbShapeSelected;
-        mbShapeSelected = bShapeSelected;
-
-        if( aFrameOrObj.GetSwFrame() && mpFrameMap )
+        SwAccessibleContextMap_Impl::iterator aIter =
+            mpFrameMap->find( aFrameOrObj.GetSwFrame() );
+        if( aIter != mpFrameMap->end() )
+            xAcc = (*aIter).second;
+        else
         {
-            SwAccessibleContextMap_Impl::iterator aIter =
-                mpFrameMap->find( aFrameOrObj.GetSwFrame() );
-            if( aIter != mpFrameMap->end() )
-                xAcc = (*aIter).second;
+            SwRect rcEmpty;
+            const SwTabFrame* pTabFrame = aFrameOrObj.GetSwFrame()->FindTabFrame();
+            if (pTabFrame)
+            {
+                InvalidatePosOrSize(pTabFrame, nullptr, nullptr, rcEmpty);
+            }
             else
             {
-                SwRect rcEmpty;
-                const SwTabFrame* pTabFrame = aFrameOrObj.GetSwFrame()->FindTabFrame();
-                if (pTabFrame)
-                {
-                    InvalidatePosOrSize(pTabFrame, nullptr, nullptr, rcEmpty);
-                }
-                else
-                {
-                    InvalidatePosOrSize(aFrameOrObj.GetSwFrame(), nullptr, nullptr, rcEmpty);
-                }
-
-                aIter = mpFrameMap->find( aFrameOrObj.GetSwFrame() );
-                if( aIter != mpFrameMap->end() )
-                {
-                    xAcc = (*aIter).second;
-                }
+                InvalidatePosOrSize(aFrameOrObj.GetSwFrame(), nullptr, nullptr, rcEmpty);
             }
 
-            // For cells, some extra thoughts are necessary,
-            // because invalidating the cursor for one cell
-            // invalidates the cursor for all cells of the same
-            // table. For this reason, we don't want to
-            // invalidate the cursor for the old cursor object
-            // and the new one if they are within the same table,
-            // because this would result in doing the work twice.
-            // Moreover, we have to make sure to invalidate the
-            // cursor even if the current cell has no accessible object.
-            // If the old cursor objects exists and is in the same
-            // table, it's the best choice, because using it avoids
-            // an unnecessary cursor invalidation cycle when creating
-            // a new object for the current cell.
-            if( aFrameOrObj.GetSwFrame()->IsCellFrame() )
+            aIter = mpFrameMap->find( aFrameOrObj.GetSwFrame() );
+            if( aIter != mpFrameMap->end() )
             {
-                if( xOldAcc.is() &&
-                    AreInSameTable( xOldAcc, aFrameOrObj.GetSwFrame() ) )
-                {
-                    if( xAcc.is() )
-                        xOldAcc = xAcc; // avoid extra invalidation
-                    else
-                        xAcc = xOldAcc; // make sure at least one
-                }
-                if( !xAcc.is() )
-                    xAcc = GetContextImpl( aFrameOrObj.GetSwFrame() );
+                xAcc = (*aIter).second;
             }
         }
-        else if (bShapeSelected)
+
+        // For cells, some extra thoughts are necessary,
+        // because invalidating the cursor for one cell
+        // invalidates the cursor for all cells of the same
+        // table. For this reason, we don't want to
+        // invalidate the cursor for the old cursor object
+        // and the new one if they are within the same table,
+        // because this would result in doing the work twice.
+        // Moreover, we have to make sure to invalidate the
+        // cursor even if the current cell has no accessible object.
+        // If the old cursor objects exists and is in the same
+        // table, it's the best choice, because using it avoids
+        // an unnecessary cursor invalidation cycle when creating
+        // a new object for the current cell.
+        if( aFrameOrObj.GetSwFrame()->IsCellFrame() )
         {
-            const SwFEShell* pFESh = static_cast<const SwFEShell*>(&rVSh);
-            const SdrMarkList *pMarkList = pFESh->GetMarkList();
-            if (pMarkList != nullptr && pMarkList->GetMarkCount() == 1)
+            if( xOldAcc.is() &&
+                AreInSameTable( xOldAcc, aFrameOrObj.GetSwFrame() ) )
             {
-                SdrObject *pObj = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
-                ::rtl::Reference < ::accessibility::AccessibleShape > pAccShapeImpl = GetContextImpl(pObj,nullptr,false);
-                if (!pAccShapeImpl.is())
+                if( xAcc.is() )
+                    xOldAcc = xAcc; // avoid extra invalidation
+                else
+                    xAcc = xOldAcc; // make sure at least one
+            }
+            if( !xAcc.is() )
+                xAcc = GetContextImpl( aFrameOrObj.GetSwFrame() );
+        }
+    }
+    else if (bShapeSelected)
+    {
+        const SwFEShell* pFESh = static_cast<const SwFEShell*>(&rVSh);
+        const SdrMarkList *pMarkList = pFESh->GetMarkList();
+        if (pMarkList != nullptr && pMarkList->GetMarkCount() == 1)
+        {
+            SdrObject *pObj = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
+            ::rtl::Reference < ::accessibility::AccessibleShape > pAccShapeImpl = GetContextImpl(pObj,nullptr,false);
+            if (!pAccShapeImpl.is())
+            {
+                while (pObj && pObj->getParentSdrObjectFromSdrObject())
                 {
-                    while (pObj && pObj->getParentSdrObjectFromSdrObject())
+                    pObj = pObj->getParentSdrObjectFromSdrObject();
+                }
+                if (pObj != nullptr)
+                {
+                    const SwFrame *pParent = SwAccessibleFrame::GetParent(SwAccessibleChild(pObj), GetShell().IsPreview());
+                    if( pParent )
                     {
-                        pObj = pObj->getParentSdrObjectFromSdrObject();
-                    }
-                    if (pObj != nullptr)
-                    {
-                        const SwFrame *pParent = SwAccessibleFrame::GetParent(SwAccessibleChild(pObj), GetShell().IsPreview());
-                        if( pParent )
+                        ::rtl::Reference< SwAccessibleContext > xParentAccImpl = GetContextImpl(pParent,false);
+                        if (!xParentAccImpl.is())
                         {
-                            ::rtl::Reference< SwAccessibleContext > xParentAccImpl = GetContextImpl(pParent,false);
-                            if (!xParentAccImpl.is())
+                            const SwTabFrame* pTabFrame = pParent->FindTabFrame();
+                            if (pTabFrame)
                             {
-                                const SwTabFrame* pTabFrame = pParent->FindTabFrame();
-                                if (pTabFrame)
+                                //The Table should not add in acc.because the "pParent" is not add to acc .
+                                uno::Reference< XAccessible>  xAccParentTab = GetContext(pTabFrame);//Should Create.
+
+                                const SwFrame *pParentRoot = SwAccessibleFrame::GetParent(SwAccessibleChild(pTabFrame), GetShell().IsPreview());
+                                if (pParentRoot)
                                 {
-                                    //The Table should not add in acc.because the "pParent" is not add to acc .
-                                    uno::Reference< XAccessible>  xAccParentTab = GetContext(pTabFrame);//Should Create.
-
-                                    const SwFrame *pParentRoot = SwAccessibleFrame::GetParent(SwAccessibleChild(pTabFrame), GetShell().IsPreview());
-                                    if (pParentRoot)
-                                    {
-                                        ::rtl::Reference< SwAccessibleContext > xParentAccImplRoot = GetContextImpl(pParentRoot,false);
-                                        if(xParentAccImplRoot.is())
-                                        {
-                                            xParentAccImplRoot->FireAccessibleEvent(
-                                                AccessibleEventId::CHILD, uno::Any(),
-                                                uno::Any(xAccParentTab));
-                                        }
-                                    }
-
-                                    //Get "pParent" acc again.
-                                    xParentAccImpl = GetContextImpl(pParent,false);
-                                }
-                                else
-                                {
-                                    //directly create this acc para .
-                                    xParentAccImpl = GetContextImpl(pParent);//Should Create.
-
-                                    const SwFrame *pParentRoot = SwAccessibleFrame::GetParent(SwAccessibleChild(pParent), GetShell().IsPreview());
-
                                     ::rtl::Reference< SwAccessibleContext > xParentAccImplRoot = GetContextImpl(pParentRoot,false);
                                     if(xParentAccImplRoot.is())
                                     {
                                         xParentAccImplRoot->FireAccessibleEvent(
                                             AccessibleEventId::CHILD, uno::Any(),
-                                            uno::Any(uno::Reference<XAccessible>(xParentAccImpl)));
+                                            uno::Any(xAccParentTab));
                                     }
                                 }
+
+                                //Get "pParent" acc again.
+                                xParentAccImpl = GetContextImpl(pParent,false);
                             }
-                            if (xParentAccImpl.is())
+                            else
                             {
-                                uno::Reference< XAccessible>  xAccShape =
-                                    GetContext(pObj,xParentAccImpl.get());
-                                xParentAccImpl->FireAccessibleEvent(
-                                    AccessibleEventId::CHILD, uno::Any(), uno::Any(xAccShape));
+                                //directly create this acc para .
+                                xParentAccImpl = GetContextImpl(pParent);//Should Create.
+
+                                const SwFrame *pParentRoot = SwAccessibleFrame::GetParent(SwAccessibleChild(pParent), GetShell().IsPreview());
+
+                                ::rtl::Reference< SwAccessibleContext > xParentAccImplRoot = GetContextImpl(pParentRoot,false);
+                                if(xParentAccImplRoot.is())
+                                {
+                                    xParentAccImplRoot->FireAccessibleEvent(
+                                        AccessibleEventId::CHILD, uno::Any(),
+                                        uno::Any(uno::Reference<XAccessible>(xParentAccImpl)));
+                                }
                             }
+                        }
+                        if (xParentAccImpl.is())
+                        {
+                            uno::Reference< XAccessible>  xAccShape =
+                                GetContext(pObj,xParentAccImpl.get());
+                            xParentAccImpl->FireAccessibleEvent(
+                                AccessibleEventId::CHILD, uno::Any(), uno::Any(xAccShape));
                         }
                     }
                 }
