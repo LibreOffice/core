@@ -180,6 +180,7 @@ public:
     void testBinaryCallback();
     void testOmitInvalidate();
     void test2ViewsOmitInvalidate();
+    void testPaintTileOmitInvalidate();
     void testInput();
     void testRedlineWriter();
     void testRedlineCalc();
@@ -254,6 +255,7 @@ public:
     CPPUNIT_TEST(testBinaryCallback);
     CPPUNIT_TEST(testOmitInvalidate);
     CPPUNIT_TEST(test2ViewsOmitInvalidate);
+    CPPUNIT_TEST(testPaintTileOmitInvalidate);
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testRedlineWriter);
     CPPUNIT_TEST(testRedlineCalc);
@@ -2346,6 +2348,32 @@ void DesktopLOKTest::testPaintPartTile()
     // This failed: paintPartTile() (as a side-effect) ended the text edit of
     // the first view, so there were no invalidations.
     //CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
+}
+
+void DesktopLOKTest::testPaintTileOmitInvalidate()
+{
+    // Given a painted tile:
+    comphelper::LibreOfficeKit::setPartInInvalidation(true);
+    comphelper::ScopeGuard aGuard([]()
+    {
+        comphelper::LibreOfficeKit::setPartInInvalidation(false);
+    });
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    ViewCallback aView(pDocument);
+    const int nCanvasWidth = 256;
+    const int nCanvasHeight = 256;
+    std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aPixels;
+    pDocument->m_pDocumentClass->paintTile(pDocument, aPixels.data(), nCanvasWidth, nCanvasHeight, 0, 0, 3840, 3840);
+    Scheduler::ProcessEventsToIdle();
+    aView.m_bTilesInvalidated = false;
+
+    // When pressing a key:
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then make sure we get an invalidation:
+    CPPUNIT_ASSERT(aView.m_bTilesInvalidated);
 }
 
 void DesktopLOKTest::testPaintPartTileDifferentSchemes()
