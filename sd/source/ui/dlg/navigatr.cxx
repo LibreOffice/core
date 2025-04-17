@@ -735,12 +735,10 @@ IMPL_LINK(SdNavigatorWin, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
     if (KEY_ESCAPE == rKEvt.GetKeyCode().GetCode())
     {
-        // during drag'n'drop we just stop the drag but do not close the navigator
-        if (!SdPageObjsTLV::IsInDrag())
+        ::sd::ViewShellBase* pBase = ::sd::ViewShellBase::GetViewShellBase( mpBindings->GetDispatcher()->GetFrame());
+        if (sd::SlideShow::IsRunning(*pBase))
         {
-            ::sd::ViewShellBase* pBase = ::sd::ViewShellBase::GetViewShellBase( mpBindings->GetDispatcher()->GetFrame());
-            if (pBase)
-                sd::SlideShow::Stop(*pBase);
+            sd::SlideShow::Stop(*pBase);
             bConsumed = true;
         }
     }
