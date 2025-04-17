@@ -1268,13 +1268,12 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
     //Checked for FlyFrame
     if (mpFrameMap)
     {
-        SwAccessibleContextMap_Impl::iterator aIter = mpFrameMap->begin();
-        while( aIter != mpFrameMap->end() )
+        for (const auto& rIter : *mpFrameMap)
         {
-            const SwFrame *pFrame = (*aIter).first;
+            const SwFrame *pFrame = rIter.first;
             if(pFrame->IsFlyFrame())
             {
-                rtl::Reference < SwAccessibleContext > xAcc = (*aIter).second;
+                rtl::Reference<SwAccessibleContext> xAcc = rIter.second;
 
                 if(xAcc.is())
                 {
@@ -1312,7 +1311,6 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     }
                 }
             }
-            ++aIter;
         }
     }
 
