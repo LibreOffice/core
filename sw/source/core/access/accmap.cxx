@@ -2399,7 +2399,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
     bool bOldShapeSelected = false;
 
     xOldAcc = mxCursorContext;
-    mxCursorContext = xAcc.get(); // clear reference
+    mxCursorContext.clear();
 
     bOldShapeSelected = mbShapeSelected;
     mbShapeSelected = bShapeSelected;
