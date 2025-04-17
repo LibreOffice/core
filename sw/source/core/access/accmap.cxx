@@ -94,14 +94,7 @@ private:
     std::unordered_map <key_type, mapped_type> maMap;
 public:
 
-#if OSL_DEBUG_LEVEL > 0
-    bool mbLocked;
-#endif
-
     SwAccessibleContextMap_Impl()
-#if OSL_DEBUG_LEVEL > 0
-        : mbLocked( false )
-#endif
     {}
 
     iterator begin() { return maMap.begin(); }
@@ -1658,17 +1651,7 @@ rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetDocumentView_(
     bool bSetVisArea = false;
 
     if( !mpFrameMap )
-    {
         mpFrameMap.reset(new SwAccessibleContextMap_Impl);
-#if OSL_DEBUG_LEVEL > 0
-        mpFrameMap->mbLocked = false;
-#endif
-    }
-
-#if OSL_DEBUG_LEVEL > 0
-    assert(!mpFrameMap->mbLocked);
-    mpFrameMap->mbLocked = true;
-#endif
 
     const SwRootFrame* pRootFrame = GetShell().GetLayout();
     SwAccessibleContextMap_Impl::iterator aIter = mpFrameMap->find( pRootFrame );
@@ -1694,10 +1677,6 @@ rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetDocumentView_(
             mpFrameMap->emplace( pRootFrame, xAcc );
         }
     }
-
-#if OSL_DEBUG_LEVEL > 0
-    mpFrameMap->mbLocked = false;
-#endif
 
     if( bSetVisArea )
     {
