@@ -1129,7 +1129,6 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
 {
     DBG_TESTSOLARMUTEX();
 
-    std::unique_ptr<SwAccessibleObjShape_Impl[]> pShapes;
     SwAccessibleObjShape_Impl *pSelShape = nullptr;
     size_t nShapes = 0;
 
@@ -1139,7 +1138,8 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
 
     if( mpShapeMap )
     {
-        pShapes = mpShapeMap->Copy( nShapes, pFESh, &pSelShape );
+        std::unique_ptr<SwAccessibleObjShape_Impl[]> pShapes
+            = mpShapeMap->Copy(nShapes, pFESh, &pSelShape);
 
         //Checked for shapes.
         SwAccessibleShapeMap_Impl::const_iterator aIter = mpShapeMap->cbegin();
@@ -1290,8 +1290,6 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
             }//while( aIter != aEndIter )
         }//else
     }
-
-    pShapes.reset();
 
     //Checked for FlyFrame
     if (mpFrameMap)
