@@ -1751,19 +1751,18 @@ rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetContextImpl(const SwFram
 
         if( !xAcc.is() && bCreate )
         {
-            rtl::Reference<SwAccessibleContext> pAcc;
             switch( pFrame->GetType() )
             {
             case SwFrameType::Txt:
-                pAcc = new SwAccessibleParagraph(shared_from_this(),
+                xAcc = new SwAccessibleParagraph(shared_from_this(),
                                 static_cast< const SwTextFrame& >( *pFrame ) );
                 break;
             case SwFrameType::Header:
-                pAcc = new SwAccessibleHeaderFooter(shared_from_this(),
+                xAcc = new SwAccessibleHeaderFooter(shared_from_this(),
                                 static_cast< const SwHeaderFrame *>( pFrame ) );
                 break;
             case SwFrameType::Footer:
-                pAcc = new SwAccessibleHeaderFooter(shared_from_this(),
+                xAcc = new SwAccessibleHeaderFooter(shared_from_this(),
                                 static_cast< const SwFooterFrame *>( pFrame ) );
                 break;
             case SwFrameType::Ftn:
@@ -1772,7 +1771,7 @@ rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetContextImpl(const SwFram
                         static_cast < const SwFootnoteFrame * >( pFrame );
                     bool bIsEndnote =
                         SwAccessibleFootnote::IsEndnote( pFootnoteFrame );
-                    pAcc = new SwAccessibleFootnote(shared_from_this(), bIsEndnote,
+                    xAcc = new SwAccessibleFootnote(shared_from_this(), bIsEndnote,
                                 /*(bIsEndnote ? mnEndnote++ : mnFootnote++),*/
                                 pFootnoteFrame );
                 }
@@ -1784,33 +1783,32 @@ rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetContextImpl(const SwFram
                     switch( SwAccessibleFrameBase::GetNodeType( pFlyFrame ) )
                     {
                     case SwNodeType::Grf:
-                        pAcc = new SwAccessibleGraphic(shared_from_this(), pFlyFrame );
+                        xAcc = new SwAccessibleGraphic(shared_from_this(), pFlyFrame );
                         break;
                     case SwNodeType::Ole:
-                        pAcc = new SwAccessibleEmbeddedObject(shared_from_this(), pFlyFrame );
+                        xAcc = new SwAccessibleEmbeddedObject(shared_from_this(), pFlyFrame );
                         break;
                     default:
-                        pAcc = new SwAccessibleTextFrame(shared_from_this(), *pFlyFrame );
+                        xAcc = new SwAccessibleTextFrame(shared_from_this(), *pFlyFrame );
                         break;
                     }
                 }
                 break;
             case SwFrameType::Cell:
-                pAcc = new SwAccessibleCell(shared_from_this(),
+                xAcc = new SwAccessibleCell(shared_from_this(),
                                 static_cast< const SwCellFrame *>( pFrame ) );
                 break;
             case SwFrameType::Tab:
-                pAcc = new SwAccessibleTable(shared_from_this(),
+                xAcc = new SwAccessibleTable(shared_from_this(),
                                 static_cast< const SwTabFrame *>( pFrame ) );
                 break;
             case SwFrameType::Page:
                 OSL_ENSURE(GetShell().IsPreview(),
                             "accessible page frames only in PagePreview" );
-                pAcc = new SwAccessiblePage(shared_from_this(), pFrame);
+                xAcc = new SwAccessiblePage(shared_from_this(), pFrame);
                 break;
             default: break;
             }
-            xAcc = pAcc;
             assert(xAcc.is());
 
             if( aIter != mpFrameMap->end() )
@@ -1822,7 +1820,7 @@ rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetContextImpl(const SwFram
                 mpFrameMap->emplace( pFrame, xAcc );
             }
 
-            if( pAcc->HasCursor() &&
+            if (xAcc->HasCursor() &&
                 !AreInSameTable( mxCursorContext, pFrame ) )
             {
                 // If the new context has the focus, and if we know
