@@ -1138,10 +1138,9 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
     SwPaM* pCursor = pFESh ? pFESh->GetCursor( false /* ??? */ ) : nullptr;
 
     if( mpShapeMap )
+    {
         pShapes = mpShapeMap->Copy( nShapes, pFESh, &pSelShape );
 
-    if( mpShapeMap )
-    {
         //Checked for shapes.
         SwAccessibleShapeMap_Impl::const_iterator aIter = mpShapeMap->cbegin();
         SwAccessibleShapeMap_Impl::const_iterator aEndIter = mpShapeMap->cend();
