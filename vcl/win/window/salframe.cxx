@@ -2202,9 +2202,7 @@ static void ImplGetKeyNameText(UINT lParam, OUStringBuffer& rBuf, const char* pR
     if ( lParam )
     {
         OUString aLang = Application::GetSettings().GetUILanguageTag().getLanguage();
-        OUString aRet;
-
-        aRet = ::vcl_sal::getKeysReplacementName( aLang, lParam );
+        OUString aRet = vcl_sal::getKeysReplacementName(aLang, lParam);
         if( aRet.isEmpty() )
         {
             nKeyLen = GetKeyNameTextW( lParam, aKeyBuf, nMaxKeyLen );
