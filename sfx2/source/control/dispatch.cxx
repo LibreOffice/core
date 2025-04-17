@@ -40,6 +40,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <config_vclplug.h>
 #include <officecfg/Office/Common.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
@@ -1902,6 +1903,23 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, c
     css::uno::Reference< css::frame::XPopupMenuController > xPopupController(
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         u"com.sun.star.comp.framework.ResourceMenuController"_ustr, aArgs, xContext ), css::uno::UNO_QUERY );
+#if defined EMSCRIPTEN && ENABLE_QT5
+    // At least under Emscripten with Qt5, the QMenu::exec underlying the below call to
+    // xPopupMenu->execute returns immediately, without going into a new event loop, and we need to
+    // keep the underlying QMenu instance alive via the static lastPopupController chain here, until
+    // the next popup menu is opened (there can only ever be a single popup menu open, so it
+    // suffices to have a single static lastPopupController instance):
+    static css::uno::Reference<css::frame::XPopupMenuController> lastPopupController;
+    if (lastPopupController.is()) {
+        if (css::uno::Reference<css::lang::XComponent> component(
+                lastPopupController, css::uno::UNO_QUERY);
+            component.is())
+        {
+            component->dispose();
+        }
+        lastPopupController = xPopupController;
+    }
+#endif
 
     rtl::Reference< VCLXPopupMenu > xPopupMenu = new VCLXPopupMenu();
 
@@ -1938,9 +1956,11 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, c
         }
     }
 
+#if !(defined EMSCRIPTEN && ENABLE_QT5)
     css::uno::Reference< css::lang::XComponent > xComponent( xPopupController, css::uno::UNO_QUERY );
     if ( xComponent.is() )
         xComponent->dispose();
+#endif
 }
 
 /** With this method the SfxDispatcher can be locked and released. A locked
