@@ -2722,21 +2722,18 @@ sal_Int32 SwAccessibleMap::GetChildIndex( const SwFrame& rParentFrame,
     SwAccessibleChild aFrameOrObj( &rParentFrame );
     if (aFrameOrObj.IsAccessible(GetShell().IsPreview()))
     {
-        rtl::Reference < SwAccessibleContext > xAcc;
-
         if( mpFrameMap )
         {
             SwAccessibleContextMap_Impl::iterator aIter =
                                     mpFrameMap->find( aFrameOrObj.GetSwFrame() );
             if( aIter != mpFrameMap->end() )
             {
-                xAcc = (*aIter).second;
+                rtl::Reference<SwAccessibleContext> xAcc = (*aIter).second;
+                if (xAcc.is())
+                    nIndex = xAcc->GetChildIndex(const_cast<SwAccessibleMap&>(*this),
+                                                 SwAccessibleChild(&rChild));
             }
         }
-
-        if( xAcc.is() )
-            nIndex = xAcc->GetChildIndex( const_cast<SwAccessibleMap&>(*this),
-                                              SwAccessibleChild( &rChild ) );
     }
 
     return nIndex;
