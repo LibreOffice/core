@@ -1137,8 +1137,6 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
     const SwFEShell *pFESh = dynamic_cast<const SwFEShell*>(&rVSh);
     SwPaM* pCursor = pFESh ? pFESh->GetCursor( false /* ??? */ ) : nullptr;
 
-    //const size_t nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
-
     if( mpShapeMap )
         pShapes = mpShapeMap->Copy( nShapes, pFESh, &pSelShape );
 
