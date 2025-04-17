@@ -1129,15 +1129,14 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
 {
     DBG_TESTSOLARMUTEX();
 
-    SwAccessibleObjShape_Impl *pSelShape = nullptr;
-    size_t nShapes = 0;
-
     const SwViewShell& rVSh = GetShell();
     const SwFEShell *pFESh = dynamic_cast<const SwFEShell*>(&rVSh);
     SwPaM* pCursor = pFESh ? pFESh->GetCursor( false /* ??? */ ) : nullptr;
 
     if( mpShapeMap )
     {
+        SwAccessibleObjShape_Impl* pSelShape = nullptr;
+        size_t nShapes = 0;
         std::unique_ptr<SwAccessibleObjShape_Impl[]> pShapes
             = mpShapeMap->Copy(nShapes, pFESh, &pSelShape);
 
