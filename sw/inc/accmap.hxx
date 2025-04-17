@@ -53,18 +53,6 @@ struct PreviewPage;
 namespace vcl { class Window; }
 namespace com::sun::star::accessibility { class XAccessible; }
 
-// The shape list is filled if an accessible shape is destroyed. It
-// simply keeps a reference to the accessible shape's XShape. These
-// references are destroyed within the EndAction when firing events.
-// There are two reason for this. First of all, a new accessible shape
-// for the XShape might be created soon. It's then cheaper if the XShape
-// still exists. The other reason are situations where an accessible shape
-// is destroyed within an SwFrameFormat::SwClientNotify. In this case, destroying
-// the XShape at the same time (indirectly by destroying the accessible
-// shape) leads to an assert, because a client of the Modify is destroyed
-// within a Modify call.
-using SwShapeList_Impl = std::vector<css::uno::Reference<css::drawing::XShape>>;
-
 enum class AccessibleStates
 {
     NONE                   = 0x0000,
@@ -93,7 +81,19 @@ class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
     ::osl::Mutex maEventMutex;
     std::unique_ptr<SwAccessibleContextMap> mpFrameMap;
     std::unique_ptr<SwAccessibleShapeMap_Impl> mpShapeMap;
-    SwShapeList_Impl mvShapes;
+
+    // The shape list is filled if an accessible shape is destroyed. It
+    // simply keeps a reference to the accessible shape's XShape. These
+    // references are destroyed within the EndAction when firing events.
+    // There are two reason for this. First of all, a new accessible shape
+    // for the XShape might be created soon. It's then cheaper if the XShape
+    // still exists. The other reason are situations where an accessible shape
+    // is destroyed within an SwFrameFormat::SwClientNotify. In this case, destroying
+    // the XShape at the same time (indirectly by destroying the accessible
+    // shape) leads to an assert, because a client of the Modify is destroyed
+    // within a Modify call.
+    std::vector<css::uno::Reference<css::drawing::XShape>> mvShapes;
+
     std::unique_ptr<SwAccessibleEventList_Impl> mpEvents;
     std::unique_ptr<SwAccessibleEventMap_Impl> mpEventMap;
 
