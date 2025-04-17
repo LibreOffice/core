@@ -73,11 +73,7 @@ void BufferedDecompositionFlusher::update(const BufferedDecompositionGroupPrimit
     getInstance()->updateImpl(p);
 }
 
-BufferedDecompositionFlusher::BufferedDecompositionFlusher()
-{
-    setName("BufferedDecompositionFlusher");
-    create();
-}
+BufferedDecompositionFlusher::BufferedDecompositionFlusher() { create(); }
 
 void BufferedDecompositionFlusher::updateImpl(const BufferedDecompositionPrimitive2D* p)
 {
@@ -95,6 +91,7 @@ void BufferedDecompositionFlusher::updateImpl(const BufferedDecompositionGroupPr
 
 void SAL_CALL BufferedDecompositionFlusher::run()
 {
+    setName("BufferedDecompositionFlusher");
     for (;;)
     {
         auto aNow = std::chrono::steady_clock::now();
