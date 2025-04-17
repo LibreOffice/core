@@ -1584,13 +1584,11 @@ SwAccessibleMap::~SwAccessibleMap()
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
     if( mpFrameMap )
     {
-        SwAccessibleContextMap::iterator aIter = mpFrameMap->begin();
-        while( aIter != mpFrameMap->end() )
+        for (const auto& rIter : *mpFrameMap)
         {
-            rtl::Reference < SwAccessibleContext > xTmp = (*aIter).second;
+            rtl::Reference <SwAccessibleContext> xTmp = rIter.second;
             if( xTmp.is() )
                 assert(xTmp->GetMap() == nullptr); // must be disposed
-            ++aIter;
         }
     }
 #endif
