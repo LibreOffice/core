@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkMenu" id="navmenu">
@@ -9,7 +9,7 @@
       <object class="GtkMenuItem" id="rename">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_RENAME">Rename...</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_RENAME">Rename</property>
         <property name="use-underline">True</property>
       </object>
     </child>

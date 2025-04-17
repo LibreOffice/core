@@ -301,8 +301,13 @@ bool SdPageObjsTLV::IsEqualToDoc( const SdDrawDocument* pInDoc )
 
 IMPL_LINK(SdPageObjsTLV, CommandHdl, const CommandEvent&, rCEvt, bool)
 {
-    if (IsEditingActive())
-        return false;
+    if (m_bEditing)
+    {
+        // Set the editing flag false here because gtk3 in-place editing ends but EditedEntryHdl
+        // doesn't get called. This isn't needed for sal in-place editing because EditedEntryHdl
+        // gets called when focus is lost.
+        m_bEditing = false;
+    }
 
     if (rCEvt.GetCommand() == CommandEventId::ContextMenu)
     {
@@ -328,16 +333,17 @@ IMPL_LINK(SdPageObjsTLV, CommandHdl, const CommandEvent&, rCEvt, bool)
 
 IMPL_LINK(SdPageObjsTLV, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
+    if (m_bEditing)
+        return false;
+
     const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
     if (m_xAccel->execute(rKeyCode))
     {
-        m_bEditing = false;
         // the accelerator consumed the event
         return true;
     }
     if (rKeyCode.GetCode() == KEY_RETURN)
     {
-        m_bEditing = false;
         std::unique_ptr<weld::TreeIter> xCursor(m_xTreeView->make_iterator());
         if (m_xTreeView->get_cursor(xCursor.get()) && m_xTreeView->iter_has_child(*xCursor))
         {
@@ -352,15 +358,16 @@ IMPL_LINK(SdPageObjsTLV, KeyInputHdl, const KeyEvent&, rKEvt, bool)
         return true;
     }
     bool bRet = m_aKeyPressHdl.Call(rKEvt);
-    // m_bEditing needs to be set after key press handler call back or x11 won't end editing on
-    // Esc key press. See SdNavigatorWin::KeyInputHdl.
-    m_bEditing = false;
     return bRet;
 }
 
 IMPL_LINK(SdPageObjsTLV, MousePressHdl, const MouseEvent&, rMEvt, bool)
 {
-    m_bEditing = false;
+    // Don't set m_bEditing false here. Sal in-place editing doesn't like that because the in-place
+    // editing mouse presses also end up here.
+    if (m_bEditing)
+        return false;
+
     m_bSelectionHandlerNavigates = rMEvt.GetClicks() == 1;
     m_bNavigationGrabsFocus = rMEvt.GetClicks() != 1;
     return false;
@@ -368,6 +375,9 @@ IMPL_LINK(SdPageObjsTLV, MousePressHdl, const MouseEvent&, rMEvt, bool)
 
 IMPL_LINK_NOARG(SdPageObjsTLV, MouseReleaseHdl, const MouseEvent&, bool)
 {
+    if (m_bEditing)
+        return false;
+
     if (m_aMouseReleaseHdl.IsSet() && m_aMouseReleaseHdl.Call(MouseEvent()))
         return false;
 
@@ -767,12 +777,11 @@ SdPageObjsTLV::SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeView)
     m_xTreeView->set_column_editables({true});
 }
 
-IMPL_LINK(SdPageObjsTLV, EditEntryAgain, void*, p, void)
+IMPL_LINK(SdPageObjsTLV, EditEntryAgain, void*, pTreeIter, void)
 {
     m_xTreeView->grab_focus();
-    std::unique_ptr<weld::TreeIter> xEntry(static_cast<weld::TreeIter*>(p));
+    std::unique_ptr<weld::TreeIter> xEntry(static_cast<weld::TreeIter*>(pTreeIter));
     m_xTreeView->start_editing(*xEntry);
-    m_bEditing = true;
 }
 
 IMPL_LINK_NOARG(SdPageObjsTLV, EditingEntryHdl, const weld::TreeIter&, bool)
@@ -790,7 +799,8 @@ IMPL_LINK(SdPageObjsTLV, EditedEntryHdl, const IterString&, rIterString, bool)
         return true;
 
     // If the new name is empty or not unique, start editing again.
-    if (rIterString.second.isEmpty() || m_pDoc->GetObj(rIterString.second))
+    if (rIterString.second.isEmpty() || m_pDoc->GetObj(rIterString.second)
+        || m_pDoc->IsPageNameUnique(rIterString.second))
     {
         std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator(&rIterString.first));
         Application::PostUserEvent(LINK(this, SdPageObjsTLV, EditEntryAgain), xEntry.release());
@@ -846,7 +856,7 @@ void SdPageObjsTLV::Select()
 {
     m_nSelectEventId = nullptr;
 
-    if (IsEditingActive())
+    if (m_bEditing)
         return;
 
     m_bLinkableSelected = true;

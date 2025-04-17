@@ -173,8 +173,6 @@ public:
     SD_DLLPUBLIC SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeview);
     SD_DLLPUBLIC ~SdPageObjsTLV();
 
-    bool IsEditingActive() const {return m_bEditing;}
-
     void hide()
     {
         m_xTreeView->hide();

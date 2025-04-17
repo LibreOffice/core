@@ -271,18 +271,7 @@ void SdNavigatorWin::ExecuteContextMenuAction(std::u16string_view rSelectedPopup
         weld::TreeView& rTreeView = GetObjects().get_treeview();
         std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
         if (rTreeView.get_selected(xIter.get()))
-        {
-            // grab the shell focus so the navigator will update
-            if (SfxViewShell* pCurSh = SfxViewShell::Current())
-            {
-                if (vcl::Window* pShellWnd = pCurSh->GetWindow())
-                    pShellWnd->GrabFocus();
-            }
-            if (rTreeView.get_iter_depth(*xIter) > 0)
-                mpBindings->Execute(SID_NAME_GROUP);
-            else
-                mpBindings->Execute(SID_RENAMEPAGE);
-        }
+            rTreeView.start_editing(*xIter);
     }
 }
 
@@ -747,7 +736,7 @@ IMPL_LINK(SdNavigatorWin, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     if (KEY_ESCAPE == rKEvt.GetKeyCode().GetCode())
     {
         // during drag'n'drop we just stop the drag but do not close the navigator
-        if (!SdPageObjsTLV::IsInDrag() && !GetObjects().IsEditingActive())
+        if (!SdPageObjsTLV::IsInDrag())
         {
             ::sd::ViewShellBase* pBase = ::sd::ViewShellBase::GetViewShellBase( mpBindings->GetDispatcher()->GetFrame());
             if (pBase)
