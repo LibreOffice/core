@@ -29,6 +29,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <fmtanchr.hxx>
+#include <redline.hxx>
 
 /// Test to assert layout / rendering result of Writer.
 class SwLayoutWriter2 : public SwModelTestBase
@@ -540,6 +541,26 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf165322)
                 "//text[text() = 'Nunc viverra imperdiet enim. Fusce est. Vivamus a "
                 "tellus.']/parent::textarray/preceding-sibling::font[1]",
                 "strikeout", u"1");
+
+    // Also check if the tooltip shows the delete, not the format
+    // Given a paragraph with both delete and format:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwRootFrame* pLayout = pWrtShell->GetLayout();
+    SwFrame* pPage = pLayout->GetLower();
+    SwFrame* pBody = pPage->GetLower();
+    SwFrame* pPara = pBody->GetLower()->GetNext();
+    // When getting the content at a position for tooltip purposes:
+    Point aPoint = pPara->getFrameArea().Center();
+    SwContentAtPos aContentAtPos(IsAttrAtPos::Redline);
+    CPPUNIT_ASSERT(pWrtShell->GetContentAtPos(aPoint, aContentAtPos));
+    // Then make sure we find a delete redline:
+    CPPUNIT_ASSERT_EQUAL(IsAttrAtPos::Redline, aContentAtPos.eContentAtPos);
+    const SwRangeRedline* pRedline = aContentAtPos.aFnd.pRedl;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1 (RedlineType::Delete)
+    // - Actual  : 5 (RedlineType::ParagraphFormat)
+    // i.e. the delete didn't have priority over para format, leading to a misleading tooltip.
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, pRedline->GetType());
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInNumbering)
