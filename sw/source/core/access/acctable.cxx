@@ -131,11 +131,8 @@ public:
 void SwAccessibleTableData_Impl::CollectData( const SwFrame *pFrame )
 {
     const SwAccessibleChildSList aList( *pFrame, mrAccMap );
-    SwAccessibleChildSList::const_iterator aIter( aList.begin() );
-    SwAccessibleChildSList::const_iterator aEndIter( aList.end() );
-    while( aIter != aEndIter )
+    for (const SwAccessibleChild& rLower : aList)
     {
-        const SwAccessibleChild& rLower = *aIter;
         const SwFrame *pLower = rLower.GetSwFrame();
         if( pLower )
         {
@@ -158,7 +155,6 @@ void SwAccessibleTableData_Impl::CollectData( const SwFrame *pFrame )
                 CollectData( pLower );
             }
         }
-        ++aIter;
     }
 }
 
@@ -207,11 +203,8 @@ void SwAccessibleTableData_Impl::GetSelection(
             bool bColumns ) const
 {
     const SwAccessibleChildSList aList( *pFrame, mrAccMap );
-    SwAccessibleChildSList::const_iterator aIter( aList.begin() );
-    SwAccessibleChildSList::const_iterator aEndIter( aList.end() );
-    while( aIter != aEndIter )
+    for (const SwAccessibleChild& rLower : aList)
     {
-        const SwAccessibleChild& rLower = *aIter;
         const SwFrame *pLower = rLower.GetSwFrame();
         OSL_ENSURE( pLower, "child should be a frame" );
         const SwRect aBox = rLower.GetBox( mrAccMap );
@@ -259,7 +252,6 @@ void SwAccessibleTableData_Impl::GetSelection(
                 }
             }
         }
-        ++aIter;
     }
 }
 
