@@ -148,8 +148,8 @@ void FunnelChartTypeTemplate::applyStyle2(const rtl::Reference<DataSeries>& xSer
                                           ::sal_Int32 nSeriesCount)
 {
     ChartTypeTemplate::applyStyle2(xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount);
-    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(xSeries, "BorderStyle",
-                                                               uno::Any(drawing::LineStyle_NONE));
+    xSeries->setPropertyAlsoToAllAttributedDataPoints("BorderStyle",
+                                                      uno::Any(drawing::LineStyle_NONE));
     if (getDimension() != 3)
         return;
 
@@ -158,8 +158,7 @@ void FunnelChartTypeTemplate::applyStyle2(const rtl::Reference<DataSeries>& xSer
         //apply Geometry3D
         uno::Any aAGeometry3D;
         getFastPropertyValue(aAGeometry3D, PROP_FUNNEL_TEMPLATE_GEOMETRY3D);
-        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(xSeries, "Geometry3D",
-                                                                   aAGeometry3D);
+        xSeries->setPropertyAlsoToAllAttributedDataPoints("Geometry3D", aAGeometry3D);
     }
     catch (const uno::Exception&)
     {
