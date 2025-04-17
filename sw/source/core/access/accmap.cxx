@@ -289,9 +289,8 @@ public:
         const SwFEShell *pFESh,
         SwAccessibleObjShape_Impl  **pSelShape ) const;
 
-    iterator end() { return maMap.end(); }
-    const_iterator cbegin() const { return maMap.cbegin(); }
-    const_iterator cend() const { return maMap.cend(); }
+    const_iterator begin() const { return maMap.begin(); }
+    const_iterator end() const { return maMap.end(); }
     bool empty() const { return maMap.empty(); }
     iterator find(const key_type& key) { return maMap.find(key); }
     template<class... Args>
@@ -1140,49 +1139,37 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
         std::unique_ptr<SwAccessibleObjShape_Impl[]> pShapes
             = mpShapeMap->Copy(nShapes, pFESh, &pSelShape);
 
-        //Checked for shapes.
-        SwAccessibleShapeMap_Impl::const_iterator aIter = mpShapeMap->cbegin();
-        SwAccessibleShapeMap_Impl::const_iterator aEndIter = mpShapeMap->cend();
-
         if (IsDocumentSelAll())
         {
-            while( aIter != aEndIter )
+            for (const auto& rIter : *mpShapeMap)
             {
-                rtl::Reference<::accessibility::AccessibleShape> xAcc( (*aIter).second );
+                rtl::Reference<::accessibility::AccessibleShape> xAcc(rIter.second);
                 if( xAcc.is() )
                     xAcc->SetState( AccessibleStateType::SELECTED );
-
-                ++aIter;
             }
         }
         else
         {
-            while( aIter != aEndIter )
+            for (const auto& rIter : *mpShapeMap)
             {
-                const SwFrameFormat *pFrameFormat = (*aIter).first ? ::FindFrameFormat( (*aIter).first ) : nullptr;
+                const SwFrameFormat* pFrameFormat = rIter.first ? ::FindFrameFormat(rIter.first) : nullptr;
                 if( !pFrameFormat )
-                {
-                    ++aIter;
                     continue;
-                }
+
                 const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
                 const SwNode *pAnchorNode = rAnchor.GetAnchorNode();
 
                 if(rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
                 {
-                    rtl::Reference < ::accessibility::AccessibleShape > xAcc( (*aIter).second );
+                    rtl::Reference <::accessibility::AccessibleShape> xAcc(rIter.second);
                     if(xAcc.is())
                         xAcc->ResetState( AccessibleStateType::SELECTED );
-
-                    ++aIter;
                     continue;
                 }
 
                 if( !pAnchorNode )
-                {
-                    ++aIter;
                     continue;
-                }
+
                 if( pAnchorNode->GetTextNode() )
                 {
                     sal_Int32 nIndex = rAnchor.GetAnchorContentOffset();
@@ -1222,20 +1209,20 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                         if( ( ((nHere == nStartIndex) && (nIndex >= pStart->GetContentIndex())) || (nHere > nStartIndex) )
                                             &&( ((nHere == nEndIndex) && (nIndex < pEnd->GetContentIndex())) || (nHere < nEndIndex) ) )
                                         {
-                                            rtl::Reference < ::accessibility::AccessibleShape > xAcc( (*aIter).second );
+                                            rtl::Reference<::accessibility::AccessibleShape> xAcc(rIter.second);
                                             if( xAcc.is() )
                                                 xAcc->SetState( AccessibleStateType::SELECTED );
                                         }
                                         else
                                         {
-                                            rtl::Reference < ::accessibility::AccessibleShape > xAcc( (*aIter).second );
+                                            rtl::Reference<::accessibility::AccessibleShape> xAcc(rIter.second);
                                             if( xAcc.is() )
                                                 xAcc->ResetState( AccessibleStateType::SELECTED );
                                         }
                                     }
                                     else if( rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA )
                                     {
-                                        rtl::Reference<::accessibility::AccessibleShape> const xAcc((*aIter).second);
+                                        rtl::Reference<::accessibility::AccessibleShape> const xAcc(rIter.second);
                                         if (xAcc.is())
                                         {
                                             if (IsSelectFrameAnchoredAtPara(*rAnchor.GetContentAnchor(), *pStart, *pEnd))
@@ -1250,7 +1237,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                     }
                                     else if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
                                     {
-                                        rtl::Reference<::accessibility::AccessibleShape> const xAcc((*aIter).second);
+                                        rtl::Reference<::accessibility::AccessibleShape> const xAcc(rIter.second);
                                         if (xAcc.is())
                                         {
                                             if (IsDestroyFrameAnchoredAtChar(*rAnchor.GetContentAnchor(), *pStart, *pEnd))
@@ -1273,9 +1260,9 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                         size_t nNumShapes = nShapes;
                         while (nNumShapes > 0)
                         {
-                            if( pShape < pSelShape && (pShape->first==(*aIter).first) )
+                            if (pShape < pSelShape && (pShape->first == rIter.first))
                             {
-                                rtl::Reference < ::accessibility::AccessibleShape > xAcc( (*aIter).second );
+                                rtl::Reference<::accessibility::AccessibleShape> xAcc(rIter.second);
                                 if(xAcc.is())
                                     xAcc->ResetState( AccessibleStateType::SELECTED );
                             }
@@ -1284,9 +1271,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                         }
                     }
                 }
-
-                ++aIter;
-            }//while( aIter != aEndIter )
+            } // for loop
         }//else
     }
 
@@ -2925,8 +2910,8 @@ bool SwAccessibleMap::ReplaceChild (
     const SdrObject *pObj = nullptr;
     if( mpShapeMap )
     {
-        SwAccessibleShapeMap_Impl::const_iterator aIter = mpShapeMap->cbegin();
-        SwAccessibleShapeMap_Impl::const_iterator aEndIter = mpShapeMap->cend();
+        SwAccessibleShapeMap_Impl::const_iterator aIter = mpShapeMap->begin();
+        SwAccessibleShapeMap_Impl::const_iterator aEndIter = mpShapeMap->end();
         while( aIter != aEndIter && !pObj )
         {
             rtl::Reference < ::accessibility::AccessibleShape > xAcc( (*aIter).second );
@@ -2987,18 +2972,15 @@ bool SwAccessibleMap::ReplaceChild (
 {
     if( mpShapeMap )
     {
-        SwAccessibleShapeMap_Impl::const_iterator aIter = mpShapeMap->cbegin();
-        SwAccessibleShapeMap_Impl::const_iterator aEndIter = mpShapeMap->cend();
-        while( aIter != aEndIter)
+        for (const auto& rIter : *mpShapeMap)
         {
-            rtl::Reference < ::accessibility::AccessibleShape > xAcc( (*aIter).second );
+            rtl::Reference<::accessibility::AccessibleShape> xAcc(rIter.second);
             if(xAcc && ::accessibility::ShapeTypeHandler::Instance().GetTypeId (xAcc->GetXShape()) == ::accessibility::DRAWING_CONTROL)
             {
                 ::accessibility::AccessibleControlShape *pCtlAccShape = static_cast < ::accessibility::AccessibleControlShape* >(xAcc.get());
                 if (pCtlAccShape->GetControlModel() == pSet)
                     return pCtlAccShape;
             }
-            ++aIter;
         }
     }
     return nullptr;
