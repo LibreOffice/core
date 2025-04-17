@@ -4292,6 +4292,15 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 #else
     (void) pBuffer;
 #endif
+
+    // Inform all views with the same view render state about the paint, so they know if makes sense
+    // to invalidate those areas later.
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    int nOrigViewId = doc_getView(pThis);
+    int nPart = pDoc->getPart();
+    int nMode = pDoc->getEditMode();
+    tools::Rectangle aRectangle{Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight)};
+    pDocument->updateViewsForPaintedTile(nOrigViewId, nPart, nMode, aRectangle);
 }
 
 inline static ITiledRenderable* getDocumentPointer(LibreOfficeKitDocument* pThis)
