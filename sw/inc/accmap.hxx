@@ -37,7 +37,6 @@ class SwFrame;
 class SwTextFrame;
 class SwPageFrame;
 class SwAccessibleContext;
-class SwAccessibleContextMap_Impl;
 class SwAccessibleEventList_Impl;
 class SwAccessibleEventMap_Impl;
 class SdrObject;
@@ -84,12 +83,15 @@ namespace o3tl
     template<> struct typed_flags<AccessibleStates> : is_typed_flags<AccessibleStates, 0x3e3> {};
 }
 
+using SwAccessibleContextMap
+    = std::unordered_map<const SwFrame*, unotools::WeakReference<SwAccessibleContext>>;
+
 class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
                         public ::accessibility::IAccessibleParent
                 , public std::enable_shared_from_this<SwAccessibleMap>
 {
     ::osl::Mutex maEventMutex;
-    std::unique_ptr<SwAccessibleContextMap_Impl> mpFrameMap;
+    std::unique_ptr<SwAccessibleContextMap> mpFrameMap;
     std::unique_ptr<SwAccessibleShapeMap_Impl> mpShapeMap;
     SwShapeList_Impl mvShapes;
     std::unique_ptr<SwAccessibleEventList_Impl> mpEvents;
@@ -121,7 +123,7 @@ class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
     void InvalidateShapeSelection();
 
     //mpSelectedFrameMap contains the old selected objects.
-    std::unique_ptr<SwAccessibleContextMap_Impl> mpSelectedFrameMap;
+    std::unique_ptr<SwAccessibleContextMap> mpSelectedFrameMap;
 
     OUString maDocName;
 
