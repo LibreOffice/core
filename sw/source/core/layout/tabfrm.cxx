@@ -2190,6 +2190,12 @@ static void InvalidateFramePositions(SwFrame * pFrame)
     }
 }
 
+static bool IsFirstNonHeadlineRowDeleteForbidden(const SwTabFrame& rFoll)
+{
+    const SwFrame* pFirstRow = rFoll.GetFirstNonHeadlineRow();
+    return pFirstRow && pFirstRow->IsDeleteForbidden();
+}
+
 void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 {
     if ( IsJoinLocked() || StackHack::IsLocked() || StackHack::Count() > 50 )
@@ -2620,8 +2626,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             if ( !bSplit && GetFollow() )
             {
                 bool bDummy;
-                if (!(HasFollowFlowLine()
-                        && GetFollow()->GetFirstNonHeadlineRow()->IsDeleteForbidden())
+                if (!(HasFollowFlowLine() && IsFirstNonHeadlineRowDeleteForbidden(*GetFollow()))
                     && GetFollow()->ShouldBwdMoved(GetUpper(), bDummy))
                 {
                     SwFrame *pTmp = GetUpper();
