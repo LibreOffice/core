@@ -18,6 +18,7 @@
 #include <QtInstanceComboBox.hxx>
 #include <QtInstanceDrawingArea.hxx>
 #include <QtInstanceEntry.hxx>
+#include <QtInstanceEntryTreeView.hxx>
 #include <QtInstanceExpander.hxx>
 #include <QtInstanceFormattedSpinButton.hxx>
 #include <QtInstanceFrame.hxx>
@@ -388,10 +389,18 @@ std::unique_ptr<weld::ComboBox> QtInstanceBuilder::weld_combo_box(const OUString
 }
 
 std::unique_ptr<weld::EntryTreeView>
-QtInstanceBuilder::weld_entry_tree_view(const OUString&, const OUString&, const OUString&)
+QtInstanceBuilder::weld_entry_tree_view(const OUString& rContainerId, const OUString& rEntryId,
+                                        const OUString& rTreeViewId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QWidget* pWidget = m_xBuilder->get<QWidget>(rContainerId);
+    QLineEdit* pLineEdit = m_xBuilder->get<QLineEdit>(rEntryId);
+    QTreeView* pTreeView = m_xBuilder->get<QTreeView>(rTreeViewId);
+    assert(pWidget && pLineEdit && pTreeView);
+
+    std::unique_ptr<weld::EntryTreeView> xRet(std::make_unique<QtInstanceEntryTreeView>(
+        pWidget, pLineEdit, pTreeView, weld_entry(rEntryId), weld_tree_view(rTreeViewId)));
+
+    return xRet;
 }
 
 std::unique_ptr<weld::TreeView> QtInstanceBuilder::weld_tree_view(const OUString& rId)

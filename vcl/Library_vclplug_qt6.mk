@@ -108,6 +108,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt6,\
     vcl/qt6/QtInstanceDialog \
     vcl/qt6/QtInstanceDrawingArea \
     vcl/qt6/QtInstanceEntry \
+    vcl/qt6/QtInstanceEntryTreeView \
     vcl/qt6/QtInstanceExpander \
     vcl/qt6/QtInstanceFormattedSpinButton \
     vcl/qt6/QtInstanceFrame \
