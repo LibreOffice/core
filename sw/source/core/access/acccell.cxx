@@ -60,8 +60,7 @@ bool SwAccessibleCell::IsSelected()
         {
             const SwCellFrame *pCFrame =
                 static_cast< const SwCellFrame * >( GetFrame() );
-            SwTableBox *pBox =
-                const_cast< SwTableBox *>( pCFrame->GetTabBox() );
+            const SwTableBox* pBox = pCFrame->GetTabBox();
             SwSelBoxes const& rBoxes(pCSh->GetTableCursor()->GetSelectedBoxes());
             bRet = rBoxes.find(pBox) != rBoxes.end();
         }

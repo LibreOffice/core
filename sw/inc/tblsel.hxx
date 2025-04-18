@@ -44,7 +44,7 @@ typedef std::deque< SwCellFrame* > SwCellFrames;
 
 struct CompareSwSelBoxes
 {
-    bool operator()(SwTableBox* const& lhs, SwTableBox* const& rhs) const
+    bool operator()(const SwTableBox* const& lhs, const SwTableBox* const& rhs) const
     {
         return lhs->GetSttIdx() < rhs->GetSttIdx();
     }
