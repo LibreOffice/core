@@ -105,6 +105,24 @@
                     <property name="vexpand">True</property>
                     <property name="row-spacing">3</property>
                     <child>
+                      <object class="GtkEntry" id="font">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="activates-default">True</property>
+                        <property name="truncate-multiline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="font-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fontdialog|extended_tip|font">Select a font from the list.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -141,24 +159,6 @@
                       <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="font">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="activates-default">True</property>
-                        <property name="truncate-multiline">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="font-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="fontdialog|extended_tip|font">Select a font from the list.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                   </object>
