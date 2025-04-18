@@ -273,12 +273,21 @@ SwTextNode::~SwTextNode()
 
     DelFrames(nullptr); // must be called here while it's still a SwTextNode
     DelFrames_TextNodePart();
+
+    // If this Node should have Outline Numbering but that state hasn't been
+    // crystalized by SwNodes::UpdateOutlineNode yet, and so it currently isn't
+    // added to SwNodes::m_aOutlineNodes, then set LastOutlineState so it won't
+    // be added if ResetAttr() triggers UpdateOutlineNode() during destruction,
+    // and avoid leaving a dangling pointer in m_aOutlineNodes.
+    if (IsOutline() && !m_bLastOutlineState)
+        m_bLastOutlineState = true;
+
 #if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
     if (!GetDoc().IsInDtor())
-        ResetAttr(RES_PAGEDESC);
-#else
-    ResetAttr(RES_PAGEDESC);
 #endif
+    {
+        ResetAttr(RES_PAGEDESC);
+    }
     InvalidateInSwCache();
 }
 
