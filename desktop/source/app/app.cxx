@@ -2013,19 +2013,19 @@ void Desktop::OpenClients()
     {
         OUString aHelpModule;
         if (rArgs.IsHelpWriter()) {
-            aHelpModule = "swriter";
+            aHelpModule = "swriter/helpwriter";
         } else if (rArgs.IsHelpCalc()) {
-            aHelpModule = "scalc";
+            aHelpModule = "scalc/helpcalc";
         } else if (rArgs.IsHelpDraw()) {
-            aHelpModule = "sdraw";
+            aHelpModule = "sdraw/helpdraw";
         } else if (rArgs.IsHelpImpress()) {
-            aHelpModule = "simpress";
+            aHelpModule = "simpress/helpimpress";
         } else if (rArgs.IsHelpBase()) {
-            aHelpModule = "sdatabase";
+            aHelpModule = "sdatabase/helpbase";
         } else if (rArgs.IsHelpBasic()) {
-            aHelpModule = "sbasic";
+            aHelpModule = "sbasic/helpbasic";
         } else if (rArgs.IsHelpMath()) {
-            aHelpModule = "smath";
+            aHelpModule = "smath/helpmath";
         }
         if (!aHelpModule.isEmpty()) {
             OUString aHelpURL = "vnd.sun.star.help://"
