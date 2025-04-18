@@ -72,7 +72,6 @@
 #include <svx/xbtmpit.hxx>
 #include <memory>
 #include <SlideSorter.hxx>
-#include <SlideSorterViewShell.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsClipboard.hxx>
 
