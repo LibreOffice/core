@@ -561,18 +561,16 @@ const struct
     { ocNoName, FT_NotImpl }   // gives properties of DOS menus
 };
 
-const int nIndexCount = SAL_N_ELEMENTS( aFuncMap );
-
 DefTokenId QProToSc::IndexToToken( sal_uInt16 nIndex )
 {
-    if( nIndex < nIndexCount )
+    if( nIndex < std::size(aFuncMap) )
         return aFuncMap[ nIndex ].nToken;
     return ocNoName;
 }
 
 QPRO_FUNC_TYPE QProToSc::IndexToType( sal_uInt8 nIndex )
 {
-    if( nIndex < nIndexCount )
+    if( nIndex < std::size(aFuncMap) )
         return aFuncMap[ nIndex ].nType;
     return FT_NotImpl;
 }
