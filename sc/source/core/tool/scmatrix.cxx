@@ -1136,11 +1136,12 @@ double EvalMatrix(const MatrixImplType& rMat)
 {
     Evaluator aEval;
     size_t nRows = rMat.size().row, nCols = rMat.size().column;
-    for (size_t i = 0; i < nRows; ++i)
+
+    MatrixImplType::const_position_type aPos = rMat.position(0, 0);
+    for (size_t nC = 0; nC < nCols; ++nC)
     {
-        for (size_t j = 0; j < nCols; ++j)
+        for (size_t nR = 0; nR < nRows; ++nR)
         {
-            MatrixImplType::const_position_type aPos = rMat.position(i, j);
             mdds::mtm::element_t eType = rMat.get_type(aPos);
             if (eType != mdds::mtm::element_numeric && eType != mdds::mtm::element_boolean)
                 // assuming a CompareMat this is an error
@@ -1152,8 +1153,11 @@ double EvalMatrix(const MatrixImplType& rMat)
                 return fVal;
 
             aEval.operate(fVal);
+
+            aPos = MatrixImplType::next_position(aPos);
         }
     }
+
     return aEval.result();
 }
 
