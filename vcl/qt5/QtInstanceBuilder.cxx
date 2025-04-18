@@ -103,6 +103,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"modules/schart/ui/insertaxisdlg.ui"_ustr,
         u"modules/simpress/ui/presentationdialog.ui"_ustr,
         u"modules/smath/ui/alignmentdialog.ui"_ustr,
+        u"modules/smath/ui/fontdialog.ui"_ustr,
         u"modules/smath/ui/fontsizedialog.ui"_ustr,
         u"modules/smath/ui/savedefaultsdialog.ui"_ustr,
         u"modules/smath/ui/smathsettings.ui"_ustr,
