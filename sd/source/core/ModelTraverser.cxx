@@ -11,8 +11,7 @@
 
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
-
-using namespace css;
+#include <svx/svditer.hxx>
 
 namespace sd
 {
@@ -21,19 +20,43 @@ void ModelTraverser::traverse()
     if (!m_pDocument)
         return;
 
+    if (m_aTraverserOptions.mbPages)
+        traversePages();
+
+    if (m_aTraverserOptions.mbMasterPages)
+        traverseMasterPages();
+}
+
+void ModelTraverser::traverseObjects(SdrPage const& rPage)
+{
+    SdrObjListIter aIterator(&rPage, SdrIterMode::DeepWithGroups);
+    while (aIterator.IsMore())
+    {
+        SdrObject* pObject = aIterator.Next();
+        if (!pObject)
+            continue;
+        for (auto& pNodeHandler : m_pNodeHandler)
+            pNodeHandler->handleSdrObject(pObject);
+    }
+}
+
+void ModelTraverser::traversePages()
+{
     for (sal_uInt16 nPage = 0; nPage < m_pDocument->GetPageCount(); ++nPage)
     {
         SdrPage* pPage = m_pDocument->GetPage(nPage);
         if (pPage)
-        {
-            for (const rtl::Reference<SdrObject>& pObject : *pPage)
-            {
-                for (auto& pNodeHandler : m_pNodeHandler)
-                {
-                    pNodeHandler->handleSdrObject(pObject.get());
-                }
-            }
-        }
+            traverseObjects(*pPage);
+    }
+}
+
+void ModelTraverser::traverseMasterPages()
+{
+    for (sal_uInt16 nMasterPage = 0; nMasterPage < m_pDocument->GetMasterPageCount(); ++nMasterPage)
+    {
+        SdrPage* pMasterPage = m_pDocument->GetMasterPage(nMasterPage);
+        if (pMasterPage)
+            traverseObjects(*pMasterPage);
     }
 }
 

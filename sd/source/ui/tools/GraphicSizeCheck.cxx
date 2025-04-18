@@ -95,7 +95,7 @@ void GraphicSizeCheck::check()
 
     auto pHandler = std::make_shared<GraphicSizeCheckHandler>(nDPI, m_aGraphicSizeViolationList);
 
-    ModelTraverser aModelTraverser(m_pDocument);
+    ModelTraverser aModelTraverser(m_pDocument, { .mbPages = true, .mbMasterPages = false });
     aModelTraverser.addNodeHandler(pHandler);
     aModelTraverser.traverse();
 }
