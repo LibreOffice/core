@@ -202,13 +202,18 @@ private:
 
     void WriteModifyVerifier();
 
+    /// Embedded font related members
     bool mbEmbedFonts = false;
     bool mbEmbedUsedOnly = false;
     bool mbEmbedLatinScript = true;
     bool mbEmbedAsianScript = true;
     bool mbEmbedComplexScript = true;
 
+    /// Write the embedded font list element
     void WriteEmbeddedFontList();
+
+    /// Get the font names that are used in the document (and styles)
+    std::unordered_set<OUString> getUsedFontList();
 };
 
 }

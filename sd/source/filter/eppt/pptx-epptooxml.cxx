@@ -29,6 +29,13 @@
 #include <unokywds.hxx>
 #include <osl/file.hxx>
 
+#include <editeng/fontitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <drawdoc.hxx>
+#include <svl/itempool.hxx>
+#include <editeng/section.hxx>
+#include <editeng/editeng.hxx>
+
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/xmltools.hxx>
@@ -67,6 +74,7 @@
 #include <oox/export/utils.hxx>
 #include <oox/export/ThemeExport.hxx>
 #include <docmodel/theme/Theme.hxx>
+#include <ModelTraverser.hxx>
 
 #include "pptx-animations.hxx"
 #include "../ppt/pptanimations.hxx"
@@ -543,18 +551,178 @@ struct EmbeddedFont
 };
 } // end anonymous namespace
 
-// Writers the list of all embedded fonts and reference to the fonts
-void PowerPointExport::WriteEmbeddedFontList()
+namespace
 {
-    if (!mbEmbedFonts)
-        return;
+class FontCollector : public sd::ModelTraverseHandler
+{
+private:
+    std::unordered_set<OUString>& mrUsedFontNames;
+    bool mbEmbedLatinScript;
+    bool mbEmbedAsianScript;
+    bool mbEmbedComplexScript;
+
+    static const SvxFontItem* getFontItem(const editeng::Section& rSection, sal_uInt16 eFontWhich)
+    {
+        auto iterator = std::find_if(rSection.maAttributes.begin(), rSection.maAttributes.end(), [eFontWhich] (const SfxPoolItem* pPoolItem) {
+            return pPoolItem->Which() == eFontWhich;
+        });
+
+        if (iterator != rSection.maAttributes.end())
+            return static_cast<const SvxFontItem*>(*iterator);
+        return nullptr;
+    }
+
+    void traverseEditEng(SdrTextObj* pTextObject)
+    {
+        OutlinerParaObject* pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
+        if (!pOutlinerParagraphObject)
+            return;
+
+        const EditTextObject& rEditText = pOutlinerParagraphObject->GetTextObject();
+        std::vector<editeng::Section> aSections;
+        rEditText.GetAllSections(aSections);
+
+        for (editeng::Section const& rSection : aSections)
+        {
+            if (SvxFontItem const* pFontItem = getFontItem(rSection, EE_CHAR_FONTINFO); pFontItem && mbEmbedLatinScript)
+            {
+                mrUsedFontNames.insert(pFontItem->GetFamilyName());
+            }
+            if (SvxFontItem const * pFontItem = getFontItem(rSection, EE_CHAR_FONTINFO_CJK); pFontItem && mbEmbedAsianScript)
+            {
+                mrUsedFontNames.insert(pFontItem->GetFamilyName());
+            }
+            if (SvxFontItem const* pFontItem = getFontItem(rSection, EE_CHAR_FONTINFO_CTL); pFontItem && mbEmbedComplexScript)
+            {
+                mrUsedFontNames.insert(pFontItem->GetFamilyName());
+            }
+        }
+    }
+
+public:
+    FontCollector(std::unordered_set<OUString>& rUsedFontNames, bool bEmbedLatinScript, bool bEmbedAsianScript, bool bEmbedComplexScript)
+        : mrUsedFontNames(rUsedFontNames)
+        , mbEmbedLatinScript(bEmbedLatinScript)
+        , mbEmbedAsianScript(bEmbedAsianScript)
+        , mbEmbedComplexScript(bEmbedComplexScript)
+    {}
+
+protected:
+    void handleSdrObject(SdrObject* pObject) override
+    {
+        SdrTextObj* pTextShape = DynCastSdrTextObj(pObject);
+        if (pTextShape && !pTextShape->IsEmptyPresObj())
+        {
+            auto& rItemSet = pTextShape->GetMergedItemSet();
+
+            if (SvxFontItem const* pFontItem = rItemSet.GetItemIfSet(EE_CHAR_FONTINFO, true); pFontItem && mbEmbedLatinScript)
+            {
+                mrUsedFontNames.insert(pFontItem->GetFamilyName());
+            }
+            if (SvxFontItem const* pFontItem = rItemSet.GetItemIfSet(EE_CHAR_FONTINFO_CJK, true); pFontItem && mbEmbedAsianScript)
+            {
+                mrUsedFontNames.insert(pFontItem->GetFamilyName());
+            }
+            if (SvxFontItem const* pFontItem = rItemSet.GetItemIfSet(EE_CHAR_FONTINFO_CTL, true); pFontItem && mbEmbedComplexScript)
+            {
+                mrUsedFontNames.insert(pFontItem->GetFamilyName());
+            }
+            traverseEditEng(pTextShape);
+        }
+    }
+};
+
+} // end anonymous namespace
+
+
+std::unordered_set<OUString> PowerPointExport::getUsedFontList()
+{
+    std::unordered_set<OUString> aReturnSet;
 
     SdDrawDocument* pDocument = nullptr;
     if (auto* pSdXImpressDocument = dynamic_cast<SdXImpressDocument*>(mXModel.get()))
         pDocument = pSdXImpressDocument->GetDoc();
 
     if (!pDocument)
+        return aReturnSet;
+
+    uno::Reference<style::XStyleFamiliesSupplier> xFamiliesSupp(getModel(), UNO_QUERY);
+    if (!xFamiliesSupp.is())
+        return aReturnSet;
+
+    // Check styles first
+    uno::Reference<container::XNameAccess> xFamilies = xFamiliesSupp->getStyleFamilies();
+    if (!xFamilies.is())
+        return aReturnSet;
+
+    const uno::Sequence<OUString> aFamilyNames = xFamilies->getElementNames();
+    for (OUString const & sFamilyName : aFamilyNames)
+    {
+        uno::Reference<container::XNameAccess> xStyleContainer;
+        xFamilies->getByName(sFamilyName) >>= xStyleContainer;
+
+        if (!xStyleContainer.is())
+            continue;
+
+        for (OUString const& rName : xStyleContainer->getElementNames())
+        {
+            uno::Reference<style::XStyle> xStyle;
+            xStyleContainer->getByName(rName) >>= xStyle;
+            if (!xStyle->isInUse())
+                continue;
+
+            uno::Reference<beans::XPropertySet> xPropertySet(xStyle, UNO_QUERY);
+            if (!xPropertySet.is())
+                continue;
+
+            uno::Reference<beans::XPropertySetInfo> xInfo = xPropertySet->getPropertySetInfo();
+            if (!xInfo.is())
+                continue;
+
+            if (mbEmbedLatinScript && xInfo->hasPropertyByName(u"CharFontName"_ustr))
+            {
+                OUString sCharFontName;
+                Any aFontAny = xPropertySet->getPropertyValue(u"CharFontName"_ustr);
+                aFontAny >>= sCharFontName;
+                if (!sCharFontName.isEmpty())
+                    aReturnSet.insert(sCharFontName);
+            }
+            if (mbEmbedAsianScript && xInfo->hasPropertyByName(u"CharFontNameAsian"_ustr))
+            {
+                OUString sCharFontNameAsian;
+                Any aFontAny = xPropertySet->getPropertyValue(u"CharFontNameAsian"_ustr);
+                aFontAny >>= sCharFontNameAsian;
+                if (!sCharFontNameAsian.isEmpty())
+                    aReturnSet.insert(sCharFontNameAsian);
+            }
+            if (mbEmbedComplexScript && xInfo->hasPropertyByName(u"CharFontNameComplex"_ustr))
+            {
+                OUString sCharFontNameComplex;
+                Any aFontAny = xPropertySet->getPropertyValue(u"CharFontNameComplex"_ustr);
+                aFontAny >>= sCharFontNameComplex;
+                if (!sCharFontNameComplex.isEmpty())
+                    aReturnSet.insert(sCharFontNameComplex);
+            }
+        }
+    }
+
+    std::shared_ptr<FontCollector> pFontCollector(new FontCollector(aReturnSet, mbEmbedLatinScript, mbEmbedAsianScript, mbEmbedComplexScript));
+    sd::ModelTraverser aModelTraverser(pDocument, { .mbPages = true, .mbMasterPages = true });
+    aModelTraverser.addNodeHandler(pFontCollector);
+    aModelTraverser.traverse();
+
+    return aReturnSet;
+}
+
+// Writers the list of all embedded fonts and reference to the fonts
+void PowerPointExport::WriteEmbeddedFontList()
+{
+    if (!mbEmbedFonts)
         return;
+
+    std::unordered_set<OUString> aUsedFonts;
+    if (mbEmbedUsedOnly)
+        aUsedFonts = getUsedFontList();
 
     int nextFontId = 1;
 
@@ -590,6 +758,9 @@ void PowerPointExport::WriteEmbeddedFontList()
         aAnySeq[nSeqIndex++] >>= eFamily;
         aAnySeq[nSeqIndex++] >>= ePitch;
         aAnySeq[nSeqIndex++] >>= eCharSet;
+
+        if (mbEmbedUsedOnly && !aUsedFonts.contains(sFamilyName))
+            continue;
 
         if (aFontFamilyNameSet.contains(sFamilyName))
             continue;

@@ -14,6 +14,7 @@
 #include "drawdoc.hxx"
 
 class SdrObject;
+class SdrPage;
 
 namespace sd
 {
@@ -28,6 +29,13 @@ public:
     virtual void handleSdrObject(SdrObject* pObject) = 0;
 };
 
+/** Options to change how the traverser is traversing the tree, what is included and what not */
+struct TraverserOptions
+{
+    bool mbPages = true;
+    bool mbMasterPages = false;
+};
+
 /**
  * Traverses the DOM and calls a handler for each object (SdrObject) it
  * encounters.
@@ -37,10 +45,16 @@ class ModelTraverser
 private:
     std::vector<std::shared_ptr<ModelTraverseHandler>> m_pNodeHandler;
     SdDrawDocument* m_pDocument;
+    TraverserOptions m_aTraverserOptions;
+
+    void traverseObjects(SdrPage const& rPage);
+    void traversePages();
+    void traverseMasterPages();
 
 public:
-    ModelTraverser(SdDrawDocument* pDocument)
+    ModelTraverser(SdDrawDocument* pDocument, TraverserOptions const& rTraverserOptions)
         : m_pDocument(pDocument)
+        , m_aTraverserOptions(rTraverserOptions)
     {
     }
 
