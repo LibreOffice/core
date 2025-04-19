@@ -86,7 +86,7 @@ public:
 
         m_xWidget->connect_key_press(LINK(this, CheckButtonItemWindow, KeyInputHdl));
         m_xWidget->set_label(rLabel);
-        SetSizePixel(m_xWidget->get_preferred_size());
+        SetSizePixel(m_xContainer->get_preferred_size());
     }
 
     bool get_active() const
@@ -229,7 +229,7 @@ FindTextFieldControl::FindTextFieldControl(ToolBox* pParent,
     m_xWidget->connect_entry_activate(LINK(this, FindTextFieldControl, ActivateHdl));
 
     m_xWidget->set_size_request(250, -1);
-    SetSizePixel(m_xWidget->get_preferred_size());
+    SetSizePixel(m_xContainer->get_preferred_size());
 
     // tdf#154269 - respect FindReplaceRememberedSearches expert option
     m_nRememberSize = officecfg::Office::Common::Misc::FindReplaceRememberedSearches::get();
