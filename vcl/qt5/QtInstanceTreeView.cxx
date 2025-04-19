@@ -490,10 +490,12 @@ bool QtInstanceTreeView::get_cursor(weld::TreeIter*) const
 
 void QtInstanceTreeView::set_cursor(const weld::TreeIter& rIter) { set_cursor(rowIndex(rIter)); }
 
-bool QtInstanceTreeView::get_iter_first(weld::TreeIter&) const
+bool QtInstanceTreeView::get_iter_first(weld::TreeIter& rIter) const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);
+    const QModelIndex aIndex = modelIndex(0);
+    rQtIter.setModelIndex(aIndex);
+    return aIndex.isValid();
 }
 
 bool QtInstanceTreeView::iter_next_sibling(weld::TreeIter&) const
