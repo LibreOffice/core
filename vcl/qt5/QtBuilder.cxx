@@ -656,8 +656,8 @@ void QtBuilder::insertMenuObject(QMenu* pParent, QMenu* pSubMenu, const OUString
     assert(!pSubMenu && "Handling not implemented yet");
     (void)pSubMenu;
 
-    const OUString sLabel = extractLabel(rProps);
-    QAction* pAction = pParent->addAction(toQString(sLabel));
+    const QString sLabel = convertAccelerator(extractLabel(rProps));
+    QAction* pAction = pParent->addAction(sLabel);
     pAction->setObjectName(toQString(rID));
 
     const OUString sActionName(extractActionName(rProps));
