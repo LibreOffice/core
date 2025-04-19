@@ -24,7 +24,7 @@ QtInstanceComboBox::QtInstanceComboBox(QComboBox* pComboBox)
 {
     assert(pComboBox);
 
-    QObject::connect(m_pComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+    QObject::connect(m_pComboBox, &QComboBox::currentTextChanged, this,
                      &QtInstanceComboBox::signalChanged);
     QObject::connect(m_pComboBox, &QComboBox::editTextChanged, this,
                      &QtInstanceComboBox::signalChanged);
