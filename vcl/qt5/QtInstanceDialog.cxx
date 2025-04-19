@@ -52,7 +52,7 @@ bool QtInstanceDialog::runAsync(const std::shared_ptr<weld::DialogController>& r
     m_xRunAsyncDialogController = rxOwner;
     m_aRunAsyncFunc = func;
     connect(m_pDialog, &QDialog::finished, this, &QtInstanceDialog::dialogFinished);
-    m_pDialog->open();
+    m_pDialog->show();
 
     return true;
 }
