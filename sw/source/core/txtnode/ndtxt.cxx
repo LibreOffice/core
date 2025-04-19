@@ -275,7 +275,7 @@ SwTextNode::~SwTextNode()
     DelFrames_TextNodePart();
 
     // If this Node should have Outline Numbering but that state hasn't been
-    // crystalized by SwNodes::UpdateOutlineNode yet, and so it currently isn't
+    // crystallized by SwNodes::UpdateOutlineNode yet, and so it currently isn't
     // added to SwNodes::m_aOutlineNodes, then set LastOutlineState so it won't
     // be added if ResetAttr() triggers UpdateOutlineNode() during destruction,
     // and avoid leaving a dangling pointer in m_aOutlineNodes.
