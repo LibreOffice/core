@@ -213,8 +213,8 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
         ++nIndex;
 
         bool bIsDarkMode
-            = MiscSettings::GetAppColorMode() == 2
-              || (MiscSettings::GetAppColorMode() == 0 && MiscSettings::GetUseDarkMode());
+            = MiscSettings::GetAppColorMode() == AppearanceMode::DARK
+              || (MiscSettings::GetAppColorMode() == AppearanceMode::AUTO && MiscSettings::GetUseDarkMode());
 
         // based on the appearance (light/dark) cache the value of the appropriate color in nColor.
         // this way we don't have to add hundreds of function calls in the codebase and it will be fast.
@@ -710,14 +710,19 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
             else
             {
                 switch (MiscSettings::GetAppColorMode()) {
+                    case AppearanceMode::LIGHT:
+                        nAppMod = clLight;
+                        break;
+                    case AppearanceMode::DARK:
+                        nAppMod = clDark;
+                        break;
+                    case AppearanceMode::AUTO:
                     default:
                         if (MiscSettings::GetUseDarkMode())
                             nAppMod = clDark;
                         else
                             nAppMod = clLight;
                         break;
-                    case 1: nAppMod = clLight; break;
-                    case 2: nAppMod = clDark; break;
                 }
             }
             aRet = cAutoColors[eEntry][nAppMod];

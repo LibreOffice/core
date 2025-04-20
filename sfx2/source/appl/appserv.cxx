@@ -692,31 +692,32 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 // Since only gtk/osx/win support UI theme, toggle based on document colors
                 // Automatic in this case means "whatever GetUseDarkMode() says"
                 const bool bWasInDarkMode
-                    = MiscSettings::GetAppColorMode() == 2
-                      || (MiscSettings::GetAppColorMode() == 0 && MiscSettings::GetUseDarkMode());
+                    = MiscSettings::GetAppColorMode() == AppearanceMode::DARK
+                      || (MiscSettings::GetAppColorMode() == AppearanceMode::AUTO
+                          && MiscSettings::GetUseDarkMode());
 
                 // Set the UI theme. It would be nicest to use automatic whenever possible
-                sal_Int32 nUseMode = 0; // automatic
-                if (MiscSettings::GetDarkMode() != 0)
-                    MiscSettings::SetDarkMode(nUseMode);
+                AppearanceMode eUseMode = AppearanceMode::AUTO;
+                if (MiscSettings::GetDarkMode() != AppearanceMode::AUTO)
+                    MiscSettings::SetDarkMode(eUseMode);
 
                 if (MiscSettings::GetUseDarkMode() == bWasInDarkMode)
                 {
                     // automatic didn't toggle, so force the desired theme
-                    nUseMode = bWasInDarkMode ? 1 : 2;
-                    MiscSettings::SetDarkMode(nUseMode);
+                    eUseMode = bWasInDarkMode ? AppearanceMode::LIGHT : AppearanceMode::DARK;
+                    MiscSettings::SetDarkMode(eUseMode);
                 }
 
                 // Now set the document theme
                 // If the UI can be themed, then the document theme can always remain on automatic.
-                nUseMode = 0;
+                eUseMode = AppearanceMode::AUTO;
                 // NOTE: since SetDarkMode has run, GetUseDarkMode might return a different result.
                 if (MiscSettings::GetUseDarkMode() == bWasInDarkMode)
                 {
-                    nUseMode = bWasInDarkMode ? 1 : 2;
+                    eUseMode = bWasInDarkMode ? AppearanceMode::LIGHT : AppearanceMode::DARK;
                     sSchemeName = bWasInDarkMode ? u"Light" : u"Dark";
                 }
-                MiscSettings::SetAppColorMode(nUseMode);
+                MiscSettings::SetAppColorMode(eUseMode);
             }
             svtools::EditableColorConfig aEditableConfig;
             // kit explicitly ignores changes to the global color scheme, except for the current ViewShell,
@@ -1362,8 +1363,9 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                 case FN_CHANGE_THEME:
                 {
                     const bool bIsDarkMode
-                        = MiscSettings::GetAppColorMode() == 2
-                          || (!MiscSettings::GetAppColorMode() && MiscSettings::GetUseDarkMode());
+                        = MiscSettings::GetAppColorMode() == AppearanceMode::DARK
+                          || (MiscSettings::GetAppColorMode() == AppearanceMode::AUTO
+                              && MiscSettings::GetUseDarkMode());
                     rSet.Put(SfxBoolItem(FN_CHANGE_THEME, bIsDarkMode));
                     break;
                 }

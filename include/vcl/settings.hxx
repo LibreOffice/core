@@ -23,6 +23,7 @@
 #include <config_options.h>
 
 #include <vcl/dllapi.h>
+#include <vcl/themecolors.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <o3tl/cow_wrapper.hxx>
@@ -667,13 +668,13 @@ public:
     bool                            GetDisablePrinting() const;
     void                            SetEnableLocalizedDecimalSep( bool bEnable );
     bool                            GetEnableLocalizedDecimalSep() const;
-    // 0 auto, 1 light, 2, dark
-    static void                     SetDarkMode(int nMode);
-    static int                      GetDarkMode();
+
+    static void                     SetDarkMode(AppearanceMode nMode);
+    static AppearanceMode           GetDarkMode();
     // return if dark mode is active, resolving 'auto' to dark (true) or light (false)
     static bool                     GetUseDarkMode();
-    static void                     SetAppColorMode(int nMode);
-    static int                      GetAppColorMode();
+    static void                     SetAppColorMode(AppearanceMode nMode);
+    static AppearanceMode           GetAppColorMode();
     // return true if system preferences are set to use reduced animation
     static bool                     GetUseReducedAnimation();
     static bool                     IsAnimatedGraphicAllowed();

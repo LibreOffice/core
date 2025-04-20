@@ -33,15 +33,8 @@ using namespace svtools;
 class SvxAppearanceTabPage : public SfxTabPage
 {
 private:
-    enum class Appearance
-    {
-        SYSTEM,
-        LIGHT,
-        DARK,
-    };
-
     bool m_bRestartRequired;
-    Appearance eCurrentAppearanceMode;
+    AppearanceMode eCurrentAppearanceMode;
     std::unique_ptr<EditableColorConfig> pColorConfig;
 
     std::unique_ptr<weld::ComboBox> m_xSchemeList;

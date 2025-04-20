@@ -1518,16 +1518,16 @@ void AquaSalFrame::UpdateDarkMode()
 
     switch (MiscSettings::GetDarkMode())
     {
-        case 0: // auto
+        case AppearanceMode::AUTO:
         default:
             if (pCurrentAppearance)
                 [NSApp setAppearance: nil];
             break;
-        case 1: // light
+        case AppearanceMode::LIGHT:
             if (!pCurrentAppearance || ![NSAppearanceNameAqua isEqualToString: [pCurrentAppearance name]])
                 [NSApp setAppearance: [NSAppearance appearanceNamed: NSAppearanceNameAqua]];
             break;
-        case 2: // dark
+        case AppearanceMode::DARK:
             if (!pCurrentAppearance || ![NSAppearanceNameDarkAqua isEqualToString: [pCurrentAppearance name]])
                 [NSApp setAppearance: [NSAppearance appearanceNamed: NSAppearanceNameDarkAqua]];
             break;

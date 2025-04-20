@@ -410,7 +410,7 @@ bool UseDarkMode()
     bool bRet(false);
     switch (MiscSettings::GetDarkMode())
     {
-        case 0: // auto
+        case AppearanceMode::AUTO:
         default:
         {
             HINSTANCE hUxthemeLib = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
@@ -424,10 +424,10 @@ bool UseDarkMode()
             FreeLibrary(hUxthemeLib);
             break;
         }
-        case 1: // light
+        case AppearanceMode::LIGHT:
             bRet = false;
             break;
-        case 2: // dark
+        case AppearanceMode::DARK:
             bRet = true;
             break;
     }

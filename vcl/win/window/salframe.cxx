@@ -270,13 +270,13 @@ static void UpdateDarkMode(HWND hWnd)
     {
         switch (MiscSettings::GetDarkMode())
         {
-            case 0:
+            case AppearanceMode::AUTO:
                 SetPreferredAppMode(AllowDark);
                 break;
-            case 1:
+            case AppearanceMode::LIGHT:
                 SetPreferredAppMode(ForceLight);
                 break;
-            case 2:
+            case AppearanceMode::DARK:
                 SetPreferredAppMode(ForceDark);
                 break;
         }

@@ -166,9 +166,9 @@ OUString SvxAppearanceTabPage::GetAllStrings()
 bool SvxAppearanceTabPage::FillItemSet(SfxItemSet* /* rSet */)
 {
     // commit appearance value if changed
-    if (eCurrentAppearanceMode != static_cast<Appearance>(MiscSettings::GetAppColorMode()))
+    if (eCurrentAppearanceMode != MiscSettings::GetAppColorMode())
     {
-        MiscSettings::SetAppColorMode(static_cast<int>(eCurrentAppearanceMode));
+        MiscSettings::SetAppColorMode(eCurrentAppearanceMode);
         // if themes disabled then change the document colors as per the new appearance mode.
         if (ThemeColors::IsThemeDisabled())
             UpdateDocumentAppearance();
@@ -193,7 +193,7 @@ void SvxAppearanceTabPage::Reset(const SfxItemSet* /* rSet */)
     UpdateRemoveBtnState();
 
     // reset appearance
-    eCurrentAppearanceMode = static_cast<Appearance>(MiscSettings::GetAppColorMode());
+    eCurrentAppearanceMode = MiscSettings::GetAppColorMode();
 
     // reset ColorConfig
     pColorConfig->ClearModified();
@@ -218,16 +218,16 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, ShowInDocumentHdl, weld::Toggleable&, void
 IMPL_LINK_NOARG(SvxAppearanceTabPage, AppearanceChangeHdl, weld::Toggleable&, void)
 {
     if (m_xAppearanceSystem->get_state() == TRISTATE_TRUE)
-        eCurrentAppearanceMode = Appearance::SYSTEM;
+        eCurrentAppearanceMode = AppearanceMode::AUTO;
     if (m_xAppearanceLight->get_state() == TRISTATE_TRUE)
-        eCurrentAppearanceMode = Appearance::LIGHT;
+        eCurrentAppearanceMode = AppearanceMode::LIGHT;
     if (m_xAppearanceDark->get_state() == TRISTATE_TRUE)
-        eCurrentAppearanceMode = Appearance::DARK;
+        eCurrentAppearanceMode = AppearanceMode::DARK;
     // set the extension theme on light/dark
 
     // restart iff appearance was toggled and theme was enabled
     m_bRestartRequired = false;
-    if (eCurrentAppearanceMode != static_cast<Appearance>(MiscSettings::GetAppColorMode())
+    if (eCurrentAppearanceMode != MiscSettings::GetAppColorMode()
         && !ThemeColors::IsThemeDisabled())
         m_bRestartRequired = true;
 
@@ -484,22 +484,22 @@ void SvxAppearanceTabPage::InitAppearance()
     m_xAppearanceSystem->connect_toggled(LINK(this, SvxAppearanceTabPage, AppearanceChangeHdl));
     m_xAppearanceDark->connect_toggled(LINK(this, SvxAppearanceTabPage, AppearanceChangeHdl));
 
-    Appearance nAppearance = static_cast<Appearance>(MiscSettings::GetAppColorMode());
+    AppearanceMode nAppearance = MiscSettings::GetAppColorMode();
     eCurrentAppearanceMode = nAppearance;
 
     switch (nAppearance)
     {
-        case Appearance::SYSTEM:
+        case AppearanceMode::AUTO:
             m_xAppearanceSystem->set_state(TRISTATE_TRUE);
             break;
-        case Appearance::LIGHT:
+        case AppearanceMode::LIGHT:
             m_xAppearanceLight->set_state(TRISTATE_TRUE);
             break;
-        case Appearance::DARK:
+        case AppearanceMode::DARK:
             m_xAppearanceDark->set_state(TRISTATE_TRUE);
             break;
         default:
-            eCurrentAppearanceMode = Appearance::SYSTEM;
+            eCurrentAppearanceMode = AppearanceMode::AUTO;
     }
 }
 
@@ -587,8 +587,8 @@ void SvxAppearanceTabPage::UpdateDocumentAppearance()
 
 bool SvxAppearanceTabPage::IsDarkModeEnabled()
 {
-    return eCurrentAppearanceMode == Appearance::DARK
-           || (eCurrentAppearanceMode == Appearance::SYSTEM && MiscSettings::GetUseDarkMode());
+    return eCurrentAppearanceMode == AppearanceMode::DARK
+           || (eCurrentAppearanceMode == AppearanceMode::AUTO && MiscSettings::GetUseDarkMode());
 }
 
 void SvxAppearanceTabPage::FillItemsList()

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/themecolors.hxx>
 #include <config_folders.h>
 
 #include <officecfg/Office/Common.hxx>
@@ -2308,16 +2307,16 @@ bool MiscSettings::GetEnableLocalizedDecimalSep() const
     return mxData->mbEnableLocalizedDecimalSep;
 }
 
-int MiscSettings::GetDarkMode()
+AppearanceMode MiscSettings::GetDarkMode()
 {
     // MiscSettings::GetAppColorMode() replaces MiscSettings::GetDarkMode()
     return MiscSettings::GetAppColorMode();
 }
 
-void MiscSettings::SetDarkMode(int nMode)
+void MiscSettings::SetDarkMode(AppearanceMode eMode)
 {
     // MiscSettings::SetAppColorMode() replaces MiscSettings::SetDarkMode()
-    MiscSettings::SetAppColorMode(nMode);
+    MiscSettings::SetAppColorMode(eMode);
 }
 
 bool MiscSettings::GetUseDarkMode()
@@ -2328,14 +2327,26 @@ bool MiscSettings::GetUseDarkMode()
     return pDefWindow->ImplGetFrame()->GetUseDarkMode();
 }
 
-int MiscSettings::GetAppColorMode()
+AppearanceMode MiscSettings::GetAppColorMode()
 {
     if (comphelper::IsFuzzing())
-        return 0;
-    return officecfg::Office::Common::Appearance::ApplicationAppearance::get();
+        return AppearanceMode::AUTO;
+
+    int nMode = officecfg::Office::Common::Appearance::ApplicationAppearance::get();
+
+    // check for invalid appearance mode, and if found, set it back to AUTO
+    if (nMode < static_cast<int>(AppearanceMode::AUTO)
+        || static_cast<int>(AppearanceMode::COUNT) <= nMode)
+    {
+        SAL_WARN("vcl.app", "invalid appearance mode! setting back to AppearanceMode::AUTO");
+        MiscSettings::SetAppColorMode(AppearanceMode::AUTO);
+        return AppearanceMode::AUTO;
+    }
+
+    return static_cast<AppearanceMode>(nMode);
 }
 
-void MiscSettings::SetAppColorMode(int nMode)
+void MiscSettings::SetAppColorMode(AppearanceMode eMode)
 {
     // Partial: tdf#156855 update native and LibreOffice dark mode states
     // Updating the dark mode state of everything all at once does not
@@ -2348,7 +2359,8 @@ void MiscSettings::SetAppColorMode(int nMode)
 
     // 1. Save the new mode.
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Appearance::ApplicationAppearance::set(nMode, batch);
+    officecfg::Office::Common::Appearance::ApplicationAppearance::set(static_cast<int>(eMode),
+                                                                      batch);
     batch->commit();
 
     // 2. Force the native windows to update their dark mode state so
