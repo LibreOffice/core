@@ -863,6 +863,11 @@
                     <property name="use-underline">True</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="cbTextBoundaries-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="optformataidpage|extended_tip|cbTextBoundaries">Displays the text object boundaries.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -879,6 +884,11 @@
                     <property name="use-underline">True</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="cbTableBoundaries-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="optformataidpage|extended_tip|cbTableBoundaries">Displays the boundaries of table cells.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -896,6 +906,11 @@
                     <property name="use-underline">True</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="cbSectionBoundaries-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="optformataidpage|extended_tip|cbSectionBoundaries">Displays the boundaries of sections and frames.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -914,6 +929,11 @@
                     <property name="use-underline">True</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="rbTextBoundariesCrop-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="optformataidpage|extended_tip|rbTextBoundariesCrop">Shows marks on the corners of the margins box.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -932,6 +952,11 @@
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">rbTextBoundariesCrop</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="rbTextBoundariesFull-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="optformataidpage|extended_tip|rbTextBoundariesFull">Shows a faint line indicating the page margins.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
