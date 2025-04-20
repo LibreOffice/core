@@ -21,6 +21,20 @@ enum class ThemeState
     RESET = 2,
 };
 
+/*
+  AUTO          app colors follow os, light doc colors (default)
+  LIGHT         app colors follow os, light doc colors
+  DARK          app colors follow os, dark  doc colors
+  COUNT         app color modes count
+*/
+enum class AppearanceMode
+{
+    AUTO = 0,
+    LIGHT = 1,
+    DARK = 2,
+    COUNT,
+};
+
 class VCL_DLLPUBLIC ThemeColors
 {
     ThemeColors() {}
