@@ -181,7 +181,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     SwTwips nLineWidth = rInf.GetLineWidth();
     TextFrameIndex nMaxLen = TextFrameIndex(rInf.GetText().getLength()) - rInf.GetIdx();
 
-    auto aAdjustItem = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
+    SvxAdjustItem aAdjustItem = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
     const SvxAdjust aAdjust = aAdjustItem.GetAdjust();
 
     // allow up to 20% shrinking of the spaces
