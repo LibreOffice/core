@@ -937,6 +937,8 @@ bool Clipboard::PasteSlidesFromSystemClipboard()
     ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
     std::shared_ptr<DrawViewShell> pDrawViewShell(
         std::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
+    if (!pDrawViewShell)
+        return false;
     TransferableDataHelper aDataHelper(
         TransferableDataHelper::CreateFromSystemClipboard(pDrawViewShell->GetActiveWindow()));
 
