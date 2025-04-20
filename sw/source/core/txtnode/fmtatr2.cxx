@@ -405,7 +405,7 @@ bool SwFormatINetFormat::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 rVal >>= sVal;
                 UIName aString;
                 SwStyleNameMapper::FillUIName( ProgName(sVal), aString, SwGetPoolIdFromName::ChrFmt );
-                msVisitedFormatName = aString;
+                msVisitedFormatName = std::move(aString);
                 mnVisitedFormatId = SwStyleNameMapper::GetPoolIdFromUIName( msVisitedFormatName,
                                                SwGetPoolIdFromName::ChrFmt );
             }
@@ -416,7 +416,7 @@ bool SwFormatINetFormat::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 rVal >>= sVal;
                 UIName aString;
                 SwStyleNameMapper::FillUIName( ProgName(sVal), aString, SwGetPoolIdFromName::ChrFmt );
-                msINetFormatName = aString;
+                msINetFormatName = std::move(aString);
                 mnINetFormatId = SwStyleNameMapper::GetPoolIdFromUIName( msINetFormatName, SwGetPoolIdFromName::ChrFmt );
             }
             break;

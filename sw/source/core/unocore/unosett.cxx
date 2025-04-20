@@ -1840,7 +1840,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                 rCharStyleName = UIName();
             }
             else
-                rCharStyleName = sCharFormatName;
+                rCharStyleName = std::move(sCharFormatName);
         }
         else if (rProp.Name == UNO_NAME_START_WITH)
         {
@@ -2096,7 +2096,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                 rProp.Value >>= uTmp;
                 UIName sStyleName;
                 SwStyleNameMapper::FillUIName(ProgName(uTmp), sStyleName, SwGetPoolIdFromName::TxtColl );
-                *pHeadingStyleName = sStyleName;
+                *pHeadingStyleName = std::move(sStyleName);
             }
         }
         else if (rProp.Name == UNO_NAME_BULLET_REL_SIZE)

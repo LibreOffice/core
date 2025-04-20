@@ -445,7 +445,7 @@ static bool GetSubranges( std::u16string_view rRangeRepresentation,
 
                 // make sure to use only a single table
                 if (nCnt == 0)
-                    aFirstTable = aTableName;
+                    aFirstTable = std::move(aTableName);
                 else
                     if (aFirstTable != aTableName) bRes = false;
 
@@ -492,7 +492,7 @@ static void SortSubranges( uno::Sequence< OUString > &rSubRanges, bool bCmpByCol
                                 aSmallestStartCell, aSmallestEndCell, bCmpByColumn ))
             {
                 nIdxOfSmallest = k;
-                aSmallestTableName    = aTableName;
+                aSmallestTableName = std::move(aTableName);
                 aSmallestStartCell  = aStartCell;
                 aSmallestEndCell    = aEndCell;
             }

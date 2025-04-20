@@ -2262,7 +2262,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
                     ( nPoolId == RES_POOLCOLL_STANDARD || !sParaStyleName.isEmpty() ) )
                 {
                     std::unique_ptr<SwRedlineExtraData_FormatColl> xExtra;
-                    xExtra.reset(new SwRedlineExtraData_FormatColl(sParaStyleName, nPoolId, nullptr));
+                    xExtra.reset(new SwRedlineExtraData_FormatColl(std::move(sParaStyleName), nPoolId, nullptr));
                     pRedline->SetExtraData( xExtra.get() );
                 }
             }

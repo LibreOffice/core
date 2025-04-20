@@ -2202,7 +2202,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, OUString& rStr )
 
     SwGetRefField aField(
         static_cast<SwGetRefFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )),
-        sBkmName,u""_ustr,REF_BOOKMARK,0,0,eFormat);
+        std::move(sBkmName), u""_ustr, REF_BOOKMARK, 0, 0, eFormat);
 
     if (eFormat == REF_CONTENT)
     {
@@ -2337,7 +2337,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
         sPageRefBookmarkName = ReferenceMarkerName(sName);
     }
     SwGetRefField aField( static_cast<SwGetRefFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )),
-                        sPageRefBookmarkName, u""_ustr, REF_BOOKMARK, 0, 0, REF_PAGE );
+                        std::move(sPageRefBookmarkName), u""_ustr, REF_BOOKMARK, 0, 0, REF_PAGE );
     m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
 
     return eF_ResT::OK;

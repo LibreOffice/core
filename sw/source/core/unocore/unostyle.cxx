@@ -1426,7 +1426,7 @@ void SwXStyle::setName(const OUString& rProgName)
     rtl::Reference<SwDocStyleSheet> xTmp(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
     if (!xTmp->SetName(sUIName.toString()))
         throw uno::RuntimeException();
-    m_sStyleUIName = sUIName;
+    m_sStyleUIName = std::move(sUIName);
 }
 
 sal_Bool SwXStyle::isUserDefined()
@@ -4868,7 +4868,7 @@ rtl::Reference<SwXTextCellStyle> SwXTextCellStyle::CreateXTextCellStyle(SwDocShe
         xTextCellStyle = pBoxFormat->GetXObject();
         if (!xTextCellStyle.is())
         {
-            xTextCellStyle.set(new SwXTextCellStyle(pDocShell, pBoxFormat, sParentName));
+            xTextCellStyle.set(new SwXTextCellStyle(pDocShell, pBoxFormat, std::move(sParentName)));
             pBoxFormat->SetXObject(xTextCellStyle);
         }
     }

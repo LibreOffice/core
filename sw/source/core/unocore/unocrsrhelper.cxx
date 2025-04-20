@@ -1393,7 +1393,7 @@ void makeRedline( SwPaM const & rPaM,
                 SwStyleNameMapper::FillUIName(ProgName(sParaStyleName), sUIStyle,
                                               SwGetPoolIdFromName::TxtColl);
                 xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl(
-                    sUIStyle.isEmpty() ? UIName(sParaStyleName) : sUIStyle, nStylePoolId, &aItemSet));
+                    sUIStyle.isEmpty() ? UIName(sParaStyleName) : std::move(sUIStyle), nStylePoolId, &aItemSet));
             }
             else if (eType == RedlineType::ParagraphFormat)
                 xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( UIName(u""_ustr), RES_POOLCOLL_STANDARD, nullptr ));
