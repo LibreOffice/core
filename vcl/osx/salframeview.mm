@@ -310,29 +310,24 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
     }
 }
 
-static void updateWindowCollectionBehavior( const AquaSalFrame *pFrame )
+static void updateWindowCollectionBehavior( const SalFrameStyleFlags nStyle, const AquaSalFrame *pParent, NSWindow *pNSWindow )
 {
-    if( !pFrame )
+    if( !pNSWindow )
         return;
 
     // Enable fullscreen options if available and useful
-    NSWindowCollectionBehavior bOldCollectionBehavor = [pFrame->mpNSWindow collectionBehavior];
-    NSWindowCollectionBehavior bCollectionBehavor = NSWindowCollectionBehaviorFullScreenNone;
+    NSWindowCollectionBehavior eOldCollectionBehavior = [pNSWindow collectionBehavior];
+    NSWindowCollectionBehavior eCollectionBehavior = NSWindowCollectionBehaviorFullScreenNone;
     if ( officecfg::Office::Common::VCL::macOS::EnableNativeFullScreenWindows::get() )
     {
-        bool bAllowFullScreen = (SalFrameStyleFlags::NONE == (pFrame->mnStyle & (SalFrameStyleFlags::DIALOG | SalFrameStyleFlags::TOOLTIP | SalFrameStyleFlags::SYSTEMCHILD | SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::TOOLWINDOW | SalFrameStyleFlags::INTRO)));
-        bAllowFullScreen &= (SalFrameStyleFlags::NONE == (~pFrame->mnStyle & SalFrameStyleFlags::SIZEABLE));
-        bAllowFullScreen &= (pFrame->mpParent == nullptr);
+        bool bAllowFullScreen = (SalFrameStyleFlags::NONE == (nStyle & (SalFrameStyleFlags::DIALOG | SalFrameStyleFlags::TOOLTIP | SalFrameStyleFlags::SYSTEMCHILD | SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::TOOLWINDOW | SalFrameStyleFlags::INTRO)));
+        bAllowFullScreen &= (SalFrameStyleFlags::NONE == (~nStyle & SalFrameStyleFlags::SIZEABLE));
+        bAllowFullScreen &= (pParent == nullptr);
 
-        bCollectionBehavor = bAllowFullScreen ? NSWindowCollectionBehaviorFullScreenPrimary : NSWindowCollectionBehaviorFullScreenAuxiliary;
+        eCollectionBehavior = bAllowFullScreen ? NSWindowCollectionBehaviorFullScreenPrimary : NSWindowCollectionBehaviorFullScreenAuxiliary;
     }
-    else
-    {
-        bCollectionBehavor = NSWindowCollectionBehaviorFullScreenNone;
-    }
-
-    if ( bCollectionBehavor != bOldCollectionBehavor )
-        [pFrame->mpNSWindow setCollectionBehavior: bCollectionBehavor];
+    if ( eCollectionBehavior != eOldCollectionBehavior )
+        [pNSWindow setCollectionBehavior: eCollectionBehavior];
 }
 
 @interface NSResponder (SalFrameWindow)
@@ -357,7 +352,7 @@ static void updateWindowCollectionBehavior( const AquaSalFrame *pFrame )
                                  backing: NSBackingStoreBuffered
                                  defer: Application::IsHeadlessModeEnabled()];
 
-    updateWindowCollectionBehavior( mpFrame );
+    updateWindowCollectionBehavior( mpFrame->mnStyle, mpFrame->mpParent, pNSWindow );
 
     [pNSWindow setReleasedWhenClosed: NO];
 
@@ -444,7 +439,7 @@ static void updateWindowCollectionBehavior( const AquaSalFrame *pFrame )
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
-        updateWindowCollectionBehavior( mpFrame );
+        updateWindowCollectionBehavior( mpFrame->mnStyle, mpFrame->mpParent, mpFrame->mpNSWindow);
 
         static const SalFrameStyleFlags nGuessDocument = SalFrameStyleFlags::MOVEABLE|
                                             SalFrameStyleFlags::SIZEABLE|
