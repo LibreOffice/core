@@ -550,13 +550,13 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
 
                 rOutItemSet.Put(SfxBoolItem(nWhichId, bValue));
 
-                if (mbDataSeries)
-                {
-                    if (dynamic_cast<DataSeries*>(GetPropertySet().get())->hasAttributedDataPointDifferentValue(
+                DataSeries* pDataSeries = mbDataSeries
+                    ? dynamic_cast<DataSeries*>(GetPropertySet().get())
+                    : nullptr;
+                if (pDataSeries && pDataSeries->hasAttributedDataPointDifferentValue(
                             CHART_UNONAME_LABEL, uno::Any(aLabel)))
-                    {
-                        rOutItemSet.InvalidateItem(nWhichId);
-                    }
+                {
+                    rOutItemSet.InvalidateItem(nWhichId);
                 }
             }
         }

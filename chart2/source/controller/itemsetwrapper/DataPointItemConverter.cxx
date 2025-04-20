@@ -635,13 +635,13 @@ void DataPointItemConverter::FillSpecialItem(
 
                 rOutItemSet.Put( SfxBoolItem( nWhichId, bValue ));
 
-                if( m_bOverwriteLabelsForAttributedDataPointsAlso )
+                DataSeries* pDataSeries = m_bOverwriteLabelsForAttributedDataPointsAlso
+                    ? dynamic_cast<DataSeries*>(GetPropertySet().get())
+                    : nullptr;
+                if (pDataSeries && pDataSeries->hasAttributedDataPointDifferentValue(
+                            CHART_UNONAME_LABEL, uno::Any(aLabel)))
                 {
-                    if( dynamic_cast<DataSeries*>(GetPropertySet().get())->hasAttributedDataPointDifferentValue(
-                            CHART_UNONAME_LABEL , uno::Any(aLabel) ) )
-                    {
-                        rOutItemSet.InvalidateItem(nWhichId);
-                    }
+                    rOutItemSet.InvalidateItem(nWhichId);
                 }
             }
         }
