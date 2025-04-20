@@ -485,20 +485,21 @@ void SvxAppearanceTabPage::InitAppearance()
     m_xAppearanceDark->connect_toggled(LINK(this, SvxAppearanceTabPage, AppearanceChangeHdl));
 
     Appearance nAppearance = static_cast<Appearance>(MiscSettings::GetAppColorMode());
+    eCurrentAppearanceMode = nAppearance;
+
     switch (nAppearance)
     {
         case Appearance::SYSTEM:
             m_xAppearanceSystem->set_state(TRISTATE_TRUE);
-            eCurrentAppearanceMode = Appearance::SYSTEM;
             break;
         case Appearance::LIGHT:
             m_xAppearanceLight->set_state(TRISTATE_TRUE);
-            eCurrentAppearanceMode = Appearance::LIGHT;
             break;
         case Appearance::DARK:
             m_xAppearanceDark->set_state(TRISTATE_TRUE);
-            eCurrentAppearanceMode = Appearance::DARK;
             break;
+        default:
+            eCurrentAppearanceMode = Appearance::SYSTEM;
     }
 }
 
