@@ -946,6 +946,12 @@ void ChartController::executeDispatch_FillColor(sal_uInt32 nColor)
                 ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
             if( xPointProperties.is() )
                 xPointProperties->setPropertyValue( u"FillColor"_ustr, uno::Any( nColor ) );
+
+            ObjectType eType = ObjectIdentifier::getObjectType(aCID);
+            if (eType == OBJECTTYPE_DATA_SERIES || eType == OBJECTTYPE_DATA_POINT)
+            {
+                xChartModel->clearColorPalette();
+            }
         }
     }
     catch( const uno::Exception& )
