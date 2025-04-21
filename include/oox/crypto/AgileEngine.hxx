@@ -65,6 +65,7 @@ enum class AgileEncryptionPreset
 {
     AES_128_SHA1,
     AES_128_SHA384,
+    AES_192_SHA384,
     AES_256_SHA512,
 };
 

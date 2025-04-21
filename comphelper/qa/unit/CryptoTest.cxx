@@ -185,4 +185,102 @@ CPPUNIT_TEST_FIXTURE(CryptoTest, testEncrypt_AES256_ECB)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(CryptoTest, testEncrypt_AES192_CBC)
+{
+    std::vector<sal_uInt8> key = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x10, 0x11,
+                                   0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20, 0x21, 0x22,
+                                   0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x30, 0x31, 0x32 };
+
+    std::vector<sal_uInt8> iv = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+                                  0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16 };
+
+    std::vector<sal_uInt8> original = { 's', 'e', 'c', 'r', 'e', 't', '\0' };
+
+    std::vector<sal_uInt8> encrypted(original.size());
+
+    {
+        sal_uInt32 nWrittenSize = 0;
+        comphelper::Encrypt aEncryptor(key, iv, comphelper::CryptoType::AES_192_CBC);
+        nWrittenSize = aEncryptor.update(encrypted, original);
+
+        // nothing should be written as the size of the input is not a multiple of block size
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), nWrittenSize);
+    }
+
+    {
+        sal_uInt32 nWrittenSize = 0;
+        comphelper::Encrypt aEncryptor(key, iv, comphelper::CryptoType::AES_192_CBC);
+
+        original.resize(16, 0); // apply padding to make it multiple of block size
+        encrypted.resize(16, 0);
+
+        CPPUNIT_ASSERT_EQUAL(std::string("73656372657400000000000000000000"),
+                             comphelper::hashToString(original));
+
+        nWrittenSize = aEncryptor.update(encrypted, original);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(16), nWrittenSize);
+
+        CPPUNIT_ASSERT_EQUAL(std::string("e75cb91a34377c09c354c24fcef345a6"),
+                             comphelper::hashToString(encrypted));
+
+        std::vector<sal_uInt8> decrypted(encrypted.size(), 0);
+
+        comphelper::Decrypt aDecryptor(key, iv, comphelper::CryptoType::AES_192_CBC);
+        nWrittenSize = aDecryptor.update(decrypted, encrypted);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(16), nWrittenSize);
+
+        CPPUNIT_ASSERT_EQUAL(std::string("73656372657400000000000000000000"),
+                             comphelper::hashToString(decrypted));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(CryptoTest, testEncrypt_AES192_ECB)
+{
+    std::vector<sal_uInt8> key = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x10, 0x11,
+                                   0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20, 0x21, 0x22,
+                                   0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x30, 0x31, 0x32 };
+
+    std::vector<sal_uInt8> iv = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+                                  0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16 };
+
+    std::vector<sal_uInt8> original = { 's', 'e', 'c', 'r', 'e', 't', '\0' };
+
+    std::vector<sal_uInt8> encrypted(original.size());
+
+    {
+        sal_uInt32 nWrittenSize = 0;
+        comphelper::Encrypt aEncryptor(key, iv, comphelper::CryptoType::AES_192_ECB);
+        nWrittenSize = aEncryptor.update(encrypted, original);
+
+        // nothing should be written as the size of the input is not a multiple of block size
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), nWrittenSize);
+    }
+
+    {
+        sal_uInt32 nWrittenSize = 0;
+        comphelper::Encrypt aEncryptor(key, iv, comphelper::CryptoType::AES_192_ECB);
+
+        original.resize(16, 0); // apply padding to make it multiple of block size
+        encrypted.resize(16, 0);
+
+        CPPUNIT_ASSERT_EQUAL(std::string("73656372657400000000000000000000"),
+                             comphelper::hashToString(original));
+
+        nWrittenSize = aEncryptor.update(encrypted, original);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(16), nWrittenSize);
+
+        CPPUNIT_ASSERT_EQUAL(std::string("abf7abec9a6b58c089e902397c47ac49"),
+                             comphelper::hashToString(encrypted));
+
+        std::vector<sal_uInt8> decrypted(encrypted.size(), 0);
+
+        comphelper::Decrypt aDecryptor(key, iv, comphelper::CryptoType::AES_192_ECB);
+        nWrittenSize = aDecryptor.update(decrypted, encrypted);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(16), nWrittenSize);
+
+        CPPUNIT_ASSERT_EQUAL(std::string("73656372657400000000000000000000"),
+                             comphelper::hashToString(decrypted));
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

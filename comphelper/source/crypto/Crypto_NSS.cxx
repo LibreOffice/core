@@ -169,13 +169,12 @@ public:
         switch (type)
         {
             case CryptoType::AES_128_ECB:
+            case CryptoType::AES_192_ECB:
             case CryptoType::AES_256_ECB:
                 mechanism = CKM_AES_ECB;
                 break;
             case CryptoType::AES_128_CBC:
-                mechanism = CKM_AES_CBC;
-                pIvItem = &ivItem;
-                break;
+            case CryptoType::AES_192_CBC:
             case CryptoType::AES_256_CBC:
                 mechanism = CKM_AES_CBC;
                 pIvItem = &ivItem;

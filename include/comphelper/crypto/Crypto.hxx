@@ -46,6 +46,8 @@ enum class CryptoType
     UNKNOWN,
     AES_128_ECB,
     AES_128_CBC,
+    AES_192_ECB,
+    AES_192_CBC,
     AES_256_ECB,
     AES_256_CBC,
 };

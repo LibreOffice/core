@@ -8,6 +8,7 @@
  *
  */
 
+#include <algorithm>
 #include <oox/crypto/AgileEngine.hxx>
 
 #include <oox/helper/binaryinputstream.hxx>
@@ -238,6 +239,8 @@ comphelper::CryptoType AgileEngine::cryptoType(const AgileEncryptionInfo& rInfo)
 {
     if (rInfo.keyBits == 128 && rInfo.cipherAlgorithm == "AES" && rInfo.cipherChaining == "ChainingModeCBC")
         return comphelper::CryptoType::AES_128_CBC;
+    else if (rInfo.keyBits == 192 && rInfo.cipherAlgorithm == "AES" && rInfo.cipherChaining == "ChainingModeCBC")
+        return comphelper::CryptoType::AES_192_CBC;
     else if (rInfo.keyBits == 256 && rInfo.cipherAlgorithm == "AES" && rInfo.cipherChaining == "ChainingModeCBC")
         return comphelper::CryptoType::AES_256_CBC;
     return comphelper::CryptoType::UNKNOWN;
@@ -337,10 +340,7 @@ bool AgileEngine::decryptAndCheckVerifierHash(OUString const & rPassword)
     calculateHashFinal(rPassword, hashFinal);
 
     std::vector<sal_uInt8>& encryptedHashInput = mInfo.encryptedVerifierHashInput;
-    // SALT - needs to be a multiple of block size (?)
-    sal_uInt32 nSaltSize = comphelper::roundUp(mInfo.saltSize, mInfo.blockSize);
-    if (nSaltSize < encryptedHashInput.size())
-        return false;
+    sal_uInt32 nSaltSize = std::max<sal_uInt32>(comphelper::roundUp(mInfo.saltSize, mInfo.blockSize), encryptedHashInput.size());
     std::vector<sal_uInt8> hashInput(nSaltSize, 0);
     calculateBlock(constBlock1, hashFinal, encryptedHashInput, hashInput);
 
@@ -358,6 +358,10 @@ void AgileEngine::decryptEncryptionKey(OUString const & rPassword)
     sal_Int32 nKeySize = mInfo.keyBits / 8;
 
     mKey.clear();
+    // tdf#166241: for AES 192
+    // mKey is the outbuf and in that moment, mInfo.encryptedKeyValue length is 32, while mKey size is 24.
+    // so the end result is: we simply need to reserve mKey for mInfo.encryptedKeyValue.size() before resizing.
+    mKey.reserve(mInfo.encryptedKeyValue.size());
     mKey.resize(nKeySize, 0);
 
     std::vector<sal_uInt8> aPasswordHash(mInfo.hashSize, 0);
@@ -570,6 +574,16 @@ bool AgileEngine::readEncryptionInfo(uno::Reference<io::XInputStream> & rxInputS
         return true;
     }
 
+    // AES 192 CBC with SHA384
+    if (mInfo.keyBits         == 192 &&
+        mInfo.cipherAlgorithm == "AES" &&
+        mInfo.cipherChaining  == "ChainingModeCBC" &&
+        mInfo.hashAlgorithm   == "SHA384" &&
+        mInfo.hashSize        == comphelper::SHA384_HASH_LENGTH)
+    {
+        return true;
+    }
+
     // AES 256 CBC with SHA512
     if (mInfo.keyBits         == 256 &&
         mInfo.cipherAlgorithm == "AES" &&
@@ -705,6 +719,8 @@ bool AgileEngine::setupEncryption(OUString const & rPassword)
         setupEncryptionParameters({ 100000, 16, 128, 20, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA1"_ustr });
     else if (meEncryptionPreset == AgileEncryptionPreset::AES_128_SHA384)
         setupEncryptionParameters({ 100000, 16, 128, 48, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA384"_ustr });
+    else if (meEncryptionPreset == AgileEncryptionPreset::AES_192_SHA384)
+        setupEncryptionParameters({ 100000, 16, 192, 48, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA384"_ustr });
     else
         setupEncryptionParameters({ 100000, 16, 256, 64, 16, u"AES"_ustr, u"ChainingModeCBC"_ustr, u"SHA512"_ustr });
 

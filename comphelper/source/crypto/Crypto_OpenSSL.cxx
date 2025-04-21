@@ -144,10 +144,14 @@ public:
         {
             case CryptoType::AES_128_ECB:
                 return EVP_aes_128_ecb();
+            case CryptoType::AES_192_ECB:
+                return EVP_aes_192_ecb();
             case CryptoType::AES_256_ECB:
                 return EVP_aes_256_ecb();
             case CryptoType::AES_128_CBC:
                 return EVP_aes_128_cbc();
+            case CryptoType::AES_192_CBC:
+                return EVP_aes_192_cbc();
             case CryptoType::AES_256_CBC:
                 return EVP_aes_256_cbc();
             default:
