@@ -2215,7 +2215,7 @@ void ScMatrixImpl::IfJump( ScJumpMatrix& rJumpMatrix, const short* pJump, short 
                     // empty result.
                     bIsValue = false;
                     bTrue = false;
-                    fVal = (bIsValue ? 0.0 : CreateDoubleError( FormulaError::NoValue));
+                    fVal = CreateDoubleError(FormulaError::NoValue);
                 break;
                 case mdds::mtm::element_empty:
                     // Treat empty and empty path as 0, but string
@@ -2224,7 +2224,7 @@ void ScMatrixImpl::IfJump( ScJumpMatrix& rJumpMatrix, const short* pJump, short 
                     // empty result.
                     bIsValue = true;
                     bTrue = false;
-                    fVal = (bIsValue ? 0.0 : CreateDoubleError( FormulaError::NoValue));
+                    fVal = 0.0;
                 break;
                 default:
                     assert(false);
