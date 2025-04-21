@@ -61,7 +61,7 @@ MemoryManager::MemoryManager()
         maSwapOutTimer.SetPriority(TaskPriority::DEFAULT_IDLE);
         maSwapOutTimer.SetInvokeHandler(LINK(this, MemoryManager, ReduceMemoryTimerHandler));
         maSwapOutTimer.SetTimeout(mnTimeout);
-        maSwapOutTimer.Start();
+        maSwapOutTimer.Stop();
     }
 }
 
@@ -71,12 +71,12 @@ MemoryManager& MemoryManager::get()
     return gStaticManager;
 }
 
-IMPL_LINK(MemoryManager, ReduceMemoryTimerHandler, Timer*, pTimer, void)
+IMPL_LINK_NOARG(MemoryManager, ReduceMemoryTimerHandler, Timer*, void)
 {
     std::unique_lock aGuard(maMutex);
-    pTimer->Stop();
+    maSwapOutTimer.Stop();
     reduceMemory(aGuard);
-    pTimer->Start();
+    // will be started again on size change
 }
 
 void MemoryManager::registerObject(MemoryManaged* pMemoryManaged)
@@ -88,6 +88,7 @@ void MemoryManager::registerObject(MemoryManaged* pMemoryManaged)
     // coverity[missing_lock: FALSE] - as above assert
     mnTotalSize += pMemoryManaged->getCurrentSizeInBytes();
     maObjectList.insert(pMemoryManaged);
+    checkStartReduceTimer();
 }
 
 void MemoryManager::unregisterObject(MemoryManaged* pMemoryManaged)
@@ -95,6 +96,7 @@ void MemoryManager::unregisterObject(MemoryManaged* pMemoryManaged)
     std::unique_lock aGuard(maMutex);
     mnTotalSize -= pMemoryManaged->getCurrentSizeInBytes();
     maObjectList.erase(pMemoryManaged);
+    checkStartReduceTimer();
 }
 
 void MemoryManager::changeExisting(MemoryManaged* pMemoryManaged, sal_Int64 nNewSize)
@@ -104,6 +106,7 @@ void MemoryManager::changeExisting(MemoryManaged* pMemoryManaged, sal_Int64 nNew
     mnTotalSize -= nOldSize;
     mnTotalSize += nNewSize;
     pMemoryManaged->setCurrentSizeInBytes(nNewSize);
+    checkStartReduceTimer();
 }
 
 void MemoryManager::swappedIn(MemoryManaged* pMemoryManaged, sal_Int64 nNewSize)
@@ -136,6 +139,18 @@ void MemoryManager::dumpState(rtl::OStringBuffer& rState)
     {
         pMemoryManaged->dumpState(rState);
     }
+}
+
+void MemoryManager::checkStartReduceTimer()
+{
+    // maMutex is locked in callers
+
+    if (!mbSwapEnabled || mnTotalSize < mnMemoryLimit)
+        return;
+
+    // start the timer
+    if (!maSwapOutTimer.IsActive())
+        maSwapOutTimer.Start();
 }
 
 void MemoryManager::reduceMemory(std::unique_lock<std::mutex>& rGuard, bool bDropAll)
