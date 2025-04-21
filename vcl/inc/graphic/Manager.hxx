@@ -52,6 +52,7 @@ public:
     o3tl::sorted_vector<MemoryManaged*> const& getManagedObjects() { return maObjectList; }
     sal_Int64 getTotalSize() { return mnTotalSize; }
 
+    void checkStartReduceTimer();
     void reduceMemory(std::unique_lock<std::mutex>& rGuard, bool bDropAll = false);
     void loopAndReduceMemory(std::unique_lock<std::mutex>& rGuard, bool bDropAll = false);
     void reduceAllAndNow();
