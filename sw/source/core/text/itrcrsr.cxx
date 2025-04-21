@@ -1654,29 +1654,29 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
                 return nCurrStart;
             }
         }
-        else
+        else if (pPor->IsPostItsPortion())
         {
-            if (pPor->IsPostItsPortion() || pPor->InToxRefGrp())
+            if (SwPostItsPortion* pPostItsPortion = dynamic_cast<SwPostItsPortion*>(pPor))
             {
-                SwPostItsPortion* pPostItsPortion = pPor->IsPostItsPortion() ? dynamic_cast<SwPostItsPortion*>(pPor) : nullptr;
-                if (pPostItsPortion)
+                if (!pPostItsPortion->IsScript()) // tdf#141079
                 {
-                    if (!pPostItsPortion->IsScript()) // tdf#141079
-                    {
-                        // Offset would be nCurrStart + nLength below, do the same for post-it portions.
-                        nCurrStart += pPor->GetLen();
-                    }
+                    // Offset would be nCurrStart + nLength below, do the same for post-it portions.
+                    nCurrStart += pPor->GetLen();
                 }
-                return nCurrStart;
             }
-            if ( pPor->InFieldGrp() )
+            return nCurrStart;
+        }
+        else if (pPor->InToxRefGrp())
+        {
+            return nCurrStart;
+        }
+        else if (pPor->InFieldGrp())
+        {
+            if (bRightOver && !static_cast<SwFieldPortion*>(pPor)->HasFollow())
             {
-                if( bRightOver && !static_cast<SwFieldPortion*>(pPor)->HasFollow() )
-                {
-                    nCurrStart += static_cast<SwFieldPortion*>(pPor)->GetFieldLen();
-                }
-                return nCurrStart;
+                nCurrStart += static_cast<SwFieldPortion*>(pPor)->GetFieldLen();
             }
+            return nCurrStart;
         }
     }
 
