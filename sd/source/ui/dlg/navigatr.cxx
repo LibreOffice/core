@@ -736,7 +736,7 @@ IMPL_LINK(SdNavigatorWin, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     if (KEY_ESCAPE == rKEvt.GetKeyCode().GetCode())
     {
         ::sd::ViewShellBase* pBase = ::sd::ViewShellBase::GetViewShellBase( mpBindings->GetDispatcher()->GetFrame());
-        if (sd::SlideShow::IsRunning(*pBase))
+        if (pBase && sd::SlideShow::IsRunning(*pBase))
         {
             sd::SlideShow::Stop(*pBase);
             bConsumed = true;
