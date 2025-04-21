@@ -72,6 +72,8 @@ private:
 
     CommentAuthorList           maAuthorList;
     bool                        mbCommentAuthorsRead; // read commentAuthors.xml only once
+
+    bool mbEmbedTrueTypeFonts = false;
 };
 
 }

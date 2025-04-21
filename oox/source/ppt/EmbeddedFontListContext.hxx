@@ -45,9 +45,12 @@ class EmbeddedFontListContext final : public ::oox::core::FragmentHandler2
 {
     std::optional<EmbeddedFont> moCurrentFont;
     EmbeddedFontsHelper maEmbeddedFontHelper;
+    bool mbEmbedTrueType = false;
+    css::uno::Reference<css::beans::XPropertySet> mxDocSettings;
 
 public:
-    EmbeddedFontListContext(oox::core::FragmentHandler2 const& rParent);
+    EmbeddedFontListContext(oox::core::FragmentHandler2 const& rParent, bool bEmbedTrueType,
+                            css::uno::Reference<css::beans::XPropertySet> const& rxDocSettings);
     ~EmbeddedFontListContext() override;
 
     oox::core::ContextHandlerRef onCreateContext(sal_Int32 aElementToken,
