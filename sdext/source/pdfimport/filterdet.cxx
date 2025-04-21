@@ -314,7 +314,7 @@ uno::Reference<io::XStream> getEmbeddedFile(const OUString& rInPDFFileURL,
     if (pPdfium)
     {
         // Needs rewriting more C++ with autocleanup
-        // Start by mmaping the file because our pdfium wrapper only wraps the LoadMemDocument
+        // Start by mmapping the file because our pdfium wrapper only wraps the LoadMemDocument
         oslFileHandle fileHandle = nullptr;
         SAL_INFO("sdext.pdfimport", "getEmbeddedFile prior to openFile" << aSysUPath);
         if (osl_openFile(rInPDFFileURL.pData, &fileHandle, osl_File_OpenFlag_Read)
