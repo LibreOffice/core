@@ -14,7 +14,9 @@
 #include <string_view>
 
 #include <initializer_list>
-#include <unordered_map>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
 
 #include <com/sun/star/svg/XSVGWriter.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
@@ -41,13 +43,13 @@ namespace writerperfect::exp
 namespace
 {
 /// Looks up mime type for a given image extension.
-OUString GetMimeType(const OUString& rExtension)
+OUString GetMimeType(std::u16string_view rExtension)
 {
-    static const std::unordered_map<OUString, OUString> vMimeTypes = {
-        { "gif", "image/gif" },
-        { "jpg", "image/jpeg" },
-        { "png", "image/png" },
-        { "svg", "image/svg+xml" },
+    static constexpr frozen::unordered_map<std::u16string_view, OUString, 4> vMimeTypes = {
+        { u"gif", u"image/gif"_ustr },
+        { u"jpg", u"image/jpeg"_ustr },
+        { u"png", u"image/png"_ustr },
+        { u"svg", u"image/svg+xml"_ustr },
     };
 
     auto it = vMimeTypes.find(rExtension);
@@ -107,8 +109,7 @@ OUString FindCoverImage(const OUString& rDocumentBaseURL, OUString& rMimeType,
     if (rDocumentBaseURL.isEmpty())
         return aRet;
 
-    static const std::initializer_list<std::u16string_view> vExtensions
-        = { u"gif", u"jpg", u"png", u"svg" };
+    static constexpr std::u16string_view vExtensions[] = { u"gif", u"jpg", u"png", u"svg" };
 
     OUString aMediaDir = FindMediaDir(rDocumentBaseURL, rFilterData);
     for (const auto& rExtension : vExtensions)
@@ -119,7 +120,7 @@ OUString FindCoverImage(const OUString& rDocumentBaseURL, OUString& rMimeType,
             SvFileStream aStream(aRet, StreamMode::READ);
             if (aStream.IsOpen())
             {
-                rMimeType = GetMimeType(OUString(rExtension));
+                rMimeType = GetMimeType(rExtension);
                 // File exists.
                 return aRet;
             }

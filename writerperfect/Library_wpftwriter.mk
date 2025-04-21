@@ -66,6 +66,7 @@ $(eval $(call gb_Library_use_externals,wpftwriter,\
 	boost_headers \
 	ebook \
     $(if $(ENABLE_WASM_STRIP_SWEXPORTS),,etonyek) \
+	frozen \
 	icu_headers \
 	icui18n \
 	icuuc \
