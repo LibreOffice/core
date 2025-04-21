@@ -247,9 +247,7 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, std::u16string_view algor
     for (i = 0; i < mkey_count; i++) {
         for (j=i+1; j < mkey_count; j++) {
             if (keys[mkeys[i]].mkey.getLength() < keys[mkeys[j]].mkey.getLength()) {
-                sal_Int16 k = mkeys[i];
-                mkeys[i] = mkeys[j];
-                mkeys[j] = k;
+                std::swap(mkeys[i], mkeys[j]);
             }
         }
     }
