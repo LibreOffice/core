@@ -12,6 +12,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/bitmapex.hxx>
 #include <vcl/animate/Animation.hxx>
+#include <vcl/gdimtf.hxx>
 
 class VCL_DLLPUBLIC ImportOutput
 {
@@ -19,6 +20,7 @@ public:
     bool mbIsAnimated = false;
     std::optional<BitmapEx> moBitmap;
     std::optional<Animation> moAnimation;
+    std::optional<GDIMetaFile> moGDIMetaFile;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

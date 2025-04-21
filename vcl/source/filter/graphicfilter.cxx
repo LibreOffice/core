@@ -1264,18 +1264,26 @@ ErrCode GraphicFilter::readPCD(SvStream & rStream, Graphic & rGraphic)
         return ERRCODE_GRFILTER_FILTERERROR;
 }
 
-ErrCode GraphicFilter::readPBM(SvStream & rStream, Graphic & rGraphic)
+ErrCode GraphicFilter::readPBM(SvStream& rStream, Graphic& rGraphic)
 {
-    if (ImportPbmGraphic(rStream, rGraphic))
+    ImportOutput aImportOutput;
+    if (ImportPbmGraphic(rStream, aImportOutput))
+    {
+        rGraphic = Graphic(*aImportOutput.moBitmap);
         return ERRCODE_NONE;
+    }
     else
         return ERRCODE_GRFILTER_FILTERERROR;
 }
 
-ErrCode GraphicFilter::readDXF(SvStream & rStream, Graphic & rGraphic)
+ErrCode GraphicFilter::readDXF(SvStream& rStream, Graphic& rGraphic)
 {
-    if (ImportDxfGraphic(rStream, rGraphic))
+    ImportOutput aImportOutput;
+    if (ImportDxfGraphic(rStream, aImportOutput))
+    {
+        rGraphic = Graphic(*aImportOutput.moGDIMetaFile);
         return ERRCODE_NONE;
+    }
     else
         return ERRCODE_GRFILTER_FILTERERROR;
 }

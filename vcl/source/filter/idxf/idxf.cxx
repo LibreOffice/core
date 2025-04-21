@@ -19,23 +19,20 @@
 
 
 #include <filter/DxfReader.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/filter/ImportOutput.hxx>
 #include "dxf2mtf.hxx"
 
-//================== GraphicImport - the exported function ================
-
-bool ImportDxfGraphic(SvStream & rStream, Graphic & rGraphic)
+bool ImportDxfGraphic(SvStream& rStream, ImportOutput& rImportOutput)
 {
     DXFRepresentation aDXF;
     DXF2GDIMetaFile aConverter;
-    GDIMetaFile aMTF;
+    GDIMetaFile aGDIMetaFile;
 
-    if ( !aDXF.Read( rStream ) )
+    if (!aDXF.Read(rStream))
         return false;
-    if ( !aConverter.Convert( aDXF, aMTF, 60, 100 ) )
+    if (!aConverter.Convert(aDXF, aGDIMetaFile, 60, 100))
         return false;
-    rGraphic = Graphic(aMTF);
+    rImportOutput.moGDIMetaFile = aGDIMetaFile;
 
     return true;
 }

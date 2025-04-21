@@ -20,7 +20,7 @@
 #include <sal/config.h>
 #include <o3tl/safeint.hxx>
 #include <vcl/FilterConfigItem.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/filter/ImportOutput.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <tools/stream.hxx>
 #include <filter/PbmReader.hxx>
@@ -49,7 +49,7 @@ private:
 
 public:
     explicit PBMReader(SvStream & rPBM);
-    bool                ReadPBM(Graphic & rGraphic );
+    bool ReadPBM(ImportOutput& rImportOutput);
 };
 
 }
@@ -69,7 +69,7 @@ PBMReader::PBMReader(SvStream & rPBM)
 {
 }
 
-bool PBMReader::ReadPBM(Graphic & rGraphic )
+bool PBMReader::ReadPBM(ImportOutput& rImportOutput)
 {
     if ( mrPBM.GetError() )
         return false;
@@ -131,8 +131,8 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
     // read bitmap data
     mbStatus = ImplReadBody();
 
-    if ( mbStatus )
-        rGraphic = vcl::bitmap::CreateFromData(std::move(*mpRawBmp));
+    if (mbStatus)
+        rImportOutput.moBitmap = vcl::bitmap::CreateFromData(std::move(*mpRawBmp));
 
     return mbStatus;
 }
@@ -531,11 +531,11 @@ bool PBMReader::ImplReadBody()
 
 //================== GraphicImport - the exported function ================
 
-bool ImportPbmGraphic( SvStream & rStream, Graphic & rGraphic)
+bool ImportPbmGraphic(SvStream& rStream, ImportOutput& rImportOutput)
 {
     PBMReader aPBMReader(rStream);
 
-    return aPBMReader.ReadPBM(rGraphic );
+    return aPBMReader.ReadPBM(rImportOutput);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

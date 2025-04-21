@@ -190,9 +190,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else if (strcmp(argv[2], "dxf") == 0)
         {
-            Graphic aGraphic;
+            ImportOutput aImportOutput;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = static_cast<int>(ImportDxfGraphic(aFileStream, aGraphic));
+            ret = static_cast<int>(ImportDxfGraphic(aFileStream, aImportOutput));
         }
         else if (strcmp(argv[2], "met") == 0)
         {
@@ -202,9 +202,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else if ((strcmp(argv[2], "pbm") == 0) || strcmp(argv[2], "ppm") == 0)
         {
-            Graphic aGraphic;
+            ImportOutput aImportOutput;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = static_cast<int>(ImportPbmGraphic(aFileStream, aGraphic));
+            ret = static_cast<int>(ImportPbmGraphic(aFileStream, aImportOutput));
         }
         else if (strcmp(argv[2], "psd") == 0)
         {

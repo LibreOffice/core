@@ -11,7 +11,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <tools/stream.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/filter/ImportOutput.hxx>
 #include <filter/PbmReader.hxx>
 
 using namespace ::com::sun::star;
@@ -44,8 +44,8 @@ bool PpmFilterTest::load(const OUString &,
     SfxFilterFlags, SotClipboardFormatId, unsigned int)
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
-    Graphic aGraphic;
-    return ImportPbmGraphic(aFileStream, aGraphic);
+    ImportOutput aImportOutput;
+    return ImportPbmGraphic(aFileStream, aImportOutput);
 }
 
 void PpmFilterTest::testCVEs()

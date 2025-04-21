@@ -19,8 +19,11 @@
 
 #pragma once
 
-#include <vcl/graph.hxx>
+#include <vcl/dllapi.h>
 
-VCL_DLLPUBLIC bool ImportDxfGraphic(SvStream& rStream, Graphic& rGraphic);
+class SvStream;
+class ImportOutput;
+
+VCL_DLLPUBLIC bool ImportDxfGraphic(SvStream& rStream, ImportOutput& rImportOutput);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
