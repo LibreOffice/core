@@ -19,8 +19,11 @@
 
 #pragma once
 
-#include <vcl/graph.hxx>
+#include <vcl/dllapi.h>
 
-VCL_DLLPUBLIC bool ImportTgaGraphic(SvStream& rStream, Graphic& rGraphic);
+class SvStream;
+class ImportOutput;
+
+VCL_DLLPUBLIC bool ImportTgaGraphic(SvStream& rStream, ImportOutput& rImportOutput);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <vcl/graph.hxx>
+#include <vcl/filter/ImportOutput.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <tools/stream.hxx>
 #include <memory>
@@ -110,7 +109,7 @@ private:
 
 public:
     explicit TGAReader(SvStream &rTGA);
-    bool                ReadTGA(Graphic &rGraphic);
+    bool ReadTGA(ImportOutput& rImportOutput);
 };
 
 }
@@ -127,7 +126,7 @@ TGAReader::TGAReader(SvStream &rTGA)
 {
 }
 
-bool TGAReader::ReadTGA(Graphic & rGraphic)
+bool TGAReader::ReadTGA(ImportOutput& rImportOutput)
 {
     if ( m_rTGA.GetError() )
         return false;
@@ -155,7 +154,7 @@ bool TGAReader::ReadTGA(Graphic & rGraphic)
                 mbStatus = ImplReadBody();
 
             if ( mbStatus )
-                rGraphic = vcl::bitmap::CreateFromData(std::move(*mpBitmap));
+                rImportOutput.moBitmap = vcl::bitmap::CreateFromData(std::move(*mpBitmap));
         }
     }
     return mbStatus;
@@ -780,11 +779,10 @@ bool TGAReader::ImplReadPalette()
 
 //================== GraphicImport - the exported function ================
 
-bool ImportTgaGraphic(SvStream & rStream, Graphic & rGraphic)
+bool ImportTgaGraphic(SvStream& rStream, ImportOutput& rImportOutput)
 {
     TGAReader aTGAReader(rStream);
-
-    return aTGAReader.ReadTGA(rGraphic);
+    return aTGAReader.ReadTGA(rImportOutput);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -238,9 +238,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else if (strcmp(argv[2], "tga") == 0)
         {
-            Graphic aGraphic;
+            ImportOutput aImportOutput;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ret = static_cast<int>(ImportTgaGraphic(aFileStream, aGraphic));
+            ret = static_cast<int>(ImportTgaGraphic(aFileStream, aImportOutput));
         }
         else if (strcmp(argv[2], "tif") == 0)
         {

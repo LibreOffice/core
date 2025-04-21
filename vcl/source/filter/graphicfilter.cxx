@@ -1189,8 +1189,12 @@ ErrCode GraphicFilter::readBMP(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
 
 ErrCode GraphicFilter::readTGA(SvStream & rStream, Graphic & rGraphic)
 {
-    if (ImportTgaGraphic(rStream, rGraphic))
+    ImportOutput aImportOutput;
+    if (ImportTgaGraphic(rStream, aImportOutput))
+    {
+        rGraphic = Graphic(*aImportOutput.moBitmap);
         return ERRCODE_NONE;
+    }
     else
         return ERRCODE_GRFILTER_FILTERERROR;
 }
