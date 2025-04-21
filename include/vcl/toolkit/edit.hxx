@@ -243,6 +243,8 @@ public:
 
     bool IsPassword() const { return mbPassword; }
 
+    bool IsActivePopup() const { return mbActivePopup; }
+
     virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 

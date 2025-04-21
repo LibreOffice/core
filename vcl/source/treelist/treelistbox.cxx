@@ -88,8 +88,10 @@ public:
     void        StopEditing( bool bCancel );
     void        Hide();
     const VclPtr<Edit> & GetEditWidget() const { return pEdit; };
-};
 
+    void RemoveEscapeAccel() { Application::RemoveAccel(&aAccEscape); }
+    void InsertEscapeAccel() { Application::InsertAccel(&aAccEscape); }
+};
 // ***************************************************************
 
 namespace {
@@ -103,6 +105,7 @@ public:
     virtual void dispose() override { pOwner = nullptr; Edit::dispose(); }
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
     virtual void LoseFocus() override;
+    virtual void Command(const CommandEvent& rCEvt) override;
 };
 
 }
@@ -126,6 +129,16 @@ void MyEdit_Impl::LoseFocus()
 {
     if (pOwner)
         pOwner->LoseFocus();
+}
+
+void MyEdit_Impl::Command(const CommandEvent& rCEvt)
+{
+    if (rCEvt.GetCommand() == CommandEventId::ContextMenu)
+    {
+        pOwner->RemoveEscapeAccel();  // so escape ends the popup
+        Edit::Command(rCEvt);
+        pOwner->InsertEscapeAccel();
+    }
 }
 
 SvInplaceEdit2::SvInplaceEdit2
@@ -233,9 +246,8 @@ void SvInplaceEdit2::StopEditing( bool bCancel )
 
 void SvInplaceEdit2::LoseFocus()
 {
-    if ( !bAlreadyInCallBack
-    && ((!Application::GetFocusWindow()) || !pEdit->IsChild( Application::GetFocusWindow()) )
-    )
+    if (!bAlreadyInCallBack && !pEdit->IsActivePopup()
+        && ((!Application::GetFocusWindow()) || !pEdit->IsChild(Application::GetFocusWindow())))
     {
         bCanceled = false;
         aIdle.SetPriority(TaskPriority::REPAINT);
