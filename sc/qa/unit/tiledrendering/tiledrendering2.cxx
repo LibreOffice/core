@@ -165,6 +165,42 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCool11739LocaleDialogFieldUnit)
     CPPUNIT_ASSERT_EQUAL(FieldUnit::CM, eMetric);
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSplitPanes)
+{
+    createDoc("split-panes.ods");
+
+    save(u"calc8"_ustr);
+
+    xmlDocUniquePtr pSettings = parseExport(u"settings.xml"_ustr);
+    CPPUNIT_ASSERT(pSettings);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 2
+    assertXPathContent(pSettings,
+                       "/office:document-settings/office:settings/config:config-item-set[1]/"
+                       "config:config-item-map-indexed/config:config-item-map-entry/"
+                       "config:config-item-map-named/config:config-item-map-entry/"
+                       "config:config-item[@config:name='VerticalSplitMode']",
+                       u"0");
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSplitPanesXLSX)
+{
+    createDoc("split-panes.xlsx");
+
+    save(u"Calc Office Open XML"_ustr);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: topRight
+    // - Actual  : bottomRight
+    // which also results in invalid XLSX
+    assertXPath(pSheet, "/x:worksheet/x:sheetViews/x:sheetView/x:pane", "activePane", u"topRight");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
