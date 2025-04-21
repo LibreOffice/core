@@ -1624,6 +1624,16 @@ void JSToolbar::set_item_icon_name(const OUString& rIdent, const OUString& rIcon
     sendUpdate();
 }
 
+void JSToolbar::set_item_image(const OUString& rIdent,
+                               const css::uno::Reference<css::graphic::XGraphic>& rImage)
+{
+    SalInstanceToolbar::set_item_image(rIdent, rImage);
+    if (rIdent == u".uno:ChartColorPalette"_ustr)
+    {
+        sendUpdate();
+    }
+}
+
 JSTextView::JSTextView(JSDialogSender* pSender, ::VclMultiLineEdit* pTextView,
                        SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceTextView, ::VclMultiLineEdit>(pSender, pTextView, pBuilder,

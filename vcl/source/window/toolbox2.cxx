@@ -1762,16 +1762,22 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
                     rJsonWriter.put("description", sAccDesc);
             }
 
-            Image aImage = GetItemImage(nId);
-            if (!sCommand.startsWith(".uno:") && !!aImage)
+            if (!sCommand.startsWith(".uno:") || sCommand == u".uno:ChartColorPalette"_ustr)
             {
-                SvMemoryStream aOStm(6535, 6535);
-                if(GraphicConverter::Export(aOStm, aImage.GetBitmapEx(), ConvertDataFormat::PNG) == ERRCODE_NONE)
+                Image aImage = GetItemImage(nId);
+                if (!!aImage)
                 {
-                    css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
-                    OStringBuffer aBuffer("data:image/png;base64,");
-                    ::comphelper::Base64::encode(aBuffer, aSeq);
-                    rJsonWriter.put("image", aBuffer);
+                    SvMemoryStream aOStm(6535, 6535);
+                    if (GraphicConverter::Export(aOStm, aImage.GetBitmapEx(),
+                                                 ConvertDataFormat::PNG)
+                        == ERRCODE_NONE)
+                    {
+                        css::uno::Sequence<sal_Int8> aSeq(
+                            static_cast<sal_Int8 const*>(aOStm.GetData()), aOStm.Tell());
+                        OStringBuffer aBuffer("data:image/png;base64,");
+                        ::comphelper::Base64::encode(aBuffer, aSeq);
+                        rJsonWriter.put("image", aBuffer);
+                    }
                 }
             }
         }
