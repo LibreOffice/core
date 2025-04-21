@@ -4384,16 +4384,27 @@ void ScViewData::OverrideWithLOKFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& 
                                        SCCOL& nExFixPosX, SCROW& nExFixPosY,
                                        tools::Long& nExHSplitPos, tools::Long& nExVSplitPos, SCTAB nForTab) const
 {
-    SCCOL nFreezeCol = mrDoc.GetLOKFreezeCol(nForTab);
-    SCROW nFreezeRow = mrDoc.GetLOKFreezeRow(nForTab);
+    // split mode to potentially use based on original: if it was split, use split mode to preserve that, otherwise use freeze
+    // whether there is actual split/freeze will depend on GetLOKFreezeCol/Row
+    const ScSplitMode aExSplitMode = (eExHSplitMode == SC_SPLIT_NORMAL || eExVSplitMode == SC_SPLIT_NORMAL) ? SC_SPLIT_NORMAL : SC_SPLIT_FIX;
+
+    // initialize split modes and positions in case no split/freeze is set
+    eExHSplitMode = SC_SPLIT_NONE;
+    eExVSplitMode = SC_SPLIT_NONE;
+    nExFixPosX = 0;
+    nExFixPosY = 0;
+    nExHSplitPos = 0;
+    nExVSplitPos = 0;
 
     bool bConvertToScrPosX = false;
     bool bConvertToScrPosY = false;
 
-    if (nFreezeCol >= 0)
+    SCCOL nFreezeCol = mrDoc.GetLOKFreezeCol(nForTab);
+    SCROW nFreezeRow = mrDoc.GetLOKFreezeRow(nForTab);
+
+    if (nFreezeCol > 0)
     {
-        if (eExHSplitMode == SC_SPLIT_NONE)
-            eExHSplitMode = SC_SPLIT_FIX;
+        eExHSplitMode = aExSplitMode;
 
         if (eExHSplitMode == SC_SPLIT_FIX)
         {
@@ -4404,10 +4415,9 @@ void ScViewData::OverrideWithLOKFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& 
             bConvertToScrPosX = true;
     }
 
-    if (nFreezeRow >= 0)
+    if (nFreezeRow > 0)
     {
-        if (eExVSplitMode == SC_SPLIT_NONE)
-            eExVSplitMode = SC_SPLIT_FIX;
+        eExVSplitMode = aExSplitMode;
 
         if (eExVSplitMode == SC_SPLIT_FIX)
         {
