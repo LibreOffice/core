@@ -495,7 +495,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
     if (aEmbedMimetype.isEmpty())
     {
         SAL_INFO( "sdext.pdfimport", "PDFDetector::detect before getAdditionalStream" );
-        // No success with embedd file, try the older trailer based AdditionalStream
+        // No success with embedded file, try the older trailer based AdditionalStream
         xEmbedStream =
             getAdditionalStream(aURL, aEmbedMimetype, aPassword, m_xContext, rFilterData, false);
     }
