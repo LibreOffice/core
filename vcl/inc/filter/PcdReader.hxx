@@ -19,10 +19,13 @@
 
 #pragma once
 
-#include <vcl/graph.hxx>
-#include <vcl/FilterConfigItem.hxx>
+#include <vcl/dllapi.h>
 
-VCL_DLLPUBLIC bool ImportPcdGraphic(SvStream& rStream, Graphic& rGraphic,
+class SvStream;
+class ImportOutput;
+class FilterConfigItem;
+
+VCL_DLLPUBLIC bool ImportPcdGraphic(SvStream& rStream, ImportOutput& rImportOutput,
                                     FilterConfigItem* pFilterConfigItem);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

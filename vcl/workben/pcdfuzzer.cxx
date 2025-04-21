@@ -49,8 +49,8 @@ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
-    Graphic aGraphic;
-    (void)ImportPcdGraphic(aStream, aGraphic, nullptr);
+    ImportOutput aImportOutput;
+    (void)ImportPcdGraphic(aStream, aImportOutput, nullptr);
     return 0;
 }
 

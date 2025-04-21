@@ -1257,9 +1257,12 @@ ErrCode GraphicFilter::readPCD(SvStream & rStream, Graphic & rGraphic)
         OUString aFilterConfigPath( u"Office.Common/Filter/Graphic/Import/PCD"_ustr );
         pFilterConfigItem = std::make_unique<FilterConfigItem>(aFilterConfigPath);
     }
-
-    if (ImportPcdGraphic(rStream, rGraphic, pFilterConfigItem.get()))
+    ImportOutput aImportOutput;
+    if (ImportPcdGraphic(rStream, aImportOutput, pFilterConfigItem.get()))
+    {
+        rGraphic = Graphic(*aImportOutput.moBitmap);
         return ERRCODE_NONE;
+    }
     else
         return ERRCODE_GRFILTER_FILTERERROR;
 }

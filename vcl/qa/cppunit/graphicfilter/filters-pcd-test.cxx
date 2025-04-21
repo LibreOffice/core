@@ -11,7 +11,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <tools/stream.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/filter/ImportOutput.hxx>
 #include <filter/PcdReader.hxx>
 
 using namespace css;
@@ -44,8 +44,8 @@ bool PcdFilterTest::load(const OUString &,
     SfxFilterFlags, SotClipboardFormatId, unsigned int)
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
-    Graphic aGraphic;
-    return ImportPcdGraphic(aFileStream, aGraphic, nullptr);
+    ImportOutput aImportOutput;
+    return ImportPcdGraphic(aFileStream, aImportOutput, nullptr);
 }
 
 void PcdFilterTest::testCVEs()

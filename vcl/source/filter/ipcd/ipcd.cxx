@@ -21,7 +21,7 @@
 
 #include <string_view>
 
-#include <vcl/graph.hxx>
+#include <vcl/filter/ImportOutput.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <tools/stream.hxx>
@@ -90,14 +90,14 @@ public:
     {
     }
 
-    bool ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem );
+    bool ReadPCD(ImportOutput& rImportOutput, FilterConfigItem* pConfigItem);
 };
 
 }
 
 //=================== Methods of PCDReader ==============================
 
-bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
+bool PCDReader::ReadPCD(ImportOutput& rImportOutput, FilterConfigItem* pConfigItem)
 {
     bStatus      = true;
 
@@ -157,7 +157,7 @@ bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
 
         ReadImage();
 
-        rGraphic = vcl::bitmap::CreateFromData(std::move(*mpBitmap));
+        rImportOutput.moBitmap = vcl::bitmap::CreateFromData(std::move(*mpBitmap));
     }
     return bStatus;
 }
@@ -343,10 +343,10 @@ void PCDReader::ReadImage()
 
 //================== GraphicImport - the exported Function ================
 
-bool ImportPcdGraphic(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pConfigItem)
+bool ImportPcdGraphic(SvStream& rStream, ImportOutput& rImportOutput, FilterConfigItem* pConfigItem)
 {
     PCDReader aPCDReader(rStream);
-    return aPCDReader.ReadPCD(rGraphic, pConfigItem);
+    return aPCDReader.ReadPCD(rImportOutput, pConfigItem);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
