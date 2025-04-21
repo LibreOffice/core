@@ -682,6 +682,8 @@ void PresentationFragmentHandler::finalizeImport()
     switch( aElementToken )
     {
     case PPT_TOKEN( presentation ):
+        mbEmbedTrueTypeFonts = rAttribs.getBool(XML_embedTrueTypeFonts, false);
+        return this;
     case PPT_TOKEN( sldMasterIdLst ):
     case PPT_TOKEN( notesMasterIdLst ):
     case PPT_TOKEN( sldIdLst ):
@@ -706,7 +708,10 @@ void PresentationFragmentHandler::finalizeImport()
     case PPT_TOKEN( defaultTextStyle ):
         return new TextListStyleContext( *this, *mpTextListStyle );
     case PPT_TOKEN(embeddedFontLst):
-        return new EmbeddedFontListContext(*this);
+    {
+        uno::Reference<beans::XPropertySet> xDocSettings(getFilter().getModelFactory()->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
+        return new EmbeddedFontListContext(*this, mbEmbedTrueTypeFonts, xDocSettings);
+    }
     case PPT_TOKEN( modifyVerifier ):
         OUString sAlgorithmClass = rAttribs.getStringDefaulted(XML_cryptAlgorithmClass);
         OUString sAlgorithmType = rAttribs.getStringDefaulted(XML_cryptAlgorithmType);

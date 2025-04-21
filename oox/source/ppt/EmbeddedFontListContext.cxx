@@ -20,8 +20,12 @@ using namespace css;
 
 namespace oox::ppt
 {
-EmbeddedFontListContext::EmbeddedFontListContext(FragmentHandler2 const& rParent)
+EmbeddedFontListContext::EmbeddedFontListContext(
+    FragmentHandler2 const& rParent, bool bEmbedTrueType,
+    css::uno::Reference<css::beans::XPropertySet> const& rxDocSettings)
     : FragmentHandler2(rParent)
+    , mbEmbedTrueType(bEmbedTrueType)
+    , mxDocSettings(rxDocSettings)
 {
 }
 
@@ -77,8 +81,13 @@ void EmbeddedFontListContext::onEndElement()
     if (!isCurrentElement(PPT_TOKEN(embeddedFont)))
         return;
 
-    if (!moCurrentFont)
+    if (!mbEmbedTrueType || !moCurrentFont)
         return;
+
+    if (mxDocSettings.is())
+    {
+        mxDocSettings->setPropertyValue(u"EmbedFonts"_ustr, uno::Any(true));
+    }
 
     if (!moCurrentFont->aRegularID.isEmpty())
     {
