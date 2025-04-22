@@ -49,6 +49,168 @@ namespace vcl
 #endif
 #endif
         ::rtl::Reference< IAccessibleFactory >   s_pFactory;
+
+
+#if ENABLE_WASM_STRIP_ACCESSIBILITY || !HAVE_FEATURE_DESKTOP
+        //= AccessibleDummyFactory
+
+        class AccessibleDummyFactory:
+            public IAccessibleFactory
+        {
+        public:
+            AccessibleDummyFactory();
+            AccessibleDummyFactory(const AccessibleDummyFactory&) = delete;
+            AccessibleDummyFactory& operator=(const AccessibleDummyFactory&) = delete;
+
+        protected:
+            virtual ~AccessibleDummyFactory() override;
+
+        public:
+            // IAccessibleFactory
+            virtual vcl::IAccessibleTabListBox*
+                createAccessibleTabListBox(
+                    const css::uno::Reference< css::accessibility::XAccessible >& /*rxParent*/,
+                    SvHeaderTabListBox& /*rBox*/
+                ) const override
+            {
+                return nullptr;
+            }
+
+            virtual css::uno::Reference< css::accessibility::XAccessible >
+                createAccessibleTreeListBox(
+                    SvTreeListBox& /*_rListBox*/,
+                    const css::uno::Reference< css::accessibility::XAccessible >& /*_xParent*/
+                ) const override
+            {
+                return nullptr;
+            }
+
+            virtual css::uno::Reference< css::accessibility::XAccessible >
+                createAccessibleIconView(
+                    SvTreeListBox& /*_rListBox*/,
+                    const css::uno::Reference< css::accessibility::XAccessible >& /*_xParent*/
+                ) const override
+            {
+                return nullptr;
+            }
+
+            virtual rtl::Reference<vcl::IAccessibleBrowseBox>
+                createAccessibleBrowseBox(
+                    const css::uno::Reference< css::accessibility::XAccessible >& /*_rxParent*/,
+                    vcl::IAccessibleTableProvider& /*_rBrowseBox*/
+                ) const override
+            {
+                return nullptr;
+            }
+
+            virtual rtl::Reference<table::IAccessibleTableControl>
+                createAccessibleTableControl(
+                    const css::uno::Reference< css::accessibility::XAccessible >& /*_rxParent*/,
+                    table::IAccessibleTable& /*_rTable*/
+                ) const override
+            {
+                return nullptr;
+            }
+
+            virtual css::uno::Reference< css::accessibility::XAccessible >
+                createAccessibleIconChoiceCtrl(
+                    SvtIconChoiceCtrl& /*_rIconCtrl*/,
+                    const css::uno::Reference< css::accessibility::XAccessible >& /*_xParent*/
+                ) const override
+            {
+                return nullptr;
+            }
+
+            virtual css::uno::Reference< css::accessibility::XAccessible >
+                createAccessibleTabBar(
+                    TabBar& /*_rTabBar*/
+                ) const override
+            {
+                return nullptr;
+            }
+
+            virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+                createAccessibleTextWindowContext(
+                    VCLXWindow* /*pVclXWindow*/, TextEngine& /*rEngine*/, TextView& /*rView*/
+                ) const override
+            {
+                return nullptr;
+            }
+
+            virtual css::uno::Reference< css::accessibility::XAccessible >
+                createAccessibleBrowseBoxHeaderBar(
+                    const css::uno::Reference< css::accessibility::XAccessible >& /*rxParent*/,
+                    vcl::IAccessibleTableProvider& /*_rOwningTable*/,
+                    AccessibleBrowseBoxObjType /*_eObjType*/
+                ) const override
+            {
+                return nullptr;
+            }
+
+            virtual css::uno::Reference< css::accessibility::XAccessible >
+                createAccessibleBrowseBoxTableCell(
+                    const css::uno::Reference< css::accessibility::XAccessible >& /*_rxParent*/,
+                    vcl::IAccessibleTableProvider& /*_rBrowseBox*/,
+                    const css::uno::Reference< css::awt::XWindow >& /*_xFocusWindow*/,
+                    sal_Int32 /*_nRowId*/,
+                    sal_uInt16 /*_nColId*/,
+                    sal_Int32 /*_nOffset*/
+                ) const override
+            {
+                return nullptr;
+            }
+
+            virtual css::uno::Reference< css::accessibility::XAccessible >
+                createAccessibleBrowseBoxHeaderCell(
+                    sal_Int32 /*_nColumnRowId*/,
+                    const css::uno::Reference< css::accessibility::XAccessible >& /*rxParent*/,
+                    vcl::IAccessibleTableProvider& /*_rBrowseBox*/,
+                    const css::uno::Reference< css::awt::XWindow >& /*_xFocusWindow*/,
+                    AccessibleBrowseBoxObjType  /*_eObjType*/
+                ) const override
+            {
+                return nullptr;
+            }
+
+            virtual css::uno::Reference< css::accessibility::XAccessible >
+                createAccessibleCheckBoxCell(
+                    const css::uno::Reference< css::accessibility::XAccessible >& /*_rxParent*/,
+                    vcl::IAccessibleTableProvider& /*_rBrowseBox*/,
+                    const css::uno::Reference< css::awt::XWindow >& /*_xFocusWindow*/,
+                    sal_Int32 /*_nRowPos*/,
+                    sal_uInt16 /*_nColPos*/,
+                    const TriState& /*_eState*/,
+                    bool /*_bIsTriState*/
+                ) const override
+            {
+                return nullptr;
+            }
+
+            virtual css::uno::Reference< css::accessibility::XAccessible >
+                createEditBrowseBoxTableCellAccess(
+                    const css::uno::Reference< css::accessibility::XAccessible >& /*_rxParent*/,
+                    const css::uno::Reference< css::accessibility::XAccessible >& /*_rxControlAccessible*/,
+                    const css::uno::Reference< css::awt::XWindow >& /*_rxFocusWindow*/,
+                    vcl::IAccessibleTableProvider& /*_rBrowseBox*/,
+                    sal_Int32 /*_nRowPos*/,
+                    sal_uInt16 /*_nColPos*/
+                ) const override
+            {
+                return nullptr;
+            }
+        };
+
+
+        AccessibleDummyFactory::AccessibleDummyFactory()
+        {
+        }
+
+
+        AccessibleDummyFactory::~AccessibleDummyFactory()
+        {
+        }
+#endif // ENABLE_WASM_STRIP_ACCESSIBILITY || !HAVE_FEATURE_DESKTOP
+
     }
 
 
@@ -77,8 +239,7 @@ namespace vcl
 
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
-#if !ENABLE_WASM_STRIP_ACCESSIBILITY
-#if HAVE_FEATURE_DESKTOP
+#if !ENABLE_WASM_STRIP_ACCESSIBILITY && HAVE_FEATURE_DESKTOP
         // load the library implementing the factory
         if (!s_pFactory)
         {
@@ -103,8 +264,11 @@ namespace vcl
             s_pFactory = pFactory;
             pFactory->release();
         }
-#endif // HAVE_FEATURE_DESKTOP
-#endif // ENABLE_WASM_STRIP_ACCESSIBILITY
+#else
+        // the attempt to load the lib, or to create the factory, failed
+        // -> fall back to a dummy factory
+        s_pFactory = new AccessibleDummyFactory;
+#endif // !ENABLE_WASM_STRIP_ACCESSIBILITY && HAVE_FEATURE_DESKTOP
 
         assert(s_pFactory);
 
