@@ -297,7 +297,7 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
-                                <property name="tooltip-text" translatable="yes" context="formuladialog|favorites|tooltip_text">Add or remove function from favourites</property>
+                                <property name="tooltip-text" translatable="yes" context="formuladialog|favorites|tooltip_text">Add or remove function from favorites</property>
                                 <property name="hexpand">False</property>
                                 <property name="vexpand">False</property>
                                 <property name="halign">start</property>
