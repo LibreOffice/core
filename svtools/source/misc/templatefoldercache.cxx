@@ -208,15 +208,25 @@ namespace svt
                 return true;
                     // this is not strictly true, in case only one is invalid - but this is a heavy error anyway
             }
+            SAL_INFO("svtools.misc", "TemplateContentEqual <" << _rLHS->getURL() << "> " << _rLHS->getModDate().Year << "-" << _rLHS->getModDate().Month << "-" << _rLHS->getModDate().Day << " " << _rLHS->getModDate().Hours << ":" << _rLHS->getModDate().Minutes << ":" << _rLHS->getModDate().Seconds << "." << _rLHS->getModDate().NanoSeconds << " " << bool(_rLHS->getModDate().IsUTC) << " " << _rLHS->getSubContents().size() << " vs. <" << _rRHS->getURL() << "> " << _rRHS->getModDate().Year << "-" << _rRHS->getModDate().Month << "-" << _rRHS->getModDate().Day << " " << _rRHS->getModDate().Hours << ":" << _rRHS->getModDate().Minutes << ":" << _rRHS->getModDate().Seconds << "." << _rRHS->getModDate().NanoSeconds << " " << bool(_rRHS->getModDate().IsUTC) << " " << _rRHS->getSubContents().size());
 
             if ( _rLHS->getURL() != _rRHS->getURL() )
+            {
+                SAL_INFO("svtools.misc", "TemplateContentEqual HIT 1 <" << _rLHS->getURL() << "> " << _rLHS->getModDate().Year << "-" << _rLHS->getModDate().Month << "-" << _rLHS->getModDate().Day << " " << _rLHS->getModDate().Hours << ":" << _rLHS->getModDate().Minutes << ":" << _rLHS->getModDate().Seconds << "." << _rLHS->getModDate().NanoSeconds << " " << bool(_rLHS->getModDate().IsUTC) << " " << _rLHS->getSubContents().size() << " vs. <" << _rRHS->getURL() << "> " << _rRHS->getModDate().Year << "-" << _rRHS->getModDate().Month << "-" << _rRHS->getModDate().Day << " " << _rRHS->getModDate().Hours << ":" << _rRHS->getModDate().Minutes << ":" << _rRHS->getModDate().Seconds << "." << _rRHS->getModDate().NanoSeconds << " " << bool(_rRHS->getModDate().IsUTC) << " " << _rRHS->getSubContents().size());
                 return false;
+            }
 
             if ( _rLHS->getModDate() != _rRHS->getModDate() )
+            {
+                SAL_INFO("svtools.misc", "TemplateContentEqual HIT 2 <" << _rLHS->getURL() << "> " << _rLHS->getModDate().Year << "-" << _rLHS->getModDate().Month << "-" << _rLHS->getModDate().Day << " " << _rLHS->getModDate().Hours << ":" << _rLHS->getModDate().Minutes << ":" << _rLHS->getModDate().Seconds << "." << _rLHS->getModDate().NanoSeconds << " " << bool(_rLHS->getModDate().IsUTC) << " " << _rLHS->getSubContents().size() << " vs. <" << _rRHS->getURL() << "> " << _rRHS->getModDate().Year << "-" << _rRHS->getModDate().Month << "-" << _rRHS->getModDate().Day << " " << _rRHS->getModDate().Hours << ":" << _rRHS->getModDate().Minutes << ":" << _rRHS->getModDate().Seconds << "." << _rRHS->getModDate().NanoSeconds << " " << bool(_rRHS->getModDate().IsUTC) << " " << _rRHS->getSubContents().size());
                 return false;
+            }
 
             if ( _rLHS->getSubContents().size() != _rRHS->getSubContents().size() )
+            {
+                SAL_INFO("svtools.misc", "TemplateContentEqual HIT 3 <" << _rLHS->getURL() << "> " << _rLHS->getModDate().Year << "-" << _rLHS->getModDate().Month << "-" << _rLHS->getModDate().Day << " " << _rLHS->getModDate().Hours << ":" << _rLHS->getModDate().Minutes << ":" << _rLHS->getModDate().Seconds << "." << _rLHS->getModDate().NanoSeconds << " " << bool(_rLHS->getModDate().IsUTC) << " " << _rLHS->getSubContents().size() << " vs. <" << _rRHS->getURL() << "> " << _rRHS->getModDate().Year << "-" << _rRHS->getModDate().Month << "-" << _rRHS->getModDate().Day << " " << _rRHS->getModDate().Hours << ":" << _rRHS->getModDate().Minutes << ":" << _rRHS->getModDate().Seconds << "." << _rRHS->getModDate().NanoSeconds << " " << bool(_rRHS->getModDate().IsUTC) << " " << _rRHS->getSubContents().size());
                 return false;
+            }
 
             if ( !_rLHS->getSubContents().empty() )
             {   // there are children
@@ -228,7 +238,11 @@ namespace svt
                     *this
                 );
                 if ( aFirstDifferent.first != _rLHS->getSubContents().end() )
+                {
+                    SAL_INFO("svtools.misc", "TemplateContentEqual HIT 4 <" << _rLHS->getURL() << "> " << _rLHS->getModDate().Year << "-" << _rLHS->getModDate().Month << "-" << _rLHS->getModDate().Day << " " << _rLHS->getModDate().Hours << ":" << _rLHS->getModDate().Minutes << ":" << _rLHS->getModDate().Seconds << "." << _rLHS->getModDate().NanoSeconds << " " << bool(_rLHS->getModDate().IsUTC) << " " << _rLHS->getSubContents().size() << " vs. <" << _rRHS->getURL() << "> " << _rRHS->getModDate().Year << "-" << _rRHS->getModDate().Month << "-" << _rRHS->getModDate().Day << " " << _rRHS->getModDate().Hours << ":" << _rRHS->getModDate().Minutes << ":" << _rRHS->getModDate().Seconds << "." << _rRHS->getModDate().NanoSeconds << " " << bool(_rRHS->getModDate().IsUTC) << " " << _rRHS->getSubContents().size());
+
                     return false;// the sub contents differ
+                }
             }
 
             return true;
@@ -452,6 +466,7 @@ namespace svt
 
     bool TemplateFolderCacheImpl::equalStates( const TemplateFolderContent& _rLHS, const TemplateFolderContent& _rRHS )
     {
+        SAL_INFO("svtools.misc", "TemplateFolderCacheImpl::equalStates " << _rLHS.size() << " " << _rRHS.size());
         if ( _rLHS.size() != _rRHS.size() )
             return false;
 
@@ -471,6 +486,7 @@ namespace svt
 
     void TemplateFolderCacheImpl::storeState()
     {
+        SAL_INFO("svtools.misc", "TemplateFolderCacheImpl::storeState");
         if ( !m_bValidCurrentState )
             readCurrentState( );
 
@@ -718,6 +734,7 @@ namespace svt
 
     bool TemplateFolderCacheImpl::needsUpdate()
     {
+        SAL_INFO("svtools.misc", "TemplateFolderCacheImpl::needsUpdate " << m_bKnowState << " " << m_bNeedsUpdate);
         if ( m_bKnowState )
             return m_bNeedsUpdate;
 
@@ -726,19 +743,24 @@ namespace svt
 
         if ( readCurrentState() )
         {
+            SAL_INFO("svtools.misc", "TemplateFolderCacheImpl::needsUpdate A");
             // open the stream which contains the cached state of the directories
             if ( openCacheStream( true ) )
             {   // opening the stream succeeded
+                SAL_INFO("svtools.misc", "TemplateFolderCacheImpl::needsUpdate B");
                 if ( readPreviousState() )
                 {
+                    SAL_INFO("svtools.misc", "TemplateFolderCacheImpl::needsUpdate C");
                     m_bNeedsUpdate = !equalStates( m_aPreviousState, m_aCurrentState );
                 }
                 else
                 {
+                    SAL_INFO("svtools.misc", "TemplateFolderCacheImpl::needsUpdate D");
                     closeCacheStream();
                 }
             }
         }
+        SAL_INFO("svtools.misc", "TemplateFolderCacheImpl::needsUpdate: " << m_bNeedsUpdate);
         return m_bNeedsUpdate;
     }
 
