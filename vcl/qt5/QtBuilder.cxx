@@ -20,6 +20,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/qt/QtUtils.hxx>
 
+#include <QtCore/QSortFilterProxyModel>
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QtGui/QActionGroup>
 #endif
@@ -365,7 +366,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     else if (sName == u"GtkTreeView")
     {
         QTreeView* pTreeView = new QTreeView(pParentWidget);
-        pTreeView->setModel(new QStandardItemModel(pTreeView));
+        QStandardItemModel* pItemModel = new QStandardItemModel(pTreeView);
+        QSortFilterProxyModel* pProxyModel = new QSortFilterProxyModel(pTreeView);
+        pProxyModel->setSourceModel(pItemModel);
+        pTreeView->setModel(pProxyModel);
         pTreeView->setHeaderHidden(!extractHeadersVisible(rMap));
         pTreeView->setRootIsDecorated(extractShowExpanders(rMap));
         pObject = pTreeView;
@@ -374,8 +378,8 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     {
         QTreeView* pTreeView = qobject_cast<QTreeView*>(pParentWidget);
         assert(pTreeView && "Tree view column doesn't have a tree view parent");
-        QStandardItemModel* pModel = qobject_cast<QStandardItemModel*>(pTreeView->model());
-        assert(pModel && "Tree view doesn't have QStandardItemModel set");
+        QAbstractItemModel* pModel = pTreeView->model();
+        assert(pModel && "Tree view doesn't have model set");
         const int nCol = pModel->columnCount();
         pModel->insertColumn(nCol);
         pModel->setHeaderData(nCol, Qt::Horizontal, toQString(extractTitle(rMap)));

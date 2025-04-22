@@ -25,8 +25,11 @@ QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
 {
     assert(m_pTreeView);
 
-    m_pModel = qobject_cast<QStandardItemModel*>(m_pTreeView->model());
-    assert(m_pModel && "tree view doesn't have expected item model set");
+    m_pModel = qobject_cast<QSortFilterProxyModel*>(m_pTreeView->model());
+    assert(m_pModel && "tree view doesn't have expected QSortFilterProxyModel set");
+
+    m_pSourceModel = qobject_cast<QStandardItemModel*>(m_pModel->sourceModel());
+    assert(m_pSourceModel && "proxy model doesn't have expected source model");
 
     m_pSelectionModel = m_pTreeView->selectionModel();
     assert(m_pSelectionModel);
@@ -57,7 +60,7 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const O
         m_pModel->insertRow(nPos);
 
         const QModelIndex aIndex = modelIndex(nPos);
-        QStandardItem* pItem = m_pModel->itemFromIndex(aIndex);
+        QStandardItem* pItem = itemFromIndex(aIndex);
         if (pStr)
             pItem->setText(toQString(*pStr));
         if (pId)
@@ -69,7 +72,7 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const O
             pItem->setIcon(toQPixmap(*pImageSurface));
 
         if (m_bExtraToggleButtonColumnEnabled)
-            m_pModel->itemFromIndex(toggleButtonModelIndex(nPos))->setCheckable(true);
+            itemFromIndex(toggleButtonModelIndex(nPos))->setCheckable(true);
 
         if (pRet)
             static_cast<QtInstanceTreeIter*>(pRet)->setModelIndex(aIndex);
@@ -91,7 +94,7 @@ OUString QtInstanceTreeView::get_selected_text() const
         if (aSelectedIndexes.empty())
             return;
 
-        sText = toOUString(m_pModel->itemFromIndex(aSelectedIndexes.first())->text());
+        sText = toOUString(itemFromIndex(aSelectedIndexes.first())->text());
     });
 
     return sText;
@@ -208,7 +211,7 @@ void QtInstanceTreeView::set_sensitive(int nRow, bool bSensitive, int nCol)
             return;
         }
 
-        QStandardItem* pItem = m_pModel->item(nRow, nCol);
+        QStandardItem* pItem = itemFromIndex(modelIndex(nRow, nCol));
         if (pItem)
         {
             if (bSensitive)
@@ -225,7 +228,7 @@ bool QtInstanceTreeView::get_sensitive(int nRow, int nCol) const
 
     bool bSensitive = false;
     GetQtInstance().RunInMainThread([&] {
-        QStandardItem* pItem = m_pModel->item(nRow, nCol);
+        QStandardItem* pItem = itemFromIndex(modelIndex(nRow, nCol));
         if (pItem)
             bSensitive = pItem->flags() & Qt::ItemIsEnabled;
     });
@@ -249,7 +252,7 @@ void QtInstanceTreeView::set_toggle(int nRow, TriState eState, int nCol)
 
     GetQtInstance().RunInMainThread([&] {
         QModelIndex aIndex = nCol == -1 ? toggleButtonModelIndex(nRow) : modelIndex(nRow, nCol);
-        m_pModel->itemFromIndex(aIndex)->setCheckState(toQtCheckState(eState));
+        itemFromIndex(aIndex)->setCheckState(toQtCheckState(eState));
     });
 }
 
@@ -260,7 +263,7 @@ TriState QtInstanceTreeView::get_toggle(int nRow, int nCol) const
     TriState eState = TRISTATE_INDET;
     GetQtInstance().RunInMainThread([&] {
         QModelIndex aIndex = nCol == -1 ? toggleButtonModelIndex(nRow) : modelIndex(nRow, nCol);
-        eState = toVclTriState(m_pModel->itemFromIndex(aIndex)->checkState());
+        eState = toVclTriState(itemFromIndex(aIndex)->checkState());
     });
 
     return eState;
@@ -333,18 +336,21 @@ void QtInstanceTreeView::swap(int nPos1, int nPos2)
         const bool bPos1Selected = m_pSelectionModel->isRowSelected(nPos1);
         const bool bPos2Selected = m_pSelectionModel->isRowSelected(nPos2);
 
-        const int nMin = std::min(nPos1, nPos2);
-        const int nMax = std::max(nPos1, nPos2);
-        QList<QStandardItem*> aMaxRow = m_pModel->takeRow(nMax);
-        QList<QStandardItem*> aMinRow = m_pModel->takeRow(nMin);
-        m_pModel->insertRow(nMin, aMaxRow);
-        m_pModel->insertRow(nMax, aMinRow);
+        const int nSourceModelPos1 = m_pModel->mapToSource(modelIndex(nPos1)).row();
+        const int nSourceModelPos2 = m_pModel->mapToSource(modelIndex(nPos2)).row();
+
+        const int nMin = std::min(nSourceModelPos1, nSourceModelPos2);
+        const int nMax = std::max(nSourceModelPos1, nSourceModelPos2);
+        QList<QStandardItem*> aMaxRow = m_pSourceModel->takeRow(nMax);
+        QList<QStandardItem*> aMinRow = m_pSourceModel->takeRow(nMin);
+        m_pSourceModel->insertRow(nMin, aMaxRow);
+        m_pSourceModel->insertRow(nMax, aMinRow);
 
         // restore selection
         if (bPos1Selected)
-            select(nPos2);
+            select(m_pModel->mapFromSource(m_pSourceModel->index(nSourceModelPos2, 0)).row());
         if (bPos2Selected)
-            select(nPos1);
+            select(m_pModel->mapFromSource(m_pSourceModel->index(nSourceModelPos1, 0)).row());
     });
 }
 
@@ -413,9 +419,10 @@ int QtInstanceTreeView::find_text(const OUString& rText) const
 
     int nIndex = -1;
     GetQtInstance().RunInMainThread([&] {
-        const QList<QStandardItem*> aItems = m_pModel->findItems(toQString(rText));
+        // search in underlying QStandardItemModel and map index
+        const QList<QStandardItem*> aItems = m_pSourceModel->findItems(toQString(rText));
         if (!aItems.empty())
-            nIndex = aItems.at(0)->index().row();
+            nIndex = m_pModel->mapFromSource(aItems.at(0)->index()).row();
     });
 
     return nIndex;
@@ -766,14 +773,22 @@ int QtInstanceTreeView::n_children() const
     SolarMutexGuard g;
 
     int nChildCount;
-    GetQtInstance().RunInMainThread(
-        [&] { nChildCount = m_pModel->rowCount(m_pModel->invisibleRootItem()->index()); });
+    GetQtInstance().RunInMainThread([&] {
+        const QModelIndex aRootIndex
+            = m_pModel->mapFromSource(m_pSourceModel->invisibleRootItem()->index());
+        nChildCount = m_pModel->rowCount(aRootIndex);
+    });
     return nChildCount;
 }
 
 void QtInstanceTreeView::make_sorted()
 {
-    GetQtInstance().RunInMainThread([&] { m_pTreeView->setSortingEnabled(true); });
+    GetQtInstance().RunInMainThread([&] {
+        m_pTreeView->setSortingEnabled(true);
+        // sort by first "normal" column
+        const int nSortColumn = m_bExtraToggleButtonColumnEnabled ? 1 : 0;
+        m_pModel->sort(nSortColumn);
+    });
 }
 
 void QtInstanceTreeView::make_unsorted()
@@ -959,6 +974,12 @@ int QtInstanceTreeView::rowIndex(const weld::TreeIter& rIter)
 {
     QModelIndex aModelIndex = static_cast<const QtInstanceTreeIter&>(rIter).modelIndex();
     return aModelIndex.row();
+}
+
+QStandardItem* QtInstanceTreeView::itemFromIndex(const QModelIndex& rIndex) const
+{
+    const QModelIndex aSourceIndex = m_pModel->mapToSource(rIndex);
+    return m_pSourceModel->itemFromIndex(aSourceIndex);
 }
 
 QModelIndex QtInstanceTreeView::toggleButtonModelIndex(int nRow) const

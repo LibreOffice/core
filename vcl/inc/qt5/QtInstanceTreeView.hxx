@@ -11,6 +11,7 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <QtCore/QSortFilterProxyModel>
 #include <QtGui/QStandardItemModel>
 #include <QtWidgets/QTreeView>
 
@@ -19,7 +20,14 @@ class QtInstanceTreeView : public QtInstanceWidget, public virtual weld::TreeVie
     Q_OBJECT
 
     QTreeView* m_pTreeView;
-    QStandardItemModel* m_pModel;
+
+    /** The model displayed in the tree view. The proxy model takes care of sorting
+     *  if sorting is enabled. */
+    QSortFilterProxyModel* m_pModel;
+
+    /** The QStandardItemModel used as the source model for `m_pModel`. */
+    QStandardItemModel* m_pSourceModel;
+
     QItemSelectionModel* m_pSelectionModel;
 
     bool m_bExtraToggleButtonColumnEnabled = false;
@@ -195,6 +203,7 @@ private:
     QModelIndex modelIndex(int nRow, int nCol = 0) const;
     QModelIndex modelIndex(const weld::TreeIter& rIter, int nCol = 0) const;
     static int rowIndex(const weld::TreeIter& rIter);
+    QStandardItem* itemFromIndex(const QModelIndex& rIndex) const;
     QModelIndex toggleButtonModelIndex(int nRow) const;
     QModelIndex firstTextColumnModelIndex(int nRow) const;
     static QAbstractItemView::SelectionMode mapSelectionMode(SelectionMode eMode);
