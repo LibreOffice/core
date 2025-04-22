@@ -392,3 +392,48 @@ In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linu
  
  Object NameTree::lookup(const GooString *name)
  {
+diff -ur poppler.org/poppler/TextOutputDev.cc poppler/poppler/TextOutputDev.cc
+--- poppler.org/poppler/TextOutputDev.cc	2025-04-22 15:42:57.000000000 +0200
++++ poppler/poppler/TextOutputDev.cc	2025-04-22 15:49:06.000000000 +0200
+@@ -2419,7 +2419,11 @@
+                 }
+             }
+         }
++#if 0//ndef __clang__
+         std::ranges::sort(words, &TextWord::cmpYX);
++#else
++        std::sort(words.begin(), words.end(), &TextWord::cmpYX);
++#endif
+ 
+     } else {
+         for (flow = text->flows; flow; flow = flow->next) {
+@@ -4402,9 +4406,17 @@
+         // if all lines in the region have the same rotation, use it;
+         // otherwise, use the page's primary rotation
+         if (oneRot) {
++#if 0//ndef __clang__
+             std::ranges::sort(frags, &TextLineFrag::cmpYXLineRot);
++#else
++            std::sort(frags.begin(), frags.end(), &TextLineFrag::cmpYXLineRot);
++#endif
+         } else {
++#if 0//ndef __clang__
+             std::ranges::sort(frags, &TextLineFrag::cmpYXPrimaryRot);
++#else
++            std::sort(frags.begin(), frags.end(), &TextLineFrag::cmpYXPrimaryRot);
++#endif
+         }
+         for (auto it = frags.begin(); it != frags.end();) {
+             double delta = maxIntraLineDelta * it->line->words->fontSize;
+@@ -5416,7 +5428,11 @@
+                 frags.back().computeCoords(true);
+             }
+         }
++#if 0//ndef __clang__
+         std::ranges::sort(frags, &TextLineFrag::cmpYXPrimaryRot);
++#else
++        std::sort(frags.begin(), frags.end(), &TextLineFrag::cmpYXPrimaryRot);
++#endif
+         for (auto it = frags.begin(); it != frags.end();) {
+             double delta = maxIntraLineDelta * it->line->words->fontSize;
+             double base = it->base;
