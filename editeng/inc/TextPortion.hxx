@@ -79,7 +79,7 @@ struct ExtraPortionInfo
         if (pDXArray)
         {
             pOrgDXArray.reset(new double[nLen]);
-            memcpy(pOrgDXArray.get(), pDXArray, nLen * sizeof(sal_Int32));
+            memcpy(pOrgDXArray.get(), pDXArray, nLen * sizeof(double));
         }
         else
             pOrgDXArray.reset();
