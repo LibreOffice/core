@@ -32,10 +32,12 @@ uno::Reference<css::graphic::XGraphic> toXGraphic(const QImage& rImage)
 
     SvMemoryStream aStream(aData.data(), aData.size(), StreamMode::READ);
     vcl::PngImageReader aReader(aStream);
-    Graphic aGraphic;
-    aReader.read(aGraphic);
 
-    return aGraphic.GetXGraphic();
+    BitmapEx aBitmapEx;
+    if (aReader.read(aBitmapEx))
+        return Graphic(aBitmapEx).GetXGraphic();
+
+    return nullptr;
 }
 }
 
