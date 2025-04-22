@@ -87,6 +87,13 @@ std::vector<BitmapData> const& getBitmapList()
 }
 }
 
+static bool IsDarkModeEnabled()
+{
+    return MiscSettings::GetAppColorMode() == AppearanceMode::DARK
+           || (MiscSettings::GetAppColorMode() == AppearanceMode::AUTO
+               && MiscSettings::GetUseDarkMode());
+}
+
 SvxAppearanceTabPage::SvxAppearanceTabPage(weld::Container* pPage,
                                            weld::DialogController* pController,
                                            const SfxItemSet& rSet)
@@ -97,9 +104,6 @@ SvxAppearanceTabPage::SvxAppearanceTabPage(weld::Container* pPage,
     , m_xMoreThemesBtn(m_xBuilder->weld_button(u"morethemesbtn"_ustr))
     , m_xAddSchemeBtn(m_xBuilder->weld_button(u"newschemebtn"_ustr))
     , m_xRemoveSchemeBtn(m_xBuilder->weld_button(u"removeschemebtn"_ustr))
-    , m_xAppearanceSystem(m_xBuilder->weld_radio_button(u"system"_ustr))
-    , m_xAppearanceLight(m_xBuilder->weld_radio_button(u"light"_ustr))
-    , m_xAppearanceDark(m_xBuilder->weld_radio_button(u"dark"_ustr))
     , m_xColorEntryBtn(m_xBuilder->weld_combo_box(u"registrydropdown"_ustr))
     , m_xColorChangeBtn((new ColorListBox(m_xBuilder->weld_menu_button(u"colorsdropdownbtn"_ustr),
                                           [this] { return GetFrameWeld(); })))
@@ -112,7 +116,6 @@ SvxAppearanceTabPage::SvxAppearanceTabPage(weld::Container* pPage,
     , m_xBitmapDropDownBtn(m_xBuilder->weld_combo_box(u"bitmapdropdown"_ustr))
 {
     InitThemes();
-    InitAppearance();
     InitCustomization();
 }
 
@@ -120,16 +123,29 @@ void SvxAppearanceTabPage::LoadSchemeList()
 {
     m_xSchemeList->clear();
     css::uno::Sequence<OUString> aSchemeNames = pColorConfig->GetSchemeNames();
-    for (size_t i = 0; i < aSchemeNames.size(); ++i)
-    {
-        if (aSchemeNames[i] != AUTOMATIC_COLOR_SCHEME)
-            m_xSchemeList->insert(i, aSchemeNames[i], nullptr, nullptr, nullptr);
-    }
+
+    // insert auto, light, dark themes first
     m_xSchemeList->insert(0, CuiResId(RID_COLOR_SCHEME_LIBREOFFICE_AUTOMATIC),
                           &AUTOMATIC_COLOR_SCHEME, nullptr, nullptr);
+    m_xSchemeList->insert(1, CuiResId(RID_COLOR_SCHEME_LIBREOFFICE_LIGHT), &LIGHT_COLOR_SCHEME,
+                          nullptr, nullptr);
+    m_xSchemeList->insert(2, CuiResId(RID_COLOR_SCHEME_LIBREOFFICE_DARK), &DARK_COLOR_SCHEME,
+                          nullptr, nullptr);
 
-    if (pColorConfig->GetCurrentSchemeName() == AUTOMATIC_COLOR_SCHEME)
+    // insert all the custom color schemes
+    for (size_t i = 0; i < aSchemeNames.size(); ++i)
+        if (ThemeColors::IsCustomTheme(aSchemeNames[i]))
+            m_xSchemeList->append_text(aSchemeNames[i]);
+
+    // since this function just loads entries into the list, we don't call
+    // MiscSettings::SetAppColorMode(...) here, and instead do so in the
+    // SchemeChangeHdl callback.
+    if (ThemeColors::IsAutomaticTheme(pColorConfig->GetCurrentSchemeName()))
         m_xSchemeList->set_active_id(AUTOMATIC_COLOR_SCHEME);
+    else if (ThemeColors::IsLightTheme(pColorConfig->GetCurrentSchemeName()))
+        m_xSchemeList->set_active_id(LIGHT_COLOR_SCHEME);
+    else if (ThemeColors::IsDarkTheme(pColorConfig->GetCurrentSchemeName()))
+        m_xSchemeList->set_active_id(DARK_COLOR_SCHEME);
     else
         m_xSchemeList->set_active_text(pColorConfig->GetCurrentSchemeName());
 }
@@ -165,15 +181,6 @@ OUString SvxAppearanceTabPage::GetAllStrings()
 
 bool SvxAppearanceTabPage::FillItemSet(SfxItemSet* /* rSet */)
 {
-    // commit appearance value if changed
-    if (eCurrentAppearanceMode != MiscSettings::GetAppColorMode())
-    {
-        MiscSettings::SetAppColorMode(eCurrentAppearanceMode);
-        // if themes disabled then change the document colors as per the new appearance mode.
-        if (ThemeColors::IsThemeDisabled())
-            UpdateDocumentAppearance();
-    }
-
     // commit ColorConfig
     if (pColorConfig->IsModified())
         pColorConfig->Commit();
@@ -191,9 +198,6 @@ void SvxAppearanceTabPage::Reset(const SfxItemSet* /* rSet */)
     m_xSchemeList->save_value();
 
     UpdateRemoveBtnState();
-
-    // reset appearance
-    eCurrentAppearanceMode = MiscSettings::GetAppColorMode();
 
     // reset ColorConfig
     pColorConfig->ClearModified();
@@ -213,25 +217,6 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, ShowInDocumentHdl, weld::Toggleable&, void
     // set colorconfig value
     aCurrentEntryColor.bIsVisible = m_xShowInDocumentChkBtn->get_active();
     pColorConfig->SetColorValue(nEntry, aCurrentEntryColor);
-}
-
-IMPL_LINK_NOARG(SvxAppearanceTabPage, AppearanceChangeHdl, weld::Toggleable&, void)
-{
-    if (m_xAppearanceSystem->get_state() == TRISTATE_TRUE)
-        eCurrentAppearanceMode = AppearanceMode::AUTO;
-    if (m_xAppearanceLight->get_state() == TRISTATE_TRUE)
-        eCurrentAppearanceMode = AppearanceMode::LIGHT;
-    if (m_xAppearanceDark->get_state() == TRISTATE_TRUE)
-        eCurrentAppearanceMode = AppearanceMode::DARK;
-    // set the extension theme on light/dark
-
-    // restart iff appearance was toggled and theme was enabled
-    m_bRestartRequired = false;
-    if (eCurrentAppearanceMode != MiscSettings::GetAppColorMode()
-        && !ThemeColors::IsThemeDisabled())
-        m_bRestartRequired = true;
-
-    UpdateColorDropdown();
 }
 
 IMPL_LINK_NOARG(SvxAppearanceTabPage, ColorEntryChgHdl, weld::ComboBox&, void)
@@ -316,14 +301,42 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, ColorValueChgHdl, ColorListBox&, void)
 
 IMPL_LINK_NOARG(SvxAppearanceTabPage, SchemeChangeHdl, weld::ComboBox&, void)
 {
-    if (m_xSchemeList->get_active_id() == AUTOMATIC_COLOR_SCHEME)
-        pColorConfig->LoadScheme(AUTOMATIC_COLOR_SCHEME);
+    AppearanceMode eMode;
+    OUString sNewScheme;
+
+    if (ThemeColors::IsAutomaticTheme(m_xSchemeList->get_active_id()))
+    {
+        sNewScheme = AUTOMATIC_COLOR_SCHEME;
+        eMode = AppearanceMode::AUTO;
+    }
+    else if (ThemeColors::IsLightTheme(m_xSchemeList->get_active_id()))
+    {
+        sNewScheme = LIGHT_COLOR_SCHEME;
+        eMode = AppearanceMode::LIGHT;
+    }
+    else if (ThemeColors::IsDarkTheme(m_xSchemeList->get_active_id()))
+    {
+        sNewScheme = DARK_COLOR_SCHEME;
+        eMode = AppearanceMode::DARK;
+    }
     else
-        pColorConfig->LoadScheme(m_xSchemeList->get_active_text());
+    {
+        sNewScheme = m_xSchemeList->get_active_text();
+        // for custom theme, keep appearance to AUTO, doesn't matter for the most part,
+        // but if some colors like document colors are not specified, then they will be
+        // set as per the OS appearance mode
+        eMode = AppearanceMode::AUTO;
+    }
+
+    // NOTE: LoadScheme must be called after updating the AppearanceMode as LoadScheme calls Lode
+    // which loads colors based on the current application appearance.
+    MiscSettings::SetAppColorMode(eMode);
+    pColorConfig->LoadScheme(sNewScheme);
 
     if (m_xSchemeList->get_value_changed_from_saved() && !ThemeColors::IsThemeDisabled())
         m_bRestartRequired = true;
 
+    UpdateColorDropdown();
     UpdateRemoveBtnState();
 }
 
@@ -479,30 +492,6 @@ void SvxAppearanceTabPage::InitThemes()
     UpdateRemoveBtnState();
 }
 
-void SvxAppearanceTabPage::InitAppearance()
-{
-    m_xAppearanceSystem->connect_toggled(LINK(this, SvxAppearanceTabPage, AppearanceChangeHdl));
-    m_xAppearanceDark->connect_toggled(LINK(this, SvxAppearanceTabPage, AppearanceChangeHdl));
-
-    AppearanceMode nAppearance = MiscSettings::GetAppColorMode();
-    eCurrentAppearanceMode = nAppearance;
-
-    switch (nAppearance)
-    {
-        case AppearanceMode::AUTO:
-            m_xAppearanceSystem->set_state(TRISTATE_TRUE);
-            break;
-        case AppearanceMode::LIGHT:
-            m_xAppearanceLight->set_state(TRISTATE_TRUE);
-            break;
-        case AppearanceMode::DARK:
-            m_xAppearanceDark->set_state(TRISTATE_TRUE);
-            break;
-        default:
-            eCurrentAppearanceMode = AppearanceMode::AUTO;
-    }
-}
-
 void SvxAppearanceTabPage::InitCustomization()
 {
     m_xColorEntryBtn->connect_changed(LINK(this, SvxAppearanceTabPage, ColorEntryChgHdl));
@@ -534,12 +523,10 @@ void SvxAppearanceTabPage::InitCustomization()
     EnableImageControls(false);
 }
 
-// disable remove if only one scheme available or if the selected theme is AUTOMATIC_COLOR_SCHEME
+// enable remove button for custom themes only
 void SvxAppearanceTabPage::UpdateRemoveBtnState()
 {
-    bool bEnableRemoveButton = (m_xSchemeList->get_count() > 1)
-                               && (m_xSchemeList->get_active_id() != AUTOMATIC_COLOR_SCHEME);
-    m_xRemoveSchemeBtn->set_sensitive(bEnableRemoveButton);
+    m_xRemoveSchemeBtn->set_sensitive(ThemeColors::IsCustomTheme(m_xSchemeList->get_active_id()));
 }
 
 void SvxAppearanceTabPage::EnableImageControls(bool bEnabled)
@@ -566,29 +553,6 @@ void SvxAppearanceTabPage::UpdateColorDropdown()
         m_xColorChangeBtn->SelectEntry(rCurrentEntryColor.nDarkColor);
     else
         m_xColorChangeBtn->SelectEntry(rCurrentEntryColor.nLightColor);
-}
-
-// if the user changes appearance options for automatic theme, then follow the old behaviour
-// and change the document colors to light/dark based on the choice.
-void SvxAppearanceTabPage::UpdateDocumentAppearance()
-{
-    ColorConfigValue aValue;
-    bool bIsDarkModeEnabled = IsDarkModeEnabled();
-    for (size_t i = 0; i < WINDOWCOLOR; ++i)
-    {
-        if (bIsDarkModeEnabled)
-            aValue.nDarkColor = ColorConfig::GetDefaultColor(static_cast<ColorConfigEntry>(i), 1);
-        else
-            aValue.nLightColor = ColorConfig::GetDefaultColor(static_cast<ColorConfigEntry>(i), 0);
-
-        pColorConfig->SetColorValue(static_cast<ColorConfigEntry>(i), aValue);
-    }
-}
-
-bool SvxAppearanceTabPage::IsDarkModeEnabled()
-{
-    return eCurrentAppearanceMode == AppearanceMode::DARK
-           || (eCurrentAppearanceMode == AppearanceMode::AUTO && MiscSettings::GetUseDarkMode());
 }
 
 void SvxAppearanceTabPage::FillItemsList()

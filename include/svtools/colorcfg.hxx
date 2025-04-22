@@ -130,6 +130,8 @@ enum ColorConfigEntry : int
 };
 
 constexpr OUString AUTOMATIC_COLOR_SCHEME = u"COLOR_SCHEME_LIBREOFFICE_AUTOMATIC"_ustr;
+constexpr OUString LIGHT_COLOR_SCHEME = u"COLOR_SCHEME_LIBREOFFICE_LIGHT"_ustr;
+constexpr OUString DARK_COLOR_SCHEME = u"COLOR_SCHEME_LIBREOFFICE_DARK"_ustr;
 constexpr size_t THEME_APPLICATION_COLORS_COUNT = ColorConfigEntryCount - WINDOWCOLOR;
 
 namespace {

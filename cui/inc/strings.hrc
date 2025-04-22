@@ -402,6 +402,8 @@
 
 // Translatable names of color schemes
 #define RID_COLOR_SCHEME_LIBREOFFICE_AUTOMATIC      NC_("RID_COLOR_SCHEME_LIBREOFFICE_AUTOMATIC", "Automatic")
+#define RID_COLOR_SCHEME_LIBREOFFICE_LIGHT          NC_("RID_COLOR_SCHEME_LIBREOFFICE_LIGHT", "Light")
+#define RID_COLOR_SCHEME_LIBREOFFICE_DARK           NC_("RID_COLOR_SCHEME_LIBREOFFICE_DARK", "Dark")
 
 // Translatable Bitmap Names
 #define BMP_FUZZY_LIGHTGREY                         NC_("BMP_FUZZY_LIGHTGREY", "Fuzzy Lightgrey")

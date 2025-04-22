@@ -34,16 +34,12 @@ class SvxAppearanceTabPage : public SfxTabPage
 {
 private:
     bool m_bRestartRequired;
-    AppearanceMode eCurrentAppearanceMode;
     std::unique_ptr<EditableColorConfig> pColorConfig;
 
     std::unique_ptr<weld::ComboBox> m_xSchemeList;
     std::unique_ptr<weld::Button> m_xMoreThemesBtn;
     std::unique_ptr<weld::Button> m_xAddSchemeBtn;
     std::unique_ptr<weld::Button> m_xRemoveSchemeBtn;
-    std::unique_ptr<weld::RadioButton> m_xAppearanceSystem;
-    std::unique_ptr<weld::RadioButton> m_xAppearanceLight;
-    std::unique_ptr<weld::RadioButton> m_xAppearanceDark;
     std::unique_ptr<weld::ComboBox> m_xColorEntryBtn;
     std::unique_ptr<ColorListBox> m_xColorChangeBtn;
     std::unique_ptr<weld::CheckButton> m_xShowInDocumentChkBtn;
@@ -56,7 +52,6 @@ private:
 
     std::unique_ptr<weld::ComboBox> m_xBitmapDropDownBtn;
 
-    DECL_LINK(AppearanceChangeHdl, weld::Toggleable&, void);
     DECL_LINK(ColorEntryChgHdl, weld::ComboBox&, void);
     DECL_LINK(ColorValueChgHdl, ColorListBox&, void);
     DECL_LINK(ShowInDocumentHdl, weld::Toggleable&, void);
@@ -71,15 +66,12 @@ private:
     DECL_LINK(ResetAllBtnHdl, weld::Button&, void);
 
     void InitThemes();
-    void InitAppearance();
     void InitCustomization();
     void LoadSchemeList();
 
     void UpdateRemoveBtnState();
     void EnableImageControls(bool bEnabled);
     void UpdateColorDropdown();
-    void UpdateDocumentAppearance();
-    bool IsDarkModeEnabled();
     void FillItemsList();
     ColorConfigEntry GetActiveEntry();
 

@@ -177,8 +177,8 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     }
     m_sLoadedScheme = sScheme;
 
-    // in cases like theme not found or extension removal, use AUTOMATIC_COLOR_SCHEME as fallback.
-    if (!ThemeColors::IsAutomaticTheme(sScheme))
+    // use automatic theme as the fallback, in case the theme extension was removed
+    if (ThemeColors::IsCustomTheme(sScheme))
     {
         uno::Sequence<OUString> aSchemes = GetSchemeNames();
         bool bFound = std::any_of(aSchemes.begin(), aSchemes.end(),
