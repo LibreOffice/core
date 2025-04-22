@@ -112,7 +112,7 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
 
         sal_Int32 nNumberFormat = series->getExplicitNumberFormatKeyForDataLabel();
         sal_Int32 nPercentNumberFormat=ChartView::getExplicitPercentageNumberFormatKeyForDataLabel(
-                series, xChartModel->getNumberFormatsSupplier());
+                series,xChartModel);
 
         m_aConverters.emplace_back(
             new ::chart::wrapper::DataPointItemConverter(

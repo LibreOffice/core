@@ -86,7 +86,6 @@
 #include <vcl/settings.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
-#include <svl/numuno.hxx>
 
 #include <functional>
 #include <map>
@@ -1824,7 +1823,7 @@ sal_Int32 VSeriesPlotter::getPointCount() const
 }
 
 void VSeriesPlotter::setNumberFormatsSupplier(
-    const rtl::Reference< SvNumberFormatsSupplierObj > & xNumFmtSupplier )
+    const uno::Reference< util::XNumberFormatsSupplier > & xNumFmtSupplier )
 {
     m_apNumberFormatterWrapper.reset( new NumberFormatterWrapper( xNumFmtSupplier ));
 }

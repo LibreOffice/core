@@ -418,7 +418,7 @@ static bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >&
         uno::Sequence< uno::Any > aValues = xDataSequence->getData();
         sal_Int32 nCount = aValues.getLength();
         rDateCategories.reserve(nCount);
-        rtl::Reference< SvNumberFormatsSupplierObj > xNumberFormatsSupplier( rModel.getNumberFormatsSupplier() );
+        Reference< util::XNumberFormats > xNumberFormats( rModel.getNumberFormats() );
 
         bool bOwnData = false;
         bool bOwnDataAnddAxisHasAnyFormat = false;
@@ -434,7 +434,7 @@ static bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >&
                 if (xAxisProps.is() && (xAxisProps->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nAxisNumberFormat))
                 {
                     bOwnDataAnddAxisHasAnyFormat = true;
-                    bOwnDataAnddAxisHasDateFormat = DiagramHelper::isDateNumberFormat( nAxisNumberFormat, xNumberFormatsSupplier );
+                    bOwnDataAnddAxisHasDateFormat = DiagramHelper::isDateNumberFormat( nAxisNumberFormat, xNumberFormats );
                 }
             }
         }
@@ -447,7 +447,7 @@ static bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >&
                 if( bOwnData )
                     bIsDate = !bOwnDataAnddAxisHasAnyFormat || bOwnDataAnddAxisHasDateFormat;
                 else
-                    bIsDate = DiagramHelper::isDateNumberFormat( xDataSequence->getNumberFormatKeyByIndex( nN ), xNumberFormatsSupplier );
+                    bIsDate = DiagramHelper::isDateNumberFormat( xDataSequence->getNumberFormatKeyByIndex( nN ), xNumberFormats );
             }
             else
                 bIsDate = true;

@@ -162,7 +162,8 @@ private:
     rtl::Reference< InternalDataProvider > m_xInternalDataProvider;
 
     rtl::Reference< SvNumberFormatsSupplierObj > m_xOwnNumberFormatsSupplier;
-    rtl::Reference< SvNumberFormatsSupplierObj > m_xNumberFormatsSupplier;
+    css::uno::Reference< css::util::XNumberFormatsSupplier >
+                                m_xNumberFormatsSupplier;
     std::unique_ptr< SvNumberFormatter > m_apSvNumberFormatter; // #i113784# avoid memory leak
 
     rtl::Reference< ::chart::ChartTypeManager >
@@ -459,7 +460,7 @@ public:
     virtual OUString SAL_CALL dump(OUString const & kind) override;
 
     // normal methods
-    rtl::Reference< SvNumberFormatsSupplierObj > const &
+    css::uno::Reference< css::util::XNumberFormatsSupplier > const &
         getNumberFormatsSupplier();
 
     ChartView* getChartView() const;

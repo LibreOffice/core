@@ -24,7 +24,6 @@
 
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
 namespace com::sun::star::uno { class XComponentContext; }
-class SvNumberFormatsSupplierObj;
 
 namespace chart
 {
@@ -39,7 +38,7 @@ class VAxisBase : public VAxisOrGridBase
 public:
     VAxisBase( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
            , const AxisProperties& rAxisProperties
-           , const rtl::Reference< SvNumberFormatsSupplierObj>& xNumberFormatsSupplier );
+           , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
     virtual ~VAxisBase() override;
 
     /**
@@ -67,7 +66,7 @@ public:
     void setExtraLinePositionAtOtherAxis( double fCrossingAt );
 
     virtual void createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
-                                     rtl::Reference<SvNumberFormatsSupplierObj> const& xNumberFormatsSupplier,
+                                     css::uno::Reference<css::util::XNumberFormatsSupplier> const& xNumberFormatsSupplier,
                                      rtl::Reference<::chart::ChartModel> const& xChartDoc,
                                      css::uno::Reference<css::uno::XComponentContext> const& rComponentContext);
 
@@ -85,7 +84,7 @@ protected: //methods
     bool isComplexCategoryAxis() const;
 
 protected: //member
-    rtl::Reference< SvNumberFormatsSupplierObj >              m_xNumberFormatsSupplier;
+    css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
     AxisProperties                                            m_aAxisProperties;
     AxisLabelProperties                                       m_aAxisLabelProperties;
     css::uno::Sequence< OUString >                            m_aTextLabels;

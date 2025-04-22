@@ -45,7 +45,6 @@
 #include <comphelper/classids.hxx>
 #include <servicenames_charttypes.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <svl/numuno.hxx>
 
 namespace chart
 {
@@ -135,9 +134,9 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
     if (!xDiagram.is())
         return;
 
+    uno::Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(&rChartModel);
     if (rChartModel.hasInternalDataProvider() && xDiagram->isSupportingDateAxis())
-        m_nDefaultDateNumberFormat
-            = DiagramHelper::getDateNumberFormat(rChartModel.getNumberFormatsSupplier());
+        m_nDefaultDateNumberFormat = DiagramHelper::getDateNumberFormat(xNumberFormatsSupplier);
 
     sal_Int32 nDimensionCount = xDiagram->getDimension();
     if (!nDimensionCount)
@@ -254,7 +253,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
                 continue;
 
             m_aSeriesPlotterList.push_back(std::unique_ptr<VSeriesPlotter>(pPlotter));
-            pPlotter->setNumberFormatsSupplier(rChartModel.getNumberFormatsSupplier());
+            pPlotter->setNumberFormatsSupplier(xNumberFormatsSupplier);
             pPlotter->setColorScheme(xColorScheme);
             if (pVCooSys)
                 pPlotter->setExplicitCategoriesProvider(

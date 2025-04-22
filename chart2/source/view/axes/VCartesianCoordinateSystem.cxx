@@ -29,7 +29,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <ChartModel.hxx>
 #include <GridProperties.hxx>
-#include <svl/numuno.hxx>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 
@@ -111,7 +110,7 @@ void VCartesianCoordinateSystem::createVAxisList(
 {
     // note: using xChartDoc itself as XNumberFormatsSupplier would cause
     // a leak from VCartesianAxis due to cyclic reference
-    rtl::Reference<SvNumberFormatsSupplierObj> const xNumberFormatsSupplier(
+    uno::Reference<util::XNumberFormatsSupplier> const xNumberFormatsSupplier(
         xChartDoc->getNumberFormatsSupplier());
 
     m_aAxisMap.clear();

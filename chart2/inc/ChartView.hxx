@@ -51,7 +51,6 @@ namespace com::sun::star::util { class XUpdatable2; }
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
 
 class SdrPage;
-class SvNumberFormatsSupplierObj;
 
 namespace chart {
 
@@ -205,7 +204,7 @@ public:
 
     static sal_Int32 getExplicitPercentageNumberFormatKeyForDataLabel(
             const css::uno::Reference< css::beans::XPropertySet >& xSeriesOrPointProp
-            , const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier );
+            , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 
 private: //methods
     void createShapes();

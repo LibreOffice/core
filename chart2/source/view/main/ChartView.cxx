@@ -76,7 +76,6 @@
 #include <svx/unofill.hxx>
 #include <drawinglayer/XShapeDumper.hxx>
 #include <sfx2/objsh.hxx>
-#include <svl/numuno.hxx>
 
 #include <time.h>
 
@@ -517,7 +516,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     auto& rSeriesPlotterList = rParam.mpSeriesPlotterContainer->getSeriesPlotterList();
 
     //create VAxis, so they can give necessary information for automatic scaling
-    rtl::Reference<SvNumberFormatsSupplierObj> const xNumberFormatsSupplier(
+    uno::Reference<util::XNumberFormatsSupplier> const xNumberFormatsSupplier(
             mrChartModel.getNumberFormatsSupplier());
 
     for (auto& rpVCooSys : rVCooSysList)
@@ -2118,7 +2117,7 @@ sal_Int32 ChartView::getExplicitNumberFormatKeyForAxis(
 
 sal_Int32 ChartView::getExplicitPercentageNumberFormatKeyForDataLabel(
     const uno::Reference<beans::XPropertySet>& xSeriesOrPointProp,
-    const rtl::Reference<SvNumberFormatsSupplierObj>& xNumberFormatsSupplier)
+    const uno::Reference<util::XNumberFormatsSupplier>& xNumberFormatsSupplier)
 {
     sal_Int32 nFormat = 0;
     if (!xSeriesOrPointProp.is())

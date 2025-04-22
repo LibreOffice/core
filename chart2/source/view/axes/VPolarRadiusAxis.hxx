@@ -30,7 +30,7 @@ class VPolarRadiusAxis : public VPolarAxis
 {
 public:
     VPolarRadiusAxis( const AxisProperties& rAxisProperties
-           , const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier
+           , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
            , sal_Int32 nDimensionCount );
     virtual ~VPolarRadiusAxis() override;
 

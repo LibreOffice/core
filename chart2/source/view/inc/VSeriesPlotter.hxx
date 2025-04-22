@@ -47,8 +47,6 @@ namespace com::sun::star {
     }
 }
 
-class SvNumberFormatsSupplierObj;
-
 namespace chart {
 
 class ChartType;
@@ -240,7 +238,7 @@ public:
 
     // Methods for number formats and color schemes
 
-    void setNumberFormatsSupplier( const rtl::Reference< SvNumberFormatsSupplierObj > & xNumFmtSupplier );
+    void setNumberFormatsSupplier( const css::uno::Reference< css::util::XNumberFormatsSupplier > & xNumFmtSupplier );
 
     void setColorScheme( const css::uno::Reference< css::chart2::XColorScheme >& xColorScheme );
 

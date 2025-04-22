@@ -329,7 +329,7 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
                                  const SfxItemSet* pAttr,
                                  const ObjectPropertiesDialogParameter* pDialogParameter,
                                  const ViewElementListProvider* pViewElementListProvider,
-                                 const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier)
+                                 const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier)
     : SfxTabDialogController(pParent, u"modules/schart/ui/attributedialog.ui"_ustr, u"AttributeDialog"_ustr, pAttr)
     , m_pParameter( pDialogParameter )
     , m_pViewElementListProvider( pViewElementListProvider )

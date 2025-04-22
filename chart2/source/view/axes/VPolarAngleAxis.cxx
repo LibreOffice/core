@@ -35,7 +35,7 @@ namespace chart
 using namespace ::com::sun::star;
 
 VPolarAngleAxis::VPolarAngleAxis( const AxisProperties& rAxisProperties
-            , const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier
+            , const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier
             , sal_Int32 nDimensionCount )
             : VPolarAxis( rAxisProperties, xNumberFormatsSupplier, 0/*nDimensionIndex*/, nDimensionCount )
 {

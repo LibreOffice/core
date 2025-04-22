@@ -28,7 +28,7 @@ class VPolarAngleAxis : public VPolarAxis
 {
 public:
     VPolarAngleAxis( const AxisProperties& rAxisProperties
-           , const rtl::Reference< SvNumberFormatsSupplierObj >& xNumberFormatsSupplier
+           , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
            , sal_Int32 nDimensionCount );
     virtual ~VPolarAngleAxis() override;
 
