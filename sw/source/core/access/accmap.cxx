@@ -1289,7 +1289,6 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
     std::vector<SwAccessibleContext*> vecAdd;
     std::vector<SwAccessibleContext*> vecRemove;
     //Checked for Paras.
-    bool bMarkChanged = false;
     SwAccessibleContextMap mapTemp;
     if( pCursor != nullptr )
     {
@@ -1337,7 +1336,6 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                             }
                             else
                             {
-                                bMarkChanged = true;
                                 vecAdd.push_back(xAcc.get());
                             }
 
@@ -1359,7 +1357,6 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
             ++aIter;
             vecRemove.push_back(xAcc.get());
         }
-        bMarkChanged = true;
         maSelectedFrameMap.clear();
     }
 
@@ -1370,9 +1367,6 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
         ++aIter;
     }
     mapTemp.clear();
-
-    if (!bMarkChanged)
-        return;
 
     for (SwAccessibleContext* pAccPara : vecAdd)
     {
