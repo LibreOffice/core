@@ -49,6 +49,7 @@ ContextHandlerRef lclDataLabelSharedCreateContext( ContextHandler2& rContext,
             orModel.monLabelPos = rAttribs.getToken( XML_val, XML_TOKEN_INVALID );
             return nullptr;
         case C_TOKEN( numFmt ):
+        case CX_TOKEN( numFmt ):
             orModel.maNumberFormat.setAttributes( rAttribs );
             return nullptr;
         case C_TOKEN( showBubbleSize ):
@@ -70,19 +71,25 @@ ContextHandlerRef lclDataLabelSharedCreateContext( ContextHandler2& rContext,
             orModel.mobShowVal = rAttribs.getBool( XML_val );
             return nullptr;
         case C_TOKEN( separator ):
+        case CX_TOKEN( separator ):
             // collect separator text in onCharacters()
             return &rContext;
         case C_TOKEN( spPr ):
+        case CX_TOKEN( spPr ):
             return new ShapePropertiesContext( rContext, orModel.mxShapeProp.create() );
         case C_TOKEN( txPr ):
+        case CX_TOKEN( txPr ):
             return new TextBodyContext( rContext, orModel.mxTextProp.create() );
+        case CX_TOKEN( visibility ):
+            return nullptr; // TODO
     }
     return nullptr;
 }
 
 void lclDataLabelSharedCharacters( ContextHandler2 const & rContext, const OUString& rChars, DataLabelModelBase& orModel )
 {
-    if( rContext.isCurrentElement( C_TOKEN( separator ) ) )
+    if( rContext.isCurrentElement( C_TOKEN( separator ) ) ||
+            rContext.isCurrentElement( CX_TOKEN( separator ) ) )
         orModel.moaSeparator = rChars;
 }
 
@@ -132,6 +139,7 @@ ContextHandlerRef DataLabelContext::onCreateContext( sal_Int32 nElement, const A
                 else if (nElement == C15_TOKEN(layout))
                     return new LayoutContext(*this, mrModel.mxLayout.getOrCreate());
             break;
+            // Not sure how to handle <cx:extLst> and <cx:ext>. TODO
         }
     }
     bool bMSO2007 = getFilter().isMSO2007Document();
@@ -761,11 +769,9 @@ ContextHandlerRef ChartexSeriesContext::onCreateContext( sal_Int32 nElement, con
     switch( getCurrentElement() )
     {
         case CX_TOKEN( tx ):
-            // TODO
-            return nullptr;
+            return new TextContext( *this, mrModel.mxText.create() );
         case CX_TOKEN( spPr ):
-            // TODO
-            return nullptr;
+            return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
         case CX_TOKEN( valueColors ):
             // TODO
             return nullptr;
@@ -773,16 +779,14 @@ ContextHandlerRef ChartexSeriesContext::onCreateContext( sal_Int32 nElement, con
             // TODO
             return nullptr;
         case CX_TOKEN( dataPt ):
-            // TODO
-            return nullptr;
+            return new DataPointContext( *this, mrModel.maPoints.create(false) );
         case CX_TOKEN( dataLabels ):
-            // TODO
-            return nullptr;
+            return new DataLabelsContext( *this, mrModel.mxLabels.create(false) );
         case CX_TOKEN( dataId ):
             // TODO
             return nullptr;
         case CX_TOKEN( layoutPr ):
-            // TODO
+            // This looks complicated. TODO
             return nullptr;
         case CX_TOKEN( axisId ):
             // TODO

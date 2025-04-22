@@ -91,8 +91,13 @@ w15                     http://schemas.microsoft.com/office/word/2012/wordml
 p15                     http://schemas.microsoft.com/office/powerpoint/2012/main
 x12ac                   http://schemas.microsoft.com/office/spreadsheetml/2011/1/ac
 c15                     http://schemas.microsoft.com/office/drawing/2012/chart
+x15                     http://schemas.microsoft.com/office/spreadsheetml/2010/11/main
+xr                      http://schemas.microsoft.com/office/spreadsheetml/2014/revision
 xr2                     http://schemas.microsoft.com/office/spreadsheetml/2015/revision2
+xr6                     http://schemas.microsoft.com/office/spreadsheetml/2016/revision6
+xr10                    http://schemas.microsoft.com/office/spreadsheetml/2016/revision10
 xr16                    http://schemas.microsoft.com/office/spreadsheetml/2017/revision16
+cs                      http://schemas.microsoft.com/office/drawing/2012/chartStyle
 
 # MSO 2014 extensions ---------------------------------------------------------
 

@@ -1,6 +1,8 @@
 {Relationship::ACTIVEXCONTROLBINARY, u"http://schemas.microsoft.com/office/2006/relationships/activeXControlBinary"},
 {Relationship::CHART, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart"},
+{Relationship::CHARTCOLORSTYLE, u"http://schemas.microsoft.com/office/2011/relationships/chartColorStyle"},
 {Relationship::CHARTEX, u"http://schemas.microsoft.com/office/2014/relationships/chartEx"},
+{Relationship::CHARTSTYLE, u"http://schemas.microsoft.com/office/2011/relationships/chartStyle"},
 {Relationship::CHARTUSERSHAPES, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/chartUserShapes"},
 {Relationship::COMMENTS, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments"},
 {Relationship::COMMENTAUTHORS, u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/commentAuthors"},

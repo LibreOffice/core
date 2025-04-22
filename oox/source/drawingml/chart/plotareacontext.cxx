@@ -211,8 +211,34 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, const At
                         }
                         assert(nChartType != 0);
 
-                        return new ChartexTypeGroupContext( *this,
+                        // This is a little awkward. The existing parsing
+                        // structures are set up for the ECMA-376 charts, which
+                        // are structured in the XML as
+                        // ...
+                        //   <c:plotArea>
+                        //     <c:barChart> (or whatever)
+                        //       <c:series ... />
+                        //     <c:barChart/>
+                        //   <c:plotArea/>
+                        //
+                        // By contrast, chartex is like this:
+                        // ...
+                        //   <cx:plotArea>
+                        //     <cx:plotAreaRegion>
+                        //       <cx:series layoutId="funnel" ... /> (or other chart type)
+                        //     <cx:plotAreaRegion/>
+                        //   <cx:plotArea/>
+                        //
+                        // The best way I've figured out to bridge this
+                        // difference is via the explicit CreateSeries() call
+                        // below, since the structure wants a TypeGroup but
+                        // we're already in the series handling. There may well
+                        // be a better solution.
+                        rtl::Reference<ChartexTypeGroupContext> rTGCtx = new ChartexTypeGroupContext( *this,
                                 mrModel.maTypeGroups.create( nChartType, false ) );
+                        rTGCtx->CreateSeries();
+
+                        return rTGCtx;
                     }
                     break;
 

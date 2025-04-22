@@ -956,7 +956,9 @@ sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (
     const uno::Reference< XOutputStream >& xParentRelation,
     const char* sContentType,
     const OUString& sRelationshipType,
-    OUString* pRelationshipId )
+    OUString* pRelationshipId,
+    // if bNoHeader is true, don't create a header (<?xml... ) line
+    bool bNoHeader /* = false */ )
 {
     OUString sRelationshipId;
     if (xParentRelation.is())
@@ -967,7 +969,8 @@ sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (
     if( pRelationshipId )
         *pRelationshipId = sRelationshipId;
 
-    sax_fastparser::FSHelperPtr p = openFragmentStreamWithSerializer( sFullStream, OUString::createFromAscii( sContentType ) );
+    sax_fastparser::FSHelperPtr p = openFragmentStreamWithSerializer(
+            sFullStream, OUString::createFromAscii( sContentType ), bNoHeader );
 
     maOpenedStreamMap[ sFullStream ] = std::make_pair( sRelationshipId, p );
 

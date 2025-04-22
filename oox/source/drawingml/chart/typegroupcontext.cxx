@@ -405,10 +405,24 @@ ChartexTypeGroupContext::~ChartexTypeGroupContext()
 {
 }
 
+void ChartexTypeGroupContext::CreateSeries()
+{
+    mrModel.maSeries.create(false);
+}
+
 ContextHandlerRef ChartexTypeGroupContext::onCreateContext( [[maybe_unused]] sal_Int32 nElement,
         [[maybe_unused]] const AttributeList& rAttribs )
 {
-    return new ChartexSeriesContext( *this, mrModel.maSeries.create(false) );
+    if (isRootElement()) switch (nElement) {
+        case CX_TOKEN(dataLabels):
+            // TODO
+            return nullptr;
+        case CX_TOKEN(dataId):
+            // TODO
+            return nullptr;
+    }
+
+    return nullptr;
 }
 
 } // namespace oox::drawingml::chart

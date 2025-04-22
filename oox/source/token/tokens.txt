@@ -755,6 +755,7 @@ axisId
 axisPage
 axisPosition
 axisRow
+axisTitle
 axisValues
 azure
 b
@@ -1113,6 +1114,7 @@ catAx
 catLst
 catalog
 category
+categoryAxis
 categoryEl
 categoryIdx
 ccw
@@ -1175,6 +1177,7 @@ characteristic
 charset
 chart
 chartAndTx
+chartArea
 chartData
 chartFormat
 chartFormats
@@ -1182,6 +1185,7 @@ chartObject
 chartPlus
 chartSpace
 chartStar
+chartStyle
 chartX
 chartex
 chartreuse
@@ -1311,6 +1315,7 @@ colorMarkers
 colorNegative
 colorScale
 colorSeries
+colorStyle
 colorTemp
 colorTemperature
 colormenu
@@ -1668,6 +1673,11 @@ dataModel
 dataModelExt
 dataOnRows
 dataOnly
+dataPoint
+dataPoint3D
+dataPointLine
+dataPointMarker
+dataPointWireframe
 dataPosition
 dataPt
 dataRef
@@ -1985,6 +1995,7 @@ doughnutChart
 down
 downArrow
 downArrowCallout
+downBar
 downBars
 downThenOver
 dpi
@@ -2004,6 +2015,7 @@ drill
 drop
 dropCap
 dropDownList
+dropLine
 dropLines
 dropauto
 ds
@@ -2154,6 +2166,7 @@ errBars
 errDir
 errValType
 error
+errorBar
 errorCaption
 errorStyle
 errorTitle
@@ -2563,6 +2576,8 @@ gridLinesSet
 gridSize
 gridSpacing
 gridSpan
+gridlineMajor
+gridlineMinor
 group
 groupBy
 groupChr
@@ -2678,6 +2693,7 @@ hex
 hexBinary
 hexagon
 hf
+hiLoLine
 hiLowLines
 hidden
 hiddenButton
@@ -3044,6 +3060,7 @@ lc
 ld
 le
 leader
+leaderLine
 leaderLines
 ledger
 left
@@ -3484,6 +3501,7 @@ modelId
 modern
 modified
 modifyVerifier
+mods
 mongolianVert
 monospace
 month
@@ -4072,6 +4090,7 @@ plaqueTabs
 plastic
 plcHide
 plotArea
+plotArea3D
 plotAreaRegion
 plotSurface
 plotVisOnly
@@ -4590,8 +4609,10 @@ ser
 serAx
 serLines
 series
+seriesAxis
 seriesEl
 seriesIdx
+seriesLine
 serverCommand
 serverField
 serverFill
@@ -5054,6 +5075,7 @@ strokeok
 strokeweight
 sty
 style
+styleClr
 styleData
 styleDef
 styleDefHdr
@@ -5460,6 +5482,7 @@ trees
 trellis
 trend
 trendline
+trendlineLabel
 trendlineLbl
 trendlineType
 tri
@@ -5578,6 +5601,7 @@ unsignedShort
 up
 upArrow
 upArrowCallout
+upBar
 upBars
 upDiag
 upDownArrow
@@ -5667,6 +5691,7 @@ vacatedStyle
 val
 valAx
 value
+valueAxis
 valueBetween
 valueColors
 valueColorPositions
@@ -5749,6 +5774,7 @@ wBefore
 wMode
 wOff
 wR
+wall
 warmMatte
 warning
 warp
@@ -5858,6 +5884,8 @@ wsp
 x
 x12ac
 x14
+x15
+x2
 xAlign
 xIllusions
 xMode
@@ -5882,8 +5910,11 @@ xmlDataType
 xmlPr
 xmlns
 xpath
-xr2
+xr
+xr10
 xr16
+xr2
+xr6
 xrange
 xsc
 xscale

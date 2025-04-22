@@ -844,7 +844,14 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
     rWorkbook->startElement( XML_workbook,
             XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)),
-            FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)) );
+            FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)),
+            // the following are for chartex
+            FSNS(XML_xmlns, XML_mc), rStrm.getNamespaceURL(OOX_NS(mce)),
+            FSNS(XML_xmlns, XML_x15), rStrm.getNamespaceURL(OOX_NS(x15)),
+            FSNS(XML_xmlns, XML_xr), rStrm.getNamespaceURL(OOX_NS(xr)),
+            FSNS(XML_xmlns, XML_xr6), rStrm.getNamespaceURL(OOX_NS(xr6)),
+            FSNS(XML_xmlns, XML_xr10), rStrm.getNamespaceURL(OOX_NS(xr10)),
+            FSNS(XML_xmlns, XML_xr2), rStrm.getNamespaceURL(OOX_NS(xr2)) );
     rWorkbook->singleElement( XML_fileVersion,
             XML_appName, "Calc"
             // OOXTODO: XML_codeName

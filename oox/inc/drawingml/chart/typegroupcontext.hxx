@@ -162,6 +162,9 @@ public:
     explicit            ChartexTypeGroupContext( ::oox::core::ContextHandler2Helper& rParent, TypeGroupModel& rModel );
     virtual             ~ChartexTypeGroupContext() override;
 
+    // Explicitly create a new series
+    void CreateSeries();
+
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
 

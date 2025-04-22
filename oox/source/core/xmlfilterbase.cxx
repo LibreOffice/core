@@ -508,9 +508,10 @@ Reference< XOutputStream > XmlFilterBase::openFragmentStream( const OUString& rS
     return xOutputStream;
 }
 
-FSHelperPtr XmlFilterBase::openFragmentStreamWithSerializer( const OUString& rStreamName, const OUString& rMediaType )
+FSHelperPtr XmlFilterBase::openFragmentStreamWithSerializer(
+        const OUString& rStreamName, const OUString& rMediaType, bool bNoHeader /* = false */)
 {
-    const bool bWriteHeader = rMediaType.indexOf( "vml" ) < 0 || rMediaType.indexOf( "+xml" ) >= 0;
+    const bool bWriteHeader = !bNoHeader && (rMediaType.indexOf( "vml" ) < 0 || rMediaType.indexOf( "+xml" ) >= 0);
     return std::make_shared<FastSerializerHelper>( openFragmentStream( rStreamName, rMediaType ), bWriteHeader );
 }
 

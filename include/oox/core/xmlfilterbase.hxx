@@ -201,12 +201,17 @@ public:
             The media type string, used in [Content_Types].xml stream in base
             storage.
 
+        @param bNoHeader
+            If true, do not include a header line in the output. If false,
+            potentially include a header line based on the media type string.
+
         @return newly created serializer helper.
      */
     ::sax_fastparser::FSHelperPtr
                         openFragmentStreamWithSerializer(
                             const OUString& rStreamName,
-                            const OUString& rMediaType );
+                            const OUString& rMediaType,
+                            bool bNoHeader = false);
 
     /** Returns new unique ID for exported document.
 

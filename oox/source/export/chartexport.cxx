@@ -162,7 +162,77 @@ private:
     OUString m_aRole;
 };
 
+void outputStyleEntry(FSHelperPtr pFS, sal_Int32 nElTokenId)
+{
+    // Just default values for now
+    pFS->startElement(FSNS(XML_cs, nElTokenId));
+    pFS->singleElement(FSNS(XML_cs, XML_lnRef), XML_idx, "0");
+    pFS->singleElement(FSNS(XML_cs, XML_fillRef), XML_idx, "0");
+    pFS->singleElement(FSNS(XML_cs, XML_effectRef), XML_idx, "0");
+    pFS->singleElement(FSNS(XML_cs, XML_fontRef), XML_idx, "minor");
+    pFS->endElement(FSNS(XML_cs, nElTokenId));
 }
+
+void outputChartAreaStyleEntry(FSHelperPtr pFS)
+{
+    // Just default values for now
+    pFS->startElement(FSNS(XML_cs, XML_chartArea), XML_mods, "allowNoFillOverride allowNoLineOverride");
+    pFS->singleElement(FSNS(XML_cs, XML_lnRef), XML_idx, "0");
+    pFS->singleElement(FSNS(XML_cs, XML_fillRef), XML_idx, "0");
+    pFS->singleElement(FSNS(XML_cs, XML_effectRef), XML_idx, "0");
+
+    pFS->startElement(FSNS(XML_cs, XML_fontRef), XML_idx, "minor");
+    pFS->singleElement(FSNS(XML_a, XML_schemeClr), XML_val, "tx1");
+    pFS->endElement(FSNS(XML_cs, XML_fontRef));
+
+    pFS->startElement(FSNS(XML_cs, XML_spPr));
+
+    pFS->startElement(FSNS(XML_a, XML_solidFill));
+    pFS->singleElement(FSNS(XML_a, XML_schemeClr), XML_val, "bg1");
+    pFS->endElement(FSNS(XML_a, XML_solidFill));
+
+    pFS->startElement(FSNS(XML_a, XML_ln), XML_w, "9525", XML_cap, "flat",
+            XML_cmpd, "sng", XML_algn, "ctr");
+    pFS->startElement(FSNS(XML_a, XML_solidFill));
+    pFS->startElement(FSNS(XML_a, XML_schemeClr), XML_val, "tx1");
+    pFS->singleElement(FSNS(XML_a, XML_lumMod), XML_val, "15000");
+    pFS->singleElement(FSNS(XML_a, XML_lumOff), XML_val, "85000");
+    pFS->endElement(FSNS(XML_a, XML_schemeClr));
+    pFS->endElement(FSNS(XML_a, XML_solidFill));
+    pFS->singleElement(FSNS(XML_a, XML_round));
+    pFS->endElement(FSNS(XML_a, XML_ln));
+
+    pFS->endElement(FSNS(XML_cs, XML_spPr));
+
+    pFS->endElement(FSNS(XML_cs, XML_chartArea));
+}
+
+void outputDataPointStyleEntry(FSHelperPtr pFS)
+{
+    pFS->startElement(FSNS(XML_cs, XML_dataPoint));
+    pFS->singleElement(FSNS(XML_cs, XML_lnRef), XML_idx, "0");
+
+    pFS->startElement(FSNS(XML_cs, XML_fillRef), XML_idx, "0");
+    pFS->singleElement(FSNS(XML_cs, XML_styleClr), XML_val, "auto");
+    pFS->endElement(FSNS(XML_cs, XML_fillRef));
+
+    pFS->singleElement(FSNS(XML_cs, XML_effectRef), XML_idx, "0");
+
+    pFS->startElement(FSNS(XML_cs, XML_fontRef), XML_idx, "minor");
+    pFS->singleElement(FSNS(XML_cs, XML_schemeClr), XML_val, "tx1");
+    pFS->endElement(FSNS(XML_cs, XML_fontRef));
+
+    pFS->startElement(FSNS(XML_cs, XML_spPr));
+    pFS->startElement(FSNS(XML_a, XML_solidFill));
+    pFS->singleElement(FSNS(XML_a, XML_schemeClr), XML_val, "phClr");
+    pFS->endElement(FSNS(XML_a, XML_solidFill));
+    pFS->endElement(FSNS(XML_cs, XML_spPr));
+
+    pFS->endElement(FSNS(XML_cs, XML_dataPoint));
+}
+
+
+}   // unnamed namespace
 
 static Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Reference< chart2::XDiagram > & xDiagram, bool& bHasDateCategories )
 {
@@ -982,7 +1052,114 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
 
     SetFS( pChart );
     ExportContent();
-    SetFS( pFS );
+
+    if (bIsChartex) {
+        SetFS( pChart );
+        sRelativePath ="";
+
+        FSHelperPtr pChartFS = GetFS();
+
+        // output style and colorstyle files
+
+        // first style
+        static constexpr char sStyleFnamePrefix[] = "style";
+        OUStringBuffer sFullStreamBuf;
+        sFullStreamBuf.appendAscii(sFullPath);
+        sFullStreamBuf = sFullStreamBuf + sStyleFnamePrefix + OUString::number(nChartCount) + ".xml";
+        sFullStream = sFullStreamBuf.makeStringAndClear();
+        OUStringBuffer sRelativeStreamBuf;
+        sRelativeStreamBuf.appendAscii(sRelativePath);
+        sRelativeStreamBuf = sRelativeStreamBuf + sStyleFnamePrefix + OUString::number(nChartCount) + ".xml";
+        sRelativeStream = sRelativeStreamBuf.makeStringAndClear();
+
+        FSHelperPtr pStyle = CreateOutputStream(
+                sFullStream,
+                sRelativeStream,
+                pChartFS->getOutputStream(),
+                u"application/vnd.ms-office.chartstyle+xml"_ustr,
+                oox::getRelationship(Relationship::CHARTSTYLE),
+                &sId,
+                true /* for some reason this doesn't have a header line */);
+
+        SetFS( pStyle );
+        pFS = GetFS();
+
+        pFS->startElement(FSNS(XML_cs, XML_chartStyle),
+                FSNS( XML_xmlns, XML_cs ), pFB->getNamespaceURL(OOX_NS(cs)),
+                FSNS( XML_xmlns, XML_a ), pFB->getNamespaceURL(OOX_NS(dml)),
+                XML_id, "419" /* no idea what this number is supposed to be */);
+
+        outputStyleEntry(pFS, XML_axisTitle);;
+        outputStyleEntry(pFS, XML_categoryAxis);
+        outputChartAreaStyleEntry(pFS);
+        outputStyleEntry(pFS, XML_dataLabel);
+        outputDataPointStyleEntry(pFS);
+        outputStyleEntry(pFS, XML_dataPoint3D);
+        outputStyleEntry(pFS, XML_dataPointLine);
+        outputStyleEntry(pFS, XML_dataPointMarker);
+        outputStyleEntry(pFS, XML_dataPointWireframe);
+        outputStyleEntry(pFS, XML_dataTable);
+        outputStyleEntry(pFS, XML_downBar);
+        outputStyleEntry(pFS, XML_dropLine);
+        outputStyleEntry(pFS, XML_errorBar);
+        outputStyleEntry(pFS, XML_floor);
+        outputStyleEntry(pFS, XML_gridlineMajor);
+        outputStyleEntry(pFS, XML_gridlineMinor);
+        outputStyleEntry(pFS, XML_hiLoLine);
+        outputStyleEntry(pFS, XML_leaderLine);
+        outputStyleEntry(pFS, XML_legend);
+        outputStyleEntry(pFS, XML_plotArea);
+        outputStyleEntry(pFS, XML_plotArea3D);
+        outputStyleEntry(pFS, XML_seriesAxis);
+        outputStyleEntry(pFS, XML_seriesLine);
+        outputStyleEntry(pFS, XML_title);
+        outputStyleEntry(pFS, XML_trendline);
+        outputStyleEntry(pFS, XML_trendlineLabel);
+        outputStyleEntry(pFS, XML_upBar);
+        outputStyleEntry(pFS, XML_valueAxis);
+        outputStyleEntry(pFS, XML_wall);
+
+        pFS->endElement(FSNS(XML_cs, XML_chartStyle));
+
+        pStyle->endDocument();
+
+        // now colorstyle
+        static constexpr char sColorFnamePrefix[] = "colors";
+        sFullStreamBuf = OUStringBuffer();
+        sFullStreamBuf.appendAscii(sFullPath);
+        sFullStreamBuf = sFullStreamBuf + sColorFnamePrefix + OUString::number(nChartCount) + ".xml";
+        sFullStream = sFullStreamBuf.makeStringAndClear();
+        sRelativeStreamBuf = OUStringBuffer();
+        sRelativeStreamBuf.appendAscii(sRelativePath);
+        sRelativeStreamBuf = sRelativeStreamBuf + sColorFnamePrefix + OUString::number(nChartCount) + ".xml";
+        sRelativeStream = sRelativeStreamBuf.makeStringAndClear();
+
+        FSHelperPtr pColorStyle = CreateOutputStream(
+                sFullStream,
+                sRelativeStream,
+                pChartFS->getOutputStream(),
+                u"application/vnd.ms-office.chartcolorstyle+xml"_ustr,
+                oox::getRelationship(Relationship::CHARTCOLORSTYLE),
+                &sId,
+                true /* also no header line */);
+
+        SetFS( pColorStyle );
+        pFS = GetFS();
+
+        pFS->startElement(FSNS(XML_cs, XML_colorStyle),
+                FSNS( XML_xmlns, XML_cs ), pFB->getNamespaceURL(OOX_NS(cs)),
+                FSNS( XML_xmlns, XML_a ), pFB->getNamespaceURL(OOX_NS(dml)),
+                XML_meth, "cycle",
+                XML_id, "10" /* no idea what this number is supposed to be */);
+
+        pFS->singleElement(FSNS(XML_a, XML_schemeClr),
+                XML_val, "accent1");
+
+        pFS->endElement(FSNS(XML_cs, XML_colorStyle));
+
+        pColorStyle->endDocument();
+    }
+
     pChart->endDocument();
 }
 
@@ -1117,6 +1294,8 @@ void ChartExport::exportData( [[maybe_unused]] const Reference< css::chart::XCha
     if (bIsChartex) {
         FSHelperPtr pFS = GetFS();
 
+        // Not sure if the data id is always 0. However, it seems it may need to
+        // agree with the id in exportSeries(). See DATA_ID_COMMENT
         pFS->startElement(FSNS(XML_cx, XML_data), XML_id, "0");
         // Just hard-coding this for now
         pFS->startElement(FSNS(XML_cx, XML_numDim), XML_type, "val");
@@ -3127,6 +3306,12 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                             writeDataLabelsRange(pFS, GetFB(), aDLblsRange);
 
                         pFS->endElement( FSNS( XML_c, XML_ser ) );
+                    } else {
+                        // chartex
+
+                        // Align the data id here with that in exportData().
+                        // See DATA_ID_COMMENT
+                        pFS->singleElement(FSNS(XML_cx, XML_dataId), XML_val, "0");
                     }
                 }
             }
