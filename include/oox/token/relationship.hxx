@@ -20,7 +20,9 @@ enum class Relationship
 {
     ACTIVEXCONTROLBINARY,
     CHART,
+    CHARTCOLORSTYLE, // for chartex
     CHARTEX,
+    CHARTSTYLE, // for chartex
     CHARTUSERSHAPES,
     COMMENTS,
     COMMENTAUTHORS,
