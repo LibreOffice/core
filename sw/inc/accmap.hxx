@@ -79,7 +79,7 @@ class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
                 , public std::enable_shared_from_this<SwAccessibleMap>
 {
     ::osl::Mutex maEventMutex;
-    std::unique_ptr<SwAccessibleContextMap> mpFrameMap;
+    SwAccessibleContextMap maFrameMap;
     std::unique_ptr<SwAccessibleShapeMap_Impl> mpShapeMap;
 
     // The shape list is filled if an accessible shape is destroyed. It
