@@ -26,14 +26,15 @@
 #include <comphelper/sequence.hxx>
 #include <officecfg/Setup.hxx>
 #include <officecfg/TypeDetection/UISort.hxx>
+#include <tools/lazydelete.hxx>
 
 
 namespace filter::config{
 
 FilterCache& GetTheFilterCache()
 {
-    static FilterCache CACHE;
-    return CACHE;
+    static tools::DeleteOnDeinit<FilterCache> CACHE;
+    return *CACHE.get();
 }
 
 /** @short  define all possible parts of a filter query.
