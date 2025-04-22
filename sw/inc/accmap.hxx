@@ -122,8 +122,8 @@ class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
 
     void InvalidateShapeSelection();
 
-    //mpSelectedFrameMap contains the old selected objects.
-    std::unique_ptr<SwAccessibleContextMap> mpSelectedFrameMap;
+    //maSelectedFrameMap contains the old selected objects.
+    SwAccessibleContextMap maSelectedFrameMap;
 
     OUString maDocName;
 

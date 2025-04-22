@@ -1331,9 +1331,9 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                             }
                             if(!isChanged)
                             {
-                                SwAccessibleContextMap::iterator aEraseIter = mpSelectedFrameMap->find(pFrame);
-                                if(aEraseIter != mpSelectedFrameMap->end())
-                                    mpSelectedFrameMap->erase(aEraseIter);
+                                SwAccessibleContextMap::iterator aEraseIter = maSelectedFrameMap.find(pFrame);
+                                if (aEraseIter != maSelectedFrameMap.end())
+                                    maSelectedFrameMap.erase(aEraseIter);
                             }
                             else
                             {
@@ -1348,12 +1348,10 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
             }
         }
     }
-    if( !mpSelectedFrameMap )
-        mpSelectedFrameMap.reset(new SwAccessibleContextMap);
-    if( !mpSelectedFrameMap->empty() )
+    if (!maSelectedFrameMap.empty())
     {
-        SwAccessibleContextMap::iterator aIter = mpSelectedFrameMap->begin();
-        while( aIter != mpSelectedFrameMap->end() )
+        SwAccessibleContextMap::iterator aIter = maSelectedFrameMap.begin();
+        while (aIter != maSelectedFrameMap.end())
         {
             rtl::Reference < SwAccessibleContext > xAcc = (*aIter).second;
             if(xAcc.is())
@@ -1362,13 +1360,13 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
             vecRemove.push_back(xAcc.get());
         }
         bMarkChanged = true;
-        mpSelectedFrameMap->clear();
+        maSelectedFrameMap.clear();
     }
 
     SwAccessibleContextMap::iterator aIter = mapTemp.begin();
     while( aIter != mapTemp.end() )
     {
-        mpSelectedFrameMap->emplace( (*aIter).first, (*aIter).second );
+        maSelectedFrameMap.emplace((*aIter).first, (*aIter).second);
         ++aIter;
     }
     mapTemp.clear();
@@ -1944,12 +1942,9 @@ void SwAccessibleMap::RemoveContext( const SwFrame *pFrame )
 
     maFrameMap.erase(aIter);
 
-    if (mpSelectedFrameMap)
-    {
-        SwAccessibleContextMap::iterator aSelectedIter = mpSelectedFrameMap->find(pFrame);
-        if (aSelectedIter != mpSelectedFrameMap->end())
-            mpSelectedFrameMap->erase(aSelectedIter);
-    }
+    SwAccessibleContextMap::iterator aSelectedIter = maSelectedFrameMap.find(pFrame);
+    if (aSelectedIter != maSelectedFrameMap.end())
+        maSelectedFrameMap.erase(aSelectedIter);
 
     // Remove reference to old caret object. Though mxCursorContext
     // is a weak reference and cleared automatically, clearing it
