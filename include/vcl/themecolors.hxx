@@ -52,6 +52,22 @@ public:
         return rThemeName == svtools::AUTOMATIC_COLOR_SCHEME;
     }
 
+    static bool IsLightTheme(std::u16string_view rThemeName)
+    {
+        return rThemeName == svtools::LIGHT_COLOR_SCHEME;
+    }
+
+    static bool IsDarkTheme(std::u16string_view rThemeName)
+    {
+        return rThemeName == svtools::DARK_COLOR_SCHEME;
+    }
+
+    static bool IsCustomTheme(std::u16string_view rThemeName)
+    {
+        return !IsAutomaticTheme(rThemeName) && !IsLightTheme(rThemeName)
+               && !IsDarkTheme(rThemeName);
+    }
+
     static ThemeState GetThemeState();
     static void SetThemeState(ThemeState eState);
 
