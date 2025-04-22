@@ -962,7 +962,7 @@ bool IsGIFAnimated(SvStream& rStream, Size& rLogicSize)
     return bResult;
 }
 
-VCL_DLLPUBLIC bool ImportGIF(SvStream & rStream, ImportOutput& rInportOutput)
+VCL_DLLPUBLIC bool ImportGIF(SvStream & rStream, ImportOutput& rImportOutput)
 {
     bool bReturn = false;
     GIFReader aGIFReader(rStream);
@@ -970,7 +970,7 @@ VCL_DLLPUBLIC bool ImportGIF(SvStream & rStream, ImportOutput& rInportOutput)
     SvStreamEndian nOldFormat = rStream.GetEndian();
     rStream.SetEndian(SvStreamEndian::LITTLE);
 
-    ReadState eReadState = aGIFReader.ReadGIF(rInportOutput);
+    ReadState eReadState = aGIFReader.ReadGIF(rImportOutput);
 
     if (eReadState == GIFREAD_OK)
         bReturn = true;
