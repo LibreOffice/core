@@ -1993,7 +1993,7 @@ void SwAccessibleMap::RemoveContext( const SdrObject *pObj )
 
 bool SwAccessibleMap::Contains(const SwFrame *pFrame) const
 {
-    return (pFrame && maFrameMap.find(pFrame) != maFrameMap.end());
+    return pFrame && maFrameMap.contains(pFrame);
 }
 
 void SwAccessibleMap::A11yDispose( const SwFrame *pFrame,
