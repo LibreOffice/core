@@ -222,6 +222,12 @@ void ScPDFExportTest::testMediaShapeScreen_Tdf159094()
 
 void ScPDFExportTest::testPopupRectangleSize_Tdf162955()
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     loadFromFile(u"tdf162955_comment.ods");
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
