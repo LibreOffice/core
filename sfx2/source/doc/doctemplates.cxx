@@ -419,34 +419,45 @@ void SfxDocTplService::init_Impl()
     // entry if necessary
 
     maRootURL = TEMPLATE_ROOT_URL + "/" + LanguageTag::convertToBcp47(maLocale);
+    SAL_INFO("sfx.doc", "SfxDocTplService_Impl::init_Impl <" << maRootURL << ">");
 
     const OUString aTemplVersPropName( TEMPLATE_VERSION  );
     const OUString aTemplVers( TEMPLATE_VERSION_VALUE  );
     if ( Content::create( maRootURL, maCmdEnv, comphelper::getProcessComponentContext(), maRootContent ) )
     {
+        SAL_INFO("sfx.doc", "SfxDocTplService_Impl::init_Impl A");
         uno::Any aValue;
         OUString aPropValue;
         if ( getProperty( maRootContent, aTemplVersPropName, aValue )
           && ( aValue >>= aPropValue )
           && aPropValue == aTemplVers )
         {
+            SAL_INFO("sfx.doc", "SfxDocTplService_Impl::init_Impl B");
             bIsInitialized = true;
         }
         else
+        {
+            SAL_INFO("sfx.doc", "SfxDocTplService_Impl::init_Impl C");
             removeContent( maRootContent );
+        }
     }
 
     if ( !bIsInitialized )
     {
+        SAL_INFO("sfx.doc", "SfxDocTplService_Impl::init_Impl D");
         if ( createFolder( maRootURL, true, false, maRootContent )
           && setProperty( maRootContent, aTemplVersPropName, uno::Any( aTemplVers ) ) )
+        {
+            SAL_INFO("sfx.doc", "SfxDocTplService_Impl::init_Impl E");
             bIsInitialized = true;
+        }
 
         bNeedsUpdate = true;
     }
 
     if ( bIsInitialized )
     {
+        SAL_INFO("sfx.doc", "SfxDocTplService_Impl::init_Impl F");
         try {
             m_xDocProps.set(document::DocumentProperties::create(
                         ::comphelper::getProcessComponentContext()));
@@ -461,6 +472,7 @@ void SfxDocTplService::init_Impl()
 
         if ( bNeedsUpdate )
         {
+            SAL_INFO("sfx.doc", "SfxDocTplService_Impl::init_Impl G");
             aGuard.clear();
             SolarMutexClearableGuard aSolarGuard;
 
@@ -475,6 +487,8 @@ void SfxDocTplService::init_Impl()
             pWin.disposeAndClear();
         }
         else if ( needsUpdate() )
+        {
+            SAL_INFO("sfx.doc", "SfxDocTplService_Impl::init_Impl H");
             // the UI should be shown only on the first update
             doUpdate();
     }
@@ -484,6 +498,7 @@ void SfxDocTplService::init_Impl()
     }
 
     mbIsInitialized = bIsInitialized;
+    SAL_INFO("sfx.doc", "SfxDocTplService_Impl::init_Impl: " << mbIsInitialized);
 }
 
 
