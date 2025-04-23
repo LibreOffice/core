@@ -837,7 +837,7 @@ void ExtMgrDialog::showProgress( bool _bStart )
 }
 
 
-void ExtMgrDialog::updateProgress( const tools::Long nProgress )
+void ExtMgrDialog::updateProgress(sal_Int32 nProgress)
 {
     SolarMutexGuard aGuard;
     if ( m_nProgress != nProgress )
@@ -973,7 +973,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl, Timer *, void)
         }
 
         if ( m_xProgressBar->get_visible() )
-            m_xProgressBar->set_percentage( static_cast<sal_uInt16>(m_nProgress) );
+            m_xProgressBar->set_percentage(m_nProgress);
     }
 }
 
@@ -1128,7 +1128,7 @@ void UpdateRequiredDialog::showProgress( bool _bStart )
 }
 
 
-void UpdateRequiredDialog::updateProgress( const tools::Long nProgress )
+void UpdateRequiredDialog::updateProgress(sal_Int32 nProgress)
 {
     SolarMutexGuard aGuard;
     if ( m_nProgress != nProgress )
