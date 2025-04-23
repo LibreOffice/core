@@ -588,7 +588,7 @@ void bridges::cpp_uno::shared::VtableFactory::flushCode(
        = (void (*)(unsigned char const *, unsigned char const *)) dlsym(
            RTLD_DEFAULT, "__clear_cache");
    (*clear_cache)(begin, end);
-#else
+#elif defined __clang_major__ && __clang_major__ < 21
     // GCC clarified with
     // <http://gcc.gnu.org/git/?p=gcc.git;a=commit;h=a90b0cdd444f6dde1084a439862cf507f6d3b2ae>
     // "extend.texi (__clear_cache): Correct signature" that __builtin___clear_cache takes void*
@@ -600,6 +600,8 @@ void bridges::cpp_uno::shared::VtableFactory::flushCode(
     __builtin___clear_cache(
         reinterpret_cast<char *>(const_cast<unsigned char *>(begin)),
         reinterpret_cast<char *>(const_cast<unsigned char *>(end)));
+#else
+    __builtin___clear_cache(const_cast<unsigned char *>(begin), const_cast<unsigned char *>(end));
 #endif
 }
 
