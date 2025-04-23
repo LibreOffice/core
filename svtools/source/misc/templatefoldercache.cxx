@@ -126,6 +126,12 @@ namespace svt
         // attribute access
         OUString                 getURL( ) const                             { return m_aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ); }
         void                     setModDate( const util::DateTime& _rDate )  { m_aLastModified = _rDate; }
+        void                     setModDateNormalized( const util::DateTime& _rDate ) {
+            auto norm = _rDate;
+            norm.NanoSeconds
+                = (norm.NanoSeconds / tools::Time::nanoPerCenti) * tools::Time::nanoPerCenti;
+            setModDate(norm);
+        }
         const util::DateTime&    getModDate( ) const                         { return m_aLastModified; }
 
         TemplateFolderContent&   getSubContents()            { return m_aSubContents; }
@@ -580,9 +586,10 @@ namespace svt
                     ::rtl::Reference< TemplateContent > xChild = new TemplateContent( aSubContentURL );
 
                     // the modified date
-                    xChild->setModDate( xRow->getTimestamp( 2 ) );  // date modified
+                    xChild->setModDateNormalized( xRow->getTimestamp( 2 ) );  // date modified
                     if ( xRow->wasNull() )
-                        xChild->setModDate( xRow->getTimestamp( 3 ) );  // fallback: date created
+                        xChild->setModDateNormalized( xRow->getTimestamp( 3 ) );
+                            // fallback: date created
 
                     // push back this content
                     _rxRoot->push_back( xChild );
