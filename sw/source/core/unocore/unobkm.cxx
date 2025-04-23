@@ -166,10 +166,8 @@ rtl::Reference<SwXBookmark> SwXBookmark::CreateXBookmark(
             IDocumentMarkAccess::GetType(*pBookmark) == IDocumentMarkAccess::MarkType::ANNOTATIONMARK,
             "<SwXBookmark::GetObject(..)>"
             "SwXBookmark requested for non-bookmark mark and non-annotation mark.");
-        SwXBookmark *const pXBookmark =
-            pBookmark ? new SwXBookmark(&rDoc) : new SwXBookmark;
-        xBookmark.set(pXBookmark);
-        pXBookmark->m_pImpl->registerInMark(*pXBookmark, pBookmark);
+        xBookmark = pBookmark ? new SwXBookmark(&rDoc) : new SwXBookmark;
+        xBookmark->m_pImpl->registerInMark(*xBookmark, pBookmark);
     }
     return xBookmark;
 }
