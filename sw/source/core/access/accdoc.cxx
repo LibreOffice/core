@@ -449,7 +449,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
             + ";cursor-position-in-page-vertical:" + OUString::number(aCursorPagePos.getY()) + ";";
 
     SwContentFrame* pCurrFrame = pCursorShell->GetCurrFrame();
-    SwPageFrame* pCurrPage=static_cast<SwFrame*>(pCurrFrame)->FindPageFrame();
+    SwPageFrame* pCurrPage = pCurrFrame->FindPageFrame();
     sal_Int32 nLineNum = 0;
     SwTextFrame* pCurrTextFrame = nullptr;
     SwTextFrame* pTextFrame = static_cast<SwTextFrame*>(pCurrPage->ContainsContent());
