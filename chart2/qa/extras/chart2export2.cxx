@@ -1713,6 +1713,27 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDataTableImportExport)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf166249)
+{
+    loadFromFile(u"xlsx/tdf166249.xlsx");
+    // FIXME: validation error in OOXML export
+    skipValidation();
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // test color and alpha value of data label borders
+    assertXPath(pXmlDoc,
+                "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[1]/c:spPr/a:ln/"
+                "a:solidFill/a:srgbClr",
+                "val", u"156082");
+
+    assertXPath(pXmlDoc,
+                "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[1]/c:spPr/a:ln/"
+                "a:solidFill/a:srgbClr/a:alpha",
+                "val", u"128");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -294,7 +294,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testDataLabelFillColor)
     save(u"Calc Office Open XML"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:spPr/a:solidFill/a:srgbClr", "val", u"F79646");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:spPr/a:solidFill/a:srgbClr", "val", u"f79646");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTitleOverlayXLSX)
