@@ -483,11 +483,11 @@ namespace
         OUString aString = rErrorText;
 
         //dots are sometimes part of the spelled word but they are not necessarily part of the replacement
-        bool bDot = aString.endsWith(".");
+        bool bEndsWithDot = aString != "." && aString.endsWith(".");
 
         aString = rSuggestedReplacement;
 
-        if(bDot && (aString.isEmpty() || !aString.endsWith(".")))
+        if(bEndsWithDot && (aString.isEmpty() || !aString.endsWith(".")))
             aString += ".";
 
         return aString;
