@@ -3908,12 +3908,11 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
 
         if (nLabelFillColor != -1)
         {
-            pFS->startElement(FSNS(XML_a, XML_solidFill));
-
-            OString aStr = OString::number(nLabelFillColor, 16).toAsciiUpperCase();
-            pFS->singleElement(FSNS(XML_a, XML_srgbClr), XML_val, aStr);
-
-            pFS->endElement(FSNS(XML_a, XML_solidFill));
+            ::Color nColor(ColorTransparency, nLabelFillColor);
+            if (nColor.IsTransparent())
+                pChartExport->WriteSolidFill(nColor, nColor.GetAlpha());
+            else
+                pChartExport->WriteSolidFill(nColor);
         }
 
         if (nLabelBorderWidth > 0)
@@ -3923,12 +3922,11 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
 
             if (nLabelBorderColor != -1)
             {
-                pFS->startElement(FSNS(XML_a, XML_solidFill));
-
-                OString aStr = OString::number(nLabelBorderColor, 16).toAsciiUpperCase();
-                pFS->singleElement(FSNS(XML_a, XML_srgbClr), XML_val, aStr);
-
-                pFS->endElement(FSNS(XML_a, XML_solidFill));
+                ::Color nColor(ColorTransparency, nLabelBorderColor);
+                if (nColor.IsTransparent())
+                    pChartExport->WriteSolidFill(nColor, nColor.GetAlpha());
+                else
+                    pChartExport->WriteSolidFill(nColor);
             }
 
             pFS->endElement(FSNS(XML_a, XML_ln));
@@ -4140,39 +4138,16 @@ void ChartExport::exportDataLabels(
     xPropSet->getPropertyValue(u"ShowCustomLeaderLines"_ustr) >>= bShowLeaderLines;
     pFS->singleElement(FSNS(XML_c, XML_showLeaderLines), XML_val, ToPsz10(bShowLeaderLines));
 
-    // LeaderLine color, and width
-    util::Color aLineColor = -1;
-    xPropSet->getPropertyValue(u"LineColor"_ustr) >>= aLineColor;
-    // Line width
-    sal_Int32 nLineWidth = -1;
-    xPropSet->getPropertyValue(u"LineWidth"_ustr) >>= nLineWidth;
-
-    if (aLineColor > 0 || nLineWidth > 0)
+    // Export LeaderLine properties
+    // TODO: import all kind of LeaderLine props (not just LineColor/LineWidth)
+    if (bShowLeaderLines)
     {
         pFS->startElement(FSNS(XML_c, XML_leaderLines));
         pFS->startElement(FSNS(XML_c, XML_spPr));
-
-        if (nLineWidth > 0)
-            pFS->startElement(FSNS(XML_a, XML_ln), XML_w,
-                              OString::number(convertHmmToEmu(nLineWidth)));
-        else
-            pFS->startElement(FSNS(XML_a, XML_ln));
-
-        if (aLineColor != -1)
-        {
-            pFS->startElement(FSNS(XML_a, XML_solidFill));
-
-            OString aStr = I32SHEX(aLineColor);
-            pFS->singleElement(FSNS(XML_a, XML_srgbClr), XML_val, aStr);
-
-            pFS->endElement(FSNS(XML_a, XML_solidFill));
-        }
-
-        pFS->endElement(FSNS(XML_a, XML_ln));
+        WriteOutline(xPropSet, getModel());
         pFS->endElement(FSNS(XML_c, XML_spPr));
         pFS->endElement(FSNS(XML_c, XML_leaderLines));
     }
-
 
     // Export leader line
     if( eChartType != chart::TYPEID_PIE )
