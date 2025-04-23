@@ -1,0 +1,56 @@
+--- include/libxml/xpath.h	2025-05-13 16:42:31.000000000 +0200
++++ include/libxml/xpath.h	2025-06-03 14:10:14.539373167 +0200
+@@ -401,7 +401,6 @@
+  * Objects and Nodesets handling
+  */
+
+-XML_DEPRECATED
+ XMLPUBVAR double xmlXPathNAN;
+ XML_DEPRECATED
+ XMLPUBVAR double xmlXPathPINF;
+--- include/libxml/parser.h	2025-05-13 16:42:31.000000000 +0200
++++ include/libxml/parser.h	2025-06-03 14:00:37.833979131 +0200
+@@ -268,20 +268,20 @@
+     /* Number of current input streams */
+     int inputNr;
+     /* Max number of input streams */
+-    int inputMax XML_DEPRECATED_MEMBER;
++    int inputMax;
+     /* stack of inputs */
+     xmlParserInputPtr *inputTab;
+
+     /* Node analysis stack only used for DOM building */
+
+     /* Current parsed Node */
+-    xmlNodePtr node XML_DEPRECATED_MEMBER;
++    xmlNodePtr node;
+     /* Depth of the parsing stack */
+-    int nodeNr XML_DEPRECATED_MEMBER;
++    int nodeNr;
+     /* Max depth of the parsing stack */
+     int nodeMax XML_DEPRECATED_MEMBER;
+     /* array of nodes */
+-    xmlNodePtr *nodeTab XML_DEPRECATED_MEMBER;
++    xmlNodePtr *nodeTab;
+
+     /* Whether node info should be kept */
+     int record_info;
+@@ -374,7 +374,7 @@
+     /* document's own catalog */
+     void *catalogs XML_DEPRECATED_MEMBER;
+     /* run in recovery mode */
+-    int recovery XML_DEPRECATED_MEMBER;
++    int recovery;
+     /* unused */
+     int progressive XML_DEPRECATED_MEMBER;
+     /* dictionary for the parser */
+@@ -436,7 +436,7 @@
+     /*
+      * the complete error information for the last error.
+      */
+-    xmlError lastError XML_DEPRECATED_MEMBER;
++    xmlError lastError;
+     /* the parser mode */
+     xmlParserMode parseMode XML_DEPRECATED_MEMBER;
+     /* unused */
+
