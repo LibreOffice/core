@@ -173,10 +173,10 @@ public:
             GetBookmarks(TextFrameIndex const nPos);
     static void CalcHiddenRanges(const SwTextNode& rNode,
             MultiSelection& rHiddenMulti,
-            std::vector<std::pair<sw::mark::Bookmark const*, MarkKind>> * pBookmarks);
+            std::vector<std::pair<sw::mark::Bookmark*, MarkKind>> * pBookmarks);
     static void selectHiddenTextProperty(const SwTextNode& rNode,
             MultiSelection &rHiddenMulti,
-            std::vector<std::pair<sw::mark::Bookmark const*, MarkKind>> * pBookmarks);
+            std::vector<std::pair<sw::mark::Bookmark*, MarkKind>> * pBookmarks);
     static void selectRedLineDeleted(const SwTextNode& rNode, MultiSelection &rHiddenMulti, bool bSelect=true);
 
     // "high" level operations, nPos refers to string position

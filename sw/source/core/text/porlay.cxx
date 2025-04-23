@@ -867,7 +867,7 @@ SwFontScript SwScriptInfo::WhichFont(sal_Int32 nIdx, OUString const& rText)
     return lcl_ScriptToFont(nScript);
 }
 
-static Color getBookmarkColor(const SwTextNode& rNode, const sw::mark::Bookmark* pBookmark)
+static Color getBookmarkColor(const SwTextNode& rNode, sw::mark::Bookmark* pBookmark)
 {
     // search custom color in metadata, otherwise use COL_TRANSPARENT;
     Color c = COL_TRANSPARENT;
@@ -875,8 +875,7 @@ static Color getBookmarkColor(const SwTextNode& rNode, const sw::mark::Bookmark*
     try
     {
         SwDoc& rDoc = const_cast<SwDoc&>(rNode.GetDoc());
-        const rtl::Reference< SwXBookmark > xRef = SwXBookmark::CreateXBookmark(rDoc,
-                const_cast<sw::mark::MarkBase*>(static_cast<const sw::mark::MarkBase*>(pBookmark)));
+        const rtl::Reference< SwXBookmark > xRef = SwXBookmark::CreateXBookmark(rDoc, pBookmark);
         if (const SwDocShell* pShell = rDoc.GetDocShell())
         {
             rtl::Reference<SwXTextDocument> xModel = pShell->GetBaseModel();
@@ -908,7 +907,7 @@ static Color getBookmarkColor(const SwTextNode& rNode, const sw::mark::Bookmark*
     return c;
 }
 
-static OUString getBookmarkType(const SwTextNode& rNode, const sw::mark::Bookmark* pBookmark)
+static OUString getBookmarkType(const SwTextNode& rNode, sw::mark::Bookmark* pBookmark)
 {
     // search ODF_PREFIX in metadata, otherwise use empty string;
     OUString sRet;
@@ -916,8 +915,7 @@ static OUString getBookmarkType(const SwTextNode& rNode, const sw::mark::Bookmar
     try
     {
         SwDoc& rDoc = const_cast<SwDoc&>(rNode.GetDoc());
-        const rtl::Reference< SwXBookmark > xRef = SwXBookmark::CreateXBookmark(rDoc,
-                const_cast<sw::mark::MarkBase*>(static_cast<const sw::mark::MarkBase*>(pBookmark)));
+        const rtl::Reference< SwXBookmark > xRef = SwXBookmark::CreateXBookmark(rDoc, pBookmark);
         if (const SwDocShell* pShell = rDoc.GetDocShell())
         {
             rtl::Reference<SwXTextDocument> xModel = pShell->GetBaseModel();
@@ -956,7 +954,7 @@ static void InitBookmarks(
     std::vector<sw::Extent>::const_iterator iter,
     std::vector<sw::Extent>::const_iterator const end,
     TextFrameIndex nOffset,
-    std::vector<std::pair<sw::mark::Bookmark const*, SwScriptInfo::MarkKind>> & rBookmarks,
+    std::vector<std::pair<sw::mark::Bookmark*, SwScriptInfo::MarkKind>> & rBookmarks,
     std::vector<std::tuple<TextFrameIndex, SwScriptInfo::MarkKind, Color, ReferenceMarkerName, OUString>> & o_rBookmarks)
 {
     SwTextNode const*const pNode(iter->pNode);
@@ -1172,7 +1170,7 @@ void SwScriptInfo::InitScriptInfoHidden(const SwTextNode& rNode,
             pNode = iter->pNode;
             Range aRange( 0, pNode->Len() > 0 ? pNode->Len() - 1 : 0 );
             MultiSelection aHiddenMulti( aRange );
-            std::vector<std::pair<sw::mark::Bookmark const*, MarkKind>> bookmarks;
+            std::vector<std::pair<sw::mark::Bookmark*, MarkKind>> bookmarks;
             CalcHiddenRanges(*pNode, aHiddenMulti, &bookmarks);
 
             InitBookmarks(oPrevIter, iter, pMerged->extents.end(), nOffset, bookmarks, m_Bookmarks);
@@ -1248,7 +1246,7 @@ void SwScriptInfo::InitScriptInfoHidden(const SwTextNode& rNode,
     {
         Range aRange( 0, !rText.isEmpty() ? rText.getLength() - 1 : 0 );
         MultiSelection aHiddenMulti( aRange );
-        std::vector<std::pair<sw::mark::Bookmark const*, MarkKind>> bookmarks;
+        std::vector<std::pair<sw::mark::Bookmark*, MarkKind>> bookmarks;
         CalcHiddenRanges(rNode, aHiddenMulti, &bookmarks);
 
         for (auto const& it : bookmarks)
@@ -2274,7 +2272,7 @@ SwTwips SwTextFrame::GetLowerMarginForFlyIntersect() const
 
 void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode,
     MultiSelection & rHiddenMulti,
-    std::vector<std::pair<sw::mark::Bookmark const*, MarkKind>> *const pBookmarks)
+    std::vector<std::pair<sw::mark::Bookmark*, MarkKind>> *const pBookmarks)
 {
     assert((rNode.GetText().isEmpty() && rHiddenMulti.GetTotalRange().Len() == 1)
         || (rNode.GetText().getLength() == rHiddenMulti.GetTotalRange().Len()));
@@ -2310,8 +2308,8 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode,
     {
         if (!pIndex->GetOwner() || pIndex->GetOwner()->GetOwnerType() != SwContentIndexOwnerType::Mark)
             continue;
-        auto const pMark = static_cast<sw::mark::MarkBase const*>(pIndex->GetOwner());
-        const sw::mark::Bookmark* pBookmark = dynamic_cast<const sw::mark::Bookmark*>(pMark);
+        auto pMark = static_cast<sw::mark::MarkBase*>(pIndex->GetOwner());
+        sw::mark::Bookmark* pBookmark = dynamic_cast<sw::mark::Bookmark*>(pMark);
         if (pBookmarks && pBookmark)
         {
             if (!pBookmark->IsExpanded())
@@ -2384,7 +2382,7 @@ void SwScriptInfo::selectRedLineDeleted(const SwTextNode& rNode, MultiSelection 
 // Returns a MultiSection indicating the hidden ranges.
 void SwScriptInfo::CalcHiddenRanges( const SwTextNode& rNode,
     MultiSelection & rHiddenMulti,
-    std::vector<std::pair<sw::mark::Bookmark const*, MarkKind>> *const pBookmarks)
+    std::vector<std::pair<sw::mark::Bookmark*, MarkKind>> *const pBookmarks)
 {
     selectHiddenTextProperty(rNode, rHiddenMulti, pBookmarks);
 
