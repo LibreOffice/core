@@ -859,12 +859,6 @@ OUString SAL_CALL SwAccessibleParagraph::getImplementationName()
     return sImplementationName;
 }
 
-sal_Bool SAL_CALL SwAccessibleParagraph::supportsService(
-        const OUString& sTestServiceName)
-{
-    return cppu::supportsService(this, sTestServiceName);
-}
-
 uno::Sequence< OUString > SAL_CALL SwAccessibleParagraph::getSupportedServiceNames()
 {
     return { sServiceName, sAccessibleServiceName };
