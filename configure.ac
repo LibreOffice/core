@@ -703,13 +703,13 @@ if test "$build_os" = "cygwin" -o -n "$WSL_ONLY_AS_HELPER"; then
 else
     case "$build_os" in
         darwin*)
-            # convenience check for a custom pkgconf used by meson - needs to be a version that uses macOS
-            # style paths. Needs to be checked before the configure-switches that use PKG_CHECK_MODULES as
+            # convenience check for LODE's custom pkgconf used by meson
+            # Needs to be checked before the configure-switches that use PKG_CHECK_MODULES as
             # that would already set the PKG_CONFIG var and then bypass/skip this autoselection
             AC_PATH_PROG(PKG_CONFIG,pkgconf,,[$PATH:$LODE_HOME/opt/bin])
             if test -z "$PKG_CONFIG"; then
                 AC_MSG_WARN([pkgconf not found - pkgconf is required to build harfbuzz])
-                add_warning "please add PKG_CONFIG=/path/to/pkgconf to autogen.input or put it in PATH, a macOS version of pkgconf is required to build harfbuzz"
+                add_warning "please add PKG_CONFIG=/path/to/pkgconf to autogen.input or put it in PATH, pkgconf is required to build harfbuzz"
             fi
             ;;
     esac
