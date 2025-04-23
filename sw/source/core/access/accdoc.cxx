@@ -430,192 +430,192 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         return anyAttribute;
 
     SwFEShell* pFEShell = dynamic_cast<SwFEShell*>(pCursorShell);
-    if( pFEShell )
+    if (!pFEShell)
+        return anyAttribute;
+
+    OUString sDisplay;
+    sal_uInt16 nPage, nLogPage;
+    pFEShell->GetPageNumber(-1,true,nPage,nLogPage,sDisplay);
+
+    OUString sValue = "page-name:" + sDisplay +
+        ";page-number:" +
+        OUString::number( nPage ) +
+        ";total-pages:" +
+        OUString::number( pCursorShell->GetPageCnt() ) + ";";
+
+    // cursor position relative to the page
+    Point aCursorPagePos = pFEShell->GetCursorPagePos();
+    sValue += "cursor-position-in-page-horizontal:" + OUString::number(aCursorPagePos.getX())
+            + ";cursor-position-in-page-vertical:" + OUString::number(aCursorPagePos.getY()) + ";";
+
+    SwContentFrame* pCurrFrame = pCursorShell->GetCurrFrame();
+    SwPageFrame* pCurrPage=static_cast<SwFrame*>(pCurrFrame)->FindPageFrame();
+    sal_Int32 nLineNum = 0;
+    SwTextFrame* pTextFrame = nullptr;
+    SwTextFrame* pCurrTextFrame = nullptr;
+    pTextFrame = static_cast< SwTextFrame* >(pCurrPage->ContainsContent());
+    if (pCurrFrame->IsInFly())//such as, graphic,chart
     {
-        OUString sDisplay;
-        sal_uInt16 nPage, nLogPage;
-        pFEShell->GetPageNumber(-1,true,nPage,nLogPage,sDisplay);
-
-        OUString sValue = "page-name:" + sDisplay +
-            ";page-number:" +
-            OUString::number( nPage ) +
-            ";total-pages:" +
-            OUString::number( pCursorShell->GetPageCnt() ) + ";";
-
-        // cursor position relative to the page
-        Point aCursorPagePos = pFEShell->GetCursorPagePos();
-        sValue += "cursor-position-in-page-horizontal:" + OUString::number(aCursorPagePos.getX())
-                + ";cursor-position-in-page-vertical:" + OUString::number(aCursorPagePos.getY()) + ";";
-
-        SwContentFrame* pCurrFrame = pCursorShell->GetCurrFrame();
-        SwPageFrame* pCurrPage=static_cast<SwFrame*>(pCurrFrame)->FindPageFrame();
-        sal_Int32 nLineNum = 0;
-        SwTextFrame* pTextFrame = nullptr;
-        SwTextFrame* pCurrTextFrame = nullptr;
-        pTextFrame = static_cast< SwTextFrame* >(pCurrPage->ContainsContent());
-        if (pCurrFrame->IsInFly())//such as, graphic,chart
+        SwFlyFrame *pFlyFrame = pCurrFrame->FindFlyFrame();
+        const SwFormatAnchor& rAnchor = pFlyFrame->GetFormat()->GetAnchor();
+        RndStdIds eAnchorId = rAnchor.GetAnchorId();
+        if(eAnchorId == RndStdIds::FLY_AS_CHAR)
         {
-            SwFlyFrame *pFlyFrame = pCurrFrame->FindFlyFrame();
-            const SwFormatAnchor& rAnchor = pFlyFrame->GetFormat()->GetAnchor();
-            RndStdIds eAnchorId = rAnchor.GetAnchorId();
-            if(eAnchorId == RndStdIds::FLY_AS_CHAR)
-            {
-                const SwFrame *pSwFrame = pFlyFrame->GetAnchorFrame();
-                if(pSwFrame->IsTextFrame())
-                    pCurrTextFrame = const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pSwFrame));
-            }
+            const SwFrame *pSwFrame = pFlyFrame->GetAnchorFrame();
+            if(pSwFrame->IsTextFrame())
+                pCurrTextFrame = const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pSwFrame));
         }
-        else
+    }
+    else
+    {
+        assert(dynamic_cast<SwTextFrame*>(pCurrFrame));
+        pCurrTextFrame = static_cast<SwTextFrame* >(pCurrFrame);
+    }
+    //check whether the text frame where the Graph/OLE/Frame anchored is in the Header/Footer
+    SwFrame* pFrame = pCurrTextFrame;
+    while ( pFrame && !pFrame->IsHeaderFrame() && !pFrame->IsFooterFrame() )
+        pFrame = pFrame->GetUpper();
+    if ( pFrame )
+        pCurrTextFrame = nullptr;
+    //check shape
+    if(pCursorShell->Imp()->GetDrawView())
+    {
+        const SdrMarkList &rMrkList = pCursorShell->Imp()->GetDrawView()->GetMarkedObjectList();
+        for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
-            assert(dynamic_cast<SwTextFrame*>(pCurrFrame));
-            pCurrTextFrame = static_cast<SwTextFrame* >(pCurrFrame);
+            SdrObject *pObj = rMrkList.GetMark(i)->GetMarkedSdrObj();
+            SwFrameFormat* pFormat = static_cast<SwDrawContact*>(pObj->GetUserCall())->GetFormat();
+            const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
+            if( RndStdIds::FLY_AS_CHAR != rAnchor.GetAnchorId() )
+                pCurrTextFrame = nullptr;
         }
-        //check whether the text frame where the Graph/OLE/Frame anchored is in the Header/Footer
-        SwFrame* pFrame = pCurrTextFrame;
-        while ( pFrame && !pFrame->IsHeaderFrame() && !pFrame->IsFooterFrame() )
-            pFrame = pFrame->GetUpper();
-        if ( pFrame )
-            pCurrTextFrame = nullptr;
-        //check shape
-        if(pCursorShell->Imp()->GetDrawView())
+    }
+    //calculate line number
+    if (pCurrTextFrame && pTextFrame)
+    {
+        if (!(pCurrTextFrame->IsInTab() || pCurrTextFrame->IsInFootnote()))
         {
-            const SdrMarkList &rMrkList = pCursorShell->Imp()->GetDrawView()->GetMarkedObjectList();
-            for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
+            while( pTextFrame && pTextFrame != pCurrTextFrame )
             {
-                SdrObject *pObj = rMrkList.GetMark(i)->GetMarkedSdrObj();
-                SwFrameFormat* pFormat = static_cast<SwDrawContact*>(pObj->GetUserCall())->GetFormat();
-                const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-                if( RndStdIds::FLY_AS_CHAR != rAnchor.GetAnchorId() )
-                    pCurrTextFrame = nullptr;
-            }
-        }
-        //calculate line number
-        if (pCurrTextFrame && pTextFrame)
-        {
-            if (!(pCurrTextFrame->IsInTab() || pCurrTextFrame->IsInFootnote()))
-            {
-                while( pTextFrame && pTextFrame != pCurrTextFrame )
+                //check header/footer
+                pFrame = pTextFrame;
+                while ( pFrame && !pFrame->IsHeaderFrame() && !pFrame->IsFooterFrame() )
+                    pFrame = pFrame->GetUpper();
+                if ( pFrame )
                 {
-                    //check header/footer
-                    pFrame = pTextFrame;
-                    while ( pFrame && !pFrame->IsHeaderFrame() && !pFrame->IsFooterFrame() )
-                        pFrame = pFrame->GetUpper();
-                    if ( pFrame )
-                    {
-                        pTextFrame = static_cast< SwTextFrame*>(pTextFrame->GetNextContentFrame());
-                        continue;
-                    }
-                    if (!(pTextFrame->IsInTab() || pTextFrame->IsInFootnote() || pTextFrame->IsInFly()))
-                        nLineNum += pTextFrame->GetThisLines();
-                    pTextFrame = static_cast< SwTextFrame* >(pTextFrame ->GetNextContentFrame());
+                    pTextFrame = static_cast< SwTextFrame*>(pTextFrame->GetNextContentFrame());
+                    continue;
                 }
-                SwPaM* pCaret = pCursorShell->GetCursor();
-                if (!pCurrTextFrame->IsEmpty() && pCaret)
+                if (!(pTextFrame->IsInTab() || pTextFrame->IsInFootnote() || pTextFrame->IsInFly()))
+                    nLineNum += pTextFrame->GetThisLines();
+                pTextFrame = static_cast< SwTextFrame* >(pTextFrame ->GetNextContentFrame());
+            }
+            SwPaM* pCaret = pCursorShell->GetCursor();
+            if (!pCurrTextFrame->IsEmpty() && pCaret)
+            {
+                assert(pCurrTextFrame->IsTextFrame());
+                const SwPosition* pPoint = nullptr;
+                if (pCurrTextFrame->IsInFly())
                 {
-                    assert(pCurrTextFrame->IsTextFrame());
-                    const SwPosition* pPoint = nullptr;
-                    if (pCurrTextFrame->IsInFly())
-                    {
-                        SwFlyFrame *pFlyFrame = pCurrTextFrame->FindFlyFrame();
-                        const SwFormatAnchor& rAnchor = pFlyFrame->GetFormat()->GetAnchor();
-                        pPoint = rAnchor.GetContentAnchor();
-                        SwContentNode *const pNode(pPoint->GetNode().GetContentNode());
-                        pCurrTextFrame = pNode
-                            ? static_cast<SwTextFrame*>(pNode->getLayoutFrame(
-                                        pCurrTextFrame->getRootFrame(), pPoint))
-                            : nullptr;
-                    }
-                    else
-                        pPoint = pCaret->GetPoint();
-                    if (pCurrTextFrame)
-                    {
-                        TextFrameIndex const nActPos(pCurrTextFrame->MapModelToViewPos(*pPoint));
-                        nLineNum += pCurrTextFrame->GetLineCount( nActPos );
-                    }
+                    SwFlyFrame *pFlyFrame = pCurrTextFrame->FindFlyFrame();
+                    const SwFormatAnchor& rAnchor = pFlyFrame->GetFormat()->GetAnchor();
+                    pPoint = rAnchor.GetContentAnchor();
+                    SwContentNode *const pNode(pPoint->GetNode().GetContentNode());
+                    pCurrTextFrame = pNode
+                        ? static_cast<SwTextFrame*>(pNode->getLayoutFrame(
+                                    pCurrTextFrame->getRootFrame(), pPoint))
+                        : nullptr;
                 }
                 else
-                    ++nLineNum;
+                    pPoint = pCaret->GetPoint();
+                if (pCurrTextFrame)
+                {
+                    TextFrameIndex const nActPos(pCurrTextFrame->MapModelToViewPos(*pPoint));
+                    nLineNum += pCurrTextFrame->GetLineCount( nActPos );
+                }
             }
+            else
+                ++nLineNum;
+        }
+    }
+
+    sValue += "line-number:" + OUString::number( nLineNum ) + ";";
+
+    SwFrame* pCurrCol=static_cast<SwFrame*>(pCurrFrame)->FindColFrame();
+
+    sValue += "column-number:";
+
+    int nCurrCol = 1;
+    if(pCurrCol!=nullptr)
+    {
+        //SwLayoutFrame* pParent = pCurrCol->GetUpper();
+        SwFrame* pCurrPageCol=static_cast<SwFrame*>(pCurrFrame)->FindColFrame();
+        while(pCurrPageCol && pCurrPageCol->GetUpper() && pCurrPageCol->GetUpper()->IsPageFrame())
+        {
+            pCurrPageCol = pCurrPageCol->GetUpper();
         }
 
-        sValue += "line-number:" + OUString::number( nLineNum ) + ";";
+        SwLayoutFrame* pParent = pCurrPageCol->GetUpper();
 
-        SwFrame* pCurrCol=static_cast<SwFrame*>(pCurrFrame)->FindColFrame();
+        if(pParent!=nullptr)
+        {
+            SwFrame* pCol = pParent->Lower();
+            while(pCol&&(pCol!=pCurrPageCol))
+            {
+                pCol = pCol->GetNext();
+                ++nCurrCol;
+            }
+        }
+    }
+    sValue += OUString::number( nCurrCol ) + ";";
 
-        sValue += "column-number:";
+    const SwFormatCol &rFormatCol=pCurrPage->GetAttrSet()->GetCol();
+    sal_uInt16 nColCount=rFormatCol.GetNumCols();
+    nColCount = nColCount>0?nColCount:1;
+    sValue += "total-columns:" + OUString::number( nColCount ) + ";";
 
-        int nCurrCol = 1;
+    SwSectionFrame* pCurrSctFrame=static_cast<SwFrame*>(pCurrFrame)->FindSctFrame();
+    if(pCurrSctFrame!=nullptr && pCurrSctFrame->GetSection()!=nullptr )
+    {
+        OUString sectionName = pCurrSctFrame->GetSection()->GetSectionName().toString();
+
+        sectionName = sectionName.replaceFirst( "\\" , "\\\\" );
+        sectionName = sectionName.replaceFirst( "=" , "\\=" );
+        sectionName = sectionName.replaceFirst( ";" , "\\;" );
+        sectionName = sectionName.replaceFirst( "," , "\\," );
+        sectionName = sectionName.replaceFirst( ":" , "\\:" );
+
+        sValue += "section-name:" + sectionName + ";";
+
+        //section-columns-number
+
+        nCurrCol = 1;
+
         if(pCurrCol!=nullptr)
         {
-            //SwLayoutFrame* pParent = pCurrCol->GetUpper();
-            SwFrame* pCurrPageCol=static_cast<SwFrame*>(pCurrFrame)->FindColFrame();
-            while(pCurrPageCol && pCurrPageCol->GetUpper() && pCurrPageCol->GetUpper()->IsPageFrame())
-            {
-                pCurrPageCol = pCurrPageCol->GetUpper();
-            }
-
-            SwLayoutFrame* pParent = pCurrPageCol->GetUpper();
-
+            SwLayoutFrame* pParent = pCurrCol->GetUpper();
             if(pParent!=nullptr)
             {
                 SwFrame* pCol = pParent->Lower();
-                while(pCol&&(pCol!=pCurrPageCol))
+                while(pCol&&(pCol!=pCurrCol))
                 {
                     pCol = pCol->GetNext();
-                    ++nCurrCol;
+                    nCurrCol +=1;
                 }
             }
         }
-        sValue += OUString::number( nCurrCol ) + ";";
+        sValue += "section-columns-number:" +
+            OUString::number( nCurrCol ) + ";";
 
-        const SwFormatCol &rFormatCol=pCurrPage->GetAttrSet()->GetCol();
-        sal_uInt16 nColCount=rFormatCol.GetNumCols();
-        nColCount = nColCount>0?nColCount:1;
-        sValue += "total-columns:" + OUString::number( nColCount ) + ";";
-
-        SwSectionFrame* pCurrSctFrame=static_cast<SwFrame*>(pCurrFrame)->FindSctFrame();
-        if(pCurrSctFrame!=nullptr && pCurrSctFrame->GetSection()!=nullptr )
-        {
-            OUString sectionName = pCurrSctFrame->GetSection()->GetSectionName().toString();
-
-            sectionName = sectionName.replaceFirst( "\\" , "\\\\" );
-            sectionName = sectionName.replaceFirst( "=" , "\\=" );
-            sectionName = sectionName.replaceFirst( ";" , "\\;" );
-            sectionName = sectionName.replaceFirst( "," , "\\," );
-            sectionName = sectionName.replaceFirst( ":" , "\\:" );
-
-            sValue += "section-name:" + sectionName + ";";
-
-            //section-columns-number
-
-            nCurrCol = 1;
-
-            if(pCurrCol!=nullptr)
-            {
-                SwLayoutFrame* pParent = pCurrCol->GetUpper();
-                if(pParent!=nullptr)
-                {
-                    SwFrame* pCol = pParent->Lower();
-                    while(pCol&&(pCol!=pCurrCol))
-                    {
-                        pCol = pCol->GetNext();
-                        nCurrCol +=1;
-                    }
-                }
-            }
-            sValue += "section-columns-number:" +
-                OUString::number( nCurrCol ) + ";";
-
-            //section-total-columns
-            const SwFormatCol &rFormatSctCol=pCurrSctFrame->GetAttrSet()->GetCol();
-            sal_uInt16 nSctColCount=rFormatSctCol.GetNumCols();
-            nSctColCount = nSctColCount>0?nSctColCount:1;
-            sValue += "section-total-columns:" +
-                OUString::number( nSctColCount ) + ";";
-        }
-
-        anyAttribute <<= sValue;
+        //section-total-columns
+        const SwFormatCol &rFormatSctCol=pCurrSctFrame->GetAttrSet()->GetCol();
+        sal_uInt16 nSctColCount=rFormatSctCol.GetNumCols();
+        nSctColCount = nSctColCount>0?nSctColCount:1;
+        sValue += "section-total-columns:" +
+            OUString::number( nSctColCount ) + ";";
     }
+
+    anyAttribute <<= sValue;
     return anyAttribute;
 }
 
