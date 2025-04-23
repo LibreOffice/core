@@ -923,8 +923,7 @@ QHash<QAccessible::Attribute, QVariant> QtAccessibleWidget::attributes() const
     if (!xAttributes.is())
         return {};
 
-    OUString sAttrs;
-    xAttributes->getExtendedAttributes() >>= sAttrs;
+    const OUString sAttrs = xAttributes->getExtendedAttributes();
 
     QHash<QAccessible::Attribute, QVariant> aQtAttrs;
     sal_Int32 nIndex = 0;

@@ -112,7 +112,7 @@ public:
     virtual OUString SAL_CALL
         getAccessibleName() override;
 
-    virtual css::uno::Any SAL_CALL getExtendedAttributes() override ;
+    virtual OUString SAL_CALL getExtendedAttributes() override ;
     ///=====  XAccessibleSelection  ===========================================
 
     virtual void SAL_CALL

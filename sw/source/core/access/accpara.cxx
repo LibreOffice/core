@@ -3370,7 +3370,7 @@ bool SwAccessibleParagraph::IsBlockQuote()
     return false;
 }
 
-uno::Any SAL_CALL SwAccessibleParagraph::getExtendedAttributes()
+OUString SAL_CALL SwAccessibleParagraph::getExtendedAttributes()
 {
     SolarMutexGuard g;
 
@@ -3383,7 +3383,7 @@ uno::Any SAL_CALL SwAccessibleParagraph::getExtendedAttributes()
         strHeading = "level:" + OUString::number(m_nHeadingLevel) + ";";
     }
 
-    return uno::Any(strHeading);
+    return strHeading;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -66,7 +66,7 @@ public:
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XAccessibleExtendedAttributes
-        virtual css::uno::Any SAL_CALL getExtendedAttributes() override ;
+    virtual OUString SAL_CALL getExtendedAttributes() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

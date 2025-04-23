@@ -134,7 +134,7 @@ public:
     virtual void SAL_CALL deselectAccessibleChild(
         sal_Int64 nChildIndex ) override;
 
-    virtual css::uno::Any SAL_CALL getExtendedAttributes() override;
+    virtual OUString SAL_CALL getExtendedAttributes() override;
 
     // thread safe C++ interface
 

@@ -342,7 +342,7 @@ public:
     virtual sal_Bool SAL_CALL removeSelection( sal_Int32 selectionIndex ) override;
     virtual sal_Int32 SAL_CALL  addSelection( sal_Int32 selectionIndex, sal_Int32 startOffset, sal_Int32 endOffset) override;
     // XAccessibleExtendedAttributes
-    virtual css::uno::Any SAL_CALL getExtendedAttributes() override ;
+    virtual OUString SAL_CALL getExtendedAttributes() override;
     sal_Int32 GetRealHeadingLevel();
     bool IsBlockQuote();
 

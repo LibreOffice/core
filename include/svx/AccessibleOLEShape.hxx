@@ -89,7 +89,7 @@ public:
     virtual css::uno::Sequence< css::uno::Type> SAL_CALL
         getTypes() override;
 // ====== XAccessibleExtendedAttributes =====================================
-    virtual css::uno::Any SAL_CALL getExtendedAttributes() override ;
+    virtual OUString SAL_CALL getExtendedAttributes() override;
 protected:
     /// Create a name string that contains the accessible name.
     virtual OUString

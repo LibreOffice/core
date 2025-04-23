@@ -484,7 +484,7 @@ static OUString ReplaceFourChar(const OUString& oldOUString)
         .replaceAll(u":", u"\\:");
 }
 
-uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()
+OUString SAL_CALL ScAccessibleCell::getExtendedAttributes()
 {
     SolarMutexGuard aGuard;
 
@@ -522,7 +522,7 @@ uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()
         sAttributes += strFor ;
     }
 
-    return uno::Any(sAttributes);
+    return sAttributes;
 }
 
 // cell has its own ParaIndent property, so when calling character attributes on cell, the ParaIndent should replace the ParaLeftMargin if its value is not zero.

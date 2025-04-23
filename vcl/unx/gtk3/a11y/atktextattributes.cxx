@@ -1223,9 +1223,7 @@ attribute_set_new_from_extended_attributes(
 
     // extended attributes is a string of colon-separated pairs of property and value,
     // with pairs separated by semicolons. Example: "heading-level:2;weight:bold;"
-    uno::Any anyVal = rExtendedAttributes->getExtendedAttributes();
-    OUString sExtendedAttrs;
-    anyVal >>= sExtendedAttrs;
+    const OUString sExtendedAttrs = rExtendedAttributes->getExtendedAttributes();
     sal_Int32 nIndex = 0;
     do
     {

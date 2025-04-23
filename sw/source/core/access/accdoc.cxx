@@ -416,22 +416,21 @@ void SwAccessibleDocument::deselectAccessibleChild(
     maSelectionHelper.deselectAccessibleChild( nChildIndex );
 }
 
-uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
+OUString SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 {
     SolarMutexGuard g;
 
-    uno::Any anyAttribute;
     SwDoc* pDoc = GetMap() ? GetShell().GetDoc() : nullptr;
 
     if (!pDoc)
-        return anyAttribute;
+        return OUString();
     SwCursorShell* pCursorShell = GetCursorShell();
     if( !pCursorShell )
-        return anyAttribute;
+        return OUString();
 
     SwFEShell* pFEShell = dynamic_cast<SwFEShell*>(pCursorShell);
     if (!pFEShell)
-        return anyAttribute;
+        return OUString();
 
     OUString sDisplay;
     sal_uInt16 nPage, nLogPage;
@@ -614,8 +613,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
             OUString::number( nSctColCount ) + ";";
     }
 
-    anyAttribute <<= sValue;
-    return anyAttribute;
+    return sValue;
 }
 
 sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()

@@ -767,18 +767,18 @@ void SAL_CALL AccessibleShape::deselectAccessibleChild( sal_Int64 )
 }
 
 // XAccessibleExtendedAttributes
-uno::Any SAL_CALL AccessibleShape::getExtendedAttributes()
+OUString SAL_CALL AccessibleShape::getExtendedAttributes()
 {
-    uno::Any strRet;
     OUString style;
-    if( getAccessibleRole() != AccessibleRole::SHAPE ) return strRet;
+    if (getAccessibleRole() != AccessibleRole::SHAPE)
+        return OUString();
+
     if( m_pShape )
     {
         style = "style:" + GetStyle();
     }
     style += ";";
-    strRet <<= style;
-    return strRet;
+    return style;
 }
 
 // XServiceInfo

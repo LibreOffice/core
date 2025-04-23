@@ -139,7 +139,7 @@ public:
         sal_Int64 nSelectedChildIndex ) override;
 
     // ====== XAccessibleExtendedAttributes =====================================
-    virtual css::uno::Any SAL_CALL getExtendedAttributes() override ;
+    virtual OUString SAL_CALL getExtendedAttributes() override;
     /// Return this object's role.
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
     //=====  XAccessibleGroupPosition  =========================================

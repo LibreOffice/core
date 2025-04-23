@@ -316,11 +316,10 @@ uno::Any SwAccessibleCell::getMinimumIncrement(  )
     return uno::Any();
 }
 
-css::uno::Any SAL_CALL SwAccessibleCell::getExtendedAttributes()
+OUString SAL_CALL SwAccessibleCell::getExtendedAttributes()
 {
     SolarMutexGuard g;
 
-    css::uno::Any strRet;
     SwFrameFormat *pFrameFormat = GetTableBoxFormat();
     assert(pFrameFormat);
 
@@ -332,10 +331,7 @@ css::uno::Any SAL_CALL SwAccessibleCell::getExtendedAttributes()
                               .replaceAll(u"=", u"\\=")
                               .replaceAll(u",", u"\\,")
                               .replaceAll(u":", u"\\:");
-    OUString strFor = "Formula:" + strFormula + ";";
-    strRet <<= strFor;
-
-    return strRet;
+    return "Formula:" + strFormula + ";";
 }
 
 sal_Int32 SAL_CALL SwAccessibleCell::getBackground()

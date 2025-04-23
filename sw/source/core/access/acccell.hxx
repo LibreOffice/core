@@ -85,7 +85,7 @@ public:
     virtual void InvalidatePosOrSize( const SwRect& rFrame ) override;
 
     // XAccessibleExtendedAttributes
-    css::uno::Any SAL_CALL getExtendedAttributes() override ;
+    OUString SAL_CALL getExtendedAttributes() override;
 private:
     SwFrameFormat* GetTableBoxFormat() const;
 

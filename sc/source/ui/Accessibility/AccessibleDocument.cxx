@@ -2135,23 +2135,20 @@ ScAddress   ScAccessibleDocument::GetCurCellAddress() const
     return mpViewShell ? mpViewShell->GetViewData().GetCurPos() : ScAddress();
 }
 
-uno::Any SAL_CALL ScAccessibleDocument::getExtendedAttributes()
+OUString SAL_CALL ScAccessibleDocument::getExtendedAttributes()
 {
     SolarMutexGuard g;
-
-    uno::Any anyAttribute;
 
     sal_uInt16 sheetIndex;
     OUString sSheetName;
     sheetIndex = getVisibleTable();
     if(GetDocument()==nullptr)
-        return anyAttribute;
+        return OUString();
     GetDocument()->GetName(sheetIndex,sSheetName);
     OUString sValue = "page-name:" + sSheetName +
         ";page-number:" + OUString::number(sheetIndex+1) +
         ";total-pages:" + OUString::number(GetDocument()->GetTableCount()) + ";";
-    anyAttribute <<= sValue;
-    return anyAttribute;
+    return sValue;
 }
 
 sal_Int32 SAL_CALL ScAccessibleDocument::getForeground(  )

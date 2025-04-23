@@ -206,7 +206,7 @@ public:
     virtual void SAL_CALL focusGained (const css::awt::FocusEvent& e) override;
     virtual void SAL_CALL focusLost (const css::awt::FocusEvent& e) override;
     //----------------------------xAttribute----------------------------
-    virtual css::uno::Any SAL_CALL getExtendedAttributes() override;
+    virtual OUString SAL_CALL getExtendedAttributes() override;
      ::sd::ViewShell* mpViewShell;
 private:
 

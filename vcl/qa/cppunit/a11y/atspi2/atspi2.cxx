@@ -325,9 +325,7 @@ void Atspi2TestTree::compareObjects(const uno::Reference<accessibility::XAccessi
         = uno::Reference<accessibility::XAccessibleExtendedAttributes>(xLOContext, uno::UNO_QUERY))
     {
         // see atktextattributes.cxx:attribute_set_new_from_extended_attributes
-        const uno::Any anyVal = xLOAttrs->getExtendedAttributes();
-        OUString sExtendedAttrs;
-        anyVal >>= sExtendedAttrs;
+        const OUString sExtendedAttrs = xLOAttrs->getExtendedAttributes();
         sal_Int32 nIndex = 0;
 
         const auto atspiAttrs = pAtspiAccessible.getAttributes();

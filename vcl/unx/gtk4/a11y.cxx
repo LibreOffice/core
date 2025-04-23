@@ -374,8 +374,7 @@ applyObjectAttributes(GtkAccessible* pGtkAccessible,
     if (!xAttributes.is())
         return;
 
-    OUString sAttrs;
-    xAttributes->getExtendedAttributes() >>= sAttrs;
+    const OUString sAttrs = xAttributes->getExtendedAttributes();
 
     sal_Int32 nIndex = 0;
     do

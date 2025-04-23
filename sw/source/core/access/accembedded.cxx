@@ -88,11 +88,10 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleEmbeddedObject::getImplementation
 }
 
 // XAccessibleExtendedAttributes
-css::uno::Any SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
+OUString SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
 {
     SolarMutexGuard g;
 
-    css::uno::Any strRet;
     OUString style;
     SwFlyFrame* pFFrame = getFlyFrame();
 
@@ -112,8 +111,7 @@ css::uno::Any SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
         }
         style += ";";
     }
-    strRet <<= style;
-    return strRet;
+    return style;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

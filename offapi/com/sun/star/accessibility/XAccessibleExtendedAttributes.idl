@@ -22,7 +22,7 @@ module com { module sun { module star { module accessibility {
 interface XAccessibleExtendedAttributes : ::com::sun::star::uno::XInterface
 {
     /** Returns the attributes specific to this object, like a cell's formula. */
-    any getExtendedAttributes() raises (::com::sun::star::lang::IndexOutOfBoundsException);
+    string getExtendedAttributes() raises (::com::sun::star::lang::IndexOutOfBoundsException);
 };
 
 }; }; }; };
