@@ -2236,7 +2236,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTabHTML)
     // - Expected: <newline><nbsp><nbsp><space>test
     // - Actual  : <newline><tab><space>test
     // i.e. the leading tab was not replaced by 2 nbsps.
-    assertXPathContent(pHtmlDoc, "/html/body/p"_ostr, SAL_NEWLINE_STRING u"\xa0\xa0 test"_ustr);
+    assertXPathContent(pHtmlDoc, "/html/body/p"_ostr, u"\n\xa0\xa0 test"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testClearingBreak)
