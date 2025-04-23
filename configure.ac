@@ -11502,6 +11502,13 @@ else
         fi
     fi
 fi
+if test -z "$NINJA" || test "$NINJA" = 'assumed to be available from Visual Studio'; then
+    x_NINJA=[\#]
+else
+    x_NINJA=
+fi
+AC_SUBST(x_NINJA)
+AC_SUBST(NINJA)
 
 if test "$USING_X11" = TRUE; then
     AC_PATH_X
