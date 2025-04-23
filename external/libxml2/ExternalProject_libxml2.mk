@@ -28,7 +28,7 @@ $(call gb_ExternalProject_get_state_target,libxml2,build):
 else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,libxml2,build):
 	$(call gb_ExternalProject_run,build,\
-		./configure --disable-ipv6 --without-python --without-zlib --with-sax1 \
+		./configure --disable-ipv6 --without-iconv --without-python --without-zlib --with-sax1 \
 			--without-lzma \
 			$(if $(debug),--with-run-debug) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \

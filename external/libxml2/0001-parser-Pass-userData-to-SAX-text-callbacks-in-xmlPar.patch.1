@@ -22,16 +22,11 @@ bypass on the rare targets where the confused call doesn't crash).
 
 Fix by passing ctxt->userData, matching the rest of the file.
 ---
- parser.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/parser.c b/parser.c
-index 6e7621a8..85bc39b1 100644
 --- a/parser.c
 +++ b/parser.c
-@@ -7261,10 +7261,10 @@ xmlParseReference(xmlParserCtxt *ctxt) {
+@@ -7488,10 +7488,10 @@
              if ((cur->type == XML_TEXT_NODE) ||
-                 (ctxt->sax->cdataBlock == NULL)) {
+                 (ctxt->options & XML_PARSE_NOCDATA)) {
                  if (ctxt->sax->characters != NULL)
 -                    ctxt->sax->characters(ctxt, cur->content, len);
 +                    ctxt->sax->characters(ctxt->userData, cur->content, len);
@@ -42,9 +37,9 @@ index 6e7621a8..85bc39b1 100644
              }
  
              cur = cur->next;
-@@ -7284,10 +7284,12 @@ xmlParseReference(xmlParserCtxt *ctxt) {
+@@ -7511,10 +7511,12 @@
                  if ((cur->type == XML_TEXT_NODE) ||
-                     (ctxt->sax->cdataBlock == NULL)) {
+                     (ctxt->options & XML_PARSE_NOCDATA)) {
                      if (ctxt->sax->characters != NULL)
 -                        ctxt->sax->characters(ctxt, cur->content, len);
 +                        ctxt->sax->characters(ctxt->userData, cur->content,
@@ -57,6 +52,3 @@ index 6e7621a8..85bc39b1 100644
                  }
  
                  break;
--- 
-2.55.0
-

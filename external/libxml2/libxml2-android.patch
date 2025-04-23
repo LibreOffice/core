@@ -1,7 +1,7 @@
 --- misc/libxml2-2.7.6/Makefile.in
 +++ misc/build/libxml2-2.7.6/Makefile.in
-@@ -1635,7 +1635,7 @@
- 	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS)
+@@ -1775,7 +1775,7 @@
+ 	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS) $(check_LTLIBRARIES)
  	$(MAKE) $(AM_MAKEFLAGS) check-local
  check: check-recursive
 -all-am: Makefile $(PROGRAMS) $(LTLIBRARIES) $(SCRIPTS) $(DATA) \
