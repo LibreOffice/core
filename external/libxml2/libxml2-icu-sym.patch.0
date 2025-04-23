@@ -10,8 +10,8 @@ diff -up win32/Makefile.msvc.dt win32/Makefile.msvc
 +CFLAGS = $(CFLAGS) /I$(WORKDIR)/UnpackedTarball/icu/source/i18n /I$(WORKDIR)/UnpackedTarball/icu/source/common
  !if "$(WITH_THREADS)" == "ctls"
  CFLAGS = $(CFLAGS) /D "XML_THREAD_LOCAL=__declspec(thread)"
- !else if "$(WITH_THREADS)" == "posix"
-@@ -62,7 +63,9 @@
+ !endif
+@@ -51,7 +52,9 @@
  # The linker and its options.
  LD = link.exe
  LDFLAGS = /nologo /VERSION:$(LIBXML_MAJOR_VERSION).$(LIBXML_MINOR_VERSION)
@@ -19,7 +19,7 @@ diff -up win32/Makefile.msvc.dt win32/Makefile.msvc
  LDFLAGS = $(LDFLAGS) /LIBPATH:$(BINDIR) /LIBPATH:$(LIBPREFIX)
 +LDFLAGS = $(LDFLAGS) /DEBUG /OPT:REF
  LIBS =
- !if "$(WITH_FTP)" == "1" || "$(WITH_HTTP)" == "1"
+ !if "$(WITH_HTTP)" == "1"
  LIBS = $(LIBS) wsock32.lib ws2_32.lib
 @@ -74,9 +77,13 @@
  !if "$(STATIC)" == "1"
