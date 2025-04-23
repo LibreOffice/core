@@ -10,15 +10,15 @@ diff -up win32/Makefile.msvc.dt win32/Makefile.msvc
 +CFLAGS = $(CFLAGS) /I$(WORKDIR)/UnpackedTarball/icu/source/i18n /I$(WORKDIR)/UnpackedTarball/icu/source/common
  !if "$(WITH_THREADS)" == "ctls"
  CFLAGS = $(CFLAGS) /D "XML_THREAD_LOCAL=__declspec(thread)"
- !else if "$(WITH_THREADS)" == "posix"
-@@ -67,6 +68,7 @@ CFLAGS = $(CFLAGS) $(SOLARINC)
+ !endif
+@@ -51,6 +52,7 @@
  # The linker and its options.
  LD = link.exe
  LDFLAGS = /nologo /VERSION:$(LIBXML_MAJOR_VERSION).$(LIBXML_MINOR_VERSION)
 +LDFLAGS = $(LDFLAGS) /LIBPATH:$(WORKDIR)/UnpackedTarball/icu/source/lib
  LDFLAGS = $(LDFLAGS) /LIBPATH:$(BINDIR) /LIBPATH:$(LIBPREFIX)
  LIBS =
- !if "$(WITH_FTP)" == "1" || "$(WITH_HTTP)" == "1"
+ !if "$(WITH_HTTP)" == "1"
 @@ -78,7 +78,11 @@ LIBS = $(LIBS) wsock32.lib ws2_32.lib
  !if "$(STATIC)" == "1"
  LIBS = $(LIBS) advapi32.lib sicuuc.lib sicuin.lib sicudt.lib
