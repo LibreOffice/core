@@ -25,6 +25,12 @@
 enum class QuickHelpFlags;
 struct ImplSVHelpData;
 
+enum class HelpWinStyle
+{
+    Quick,
+    Balloon,
+};
+
 /// A tooltip: adds tips to widgets in a floating / popup window.
 class HelpTextWindow final : public FloatingWindow
 {
@@ -38,7 +44,7 @@ private:
     Timer               maShowTimer;
     Timer               maHideTimer;
 
-    sal_uInt16          mnHelpWinStyle;
+    HelpWinStyle        meHelpWinStyle;
     QuickHelpFlags      mnStyle;
 
 private:
@@ -53,12 +59,13 @@ private:
 
     virtual void        dispose() override;
 public:
-                        HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle );
+    HelpTextWindow(vcl::Window* pParent, const OUString& rText, HelpWinStyle eHelpWinStyle,
+                   QuickHelpFlags nStyle);
     virtual             ~HelpTextWindow() override;
 
     const OUString&     GetHelpText() const { return maHelpText; }
     void                SetHelpText( const OUString& rHelpText );
-    sal_uInt16          GetWinStyle() const { return mnHelpWinStyle; }
+    HelpWinStyle GetWinStyle() const { return meHelpWinStyle; }
     QuickHelpFlags      GetStyle() const { return mnStyle; }
 
     // only remember:
