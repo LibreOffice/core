@@ -42,6 +42,13 @@
 
 #define HELPTEXTMAXLEN        150
 
+static void ImplShowHelpWindow(vcl::Window* pParent, sal_uInt16 nHelpWinStyle,
+                               QuickHelpFlags nStyle, const OUString& rHelpText,
+                               const Point& rScreenPos, const tools::Rectangle& rHelpArea);
+static void ImplSetHelpWindowPos(vcl::Window* pHelpWindow, sal_uInt16 nHelpWinStyle,
+                                 QuickHelpFlags nStyle, const Point& rPos,
+                                 const tools::Rectangle& rHelpArea);
+
 Help::Help()
 {
 }
@@ -479,9 +486,9 @@ void HelpTextWindow::ResetHideTimer()
     }
 }
 
-void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
-                         const OUString& rHelpText,
-                         const Point& rScreenPos, const tools::Rectangle& rHelpArea )
+static void ImplShowHelpWindow(vcl::Window* pParent, sal_uInt16 nHelpWinStyle,
+                               QuickHelpFlags nStyle, const OUString& rHelpText,
+                               const Point& rScreenPos, const tools::Rectangle& rHelpArea)
 {
     if (pParent->ImplGetFrame()->ShowTooltip(rHelpText, rHelpArea))
     {
@@ -573,8 +580,9 @@ void ImplDestroyHelpWindow(ImplSVHelpData& rHelpData, bool bUpdateHideTime)
     }
 }
 
-void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
-                           const Point& rPos, const tools::Rectangle& rHelpArea )
+static void ImplSetHelpWindowPos(vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle,
+                                 QuickHelpFlags nStyle, const Point& rPos,
+                                 const tools::Rectangle& rHelpArea)
 {
     AbsoluteScreenPixelPoint aPos;
     AbsoluteScreenPixelSize aSz( pHelpWin->GetSizePixel() );

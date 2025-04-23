@@ -72,12 +72,7 @@ public:
     void ResetHideTimer();
 };
 
-void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
-        const OUString& rHelpText,
-        const Point& rScreenPos, const tools::Rectangle& rHelpArea );
 VCL_DLLPUBLIC void ImplDestroyHelpWindow( bool bUpdateHideTime );
 void ImplDestroyHelpWindow(ImplSVHelpData& rHelpData, bool bUpdateHideTime);
-void ImplSetHelpWindowPos( vcl::Window* pHelpWindow, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
-                            const Point& rPos, const tools::Rectangle& rHelpArea );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
