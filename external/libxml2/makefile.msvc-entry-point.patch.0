@@ -1,0 +1,32 @@
+--- win32/Makefile.msvc	2025-06-06 10:57:06.219160687 +0200
++++ win32/Makefile.msvc	2025-06-06 11:01:45.213981862 +0200
+@@ -235,17 +235,7 @@
+ !endif
+ 
+ # Xmllint and friends executables.
+-UTILS = $(BINDIR)\xmllint.exe\
+-	$(BINDIR)\xmlcatalog.exe\
+-	$(BINDIR)\testModule.exe\
+-	$(BINDIR)\runtest.exe\
+-	$(BINDIR)\runsuite.exe\
+-	$(BINDIR)\runxmlconf.exe\
+-	$(BINDIR)\testapi.exe\
+-	$(BINDIR)\testchar.exe\
+-	$(BINDIR)\testdict.exe\
+-	$(BINDIR)\testlimits.exe\
+-	$(BINDIR)\testrecurse.exe
++UTILS = $(BINDIR)\xmllint.exe
+ 	
+ !if "$(VCMANIFEST)" == "1"
+ _VC_MANIFEST_EMBED_EXE= if exist $@.manifest mt.exe -nologo -manifest $@.manifest -outputresource:$@;1
+@@ -396,8 +386,8 @@
+ 	@$(_VC_MANIFEST_EMBED_EXE)
+ !else
+ {$(UTILS_SRCDIR)}.c{$(BINDIR)}.exe:
+-	$(CC) $(CFLAGS) /Fo$(UTILS_INTDIR)\ /c $< 
+-	$(LD) $(LDFLAGS) /OUT:$@ $(XML_IMP) $(LIBS) $(UTILS_INTDIR)\$(<B).obj
++	$(CC) $(CFLAGS) /Fo$(UTILS_INTDIR)\ /c $< ..\lintmain.c ..\shell.c
++	$(LD) $(LDFLAGS) /OUT:$@ $(XML_IMP) $(LIBS) $(UTILS_INTDIR)\$(<B).obj  $(UTILS_INTDIR)\lintmain.obj $(UTILS_INTDIR)\shell.obj
+ 	@$(_VC_MANIFEST_EMBED_EXE)
+ !endif
+ 
