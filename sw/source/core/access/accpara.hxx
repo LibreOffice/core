@@ -65,8 +65,6 @@ class SwAccessibleParagraph :
 {
     friend class SwAccessibleHyperlink;
 
-    OUString m_sDesc;  // protected by base classes mutex
-
     // data for this paragraph's text portions; this contains the
     // mapping from the core 'model string' to the accessible text
     // string.
@@ -95,8 +93,6 @@ class SwAccessibleParagraph :
 
     /// get the (accessible) text string (requires frame; check before)
     OUString const & GetString();
-
-    static const OUString & GetDescription();
 
     // get the current care position
     sal_Int32 GetCaretPos();

@@ -123,11 +123,6 @@ OUString const & SwAccessibleParagraph::GetString()
     return GetPortionData().GetAccessibleString();
 }
 
-const OUString & SwAccessibleParagraph::GetDescription()
-{
-    return EMPTY_OUSTRING; // provide empty description for paragraphs
-}
-
 sal_Int32 SwAccessibleParagraph::GetCaretPos()
 {
     sal_Int32 nRet = -1;
@@ -301,25 +296,6 @@ void SwAccessibleParagraph::InvalidateContent_( bool bVisibleDataFired )
     {
         // The role has changed
         FireAccessibleEvent(AccessibleEventId::ROLE_CHANGED, uno::Any(), uno::Any());
-    }
-
-    if( sText == sOldText )
-        return;
-
-    OUString sNewDesc( GetDescription() );
-    OUString sOldDesc;
-    {
-        std::scoped_lock aGuard( m_Mutex );
-        sOldDesc = m_sDesc;
-        if( m_sDesc != sNewDesc )
-            m_sDesc = sNewDesc;
-    }
-
-    if( sNewDesc != sOldDesc )
-    {
-        // The text is changed
-        FireAccessibleEvent(AccessibleEventId::DESCRIPTION_CHANGED, uno::Any(sOldDesc),
-                            uno::Any(sNewDesc));
     }
 }
 
@@ -694,14 +670,9 @@ bool SwAccessibleParagraph::GetTextBoundary(
 OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription()
 {
     SolarMutexGuard aGuard;
-
     ThrowIfDisposed();
 
-    std::scoped_lock aGuard2( m_Mutex );
-    if( m_sDesc.isEmpty() )
-        m_sDesc = GetDescription();
-
-    return m_sDesc;
+    return OUString();
 }
 
 lang::Locale SAL_CALL SwAccessibleParagraph::getLocale()
