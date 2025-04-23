@@ -154,7 +154,6 @@ rtl::Reference<SwXBookmark> SwXBookmark::CreateXBookmark(
     ::sw::mark::MarkBase *const pBookmark)
 {
     // #i105557#: do not iterate over the registered clients: race condition
-    OSL_ENSURE(pBookmark, "CreateXBookmark: no MarkBase?");
     rtl::Reference<SwXBookmark> xBookmark;
     if (pBookmark)
     {
