@@ -186,6 +186,7 @@ public:
     svtools::ColorConfig&   GetColorConfig();
     static bool         IsLOKViewInDarkMode();
     SC_DLLPUBLIC SvtUserOptions& GetUserOptions();
+    SC_DLLPUBLIC FieldUnit GetMetric();
 
     void                ModifyOptions( const SfxItemSet& rOptSet );
 
