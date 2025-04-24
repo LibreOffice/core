@@ -1784,45 +1784,44 @@ SwAccessibleMap::GetContextImpl(const SdrObject* pObj, SwAccessibleContext* pPar
 {
     DBG_TESTSOLARMUTEX();
 
-    rtl::Reference < ::accessibility::AccessibleShape > xAcc;
-
     if( !mpShapeMap && bCreate )
         mpShapeMap.reset(new SwAccessibleShapeMap_Impl( this ));
-    if( mpShapeMap )
+    if (!mpShapeMap)
+        return nullptr;
+
+    rtl::Reference<::accessibility::AccessibleShape> xAcc;
+    SwAccessibleShapeMap_Impl::iterator aIter = mpShapeMap->find( pObj );
+    if( aIter != mpShapeMap->end() )
+        xAcc = (*aIter).second;
+
+    if( !xAcc.is() && bCreate )
     {
-        SwAccessibleShapeMap_Impl::iterator aIter = mpShapeMap->find( pObj );
-        if( aIter != mpShapeMap->end() )
-            xAcc = (*aIter).second;
-
-        if( !xAcc.is() && bCreate )
+        uno::Reference < drawing::XShape > xShape(
+            const_cast< SdrObject * >( pObj )->getUnoShape(),
+            uno::UNO_QUERY );
+        if( xShape.is() )
         {
-            uno::Reference < drawing::XShape > xShape(
-                const_cast< SdrObject * >( pObj )->getUnoShape(),
-                uno::UNO_QUERY );
-            if( xShape.is() )
-            {
-                ::accessibility::ShapeTypeHandler& rShapeTypeHandler =
-                            ::accessibility::ShapeTypeHandler::Instance();
+            ::accessibility::ShapeTypeHandler& rShapeTypeHandler =
+                        ::accessibility::ShapeTypeHandler::Instance();
 
-                ::accessibility::AccessibleShapeInfo aShapeInfo(
-                        xShape, uno::Reference<XAccessible>(pParentImpl), this );
+            ::accessibility::AccessibleShapeInfo aShapeInfo(
+                    xShape, uno::Reference<XAccessible>(pParentImpl), this );
 
-                xAcc = rShapeTypeHandler.CreateAccessibleObject(
-                            aShapeInfo, mpShapeMap->GetInfo() );
-            }
-            assert(xAcc.is());
-            xAcc->Init();
-            if( aIter != mpShapeMap->end() )
-            {
-                (*aIter).second = xAcc.get();
-            }
-            else
-            {
-                mpShapeMap->emplace( pObj, xAcc );
-            }
-            // TODO: focus!!!
-            AddGroupContext(pObj, xAcc);
+            xAcc = rShapeTypeHandler.CreateAccessibleObject(
+                        aShapeInfo, mpShapeMap->GetInfo() );
         }
+        assert(xAcc.is());
+        xAcc->Init();
+        if( aIter != mpShapeMap->end() )
+        {
+            (*aIter).second = xAcc.get();
+        }
+        else
+        {
+            mpShapeMap->emplace( pObj, xAcc );
+        }
+        // TODO: focus!!!
+        AddGroupContext(pObj, xAcc);
     }
 
     return xAcc;
