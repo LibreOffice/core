@@ -25,7 +25,7 @@
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <optional>
 
-class VCL_DLLPUBLIC SvpSalBitmap final : public SalBitmap, public basegfx::SystemDependentDataHolder // MM02
+class VCL_DLLPUBLIC SvpSalBitmap final : public SalBitmap
 {
     std::optional<BitmapBuffer> moDIB;
 public:
@@ -65,8 +65,6 @@ public:
     SAL_DLLPRIVATE virtual bool            ScalingSupported() const override;
     SAL_DLLPRIVATE virtual bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) override;
     SAL_DLLPRIVATE virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol ) override;
-
-    SAL_DLLPRIVATE virtual const basegfx::SystemDependentDataHolder* accessSystemDependentDataHolder() const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -47,7 +47,7 @@ extern const sal_uLong nVCLBLut[ 6 ];
 extern const sal_uLong nVCLDitherLut[ 256 ];
 extern const sal_uLong nVCLLut[ 256 ];
 
-class VCL_PLUGIN_PUBLIC SalBitmap
+class VCL_PLUGIN_PUBLIC SalBitmap : public basegfx::SystemDependentDataHolder
 {
 public:
 
@@ -155,25 +155,17 @@ protected:
         BitConvert type );
 
 public:
-    // access to SystemDependentDataHolder, to support overload in derived class(es)
-    virtual const basegfx::SystemDependentDataHolder* accessSystemDependentDataHolder() const;
-
     // exclusive management op's for SystemDependentData at SalBitmap
     template<class T>
     std::shared_ptr<T> getSystemDependentData(basegfx::SDD_Type aType) const
     {
-        const basegfx::SystemDependentDataHolder* pDataHolder(accessSystemDependentDataHolder());
-        if(pDataHolder)
-            return std::static_pointer_cast<T>(pDataHolder->getSystemDependentData(aType));
-        return std::shared_ptr<T>();
+        return std::static_pointer_cast<T>(basegfx::SystemDependentDataHolder::getSystemDependentData(aType));
     }
 
     template<class T, class... Args>
     std::shared_ptr<T> addOrReplaceSystemDependentData(Args&&... args) const
     {
-        const basegfx::SystemDependentDataHolder* pDataHolder(accessSystemDependentDataHolder());
-        if(!pDataHolder)
-            return std::shared_ptr<T>();
+        const basegfx::SystemDependentDataHolder* pDataHolder = this;
 
         std::shared_ptr<T> r = std::make_shared<T>(std::forward<Args>(args)...);
 

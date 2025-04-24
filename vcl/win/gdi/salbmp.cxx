@@ -45,7 +45,6 @@
 
 WinSalBitmap::WinSalBitmap()
 :   SalBitmap(),
-    basegfx::SystemDependentDataHolder(),
     maSize(),
     mhDIB(nullptr),
     mhDDB(nullptr),
@@ -831,11 +830,6 @@ bool WinSalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, 
 bool WinSalBitmap::Replace( const Color& /*rSearchColor*/, const Color& /*rReplaceColor*/, sal_uInt8 /*nTol*/ )
 {
     return false;
-}
-
-const basegfx::SystemDependentDataHolder* WinSalBitmap::accessSystemDependentDataHolder() const
-{
-    return this;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

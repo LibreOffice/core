@@ -515,11 +515,6 @@ bool SkiaSalBitmap::Replace(const Color&, const Color&, sal_uInt8)
     return false;
 }
 
-const basegfx::SystemDependentDataHolder* SkiaSalBitmap::accessSystemDependentDataHolder() const
-{
-    return this;
-}
-
 bool SkiaSalBitmap::ConvertToGreyscale()
 {
 #ifdef DBG_UTIL

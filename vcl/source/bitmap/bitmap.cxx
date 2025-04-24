@@ -1667,9 +1667,7 @@ void Bitmap::RemoveBlendedStartColor(
 
 const basegfx::SystemDependentDataHolder* Bitmap::accessSystemDependentDataHolder() const
 {
-    if(!mxSalBmp)
-        return nullptr;
-    return mxSalBmp->accessSystemDependentDataHolder();
+    return mxSalBmp.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

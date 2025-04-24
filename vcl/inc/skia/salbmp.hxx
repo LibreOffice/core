@@ -28,8 +28,7 @@
 
 #include <SkImage.h>
 
-class VCL_PLUGIN_PUBLIC SkiaSalBitmap final : public SalBitmap,
-                                              public basegfx::SystemDependentDataHolder
+class VCL_PLUGIN_PUBLIC SkiaSalBitmap final : public SalBitmap
 {
 public:
     SkiaSalBitmap();
@@ -65,8 +64,6 @@ public:
     virtual bool Erase(const Color& color) override;
     virtual bool AlphaBlendWith(const SalBitmap& rSalBmp) override;
     virtual bool Invert() override;
-    SAL_DLLPRIVATE virtual const basegfx::SystemDependentDataHolder*
-    accessSystemDependentDataHolder() const override;
 
 #if defined MACOSX || defined IOS
     virtual CGImageRef CreateWithMask(const SalBitmap& rMask, int nX, int nY, int nWidth,
