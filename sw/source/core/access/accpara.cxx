@@ -663,9 +663,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccess
 
     rtl::Reference<utl::AccessibleRelationSetHelper> pHelper = new utl::AccessibleRelationSetHelper();
 
-    const SwTextFrame* pTextFrame = GetFrame()->DynCastTextFrame();
-    OSL_ENSURE( pTextFrame,
-            "<SwAccessibleParagraph::getAccessibleRelationSet()> - missing text frame");
+    const SwTextFrame* pTextFrame = GetTextFrame();
     if ( pTextFrame )
     {
         const SwContentFrame* pPrevContentFrame( pTextFrame->FindPrevCnt() );
