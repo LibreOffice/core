@@ -2657,13 +2657,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *p
         }
 
         OUString sAttributes;
-        Reference<XAccessibleExtendedAttributes> pRXI(pRContext,UNO_QUERY);
-        if (pRXI.is())
+        Reference<XAccessibleExtendedAttributes> xExtendedAttributes(pRContext, UNO_QUERY);
+        if (xExtendedAttributes.is())
         {
-            css::uno::Reference<css::accessibility::XAccessibleExtendedAttributes> pRXAttr;
-            pRXAttr = pRXI.get();
-
-            const OUString val = pRXAttr->getExtendedAttributes();
+            const OUString val = xExtendedAttributes->getExtendedAttributes();
             sAttributes += val;
         }
 
