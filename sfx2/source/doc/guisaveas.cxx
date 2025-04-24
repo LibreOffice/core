@@ -954,16 +954,13 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     SfxFilterFlags nMust = getMustFlags( nStoreMode );
     SfxFilterFlags nDont = getDontFlags( nStoreMode );
     weld::Window* pFrameWin = SfxStoringHelper::GetModelWindow(m_xModel);
-    OUString sPreselectedDir;
+    OUString sPreselectedDir = GetDocProps().getUnpackedValueOrDefault(
+        "ExportDirectory", GetDocProps().getUnpackedValueOrDefault("DocumentBaseURL", OUString()));
+    INetURLObject aObj(sPreselectedDir);
+    aObj.removeSegment(); // remove file name from URL
+    sPreselectedDir = aObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);
     if ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
     {
-        const OUString aBaseUrl = GetDocProps().getUnpackedValueOrDefault("DocumentBaseURL", OUString());
-        OUString aExportDir = GetDocProps().getUnpackedValueOrDefault("ExportDirectory", aBaseUrl);
-        INetURLObject aObj( aExportDir );
-        aObj.removeSegment();
-        aExportDir = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-        if (!aExportDir.isEmpty())
-            sPreselectedDir = aExportDir;
         if ( ( nStoreMode & PDFEXPORT_REQUESTED ) && !aPreselectedFilterPropsHM.empty() )
         {
             // this is a PDF export
