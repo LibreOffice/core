@@ -21,20 +21,23 @@ $(eval $(call gb_ExternalProject_use_externals,harfbuzz,\
 # We cannot use environment vars inside the meson cross-build file,
 # so we're going to have to generate one on-the-fly.
 # mungle variables into python list format
-cross_c   = '$(subst $(WHITESPACE),'$(COMMA)',$(strip $(gb_CC)))'
-cross_cxx = '$(subst $(WHITESPACE),'$(COMMA)',$(strip $(gb_CXX)))'
+python_listify = '$(subst $(WHITESPACE),'$(COMMA)',$(strip $(1)))'
+cross_c = $(call python_listify,$(gb_CC))
+cross_cxx = $(call python_listify,$(gb_CXX))
+cross_ld := $(call python_listify,$(subst -fuse-ld=,,$(USE_LD)))
+
 define gb_harfbuzz_cross_compile
 [binaries]
 c = [$(cross_c)]
 cpp = [$(cross_cxx)]
-c_ld = [$(subst cl.exe,link.exe,$(cross_c))]
-cpp_ld = [$(subst cl.exe,link.exe,$(cross_c))]
+c_ld = [$(cross_ld)]
+cpp_ld = [$(cross_ld)]
 ar = '$(AR)'
 strip = '$(STRIP)'
 # TODO: this is pretty ugly...
 [host_machine]
 system = '$(if $(filter WNT,$(OS)),windows,$(if $(filter MACOSX,$(OS)),darwin,$(if $(filter ANDROID,$(OS)),android,linux)))'
-cpu_family = '$(RTL_ARCH)'
+cpu_family = '$(subst X86_64,x86_64,$(RTL_ARCH))'
 cpu = '$(if $(filter x86,$(RTL_ARCH)),i686,$(if $(filter X86_64,$(RTL_ARCH)),x86_64,$(if $(filter AARCH64,$(RTL_ARCH)),aarch64,armv7)))'
 endian = '$(ENDIANNESS)'
 endef
