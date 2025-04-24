@@ -126,13 +126,10 @@ uno::Sequence<uno::Type> SAL_CALL AccessibleOLEShape::getTypes()
 // XAccessibleExtendedAttributes
 OUString SAL_CALL AccessibleOLEShape::getExtendedAttributes()
 {
-    OUString style;
-    if( m_pShape )
-    {
-        style = "style:" + static_cast<SdrOle2Obj*>(m_pShape)->GetStyleString();
-    }
-    style += ";";
-    return style;
+    if (m_pShape)
+        return "style:" + static_cast<SdrOle2Obj*>(m_pShape)->GetStyleString() + ";";
+
+    return OUString();
 }
 
 /// Set this object's name if is different to the current name.
