@@ -255,17 +255,9 @@ void SwAccessibleParagraph::InvalidateContent_( bool bVisibleDataFired )
                                                                           aOldValue, aNewValue);
 
         FireAccessibleEvent(AccessibleEventId::TEXT_CHANGED, aOldValue, aNewValue);
-        uno::Reference< XAccessible > xparent = getAccessibleParent();
-        uno::Reference< XAccessibleContext > xAccContext(xparent,uno::UNO_QUERY);
-        if (xAccContext.is() && xAccContext->getAccessibleRole() == AccessibleRole::TABLE_CELL)
-        {
-            SwAccessibleContext* pPara = static_cast< SwAccessibleContext* >(xparent.get());
-            if(pPara)
-            {
-                pPara->FireAccessibleEvent(AccessibleEventId::VALUE_CHANGED, uno::Any(),
-                                           uno::Any());
-            }
-        }
+        rtl::Reference<SwAccessibleContext> xParent = getAccessibleParentImpl();
+        if (xParent.is() && xParent->getAccessibleRole() == AccessibleRole::TABLE_CELL)
+            xParent->FireAccessibleEvent(AccessibleEventId::VALUE_CHANGED, uno::Any(), uno::Any());
     }
     else if( !bVisibleDataFired )
     {
