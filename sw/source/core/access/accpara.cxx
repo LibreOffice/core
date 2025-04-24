@@ -102,10 +102,6 @@ using beans::PropertyValue;
 using beans::UnknownPropertyException;
 using beans::PropertyState_DIRECT_VALUE;
 
-using std::max;
-using std::min;
-using std::sort;
-
 namespace com::sun::star::text {
     class XText;
 }
@@ -2170,7 +2166,7 @@ OUString SwAccessibleParagraph::getTextRange(
         i18n::Boundary preBound = aBound;
         while(preBound.startPos==aBound.startPos && nIndex > 0)
         {
-            nIndex = min(nIndex, preBound.startPos);
+            nIndex = std::min(nIndex, preBound.startPos);
             if (nIndex <= 0) break;
             rText.iterateCodePoints(&nIndex, -1);
             GetTextBoundary( preBound, rText, nIndex, nTextType );
@@ -2189,7 +2185,7 @@ OUString SwAccessibleParagraph::getTextRange(
         bool bWord = false;
         while( !bWord )
         {
-            nIndex = min(nIndex, aBound.startPos);
+            nIndex = std::min(nIndex, aBound.startPos);
             if (nIndex > 0)
             {
                 rText.iterateCodePoints(&nIndex, -1);
@@ -2232,7 +2228,7 @@ OUString SwAccessibleParagraph::getTextRange(
     bool bWord = false;
     while( !bWord )
     {
-        nIndex = max( sal_Int32(nIndex+1), aBound.endPos );
+        nIndex = std::max(sal_Int32(nIndex + 1), aBound.endPos);
         if( nIndex < rText.getLength() )
             bWord = GetTextBoundary( aBound, rText, nIndex, nTextType );
         else
@@ -2259,8 +2255,8 @@ OUString SwAccessibleParagraph::getTextRange(
         {
             while(nexBound.endPos==aBound.endPos&&nIndex<rText.getLength())
             {
-                // nIndex = max( (sal_Int32)(nIndex), nexBound.endPos) + 1;
-                nIndex = max( (sal_Int32)(nIndex), nexBound.endPos) ;
+                // nIndex = std::max( (sal_Int32)(nIndex), nexBound.endPos) + 1;
+                nIndex = std::max( (sal_Int32)(nIndex), nexBound.endPos) ;
                 const sal_Unicode* pStr = rText.getStr();
                 if (pStr)
                 {
@@ -2287,7 +2283,7 @@ OUString SwAccessibleParagraph::getTextRange(
         bWord = sal_False;
         while( !bWord )
         {
-            nIndex = max( (sal_Int32)(nIndex+1), aBound.endPos );
+            nIndex = std::max( (sal_Int32)(nIndex+1), aBound.endPos );
             if( nIndex < rText.getLength() )
             {
                 bWord = GetTextBoundary( aBound, rText, nIndex, nTextType );
@@ -2695,9 +2691,9 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
         TextFrameIndex const nHintStart(pTextFrame->MapModelToView(pNode, pHt->GetStart()));
         TextFrameIndex const nHintEnd(pTextFrame->MapModelToView(pNode, pHt->GetAnyEnd()));
         const sal_Int32 nTmpHStt = GetPortionData().GetAccessiblePosition(
-            max(aHIter.startIdx(), nHintStart));
+            std::max(aHIter.startIdx(), nHintStart));
         const sal_Int32 nTmpHEnd = GetPortionData().GetAccessiblePosition(
-            min(aHIter.endIdx(), nHintEnd));
+            std::min(aHIter.endIdx(), nHintEnd));
         xRet = new SwAccessibleHyperlink(*pHt,
                                          *this, nTmpHStt, nTmpHEnd );
         if (aIter != m_pHyperTextData->end())
