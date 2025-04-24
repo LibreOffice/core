@@ -1675,9 +1675,6 @@ rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetContextImpl(const SwFram
     if (xAcc.is() || !bCreate)
         return xAcc;
 
-    rtl::Reference<SwAccessibleContext> xOldCursorAcc;
-    bool bOldShapeSelected = false;
-
     switch( pFrame->GetType() )
     {
     case SwFrameType::Txt:
@@ -1762,19 +1759,18 @@ rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetContextImpl(const SwFram
         // no one except us knows it. In any case, we remember
         // the new context as the one that has the focus
         // currently.
-
-        xOldCursorAcc = mxCursorContext;
+        rtl::Reference<SwAccessibleContext> xOldCursorAcc = mxCursorContext;
         mxCursorContext = xAcc.get();
 
-        bOldShapeSelected = mbShapeSelected;
+        const bool bOldShapeSelected = mbShapeSelected;
         mbShapeSelected = false;
-    }
 
-    // Invalidate focus for old object when map is not locked
-    if (xOldCursorAcc.is())
-        InvalidateCursorPosition(xOldCursorAcc);
-    if (bOldShapeSelected)
-        InvalidateShapeSelection();
+        // Invalidate focus for old object when map is not locked
+        if (xOldCursorAcc.is())
+            InvalidateCursorPosition(xOldCursorAcc);
+        if (bOldShapeSelected)
+            InvalidateShapeSelection();
+    }
 
     return xAcc;
 }
