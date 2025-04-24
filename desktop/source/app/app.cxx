@@ -2664,19 +2664,6 @@ void Desktop::ShowBackingComponent(Desktop * progress)
     {
         progress->CloseSplashScreen();
     }
-#ifdef MACOSX
-    else
-    {
-        // Related: tdf#41775 don't display the Start Center when loading
-        // modules or documents by unsetting the backing frame's component.
-        // This makes the Start Center's window empty so that loading large
-        // documents don't have the Start Center content displayed while the
-        // the document loads.
-        xBackingFrame->setComponent(css::uno::Reference<css::awt::XWindow>(), css::uno::Reference<css::frame::XController>());
-        return;
-    }
-#endif
-
     xContainerWindow->setVisible(true);
 }
 
