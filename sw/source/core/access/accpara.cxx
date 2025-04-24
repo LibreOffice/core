@@ -31,6 +31,7 @@
 #include <fesh.hxx>
 #include <viewopt.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <vcl/window.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -1893,10 +1894,7 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     Point aFramePixPos( GetMap()->CoreToPixel( aFrameLogBounds ).TopLeft() );
     aScreenRect.Move( -aFramePixPos.getX(), -aFramePixPos.getY() );
 
-    // convert into AWT Rectangle
-    return awt::Rectangle(
-        aScreenRect.Left(), aScreenRect.Top(),
-        aScreenRect.GetWidth(), aScreenRect.GetHeight() );
+    return vcl::unohelper::ConvertToAWTRect(aScreenRect);
 }
 
 sal_Int32 SwAccessibleParagraph::getCharacterCount()
