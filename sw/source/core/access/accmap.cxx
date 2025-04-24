@@ -1695,9 +1695,7 @@ rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetContextImpl(const SwFram
                 static_cast < const SwFootnoteFrame * >( pFrame );
             bool bIsEndnote =
                 SwAccessibleFootnote::IsEndnote( pFootnoteFrame );
-            xAcc = new SwAccessibleFootnote(shared_from_this(), bIsEndnote,
-                        /*(bIsEndnote ? mnEndnote++ : mnFootnote++),*/
-                        pFootnoteFrame );
+            xAcc = new SwAccessibleFootnote(shared_from_this(), bIsEndnote, pFootnoteFrame);
         }
         break;
     case SwFrameType::Fly:
