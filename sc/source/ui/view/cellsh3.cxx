@@ -726,7 +726,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 else
                 {
                     ScViewData& rData      = GetViewData();
-                    FieldUnit eMetric = pScMod->GetAppOptions().GetAppMetric();
+                    FieldUnit eMetric = pScMod->GetMetric();
                     sal_uInt16      nCurHeight = rData.GetDocument().
                                                 GetRowHeight( rData.GetCurY(),
                                                               rData.GetTabNo() );
@@ -769,7 +769,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    FieldUnit eMetric = pScMod->GetAppOptions().GetAppMetric();
+                    FieldUnit eMetric = pScMod->GetMetric();
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     VclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
@@ -831,7 +831,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    FieldUnit eMetric = pScMod->GetAppOptions().GetAppMetric();
+                    FieldUnit eMetric = pScMod->GetMetric();
                     ScViewData& rData      = GetViewData();
                     sal_uInt16      nCurHeight = rData.GetDocument().
                                                 GetColWidth( rData.GetCurX(),
@@ -874,7 +874,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    FieldUnit eMetric = pScMod->GetAppOptions().GetAppMetric();
+                    FieldUnit eMetric = pScMod->GetMetric();
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     VclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(

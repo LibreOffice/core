@@ -19,6 +19,7 @@
 
 #include <sctestviewcallback.hxx>
 #include <docuno.hxx>
+#include <scmod.hxx>
 #include <tabvwsh.hxx>
 
 using namespace com::sun::star;
@@ -146,6 +147,22 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDecimalSeparatorInfo)
 
     // Cell B1 has language set to Turkish. Decimal separator should be ",".
     CPPUNIT_ASSERT_EQUAL(std::string(","), aView1.decimalSeparator);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCool11739LocaleDialogFieldUnit)
+{
+    createDoc("empty.ods");
+    SfxViewShell* pView1 = SfxViewShell::Current();
+    pView1->SetLOKLocale(u"fr-FR"_ustr);
+
+    ScModule* pMod = ScModule::get();
+    FieldUnit eMetric = pMod->GetMetric();
+
+    // Without the fix, it fails with
+    // - Expected: 2
+    // - Actual  : 8
+    // where 2 is FieldUnit::CM and 8 is FieldUnit::INCH
+    CPPUNIT_ASSERT_EQUAL(FieldUnit::CM, eMetric);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
