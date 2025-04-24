@@ -280,7 +280,7 @@ FrameTypeFlags SwFEShell::GetFrameType( const Point *pPt, bool bStopAtFly ) cons
                 if( pFrame->GetUpper()->IsPageFrame() ) // not for ColumnFrames
                     nReturn |= FrameTypeFlags::BODY;
                 break;
-            case SwFrameType::Ftn:
+            case SwFrameType::Footnote:
                 nReturn |= FrameTypeFlags::FOOTNOTE;
                 break;
             case SwFrameType::Fly:

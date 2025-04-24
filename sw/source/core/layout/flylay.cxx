@@ -1346,9 +1346,9 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                 const SwFrame *pCell = pUp->IsCellFrame() ? pUp : nullptr;
                 const SwFrameType nType = bMove
                                      ? SwFrameType::Root   | SwFrameType::Fly | SwFrameType::Header |
-                                       SwFrameType::Footer | SwFrameType::Ftn
+                                       SwFrameType::Footer | SwFrameType::Footnote
                                      : SwFrameType::Body   | SwFrameType::Fly | SwFrameType::Header |
-                                       SwFrameType::Footer | SwFrameType::Cell| SwFrameType::Ftn;
+                                       SwFrameType::Footer | SwFrameType::Cell| SwFrameType::Footnote;
 
                 while ( !(pUp->GetType() & nType) || pUp->IsColBodyFrame() )
                 {
@@ -1378,7 +1378,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                     }
                     else
                     {
-                        if( ( pUp->GetType() & (SwFrameType::Fly | SwFrameType::Ftn ) ) &&
+                        if( ( pUp->GetType() & (SwFrameType::Fly | SwFrameType::Footnote ) ) &&
                             !pUp->getFrameArea().Contains( pFly->getFrameArea().Pos() ) )
                         {
                             if( pUp->IsFlyFrame() )

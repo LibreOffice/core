@@ -5512,7 +5512,7 @@ void SwFrame::PaintSwFrameShadowAndBorder(
     const SwBorderAttrs& rAttrs) const
 {
     // There's nothing (Row,Body,Footnote,Root,Column,NoText) need to do here
-    if (GetType() & (SwFrameType::NoTxt|SwFrameType::Row|SwFrameType::Body|SwFrameType::Ftn|SwFrameType::Column|SwFrameType::Root))
+    if (GetType() & (SwFrameType::NoTxt|SwFrameType::Row|SwFrameType::Body|SwFrameType::Footnote|SwFrameType::Column|SwFrameType::Root))
         return;
 
     if (IsCellFrame() && !gProp.pSGlobalShell->GetViewOptions()->IsTable())

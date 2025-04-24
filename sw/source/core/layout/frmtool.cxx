@@ -624,7 +624,7 @@ void SwLayNotify::ImplDestroy()
          !(pLay->GetType()&(SwFrameType::Fly|SwFrameType::Section) &&
             pLower && pLower->IsColumnFrame()) &&
          (bPos || bNotify) &&
-         !(pLay->GetType() & (SwFrameType::Row|SwFrameType::Tab|SwFrameType::FtnCont|SwFrameType::Page|SwFrameType::Root)))
+         !(pLay->GetType() & (SwFrameType::Row|SwFrameType::Tab|SwFrameType::FootnoteContainer|SwFrameType::Page|SwFrameType::Root)))
     {
         // #i44016# - force unlock of position of lower objects.
         // #i43913# - no unlock of position of objects,
@@ -3670,8 +3670,8 @@ bool Is_Lower_Of(const SwFrame *pCurrFrame, const SdrObject* pObj)
 /// provides the area of a frame in that no Fly from another area can overlap
 const SwFrame *FindContext( const SwFrame *pFrame, SwFrameType nAdditionalContextType )
 {
-    const SwFrameType nTyp = SwFrameType::Root | SwFrameType::Header   | SwFrameType::Footer | SwFrameType::FtnCont  |
-                        SwFrameType::Ftn  | SwFrameType::Fly      |
+    const SwFrameType nTyp = SwFrameType::Root | SwFrameType::Header   | SwFrameType::Footer | SwFrameType::FootnoteContainer  |
+                        SwFrameType::Footnote  | SwFrameType::Fly      |
                         SwFrameType::Tab  | SwFrameType::Row      | SwFrameType::Cell |
                         nAdditionalContextType;
     do
@@ -3686,8 +3686,8 @@ bool IsFrameInSameContext( const SwFrame *pInnerFrame, const SwFrame *pFrame )
 {
     const SwFrame *pContext = FindContext( pInnerFrame, SwFrameType::None );
 
-    const SwFrameType nTyp = SwFrameType::Root | SwFrameType::Header | SwFrameType::Footer | SwFrameType::FtnCont |
-                        SwFrameType::Ftn  | SwFrameType::Fly      |
+    const SwFrameType nTyp = SwFrameType::Root | SwFrameType::Header | SwFrameType::Footer | SwFrameType::FootnoteContainer |
+                        SwFrameType::Footnote  | SwFrameType::Fly      |
                         SwFrameType::Tab  | SwFrameType::Row      | SwFrameType::Cell;
     do
     {   if ( pFrame->GetType() & nTyp )

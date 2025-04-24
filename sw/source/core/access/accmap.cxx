@@ -1689,7 +1689,7 @@ rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetContextImpl(const SwFram
         xAcc = new SwAccessibleHeaderFooter(shared_from_this(),
                         static_cast< const SwFooterFrame *>( pFrame ) );
         break;
-    case SwFrameType::Ftn:
+    case SwFrameType::Footnote:
         {
             const SwFootnoteFrame *pFootnoteFrame =
                 static_cast < const SwFootnoteFrame * >( pFrame );

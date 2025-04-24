@@ -1420,7 +1420,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             nPDFType = sal_uInt16(vcl::pdf::StructElement::NonStructElement);
             break;
 
-        case SwFrameType::FtnCont :
+        case SwFrameType::FootnoteContainer:
 
             // Footnote container: Division
 
@@ -1428,7 +1428,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             aPDFType = aDivString;
             break;
 
-        case SwFrameType::Ftn :
+        case SwFrameType::Footnote:
 
             // Footnote frame: Note
 

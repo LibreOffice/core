@@ -400,8 +400,8 @@ static void lcl_FormatLay( SwLayoutFrame *pLay )
     while ( pTmp )
     {
         const SwFrameType nTypes = SwFrameType::Root | SwFrameType::Page | SwFrameType::Column
-                           | SwFrameType::Header | SwFrameType::Footer | SwFrameType::FtnCont
-                           | SwFrameType::Ftn | SwFrameType::Body;
+                           | SwFrameType::Header | SwFrameType::Footer | SwFrameType::FootnoteContainer
+                           | SwFrameType::Footnote | SwFrameType::Body;
         if ( pTmp->GetType() & nTypes )
             ::lcl_FormatLay( static_cast<SwLayoutFrame*>(pTmp) );
         pTmp = pTmp->GetNext();

@@ -81,8 +81,8 @@ enum class SwFrameType
     Column      = 0x0004,
     Header      = 0x0008,
     Footer      = 0x0010,
-    FtnCont     = 0x0020,
-    Ftn         = 0x0040,
+    FootnoteContainer = 0x0020,
+    Footnote    = 0x0040,
     Body        = 0x0080,
     Fly         = 0x0100,
     Section     = 0x0200,
@@ -104,11 +104,11 @@ namespace o3tl
 #define FRM_ALL         SwFrameType(0xfbff)
 #define FRM_CNTNT       (SwFrameType::Txt | SwFrameType::NoTxt)
 #define FRM_FTNBOSS     (SwFrameType::Page | SwFrameType::Column)
-#define FRM_ACCESSIBLE  (SwFrameType::Root | SwFrameType::Page | SwFrameType::Header | SwFrameType::Footer | SwFrameType::Ftn | SwFrameType::Fly | SwFrameType::Tab | SwFrameType::Cell | SwFrameType::Txt)
+#define FRM_ACCESSIBLE  (SwFrameType::Root | SwFrameType::Page | SwFrameType::Header | SwFrameType::Footer | SwFrameType::Footnote | SwFrameType::Fly | SwFrameType::Tab | SwFrameType::Cell | SwFrameType::Txt)
 #define FRM_NEIGHBOUR   (SwFrameType::Column | SwFrameType::Cell)
-#define FRM_NOTE_VERT   (SwFrameType::FtnCont | SwFrameType::Ftn | SwFrameType::Section | SwFrameType::Tab | SwFrameType::Row | SwFrameType::Cell | SwFrameType::Txt)
+#define FRM_NOTE_VERT   (SwFrameType::FootnoteContainer | SwFrameType::Footnote | SwFrameType::Section | SwFrameType::Tab | SwFrameType::Row | SwFrameType::Cell | SwFrameType::Txt)
 #define FRM_HEADFOOT    (SwFrameType::Header | SwFrameType::Footer)
-#define FRM_BODYFTNC    (SwFrameType::FtnCont | SwFrameType::Body)
+#define FRM_BODYFTNC    (SwFrameType::FootnoteContainer | SwFrameType::Body)
 
 // for GetNextLeaf/GetPrevLeaf.
 enum MakePageType
@@ -1237,11 +1237,11 @@ inline bool SwFrame::IsFooterFrame() const
 }
 inline bool SwFrame::IsFootnoteContFrame() const
 {
-    return mnFrameType == SwFrameType::FtnCont;
+    return mnFrameType == SwFrameType::FootnoteContainer;
 }
 inline bool SwFrame::IsFootnoteFrame() const
 {
-    return mnFrameType == SwFrameType::Ftn;
+    return mnFrameType == SwFrameType::Footnote;
 }
 inline bool SwFrame::IsBodyFrame() const
 {
@@ -1285,7 +1285,7 @@ inline bool SwFrame::IsFlowFrame() const
 }
 inline bool SwFrame::IsRetoucheFrame() const
 {
-    return bool(GetType() & (FRM_CNTNT|SwFrameType::Tab|SwFrameType::Section|SwFrameType::Ftn));
+    return bool(GetType() & (FRM_CNTNT|SwFrameType::Tab|SwFrameType::Section|SwFrameType::Footnote));
 }
 inline bool SwFrame::IsAccessibleFrame() const
 {

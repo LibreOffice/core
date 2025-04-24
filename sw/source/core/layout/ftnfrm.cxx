@@ -188,7 +188,7 @@ static sal_uInt16 lcl_ColumnNum( const SwFrame* pBoss )
 SwFootnoteContFrame::SwFootnoteContFrame( SwFrameFormat *pFormat, SwFrame* pSib ):
     SwLayoutFrame( pFormat, pSib )
 {
-    mnFrameType = SwFrameType::FtnCont;
+    mnFrameType = SwFrameType::FootnoteContainer;
 }
 
 SwFootnoteFrame* SwFootnoteContFrame::AddChained(bool bAppend, SwFrame* pThis, bool bDefaultFormat)
@@ -559,7 +559,7 @@ SwFootnoteFrame::SwFootnoteFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwConte
     // #i49383#
     mbUnlockPosOfLowerObjs( true )
 {
-    mnFrameType = SwFrameType::Ftn;
+    mnFrameType = SwFrameType::Footnote;
 }
 
 void SwFootnoteFrame::InvalidateNxtFootnoteCnts( SwPageFrame const *pPage )

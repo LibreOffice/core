@@ -2905,7 +2905,7 @@ SwTwips SwLayoutFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, boo
                 InvalidateAll_();
                 InvalidatePage( pPage );
             }
-            if (!(GetType() & (SwFrameType::Row|SwFrameType::Tab|SwFrameType::FtnCont|SwFrameType::Page|SwFrameType::Root)))
+            if (!(GetType() & (SwFrameType::Row|SwFrameType::Tab|SwFrameType::FootnoteContainer|SwFrameType::Page|SwFrameType::Root)))
                 NotifyLowerObjs();
 
             if( IsCellFrame() )
@@ -3148,7 +3148,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
                 SetCompletePaint();
         }
 
-        if (!(GetType() & (SwFrameType::Row|SwFrameType::Tab|SwFrameType::FtnCont|SwFrameType::Page|SwFrameType::Root)))
+        if (!(GetType() & (SwFrameType::Row|SwFrameType::Tab|SwFrameType::FootnoteContainer|SwFrameType::Page|SwFrameType::Root)))
             NotifyLowerObjs();
 
         if( IsCellFrame() )
