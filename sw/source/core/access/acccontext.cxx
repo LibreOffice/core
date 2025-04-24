@@ -339,12 +339,9 @@ void SwAccessibleContext::InvalidateChildrenStates( const SwFrame* _pFrame,
 {
     const SwAccessibleChildSList aVisList( GetVisArea(), *_pFrame, *(GetMap()) );
 
-    SwAccessibleChildSList::const_iterator aIter( aVisList.begin() );
-    while( aIter != aVisList.end() )
+    for (const SwAccessibleChild& rLower : aVisList)
     {
-        const SwAccessibleChild& rLower = *aIter;
-        const SwFrame* pLower = rLower.GetSwFrame();
-        if( pLower )
+        if (const SwFrame* pLower = rLower.GetSwFrame())
         {
             ::rtl::Reference< SwAccessibleContext > xAccImpl;
             if (rLower.IsAccessible(GetShell().IsPreview()))
@@ -362,8 +359,6 @@ void SwAccessibleContext::InvalidateChildrenStates( const SwFrame* _pFrame,
         {
             // nothing to do ?
         }
-
-        ++aIter;
     }
 }
 
