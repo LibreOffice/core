@@ -447,12 +447,11 @@ void SwAccessiblePortionData::GetSentenceBoundary(
     OSL_ENSURE( nPos >= 0, "illegal position; check before" );
     OSL_ENSURE( nPos < m_sAccessibleString.getLength(), "illegal position" );
 
-    if( m_pSentences == nullptr )
+    if( m_aSentences.empty() )
     {
         assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
-        m_pSentences.reset(new AccessiblePositions);
-        m_pSentences->reserve(10);
+        m_aSentences.reserve(10);
 
         // use xBreak->endOfSentence to iterate over all words; store
         // positions in pSentences
@@ -460,7 +459,7 @@ void SwAccessiblePortionData::GetSentenceBoundary(
         sal_Int32 nLength = m_sAccessibleString.getLength();
         do
         {
-            m_pSentences->push_back( nCurrent );
+            m_aSentences.push_back( nCurrent );
 
             const TextFrameIndex nFramePos = GetCoreViewPosition(nCurrent);
 
@@ -478,11 +477,11 @@ void SwAccessiblePortionData::GetSentenceBoundary(
         while (nCurrent < nLength);
 
         // finish with two terminators
-        m_pSentences->push_back( nLength );
-        m_pSentences->push_back( nLength );
+        m_aSentences.push_back( nLength );
+        m_aSentences.push_back( nLength );
     }
 
-    FillBoundary( rBound, *m_pSentences, FindBreak( *m_pSentences, nPos ) );
+    FillBoundary( rBound, m_aSentences, FindBreak( m_aSentences, nPos ) );
 }
 
 void SwAccessiblePortionData::GetAttributeBoundary(

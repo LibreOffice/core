@@ -66,7 +66,7 @@ class SwAccessiblePortionData : public SwPortionHandler
 
     std::vector<sal_uInt8> m_aPortionAttrs;   /// additional portion attributes
 
-    std::unique_ptr<AccessiblePositions> m_pSentences; /// positions of sentence breaks
+    AccessiblePositions m_aSentences; /// positions of sentence breaks
 
     size_t m_nBeforePortions;     /// # of portions before first core character
     bool m_bFinished;
