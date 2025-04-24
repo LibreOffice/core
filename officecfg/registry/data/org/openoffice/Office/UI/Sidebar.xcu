@@ -1961,6 +1961,49 @@
         </prop>
       </node>
 
+      <!--
+          Ideally we would just add "Chart, whatever, visible" to
+          "TextPropertyPanel" and expect it to work.
+          But what happens is that a TextPropertyPanel of the parent
+          frame of the Chart frame is present and gets reused,
+          but it is initialized to use the parent XFrame not the
+          embedded Chart one, so it doesn't work.
+
+          TODO: see if the above is still true, it was seen before
+          the parent commit change was figured out.
+      -->
+      <node oor:name="ChartTextPropertyPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Character</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ChartTextPropertyPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>PropertyDeck</value>
+        </prop>
+        <prop oor:name="DefaultMenuCommand">
+          <value>.uno:FontDialog</value>
+        </prop>
+        <prop oor:name="ContextList">
+        <value oor:separator=";">
+            Chart, Axis, visible;
+            Chart, ChartTitle, visible;
+            Chart, ChartLegend, visible;
+            Chart, ChartLabel, visible;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SvxPanelFactory/TextPropertyPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>3</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+      </node>
+
       <node oor:name="ChartErrorBarPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Error Bar</value>
@@ -2035,6 +2078,9 @@
         <prop oor:name="ContextList">
           <value oor:separator=";">
             Chart, Chart, visible ;
+            Chart, ChartTitle, visible;
+            Chart, ChartLegend, visible;
+            Chart, ChartLabel, visible;
             Chart, Series, visible ;
           </value>
         </prop>
@@ -2065,6 +2111,9 @@
         <prop oor:name="ContextList">
           <value oor:separator=";">
             Chart, Chart, visible ;
+            Chart, ChartTitle, visible;
+            Chart, ChartLegend, visible;
+            Chart, ChartLabel, visible;
             Chart, Series, visible ;
             Chart, ErrorBar, visible ;
             Chart, Axis, visible ;

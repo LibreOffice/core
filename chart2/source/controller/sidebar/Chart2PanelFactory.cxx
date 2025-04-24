@@ -56,7 +56,7 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
     try
     {
         const ::comphelper::NamedValueCollection aArguments (rArguments);
-        Reference<css::frame::XFrame> xFrame (aArguments.getOrDefault(u"Frame"_ustr, Reference<css::frame::XFrame>()));
+        Reference<css::frame::XFrame> xFrame(sfx2::sidebar::GetFrame(aArguments));
         Reference<css::awt::XWindow> xParentWindow (aArguments.getOrDefault(u"ParentWindow"_ustr, Reference<css::awt::XWindow>()));
         Reference<css::frame::XController> xController (aArguments.getOrDefault(u"Controller"_ustr, Reference<css::frame::XController>()));
 

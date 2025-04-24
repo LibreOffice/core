@@ -1048,9 +1048,11 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
         {
             OUString aModule = Tools::GetModuleName(mxCurrentController);
             if (!aModule.isEmpty())
-            {
                 aCreationArguments.put(u"Module"_ustr, Any(aModule));
-            }
+            // See also sfx2::sidebar::GetFrame. Maybe we should always create
+            // uielements with the Controller's getFrame as the XFrame. For now
+            // set both XFrame and Controller and selectively get the XFrame
+            // from the Controller.
             aCreationArguments.put(u"Controller"_ustr, Any(mxCurrentController));
         }
 

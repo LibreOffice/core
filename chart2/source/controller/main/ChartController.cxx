@@ -82,6 +82,8 @@
 #include <svx/ActionDescriptionProvider.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
+#include <editeng/fontitem.hxx>
+
 // enable the following define to let the controller listen to model changes and
 // react on this by rebuilding the view
 #define TEST_ENABLE_MODIFY_LISTENER
@@ -278,6 +280,13 @@ OUString ChartController::GetContextName()
         case OBJECTTYPE_DATA_CURVE:
         case OBJECTTYPE_DATA_AVERAGE_LINE:
             return u"Trendline"_ustr;
+        case OBJECTTYPE_TITLE:
+            return u"ChartTitle"_ustr;
+        case OBJECTTYPE_LEGEND:
+            return u"ChartLegend"_ustr;
+        case OBJECTTYPE_DATA_LABEL:
+        case OBJECTTYPE_DATA_LABELS:
+            return u"ChartLabel"_ustr;
         default:
         break;
     }
@@ -1270,6 +1279,127 @@ void SAL_CALL ChartController::dispatch(
         this->executeDispatch_ToggleGridVertical();
     else if( aCommand == "ScaleText" )
         this->executeDispatch_ScaleText();
+    else if( aCommand == "Bold" || aCommand == "CharFontName" || aCommand == "FontHeight"
+             || aCommand == "Italic" || aCommand == "Underline" || aCommand == "Strikeout"
+             || aCommand == "Shadowed" || aCommand == "Color" || aCommand == "FontColor"
+             || aCommand == "Grow" || aCommand == "Shrink" || aCommand == "ResetAttributes"
+             || aCommand == "SuperScript" || aCommand == "SubScript"
+             || aCommand == "Spacing"
+             )
+    {
+        try
+        {
+            OUString aCID(m_aSelection.getSelectedCID());
+            rtl::Reference<::chart::ChartModel> xChartModel = getChartModel();
+            if (xChartModel.is())
+            {
+                // if the selected is title.. we should get the text propertyes instead...
+                // or the selected text properties
+                std::vector<Reference<beans::XPropertySet>> xProperties;
+                xProperties.emplace(xProperties.end(),
+                                     ObjectIdentifier::getObjectPropertySet(aCID, xChartModel));
+
+                if (ObjectIdentifier::getObjectType(aCID) == OBJECTTYPE_TITLE)
+                {
+                    Reference<chart2::XTitle> xTitle(xProperties[0], uno::UNO_QUERY);
+                    if (xTitle.is())
+                    {
+                        OutlinerView* pOutlinerView = nullptr;
+                        if (m_pDrawViewWrapper)
+                        {
+                            pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+                        }
+                        // if the Title is not in edit mode
+                        if (!pOutlinerView)
+                        {
+                            const Sequence<Reference<chart2::XFormattedString>> aStrings(
+                                xTitle->getText());
+                            xProperties.pop_back();
+                            for (int i = 0; i < aStrings.getLength(); i++)
+                            {
+                                Reference<beans::XPropertySet> xTitlePropSet(aStrings[i],
+                                                                             uno::UNO_QUERY);
+                                xProperties.push_back(xTitlePropSet);
+                            }
+                        }
+                        // Todo: implement the edit mode case here.
+                        // the edited text attributes are a bit different from the properties
+                        // SfxItemSet aItemSet = pOutlinerView->GetAttribs();
+                    }
+                }
+                bool bAllPropertiesExist = (xProperties.size() > 0);
+                for (std::size_t i = 0; i < xProperties.size(); i++)
+                {
+                    if (!xProperties[i].is())
+                        bAllPropertiesExist = false;
+                }
+                if (bAllPropertiesExist)
+                {
+                    if (aCommand == "Bold")
+                    {
+                        executeDispatch_FontBold(xProperties);
+                    }
+                    else if (aCommand == "CharFontName")
+                    {
+                        executeDispatch_FontName(xProperties, rArgs);
+                    }
+                    else if (aCommand == "FontHeight")
+                    {
+                        executeDispatch_FontHeight(xProperties, rArgs);
+                    }
+                    else if (aCommand == "Italic")
+                    {
+                        executeDispatch_FontItalic(xProperties);
+                    }
+                    else if (aCommand == "Underline")
+                    {
+                        executeDispatch_FontUnderline(xProperties, rArgs);
+                    }
+                    else if (aCommand == "Strikeout")
+                    {
+                        executeDispatch_FontStrikeout(xProperties);
+                    }
+                    else if (aCommand == "Shadowed")
+                    {
+                        executeDispatch_FontShadowed(xProperties);
+                    }
+                    else if (aCommand == "Color" || aCommand == "FontColor")
+                    {
+                        executeDispatch_FontColor(xProperties, rArgs);
+                    }
+                    else if (aCommand == "Grow")
+                    {
+                        executeDispatch_FontGrow(xProperties);
+                    }
+                    else if (aCommand == "Shrink")
+                    {
+                        executeDispatch_FontShrink(xProperties);
+                    }
+                    else if (aCommand == "ResetAttributes")
+                    {
+                        executeDispatch_FontReset(xProperties);
+                    }
+                    else if (aCommand == "Spacing")
+                    {
+                        executeDispatch_FontSpacing(xProperties, rArgs);
+                    }
+                    else if (aCommand == "SuperScript")
+                    {
+                        executeDispatch_FontSuperScript(xProperties);
+                    }
+                    else if (aCommand == "SubScript")
+                    {
+                        executeDispatch_FontSubScript(xProperties);
+                    }
+                }
+            }
+        }
+        catch (const uno::Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION("chart2");
+        }
+
+    }
     else if( aCommand == "StatusBarVisible" )
     {
         // workaround: this should not be necessary.
@@ -1634,7 +1764,13 @@ const o3tl::sorted_vector< std::u16string_view >& ChartController::impl_getAvail
         u"DefaultColors",      u"BarWidth",             u"NumberOfLines",
         u"ArrangeRow",
         u"StatusBarVisible",
-        u"ChartElementSelector"};
+        u"ChartElementSelector",
+
+        // sidebar commands
+        u"CharFontName" , u"FontHeight" , u"Italic", u"Underline",
+        u"Bold", u"Strikeout",u"Shadowed", u"Color", u"FontColor", u"ResetAttributes",
+        u"Grow", u"Shrink", u"Spacing", u"SuperScript", u"SubScript"
+    };
     return s_AvailableCommands;
 }
 

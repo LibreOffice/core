@@ -110,6 +110,7 @@ void TextPropertyPanel::HandleContextChange (
     bool bWriterText = false;
     bool bDrawText = false;
     bool bCalcText = false;
+    bool bChartText = false;
 
     switch (maContext.GetCombinedContext_DI())
     {
@@ -139,15 +140,28 @@ void TextPropertyPanel::HandleContextChange (
             bCalcText = true;
             break;
 
+        //case CombinedEnumContext(Application::Chart, Context::Chart):
+        case CombinedEnumContext(Application::Chart, Context::Axis):
+        case CombinedEnumContext(Application::Chart, Context::ChartLabel):
+        case CombinedEnumContext(Application::Chart, Context::ChartLegend):
+        case CombinedEnumContext(Application::Chart, Context::ChartTitle):
+            bChartText = true;
+            break;
+
         default:
             break;
     }
 
     mxToolBoxBackgroundColor->set_visible(bWriterText || bDrawText);
-    mxResetBar->set_visible(bWriterText || bCalcText);
+    mxResetBar->set_visible(bWriterText || bCalcText || bChartText);
     mxDefaultBar->set_visible(bDrawText);
     mxHyphenationBar->set_visible(bWriterText);
     mxSpacingBar->set_item_visible(".uno:NoBreak", bWriterText);
+
+    bool bChartTitleOrNonChart
+        = (maContext.GetContext() == vcl::EnumContext::Context::ChartTitle) || !bChartText;
+    mxPositionBar->set_visible(bChartTitleOrNonChart);
+    mxSpacingBar->set_visible(bChartTitleOrNonChart);
 }
 
 } // end of namespace svx::sidebar

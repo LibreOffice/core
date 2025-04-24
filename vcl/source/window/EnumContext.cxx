@@ -163,6 +163,9 @@ void EnumContext::ProvideContextContainers()
     AddEntry(u"Cell"_ustr, Context::Cell);
     AddEntry(u"Chart"_ustr, Context::Chart);
     AddEntry(u"ChartElements"_ustr, Context::ChartElements);
+    AddEntry(u"ChartLabel"_ustr, Context::ChartLabel);
+    AddEntry(u"ChartLegend"_ustr, Context::ChartLegend);
+    AddEntry(u"ChartTitle"_ustr, Context::ChartTitle);
     AddEntry(u"Draw"_ustr, Context::Draw);
     AddEntry(u"DrawFontwork"_ustr, Context::DrawFontwork);
     AddEntry(u"DrawLine"_ustr, Context::DrawLine);
