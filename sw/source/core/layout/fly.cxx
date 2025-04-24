@@ -262,7 +262,7 @@ void SwFlyFrame::Chain( SwFrame* _pAnch )
         {
             OSL_ENSURE( !pFollow->GetPrevLink(), "wrong chain detected" );
             if ( !pFollow->GetPrevLink() )
-                SwFlyFrame::ChainFrames( this, pFollow );
+                SwFlyFrame::ChainFrames( *this, *pFollow );
         }
     }
     if ( rChain.GetPrev() )
@@ -272,7 +272,7 @@ void SwFlyFrame::Chain( SwFrame* _pAnch )
         {
             OSL_ENSURE( !pMaster->GetNextLink(), "wrong chain detected" );
             if ( !pMaster->GetNextLink() )
-                SwFlyFrame::ChainFrames( pMaster, this );
+                SwFlyFrame::ChainFrames( *pMaster, *this );
         }
     }
 }
@@ -382,9 +382,9 @@ const IDocumentDrawModelAccess& SwFlyFrame::getIDocumentDrawModelAccess()
 void SwFlyFrame::Unchain()
 {
     if ( GetPrevLink() )
-        UnchainFrames( GetPrevLink(), this );
+        UnchainFrames( *GetPrevLink(), *this );
     if ( GetNextLink() )
-        UnchainFrames( this, GetNextLink() );
+        UnchainFrames( *this, *GetNextLink() );
 }
 
 void SwFlyFrame::DeleteCnt()
@@ -521,21 +521,20 @@ void SwFlyFrame::FinitDrawObj()
     ClearDrawObj();
 }
 
-void SwFlyFrame::ChainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
+void SwFlyFrame::ChainFrames( SwFlyFrame &rMaster, SwFlyFrame &rFollow )
 {
-    assert(pMaster && pFollow && "incomplete chain");
-    OSL_ENSURE( !pMaster->GetNextLink(), "link can not be changed" );
-    OSL_ENSURE( !pFollow->GetPrevLink(), "link can not be changed" );
+    OSL_ENSURE( !rMaster.GetNextLink(), "link can not be changed" );
+    OSL_ENSURE( !rFollow.GetPrevLink(), "link can not be changed" );
 
-    pMaster->m_pNextLink = pFollow;
-    pFollow->m_pPrevLink = pMaster;
+    rMaster.m_pNextLink = &rFollow;
+    rFollow.m_pPrevLink = &rMaster;
 
-    if ( pMaster->ContainsContent() )
+    if ( rMaster.ContainsContent() )
     {
         // To get a text flow we need to invalidate
-        SwFrame *pInva = pMaster->FindLastLower();
-        SwRectFnSet aRectFnSet(pMaster);
-        const tools::Long nBottom = aRectFnSet.GetPrtBottom(*pMaster);
+        SwFrame *pInva = rMaster.FindLastLower();
+        SwRectFnSet aRectFnSet(&rMaster);
+        const tools::Long nBottom = aRectFnSet.GetPrtBottom(rMaster);
         while ( pInva )
         {
             if( aRectFnSet.BottomDist( pInva->getFrameArea(), nBottom ) <= 0 )
@@ -549,11 +548,11 @@ void SwFlyFrame::ChainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
         }
     }
 
-    if ( pFollow->ContainsContent() )
+    if ( rFollow.ContainsContent() )
     {
         // There's only the content from the Masters left; the content from the Follow
         // does not have any Frames left (should always be exactly one empty TextNode).
-        SwFrame *pFrame = pFollow->ContainsContent();
+        SwFrame *pFrame = rFollow.ContainsContent();
         OSL_ENSURE( !pFrame->IsTabFrame() && !pFrame->FindNext(), "follow in chain contains content" );
         pFrame->Cut();
         SwFrame::DestroyFrame(pFrame);
@@ -561,37 +560,37 @@ void SwFlyFrame::ChainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
 
     // invalidate accessible relation set (accessibility wrapper)
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    SwViewShell* pSh = pMaster->getRootFrame()->GetCurrShell();
+    SwViewShell* pSh = rMaster.getRootFrame()->GetCurrShell();
     if( pSh )
     {
-        SwRootFrame* pLayout = pMaster->getRootFrame();
+        SwRootFrame* pLayout = rMaster.getRootFrame();
         if( pLayout && pLayout->IsAnyShellAccessible() )
-            pSh->Imp()->InvalidateAccessibleRelationSet( pMaster, pFollow );
+            pSh->Imp()->InvalidateAccessibleRelationSet( &rMaster, &rFollow );
     }
 #endif
 }
 
-void SwFlyFrame::UnchainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
+void SwFlyFrame::UnchainFrames( SwFlyFrame &rMaster, SwFlyFrame &rFollow )
 {
-    pMaster->m_pNextLink = nullptr;
-    pFollow->m_pPrevLink = nullptr;
+    rMaster.m_pNextLink = nullptr;
+    rFollow.m_pPrevLink = nullptr;
 
-    if ( pFollow->ContainsContent() )
+    if ( rFollow.ContainsContent() )
     {
         // The Master sucks up the content of the Follow
-        SwLayoutFrame *pUpper = pMaster;
+        SwLayoutFrame *pUpper = &rMaster;
         if ( pUpper->Lower()->IsColumnFrame() )
         {
             pUpper = static_cast<SwLayoutFrame*>(pUpper->GetLastLower());
             pUpper = static_cast<SwLayoutFrame*>(pUpper->Lower()); // The (Column)BodyFrame
             OSL_ENSURE( pUpper && pUpper->IsColBodyFrame(), "Missing ColumnBody" );
         }
-        SwFlyFrame *pFoll = pFollow;
+        SwFlyFrame *pFoll = &rFollow;
         while ( pFoll )
         {
             SwFrame *pTmp = ::SaveContent( pFoll );
             if ( pTmp )
-                ::RestoreContent( pTmp, pUpper, pMaster->FindLastLower() );
+                ::RestoreContent( pTmp, pUpper, rMaster.FindLastLower() );
             pFoll->SetCompletePaint();
             pFoll->InvalidateSize();
             pFoll = pFoll->GetNextLink();
@@ -599,23 +598,23 @@ void SwFlyFrame::UnchainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
     }
 
     // The Follow needs his own content to be served
-    const SwFormatContent &rContent = pFollow->GetFormat()->GetContent();
+    const SwFormatContent &rContent = rFollow.GetFormat()->GetContent();
     OSL_ENSURE( rContent.GetContentIdx(), ":-( No content prepared." );
     SwNodeOffset nIndex = rContent.GetContentIdx()->GetIndex();
     // Lower() means SwColumnFrame: this one contains another SwBodyFrame
-    SwFrame* pLower = pFollow->Lower();
+    SwFrame* pLower = rFollow.Lower();
     ::InsertCnt_( pLower ? const_cast<SwLayoutFrame*>(static_cast<const SwLayoutFrame*>(static_cast<const SwLayoutFrame*>(pLower)->Lower()))
-                                   : static_cast<SwLayoutFrame*>(pFollow),
-                  pFollow->GetFormat()->GetDoc(), ++nIndex );
+                                   : static_cast<SwLayoutFrame*>(&rFollow),
+                  rFollow.GetFormat()->GetDoc(), ++nIndex );
 
     // invalidate accessible relation set (accessibility wrapper)
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    SwViewShell* pSh = pMaster->getRootFrame()->GetCurrShell();
+    SwViewShell* pSh = rMaster.getRootFrame()->GetCurrShell();
     if( pSh )
     {
-        SwRootFrame* pLayout = pMaster->getRootFrame();
+        SwRootFrame* pLayout = rMaster.getRootFrame();
         if( pLayout && pLayout->IsAnyShellAccessible() )
-            pSh->Imp()->InvalidateAccessibleRelationSet( pMaster, pFollow );
+            pSh->Imp()->InvalidateAccessibleRelationSet( &rMaster, &rFollow );
     }
 #endif
 }
@@ -1168,36 +1167,35 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 {
                     SwFlyFrame *pFollow = FindChainNeighbour( *pChain->GetNext() );
                     if ( GetNextLink() && pFollow != GetNextLink() )
-                        SwFlyFrame::UnchainFrames( this, GetNextLink());
+                        SwFlyFrame::UnchainFrames( *this, *GetNextLink());
                     if ( pFollow )
                     {
                         if ( pFollow->GetPrevLink() &&
                              pFollow->GetPrevLink() != this )
-                            SwFlyFrame::UnchainFrames( pFollow->GetPrevLink(),
-                                                     pFollow );
+                            SwFlyFrame::UnchainFrames( *pFollow->GetPrevLink(),
+                                                     *pFollow );
                         if ( !GetNextLink() )
-                            SwFlyFrame::ChainFrames( this, pFollow );
+                            SwFlyFrame::ChainFrames( *this, *pFollow );
                     }
                 }
                 else if ( GetNextLink() )
-                    SwFlyFrame::UnchainFrames( this, GetNextLink() );
+                    SwFlyFrame::UnchainFrames( *this, *GetNextLink() );
                 if ( pChain->GetPrev() )
                 {
                     SwFlyFrame *pMaster = FindChainNeighbour( *pChain->GetPrev() );
                     if ( GetPrevLink() && pMaster != GetPrevLink() )
-                        SwFlyFrame::UnchainFrames( GetPrevLink(), this );
+                        SwFlyFrame::UnchainFrames( *GetPrevLink(), *this );
                     if ( pMaster )
                     {
                         if ( pMaster->GetNextLink() &&
                              pMaster->GetNextLink() != this )
-                            SwFlyFrame::UnchainFrames( pMaster,
-                                                     pMaster->GetNextLink() );
+                            SwFlyFrame::UnchainFrames( *pMaster, *pMaster->GetNextLink() );
                         if ( !GetPrevLink() )
-                            SwFlyFrame::ChainFrames( pMaster, this );
+                            SwFlyFrame::ChainFrames( *pMaster, *this );
                     }
                 }
                 else if ( GetPrevLink() )
-                    SwFlyFrame::UnchainFrames( GetPrevLink(), this );
+                    SwFlyFrame::UnchainFrames( *GetPrevLink(), *this );
             }
             [[fallthrough]];
         default:

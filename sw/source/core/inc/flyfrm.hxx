@@ -193,8 +193,8 @@ public:
     SwFlyFrame *GetPrevLink() const { return m_pPrevLink; }
     SwFlyFrame *GetNextLink() const { return m_pNextLink; }
 
-    static void ChainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow );
-    static void UnchainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow );
+    static void ChainFrames( SwFlyFrame &rMaster, SwFlyFrame &rFollow );
+    static void UnchainFrames( SwFlyFrame &rMaster, SwFlyFrame &rFollow );
 
     SwFlyFrame *FindChainNeighbour( SwFrameFormat const &rFormat, SwFrame *pAnch = nullptr );
 
