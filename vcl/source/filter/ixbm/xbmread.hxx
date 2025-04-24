@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <vcl/dllapi.h>
+
 class SvStream;
 class ImportOutput;
 
