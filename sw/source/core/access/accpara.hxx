@@ -94,7 +94,7 @@ class SwAccessibleParagraph :
     /// get the (accessible) text string (requires frame; check before)
     OUString const & GetString();
 
-    // get the current care position
+    // get the current caret position
     sal_Int32 GetCaretPos();
 
     // determine the current selection. Fill the values with
