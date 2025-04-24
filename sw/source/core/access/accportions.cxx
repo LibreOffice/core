@@ -60,16 +60,14 @@ static size_t FindLastBreak(const std::vector<T>& rPositions, T nValue);
 
 
 SwAccessiblePortionData::SwAccessiblePortionData(
-    const SwTextFrame *const pTextFrame,
+    const SwTextFrame& rTextFrame,
     const SwViewOption* pViewOpt ) :
-    m_pTextFrame(pTextFrame),
+    m_rTextFrame(rTextFrame),
     m_nViewPosition( 0 ),
     m_pViewOptions( pViewOpt ),
     m_nBeforePortions( 0 ),
     m_bFinished( false )
 {
-    OSL_ENSURE( m_pTextFrame != nullptr, "Need SwTextFrame!" );
-
     // reserve some space to reduce memory allocations
     m_aLineBreaks.reserve( 5 );
     m_ViewPositions.reserve( 10 );
@@ -86,7 +84,7 @@ SwAccessiblePortionData::~SwAccessiblePortionData()
 void SwAccessiblePortionData::Text(TextFrameIndex const nLength,
         PortionType nType)
 {
-    OSL_ENSURE((m_nViewPosition + nLength) <= TextFrameIndex(m_pTextFrame->GetText().getLength()),
+    OSL_ENSURE((m_nViewPosition + nLength) <= TextFrameIndex(m_rTextFrame.GetText().getLength()),
                 "portion exceeds model string!" );
 
     OSL_ENSURE( !m_bFinished, "We are already done!" );
@@ -104,7 +102,7 @@ void SwAccessiblePortionData::Text(TextFrameIndex const nLength,
     m_aPortionAttrs.push_back( nAttr );
 
     // update buffer + nViewPosition
-    m_aBuffer.append(m_pTextFrame->GetText().subView(sal_Int32(m_nViewPosition), sal_Int32(nLength)));
+    m_aBuffer.append(m_rTextFrame.GetText().subView(sal_Int32(m_nViewPosition), sal_Int32(nLength)));
     m_nViewPosition += nLength;
 }
 
@@ -112,7 +110,7 @@ void SwAccessiblePortionData::Special(
     TextFrameIndex const nLength, const OUString& rText, PortionType nType)
 {
     OSL_ENSURE(m_nViewPosition >= TextFrameIndex(0), "illegal position");
-    OSL_ENSURE((m_nViewPosition + nLength) <= TextFrameIndex(m_pTextFrame->GetText().getLength()),
+    OSL_ENSURE((m_nViewPosition + nLength) <= TextFrameIndex(m_rTextFrame.GetText().getLength()),
                 "portion exceeds model string!" );
 
     OSL_ENSURE( !m_bFinished, "We are already done!" );
@@ -159,7 +157,7 @@ void SwAccessiblePortionData::Special(
         // #i111768# - apply patch from kstribley:
         // Include the control characters.
         case PortionType::ControlChar:
-            sDisplay = rText + OUStringChar(m_pTextFrame->GetText()[sal_Int32(m_nViewPosition)]);
+            sDisplay = rText + OUStringChar(m_rTextFrame.GetText()[sal_Int32(m_nViewPosition)]);
             break;
         case PortionType::Bookmark:
             if ( m_pViewOptions->IsShowBookmarks() )
@@ -206,7 +204,7 @@ void SwAccessiblePortionData::Skip(TextFrameIndex const nLength)
 {
     OSL_ENSURE( !m_bFinished, "We are already done!" );
     OSL_ENSURE( m_ViewPositions.empty(), "Never Skip() after portions" );
-    OSL_ENSURE(nLength <= TextFrameIndex(m_pTextFrame->GetText().getLength()),
+    OSL_ENSURE(nLength <= TextFrameIndex(m_rTextFrame.GetText().getLength()),
             "skip exceeds model string!" );
 
     m_nViewPosition += nLength;
@@ -465,7 +463,7 @@ void SwAccessiblePortionData::GetSentenceBoundary(
 
             sal_Int32 nNew = g_pBreakIt->GetBreakIter()->endOfSentence(
                 m_sAccessibleString, nCurrent,
-                g_pBreakIt->GetLocale(m_pTextFrame->GetLangOfChar(nFramePos, 0, true))) + 1;
+                g_pBreakIt->GetLocale(m_rTextFrame.GetLangOfChar(nFramePos, 0, true))) + 1;
 
             if( (nNew < 0) && (nNew > nLength) )
                 nNew = nLength;
@@ -488,8 +486,6 @@ void SwAccessiblePortionData::GetAttributeBoundary(
     Boundary& rBound,
     sal_Int32 nPos) const
 {
-    OSL_ENSURE( m_pTextFrame != nullptr, "Need SwTextNode!" );
-
     // attribute boundaries can only occur on portion boundaries
     FillBoundary( rBound, m_aAccessiblePositions,
                   FindBreak( m_aAccessiblePositions, nPos ) );
@@ -497,7 +493,7 @@ void SwAccessiblePortionData::GetAttributeBoundary(
 
 sal_Int32 SwAccessiblePortionData::GetAccessiblePosition(TextFrameIndex const nPos) const
 {
-    OSL_ENSURE(nPos <= TextFrameIndex(m_pTextFrame->GetText().getLength()), "illegal position");
+    OSL_ENSURE(nPos <= TextFrameIndex(m_rTextFrame.GetText().getLength()), "illegal position");
 
     // find the portion number
     // #i70538# - consider "empty" model portions - e.g. number portion

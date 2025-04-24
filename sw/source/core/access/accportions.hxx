@@ -39,7 +39,7 @@ namespace com::sun::star {
 class SwAccessiblePortionData : public SwPortionHandler
 {
     // the frame this portion is referring to
-    SwTextFrame const* m_pTextFrame;
+    const SwTextFrame& m_rTextFrame;
 
     // variables used while collecting the data
     OUStringBuffer m_aBuffer;
@@ -86,7 +86,7 @@ class SwAccessiblePortionData : public SwPortionHandler
                          TextFrameIndex& rCorePos, bool& bEdit) const;
 
 public:
-    SwAccessiblePortionData( const SwTextFrame* pTextFrame,
+    SwAccessiblePortionData(const SwTextFrame& rTextFrame,
                              const SwViewOption* pViewOpt );
     virtual ~SwAccessiblePortionData() override;
 

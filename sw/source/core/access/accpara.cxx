@@ -390,7 +390,7 @@ void SwAccessibleParagraph::UpdatePortionData()
     assert(pFrame && "The text frame has vanished!");
     // build new portion data
     m_pPortionData.reset(
-        new SwAccessiblePortionData(pFrame, GetMap()->GetShell().GetViewOptions()));
+        new SwAccessiblePortionData(*pFrame, GetMap()->GetShell().GetViewOptions()));
     pFrame->VisitPortions(*m_pPortionData);
 }
 
