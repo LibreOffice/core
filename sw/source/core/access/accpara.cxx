@@ -624,47 +624,30 @@ bool SwAccessibleParagraph::GetTextBoundary(
                 : IsValidChar( nPos, rText.getLength() ) ) )
         throw lang::IndexOutOfBoundsException();
 
-    bool bRet;
-
     switch( nTextType )
     {
         case AccessibleTextType::WORD:
-            bRet = GetWordBoundary(rBound, rText, nPos);
-            break;
-
+            return GetWordBoundary(rBound, rText, nPos);
         case AccessibleTextType::SENTENCE:
-            bRet = GetSentenceBoundary( rBound, rText, nPos );
-            break;
-
+            return GetSentenceBoundary(rBound, rText, nPos);
         case AccessibleTextType::PARAGRAPH:
-            bRet = GetParagraphBoundary( rBound, rText );
-            break;
-
+            return GetParagraphBoundary(rBound, rText);
         case AccessibleTextType::CHARACTER:
-            bRet = GetCharBoundary( rBound, rText, nPos );
-            break;
-
+            return GetCharBoundary(rBound, rText, nPos);
         case AccessibleTextType::LINE:
             //Solve the problem of returning wrong LINE and PARAGRAPH
             if((nPos == rText.getLength()) && nPos > 0)
-                bRet = GetLineBoundary( rBound, rText, nPos - 1);
+                return GetLineBoundary(rBound, rText, nPos - 1);
             else
-                bRet = GetLineBoundary( rBound, rText, nPos );
+                return GetLineBoundary(rBound, rText, nPos);
             break;
-
         case AccessibleTextType::ATTRIBUTE_RUN:
-            bRet = GetAttributeBoundary( rBound, nPos );
-            break;
-
+            return GetAttributeBoundary(rBound, nPos);
         case AccessibleTextType::GLYPH:
-            bRet = GetGlyphBoundary( rBound, rText, nPos );
-            break;
-
+            return GetGlyphBoundary(rBound, rText, nPos);
         default:
             throw lang::IllegalArgumentException( );
     }
-
-    return bRet;
 }
 
 OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription()
