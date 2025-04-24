@@ -1918,11 +1918,9 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     {
         throw uno::RuntimeException(u"no Window"_ustr, getXWeak());
     }
-    Point aPoint( rPoint.X, rPoint.Y );
     SwRect aLogBounds( GetBounds( *(GetMap()), GetFrame() ) ); // twip rel to doc root
     Point aPixPos( GetMap()->CoreToPixel( aLogBounds ).TopLeft() );
-    aPoint.setX(aPoint.getX() + aPixPos.getX());
-    aPoint.setY(aPoint.getY() + aPixPos.getY());
+    const Point aPoint(rPoint.X + aPixPos.getX(), rPoint.Y + aPixPos.getY());
     Point aCorePoint( GetMap()->PixelToCore( aPoint ) );
     if( !aLogBounds.Contains( aCorePoint ) )
     {
