@@ -391,7 +391,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accName(VARIANT varChild, BS
 
             long lVal = varChild.lVal;
             varChild.lVal = CHILDID_SELF;
-            IMAccessible *pChild = this->GetChildInterface(lVal);
+            IMAccessible* pChild = GetChildInterface(lVal);
             if(!pChild)
                 return E_FAIL;
             return pChild->get_accName(varChild,pszName);
@@ -436,7 +436,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accValue(VARIANT varChild, B
 
             long lVal = varChild.lVal;
             varChild.lVal = CHILDID_SELF;
-            IMAccessible *pChild = this->GetChildInterface(lVal);
+            IMAccessible* pChild = GetChildInterface(lVal);
             if(!pChild)
                 return E_FAIL;
             return pChild->get_accValue(varChild,pszValue);
@@ -483,7 +483,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accDescription(VARIANT varCh
 
             long lVal = varChild.lVal;
             varChild.lVal = CHILDID_SELF;
-            IMAccessible *pChild = this->GetChildInterface(lVal);
+            IMAccessible* pChild = GetChildInterface(lVal);
             if(!pChild)
                 return E_FAIL;
             return pChild->get_accDescription(varChild,pszDescription);
@@ -530,7 +530,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accRole(VARIANT varChild, VA
 
             long lVal = varChild.lVal;
             varChild.lVal = CHILDID_SELF;
-            IMAccessible *pChild = this->GetChildInterface(lVal);
+            IMAccessible* pChild = GetChildInterface(lVal);
             if(!pChild)
                 return E_FAIL;
             return pChild->get_accRole(varChild,pvarRole);
@@ -590,7 +590,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accState(VARIANT varChild, V
 
             long lVal = varChild.lVal;
             varChild.lVal = CHILDID_SELF;
-            IMAccessible *pChild = this->GetChildInterface(lVal);
+            IMAccessible* pChild = GetChildInterface(lVal);
             if(!pChild)
                 return E_FAIL;
             return pChild->get_accState(varChild,pvarState);
@@ -782,7 +782,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT 
 
             long lVal = varChild.lVal;
             varChild.lVal = CHILDID_SELF;
-            IMAccessible *pChild = this->GetChildInterface(lVal);
+            IMAccessible* pChild = GetChildInterface(lVal);
             if(!pChild)
                 return E_FAIL;
 
@@ -1073,7 +1073,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::put_accValue(VARIANT varChild, B
 
             long lVal = varChild.lVal;
             varChild.lVal = CHILDID_SELF;
-            IMAccessible *pChild = this->GetChildInterface(lVal);
+            IMAccessible* pChild = GetChildInterface(lVal);
             if(!pChild)
                 return E_FAIL;
             return pChild->put_accValue(varChild,szValue);
@@ -1222,7 +1222,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccParent(IMAccessible __RP
 {
     // internal IMAccessible - no mutex meeded
 
-    this->m_pIParent = pIParent;
+    m_pIParent = pIParent;
 
     if(pIParent)
         m_pIParent->AddRef();
@@ -1239,7 +1239,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccChildID(long dChildID)
 {
     // internal IMAccessible - no mutex meeded
 
-    this->m_dChildID = dChildID;
+    m_dChildID = dChildID;
     return S_OK;
 }
 
@@ -2181,7 +2181,7 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CMAccessible::get_accDefaultActio
 
             long lVal = varChild.lVal;
             varChild.lVal = CHILDID_SELF;
-            IMAccessible *pChild = this->GetChildInterface(lVal);
+            IMAccessible* pChild = GetChildInterface(lVal);
             if(!pChild)
                 return E_FAIL;
             return pChild->get_accDefaultAction(varChild,pszDefaultAction);
@@ -2217,7 +2217,7 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CMAccessible::accDoDefaultAction(
 
         long lVal = varChild.lVal;
         varChild.lVal = CHILDID_SELF;
-        IMAccessible *pChild = this->GetChildInterface(lVal);
+        IMAccessible* pChild = GetChildInterface(lVal);
         if(!pChild)
             return E_FAIL;
         return pChild->accDoDefaultAction( varChild );

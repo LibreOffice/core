@@ -633,7 +633,7 @@ bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentX
     }
 
     AccObject pObj(pXAcc, this);
-    pObj.SetResID( this->ImpleGenerateResID());
+    pObj.SetResID(ImpleGenerateResID());
     pObj.SetParentHWND( pWnd );
 
     //for file name support
