@@ -300,8 +300,7 @@ void SwAccessibleParagraph::InvalidateCursorPos_()
     {
         // remember that object as the one that has the caret. This is
         // necessary to notify that object if the cursor leaves it.
-        ::rtl::Reference < SwAccessibleContext > xThis( this );
-        GetMap()->SetCursorContext( xThis );
+        GetMap()->SetCursorContext(this);
     }
 
     vcl::Window *pWin = GetWindow();
