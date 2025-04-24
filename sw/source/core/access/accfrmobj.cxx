@@ -129,22 +129,10 @@ bool SwAccessibleChild::IsFrameAccessible(const SwFrame& rFrame, bool bPagePrevi
 
 bool SwAccessibleChild::IsAccessible( bool bPagePreview ) const
 {
-    bool bRet( false );
-
     if ( mpFrame )
-    {
-        bRet = IsFrameAccessible(*mpFrame, bPagePreview);
-    }
-    else if ( mpDrawObj )
-    {
-        bRet = true;
-    }
-    else if ( mpWindow )
-    {
-        bRet = true;
-    }
+        return IsFrameAccessible(*mpFrame, bPagePreview);
 
-    return bRet;
+    return mpDrawObj || mpWindow;
 }
 
 bool SwAccessibleChild::IsBoundAsChar() const
