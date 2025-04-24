@@ -2281,15 +2281,15 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
 {
     DBG_TESTSOLARMUTEX();
 
-    SwAccessibleChild aFrameOrObj( pFrame );
+    const SwFrame* pAccFrame = pFrame;
     bool bShapeSelected = false;
     const SwViewShell& rVSh = GetShell();
     if( auto pCSh = dynamic_cast<const SwCursorShell*>(&rVSh) )
     {
         if( pCSh->IsTableMode() )
         {
-            while( aFrameOrObj.GetSwFrame() && !aFrameOrObj.GetSwFrame()->IsCellFrame() )
-                aFrameOrObj = aFrameOrObj.GetSwFrame()->GetUpper();
+            while (pAccFrame && !pAccFrame->IsCellFrame())
+                pAccFrame = pAccFrame->GetUpper();
         }
         else if( auto pFESh = dynamic_cast<const SwFEShell*>(&rVSh) )
         {
@@ -2298,17 +2298,17 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
             {
                 OSL_ENSURE( !pFrame || pFrame->FindFlyFrame() == pFlyFrame,
                         "cursor is not contained in fly frame" );
-                aFrameOrObj = pFlyFrame;
+                pAccFrame = pFlyFrame;
             }
             else if( pFESh->GetSelectedObjCount() > 0 )
             {
                 bShapeSelected = true;
-                aFrameOrObj = static_cast<const SwFrame *>( nullptr );
+                pAccFrame = nullptr;
             }
         }
     }
 
-    OSL_ENSURE(bShapeSelected || aFrameOrObj.IsAccessible(GetShell().IsPreview()),
+    OSL_ENSURE(bShapeSelected || (pAccFrame && SwAccessibleChild::IsFrameAccessible(*pAccFrame, GetShell().IsPreview())),
             "frame is not accessible" );
 
     rtl::Reference <SwAccessibleContext> xOldAcc = mxCursorContext;
@@ -2318,25 +2318,25 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
     mbShapeSelected = bShapeSelected;
 
     rtl::Reference <SwAccessibleContext> xAcc;
-    if (aFrameOrObj.GetSwFrame())
+    if (pAccFrame)
     {
-        SwAccessibleContextMap::iterator aIter = maFrameMap.find(aFrameOrObj.GetSwFrame());
+        SwAccessibleContextMap::iterator aIter = maFrameMap.find(pAccFrame);
         if (aIter != maFrameMap.end())
             xAcc = (*aIter).second;
         else
         {
             SwRect rcEmpty;
-            const SwTabFrame* pTabFrame = aFrameOrObj.GetSwFrame()->FindTabFrame();
+            const SwTabFrame* pTabFrame = pAccFrame->FindTabFrame();
             if (pTabFrame)
             {
                 InvalidatePosOrSize(pTabFrame, nullptr, nullptr, rcEmpty);
             }
             else
             {
-                InvalidatePosOrSize(aFrameOrObj.GetSwFrame(), nullptr, nullptr, rcEmpty);
+                InvalidatePosOrSize(pAccFrame, nullptr, nullptr, rcEmpty);
             }
 
-            aIter = maFrameMap.find(aFrameOrObj.GetSwFrame());
+            aIter = maFrameMap.find(pAccFrame);
             if (aIter != maFrameMap.end())
             {
                 xAcc = (*aIter).second;
@@ -2356,10 +2356,9 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
         // table, it's the best choice, because using it avoids
         // an unnecessary cursor invalidation cycle when creating
         // a new object for the current cell.
-        if( aFrameOrObj.GetSwFrame()->IsCellFrame() )
+        if (pAccFrame->IsCellFrame())
         {
-            if( xOldAcc.is() &&
-                AreInSameTable( xOldAcc, aFrameOrObj.GetSwFrame() ) )
+            if (xOldAcc.is() && AreInSameTable(xOldAcc, pAccFrame))
             {
                 if( xAcc.is() )
                     xOldAcc = xAcc; // avoid extra invalidation
@@ -2367,7 +2366,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
                     xAcc = xOldAcc; // make sure at least one
             }
             if( !xAcc.is() )
-                xAcc = GetContextImpl( aFrameOrObj.GetSwFrame() );
+                xAcc = GetContextImpl(pAccFrame);
         }
     }
     else if (bShapeSelected)
