@@ -82,6 +82,7 @@ public:
 #if OSL_DEBUG_LEVEL > 0
     void SetRedlineCountDontCheck(bool bCheck) { m_Data[0]->m_bRedlineCountDontCheck=bCheck; }
 #endif
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 namespace sw {

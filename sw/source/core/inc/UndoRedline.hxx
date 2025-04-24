@@ -53,6 +53,7 @@ public:
 #if OSL_DEBUG_LEVEL > 0
     void SetRedlineCountDontCheck(bool bCheck);
 #endif
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 class SwUndoRedlineDelete final : public SwUndoRedline
@@ -115,6 +116,7 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 };
 
+/// Undo for Edit -> Track Changes -> Reject.
 class SwUndoRejectRedline final : public SwUndoRedline
 {
 private:

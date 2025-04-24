@@ -1238,6 +1238,26 @@ bool SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) c
     return true;
 }
 
+void SwRedlineSaveDatas::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwRedlineSaveDatas"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    for (const auto& rRedlineData : m_Data)
+    {
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("data"));
+        const SwRedlineData* pData = rRedlineData.get();
+        while (pData)
+        {
+            pData->dumpAsXml(pWriter);
+            pData = pData->Next();
+        }
+        (void)xmlTextWriterEndElement(pWriter);
+    }
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 SwRedlineData::SwRedlineData( RedlineType eT, std::size_t nAut, sal_uInt32 nMovedID )
     : m_pNext( nullptr ), m_pExtraData( nullptr ),
     m_aStamp( DateTime::SYSTEM ),

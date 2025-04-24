@@ -97,6 +97,27 @@ void SwUndoRedline::SetRedlineCountDontCheck(bool bCheck)
 }
 #endif
 
+void SwUndoRedline::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoRedline"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"), BAD_CAST(typeid(*this).name()));
+
+    const SwRedlineData* pRedlData = mpRedlData.get();
+    while (pRedlData)
+    {
+        pRedlData->dumpAsXml(pWriter);
+        pRedlData = pRedlData->Next();
+    }
+
+    if (mpRedlSaveData)
+    {
+        mpRedlSaveData->dumpAsXml(pWriter);
+    }
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc& rDoc = rContext.GetDoc();
