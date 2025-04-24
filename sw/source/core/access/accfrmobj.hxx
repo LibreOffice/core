@@ -66,6 +66,7 @@ class SwAccessibleChild
 
         const SwFrame* GetParent( const bool bInPagePreview ) const;
 
+        static bool IsFrameAccessible(const SwFrame& rFrame, bool bPagePreview);
         bool IsAccessible( bool bPagePreview ) const;
         bool IsBoundAsChar() const;
 

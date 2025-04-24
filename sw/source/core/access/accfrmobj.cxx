@@ -119,18 +119,21 @@ void SwAccessibleChild::Init( vcl::Window* pWindow )
     mpDrawObj = nullptr;
 }
 
+bool SwAccessibleChild::IsFrameAccessible(const SwFrame& rFrame, bool bPagePreview)
+{
+    return rFrame.IsAccessibleFrame()
+           && (!rFrame.IsCellFrame()
+               || static_cast<const SwCellFrame&>(rFrame).GetTabBox()->GetSttNd() != nullptr)
+           && !rFrame.IsInCoveredCell() && (bPagePreview || !rFrame.IsPageFrame());
+}
+
 bool SwAccessibleChild::IsAccessible( bool bPagePreview ) const
 {
     bool bRet( false );
 
     if ( mpFrame )
     {
-        bRet = mpFrame->IsAccessibleFrame() &&
-               ( !mpFrame->IsCellFrame() ||
-                 static_cast<const SwCellFrame *>( mpFrame )->GetTabBox()->GetSttNd() != nullptr ) &&
-               !mpFrame->IsInCoveredCell() &&
-               ( bPagePreview ||
-                 !mpFrame->IsPageFrame() );
+        bRet = IsFrameAccessible(*mpFrame, bPagePreview);
     }
     else if ( mpDrawObj )
     {
