@@ -91,8 +91,6 @@ private:
     // in general registered at the accessible map.
     bool m_isRegisteredAtAccessibleMap;
 
-    void InitStates();
-
 protected:
     void SetName( const OUString& rName ) { m_sName = rName; }
     sal_Int16 GetRole() const

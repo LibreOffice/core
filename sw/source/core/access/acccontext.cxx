@@ -51,16 +51,6 @@ using namespace sw::access;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-void SwAccessibleContext::InitStates()
-{
-    m_isShowingState = GetMap() && IsShowing( *(GetMap()) );
-
-    SwViewShell& rVSh = GetMap()->GetShell();
-    m_isEditableState = IsEditable(rVSh);
-    m_isOpaqueState = IsOpaque(rVSh);
-    m_isDefuncState = false;
-}
-
 void SwAccessibleContext::SetParent( SwAccessibleContext *pParent )
 {
     std::scoped_lock aGuard( m_Mutex );
@@ -526,7 +516,12 @@ SwAccessibleContext::SwAccessibleContext(std::shared_ptr<SwAccessibleMap> const&
     , m_isRegisteredAtAccessibleMap( true )
     , m_isSelectedInDoc(false)
 {
-    InitStates();
+    m_isShowingState = IsShowing( *(GetMap()) );
+
+    SwViewShell& rVSh = GetMap()->GetShell();
+    m_isEditableState = IsEditable(rVSh);
+    m_isOpaqueState = IsOpaque(rVSh);
+    m_isDefuncState = false;
 }
 
 SwAccessibleContext::~SwAccessibleContext()
