@@ -2074,13 +2074,13 @@ OUString SwAccessibleParagraph::getTextRange(
     return sText.copy(nStartIndex, nEndIndex-nStartIndex );
 }
 
-/*accessibility::*/TextSegment SwAccessibleParagraph::getTextAtIndex( sal_Int32 nIndex, sal_Int16 nTextType )
+TextSegment SwAccessibleParagraph::getTextAtIndex(sal_Int32 nIndex, sal_Int16 nTextType)
 {
     SolarMutexGuard aGuard;
 
     ThrowIfDisposed();
 
-    /*accessibility::*/TextSegment aResult;
+    TextSegment aResult;
     aResult.SegmentStart = -1;
     aResult.SegmentEnd = -1;
 
@@ -2110,7 +2110,7 @@ OUString SwAccessibleParagraph::getTextRange(
     return aResult;
 }
 
-/*accessibility::*/TextSegment SwAccessibleParagraph::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 nTextType )
+TextSegment SwAccessibleParagraph::getTextBeforeIndex(sal_Int32 nIndex, sal_Int16 nTextType)
 {
     SolarMutexGuard aGuard;
 
@@ -2118,7 +2118,7 @@ OUString SwAccessibleParagraph::getTextRange(
 
     const OUString rText = GetString();
 
-    /*accessibility::*/TextSegment aResult;
+    TextSegment aResult;
     aResult.SegmentStart = -1;
     aResult.SegmentEnd = -1;
     //If nIndex = 0, then nobefore text so return -1 directly.
@@ -2183,13 +2183,13 @@ OUString SwAccessibleParagraph::getTextRange(
     return aResult;
 }
 
-/*accessibility::*/TextSegment SwAccessibleParagraph::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 nTextType )
+TextSegment SwAccessibleParagraph::getTextBehindIndex(sal_Int32 nIndex, sal_Int16 nTextType)
 {
     SolarMutexGuard aGuard;
 
     ThrowIfDisposed();
 
-    /*accessibility::*/TextSegment aResult;
+    TextSegment aResult;
     aResult.SegmentStart = -1;
     aResult.SegmentEnd = -1;
     const OUString rText = GetString();
@@ -2951,9 +2951,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 sta
     return 0;
 }
 
-/*accessibility::*/TextSegment SAL_CALL
-        SwAccessibleParagraph::getTextMarkup( sal_Int32 nTextMarkupIndex,
-                                              sal_Int32 nTextMarkupType )
+TextSegment SAL_CALL SwAccessibleParagraph::getTextMarkup(sal_Int32 nTextMarkupIndex,
+                                                          sal_Int32 nTextMarkupType)
 {
     SolarMutexGuard g;
 
@@ -2979,9 +2978,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 sta
     return pTextMarkupHelper->getTextMarkup( nTextMarkupIndex, nTextMarkupType );
 }
 
-uno::Sequence< /*accessibility::*/TextSegment > SAL_CALL
-        SwAccessibleParagraph::getTextMarkupAtIndex( sal_Int32 nCharIndex,
-                                                     sal_Int32 nTextMarkupType )
+uno::Sequence<TextSegment> SAL_CALL
+SwAccessibleParagraph::getTextMarkupAtIndex(sal_Int32 nCharIndex, sal_Int32 nTextMarkupType)
 {
     SolarMutexGuard g;
 
@@ -3030,8 +3028,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getLineNumberAtIndex( sal_Int32 nIndex
     return nLineNo;
 }
 
-/*accessibility::*/TextSegment SAL_CALL
-        SwAccessibleParagraph::getTextAtLineNumber( sal_Int32 nLineNo )
+TextSegment SAL_CALL SwAccessibleParagraph::getTextAtLineNumber(sal_Int32 nLineNo)
 {
     SolarMutexGuard g;
 
@@ -3045,7 +3042,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getLineNumberAtIndex( sal_Int32 nIndex
     i18n::Boundary aLineBound;
     GetPortionData().GetBoundaryOfLine( nLineNo, aLineBound );
 
-    /*accessibility::*/TextSegment aTextAtLine;
+    TextSegment aTextAtLine;
     const OUString rText = GetString();
     aTextAtLine.SegmentText = rText.copy( aLineBound.startPos,
                                           aLineBound.endPos - aLineBound.startPos );
@@ -3055,7 +3052,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getLineNumberAtIndex( sal_Int32 nIndex
     return aTextAtLine;
 }
 
-/*accessibility::*/TextSegment SAL_CALL SwAccessibleParagraph::getTextAtLineWithCaret()
+TextSegment SAL_CALL SwAccessibleParagraph::getTextAtLineWithCaret()
 {
     SolarMutexGuard g;
 
@@ -3067,7 +3064,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getLineNumberAtIndex( sal_Int32 nIndex
         return getTextAtLineNumber( nLineNoOfCaret );
     }
 
-    return /*accessibility::*/TextSegment();
+    return TextSegment();
 }
 
 sal_Int32 SAL_CALL SwAccessibleParagraph::getNumberOfLineWithCaret()
