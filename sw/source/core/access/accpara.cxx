@@ -181,7 +181,7 @@ SwPaM* SwAccessibleParagraph::GetCursor( const bool _bForSelection )
     // get the cursor shell; if we don't have any, we don't have a
     // cursor/selection either
     SwPaM* pCursor = nullptr;
-    SwCursorShell* pCursorShell = SwAccessibleParagraph::GetCursorShell();
+    SwCursorShell* pCursorShell = GetCursorShell();
     // #i27301# - if cursor is retrieved for selection, the cursors for
     // a table selection has to be returned.
     if ( pCursorShell != nullptr &&
