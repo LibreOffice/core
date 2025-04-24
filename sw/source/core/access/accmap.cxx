@@ -2534,12 +2534,11 @@ void SwAccessibleMap::InvalidateRelationSet_( const SwFrame* pFrame,
     DBG_TESTSOLARMUTEX();
 
     // first, see if this frame is accessible, and if so, get the respective
-    SwAccessibleChild aFrameOrObj( pFrame );
-    if (!aFrameOrObj.IsAccessible(GetShell().IsPreview()))
+    if (!pFrame || !SwAccessibleChild::IsFrameAccessible(*pFrame, GetShell().IsPreview()))
         return;
 
     rtl::Reference < SwAccessibleContext > xAcc;
-    SwAccessibleContextMap::iterator aIter = maFrameMap.find(aFrameOrObj.GetSwFrame());
+    SwAccessibleContextMap::iterator aIter = maFrameMap.find(pFrame);
     if (aIter != maFrameMap.end())
     {
         xAcc = (*aIter).second;
@@ -2587,12 +2586,11 @@ void SwAccessibleMap::InvalidateParaTextSelection( const SwTextFrame& _rTextFram
     DBG_TESTSOLARMUTEX();
 
     // first, see if this frame is accessible, and if so, get the respective
-    SwAccessibleChild aFrameOrObj( &_rTextFrame );
-    if (!aFrameOrObj.IsAccessible(GetShell().IsPreview()))
+    if (!SwAccessibleChild::IsFrameAccessible(_rTextFrame, GetShell().IsPreview()))
         return;
 
     rtl::Reference < SwAccessibleContext > xAcc;
-    SwAccessibleContextMap::iterator aIter = maFrameMap.find(aFrameOrObj.GetSwFrame());
+    SwAccessibleContextMap::iterator aIter = maFrameMap.find(&_rTextFrame);
     if (aIter != maFrameMap.end())
     {
         xAcc = (*aIter).second;
@@ -2625,10 +2623,9 @@ sal_Int32 SwAccessibleMap::GetChildIndex( const SwFrame& rParentFrame,
 
     sal_Int32 nIndex( -1 );
 
-    SwAccessibleChild aFrameOrObj( &rParentFrame );
-    if (aFrameOrObj.IsAccessible(GetShell().IsPreview()))
+    if (SwAccessibleChild::IsFrameAccessible(rParentFrame, GetShell().IsPreview()))
     {
-        SwAccessibleContextMap::const_iterator aIter = maFrameMap.find(aFrameOrObj.GetSwFrame());
+        SwAccessibleContextMap::const_iterator aIter = maFrameMap.find(&rParentFrame);
         if (aIter != maFrameMap.end())
         {
             rtl::Reference<SwAccessibleContext> xAcc = (*aIter).second;
