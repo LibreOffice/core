@@ -569,7 +569,7 @@ void ScModule::GetState( SfxItemSet& rSet )
                 rSet.Put( SfxUInt32Item( nWhich, GetAppOptions().GetStatusFunc() ) );
                 break;
             case SID_ATTR_METRIC:
-                rSet.Put( SfxUInt16Item( nWhich, sal::static_int_cast<sal_uInt16>(GetAppOptions().GetAppMetric()) ) );
+                rSet.Put(SfxUInt16Item(nWhich, sal::static_int_cast<sal_uInt16>(GetMetric())));
                 break;
             case SID_AUTOSPELL_CHECK:
                 rSet.Put( SfxBoolItem( nWhich, pTabViewShell->IsAutoSpell()) );
@@ -919,6 +919,13 @@ SvtUserOptions&  ScModule::GetUserOptions()
         m_pUserOptions.reset( new SvtUserOptions );
     }
     return *m_pUserOptions;
+}
+
+FieldUnit ScModule::GetMetric()
+{
+    if (comphelper::LibreOfficeKit::isActive())
+        return SfxModule::GetFieldUnit();
+    return GetAppOptions().GetAppMetric();
 }
 
 LanguageType ScModule::GetOptDigitLanguage()

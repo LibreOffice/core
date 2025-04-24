@@ -3514,6 +3514,12 @@ void SfxViewShell::SetLOKAccessibilityState(bool bEnabled)
 void SfxViewShell::SetLOKLocale(const OUString& rBcp47LanguageTag)
 {
     maLOKLocale = LanguageTag(rBcp47LanguageTag, true).makeFallback();
+    if (this == Current())
+    {
+        // update the current LOK language and locale for the dialog tunneling
+        comphelper::LibreOfficeKit::setLanguageTag(GetLOKLanguageTag());
+        comphelper::LibreOfficeKit::setLocale(GetLOKLocale());
+    }
 }
 
 void SfxViewShell::NotifyCursor(SfxViewShell* /*pViewShell*/) const
