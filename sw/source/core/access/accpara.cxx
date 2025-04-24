@@ -855,8 +855,7 @@ sal_Int32 SwAccessibleParagraph::getCaretPosition()
     }
     if( -1 != nRet )
     {
-        ::rtl::Reference < SwAccessibleContext > xThis( this );
-        GetMap()->SetCursorContext( xThis );
+        GetMap()->SetCursorContext(this);
     }
 
     return nRet;
