@@ -1672,110 +1672,109 @@ rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetContextImpl(const SwFram
     if (aIter != maFrameMap.end())
         xAcc = (*aIter).second;
 
-    if (!xAcc.is() && bCreate)
+    if (xAcc.is() || !bCreate)
+        return xAcc;
+
+    rtl::Reference<SwAccessibleContext> xOldCursorAcc;
+    bool bOldShapeSelected = false;
+
+    switch( pFrame->GetType() )
     {
-        rtl::Reference<SwAccessibleContext> xOldCursorAcc;
-        bool bOldShapeSelected = false;
-
-        switch( pFrame->GetType() )
+    case SwFrameType::Txt:
+        xAcc = new SwAccessibleParagraph(shared_from_this(),
+                        static_cast< const SwTextFrame& >( *pFrame ) );
+        break;
+    case SwFrameType::Header:
+        xAcc = new SwAccessibleHeaderFooter(shared_from_this(),
+                        static_cast< const SwHeaderFrame *>( pFrame ) );
+        break;
+    case SwFrameType::Footer:
+        xAcc = new SwAccessibleHeaderFooter(shared_from_this(),
+                        static_cast< const SwFooterFrame *>( pFrame ) );
+        break;
+    case SwFrameType::Ftn:
         {
-        case SwFrameType::Txt:
-            xAcc = new SwAccessibleParagraph(shared_from_this(),
-                            static_cast< const SwTextFrame& >( *pFrame ) );
-            break;
-        case SwFrameType::Header:
-            xAcc = new SwAccessibleHeaderFooter(shared_from_this(),
-                            static_cast< const SwHeaderFrame *>( pFrame ) );
-            break;
-        case SwFrameType::Footer:
-            xAcc = new SwAccessibleHeaderFooter(shared_from_this(),
-                            static_cast< const SwFooterFrame *>( pFrame ) );
-            break;
-        case SwFrameType::Ftn:
+            const SwFootnoteFrame *pFootnoteFrame =
+                static_cast < const SwFootnoteFrame * >( pFrame );
+            bool bIsEndnote =
+                SwAccessibleFootnote::IsEndnote( pFootnoteFrame );
+            xAcc = new SwAccessibleFootnote(shared_from_this(), bIsEndnote,
+                        /*(bIsEndnote ? mnEndnote++ : mnFootnote++),*/
+                        pFootnoteFrame );
+        }
+        break;
+    case SwFrameType::Fly:
+        {
+            const SwFlyFrame *pFlyFrame =
+                static_cast < const SwFlyFrame * >( pFrame );
+            switch( SwAccessibleFrameBase::GetNodeType( pFlyFrame ) )
             {
-                const SwFootnoteFrame *pFootnoteFrame =
-                    static_cast < const SwFootnoteFrame * >( pFrame );
-                bool bIsEndnote =
-                    SwAccessibleFootnote::IsEndnote( pFootnoteFrame );
-                xAcc = new SwAccessibleFootnote(shared_from_this(), bIsEndnote,
-                            /*(bIsEndnote ? mnEndnote++ : mnFootnote++),*/
-                            pFootnoteFrame );
+            case SwNodeType::Grf:
+                xAcc = new SwAccessibleGraphic(shared_from_this(), pFlyFrame );
+                break;
+            case SwNodeType::Ole:
+                xAcc = new SwAccessibleEmbeddedObject(shared_from_this(), pFlyFrame );
+                break;
+            default:
+                xAcc = new SwAccessibleTextFrame(shared_from_this(), *pFlyFrame );
+                break;
             }
-            break;
-        case SwFrameType::Fly:
-            {
-                const SwFlyFrame *pFlyFrame =
-                    static_cast < const SwFlyFrame * >( pFrame );
-                switch( SwAccessibleFrameBase::GetNodeType( pFlyFrame ) )
-                {
-                case SwNodeType::Grf:
-                    xAcc = new SwAccessibleGraphic(shared_from_this(), pFlyFrame );
-                    break;
-                case SwNodeType::Ole:
-                    xAcc = new SwAccessibleEmbeddedObject(shared_from_this(), pFlyFrame );
-                    break;
-                default:
-                    xAcc = new SwAccessibleTextFrame(shared_from_this(), *pFlyFrame );
-                    break;
-                }
-            }
-            break;
-        case SwFrameType::Cell:
-            xAcc = new SwAccessibleCell(shared_from_this(),
-                            static_cast< const SwCellFrame *>( pFrame ) );
-            break;
-        case SwFrameType::Tab:
-            xAcc = new SwAccessibleTable(shared_from_this(),
-                            static_cast< const SwTabFrame *>( pFrame ) );
-            break;
-        case SwFrameType::Page:
-            OSL_ENSURE(GetShell().IsPreview(),
-                        "accessible page frames only in PagePreview" );
-            xAcc = new SwAccessiblePage(shared_from_this(), pFrame);
-            break;
-        default: break;
         }
-        assert(xAcc.is());
-
-        if (aIter != maFrameMap.end())
-        {
-            (*aIter).second = xAcc.get();
-        }
-        else
-        {
-            maFrameMap.emplace(pFrame, xAcc);
-        }
-
-        if (xAcc->HasCursor() &&
-            !AreInSameTable( mxCursorContext, pFrame ) )
-        {
-            // If the new context has the focus, and if we know
-            // another context that had the focus, then the focus
-            // just moves from the old context to the new one. We
-            // then have to send a focus event and a caret event for
-            // the old context. We have to do that now,
-            // because after we have left this method, anyone might
-            // call getStates for the new context and will get a
-            // focused state then. Sending the focus changes event
-            // after that seems to be strange. However, we cannot
-            // send a focus event for the new context now, because
-            // no one except us knows it. In any case, we remember
-            // the new context as the one that has the focus
-            // currently.
-
-            xOldCursorAcc = mxCursorContext;
-            mxCursorContext = xAcc.get();
-
-            bOldShapeSelected = mbShapeSelected;
-            mbShapeSelected = false;
-        }
-
-        // Invalidate focus for old object when map is not locked
-        if (xOldCursorAcc.is())
-            InvalidateCursorPosition(xOldCursorAcc);
-        if (bOldShapeSelected)
-            InvalidateShapeSelection();
+        break;
+    case SwFrameType::Cell:
+        xAcc = new SwAccessibleCell(shared_from_this(),
+                        static_cast< const SwCellFrame *>( pFrame ) );
+        break;
+    case SwFrameType::Tab:
+        xAcc = new SwAccessibleTable(shared_from_this(),
+                        static_cast< const SwTabFrame *>( pFrame ) );
+        break;
+    case SwFrameType::Page:
+        OSL_ENSURE(GetShell().IsPreview(),
+                    "accessible page frames only in PagePreview" );
+        xAcc = new SwAccessiblePage(shared_from_this(), pFrame);
+        break;
+    default: break;
     }
+    assert(xAcc.is());
+
+    if (aIter != maFrameMap.end())
+    {
+        (*aIter).second = xAcc.get();
+    }
+    else
+    {
+        maFrameMap.emplace(pFrame, xAcc);
+    }
+
+    if (xAcc->HasCursor() && !AreInSameTable(mxCursorContext, pFrame))
+    {
+        // If the new context has the focus, and if we know
+        // another context that had the focus, then the focus
+        // just moves from the old context to the new one. We
+        // then have to send a focus event and a caret event for
+        // the old context. We have to do that now,
+        // because after we have left this method, anyone might
+        // call getStates for the new context and will get a
+        // focused state then. Sending the focus changes event
+        // after that seems to be strange. However, we cannot
+        // send a focus event for the new context now, because
+        // no one except us knows it. In any case, we remember
+        // the new context as the one that has the focus
+        // currently.
+
+        xOldCursorAcc = mxCursorContext;
+        mxCursorContext = xAcc.get();
+
+        bOldShapeSelected = mbShapeSelected;
+        mbShapeSelected = false;
+    }
+
+    // Invalidate focus for old object when map is not locked
+    if (xOldCursorAcc.is())
+        InvalidateCursorPosition(xOldCursorAcc);
+    if (bOldShapeSelected)
+        InvalidateShapeSelection();
 
     return xAcc;
 }
