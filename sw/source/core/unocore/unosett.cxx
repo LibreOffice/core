@@ -2208,7 +2208,7 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
 
     }
     if(!m_pNumRule && !pDocRule && !pCreatedRule)
-        throw RuntimeException(u"Could not set numbering rule property \'"_ustr + rPropertyName + u"\'."_ustr);
+        throw RuntimeException("Could not set numbering rule property \'" + rPropertyName + "\'.");
 
     if(rPropertyName == UNO_NAME_IS_AUTOMATIC)
     {
@@ -2267,7 +2267,7 @@ Any SwXNumberingRules::getPropertyValue( const OUString& rPropertyName )
     else if(m_pDoc && !m_sCreatedNumRuleName.isEmpty())
         pRule = m_pDoc->FindNumRulePtr( m_sCreatedNumRuleName );
     if(!pRule)
-        throw RuntimeException(u"Could not get numbering rule property \'"_ustr + rPropertyName + u"\'."_ustr);
+        throw RuntimeException("Could not get numbering rule property \'" + rPropertyName + "\'.");
 
     if(rPropertyName == UNO_NAME_IS_AUTOMATIC)
     {
