@@ -2507,14 +2507,13 @@ void SwAccessibleMap::SetCursorContext(
 void SwAccessibleMap::InvalidateEditableStates( const SwFrame* _pFrame )
 {
     // Start with the frame or the first upper that is accessible
-    SwAccessibleChild aFrameOrObj( _pFrame );
-    while( aFrameOrObj.GetSwFrame() &&
-            !aFrameOrObj.IsAccessible(GetShell().IsPreview()))
-        aFrameOrObj = aFrameOrObj.GetSwFrame()->GetUpper();
-    if( !aFrameOrObj.GetSwFrame() )
-        aFrameOrObj = GetShell().GetLayout();
+    const SwFrame* pAccFrame = _pFrame;
+    while (pAccFrame && !SwAccessibleChild::IsFrameAccessible(*pAccFrame, GetShell().IsPreview()))
+        pAccFrame->GetUpper();
+    if (!pAccFrame)
+        pAccFrame = GetShell().GetLayout();
 
-    rtl::Reference<SwAccessibleContext> xAccImpl = GetContextImpl(aFrameOrObj.GetSwFrame());
+    rtl::Reference<SwAccessibleContext> xAccImpl = GetContextImpl(pAccFrame);
     if (GetShell().ActionPend())
     {
         SwAccessibleEvent_Impl aEvent(SwAccessibleEvent_Impl::CARET_OR_STATES, xAccImpl.get(),
