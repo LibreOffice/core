@@ -449,7 +449,7 @@ service MediaDescriptor
      */
     [optional,property] string SuggestedSaveAsName;
 
-    /** Directory to be used when exporting (to PDF, epub, ...).
+    /** Directory to be used when saving (save as, save a copy) or exporting (to PDF, epub, ...).
         Defaults to the current document directory.
      */
     [optional,property] string ExportDirectory;
