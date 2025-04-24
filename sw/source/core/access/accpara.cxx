@@ -121,57 +121,56 @@ OUString const & SwAccessibleParagraph::GetString()
 
 sal_Int32 SwAccessibleParagraph::GetCaretPos()
 {
-    sal_Int32 nRet = -1;
-
     // get the selection's point, and test whether it's in our node
     // #i27301# - consider adjusted method signature
     SwPaM* pCaret = GetCursor( false );  // caret is first PaM in PaM-ring
+    if (!pCaret)
+        // no cursor -> no caret
+        return -1;
 
-    if( pCaret != nullptr )
+    const SwTextFrame* const pTextFrame = GetTextFrame();
+    assert(pTextFrame);
+
+    // check whether the point points into 'our' node
+    SwPosition* pPoint = pCaret->GetPoint();
+
+    if (!sw::FrameContainsNode(*pTextFrame, pPoint->GetNodeIndex()))
+        // not in this paragraph
+        return -1;
+
+    sal_Int32 nRet = -1;
+
+    // check whether it's also within 'our' part of the paragraph
+    const TextFrameIndex nIndex = pTextFrame->MapModelToViewPos(*pPoint);
+    if(!GetPortionData().IsValidCorePosition( nIndex ) ||
+        (GetPortionData().IsZeroCorePositionData()
+          && nIndex == TextFrameIndex(0)))
     {
-        const SwTextFrame* const pTextFrame = GetTextFrame();
-        assert(pTextFrame);
-
-        // check whether the point points into 'our' node
-        SwPosition* pPoint = pCaret->GetPoint();
-        if (sw::FrameContainsNode(*pTextFrame, pPoint->GetNodeIndex()))
+        bool bFormat = pTextFrame->HasPara();
+        if(bFormat)
         {
-            // same node? Then check whether it's also within 'our' part
-            // of the paragraph
-            const TextFrameIndex nIndex = pTextFrame->MapModelToViewPos(*pPoint);
-            if(!GetPortionData().IsValidCorePosition( nIndex ) ||
-                (GetPortionData().IsZeroCorePositionData()
-                  && nIndex == TextFrameIndex(0)))
-            {
-                bool bFormat = pTextFrame->HasPara();
-                if(bFormat)
-                {
-                    ClearPortionData();
-                    UpdatePortionData();
-                }
-            }
-            if( GetPortionData().IsValidCorePosition( nIndex ) )
-            {
-                // Yes, it's us!
-                // consider that cursor/caret is in front of the list label
-                if ( pCaret->IsInFrontOfLabel() )
-                {
-                    nRet = 0;
-                }
-                else
-                {
-                    nRet = GetPortionData().GetAccessiblePosition( nIndex );
-                }
-
-                OSL_ENSURE( nRet >= 0, "invalid cursor?" );
-                OSL_ENSURE( nRet <= GetPortionData().GetAccessibleString().
-                                              getLength(), "invalid cursor?" );
-            }
-            // else: in this paragraph, but in different frame
+            ClearPortionData();
+            UpdatePortionData();
         }
-        // else: not in this paragraph
     }
-    // else: no cursor -> no caret
+    if( GetPortionData().IsValidCorePosition( nIndex ) )
+    {
+        // Yes, it's us!
+        // consider that cursor/caret is in front of the list label
+        if ( pCaret->IsInFrontOfLabel() )
+        {
+            nRet = 0;
+        }
+        else
+        {
+            nRet = GetPortionData().GetAccessiblePosition( nIndex );
+        }
+
+        OSL_ENSURE( nRet >= 0, "invalid cursor?" );
+        OSL_ENSURE( nRet <= GetPortionData().GetAccessibleString().
+                                      getLength(), "invalid cursor?" );
+    }
+    // else: in this paragraph, but in different frame
 
     return nRet;
 }
