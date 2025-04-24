@@ -385,18 +385,12 @@ void SwAccessibleParagraph::UpdatePortionData()
 {
     // obtain the text frame
     const SwTextFrame* pFrame = GetTextFrame();
-    OSL_ENSURE( pFrame != nullptr, "The text frame has vanished!" );
-    if (!pFrame)
-        ClearPortionData();
-    else
-    {
-        OSL_ENSURE( pFrame->IsTextFrame(), "The text frame has mutated!" );
-        // build new portion data
-        m_pPortionData.reset( new SwAccessiblePortionData(
-            pFrame, GetMap()->GetShell().GetViewOptions()) );
-        pFrame->VisitPortions( *m_pPortionData );
-    }
-    OSL_ENSURE( m_pPortionData != nullptr, "UpdatePortionData() failed" );
+    assert(pFrame && "The text frame has vanished!");
+    assert(pFrame->IsTextFrame() && "The text frame has mutated!");
+    // build new portion data
+    m_pPortionData.reset(
+        new SwAccessiblePortionData(pFrame, GetMap()->GetShell().GetViewOptions()));
+    pFrame->VisitPortions(*m_pPortionData);
 }
 
 void SwAccessibleParagraph::ClearPortionData()
