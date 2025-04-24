@@ -276,8 +276,7 @@ public:
                                                const SwFrame *pFrame=nullptr );
 
     /// Invalidate frame's relation set (for chained frames)
-    void InvalidateAccessibleRelationSet( const SwFlyFrame *pMaster,
-                                          const SwFlyFrame *pFollow );
+    void InvalidateAccessibleRelationSet(const SwFlyFrame& rMaster, const SwFlyFrame& rFollow);
 
     /// update data for accessible preview
     /// change method signature due to new page preview functionality

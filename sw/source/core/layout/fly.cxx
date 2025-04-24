@@ -565,7 +565,7 @@ void SwFlyFrame::ChainFrames( SwFlyFrame &rMaster, SwFlyFrame &rFollow )
     {
         SwRootFrame* pLayout = rMaster.getRootFrame();
         if( pLayout && pLayout->IsAnyShellAccessible() )
-            pSh->Imp()->InvalidateAccessibleRelationSet( &rMaster, &rFollow );
+            pSh->Imp()->InvalidateAccessibleRelationSet(rMaster, rFollow);
     }
 #endif
 }
@@ -614,7 +614,7 @@ void SwFlyFrame::UnchainFrames( SwFlyFrame &rMaster, SwFlyFrame &rFollow )
     {
         SwRootFrame* pLayout = rMaster.getRootFrame();
         if( pLayout && pLayout->IsAnyShellAccessible() )
-            pSh->Imp()->InvalidateAccessibleRelationSet( &rMaster, &rFollow );
+            pSh->Imp()->InvalidateAccessibleRelationSet(rMaster, rFollow);
     }
 #endif
 }

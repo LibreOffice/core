@@ -434,14 +434,13 @@ void SwViewShellImp::InvalidateAccessibleEditableState( bool bAllShells,
     }
 }
 
-void SwViewShellImp::InvalidateAccessibleRelationSet( const SwFlyFrame *pMaster,
-                                                 const SwFlyFrame *pFollow )
+void SwViewShellImp::InvalidateAccessibleRelationSet(const SwFlyFrame& rMaster,
+                                                     const SwFlyFrame& rFollow)
 {
     for(SwViewShell& rTmp : GetShell().GetRingContainer())
     {
         if( rTmp.Imp()->IsAccessible() )
-            rTmp.Imp()->GetAccessibleMap().InvalidateRelationSet( pMaster,
-                                                                   pFollow );
+            rTmp.Imp()->GetAccessibleMap().InvalidateRelationSet(rMaster, rFollow);
     }
 }
 

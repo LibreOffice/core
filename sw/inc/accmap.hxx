@@ -221,7 +221,7 @@ public:
     // is processed when the last action ends.
     void InvalidateEditableStates( const SwFrame* _pFrame );
 
-    void InvalidateRelationSet( const SwFrame* pMaster, const SwFrame* pFollow );
+    void InvalidateRelationSet(const SwFrame& rMaster, const SwFrame& rFollow);
 
     /** invalidation CONTENT_FLOWS_FROM/_TO relation of a paragraph
 

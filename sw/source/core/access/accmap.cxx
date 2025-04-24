@@ -2566,11 +2566,10 @@ void SwAccessibleMap::InvalidateRelationSet_( const SwFrame* pFrame,
     }
 }
 
-void SwAccessibleMap::InvalidateRelationSet( const SwFrame* pMaster,
-                                             const SwFrame* pFollow )
+void SwAccessibleMap::InvalidateRelationSet(const SwFrame& rMaster, const SwFrame& rFollow)
 {
-    InvalidateRelationSet_( pMaster, false );
-    InvalidateRelationSet_( pFollow, true );
+    InvalidateRelationSet_(&rMaster, false);
+    InvalidateRelationSet_(&rFollow, true);
 }
 
 // invalidation of CONTENT_FLOW_FROM/_TO relation of a paragraph
