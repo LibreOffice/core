@@ -303,11 +303,11 @@ void SwAccessibleParagraph::InvalidateCursorPos_()
         GetMap()->SetCursorContext(this);
     }
 
-    vcl::Window *pWin = GetWindow();
     if( nOld == nNew )
         return;
 
     // The cursor's node position is simulated by the focus!
+    vcl::Window* pWin = GetWindow();
     if( pWin && pWin->HasFocus() && -1 == nOld )
         FireStateChangedEvent( AccessibleStateType::FOCUSED, true );
 
