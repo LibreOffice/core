@@ -25,6 +25,7 @@
 #include <vcl/EnumContext.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
@@ -191,6 +192,15 @@ void SAL_CALL SidebarPanelBase::updateModel(const css::uno::Reference<css::frame
         return;
 
     pModelUpdate->updateModel(xModel);
+}
+
+Reference<css::frame::XFrame> GetFrame(const comphelper::NamedValueCollection& rArguments)
+{
+    Reference<css::frame::XController> xController(rArguments.getOrDefault(u"Controller"_ustr, Reference<css::frame::XController>()));
+    Reference<frame::XFrame> xFrame(xController ? xController->getFrame() : nullptr);
+    if (!xFrame)
+        xFrame = rArguments.getOrDefault(u"Frame"_ustr, Reference<frame::XFrame>());
+    return xFrame;
 }
 
 } // end of namespace sfx2::sidebar

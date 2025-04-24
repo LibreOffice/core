@@ -31,8 +31,17 @@
 #include <com/sun/star/ui/XToolPanel.hpp>
 #include <com/sun/star/ui/XSidebarPanel.hpp>
 #include <com/sun/star/ui/XUpdateModel.hpp>
+#include <com/sun/star/uno/Reference.h>
 
 class PanelLayout;
+
+namespace com::sun::star::frame {
+    class XFrame;
+}
+
+namespace comphelper {
+    class NamedValueCollection;
+}
 
 namespace sfx2::sidebar {
 
@@ -44,6 +53,8 @@ typedef comphelper::WeakComponentImplHelper<css::ui::XContextChangeEventListener
                                        css::ui::XSidebarPanel,
                                        css::ui::XUpdateModel>
             SidebarPanelBaseInterfaceBase;
+
+SFX2_DLLPUBLIC css::uno::Reference<css::frame::XFrame> GetFrame(const comphelper::NamedValueCollection& rArguments);
 
 /** Base class for sidebar panels that provides some convenience
     functionality.

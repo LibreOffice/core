@@ -341,6 +341,8 @@ public:
     rtl::Reference<::chart::ChartModel> getChartModel();
     rtl::Reference<::chart::Diagram> getFirstDiagram();
 
+    Selection getSelectionMember() { return m_aSelection; }
+
 private:
     class TheModel : public salhelper::SimpleReferenceObject
     {
@@ -495,6 +497,40 @@ private:
 
     void executeDispatch_NewArrangement();
     void executeDispatch_ScaleText();
+
+    static void executeDispatch_FontBold(
+        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
+    static void executeDispatch_FontName(
+        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+        const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+    static void executeDispatch_FontHeight(
+        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+        const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+    static void executeDispatch_FontItalic(
+        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
+    static void executeDispatch_FontUnderline(
+        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+        const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+    static void executeDispatch_FontStrikeout(
+        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
+    static void executeDispatch_FontShadowed(
+        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
+    static void executeDispatch_FontColor(
+        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+        const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+    static void executeDispatch_FontGrow(
+        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
+    static void executeDispatch_FontShrink(
+        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
+    static void executeDispatch_FontReset(
+        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
+    static void executeDispatch_FontSpacing(
+        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+        const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+    static void executeDispatch_FontSuperScript(
+        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
+    static void executeDispatch_FontSubScript(
+        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
 
     void executeDispatch_Paste();
     void executeDispatch_Copy();

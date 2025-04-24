@@ -96,7 +96,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     const ::css::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {
     const ::comphelper::NamedValueCollection aArguments (rArguments);
-    Reference<frame::XFrame> xFrame (aArguments.getOrDefault(u"Frame"_ustr, Reference<frame::XFrame>()));
+    Reference<frame::XFrame> xFrame(sfx2::sidebar::GetFrame(aArguments));
     Reference<awt::XWindow> xParentWindow (aArguments.getOrDefault(u"ParentWindow"_ustr, Reference<awt::XWindow>()));
     Reference<ui::XSidebar> xSidebar (aArguments.getOrDefault(u"Sidebar"_ustr, Reference<ui::XSidebar>()));
     const sal_uInt64 nBindingsValue (aArguments.getOrDefault(u"SfxBindings"_ustr, sal_uInt64(0)));

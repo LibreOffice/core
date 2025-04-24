@@ -34,6 +34,8 @@
 #include <StatisticsHelper.hxx>
 #include <ReferenceSizeProvider.hxx>
 #include "ShapeController.hxx"
+#include <ObjectIdentifier.hxx>
+#include <CharacterProperties.hxx>
 
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
@@ -44,6 +46,7 @@
 
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/XDataProviderAccess.hpp>
+#include <com/sun/star/frame/status/FontHeight.hpp>
 
 // only needed until #i68864# is fixed
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -72,6 +75,23 @@ bool lcl_isStatusBarVisible( const Reference< frame::XController > & xController
         }
     }
     return bIsStatusBarVisible;
+}
+
+bool lcl_arePropertiesSame(std::vector<Reference<beans::XPropertySet>>& xProperties,
+                           OUString& aPropName)
+{
+    if (xProperties.size() == 1)
+        return true;
+    if (xProperties.size() < 1)
+        return false;
+
+    uno::Any aValue = xProperties[0]->getPropertyValue(aPropName);
+    for (std::size_t i = 1; i < xProperties.size(); i++)
+    {
+        if (aValue != xProperties[i]->getPropertyValue(aPropName))
+            return false;
+    }
+    return true;
 }
 
 } // anonymous namespace
@@ -650,6 +670,176 @@ void ControllerCommandDispatch::updateCommandAvailability()
     // text
     m_aCommandAvailability[ u".uno:ScaleText"_ustr ] = bIsWritable && bModelStateIsValid ;
     m_aCommandArguments[ u".uno:ScaleText"_ustr ] <<= bModelStateIsValid && m_apModelState->bHasAutoScaledText;
+
+    bool bTitleIsInEditMode = false;
+    try
+    {
+        OUString aObjectCID2 = m_xChartController->getSelectionMember().getSelectedCID();
+        if (!aObjectCID2.isEmpty())
+            if (ObjectIdentifier::getObjectType(aObjectCID2) == OBJECTTYPE_TITLE)
+                if (m_xChartController->GetDrawViewWrapper())
+                    if (m_xChartController->GetDrawViewWrapper()->GetTextEditOutlinerView())
+                        bTitleIsInEditMode = true;
+    }
+    catch (const uno::Exception&) { TOOLS_WARN_EXCEPTION("chart2", ""); }
+
+    bool bEnableUnoCommands = bIsWritable && bModelStateIsValid && !bTitleIsInEditMode;
+    m_aCommandAvailability[u".uno:Bold"_ustr] = bEnableUnoCommands;
+    m_aCommandAvailability[u".uno:Strikeout"_ustr] = bEnableUnoCommands;
+    m_aCommandAvailability[u".uno:CharFontName"_ustr] = bEnableUnoCommands;
+    m_aCommandAvailability[u".uno:FontHeight"_ustr] = bEnableUnoCommands;
+    m_aCommandAvailability[u".uno:Italic"_ustr] = bEnableUnoCommands;
+    m_aCommandAvailability[u".uno:Underline"_ustr] = bEnableUnoCommands;
+    m_aCommandAvailability[u".uno:Shadowed"_ustr] = bEnableUnoCommands;
+    m_aCommandAvailability[u".uno:Color"_ustr] = bEnableUnoCommands;
+    m_aCommandAvailability[u".uno:FontColor"_ustr] = bEnableUnoCommands;
+    m_aCommandAvailability[u".uno:Grow"_ustr] = bEnableUnoCommands;
+    m_aCommandAvailability[u".uno:Shrink"_ustr] = bEnableUnoCommands;
+    m_aCommandAvailability[u".uno:SuperScript"_ustr] = bEnableUnoCommands;
+    m_aCommandAvailability[u".uno:SubScript"_ustr] = bEnableUnoCommands;
+    m_aCommandAvailability[u".uno:Spacing"_ustr] = bEnableUnoCommands;
+    m_aCommandAvailability[u".uno:ResetAttributes"_ustr] = bEnableUnoCommands;
+
+    if (!bTitleIsInEditMode)
+    {
+        // at default they are not filled in the sidebar
+        m_aCommandArguments[u".uno:CharFontName"_ustr] <<= false;
+        m_aCommandArguments[u".uno:FontHeight"_ustr] <<= false;
+        m_aCommandArguments[u".uno:Bold"_ustr] <<= false;
+        m_aCommandArguments[u".uno:Strikeout"_ustr] <<= false;
+        m_aCommandArguments[u".uno:Italic"_ustr] <<= false;
+        m_aCommandArguments[u".uno:Underline"_ustr] <<= false;
+        m_aCommandArguments[u".uno:Shadowed"_ustr] <<= false;
+        m_aCommandArguments[u".uno:Color"_ustr] <<= false;
+        m_aCommandArguments[u".uno:FontColor"_ustr] <<= false;
+        m_aCommandArguments[u".uno:SuperScript"_ustr] <<= false;
+        m_aCommandArguments[u".uno:SubScript"_ustr] <<= false;
+        m_aCommandArguments[u".uno:Spacing"_ustr] <<= false;
+        m_aCommandArguments[u".uno:ResetAttributes"_ustr] <<= false;
+    }
+
+    // They are filled based on the text properties.. if there are only 1
+    // but only those properties that are true for the whole text
+    try
+    {
+        // if title is selected, and in edit mode, then he font panel shoulkd be disabled
+        // enable the uno commands only if the title is not in edit mode
+        // Todo: enable font panel here if the panel will be able to handle edited title.
+        OUString aObjectCID = m_xChartController->getSelectionMember().getSelectedCID();
+        if (!aObjectCID.isEmpty() && !bTitleIsInEditMode)
+        {
+            // If the selected is not title, then we should check the text properties..
+            // or the selected text properties?
+            std::vector<Reference<beans::XPropertySet>> xProperties;
+            xProperties.emplace(xProperties.end(),
+                                ObjectIdentifier::getObjectPropertySet(
+                                    aObjectCID, m_xChartController->getChartModel()));
+
+            if (ObjectIdentifier::getObjectType(aObjectCID) == OBJECTTYPE_TITLE)
+            {
+                Reference<chart2::XTitle> xTitle(xProperties[0], uno::UNO_QUERY);
+                if (xTitle.is())
+                {
+                    const Sequence<Reference<chart2::XFormattedString>> aStrings(xTitle->getText());
+                    xProperties.pop_back();
+                    for (int i = 0; i < aStrings.getLength(); i++)
+                    {
+                        Reference<beans::XPropertySet> xTitlePropSet(aStrings[i], uno::UNO_QUERY);
+                        xProperties.push_back(xTitlePropSet);
+                    }
+                }
+            }
+
+            Reference<beans::XMultiPropertySet> aMObjProps(xProperties[0], uno::UNO_QUERY);
+            if (aMObjProps)
+            {
+                awt::FontDescriptor aFont
+                    = CharacterProperties::createFontDescriptorFromPropertySet(aMObjProps);
+
+                if (!aFont.Name.isEmpty())
+                {
+                    OUString aPropName = u"CharFontName"_ustr;
+                    if (lcl_arePropertiesSame(xProperties, aPropName))
+                    {
+                        m_aCommandArguments[u".uno:CharFontName"_ustr] <<= aFont;
+                    }
+                }
+            }
+            OUString aPropName = u"CharHeight"_ustr;
+            if (lcl_arePropertiesSame(xProperties, aPropName))
+            {
+                uno::Any aAny = xProperties[0]->getPropertyValue(aPropName);
+                frame::status::FontHeight aFontHeight;
+                aAny >>= aFontHeight.Height;
+                // another type is needed here, so
+                m_aCommandArguments[u".uno:FontHeight"_ustr] <<= aFontHeight;
+            }
+
+            aPropName = u"CharWeight"_ustr;
+            if (lcl_arePropertiesSame(xProperties, aPropName))
+            {
+                float nFontWeight;
+                xProperties[0]->getPropertyValue(aPropName) >>= nFontWeight;
+                bool bFontWeight = (nFontWeight > 100.0);
+                m_aCommandArguments[u".uno:Bold"_ustr] <<= bFontWeight;
+            }
+
+            aPropName = u"CharPosture"_ustr;
+            if (lcl_arePropertiesSame(xProperties, aPropName))
+            {
+                awt::FontSlant nFontItalic;
+                xProperties[0]->getPropertyValue(aPropName) >>= nFontItalic;
+                bool bItalic = (nFontItalic == awt::FontSlant_ITALIC);
+                m_aCommandArguments[u".uno:Italic"_ustr] <<= bItalic;
+            }
+
+            aPropName = u"CharStrikeout"_ustr;
+            if (lcl_arePropertiesSame(xProperties, aPropName))
+            {
+                sal_Int16 nFontStrikeout;
+                xProperties[0]->getPropertyValue(aPropName) >>= nFontStrikeout;
+                bool bFontStrikeout = (nFontStrikeout > 0);
+                m_aCommandArguments[u".uno:Strikeout"_ustr] <<= bFontStrikeout;
+            }
+
+            aPropName = u"CharUnderline"_ustr;
+            if (lcl_arePropertiesSame(xProperties, aPropName))
+            {
+                sal_Int16 nFontUnderline;
+                xProperties[0]->getPropertyValue(aPropName) >>= nFontUnderline;
+                bool bFontUnderline = (nFontUnderline > 0);
+                m_aCommandArguments[u".uno:Underline"_ustr] <<= bFontUnderline;
+            }
+
+            aPropName = u"CharShadowed"_ustr;
+            if (lcl_arePropertiesSame(xProperties, aPropName))
+            {
+                bool bShadowed = false;
+                xProperties[0]->getPropertyValue(aPropName) >>= bShadowed;
+                m_aCommandArguments[u".uno:Shadowed"_ustr] <<= bShadowed;
+            }
+
+            // Font color is not set in panel.. it is just evnabled to use
+            m_aCommandArguments[u".uno:Color"_ustr] <<= false;
+            m_aCommandArguments[u".uno:FontColor"_ustr] <<= false;
+
+            aPropName = u"CharEscapement"_ustr;
+            if (lcl_arePropertiesSame(xProperties, aPropName))
+            {
+                sal_Int32 nCharEscapement = 0;
+                xProperties[0]->getPropertyValue(aPropName) >>= nCharEscapement;
+                m_aCommandArguments[u".uno:SuperScript"_ustr] <<= (nCharEscapement > 0);
+                m_aCommandArguments[u".uno:SubScript"_ustr] <<= (nCharEscapement < 0);
+            }
+
+            // Font Spacing is not set in panel.. it is just evnabled to use
+            m_aCommandArguments[u".uno:Spacing"_ustr] <<= false;
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "");
+    }
 
     // axes
     m_aCommandAvailability[ u".uno:DiagramAxisX"_ustr ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasXAxis;

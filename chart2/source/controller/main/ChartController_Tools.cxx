@@ -46,6 +46,7 @@
 #include <ObjectNameProvider.hxx>
 #include <unonames.hxx>
 
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -160,6 +161,23 @@ bool lcl_deleteDataCurve(
     return bResult;
 }
 
+bool lcl_arePropertiesSame(const std::vector<Reference<beans::XPropertySet>>& xProperties,
+                           OUString& aPropName)
+{
+    if (xProperties.size() == 1)
+        return true;
+    if (xProperties.size() < 1)
+        return false;
+
+    uno::Any aValue = xProperties[0]->getPropertyValue(aPropName);
+    for (std::size_t i = 1; i < xProperties.size(); i++)
+    {
+        if (aValue != xProperties[i]->getPropertyValue(aPropName))
+            return false;
+    }
+    return true;
+}
+
 } // anonymous namespace
 
 ReferenceSizeProvider ChartController::impl_createReferenceSizeProvider()
@@ -247,6 +265,234 @@ void ChartController::executeDispatch_ScaleText()
     impl_createReferenceSizeProvider().toggleAutoResizeState();
 
     aUndoGuard.commit();
+}
+
+void ChartController::executeDispatch_FontBold(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+{
+    OUString aPropName = u"CharWeight"_ustr;
+    float nFontWeight = awt::FontWeight::NORMAL;
+    if (lcl_arePropertiesSame(xProperties, aPropName))
+    {
+        xProperties[0]->getPropertyValue(aPropName) >>= nFontWeight;
+    }
+    nFontWeight = (nFontWeight == awt::FontWeight::NORMAL) ? awt::FontWeight::BOLD
+                                                           : awt::FontWeight::NORMAL;
+    for (std::size_t i = 0; i < xProperties.size(); i++)
+        xProperties[i]->setPropertyValue(aPropName, uno::Any(nFontWeight));
+}
+
+void ChartController::executeDispatch_FontName(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+    const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
+{
+    // the sent font may have a lot of properties that we could set.
+    // but now we set only this
+    awt::FontDescriptor aFont;
+    rArgs[0].Value >>= aFont;
+    for (std::size_t i = 0; i < xProperties.size(); i++)
+        xProperties[i]->setPropertyValue(u"CharFontName"_ustr, css::uno::Any(aFont.Name));
+}
+
+void ChartController::executeDispatch_FontHeight(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+    const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
+{
+    for (std::size_t i = 0; i < xProperties.size(); i++)
+        xProperties[i]->setPropertyValue(u"CharHeight"_ustr, rArgs[0].Value);
+}
+
+void ChartController::executeDispatch_FontItalic(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+{
+    OUString aPropName = u"CharPosture"_ustr;
+    awt::FontSlant nFontItalic = awt::FontSlant::FontSlant_NONE;
+    if (lcl_arePropertiesSame(xProperties, aPropName))
+    {
+        xProperties[0]->getPropertyValue(aPropName) >>= nFontItalic;
+    }
+    nFontItalic = (nFontItalic == awt::FontSlant::FontSlant_NONE ? awt::FontSlant::FontSlant_ITALIC
+                                                                 : awt::FontSlant::FontSlant_NONE);
+    for (std::size_t i = 0; i < xProperties.size(); i++)
+        xProperties[i]->setPropertyValue(aPropName, css::uno::Any(nFontItalic));
+}
+
+void ChartController::executeDispatch_FontUnderline(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+    const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
+{
+    OUString aPropName = u"CharUnderline"_ustr;
+    sal_Int16 nFontUnderline = 0;
+    sal_Int32 nFontUnderline32 = 0;
+    if (!(rArgs[0].Value >>= nFontUnderline) && (rArgs[0].Value >>= nFontUnderline32))
+    {
+        nFontUnderline = nFontUnderline32;
+    }
+    else
+    {
+        if (lcl_arePropertiesSame(xProperties, aPropName))
+        {
+            xProperties[0]->getPropertyValue(aPropName) >>= nFontUnderline;
+        }
+        nFontUnderline = (nFontUnderline == 0 ? 1 : 0);
+    }
+
+    for (std::size_t i = 0; i < xProperties.size(); i++)
+        xProperties[i]->setPropertyValue(aPropName, css::uno::Any(nFontUnderline));
+}
+
+void ChartController::executeDispatch_FontStrikeout(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+{
+    OUString aPropName = u"CharStrikeout"_ustr;
+    sal_Int16 nFontStrikeout = 0;
+    if (lcl_arePropertiesSame(xProperties, aPropName))
+    {
+        xProperties[0]->getPropertyValue(aPropName) >>= nFontStrikeout;
+    }
+    nFontStrikeout = (nFontStrikeout == 0 ? 1 : 0);
+    for (std::size_t i = 0; i < xProperties.size(); i++)
+        xProperties[i]->setPropertyValue(aPropName, css::uno::Any(nFontStrikeout));
+}
+
+void ChartController::executeDispatch_FontShadowed(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+{
+    OUString aPropName = u"CharShadowed"_ustr;
+    bool bFontShadowed = false;
+    if (lcl_arePropertiesSame(xProperties, aPropName))
+    {
+        xProperties[0]->getPropertyValue(aPropName) >>= bFontShadowed;
+    }
+    for (std::size_t i = 0; i < xProperties.size(); i++)
+        xProperties[i]->setPropertyValue(u"CharShadowed"_ustr, css::uno::Any(!bFontShadowed));
+}
+
+void ChartController::executeDispatch_FontColor(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+    const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
+{
+    for (std::size_t i = 0; i < xProperties.size(); i++)
+        xProperties[i]->setPropertyValue(u"CharColor"_ustr, rArgs[0].Value);
+}
+
+void ChartController::executeDispatch_FontGrow(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+{
+    for (std::size_t i = 0; i < xProperties.size(); i++)
+    {
+        float nFontHeight = 0;
+        xProperties[i]->getPropertyValue(u"CharHeight"_ustr) >>= nFontHeight;
+        if (nFontHeight > 0)
+        {
+            nFontHeight = ceil(nFontHeight); //round
+            nFontHeight += 1;
+            if (nFontHeight > 999)
+                nFontHeight = 999;
+            xProperties[i]->setPropertyValue(u"CharHeight"_ustr, css::uno::Any(nFontHeight));
+        }
+    }
+}
+
+void ChartController::executeDispatch_FontShrink(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+{
+    for (std::size_t i = 0; i < xProperties.size(); i++)
+    {
+        float nFontHeight = 0;
+        xProperties[i]->getPropertyValue(u"CharHeight"_ustr) >>= nFontHeight;
+        if (nFontHeight > 0)
+        {
+            if (nFontHeight - ceil(nFontHeight) >= 0.4)
+                nFontHeight = ceil(nFontHeight); //round
+            else
+            {
+                nFontHeight -= 1;
+                if (nFontHeight < 2)
+                    nFontHeight = 2;
+            }
+            xProperties[i]->setPropertyValue(u"CharHeight"_ustr, css::uno::Any(nFontHeight));
+        }
+    }
+}
+
+void ChartController::executeDispatch_FontReset(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+{
+    for (std::size_t i = 0; i < xProperties.size(); i++)
+    {
+        xProperties[i]->setPropertyValue(u"CharFontName"_ustr,
+                                         css::uno::Any(OUString("Liberation Sans")));
+        xProperties[i]->setPropertyValue(u"CharHeight"_ustr, css::uno::Any(float(13)));
+        xProperties[i]->setPropertyValue(u"CharWeight"_ustr, uno::Any(float(100)));
+        xProperties[i]->setPropertyValue(u"CharPosture"_ustr,
+                                         css::uno::Any(awt::FontSlant::FontSlant_NONE));
+        xProperties[i]->setPropertyValue(u"CharUnderline"_ustr, css::uno::Any(sal_Int16(0)));
+        xProperties[i]->setPropertyValue(u"CharStrikeout"_ustr, css::uno::Any(sal_Int16(0)));
+        xProperties[i]->setPropertyValue(u"CharShadowed"_ustr, css::uno::Any(false));
+        xProperties[i]->setPropertyValue(u"CharColor"_ustr, css::uno::Any(Color(0)));
+
+        xProperties[i]->setPropertyValue(u"CharKerning"_ustr, css::uno::Any(sal_Int16(0)));
+        xProperties[i]->setPropertyValue(u"CharEscapement"_ustr, css::uno::Any(sal_Int16(0)));
+        xProperties[i]->setPropertyValue(u"CharEscapementHeight"_ustr,
+                                         css::uno::Any(sal_Int8(100)));
+    }
+}
+
+void ChartController::executeDispatch_FontSpacing(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+    const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
+{
+    sal_Int16 nKerning = 0;
+    rArgs[0].Value >>= nKerning;
+    for (std::size_t i = 0; i < xProperties.size(); i++)
+        xProperties[i]->setPropertyValue(u"CharKerning"_ustr, css::uno::Any(nKerning));
+}
+
+void ChartController::executeDispatch_FontSuperScript(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+{
+    sal_Int16 nCharEscapement = 0;
+    xProperties[0]->getPropertyValue(u"CharEscapement"_ustr) >>= nCharEscapement;
+    for (std::size_t i = 0; i < xProperties.size(); i++)
+    {
+        if (nCharEscapement > 0)
+        {
+            xProperties[i]->setPropertyValue(u"CharEscapement"_ustr, css::uno::Any(sal_Int16(0)));
+            xProperties[i]->setPropertyValue(u"CharEscapementHeight"_ustr,
+                                             css::uno::Any(sal_Int8(100)));
+        }
+        else
+        {
+            xProperties[i]->setPropertyValue(u"CharEscapement"_ustr,
+                                             css::uno::Any(sal_Int16(14000)));
+            xProperties[i]->setPropertyValue(u"CharEscapementHeight"_ustr,
+                                             css::uno::Any(sal_Int8(58)));
+        }
+    }
+}
+
+void ChartController::executeDispatch_FontSubScript(
+    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+{
+    sal_Int16 nCharEscapement = 0;
+    xProperties[0]->getPropertyValue(u"CharEscapement"_ustr) >>= nCharEscapement;
+    for (std::size_t i = 0; i < xProperties.size(); i++)
+    {
+        if (nCharEscapement < 0)
+        {
+            xProperties[i]->setPropertyValue(u"CharEscapement"_ustr, css::uno::Any(sal_Int16(0)));
+            xProperties[i]->setPropertyValue(u"CharEscapementHeight"_ustr,
+                                             css::uno::Any(sal_Int8(100)));
+        }
+        else
+        {
+            xProperties[i]->setPropertyValue(u"CharEscapement"_ustr,
+                                             css::uno::Any(sal_Int16(-14000)));
+            xProperties[i]->setPropertyValue(u"CharEscapementHeight"_ustr,
+                                             css::uno::Any(sal_Int8(58)));
+        }
+    }
 }
 
 void ChartController::executeDispatch_Paste()
