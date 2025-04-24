@@ -1796,7 +1796,6 @@ SwAccessibleMap::GetContextImpl(const SdrObject* pObj, SwAccessibleContext* pPar
 
         if( !xAcc.is() && bCreate )
         {
-            rtl::Reference< ::accessibility::AccessibleShape> pAcc;
             uno::Reference < drawing::XShape > xShape(
                 const_cast< SdrObject * >( pObj )->getUnoShape(),
                 uno::UNO_QUERY );
@@ -1808,12 +1807,11 @@ SwAccessibleMap::GetContextImpl(const SdrObject* pObj, SwAccessibleContext* pPar
                 ::accessibility::AccessibleShapeInfo aShapeInfo(
                         xShape, uno::Reference<XAccessible>(pParentImpl), this );
 
-                pAcc = rShapeTypeHandler.CreateAccessibleObject(
+                xAcc = rShapeTypeHandler.CreateAccessibleObject(
                             aShapeInfo, mpShapeMap->GetInfo() );
             }
-            xAcc = pAcc.get();
             assert(xAcc.is());
-            pAcc->Init();
+            xAcc->Init();
             if( aIter != mpShapeMap->end() )
             {
                 (*aIter).second = xAcc.get();
