@@ -1101,7 +1101,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
             OutputDevice *pOutDev = GetOutDev();
             if ( pOutDev->AcquireGraphics() )
             {
-                mpWindowImpl->mxOutDev->mpGraphics->GetResolution( mpWindowImpl->mpFrameData->mnDPIX, mpWindowImpl->mpFrameData->mnDPIY );
+                pOutDev->mpGraphics->GetResolution( mpWindowImpl->mpFrameData->mnDPIX, mpWindowImpl->mpFrameData->mnDPIY );
             }
         }
 
