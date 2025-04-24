@@ -111,7 +111,9 @@ constexpr OUStringLiteral sImplementationName = u"com.sun.star.comp.Writer.SwAcc
 
 const SwTextFrame* SwAccessibleParagraph::GetTextFrame() const
 {
-    return static_cast<const SwTextFrame*>(GetFrame());
+    const SwFrame* pFrame = GetFrame();
+    assert(!pFrame || pFrame->IsTextFrame());
+    return static_cast<const SwTextFrame*>(pFrame);
 }
 
 OUString const & SwAccessibleParagraph::GetString()
@@ -386,7 +388,6 @@ void SwAccessibleParagraph::UpdatePortionData()
     // obtain the text frame
     const SwTextFrame* pFrame = GetTextFrame();
     assert(pFrame && "The text frame has vanished!");
-    assert(pFrame->IsTextFrame() && "The text frame has mutated!");
     // build new portion data
     m_pPortionData.reset(
         new SwAccessiblePortionData(pFrame, GetMap()->GetShell().GetViewOptions()));
