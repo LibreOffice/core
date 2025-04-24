@@ -1667,8 +1667,6 @@ rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetContextImpl(const SwFram
     DBG_TESTSOLARMUTEX();
 
     rtl::Reference < SwAccessibleContext > xAcc;
-    rtl::Reference < SwAccessibleContext > xOldCursorAcc;
-    bool bOldShapeSelected = false;
 
     SwAccessibleContextMap::iterator aIter = maFrameMap.find(pFrame);
     if (aIter != maFrameMap.end())
@@ -1676,6 +1674,9 @@ rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetContextImpl(const SwFram
 
     if (!xAcc.is() && bCreate)
     {
+        rtl::Reference<SwAccessibleContext> xOldCursorAcc;
+        bool bOldShapeSelected = false;
+
         switch( pFrame->GetType() )
         {
         case SwFrameType::Txt:
@@ -1768,13 +1769,13 @@ rtl::Reference<SwAccessibleContext> SwAccessibleMap::GetContextImpl(const SwFram
             bOldShapeSelected = mbShapeSelected;
             mbShapeSelected = false;
         }
-    }
 
-    // Invalidate focus for old object when map is not locked
-    if( xOldCursorAcc.is() )
-        InvalidateCursorPosition( xOldCursorAcc );
-    if( bOldShapeSelected )
-        InvalidateShapeSelection();
+        // Invalidate focus for old object when map is not locked
+        if (xOldCursorAcc.is())
+            InvalidateCursorPosition(xOldCursorAcc);
+        if (bOldShapeSelected)
+            InvalidateShapeSelection();
+    }
 
     return xAcc;
 }
