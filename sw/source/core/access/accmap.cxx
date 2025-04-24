@@ -2528,17 +2528,17 @@ void SwAccessibleMap::InvalidateEditableStates( const SwFrame* _pFrame )
     }
 }
 
-void SwAccessibleMap::InvalidateRelationSet_( const SwFrame* pFrame,
+void SwAccessibleMap::InvalidateRelationSet_(const SwFrame& rFrame,
                                               bool bFrom )
 {
     DBG_TESTSOLARMUTEX();
 
     // first, see if this frame is accessible, and if so, get the respective
-    if (!pFrame || !SwAccessibleChild::IsFrameAccessible(*pFrame, GetShell().IsPreview()))
+    if (!SwAccessibleChild::IsFrameAccessible(rFrame, GetShell().IsPreview()))
         return;
 
     rtl::Reference < SwAccessibleContext > xAcc;
-    SwAccessibleContextMap::iterator aIter = maFrameMap.find(pFrame);
+    SwAccessibleContextMap::iterator aIter = maFrameMap.find(&rFrame);
     if (aIter != maFrameMap.end())
     {
         xAcc = (*aIter).second;
@@ -2551,7 +2551,7 @@ void SwAccessibleMap::InvalidateRelationSet_( const SwFrame* pFrame,
     if (GetShell().ActionPend())
     {
         SwAccessibleEvent_Impl aEvent( SwAccessibleEvent_Impl::CARET_OR_STATES,
-                                       xAcc.get(), SwAccessibleChild(pFrame),
+                                       xAcc.get(), SwAccessibleChild(&rFrame),
                                        ( bFrom
                                          ? AccessibleStates::RELATION_FROM
                                          : AccessibleStates::RELATION_TO ) );
@@ -2568,15 +2568,15 @@ void SwAccessibleMap::InvalidateRelationSet_( const SwFrame* pFrame,
 
 void SwAccessibleMap::InvalidateRelationSet(const SwFrame& rMaster, const SwFrame& rFollow)
 {
-    InvalidateRelationSet_(&rMaster, false);
-    InvalidateRelationSet_(&rFollow, true);
+    InvalidateRelationSet_(rMaster, false);
+    InvalidateRelationSet_(rFollow, true);
 }
 
 // invalidation of CONTENT_FLOW_FROM/_TO relation of a paragraph
 void SwAccessibleMap::InvalidateParaFlowRelation( const SwTextFrame& _rTextFrame,
                                                   const bool _bFrom )
 {
-    InvalidateRelationSet_( &_rTextFrame, _bFrom );
+    InvalidateRelationSet_(_rTextFrame, _bFrom );
 }
 
 // invalidation of text selection of a paragraph

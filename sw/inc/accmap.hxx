@@ -130,7 +130,7 @@ class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
     //InvalidateShapeInParaSelection() method is responsible for the updating the selected states of the objects.
     void InvalidateShapeInParaSelection();
 
-    void InvalidateRelationSet_( const SwFrame* pFrame, bool bFrom );
+    void InvalidateRelationSet_(const SwFrame& rFrame, bool bFrom);
 
     rtl::Reference<SwAccessibleContext> GetDocumentView_(bool bPagePreview);
 
