@@ -579,7 +579,8 @@ void SwFlyFrame::UnchainFrames( SwFlyFrame &rMaster, SwFlyFrame &rFollow )
     {
         // The Master sucks up the content of the Follow
         SwLayoutFrame *pUpper = &rMaster;
-        if ( pUpper->Lower()->IsColumnFrame() )
+        SwFrame* pLower = pUpper->Lower();
+        if ( pLower && pLower->IsColumnFrame() )
         {
             pUpper = static_cast<SwLayoutFrame*>(pUpper->GetLastLower());
             pUpper = static_cast<SwLayoutFrame*>(pUpper->Lower()); // The (Column)BodyFrame
