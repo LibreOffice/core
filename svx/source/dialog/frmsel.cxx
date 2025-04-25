@@ -988,7 +988,6 @@ void FrameSelector::SelectBorder( FrameBorderType eBorder )
 {
     mxImpl->SelectBorder( mxImpl->GetBorderAccess( eBorder ), true/*bSelect*/ );
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    // MT: bFireFox as API parameter is ugly...
     // if (bFocus)
     {
         rtl::Reference< a11y::AccFrameSelectorChild > xRet = GetChildAccessible(eBorder);
