@@ -154,6 +154,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/core/CustomAnimationEffect \
 	sd/source/core/CustomAnimationPreset \
 	sd/source/core/EffectMigration \
+	sd/source/core/ModelTraverser \
 	sd/source/core/PageListWatcher \
 	sd/source/core/TransitionPreset \
 	sd/source/core/ThemeColorChanger \

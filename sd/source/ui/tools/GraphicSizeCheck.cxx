@@ -10,6 +10,7 @@
 
 #include <memory>
 #include <tools/GraphicSizeCheck.hxx>
+#include <ModelTraverser.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
@@ -22,64 +23,6 @@
 
 namespace sd
 {
-namespace
-{
-/**
- * Interface for the visitor class, which handles each visited SdrObject
- * in the DOM.
- */
-class ModelTraverseHandler
-{
-public:
-    virtual ~ModelTraverseHandler() {}
-
-    virtual void handleSdrObject(SdrObject* pObject) = 0;
-};
-
-/**
- * Traverses the DOM and calls a handler for each object (SdrObject) it
- * encounters.
- */
-class ModelTraverser
-{
-private:
-    std::vector<std::shared_ptr<ModelTraverseHandler>> m_pNodeHandler;
-    SdDrawDocument* m_pDocument;
-
-public:
-    ModelTraverser(SdDrawDocument* pDocument)
-        : m_pDocument(pDocument)
-    {
-    }
-
-    void traverse()
-    {
-        if (!m_pDocument)
-            return;
-
-        for (sal_uInt16 nPage = 0; nPage < m_pDocument->GetPageCount(); ++nPage)
-        {
-            SdrPage* pPage = m_pDocument->GetPage(nPage);
-            if (pPage)
-            {
-                for (const rtl::Reference<SdrObject>& pObject : *pPage)
-                {
-                    for (auto& pNodeHandler : m_pNodeHandler)
-                    {
-                        pNodeHandler->handleSdrObject(pObject.get());
-                    }
-                }
-            }
-        }
-    }
-
-    void addNodeHandler(std::shared_ptr<ModelTraverseHandler> pHandler)
-    {
-        m_pNodeHandler.push_back(pHandler);
-    }
-};
-}
-
 GraphicSizeViolation::GraphicSizeViolation(sal_Int32 nDPI, SdrGrafObj* pGraphicObject)
     : m_pGraphicObject(pGraphicObject)
 {
