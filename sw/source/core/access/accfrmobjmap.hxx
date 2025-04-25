@@ -38,30 +38,18 @@ public:
     SwAccessibleChildMapKey()
         : m_eLayerId( INVALID )
         , m_nOrdNum( 0 )
-        , m_nPosNum( 0, 0 )
     {}
 
     SwAccessibleChildMapKey( LayerId eId, sal_uInt32 nOrd )
         : m_eLayerId( eId )
         , m_nOrdNum( nOrd )
-        , m_nPosNum( 0, 0 )
     {}
 
     bool operator()( const SwAccessibleChildMapKey& r1,
                             const SwAccessibleChildMapKey& r2 ) const
     {
         if(r1.m_eLayerId == r2.m_eLayerId)
-        {
-            if(r1.m_nPosNum == r2.m_nPosNum)
-                return r1.m_nOrdNum < r2.m_nOrdNum;
-            else
-            {
-                if(r1.m_nPosNum.getY() == r2.m_nPosNum.getY())
-                    return r1.m_nPosNum.getX() < r2.m_nPosNum.getX();
-                else
-                    return r1.m_nPosNum.getY() < r2.m_nPosNum.getY();
-            }
-        }
+            return r1.m_nOrdNum < r2.m_nOrdNum;
         else
             return r1.m_eLayerId < r2.m_eLayerId;
     }
@@ -79,7 +67,6 @@ public:
 private:
     LayerId m_eLayerId;
     sal_uInt32 m_nOrdNum;
-    Point m_nPosNum;
 };
 
 
