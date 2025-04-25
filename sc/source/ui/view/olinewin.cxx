@@ -37,9 +37,9 @@ const tools::Long SC_OL_POSOFFSET                  = 2;
 const size_t SC_OL_NOLEVEL                  = static_cast< size_t >( -1 );
 const size_t SC_OL_HEADERENTRY              = static_cast< size_t >( -1 );
 
-ScOutlineWindow::ScOutlineWindow( vcl::Window* pParent, ScOutlineMode eMode, ScViewData* pViewData, ScSplitPos eWhich ) :
+ScOutlineWindow::ScOutlineWindow( vcl::Window* pParent, ScOutlineMode eMode, ScViewData& rViewData, ScSplitPos eWhich ) :
     Window( pParent ),
-    mrViewData( *pViewData ),
+    mrViewData( rViewData ),
     meWhich( eWhich ),
     mbHoriz( eMode == SC_OUTLINE_HOR ),
     mbMirrorEntries( false ),           // updated in SetHeaderSize

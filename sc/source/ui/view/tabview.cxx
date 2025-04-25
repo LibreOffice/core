@@ -1657,14 +1657,14 @@ void ScTabView::UpdateShow()
     }
 
     if (bHOutline && !pColOutline[SC_SPLIT_LEFT])
-        pColOutline[SC_SPLIT_LEFT] = VclPtr<ScOutlineWindow>::Create( pFrameWin, SC_OUTLINE_HOR, &aViewData, SC_SPLIT_BOTTOMLEFT );
+        pColOutline[SC_SPLIT_LEFT] = VclPtr<ScOutlineWindow>::Create( pFrameWin, SC_OUTLINE_HOR, aViewData, SC_SPLIT_BOTTOMLEFT );
     if (bShowH && bHOutline && !pColOutline[SC_SPLIT_RIGHT])
-        pColOutline[SC_SPLIT_RIGHT] = VclPtr<ScOutlineWindow>::Create( pFrameWin, SC_OUTLINE_HOR, &aViewData, SC_SPLIT_BOTTOMRIGHT );
+        pColOutline[SC_SPLIT_RIGHT] = VclPtr<ScOutlineWindow>::Create( pFrameWin, SC_OUTLINE_HOR, aViewData, SC_SPLIT_BOTTOMRIGHT );
 
     if (bVOutline && !pRowOutline[SC_SPLIT_BOTTOM])
-        pRowOutline[SC_SPLIT_BOTTOM] = VclPtr<ScOutlineWindow>::Create( pFrameWin, SC_OUTLINE_VER, &aViewData, SC_SPLIT_BOTTOMLEFT );
+        pRowOutline[SC_SPLIT_BOTTOM] = VclPtr<ScOutlineWindow>::Create( pFrameWin, SC_OUTLINE_VER, aViewData, SC_SPLIT_BOTTOMLEFT );
     if (bShowV && bVOutline && !pRowOutline[SC_SPLIT_TOP])
-        pRowOutline[SC_SPLIT_TOP] = VclPtr<ScOutlineWindow>::Create( pFrameWin, SC_OUTLINE_VER, &aViewData, SC_SPLIT_TOPLEFT );
+        pRowOutline[SC_SPLIT_TOP] = VclPtr<ScOutlineWindow>::Create( pFrameWin, SC_OUTLINE_VER, aViewData, SC_SPLIT_TOPLEFT );
 
     if (bShowH && bHeader && !pColBar[SC_SPLIT_RIGHT])
         pColBar[SC_SPLIT_RIGHT] = VclPtr<ScColBar>::Create( pFrameWin, SC_SPLIT_RIGHT,

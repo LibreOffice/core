@@ -58,7 +58,7 @@ public:
                                 ScOutlineWindow(
                                     vcl::Window* pParent,
                                     ScOutlineMode eMode,
-                                    ScViewData* pViewData,
+                                    ScViewData& rViewData,
                                     ScSplitPos eWhich );
     virtual                     ~ScOutlineWindow() override;
     virtual void                dispose() override;
