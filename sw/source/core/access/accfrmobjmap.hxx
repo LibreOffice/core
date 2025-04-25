@@ -54,16 +54,6 @@ public:
             return r1.m_eLayerId < r2.m_eLayerId;
     }
 
-    /* MT: Need to get this position parameter stuff in dev300 somehow...
-    //This methods are used to insert an object to the map, adding a position parameter.
-    std::pair< iterator, bool > insert( sal_uInt32 nOrd, Point nPos,
-                                          const SwFrameOrObj& rLower );
-    std::pair< iterator, bool > insert( const SdrObject *pObj,
-                                          const SwFrameOrObj& rLower,
-                                          const SwDoc *pDoc,
-                                          Point nPos);
-    */
-
 private:
     LayerId m_eLayerId;
     sal_uInt32 m_nOrdNum;
