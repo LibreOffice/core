@@ -3476,8 +3476,8 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
             // so we rather just accept the deletion redline
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
-                std::unique_ptr<SwUndoRejectRedline> pUndoRdl
-                    = std::make_unique<SwUndoRejectRedline>(*pTmp, 1);
+                std::unique_ptr<SwUndoAcceptRedline> pUndoRdl
+                    = std::make_unique<SwUndoAcceptRedline>(*pTmp);
 #if OSL_DEBUG_LEVEL > 0
                 pUndoRdl->SetRedlineCountDontCheck(true);
 #endif
