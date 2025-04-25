@@ -152,8 +152,12 @@ void QtInstanceTreeView::select(int nPos)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] {
-        m_pSelectionModel->select(modelIndex(nPos),
-                                  QItemSelectionModel::Select | QItemSelectionModel::Rows);
+        QItemSelectionModel::SelectionFlags eFlags
+            = QItemSelectionModel::Select | QItemSelectionModel::Rows;
+        if (m_pTreeView->selectionMode() == QAbstractItemView::SingleSelection)
+            eFlags |= QItemSelectionModel::Clear;
+
+        m_pSelectionModel->select(modelIndex(nPos), eFlags);
     });
 }
 
