@@ -1,0 +1,13 @@
+Form.cc:2517:24: error: could not convert ‘gstr’ from ‘GooString’ to ‘std::optional<GooString>’
+
+--- poppler/poppler/Form.cc.orig2	2025-04-25 20:55:50.411236258 +0200
++++ poppler/poppler/Form.cc	2025-04-25 20:55:53.108246143 +0200
+@@ -2514,7 +2514,7 @@
+             } while (++pos < len);
+             if (signature_type == CryptoSign::SignatureType::g10c_pgp_signature_detached) {
+                 // Padding here is done as pgp packets, so keep no need to try to unmangle it
+-                return gstr;
++                return std::optional<GooString>{std::move(gstr)};
+             } else {
+                 if (gstr.getChar(0) == '3' && gstr.getChar(1) == '0') {
+                     if (gstr.getChar(2) == '8' && gstr.getChar(3) == '0') {

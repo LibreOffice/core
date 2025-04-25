@@ -14,6 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,poppler,$(POPPLER_TARBALL),,poppler
 $(eval $(call gb_UnpackedTarball_set_patchlevel,poppler,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
+	external/poppler/0001-Revert-Remove-gdir-we-have-std-filesystem.patch.1 \
 	external/poppler/disable-freetype.patch.1 \
 	external/poppler/gcc7-EntityInfo.patch.1 \
 	external/poppler/gcc7-GfxFont.patch.1 \
@@ -21,6 +22,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	external/poppler/std_string.patch.1 \
 	external/poppler/std_span.patch.1 \
 	external/poppler/std_numbers.patch.1 \
+	external/poppler/std_optional.patch.1 \
 	external/poppler/clang-std-ranges.patch.1 \
 	external/poppler/poppler-config.patch.1 \
 ))
