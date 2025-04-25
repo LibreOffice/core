@@ -368,7 +368,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
     theParam.bCaseSens      = m_xBtnCase->get_active();
     theParam.eSearchType    = m_xBtnRegExp->get_active() ? utl::SearchParam::SearchType::Regexp : utl::SearchParam::SearchType::Normal;
 
-    pOutItem.reset( new ScQueryItem( nWhichQuery, &theParam ) );
+    pOutItem.reset( new ScQueryItem( nWhichQuery, pViewData, &theParam ) );
 
     return *pOutItem;
 }

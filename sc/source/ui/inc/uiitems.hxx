@@ -149,8 +149,6 @@ public:
                             ScQueryItem( sal_uInt16                 nWhich,
                                          ScViewData*            ptrViewData,
                                          const ScQueryParam*    pQueryData );
-                            ScQueryItem( sal_uInt16                 nWhich,
-                                         const ScQueryParam*    pQueryData );
                             ScQueryItem( const ScQueryItem& rItem );
                             virtual ~ScQueryItem() override;
 

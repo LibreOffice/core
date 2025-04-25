@@ -236,7 +236,7 @@ void ScSpecialFilterDlg::SetActive()
 ScQueryItem* ScSpecialFilterDlg::GetOutputItem( const ScQueryParam& rParam,
                                                 const ScRange& rSource )
 {
-    pOutItem.reset(new ScQueryItem( nWhichQuery, &rParam ));
+    pOutItem.reset(new ScQueryItem( nWhichQuery, pViewData, &rParam ));
     pOutItem->SetAdvancedQuerySource( &rSource );
     return pOutItem.get();
 }

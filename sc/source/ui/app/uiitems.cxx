@@ -169,18 +169,6 @@ ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
         mpQueryData.reset(new ScQueryParam);
 }
 
-ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
-                          const ScQueryParam*   pQueryData ) :
-        SfxPoolItem ( nWhichP ),
-        pViewData   ( nullptr ),
-        bIsAdvanced ( false )
-{
-    if (pQueryData)
-        mpQueryData.reset(new ScQueryParam(*pQueryData));
-    else
-        mpQueryData.reset(new ScQueryParam);
-}
-
 ScQueryItem::ScQueryItem( const ScQueryItem& rItem ) :
         SfxPoolItem ( rItem ),
         mpQueryData(new ScQueryParam(*rItem.mpQueryData)),

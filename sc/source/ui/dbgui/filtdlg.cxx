@@ -726,7 +726,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
 
     // only set the three - reset everything else
 
-    pOutItem.reset( new ScQueryItem( nWhichQuery, &theParam ) );
+    pOutItem.reset( new ScQueryItem( nWhichQuery, pViewData, &theParam ) );
 
     return pOutItem.get();
 }
