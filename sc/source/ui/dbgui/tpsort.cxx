@@ -675,7 +675,7 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
     }
     aNewSortData.aCollatorAlgorithm = sAlg;
 
-    rArgSet->Put( ScSortItem( SCITEM_SORTDATA, &aNewSortData ) );
+    rArgSet->Put( ScSortItem( SCITEM_SORTDATA, pViewData, &aNewSortData ) );
 
     return true;
 }

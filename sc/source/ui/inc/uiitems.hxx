@@ -129,8 +129,6 @@ public:
                             ScSortItem( sal_uInt16              nWhich,
                                         ScViewData*         ptrViewData,
                                         const ScSortParam*  pSortData );
-                            ScSortItem( sal_uInt16              nWhich,
-                                        const ScSortParam*  pSortData );
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual ScSortItem*     Clone( SfxItemPool *pPool = nullptr ) const override;

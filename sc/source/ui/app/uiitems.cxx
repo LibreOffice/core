@@ -131,14 +131,6 @@ ScSortItem::ScSortItem( sal_uInt16              nWhichP,
     if ( pSortData ) theSortData = *pSortData;
 }
 
-ScSortItem::ScSortItem( sal_uInt16              nWhichP,
-                        const ScSortParam*  pSortData ) :
-        SfxPoolItem ( nWhichP ),
-        pViewData   ( nullptr )
-{
-    if ( pSortData ) theSortData = *pSortData;
-}
-
 bool ScSortItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));

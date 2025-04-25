@@ -32,7 +32,7 @@ static ItemInfoPackage& getItemInfoPackageScMessage()
             // m_nWhich, m_pItem, m_nSlotID, m_nItemInfoFlags
             { SCITEM_STRING, new SfxStringItem(SCITEM_STRING, OUString() ), 0, SFX_ITEMINFOFLAG_NONE },
             { SCITEM_SEARCHDATA, new SvxSearchItem(SCITEM_SEARCHDATA ), 0, SFX_ITEMINFOFLAG_NONE },
-            { SCITEM_SORTDATA, new ScSortItem(SCITEM_SORTDATA, nullptr ), SID_SORT, SFX_ITEMINFOFLAG_NONE },
+            { SCITEM_SORTDATA, new ScSortItem(SCITEM_SORTDATA, nullptr, nullptr), SID_SORT, SFX_ITEMINFOFLAG_NONE },
             { SCITEM_QUERYDATA, new ScQueryItem(SCITEM_QUERYDATA, nullptr, nullptr ), SID_QUERY, SFX_ITEMINFOFLAG_NONE },
             { SCITEM_SUBTDATA, new ScSubTotalItem(SCITEM_SUBTDATA, nullptr, nullptr ), SID_SUBTOTALS, SFX_ITEMINFOFLAG_NONE },
             { SCITEM_CONSOLIDATEDATA, new ScConsolidateItem(SCITEM_CONSOLIDATEDATA, nullptr ), SID_CONSOLIDATE, SFX_ITEMINFOFLAG_NONE },
