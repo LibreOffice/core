@@ -177,8 +177,8 @@ bool lcl_HasRowOutline( const ScViewData& rViewData )
 ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     pFrameWin( pParent ),
     aViewData( rDocSh, pViewShell ),
-    aFunctionSet( &aViewData ),
-    aHdrFunc( &aViewData ),
+    aFunctionSet( aViewData ),
+    aHdrFunc( aViewData ),
     aVScrollTop( VclPtr<ScrollAdaptor>::Create( pFrameWin, false ) ),
     aVScrollBottom( VclPtr<ScrollAdaptor>::Create( pFrameWin, false ) ),
     aHScrollLeft( VclPtr<ScrollAdaptor>::Create( pFrameWin, true ) ),

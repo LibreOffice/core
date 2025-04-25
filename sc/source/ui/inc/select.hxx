@@ -40,7 +40,7 @@ public:
 class ScViewFunctionSet : public FunctionSet            // View (Gridwin / keyboard)
 {
 private:
-    ScViewData*             m_pViewData;
+    ScViewData&             m_rViewData;
     ScViewSelectionEngine*  m_pEngine;
 
     bool            m_bAnchor;
@@ -53,7 +53,7 @@ private:
                                         bool bLeftScroll, bool bTopScroll, bool bRightScroll, bool bBottomScroll );
 
 public:
-                    ScViewFunctionSet( ScViewData* pNewViewData );
+                    ScViewFunctionSet( ScViewData& rViewData );
 
     void            SetSelectionEngine( ScViewSelectionEngine* pSelEngine );
 
@@ -75,7 +75,7 @@ public:
 class ScHeaderFunctionSet : public FunctionSet          // Column / row headers
 {
 private:
-    ScViewData*     pViewData;
+    ScViewData&     rViewData;
     bool            bColumn;                // Col- / Rowbar
     ScSplitPos      eWhich;
 
@@ -83,7 +83,7 @@ private:
     SCCOLROW        nCursorPos;
 
 public:
-                    ScHeaderFunctionSet( ScViewData* pNewViewData );
+                    ScHeaderFunctionSet( ScViewData& rData );
 
     void            SetColumn( bool bSet );
     void            SetWhich( ScSplitPos eNew );
