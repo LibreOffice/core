@@ -121,10 +121,17 @@ void SwAccessibleChild::Init( vcl::Window* pWindow )
 
 bool SwAccessibleChild::IsFrameAccessible(const SwFrame& rFrame, bool bPagePreview)
 {
-    return rFrame.IsAccessibleFrame()
-           && (!rFrame.IsCellFrame()
-               || static_cast<const SwCellFrame&>(rFrame).GetTabBox()->GetSttNd() != nullptr)
-           && !rFrame.IsInCoveredCell() && (bPagePreview || !rFrame.IsPageFrame());
+    if (!rFrame.IsAccessibleFrame())
+        return false;
+
+    if (rFrame.IsCellFrame()
+        && static_cast<const SwCellFrame&>(rFrame).GetTabBox()->GetSttNd() == nullptr)
+        return false;
+
+    if (rFrame.IsInCoveredCell())
+        return false;
+
+    return bPagePreview || !rFrame.IsPageFrame();
 }
 
 bool SwAccessibleChild::IsAccessible( bool bPagePreview ) const
