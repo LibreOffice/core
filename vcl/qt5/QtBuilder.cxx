@@ -678,6 +678,10 @@ void QtBuilder::insertMenuObject(QMenu* pParent, QMenu* pSubMenu, const OUString
         if (!sGroup.isEmpty())
             setMenuActionGroup(pParent, pAction, sGroup);
     }
+    else if (rClass == u"GtkSeparatorMenuItem")
+    {
+        pAction->setSeparator(true);
+    }
     else
     {
         assert(false && "Not implemented yet");
