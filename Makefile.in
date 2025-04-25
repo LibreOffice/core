@@ -69,7 +69,7 @@ else # MAKE_RESTARTS
 # Nested test is to check if the systemd-detect-virt command doesn't exist or it reports we're not
 # in a container:
 check-if-root:
-	@if test ! `uname` = 'Haiku' -a `id -u` = 0; then \
+	@if test ! `uname` = 'Haiku' -a `id -u` = 0 && test -z $$container; then \
 		if test ! -x "$$(command -v systemd-detect-virt)" || ! systemd-detect-virt -c -q; then \
 			echo; \
 			echo 'Building LibreOffice as root is a very bad idea, use a regular user.'; \
