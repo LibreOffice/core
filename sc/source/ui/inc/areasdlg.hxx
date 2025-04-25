@@ -29,7 +29,7 @@ class SfxStringItem;
 class ScPrintAreasDlg : public ScAnyRefDlgController
 {
 public:
-    ScPrintAreasDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent);
+    ScPrintAreasDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent, ScViewData& rData);
     virtual ~ScPrintAreasDlg() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument& rDoc ) override;
@@ -43,8 +43,8 @@ public:
 
 private:
     bool            bDlgLostFocus;
-    ScDocument*     pDoc;
-    ScViewData*     pViewData;
+    ScViewData&     rViewData;
+    ScDocument&     rDoc;
     SCTAB           nCurTab;
 
     formula::RefEdit* m_pRefInputEdit;

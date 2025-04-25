@@ -265,7 +265,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             break;
         }
         case SID_OPENDLG_EDIT_PRINTAREA:
-            xResult = std::make_shared<ScPrintAreasDlg>(pB, pCW, pParent);
+            xResult = std::make_shared<ScPrintAreasDlg>(pB, pCW, pParent, GetViewData());
             break;
         case SID_DEFINE_COLROWNAMERANGES:
             xResult = std::make_shared<ScColRowNameRangesDlg>(pB, pCW, pParent, GetViewData());
