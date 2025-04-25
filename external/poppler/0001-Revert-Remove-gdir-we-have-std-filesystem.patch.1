@@ -1,0 +1,503 @@
+From a753625a91dc468021339978782c198238a70292 Mon Sep 17 00:00:00 2001
+From: Michael Stahl <michael.stahl@allotropia.de>
+Date: Fri, 25 Apr 2025 20:34:55 +0200
+Subject: [PATCH] Revert "Remove gdir, we have std::filesystem"
+
+This reverts commit b50390f748b59cb0a64b912636ecf6527bd0d12a.
+---
+ goo/gdir.h                      |  96 +++++++++++++++++++++++++++++
+ goo/gfile.cc                    | 104 ++++++++++++++++++++++++++++++++
+ poppler/GlobalParams.cc         |  74 ++++++++++++++---------
+ poppler/GlobalParams.h          |  15 +++--
+ poppler/GlobalParamsWin.cc      |   2 +-
+ poppler/NSSCryptoSignBackend.cc |  11 ++--
+ 6 files changed, 261 insertions(+), 41 deletions(-)
+ create mode 100644 goo/gdir.h
+
+diff --git a/goo/gdir.h b/goo/gdir.h
+new file mode 100644
+index 00000000..76068791
+--- /dev/null
++++ b/goo/gdir.h
+@@ -0,0 +1,96 @@
++//========================================================================
++//
++// gfile.h
++//
++// Miscellaneous file and directory name manipulation.
++//
++// Copyright 1996-2003 Glyph & Cog, LLC
++//
++//========================================================================
++
++//========================================================================
++//
++// Modified under the Poppler project - http://poppler.freedesktop.org
++//
++// All changes made under the Poppler project to this file are licensed
++// under GPL version 2 or later
++//
++// Copyright (C) 2006 Kristian Høgsberg <krh@redhat.com>
++// Copyright (C) 2009, 2011, 2012, 2017, 2018, 2021, 2022 Albert Astals Cid <aacid@kde.org>
++// Copyright (C) 2009 Kovid Goyal <kovid@kovidgoyal.net>
++// Copyright (C) 2013 Adam Reichold <adamreichold@myopera.com>
++// Copyright (C) 2013, 2017 Adrian Johnson <ajohnson@redneon.com>
++// Copyright (C) 2014 Bogdan Cristea <cristeab@gmail.com>
++// Copyright (C) 2014 Peter Breitenlohner <peb@mppmu.mpg.de>
++// Copyright (C) 2017 Christoph Cullmann <cullmann@kde.org>
++// Copyright (C) 2017 Thomas Freitag <Thomas.Freitag@alfa.de>
++// Copyright (C) 2018 Mojca Miklavec <mojca@macports.org>
++// Copyright (C) 2019 Christian Persch <chpe@src.gnome.org>
++//
++// To see a description of the changes please see the Changelog file that
++// came with your tarball or type make ChangeLog if you are building from git
++//
++//========================================================================
++
++#ifndef GDIR_H
++#define GDIR_H
++
++#include "poppler-config.h"
++
++#include <memory>
++
++class GooString;
++
++#if defined(_WIN32)
++#    include <windows.h>
++#else
++#    include <dirent.h>
++#endif
++
++//------------------------------------------------------------------------
++// GDir and GDirEntry
++//------------------------------------------------------------------------
++
++class GDirEntry
++{
++public:
++    GDirEntry(const char *dirPath, const char *nameA, bool doStat);
++    ~GDirEntry();
++
++    GDirEntry(const GDirEntry &other) = delete;
++    GDirEntry &operator=(const GDirEntry &other) = delete;
++
++    const GooString *getName() const { return name; }
++    const GooString *getFullPath() const { return fullPath; }
++    bool isDir() const { return dir; }
++
++private:
++    GooString *name; // dir/file name
++    GooString *fullPath;
++    bool dir; // is it a directory?
++};
++
++class GDir
++{
++public:
++    explicit GDir(const char *name, bool doStatA = true);
++    ~GDir();
++
++    GDir(const GDir &other) = delete;
++    GDir &operator=(const GDir &other) = delete;
++
++    std::unique_ptr<GDirEntry> getNextEntry();
++    void rewind();
++
++private:
++    GooString *path; // directory path
++    bool doStat; // call stat() for each entry?
++#if defined(_WIN32)
++    WIN32_FIND_DATAA ffd;
++    HANDLE hnd;
++#else
++    DIR *dir; // the DIR structure from opendir()
++#endif
++};
++
++#endif
+diff --git a/goo/gfile.cc b/goo/gfile.cc
+index 499550a6..fb42e028 100644
+--- a/goo/gfile.cc
++++ b/goo/gfile.cc
+@@ -48,6 +48,7 @@
+ #include <limits>
+ #include "GooString.h"
+ #include "gfile.h"
++#include "gdir.h"
+ 
+ // Some systems don't define this, so just make it something reasonably
+ // large.
+@@ -433,3 +434,106 @@ bool GooFile::modificationTimeChangedSinceOpen() const
+ }
+ 
+ #endif // _WIN32
++
++//------------------------------------------------------------------------
++// GDir and GDirEntry
++//------------------------------------------------------------------------
++
++GDirEntry::GDirEntry(const char *dirPath, const char *nameA, bool doStat)
++{
++#ifdef _WIN32
++    DWORD fa;
++#else
++    struct stat st;
++#endif
++
++    name = new GooString(nameA);
++    dir = false;
++    fullPath = new GooString(dirPath);
++    appendToPath(fullPath, nameA);
++    if (doStat) {
++#ifdef _WIN32
++        fa = GetFileAttributesA(fullPath->c_str());
++        dir = (fa != 0xFFFFFFFF && (fa & FILE_ATTRIBUTE_DIRECTORY));
++#else
++        if (stat(fullPath->c_str(), &st) == 0) {
++            dir = S_ISDIR(st.st_mode);
++        }
++#endif
++    }
++}
++
++GDirEntry::~GDirEntry()
++{
++    delete fullPath;
++    delete name;
++}
++
++GDir::GDir(const char *name, bool doStatA)
++{
++    path = new GooString(name);
++    doStat = doStatA;
++#ifdef _WIN32
++    std::unique_ptr<GooString> tmp = path->copy();
++    tmp->append("/*.*");
++    hnd = FindFirstFileA(tmp->c_str(), &ffd);
++#else
++    dir = opendir(name);
++#endif
++}
++
++GDir::~GDir()
++{
++    delete path;
++#ifdef _WIN32
++    if (hnd != INVALID_HANDLE_VALUE) {
++        FindClose(hnd);
++        hnd = INVALID_HANDLE_VALUE;
++    }
++#else
++    if (dir) {
++        closedir(dir);
++    }
++#endif
++}
++
++std::unique_ptr<GDirEntry> GDir::getNextEntry()
++{
++#ifdef _WIN32
++    if (hnd != INVALID_HANDLE_VALUE) {
++        auto e = std::make_unique<GDirEntry>(path->c_str(), ffd.cFileName, doStat);
++        if (!FindNextFileA(hnd, &ffd)) {
++            FindClose(hnd);
++            hnd = INVALID_HANDLE_VALUE;
++        }
++        return e;
++    }
++#else
++    struct dirent *ent;
++    if (dir) {
++        do {
++            ent = readdir(dir);
++        } while (ent && (!strcmp(ent->d_name, ".") || !strcmp(ent->d_name, "..")));
++        if (ent) {
++            return std::make_unique<GDirEntry>(path->c_str(), ent->d_name, doStat);
++        }
++    }
++#endif
++
++    return {};
++}
++
++void GDir::rewind()
++{
++#ifdef _WIN32
++    if (hnd != INVALID_HANDLE_VALUE)
++        FindClose(hnd);
++    std::unique_ptr<GooString> tmp = path->copy();
++    tmp->append("/*.*");
++    hnd = FindFirstFileA(tmp->c_str(), &ffd);
++#else
++    if (dir) {
++        rewinddir(dir);
++    }
++#endif
++}
+diff --git a/poppler/GlobalParams.cc b/poppler/GlobalParams.cc
+index 82e2f023..294124ee 100644
+--- a/poppler/GlobalParams.cc
++++ b/poppler/GlobalParams.cc
+@@ -62,7 +62,6 @@
+ #include <cstring>
+ #include <cstdio>
+ #include <cctype>
+-#include <filesystem>
+ #ifdef _WIN32
+ #    include <shlobj.h>
+ #    include <mbstring.h>
+@@ -73,8 +72,10 @@
+ #    include <android/system_fonts.h>
+ #endif
+ #include "goo/glibc.h"
++#include "goo/gmem.h"
+ #include "goo/GooString.h"
+ #include "goo/gfile.h"
++#include "goo/gdir.h"
+ #include "Error.h"
+ #include "NameToCharCode.h"
+ #include "CharCodeToUnicode.h"
+@@ -409,7 +410,7 @@ const SysFontInfo *SysFontList::find(const std::string &name, bool fixedWidth, b
+ // parsing
+ //------------------------------------------------------------------------
+ 
+-GlobalParams::GlobalParams(const std::string &customPopplerDataDir) : popplerDataDir(customPopplerDataDir)
++GlobalParams::GlobalParams(const char *customPopplerDataDir) : popplerDataDir(customPopplerDataDir)
+ {
+     // scan the encoding in reverse because we want the lowest-numbered
+     // index for each char name ('space' is encoded twice)
+@@ -466,30 +467,49 @@ GlobalParams::GlobalParams(const std::string &customPopplerDataDir) : popplerDat
+ 
+ void GlobalParams::scanEncodingDirs()
+ {
+-    std::string dataRoot = !popplerDataDir.empty() ? popplerDataDir : std::string { POPPLER_DATADIR };
++    GDir *dir;
++    std::unique_ptr<GDirEntry> entry;
++    const char *dataRoot = popplerDataDir ? popplerDataDir : POPPLER_DATADIR;
+ 
+-    std::error_code ec; // if ec is set, we also get the end iterator, so that's kind of okay.  If not creating with a error code, we get an exception if poppler data is missing
+-    for (const auto &entry : std::filesystem::directory_iterator { dataRoot + "/nameToUnicode", ec }) {
+-        if (entry.is_regular_file()) {
+-            parseNameToUnicode(entry.path());
++    // allocate buffer large enough to append "/nameToUnicode"
++    size_t bufSize = strlen(dataRoot) + strlen("/nameToUnicode") + 1;
++    char *dataPathBuffer = new char[bufSize];
++
++    snprintf(dataPathBuffer, bufSize, "%s/nameToUnicode", dataRoot);
++    dir = new GDir(dataPathBuffer, true);
++    while (entry = dir->getNextEntry(), entry != nullptr) {
++        if (!entry->isDir()) {
++            parseNameToUnicode(entry->getFullPath());
+         }
+     }
++    delete dir;
+ 
+-    for (const auto &entry : std::filesystem::directory_iterator { dataRoot + "/cidToUnicode", ec }) {
+-        addCIDToUnicode(entry.path().filename().string(), entry.path().string());
++    snprintf(dataPathBuffer, bufSize, "%s/cidToUnicode", dataRoot);
++    dir = new GDir(dataPathBuffer, false);
++    while (entry = dir->getNextEntry(), entry != nullptr) {
++        addCIDToUnicode(entry->getName(), entry->getFullPath());
+     }
++    delete dir;
+ 
+-    for (const auto &entry : std::filesystem::directory_iterator { dataRoot + "/unicodeMap", ec }) {
+-        addUnicodeMap(entry.path().filename().string(), entry.path().string());
++    snprintf(dataPathBuffer, bufSize, "%s/unicodeMap", dataRoot);
++    dir = new GDir(dataPathBuffer, false);
++    while (entry = dir->getNextEntry(), entry != nullptr) {
++        addUnicodeMap(entry->getName(), entry->getFullPath());
+     }
++    delete dir;
+ 
+-    for (const auto &entry : std::filesystem::directory_iterator { dataRoot + "/cMap", ec }) {
+-        addCMapDir(entry.path().filename().string(), entry.path().string());
+-        toUnicodeDirs.push_back(entry.path().string());
++    snprintf(dataPathBuffer, bufSize, "%s/cMap", dataRoot);
++    dir = new GDir(dataPathBuffer, false);
++    while (entry = dir->getNextEntry(), entry != nullptr) {
++        addCMapDir(entry->getName(), entry->getFullPath());
++        toUnicodeDirs.push_back(entry->getFullPath()->copy());
+     }
++    delete dir;
++
++    delete[] dataPathBuffer;
+ }
+ 
+-void GlobalParams::parseNameToUnicode(const std::filesystem::path &name)
++void GlobalParams::parseNameToUnicode(const GooString *name)
+ {
+     char *tok1, *tok2;
+     FILE *f;
+@@ -498,8 +518,8 @@ void GlobalParams::parseNameToUnicode(const std::filesystem::path &name)
+     Unicode u;
+     char *tokptr;
+ 
+-    if (!(f = openFile(name.string().c_str(), "r"))) {
+-        error(errIO, -1, "Couldn't open 'nameToUnicode' file '{0:s}'", name.string().c_str());
++    if (!(f = openFile(name->c_str(), "r"))) {
++        error(errIO, -1, "Couldn't open 'nameToUnicode' file '{0:t}'", name);
+         return;
+     }
+     line = 1;
+@@ -510,26 +530,26 @@ void GlobalParams::parseNameToUnicode(const std::filesystem::path &name)
+             sscanf(tok1, "%x", &u);
+             nameToUnicodeText->add(tok2, u);
+         } else {
+-            error(errConfig, -1, "Bad line in 'nameToUnicode' file ({0:s}:{1:d})", name.string().c_str(), line);
++            error(errConfig, -1, "Bad line in 'nameToUnicode' file ({0:t}:{1:d})", name, line);
+         }
+         ++line;
+     }
+     fclose(f);
+ }
+ 
+-void GlobalParams::addCIDToUnicode(std::string &&collection, std::string &&fileName)
++void GlobalParams::addCIDToUnicode(const GooString *collection, const GooString *fileName)
+ {
+-    cidToUnicodes[collection] = fileName;
++    cidToUnicodes[collection->toStr()] = fileName->toStr();
+ }
+ 
+-void GlobalParams::addUnicodeMap(std::string &&encodingName, std::string &&fileName)
++void GlobalParams::addUnicodeMap(const GooString *encodingName, const GooString *fileName)
+ {
+-    unicodeMaps[encodingName] = fileName;
++    unicodeMaps[encodingName->toStr()] = fileName->toStr();
+ }
+ 
+-void GlobalParams::addCMapDir(std::string &&collection, std::string &&dir)
++void GlobalParams::addCMapDir(const GooString *collection, const GooString *dir)
+ {
+-    cMapDirs.emplace(collection, dir);
++    cMapDirs.emplace(collection->toStr(), dir->toStr());
+ }
+ 
+ bool GlobalParams::parseYesNo2(const char *token, bool *flag)
+@@ -634,8 +654,8 @@ FILE *GlobalParams::findToUnicodeFile(const GooString *name)
+     FILE *f;
+ 
+     globalParamsLocker();
+-    for (const std::string &dir : toUnicodeDirs) {
+-        fileName = appendToPath(new GooString(dir), name->c_str());
++    for (const std::unique_ptr<GooString> &dir : toUnicodeDirs) {
++        fileName = appendToPath(dir->copy().release(), name->c_str());
+         f = openFile(fileName->c_str(), "r");
+         delete fileName;
+         if (f) {
+@@ -1543,7 +1563,7 @@ GlobalParamsIniter::GlobalParamsIniter(ErrorCallback errorCallback)
+     const std::scoped_lock lock { mutex };
+ 
+     if (count == 0) {
+-        globalParams = std::make_unique<GlobalParams>(customDataDir);
++        globalParams = std::make_unique<GlobalParams>(!customDataDir.empty() ? customDataDir.c_str() : nullptr);
+ 
+         setErrorCallback(errorCallback);
+     }
+diff --git a/poppler/GlobalParams.h b/poppler/GlobalParams.h
+index 3bd9d7b6..1bb69d15 100644
+--- a/poppler/GlobalParams.h
++++ b/poppler/GlobalParams.h
+@@ -52,7 +52,6 @@
+ #include <mutex>
+ #include <optional>
+ #include <vector>
+-#include <filesystem>
+ 
+ class GooString;
+ class NameToCharCode;
+@@ -113,7 +112,7 @@ class POPPLER_PRIVATE_EXPORT GlobalParams
+ {
+ public:
+     // Initialize the global parameters
+-    explicit GlobalParams(const std::string &customPopplerDataDir = {});
++    explicit GlobalParams(const char *customPopplerDataDir = nullptr);
+ 
+     ~GlobalParams();
+ 
+@@ -169,12 +168,12 @@ public:
+     static bool parseYesNo2(const char *token, bool *flag);
+ 
+ private:
+-    void parseNameToUnicode(const std::filesystem::path &name);
++    void parseNameToUnicode(const GooString *name);
+ 
+     void scanEncodingDirs();
+-    void addCIDToUnicode(std::string &&collection, std::string &&fileName);
+-    void addUnicodeMap(std::string &&encodingName, std::string &&fileName);
+-    void addCMapDir(std::string &&collection, std::string &&dir);
++    void addCIDToUnicode(const GooString *collection, const GooString *fileName);
++    void addUnicodeMap(const GooString *encodingName, const GooString *fileName);
++    void addCMapDir(const GooString *collection, const GooString *dir);
+ 
+     //----- static tables
+ 
+@@ -198,7 +197,7 @@ private:
+     std::unordered_map<std::string, std::string> unicodeMaps;
+     // list of CMap dirs, indexed by collection
+     std::unordered_multimap<std::string, std::string> cMapDirs;
+-    std::vector<std::string> toUnicodeDirs; // list of ToUnicode CMap dirs
++    std::vector<std::unique_ptr<GooString>> toUnicodeDirs; // list of ToUnicode CMap dirs
+     bool baseFontsInitialized;
+ #ifdef _WIN32
+     // windows font substitutes (for CID fonts)
+@@ -224,7 +223,7 @@ private:
+     mutable std::recursive_mutex unicodeMapCacheMutex;
+     mutable std::recursive_mutex cMapCacheMutex;
+ 
+-    std::string popplerDataDir;
++    const char *popplerDataDir;
+ };
+ 
+ class POPPLER_PRIVATE_EXPORT GlobalParamsIniter
+diff --git a/poppler/GlobalParamsWin.cc b/poppler/GlobalParamsWin.cc
+index c838bfa6..2d45ec59 100644
+--- a/poppler/GlobalParamsWin.cc
++++ b/poppler/GlobalParamsWin.cc
+@@ -378,7 +378,7 @@ void GlobalParams::setupBaseFonts(const char *dir)
+         sysFonts->scanWindowsFonts(winFontDir);
+     }
+ 
+-    std::string dataRoot = !popplerDataDir.empty() ? popplerDataDir : std::string { POPPLER_DATADIR };
++    const char *dataRoot = popplerDataDir ? popplerDataDir : POPPLER_DATADIR;
+     const std::string fileName = std::string(dataRoot).append("/cidfmap");
+ 
+     // try to open file
+diff --git a/poppler/NSSCryptoSignBackend.cc b/poppler/NSSCryptoSignBackend.cc
+index eeea26ee..f1c75a77 100644
+--- a/poppler/NSSCryptoSignBackend.cc
++++ b/poppler/NSSCryptoSignBackend.cc
+@@ -28,12 +28,12 @@
+ 
+ #include "CryptoSignBackend.h"
+ #include "NSSCryptoSignBackend.h"
++#include "goo/gdir.h"
+ #include "goo/gmem.h"
+ 
+ #include <array>
+ #include <optional>
+ #include <vector>
+-#include <filesystem>
+ 
+ #include <Error.h>
+ 
+@@ -618,10 +618,11 @@ static std::optional<std::string> getDefaultFirefoxCertDB()
+     const std::string firefoxPath = std::string(env) + "/.mozilla/firefox/";
+ #endif
+ 
+-    std::error_code ec; // ensures directory_iterator doesn't throw exceptions
+-    for (const auto &entry : std::filesystem::directory_iterator { firefoxPath, ec }) {
+-        if (entry.is_directory() && entry.path().string().find("default") != std::string::npos) {
+-            return entry.path().string();
++    GDir firefoxDir(firefoxPath.c_str());
++    std::unique_ptr<GDirEntry> entry;
++    while (entry = firefoxDir.getNextEntry(), entry != nullptr) {
++        if (entry->isDir() && entry->getName()->toStr().find("default") != std::string::npos) {
++            return entry->getFullPath()->toStr();
+         }
+     }
+     return {};
+-- 
+2.49.0
+
