@@ -949,11 +949,11 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
             }
             else if(ScanlineFormat::N24BitTcBgr == xContent->GetScanlineFormat())
             {
-                for(tools::Long y(0); y < xContent->Height(); y++)
+                for(tools::Long y(0), nHeight(xContent->Height()); y < nHeight; y++)
                 {
                     Scanline pScan = xContent->GetScanline(y);
 
-                    for(tools::Long x(0); x < xContent->Width(); x++)
+                    for(tools::Long x(0), nWidth(xContent->Width()); x < nWidth; x++)
                     {
                         const basegfx::BColor aBSource(
                             *(pScan + 2)* fConvertColor,
@@ -968,11 +968,11 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
             }
             else if(ScanlineFormat::N24BitTcRgb == xContent->GetScanlineFormat())
             {
-                for(tools::Long y(0); y < xContent->Height(); y++)
+                for(tools::Long y(0), nHeight(xContent->Height()); y < nHeight; y++)
                 {
                     Scanline pScan = xContent->GetScanline(y);
 
-                    for(tools::Long x(0); x < xContent->Width(); x++)
+                    for(tools::Long x(0), nWidth(xContent->Width()); x < nWidth; x++)
                     {
                         const basegfx::BColor aBSource(
                             *pScan * fConvertColor,
@@ -987,10 +987,10 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
             }
             else
             {
-                for(tools::Long y(0); y < xContent->Height(); y++)
+                for(tools::Long y(0), nHeight(xContent->Height()); y < nHeight; y++)
                 {
                     Scanline pScanline = xContent->GetScanline( y );
-                    for(tools::Long x(0); x < xContent->Width(); x++)
+                    for(tools::Long x(0), nWidth(xContent->Width()); x < nWidth; x++)
                     {
                         const BitmapColor aBMCol(xContent->GetColor(y, x));
                         const basegfx::BColor aBSource(
