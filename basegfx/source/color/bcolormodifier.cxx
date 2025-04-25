@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/mathconf.h>
 #include <algorithm>
 #include <float.h>
 #include <basegfx/color/bcolormodifier.hxx>
@@ -325,28 +326,19 @@ namespace basegfx
     }
 
     /**
-      A fast and approximate std::pow(), good enough for gamma calculations.
+      A fast and approximate std::pow(), good enough for gamma calculations,
+      given that the parameter a is in the range [0,1), and b is in the range (0, 0.1]
 
-      std::pow() is basically implemented using log's:
-          pow(a,b) = x^(logx(a) * b)
-      So we need a fast log and fast exponent - it doesn't matter what x is so we use 2.
-          pow(a,b) = 2^(log2(a) * b)
-      The trick is that a floating point number is already in a log style format:
-          a = M * 2^E
-      Taking the log of both sides gives:
-          log2(a) = log2(M) + E
-      or more simply:
-          log2(a) ~= E
-      In other words if we take the floating point representation of a number,
-      and extract the Exponent we've got something that's a good starting point as its log.
-      And then we can do:
-          pow(a,b) = 2^(E * b)
+      Google for "optimised power approximation". The below function is the result
+      of reducing various bit-twiddling tricks into fewer operations.
     */
     static double fast_pow(double a, double b)
     {
-        int a_exp;
-        std::frexp(a, &a_exp);
-        return std::exp2(a_exp * b);
+        sal_math_Double u;
+        u.value = a;
+        u.w32_parts.msw = static_cast<int>(b * (static_cast<int>(u.w32_parts.msw) - 1072632447) + 1072632447);
+        u.w32_parts.lsw = 0;
+        return u.value;
     }
 
     ::basegfx::BColor BColorModifier_gamma::getModifiedColor(const ::basegfx::BColor& aSourceColor) const

@@ -395,6 +395,26 @@ public:
         CPPUNIT_ASSERT(aBColorModifier->operator==(*aBColorModifier2));
     }
 
+    // Verify that our shortcut gamma calculation produces reasonably accurate results
+    void testGamma()
+    {
+        for (int i = 1; i < 10; i++)
+        {
+            BColorModifier_gamma g(i);
+            for (int j = 0; j < 100; j++)
+            {
+                double inputRed = j / 100.0;
+                // this is the "slow but correct" gamma calculation
+                double expectedOutputRed = std::pow(inputRed, 1 / double(i));
+                BColor col = g.getModifiedColor(BColor(inputRed, 0, 0));
+                auto msg = OString("col is " + OString::number(inputRed) + " and gamma is "
+                                   + OString::number(i));
+                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(msg.getStr(), expectedOutputRed, col.getRed(),
+                                                     0.029);
+            }
+        }
+    }
+
     CPPUNIT_TEST_SUITE(bcolormodifier);
     CPPUNIT_TEST(testGray);
     CPPUNIT_TEST(testInvert);
@@ -407,6 +427,7 @@ public:
     CPPUNIT_TEST(testMatrixShift);
     CPPUNIT_TEST(testIdentityMatrix);
     CPPUNIT_TEST(testBlackAndWhite);
+    CPPUNIT_TEST(testGamma);
     CPPUNIT_TEST_SUITE_END();
 };
 

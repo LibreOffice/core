@@ -351,7 +351,7 @@ namespace basegfx
 
         col(r,g,b) = clamp(pow(col(r,g,b), 1.0 / gamma), 0.0, 1.0)
     */
-    class SAL_WARN_UNUSED UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) BColorModifier_gamma final : public BColorModifier
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_gamma final : public BColorModifier
     {
     private:
         double                      mfValue;
