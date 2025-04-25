@@ -111,6 +111,49 @@
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">12</property>
                 <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="shadow-type">in</property>
+                    <child>
+                      <object class="GtkTreeView" id="paths">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="model">liststore1</property>
+                        <property name="headers-visible">False</property>
+                        <property name="headers-clickable">False</property>
+                        <property name="search-column">0</property>
+                        <property name="show-expanders">False</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="treeview-selection1"/>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                            <child>
+                              <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="paths-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="cui/ui/selectpathdialog/paths">Contains a list of the paths that have already been added. Mark the default path for new files.</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkButtonBox" id="buttonbox1">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -158,49 +201,6 @@
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkScrolledWindow">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="shadow-type">in</property>
-                    <child>
-                      <object class="GtkTreeView" id="paths">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="model">liststore1</property>
-                        <property name="headers-visible">False</property>
-                        <property name="headers-clickable">False</property>
-                        <property name="search-column">0</property>
-                        <property name="show-expanders">False</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="treeview-selection1"/>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                            <child>
-                              <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="paths-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="cui/ui/selectpathdialog/paths">Contains a list of the paths that have already been added. Mark the default path for new files.</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
