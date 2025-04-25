@@ -73,8 +73,8 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rEditEngine.GetParagraphCount());
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.925, rEditEngine.getScalingParameters().fFontY, 1E-4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.8, rEditEngine.getScalingParameters().fSpacingY, 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.85, rEditEngine.getScalingParameters().fFontY, 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9, rEditEngine.getScalingParameters().fSpacingY, 1E-4);
 
     // Add paragraph 5
     rEditView.SetSelection(ESelection(4, 0));

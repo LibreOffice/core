@@ -364,11 +364,10 @@ tools::Long ImpEditEngine::FormatParagraphs(o3tl::sorted_vector<sal_Int32>& aRep
 
 namespace
 {
-constexpr std::array<ScalingParameters, 13> constScaleLevels =
+constexpr std::array<ScalingParameters, 12> constScaleLevels =
 {
     ScalingParameters{ 1.000,  1.000,  1.0,  0.9 },
     ScalingParameters{ 0.925,  0.925,  1.0,  0.9 },
-    ScalingParameters{ 0.925,  0.925,  1.0,  0.8 },
     ScalingParameters{ 0.850,  0.850,  1.0,  0.9 },
     ScalingParameters{ 0.850,  0.850,  1.0,  0.8 },
     ScalingParameters{ 0.775,  0.775,  1.0,  0.8 },
