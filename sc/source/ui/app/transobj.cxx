@@ -108,7 +108,7 @@ void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument& rDoc, double nPr
     aViewData.SetScreen( rBlock.aStart.Col(), rBlock.aStart.Row(),
                             rBlock.aEnd.Col(), rBlock.aEnd.Row() );
 
-    ScPrintFunc::DrawToDev( rDoc, pDev, nPrintFactor, aBound, &aViewData, false/*bMetaFile*/ );
+    ScPrintFunc::DrawToDev( rDoc, pDev, nPrintFactor, aBound, aViewData, false/*bMetaFile*/ );
 }
 
 ScTransferObj::ScTransferObj( const std::shared_ptr<ScDocument>& pClipDoc, TransferableObjectDescriptor aDesc ) :

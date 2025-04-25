@@ -2422,7 +2422,7 @@ void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uI
         aTmpData.SetTabNo(nVisTab);
         SnapVisArea( aBoundRect );
         aTmpData.SetScreen( aBoundRect );
-        ScPrintFunc::DrawToDev( *m_pDocument, pDev, 1.0, aBoundRect, &aTmpData, true );
+        ScPrintFunc::DrawToDev( *m_pDocument, pDev, 1.0, aBoundRect, aTmpData, true );
     }
     else
     {
@@ -2434,7 +2434,7 @@ void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uI
         if ( aNewArea != aOldArea && (m_pDocument->GetPosLeft() > 0 || m_pDocument->GetPosTop() > 0) )
             SfxObjectShell::SetVisArea( aNewArea );
         aTmpData.SetScreen( aNewArea );
-        ScPrintFunc::DrawToDev( *m_pDocument, pDev, 1.0, aNewArea, &aTmpData, true );
+        ScPrintFunc::DrawToDev( *m_pDocument, pDev, 1.0, aNewArea, aTmpData, true );
     }
 
     pDev->SetLayoutMode( nOldLayoutMode );

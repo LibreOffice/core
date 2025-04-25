@@ -338,7 +338,7 @@ public:
                     ~ScPrintFunc();
 
     static void     DrawToDev( ScDocument& rDoc, OutputDevice* pDev, double nPrintFactor,
-                               const tools::Rectangle& rBound, ScViewData* pViewData, bool bMetaFile );
+                               const tools::Rectangle& rBound, ScViewData& rViewData, bool bMetaFile );
 
     void            SetDrawView( FmFormView* pNew );
 

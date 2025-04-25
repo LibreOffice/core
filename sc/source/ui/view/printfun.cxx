@@ -435,16 +435,14 @@ static void lcl_HidePrint( const ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
 //      -   Preview of templates
 
 void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPrintFactor */,
-                            const tools::Rectangle& rBound, ScViewData* pViewData, bool bMetaFile)
+                            const tools::Rectangle& rBound, ScViewData& rViewData, bool bMetaFile)
 {
     if (rDoc.GetMaxTableNumber() < 0)
         return;
 
     //! evaluate nPrintFactor !!!
 
-    SCTAB nTab = 0;
-    if (pViewData)
-        nTab = pViewData->GetTabNo();
+    SCTAB nTab = rViewData.GetTabNo();
 
     bool bDoGrid, bNullVal, bFormula;
     ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
@@ -483,16 +481,16 @@ void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPri
         nX2 = aRange.aEnd.Col();
         nY2 = aRange.aEnd.Row();
     }
-    else if (pViewData)
+    else
     {
-        ScSplitPos eWhich = pViewData->GetActivePart();
+        ScSplitPos eWhich = rViewData.GetActivePart();
         ScHSplitPos eHWhich = WhichH(eWhich);
         ScVSplitPos eVWhich = WhichV(eWhich);
-        nX1 = pViewData->GetPosX(eHWhich);
-        nY1 = pViewData->GetPosY(eVWhich);
-        nX2 = nX1 + pViewData->VisibleCellsX(eHWhich);
+        nX1 = rViewData.GetPosX(eHWhich);
+        nY1 = rViewData.GetPosY(eVWhich);
+        nX2 = nX1 + rViewData.VisibleCellsX(eHWhich);
         if (nX2>nX1) --nX2;
-        nY2 = nY1 + pViewData->VisibleCellsY(eVWhich);
+        nY2 = nY1 + rViewData.VisibleCellsY(eVWhich);
         if (nY2>nY1) --nY2;
     }
 
@@ -591,14 +589,14 @@ void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPri
 
     //!     nZoom for GetFont in OutputData ???
 
-    if (!bMetaFile && pViewData)
-        pDev->SetMapMode(pViewData->GetLogicMode(pViewData->GetActivePart()));
+    if (!bMetaFile)
+        pDev->SetMapMode(rViewData.GetLogicMode(rViewData.GetActivePart()));
 
     // #i72502#
     const Point aMMOffset(aOutputData.PrePrintDrawingLayer(nLogStX, nLogStY));
     aOutputData.PrintDrawingLayer(SC_LAYER_BACK, aMMOffset);
 
-    if (!bMetaFile && pViewData)
+    if (!bMetaFile)
         pDev->SetMapMode(aMode);
 
     aOutputData.DrawBackground(*pDev);
@@ -608,14 +606,14 @@ void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPri
     aOutputData.DrawSparklines(*pDev);
     aOutputData.DrawStrings();
 
-    if (!bMetaFile && pViewData)
-        pDev->SetMapMode(pViewData->GetLogicMode(pViewData->GetActivePart()));
+    if (!bMetaFile)
+        pDev->SetMapMode(rViewData.GetLogicMode(rViewData.GetActivePart()));
 
     aOutputData.DrawEdit(!bMetaFile);
 
     if (bDoGrid)
     {
-        if (!bMetaFile && pViewData)
+        if (!bMetaFile)
             pDev->SetMapMode(aMode);
 
         aOutputData.DrawGrid(*pDev, true, false);    // no page breaks
