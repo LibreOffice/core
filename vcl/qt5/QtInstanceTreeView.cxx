@@ -787,6 +787,8 @@ int QtInstanceTreeView::n_children() const
 
 void QtInstanceTreeView::make_sorted()
 {
+    SolarMutexGuard g;
+
     GetQtInstance().RunInMainThread([&] {
         m_pTreeView->setSortingEnabled(true);
         // sort by first "normal" column
@@ -797,6 +799,8 @@ void QtInstanceTreeView::make_sorted()
 
 void QtInstanceTreeView::make_unsorted()
 {
+    SolarMutexGuard g;
+
     GetQtInstance().RunInMainThread([&] { m_pTreeView->setSortingEnabled(false); });
 }
 
