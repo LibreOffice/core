@@ -39,7 +39,7 @@ public:
     ScPivotLayoutTreeListBase* mpPreviouslyFocusedListBox;
 
 private:
-    ScViewData* mpViewData;
+    ScViewData& mrViewData;
     ScDocument& mrDocument;
 
     bool        mbNewPivotTable;
@@ -114,7 +114,7 @@ private:
 
 public:
     ScPivotLayoutDialog(SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow, weld::Window* pParent,
-                             ScViewData* pViewData, const ScDPObject* pPivotTableObject, bool bCreateNewPivotTable);
+                             ScViewData& rViewData, const ScDPObject* pPivotTableObject, bool bCreateNewPivotTable);
     virtual ~ScPivotLayoutDialog() override;
 
     virtual void SetReference(const ScRange& rReferenceRange, ScDocument& rDocument) override;

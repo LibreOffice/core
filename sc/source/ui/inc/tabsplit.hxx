@@ -26,7 +26,7 @@ class ScViewData;
 class ScTabSplitter : public Splitter
 {
 private:
-    const ScViewData *const pViewData;
+    ScViewData&     rViewData;
     bool            bFixed;
 
 protected:
@@ -34,7 +34,7 @@ protected:
 
 public:
                     ScTabSplitter( vcl::Window* pParent, WinBits nWinStyle,
-                                    const ScViewData* pData );
+                                    ScViewData& rData );
                     virtual ~ScTabSplitter() override;
 
     void            SetFixed(bool bSet);

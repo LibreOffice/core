@@ -71,12 +71,12 @@ ScRange lclGetRangeForNamedRange(OUString const & aName, const ScDocument& rDocu
 
 ScPivotLayoutDialog::ScPivotLayoutDialog(
                             SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow, weld::Window* pParent,
-                            ScViewData* pViewData, const ScDPObject* pPivotTableObject, bool bNewPivotTable)
+                            ScViewData& rViewData, const ScDPObject* pPivotTableObject, bool bNewPivotTable)
     : ScAnyRefDlgController(pSfxBindings, pChildWindow, pParent, u"modules/scalc/ui/pivottablelayoutdialog.ui"_ustr, u"PivotTableLayout"_ustr)
     , maPivotTableObject(*pPivotTableObject)
     , mpPreviouslyFocusedListBox(nullptr)
-    , mpViewData(pViewData)
-    , mrDocument(pViewData->GetDocument())
+    , mrViewData(rViewData)
+    , mrDocument(rViewData.GetDocument())
     , mbNewPivotTable(bNewPivotTable)
     , maAddressDetails(mrDocument.GetAddressConvention(), 0, 0)
     , mbDialogLostFocus(false)
@@ -481,7 +481,7 @@ void ScPivotLayoutDialog::ApplyChanges()
 
     sal_uInt16 nWhichPivot = ScModule::get()->GetPool().GetWhichIDFromSlotID(SID_PIVOT_TABLE);
     ScPivotItem aPivotItem(nWhichPivot, &aSaveData, &aDestinationRange, bToNewSheet);
-    mpViewData->GetViewShell()->SetDialogDPObject(std::make_unique<ScDPObject>(maPivotTableObject));
+    mrViewData.GetViewShell()->SetDialogDPObject(std::make_unique<ScDPObject>(maPivotTableObject));
 
 
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();
@@ -506,9 +506,9 @@ void ScPivotLayoutDialog::ApplyChanges()
             }
             if (pDPObj)
             {
-                ScDBDocFunc aFunc( *(mpViewData->GetDocShell() ));
+                ScDBDocFunc aFunc( *(mrViewData.GetDocShell() ));
                 aFunc.RemovePivotTable( *pDPObj, true, false);
-                mpViewData->GetView()->CursorPosChanged();
+                mrViewData.GetView()->CursorPosChanged();
             }
         }
         return;

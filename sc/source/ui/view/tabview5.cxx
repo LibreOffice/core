@@ -91,14 +91,14 @@ void ScTabView::Init()
     for (i=0; i<2; i++)
         pColOutline[i] = pRowOutline[i] = nullptr;
 
-    pHSplitter = VclPtr<ScTabSplitter>::Create( pFrameWin, WinBits( WB_HSCROLL ), &aViewData );
-    pVSplitter = VclPtr<ScTabSplitter>::Create( pFrameWin, WinBits( WB_VSCROLL ), &aViewData );
+    pHSplitter = VclPtr<ScTabSplitter>::Create( pFrameWin, WinBits( WB_HSCROLL ), aViewData );
+    pVSplitter = VclPtr<ScTabSplitter>::Create( pFrameWin, WinBits( WB_VSCROLL ), aViewData );
 
     // SSA: override default keyboard step size to allow snap to row/column
     pHSplitter->SetKeyboardStepSize( 1 );
     pVSplitter->SetKeyboardStepSize( 1 );
 
-    pTabControl = VclPtr<ScTabControl>::Create(pFrameWin, &aViewData);
+    pTabControl = VclPtr<ScTabControl>::Create(pFrameWin, aViewData);
     if (mbInlineWithScrollbar)
         pTabControl->SetStyle(pTabControl->GetStyle() | WB_SIZEABLE);
 

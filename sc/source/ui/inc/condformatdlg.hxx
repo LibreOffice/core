@@ -81,7 +81,7 @@ private:
     sal_uInt32 mnKey;
 
     ScAddress maPos;
-    ScViewData* mpViewData;
+    ScViewData& mrViewData;
 
     std::shared_ptr<ScCondFormatDlgData> mpDlgData;
 
@@ -109,7 +109,7 @@ protected:
 
 public:
     ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pWindow,
-                                 ScViewData* pViewData, const std::shared_ptr<ScCondFormatDlgData>& rItem);
+                                 ScViewData& rViewData, const std::shared_ptr<ScCondFormatDlgData>& rItem);
     virtual ~ScCondFormatDlg() override;
 
     std::unique_ptr<ScConditionalFormat> GetConditionalFormat() const;

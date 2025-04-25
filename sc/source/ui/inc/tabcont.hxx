@@ -31,7 +31,7 @@ class ScViewData;
 class ScTabControl : public TabBar, public DropTargetHelper, public DragSourceHelper
 {
 private:
-    ScViewData*     pViewData;
+    ScViewData&     rViewData;
     sal_uInt16      nMouseClickPageId;      /// Last page ID after mouse button down/up
     sal_uInt16      nSelPageIdByMouse;      /// Selected page ID, if selected with mouse
     bool            bErrorShown;
@@ -62,7 +62,7 @@ protected:
     virtual void    AddTabClick() override;
 
 public:
-                    ScTabControl( vcl::Window* pParent, ScViewData* pData );
+                    ScTabControl( vcl::Window* pParent, ScViewData& rData );
     virtual void    dispose() override;
                     virtual ~ScTabControl() override;
 

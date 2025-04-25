@@ -410,7 +410,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                 ScViewData& rViewData = GetViewData();
                 rViewData.SetRefTabNo( rViewData.GetTabNo() );
                 ScDPObject* pObj = rDoc.GetDPAtCursor(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
-                xResult = std::make_shared<ScPivotLayoutDialog>(pB, pCW, pParent, &rViewData, pDialogDPObject.get(), pObj == nullptr);
+                xResult = std::make_shared<ScPivotLayoutDialog>(pB, pCW, pParent, rViewData, pDialogDPObject.get(), pObj == nullptr);
             }
 
             break;
@@ -434,7 +434,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                 ScViewData& rViewData = GetViewData();
                 rViewData.SetRefTabNo( rViewData.GetTabNo() );
 
-                xResult = std::make_shared<ScCondFormatDlg>(pB, pCW, pParent, &rViewData, rDlgData);
+                xResult = std::make_shared<ScCondFormatDlg>(pB, pCW, pParent, rViewData, rDlgData);
 
                 // Remove the DialogData stored by Conditional Format Manager Dialog.
                 setScCondFormatDlgData(nullptr);

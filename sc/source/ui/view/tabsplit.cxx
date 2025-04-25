@@ -22,9 +22,9 @@
 
 #include <vcl/settings.hxx>
 
-ScTabSplitter::ScTabSplitter( vcl::Window* pParent, WinBits nWinStyle, const ScViewData* pData ) :
+ScTabSplitter::ScTabSplitter( vcl::Window* pParent, WinBits nWinStyle, ScViewData& rData ) :
     Splitter(pParent, nWinStyle),
-    pViewData(pData)
+    rViewData(rData)
 {
     SetFixed(false);
     EnableRTL(false);
@@ -60,7 +60,7 @@ void ScTabSplitter::Paint( vcl::RenderContext& rRenderContext, const tools::Rect
 
     if (IsHorizontal())
     {
-        switch (pViewData->GetHSplitMode())
+        switch (rViewData.GetHSplitMode())
         {
             case SC_SPLIT_NONE:
             {
@@ -91,7 +91,7 @@ void ScTabSplitter::Paint( vcl::RenderContext& rRenderContext, const tools::Rect
     }
     else
     {
-        switch (pViewData->GetVSplitMode())
+        switch (rViewData.GetVSplitMode())
         {
             case SC_SPLIT_NONE:
             {
