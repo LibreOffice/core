@@ -1022,7 +1022,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf151548_activeContentDemo, "tdf151548_activeConte
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     for(auto aIter = pMarkAccess->getFieldmarksBegin(); aIter != pMarkAccess->getFieldmarksEnd(); ++aIter)
     {
-        const ReferenceMarkerName sName = (*aIter)->GetName();
+        const SwMarkName sName = (*aIter)->GetName();
         CPPUNIT_ASSERT(sName == "Check1" || sName == "Text1" || sName == "Dropdown1");
     }
 }

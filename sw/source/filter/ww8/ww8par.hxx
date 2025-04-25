@@ -558,7 +558,7 @@ namespace sw
 class WW8FieldEntry
 {
     private:
-        ReferenceMarkerName msBookmarkName;
+        SwMarkName msBookmarkName;
         OUString msMarkType;
         OUString msMarkCode;
         ::sw::mark::Fieldmark::parameter_map_t maParams;
@@ -575,9 +575,9 @@ class WW8FieldEntry
         const SwNodeIndex& GetPtNode() const { return maStartPos.GetPtNode(); };
         sal_Int32 GetPtContent() const { return maStartPos.GetPtContent(); };
 
-        const ReferenceMarkerName& GetBookmarkName() const { return msBookmarkName;}
+        const SwMarkName& GetBookmarkName() const { return msBookmarkName;}
         const OUString& GetBookmarkCode() const { return msMarkCode;}
-        void SetBookmarkName(const ReferenceMarkerName& bookmarkName);
+        void SetBookmarkName(const SwMarkName& bookmarkName);
         void SetBookmarkType(const OUString& bookmarkType);
         void SetBookmarkCode(const OUString& bookmarkCode);
         ::sw::mark::Fieldmark::parameter_map_t& getParameters() { return maParams;}

@@ -270,7 +270,7 @@ class FieldMarkParamsHelper
     const sw::mark::Fieldmark& mrFieldmark;
     public:
     explicit FieldMarkParamsHelper( const sw::mark::Fieldmark& rFieldmark ) : mrFieldmark( rFieldmark ) {}
-    ReferenceMarkerName const & getName() const { return mrFieldmark.GetName(); }
+    SwMarkName const & getName() const { return mrFieldmark.GetName(); }
     template < typename T >
     bool extractParam( const OUString& rKey, T& rResult )
     {
@@ -2490,7 +2490,7 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
     if ( rInfos.eType == ww::eFORMDROPDOWN )
     {
         uno::Sequence< OUString> vListEntries;
-        ReferenceMarkerName sName;
+        SwMarkName sName;
         OUString sSelected;
 
         params.extractParam( ODF_FORMDROPDOWN_LISTENTRY, vListEntries );
@@ -2510,7 +2510,7 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
     }
     else if ( rInfos.eType == ww::eFORMCHECKBOX )
     {
-        const ReferenceMarkerName& sName = params.getName();
+        const SwMarkName& sName = params.getName();
         bool bChecked = false;
 
         const sw::mark::CheckboxFieldmark* pCheckboxFm = dynamic_cast<const sw::mark::CheckboxFieldmark*>(&rFieldmark);
@@ -8505,7 +8505,7 @@ void DocxAttributeOutput::WritePostitFieldReference()
 
         // In case this file is inside annotation marks, we want to write the
         // comment reference after the annotation mark is closed, not here.
-        const ReferenceMarkerName& idname = m_postitFields[m_postitFieldsMaxId].first->GetName();
+        const SwMarkName& idname = m_postitFields[m_postitFieldsMaxId].first->GetName();
         auto it = m_rOpenedAnnotationMarksIds.find( idname );
         if ( it == m_rOpenedAnnotationMarksIds.end(  ) )
             m_pSerializer->singleElementNS(XML_w, XML_commentReference, FSNS(XML_w, XML_id), idstr);
@@ -8787,8 +8787,8 @@ void DocxAttributeOutput::WriteFinalBookmarks_Impl( std::vector< OUString >& rSt
     rEnds.clear();
 }
 
-void DocxAttributeOutput::WriteAnnotationMarks_Impl( std::vector< ReferenceMarkerName >& rStarts,
-        std::vector< ReferenceMarkerName >& rEnds )
+void DocxAttributeOutput::WriteAnnotationMarks_Impl( std::vector< SwMarkName >& rStarts,
+        std::vector< SwMarkName >& rEnds )
 {
     m_rAnnotationMarksStart.insert(m_rAnnotationMarksStart.end(), rStarts.begin(), rStarts.end());
     rStarts.clear();

@@ -1001,7 +1001,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, ModifyHdl, weld::Entry&, void)
     bool bEnable = true;
     sal_uInt16 nTypeId = m_xTypeLB->get_id(GetTypeSel()).toUInt32();
 
-    if ((nTypeId == static_cast<sal_uInt16>(SwFieldTypesEnum::SetRef) && !GetFieldMgr().CanInsertRefMark(ReferenceMarkerName(aName))) ||
+    if ((nTypeId == static_cast<sal_uInt16>(SwFieldTypesEnum::SetRef) && !GetFieldMgr().CanInsertRefMark(SwMarkName(aName))) ||
         (bEmptyName && (nTypeId == static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef) || nTypeId == static_cast<sal_uInt16>(SwFieldTypesEnum::SetRef) ||
                        nTypeId == REFFLDFLAG_BOOKMARK)))
         bEnable = false;

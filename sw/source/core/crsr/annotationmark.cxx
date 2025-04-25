@@ -35,7 +35,7 @@ namespace sw::mark
 {
     AnnotationMark::AnnotationMark(
         const SwPaM& rPaM,
-        const ReferenceMarkerName& rName )
+        const SwMarkName& rName )
         : MarkBase( rPaM, rName )
     {
         if ( rName.toString().getLength() == 0 )

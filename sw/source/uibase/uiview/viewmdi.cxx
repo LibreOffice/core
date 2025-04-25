@@ -507,7 +507,7 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
 
             // collect and sort navigator reminder names
             IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
-            std::vector< ReferenceMarkerName > vNavMarkNames;
+            std::vector< SwMarkName > vNavMarkNames;
             for(auto ppMark = pMarkAccess->getAllMarksBegin();
                 ppMark != pMarkAccess->getAllMarksEnd();
                 ++ppMark)

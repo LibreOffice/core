@@ -84,7 +84,7 @@ struct SwInsertField_Data
     weld::Widget* m_pParent; // parent widget used for SwWrtShell::StartInputFieldDlg()
     /// Marks the PostIt field's annotation start/end if it differs from the cursor selection.
     std::optional<SwPaM> m_oAnnotationRange;
-    std::optional<std::tuple<sal_uInt32, sal_uInt32, ReferenceMarkerName>> m_oParentId;
+    std::optional<std::tuple<sal_uInt32, sal_uInt32, SwMarkName>> m_oParentId;
 
     SwInsertField_Data(SwFieldTypesEnum nType, sal_uInt16 nSub, OUString aPar1, OUString aPar2,
                     sal_uInt32 nFormatId, SwWrtShell* pShell = nullptr, sal_Unicode cSep = ' ', bool bIsAutoLanguage = true) :
@@ -156,7 +156,7 @@ public:
                                     bool bIsTable, const OUString& rFieldName);
 
     // organise RefMark with names
-    bool            CanInsertRefMark( const ReferenceMarkerName& rStr );
+    bool            CanInsertRefMark( const SwMarkName& rStr );
 
     // access to field types via ResId
     size_t          GetFieldTypeCount() const;

@@ -576,7 +576,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                       IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( aRegion ) )
                     ? IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK
                     : IDocumentMarkAccess::MarkType::BOOKMARK;
-                m_rDoc.getIDocumentMarkAccess()->makeMark(aRegion, ReferenceMarkerName(rName), eBookmarkType, sw::mark::InsertMode::New);
+                m_rDoc.getIDocumentMarkAccess()->makeMark(aRegion, SwMarkName(rName), eBookmarkType, sw::mark::InsertMode::New);
             }
         }
         break;
@@ -606,7 +606,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                             aRegion.Start()->AdjustContent(-1);
                         }
 
-                        m_rDoc.getIDocumentMarkAccess()->makeAnnotationMark(aRegion, ReferenceMarkerName());
+                        m_rDoc.getIDocumentMarkAccess()->makeAnnotationMark(aRegion, SwMarkName());
                     }
                     else
                     {

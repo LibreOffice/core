@@ -441,7 +441,7 @@ public:
 
     void WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds, const SwRedlineData* pRedlineData = nullptr );
     void WriteFinalBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
-    void WriteAnnotationMarks_Impl( std::vector< ReferenceMarkerName >& rStarts, std::vector< ReferenceMarkerName >& rEnds );
+    void WriteAnnotationMarks_Impl( std::vector< SwMarkName >& rStarts, std::vector< SwMarkName >& rEnds );
     /// End possibly opened paragraph sdt block.
     void EndParaSdtBlock();
 
@@ -911,8 +911,8 @@ private:
     std::vector<OUString> m_rPermissionsEnd;
 
     /// Annotation marks to output
-    std::vector<ReferenceMarkerName> m_rAnnotationMarksStart;
-    std::vector<ReferenceMarkerName> m_rAnnotationMarksEnd;
+    std::vector<SwMarkName> m_rAnnotationMarksStart;
+    std::vector<SwMarkName> m_rAnnotationMarksEnd;
 
     /// Maps of the bookmarks ids
     std::map<OUString, sal_Int32> m_rOpenedBookmarksIds;
@@ -924,10 +924,10 @@ private:
     std::unordered_set<sal_Int32> m_rSavedBookmarksIds;
 
     /// Maps of the annotation marks ids
-    std::map<ReferenceMarkerName, sal_Int32> m_rOpenedAnnotationMarksIds;
+    std::map<SwMarkName, sal_Int32> m_rOpenedAnnotationMarksIds;
 
     /// Name of the last opened annotation mark.
-    ReferenceMarkerName m_sLastOpenedAnnotationMark;
+    SwMarkName m_sLastOpenedAnnotationMark;
 
     /// Set of currently opened permissions
     std::unordered_set<OUString> m_aOpenedPermissions;

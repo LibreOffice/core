@@ -62,7 +62,7 @@ class SwPostItField;
 class SwTextField;
 class SwTextFootnote;
 class SwTextContentControl;
-class ReferenceMarkerName;
+class SwMarkName;
 
 namespace i18nutil {
     struct SearchOptions2;
@@ -593,11 +593,11 @@ public:
     // at CurrentCursor.SPoint
     SW_DLLPUBLIC ::sw::mark::MarkBase* SetBookmark(
         const vcl::KeyCode&,
-        const ReferenceMarkerName& rName,
+        const SwMarkName& rName,
         IDocumentMarkAccess::MarkType eMark = IDocumentMarkAccess::MarkType::BOOKMARK);
     SW_DLLPUBLIC ::sw::mark::MarkBase* SetBookmark2(
         const vcl::KeyCode&,
-        const ReferenceMarkerName& rName,
+        const SwMarkName& rName,
         bool bHide,
         const OUString& rCondition);
     SW_DLLPUBLIC bool GotoMark( const ::sw::mark::MarkBase* const pMark );    // sets CurrentCursor.SPoint
@@ -725,7 +725,7 @@ public:
     // on graphics
     bool SelectNxtPrvHyperlink( bool bNext );
 
-    bool GotoRefMark( const ReferenceMarkerName& rRefMark, sal_uInt16 nSubType,
+    bool GotoRefMark( const SwMarkName& rRefMark, sal_uInt16 nSubType,
                             sal_uInt16 nSeqNo, sal_uInt16 nFlags );
 
     // get the nth character from the start or end of the  current selection

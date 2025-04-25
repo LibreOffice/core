@@ -270,7 +270,7 @@ namespace
 namespace sw::mark
 {
     MarkBase::MarkBase(const SwPaM& aPaM,
-        ReferenceMarkerName aName)
+        SwMarkName aName)
         : m_oPos1(*aPaM.GetPoint())
         , m_aName(std::move(aName))
     {
@@ -333,14 +333,14 @@ namespace sw::mark
     MarkBase::~MarkBase()
     { }
 
-    ReferenceMarkerName MarkBase::GenerateNewName(std::u16string_view rPrefix)
+    SwMarkName MarkBase::GenerateNewName(std::u16string_view rPrefix)
     {
         static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
 
         if (bHack)
         {
             static sal_Int64 nIdCounter = SAL_CONST_INT64(6000000000);
-            return ReferenceMarkerName(rPrefix + OUString::number(nIdCounter++));
+            return SwMarkName(rPrefix + OUString::number(nIdCounter++));
         }
         else
         {
@@ -354,7 +354,7 @@ namespace sw::mark
                 nCount = 0;
             }
             // putting the counter in front of the random parts will speed up string comparisons
-            return ReferenceMarkerName(rPrefix + OUString::number(nCount++) + sUniquePostfix);
+            return SwMarkName(rPrefix + OUString::number(nCount++) + sUniquePostfix);
         }
     }
 
@@ -408,7 +408,7 @@ namespace sw::mark
 
     Bookmark::Bookmark(const SwPaM& aPaM,
         const vcl::KeyCode& rCode,
-        const ReferenceMarkerName& rName)
+        const SwMarkName& rName)
         : DdeBookmark(aPaM)
         , m_aCode(rCode)
         , m_bHidden(false)
@@ -425,7 +425,7 @@ namespace sw::mark
         if (!pViewShell)
             return;
 
-        ReferenceMarkerName fieldCommand = GetName();
+        SwMarkName fieldCommand = GetName();
         tools::JsonWriter aJson;
         aJson.put("commandName", ".uno:DeleteBookmark");
         aJson.put("success", true);
@@ -572,7 +572,7 @@ namespace sw::mark
         (void)xmlTextWriterEndElement(pWriter);
     }
 
-    TextFieldmark::TextFieldmark(const SwPaM& rPaM, const ReferenceMarkerName& rName)
+    TextFieldmark::TextFieldmark(const SwPaM& rPaM, const SwMarkName& rName)
         : Fieldmark(rPaM)
         , m_pDocumentContentOperationsManager(nullptr)
     {
@@ -705,7 +705,7 @@ namespace sw::mark
     }
 
 
-    CheckboxFieldmark::CheckboxFieldmark(const SwPaM& rPaM, const ReferenceMarkerName& rName)
+    CheckboxFieldmark::CheckboxFieldmark(const SwPaM& rPaM, const SwMarkName& rName)
         : NonTextFieldmark(rPaM)
     {
         if (!rName.isEmpty())
@@ -769,7 +769,7 @@ namespace sw::mark
         m_pButton->LaunchPopup();
     }
 
-    DropDownFieldmark::DropDownFieldmark(const SwPaM& rPaM, const ReferenceMarkerName& rName)
+    DropDownFieldmark::DropDownFieldmark(const SwPaM& rPaM, const SwMarkName& rName)
         : FieldmarkWithDropDownButton(rPaM)
     {
         if (!rName.isEmpty())

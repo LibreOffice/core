@@ -469,7 +469,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testGotoMark)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SplitNode();
     pWrtShell->SttEndDoc(/*bStt=*/false);
-    pWrtShell->SetBookmark(vcl::KeyCode(), ReferenceMarkerName(u"mybookmark"_ustr));
+    pWrtShell->SetBookmark(vcl::KeyCode(), SwMarkName(u"mybookmark"_ustr));
     SwNodeOffset nExpected = pWrtShell->GetCursor()->GetPointNode().GetIndex();
 
     // When jumping to that mark from the doc start:
@@ -498,10 +498,10 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmarks)
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    pWrtShell->SetBookmark(vcl::KeyCode(), ReferenceMarkerName(u"ZOTERO_BREF_GiQ7DAWQYWLy"_ustr));
+    pWrtShell->SetBookmark(vcl::KeyCode(), SwMarkName(u"ZOTERO_BREF_GiQ7DAWQYWLy"_ustr));
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    pWrtShell->SetBookmark(vcl::KeyCode(), ReferenceMarkerName(u"ZOTERO_BREF_PRxDGUb4SWXF"_ustr));
+    pWrtShell->SetBookmark(vcl::KeyCode(), SwMarkName(u"ZOTERO_BREF_PRxDGUb4SWXF"_ustr));
 
     // When updating the content of bookmarks:
     pWrtShell->SttEndDoc(/*bStt=*/true);
@@ -552,8 +552,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmarks)
 
     // Without the accompanying fix in place, this test would have failed, ZOTERO_BREF_GiQ7DAWQYWLy
     // was not renamed to ZOTERO_BREF_new1.
-    auto it
-        = pDoc->getIDocumentMarkAccess()->findMark(ReferenceMarkerName(u"ZOTERO_BREF_new1"_ustr));
+    auto it = pDoc->getIDocumentMarkAccess()->findMark(SwMarkName(u"ZOTERO_BREF_new1"_ustr));
     CPPUNIT_ASSERT(it != pDoc->getIDocumentMarkAccess()->getAllMarksEnd());
 }
 
@@ -1114,7 +1113,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmark)
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
-    pWrtShell->SetBookmark(vcl::KeyCode(), ReferenceMarkerName(u"ZOTERO_BREF_old"_ustr));
+    pWrtShell->SetBookmark(vcl::KeyCode(), SwMarkName(u"ZOTERO_BREF_old"_ustr));
 
     // When updating the content of the bookmark under the cursor:
     pWrtShell->SttEndDoc(/*bStt=*/true);
@@ -1151,8 +1150,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmark)
     // - Actual  : ABCD
     // i.e. it was not possible to update just the bookmark under cursor.
     CPPUNIT_ASSERT_EQUAL(u"Anew resultD"_ustr, aActual);
-    auto it
-        = pDoc->getIDocumentMarkAccess()->findMark(ReferenceMarkerName(u"ZOTERO_BREF_new"_ustr));
+    auto it = pDoc->getIDocumentMarkAccess()->findMark(SwMarkName(u"ZOTERO_BREF_new"_ustr));
     CPPUNIT_ASSERT(it != pDoc->getIDocumentMarkAccess()->getAllMarksEnd());
 }
 
@@ -1217,10 +1215,10 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteBookmarks)
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    pWrtShell->SetBookmark(vcl::KeyCode(), ReferenceMarkerName(u"ZOTERO_BREF_GiQ7DAWQYWLy"_ustr));
+    pWrtShell->SetBookmark(vcl::KeyCode(), SwMarkName(u"ZOTERO_BREF_GiQ7DAWQYWLy"_ustr));
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    pWrtShell->SetBookmark(vcl::KeyCode(), ReferenceMarkerName(u"other"_ustr));
+    pWrtShell->SetBookmark(vcl::KeyCode(), SwMarkName(u"other"_ustr));
 
     // When deleting 1 matching bookmark:
     pWrtShell->SttEndDoc(/*bStt=*/true);
@@ -1236,12 +1234,12 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteBookmarks)
     dispatchCommand(mxComponent, u".uno:DeleteBookmarks"_ustr, aArgs);
 
     // Then make sure that only the other bookmark is kept:
-    auto it = pDoc->getIDocumentMarkAccess()->findMark(
-        ReferenceMarkerName(u"ZOTERO_BREF_GiQ7DAWQYWLy"_ustr));
+    auto it
+        = pDoc->getIDocumentMarkAccess()->findMark(SwMarkName(u"ZOTERO_BREF_GiQ7DAWQYWLy"_ustr));
     // Without the accompanying fix in place, this test would have failed, the matching bookmark was
     // not removed.
     CPPUNIT_ASSERT(bool(it == pDoc->getIDocumentMarkAccess()->getAllMarksEnd()));
-    it = pDoc->getIDocumentMarkAccess()->findMark(ReferenceMarkerName(u"other"_ustr));
+    it = pDoc->getIDocumentMarkAccess()->findMark(SwMarkName(u"other"_ustr));
     CPPUNIT_ASSERT(it != pDoc->getIDocumentMarkAccess()->getAllMarksEnd());
 }
 

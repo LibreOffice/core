@@ -724,7 +724,7 @@ void SwHistoryNoTextFieldmark::SetInDoc(SwDoc* pDoc, bool)
     if (pPam)
     {
         IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
-        pMarkAccess->makeNoTextFieldBookmark(*pPam, ReferenceMarkerName(), m_sType);
+        pMarkAccess->makeNoTextFieldBookmark(*pPam, SwMarkName(), m_sType);
     }
 }
 

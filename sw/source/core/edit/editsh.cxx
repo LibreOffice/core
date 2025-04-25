@@ -432,7 +432,7 @@ const SwDocStat& SwEditShell::GetUpdatedDocStat()
 }
 
 /// get the reference of a given name in the Doc
-const SwFormatRefMark* SwEditShell::GetRefMark( const ReferenceMarkerName& rName ) const
+const SwFormatRefMark* SwEditShell::GetRefMark( const SwMarkName& rName ) const
 {
     return GetDoc()->GetRefMark( rName );
 }

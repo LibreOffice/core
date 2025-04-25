@@ -764,7 +764,7 @@ void SwXTextRange::SetPositions(const SwPaM& rPam)
 {
     InvalidateImpl();
     IDocumentMarkAccess* const pMA = m_rDoc.getIDocumentMarkAccess();
-    auto pMark = pMA->makeMark(rPam, ReferenceMarkerName(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK, sw::mark::InsertMode::New);
+    auto pMark = pMA->makeMark(rPam, SwMarkName(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK, sw::mark::InsertMode::New);
     if (pMark)
         SetMark(*pMark);
 }

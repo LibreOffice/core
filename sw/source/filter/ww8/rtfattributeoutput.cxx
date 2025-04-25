@@ -1946,8 +1946,8 @@ void RtfAttributeOutput::WriteBookmarks_Impl(std::vector<OUString>& rStarts,
     rEnds.clear();
 }
 
-void RtfAttributeOutput::WriteAnnotationMarks_Impl(std::vector<ReferenceMarkerName>& rStarts,
-                                                   std::vector<ReferenceMarkerName>& rEnds)
+void RtfAttributeOutput::WriteAnnotationMarks_Impl(std::vector<SwMarkName>& rStarts,
+                                                   std::vector<SwMarkName>& rEnds)
 {
     for (const auto& rStart : rStarts)
     {
@@ -4103,7 +4103,7 @@ void RtfAttributeOutput::PostitField(const SwField* pField)
 
     const SwPostItField& rPField = *static_cast<const SwPostItField*>(pField);
 
-    ReferenceMarkerName aName = rPField.GetName();
+    SwMarkName aName = rPField.GetName();
     auto it = m_rOpenedAnnotationMarksIds.find(aName);
     if (it != m_rOpenedAnnotationMarksIds.end())
     {

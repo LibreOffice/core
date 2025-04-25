@@ -687,7 +687,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
             {
                 if(lcl_IsUiVisibleBookmark(*ppBookmark))
                 {
-                    const ReferenceMarkerName& rBkmName = (*ppBookmark)->GetName();
+                    const SwMarkName& rBkmName = (*ppBookmark)->GetName();
                     //nYPos from 0 -> text::Bookmarks will be sorted alphabetically
                     auto pCnt(std::make_unique<SwContent>(this, rBkmName.toString(),
                                                           m_bAlphabeticSort ? 0 : nYPos++));
@@ -4980,7 +4980,7 @@ void SwContentTree::UpdateTracking()
         if (pCursor && ppBookmark != pMarkAccess->getBookmarksEnd()
             && !(m_bIsRoot && m_nRootType != ContentTypeId::BOOKMARK))
         {
-            ReferenceMarkerName sBookmarkName;
+            SwMarkName sBookmarkName;
             SwPosition* pCursorPoint = pCursor->GetPoint();
             while (ppBookmark != pMarkAccess->getBookmarksEnd())
             {
@@ -5248,7 +5248,7 @@ bool SwContentTree::IsSelectedEntryCurrentDocCursorPosition(const weld::TreeIter
         auto ppBookmark = pMarkAccess->getBookmarksBegin();
         if (pCursor && ppBookmark != pMarkAccess->getBookmarksEnd())
         {
-            ReferenceMarkerName sBookmarkName;
+            SwMarkName sBookmarkName;
             SwPosition* pCursorPoint = pCursor->GetPoint();
             while (ppBookmark != pMarkAccess->getBookmarksEnd())
             {
@@ -6315,7 +6315,7 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             {
                 assert(!m_pActiveShell->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS));
                 IDocumentMarkAccess* const pMarkAccess = m_pActiveShell->getIDocumentMarkAccess();
-                pMarkAccess->deleteMark(pMarkAccess->findMark(ReferenceMarkerName(pCnt->GetName())), false);
+                pMarkAccess->deleteMark(pMarkAccess->findMark(SwMarkName(pCnt->GetName())), false);
             }
             else
             {
@@ -6595,7 +6595,7 @@ void SwContentTree::DeleteAllContentOfEntryContentType(const weld::TreeIter& rEn
         for (size_t i = 0; i < nCount; i++)
         {
             const OUString& rName(pContentType->GetMember(i)->GetName());
-            pMarkAccess->deleteMark(pMarkAccess->findMark(ReferenceMarkerName(rName)), false);
+            pMarkAccess->deleteMark(pMarkAccess->findMark(SwMarkName(rName)), false);
         }
         m_pActiveShell->EndUndo();
         m_pActiveShell->EndAction();
@@ -6856,7 +6856,7 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
         case ContentTypeId::BOOKMARK:
         {
             m_pActiveShell->StartAction();
-            m_pActiveShell->GotoMark(ReferenceMarkerName(pCnt->GetName()));
+            m_pActiveShell->GotoMark(SwMarkName(pCnt->GetName()));
             m_pActiveShell->EndAction();
             m_sSelectedItem = pCnt->GetName();
 
@@ -6917,7 +6917,7 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
         break;
         case ContentTypeId::REFERENCE:
         {
-            m_pActiveShell->GotoRefMark(ReferenceMarkerName(pCnt->GetName()));
+            m_pActiveShell->GotoRefMark(SwMarkName(pCnt->GetName()));
         }
         break;
         case ContentTypeId::INDEX:
@@ -7132,7 +7132,7 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
             }
             else if (nType == ContentTypeId::BOOKMARK)
             {
-                BringBookmarksToAttention(std::vector<ReferenceMarkerName> {ReferenceMarkerName(pCnt->GetName())});
+                BringBookmarksToAttention(std::vector<SwMarkName> {SwMarkName(pCnt->GetName())});
             }
             else if (nType == ContentTypeId::REGION || nType == ContentTypeId::INDEX)
             {
@@ -7176,7 +7176,7 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
             else if (nType == ContentTypeId::REFERENCE)
             {
                 if (const SwTextAttr* pTextAttr =
-                        m_pActiveShell->GetDoc()->GetRefMark(ReferenceMarkerName(pCnt->GetName()))->GetTextRefMark())
+                        m_pActiveShell->GetDoc()->GetRefMark(SwMarkName(pCnt->GetName()))->GetTextRefMark())
                 {
                     std::vector<const SwTextAttr*> aTextAttrArr {pTextAttr};
                     BringReferencesToAttention(aTextAttrArr);
@@ -7260,13 +7260,13 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
             }
             else if (nType == ContentTypeId::BOOKMARK)
             {
-                std::vector<ReferenceMarkerName> aNames;
+                std::vector<SwMarkName> aNames;
                 const auto nCount = pCntType->GetMemberCount();
                 for (size_t i = 0; i < nCount; i++)
                 {
                     const SwContent* pMember = pCntType->GetMember(i);
                     if (pMember && !pMember->IsInvisible())
-                        aNames.push_back(ReferenceMarkerName(pMember->GetName()));
+                        aNames.push_back(SwMarkName(pMember->GetName()));
                 }
                 BringBookmarksToAttention(aNames);
             }
@@ -7432,7 +7432,7 @@ void SwContentTree::BringFramesToAttention(const std::vector<const SwFrameFormat
     OverlayObject(std::move(aRanges));
 }
 
-void SwContentTree::BringBookmarksToAttention(const std::vector<ReferenceMarkerName>& rNames)
+void SwContentTree::BringBookmarksToAttention(const std::vector<SwMarkName>& rNames)
 {
     std::vector<basegfx::B2DRange> aRanges;
     IDocumentMarkAccess* const pMarkAccess = m_pActiveShell->getIDocumentMarkAccess();

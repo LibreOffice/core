@@ -1790,14 +1790,14 @@ SwPostItField::SwPostItField( SwPostItFieldType* pT,
         OUString aAuthor,
         OUString aText,
         OUString aInitials,
-        ReferenceMarkerName aName,
+        SwMarkName aName,
         const DateTime& rDateTime,
         const bool bResolved,
         const sal_uInt32 nPostItId,
         const sal_uInt32 nParentId,
         const sal_uInt32 nParaId,
         const sal_uInt32 nParentPostItId,
-        ReferenceMarkerName aParentName
+        SwMarkName aParentName
 )
     : SwField( pT )
     , m_sText( std::move(aText) )
@@ -1886,12 +1886,12 @@ OUString SwPostItField::GetPar2() const
 }
 
 
-void SwPostItField::SetName(const ReferenceMarkerName& rName)
+void SwPostItField::SetName(const SwMarkName& rName)
 {
     m_sName = rName;
 }
 
-void SwPostItField::SetParentName(const ReferenceMarkerName& rName)
+void SwPostItField::SetParentName(const SwMarkName& rName)
 {
     m_sParentName = rName;
 }
@@ -2021,14 +2021,14 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         {
             OUString tmp;
             if (rAny >>= tmp)
-                m_sName = ReferenceMarkerName(tmp);
+                m_sName = SwMarkName(tmp);
         }
         break;
     case FIELD_PROP_PAR7: // PAR5 (Parent Para Id) and PAR6 (Para Id) are skipped - they are not written into xml. Used for file conversion.
         {
             OUString tmp;
             if (rAny >>= tmp)
-                m_sParentName = ReferenceMarkerName(tmp);
+                m_sParentName = SwMarkName(tmp);
         }
         break;
     case FIELD_PROP_BOOL1:

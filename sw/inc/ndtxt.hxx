@@ -46,7 +46,7 @@ class SvxFirstLineIndentItem;
 class SvxTextLeftMarginItem;
 struct SvxFontUnitMetrics;
 class SwXParagraph;
-class ReferenceMarkerName;
+class SwMarkName;
 
 namespace utl {
     class TransliterationWrapper;
@@ -394,7 +394,7 @@ public:
     */
     static void EstablishParentChildRelationsOfComments(const SwTextNode* pDest,
                 std::map<sal_Int32, sal_Int32>& idMapForComments,
-                std::map<sal_Int32, ReferenceMarkerName>& nameMapForComments);
+                std::map<sal_Int32, SwMarkName>& nameMapForComments);
 
     void        CutText(SwTextNode * const pDest,
                     const SwContentIndex & rStart, const sal_Int32 nLen);

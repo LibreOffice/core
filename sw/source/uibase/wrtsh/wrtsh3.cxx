@@ -261,7 +261,7 @@ void SwWrtShell::DrawSelChanged( )
     g_bNoInterrupt = bOldVal;
 }
 
-void SwWrtShell::GotoMark( const ReferenceMarkerName& rName )
+void SwWrtShell::GotoMark( const SwMarkName& rName )
 {
     auto ppMark = getIDocumentMarkAccess()->findMark( rName );
     if (ppMark == getIDocumentMarkAccess()->getAllMarksEnd())

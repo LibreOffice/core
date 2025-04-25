@@ -696,7 +696,7 @@ bool SwWrtShell::GotoRegion( std::u16string_view rName )
     return bRet;
  }
 
-bool SwWrtShell::GotoRefMark( const ReferenceMarkerName& rRefMark, sal_uInt16 nSubType,
+bool SwWrtShell::GotoRefMark( const SwMarkName& rRefMark, sal_uInt16 nSubType,
                                     sal_uInt16 nSeqNo, sal_uInt16 nFlags )
 {
     SwPosition aPos = *GetCursor()->GetPoint();

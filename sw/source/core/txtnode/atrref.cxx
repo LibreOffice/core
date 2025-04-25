@@ -40,7 +40,7 @@ SwFormatRefMark::~SwFormatRefMark( )
 {
 }
 
-SwFormatRefMark::SwFormatRefMark( ReferenceMarkerName aName )
+SwFormatRefMark::SwFormatRefMark( SwMarkName aName )
     : SfxPoolItem(RES_TXTATR_REFMARK)
     , m_pTextAttr(nullptr)
     , m_aRefName(std::move(aName))
@@ -133,7 +133,7 @@ SwTextRefMark::~SwTextRefMark()
     if (!pViewShell)
         return;
 
-    ReferenceMarkerName fieldCommand = GetRefMark().GetRefName();
+    SwMarkName fieldCommand = GetRefMark().GetRefName();
     tools::JsonWriter aJson;
     aJson.put("commandName", ".uno:DeleteField");
     aJson.put("success", true);

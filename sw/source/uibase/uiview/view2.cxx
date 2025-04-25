@@ -1491,7 +1491,7 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case SID_JUMPTOMARK:
             if( pArgs && SfxItemState::SET == pArgs->GetItemState(SID_JUMPTOMARK, false, &pItem))
-                JumpToSwMark( ReferenceMarkerName(static_cast<const SfxStringItem*>(pItem)->GetValue()) );
+                JumpToSwMark( SwMarkName(static_cast<const SfxStringItem*>(pItem)->GetValue()) );
         break;
         case SID_GALLERY :
             // First make sure that the sidebar is visible
@@ -2600,7 +2600,7 @@ static auto JumpToTOXMark(SwWrtShell & rSh, std::u16string_view aName) -> bool
     }
 }
 
-bool SwView::JumpToSwMark( const ReferenceMarkerName& rMark )
+bool SwView::JumpToSwMark( const SwMarkName& rMark )
 {
     bool bRet = false;
     if( !rMark.toString().isEmpty() )
@@ -2667,7 +2667,7 @@ bool SwView::JumpToSwMark( const ReferenceMarkerName& rMark )
                 {
                     sal_uInt16 nSeqNo = o3tl::toInt32(sName.subView( nNoPos + 1 ));
                     sName = sName.copy( 0, nNoPos );
-                    bRet = m_pWrtShell->GotoRefMark(ReferenceMarkerName(sName), REF_SEQUENCEFLD, nSeqNo);
+                    bRet = m_pWrtShell->GotoRefMark(SwMarkName(sName), REF_SEQUENCEFLD, nSeqNo);
                 }
             }
             else if (sCmp == "toxmark")
@@ -2695,7 +2695,7 @@ bool SwView::JumpToSwMark( const ReferenceMarkerName& rMark )
                     bRet = true;
                 }
             }
-            else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(ReferenceMarkerName(sMark))) )
+            else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(SwMarkName(sMark))) )
             {
                 bRet = m_pWrtShell->GotoMark( *ppMark, false );
             }
@@ -2721,7 +2721,7 @@ bool SwView::JumpToSwMark( const ReferenceMarkerName& rMark )
                 }
             }
         }
-        else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(ReferenceMarkerName(sMark))))
+        else if( pMarkAccess->getAllMarksEnd() != (ppMark = pMarkAccess->findMark(SwMarkName(sMark))))
         {
             bRet = m_pWrtShell->GotoMark( *ppMark, false );
         }

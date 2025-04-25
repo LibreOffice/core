@@ -72,7 +72,7 @@ class SwCursorShell;
 enum class SvxSearchCmd;
 enum class SelectionType : sal_Int32;
 class SwNode;
-class ReferenceMarkerName;
+class SwMarkName;
 
 namespace com::sun::star::view { class XSelectionSupplier; }
 namespace sfx2 { class FileDialogHelper; }
@@ -618,7 +618,7 @@ public:
     void SetCursorAtTop( bool bFlag, bool bCenter = false )
         { m_bTopCursor = bFlag; m_bCenterCursor = bCenter; }
 
-    bool JumpToSwMark( const ReferenceMarkerName& rMark );
+    bool JumpToSwMark( const SwMarkName& rMark );
 
     tools::Long InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName,
                     const OUString& rFilterName, sal_Int16 nVersion = 0 );

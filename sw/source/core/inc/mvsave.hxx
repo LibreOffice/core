@@ -57,7 +57,7 @@ namespace sw::mark
                 std::optional<sal_Int32> oContentIdx = std::nullopt);
 
     private:
-            ReferenceMarkerName m_aName;
+            SwMarkName m_aName;
             OUString m_aShortName;
             bool m_bHidden;
             OUString m_aHideCondition;

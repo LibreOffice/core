@@ -186,13 +186,13 @@ public:
 class SwBookmarkPortion : public SwControlCharPortion
 {
     // custom colors defined by metadata
-    std::vector<std::tuple<SwScriptInfo::MarkKind, Color, ReferenceMarkerName, OUString>> m_aColors;
+    std::vector<std::tuple<SwScriptInfo::MarkKind, Color, SwMarkName, OUString>> m_aColors;
     // number of MarkKind marks
     sal_Int16 m_nStart, m_nEnd, m_nPoint;
     bool m_bHasCustomColor;
 
 public:
-    explicit SwBookmarkPortion(sal_Unicode const cChar, std::vector<std::tuple<SwScriptInfo::MarkKind, Color, ReferenceMarkerName, OUString>> aColors)
+    explicit SwBookmarkPortion(sal_Unicode const cChar, std::vector<std::tuple<SwScriptInfo::MarkKind, Color, SwMarkName, OUString>> aColors)
         : SwControlCharPortion(cChar), m_aColors(std::move(aColors)), m_nStart(0), m_nEnd(0), m_nPoint(0), m_bHasCustomColor(false)
     {
         SetWhichPor(PortionType::Bookmark);

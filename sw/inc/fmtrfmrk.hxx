@@ -44,13 +44,13 @@ class SAL_DLLPUBLIC_RTTI SwFormatRefMark final : public SfxPoolItem
     SwTextRefMark* m_pTextAttr;
 
     SwFormatRefMark& operator=(const SwFormatRefMark& rRefMark) = delete;
-    ReferenceMarkerName m_aRefName;
+    SwMarkName m_aRefName;
 
     unotools::WeakReference<SwXReferenceMark> m_wXReferenceMark;
 
 public:
     DECLARE_ITEM_TYPE_FUNCTION(SwFormatRefMark)
-    SwFormatRefMark( ReferenceMarkerName aText );
+    SwFormatRefMark( SwMarkName aText );
     SwFormatRefMark( const SwFormatRefMark& rRefMark );
     virtual ~SwFormatRefMark( ) override;
 
@@ -62,8 +62,8 @@ public:
 
     const SwTextRefMark *GetTextRefMark() const   { return m_pTextAttr; }
 
-    ReferenceMarkerName &GetRefName()       { return m_aRefName; }
-    const ReferenceMarkerName &GetRefName() const { return m_aRefName; }
+    SwMarkName &GetRefName()       { return m_aRefName; }
+    const SwMarkName &GetRefName() const { return m_aRefName; }
 
     unotools::WeakReference<SwXReferenceMark> const& GetXRefMark() const
         { return m_wXReferenceMark; }

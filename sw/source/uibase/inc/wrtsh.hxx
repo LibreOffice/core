@@ -431,7 +431,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     // jump to bookmark and set the "selections-flags" correctly again
     SW_DLLPUBLIC void GotoMark( const ::sw::mark::MarkBase* const pMark );
     bool GotoMark( const ::sw::mark::MarkBase* const pMark, bool bSelect );
-    SW_DLLPUBLIC void GotoMark( const ReferenceMarkerName& rName );
+    SW_DLLPUBLIC void GotoMark( const SwMarkName& rName );
     bool GoNextBookmark(); // true when there still was one
     bool GoPrevBookmark();
 
@@ -501,7 +501,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     void GotoOutline( SwOutlineNodes::size_type nIdx );
     bool GotoOutline( const OUString& rName );
     bool GotoRegion( std::u16string_view rName );
-    bool GotoRefMark( const ReferenceMarkerName& rRefMark, sal_uInt16 nSubType = 0,
+    bool GotoRefMark( const SwMarkName& rRefMark, sal_uInt16 nSubType = 0,
         sal_uInt16 nSeqNo = 0, sal_uInt16 nFlags = 0 );
     SW_DLLPUBLIC bool GotoNextTOXBase( const UIName* pName = nullptr);
     SW_DLLPUBLIC bool GotoTable( const UIName& rName );

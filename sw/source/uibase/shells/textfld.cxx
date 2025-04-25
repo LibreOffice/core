@@ -294,7 +294,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(FN_GOTO_MARK);
             if (pName)
             {
-                rSh.GotoMark(ReferenceMarkerName(pName->GetValue()));
+                rSh.GotoMark(SwMarkName(pName->GetValue()));
             }
         }
         break;
@@ -928,7 +928,7 @@ FIELD_INSERT:
 
                     IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
                     sw::mark::Fieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(
-                        aFieldPam, ReferenceMarkerName(), aFieldType, aFieldPam.Start());
+                        aFieldPam, SwMarkName(), aFieldType, aFieldPam.Start());
                     if (pFieldmark && !aFieldCode.isEmpty())
                     {
                         pFieldmark->GetParameters()->insert(
@@ -950,7 +950,7 @@ FIELD_INSERT:
             if(pCursorPos)
             {
                 IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
-                pMarksAccess->makeNoTextFieldBookmark(*pCursorPos, ReferenceMarkerName(), ODF_FORMCHECKBOX);
+                pMarksAccess->makeNoTextFieldBookmark(*pCursorPos, SwMarkName(), ODF_FORMCHECKBOX);
             }
 
             rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
@@ -965,7 +965,7 @@ FIELD_INSERT:
             if(pCursorPos)
             {
                 IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
-                pMarksAccess->makeNoTextFieldBookmark(*pCursorPos, ReferenceMarkerName(), ODF_FORMDROPDOWN);
+                pMarksAccess->makeNoTextFieldBookmark(*pCursorPos, SwMarkName(), ODF_FORMDROPDOWN);
             }
 
             rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT_FORM_FIELD, nullptr);
@@ -986,7 +986,7 @@ FIELD_INSERT:
                 IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
                 SwPaM aFieldPam(pCursorPos->GetPoint()->GetNode(), pCursorPos->GetPoint()->GetContentIndex() - ODF_FORMFIELD_DEFAULT_LENGTH,
                                 pCursorPos->GetPoint()->GetNode(), pCursorPos->GetPoint()->GetContentIndex());
-                sw::mark::Fieldmark* pFieldBM = pMarksAccess->makeFieldBookmark(aFieldPam, ReferenceMarkerName(), ODF_FORMDATE,
+                sw::mark::Fieldmark* pFieldBM = pMarksAccess->makeFieldBookmark(aFieldPam, SwMarkName(), ODF_FORMDATE,
                             aFieldPam.Start());
 
                 // Use a default date format and language
@@ -1161,7 +1161,7 @@ FIELD_INSERT:
                 const bool bFooterAlreadyOn = rDesc.GetMaster().GetFooter().IsActive();
                 const bool bIsSinglePage = rDesc.GetFollow() != &rDesc;
                 const size_t nMirrorPagesNeeded = rDesc.IsFirstShared() ? 2 : 3;
-                const ReferenceMarkerName sBookmarkName( OUString::Concat("PageNumWizard_")
+                const SwMarkName sBookmarkName( OUString::Concat("PageNumWizard_")
                     + (bHeader ? "HEADER" : "FOOTER") + "_" + rDesc.GetName().toString()
                     + OUString::number(rSh.GetVirtPageNum()) );
                 IDocumentMarkAccess& rIDMA = *rSh.getIDocumentMarkAccess();

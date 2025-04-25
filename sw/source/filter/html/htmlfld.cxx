@@ -641,7 +641,7 @@ void SwHTMLParser::InsertComment( const OUString& rComment, std::string_view pTa
 
     SwPostItField aPostItField(
                     static_cast<SwPostItFieldType*>(m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Postit )),
-                    OUString(), aComment, OUString(), ReferenceMarkerName(), DateTime(DateTime::SYSTEM));
+                    OUString(), aComment, OUString(), SwMarkName(), DateTime(DateTime::SYSTEM));
     InsertAttr( SwFormatField( aPostItField ), false );
 
     if( bMoveFwd )

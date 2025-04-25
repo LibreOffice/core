@@ -119,7 +119,7 @@ void RepaintPagePreview( SwViewShell const * pVwSh, const SwRect& rRect )
         pSwPagePreview->RepaintCoreRect(rRect);
 }
 
-bool JumpToSwMark( SwViewShell const * pVwSh, const ReferenceMarkerName& rMark )
+bool JumpToSwMark( SwViewShell const * pVwSh, const SwMarkName& rMark )
 {
     SfxViewShell *pSfxViewShell = pVwSh->GetSfxViewShell();
 

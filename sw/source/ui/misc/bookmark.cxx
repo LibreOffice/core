@@ -105,7 +105,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl, weld::Button&, void)
         // remove from model
         sw::mark::MarkBase* pBookmark
             = weld::fromId<sw::mark::MarkBase*>(m_xBookmarksBox->get_id(rEntry));
-        ReferenceMarkerName sRemoved = pBookmark->GetName();
+        SwMarkName sRemoved = pBookmark->GetName();
         IDocumentMarkAccess* const pMarkAccess = m_rSh.getIDocumentMarkAccess();
         pMarkAccess->deleteMark(pMarkAccess->findMark(sRemoved), false);
         SfxRequest aReq(m_rSh.GetView().GetViewFrame(), FN_DELETE_BOOKMARK);
@@ -161,7 +161,7 @@ void SwInsertBookmarkDlg::SelectionChanged()
         [this, &sEditBoxText, &nSelectedRows](weld::TreeIter& rEntry) {
             sw::mark::MarkBase* pBookmark
                 = weld::fromId<sw::mark::MarkBase*>(m_xBookmarksBox->get_id(rEntry));
-            const ReferenceMarkerName& sEntryName = pBookmark->GetName();
+            const SwMarkName& sEntryName = pBookmark->GetName();
             if (!sEditBoxText.isEmpty())
                 sEditBoxText.append(";");
             sEditBoxText.append(sEntryName.toString());
@@ -238,7 +238,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, RenameHdl, weld::Button&, void)
 IMPL_LINK_NOARG(SwInsertBookmarkDlg, InsertHdl, weld::Button&, void)
 {
     OUString sBookmark = m_xEditBox->get_text();
-    m_rSh.SetBookmark2(vcl::KeyCode(), ReferenceMarkerName(sBookmark), m_xHideCB->get_active(),
+    m_rSh.SetBookmark2(vcl::KeyCode(), SwMarkName(sBookmark), m_xHideCB->get_active(),
                        m_xConditionED->get_text());
 
     m_xDialog->response(RET_OK);
@@ -528,7 +528,7 @@ void BookmarkTable::InsertBookmark(SwWrtShell& rSh, sw::mark::MarkBase* const pM
     }
 
     const OUString& sHideCondition = pBookmark->GetHideCondition();
-    const ReferenceMarkerName& sName = pBookmark->GetName();
+    const SwMarkName& sName = pBookmark->GetName();
     OUString sHidden
         = (pBookmark->IsHidden() || !sHideCondition.isEmpty() ||
            // tdf#150955 add "hidden" status to the imported OOXML _Toc and _Ref bookmarks
@@ -590,7 +590,7 @@ OUString BookmarkTable::GetNameProposal() const
     for (int i = 0, nCount = m_xControl->n_children(); i < nCount; ++i)
     {
         sw::mark::MarkBase* pBookmark = weld::fromId<sw::mark::MarkBase*>(m_xControl->get_id(i));
-        const ReferenceMarkerName& sName = pBookmark->GetName();
+        const SwMarkName& sName = pBookmark->GetName();
         sal_Int32 nIndex = 0;
         if (o3tl::getToken(sName.toString(), 0, ' ', nIndex) == sDefaultBookmarkName)
         {

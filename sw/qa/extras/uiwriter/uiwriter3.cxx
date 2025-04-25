@@ -1841,7 +1841,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
         CPPUNIT_ASSERT_EQUAL(u"#1%19the%20tocmark%19C%7Ctoxmark"_ustr, url);
         rView.JumpToSwMark(
-            ReferenceMarkerName(url.copy(1))); // SfxApplication::OpenDocExec_Impl eats the "#"
+            SwMarkName(url.copy(1))); // SfxApplication::OpenDocExec_Impl eats the "#"
         CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_INWORD) + "tocmark"),
                              pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
         pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
@@ -1856,7 +1856,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         pWrtShell->Push();
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
         CPPUNIT_ASSERT_EQUAL(u"#__RefHeading___Toc105_706348105"_ustr, url);
-        rView.JumpToSwMark(ReferenceMarkerName(url.copy(1)));
+        rView.JumpToSwMark(SwMarkName(url.copy(1)));
         CPPUNIT_ASSERT_EQUAL(u"foo"_ustr,
                              pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
         pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
@@ -1877,7 +1877,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
         CPPUNIT_ASSERT_EQUAL(u"#1%19the%20udmark%19UUser-Defined%20Index%7Ctoxmark"_ustr,
                              url); // User-Defined => User-Defined Index, tdf#161574
-        rView.JumpToSwMark(ReferenceMarkerName(url.copy(1)));
+        rView.JumpToSwMark(SwMarkName(url.copy(1)));
         CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_INWORD) + "udmark the first"),
                              pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
         pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
@@ -1893,7 +1893,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
         CPPUNIT_ASSERT_EQUAL(u"#2%19the%20udmark%19UUser-Defined%20Index%7Ctoxmark"_ustr,
                              url); // User-Defined => User-Defined Index, tdf#161574
-        rView.JumpToSwMark(ReferenceMarkerName(url.copy(1)));
+        rView.JumpToSwMark(SwMarkName(url.copy(1)));
         CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_INWORD) + "udmark the 2nd"),
                              pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
         pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
@@ -1908,7 +1908,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         pWrtShell->Push();
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
         CPPUNIT_ASSERT_EQUAL(u"#__RefHeading___Toc105_706348105"_ustr, url);
-        rView.JumpToSwMark(ReferenceMarkerName(url.copy(1)));
+        rView.JumpToSwMark(SwMarkName(url.copy(1)));
         CPPUNIT_ASSERT_EQUAL(u"foo"_ustr,
                              pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
         pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
@@ -1928,7 +1928,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         pWrtShell->Push();
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
         CPPUNIT_ASSERT_EQUAL(u"#1%19the%20udmark%19UNewUD!%7C%7Ctoxmark"_ustr, url);
-        rView.JumpToSwMark(ReferenceMarkerName(url.copy(1)));
+        rView.JumpToSwMark(SwMarkName(url.copy(1)));
         CPPUNIT_ASSERT_EQUAL(u"the udmark"_ustr,
                              pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
         pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);

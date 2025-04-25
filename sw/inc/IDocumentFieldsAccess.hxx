@@ -63,7 +63,7 @@ namespace com::sun::star::uno { class Any; }
     // convenience methods
     SwFieldType* GetFieldType(SwFieldIds nResId, const UIName& rName, bool bDbFieldMatching) const
     { return GetFieldType(nResId, rName.toString(), bDbFieldMatching); }
-    SwFieldType* GetFieldType(SwFieldIds nResId, const ReferenceMarkerName& rName, bool bDbFieldMatching) const
+    SwFieldType* GetFieldType(SwFieldIds nResId, const SwMarkName& rName, bool bDbFieldMatching) const
     { return GetFieldType(nResId, rName.toString(), bDbFieldMatching); }
 
     virtual void RemoveFieldType(size_t nField) = 0;

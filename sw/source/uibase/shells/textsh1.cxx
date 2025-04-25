@@ -600,7 +600,7 @@ void UpdateBookmarks(const SfxRequest& rReq, SwWrtShell& rWrtSh)
         comphelper::SequenceAsHashMap aMap(aBookmarks[nBookmarkIndex++]);
         if (aMap[u"Bookmark"_ustr].get<OUString>() != pMark->GetName())
         {
-            rIDMA.renameMark(pMark, ReferenceMarkerName(aMap[u"Bookmark"_ustr].get<OUString>()));
+            rIDMA.renameMark(pMark, SwMarkName(aMap[u"Bookmark"_ustr].get<OUString>()));
         }
 
         OUString aBookmarkText = aMap[u"BookmarkText"_ustr].get<OUString>();
@@ -687,7 +687,7 @@ void UpdateBookmark(const SfxRequest& rReq, SwWrtShell& rWrtSh)
     comphelper::SequenceAsHashMap aMap(aBookmark);
     if (aMap[u"Bookmark"_ustr].get<OUString>() != pBookmark->GetName())
     {
-        rIDMA.renameMark(pBookmark, ReferenceMarkerName(aMap[u"Bookmark"_ustr].get<OUString>()));
+        rIDMA.renameMark(pBookmark, SwMarkName(aMap[u"Bookmark"_ustr].get<OUString>()));
     }
 
     // Insert markers to remember where the paste positions are.
@@ -1311,7 +1311,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     }
                 }
 
-                rWrtSh.SetBookmark( vcl::KeyCode(), ReferenceMarkerName(sName) );
+                rWrtSh.SetBookmark( vcl::KeyCode(), SwMarkName(sName) );
                 if (pBookmarkText)
                 {
                     pCursorPos->DeleteMark();
@@ -1357,7 +1357,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if (pItem && !rWrtSh.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS))
             {
                 IDocumentMarkAccess* const pMarkAccess = rWrtSh.getIDocumentMarkAccess();
-                pMarkAccess->deleteMark(pMarkAccess->findMark(ReferenceMarkerName(static_cast<const SfxStringItem*>(pItem)->GetValue())), false);
+                pMarkAccess->deleteMark(pMarkAccess->findMark(SwMarkName(static_cast<const SfxStringItem*>(pItem)->GetValue())), false);
             }
             break;
         }
@@ -1394,7 +1394,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             // collect and sort navigator reminder names
             IDocumentMarkAccess* const pMarkAccess = rWrtSh.getIDocumentMarkAccess();
-            std::vector< ReferenceMarkerName > vNavMarkNames;
+            std::vector< SwMarkName > vNavMarkNames;
             for(auto ppMark = pMarkAccess->getAllMarksBegin();
                 ppMark != pMarkAccess->getAllMarksEnd();
                 ++ppMark)
@@ -1409,7 +1409,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if(vNavMarkNames.size() == MAX_MARKS)
                 pMarkAccess->deleteMark(pMarkAccess->findMark(vNavMarkNames[0]), false);
 
-            rWrtSh.SetBookmark(vcl::KeyCode(), ReferenceMarkerName(), IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER);
+            rWrtSh.SetBookmark(vcl::KeyCode(), SwMarkName(), IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER);
             SwView::SetActMark(vNavMarkNames.size() < MAX_MARKS ? vNavMarkNames.size() : MAX_MARKS-1);
 
             break;

@@ -416,7 +416,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 {
                     OUString sTmpSearchStr = sText.copy( 1 );
                     IDocumentMarkAccess* pMarkAccess = rSh.getIDocumentMarkAccess();
-                    auto ppBkmk = pMarkAccess->findBookmark( ReferenceMarkerName(sTmpSearchStr) );
+                    auto ppBkmk = pMarkAccess->findBookmark( SwMarkName(sTmpSearchStr) );
                     if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
                          IDocumentMarkAccess::GetType(**ppBkmk)
                             == IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK )

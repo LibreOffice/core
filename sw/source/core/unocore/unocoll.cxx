@@ -1566,7 +1566,7 @@ uno::Any SwXBookmarks::getByName(const OUString& rName)
 
     auto& rDoc = GetDoc();
     IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
-    auto ppBkmk = pMarkAccess->findBookmark(ReferenceMarkerName(rName));
+    auto ppBkmk = pMarkAccess->findBookmark(SwMarkName(rName));
     if(ppBkmk == pMarkAccess->getBookmarksEnd())
         throw NoSuchElementException();
 
@@ -1601,7 +1601,7 @@ sal_Bool SwXBookmarks::hasByName(const OUString& rName)
     SolarMutexGuard aGuard;
 
     IDocumentMarkAccess* const pMarkAccess = GetDoc().getIDocumentMarkAccess();
-    return pMarkAccess->findBookmark(ReferenceMarkerName(rName)) != pMarkAccess->getBookmarksEnd();
+    return pMarkAccess->findBookmark(SwMarkName(rName)) != pMarkAccess->getBookmarksEnd();
 }
 
 uno::Type SAL_CALL SwXBookmarks::getElementType()
@@ -1798,7 +1798,7 @@ uno::Any SwXReferenceMarks::getByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
     auto& rDoc = GetDoc();
-    if (auto* const pMark = const_cast<SwFormatRefMark*>(rDoc.GetRefMark(ReferenceMarkerName(rName))))
+    if (auto* const pMark = const_cast<SwFormatRefMark*>(rDoc.GetRefMark(SwMarkName(rName))))
         return uno::Any(
             uno::Reference<XTextContent>(SwXReferenceMark::CreateXReferenceMark(rDoc, pMark)));
 
@@ -1818,7 +1818,7 @@ uno::Sequence< OUString > SwXReferenceMarks::getElementNames()
 sal_Bool SwXReferenceMarks::hasByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
-    return nullptr != GetDoc().GetRefMark( ReferenceMarkerName(rName) );
+    return nullptr != GetDoc().GetRefMark( SwMarkName(rName) );
 }
 
 uno::Type SAL_CALL SwXReferenceMarks::getElementType()

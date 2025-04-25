@@ -1961,7 +1961,7 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
             if ( nSubType == REF_SETREFATTR ||
                  nSubType == REF_BOOKMARK )
             {
-                const ReferenceMarkerName& aRefName(rRField.GetSetRefName());
+                const SwMarkName& aRefName(rRField.GetSetRefName());
                 aLinkStr = GetBookmarkName( nSubType, &aRefName.toString(), 0 );
             }
             else if ( nSubType == REF_FOOTNOTE ||
@@ -2196,7 +2196,7 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                         {
                             SwGetRefField* pRefField = static_cast<SwGetRefField*>(pFormatField->GetField());
                             // If we have a reference to the current sequence field
-                            if(pRefField->GetSeqNo() == nSeqFieldNumber && pRefField->GetSetRefName() == ReferenceMarkerName(sObjectName.toString()))
+                            if(pRefField->GetSeqNo() == nSeqFieldNumber && pRefField->GetSetRefName() == SwMarkName(sObjectName.toString()))
                             {
                                 // Need to create a separate run for separator character
                                 SwWW8AttrIter aLocalAttrIter( GetExport(), rNode ); // We need a local iterator having the right number of runs
@@ -3248,7 +3248,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                             break;
                     }
                     {
-                        const ReferenceMarkerName& aRefName(rRField.GetSetRefName());
+                        const SwMarkName& aRefName(rRField.GetSetRefName());
                         sStr = FieldString(eField)
                                + GetExport().GetBookmarkName(nSubType, &aRefName.toString(), 0);
                     }

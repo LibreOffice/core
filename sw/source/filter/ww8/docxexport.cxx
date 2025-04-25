@@ -200,8 +200,8 @@ void DocxExport::AppendBookmark( const OUString& rName )
 
 void DocxExport::AppendAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int32 nCurrentPos, sal_Int32 nLen )
 {
-    std::vector< ReferenceMarkerName > aStarts;
-    std::vector< ReferenceMarkerName > aEnds;
+    std::vector< SwMarkName > aStarts;
+    std::vector< SwMarkName > aEnds;
 
     IMarkVector aMarks;
     if (GetAnnotationMarks(rAttrs, nCurrentPos, nCurrentPos + nLen, aMarks))

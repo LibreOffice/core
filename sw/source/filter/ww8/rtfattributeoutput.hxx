@@ -242,8 +242,8 @@ public:
     void WriteField_Impl(const SwField* pField, ww::eField eType, std::u16string_view rFieldCmd,
                          FieldFlags nMode);
     void WriteBookmarks_Impl(std::vector<OUString>& rStarts, std::vector<OUString>& rEnds);
-    void WriteAnnotationMarks_Impl(std::vector<ReferenceMarkerName>& rStarts,
-                                   std::vector<ReferenceMarkerName>& rEnds);
+    void WriteAnnotationMarks_Impl(std::vector<SwMarkName>& rStarts,
+                                   std::vector<SwMarkName>& rEnds);
     void WriteHeaderFooter_Impl(const SwFrameFormat& rFormat, bool bHeader, const char* pStr,
                                 bool bTitlepg);
     void WriteBookmarkInActParagraph(const OUString& /*rName*/, sal_Int32 /*nFirstRunPos*/,
@@ -570,7 +570,7 @@ private:
     sal_Int32 m_nNextAnnotationMarkId;
     sal_Int32 m_nCurrentAnnotationMarkId;
     /// Maps annotation mark names to ID's.
-    std::map<ReferenceMarkerName, sal_Int32> m_rOpenedAnnotationMarksIds;
+    std::map<SwMarkName, sal_Int32> m_rOpenedAnnotationMarksIds;
 
     /*
      * The current table helper.

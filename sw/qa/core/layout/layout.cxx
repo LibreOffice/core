@@ -967,7 +967,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testPageRemoveFlyTable)
     pWrtShell->Reformat();
 
     // Then make sure that the 2nd table below the bookmark has no unwanted top margin:
-    pWrtShell->GotoMark(ReferenceMarkerName(u"test"_ustr));
+    pWrtShell->GotoMark(SwMarkName(u"test"_ustr));
     pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false);
     pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false);
     SwCursor* pCursor = pWrtShell->GetCursor();

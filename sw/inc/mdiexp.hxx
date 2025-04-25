@@ -30,7 +30,7 @@ class SwRect;
 class Size;
 class SwViewShell;
 class SwDocShell;
-class ReferenceMarkerName;
+class SwMarkName;
 
 extern void ScrollMDI(SwViewShell const & rVwSh, const SwRect &, sal_uInt16 nRangeX, sal_uInt16 nRangeY
     , ScrollSizeMode eScrollSizeMode = ScrollSizeMode::ScrollSizeDefault);
@@ -53,6 +53,6 @@ void RepaintPagePreview( SwViewShell const * pVwSh, const SwRect& rRect );
 // Read ChgMode for tables from configuration.
 TableChgMode GetTableChgDefaultMode();
 
-bool JumpToSwMark( SwViewShell const * pVwSh, const ReferenceMarkerName& rMark );
+bool JumpToSwMark( SwViewShell const * pVwSh, const SwMarkName& rMark );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

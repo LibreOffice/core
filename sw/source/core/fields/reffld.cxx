@@ -351,7 +351,7 @@ static void lcl_formatReferenceLanguage( OUString& rRefText,
 
 /// get references
 SwGetRefField::SwGetRefField( SwGetRefFieldType* pFieldType,
-                              ReferenceMarkerName aSetRef, OUString aSetReferenceLanguage, sal_uInt16 nSubTyp,
+                              SwMarkName aSetRef, OUString aSetReferenceLanguage, sal_uInt16 nSubTyp,
                               sal_uInt16 nSequenceNo, sal_uInt16 nFlags, sal_uLong nFormat )
     : SwField(pFieldType, nFormat),
       m_sSetRefName(std::move(aSetRef)),
@@ -889,7 +889,7 @@ OUString SwGetRefField::GetPar1() const
 /// set reference name
 void SwGetRefField::SetPar1( const OUString& rName )
 {
-    m_sSetRefName = ReferenceMarkerName(rName);
+    m_sSetRefName = SwMarkName(rName);
 }
 
 OUString SwGetRefField::GetPar2() const
@@ -1328,7 +1328,7 @@ namespace
     }
 }
 
-SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const ReferenceMarkerName& rRefMark,
+SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const SwMarkName& rRefMark,
                                           sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags,
                                           sal_Int32* pStart, sal_Int32* pEnd, SwRootFrame const* const pLayout,
                                           const SwTextNode* pSelf, SwFrame* pContentFrame)
@@ -1455,7 +1455,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const ReferenceMarkerName
     return pTextNd;
 }
 
-SwTextNode* SwGetRefFieldType::FindAnchorRefStyle(SwDoc* pDoc, const ReferenceMarkerName& rRefMark,
+SwTextNode* SwGetRefFieldType::FindAnchorRefStyle(SwDoc* pDoc, const SwMarkName& rRefMark,
                                           sal_uInt16 nFlags,
                                           sal_Int32* pStart, sal_Int32* pEnd, SwRootFrame const* const pLayout,
                                           const SwTextNode* pSelf, SwFrame* pContentFrame)
@@ -1680,7 +1680,7 @@ namespace {
 struct RefIdsMap
 {
 private:
-    ReferenceMarkerName aName;
+    SwMarkName aName;
     std::set<sal_uInt16> aIds;
     std::set<sal_uInt16> aDstIds;
     std::map<sal_uInt16, sal_uInt16> sequencedIds; /// ID numbers sorted by sequence number.
@@ -1693,11 +1693,11 @@ private:
     static sal_uInt16 GetFirstUnusedId( std::set<sal_uInt16> &rIds );
 
 public:
-    explicit RefIdsMap( ReferenceMarkerName _aName ) : aName(std::move( _aName )), bInit( false ) {}
+    explicit RefIdsMap( SwMarkName _aName ) : aName(std::move( _aName )), bInit( false ) {}
 
     void Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rField, bool bField );
 
-    const ReferenceMarkerName& GetName() const { return aName; }
+    const SwMarkName& GetName() const { return aName; }
 };
 
 }
@@ -1844,7 +1844,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
 
     // then there are RefFields in the DescDox - so all RefFields in the SourceDoc
     // need to be converted to have unique IDs for both documents
-    RefIdsMap aFntMap { ReferenceMarkerName() };
+    RefIdsMap aFntMap { SwMarkName() };
     std::vector<std::unique_ptr<RefIdsMap>> aFieldMap;
 
     std::vector<SwFormatField*> vFields;

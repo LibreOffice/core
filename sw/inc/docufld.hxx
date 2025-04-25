@@ -455,7 +455,7 @@ class SW_DLLPUBLIC SwPostItField final : public SwField
     OUString m_sText;
     OUString m_sAuthor;
     OUString m_sInitials; ///< Initials of the author.
-    ReferenceMarkerName m_sName;     ///< Name of the comment.
+    SwMarkName m_sName;     ///< Name of the comment.
     DateTime    m_aDateTime;
     bool     m_bResolved;
     std::optional<OutlinerParaObject> mpText;
@@ -464,7 +464,7 @@ class SW_DLLPUBLIC SwPostItField final : public SwField
     sal_uInt32 m_nParentId;
     sal_uInt32 m_nParaId;
     sal_uInt32 m_nParentPostItId;
-    ReferenceMarkerName m_sParentName; /// Parent comment's name.
+    SwMarkName m_sParentName; /// Parent comment's name.
 
 public:
     static sal_uInt32 s_nLastPostItId;
@@ -473,14 +473,14 @@ public:
                    OUString aAuthor,
                    OUString aText,
                    OUString aInitials,
-                   ReferenceMarkerName aName,
+                   SwMarkName aName,
                    const DateTime& rDate,
                    const bool bResolved = false,
                    const sal_uInt32 nPostItId = 0,
                    const sal_uInt32 nParentId = 0,
                    const sal_uInt32 nParaId = 0,
                    const sal_uInt32 nParentPostItId = 0,
-                   const ReferenceMarkerName aParentName = ReferenceMarkerName());
+                   const SwMarkName aParentName = SwMarkName());
 
     SwPostItField(const SwPostItField&) = delete;
     SwPostItField* operator=(const SwPostItField&) = delete;
@@ -511,10 +511,10 @@ public:
     virtual void            SetPar2(const OUString& rStr) override;
     const OUString&         GetText() const { return m_sText; }
     const OUString&         GetInitials() const { return m_sInitials;}
-    void                    SetName(const ReferenceMarkerName& rStr);
-    const ReferenceMarkerName& GetName() const { return m_sName;}
-    const ReferenceMarkerName& GetParentName() const { return m_sParentName; }
-    void                    SetParentName(const ReferenceMarkerName& rStr);
+    void                    SetName(const SwMarkName& rStr);
+    const SwMarkName& GetName() const { return m_sName;}
+    const SwMarkName& GetParentName() const { return m_sParentName; }
+    void                    SetParentName(const SwMarkName& rStr);
 
     const OutlinerParaObject* GetTextObject() const { return mpText ? &*mpText : nullptr;}
     void SetTextObject( std::optional<OutlinerParaObject> pText );

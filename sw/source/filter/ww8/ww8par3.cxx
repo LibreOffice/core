@@ -130,7 +130,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
     else
     {
         WW8PLCFx_Book* pB = m_xPlcxMan->GetBook();
-        ReferenceMarkerName aBookmarkName;
+        SwMarkName aBookmarkName;
         if (pB!=nullptr) {
             WW8_CP currentCP=pF->nSCode;
             WW8_CP currentLen=pF->nLen;
@@ -147,14 +147,14 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
                 if (!aBookmarkFind.isEmpty()) {
                     pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark bookmark as consumed, such that it'll not get inserted as a "normal" bookmark again
                     if (!aBookmarkFind.isEmpty()) {
-                        aBookmarkName=ReferenceMarkerName(aBookmarkFind);
+                        aBookmarkName=SwMarkName(aBookmarkFind);
                     }
                 }
             }
         }
 
         if (pB!=nullptr && aBookmarkName.isEmpty()) {
-            aBookmarkName = ReferenceMarkerName(pB->GetUniqueBookmarkName(aFormula.msTitle));
+            aBookmarkName = SwMarkName(pB->GetUniqueBookmarkName(aFormula.msTitle));
         }
 
         if (!aBookmarkName.isEmpty()) {
@@ -198,7 +198,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
         return eF_ResT::OK;
     }
 
-    ReferenceMarkerName aBookmarkName;
+    SwMarkName aBookmarkName;
     WW8PLCFx_Book* pB = m_xPlcxMan->GetBook();
     if (pB!=nullptr) {
         WW8_CP currentCP=pF->nSCode;
@@ -210,13 +210,13 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
         if (!aBookmarkFind.isEmpty()) {
             pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark as consumed by field
             if (!aBookmarkFind.isEmpty()) {
-                aBookmarkName=ReferenceMarkerName(aBookmarkFind);
+                aBookmarkName=SwMarkName(aBookmarkFind);
             }
         }
     }
 
     if (pB!=nullptr && aBookmarkName.isEmpty()) {
-        aBookmarkName = ReferenceMarkerName(pB->GetUniqueBookmarkName(aFormula.msTitle));
+        aBookmarkName = SwMarkName(pB->GetUniqueBookmarkName(aFormula.msTitle));
     }
 
     if (!aBookmarkName.isEmpty())
@@ -293,7 +293,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
         {
             IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
             Fieldmark *pFieldmark =
-                    pMarksAccess->makeNoTextFieldBookmark( *m_pPaM, ReferenceMarkerName(aBookmarkName), ODF_FORMDROPDOWN );
+                    pMarksAccess->makeNoTextFieldBookmark( *m_pPaM, SwMarkName(aBookmarkName), ODF_FORMDROPDOWN );
             OSL_ENSURE(pFieldmark!=nullptr, "hmmm; why was the bookmark not created?");
             if ( pFieldmark != nullptr )
             {

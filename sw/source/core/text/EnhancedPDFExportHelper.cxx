@@ -2456,7 +2456,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     {
                         aURL = aURL.copy( 1 );
                         mrSh.SwCursorShell::ClearMark();
-                        if (! JumpToSwMark( &mrSh, ReferenceMarkerName(aURL) ))
+                        if (! JumpToSwMark( &mrSh, SwMarkName(aURL) ))
                         {
                             continue; // target deleted
                         }
@@ -2544,7 +2544,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 {
                     aURL = aURL.copy( 1 );
                     mrSh.SwCursorShell::ClearMark();
-                    if (! JumpToSwMark( &mrSh, ReferenceMarkerName(aURL) ))
+                    if (! JumpToSwMark( &mrSh, SwMarkName(aURL) ))
                     {
                         continue; // target deleted
                     }
@@ -2681,7 +2681,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
 
                 // Destination Rectangle
                 const SwGetRefField* pField = static_cast<SwGetRefField*>(pFormatField->GetField());
-                const ReferenceMarkerName& rRefName = pField->GetSetRefName();
+                const SwMarkName& rRefName = pField->GetSetRefName();
                 mrSh.GotoRefMark( rRefName, pField->GetSubType(), pField->GetSeqNo(), pField->GetFlags() );
                 const SwRect& rDestRect = mrSh.GetCharRect();
 
@@ -2987,7 +2987,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 //get the name
                 const ::sw::mark::MarkBase* pBkmk = *ppMark;
                 mrSh.SwCursorShell::ClearMark();
-                const ReferenceMarkerName& sBkName = pBkmk->GetName();
+                const SwMarkName& sBkName = pBkmk->GetName();
 
                 //jump to it
                 if (! JumpToSwMark( &mrSh, sBkName ))
@@ -3028,7 +3028,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
             if ( bInternal )
             {
                 aBookmarkName = aBookmarkName.copy( 1 );
-                JumpToSwMark( &mrSh, ReferenceMarkerName(aBookmarkName) );
+                JumpToSwMark( &mrSh, SwMarkName(aBookmarkName) );
 
                 // Destination Rectangle
                 const SwRect& rDestRect = mrSh.GetCharRect();

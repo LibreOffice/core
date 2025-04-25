@@ -42,10 +42,7 @@ public:
     void AddRule(SwUndoArg eWhat, const OUString& rWith);
     // convenience methods
     void AddRule(SwUndoArg eWhat, const UIName& rWith) { AddRule(eWhat, rWith.toString()); }
-    void AddRule(SwUndoArg eWhat, const ReferenceMarkerName& rWith)
-    {
-        AddRule(eWhat, rWith.toString());
-    }
+    void AddRule(SwUndoArg eWhat, const SwMarkName& rWith) { AddRule(eWhat, rWith.toString()); }
 
     OUString Apply(const OUString& rStr) const;
 
