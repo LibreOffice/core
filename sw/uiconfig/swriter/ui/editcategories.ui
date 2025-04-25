@@ -148,6 +148,68 @@
             <property name="column-spacing">12</property>
             <property name="column-homogeneous">True</property>
             <child>
+              <object class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="editcategories|label1">Category</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">name</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label2">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="editcategories|label2">Path</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">pathlb</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="name">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="max-length">256</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="name-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="editcategories|extended_tip|name">Displays the name of the selected AutoText category. To change the name of the category, type a new name, and then click Rename. To create a new category, type a name, and then click New.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="pathlb">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="pathlb-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="editcategories|extended_tip|pathlb">Displays the current path to the directory where the selected AutoText category files are stored. If you are creating an AutoText category, select where you want to store the category files.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -219,68 +281,6 @@
                 <property name="left-attach">0</property>
                 <property name="top-attach">3</property>
                 <property name="width">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBoxText" id="pathlb">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="pathlb-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="editcategories|extended_tip|pathlb">Displays the current path to the directory where the selected AutoText category files are stored. If you are creating an AutoText category, select where you want to store the category files.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label2">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="editcategories|label2">Path</property>
-                <property name="use-underline">True</property>
-                <property name="mnemonic-widget">pathlb</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label1">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="editcategories|label1">Category</property>
-                <property name="use-underline">True</property>
-                <property name="mnemonic-widget">name</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="name">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="max-length">256</property>
-                <property name="activates-default">True</property>
-                <property name="truncate-multiline">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="name-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="editcategories|extended_tip|name">Displays the name of the selected AutoText category. To change the name of the category, type a new name, and then click Rename. To create a new category, type a name, and then click New.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
               </packing>
             </child>
           </object>
