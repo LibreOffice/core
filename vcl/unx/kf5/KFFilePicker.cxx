@@ -34,19 +34,6 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION;
 
-namespace
-{
-uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
-{
-    return { u"com.sun.star.ui.dialogs.FilePicker"_ustr,
-             u"com.sun.star.ui.dialogs.SystemFilePicker"_ustr,
-             u"com.sun.star.ui.dialogs.KFFilePicker"_ustr,
-             u"com.sun.star.ui.dialogs.KFFolderPicker"_ustr };
-}
-}
-
-// KFFilePicker
-
 KFFilePicker::KFFilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                            QFileDialog::FileMode eMode)
     // Native KF5/KF6 filepicker does not add file extension automatically
@@ -156,7 +143,10 @@ sal_Bool SAL_CALL KFFilePicker::supportsService(const OUString& ServiceName)
 
 uno::Sequence<OUString> SAL_CALL KFFilePicker::getSupportedServiceNames()
 {
-    return FilePicker_getSupportedServiceNames();
+    return { u"com.sun.star.ui.dialogs.FilePicker"_ustr,
+             u"com.sun.star.ui.dialogs.SystemFilePicker"_ustr,
+             u"com.sun.star.ui.dialogs.KFFilePicker"_ustr,
+             u"com.sun.star.ui.dialogs.KFFolderPicker"_ustr };
 }
 
 bool KFFilePicker::eventFilter(QObject* o, QEvent* e)

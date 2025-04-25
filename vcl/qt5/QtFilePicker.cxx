@@ -78,16 +78,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
-namespace
-{
-uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
-{
-    return { u"com.sun.star.ui.dialogs.FilePicker"_ustr,
-             u"com.sun.star.ui.dialogs.SystemFilePicker"_ustr,
-             u"com.sun.star.ui.dialogs.QtFilePicker"_ustr };
-}
-}
-
 QtFilePicker::QtFilePicker(css::uno::Reference<css::uno::XComponentContext> context,
                            QFileDialog::FileMode eMode, bool bUseNative)
     : QtFilePicker_Base(m_aHelperMutex)
@@ -916,7 +906,9 @@ sal_Bool SAL_CALL QtFilePicker::supportsService(const OUString& ServiceName)
 
 uno::Sequence<OUString> SAL_CALL QtFilePicker::getSupportedServiceNames()
 {
-    return FilePicker_getSupportedServiceNames();
+    return { u"com.sun.star.ui.dialogs.FilePicker"_ustr,
+             u"com.sun.star.ui.dialogs.SystemFilePicker"_ustr,
+             u"com.sun.star.ui.dialogs.QtFilePicker"_ustr };
 }
 
 void QtFilePicker::updateAutomaticFileExtension()

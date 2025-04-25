@@ -45,19 +45,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
-// helper functions
-
-namespace
-{
-uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
-{
-    return { "com.sun.star.ui.dialogs.FilePicker", "com.sun.star.ui.dialogs.SystemFilePicker",
-             "com.sun.star.ui.dialogs.Gtk3KDE5FilePicker" };
-}
-}
-
-// Gtk3KDE5FilePicker
-
 Gtk3KDE5FilePicker::Gtk3KDE5FilePicker(const uno::Reference<uno::XComponentContext>&)
     : Gtk3KDE5FilePicker_Base(_helperMutex)
 {
@@ -438,7 +425,8 @@ sal_Bool SAL_CALL Gtk3KDE5FilePicker::supportsService(const OUString& ServiceNam
 
 uno::Sequence<OUString> SAL_CALL Gtk3KDE5FilePicker::getSupportedServiceNames()
 {
-    return FilePicker_getSupportedServiceNames();
+    return { "com.sun.star.ui.dialogs.FilePicker", "com.sun.star.ui.dialogs.SystemFilePicker",
+             "com.sun.star.ui.dialogs.Gtk3KDE5FilePicker" };
 }
 
 void Gtk3KDE5FilePicker::filterChanged()
