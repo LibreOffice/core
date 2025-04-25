@@ -3377,7 +3377,7 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
     //      header frames and footer frames.
     // In horizontal layout these are all frames, which aren't neighbour frames.
     const SwFrameType nFixWidth = aRectFnSet.IsVert() ? (FRM_NEIGHBOUR | FRM_HEADFOOT)
-                                   : ~SwFrameType(FRM_NEIGHBOUR);
+                                   : ~FRM_NEIGHBOUR;
 
     // Declare const unsigned short <nFixHeight> and init it this frame types
     // which has fixed height in vertical respectively horizontal layout.

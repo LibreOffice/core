@@ -100,15 +100,15 @@ namespace o3tl
 };
 
 // for internal use some common combinations
-#define FRM_LAYOUT      SwFrameType(0x3bFF)
-#define FRM_ALL         SwFrameType(0xfbff)
-#define FRM_CNTNT       (SwFrameType::Txt | SwFrameType::NoTxt)
-#define FRM_FTNBOSS     (SwFrameType::Page | SwFrameType::Column)
-#define FRM_ACCESSIBLE  (SwFrameType::Root | SwFrameType::Page | SwFrameType::Header | SwFrameType::Footer | SwFrameType::Footnote | SwFrameType::Fly | SwFrameType::Tab | SwFrameType::Cell | SwFrameType::Txt)
-#define FRM_NEIGHBOUR   (SwFrameType::Column | SwFrameType::Cell)
-#define FRM_NOTE_VERT   (SwFrameType::FootnoteContainer | SwFrameType::Footnote | SwFrameType::Section | SwFrameType::Tab | SwFrameType::Row | SwFrameType::Cell | SwFrameType::Txt)
-#define FRM_HEADFOOT    (SwFrameType::Header | SwFrameType::Footer)
-#define FRM_BODYFTNC    (SwFrameType::FootnoteContainer | SwFrameType::Body)
+constexpr SwFrameType FRM_LAYOUT = SwFrameType(0x3bFF);
+constexpr SwFrameType FRM_ALL = SwFrameType(0xfbff);
+constexpr SwFrameType FRM_CNTNT = SwFrameType::Txt | SwFrameType::NoTxt;
+constexpr SwFrameType FRM_FTNBOSS = SwFrameType::Page | SwFrameType::Column;
+constexpr SwFrameType FRM_ACCESSIBLE = SwFrameType::Root | SwFrameType::Page | SwFrameType::Header | SwFrameType::Footer | SwFrameType::Footnote | SwFrameType::Fly | SwFrameType::Tab | SwFrameType::Cell | SwFrameType::Txt;
+constexpr SwFrameType FRM_NEIGHBOUR = SwFrameType::Column | SwFrameType::Cell;
+constexpr SwFrameType FRM_NOTE_VERT = SwFrameType::FootnoteContainer | SwFrameType::Footnote | SwFrameType::Section | SwFrameType::Tab | SwFrameType::Row | SwFrameType::Cell | SwFrameType::Txt;
+constexpr SwFrameType FRM_HEADFOOT = SwFrameType::Header | SwFrameType::Footer;
+constexpr SwFrameType FRM_BODYFTNC = SwFrameType::FootnoteContainer | SwFrameType::Body;
 
 // for GetNextLeaf/GetPrevLeaf.
 enum MakePageType
