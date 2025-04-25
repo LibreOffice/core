@@ -29,15 +29,12 @@
 #include <QtInstance.hxx>
 #include <QtXWindow.hxx>
 
-#include <com/sun/star/awt/SystemDependentXWindow.hpp>
-#include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
