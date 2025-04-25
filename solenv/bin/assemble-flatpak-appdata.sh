@@ -45,24 +45,12 @@ cat <<\EOF >"${1?}"de.allotropia.ZetaOffice.appdata.xml
  <url type="homepage">http://zetaoffice.net</url>
  <screenshots>
   <screenshot type="default">
-   <image>https://hub.libreoffice.org/screenshots/writer-01.png</image>
+   <image>https://download.zetaoffice.net/appstream-screenshots/startcenter.png</image>
+   <caption>The ZetaOffice productivity suite</caption>
+  </screenshot>
+  <screenshot>
+   <image>https://download.zetaoffice.net/appstream-screenshots/writer.png</image>
    <caption>Sample Writer document</caption>
-  </screenshot>
-  <screenshot>
-   <image>https://hub.libreoffice.org/screenshots/calc-02.png</image>
-   <caption>Sample Calc document</caption>
-  </screenshot>
-  <screenshot>
-   <image>https://hub.libreoffice.org/screenshots/impress-01.png</image>
-   <caption>Sample Impress document</caption>
-  </screenshot>
-  <screenshot>
-   <image>https://hub.libreoffice.org/screenshots/draw-02.png</image>
-   <caption>Sample Draw document</caption>
-  </screenshot>
-  <screenshot>
-   <image>https://hub.libreoffice.org/screenshots/base-02.png</image>
-   <caption>Sample Base document</caption>
   </screenshot>
  </screenshots>
  <developer_name>allotropia Software GmbH</developer_name>
