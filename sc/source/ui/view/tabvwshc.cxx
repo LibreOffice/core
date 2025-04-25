@@ -327,7 +327,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         }
         case SID_EASY_CONDITIONAL_FORMAT_DIALOG:
         {
-            xResult = std::make_shared<sc::ConditionalFormatEasyDialog>(pB, pCW, pParent, &GetViewData());
+            xResult = std::make_shared<sc::ConditionalFormatEasyDialog>(pB, pCW, pParent, GetViewData());
             break;
         }
         case SID_FILTER:

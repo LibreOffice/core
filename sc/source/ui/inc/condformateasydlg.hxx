@@ -22,7 +22,7 @@ namespace sc
 class ConditionalFormatEasyDialog : public ScAnyRefDlgController, public SfxListener
 {
 public:
-    ConditionalFormatEasyDialog(SfxBindings*, SfxChildWindow*, weld::Window*, ScViewData*);
+    ConditionalFormatEasyDialog(SfxBindings*, SfxChildWindow*, weld::Window*, ScViewData&);
     virtual ~ConditionalFormatEasyDialog() override;
 
     virtual void SetReference(const ScRange&, ScDocument&) override;
@@ -36,7 +36,7 @@ public:
 private:
     void SetDescription(std::u16string_view rCondition);
 
-    ScViewData* mpViewData;
+    ScViewData& mrViewData;
     ScDocument& mrDocument;
     ScConditionMode meMode;
     ScAddress maPosition;

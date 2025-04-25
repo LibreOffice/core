@@ -52,12 +52,12 @@ void ConditionalFormatEasyDialog::SetDescription(std::u16string_view rCondition)
 ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
                                                          SfxChildWindow* pChildWindow,
                                                          weld::Window* pParent,
-                                                         ScViewData* pViewData)
+                                                         ScViewData& rViewData)
     : ScAnyRefDlgController(pBindings, pChildWindow, pParent,
                             u"modules/scalc/ui/conditionaleasydialog.ui"_ustr,
                             u"CondFormatEasyDlg"_ustr)
-    , mpViewData(pViewData)
-    , mrDocument(mpViewData->GetDocument())
+    , mrViewData(rViewData)
+    , mrDocument(mrViewData.GetDocument())
     , mxNumberEntry(m_xBuilder->weld_entry(u"entryNumber"_ustr))
     , mxNumberEntry2(m_xBuilder->weld_entry(u"entryNumber2"_ustr))
     , mxAllInputs(m_xBuilder->weld_container(u"allInputs"_ustr))
@@ -70,7 +70,7 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
 {
     mxButtonRangeEdit->SetReferences(this, mxRangeEntry.get());
     const ScConditionMode* pCurrentMode
-        = pViewData->GetDocument().GetEasyConditionalFormatDialogData();
+        = rViewData.GetDocument().GetEasyConditionalFormatDialogData();
     if (!pCurrentMode)
     {
         SAL_WARN(
@@ -179,10 +179,10 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     mxButtonCancel->connect_clicked(LINK(this, ConditionalFormatEasyDialog, ButtonPressed));
 
     ScRangeList aRange;
-    mpViewData->GetMarkData().FillRangeListWithMarks(&aRange, false);
+    mrViewData.GetMarkData().FillRangeListWithMarks(&aRange, false);
     if (aRange.empty())
     {
-        ScAddress aPosition(mpViewData->GetCurX(), mpViewData->GetCurY(), mpViewData->GetTabNo());
+        ScAddress aPosition(mrViewData.GetCurX(), mrViewData.GetCurY(), mrViewData.GetTabNo());
         aRange.push_back(ScRange(aPosition));
     }
     maPosition = aRange.GetTopLeftCorner();
@@ -213,7 +213,7 @@ void ConditionalFormatEasyDialog::SetReference(const ScRange& rRange, ScDocument
         RefInputStart(pEdit);
 
     ScRefFlags nFlags = ScRefFlags::RANGE_ABS;
-    const ScDocument& rDoc = mpViewData->GetDocument();
+    const ScDocument& rDoc = mrViewData.GetDocument();
     OUString sRange(
         rRange.Format(rDoc, nFlags, ScAddress::Details(mrDocument.GetAddressConvention(), 0, 0)));
     pEdit->SetRefString(sRange);
@@ -263,14 +263,14 @@ IMPL_LINK(ConditionalFormatEasyDialog, ButtonPressed, weld::Button&, rButton, vo
 
         ScRangeList aRange;
         ScRefFlags nFlags
-            = aRange.Parse(mxRangeEntry->GetText(), mpViewData->GetDocument(),
-                           mpViewData->GetDocument().GetAddressConvention(), maPosition.Tab());
+            = aRange.Parse(mxRangeEntry->GetText(), mrViewData.GetDocument(),
+                           mrViewData.GetDocument().GetAddressConvention(), maPosition.Tab());
         if ((nFlags & ScRefFlags::VALID) && !aRange.empty())
         {
             pFormat->AddEntry(pEntry.release());
             pFormat->SetRange(aRange);
             auto& rRangeList = pFormat->GetRange();
-            mpViewData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(
+            mrViewData.GetDocShell()->GetDocFunc().ReplaceConditionalFormat(
                 0, std::move(pFormat), maPosition.Tab(), rRangeList);
         }
         m_xDialog->response(RET_OK);
