@@ -50,6 +50,7 @@
 #include <rtl/process.h>
 #include <sal/log.hxx>
 #include <vcl/qt/QtUtils.hxx>
+#include <vcl/toolkit/unowrap.hxx>
 
 #include <QtCore/QDebug>
 #include <QtCore/QRegularExpression>
@@ -871,28 +872,16 @@ void SAL_CALL QtFilePicker::initialize(const uno::Sequence<uno::Any>& args)
         return;
     }
 
-    css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysWinPeer(xParentWindow,
-                                                                          css::uno::UNO_QUERY);
-    if (!xSysWinPeer.is())
+    UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper();
+    if (!pWrapper)
         return;
 
-    // the sal_*Int8 handling is strange, but it's public API - no way around
-    css::uno::Sequence<sal_Int8> aProcessIdent(16);
-    rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
-    uno::Any aAny
-        = xSysWinPeer->getWindowHandle(aProcessIdent, css::lang::SystemDependent::SYSTEM_XWINDOW);
-    css::awt::SystemDependentXWindow xSysWin;
-    aAny >>= xSysWin;
+    VclPtr<vcl::Window> xWindow = pWrapper->GetWindow(xParentWindow);
+    if (!xWindow)
+        return;
 
-    const auto& pFrames = rQtInstance.getFrames();
-    const tools::Long aWindowHandle = xSysWin.WindowHandle;
-    const auto it
-        = std::find_if(pFrames.begin(), pFrames.end(), [&aWindowHandle](auto pFrame) -> bool {
-              const SystemEnvData& rData = pFrame->GetSystemData();
-              return tools::Long(rData.GetWindowHandle(pFrame)) == aWindowHandle;
-          });
-    if (it != pFrames.end())
-        m_pParentWidget = static_cast<QtFrame*>(*it)->asChild();
+    if (QtFrame* pFrame = static_cast<QtFrame*>(xWindow->ImplGetFrame()))
+        m_pParentWidget = pFrame->asChild();
 }
 
 void SAL_CALL QtFilePicker::cancel() { m_pFileDialog->reject(); }
