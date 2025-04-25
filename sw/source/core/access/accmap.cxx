@@ -3040,8 +3040,7 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
     // also in the current ones.
     if ( mpSelectedParas )
     {
-        SwAccessibleSelectedParas_Impl::iterator aIter = mpSelectedParas->begin();
-        for ( ; aIter != mpSelectedParas->end(); ++aIter )
+        for (const auto& rIter : *mpSelectedParas)
         {
             bool bSubmitEvent( false );
             if ( !pPrevSelectedParas )
@@ -3051,15 +3050,13 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
             }
             else
             {
-                SwAccessibleSelectedParas_Impl::iterator aPrevSelected =
-                                        pPrevSelectedParas->find( (*aIter).first );
+                SwAccessibleSelectedParas_Impl::iterator aPrevSelected
+                    = pPrevSelectedParas->find(rIter.first);
                 if ( aPrevSelected != pPrevSelectedParas->end() )
                 {
                     // check, if selection has changed
-                    if ( (*aIter).second.nStartOfSelection !=
-                                    (*aPrevSelected).second.nStartOfSelection ||
-                         (*aIter).second.nEndOfSelection !=
-                                    (*aPrevSelected).second.nEndOfSelection )
+                    if (rIter.second.nStartOfSelection != (*aPrevSelected).second.nStartOfSelection
+                        || rIter.second.nEndOfSelection != (*aPrevSelected).second.nEndOfSelection)
                     {
                         // changed selection
                         bSubmitEvent = true;
@@ -3075,7 +3072,7 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
 
             if ( bSubmitEvent )
             {
-                rtl::Reference < SwAccessibleContext > xAcc( (*aIter).first );
+                rtl::Reference<SwAccessibleContext> xAcc(rIter.first);
                 if ( xAcc.is() && xAcc->GetFrame() )
                 {
                     const SwTextFrame* pTextFrame = xAcc->GetFrame()->DynCastTextFrame();
@@ -3095,10 +3092,9 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
     if ( !pPrevSelectedParas )
         return;
 
-    SwAccessibleSelectedParas_Impl::iterator aIter = pPrevSelectedParas->begin();
-    for ( ; aIter != pPrevSelectedParas->end(); ++aIter )
+    for (const auto& rIter : *pPrevSelectedParas)
     {
-        rtl::Reference < SwAccessibleContext > xAcc( (*aIter).first );
+        rtl::Reference<SwAccessibleContext> xAcc(rIter.first);
         if ( xAcc.is() && xAcc->GetFrame() )
         {
             const SwTextFrame* pTextFrame = xAcc->GetFrame()->DynCastTextFrame();
