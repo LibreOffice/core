@@ -66,14 +66,14 @@ enum HeaderType
 class ScCornerButton : public vcl::Window
 {
 private:
-    ScViewData*     pViewData;
+    ScViewData&     rViewData;
 
 protected:
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Resize() override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
 public:
-                    ScCornerButton( vcl::Window* pParent, ScViewData* pData );
+                    ScCornerButton( vcl::Window* pParent, ScViewData& pData );
                     virtual ~ScCornerButton() override;
 
     virtual void    StateChanged( StateChangedType nType ) override;

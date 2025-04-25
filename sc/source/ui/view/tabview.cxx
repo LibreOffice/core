@@ -76,9 +76,9 @@ using namespace ::com::sun::star;
 
 //  Corner-Button
 
-ScCornerButton::ScCornerButton( vcl::Window* pParent, ScViewData* pData ) :
+ScCornerButton::ScCornerButton( vcl::Window* pParent, ScViewData& rData ) :
     Window( pParent, WinBits( 0 ) ),
-    pViewData( pData )
+    rViewData( rData )
 {
     ScCornerButton::EnableRTL( false );
     SetQuickHelpText(ScResId(SCSTR_QHELP_SELECT_ALL_CELLS));
@@ -99,7 +99,7 @@ void ScCornerButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
 
     Window::Paint(rRenderContext, rRect);
 
-    bool bLayoutRTL = pViewData->GetDocument().IsLayoutRTL( pViewData->GetTabNo() );
+    bool bLayoutRTL = rViewData.GetDocument().IsLayoutRTL( rViewData.GetTabNo() );
     tools::Long nDarkX = bLayoutRTL ? 0 : nPosX;
 
     //  both buttons have the same look now - only dark right/bottom lines
@@ -137,7 +137,7 @@ void ScCornerButton::MouseButtonDown( const MouseEvent& rMEvt )
     bool bDisable = pScMod->IsFormulaMode() || pScMod->IsModalMode();
     if (!bDisable)
     {
-        ScTabViewShell* pViewSh = pViewData->GetViewShell();
+        ScTabViewShell* pViewSh = rViewData.GetViewShell();
         pViewSh->SetActive();                                   // Appear and SetViewFrame
         pViewSh->ActiveGrabFocus();
 
@@ -183,8 +183,8 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     aVScrollBottom( VclPtr<ScrollAdaptor>::Create( pFrameWin, false ) ),
     aHScrollLeft( VclPtr<ScrollAdaptor>::Create( pFrameWin, true ) ),
     aHScrollRight( VclPtr<ScrollAdaptor>::Create( pFrameWin, true ) ),
-    aCornerButton( VclPtr<ScCornerButton>::Create( pFrameWin, &aViewData ) ),
-    aTopButton( VclPtr<ScCornerButton>::Create( pFrameWin, &aViewData ) ),
+    aCornerButton( VclPtr<ScCornerButton>::Create( pFrameWin, aViewData ) ),
+    aTopButton( VclPtr<ScCornerButton>::Create( pFrameWin, aViewData ) ),
     aScrollTimer("ScTabView aScrollTimer"),
     pTimerWindow( nullptr ),
     aExtraEditViewManager( pViewShell, pGridWin ),
