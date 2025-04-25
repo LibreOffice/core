@@ -569,7 +569,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                     IsAttrAtPos::Field |
                     IsAttrAtPos::ClickField |
                     IsAttrAtPos::InetAttr |
-                    IsAttrAtPos::Ftn |
+                    IsAttrAtPos::Footnote |
                     IsAttrAtPos::SmartTag);
                 if( rSh.GetContentAtPos( rLPt, aSwContentAtPos) )
                 {
@@ -3914,7 +3914,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                     if( bExecHyperlinks )
                                     {
                                         SwContentAtPos aContentAtPos(
-                                            IsAttrAtPos::Ftn |
+                                            IsAttrAtPos::Footnote |
                                             IsAttrAtPos::InetAttr );
 
                                         if( rSh.GetContentAtPos( aDocPos, aContentAtPos ) )
@@ -5194,7 +5194,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         }
                         else
                         {
-                            aContentAtPos = SwContentAtPos( IsAttrAtPos::Ftn );
+                            aContentAtPos = SwContentAtPos( IsAttrAtPos::Footnote );
                             if( !rSh.GetContentAtPos( aDocPt, aContentAtPos, true ) && bExecHyperlinks )
                             {
                                 SdrViewEvent aVEvt;

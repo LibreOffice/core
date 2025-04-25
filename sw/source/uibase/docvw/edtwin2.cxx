@@ -354,7 +354,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         SwRect aFieldRect;
         SwContentAtPos aContentAtPos( IsAttrAtPos::Field |
                                     IsAttrAtPos::InetAttr |
-                                    IsAttrAtPos::Ftn |
+                                    IsAttrAtPos::Footnote |
                                     IsAttrAtPos::Redline |
                                     IsAttrAtPos::ToxMark |
                                     IsAttrAtPos::RefMark |
@@ -481,7 +481,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 break;
             }
 
-            case IsAttrAtPos::Ftn:
+            case IsAttrAtPos::Footnote:
                 if( aContentAtPos.pFndTextAttr && aContentAtPos.aFnd.pAttr )
                 {
                     const SwFormatFootnote* pFootnote = static_cast<const SwFormatFootnote*>(aContentAtPos.aFnd.pAttr);

@@ -77,7 +77,7 @@ enum class IsAttrAtPos
     NONE             = 0x0000,
     Field            = 0x0001,
     ClickField       = 0x0002,
-    Ftn              = 0x0004,
+    Footnote         = 0x0004,
     InetAttr         = 0x0008,
     TableBoxFml      = 0x0010,
     Redline          = 0x0020,

@@ -1704,7 +1704,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                 }
             }
 
-            if( !bRet && IsAttrAtPos::Ftn & rContentAtPos.eContentAtPos )
+            if( !bRet && IsAttrAtPos::Footnote & rContentAtPos.eContentAtPos )
             {
                 if( aTmpState.m_bFootnoteNoInfo )
                 {
@@ -1717,7 +1717,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             bRet = false;
                     }
                     if( bRet )
-                        rContentAtPos.eContentAtPos = IsAttrAtPos::Ftn;
+                        rContentAtPos.eContentAtPos = IsAttrAtPos::Footnote;
                 }
                 else if ( nullptr != ( pTextAttr = pTextNd->GetTextAttrForCharAt(
                     aPos.GetContentIndex(), RES_TXTATR_FTN )) )
@@ -1749,7 +1749,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
                     if( bRet )
                     {
-                        rContentAtPos.eContentAtPos = IsAttrAtPos::Ftn;
+                        rContentAtPos.eContentAtPos = IsAttrAtPos::Footnote;
                         rContentAtPos.pFndTextAttr = pTextAttr;
                         rContentAtPos.aFnd.pAttr = &pTextAttr->GetAttr();
 
@@ -2239,7 +2239,7 @@ bool SwContentAtPos::IsInProtectSect() const
             pNd = static_txtattr_cast<SwTextField const*>(pFndTextAttr)->GetpTextNode();
             break;
 
-        case IsAttrAtPos::Ftn:
+        case IsAttrAtPos::Footnote:
             pNd = &static_cast<const SwTextFootnote*>(pFndTextAttr)->GetTextNode();
             break;
 
@@ -2264,7 +2264,7 @@ bool SwContentAtPos::IsInProtectSect() const
 bool SwContentAtPos::IsInRTLText()const
 {
     const SwTextNode* pNd = nullptr;
-    if (!pFndTextAttr || (eContentAtPos != IsAttrAtPos::Ftn))
+    if (!pFndTextAttr || (eContentAtPos != IsAttrAtPos::Footnote))
         return false;
 
     const SwTextFootnote* pTextFootnote = static_cast<const SwTextFootnote*>(pFndTextAttr);

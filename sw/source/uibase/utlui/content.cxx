@@ -4761,7 +4761,7 @@ void SwContentTree::UpdateTracking()
             return;
         }
         // footnotes and endnotes
-        if (SwContentAtPos aContentAtPos(IsAttrAtPos::Ftn);
+        if (SwContentAtPos aContentAtPos(IsAttrAtPos::Footnote);
                 m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos)
                 && aContentAtPos.pFndTextAttr &&
                 !(m_bIsRoot && (m_nRootType != ContentTypeId::FOOTNOTE &&
@@ -5224,7 +5224,7 @@ bool SwContentTree::IsSelectedEntryCurrentDocCursorPosition(const weld::TreeIter
         return false;
     }
     // footnotes and endnotes
-    if (SwContentAtPos aContentAtPos(IsAttrAtPos::Ftn);
+    if (SwContentAtPos aContentAtPos(IsAttrAtPos::Footnote);
         m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos)
         && aContentAtPos.pFndTextAttr)
     {
