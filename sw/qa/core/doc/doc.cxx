@@ -714,6 +714,31 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testEditListAutofmt)
                 "color", u"00000000");
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testInsThenDelRejectUndo)
+{
+    // Given a document with an outer insert redline and an inner delete redline:
+    createSwDoc("ins-then-del.docx");
+
+    // When rejecting the insert, undo, then re-rejecting:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->RejectRedline(0);
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rRedlines.size());
+    pWrtShell->Undo();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->RejectRedline(0);
+
+    // Then make sure that the reject of insert also gets rid of the delete on top of it:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 2
+    // i.e. initially the doc had no redlines after insert, but undo + doing it again resulted in
+    // redlines, which is inconsistent.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rRedlines.size());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
