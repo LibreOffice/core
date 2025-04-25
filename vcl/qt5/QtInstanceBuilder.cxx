@@ -112,6 +112,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"modules/spropctrlr/ui/taborder.ui"_ustr,
         u"modules/swriter/ui/authenticationsettingsdialog.ui"_ustr,
         u"modules/swriter/ui/columnwidth.ui"_ustr,
+        u"modules/swriter/ui/editcategories.ui"_ustr,
         u"modules/swriter/ui/endnotepage.ui"_ustr,
         u"modules/swriter/ui/footendnotedialog.ui"_ustr,
         u"modules/swriter/ui/footnotepage.ui"_ustr,
