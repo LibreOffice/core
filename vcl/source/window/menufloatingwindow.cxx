@@ -92,7 +92,7 @@ void MenuFloatingWindow::doShutdown()
     }
 
     // free the reference to the accessible component
-    SetAccessible( css::uno::Reference< css::accessibility::XAccessible >() );
+    SetAccessible({});
 
     aHighlightChangedTimer.Stop();
 

@@ -871,7 +871,7 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
         if ( pOldWindow )
         {
             CallEventListeners( VclEventId::WindowMenubarRemoved, static_cast<void*>(pOldMenuBar) );
-            pOldWindow->SetAccessible( css::uno::Reference< css::accessibility::XAccessible >() );
+            pOldWindow->SetAccessible({});
         }
         if ( pMenuBar )
         {
