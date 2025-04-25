@@ -877,7 +877,7 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
         {
             SAL_WARN_IF( pMenuBar->m_pWindow, "vcl", "SystemWindow::SetMenuBar() - MenuBars can only set in one SystemWindow at time" );
 
-            pNewWindow = MenuBar::ImplCreate(mpWindowImpl->mpBorderWindow, pOldWindow, pMenuBar);
+            pNewWindow = pMenuBar->ImplCreate(mpWindowImpl->mpBorderWindow, pOldWindow);
             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetMenuBarWindow(pNewWindow);
 
             CallEventListeners( VclEventId::WindowMenubarAdded, static_cast<void*>(pMenuBar) );
@@ -893,7 +893,7 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
                 if( mpImplData->mpTaskPaneList )
                     mpImplData->mpTaskPaneList->RemoveWindow( pOldWindow );
             }
-            MenuBar::ImplDestroy( pOldMenuBar, bDelete );
+            pOldMenuBar->ImplDestroy(bDelete);
             if( bDelete )
                 pOldWindow = nullptr;  // will be deleted in MenuBar::ImplDestroy,
         }

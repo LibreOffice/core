@@ -425,8 +425,8 @@ class VCL_DLLPUBLIC MenuBar final : public Menu
     friend class MenuBarWindow;
     friend class SystemWindow;
 
-    SAL_DLLPRIVATE static VclPtr<MenuBarWindow> ImplCreate(vcl::Window* pParent, MenuBarWindow* pWindow, MenuBar* pMenu);
-    SAL_DLLPRIVATE static void ImplDestroy(MenuBar* pMenu, bool bDelete);
+    SAL_DLLPRIVATE VclPtr<MenuBarWindow> ImplCreate(vcl::Window* pParent, MenuBarWindow* pWindow);
+    SAL_DLLPRIVATE void ImplDestroy(bool bDelete);
     SAL_DLLPRIVATE bool ImplHandleKeyEvent(const KeyEvent& rKEvent);
     SAL_DLLPRIVATE bool ImplHandleCmdEvent(const CommandEvent& rCEvent);
 

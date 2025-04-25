@@ -2452,7 +2452,7 @@ MenuBar::~MenuBar()
 
 void MenuBar::dispose()
 {
-    ImplDestroy( this, true );
+    ImplDestroy(true);
     Menu::dispose();
 }
 
@@ -2508,7 +2508,7 @@ void MenuBar::SetDisplayable( bool bDisplayable )
     }
 }
 
-VclPtr<MenuBarWindow> MenuBar::ImplCreate(vcl::Window* pParent, MenuBarWindow* pWindow, MenuBar* pMenu)
+VclPtr<MenuBarWindow> MenuBar::ImplCreate(vcl::Window* pParent, MenuBarWindow* pWindow)
 {
     VclPtr<MenuBarWindow> pMenuBarWindow = pWindow;
     if (!pMenuBarWindow)
@@ -2516,14 +2516,14 @@ VclPtr<MenuBarWindow> MenuBar::ImplCreate(vcl::Window* pParent, MenuBarWindow* p
         pMenuBarWindow = VclPtr<MenuBarWindow>::Create(pParent);
     }
 
-    pMenu->pStartedFrom = nullptr;
-    pMenu->m_pWindow = pMenuBarWindow;
-    pMenuBarWindow->SetMenu(pMenu);
-    tools::Long nHeight = pMenu->ImplCalcSize(pMenuBarWindow).Height();
+    pStartedFrom = nullptr;
+    m_pWindow = pMenuBarWindow;
+    pMenuBarWindow->SetMenu(this);
+    tools::Long nHeight = ImplCalcSize(pMenuBarWindow).Height();
 
     // depending on the native implementation or the displayable flag
     // the menubar windows is suppressed (ie, height=0)
-    if (!pMenu->IsDisplayable() || (pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar()))
+    if (!IsDisplayable() || (ImplGetSalMenu() && ImplGetSalMenu()->VisibleMenuBar()))
     {
         nHeight = 0;
     }
@@ -2532,17 +2532,18 @@ VclPtr<MenuBarWindow> MenuBar::ImplCreate(vcl::Window* pParent, MenuBarWindow* p
     return pMenuBarWindow;
 }
 
-void MenuBar::ImplDestroy( MenuBar* pMenu, bool bDelete )
+void MenuBar::ImplDestroy(bool bDelete)
 {
-    MenuBarWindow* pMenuWin = pMenu->getMenuBarWindow();
+    MenuBarWindow* pMenuWin = getMenuBarWindow();
     if (pMenuWin && bDelete)
     {
         pMenuWin->KillActivePopup();
         pMenuWin->disposeOnce();
     }
-    pMenu->m_pWindow = nullptr;
-    if (pMenu->mpSalMenu) {
-        pMenu->mpSalMenu->ShowMenuBar(false);
+    m_pWindow = nullptr;
+    if (mpSalMenu)
+    {
+        mpSalMenu->ShowMenuBar(false);
     }
 }
 
