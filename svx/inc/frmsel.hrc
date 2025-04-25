@@ -39,19 +39,6 @@ std::pair<TranslateId, sal_uInt16> RID_SVXSTR_FRMSEL_TEXTS[] =
     { NC_("RID_SVXSTR_FRMSEL_TEXTS", "Diagonal border line from bottom left to top right") , 8 },
 };
 
-std::pair<TranslateId, sal_uInt16> RID_SVXSTR_FRMSEL_DESCRIPTIONS[] =
-{
-    { NC_("RID_SVXSTR_FRMSEL_DESCRIPTIONS", "Border setting") , 0 },
-    { NC_("RID_SVXSTR_FRMSEL_DESCRIPTIONS", "Left border line") , 1 },
-    { NC_("RID_SVXSTR_FRMSEL_DESCRIPTIONS", "Right border line") , 2 },
-    { NC_("RID_SVXSTR_FRMSEL_DESCRIPTIONS", "Top border line") , 3 },
-    { NC_("RID_SVXSTR_FRMSEL_DESCRIPTIONS", "Bottom border line") , 4 },
-    { NC_("RID_SVXSTR_FRMSEL_DESCRIPTIONS", "Horizontal border line") , 5 },
-    { NC_("RID_SVXSTR_FRMSEL_DESCRIPTIONS", "Vertical border line") , 6 },
-    { NC_("RID_SVXSTR_FRMSEL_DESCRIPTIONS", "Diagonal border line from top left to bottom right") , 7 },
-    { NC_("RID_SVXSTR_FRMSEL_DESCRIPTIONS", "Diagonal border line from bottom left to top right") , 8 },
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

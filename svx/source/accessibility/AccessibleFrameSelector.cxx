@@ -90,7 +90,7 @@ OUString AccFrameSelector::getAccessibleDescription(  )
 {
     SolarMutexGuard aGuard;
     IsValid();
-    return SvxResId(RID_SVXSTR_FRMSEL_DESCRIPTIONS[0].first);
+    return OUString();
 }
 
 OUString AccFrameSelector::getAccessibleName(  )
@@ -265,7 +265,7 @@ OUString AccFrameSelectorChild::getAccessibleDescription(  )
 {
     SolarMutexGuard aGuard;
     IsValid();
-    return SvxResId(RID_SVXSTR_FRMSEL_DESCRIPTIONS[static_cast<sal_uInt32>(meBorder)].first);
+    return OUString();
 }
 
 OUString AccFrameSelectorChild::getAccessibleName(  )
