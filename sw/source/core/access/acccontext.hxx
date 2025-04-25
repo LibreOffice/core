@@ -325,7 +325,7 @@ public:
     vcl::Window* GetAdditionalAccessibleChild( const sal_Int32 nIndex );
 
     // #i88070# - get all additional accessible children
-    void GetAdditionalAccessibleChildren( std::vector< vcl::Window* >* pChildren );
+    std::vector<vcl::Window*> GetAdditionalAccessibleChildren();
 
     const OUString& GetName() const { return m_sName; }
 

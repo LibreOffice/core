@@ -99,8 +99,7 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
                 if ( pAccImpl &&
                      pAccImpl->HasAdditionalAccessibleChildren() )
                 {
-                    std::vector< vcl::Window* > aAdditionalChildren;
-                    pAccImpl->GetAdditionalAccessibleChildren( &aAdditionalChildren );
+                    std::vector<vcl::Window*> aAdditionalChildren = pAccImpl->GetAdditionalAccessibleChildren();
 
                     sal_Int32 nCounter( 0 );
                     for ( const auto& rpChild : aAdditionalChildren )

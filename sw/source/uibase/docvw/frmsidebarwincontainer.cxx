@@ -150,10 +150,9 @@ sw::annotation::SwAnnotationWin* SwFrameSidebarWinContainer::get( const SwFrame&
     return pRet;
 }
 
-void SwFrameSidebarWinContainer::getAll( const SwFrame& rFrame,
-                                       std::vector< vcl::Window* >* pSidebarWins )
+std::vector<vcl::Window*> SwFrameSidebarWinContainer::getAll(const SwFrame& rFrame)
 {
-    pSidebarWins->clear();
+    std::vector<vcl::Window*> aSidebarWins;
 
     FrameKey aFrameKey( &rFrame );
     FrameSidebarWinContainer::iterator aFrameIter = mpFrameSidebarWinContainer->find( aFrameKey );
@@ -162,9 +161,11 @@ void SwFrameSidebarWinContainer::getAll( const SwFrame& rFrame,
         SidebarWinContainer& rSidebarWinContainer = (*aFrameIter).second;
         for ( const auto& rEntry : rSidebarWinContainer )
         {
-            pSidebarWins->push_back( rEntry.second );
+            aSidebarWins.push_back(rEntry.second);
         }
     }
+
+    return aSidebarWins;
 }
 
 } // eof of namespace sw::sidebarwindows

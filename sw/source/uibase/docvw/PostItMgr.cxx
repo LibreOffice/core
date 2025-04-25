@@ -2737,13 +2737,12 @@ vcl::Window* SwPostItMgr::GetSidebarWinForFrameByIndex( const SwFrame& rFrame,
     return pSidebarWin;
 }
 
-void SwPostItMgr::GetAllSidebarWinForFrame( const SwFrame& rFrame,
-                                          std::vector< vcl::Window* >* pChildren )
+std::vector<vcl::Window*> SwPostItMgr::GetAllSidebarWinForFrame(const SwFrame& rFrame)
 {
     if ( mpFrameSidebarWinContainer != nullptr )
-    {
-        mpFrameSidebarWinContainer->getAll( rFrame, pChildren );
-    }
+        return mpFrameSidebarWinContainer->getAll(rFrame);
+
+    return {};
 }
 
 void SwPostItMgr::ShowHideResolvedNotes(bool visible) {

@@ -245,8 +245,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener,
         bool HasFrameConnectedSidebarWins( const SwFrame& rFrame );
         vcl::Window* GetSidebarWinForFrameByIndex( const SwFrame& rFrame,
                                             const sal_Int32 nIndex );
-        void GetAllSidebarWinForFrame( const SwFrame& rFrame,
-                                     std::vector< vcl::Window* >* pChildren );
+        std::vector<vcl::Window*> GetAllSidebarWinForFrame(const SwFrame& rFrame);
 
         void DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage);
         void PaintTile(OutputDevice& rRenderContext);

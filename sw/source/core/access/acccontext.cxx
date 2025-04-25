@@ -1442,16 +1442,18 @@ vcl::Window* SwAccessibleContext::GetAdditionalAccessibleChild( const sal_Int32 
 }
 
 /** #i88070# - get all additional accessible children */
-void SwAccessibleContext::GetAdditionalAccessibleChildren( std::vector< vcl::Window* >* pChildren )
+std::vector<vcl::Window*> SwAccessibleContext::GetAdditionalAccessibleChildren()
 {
     if ( GetFrame()->IsTextFrame() )
     {
         SwPostItMgr* pPostItMgr = GetMap()->GetShell().GetPostItMgr();
         if ( pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
         {
-            pPostItMgr->GetAllSidebarWinForFrame( *(GetFrame()), pChildren );
+            return pPostItMgr->GetAllSidebarWinForFrame(*(GetFrame()));
         }
     }
+
+    return {};
 }
 
 bool SwAccessibleContext::SetSelectedState(bool const bSelected)

@@ -50,8 +50,7 @@ class SwFrameSidebarWinContainer
         sw::annotation::SwAnnotationWin* get( const SwFrame& rFrame,
                            const sal_Int32 nIndex );
 
-        void getAll( const SwFrame& rFrame,
-                     std::vector< vcl::Window* >* pSidebarWins );
+        std::vector<vcl::Window*> getAll(const SwFrame& rFrame);
 
     private:
         std::unique_ptr<FrameSidebarWinContainer> mpFrameSidebarWinContainer;
