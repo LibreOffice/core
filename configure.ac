@@ -11463,6 +11463,7 @@ if test "$COM" = "MSC"; then # override the above
     HARFBUZZ_LIBS='$(gb_UnpackedTarball_workdir)/harfbuzz/builddir/src/libharfbuzz.a $(GRAPHITE_LIBS)'
 fi
 
+MESON_NO_PYTHON=
 if test "$with_system_harfbuzz" = "yes"; then
     if test "$with_system_graphite" = "no"; then
         AC_MSG_ERROR([--with-system-graphite must be used when --with-system-harfbuzz is used])
@@ -11489,8 +11490,7 @@ else
     fi
     if test -z "$PYTHON_FOR_BUILD"; then
         if test "$(basename $MESON)" = "$(basename -s .py $MESON)"; then
-            AC_MSG_WARN([using internal python with a meson launcher might not work, best to use MESON=/path/to/meson.py in autogen.input])
-            add_warning "using internal python with a meson launcher might not work, best to use MESON=/path/to/meson.py in autogen.input"
+            MESON_NO_PYTHON=TRUE
         fi
     else
         AC_MSG_CHECKING([whether meson can be run with "$PYTHON_FOR_BUILD $MESON"])
@@ -11502,6 +11502,7 @@ else
         fi
     fi
 fi
+AC_SUBST(MESON_NO_PYTHON)
 if test -z "$NINJA" || test "$NINJA" = 'assumed to be available from Visual Studio'; then
     x_NINJA=[\#]
 else
