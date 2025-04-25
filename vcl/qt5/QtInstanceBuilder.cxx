@@ -81,6 +81,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"cui/ui/qrcodegen.ui"_ustr,
         u"cui/ui/querydialog.ui"_ustr,
         u"cui/ui/securityoptionsdialog.ui"_ustr,
+        u"cui/ui/selectpathdialog.ui"_ustr,
         u"cui/ui/spelloptionsdialog.ui"_ustr,
         u"cui/ui/splitcellsdialog.ui"_ustr,
         u"cui/ui/tipofthedaydialog.ui"_ustr,
