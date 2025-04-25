@@ -806,11 +806,24 @@ void QtInstanceTreeView::make_unsorted()
 
 bool QtInstanceTreeView::get_sort_order() const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    SolarMutexGuard g;
+
+    bool bAscending = true;
+    GetQtInstance().RunInMainThread(
+        [&] { bAscending = m_pModel->sortOrder() == Qt::AscendingOrder; });
+
+    return bAscending;
 }
 
-void QtInstanceTreeView::set_sort_order(bool) { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::set_sort_order(bool bAscending)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        const Qt::SortOrder eOrder = bAscending ? Qt::AscendingOrder : Qt::DescendingOrder;
+        m_pModel->sort(m_pModel->sortColumn(), eOrder);
+    });
+}
 
 void QtInstanceTreeView::set_sort_indicator(TriState, int)
 {
