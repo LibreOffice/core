@@ -179,17 +179,17 @@ void OP_ColumnWidth(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 
     nCol = rContext.rDoc.SanitizeCol(nCol);
 
-    sal_uInt16 nBreite;
+    sal_uInt16 nWidth;
     if( nWidthSpaces )
         // assuming 10cpi character set
-        nBreite = static_cast<sal_uInt16>( TWIPS_PER_CHAR * nWidthSpaces );
+        nWidth = static_cast<sal_uInt16>( TWIPS_PER_CHAR * nWidthSpaces );
     else
     {
         rContext.rDoc.SetColHidden(nCol, nCol, 0, true);
-        nBreite = nDefWidth;
+        nWidth = nDefWidth;
     }
 
-    rContext.rDoc.SetColWidth(nCol, 0, nBreite);
+    rContext.rDoc.SetColWidth(nCol, 0, nWidth);
 }
 
 void OP_NamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
