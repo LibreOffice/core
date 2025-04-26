@@ -56,6 +56,10 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const O
             nPos = m_pModel->rowCount(aParentIndex);
         m_pModel->insertRow(nPos, aParentIndex);
 
+        // ensure parent has same column count as top-level
+        if (aParentIndex.isValid() && m_pModel->columnCount(aParentIndex) == 0)
+            m_pModel->insertColumns(0, m_pModel->columnCount(), aParentIndex);
+
         const QModelIndex aIndex = modelIndex(nPos, 0, aParentIndex);
         QStandardItem* pItem = itemFromIndex(aIndex);
         if (pStr)
