@@ -237,7 +237,7 @@ namespace logging
             }
 
             // ISO 8601
-            char buffer[ SAL_N_ELEMENTS("-32768-65535-65535T65535:65535:65535.4294967295") ];
+            char buffer[ std::size("-32768-65535-65535T65535:65535:65535.4294967295") ];
             const size_t buffer_size = sizeof( buffer );
             snprintf( buffer, buffer_size, "%04i-%02u-%02uT%02u:%02u:%02u.%09" SAL_PRIuUINT32,
                 static_cast<int>(record.LogTime.Year),

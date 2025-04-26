@@ -107,7 +107,7 @@ namespace pcr
             { "com.sun.star.form.inspection.FormGeometryHandler", true }
         };
 
-        sal_Int32 nFactories = SAL_N_ELEMENTS( aFactories );
+        sal_Int32 nFactories = std::size( aFactories );
         Sequence< Any > aReturn( nFactories );
         Any* pReturn = aReturn.getArray();
         for ( sal_Int32 i = 0; i < nFactories; ++i )
@@ -137,7 +137,7 @@ namespace pcr
             { "Events",     RID_STR_EVENTS,             HID_FM_PROPDLG_TAB_EVT }
         };
 
-        sal_Int32 nCategories = SAL_N_ELEMENTS( aCategories );
+        sal_Int32 nCategories = std::size( aCategories );
         Sequence< PropertyCategoryDescriptor > aReturn( nCategories );
         PropertyCategoryDescriptor* pReturn = aReturn.getArray();
         for ( sal_Int32 i=0; i<nCategories; ++i, ++pReturn )
