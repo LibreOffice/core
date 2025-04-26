@@ -201,11 +201,11 @@ public:
     using QtInstanceWidget::get_sensitive;
 
 private:
-    QModelIndex modelIndex(int nRow, int nCol = 0) const;
+    QModelIndex modelIndex(int nRow, int nCol = 0,
+                           const QModelIndex& rParentIndex = QModelIndex()) const;
     QModelIndex modelIndex(const weld::TreeIter& rIter, int nCol = 0) const;
-    QtInstanceTreeIter treeIter(int nRow) const;
+    QtInstanceTreeIter treeIter(int nRow, const QModelIndex& rParentIndex = QModelIndex()) const;
     QStandardItem* itemFromIndex(const QModelIndex& rIndex) const;
-    QModelIndex toggleButtonModelIndex(int nRow) const;
     QModelIndex toggleButtonModelIndex(const weld::TreeIter& rIter) const;
     QModelIndex firstTextColumnModelIndex(const weld::TreeIter& rIter) const;
     static QAbstractItemView::SelectionMode mapSelectionMode(SelectionMode eMode);

@@ -42,22 +42,21 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const O
                                 VirtualDevice* pImageSurface, bool bChildrenOnDemand,
                                 weld::TreeIter* pRet)
 {
-    // Only specific subset of parameters handled so far;
-    // assert only these are used at the moment and implement remaining cases
-    // when needed to support more dialogs, then adjust/remove asserts below
-    assert(!pParent && "Not implemented yet");
     assert(!bChildrenOnDemand && "Not implemented yet");
     // avoid -Werror=unused-parameter for release build
-    (void)pParent;
     (void)bChildrenOnDemand;
 
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] {
-        if (nPos == -1)
-            nPos = m_pModel->rowCount();
-        m_pModel->insertRow(nPos);
+        const QModelIndex aParentIndex
+            = pParent ? static_cast<const QtInstanceTreeIter*>(pParent)->modelIndex()
+                      : QModelIndex();
 
-        const QModelIndex aIndex = modelIndex(nPos);
+        if (nPos == -1)
+            nPos = m_pModel->rowCount(aParentIndex);
+        m_pModel->insertRow(nPos, aParentIndex);
+
+        const QModelIndex aIndex = modelIndex(nPos, 0, aParentIndex);
         QStandardItem* pItem = itemFromIndex(aIndex);
         if (pStr)
             pItem->setText(toQString(*pStr));
@@ -70,7 +69,7 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const O
             pItem->setIcon(toQPixmap(*pImageSurface));
 
         if (m_bExtraToggleButtonColumnEnabled)
-            itemFromIndex(toggleButtonModelIndex(nPos))->setCheckable(true);
+            itemFromIndex(toggleButtonModelIndex(QtInstanceTreeIter(aIndex)))->setCheckable(true);
 
         if (pRet)
             static_cast<QtInstanceTreeIter*>(pRet)->setModelIndex(aIndex);
@@ -971,9 +970,10 @@ QAbstractItemView::SelectionMode QtInstanceTreeView::mapSelectionMode(SelectionM
     }
 }
 
-QModelIndex QtInstanceTreeView::modelIndex(int nRow, int nCol) const
+QModelIndex QtInstanceTreeView::modelIndex(int nRow, int nCol,
+                                           const QModelIndex& rParentIndex) const
 {
-    return modelIndex(treeIter(nRow), nCol);
+    return modelIndex(treeIter(nRow, rParentIndex), nCol);
 }
 
 QModelIndex QtInstanceTreeView::modelIndex(const weld::TreeIter& rIter, int nCol) const
@@ -985,20 +985,15 @@ QModelIndex QtInstanceTreeView::modelIndex(const weld::TreeIter& rIter, int nCol
     return m_pModel->index(aModelIndex.row(), nCol, aModelIndex.parent());
 }
 
-QtInstanceTreeIter QtInstanceTreeView::treeIter(int nRow) const
+QtInstanceTreeIter QtInstanceTreeView::treeIter(int nRow, const QModelIndex& rParentIndex) const
 {
-    return QtInstanceTreeIter(m_pModel->index(nRow, 0));
+    return QtInstanceTreeIter(m_pModel->index(nRow, 0, rParentIndex));
 }
 
 QStandardItem* QtInstanceTreeView::itemFromIndex(const QModelIndex& rIndex) const
 {
     const QModelIndex aSourceIndex = m_pModel->mapToSource(rIndex);
     return m_pSourceModel->itemFromIndex(aSourceIndex);
-}
-
-QModelIndex QtInstanceTreeView::toggleButtonModelIndex(int nRow) const
-{
-    return toggleButtonModelIndex(treeIter(nRow));
 }
 
 QModelIndex QtInstanceTreeView::toggleButtonModelIndex(const weld::TreeIter& rIter) const
