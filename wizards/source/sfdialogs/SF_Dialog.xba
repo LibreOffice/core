@@ -143,7 +143,9 @@ Private _MouseCounter		As Integer		&apos; Counts the number of events set on the
 Private _MouseMotionListener As Object		&apos; com.sun.star.awt.XMouseMotionListener
 Private _OnMouseDragged		As String		&apos; Script to invoke when mouse is dragged from the dialog
 Private _OnMouseMoved		As String		&apos; Script to invoke when mouse is moved across the dialog
-Private _MouseMotionCounter	As Integer	&apos; Counts the number of events set on the listener
+Private _MouseMotionCounter	As Integer		&apos; Counts the number of events set on the listener
+&apos; ---
+Private _TopWindowListener	As Object		&apos; com.sun.star.awt.XTopWindowListener
 
 &apos;	Persistent storage for controls
 Private _ControlCache		As Variant		&apos; Array of control objects sorted like ElementNames of the Dialog model
@@ -2050,7 +2052,6 @@ Public Function Execute(Optional ByVal Modal As Variant) As Long
 &apos;&apos;&apos;			Select Case lReturn
 
 Dim lExecute As Long			&apos;	Return value
-Dim oListener As Object			&apos;	com.sun.star.awt.XTopWindowListener
 Const cstThisSub = &quot;SFDialogs.Dialog.Execute&quot;
 Const cstSubArgs = &quot;[Modal=True]&quot;
 
@@ -2083,10 +2084,12 @@ Try:
 		&apos;	To make visible an on-the-fly designed dialog when macro triggered from Python
 		_DialogModel.DesktopAsParent = Not ( _BuiltFromScratch And _BuiltInPython )
 		_DialogControl.setVisible(True)
-		&apos;	Watch the window Close button
-		Set oListener = CreateUnoListener(&quot;SFDialogs.SF_DialogListener._SFNONMODAL_&quot; _
-											, &quot;com.sun.star.awt.XTopWindowListener&quot;)
-		_DialogControl.addTopWindowListener(oListener)
+		&apos;	Watch the window Close button - not to be done for stored dialogs
+		If _BuiltFromScratch Then
+			Set _TopWindowListener = CreateUnoListener(&quot;SFDialogs.SF_DialogListener._SFNONMODAL_&quot; _
+												, &quot;com.sun.star.awt.XTopWindowListener&quot;)
+			_DialogControl.addTopWindowListener(_TopWindowListener)
+		End If
 		lExecute = 0
 	End If
 
@@ -3328,6 +3331,9 @@ Try:
 	Set _KeyListener = Nothing
 	Set _MouseListener = Nothing
 	Set _MouseMotionListener = Nothing
+
+	&apos;	Clean close listener for non-modal dialog
+	If Not IsNull(_TopWindowListener) Then _DialogControl.removeTopWindowListener(_TopWindowListener)
 
 Finally:
 	Exit Sub	

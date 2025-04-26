@@ -364,28 +364,25 @@ Try:
 	With _SF_
 		bConsoleActive = False
 		If Not IsNull(.ConsoleDialog) Then bConsoleActive = .ConsoleDialog._IsStillAlive(False)		&apos;	False to not raise an error
-		If bConsoleActive And Modal = False Then
-			&apos;	Bring to front
-			.ConsoleDialog.Activate()
-		Else
-			&apos;	Initialize dialog and fill with actual data
-			&apos;	The dual modes (modal and non-modal) require to have 2 close buttons o/w only 1 is visible
-			&apos;		- a usual OK button
-			&apos;		- a Default button triggering the Close action
-			Set .ConsoleDialog = CreateScriptService(&quot;SFDialogs.Dialog&quot;, &quot;GlobalScope&quot;, &quot;ScriptForge&quot;, &quot;dlgConsole&quot;, _Context)
-			&apos;	Setup labels and visibility
-			Set oModalBtn = .ConsoleDialog.Controls(&quot;CloseModalButton&quot;)
-			Set oNonModalBtn = .ConsoleDialog.Controls(&quot;CloseNonModalButton&quot;)
-			oModalBtn.Visible = Modal
-			oNonModalBtn.Visible = CBool(Not Modal)
-			&apos;	Load console lines
-			_ConsoleRefresh()
-			.ConsoleDialog.Execute(Modal)
-			&apos;	Terminate the modal dialog
-			If Modal Then
-				Set .ConsoleControl = .ConsoleControl.Dispose()
-				.ConsoleDialog.Terminate()
-			End If
+		If bConsoleActive And Modal = False Then _CloseConsole()
+
+		&apos;	Initialize dialog and fill with actual data
+		&apos;	The dual modes (modal and non-modal) require to have 2 close buttons o/w only 1 is visible
+		&apos;		- a usual OK button
+		&apos;		- a Default button triggering the Close action
+		Set .ConsoleDialog = CreateScriptService(&quot;SFDialogs.Dialog&quot;, &quot;GlobalScope&quot;, &quot;ScriptForge&quot;, &quot;dlgConsole&quot;, _Context)
+		&apos;	Setup labels and visibility
+		Set oModalBtn = .ConsoleDialog.Controls(&quot;CloseModalButton&quot;)
+		Set oNonModalBtn = .ConsoleDialog.Controls(&quot;CloseNonModalButton&quot;)
+		oModalBtn.Visible = Modal
+		oNonModalBtn.Visible = CBool(Not Modal)
+		&apos;	Load console lines
+		_ConsoleRefresh()
+		.ConsoleDialog.Execute(Modal)
+		&apos;	Terminate the modal dialog
+		If Modal Then
+			Set .ConsoleControl = .ConsoleControl.Dispose()
+			.ConsoleDialog.Terminate()
 		End If
 	End With
 
@@ -1306,8 +1303,9 @@ Try:
 	With _SF_
 		If Not IsNull(.ConsoleDialog) Then
 			If .ConsoleDialog._IsStillAlive(False) Then		&apos;	False to not raise an error
-				Set .ConsoleControl = .ConsoleControl.Dispose()
-				Set .ConsoleDialog = .ConsoleDialog.Dispose()
+				.ConsoleDialog.Terminate()
+				Set .ConsoleControl = Nothing
+				Set .ConsoleDialog = Nothing
 			End If
 		End If
 	End With
