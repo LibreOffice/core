@@ -1165,7 +1165,8 @@ Try:
 	With oDialog
 		If Not IsNull(oDialog) Then
 			If Len(Title) = 0 And Len(Text) = 0 And Percentage = -1 Then
-				Set oDialog = .Dispose()
+				.Terminate()
+				Set oDialog = Nothing
 			Else
 				.Caption = Iif(Len(Title) &gt; 0, Title, &quot;ScriptForge&quot;)
 				If bFirstCall Then
