@@ -275,11 +275,11 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
 
 void ScDBFunc::ToggleAutoFilter()
 {
-    ScViewData* pViewData = &GetViewData();
-    ScDocShell* pDocSh = pViewData->GetDocShell();
+    ScViewData& rViewData = GetViewData();
+    ScDocShell* pDocSh = rViewData.GetDocShell();
 
     ScQueryParam    aParam;
-    ScDocument&     rDoc    = pViewData->GetDocument();
+    ScDocument&     rDoc    = rViewData.GetDocument();
     ScDBData*       pDBData = GetDBData(false, SC_DB_AUTOFILTER, ScGetDBSelection::RowDown);
 
     pDBData->SetByRow( true );              //! undo, retrieve beforehand ??
@@ -287,7 +287,7 @@ void ScDBFunc::ToggleAutoFilter()
 
     SCCOL  nCol;
     SCROW  nRow = aParam.nRow1;
-    SCTAB  nTab = pViewData->GetTabNo();
+    SCTAB  nTab = rViewData.GetTabNo();
     ScMF   nFlag;
     bool   bHasAuto = true;
     bool   bHeader  = pDBData->HasHeader();
@@ -316,7 +316,7 @@ void ScDBFunc::ToggleAutoFilter()
         // use a list action for the AutoFilter buttons (ScUndoAutoFilter) and the filter operation
 
         OUString aUndo = ScResId( STR_UNDO_QUERY );
-        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pViewData->GetViewShell()->GetViewShellId() );
+        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, rViewData.GetViewShell()->GetViewShellId() );
 
         ScRange aRange;
         pDBData->GetArea( aRange );
@@ -339,7 +339,7 @@ void ScDBFunc::ToggleAutoFilter()
         {
             if (!bHeader)
             {
-                std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pViewData->GetDialogParent(),
+                std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(rViewData.GetDialogParent(),
                                                                                            VclMessageType::Question,
                                                                                            VclButtonsType::YesNo,
                                                                                            // header from first row?
@@ -347,21 +347,21 @@ void ScDBFunc::ToggleAutoFilter()
                 xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"
                 xBox->set_default_response(RET_YES);
                 xBox->SetInstallLOKNotifierHdl(LINK(this, ScDBFunc, InstallLOKNotifierHdl));
-                xBox->runAsync(xBox, [pDocSh, pViewData, pDBData, nRow, nTab, aParam] (sal_Int32 nResult) {
+                xBox->runAsync(xBox, [pDocSh, &rViewData, pDBData, nRow, nTab, aParam] (sal_Int32 nResult) {
                     if (nResult == RET_YES)
                     {
                         pDBData->SetHeader( true );     //! Undo ??
                     }
 
-                    ApplyAutoFilter(pDocSh, pViewData, pDBData, nRow, nTab, aParam);
+                    ApplyAutoFilter(pDocSh, rViewData, pDBData, nRow, nTab, aParam);
                 });
             }
             else
-                ApplyAutoFilter(pDocSh, pViewData, pDBData, nRow, nTab, aParam);
+                ApplyAutoFilter(pDocSh, rViewData, pDBData, nRow, nTab, aParam);
         }
         else
         {
-            std::shared_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pViewData->GetDialogParent(),
+            std::shared_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(rViewData.GetDialogParent(),
                                                            VclMessageType::Warning, VclButtonsType::Ok,
                                                            ScResId(STR_ERR_AUTOFILTER)));
             xErrorBox->SetInstallLOKNotifierHdl(LINK(this, ScDBFunc, InstallLOKNotifierHdl));
@@ -375,10 +375,10 @@ IMPL_STATIC_LINK_NOARG(ScDBFunc, InstallLOKNotifierHdl, void*, vcl::ILibreOffice
     return GetpApp();
 }
 
-void ScDBFunc::ApplyAutoFilter(ScDocShell* pDocSh, const ScViewData* pViewData, ScDBData* pDBData,
+void ScDBFunc::ApplyAutoFilter(ScDocShell* pDocSh, ScViewData& rViewData, ScDBData* pDBData,
                                SCROW nRow, SCTAB nTab, const ScQueryParam& aParam)
 {
-    ScDocument& rDoc = pViewData->GetDocument();
+    ScDocument& rDoc = rViewData.GetDocument();
     ScRange aRange;
     pDBData->GetArea(aRange);
     pDocSh->GetUndoManager()->AddUndoAction(
