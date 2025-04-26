@@ -996,7 +996,7 @@ private:
     double GetFDist(double x, double fF1, double fF2);
     double GetTDist( double T, double fDF, int nType );
     double Fakultaet(double x);
-    static double BinomKoeff(double n, double k);
+    static double BinomCoeff(double n, double k);
     double GetGamma(double x);
     static double GetLogGamma(double x);
     double GetBeta(double fAlpha, double fBeta);

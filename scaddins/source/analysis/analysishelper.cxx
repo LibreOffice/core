@@ -590,7 +590,7 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
 
 double BinomialCoefficient( double n, double k )
 {
-    // This method is a copy of BinomKoeff()
+    // This method is a copy of BinomCoeff()
     // found in sc/source/core/tool/interpr3.cxx
 
     double nVal = 0.0;

@@ -29,7 +29,7 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
     if (!pWriteAcc)
         return BitmapEx();
 
-    std::array<std::array<sal_Int32, 256>, 9> aKoeff;
+    std::array<std::array<sal_Int32, 256>, 9> aCoeff;
 
     // create LUT of products of matrix value and possible color component values
     for (sal_Int32 nY = 0; nY < 9; nY++)
@@ -37,7 +37,7 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
         for (sal_Int32 nX = 0, nTmp = 0, nMatrixVal = mrMatrix[nY]; nX < 256;
              nX++, nTmp += nMatrixVal)
         {
-            aKoeff[nY][nX] = nTmp;
+            aCoeff[nY][nX] = nTmp;
         }
     }
 
@@ -87,52 +87,52 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
         for (sal_Int32 nX = 0; nX < nWidth; nX++)
         {
             // first row
-            sal_Int32* pTmp = aKoeff[0].data();
+            sal_Int32* pTmp = aCoeff[0].data();
             BitmapColor* pColor = pRowTmp1 + nX;
             sal_Int32 nSumR = pTmp[pColor->GetRed()];
             sal_Int32 nSumG = pTmp[pColor->GetGreen()];
             sal_Int32 nSumB = pTmp[pColor->GetBlue()];
 
-            pTmp = aKoeff[1].data();
+            pTmp = aCoeff[1].data();
             nSumR += pTmp[(++pColor)->GetRed()];
             nSumG += pTmp[pColor->GetGreen()];
             nSumB += pTmp[pColor->GetBlue()];
 
-            pTmp = aKoeff[2].data();
+            pTmp = aCoeff[2].data();
             nSumR += pTmp[(++pColor)->GetRed()];
             nSumG += pTmp[pColor->GetGreen()];
             nSumB += pTmp[pColor->GetBlue()];
 
             // second row
-            pTmp = aKoeff[3].data();
+            pTmp = aCoeff[3].data();
             pColor = pRowTmp2 + nX;
             nSumR += pTmp[pColor->GetRed()];
             nSumG += pTmp[pColor->GetGreen()];
             nSumB += pTmp[pColor->GetBlue()];
 
-            pTmp = aKoeff[4].data();
+            pTmp = aCoeff[4].data();
             nSumR += pTmp[(++pColor)->GetRed()];
             nSumG += pTmp[pColor->GetGreen()];
             nSumB += pTmp[pColor->GetBlue()];
 
-            pTmp = aKoeff[5].data();
+            pTmp = aCoeff[5].data();
             nSumR += pTmp[(++pColor)->GetRed()];
             nSumG += pTmp[pColor->GetGreen()];
             nSumB += pTmp[pColor->GetBlue()];
 
             // third row
-            pTmp = aKoeff[6].data();
+            pTmp = aCoeff[6].data();
             pColor = pRowTmp3 + nX;
             nSumR += pTmp[pColor->GetRed()];
             nSumG += pTmp[pColor->GetGreen()];
             nSumB += pTmp[pColor->GetBlue()];
 
-            pTmp = aKoeff[7].data();
+            pTmp = aCoeff[7].data();
             nSumR += pTmp[(++pColor)->GetRed()];
             nSumG += pTmp[pColor->GetGreen()];
             nSumB += pTmp[pColor->GetBlue()];
 
-            pTmp = aKoeff[8].data();
+            pTmp = aCoeff[8].data();
             nSumR += pTmp[(++pColor)->GetRed()];
             nSumG += pTmp[pColor->GetGreen()];
             nSumB += pTmp[pColor->GetBlue()];

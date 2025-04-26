@@ -459,7 +459,7 @@ double ScInterpreter::Fakultaet(double x)
     return x;
 }
 
-double ScInterpreter::BinomKoeff(double n, double k)
+double ScInterpreter::BinomCoeff(double n, double k)
 {
     // this method has been duplicated as BinomialCoefficient()
     // in scaddins/source/analysis/analysishelper.cxx
@@ -1181,7 +1181,7 @@ void ScInterpreter::ScCombin()
         if (k < 0.0 || n < 0.0 || k > n)
             PushIllegalArgument();
         else
-            PushDouble(BinomKoeff(n, k));
+            PushDouble(BinomCoeff(n, k));
     }
 }
 
@@ -1194,7 +1194,7 @@ void ScInterpreter::ScCombinA()
         if (k < 0.0 || n < 0.0 || k > n)
             PushIllegalArgument();
         else
-            PushDouble(BinomKoeff(n + k - 1, k));
+            PushDouble(BinomCoeff(n + k - 1, k));
     }
 }
 
