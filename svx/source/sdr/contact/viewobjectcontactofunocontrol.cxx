@@ -280,7 +280,9 @@ namespace sdr::contact {
         const basegfx::B2DHomMatrix& _rViewTransformation, const ::basegfx::B2DHomMatrix& _rZoomLevelNormalization )
     {
         // In the LOK case, control geometry is handled by LokControlHandler
-        if (comphelper::LibreOfficeKit::isActive())
+        // except when the document is exported to PDF or printed,
+        // so we use isTiledPainting() in place of the more generic isActive()
+        if (comphelper::LibreOfficeKit::isTiledPainting())
             return;
 
         OSL_PRECOND( _rControl.is(), "UnoControlContactHelper::adjustControlGeometry_throw: illegal control!" );
