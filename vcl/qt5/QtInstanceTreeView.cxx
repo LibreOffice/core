@@ -374,16 +374,24 @@ bool QtInstanceTreeView::get_iter_first(weld::TreeIter& rIter) const
     return aIndex.isValid();
 }
 
-bool QtInstanceTreeView::iter_next_sibling(weld::TreeIter&) const
+bool QtInstanceTreeView::iter_next_sibling(weld::TreeIter& rIter) const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);
+    const QModelIndex aIndex = rQtIter.modelIndex();
+    const QModelIndex aSiblingIndex = m_pModel->sibling(aIndex.row() + 1, 0, aIndex);
+    rQtIter.setModelIndex(aSiblingIndex);
+
+    return aSiblingIndex.isValid();
 }
 
-bool QtInstanceTreeView::iter_previous_sibling(weld::TreeIter&) const
+bool QtInstanceTreeView::iter_previous_sibling(weld::TreeIter& rIter) const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);
+    const QModelIndex aIndex = rQtIter.modelIndex();
+    const QModelIndex aSiblingIndex = m_pModel->sibling(aIndex.row() - 1, 0, aIndex);
+    rQtIter.setModelIndex(aSiblingIndex);
+
+    return aSiblingIndex.isValid();
 }
 
 bool QtInstanceTreeView::iter_next(weld::TreeIter&) const
@@ -398,16 +406,22 @@ bool QtInstanceTreeView::iter_previous(weld::TreeIter&) const
     return false;
 }
 
-bool QtInstanceTreeView::iter_children(weld::TreeIter&) const
+bool QtInstanceTreeView::iter_children(weld::TreeIter& rIter) const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);
+    const QModelIndex aChildIndex = m_pModel->index(0, 0, rQtIter.modelIndex());
+    rQtIter.setModelIndex(aChildIndex);
+
+    return aChildIndex.isValid();
 }
 
-bool QtInstanceTreeView::iter_parent(weld::TreeIter&) const
+bool QtInstanceTreeView::iter_parent(weld::TreeIter& rIter) const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    QtInstanceTreeIter& rQtIter = static_cast<QtInstanceTreeIter&>(rIter);
+    const QModelIndex aParentIndex = rQtIter.modelIndex().parent();
+    rQtIter.setModelIndex(aParentIndex);
+
+    return aParentIndex.isValid();
 }
 
 int QtInstanceTreeView::get_iter_depth(const weld::TreeIter& rIter) const
