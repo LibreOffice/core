@@ -1527,6 +1527,38 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf60700_accelerators)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf60700_directories)
+{
+    createSwDoc();
+    save(mpFilter);
+
+    // There is no way to read the contents of Configurations2/ from a loaded document,
+    // because only UIConfigurationManager has a reference to it and there is no method
+    // to access that reference from outside the class. So, we inspect the zipfile
+    // directly.
+
+    uno::Sequence<uno::Any> aArgs{ uno::Any(maTempFile.GetURL()) };
+    uno::Reference<container::XNameAccess> xNameAccess(
+        m_xSFactory->createInstanceWithArguments(u"com.sun.star.packages.zip.ZipFileAccess"_ustr,
+                                                 aArgs),
+        uno::UNO_QUERY);
+    const css::uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
+
+    int nMatches = 0;
+    for (const OUString& sName : aNames)
+    {
+        OUString sRest;
+        if (sName.startsWith("Configurations2/", &sRest) && !sRest.isEmpty())
+        {
+            ++nMatches;
+        }
+    }
+
+    // There should be two elements ("accelerator", "images") within Configurations2/ on a fresh document.
+    CPPUNIT_ASSERT_EQUAL(2, nMatches);
+}
+
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

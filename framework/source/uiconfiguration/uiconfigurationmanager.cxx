@@ -163,10 +163,12 @@ private:
     {
         UIElementType() : bModified( false ),
                           bLoaded( false ),
+                          bShouldReloadRWOnStore( false ),
                           nElementType( css::ui::UIElementType::UNKNOWN ) {}
 
         bool                                                              bModified;
         bool                                                              bLoaded;
+        bool                                                              bShouldReloadRWOnStore;
         sal_Int16                                                         nElementType;
         UIElementDataHashMap                                              aElementsHashMap;
         css::uno::Reference< css::embed::XStorage > xStorage;
@@ -631,8 +633,6 @@ void UIConfigurationManager::impl_Initialize()
     // Initialize the top-level structures with the storage data
     if ( m_xDocConfigStorage.is() )
     {
-        tools::Long nModes = m_bReadOnly ? ElementModes::READ : ElementModes::READWRITE;
-
         // Try to access our module sub folder
         for ( sal_Int16 i = 1; i < css::ui::UIElementType::COUNT;
               i++ )
@@ -640,7 +640,7 @@ void UIConfigurationManager::impl_Initialize()
             Reference< XStorage > xElementTypeStorage;
             try
             {
-                xElementTypeStorage = m_xDocConfigStorage->openStorageElement( OUString(UIELEMENTTYPENAMES[i]), nModes );
+                xElementTypeStorage = m_xDocConfigStorage->openStorageElement( OUString(UIELEMENTTYPENAMES[i]), ElementModes::READ );
             }
             catch ( const css::container::NoSuchElementException& )
             {
@@ -660,6 +660,7 @@ void UIConfigurationManager::impl_Initialize()
 
             m_aUIElements[i].nElementType = i;
             m_aUIElements[i].bModified = false;
+            m_aUIElements[i].bShouldReloadRWOnStore = !m_bReadOnly;
             m_aUIElements[i].xStorage = std::move(xElementTypeStorage);
         }
     }
@@ -1286,8 +1287,30 @@ void SAL_CALL UIConfigurationManager::store()
         {
             UIElementType& rElementType = m_aUIElements[i];
 
-            if ( rElementType.bModified && rElementType.xStorage.is() )
-                impl_storeElementTypeData( rElementType.xStorage, rElementType );
+            if ( rElementType.bModified )
+            {
+                if ( rElementType.bShouldReloadRWOnStore )
+                {
+                    rElementType.bShouldReloadRWOnStore = false;
+                    rElementType.xStorage.clear();
+                    try
+                    {
+                        rElementType.xStorage = m_xDocConfigStorage->openStorageElement( OUString(UIELEMENTTYPENAMES[i]),
+                                                                                         ElementModes::READWRITE );
+                    }
+                    catch ( const Exception& )
+                    {
+                        rElementType.xStorage = m_xDocConfigStorage->openStorageElement( OUString(UIELEMENTTYPENAMES[i]),
+                                                                                        ElementModes::READ );
+                        throw;
+                    }
+                }
+                if ( rElementType.xStorage.is() )
+                {
+                    impl_storeElementTypeData( rElementType.xStorage, rElementType );
+                }
+
+            }
         }
         catch ( const Exception& )
         {
