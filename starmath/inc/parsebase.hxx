@@ -30,7 +30,7 @@
 #include <set>
 #include <utility>
 
-#define DEPTH_LIMIT 1024
+constexpr int DEPTH_LIMIT = 256 * 6;
 
 // Those are the errors that the parser may encounter.
 enum class SmParseError : uint_fast8_t
