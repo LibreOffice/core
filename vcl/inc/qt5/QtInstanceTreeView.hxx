@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "QtInstanceTreeIter.hxx"
 #include "QtInstanceWidget.hxx"
 
 #include <QtCore/QSortFilterProxyModel>
@@ -64,12 +65,12 @@ public:
     virtual void set_image(int nRow, VirtualDevice& rImage, int nCol = -1) override;
     virtual void set_image(int nRow, const css::uno::Reference<css::graphic::XGraphic>& rImage,
                            int nCol = -1) override;
-    virtual void set_text_emphasis(int row, bool bOn, int col) override;
-    virtual bool get_text_emphasis(int row, int col) const override;
-    virtual void set_text_align(int row, double fAlign, int col) override;
+    virtual void set_text_emphasis(int nRow, bool bOn, int nCol) override;
+    virtual bool get_text_emphasis(int nRow, int nCol) const override;
+    virtual void set_text_align(int nRow, double fAlign, int nCol) override;
     virtual void swap(int nPos1, int nPos2) override;
     virtual std::vector<int> get_selected_rows() const override;
-    virtual void set_font_color(int pos, const Color& rColor) override;
+    virtual void set_font_color(int nPos, const Color& rColor) override;
     virtual void scroll_to_row(int nRow) override;
     virtual bool is_selected(int nPos) const override;
     virtual int get_cursor_index() const override;
@@ -110,7 +111,7 @@ public:
     virtual void set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int nCol) override;
     virtual bool get_text_emphasis(const weld::TreeIter& rIter, int nCol) const override;
     virtual void set_text_align(const weld::TreeIter& rIter, double fAlign, int nCol) override;
-    virtual void set_toggle(const weld::TreeIter& rIter, TriState bOn, int nCol = -1) override;
+    virtual void set_toggle(const weld::TreeIter& rIter, TriState eState, int nCol = -1) override;
     virtual TriState get_toggle(const weld::TreeIter& rIter, int nCol = -1) const override;
     virtual OUString get_text(const weld::TreeIter& rIter, int nCol = -1) const override;
     virtual void set_id(const weld::TreeIter& rIter, const OUString& rId) override;
@@ -202,10 +203,11 @@ public:
 private:
     QModelIndex modelIndex(int nRow, int nCol = 0) const;
     QModelIndex modelIndex(const weld::TreeIter& rIter, int nCol = 0) const;
-    static int rowIndex(const weld::TreeIter& rIter);
+    QtInstanceTreeIter treeIter(int nRow) const;
     QStandardItem* itemFromIndex(const QModelIndex& rIndex) const;
     QModelIndex toggleButtonModelIndex(int nRow) const;
-    QModelIndex firstTextColumnModelIndex(int nRow) const;
+    QModelIndex toggleButtonModelIndex(const weld::TreeIter& rIter) const;
+    QModelIndex firstTextColumnModelIndex(const weld::TreeIter& rIter) const;
     static QAbstractItemView::SelectionMode mapSelectionMode(SelectionMode eMode);
 
     static Qt::CheckState toQtCheckState(TriState eTristate);
