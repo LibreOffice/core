@@ -299,12 +299,12 @@ void fillWithData(sal_uInt8* pData, BitmapEx const& rBitmapEx)
 
     sal_uInt8* p = pData;
 
-    for (tools::Long y = 0; y < aReadAccessBitmap->Height(); ++y)
+    for (tools::Long y = 0, nHeight = aReadAccessBitmap->Height(); y < nHeight; ++y)
     {
         Scanline dataBitmap = aReadAccessBitmap->GetScanline(y);
         Scanline dataAlpha = aReadAccessAlpha ? aReadAccessAlpha->GetScanline(y) : nullptr;
 
-        for (tools::Long x = 0; x < aReadAccessBitmap->Width(); ++x)
+        for (tools::Long x = 0, nWidth = aReadAccessBitmap->Width(); x < nWidth; ++x)
         {
             BitmapColor aColor = aReadAccessBitmap->GetPixelFromData(dataBitmap, x);
             sal_uInt8 aAlpha = dataAlpha ? aReadAccessAlpha->GetPixelFromData(dataAlpha, x).GetBlue() : 255;
@@ -564,10 +564,10 @@ void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparen
         {
             const double fOpNew(1.0 - fTransparence);
 
-            for(tools::Long y(0); y < pOld->Height(); y++)
+            for(tools::Long y(0),nHeight(pOld->Height()); y < nHeight; y++)
             {
                 Scanline pScanline = pOld->GetScanline( y );
-                for(tools::Long x(0); x < pOld->Width(); x++)
+                for(tools::Long x(0),nWidth(pOld->Width()); x < nWidth; x++)
                 {
                     const double fOpOld(pOld->GetIndexFromData(pScanline, x) * fFactor);
                     const sal_uInt8 aCol(basegfx::fround((fOpOld * fOpNew) * 255.0));
@@ -585,10 +585,10 @@ void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparen
             assert(pOld->Width() == pNew->Width() && pOld->Height() == pNew->Height() &&
                     "Alpha masks have different sizes (!)");
 
-            for(tools::Long y(0); y < pOld->Height(); y++)
+            for(tools::Long y(0),nHeight(pOld->Height()); y < nHeight; y++)
             {
                 Scanline pScanline = pOld->GetScanline( y );
-                for(tools::Long x(0); x < pOld->Width(); x++)
+                for(tools::Long x(0),nWidth(pOld->Width()); x < nWidth; x++)
                 {
                     const double fOpOld(pOld->GetIndexFromData(pScanline, x) * fFactor);
                     const double fOpNew(pNew->GetIndexFromData(pScanline, x) * fFactor);
@@ -1122,8 +1122,8 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, const Bitmap & aBitm
                 BitmapScopedReadAccess access(aBitmap);
                 o_rBack = access->GetColor(0,0);
                 bool foundSecondColor = false;;
-                for(tools::Long y = 0; y < access->Height(); ++y)
-                    for(tools::Long x = 0; x < access->Width(); ++x)
+                for(tools::Long y = 0, nHeight = access->Height(); y < nHeight; ++y)
+                    for(tools::Long x = 0, nWidth = access->Width(); x < nWidth; ++x)
                     {
                         if(!foundSecondColor)
                         {

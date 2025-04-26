@@ -220,7 +220,7 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
             bool bIsGrey = true;
 
             tools::Long nWidth = mpReadAccess->Width();
-            for ( tools::Long nY = 0; bIsGrey && ( nY < mpReadAccess->Height() ); nY++ )
+            for ( tools::Long nY = 0, nHeight = mpReadAccess->Height(); bIsGrey && ( nY < nHeight ); nY++ )
             {
                 BitmapColor aColor;
                 Scanline pScanlineRead = mpReadAccess->GetScanline( nY );

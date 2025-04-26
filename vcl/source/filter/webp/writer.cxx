@@ -140,12 +140,12 @@ static bool writeWebp(SvStream& rStream, const BitmapEx& bitmapEx, bool lossless
         data.resize(width * height * bpp);
         if (!bitmapAlpha.IsEmpty())
         {
-            for (tools::Long y = 0; y < access->Height(); ++y)
+            for (tools::Long y = 0, nHeight = access->Height(); y < nHeight; ++y)
             {
                 unsigned char* dst = data.data() + width * bpp * y;
                 const sal_uInt8* srcB = access->GetScanline(y);
                 const sal_uInt8* srcA = accessAlpha->GetScanline(y);
-                for (tools::Long x = 0; x < access->Width(); ++x)
+                for (tools::Long x = 0, nWidth = access->Width(); x < nWidth; ++x)
                 {
                     BitmapColor color = access->GetPixelFromData(srcB, x);
                     BitmapColor alpha = accessAlpha->GetPixelFromData(srcA, x);
@@ -160,11 +160,11 @@ static bool writeWebp(SvStream& rStream, const BitmapEx& bitmapEx, bool lossless
         }
         else
         {
-            for (tools::Long y = 0; y < access->Height(); ++y)
+            for (tools::Long y = 0, nHeight = access->Height(); y < nHeight; ++y)
             {
                 unsigned char* dst = data.data() + width * bpp * y;
                 const sal_uInt8* src = access->GetScanline(y);
-                for (tools::Long x = 0; x < access->Width(); ++x)
+                for (tools::Long x = 0, nWidth = access->Width(); x < nWidth; ++x)
                 {
                     Color color = access->GetPixelFromData(src, x);
                     dst[0] = color.GetRed();

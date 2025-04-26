@@ -1358,7 +1358,7 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
 static void shiftColors(sal_Int32* pColorArray, const BitmapScopedReadAccess& pReadAcc)
 {
     Scanline pScanlineRead = pReadAcc->GetScanline(0); // Why always 0?
-    for (tools::Long n = 0; n < pReadAcc->Width(); ++n)
+    for (tools::Long n = 0, nWidth = pReadAcc->Width(); n < nWidth; ++n)
     {
         const BitmapColor aColor = pReadAcc->GetColorFromData(pScanlineRead, n);
         *pColorArray++ = static_cast<sal_Int32>(aColor.GetBlue()) << 12;

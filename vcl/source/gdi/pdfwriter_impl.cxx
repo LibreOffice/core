@@ -9748,7 +9748,7 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject )
             //With PDF bitmaps, each row is padded to a BYTE boundary (multiple of 8 bits).
             const int nScanLineBytes = ((pAccess->GetBitCount() * pAccess->Width()) + 7U) / 8U;
 
-            for( tools::Long i = 0; i < pAccess->Height(); i++ )
+            for( tools::Long i = 0, nHeight = pAccess->Height(); i < nHeight; i++ )
             {
                 if (!writeBufferBytes(pAccess->GetScanline(i), nScanLineBytes))
                     return false;
@@ -9758,9 +9758,9 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject )
         {
             const int nScanLineBytes = pAccess->Width()*3;
             std::unique_ptr<sal_uInt8[]> xCol(new sal_uInt8[nScanLineBytes]);
-            for( tools::Long y = 0; y < pAccess->Height(); y++ )
+            for( tools::Long y = 0, nHeight = pAccess->Height(); y < nHeight; y++ )
             {
-                for( tools::Long x = 0; x < pAccess->Width(); x++ )
+                for( tools::Long x = 0, nWidth = pAccess->Width(); x < nWidth; x++ )
                 {
                     BitmapColor aColor = pAccess->GetColor( y, x );
                     xCol[3*x+0] = aColor.GetRed();
@@ -9856,7 +9856,7 @@ bool PDFWriterImpl::writeBitmapMaskObject( sal_Int32 nMaskObject, const AlphaMas
     const int nScanLineBytes = ((pAccess->GetBitCount() * pAccess->Width()) + 7U) / 8U;
     // we have alpha, but we want to output transparency, so we need to invert the data
     std::unique_ptr<sal_uInt8[]> pInvertedBytes = std::make_unique<sal_uInt8[]>(nScanLineBytes);
-    for( tools::Long i = 0; i < pAccess->Height(); i++ )
+    for( tools::Long i = 0, nHeight = pAccess->Height(); i < nHeight; i++ )
     {
         const Scanline pScanline = pAccess->GetScanline(i);
         std::copy(pScanline, pScanline + nScanLineBytes, pInvertedBytes.get());

@@ -1304,11 +1304,11 @@ void BitmapEx::ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
     if ( !(pReadAccess.get() && pAlphaWriteAccess.get()) )
         return;
 
-    for ( tools::Long nY = 0; nY < pReadAccess->Height(); nY++ )
+    for ( tools::Long nY = 0, nHeight = pReadAccess->Height(); nY < nHeight; nY++ )
     {
         Scanline pScanline = pAlphaWriteAccess->GetScanline( nY );
         Scanline pScanlineRead = pReadAccess->GetScanline( nY );
-        for ( tools::Long nX = 0; nX < pReadAccess->Width(); nX++ )
+        for ( tools::Long nX = 0, nWidth = pReadAccess->Width(); nX < nWidth; nX++ )
         {
             const sal_uInt8 cIndex = pReadAccess->GetPixelFromData( pScanlineRead, nX ).GetIndex();
             if ( cIndex == cIndexFrom )

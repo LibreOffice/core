@@ -222,7 +222,7 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
                 std::vector<char> tmp;
                 const sal_uInt32 lineSize = access->GetScanlineSize();
                 tmp.resize(lineSize);
-                for (tools::Long y = 0; y < access->Height() / 2; ++y)
+                for (tools::Long y = 0, nHeight = access->Height(); y < nHeight / 2; ++y)
                 {
                     tools::Long otherY = access->Height() - 1 - y;
                     memcpy(tmp.data(), access->GetScanline(y), lineSize);
@@ -236,12 +236,12 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
         {
             // Split to normal and alpha bitmaps.
             BitmapScopedWriteAccess accessAlpha(bitmapAlpha);
-            for (tools::Long y = 0; y < access->Height(); ++y)
+            for (tools::Long y = 0, nHeight = access->Height(); y < nHeight; ++y)
             {
                 const unsigned char* src = tmpRgbaData.data() + width * 4 * y;
                 unsigned char* dstB = access->GetScanline(y);
                 unsigned char* dstA = accessAlpha->GetScanline(y);
-                for (tools::Long x = 0; x < access->Width(); ++x)
+                for (tools::Long x = 0, nWidth = access->Width(); x < nWidth; ++x)
                 {
                     memcpy(dstB, src, 3);
                     *dstA = *(src + 3);
@@ -254,10 +254,10 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
         }
         case PixelMode::SetPixel:
         {
-            for (tools::Long y = 0; y < access->Height(); ++y)
+            for (tools::Long y = 0, nHeight = access->Height(); y < nHeight; ++y)
             {
                 const unsigned char* src = tmpRgbaData.data() + width * 4 * y;
-                for (tools::Long x = 0; x < access->Width(); ++x)
+                for (tools::Long x = 0, nWidth = access->Width(); x < nWidth; ++x)
                 {
                     sal_uInt8 r = src[0];
                     sal_uInt8 g = src[1];
@@ -270,10 +270,10 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
             if (!bitmapAlpha.IsEmpty())
             {
                 BitmapScopedWriteAccess accessAlpha(bitmapAlpha);
-                for (tools::Long y = 0; y < accessAlpha->Height(); ++y)
+                for (tools::Long y = 0, nHeight = accessAlpha->Height(); y < nHeight; ++y)
                 {
                     const unsigned char* src = tmpRgbaData.data() + width * 4 * y;
-                    for (tools::Long x = 0; x < accessAlpha->Width(); ++x)
+                    for (tools::Long x = 0, nWidth = accessAlpha->Width(); x < nWidth; ++x)
                     {
                         sal_uInt8 a = src[3];
                         accessAlpha->SetPixelIndex(y, x, a);

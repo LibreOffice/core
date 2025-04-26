@@ -1004,9 +1004,9 @@ namespace emfio
                 if ( !aBmp.IsEmpty() )
                 {
                     BitmapScopedReadAccess pBmp(aBmp);
-                    for ( tools::Long y = 0; y < pBmp->Height(); y++ )
+                    for ( tools::Long y = 0, nHeight = pBmp->Height(); y < nHeight; y++ )
                     {
-                        for ( tools::Long x = 0; x < pBmp->Width(); x++ )
+                        for ( tools::Long x = 0, nWidth = pBmp->Width(); x < nWidth; x++ )
                         {
                             const BitmapColor aColor( pBmp->GetColor( y, x ) );
 
