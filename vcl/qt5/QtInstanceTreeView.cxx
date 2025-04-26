@@ -819,7 +819,10 @@ void QtInstanceTreeView::make_unsorted()
 {
     SolarMutexGuard g;
 
-    GetQtInstance().RunInMainThread([&] { m_pTreeView->setSortingEnabled(false); });
+    GetQtInstance().RunInMainThread([&] {
+        m_pTreeView->setSortingEnabled(false);
+        m_pModel->sort(-1);
+    });
 }
 
 bool QtInstanceTreeView::get_sort_order() const
