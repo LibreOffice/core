@@ -956,7 +956,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
 
                 weld::Window* pWin = GetActiveDialogParent();
-                ScShareDocumentDlg aDlg(pWin, pViewData);
+                ScShareDocumentDlg aDlg(pWin, *pViewData);
                 if (aDlg.run() == RET_OK)
                 {
                     bool bSetShared = aDlg.IsShareDocumentChecked();
