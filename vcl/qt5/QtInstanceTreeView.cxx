@@ -410,10 +410,18 @@ bool QtInstanceTreeView::iter_parent(weld::TreeIter&) const
     return false;
 }
 
-int QtInstanceTreeView::get_iter_depth(const weld::TreeIter&) const
+int QtInstanceTreeView::get_iter_depth(const weld::TreeIter& rIter) const
 {
-    assert(false && "Not implemented yet");
-    return -1;
+    const QtInstanceTreeIter& rQtIter = static_cast<const QtInstanceTreeIter&>(rIter);
+    int nDepth = 0;
+    QModelIndex aParentIndex = rQtIter.modelIndex().parent();
+    while (aParentIndex.isValid())
+    {
+        nDepth++;
+        aParentIndex = aParentIndex.parent();
+    }
+
+    return nDepth;
 }
 
 int QtInstanceTreeView::get_iter_index_in_parent(const weld::TreeIter&) const
