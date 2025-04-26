@@ -161,10 +161,10 @@ public:
     virtual void SetIcon(sal_uInt16 nIcon) override;
     virtual void SetMenu(SalMenu* pMenu) override;
 
-    virtual void registerDragSource(QtDragSource* pDragSource);
-    virtual void deregisterDragSource(QtDragSource const* pDragSource);
-    virtual void registerDropTarget(QtDropTarget* pDropTarget);
-    virtual void deregisterDropTarget(QtDropTarget const* pDropTarget);
+    void registerDragSource(QtDragSource* pDragSource);
+    void deregisterDragSource(QtDragSource const* pDragSource);
+    void registerDropTarget(QtDropTarget* pDropTarget);
+    void deregisterDropTarget(QtDropTarget const* pDropTarget);
 
     void handleDragLeave();
     void handleDragMove(QDragMoveEvent* pEvent);
