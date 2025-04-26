@@ -326,7 +326,8 @@ std::unique_ptr<weld::TreeIter> QtInstanceTreeView::make_iterator(const weld::Tr
 
 void QtInstanceTreeView::copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const
 {
-    static_cast<QtInstanceTreeIter&>(rDest).setModelIndex(modelIndex(rSource));
+    const QModelIndex aModelIndex = static_cast<const QtInstanceTreeIter&>(rSource).modelIndex();
+    static_cast<QtInstanceTreeIter&>(rDest).setModelIndex(aModelIndex);
 }
 
 bool QtInstanceTreeView::get_selected(weld::TreeIter* pIter) const
