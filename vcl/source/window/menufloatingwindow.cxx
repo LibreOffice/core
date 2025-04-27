@@ -108,10 +108,6 @@ void MenuFloatingWindow::doShutdown()
 
     aScrollTimer.Stop();
     aSubmenuCloseTimer.Stop();
-    aSubmenuCloseTimer.Stop();
-    aHighlightChangedTimer.Stop();
-    aHighlightChangedTimer.Stop();
-
 }
 
 MenuFloatingWindow::~MenuFloatingWindow()
