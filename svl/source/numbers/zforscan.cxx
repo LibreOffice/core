@@ -122,8 +122,9 @@ static const std::u16string_view& GermanColorName(size_t i)
 }
 
 ImpSvNumberformatScan::ImpSvNumberformatScan(SvNFLanguageData& rCurrentLanguageData,
-                                             const SvNumberFormatter& rColorCallback)
-    : maNullDate( 30, 12, 1899)
+                                             const SvNumberFormatter& rColorCallback,
+                                             const Date& aNullDate)
+    : maNullDate(aNullDate)
     , mrCurrentLanguageData(rCurrentLanguageData)
     , mrColorCallback(rColorCallback)
     , eNewLnge(LANGUAGE_DONTKNOW)

@@ -51,7 +51,8 @@ public:
     };
 
     explicit ImpSvNumberformatScan(SvNFLanguageData& rCurrentLanguageData,
-                                   const SvNumberFormatter& rColorCallback);
+                                   const SvNumberFormatter& rColorCallback,
+                                   const Date& aNullDate = Date(30, 12, 1899));
     ~ImpSvNumberformatScan();
     void ChangeIntl( KeywordLocalization eKeywordLocalization = KeywordLocalization::AllowEnglish ); // Replaces Keywords
 
