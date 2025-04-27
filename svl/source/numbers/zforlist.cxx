@@ -325,7 +325,8 @@ SvNFLanguageData::SvNFLanguageData(const SvNFLanguageData& rOther)
     xTransliteration.init(xContext, ActLnge);
 
     pStringScanner.reset(new ImpSvNumberInputScan(*this));
-    pFormatScanner.reset(new ImpSvNumberformatScan(*this, rOther.pFormatScanner->getColorCallback()));
+    pFormatScanner.reset(new ImpSvNumberformatScan(*this, rOther.pFormatScanner->getColorCallback(),
+                                                   rOther.pFormatScanner->GetNullDate()));
 }
 
 SvNFLanguageData::~SvNFLanguageData()
