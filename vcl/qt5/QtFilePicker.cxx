@@ -977,7 +977,7 @@ OUString QtFilePicker::getDirectory()
     uno::Sequence<OUString> seq = getSelectedFiles();
     if (seq.getLength() > 1)
         seq.realloc(1);
-    return seq[0];
+    return seq.hasElements() ? seq[0] : OUString();
 }
 
 void QtFilePicker::setDescription(const OUString&) {}
