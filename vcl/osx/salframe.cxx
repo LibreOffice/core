@@ -555,13 +555,22 @@ void AquaSalFrame::Show(bool bVisible, bool bNoActivate)
         // Ordering out a native full screen window would leave the
         // application in a state where there is no Desktop and both
         // the menubar and the Dock are hidden.
-        // Related: tdf#165448 delay closing the window
+        [mpNSWindow close];
+
+        // Related: tdf#165448 move parent window to front after closing window
         // When a floating window such as the dropdown list in the
         // font combobox is open when selecting any of the menu items
         // inserted by macOS in the windows menu, the parent window
-        // will be hidden. So delay closing the window until the next
-        // pass through the native event loop.
-        [mpNSWindow performSelector: @selector(close) withObject: nil afterDelay: 0.01f];
+        // will be hidden. So if there is a key window, force the key
+        // window back to the front.
+        // Previously, delaying closing of the window was used to avoid
+        // this bug, but that caused Skia/Metal to crash when the
+        // window was released before the delayed close occurred. This
+        // crash was found when rapidly dragging the border between two
+        // column headings side to side in a Calc document.
+        NSWindow *pKeyWin = [NSApp keyWindow];
+        if( pKeyWin )
+            [pKeyWin orderFront: NSApp];
     }
 }
 
