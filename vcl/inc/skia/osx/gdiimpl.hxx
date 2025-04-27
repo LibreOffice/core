@@ -41,6 +41,8 @@ public:
     virtual void Flush(const tools::Rectangle&) override;
     virtual void WindowBackingPropertiesChanged() override;
 
+    void ScheduleFlush();
+
     CGImageRef createCGImageFromRasterSurface(const NSRect& rDirtyRect, CGPoint& rImageOrigin,
                                               bool& rImageFlipped);
 

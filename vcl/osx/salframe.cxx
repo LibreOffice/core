@@ -59,6 +59,7 @@
 
 #if HAVE_FEATURE_SKIA
 #include <vcl/skia/SkiaHelper.hxx>
+#include "skia/osx/gdiimpl.hxx"
 #endif
 
 const int nMinBlinkCursorDelay = 500;
@@ -1196,20 +1197,50 @@ bool AquaSalFrame::doFlush()
         // rapid dragging, this can lead to creating and queueing
         // up to 200 drawables per second leaving no spare time for
         // the Impress selection box painting timer to fire.
-        // So with Skia/Metal, throttle the rate of flushing by
-        // calling display on the view.
-        bool bDisplay = false;
+        // So with Skia/Metal, throttle the rate of flushing.
+        bool bNeedsFlush = true;
+        bool bFlushed = false;
 #if HAVE_FEATURE_SKIA
         // tdf#164428 Skia/Metal needs flush after drawing progress bar
-        bDisplay = !mbForceFlushProgressBar && SkiaHelper::isVCLSkiaEnabled() && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster;
+        if (!mbForceFlushProgressBar && SkiaHelper::isVCLSkiaEnabled() && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster)
+        {
+            AquaSkiaSalGraphicsImpl *pSkiaGraphicsImpl = dynamic_cast<AquaSkiaSalGraphicsImpl*>(mpGraphics->GetImpl());
+            if (pSkiaGraphicsImpl)
+            {
+                // Assume 1/200th of a second is the fastest flushing rate
+                // that can be handled with Skia/Metal. Note that the Skia
+                // timer is running separately so the overall flushing rate
+                // may still be faster than this limit.
+                static const CFAbsoluteTime fMinFlushInterval = 0.005f;
+                static CFAbsoluteTime fLastFlushTime = 0;
+
+                CFAbsoluteTime fInterval = CFAbsoluteTimeGetCurrent() - fLastFlushTime;
+                if (fInterval >= 0.0f && fInterval < fMinFlushInterval)
+                {
+                    // Just to be safe, schedule the Skia timer to run so that
+                    // a flush is only delayed but never missed
+                    pSkiaGraphicsImpl->ScheduleFlush();
+                }
+                else
+                {
+                    mpGraphics->Flush();
+                    fLastFlushTime = CFAbsoluteTimeGetCurrent();
+                    bFlushed = true;
+                }
+                bNeedsFlush = false;
+            }
+        }
 #endif
-        if (!bDisplay)
+        if (bNeedsFlush)
+        {
             mpGraphics->Flush();
+            bFlushed = true;
+        }
 
         // Related: tdf#155266 skip redisplay of the view when forcing flush
         // It appears that calling -[NSView display] overwhelms some Intel Macs
         // so only flush the graphics and skip immediate redisplay of the view.
-        bRet = bDisplay || ImplGetSVData()->maAppData.mnDispatchLevel <= 0;
+        bRet = !bFlushed || ImplGetSVData()->maAppData.mnDispatchLevel <= 0;
 
         mbForceFlushScrolling = false;
         mbForceFlushProgressBar = false;

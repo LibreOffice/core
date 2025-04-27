@@ -129,6 +129,8 @@ void AquaSkiaSalGraphicsImpl::flushSurfaceToWindowContext()
     }
 }
 
+void AquaSkiaSalGraphicsImpl::ScheduleFlush() { scheduleFlush(); }
+
 // For Raster we use our own screen blitting (see above).
 CGImageRef AquaSkiaSalGraphicsImpl::createCGImageFromRasterSurface(const NSRect& rDirtyRect,
                                                                    CGPoint& rImageOrigin,
