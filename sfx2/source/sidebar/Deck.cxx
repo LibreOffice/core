@@ -152,7 +152,9 @@ void Deck::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
             continue;
 
         auto childNode = rJsonWriter.startStruct();
-        rJsonWriter.put("id", it->GetId());
+        // JSDialog references widget by vcl id
+        rJsonWriter.put("id", it->GetContainer()->get_buildable_name());
+        rJsonWriter.put("name", it->GetId());
         rJsonWriter.put("type", "panel");
         rJsonWriter.put("text", it->GetTitle());
         rJsonWriter.put("enabled", true);
