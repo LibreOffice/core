@@ -171,44 +171,6 @@ IMPL_LINK_NOARG(SwFieldDlg, CancelHdl, weld::Button&, void)
     Close();
 }
 
-// newly initialise dialog after Doc-Switch
-void SwFieldDlg::ReInitDlg()
-{
-    SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
-    bool bNewMode = (::GetHtmlMode(pDocSh) & HTMLMODE_ON) != 0;
-
-    if (bNewMode != m_bHtmlMode)
-    {
-        if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
-        {
-            pViewFrm->GetDispatcher()->
-                Execute(FN_INSERT_FIELD, SfxCallMode::ASYNCHRON|SfxCallMode::RECORD);
-        }
-        Close();
-    }
-
-    SwView* pActiveView = ::GetActiveView();
-    if(!pActiveView)
-        return;
-    const SwWrtShell& rSh = pActiveView->GetWrtShell();
-    GetOKButton().set_sensitive((  !rSh.IsReadOnlyAvailable()
-                                || !rSh.HasReadonlySel())
-                            &&  !SwCursorShell::PosInsideInputField(*rSh.GetCursor()->GetPoint()));
-
-    ReInitTabPage(u"document");
-    ReInitTabPage(u"variables");
-    ReInitTabPage(u"docinfo");
-
-    if (!m_bHtmlMode)
-    {
-        ReInitTabPage(u"ref");
-        ReInitTabPage(u"functions");
-        ReInitTabPage(u"database");
-    }
-
-    m_pChildWin->SetOldDocShell(pDocSh);
-}
-
 // newly initialise TabPage after Doc-Switch
 void SwFieldDlg::ReInitTabPage(std::u16string_view rPageId, bool bOnlyActivate)
 {

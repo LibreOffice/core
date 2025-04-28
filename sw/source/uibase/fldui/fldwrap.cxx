@@ -43,19 +43,9 @@ IMPL_LINK_NOARG(SwChildWinWrapper, UpdateHdl, Timer *, void)
 }
 
 // newly initialise dialog after Doc switch
-bool SwChildWinWrapper::ReInitDlg(SwDocShell *)
+void SwChildWinWrapper::ReInitDlg()
 {
-    bool bRet = false;
-
-    if (m_pDocSh != GetOldDocShell())
-    {
-        m_aUpdateTimer.Stop();
-        bRet = true;            // immediate Update
-    }
-    else
-        m_aUpdateTimer.Start();
-
-    return bRet;
+    m_aUpdateTimer.Start();
 }
 
 SfxChildWinInfo SwFieldDlgWrapper::GetInfo() const
@@ -73,18 +63,6 @@ SwFieldDlgWrapper::SwFieldDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
     m_pDlgInterface = pFact->CreateSwFieldDlg(pB, this, _pParent->GetFrameWeld());
     SetController(m_pDlgInterface->GetController());
     m_pDlgInterface->StartExecuteAsync(nullptr);
-}
-
-// newly initialise dialog after Doc switch
-bool SwFieldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
-{
-    bool bRet = SwChildWinWrapper::ReInitDlg(pDocSh);
-    if (bRet)  // update immediately, Doc switch
-    {
-        m_pDlgInterface->ReInitDlg();
-    }
-
-    return bRet;
 }
 
 void SwFieldDlgWrapper::ShowReferencePage()
@@ -115,18 +93,6 @@ SwFieldDataOnlyDlgWrapper::SwFieldDataOnlyDlgWrapper( vcl::Window* _pParent, sal
     m_pDlgInterface->ActivateDatabasePage();
     m_pDlgInterface->StartExecuteAsync(nullptr);
     m_pDlgInterface->Initialize( pInfo );
-}
-
-// re-init after doc activation
-bool SwFieldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
-{
-    bool bRet = SwChildWinWrapper::ReInitDlg(pDocSh);
-    if (bRet)  // update immediately, Doc switch
-    {
-        m_pDlgInterface->ReInitDlg();
-    }
-
-    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1202,7 +1202,7 @@ void SwView::Execute(SfxRequest &rReq)
                         SwRedlineAcceptChild *pRed = static_cast<SwRedlineAcceptChild*>(
                                                 rVFrame.GetChildWindow(nId));
                         if (pRed)
-                            pRed->ReInitDlg(GetDocShell());
+                            pRed->ReInitDlg();
                     }
                 }
                 else
@@ -3182,7 +3182,7 @@ IMPL_LINK( SwView, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
             sal_uInt16 nId = SwRedlineAcceptChild::GetChildWindowId();
             SwRedlineAcceptChild* pRed = static_cast<SwRedlineAcceptChild*>(rVFrame.GetChildWindow( nId ));
             if ( pRed )
-                pRed->ReInitDlg( GetDocShell() );
+                pRed->ReInitDlg();
         }
     }
 }

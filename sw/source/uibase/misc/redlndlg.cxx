@@ -68,16 +68,6 @@ SwRedlineAcceptChild::SwRedlineAcceptChild(vcl::Window* _pParent,
     xDlg->Initialize(pInfo);
 }
 
-// newly initialise dialog after document switch
-bool SwRedlineAcceptChild::ReInitDlg(SwDocShell *pDocSh)
-{
-    bool bRet = SwChildWinWrapper::ReInitDlg(pDocSh);
-    if (bRet)  // update immediately, doc switch!
-        static_cast<SwModelessRedlineAcceptDlg*>(GetController().get())->Activate();
-
-    return bRet;
-}
-
 SwModelessRedlineAcceptDlg::SwModelessRedlineAcceptDlg(
     SfxBindings* _pBindings, SwChildWinWrapper* pChild, weld::Window *pParent)
     : SfxModelessDialogController(_pBindings, pChild, pParent,

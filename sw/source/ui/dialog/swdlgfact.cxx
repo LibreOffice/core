@@ -699,7 +699,6 @@ public:
     void SetText(const OUString& rStr) override { m_pDlg->set_title(rStr); }
     void ShowReferencePage() override { m_pDlg->ShowReferencePage(); }
     void Initialize(SfxChildWinInfo* pInfo) override { m_pDlg->Initialize(pInfo); }
-    void ReInitDlg() override { m_pDlg->ReInitDlg(); }
     void ActivateDatabasePage() override { m_pDlg->ActivateDatabasePage(); }
     std::shared_ptr<SfxDialogController> GetController() override { return m_pDlg; }
 };

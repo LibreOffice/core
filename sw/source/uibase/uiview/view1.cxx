@@ -105,13 +105,13 @@ void SwView::Activate(bool bMDIActivate)
         SfxViewFrame& rVFrame = GetViewFrame();
         SwFieldDlgWrapper *pWrp = static_cast<SwFieldDlgWrapper*>(rVFrame.GetChildWindow(nId));
         if (pWrp)
-            pWrp->ReInitDlg(GetDocShell());
+            pWrp->ReInitDlg();
 
         // Initialize RedlineDlg newly if necessary
         nId = SwRedlineAcceptChild::GetChildWindowId();
         SwRedlineAcceptChild *pRed = static_cast<SwRedlineAcceptChild*>(rVFrame.GetChildWindow(nId));
         if (pRed)
-            pRed->ReInitDlg(GetDocShell());
+            pRed->ReInitDlg();
 
         // reinit IdxMarkDlg
         nId = SwInsertIdxMarkWrapper::GetChildWindowId();

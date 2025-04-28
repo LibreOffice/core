@@ -337,7 +337,6 @@ protected:
     virtual ~AbstractSwFieldDlg() override = default;
 public:
     virtual void                Initialize(SfxChildWinInfo *pInfo) = 0;
-    virtual void                ReInitDlg() = 0;
     virtual void                ActivateDatabasePage() = 0;
     virtual void                ShowReferencePage() = 0;
     virtual std::shared_ptr<SfxDialogController> GetController() = 0;

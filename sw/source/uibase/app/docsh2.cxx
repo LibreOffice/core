@@ -1474,13 +1474,13 @@ void SwDocShell::UpdateChildWindows()
     SwFieldDlgWrapper *pWrp = static_cast<SwFieldDlgWrapper*>(rVFrame.
             GetChildWindow( SwFieldDlgWrapper::GetChildWindowId() ));
     if( pWrp )
-        pWrp->ReInitDlg( this );
+        pWrp->ReInitDlg();
 
     // if necessary newly initialize RedlineDlg
     SwRedlineAcceptChild *pRed = static_cast<SwRedlineAcceptChild*>(rVFrame.
             GetChildWindow( SwRedlineAcceptChild::GetChildWindowId() ));
     if( pRed )
-        pRed->ReInitDlg( this );
+        pRed->ReInitDlg();
 }
 
 namespace {

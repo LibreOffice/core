@@ -157,8 +157,6 @@ public:
                          SfxChildWinInfo*);
 
     SFX_DECL_CHILDWINDOW_WITHID( SwRedlineAcceptChild );
-
-    virtual bool    ReInitDlg(SwDocShell *pDocSh) override;
 };
 
 /// Redline (Manage Changes) panel for the sidebar.
