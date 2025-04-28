@@ -549,11 +549,9 @@ RTFDocumentImpl::getProperties(const RTFSprms& rAttributes, RTFSprms const& rSpr
     auto it = m_pStyleTableEntries->find(nStyle);
     if (!nStyle && it == m_pStyleTableEntries->end())
     {
-        RTFSprms aAttributes;
         writerfilter::Reference<Properties>::Pointer_t pProps(
-            new RTFReferenceProperties(aAttributes));
-        writerfilter::Reference<Properties>::Pointer_t const pProp(pProps);
-        m_pStyleTableEntries->insert(std::make_pair(0, pProp));
+            new RTFReferenceProperties(RTFSprms()));
+        m_pStyleTableEntries->insert(std::make_pair(0, pProps));
         it = m_pStyleTableEntries->find(nStyle);
     }
 
@@ -776,11 +774,10 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
     // Section properties are a paragraph sprm.
     auto pValue
         = new RTFValue(m_aStates.top().getSectionAttributes(), m_aStates.top().getSectionSprms());
-    RTFSprms aAttributes;
     RTFSprms aSprms;
     aSprms.set(NS_ooxml::LN_CT_PPr_sectPr, pValue);
     writerfilter::Reference<Properties>::Pointer_t pProperties
-        = new RTFReferenceProperties(std::move(aAttributes), std::move(aSprms));
+        = new RTFReferenceProperties(RTFSprms(), std::move(aSprms));
 
     if (bFinal && !m_pSuperstream)
         // This is the end of the document, not just the end of e.g. a header.
@@ -1117,7 +1114,6 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
 
     // Send it to the dmapper.
     RTFSprms aSprms;
-    RTFSprms aAttributes;
     // shape attribute
     RTFSprms aPicAttributes;
     if (m_aStates.top().getPicture().nCropT != 0 || m_aStates.top().getPicture().nCropB != 0
@@ -1274,14 +1270,14 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     if (!m_aStates.top().getCurrentBuffer())
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties
-            = new RTFReferenceProperties(std::move(aAttributes), std::move(aSprms));
+            = new RTFReferenceProperties(RTFSprms(), std::move(aSprms));
         Mapper().props(pProperties);
         // Make sure we don't lose these properties with a too early reset.
         m_bHadPicture = true;
     }
     else
     {
-        auto pValue = new RTFValue(aAttributes, aSprms);
+        auto pValue = new RTFValue(RTFSprms(), aSprms);
         bufferProperties(*m_aStates.top().getCurrentBuffer(), pValue, nullptr);
     }
 }
