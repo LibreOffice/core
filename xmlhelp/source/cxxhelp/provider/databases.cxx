@@ -793,73 +793,45 @@ Reference< XHierarchicalNameAccess > Databases::jarFile(
 
     OUString key = processLang(rGuard, Language) + "/" + jar;
 
-    ZipFileTable::iterator it =
-        m_aZipFileTable.emplace( key,Reference< XHierarchicalNameAccess >(nullptr) ).first;
-
-    if( ! it->second.is() )
+    css::uno::Reference< css::container::XHierarchicalNameAccess > xHNameAccess;
+    try
     {
-        try
+        OUString zipFile;
+        // Extension jar file? Search for ?
+        size_t nQuestionMark1 = jar.find( '?' );
+        size_t nQuestionMark2 = jar.rfind( '?' );
+        if( nQuestionMark1 != std::u16string_view::npos && nQuestionMark2 != std::u16string_view::npos && nQuestionMark1 != nQuestionMark2 )
         {
-            OUString zipFile;
-            // Extension jar file? Search for ?
-            size_t nQuestionMark1 = jar.find( '?' );
-            size_t nQuestionMark2 = jar.rfind( '?' );
-            if( nQuestionMark1 != std::u16string_view::npos && nQuestionMark2 != std::u16string_view::npos && nQuestionMark1 != nQuestionMark2 )
-            {
-                std::u16string_view aExtensionPath = jar.substr( nQuestionMark1 + 1, nQuestionMark2 - nQuestionMark1 - 1 );
-                std::u16string_view aPureJar = jar.substr( nQuestionMark2 + 1 );
+            std::u16string_view aExtensionPath = jar.substr( nQuestionMark1 + 1, nQuestionMark2 - nQuestionMark1 - 1 );
+            std::u16string_view aPureJar = jar.substr( nQuestionMark2 + 1 );
 
-                zipFile = expandURL(rGuard, OUString::Concat(aExtensionPath) + "/" + aPureJar);
-            }
-            else
-            {
-                zipFile = m_aInstallDirectory + key;
-            }
-
-            Sequence< Any > aArguments( 2 );
-            auto pArguments = aArguments.getArray();
-
-            rtl::Reference<XInputStream_impl> p(new XInputStream_impl( zipFile ));
-            if( p->CtorSuccess() )
-            {
-                pArguments[ 0 ] <<= Reference< XInputStream >( p );
-            }
-            else
-            {
-                p.clear();
-                pArguments[ 0 ] <<= zipFile;
-            }
-
-            // let ZipPackage be used ( no manifest.xml is required )
-            beans::NamedValue aArg;
-            aArg.Name = "StorageFormat";
-            aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
-            pArguments[ 1 ] <<= aArg;
-
-            Reference< XInterface > xIfc
-                = m_xSMgr->createInstanceWithArgumentsAndContext(
-                    u"com.sun.star.packages.comp.ZipPackage"_ustr,
-                    aArguments, m_xContext );
-
-            if ( xIfc.is() )
-            {
-                it->second.set( xIfc, UNO_QUERY );
-
-                OSL_ENSURE( it->second.is(),
-                            "ContentProvider::createPackage - "
-                            "Got no hierarchical name access!" );
-
-            }
+            zipFile = expandURL(rGuard, OUString::Concat(aExtensionPath) + "/" + aPureJar);
         }
-        catch ( RuntimeException & )
+        else
         {
+            zipFile = m_aInstallDirectory + key;
         }
-        catch ( Exception & )
-        {
-        }
+
+        // create the package zip file
+        Sequence< Any > aArguments{
+            Any(zipFile),
+            // let ZipPackage be used
+            Any(beans::NamedValue(u"StorageFormat"_ustr, Any(ZIP_STORAGE_FORMAT_STRING)))
+        };
+
+        xHNameAccess.set(
+            m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            u"com.sun.star.packages.comp.ZipPackage"_ustr,
+            aArguments, m_xContext ), UNO_QUERY);
     }
-
-    return it->second;
+    catch ( RuntimeException & )
+    {
+    }
+    catch ( Exception & )
+    {
+    }
+    // get root zip folder
+    return xHNameAccess;
 }
 
 Reference< XHierarchicalNameAccess > Databases::findJarFileForPath

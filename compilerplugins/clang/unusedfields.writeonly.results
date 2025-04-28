@@ -1348,8 +1348,6 @@ xmlhelp/source/cxxhelp/provider/databases.hxx:264
     chelp::Databases m_aModInfo ModInfoTable
 xmlhelp/source/cxxhelp/provider/databases.hxx:267
     chelp::Databases m_aKeywordInfo KeywordInfoTable
-xmlhelp/source/cxxhelp/provider/databases.hxx:273
-    chelp::Databases m_aZipFileTable ZipFileTable
 xmlhelp/source/cxxhelp/provider/databases.hxx:279
     chelp::Databases m_aCollatorTable CollatorTable
 xmloff/qa/unit/uxmloff.cxx:107

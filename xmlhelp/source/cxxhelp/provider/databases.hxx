@@ -269,12 +269,6 @@ namespace chelp {
         typedef
         std::unordered_map<
              OUString,
-             css::uno::Reference< css::container::XHierarchicalNameAccess > > ZipFileTable;
-        ZipFileTable m_aZipFileTable;   // No closing of an once opened jarfile
-
-        typedef
-        std::unordered_map<
-             OUString,
              css::uno::Reference< css::i18n::XCollator > > CollatorTable;
         CollatorTable    m_aCollatorTable;
 
