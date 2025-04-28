@@ -374,7 +374,7 @@ uno::Reference<io::XStream> getEmbeddedFile(const OUString& rInPDFFileURL,
             }
             bAgain = false;
             // The new style hybrids have exactly one embedded file
-            if (pPdfiumDoc->getAttachmentCount() != 1)
+            if (!pPdfiumDoc || pPdfiumDoc->getAttachmentCount() != 1)
             {
                 SAL_INFO("sdext.pdfimport", "getEmbeddedFile incorrect attachment count");
                 break;
