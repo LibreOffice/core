@@ -62,6 +62,7 @@ public:
 
     SAL_DLLPRIVATE PanelTitleBar* GetTitleBar() const;
     SAL_DLLPRIVATE weld::Box* GetContents() const;
+    SAL_DLLPRIVATE const weld::Box* GetContainer() const { return mxContainer.get(); }
     SAL_DLLPRIVATE void Show(bool bShow);
     bool IsTitleBarOptional() const { return mbIsTitleBarOptional; }
     SAL_DLLPRIVATE void SetUIElement(const css::uno::Reference<css::ui::XUIElement>& rxElement);
