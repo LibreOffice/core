@@ -3293,6 +3293,41 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestCrashHyphenation)
     createSwDoc("crashHyphen.fodt");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf166210)
+{
+    // Given a document with a table, inside which there are two conditionally hidden sections
+    createSwDoc("tdf166210.fodt");
+
+    auto xTextSectionsSupplier = mxComponent.queryThrow<css::text::XTextSectionsSupplier>();
+    auto xSections = xTextSectionsSupplier->getTextSections();
+    CPPUNIT_ASSERT(xSections);
+    auto xSection1 = xSections->getByName(u"Section1"_ustr).queryThrow<css::beans::XPropertySet>();
+    auto xSection2 = xSections->getByName(u"Section2"_ustr).queryThrow<css::beans::XPropertySet>();
+
+    Scheduler::ProcessEventsToIdle();
+    auto pXmlDoc = parseLayoutDump();
+    auto rowHeight1 = getXPath(pXmlDoc, "//body/tab/infos/bounds", "height").toInt32();
+    discardDumpedLayout();
+
+    // Hide first section
+    xSection1->setPropertyValue(u"Condition"_ustr, css::uno::Any(u"1"_ustr));
+    Scheduler::ProcessEventsToIdle();
+    pXmlDoc = parseLayoutDump();
+    auto rowHeight2 = getXPath(pXmlDoc, "//body/tab/infos/bounds", "height").toInt32();
+    // Make sure that the table has shrunk its height
+    CPPUNIT_ASSERT_LESS(rowHeight1, rowHeight2);
+    discardDumpedLayout();
+
+    // Hide second section
+    xSection2->setPropertyValue(u"Condition"_ustr, css::uno::Any(u"1"_ustr));
+    Scheduler::ProcessEventsToIdle();
+    pXmlDoc = parseLayoutDump();
+    auto rowHeight3 = getXPath(pXmlDoc, "//body/tab/infos/bounds", "height").toInt32();
+    // Make sure that the table has shrunk its height
+    CPPUNIT_ASSERT_LESS(rowHeight2, rowHeight3);
+    discardDumpedLayout();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
