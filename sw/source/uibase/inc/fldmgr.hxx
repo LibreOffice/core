@@ -83,18 +83,23 @@ struct SwInsertField_Data
     weld::Widget* m_pParent; // parent widget used for SwWrtShell::StartInputFieldDlg()
     /// Marks the PostIt field's annotation start/end if it differs from the cursor selection.
     std::optional<SwPaM> m_oAnnotationRange;
+    bool m_bNeverExpand;
 
     SwInsertField_Data(SwFieldTypesEnum nType, sal_uInt16 nSub, OUString aPar1, OUString aPar2,
-                    sal_uInt32 nFormatId, SwWrtShell* pShell = nullptr, sal_Unicode cSep = ' ', bool bIsAutoLanguage = true) :
-        m_nTypeId(nType),
-        m_nSubType(nSub),
-        m_sPar1(std::move(aPar1)),
-        m_sPar2(std::move(aPar2)),
-        m_nFormatId(nFormatId),
-        m_pSh(pShell),
-        m_cSeparator(cSep),
-        m_bIsAutomaticLanguage(bIsAutoLanguage),
-        m_pParent(nullptr) {}
+                       sal_uInt32 nFormatId, SwWrtShell* pShell = nullptr, sal_Unicode cSep = ' ',
+                       bool bIsAutoLanguage = true, bool bNeverExpand = false)
+        : m_nTypeId(nType)
+        , m_nSubType(nSub)
+        , m_sPar1(std::move(aPar1))
+        , m_sPar2(std::move(aPar2))
+        , m_nFormatId(nFormatId)
+        , m_pSh(pShell)
+        , m_cSeparator(cSep)
+        , m_bIsAutomaticLanguage(bIsAutoLanguage)
+        , m_pParent(nullptr)
+        , m_bNeverExpand(bNeverExpand)
+    {
+    }
 };
 
 class SW_DLLPUBLIC SwFieldMgr

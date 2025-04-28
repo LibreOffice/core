@@ -3012,7 +3012,7 @@ SfxVoidItem InsertEnvelope FN_ENVELOP
 ]
 
 SfxVoidItem InsertField FN_INSERT_FIELD
-(SfxUInt16Item Type FN_PARAM_FIELD_TYPE,SfxUInt16Item SubType FN_PARAM_FIELD_SUBTYPE,SfxStringItem Name FN_INSERT_FIELD,SfxStringItem Content FN_PARAM_FIELD_CONTENT,SfxUInt32Item Format FN_PARAM_FIELD_FORMAT,SfxStringItem Separator FN_PARAM_3, SfxStringItem TypeName FN_PARAM_4, SfxStringItem Wrapper FN_PARAM_5)
+(SfxUInt16Item Type FN_PARAM_FIELD_TYPE,SfxUInt16Item SubType FN_PARAM_FIELD_SUBTYPE,SfxStringItem Name FN_INSERT_FIELD,SfxStringItem Content FN_PARAM_FIELD_CONTENT,SfxUInt32Item Format FN_PARAM_FIELD_FORMAT,SfxStringItem Separator FN_PARAM_3, SfxStringItem TypeName FN_PARAM_4, SfxStringItem Wrapper FN_PARAM_5, SfxBoolItem NeverExpand FN_PARAM_6)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -6777,7 +6777,7 @@ SfxVoidItem UpdateCurIndex FN_UPDATE_CUR_TOX
 ]
 
 SfxVoidItem UpdateFields FN_UPDATE_FIELDS
-(SfxStringItem TypeName FN_PARAM_1, SfxStringItem NamePrefix FN_PARAM_2, SfxUnoAnyItem Fields FN_PARAM_3)
+(SfxStringItem TypeName FN_PARAM_1, SfxStringItem NamePrefix FN_PARAM_2, SfxUnoAnyItem Fields FN_PARAM_3, SfxBoolItem NeverExpand FN_PARAM_6)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
